@@ -1,0 +1,163 @@
+--- accepted-normal/observe_current_pass_image_retirement.py
++++ current-bound/observe_current_pass_image_retirement.py
+@@ -16,23 +16,23 @@
+ 
+ 
+ 
+-FAILURE_CASE = Path('/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/bound-matched-image-terminal-source-2/PASS-CASE-STATIC.json')
+-FAILURE_CASE_SHA = '035f929cf99b6ca8aea921cf04f173d683e2f8c1126fcdfc5c232dcb4a886d1b'
++FAILURE_CASE = Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/post-ten-build-admission-preparation-1/normal-build-retirement-preparation-1/bound-current-normal-image-source-1/PASS-CASE-STATIC.json')
++FAILURE_CASE_SHA = 'd11bf39e86a5a9c730c6d9e674edf862c16bae06287143875da6498a9b0d2cb9'
+ REPO = Path('/home/holden/mckernel')
+ ROOT = Path('/home/holden/mckernel-work/scratch')
+-PREP = Path('/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/bound-matched-image-terminal-source-2')
+-CASE = Path('/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1')
+-CAPTURE = Path('/home/holden/mckernel-work/scratch/native-rust-phase5-current-optin-image-guard-d18ea24c04e0435cbd8f673e253dc59d')
+-SOURCE = Path('/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/bound-matched-image-terminal-source-2/cleanup_pass_image.py')
++PREP = Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/post-ten-build-admission-preparation-1/normal-build-retirement-preparation-1/bound-current-normal-image-source-1')
++CASE = Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/pinned-full-image-attempt-2')
++CAPTURE = Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/pinned-full-image-attempt-2/owner-evidence/attempt')
++SOURCE = Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/post-ten-build-admission-preparation-1/normal-build-retirement-preparation-1/bound-current-normal-image-source-1/cleanup_pass_image.py')
+ TEST = Path('/home/holden/mckernel/scripts/tests/test_native_rust_cutover_image_terminal_cleanup.py')
+-SOURCE_SHA = '59efab0bc29fa5784dc855743cec397237552821bc150b60ea1d6c2e5f7ac00d'
++SOURCE_SHA = 'afc557b8430eb395b1a0bd59eedbbc8ff126e3a9c49229437ac0b449d5bb281b'
+ TEST_SHA = '2fba315ad96f271124cf78f7441faa306f58ea03ae35cdbe78bba5be6488d630'
+-RETIREMENT = Path('/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/INDEPENDENT-ACTUAL-IMAGE-RETAINED-POSTJOIN-REVIEW-2.json')
+-RETIREMENT_SHA = 'a8479779e90a26b50240f2dc890259cb1f264b4a7046ec97dd592190c84b20a6'
+-NONCE = 'm06-matched-image-retained-observation-20261022-1'
++RETIREMENT = Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/post-ten-build-admission-preparation-1/normal-build-retirement-preparation-1/bound-current-normal-image-source-1/CURRENT-RETAINED-BUILD-AUTHORITY.HOLD.json')
++RETIREMENT_SHA = '755133996d04e83100a032657b749f6a8742de540b00bbf6310b30df2d8cc596'
++NONCE = 'm14-normal-image-terminal-observation-20261023-1'
+ OUTPUT = PREP / ('root-observation-' + NONCE)
+ BOOT = '7bfc5687-6c04-4d15-84eb-b92ab9a55dcb'
+-PIDS = (3326009, 3329483, 3325997, 3326025, 3326017, 3329491, 3329994, 3326086)
++PIDS = (3726786, 3726794, 3730315, 3726852, 3726766, 3726778, 3730323)
+ 
+ 
+ def need(ok, reason):
+@@ -129,7 +129,7 @@
+     return stdout
+ 
+ 
+-TERMINAL_INSPECTION_SHA = '9e1b06340addaf21e9795f3b1277d9562f65649e3a0058e64e66fb64fa15cb33'
++TERMINAL_INSPECTION_SHA = '42cb8155240030114cfdd5f48ff327064bfd7b1b44fca649455ea3c411476aa5'
+ 
+ OBSERVATION_COMMAND = ['/usr/bin/sudo','-A','/home/holden/anaconda3/bin/python3','-I','-B',str(Path(__file__).resolve())]
+ OBSERVATION_PROFILE = {'metadata_soft_as': 536870912, 'metadata_hard_as': 2147483648, 'only_exact_docker_child_soft_as': 2147483648, 'command_timeout_seconds': 30, 'output_limit_bytes': 1048576, 'selected_hash_cap_bytes': 134217728, 'inventory_cap': 400000}
+@@ -167,59 +167,37 @@
+ 
+ PENDING_BINDINGS = ()
+ 
++
+ def current_pass_prerequisites(retirement,case,root_join,artifact):
+-    """Decode genuine retained physical and separate producer-artifact authority."""
+-    need(retirement['schema']=='mckernel.numa-current-image.retained-terminal-postjoin-review.v1' and
+-         retirement['status']=='PASS_ACTUAL_IMAGE_TERMINAL_RETAINED_POSTJOIN_SCOPE_ONLY' and
+-         retirement['build_status']=='PASS' and retirement['retired'] is True and
+-         retirement['terminal_container_retained'] is True and retirement['cleanup_separately_required'] is True and
+-         retirement['physical_release'] is False and retirement['record_release_complete'] is False and
+-         retirement['request_lease_absent'] is True and retirement['outer_direct_joined'] is True and
+-         retirement['outer_group_absent'] is True and retirement['root_mutex_reacquired_after_guard_join'] is True and
+-         retirement['exact_terminal_exit0_nonOOM_PID0'] is True and retirement['closed_saved_host_client_count']==8,
+-         'exact current retained PASS physical authority required')
+-    need(case['execution_authorized'] is False and case['successful_artifacts_required'] is True and
+-         case['target']['exit_code']==0,'current PASS case only')
+-    for key in ('container_id','container_name','owner_nonce','owner_pid','owner_starttime'):
+-        need(retirement[key]==case['target'][key],'retained target mismatch:'+key)
+-    for key,role in (('owner_receipt','owner_receipt'),('guard_result','guard_result'),
+-                     ('outer_status','outer_status'),('inner_status','inner_status'),
+-                     ('terminal_fresh_inspect','terminal_inspection')):
+-        need(retirement[key]==case['finite_roles'][role],'retained receipt/source mismatch:'+key)
+-    need(case['artifact_acceptance']==case['finite_roles']['artifact_acceptance'],
+-         'exact bound artifact reference differs')
+-    need(artifact['schema']=='mckernel.current-numa-scheduler.production-image-artifact-review.v1' and
+-         artifact['status']=='PASS_CURRENT_IMAGE_BUILD_LINK_AND_NAMED_BOUNDARIES_NO_NATIVE_ACCEPTANCE' and
+-         artifact['decision']=='PASS_ACTUAL_CURRENT_NUMA_SCHEDULER_IMAGE_AND_REAL_MCEEXEC_LINK_ARTIFACTS_ONLY' and
+-         artifact['implementation_ownership'] is False and isinstance(artifact['reviewer'],str) and
+-         bool(artifact['reviewer']) and artifact['physical_clearance'] is False,
+-         'separate genuine current NUMA/scheduler artifact authority required')
+-    need(artifact['producer_receipt']==case['finite_roles']['driver_receipt'],
+-         'genuine artifact producer receipt differs')
+-    for key in ('source_derivative_sha256','materialization_sha256'):
+-        need(artifact[key]==retirement[key]==case['source_identity'][key],
+-             'physical/artifact source fingerprint differs:'+key)
+-    need(root_join['status']=='PASS_ORDINARY_GUARD_POSTJOIN_READBACK_ONLY' and
+-         root_join['root27_4_reacquired_after_join'] is True and root_join['guard_direct_joined'] is True and
+-         root_join['common_shared_and_container_retained_for_separate_cleanup'] is True and
+-         root_join['cleanup_authorized'] is False and root_join['container_id']==case['target']['container_id'] and
+-         root_join['owner_receipt_sha256']==retirement['owner_receipt']['sha256'] and
+-         root_join['guard_result_sha256']==retirement['guard_result']['sha256'],'current guard postjoin mismatch')
+-    byrole={row['role']:row for row in case['full_original_record_authority']}
+-    need(set(byrole)==set(retirement['retained_ownership'])=={'common','shared'},
+-         'both original record authorities required')
+-    for role,expected in retirement['retained_ownership'].items():
+-        full=byrole[role]['full_descriptor']
+-        need(all(full[k]==v for k,v in expected.items()) and byrole[role]['sha256']==expected['sha256'],
+-             'complete retained record descriptor differs:'+role)
+-        record=byrole[role]['record']
+-        need(record['pid']==case['target']['owner_pid'] and record['starttime']==case['target']['owner_starttime'] and
+-             record['boot_id']==BOOT and record['inode']==expected['inode'] and
+-             record.get('dev',record.get('device'))==expected['device'],'retained record producer mismatch:'+role)
+-    need(case['source_identity']==CURRENT_EXPECTED_SOURCE,'exact frozen current source required')
+-
+-
+-CURRENT_EXPECTED_SOURCE = {'candidate_identity_scope': 'base_git_commit_only', 'candidate_sha': '942c927b1ec93cc31284ff498455909d9bb2d0fc', 'materialization_sha256': 'd7e24b4c0d3174b3479e33796d712d439444bae82902482448890b9d8142d43d', 'source_derivative_sha256': '5cffcc1b23dc5ca377baa055aab0417b0daac7ddcac0e2281903260f0ebd79e3', 'source_identity': {'dev': 66306, 'file_type': 16384, 'gid': 1000, 'inode': 48651056, 'mode': 448, 'path': '/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/source-materialization-1/materialized-source', 'uid': 1000}, 'source_root': '/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/source-materialization-1/materialized-source'}
++    # Genuine current M14 build/closed direct-capture authority. This record
++    # explicitly retains physical HOLD; root mutex, publisher census and full
++    # record identities are independently acquired by the unchanged observer.
++    need(retirement['schema']=='mckernel.m14.normal-image.closed-retained-build-authority.v1' and
++         retirement['status']=='HOLD_RETAINED_BUILD_OWNERSHIP' and retirement['physical_release'] is False and
++         retirement['cleanup_authorized'] is False and case['execution_authorized'] is False and
++         case['successful_artifacts_required'] is True,'current retained normal-image case required')
++    need(retirement['target']==case['target'] and case['source_identity']==CURRENT_EXPECTED_SOURCE and
++         retirement['source_identity']==CURRENT_EXPECTED_SOURCE,'exact current target/source authority')
++    for key in ('owner_receipt','guard_result','outer_status','artifact_acceptance'):
++        need(retirement[key]==case['finite_roles'][key],'exact current closed source role:'+key)
++    need(retirement['terminal_fresh_inspect']==case['finite_roles']['terminal_inspection'] and
++         retirement['current_live_postjoin']==case['current_live_postjoin'],'exact current retained observation refs')
++    need(artifact['schema']=='m14-actual-production-default-link-independent-root-record-v1' and
++         artifact['status']=='PASS_ACTUAL_M14_DEFAULT_LINK_ONLY' and artifact['independent_reviewer'] and
++         artifact['native'] is False and artifact['physical_clearance']=='HOLD_NORMAL_CLEANUP_REQUIRED' and
++         artifact['owner_sha256']==case['finite_roles']['image_owner']['sha256'] and
++         artifact['frozen_request_sha256']==case['request']['sha256'] and
++         artifact['receipt']['sha256']==case['finite_roles']['driver_receipt']['sha256'],
++         'genuine exact current M14 default-link artifact authority required')
++    need(root_join==artifact['current_live_postjoin'] and
++         root_join['status']=='HOLD_RETAINED_BUILD_OWNERSHIP' and
++         root_join['container_id']==case['target']['container_id'] and
++         root_join['controller_joined_group_absent_streams_closed'] is True and
++         root_join['container_retained'] is True and root_join['shared_heavy_token_retained'] is True and
++         root_join['normal_cleanup_required'] is True,'actual current postjoin HOLD required')
++
++
++CURRENT_EXPECTED_SOURCE = {'candidate_identity_scope': 'base_git_commit_only', 'candidate_sha': '942c927b1ec93cc31284ff498455909d9bb2d0fc', 'materialization_sha256': 'f38059b611d6dff62631e732cf37e7426aa17bdf48180400608487f7acc1b8a2', 'source_derivative_sha256': 'fc8c64148e98a88be9b5c068a39383810656da85f829f7a44d13d04b5e013bb2', 'source_identity': {'dev': 66306, 'file_type': 16384, 'gid': 1000, 'inode': 48802712, 'mode': 448, 'path': '/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/source-materialization-attempt-1/materialized-source', 'uid': 1000}, 'source_root': '/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/source-materialization-attempt-1/materialized-source'}
+ 
+ def decode_finite_case(case):
+     """Reject scalar inventory schema; bind exact sorted role path union pre-mutation."""
+@@ -333,6 +311,7 @@
+         owner=m.parse(stable_bytes(Path(retirement['owner_receipt']['path']),retirement['owner_receipt']['sha256']))
+         guard=m.parse(stable_bytes(Path(retirement['guard_result']['path']),retirement['guard_result']['sha256']))
+         old_inspect=m.parse(stable_bytes(Path(retirement['terminal_fresh_inspect']['path']),retirement['terminal_fresh_inspect']['sha256']))
++        need(type(old_inspect) is list and len(old_inspect)==1,'exact current single-CID inspect array');old_inspect=old_inspect[0]
+         target=dict(case['target']);need(target['image_id']==old_inspect['Image'],'actual current PASS image identity')
+         m.validate_attempt_binding(target,dict(path=str(m.REQUEST),sha256=m.REQUEST_SHA))
+         m.CONTAINER=target['container_id'];m.CONTAINER_NAME=target['container_name'];m.OWNER_NONCE=target['owner_nonce'];m.EXPECTED_EXIT=target['exit_code'];m.EXPECTED_CONTAINER=old_inspect
+@@ -362,13 +341,14 @@
+         selected_map={row['path']:row for row in selected}
+         need(selected_map[str(m.REQUEST)]['sha256']==m.REQUEST_SHA,'request bytes differ')
+         records=[m.observe_identity(path) for path in (m.ATTEMPT,m.SHARED)]
+-        need([row['sha256'] for row in records]==[retirement['retained_ownership']['common']['sha256'],retirement['retained_ownership']['shared']['sha256']],'retained exclusion bytes differ')
+-        for row,role in zip(records,('common','shared')):
+-            need(row==retirement['retained_ownership'][role],'retained full record identity differs:'+role)
++        request=m.parse(m.read_bounded(m.REQUEST))
++        for row in records:
++            m.image_record_binding(Path(row['path']),row,m.parse(m.read_bounded(Path(row['path']))),request,target,BOOT)
++        need(m.parse(m.read_bounded(m.SHARED))==retirement['shared_record_from_actual_owner']['record'],'actual retained shared record content differs')
+         need(not os.path.lexists(m.LEASE),'request lease reappeared')
+         request=m.parse(m.read_bounded(m.REQUEST))
+         m.image_request_binding(request)
+-        observation=dict(mount=mount,root=m.observe_identity(ROOT),boot_id=BOOT,root_lock=lock,request=selected_map[str(m.REQUEST)],target=target,container_inspect=inspection,retained_exclusions=records,request_lease_absent=True,inventories={str(p):m.metadata_inventory(p) for p in (m.OUTPUT,m.EVIDENCE)},candidate_root=m.observe_identity(Path(request['source_root'])),candidate_commit=m.IMAGE_CANDIDATE,candidate_tree=None,selected_files=selected,backup_root=m.observe_identity(ROOT/'mckernel-exact-candidate-scratch-22-authority3-metadata-backup'),namespace_binding=m.NAMESPACE_BINDING,namespace_ancestry=m.NAMESPACE_ANCESTRY,client_ledger=ledger,guard_proof=selected_map[str(CAPTURE/'guard-result.json')])
++        observation=dict(mount=mount,root=m.observe_identity(ROOT),boot_id=BOOT,root_lock=lock,request=selected_map[str(m.REQUEST)],target=target,container_inspect=inspection,retained_exclusions=records,request_lease_absent=True,inventories={str(p):m.metadata_inventory(p) for p in (m.OUTPUT,m.EVIDENCE)},candidate_root=m.observe_identity(Path(request['source_root'])),candidate_commit=m.IMAGE_CANDIDATE,candidate_tree=None,selected_files=selected,backup_root=m.observe_identity(ROOT/'mckernel-exact-candidate-scratch-22-authority3-metadata-backup'),namespace_binding=m.NAMESPACE_BINDING,namespace_ancestry=m.NAMESPACE_ANCESTRY,client_ledger=ledger,guard_proof=selected_map[case['finite_roles']['guard_result']['path']])
+         # No configure/cleanup call: prepare_release only binds these bytes.
+         need(m.census(),'terminal container changed during read-only observation')
+         need(m.namespace_ancestry()==m.NAMESPACE_ANCESTRY and Path('/proc/sys/kernel/random/boot_id').read_text().strip()==BOOT,'post-observation ancestry/boot changed')

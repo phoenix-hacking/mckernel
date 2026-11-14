@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_test_failure",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "attempt": 27,
+  "status": "FAIL_SOURCE_TEST",
+  "recorded_utc": "2026-09-16T03:20:07Z",
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-failure-20260915-27.tar.gz",
+    "sha256": "759bcc40d3c8b30c0522f0690c89b4f0f7f4cf766d44992cdd1e5ec50564c36d",
+    "size": 4419496,
+    "members": 27
+  },
+  "failing_source_sha256": {
+    "oracle.py": "d701e4e95ac332726ee46bbc89922bbededa37f018b3c7a97f06540e31ef8268",
+    "test_collector_storage_fault_packet.py": "77c9473da7f675b09560aa33ba1661017617c0e88cf101fd12280ab0a6cf90c7"
+  },
+  "focused_failure": {
+    "status": 1,
+    "raw_sha256": "0abde95c12f160da6e6a55cdfcbb442abe574c9eb46f584d42e3f4059f997ee2",
+    "tests_run": 4,
+    "failures": 3
+  },
+  "failures": [
+    "A same-timestamp contradictory identity immediately before a positive direct reap was accepted on the sentinel path.",
+    "The equivalent same-timestamp contradiction was accepted on the owner path.",
+    "An adopted retirement at the same timestamp as a direct signal error did not revoke that direct authority."
+  ],
+  "additional_control": "The equal-time positive-pair control passed against the old oracle; it was added to prevent the correction from treating array order as positive proof at an equal timestamp.",
+  "corrected_source_sha256": {
+    "prepare.py": "1d09a2f4f143af79de7eb98e7cc6d5c6a01efa89e15fa925d2c7869c78ab2df4",
+    "witness_owner.py": "4554efcda371a395681ff7f7353e05d98adf6ab4aae656b40d524f128fdf4670",
+    "supervise.py": "306a4982bd4d04721bc0478a5cfec553ac751dd0b5e9379cb9ba519bf4c92ce1",
+    "oracle.py": "99b4b72c2bf7ae3d0703ec6fd309d9914137ce3f0091452bc4f053f73729b2c4",
+    "test_collector_storage_fault_packet.py": "77c9473da7f675b09560aa33ba1661017617c0e88cf101fd12280ab0a6cf90c7"
+  },
+  "corrected_checks": {
+    "python3.9.12": "104/104 PASS",
+    "python3.8.19": "104/104 PASS",
+    "pycompile": "PASS on both interpreters for all four fixture Python sources"
+  },
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

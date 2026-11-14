@@ -1,0 +1,13 @@
+test_memory_os_equivalence.c: In function ‘main’:
+test_memory_os_equivalence.c:70:3: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+   70 |   if(fail==1)s.access_fail=1;if(fail==2)s.access_fail=2;if(fail==3)s.open_fail=1;if(fail>=4&&fail<=7)s.alloc_fail=fail-3;if(fail>=8)s.io_fail=fail-7;
+      |   ^~
+test_memory_os_equivalence.c:70:30: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+   70 |   if(fail==1)s.access_fail=1;if(fail==2)s.access_fail=2;if(fail==3)s.open_fail=1;if(fail>=4&&fail<=7)s.alloc_fail=fail-3;if(fail>=8)s.io_fail=fail-7;
+      |                              ^~
+/usr/local/bin/ld: ihklib_memory.fixture.o: in function `ihk_reserve_mem':
+ihklib_memory_fixture.a3bbcdf376a0ec8d-cgu.0:(.text.ihk_reserve_mem+0x75e): undefined reference to `core::panicking::panic_const::panic_const_div_by_zero'
+/usr/local/bin/ld: ihklib_memory_fixture.a3bbcdf376a0ec8d-cgu.0:(.text.ihk_reserve_mem+0x76b): undefined reference to `core::panicking::panic_const::panic_const_div_by_zero'
+/usr/local/bin/ld: ihklib_memory_fixture.a3bbcdf376a0ec8d-cgu.0:(.text.ihk_reserve_mem+0x778): undefined reference to `core::panicking::panic_const::panic_const_div_by_zero'
+/usr/local/bin/ld: ihklib_memory_fixture.a3bbcdf376a0ec8d-cgu.0:(.text.ihk_reserve_mem+0x785): undefined reference to `core::panicking::panic_const::panic_const_div_by_zero'
+collect2: error: ld returned 1 exit status

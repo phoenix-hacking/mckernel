@@ -1,0 +1,377 @@
+{
+  "schema": "mckernel.scheduler-debug18.independent-correction-review.v1",
+  "decision": "GO_ONE_PREDICATE_ONLY_CORRECTION_NO_NEW_COMPILER_NM_ELF_LINK_POPEN_PENDING_ROOT_FRESH_ADMISSION",
+  "reviewer": "/root/scheduler_debug_data_review_high",
+  "frozen_corrected_inputs": {
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-metadata-1/correction-1/REQUEST.json": "49d2f0df3a1d2a1894028f16fb3423d4b34129bb7cc98846184aec3b14069806",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-metadata-1/correction-1/debug_data_metadata_checks.py": "ba9db1c35c9d1323e6f4874228c55a958ba01efaea40caf2e775a44afc642f85",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-metadata-1/correction-1/FLAG-PROVENANCE.json": "7f173860a1eeac222bb54a920b5311a44408f0d8851396ab3700db98663b700e",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-metadata-1/correction-1/CORRECTION-PROOF.json": "276cac6322efffc5ef3474911097804ab555c2209e3f94248fadc19027a76351",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-metadata-1/correction-1/PREDICATE.patch": "e6d13fb658ba52c3bfb7e02ab9504ff15ff3f662ea74758a440e9f258dffcbbd"
+  },
+  "all_declared_input_hashes_match": true,
+  "declared_input_count": 30,
+  "prior_failure_class": "Exact predicate expectation error at line55 after two successful directly joined GNU metadata readbacks; no runner crash/native event. Original request/failure/capture/readbacks unchanged and hash-bound.",
+  "exact_semantic_change": "section['flags'] == 3 becomes section['flags'] == 0x200003; alignment8 and every other condition byte-identical, plus explanatory comment.",
+  "observed_section": {
+    "index": 4,
+    "name": "__verbose",
+    "type": 1,
+    "flags": 2097155,
+    "size": 576,
+    "align": 8,
+    "actual_file_bytes_sha256": "6a8f6298ec55492818cd224baa2e0b212f7231c32b4c4309b4b97ee7eb00782f"
+  },
+  "flag_provenance": {
+    "reference": "https://raw.githubusercontent.com/llvm/llvm-project/llvmorg-22.1.0/llvm/include/llvm/BinaryFormat/ELF.h",
+    "independently_opened": true,
+    "numeric_definitions": {
+      "SHF_WRITE": "0x1",
+      "SHF_ALLOC": "0x2",
+      "SHF_GNU_RETAIN": "0x200000",
+      "SHF_X86_64_LARGE": "0x10000000"
+    },
+    "scope": "ELF numeric ABI reference only, not selectedcompilerLLVMversion. Actual unchanged qualifiednightly1.95 source retains #[used]/staticmut/no_mangle/__verbose; exactobservedflag requiresretainbit and no otherbit, no wildcard."
+  },
+  "remaining_actual_retained_capture_review": {
+    "sole_global_owner": "process_remaining_range_scheduler_debug GLOBAL DEFAULT OBJECT576/value0/section4",
+    "T": 0,
+    "external_U": 0,
+    "private_OBJECTs": 0,
+    "nonempty_executable_sections": 0,
+    "unrelated_writable_sections": 0,
+    "relocation_count": 36,
+    "all_exact_expected_offsets_and_R_X86_64_64": true,
+    "records": [
+      {
+        "index": 0,
+        "line_flags": 16779353,
+        "fmt_null": true,
+        "fields": {
+          "file": {
+            "target_section": 3,
+            "target_offset": 0,
+            "exact_original_NUL_content": true
+          },
+          "func": {
+            "target_section": 3,
+            "target_offset": 39,
+            "exact_original_NUL_content": true
+          }
+        }
+      },
+      {
+        "index": 1,
+        "line_flags": 16779357,
+        "fmt_null": true,
+        "fields": {
+          "file": {
+            "target_section": 3,
+            "target_offset": 0,
+            "exact_original_NUL_content": true
+          },
+          "func": {
+            "target_section": 3,
+            "target_offset": 39,
+            "exact_original_NUL_content": true
+          }
+        }
+      },
+      {
+        "index": 2,
+        "line_flags": 16779363,
+        "fmt_null": true,
+        "fields": {
+          "file": {
+            "target_section": 3,
+            "target_offset": 0,
+            "exact_original_NUL_content": true
+          },
+          "func": {
+            "target_section": 3,
+            "target_offset": 39,
+            "exact_original_NUL_content": true
+          }
+        }
+      },
+      {
+        "index": 3,
+        "line_flags": 16779367,
+        "fmt_null": true,
+        "fields": {
+          "file": {
+            "target_section": 3,
+            "target_offset": 0,
+            "exact_original_NUL_content": true
+          },
+          "func": {
+            "target_section": 3,
+            "target_offset": 39,
+            "exact_original_NUL_content": true
+          }
+        }
+      },
+      {
+        "index": 4,
+        "line_flags": 16779373,
+        "fmt_null": true,
+        "fields": {
+          "file": {
+            "target_section": 3,
+            "target_offset": 0,
+            "exact_original_NUL_content": true
+          },
+          "func": {
+            "target_section": 3,
+            "target_offset": 39,
+            "exact_original_NUL_content": true
+          }
+        }
+      },
+      {
+        "index": 5,
+        "line_flags": 16779377,
+        "fmt_null": true,
+        "fields": {
+          "file": {
+            "target_section": 3,
+            "target_offset": 0,
+            "exact_original_NUL_content": true
+          },
+          "func": {
+            "target_section": 3,
+            "target_offset": 39,
+            "exact_original_NUL_content": true
+          }
+        }
+      },
+      {
+        "index": 6,
+        "line_flags": 16779383,
+        "fmt_null": true,
+        "fields": {
+          "file": {
+            "target_section": 3,
+            "target_offset": 0,
+            "exact_original_NUL_content": true
+          },
+          "func": {
+            "target_section": 3,
+            "target_offset": 39,
+            "exact_original_NUL_content": true
+          }
+        }
+      },
+      {
+        "index": 7,
+        "line_flags": 16779389,
+        "fmt_null": true,
+        "fields": {
+          "file": {
+            "target_section": 3,
+            "target_offset": 0,
+            "exact_original_NUL_content": true
+          },
+          "func": {
+            "target_section": 3,
+            "target_offset": 39,
+            "exact_original_NUL_content": true
+          }
+        }
+      },
+      {
+        "index": 8,
+        "line_flags": 16781564,
+        "fmt_null": true,
+        "fields": {
+          "file": {
+            "target_section": 3,
+            "target_offset": 0,
+            "exact_original_NUL_content": true
+          },
+          "func": {
+            "target_section": 3,
+            "target_offset": 71,
+            "exact_original_NUL_content": true
+          }
+        }
+      },
+      {
+        "index": 9,
+        "line_flags": 16781573,
+        "fmt_null": true,
+        "fields": {
+          "file": {
+            "target_section": 3,
+            "target_offset": 0,
+            "exact_original_NUL_content": true
+          },
+          "func": {
+            "target_section": 3,
+            "target_offset": 71,
+            "exact_original_NUL_content": true
+          }
+        }
+      },
+      {
+        "index": 10,
+        "line_flags": 16781577,
+        "fmt_null": true,
+        "fields": {
+          "file": {
+            "target_section": 3,
+            "target_offset": 0,
+            "exact_original_NUL_content": true
+          },
+          "func": {
+            "target_section": 3,
+            "target_offset": 71,
+            "exact_original_NUL_content": true
+          }
+        }
+      },
+      {
+        "index": 11,
+        "line_flags": 16781584,
+        "fmt_null": true,
+        "fields": {
+          "file": {
+            "target_section": 3,
+            "target_offset": 0,
+            "exact_original_NUL_content": true
+          },
+          "func": {
+            "target_section": 3,
+            "target_offset": 71,
+            "exact_original_NUL_content": true
+          }
+        }
+      },
+      {
+        "index": 12,
+        "line_flags": 16781590,
+        "fmt_null": true,
+        "fields": {
+          "file": {
+            "target_section": 3,
+            "target_offset": 0,
+            "exact_original_NUL_content": true
+          },
+          "func": {
+            "target_section": 3,
+            "target_offset": 71,
+            "exact_original_NUL_content": true
+          }
+        }
+      },
+      {
+        "index": 13,
+        "line_flags": 16781598,
+        "fmt_null": true,
+        "fields": {
+          "file": {
+            "target_section": 3,
+            "target_offset": 0,
+            "exact_original_NUL_content": true
+          },
+          "func": {
+            "target_section": 3,
+            "target_offset": 71,
+            "exact_original_NUL_content": true
+          }
+        }
+      },
+      {
+        "index": 14,
+        "line_flags": 16781606,
+        "fmt_null": true,
+        "fields": {
+          "file": {
+            "target_section": 3,
+            "target_offset": 0,
+            "exact_original_NUL_content": true
+          },
+          "func": {
+            "target_section": 3,
+            "target_offset": 71,
+            "exact_original_NUL_content": true
+          }
+        }
+      },
+      {
+        "index": 15,
+        "line_flags": 16781614,
+        "fmt_null": true,
+        "fields": {
+          "file": {
+            "target_section": 3,
+            "target_offset": 0,
+            "exact_original_NUL_content": true
+          },
+          "func": {
+            "target_section": 3,
+            "target_offset": 71,
+            "exact_original_NUL_content": true
+          }
+        }
+      },
+      {
+        "index": 16,
+        "line_flags": 16781629,
+        "fmt_null": true,
+        "fields": {
+          "file": {
+            "target_section": 3,
+            "target_offset": 0,
+            "exact_original_NUL_content": true
+          },
+          "func": {
+            "target_section": 3,
+            "target_offset": 71,
+            "exact_original_NUL_content": true
+          }
+        }
+      },
+      {
+        "index": 17,
+        "line_flags": 16777705,
+        "fmt_null": true,
+        "fields": {
+          "file": {
+            "target_section": 3,
+            "target_offset": 0,
+            "exact_original_NUL_content": true
+          },
+          "func": {
+            "target_section": 3,
+            "target_offset": 101,
+            "exact_original_NUL_content": true
+          }
+        }
+      }
+    ],
+    "readonly": {
+      "section": ".lrodata.str1.1",
+      "flags": 268435506,
+      "bytes": 137,
+      "alignment": 1,
+      "field_target_offsets": [
+        0,
+        39,
+        71,
+        101
+      ],
+      "actual_contents": "Exact sourcefile NUL followed by original range/runq/migration function-label NUL strings; all36fieldtargets individually verified. Actual one physical pool observed, no generalized unique-pool requirement.",
+      "trailing_record_padding": "Actual bytes retained; no semantic padding value required."
+    }
+  },
+  "root_required_action": [
+    "Fresh actual includedusage/resource/ownership admission with CPU6affinity and aggregate4GiBaccounting.",
+    "Check EVERY q.inputs hash before importing exact corrected module; directcall actual_object_gate(q) ONCE and save return/failure. Correctedgate retains source_bindings+qualifiedreader checks; Root must retain fullinputchecks formerly performed by controller.",
+    "Use existingobject/rawreadbacks only, EMPTYcommands means no compiler/nm/ELF/link/function/runtime Popen; newcorrectedcapturepath preserves originalfailedcapture.",
+    "If anotherunexpectedfailure occurs, focused escalation rather than another predicate-fix loop; future actualbase/join remainsUNBOUND and separate collision/prejoin/postjoin review required."
+  ],
+  "material_remaining_defects": [],
+  "operations": "Read originalfailure/retainedJSONandGNUreadbacktext and frozen correction; inspect exact diff/AST/hashes and independently compare retainedJSONfield/relocation/string data. Open primarynumericELFreference. No correctedgate/ELFparser/readback/compiler/link/test/function/runtime/account/monitor/canonical/index/otherowner operation.",
+  "no_score_C_retirement_default_native_acceptance": true
+}

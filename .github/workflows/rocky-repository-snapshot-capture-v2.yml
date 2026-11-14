@@ -1,0 +1,259 @@
+name: Rocky 10.2 signed repository snapshot capture v2
+
+on:
+  workflow_dispatch:
+    inputs:
+      validation_sha:
+        description: Exact 40-hex candidate commit to capture against
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+env:
+  EXPECTED_HEAD_SHA: ${{ inputs.validation_sha }}
+  RK_SNAPSHOT_CONTAINER_IMAGE: rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176
+
+jobs:
+  capture:
+    name: Signed metadata closure capture (credit forbidden)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    container:
+      image: rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Initialize always-uploaded diagnostics
+        env:
+          EVIDENCE_ROOT: ${{ runner.temp }}/rocky-repository-snapshot-v2
+        run: |
+          set -euo pipefail
+          test ! -e "$EVIDENCE_ROOT"
+          mkdir -m 700 -p "$EVIDENCE_ROOT/diagnostics"
+          /usr/bin/env -i \
+            PATH=/usr/bin:/bin HOME=/nonexistent LANG=C LC_ALL=C \
+            RK_SNAPSHOT_CONTAINER_IMAGE="$RK_SNAPSHOT_CONTAINER_IMAGE" \
+            GITHUB_REPOSITORY="$GITHUB_REPOSITORY" \
+            GITHUB_SHA="$GITHUB_SHA" \
+            GITHUB_RUN_ATTEMPT="$GITHUB_RUN_ATTEMPT" \
+            GITHUB_RUN_ID="$GITHUB_RUN_ID" \
+            GITHUB_WORKFLOW_REF="$GITHUB_WORKFLOW_REF" \
+            GITHUB_WORKFLOW_SHA="$GITHUB_WORKFLOW_SHA" \
+            EXPECTED_HEAD_SHA="$EXPECTED_HEAD_SHA" \
+            /usr/bin/python3 -I -S -B - \
+            "$EVIDENCE_ROOT/diagnostics/run-context.json" <<'PY'
+          import json
+          import os
+          import sys
+
+          value = {
+              "claims": {
+                  "accepted_checkpoint": False,
+                  "credit_eligible": False,
+                  "durable_archive": False,
+                  "tracker_credit": False,
+              },
+              "container_image": os.environ["RK_SNAPSHOT_CONTAINER_IMAGE"],
+              "github_repository": os.environ["GITHUB_REPOSITORY"],
+              "github_sha": os.environ["GITHUB_SHA"],
+              "github_run_attempt": int(os.environ["GITHUB_RUN_ATTEMPT"]),
+              "github_run_id": int(os.environ["GITHUB_RUN_ID"]),
+              "github_workflow_ref": os.environ["GITHUB_WORKFLOW_REF"],
+              "github_workflow_sha": os.environ["GITHUB_WORKFLOW_SHA"],
+              "requested_head_sha": os.environ["EXPECTED_HEAD_SHA"],
+              "schema_version": 1,
+          }
+          with open(sys.argv[1], "w") as output:
+              json.dump(value, output, allow_nan=False, separators=(",", ":"), sort_keys=True)
+              output.write("\n")
+          value = {
+              "capture_id": "rocky-10.2-x86_64-repository-metadata-capture-v2",
+              "claims": value["claims"],
+              "error": "capture did not start or terminate normally",
+              "observations": [],
+              "schema_version": 1,
+              "status": "not-started",
+          }
+          with open(os.path.join(os.path.dirname(sys.argv[1]), "drift-report.json"), "w") as output:
+              json.dump(value, output, allow_nan=False, separators=(",", ":"), sort_keys=True)
+              output.write("\n")
+          PY
+
+      - name: Install bounded verification tools
+        run: |
+          set -euo pipefail
+          test "$(uname -m)" = x86_64
+          . /etc/os-release
+          test "$ID" = rocky
+          test "$VERSION_ID" = 10.2
+          /usr/bin/dnf -y --setopt=install_weak_deps=False install \
+            bzip2 git-core gnupg2 gzip python3 python3-pyyaml tar xz
+          /usr/bin/dnf clean all
+          for tool in /usr/bin/git /usr/bin/gpg /usr/bin/gpgv \
+            /usr/bin/python3 /usr/bin/sha256sum /usr/bin/tar; do
+            test -x "$tool"
+          done
+          /usr/bin/env -i \
+            PATH=/usr/bin:/bin HOME=/nonexistent LANG=C LC_ALL=C \
+            /usr/bin/python3 -I -B -c 'import yaml'
+
+      - name: Check out the exact requested candidate
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ env.EXPECTED_HEAD_SHA }}
+          fetch-depth: 1
+          persist-credentials: false
+          set-safe-directory: true
+
+      - name: Validate the no-credit capture contract
+        run: |
+          set -euo pipefail
+          [[ "$EXPECTED_HEAD_SHA" =~ ^[0-9a-f]{40}$ ]]
+          test "$GITHUB_SHA" = "$EXPECTED_HEAD_SHA"
+          test "$GITHUB_WORKFLOW_SHA" = "$EXPECTED_HEAD_SHA"
+          case "$GITHUB_WORKFLOW_REF" in
+            "$GITHUB_REPOSITORY/.github/workflows/rocky-repository-snapshot-capture-v2.yml@refs/heads/"*|\
+            "$GITHUB_REPOSITORY/.github/workflows/rocky-repository-snapshot-capture-v2.yml@refs/tags/"*) ;;
+            *) echo "unexpected workflow ref: $GITHUB_WORKFLOW_REF" >&2; exit 1 ;;
+          esac
+          canonical_workspace="$(/usr/bin/env -i \
+            PATH=/usr/bin:/bin HOME=/nonexistent LANG=C LC_ALL=C \
+            /usr/bin/python3 -I -S -B -c \
+            'import os, sys; print(os.path.realpath(sys.argv[1]))' \
+            "$GITHUB_WORKSPACE")"
+          bootstrap_home="$RUNNER_TEMP/rocky-snapshot-bootstrap-home"
+          committed_checker="$RUNNER_TEMP/rocky-repository-snapshot-capture-v2-check.py"
+          test ! -e "$committed_checker"
+          mkdir -m 700 -p "$bootstrap_home"
+          git_env=(
+            /usr/bin/env -i
+            PATH=/usr/bin:/bin HOME="$bootstrap_home" LANG=C LC_ALL=C
+            GIT_ATTR_NOSYSTEM=1 GIT_CONFIG_GLOBAL=/dev/null
+            GIT_CONFIG_NOSYSTEM=1 GIT_GRAFT_FILE=/dev/null
+            GIT_NO_REPLACE_OBJECTS=1 GIT_OPTIONAL_LOCKS=0
+            GIT_PAGER=cat GIT_TERMINAL_PROMPT=0 PAGER=cat
+            XDG_CONFIG_HOME=/nonexistent
+          )
+          git_command=(
+            /usr/bin/git --no-pager
+            -c advice.graftFileDeprecated=false
+            -c core.attributesFile=/dev/null
+            -c core.fsmonitor=false
+            -c core.hooksPath=/dev/null
+            -c core.pager=cat
+            -c core.sshCommand=/usr/bin/false
+            -c credential.helper=
+            -c diff.external=
+            -c fetch.recurseSubmodules=false
+            -c interactive.diffFilter=
+            -c protocol.allow=never
+            -c submodule.recurse=false
+          )
+          python_env=(
+            /usr/bin/env -i
+            PATH=/usr/bin:/bin HOME="$bootstrap_home" LANG=C LC_ALL=C
+            PYTHONDONTWRITEBYTECODE=1
+          )
+          test "$("${git_env[@]}" "${git_command[@]}" \
+            -c "safe.directory=$canonical_workspace" \
+            -C "$canonical_workspace" rev-parse --verify 'HEAD^{commit}')" = \
+            "$EXPECTED_HEAD_SHA"
+          umask 077
+          set -C
+          "${git_env[@]}" "${git_command[@]}" \
+            -c "safe.directory=$canonical_workspace" \
+            -C "$canonical_workspace" show \
+            "$EXPECTED_HEAD_SHA:scripts/rocky_repository_snapshot_capture.py" \
+            >"$committed_checker"
+          chmod 0400 "$committed_checker"
+          test -s "$committed_checker"
+          "${python_env[@]}" /usr/bin/python3 -I -B "$committed_checker" \
+            --repo "$GITHUB_WORKSPACE" \
+            --check \
+            --source-commit "$EXPECTED_HEAD_SHA" \
+            --workflow-ref "$GITHUB_WORKFLOW_REF"
+          "${python_env[@]}" /usr/bin/python3 -I -B \
+            scripts/tests/test_rocky_repository_snapshot_capture.py -v
+
+      - name: Capture and verify the signed metadata closure
+        env:
+          EVIDENCE_ROOT: ${{ runner.temp }}/rocky-repository-snapshot-v2
+        run: |
+          set -euo pipefail
+          canonical_workspace="$(/usr/bin/env -i \
+            PATH=/usr/bin:/bin HOME=/nonexistent LANG=C LC_ALL=C \
+            /usr/bin/python3 -I -S -B -c \
+            'import os, sys; print(os.path.realpath(sys.argv[1]))' \
+            "$GITHUB_WORKSPACE")"
+          bootstrap_home="$RUNNER_TEMP/rocky-snapshot-bootstrap-home"
+          committed_checker="$RUNNER_TEMP/rocky-repository-snapshot-v2-capture.py"
+          test ! -e "$committed_checker"
+          mkdir -m 700 -p "$bootstrap_home"
+          git_env=(
+            /usr/bin/env -i
+            PATH=/usr/bin:/bin HOME="$bootstrap_home" LANG=C LC_ALL=C
+            GIT_ATTR_NOSYSTEM=1 GIT_CONFIG_GLOBAL=/dev/null
+            GIT_CONFIG_NOSYSTEM=1 GIT_GRAFT_FILE=/dev/null
+            GIT_NO_REPLACE_OBJECTS=1 GIT_OPTIONAL_LOCKS=0
+            GIT_PAGER=cat GIT_TERMINAL_PROMPT=0 PAGER=cat
+            XDG_CONFIG_HOME=/nonexistent
+          )
+          git_command=(
+            /usr/bin/git --no-pager
+            -c advice.graftFileDeprecated=false
+            -c core.attributesFile=/dev/null
+            -c core.fsmonitor=false
+            -c core.hooksPath=/dev/null
+            -c core.pager=cat
+            -c core.sshCommand=/usr/bin/false
+            -c credential.helper=
+            -c diff.external=
+            -c fetch.recurseSubmodules=false
+            -c interactive.diffFilter=
+            -c protocol.allow=never
+            -c submodule.recurse=false
+          )
+          python_env=(
+            /usr/bin/env -i
+            PATH=/usr/bin:/bin HOME="$bootstrap_home" LANG=C LC_ALL=C
+            PYTHONDONTWRITEBYTECODE=1
+          )
+          umask 077
+          set -C
+          "${git_env[@]}" "${git_command[@]}" \
+            -c "safe.directory=$canonical_workspace" \
+            -C "$canonical_workspace" show \
+            "$EXPECTED_HEAD_SHA:scripts/rocky_repository_snapshot_capture.py" \
+            >"$committed_checker"
+          chmod 0400 "$committed_checker"
+          test -s "$committed_checker"
+          "${python_env[@]}" /usr/bin/python3 -I -B "$committed_checker" \
+            --repo "$GITHUB_WORKSPACE" \
+            --capture \
+            --output-dir "$EVIDENCE_ROOT/payload" \
+            --diagnostics-dir "$EVIDENCE_ROOT/diagnostics" \
+            --source-commit "$EXPECTED_HEAD_SHA" \
+            --workflow-ref "$GITHUB_WORKFLOW_REF"
+          (cd "$EVIDENCE_ROOT/payload" && sha256sum --check --strict snapshot.tar.sha256)
+          "${python_env[@]}" /usr/bin/python3 -I -B "$committed_checker" \
+            --repo "$GITHUB_WORKSPACE" \
+            --verify-artifact "$EVIDENCE_ROOT/payload/snapshot.tar" \
+            --source-commit "$EXPECTED_HEAD_SHA" \
+            --workflow-ref "$GITHUB_WORKFLOW_REF"
+
+      - name: Upload deterministic payload and drift diagnostics
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: rocky-repository-snapshot-v2-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/rocky-repository-snapshot-v2/payload/snapshot.tar
+            ${{ runner.temp }}/rocky-repository-snapshot-v2/payload/snapshot.tar.sha256
+            ${{ runner.temp }}/rocky-repository-snapshot-v2/diagnostics/
+          if-no-files-found: warn
+          retention-days: 30
+          compression-level: 0

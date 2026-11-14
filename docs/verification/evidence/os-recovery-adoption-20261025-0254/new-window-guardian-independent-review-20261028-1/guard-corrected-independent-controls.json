@@ -1,0 +1,48 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "actual_guard_calls": 0,
+  "results": [
+    {
+      "field": "checkpoint_requested",
+      "value": true,
+      "result": "REFUSED",
+      "exception": "campaign stop/checkpoint requested"
+    },
+    {
+      "field": "stop_now",
+      "value": true,
+      "result": "REFUSED",
+      "exception": "campaign stop/checkpoint requested"
+    },
+    {
+      "field": "paused",
+      "value": true,
+      "result": "REFUSED",
+      "exception": "campaign stop/checkpoint requested"
+    },
+    {
+      "field": "transport_uncertain",
+      "value": {
+        "method": "thread/read"
+      },
+      "result": "REFUSED",
+      "exception": "campaign transport uncertainty"
+    },
+    {
+      "field": "resume_instruction",
+      "value": {
+        "status": "delivery_uncertain"
+      },
+      "result": "REFUSED",
+      "exception": "campaign instruction uncertainty resume_instruction"
+    },
+    {
+      "field": "last_instruction",
+      "value": {
+        "status": "sending"
+      },
+      "result": "REFUSED",
+      "exception": "campaign instruction uncertainty last_instruction"
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "actual_current_resource_unknown_not_resolved": true,
+  "actual_original_CALLER_status_preserved": true,
+  "baseline_source": {
+    "bytes": 39398,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/prepare_current.py",
+    "sha256": "05ea0c9e8c1904869a3eb7072a9a197b480ad78209cc19c2aac4ae5c1ae39e8d"
+  },
+  "candidate_source": {
+    "bytes": 39476,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/role-observer-correction-1/prepare_current.CANDIDATE.py",
+    "sha256": "abadd7ebf5531b6edb408544b2367a95e357ca80917bf1fa912fdeb8708efaba"
+  },
+  "diagnosis": {
+    "bytes": 13351,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/role-observer-correction-1/DIAGNOSIS.json",
+    "sha256": "a6cd18224ad35413ca6a988b00989ae33e0e229c5ad9aa8b1160b0415395c5d9"
+  },
+  "no_SUT_or_helper_test_or_privileged_action": true,
+  "only_literal_edits": [
+    {
+      "after": "        if not timed_out and set(observed)!={'root_parent','keeper','installer'}:\n            try:\n                tree=owned_tree",
+      "before": "        if not timed_out:\n            try:\n                tree=owned_tree"
+    },
+    {
+      "after": "                errors.append(type(error).__name__+': '+str(error)[:512]);resource_unknown=True\n",
+      "before": "                errors.append(type(error).__name__);resource_unknown=True\n"
+    }
+  ],
+  "patch": {
+    "bytes": 1447,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/role-observer-correction-1/POINT-SCOPE-AND-ERROR-CONTEXT.patch",
+    "sha256": "7ff2b155629d7cab988c655cd7fbc1189401ca19eab5059e2dfa5a7505158811"
+  },
+  "reverse_exact_source_bytes": true,
+  "status": "PRIVATE_CALLER_POINT_SCOPE_CANDIDATE_FOR_INDEPENDENT_REVIEW_NOT_A_PUBLICATION_REQUEST"
+}

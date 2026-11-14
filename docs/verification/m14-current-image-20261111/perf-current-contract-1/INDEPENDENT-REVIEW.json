@@ -1,0 +1,48 @@
+{
+  "status": "NO_GO_CURRENT_IMPLEMENTATION_MINIMUM_COHERENT_SOURCE_SCOPE_CONFIRMED",
+  "at": "2026-11-11T10:27:18.437476+00:00",
+  "original_check": "M14-03-05 DEFAULT, perf required descriptor/event/provider ownership boundary",
+  "reviewer": {
+    "agent_path": "/root/p04_tests_max",
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "max",
+    "execution": "none"
+  },
+  "reviewed_source_packet": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/SOURCE-READY.NOT-EXECUTED.json",
+    "sha256": "28c492a823eb6771005f2a9ccaaa02b208a545427538e18a274a96cc18ff4e5c"
+  },
+  "material_findings": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-review-p04tests-max-1/SOURCE-FINDINGS.json",
+    "bytes": 14481,
+    "sha256": "e28a7039f5a664c72b5c2268973223b2d6d15ed733257aafdfbc607de7d55ead"
+  },
+  "decision": "Current shared find/use-after-unlock, raw group kind, counter reservation, copied event ownership and ordinary/VM close paths do not provide a coherent lifetime contract. Selected monitoring-event consumers and creator-thread destruction are necessary participants. A real finite protocol must repair these linked boundaries before the perf entry can be selected.",
+  "minimum_source_scope": [
+    "Shared descriptor resolve before escape and actual typed perf publisher/unpublish/free identity",
+    "Pending open/group topology/counter reservation and exact owned rollback",
+    "Parent-side copy ownership and acquired-reference failure unwind",
+    "Process.monitoring_event publication/inheritance, scheduler and terminal reader ownership",
+    "Real counter-map owner retirement before Thread destruction, without a Thread/VM/event reference cycle",
+    "Ordinary close and already-P-held VM close/final descriptor drain, with actual post-unlock retirement progress"
+  ],
+  "locks": {
+    "required": "An explicit order for process descriptor lock P, proposed registry/group lock, process hash/update/runqueue/IRQ contexts and real Thread destruction. No reverse edge, recursive P, blocking retirement wait, usercopy or offload under the new spinlock. Real owner pins/snapshots cross unlock; deferred finalization has a named source drain point.",
+    "PMI_minimum": "Only sig_no and fd are read after P unlock; scalar capture under P removes this particular descriptor dereference gap before set_signal without an IRQ allocation or retained descriptor."
+  },
+  "proposal_review": {
+    "status": "PENDING_EXACT_FROZEN_PROTOCOL",
+    "owner": "/root/p03_cutover_source_max",
+    "expected_path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/ownership-proposal-1",
+    "fact": "The source author is writing fields, transitions, lock graph and retirement hooks. No frozen proposal bytes or candidate were supplied at this decision. The minimum source scope is established by current participating code, not missing external inventory."
+  },
+  "next_meaningful_action": "Review the exact finite ownership proposal when frozen, then prepare only changed-path source tests/normal-image type-owner proof for an independently reviewed actual candidate. No unchanged suite or held fixture replay.",
+  "scope_limits": {
+    "current_technical_NO_GO_preserved": true,
+    "source_or_service_or_native_holds_released": false,
+    "source_candidate_written_or_approved": false,
+    "compiler_or_test_or_helper_or_native_executed": false,
+    "DEFAULT_or_parent_acceptance": false,
+    "canonical_edit": false
+  }
+}

@@ -1,0 +1,98 @@
+--- /home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-20261020-1/phase4-revoke-ack-correction-1/guest-fixture-1/actual-phase4.rs
++++ fixture/actual-finalack.rs
+@@ -3,16 +3,17 @@
+ // EXPLICIT adapters: C constructor, VM release callback, physical mapping and
+ // host transport. This proves source semantics, NOT Linux/kernel ABI or MM.
+ mod abi;mod process_helpers;mod fork_control_registry;mod fork_control_guest;mod x86_cpu_helpers;
+-mod application_rpc;mod application_syscall;
++mod application_rpc;mod application_syscall;mod sched_helpers;mod syscall_policy;mod lock_helpers;
+ use std::sync::atomic::{AtomicUsize,AtomicPtr,AtomicU64,Ordering};
+ use core::ffi::c_void;
+ fn unexpected_destructor(){panic!("unexpected final parent destructor")}
+ mod cls{
+  use super::*;static CURRENT:AtomicPtr<abi::CpuLocalVar>=AtomicPtr::new(core::ptr::null_mut());
++ pub unsafe fn preempt_disable(){} pub unsafe fn preempt_enable(){}
+  pub unsafe fn set(p:*mut abi::CpuLocalVar){CURRENT.store(p,Ordering::SeqCst);}
+  pub unsafe fn get_this_cpu_local_var()->*mut abi::CpuLocalVar{CURRENT.load(Ordering::SeqCst)}
+ }
+-mod x86_memory_helpers{pub unsafe fn virt_to_phys(p:*mut core::ffi::c_void)->u64{p as u64}}
++mod x86_memory_helpers{pub unsafe fn write_process_vm(_: *mut crate::abi::ProcessVm,_:*mut core::ffi::c_void,_:*const core::ffi::c_void,_:usize)->i32{panic!("runtime VM write outside normal-fork test scope")}pub unsafe fn virt_to_phys(p:*mut core::ffi::c_void)->u64{p as u64}}
+ mod mem_helpers{
+  use super::*;use std::sync::Mutex;use std::alloc::{alloc,dealloc,Layout};
+  static LIVE:Mutex<Vec<(usize,usize)>>=Mutex::new(Vec::new());
+@@ -22,11 +23,12 @@
+   let(_,n)=live.remove(i);dealloc(p.cast(),Layout::from_size_align(n,8).unwrap());}
+  pub fn live()->usize{LIVE.lock().unwrap().len()}
+ }
+-#[no_mangle]unsafe extern "C" fn do_syscall(r:*mut abi::SyscallRequest,c:i32)->i64{phase4_tests::transport(r,c)}
+-#[no_mangle]unsafe extern "C" fn clone_thread(p:*mut abi::Thread,_:u64,_:u64,_:i32)->*mut abi::Thread{phase4_tests::construct(p)}
+-#[no_mangle]unsafe extern "C" fn release_cpuid(cpu:i32){assert_eq!(cpu,1);phase4_tests::CPU.fetch_add(1,Ordering::SeqCst);}
++#[no_mangle]unsafe extern "C" fn do_syscall(r:*mut abi::SyscallRequest,c:i32)->i64{phase5_tests::transport(r,c)}
++#[no_mangle]unsafe extern "C" fn clone_thread(p:*mut abi::Thread,_:u64,_:u64,_:i32)->*mut abi::Thread{phase5_tests::construct(p)}
++#[no_mangle]unsafe extern "C" fn release_cpuid(cpu:i32){assert_eq!(cpu,1);phase5_tests::CPU.fetch_add(1,Ordering::SeqCst);}
+ extern "C"{fn process_fork_construct_current_v1(p:*mut abi::Thread,pc:u64,sp:u64,f:i32,cpu:i32,out:*mut *mut c_void)->*mut abi::Thread;}
+-mod phase4_tests{
++mod phase5_tests{
++ pub fn mode()->usize{panic!("runtime scheduler outside normal-fork test scope")}pub fn target()->*mut crate::abi::CpuLocalVar{panic!("runtime scheduler outside normal-fork test scope")}pub fn queued(){panic!("runtime scheduler outside normal-fork test scope")}
+  use super::*;use abi::{Thread,Process,ProcessVm,AddressSpace,CpuLocalVar,SyscallRequest,SyscallResponse};
+  static MODE:AtomicUsize=AtomicUsize::new(0);static CHILD:AtomicPtr<Thread>=AtomicPtr::new(core::ptr::null_mut());
+  static CALLS:AtomicUsize=AtomicUsize::new(0);static THREAD:AtomicUsize=AtomicUsize::new(0);
+@@ -90,6 +92,8 @@
+    assert_eq!(CPU.load(Ordering::SeqCst),0);
+    frame[..8].copy_from_slice(b"MCFKA001");for(at,v)in[(8,19u64),(16,11),(24,29),(32,physical)]{frame[at..at+8].copy_from_slice(&v.to_le_bytes());}
+    if MODE.load(Ordering::SeqCst)==3{frame[120]^=1;}
++   if MODE.load(Ordering::SeqCst)==5{return -5;}
++   if MODE.load(Ordering::SeqCst)==6{return 0;}
+   }
+   AtomicU64::from_ptr(&raw mut response.status).store(1,Ordering::Release);
+   fork_control_guest::observe_fork_control_reply(r,&mut response,cpu,parent);response.ret
+@@ -127,4 +131,31 @@
+   let(out,p,_)=run(4);assert_eq!(out.disposition,1);assert_eq!(out.error,-95);assert_eq!(CALLS.load(Ordering::SeqCst),2);
+   assert_eq!(THREAD.load(Ordering::SeqCst),0);assert_eq!(VM.load(Ordering::SeqCst),0);assert_eq!(CPU.load(Ordering::SeqCst),0);assert_eq!((*p).refcount.counter,2);
+  }}
++
++ #[test]fn finalack_uncertainty_transport_error_retains_exact_owners(){unsafe{uncertain(5,-5)}}
++ #[test]fn finalack_uncertainty_missing_publication_retains_exact_owners(){unsafe{uncertain(6,-13)}}
++ unsafe fn uncertain(mode:usize,error:i32){
++  let(out,parent,before)=run(mode);assert_eq!((out.disposition,out.error),(1,error));
++  assert_eq!((THREAD.load(Ordering::SeqCst),VM.load(Ordering::SeqCst),PROCESS.load(Ordering::SeqCst),PAGES.load(Ordering::SeqCst)),(1,1,1,1));
++  assert_eq!(CALLS.load(Ordering::SeqCst),3);assert_eq!(CPU.load(Ordering::SeqCst),0);assert_eq!((*parent).refcount.counter,2);
++  assert_eq!(mem_helpers::live(),before+5);
++  let owners=fork_control_guest::uncertainty_owners(out.handle).expect("retained allocation remains discoverable");
++  assert!(owners.iter().all(|p|*p!=0));
++  let mut unique=owners.to_vec();unique.sort();unique.dedup();assert_eq!(unique.len(),4);
++  // A repeated actual production terminal call cannot reacquire the graph
++  // permit, repeat destructive callbacks or manufacture successful retirement.
++  assert_eq!(fork_control_guest::retry_final_ack(out.handle),-13);
++  assert_eq!(fork_control_guest::uncertainty_owners(out.handle),Some(owners));
++  assert_eq!(mem_helpers::live(),before+5);assert_eq!((*parent).refcount.counter,2);
++  assert_eq!(CALLS.load(Ordering::SeqCst),3);assert_eq!(CPU.load(Ordering::SeqCst),0);
++  assert_eq!((THREAD.load(Ordering::SeqCst),VM.load(Ordering::SeqCst),PROCESS.load(Ordering::SeqCst),PAGES.load(Ordering::SeqCst)),(1,1,1,1));
++ }
++ #[test]fn finalack_uncertainty_success_retires_once_and_retry_cannot_free(){unsafe{
++  let(out,parent,before)=run(0);assert_eq!((out.disposition,out.error),(2,-11));
++  assert_eq!(mem_helpers::live(),before);assert_eq!((*parent).refcount.counter,1);assert_eq!(CPU.load(Ordering::SeqCst),1);
++  assert_eq!(fork_control_guest::retry_final_ack(out.handle),-2);
++  assert_eq!(mem_helpers::live(),before);assert_eq!((*parent).refcount.counter,1);assert_eq!(CPU.load(Ordering::SeqCst),1);
++  assert_eq!(CALLS.load(Ordering::SeqCst),3);
++  assert_eq!((THREAD.load(Ordering::SeqCst),VM.load(Ordering::SeqCst),PROCESS.load(Ordering::SeqCst),PAGES.load(Ordering::SeqCst)),(1,1,1,1));
++ }}
+ }
+--- CURRENT_PRODUCTION/kernel/rust/fork_control_guest.rs
++++ fixture/fork_control_guest.rs
+@@ -310,3 +310,15 @@
+ 
+ const _:()={assert!(size_of::<GuestIdentity>()==88);assert!(size_of::<ControlObservation>()==128);
+     assert!(core::mem::offset_of!(Carrier,bytes)%8==0);};
++
++// Test-only readout: production Carrier layout and real registry visit.
++pub(crate) unsafe fn uncertainty_owners(handle:Handle)->Option<[usize;4]>{let mut result=None;
++ let rc=registry::visit(handle,|p|{let c=p.as_ref();assert_eq!(c.phase,RETAINED);
++ assert!(c.owned_credits.as_ref().is_some_and(|v|v.retirement_complete(false)));
++ assert_eq!(c.control.state,RETAINED);
++ assert!(c.owned_request.is_some());
++ result=Some([c.request,
++ c.retired_control.as_ref().unwrap().request.as_ptr()as usize,
++ c.control.owned_request.as_ref().unwrap().request.as_ptr()as usize,c as *const Carrier as usize]);0});
++ if rc==0{result}else{None}}
++pub(crate) unsafe fn retry_final_ack(handle:Handle)->i32{destroy_and_ack_current(handle)}

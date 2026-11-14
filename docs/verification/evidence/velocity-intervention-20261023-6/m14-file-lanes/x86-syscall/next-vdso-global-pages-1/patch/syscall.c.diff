@@ -1,0 +1,22 @@
+--- a/arch/x86_64/kernel/syscall.c
++++ b/arch/x86_64/kernel/syscall.c
+@@ -2910,6 +2910,9 @@
+ 	return error;
+ } /* vdso_get_vdso_info() */
+ 
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++extern int vdso_map_global_pages(void);
++#else
+ int vdso_map_global_pages(void)
+ {
+ 	int error;
+@@ -2960,7 +2963,8 @@
+ out:
+ 	dkprintf("vdso_map_global_pages(): %d\n", error);
+ 	return error;
+-} /* vdso_map_global_pages() */
++}
++#endif /* complete global VDSO mapping orchestration is Rust-selected */ /* vdso_map_global_pages() */
+ 
+ #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ static void vdso_calc_container_size(void)

@@ -1,0 +1,52 @@
+{
+  "schema": "mckernel-retirement-release-admission-correction-failure-v1",
+  "recorded_at": "2026-09-29T06:23:00-07:00",
+  "status": "FAIL_BOUNDED_CORRECTION",
+  "family": "canonical Git object streaming and retirement",
+  "source_candidate": {
+    "packet_sha256": "205bf540c6d907b88b8c1c0c72c238b5b75b807ff4f0343d54a724a1e9ce8870",
+    "packet_test_sha256": "9d05eb944771faf48a001974e20c1212a5bf2f9fd9dc30cccf467eb6c7c37fbf",
+    "change": "raise only canonical reader RLIMIT_AS from 512 MiB to 12 GiB"
+  },
+  "test_results": {
+    "python_3_8": "109/109 PASS",
+    "python_3_9": "109/109 PASS",
+    "full_inventory_verification": "FAIL"
+  },
+  "full_verification": {
+    "elapsed_seconds": 32.52,
+    "user_seconds": 26.06,
+    "system_seconds": 4.20,
+    "maximum_resident_kib": 7900852,
+    "major_page_faults": 1,
+    "minor_page_faults": 655139,
+    "swaps": 0,
+    "primary_error": "malformed blob record",
+    "cleanup_error": "Command 'canonical reader' timed out after 5 seconds"
+  },
+  "malformed_authority": {
+    "main_records": 7715,
+    "ihk_records": 1296,
+    "main_malformed": 49,
+    "ihk_malformed": 0,
+    "first_stream_record": 5634,
+    "first_inventory_index": 8192,
+    "first_path": "test/freeze_thaw/tp/100.sh",
+    "type": "symlink",
+    "sha1": "d7f2fff70ec613fb0ccd08da8f8f4a5ba6a3eba7",
+    "content_sha256": null,
+    "size": 6,
+    "git_sha256_object": "d4b53ba07ac4e8c79a6710f5c30dacb0419c637d4582cc1abc31601867bcc728",
+    "diagnosis": "Preparation inventory intentionally omits the regular-file content sha256 field for symlinks; canonical verification incorrectly sourced every content digest from that field instead of hashing the symlink target bytes."
+  },
+  "cleanup_diagnosis": "On a mid-stream record error, stream_store enters finish_reader while cat-file stdin remains open, so the otherwise healthy reader waits for more records and exceeds the five-second completion wait.",
+  "side_effects": {
+    "candidate_or_backup_mutated": false,
+    "retirement_executed": false,
+    "privilege_mutation": false,
+    "docker_mutation": false,
+    "build_or_guest": false,
+    "orphaned_reader_process": false
+  },
+  "convergence": "The original family failure and its one bounded correction are exhausted. Escalate the coherent content-authority, reader-retirement and RSS design before another candidate."
+}

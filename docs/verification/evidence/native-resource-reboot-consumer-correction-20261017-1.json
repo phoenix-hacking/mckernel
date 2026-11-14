@@ -1,0 +1,184 @@
+{
+  "actual_capture": {
+    "after_bytes": 47595,
+    "append_prefix": true,
+    "archive": {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-dispatch-20261017-2/attempt-evidence.tar",
+      "sha256": "f594c8a4ae7eccfe19c09533f3d020438582382367be47ef3256a5ffd324e2b0",
+      "size": 962560
+    },
+    "before_bytes": 42439,
+    "result": {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-consumer-correction-20261017-1/corrected-actual-result.json",
+      "sha256": "5ac4802fea18a84bb90c7fc01c83da25074da07734746e2ee35927caf03ba2f2",
+      "size": 420
+    },
+    "serial": {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-consumer-correction-20261017-1/actual-serial.log",
+      "sha256": "a60f9c3818a796530abc2f89369d0dcc6acf0cc79e478913ed6981c091545f27",
+      "size": 277418
+    },
+    "unique_fresh_status": [
+      "<14>[   34.067225] NATIVE_BOOT_STATUS x86_64 observed=5 expected=5"
+    ]
+  },
+  "checks": {
+    "actual_new_decoder_guard_and_corrected_consumer": true,
+    "actual_test_returncode": 0,
+    "loader_injection": false,
+    "methods": 2,
+    "negative_scope": [
+      "wrongPRI0/6/13/15/22",
+      "stale",
+      "duplicate",
+      "Booted3",
+      "Ready4",
+      "truncated",
+      "nonprefix/wrapped",
+      "missing",
+      "boundedloss",
+      "resourcefailure",
+      "rawstatus/type",
+      "sequenceorder"
+    ],
+    "skips": 0
+  },
+  "consumer": {
+    "path": "/home/holden/mckernel/scripts/application-tests/native_resource_reboot_sequence.py",
+    "sha256": "53dace6e984b28b2236c91c69906c202399fed2cac88cff260db1f504e62191c",
+    "size": 4238
+  },
+  "consumer_version": 3,
+  "full_cycle_verified": false,
+  "helper_binary": {
+    "path": "/home/holden/mckernel-work/scratch/native-boot-running-prerequisite-20261017-1/native-boot-running",
+    "sha256": "6b9f753e34d12da474c701ca64ce62825788295646b60f67482ef9ec8690c417",
+    "size": 31208
+  },
+  "helper_source": {
+    "path": "/home/holden/mckernel-work/scratch/native-boot-running-prerequisite-20261017-1/source/native-boot-running.c",
+    "sha256": "6a39824cdcde3ddfa3508d3c229f195f6ecbe5a07d57eb748890d452cc729e03",
+    "size": 12362
+  },
+  "linux_contract": {
+    "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-consumer-correction-20261017-1/linux-printk-contract.txt",
+    "sha256": "b69725a7e6955188e65654d48b7b0f5ff4062ed8ac9adc473c60c93856ecefba",
+    "size": 2135
+  },
+  "linux_source": {
+    "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/kernel/printk/printk.c",
+    "sha256": "f8b0c2b0830ae161f503a7ab4d6d9cbf0cbc1a3e6827568aba05900de5dd4967",
+    "size": 134359
+  },
+  "new_decoder": {
+    "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-decoder-20261017-2/reboot_capture.py",
+    "sha256": "eb9fa1106ec8caead27eaae37202c38bdae05c854cf61d533e89f86e18257cb5",
+    "size": 7120
+  },
+  "next": "Independent affected-source/capture evaluation and allfour evaluator+retirement review; no guest retry.",
+  "old_decoder": {
+    "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-collector-20261017-1/source/reboot_capture.py",
+    "sha256": "9ce5380fa50243ea9f865e45c0432b733f7373385c8e70a1ac13ed0f636fc558",
+    "size": 7120
+  },
+  "preserved_fail": {
+    "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-consumer-correction-20261017-1/old-consumer-failure.txt",
+    "sha256": "b99345316b58b58bb3a265037829ce86670a99e339cc86f3738781afeba3d437",
+    "size": 513
+  },
+  "priority_contract": {
+    "accepted_snapshot_pri_exact": 14,
+    "formula": "(LOG_USER << 3) | level6 ==14; facility0 userspacewrite cannot override LOG_USER",
+    "generic_priority_match": false,
+    "helper_write_pri": 6,
+    "linux_default_facility": 1,
+    "serialized_snapshot_pri": 14
+  },
+  "production_acceptance": false,
+  "retained_files": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-consumer-correction-20261017-1/actual-after.snapshot",
+      "sha256": "d455d6657de75e7e764b2cd89a6661d01e060ab3a1f44dd57d8bd2378eb80deb",
+      "size": 47595
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-consumer-correction-20261017-1/actual-before.snapshot",
+      "sha256": "b1fb3528e3b70e9db6e6e985cf0d920538fc30f4c772c73dac77d3d66aaade85",
+      "size": 42439
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-consumer-correction-20261017-1/actual-serial.log",
+      "sha256": "a60f9c3818a796530abc2f89369d0dcc6acf0cc79e478913ed6981c091545f27",
+      "size": 277418
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-consumer-correction-20261017-1/consumer-before.py",
+      "sha256": "dfa2d96b1be6d698ae00c83a622986d3e8f6f13e1f376d8914491aa78612cb5d",
+      "size": 3942
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-consumer-correction-20261017-1/consumer.diff",
+      "sha256": "466e1444cb8f890ce7a7a99d651f9de90964d79283a4281daa2e19fede9d80c4",
+      "size": 1603
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-consumer-correction-20261017-1/corrected-actual-result.json",
+      "sha256": "5ac4802fea18a84bb90c7fc01c83da25074da07734746e2ee35927caf03ba2f2",
+      "size": 420
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-consumer-correction-20261017-1/decoder.diff",
+      "sha256": "e7151cd504ed7b3cb5819ec0be9edb59c623e41c2eaa34fe25bf98c653197fb4",
+      "size": 818
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-consumer-correction-20261017-1/linux-printk-contract.txt",
+      "sha256": "b69725a7e6955188e65654d48b7b0f5ff4062ed8ac9adc473c60c93856ecefba",
+      "size": 2135
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-consumer-correction-20261017-1/old-consumer-failure.txt",
+      "sha256": "b99345316b58b58bb3a265037829ce86670a99e339cc86f3738781afeba3d437",
+      "size": 513
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-consumer-correction-20261017-1/tests-before.py",
+      "sha256": "36055ae083351911ee0e487ca819abb90618f28ad1f845048d01cc6451c08504",
+      "size": 12829
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-consumer-correction-20261017-1/tests.command.json",
+      "sha256": "52f05c25823045da40160b77edff2f9fe8fa4d5f86e7f94b32ef98415caedf0a",
+      "size": 794
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-consumer-correction-20261017-1/tests.diff",
+      "sha256": "91538abfab413fe209532ea11afb9387e2f578c1271f1b8775713836c8047dad",
+      "size": 4975
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-consumer-correction-20261017-1/tests.status.json",
+      "sha256": "d58f2de05a957da84cf8d9b3365a5810f062bcf071c90aa2e7b72527f82caead",
+      "size": 141
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-consumer-correction-20261017-1/tests.stderr",
+      "sha256": "e84af6fb3183f2e6c929d3188feaa38c20151c825192a5117c1911fec8992ee5",
+      "size": 100
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-consumer-correction-20261017-1/tests.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    }
+  ],
+  "runtime_acceptance": false,
+  "scope": "Host consumer/fixture correction only. Raw guest captures, helper/C/staticcollector/kernel/module/image/oracles untouched. Frozen9ce/dfa bytes retained; newdecoder only exact consumerpin substitution.",
+  "status": "PASS_SOURCE_AND_RETAINED_CAPTURE_PROTOCOL_PENDING_INDEPENDENT_REVIEW",
+  "task_id": "native-resource-reboot-consumer-correction-20261017-1",
+  "tests": {
+    "path": "/home/holden/mckernel/scripts/tests/test_native_resource_reboot_sequence.py",
+    "sha256": "f1574ea370a7c6761aa7b2b52aeed815166b24000347da7ae1c5b95185bc36df",
+    "size": 15453
+  }
+}

@@ -1,0 +1,47 @@
+--- /home/holden/mckernel/scripts/tests/test_native_running_external_modules_offline.py.before
++++ /home/holden/mckernel/scripts/tests/test_native_running_external_modules_offline.py
+@@ -183,10 +183,43 @@
+                 with self.assertRaisesRegex(ValueError, "MM provider D/U mismatch"):
+                     driver.actual_mm_provider_check(self.candidate / "modules")
+ 
++    def test_actual_current68_reference_only_pipe_proof_contract(self):
++        manifest = driver.load_preparation(PREPARATION)
++        self.assertNotIn("make_pipe_probe", manifest)
++        reference = manifest["references"]["make_pipe_proof"]
++        retained = Path(reference["retained_copy"])
++        self.assertEqual(driver.digest(retained), reference["sha256"])
++        # Only /usr/bin/make identity is injected by setUp; descriptor, proof
++        # bytes, hashes and every decoder/content check use installed code.
++        driver.pipe_probe(manifest, retained.parent)
++
++    def test_actual_reference_only_pipe_proof_drift_is_refused(self):
++        current = driver.load_preparation(PREPARATION)
++        self.assertNotIn("make_pipe_probe", current)
++        reference = current["references"]["make_pipe_proof"]
++        retained = Path(reference["retained_copy"])
++        copied = self.inputs / retained.name
++        copied.write_bytes(retained.read_bytes())
++        for failure in ("reference", "proof", "content"):
++            manifest = copy.deepcopy(current)
++            copied.write_bytes(retained.read_bytes())
++            if failure == "reference":
++                manifest["references"]["make_pipe_proof"]["sha256"] = "0" * 64
++            elif failure == "proof":
++                copied.write_bytes(copied.read_bytes() + b" ")
++            else:
++                proof = json.loads(copied.read_bytes())
++                proof["direct_child_joined"] = False
++                copied.write_text(json.dumps(proof))
++                manifest["references"]["make_pipe_proof"]["sha256"] = driver.digest(copied)
++            expected = "pipe recipe proof" if failure == "content" else "pipe probe drift"
++            with self.subTest(failure=failure), self.assertRaisesRegex(ValueError, expected):
++                driver.pipe_probe(manifest, self.inputs)
++
+     def test_missing_pipe_probe_is_refused_before_executor(self):
+         self.manifest.pop("make_pipe_probe")
+         receipt, process = self.run_driver(self.synthetic_process)
+-        self.assertIn("pinned make pipe recipe observation required", receipt["error"])
++        self.assertIn("retained make pipe proof reference required", receipt["error"])
+         process.assert_not_called()
+ 
+     def test_changed_pipe_probe_is_refused_before_executor(self):

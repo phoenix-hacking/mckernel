@@ -1,0 +1,350 @@
+{
+  "OBSERVATIONS": {
+    "bytes": 6847,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/oserror-message-oracle-correction-1/qualification-1/OBSERVATIONS.json",
+    "sha256": "5c2036f2dcc3db4fe5de36620db7b028880aaf877a1573d82a48f19c8b791423"
+  },
+  "Root_chunk_id": "ca8793",
+  "Root_exit_code": 0,
+  "Root_saved_current_owner_resource_refs": [
+    {
+      "bytes": 25573,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-corrected-current-root-admission-1/CURRENT-OWNER-VALIDATION.PRIVATE.json",
+      "sha256": "1db1d3fc4e33054e98da99cbd7c2ac8cd1dd0550f810cc7425154b2a7786ae58"
+    },
+    {
+      "bytes": 2835,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-corrected-current-root-admission-1/SCOPED-RESOURCE-CENSUS.json",
+      "sha256": "cd7f686449ffffc64e7cd2585032e87b1325c7b5784c30f3c400079ba18569f9"
+    }
+  ],
+  "Root_session_remaining": false,
+  "actual_RESULT": {
+    "bytes": 1989,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/oserror-message-oracle-correction-1/execution-1/RESULT.json",
+    "sha256": "d50ad32f781c4137510b684ab614d7040c49186d3d843730e1707a0696a2c610"
+  },
+  "actual_complete_function_If_selection": {
+    "bytes": 1707,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/ACTUAL-ENTRY-SELECTION.json",
+    "sha256": "7235742cd511eeafe7564663e89de9f85e7bbc86977a362a81781a47da8320b1"
+  },
+  "actual_cwd": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/oserror-message-oracle-correction-1",
+  "actual_literal_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=268435456",
+    "--cpu=10",
+    "--fsize=4194304",
+    "--nofile=64",
+    "--",
+    "/usr/bin/env",
+    "-i",
+    "PATH=/usr/bin:/bin",
+    "LANG=C",
+    "LC_ALL=C",
+    "TZ=UTC",
+    "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/oserror-message-oracle-correction-1/output-1/tmp",
+    "PYTHONDONTWRITEBYTECODE=1",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/outer_keeper_cases.py"
+  ],
+  "actual_native_execution": false,
+  "actual_positive_owner": {
+    "adopted_kills": [],
+    "adopted_reaps": [],
+    "error": null,
+    "label": "actual-outer-keeper-two-entry-vectors",
+    "leader": 1619686,
+    "leader_birth": "53128235",
+    "leader_group_signalled": false,
+    "leader_parent_joined": true,
+    "remaining_direct_children": [],
+    "status": 0,
+    "streams_closed": true,
+    "timed_out": false,
+    "whole_descendants_joined": true
+  },
+  "all21_input_pins_unchanged": true,
+  "all5_function_spans_and_final_If_current_source_equal": true,
+  "at": "2026-11-12T01:01:36.398011+00:00",
+  "case_decisions": [
+    {
+      "actual_main_calls": 1,
+      "actual_modeled_Popen_calls": 1,
+      "decision": "PASS_EXACT_FULL_OBSERVATION",
+      "id": "secondary_interruption_outside_perwait",
+      "main_retry_or_replacement_Popen": false,
+      "native_runtime_historical_release_inferred": false,
+      "original_UNKNOWN_resource_fields_remain": {
+        "birth": "900001",
+        "late_join_at": "MODEL_TIME",
+        "late_original_direct_wait_joined": true,
+        "late_original_exit": 0,
+        "pid": 20000001,
+        "primary_error": "original-capture-failure",
+        "resource_charge_retained": true,
+        "status": "UNKNOWN"
+      },
+      "original_primary": "OSError",
+      "original_same_object_waits": [
+        [
+          30,
+          "timeout",
+          true
+        ],
+        [
+          30,
+          0,
+          true
+        ]
+      ],
+      "positive_same_original_wait_before_primary_can_leave": true,
+      "raw_keeper_capture_errors": [],
+      "raw_outer_retention_errors": [
+        {
+          "errno": null,
+          "label": "existing-retention-path",
+          "message": "secondary clock interruption",
+          "same_injected_object": true,
+          "traceback_functions": [
+            "retain_original_pending_nonescaping",
+            "preserve_original_pending_waits",
+            "now"
+          ],
+          "type": "KeyboardInterrupt"
+        }
+      ],
+      "same_original_primary_and_traceback_retained": true
+    },
+    {
+      "actual_main_calls": 1,
+      "actual_modeled_Popen_calls": 1,
+      "decision": "PASS_EXACT_FULL_OBSERVATION",
+      "id": "record_failure_after_positive_wait",
+      "main_retry_or_replacement_Popen": false,
+      "native_runtime_historical_release_inferred": false,
+      "original_UNKNOWN_resource_fields_remain": {
+        "birth": "900001",
+        "outermost_original_direct_wait_joined": true,
+        "outermost_original_exit": 0,
+        "pid": 20000001,
+        "primary_error": "original-capture-failure",
+        "resource_charge_retained": true,
+        "status": "UNKNOWN"
+      },
+      "original_primary": "KeyboardInterrupt",
+      "original_same_object_waits": [
+        [
+          30,
+          "timeout",
+          true
+        ],
+        [
+          30,
+          0,
+          true
+        ]
+      ],
+      "positive_same_original_wait_before_primary_can_leave": true,
+      "raw_keeper_capture_errors": [
+        {
+          "errno": 5,
+          "label": "OUTERMOST-ORIGINAL-CUSTODY.json",
+          "message": "[Errno 5] postjoin record unavailable",
+          "same_injected_object": true,
+          "traceback_functions": [
+            "keeper_record",
+            "save"
+          ],
+          "type": "OSError"
+        },
+        {
+          "errno": 32,
+          "label": "keeper-stderr",
+          "message": "[Errno 32] report stderr unavailable",
+          "same_injected_object": true,
+          "traceback_functions": [
+            "keeper_record",
+            "write"
+          ],
+          "type": "BrokenPipeError"
+        }
+      ],
+      "raw_outer_retention_errors": [
+        {
+          "errno": 28,
+          "label": "existing-retention-path",
+          "message": "[Errno 28] record field unavailable",
+          "same_injected_object": true,
+          "traceback_functions": [
+            "retain_original_pending_nonescaping",
+            "preserve_original_pending_waits",
+            "now"
+          ],
+          "type": "OSError"
+        },
+        {
+          "errno": 28,
+          "label": "existing-retention-path",
+          "message": "[Errno 28] record field unavailable",
+          "same_injected_object": true,
+          "traceback_functions": [
+            "retain_original_pending_nonescaping",
+            "preserve_original_pending_waits",
+            "now"
+          ],
+          "type": "OSError"
+        }
+      ],
+      "same_original_primary_and_traceback_retained": true
+    }
+  ],
+  "current_Root_admission": {
+    "bytes": 1494,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/oserror-message-oracle-correction-1/ROOT-CURRENT-ADMISSION.ACTUAL.json",
+    "sha256": "819aca20161a5ad6b5e48571753a3161532ea8dd9442ab6e591465c1299ade3e"
+  },
+  "current_resource_disposition": {
+    "Root_may_record_current_only_retirement": true,
+    "actual_positive_owner_and_fullRoot_terminal_proven": true,
+    "eligible_only_current_CPU": [
+      0
+    ],
+    "eligible_only_current_HOST_bytes": 268435456,
+    "eligible_only_current_HOST_jobs": 1,
+    "native_and_historical_UNKNOWN_claims_unchanged": true,
+    "reviewer_released_or_mutated_no_resource": true
+  },
+  "decision": "QUALIFIED_GO_ACTUAL_PURE_OUTER_KEEPER_TWO_VECTORS_ONLY",
+  "external_oracles": {
+    "bytes": 6847,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/oserror-message-oracle-correction-1/EXPECTED.json",
+    "sha256": "5c2036f2dcc3db4fe5de36620db7b028880aaf877a1573d82a48f19c8b791423"
+  },
+  "failure_preservation": {
+    "first_frozen_original_check_remains_FAILED": true,
+    "independent_failed_result_qualification": {
+      "bytes": 8391,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-review-sourceacq-max-1/failed-result-1/QUALIFICATION.json",
+      "sha256": "7ea41b6ee5865874f0c61433a3f8a7bdde018264ffe1376360650d89c261306c"
+    },
+    "no_production_keeper_or_fixture_or_profile_or_capture_algorithm_fix": true,
+    "only_four_source_implied_external_message_literals_changed": true,
+    "oracle_derivation": {
+      "bytes": 3707,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/oserror-message-oracle-correction-1/ORACLE-DERIVATION.json",
+      "sha256": "a53ec694415d374e069ab7b89961574bb7b2e32bb6931ef6ce8ee5d15c1a6397"
+    },
+    "original_failed_RESULT": {
+      "bytes": 1725,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/execution-1/RESULT.json",
+      "sha256": "ff3086374fa08ae09a9b5e8b6d4cfe235b0fa4f83d907ae87e11e2e20a9dc9e8"
+    },
+    "original_failed_fullRoot": {
+      "bytes": 404,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/execution-1/ROOT-TOOL-FINAL.json",
+      "sha256": "e104ec8af78fdb18ea6daf8e752f8c26fa9529810eebd4450e995c50d78e47f6"
+    },
+    "original_failed_oracle": {
+      "bytes": 6804,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/EXPECTED.json",
+      "sha256": "b5d0add7bfdb09305c4d82e31756f672bb3c8cac9565ff538788763116e2f1bf"
+    },
+    "original_failed_request": {
+      "bytes": 15126,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/REQUEST.json",
+      "sha256": "5cfd545aee1c2ecf83baac8e892cefe20159be83d1ac45a460d0063be59675de"
+    },
+    "original_failed_stdout": {
+      "bytes": 4155,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/execution-1/actual-outer-keeper-two-entry-vectors.stdout",
+      "sha256": "7b82bdc7f3ce6b201bdc5721166e0ac69e3f560d9d7a3a0da7285f2282d252fe"
+    }
+  },
+  "fixture": {
+    "bytes": 7647,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/outer_keeper_cases.py",
+    "sha256": "9a5c8d587048c515f5bb79e6f9e8d69cb310a2110f739965eb7a822822a77816"
+  },
+  "full_Root_final": {
+    "bytes": 237,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/oserror-message-oracle-correction-1/execution-1/ROOT-TOOL-FINAL.json",
+    "sha256": "65c5fa16d7d3122fe5f3c473b3399f5f5f277908daebf82279743ff5481bd6e3"
+  },
+  "full_Root_initial": {
+    "bytes": 237,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/oserror-message-oracle-correction-1/execution-1/ROOT-TOOL-INITIAL.json",
+    "sha256": "65c5fa16d7d3122fe5f3c473b3399f5f5f277908daebf82279743ff5481bd6e3"
+  },
+  "full_two_actual_JSON_observations_equal_corrected_external_oracle_and_literal_request": true,
+  "inner_admission": {
+    "bytes": 666,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/oserror-message-oracle-correction-1/execution-1/ADMISSION.json",
+    "sha256": "2ab20318220185dd69e1e1058d32dd4f16c8af0e9ef42514ed2719571d6e912b"
+  },
+  "inner_closure": {
+    "bytes": 253,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/oserror-message-oracle-correction-1/execution-1/INNER-CLOSURE.json",
+    "sha256": "5f6e9fbaf13e93e0c3616467ad7c6f2e23c60c185efca43238dbd64d5a9a5be6"
+  },
+  "input_pin_count_including_interpreter": 21,
+  "method": "Saved exact observations/expected/source/AST/input/Owner/fullRoot joins only. No fixture/helper/Root/native/account/flag/process or signal/pause replay.",
+  "no_replay": true,
+  "operation_GO": {
+    "bytes": 9950,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-review-sourceacq-max-1/oserror-message-oracle-correction-1/REVIEW.json",
+    "sha256": "31b78e1ec175ade0f4382173629d28805b99e0aafbae494f7764fb0eb4fc37d9"
+  },
+  "original_acceptance": false,
+  "ownership": {
+    "bytes": 404,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/oserror-message-oracle-correction-1/execution-1/ownership.json",
+    "sha256": "86211eb81521406baf635375888666a7faa82b37f2f8814e573922dc3c0eadf6"
+  },
+  "qualifier": "/root/p04_tests_max",
+  "request": {
+    "bytes": 16574,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/oserror-message-oracle-correction-1/REQUEST.json",
+    "sha256": "fc001589e464a46647464bd5f06a12e1179e20395e2761d170c16de31c5b5fb9"
+  },
+  "saved_empty_stderr": {
+    "bytes": 0,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/oserror-message-oracle-correction-1/execution-1/actual-outer-keeper-two-entry-vectors.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "saved_stdout": {
+    "bytes": 4155,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/oserror-message-oracle-correction-1/execution-1/actual-outer-keeper-two-entry-vectors.stdout",
+    "sha256": "7b82bdc7f3ce6b201bdc5721166e0ac69e3f560d9d7a3a0da7285f2282d252fe"
+  },
+  "schema": "mckernel.actual-outer-keeper-two-vector-qualification.v1",
+  "scope_limits": [
+    "Only full actual corrected entry/keeper functions and finalIf with controlled initial-main/FakePopen/time/record/save/stderr effects. No real originalmain/process/Popen/Root/native/flags/signals/pause/account execution.",
+    "After secondary interruption before perwait and after record/report failures, only the same modeled original handle waited(timeout30 then0). Main ran once and no replacement Popen was created. Every modeledoriginal primary/rawTB and originalUNKNOWN/resource flag remained.",
+    "Positive modeledwait is not real native/runtime/lease/source restoration or source authority. Actual outer capture on real privileged pending handles and full original firstnative remains separately admitted/unproved by this HOST check.",
+    "The original failed5cfd/b5d0/rawstdout7b82/fullRoot50d763 and its failed-resultQ7ea remain intact. This actual correctedfc001 run is independently positive; the old failed check is not relabeled PASS.",
+    "Only actual currentCPU0/256MiB/job1 may be retired by Root from positive actualOwner+fullRoot closure. No native pool/global/historical/source/service/UNKNOWN release follows.",
+    "No originalDEFAULT/FUNCTIONAL/file/milestone/goal or C-retirement acceptance."
+  ],
+  "source": {
+    "bytes": 18085,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-runtime-native-outer-capture-publicabi-max-1/correction-1/run_root_once.py",
+    "sha256": "1f668620d63bf7ab4a4b86ee6c8d2128b96d59d4e19c4d0601ab2dc894870657"
+  },
+  "source_delta_GO": {
+    "bytes": 4625,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-runtime-native-outer-capture-review-sdk-max-1/correction-1/REVIEW.source.json",
+    "sha256": "df56523a8da581ef190a1c7a92f66cdd1af6caad79f21438bba8127578a4d83a"
+  },
+  "source_ready": {
+    "bytes": 2778,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-runtime-native-outer-capture-publicabi-max-1/correction-1/READY.NOT-EXECUTED.json",
+    "sha256": "aa6dfceab8108444881eff383effc67d56cf268c73a9e8c59690e17849807240"
+  },
+  "synchronous_initial_final_equal": true
+}

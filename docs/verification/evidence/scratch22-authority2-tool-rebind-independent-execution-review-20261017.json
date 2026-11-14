@@ -1,0 +1,54 @@
+{
+  "schema": "scratch22-authority2.tool-rebind-request-independent-review.v1",
+  "decision": "PASS_EXECUTION_CONDITIONAL",
+  "reviewer": "/root/scratch22_adapter_review",
+  "implementation_ownership": false,
+  "model": "gpt-6.1-sol",
+  "scope": "Additive exact new-request binding only. Reuses the unchanged accepted probe, root guard, resource profile and provenance review. No execution performed or authority to overlap a native build.",
+  "reused_review": {
+    "path": "docs/verification/evidence/scratch22-authority1-tool-rebind-independent-execution-review-20261017.json",
+    "sha256": "a86c4bd247faf892e8e66cc257d7c08dd6160dcce1081c08ee30655a2e958535",
+    "all_source_and_import_hashes_rechecked_unchanged": true,
+    "probe_sha256": "412d46de7e078746a7ec979a13ccb25753d6fa34708610932e35be8f02a89635"
+  },
+  "request": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-build-image-rebind-d37d2216-scratch22-authority2-image1-20261017.json",
+    "sha256": "aea8d97927177b58d86cfb5243755e398963f323052ce929e02302f5ad803f01",
+    "target_candidate_sha": "d37d2216a60c6db10442ba8bc238d64fbd59c5ea",
+    "target_evidence_root": "/home/holden/mckernel-exact-image-evidence-d37d2216-scratch22-authority2-image1-20261017",
+    "target_receipt": "/home/holden/mckernel-exact-image-evidence-d37d2216-scratch22-authority2-image1-20261017/image-receipt.json",
+    "lease": "/home/holden/.mckernel-exact-image-evidence-d37d2216-scratch22-authority2-image1-20261017.lease.json",
+    "image_id": "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5",
+    "source_receipt": "/home/holden/mckernel-exact-image-evidence-c81aeaca-7/image-receipt.json",
+    "source_receipt_sha256": "824e22c0aad7494914d39adb31bb70290c59912d5326618d2ffeb5cdbb6ef845"
+  },
+  "minimal_source_reference": {
+    "path": "docs/verification/evidence/scratch22-authority2-minimal-source-repair-independent-review-20261017.json",
+    "sha256": "f0a565f2b1a81ed49acea2234fc2b24621a99cab6298c75474b7a20730b6a077",
+    "decision": "PASS_MINIMAL_SOURCE_REPAIR"
+  },
+  "independent_checks": {
+    "result": "PASS_NEW_REQUEST_BINDING",
+    "exit_code": 0,
+    "profile": "CPU5, one ordinary Python process,2-GiB virtual-AS/50CPU/60wall limits; no root, Docker, compiler, guest, network, Git or execution mutation.",
+    "exact_changes_only": ["target_candidate_sha", "target_evidence_root", "target_receipt", "probe.target_receipt_candidate_sha", "probe.target_receipt_evidence_root"],
+    "method": "Deep comparison with the exact hash-bound reviewed authority1 request proves every other field unchanged, including source image/provenance, all92 evidence rows, profile, toolchain lock and probe contract. Current source receipt hash and every imported source hash still match the reused review. New canonical target/receipt/lease/quarantine paths are absent.",
+    "source_or_provenance_suites_repeated": false,
+    "blocking_findings": []
+  },
+  "activation_prerequisites": [
+    "Actual authority2 native build PASS, followed by independently accepted exact terminal cleanup. No overlap with a build, guest, owner or unretired container.",
+    "Dispatcher checkpoint/fetch and exact execution release bind the unchanged guarded probe/imports, this review and the new request digest.",
+    "Fresh boot/UUID/mount/device, process/container/lease census and free preserved development lock27:4. Target paths, request quarantine, target lease and shared heavy token must remain absent. Preserve all resource floors and aggregate budget from the reused review.",
+    "No new external stop or97% included-usage stop. All other activation, retirement, signal/quarantine and failure-preservation requirements of the reused review remain mandatory."
+  ],
+  "command_once_after_activation": [
+    "python3", "-B", "scripts/native_rust_exact_build_image_rebind_probe.py",
+    "--request", "/home/holden/mckernel-work/scratch/native-exact-build-image-rebind-d37d2216-scratch22-authority2-image1-20261017.json",
+    "--expected-request-sha256", "aea8d97927177b58d86cfb5243755e398963f323052ce929e02302f5ad803f01"
+  ],
+  "execution_profile": "Existing guarded CLI holds exact development lock27:4 through positive receipt/absence/shared-release proof or indefinite uncertainty quarantine. One current-user container, CPUs2-5/four CPUs,12GiB/no added swap,512tasks, no mounts/network, read-only root, cap-drop ALL/no-new-privileges,256MiB tmpfs. No outer timeout or external unlock wrapper.",
+  "required_receipt": "PASS for exact targetd37d2216, immutable image41778f1f, fresh tool observation equal to source, owned container retired/removed/exactly absent, lease/shared token absent and complete retained evidence. No unchanged replay on failure.",
+  "execution_released_now": false,
+  "acceptance_credit": false
+}

@@ -1,0 +1,88 @@
+error[E0425]: cannot find value `EOVERFLOW` in this scope
+    --> /candidate/modules/os_runtime.rs:1931:59
+     |
+1931 |         let epoch = table.next_epoch.checked_add(1).ok_or(EOVERFLOW)?;
+     |                                                           ^^^^^^^^^ not found in this scope
+     |
+note: these constants exist but are inaccessible
+    --> /candidate/modules/os_registry.rs:27:1
+     |
+  27 | const EOVERFLOW: i32 = 75;
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::os_registry::EOVERFLOW`: not accessible
+     |
+    ::: /candidate/modules/ihk_ioctl.rs:24:1
+     |
+  24 | const EOVERFLOW: i32 = 75;
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::ihk_ioctl::EOVERFLOW`: not accessible
+     |
+    ::: /candidate/modules/device_registry.rs:48:1
+     |
+  48 | const EOVERFLOW: i32 = 75;
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::device_registry::EOVERFLOW`: not accessible
+help: consider importing this constant
+     |
+  10 + use crate::os_runtime::bindings::EOVERFLOW;
+     |
+
+error[E0425]: cannot find value `EOVERFLOW` in this scope
+   --> /candidate/modules/smp_fork_link.rs:120:76
+    |
+120 |         let parent_refs = p.fork_prepared_parent_refs.checked_add(1).ok_or(EOVERFLOW)?;
+    |                                                                            ^^^^^^^^^ not found in this scope
+    |
+help: consider importing this constant
+    |
+  5 + use crate::smp_application::bindings::EOVERFLOW;
+    |
+
+error[E0425]: cannot find value `EOVERFLOW` in this scope
+   --> /candidate/modules/smp_fork_link.rs:143:78
+    |
+143 |             record.last_sequence = record.last_sequence.checked_add(1).ok_or(EOVERFLOW)?;
+    |                                                                              ^^^^^^^^^ not found in this scope
+    |
+help: consider importing this constant
+    |
+  5 + use crate::smp_application::bindings::EOVERFLOW;
+    |
+
+error[E0425]: cannot find value `EOVERFLOW` in this scope
+   --> /candidate/modules/smp_fork_ingress.rs:253:99
+    |
+253 |             let refs = slots[pi].as_ref().unwrap().fork_prepared_parent_refs.checked_add(1).ok_or(EOVERFLOW)?;
+    |                                                                                                   ^^^^^^^^^ not found in this scope
+    |
+help: consider importing this constant
+    |
+  4 + use crate::smp_application::bindings::EOVERFLOW;
+    |
+
+error[E0425]: cannot find value `EOVERFLOW` in this scope
+   --> /candidate/modules/smp_application.rs:287:72
+    |
+287 |     let parent_refs = p.fork_prepared_parent_refs.checked_add(1).ok_or(EOVERFLOW)?;
+    |                                                                        ^^^^^^^^^ not found in this scope
+    |
+help: consider importing this constant
+    |
+  4 + use crate::smp_application::bindings::EOVERFLOW;
+    |
+
+error[E0425]: cannot find value `EOVERFLOW` in this scope
+   --> /candidate/modules/smp_application_image.rs:158:60
+    |
+158 |         self.accesses = self.accesses.checked_add(1).ok_or(EOVERFLOW)?;
+    |                                                            ^^^^^^^^^ not found in this scope
+
+error: aborting due to 1 previous error
+
+For more information about this error, try `rustc --explain E0425`.
+make[3]: *** [/out/source/linux-6.12.0-211.44.1.el10_2/scripts/Makefile.build:284: /candidate/modules/ihk.o] Error 1
+make[3]: *** Waiting for unfinished jobs....
+error: aborting due to 5 previous errors
+
+For more information about this error, try `rustc --explain E0425`.
+make[3]: *** [/out/source/linux-6.12.0-211.44.1.el10_2/scripts/Makefile.build:284: /candidate/modules/ihk_smp_x86_64.o] Error 1
+make[2]: *** [/out/source/linux-6.12.0-211.44.1.el10_2/Makefile:1990: /candidate/modules] Error 2
+make[1]: *** [/out/source/linux-6.12.0-211.44.1.el10_2/Makefile:242: __sub-make] Error 2
+make: *** [Makefile:242: __sub-make] Error 2

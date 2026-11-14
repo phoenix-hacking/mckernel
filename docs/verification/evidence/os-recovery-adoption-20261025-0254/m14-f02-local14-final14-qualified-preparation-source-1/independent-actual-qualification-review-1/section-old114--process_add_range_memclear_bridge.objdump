@@ -1,0 +1,78 @@
+
+/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o:     file format elf64-x86-64
+
+
+Disassembly of section .ltext.process_add_range_memclear_bridge:
+
+0000000000000000 <process_add_range_memclear_bridge>:
+   0:	48 89 f8             	mov    %rdi,%rax
+   3:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	5: R_X86_64_64	_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data20OWNED_INIT_PT_LOADED
+   d:	83 39 00             	cmpl   $0x0,(%rcx)
+  10:	74 0f                	je     21 <process_add_range_memclear_bridge+0x21>
+  12:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	14: R_X86_64_64	linux_page_offset_base
+  1c:	48 8b 39             	mov    (%rcx),%rdi
+  1f:	eb 0a                	jmp    2b <process_add_range_memclear_bridge+0x2b>
+  21:	48 bf 00 00 00 00 00 80 ff ff 	movabs $0xffff800000000000,%rdi
+  2b:	48 01 c7             	add    %rax,%rdi
+  2e:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	30: R_X86_64_64	process_add_range_arch_memclear_callback
+  38:	48 8b 00             	mov    (%rax),%rax
+  3b:	48 85 c0             	test   %rax,%rax
+  3e:	74 02                	je     42 <process_add_range_memclear_bridge+0x42>
+  40:	ff e0                	jmp    *%rax
+  42:	55                   	push   %rbp
+  43:	48 89 e5             	mov    %rsp,%rbp
+  46:	48 83 fe 04          	cmp    $0x4,%rsi
+  4a:	0f 82 9d 00 00 00    	jb     ed <process_add_range_memclear_bridge+0xed>
+  50:	48 8d 46 fc          	lea    -0x4(%rsi),%rax
+  54:	89 c1                	mov    %eax,%ecx
+  56:	f7 d1                	not    %ecx
+  58:	f6 c1 0c             	test   $0xc,%cl
+  5b:	74 3b                	je     98 <process_add_range_memclear_bridge+0x98>
+  5d:	89 c1                	mov    %eax,%ecx
+  5f:	c1 e9 02             	shr    $0x2,%ecx
+  62:	ff c1                	inc    %ecx
+  64:	83 e1 03             	and    $0x3,%ecx
+  67:	8d 14 8d 00 00 00 00 	lea    0x0(,%rcx,4),%edx
+  6e:	48 29 d6             	sub    %rdx,%rsi
+  71:	66 66 66 66 66 66 2e 0f 1f 84 00 00 00 00 00 	data16 data16 data16 data16 data16 cs nopw 0x0(%rax,%rax,1)
+  80:	c6 07 00             	movb   $0x0,(%rdi)
+  83:	c6 47 01 00          	movb   $0x0,0x1(%rdi)
+  87:	c6 47 02 00          	movb   $0x0,0x2(%rdi)
+  8b:	c6 47 03 00          	movb   $0x0,0x3(%rdi)
+  8f:	48 83 c7 04          	add    $0x4,%rdi
+  93:	48 ff c9             	dec    %rcx
+  96:	75 e8                	jne    80 <process_add_range_memclear_bridge+0x80>
+  98:	48 83 f8 0c          	cmp    $0xc,%rax
+  9c:	72 4f                	jb     ed <process_add_range_memclear_bridge+0xed>
+  9e:	66 90                	xchg   %ax,%ax
+  a0:	c6 07 00             	movb   $0x0,(%rdi)
+  a3:	c6 47 01 00          	movb   $0x0,0x1(%rdi)
+  a7:	c6 47 02 00          	movb   $0x0,0x2(%rdi)
+  ab:	c6 47 03 00          	movb   $0x0,0x3(%rdi)
+  af:	c6 47 04 00          	movb   $0x0,0x4(%rdi)
+  b3:	c6 47 05 00          	movb   $0x0,0x5(%rdi)
+  b7:	c6 47 06 00          	movb   $0x0,0x6(%rdi)
+  bb:	c6 47 07 00          	movb   $0x0,0x7(%rdi)
+  bf:	c6 47 08 00          	movb   $0x0,0x8(%rdi)
+  c3:	c6 47 09 00          	movb   $0x0,0x9(%rdi)
+  c7:	c6 47 0a 00          	movb   $0x0,0xa(%rdi)
+  cb:	c6 47 0b 00          	movb   $0x0,0xb(%rdi)
+  cf:	c6 47 0c 00          	movb   $0x0,0xc(%rdi)
+  d3:	c6 47 0d 00          	movb   $0x0,0xd(%rdi)
+  d7:	c6 47 0e 00          	movb   $0x0,0xe(%rdi)
+  db:	c6 47 0f 00          	movb   $0x0,0xf(%rdi)
+  df:	48 83 c7 10          	add    $0x10,%rdi
+  e3:	48 83 c6 f0          	add    $0xfffffffffffffff0,%rsi
+  e7:	48 83 fe 03          	cmp    $0x3,%rsi
+  eb:	77 b3                	ja     a0 <process_add_range_memclear_bridge+0xa0>
+  ed:	48 83 fe 01          	cmp    $0x1,%rsi
+  f1:	76 0f                	jbe    102 <process_add_range_memclear_bridge+0x102>
+  f3:	c6 07 00             	movb   $0x0,(%rdi)
+  f6:	c6 47 01 00          	movb   $0x0,0x1(%rdi)
+  fa:	48 83 c7 02          	add    $0x2,%rdi
+  fe:	48 83 c6 fe          	add    $0xfffffffffffffffe,%rsi
+ 102:	48 85 f6             	test   %rsi,%rsi
+ 105:	74 03                	je     10a <process_add_range_memclear_bridge+0x10a>
+ 107:	c6 07 00             	movb   $0x0,(%rdi)
+ 10a:	5d                   	pop    %rbp
+ 10b:	c3                   	ret    

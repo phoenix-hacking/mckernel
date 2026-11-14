@@ -1,0 +1,172 @@
+{
+  "status": "FINITE_THREE_GENUINE_PROVIDER_SOURCE_PREPARATION_ONLY_NO_EXECUTION",
+  "unit_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-unit-1/scheduler_lock_primitive_unit.rs",
+  "unit_sha256": "33d288aa636da8450ebff8751c16ed5d24a90d0624c65e88482207d98cfdfd5b",
+  "source_bindings": {
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs": "7b6c1e87f521eaf4674128afd7bff71785bead4ff7c9eb3c9a668d6a0cb0cbe7",
+    "/home/holden/mckernel/kernel/rust/lock_helpers.rs": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3",
+    "/home/holden/mckernel/kernel/rust/atomic_helpers.rs": "8acf10a907cede816da8300d36bf967d938cc672dd75dbb3ecc8f3992ec42941"
+  },
+  "source_blocks": [
+    {
+      "name": "CInt",
+      "kind": "actual_alias",
+      "source_path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "source_line_start": 5,
+      "source_line_end": 5,
+      "source_bytes": "pub type CInt = i32;\n",
+      "source_sha256": "b09cd972ccaa959019e419236b46df2f11a8eebbae2cbcf8380be1a3c45e7ad6"
+    },
+    {
+      "name": "IhkSpinlock",
+      "kind": "actual_reprC_type",
+      "source_path": "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs",
+      "source_line_start": 5,
+      "source_line_end": 8,
+      "source_bytes": "#[repr(C)]\npub struct IhkSpinlock {\n    head_tail: AtomicU32,\n}\n",
+      "source_sha256": "d41eba1de35d9983d4ac1955a6cb742cecbfc3769511154f0e1092f0890321e9"
+    },
+    {
+      "name": "IhkSpinlock_assertions",
+      "kind": "actual_complete_source_assertions",
+      "source_path": "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs",
+      "source_line_start": 21,
+      "source_line_end": 27,
+      "source_bytes": "const _: () = {\n    use core::mem::{align_of, offset_of, size_of};\n\n    assert!(size_of::<IhkSpinlock>() == 4);\n    assert!(align_of::<IhkSpinlock>() == 4);\n    assert!(offset_of!(IhkSpinlock, head_tail) == 0);\n};\n",
+      "source_sha256": "2a2b8e8453243cee2ef6db409d1c7e181f3762030901d9335246c3740597bb19"
+    },
+    {
+      "name": "McsRwlockLock",
+      "kind": "actual_reprC_align64_type",
+      "source_path": "/home/holden/mckernel/kernel/rust/lock_helpers.rs",
+      "source_line_start": 36,
+      "source_line_end": 39,
+      "source_bytes": "#[repr(C, align(64))]\npub struct McsRwlockLock {\n    slock: spinlock_helpers::IhkSpinlock,\n}\n",
+      "source_sha256": "8aff4ad59b036127a00b45823851203de34d5914721fd96739f0251aca86d087"
+    },
+    {
+      "name": "assert!(size_of::<McsRwlockLock>() == 64);",
+      "kind": "actual_source_layout_assertion",
+      "source_path": "/home/holden/mckernel/kernel/rust/lock_helpers.rs",
+      "source_line_start": 60,
+      "source_line_end": 60,
+      "source_bytes": "    assert!(size_of::<McsRwlockLock>() == 64);\n",
+      "source_sha256": "3222afc132de877eaaf81eb965d6002efc4a53c4548a1383347c030d19a1f506"
+    },
+    {
+      "name": "assert!(align_of::<McsRwlockLock>() == 64);",
+      "kind": "actual_source_layout_assertion",
+      "source_path": "/home/holden/mckernel/kernel/rust/lock_helpers.rs",
+      "source_line_start": 61,
+      "source_line_end": 61,
+      "source_bytes": "    assert!(align_of::<McsRwlockLock>() == 64);\n",
+      "source_sha256": "637e142579f8dad17ad01c5288aa25192f6e9e0eb59b3b81e59ef321e0aa5fe6"
+    },
+    {
+      "name": "assert!(offset_of!(McsRwlockLock, slock) == 0);",
+      "kind": "actual_source_layout_assertion",
+      "source_path": "/home/holden/mckernel/kernel/rust/lock_helpers.rs",
+      "source_line_start": 62,
+      "source_line_end": 62,
+      "source_bytes": "    assert!(offset_of!(McsRwlockLock, slock) == 0);\n",
+      "source_sha256": "e4b32fc0851a0388b9ae37740f7a865957cd85f8b38780093026ae50e7aa4fa8"
+    },
+    {
+      "name": "__mcs_rwlock_writer_lock_noirq",
+      "kind": "actual_no_mangle_public_body",
+      "source_path": "/home/holden/mckernel/kernel/rust/lock_helpers.rs",
+      "source_line_start": 306,
+      "source_line_end": 312,
+      "source_bytes": "#[no_mangle]\npub unsafe extern \"C\" fn __mcs_rwlock_writer_lock_noirq(\n    lock: *mut McsRwlockLock,\n    _node: *mut core::ffi::c_void,\n) {\n    spinlock_helpers::__ihk_mc_spinlock_lock_noirq(&mut (*lock).slock);\n}\n",
+      "source_sha256": "d6d500795090af4352de4c2f88797b977ce52d60a4f2dfb8f46ce7367a0068ca"
+    },
+    {
+      "name": "__mcs_rwlock_writer_unlock_noirq",
+      "kind": "actual_no_mangle_public_body",
+      "source_path": "/home/holden/mckernel/kernel/rust/lock_helpers.rs",
+      "source_line_start": 314,
+      "source_line_end": 320,
+      "source_bytes": "#[no_mangle]\npub unsafe extern \"C\" fn __mcs_rwlock_writer_unlock_noirq(\n    lock: *mut McsRwlockLock,\n    _node: *mut core::ffi::c_void,\n) {\n    spinlock_helpers::__ihk_mc_spinlock_unlock_noirq(&mut (*lock).slock);\n}\n",
+      "source_sha256": "6facb57a8df56a44481f759337a9bb9dd8dfd58a9b6031abf8006120180f4d22"
+    },
+    {
+      "name": "xchg4",
+      "kind": "actual_no_mangle_public_body",
+      "source_path": "/home/holden/mckernel/kernel/rust/atomic_helpers.rs",
+      "source_line_start": 117,
+      "source_line_end": 120,
+      "source_bytes": "#[no_mangle]\npub unsafe extern \"C\" fn xchg4(ptr: *mut CInt, x: CInt) -> CInt {\n    AtomicI32::from_ptr(ptr).swap(x, Ordering::SeqCst)\n}\n",
+      "source_sha256": "1e4b527755f2212ca98ee3ea25046751362e5eb254a8c0fff25871ed4c1246d2"
+    },
+    {
+      "name": "__ihk_mc_spinlock_lock_noirq_signature",
+      "kind": "existing_owner_signature_ONLY_body_EXCLUDED",
+      "source_path": "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs",
+      "source_line_start": 90,
+      "source_line_end": 89,
+      "source_bytes": "pub unsafe extern \"C\" fn __ihk_mc_spinlock_lock_noirq(lock: *mut IhkSpinlock)",
+      "source_sha256": "eddd6a113711fa53d57b048e1c31e50d64ac86a81aa7b15184aaa95a85690e57"
+    },
+    {
+      "name": "__ihk_mc_spinlock_unlock_noirq_signature",
+      "kind": "existing_owner_signature_ONLY_body_EXCLUDED",
+      "source_path": "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs",
+      "source_line_start": 116,
+      "source_line_end": 115,
+      "source_bytes": "pub unsafe extern \"C\" fn __ihk_mc_spinlock_unlock_noirq(lock: *mut IhkSpinlock)",
+      "source_sha256": "cd76e3777bb076378117496bfd6adb3ce785c3b4c4e5b5078f16094bc455ea4c"
+    }
+  ],
+  "selected_public_bodies": [
+    "__mcs_rwlock_writer_lock_noirq",
+    "__mcs_rwlock_writer_unlock_noirq",
+    "xchg4"
+  ],
+  "private_function_bodies": [],
+  "genuine_external_interfaces": [
+    {
+      "native_symbol": "__ihk_mc_spinlock_lock_noirq",
+      "original_definition_signature": "pub unsafe extern \"C\" fn __ihk_mc_spinlock_lock_noirq(lock: *mut IhkSpinlock)",
+      "finite_module_extern_declaration": "    pub fn __ihk_mc_spinlock_lock_noirq(lock: *mut IhkSpinlock);",
+      "body_included": false
+    },
+    {
+      "native_symbol": "__ihk_mc_spinlock_unlock_noirq",
+      "original_definition_signature": "pub unsafe extern \"C\" fn __ihk_mc_spinlock_unlock_noirq(lock: *mut IhkSpinlock)",
+      "finite_module_extern_declaration": "    pub fn __ihk_mc_spinlock_unlock_noirq(lock: *mut IhkSpinlock);",
+      "body_included": false
+    }
+  ],
+  "data_owner_definitions": [],
+  "source_semantics": "Original MCS writer wrappers ignore node and borrow real slock; spin implementations remain genuine U. Exact AtomicI32::from_ptr(ptr).swap(x,Ordering::SeqCst) returns old CInt. No callback, store or atomic protocol substitute.",
+  "layout": "Original IhkSpinlock repr(C)/AtomicU32 and whole4/4/offset0 assertion block; original McsRwlockLock repr(C,align64) plus exact64/64/slock0 assertion lines. No unrelated lock types/bodies or wholemodule.",
+  "source_only_glue": "no_std and finite original module names; minimal core/type imports; actual CInt alias copied byte-exact; two module-path extern declarations derived only from actual native definitions; Mcs assertion container includes only three original statements from larger source block. No source-body/attribute change.",
+  "existing_spin_owners_reused_not_recompiled": [
+    "__ihk_mc_spinlock_lock",
+    "__ihk_mc_spinlock_unlock",
+    "__ihk_mc_spinlock_lock_noirq",
+    "__ihk_mc_spinlock_unlock_noirq"
+  ],
+  "expected_future_object_only": {
+    "new_global_T": [
+      "__mcs_rwlock_writer_lock_noirq",
+      "__mcs_rwlock_writer_unlock_noirq",
+      "xchg4"
+    ],
+    "genuine_U": [
+      "__ihk_mc_spinlock_lock_noirq",
+      "__ihk_mc_spinlock_unlock_noirq"
+    ],
+    "writable_data": [],
+    "lowering": "Actual future metadata/disassembly must qualify atomic lowering; any unexpected helper/intrinsic/private/data stops before link for concrete source/ABI review."
+  },
+  "future_current_partial_input": null,
+  "future_join": "UNBOUND until actual current scheduler and next-source joins pass. No guessed hash/path/remaining-U count. Only then-current reviewed partial plus future new object, reusing all actual spin owners without duplicates.",
+  "contract": {
+    "path": "/home/holden/mckernel-work/m14-m15-scheduler-resume-20261109T211802Z/scheduler-lock-primitive-lookahead.json",
+    "sha256": "e85547cc68ec3edf1e4b04cdc028f744941a3d7c1224e9d17520f49314024f2f"
+  },
+  "no_optional_cfg_wholemodule_bridge_body_runtime_tests_compiler_link_or_native": true,
+  "canonical_index_or_live_state_writes": false
+}

@@ -1,0 +1,96 @@
+{
+  "status": "SOURCE_ONLY_NOT_COMPILED_NOT_EXECUTED",
+  "original_contribution": "Remove actual do_fork4797B project-C provider consumed by the still-open M14-06-01 and whole-F06 DEFAULT conditions. No acceptance or count follows source alone.",
+  "current_cohort": {
+    "source_commit": "f37463cdd25f7f25e6c92c3f418c6dce3054a74f",
+    "default_image_sha256": "100d078609104b9853b14705fb3d0ee6ef4d6597101e5dad3f948ae46a94a5e2",
+    "whole_Rust_sha256": "4a1f34064c238e7cf9ccf21ca06c0219300b226fbdcf7b69abe082efe94c2912",
+    "accepted_deep_review": "f949b85f0e7d825020e7f9dc392eb6cb3b69ecdc2db35d9258371a2a64da625e",
+    "E2_whole_review": "1f1d7bd2e364bf754fb55751cb7104fd23ab57f52e68e804fd4ab9560b402cab"
+  },
+  "entry": "unsafe extern C fn do_fork(CInt,CULong,CULong,CULong,CULong,CULong,CULong)->CULong; original signed-int errors sign-extend into unsigned-long bits",
+  "selector": {
+    "rust_cfg": "f03_do_fork_candidate",
+    "C_exclusion": "MCKERNEL_RUST_F03_DO_FORK",
+    "required": [
+      "ENABLE_RUST_KERNEL",
+      "ARCH=x86_64",
+      "MCKERNEL_HOST_IRQ_ABI=linux-6.12",
+      "!ENABLE_UBSAN",
+      "PROFILE_ENABLE",
+      "ENABLE_RUST_F06_SYSCALL_WHOLE",
+      "ENABLE_PERF",
+      "ENABLE_RUSAGE",
+      "ENABLE_LINUX_WORK_IRQ_FOR_IKC",
+      "!ENABLE_TOFU",
+      "!ENABLE_FUGAKU_HACKS",
+      "!ENABLE_RUST_M14_SYSCALL_ADAPTERS",
+      "!MCKERNEL_F03_SIGNAL_FORWARD_EXPERIMENTAL",
+      "!ENABLE_NATIVE_FORK_OWNED_TRANSACTION"
+    ],
+    "outside": "Byte-identical complete C body remains selected; explicit original owned-transaction option is unchanged."
+  },
+  "preserved_paths": [
+    "clone3 exclusion before private pthread marker; clear saved routine before flag validation",
+    "flag/coredump failure and UTI rank updates",
+    "helper CPU policy versus real reserved CPU snapshot/inherit; preserve original constructor-null helper no-release edge and every other existing release disposition",
+    "accepted genuine clone_thread, current VM/private process construction and bookkeeping",
+    "shared TID first-allocation/gettid/complete initialized reply/cas retry/table-created cleanup without zeroing additional TID storage",
+    "legacy host selector0 mapping/pagetable/parent flags and int PID conversion, then matching selector1 after chain/ptrace; unchanged selector1 error modarg->kill->destroy->CPU cleanup",
+    "native parent store error ignored, child clear-TID pointer, full int child VM/COW store error ignored",
+    "existing TLS/return/status, UTI remote argument, thread/process publication and ptrace paths",
+    "non-SIGCHLD thread report/list/writer IRQ/hold ordering",
+    "all original success/negative return bits; original label cleanup sequence and ignored provider dispositions"
+  ],
+  "defined_lifetime_changes": [
+    {
+      "source_failure": "C routine range/memobj/path raw borrow is used after read unlock and again after clone_thread; lookup returns no retention. Real range writers can remove/free that descriptor/object.",
+      "change": "Snapshot only immutable diagnostic path bytes under the same existing reader lock; classify and format copied bytes afterward. No range/object/path pointer escapes, added lock, pin, allocation, new result or error.",
+      "equivalence": "Actual file/hugefile/device paths occupy PATH_MAX storage; defined terminated C path output fits the existing4160-byte destination. Same helper classification, path diagnostic and formatting on defined inputs.",
+      "existing_provider_scope": "Reuse accepted real range/object ownership and unchanged provider source; no held private mmap/XPMEM fixture."
+    },
+    {
+      "source_failure": "C evaluates new->tid after runq publication and optional schedule, without a newly established caller-owned reference at this entry. Child can finish before caller resumes.",
+      "change": "Read committed immutable int TID before genuine runq_add_thread; no child load afterward. No invented hold/release/reference or altered enqueue/schedule.",
+      "equivalence": "Same committed TID for every defined original return; strengthens the dereference lifetime only."
+    }
+  ],
+  "ABI": {
+    "word_contract": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-fork-default-ownership-p04source-max-1/ABI-WORD-CONTRACT.json",
+      "bytes": 15838,
+      "sha256": "3ab6516f652c7a9ac09612d80db87288a3ac27f73e9513292686744c85f23486"
+    },
+    "actual_image_required": "Compare all104 C/Rust emitted words, including flexible pids trailing allocation offset, all consumed data layouts/constants, request72/align8 and selected empty DMA annotation. Existing whole-F06 real inherited-bit provider proof reused unchanged.",
+    "nominal_locks": "Cast lock addresses only, matching existing validated f8 representation. Both ABI/provider MCS lock64/align64 and existing node64/align64 facts retained.",
+    "no_new_ABI_shim": true
+  },
+  "source_origin": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-fork-default-ownership-p04source-max-1/SOURCE-ORIGINS.json",
+    "bytes": 1621,
+    "sha256": "fa82432414777a51921e2b77f68887d59332599970ef786687ceb5a514771ae6"
+  },
+  "unchanged_provider_bindings": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-fork-default-ownership-p04source-max-1/PROVIDER-SOURCE-BINDINGS.json",
+    "bytes": 7465,
+    "sha256": "441c263ba1dc7c96f164a8f7ddcc394b3020a4458cf924068703d0922d7ad10a"
+  },
+  "source_recovery": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-fork-default-ownership-p04source-max-1/SOURCE-RECOVERY.json",
+    "bytes": 2437,
+    "sha256": "63669e1e354bcdaee3369e31b6b6aa9f975318917f9aee79e82ef344b1c165ec"
+  },
+  "independent_review_focus": [
+    "Complete current normal/error branch equivalence and the actual direct-provider type family, not the old owned-only candidate",
+    "Raw-pointer borrow ends at reader unlock and enqueue; source-derived path bound and current128KiB Thread kernel stack",
+    "Exact seven-argument callable ABI/field words/flexible pids index0 allocation",
+    "Current request zero initialization and real host protocol/TID transfer; no speculative memory initialization/refcount change",
+    "C guard/Rust cfg/source dependencies stay paired only in actual qualified cohort; unrelated time-wrapper work and all previous selections preserved"
+  ],
+  "tests": "No old held fork/TID/owned-constructor fixture, equivalent replay, fake syscall callback or HOST model is proposed. Accepted F02/process/provider behavior remains reused. Changed source needs independent material/type/lifetime review, then actual normal image compilation and passive ownership/ABI evidence; original native behavior/current-free gates remain.",
+  "remaining": [
+    "Independent source/type/concurrency review and separately reviewed Root operation",
+    "Actual changed normal image compile/link and new Rust do_fork owner, exact matching C exclusion, unique providers/no UND, ABI/source-origin readback, retained15 prior entries, actual C ledger",
+    "Original F06 DEFAULT/functionality/fullfile criteria, native fork/clone/vfork/error/TID/resource behavior and genuine holds are not accepted by source or compile evidence"
+  ]
+}

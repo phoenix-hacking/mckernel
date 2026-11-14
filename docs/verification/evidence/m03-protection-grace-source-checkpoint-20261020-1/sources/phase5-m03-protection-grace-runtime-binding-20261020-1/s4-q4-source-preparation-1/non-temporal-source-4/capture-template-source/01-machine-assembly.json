@@ -1,0 +1,68 @@
+{
+  "operations": [
+    {
+      "argv_template": [],
+      "profile": "metadata",
+      "role": "UNUSED_INDEX_ZERO_DO_NOT_EXECUTE"
+    },
+    {
+      "argv_template": [
+        "/usr/bin/taskset",
+        "--cpu-list",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--core=0",
+        "--nofile=256",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/s4-q4-source-preparation-1/non-temporal-source-4/machine_assembly_caller.py",
+        "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/s4-q4-source-preparation-1/native-control-packet-4/machine-base.json",
+        null,
+        "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/s4-q4-source-preparation-1/native-control-packet-4/root-live-preflight-1.json",
+        "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/s4-q4-source-preparation-1/native-control-packet-4/execution-release.json",
+        null
+      ],
+      "profile": "metadata",
+      "role": "machine-assembly",
+      "status_path": "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/s4-q4-source-preparation-1/native-control-packet-4/captures/01-machine-assembly/status.json",
+      "stderr_path": "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/s4-q4-source-preparation-1/native-control-packet-4/captures/01-machine-assembly/stderr",
+      "stdout_path": "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/s4-q4-source-preparation-1/native-control-packet-4/captures/01-machine-assembly/stdout"
+    }
+  ],
+  "profiles": {
+    "metadata": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 40,
+      "stream_fsize": 33554432
+    },
+    "native": {
+      "cpu": 7,
+      "parent_kill_grace_seconds": null,
+      "parent_wall_seconds": null,
+      "stream_fsize": 33554432
+    },
+    "reader": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 35,
+      "stream_fsize": 33554432
+    },
+    "snapshot": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 40,
+      "stream_fsize": 33554432
+    }
+  },
+  "release": null,
+  "root_installed_release_path": null
+}

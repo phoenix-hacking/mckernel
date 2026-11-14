@@ -1,0 +1,87 @@
+{
+  "schema": "mckernel.callback-target5.metadata.independent-review.v1",
+  "decision": "GO_EXACT_TWO_NEW_METADATA_READBACKS_AND_CALLED_FIVE_TARGET_SOURCE_ABI_OWNER_CONTENT_GATE_PENDING_FRESH_ROOT_ADMISSION",
+  "reviewer": "/root/scheduler_debug_data_high independent of D source/metadata writer; Esource6dec retained at unchanged scope.",
+  "request": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-metadata-1/REQUEST.json",
+    "sha256": "e62d463144997a833cd6484a6c78622de1eb4f67ea6d3531796937dddc86a781"
+  },
+  "contract": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-metadata-1/SOURCE-EMISSION-CONTRACT.json",
+    "sha256": "2d9582745fe2b5266d7218273e5db716e0c659c4d62efa3bca7b16f01dad7e45"
+  },
+  "predicate": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-metadata-1/metadata_checks.py",
+    "sha256": "6c0d739c4117264333ab0a12004a61cbffe0df439476f4b8e1eb8210a664a44d"
+  },
+  "controller": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-metadata-1/run_metadata.py",
+    "sha256": "bf4a8ddf6d794e336397ac5b63017870c0aea9a4eea19414b6fa277a541b3ec5"
+  },
+  "source_request": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-unit-1/REQUEST.json",
+    "sha256": "7d7230dee529bdea3585404461b06acab62dcfc5ffa3796186c8519972948131"
+  },
+  "source_review": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-review-1/REVIEW.json",
+    "sha256": "6dec3b2bea7777c779007d6630eca20bc5a8dcfabef028f4be1f3240d9b2375a"
+  },
+  "actual_object": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-unit-1/output/scheduler_callback_target_provider.o",
+    "sha256": "e55e73a72edb30de6454989ee6d896fb55ca520791f628d514d690a18ba89cf4",
+    "bytes": 2408,
+    "producer_PID": 669018,
+    "producer_birth": "35643944",
+    "producer_joined_returncode": 0,
+    "exact_warning": "52aa"
+  },
+  "retained_raw": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-metadata-1/ACTUAL-CAPTURE-BEFORE-GATE.json",
+    "sha256": "0d431bc9514928e2f76a43f2b42882921063dbc1929568c8a4463d921f670418",
+    "scope": "Actual0d431bc9 capture only, explicitly NOT owner/runtime PASS; new actual called gate stillrequired."
+  },
+  "actual_pin_review": {
+    "all20_actual_input_SHA256_bindings_match": true,
+    "actual5function_symbols_section_fields_fullcode_bytes_hashes_and_reloc_summaries_match_retained_JSON": true,
+    "actual_unwind_section_bytes_and_full5relocations_match_retained_JSON": true,
+    "producer": "Actuale55e73a7/2408B PID669018/birth35643944 joined0/exactretained52aa warning; RootproducerPASS and source7d72/6dec/actualABIff48 bound. No compilerretry or staleowner substitution."
+  },
+  "original_source_semantics": {
+    "mapped_read_write": "Original addr_of!(mapped_local_apic).read() borrows one genuine pointer slot through link_name lapic_vp. Original reg:CInt is signextended to isize as a BYTEoffset, not scaledindex or unsignedmask; original read_volatile/write_volatile perform single32-bit mappedaccess. Actual20B pairloads external slot pointer, MOVSXDreg, and respective DWORDload/store match this source. No additionalpoll, buffer, retry, reference or mappingowner supplied.",
+    "alias_direction": "Rust mapped_local_apic -> actual ELF lapic_vp by original link_name; actualUlapic_vp is retained and reverse mapped_local_apic symbol/owner is forbidden. No fixedmappedpointer or newstorage.",
+    "public_RDMSR": "Original public rdmsr(CUInt=u32)->CULong=u64 asm remains nomem/nostack/preserves_flags, EDX/EAXlateoutputs and ECXinput. Actual14B setsECX, contains0F32, shiftsRDX32/zeroextendsEAX/ORs to full64return. Independent publicT remains despite inlining elsewhere; no instructionexecuted.",
+    "x2_read": "Original signedSAR4 and OR with external x86_local_apic_base_msr asCInt are preserved. Actual20B legitimately inlines RDMSR and returns lowEAX32 for source asu32; absenceofrdmsrU/directcall or high32recombination in this caller is expected, not missingprovider evidence.",
+    "x2_write": "Original signedSAR4/baseOR/indexasu32/valueu32toCULong preserved; actual29B valuezeroextension and genuine wrmsrUtailjump match sourceABI. No inlineWRMSRbody, fakebridge/alias/owner or extra orderingpolicy. Existing Root63f2 WRMSR owner is scopedreference only; actualfuturecohort binding remains compositor responsibility.",
+    "data_and_helpers": "Source has no newdata/constants/runtimeprivatehelpers; exactly5definedT and3realU required. Optionalfixture027f closed, no MMIO/MSR/target/store/runtime operation."
+  },
+  "actual_emission_checks": {
+    "T_sizes": {
+      "apic_read": 20,
+      "apic_write": 20,
+      "rdmsr": 14,
+      "x2apic_read": 20,
+      "x2apic_write": 29
+    },
+    "genuine_U": [
+      "lapic_vp",
+      "wrmsr",
+      "x86_local_apic_base_msr"
+    ],
+    "function_sections": "Exact.ltext.<publicname> SHT_PROGBITS1/flags0x10000006/align16/entrysize0/sourceactualsize/value0, globalFUNC/defaultvisibility, exactactualbytes+hash and onequalifiedsection perfunction.",
+    "owners": "Exactly5globalT, no data/privateFUNC/OBJECT or writableallocatedstorage, no lapic_vp/MSRbase/WRMSR replacement owner. Allactualdefs equal sourcefunctionset and contract.",
+    "code_relocations": "Exactly5actualR64 codeglobaladdresses with addend0: mappedpair lapic_vp onceeach, x2readMSRbase once, x2writeMSRbase andwrmsr. PublicRDMSR has no sourceUrelocation. Exactrelocfields checked; no forcedcall/data/field quota or guesseduninlinedshape.",
+    "unwind": "Exactly .eh_frame SHT_X86_64_UNWIND0x70000001, flags2/align8/184B/entsize0; exactbytes/hash and5PC64 localSECTIONrefs to correspondingfunctionstart0. No PROGBITS assumption or unknownprovider.",
+    "coverage": "Allnonemptyallocatedsections exactly5functionsections+actualunwind; total10relocations=5function+5unwind, no otherrelocation source. Newexclusivefullcapture preserves allsymbols/sections/allocatedbytes/relocs before owner assertions; retained0draw unchanged."
+  },
+  "controller_and_commands": "Exactly2NEW taskset6 GNU nm-S-posix/readelf-h-SW-Ws-Wr payloads on e55eonly. Controller itself taskset6/affinity{6} asserted, payloads AS1GiB/CPU45s/wall60s/KILL5s/fsize64MiB/core0; Rootouterdriver140s retained. Frozeninputs verified, rawstdioexclusive, actualPID/birth fsyncedbefore finallydirectwait, status/emptyGNUdiagnostics checked before nextpayload. Only afterbothreadbacks does controllerCALL actual_object_gate and fsync OBJECT-CHECK/result. Firstunexpectedfailure preserves raw/receipt and allstartedchildrenjoined; missingbirthUNKNOWN stops withoutretry.",
+  "scope_and_admission": "Fresh Root ordinaryHOST/source/ownership/usage/admission required, CPU0/6/7 max3aggregatejobs/4GiBTOTAL including overhead/fresh>=26GiB and retained18GiB/hostfloor/disk/native2-5/12GiB/UNKNOWN holds. This review grants no workloadlease; existing source/compiler/ABI scope unchanged. Futurelatestcurrentcohort/collision/prejoin/postjoin remains UNBOUND; no metadata-only proof retiresC or acceptsdefault/nativeimage/lifetimes/hardware/controller/readiness.",
+  "optional_behavior_and_held_scope": "Optionalpublisher027f remains CLOSED/NO_GO; no fixture, newtest requirement, publisher/targetcall/MMIO/MSR/IRQ/CPU/boot/native/store execution. F03wait-release UNKNOWN/NO_GOs remain excluded; no bodyinspection or reassignment.",
+  "material_defects": [],
+  "reviewer_operations": {
+    "CPU0_light_hash_private_source_retained_JSON_bytes_and_predicate_controller_inspection": true,
+    "ELFparser_gate_GNU_compiler_link_disassembly_or_test": false,
+    "MMIO_MSR_RDMSR_WRMSR_function_fixture_native_runtime": false,
+    "canonical_index_state_source_or_other_owner_edit": false,
+    "recursive_agent": false
+  }
+}

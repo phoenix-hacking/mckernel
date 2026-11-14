@@ -1,0 +1,120 @@
+{
+  "P12_acceptance": false,
+  "actual_command_count": 4,
+  "actual_result": {
+    "bytes": 10077,
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-long-mixed-apps-20261023-1/RESULT.json",
+    "sha256": "7842532ea6ef329dff85c6e704a695caa61127b4e526ac4245fbb286562a01dd"
+  },
+  "all_processes_joined_group_absent_streams_closed": true,
+  "apps": [
+    {
+      "ELF": {
+        "bytes": 5710216,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-mixed-apps-20261023-1/app0-long",
+        "sha256": "03ac419d72a7e8c1584aa6e0fda1032f239bef90c25d3f996167f9191dd1d87e"
+      },
+      "Linux_reference_only": true,
+      "app": 0,
+      "empty_workspace": "/home/holden/mckernel-work/host-preparation/p12-long-mixed-apps-20261023-1/reference0",
+      "exit_status": 0,
+      "max_rss_bytes": 1277952,
+      "native_credit": false,
+      "original_body_once_source_rename_only": true,
+      "resources": {
+        "bytes": 802,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-mixed-apps-20261023-1/linux0-capture-1/resources.txt",
+        "sha256": "3e5975b15c2f960fff5ae9ff2666368fe636eed4e601c82441bf482801bfdfed"
+      },
+      "stderr": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-mixed-apps-20261023-1/linux0-capture-1/stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 387,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-mixed-apps-20261023-1/linux0-capture-1/stdout",
+        "sha256": "e5aab46f5a720bacdbb2fb3cb83d682b02df7261336e79663c79fa78022b9bc4"
+      },
+      "wall_seconds": 3.0410868159960955
+    },
+    {
+      "ELF": {
+        "bytes": 5690440,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-mixed-apps-20261023-1/app1-long",
+        "sha256": "266d73698c3440129f4510def7c43787a5eb2065c20dc03f26e175c962b2fa10"
+      },
+      "Linux_reference_only": true,
+      "app": 1,
+      "empty_workspace": "/home/holden/mckernel-work/host-preparation/p12-long-mixed-apps-20261023-1/reference1",
+      "exit_status": 0,
+      "max_rss_bytes": 1245184,
+      "native_credit": false,
+      "original_body_once_source_rename_only": true,
+      "resources": {
+        "bytes": 806,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-mixed-apps-20261023-1/linux1-capture-1/resources.txt",
+        "sha256": "430715d5d2a942116bc7b8e7e67d9c9ef7273b0630c687f551a26e12ba90b818"
+      },
+      "stderr": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-mixed-apps-20261023-1/linux1-capture-1/stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 254,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-mixed-apps-20261023-1/linux1-capture-1/stdout",
+        "sha256": "52095dafd5235a8c1073248bbda3964f8a7b749722306ceaabf321d2fdcd4816"
+      },
+      "wall_seconds": 3.0363973969360813
+    }
+  ],
+  "bounded_corrections": 0,
+  "counts_or_profile_caps_changed": false,
+  "exact_commands": {
+    "bytes": 4176,
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-long-mixed-apps-20261023-1/PREPARED-COMMANDS.json",
+    "sha256": "83d027fd40b74667bc8d804e74346e18d0855a6b1d20fbe3646f8227f6aa9e8c"
+  },
+  "first_candidate_passed": true,
+  "native_acceptance": false,
+  "native_execution": null,
+  "new_LONG_source_profile_oracle_independent_review": null,
+  "old_sources_ELFs_ASM_unchanged": true,
+  "original_body_checks": [
+    {
+      "app": 0,
+      "min_work_seconds": 3,
+      "monotonic_clock": "std::time::Instant, work-loop interval excludes setup",
+      "original_entry_invocations": 1,
+      "original_prefix_exact_except_function_name": true,
+      "original_round_counters_unchanged": true,
+      "persistent_warmup_threads": 2,
+      "warmup_source_sha256": "449e98f19daf7b252e587fd874113a77f00c1e6f1756662a5971dd009a30a91c",
+      "warmup_stack_bytes_each": 2097152,
+      "warmup_stdout": false
+    },
+    {
+      "app": 1,
+      "min_work_seconds": 3,
+      "monotonic_clock": "std::time::Instant, work-loop interval excludes setup",
+      "original_entry_invocations": 1,
+      "original_prefix_exact_except_function_name": true,
+      "original_round_counters_unchanged": true,
+      "persistent_warmup_threads": 2,
+      "warmup_source_sha256": "259bc8231f0c9e269b6ec29a9ad908bc843ead1b29be5273927a076fe4738c43",
+      "warmup_stack_bytes_each": 2097152,
+      "warmup_stdout": false
+    }
+  ],
+  "original_requested_manifest_missing": true,
+  "remaining": "Root reviews new LONG source/workload profile/oracles and actual native behavior before integrating into P12. Linux reference duration and RSS are not native credit or speedup measurements.",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_bindings": {
+    "bytes": 7267,
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-long-mixed-apps-20261023-1/SOURCE-BINDINGS.json",
+    "sha256": "1c81c856c866da58845a1fc71e06a7a8d746ecde678f0ff0c49655847902af6c"
+  },
+  "status": "PASS_NEW_LONG_SOURCE_TWO_ACTUAL_ELFS_AND_EXACT_LINUX_REFERENCE_ONLY",
+  "strict_oracle_basis": "Exact adjacent original expected.stdout bytes, empty stderr, status0; original body byte-preserved except fnrename and executes once after LONG work/cleanup/join."
+}

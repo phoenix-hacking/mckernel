@@ -1,0 +1,163 @@
+{
+  "actual_failed_scope_qualification": {
+    "bytes": 6351,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-scoped-staging-review-p04source-max-1/fd-cleanup-escalation-1/actual-failure-1/QUALIFICATION.json",
+    "sha256": "ca0aa935852dcf0a25e99a1fde0a1e138ec1c81477e98e8cee81fd8527c28b15"
+  },
+  "actual_stage_or_native_result_inferred": false,
+  "all_other_holds_preserved": true,
+  "at": "2026-11-11T20:30:56.378824+00:00",
+  "checks": {
+    "Python_3_8_AST_parse_only": true,
+    "all_current_immutable_refs_bytes_and_SHA_match": 30,
+    "all_previous_immutable_refs_preserved": 21,
+    "all_previous_resource_fields_equal": true,
+    "child_literal_argv_equals_actual_failed_argv": true,
+    "complete_function_and_class_source_bodies_byte_identical": 10,
+    "exact_patch_reconstructs_postimage": true,
+    "new_failure_correction_refs": 9,
+    "no_sudo_pid_limit_switch_cgroup_mount_permission_or_machine_limit_change": true,
+    "only_source_changes": [
+      "Parent AS assertion (soft256MiB,hard1GiB)",
+      "Parent FSIZE assertion (soft8MiB,hard256MiB)",
+      "Exact new request digest"
+    ],
+    "stager_and_input_manifest_hashes_match_without_replaying_43_file_audit": true,
+    "unchanged_request_fields": [
+      "source",
+      "inputs",
+      "command",
+      "cwd",
+      "environment",
+      "output_directory",
+      "exact_scoped_parent",
+      "actual_parent_provisioning_proof",
+      "actual_parent_independent_qualification",
+      "operator_authorization",
+      "capture_reuse",
+      "contract",
+      "current_a2f_handoff",
+      "meaningful_success_oracles"
+    ]
+  },
+  "child_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--core=0",
+    "--cpu=180",
+    "--fsize=268435456",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-coherent-operation-source-p04-1/stager-correction-1/candidate/scripts/application-tests/native_diagnostic_stager.py",
+    "--bound-inputs",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-functional-a2f-handoff-p03-max-1/GUEST-STAGING-INPUTS.PROPOSED.json",
+    "--bound-inputs-sha256",
+    "58043c742a8593bb50faccf3a4ea7bfff7bb6e8f30eaa7f18ee06652dd792e1a",
+    "--output",
+    "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1"
+  ],
+  "correction": {
+    "bytes": 3148,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-scoped-staging-p04tests-max-1/fd-cleanup-escalation-1/profile-inheritance-correction-1/PROFILE-INHERITANCE-CORRECTION.json",
+    "sha256": "06d000c07cf0f28a5d411c9182c35f33532a3d514c5277e6a251431eec4cc7c5"
+  },
+  "decision": "GO_BOUNDED_PARENT_SOFT_HARD_INHERITANCE_CORRECTION_AFTER_FRESH_ROOT_ADMISSION",
+  "exact_root_argv_prefix": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=268435456:1073741824",
+    "--core=0",
+    "--cpu=330",
+    "--fsize=8388608:268435456",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-scoped-staging-p04tests-max-1/fd-cleanup-escalation-1/profile-inheritance-correction-1/run_root_once.py"
+  ],
+  "material_findings": [],
+  "model_effort": {
+    "bytes": 594,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-scoped-staging-review-p04source-max-1/fd-cleanup-escalation-1/profile-inheritance-correction-1/MODEL-EFFORT-READBACK.json",
+    "sha256": "7d56d630ffddfd91e2b263e61b545671f81b4b4c10fd3468eadb8fd90bf7b5cf"
+  },
+  "no_tests_helpers_stager_prlimit_or_control_executed_by_reviewer": true,
+  "output_directory": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1",
+  "owner": "/root/p04_source_max",
+  "parent": {
+    "bytes": 15372,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-scoped-staging-p04tests-max-1/fd-cleanup-escalation-1/profile-inheritance-correction-1/run_root_once.py",
+    "sha256": "1b6a8edeba7d3c549b5a87f4fbcd2af59bc3855e728a4d8e6e3d86f45055e93c"
+  },
+  "patch": {
+    "bytes": 2270,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-scoped-staging-p04tests-max-1/fd-cleanup-escalation-1/profile-inheritance-correction-1/PARENT-SOFT-HARD-PROFILE.patch",
+    "sha256": "c60ca0b3ca9f43ca977ad2cf87f66a639aa0a75fa59b936efe513dc4143205b4"
+  },
+  "prior_unaffected_review": {
+    "bytes": 10109,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-scoped-staging-review-p04source-max-1/fd-cleanup-escalation-1/REVIEW.json",
+    "sha256": "1a3972814c0c3c38bad894cb2022b7d7db059796a4fbfdaa1cc6e2658b112374"
+  },
+  "profile": {
+    "CPU": 0,
+    "HOST_planning_bytes": 1073741824,
+    "child_AS_soft_hard": [
+      1073741824,
+      1073741824
+    ],
+    "child_CPU_soft_hard": [
+      180,
+      180
+    ],
+    "child_FSIZE_soft_hard": [
+      268435456,
+      268435456
+    ],
+    "jobs": 1,
+    "parent_AS_soft_hard": [
+      268435456,
+      1073741824
+    ],
+    "parent_CPU_soft_hard": [
+      330,
+      330
+    ],
+    "parent_FSIZE_soft_hard": [
+      8388608,
+      268435456
+    ],
+    "planning_not_aggregate_cgroup_hardcap": true,
+    "wall_seconds": 300
+  },
+  "reason": "The parent keeps its existing soft limits while transporting hard limits equal to the already-reviewed child grant. The unprivileged child can set its own soft limit up to those hard values; no new privileged/system limit operation is selected. CPU inheritance already permits the unchanged lower child CPU limit. All FD drain/raw-primary retention methods are byte-identical to the reviewed and actually observed closed failure path.",
+  "request": {
+    "bytes": 23111,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-scoped-staging-p04tests-max-1/fd-cleanup-escalation-1/profile-inheritance-correction-1/REQUEST.json",
+    "sha256": "eb7c682caab1c2d64508f8c4d8274dc499683e11f63c53e337c1683b75b754f5"
+  },
+  "required_positional_arguments": [
+    "absolute path of this exact REVIEW.json",
+    "SHA256 of this exact REVIEW.json"
+  ],
+  "runtime_preconditions": [
+    "Root consumes actual failed-scope qualification and current-only1GiB/job retirement; historical failures/unknowns remain.",
+    "Fresh actual account/stop/credit/source controls, CPU0 ownership, aggregate HOST4GiB/max3/all-overhead accounting and >=26GiB available before launch.",
+    "Actual host16GiB/scratch12GiB floors plus existing1GiB output planning reservation; no aggregate hard disk cap is claimed.",
+    "Existing no-symlink parent directory identity66306:49551867/UID1000:GID1000/0700, real RWX, namespace/protected ROloop44 and final output absence rechecked by unchanged parent immediately before stage.",
+    "Only the exact authenticated child argv/43 current inputs/stager4fa execute; no alternate output or privilege route.",
+    "Require actual protected child birth/wait/streams, all FD closure, full outer Root tool completion before current-only release or saved output qualification."
+  ],
+  "schema": "scoped-stage-parent-profile-delta-review-v1",
+  "scope": "Only exact profile-corrected ordinary HOST stage operation. No actual stager/output/functional/native credit yet.",
+  "source_ready": {
+    "bytes": 5240,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-scoped-staging-p04tests-max-1/fd-cleanup-escalation-1/profile-inheritance-correction-1/SOURCE-READY.NOT-EXECUTED.json",
+    "sha256": "0dfbb4f9cf99d1f24800bde7eeeeceb8723a13b755f1f51c0d98598c27a70408"
+  }
+}

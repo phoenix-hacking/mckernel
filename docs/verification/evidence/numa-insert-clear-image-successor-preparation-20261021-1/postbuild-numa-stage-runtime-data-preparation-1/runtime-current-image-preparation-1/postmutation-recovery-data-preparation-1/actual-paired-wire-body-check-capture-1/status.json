@@ -1,0 +1,35 @@
+{
+  "argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=30:30",
+    "--fsize=67108864:67108864",
+    "--core=0:0",
+    "--nofile=256:256",
+    "--",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/postbuild-numa-stage-runtime-data-preparation-1/runtime-current-image-preparation-1/postmutation-recovery-data-preparation-1/check_actual_paired_wire_bodies_once.py",
+    "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/postbuild-numa-stage-runtime-data-preparation-1/runtime-current-image-preparation-1/postmutation-recovery-data-preparation-1/PAIRED-ACTUAL-WIRE-BODY-CHECK-BINDINGS-1.json",
+    "2a70e525f754c2ec5ac1873e0a4de85b2d091b2938a6b8fb147ccc6ab9fa9fbb"
+  ],
+  "elapsed_seconds": 0.05351561197312549,
+  "returncode": 1,
+  "scope": "ordinary paired actual bodies only; no physical acceptance",
+  "stderr": {
+    "bytes": 690,
+    "sha256": "b73d5f2e19b390adf438a2c8b03fbb92ab064b2c951aebabb8c1c9c248a80fca"
+  },
+  "stdout": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

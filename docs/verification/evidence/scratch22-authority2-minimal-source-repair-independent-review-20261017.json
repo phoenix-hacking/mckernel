@@ -1,0 +1,112 @@
+{
+  "schema": "mckernel.scratch22-authority2-minimal-source-repair-independent-review.v1",
+  "status": "PASS_MINIMAL_SOURCE_REPAIR",
+  "decision": "PASS_MINIMAL_SOURCE_REPAIR",
+  "reviewer": "/root/fork_adoption_boundary_review",
+  "model": "gpt-6.1-sol",
+  "implementation_ownership": false,
+  "implementation_author": "/root/shutdown_actual_bodies",
+  "scope": "Independent authority for the exact two-file shutdown Error namespace repair relative to the accepted source-check baseline. Reuse the immutable RS-011 checks/review for unchanged bytes; authorize only this bound delta. No preparation, recovery, build or guest execution is released.",
+  "baseline_candidate": "fd09933c64adaba32bf975ec96e5d518a42544e9",
+  "target": "d37d2216a60c6db10442ba8bc238d64fbd59c5ea",
+  "target_tree": "95cbbdba1bdfa58e48ba7edba6a2d0d20259ecc6",
+  "target_parent": "fd09933c64adaba32bf975ec96e5d518a42544e9",
+  "fetched_remote_ref": "refs/remotes/origin/scratch22-authority2-source-errorpath-20261017",
+  "fetched_remote_ref_resolves_to_target": true,
+  "files_sha256_delta": {
+    "host-kernel/native-rust/ihk_smp_x86_64.rs": {
+      "baseline_sha256": "ead31123d69508bd678f321137e9fba023621a46cdf86aa3466381b966b52b44",
+      "target_sha256": "a353b2915a4038e7739d01cc440376daf091367f976cf6de297bceb1dd59fce8"
+    },
+    "scripts/tests/fixtures/shutdown_v6_provider.rs": {
+      "baseline_sha256": "2cf0952892bdd0cc2643e2422682249a0307df946fbca2a1f0053c8b8fc3df6a",
+      "target_sha256": "86a50132f331fdac00ae155d8970d6644b0e7c0f4e82c5bdd4ddcc950890c94c"
+    }
+  },
+  "source_checks_baseline": {
+    "path": "docs/verification/evidence/rs011-authority-20261017.json",
+    "sha256": "77c98238bb181b0bab2ee0915f386c9294441fb8d07692995b61a789e6172516",
+    "status": "PASS_SOURCE_CHECKS_ONLY",
+    "candidate": "fd09933c64adaba32bf975ec96e5d518a42544e9",
+    "baseline_and_target_record_bytes_identical": true,
+    "reported_test_count_reused": 166,
+    "reported_checks_reused": "Original ordered source checks and additional SMP/mapping/host-audit source checks; exact results remain in the immutable record. They were not rerun or relabelled as full checks of changed target bytes."
+  },
+  "source_review_baseline": {
+    "path": "docs/verification/evidence/rs011-authority-independent-review-20261017.json",
+    "sha256": "5457654a2b15bdf94e4edf5d163fd4eeb1192da6604996df8646d45328c33213",
+    "decision": "PASS_SOURCE_AUTHORITY",
+    "baseline_and_target_record_bytes_identical": true
+  },
+  "unchanged_author_files_sha256": {
+    "host-kernel/contracts/ihk-os-runtime-v1.json": "0c808a75ed83820ce8180e2dc985e91541723a687bbd5e31d16f2876ad91dbf0",
+    "host-kernel/kbuild/stage-manifest.json": "f5c7efabb35366142600b4c58df8aa77718ad982f282e00cdcf55c99cb965d46",
+    "host-kernel/native-rust/ihk-lifecycle-contract-v1.json": "de6a8f4121ed992abba680026c5c23c4324ef5c7cdd5ddb92ed1d31889826fd5",
+    "host-kernel/native-rust/ihk-smp-lifecycle-contract-v1.json": "a5b9818be9ccfb36516bb62d1f0114196651a83c41befee4f0fffd39770b4185",
+    "host-kernel/native-rust/ihk-mapping-foundation-contract-v1.json": "9843b938d283e792c678032d697de46a966f071a634195d86163a8caddd50abc",
+    "host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json": "12e67cb24105d53021da12aa3ad563dcd99baee6444d0ff21842cd36776971fa",
+    "host-kernel/native-rust/os_runtime.rs": "9519b7f35f5d28c88cdf366fe5c67a244ea005db713690a3686afe8c2a60fcab",
+    "host-kernel/native-rust/smp_memory.rs": "db0c5f94b5ea41610c501002ff359b7f23a38841715a0307e8b8f7872ac65522",
+    "scripts/rocky_rust_staging.py": "adf9d798856859ce7391f0cd7b8ba5a8c425cda71e73365db2923f0ab1abe981",
+    "scripts/ihk_smp_native_lifecycle_check.py": "9133a587e9a11fec6c2dbab48268ed6dd245fe69d3b4f37c66119a890e74d084",
+    "scripts/native_rust_host_audit.py": "37946ab30ff6c74cc94bda8e0ca28df52b61474454b9561ea2f6631d851fe3cb",
+    "scripts/tests/test_native_rust_unsafe_ffi_ledger.py": "cc7fec55765f7a2f1587333b7450cecd0a490b1847c0680a970698e21cdcdffe"
+  },
+  "unchanged_checks": {
+    "scripts/native_rust_build_surface_audit.py": "baa1d891424838d847e011e9541dfd5870a37715e93cb302bcbd195e2a6fe587",
+    "scripts/rocky_rust_staging.py": "adf9d798856859ce7391f0cd7b8ba5a8c425cda71e73365db2923f0ab1abe981",
+    "scripts/ihk_native_lifecycle_check.py": "8773eb0d022b227c1cf276fdfd0ed6909157bd006e57fff9033e7476edc967ec",
+    "scripts/native_rust_unsafe_ffi_ledger.py": "bf9a8ea3fc5402aa3946860f416570d81420e387619f20513d8f97bc21bcdfee",
+    "scripts/ihk_smp_native_lifecycle_check.py": "9133a587e9a11fec6c2dbab48268ed6dd245fe69d3b4f37c66119a890e74d084",
+    "scripts/ihk_mapping_check.py": "71b6973062ba692dede1a9e81c1df9e699ca817d5747534d1e4626790a63df31",
+    "scripts/native_rust_host_audit.py": "37946ab30ff6c74cc94bda8e0ca28df52b61474454b9561ea2f6631d851fe3cb"
+  },
+  "independent_delta_checks": {
+    "target_identity": "Read-only git show proves exact target/tree/single parent; the named fetched-origin ref resolves to that target. git diff-tree lists exactly the two files in files_sha256_delta. No other candidate path changes, including optional fork, checked kernel APIs or resource/job profiles.",
+    "production_bytes": "Replacing the one complete signature substring fn shutdown_v6_post_effect(error: kernel::Error) -> i64 with fn shutdown_v6_post_effect(error: kernel::error::Error) -> i64 in the baseline reproduces the complete target file exactly. The helper body, to_errno invocation, tag/low32 encoding, callback error arms, unsafe operations, effect ordering and ownership comments are unchanged.",
+    "fixture_bytes": "Replacing the single baseline line mod kernel { pub type Error = i32; } with the exact reviewed nested error::Error alias, historical root alias and explanatory comments reproduces the complete target fixture exactly. No test body/assertion changes. The root alias remains solely for unchanged historical mutation replacement text; the separate target-export regression supplies no root alias and requires the old spelling to fail.",
+    "baseline_join": "All twelve files in the immutable RS-011 author's files_sha256 map match both baseline and target blobs exactly. The author/reviewer JSON bytes and seven checker source hashes also match baseline and target. No inventory ID, discovery, source policy, readiness status or checker is edited.",
+    "method": "Bounded CPU0/2-GiB standard-library byte/hash comparisons and read-only Git blob/tree/ref queries. No repository checker suites, compiler, root observer, container or guest was rerun."
+  },
+  "actual_linux_export_surface": {
+    "root": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority1-output/source/linux-6.12.0-211.44.1.el10_2/rust/kernel",
+    "lib_rs_sha256": "cde3e1e9608006f36c3a44ee11be848d8481c665f75b6d29937c9e9d9f76b0b6",
+    "error_rs_sha256": "50181273de10264d9aa181ba573ef859945808ebf59b01453939de75f9b47ff2",
+    "observed": "The retained selected Linux lib.rs exposes pub mod error with no crate-root Error reexport; error.rs defines public Error and inherent public to_errno. The new path names that actual type; it does not introduce a substitute production type."
+  },
+  "touched_executable_evidence": {
+    "path": "docs/verification/evidence/shutdown-native-error-path-central-pass-20261017.json",
+    "sha256": "7a25e80779305d8308bfa9af37e4e2c7db789b56e76a64d910e332686c1619ff",
+    "status": "PASS_TARGET_EXPORT_AND_TOUCHED_SHUTDOWN_FAMILIES",
+    "reviewed_results": "8 Python tests; actual target Error declaration/to_errno extraction checks all 4095 negative errno encodings; old root path fails E0412; original provider 9 Rust cases and four compiled mutations; actual-order 13 Rust cases and three precise negative mutations pass their unchanged oracles.",
+    "reviewer_reran_compiler": false,
+    "external_regression_driver_sha256": "48899df693514106d4c125d0fa204b9ae1c79325396b8de04913499effd8fc83",
+    "regression_driver_scope": "Retained test evidence outside the exact two-file candidate delta; it does not silently add that driver or unrelated sources to target.",
+    "limit": "Actual Linux export bytes and local extraction/target-surface tests are evidence for this namespace fix. They are not yet an actual kernel.rmeta typecheck, successful native module build or runtime shutdown."
+  },
+  "source_authority_binding": {
+    "baseline_validation_target": "fd09933c64adaba32bf975ec96e5d518a42544e9",
+    "delta_validation_target": "d37d2216a60c6db10442ba8bc238d64fbd59c5ea",
+    "rule": "Consume the immutable baseline author/review and their exact original source bindings at baseline_candidate, then require target/tree/parent and this exact two-file delta with all unaffected bytes preserved. This additive review supplies authority only for the namespace/fixture repair. It does not rewrite historical ledger source_input hashes or pretend unchanged full-file bindings already describe the repaired provider.",
+    "fail_closed": "Any different target/tree/parent, extra changed path, old/new hash, fixture replacement, author/reviewer record or unaffected file refuses this authority. No broader whole-tree exception is granted."
+  },
+  "failure_family": {
+    "name": "S22-NATIVE-SHUTDOWN-ERROR-PATH-1",
+    "actual_native_failures": 1,
+    "bounded_corrections_used": 1,
+    "preserved_author_record": "docs/verification/evidence/shutdown-native-error-path-repair-20261017.json",
+    "preserved_original": "Failed authority1 source, output/container, build E0412 capture and source commit remain immutable. Namespace repair is this family's single bounded correction; it is not a reset or successful native replay claim. A repeated native failure of this family requires the existing expert escalation."
+  },
+  "remaining_prerequisites": [
+    "Actual kernel.rmeta boundary check remains pending and must retain its real result.",
+    "The failed authority1 owner/root guard quarantine and original capture size/observer failure require their separate exact recovery and cleanup authority; this record authorizes no signalling or root-lock change.",
+    "Fresh authority2 names, source-bound preparation/materialization and independent execution release remain required before any build or guest."
+  ],
+  "blocking_findings_in_source_delta": [],
+  "rs011_gate_status": "NOT_READY",
+  "runtime_acceptance": false,
+  "native_build_accepted": false,
+  "execution_released": false,
+  "formal_case_credit": false,
+  "campaign_scope": "Reviewer wrote only this new source-authority record. No Git write/fetch, network, compiler, root, Docker, signal, guard/lease change or guest operation was performed."
+}

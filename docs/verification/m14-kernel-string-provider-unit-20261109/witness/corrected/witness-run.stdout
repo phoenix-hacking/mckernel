@@ -1,0 +1,12 @@
+C-ABI strnlen input=empty limit=0 result=0 retained-readable-NUL-input=1
+C-ABI strnlen input=empty limit=2 result=0 retained-readable-NUL-input=1
+C-ABI strnlen input=empty limit=3 result=0 retained-readable-NUL-input=1
+C-ABI strnlen input=empty limit=8 result=0 retained-readable-NUL-input=1
+C-ABI strnlen input=abc limit=0 result=0 retained-readable-NUL-input=1
+C-ABI strnlen input=abc limit=2 result=2 retained-readable-NUL-input=1
+C-ABI strnlen input=abc limit=3 result=3 retained-readable-NUL-input=1
+C-ABI strnlen input=abc limit=8 result=3 retained-readable-NUL-input=1
+C-ABI memset offset=4 count=0 int=291 low-byte=35 return-original=1 owned-prefix-suffix-unchanged=1
+C-ABI memset offset=3 count=5 int=291 low-byte=35 return-original=1 owned-prefix-suffix-unchanged=1
+C-ABI memset offset=2 count=5 int=-1 low-byte=255 return-original=1 owned-prefix-suffix-unchanged=1
+ordinary HOST C-ABI observations complete; genuine kernel roots only; no kernel state/native acceptance

@@ -1,0 +1,140 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_SIX_LEAF_SOURCE_COMPOSITION_ONLY",
+  "inputs": {
+    "logger_lock": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-LOGGER-LOCK-BATCH-1/SOURCE-READY.json",
+      "bytes": 5760,
+      "sha256": "7f9c58f4a9f17f399c2548d383cd8b6e0a253ae0ead7e91895fc77133bb68375"
+    },
+    "util": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-UTIL-CLONE-DISABLED-LOGGER-1/READY.SOURCE-ONLY.json",
+      "bytes": 3390,
+      "sha256": "a44b2c65bd7637d26f3ade4cf0c02e35a2b33a4c0593e226be1199c0738f0aa6"
+    }
+  },
+  "files": [
+    {
+      "proposed_path": "kernel/rust/syscall_policy.rs",
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SIX-LEAF-BATCH-1/postimage/kernel/rust/syscall_policy.rs",
+        "bytes": 1302658,
+        "sha256": "9fbecea33790e7108045cc9afa88e0fdac65a5dd114a673fd858ac57b0447fae"
+      },
+      "canonical_preimage": {
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "bytes": 1301841,
+        "sha256": "07cb4bff5a0a9a0d582ebc18e344e5cf06ccd6fc37005292c757ef0501ea50eb"
+      },
+      "reused_leaf_exact": false
+    },
+    {
+      "proposed_path": "kernel/CMakeLists.txt",
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SIX-LEAF-BATCH-1/postimage/kernel/CMakeLists.txt",
+        "bytes": 43977,
+        "sha256": "e844f1bd530b5107e490efea5bb6ef569c5fff5265bdc9669136da922afc8231"
+      },
+      "canonical_preimage": {
+        "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+        "bytes": 43464,
+        "sha256": "0fe73cfa95c24b2aa6f91062a802bffc222b0c0f1cc094740dbff7e2634d8516"
+      },
+      "reused_leaf_exact": false
+    },
+    {
+      "proposed_path": "kernel/syscall.c",
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SIX-LEAF-BATCH-1/postimage/kernel/syscall.c",
+        "bytes": 928460,
+        "sha256": "0e995af0f02e78255712b361df84edd6ae43479239773f9214ac80a21898e027"
+      },
+      "canonical_preimage": {
+        "path": "/home/holden/mckernel/kernel/syscall.c",
+        "bytes": 928517,
+        "sha256": "7b33e5de55ddba41036a57ddba3694c51afe7153ca7d779ceec0206734a15fd0"
+      },
+      "reused_leaf_exact": false
+    },
+    {
+      "proposed_path": "kernel/rust/syscall_settid_logger.rs",
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SIX-LEAF-BATCH-1/postimage/kernel/rust/syscall_settid_logger.rs",
+        "bytes": 768,
+        "sha256": "895f6a205232e503f6f737ce363425c3d9571faaf99c517ced9ed95723c22a29"
+      },
+      "canonical_preimage": null,
+      "reused_leaf_exact": true
+    },
+    {
+      "proposed_path": "kernel/rust/syscall_clear_host_pte_logger.rs",
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SIX-LEAF-BATCH-1/postimage/kernel/rust/syscall_clear_host_pte_logger.rs",
+        "bytes": 772,
+        "sha256": "1982650efce731c33d02084b809b10fa9f2e44ceee69ef755325e253f5bf33f5"
+      },
+      "canonical_preimage": null,
+      "reused_leaf_exact": true
+    },
+    {
+      "proposed_path": "kernel/rust/syscall_exit_group_logger.rs",
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SIX-LEAF-BATCH-1/postimage/kernel/rust/syscall_exit_group_logger.rs",
+        "bytes": 1719,
+        "sha256": "2f88ddd3dc2957d589abb61f0e1f23412039753bad5c5d2719d17d33bdd79f09"
+      },
+      "canonical_preimage": null,
+      "reused_leaf_exact": true
+    },
+    {
+      "proposed_path": "kernel/rust/syscall_ptrace_clone_logger.rs",
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SIX-LEAF-BATCH-1/postimage/kernel/rust/syscall_ptrace_clone_logger.rs",
+        "bytes": 3003,
+        "sha256": "049cb248d35af6f8f6362c4a3caeafe78ec50a5e6b0432ee2934a09cf9b6d4e9"
+      },
+      "canonical_preimage": null,
+      "reused_leaf_exact": true
+    },
+    {
+      "proposed_path": "kernel/rust/lib.rs",
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SIX-LEAF-BATCH-1/postimage/kernel/rust/lib.rs",
+        "bytes": 3377,
+        "sha256": "8c57731ede6aa125d132a08b012438fc7d16046ebb0f633d189409571add9344"
+      },
+      "canonical_preimage": {
+        "path": "/home/holden/mckernel/kernel/rust/lib.rs",
+        "bytes": 3283,
+        "sha256": "ceb60c3de3b0217c7bd435e3d8cb1b7aba6123811082f1248060aec66a45ea41"
+      },
+      "reused_leaf_exact": false
+    },
+    {
+      "proposed_path": "kernel/rust/ptrace_clone_noirq.rs",
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SIX-LEAF-BATCH-1/postimage/kernel/rust/ptrace_clone_noirq.rs",
+        "bytes": 1184,
+        "sha256": "a3466b4decd926036048c70f56ca8de3ef206bab6e26dd4db75d0f9af4d39dbe"
+      },
+      "canonical_preimage": null,
+      "reused_leaf_exact": true
+    },
+    {
+      "proposed_path": "kernel/rust/syscall_util_clone_disabled_logger.rs",
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SIX-LEAF-BATCH-1/postimage/kernel/rust/syscall_util_clone_disabled_logger.rs",
+        "bytes": 870,
+        "sha256": "b74a4c390c6baf1a52becf03275725b49944678b4907e4848db19f365fae44fd"
+      },
+      "canonical_preimage": null,
+      "reused_leaf_exact": true
+    }
+  ],
+  "patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SIX-LEAF-BATCH-1/SIX-LEAF-BATCH.PRIVATE-NOT-APPLIED.patch",
+    "bytes": 18260,
+    "sha256": "606cbbd20a318a7b0693151efafe4d4cb83d246aed0e79a357c5cd546f2e8dd9"
+  },
+  "runtime_authority": null
+}

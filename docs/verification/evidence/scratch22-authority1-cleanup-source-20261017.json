@@ -1,0 +1,63 @@
+{
+  "schema": "scratch22-authority1.cleanup-source-template.v1",
+  "status": "TEMPLATE_NOT_RELEASED",
+  "author": "/root/scratch21_transaction",
+  "execution_released": false,
+  "acceptance_credit": false,
+  "files_sha256": {
+    "scripts/native_exact_scratch22_authority1_terminal_cleanup.py": "7d4673dbb1ff0b3bc33b25aab2a10de9f18f759df84eb5255613dd7d1fdf7ced",
+    "scripts/tests/test_native_exact_scratch22_authority1_terminal_cleanup.py": "bd0e93447b348f1c08b26cbd257288d0a7344145e10160b7193bc3aa201dd921"
+  },
+  "reviewed_unchanged_baseline": {
+    "source": "scripts/native_exact_scratch21_terminal_cleanup.py",
+    "source_sha256": "6606af40114eb5b6019438c4127948081d80bbe65144d841e906a7cba84aabed",
+    "tests": "scripts/tests/test_native_exact_scratch21_terminal_cleanup.py",
+    "tests_sha256": "e1467625cfcc848c7834e23c6bff26a535b40115a0d85bb512f488bf8fcb7d90",
+    "baseline_result": "32 tests previously passed and independently reviewed; all original source/test bytes remain unchanged",
+    "independent_source_review_sha256": "f1c5065880df2b4a4769cde6b7b0ac68621108f663c480d1b332f16c599b3b91",
+    "failure_history": "Carry the retained scratch21 BrokenPipe/ordinary termination root-flock failure and accepted expert correction. Also retain the separate S22-LOCK-1 SIGQUIT/quarantine family and its accepted corrected heavy wrapper. This fresh namespace does not reset either failure history.",
+    "reuse": "Standalone exact attempt adaptation retains transaction locking, atomic exclusions exchange, same-inode original archives, nine-row hash-chain journal, positive container absence, deferred HUP/INT/TERM/QUIT and nonreturning uncertain-retirement quarantine. Focused tests reuse the exact authenticated baseline fault-test methods rather than duplicating their assertions."
+  },
+  "namespace": {
+    "candidate": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority1",
+    "request": "/home/holden/mckernel-work/scratch/native-exact-build-request-scratch-22-authority1.execution.json",
+    "lease": "/home/holden/mckernel-work/scratch/native-exact-build-lease-scratch-22-authority1.json",
+    "output": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority1-output",
+    "evidence": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority1-evidence",
+    "transaction_prefix": "/home/holden/mckernel-work/scratch/native-exact-scratch22-authority1-terminal-cleanup-20261017",
+    "shared_lock": "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock",
+    "operational_slot": "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch18.json"
+  },
+  "preservation": {
+    "nonempty_output": "Allowed. Complete metadata inventories cover output and evidence roots and every declared descendant, including symlink identity/target without following it. Identity fields include inode/device/type/mode/owner/size/link count/mtime_ns/ctime_ns. Selected published image/artifact, request, terminal, receipts, logs and direct source inputs retain exact byte hashes. Large vmlinux and whole output bytes are not added to repeated hashing.",
+    "source": "Exact candidate root binding, candidate commit/tree and direct request driver/owner/input/image-receipt SHA joins are checked. Source/build/output/image/evidence objects are never mutated or removed by this transaction.",
+    "allowed_mutations": "Only fresh cleanup transaction artifacts, nonforce removal of the exact stopped container, atomic exchange of the two exclusions into same-inode archives, and authorized empty sentinel rmdir."
+  },
+  "future_observation_contract": {
+    "release_schema": "scratch22-authority1.cleanup-release.v1",
+    "release_required_status": "PASS_EXECUTION_RELEASE",
+    "observation_keys": ["mount", "root", "boot_id", "root_lock", "request", "target", "container_inspect", "retained_exclusions", "request_lease_absent", "inventories", "candidate_root", "candidate_commit", "candidate_tree", "selected_files"],
+    "target_keys": ["container_id", "container_name", "owner_nonce", "image_id", "owner_pid", "owner_starttime", "exit_code"],
+    "inventories": "Map with exactly the fixed output/evidence roots as keys; each value is metadata_inventory(root), including the bound root first. Selected byte identities use the existing observe_identity(path) schema and its 32-MiB bound. Successful exit0 additionally requires a selected hashed artifact below output.",
+    "runtime_defaults": "Container, nonce, owner PID/starttime, expected exit status, terminal digest/inode/size, boot, device and release all begin None. No scratch21 runtime identity, request, terminal or phase0 empty-output assumption can be adopted.",
+    "read_only_draft_api": "prepare_release(future_observation, fetched_commit, fetched_tree) emits NOT_RELEASED. Missing runtime observations and unreleased drafts fail closed.",
+    "unknown": "Actual authority1 terminal container, owner/process, evidence, exclusion and artifact identities do not exist in this source record. Obtain only from the future exact hash-bound observation/release after the active build reaches a verified terminal state."
+  },
+  "checks": {
+    "status": "PASS_FOCUSED_TEMPLATE_ONLY",
+    "command": "timeout 180s taskset -c 7 bash -c 'ulimit -v 2097152; exec python3 -B -m unittest -v scripts.tests.test_native_exact_scratch22_authority1_terminal_cleanup'",
+    "exit_code": 0,
+    "stderr_summary": "Ran 12 tests in 1.037s\n\nOK\n",
+    "coverage": "Fresh namespace/no runtime fallback, nonempty successful image preservation and immutable terminal replay, undeclared output drift, selected-image hash drift, source-root/lease drift, symlink metadata, unreleased draft refusal, twelve exchange/release crash frontiers and seven actual disposable BrokenPipe/writer/HUP/INT/TERM children retaining real temporary flocks and post-SIGKILL barriers.",
+    "final_narrow_check": {
+      "reason": "Require the successful output selection to carry a byte digest below output, so a directory cannot satisfy the artifact prerequisite. Transaction core unchanged.",
+      "command": "timeout 180s taskset -c 7 bash -c 'ulimit -v 2097152; exec python3 -B -m unittest -v scripts.tests.test_native_exact_scratch22_authority1_terminal_cleanup.Authority1CleanupTests.test_nonempty_successful_output_is_preserved_through_cleanup_and_replay scripts.tests.test_native_exact_scratch22_authority1_terminal_cleanup.Authority1CleanupTests.test_unreleased_template_and_missing_future_observation_cannot_execute'",
+      "exit_code": 0,
+      "stderr_summary": "Ran 2 tests in 0.063s\n\nOK\n"
+    },
+    "resource_profile": "CPU7 only, RLIMIT_AS2GiB,180seconds; ordinary Python/mocked Docker/root operations with existing reviewed disposable child/flock tests",
+    "failures": [],
+    "not_performed": ["live sudo", "live Docker", "compiler", "guest", "live cleanup", "Git", "network", "active authority1 source/output/lease mutation"]
+  },
+  "next": "Stop at unknown runtime identities. Dispatcher independently reviews this source template and a future actual observation/execution release. The active image/build critical path does not depend on this template being executable now."
+}

@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "signal.external-user1",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/signal.external-user1"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "relation", "records": ["ready pid=<positive> tid=<positive>", "handled=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["The supervisor sends exactly one SIGUSR1 after the ready record", "Exactly one handler entry occurs in the intended guest PID/TID and the application exits normally"],
+  "unresolved_expectations": ["Bind supervisor sender identity, PID/TID matching, and delivery timing before execution."],
+  "max_question_for_reviewer": "Confirm the ready record gates one external SIGUSR1 and handler identity must match the intended guest task."
+}

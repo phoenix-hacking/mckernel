@@ -1,0 +1,36 @@
+{
+  "schema": "mckernel.stability.source-evidence.v1",
+  "date": "2026-09-28",
+  "status": "PASS_SOURCE_ONLY",
+  "scope": "minimal pinned-Linux export of the existing x86 send_init_sequence reset attempt",
+  "base_commit": "df6d3f29af0e438b34a95d319e2a8f6c7a573f47",
+  "artifacts": {
+    "host-kernel/kbuild/patches/0010-x86-export-secondary-reset-sequence.patch": "14b2796e7ea92243808f36da663e5572f07da561570f0e7a5918d7b52fd771e3",
+    "scripts/tests/test_x86_export_secondary_reset_sequence.py": "4a32e8218a0b9048db3508c67cbee8e7522f279dd5482e0c5a1966750c0e2734"
+  },
+  "original_failure": {
+    "patch_sha256": "fd2b24f87ddd015e99931177e4ffb8fafdbf8a9011e3bb06decd5ab86e762dda",
+    "test_sha256": "4a32e8218a0b9048db3508c67cbee8e7522f279dd5482e0c5a1966750c0e2734",
+    "command": "python3 scripts/tests/test_x86_export_secondary_reset_sequence.py",
+    "result": "FAIL return code 2: malformed patch at the second smpboot.c hunk"
+  },
+  "bounded_correction": {
+    "change": "corrected only the two smpboot.c unified-diff hunk ranges",
+    "command": "python3 scripts/tests/test_x86_export_secondary_reset_sequence.py",
+    "result": "PASS: 1 test",
+    "diff_check": "PASS"
+  },
+  "verified_behavior": [
+    "the patch applies to the exact retained linux-6.12.0-211.44.1.el10_2 source in a temporary tree",
+    "send_init_sequence remains void and its function body is byte-identical",
+    "the symbol is declared in asm/smp.h and exported once with EXPORT_SYMBOL_GPL",
+    "no SIPI or startup behavior is added"
+  ],
+  "excluded": [
+    "configured kernel build",
+    "module link or load",
+    "native journal implementation",
+    "privileged or guest execution",
+    "CPU reclamation, lifecycle or whole-OS acceptance"
+  ]
+}

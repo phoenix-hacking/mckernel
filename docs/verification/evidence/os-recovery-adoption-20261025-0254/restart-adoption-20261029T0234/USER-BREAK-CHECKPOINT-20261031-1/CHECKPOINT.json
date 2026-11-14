@@ -1,0 +1,610 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\nUser-requested checkpoint only; no new workload, repair, diagnostic or cleanup.\n",
+  "at": "2026-10-31T00:26:30.169470+00:00",
+  "status": "USER_REQUESTED_CHECKPOINT_THEN_PAUSE",
+  "request_id": "20261031T002130096473Z-d95c8aaa167d4804b4573060825b77e6",
+  "thread_id": "01a18bc3-e072-7810-9426-75101b0856c0",
+  "model": "gpt-6.1-sol",
+  "effort": "max",
+  "M14": [
+    4,
+    6
+  ],
+  "practical": [
+    35,
+    35
+  ],
+  "M15": "PAUSED_UNTIL_M14_ACCEPTANCE",
+  "final_completion": "Complete reproducible McKernel system with existing Rocky/Linux support. Linux-independent boot is not required.",
+  "new_bridge_machinecode": "a93caecbfd04b672a860e4a5de00e5ec8c280b5e35883b7498ae5ce82dc62678;6712B/98Bfunction; providers/link/native still open",
+  "new_production_link_native_C_retirement_file_acceptance_delta": 0,
+  "R3": {
+    "at": 1793406157.153635,
+    "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+    "status": "STOP_REQUEST_EXISTING_OPERATION_UNKNOWN",
+    "tool_session_id": 46406,
+    "rows": [
+      {
+        "pid": 3121863,
+        "expected_birth": "120224717",
+        "birth": "120224717",
+        "matches_expected_birth": true,
+        "state": "S",
+        "ppid": 2996005,
+        "pgid": 3121863,
+        "uid": 1000,
+        "children": "3121864",
+        "comm": "python3"
+      },
+      {
+        "pid": 3121864,
+        "expected_birth": "120224735",
+        "birth": "120224735",
+        "matches_expected_birth": true,
+        "state": "S",
+        "ppid": 3121863,
+        "pgid": 3121863,
+        "uid": 0,
+        "children": "3121867",
+        "comm": "sudo"
+      },
+      {
+        "pid": 3121867,
+        "expected_birth": "120224742",
+        "birth": "120224742",
+        "matches_expected_birth": true,
+        "state": "S",
+        "ppid": 3121864,
+        "pgid": 3121863,
+        "uid": 0,
+        "children": "",
+        "comm": "python3"
+      },
+      {
+        "pid": 3121868,
+        "expected_birth": "120224750",
+        "current_observation": "ABSENT_NO_RETIREMENT_INFERRED"
+      }
+    ],
+    "no_new_stop_helper_invoked": true,
+    "reservation_bytes": 4294967296,
+    "previous_unknown_bytes": 4294967296,
+    "native_release": false,
+    "native_currentfree": null
+  },
+  "mode_repair": {
+    "status": "verified0755sameinode1048578/dev66306",
+    "proof": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/usr-bin-functional-mode-repair-1/actual-1/RESULT.json",
+    "unchanged_guard_proof": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/r3-stop-and-mode-guard-0001/RESULT.json",
+    "repair_not_replayed": true
+  },
+  "holds": {
+    "dfd_failed_install_bytes": 4294967296,
+    "R3_failed_install_bytes": 4294967296,
+    "V2_unknown_bytes": 2147483648,
+    "native_reserved_bytes": 12884901888,
+    "scratch21": "HELD",
+    "permanent27_4": "HELD",
+    "native_currentfree": null,
+    "no_unlisted_later_operation": "UNKNOWN",
+    "all_original_rejected_scopes": "HELD"
+  },
+  "weekly": {
+    "at": "2026-10-31T00:26:28.325474+00:00",
+    "used_percent": 96,
+    "reset_upper_bound": 1793774133,
+    "billing": "included_only",
+    "paid_fallback": false
+  },
+  "new_actions_after_stop": "Only existing session observation and authorized checkpoint/push/handoff; no new stop helper or operation",
+  "all_child_turns": "completed; no new assignments",
+  "periodic_engineering_submissions": "STOPPED; no new review or dispatch after break",
+  "foreground_owns": "single Markdown consolidation, legacy repository, AGENTS entrypoint, future context; left untouched",
+  "next_after_explicit_manual_resume": "Reconcile the live R3 control chain/session46406 with fresh PID/birth/custody and reviewed stop/disposition before any further install/build; no automatic action.",
+  "preserved_files": [
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-actual-caller-3/ACTUAL-VALUES.json",
+      "bytes": 966,
+      "sha256": "0c08158f703d6a14dd4fb6c227ccab00c5358c767891422391ef79a483ccc021",
+      "retained": "retained/root-install-actual-caller-3/ACTUAL-VALUES.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-actual-caller-3/ROOT-ACTUAL-ADMISSION.json",
+      "bytes": 1586,
+      "sha256": "79d22e1f1030ba1cde53707057204e598fe0b96d8b474efa27612049a8e4d7d0",
+      "retained": "retained/root-install-actual-caller-3/ROOT-ACTUAL-ADMISSION.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-actual-caller-3/ROOT-ACTUAL-ARGV.json",
+      "bytes": 1991,
+      "sha256": "93cbef0a0b37f7d7f08097f63e2c31bc035b4bc67118686f4409bff9bd8fdaa0",
+      "retained": "retained/root-install-actual-caller-3/ROOT-ACTUAL-ARGV.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-actual-caller-3/ROOT-ACTUAL-SESSION.json",
+      "bytes": 500,
+      "sha256": "eb3b1f814f2628e1ce9bb6aa909602f546172f8a355b19a0776ef011fef04a16",
+      "retained": "retained/root-install-actual-caller-3/ROOT-ACTUAL-SESSION.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-actual-caller-3/ROOT-CALLER-OWNER.json",
+      "bytes": 90,
+      "sha256": "1245eb375bbf9ae76c2ee5a11d0715d8ebc27a33532acb4184fd50bcfb686047",
+      "retained": "retained/root-install-actual-caller-3/ROOT-CALLER-OWNER.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-actual-caller-3/USER-CHECKPOINT-OBSERVATION.json",
+      "bytes": 1341,
+      "sha256": "b73d41fb687292bb7735c19c6874ddd1b5c52c48290227bfe841c7c5ee6be6bd",
+      "retained": "retained/root-install-actual-caller-3/USER-CHECKPOINT-OBSERVATION.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-actual-caller-3/USR-BIN-MODE-OBSERVATION.json",
+      "bytes": 1406,
+      "sha256": "7bbafed0badf8f7c745782abaf583a0d76b59d9ff15a0afa8369dff94d3995f8",
+      "retained": "retained/root-install-actual-caller-3/USR-BIN-MODE-OBSERVATION.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-actual-caller-3/reservations/install-8c12bd228ca26f54732752129977b7310a74234a5d8812faaaa8658be5925bec/BEFORE-SUDO-FORK.json",
+      "bytes": 183,
+      "sha256": "6c697c26e88cd9c2211691f85769cc320075aae749f21b3c717e4268d77e9755",
+      "retained": "retained/root-install-actual-caller-3/reservations/install-8c12bd228ca26f54732752129977b7310a74234a5d8812faaaa8658be5925bec/BEFORE-SUDO-FORK.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-actual-caller-3/reservations/install-8c12bd228ca26f54732752129977b7310a74234a5d8812faaaa8658be5925bec/CAPTURE.json",
+      "bytes": 161,
+      "sha256": "bc1acc4935f8688a4a38e8920607f995c4fe40029e8a7ee536dbd411db2107e7",
+      "retained": "retained/root-install-actual-caller-3/reservations/install-8c12bd228ca26f54732752129977b7310a74234a5d8812faaaa8658be5925bec/CAPTURE.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-actual-caller-3/reservations/install-8c12bd228ca26f54732752129977b7310a74234a5d8812faaaa8658be5925bec/OBSERVED-root_parent.json",
+      "bytes": 270,
+      "sha256": "2f77be6b550ccd5b1d1744b7a163f240906b076f5fcfd38048f19d84f26c6330",
+      "retained": "retained/root-install-actual-caller-3/reservations/install-8c12bd228ca26f54732752129977b7310a74234a5d8812faaaa8658be5925bec/OBSERVED-root_parent.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-actual-caller-3/reservations/install-8c12bd228ca26f54732752129977b7310a74234a5d8812faaaa8658be5925bec/PREEXEC.json",
+      "bytes": 180,
+      "sha256": "6e936232769ebfdf5886295f2b05530de56272c9106d23359db76596a8b9d196",
+      "retained": "retained/root-install-actual-caller-3/reservations/install-8c12bd228ca26f54732752129977b7310a74234a5d8812faaaa8658be5925bec/PREEXEC.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-actual-caller-3/reservations/install-8c12bd228ca26f54732752129977b7310a74234a5d8812faaaa8658be5925bec/RESERVATION.json",
+      "bytes": 1025,
+      "sha256": "97f8b093402985b5d937629afee2587053bfae42181e226c640d2ac985c73b92",
+      "retained": "retained/root-install-actual-caller-3/reservations/install-8c12bd228ca26f54732752129977b7310a74234a5d8812faaaa8658be5925bec/RESERVATION.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-actual-caller-3/reservations/install-8c12bd228ca26f54732752129977b7310a74234a5d8812faaaa8658be5925bec/SUDO-CHILD.json",
+      "bytes": 161,
+      "sha256": "566566109a7c5356369fb7848d2a32c78fd9be3af8b676b85c5f82acffa87d8e",
+      "retained": "retained/root-install-actual-caller-3/reservations/install-8c12bd228ca26f54732752129977b7310a74234a5d8812faaaa8658be5925bec/SUDO-CHILD.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-actual-caller-3/reservations/install-8c12bd228ca26f54732752129977b7310a74234a5d8812faaaa8658be5925bec/argv.json",
+      "bytes": 7282,
+      "sha256": "7355025b0b6a1b717cb052849f71cf0ff4004ee179f1e6561d3a41c4d635f09f",
+      "retained": "retained/root-install-actual-caller-3/reservations/install-8c12bd228ca26f54732752129977b7310a74234a5d8812faaaa8658be5925bec/argv.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-actual-caller-3/reservations/install-8c12bd228ca26f54732752129977b7310a74234a5d8812faaaa8658be5925bec/request.json",
+      "bytes": 3143,
+      "sha256": "176074ffe7f98766e4b8b14c572082bf2e4af4256fd970c55fd9042d97ae0b2b",
+      "retained": "retained/root-install-actual-caller-3/reservations/install-8c12bd228ca26f54732752129977b7310a74234a5d8812faaaa8658be5925bec/request.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-actual-caller-3/reservations/install-8c12bd228ca26f54732752129977b7310a74234a5d8812faaaa8658be5925bec/stderr.capture",
+      "bytes": 843,
+      "sha256": "5ea1849eb55709f2eab2a3c199648596b2f6e482185b4e63ca4589a186354599",
+      "retained": "retained/root-install-actual-caller-3/reservations/install-8c12bd228ca26f54732752129977b7310a74234a5d8812faaaa8658be5925bec/stderr.capture"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-actual-caller-3/reservations/install-8c12bd228ca26f54732752129977b7310a74234a5d8812faaaa8658be5925bec/stdout.capture",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retained_reference": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-NINE-ENTRY-CODEGEN-AND-ABI-CHECKPOINT-20261030-1/retained/source-test-runs/clone-abi-compare-0001/stderr.txt"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/usr-bin-functional-mode-repair-1/ENTRY.py",
+      "bytes": 2216,
+      "sha256": "a4e1835083c27bd5086fa502dfd69037cf55aebd2e476d9c2b84c1d412c664ab",
+      "retained": "retained/usr-bin-functional-mode-repair-1/ENTRY.py"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/usr-bin-functional-mode-repair-1/FROZEN-SOURCE.json",
+      "bytes": 1079,
+      "sha256": "504dc9698cb056a334c356105aad79fc90e4978b6db7512af733e369934f6667",
+      "retained": "retained/usr-bin-functional-mode-repair-1/FROZEN-SOURCE.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/usr-bin-functional-mode-repair-1/PROFILE.SOURCE-ONLY.json",
+      "bytes": 2923,
+      "sha256": "6ad22ac2c10001dbc72aa48f515be96fbf5c56e09d1de02a75515d56e9c68729",
+      "retained": "retained/usr-bin-functional-mode-repair-1/PROFILE.SOURCE-ONLY.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/usr-bin-functional-mode-repair-1/README.md",
+      "bytes": 3425,
+      "sha256": "c7f047e4004ddb6396c50b0ec15872b464d7a4b97fcf718a65ab5e10dc025130",
+      "retained": "retained/usr-bin-functional-mode-repair-1/README.md"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/usr-bin-functional-mode-repair-1/actual-1/ACTUAL-ARGV.json",
+      "bytes": 3186,
+      "sha256": "01a2af1cd7d6cd87cd8dc8c83ce5bedf708197b7ec82e9cf05982b3133616ec3",
+      "retained": "retained/usr-bin-functional-mode-repair-1/actual-1/ACTUAL-ARGV.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/usr-bin-functional-mode-repair-1/actual-1/ADMISSION.json",
+      "bytes": 1674,
+      "sha256": "848867f97ecf82203d4d5eb7d26c31f105050489a9f5ddec5340e94dc12b2a11",
+      "retained": "retained/usr-bin-functional-mode-repair-1/actual-1/ADMISSION.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/usr-bin-functional-mode-repair-1/actual-1/CONSUMED-ONE-SHOT.json",
+      "bytes": 194,
+      "sha256": "c048f1ebf94685da4c61ee6e4aa29db43dd42d107f887c3dd6291041ecf3a722",
+      "retained": "retained/usr-bin-functional-mode-repair-1/actual-1/CONSUMED-ONE-SHOT.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/usr-bin-functional-mode-repair-1/actual-1/PROCESS-OWNER.json",
+      "bytes": 66,
+      "sha256": "561f0ba71b5e5a04437ac74af589dfd9e9a1c8b613111b0419deb02e4fb254c8",
+      "retained": "retained/usr-bin-functional-mode-repair-1/actual-1/PROCESS-OWNER.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/usr-bin-functional-mode-repair-1/actual-1/RESULT.json",
+      "bytes": 4490,
+      "sha256": "4d2265eb9cfde6075ba80a722ff5b79db7b65f1e9656784f5705dfc51aa4ca15",
+      "retained": "retained/usr-bin-functional-mode-repair-1/actual-1/RESULT.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/usr-bin-functional-mode-repair-1/actual-1/ROOT-ONE-SHOT-RELEASE.json",
+      "bytes": 867,
+      "sha256": "a2df13eabc1a6708d52e7c6b52ec1096a1d2d6f49dc6f431b32a50ef83d14e2e",
+      "retained": "retained/usr-bin-functional-mode-repair-1/actual-1/ROOT-ONE-SHOT-RELEASE.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/usr-bin-functional-mode-repair-1/actual-1/stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retained_reference": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-NINE-ENTRY-CODEGEN-AND-ABI-CHECKPOINT-20261030-1/retained/source-test-runs/clone-abi-compare-0001/stderr.txt"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/usr-bin-functional-mode-repair-1/actual-1/time.txt",
+      "bytes": 3611,
+      "sha256": "077395904853590dd4f57badefd625c75d93b333218686d201cde6ead88debc9",
+      "retained": "retained/usr-bin-functional-mode-repair-1/actual-1/time.txt"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/usr-bin-functional-mode-repair-1/mode_repair.py",
+      "bytes": 11747,
+      "sha256": "2d2dc33884f82deca9ad00b37d8d36e0298b282126110c0158e370ef9818287c",
+      "retained": "retained/usr-bin-functional-mode-repair-1/mode_repair.py"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/usr-bin-functional-mode-repair-1/sequence-tests-1/MANIFEST.json",
+      "bytes": 540,
+      "sha256": "a989630868e9211bd5824dcde42bc4ed40fd5b194e4d9129afb5a9610959d2e4",
+      "retained": "retained/usr-bin-functional-mode-repair-1/sequence-tests-1/MANIFEST.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/usr-bin-functional-mode-repair-1/sequence-tests-1/README.md",
+      "bytes": 1407,
+      "sha256": "b7f71d03827dda0c1af91606610a035e640ce7adc3d0f7ff8b6c24d7d16ab8c0",
+      "retained": "retained/usr-bin-functional-mode-repair-1/sequence-tests-1/README.md"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/usr-bin-functional-mode-repair-1/sequence-tests-1/test_repair_sequence.py",
+      "bytes": 7435,
+      "sha256": "39425a8f84616eac8095269833d798673b54d02eb031690e9fb888c2a414322e",
+      "retained": "retained/usr-bin-functional-mode-repair-1/sequence-tests-1/test_repair_sequence.py"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/usr-bin-functional-mode-repair-1/test_mode_repair.py",
+      "bytes": 1995,
+      "sha256": "01add1d76aaa952ee15e33ef9e79f0b06838ae132d5ed70621b5d0ff440b8dd9",
+      "retained": "retained/usr-bin-functional-mode-repair-1/test_mode_repair.py"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-r3-control-stop-1/ENTRY.py",
+      "bytes": 2384,
+      "sha256": "6bc9c7a1de5841c454b455d13afba13612e1edd2a56a2a55eafb70d1c7f020c1",
+      "retained": "retained/root-install-r3-control-stop-1/ENTRY.py"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-r3-control-stop-1/FROZEN-SOURCE.json",
+      "bytes": 1923,
+      "sha256": "ee8ae6a493682c2fcc1c02f210eaf723077e2fc76a5744af89aa9ac15839eb86",
+      "retained": "retained/root-install-r3-control-stop-1/FROZEN-SOURCE.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-r3-control-stop-1/PROFILE.SOURCE-ONLY.json",
+      "bytes": 3164,
+      "sha256": "df9728ffb325649ab7840f0b2549fe58ce9b1f796dfb599013ee2fe2b1926338",
+      "retained": "retained/root-install-r3-control-stop-1/PROFILE.SOURCE-ONLY.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-r3-control-stop-1/README.md",
+      "bytes": 3561,
+      "sha256": "80474d48382796aeb20a9bc8732521b2eea4cab46ded07d6c44c7100810b85e5",
+      "retained": "retained/root-install-r3-control-stop-1/README.md"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-r3-control-stop-1/control_stop.py",
+      "bytes": 21346,
+      "sha256": "a7010f0eb68caf9819dfe857f35a0a7b1ec6e77d12e47173194ee9d2d375bb2f",
+      "retained": "retained/root-install-r3-control-stop-1/control_stop.py"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-r3-control-stop-1/test_failure_binding.py",
+      "bytes": 1756,
+      "sha256": "80897535eb770a62d212dc7fb265bd4fb0ef4aa147d5af8d52176e78ffe19ff1",
+      "retained": "retained/root-install-r3-control-stop-1/test_failure_binding.py"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-parent-independent-review-1/ACTUAL-PARENT4-INSTALL-REVIEW.json",
+      "bytes": 500,
+      "sha256": "001d1274c8903974956271aac3e1f46e111eba758726d0571ef62e80cd1dc80d",
+      "retained_reference": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CALLER-PROOF-CHECKPOINT-20261030-1/retained/root-install-direct-parent-independent-review-1/ACTUAL-PARENT4-INSTALL-REVIEW.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-parent-independent-review-1/ACTUAL-PARENT4-INSTALL-REVIEW.md",
+      "bytes": 2004,
+      "sha256": "af67c43b8e53fcfbde04b6c6f8fa74694023f9fad95d993e27b8a4111c93a5a2",
+      "retained_reference": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CALLER-PROOF-CHECKPOINT-20261030-1/retained/root-install-direct-parent-independent-review-1/ACTUAL-PARENT4-INSTALL-REVIEW.md"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-parent-independent-review-1/ACTUAL-PARENT4-WAIT-INSTALL-REVIEW.json",
+      "bytes": 500,
+      "sha256": "59333c5559afc72273b4626813e27b23843196c698b51e530b5f51f8c1b4d411",
+      "retained_reference": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CALLER-PROOF-CHECKPOINT-20261030-1/retained/root-install-direct-parent-independent-review-1/ACTUAL-PARENT4-WAIT-INSTALL-REVIEW.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-parent-independent-review-1/ACTUAL-PARENT5-R3-INSTALL-REVIEW.json",
+      "bytes": 500,
+      "sha256": "fd33462099e5df7cbc9d9296870ad839a6b9c968d5354a7b4d4e5679f2819002",
+      "retained_reference": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-SIGNALFD-CODEGEN-AND-CONTROL-JOIN-20261030-1/retained/root-install-direct-parent-independent-review-1/ACTUAL-PARENT5-R3-INSTALL-REVIEW.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-parent-independent-review-1/ACTUAL-PARENT5-R3-INSTALL-REVIEW.md",
+      "bytes": 1929,
+      "sha256": "a403fed62c29c567568574b0025279e5f4411c3040204c997d7ed4ff44b66c10",
+      "retained_reference": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-SIGNALFD-CODEGEN-AND-CONTROL-JOIN-20261030-1/retained/root-install-direct-parent-independent-review-1/ACTUAL-PARENT5-R3-INSTALL-REVIEW.md"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-parent-independent-review-1/ACTUAL-USR-BIN-MODE-REPAIR-REVIEW.json",
+      "bytes": 1019,
+      "sha256": "eb02ea84b44828b4a368b40340f7c6f04a34282f388ae9cc06a5a59a7e2f567b",
+      "retained": "retained/root-install-direct-parent-independent-review-1/ACTUAL-USR-BIN-MODE-REPAIR-REVIEW.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-parent-independent-review-1/ACTUAL-USR-BIN-MODE-REPAIR-REVIEW.md",
+      "bytes": 1773,
+      "sha256": "e706bba4069764404853df88aa33dc6e9a5fe02fdadc9919eff448873e53087a",
+      "retained": "retained/root-install-direct-parent-independent-review-1/ACTUAL-USR-BIN-MODE-REPAIR-REVIEW.md"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-parent-independent-review-1/ADMISSION-WIP-REVIEW.md",
+      "bytes": 2155,
+      "sha256": "1aeb9d7ad2c633da797b3bedc69a4b8f29edcbc4d5e0d0eaa3c23cc2c70480b9",
+      "retained_reference": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CALLER-PROOF-CHECKPOINT-20261030-1/retained/root-install-direct-parent-independent-review-1/ADMISSION-WIP-REVIEW.md"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-parent-independent-review-1/CALLER-DATA-REVIEW.md",
+      "bytes": 2086,
+      "sha256": "729979d53792a4527e44737fe3bf1aba1e423b6d79fc70bb0459f218bc7a0b8b",
+      "retained_reference": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CALLER-PROOF-CHECKPOINT-20261030-1/retained/root-install-direct-parent-independent-review-1/CALLER-DATA-REVIEW.md"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-parent-independent-review-1/CONTROL-JOIN-AND-FAILURE-OBSERVER-REVIEW.md",
+      "bytes": 2570,
+      "sha256": "0a56b67a70e6d440840064d08486efe3e8498274a624925857c11725c8f9ad02",
+      "retained_reference": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-SIGNALFD-CODEGEN-AND-CONTROL-JOIN-20261030-1/retained/root-install-direct-parent-independent-review-1/CONTROL-JOIN-AND-FAILURE-OBSERVER-REVIEW.md"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-parent-independent-review-1/CURRENT-CONTROL-STOP-REVIEW.json",
+      "bytes": 948,
+      "sha256": "43ab69b02b8412d7cbbe105226ea2b2a7349ed368c7cf440f6743b28a961ad48",
+      "retained_reference": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-SIGNALFD-CODEGEN-AND-CONTROL-JOIN-20261030-1/retained/root-install-direct-parent-independent-review-1/CURRENT-CONTROL-STOP-REVIEW.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-parent-independent-review-1/CURRENT-CONTROL-STOP-REVIEW.md",
+      "bytes": 2252,
+      "sha256": "ac0767d1f3cd639f1f2aa7c0c6e6ea0997aaa6520c8b9872f701fcbe9b1fdef9",
+      "retained_reference": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-SIGNALFD-CODEGEN-AND-CONTROL-JOIN-20261030-1/retained/root-install-direct-parent-independent-review-1/CURRENT-CONTROL-STOP-REVIEW.md"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-parent-independent-review-1/CURRENT-OWNED-METADATA-REVIEW.json",
+      "bytes": 903,
+      "sha256": "df947bc208721c467bd4c283e23b0327deece5a0b060e6ab171f0c4d52486b67",
+      "retained_reference": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-SIGNALFD-CODEGEN-AND-CONTROL-JOIN-20261030-1/retained/root-install-direct-parent-independent-review-1/CURRENT-OWNED-METADATA-REVIEW.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-parent-independent-review-1/CURRENT-OWNED-METADATA-REVIEW.md",
+      "bytes": 1897,
+      "sha256": "051036f3a4fe59bb13ad214a9143ef6e4bda2f5c382bde7264a044d79a6271f6",
+      "retained_reference": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-SIGNALFD-CODEGEN-AND-CONTROL-JOIN-20261030-1/retained/root-install-direct-parent-independent-review-1/CURRENT-OWNED-METADATA-REVIEW.md"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-parent-independent-review-1/DELIMITER-CORRECTION.md",
+      "bytes": 558,
+      "sha256": "1434f0ab7dc49430c8610fe61a4cc909a149cc36fd3dcc0ee68aa0ae277a5014",
+      "retained_reference": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-DIRECT-PARENT-LOADER-FIX-CHECKPOINT-20261030-1/retained/root-install-direct-parent-independent-review-1/DELIMITER-CORRECTION.md"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-parent-independent-review-1/DESCRIPTOR-BUDGET-RECOMMENDATION.md",
+      "bytes": 2177,
+      "sha256": "eb586f66db904ee37dc011b231b57ea2ac283a6b0043c7541d768fe1116f130e",
+      "retained_reference": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-DIRECT-PARENT-LOADER-FIX-CHECKPOINT-20261030-1/retained/root-install-direct-parent-independent-review-1/DESCRIPTOR-BUDGET-RECOMMENDATION.md"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-parent-independent-review-1/INSTALLER-FIXTURE-PERMISSIONS.md",
+      "bytes": 1582,
+      "sha256": "e9114895fb93008e9694c8534597771ba7c4588a479eb1265cf2a604c5038ab9",
+      "retained_reference": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CALLER-PROOF-CHECKPOINT-20261030-1/retained/root-install-direct-parent-independent-review-1/INSTALLER-FIXTURE-PERMISSIONS.md"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-parent-independent-review-1/PARENT4-CALLER-REVIEW.md",
+      "bytes": 3541,
+      "sha256": "8f70d0bfb066edf8ad3dfb37987cd2ebead89697b8796f8df98261c23737b6be",
+      "retained_reference": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CALLER-PROOF-CHECKPOINT-20261030-1/retained/root-install-direct-parent-independent-review-1/PARENT4-CALLER-REVIEW.md"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-parent-independent-review-1/R3-COMPOSITION-REVIEW.md",
+      "bytes": 2295,
+      "sha256": "b99f32e754a4e83088b65f3e7c796cc97a43d0e29536b35be3256b455d7740ce",
+      "retained_reference": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-SIGNALFD-CODEGEN-AND-CONTROL-JOIN-20261030-1/retained/root-install-direct-parent-independent-review-1/R3-COMPOSITION-REVIEW.md"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-parent-independent-review-1/R3-CONTROL-STOP-REVIEW.json",
+      "bytes": 922,
+      "sha256": "98d5c16056ca43df31403c8e44e312fdd4257b727e4056ebaf8f3e285338aa7c",
+      "retained": "retained/root-install-direct-parent-independent-review-1/R3-CONTROL-STOP-REVIEW.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-parent-independent-review-1/R3-CONTROL-STOP-REVIEW.md",
+      "bytes": 2395,
+      "sha256": "497fdd59f42a61fe4f7146513387462660c44720351932e67195d045c782c311",
+      "retained": "retained/root-install-direct-parent-independent-review-1/R3-CONTROL-STOP-REVIEW.md"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-parent-independent-review-1/R3-FAILED-CONTROL-MEMORY-RULE.md",
+      "bytes": 2196,
+      "sha256": "7392d18ea7e0f16e6bcdb887b3bf4696318e3806ed9a3d23676047b279bd76fa",
+      "retained": "retained/root-install-direct-parent-independent-review-1/R3-FAILED-CONTROL-MEMORY-RULE.md"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-parent-independent-review-1/RESTORE-PROBE-CORRECTION2-REVIEW.md",
+      "bytes": 1817,
+      "sha256": "8f62cfc6acf156f4d378ccebce7be74397f538c17122a8bea168cb51ef313235",
+      "retained_reference": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-SIGNALFD-CODEGEN-AND-CONTROL-JOIN-20261030-1/retained/root-install-direct-parent-independent-review-1/RESTORE-PROBE-CORRECTION2-REVIEW.md"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-parent-independent-review-1/RESTORE-PROBE-REVIEW.md",
+      "bytes": 1631,
+      "sha256": "71bae0de1877fff51647e751cea72c809faafc04ee7b3862413e2a31e1eba264",
+      "retained_reference": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-SIGNALFD-CODEGEN-AND-CONTROL-JOIN-20261030-1/retained/root-install-direct-parent-independent-review-1/RESTORE-PROBE-REVIEW.md"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-parent-independent-review-1/RESULT.md",
+      "bytes": 3281,
+      "sha256": "8a52a8e11181b5cdd224eede030452242e9d317c97758e3f4f2d1c197ae9e4c9",
+      "retained_reference": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-DIRECT-PARENT-LOADER-FIX-CHECKPOINT-20261030-1/retained/root-install-direct-parent-independent-review-1/RESULT.md"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-parent-independent-review-1/ROLLING-AND-FD-DRIVER-REVIEW.md",
+      "bytes": 2329,
+      "sha256": "16cc2fc59030d5e4f8d73f87a8f331a2c23044a86d6ef5269682d9039e9727b5",
+      "retained_reference": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CALLER-PROOF-CHECKPOINT-20261030-1/retained/root-install-direct-parent-independent-review-1/ROLLING-AND-FD-DRIVER-REVIEW.md"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-parent-independent-review-1/USR-BIN-MODE-REPAIR-SOURCE-REVIEW.md",
+      "bytes": 2483,
+      "sha256": "e4caf3e1ffac82f9e476366c6f3dd35f9718e6ece40ddcefce578ddd2f80cfba",
+      "retained": "retained/root-install-direct-parent-independent-review-1/USR-BIN-MODE-REPAIR-SOURCE-REVIEW.md"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-parent-independent-review-1/WAIT-CORRECTION-REVIEW.md",
+      "bytes": 1951,
+      "sha256": "3344d90a2f2dc32931d4f67568fdc67657b918068c8211622c250b7971a5f25b",
+      "retained_reference": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CALLER-PROOF-CHECKPOINT-20261030-1/retained/root-install-direct-parent-independent-review-1/WAIT-CORRECTION-REVIEW.md"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/usr-bin-mode-cases-0001/ACTUAL-ARGV.json",
+      "bytes": 939,
+      "sha256": "240626ffa12c3f8edc644134e790a2e7e1705b942e987406d70f21ea73535df1",
+      "retained": "retained/source-test-runs/usr-bin-mode-cases-0001/ACTUAL-ARGV.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/usr-bin-mode-cases-0001/ADMISSION.json",
+      "bytes": 2771,
+      "sha256": "7854bcdd77ab62bb24a0dd3c9161040e5dcd696c318fb0cf33018bac412f98a3",
+      "retained": "retained/source-test-runs/usr-bin-mode-cases-0001/ADMISSION.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/usr-bin-mode-cases-0001/PROCESS-OWNER.json",
+      "bytes": 208,
+      "sha256": "45794b1a55032af6d254682774ea0b7fb374514f6c5d9f79e987d78565ab91b7",
+      "retained": "retained/source-test-runs/usr-bin-mode-cases-0001/PROCESS-OWNER.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/usr-bin-mode-cases-0001/RESULT.json",
+      "bytes": 2582,
+      "sha256": "85c9a368391828ae0c493b587013b04471261e1302ababa525624f4574141a91",
+      "retained": "retained/source-test-runs/usr-bin-mode-cases-0001/RESULT.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/usr-bin-mode-cases-0001/run_cases.py",
+      "bytes": 684,
+      "sha256": "420c738c16a8810dc7d1a9761751d0a2343dc0d99a45103e1af08e543b43df1c",
+      "retained": "retained/source-test-runs/usr-bin-mode-cases-0001/run_cases.py"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/usr-bin-mode-cases-0001/stderr.txt",
+      "bytes": 741,
+      "sha256": "1ecb4d1361ad85babf8ddd6abe36c0d2183f6f586c00ed092d7a0603481c8a35",
+      "retained": "retained/source-test-runs/usr-bin-mode-cases-0001/stderr.txt"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/usr-bin-mode-cases-0001/stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retained_reference": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-NINE-ENTRY-CODEGEN-AND-ABI-CHECKPOINT-20261030-1/retained/source-test-runs/clone-abi-compare-0001/stderr.txt"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/usr-bin-mode-cases-0001/time.txt",
+      "bytes": 933,
+      "sha256": "9cbb00424a06d2e83aaa197a78b91ec701bc3df8bd719aef19caba57ce9bb696",
+      "retained": "retained/source-test-runs/usr-bin-mode-cases-0001/time.txt"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/r3-stop-and-mode-guard-0001/ACTUAL-ARGV.json",
+      "bytes": 951,
+      "sha256": "86270578419e7930e441ccd7f87ef4cb178f86575aafc32979ae5b6c9c2b8968",
+      "retained": "retained/source-test-runs/r3-stop-and-mode-guard-0001/ACTUAL-ARGV.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/r3-stop-and-mode-guard-0001/ADMISSION.json",
+      "bytes": 2547,
+      "sha256": "cb88cb31488e4cfa91bed2357cd31ca3c2ee69f72b6d62fecd94d92d98bda05e",
+      "retained": "retained/source-test-runs/r3-stop-and-mode-guard-0001/ADMISSION.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/r3-stop-and-mode-guard-0001/PROCESS-OWNER.json",
+      "bytes": 208,
+      "sha256": "2bccf054925ae6e87007ce2716b5d6652a411b4e56a0e856250eb0046cf14634",
+      "retained": "retained/source-test-runs/r3-stop-and-mode-guard-0001/PROCESS-OWNER.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/r3-stop-and-mode-guard-0001/RESULT.json",
+      "bytes": 2390,
+      "sha256": "77aba5df671b70066c5392c0248fcfef9adde2303faf5d96a7c5014f810ddb92",
+      "retained": "retained/source-test-runs/r3-stop-and-mode-guard-0001/RESULT.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/r3-stop-and-mode-guard-0001/run_cases.py",
+      "bytes": 1108,
+      "sha256": "4863f9e35446b23477b76f97ce21989248ba98cb49b63479aa5f96187b321dff",
+      "retained": "retained/source-test-runs/r3-stop-and-mode-guard-0001/run_cases.py"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/r3-stop-and-mode-guard-0001/stderr.txt",
+      "bytes": 192,
+      "sha256": "41357171ed1b058f18cc7b258e5dcb1f5fb3488758b0de3a5e2d489a668e4d1d",
+      "retained": "retained/source-test-runs/r3-stop-and-mode-guard-0001/stderr.txt"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/r3-stop-and-mode-guard-0001/stdout.txt",
+      "bytes": 152,
+      "sha256": "1dda2d483f3844deef885f09e2755c93e8a8222cb29667a4fcab4cdbdf6ad5d0",
+      "retained": "retained/source-test-runs/r3-stop-and-mode-guard-0001/stdout.txt"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/r3-stop-and-mode-guard-0001/time.txt",
+      "bytes": 939,
+      "sha256": "ecbade8ff071732f3fc3885cf0914c0f51f1d0a24989161d15d541cf6087ae0b",
+      "retained": "retained/source-test-runs/r3-stop-and-mode-guard-0001/time.txt"
+    }
+  ]
+}

@@ -1,0 +1,152 @@
+{
+  "CPU6_released": true,
+  "CPU_seconds": 0.226626,
+  "SDK": false,
+  "actual": {
+    "bytes": 5638,
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-11-current230-dispatch-leaf-default-source-1/ACTUAL-THREE-CASE-CONFIGURE-ENVELOPE.json",
+    "sha256": "ba547b5df6059406ad940d92d5f33804dd22e41f2321369e3855f2781f98e61d"
+  },
+  "candidate": {
+    "bytes": 25645,
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-11-current230-dispatch-leaf-default-source-1/candidate/kernel/CMakeLists.txt",
+    "sha256": "a2451f574cf87b4ea5467303bc42684b72e63f7e3d352639998af682a25d1c2f"
+  },
+  "canonical_writes": false,
+  "cases": [
+    {
+      "argv": [
+        "/usr/bin/cmake",
+        "-S",
+        "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-11-current230-dispatch-leaf-default-source-1/actual-fragment-configure-1/producer-fragment",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-11-current230-dispatch-leaf-default-source-1/actual-fragment-configure-1/rust_x86",
+        "-DARCH=x86_64",
+        "-DENABLE_RUST_KERNEL=ON"
+      ],
+      "name": "rust_x86",
+      "observed": {
+        "cdefs": "MCKERNEL_RUST_SHMID_HELPERS;MCKERNEL_RUST_SHM_PERM_HELPERS;MCKERNEL_RUST_RLIMIT_HELPERS;MCKERNEL_RUST_SCHED_PRIO_HELPERS;MCKERNEL_RUST_SCHED_POLICY_HELPERS;MCKERNEL_RUST_SYSCALL_POLICY_HELPERS;MCKERNEL_RUST_SYSCALL_OFFLOAD;MCKERNEL_RUST_SIGNAL_HELPERS;MCKERNEL_RUST_F03_IO_DIAGNOSTICS;MCKERNEL_RUST_F03_MINCORE;MCKERNEL_RUST_F03_MOVE_PAGES;MCKERNEL_RUST_F03_SCHED_BRIDGES;MCKERNEL_RUST_F03_SIGNAL_PROCESS_BRIDGES;MCKERNEL_RUST_F03_DISPATCH_CONTEXT;MCKERNEL_RUST_F03_LEAF_CALLBACKS",
+        "cfg": "--cfg;f03_io_diagnostic_callbacks_candidate;--cfg;f03_mincore_candidate;--cfg;f03_move_pages_candidate;--cfg;f03_sched_bridges_candidate;--cfg;f03_signal_process_bridges_candidate;--cfg;f03_dispatch_context_candidate;--cfg;f03_leaf_callbacks_candidate",
+        "rust": "ON"
+      },
+      "returncode": 0,
+      "selected": true
+    },
+    {
+      "argv": [
+        "/usr/bin/cmake",
+        "-S",
+        "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-11-current230-dispatch-leaf-default-source-1/actual-fragment-configure-1/producer-fragment",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-11-current230-dispatch-leaf-default-source-1/actual-fragment-configure-1/fallback_x86",
+        "-DARCH=x86_64",
+        "-DENABLE_RUST_KERNEL=OFF"
+      ],
+      "name": "fallback_x86",
+      "observed": {
+        "cdefs": "NOTFOUND",
+        "cfg": "",
+        "rust": "OFF"
+      },
+      "returncode": 0,
+      "selected": false
+    },
+    {
+      "argv": [
+        "/usr/bin/cmake",
+        "-S",
+        "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-11-current230-dispatch-leaf-default-source-1/actual-fragment-configure-1/producer-fragment",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-11-current230-dispatch-leaf-default-source-1/actual-fragment-configure-1/non_x86",
+        "-DARCH=arm64",
+        "-DENABLE_RUST_KERNEL=ON"
+      ],
+      "name": "non_x86",
+      "observed": {
+        "cdefs": "NOTFOUND",
+        "cfg": "",
+        "rust": "OFF"
+      },
+      "returncode": 0,
+      "selected": false
+    }
+  ],
+  "compiler": false,
+  "copyerror_default_OFF": true,
+  "fullproject": false,
+  "join": {
+    "captures": {
+      "stderr": {
+        "ctime_ns": 1792910802799406935,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 59521635,
+        "mode": "0o600",
+        "mtime_ns": 1792910802799406935,
+        "nlink": 1,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-11-current230-dispatch-leaf-default-source-1/actual-fragment-configure-h990-1/stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0,
+        "uid": 1000
+      },
+      "stdout": {
+        "ctime_ns": 1792910802871409043,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 59521634,
+        "mode": "0o600",
+        "mtime_ns": 1792910802871409043,
+        "nlink": 1,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-11-current230-dispatch-leaf-default-source-1/actual-fragment-configure-h990-1/stdout",
+        "sha256": "f1b5c52bf995116a62d157faee18825ed5ac46d326ae131a81aadc86521d764c",
+        "size": 63,
+        "uid": 1000
+      }
+    },
+    "closed_streams": true,
+    "direct_child_joined": true,
+    "error": null,
+    "group_absent": true,
+    "pid": 575730,
+    "remaining_group_members": [],
+    "retirement_error": null,
+    "returncode": 0,
+    "seconds": 0.11628191301133484,
+    "start": 70824750,
+    "timed_out": false,
+    "unexpected_group_members": []
+  },
+  "native": false,
+  "ownership_map": {
+    "bytes": 179834,
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-11-current230-dispatch-leaf-default-source-1/CURRENT230-DEFAULT-IMAGE-SOURCE-ABI-OWNERSHIP-BINDINGS.json",
+    "sha256": "a4d0d4f23279eac1874bdfe6293f85909b1cc33e5a05ef4644e7d787e74dbdff"
+  },
+  "patch": {
+    "bytes": 1930,
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-11-current230-dispatch-leaf-default-source-1/EXACT-PAIRED-DISPATCH-LEAF-DEFAULT.patch",
+    "sha256": "137710f6025c4d65fe7406590527eb598bddba42968cf1d7a67fc67fc0090ab3"
+  },
+  "preimage": {
+    "bytes": 25435,
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-11-current230-dispatch-leaf-default-source-1/canonical-preimage.CMakeLists.txt",
+    "sha256": "507e1f058f8bc559f4d8b47eb5646d64aa7a20653bce89ad578a5af452ab7faa"
+  },
+  "production_default_artifact": false,
+  "recipe": {
+    "bytes": 4412,
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-11-current230-dispatch-leaf-default-source-1/EXACT-THREE-CASE-CHECK.NOT-GRANTED.json",
+    "sha256": "b8fcbf75499b805489f58adedf70ad9f07add04c05f76f599a8864026241d3d6"
+  },
+  "root_only_adoption": true,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_identities_unchanged": true,
+  "status": "ACTUAL_CURRENT230_SEVEN_PAIRED_PRODUCER_FRAGMENT_CASES_PASS_PENDING_INDEPENDENT_SOURCE_REVIEW",
+  "wall_seconds": 0.1802704919828102,
+  "wrapper": {
+    "bytes": 7117,
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-11-current230-dispatch-leaf-default-source-1/run_three_case_current230_dispatch_leaf_once.NOT-GRANTED.py",
+    "sha256": "d789ee94b810d601c645305d64b0d9a8d4ae11a47118fb0925841372c4081efb"
+  }
+}

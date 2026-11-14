@@ -1,0 +1,28 @@
+{
+  "label": "00-three-termination-provider-selectors-genuine-Rust-atomics",
+  "argv": [
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+    "--crate-name",
+    "f03_termination_provider_backlog",
+    "--crate-type",
+    "lib",
+    "--edition=2021",
+    "-C",
+    "panic=abort",
+    "-C",
+    "opt-level=2",
+    "--cfg",
+    "enable_profile",
+    "--cfg",
+    "enable_perf",
+    "--cfg",
+    "f03_wait_process_release_selected_candidate",
+    "--cfg",
+    "f03_terminate_refcount_selected_candidate",
+    "--emit=obj=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/output-PENDING-ROOT/providers.o",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/lib.fixture.rs"
+  ],
+  "cwd": "/home/holden/mckernel",
+  "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Controlled HOST actual-selected C callback/ABI equivalence for process-release, refcount-set adapter and direct existing compare-exchange alias. Genuine Rust atomic helpers operate only on initialized ordinary HOST storage; process-release effects are an explicit identity mock. No actual process refcount/free/current-stack/IRQ/MSR/CR/FSGS/context-switch/syscall/kernel/native effects.",
+  "argv_compact_json_LF_sha256": "79ad67e60488e32e85e718fd2a5a004bee7ea4ddb47bec363bdadb403bd8f5c4"
+}

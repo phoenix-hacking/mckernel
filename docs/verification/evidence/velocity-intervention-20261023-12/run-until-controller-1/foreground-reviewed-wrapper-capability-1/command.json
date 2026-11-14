@@ -1,0 +1,15 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Verify the actual reviewed compatibility wrappers on the probe's own PID only, before any controller arm.",
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "-c",
+    "import importlib.util,json,os,signal,sys,time\nfrom pathlib import Path\npath=Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-controller-1/bridge.py')\nspec=importlib.util.spec_from_file_location('reviewed_bridge_self_capability',path)\nb=importlib.util.module_from_spec(spec);spec.loader.exec_module(b)\nb.verify_packet(sys.argv[1])\nfd=b.pidfd_open(os.getpid())\ntry:\n    b.pidfd_send_signal(fd,0)\n    boot=time.clock_gettime(time.CLOCK_BOOTTIME)\nfinally:\n    os.close(fd)\nprint(json.dumps(dict(status='PASS_REVIEWED_WRAPPER_OWN_PIDFD_SIGNAL0_AND_BOOTTIME',scope='Functional McKernel OS/apps and Rust/assembly migration only; no security testing.',python=sys.version,architecture=os.uname().machine,pid=os.getpid(),packet_sha256=sys.argv[1],clock_boottime=boot,pidfd_closed=True,signal_zero_to_own_process_only=True,campaign_signals=0,guest_actions=0)))\n",
+    "fd28d66e4d93e3154bbd3d89e09b909c6997a7a0925b0d88f094a46f7343ea54"
+  ],
+  "source_ready_sha256": "e8fec9a1adfe8814183ebcce57d323b2da91192d2513ddadb18a9853070b7a2f"
+}

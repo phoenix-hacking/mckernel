@@ -1,0 +1,52 @@
+{
+  "artifacts": {
+    "build_produced_mcexec": {
+      "bytes": 394656,
+      "sha256": "689dcad27b2ce3a30f49df1bfe9452f2169a14e9c350c24c9677c88b1f152876"
+    },
+    "build_produced_mcexec_helpers.o": {
+      "bytes": 437008,
+      "sha256": "63f7f2916feb6b051325133b9e04008618c178a11ff6310c55d56183ac7398d3"
+    },
+    "mckernel.img": {
+      "bytes": 8439816,
+      "sha256": "10972f87277e8429e2badd238d3ac53e451b8a2351a8ebf013941e1dfb95e1e2"
+    },
+    "mckernel_rust.o": {
+      "bytes": 13599104,
+      "sha256": "c282ce61bf89adedf844e74ba47b9c40ef1c7d1e70fcadc903b5b81f1609266a"
+    }
+  },
+  "decision": "PASS_ACTUAL_CURRENT_NUMA_SCHEDULER_IMAGE_AND_REAL_MCEEXEC_LINK_ARTIFACTS_ONLY",
+  "findings": [],
+  "implementation_ownership": false,
+  "launcher_separation": "This accepts only the build-produced 689dcad2 launcher and its paired 63f7f291 Rust object. Native execution will select separately accepted launcher 0d774a14; that launcher is not an output of this build.",
+  "limitations": [
+    "Build/link and named-boundary acceptance only; pending postbuild/native fields in original reports are not promoted.",
+    "Compiler and linker warnings remain preserved; no warning-free claim.",
+    "Container and ownership records remain retained for separately reviewed observation and cleanup.",
+    "No native, application, final-ACK, language-retirement, physical-clearance or P06/P08/P09 check credit."
+  ],
+  "materialization_sha256": "d7e24b4c0d3174b3479e33796d712d439444bae82902482448890b9d8142d43d",
+  "observations": [
+    "All 18 recorded compiler/build phases exited zero; current ABI, release and affinity reports pass their declared compiler scope.",
+    "Actual source fingerprints and postimage pins match the previously accepted source/build binding.",
+    "Actual C caller imports exec_reset_signal_state_current_v1 and all four selected owned-fork bridges; production Rust object and final image define each uniquely.",
+    "Final exec-reset definition is at fffffffffe859160. Link command and depfile include the actual syscall caller and production Rust object.",
+    "Native fork option and Linux 6.12 Rust selection remain enabled; constructor-credit and final-ACK symbols remain linked. Final saved image symbol inventory contains no undefined symbols.",
+    "Actual NUMA and scheduler providers remain present. Existing source acceptance is reused; no new NUMA behavior or native scheduler result is inferred.",
+    "Actual launcher link includes mcexec.c.o and mcexec_helpers.o. Saved C/Rust/final symbol inventories support the selected Rust main-loop and fork-completion joins."
+  ],
+  "physical_clearance": false,
+  "producer_receipt": {
+    "bytes": 41900,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/evidence/receipt.json",
+    "sha256": "806cc4e6cd7a52346442aeb72df198ec8d4bb817fe454306ed0966aad8c25d39"
+  },
+  "review_method": "Read-only inspection of actual receipts, raw symbol inventories, generated selection/link records and captured results; no compiler, tests, guests, root operations or repeated artifact/tree hashing.",
+  "reviewer": "/root/matched_guest_build_review",
+  "schema": "mckernel.current-numa-scheduler.production-image-artifact-review.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_derivative_sha256": "5cffcc1b23dc5ca377baa055aab0417b0daac7ddcac0e2281903260f0ebd79e3",
+  "status": "PASS_CURRENT_IMAGE_BUILD_LINK_AND_NAMED_BOUNDARIES_NO_NATIVE_ACCEPTANCE"
+}

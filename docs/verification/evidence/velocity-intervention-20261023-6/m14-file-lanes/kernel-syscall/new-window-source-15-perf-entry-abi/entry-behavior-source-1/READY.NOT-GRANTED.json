@@ -1,0 +1,68 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_FROZEN_REVIEW_AND_ROOT_CPU0_GRANT_REQUIRED",
+  "recipe": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-15-perf-entry-abi/entry-behavior-source-1/EXACT-PERF-ENTRY-COMMANDS.NOT-GRANTED.json",
+    "bytes": 25394,
+    "sha256": "a9ee7de7cda8297bb0630bb67a7ac2a4f17e1ae90d631d3b0b1d1003af531cd6"
+  },
+  "runner": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-15-perf-entry-abi/entry-behavior-source-1/run_perf_entry_once.NOT-GRANTED.py",
+    "bytes": 9667,
+    "sha256": "4fa707b551d2eec5da7c64a1d115a1f869c26120f9ea565524395a3ce4c61900"
+  },
+  "original_runtime_entry": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-15-perf-entry-abi/perf_entry.RUST-FRAGMENT.rs.inc",
+    "bytes": 9393,
+    "sha256": "9963e2b3159e38f7f27f9e4d4a7b9f585c283634a63ed4e84ba95497dd1ddbc2"
+  },
+  "accepted_ABI": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-15-perf-entry-abi/execution-freeze-1/ACTUAL-SOURCE15-ABI-HANDOFF.json",
+    "bytes": 13846,
+    "sha256": "6763a9706372c8449527f225562dfc51b554383344e08eef70b50c15c71c677b"
+  },
+  "genuine_C_original": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-15-perf-entry-abi/sys_perf_event_open.ORIGINAL-C.inc",
+    "bytes": 2463,
+    "sha256": "4f3a8e0db64b590f6da342c591add430639491a82bca42ba2e9e778898b71e8b"
+  },
+  "source_predicates": [
+    "Exact Source15 runtime entry body preserved; only fixture geometry static appended outside its body.",
+    "Existing actual production validation/group/counter/Linux/publish/body/entry helpers reused unchanged.",
+    "Actual13 C provider signatures/initializers and genuine header offsets remain, no held corrections.",
+    "56realC/Rust layout words before any CPU/current-thread pointers are consumed.",
+    "rtid/ttid/valid initialized by controlled syscallprovider before observation; no read of incoming uninitialized request ID bytes.",
+    "No new cleanup semantics: original failure side effects compared using static fixture-owned storage.",
+    "No fixture memory declarations/stubs; actual string.h plus normalHOST libc binding.",
+    "OriginalC/Rust state/return/trace paired with independent expected stage/result/publication assertions.",
+    "Source290 unchanged and excludes this perf candidate."
+  ],
+  "launch_argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-15-perf-entry-abi/entry-behavior-source-1/run_perf_entry_once.NOT-GRANTED.py"
+  ],
+  "CPU": 0,
+  "profile": {
+    "cpu": 0,
+    "jobs": 1,
+    "as_bytes": 2147483648,
+    "cpu_seconds_shared": 60,
+    "wall_seconds": 90,
+    "cleanup_grace": 6,
+    "file_bytes": 33554432,
+    "fd": 256,
+    "stack_bytes": 2097152,
+    "core": 0,
+    "capture": "existing h990 owned_capture; first failure stop; all children joined/groups absent/streams closed"
+  },
+  "commands": 3,
+  "ABI_words": 56,
+  "cases": 3600,
+  "scenarios": 18,
+  "provider_count": 13,
+  "compiler_jobs": 0,
+  "tests_run": 0,
+  "canonical_mutations": 0,
+  "default": false,
+  "native": false
+}

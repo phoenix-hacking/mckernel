@@ -1,0 +1,38 @@
+[
+  {
+    "argv": [
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/check_exit7_binding_body.py"
+    ],
+    "cpu_seconds": 8,
+    "effects": "No output files/process/socket/root; actual binding body + AST preservation",
+    "expected_counts": {
+      "accepted": 1,
+      "rejected": 13
+    },
+    "expected_exit": [
+      0
+    ],
+    "wall_seconds": 10
+  },
+  {
+    "argv": [
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/prepare_exit7_stage_once.py"
+    ],
+    "cpu_seconds": 55,
+    "effects": "One0755 same-byte app copy + derivative archive/overlay/manifest/result in fresh ordinary-stage-1",
+    "expected_counts": {
+      "guest_runs": 0,
+      "output_files": 5
+    },
+    "expected_exit": [
+      0
+    ],
+    "wall_seconds": 60
+  }
+]

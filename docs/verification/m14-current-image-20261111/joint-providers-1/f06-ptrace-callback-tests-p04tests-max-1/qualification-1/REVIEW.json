@@ -1,0 +1,142 @@
+{
+  "acceptance_delta": 0,
+  "artifact_and_resource": {
+    "ELF_header_independently_checked": "ELF64LE ET_DYN EM_X86_64; mode0700; no production ownership credit",
+    "HOST_fixture": {
+      "bytes": 4546944,
+      "mode": "0o700",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-tests-publicabi-max-1/output-1/ptrace-callback-lifecycle",
+      "sha256": "31b5d09f8f97484608f2e1035e6a8fb543b6e93b6e7d59879fd72f3107ca9664"
+    },
+    "MemAvailable_bytes": 29325549568,
+    "actual_shared_bytes": 3635134464,
+    "admission": {
+      "bytes": 620,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-tests-publicabi-max-1/execution-1/ADMISSION.json",
+      "sha256": "c03843b678d8e3601218432296693f7cf94775f5d3999959fcadc998337b46fb"
+    },
+    "full_Root_tool": {
+      "bytes": 240,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-tests-publicabi-max-1/ROOT-EXEC-TOOL.json",
+      "sha256": "f68dc8790029a195401c8ae6349d2fd859c49b9288bd6c200b5f41083e70b615"
+    },
+    "ownership_receipt": {
+      "bytes": 745,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-tests-publicabi-max-1/execution-1/ownership.json",
+      "sha256": "958695fcad9c926012f17a596dbccdb69ed6db39cd5fe5e1a08f9d8e8ca895fb"
+    },
+    "release": {
+      "bytes": 187,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-tests-publicabi-max-1/execution-1/RESOURCE-RELEASE.json",
+      "sha256": "c5eda9b1483840e130bce2fed4cd3f7ba33387d77913ecc9ae0eac0b694ddedb"
+    },
+    "shared_limit_bytes": 4294967296
+  },
+  "at": "2026-11-11T03:45:29.802728+00:00",
+  "decision": "GO_EXACT_ACTUAL_HOST_SEVEN_FAMILIES_TWELVE_VECTORS",
+  "exact_actual_binding": {
+    "actual_RESULT": {
+      "bytes": 4395,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-tests-publicabi-max-1/execution-1/RESULT.json",
+      "sha256": "bbaa3b6ceac4be5435757b46b162309013ae2a4700547fee588a82c189d966b8"
+    },
+    "all20_pinned_inputs_and_actual_compiler_SHA_match": true,
+    "both_literal_argv_cwd_id_exit0": true,
+    "compiler_and_runtime_diagnostics_empty": true,
+    "complete_nested_JSON_equals_external_and_request_and_author_joins": true,
+    "counts": {
+      "current_lookups": 11,
+      "delivery_records": 7,
+      "finds": 11,
+      "frees": 3,
+      "irq_pairs": 7,
+      "steps": 1,
+      "thread_unlocks": 10,
+      "wakes": 6
+    },
+    "external_oracle": {
+      "bytes": 13532,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-tests-publicabi-max-1/EXPECTED.json",
+      "sha256": "22f21bf1c94ce61b30fb40fb6fa47b25fb6168483b7c1b77ca82fe2b4c696a2e"
+    },
+    "raw_stdout": {
+      "bytes": 7390,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-tests-publicabi-max-1/execution-1/phase-2.stdout",
+      "sha256": "458a88f9f7434b805dc0d988204c651c1242affe12a0216ee92618f35445caf3"
+    },
+    "request": {
+      "bytes": 25944,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-tests-publicabi-max-1/REQUEST.json",
+      "sha256": "c7b6260aeed8d3902757eb79b9c80cc281efeed6b4d6f5070f420be6fc4bd1e3"
+    }
+  },
+  "independent_material_findings": [
+    {
+      "condition": "Full signal data and signed public ABI",
+      "facts": "Independently constructed and compared all128 bytes of seven delivered records: direct0x11; two KILL zero+signo9; SI_USER10/12 with actual PID500 at16 and UID0; seed3 and11 full128-byte patterns. Direct opaque adapter preserves signed64 MIN+3 and void wake discards controlled-44. No prefix/count-only comparison.",
+      "result": "PASS_ACTUAL_SAVED"
+    },
+    {
+      "condition": "Pending raw slots, copy-before-free and one owner",
+      "facts": "CONT send preference clears chosen send and retains recv; recv fallback clears chosen recv; nonCONT keeps both pending slots. Actual free validates exact tracked test allocation, rejects pointers still in either child slot, removes ownership once, poisons all128 bytes and deallocates before delivery. Surviving full delivered patterns require the prior live stack copy. Retained states in stdout are null/non-null booleans, not numerical pointer-address traces; exact unchanged helper writes only the selected raw slot to null and returns its prior pointer. No raw address identity was invented from the booleans.",
+      "result": "PASS_AT_EXACT_SOURCE_AND_HOST_OBSERVATION_SCOPE"
+    },
+    {
+      "condition": "Calls, borrowed lifetime and IRQ-node order",
+      "facts": "Eleven entry current/lookups, miss has no borrowed unlock, ten acquired borrows each release once. Seven same64-aligned lock/node pairs initialize savedIRQ before read and verify exact lock/node/sentinel on release. Every signal/free/wake/borrow-unlock follows logical IRQ restore; SINGLESTEP precedes writer. KILL-77, SYSCALL-91 and recv-5 suppress wake; CONT0/19 avoid delivery. Direct six callbacks intentionally leave their caller-owned model borrow active; this is expected callback ownership, not a claimed OS reference release.",
+      "result": "PASS_CONTROLLED_HOST"
+    },
+    {
+      "condition": "Original log/free identities",
+      "facts": "Tracked frees exactly use /src/kernel/syscall.c:4657. Original32B Ddebug filename/function/fmtNULL/logical24429 is asserted in actual fixture; flags0 and wrongevent3 suppress, any-nonzero0x80 with event4 produces exactly one direct print. SignedPID-7 and unsigned32 hexbits2147483649 and full literal formatter arguments are preserved.",
+      "result": "PASS_CONTROLLED_HOST"
+    },
+    {
+      "condition": "Actual19 callback types and layout",
+      "facts": "Independently matched all19 ordered PtraceSyscallOps field names to the C-source contract and resolved every actual function-pointer alias against current production policy. Full2a00 source prefix plus only372B HOST footer reconstructs compiled entry exactly. Original const function assignments/layout guards typechecked in actual compile; runtime measures152B/19slots/wakeup8,node64/align64,SigInfo128/pending.info24. This does not claim that a real C19 table/provider relocation or the new C guards executed in this HOST batch.",
+      "result": "PASS_TYPE_AND_HOST_LAYOUT"
+    },
+    {
+      "condition": "Positive operation ownership and cleanup",
+      "facts": "Exactly two positive leader/birth/status0 records:1229169/45440563 and1229180/45440616; direct/whole-family/streams closed, no timeout/group signal/adopted reap/adopted kill/residual/error. Full synchronous Root tool a542cb exit0/no pending session corroborates final outer completion. CPU6 current2GiB one-job release is corroborated; no other/native/history release.",
+      "result": "PASS_ACTUAL_SAVED"
+    }
+  ],
+  "not_performed": [
+    "compiler or test/runtime replay",
+    "SUT/helper import",
+    "ELF command or metadata producer",
+    "canonical/source changes",
+    "kernel IRQ/GS/current-thread/kill/signal/scheduler/native operation"
+  ],
+  "original_DEFAULT_FUNCTIONAL_native_ACCEPT_or_milestone_accepted": false,
+  "remaining_material_defect_at_this_scope": null,
+  "remaining_original_requirement": "Separately reviewed/admitted normal composed image must prove all seven unique Rust owners, exact C exclusions, actual C19-slot/type/relocation and genuine lower-provider closure/default selection. P03 owns the combined production selector review; this decision supplies only the changed HOST behavior prerequisite.",
+  "reused_author_qualification": {
+    "bytes": 18738,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-tests-publicabi-max-1/qualification-1/QUALIFICATION.json",
+    "sha256": "0176a8ffc4a68d4b331d48743a205e0e0067a532ba16ad641b47a5e275444f85"
+  },
+  "reused_author_result": {
+    "bytes": 718,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-tests-publicabi-max-1/qualification-1/RESULT.json",
+    "sha256": "20e7ee5a08ec8bf5704a3eb65cb3949dbbeadda729a9ace6b66a811a884d0752"
+  },
+  "reused_case_joins": {
+    "bytes": 15493,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-tests-publicabi-max-1/qualification-1/ACTUAL-CASE-JOINS.json",
+    "sha256": "b37a24880e36f6b5039ec1ca07e2b8ddabe08af504725f37a1063429f93f1cdf"
+  },
+  "reused_operation_GO": {
+    "bytes": 23590,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-tests-review-source-acquisition-max-1/REVIEW.json",
+    "sha256": "ad3a4ae1e7015070f7042f441d4383c1b3e77dfc6ffabfcb1c8b05414c263716"
+  },
+  "reused_source_GO": {
+    "bytes": 19857,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-review-p03-max-1/REVIEW.json",
+    "sha256": "297d61c5f27dd267f58e380408ca3f14055036a77233aadfd488ad1d6afd3b64"
+  },
+  "reviewer": "/root/p04_tests_max actual Sol/MAX, independent final saved-result owner under user c388; source/test author is PublicABI",
+  "schema": "ptrace-callback-actual-saved-result-independent-decision-v1"
+}

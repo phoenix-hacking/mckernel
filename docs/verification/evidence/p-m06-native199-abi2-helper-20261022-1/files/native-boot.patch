@@ -1,0 +1,27 @@
+--- /home/holden/mckernel-work/scratch/native-ultra-futex-guest-20260909-2026091302/boot-probe-source/native-boot.c
++++ /home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/native-boot.c
+@@ -5,6 +5,7 @@
+ #define OS_LOAD 0x112a00
+ #define OS_BOOT 0x112a01
+ #define OS_STATUS 0x112a03
++#include "native-boot-status-contract.h"
+ #define OS_KARGS 0x112a04
+ #if defined(__x86_64__)
+ #define SYS_NANOSLEEP 35
+@@ -212,7 +213,16 @@
+     sysfs_completed = 1;
+ #endif
+ #if defined(NATIVE_SYSFS_SERVICE)
++#if NATIVE_BOOT_CALLBACK_ABI2
++    long boot_status = call(SYS_IOCTL, os, OS_STATUS, 0);
++    message("NATIVE_BOOT_STATUS " ARCH_LABEL " raw_status=");
++    if (boot_status < 0) message("-");
++    print_number(boot_status < 0 ? 0UL - (unsigned long)boot_status : (unsigned long)boot_status);
++    message(" expected=5 callback_abi=2\n");
++    require(boot_status == 5);
++#else
+     require(call(SYS_IOCTL, os, OS_STATUS, 0) == 4);
++#endif
+ #else
+     require(call(SYS_IOCTL, os, OS_STATUS, 0) == 9);
+ #endif

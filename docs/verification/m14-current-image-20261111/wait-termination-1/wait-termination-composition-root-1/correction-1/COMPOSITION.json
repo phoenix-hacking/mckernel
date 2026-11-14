@@ -1,0 +1,96 @@
+{
+  "at": "2026-11-11T07:55:13.705590+00:00",
+  "status": "PRIVATE_COMPOSITION_ONLY_PENDING_INDEPENDENT_REVIEW",
+  "canonical_parent": "fdbe7559081da29b316ff7a35a99a8f994a6fcef",
+  "paths": [
+    "kernel/CMakeLists.txt",
+    "kernel/syscall.c",
+    "kernel/rust/lib.rs",
+    "kernel/rust/f03_terminate.rs",
+    "kernel/rust/f03_wait_host_provider.rs"
+  ],
+  "before": {
+    "kernel/CMakeLists.txt": "06e818515cb5a79e9e8355b1f10db1dd44c70d67312a238855a4df8c640dc7c8",
+    "kernel/syscall.c": "e2bb3e910dcaecf23a8e131b347b401d7baf372f3d749a073e03458c429f1947",
+    "kernel/rust/lib.rs": "fd4f23799012916658fa690bffb19116606b4c01dd23b6a14ef32879b58778b9",
+    "kernel/rust/f03_terminate.rs": "c32cbef93b4441aa8adc12090b9d02d3c9bedbcc8fd99aa3a1b6111f0f3dd328"
+  },
+  "after": {
+    "kernel/CMakeLists.txt": "c4d8002f088ccf7f2be54899d811e247a40e587b3391e2778efa8b95f13015df",
+    "kernel/syscall.c": "8030afeba14c6c29e93e97e430e9c300b2239aff09c5f96c8986d3baa2b5cec8",
+    "kernel/rust/lib.rs": "91ce0b15ac56a2fba026cf06f508bccd18629b1c885f3333e281d058f7340e80",
+    "kernel/rust/f03_terminate.rs": "f62d22c9f5b395617135f84869aebc100270cab34fdee2f810e980c29ba739f3",
+    "kernel/rust/f03_wait_host_provider.rs": "400ad42def827a0516dbe3a5a918802b929fae1c8861a6589f48f80bff4b0753"
+  },
+  "patch_sha256": "756e3d2762b11200c7735a383c50831458d55644864c37e317de40095e5f5244",
+  "exact_component_source_GOs": [
+    "4a6cfc79",
+    "e9a6ab39"
+  ],
+  "actual_new_wait_tests": "3c75aa49",
+  "CMake_overlap": {
+    "prior_failed_composition_preserved": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-composition-root-1/FAILURE.json",
+    "documented_git_merge_file_exit": 2,
+    "complete_diff3_blocks": 2,
+    "all_conflict_bases_empty": true,
+    "resolutions": [
+      {
+        "ours": "        # Only the required host wait4 callback; retain broad/owned selections.\n        if (MCKERNEL_RUST_F06_WHOLE_DEFAULT AND ENABLE_RUST_F06_SYSCALL_WHOLE AND\n            MCKERNEL_DO_SYSCALL_OUTER_SELECTED AND\n            NOT ENABLE_NATIVE_FORK_OWNED_TRANSACTION AND NOT DCFA_KMOD)\n            set(MCKERNEL_WAIT_HOST_PROVIDER_SELECTED ON)\n            list(APPEND RUST_KERNEL_CFG \"--cfg\" \"f03_wait_host_provider_candidate\")\n            list(APPEND RUST_KERNEL_SRCS\n                \"${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_wait_host_provider.rs\"\n                \"${CMAKE_CURRENT_SOURCE_DIR}/include/syscall.h\"\n                \"${IHK_FULL_SOURCE_DIR}/cokernel/smp/x86_64/include/ihk/memconst.h\")\n        endif()\n",
+        "base": "",
+        "incoming": "        # Export the existing real Rust exit-notification transaction only here.\n        # Reuse its body and ordinary signal profile; keep owned/broad paths off.\n        if (MCKERNEL_SIGNAL_FORWARD_PROVIDER_SELECTED)\n            set(MCKERNEL_TERMINATE_HOST_PROVIDER_SELECTED ON)\n            list(APPEND RUST_KERNEL_CFG \"--cfg\" \"f03_terminate_host_provider_candidate\")\n            list(APPEND RUST_KERNEL_SRCS\n                \"${CMAKE_CURRENT_SOURCE_DIR}/include/cls.h\"\n                \"${CMAKE_CURRENT_SOURCE_DIR}/include/process.h\"\n                \"${CMAKE_CURRENT_SOURCE_DIR}/include/syscall.h\"\n                \"${IHK_FULL_SOURCE_DIR}/cokernel/smp/x86_64/include/ihk/memconst.h\")\n        endif()\n",
+        "resolution": "exact ours then exact incoming; base empty"
+      },
+      {
+        "ours": "if (MCKERNEL_WAIT_HOST_PROVIDER_SELECTED)\n    set_property(SOURCE \"${CMAKE_CURRENT_SOURCE_DIR}/syscall.c\" APPEND PROPERTY\n        COMPILE_DEFINITIONS MCKERNEL_RUST_F03_WAIT_HOST_PROVIDER)\nendif()\n\n",
+        "base": "",
+        "incoming": "if (MCKERNEL_TERMINATE_HOST_PROVIDER_SELECTED)\n    set_property(SOURCE \"${CMAKE_CURRENT_SOURCE_DIR}/syscall.c\" APPEND PROPERTY\n        COMPILE_DEFINITIONS MCKERNEL_RUST_F03_TERMINATE_HOST_PROVIDER)\nendif()\n\n",
+        "resolution": "exact ours then exact incoming; base empty"
+      }
+    ],
+    "no_source_body_rewrite": true
+  },
+  "commands": [
+    {
+      "argv": [
+        "git",
+        "apply",
+        "--check",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-1/WAIT-HOST-PROVIDER.patch"
+      ],
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "apply",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-1/WAIT-HOST-PROVIDER.patch"
+      ],
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "apply",
+        "--check",
+        "--exclude=kernel/CMakeLists.txt",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/signal-termination-host-provider-1/SIGNAL-TERMINATE-HOST-PROVIDER.patch"
+      ],
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "apply",
+        "--exclude=kernel/CMakeLists.txt",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/signal-termination-host-provider-1/SIGNAL-TERMINATE-HOST-PROVIDER.patch"
+      ],
+      "exit": 0,
+      "stderr": ""
+    }
+  ],
+  "canonical_unchanged": true,
+  "source_acceptance_or_native_release": false
+}

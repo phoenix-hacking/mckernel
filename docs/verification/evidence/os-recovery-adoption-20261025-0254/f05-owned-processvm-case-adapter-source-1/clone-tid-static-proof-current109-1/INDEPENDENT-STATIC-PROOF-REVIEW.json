@@ -1,0 +1,109 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/guardian_execution_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "at": "2026-10-27T17:53:26.269904+00:00",
+  "decision": "PASS_CURRENT109_F05_CLONETID_BRANCH_OBJECT_FINAL_RUST_PROVIDER_STATIC_PROOF_ONLY",
+  "blocking_findings": [],
+  "proof": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/f05-owned-processvm-case-adapter-source-1/clone-tid-proof-preparation-1/CLONETID-STATIC-PROOF.json",
+    "bytes": 10290,
+    "sha256": "11e720ce2a6585d1766d24eede328d5caf815837c395b7c4caa47f2b65a275fd"
+  },
+  "ELF_bindings": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/f05-owned-processvm-case-adapter-source-1/clone-tid-proof-preparation-1/ELF-BINDINGS.json",
+    "bytes": 28854,
+    "sha256": "4dd7d3d49dec28db69e53b60b357082637215664ab6825e777f92d6aa61f6443"
+  },
+  "inspection_script": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/f05-owned-processvm-case-adapter-source-1/clone-tid-proof-preparation-1/inspect_retained_elf.py",
+    "bytes": 7384,
+    "sha256": "bb1441b70379fa50e27417f2861adcc59af59125664927a3b3dd6bab14ba89b4"
+  },
+  "accepted_image_sha256": "e87f5155eb82c13ab268e8a35fb13bf1560ffd5a5f97c8fd2af78f0281fc3d78",
+  "verified_static_predicates": [
+    "Proof11e720ce and ELF-bindings4dd7d3d4 match. Accepted CURRENT109 acceptanceb7b1c441, profile8a31dd25, actual worker-result9a7ff321, ELF artifacts and three selected source references were independently hashed. The three source references exactly equal actual CURRENT109 profile cohort_source_bindings.",
+    "Actual worker command index2 exactly matches proof actual_selected_C_compile including -DMCKERNEL_NATIVE_CLONE_TID and exit0/output syscall.c.o7f7e92df. Retained source kernel/syscall.c8168..8176 selects explicit write_process_vm(new->vm,child_tidptr,&new->tid,sizeof(new->tid)), cast void, under that conditional. This is actual branch/object proof beyond flag spelling.",
+    "Actual caller object do_fork predicate operand at section offset0x4cb0 and write operand0x554b are R_X86_64_64 and independently resolve to unique image predicate0xfffffffffe8423d0 and Rust write0xfffffffffe8dd470. Final caller predicate and write instruction windows equal patched actual object bytes, including indirect calls and branch/join instructions.",
+    "Final14B Rust predicate body554889e589f8c1e81883e0015dc3 shifts low clone flags24 and masks1. It therefore recognizes F05 CLONE_CHILD_SETTID0x01000000; actual F05 source raw clone56 passes0x01000000|17,stack0,parent_tid0,child_tid=private+128,TLS0 with no CLONE_VM.",
+    "Final do_fork+0xdf0 loads RDI=[child+0x1068] new VM, RSI=child_tidptr, RDX=child+0x14 address of tid, ECX=4, calls write_process_vm and immediately jumps to normal continuation without testing return. Retained selected C source and actual object/image agree on four-byte child VM write ABI and ignored error behavior.",
+    "Independently reread actual imagee87f, Rust object92301a04 and caller object7f7e92df. All eight named Rust definitions are unique in object/image and match exact size/address/body after every relocation: write_process_vm859B,read_process_vm859B,patch_process_vm1052B,predicate14B,peek373B,poke345B,sys_clone344B,sys_ptrace163B.",
+    "All89 Rust-function relocations independently match actual object relocation tables and resolve positively in final image. Named targets use actual unique symbol value plus addend; unnamed section-symbol aliases are uniquely identified; anonymous readonly string operands compare complete actual source C string including NUL against actual final pointer target. No operand bytes were masked, ignored or normalized to claim equality.",
+    "Actual ptrace ops table offsets64/72 positively resolve to final Rust f03_ptrace_peektext_v1/poketext_v1. Both exact relocated final bodies bind read_process_vm/patch_process_vm respectively. Source repr(C) table order and request-dispatch source select PEEKDATA2 through peektext_fn and POKEDATA5 through poketext_fn; sys_ptrace final body binds this table and ptrace_syscall_body_result, sys_clone binds do_fork.",
+    "F05 selected source uses raw ptrace101 request2 with fourth-argument output word pointer, request5 with fourth-argument value, request7 CONT, and an eight-byte word beginning at4092 across4KiB. This is static ptrace route/ABI/provider identity, with no process_vm310/311 substitution."
+  ],
+  "providers": [
+    {
+      "symbol": "write_process_vm",
+      "bytes": 859,
+      "final_address": "0xfffffffffe8dd470",
+      "relocations_checked": 16
+    },
+    {
+      "symbol": "read_process_vm",
+      "bytes": 859,
+      "final_address": "0xfffffffffe8aafb0",
+      "relocations_checked": 16
+    },
+    {
+      "symbol": "patch_process_vm",
+      "bytes": 1052,
+      "final_address": "0xfffffffffe88a5f0",
+      "relocations_checked": 23
+    },
+    {
+      "symbol": "clone_child_tid_store_needed_result",
+      "bytes": 14,
+      "final_address": "0xfffffffffe8423d0",
+      "relocations_checked": 0
+    },
+    {
+      "symbol": "f03_ptrace_peektext_v1",
+      "bytes": 373,
+      "final_address": "0xfffffffffe8513f0",
+      "relocations_checked": 12
+    },
+    {
+      "symbol": "f03_ptrace_poketext_v1",
+      "bytes": 345,
+      "final_address": "0xfffffffffe851780",
+      "relocations_checked": 11
+    },
+    {
+      "symbol": "sys_clone",
+      "bytes": 344,
+      "final_address": "0xfffffffffe8bfdb0",
+      "relocations_checked": 6
+    },
+    {
+      "symbol": "sys_ptrace",
+      "bytes": 163,
+      "final_address": "0xfffffffffe8c5520",
+      "relocations_checked": 5
+    }
+  ],
+  "retained_failures": [
+    "Original ELF inspection stopped at anonymous section symbol; corrected helper positively resolves full strings/aliases rather than ignoring operands.",
+    "Original namespace-load __file__ error and empty compile_commands.json remain retained; actual worker argv/profile bind this review."
+  ],
+  "remaining_native_predicates": [
+    "Actual final manifest/runtime snapshots/source-authority/capability successor and complete staging/final-map joins must bind accepted exported owner+runner/helpers, exact source4aef/binarybe508/oraclede8c/HOSTca6f/c020collector,1024-byte streams/10s and matched CURRENT109 image/modules.",
+    "Fresh exact original-contract independent native execution release, current account/source/native ownership/resource admission and fixed-window authorization remain mandatory.",
+    "Actual one child CloneTID behavior, parent-private COW preservation, cross-page PEEK/POKE/readback, child verification/exit0, parent wait/reap and exact204B stdout/empty stderr remain UNRUN/unaccepted here.",
+    "Original parent real ACK, child terminal60, matched successful wait4, bounded stream/timeout predicates and independent physical postjoin retirement remain required. No actual wait-status word or read/write/COW behavior follows from disassembly.",
+    "M14-05-05/native/file retirement remain OPEN; practical35 remains unchanged. WholeFP4096/1024 original FAIL and existing holds are untouched.",
+    "Same fixed window ending2026-10-28T05:36:09Z, run7f4af94a83b14cc08f97401f5891d965/ceiling57774.852125/cumulative spent>=22812.3311 and all real holds/resource controls persist; no operation or budget authority is created."
+  ],
+  "review_actions": {
+    "stored_disassembly_and_sources_read": true,
+    "actual_ELF_hash_and_positive_byte_relocation_checks": true,
+    "ELF_parser_class_only_used_no_report_writer_executed": true,
+    "no_rebuild_relink_compiler_Docker_root_guest_workload_cleanup": true,
+    "no_canonical_or_artifact_mutation": true,
+    "only_this_review_file_written": true
+  },
+  "actual_F05_native_behavior_accepted": false,
+  "execution_release": false,
+  "whole_file_retirement": false
+}

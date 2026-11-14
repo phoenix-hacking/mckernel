@@ -1,0 +1,117 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "grant": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/f05-owned-processvm-v3-causal-source-1/host-qualification-preparation-1/ROOT-GRANT.ACTUAL.json",
+    "bytes": 3310,
+    "sha256": "57c0976b7d771104e9f1f8841349805b480abe509e6c54bc082e630ed27eb9c7"
+  },
+  "inputs": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/f05-owned-processvm-v3-causal-source-1/app.rs",
+      "bytes": 15845,
+      "sha256": "50d654641b1b00e1ad08f79609cb99a1d5445027f9d719efa99ec5a90fba23d5"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/f05-owned-processvm-v3-causal-source-1/app.rs",
+      "bytes": 15845,
+      "sha256": "50d654641b1b00e1ad08f79609cb99a1d5445027f9d719efa99ec5a90fba23d5"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/f05-owned-processvm-v3-causal-source-1/v3-oracle.json",
+      "bytes": 3240,
+      "sha256": "6d5946ab99f795a7e9887cdba163a4271511b5be9e8f30f6fef19b9360d2f392"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/f05-owned-processvm-v3-causal-source-1/expected.stdout",
+      "bytes": 204,
+      "sha256": "bb5952e803baae65378534b8fde8b9686795b3343c5429096297a372b1f1f46e"
+    }
+  ],
+  "tools": [
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "bytes": 654904,
+      "sha256": "028fd60b0e0add5505c661cd3ccde91393d615c8729bd95d94ab1e91409b36a1"
+    },
+    {
+      "path": "/usr/bin/readelf",
+      "bytes": 658360,
+      "sha256": "41a813335a74480f145fba9400aa7fb5c0ec7ffcaa7af7f33e832dc75eb90ffb"
+    }
+  ],
+  "helpers": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/phase5-m03-handshake-runtime-checkpoint-20261020-1/sdk-physical-source/run_two_commands_source_bound_corrected.py",
+      "bytes": 14753,
+      "sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-selected-1/next-prctl-getter-selected-1/actual-host-getter-1/reviewed-account-supervisor-correction-1/run_sealed.py",
+      "bytes": 6620,
+      "sha256": "e8b84de39128433542b213fc3a374dd50d3e12f232bd397dddaa24859349a805"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-selected-1/next-prctl-getter-selected-1/actual-host-getter-1/reviewed-account-supervisor-correction-1/accepted_account_policy.py",
+      "bytes": 1501,
+      "sha256": "d300c64f6df103af42b628eff65db07387f9d7840bc2c842163e06a9d8fdfddc"
+    }
+  ],
+  "commands": [
+    {
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "-D",
+        "warnings",
+        "-C",
+        "opt-level=1",
+        "-C",
+        "codegen-units=1",
+        "-C",
+        "target-feature=+crt-static",
+        "-C",
+        "relocation-model=static",
+        "-C",
+        "link-arg=-no-pie",
+        "-C",
+        "link-arg=-Wl,-z,noexecstack",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/f05-owned-processvm-v3-causal-source-1/app.rs",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-v3-causal-host-qualification-1/future-host-output-1/app"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Exact Root-adopted foreground Rust compiler argv.",
+      "wall": 90
+    },
+    {
+      "argv": [
+        "/usr/bin/readelf",
+        "-W",
+        "-h",
+        "-l",
+        "-d",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-v3-causal-host-qualification-1/future-host-output-1/app"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Read-only executable/static ELF qualification.",
+      "wall": 90
+    },
+    {
+      "argv": [
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-v3-causal-host-qualification-1/future-host-output-1/app"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Owned Linux parent-child reference against unchanged frozen oracle.",
+      "wall": 10
+    }
+  ],
+  "profile": {
+    "CPU": 6,
+    "jobs": 1,
+    "RLIMIT_AS_bytes": 1073741824,
+    "ordinary_reviewed_AS_ceiling_bytes": 2147483648,
+    "RLIMIT_CPU_seconds": 60,
+    "RLIMIT_FSIZE_bytes": 67108864,
+    "RLIMIT_CORE": 0,
+    "compile_wall_seconds": 90,
+    "static_ELF_wall_seconds": 90,
+    "reference_payload_wall_seconds": 10
+  }
+}

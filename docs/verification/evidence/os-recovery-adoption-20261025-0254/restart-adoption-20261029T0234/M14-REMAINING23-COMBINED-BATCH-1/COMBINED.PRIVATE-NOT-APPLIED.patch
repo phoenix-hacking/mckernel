@@ -1,0 +1,4106 @@
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -29850,7 +29850,7 @@
+ /// Native kernel GS base and current TSS/rsp0 must be installed, with the complete
+ /// saved X86UserContext immediately below rsp0. Never call this HOST-side. The
+ /// original C used this same GS load and context subtraction, without recovery.
+-unsafe extern "C" fn f06_signal_syscall_context() -> *mut X86UserContext {
++pub(super) unsafe extern "C" fn f06_signal_syscall_context() -> *mut X86UserContext {
+     let top: CULong;
+     let offset = offset_of!(crate::abi::X86CpuLocalVariables, tss)
+         + offset_of!(crate::abi::Tss64, rsp0);
+@@ -30327,28 +30327,28 @@
+ #[used]
+ #[link_section = "__verbose"]
+ static mut F06_SIGNAL_TRAP_ENTER_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
+-    file: concat!(file!(), "\0").as_ptr().cast(),
++    file: b"/src/arch/x86_64/kernel/syscall.c\0".as_ptr().cast(),
+     func: b"do_signal\0".as_ptr().cast(),
+     fmt: core::ptr::null(),
+-    line_flags: line!() & 0x00ff_ffff,
++    line_flags: 2081,
+ };
+ 
+ #[used]
+ #[link_section = "__verbose"]
+ static mut F06_SIGNAL_TRAP_SLEEP_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
+-    file: concat!(file!(), "\0").as_ptr().cast(),
++    file: b"/src/arch/x86_64/kernel/syscall.c\0".as_ptr().cast(),
+     func: b"do_signal\0".as_ptr().cast(),
+     fmt: core::ptr::null(),
+-    line_flags: line!() & 0x00ff_ffff,
++    line_flags: 2106,
+ };
+ 
+ #[used]
+ #[link_section = "__verbose"]
+ static mut F06_SIGNAL_TRAP_WAKE_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
+-    file: concat!(file!(), "\0").as_ptr().cast(),
++    file: b"/src/arch/x86_64/kernel/syscall.c\0".as_ptr().cast(),
+     func: b"do_signal\0".as_ptr().cast(),
+     fmt: core::ptr::null(),
+-    line_flags: line!() & 0x00ff_ffff,
++    line_flags: 2109,
+ };
+ 
+ /// Return zero for the original untraced `goto core`, one after traced sleep.
+@@ -30357,10 +30357,10 @@
+ /// The live thread and process are the caller's original borrowed inputs; their
+ /// process/parent/report references remain valid through synchronous notify,
+ /// waitq wake and schedule. Pending is already consumed and sigcommon unlocked.
+-/// `info` is forwarded without reading, initializing or retaining it here. For a
+-/// defined execution, its bytes must be valid for the existing do_kill consumer.
+-/// The C caller's original SIGTRAP branch may supply uninitialized local info;
+-/// that remains an explicit caller debt, not permission to assume_init or zero it.
++/// Traced info is aligned writable complete caller-owned SigInfo storage, live
++/// through synchronous do_kill consumption. The approved EOF constructor fully
++/// initializes it after SIGTRAP state stores; untraced return never touches it.
++/// Original thread/parent/report lifetimes and CPU/IRQ exclusions still apply.
+ #[no_mangle]
+ pub unsafe extern "C" fn arch_do_signal_trap_stop_result(
+     thread: *mut Thread,
+@@ -30385,7 +30385,7 @@
+     // matching the C fork-tree publication order rather than widening its lock.
+     unsafe {
+         (*thread).exit_status = SIGTRAP;
+-        (*thread).status = PS_TRACED;
++        (*thread).status = PS_TRACED; super::f06_construct_trap_notification(info, thread);
+     }
+     // SAFETY: proc remains live across the borrowed main-thread comparison.
+     if thread == unsafe { (*proc).main_thread } {
+@@ -30449,9 +30449,9 @@
+ #[used]
+ #[link_section = "__verbose"]
+ static mut F06_SIGNAL_STOP_WAKE_DEBUG: crate::debug::Ddebug=crate::debug::Ddebug {
+-    file:concat!(file!(),"\0").as_ptr().cast(),
++    file: b"/src/arch/x86_64/kernel/syscall.c\0".as_ptr().cast(),
+     func:b"do_signal\0".as_ptr().cast(),fmt:core::ptr::null(),
+-    line_flags:line!()&0x00ff_ffff,
++    line_flags: 2077,
+ };
+ 
+ /// Called only for the four original default stop-action switch labels, AFTER
+@@ -30964,18 +30964,18 @@
+ #[used]
+ #[link_section = "__verbose"]
+ static mut F06_SIGNAL_ENTRY_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
+-    file: concat!(file!(), "\0").as_ptr().cast(),
++    file: b"/src/arch/x86_64/kernel/syscall.c\0".as_ptr().cast(),
+     func: b"do_signal\0".as_ptr().cast(),
+     fmt: core::ptr::null(),
+-    line_flags: line!() & 0x00ff_ffff,
++    line_flags: 1778,
+ };
+ #[used]
+ #[link_section = "__verbose"]
+ static mut F06_SIGNAL_TERMINATE_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
+-    file: concat!(file!(), "\0").as_ptr().cast(),
++    file: b"/src/arch/x86_64/kernel/syscall.c\0".as_ptr().cast(),
+     func: b"do_signal\0".as_ptr().cast(),
+     fmt: core::ptr::null(),
+-    line_flags: line!() & 0x00ff_ffff,
++    line_flags: 2162,
+ };
+ unsafe extern "C" {
+     #[link_name = "terminate"]
+@@ -30988,22 +30988,22 @@
+ /// Native kernel GS base and current TSS/rsp0 must be installed, with the complete
+ /// saved X86UserContext immediately below rsp0. Never call this HOST-side. The
+ /// original C used this same GS load and context subtraction, without recovery.
+-unsafe extern "C" fn f06_signal_syscall_context() -> *mut X86UserContext {
+-    let top: CULong;
+-    let offset = offset_of!(crate::abi::X86CpuLocalVariables, tss)
+-        + offset_of!(crate::abi::Tss64, rsp0);
+-    // SAFETY: exact original GS memory load; MOV preserves flags and does not
+-    // touch stack. No privileged instruction is executed during preparation.
+-    unsafe {
+-        core::arch::asm!(
+-            "mov {top}, gs:[{offset}]",
+-            top = out(reg) top,
+-            offset = in(reg) offset,
+-            options(nostack, readonly, preserves_flags),
+-        );
+-        (top as *mut X86UserContext).sub(1)
+-    }
+-}
++use super::f06_signal_context_candidate::f06_signal_syscall_context;
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
+ 
+ /// Deliver one detached pending node with the original complete C entry rules.
+ ///
+@@ -31013,11 +31013,11 @@
+ /// mask selects a valid action in the actual64-entry table. Original object and
+ /// callback lifetimes/IRQ/scheduling preconditions apply, including XSAVE CPU
+ /// exclusion. Kernel and frame layouts must match native_linux_irq_work_v6_12.
+-/// The original traced default-SIGTRAP info bytes are uninitialized caller debt;
+-/// that branch remains OUTSIDE this port's defined qualification domain. This
+-/// source does not zero or assume_init them. C stays selected until root resolves
+-/// that debt and qualifies complete ownership/default/native behavior. Counter
+-/// races and overwritten old core slots are also preserved, not silently fixed.
++/// Default traced-SIGTRAP uses the approved initialized parent notification.
++/// Whole selection remains OFF pending ABI/ownership/codegen/native proof.
++/// The caller-owned info lives through synchronous consumer copies; no pending
++/// payload is read after transfer/free. Counter races and overwritten old core
++/// slots remain independent existing debt, not silently fixed here.
+ #[no_mangle]
+ pub unsafe extern "C" fn do_signal(
+     mut result: CULong,
+@@ -31210,8 +31210,8 @@
+         return restart;
+     }
+ 
+-    // Native C declares this storage uninitialized before pending disposal. Do
+-    // NOT assume_init/zero: traced SIGTRAP remains a qualified-execution HOLD.
++    // Aligned caller-owned storage; traced helper initializes all bytes before
++    // synchronous notify. Never reread transferred/freed pending payload.
+     let mut trap_info = MaybeUninit::<SigInfo>::uninit();
+     // SAFETY: complete default ownership helper caches ptracecont before free,
+     // transfers ptrace nodes or consumes pending, then releases the original lock.
+@@ -31227,9 +31227,9 @@
+             );
+         },
+         SIGTRAP => {
+-            // SAFETY: full-defined qualification explicitly EXCLUDES the traced
+-            // branch's uninitialized-info consumer. This preserves original C
+-            // source debt, not a new validity claim or zero-initialization repair.
++            // SAFETY: aligned stack storage remains live through synchronous
++            // notify copies; approved helper constructs every byte before use.
++            // Original thread/parent/report lifetime preconditions still apply.
+             let handled = unsafe {
+                 arch_do_signal_trap_stop_result(thread, proc, trap_info.as_mut_ptr())
+             };
+@@ -36831,3 +36831,814 @@
+ mod f06_vdso_info;
+ #[cfg(all(f06_vdso_info_candidate, not(native_linux_irq_work_v6_12)))]
+ use self::f06_vdso_info::vdso_get_vdso_info;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(all(f03_leaf_callbacks_candidate, target_arch = "x86_64"))]
++#[path = "syscall_exit_group_current_pid.rs"]
++mod syscall_exit_group_current_pid;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[path = "syscall_util_clone_disabled_logger.rs"]
++mod syscall_util_clone_disabled_logger;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[path = "syscall_settid_logger.rs"]
++mod syscall_settid_logger;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[path = "syscall_ptrace_clone_logger.rs"]
++mod syscall_ptrace_clone_logger;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[path = "syscall_exit_group_logger.rs"]
++mod syscall_exit_group_logger;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[path = "syscall_clear_host_pte_logger.rs"]
++mod syscall_clear_host_pte_logger;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(all(f03_leaf_callbacks_candidate, target_arch = "x86_64"))]
++#[path = "syscall_munmap_clear_host_forward.rs"]
++mod syscall_munmap_clear_host_forward;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(all(f03_leaf_callbacks_candidate, target_arch = "x86_64"))]
++#[path = "syscall_mprotect_host_vma.rs"]
++mod syscall_mprotect_host_vma;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(all(f03_context_forward_pair_candidate, target_arch = "x86_64"))]
++#[path = "f03_context_forward_pair.rs"]
++mod f03_context_forward_pair;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(all(f03_leaf_callbacks_candidate, f03_ptrace_kfree_profile_119, target_arch = "x86_64"))]
++#[path = "syscall_ptrace_detach_kfree.rs"]
++mod syscall_ptrace_detach_kfree;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(all(f03_leaf_callbacks_candidate, target_arch = "x86_64"))]
++#[path = "syscall_exit_group_terminate.rs"]
++mod syscall_exit_group_terminate;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(all(f03_leaf_callbacks_candidate, target_arch = "x86_64"))]
++#[path = "syscall_ptrace_detach_wakeup.rs"]
++mod syscall_ptrace_detach_wakeup;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(all(f03_leaf_callbacks_candidate, target_arch = "x86_64"))]
++#[path = "syscall_terminate_mcexec_forward.rs"]
++mod syscall_terminate_mcexec_forward;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(all(f03_leaf_callbacks_candidate, target_arch = "x86_64", enable_perf))]
++#[path = "syscall_perf_open_forward.rs"]
++mod syscall_perf_open_forward;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Complete PROFILE_ENABLE + Rust-offload, non-ToFu entry. Unselected caller HOLD.
++#[cfg(f03_do_syscall_supported_candidate)]
++mod f03_do_syscall_supported_v1 {
++    use core::mem::{align_of, offset_of, size_of, MaybeUninit};
++    use core::ptr::{addr_of, addr_of_mut, read_volatile, write_volatile};
++    use core::sync::atomic::{compiler_fence, AtomicU64, Ordering};
++
++    use crate::abi::{
++        CInt, CLong, CULong, CpuLocalVar, IhkOsCpuMonitor, Process, SyscallRequest,
++        SyscallResponse, Thread,
++    };
++    use crate::debug::Ddebug;
++
++    use super::{
++        ihk_mc_get_processor_id, send_syscall, syscall_offload_counted_result,
++        syscall_offload_prepare_result, syscall_offload_wait_reply, syscall_owner_log_budget,
++        syscall_preempt_disable_needed_result, syscall_profile_event_needed_result,
++        syscall_proxy_dead_result,
++    };
++
++    unsafe extern "C" {
++        static f03_do_syscall_constants_v1: [CULong; 5];
++        static mut f03_do_syscall_debug_v1: [Ddebug; 6];
++        fn kprintf(format: *const i8, ...) -> CInt;
++    }
++
++    // Reuse the existing Rust offload logger's linearized PID/count state. It
++    // matches the old serial 64-message budget and avoids the original shared
++    // C static ints' unsynchronized accesses. This is a correctness extension,
++    // not a claim of cross-CPU C data-race parity or ordered console delivery.
++    static RETURN_LOG_STATE: AtomicU64 = AtomicU64::new((u32::MAX as u64) << 32);
++
++    macro_rules! debug {
++        ($index:expr, $format:expr $(, $value:expr)* $(,)?) => {{
++            // SAFETY: Original static lexical records and exact scalar varargs.
++            unsafe {
++                if read_volatile(addr_of!(f03_do_syscall_debug_v1[$index].line_flags)) >> 24 != 0 {
++                    kprintf($format.as_ptr().cast() $(, $value)*);
++                }
++            }
++        }};
++    }
++
++    /// Execute the existing Rust offload transaction and original caller accounting.
++    ///
++    /// # Safety
++    /// The current CPU, monitor, thread/process and selected IKC channel remain
++    /// live for the entire offload, including nested service/scheduling callbacks.
++    /// request is aligned and its number and all six argument scalars are
++    /// initialized before entry. The existing prepare helper assigns rtid and
++    /// ttid, and the existing sender assigns valid before copying/publishing.
++    /// No pointer ownership is created or foreign whole-object reference made.
++    /// The host's release/completion contract makes the final response readable.
++    /// This precondition excludes the separately held partial exec requests; no
++    /// guessed field initialization or host acknowledgement is supplied here.
++    #[export_name = "do_syscall"]
++    pub unsafe extern "C" fn f03_do_syscall_supported_v1(
++        request: *mut SyscallRequest, cpu: CInt,
++    ) -> CLong {
++        // SAFETY: These are exactly the caller-owned current objects. Raw field
++        // operations never create a fully initialized response reference.
++        unsafe {
++            let local = crate::cls::get_this_cpu_local_var();
++            let thread = read_volatile(addr_of!((*local).current));
++            let monitor = read_volatile(addr_of!((*local).monitor));
++            let process = read_volatile(addr_of!((*thread).proc));
++            let pid = if process.is_null() { -1 } else { (*process).pid };
++            let started = if read_volatile(addr_of!((*thread).profile)) != 0 {
++                crate::x86_cpu_helpers::rdtsc()
++            } else {
++                0
++            };
++            let exit_group = f03_do_syscall_constants_v1[0] as CInt;
++            let setaffinity = f03_do_syscall_constants_v1[1] as CInt;
++            let spinning = f03_do_syscall_constants_v1[2];
++            let offload_monitor = f03_do_syscall_constants_v1[3] as CInt;
++            let profile_max = f03_do_syscall_constants_v1[4] as CInt;
++            let number = read_volatile(addr_of!((*request).number)) as CInt;
++
++            debug!(0, b"SC(%d)[%3d] sending syscall\n\0", ihk_mc_get_processor_id(), number);
++            let old_monitor_status = read_volatile(addr_of!((*monitor).status));
++            write_volatile(addr_of_mut!((*monitor).status), offload_monitor);
++            // C barrier() orders compiler accesses; no new hardware fence.
++            compiler_fence(Ordering::SeqCst);
++            if syscall_offload_counted_result(number, exit_group) != 0 {
++                let count = addr_of_mut!((*thread).in_syscall_offload);
++                write_volatile(count, read_volatile(count).wrapping_add(1));
++            }
++
++            let mut response = MaybeUninit::<SyscallResponse>::uninit();
++            let response_ptr = response.as_mut_ptr();
++            let current = read_volatile(addr_of!((*crate::cls::get_this_cpu_local_var()).current));
++            let use_requester = syscall_offload_prepare_result(
++                request, response_ptr, read_volatile(addr_of!((*current).tid)), number,
++                read_volatile(addr_of!((*request).args[0])), setaffinity, spinning,
++            );
++            if use_requester < 0 {
++                // Preserve the original early return before monitor/count unwind.
++                return use_requester as CLong;
++            }
++            if use_requester != 0 {
++                debug!(1, b"%s: uti, ttid=%d\n\0", c"do_syscall".as_ptr(), (*request).ttid);
++            }
++            send_syscall(request, cpu, response_ptr);
++            if syscall_preempt_disable_needed_result((*request).rtid) != 0 {
++                crate::cls::preempt_disable();
++            }
++            debug!(2, b"%s: syscall num: %d waiting for Linux.. \n\0",
++                c"do_syscall".as_ptr(), number);
++            syscall_offload_wait_reply(request, response_ptr, cpu, thread);
++            if syscall_preempt_disable_needed_result((*request).rtid) != 0 {
++                crate::cls::preempt_enable();
++            }
++            // Only the completed ret field is read. Other response fields can
++            // remain uninitialized unless the genuine protocol wrote them.
++            let result = read_volatile(addr_of!((*response_ptr).ret));
++            debug!(3, b"%s: syscall num: %d got host reply: %d \n\0",
++                c"do_syscall".as_ptr(), number, result as CInt);
++            if syscall_owner_log_budget(&RETURN_LOG_STATE, pid) {
++                kprintf(
++                    concat!(
++                        "mcexec_v10: offload_return cpu=%d pid=%d tid=%d nr=%d ",
++                        "ret=0x%lx ret_signed=%ld\n\0",
++                    ).as_ptr().cast(),
++                    cpu, pid, read_volatile(addr_of!((*thread).tid)), number,
++                    result as CULong, result,
++                );
++            }
++            if syscall_offload_counted_result(number, exit_group) != 0 {
++                let count = addr_of_mut!((*thread).in_syscall_offload);
++                write_volatile(count, read_volatile(count).wrapping_sub(1));
++            }
++            if syscall_proxy_dead_result(result) != 0 {
++                debug!(4, b"%s: proxy PID %d is dead, terminate()\n\0",
++                    c"do_syscall".as_ptr(), (*process).pid);
++                write_volatile(addr_of_mut!((*process).nohost), 1);
++            }
++            if syscall_profile_event_needed_result(number, profile_max) != 0 {
++                let event = crate::profile::profile_syscall2offload(number);
++                crate::profile::profile_event_add(
++                    event, crate::x86_cpu_helpers::rdtsc().wrapping_sub(started),
++                );
++            } else {
++                debug!(5, b"%s: offload syscall > %d ?? : %d\n\0",
++                    c"do_syscall".as_ptr(), profile_max, number);
++            }
++            write_volatile(addr_of_mut!((*monitor).status), old_monitor_status);
++            let counter = addr_of_mut!((*monitor).counter);
++            write_volatile(counter, read_volatile(counter).wrapping_add(1));
++            result
++        }
++    }
++
++    #[no_mangle]
++    #[used]
++    pub static f03_do_syscall_Rust_ABI_v1: [CULong; 29] = [
++        size_of::<SyscallRequest>() as CULong,
++        align_of::<SyscallRequest>() as CULong,
++        offset_of!(SyscallRequest, rtid) as CULong,
++        offset_of!(SyscallRequest, ttid) as CULong,
++        offset_of!(SyscallRequest, valid) as CULong,
++        offset_of!(SyscallRequest, number) as CULong,
++        offset_of!(SyscallRequest, args) as CULong,
++        size_of::<SyscallResponse>() as CULong,
++        align_of::<SyscallResponse>() as CULong,
++        offset_of!(SyscallResponse, status) as CULong,
++        offset_of!(SyscallResponse, req_thread_status) as CULong,
++        offset_of!(SyscallResponse, ret) as CULong,
++        offset_of!(SyscallResponse, pde_data) as CULong,
++        size_of::<IhkOsCpuMonitor>() as CULong,
++        align_of::<IhkOsCpuMonitor>() as CULong,
++        offset_of!(IhkOsCpuMonitor, status) as CULong,
++        offset_of!(IhkOsCpuMonitor, counter) as CULong,
++        size_of::<CpuLocalVar>() as CULong,
++        align_of::<CpuLocalVar>() as CULong,
++        offset_of!(CpuLocalVar, current) as CULong,
++        offset_of!(CpuLocalVar, monitor) as CULong,
++        size_of::<Thread>() as CULong,
++        align_of::<Thread>() as CULong,
++        offset_of!(Thread, tid) as CULong,
++        offset_of!(Thread, proc) as CULong,
++        offset_of!(Thread, profile) as CULong,
++        offset_of!(Thread, in_syscall_offload) as CULong,
++        offset_of!(Process, pid) as CULong,
++        offset_of!(Process, nohost) as CULong,
++    ];
++}
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Root accepted args5=0 as a separate intended-wire correction; both cfgs are required.
++#[cfg(all(f03_util_thread_whole_candidate, f03_util_thread_arg5_zero_candidate))]
++mod f03_util_thread_whole_v1 {
++    use core::ffi::c_void;
++    use core::mem::{align_of, offset_of, size_of, MaybeUninit};
++    use core::ptr::{addr_of, addr_of_mut, copy_nonoverlapping, null_mut, read_volatile};
++    use core::ptr::write_volatile;
++    use crate::abi::{
++        CInt, CLong, CULong, SizeT, SyscallRequest, Thread, UtiAttr, UtiCtx, UtiCtxRefill,
++    };
++    use super::{field_ptr, kprintf, save_uctx, syscall_proxy_dead_result, ENOMEM};
++
++    #[repr(C)]
++    struct Kattr {
++        parent_cpuid: CLong,
++        attr: UtiAttr,
++    }
++
++    #[repr(C)]
++    struct Layout {
++        context_size: SizeT,
++        info_size: SizeT,
++        context: SizeT,
++        refill_tid: SizeT,
++        info_thread_va: SizeT,
++        info_response_pa: SizeT,
++        info_channel_pa: SizeT,
++        info_tid: SizeT,
++        info_cpu: SizeT,
++        info_status_pa: SizeT,
++        info_sleep_lock_pa: SizeT,
++        info_sleep_pa: SizeT,
++        info_vm_pa: SizeT,
++        info_futex_q_pa: SizeT,
++        info_idle_halt: SizeT,
++        info_futex_queue_pa: SizeT,
++    }
++
++    #[repr(C)]
++    struct Origins {
++        file: *const i8,
++        context_alloc: CInt,
++        info_alloc: CInt,
++        context_free: CInt,
++        info_free: CInt,
++        context_out: CInt,
++        info_out: CInt,
++    }
++
++    unsafe extern "C" {
++        static f03_util_thread_layout_v1: Layout;
++        static f03_util_thread_constants_v1: [CULong; 5];
++        static f03_util_thread_origins_v1: Origins;
++        static f03_util_thread_descriptor_slot_v1: *const CULong;
++        static mut f03_util_thread_debug_v1: [crate::debug::Ddebug; 4];
++        static mut idle_halt: CInt;
++        #[link_name = "do_syscall"]
++        fn existing_do_syscall(request: *mut SyscallRequest, cpu: CInt) -> CLong;
++        #[link_name = "terminate"]
++        fn existing_terminate(rc: CInt, sig: CInt);
++        // Existing public adapter is needed because do_exit remains C-static.
++        #[link_name = "exit_do_exit_bridge"]
++        fn existing_do_exit(code: CInt);
++        #[link_name = "util_show_syscall_profile"]
++        fn existing_profile() -> CInt;
++    }
++
++    unsafe fn physical(address: *mut c_void) -> CULong {
++        // SAFETY: Same live original mapping/boot objects; no pin is synthesized.
++        unsafe { crate::x86_memory_helpers::virt_to_phys(address) }
++    }
++
++    unsafe fn release(pointer: *mut c_void, line: CInt) {
++        // SAFETY: The selected original edge owns this allocation or NULL.
++        let file = unsafe { f03_util_thread_origins_v1.file.cast_mut() };
++        unsafe { crate::mem_helpers::kfree_tracked(pointer, file, line) };
++    }
++
++    unsafe fn debug_record(index: usize, thread: *mut Thread, rc: CLong) {
++        // SAFETY: Actual aligned C records preserve the original macro flag gate.
++        unsafe {
++            let record = addr_of!(f03_util_thread_debug_v1).cast::<crate::debug::Ddebug>();
++            if read_volatile(addr_of!((*record.add(index)).line_flags)) >> 24 == 0 {
++                return;
++            }
++            match index {
++                0 => {
++                    kprintf(c"%s: returned from do_syscall,tid=%d,rc=%lx\n".as_ptr().cast(),
++                        c"util_thread".as_ptr(), read_volatile(addr_of!((*thread).tid)),
++                        rc as CULong);
++                }
++                1 => {
++                    kprintf(c"%s: mcexec worker tid=%d\n".as_ptr().cast(),
++                        c"util_thread".as_ptr(),
++                        read_volatile(addr_of!((*thread).uti_refill_tid)));
++                }
++                2 => {
++                    kprintf(c"%s: exit_group, tid=%d,rc=%lx\n".as_ptr().cast(),
++                        c"util_thread".as_ptr(), read_volatile(addr_of!((*thread).tid)),
++                        rc as CULong);
++                }
++                3 => {
++                    let process = read_volatile(addr_of!((*thread).proc));
++                    kprintf(c"%s: exit or killed by signal, pid=%d,tid=%d,rc=%lx\n"
++                        .as_ptr().cast(), c"util_thread".as_ptr(),
++                        read_volatile(addr_of!((*process).pid)),
++                        read_volatile(addr_of!((*thread).tid)), rc as CULong);
++                }
++                _ => {}
++            }
++        }
++    }
++
++    /// Preserve both allocations, remote argument ownership and final cleanup.
++    ///
++    /// # Safety
++    /// arg is NULL or the original readable disjoint UtiAttr span. Current thread,
++    /// VM/channel/futex objects and physical mappings survive the synchronous
++    /// offload transaction. Its host/context-completion and final-stack contracts
++    /// remain explicit HOLDs. Neither scalar return nor a thread ref is a new ACK.
++    /// Root accepted only args5=0; host completion and lifetime proofs remain held.
++    #[export_name = "util_thread"]
++    pub unsafe extern "C" fn f03_util_thread_whole_v1(arg: *mut UtiAttr) -> CInt {
++        let mut context: *mut c_void = null_mut();
++        let mut info: *mut c_void = null_mut();
++        let mut request = MaybeUninit::<SyscallRequest>::uninit();
++        let mut attribute = MaybeUninit::<Kattr>::uninit();
++        // SAFETY: Raw current pointers and exact C layout data; no foreign whole
++        // object reference or initialized MaybeUninit value is constructed.
++        unsafe {
++            let layout = addr_of!(f03_util_thread_layout_v1);
++            let origins = addr_of!(f03_util_thread_origins_v1);
++            let constants = addr_of!(f03_util_thread_constants_v1).cast::<CULong>();
++            let local = crate::cls::get_this_cpu_local_var();
++            let thread = read_volatile(addr_of!((*local).current));
++            write_volatile(addr_of_mut!((*thread).uti_state), *constants.add(2) as CInt);
++            let rc = 'allocate: {
++                context = crate::mem_helpers::kmalloc_tracked(
++                    (*layout).context_size as CInt, *constants, (*origins).file.cast_mut(),
++                    (*origins).context_alloc,
++                );
++                if context.is_null() {
++                    break 'allocate -(ENOMEM as CLong);
++                }
++                let remote_context = physical(context);
++                // Actual Rust provider initializes cond at offset0 before later
++                // ctx[0..4]/uti_refill_tid reads; its real saved-context bridge applies.
++                save_uctx(context.cast::<u8>().add((*layout).context).cast(), null_mut());
++                info = crate::mem_helpers::kmalloc_tracked(
++                    (*layout).info_size as CInt, *constants, (*origins).file.cast_mut(),
++                    (*origins).info_alloc,
++                );
++                if info.is_null() {
++                    break 'allocate -(ENOMEM as CLong);
++                }
++                let bytes = info.cast::<u8>();
++                let current = crate::cls::get_this_cpu_local_var();
++                write_volatile(field_ptr::<CULong>(bytes, (*layout).info_thread_va),
++                    read_volatile(addr_of!((*current).current)) as CULong);
++                let current = crate::cls::get_this_cpu_local_var();
++                write_volatile(field_ptr::<CULong>(bytes, (*layout).info_response_pa),
++                    physical(read_volatile(addr_of!((*current).uti_futex_resp)).cast()));
++                let current = crate::cls::get_this_cpu_local_var();
++                write_volatile(field_ptr::<CULong>(bytes, (*layout).info_channel_pa),
++                    physical(read_volatile(addr_of!((*current).ikc2linux)).cast()));
++                write_volatile(field_ptr::<CInt>(bytes, (*layout).info_tid),
++                    read_volatile(addr_of!((*thread).tid)));
++                write_volatile(field_ptr::<CInt>(bytes, (*layout).info_cpu),
++                    crate::x86_local::ihk_mc_get_processor_id());
++                write_volatile(field_ptr::<CULong>(bytes, (*layout).info_status_pa),
++                    physical(addr_of_mut!((*thread).status).cast()));
++                write_volatile(field_ptr::<CULong>(bytes, (*layout).info_sleep_lock_pa),
++                    physical(addr_of_mut!((*thread).spin_sleep_lock).cast()));
++                write_volatile(field_ptr::<CULong>(bytes, (*layout).info_sleep_pa),
++                    physical(addr_of_mut!((*thread).spin_sleep).cast()));
++                write_volatile(field_ptr::<CULong>(bytes, (*layout).info_vm_pa),
++                    physical(read_volatile(addr_of!((*thread).vm)).cast()));
++                write_volatile(field_ptr::<CULong>(bytes, (*layout).info_futex_q_pa),
++                    physical(addr_of_mut!((*thread).futex_q).cast()));
++                write_volatile(field_ptr::<CInt>(bytes, (*layout).info_idle_halt),
++                    read_volatile(addr_of!(idle_halt)));
++                write_volatile(field_ptr::<CULong>(bytes, (*layout).info_futex_queue_pa),
++                    physical(crate::futex::get_futex_queues().cast()));
++
++                let request = request.as_mut_ptr();
++                write_volatile(addr_of_mut!((*request).number), *constants.add(1));
++                write_volatile(addr_of_mut!((*request).args[0]), 0);
++                write_volatile(addr_of_mut!((*request).args[1]), remote_context);
++                write_volatile(addr_of_mut!((*request).args[2]), 0);
++                if !arg.is_null() {
++                    let attribute = attribute.as_mut_ptr();
++                    copy_nonoverlapping(arg.cast::<u8>(),
++                        addr_of_mut!((*attribute).attr).cast(), size_of::<UtiAttr>());
++                    write_volatile(addr_of_mut!((*attribute).parent_cpuid),
++                        read_volatile(addr_of!((*thread).parent_cpuid)) as CLong);
++                    write_volatile(addr_of_mut!((*request).args[2]), physical(attribute.cast()));
++                }
++                write_volatile(addr_of_mut!((*request).args[3]), info as CULong);
++                let slot = read_volatile(addr_of!(f03_util_thread_descriptor_slot_v1));
++                write_volatile(addr_of_mut!((*request).args[4]), read_volatile(slot));
++                write_volatile(addr_of_mut!((*thread).uti_state), *constants.add(3) as CInt);
++                // Separate Root-accepted correction: the actual selected host ignores
++                // arg5, but the transport copies all6. Never reset IDs/valid here.
++                write_volatile(addr_of_mut!((*request).args[5]), 0);
++                let rc = existing_do_syscall(request, crate::x86_local::ihk_mc_get_processor_id());
++                debug_record(0, thread, rc);
++                write_volatile(addr_of_mut!((*thread).uti_state), *constants.add(4) as CInt);
++                let _ = existing_profile();
++                write_volatile(addr_of_mut!((*thread).uti_refill_tid),
++                    read_volatile(field_ptr::<CInt>(context.cast(), (*layout).refill_tid)));
++                debug_record(1, thread, rc);
++                release(context, (*origins).context_free);
++                context = null_mut();
++                release(info, (*origins).info_free);
++                info = null_mut();
++                if rc >= 0 {
++                    if rc & 0x1_0000_0000 != 0 {
++                        debug_record(2, thread, rc);
++                        let process = read_volatile(addr_of!((*thread).proc));
++                        write_volatile(addr_of_mut!((*process).nohost), 1);
++                        existing_terminate(((rc >> 8) & 255) as CInt, (rc & 255) as CInt);
++                    } else {
++                        debug_record(3, thread, rc);
++                        existing_do_exit(rc as CInt);
++                    }
++                } else if syscall_proxy_dead_result(rc) != 0 {
++                    let process = read_volatile(addr_of!((*thread).proc));
++                    kprintf(c"%s: release_handler,pid=%d,tid=%d,rc=%lx\n".as_ptr().cast(),
++                        c"util_thread".as_ptr(), read_volatile(addr_of!((*process).pid)),
++                        read_volatile(addr_of!((*thread).tid)), rc as CULong);
++                    let process = read_volatile(addr_of!((*thread).proc));
++                    write_volatile(addr_of_mut!((*process).nohost), 1);
++                    existing_do_exit(rc as CInt);
++                } else {
++                    kprintf(c"%s: ERROR: do_syscall() failed (%ld)\n".as_ptr().cast(),
++                        c"util_thread".as_ptr(), rc);
++                }
++                break 'allocate rc;
++            };
++            // Preserve the original out label even after a nominally nonreturning
++            // terminate/do_exit returns: only NULL remains on the success path.
++            release(context, (*origins).context_out);
++            release(info, (*origins).info_out);
++            rc as CInt
++        }
++    }
++
++    #[no_mangle]
++    #[used]
++    pub static f03_util_thread_Rust_ABI_v1: [CULong; 23] = [
++        size_of::<Layout>() as CULong, align_of::<Layout>() as CULong,
++        size_of::<Origins>() as CULong, align_of::<Origins>() as CULong,
++        size_of::<Kattr>() as CULong, align_of::<Kattr>() as CULong,
++        offset_of!(Kattr, parent_cpuid) as CULong, offset_of!(Kattr, attr) as CULong,
++        size_of::<UtiAttr>() as CULong, align_of::<UtiAttr>() as CULong,
++        size_of::<SyscallRequest>() as CULong, align_of::<SyscallRequest>() as CULong,
++        size_of::<CInt>() as CULong, size_of::<CLong>() as CULong,
++        size_of::<CULong>() as CULong, offset_of!(super::TransUctx, cond) as CULong,
++        size_of::<CULong>() as CULong,
++        size_of::<UtiCtx>() as CULong, align_of::<UtiCtx>() as CULong,
++        offset_of!(UtiCtx, ctx) as CULong,
++        (offset_of!(UtiCtx, refill) + offset_of!(UtiCtxRefill, uti_refill_tid)) as CULong,
++        size_of::<UtiCtxRefill>() as CULong, align_of::<UtiCtxRefill>() as CULong,
++    ];
++}
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(all(f03_request_constructors_candidate, target_arch = "x86_64"))]
++#[path = "f03_request_constructors.rs"]
++mod f03_request_constructors;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// EOF placement preserves every inherited source-location macro coordinate.
++#[cfg(f06_signal_context_candidate)]
++const _: () = {
++    assert!(core::mem::offset_of!(crate::abi::X86CpuLocalVariables, tss)
++        + core::mem::offset_of!(crate::abi::Tss64, rsp0) == 180);
++    assert!(core::mem::size_of::<crate::abi::CInt>() == 4);
++    assert!(core::mem::size_of::<crate::abi::CULong>() == 8);
++};
++
++/// # Safety
++/// info covers aligned writable complete SigInfo through synchronous consumers;
++/// thread is live and exit_status/status already hold the original SIGTRAP state.
++/// This approved constructor establishes no thread/parent/report/CPU lifetime.
++#[cfg(f06_do_signal_whole_candidate)]
++unsafe fn f06_construct_trap_notification(info: *mut SigInfo, thread: *mut Thread) {
++    // Root-approved defined notification; initialize complete caller-owned storage
++    // before any reference or synchronous consumer. Never read the old pending.
++    // SAFETY: info is aligned writable SigInfo storage kept live through do_kill.
++    // Every byte, including union extent and padding, is initialized first. This
++    // is the existing ptrace_report_signal_body_result writer/layout pattern.
++    unsafe {
++        let raw = info.cast::<u8>();
++        let mut offset = 0;
++        while offset < size_of::<SigInfo>() {
++            raw.add(offset).write_volatile(0);
++            offset += 1;
++        }
++        let info_ref = &mut *info;
++        info_ref.si_signo = SIGCHLD;
++        info_ref.si_code = CLD_TRAPPED;
++        let sigchld = (&mut info_ref.sifields as *mut crate::abi::SigInfoFields)
++            .cast::<crate::abi::SigInfoChild>();
++        core::ptr::write_volatile(
++            core::ptr::addr_of_mut!((*sigchld).si_pid), (*thread).tid,
++        );
++        core::ptr::write_volatile(
++            core::ptr::addr_of_mut!((*sigchld).si_status),
++            core::ptr::read_volatile(core::ptr::addr_of!((*thread).exit_status)),
++        );
++    }
++}
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// ARCH5 imports stay at EOF to preserve all inherited source-location macros.
++#[cfg(f06_regset_defined_diagnostic_candidate)]
++#[path = "syscall_regset_defined_logger.rs"]
++mod syscall_regset_defined_logger;
++#[cfg(f06_signal_leaf_adapters_candidate)]
++#[path = "syscall_signal_leaf_adapters.rs"]
++mod syscall_signal_leaf_adapters;
++#[cfg(arch5_abi_witness_candidate)]
++#[path = "arch5_abi_witness.rs"]
++mod arch5_abi_witness;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(all(f03_terminate_whole_candidate, f03_terminate_origin_profile_119, target_arch = "x86_64"))]
++#[path = "syscall_terminate_whole.rs"]
++mod syscall_terminate_whole;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(all(f03_terminate_mcexec_whole_candidate, target_arch = "x86_64"))]
++#[path = "syscall_terminate_mcexec_whole.rs"]
++mod syscall_terminate_mcexec_whole;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(all(f03_terminate_host_whole_candidate, target_arch = "x86_64"))]
++#[path = "syscall_terminate_host_whole.rs"]
++mod syscall_terminate_host_whole;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(all(f03_leaf_callbacks_candidate, target_arch = "x86_64"))]
++#[path = "syscall_ptrace_detach_kill.rs"]
++mod syscall_ptrace_detach_kill;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(all(f03_interrupt_arity3_defined_candidate, f03_interrupt_origin_profile_119, target_arch = "x86_64"))]
++#[path = "syscall_interrupt_arity3.rs"]
++mod syscall_interrupt_arity3;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(all(f03_ptrace_wakeup_log_defined_u32_candidate, f03_ptrace_wakeup_log_origin_profile_119, target_arch = "x86_64"))]
++#[path = "syscall_ptrace_wakeup_log.rs"]
++mod syscall_ptrace_wakeup_log;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(all(f03_signal_forward_defined_candidate, target_arch = "x86_64"))]
++#[path = "f03_signal_forward_defined_candidate.rs"]
++mod f03_signal_forward_defined_candidate;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(all(f03_perf_entry_candidate, enable_perf, target_arch = "x86_64"))]
++#[path = "f03_perf_entry_candidate.rs"]
++mod f03_perf_entry_candidate;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(all(f03_credential_refresh_candidate, target_arch = "x86_64"))]
++#[path = "f03_credential_refresh_candidate.rs"]
++mod f03_credential_refresh_candidate;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(all(f03_execveat_bridge_candidate, target_arch = "x86_64"))]
++#[path = "f03_execveat_bridge_candidate.rs"]
++mod f03_execveat_bridge_candidate;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Private, unselected source proposal; see CONTRACT.md. Request providers are
++// intentionally unresolved until the two-phase protocol has a real owner.
++#[cfg(f03_execveat_whole_candidate)]
++mod f03_execveat_whole_v1 {
++    use core::ffi::c_void;
++    use core::mem::{size_of, MaybeUninit};
++    use core::ptr::{addr_of, addr_of_mut, null_mut, read_volatile};
++    use crate::abi::{CInt, CLong, CULong, ProgramImageSection, ProgramLoadDesc,
++                     SyscallRequest, Thread, X86UserContext};
++    use super::{f03_execveat_allocate_descriptor_v1, f03_execveat_filename_admission_v1,
++        f03_execveat_release_temporaries_v1, f03_munmap_all_current_v1,
++        f03_execveat_install_user_context_v1, f03_execveat_ptrace_report_v1,
++        f03_execveat_finish_switch_v1, exec_reset_signal_state_current_v1, do_syscall};
++    use crate::debug::Ddebug;
++
++    #[repr(C)]
++    struct Origins {
++        file: *const i8,
++        filename_argv_alloc_line: CInt,
++        filename_argv_free_line: CInt,
++        filename_envp_alloc_line: CInt,
++        filename_envp_free_line: CInt,
++        ranges_attr: CULong,
++        sigkill: CInt,
++    }
++    unsafe extern "C" {
++        static f03_execveat_origins_v1: Origins;
++        static mut f03_execveat_debug_v1: [Ddebug; 3];
++        fn kprintf(format: *const i8, ...) -> CInt;
++        #[link_name = "preempt_enable"] fn exec_preempt_enable();
++        #[link_name = "do_kill"] fn exec_kill(thread: *mut Thread, pid: CInt,
++            tid: CInt, sig: CInt, info: *mut c_void, ptracecont: CInt) -> CULong;
++    }
++    macro_rules! debug {
++        ($index:expr, $fmt:expr $(, $arg:expr)* $(,)?) => {{
++            if unsafe { read_volatile(addr_of!(f03_execveat_debug_v1[$index].line_flags)) } >> 24 != 0 {
++                unsafe { kprintf($fmt.as_ptr().cast() $(, $arg)*); }
++            }
++        }};
++    }
++    unsafe fn failed_strings(filename: *const i8, argv: bool) {
++        let n = crate::x86_memory_helpers::strlen_user(filename);
++        let o = &f03_execveat_origins_v1;
++        let (alloc_line, free_line) = if argv {
++            (o.filename_argv_alloc_line, o.filename_argv_free_line)
++        } else { (o.filename_envp_alloc_line, o.filename_envp_free_line) };
++        let name = crate::mem_helpers::kmalloc_tracked(n.wrapping_add(1), 2,
++            o.file.cast_mut(), alloc_line).cast::<i8>();
++        if !name.is_null() { let _ = crate::x86_memory_helpers::strcpy_from_user(name, filename); }
++        if argv { kprintf(c"ERROR: no argv for executable: %s?\n".as_ptr(),
++            if name.is_null() { c"".as_ptr() } else { name }); }
++        else { kprintf(c"ERROR: no envp for executable: %s?\n".as_ptr(),
++            if name.is_null() { c"".as_ptr() } else { name }); }
++        if !name.is_null() { crate::mem_helpers::kfree_tracked(name.cast(), o.file.cast_mut(), free_line); }
++    }
++    /// # Safety
++    /// The current thread/VM/context and syscall input remain live; filename and
++    /// vector access use the actual usercopy providers. The host supplies a valid,
++    /// bounded descriptor and pre-strings. The approved declared-arity writes
++    /// rely on the real offload helpers to initialize their own ID/valid fields.
++    /// Temporary buffers remain owned until both synchronous host requests and
++    /// range preparation complete. Exec teardown exclusivity, signal/ptrace and
++    /// runq switch owners must satisfy their actual existing provider contracts.
++    #[export_name = "do_execveat"]
++    pub unsafe extern "C" fn do_execveat(ctx: *mut X86UserContext, dirfd: CInt,
++        filename: *const i8, argv: *mut *mut i8, envp: *mut *mut i8, flags: CInt) -> CInt {
++        let thread = (*crate::cls::get_this_cpu_local_var()).current;
++        let vm = (*thread).vm;
++        let process = (*thread).proc;
++        let mut exec_ctx = MaybeUninit::<X86UserContext>::uninit();
++        core::ptr::copy_nonoverlapping(ctx.cast::<u8>(), exec_ctx.as_mut_ptr().cast::<u8>(), size_of::<X86UserContext>());
++        let admission = f03_execveat_filename_admission_v1(vm, filename.cast());
++        if admission != 0 { return admission; }
++        let mut error: CInt = 0;
++        let o = &f03_execveat_origins_v1;
++        let desc = f03_execveat_allocate_descriptor_v1(o.file, 7142, addr_of_mut!(error)).cast::<ProgramLoadDesc>();
++        if desc.is_null() { return error; }
++        let mut argv_flat: *mut i8 = null_mut();
++        let mut envp_flat: *mut i8 = null_mut();
++        let mut request = MaybeUninit::<SyscallRequest>::uninit();
++        let ret: CLong = 'transaction: {
++            let pa = crate::x86_memory_helpers::virt_to_phys(desc.cast());
++            // Root-approved exec-specific arity: no whole-request reference or
++            // blanket zeroing. Offload owns rtid, ttid and valid initialization.
++            let request_ptr = request.as_mut_ptr();
++            core::ptr::write(addr_of_mut!((*request_ptr).number), 59);
++            core::ptr::write(addr_of_mut!((*request_ptr).args[0]), 1);
++            core::ptr::write(addr_of_mut!((*request_ptr).args[1]), dirfd as CLong as CULong);
++            core::ptr::write(addr_of_mut!((*request_ptr).args[2]), filename as CULong);
++            core::ptr::write(addr_of_mut!((*request_ptr).args[3]), pa);
++            core::ptr::write(addr_of_mut!((*request_ptr).args[4]), flags as CLong as CULong);
++            core::ptr::write(addr_of_mut!((*request_ptr).args[5]), 0);
++            let mut ret = do_syscall(request.as_mut_ptr(), crate::x86_local::ihk_mc_get_processor_id());
++            if ret != 0 {
++                debug!(0, b"execve(): ERROR: host failed to load elf header, errno: %ld\n\0", ret);
++                break 'transaction ret.wrapping_neg();
++            }
++            debug!(1, b"execve(): ELF desc received, num sections: %d\n\0", (*desc).num_sections);
++            if (*desc).args_len != 0 {
++                let offset = size_of::<ProgramLoadDesc>().wrapping_add(
++                    size_of::<ProgramImageSection>().wrapping_mul((*desc).num_sections as usize));
++                (*desc).args = desc.cast::<u8>().wrapping_add(offset).cast();
++            }
++            let argv_len = crate::string::flatten_strings_from_user((*desc).args, argv, addr_of_mut!(argv_flat));
++            if argv_len < 0 { failed_strings(filename, true); break 'transaction argv_len as CLong; }
++            (*desc).args = null_mut(); (*desc).args_len = 0;
++            let envp_len = crate::string::flatten_strings_from_user(null_mut(), envp, addr_of_mut!(envp_flat));
++            if envp_len < 0 { failed_strings(filename, false); break 'transaction envp_len as CLong; }
++            f03_munmap_all_current_v1();
++            f03_execveat_install_user_context_v1(thread, vm, (*desc).entry);
++            ret = crate::host_helpers::prepare_process_ranges_args_envs(thread, desc, desc,
++                o.ranges_attr, argv_flat, argv_len, envp_flat, envp_len) as CLong;
++            if ret != 0 {
++                kprintf(c"execve(): ERROR: preparing ranges, args, envs, stack, ret: %ld\n".as_ptr(), ret);
++                exec_preempt_enable();
++                let _ = exec_kill(thread, (*(*thread).proc).pid, (*thread).tid, o.sigkill, null_mut(), 0);
++                break 'transaction ret;
++            }
++            let _ = super::clear_host_pte((*vm).region.user_start,
++                (*vm).region.user_end.wrapping_sub((*vm).region.user_start), 0);
++            let desc_bytes = size_of::<ProgramLoadDesc>().wrapping_add(
++                size_of::<ProgramImageSection>().wrapping_mul((*desc).num_sections as usize));
++            // Preserve initialized args3..5 exactly as left by phase one.
++            // Caller/transport must prove the preceding request is no longer borrowed.
++            core::ptr::write(addr_of_mut!((*request_ptr).number), 59);
++            core::ptr::write(addr_of_mut!((*request_ptr).args[0]), 2);
++            core::ptr::write(addr_of_mut!((*request_ptr).args[1]),
++                crate::x86_memory_helpers::virt_to_phys(desc.cast()));
++            core::ptr::write(addr_of_mut!((*request_ptr).args[2]), desc_bytes as CULong);
++            ret = do_syscall(request.as_mut_ptr(), crate::x86_local::ihk_mc_get_processor_id());
++            if ret != 0 {
++                exec_preempt_enable();
++                let _ = exec_kill(thread, (*(*thread).proc).pid, (*thread).tid, o.sigkill, null_mut(), 0);
++                break 'transaction ret;
++            }
++            exec_reset_signal_state_current_v1(thread);
++            if f03_execveat_ptrace_report_v1(thread, exec_ctx.as_mut_ptr()) != 0 {
++                kprintf(c"execve(): ERROR: ptrace_report_exec()\n".as_ptr());
++            }
++            debug!(2, b"execve(): switching to new process\n\0");
++            (*process).execed = 1;
++            0
++        };
++        f03_execveat_release_temporaries_v1(envp_flat.cast(), argv_flat.cast(), desc.cast(),
++            o.file, 7285, 7288, 7290);
++        f03_execveat_finish_switch_v1(thread, ret) as CInt
++    }
++    #[no_mangle]
++    #[used]
++    pub static f03_execveat_Rust_ABI_v1: [CULong; 32] = [
++        size_of::<Thread>() as CULong, core::mem::align_of::<Thread>() as CULong,
++        core::mem::offset_of!(Thread, vm) as CULong, core::mem::offset_of!(Thread, proc) as CULong,
++        core::mem::offset_of!(Thread, tid) as CULong,
++        size_of::<crate::abi::ProcessVm>() as CULong,
++        core::mem::offset_of!(crate::abi::ProcessVm, region) as CULong,
++        core::mem::offset_of!(crate::abi::VmRegions, user_start) as CULong,
++        core::mem::offset_of!(crate::abi::VmRegions, user_end) as CULong,
++        core::mem::offset_of!(crate::abi::Process, pid) as CULong,
++        core::mem::offset_of!(crate::abi::Process, execed) as CULong,
++        size_of::<ProgramLoadDesc>() as CULong, core::mem::align_of::<ProgramLoadDesc>() as CULong,
++        core::mem::offset_of!(ProgramLoadDesc, num_sections) as CULong,
++        core::mem::offset_of!(ProgramLoadDesc, entry) as CULong,
++        core::mem::offset_of!(ProgramLoadDesc, args) as CULong,
++        core::mem::offset_of!(ProgramLoadDesc, args_len) as CULong,
++        size_of::<ProgramImageSection>() as CULong, size_of::<X86UserContext>() as CULong,
++        size_of::<SyscallRequest>() as CULong, core::mem::align_of::<SyscallRequest>() as CULong,
++        core::mem::offset_of!(SyscallRequest, number) as CULong,
++        core::mem::offset_of!(SyscallRequest, args) as CULong,
++        size_of::<Origins>() as CULong, core::mem::align_of::<Origins>() as CULong,
++        core::mem::offset_of!(Origins, file) as CULong,
++        core::mem::offset_of!(Origins, filename_argv_alloc_line) as CULong,
++        core::mem::offset_of!(Origins, filename_argv_free_line) as CULong,
++        core::mem::offset_of!(Origins, filename_envp_alloc_line) as CULong,
++        core::mem::offset_of!(Origins, filename_envp_free_line) as CULong,
++        core::mem::offset_of!(Origins, ranges_attr) as CULong,
++        core::mem::offset_of!(Origins, sigkill) as CULong,
++    ];
++}
+--- a/kernel/CMakeLists.txt
++++ b/kernel/CMakeLists.txt
+@@ -32,6 +32,9 @@
+ endif()
+ 
+ option(ENABLE_RUST_KERNEL "Enable Rust code in the McKernel image" ON)
++# Functional OS source candidate; Root explicitly selects the next admitted compile.
++option(MCKERNEL_ARCH5_CUTOVER_CANDIDATE "Select reviewed ARCH5 source candidate" OFF)
++option(MCKERNEL_ARCH5_ABI_WITNESS "Emit compile-only ARCH5 ABI witness arrays" OFF)
+ # Functional OS migration: paired typed Rust storage for 32 public debug objects.
+ # Internal descriptors and their three configs use a separate atomic selector.
+ option(ENABLE_RUST_PROCESS_VERBOSE_DATA "Use typed Rust process debug globals" ON)
+@@ -51,6 +54,14 @@
+ option(ENABLE_NATIVE_FORK_OWNED_TRANSACTION "Enable the existing native owned-fork transaction" OFF)
+ set(MCKERNEL_HOST_IRQ_ABI "legacy" CACHE STRING "Linux control-kernel IRQ-work ABI")
+ set_property(CACHE MCKERNEL_HOST_IRQ_ABI PROPERTY STRINGS legacy linux-6.12)
++if (MCKERNEL_ARCH5_CUTOVER_CANDIDATE AND
++    (NOT ENABLE_RUST_KERNEL OR NOT ARCH STREQUAL "x86_64" OR
++     NOT MCKERNEL_HOST_IRQ_ABI STREQUAL "linux-6.12" OR ENABLE_UBSAN))
++    message(FATAL_ERROR "ARCH5 requires paired Rust x86_64 Linux6.12 non-UBSAN profile")
++endif()
++if (MCKERNEL_ARCH5_ABI_WITNESS AND NOT MCKERNEL_ARCH5_CUTOVER_CANDIDATE)
++    message(FATAL_ERROR "ARCH5 ABI witness requires the paired ARCH5 candidate")
++endif()
+ if (NOT MCKERNEL_HOST_IRQ_ABI STREQUAL "legacy" AND
+     NOT MCKERNEL_HOST_IRQ_ABI STREQUAL "linux-6.12")
+ 	message(FATAL_ERROR "MCKERNEL_HOST_IRQ_ABI must be legacy or linux-6.12")
+@@ -119,6 +130,7 @@
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/listeners.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/list_helpers.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/lock_helpers.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/ptrace_clone_noirq.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/mem_helpers.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/mikc.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/numparse.rs"
+@@ -142,16 +154,42 @@
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/smp_ikc.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/sysfs.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_policy.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_execveat_bridge_candidate.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_credential_refresh_candidate.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_entry_candidate.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_signal_forward_defined_candidate.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_request_constructors.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_perf_open_forward.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_terminate_mcexec_forward.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_ptrace_detach_wakeup.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_wakeup_writer_pair.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_exit_group_terminate.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_context_forward_pair.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_mprotect_host_vma.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_ptrace_detach_kfree.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_ptrace_detach_kill.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_interrupt_arity3.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_ptrace_wakeup_log.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_terminate_whole.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_terminate_mcexec_whole.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_terminate_host_whole.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_munmap_clear_host_forward.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_exit_group_current_pid.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_util_clone_disabled_logger.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_settid_logger.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/timer.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/tofu_uapi.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/ubsan.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/waitq.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_coredump.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_exit_group_logger.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_cpu_helpers.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_cpu_log_providers.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_ptrace_clone_logger.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_local.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_memory_helpers.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_memory_logger_bridges.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_clear_host_pte_logger.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_memory_loggers.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_perfctr.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_setup.rs"
+@@ -199,6 +237,16 @@
+ 		list(APPEND RUST_KERNEL_CFG "--cfg" "f03_signal_process_bridges_candidate")
+ 		list(APPEND RUST_KERNEL_CFG "--cfg" "f03_dispatch_context_candidate")
+ 		list(APPEND RUST_KERNEL_CFG "--cfg" "f03_leaf_callbacks_candidate")
++		# Defined named-callers contract, only under the retained /src x86 profile.
++		if (MCKERNEL_HOST_IRQ_ABI STREQUAL "linux-6.12" AND NOT ENABLE_UBSAN AND
++		    CMAKE_CURRENT_SOURCE_DIR STREQUAL "/src/kernel")
++			list(APPEND RUST_KERNEL_CFG
++				"--cfg" "f03_interrupt_arity3_defined_candidate"
++				"--cfg" "f03_interrupt_origin_profile_119"
++				"--cfg" "f03_interrupt_origin_dispatch"
++				"--cfg" "f03_ptrace_wakeup_log_defined_u32_candidate"
++				"--cfg" "f03_ptrace_wakeup_log_origin_profile_119")
++		endif()
+ 		if (ENABLE_NATIVE_SYSFS_VERIFY)
+ 			list(APPEND RUST_KERNEL_CFG "--cfg" "native_sysfs_verify")
+ 			list(APPEND RUST_KERNEL_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../scripts/tests/fixtures/mckernel_guest_sysfs.rs")
+@@ -215,6 +263,34 @@
+ 			list(APPEND RUST_KERNEL_CFG "--cfg" "f03_syscall_table_clone3")
+ 			# Qualified next cohort: current native x86_64 Linux6.12, no UBSAN.
+ 			if (ARCH STREQUAL "x86_64" AND NOT ENABLE_UBSAN)
++				if (MCKERNEL_F03_EXECVEAT_BRIDGE_EXPERIMENTAL)
++					list(APPEND RUST_KERNEL_CFG "--cfg" "f03_execveat_bridge_candidate")
++				endif()
++				# Queue B is opt-in and remains subject to the documented source contracts.
++				if (MCKERNEL_F03_DO_SYSCALL_SUPPORTED_EXPERIMENTAL)
++					if (NOT MCKERNEL_F03_DEFINED_ALL_REQUEST_CALLERS_REVIEWED)
++						message(FATAL_ERROR "F03 do_syscall requires reviewed initialization of all selected callers")
++					endif()
++					list(APPEND RUST_KERNEL_CFG "--cfg" "f03_do_syscall_supported_candidate")
++				endif()
++				if (MCKERNEL_F03_UTIL_THREAD_WHOLE_EXPERIMENTAL)
++					list(APPEND RUST_KERNEL_CFG "--cfg" "f03_util_thread_whole_candidate" "--cfg" "f03_util_thread_arg5_zero_candidate")
++				endif()
++				if (MCKERNEL_F03_REQUEST_CONSTRUCTORS_EXPERIMENTAL)
++					list(APPEND RUST_KERNEL_CFG "--cfg" "f03_request_constructors_candidate")
++				endif()
++				if (MCKERNEL_F03_SIGNAL_FORWARD_EXPERIMENTAL)
++					list(APPEND RUST_KERNEL_CFG "--cfg" "f03_signal_forward_defined_candidate")
++				endif()
++				if (ENABLE_PERF AND MCKERNEL_F03_PERF_ENTRY_EXPERIMENTAL)
++					list(APPEND RUST_KERNEL_CFG "--cfg" "f03_perf_entry_candidate")
++				endif()
++				if (MCKERNEL_F03_CREDENTIAL_REFRESH_EXPERIMENTAL)
++					list(APPEND RUST_KERNEL_CFG "--cfg" "f03_credential_refresh_candidate")
++				endif()
++				list(APPEND RUST_KERNEL_CFG "--cfg" "f03_wakeup_writer_pair_candidate")
++				list(APPEND RUST_KERNEL_CFG "--cfg" "f03_context_forward_pair_candidate")
++				list(APPEND RUST_KERNEL_CFG "--cfg" "f03_ptrace_clone_noirq_candidate")
+ 				list(APPEND RUST_KERNEL_CFG "--cfg" "f03_prlimit_body_candidate")
+ 				list(APPEND RUST_KERNEL_CFG "--cfg" "f03_do_exit_supported_candidate")
+ 				list(APPEND RUST_KERNEL_CFG "--cfg" "f03_unmap_begin_selected_candidate")
+@@ -242,6 +318,23 @@
+ 				list(APPEND RUST_KERNEL_CFG "--cfg" "f06_rt_sigreturn_syscall_candidate")
+ 				list(APPEND RUST_KERNEL_CFG "--cfg" "f06_rt_sigreturn_set_signal_candidate")
+ 				list(APPEND RUST_KERNEL_CFG "--cfg" "f06_rt_sigreturn_check_signal_candidate")
++                if (MCKERNEL_ARCH5_CUTOVER_CANDIDATE)
++                    list(APPEND RUST_KERNEL_CFG
++                        "--cfg" "f06_regset_defined_diagnostic_candidate"
++                        "--cfg" "f06_signal_leaf_adapters_candidate"
++                        "--cfg" "f06_signal_context_candidate"
++                        "--cfg" "f06_do_signal_whole_candidate"
++                        "--cfg" "f06_do_signal_reuse_qualified_context")
++                    list(APPEND RUST_KERNEL_SRCS
++                        "${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_regset_defined_logger.rs"
++                        "${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_signal_leaf_adapters.rs")
++                    if (MCKERNEL_ARCH5_ABI_WITNESS)
++                        list(APPEND RUST_KERNEL_CFG "--cfg" "arch5_abi_witness_candidate")
++                        list(APPEND RUST_KERNEL_SRCS
++                            "${CMAKE_CURRENT_SOURCE_DIR}/rust/arch5_abi_witness.rs"
++                            "${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/include/arch5-abi-witness.inc")
++                    endif()
++                endif()
+ 				# Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+ 				# Source-only default OFF. Root inserts only in existing selected
+ 				# linux-6.12/x86_64/NOT ENABLE_UBSAN branch, alongside exact F06 providers.
+@@ -592,19 +685,53 @@
+ 	set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/syscall.c"
+ 		PROPERTIES COMPILE_DEFINITIONS
+ 		"MCKERNEL_RUST_SHMID_HELPERS;MCKERNEL_RUST_SHM_PERM_HELPERS;MCKERNEL_RUST_RLIMIT_HELPERS;MCKERNEL_RUST_SCHED_PRIO_HELPERS;MCKERNEL_RUST_SCHED_POLICY_HELPERS;MCKERNEL_RUST_SYSCALL_POLICY_HELPERS;MCKERNEL_RUST_SYSCALL_OFFLOAD;MCKERNEL_RUST_SIGNAL_HELPERS;MCKERNEL_RUST_F03_IO_DIAGNOSTICS;MCKERNEL_RUST_F03_MINCORE;MCKERNEL_RUST_F03_MOVE_PAGES;MCKERNEL_RUST_F03_SCHED_BRIDGES;MCKERNEL_RUST_F03_SIGNAL_PROCESS_BRIDGES;MCKERNEL_RUST_F03_DISPATCH_CONTEXT;MCKERNEL_RUST_F03_LEAF_CALLBACKS")
++	if (MCKERNEL_HOST_IRQ_ABI STREQUAL "linux-6.12" AND NOT ENABLE_UBSAN AND
++	    CMAKE_CURRENT_SOURCE_DIR STREQUAL "/src/kernel")
++		set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
++			COMPILE_DEFINITIONS "MCKERNEL_RUST_F03_INTERRUPT_ARITY3_DEFINED;MCKERNEL_RUST_F03_INTERRUPT_ORIGIN_PROFILE_119;MCKERNEL_RUST_F03_PTRACE_WAKEUP_LOG_DEFINED;MCKERNEL_RUST_F03_PTRACE_WAKEUP_LOG_PROFILE_119")
++	endif()
+ 	if (MCKERNEL_HOST_IRQ_ABI STREQUAL "linux-6.12")
+ 		# Pair the existing Rust process_global_storage_candidate provider above.
+ 		set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/process.c" APPEND PROPERTY
+ 			COMPILE_DEFINITIONS MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE)
+ 		if (ARCH STREQUAL "x86_64" AND NOT ENABLE_UBSAN)
++			if (MCKERNEL_F03_DO_SYSCALL_SUPPORTED_EXPERIMENTAL)
++				set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY COMPILE_DEFINITIONS MCKERNEL_RUST_F03_DO_SYSCALL_SUPPORTED)
++			endif()
++			if (MCKERNEL_F03_UTIL_THREAD_WHOLE_EXPERIMENTAL)
++				set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY COMPILE_DEFINITIONS "MCKERNEL_RUST_F03_UTIL_THREAD_WHOLE;MCKERNEL_RUST_F03_UTIL_REQUEST_ARG5_ZERO")
++			endif()
++			if (MCKERNEL_F03_REQUEST_CONSTRUCTORS_EXPERIMENTAL)
++				set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY COMPILE_DEFINITIONS MCKERNEL_RUST_F03_REQUEST_CONSTRUCTORS)
++			endif()
++			if (MCKERNEL_F03_SIGNAL_FORWARD_EXPERIMENTAL)
++				set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY COMPILE_DEFINITIONS MCKERNEL_RUST_F03_SIGNAL_FORWARD_EXPERIMENTAL)
++			endif()
++			if (ENABLE_PERF AND MCKERNEL_F03_PERF_ENTRY_EXPERIMENTAL)
++				set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY COMPILE_DEFINITIONS MCKERNEL_RUST_F03_PERF_ENTRY_EXPERIMENTAL)
++			endif()
++			if (MCKERNEL_F03_CREDENTIAL_REFRESH_EXPERIMENTAL)
++				set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY COMPILE_DEFINITIONS MCKERNEL_RUST_F03_CREDENTIAL_REFRESH_EXPERIMENTAL)
++			endif()
++			if (MCKERNEL_F03_EXECVEAT_BRIDGE_EXPERIMENTAL)
++				set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY COMPILE_DEFINITIONS MCKERNEL_RUST_F03_EXECVEAT_BRIDGE)
++			endif()
+ 			set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+-				COMPILE_DEFINITIONS "MCKERNEL_RUST_F03_PERF_ATTR_CALLBACKS;MCKERNEL_RUST_F03_PRLIMIT_BODY;MCKERNEL_RUST_F03_EXEC_DEFINED_TAIL;MCKERNEL_RUST_F03_DO_EXIT_V2;MCKERNEL_RUST_F03_UNMAP_BEGIN;MCKERNEL_RUST_F03_UNMAP_REMOVE;MCKERNEL_RUST_F03_UNMAP_FINISH;MCKERNEL_RUST_F03_MMAP_PAGE_CALLBACK;MCKERNEL_RUST_F03_WAIT_RELEASE;MCKERNEL_RUST_F03_WAIT_PROCESS_RELEASE;MCKERNEL_RUST_F03_TERMINATE_REFCOUNT;MCKERNEL_RUST_F03_TERMINATE_CMPXCHG;MCKERNEL_RUST_F03_PTRACE_IO_FIND;MCKERNEL_RUST_F03_PTRACE_IO_UNLOCK;MCKERNEL_RUST_F03_PTRACE_IO_COPY_FROM;MCKERNEL_RUST_F03_SYNC_CHILD_EVENT;MCKERNEL_RUST_F03_WAKEUP_FIND;MCKERNEL_RUST_F03_WAKEUP_UNLOCK;MCKERNEL_RUST_F03_EXIT_WAITQ_WAKE")
++				COMPILE_DEFINITIONS "MCKERNEL_RUST_F03_WAKEUP_WRITER_PAIR;MCKERNEL_RUST_F03_CONTEXT_FORWARD_PAIR;MCKERNEL_RUST_F03_PTRACE_CLONE_NOIRQ;MCKERNEL_RUST_F03_PERF_ATTR_CALLBACKS;MCKERNEL_RUST_F03_PRLIMIT_BODY;MCKERNEL_RUST_F03_EXEC_DEFINED_TAIL;MCKERNEL_RUST_F03_DO_EXIT_V2;MCKERNEL_RUST_F03_UNMAP_BEGIN;MCKERNEL_RUST_F03_UNMAP_REMOVE;MCKERNEL_RUST_F03_UNMAP_FINISH;MCKERNEL_RUST_F03_MMAP_PAGE_CALLBACK;MCKERNEL_RUST_F03_WAIT_RELEASE;MCKERNEL_RUST_F03_WAIT_PROCESS_RELEASE;MCKERNEL_RUST_F03_TERMINATE_REFCOUNT;MCKERNEL_RUST_F03_TERMINATE_CMPXCHG;MCKERNEL_RUST_F03_PTRACE_IO_FIND;MCKERNEL_RUST_F03_PTRACE_IO_UNLOCK;MCKERNEL_RUST_F03_PTRACE_IO_COPY_FROM;MCKERNEL_RUST_F03_SYNC_CHILD_EVENT;MCKERNEL_RUST_F03_WAKEUP_FIND;MCKERNEL_RUST_F03_WAKEUP_UNLOCK;MCKERNEL_RUST_F03_EXIT_WAITQ_WAKE")
+ 			if (ENABLE_PERF)
+ 				set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+ 					COMPILE_DEFINITIONS "MCKERNEL_RUST_F03_PERF_ALLOC_BRIDGES;MCKERNEL_RUST_F03_PERF_COUNTER_CONTROL_BRIDGES;MCKERNEL_RUST_F03_PERF_EVENT_PROVIDER_BRIDGES;MCKERNEL_RUST_F03_PERF_PROVIDER_NEXT3_BRIDGES")
+ 			endif()
+ 			set_property(SOURCE "${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/syscall.c" APPEND PROPERTY
+ 				COMPILE_DEFINITIONS "MCKERNEL_RUST_F06_MMAP_FLAG_PROVIDERS;MCKERNEL_RUST_F06_PRCTL_SET_REGISTER;MCKERNEL_RUST_F06_PRCTL_GET_REGISTER;MCKERNEL_RUST_F06_MMAP_DISPATCH_BRIDGE;MCKERNEL_RUST_F06_PTRACE_CONTEXT;MCKERNEL_RUST_F06_PTRACE_ALLOC;MCKERNEL_RUST_F06_VDSO_ADD_RANGE;MCKERNEL_RUST_F06_VDSO_SET_RANGE;MCKERNEL_RUST_F06_PROCESS_VM_ENTRY;MCKERNEL_RUST_F06_COPY_TO_USER;MCKERNEL_RUST_F06_COPY_FROM_USER;MCKERNEL_RUST_F06_FORWARD_CONTEXT;MCKERNEL_RUST_F06_RT_SIGRETURN_SYSCALL;MCKERNEL_RUST_F06_RT_SIGRETURN_SET_SIGNAL;MCKERNEL_RUST_F06_RT_SIGRETURN_CHECK_SIGNAL")
++            if (MCKERNEL_ARCH5_CUTOVER_CANDIDATE)
++                set_property(SOURCE "${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/syscall.c" APPEND PROPERTY
++                    COMPILE_DEFINITIONS "MCKERNEL_RUST_F06_REGSET_DEFINED_DIAGNOSTIC;MCKERNEL_RUST_F06_XRSTOR_LEAF;MCKERNEL_RUST_F06_BAD_FRAME_LEAF;MCKERNEL_RUST_F06_SIGNAL_CONTEXT;MCKERNEL_RUST_F06_DO_SIGNAL_WHOLE")
++                if (MCKERNEL_ARCH5_ABI_WITNESS)
++                    set_property(SOURCE "${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/syscall.c" APPEND PROPERTY
++                        COMPILE_DEFINITIONS MCKERNEL_ARCH5_ABI_WITNESS)
++                endif()
++            endif()
+ 		endif()
+ 		set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+ 			COMPILE_DEFINITIONS "MCKERNEL_RUST_F03_PTRACE_ENTRY;MCKERNEL_RUST_F03_SYSCALL_TABLE;MCKERNEL_RUST_F03_SYSCALL_ENTRY;MCKERNEL_RUST_F03_FUTEX_ATOMIC")
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -1067,12 +1067,12 @@
+ 		unsigned long src_addr, size_t bytes);
+ long syscall_copy_to_user_bridge(unsigned long dst_addr,
+ 		const void *src, size_t bytes);
+-static long syscall_do_syscall2_bridge(int syscall_nr, unsigned long arg0,
+-		unsigned long arg1);
+-static long syscall_do_syscall3_bridge(int syscall_nr, unsigned long arg0,
+-		unsigned long arg1, unsigned long arg2);
+-long syscall_policy_do_syscall3_bridge(int syscall_nr, unsigned long arg0,
+-		unsigned long arg1, unsigned long arg2);
++#if defined(MCKERNEL_RUST_F03_REQUEST_CONSTRUCTORS)
++extern long syscall_do_syscall2_bridge(int syscall_nr, unsigned long arg0, unsigned long arg1); extern long syscall_do_syscall3_bridge(int syscall_nr, unsigned long arg0, unsigned long arg1, unsigned long arg2);
++#else
++static long syscall_do_syscall2_bridge(int syscall_nr, unsigned long arg0, unsigned long arg1); static long syscall_do_syscall3_bridge(int syscall_nr, unsigned long arg0, unsigned long arg1, unsigned long arg2);
++#endif
++long syscall_policy_do_syscall3_bridge(int syscall_nr, unsigned long arg0, unsigned long arg1, unsigned long arg2);
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ extern long syscall_do_syscall_request_bridge(struct syscall_request *request,
+ 		int cpu);
+@@ -1085,12 +1085,12 @@
+ #else
+ static unsigned long syscall_virt_to_phys_bridge(void *addr);
+ #endif
++#if defined(MCKERNEL_RUST_F03_CONTEXT_FORWARD_PAIR)
++extern long syscall_forward_context_bridge(int syscall_nr, void *ctx);
++#else
+ static long syscall_forward_context_bridge(int syscall_nr, void *ctx);
+-void syscall_tsc_to_ts_bridge(unsigned long tsc, void *ts);
+-unsigned long syscall_timespec_to_jiffy_bridge(const void *ts);
+-void syscall_ts_add_bridge(void *dst, const void *src);
+-void *syscall_find_process_bridge(int pid, void *lock_arg);
+-void syscall_process_unlock_bridge(void *proc, void *lock_arg);
++#endif
++void syscall_tsc_to_ts_bridge(unsigned long tsc, void *ts); unsigned long syscall_timespec_to_jiffy_bridge(const void *ts); void syscall_ts_add_bridge(void *dst, const void *src); void *syscall_find_process_bridge(int pid, void *lock_arg); void syscall_process_unlock_bridge(void *proc, void *lock_arg);
+ long syscall_do_prlimit64_bridge(int pid, int resource,
+ 		unsigned long new_limit_addr, unsigned long old_limit_addr);
+ int syscall_get_processor_id_bridge(void);
+@@ -4131,6 +4131,44 @@
+ 		struct syscall_response *res, int cpu, struct thread *thread);
+ #endif
+ 
++#ifdef MCKERNEL_RUST_F03_DO_SYSCALL_SUPPORTED
++#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
++#define F03_DO_LINE_OFFSET 23
++#else
++#define F03_DO_LINE_OFFSET 16
++#endif
++#ifndef MCKERNEL_RUST_SYSCALL_OFFLOAD
++#error "F03 supported do_syscall requires the actual Rust offload provider"
++#endif
++#ifndef PROFILE_ENABLE
++#error "F03 supported do_syscall requires the actual profiling configuration"
++#endif
++#ifdef ENABLE_TOFU
++#error "F03 supported do_syscall excludes optional ToFu post-reply handling"
++#endif
++#ifdef ENABLE_FUGAKU_HACKS
++#error "F03 supported do_syscall excludes the optional Fugaku profile"
++#endif
++extern long do_syscall(struct syscall_request *, int);
++const unsigned long f03_do_syscall_constants_v1[5] = {
++ __NR_exit_group, __NR_sched_setaffinity, IHK_SCD_REQ_THREAD_SPINNING,
++ IHK_OS_MONITOR_KERNEL_OFFLOAD, PROFILE_SYSCALL_MAX,
++};
++struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_do_syscall_debug_v1[6] = {
++ { .file=__FILE__, .func="do_syscall", .line=4155-F03_DO_LINE_OFFSET, .flags=DDEBUG_DEFAULT },
++ { .file=__FILE__, .func="do_syscall", .line=4189-F03_DO_LINE_OFFSET, .flags=DDEBUG_DEFAULT },
++ { .file=__FILE__, .func="do_syscall", .line=4197-F03_DO_LINE_OFFSET, .flags=DDEBUG_DEFAULT },
++ { .file=__FILE__, .func="do_syscall", .line=4369-F03_DO_LINE_OFFSET, .flags=DDEBUG_DEFAULT },
++ { .file=__FILE__, .func="do_syscall", .line=4416-F03_DO_LINE_OFFSET, .flags=DDEBUG_DEFAULT },
++ { .file=__FILE__, .func="do_syscall", .line=4428-F03_DO_LINE_OFFSET, .flags=DDEBUG_DEFAULT },
++};
++#undef F03_DO_LINE_OFFSET
++#else
++#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
++#line 4108
++#else
++#line 4117
++#endif
+ long do_syscall(struct syscall_request *req, int cpu)
+ {
+ 	struct syscall_response res;
+@@ -4434,6 +4472,12 @@
+ 	monitor->counter++;
+ 	return rc;
+ }
++#endif /* MCKERNEL_RUST_F03_DO_SYSCALL_SUPPORTED */
++#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
++#line 4411
++#else
++#line 4420
++#endif
+ 
+ #ifndef MCKERNEL_RUST_SYSCALL_OFFLOAD
+ long syscall_generic_forwarding(int n, ihk_mc_user_context_t *ctx)
+@@ -4684,11 +4728,11 @@
+ }
+ #endif
+ 
+-static void
+-ptrace_detach_kfree_bridge(void *ptr)
+-{
+-	kfree_tracked(ptr, __FILE__, __LINE__);
+-}
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_LEAF_CALLBACKS) && defined(__x86_64__) && defined(MCKERNEL_RUST_F03_PTRACE_KFREE_PROFILE_119)
++extern void ptrace_detach_kfree_bridge(void *ptr);
++#else
++static void ptrace_detach_kfree_bridge(void *ptr) { kfree_tracked(ptr, __FILE__, __LINE__); }
++#endif
+ 
+ #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ static void
+@@ -4720,6 +4764,14 @@
+ }
+ #endif
+ 
++#if defined(MCKERNEL_RUST_F03_LEAF_CALLBACKS) && defined(__x86_64__)
++extern long ptrace_detach_do_kill_bridge(void *current_thread, int pid, int tid, int sig, const void *info, int ptracecont);
++#else
++#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
++#line 4687
++#else
++#line 4696
++#endif
+ static long
+ ptrace_detach_do_kill_bridge(void *current_thread, int pid, int tid,
+ 		int sig, const void *info, int ptracecont)
+@@ -4727,12 +4779,18 @@
+ 	return do_kill((struct thread *)current_thread, pid, tid, sig,
+ 			(struct siginfo *)info, ptracecont);
+ }
+-
+-static void
+-ptrace_detach_wakeup_bridge(void *thread, int valid_states)
+-{
+-	sched_wakeup_thread((struct thread *)thread, valid_states);
+-}
++#endif
++#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
++#line 4694
++#else
++#line 4703
++#endif
++
++#if defined(MCKERNEL_RUST_F03_LEAF_CALLBACKS) && defined(__x86_64__)
++extern void ptrace_detach_wakeup_bridge(void *thread, int valid_states);
++#else
++static void ptrace_detach_wakeup_bridge(void *thread, int valid_states) { sched_wakeup_thread((struct thread *)thread, valid_states); }
++#endif
+ 
+ #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ static void
+@@ -4864,17 +4922,17 @@
+ 			(struct list_head *)head);
+ }
+ 
+-static int
+-wait_host_wait4_bridge(int pid, int options)
+-{
+-	struct syscall_request request IHK_DMA_ALIGN;
+-
+-	request.number = __NR_wait4;
+-	request.args[0] = pid;
+-	request.args[1] = 0;
+-	request.args[2] = options;
+-	return do_syscall(&request, ihk_mc_get_processor_id());
+-}
++#if defined(MCKERNEL_RUST_F03_REQUEST_CONSTRUCTORS)
++extern int wait_host_wait4_bridge(int pid, int options);
++#else
++static int wait_host_wait4_bridge(int pid, int options) { struct syscall_request request IHK_DMA_ALIGN; request.number = __NR_wait4; request.args[0] = pid; request.args[1] = 0; request.args[2] = options; return do_syscall(&request, ihk_mc_get_processor_id()); }
++#endif
++
++
++
++
++
++
+ 
+ #if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_WAIT_PROCESS_RELEASE)
+ extern void f03_wait_release_process(void *);
+@@ -5205,11 +5263,11 @@
+ }
+ 
+ #endif
+-static long
+-terminate_mcexec_do_syscall_bridge(struct syscall_request *request, int cpu)
+-{
+-	return do_syscall(request, cpu);
+-}
++#if defined(MCKERNEL_RUST_F03_LEAF_CALLBACKS) && defined(__x86_64__)
++extern long terminate_mcexec_do_syscall_bridge(struct syscall_request *request, int cpu);
++#else
++static long terminate_mcexec_do_syscall_bridge(struct syscall_request *request, int cpu) { return do_syscall(request, cpu); }
++#endif
+ 
+ #if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_ATOMIC_HELPERS) && defined(MCKERNEL_RUST_F03_TERMINATE_REFCOUNT)
+ extern void f03_terminate_host_refcount_set_v1(void *, int);
+@@ -5250,6 +5308,17 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_F03_TERMINATE_MCEXEC_WHOLE
++#if !defined(__x86_64__) || !defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) || !defined(MCKERNEL_RUST_ATOMIC_HELPERS) || !defined(MCKERNEL_RUST_F03_TERMINATE_CMPXCHG)
++#error "terminate_mcexec candidate needs x86 and existing policy/atomic providers"
++#endif
++extern void terminate_mcexec(int rc, int sig);
++#else
++#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
++#line 5180
++#else
++#line 5189
++#endif
+ void terminate_mcexec(int rc, int sig)
+ {
+ 	struct thread *mythread = get_this_cpu_local_var()->current;
+@@ -5263,6 +5332,12 @@
+ 			terminate_mcexec_cmpxchg_bridge,
+ 			terminate_mcexec_do_syscall_bridge);
+ }
++#endif
++#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
++#line 5193
++#else
++#line 5202
++#endif
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ extern unsigned long f03_sync_child_perf_read_v2(int);
+@@ -5309,6 +5384,17 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_F03_TERMINATE_WHOLE
++#if !defined(__x86_64__) || !defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) || !defined(MCKERNEL_RUST_F03_TERMINATE_PROFILE_119) || defined(ENABLE_TOFU) || defined(DCFA_KMOD)
++#error "terminate whole candidate requires supported non-Tofu/non-DCFA x86 policy profile"
++#endif
++extern void terminate(int rc, int sig);
++#else
++#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
++#line 5239
++#else
++#line 5248
++#endif
+ void terminate(int rc, int sig)
+ {
+ 	struct resource_set *resource_set = get_this_cpu_local_var()->resource_set;
+@@ -5598,6 +5684,12 @@
+ 	kprintf("%s: ERROR: returned from terminate() -> schedule()\n", __FUNCTION__);
+ 	panic("panic");
+ }
++#endif
++#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
++#line 5528
++#else
++#line 5537
++#endif
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ extern int __process_cleanup_fd(struct process *, int);
+@@ -5687,6 +5779,17 @@
+ #endif
+ 
+ 
++#ifdef MCKERNEL_RUST_F03_TERMINATE_HOST_WHOLE
++#if !defined(__x86_64__) || !defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) || !defined(MCKERNEL_RUST_ATOMIC_HELPERS) || !defined(MCKERNEL_RUST_F03_TERMINATE_REFCOUNT)
++#error "terminate_host candidate requires x86 policy and refcount providers"
++#endif
++extern void terminate_host(int pid, struct thread *thread);
++#else
++#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
++#line 5617
++#else
++#line 5626
++#endif
+ void
+ terminate_host(int pid, struct thread *thread)
+ {
+@@ -5701,6 +5804,12 @@
+ 			wait_thread_release_bridge, wait_process_release_bridge,
+ 			syscall_do_kill_thread_bridge);
+ }
++#endif
++#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
++#line 5631
++#else
++#line 5640
++#endif
+ 
+ #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ static int syscall_ikc_send_bridge(void *channel, void *packet, int opt)
+@@ -5723,6 +5832,14 @@
+ }
+ #endif
+ 
++#if defined(MCKERNEL_RUST_F03_INTERRUPT_ARITY3_DEFINED) && defined(MCKERNEL_RUST_F03_INTERRUPT_ORIGIN_PROFILE_119) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(__x86_64__)
++extern void interrupt_syscall(struct thread *thread, int sig);
++#else
++#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
++#line 5653
++#else
++#line 5662
++#endif
+ void
+ interrupt_syscall(struct thread *thread, int sig)
+ {
+@@ -5741,26 +5858,32 @@
+ 	}
+ 	return;
+ }
+-
+-void
+-exit_group_log_bridge(int pid)
+-{
+-	dkprintf("sys_exit_group,pid=%d\n", pid);
+-}
+-
+-void
+-exit_group_terminate_bridge(int status, int group)
+-{
+-	terminate(status, group);
+-}
+-
+-int
+-exit_group_current_pid_bridge(void)
+-{
+-	struct thread *thread = get_this_cpu_local_var()->current;
+-
+-	return thread->proc->pid;
+-}
++#endif
++#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
++#line 5671
++#else
++#line 5680
++#endif
++
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++extern void exit_group_log_bridge(int pid);
++#else
++void exit_group_log_bridge(int pid) { dkprintf("sys_exit_group,pid=%d\n", pid); }
++#endif
++
++#if defined(MCKERNEL_RUST_F03_LEAF_CALLBACKS) && defined(__x86_64__)
++extern void exit_group_terminate_bridge(int status, int group);
++#else
++void exit_group_terminate_bridge(int status, int group) { terminate(status, group); }
++#endif
++
++#if defined(MCKERNEL_RUST_F03_LEAF_CALLBACKS) && defined(__x86_64__)
++extern int exit_group_current_pid_bridge(void);
++#else
++int exit_group_current_pid_bridge(void) { struct thread *thread = get_this_cpu_local_var()->current; return thread->proc->pid; }
++
++
++#endif
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ long sys_exit_group(int n, ihk_mc_user_context_t *ctx);
+@@ -5775,11 +5898,11 @@
+ }
+ #endif
+ 
+-static void
+-clear_host_pte_log_bridge(long error)
+-{
+-	kprintf("clear_host_pte failed. %ld\n", error);
+-}
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++extern void clear_host_pte_log_bridge(long error);
++#else
++static void clear_host_pte_log_bridge(long error) { kprintf("clear_host_pte failed. %ld\n", error); }
++#endif
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ /* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
+@@ -5888,18 +6011,18 @@
+ }
+ #endif
+ 
+-static long
+-do_munmap_clear_host_bridge(unsigned long addr, size_t len, int holding_lock)
+-{
+-	return clear_host_pte(addr, len, holding_lock);
+-}
+-
+-static int
+-do_munmap_set_host_bridge(unsigned long addr, size_t len, int prot,
+-		int holding_lock)
+-{
+-	return set_host_vma(addr, len, prot, holding_lock);
+-}
++#if defined(MCKERNEL_RUST_F03_LEAF_CALLBACKS) && defined(__x86_64__)
++extern long do_munmap_clear_host_bridge(unsigned long addr, size_t len, int holding_lock);
++#else
++static long do_munmap_clear_host_bridge(unsigned long addr, size_t len, int holding_lock) { return clear_host_pte(addr, len, holding_lock); }
++#endif
++
++#if defined(MCKERNEL_RUST_F03_LEAF_CALLBACKS) && defined(__x86_64__)
++extern int mprotect_set_host_vma_bridge(unsigned long start, size_t len, int prot, int holding_lock);
++#define do_munmap_set_host_bridge mprotect_set_host_vma_bridge
++#else
++static int do_munmap_set_host_bridge(unsigned long addr, size_t len, int prot, int holding_lock) { return set_host_vma(addr, len, prot, holding_lock); }
++#endif
+ 
+ #if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_UNMAP_FINISH)
+ extern void f03_unmap_finish(void);
+@@ -6937,11 +7060,11 @@
+ }
+ #endif
+ 
+-static int mprotect_set_host_vma_bridge(unsigned long start, size_t len,
+-		int prot, int holding_lock)
+-{
+-	return set_host_vma(start, len, prot, holding_lock);
+-}
++#if defined(MCKERNEL_RUST_F03_LEAF_CALLBACKS) && defined(__x86_64__)
++extern int mprotect_set_host_vma_bridge(unsigned long start, size_t len, int prot, int holding_lock);
++#else
++static int mprotect_set_host_vma_bridge(unsigned long start, size_t len, int prot, int holding_lock) { return set_host_vma(start, len, prot, holding_lock); }
++#endif
+ 
+ #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ void mprotect_flush_nfo_bridge(void)
+@@ -7187,10 +7310,10 @@
+ 		syscall_get_cpu_fn_t get_cpu_fn,
+ 		syscall_request_call_fn_t syscall_fn, void (*log_fn)(int));
+ 
+-static void syscall_settid_log_bridge(int ret)
+-{
+-	kprintf("settid: WARNING: do_syscall returns %d\n", ret);
+-}
++extern void syscall_settid_log_bridge(int ret);
++
++
++
+ #endif
+ 
+ static int settid(struct thread *thread, int nr_tids, int *tids)
+@@ -7420,36 +7543,36 @@
+ }
+ #endif
+ 
+-static void
+-ptrace_report_clone_noirq_lock_bridge(unsigned long lock_addr, void *node)
+-{
+-	mcs_rwlock_writer_lock_noirq((struct mcs_rwlock_lock *)lock_addr,
+-			(struct mcs_rwlock_node *)node);
+-}
+-
+-static void
+-ptrace_report_clone_noirq_unlock_bridge(unsigned long lock_addr, void *node)
+-{
+-	mcs_rwlock_writer_unlock_noirq((struct mcs_rwlock_lock *)lock_addr,
+-			(struct mcs_rwlock_node *)node);
+-}
+-
+-static void
+-ptrace_report_clone_log_bridge(int event, int value, int result)
+-{
+-	if (event == PTRACE_REPORT_CLONE_LOG_ENTER) {
+-		dkprintf("ptrace_report_clone,enter\n");
+-	}
+-	else if (event == PTRACE_REPORT_CLONE_LOG_KILL_SIGCHLD) {
+-		(void)value;
+-		dkprintf("ptrace_report_clone,kill SIGCHLD\n");
+-	}
+-	else if (event == PTRACE_REPORT_CLONE_LOG_DO_KILL_FAILED) {
+-		(void)value;
+-		(void)result;
+-		dkprintf("ptrace_report_clone,do_kill failed\n");
+-	}
+-}
++#if defined(MCKERNEL_RUST_F03_PTRACE_CLONE_NOIRQ)
++extern void ptrace_report_clone_noirq_lock_bridge(unsigned long lock_addr, void *node);
++extern void ptrace_report_clone_noirq_unlock_bridge(unsigned long lock_addr, void *node);
++#else
++static void ptrace_report_clone_noirq_lock_bridge(unsigned long lock_addr, void *node) { mcs_rwlock_writer_lock_noirq((struct mcs_rwlock_lock *)lock_addr, (struct mcs_rwlock_node *)node); }
++static void ptrace_report_clone_noirq_unlock_bridge(unsigned long lock_addr, void *node) { mcs_rwlock_writer_unlock_noirq((struct mcs_rwlock_lock *)lock_addr, (struct mcs_rwlock_node *)node); }
++
++
++
++
++
++
++#endif
++
++extern void ptrace_report_clone_log_bridge(int event, int value, int result);
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
+ #endif
+ 
+ #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+@@ -7690,7 +7813,17 @@
+ extern long f03_execveat_finish_switch_v1(struct thread *, long);
+ #endif
+ 
+-static int do_execveat(ihk_mc_user_context_t *ctx, int dirfd,
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_EXECVEAT_BRIDGE)
++int
++#else
++static int
++#endif
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++#line 7528
++#else
++#line 7537
++#endif
++do_execveat(ihk_mc_user_context_t *ctx, int dirfd,
+ 		const char *filename, char **argv, char **envp, int flags)
+ {
+ 	int error;
+@@ -7930,6 +8063,10 @@
+ }
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++#ifdef MCKERNEL_RUST_F03_EXECVEAT_BRIDGE
++extern int syscall_execveat_bridge(void *ctx, int dirfd, const char *filename,
++		char **argv, char **envp, int flags);
++#else
+ int
+ syscall_execveat_bridge(void *ctx, int dirfd, const char *filename,
+ 		char **argv, char **envp, int flags)
+@@ -7937,7 +8074,8 @@
+ 	return do_execveat((ihk_mc_user_context_t *)ctx, dirfd, filename,
+ 			argv, envp, flags);
+ }
+-
++#endif
++#line 7779
+ long sys_execve(int n, ihk_mc_user_context_t *ctx);
+ #else
+ #line 7705
+@@ -19777,13 +19915,15 @@
+ }
+ #endif
+ 
++#if defined(MCKERNEL_RUST_F03_CREDENTIAL_REFRESH_EXPERIMENTAL)
++extern void do_setresuid(void); extern void do_setresgid(void);
++#else
+ void
+ do_setresuid()
+ {
+ 	int	_buf[16];
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ 	struct thread *thread = get_this_cpu_local_var()->current;
+-
+ 	(void)syscall_refresh_cred_fields_body_result(thread, _buf,
+ 			__builtin_offsetof(struct thread, proc),
+ 			__builtin_offsetof(struct process, ruid),
+@@ -19795,16 +19935,13 @@
+ 	int	*buf;
+ 	struct thread *thread = get_this_cpu_local_var()->current;
+ 	struct process *proc = thread->proc;
+-
+ 	buf = getcred(_buf);
+-
+ 	proc->ruid = buf[0];
+ 	proc->euid = buf[1];
+ 	proc->suid = buf[2];
+ 	proc->fsuid = buf[3];
+ #endif
+ }
+-
+ void
+ do_setresgid()
+ {
+@@ -19832,6 +19969,7 @@
+ 	proc->fsgid = buf[7];
+ #endif
+ }
++#endif
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ long sys_setresuid(int n, ihk_mc_user_context_t *ctx);
+@@ -19980,14 +20118,14 @@
+ }
+ #endif
+ 
+-long
+-syscall_forward_rt_sigprocmask_bridge(unsigned long sigmask)
+-{
+-	ihk_mc_user_context_t ctx0;
+-
+-	ihk_mc_syscall_set_arg0(&ctx0, sigmask);
+-	return syscall_generic_forwarding(__NR_rt_sigprocmask, &ctx0);
+-}
++#if defined(MCKERNEL_RUST_F03_SIGNAL_FORWARD_EXPERIMENTAL)
++extern long syscall_forward_rt_sigprocmask_bridge(unsigned long sigmask);
++#else
++long syscall_forward_rt_sigprocmask_bridge(unsigned long sigmask) { ihk_mc_user_context_t ctx0;  ihk_mc_syscall_set_arg0(&ctx0, sigmask); return syscall_generic_forwarding(__NR_rt_sigprocmask, &ctx0); }
++#endif
++
++
++
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ long sys_getresuid(int n, ihk_mc_user_context_t *ctx);
+@@ -20091,18 +20229,18 @@
+ #endif
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+-long
+-syscall_forward_sigaction_update_bridge(int sig, const void *actp)
+-{
+-	const struct k_sigaction *act = actp;
+-	ihk_mc_user_context_t ctx0;
+-
+-	ihk_mc_syscall_set_arg0(&ctx0, sig);
+-	ihk_mc_syscall_set_arg1(&ctx0,
+-			(unsigned long)act->sa.sa_handler);
+-	ihk_mc_syscall_set_arg2(&ctx0, act->sa.sa_flags);
+-	return syscall_generic_forwarding(__NR_rt_sigaction, &ctx0);
+-}
++#if defined(MCKERNEL_RUST_F03_SIGNAL_FORWARD_EXPERIMENTAL)
++extern long syscall_forward_sigaction_update_bridge(int sig, const void *actp);
++#else
++long syscall_forward_sigaction_update_bridge(int sig, const void *actp) { const struct k_sigaction *act = actp; ihk_mc_user_context_t ctx0;  ihk_mc_syscall_set_arg0(&ctx0, sig); ihk_mc_syscall_set_arg1(&ctx0, (unsigned long)act->sa.sa_handler); ihk_mc_syscall_set_arg2(&ctx0, act->sa.sa_flags); return syscall_generic_forwarding(__NR_rt_sigaction, &ctx0); }
++#endif
++
++
++
++
++
++
++
+ 
+ int do_sigaction(int sig, struct k_sigaction *act, struct k_sigaction *oact);
+ #else
+@@ -20411,20 +20549,20 @@
+ }
+ #endif
+ 
+-static long
+-syscall_forward_context_bridge(int syscall_nr, void *ctx)
+-{
+-	return syscall_generic_forwarding(syscall_nr,
+-			(ihk_mc_user_context_t *)ctx);
+-}
+-
++#if !defined(MCKERNEL_RUST_F03_CONTEXT_FORWARD_PAIR)
++static long syscall_forward_context_bridge(int syscall_nr, void *ctx) { return syscall_generic_forwarding(syscall_nr, (ihk_mc_user_context_t *)ctx); }
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+-long
+-syscall_policy_forward_context_bridge(int syscall_nr, void *ctx)
+-{
+-	return syscall_forward_context_bridge(syscall_nr, ctx);
+-}
+-#endif
++long syscall_policy_forward_context_bridge(int syscall_nr, void *ctx) { return syscall_forward_context_bridge(syscall_nr, ctx); }
++#endif
++#endif
++
++
++
++
++
++
++
++
+ 
+ #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ long
+@@ -21445,11 +21583,11 @@
+ #line 21113
+ 
+ 
+-static long
+-perf_event_open_do_syscall_bridge(struct syscall_request *request, int cpu)
+-{
+-	return do_syscall(request, cpu);
+-}
++#if defined(MCKERNEL_RUST_F03_LEAF_CALLBACKS) && defined(__x86_64__)
++extern long perf_event_open_do_syscall_bridge(struct syscall_request *request, int cpu);
++#else
++static long perf_event_open_do_syscall_bridge(struct syscall_request *request, int cpu) { return do_syscall(request, cpu); }
++#endif
+ #endif /*ENABLE_PERF*/
+ #ifdef ENABLE_PERF
+ #line 21118
+@@ -21890,14 +22028,13 @@
+ #line 21470
+ 
+ 
+-long sys_perf_event_open(int n, ihk_mc_user_context_t *ctx)
+-{
+-	struct syscall_request request IHK_DMA_ALIGN;
+-	struct thread *thread = get_this_cpu_local_var()->current;
+-	struct process *proc = thread->proc;
++#if defined(MCKERNEL_RUST_F03_PERF_ENTRY_EXPERIMENTAL)
++extern long sys_perf_event_open(int n, ihk_mc_user_context_t *ctx);
++#else
++long sys_perf_event_open(int n, ihk_mc_user_context_t *ctx) {
++	struct syscall_request request IHK_DMA_ALIGN; struct thread *thread = get_this_cpu_local_var()->current; struct process *proc = thread->proc;
+ 	struct perf_event_attr *arg0 = (void *)ihk_mc_syscall_arg0(ctx);
+-	int pid = ihk_mc_syscall_arg1(ctx);
+-	int cpu = ihk_mc_syscall_arg2(ctx);
++	int pid = ihk_mc_syscall_arg1(ctx); int cpu = ihk_mc_syscall_arg2(ctx);
+ 	int group_fd = ihk_mc_syscall_arg3(ctx);
+ 	unsigned long flags = ihk_mc_syscall_arg4(ctx);
+ 	struct perf_event_attr attr_user;
+@@ -21947,6 +22084,7 @@
+ 			syscall_mckfd_lock_bridge,
+ 			syscall_mckfd_unlock_bridge);
+ }
++#endif
+ #endif /* ENABLE_PERF */
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+@@ -24878,6 +25016,10 @@
+ #endif
+ #line 24424
+ 
++#if defined(MCKERNEL_RUST_F03_PTRACE_WAKEUP_LOG_DEFINED) && defined(MCKERNEL_RUST_F03_PTRACE_WAKEUP_LOG_PROFILE_119) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(__x86_64__)
++extern void ptrace_wakeup_log_bridge(int event, int value, int result);
++#else
++#line 24425
+ static void
+ ptrace_wakeup_log_bridge(int event, int value, int result)
+ {
+@@ -24886,6 +25028,8 @@
+ 				value, result);
+ 	}
+ }
++#endif
++#line 24433
+ 
+ #if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PTRACE_ENTRY)
+ extern int ptrace_wakeup_clear_saved_bridge(unsigned long, unsigned long);
+@@ -24913,12 +25057,12 @@
+ #endif
+ #line 24447
+ 
+-static void
+-ptrace_wakeup_update_lock_bridge(unsigned long lock_addr, void *node)
+-{
+-	mcs_rwlock_writer_lock((struct mcs_rwlock_lock *)lock_addr,
+-			(struct mcs_rwlock_node_irqsave *)node);
+-}
++#if defined(MCKERNEL_RUST_F03_WAKEUP_WRITER_PAIR)
++extern void ptrace_wakeup_update_lock_bridge(unsigned long lock_addr, void *node);
++#else
++static void ptrace_wakeup_update_lock_bridge(unsigned long lock_addr, void *node) { mcs_rwlock_writer_lock((struct mcs_rwlock_lock *)lock_addr, (struct mcs_rwlock_node_irqsave *)node); }
++
++#endif
+ 
+ #if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PTRACE_ENTRY)
+ extern int ptrace_wakeup_trace_syscall_bridge(unsigned long, unsigned long, int);
+@@ -24934,12 +25078,12 @@
+ #endif
+ #line 24462
+ 
+-static void
+-ptrace_wakeup_update_unlock_bridge(unsigned long lock_addr, void *node)
+-{
+-	mcs_rwlock_writer_unlock((struct mcs_rwlock_lock *)lock_addr,
+-			(struct mcs_rwlock_node_irqsave *)node);
+-}
++#if defined(MCKERNEL_RUST_F03_WAKEUP_WRITER_PAIR)
++extern void ptrace_wakeup_update_unlock_bridge(unsigned long lock_addr, void *node);
++#else
++static void ptrace_wakeup_update_unlock_bridge(unsigned long lock_addr, void *node) { mcs_rwlock_writer_unlock((struct mcs_rwlock_lock *)lock_addr, (struct mcs_rwlock_node_irqsave *)node); }
++
++#endif
+ 
+ #if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PTRACE_ENTRY)
+ extern unsigned long ptrace_wakeup_pending_take_bridge(unsigned long,
+@@ -26992,48 +27136,48 @@
+ }
+ #endif
+ 
+-static long
+-syscall_do_syscall2_bridge(int syscall_nr, unsigned long arg0,
+-		unsigned long arg1)
+-{
+-	struct syscall_request request IHK_DMA_ALIGN;
+-
+-	request.number = syscall_nr;
+-	request.args[0] = arg0;
+-	request.args[1] = arg1;
+-	return do_syscall(&request, ihk_mc_get_processor_id());
+-}
+-
++#ifndef MCKERNEL_RUST_F03_REQUEST_CONSTRUCTORS
++static long syscall_do_syscall2_bridge(int syscall_nr, unsigned long arg0, unsigned long arg1) { struct syscall_request request IHK_DMA_ALIGN; request.number = syscall_nr; request.args[0] = arg0; request.args[1] = arg1; return do_syscall(&request, ihk_mc_get_processor_id()); }
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+-long
+-syscall_policy_do_syscall2_bridge(int syscall_nr, unsigned long arg0,
+-		unsigned long arg1)
+-{
+-	return syscall_do_syscall2_bridge(syscall_nr, arg0, arg1);
+-}
+-#endif
+-
+-static long
+-syscall_do_syscall3_bridge(int syscall_nr, unsigned long arg0,
+-		unsigned long arg1, unsigned long arg2)
+-{
+-	struct syscall_request request IHK_DMA_ALIGN;
+-
+-	request.number = syscall_nr;
+-	request.args[0] = arg0;
+-	request.args[1] = arg1;
+-	request.args[2] = arg2;
+-	return do_syscall(&request, ihk_mc_get_processor_id());
+-}
+-
++long syscall_policy_do_syscall2_bridge(int syscall_nr, unsigned long arg0, unsigned long arg1) { return syscall_do_syscall2_bridge(syscall_nr, arg0, arg1); }
++#endif
++static long syscall_do_syscall3_bridge(int syscall_nr, unsigned long arg0, unsigned long arg1, unsigned long arg2) { struct syscall_request request IHK_DMA_ALIGN; request.number = syscall_nr; request.args[0] = arg0; request.args[1] = arg1; request.args[2] = arg2; return do_syscall(&request, ihk_mc_get_processor_id()); }
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+-long
+-syscall_policy_do_syscall3_bridge(int syscall_nr, unsigned long arg0,
+-		unsigned long arg1, unsigned long arg2)
+-{
+-	return syscall_do_syscall3_bridge(syscall_nr, arg0, arg1, arg2);
+-}
+-#endif
++long syscall_policy_do_syscall3_bridge(int syscall_nr, unsigned long arg0, unsigned long arg1, unsigned long arg2) { return syscall_do_syscall3_bridge(syscall_nr, arg0, arg1, arg2); }
++#endif
++#endif
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
+ 
+ #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ static long
+@@ -28872,6 +29016,59 @@
+ #line 28297
+ 
+ 
++#ifdef MCKERNEL_RUST_F03_UTIL_THREAD_WHOLE
++#ifndef MCKERNEL_RUST_F03_UTIL_REQUEST_ARG5_ZERO
++#error F03_util_thread_requires_separate_reviewed_request_arg5_zero_selection
++#endif
++struct f03_util_thread_layout {
++ size_t context_size;
++ size_t info_size;
++ size_t context;
++ size_t refill_tid;
++ size_t info_thread_va;
++ size_t info_response_pa;
++ size_t info_channel_pa;
++ size_t info_tid;
++ size_t info_cpu;
++ size_t info_status_pa;
++ size_t info_sleep_lock_pa;
++ size_t info_sleep_pa;
++ size_t info_vm_pa;
++ size_t info_futex_q_pa;
++ size_t info_idle_halt;
++ size_t info_futex_queue_pa;
++};
++const struct f03_util_thread_layout f03_util_thread_layout_v1 = {
++ .context_size = sizeof(struct uti_ctx),
++ .info_size = sizeof(struct uti_info),
++ .context = __builtin_offsetof(struct uti_ctx,ctx),
++ .refill_tid = __builtin_offsetof(struct uti_ctx,uti_refill_tid),
++ .info_thread_va = __builtin_offsetof(struct uti_info,thread_va),
++ .info_response_pa = __builtin_offsetof(struct uti_info,uti_futex_resp_pa),
++ .info_channel_pa = __builtin_offsetof(struct uti_info,ikc2linux_pa),
++ .info_tid = __builtin_offsetof(struct uti_info,tid),
++ .info_cpu = __builtin_offsetof(struct uti_info,cpu),
++ .info_status_pa = __builtin_offsetof(struct uti_info,status_pa),
++ .info_sleep_lock_pa = __builtin_offsetof(struct uti_info,spin_sleep_lock_pa),
++ .info_sleep_pa = __builtin_offsetof(struct uti_info,spin_sleep_pa),
++ .info_vm_pa = __builtin_offsetof(struct uti_info,vm_pa),
++ .info_futex_q_pa = __builtin_offsetof(struct uti_info,futex_q_pa),
++ .info_idle_halt = __builtin_offsetof(struct uti_info,mc_idle_halt),
++ .info_futex_queue_pa = __builtin_offsetof(struct uti_info,futex_queue_pa),
++};
++const unsigned long f03_util_thread_constants_v1[5] = { IHK_MC_AP_NOWAIT, __NR_sched_setaffinity, UTI_STATE_PROLOGUE, UTI_STATE_RUNNING_IN_LINUX, UTI_STATE_EPILOGUE };
++struct f03_util_thread_origins { const char *file; int context_alloc,info_alloc,context_free,info_free,context_out,info_out; };
++const struct f03_util_thread_origins f03_util_thread_origins_v1 = { __FILE__, 28314,28323,28369,28372,28395,28396 };
++unsigned long *const f03_util_thread_descriptor_slot_v1 = &uti_desc;
++struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_util_thread_debug_v1[4] = {
++ { .file=__FILE__, .func="util_thread", .line=28359, .flags=DDEBUG_DEFAULT },
++ { .file=__FILE__, .func="util_thread", .line=28367, .flags=DDEBUG_DEFAULT },
++ { .file=__FILE__, .func="util_thread", .line=28377, .flags=DDEBUG_DEFAULT },
++ { .file=__FILE__, .func="util_thread", .line=28382, .flags=DDEBUG_DEFAULT },
++};
++extern int util_thread(struct uti_attr *);
++#else
++#line 28299
+ int util_thread(struct uti_attr *arg)
+ {
+ 	struct uti_ctx *rctx = NULL;
+@@ -28973,6 +29170,8 @@
+ 
+ 	return rc;
+ }
++#endif /* MCKERNEL_RUST_F03_UTIL_THREAD_WHOLE */
++#line 28400
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ extern long syscall_util_thread_bridge(void *);
+@@ -29015,12 +29214,12 @@
+ #endif
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+-void
+-syscall_util_indicate_clone_disabled_bridge(void)
+-{
+-	kprintf("%s: error: --enable-uti mcexec option not specified\n",
+-			"sys_util_indicate_clone");
+-}
++extern void syscall_util_indicate_clone_disabled_bridge(void);
++
++
++
++
++
+ 
+ long sys_util_indicate_clone(int n, ihk_mc_user_context_t *ctx);
+ #else
+@@ -29805,3 +30004,105 @@
+ 	__check_signal(rc, regs0, num, 1);
+ }
+ #endif
++
++
++/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
++#if defined(ENABLE_PERF) && defined(MCKERNEL_RUST_F03_PERF_ENTRY_EXPERIMENTAL)
++_Static_assert(sizeof(struct perf_event_attr) == 104 && _Alignof(struct perf_event_attr) == 8, "perf attribute ABI");
++_Static_assert(__builtin_offsetof(struct perf_event_attr, type) == 0 && __builtin_offsetof(struct perf_event_attr, read_format) == 32 && __builtin_offsetof(struct perf_event_attr, sample_period) == 16, "perf field ABI");
++_Static_assert(sizeof(struct syscall_request) == 72 && _Alignof(struct syscall_request) == 8, "request ABI");
++_Static_assert(sizeof(unsigned long) == 8 && sizeof(void (*)(void)) == 8, "binding scalar and callback ABI");
++struct f03_perf_entry_binding_v1_type {
++	unsigned long attr_size;
++	unsigned long attr_type;
++	unsigned long attr_read_format;
++	unsigned long attr_sample_period;
++	unsigned long raw_type;
++	unsigned long hardware_type;
++	unsigned long cache_type;
++	unsigned long unsupported_format;
++	unsigned long sign_bit;
++	unsigned long syscall_number;
++	unsigned long mckfd_size;
++	unsigned long allocation_flags;
++	unsigned long event_pid;
++	unsigned long event_counter_id;
++	unsigned long proc_mckfd;
++	unsigned long mckfd_next;
++	unsigned long mckfd_fd;
++	unsigned long mckfd_data;
++	unsigned long event_group_leader;
++	unsigned long event_sibling_list;
++	unsigned long event_group_entry;
++	unsigned long event_nr_siblings;
++	unsigned long event_pmc_status;
++	unsigned long thread_pmc_alloc_map;
++	unsigned long proc_mckfd_lock;
++	unsigned long mckfd_sig_no;
++	unsigned long mckfd_read_cb;
++	unsigned long mckfd_ioctl_cb;
++	unsigned long mckfd_mmap_cb;
++	unsigned long mckfd_close_cb;
++	unsigned long mckfd_fcntl_cb;
++	__typeof__(&syscall_copy_from_user_bridge) copy_from;
++	__typeof__(&perf_event_open_attr_freq_bridge) attr_freq;
++	__typeof__(&perf_event_open_alloc_event_bridge) event_alloc;
++	__typeof__(&perf_event_open_counter_alloc_bridge) counter_alloc;
++	__typeof__(&perf_event_open_do_syscall_bridge) syscall;
++	__typeof__(&perf_event_alloc_kmalloc_bridge) allocate;
++	__typeof__(&perf_read) read;
++	__typeof__(&perf_ioctl) ioctl;
++	__typeof__(&perf_mmap) mmap;
++	__typeof__(&perf_close) close;
++	__typeof__(&perf_fcntl) fcntl;
++	__typeof__(&syscall_mckfd_lock_bridge) lock;
++	__typeof__(&syscall_mckfd_unlock_bridge) unlock;
++};
++_Static_assert(sizeof(struct f03_perf_entry_binding_v1_type) == 352 && _Alignof(struct f03_perf_entry_binding_v1_type) == 8, "binding layout ABI");
++const struct f03_perf_entry_binding_v1_type f03_perf_entry_binding_v1 = {
++	.attr_size = sizeof(struct perf_event_attr),
++	.attr_type = __builtin_offsetof(struct perf_event_attr, type),
++	.attr_read_format = __builtin_offsetof(struct perf_event_attr, read_format),
++	.attr_sample_period = __builtin_offsetof(struct perf_event_attr, sample_period),
++	.raw_type = PERF_TYPE_RAW,
++	.hardware_type = PERF_TYPE_HARDWARE,
++	.cache_type = PERF_TYPE_HW_CACHE,
++	.unsupported_format = PERF_FORMAT_TOTAL_TIME_ENABLED | PERF_FORMAT_TOTAL_TIME_RUNNING | PERF_FORMAT_ID,
++	.sign_bit = 1UL << 63,
++	.syscall_number = __NR_perf_event_open,
++	.mckfd_size = sizeof(struct mckfd),
++	.allocation_flags = IHK_MC_AP_NOWAIT,
++	.event_pid = __builtin_offsetof(struct mc_perf_event, pid),
++	.event_counter_id = __builtin_offsetof(struct mc_perf_event, counter_id),
++	.proc_mckfd = __builtin_offsetof(struct process, mckfd),
++	.mckfd_next = __builtin_offsetof(struct mckfd, next),
++	.mckfd_fd = __builtin_offsetof(struct mckfd, fd),
++	.mckfd_data = __builtin_offsetof(struct mckfd, data),
++	.event_group_leader = __builtin_offsetof(struct mc_perf_event, group_leader),
++	.event_sibling_list = __builtin_offsetof(struct mc_perf_event, sibling_list),
++	.event_group_entry = __builtin_offsetof(struct mc_perf_event, group_entry),
++	.event_nr_siblings = __builtin_offsetof(struct mc_perf_event, nr_siblings),
++	.event_pmc_status = __builtin_offsetof(struct mc_perf_event, pmc_status),
++	.thread_pmc_alloc_map = __builtin_offsetof(struct thread, pmc_alloc_map),
++	.proc_mckfd_lock = __builtin_offsetof(struct process, mckfd_lock),
++	.mckfd_sig_no = __builtin_offsetof(struct mckfd, sig_no),
++	.mckfd_read_cb = __builtin_offsetof(struct mckfd, read_cb),
++	.mckfd_ioctl_cb = __builtin_offsetof(struct mckfd, ioctl_cb),
++	.mckfd_mmap_cb = __builtin_offsetof(struct mckfd, mmap_cb),
++	.mckfd_close_cb = __builtin_offsetof(struct mckfd, close_cb),
++	.mckfd_fcntl_cb = __builtin_offsetof(struct mckfd, fcntl_cb),
++	.copy_from = syscall_copy_from_user_bridge,
++	.attr_freq = perf_event_open_attr_freq_bridge,
++	.event_alloc = perf_event_open_alloc_event_bridge,
++	.counter_alloc = perf_event_open_counter_alloc_bridge,
++	.syscall = perf_event_open_do_syscall_bridge,
++	.allocate = perf_event_alloc_kmalloc_bridge,
++	.read = perf_read,
++	.ioctl = perf_ioctl,
++	.mmap = perf_mmap,
++	.close = perf_close,
++	.fcntl = perf_fcntl,
++	.lock = syscall_mckfd_lock_bridge,
++	.unlock = syscall_mckfd_unlock_bridge,
++};
++#endif
+--- a/kernel/rust/lib.rs
++++ b/kernel/rust/lib.rs
+@@ -34,6 +34,8 @@
+ mod listeners;
+ mod llist;
+ mod lock_helpers;
++#[cfg(all(f03_ptrace_clone_noirq_candidate, target_arch = "x86_64"))]
++mod ptrace_clone_noirq;
+ mod mem_helpers;
+ mod mikc;
+ mod numparse;
+@@ -148,3 +150,7 @@
+ mod f06_prctl_log_storage;
+ #[cfg(f06_vdso_map_log_candidate)]
+ mod f06_vdso_map_log;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(all(f03_wakeup_writer_pair_candidate, target_arch = "x86_64"))]
++mod f03_wakeup_writer_pair;
+--- /dev/null
++++ b/kernel/rust/syscall_settid_logger.rs
+@@ -0,0 +1,16 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Private uncompiled successor for the existing settid warning callback.
++
++use super::{kprintf, CInt};
++
++/// Preserve the existing `void (*)(int)` callback and one warning per call.
++#[no_mangle]
++pub(super) extern "C" fn syscall_settid_log_bridge(ret: CInt) {
++    // SAFETY: the static C string is NUL-terminated and contains exactly one %d;
++    // CInt is the existing i32 C int ABI, so ret has the required variadic int
++    // promotion/type. No borrowed or mutable data crosses this call. kprintf is
++    // the same synchronous kernel logger used by the original C callback.
++    unsafe {
++        kprintf(c"settid: WARNING: do_syscall returns %d\n".as_ptr().cast(), ret);
++    }
++}
+--- /dev/null
++++ b/kernel/rust/syscall_clear_host_pte_logger.rs
+@@ -0,0 +1,16 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Private same-name successor for the clear_host_pte diagnostic callback.
++
++use super::{kprintf, CLong};
++
++/// Existing `void (*)(long)` callback; body-level nonzero gating stays upstream.
++#[no_mangle]
++pub(super) extern "C" fn clear_host_pte_log_bridge(error: CLong) {
++    // SAFETY: the immutable NUL-terminated format contains one %ld. CLong is
++    // the existing signed i64 C long ABI on the selected 64-bit compute target;
++    // error is passed unchanged as that exact variadic type. No pointer payload,
++    // allocation, retained reference or mutable logger state crosses this call.
++    unsafe {
++        kprintf(c"clear_host_pte failed. %ld\n".as_ptr().cast(), error);
++    }
++}
+--- /dev/null
++++ b/kernel/rust/syscall_exit_group_logger.rs
+@@ -0,0 +1,41 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Private candidate: both the callback and its original descriptor are Rust-owned.
++
++use core::mem::{align_of, offset_of, size_of};
++use core::ptr::{addr_of, read_volatile};
++use crate::debug::Ddebug;
++use super::{kprintf, CInt};
++
++const _: () = {
++    assert!(size_of::<Ddebug>() == 32);
++    assert!(align_of::<Ddebug>() == 8);
++    assert!(offset_of!(Ddebug, line_flags) == 24);
++};
++
++// Exactly one original af46 registry row, using the existing private F06 Rust
++// static pattern. Keep original image-lifetime storage and flag-update/exclusion
++// contract: no new reference aliases, locks or atomicity guarantees are added.
++#[used]
++#[link_section = "__verbose"]
++static mut EXIT_GROUP_DEBUG: Ddebug = Ddebug {
++    file: b"/src/kernel/syscall.c\0".as_ptr().cast(),
++    func: b"exit_group_log_bridge\0".as_ptr().cast(),
++    fmt: core::ptr::null(),
++    line_flags: 5678 | (0 << 24),
++};
++
++/// Existing void(int) callback, with the original nonzero dynamic-debug gate.
++#[no_mangle]
++pub(super) extern "C" fn exit_group_log_bridge(pid: CInt) {
++    // SAFETY: the private static has image lifetime and the existing Ddebug ABI.
++    // Read the same mutable high-byte flags once without retaining a reference
++    // over kprintf, under the unchanged debug-update/exclusion contract. Volatile
++    // retains the load; it supplies no new synchronization guarantee.
++    // The static NUL format has exactly one %d matched by unchanged CInt/i32.
++    unsafe {
++        let flags = read_volatile(addr_of!(EXIT_GROUP_DEBUG.line_flags)) >> 24;
++        if flags != 0 {
++            kprintf(c"sys_exit_group,pid=%d\n".as_ptr().cast(), pid);
++        }
++    }
++}
+--- /dev/null
++++ b/kernel/rust/syscall_ptrace_clone_logger.rs
+@@ -0,0 +1,74 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Private same-name callback and three Rust-owned original debug descriptors.
++use core::mem::{align_of, offset_of, size_of};
++use core::ptr::{addr_of, read_volatile};
++use crate::debug::Ddebug;
++use super::{kprintf, CInt, PTRACE_REPORT_CLONE_LOG_ENTER,
++    PTRACE_REPORT_CLONE_LOG_KILL_SIGCHLD, PTRACE_REPORT_CLONE_LOG_DO_KILL_FAILED};
++
++const _: () = {
++    assert!(size_of::<Ddebug>() == 32);
++    assert!(align_of::<Ddebug>() == 8);
++    assert!(offset_of!(Ddebug, line_flags) == 24);
++};
++
++// Private image-lifetime records reuse the existing Rust __verbose pattern.
++// Preserve original debug update/exclusion; volatile is not synchronization.
++#[used]
++#[link_section = "__verbose"]
++static mut CLONE_ENTER_DEBUG: Ddebug = Ddebug {
++    file: b"/src/kernel/syscall.c\0".as_ptr().cast(),
++    func: b"ptrace_report_clone_log_bridge\0".as_ptr().cast(),
++    fmt: core::ptr::null(), line_flags: 7279 | (0 << 24),
++};
++#[used]
++#[link_section = "__verbose"]
++static mut CLONE_KILL_DEBUG: Ddebug = Ddebug {
++    file: b"/src/kernel/syscall.c\0".as_ptr().cast(),
++    func: b"ptrace_report_clone_log_bridge\0".as_ptr().cast(),
++    fmt: core::ptr::null(), line_flags: 7283 | (0 << 24),
++};
++#[used]
++#[link_section = "__verbose"]
++static mut CLONE_FAILED_DEBUG: Ddebug = Ddebug {
++    file: b"/src/kernel/syscall.c\0".as_ptr().cast(),
++    func: b"ptrace_report_clone_log_bridge\0".as_ptr().cast(),
++    fmt: core::ptr::null(), line_flags: 7288 | (0 << 24),
++};
++
++/// # Safety
++/// The pointer is one of these live aligned records; original flag-update
++/// exclusion remains. No reference is retained across the eventual kprintf.
++unsafe fn enabled(descriptor: *const Ddebug) -> bool {
++    unsafe { read_volatile(addr_of!((*descriptor).line_flags)) >> 24 != 0 }
++}
++
++/// Existing void(int,int,int) callback; value/result were never format arguments.
++#[no_mangle]
++pub(super) extern "C" fn ptrace_report_clone_log_bridge(
++    event: CInt, _value: CInt, _result: CInt,
++) {
++    // SAFETY: only the matching image-lifetime descriptor is read; each format
++    // is static NUL-terminated with zero varargs. kprintf retains its existing
++    // CPU prefix; no extra CPU query/argument or body action is added.
++    unsafe {
++        match event {
++            PTRACE_REPORT_CLONE_LOG_ENTER => {
++                if enabled(addr_of!(CLONE_ENTER_DEBUG)) {
++                    kprintf(c"ptrace_report_clone,enter\n".as_ptr().cast());
++                }
++            }
++            PTRACE_REPORT_CLONE_LOG_KILL_SIGCHLD => {
++                if enabled(addr_of!(CLONE_KILL_DEBUG)) {
++                    kprintf(c"ptrace_report_clone,kill SIGCHLD\n".as_ptr().cast());
++                }
++            }
++            PTRACE_REPORT_CLONE_LOG_DO_KILL_FAILED => {
++                if enabled(addr_of!(CLONE_FAILED_DEBUG)) {
++                    kprintf(c"ptrace_report_clone,do_kill failed\n".as_ptr().cast());
++                }
++            }
++            _ => {}
++        }
++    }
++}
+--- /dev/null
++++ b/kernel/rust/ptrace_clone_noirq.rs
+@@ -0,0 +1,27 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! The x86 noirq ptrace clone callbacks delegate to the existing Rust lock pair.
++use core::ffi::c_void;
++use crate::abi::CULong;
++use crate::lock_helpers::{self, McsRwlockLock};
++
++/// # Safety
++/// `lock_addr` is the live, aligned selected x86 MCS rwlock supplied by the
++/// caller, and `node` is its live caller-owned node. Interrupt state and the
++/// surrounding critical section are owned by the caller. The matching unlock
++/// must receive the same lock and node after the protected operations.
++#[no_mangle]
++pub unsafe extern "C" fn ptrace_report_clone_noirq_lock_bridge(
++    lock_addr: CULong, node: *mut c_void,
++) {
++    lock_helpers::__mcs_rwlock_writer_lock_noirq(lock_addr as *mut McsRwlockLock, node);
++}
++
++/// # Safety
++/// The lock must be held by the matching noirq writer acquisition using this
++/// same live node. This call does not restore or otherwise alter IRQ flags.
++#[no_mangle]
++pub unsafe extern "C" fn ptrace_report_clone_noirq_unlock_bridge(
++    lock_addr: CULong, node: *mut c_void,
++) {
++    lock_helpers::__mcs_rwlock_writer_unlock_noirq(lock_addr as *mut McsRwlockLock, node);
++}
+--- /dev/null
++++ b/kernel/rust/syscall_util_clone_disabled_logger.rs
+@@ -0,0 +1,19 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Private source-only successor for the existing constant disabled-UTI logger.
++
++use super::kprintf;
++
++/// Existing no-argument void callback; one unchanged diagnostic per invocation.
++#[no_mangle]
++pub(super) extern "C" fn syscall_util_indicate_clone_disabled_bridge() {
++    // SAFETY: both pointers refer to immutable static NUL-terminated C strings.
++    // The format consumes exactly one %s; its sole variadic argument is the
++    // matching const-char pointer. Neither storage can expire during kprintf.
++    // The existing synchronous logger retains its CPU-prefix/output behavior.
++    unsafe {
++        kprintf(
++            c"%s: error: --enable-uti mcexec option not specified\n".as_ptr().cast(),
++            c"sys_util_indicate_clone".as_ptr().cast::<i8>(),
++        );
++    }
++}
+--- /dev/null
++++ b/kernel/rust/syscall_exit_group_current_pid.rs
+@@ -0,0 +1,27 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Existing raw current-process PID callback; private source-only successor.
++
++use super::{current_thread_ptr, CInt};
++use crate::abi::{Process, Thread};
++use core::mem::{offset_of, size_of};
++
++// Reuse the exact existing abi.rs/process_helpers.rs assertions, not a new layout.
++const _: () = {
++    assert!(size_of::<CInt>() == 4);
++    assert!(offset_of!(Thread, proc) == 4304);
++    assert!(offset_of!(Process, pid) == 456);
++};
++
++/// Same no-argument C int callback as the original raw C getter.
++///
++/// # Safety
++/// Existing syscall-entry invariant: the local current thread and its proc are
++/// live, non-null, correctly aligned and readable for this callback. Reuse the
++/// existing accessor and scheduler/preemption/lifetime context. This getter does
++/// not schedule, acquire ownership, add null handling, or extend either lifetime.
++#[no_mangle]
++pub(super) unsafe extern "C" fn exit_group_current_pid_bridge() -> CInt {
++    // SAFETY: the unchanged caller's raw current/proc invariant above is exactly
++    // the original C getter's precondition. No Rust reference is constructed.
++    unsafe { (*(*current_thread_ptr()).proc).pid }
++}
+--- /dev/null
++++ b/kernel/rust/syscall_munmap_clear_host_forward.rs
+@@ -0,0 +1,31 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Existing do_munmap callback forwarding to the qualified Rust clear_host_pte.
++
++use crate::abi::{CInt, CLong, CULong, SizeT};
++use super::f03_clear_host_pte_entry_v1::clear_host_pte;
++
++type ClearHostFn = unsafe extern "C" fn(CULong, SizeT, CInt) -> CLong;
++const _: ClearHostFn = clear_host_pte;
++const _: ClearHostFn = do_munmap_clear_host_bridge;
++const _: () = {
++    assert!(core::mem::size_of::<CULong>() == 8);
++    assert!(core::mem::size_of::<SizeT>() == 8);
++    assert!(core::mem::size_of::<CInt>() == 4);
++    assert!(core::mem::size_of::<CLong>() == 8);
++};
++
++/// Retain the original scalar callback ABI and exact signed long return.
++///
++/// # Safety
++/// The caller retains all existing clear_host_pte current CPU/thread/VM lifetime,
++/// original memory-range-lock state and synchronous forwarding prerequisites.
++/// The qualified Rust provider owns the existing request/endpoint/flag/logging
++/// protocol; this callback adds no access, validation, lock, retry or cleanup.
++#[no_mangle]
++pub(super) unsafe extern "C" fn do_munmap_clear_host_bridge(
++    addr: CULong, len: SizeT, holding_lock: CInt,
++) -> CLong {
++    // SAFETY: Unchanged exact original provider and argument order. No casts,
++    // normalization or null/errno policy is introduced by this forwarding leaf.
++    unsafe { clear_host_pte(addr, len, holding_lock) }
++}
+--- /dev/null
++++ b/kernel/rust/syscall_mprotect_host_vma.rs
+@@ -0,0 +1,53 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Full reachable set_host_vma prefix, then the existing qualified Rust body.
++
++use crate::abi::{CInt, CULong, SizeT, X86UserContext};
++use crate::x86_cpu_helpers::{
++    ihk_mc_syscall_set_arg0, ihk_mc_syscall_set_arg1, ihk_mc_syscall_set_arg2,
++};
++use super::{get_this_cpu_local_var, set_host_vma_body_result};
++use core::mem::{offset_of, size_of, MaybeUninit};
++
++type SetArgFn = unsafe extern "C" fn(*mut X86UserContext, CULong);
++type HostVmaFn = unsafe extern "C" fn(CULong, SizeT, CInt, CInt) -> CInt;
++const _: SetArgFn = ihk_mc_syscall_set_arg0;
++const _: SetArgFn = ihk_mc_syscall_set_arg1;
++const _: SetArgFn = ihk_mc_syscall_set_arg2;
++const _: HostVmaFn = set_host_vma_body_result;
++const _: HostVmaFn = mprotect_set_host_vma_bridge;
++const _: () = {
++    assert!(size_of::<X86UserContext>() == 224);
++    assert!(offset_of!(X86UserContext, gpr) == 56);
++    assert!(size_of::<CULong>() == 8 && size_of::<SizeT>() == 8);
++    assert!(size_of::<CInt>() == 4);
++};
++
++/// Preserve the original callback's complete reachable prefix and return.
++///
++/// # Safety
++/// The existing CPU-local pointer remains valid/readable for its current slot;
++/// the original body's current/thread/VM and borrowed lock/endpoint prerequisites
++/// are unchanged. The unused current-thread value may be null as before. No new
++/// lifetime, ownership, locking or null/errno policy is introduced here.
++#[no_mangle]
++pub(super) unsafe extern "C" fn mprotect_set_host_vma_bridge(
++    start: CULong, len: SizeT, prot: CInt, holding_lock: CInt,
++) -> CInt {
++    // Private scratch only. X86UserContext and its nested register structs contain
++    // only u64/u8 fields, so zero is valid. Initializing these otherwise unused
++    // local bytes prevents references to uninitialized fields in existing setters.
++    // The scratch pointer never escapes those setters; no context is read back.
++    let mut ctx = MaybeUninit::<X86UserContext>::zeroed();
++    // SAFETY: Exactly the original reachable current-slot read before setters.
++    let _thread = unsafe { (*get_this_cpu_local_var()).current };
++    // SAFETY: Naturally aligned, live, zero-initialized private224B scratch; each
++    // unchanged setter performs its original volatile register write in order.
++    // C size_t/unsigned long are64-bit here. C int prot converts to unsigned long
++    // modulo2^64; Rust's direct signed-i32→u64 cast has that exact defined value.
++    unsafe {
++        ihk_mc_syscall_set_arg0(ctx.as_mut_ptr(), start);
++        ihk_mc_syscall_set_arg1(ctx.as_mut_ptr(), len as CULong);
++        ihk_mc_syscall_set_arg2(ctx.as_mut_ptr(), prot as CULong);
++    }
++    set_host_vma_body_result(start, len, prot, holding_lock)
++}
+--- /dev/null
++++ b/kernel/rust/f03_context_forward_pair.rs
+@@ -0,0 +1,32 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Context callbacks delegate to the existing Rust generic forwarder.
++use core::ffi::c_void;
++use crate::abi::{CInt, CLong};
++
++type ForwardContext = unsafe extern "C" fn(CInt, *mut c_void) -> CLong;
++
++/// Forward the syscall number and original borrowed user context.
++///
++/// # Safety
++/// The context is the live x86 user context required by the existing forwarder;
++/// the caller retains it for the full synchronous call and follows its existing
++/// request and endpoint contracts. The pointer is neither retained nor inspected here.
++#[no_mangle]
++pub unsafe extern "C" fn syscall_forward_context_bridge(number: CInt, context: *mut c_void) -> CLong {
++    // SAFETY: Preserve the original context address and callee preconditions.
++    unsafe { super::syscall_generic_forwarding(number, context.cast()) }
++}
++
++/// Public policy callback for the same existing forwarding operation.
++///
++/// # Safety
++/// Same borrowed context, lifetime and forwarding preconditions as the private
++/// callback; no request, endpoint, error or null policy is added by this wrapper.
++#[no_mangle]
++pub unsafe extern "C" fn syscall_policy_forward_context_bridge(number: CInt, context: *mut c_void) -> CLong {
++    // SAFETY: Preserve the original context address and callee preconditions.
++    unsafe { super::syscall_generic_forwarding(number, context.cast()) }
++}
++
++const _: ForwardContext = syscall_forward_context_bridge;
++const _: ForwardContext = syscall_policy_forward_context_bridge;
+--- /dev/null
++++ b/kernel/rust/syscall_ptrace_detach_kfree.rs
+@@ -0,0 +1,27 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++use core::ffi::{c_int, c_void};
++
++// These constants are valid only under the independently bound PROFILE_119
++// source path and logical-line profile described in the private handoff.
++const SOURCE_FILE: &[u8] = b"/src/kernel/syscall.c\0";
++#[cfg(f03_ptrace_kfree_dispatch_origin)]
++const SOURCE_LINE: c_int = 4657;
++#[cfg(not(f03_ptrace_kfree_dispatch_origin))]
++const SOURCE_LINE: c_int = 4664;
++
++/// Preserve the original tracked-free callback and its selected C origin.
++///
++/// # Safety
++/// `ptr` must be null or an owned live tracked allocation admissible to the
++/// original callback, and ownership must be transferred exactly once.
++#[no_mangle]
++pub unsafe extern "C" fn ptrace_detach_kfree_bridge(ptr: *mut c_void) {
++    // SAFETY: The caller supplies the original pointer domain, and the source
++    // profile binds these Rust-owned C-string bytes and line to the original
++    // translation unit. The allocator handles null and tracking as before.
++    unsafe {
++        crate::mem_helpers::kfree_tracked(
++            ptr, SOURCE_FILE.as_ptr().cast_mut().cast(), SOURCE_LINE,
++        );
++    }
++}
+--- /dev/null
++++ b/kernel/rust/syscall_exit_group_terminate.rs
+@@ -0,0 +1,20 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++use core::ffi::c_int;
++
++// Same existing C provider used by the scoped Rust exit helpers. This is a
++// declaration only; it does not replace or claim the terminate implementation.
++unsafe extern "C" {
++    fn terminate(status: c_int, group: c_int);
++}
++
++/// Forward the exit-group callback to its existing termination provider.
++///
++/// # Safety
++/// The caller must meet the same execution-context and lifetime requirements
++/// as the original C callback and the existing terminate provider.
++#[no_mangle]
++pub unsafe extern "C" fn exit_group_terminate_bridge(status: c_int, group: c_int) {
++    // SAFETY: The original callback forwards these exact C int arguments once
++    // to the existing void provider and does not assume it cannot return.
++    unsafe { terminate(status, group) };
++}
+--- /dev/null
++++ b/kernel/rust/f03_wakeup_writer_pair.rs
+@@ -0,0 +1,41 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Paired IRQ-saving MCS writer callbacks use the existing lock provider.
++use core::ffi::c_void;
++use core::mem::{align_of, size_of};
++use crate::abi::CULong;
++use crate::lock_helpers::{self, McsRwlockLock, McsRwlockNodeIrqsave};
++
++const _: () = {
++    assert!(size_of::<CULong>() == 8);
++    assert!(size_of::<McsRwlockLock>() == 64 && align_of::<McsRwlockLock>() == 64);
++    assert!(size_of::<McsRwlockNodeIrqsave>() == 64 && align_of::<McsRwlockNodeIrqsave>() == 64);
++};
++
++/// Acquire the caller's IRQ-saving writer lock and save flags in its node.
++///
++/// # Safety
++/// The caller provides the original live, 64-byte-aligned lock and exclusive,
++/// writable IRQ-save node, follows existing lock ordering and IRQ context, and
++/// retains both objects until the matching release completes.
++#[no_mangle]
++pub unsafe extern "C" fn ptrace_wakeup_update_lock_bridge(lock_addr: CULong, node: *mut c_void) {
++    // SAFETY: The selected x86 lock and IRQ-save node have the provider's C
++    // representation; raw casts preserve their addresses and caller ownership.
++    unsafe { lock_helpers::__mcs_rwlock_writer_lock(lock_addr as *mut McsRwlockLock, node.cast::<McsRwlockNodeIrqsave>()) };
++}
++
++/// Release the matching writer acquisition and restore its saved IRQ flags.
++///
++/// # Safety
++/// The caller owns the matching acquisition and provides the same live lock
++/// and node without concurrent node reuse until this release has completed.
++#[no_mangle]
++pub unsafe extern "C" fn ptrace_wakeup_update_unlock_bridge(lock_addr: CULong, node: *mut c_void) {
++    // SAFETY: The original lock and saved node are passed to the paired provider;
++    // it performs the release and restores the original saved interrupt state.
++    unsafe { lock_helpers::__mcs_rwlock_writer_unlock(lock_addr as *mut McsRwlockLock, node.cast::<McsRwlockNodeIrqsave>()) };
++}
++
++type WriterCallback = unsafe extern "C" fn(CULong, *mut c_void);
++const _: WriterCallback = ptrace_wakeup_update_lock_bridge;
++const _: WriterCallback = ptrace_wakeup_update_unlock_bridge;
+--- /dev/null
++++ b/kernel/rust/syscall_ptrace_detach_wakeup.rs
+@@ -0,0 +1,14 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++use core::ffi::{c_int, c_void};
++
++/// Forward the callback to the qualified existing scheduler provider.
++///
++/// # Safety
++/// The thread and its lifetime must meet the original callback and scheduler
++/// provider contracts; this callback does not acquire or release ownership.
++#[no_mangle]
++pub unsafe extern "C" fn ptrace_detach_wakeup_bridge(thread: *mut c_void, valid_states: c_int) {
++    // SAFETY: The caller supplies the same live thread and states as the C
++    // callback. The original callback also discards the scheduler result.
++    let _ = unsafe { crate::sched_helpers::sched_wakeup_thread(thread.cast(), valid_states) };
++}
+--- /dev/null
++++ b/kernel/rust/syscall_terminate_mcexec_forward.rs
+@@ -0,0 +1,14 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++use crate::abi::{CInt, CLong, SyscallRequest};
++
++/// Forward the existing request callback without inspecting its raw pointer.
++///
++/// # Safety
++/// The request and cpu must satisfy the original caller and existing do_syscall
++/// provider contracts. This function neither creates nor retains the request.
++#[no_mangle]
++pub unsafe extern "C" fn terminate_mcexec_do_syscall_bridge(request: *mut SyscallRequest, cpu: CInt) -> CLong {
++    // SAFETY: The same pointer and CPU are passed to the original provider;
++    // its exact return value is returned to the original caller.
++    unsafe { super::do_syscall(request, cpu) }
++}
+--- /dev/null
++++ b/kernel/rust/syscall_perf_open_forward.rs
+@@ -0,0 +1,14 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++use crate::abi::{CInt, CLong, SyscallRequest};
++
++/// Forward the existing request callback without inspecting its raw pointer.
++///
++/// # Safety
++/// The request and cpu must satisfy the original caller and existing do_syscall
++/// provider contracts. This function neither creates nor retains the request.
++#[no_mangle]
++pub unsafe extern "C" fn perf_event_open_do_syscall_bridge(request: *mut SyscallRequest, cpu: CInt) -> CLong {
++    // SAFETY: The same pointer and CPU are passed to the original provider;
++    // its exact return value is returned to the original caller.
++    unsafe { super::do_syscall(request, cpu) }
++}
+--- /dev/null
++++ b/kernel/rust/f03_request_constructors.rs
+@@ -0,0 +1,77 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Experimental declared-arity wire constructors; default selection stays disabled.
++use core::mem::{align_of, offset_of, size_of, MaybeUninit};
++use core::ptr::addr_of_mut;
++use crate::abi::{CInt, CLong, CULong, SyscallRequest};
++
++// The selected x86 request has its own natural C type alignment.
++const _: () = {
++    assert!(size_of::<SyscallRequest>() == 72 && align_of::<SyscallRequest>() == 8);
++    assert!(offset_of!(SyscallRequest, number) == 16 && offset_of!(SyscallRequest, args) == 24);
++    assert!(align_of::<MaybeUninit<SyscallRequest>>() == 8);
++};
++
++/// Construct only the approved wire fields; IDs and valid belong to the callee.
++///
++/// # Safety
++/// The existing synchronous do_syscall contract, request/response lifetime,
++/// endpoint and caller-specific number/argument preconditions must all hold.
++/// The current CPU and helper must be usable in the calling context.
++unsafe fn forward(number: CInt, args: [CULong; 6]) -> CLong {
++    let mut storage = MaybeUninit::<SyscallRequest>::uninit();
++    let request = storage.as_mut_ptr();
++    // SAFETY: Aligned live storage. Raw field pointers never form a reference to
++    // the incomplete request. Only approved number and six wire slots are set;
++    // the existing helper owns sender IDs and valid before their first read.
++    unsafe {
++        addr_of_mut!((*request).number).write(number as CULong);
++        let slots = addr_of_mut!((*request).args).cast::<CULong>();
++        slots.add(0).write(args[0]);
++        slots.add(1).write(args[1]);
++        slots.add(2).write(args[2]);
++        slots.add(3).write(args[3]);
++        slots.add(4).write(args[4]);
++        slots.add(5).write(args[5]);
++        super::do_syscall(request, super::ihk_mc_get_processor_id())
++    }
++}
++
++/// # Safety
++/// Caller meets the approved two-argument wire and existing do_syscall contracts.
++#[no_mangle]
++pub unsafe extern "C" fn syscall_do_syscall2_bridge(number: CInt, arg0: CULong, arg1: CULong) -> CLong {
++    unsafe { forward(number, [arg0, arg1, 0, 0, 0, 0]) }
++}
++/// # Safety
++/// Same contract as the two-argument callback; its wire values are unchanged.
++#[no_mangle]
++pub unsafe extern "C" fn syscall_policy_do_syscall2_bridge(number: CInt, arg0: CULong, arg1: CULong) -> CLong {
++    unsafe { forward(number, [arg0, arg1, 0, 0, 0, 0]) }
++}
++/// # Safety
++/// Caller meets the approved three-argument wire and existing do_syscall contracts.
++#[no_mangle]
++pub unsafe extern "C" fn syscall_do_syscall3_bridge(number: CInt, arg0: CULong, arg1: CULong, arg2: CULong) -> CLong {
++    unsafe { forward(number, [arg0, arg1, arg2, 0, 0, 0]) }
++}
++/// # Safety
++/// Same contract as the three-argument callback; its wire values are unchanged.
++#[no_mangle]
++pub unsafe extern "C" fn syscall_policy_do_syscall3_bridge(number: CInt, arg0: CULong, arg1: CULong, arg2: CULong) -> CLong {
++    unsafe { forward(number, [arg0, arg1, arg2, 0, 0, 0]) }
++}
++/// # Safety
++/// Caller meets the original wait4 process and do_syscall lifetime contracts.
++#[no_mangle]
++pub unsafe extern "C" fn wait_host_wait4_bridge(pid: CInt, options: CInt) -> CInt {
++    const SYS_WAIT4: CInt = 61;
++    unsafe { forward(SYS_WAIT4, [pid as CULong, 0, options as CULong, 0, 0, 0]) as CInt }
++}
++
++type Two = unsafe extern "C" fn(CInt, CULong, CULong) -> CLong;
++type Three = unsafe extern "C" fn(CInt, CULong, CULong, CULong) -> CLong;
++const _: Two = syscall_do_syscall2_bridge;
++const _: Two = syscall_policy_do_syscall2_bridge;
++const _: Three = syscall_do_syscall3_bridge;
++const _: Three = syscall_policy_do_syscall3_bridge;
++const _: unsafe extern "C" fn(CInt, CInt) -> CInt = wait_host_wait4_bridge;
+--- /dev/null
++++ b/kernel/rust/syscall_regset_defined_logger.rs
+@@ -0,0 +1,18 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Root-approved defined diagnostic correction; no parity claim for old long/%x.
++
++use super::{kprintf, CInt, CLong, CULong};
++
++/// Preserve the public callback ABI; render the complete unsigned long bit value.
++#[no_mangle]
++pub(super) extern "C" fn arch_ptrace_regset_log_bridge(event: CInt, type_: CLong) {
++    let format = match event {
++        1 => c"ptrace_read_regset: not supported type 0x%lx\n",
++        2 => c"ptrace_write_regset: not supported type 0x%lx\n",
++        _ => return,
++    };
++    // SAFETY: immutable NUL-terminated format has one %lx slot. CULong is the
++    // actual u64 unsigned long variadic type. Conversion preserves all 64 bits,
++    // including negative CLong values. No pointer/object lifetime crosses here.
++    unsafe { kprintf(format.as_ptr().cast(), type_ as CULong); }
++}
+--- /dev/null
++++ b/kernel/rust/syscall_signal_leaf_adapters.rs
+@@ -0,0 +1,36 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Rebased existing private adapters. Instruction and destructive native proof OPEN.
++use core::ffi::c_void;
++use super::{kprintf, CInt, CLong, EFAULT};
++
++unsafe extern "C" {
++    #[link_name = "terminate"]
++    fn f06_signal_adapter_terminate(status: CInt, signal: CInt);
++}
++
++/// # Safety
++/// Exact original raw XRSTOR contract: aligned valid standard state, boot mask,
++/// intended CPU and exclusion; all code/callees obey the no-FP/SIMD profile.
++/// Fault behavior stays raw; never substitute native_xrstor_checked or HOST-run.
++#[no_mangle]
++pub unsafe extern "C" fn arch_rt_sigreturn_xrstor_bridge(state: *mut c_void) {
++    // SAFETY: complete existing Rust instruction body and actual boot-mask getter.
++    unsafe {
++        let mask = crate::x86_cpu_helpers::get_xsave_mask();
++        crate::x86_cpu_helpers::x86_restore_xstate(state.cast_const(), mask);
++    }
++}
++
++/// # Safety
++/// Original native disposition: logger is available and genuine terminate owns
++/// the current process lifetime. The original void call may return in a fixture.
++#[cfg(native_linux_irq_work_v6_12)]
++#[no_mangle]
++pub unsafe extern "C" fn arch_native_signal_bad_frame_bridge(error: CLong) -> CLong {
++    // SAFETY: exact diagnostic, then original void terminate and constant result.
++    unsafe {
++        kprintf(b"native signal return rejected: %ld\n\0".as_ptr().cast(), error);
++        f06_signal_adapter_terminate(0, 11); // SIGSEGV, actual header witness.
++    }
++    -(EFAULT as CLong)
++}
+--- /dev/null
++++ b/arch/x86_64/kernel/include/arch5-abi-witness.inc
+@@ -0,0 +1,80 @@
++/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
++/* Appended to actual selected arch TU ONLY for compile-only ABI qualification.
++ * Do not link this witness build as production acceptance. No fake headers. */
++extern void arch_rt_sigreturn_xrstor_bridge(void *);
++extern long arch_native_signal_bad_frame_bridge(long);
++extern void arch_rt_sigreturn_context_bridge(struct thread **, struct x86_user_context **, int *);
++extern int do_signal(unsigned long, void *, struct thread *, struct sig_pending *, int);
++extern void arch_ptrace_regset_log_bridge(int, long);
++#define ARCH5_TYPE(fn, type) _Static_assert(__builtin_types_compatible_p(__typeof__(&(fn)), type), #fn " ABI")
++ARCH5_TYPE(arch_rt_sigreturn_xrstor_bridge, void (*)(void *));
++ARCH5_TYPE(arch_native_signal_bad_frame_bridge, long (*)(long));
++ARCH5_TYPE(arch_rt_sigreturn_context_bridge, void (*)(struct thread **,struct x86_user_context **,int *));
++ARCH5_TYPE(do_signal, int (*)(unsigned long,void *,struct thread *,struct sig_pending *,int));
++ARCH5_TYPE(arch_ptrace_regset_log_bridge, void (*)(int,long));
++_Static_assert(sizeof(long)==8 && sizeof(unsigned long)==8 && sizeof(int)==4,"LP64");
++_Static_assert(__builtin_offsetof(struct x86_cpu_local_variables,tss.rsp0)==180,"actual GS180");
++const unsigned long arch5_c_abi_geometry[] __attribute__((used,section(".arch5_abi_c"))) = {
++    sizeof(int), /* 0 int.size */
++    __alignof__(int), /* 1 int.align */
++    sizeof(long), /* 2 long.size */
++    __alignof__(long), /* 3 long.align */
++    sizeof(unsigned long), /* 4 ulong.size */
++    __alignof__(unsigned long), /* 5 ulong.align */
++    sizeof(void *), /* 6 pointer.size */
++    __alignof__(void *), /* 7 pointer.align */
++    sizeof(siginfo_t), /* 8 siginfo.size */
++    __alignof__(siginfo_t), /* 9 siginfo.align */
++    sizeof(struct thread), /* 10 thread.size */
++    __alignof__(struct thread), /* 11 thread.align */
++    sizeof(struct sig_pending), /* 12 pending.size */
++    __alignof__(struct sig_pending), /* 13 pending.align */
++    sizeof(struct process), /* 14 process.size */
++    __alignof__(struct process), /* 15 process.align */
++    sizeof(struct sig_common), /* 16 sigcommon.size */
++    __alignof__(struct sig_common), /* 17 sigcommon.align */
++    sizeof(struct x86_user_context), /* 18 context.size */
++    __alignof__(struct x86_user_context), /* 19 context.align */
++    sizeof(struct xsave_struct), /* 20 xsave.size */
++    __alignof__(struct xsave_struct), /* 21 xsave.align */
++    sizeof(struct sigsp), /* 22 frame.size */
++    __alignof__(struct sigsp), /* 23 frame.align */
++    __builtin_offsetof(struct thread,tid), /* 24 thread.tid */
++    __builtin_offsetof(struct thread,exit_status), /* 25 thread.exit_status */
++    __builtin_offsetof(struct thread,status), /* 26 thread.status */
++    __builtin_offsetof(struct thread,proc), /* 27 thread.proc */
++    __builtin_offsetof(struct thread,report_proc), /* 28 thread.report_proc */
++    __builtin_offsetof(struct thread,sigcommon), /* 29 thread.sigcommon */
++    __builtin_offsetof(struct thread,sigmask), /* 30 thread.sigmask */
++    __builtin_offsetof(struct thread,sigstack), /* 31 thread.sigstack */
++    __builtin_offsetof(struct thread,ptrace), /* 32 thread.ptrace */
++    __builtin_offsetof(struct thread,coredump_regs), /* 33 thread.coredump_regs */
++    __builtin_offsetof(struct sig_pending,info), /* 34 pending.info */
++    __builtin_offsetof(struct sig_pending,ptracecont), /* 35 pending.ptracecont */
++    __builtin_offsetof(struct process,parent), /* 36 process.parent */
++    __builtin_offsetof(struct process,main_thread), /* 37 process.main_thread */
++    __builtin_offsetof(struct process,update_lock), /* 38 process.update_lock */
++    __builtin_offsetof(struct process,pid), /* 39 process.pid */
++    __builtin_offsetof(struct process,status), /* 40 process.status */
++    __builtin_offsetof(struct process,group_exit_status), /* 41 process.group_exit_status */
++    __builtin_offsetof(struct sig_common,lock), /* 42 sigcommon.lock */
++    __builtin_offsetof(struct sig_common,action), /* 43 sigcommon.action */
++    __builtin_offsetof(struct sigsp,info), /* 44 frame.info */
++    __builtin_offsetof(struct sigsp,fpregs), /* 45 frame.fpregs */
++    __builtin_offsetof(struct sigsp,sigstack), /* 46 frame.sigstack */
++    __builtin_offsetof(siginfo_t,si_signo), /* 47 siginfo.si_signo */
++    __builtin_offsetof(siginfo_t,si_code), /* 48 siginfo.si_code */
++    __builtin_offsetof(siginfo_t,_sifields), /* 49 siginfo._sifields */
++    __builtin_offsetof(siginfo_t,_sifields._sigchld.si_pid), /* 50 siginfo.child.si_pid */
++    __builtin_offsetof(siginfo_t,_sifields._sigchld.si_status), /* 51 siginfo.child.si_status */
++    __builtin_offsetof(siginfo_t,_sifields._sigchld.si_uid), /* 52 siginfo.child.si_uid */
++    __builtin_offsetof(siginfo_t,_sifields._sigchld.si_utime), /* 53 siginfo.child.si_utime */
++    __builtin_offsetof(siginfo_t,_sifields._sigchld.si_stime), /* 54 siginfo.child.si_stime */
++    __builtin_offsetof(struct x86_cpu_local_variables,tss.rsp0), /* 55 GS.rsp0 */
++    SIGCHLD, /* 56 SIGCHLD */
++    CLD_TRAPPED, /* 57 CLD_TRAPPED */
++    SIGTRAP, /* 58 SIGTRAP */
++    SIGSEGV, /* 59 SIGSEGV */
++    EFAULT, /* 60 EFAULT */
++};
++#undef ARCH5_TYPE
+--- /dev/null
++++ b/kernel/rust/arch5_abi_witness.rs
+@@ -0,0 +1,76 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Compile-only actual shared Rust types; compare against same ordered C array.
++use core::mem::{size_of, align_of, offset_of};
++use crate::abi::{CInt, CLong, CULong, SigInfo, SigInfoChild, Thread, SigPending,
++    Process, SigCommon, X86UserContext, XsaveStruct, X86CpuLocalVariables, Tss64};
++const _: unsafe extern "C" fn(*mut core::ffi::c_void) = super::syscall_signal_leaf_adapters::arch_rt_sigreturn_xrstor_bridge;
++const _: unsafe extern "C" fn(CLong)->CLong = super::syscall_signal_leaf_adapters::arch_native_signal_bad_frame_bridge;
++const _: unsafe extern "C" fn(*mut *mut Thread,*mut *mut X86UserContext,*mut CInt) = super::f06_signal_context_candidate::arch_rt_sigreturn_context_bridge;
++const _: unsafe extern "C" fn(CULong,*mut core::ffi::c_void,*mut Thread,*mut SigPending,CInt)->CInt = super::f06_do_signal_whole_candidate::do_signal;
++const _: extern "C" fn(CInt,CLong) = super::syscall_regset_defined_logger::arch_ptrace_regset_log_bridge;
++#[used]
++#[no_mangle]
++#[link_section = ".arch5_abi_rust"]
++pub static arch5_rust_abi_geometry: [u64; 61] = [
++    (size_of::<CInt>()) as u64, // 0 int.size
++    (align_of::<CInt>()) as u64, // 1 int.align
++    (size_of::<CLong>()) as u64, // 2 long.size
++    (align_of::<CLong>()) as u64, // 3 long.align
++    (size_of::<CULong>()) as u64, // 4 ulong.size
++    (align_of::<CULong>()) as u64, // 5 ulong.align
++    (size_of::<*mut core::ffi::c_void>()) as u64, // 6 pointer.size
++    (align_of::<*mut core::ffi::c_void>()) as u64, // 7 pointer.align
++    (size_of::<SigInfo>()) as u64, // 8 siginfo.size
++    (align_of::<SigInfo>()) as u64, // 9 siginfo.align
++    (size_of::<Thread>()) as u64, // 10 thread.size
++    (align_of::<Thread>()) as u64, // 11 thread.align
++    (size_of::<SigPending>()) as u64, // 12 pending.size
++    (align_of::<SigPending>()) as u64, // 13 pending.align
++    (size_of::<Process>()) as u64, // 14 process.size
++    (align_of::<Process>()) as u64, // 15 process.align
++    (size_of::<SigCommon>()) as u64, // 16 sigcommon.size
++    (align_of::<SigCommon>()) as u64, // 17 sigcommon.align
++    (size_of::<X86UserContext>()) as u64, // 18 context.size
++    (align_of::<X86UserContext>()) as u64, // 19 context.align
++    (size_of::<XsaveStruct>()) as u64, // 20 xsave.size
++    (align_of::<XsaveStruct>()) as u64, // 21 xsave.align
++    (size_of::<crate::native_signal::Frame>()) as u64, // 22 frame.size
++    (align_of::<crate::native_signal::Frame>()) as u64, // 23 frame.align
++    (offset_of!(Thread,tid)) as u64, // 24 thread.tid
++    (offset_of!(Thread,exit_status)) as u64, // 25 thread.exit_status
++    (offset_of!(Thread,status)) as u64, // 26 thread.status
++    (offset_of!(Thread,proc)) as u64, // 27 thread.proc
++    (offset_of!(Thread,report_proc)) as u64, // 28 thread.report_proc
++    (offset_of!(Thread,sigcommon)) as u64, // 29 thread.sigcommon
++    (offset_of!(Thread,sigmask)) as u64, // 30 thread.sigmask
++    (offset_of!(Thread,sigstack)) as u64, // 31 thread.sigstack
++    (offset_of!(Thread,ptrace)) as u64, // 32 thread.ptrace
++    (offset_of!(Thread,coredump_regs)) as u64, // 33 thread.coredump_regs
++    (offset_of!(SigPending,info)) as u64, // 34 pending.info
++    (offset_of!(SigPending,ptracecont)) as u64, // 35 pending.ptracecont
++    (offset_of!(Process,parent)) as u64, // 36 process.parent
++    (offset_of!(Process,main_thread)) as u64, // 37 process.main_thread
++    (offset_of!(Process,update_lock)) as u64, // 38 process.update_lock
++    (offset_of!(Process,pid)) as u64, // 39 process.pid
++    (offset_of!(Process,status)) as u64, // 40 process.status
++    (offset_of!(Process,group_exit_status)) as u64, // 41 process.group_exit_status
++    (offset_of!(SigCommon,lock)) as u64, // 42 sigcommon.lock
++    (offset_of!(SigCommon,action)) as u64, // 43 sigcommon.action
++    (offset_of!(crate::native_signal::Frame,info)) as u64, // 44 frame.info
++    (offset_of!(crate::native_signal::Frame,fpregs)) as u64, // 45 frame.fpregs
++    (offset_of!(crate::native_signal::Frame,sigstack)) as u64, // 46 frame.sigstack
++    (offset_of!(SigInfo,si_signo)) as u64, // 47 siginfo.si_signo
++    (offset_of!(SigInfo,si_code)) as u64, // 48 siginfo.si_code
++    (offset_of!(SigInfo,sifields)) as u64, // 49 siginfo._sifields
++    (offset_of!(SigInfo,sifields)+offset_of!(SigInfoChild,si_pid)) as u64, // 50 siginfo.child.si_pid
++    (offset_of!(SigInfo,sifields)+offset_of!(SigInfoChild,si_status)) as u64, // 51 siginfo.child.si_status
++    (offset_of!(SigInfo,sifields)+offset_of!(SigInfoChild,si_uid)) as u64, // 52 siginfo.child.si_uid
++    (offset_of!(SigInfo,sifields)+offset_of!(SigInfoChild,si_utime)) as u64, // 53 siginfo.child.si_utime
++    (offset_of!(SigInfo,sifields)+offset_of!(SigInfoChild,si_stime)) as u64, // 54 siginfo.child.si_stime
++    (offset_of!(X86CpuLocalVariables,tss)+offset_of!(Tss64,rsp0)) as u64, // 55 GS.rsp0
++    (17) as u64, // 56 SIGCHLD
++    (4) as u64, // 57 CLD_TRAPPED
++    (5) as u64, // 58 SIGTRAP
++    (11) as u64, // 59 SIGSEGV
++    (14) as u64, // 60 EFAULT
++];
+--- /dev/null
++++ b/kernel/rust/syscall_terminate_host_whole.rs
+@@ -0,0 +1,53 @@
++use super::*;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++
++unsafe extern "C" fn f03_terminate_host_refcount_set_v2(value: *mut c_void, count: CInt) {
++    // SAFETY: Exact initialized IhkAtomic field chosen by the unchanged helper.
++    // Keep its existing detached-cleanup set-to-one operation; this is not an
++    // authority to manufacture a reference or to admit arbitrary detached nodes.
++    unsafe { crate::atomic_helpers::ihk_atomic_set(value.cast(), count) };
++}
++
++unsafe extern "C" fn f03_terminate_host_release_thread_v2(thread: *mut c_void) {
++    // SAFETY: The original detached cleanup caller grants this genuine release.
++    unsafe { crate::process_helpers::release_thread(thread.cast()) };
++}
++
++unsafe extern "C" fn f03_terminate_host_release_process_v2(proc: *mut c_void) {
++    // SAFETY: Saved exact Process pointer/owned release, after thread release.
++    unsafe { crate::process_helpers::release_process(proc.cast()) };
++}
++
++/// Execute the complete existing lookup/nohost/kill-or-detached-release transaction.
++///
++/// # Safety
++/// Current CPU/thread state is live. Actual find_process/process_unlock own the
++/// paired hash reader lock and same writable MCS IRQ-save node; they do not mint
++/// a Process reference. A supplied detached_thread must carry the ORIGINAL caller's
++/// exceptional detached Thread/Process cleanup authority, including its existing
++/// refcount reset/release protocol. This entry cannot create that authority from
++/// a pointer or numeric count. Actual do_kill remains a genuine C endpoint with
++/// its existing signal/relationship/lifetime contract, not a completed Rust port.
++#[no_mangle]
++pub unsafe extern "C" fn terminate_host(pid: CInt, detached_thread: *mut Thread) {
++    let mut node = MaybeUninit::<McsRwlockNodeIrqsave>::uninit();
++    // SAFETY: Same current-thread lookup and node preparation as the complete C entry.
++    let local = unsafe { crate::cls::get_this_cpu_local_var() };
++    let current = unsafe { addr_of!((*local).current).read() };
++    // SAFETY: Reuse the ACTUAL complete algorithm unchanged, including missing
++    // process handling, nohost1 no-op, nohost-before-unlock, and ignored kill result.
++    // Genuine lookup helpers fill/release the same IRQ-save node exactly once.
++    let _ = unsafe {
++        terminate_host_body_result(
++            pid, detached_thread.cast(), current.cast(), node.as_mut_ptr().cast(),
++            offset_of!(Process, nohost), offset_of!(Thread, proc),
++            offset_of!(Thread, refcount), Some(syscall_find_process_bridge),
++            Some(syscall_process_unlock_bridge), Some(f03_terminate_host_refcount_set_v2),
++            Some(f03_terminate_host_release_thread_v2),
++            Some(f03_terminate_host_release_process_v2), Some(syscall_do_kill_thread_bridge),
++        )
++    };
++}
++
++const _: unsafe extern "C" fn(CInt, *mut Thread) = terminate_host;
+--- /dev/null
++++ b/kernel/rust/syscall_terminate_mcexec_whole.rs
+@@ -0,0 +1,36 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Source-only proposal. This is unselected until the real C guard, provider
++// binding, request initialization/ownership and exact target ABI are reviewed.
++    use core::mem::{offset_of, MaybeUninit};
++    use crate::abi::{CInt, Process, SyscallRequest};
++
++    // kernel/include/syscall.h defines __NR_exit_group = 231 on this profile.
++    const EXIT_GROUP_NR: CInt = 231;
++
++    /// Execute only the existing terminate_mcexec C entry's adapter.
++    ///
++    /// # Safety
++    /// Current CPU/thread/process and group status obey the existing body and
++    /// atomic provider contracts. The existing synchronous do_syscall provider
++    /// may use the request only while this stack frame lives. Before any field
++    /// is read or copied, the existing body and provider must initialize it.
++    /// This wrapper establishes no request ownership, publication or host ACK.
++    #[export_name = "terminate_mcexec"]
++    pub unsafe extern "C" fn f03_terminate_mcexec_v1(rc: CInt, sig: CInt) {
++        let mut request = MaybeUninit::<SyscallRequest>::uninit();
++        // SAFETY: The unchanged current-CPU and process contracts match C;
++        // request is passed as raw uninitialized storage, never as a reference.
++        unsafe {
++            let current = (*crate::cls::get_this_cpu_local_var()).current;
++            let process = (*current).proc;
++            let _ = super::terminate_mcexec_body_result(
++                process.cast(), request.as_mut_ptr(), rc, sig,
++                super::ihk_mc_get_processor_id(), EXIT_GROUP_NR,
++                offset_of!(Process, group_exit_status), offset_of!(Process, nohost),
++                Some(crate::atomic_helpers::atomic_cmpxchg_ulong),
++                Some(super::do_syscall),
++            );
++        }
++    }
++
++const _: unsafe extern "C" fn(CInt, CInt) = f03_terminate_mcexec_v1;
+--- /dev/null
++++ b/kernel/rust/syscall_terminate_whole.rs
+@@ -0,0 +1,440 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Supported non-ToFu/non-DCFA transaction; final stack handoff remains unselected.
++    use core::ffi::c_void;
++    use core::mem::{offset_of, size_of, MaybeUninit};
++    use core::ptr::{addr_of, addr_of_mut, null_mut, read_volatile, write_volatile};
++
++    use crate::abi::{
++        AbiListHead, CInt, CULong, Process, ResourceSet, Thread, TimeSpec, PROCESS_HASH_SIZE,
++    };
++    use crate::debug::Ddebug;
++    use crate::lock_helpers::{McsRwlockLock, McsRwlockNodeIrqsave};
++    use crate::process_helpers::{
++        free_all_process_memory_range, process_child_reparent_result,
++        process_list_add_tail_result, process_list_del_init_result, process_list_detach_result,
++        process_thread_report_detach_result, process_thread_termsig_clear_result,
++        release_process, release_process_vm, release_thread,
++    };
++
++    use super::{
++        f03_finalize_process_v1, f03_ptrace_detach_thread_v1, f03_thread_exit_signal_v1,
++        f06_ptrace_report_signal_kill, schedule, terminate_child_action_result,
++        terminate_child_cleanup_needed_result, terminate_process_exited_result,
++        terminate_release_child_needed_result, terminate_report_thread_ptrace_result,
++        terminate_report_thread_release_needed_result, terminate_status_result,
++        terminate_thread_active_result, terminate_thread_is_other_result, tsc_to_ts,
++        McsRwlockNode, PS_EXITED, SIGKILL, TERMINATE_CHILD_ACTION_FREE_ZOMBIE,
++        TERMINATE_CHILD_ACTION_REPARENT_CHILD, TERMINATE_CHILD_ACTION_REPARENT_PTRACED,
++    };
++
++    // The Rust-owned metadata below is limited to the reviewed /src source
++    // profile. The compiler's selected __FILE__/__LINE__ must be verified before
++    // the candidate can be enabled; these source facts are not runtime proof.
++    const SOURCE_FILE: &[u8] = b"/src/kernel/syscall.c\0";
++    const FUNCTION_NAME: &[u8] = b"terminate\0";
++    const NOWAIT: CULong = 0x000002;
++    #[cfg(f03_terminate_origin_dispatch)]
++    const ORIGIN_LINES: [CInt; 6] = [5271, 5292, 5511, 5346, 5363, 5403];
++    #[cfg(not(f03_terminate_origin_dispatch))]
++    const ORIGIN_LINES: [CInt; 6] = [5278, 5299, 5518, 5353, 5370, 5410];
++
++    // Match the three original ddebug records and writable flag semantics.
++    #[used]
++    #[no_mangle]
++    #[link_section = "__verbose"]
++    static mut f03_terminate_debug_v1: [Ddebug; 3] = [
++        Ddebug { file: SOURCE_FILE.as_ptr().cast(), func: FUNCTION_NAME.as_ptr().cast(),
++            fmt: core::ptr::null(), line_flags: ORIGIN_LINES[0] as u32 },
++        Ddebug { file: SOURCE_FILE.as_ptr().cast(), func: FUNCTION_NAME.as_ptr().cast(),
++            fmt: core::ptr::null(), line_flags: ORIGIN_LINES[1] as u32 },
++        Ddebug { file: SOURCE_FILE.as_ptr().cast(), func: FUNCTION_NAME.as_ptr().cast(),
++            fmt: core::ptr::null(), line_flags: ORIGIN_LINES[2] as u32 },
++    ];
++
++    unsafe extern "C" {
++        #[link_name = "sync_child_event"]
++        fn original_sync_child_event(event: *mut c_void);
++        #[link_name = "terminate_mcexec"]
++        fn original_terminate_mcexec(rc: CInt, sig: CInt);
++        fn kprintf(format: *const i8, ...) -> CInt;
++    }
++
++    macro_rules! debug {
++        ($index:expr, $format:expr $(, $value:expr)* $(,)?) => {{
++            // SAFETY: Genuine original lexical record and scalar variadic ABI.
++            unsafe {
++                if read_volatile(addr_of!(f03_terminate_debug_v1[$index].line_flags)) >> 24 != 0 {
++                    kprintf($format.as_ptr().cast() $(, $value)*);
++                }
++            }
++        }};
++    }
++
++    unsafe fn thread_from_sibling(node: *mut AbiListHead) -> *mut Thread {
++        // SAFETY: Call only after excluding the live list head while holding its
++        // original threads lock. The node belongs to a retained real Thread.
++        unsafe { node.cast::<u8>().sub(offset_of!(Thread, siblings_list)).cast() }
++    }
++
++    unsafe fn process_from_hash(node: *mut AbiListHead) -> *mut Process {
++        // SAFETY: The process hash writer lock retains this non-head element.
++        unsafe { node.cast::<u8>().sub(offset_of!(Process, hash_list)).cast() }
++    }
++
++    unsafe fn account_time(thread: *mut Thread, process: *mut Process) {
++        let mut delta = MaybeUninit::<TimeSpec>::uninit();
++        // SAFETY: Actual update/threads locks retain these fields. tsc_to_ts
++        // initializes both timespec members before the genuine ts_add reads it.
++        unsafe {
++            tsc_to_ts((*thread).user_tsc, delta.as_mut_ptr());
++            crate::timer::ts_add(addr_of_mut!((*process).utime), delta.as_ptr());
++            tsc_to_ts((*thread).system_tsc, delta.as_mut_ptr());
++            crate::timer::ts_add(addr_of_mut!((*process).stime), delta.as_ptr());
++            write_volatile(addr_of_mut!((*thread).user_tsc), 0);
++            write_volatile(addr_of_mut!((*thread).system_tsc), 0);
++        }
++    }
++
++    unsafe fn reparent_children(
++        resources: *mut ResourceSet, process: *mut Process, pid1: *mut Process,
++        irq_node: *mut McsRwlockNodeIrqsave, update_node: *mut McsRwlockNode,
++        parent_node: *mut McsRwlockNode, pid1_node: *mut McsRwlockNode,
++    ) {
++        // SAFETY: Resource/hash/PID1 lifetimes are the original termination
++        // graph. Every raw next pointer is captured before unlink/final release,
++        // and no released child is inspected. Distinct noirq nodes are retained.
++        unsafe {
++            let hash = (*resources).process_hash;
++            for index in 0..PROCESS_HASH_SIZE {
++                let hash_lock = addr_of_mut!((*hash).lock[index]).cast::<McsRwlockLock>();
++                crate::lock_helpers::__mcs_rwlock_writer_lock(hash_lock, irq_node);
++                let head = addr_of_mut!((*hash).list[index]);
++                let mut cursor = (*head).next;
++                while cursor != head {
++                    let next = (*cursor).next;
++                    let child = process_from_hash(cursor);
++                    let child_update = addr_of_mut!((*child).update_lock).cast();
++                    crate::lock_helpers::__mcs_rwlock_writer_lock_noirq(
++                        child_update, update_node.cast(),
++                    );
++                    let action = terminate_child_action_result(
++                        ((*child).ppid_parent == process) as CInt,
++                        ((*child).parent == process) as CInt, (*child).status,
++                    );
++                    let mut free_child = 0;
++                    match action {
++                        TERMINATE_CHILD_ACTION_FREE_ZOMBIE => {
++                            process_list_del_init_result(addr_of_mut!((*child).hash_list));
++                            process_list_del_init_result(addr_of_mut!((*child).siblings_list));
++                            free_child = 1;
++                        }
++                        TERMINATE_CHILD_ACTION_REPARENT_CHILD
++                        | TERMINATE_CHILD_ACTION_REPARENT_PTRACED => {
++                            let old_children = addr_of_mut!((*process).children_lock).cast();
++                            let new_children = addr_of_mut!((*pid1).children_lock).cast();
++                            crate::lock_helpers::__mcs_rwlock_writer_lock_noirq(
++                                old_children, parent_node.cast(),
++                            );
++                            crate::lock_helpers::__mcs_rwlock_writer_lock_noirq(
++                                new_children, pid1_node.cast(),
++                            );
++                            let ordinary = action == TERMINATE_CHILD_ACTION_REPARENT_CHILD;
++                            let (entry, target) = if ordinary {
++                                (addr_of_mut!((*child).siblings_list),
++                                    addr_of_mut!((*pid1).children_list))
++                            } else {
++                                (addr_of_mut!((*child).ptraced_siblings_list),
++                                    addr_of_mut!((*pid1).ptraced_children_list))
++                            };
++                            process_child_reparent_result(
++                                child.cast(), offset_of!(Process, ppid_parent) as CULong,
++                                offset_of!(Process, parent) as CULong, pid1.cast(), entry,
++                                target, ordinary as CInt,
++                            );
++                            crate::lock_helpers::__mcs_rwlock_writer_unlock_noirq(
++                                new_children, pid1_node.cast(),
++                            );
++                            crate::lock_helpers::__mcs_rwlock_writer_unlock_noirq(
++                                old_children, parent_node.cast(),
++                            );
++                        }
++                        _ => {}
++                    }
++                    crate::lock_helpers::__mcs_rwlock_writer_unlock_noirq(
++                        child_update, update_node.cast(),
++                    );
++                    if terminate_release_child_needed_result(free_child) != 0 {
++                        release_process(child);
++                    }
++                    cursor = next;
++                }
++                crate::lock_helpers::__mcs_rwlock_writer_unlock(hash_lock, irq_node);
++            }
++        }
++    }
++
++    /// Complete the original supported termination control and ownership order.
++    ///
++    /// # Safety
++    /// The original current Thread/Process/VM/resource graph stays valid through
++    /// the exact lock and release edges below. Final current-thread destruction
++    /// must retain the executing stack and CPU scheduler handoff until schedule;
++    /// this module neither supplies that authority nor creates a reference.
++    /// Legacy void ptrace detach must consume its report-list edge; a future
++    /// fallible reservation binder cannot be substituted without propagation.
++    /// The original selected allocation domain also requires a nonnegative peer
++    /// count for which `count * sizeof(int)` fits the allocator's C int size and
++    /// matches the number of peer nodes under the held reader lock. No claim is
++    /// made about C signed-overflow or implementation-defined narrowing cases.
++    #[export_name = "terminate"]
++    pub unsafe extern "C" fn f03_terminate_whole_v1(rc: CInt, sig: CInt) {
++        let mut irq_node = MaybeUninit::<McsRwlockNodeIrqsave>::uninit();
++        let mut update_node = MaybeUninit::<McsRwlockNode>::uninit();
++        let mut parent_node = MaybeUninit::<McsRwlockNode>::uninit();
++        let mut pid1_node = MaybeUninit::<McsRwlockNode>::uninit();
++        // SAFETY: This is the exact borrowed current graph, not an owned Rust
++        // reference. Each callback receives the original lock/node/argument.
++        unsafe {
++            let local = crate::cls::get_this_cpu_local_var();
++            let resources = (*local).resource_set;
++            let current = (*crate::cls::get_this_cpu_local_var()).current;
++            let process = (*current).proc;
++            let pid1 = (*resources).pid1;
++            let perf = (*process).monitoring_event;
++            if !perf.is_null() {
++                original_sync_child_event(perf);
++            }
++            let update = addr_of_mut!((*process).update_lock).cast();
++            let threads = addr_of_mut!((*process).threads_lock).cast();
++            crate::lock_helpers::__mcs_rwlock_writer_lock_noirq(
++                update, update_node.as_mut_ptr().cast(),
++            );
++            crate::lock_helpers::__mcs_rwlock_writer_lock(threads, irq_node.as_mut_ptr());
++            if terminate_process_exited_result((*process).status) != 0 {
++                debug!(0, b"%s: PID: %d, TID: %d PS_EXITED already\n\0",
++                    c"terminate".as_ptr(), (*process).pid, (*current).tid);
++                crate::cls::preempt_disable();
++                account_time(current, process);
++                (*current).status = PS_EXITED;
++                (*current).exit_status = (*process).group_exit_status as CInt;
++                f03_thread_exit_signal_v1(current);
++                crate::lock_helpers::__mcs_rwlock_writer_unlock(threads, irq_node.as_mut_ptr());
++                crate::lock_helpers::__mcs_rwlock_writer_unlock_noirq(
++                    update, update_node.as_mut_ptr().cast(),
++                );
++                release_thread(current);
++                // No access through current/process after this release.
++                crate::cls::preempt_enable();
++                schedule();
++                return;
++            }
++            debug!(1, b"%s: PID: %d, TID: %d setting PS_EXITED\n\0",
++                c"terminate".as_ptr(), (*process).pid, (*current).tid);
++            account_time(current, process);
++            let exit_status = terminate_status_result(rc, sig);
++            (*process).group_exit_status = exit_status as CULong;
++            (*current).exit_status = exit_status;
++            (*process).status = PS_EXITED;
++            crate::lock_helpers::__mcs_rwlock_writer_unlock(threads, irq_node.as_mut_ptr());
++            crate::lock_helpers::__mcs_rwlock_writer_unlock_noirq(
++                update, update_node.as_mut_ptr().cast(),
++            );
++            original_terminate_mcexec(rc, sig);
++            crate::lock_helpers::__mcs_rwlock_writer_lock(threads, irq_node.as_mut_ptr());
++            process_list_detach_result(addr_of_mut!((*current).siblings_list));
++            crate::lock_helpers::__mcs_rwlock_writer_unlock(threads, irq_node.as_mut_ptr());
++
++            crate::lock_helpers::__mcs_rwlock_reader_lock(threads, irq_node.as_mut_ptr());
++            let head = addr_of_mut!((*process).threads_list);
++            let mut cursor = (*head).next;
++            let mut count: CInt = 0;
++            while cursor != head {
++                let thread = thread_from_sibling(cursor);
++                if terminate_thread_is_other_result(thread.cast(), current.cast()) != 0 {
++                    count = count.wrapping_add(1);
++                }
++                cursor = (*cursor).next;
++            }
++            let mut ids: *mut CInt = null_mut();
++            if count != 0 {
++                ids = crate::mem_helpers::kmalloc_tracked(
++                    count.wrapping_mul(size_of::<CInt>() as CInt), NOWAIT,
++                    SOURCE_FILE.as_ptr().cast_mut().cast(), ORIGIN_LINES[3],
++                ).cast();
++                if !ids.is_null() {
++                    cursor = (*head).next;
++                    let mut index = 0;
++                    while cursor != head {
++                        let thread = thread_from_sibling(cursor);
++                        if terminate_thread_is_other_result(thread.cast(), current.cast()) != 0 {
++                            ids.add(index).write((*thread).tid);
++                            index += 1;
++                        }
++                        cursor = (*cursor).next;
++                    }
++                }
++            }
++            crate::lock_helpers::__mcs_rwlock_reader_unlock(threads, irq_node.as_mut_ptr());
++            if !ids.is_null() {
++                for index in 0..count as usize {
++                    let _ = f06_ptrace_report_signal_kill(
++                        current.cast(), (*process).pid, ids.add(index).read(), SIGKILL,
++                        core::ptr::null(), 0,
++                    );
++                }
++                crate::mem_helpers::kfree_tracked(
++                    ids.cast(), SOURCE_FILE.as_ptr().cast_mut().cast(), ORIGIN_LINES[4],
++                );
++            }
++            loop {
++                crate::lock_helpers::__mcs_rwlock_reader_lock(threads, irq_node.as_mut_ptr());
++                let mut found = false;
++                cursor = (*head).next;
++                while cursor != head {
++                    let thread = thread_from_sibling(cursor);
++                    if terminate_thread_active_result((*thread).status) != 0 {
++                        found = true;
++                        break;
++                    }
++                    cursor = (*cursor).next;
++                }
++                crate::lock_helpers::__mcs_rwlock_reader_unlock(threads, irq_node.as_mut_ptr());
++                if !found {
++                    break;
++                }
++                schedule();
++            }
++            crate::lock_helpers::__mcs_rwlock_writer_lock(threads, irq_node.as_mut_ptr());
++            process_list_add_tail_result(addr_of_mut!((*current).siblings_list), head);
++            crate::lock_helpers::__mcs_rwlock_writer_unlock(threads, irq_node.as_mut_ptr());
++            let vm = (*process).vm;
++            free_all_process_memory_range(vm);
++            let saved = (*process).saved_cmdline;
++            if !saved.is_null() {
++                crate::mem_helpers::kfree_tracked(
++                    saved.cast(), SOURCE_FILE.as_ptr().cast_mut().cast(), ORIGIN_LINES[5],
++                );
++            }
++            let reports = addr_of_mut!((*process).report_threads_list);
++            while (*reports).next != reports {
++                let report = (*reports).next.cast::<u8>()
++                    .sub(offset_of!(Thread, report_siblings_list)).cast::<Thread>();
++                if terminate_report_thread_ptrace_result((*report).ptrace) != 0 {
++                    let release = terminate_report_thread_release_needed_result(
++                        ((*report).proc == process) as CInt, (*report).termsig,
++                    );
++                    if release != 0 {
++                        process_thread_termsig_clear_result(
++                            report.cast(), offset_of!(Thread, termsig) as CULong, release,
++                        );
++                    }
++                    f03_ptrace_detach_thread_v1(report, 0);
++                    if release != 0 {
++                        release_thread(report);
++                    }
++                } else {
++                    crate::lock_helpers::__mcs_rwlock_writer_lock(threads, irq_node.as_mut_ptr());
++                    process_thread_report_detach_result(
++                        report.cast(), offset_of!(Thread, report_proc) as CULong,
++                        null_mut(), addr_of_mut!((*report).report_siblings_list),
++                    );
++                    crate::lock_helpers::__mcs_rwlock_writer_unlock(threads, irq_node.as_mut_ptr());
++                    release_thread(report);
++                }
++            }
++            let children = addr_of_mut!((*process).children_list);
++            let ptraced_children = addr_of_mut!((*process).ptraced_children_list);
++            if terminate_child_cleanup_needed_result(
++                ((*children).next == children) as CInt,
++                ((*ptraced_children).next == ptraced_children) as CInt,
++            ) != 0 {
++                reparent_children(
++                    resources, process, pid1, irq_node.as_mut_ptr(), update_node.as_mut_ptr(),
++                    parent_node.as_mut_ptr(), pid1_node.as_mut_ptr(),
++                );
++            }
++            debug!(2, b"terminate,pid=%d\n\0", (*process).pid);
++            f03_finalize_process_v1(process);
++            crate::cls::preempt_disable();
++            // Original current-thread/process ownership must keep threads valid
++            // across finalize_process; this proposal does not invent that ref.
++            crate::lock_helpers::__mcs_rwlock_writer_lock(threads, irq_node.as_mut_ptr());
++            (*current).status = PS_EXITED;
++            crate::lock_helpers::__mcs_rwlock_writer_unlock(threads, irq_node.as_mut_ptr());
++            release_thread(current);
++            release_process_vm(vm);
++            // No current/process/VM pointer is dereferenced beyond this point.
++            // Executing-stack retention until scheduler handoff remains a HOLD.
++            crate::cls::preempt_enable();
++            schedule();
++            kprintf(c"%s: ERROR: returned from terminate() -> schedule()\n".as_ptr(),
++                c"terminate".as_ptr());
++            crate::abort::panic(c"panic".as_ptr());
++        }
++    }
++
++    #[no_mangle]
++    #[used]
++    pub static f03_terminate_Rust_ABI_v1: [CULong; 59] = [
++        size_of::<crate::abi::Thread>() as CULong,
++        core::mem::align_of::<crate::abi::Thread>() as CULong,
++        offset_of!(crate::abi::Thread, proc) as CULong,
++        offset_of!(crate::abi::Thread, vm) as CULong,
++        offset_of!(crate::abi::Thread, status) as CULong,
++        offset_of!(crate::abi::Thread, exit_status) as CULong,
++        offset_of!(crate::abi::Thread, user_tsc) as CULong,
++        offset_of!(crate::abi::Thread, system_tsc) as CULong,
++        offset_of!(crate::abi::Thread, tid) as CULong,
++        offset_of!(crate::abi::Thread, siblings_list) as CULong,
++        offset_of!(crate::abi::Thread, report_siblings_list) as CULong,
++        offset_of!(crate::abi::Thread, report_proc) as CULong,
++        offset_of!(crate::abi::Thread, ptrace) as CULong,
++        offset_of!(crate::abi::Thread, termsig) as CULong,
++        size_of::<crate::abi::Process>() as CULong,
++        core::mem::align_of::<crate::abi::Process>() as CULong,
++        offset_of!(crate::abi::Process, monitoring_event) as CULong,
++        offset_of!(crate::abi::Process, update_lock) as CULong,
++        offset_of!(crate::abi::Process, threads_lock) as CULong,
++        offset_of!(crate::abi::Process, status) as CULong,
++        offset_of!(crate::abi::Process, group_exit_status) as CULong,
++        offset_of!(crate::abi::Process, utime) as CULong,
++        offset_of!(crate::abi::Process, stime) as CULong,
++        offset_of!(crate::abi::Process, pid) as CULong,
++        offset_of!(crate::abi::Process, threads_list) as CULong,
++        offset_of!(crate::abi::Process, vm) as CULong,
++        offset_of!(crate::abi::Process, saved_cmdline) as CULong,
++        offset_of!(crate::abi::Process, report_threads_list) as CULong,
++        offset_of!(crate::abi::Process, children_list) as CULong,
++        offset_of!(crate::abi::Process, ptraced_children_list) as CULong,
++        offset_of!(crate::abi::Process, ppid_parent) as CULong,
++        offset_of!(crate::abi::Process, parent) as CULong,
++        offset_of!(crate::abi::Process, siblings_list) as CULong,
++        offset_of!(crate::abi::Process, ptraced_siblings_list) as CULong,
++        offset_of!(crate::abi::Process, children_lock) as CULong,
++        offset_of!(crate::abi::Process, hash_list) as CULong,
++        size_of::<crate::abi::ResourceSet>() as CULong,
++        core::mem::align_of::<crate::abi::ResourceSet>() as CULong,
++        offset_of!(crate::abi::ResourceSet, process_hash) as CULong,
++        offset_of!(crate::abi::ResourceSet, pid1) as CULong,
++        size_of::<crate::abi::ProcessHash>() as CULong,
++        core::mem::align_of::<crate::abi::ProcessHash>() as CULong,
++        offset_of!(crate::abi::ProcessHash, list) as CULong,
++        offset_of!(crate::abi::ProcessHash, lock) as CULong,
++        size_of::<crate::abi::TimeSpec>() as CULong,
++        core::mem::align_of::<crate::abi::TimeSpec>() as CULong,
++        offset_of!(crate::abi::TimeSpec, tv_sec) as CULong,
++        offset_of!(crate::abi::TimeSpec, tv_nsec) as CULong,
++        size_of::<crate::abi::AbiListHead>() as CULong,
++        core::mem::align_of::<crate::abi::AbiListHead>() as CULong,
++        offset_of!(crate::abi::AbiListHead, next) as CULong,
++        offset_of!(crate::abi::AbiListHead, prev) as CULong,
++        size_of::<McsRwlockNode>() as CULong,
++        core::mem::align_of::<McsRwlockNode>() as CULong,
++        size_of::<McsRwlockNodeIrqsave>() as CULong,
++        core::mem::align_of::<McsRwlockNodeIrqsave>() as CULong,
++        size_of::<McsRwlockLock>() as CULong,
++        core::mem::align_of::<McsRwlockLock>() as CULong,
++        PROCESS_HASH_SIZE as CULong,
++    ];
++
++const _: unsafe extern "C" fn(CInt, CInt) = f03_terminate_whole_v1;
+--- /dev/null
++++ b/kernel/rust/syscall_interrupt_arity3.rs
+@@ -0,0 +1,52 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Contract candidate only: kill's unused arguments 3-5 are zero. This proposed
++// defined-input policy does not change UTI decisions or request ID/valid logic.
++use core::mem::MaybeUninit;
++use core::ptr::{addr_of, addr_of_mut, write_volatile};
++use crate::abi::{CInt, CULong, Thread, X86UserContext};
++use crate::debug::Ddebug;
++
++const SOURCE_FILE: &[u8] = b"/src/kernel/syscall.c\0";
++#[cfg(f03_interrupt_origin_dispatch)]
++const DEBUG_LINE: u32 = 5662;
++#[cfg(not(f03_interrupt_origin_dispatch))]
++const DEBUG_LINE: u32 = 5669;
++#[used]
++#[no_mangle]
++#[link_section = "__verbose"]
++static mut f03_interrupt_syscall_debug_v1: [Ddebug; 1] = [Ddebug {
++    file: SOURCE_FILE.as_ptr().cast(), func: b"interrupt_syscall\0".as_ptr().cast(),
++    fmt: core::ptr::null(), line_flags: DEBUG_LINE,
++}];
++
++/// Invoke the original three-argument kill forwarding route on a defined context.
++///
++/// # Safety
++/// `thread` and its process are live for all field reads and forwarding, as in
++/// the original entry. Current execution and forwarding retain their original
++/// locks and lifetime; this does not acquire a reference or alter UTI state.
++#[export_name = "interrupt_syscall"]
++pub unsafe extern "C" fn f03_interrupt_arity3_v1(thread: *mut Thread, sig: CInt) {
++    // Only the six argument fields are initialized; never create a reference
++    // to an incompletely initialized context or initialize unrelated UTI state.
++    let mut ctx = MaybeUninit::<X86UserContext>::uninit();
++    let ctx_ptr = ctx.as_mut_ptr();
++    unsafe {
++        if core::ptr::read_volatile(addr_of!(f03_interrupt_syscall_debug_v1[0].line_flags)) >> 24 != 0 {
++            super::kprintf(c"interrupt_syscall pid=%d tid=%d sig=%d\n".as_ptr(),
++                (*(*thread).proc).pid, (*thread).tid, sig);
++        }
++        // SAFETY: These six distinct integer fields match the x86 syscall
++        // selectors; raw field writes avoid references to uninitialized storage.
++        write_volatile(addr_of_mut!((*ctx_ptr).gpr.rdi), (*(*thread).proc).pid as CULong);
++        write_volatile(addr_of_mut!((*ctx_ptr).gpr.rsi), (*thread).tid as CULong);
++        write_volatile(addr_of_mut!((*ctx_ptr).gpr.rdx), sig as CULong);
++        write_volatile(addr_of_mut!((*ctx_ptr).gpr.r10), 0);
++        write_volatile(addr_of_mut!((*ctx_ptr).gpr.r8), 0);
++        write_volatile(addr_of_mut!((*ctx_ptr).gpr.r9), 0);
++        let error = super::syscall_generic_forwarding(62, ctx_ptr);
++        if error != 0 {
++            super::kprintf(c"interrupt_syscall failed. %ld\n".as_ptr(), error);
++        }
++    }
++}
+--- /dev/null
++++ b/kernel/rust/syscall_ptrace_detach_kill.rs
+@@ -0,0 +1,20 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++use crate::abi::{CInt, CLong, SigInfo};
++use core::ffi::c_void;
++
++/// Forward the original callback to the existing do_kill provider.
++///
++/// # Safety
++/// Caller retains the current thread and, when non-null, info for the duration
++/// of the existing provider call, following the original C callback contract.
++#[no_mangle]
++pub unsafe extern "C" fn ptrace_detach_do_kill_bridge(
++    current_thread: *mut c_void, pid: CInt, tid: CInt, sig: CInt,
++    info: *const c_void, ptracecont: CInt,
++) -> CLong {
++    // SAFETY: Existing adapter uses the original unsigned C provider and
++    // bit-preserving long conversion; raw pointers and arguments are unchanged.
++    unsafe { super::f06_ptrace_report_signal_kill(
++        current_thread, pid, tid, sig, info.cast::<SigInfo>(), ptracecont,
++    ) }
++}
+--- /dev/null
++++ b/kernel/rust/syscall_ptrace_wakeup_log.rs
+@@ -0,0 +1,35 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Approved defined contract: event 4 logs the result's low 32 bits as unsigned hex.
++    use crate::abi::CInt;
++    use crate::debug::Ddebug;
++    use core::ptr::addr_of;
++
++    #[used]
++    #[no_mangle]
++    #[link_section = "__verbose"]
++    static mut f03_ptrace_wakeup_log_debug_v1: [Ddebug; 1] = [Ddebug {
++        file: b"/src/kernel/syscall.c\0".as_ptr().cast(),
++        func: b"ptrace_wakeup_log_bridge\0".as_ptr().cast(),
++        fmt: core::ptr::null(), line_flags: 24429,
++    }];
++
++    /// Emit the event-4 diagnostic under the proposed defined hexadecimal ABI.
++    ///
++    /// # Safety
++    /// The original C caller's logging/CPU context must remain valid. The review
++    /// must bind the static ddebug identity and the logger's callable ABI.
++    #[no_mangle]
++    pub unsafe extern "C" fn ptrace_wakeup_log_bridge(event: CInt, value: CInt, result: CInt) {
++        if event == 4 {
++            // SAFETY: The original writable ddebug flag is read before emission;
++            // passing u32 gives `%x` its defined unsigned-int variadic domain.
++            unsafe {
++                if core::ptr::read_volatile(addr_of!(f03_ptrace_wakeup_log_debug_v1[0].line_flags)) >> 24 != 0 {
++                    super::kprintf(c"ptrace_wakeup_sig,pid=%d,data=%08x\n".as_ptr(),
++                        value, result as u32);
++                }
++            }
++        }
++    }
++
++const _: unsafe extern "C" fn(CInt, CInt, CInt) = ptrace_wakeup_log_bridge;
+--- /dev/null
++++ b/kernel/rust/f03_signal_forward_defined_candidate.rs
+@@ -0,0 +1,56 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Signal-forwarding six-slot wire contract; selector is default OFF.
++use core::{ffi::c_void, mem::MaybeUninit, ptr::{addr_of, addr_of_mut}};
++use crate::abi::{CInt, CLong, CULong, KSigAction, X86UserContext};
++
++/// Forward the existing custom signal-mask payload with approved unused zeroes.
++///
++/// # Safety
++/// Original current-thread, endpoint and synchronous transport contracts apply.
++/// Only the six argument fields are initialized; no whole-context reference is
++/// valid, and the context remains live until generic forwarding completes.
++#[no_mangle]
++pub unsafe extern "C" fn syscall_forward_rt_sigprocmask_bridge(sigmask: CULong) -> CLong {
++    let mut storage = MaybeUninit::<X86UserContext>::uninit();
++    let ctx = storage.as_mut_ptr();
++    // SAFETY: Each pointer addresses the naturally aligned live raw field. The
++    // first volatile write exactly retains original setter0; remaining fields
++    // implement the explicitly approved transmitted zero slots.
++    unsafe {
++        addr_of_mut!((*ctx).gpr.rdi).write_volatile(sigmask);
++        addr_of_mut!((*ctx).gpr.rsi).write(0);
++        addr_of_mut!((*ctx).gpr.rdx).write(0);
++        addr_of_mut!((*ctx).gpr.r10).write(0);
++        addr_of_mut!((*ctx).gpr.r8).write(0);
++        addr_of_mut!((*ctx).gpr.r9).write(0);
++        super::syscall_generic_forwarding(14, ctx)
++    }
++}
++
++/// Forward original ordered action fields with approved unused zeroes.
++///
++/// # Safety
++/// The action points to the original live aligned initialized action for the
++/// original handler/flags reads; caller retains validation, update ordering and
++/// endpoint/lifetime contracts. No whole-context reference or zero is formed.
++#[no_mangle]
++pub unsafe extern "C" fn syscall_forward_sigaction_update_bridge(sig: CInt, action: *const c_void) -> CLong {
++    let mut storage = MaybeUninit::<X86UserContext>::uninit();
++    let ctx = storage.as_mut_ptr();
++    let action = action.cast::<KSigAction>();
++    // SAFETY: Match original volatile setter order, including reading handler
++    // after arg0 and flags after arg1. Signed sig converts modulo 2^64, as C.
++    unsafe {
++        addr_of_mut!((*ctx).gpr.rdi).write_volatile(sig as CULong);
++        let handler = addr_of!((*action).sa.sa_handler).read() as CULong;
++        addr_of_mut!((*ctx).gpr.rsi).write_volatile(handler);
++        let flags = addr_of!((*action).sa.sa_flags).read();
++        addr_of_mut!((*ctx).gpr.rdx).write_volatile(flags);
++        addr_of_mut!((*ctx).gpr.r10).write(0);
++        addr_of_mut!((*ctx).gpr.r8).write(0);
++        addr_of_mut!((*ctx).gpr.r9).write(0);
++        super::syscall_generic_forwarding(13, ctx)
++    }
++}
++const _: unsafe extern "C" fn(CULong) -> CLong = syscall_forward_rt_sigprocmask_bridge;
++const _: unsafe extern "C" fn(CInt, *const c_void) -> CLong = syscall_forward_sigaction_update_bridge;
+--- /dev/null
++++ b/kernel/rust/f03_perf_entry_candidate.rs
+@@ -0,0 +1,128 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Default-off entry binding to the existing Rust perf body and C metadata.
++use core::{ffi::c_void, mem::{align_of, offset_of, size_of, MaybeUninit}};
++use crate::abi::{CInt, CLong, CULong, SyscallRequest, X86UserContext};
++use crate::f03_perf_attr_callbacks::PerfEventAttr;
++use crate::x86_cpu_helpers::{ihk_mc_syscall_arg0, ihk_mc_syscall_arg1, ihk_mc_syscall_arg2, ihk_mc_syscall_arg3, ihk_mc_syscall_arg4};
++use super::{PerfAttrFreqFn,PerfCounterAllocFn,PerfOpenAllocEventFn,PerfOpenSyscallFn,SyscallCopyFromUserFn,SyscallMckfdIntFn,SyscallMckfdLockFn,SyscallMckfdLongFn,SyscallMckfdUnlockFn,SyscallPolicyAllocFn};
++#[repr(C)]
++struct PerfEntryBinding {
++    attr_size: CULong,
++    attr_type: CULong,
++    attr_read_format: CULong,
++    attr_sample_period: CULong,
++    raw_type: CULong,
++    hardware_type: CULong,
++    cache_type: CULong,
++    unsupported_format: CULong,
++    sign_bit: CULong,
++    syscall_number: CULong,
++    mckfd_size: CULong,
++    allocation_flags: CULong,
++    event_pid: CULong,
++    event_counter_id: CULong,
++    proc_mckfd: CULong,
++    mckfd_next: CULong,
++    mckfd_fd: CULong,
++    mckfd_data: CULong,
++    event_group_leader: CULong,
++    event_sibling_list: CULong,
++    event_group_entry: CULong,
++    event_nr_siblings: CULong,
++    event_pmc_status: CULong,
++    thread_pmc_alloc_map: CULong,
++    proc_mckfd_lock: CULong,
++    mckfd_sig_no: CULong,
++    mckfd_read_cb: CULong,
++    mckfd_ioctl_cb: CULong,
++    mckfd_mmap_cb: CULong,
++    mckfd_close_cb: CULong,
++    mckfd_fcntl_cb: CULong,
++    copy_from: Option<SyscallCopyFromUserFn>,
++    attr_freq: Option<PerfAttrFreqFn>,
++    event_alloc: Option<PerfOpenAllocEventFn>,
++    counter_alloc: Option<PerfCounterAllocFn>,
++    syscall: Option<PerfOpenSyscallFn>,
++    allocate: Option<SyscallPolicyAllocFn>,
++    read: Option<SyscallMckfdLongFn>,
++    ioctl: Option<SyscallMckfdIntFn>,
++    mmap: Option<SyscallMckfdLongFn>,
++    close: Option<SyscallMckfdIntFn>,
++    fcntl: Option<SyscallMckfdIntFn>,
++    lock: Option<SyscallMckfdLockFn>,
++    unlock: Option<SyscallMckfdUnlockFn>,
++}
++unsafe extern "C" { static f03_perf_entry_binding_v1: PerfEntryBinding; }
++const _: () = {
++    assert!(size_of::<CULong>() == 8 && size_of::<usize>() == 8);
++    assert!(size_of::<PerfEventAttr>() == 104 && align_of::<PerfEventAttr>() == 8);
++    assert!(offset_of!(PerfEventAttr, type_) == 0 && offset_of!(PerfEventAttr, read_format) == 32);
++    assert!(offset_of!(PerfEventAttr, sampling) == 16);
++    assert!(size_of::<SyscallRequest>() == 72 && align_of::<SyscallRequest>() == 8);
++    assert!(size_of::<PerfEntryBinding>() == 352 && align_of::<PerfEntryBinding>() == 8);
++};
++/// Reuse the original perf entry provider, field and callback bindings.
++///
++/// # Safety
++/// The caller supplies the original live syscall context and current thread,
++/// process, perf, VM and endpoint lifetimes. Existing perf and request helper
++/// contracts, publication/cleanup and all unreleased holds remain unchanged.
++#[no_mangle]
++pub unsafe extern "C" fn sys_perf_event_open(_number: CInt, ctx: *mut X86UserContext) -> CLong {
++    // No whole reference to either uninitialized stack object is formed.
++    let mut request = MaybeUninit::<SyscallRequest>::uninit();
++    let mut attr = MaybeUninit::<PerfEventAttr>::uninit();
++    // SAFETY: Identical current CPU/thread/process and context prerequisites as C.
++    let thread = unsafe { (*super::get_this_cpu_local_var()).current };
++    let proc = unsafe { (*thread).proc };
++    let arg0 = unsafe { ihk_mc_syscall_arg0(ctx) };
++    let pid = unsafe { ihk_mc_syscall_arg1(ctx) } as CInt;
++    let cpu = unsafe { ihk_mc_syscall_arg2(ctx) } as CInt;
++    let group_fd = unsafe { ihk_mc_syscall_arg3(ctx) } as CInt;
++    let flags = unsafe { ihk_mc_syscall_arg4(ctx) };
++    let linux_cpu = unsafe { super::ihk_mc_get_processor_id() };
++    // SAFETY: Read-only C binding captures the original values and exact provider
++    // addresses. The existing body retains all initialisation and ownership rules.
++    let b = unsafe { &f03_perf_entry_binding_v1 };
++    unsafe { super::perf_event_open_entry_body_result(
++        request.as_mut_ptr(), thread.cast::<c_void>(), proc.cast::<c_void>(),
++        attr.as_mut_ptr().cast::<c_void>(), arg0,
++        b.attr_size as usize, b.attr_type as usize, b.attr_read_format as usize,
++        b.attr_sample_period as usize, pid, cpu, group_fd, flags, linux_cpu,
++        b.raw_type, b.hardware_type, b.cache_type, b.unsupported_format,
++        b.sign_bit, b.syscall_number as CInt, b.mckfd_size as usize, b.allocation_flags,
++        b.event_pid as usize,
++        b.event_counter_id as usize,
++        b.proc_mckfd as usize,
++        b.mckfd_next as usize,
++        b.mckfd_fd as usize,
++        b.mckfd_data as usize,
++        b.event_group_leader as usize,
++        b.event_sibling_list as usize,
++        b.event_group_entry as usize,
++        b.event_nr_siblings as usize,
++        b.event_pmc_status as usize,
++        b.thread_pmc_alloc_map as usize,
++        b.proc_mckfd_lock as usize,
++        b.mckfd_sig_no as usize,
++        b.mckfd_read_cb as usize,
++        b.mckfd_ioctl_cb as usize,
++        b.mckfd_mmap_cb as usize,
++        b.mckfd_close_cb as usize,
++        b.mckfd_fcntl_cb as usize,
++        b.copy_from,
++        b.attr_freq,
++        b.event_alloc,
++        b.counter_alloc,
++        b.syscall,
++        b.allocate,
++        b.read,
++        b.ioctl,
++        b.mmap,
++        b.close,
++        b.fcntl,
++        b.lock,
++        b.unlock,
++    ) }
++}
++const _: unsafe extern "C" fn(CInt, *mut X86UserContext) -> CLong = sys_perf_event_open;
+--- /dev/null
++++ b/kernel/rust/f03_credential_refresh_candidate.rs
+@@ -0,0 +1,39 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Default-off credential field entry wrappers, reusing the existing refresh body.
++use core::{ffi::c_void, mem::{offset_of, MaybeUninit}};
++use crate::abi::{CInt, Process, Thread};
++
++/// # Safety
++/// The current CPU, thread, process, borrowed scratch and existing getcred
++/// synchronous endpoint remain live. The response producer must initialize all
++/// four selected fields before the existing refresh helper reads them. Caller
++/// retains original field exclusion/validation; no failed response is repaired.
++#[no_mangle]
++pub unsafe extern "C" fn do_setresuid() {
++    let mut scratch = MaybeUninit::<[CInt; 16]>::uninit();
++    let thread = unsafe { (*super::get_this_cpu_local_var()).current };
++    // SAFETY: Same current thread, stack allocation, indices and getcred provider;
++    // no reference to the uninitialized scratch or added null/error policy.
++    let _ = unsafe { super::syscall_refresh_cred_fields_body_result(
++        thread.cast::<c_void>(), scratch.as_mut_ptr().cast::<CInt>(),
++        offset_of!(Thread, proc), offset_of!(Process, ruid), offset_of!(Process, euid),
++        offset_of!(Process, suid), offset_of!(Process, fsuid), 0, 1, 2, 3, Some(super::getcred),
++    ) };
++}
++
++/// # Safety
++/// Same current/endpoint and scratch ownership as the uid entry, but the producer
++/// must initialize credential slots four through seven before their consumption.
++#[no_mangle]
++pub unsafe extern "C" fn do_setresgid() {
++    let mut scratch = MaybeUninit::<[CInt; 16]>::uninit();
++    let thread = unsafe { (*super::get_this_cpu_local_var()).current };
++    // SAFETY: Exact existing helper, original field order and gid value indices.
++    let _ = unsafe { super::syscall_refresh_cred_fields_body_result(
++        thread.cast::<c_void>(), scratch.as_mut_ptr().cast::<CInt>(),
++        offset_of!(Thread, proc), offset_of!(Process, rgid), offset_of!(Process, egid),
++        offset_of!(Process, sgid), offset_of!(Process, fsgid), 4, 5, 6, 7, Some(super::getcred),
++    ) };
++}
++const _: unsafe extern "C" fn() = do_setresuid;
++const _: unsafe extern "C" fn() = do_setresgid;
+--- /dev/null
++++ b/kernel/rust/f03_execveat_bridge_candidate.rs
+@@ -0,0 +1,26 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// The target is the existing C body or, when later selected, the whole Rust body.
++#[cfg(f03_execveat_bridge_candidate)]
++mod f03_execveat_bridge_candidate_v1 {
++    use core::ffi::c_void;
++    use crate::abi::{CInt, X86UserContext};
++    unsafe extern "C" {
++        #[link_name = "do_execveat"]
++        fn target(ctx: *mut X86UserContext, dirfd: CInt, filename: *const i8,
++            argv: *mut *mut i8, envp: *mut *mut i8, flags: CInt) -> CInt;
++    }
++    /// # Safety
++    /// Original exec caller owns the context, filename and user argv/env vector
++    /// lifetimes. The actual target retains its initialization, descriptor,
++    /// offload/ACK, VM, preemption and switch contracts. No pointer is dereferenced
++    /// here and no new owner, ACK, error path or additional context copy is added.
++    #[export_name = "syscall_execveat_bridge"]
++    pub unsafe extern "C" fn bridge(ctx: *mut c_void, dirfd: CInt,
++        filename: *const c_void, argv: *mut *mut c_void,
++        envp: *mut *mut c_void, flags: CInt) -> CInt {
++        target(ctx.cast::<X86UserContext>(), dirfd, filename.cast::<i8>(),
++            argv.cast::<*mut i8>(), envp.cast::<*mut i8>(), flags)
++    }
++    const _: unsafe extern "C" fn(*mut c_void, CInt, *const c_void,
++        *mut *mut c_void, *mut *mut c_void, CInt) -> CInt = bridge;
++}
+--- a/kernel/rust/x86_cpu_helpers.rs
++++ b/kernel/rust/x86_cpu_helpers.rs
+@@ -354,7 +354,7 @@
+ /// effect prevents memory reordering across restore. FP/SIMD registers are not
+ /// Rust operands: the entire kernel build excludes their compiler-generated use.
+ #[inline(always)]
+-unsafe fn x86_restore_xstate(state: *const c_void, mask: CULong) {
++pub(crate) unsafe fn x86_restore_xstate(state: *const c_void, mask: CULong) {
+     unsafe {
+         core::arch::asm!(
+             "xrstor [{state}]",
+--- a/arch/x86_64/kernel/syscall.c
++++ b/arch/x86_64/kernel/syscall.c
+@@ -452,6 +452,10 @@
+ 
+ #endif
+ #line 394
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_XRSTOR_LEAF)
++extern void arch_rt_sigreturn_xrstor_bridge(void *fpregs);
++#else
++#line 394
+ void
+ arch_rt_sigreturn_xrstor_bridge(void *fpregs)
+ {
+@@ -462,6 +466,8 @@
+ 
+ 	asm volatile("xrstor %0" : : "m"(*kfpregs), "a"(low), "d"(high) : "memory");
+ }
++#endif
++#line 404
+ 
+ #ifdef MCKERNEL_NATIVE_SIGNAL_STACK
+ extern long native_xstate_buffer_size_result(int provided, int configured);
+@@ -507,12 +513,18 @@
+ }
+ #endif /* selected signal-return FP lifecycle is Rust-owned */
+ 
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_BAD_FRAME_LEAF)
++extern long arch_native_signal_bad_frame_bridge(long error);
++#else
++#line 449
+ long arch_native_signal_bad_frame_bridge(long error)
+ {
+ 	kprintf("native signal return rejected: %ld\n", error);
+ 	terminate(0, SIGSEGV);
+ 	return -EFAULT;
+ }
++#endif
++#line 455
+ #endif
+ 
+ #if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && \
+@@ -1622,6 +1634,10 @@
+ #endif
+ #line 1446
+ 
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_REGSET_DEFINED_DIAGNOSTIC)
++extern void arch_ptrace_regset_log_bridge(int event, long type);
++#else
++#line 1447
+ void
+ arch_ptrace_regset_log_bridge(int event, long type)
+ {
+@@ -1632,6 +1648,8 @@
+ 		kprintf("ptrace_write_regset: not supported type 0x%x\n", type);
+ 	}
+ }
++#endif
++#line 1457
+ #endif
+ #line 1458
+ 
+@@ -4354,3 +4372,9 @@
+ }
+ #endif /* public arch_ptrace_syscall_event is owned by Rust */
+ /*** End of File ***/
++
++/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
++/* ABI witness only: not selected into the normal production image. */
++#ifdef MCKERNEL_ARCH5_ABI_WITNESS
++#include <arch5-abi-witness.inc>
++#endif

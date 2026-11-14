@@ -1,0 +1,66 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_BOUND_CONSERVATIVE_PLANNING_RESERVATION_NOT_AN_AGGREGATE_RLIMIT",
+  "components": [
+    {
+      "kind": "retained_final_artifacts",
+      "slots": 6,
+      "bytes_each": 67108864,
+      "bytes": 402653184,
+      "basis": "providers.o,selected.o,three fallback objects,parity executable"
+    },
+    {
+      "kind": "Rust_internal_temporaries",
+      "slots": 32,
+      "bytes_each": 67108864,
+      "bytes": 2147483648,
+      "basis": "Conservative32 temporary slots for default codegen partitioning/metadata/object emission; emit=obj, no save-temps/incremental/debug archives"
+    },
+    {
+      "kind": "four_C_compile_internal_temporaries",
+      "slots": 12,
+      "bytes_each": 67108864,
+      "bytes": 805306368,
+      "basis": "Three temporary slots per fixed one-TU witness compile, including assembly/intermediate/driver file"
+    },
+    {
+      "kind": "link_driver_and_linker_internal_temporaries",
+      "slots": 8,
+      "bytes_each": 67108864,
+      "bytes": 536870912,
+      "basis": "Single driver TU assembly/object, collect2/linker temporary files and transient final artifact; no LTO/plugin/save-temps commands"
+    },
+    {
+      "kind": "outer_command_streams",
+      "slots": 14,
+      "bytes_each": 67108864,
+      "bytes": 939524096,
+      "basis": "Seven stdout plus seven stderr regular files. Reserve full64MiB RLIMIT_FSIZE each even though capture hashing later rejects above32MiB and leaf proposals16KiB are not aggregate enforcement"
+    },
+    {
+      "kind": "outer_records_and_qualifier_capture",
+      "bytes": 67108864,
+      "basis": "Grant/admission/argv/start/join/results records plus bounded nm/readelf/qualification captures"
+    },
+    {
+      "kind": "filesystem_metadata_rounding_and_directory_entries",
+      "bytes": 67108864,
+      "basis": "All compiler temporaries routed to same private leaf output; directory/metadata rounding allowance"
+    },
+    {
+      "kind": "emergency_growth_margin",
+      "bytes": 1073741824,
+      "basis": "One GiB beyond enumerated outputs before reservation rounding"
+    }
+  ],
+  "enumerated_total_bytes": 6039797760,
+  "host_growth_reserve_bytes": 8589934592,
+  "rounding_margin_bytes": 2550136832,
+  "HOST_floor_bytes": 17179869184,
+  "scratch_floor_bytes": 12884901888,
+  "host_free_required_bytes": 25769803776,
+  "temporary_output_location": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/ordinary-host-profile-1/future-output-1",
+  "temporary_location_binding": "First six commands use pinned /usr/bin/env TMPDIR=<private leaf output> before exact compiler executable. Runner creates leaf before first command. Harness opens no files; captures are separate same-HOST paths.",
+  "limits": "Existing runner per-file64MiB limit is not a count or aggregate output limit. This is a planning reserve for these exact ordinary pinned sources/tools/commands, not a universal compiler output-count guarantee or new quota.",
+  "failure_behavior": "Original runner preserves first failure and successful prefix. No automatic replay or cleanup. Existing admission requires HOST16GiB plus the full8GiB reserve on each command; scratch12GiB and memory/oneheavy/aggregate limits unchanged."
+}

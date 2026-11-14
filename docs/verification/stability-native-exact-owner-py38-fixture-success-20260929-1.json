@@ -1,0 +1,45 @@
+{
+  "schema": "mckernel.native-exact-owner-py38-fixture-success.v1",
+  "date": "2026-09-29",
+  "status": "PASS_TEST_FIXTURE_ONLY",
+  "base_checkpoint": "f18a1e857f1e38a4435c5e7b1c8540144fee35d9",
+  "failure": {
+    "command": "/usr/bin/python3 -B scripts/tests/test_native_rust_exact_build_container_owner.py",
+    "result": "ERROR: 65 tests, one error",
+    "case": "test_memory_allocation_unknown_and_backup_walk_failure_precede_lease_or_docker",
+    "diagnostic": "TypeError: denied_backup_walk() takes from 1 to 3 positional arguments but 4 were given",
+    "classification": "Python 3.8 test-mock signature compatibility; production owner did not reach a Docker client or lease"
+  },
+  "correction": {
+    "file": "scripts/tests/test_native_rust_exact_build_container_owner.py",
+    "before_sha256": "c96d25c0a8d06aec6ff9d73a207cae3102771f89ec8d978cb6883183168a0857",
+    "after_sha256": "b187b587bb5ae253bfba2e06f6c0cc81f5a5152b83eb5db48602890159329ae5",
+    "change": "accept and forward the full os.walk path/topdown/onerror/followlinks call in the denied-backup fixture",
+    "production_owner_changed": false,
+    "denial_oracle_preserved": true
+  },
+  "tests": [
+    {
+      "command": "/usr/bin/python3 -B -m unittest scripts.tests.test_native_rust_exact_build_container_owner",
+      "result": "PASS 65 tests"
+    },
+    {
+      "command": "python3 -B -m unittest scripts.tests.test_native_rust_exact_build_container_owner",
+      "result": "PASS 65 tests"
+    },
+    {
+      "command": "Python 3.8 and 3.9 py_compile to temporary outputs; git diff --check",
+      "result": "PASS"
+    }
+  ],
+  "evidence": {
+    "path": "docs/verification/evidence/native-exact-owner-py38-fixture-20260929-1.txt",
+    "sha256": "001a4b593bacbb235a6b4ac69a5b9c3a75e9e1f5c184ad370627647a10520e2e"
+  },
+  "scope": {
+    "build_acceptance": false,
+    "runtime_acceptance": false,
+    "formal_counters_changed": false,
+    "candidate_rebuild_required": false
+  }
+}

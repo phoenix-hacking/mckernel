@@ -1,0 +1,91 @@
+{
+  "decision": "GO_FOR_TWO_FROZEN_AFFECTED_SELECTORS_BASELINE_AND_CANDIDATE_AFTER_ABI_LANE_AND_FRESH_ROOT_ADMISSION",
+  "request": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/module-existing-fixture-1/REQUEST.json",
+    "sha256": "cedd7168a155a0390f3c8e1984944e0c75d4e0f83afe0b74a3b5f1da1bd04703"
+  },
+  "inputs_verified": [
+    {
+      "path": "/home/holden/mckernel/scripts/tests/test_native_rust_kbuild_link_closure.py",
+      "sha256": "ec488a0bedd03bc66b234bac530d6a6f675fcf49564d1bb4f3d48b23b832e06b",
+      "bytes": 60147
+    },
+    {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/module-existing-fixture-1/baseline/scripts/tests/test_native_rust_kbuild_link_closure.py",
+      "sha256": "ec488a0bedd03bc66b234bac530d6a6f675fcf49564d1bb4f3d48b23b832e06b",
+      "bytes": 60147
+    },
+    {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/module-existing-fixture-1/candidate/scripts/tests/test_native_rust_kbuild_link_closure.py",
+      "sha256": "8367a8f49b3f5e574e057ced0d3529ef18c08198a7f17b80fad143fa5671f9a5",
+      "bytes": 62872
+    },
+    {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/module-existing-fixture-1/TESTS.PRIVATE.patch",
+      "sha256": "cf3cf7fe4f6ef305b65d869af41de002fbcf942cccd41bdff4bf3d08db35b29e",
+      "bytes": 8581
+    },
+    {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/module-existing-fixture-1/run_affected_tests.py",
+      "sha256": "edd7629830f91dd56c8c912aacab07b165f8eca1621625f86a27c433c28a5936",
+      "bytes": 1085
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/native_rust_kbuild_link_closure.py",
+      "sha256": "dcf60a94f46a8312cf60a67cba0a28d3dc27654083d1d0c5d25bf3ccad6c0523",
+      "bytes": 69374
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/rocky_rust_staging.py",
+      "sha256": "48883e8c415737341ecebfe64206740547c2e2f571f14ca1a775b9ca1dd747b0",
+      "bytes": 100275
+    },
+    {
+      "path": "/home/holden/mckernel/host-kernel/kbuild/Kbuild.in",
+      "sha256": "192c744b53fe2158f8f81ab6165107753b2fb66a9642db02c3a85c3c3843a4e3",
+      "bytes": 1472
+    },
+    {
+      "path": "/home/holden/mckernel/host-kernel/kbuild/stage-manifest.json",
+      "sha256": "af03cd85ca6c6811134bba5d0e304b0202ca45d7a340fb8f646e03d74b33f85e",
+      "bytes": 19269
+    },
+    {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/module-tests-1/test_native_rust_mcctrl_composite.py",
+      "sha256": "e5aca0741e037f49d25c05cd16ccb5fc02ca558a8ff5ab3116b23d0d5a5fb02e",
+      "bytes": 9113
+    },
+    {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/module-tests-1/correction-1/test_native_rust_mcctrl_composite.py",
+      "sha256": "6327356bee9fd13aa8440a9b9befe0adda3509b8406bcc69bcd98b1389ded23a",
+      "bytes": 11515
+    },
+    {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/module-existing-fixture-1/PREPARATION-FIRST-FAILURE.json",
+      "sha256": "a1ee5f0dd55790448778541e9f2b1432c9f8167fe4d21c0112678847c540e4ab",
+      "bytes": 386
+    }
+  ],
+  "patch_verification": "Exact unified diff from pinned ec488 baseline to 8367 candidate; AST parsed only. No test/SUT/runner/helper import, compiler or process execution.",
+  "fixture_delta": [
+    "MCCTRL receives exact four existing MCCTRL_CHECK_CFG operands with accepted literal quoting, not altered validator grammar.",
+    "Generated module C metadata uses actual normalized module name mcctrl rather than Rust crate mcctrl_rust; other module names remain corresponding normalized names.",
+    "Current MCCTRL .mod generator/response contains exact Rust+two assembly components, source-owned conservative assembly records, MCCTRL aggregate with existing strict objtool; no execution of recorded compiler/link/objtool text.",
+    "Raw19/cmd16/mod3 counts reflect actual current graph; success assertions strengthen exact three-member MCCTRL order/two assembly owners/stage hashes and explicitly False actual_profile_and_emission_qualification.",
+    "Actual existing stage alias is honored by source traversal helper. That separate source traversal selector is not run or claimed covered by this packet."
+  ],
+  "unchanged_assertions": "Exact canonical serialized output/reparse, complete_external_build_input_closure=False, credit/load/production/runtime=False, stage/source identity assertions and CLI altered-output rejection remain. No assertion or validation bypass.",
+  "execution_contract": [
+    "Exactly two frozen unittest selectors in each serial baseline/candidate invocation; no full29 suite or prior4/quote3 replay.",
+    "Runner imports exact current canonical validator dcf60 and private test file explicitly, then resets REPO_ROOT/SCRIPT/TEST_FILE to frozen intended actual paths. It loads only named selectors.",
+    "Fixtures use fresh tempfile directories and remove only their own temporary roots. CLI selector has exactly three sequential subprocess.run calls of the same sys.executable/checker source for output/check-output/altered-output rejection; all wait synchronously. Synthetic stage hashes and saved commands grant no SDK/compiler/runtime identity.",
+    "Baseline expected unittest exit1 must show obsolete fixture missing current composite/checkcfg/normalized metadata, not setup/import/environment failure. Preserve actual first diagnostic. Candidate exit0 requires both tests pass, no errors/unexpected children.",
+    "Root owns actual pre-Popen pin validation, fresh CPU7/AS1GiB/CPU45/wall58+2/FSIZE64MiB/core0 inside shared3jobs/4GiB TOTAL/fresh26GiB; no overlap or extra grant beyond existing allocation.",
+    "Record actual outer/CLI PIDs/births/direct waits/stdout/stderr/metrics. Stop first unexpected failure/no automatic retry; release slot after all joins. No native/ASM/compiler/link/module-load/service/network/model actions."
+  ],
+  "preserved_failure": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/module-existing-fixture-1/PREPARATION-FIRST-FAILURE.json",
+    "scope": "metadata assembly NameError only; zero test/SUT/Popen and canonical changes; preserved exactbytes"
+  },
+  "acceptance_limit": "Actual current-composite validator/CLI fixture regression only. Real SDK command, emitted assembly/objtool/module artifact, deployment/native and full original acceptance remain separate obligations."
+}

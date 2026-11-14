@@ -1,0 +1,9 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+Use the already accepted strict235 Rust process/exec/wait case as the smallest existing operation which can exercise all three MM bodies without a new harness. Genuine fork adoption reaches mmap_write_lock, a nonempty vma_start_write loop, then RAII mmap_write_unlock. Existing revoke/control additionally exercises lock/unlock and the nonterminal VMA-write path; the terminal zero-users branch must not be counted as VMA-write execution.
+
+The exact oracle is copied as expected.stdout (235 bytes) and expected.stderr (empty). Keep raw exit0, both child EOF/reap/ECHILD, real cleanup ACK/final retirement, procfs deletion and original kernel-log scanning. Reuse the existing 4-vCPU/8192-MiB guest, CPU2-5/12-GiB/no-swap/512-task/no-network container, existing owner/stager/collector and bounded cleanup. No profile expansion or new harness is proposed.
+
+Concrete blocker: retained MM module57546af5 belongs to the actual SDK cohort with SMP887dc356 and IHKdaced291, while accepted strict235 used SMP2eb3e8e6/mcctrl06e8b9b5. A matching capsule/manifest and image/launcher/native-boot compatibility proof for the new cohort are absent. Replacing only mcctrl inside the old capsule would not establish coherent acceptance. The original SDK FAIL is preserved, as are later scoped artifact/codegen results. Do not rebuild unchanged modules to resolve this source-binding gap.
+
+JSON includes exact historical bindings, source call paths, strict oracle, profile, restoration observations and missing bindings. Native argv is intentionally null until root creates a fresh namespace, actual capsule, current physical/capacity/lease bindings and independent one-shot native release. No compiler, test, root, Docker or guest command ran in this preparation. Source work in this lane is ready; the next productive step is root-owned coherent artifact/capsule binding.

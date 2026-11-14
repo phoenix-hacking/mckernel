@@ -1,0 +1,14 @@
+--- preserved-runtime-failure/actual_parity.c
++++ original-function-context-restored/actual_parity.c
+@@ -82,7 +82,11 @@
+ static int original(struct process_vm *vm,struct vm_range *range,uintptr_t fault_addr,uint64_t reason,
+  pte_t **po,void **bo,size_t *so,int *ao,int *eo) {
+  int error=*eo;pte_t *ptep;void *pgaddr;size_t pgsize;int p2align;
++/* Restore the extracted block's original enclosing function identity.
++ * The strict logger oracle below remains unchanged. */
++#define __FUNCTION__ "page_fault_process_memory_range"
+ #include "original_page_fault_prepare.ACTUAL-C-BLOCK.inc"
++#undef __FUNCTION__
+  *po=ptep;*bo=pgaddr;*so=pgsize;*ao=p2align;*eo=error;return 0;
+ out:
+  *po=ptep;*bo=pgaddr;*so=pgsize;*ao=p2align;*eo=error;return 1;

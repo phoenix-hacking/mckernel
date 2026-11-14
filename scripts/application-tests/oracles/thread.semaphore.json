@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "thread.semaphore",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/thread.semaphore"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["consumed=16 extra_rc=-1 extra_errno=11 eagain=1 final_value=0"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Sixteen posted tokens produce exactly sixteen successful waits", "No extra token remains and sem_trywait returns EAGAIN"],
+  "unresolved_expectations": ["Freeze semaphore sharing and numeric EAGAIN binding before execution."],
+  "max_question_for_reviewer": "Confirm process-private semaphore count and final EAGAIN/no-token state."
+}

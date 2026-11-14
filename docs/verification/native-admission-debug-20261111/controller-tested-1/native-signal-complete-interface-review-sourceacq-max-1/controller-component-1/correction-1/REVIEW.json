@@ -1,0 +1,121 @@
+{
+  "schema": "mckernel.current-owner-component-correction-delta-review.v1",
+  "at": "2026-11-11T07:39:55.355404+00:00",
+  "reviewer": "source_acquisition_review_max",
+  "decision": "NO_GO_ONE_REMAINING_EXCEPTION_PRIORITY_SUBCASE_IN_ORIGINAL_CLEANUP_FAMILY",
+  "correction_metadata": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-real-binding-source-1/complete-interface-1/controller-correction-1/CORRECTION.json",
+    "bytes": 3333,
+    "sha256": "74169200b9c354637c1967339abbbbe8477cf1c37e02bfa68e98ed2008b5e6bf"
+  },
+  "baseline_review": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-complete-interface-review-sourceacq-max-1/controller-component-1/REVIEW.json",
+    "bytes": 10015,
+    "sha256": "b696291f010970695bb89f278e3245fc21e3ef6ff695672d95ceb0f26f806179"
+  },
+  "frozen_postimages": [
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-real-binding-source-1/complete-interface-1/controller-correction-1/candidate/controller/native_current_owner.py",
+      "bytes": 16267,
+      "sha256": "7207a8b68feaf4dc00bcb10cf25f32ef13073e1eeae060e86038c6f855080622"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-real-binding-source-1/complete-interface-1/controller-correction-1/candidate/controller/run_os_goal.py",
+      "bytes": 137532,
+      "sha256": "90256970779fc0f71c1c3779ac009d3b9adcfbc7a6a1e6e4e72e1a8fcd4e269b"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-real-binding-source-1/complete-interface-1/controller-correction-1/candidate/controller/pidfd_compat.py",
+      "bytes": 3875,
+      "sha256": "068e8316ef03a03d1977d05ce755dfa8133c13bd4dfa56254c27b0066be2575c"
+    }
+  ],
+  "frozen_patch": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-real-binding-source-1/complete-interface-1/controller-correction-1/COMPAT-CLEANUP-DEADLINE-CORRECTION.patch",
+    "bytes": 17912,
+    "sha256": "be39082617ee5c32569f6a0b30f2243762f93354e16b1edd5c11aa9b8a07c67f"
+  },
+  "closed_source_findings": {
+    "RUNTIME_PIDFD_38": "Both acquisition sites now use genuine registered068e pidfd_compat.open_pidfd and adopt PidfdVerificationError.fd before propagating. Exact source copied to both controller and immutable package, no runtime upgrade.",
+    "ALL_HANDLE_ATTEMPTS": "close_pair attempts socket and pidfd independently. Server attempts every client/listener/path; OPEN/CLOSING/CLOSED or stickyUNKNOWN_RETAINED prevents ambiguous FD retries. Client fields now initialized before validation. Campaign error path closes before receipt; run finally closes on ordinary stop/cancellation.",
+    "TOTAL_FRAME_DEADLINE": "send/receive share absolute monotonic deadline, update each socket timeout from remaining time and reject deadline expiry after header/body/send. Client/server use one60s handoff; snapshot reserves45s for unchanged bounded account/credit calls. No per-fragment renewal.",
+    "same_actual_account_credit_body_AST": {
+      "begin": true,
+      "record_rate_limits": true,
+      "refresh_credit_budget": true
+    },
+    "data_is_not_native_authority": "authority=None/native_grant=False and same Root/credit run preserved; no controller/allowance constructed."
+  },
+  "remaining_material_finding": {
+    "id": "CLEANUP_INTERRUPT_MASKED_BY_LATER_RECEIPT",
+    "family": "Original b696 always-cleanup/primary-KeyboardInterrupt-preservation contract; no new unrelated requirement.",
+    "source": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-real-binding-source-1/complete-interface-1/controller-correction-1/candidate/controller/run_os_goal.py",
+      "bytes": 137532,
+      "sha256": "90256970779fc0f71c1c3779ac009d3b9adcfbc7a6a1e6e4e72e1a8fcd4e269b"
+    },
+    "poll_method_lines": [
+      656,
+      697
+    ],
+    "run_method_lines": [
+      1841,
+      2001
+    ],
+    "exact_relevant_lines": {
+      "primary_interrupt_assignment": [
+        675
+      ],
+      "receipt_error_handler": [
+        682
+      ],
+      "late_secondary_interrupt_loop": [
+        692
+      ],
+      "run_native_close_interrupt_assignment": [
+        1955
+      ],
+      "run_post_finally_raise": [
+        1999
+      ]
+    },
+    "poll_counterpath": [
+      "Actual component poll fails with an ordinary RuntimeError.",
+      "Actual close attempts all owned handles and raises ChannelCleanupError whose .interrupt is an actual KeyboardInterrupt from one close. The wrapper stores it in secondary, while primary_interrupt remainsNone because only the original poll error was examined.",
+      "The following diagnostic self.save raises OSError. Its except branch attaches errors but sees primary_interruptNone and raises OSError before reaching the later close_error interrupt scan.",
+      "Thus the required interruption object is not propagated; it is only indirectly retained inside attributes."
+    ],
+    "run_counterpath": [
+      "Run finally obtains a KeyboardInterrupt through native_close_interrupt from an actual close result.",
+      "Subsequent existing stop/save/diagnostic/output-close raises an ordinary exception.",
+      "The raise native_close_interrupt statement lies after the whole try/finally, so that later exception bypasses it and masks the pending close interruption."
+    ],
+    "minimum_correction": "Determine the pending interruption from primary and all close results before any diagnostic write. Enclose later shutdown/receipt cleanup so that all required cleanup still runs and the original/pending KeyboardInterrupt or SystemExit is rethrown with secondary failures retained even when those later operations raise. Preserve ordinary primary error/secondary identity. No new control object, allowance, Native/source lease release, permission fallback or API.",
+    "execution_required_to_establish_this_finding": false
+  },
+  "focused_test_preparation": {
+    "owner": "source_acquisition_review_max",
+    "existing_contract": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-controller-correction-tests-sourceacq-max-1/TEST-CONTRACT.PROPOSED.json",
+      "bytes": 4888,
+      "sha256": "994045a75e1f06badf4a190cf9cb26a90f93061969708f35752137b3afec101f"
+    },
+    "three_family_scope_unchanged": true,
+    "specific_cleanup_oracle": "Use actual corrected close/poll/run code with explicit fake socket/pidfd/storage/output effects: one close produces the exact KeyboardInterrupt object, a later receipt raises OSError; all own handles must be attempted and the same interruption must escape with that receipt/close error retained. Normal shutdown control must still close.",
+    "fixture_or_test_executed": false,
+    "runnable_request_not_yet_admitted": true
+  },
+  "preservation": {
+    "original701c_ad675_b696_unchanged": true,
+    "this7416_7207_9025_candidate_unchanged": true,
+    "author_source_import_or_execution": false,
+    "real_account_model_ledger_service_native_or_source_state_writes": false,
+    "canonical_or_peer_edits": false,
+    "full_native_success_path_review_still_pending": true
+  },
+  "next_action": {
+    "owner": "Root routes focused source repair owner under existing bounded-correction/escalation rule",
+    "action": "Freeze only meaningful exception-order successor, retain this failure/source evidence, then independent delta review and exact revised-code pure/fake tests before execution.",
+    "full_native_author": "PublicABI continues the complete native source path independently."
+  }
+}

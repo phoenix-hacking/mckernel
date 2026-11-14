@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "record_kind": "stability_selected_retention_actual_method_implementation_packet_review_failure",
+  "task_id": "M01-B-selected-retention-actual-methods",
+  "review_attempt": 4,
+  "recorded_utc": "2026-09-16T07:29:00Z",
+  "status": "FAIL_IMPLEMENTATION_PACKET_ONLY",
+  "review_role": "independent Astra/high ownership and actual-method packet reviewer",
+  "packet": {
+    "path": "docs/verification/stability-selected-retention-actual-method-implementation-packet-20260916-3.md",
+    "sha256": "6727a0405534b3d95bc5fd8dc7fa8803c05c6cecedd0ea19f9d1a4f6d0288d08"
+  },
+  "findings": [
+    {
+      "id": "generation-output-not-allowlisted",
+      "finding": "The packet lists 17 paths rather than 18 and forbids most of the stager's required 51 source members, originals, input copies, diffs, helper.py, record.json and directories.",
+      "required": "Enumerate the complete per-mode stager creation set separately from the three candidate modifications, plus exact evidence/check outputs."
+    },
+    {
+      "id": "held-results-wrong",
+      "finding": "stability_retention_pre_publish returns -11 for both hold branches; stage-specific first-invalid -71 is a separate observation. Rows 01 through 11 conflate these outcomes.",
+      "required": "For every row specify publish result, first-invalid, stage, commit and wake."
+    },
+    {
+      "id": "mode2-release-reversed",
+      "finding": "Successful Mailbox::publish stores status, consumes release, clears the call and completes the worker before the matching notification fails with -5. Wake None does not set STABILITY_FAULT_PUBLISHED.",
+      "required": "Record publication/release before notification failure with no rollback; keep wake None separate."
+    },
+    {
+      "id": "changed-owner-methods-conflated",
+      "finding": "verification_phase_completion can reject copied-owner mismatch with -71, but retention and fault-send selection bypass on mismatch and ordinary publication can release.",
+      "required": "Split method assertions; mutate only copied host identity while retaining a valid physical/backing claim."
+    },
+    {
+      "id": "rows-not-executable",
+      "finding": "Rows 18, 20 and 25 through 27 lack exact setup, calls, arguments, returns and events; negative servicing TID cannot originate from open_worker; rows 15/16 omit fresh-process initial attempts; mode membership and wake-Some phase requirement are ambiguous.",
+      "required": "Provide complete executable sequences and row-specific baselines."
+    },
+    {
+      "id": "hook-boundaries-incomplete",
+      "finding": "test_insert(Call) is unnecessary and the fault/status/phase/publish helper names, visibility, signatures and gated sites are incomplete; mode2 clock and allocator boundaries are missing.",
+      "required": "Use real admit, define exact cfg(test) helpers and ensure all references disappear under cfg(not(test))."
+    },
+    {
+      "id": "lifetime-and-provenance-incomplete",
+      "finding": "NonNull alone does not own backing; capability Drop and backing deallocation are not separated; post-release observation and both inverse restoration stages are unspecified.",
+      "required": "Bind ledger-owned allocation/quarantine/deallocation, safe status observation, concrete manifest/diff paths and adapter-to-staged plus stager-to-authenticated inverse checks."
+    }
+  ],
+  "implementation_released": false,
+  "compiler_execution": false,
+  "runtime_execution": false,
+  "guest_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}

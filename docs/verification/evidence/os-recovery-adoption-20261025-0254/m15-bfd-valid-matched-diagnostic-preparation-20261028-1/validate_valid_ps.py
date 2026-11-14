@@ -1,0 +1,132 @@
+"""Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Offline oracle for genuine paired idle mcinspect captures; never starts a child.
+Pure fixture success is not diagnostic acceptance or execution authority.
+"""
+import argparse
+import hashlib
+import json
+from pathlib import Path
+import re
+
+HEADER = 'CPU     TID    PID             Thread ST exe\n'
+SEPARATOR = '-----------------------------------------------\n'
+PREFIX = ('dwarf_global_var_addr: inspecting mck_num_processors\n'
+          'dwarf_get_address: DW_AT_location\n'
+          'dwarf_global_var_addr: inspecting clv\n'
+          'dwarf_get_address: DW_AT_location\n')
+
+
+def need(value, message):
+    if not value:
+        raise ValueError(message)
+
+
+def stream_bytes(record):
+    data = bytes.fromhex(record['hex'])
+    need(record['eof'] is True and record['truncated'] is False and
+         record['observed'] == record['retained'] == len(data) and
+         record['discarded'] == 0 and record['limit'] == 65536 and
+         0 < record['eof_ns'] and len(data) <= 65536, 'complete bounded stream')
+    return data
+
+
+def extract(serial):
+    captures = {'reference': {}, 'current': {}}
+    for line in serial.splitlines():
+        if line.startswith('M15_BFD_PROBE_STREAM '):
+            record = json.loads(line.removeprefix('M15_BFD_PROBE_STREAM '))
+            tag, name = record['tag'], record['stream']
+            need(tag in captures and name in ('stdout', 'stderr') and name not in captures[tag],
+                 'unique probe stream')
+            captures[tag][name] = record['capture']
+        elif line.startswith('M15_BFD_PROBE_STATUS '):
+            record = json.loads(line.removeprefix('M15_BFD_PROBE_STATUS '))
+            tag = record['tag']
+            need(tag in captures and 'status' not in captures[tag], 'unique probe status')
+            captures[tag]['status'] = record
+    need(all(set(record) == {'stdout', 'stderr', 'status'} for record in captures.values()),
+         'both real probe captures required')
+    return captures
+
+
+def validate_declaration_trace(text):
+    """Original C walker may visit declarations before each address definition.
+
+    Every attempted variable has the exact original inspection line and either
+    the ordinary NO_ENTRY continuation or a real DW_AT_location resolution.
+    Missing/stripped images and unresolved globals cannot finish this grammar.
+    """
+    lines = text.splitlines(keepends=True)
+    index = 0
+    for variable in ('mck_num_processors', 'clv'):
+        while True:
+            first = f'dwarf_global_var_addr: inspecting {variable}\n'
+            need(index + 1 < len(lines) and lines[index] == first,
+                 'original C variable inspection trace')
+            second = lines[index + 1]
+            index += 2
+            if second == 'dwarf_get_address: DW_AT_location\n':
+                break
+            need(second == f'dwarf_global_var_addr: inspecting {variable} -> DW_DLV_NO_ENTRY for addr?\n',
+                 'original C declaration continuation')
+    need(index == len(lines), 'unexpected pre-PS trace bytes')
+
+
+def validate(inputs, context, captures):
+    need(context['actual_owned_native_context'] is True and context['os_id'] == 0 and
+         context['os_generation'] > 0 and context['logical_cpus'] == [0] and
+         context['kernel_loaded_sha256'] == inputs['refs']['kernel']['sha256'] and
+         context['current_mcinspect_sha256'] == inputs['refs']['current_mcinspect']['sha256'] and
+         context['reference_mcinspect_sha256'] == inputs['refs']['reference_mcinspect']['sha256'],
+         'genuine matched native context')
+    need(context['running_before'] is True and context['running_after'] is True and
+         all(context[name] is True for name in ('procfs_empty_before', 'procfs_empty_between', 'procfs_empty_after')),
+         'owned idle state before/between/after')
+    need(re.fullmatch('[0-9a-f]{64}', context['actual_native_owner_receipt_sha256']) and
+         re.fullmatch('[0-9a-f]{64}', context['independent_cpu_idle_facts_sha256']),
+         'actual owner and independent CPU/idle facts required')
+    outputs = []
+    for tag in ('reference', 'current'):
+        record = captures[tag]
+        status = record['status']
+        need(status['raw_wait_status'] == 0 and status['fault'] is False and
+             status['timeout'] is False and status['clean'] is True and
+             status['stage'] == status['errno'] == 0 and
+             0 < status['started_ns'] <= status['reaped_ns'] <= status['finished_ns'],
+             'actual successful child and normal retirement')
+        stdout, stderr = stream_bytes(record['stdout']), stream_bytes(record['stderr'])
+        need(stderr == b'', 'valid diagnostic stderr must be empty')
+        text = stdout.decode('ascii')
+        need(text.count(HEADER + SEPARATOR) == 1, 'original C DWARF/PS header bytes')
+        trace, table = text.split(HEADER + SEPARATOR)
+        validate_declaration_trace(trace)
+        rows = table.splitlines()
+        need(len(rows) == 1, 'one CPU and one actual idle thread, no user rows')
+        row = re.fullmatch(r'\s*0 >\s*0\s+0 0x([0-9a-f]{16})\s+R \(idle\)', rows[0])
+        need(row is not None and int(row[1], 16) >= 0xffff800000000000,
+             'original C idle CPU/TID/PID/state/command and nonnull kernel pointer')
+        outputs.append(stdout)
+    need(outputs[0] == outputs[1], 'valid original-C-BFD/current complete output equality')
+    return dict(status='PASS_MATCHED_VALID_IDLE_MCINSPECT_PS_ONLY', real_valid_diagnostics=2,
+                current_default_tool_cases=1, original_C_BFD_reference_cases=1,
+                kernel_scope='CURRENT110_60e', matching_CURRENT116_native=False,
+                eclair_valid_diagnostic=False, public_resource_restoration=False,
+                file_closure=False, independent_final_acceptance_required=True)
+
+
+def main():
+    p = argparse.ArgumentParser(description=__doc__)
+    p.add_argument('--inputs', type=Path, required=True)
+    p.add_argument('--context', type=Path, required=True)
+    p.add_argument('--expected-context-sha256', required=True)
+    p.add_argument('--serial', type=Path, required=True)
+    a = p.parse_args()
+    context_bytes = a.context.read_bytes()
+    need(hashlib.sha256(context_bytes).hexdigest() == a.expected_context_sha256,
+         'Root independent actual-context binding')
+    print(json.dumps(validate(json.loads(a.inputs.read_bytes()), json.loads(context_bytes),
+                              extract(a.serial.read_text())), sort_keys=True))
+
+
+if __name__ == '__main__':
+    main()

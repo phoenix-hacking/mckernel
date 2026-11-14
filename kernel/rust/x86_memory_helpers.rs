@@ -3,9 +3,12 @@ use core::ptr::{copy_nonoverlapping, read_volatile, write_bytes, write_volatile}
 use core::sync::atomic::{AtomicU64, Ordering};
 
 use crate::abi::{
-    CInt, CLong, CULong, CpuLocalVar, IkcScdPacket, IkcScdPacketTraditional, ProcessVm, SizeT,
+    CInt, CLong, CULong, CpuLocalVar, IkcScdPacket, IkcScdPacketTraditional, Memobj, Process, ProcessVm, SizeT,
     Thread,
 };
+
+use crate::page_helpers::{page_is_in_memobj, Page};
+use crate::x86_memory_loggers::x86_mem_log_int_bridge;
 
 const PTATTR_ACTIVE: CULong = 0x01;
 const PTATTR_WRITABLE: CULong = 0x02;
@@ -57,6 +60,7 @@ const PFLX_PCD: CULong = 0x10;
 const PFL2_PRESENT: CULong = 0x01;
 const PFL2_KERN_ATTR: CULong = 0x03;
 const PFL2_SIZE: CULong = 0x80;
+const PFL3_SIZE: CULong = 0x80;
 const PFL2_PDIR_ATTR: CULong = 0x07;
 const PFL3_PDIR_ATTR: CULong = 0x07;
 const PFL4_PDIR_ATTR: CULong = 0x07;
@@ -170,84 +174,54 @@ const X86_PT_PRINT_LOG_ENTRY: CInt = 3;
 const X86_PT_PRINT_LOG_LARGE: CInt = 4;
 
 unsafe extern "C" {
+    fn ihk_mc_get_processor_id() -> CInt;
+    fn remote_flush_tlb_array_cpumask(vm: *mut c_void, addr: *mut CULong, nr_addr: CInt, cpu_id: CInt);
+    static x86_clear_range_l4_callback: X86WalkPteCallback;
+    static x86_clear_range_l3_callback: X86ClearChildWalkFn;
+    static x86_clear_l2_child_walk: X86ClearChildWalkFn;
+    static x86_clear_l3_child_walk: X86ClearChildWalkFn;
+    static x86_clear_l3_memobj_flush: X86ClearFlushMemobjFn;
+    static x86_clear_l3_rss_sub: X86ClearRssSubFn;
+    static x86_clear_l3_memobj_rss_sub: X86ClearMemobjRssSubFn;
+    static x86_clear_l3_range_log: X86ClearRangeLogFn;
+    static x86_clear_l3_effect_log: X86ClearEffectLogFn;
+    static x86_clear_l3_use_1gb_page: *const CInt;
+    fn kprintf(format: *const i8, ...) -> CInt;
+    static mut x86_set_pte_enter_debug: crate::debug::Ddebug;
+    static mut x86_set_pte_exit_debug: crate::debug::Ddebug;
+    static mut x86_lookup_enter_debug: crate::debug::Ddebug;
+    static mut x86_lookup_exit_debug: crate::debug::Ddebug;
+    static mut x86_split_rss_add_debug: crate::debug::Ddebug;
+    static mut x86_split_rss_sub_debug: crate::debug::Ddebug;
+    #[link_name = "panic"]
+    fn x86_memory_existing_panic(message: *const i8);
+    static mut x86_clear_effect_free_anon_debug: crate::debug::Ddebug;
+    static mut x86_clear_effect_xpmem_keep_debug: crate::debug::Ddebug;
+    static mut x86_clear_effect_free_unmapped_debug: crate::debug::Ddebug;
+    static mut x86_clear_effect_child_free_debug: crate::debug::Ddebug;
+    static mut x86_clear_range_large_phys_debug: crate::debug::Ddebug;
+    fn _ihk_mc_free_pages(ptr: *mut c_void, npages: CInt, is_user: CInt, file: *mut i8, line: CInt);
+    static x86_clear_free_pages_user_file: [i8; 1];
+    static x86_clear_free_pages_user_line: CInt;
+    static x86_clear_free_pages_user_flag: CInt;
+    fn page_unmap(page: *mut Page) -> CInt;
+    fn phys_to_page(phys: CULong) -> *mut Page;
     fn get_this_cpu_local_var() -> *mut CpuLocalVar;
-    fn x86_addr_init_pt_loaded_bridge() -> CInt;
     fn x86_addr_log_bridge(event: CInt, value: CULong);
-    fn x86_user_page_fault_bridge(vm: *mut c_void, addr: *mut c_void, reason: CULong) -> CInt;
-    fn x86_user_verify_bridge(vm: *mut c_void, addr: *mut c_void, size: CULong) -> CInt;
-    fn x86_user_vtop_bridge(pt: *mut c_void, virt: *const c_void, phys: *mut CULong) -> CInt;
-    fn x86_user_is_memory_bridge(start: CULong, end: CULong) -> CInt;
-    fn x86_user_map_bridge(phys: CULong, nr_pages: CInt, attr: CULong) -> *mut c_void;
-    fn x86_user_unmap_bridge(addr: *mut c_void, nr_pages: CInt);
-    fn x86_user_phys_to_virt_bridge(phys: CULong) -> *mut c_void;
     fn x86_user_copy_log_bridge(event: CInt, vm: *mut c_void, a: CULong, b: CULong, error: CInt);
-    fn x86_user_map_kernel_start_bridge() -> CULong;
-    fn x86_pt_virt_to_phys_bridge(addr: *mut c_void) -> CULong;
-    fn x86_pt_phys_to_virt_bridge(phys: CULong) -> *mut c_void;
-    fn x86_pt_print_log_bridge(event: CInt, level: CInt, value: CULong, index: CInt);
-    fn x86_arch_mem_virt_to_phys_bridge(addr: *mut c_void) -> CULong;
-    fn x86_arch_mem_phys_to_virt_bridge(phys: CULong) -> *mut c_void;
-    fn x86_attr_mask_bridge() -> CULong;
-    fn x86_use_1gb_page_bridge() -> CInt;
-    fn x86_common_vrflag_to_ptattr_bridge(flag: CULong, fault: CULong, ptep: *mut CULong)
-        -> CULong;
-    fn x86_early_alloc_panic_bridge(reason: CInt);
-    fn x86_early_alloc_last_page_slot_bridge() -> *mut *mut c_void;
-    fn x86_early_alloc_end_bridge() -> CULong;
-    fn x86_bootstrap_mem_end_bridge() -> CULong;
-    fn x86_early_alloc_invalidate_bridge();
-    fn x86_kmalloc_bridge(size: CInt, flag: CInt) -> *mut c_void;
-    fn x86_kmalloc_initialized_bridge() -> CInt;
-    fn x86_kfree_bridge(ptr: *mut c_void);
     fn x86_mem_log_bridge(event: CInt);
-    fn x86_page_table_init_pt_bridge() -> *mut c_void;
-    fn x86_page_table_boot_pt_bridge() -> *mut c_void;
-    fn x86_load_page_table_panic_bridge();
     fn ihk_mc_chk_page_address(phys: CULong) -> CInt;
-    fn x86_pt_alloc_pages_bridge(nr_pages: CInt, ap_flag: CInt) -> *mut c_void;
-    fn x86_pt_free_pages_bridge(pt: *mut c_void, nr_pages: CInt);
-    fn x86_pt_destroy_panic_bridge(reason: CInt);
-    fn x86_pt_destroy_helper_failed_panic_bridge();
-    fn x86_visit_pte_log_bridge(event: CInt, level_shift: CInt);
-    fn x86_check_available_page_size_bridge(event: CInt);
-    fn x86_init_page_table_alloc_bridge(nr_pages: CInt, flag: CInt) -> *mut c_void;
-    fn x86_init_page_table_spin_init_bridge(lock: *mut c_void);
-    fn x86_init_page_table_normal_bridge(pt: *mut c_void);
-    fn x86_init_page_table_linux_bridge(pt: *mut c_void);
-    fn x86_init_page_table_fixed_bridge(pt: *mut c_void);
-    fn x86_init_page_table_text_bridge(pt: *mut c_void);
-    fn x86_init_page_table_vsyscall_bridge(pt: *mut c_void);
-    fn x86_init_page_table_low_bridge(pt: *mut c_void);
-    fn x86_init_page_table_load_bridge(pt: *mut c_void);
+    fn _ihk_mc_alloc_aligned_pages_node(npages: CInt, p2align: CInt, flag: CULong, node: CInt, is_user: CInt, virt_addr: CULong, file: *mut i8, line: CInt) -> *mut c_void;
+    static x86_pt_alloc_pages_file: [i8; 1];
+    static x86_pt_alloc_pages_line: CInt;
+    static x86_pt_alloc_pages_p2align: CInt;
+    static x86_pt_alloc_pages_is_user: CInt;
+    static x86_pt_free_pages_file: [i8; 1];
+    static x86_pt_free_pages_line: CInt;
+    static x86_pt_free_pages_flag: CInt;
     fn x86_init_page_table_log_bridge(event: CInt, pt: *mut c_void);
-    fn x86_init_page_table_panic_bridge(reason: CInt);
-    fn x86_init_page_table_init_pt_slot_bridge() -> *mut *mut c_void;
-    fn x86_init_page_table_boot_pt_slot_bridge() -> *mut *mut c_void;
-    fn x86_init_page_table_loaded_slot_bridge() -> *mut CInt;
-    fn x86_init_page_table_lock_bridge() -> *mut c_void;
-    fn x86_init_page_table_size_bridge() -> SizeT;
-    fn x86_map_fixed_area_init_pt_bridge() -> *mut c_void;
-    fn x86_map_fixed_area_fixed_virt_slot_bridge() -> *mut CULong;
     fn x86_map_fixed_area_log_bridge(phys: CULong, size: CULong, virt: CULong);
-    fn x86_pt_set_page_bridge(pt: *mut c_void, virt: CULong, phys: CULong, attr: CULong) -> CInt;
-    fn x86_move_flush_tlb_bridge();
-    fn x86_init_normal_get_memory_address_bridge(type_: CInt, arg: CInt) -> CULong;
-    fn x86_init_normal_set_large_bridge(
-        pt: *mut c_void,
-        virt: CULong,
-        phys: CULong,
-        attr: CULong,
-    ) -> CInt;
     fn x86_init_normal_log_bridge(event: CInt, a: CULong, b: CULong, c: CULong);
-    fn x86_init_normal_panic_bridge();
-    fn x86_init_linux_find_command_line_bridge(name: *mut i8) -> *mut i8;
-    fn x86_init_linux_get_nr_memory_chunks_bridge() -> CInt;
-    fn x86_init_linux_get_memory_chunk_bridge(
-        id: CInt,
-        start: *mut CULong,
-        end: *mut CULong,
-        numa_id: *mut CInt,
-    ) -> CInt;
     fn x86_init_linux_log_bridge(
         event: CInt,
         a: CULong,
@@ -256,19 +230,13 @@ unsafe extern "C" {
         d: CULong,
         error: CInt,
     );
-    fn x86_init_linux_panic_bridge();
     fn x86_init_text_log_bridge(event: CInt, a: CULong, b: CULong, c: CULong);
-    fn x86_init_text_map_kernel_start_bridge() -> CULong;
-    fn x86_init_text_end_bridge() -> CULong;
-    fn x86_init_text_panic_bridge();
-    fn x86_init_low_panic_bridge();
-    fn x86_init_fixed_panic_bridge();
-    fn x86_init_vsyscall_page_bridge() -> *mut c_void;
-    fn x86_init_vsyscall_panic_bridge();
-    fn x86_reserve_arch_pages_bridge(start: CULong, end: CULong, cb: X86ReservePagesCbFn);
-    fn x86_reserve_arch_pages_panic_bridge();
     #[link_name = "attr_mask"]
     static mut X86_ATTR_MASK: CULong;
+    #[link_name = "x86_map_kernel_start_geometry"]
+    static X86_MAP_KERNEL_START_GEOMETRY: CULong;
+    #[link_name = "_end"]
+    static X86_END: u8;
     #[link_name = "_head"]
     static mut X86_HEAD: u8;
     #[link_name = "ap_trampoline"]
@@ -642,25 +610,33 @@ pub unsafe extern "C" fn x86_init_page_table_body_result(
         return -EINVAL;
     };
 
+    crate::x86_setup::early_phase(b'a');
     check_available_page_size(3);
+    crate::x86_setup::early_phase(b'b');
 
     let init_pt = alloc_pages(1, critical_flag);
     if init_pt.is_null() {
+        crate::x86_setup::early_panic();
         panic_cb(3);
         return -ENOMEM;
     }
     write_volatile(init_pt_slot, init_pt);
     spin_init(init_pt_lock);
     write_bytes(init_pt.cast::<u8>(), 0, page_table_size);
+    crate::x86_setup::early_phase(b'c');
 
     init_normal_area(init_pt);
+    crate::x86_setup::early_phase(b'd');
     init_linux_kernel_mapping(init_pt);
+    crate::x86_setup::early_phase(b'e');
     init_fixed_area(init_pt);
     init_text_area(init_pt);
     init_vsyscall_area(init_pt);
+    crate::x86_setup::early_phase(b'f');
 
     let boot_pt = alloc_pages(1, critical_flag);
     if boot_pt.is_null() {
+        crate::x86_setup::early_panic();
         panic_cb(4);
         return -ENOMEM;
     }
@@ -680,11 +656,15 @@ pub unsafe extern "C" fn x86_init_page_table_body_result(
         offset += 1;
     }
     if same {
+        crate::x86_setup::early_panic();
         panic_cb(5);
         return -EINVAL;
     }
+    crate::x86_setup::early_phase(b'g');
 
+    crate::x86_setup::early_phase(b'h');
     load_page_table(init_pt);
+    crate::x86_setup::early_phase(b'i');
     write_volatile(init_pt_loaded_slot, 1);
     if let Some(log) = log_fn {
         log(1, init_pt);
@@ -717,6 +697,7 @@ pub unsafe extern "C" fn init_page_table() {
         )
     };
     if ret != 0 {
+        crate::x86_setup::early_panic();
         unsafe { x86_init_page_table_panic_bridge(0) };
     }
 }
@@ -834,7 +815,11 @@ type X86ClearFreePagesFn = unsafe extern "C" fn(*mut c_void, CInt);
 type X86ClearPageUnmapFn = unsafe extern "C" fn(*mut c_void) -> CInt;
 type X86ClearRssSubFn = unsafe extern "C" fn(CULong, CULong);
 type X86ClearMemobjRssSubFn = unsafe extern "C" fn(*mut c_void, CULong, CULong);
-type X86ClearEffectLogFn = unsafe extern "C" fn(CInt, CULong, CULong, CULong);
+type X86ClearEffectLogFn = unsafe extern "C" fn(CInt, CULong, CULong, SizeT);
+const _: () = {
+    assert!(core::mem::size_of::<SizeT>() == 8);
+    assert!(core::mem::size_of::<CULong>() == 8);
+};
 type X86ClearRangeTopLogFn = unsafe extern "C" fn(CInt, *mut c_void, CULong, CULong, CInt);
 type X86ClearOldActionFn = unsafe extern "C" fn(
     *mut c_void,
@@ -1083,6 +1068,17 @@ pub unsafe extern "C" fn set_pt_large_page(
             attr | PTATTR_LARGEPAGE | PTATTR_ACTIVE,
         )
     }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn x86_init_normal_set_large_bridge(
+    pt: *mut c_void,
+    virt: CULong,
+    phys: CULong,
+    attr: CULong,
+) -> CInt {
+    // x86_64's ihk_mc_pt_attribute has the same u64 ABI as CULong.
+    unsafe { set_pt_large_page(pt, virt as *mut c_void, phys, attr) }
 }
 
 #[no_mangle]
@@ -2288,6 +2284,84 @@ pub unsafe extern "C" fn x86_clear_range_old_entry_result(
     }
 }
 
+// Matches memory.c's private clear_range_args; paired C witnesses guard this ABI.
+#[repr(C)]
+struct X86ClearRangeArgs {
+    free_physical: CInt,
+    memobj: *mut Memobj,
+    vm: *mut c_void,
+    addr: *mut CULong,
+    nr_addr: CInt,
+    max_nr_addr: CInt,
+}
+
+const _: () = {
+    assert!(core::mem::size_of::<X86ClearRangeArgs>() == 40);
+    assert!(core::mem::align_of::<X86ClearRangeArgs>() == 8);
+    assert!(core::mem::offset_of!(X86ClearRangeArgs, free_physical) == 0);
+    assert!(core::mem::offset_of!(X86ClearRangeArgs, memobj) == 8);
+    assert!(core::mem::offset_of!(X86ClearRangeArgs, vm) == 16);
+    assert!(core::mem::offset_of!(X86ClearRangeArgs, addr) == 24);
+    assert!(core::mem::offset_of!(X86ClearRangeArgs, nr_addr) == 32);
+    assert!(core::mem::offset_of!(X86ClearRangeArgs, max_nr_addr) == 36);
+};
+
+// Retires the selected C clear_range_old_action and its output adapter. The
+// caller guarantees args0/physp are valid; pagep/fileoffp remain optional.
+#[no_mangle]
+pub unsafe extern "C" fn x86_clear_old_action_bridge(
+    args0: *mut c_void,
+    old: CULong,
+    pgsize: CULong,
+    physp: *mut CULong,
+    pagep: *mut *mut c_void,
+    fileoffp: *mut CInt,
+) -> CInt {
+    const MF_ZEROFILL: u32 = 0x0010;
+    const MF_PRIVATE: u32 = 0x200000;
+    const MF_XPMEM: u32 = 0x10000;
+
+    let args = args0.cast::<X86ClearRangeArgs>();
+    // C snapshots flags before decoding/publishing outputs and page lookup.
+    let memobj = unsafe { (*args).memobj };
+    let memobj_flags = if memobj.is_null() {
+        0
+    } else {
+        unsafe { (*memobj).flags }
+    };
+    let mut is_fileoff = 0;
+    let mut is_dirty = 0;
+    unsafe {
+        x86_clear_range_old_entry_result(old, pgsize, physp, &mut is_fileoff, &mut is_dirty);
+        if !fileoffp.is_null() {
+            *fileoffp = is_fileoff;
+        }
+    }
+
+    let page = if is_fileoff == 0 {
+        unsafe { phys_to_page(*physp) }
+    } else {
+        core::ptr::null_mut()
+    };
+    let has_page = !page.is_null();
+    let page_in_memobj = has_page && unsafe { page_is_in_memobj(page) } != 0;
+    let action = x86_clear_range_old_action_result(
+        is_fileoff,
+        unsafe { (*args).free_physical },
+        has_page as CInt,
+        page_in_memobj as CInt,
+        is_dirty,
+        unsafe { !(*args).memobj.is_null() } as CInt,
+        (memobj_flags & (MF_ZEROFILL | MF_PRIVATE)) as CInt,
+        (memobj_flags & MF_XPMEM) as CInt,
+    );
+    // The former C adapter publishes the page only after action selection.
+    if !pagep.is_null() {
+        unsafe { *pagep = page.cast() };
+    }
+    action
+}
+
 #[no_mangle]
 pub extern "C" fn x86_clear_range_old_action_result(
     is_fileoff: i32,
@@ -2392,7 +2466,7 @@ pub unsafe extern "C" fn x86_clear_range_old_effects_result(
         };
         flush(memobj, phys, pgsize);
         if let Some(log) = log_fn {
-            log(X86_CLEAR_EFFECT_FLUSH_MEMOBJ, base, phys, pgsize);
+            log(X86_CLEAR_EFFECT_FLUSH_MEMOBJ, base, phys, pgsize as SizeT);
         }
     }
 
@@ -2411,11 +2485,11 @@ pub unsafe extern "C" fn x86_clear_range_old_effects_result(
         free_pages(phys_to_virt(phys), nr_pages);
         rss_sub(pgsize, pgsize);
         if let Some(log) = log_fn {
-            log(X86_CLEAR_EFFECT_FREE_ANON, base, phys, pgsize);
+            log(X86_CLEAR_EFFECT_FREE_ANON, base, phys, pgsize as SizeT);
         }
     } else if (old_action & X86_CLEAR_OLD_XPMEM_KEEP) != 0 {
         if let Some(log) = log_fn {
-            log(X86_CLEAR_EFFECT_XPMEM_KEEP, base, phys, pgsize);
+            log(X86_CLEAR_EFFECT_XPMEM_KEEP, base, phys, pgsize as SizeT);
         }
     } else if (old_action & X86_CLEAR_OLD_TRY_UNMAP) != 0 {
         let (Some(page_unmap), Some(phys_to_virt), Some(free_pages), Some(memobj_rss_sub)) = (
@@ -2431,7 +2505,7 @@ pub unsafe extern "C" fn x86_clear_range_old_effects_result(
             free_pages(phys_to_virt(phys), nr_pages);
             memobj_rss_sub(memobj, pgsize, pgsize);
             if let Some(log) = log_fn {
-                log(X86_CLEAR_EFFECT_FREE_UNMAPPED, base, phys, pgsize);
+                log(X86_CLEAR_EFFECT_FREE_UNMAPPED, base, phys, pgsize as SizeT);
             }
         }
     }
@@ -2484,7 +2558,7 @@ pub unsafe extern "C" fn x86_clear_range_child_table_result(
 
     free_pages(pt, 1);
     if let Some(log) = log_fn {
-        log(X86_CLEAR_EFFECT_CHILD_FREE, base, 0, level_size);
+        log(X86_CLEAR_EFFECT_CHILD_FREE, base, 0, level_size as SizeT);
     }
     1
 }
@@ -3153,6 +3227,319 @@ pub unsafe extern "C" fn x86_set_range_map_entry_result(
     }
 
     0
+}
+
+// Error logging preserves the original unconditional ekprintf -> kprintf
+// call, format bytes and C varargs payload. Unknown events remain silent.
+/// Complete former C memobj flush callback. Reuse the existing Rust memobj
+/// operation dispatch and discard its int result exactly as the void C wrapper
+/// did. No object/page ownership or asynchronous retention is introduced.
+#[no_mangle]
+pub unsafe extern "C" fn x86_clear_memobj_flush_bridge(
+    memobj: *mut c_void,
+    phys: CULong,
+    pgsize: CULong,
+) {
+    let _ = unsafe {
+        crate::object_helpers::memobj_flush_page(memobj.cast::<Memobj>(), phys, pgsize as SizeT)
+    };
+}
+
+/// Complete former C RSS callback. Preserve its size_t callback ABI and the
+/// original C conversion to the existing accounting function's int pgsize.
+#[no_mangle]
+pub unsafe extern "C" fn x86_clear_rss_sub_bridge(size: CULong, pgsize: CULong) {
+    unsafe { crate::mem_helpers::memory_stat_rss_sub(size, pgsize as CInt) }
+}
+
+/// Complete former C memobj RSS callback. The existing Rust accounting path
+/// retains feature gating, memobj flags and atomic counter ownership. The
+/// wrapper only forwards the same borrowed pointer and C integer conversion.
+#[no_mangle]
+pub unsafe extern "C" fn x86_clear_memobj_rss_sub_bridge(
+    memobj: *mut c_void,
+    size: CULong,
+    pgsize: CULong,
+) {
+    unsafe {
+        crate::mem_helpers::rusage_memory_stat_sub(memobj.cast::<Memobj>(), size, pgsize as CInt)
+    }
+}
+
+/// Exact former C L3 walker dispatcher. Existing walk_pte_l3 retains all
+/// range bounds/error aggregation and borrows args only for synchronous calls.
+#[no_mangle]
+pub unsafe extern "C" fn x86_clear_range_walk_l3_bridge(
+    pt: *mut c_void,
+    base: CULong,
+    start: CULong,
+    end: CULong,
+    args: *mut c_void,
+) -> CInt {
+    unsafe { walk_pte_l3(pt, base, start, end, Some(clear_range_l3), args) }
+}
+
+/// Exact former C L2 walker dispatcher. The existing Rust walker retains
+/// bounds/error aggregation and synchronously borrows the same callback args.
+#[no_mangle]
+pub unsafe extern "C" fn x86_clear_range_walk_l2_bridge(
+    pt: *mut c_void,
+    base: CULong,
+    start: CULong,
+    end: CULong,
+    args: *mut c_void,
+) -> CInt {
+    unsafe { walk_pte_l2(pt, base, start, end, Some(clear_range_l2), args) }
+}
+
+/// Exact former C L1 walker dispatcher. The existing Rust walker owns bounds
+/// and short-circuit order; callback args remain synchronously borrowed.
+#[no_mangle]
+pub unsafe extern "C" fn x86_clear_range_walk_l1_bridge(
+    pt: *mut c_void,
+    base: CULong,
+    start: CULong,
+    end: CULong,
+    args: *mut c_void,
+) -> CInt {
+    unsafe { walk_pte_l1(pt, base, start, end, Some(clear_range_l1), args) }
+}
+
+/// Complete former C L1 callback. The existing leaf helper owns old-entry,
+/// flush/free/page-unmap/RSS effects; raw args and count pointers remain borrowed.
+#[no_mangle]
+pub unsafe extern "C" fn clear_range_l1(
+    args0: *mut c_void,
+    ptep: *mut CULong,
+    base: CULong,
+    start: CULong,
+    end: CULong,
+) -> CInt {
+    let args = args0.cast::<X86ClearRangeArgs>();
+    unsafe {
+        x86_clear_range_leaf_body_result(
+            args0, ptep, base, start, end,
+            (*args).vm, (*args).addr, core::ptr::addr_of_mut!((*args).nr_addr),
+            (*args).max_nr_addr, ihk_mc_get_processor_id(),
+            (*args).free_physical, (*args).memobj.cast(),
+            Some(x86_clear_old_action_bridge), Some(remote_flush_tlb_array_cpumask),
+            Some(x86_clear_l3_memobj_flush), Some(x86_clear_phys_to_virt_bridge),
+            Some(x86_clear_free_pages_user_bridge), Some(x86_clear_page_unmap_bridge),
+            Some(x86_clear_l3_rss_sub), Some(x86_clear_l3_memobj_rss_sub),
+            Some(x86_clear_l3_effect_log),
+        )
+    }
+}
+
+/// Complete former C L2 callback. Raw borrowed args/PTE/count storage is
+/// reread only as in the original call; no Rust reference spans C callbacks.
+/// L2 large pages are always enabled, independent of the live L3 1GB flag.
+#[no_mangle]
+pub unsafe extern "C" fn clear_range_l2(
+    args0: *mut c_void,
+    ptep: *mut CULong,
+    base: CULong,
+    start: CULong,
+    end: CULong,
+) -> CInt {
+    let args = args0.cast::<X86ClearRangeArgs>();
+    // Caller-valid args0 is evaluated even if the shared helper rejects ptep.
+    unsafe {
+        x86_clear_range_level_body_result(
+            args0, ptep, base, start, end,
+            PTL2_SHIFT, PTL2_SIZE, PFL2_SIZE, 1,
+            (*args).vm, (*args).addr, core::ptr::addr_of_mut!((*args).nr_addr),
+            (*args).max_nr_addr, ihk_mc_get_processor_id(),
+            (*args).free_physical, (*args).memobj.cast(),
+            Some(x86_clear_old_action_bridge), Some(x86_clear_phys_to_virt_bridge),
+            Some(x86_clear_l2_child_walk), Some(remote_flush_tlb_array_cpumask),
+            Some(x86_pt_free_pages_bridge), Some(x86_clear_l3_memobj_flush),
+            Some(x86_clear_free_pages_user_bridge), Some(x86_clear_page_unmap_bridge),
+            Some(x86_clear_l3_rss_sub), Some(x86_clear_l3_memobj_rss_sub),
+            Some(x86_clear_l3_range_log), Some(x86_clear_l3_effect_log),
+        )
+    }
+}
+
+/// Complete former C L3 callback. Args remain raw borrowed storage: callbacks
+/// may synchronously update nr_addr/PTEs, so no exclusive Rust reference survives.
+#[no_mangle]
+pub unsafe extern "C" fn clear_range_l3(
+    args0: *mut c_void,
+    ptep: *mut CULong,
+    base: CULong,
+    start: CULong,
+    end: CULong,
+) -> CInt {
+    let args = args0.cast::<X86ClearRangeArgs>();
+    // Like the original C callback, args0 is caller-valid even for null ptep.
+    unsafe {
+        x86_clear_range_level_body_result(
+            args0, ptep, base, start, end,
+            PTL3_SHIFT, PTL3_SIZE, PFL3_SIZE, *x86_clear_l3_use_1gb_page,
+            (*args).vm, (*args).addr, core::ptr::addr_of_mut!((*args).nr_addr),
+            (*args).max_nr_addr, ihk_mc_get_processor_id(),
+            (*args).free_physical, (*args).memobj.cast(),
+            Some(x86_clear_old_action_bridge), Some(x86_clear_phys_to_virt_bridge),
+            Some(x86_clear_l3_child_walk), Some(remote_flush_tlb_array_cpumask),
+            Some(x86_pt_free_pages_bridge), Some(x86_clear_l3_memobj_flush),
+            Some(x86_clear_free_pages_user_bridge), Some(x86_clear_page_unmap_bridge),
+            Some(x86_clear_l3_rss_sub), Some(x86_clear_l3_memobj_rss_sub),
+            Some(x86_clear_l3_range_log), Some(x86_clear_l3_effect_log),
+        )
+    }
+}
+
+/// Complete former clear_range_l4 callback, using the same root/phys provider
+/// and synchronously borrowing the retained private C L3 walker callback.
+#[no_mangle]
+pub unsafe extern "C" fn x86_clear_range_l4_body(
+    args: *mut c_void,
+    ptep: *mut CULong,
+    base: CULong,
+    start: CULong,
+    end: CULong,
+) -> CInt {
+    unsafe {
+        x86_clear_range_root_body_result(
+            args, ptep, base, start, end,
+            Some(x86_clear_phys_to_virt_bridge), Some(x86_clear_range_l3_callback),
+        )
+    }
+}
+
+/// Exact default clear-range L4 walker body. The immutable callback borrows
+/// the existing typed callback synchronously; no callback or args pointer is retained.
+#[no_mangle]
+pub unsafe extern "C" fn x86_clear_range_walk_l4_bridge(
+    pt: *mut c_void,
+    base: CULong,
+    start: CULong,
+    end: CULong,
+    args: *mut c_void,
+) -> CInt {
+    unsafe { walk_pte_l4(pt, base, start, end, Some(x86_clear_range_l4_callback), args) }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn x86_clear_range_top_log_bridge(
+    event: CInt,
+    pt: *mut c_void,
+    start: CULong,
+    end: CULong,
+    requested_free: CInt,
+) {
+    match event {
+        X86_CLEAR_TOP_LOG_INVALID => {
+            unsafe {
+                kprintf(
+                    b"clear_range(%p,%p,%p,%x):invalid start and/or end.\n\0".as_ptr().cast(),
+                    pt, start as *mut c_void, end as *mut c_void, requested_free,
+                );
+            }
+        }
+        X86_CLEAR_TOP_LOG_ALLOC_FAILED => {
+            unsafe {
+                kprintf(
+                    b"%s: error: allocating address array\n\0".as_ptr().cast(),
+                    b"clear_range\0".as_ptr().cast::<i8>(),
+                );
+            }
+        }
+        _ => {}
+    }
+}
+
+// Preserve the existing optional clear_range entry event through the same
+// dynamic-debug descriptor ABI already used by the Rust CPU/process consumers.
+#[used]
+#[link_section = "__verbose"]
+static mut CLEAR_RANGE_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
+    file: concat!(file!(), "\0").as_ptr().cast(),
+    func: b"clear_range\0".as_ptr().cast(),
+    fmt: core::ptr::null(),
+    line_flags: line!() & 0x00ff_ffff,
+};
+
+const _: () = {
+    assert!(core::mem::size_of::<SizeT>() == 8 && core::mem::size_of::<CULong>() == 8);
+    assert!(core::mem::offset_of!(ProcessVm, region) == 16);
+    assert!(core::mem::offset_of!(ProcessVm, proc) == 136);
+    assert!(core::mem::offset_of!(crate::abi::VmRegions, user_start) == 104);
+    assert!(core::mem::offset_of!(crate::abi::VmRegions, user_end) == 112);
+    assert!(core::mem::offset_of!(Process, straight_va) == 1624);
+    assert!(core::mem::offset_of!(Process, straight_len) == 1632);
+};
+
+// The caller retains the original clear/free-range VM, process and memobj
+// lifetime/locking requirements. The established top helper owns allocation,
+// walk, final flush and release, including failures; no new ownership is added.
+#[no_mangle]
+pub unsafe extern "C" fn x86_clear_range_public_body(
+    pt: *mut c_void,
+    vm: *mut ProcessVm,
+    start: CULong,
+    end: CULong,
+    requested_free: CInt,
+    memobj: *mut Memobj,
+) -> CInt {
+    const MF_DEV_FILE: u32 = 0x2000;
+    const MF_PREMAP: u32 = 0x8000;
+    const TLB_INVALID_ARRAY_PAGES: CInt = 4;
+
+    let debug_flags = unsafe {
+        read_volatile(core::ptr::addr_of!(CLEAR_RANGE_DEBUG.line_flags)) >> 24
+    };
+    if debug_flags != 0 {
+        unsafe {
+            kprintf(
+                b"%s: %p,%lx,%lx,%d,%p\n\0".as_ptr().cast(),
+                b"clear_range\0".as_ptr().cast::<i8>(),
+                pt, start, end, requested_free, memobj,
+            );
+        }
+    }
+    let user_start = unsafe { (*vm).region.user_start };
+    let user_end = unsafe { (*vm).region.user_end };
+    let flags = if memobj.is_null() { 0 } else { unsafe { (*memobj).flags } };
+    let proc = unsafe { (*vm).proc.cast::<Process>() };
+    let straight_va = unsafe { (*proc).straight_va as CULong };
+    let is_straight_main = straight_va != 0 && start == straight_va
+        && end == straight_va.wrapping_add(unsafe { (*proc).straight_len } as CULong);
+    let mut storage = core::mem::MaybeUninit::<X86ClearRangeArgs>::uninit();
+    let args = storage.as_mut_ptr();
+    unsafe {
+        x86_clear_range_top_result(
+            pt, vm.cast(), start, end, user_start, user_end, requested_free,
+            ((flags & MF_DEV_FILE) != 0) as CInt,
+            ((flags & MF_PREMAP) != 0) as CInt, is_straight_main as CInt,
+            memobj.cast(), core::ptr::addr_of_mut!((*args).addr),
+            core::ptr::addr_of_mut!((*args).nr_addr),
+            core::ptr::addr_of_mut!((*args).max_nr_addr),
+            core::ptr::addr_of_mut!((*args).free_physical),
+            core::ptr::addr_of_mut!((*args).memobj).cast(),
+            core::ptr::addr_of_mut!((*args).vm),
+            TLB_INVALID_ARRAY_PAGES, PTL1_SIZE, args.cast(),
+            Some(x86_pt_alloc_pages_bridge), Some(x86_pt_free_pages_bridge),
+            Some(x86_clear_range_walk_l4_bridge), Some(remote_flush_tlb_array_cpumask),
+            ihk_mc_get_processor_id(), Some(x86_clear_range_top_log_bridge),
+        )
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ihk_mc_pt_clear_range(
+    pt: *mut c_void, vm: *mut ProcessVm, start: *mut c_void, end: *mut c_void,
+) -> CInt {
+    unsafe { x86_clear_range_public_body(pt, vm, start as CULong, end as CULong, 0, core::ptr::null_mut()) }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ihk_mc_pt_free_range(
+    pt: *mut c_void, vm: *mut ProcessVm, start: *mut c_void, end: *mut c_void,
+    memobj: *mut Memobj,
+) -> CInt {
+    unsafe { x86_clear_range_public_body(pt, vm, start as CULong, end as CULong, 1, memobj) }
 }
 
 #[no_mangle]
@@ -4754,6 +5141,18 @@ pub unsafe extern "C" fn x86_init_text_area_body_result(
 }
 
 #[no_mangle]
+pub extern "C" fn x86_init_text_map_kernel_start_bridge() -> CULong {
+    // Preserve the build-resolved address; never duplicate its numeric value.
+    unsafe { X86_MAP_KERNEL_START_GEOMETRY }
+}
+
+#[no_mangle]
+pub extern "C" fn x86_init_text_end_bridge() -> CULong {
+    // The linker boundary may be one-past storage: form its address, never read it.
+    core::ptr::addr_of!(X86_END) as CULong
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn init_text_area(pt: *mut c_void) {
     let ret = unsafe {
         x86_init_text_area_body_result(
@@ -5090,6 +5489,25 @@ pub unsafe extern "C" fn phys_to_virt(p: CULong) -> *mut c_void {
         MAP_ST_START,
         LINUX_PAGE_OFFSET_BASE,
     )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn x86_clear_free_pages_user_bridge(addr: *mut c_void, nr_pages: CInt) {
+    _ihk_mc_free_pages(
+        addr, nr_pages, x86_clear_free_pages_user_flag,
+        core::ptr::addr_of!(x86_clear_free_pages_user_file).cast::<i8>() as *mut i8,
+        x86_clear_free_pages_user_line,
+    );
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn x86_clear_page_unmap_bridge(page: *mut c_void) -> CInt {
+    page_unmap(page.cast::<Page>())
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn x86_clear_phys_to_virt_bridge(phys: CULong) -> *mut c_void {
+    phys_to_virt(phys)
 }
 
 #[no_mangle]
@@ -7023,4 +7441,2965 @@ pub unsafe extern "C" fn patch_process_vm(
         Some(x86_user_phys_to_virt_bridge),
         Some(x86_user_copy_log_bridge),
     )
+}
+
+// Same tracked allocator used by the C provider. Static C callsite data keeps
+// its original file/line/flag; no Rust file!()/line!() substitution or new policy.
+#[no_mangle]
+pub unsafe extern "C" fn x86_pt_free_pages_bridge(pt: *mut c_void, nr_pages: CInt) {
+    unsafe {
+        _ihk_mc_free_pages(
+            pt, nr_pages, x86_pt_free_pages_flag,
+            core::ptr::addr_of!(x86_pt_free_pages_file).cast::<i8>() as *mut i8,
+            x86_pt_free_pages_line,
+        );
+    }
+}
+
+// Declarative C debug selectors keep the original file/function/line ABI. The
+// flag byte may be changed through the existing debug control path; any nonzero
+// byte enables its own original callsite, matching dkprintf (not just bit 0).
+#[no_mangle]
+pub unsafe extern "C" fn x86_clear_effect_log_bridge(
+    event: CInt, base: CULong, phys: CULong, pgsize: SizeT,
+) {
+    unsafe {
+        match event {
+            X86_CLEAR_EFFECT_FREE_ANON => {
+                if core::ptr::read_volatile(core::ptr::addr_of!(x86_clear_effect_free_anon_debug.line_flags)) >> 24 != 0 {
+                    let _ = kprintf(
+                        b"%lx-,%s: freed anonymous page,base=%lx,size=%ld,pgsize=%ld\n\0".as_ptr().cast(),
+                        phys, b"x86_clear_effect_log_bridge\0".as_ptr().cast::<i8>(), base, pgsize, pgsize,
+                    );
+                }
+            }
+            X86_CLEAR_EFFECT_XPMEM_KEEP => {
+                if core::ptr::read_volatile(core::ptr::addr_of!(x86_clear_effect_xpmem_keep_debug.line_flags)) >> 24 != 0 {
+                    let _ = kprintf(b"%s: XPMEM attach,phys=%lx\n\0".as_ptr().cast(),
+                        b"x86_clear_effect_log_bridge\0".as_ptr().cast::<i8>(), phys);
+                }
+            }
+            X86_CLEAR_EFFECT_FREE_UNMAPPED => {
+                if core::ptr::read_volatile(core::ptr::addr_of!(x86_clear_effect_free_unmapped_debug.line_flags)) >> 24 != 0 {
+                    let _ = kprintf(
+                        b"%lx-,%s: freed unmapped memobj page,base=%lx,size=%ld,pgsize=%ld\n\0".as_ptr().cast(),
+                        phys, b"x86_clear_effect_log_bridge\0".as_ptr().cast::<i8>(), base, pgsize, pgsize,
+                    );
+                }
+            }
+            X86_CLEAR_EFFECT_CHILD_FREE => {
+                if core::ptr::read_volatile(core::ptr::addr_of!(x86_clear_effect_child_free_debug.line_flags)) >> 24 != 0 {
+                    let _ = kprintf(b"%s: freed child page table at base=%lx,size=%ld\n\0".as_ptr().cast(),
+                        b"x86_clear_effect_log_bridge\0".as_ptr().cast::<i8>(), base, pgsize);
+                }
+            }
+            _ => {}
+        }
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn x86_clear_range_log_bridge(
+    event: CInt, args: *mut c_void, ptep: *mut CULong, base: CULong,
+    start: CULong, end: CULong, error: CInt, level_shift: CInt, phys: CULong,
+) {
+    let name = match level_shift {
+        PTL2_SHIFT => b"clear_range_l2\0".as_ptr().cast::<i8>(),
+        PTL3_SHIFT => b"clear_range_l3\0".as_ptr().cast::<i8>(),
+        _ => b"clear_range_l4\0".as_ptr().cast::<i8>(),
+    };
+    unsafe {
+        match event {
+            X86_CLEAR_RANGE_LOG_SPLIT => {
+                let _ = kprintf(b"%s(%p,%p,%lx,%lx,%lx):split page. %d\n\0".as_ptr().cast(),
+                    name, args, ptep, base, start, end, error);
+            }
+            X86_CLEAR_RANGE_LOG_LARGE_PHYS => {
+                if core::ptr::read_volatile(core::ptr::addr_of!(x86_clear_range_large_phys_debug.line_flags)) >> 24 != 0 {
+                    let _ = kprintf(b"%s: phys=%ld, pte_get_phys(&old),PTL3_SIZE\n\0".as_ptr().cast(), name, phys);
+                }
+            }
+            _ => {}
+        }
+    }
+}
+
+// Retain the C int->unsigned-long conversion, tracked allocation, and raw result.
+#[no_mangle]
+pub unsafe extern "C" fn x86_pt_alloc_pages_bridge(nr_pages: CInt, ap_flag: CInt) -> *mut c_void {
+    unsafe {
+        _ihk_mc_alloc_aligned_pages_node(
+            nr_pages, x86_pt_alloc_pages_p2align, ap_flag as CULong,
+            -1, x86_pt_alloc_pages_is_user, CULong::MAX,
+            core::ptr::addr_of!(x86_pt_alloc_pages_file).cast::<i8>() as *mut i8,
+            x86_pt_alloc_pages_line,
+        )
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn x86_pt_set_page_log_bridge(virt: CULong) {
+    unsafe {
+        let _ = kprintf(b"EBUSY: page table for 0x%lX is already set\n\0".as_ptr().cast(), virt);
+    }
+}
+#[no_mangle]
+pub unsafe extern "C" fn x86_split_log_bridge(
+    event: CInt, value: CULong, size: SizeT, pgsize: SizeT, page: *mut c_void,
+) {
+    unsafe {
+        match event {
+            X86_SPLIT_LARGE_PAGE_LOG_INVALID_PGSIZE => {
+                let _ = kprintf(b"split_large_page:invalid pgsize %#lx\n\0".as_ptr().cast(), pgsize);
+            }
+            X86_SPLIT_LARGE_PAGE_LOG_ALLOC_FAILED => {
+                let _ = kprintf(b"split_large_page:__alloc_new_pt failed\n\0".as_ptr().cast());
+            }
+            X86_SPLIT_LARGE_PAGE_LOG_RSS_ADD => {
+                if core::ptr::read_volatile(core::ptr::addr_of!(x86_split_rss_add_debug.line_flags)) >> 24 != 0 {
+                    let _ = kprintf(
+                        b"%lx+,%s: calling memory_stat_rss_add(),size=%ld,pgsize=%ld\n\0".as_ptr().cast(),
+                        value, b"split_large_page\0".as_ptr().cast::<i8>(), size, pgsize,
+                    );
+                }
+            }
+            X86_SPLIT_LARGE_PAGE_LOG_RSS_SUB => {
+                if core::ptr::read_volatile(core::ptr::addr_of!(x86_split_rss_sub_debug.line_flags)) >> 24 != 0 {
+                    let _ = kprintf(
+                        b"%lx-,%s: calling memory_stat_rss_sub(),size=%ld,pgsize=%ld\n\0".as_ptr().cast(),
+                        value, b"split_large_page\0".as_ptr().cast::<i8>(), size, pgsize,
+                    );
+                }
+            }
+            X86_SPLIT_LARGE_PAGE_LOG_PAGE_UNMAP => {
+                let _ = kprintf(b"split_large_page:page_unmap:%p\n\0".as_ptr().cast(), page);
+            }
+            _ => {}
+        }
+    }
+}
+#[no_mangle]
+pub unsafe extern "C" fn x86_split_panic_bridge() {
+    unsafe {
+        x86_memory_existing_panic(b"split_large_page:page_unmap\n\0".as_ptr().cast());
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn x86_split_rss_add_bridge(size: SizeT, pgsize: SizeT) {
+    unsafe { crate::mem_helpers::memory_stat_rss_add(size as CULong, pgsize as CInt) }
+}
+#[no_mangle]
+pub unsafe extern "C" fn x86_split_rss_sub_bridge(size: SizeT, pgsize: SizeT) {
+    unsafe { crate::mem_helpers::memory_stat_rss_sub(size as CULong, pgsize as CInt) }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn x86_pt_set_page_bridge(
+    pt: *mut c_void, virt: CULong, phys: CULong, attr: CULong,
+) -> CInt {
+    unsafe {
+        let in_kernel = x86_pt_kernel_lock_needed_result(virt) != 0;
+        let mut lock: *mut crate::spinlock_helpers::IhkSpinlock = core::ptr::null_mut();
+        let mut flags: CULong = 0;
+        if in_kernel {
+            lock = x86_init_page_table_lock_bridge().cast();
+            flags = crate::spinlock_helpers::__ihk_mc_spinlock_lock(lock);
+        }
+        // Read init_pt after acquisition, exactly as the original C body did.
+        let ret = x86_pt_set_page_body_result(
+            pt, x86_page_table_init_pt_bridge(), virt, phys, attr,
+            x86_attr_mask_bridge(), Some(x86_pt_alloc_pages_bridge),
+            Some(x86_pt_virt_to_phys_bridge), Some(x86_pt_phys_to_virt_bridge),
+            Some(x86_pt_set_page_log_bridge),
+        );
+        if in_kernel {
+            crate::spinlock_helpers::__ihk_mc_spinlock_unlock(lock, flags);
+        }
+        ret
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn x86_split_alloc_new_pt_bridge(
+    nr_pages: CInt, ap_flag: CInt,
+) -> *mut c_void {
+    if nr_pages != 1 {
+        return core::ptr::null_mut();
+    }
+    unsafe { x86_pt_alloc_zeroed_result(ap_flag, Some(x86_pt_alloc_pages_bridge)) }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn x86_split_page_map_bridge(page: *mut c_void) {
+    unsafe { crate::page_helpers::page_map(page.cast::<Page>()) }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn x86_split_page_unmap_bridge(page: *mut c_void) -> CInt {
+    unsafe { crate::page_helpers::page_unmap(page.cast::<Page>()) }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn x86_pt_split_flush_bridge(
+    vm: *mut c_void, addr: CULong, cpu_id: CInt,
+) {
+    unsafe {
+        crate::mem_helpers::remote_flush_tlb_cpumask(vm.cast::<ProcessVm>(), addr, cpu_id);
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn x86_visit_pte_log_bridge(event: CInt, level_shift: CInt) {
+    if event != X86_VISIT_PTE_LOG_SPLIT {
+        return;
+    }
+    unsafe {
+        match level_shift {
+            PTL2_SHIFT => {
+                let _ = kprintf(b"visit_pte_l2:split large page\n\0".as_ptr().cast());
+            }
+            PTL3_SHIFT => {
+                let _ = kprintf(b"visit_pte_l3:split large page\n\0".as_ptr().cast());
+            }
+            _ => {
+                let _ = kprintf(b"visit_pte_l%d:split large page\n\0".as_ptr().cast(), level_shift);
+            }
+        }
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn x86_pt_split_log_bridge(event: CInt, error: CInt) {
+    unsafe {
+        match event {
+            X86_PT_SPLIT_LOG_NOT_SPLITABLE => {
+                let _ = kprintf(b"ihk_mc_pt_split:NYI:page break down\n\0".as_ptr().cast());
+            }
+            X86_PT_SPLIT_LOG_SPLIT_FAILED => {
+                let _ = kprintf(b"ihk_mc_pt_split:split_large_page failed. %d\n\0".as_ptr().cast(), error);
+            }
+            _ => {}
+        }
+    }
+}
+
+// Preserve the original local void* output adapter. It is initialized even
+// when lookup fails; caller's pgaddrp is written only AFTER the synchronous
+// lookup, so aliased optional output locations preserve original write order.
+#[no_mangle]
+pub unsafe extern "C" fn x86_pt_split_lookup_bridge(
+    pt: *mut c_void, addr: CULong, pgshift: CInt,
+    pgaddrp: *mut CULong, pgsizep: *mut SizeT, p2alignp: *mut CInt,
+) -> *mut CULong {
+    unsafe {
+        let mut pgaddr: *mut c_void = core::ptr::null_mut();
+        let out = if pgaddrp.is_null() { core::ptr::null_mut() }
+            else { core::ptr::addr_of_mut!(pgaddr) };
+        let ptep = ihk_mc_pt_lookup_pte(pt, addr as *mut c_void, pgshift,
+            out, pgsizep, p2alignp);
+        if !pgaddrp.is_null() {
+            core::ptr::write(pgaddrp, pgaddr as CULong);
+        }
+        ptep
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn x86_pt_splitable_bridge(
+    page: *mut c_void, memobj_flags: u32,
+) -> CInt {
+    unsafe { crate::page_helpers::is_splitable(page.cast::<Page>(), memobj_flags) }
+}
+
+// Complete former split-large adapter: keep the exact existing Rust splitter,
+// allocation flag and typed callback identities. Lower physical lookup remains
+// its original provider; no new C getter or physical-page policy is introduced.
+#[no_mangle]
+pub unsafe extern "C" fn x86_pt_split_large_bridge(
+    ptep: *mut CULong, pgsize: SizeT,
+) -> CInt {
+    unsafe {
+        x86_split_large_page_body_result(
+            ptep, pgsize, IHK_MC_AP_NOWAIT,
+            Some(x86_split_alloc_new_pt_bridge), Some(x86_pt_virt_to_phys_bridge),
+            Some(x86_split_phys_to_page_bridge), Some(x86_split_page_map_bridge),
+            Some(x86_split_rss_add_bridge), Some(x86_split_rss_sub_bridge),
+            Some(x86_split_page_unmap_bridge), Some(x86_split_log_bridge),
+            Some(x86_split_panic_bridge),
+        )
+    }
+}
+
+// Original valid range/memobj lifetime remains the caller's contract. No new
+// NULL range rule or borrowed reference spans the CPU/helper callbacks.
+#[no_mangle]
+pub unsafe extern "C" fn ihk_mc_pt_split(
+    pt: *mut c_void, vm: *mut ProcessVm,
+    range: *mut crate::abi::VmRange, addr: *mut c_void,
+) -> CInt {
+    unsafe {
+        let memobj = (*range).memobj.cast::<Memobj>();
+        let memobj_flags = if memobj.is_null() { 0 } else { (*memobj).flags };
+        let cpu_id = ihk_mc_get_processor_id();
+        x86_pt_split_body_result(
+            pt, vm.cast(), addr as CULong, memobj_flags, cpu_id,
+            Some(x86_pt_split_lookup_bridge), Some(x86_split_phys_to_page_bridge),
+            Some(x86_pt_splitable_bridge), Some(x86_pt_split_large_bridge),
+            Some(x86_pt_split_flush_bridge), Some(x86_pt_split_log_bridge),
+        )
+    }
+}
+
+// Preserve the exact existing physical-page lookup endpoint and pointer bits.
+// Its lower C geometry/lookup wrapper remains debt; no new page/null policy.
+#[no_mangle]
+pub unsafe extern "C" fn x86_split_phys_to_page_bridge(phys: CULong) -> *mut c_void {
+    unsafe { phys_to_page(phys).cast::<c_void>() }
+}
+
+// Complete original public lookup plus its local-output C helper. Traverse
+// through the existing Rust level/large-page/shape implementation; preserve
+// entry->lookup->base/size/alignment stores->exit order and optional aliases.
+#[no_mangle]
+pub unsafe extern "C" fn ihk_mc_pt_lookup_pte(
+    pt: *mut c_void, virt: *mut c_void, pgshift: CInt,
+    basep: *mut *mut c_void, sizep: *mut SizeT, p2alignp: *mut CInt,
+) -> *mut CULong {
+    unsafe {
+        if core::ptr::read_volatile(core::ptr::addr_of!(x86_lookup_enter_debug.line_flags)) >> 24 != 0 {
+            let _ = kprintf(b"ihk_mc_pt_lookup_pte(%p,%p,%d)\n\0".as_ptr().cast(), pt, virt, pgshift);
+        }
+        let mut base: CULong = 0;
+        let mut size: CULong = 0;
+        let mut p2align: CInt = 0;
+        let ptep = x86_pt_lookup_pte_result(
+            pt, virt as CULong, pgshift, x86_use_1gb_page_bridge(),
+            core::ptr::addr_of_mut!(base), core::ptr::addr_of_mut!(size),
+            core::ptr::addr_of_mut!(p2align), Some(x86_pt_phys_to_virt_bridge),
+        );
+        if !basep.is_null() { core::ptr::write(basep, base as *mut c_void); }
+        if !sizep.is_null() { core::ptr::write(sizep, size as SizeT); }
+        if !p2alignp.is_null() { core::ptr::write(p2alignp, p2align); }
+        if core::ptr::read_volatile(core::ptr::addr_of!(x86_lookup_exit_debug.line_flags)) >> 24 != 0 {
+            let _ = kprintf(b"ihk_mc_pt_lookup_pte(%p,%p,%d): %p %lx %lx %d\n\0".as_ptr().cast(),
+                pt, virt, pgshift, ptep, base, size, p2align);
+        }
+        ptep
+    }
+}
+
+// Complete original set-PTE diagnostic switch. Preserve original C
+// __FUNCTION__ bytes and explicit attr->int conversion for its %x argument.
+#[no_mangle]
+pub unsafe extern "C" fn x86_pt_set_pte_log_bridge(
+    event: CInt, pt: *mut c_void, ptep: *mut CULong, pgsize: SizeT,
+    phys: CULong, attr: CULong, error: CInt, current: CULong,
+) {
+    unsafe {
+        match event {
+            X86_PT_SET_PTE_LOG_L2_ALIGN => {
+                let _ = kprintf(b"%s: error: phys needs to be PTL2_SIZE aligned\n\0".as_ptr().cast(),
+                    b"x86_pt_set_pte_log_bridge\0".as_ptr().cast::<i8>());
+            }
+            X86_PT_SET_PTE_LOG_L3_ALIGN => {
+                let _ = kprintf(b"%s: error: phys needs to be PTL3_SIZE aligned\n\0".as_ptr().cast(),
+                    b"x86_pt_set_pte_log_bridge\0".as_ptr().cast::<i8>());
+            }
+            X86_PT_SET_PTE_LOG_PAGE_SIZE => {
+                let _ = kprintf(b"ihk_mc_pt_set_pte(%p,%p,%lx,%lx,%x):page size. %d %lx\n\0".as_ptr().cast(),
+                    pt, ptep, pgsize, phys, attr as CInt, error, current);
+            }
+            _ => {}
+        }
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn x86_pt_set_pte_panic_bridge() {
+    unsafe { x86_memory_existing_panic(b"ihk_mc_pt_set_pte:page size\0".as_ptr().cast()); }
+}
+
+// Keep the existing Rust page-size/alignment/write state machine and exact
+// local diagnostic ordering. Only evaluate *ptep for the enabled EXIT log,
+// exactly as the original dkprintf macro did; do not add a NULL policy.
+// The real C API uses size_t, while the existing Rust body uses CULong.
+// Keep both public signatures and adapt the nominal Rust types losslessly.
+const _: () = {
+    assert!(core::mem::size_of::<SizeT>() == 8);
+    assert!(core::mem::size_of::<CULong>() == 8);
+};
+
+/// Internal callback adapter; it does not export another provider or change C ABI.
+///
+/// # Safety
+/// Preserve the original synchronous logger context and pointer lifetimes.
+/// pgsize is losslessly converted between the validated 64-bit unsigned types.
+unsafe extern "C" fn x86_pt_set_pte_log_body_adapter(
+    event: CInt,
+    pt: *mut c_void,
+    ptep: *mut CULong,
+    pgsize: CULong,
+    phys: CULong,
+    attr: CULong,
+    error: CInt,
+    current: CULong,
+) {
+    // SAFETY: All pointer/scalar arguments pass unchanged. This preserves the
+    // real size_t logger ABI without transmuting a mismatched function pointer.
+    unsafe {
+        x86_pt_set_pte_log_bridge(
+            event, pt, ptep, pgsize as SizeT, phys, attr, error, current,
+        );
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ihk_mc_pt_set_pte(
+    pt: *mut c_void, ptep: *mut CULong, pgsize: SizeT,
+    phys: CULong, attr: CULong,
+) -> CInt {
+    unsafe {
+        if core::ptr::read_volatile(core::ptr::addr_of!(x86_set_pte_enter_debug.line_flags)) >> 24 != 0 {
+            let _ = kprintf(b"ihk_mc_pt_set_pte(%p,%p,%lx,%lx,%x)\n\0".as_ptr().cast(),
+                pt, ptep, pgsize, phys, attr);
+        }
+        let error = x86_pt_set_pte_body_result(
+            pt, ptep, pgsize as CULong, phys, attr, x86_attr_mask_bridge(),
+            x86_use_1gb_page_bridge(), Some(x86_pt_set_pte_log_body_adapter),
+            Some(x86_pt_set_pte_panic_bridge),
+        );
+        if core::ptr::read_volatile(core::ptr::addr_of!(x86_set_pte_exit_debug.line_flags)) >> 24 != 0 {
+            let current = core::ptr::read(ptep);
+            let _ = kprintf(b"ihk_mc_pt_set_pte(%p,%p,%lx,%lx,%x): %d %lx\n\0".as_ptr().cast(),
+                pt, ptep, pgsize, phys, attr, error, current);
+        }
+        error
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Append within the existing x86_memory_helpers module; no module/ABI renames.
+unsafe extern "C" {
+    static mut x86_set_range_map_2m_debug: crate::debug::Ddebug;
+    static mut x86_set_range_map_1g_debug: crate::debug::Ddebug;
+    static mut x86_set_range_rss_add_debug: crate::debug::Ddebug;
+    static mut x86_set_range_rss_skip_debug: crate::debug::Ddebug;
+}
+
+fn set_range_log_name(level_shift: CInt) -> *const i8 {
+    match level_shift {
+        PTL1_SHIFT => b"set_range_l1\0".as_ptr().cast(),
+        PTL2_SHIFT => b"set_range_l2\0".as_ptr().cast(),
+        PTL3_SHIFT => b"set_range_l3\0".as_ptr().cast(),
+        _ => b"set_range_l4\0".as_ptr().cast(),
+    }
+}
+
+fn set_range_walk_log_name(level_shift: CInt) -> *const i8 {
+    match level_shift {
+        PTL2_SHIFT => b"walk_pte_l1\0".as_ptr().cast(),
+        PTL3_SHIFT => b"walk_pte_l2\0".as_ptr().cast(),
+        PTL4_SHIFT => b"walk_pte_l3\0".as_ptr().cast(),
+        _ => b"walk_pte_l4\0".as_ptr().cast(),
+    }
+}
+
+/// # Safety
+/// `descriptor` must point to the permanent C `__verbose` object for this call site.
+unsafe fn set_range_log_enabled(descriptor: *const crate::debug::Ddebug) -> bool {
+    // SAFETY: Callers pass one permanent, aligned C descriptor, never a stack object.
+    // Match the existing live flags byte, including nonzero values other than PRINT.
+    unsafe {
+        core::ptr::read_volatile(core::ptr::addr_of!((*descriptor).line_flags)) >> 24 != 0
+    }
+}
+
+/// Complete set-range event logger; neither allocates nor changes page ownership.
+///
+/// # Safety
+/// The existing C caller must retain the normal kprintf execution context. All
+/// format/name pointers below have static lifetime. C `__verbose` descriptors use
+/// the reviewed Ddebug layout and remain live for the duration of every call.
+#[no_mangle]
+pub unsafe extern "C" fn x86_set_range_log_bridge(
+    event: CInt,
+    level_shift: CInt,
+    base: CULong,
+    start: CULong,
+    end: CULong,
+    error: CInt,
+    pte: CULong,
+    phys: CULong,
+    size: CULong,
+    pgsize: CULong,
+    _rss_called: CInt,
+) {
+    let name = set_range_log_name(level_shift);
+    // SAFETY: Static NUL-terminated formats/names and exact original LP64 promoted
+    // vararg widths are used. No caller pointer is dereferenced or retained.
+    unsafe {
+        match event {
+            X86_SET_RANGE_LOG_BUSY => {
+                let _ = kprintf(
+                    b"%s(%lx,%lx,%lx):page exists. %d %lx\n\0".as_ptr().cast(),
+                    name, base, start, end, error, pte,
+                );
+            }
+            X86_SET_RANGE_LOG_ALLOC_FAILED => {
+                let _ = kprintf(
+                    b"%s(%lx,%lx,%lx):__alloc_new_pt failed. %d %lx\n\0".as_ptr().cast(),
+                    name, base, start, end, error, pte,
+                );
+            }
+            X86_SET_RANGE_LOG_WALK_FAILED => {
+                let _ = kprintf(
+                    b"%s(%lx,%lx,%lx):%s failed. %d %lx\n\0".as_ptr().cast(),
+                    name, base, start, end, set_range_walk_log_name(level_shift), error, pte,
+                );
+            }
+            X86_SET_RANGE_LOG_MAP_LARGE if level_shift == PTL2_SHIFT => {
+                if set_range_log_enabled(core::ptr::addr_of!(x86_set_range_map_2m_debug)) {
+                    let _ = kprintf(
+                        b"%s(%lx,%lx,%lx):2MiB page. %d %lx\n\0".as_ptr().cast(),
+                        name, base, start, end, error, pte,
+                    );
+                }
+            }
+            X86_SET_RANGE_LOG_MAP_LARGE if level_shift == PTL3_SHIFT => {
+                if set_range_log_enabled(core::ptr::addr_of!(x86_set_range_map_1g_debug)) {
+                    let _ = kprintf(
+                        b"%s(%lx,%lx,%lx):1GiB page. %d %lx\n\0".as_ptr().cast(),
+                        name, base, start, end, error, pte,
+                    );
+                }
+            }
+            X86_SET_RANGE_LOG_RSS_ADD => {
+                if set_range_log_enabled(core::ptr::addr_of!(x86_set_range_rss_add_debug)) {
+                    let _ = kprintf(
+                        b"%lx+,%s: calling memory_stat_rss_add(),base=%lx,phys=%lx,size=%ld,pgsize=%ld\n\0"
+                            .as_ptr().cast(),
+                        phys, name, base, phys, size as crate::abi::CLong,
+                        pgsize as crate::abi::CLong,
+                    );
+                }
+            }
+            X86_SET_RANGE_LOG_RSS_SKIP => {
+                if set_range_log_enabled(core::ptr::addr_of!(x86_set_range_rss_skip_debug)) {
+                    let _ = kprintf(
+                        b"%s: !calling memory_stat_rss_add(),base=%lx,phys=%lx,size=%ld,pgsize=%ld\n\0"
+                            .as_ptr().cast(),
+                        name, base, phys, size as crate::abi::CLong, pgsize as crate::abi::CLong,
+                    );
+                }
+            }
+            _ => {}
+        }
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Same module as the existing set-range algorithms and accepted page providers.
+#[repr(C)]
+struct SetRangeArgs {
+    pt: *mut c_void,
+    phys: CULong,
+    attr: CULong,
+    pgshift: CInt,
+    diff: CULong,
+    vm: *mut c_void,
+    range: *mut c_void,
+}
+
+#[repr(C)]
+struct SetRangeLogGeometry {
+    range_start_offset: CULong,
+    range_end_offset: CULong,
+}
+
+unsafe extern "C" {
+    static x86_set_range_log_geometry: SetRangeLogGeometry;
+    static mut x86_set_range_l1_enter_debug: crate::debug::Ddebug;
+    static mut x86_set_range_l1_exit_debug: crate::debug::Ddebug;
+    static mut x86_set_range_l2_enter_debug: crate::debug::Ddebug;
+    static mut x86_set_range_l2_exit_debug: crate::debug::Ddebug;
+    static mut x86_set_range_l3_enter_debug: crate::debug::Ddebug;
+    static mut x86_set_range_l3_exit_debug: crate::debug::Ddebug;
+    static mut x86_set_range_l4_enter_debug: crate::debug::Ddebug;
+    static mut x86_set_range_l4_exit_debug: crate::debug::Ddebug;
+    static mut x86_set_range_top_enter_debug: crate::debug::Ddebug;
+    static mut x86_set_range_top_exit_debug: crate::debug::Ddebug;
+}
+
+unsafe extern "C" fn set_range_clear(
+    pt: *mut c_void, vm: *mut c_void, start: CULong, end: CULong,
+    free_physical: CInt, memobj: *mut c_void,
+) -> CInt {
+    // SAFETY: The existing helper forwards the original synchronous C callback
+    // arguments; VM/memobj ownership is retained by the original range operation.
+    unsafe { x86_clear_range_public_body(pt, vm.cast(), start, end, free_physical, memobj.cast()) }
+}
+
+unsafe extern "C" fn set_range_rss_add(
+    range: *mut c_void, phys: CULong, size: CULong, pgsize: CULong,
+) -> CInt {
+    // SAFETY: The original range remains live under its caller's VM ownership.
+    // Preserve C size_t -> int narrowing of pgsize and the actual rusage cfg body.
+    unsafe { crate::mem_helpers::rusage_memory_stat_add(range.cast(), phys, size, pgsize as CInt) }
+}
+
+unsafe fn set_range_trace_enter(level: CInt, base: CULong, start: CULong, end: CULong) {
+    // SAFETY: All selected descriptors/formats are permanent C data. The volatile
+    // flags read matches the original per-call-site debug selector, not a snapshot.
+    unsafe {
+        let (descriptor, format) = match level {
+            1 => (core::ptr::addr_of!(x86_set_range_l1_enter_debug),
+                b"set_range_l1(%lx,%lx,%lx)\n\0".as_slice()),
+            2 => (core::ptr::addr_of!(x86_set_range_l2_enter_debug),
+                b"set_range_l2(%lx,%lx,%lx)\n\0".as_slice()),
+            3 => (core::ptr::addr_of!(x86_set_range_l3_enter_debug),
+                b"set_range_l3(%lx,%lx,%lx)\n\0".as_slice()),
+            4 => (core::ptr::addr_of!(x86_set_range_l4_enter_debug),
+                b"set_range_l4(%lx,%lx,%lx)\n\0".as_slice()),
+            _ => return,
+        };
+        if set_range_log_enabled(descriptor) {
+            let _ = kprintf(format.as_ptr().cast(), base, start, end);
+        }
+    }
+}
+
+unsafe fn set_range_trace_exit(
+    level: CInt, ptep: *mut CULong, base: CULong, start: CULong, end: CULong, error: CInt,
+) {
+    // SAFETY: The original callback contract keeps ptep aligned/live through the
+    // return trace. Read it only when that live selector enables the original call.
+    unsafe {
+        let (descriptor, format) = match level {
+            1 => (core::ptr::addr_of!(x86_set_range_l1_exit_debug),
+                b"set_range_l1(%lx,%lx,%lx): %d %lx\n\0".as_slice()),
+            2 => (core::ptr::addr_of!(x86_set_range_l2_exit_debug),
+                b"set_range_l2(%lx,%lx,%lx): %d %lx\n\0".as_slice()),
+            3 => (core::ptr::addr_of!(x86_set_range_l3_exit_debug),
+                b"set_range_l3(%lx,%lx,%lx): %d\n\0".as_slice()),
+            4 => (core::ptr::addr_of!(x86_set_range_l4_exit_debug),
+                b"set_range_l4(%lx,%lx,%lx): %d %lx\n\0".as_slice()),
+            _ => return,
+        };
+        if set_range_log_enabled(descriptor) {
+            // L3 deliberately preserves the original extra evaluated vararg even
+            // though its format has no final %lx conversion.
+            let current = core::ptr::read(ptep);
+            let _ = kprintf(format.as_ptr().cast(), base, start, end, error, current);
+        }
+    }
+}
+
+
+/// Original set_range_l1 orchestration using the existing Rust effect algorithm.
+///
+/// # Safety
+/// args0 points to initialized real set_range_args for the entire synchronous
+/// walk. ptep is aligned/live under the original page-table/VM ownership. No
+/// Rust reference to either object survives a child, logger or accounting call.
+#[no_mangle]
+pub unsafe extern "C" fn set_range_l1(
+    args0: *mut c_void, ptep: *mut CULong, base: CULong, start: CULong, end: CULong,
+) -> CInt {
+    // SAFETY: The caller maintains the original C lifetime/lock contract. Snapshot
+    // plain fields after entry logging, before invoking the original effect body.
+    unsafe {
+        set_range_trace_enter(1, base, start, end);
+        let state = core::ptr::read(args0.cast::<SetRangeArgs>());
+        let attr = state.attr;
+        let attr_mask = core::ptr::read(core::ptr::addr_of!(X86_ATTR_MASK));
+        let error = x86_set_range_leaf_body_result(
+            args0, ptep, base, start, end, state.pt, state.vm, state.phys, attr, attr_mask,
+            state.range, Some(set_range_clear), Some(set_range_rss_add),
+            Some(x86_set_range_log_bridge),
+        );
+        set_range_trace_exit(1, ptep, base, start, end, error);
+        error
+    }
+}
+
+/// Original set_range_l2 orchestration using the existing Rust effect algorithm.
+///
+/// # Safety
+/// args0 points to initialized real set_range_args for the entire synchronous
+/// walk. ptep is aligned/live under the original page-table/VM ownership. No
+/// Rust reference to either object survives a child, logger or accounting call.
+#[no_mangle]
+pub unsafe extern "C" fn set_range_l2(
+    args0: *mut c_void, ptep: *mut CULong, base: CULong, start: CULong, end: CULong,
+) -> CInt {
+    // SAFETY: The caller maintains the original C lifetime/lock contract. Snapshot
+    // plain fields after entry logging, before invoking the original effect body.
+    unsafe {
+        set_range_trace_enter(2, base, start, end);
+        let state = core::ptr::read(args0.cast::<SetRangeArgs>());
+        let attr = state.attr;
+        let attr_mask = core::ptr::read(core::ptr::addr_of!(X86_ATTR_MASK));
+        let error = x86_set_range_level_body_result(
+            args0, ptep, base, start, end, state.pt, state.vm, state.phys, attr, attr_mask,
+            state.diff, state.pgshift, PTL2_SHIFT, PTL2_SIZE, PFL2_SIZE, 1, PFL2_PDIR_ATTR,
+            state.range, Some(x86_pt_alloc_pages_bridge), Some(x86_pt_free_pages_bridge),
+            Some(x86_pt_virt_to_phys_bridge), Some(x86_pt_phys_to_virt_bridge),
+            Some(set_range_walk_l1), Some(set_range_clear),
+            Some(set_range_rss_add), Some(x86_set_range_log_bridge),
+        );
+        set_range_trace_exit(2, ptep, base, start, end, error);
+        error
+    }
+}
+
+/// Original set_range_l3 orchestration using the existing Rust effect algorithm.
+///
+/// # Safety
+/// args0 points to initialized real set_range_args for the entire synchronous
+/// walk. ptep is aligned/live under the original page-table/VM ownership. No
+/// Rust reference to either object survives a child, logger or accounting call.
+#[no_mangle]
+pub unsafe extern "C" fn set_range_l3(
+    args0: *mut c_void, ptep: *mut CULong, base: CULong, start: CULong, end: CULong,
+) -> CInt {
+    // SAFETY: The caller maintains the original C lifetime/lock contract. Snapshot
+    // plain fields after entry logging, before invoking the original effect body.
+    unsafe {
+        set_range_trace_enter(3, base, start, end);
+        let state = core::ptr::read(args0.cast::<SetRangeArgs>());
+        let attr = state.attr;
+        let attr_mask = core::ptr::read(core::ptr::addr_of!(X86_ATTR_MASK));
+        let error = x86_set_range_level_body_result(
+            args0, ptep, base, start, end, state.pt, state.vm, state.phys, attr, attr_mask,
+            state.diff, state.pgshift, PTL3_SHIFT, PTL3_SIZE, PFL3_SIZE, x86_use_1gb_page_bridge(), PFL3_PDIR_ATTR,
+            state.range, Some(x86_pt_alloc_pages_bridge), Some(x86_pt_free_pages_bridge),
+            Some(x86_pt_virt_to_phys_bridge), Some(x86_pt_phys_to_virt_bridge),
+            Some(set_range_walk_l2), Some(set_range_clear),
+            Some(set_range_rss_add), Some(x86_set_range_log_bridge),
+        );
+        set_range_trace_exit(3, ptep, base, start, end, error);
+        error
+    }
+}
+
+/// Original set_range_l4 orchestration using the existing Rust effect algorithm.
+///
+/// # Safety
+/// args0 points to initialized real set_range_args for the entire synchronous
+/// walk. ptep is aligned/live under the original page-table/VM ownership. No
+/// Rust reference to either object survives a child, logger or accounting call.
+#[no_mangle]
+pub unsafe extern "C" fn set_range_l4(
+    args0: *mut c_void, ptep: *mut CULong, base: CULong, start: CULong, end: CULong,
+) -> CInt {
+    // SAFETY: The caller maintains the original C lifetime/lock contract. Snapshot
+    // plain fields after entry logging, before invoking the original effect body.
+    unsafe {
+        set_range_trace_enter(4, base, start, end);
+        let state = core::ptr::read(args0.cast::<SetRangeArgs>());
+        let attr = state.attr;
+        let attr_mask = core::ptr::read(core::ptr::addr_of!(X86_ATTR_MASK));
+        let error = x86_set_range_level_body_result(
+            args0, ptep, base, start, end, state.pt, state.vm, state.phys, attr, attr_mask,
+            state.diff, state.pgshift, PTL4_SHIFT, 0, 0, 0, PFL4_PDIR_ATTR,
+            state.range, Some(x86_pt_alloc_pages_bridge), Some(x86_pt_free_pages_bridge),
+            Some(x86_pt_virt_to_phys_bridge), Some(x86_pt_phys_to_virt_bridge),
+            Some(set_range_walk_l3), Some(set_range_clear),
+            Some(set_range_rss_add), Some(x86_set_range_log_bridge),
+        );
+        set_range_trace_exit(4, ptep, base, start, end, error);
+        error
+    }
+}
+
+unsafe extern "C" fn set_range_walk_l1(
+    pt: *mut c_void, base: CULong, start: CULong, end: CULong, args: *mut c_void,
+) -> CInt {
+    // SAFETY: The original synchronous walker retains table/state ownership;
+    // the typed callback is the same level provider as the original C adapter.
+    unsafe { walk_pte_l1(pt, base, start, end, Some(set_range_l1), args) }
+}
+
+unsafe extern "C" fn set_range_walk_l2(
+    pt: *mut c_void, base: CULong, start: CULong, end: CULong, args: *mut c_void,
+) -> CInt {
+    // SAFETY: The original synchronous walker retains table/state ownership;
+    // the typed callback is the same level provider as the original C adapter.
+    unsafe { walk_pte_l2(pt, base, start, end, Some(set_range_l2), args) }
+}
+
+unsafe extern "C" fn set_range_walk_l3(
+    pt: *mut c_void, base: CULong, start: CULong, end: CULong, args: *mut c_void,
+) -> CInt {
+    // SAFETY: The original synchronous walker retains table/state ownership;
+    // the typed callback is the same level provider as the original C adapter.
+    unsafe { walk_pte_l3(pt, base, start, end, Some(set_range_l3), args) }
+}
+
+unsafe extern "C" fn set_range_walk_l4(
+    pt: *mut c_void, base: CULong, start: CULong, end: CULong, args: *mut c_void,
+) -> CInt {
+    // SAFETY: The original synchronous walker retains table/state ownership;
+    // the typed callback is the same level provider as the original C adapter.
+    unsafe { walk_pte_l4(pt, base, start, end, Some(set_range_l4), args) }
+}
+
+
+/// Original top walk/error-log algorithm with the real full-width state ABI.
+///
+/// # Safety
+/// args is aligned writable SetRangeArgs storage, live throughout the synchronous
+/// walk. The callbacks obey original page/VM ownership and do not retain args.
+unsafe fn set_range_top_wide_body(
+    pt: *mut c_void, vm: *mut c_void, start: CULong, end: CULong,
+    phys: CULong, attr: CULong, pgshift: CInt, range: *mut c_void,
+    args: *mut SetRangeArgs, walk: X86RangeTopWalkFn, log: X86SetRangeLogFn,
+) -> CInt {
+    // SAFETY: Fully initialize every actual field, including all 64 attr bits,
+    // before any callback. This deliberately avoids the retained legacy helper's
+    // int/int* boundary, which writes only half of the real C enum field.
+    unsafe {
+        core::ptr::write(args, SetRangeArgs {
+            pt, phys, attr, pgshift, diff: start ^ phys, vm, range,
+        });
+        let error = walk(pt, 0, start, end, args.cast());
+        if error != 0 {
+            x86_set_range_walk_failed_result(error, 0, start, end, 0, 0, Some(log))
+        } else {
+            0
+        }
+    }
+}
+
+/// Complete public set-range orchestration; overwrite remains deliberately unused.
+///
+/// # Safety
+/// The caller retains the original page-table/VM locks and argument lifetimes.
+/// range must be a live real vm_range whenever the entry debug selector is on.
+/// Child walkers must return synchronously without retaining the local args.
+#[no_mangle]
+pub unsafe extern "C" fn ihk_mc_pt_set_range(
+    pt: *mut c_void, vm: *mut c_void, start: *mut c_void, end: *mut c_void,
+    phys: CULong, attr: CULong, pgshift: CInt, range: *mut c_void, _overwrite: CInt,
+) -> CInt {
+    let mut storage = core::mem::MaybeUninit::<SetRangeArgs>::uninit();
+    let args = storage.as_mut_ptr();
+    // SAFETY: No uninitialized field is read. The original top helper initializes
+    // each field through raw pointers before synchronous child traversal. No
+    // mutable Rust reference crosses any callback. Geometry comes from offsetof
+    // on the real C vm_range, not an assumed Rust layout or new getter function.
+    unsafe {
+        if set_range_log_enabled(core::ptr::addr_of!(x86_set_range_top_enter_debug)) {
+            let bytes = range.cast::<u8>();
+            let range_start = core::ptr::read(bytes.add(
+                x86_set_range_log_geometry.range_start_offset as usize,
+            ).cast::<CULong>());
+            let range_end = core::ptr::read(bytes.add(
+                x86_set_range_log_geometry.range_end_offset as usize,
+            ).cast::<CULong>());
+            let _ = kprintf(
+                b"ihk_mc_pt_set_range(%p,%p,%p,%lx,%x,%d,%lx-%lx)\n\0".as_ptr().cast(),
+                pt, start, end, phys, attr, pgshift, range_start, range_end,
+            );
+        }
+        let error = set_range_top_wide_body(
+            pt, vm, start as CULong, end as CULong, phys, attr, pgshift, range,
+            args, set_range_walk_l4, x86_set_range_log_bridge,
+        );
+        if set_range_log_enabled(core::ptr::addr_of!(x86_set_range_top_exit_debug)) {
+            let _ = kprintf(
+                b"ihk_mc_pt_set_range(%p,%p,%p,%lx,%x): %d\n\0".as_ptr().cast(),
+                pt, start, end, phys, attr, error,
+            );
+        }
+        error
+    }
+}
+
+// Type-check the actual existing effect/callback boundary, not merely ABI widths.
+const _: X86SetRangeClearFn = set_range_clear;
+const _: X86SetRangeRssAddFn = set_range_rss_add;
+const _: X86SetRangeLogFn = x86_set_range_log_bridge;
+const _: X86RangeTopWalkFn = set_range_walk_l4;
+
+const _: () = {
+    assert!(core::mem::size_of::<SetRangeArgs>() == 56);
+    assert!(core::mem::align_of::<SetRangeArgs>() == 8);
+    assert!(core::mem::offset_of!(SetRangeArgs, pt) == 0);
+    assert!(core::mem::offset_of!(SetRangeArgs, phys) == 8);
+    assert!(core::mem::offset_of!(SetRangeArgs, attr) == 16);
+    assert!(core::mem::offset_of!(SetRangeArgs, pgshift) == 24);
+    assert!(core::mem::offset_of!(SetRangeArgs, diff) == 32);
+    assert!(core::mem::offset_of!(SetRangeArgs, vm) == 40);
+    assert!(core::mem::offset_of!(SetRangeArgs, range) == 48);
+};
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Coherent source dependency: the new Rust ihk_mc_pt_set_range batch is required.
+#[repr(C)]
+struct MoveRangeArgs {
+    src: CULong,
+    dest: CULong,
+    vm: *mut c_void,
+    range: *mut c_void,
+}
+
+unsafe extern "C" {
+    static mut x86_move_one_enter_debug: crate::debug::Ddebug;
+    static mut x86_move_one_exit_debug: crate::debug::Ddebug;
+    static mut x86_move_range_enter_debug: crate::debug::Ddebug;
+    static mut x86_move_range_exit_debug: crate::debug::Ddebug;
+}
+
+unsafe fn move_trace_enabled(descriptor: *const crate::debug::Ddebug) -> bool {
+    // SAFETY: All callers supply permanent real C __verbose descriptors. Preserve
+    // live nonzero byte semantics and avoid references across formatter callbacks.
+    unsafe {
+        core::ptr::read_volatile(core::ptr::addr_of!((*descriptor).line_flags)) >> 24 != 0
+    }
+}
+
+unsafe extern "C" fn move_set_range(
+    pt: *mut c_void, vm: *mut c_void, start: CULong, end: CULong,
+    phys: CULong, attr: CULong, pgshift: CInt, range: *mut c_void, overwrite: CInt,
+) -> CInt {
+    // SAFETY: Original synchronous callback forwards the same borrowed VM/range
+    // ownership. Preserve the actual full-width unsigned enum without truncation.
+    unsafe {
+        ihk_mc_pt_set_range(
+            pt, vm, start as *mut c_void, end as *mut c_void, phys,
+            attr, pgshift, range, overwrite,
+        )
+    }
+}
+
+unsafe extern "C" fn move_log(
+    event: CInt, arg: *mut c_void, pt: *mut c_void, ptep: *mut CULong,
+    entry: CULong, current: CULong, pgaddr: CULong, pgshift: CInt, error: CInt,
+) {
+    // SAFETY: Exact original static formats and C-promoted LP64 values. All raw
+    // pointer values are printed only; none is dereferenced or retained here.
+    unsafe {
+        match event {
+            X86_MOVE_ONE_LOG_FILEOFF => {
+                let _ = kprintf(
+                    b"move_one_page(%p,%p,%p %#lx,%p,%d):fileoff. %d\n\0".as_ptr().cast(),
+                    arg, pt, ptep, entry, pgaddr as *mut c_void, pgshift, error,
+                );
+            }
+            X86_MOVE_ONE_LOG_SET_FAILED => {
+                let _ = kprintf(
+                    b"move_one_page(%p,%p,%p %#lx,%p,%d):set failed. %d\n\0".as_ptr().cast(),
+                    arg, pt, ptep, current, pgaddr as *mut c_void, pgshift, error,
+                );
+            }
+            _ => {}
+        }
+    }
+}
+
+unsafe extern "C" fn move_one_page_rust(
+    arg: *mut c_void, pt: *mut c_void, ptep: *mut CULong,
+    pgaddr: *mut c_void, pgshift: CInt,
+) -> CInt {
+    // SAFETY: The visitor retains the actual move_args and PTE until this
+    // synchronous callback returns. Only raw field snapshots span nested calls.
+    unsafe {
+        if move_trace_enabled(core::ptr::addr_of!(x86_move_one_enter_debug)) {
+            let _ = kprintf(
+                b"move_one_page(%p,%p,%p %#lx,%p,%d)\n\0".as_ptr().cast(),
+                arg, pt, ptep, core::ptr::read(ptep), pgaddr, pgshift,
+            );
+        }
+        let state = core::ptr::read(arg.cast::<MoveRangeArgs>());
+        let error = x86_move_one_page_body_result(
+            arg, pt, ptep, pgaddr as CULong, pgshift, state.src, state.dest,
+            state.vm, state.range, Some(move_set_range), Some(move_log),
+        );
+        if move_trace_enabled(core::ptr::addr_of!(x86_move_one_exit_debug)) {
+            let _ = kprintf(
+                b"move_one_page(%p,%p,%p %#lx,%p,%d):%d\n\0".as_ptr().cast(),
+                arg, pt, ptep, core::ptr::read(ptep), pgaddr, pgshift, error,
+            );
+        }
+        error
+    }
+}
+
+unsafe extern "C" fn move_visit_range(
+    pt: *mut c_void, start: CULong, end: CULong, pgshift: CInt, flags: CInt,
+    visitor: X86VisitPteFn, arg: *mut c_void,
+) -> CInt {
+    // SAFETY: Match the original typed visitor, integer/pointer conversions,
+    // flag bits and synchronous traversal. Caller retains the actual VM lock.
+    unsafe {
+        visit_pte_range(
+            pt, start as *mut c_void, end as *mut c_void, pgshift, flags, Some(visitor), arg,
+        )
+    }
+}
+
+/// Existing hardware flush boundary, now Rust-owned with the reviewed helper.
+///
+/// # Safety
+/// The caller must be in the existing privileged kernel TLB context. Ordinary
+/// Linux endpoint fixtures must use a controlled flush callback, not execute this.
+#[no_mangle]
+pub unsafe extern "C" fn x86_move_flush_tlb_bridge() {
+    // SAFETY: This preserves the prior C flush_tlb() call and its hardware scope.
+    unsafe { flush_tlb() }
+}
+
+/// Complete move-range orchestration using the existing Rust transaction body.
+///
+/// # Safety
+/// Original VM/page-table locking and src/dest/range ownership must remain held.
+/// The visitor returns synchronously and must not retain the stack state. The
+/// existing helper performs one TLB flush even when traversal returns an error.
+#[no_mangle]
+pub unsafe extern "C" fn move_pte_range(
+    pt: *mut c_void, vm: *mut c_void, src: *mut c_void, dest: *mut c_void,
+    size: SizeT, range: *mut c_void,
+) -> CInt {
+    let mut storage = core::mem::MaybeUninit::<MoveRangeArgs>::uninit();
+    let args = storage.as_mut_ptr();
+    // SAFETY: Raw field addresses point into a live aligned stack object. The
+    // existing Rust body writes all four fields before any visitor can read them.
+    // No Rust mutable reference or ownership transfer crosses a callback.
+    unsafe {
+        if move_trace_enabled(core::ptr::addr_of!(x86_move_range_enter_debug)) {
+            let _ = kprintf(
+                b"move_pte_range(%p,%p,%p,%#lx)\n\0".as_ptr().cast(), pt, src, dest, size,
+            );
+        }
+        let error = x86_move_pte_range_body_result(
+            pt, src as CULong, dest as CULong, size, vm, range, args.cast(),
+            core::ptr::addr_of_mut!((*args).src), core::ptr::addr_of_mut!((*args).dest),
+            core::ptr::addr_of_mut!((*args).vm), core::ptr::addr_of_mut!((*args).range),
+            Some(move_one_page_rust), Some(move_visit_range), Some(x86_move_flush_tlb_bridge),
+        );
+        if move_trace_enabled(core::ptr::addr_of!(x86_move_range_exit_debug)) {
+            let _ = kprintf(
+                b"move_pte_range(%p,%p,%p,%#lx):%d\n\0".as_ptr().cast(),
+                pt, src, dest, size, error,
+            );
+        }
+        error
+    }
+}
+
+const _: X86MoveSetRangeFn = move_set_range;
+const _: X86MoveLogFn = move_log;
+const _: X86VisitPteFn = move_one_page_rust;
+const _: X86MoveVisitRangeFn = move_visit_range;
+const _: X86MoveFlushFn = x86_move_flush_tlb_bridge;
+const _: () = {
+    assert!(core::mem::size_of::<MoveRangeArgs>() == 32);
+    assert!(core::mem::align_of::<MoveRangeArgs>() == 8);
+    assert!(core::mem::offset_of!(MoveRangeArgs, src) == 0);
+    assert!(core::mem::offset_of!(MoveRangeArgs, dest) == 8);
+    assert!(core::mem::offset_of!(MoveRangeArgs, vm) == 16);
+    assert!(core::mem::offset_of!(MoveRangeArgs, range) == 24);
+};
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// The actual C enum contains PTATTR_NO_EXECUTE bit63 and shares attr_mask storage.
+
+/// Read the existing live attribute-mask data without adding a C state getter.
+///
+/// # Safety
+/// Preserve the existing kernel feature-initialization/attribute-mask ownership
+/// contract. The aligned C enum object remains live throughout kernel execution.
+#[no_mangle]
+pub unsafe extern "C" fn x86_attr_mask_bridge() -> CULong {
+    // SAFETY: The reviewed existing X86_ATTR_MASK link_name is attr_mask. The
+    // selected real-header gate requires its actual full-width enum data ABI.
+    unsafe { core::ptr::read(core::ptr::addr_of!(X86_ATTR_MASK)) }
+}
+
+/// Full-width original C level-one attribute conversion and live mask read.
+///
+/// # Safety
+/// Same feature-state access contract as x86_attr_mask_bridge.
+#[no_mangle]
+pub unsafe extern "C" fn x86_attr_to_l1attr_public(attr: CULong) -> CULong {
+    // SAFETY: Existing C wrapper performed this same mask read and pure helper.
+    unsafe { x86_attr_to_l1attr_result(attr, x86_attr_mask_bridge()) }
+}
+
+/// Full-width original C level-two attribute conversion and live mask read.
+///
+/// # Safety
+/// Same feature-state access contract as x86_attr_mask_bridge.
+#[no_mangle]
+pub unsafe extern "C" fn x86_attr_to_l2attr_public(attr: CULong) -> CULong {
+    // SAFETY: Existing C wrapper performed this same mask read and pure helper.
+    unsafe { x86_attr_to_l2attr_result(attr, x86_attr_mask_bridge()) }
+}
+
+/// Full-width original C level-three attribute conversion and live mask read.
+///
+/// # Safety
+/// Same feature-state access contract as x86_attr_mask_bridge.
+#[no_mangle]
+pub unsafe extern "C" fn x86_attr_to_l3attr_public(attr: CULong) -> CULong {
+    // SAFETY: Existing C wrapper performed this same mask read and pure helper.
+    unsafe { x86_attr_to_l3attr_result(attr, x86_attr_mask_bridge()) }
+}
+
+/// Complete original public change-attribute orchestration.
+///
+/// # Safety
+/// pt and every recursively reached page table obey the original valid-memory,
+/// page ownership and locking contract. The existing physical converter remains
+/// a live explicit provider dependency; no borrowed Rust reference spans it.
+#[no_mangle]
+pub unsafe extern "C" fn ihk_mc_pt_change_attr_range(
+    pt: *mut c_void, start: *mut c_void, end: *mut c_void,
+    clear_attr: CULong, set_attr: CULong,
+) -> CInt {
+    // SAFETY: Preserve pointer -> intptr_t -> unsigned-long bit patterns on the
+    // real LP64 target. Both converters reuse existing pure Rust algorithms and
+    // the same live mask; the recursive walk/effect algorithm is unchanged.
+    unsafe {
+        let clear_pte = x86_attr_to_l1attr_public(clear_attr);
+        let set_pte = x86_attr_to_l1attr_public(set_attr);
+        x86_pt_change_attr_range_result(
+            pt, start as CULong, end as CULong, clear_pte, set_pte,
+            Some(x86_pt_phys_to_virt_bridge),
+        )
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Reuse existing x86_memory_existing_panic ABI alias; no new panic implementation.
+
+/// Exact original terminal-error adapter.
+///
+/// # Safety
+/// Caller retains the original kernel error context. The panic argument is a
+/// permanent NUL-terminated literal; do not infer recovery if panic returns.
+#[no_mangle]
+pub unsafe extern "C" fn x86_pt_destroy_helper_failed_panic_bridge() {
+    // SAFETY: Exact original panic ABI and static message, no borrowed data.
+    unsafe { x86_memory_existing_panic(b"destroy_page_table: helper failed\0".as_ptr().cast()) }
+}
+
+/// Exact original terminal-error adapter.
+///
+/// # Safety
+/// Caller retains the original kernel error context. The panic argument is a
+/// permanent NUL-terminated literal; do not infer recovery if panic returns.
+#[no_mangle]
+pub unsafe extern "C" fn x86_load_page_table_panic_bridge() {
+    // SAFETY: Exact original panic ABI and static message, no borrowed data.
+    unsafe { x86_memory_existing_panic(b"load_page_table: helper failed\0".as_ptr().cast()) }
+}
+
+/// Exact original terminal-error adapter.
+///
+/// # Safety
+/// Caller retains the original kernel error context. The panic argument is a
+/// permanent NUL-terminated literal; do not infer recovery if panic returns.
+#[no_mangle]
+pub unsafe extern "C" fn x86_init_fixed_panic_bridge() {
+    // SAFETY: Exact original panic ABI and static message, no borrowed data.
+    unsafe { x86_memory_existing_panic(b"init_fixed_area: helper failed\0".as_ptr().cast()) }
+}
+
+/// Exact original terminal-error adapter.
+///
+/// # Safety
+/// Caller retains the original kernel error context. The panic argument is a
+/// permanent NUL-terminated literal; do not infer recovery if panic returns.
+#[no_mangle]
+pub unsafe extern "C" fn x86_init_normal_panic_bridge() {
+    // SAFETY: Exact original panic ABI and static message, no borrowed data.
+    unsafe { x86_memory_existing_panic(b"init_normal_area: helper failed\0".as_ptr().cast()) }
+}
+
+/// Exact original terminal-error adapter.
+///
+/// # Safety
+/// Caller retains the original kernel error context. The panic argument is a
+/// permanent NUL-terminated literal; do not infer recovery if panic returns.
+#[no_mangle]
+pub unsafe extern "C" fn x86_init_low_panic_bridge() {
+    // SAFETY: Exact original panic ABI and static message, no borrowed data.
+    unsafe { x86_memory_existing_panic(b"init_low_area: helper failed\0".as_ptr().cast()) }
+}
+
+/// Exact original terminal-error adapter.
+///
+/// # Safety
+/// Caller retains the original kernel error context. The panic argument is a
+/// permanent NUL-terminated literal; do not infer recovery if panic returns.
+#[no_mangle]
+pub unsafe extern "C" fn x86_init_text_panic_bridge() {
+    // SAFETY: Exact original panic ABI and static message, no borrowed data.
+    unsafe { x86_memory_existing_panic(b"init_text_area: helper failed\0".as_ptr().cast()) }
+}
+
+/// Exact original terminal-error adapter.
+///
+/// # Safety
+/// Caller retains the original kernel error context. The panic argument is a
+/// permanent NUL-terminated literal; do not infer recovery if panic returns.
+#[no_mangle]
+pub unsafe extern "C" fn x86_init_linux_panic_bridge() {
+    // SAFETY: Exact original panic ABI and static message, no borrowed data.
+    unsafe { x86_memory_existing_panic(b"init_linux_kernel_mapping: helper failed\0".as_ptr().cast()) }
+}
+
+/// Exact original terminal-error adapter.
+///
+/// # Safety
+/// Caller retains the original kernel error context. The panic argument is a
+/// permanent NUL-terminated literal; do not infer recovery if panic returns.
+#[no_mangle]
+pub unsafe extern "C" fn x86_init_vsyscall_panic_bridge() {
+    // SAFETY: Exact original panic ABI and static message, no borrowed data.
+    unsafe { x86_memory_existing_panic(b"init_vsyscall_area:__set_pt_page failed\0".as_ptr().cast()) }
+}
+
+/// Exact original terminal-error adapter.
+///
+/// # Safety
+/// Caller retains the original kernel error context. The panic argument is a
+/// permanent NUL-terminated literal; do not infer recovery if panic returns.
+#[no_mangle]
+pub unsafe extern "C" fn x86_reserve_arch_pages_panic_bridge() {
+    // SAFETY: Exact original panic ABI and static message, no borrowed data.
+    unsafe { x86_memory_existing_panic(b"ihk_mc_reserve_arch_pages: helper failed\0".as_ptr().cast()) }
+}
+
+/// Exact early-allocator reason dispatch, including unknown-reason silence.
+///
+/// # Safety
+/// Same original allocator terminal-error context and panic ABI.
+#[no_mangle]
+pub unsafe extern "C" fn x86_early_alloc_panic_bridge(reason: CInt) {
+    // SAFETY: Original literals have static lifetime; no allocator state is read.
+    unsafe {
+        match reason {
+            1 => x86_memory_existing_panic(
+                b"Early allocator is already finalized. Do not use it.\n\0".as_ptr().cast(),
+            ),
+            2 => x86_memory_existing_panic(b"Early allocator: Out of memory\n\0".as_ptr().cast()),
+            _ => {}
+        }
+    }
+}
+
+/// Preserve both original independent destroy-reason checks.
+///
+/// # Safety
+/// Same original page-table error context and panic ABI.
+#[no_mangle]
+pub unsafe extern "C" fn x86_pt_destroy_panic_bridge(reason: CInt) {
+    // SAFETY: Exact original constants/messages and control flow. Mock-returning
+    // panic in a functional fixture must not imply a production recovery path.
+    unsafe {
+        if reason == X86_PT_DESTROY_PANIC_LEVEL {
+            x86_memory_existing_panic(b"destroy_page_table: level is out of range\0".as_ptr().cast());
+        }
+        if reason == X86_PT_DESTROY_PANIC_NULL {
+            x86_memory_existing_panic(b"destroy_page_table: pt is NULL\0".as_ptr().cast());
+        }
+    }
+}
+
+/// Exact init-page-table terminal reason/default dispatch.
+///
+/// # Safety
+/// Same original page-table initialization error context and panic ABI.
+#[no_mangle]
+pub unsafe extern "C" fn x86_init_page_table_panic_bridge(reason: CInt) {
+    // SAFETY: No page ownership changes are introduced by this error adapter.
+    unsafe {
+        let message: &[u8] = match reason {
+            3 => b"init_page_table: init_pt allocation failed\0",
+            4 => b"init_page_table: boot_pt allocation failed\0",
+            5 => b"init low area for boot pt did not affect toplevel entry\0",
+            _ => b"init_page_table: helper failed\0",
+        };
+        x86_memory_existing_panic(message.as_ptr().cast());
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// C retains the exact static storage/readonly geometry; Rust owns every adapter.
+unsafe extern "C" {
+    static x86_memory_last_page_slot: *mut *mut c_void;
+    static x86_memory_init_pt_slot: *mut *mut c_void;
+    static x86_memory_boot_pt_slot: *mut *mut c_void;
+    static x86_memory_init_pt_loaded_slot: *mut CInt;
+    static x86_memory_init_pt_lock_address: *mut c_void;
+    static x86_memory_page_table_bytes: SizeT;
+    static x86_memory_fixed_virt_slot: *mut CULong;
+    #[link_name = "bootstrap_mem_end"]
+    static MEMORY_BOOTSTRAP_END: CULong;
+    #[link_name = "vsyscall_page"]
+    static MEMORY_VSYSCALL_PAGE: u8;
+}
+
+/// Exact original static-state identity/value adapter.
+///
+/// # Safety
+/// Preserve the original boot/page-table ownership and synchronization contract.
+/// Returned raw pointers borrow permanent C storage; no new owner or lifetime is
+/// created. The caller controls all writes/locks as before; null values pass on.
+#[no_mangle]
+pub unsafe extern "C" fn x86_early_alloc_last_page_slot_bridge() -> *mut *mut c_void {
+    // SAFETY: Typed readonly C address cells bind the real existing storage.
+    // Reads match original plain C loads; there is no borrowed Rust reference.
+    unsafe { x86_memory_last_page_slot }
+}
+
+/// Exact original static-state identity/value adapter.
+///
+/// # Safety
+/// Preserve the original boot/page-table ownership and synchronization contract.
+/// Returned raw pointers borrow permanent C storage; no new owner or lifetime is
+/// created. The caller controls all writes/locks as before; null values pass on.
+#[no_mangle]
+pub unsafe extern "C" fn x86_early_alloc_end_bridge() -> CULong {
+    // SAFETY: Typed readonly C address cells bind the real existing storage.
+    // Reads match original plain C loads; there is no borrowed Rust reference.
+    unsafe { core::ptr::addr_of!(X86_END) as CULong }
+}
+
+/// Exact original static-state identity/value adapter.
+///
+/// # Safety
+/// Preserve the original boot/page-table ownership and synchronization contract.
+/// Returned raw pointers borrow permanent C storage; no new owner or lifetime is
+/// created. The caller controls all writes/locks as before; null values pass on.
+#[no_mangle]
+pub unsafe extern "C" fn x86_bootstrap_mem_end_bridge() -> CULong {
+    // SAFETY: Typed readonly C address cells bind the real existing storage.
+    // Reads match original plain C loads; there is no borrowed Rust reference.
+    unsafe { MEMORY_BOOTSTRAP_END }
+}
+
+/// Exact original static-state identity/value adapter.
+///
+/// # Safety
+/// Preserve the original boot/page-table ownership and synchronization contract.
+/// Returned raw pointers borrow permanent C storage; no new owner or lifetime is
+/// created. The caller controls all writes/locks as before; null values pass on.
+#[no_mangle]
+pub unsafe extern "C" fn x86_addr_init_pt_loaded_bridge() -> CInt {
+    // SAFETY: Typed readonly C address cells bind the real existing storage.
+    // Reads match original plain C loads; there is no borrowed Rust reference.
+    unsafe { core::ptr::read(x86_memory_init_pt_loaded_slot) }
+}
+
+/// Exact original static-state identity/value adapter.
+///
+/// # Safety
+/// Preserve the original boot/page-table ownership and synchronization contract.
+/// Returned raw pointers borrow permanent C storage; no new owner or lifetime is
+/// created. The caller controls all writes/locks as before; null values pass on.
+#[no_mangle]
+pub unsafe extern "C" fn x86_init_page_table_init_pt_slot_bridge() -> *mut *mut c_void {
+    // SAFETY: Typed readonly C address cells bind the real existing storage.
+    // Reads match original plain C loads; there is no borrowed Rust reference.
+    unsafe { x86_memory_init_pt_slot }
+}
+
+/// Exact original static-state identity/value adapter.
+///
+/// # Safety
+/// Preserve the original boot/page-table ownership and synchronization contract.
+/// Returned raw pointers borrow permanent C storage; no new owner or lifetime is
+/// created. The caller controls all writes/locks as before; null values pass on.
+#[no_mangle]
+pub unsafe extern "C" fn x86_init_page_table_boot_pt_slot_bridge() -> *mut *mut c_void {
+    // SAFETY: Typed readonly C address cells bind the real existing storage.
+    // Reads match original plain C loads; there is no borrowed Rust reference.
+    unsafe { x86_memory_boot_pt_slot }
+}
+
+/// Exact original static-state identity/value adapter.
+///
+/// # Safety
+/// Preserve the original boot/page-table ownership and synchronization contract.
+/// Returned raw pointers borrow permanent C storage; no new owner or lifetime is
+/// created. The caller controls all writes/locks as before; null values pass on.
+#[no_mangle]
+pub unsafe extern "C" fn x86_init_page_table_loaded_slot_bridge() -> *mut CInt {
+    // SAFETY: Typed readonly C address cells bind the real existing storage.
+    // Reads match original plain C loads; there is no borrowed Rust reference.
+    unsafe { x86_memory_init_pt_loaded_slot }
+}
+
+/// Exact original static-state identity/value adapter.
+///
+/// # Safety
+/// Preserve the original boot/page-table ownership and synchronization contract.
+/// Returned raw pointers borrow permanent C storage; no new owner or lifetime is
+/// created. The caller controls all writes/locks as before; null values pass on.
+#[no_mangle]
+pub unsafe extern "C" fn x86_init_page_table_lock_bridge() -> *mut c_void {
+    // SAFETY: Typed readonly C address cells bind the real existing storage.
+    // Reads match original plain C loads; there is no borrowed Rust reference.
+    unsafe { x86_memory_init_pt_lock_address }
+}
+
+/// Exact original static-state identity/value adapter.
+///
+/// # Safety
+/// Preserve the original boot/page-table ownership and synchronization contract.
+/// Returned raw pointers borrow permanent C storage; no new owner or lifetime is
+/// created. The caller controls all writes/locks as before; null values pass on.
+#[no_mangle]
+pub unsafe extern "C" fn x86_init_page_table_size_bridge() -> SizeT {
+    // SAFETY: Typed readonly C address cells bind the real existing storage.
+    // Reads match original plain C loads; there is no borrowed Rust reference.
+    unsafe { x86_memory_page_table_bytes }
+}
+
+/// Exact original static-state identity/value adapter.
+///
+/// # Safety
+/// Preserve the original boot/page-table ownership and synchronization contract.
+/// Returned raw pointers borrow permanent C storage; no new owner or lifetime is
+/// created. The caller controls all writes/locks as before; null values pass on.
+#[no_mangle]
+pub unsafe extern "C" fn x86_page_table_init_pt_bridge() -> *mut c_void {
+    // SAFETY: Typed readonly C address cells bind the real existing storage.
+    // Reads match original plain C loads; there is no borrowed Rust reference.
+    unsafe { core::ptr::read(x86_memory_init_pt_slot) }
+}
+
+/// Exact original static-state identity/value adapter.
+///
+/// # Safety
+/// Preserve the original boot/page-table ownership and synchronization contract.
+/// Returned raw pointers borrow permanent C storage; no new owner or lifetime is
+/// created. The caller controls all writes/locks as before; null values pass on.
+#[no_mangle]
+pub unsafe extern "C" fn x86_page_table_boot_pt_bridge() -> *mut c_void {
+    // SAFETY: Typed readonly C address cells bind the real existing storage.
+    // Reads match original plain C loads; there is no borrowed Rust reference.
+    unsafe { core::ptr::read(x86_memory_boot_pt_slot) }
+}
+
+/// Exact original static-state identity/value adapter.
+///
+/// # Safety
+/// Preserve the original boot/page-table ownership and synchronization contract.
+/// Returned raw pointers borrow permanent C storage; no new owner or lifetime is
+/// created. The caller controls all writes/locks as before; null values pass on.
+#[no_mangle]
+pub unsafe extern "C" fn x86_map_fixed_area_init_pt_bridge() -> *mut c_void {
+    // SAFETY: Typed readonly C address cells bind the real existing storage.
+    // Reads match original plain C loads; there is no borrowed Rust reference.
+    unsafe { core::ptr::read(x86_memory_init_pt_slot) }
+}
+
+/// Exact original static-state identity/value adapter.
+///
+/// # Safety
+/// Preserve the original boot/page-table ownership and synchronization contract.
+/// Returned raw pointers borrow permanent C storage; no new owner or lifetime is
+/// created. The caller controls all writes/locks as before; null values pass on.
+#[no_mangle]
+pub unsafe extern "C" fn x86_map_fixed_area_fixed_virt_slot_bridge() -> *mut CULong {
+    // SAFETY: Typed readonly C address cells bind the real existing storage.
+    // Reads match original plain C loads; there is no borrowed Rust reference.
+    unsafe { x86_memory_fixed_virt_slot }
+}
+
+/// Exact original static-state identity/value adapter.
+///
+/// # Safety
+/// Preserve the original boot/page-table ownership and synchronization contract.
+/// Returned raw pointers borrow permanent C storage; no new owner or lifetime is
+/// created. The caller controls all writes/locks as before; null values pass on.
+#[no_mangle]
+pub unsafe extern "C" fn x86_use_1gb_page_bridge() -> CInt {
+    // SAFETY: Typed readonly C address cells bind the real existing storage.
+    // Reads match original plain C loads; there is no borrowed Rust reference.
+    unsafe { core::ptr::read(x86_clear_l3_use_1gb_page) }
+}
+
+/// Exact original static-state identity/value adapter.
+///
+/// # Safety
+/// Preserve the original boot/page-table ownership and synchronization contract.
+/// Returned raw pointers borrow permanent C storage; no new owner or lifetime is
+/// created. The caller controls all writes/locks as before; null values pass on.
+#[no_mangle]
+pub unsafe extern "C" fn x86_init_vsyscall_page_bridge() -> *mut c_void {
+    // SAFETY: Typed readonly C address cells bind the real existing storage.
+    // Reads match original plain C loads; there is no borrowed Rust reference.
+    unsafe { core::ptr::addr_of!(MEMORY_VSYSCALL_PAGE) as *mut c_void }
+}
+
+/// Exact original static-state identity/value adapter.
+///
+/// # Safety
+/// Preserve the original boot/page-table ownership and synchronization contract.
+/// Returned raw pointers borrow permanent C storage; no new owner or lifetime is
+/// created. The caller controls all writes/locks as before; null values pass on.
+#[no_mangle]
+pub unsafe extern "C" fn x86_user_map_kernel_start_bridge() -> CULong {
+    // SAFETY: Typed readonly C address cells bind the real existing storage.
+    // Reads match original plain C loads; there is no borrowed Rust reference.
+    unsafe { X86_MAP_KERNEL_START_GEOMETRY }
+}
+
+/// Preserve the original empty callback; its caller performs invalidation.
+#[no_mangle]
+pub extern "C" fn x86_early_alloc_invalidate_bridge() {}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Complete original startup callbacks now select their existing Rust bodies.
+
+/// Exact original page-table startup callback.
+///
+/// # Safety
+/// Preserve the original boot ordering, page/table ownership and target context.
+/// The selected existing Rust body retains its own allocation/error/hardware
+/// contracts; this adapter adds no lock, retry, ownership transfer or null policy.
+#[no_mangle]
+pub unsafe extern "C" fn x86_init_page_table_normal_bridge(pt: *mut c_void) {
+    // SAFETY: Same actual typed opaque page-table pointer and synchronous body.
+    unsafe { x86_init_normal_area_public(pt) }
+}
+
+/// Exact original page-table startup callback.
+///
+/// # Safety
+/// Preserve the original boot ordering, page/table ownership and target context.
+/// The selected existing Rust body retains its own allocation/error/hardware
+/// contracts; this adapter adds no lock, retry, ownership transfer or null policy.
+#[no_mangle]
+pub unsafe extern "C" fn x86_init_page_table_linux_bridge(pt: *mut c_void) {
+    // SAFETY: Same actual typed opaque page-table pointer and synchronous body.
+    unsafe { x86_init_linux_kernel_mapping_public(pt) }
+}
+
+/// Exact original page-table startup callback.
+///
+/// # Safety
+/// Preserve the original boot ordering, page/table ownership and target context.
+/// The selected existing Rust body retains its own allocation/error/hardware
+/// contracts; this adapter adds no lock, retry, ownership transfer or null policy.
+#[no_mangle]
+pub unsafe extern "C" fn x86_init_page_table_fixed_bridge(pt: *mut c_void) {
+    // SAFETY: Same actual typed opaque page-table pointer and synchronous body.
+    unsafe { x86_init_fixed_area_public(pt) }
+}
+
+/// Exact original page-table startup callback.
+///
+/// # Safety
+/// Preserve the original boot ordering, page/table ownership and target context.
+/// The selected existing Rust body retains its own allocation/error/hardware
+/// contracts; this adapter adds no lock, retry, ownership transfer or null policy.
+#[no_mangle]
+pub unsafe extern "C" fn x86_init_page_table_text_bridge(pt: *mut c_void) {
+    // SAFETY: Same actual typed opaque page-table pointer and synchronous body.
+    unsafe { init_text_area(pt) }
+}
+
+/// Exact original page-table startup callback.
+///
+/// # Safety
+/// Preserve the original boot ordering, page/table ownership and target context.
+/// The selected existing Rust body retains its own allocation/error/hardware
+/// contracts; this adapter adds no lock, retry, ownership transfer or null policy.
+#[no_mangle]
+pub unsafe extern "C" fn x86_init_page_table_vsyscall_bridge(pt: *mut c_void) {
+    // SAFETY: Same actual typed opaque page-table pointer and synchronous body.
+    unsafe { x86_init_vsyscall_area_public(pt) }
+}
+
+/// Exact original page-table startup callback.
+///
+/// # Safety
+/// Preserve the original boot ordering, page/table ownership and target context.
+/// The selected existing Rust body retains its own allocation/error/hardware
+/// contracts; this adapter adds no lock, retry, ownership transfer or null policy.
+#[no_mangle]
+pub unsafe extern "C" fn x86_init_page_table_low_bridge(pt: *mut c_void) {
+    // SAFETY: Same actual typed opaque page-table pointer and synchronous body.
+    unsafe { init_low_area(pt) }
+}
+
+/// Exact original page-table startup callback.
+///
+/// # Safety
+/// Preserve the original boot ordering, page/table ownership and target context.
+/// The selected existing Rust body retains its own allocation/error/hardware
+/// contracts; this adapter adds no lock, retry, ownership transfer or null policy.
+#[no_mangle]
+pub unsafe extern "C" fn x86_init_page_table_load_bridge(pt: *mut c_void) {
+    // SAFETY: Same actual typed opaque page-table pointer and synchronous body.
+    unsafe { load_page_table(pt) }
+}
+
+/// Exact original spinlock-initialization callback.
+///
+/// # Safety
+/// lock points to a real aligned ihk_spinlock_t owned by boot initialization;
+/// no other owner may access it until initialization completes, as before.
+#[no_mangle]
+pub unsafe extern "C" fn x86_init_page_table_spin_init_bridge(lock: *mut c_void) {
+    // SAFETY: Reuse the accepted real spinlock initializer and its existing ABI.
+    unsafe { crate::spinlock_helpers::ihk_mc_spinlock_init(lock.cast()) }
+}
+
+/// Exact original page-size probe callback, including the ignored event/return.
+///
+/// # Safety
+/// Caller holds the original startup ownership for mutable use_1gb_page state.
+/// CPUID/log callbacks keep their existing contexts and do not retain the slot.
+#[no_mangle]
+pub unsafe extern "C" fn x86_check_available_page_size_bridge(_event: CInt) {
+    // SAFETY: Existing readonly C address data points to the same mutable C int
+    // originally passed by &use_1gb_page. No new flag/state representation.
+    unsafe {
+        let _ = x86_check_available_page_size_body_result(
+            x86_clear_l3_use_1gb_page.cast_mut(),
+            Some(x86_mem_cpuid_edx_bridge), Some(x86_mem_log_int_bridge),
+        );
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+unsafe extern "C" {
+    #[link_name = "ihk_mc_get_memory_address"]
+    fn memory_get_address(type_: CInt, arg: CInt) -> CULong;
+    #[link_name = "find_command_line"]
+    fn memory_find_command_line(name: *mut i8) -> *mut i8;
+    #[link_name = "ihk_mc_get_nr_memory_chunks"]
+    fn memory_get_nr_chunks() -> CInt;
+    #[link_name = "ihk_mc_get_memory_chunk"]
+    fn memory_get_chunk(
+        id: CInt,
+        start: *mut CULong,
+        end: *mut CULong,
+        numa_id: *mut CInt,
+    ) -> CInt;
+    #[link_name = "__reserve_arch_pages"]
+    fn memory_reserve_arch_pages(start: CULong, end: CULong, cb: X86ReservePagesCbFn);
+}
+
+/// Preserve the original boot memory-address query without narrowing its result.
+///
+/// # Safety
+/// The original boot provider must be initialized and its enum/int ABI validated.
+#[no_mangle]
+pub unsafe extern "C" fn x86_init_normal_get_memory_address_bridge(
+    type_: CInt,
+    arg: CInt,
+) -> CULong {
+    // SAFETY: The original provider receives the same scalar arguments/context.
+    unsafe { memory_get_address(type_, arg) }
+}
+
+/// Borrow the same command-line storage returned by the existing boot provider.
+///
+/// # Safety
+/// name has the original provider's validity/lifetime. Its returned pointer is
+/// borrowed unchanged, including null; this adapter adds no ownership or policy.
+#[no_mangle]
+pub unsafe extern "C" fn x86_init_linux_find_command_line_bridge(name: *mut i8) -> *mut i8 {
+    // SAFETY: No reference or ownership is created across the original call.
+    unsafe { memory_find_command_line(name) }
+}
+
+/// Query the existing memory-chunk inventory, preserving its signed result.
+///
+/// # Safety
+/// Preserve original boot initialization and inventory synchronization.
+#[no_mangle]
+pub unsafe extern "C" fn x86_init_linux_get_nr_memory_chunks_bridge() -> CInt {
+    // SAFETY: The original no-argument provider owns its inventory access.
+    unsafe { memory_get_nr_chunks() }
+}
+
+/// Forward the original memory-chunk query, including partial outputs/errors.
+///
+/// # Safety
+/// Output pointers satisfy the existing provider's validity and aliasing rules.
+/// They are forwarded unchanged; no new validation, initialization or retention.
+#[no_mangle]
+pub unsafe extern "C" fn x86_init_linux_get_memory_chunk_bridge(
+    id: CInt,
+    start: *mut CULong,
+    end: *mut CULong,
+    numa_id: *mut CInt,
+) -> CInt {
+    // SAFETY: Raw pointers retain exactly the original call's dynamic lifetimes.
+    unsafe { memory_get_chunk(id, start, end, numa_id) }
+}
+
+/// Invoke the original reservation provider with the exact callback identity.
+///
+/// # Safety
+/// The original reservation/page-allocator ownership and callback contract apply.
+/// The callback's opaque first pointer is the same page-allocator descriptor;
+/// no layout is inspected, cast to a Rust reference, or retained by this adapter.
+#[no_mangle]
+pub unsafe extern "C" fn x86_reserve_arch_pages_bridge(
+    start: CULong,
+    end: CULong,
+    cb: X86ReservePagesCbFn,
+) {
+    // SAFETY: C already called the same synchronous provider/callback unchanged.
+    unsafe { memory_reserve_arch_pages(start, end, cb) }
+}
+
+/// Read EDX from the original page-size CPUID leaf query.
+///
+/// # Safety
+/// edxp is a valid aligned writable unsigned-long pointer, as in the original C.
+/// Current callers use extended leaves 0x80000000 and 0x80000001, which do not
+/// depend on ECX. General ECX-dependent subleaf behavior is not established here.
+#[no_mangle]
+pub unsafe extern "C" fn x86_mem_cpuid_edx_bridge(op: CULong, edxp: *mut CULong) {
+    // SAFETY: Reuse the same core intrinsic already selected by the CPU module.
+    // EAX takes the low 32 bits; x86 EDX writes zero-extend into the original word.
+    let result = unsafe { core::arch::x86_64::__cpuid(op as u32) };
+    // SAFETY: The original caller supplies the live output word. No null policy
+    // or volatile access is added to the original ordinary C store.
+    unsafe { core::ptr::write(edxp, result.edx as CULong) }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+unsafe extern "C" {
+    static x86_memory_kmalloc_file: [i8; 1];
+    static x86_memory_kmalloc_line: CInt;
+    static x86_memory_kfree_file: [i8; 1];
+    static x86_memory_kfree_line: CInt;
+    static x86_memory_init_alloc_file: [i8; 1];
+    static x86_memory_init_alloc_line: CInt;
+}
+
+/// Allocate using the original tracked allocator and exact original trace site.
+///
+/// # Safety
+/// Original allocator context/flags and returned allocation ownership apply.
+#[no_mangle]
+pub unsafe extern "C" fn x86_kmalloc_bridge(size: CInt, flag: CInt) -> *mut c_void {
+    // SAFETY: Existing Rust allocator owns allocation and failure logging. The
+    // signed int converts to unsigned long exactly as at the original C call.
+    unsafe {
+        crate::mem_helpers::kmalloc_tracked(
+            size,
+            flag as CULong,
+            core::ptr::addr_of!(x86_memory_kmalloc_file).cast_mut().cast(),
+            x86_memory_kmalloc_line,
+        )
+    }
+}
+
+/// Read the same current-CPU allocator initialization field.
+///
+/// # Safety
+/// Current CPU-local storage is valid and CPU identity remains stable throughout
+/// the plain read, as required by the original C caller. No null fallback added.
+#[no_mangle]
+pub unsafe extern "C" fn x86_kmalloc_initialized_bridge() -> CInt {
+    // SAFETY: Actual CpuLocalVar ABI field is retained, without forming a shared
+    // or mutable reference to the surrounding CPU-local object.
+    unsafe {
+        let cpu = get_this_cpu_local_var();
+        core::ptr::read(core::ptr::addr_of!((*cpu).kmalloc_initialized))
+    }
+}
+
+/// Free through the existing tracked Rust allocator with unchanged trace data.
+///
+/// # Safety
+/// ptr satisfies the original kfree_tracked ownership/lifetime contract.
+#[no_mangle]
+pub unsafe extern "C" fn x86_kfree_bridge(ptr: *mut c_void) {
+    // SAFETY: No dereference, retention, second free or null policy is added.
+    unsafe {
+        crate::mem_helpers::kfree_tracked(
+            ptr,
+            core::ptr::addr_of!(x86_memory_kfree_file).cast_mut().cast(),
+            x86_memory_kfree_line,
+        );
+    }
+}
+
+/// Allocate boot page-table pages with the exact existing allocator arguments.
+///
+/// # Safety
+/// Preserve original page allocation flags/context, ownership and error policy.
+/// Returned null/errors pass through unchanged; no retry or cleanup is added.
+#[no_mangle]
+pub unsafe extern "C" fn x86_init_page_table_alloc_bridge(
+    nr_pages: CInt,
+    flag: CInt,
+) -> *mut c_void {
+    // SAFETY: Reuse existing real C geometry data and exact typed allocator ABI.
+    // Integer -1 sentinels retain their original widths and signed conversion.
+    unsafe {
+        _ihk_mc_alloc_aligned_pages_node(
+            nr_pages,
+            x86_pt_alloc_pages_p2align,
+            flag as CULong,
+            -1,
+            x86_pt_alloc_pages_is_user,
+            CULong::MAX,
+            core::ptr::addr_of!(x86_memory_init_alloc_file).cast_mut().cast(),
+            x86_memory_init_alloc_line,
+        )
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+unsafe extern "C" {
+    #[link_name = "page_fault_process_vm"]
+    fn memory_page_fault(vm: *mut ProcessVm, addr: *mut c_void, reason: u64) -> CInt;
+}
+
+/// Preserve the original process fault callback and its signed error result.
+///
+/// # Safety
+/// vm/address satisfy the original process fault provider's ownership, lock and
+/// lifetime contract. This callback neither retains them nor constructs borrows.
+#[no_mangle]
+pub unsafe extern "C" fn x86_user_page_fault_bridge(
+    vm: *mut c_void,
+    addr: *mut c_void,
+    reason: CULong,
+) -> CInt {
+    // SAFETY: Same underlying process provider and full 64-bit reason value.
+    unsafe { memory_page_fault(vm.cast(), addr, reason) }
+}
+
+/// Preserve the existing Rust verification orchestration and error convention.
+///
+/// # Safety
+/// The original process VM/range and synchronization/lifetime requirements apply.
+#[no_mangle]
+pub unsafe extern "C" fn x86_user_verify_bridge(
+    vm: *mut c_void,
+    addr: *mut c_void,
+    size: CULong,
+) -> CInt {
+    // SAFETY: Existing Rust implementation consumes the same opaque VM/range;
+    // size_t and unsigned long are both 64-bit in the selected x86_64 ABI.
+    unsafe { verify_process_vm(vm.cast(), addr, size as SizeT) }
+}
+
+/// Preserve the actual existing page-table translation and output semantics.
+///
+/// # Safety
+/// Original table/output validity, locking and mapping lifetimes apply.
+#[no_mangle]
+pub unsafe extern "C" fn x86_user_vtop_bridge(
+    pt: *mut c_void,
+    virt: *const c_void,
+    phys: *mut CULong,
+) -> CInt {
+    // SAFETY: No output initialization/null policy or layout assumption is added.
+    unsafe { ihk_mc_pt_virt_to_phys(pt, virt, phys) }
+}
+
+/// Preserve the original memory-membership query, including ignored provider errors.
+///
+/// # Safety
+/// Preserve original initialized memory-chunk inventory and synchronization.
+#[no_mangle]
+pub unsafe extern "C" fn x86_user_is_memory_bridge(start: CULong, end: CULong) -> CInt {
+    // SAFETY: Existing Rust provider retains original endpoint/inventory semantics.
+    unsafe { crate::mem_helpers::is_mckernel_memory(start, end) }
+}
+
+/// Borrow the exact mapping returned by the existing Rust virtual-map provider.
+///
+/// # Safety
+/// Original physical extent, page count, attributes and allocator context apply.
+/// The caller retains mapping ownership and must perform the original unmap.
+#[no_mangle]
+pub unsafe extern "C" fn x86_user_map_bridge(
+    phys: CULong,
+    nr_pages: CInt,
+    attr: CULong,
+) -> *mut c_void {
+    // SAFETY: Real IhkMcPtAttribute is the same full-width unsigned-long alias.
+    unsafe { crate::mem_helpers::ihk_mc_map_virtual(phys, nr_pages, attr) }
+}
+
+/// Unmap through the existing Rust provider with identical page ownership.
+///
+/// # Safety
+/// addr/count meet the original map/unmap pairing and exclusive lifetime rules.
+#[no_mangle]
+pub unsafe extern "C" fn x86_user_unmap_bridge(addr: *mut c_void, nr_pages: CInt) {
+    // SAFETY: Exact existing unmap, flush, page-clear and allocator sequencing.
+    unsafe { crate::mem_helpers::ihk_mc_unmap_virtual(addr, nr_pages) }
+}
+
+/// Translate using existing Rust boot-state/geometry selection.
+///
+/// # Safety
+/// Preserve original address domain and boot-state synchronization assumptions.
+#[no_mangle]
+pub unsafe extern "C" fn x86_user_phys_to_virt_bridge(phys: CULong) -> *mut c_void {
+    // SAFETY: No Page ownership, dereference or validity inference is introduced.
+    unsafe { phys_to_virt(phys) }
+}
+
+/// Translate using the same existing Rust geometry and exact log selector.
+///
+/// # Safety
+/// Preserve original address domain and initialized architecture state.
+#[no_mangle]
+pub unsafe extern "C" fn x86_arch_mem_virt_to_phys_bridge(addr: *mut c_void) -> CULong {
+    // SAFETY: Existing body retains wrapping offsets and original debug calls.
+    unsafe { virt_to_phys(addr) }
+}
+
+/// Translate using the same existing Rust boot-state decision.
+///
+/// # Safety
+/// Preserve original boot sequencing and translation address domain.
+#[no_mangle]
+pub unsafe extern "C" fn x86_arch_mem_phys_to_virt_bridge(phys: CULong) -> *mut c_void {
+    // SAFETY: Returned pointer is unchanged and is not dereferenced here.
+    unsafe { phys_to_virt(phys) }
+}
+
+/// Translate a page-table address through the existing Rust algorithm.
+///
+/// # Safety
+/// Original table lifetime/address-domain requirements apply.
+#[no_mangle]
+pub unsafe extern "C" fn x86_pt_virt_to_phys_bridge(addr: *mut c_void) -> CULong {
+    // SAFETY: Same original callback forwards to virt_to_phys without policy.
+    unsafe { virt_to_phys(addr) }
+}
+
+/// Translate a physical table address through the existing Rust algorithm.
+///
+/// # Safety
+/// Original physical table ownership/boot-state requirements apply.
+#[no_mangle]
+pub unsafe extern "C" fn x86_pt_phys_to_virt_bridge(phys: CULong) -> *mut c_void {
+    // SAFETY: No reference or dereference is created before the original caller.
+    unsafe { phys_to_virt(phys) }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+unsafe extern "C" {
+    #[link_name = "__kprintf"]
+    fn memory_raw_kprintf(format: *const i8, ...) -> CInt;
+}
+
+/// Emit the exact unconditional page-table diagnostics and promoted C varargs.
+/// Unknown events and unsupported large-page levels remain silent.
+///
+/// # Safety
+/// Preserve original kernel output context. Values are printed as integers and
+/// never dereferenced. No debug selector or conditional argument policy is added.
+#[no_mangle]
+pub unsafe extern "C" fn x86_pt_print_log_bridge(
+    event: CInt,
+    level: CInt,
+    value: CULong,
+    index: CInt,
+) {
+    // SAFETY: Exact original static NUL-terminated formats and C int/unsigned-long
+    // varargs. The original ignored formatter return values remain ignored.
+    unsafe {
+        match event {
+            X86_PT_PRINT_LOG_TABLE => {
+                memory_raw_kprintf(
+                    b"l%d table: 0x%lX l%didx: %d \n\0".as_ptr().cast(),
+                    level,
+                    value,
+                    level,
+                    index,
+                );
+            }
+            X86_PT_PRINT_LOG_NOT_PRESENT => {
+                memory_raw_kprintf(
+                    b"0x%lX l%didx not present! \n\0".as_ptr().cast(), value, level,
+                );
+            }
+            X86_PT_PRINT_LOG_ENTRY => {
+                memory_raw_kprintf(b"l%d entry: 0x%lX\n\0".as_ptr().cast(), level, value);
+            }
+            X86_PT_PRINT_LOG_LARGE if level == 3 => {
+                memory_raw_kprintf(b"l3 entry is 1G page\n\0".as_ptr().cast());
+            }
+            X86_PT_PRINT_LOG_LARGE if level == 2 => {
+                memory_raw_kprintf(b"l2 entry is 2M page\n\0".as_ptr().cast());
+            }
+            _ => {}
+        }
+    }
+}
+
+/// Reuse the existing full-width Rust common VM-attribute implementation.
+///
+/// # Safety
+/// The original pointer is forwarded unchanged as an opaque pointer. The current
+/// existing Rust implementation ignores it and fault, exactly as before; this
+/// adapter does not infer a PTE lifetime or dereference a possibly null pointer.
+#[no_mangle]
+pub unsafe extern "C" fn x86_common_vrflag_to_ptattr_bridge(
+    flag: CULong,
+    fault: CULong,
+    ptep: *mut CULong,
+) -> CULong {
+    crate::process_helpers::common_vrflag_to_ptattr(flag, fault, ptep.cast())
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Compile-only data witnesses; no production algorithm or ABI declaration changes.
+const _: () = {
+    use core::mem::{align_of, offset_of, size_of};
+    assert!(size_of::<SetRangeArgs>() == 56);
+    assert!(align_of::<SetRangeArgs>() == 8);
+    assert!(offset_of!(SetRangeArgs, pt) == 0);
+    assert!(offset_of!(SetRangeArgs, phys) == 8);
+    assert!(offset_of!(SetRangeArgs, attr) == 16);
+    assert!(offset_of!(SetRangeArgs, pgshift) == 24);
+    assert!(offset_of!(SetRangeArgs, diff) == 32);
+    assert!(offset_of!(SetRangeArgs, vm) == 40);
+    assert!(offset_of!(SetRangeArgs, range) == 48);
+    assert!(size_of::<CULong>() == 8);
+};
+#[no_mangle]
+pub static x86_memory_rust_kmalloc_initialized_offset: SizeT =
+    core::mem::offset_of!(CpuLocalVar, kmalloc_initialized);
+#[no_mangle]
+pub static x86_memory_rust_debug_size: SizeT = core::mem::size_of::<crate::debug::Ddebug>();
+#[no_mangle]
+pub static x86_memory_rust_debug_align: SizeT = core::mem::align_of::<crate::debug::Ddebug>();
+#[no_mangle]
+pub static x86_memory_rust_debug_line_flags_offset: SizeT =
+    core::mem::offset_of!(crate::debug::Ddebug, line_flags);
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+/// Preserve the complete existing x86 contiguous-page split no-op.
+///
+/// # Safety
+/// The original function neither dereferences nor retains ptep, interprets the
+/// page size/flags, invokes callbacks, nor transfers page ownership. This is the
+/// exact existing success behavior, not implementation of contiguous splitting.
+#[no_mangle]
+pub unsafe extern "C" fn split_contiguous_pages(
+    _ptep: *mut CULong,
+    _pgsize: SizeT,
+    _memobj_flags: u32,
+) -> CInt {
+    0
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Exact frozen LP64/public-profile data successor; actual new artifact proof is pending.
+mod owned_memory_data {
+    use super::CInt;
+    use super::CULong;
+    use super::SizeT;
+    use super::X86ClearChildWalkFn;
+    use super::X86ClearEffectLogFn;
+    use super::X86ClearFlushMemobjFn;
+    use super::X86ClearMemobjRssSubFn;
+    use super::X86ClearRangeLogFn;
+    use super::X86ClearRssSubFn;
+    use super::X86WalkPteCallback;
+    use super::c_void;
+    use super::x86_clear_effect_log_bridge;
+    use super::x86_clear_memobj_flush_bridge;
+    use super::x86_clear_memobj_rss_sub_bridge;
+    use super::x86_clear_range_l4_body;
+    use super::x86_clear_range_log_bridge;
+    use super::x86_clear_range_walk_l1_bridge;
+    use super::x86_clear_range_walk_l2_bridge;
+    use super::x86_clear_range_walk_l3_bridge;
+    use super::x86_clear_rss_sub_bridge;
+
+    #[repr(transparent)]
+    pub(super) struct ImmutableAddress<T>(*mut T);
+    // SAFETY: the wrapper exposes only a permanent address, never a reference.
+    // Pointee access keeps the existing boot, volatile and lock discipline.
+    unsafe impl<T> Sync for ImmutableAddress<T> {}
+
+    static mut OWNED_LAST_PAGE: *mut c_void = core::ptr::null_mut();
+    static mut OWNED_INIT_PT: *mut c_void = core::ptr::null_mut();
+    static mut OWNED_BOOT_PT: *mut c_void = core::ptr::null_mut();
+    static mut OWNED_INIT_PT_LOADED: CInt = 0;
+    static mut OWNED_INIT_PT_LOCK: crate::abi::IhkSpinlock = crate::abi::IhkSpinlock { head_tail: 0 };
+    static mut OWNED_USE_1GB_PAGE: CInt = 0;
+    static mut OWNED_FIXED_VIRT: CULong = 0;
+
+    const _: () = {
+        assert!(core::mem::size_of::<crate::abi::IhkSpinlock>() == 4);
+        assert!(core::mem::align_of::<crate::abi::IhkSpinlock>() == 4);
+        assert!(core::mem::size_of::<ImmutableAddress<CInt>>() == 8);
+        assert!(core::mem::align_of::<ImmutableAddress<CInt>>() == 8);
+    };
+
+    const TRACE_FILE_BYTES: [u8; 319] = [
+        47, 104, 111, 109, 101, 47, 104, 111, 108, 100, 101, 110, 47, 109, 99, 107, 101, 114, 110, 101,
+        108, 45, 119, 111, 114, 107, 47, 104, 111, 115, 116, 45, 112, 114, 101, 112, 97, 114, 97, 116,
+        105, 111, 110, 47, 118, 101, 108, 111, 99, 105, 116, 121, 45, 105, 110, 116, 101, 114, 118, 101,
+        110, 116, 105, 111, 110, 45, 50, 48, 50, 54, 49, 48, 50, 51, 45, 49, 53, 47, 109, 49,
+        52, 45, 114, 101, 116, 97, 105, 110, 101, 100, 45, 118, 97, 108, 105, 100, 97, 116, 111, 114,
+        45, 99, 111, 110, 116, 105, 110, 117, 97, 116, 105, 111, 110, 45, 49, 47, 119, 104, 111, 108,
+        101, 45, 109, 101, 109, 111, 114, 121, 45, 99, 108, 111, 115, 117, 114, 101, 45, 115, 111, 117,
+        114, 99, 101, 45, 51, 47, 112, 114, 111, 100, 117, 99, 116, 105, 111, 110, 45, 99, 111, 110,
+        115, 117, 109, 101, 114, 45, 112, 114, 101, 112, 97, 114, 97, 116, 105, 111, 110, 45, 49, 47,
+        98, 111, 117, 110, 100, 101, 100, 45, 116, 121, 112, 101, 45, 105, 109, 112, 111, 114, 116, 45,
+        99, 111, 114, 114, 101, 99, 116, 105, 111, 110, 45, 49, 47, 101, 120, 112, 101, 114, 116, 45,
+        111, 117, 116, 101, 114, 45, 98, 114, 97, 99, 101, 45, 99, 111, 114, 114, 101, 99, 116, 105,
+        111, 110, 45, 49, 47, 114, 101, 97, 108, 45, 115, 112, 108, 105, 116, 45, 112, 114, 111, 118,
+        105, 100, 101, 114, 45, 115, 111, 117, 114, 99, 101, 45, 115, 117, 99, 99, 101, 115, 115, 111,
+        114, 45, 49, 47, 115, 111, 117, 114, 99, 101, 47, 97, 114, 99, 104, 47, 120, 56, 54, 95,
+        54, 52, 47, 107, 101, 114, 110, 101, 108, 47, 109, 101, 109, 111, 114, 121, 46, 99, 0,
+    ];
+    static TRACE_FILE: [u8; 319] = TRACE_FILE_BYTES;
+
+    #[no_mangle]
+    #[used]
+    #[link_section = ".rodata.x86_memory_pointer_owners"]
+    pub(super) static x86_memory_fixed_virt_slot: ImmutableAddress<CULong> = ImmutableAddress(
+        // SAFETY: permanent address only; no borrow, access or ownership transfer.
+        unsafe { core::ptr::addr_of_mut!(OWNED_FIXED_VIRT).cast() },
+    );
+
+    #[no_mangle]
+    pub(super) static x86_memory_page_table_bytes: SizeT = 0x1000;
+
+    #[no_mangle]
+    #[used]
+    #[link_section = ".rodata.x86_memory_pointer_owners"]
+    pub(super) static x86_memory_init_pt_lock_address: ImmutableAddress<c_void> = ImmutableAddress(
+        // SAFETY: permanent address only; no borrow, access or ownership transfer.
+        unsafe { core::ptr::addr_of_mut!(OWNED_INIT_PT_LOCK).cast() },
+    );
+
+    #[no_mangle]
+    #[used]
+    #[link_section = ".rodata.x86_memory_pointer_owners"]
+    pub(super) static x86_memory_init_pt_loaded_slot: ImmutableAddress<CInt> = ImmutableAddress(
+        // SAFETY: permanent address only; no borrow, access or ownership transfer.
+        unsafe { core::ptr::addr_of_mut!(OWNED_INIT_PT_LOADED).cast() },
+    );
+
+    #[no_mangle]
+    #[used]
+    #[link_section = ".rodata.x86_memory_pointer_owners"]
+    pub(super) static x86_memory_boot_pt_slot: ImmutableAddress<*mut c_void> = ImmutableAddress(
+        // SAFETY: permanent address only; no borrow, access or ownership transfer.
+        unsafe { core::ptr::addr_of_mut!(OWNED_BOOT_PT).cast() },
+    );
+
+    #[no_mangle]
+    #[used]
+    #[link_section = ".rodata.x86_memory_pointer_owners"]
+    pub(super) static x86_memory_init_pt_slot: ImmutableAddress<*mut c_void> = ImmutableAddress(
+        // SAFETY: permanent address only; no borrow, access or ownership transfer.
+        unsafe { core::ptr::addr_of_mut!(OWNED_INIT_PT).cast() },
+    );
+
+    #[no_mangle]
+    #[used]
+    #[link_section = ".rodata.x86_memory_pointer_owners"]
+    pub(super) static x86_memory_last_page_slot: ImmutableAddress<*mut c_void> = ImmutableAddress(
+        // SAFETY: permanent address only; no borrow, access or ownership transfer.
+        unsafe { core::ptr::addr_of_mut!(OWNED_LAST_PAGE).cast() },
+    );
+
+    #[no_mangle]
+    #[used]
+    #[link_section = "__verbose"]
+    pub(super) static mut x86_user_copy_log_patch_done_debug: crate::debug::Ddebug =
+        crate::debug::Ddebug {
+            file: TRACE_FILE.as_ptr().cast(),
+            func: b"x86_user_copy_log_bridge\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 3434,
+        };
+
+    #[no_mangle]
+    #[used]
+    #[link_section = "__verbose"]
+    pub(super) static mut x86_user_copy_log_patch_start_debug: crate::debug::Ddebug =
+        crate::debug::Ddebug {
+            file: TRACE_FILE.as_ptr().cast(),
+            func: b"x86_user_copy_log_bridge\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 3418,
+        };
+
+    #[no_mangle]
+    #[used]
+    #[link_section = "__verbose"]
+    pub(super) static mut x86_user_copy_log_external_debug: crate::debug::Ddebug =
+        crate::debug::Ddebug {
+            file: TRACE_FILE.as_ptr().cast(),
+            func: b"x86_user_copy_log_bridge\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 3414,
+        };
+
+    #[no_mangle]
+    #[used]
+    #[link_section = "__verbose"]
+    pub(super) static mut x86_addr_log_straight_debug: crate::debug::Ddebug =
+        crate::debug::Ddebug {
+            file: TRACE_FILE.as_ptr().cast(),
+            func: b"x86_addr_log_bridge\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 3276,
+        };
+
+    #[no_mangle]
+    #[used]
+    #[link_section = "__verbose"]
+    pub(super) static mut x86_addr_log_kernel_debug: crate::debug::Ddebug =
+        crate::debug::Ddebug {
+            file: TRACE_FILE.as_ptr().cast(),
+            func: b"x86_addr_log_bridge\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 3272,
+        };
+
+    #[no_mangle]
+    pub(super) static x86_memory_init_alloc_line: CInt = 2954;
+
+    #[no_mangle]
+    pub(super) static x86_memory_init_alloc_file: [u8; 319] = TRACE_FILE_BYTES;
+
+    #[no_mangle]
+    #[used]
+    #[link_section = "__verbose"]
+    pub(super) static mut x86_init_linux_log_chunk_range_debug: crate::debug::Ddebug =
+        crate::debug::Ddebug {
+            file: TRACE_FILE.as_ptr().cast(),
+            func: b"x86_init_linux_log_bridge\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 2945,
+        };
+
+    #[no_mangle]
+    pub(super) static x86_map_kernel_start_geometry: CULong = 0xfffffffffe800000;
+
+    #[no_mangle]
+    #[used]
+    #[link_section = "__verbose"]
+    pub(super) static mut x86_map_fixed_area_log_debug: crate::debug::Ddebug =
+        crate::debug::Ddebug {
+            file: TRACE_FILE.as_ptr().cast(),
+            func: b"x86_map_fixed_area_log_bridge\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 2752,
+        };
+
+    #[no_mangle]
+    #[used]
+    #[link_section = "__verbose"]
+    pub(super) static mut x86_move_range_exit_debug: crate::debug::Ddebug =
+        crate::debug::Ddebug {
+            file: TRACE_FILE.as_ptr().cast(),
+            func: b"move_pte_range\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 2548,
+        };
+
+    #[no_mangle]
+    #[used]
+    #[link_section = "__verbose"]
+    pub(super) static mut x86_move_range_enter_debug: crate::debug::Ddebug =
+        crate::debug::Ddebug {
+            file: TRACE_FILE.as_ptr().cast(),
+            func: b"move_pte_range\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 2541,
+        };
+
+    #[no_mangle]
+    #[used]
+    #[link_section = "__verbose"]
+    pub(super) static mut x86_move_one_exit_debug: crate::debug::Ddebug =
+        crate::debug::Ddebug {
+            file: TRACE_FILE.as_ptr().cast(),
+            func: b"move_one_page\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 2516,
+        };
+
+    #[no_mangle]
+    #[used]
+    #[link_section = "__verbose"]
+    pub(super) static mut x86_move_one_enter_debug: crate::debug::Ddebug =
+        crate::debug::Ddebug {
+            file: TRACE_FILE.as_ptr().cast(),
+            func: b"move_one_page\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 2510,
+        };
+
+    #[no_mangle]
+    #[used]
+    #[link_section = "__verbose"]
+    pub(super) static mut x86_set_pte_exit_debug: crate::debug::Ddebug =
+        crate::debug::Ddebug {
+            file: TRACE_FILE.as_ptr().cast(),
+            func: b"ihk_mc_pt_set_pte\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 2233,
+        };
+
+    #[no_mangle]
+    #[used]
+    #[link_section = "__verbose"]
+    pub(super) static mut x86_set_pte_enter_debug: crate::debug::Ddebug =
+        crate::debug::Ddebug {
+            file: TRACE_FILE.as_ptr().cast(),
+            func: b"ihk_mc_pt_set_pte\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 2227,
+        };
+
+    #[no_mangle]
+    #[used]
+    #[link_section = "__verbose"]
+    pub(super) static mut x86_set_range_top_exit_debug: crate::debug::Ddebug =
+        crate::debug::Ddebug {
+            file: TRACE_FILE.as_ptr().cast(),
+            func: b"ihk_mc_pt_set_range\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 2268,
+        };
+
+    #[no_mangle]
+    #[used]
+    #[link_section = "__verbose"]
+    pub(super) static mut x86_set_range_top_enter_debug: crate::debug::Ddebug =
+        crate::debug::Ddebug {
+            file: TRACE_FILE.as_ptr().cast(),
+            func: b"ihk_mc_pt_set_range\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 2258,
+        };
+
+    #[no_mangle]
+    #[used]
+    #[link_section = "__verbose"]
+    pub(super) static mut x86_set_range_l4_exit_debug: crate::debug::Ddebug =
+        crate::debug::Ddebug {
+            file: TRACE_FILE.as_ptr().cast(),
+            func: b"set_range_l4\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 2240,
+        };
+
+    #[no_mangle]
+    #[used]
+    #[link_section = "__verbose"]
+    pub(super) static mut x86_set_range_l4_enter_debug: crate::debug::Ddebug =
+        crate::debug::Ddebug {
+            file: TRACE_FILE.as_ptr().cast(),
+            func: b"set_range_l4\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 2228,
+        };
+
+    #[no_mangle]
+    #[used]
+    #[link_section = "__verbose"]
+    pub(super) static mut x86_set_range_l3_exit_debug: crate::debug::Ddebug =
+        crate::debug::Ddebug {
+            file: TRACE_FILE.as_ptr().cast(),
+            func: b"set_range_l3\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 2211,
+        };
+
+    #[no_mangle]
+    #[used]
+    #[link_section = "__verbose"]
+    pub(super) static mut x86_set_range_l3_enter_debug: crate::debug::Ddebug =
+        crate::debug::Ddebug {
+            file: TRACE_FILE.as_ptr().cast(),
+            func: b"set_range_l3\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 2199,
+        };
+
+    #[no_mangle]
+    #[used]
+    #[link_section = "__verbose"]
+    pub(super) static mut x86_set_range_l2_exit_debug: crate::debug::Ddebug =
+        crate::debug::Ddebug {
+            file: TRACE_FILE.as_ptr().cast(),
+            func: b"set_range_l2\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 2182,
+        };
+
+    #[no_mangle]
+    #[used]
+    #[link_section = "__verbose"]
+    pub(super) static mut x86_set_range_l2_enter_debug: crate::debug::Ddebug =
+        crate::debug::Ddebug {
+            file: TRACE_FILE.as_ptr().cast(),
+            func: b"set_range_l2\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 2170,
+        };
+
+    #[no_mangle]
+    #[used]
+    #[link_section = "__verbose"]
+    pub(super) static mut x86_set_range_l1_exit_debug: crate::debug::Ddebug =
+        crate::debug::Ddebug {
+            file: TRACE_FILE.as_ptr().cast(),
+            func: b"set_range_l1\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 2153,
+        };
+
+    #[no_mangle]
+    #[used]
+    #[link_section = "__verbose"]
+    pub(super) static mut x86_set_range_l1_enter_debug: crate::debug::Ddebug =
+        crate::debug::Ddebug {
+            file: TRACE_FILE.as_ptr().cast(),
+            func: b"set_range_l1\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 2145,
+        };
+
+    #[no_mangle]
+    pub(super) static x86_set_range_log_geometry: [CULong; 2] = [24, 32];
+
+    #[no_mangle]
+    #[used]
+    #[link_section = "__verbose"]
+    pub(super) static mut x86_lookup_exit_debug: crate::debug::Ddebug =
+        crate::debug::Ddebug {
+            file: TRACE_FILE.as_ptr().cast(),
+            func: b"ihk_mc_pt_lookup_pte\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 2046,
+        };
+
+    #[no_mangle]
+    #[used]
+    #[link_section = "__verbose"]
+    pub(super) static mut x86_lookup_enter_debug: crate::debug::Ddebug =
+        crate::debug::Ddebug {
+            file: TRACE_FILE.as_ptr().cast(),
+            func: b"ihk_mc_pt_lookup_pte\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 2041,
+        };
+
+    #[no_mangle]
+    #[used]
+    #[link_section = "__verbose"]
+    pub(super) static mut x86_set_range_rss_skip_debug: crate::debug::Ddebug =
+        crate::debug::Ddebug {
+            file: TRACE_FILE.as_ptr().cast(),
+            func: b"x86_set_range_log_bridge\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 1955,
+        };
+
+    #[no_mangle]
+    #[used]
+    #[link_section = "__verbose"]
+    pub(super) static mut x86_set_range_rss_add_debug: crate::debug::Ddebug =
+        crate::debug::Ddebug {
+            file: TRACE_FILE.as_ptr().cast(),
+            func: b"x86_set_range_log_bridge\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 1950,
+        };
+
+    #[no_mangle]
+    #[used]
+    #[link_section = "__verbose"]
+    pub(super) static mut x86_set_range_map_1g_debug: crate::debug::Ddebug =
+        crate::debug::Ddebug {
+            file: TRACE_FILE.as_ptr().cast(),
+            func: b"x86_set_range_log_bridge\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 1945,
+        };
+
+    #[no_mangle]
+    #[used]
+    #[link_section = "__verbose"]
+    pub(super) static mut x86_set_range_map_2m_debug: crate::debug::Ddebug =
+        crate::debug::Ddebug {
+            file: TRACE_FILE.as_ptr().cast(),
+            func: b"x86_set_range_log_bridge\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 1942,
+        };
+
+    #[no_mangle]
+    #[used]
+    #[link_section = ".rodata.x86_memory_pointer_owners"]
+    pub(super) static x86_clear_range_l4_callback: X86WalkPteCallback =
+        x86_clear_range_l4_body;
+
+    #[no_mangle]
+    #[used]
+    #[link_section = ".rodata.x86_memory_pointer_owners"]
+    pub(super) static x86_clear_range_l3_callback: X86ClearChildWalkFn =
+        x86_clear_range_walk_l3_bridge;
+
+    #[no_mangle]
+    #[used]
+    #[link_section = ".rodata.x86_memory_pointer_owners"]
+    pub(super) static x86_clear_l3_use_1gb_page: ImmutableAddress<CInt> = ImmutableAddress(
+        // SAFETY: permanent address only; no borrow, access or ownership transfer.
+        unsafe { core::ptr::addr_of_mut!(OWNED_USE_1GB_PAGE).cast() },
+    );
+
+    #[no_mangle]
+    #[used]
+    #[link_section = ".rodata.x86_memory_pointer_owners"]
+    pub(super) static x86_clear_l3_effect_log: X86ClearEffectLogFn =
+        x86_clear_effect_log_bridge;
+
+    #[no_mangle]
+    #[used]
+    #[link_section = ".rodata.x86_memory_pointer_owners"]
+    pub(super) static x86_clear_l3_range_log: X86ClearRangeLogFn =
+        x86_clear_range_log_bridge;
+
+    #[no_mangle]
+    #[used]
+    #[link_section = ".rodata.x86_memory_pointer_owners"]
+    pub(super) static x86_clear_l3_memobj_rss_sub: X86ClearMemobjRssSubFn =
+        x86_clear_memobj_rss_sub_bridge;
+
+    #[no_mangle]
+    #[used]
+    #[link_section = ".rodata.x86_memory_pointer_owners"]
+    pub(super) static x86_clear_l3_rss_sub: X86ClearRssSubFn =
+        x86_clear_rss_sub_bridge;
+
+    #[no_mangle]
+    #[used]
+    #[link_section = ".rodata.x86_memory_pointer_owners"]
+    pub(super) static x86_clear_l3_memobj_flush: X86ClearFlushMemobjFn =
+        x86_clear_memobj_flush_bridge;
+
+    #[no_mangle]
+    #[used]
+    #[link_section = ".rodata.x86_memory_pointer_owners"]
+    pub(super) static x86_clear_l3_child_walk: X86ClearChildWalkFn =
+        x86_clear_range_walk_l2_bridge;
+
+    #[no_mangle]
+    #[used]
+    #[link_section = ".rodata.x86_memory_pointer_owners"]
+    pub(super) static x86_clear_l2_child_walk: X86ClearChildWalkFn =
+        x86_clear_range_walk_l1_bridge;
+
+    #[no_mangle]
+    #[used]
+    #[link_section = "__verbose"]
+    pub(super) static mut x86_clear_range_large_phys_debug: crate::debug::Ddebug =
+        crate::debug::Ddebug {
+            file: TRACE_FILE.as_ptr().cast(),
+            func: b"x86_clear_range_log_bridge\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 1446,
+        };
+
+    #[no_mangle]
+    #[used]
+    #[link_section = "__verbose"]
+    pub(super) static mut x86_clear_effect_child_free_debug: crate::debug::Ddebug =
+        crate::debug::Ddebug {
+            file: TRACE_FILE.as_ptr().cast(),
+            func: b"x86_clear_effect_log_bridge\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 1391,
+        };
+
+    #[no_mangle]
+    #[used]
+    #[link_section = "__verbose"]
+    pub(super) static mut x86_clear_effect_free_unmapped_debug: crate::debug::Ddebug =
+        crate::debug::Ddebug {
+            file: TRACE_FILE.as_ptr().cast(),
+            func: b"x86_clear_effect_log_bridge\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 1387,
+        };
+
+    #[no_mangle]
+    #[used]
+    #[link_section = "__verbose"]
+    pub(super) static mut x86_clear_effect_xpmem_keep_debug: crate::debug::Ddebug =
+        crate::debug::Ddebug {
+            file: TRACE_FILE.as_ptr().cast(),
+            func: b"x86_clear_effect_log_bridge\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 1384,
+        };
+
+    #[no_mangle]
+    #[used]
+    #[link_section = "__verbose"]
+    pub(super) static mut x86_clear_effect_free_anon_debug: crate::debug::Ddebug =
+        crate::debug::Ddebug {
+            file: TRACE_FILE.as_ptr().cast(),
+            func: b"x86_clear_effect_log_bridge\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 1380,
+        };
+
+    #[no_mangle]
+    pub(super) static x86_clear_free_pages_user_flag: CInt = 1;
+
+    #[no_mangle]
+    pub(super) static x86_clear_free_pages_user_line: CInt = 1416;
+
+    #[no_mangle]
+    pub(super) static x86_clear_free_pages_user_file: [u8; 319] = TRACE_FILE_BYTES;
+
+    #[no_mangle]
+    #[used]
+    #[link_section = "__verbose"]
+    pub(super) static mut x86_split_rss_sub_debug: crate::debug::Ddebug =
+        crate::debug::Ddebug {
+            file: TRACE_FILE.as_ptr().cast(),
+            func: b"x86_split_log_bridge\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 970,
+        };
+
+    #[no_mangle]
+    #[used]
+    #[link_section = "__verbose"]
+    pub(super) static mut x86_split_rss_add_debug: crate::debug::Ddebug =
+        crate::debug::Ddebug {
+            file: TRACE_FILE.as_ptr().cast(),
+            func: b"x86_split_log_bridge\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 966,
+        };
+
+    #[no_mangle]
+    pub(super) static x86_pt_free_pages_flag: CInt = 0;
+
+    #[no_mangle]
+    pub(super) static x86_pt_free_pages_line: CInt = 807;
+
+    #[no_mangle]
+    pub(super) static x86_pt_free_pages_file: [u8; 319] = TRACE_FILE_BYTES;
+
+    #[no_mangle]
+    pub(super) static x86_pt_alloc_pages_is_user: CInt = 0;
+
+    #[no_mangle]
+    pub(super) static x86_pt_alloc_pages_p2align: CInt = 0;
+
+    #[no_mangle]
+    pub(super) static x86_pt_alloc_pages_line: CInt = 750;
+
+    #[no_mangle]
+    pub(super) static x86_pt_alloc_pages_file: [u8; 319] = TRACE_FILE_BYTES;
+
+    #[no_mangle]
+    pub(super) static mut attr_mask: CULong = 0x807;
+
+    #[no_mangle]
+    pub(super) static x86_memory_kfree_line: CInt = 393;
+
+    #[no_mangle]
+    pub(super) static x86_memory_kfree_file: [u8; 319] = TRACE_FILE_BYTES;
+
+    #[no_mangle]
+    pub(super) static x86_memory_kmalloc_line: CInt = 383;
+
+    #[no_mangle]
+    pub(super) static x86_memory_kmalloc_file: [u8; 319] = TRACE_FILE_BYTES;
+
+}
+
+// Add-range-only transaction. Existing public set/free/clear APIs and their
+// already qualified algorithms stay unchanged. No test callback is bound here.
+pub(crate) mod add_range_transaction {
+    use super::*;
+
+    // Keep the genuine SetRangeArgs at offset0. Existing walkers consume only
+    // that prefix; the owned sidecar records the newly mapped prefix for abort.
+    #[repr(C)]
+    struct AddArgs {
+        state: SetRangeArgs,
+        mapped_end: CULong,
+    }
+
+    const _: () = {
+        assert!(core::mem::offset_of!(AddArgs, state) == 0);
+        assert!(core::mem::offset_of!(AddArgs, mapped_end) == core::mem::size_of::<SetRangeArgs>());
+    };
+
+    unsafe fn remember(args: *mut c_void, base: CULong, end: CULong, size: CULong) {
+        let args = args.cast::<AddArgs>();
+        let mapped_end = core::cmp::min(end, base.wrapping_add(size));
+        if (*args).mapped_end < mapped_end { (*args).mapped_end = mapped_end; }
+    }
+
+    // This is a deliberate transaction phase, not a replacement RSS provider.
+    // The mandatory successful commit below invokes the real RSS provider for
+    // every mapped leaf/large entry. Failed transactions must charge nothing.
+    unsafe extern "C" fn defer_rss(
+        _range: *mut c_void, _phys: CULong, _size: CULong, _pgsize: CULong,
+    ) -> CInt { 0 }
+
+    unsafe extern "C" fn clear_prefix(
+        pt: *mut c_void, vm: *mut c_void, start: CULong, end: CULong,
+        free_physical: CInt, memobj: *mut c_void,
+    ) -> CInt {
+        if free_physical != 0 || !memobj.is_null() {
+            crate::abort::panic(b"add-range rollback attempted backing release\0".as_ptr().cast());
+        }
+        let result = clear_nonowning(pt, vm.cast(), start, end);
+        if result != 0 {
+            // Never let an ordinary caller-owned error escape with live new
+            // PTEs, after which the caller would free their backing allocation.
+            crate::abort::panic(b"add-range rollback could not clear new PTEs\0".as_ptr().cast());
+        }
+        0
+    }
+
+    unsafe extern "C" fn map_l1(
+        args: *mut c_void, ptep: *mut CULong, base: CULong, start: CULong, end: CULong,
+    ) -> CInt {
+        set_range_trace_enter(1, base, start, end);
+        let state = core::ptr::read(args.cast::<SetRangeArgs>());
+        let error = x86_set_range_leaf_body_result(args, ptep, base, start, end,
+            state.pt, state.vm, state.phys, state.attr,
+            read_volatile(core::ptr::addr_of!(X86_ATTR_MASK)), state.range,
+            Some(clear_prefix), Some(defer_rss), Some(x86_set_range_log_bridge));
+        if error == 0 { remember(args, base, end, PTL1_SIZE); }
+        set_range_trace_exit(1, ptep, base, start, end, error);
+        error
+    }
+
+    unsafe fn map_level(
+        level: CInt, args: *mut c_void, ptep: *mut CULong,
+        base: CULong, start: CULong, end: CULong, shift: CInt,
+        size: CULong, size_flag: CULong, direct: CInt, pdir: CULong,
+        child: X86SetRangeChildWalkFn,
+    ) -> CInt {
+        set_range_trace_enter(level, base, start, end);
+        let state = core::ptr::read(args.cast::<SetRangeArgs>());
+        let error = x86_set_range_level_body_result(args, ptep, base, start, end,
+            state.pt, state.vm, state.phys, state.attr,
+            read_volatile(core::ptr::addr_of!(X86_ATTR_MASK)), state.diff,
+            state.pgshift, shift, size, size_flag, direct, pdir, state.range,
+            Some(x86_pt_alloc_pages_bridge), Some(x86_pt_free_pages_bridge),
+            Some(x86_pt_virt_to_phys_bridge), Some(x86_pt_phys_to_virt_bridge),
+            Some(child), Some(clear_prefix), Some(defer_rss),
+            Some(x86_set_range_log_bridge));
+        if error == 0 && direct != 0 && size_flag != 0 && *ptep & size_flag != 0 {
+            remember(args, base, end, size);
+        }
+        set_range_trace_exit(level, ptep, base, start, end, error);
+        error
+    }
+
+    unsafe extern "C" fn map_l2(a: *mut c_void, p: *mut CULong, b: CULong, s: CULong, e: CULong) -> CInt {
+        map_level(2, a, p, b, s, e, PTL2_SHIFT, PTL2_SIZE, PFL2_SIZE, 1, PFL2_PDIR_ATTR, map_walk_l1)
+    }
+    unsafe extern "C" fn map_l3(a: *mut c_void, p: *mut CULong, b: CULong, s: CULong, e: CULong) -> CInt {
+        map_level(3, a, p, b, s, e, PTL3_SHIFT, PTL3_SIZE, PFL3_SIZE,
+            x86_use_1gb_page_bridge(), PFL3_PDIR_ATTR, map_walk_l2)
+    }
+    unsafe extern "C" fn map_l4(a: *mut c_void, p: *mut CULong, b: CULong, s: CULong, e: CULong) -> CInt {
+        map_level(4, a, p, b, s, e, PTL4_SHIFT, 0, 0, 0, PFL4_PDIR_ATTR, map_walk_l3)
+    }
+    unsafe extern "C" fn map_walk_l1(p: *mut c_void, b: CULong, s: CULong, e: CULong, a: *mut c_void) -> CInt {
+        walk_pte_l1(p, b, s, e, Some(map_l1), a)
+    }
+    unsafe extern "C" fn map_walk_l2(p: *mut c_void, b: CULong, s: CULong, e: CULong, a: *mut c_void) -> CInt {
+        walk_pte_l2(p, b, s, e, Some(map_l2), a)
+    }
+    unsafe extern "C" fn map_walk_l3(p: *mut c_void, b: CULong, s: CULong, e: CULong, a: *mut c_void) -> CInt {
+        walk_pte_l3(p, b, s, e, Some(map_l3), a)
+    }
+    unsafe extern "C" fn map_walk_l4(p: *mut c_void, b: CULong, s: CULong, e: CULong, a: *mut c_void) -> CInt {
+        walk_pte_l4(p, b, s, e, Some(map_l4), a)
+    }
+
+    // Clear only; preserve both caller backing and address-space-owned table
+    // metadata. In particular do not free a table before its TLB batch is acked.
+    // Empty tables remain reachable through the address space and are reused or
+    // destroyed by its genuine existing teardown, never leaked/unowned storage.
+    unsafe fn clear_level(
+        args: *mut c_void, ptep: *mut CULong, base: CULong,
+        start: CULong, end: CULong, shift: CInt, size: CULong,
+        size_flag: CULong, child: X86ClearChildWalkFn,
+    ) -> CInt {
+        let state = args.cast::<X86ClearRangeArgs>();
+        x86_clear_range_level_body_result(args, ptep, base, start, end,
+            shift, size, size_flag, 0, (*state).vm, (*state).addr,
+            core::ptr::addr_of_mut!((*state).nr_addr), (*state).max_nr_addr,
+            ihk_mc_get_processor_id(), 0, core::ptr::null_mut(),
+            Some(x86_clear_old_action_bridge), Some(x86_clear_phys_to_virt_bridge),
+            Some(child), Some(remote_flush_tlb_array_cpumask),
+            Some(x86_pt_free_pages_bridge), Some(x86_clear_l3_memobj_flush),
+            Some(x86_clear_free_pages_user_bridge), Some(x86_clear_page_unmap_bridge),
+            Some(x86_clear_l3_rss_sub), Some(x86_clear_l3_memobj_rss_sub),
+            Some(x86_clear_l3_range_log), Some(x86_clear_l3_effect_log))
+    }
+    unsafe extern "C" fn clear_l2(a: *mut c_void, p: *mut CULong, b: CULong, s: CULong, e: CULong) -> CInt {
+        clear_level(a, p, b, s, e, PTL2_SHIFT, PTL2_SIZE, PFL2_SIZE, clear_walk_l1)
+    }
+    unsafe extern "C" fn clear_l3(a: *mut c_void, p: *mut CULong, b: CULong, s: CULong, e: CULong) -> CInt {
+        clear_level(a, p, b, s, e, PTL3_SHIFT, PTL3_SIZE, PFL3_SIZE, clear_walk_l2)
+    }
+    unsafe extern "C" fn clear_l4(a: *mut c_void, p: *mut CULong, b: CULong, s: CULong, e: CULong) -> CInt {
+        x86_clear_range_root_body_result(a, p, b, s, e,
+            Some(x86_clear_phys_to_virt_bridge), Some(clear_walk_l3))
+    }
+    unsafe extern "C" fn clear_walk_l1(p: *mut c_void, b: CULong, s: CULong, e: CULong, a: *mut c_void) -> CInt {
+        walk_pte_l1(p, b, s, e, Some(clear_range_l1), a)
+    }
+    unsafe extern "C" fn clear_walk_l2(p: *mut c_void, b: CULong, s: CULong, e: CULong, a: *mut c_void) -> CInt {
+        walk_pte_l2(p, b, s, e, Some(clear_l2), a)
+    }
+    unsafe extern "C" fn clear_walk_l3(p: *mut c_void, b: CULong, s: CULong, e: CULong, a: *mut c_void) -> CInt {
+        walk_pte_l3(p, b, s, e, Some(clear_l3), a)
+    }
+
+    /// Clear just the failed transaction's newly mapped prefix without allocation.
+    /// Caller holds the genuine page-table lock and range writer. No page, memobj
+    /// reference or descriptor is consumed. TLB acknowledgements finish before
+    /// this borrowed stack buffer or caller-owned backing can be retired.
+    unsafe fn clear_nonowning(pt: *mut c_void, vm: *mut ProcessVm, start: CULong, end: CULong) -> CInt {
+        if end <= start { return 0; }
+        if x86_clear_range_validate_result(start, end, (*vm).region.user_start, (*vm).region.user_end) != 0 {
+            return -EINVAL;
+        }
+        let mut address = 0;
+        let mut args = X86ClearRangeArgs { free_physical: 0,
+            memobj: core::ptr::null_mut(), vm: vm.cast(), addr: &mut address,
+            nr_addr: 0, max_nr_addr: 1 };
+        let error = walk_pte_l4(pt, 0, start, end, Some(clear_l4),
+            (&mut args as *mut X86ClearRangeArgs).cast());
+        if args.nr_addr > 0 {
+            remote_flush_tlb_array_cpumask(vm.cast(), args.addr, args.nr_addr, ihk_mc_get_processor_id());
+        }
+        if error == -ENOENT { 0 } else { error }
+    }
+
+    unsafe extern "C" fn commit_rss(
+        range: *mut c_void, _pt: *mut c_void, ptep: *mut CULong,
+        base: *mut c_void, shift: CInt,
+    ) -> CInt {
+        let entry = read_volatile(ptep);
+        if entry == PTE_NULL || !matches!(shift, PTL1_SHIFT | PTL2_SHIFT | PTL3_SHIFT) {
+            return -EINVAL;
+        }
+        let size = 1u64 << shift;
+        let phys = entry & PT_PHYSMASK;
+        let charged = set_range_rss_add(range, phys, size, size);
+        let typed = range.cast::<crate::abi::VmRange>();
+        x86_set_range_log_bridge(if charged != 0 { X86_SET_RANGE_LOG_RSS_ADD } else { X86_SET_RANGE_LOG_RSS_SKIP },
+            shift, base as CULong, (*typed).start, (*typed).end, 0,
+            entry, phys, size, size, 0);
+        0
+    }
+
+    // Read-only visitor with the existing safe classifier, but no LWK-RAM
+    // validation of leaf physical addresses: remote/I/O/COW mappings are valid
+    // inputs, and the real RSS provider decides whether/how they are charged.
+    // Directory entries require the genuine size bit for a large-page visit;
+    // all missing entries skip, and no commit walk allocates or splits a table.
+    unsafe extern "C" fn commit_l1(a: *mut c_void, p: *mut CULong, b: CULong, _s: CULong, _e: CULong) -> CInt {
+        let state = core::ptr::read(a.cast::<X86VisitPteArgs>());
+        x86_visit_pte_leaf_result(state.arg, state.pt, p, b, 1, PTL1_SHIFT, state.funcp)
+    }
+    unsafe fn commit_level(
+        a: *mut c_void, p: *mut CULong, b: CULong, s: CULong, e: CULong,
+        shift: CInt, size: CULong, size_flag: CULong, direct: CInt,
+        pdir: CULong, child: X86VisitPteWalkFn,
+    ) -> CInt {
+        let state = core::ptr::read(a.cast::<X86VisitPteArgs>());
+        x86_visit_pte_level_result(state.arg, state.pt, p, b, s, e,
+            1, 1, 0, size, shift, size_flag, 1, direct, 0, pdir,
+            Some(x86_pt_alloc_pages_bridge), Some(x86_pt_virt_to_phys_bridge),
+            Some(x86_pt_phys_to_virt_bridge), Some(child), a, state.funcp,
+            Some(x86_visit_pte_log_bridge))
+    }
+    unsafe extern "C" fn commit_l2(a: *mut c_void, p: *mut CULong, b: CULong, s: CULong, e: CULong) -> CInt {
+        commit_level(a, p, b, s, e, PTL2_SHIFT, PTL2_SIZE, PFL2_SIZE, 1, PFL2_PDIR_ATTR, commit_walk_l1)
+    }
+    unsafe extern "C" fn commit_l3(a: *mut c_void, p: *mut CULong, b: CULong, s: CULong, e: CULong) -> CInt {
+        commit_level(a, p, b, s, e, PTL3_SHIFT, PTL3_SIZE, PFL3_SIZE,
+            x86_use_1gb_page_bridge(), PFL3_PDIR_ATTR, commit_walk_l2)
+    }
+    unsafe extern "C" fn commit_l4(a: *mut c_void, p: *mut CULong, b: CULong, s: CULong, e: CULong) -> CInt {
+        x86_visit_pte_root_result(p, b, s, e, 1, 0, PFL4_PDIR_ATTR,
+            Some(x86_pt_alloc_pages_bridge), Some(x86_pt_virt_to_phys_bridge),
+            Some(x86_pt_phys_to_virt_bridge), Some(commit_walk_l3), a)
+    }
+    unsafe extern "C" fn commit_walk_l1(p: *mut c_void, b: CULong, s: CULong, e: CULong, a: *mut c_void) -> CInt {
+        walk_pte_l1(p, b, s, e, Some(commit_l1), a)
+    }
+    unsafe extern "C" fn commit_walk_l2(p: *mut c_void, b: CULong, s: CULong, e: CULong, a: *mut c_void) -> CInt {
+        walk_pte_l2(p, b, s, e, Some(commit_l2), a)
+    }
+    unsafe extern "C" fn commit_walk_l3(p: *mut c_void, b: CULong, s: CULong, e: CULong, a: *mut c_void) -> CInt {
+        walk_pte_l3(p, b, s, e, Some(commit_l3), a)
+    }
+    unsafe extern "C" fn commit_walk_l4(p: *mut c_void, b: CULong, s: CULong, e: CULong, a: *mut c_void) -> CInt {
+        walk_pte_l4(p, b, s, e, Some(commit_l4), a)
+    }
+
+    unsafe fn commit_accounting(pt: *mut c_void, start: CULong, end: CULong, range: *mut c_void) -> CInt {
+        let mut args = X86VisitPteArgs { pt, flags: X86_VPTEF_SKIP_NULL,
+            pgshift: 0, funcp: Some(commit_rss), arg: range };
+        x86_visit_pte_range_dispatch_result(pt, start, end,
+            (&mut args as *mut X86VisitPteArgs).cast(), Some(commit_walk_l4))
+    }
+
+    /// The add-range-only mapping transaction. Genuine mapping algorithms and
+    /// allocation/attribute/huge-page policy are reused; accounting is committed
+    /// only after full success, so abort needs no reconstruction of cleared RSS.
+    pub(crate) unsafe fn map(
+        pt: *mut c_void, vm: *mut ProcessVm, start: CULong, end: CULong,
+        phys: CULong, attr: CULong, pgshift: CInt, range: *mut crate::abi::VmRange,
+    ) -> CInt {
+        let mut args = AddArgs { state: SetRangeArgs { pt, phys, attr, pgshift,
+            diff: start ^ phys, vm: vm.cast(), range: range.cast() }, mapped_end: start };
+        let error = set_range_top_wide_body(pt, vm.cast(), start, end, phys, attr,
+            pgshift, range.cast(), core::ptr::addr_of_mut!(args.state),
+            map_walk_l4, x86_set_range_log_bridge);
+        if error != 0 {
+            // Never clear a conflicting old PTE at/beyond the failed cursor.
+            let clear = clear_nonowning(pt, vm, start, args.mapped_end);
+            if clear != 0 {
+                crate::abort::panic(b"add-range rollback retained partial PTEs\0".as_ptr().cast());
+            }
+            return error;
+        }
+        if args.mapped_end != end {
+            crate::abort::panic(b"add-range success did not cover its full range\0".as_ptr().cast());
+        }
+        let account = commit_accounting(pt, start, end, range.cast());
+        if account != 0 {
+            crate::abort::panic(b"add-range RSS commit violated mapped-range invariant\0".as_ptr().cast());
+        }
+        0
+    }
 }

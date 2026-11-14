@@ -1,0 +1,259 @@
+{
+  "status": "PASS_PRIVATE_READINESS_SOURCE_AND_ACTUAL_TARGET_BODY_FIXTURE",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "primary_cause": "The correctly bound legacy producer proceeds from procfs DELETE to shutdown while BEGIN final retirement is still EAGAIN. Public shutdown fails application_quiesce/post-effect/status8; resource capture never runs. The resource consumer error is secondary.",
+  "source": {
+    "collector_preimage_sha256": "694b3eba48e01d4a88ffa87fc1b2dd641b806115f2e625a6612cb010d3738dfe",
+    "collector_successor_sha256": "b30d8326c5deab2ec6480c8d4d7d1acc73bbb7a38c4b4184ce9c076566d538cf",
+    "rust_readiness_sha256": "5ff5623660df5f0c49af933756346be7e9913d48f19fbbf10e32578623ab8536",
+    "diff_sha256": "aeca11297287b5b2c72fb64089d1f313506f050a7d7cf3464956f34aca8fc387",
+    "fixture_sha256": "31c6c8dcb220166deac65ca17eaa3d4eb30d74a7f3058c4e1fdc4ae64fa1da77",
+    "reader_and_two_loop_fragments": {
+      "actual-main-readiness-loop.c.inc": "68f3e290bbdb3cbfddd9a13fb40072ac704b4b9338e5632a4b64f071d4eab155",
+      "actual-readiness-glue.c.inc": "407519b8996744547a7eb9223af43a388298aee05132ead1d5fd4ba0b835100b",
+      "actual-second-readiness-loop.c.inc": "83c18a40fc10e4f9704dc3d1de77278417ee09df1d5c3cce56fbfcf1b0119728",
+      "actual-reboot-snapshot.c.inc": "0ba3ce1c565bec7643b2293d643459ac1e8f4a8c3a574a180b0d33ae25c6aa89"
+    },
+    "immutable_pair_headers": {
+      "pair_assignment.h": "29963c5088598368fe7565a6fba88f5712cece4105314e4d1f2205c6a936b643",
+      "pair_boot_contract.inc": "081921ed526b9cf874901554d1cc4a2bc5cb6ed1835f7f8237fb10b4cc166b2d"
+    }
+  },
+  "actual_retained_input": {
+    "serial_sha256": "502e0585bd662d046320e87780bd7fa7663d3b6aa0be7f036ba2d9d17f6bfad6",
+    "result_sha256": "de733f01c030fd06d95a37d0ab0c57a5d34e43e30f09e23065d5552db126875b",
+    "retained_negative_projection_sha256": "80cf7a75d89c8ae97a882a25d3b91ece67f73d17cf4c46e0d8b191866862a701",
+    "projection": "Real retained console prefix before public shutdown; CRLF transport converted to LF klog serialization. No retirement0 exists in that prefix or full failed trace."
+  },
+  "readiness": {
+    "owner": "Fixed os0, explicit epoch1 or2; unique positive SCHEDULE PID and matching published TID; terminal231 then cleanup intent0/ACK0; same-PID/gen procfs DELETE and actual distinct positive-token retirement0 after EAGAINs; readable empty procfs.",
+    "reader": "Existing original reboot_snapshot uses nondestructive klogctl action3,262144-byte cap and retained owned evidence file. New glue requires complete LF/UTF8 snapshot and unchanged full prior prefix; rollover/regression refuses.",
+    "deadline": "Both original five-second loops,10ms polling and outer collector deadline remain unchanged. Sleeping grants no authority. No public shutdown retry.",
+    "post_effect": "Any observed same-epoch public shutdown record refuses readiness; failed shutdown/status8 is never treated as pre-call Running5.",
+    "ACK_scope": "ACK proves actual mailbox drain/intent. Final retirement0 is required as a separate observation; no ACK relabeling or release manufacture.",
+    "oracle": "One-shot lifecycle helper/public shutdown, public resource inventories/release, strict reboot checks, exact app bytes, second app and final whole consumer all unchanged."
+  },
+  "existing_progress_actor": {
+    "source_files": [
+      {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-sdk-preparation-5/retained/source-modules/smp_service.rs",
+        "sha256": "ffefabadb349f55ecc4d474f6463e73e0c6b432aea6c41eb973a91f115ded0f7",
+        "current_equal_frozen": true
+      },
+      {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-sdk-preparation-5/retained/source-modules/smp_application.rs",
+        "sha256": "f5c56d83a13f10a712a4555849f52078c2d410254080150d34408011daf527a5",
+        "current_equal_frozen": true
+      }
+    ],
+    "chain": [
+      "smp_service::run681-708 calls Role::Packets Runtime::pump then msleep1 independently of application waiters.",
+      "Runtime::pump540-565 invokes application.advance every loop.",
+      "Application::advance512-530 calls request_cleanup on every retained needs_cleanup&&!quarantined entry.",
+      "Entry::request_cleanup149-162 creates/begins a new retirement query after its prior EAGAIN retry deadline.",
+      "Next pump publish_applications514-538 uses queued_cpu/Entry::next retirement exchange, publishes port501 and notifies guest.",
+      "Passive readiness reads occur before public shutdown; no native admission close/reset is introduced."
+    ],
+    "evidence_kind": "Source-proven existing actor, not a claim that the failed runtime produced a later successful reply. Eventual success remains conditional and required in a fresh native observation."
+  },
+  "fixture": {
+    "stdout": "PASS actual Rust readiness + retained495e + exact two five-second loop bodies + original bounded reader; 3705 assertions; no real ioctl/probe/guest",
+    "assertions": 3705,
+    "assertions_are_not_independent_cases": true,
+    "actual_target_bodies": [
+      "Complete new Rust readiness parser",
+      "Exact changed C readiness glue",
+      "Both exact changed original five-second loop bodies",
+      "Exact unchanged original bounded reboot_snapshot reader"
+    ],
+    "controlled_surfaces": [
+      "klogctl and owned evidence write",
+      "procfs readable/empty result",
+      "monotonic clock/nanosleep"
+    ],
+    "real_input": "Retained495e stays not-ready before shutdown and rejects full failed post-effect trace.",
+    "controlled_positives": "Appended matching-format retirement0 is TEST ONLY and is never inserted into actual result/evidence.",
+    "negative_families": [
+      "foreign PID/generation",
+      "zero/overflow/reused ACK/duplicate retry token",
+      "EAGAIN without success",
+      "failed/foreign ACK",
+      "failed intent",
+      "wrong published/DELETE TID",
+      "missing terminal231",
+      "wrong/absent schedule",
+      "retirement before schedule/ACK/DELETE",
+      "duplicate success/second scheduled PID",
+      "partial record/full cap/null input",
+      "epoch1 cannot authorize epoch2",
+      "both exact loops expire without retirement0",
+      "both loops wait for observed delayed success",
+      "nonempty/unreadable procfs",
+      "read/evidence error/full capture",
+      "append-only rollover/regression"
+    ],
+    "operations": [
+      {
+        "captures": {
+          "stderr": {
+            "ctime_ns": 1792752875834935595,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48802634,
+            "mode": "0o600",
+            "mtime_ns": 1792752875834935595,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-first-v3-failure-1/readiness-successor-1/attempt-1-step-1/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0,
+            "uid": 1000
+          },
+          "stdout": {
+            "ctime_ns": 1792752875834935595,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48802633,
+            "mode": "0o600",
+            "mtime_ns": 1792752875834935595,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-first-v3-failure-1/readiness-successor-1/attempt-1-step-1/stdout",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0,
+            "uid": 1000
+          }
+        },
+        "closed_streams": true,
+        "direct_child_joined": true,
+        "error": null,
+        "group_absent": true,
+        "pid": 3651059,
+        "remaining_group_members": [],
+        "retirement_error": null,
+        "returncode": 0,
+        "seconds": 0.2547142480034381,
+        "start": 55032053,
+        "timed_out": false,
+        "unexpected_group_members": []
+      },
+      {
+        "captures": {
+          "stderr": {
+            "ctime_ns": 1792752876090943714,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48802643,
+            "mode": "0o600",
+            "mtime_ns": 1792752876090943714,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-first-v3-failure-1/readiness-successor-1/attempt-1-step-2/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0,
+            "uid": 1000
+          },
+          "stdout": {
+            "ctime_ns": 1792752876090943714,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48802642,
+            "mode": "0o600",
+            "mtime_ns": 1792752876090943714,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-first-v3-failure-1/readiness-successor-1/attempt-1-step-2/stdout",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0,
+            "uid": 1000
+          }
+        },
+        "closed_streams": true,
+        "direct_child_joined": true,
+        "error": null,
+        "group_absent": true,
+        "pid": 3651066,
+        "remaining_group_members": [],
+        "retirement_error": null,
+        "returncode": 0,
+        "seconds": 0.15506647003348917,
+        "start": 55032078,
+        "timed_out": false,
+        "unexpected_group_members": []
+      },
+      {
+        "captures": {
+          "stderr": {
+            "ctime_ns": 1792752876250948788,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48802652,
+            "mode": "0o600",
+            "mtime_ns": 1792752876250948788,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-first-v3-failure-1/readiness-successor-1/attempt-1-step-3/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0,
+            "uid": 1000
+          },
+          "stdout": {
+            "ctime_ns": 1792752876454955257,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48802651,
+            "mode": "0o600",
+            "mtime_ns": 1792752876454955257,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-first-v3-failure-1/readiness-successor-1/attempt-1-step-3/stdout",
+            "sha256": "99b8893bfc79c4a5ec1fa15dc3116c1b038aba2f5b61f36d3f555e052f2f79cf",
+            "size": 148,
+            "uid": 1000
+          }
+        },
+        "closed_streams": true,
+        "direct_child_joined": true,
+        "error": null,
+        "group_absent": true,
+        "pid": 3651071,
+        "remaining_group_members": [],
+        "retirement_error": null,
+        "returncode": 0,
+        "seconds": 0.237627535010688,
+        "start": 55032094,
+        "timed_out": false,
+        "unexpected_group_members": []
+      }
+    ]
+  },
+  "profile": {
+    "cpus": [
+      7
+    ],
+    "jobs": 1,
+    "AS_bytes": 2147483648,
+    "CPU_seconds": 60,
+    "wall_seconds_per_command": 90,
+    "retirement_seconds": 6,
+    "FSIZE_bytes": 33554432,
+    "NOFILE": 256,
+    "CORE": 0,
+    "Rust": "1.92.0",
+    "CGU": 1,
+    "RUST_MIN_STACK": 2097152,
+    "GCC": "/usr/bin/gcc-9",
+    "owned_capture_sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8",
+    "CPU7_released": true
+  },
+  "failure_family": {
+    "native495e_failed_attempts": 1,
+    "readiness_candidate_failures": 0,
+    "bounded_corrections": 0
+  },
+  "canonical_changes": false,
+  "SDK_rebuild": false,
+  "full_HOST_collector_compiled": false,
+  "independent_source_review": null,
+  "root_stage_release": null,
+  "native_acceptance": false,
+  "remaining": [
+    "Independent focused review of this exact source/fixture graph.",
+    "Root pinned full static HOST collector link and new coherent overlay/manifest/runtime successor preserving old495e/f043/8c03 stage.",
+    "Fresh root-released M05 native run must actually observe both successful retirement0 events before unchanged shutdown/resource/boot oracles."
+  ]
+}

@@ -1,0 +1,65 @@
+--- 
++++ 
+@@ -166,38 +166,26 @@
+ 
+ 
+ def runtime(b):
+-    r=b['runtime']; mapping=json.loads(checked(r['physical_mapping'])); a=mapping['genuine_current_authorities']; physical=json.loads(checked(a['original_physical']))
+-    need(r['physical_report']==a['original_physical'] and mapping['controller_terminal_contract']['kind']=='tool-owned-unified-exec-terminal','actual matching physical kind')
+-    expected={}
+-    for pair in a['controller_terminal_receipts']:
+-        first=json.loads(checked(pair['started'])); last=json.loads(checked(pair['completed']))
+-        x=first['event']['params']['item']; y=last['event']['params']['item']
+-        need(first['event']['method']=='item/started' and last['event']['method']=='item/completed' and x['id']==y['id'] and y['status']=='completed' and y['exitCode']==0,'genuine actual raw protocol pair')
+-        expected[pair['role']]=(y['id'],y['processId'],y['durationMs'])
+-    need(set(expected)=={'holder-retirement','physical-reconciliation'} and len(physical['positive_closed_births'])==2,'TWO genuine innerbirths, no outerOS invention')
+-    p=outdir('/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/postbuild-numa-stage-runtime-data-preparation-1/runtime-current-image-preparation-1/postmutation-recovery-data-preparation-1/whole-consumer-contract-correction-1/bound-runtime-source-1'); (p/'native-packet-1').mkdir(mode=0o700)
+-    decoder=pinned(Path('/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/postbuild-numa-stage-runtime-data-preparation-1/runtime-current-image-preparation-1/postmutation-recovery-data-preparation-1/current_insert_clear_eight_state_physical.PAIRED-1.UNBOUND.py'),'978064cdbf54cb7672083be4907476b8a4f555c14a8816dbb5c72c780557ff52')
+-    counts=mapping['current_actual_counts']
+-    instance=dict(mapping=r['physical_mapping'],physical_report=r['physical_report'],tool_terminals=expected,execution_review_sha256=a['execution_review']['sha256'],cleanup_engine_sha256=a['source_reconciliation']['sha256'],selected_files=counts['selected_files'],objects=counts['postreader_actual_objects'],roles=counts['finite_roles'])
+-    decoder=bind_global(decoder,instance)
+-    source(p/'current_numa_image_physical.py',decoder)
+-    freeze=load(F/'SOURCE-FREEZE.json'); code={Path(row['path']).relative_to(F).as_posix():row for row in freeze['refs'] if row['path'].endswith('.py')}
++    r=b['runtime']; cfg=copy.deepcopy(r['static_inputs']); roles=json.loads(checked(r['physical_roles']))
++    need(cfg['latest_physical']==roles['physical_review'] and cfg['native_predecessor_binding']==r['physical_roles'],'exact compiler latest/native ancestor/build role joins')
++    checked(cfg['actual_preparation_acceptance']); checked(cfg['actual_stage_acceptance'])
++    need(type(cfg['observer_source_acceptance']) is dict,'genuine current source review required before construction')
++    checked(cfg['observer_source_acceptance'])
++    p=outdir('/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/normalization-runtime-data/runtime-source-preparation-1/bound-runtime-source-1'); (p/'native-packet-1').mkdir(mode=0o700)
++    decoderref=roles['native_ancestor_binding']['released_record_projection_source']
++    checked(decoderref) # Exact existing released-record decoder is selected at its genuine retained path.
++    freeze=load(F/'SOURCE-FREEZE.json'); code={Path(row['path']).relative_to(F).as_posix():row for row in freeze['refs'] if row['path'].endswith('.py') and Path(row['path']).name!='current_numa_image_physical.py'}
+     for name,row in code.items():
+-        if name=='current_numa_image_physical.py': continue
+-        text=checked(row).decode()
+-        overrides={'bind_numa_native_packet.py': {'path': '/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/postbuild-numa-stage-runtime-data-preparation-1/runtime-current-image-preparation-1/postmutation-recovery-data-preparation-1/whole-consumer-contract-correction-1/templates/bind_numa_native_packet.py', 'sha256': '4edc32a297558ab18c7615f74c8d52ab5d16ca18df82ef785b9f1f8f9902c217', 'bytes': 28421}, 'root_manual_snapshot_threads.py': {'path': '/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/postbuild-numa-stage-runtime-data-preparation-1/runtime-current-image-preparation-1/postmutation-recovery-data-preparation-1/whole-consumer-contract-correction-1/templates/root_manual_snapshot_threads.py', 'sha256': 'c3713aede2169bbf6c9a17d223f1d98eb011745915a111749a03e0f1ba4c746a', 'bytes': 12833}, 'check_current_whole_caller.py': {'path': '/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/postbuild-numa-stage-runtime-data-preparation-1/runtime-current-image-preparation-1/postmutation-recovery-data-preparation-1/whole-consumer-contract-correction-1/templates/check_current_whole_caller.py', 'sha256': '9d783c5cadb5a5924f68ae8b6a18c99fae12a7e2b7ddf098f9a28c454f919fcd', 'bytes': 6077}}
+-        if name in overrides: text=checked(overrides[name]).decode()
+-        if name in ('bind_numa_native_packet.py','root_manual_snapshot_threads.py'): text=once(text,'809e2828fa78d9a1cced662e832bc4269316c267eff07641d2181db6b6653d3d',r['static_inputs']['actual_preparation_acceptance']['sha256'])
++        if name=='current_numa_image_physical.py':continue
++        text=checked({'bind_numa_native_packet.py': {'path': '/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/normalization-runtime-data/runtime-source-preparation-1/current-constructor-templates-1/bind_numa_native_packet.py', 'sha256': '2b83b5749faa0332ce643aac63e0102aaff50c7531388d49c8c2f28b7fcd21bf', 'bytes': 27753}, 'root_manual_snapshot_threads.py': {'path': '/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/normalization-runtime-data/runtime-source-preparation-1/current-constructor-templates-1/root_manual_snapshot_threads.py', 'sha256': 'e577c5ae8b95b934bf61fc3ab9a7a104626a3ce745bec48bf8e12aee6b437d0a', 'bytes': 23540}, 'check_current_whole_caller.py': {'path': '/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/normalization-runtime-data/runtime-source-preparation-1/current-constructor-templates-1/check_current_whole_caller.py', 'sha256': 'e15b6d4800b09821fd6047f7f57f7faed0a2eedcd188b68276801e3d5317b6ab', 'bytes': 5235}}.get(name,row)).decode()
++        if name in ('bind_numa_native_packet.py','root_manual_snapshot_threads.py'):text=once(text,'809e2828fa78d9a1cced662e832bc4269316c267eff07641d2181db6b6653d3d',cfg['actual_preparation_acceptance']['sha256'])
+         source(p/name,text)
+-    cfg=copy.deepcopy(r['static_inputs']); need(cfg['latest_physical']==r['physical_report'] and cfg['physical_consumer_mapping']==r['physical_mapping'],'complete actual runtime DATA joins')
+-    checked(cfg['actual_preparation_acceptance']); checked(cfg['actual_stage_acceptance'])
+-    js(p/'CURRENT-PHYSICAL-MAPPING-BINDING.json',r['physical_mapping']); js(p/'CURRENT-PHYSICAL-COMPANION-ACCEPTANCE.json',r['physical_mapping']); js(p/'CURRENT-PHYSICAL-DECODER-SOURCE.json',ref(p/'current_numa_image_physical.py'))
+     js(p/'STATIC-NONTEMPORAL-INPUTS.json',cfg)
+     qualified=cfg['runtime_source_refs']
+     need(len(qualified)==6 and len({row['path'] for row in qualified})==6,'complete qualified SIX runtime source references')
+     for row in qualified: checked(row)
+     expected_hashes={row['path']:row['sha256'] for row in qualified}
+-    expected_hashes.update({str(path):ref(path)['sha256'] for path in (p/'root_manual_snapshot_threads.py',p/'current_numa_image_physical.py')})
++    expected_hashes.update({str(path):ref(path)['sha256'] for path in (p/'root_manual_snapshot_threads.py',Path(decoderref['path']))})
+     paths=list(expected_hashes)
+     need(len(paths)==len(set(paths))==8,'complete selected EIGHT source FD set')
+     identities={}
+@@ -215,8 +203,8 @@
+             identities[name]={k:getattr(before,k) for k in FIELDS}
+         finally: os.close(fd)
+     js(p/'RUNTIME-SOURCE-FD-IDENTITIES.json',dict(schema='mckernel.current-native.selected-runtime-source-full-fd-identities.v1',identities=identities))
+-    names=list(code)+['STATIC-NONTEMPORAL-INPUTS.json','RUNTIME-SOURCE-FD-IDENTITIES.json','CURRENT-PHYSICAL-MAPPING-BINDING.json','CURRENT-PHYSICAL-COMPANION-ACCEPTANCE.json','CURRENT-PHYSICAL-DECODER-SOURCE.json']
+-    js(p/'CHECK-INPUT-PINS.json',[ref(p/name) for name in names]+[r['physical_mapping'],r['physical_report']]); finish(p)
++    names=list(code)+['STATIC-NONTEMPORAL-INPUTS.json','RUNTIME-SOURCE-FD-IDENTITIES.json']
++    js(p/'CHECK-INPUT-PINS.json',[ref(p/name) for name in names]+[r['physical_roles'],cfg['latest_physical'],cfg['actual_preparation_acceptance'],cfg['actual_full_preflight'],cfg['actual_binding_result'],cfg['actual_stage_acceptance'],cfg['observer_source_acceptance']]); finish(p)
+ 
+ def main():
+     ap=argparse.ArgumentParser(allow_abbrev=False); ap.add_argument('phase',choices=('stage','normalization','terminal','runtime')); ap.add_argument('--bindings',required=True); ap.add_argument('--bindings-sha256',required=True); args=ap.parse_args()

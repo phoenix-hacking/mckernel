@@ -1,0 +1,75 @@
+    fn admit_inner(
+        &mut self,
+        request: Request,
+        claim: impl FnOnce(&Request) -> Result<M>,
+        service: Option<impl FnOnce(&Request) -> i64>,
+    ) -> Result<bool> {
+        if self.quarantined {
+            return Err(-71);
+        }
+        if self
+            .calls
+            .iter()
+            .flatten()
+            .any(|call| call.delivery.request() == &request)
+        {
+            return Ok(false);
+        }
+        if self
+            .calls
+            .iter()
+            .flatten()
+            .any(|call| call.delivery.request().response() == request.response())
+        {
+            return Err(-71);
+        }
+        let slot = self
+            .calls
+            .iter_mut()
+            .find(|slot| slot.is_none())
+            .ok_or(-11)?;
+        let delivery = Delivery::new(request)?;
+        let memory = claim(delivery.request())?;
+        let response = match Response::from_memory(delivery.request(), memory) {
+            Ok(response) => response,
+            Err(error) => {
+                self.quarantined = true;
+                return Err(error);
+            }
+        };
+        let mut call = Call {
+            delivery,
+            response: Some(response),
+            completion: None,
+            worker: None,
+            cancelled: false,
+            kernel: false,
+            service: false,
+            transferred: false,
+            fork_ingress_pending: false,
+            publication_since: None,
+        };
+        if let Some(service) = service {
+            call.delivery.begin_service()?;
+            let value = service(call.delivery.request());
+            match call.response.take().ok_or(-71)?.prepare(0, value) {
+                Ok(completion) => call.completion = Some(completion),
+                Err(error) => {
+                    self.quarantined = true;
+                    return Err(error);
+                }
+            }
+            call.service = true;
+        }
+        *slot = Some(call);
+        if self.closed {
+            self.cancel_pending()?;
+        }
+        Ok(true)
+    }
+
+    pub(crate) fn reserve(&mut self, handle: u64) -> Result<Option<(u64, [u8; 80])>> {
+        if self.closed || self.quarantined {
+            return Err(-32);
+        }
+        let worker = self

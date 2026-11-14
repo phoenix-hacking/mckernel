@@ -1,0 +1,150 @@
+{
+  "schema": "mckernel.x86-callback-local-owner-lookahead.v1",
+  "request": "2026-11-09T22:22Z same-Root source-only exact callback slot/accessor owner lookahead",
+  "invocation": "20261109T211917Z-488788ba",
+  "decision": "GO_EXISTING_ACCEPTED_F04_ACCESSOR_PLUS_REAL_NULL_INITIAL_CALLBACK_SLOT_ONLY; DO_NOT_REDEFINE_EXISTING_LOCALS",
+  "owner": "Saved Root sole canonical compositor; future source/profile review and fresh execution admission separate",
+  "first_saved_symbol_check": {
+    "method": "Read existing saved actual symbol text and named JOIN-RESULT.json only; no nm/readelf/hash census or metadata replay.",
+    "sixfb": {
+      "result_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-join-1/JOIN-RESULT.json",
+      "symbol_text": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-join-1/joined-symbols.stdout",
+      "sha256": "6fb8987df82078a290fdf25348079ef8775760c1a35942d6eb59370b25b3ec5b",
+      "owners": "76globals65T11data",
+      "target_observation": "get_x86_cpu_local_variable absent as T/U, x86_issue_ipi absent as owner, genuine locals alreadyB,size8."
+    },
+    "then_current": {
+      "result_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-primitives-debugdata-join-1/JOIN-RESULT.json",
+      "symbol_text": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-primitives-debugdata-join-1/joined-symbols.stdout",
+      "sha256": "b18f9e01ea7b3cb0b2deb2670c0d393e39370f4d4df9defcf5b102aa97d68241",
+      "owners": "80globals68T12data",
+      "target_observation": "Same: accessor not alreadyprovided, callback slot not owned; genuine locals B8 retained. No standalone x86_cpu_local_variables_span owner is needed for this accessor."
+    },
+    "relevance": "Current queued CPU/IPI caller needs actual accessor; queued real IPIbridge needs genuine slot. Supplying these exact missing source owners is dependency engineering, not a coverage inventory. Root must use actual latest matched partial/input once admitted, not assume b18 remains latest."
+  },
+  "eligibility_boundary": {
+    "positive_basis": "Actual preserved accepted-F04 CPU-local primitive and general architecture callback-storage definitions; exact source/data-only cut independently distinguished from packet/generic/exec/ACK/TID/XPMEM behavior.",
+    "accessor_scope": "Only actual address calculation using existing original locals pointer and actual span; no local initialization/allocation, processor assignment, GS/MSR/CPUlocal register access, thread policy or scheduler body.",
+    "slot_scope": "Only actual original null-initial mutable callback storage; no actual APIC/x2APIC target/hardware body, callback publication/selector setup or boot initializer is included.",
+    "no_parent_inference": "Eligibility follows exact body/data/type/constant semantics and accepted-F04scope, not a blanket permission for x86_local.rs/x86_cpu_helpers.rs/ap module or unknown held notification request.",
+    "stop_condition": "Do not import whole module or required boot/hardware/held bodies. If any such expansion is needed, stop at exact new source boundary for separate original eligibility/admission.",
+    "preserved": "Original generic/exec/notification/service/source/SDK/native/current-free and allUNKNOWN outcomes stay held. Source acceptance is never runtime/hardware readiness."
+  },
+  "actual_accessor": {
+    "export": "get_x86_cpu_local_variable",
+    "source": "kernel/rust/x86_local.rs:98–101",
+    "ABI": "unsafe extern \"C\" fn(CInt)->*mut actual abi::X86CpuLocalVariables",
+    "body": "Exact local_addr(id).",
+    "private_helper": {
+      "name": "local_addr",
+      "source": "kernel/rust/x86_local.rs:83–86",
+      "attribute": "#[inline(always)]",
+      "signature": "unsafe fn(CInt)->*mut actual X86CpuLocalVariables",
+      "body": "(locals as *mut u8).add(LOCALS_SPAN.wrapping_mul(id as usize)) as *mut X86CpuLocalVariables; preserve actual cast/wrapping/add exactly."
+    },
+    "constants": {
+      "PAGE_SIZE": "usize4096 from actual x86_local.rs:8",
+      "LOCALS_SPAN": "usize4*PAGE_SIZE from actual x86_local.rs:12; 16384 selected bytes"
+    },
+    "actual_C": {
+      "source": "arch/x86_64/kernel/local.c:44–52",
+      "signature": "struct x86_cpu_local_variables *get_x86_cpu_local_variable(int id)",
+      "body": "(char*)locals+(LOCALS_SPAN*id), cast to actual struct pointer; original valid-id/allocation-domain contract.",
+      "header": "arch/x86_64/kernel/include/cpulocal.h:29–51 exact packed type/prototype; Cspan4*PAGE_SIZE at local.c:25/header57 for selected branches."
+    },
+    "types": "Use actual kernel/rust/abi.rs CInt and complete existing repr(C,packed) X86CpuLocalVariables (line519ff), with original pointee shape/fields. No handmade opaque/register layout or offset arithmetic replacement.",
+    "storage_import": {
+      "symbol": "locals",
+      "ABI": "extern static mut *mut actual X86CpuLocalVariables",
+      "original_Rust_owner": "kernel/rust/x86_local.rs:15–16 null initialslot",
+      "current_owner": "Already present B8 in6fb andb18; consume original existing owner, do not compile/redefine this static.",
+      "original_C_owner": "arch/x86_64/kernel/local.c:28 actual locals pointer; live mapping assigned by excluded initializer."
+    },
+    "ownership": "Borrow/pass-through only. Original initialized valid locals allocation and valid-id domain are required by pointer.add, but no null/bounds policy or checks are invented. No field is dereferenced by this accessor; no function or invalid/valid-id vector executes here.",
+    "exclude": [
+      "init_processors_local allocation/write_bytes/kprintf",
+      "rdmsr/wrmsr/set_gs_base and every other accessor/processor-assignment function",
+      "LAST_PROCESSOR_ID/BOOT_CPU_LOCAL/span-debug storage",
+      "any new fixed locals mapping or fake valid pointer"
+    ]
+  },
+  "actual_callback_slot": {
+    "name": "x86_issue_ipi",
+    "source": "kernel/rust/x86_cpu_helpers.rs:5295–5296 in dispatch_and_msr_entries",
+    "declaration": "#[no_mangle] pub(crate) static mut x86_issue_ipi:Option<IssueIpi>=None",
+    "alias": "Actual type IssueIpi = unsafe extern C fn(u32,u32), same source module5281ff.",
+    "layout": "Preserve actual Option<IssueIpi> size8/align8 assertions from original source; nullable C-function-pointer representation maps original uninitialized-to-NULL Cglobal.",
+    "actual_C": "arch/x86_64/kernel/cpu.c:604–609: selectedRust profile extern void(*x86_issue_ipi)(unsigned int,unsigned int), reference profile owns original zero-initialized pointer. No code target is part of this storage.",
+    "initial_state": "Actual source initializer None/NULL only; expected8byteBSS/NOBITS slot with no target relocation. This is genuine original preboot storage, not a fabricated populated backend.",
+    "runtime_publication": "Original boot/APIC-mode selector publishes real target later under its existing lifecycle; publication and actual target bodies are excluded. An object/partial containing None does not make unwrap_unchecked caller runtime-ready. No slot call/read/assignment occurs in this investigation.",
+    "exclude": [
+      "Other lapic_write/read/icr/wait/mode storage from same module",
+      "Any fabricated nonNULL callback or callback stub",
+      "Actual x2APIC/APIC backend/boot selector/init body or API",
+      "New setter/ACK/lifetime/locking policy"
+    ]
+  },
+  "selected_profile_and_required_inputs": {
+    "source_selection": "Use exact current no-local-cfg definitions under existing native x86_64 LP64 Rust partial profile; kernel/rust/lib.rs selects x86_local and x86_cpu_helpers. Actual fullCPU Cownership is paired by MCKERNEL_RUST_X86_CPU_HELPERS; this partial includes no competing Cunit.",
+    "constant_domain": "PAGE_SIZE4096 and LOCALS_SPAN4*PAGE_SIZE are actual source values and match original current C/header expressions. No optional architecture/Fugaku/CPU profile is widened.",
+    "types": "Only actual abi.rs type definitions, actual private local_addr helper/constants and actual callbackalias; no runtime module import.",
+    "future_review": "Root/private preparer must supply concrete source unit, exact retained compilerprofile/nativecfg flags and actual current partial input. Match actual source identities and slot/locals owner before codegen; no new fullSDK/native proof is inferred.",
+    "no_missing_Rust_port": "Both real Rust definitions already exist. Exact data/provider cut needs no C-only implementation, invented ABI/getter/layout/register or new metadata policy."
+  },
+  "expected_object_and_join": {
+    "new_public_T": [
+      "get_x86_cpu_local_variable"
+    ],
+    "new_global_data": [
+      {
+        "symbol": "x86_issue_ipi",
+        "size": 8,
+        "alignment": 8,
+        "initial": "None/NULL",
+        "expected_section": "zero-initialized BSS/NOBITS"
+      }
+    ],
+    "new_U": [
+      {
+        "symbol": "locals",
+        "kind": "genuine existing mutable pointerdata",
+        "size_contract": "actual8byte pointer"
+      }
+    ],
+    "private_helper": "Exact local_addr inline(always); compiler may inline it completely. Record actual emittedprivatefunction/eh_frame metadata, no arbitrary byte-size assertion.",
+    "no_other_storage": "No second locals, no CPUlocalspan/debug/bootstatic, no callbacks/targets/constructor or initialized hardware map.",
+    "current_owner_effect": "Unique actual accessor supplies caller dependency; real callbackslot supplies IPIbridge data dependency. localsU resolves to current original B8owner after exact partial join. InitialNone is not counted as boot/runtime behavior completion.",
+    "prejoin_gate": "Actual latest source-bound metadata must reject duplicate accessor/callbackslot/localsdefinitions, preserve all prior code/data/private/aliases/relocs, verify onlyexpectednew1T/1B8 and no targetrelocation or library dependency. Current saved symbols were read once as above; no new census."
+  },
+  "smallest_next_steps": [
+    {
+      "id": "SLOT-ACCESSOR-SOURCE",
+      "owner": "Root/private source preparer",
+      "required_input": "Exact accessor+private local_addr/constants/actualABI, existingactual callbackslot+alias/assertions, extern original locals only.",
+      "done_when": "Reviewable private source contains only genuine1export/1slot plus finite helper/typeclosure, no boot/hardware/otherdata or competing localsowner.",
+      "verification_method": "Exact source/body/attribute/type/initializer/ABI comparisons to named Rust/C, including preserved pointer.add/casts and genuineNone state."
+    },
+    {
+      "id": "SLOT-ACCESSOR-REVIEW",
+      "owner": "Independent concrete source/ABI/profile reviewer",
+      "required_input": "Concrete unit/profile/currentpartial+expected1T1B8/localsU.",
+      "done_when": "Review confirms independent acceptedF04 boundary, correct4096/16384typeprofile, existinglocalsowner and nullablecallbackABI/initialization distinction; no inferred runtime target.",
+      "verification_method": "Read exact source/profile/input ownership and actual current metadata declarations; no constructor or hardware execution."
+    },
+    {
+      "id": "SLOT-ACCESSOR-CODEGEN-GATE",
+      "owner": "Root actual admitted HOSTjob owner",
+      "required_input": "Concrete GO and fresh exact source/resource admission.",
+      "done_when": "One finite compile+necessary actualsymbol/ELFreads produce actual accessor and genuine8byteNone slot,localsU only; actualproviderpredicate called/persisted before anyld-r.",
+      "verification_method": "Record exact objectsource/compiler/config/warnings/code/data/relocs; reject unexpected owners/imports rather than supplying fake backend."
+    },
+    {
+      "id": "SLOT-ACCESSOR-CURRENT-JOIN",
+      "owner": "Root sole compositor",
+      "required_input": "Actual passed newobject and latestreviewed matching partial only; actual called prejoingate/fresh admission.",
+      "done_when": "Partial resolves real accessor/slot imports and localsU binds exactlyexistingoriginalB8; preserve everyoldowner/reloc and knownpendingbootstate.",
+      "verification_method": "One exactld-r plus actualpostjoinmetadata, no oldcohort/greenreplay, functiontest/CPUlocal/boot/APIC/MSR/IRQ/native action or readinessclaim."
+    }
+  ],
+  "operations": "Read AGENTS/currentCAMPAIGN, existing6fb andactualthen-currentb18 symboltexts/results (no nm/hashrun), exact named Rust/C/header accessor/type/span/slot definitions and finite dependencies. Read nearby sourcecontext only; none of boot/MSR/helperimplementation context imported/prepared. Wrote only authorized JSON. No unitgeneration/sourceedit/compiler/preprocessor/link/test/newmetadata/actualfunction/hardware/native/spawn/goalcontrol."
+}

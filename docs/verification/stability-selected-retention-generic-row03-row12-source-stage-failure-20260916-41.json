@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "record_kind": "m01b_directed_phase_i_source_stage_failure",
+  "attempt": 41,
+  "recorded_utc": "2026-09-16T12:12:09Z",
+  "status": "FAIL_PHASE_I",
+  "authority": {
+    "review40_sha256": "156b12d414da74512a82d1cd9e8be8008130f014ccd1bcafda1871547a3497de",
+    "correction39_sha256": "37b775331111f63b573382727155c1411eae48144c3a6feb02f276d020b187c5"
+  },
+  "failed_root": {
+    "path": "/home/holden/mckernel-work/scratch/m01b-generic-row03-row12-directed-implementation-packet-20260916-41",
+    "regular_files": 327,
+    "phase_i_failure_sha256": "df278d3e8db639b446559cf247c55720143119078e246d6c5075f0db8a30cade",
+    "mode2_adapter_sha256": "9fd850d4b196e04649da046e6a530a356e8f3cea930584ce1d8baff43cbeb472",
+    "mode2_runner_sha256": "cac11385c6feac5792cc83f400f49263745b687e30a39634f38a8fc35ccecaee",
+    "mode3_adapter_sha256": "beb942df55662f1666be3ccabda755cbc750ea20f7f2548f19f8ffa2c81e7539",
+    "mode3_runner_sha256": "c8531fb2d4d5be28f04baa0620c11c21d940ece70d8f6002c587693d8ea60ae6",
+    "bytecode_present": false
+  },
+  "archive": {
+    "path": "docs/verification/evidence/stability-selected-retention-generic-row03-row12-source-stage-failure-20260916-41.tar.gz",
+    "sha256": "3281d44021b6af2adfe22ee4cf9f72bd4731e688d7b49acf74a88a28d5ee419f",
+    "size": 1006886,
+    "members": 338,
+    "regular_files": 327
+  },
+  "blocking_finding": "The inserted post-store hook calls stability_observer::status_store(), which does not exist in the authenticated observer source. The real metadata-hook contract therefore cannot resolve. The authorized failure file was written and the attempt stopped before handoff, compilation or execution.",
+  "next": "Preserve this root and archive unchanged. A new reviewed packet must define the exact test-only observer recorder implementation and ownership rather than naming a nonexistent function before another fresh attempt.",
+  "source_handoff_accepted": false,
+  "phase_ii_success_evidence_authorized": false,
+  "compiled": false,
+  "runtime_execution": false,
+  "guest_execution": false,
+  "native_backing_accepted": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}

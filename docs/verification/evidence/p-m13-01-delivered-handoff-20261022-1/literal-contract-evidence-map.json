@@ -1,0 +1,148 @@
+{
+  "task_id": "P-M13-01-delivered-handoff-20261022-1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "READY_FOR_FOCUSED_INDEPENDENT_LITERAL_REVIEW",
+  "scope_id": "practical-kernel-apps-v1-20261017",
+  "literal_contract": {
+    "id": "P-M13-01",
+    "description": "Publish concise build/run instructions and tested artifact identities.",
+    "current_shared_status": "open"
+  },
+  "delivered_now": [
+    "BUILD-RUN-HANDOFF.md",
+    "tested-artifact-identities.json",
+    "exact-command-reference.json"
+  ],
+  "mapping": [
+    {
+      "clause": "Publish concise build instructions",
+      "delivered": "BUILD-RUN-HANDOFF.md: Build recipe and provenance; exact-command-reference.json: compute_build/matched_module_build",
+      "evidence": [
+        "M10",
+        "buildreview",
+        "artifactreview",
+        "driver",
+        "SDKbuild",
+        "module_make_request"
+      ],
+      "scope": "Actual accepted recipes, exact full argv/cwd/environment/driver/request pins, source/config/toolchain and prerequisites; no new build claimed."
+    },
+    {
+      "clause": "Publish concise run instructions",
+      "delivered": "BUILD-RUN-HANDOFF.md: Run the exact applications through the reviewed owner; exact-command-reference.json: run",
+      "evidence": [
+        "recipe",
+        "rootindex",
+        "currentnative",
+        "physical"
+      ],
+      "scope": "Exact app argv/env/cwd/oracles and reviewed host owner shape; fresh parent/nonce/release/admission/snapshot and seven-step requirements explicit; consumed commands not replayable."
+    },
+    {
+      "clause": "Tested artifact identities",
+      "delivered": "tested-artifact-identities.json and handoff identity table",
+      "evidence": [
+        "freeze",
+        "matched",
+        "recipe",
+        "M10",
+        "currentnative"
+      ],
+      "scope": "Only ff4f/c396/af234/6571/ee1f/app024/app1f51 native-tested tuple. No cbb04/native or new SDK module substitution."
+    }
+  ],
+  "evidence": {
+    "contract": {
+      "path": "/home/holden/mckernel/docs/verification/os-milestones-20260914/practical-milestones.json",
+      "sha256": "6c9421f45ead5f922084e023bf337fec697f88a7eb2a9428cc9f18a626d0cad7",
+      "bytes": 178669
+    },
+    "priority": {
+      "path": "/home/holden/mckernel/docs/verification/os-milestones-20260914/CONVERGENCE.md",
+      "sha256": "72fe915f976e85ab4d4dd2ad5e73ef5bc38979c94f972edde50c1f21888f563b",
+      "bytes": 36741
+    },
+    "freeze": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/current-host-pair-205-native-20261019-1/P-M00-01-SUPPORTED-PROFILE-FREEZE-REVIEW.json",
+      "sha256": "4d28cbe56d8ed6716c6e45183b6c841fae88578611d577c6a26e751817eae1ff",
+      "bytes": 10037
+    },
+    "recipe": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/current-host-pair-205-native-20261019-1/usable-profile-1/USABLE-TESTED-PROFILE-RECIPE.json",
+      "sha256": "8fbd21f08080fc450391462c7e60dbbfaa2c5c24b5df16a2b615513cd8c4e4b5",
+      "bytes": 9460
+    },
+    "matched": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/current-host-pair-205-native-20261019-1/usable-profile-1/MATCHED-IMAGE-MODULE-AND-APP-MANIFEST.json",
+      "sha256": "0f80ec37d15488b3365573222ad6ff811d795fb54b95d375b192f10049cb97c5",
+      "bytes": 13868
+    },
+    "buildreview": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/practical-provenance-literal-20261019-1/NEW205-FRESH8B-ACTUAL-BUILD-AND-CLIENT-RETIREMENT-REVIEW.json",
+      "sha256": "f7352de9e6aaf2ed6de5928cbb94c55c7b2a2ca6a7598c9d79d2bc933e6dbf98",
+      "bytes": 18372
+    },
+    "artifactreview": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/practical-provenance-literal-20261019-1/NEW205-ACTUAL-PRODUCTION-ARTIFACT-REVIEW.json",
+      "sha256": "fa39824773f75a0e44303afcdcaf52a26fa8249bd7d0fe1d066c3dd2b6dd9813",
+      "bytes": 189111
+    },
+    "M10": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/practical-recoverable-and-launch-record-literal-review-20261020-1/M10-EXIT-CONDITION.json",
+      "sha256": "8c3b73891b55d1764ee1f001713d09e4a7b4623420dc77ea76a1432d3500740f",
+      "bytes": 6320
+    },
+    "capabilities": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/p-m13-02-capability-statement-20261022-1/CAPABILITY-STATEMENT.md",
+      "sha256": "e877026cf804bf6c657c3fffd4aa8d7ea0b9cc36007d30eac31d953e61e86afe",
+      "bytes": 14771
+    },
+    "SDKbuild": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-independent-review-20261019-1/CURRENT-HOST-PAIR-ACTUAL-THREE-MODULE-ARTIFACT-REVIEW.json",
+      "sha256": "b9ea18d03dde21fc3b6f958647358081d9a5f249779b10628e9361f4926e5005",
+      "bytes": 40051
+    },
+    "SDKABI": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-independent-review-20261019-1/CURRENT-HOST-PAIR-ACTUAL-THREE-MODULE-ABI-JOIN.json",
+      "sha256": "5d31c1f057127cf4c9fc076f3dc6c675ea4dc11ce4cef69889aab787135bd88c",
+      "bytes": 31299
+    },
+    "currentnative": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-independent-review-20261019-1/ACTUAL-205-TWO-CPU-AND-RUST-PAIR-NATIVE-DIAGNOSTIC-REVIEW.json",
+      "sha256": "d67e215390a78c991077b671ff9205ecaa9ec925a320414154795106acdc8bc7",
+      "bytes": 27300
+    },
+    "physical": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-physical-review-20261019-1/decision.json",
+      "sha256": "7d869a4f69a7d840a14bd18b4638f0a5043354ac246a1d5c57adf9e23f75001c",
+      "bytes": 16123
+    },
+    "driver": {
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/evidence/receipt.json",
+      "sha256": "4be2ccc9c38c604ee2aae760b6e7193bf045693ecc96cec2c24fa5e60be0211c",
+      "bytes": 35607
+    },
+    "rootindex": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/FINAL-SEVEN-ROOT-CALL-DATA.json",
+      "sha256": "5660ee2b5bc07392c2120607a580563432cb726d10eb3fe823dd7159af9a06ad",
+      "bytes": 46145
+    },
+    "module_make_request": {
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-c5280df71731403a97d5520f4dabc378/evidence/request.json",
+      "sha256": "34077dc08bf94243d70ad8f338e879622e5a7a29e56f56249a67b33915ccf5c6",
+      "bytes": 5510
+    }
+  },
+  "counter_baseline": {
+    "checks": 25,
+    "total": 35,
+    "whole": 6
+  },
+  "counter_delta": 0,
+  "new_builds_guests_or_test_runs": 0,
+  "new_execution_authority": false,
+  "shared_or_Git_edits": false,
+  "existing_failures_or_oracles_changed": false,
+  "blocker": null,
+  "next_task": "Focused independent P-M13-01 literal-contract review. Dispatcher publishes/adopts only this row if accepted; no whole-M13 or OS-completion inference."
+}

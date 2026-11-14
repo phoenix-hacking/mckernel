@@ -1,0 +1,70 @@
+{
+  "schema": "mckernel.stability.window-validation.v1",
+  "recorded_at_utc": "2026-09-16T04:56:46Z",
+  "task": "M02-B storage-fault-v2 source correction",
+  "disposition": "PASS_VALIDATION_ONLY_REVIEW_REQUIRED",
+  "acceptance_effect": "none",
+  "source_disposition": "untracked and rejected pending a fresh independent PASS_SOURCE review",
+  "bounded_changes": [
+    "require positive exact-integer owner_wait_deadline_ns in identity-bearing terminal records",
+    "derive the complete report wait object from raw_wait_status and require exact equality",
+    "reject bool, float, null-domain and semantically mismatched exit/signal fields"
+  ],
+  "source_sha256": {
+    "scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/storage-fault-v1/oracle.py": "f1979a4432a853ffe270c3748a18bbb0323a39da663ce1910ceb10486433c003",
+    "scripts/tests/test_collector_storage_fault_packet.py": "a1cd82a391be67f2569bcea4ccfd2416ae3872bf1e0392ff4754888486fb8182"
+  },
+  "checks": {
+    "focused_review_24_25_26_controls": "5 passed in 0.459s",
+    "python_3_9_12_full_suite": "115 passed in 19.010s",
+    "python_3_8_10_full_suite": "115 passed in 19.076s",
+    "python_3_9_12_pycompile": "PASS",
+    "python_3_8_10_pycompile": "PASS"
+  },
+  "interpreters": {
+    "python_3_9_12": {
+      "path": "/home/holden/anaconda3/bin/python3.9",
+      "executable_sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb"
+    },
+    "python_3_8_10": {
+      "path": "/usr/bin/python3.8",
+      "executable_sha256": "298a9e830ed52f36c299427565485d717d1ce0179c0597cc16560513eb780b06"
+    }
+  },
+  "evidence": {
+    "archive": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-window-validation-20260915-1.tar.gz",
+    "archive_sha256": "247be40a9b843e7eb1fdd7a7f230a75f29a68c7fb865a78e1c72be36b7f4c39f",
+    "archive_size": 584,
+    "archive_contents": "the seven original raw validation and interpreter-identity logs"
+  },
+  "live_campaign_processes": [
+    {
+      "pid": 1676703,
+      "ppid": 3801,
+      "started": "Tue Sep 15 15:51:14 2026",
+      "role": "launcher"
+    },
+    {
+      "pid": 1899017,
+      "ppid": 1676703,
+      "started": "Tue Sep 15 21:05:29 2026",
+      "role": "recovered worker"
+    },
+    {
+      "pid": 1899019,
+      "ppid": 1899017,
+      "started": "Tue Sep 15 21:05:29 2026",
+      "role": "Codex app-server"
+    }
+  ],
+  "inactive_process_classes": [
+    "project build",
+    "compiler",
+    "container build",
+    "guest",
+    "QEMU",
+    "mcexec",
+    "IHK"
+  ],
+  "next_task": "freeze source-review archive 30 and obtain fresh independent review 27; do not compile or run privileged/native/guest work unless it returns PASS_SOURCE and a separate compiler packet passes review"
+}

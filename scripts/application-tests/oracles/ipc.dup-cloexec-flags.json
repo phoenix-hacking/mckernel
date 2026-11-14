@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "ipc.dup-cloexec-flags",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/ipc.dup-cloexec-flags"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["shared_offset=1 cloexec=1 original_unchanged=1 valid=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["F_DUPFD_CLOEXEC creates a descriptor sharing the open-file offset", "Only the duplicate gains FD_CLOEXEC; the original descriptor flag remains clear"],
+  "unresolved_expectations": ["Descriptor flag and shared open-file-description ABI require Max review."],
+  "max_question_for_reviewer": "Confirm F_DUPFD_CLOEXEC preserves the shared offset while setting close-on-exec only on the new descriptor."
+}

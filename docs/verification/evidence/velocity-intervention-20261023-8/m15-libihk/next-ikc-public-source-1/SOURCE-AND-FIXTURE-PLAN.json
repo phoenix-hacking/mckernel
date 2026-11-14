@@ -1,0 +1,25 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_READY_UNRUN",
+  "reference_functions": [
+    "static int snprintf_realloc(",
+    "static int cpu_str2array(",
+    "static int ikc_str2array(",
+    "int ikc_str2count(",
+    "int ikc_str2req(",
+    "char *ikc_req2str("
+  ],
+  "reference_source": {
+    "path": "/home/holden/mckernel/ihk/linux/user/ihklib.c",
+    "sha256": "6f2c7321667f405b3dc483c089eb5119db0d0a758c8e17a86460f9aad8dcdeab"
+  },
+  "limitations": [
+    "WITH_KRM=OFF HOST qualification only",
+    "C copying beyond1024 scratch entries or formatter CPU indices outside0..1023 is undefined and excluded",
+    "formatter realloc failure NULL early-return is defined Rust extension, not C parity",
+    "diagnostic __func__ names in renamed C reference differ; stderr equivalence not claimed",
+    "fault injection uses controlled linker wrappers; no native/device execution"
+  ],
+  "actual_fixture_result": null,
+  "canonical_selection": false
+}

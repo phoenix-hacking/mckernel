@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "loader.dlsym-missing",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/loader.dlsym-missing"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["missing_null=1 error_nonempty=1 present=1 present_error=0 valid=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["A missing symbol returns NULL and a nonempty dlerror", "A subsequent valid fixture_add lookup clears the error and returns a symbol"],
+  "unresolved_expectations": ["DSO symbol table and dlerror ABI require Max review."],
+  "max_question_for_reviewer": "Confirm missing-symbol diagnostics are nonempty and do not poison a subsequent valid symbol lookup."
+}

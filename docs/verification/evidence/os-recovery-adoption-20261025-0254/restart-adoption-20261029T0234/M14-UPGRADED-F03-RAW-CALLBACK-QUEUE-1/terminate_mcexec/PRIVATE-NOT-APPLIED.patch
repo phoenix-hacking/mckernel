@@ -1,0 +1,66 @@
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -5205,11 +5205,25 @@
+ }
+ 
+ #endif
++#if defined(MCKERNEL_RUST_F03_LEAF_CALLBACKS) && defined(__x86_64__)
++extern long terminate_mcexec_do_syscall_bridge(struct syscall_request *request, int cpu);
++#else
++#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
++#line 5135
++#else
++#line 5144
++#endif
+ static long
+ terminate_mcexec_do_syscall_bridge(struct syscall_request *request, int cpu)
+ {
+ 	return do_syscall(request, cpu);
+ }
++#endif
++#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
++#line 5140
++#else
++#line 5149
++#endif
+ 
+ #if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_ATOMIC_HELPERS) && defined(MCKERNEL_RUST_F03_TERMINATE_REFCOUNT)
+ extern void f03_terminate_host_refcount_set_v1(void *, int);
+--- a/kernel/CMakeLists.txt
++++ b/kernel/CMakeLists.txt
+@@ -144,6 +144,7 @@
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/sysfs.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_policy.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_mprotect_host_vma.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_terminate_mcexec_forward.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_munmap_clear_host_forward.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_exit_group_current_pid.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_util_clone_disabled_logger.rs"
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -36866,3 +36866,8 @@
+ #[cfg(all(f03_leaf_callbacks_candidate, target_arch = "x86_64"))]
+ #[path = "syscall_mprotect_host_vma.rs"]
+ mod syscall_mprotect_host_vma;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(all(f03_leaf_callbacks_candidate, target_arch = "x86_64"))]
++#[path = "syscall_terminate_mcexec_forward.rs"]
++mod syscall_terminate_mcexec_forward;
+--- /dev/null
++++ b/kernel/rust/syscall_terminate_mcexec_forward.rs
+@@ -0,0 +1,14 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++use crate::abi::{CInt, CLong, SyscallRequest};
++
++/// Forward the existing request callback without inspecting its raw pointer.
++///
++/// # Safety
++/// The request and cpu must satisfy the original caller and existing do_syscall
++/// provider contracts. This function neither creates nor retains the request.
++#[no_mangle]
++pub unsafe extern "C" fn terminate_mcexec_do_syscall_bridge(request: *mut SyscallRequest, cpu: CInt) -> CLong {
++    // SAFETY: The same pointer and CPU are passed to the original provider;
++    // its exact return value is returned to the original caller.
++    unsafe { super::do_syscall(request, cpu) }
++}

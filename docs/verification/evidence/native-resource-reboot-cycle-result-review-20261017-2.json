@@ -1,0 +1,95 @@
+{
+  "schema": "mckernel.native-resource-reboot-cycle-result-review.v2",
+  "status": "PASS_ACTUAL_ONE_PUBLIC_NATIVE_CYCLE_AND_RETIREMENT_WITH_VERSIONED_CONSUMER_CORRECTION",
+  "recorded_by": "/root",
+  "recorded_utc": "2026-10-17T18:41:11.855893+00:00",
+  "runtime_retirement_reviewer": "/root/signal_guest_execution_review",
+  "source_and_actual_four_consumer_reviewer": "/root/lifecycle_collector_review",
+  "source_candidate_sha": "d99edf2f58ee44b1a7e9aa726cbb49eee7850248",
+  "smp_sha256": "82c9021f7491fa8bc6d178fe99e7d4b7b6f90838474a9c91b62ddb8edb3d13f8",
+  "image_source_baseline": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+  "actual_owner_exit_code": 0,
+  "elapsed_seconds": 58.94694638252258,
+  "runtime_attempt_count": 1,
+  "complete_public_native_cycles_accepted": 1,
+  "campaign_complete_native_cycles": 1,
+  "distinct_app_diagnostics_unchanged": 14,
+  "kernel_behavior": "Module-owned CPU-device/topology reference retention validated by second CPU reservation and fresh full-ready generation2 native boot. One boot/workload/strictstop/destroy/publicrelease/boot sequence.",
+  "observations": {
+    "ordinary_payload": "Exact40-byte signal mask stdout/emptyerr/exit0, unchanged oracle; repeatedbehavior adds0 distinct apps",
+    "strict_stop": "Running5 -> shutdown0 -> NotBooted0 -> close0",
+    "public_release": "ExactclosedOSCPU/MEM EBUSY; closeOS/destroy0; refreshed128MiB releasedonce; deviceCPU/MEM pools empty and CPU1online",
+    "second_boot": "Helperraw0/clean1/stdout392exact/emptyerr; generation2 fullready; before42439/after47595 appendprefix, one fresh PRI14 observed5 expected5"
+  },
+  "all_four_consumers": "PASS on unchanged actualserial after independently accepted source-bound consumer v3 PRI14 correction and newdecoder consumerpin only; original pinnedconsumer failure preserved separately",
+  "retirement": {
+    "accepted": true,
+    "docker_clients": 30,
+    "owner_pid": 644256,
+    "all_client_groups_reaped": true,
+    "container_id": "d77c2cac026ac0f61ae6c799707e6b0e93ed7663c456eb755cb64750f9e2fed8",
+    "container_removed": true,
+    "empty_identity_queries": 3,
+    "qemu_reaped": true,
+    "absence_verified": true,
+    "lease_retained": false,
+    "root_lock_free": [
+      27,
+      4
+    ]
+  },
+  "evidence": {
+    "release": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-resource-reboot-cycle-execution-release-20261017-2.json",
+      "sha256": "54c4dfccc049770fcddf632dd96cdbf0b80b761f1634189c89d666ca855e88c4",
+      "size": 29343
+    },
+    "build": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-cpu-reacquire-external-modules-result-review-20261017-1.json",
+      "sha256": "0cc6f31e9c8f92696abcd9390c937c6414f0917fc065061bef24c28034bf0ec5",
+      "size": 11103
+    },
+    "original_consumer_failure_and_retirement": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-resource-reboot-cycle-consumer-failure-review-20261017-2.json",
+      "sha256": "00e5322262b6477ec1afadbbf0dc58187f9b7b13f09c28af1acb7a14e0040af3",
+      "size": 2909
+    },
+    "source_and_actual_correction": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-resource-reboot-consumer-correction-20261017-1.json",
+      "sha256": "80a4e2e58018ce49b1b652e8c596b3771311841df5eefa153f6bb490e406a2a5",
+      "size": 8183
+    },
+    "retention": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-resource-reboot-cycle-retention-20261017-2.json",
+      "sha256": "027dcced805aba771ffa93a2eb382e6367afbf428d96e1608c125ada41fa45eb",
+      "size": 10833
+    },
+    "archive": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-resource-reboot-cycle-result-review-20261017-2.tar.gz",
+      "sha256": "04ebf75d0d51c9995b13213393af9b6f4fd383b7279d335e15aa2820d7feada0",
+      "size": 313672
+    },
+    "actual_result": {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-dispatch-20261017-2/attempt-result.json",
+      "sha256": "78b90dc7d99382d1dd8b3932b2b1348d7bacd70864f9a5b41eb79f028ce7a8c1",
+      "size": 287566
+    },
+    "owner_result": {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-dispatch-20261017-2/owner-result.json",
+      "sha256": "1136d7a3bce21266c86d94fc7949f9bac6a6a88bd21688e20fe114ecda6c420a",
+      "size": 257
+    },
+    "readbacks": {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-dispatch-20261017-2/readback-result.json",
+      "sha256": "22f63f69e841019e7fa36339300cca686d68f8f361db81c82fa99a7612e51085",
+      "size": 1271
+    }
+  },
+  "limits": [
+    "Onecycleonly; secondOS/resources retained until ordinary VM shutdown; no secondnative stop",
+    "No physicalframe/generation-identity or complete mapping/callback/reference restoration proof",
+    "Ten cycles/100 launches/60minute mixed workload/finalprofile review remain open",
+    "No comprehensive formal qualification or newdistinctappcredit"
+  ],
+  "next": "Fresh separately reviewed repeat-cycle observation and final-profile work; isolated FPU thin materialization/image release and actual carrier/LINK integration continue."
+}

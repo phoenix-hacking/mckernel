@@ -1,0 +1,64 @@
+{
+  "actual_result_sha256": "027b62091292fa26a8b8dafa991034ca593fe8795e2b67851d72b71a11ee2180",
+  "application_evidence": {
+    "accepted_assertions": "Two exact-target SIGSEGV recoveries ACCERR2 then MAPERR1; adjacent full patterns/write; restored RW access; partial unmap survivor preservation/write; final munmap/logical-mask restoration",
+    "complete_EOF_without_discard_or_truncation": true,
+    "exact_stdout_bytes": 100,
+    "procfs_empty": true,
+    "raw_payload_equals_result_report": true,
+    "raw_wait_status": 0,
+    "stderr_bytes": 0,
+    "stdout_sha256": "1d767f94ac170c5cdb0d372de446e3233b510df7e58b034ac2ede77daffe79a4",
+    "unexpected_error_scan": []
+  },
+  "capture_integrity": {
+    "attempt_archive_sha256": "6325c43e9ecc6ac34a2fde8e3832c064b217370d0a1e54bc66af69f5b444b867",
+    "owner_archive_sha256": "eb1d90b2088c4af23c1c3928dea8f5b3e94f252a3bcdf8bd33d61560a7efaa12",
+    "owner_inner_attempt_and_direct_result_bytes_equal": true,
+    "owner_join_sha256": "68cdd8edb1e3d83829476b7c71ea928c888dc6a14f7622ede04a057d410a76d4",
+    "raw_serial_debugcon_and_capture_hashes_join": true,
+    "three_approved_readbacks_exit0": true
+  },
+  "decision": "PASS_ACTUAL_TWO_PAGE_MAPPING_CASE_AND_POSITIVE_PHYSICAL_RETIREMENT",
+  "distinct_behavior_increment": 1,
+  "evidence_directory": "/home/holden/mckernel-work/host-preparation/practical-mapping-isolation-app-20261018-1/native-preparation-1/final-parent-1",
+  "expected_diagnostics": [
+    "Container already stopped on kill; remove/absence passed",
+    "Tar ignored qmp.sock only",
+    "Original generic protocol flags unchanged"
+  ],
+  "findings": [],
+  "implementation_ownership": false,
+  "limitations": [
+    "Frozen app assertions enforce fault metadata; no separate fault-register dump",
+    "No cross-process/multicore/shootdown/leak/baremetal or full memory qualification",
+    "VM/container retirement is not independent host-native CPU/memory restoration",
+    "No kernel or Rust-retirement credit; full read-only independent decision retained in campaign conversation"
+  ],
+  "manifest_sha256": "37ed10dfbfe05200eb15d2895dc0f349c18be836614e092d60f3d860d6566002",
+  "native_application_acceptance": true,
+  "physical_retirement": {
+    "QEMU_reaped": true,
+    "QEMU_returncode": -9,
+    "QMP_errors": [],
+    "QMP_guest_shutdown_and_quit_acknowledged": true,
+    "absence_verified": true,
+    "all_recorded_host_client_and_owner_PIDs_currently_absent": true,
+    "cleanup_errors": [],
+    "container_id": "10aa74ee2380a63021fd0221da99f6e3c8fd547784f54e373167906849566740",
+    "docker_clients_reaped": 30,
+    "exact_container_removed": true,
+    "lease_retained": false,
+    "owner_direct_joined": true,
+    "owner_exit": 0,
+    "owner_seconds": 34.211104426009115,
+    "owner_stderr_bytes": 0,
+    "positive": true,
+    "shared_heavy_record_currently_absent": true,
+    "three_final_name_label_ID_queries_empty": true
+  },
+  "reviewed_machine_sha256": "ad360cf9b63dd4a85ae5a2db84cc016ea8e89452e47b741c656d804c4654ea89",
+  "reviewer": "/root/mapping_isolation_source_review_1935",
+  "scope": "Exact frozen two-page userland diagnostic on accepted e85a QEMU/TCG image; functional Rust/assembly OS/apps",
+  "status": "PASS"
+}

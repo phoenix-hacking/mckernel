@@ -1,0 +1,370 @@
+{
+  "status": "PASS_FIVE_READBACKS_JOINED_FD_BOUND",
+  "decision_sha256": "41a965223704dfe34d209902ee84296f65ca3e32c2e557193b54a19d8f5fdbd3",
+  "source_stat_rows": [
+    "66306:47992410:0:0:8180:1:356810:2026-10-18 22:02:13.677121068 -0700:2026-10-18 22:02:13.677121068 -0700",
+    "66306:47992411:0:0:8180:1:0:2026-10-18 22:02:08.993097953 -0700:2026-10-18 22:02:08.993097953 -0700",
+    "66306:47992412:0:0:8180:1:5098:2026-10-18 22:02:13.741121389 -0700:2026-10-18 22:02:13.741121389 -0700"
+  ],
+  "commands": [
+    {
+      "name": "stat-before",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/stat",
+        "-c",
+        "%d:%i:%u:%g:%f:%h:%s:%y:%z",
+        "--",
+        "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation-20261019-1/actual-observation-6.stdout",
+        "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation-20261019-1/actual-observation-6.stderr",
+        "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation-20261019-1/actual-observation-6.supervisor.jsonl"
+      ],
+      "pid": 1355011,
+      "returncode": 0,
+      "direct_child_joined": true,
+      "elapsed_seconds": 0.08151850901776925,
+      "captures": {
+        "stdout": {
+          "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation-20261019-1/observation6-raw-readback-1/stat-before.stdout",
+          "before": {
+            "st_dev": 66306,
+            "st_ino": 47992421,
+            "st_uid": 1000,
+            "st_gid": 1000,
+            "st_mode": 33152,
+            "st_nlink": 1,
+            "st_size": 0,
+            "st_mtime_ns": 1792386196021509806,
+            "st_ctime_ns": 1792386196021509806
+          },
+          "after": {
+            "st_dev": 66306,
+            "st_ino": 47992421,
+            "st_uid": 1000,
+            "st_gid": 1000,
+            "st_mode": 33152,
+            "st_nlink": 1,
+            "st_size": 308,
+            "st_mtime_ns": 1792386196097510369,
+            "st_ctime_ns": 1792386196097510369
+          },
+          "bytes": 308,
+          "sha256": "48d0ae3025548c8f50467f97427719bb67a00fd6f8cc31625752991ca6b7247c"
+        },
+        "stderr": {
+          "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation-20261019-1/observation6-raw-readback-1/stat-before.stderr",
+          "before": {
+            "st_dev": 66306,
+            "st_ino": 47992422,
+            "st_uid": 1000,
+            "st_gid": 1000,
+            "st_mode": 33152,
+            "st_nlink": 1,
+            "st_size": 0,
+            "st_mtime_ns": 1792386196021509806,
+            "st_ctime_ns": 1792386196021509806
+          },
+          "after": {
+            "st_dev": 66306,
+            "st_ino": 47992422,
+            "st_uid": 1000,
+            "st_gid": 1000,
+            "st_mode": 33152,
+            "st_nlink": 1,
+            "st_size": 0,
+            "st_mtime_ns": 1792386196021509806,
+            "st_ctime_ns": 1792386196021509806
+          },
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    },
+    {
+      "name": "raw-0",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/cat",
+        "--",
+        "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation-20261019-1/actual-observation-6.stdout"
+      ],
+      "pid": 1355030,
+      "returncode": 0,
+      "direct_child_joined": true,
+      "elapsed_seconds": 0.008582541981013492,
+      "captures": {
+        "stdout": {
+          "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation-20261019-1/observation6-raw-readback-1/raw-0.stdout",
+          "before": {
+            "st_dev": 66306,
+            "st_ino": 47992424,
+            "st_uid": 1000,
+            "st_gid": 1000,
+            "st_mode": 33152,
+            "st_nlink": 1,
+            "st_size": 0,
+            "st_mtime_ns": 1792386196105510429,
+            "st_ctime_ns": 1792386196105510429
+          },
+          "after": {
+            "st_dev": 66306,
+            "st_ino": 47992424,
+            "st_uid": 1000,
+            "st_gid": 1000,
+            "st_mode": 33152,
+            "st_nlink": 1,
+            "st_size": 356810,
+            "st_mtime_ns": 1792386196109510458,
+            "st_ctime_ns": 1792386196109510458
+          },
+          "bytes": 356810,
+          "sha256": "72e157b2f9d08d3c9b0e163ba72df9b8075a020cda1039482895312307206c70"
+        },
+        "stderr": {
+          "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation-20261019-1/observation6-raw-readback-1/raw-0.stderr",
+          "before": {
+            "st_dev": 66306,
+            "st_ino": 47992425,
+            "st_uid": 1000,
+            "st_gid": 1000,
+            "st_mode": 33152,
+            "st_nlink": 1,
+            "st_size": 0,
+            "st_mtime_ns": 1792386196105510429,
+            "st_ctime_ns": 1792386196105510429
+          },
+          "after": {
+            "st_dev": 66306,
+            "st_ino": 47992425,
+            "st_uid": 1000,
+            "st_gid": 1000,
+            "st_mode": 33152,
+            "st_nlink": 1,
+            "st_size": 0,
+            "st_mtime_ns": 1792386196105510429,
+            "st_ctime_ns": 1792386196105510429
+          },
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    },
+    {
+      "name": "raw-1",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/cat",
+        "--",
+        "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation-20261019-1/actual-observation-6.stderr"
+      ],
+      "pid": 1355032,
+      "returncode": 0,
+      "direct_child_joined": true,
+      "elapsed_seconds": 0.006586353003513068,
+      "captures": {
+        "stdout": {
+          "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation-20261019-1/observation6-raw-readback-1/raw-1.stdout",
+          "before": {
+            "st_dev": 66306,
+            "st_ino": 47992427,
+            "st_uid": 1000,
+            "st_gid": 1000,
+            "st_mode": 33152,
+            "st_nlink": 1,
+            "st_size": 0,
+            "st_mtime_ns": 1792386196113510488,
+            "st_ctime_ns": 1792386196113510488
+          },
+          "after": {
+            "st_dev": 66306,
+            "st_ino": 47992427,
+            "st_uid": 1000,
+            "st_gid": 1000,
+            "st_mode": 33152,
+            "st_nlink": 1,
+            "st_size": 0,
+            "st_mtime_ns": 1792386196113510488,
+            "st_ctime_ns": 1792386196113510488
+          },
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stderr": {
+          "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation-20261019-1/observation6-raw-readback-1/raw-1.stderr",
+          "before": {
+            "st_dev": 66306,
+            "st_ino": 47992428,
+            "st_uid": 1000,
+            "st_gid": 1000,
+            "st_mode": 33152,
+            "st_nlink": 1,
+            "st_size": 0,
+            "st_mtime_ns": 1792386196113510488,
+            "st_ctime_ns": 1792386196113510488
+          },
+          "after": {
+            "st_dev": 66306,
+            "st_ino": 47992428,
+            "st_uid": 1000,
+            "st_gid": 1000,
+            "st_mode": 33152,
+            "st_nlink": 1,
+            "st_size": 0,
+            "st_mtime_ns": 1792386196113510488,
+            "st_ctime_ns": 1792386196113510488
+          },
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    },
+    {
+      "name": "raw-2",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/cat",
+        "--",
+        "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation-20261019-1/actual-observation-6.supervisor.jsonl"
+      ],
+      "pid": 1355034,
+      "returncode": 0,
+      "direct_child_joined": true,
+      "elapsed_seconds": 0.006814799999119714,
+      "captures": {
+        "stdout": {
+          "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation-20261019-1/observation6-raw-readback-1/raw-2.stdout",
+          "before": {
+            "st_dev": 66306,
+            "st_ino": 47992430,
+            "st_uid": 1000,
+            "st_gid": 1000,
+            "st_mode": 33152,
+            "st_nlink": 1,
+            "st_size": 0,
+            "st_mtime_ns": 1792386196117510517,
+            "st_ctime_ns": 1792386196117510517
+          },
+          "after": {
+            "st_dev": 66306,
+            "st_ino": 47992430,
+            "st_uid": 1000,
+            "st_gid": 1000,
+            "st_mode": 33152,
+            "st_nlink": 1,
+            "st_size": 5098,
+            "st_mtime_ns": 1792386196125510577,
+            "st_ctime_ns": 1792386196125510577
+          },
+          "bytes": 5098,
+          "sha256": "9809530809155bbce1a402bbae76975dd4b240cdbbce968b3a6c69b42ca0011a"
+        },
+        "stderr": {
+          "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation-20261019-1/observation6-raw-readback-1/raw-2.stderr",
+          "before": {
+            "st_dev": 66306,
+            "st_ino": 47992431,
+            "st_uid": 1000,
+            "st_gid": 1000,
+            "st_mode": 33152,
+            "st_nlink": 1,
+            "st_size": 0,
+            "st_mtime_ns": 1792386196117510517,
+            "st_ctime_ns": 1792386196117510517
+          },
+          "after": {
+            "st_dev": 66306,
+            "st_ino": 47992431,
+            "st_uid": 1000,
+            "st_gid": 1000,
+            "st_mode": 33152,
+            "st_nlink": 1,
+            "st_size": 0,
+            "st_mtime_ns": 1792386196117510517,
+            "st_ctime_ns": 1792386196117510517
+          },
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    },
+    {
+      "name": "stat-after",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/stat",
+        "-c",
+        "%d:%i:%u:%g:%f:%h:%s:%y:%z",
+        "--",
+        "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation-20261019-1/actual-observation-6.stdout",
+        "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation-20261019-1/actual-observation-6.stderr",
+        "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation-20261019-1/actual-observation-6.supervisor.jsonl"
+      ],
+      "pid": 1355036,
+      "returncode": 0,
+      "direct_child_joined": true,
+      "elapsed_seconds": 0.007162106980103999,
+      "captures": {
+        "stdout": {
+          "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation-20261019-1/observation6-raw-readback-1/stat-after.stdout",
+          "before": {
+            "st_dev": 66306,
+            "st_ino": 47992433,
+            "st_uid": 1000,
+            "st_gid": 1000,
+            "st_mode": 33152,
+            "st_nlink": 1,
+            "st_size": 0,
+            "st_mtime_ns": 1792386196125510577,
+            "st_ctime_ns": 1792386196125510577
+          },
+          "after": {
+            "st_dev": 66306,
+            "st_ino": 47992433,
+            "st_uid": 1000,
+            "st_gid": 1000,
+            "st_mode": 33152,
+            "st_nlink": 1,
+            "st_size": 308,
+            "st_mtime_ns": 1792386196133510636,
+            "st_ctime_ns": 1792386196133510636
+          },
+          "bytes": 308,
+          "sha256": "48d0ae3025548c8f50467f97427719bb67a00fd6f8cc31625752991ca6b7247c"
+        },
+        "stderr": {
+          "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation-20261019-1/observation6-raw-readback-1/stat-after.stderr",
+          "before": {
+            "st_dev": 66306,
+            "st_ino": 47992434,
+            "st_uid": 1000,
+            "st_gid": 1000,
+            "st_mode": 33152,
+            "st_nlink": 1,
+            "st_size": 0,
+            "st_mtime_ns": 1792386196125510577,
+            "st_ctime_ns": 1792386196125510577
+          },
+          "after": {
+            "st_dev": 66306,
+            "st_ino": 47992434,
+            "st_uid": 1000,
+            "st_gid": 1000,
+            "st_mode": 33152,
+            "st_nlink": 1,
+            "st_size": 0,
+            "st_mtime_ns": 1792386196125510577,
+            "st_ctime_ns": 1792386196125510577
+          },
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    }
+  ],
+  "actual_runtime_review": "PENDING"
+}

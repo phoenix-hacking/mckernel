@@ -1,0 +1,342 @@
+{
+  "status": "PASS_ACTUAL_FULL_STATIC_LINUX_PID1_COLLECTOR_ELF_AND_TARGET_BODY_FIXTURES",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "artifact": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-first-v3-failure-1/readiness-successor-1/bounded-correction-1/static-link-correction-1/collector.init",
+    "sha256": "3e519b822684f8cbc8613cb53554c75cd74cd35303006bac9135b7aeec5e6cc2",
+    "bytes": 1636672,
+    "mode": 33216,
+    "runtime_member_mode": "Stage owner binds existing init0755 member normalization; compile output0700 preserved."
+  },
+  "compiler": {
+    "invoked": "/usr/bin/gcc",
+    "resolved": "/usr/bin/x86_64-linux-gnu-gcc-9",
+    "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f"
+  },
+  "source": {
+    "collector": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-first-v3-failure-1/readiness-successor-1/bounded-correction-1/native-second-stop-collector.begin-ready.c",
+      "sha256": "b30d8326c5deab2ec6480c8d4d7d1acc73bbb7a38c4b4184ce9c076566d538cf"
+    },
+    "Rust_readiness": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-first-v3-failure-1/readiness-successor-1/bounded-correction-1/begin_readiness.rs",
+      "sha256": "13d066654384b585f400a35b2e9de2425f7eeeef611a5232d9f8a82fc034c4c9"
+    },
+    "Rust_archive": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-first-v3-failure-1/readiness-successor-1/bounded-correction-1/libbegin_readiness.a",
+      "sha256": "ad06507ef211dd11f23a3354b1da7acb861ebcbad5c2505275ee9ca35947858a"
+    },
+    "original_collector_preimage": "694b3eba48e01d4a88ffa87fc1b2dd641b806115f2e625a6612cb010d3738dfe",
+    "pair_headers": {
+      "pair_assignment.h": "29963c5088598368fe7565a6fba88f5712cece4105314e4d1f2205c6a936b643",
+      "pair_boot_contract.inc": "081921ed526b9cf874901554d1cc4a2bc5cb6ed1835f7f8237fb10b4cc166b2d"
+    }
+  },
+  "compile_recipe": {
+    "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+    "original_argv": [
+      "/usr/bin/gcc",
+      "-std=gnu11",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-static",
+      "-fno-pie",
+      "-no-pie",
+      "-Wl,-z,noexecstack",
+      "-MMD",
+      "-MF",
+      "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-first-v3-failure-1/readiness-successor-1/bounded-correction-1/full-static-collector-1/collector.d",
+      "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-first-v3-failure-1/readiness-successor-1/bounded-correction-1/native-second-stop-collector.begin-ready.c",
+      "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-first-v3-failure-1/readiness-successor-1/bounded-correction-1/libbegin_readiness.a",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-first-v3-failure-1/readiness-successor-1/bounded-correction-1/full-static-collector-1/collector.init"
+    ],
+    "argv": [
+      "/usr/bin/gcc",
+      "-std=gnu11",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-static",
+      "-fno-pie",
+      "-no-pie",
+      "-Wl,-z,noexecstack",
+      "-MMD",
+      "-MF",
+      "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-first-v3-failure-1/readiness-successor-1/bounded-correction-1/static-link-correction-1/collector.d",
+      "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-first-v3-failure-1/readiness-successor-1/bounded-correction-1/native-second-stop-collector.begin-ready.c",
+      "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-first-v3-failure-1/readiness-successor-1/bounded-correction-1/libbegin_readiness.a",
+      "-Wl,--gc-sections",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-first-v3-failure-1/readiness-successor-1/bounded-correction-1/static-link-correction-1/collector.init"
+    ],
+    "sole_flag_delta": "-Wl,--gc-sections",
+    "output_paths": "Fresh private output; source/archive reused byte-exact.",
+    "source": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-first-v3-failure-1/readiness-successor-1/bounded-correction-1/native-second-stop-collector.begin-ready.c",
+      "sha256": "b30d8326c5deab2ec6480c8d4d7d1acc73bbb7a38c4b4184ce9c076566d538cf"
+    },
+    "Rust_archive": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-first-v3-failure-1/readiness-successor-1/bounded-correction-1/libbegin_readiness.a",
+      "sha256": "ad06507ef211dd11f23a3354b1da7acb861ebcbad5c2505275ee9ca35947858a"
+    },
+    "compiler": {
+      "invoked": "/usr/bin/gcc",
+      "resolved": "/usr/bin/x86_64-linux-gnu-gcc-9"
+    },
+    "root_authorized": true,
+    "no_native_acceptance": true
+  },
+  "ABI": {
+    "ELF64": true,
+    "AMD64": true,
+    "EXEC": true,
+    "INTERP": false,
+    "dynamic_section": false,
+    "nm_undefined": [],
+    "rust_eh_personality_stub_added": false,
+    "unique_Rust_entry": [
+      "0000000000406a00 T m05_begin_ready"
+    ],
+    "retained_C_and_Rust_symbols": {
+      "m05_begin_ready": [
+        "0000000000406a00 T m05_begin_ready"
+      ],
+      "abort": [
+        "0000000000401394 T abort"
+      ],
+      "klogctl": [
+        "000000000045db50 T klogctl"
+      ],
+      "begin_retired_at": [
+        "0000000000405a00 t begin_retired_at.part.0"
+      ],
+      "reboot_snapshot": [
+        "00000000004043f0 t reboot_snapshot"
+      ],
+      "retired_at": [
+        "0000000000406100 t retired_at.constprop.0"
+      ],
+      "lifecycle_after_payload": [
+        "0000000000405900 t lifecycle_after_payload"
+      ],
+      "opendir": [
+        "00000000004591c0 W opendir"
+      ],
+      "readdir": [
+        "0000000000459480 W readdir"
+      ],
+      "closedir": [
+        "0000000000459450 W closedir"
+      ],
+      "main": [
+        "0000000000401910 T main"
+      ]
+    },
+    "static_glibc": true
+  },
+  "corrected_target_fixture": {
+    "receipt": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-first-v3-failure-1/readiness-successor-1/bounded-correction-1/RESULT.json",
+    "sha256": "2a7f72efe9694901179d927d8dfa2fb8e5075e73f5f869e107227361ca2c4069",
+    "passed": true,
+    "assertions": 3706,
+    "controlled_successes_only": true
+  },
+  "bounded_link_family": {
+    "first_static_failure": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-first-v3-failure-1/readiness-successor-1/bounded-correction-1/attempt-1-step-4/result.json",
+    "first_error": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-first-v3-failure-1/readiness-successor-1/bounded-correction-1/attempt-1-step-4/stderr",
+    "corrections": 1,
+    "correction": "Add only --gc-sections, preserving every original static GCC flag and reusing the same source/archive; unused personality DW.ref metadata is discarded.",
+    "actual_commands_replayed": false
+  },
+  "summary_writer_failure": {
+    "preserved_in": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-first-v3-failure-1/readiness-successor-1/bounded-correction-1/ACTUAL-BOUNDED-CORRECTION-OPERATIONS.json",
+    "cause": "O_EXCL on copied predecessor summary after original link failure; no command replay; additive actual individual-result join retained."
+  },
+  "operations": [
+    {
+      "captures": {
+        "stderr": {
+          "ctime_ns": 1792753320724971857,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48898145,
+          "mode": "0o600",
+          "mtime_ns": 1792753320724971857,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-first-v3-failure-1/readiness-successor-1/bounded-correction-1/static-link-correction-1/attempt-1-step-1/stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0,
+          "uid": 1000
+        },
+        "stdout": {
+          "ctime_ns": 1792753320724971857,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48898144,
+          "mode": "0o600",
+          "mtime_ns": 1792753320724971857,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-first-v3-failure-1/readiness-successor-1/bounded-correction-1/static-link-correction-1/attempt-1-step-1/stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0,
+          "uid": 1000
+        }
+      },
+      "closed_streams": true,
+      "direct_child_joined": true,
+      "error": null,
+      "group_absent": true,
+      "pid": 3655192,
+      "remaining_group_members": [],
+      "retirement_error": null,
+      "returncode": 0,
+      "seconds": 0.5030323690734804,
+      "start": 55076542,
+      "timed_out": false,
+      "unexpected_group_members": []
+    },
+    {
+      "captures": {
+        "stderr": {
+          "ctime_ns": 1792753321232987683,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48898155,
+          "mode": "0o600",
+          "mtime_ns": 1792753321232987683,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-first-v3-failure-1/readiness-successor-1/bounded-correction-1/static-link-correction-1/attempt-1-step-2/stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0,
+          "uid": 1000
+        },
+        "stdout": {
+          "ctime_ns": 1792753321232987683,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48898154,
+          "mode": "0o600",
+          "mtime_ns": 1792753321232987683,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-first-v3-failure-1/readiness-successor-1/bounded-correction-1/static-link-correction-1/attempt-1-step-2/stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0,
+          "uid": 1000
+        }
+      },
+      "closed_streams": true,
+      "direct_child_joined": true,
+      "error": null,
+      "group_absent": true,
+      "pid": 3655197,
+      "remaining_group_members": [],
+      "retirement_error": null,
+      "returncode": 0,
+      "seconds": 0.04118919698521495,
+      "start": 55076593,
+      "timed_out": false,
+      "unexpected_group_members": []
+    },
+    {
+      "captures": {
+        "stderr": {
+          "ctime_ns": 1792753321276989054,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48898163,
+          "mode": "0o600",
+          "mtime_ns": 1792753321276989054,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-first-v3-failure-1/readiness-successor-1/bounded-correction-1/static-link-correction-1/attempt-1-step-3/stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0,
+          "uid": 1000
+        },
+        "stdout": {
+          "ctime_ns": 1792753321288989428,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48898162,
+          "mode": "0o600",
+          "mtime_ns": 1792753321288989428,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-first-v3-failure-1/readiness-successor-1/bounded-correction-1/static-link-correction-1/attempt-1-step-3/stdout",
+          "sha256": "e3e0d6e62c75abd6402de939baa7e42e1676bad1062e781548694a470a7c1d69",
+          "size": 68586,
+          "uid": 1000
+        }
+      },
+      "closed_streams": true,
+      "direct_child_joined": true,
+      "error": null,
+      "group_absent": true,
+      "pid": 3655198,
+      "remaining_group_members": [],
+      "retirement_error": null,
+      "returncode": 0,
+      "seconds": 0.040842325892299414,
+      "start": 55076597,
+      "timed_out": false,
+      "unexpected_group_members": []
+    },
+    {
+      "captures": {
+        "stderr": {
+          "ctime_ns": 1792753321320990425,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48898171,
+          "mode": "0o600",
+          "mtime_ns": 1792753321320990425,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-first-v3-failure-1/readiness-successor-1/bounded-correction-1/static-link-correction-1/attempt-1-step-4/stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0,
+          "uid": 1000
+        },
+        "stdout": {
+          "ctime_ns": 1792753321320990425,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48898170,
+          "mode": "0o600",
+          "mtime_ns": 1792753321320990425,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-first-v3-failure-1/readiness-successor-1/bounded-correction-1/static-link-correction-1/attempt-1-step-4/stdout",
+          "sha256": "d295e565ceaee3cdd6583c4b5a3338daeebe3baf49557ed6ce2242a84c5600e7",
+          "size": 2764,
+          "uid": 1000
+        }
+      },
+      "closed_streams": true,
+      "direct_child_joined": true,
+      "error": null,
+      "group_absent": true,
+      "pid": 3655199,
+      "remaining_group_members": [],
+      "retirement_error": null,
+      "returncode": 0,
+      "seconds": 0.025099524995312095,
+      "start": 55076602,
+      "timed_out": false,
+      "unexpected_group_members": []
+    }
+  ],
+  "wall_seconds": 0.6101634169463068,
+  "all_joined_group_gone_closed": true,
+  "CPU7_released": true,
+  "independent_source_review": null,
+  "root_stage_release": null,
+  "native_acceptance": false,
+  "SDK_changed": false,
+  "canonical_sources_changed": false,
+  "remaining": [
+    "Independent source reviewer verdict for corrected readiness13d066/Cglue b30d.",
+    "Root stage new collector into coherent SDK5 overlay/manifest/runtime successor, preserving old495e/f043/8c03.",
+    "Fresh released native M05 must observe actual matching retirement0 before each unchanged one-shot shutdown and pass original resource/reboot/second-app/full-consumer oracles."
+  ]
+}

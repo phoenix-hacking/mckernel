@@ -1,0 +1,2466 @@
+#!/usr/bin/env python3
+"""Fail-closed validation for the native Rust ihk-smp lifecycle foundation."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import os
+from pathlib import Path
+import re
+import shutil
+import stat
+import subprocess
+import sys
+import tempfile
+from typing import Any
+
+if __package__:
+    from .native_rust_kconfig_policy import (
+        KconfigPolicyError,
+        validate_native_rust_kbuild,
+        validate_native_rust_kconfig,
+    )
+else:
+    from native_rust_kconfig_policy import (
+        KconfigPolicyError,
+        validate_native_rust_kbuild,
+        validate_native_rust_kconfig,
+    )
+
+
+ROOT = Path(__file__).resolve().parent.parent
+DEFAULT_CONTRACT = Path(
+    "host-kernel/native-rust/ihk-smp-lifecycle-contract-v1.json"
+)
+BOUND_MODINFO_ENVIRONMENT = {
+    "LANG": "C",
+    "LC_ALL": "C",
+    "PATH": "/usr/bin:/bin",
+    "TZ": "UTC",
+}
+EXPECTED_CRATE_MODULES = [{'destination': 'smp_resource.rs',
+  'path': 'host-kernel/native-rust/smp_resource.rs',
+  'sha256': 'd4a5794f60be7fa5e549e7c9b806e366276d87370adbc5df94e51b8d464e8dcd'},
+ {'destination': 'smp_cpu.rs',
+  'path': 'host-kernel/native-rust/smp_cpu.rs',
+  'sha256': 'ed5520878d89e9a79d7ffeb128ccbb54fbab5472b4b0f57abd00a0399fc8e9cb'},
+ {'destination': 'abi/x86_64.rs',
+  'path': 'host-kernel/native-rust/abi/x86_64.rs',
+  'sha256': '89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3'},
+ {'destination': 'smp_memory.rs',
+  'path': 'host-kernel/native-rust/smp_memory.rs',
+  'sha256': 'db0c5f94b5ea41610c501002ff359b7f23a38841715a0307e8b8f7872ac65522'},
+ {'destination': 'ihk_mapping.rs',
+  'path': 'host-kernel/native-rust/ihk_mapping.rs',
+  'sha256': '085f4f4e7935bd273d89ae4c7f7d600da557ce1da8873f57a142dc12bf9677dc'},
+ {'destination': 'smp_image.rs',
+  'path': 'host-kernel/native-rust/smp_image.rs',
+  'sha256': '4f35ec396494fa428c55298c91ffe14aa0142d0282dd37d922f94a901a692689'},
+ {'destination': 'smp_loader.rs',
+  'path': 'host-kernel/native-rust/smp_loader.rs',
+  'sha256': 'fa86ebb489454cd95c2607bba3a3d564ca36d6e65c5eea6bd6aa319bb40100e6'},
+ {'destination': 'smp_startup.rs',
+  'path': 'host-kernel/native-rust/smp_startup.rs',
+  'sha256': '12c3a816af6ff20dcf916c946b780ff988e90650300ab7c00e07a83cda1474a2'}]
+EXPECTED_RESOURCE_FOUNDATION = {'credit_eligible': False,
+ 'external_effect_failure_policy': {'cpu': 'quarantine-affected-slots-unless-compensated-rollback',
+                                    'memory': 'poison-live-map-unless-compensated-rollback'},
+ 'fixture': {'expected_fixture_tests': 14,
+             'expected_in_file_tests': 38,
+             'expected_total_tests': 52,
+             'minimum_rustc': '1.92.0',
+             'negative_path': 'scripts/tests/fixtures/ihk_smp_resource_workspace_alias_compile_fail.rs',
+             'negative_sha256': '4a3ee8971e6e34f48f4ee0a920fcdb21e713784a01838da4b05ab3bcc7276159',
+             'positive_path': 'scripts/tests/fixtures/ihk_smp_resource_compile.rs',
+             'positive_sha256': 'cd38c200b5aa8f7cfa2f42ac0f9b47676958df53a0fdf19aeb2354294f6188f1'},
+ 'integration_blockers': ['OS resource assignment and image loading require declared-stage '
+                          'integration and production acceptance',
+                          'CPU physical eject, suspend, topology replacement and uncertain-state '
+                          'reconciliation need production acceptance',
+                          'IKC optional-versus-complete mapping compatibility is not selected at '
+                          'the ABI boundary',
+                          'APIC reset, IRQ, IKC and native McKernel boot remain unreachable'],
+ 'linux_reachable': True,
+ 'os_token_minting': 'explicit-unsafe-contract-requires-exact-ihk-v2-os-lease-or-destroy-guard-and-smp-module-owner',
+ 'status': 'native-cpu-memory-and-os-resource-adapters-with-bounded-image-loading'}
+EXPECTED_PROVIDER_LEASE = {
+    "attach_symbol": "ihk_smp_provider_attach_v2",
+    "callback_abi": 1,
+    "callback_payload_reachable": False,
+    "compatibility_exports": [
+        "ihk_smp_provider_attach_v1",
+        "ihk_smp_provider_detach_v1",
+    ],
+    "credit_eligible": False,
+    "detach_symbol": "ihk_smp_provider_detach_v2",
+    "device_node_reachable": False,
+    "errno_statuses": [-2, -12, -16, -22, -75, -116, -117],
+    "gate_status": "TODO",
+    "minor": 0,
+    "namespace": "MCKERNEL_IHK_V1",
+    "lifecycle_callbacks": {
+        "arguments": "none",
+        "exit_before_vacate": True,
+        "exit_identity_retained": True,
+        "exit_symbol": "ihk_smp_provider_exit_v2",
+        "init_before_publish": True,
+        "init_symbol": "ihk_smp_provider_init_v2",
+        "operation_callbacks_reachable": False,
+        "raw_data_pointer": False,
+        "unpublishing_guard_across_exit": True,
+    },
+    "raw_token_logged": False,
+    "rocky_runtime_validated": False,
+    "runtime_behavior_proven": False,
+    "scope": "scalar minor-zero module-lifetime provider lease plus scalar-only init/exit callbacks; no provider operation payload",
+    "token_version": 1,
+    "tracker_credit": False,
+    "unknown_status_errno": -117,
+}
+EXPECTED_CONTROL_DEVICE_SHELL = {'close_symbol': 'ihk_smp_provider_close_v1',
+ 'compat_ioctl': {'explicit_when_config_compat': True,
+                  'implicit_pointer_conversion_fallback': False,
+                  'pointer_conversion': 'arg as u32 as usize',
+                  'unsupported_commands_errno': -22},
+ 'credit_eligible': False,
+ 'default_release_drops_receipt': True,
+ 'device_name': 'mcd0',
+ 'device_node_source_reachable': True,
+ 'file_operations_owner': 'THIS_MODULE',
+ 'gate_claims': {'IHK-003': False, 'IHK-004': False, 'RS-006': False},
+ 'gate_status': 'TODO',
+ 'get_buildid': {'build_identity_semantics': 'unchanged IHK consumer compatibility identity; '
+                                             'native source candidate provenance is separate',
+                 'command': '0x0011290b',
+                 'copies_nul_terminator': True,
+                 'copy_failure_errno': -14,
+                 'generated_metadata_file': 'ihk-compat-build-id.bin',
+                 'safe_usercopy': 'kernel::uaccess::UserSlice::writer::write_slice',
+                 'source_fixture': {'expected_tests': 8,
+                                    'path': 'scripts/tests/fixtures/ihk_smp_buildid_compile.rs',
+                                    'sha256': '2998807ec73766c2a50dfae7ba6a6c89cabfef208a7acddef7ac8b16ffa1a83e',
+                                    'size': 11833},
+                 'source_fixture_scope': 'extracted production dispatch with mock UserSlice; no '
+                                         'kernel usercopy or runtime proof',
+                 'success_result': 0},
+ 'minor': 0,
+ 'native_ioctl': {'explicit': True, 'unsupported_commands_errno': -22},
+ 'noncopy_fixture': {'claim_scope': 'Rust language compile-fail shape only; not a kernel build or '
+                                    'runtime result',
+                     'minimum_rustc': '1.92.0',
+                     'path': 'scripts/tests/fixtures/ihk_smp_provider_open_lease_compile_fail.rs',
+                     'sha256': 'eefe2b68114c227c8591677a935818eacd6e3e135816466a2b8f1c63b1f9be2a',
+                     'size': 541},
+ 'open_allocation_failure_releases_receipt': True,
+ 'open_close_abi': 'scalar-only',
+ 'open_receipt': {'close_exactly_once': True,
+                  'concurrent_shared_opens': True,
+                  'duplicate_close_detectable_while_other_references_exist': False,
+                  'non_clone': True,
+                  'non_copy': True,
+                  'positive': True,
+                  'provider_policy': 'shared-reference-counted-generation-receipts',
+                  'raw_value_logged': False,
+                  'same_generation_token_may_repeat': True,
+                  'trusted_noncopy_owner_balance_required': True},
+ 'open_symbol': 'ihk_smp_provider_open_v1',
+ 'pinned_registration': True,
+ 'provider_attach_before_registration': True,
+ 'provider_operation_callbacks_reachable': False,
+ 'raw_data_pointer': False,
+ 'registration_failure_releases_provider_lease': True,
+ 'rocky_runtime_validated': False,
+ 'runtime_behavior_proven': False,
+ 'scope': 'SMP-owned mcd0 with native/compat BUILDID, unbooted OS create/destroy with a versioned '
+          'resource callback pair, CPU reserve/release/count/query and memory '
+          'reserve/query/full/partial release; OS resource commands use mcosN; boot remains '
+          'pending',
+ 'teardown_order': ['deregister-control-device',
+                    'retire-memory-controller-and-owned-pages',
+                    'retire-cpu-controller-and-hotplug-callback',
+                    'detach-provider-lease',
+                    'emit-unload-diagnostic'],
+ 'tracker_credit': False,
+ 'unsupported_file_operations': ['read', 'read_iter', 'write', 'write_iter', 'mmap', 'poll'],
+ 'usercopy_reachable': True,
+ 'valid_ioctl_commands': ['IHK_DEVICE_GET_BUILDID',
+                          'IHK_DEVICE_CREATE_OS',
+                          'IHK_DEVICE_DESTROY_OS',
+                          'IHK_DEVICE_RESERVE_CPU',
+                          'IHK_DEVICE_RELEASE_CPU',
+                          'IHK_DEVICE_GET_NUM_CPUS',
+                          'IHK_DEVICE_QUERY_CPU',
+                          'IHK_DEVICE_RESERVE_MEM',
+                          'IHK_DEVICE_RELEASE_MEM',
+                          'IHK_DEVICE_QUERY_MEM',
+                          'IHK_DEVICE_RELEASE_MEM_PARTIALLY']}
+
+EXPECTED_BUILDID_INCLUDE = (
+    'const IHK_COMPAT_BUILD_ID: &[u8] = include_bytes!("ihk-compat-build-id.bin");'
+)
+EXPECTED_BUILDID_DISPATCH = '''fn control_device_ioctl(cmd: u32, arg: usize) -> Result<isize> {
+    match cmd {
+        IHK_DEVICE_GET_BUILDID => {
+            kernel::uaccess::UserSlice::new(arg, IHK_COMPAT_BUILD_ID.len())
+                .writer()
+                .write_slice(IHK_COMPAT_BUILD_ID)?;
+            Ok(0)
+        }
+        _ => Err(EINVAL),
+    }
+}'''
+
+# The native boot-preparation hold is an explicitly reviewed additive
+# diagnostic.  It does not alter the frozen six legacy IHK parameters or their
+# inventory oracle, but it is part of the current native module ABI and must
+# therefore be present exactly (and be included in generated module metadata).
+EXPECTED_ADDITIVE_DIAGNOSTIC_PARAMETER = {
+    "default": 0,
+    "description": "Hold owned boot preparation without starting CPUs (0 or 1)",
+    "name": "native_boot_prepare_only",
+    "ops": "param_ops_uint",
+    "permission": "0400",
+    "rust_type": "core::ffi::c_uint",
+    "type": "uint",
+}
+
+
+EXPECTED_OS_REQUEST = ('fn control_device_request(cmd: u32, arg: usize) -> Result<isize> {\n'
+ '    match cmd {\n'
+ '        IHK_DEVICE_CREATE_OS => {\n'
+ '            // SAFETY: This callback runs with the SMP control file pinning\n'
+ '            // THIS_MODULE. IHK acquires its own module reference before the\n'
+ '            // instance becomes live; the raw scalar argument is never a pointer.\n'
+ '            let result = unsafe {\n'
+ '                ihk_os_create_unbooted_v2(\n'
+ '                    IHK_SMP_CONTROL_DEVICE_MINOR,\n'
+ '                    THIS_MODULE.as_ptr().cast(),\n'
+ '                    arg as u64,\n'
+ '                    1,\n'
+ '                    Some(ihk_smp_os_ioctl_v2),\n'
+ '                    Some(ihk_smp_os_release_v2),\n'
+ '                )\n'
+ '            };\n'
+ '            if result < 0 {\n'
+ '                Err(provider_status_error(result))\n'
+ '            } else {\n'
+ '                Ok(result as isize)\n'
+ '            }\n'
+ '        }\n'
+ '        IHK_DEVICE_DESTROY_OS => {\n'
+ '            // SAFETY: IHK owns this scalar ABI for the dependency lifetime.\n'
+ '            // It validates the provider and minor and refuses open instances.\n'
+ '            let result =\n'
+ '                unsafe { ihk_os_destroy_unbooted_v1(IHK_SMP_CONTROL_DEVICE_MINOR, arg as u64) '
+ '};\n'
+ '            if result < 0 {\n'
+ '                Err(provider_status_error(result))\n'
+ '            } else {\n'
+ '                Ok(result as isize)\n'
+ '            }\n'
+ '        }\n'
+ '        _ => control_device_ioctl(cmd, arg),\n'
+ '    }\n'
+ '}')
+
+EXPECTED_OS_RESOURCE_BRIDGE = {'allowed_status': 'NotBooted',
+ 'authority': 'exact live IHK OsLease or exclusive DestroyGuard, never userspace identities',
+ 'callback_abi': 1,
+ 'callback_lifetime': 'OS-owned Linux SMP module reference',
+ 'commands': ['IHK_OS_ASSIGN_CPU',
+              'IHK_OS_RELEASE_CPU',
+              'IHK_OS_QUERY_CPU',
+              'IHK_OS_GET_NUM_CPUS',
+              'IHK_OS_ASSIGN_MEM',
+              'IHK_OS_RELEASE_MEM',
+              'IHK_OS_QUERY_MEM',
+              'IHK_OS_LOAD'],
+ 'compat_address': 'zero-extended once in IHK; reject out-of-range address or compat flag in SMP',
+ 'compatibility_create_export': 'ihk_os_create_unbooted_v1',
+ 'cpu_assignment': 'preserve requested logical rank; whole-batch ownership validation',
+ 'create_symbol': 'ihk_os_create_unbooted_v2',
+ 'credit_eligible': False,
+ 'destroy': 'preflight CPU and memory before either commit; return to reserved pool before minor '
+            'reuse',
+ 'image_loading': {'command': '0x00112a00',
+                   'file_limit_bytes': 67108864,
+                   'file_owner': 'Linux kernel_read_file_from_path vmalloc buffer released exactly '
+                                 'once with kvfree',
+                   'filename_limit_bytes': 256,
+                   'geometry': 'reuse ihk_mapping checked physical ranges and page alignment',
+                   'image_window_bytes': 8388608,
+                   'invalidates_prior_image': 'before replacement file read and memory resource '
+                                              'changes',
+                   'linux_read_purpose': 'READING_KEXEC_IMAGE',
+                   'loading_state': 'IHK publishes Loading while holding the OS operation mutex; '
+                                    'restores NotBooted after every result',
+                   'preflight': 'all ELF segments, executable file-backed entry and reserved '
+                                'startup space checked before writes',
+                   'prerequisites': 'assigned CPU and exact-generation owned bootstrap extent',
+                   'program_header_limit': 64,
+                   'starts_cpus': False,
+                   'tracker_credit': False,
+                   'writes': 'zero bounded window and copy segments without spanning original '
+                             'PageOwner allocations',
+                   'startup_tables': {'root_limit_exclusive': 4294967296,
+                                      'useful_pages': 260,
+                                      'original_compound_order': 9,
+                                      'allocation': 'GFP_KERNEL, ZERO, COMP, NORETRY, NOWARN and '
+                                                    'DMA32; Linux alloc_pages_noprof resolves node '
+                                                    'selection',
+                                      'mapping': '256 GiB identity and straight-map windows share '
+                                                 'a subtree; checked 8 MiB kernel window',
+                                      'ownership': 'noncopy Linux allocation owner retained inside '
+                                                   'exact-generation LoadedImage',
+                                      'cleanup': 'failed/replaced load, memory resource changes '
+                                                 'and unbooted destruction release the original '
+                                                 'compound allocation',
+                                      'preflight': 'allocate and fill tables before first image '
+                                                   'write; no capability or CPU starts',
+                                      'readback': 'volatile physical table bytes checked by an '
+                                                  'independent x86 guest capture model',
+                                      'native_boot_proven': False,
+                                      'tracker_credit': False}},
+ 'ioctl_callback': 'ihk_smp_os_ioctl_v2',
+ 'memory_assignment': 'reuse canonical MemoryMap and retained Linux allocation owners',
+ 'native_boot_proven': False,
+ 'node_family': '/dev/mcosN',
+ 'release_callback': 'ihk_smp_os_release_v2',
+ 'serialization': 'per-OS sleepable mutex before CPU then memory controller locks',
+ 'source_reachable': True,
+ 'tracker_credit': False}
+EXPECTED_OS_CALLBACK_TYPES = ('type IhkSmpOsIoctlV2 = unsafe extern "C" fn(u32, u64, u32, u64, u32) -> i64;', 'type IhkSmpOsReleaseV2 = unsafe extern "C" fn(u32, u64) -> i32;')
+EXPECTED_OS_CALLBACK_HEADERS = ('unsafe extern "C" fn ihk_smp_os_ioctl_v2(\n    slot: u32,\n    generation: u64,\n    command: u32,\n    argument: u64,\n    compat: u32,\n) -> i64 {', 'unsafe extern "C" fn ihk_smp_os_release_v2(slot: u32, generation: u64) -> i32 {')
+EXPECTED_OS_CALLBACK_BODIES = ('unsafe extern "C" fn ihk_smp_os_ioctl_v2(\n'
+ '    slot: u32,\n'
+ '    generation: u64,\n'
+ '    command: u32,\n'
+ '    argument: u64,\n'
+ '    compat: u32,\n'
+ ') -> i64 {\n'
+ '    if compat > 1 || (compat == 1 && argument > u32::MAX as u64) {\n'
+ '        return EINVAL.to_errno() as i64;\n'
+ '    }\n'
+ '    // SAFETY: IHK supplies the live lease proof described by this callback ABI;\n'
+ "    // these identifiers are not derived from the user's ioctl arguments.\n"
+ '    let owner = match unsafe { smp_resource::OsToken::from_ihk_lease_v2(slot, generation) } {\n'
+ '        Ok(owner) => owner,\n'
+ '        Err(_) => return EINVAL.to_errno() as i64,\n'
+ '    };\n'
+ '    let result = if command == 0x0011_2a00 {\n'
+ '        smp_loader::load(owner, argument as usize)\n'
+ '    } else if smp_cpu::handles_os(command) {\n'
+ '        smp_cpu::os_ioctl(owner, command, argument as usize, compat == 1)\n'
+ '    } else if smp_memory::handles_os(command) {\n'
+ '        smp_memory::os_ioctl(owner, command, argument as usize, compat == 1)\n'
+ '    } else {\n'
+ '        Err(EINVAL)\n'
+ '    };\n'
+ '    match result {\n'
+ '        Ok(value) => value as i64,\n'
+ '        Err(error) => error.to_errno() as i64,\n'
+ '    }\n'
+ '}',
+ 'unsafe extern "C" fn ihk_smp_os_release_v2(slot: u32, generation: u64) -> i32 {\n'
+ '    // SAFETY: The versioned IHK exclusive destruction callback proves the\n'
+ '    // exact generation remains owned until both resource maps are cleaned up.\n'
+ '    let owner = match unsafe { smp_resource::OsToken::from_ihk_lease_v2(slot, generation) } {\n'
+ '        Ok(owner) => owner,\n'
+ '        Err(_) => return EINVAL.to_errno(),\n'
+ '    };\n'
+ '    match smp_cpu::release_os_resources(owner) {\n'
+ '        Ok(()) => 0,\n'
+ '        Err(error) => error.to_errno(),\n'
+ '    }\n'
+ '}')
+EXPECTED_OS_LEASE_CONSTRUCTOR = '    pub(crate) unsafe fn from_ihk_lease_v2(\n        slot: u32,\n        generation: u64,\n    ) -> Result<Self, ResourceError> {\n        let token = Self { slot, generation };\n        token.validate()?;\n        Ok(token)\n    }'
+
+class ValidationError(Exception):
+    """Raised when the SMP lifecycle contract is incomplete or inconsistent."""
+
+
+_RUST_FORBIDDEN_CAPABILITIES = frozenset(
+    ("include", "include_bytes", "include_str", "asm", "global_asm")
+)
+
+
+def _blank_rust_span(masked, text, start, end, preserved=()):
+    """Blank a lexical non-code span while retaining offsets and newlines."""
+
+    preserved = set(preserved)
+    for offset in range(start, end):
+        if offset not in preserved and text[offset] not in "\r\n":
+            masked[offset] = " "
+
+
+def _rust_char_literal_end(text, start):
+    """Return the end of a Rust character literal, or None for a lifetime."""
+
+    cursor = start + 1
+    if cursor >= len(text) or text[cursor] in "\r\n'":
+        return None
+    if text[cursor] == "\\":
+        cursor += 1
+        if cursor >= len(text) or text[cursor] in "\r\n":
+            return None
+        if text[cursor] == "u" and cursor + 1 < len(text) and text[cursor + 1] == "{":
+            closing = text.find("}", cursor + 2)
+            if closing < 0:
+                return None
+            cursor = closing + 1
+        elif text[cursor] == "x":
+            cursor += 3
+        else:
+            cursor += 1
+    else:
+        cursor += 1
+    if cursor < len(text) and text[cursor] == "'":
+        return cursor + 1
+    return None
+
+
+def _mask_rust_comments_and_literals(text):
+    """Return Rust code with comments and literal contents lexically masked."""
+
+    masked = list(text)
+    cursor = 0
+    length = len(text)
+    while cursor < length:
+        if text.startswith("//", cursor):
+            end = text.find("\n", cursor + 2)
+            if end < 0:
+                end = length
+            _blank_rust_span(masked, text, cursor, end)
+            cursor = end
+            continue
+        if text.startswith("/*", cursor):
+            depth = 1
+            end = cursor + 2
+            while end < length and depth:
+                if text.startswith("/*", end):
+                    depth += 1
+                    end += 2
+                elif text.startswith("*/", end):
+                    depth -= 1
+                    end += 2
+                else:
+                    end += 1
+            if depth:
+                raise ValidationError("unterminated Rust block comment")
+            _blank_rust_span(masked, text, cursor, end)
+            cursor = end
+            continue
+
+        raw_prefix_length = None
+        if cursor == 0 or not (text[cursor - 1].isalnum() or text[cursor - 1] == "_"):
+            for prefix in ("br", "cr", "r"):
+                if text.startswith(prefix, cursor):
+                    probe = cursor + len(prefix)
+                    while probe < length and text[probe] == "#":
+                        probe += 1
+                    if probe < length and text[probe] == '"':
+                        raw_prefix_length = len(prefix)
+                        break
+        if raw_prefix_length is not None:
+            quote = cursor + raw_prefix_length
+            while quote < length and text[quote] == "#":
+                quote += 1
+            hashes = text[cursor + raw_prefix_length : quote]
+            closing = text.find('"' + hashes, quote + 1)
+            if closing < 0:
+                raise ValidationError("unterminated Rust raw string literal")
+            end = closing + 1 + len(hashes)
+            _blank_rust_span(masked, text, quote + 1, closing)
+            cursor = end
+            continue
+
+        if text[cursor] == '"':
+            end = cursor + 1
+            closed = False
+            while end < length:
+                if text[end] == "\\":
+                    end += 2
+                elif text[end] == '"':
+                    end += 1
+                    closed = True
+                    break
+                else:
+                    end += 1
+            if not closed:
+                raise ValidationError("unterminated Rust string literal")
+            _blank_rust_span(masked, text, cursor, end, (cursor, end - 1))
+            cursor = end
+            continue
+
+        char_start = cursor
+        if (
+            text[cursor] == "b"
+            and cursor + 1 < length
+            and text[cursor + 1] == "'"
+            and (cursor == 0 or not (text[cursor - 1].isalnum() or text[cursor - 1] == "_"))
+        ):
+            char_start = cursor + 1
+        if text[char_start] == "'":
+            end = _rust_char_literal_end(text, char_start)
+            if end is not None:
+                _blank_rust_span(masked, text, char_start, end)
+                cursor = end
+                continue
+        cursor += 1
+    return "".join(masked)
+
+
+def _active_fragment_positions(text, code, fragment):
+    """Return exact fragment occurrences whose syntax remains active Rust."""
+
+    fragment_code = _mask_rust_comments_and_literals(fragment)
+    positions = []
+    search_from = 0
+    while True:
+        position = text.find(fragment, search_from)
+        if position < 0:
+            return positions
+        if code[position : position + len(fragment)] == fragment_code:
+            positions.append(position)
+        search_from = position + 1
+
+
+def _require_active_count(text, code, fragment, expected, label):
+    actual = len(_active_fragment_positions(text, code, fragment))
+    if actual != expected:
+        raise ValidationError(
+            "{0} active occurrence count differs for {1}: expected {2}, got {3}".format(
+                label, fragment, expected, actual
+            )
+        )
+
+
+def _rust_identifier_start(character):
+    return character == "_" or character.isidentifier()
+
+
+def _rust_identifier_continue(character):
+    return character == "_" or ("a" + character).isidentifier()
+
+
+def _rust_identifiers(text):
+    """Yield Rust-like Unicode identifiers without Python ``\b`` ambiguity."""
+
+    cursor = 0
+    length = len(text)
+    while cursor < length:
+        raw = False
+        name_start = cursor
+        if (
+            text.startswith("r#", cursor)
+            and cursor + 2 < length
+            and _rust_identifier_start(text[cursor + 2])
+        ):
+            raw = True
+            name_start = cursor + 2
+        elif not _rust_identifier_start(text[cursor]):
+            cursor += 1
+            continue
+        end = name_start + 1
+        while end < length and _rust_identifier_continue(text[end]):
+            end += 1
+        yield text[name_start:end], cursor, end, raw
+        cursor = end
+
+
+def _validate_bare_audited_extern(masked, start, label):
+    line_start = masked.rfind("\n", 0, start) + 1
+    if masked[line_start:start].strip():
+        raise ValidationError(
+            "{0} exact audited extern boundary has an unreviewed modifier".format(label)
+        )
+    prefix = masked[:start].rstrip()
+    if prefix and prefix[-1] not in ";}":
+        raise ValidationError(
+            "{0} exact audited extern boundary has an unreviewed outer attribute".format(
+                label
+            )
+        )
+
+
+def _validate_rust_escape_hatches(
+    text, label, allowed_extern_blocks=(), allow_buildid_include=False
+):
+    """Reject unreviewed Rust source inclusion, assembly, and extern edges."""
+
+    masked = _mask_rust_comments_and_literals(text)
+    identifiers = list(_rust_identifiers(masked))
+    allowed_include_start = None
+    if allow_buildid_include:
+        _require_active_count(
+            text, masked, EXPECTED_BUILDID_INCLUDE, 1,
+            "Rust exact generated GET_BUILDID metadata include",
+        )
+        include_start = _active_fragment_positions(
+            text, masked, EXPECTED_BUILDID_INCLUDE
+        )[0]
+        _validate_top_level_item(masked, include_start, "GET_BUILDID metadata include")
+        allowed_include_start = include_start + EXPECTED_BUILDID_INCLUDE.index("include_bytes")
+    forbidden = next(
+        (name for name, start, _end, _raw in identifiers
+         if name in _RUST_FORBIDDEN_CAPABILITIES and start != allowed_include_start),
+        None,
+    )
+    if forbidden is not None:
+        raise ValidationError(
+            "{0} contains forbidden Rust macro boundary: {1}!".format(
+                label, forbidden
+            )
+        )
+
+    extern_starts = [
+        start for name, start, _end, raw in identifiers
+        if name == "extern" and not raw
+    ]
+    allowed_starts = set()
+    for exact in allowed_extern_blocks:
+        exact_extern_offset = exact.find("extern")
+        if exact_extern_offset < 0:
+            raise ValidationError(
+                "{0} audited extern boundary description is invalid".format(label)
+            )
+        starts = []
+        search_from = 0
+        while True:
+            exact_start = text.find(exact, search_from)
+            if exact_start < 0:
+                break
+            extern_start = exact_start + exact_extern_offset
+            if extern_start in extern_starts:
+                starts.append((exact_start, extern_start))
+            search_from = exact_start + 1
+        if len(starts) != 1:
+            raise ValidationError(
+                "{0} lacks one exact audited extern boundary".format(label)
+            )
+        exact_start, extern_start = starts[0]
+        if exact_extern_offset == 0:
+            _validate_bare_audited_extern(masked, extern_start, label)
+        else:
+            line_start = masked.rfind("\n", 0, exact_start) + 1
+            if masked[line_start:exact_start].strip():
+                raise ValidationError(
+                    "{0} exact audited extern boundary has an unreviewed modifier".format(
+                        label
+                    )
+                )
+        allowed_starts.add(extern_start)
+    if any(start not in allowed_starts for start in extern_starts):
+        raise ValidationError(
+            "{0} contains an additional unreviewed extern boundary".format(label)
+        )
+    return masked
+
+
+def _validate_top_level_item(code, start, label):
+    """Keep reviewed generated data and usercopy outside cfg/macros/nested scopes."""
+
+    prefix = code[:start]
+    if prefix.count("{") != prefix.count("}"):
+        raise ValidationError("Rust {0} must be a top-level item".format(label))
+    _validate_item_prefix(code, start, label)
+
+
+def _validate_item_prefix(code, start, label):
+    """Reject attributes or modifiers outside an item's exact reviewed spelling."""
+
+    prefix = code[:start]
+    line_start = prefix.rfind("\n") + 1
+    if prefix[line_start:].strip():
+        raise ValidationError("Rust {0} has an unreviewed modifier".format(label))
+    if prefix.rstrip() and prefix.rstrip()[-1] not in ";}":
+        raise ValidationError("Rust {0} has an unreviewed outer attribute".format(label))
+
+
+def _object_without_duplicates(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+    value: dict[str, Any] = {}
+    for key, item in pairs:
+        if key in value:
+            raise ValidationError(f"duplicate JSON key: {key}")
+        value[key] = item
+    return value
+
+
+def _load_json(path: Path) -> dict[str, Any]:
+    try:
+        with path.open("r", encoding="utf-8") as stream:
+            value = json.load(stream, object_pairs_hook=_object_without_duplicates)
+    except (OSError, UnicodeError, ValueError) as error:
+        raise ValidationError(f"cannot load {path}: {error}") from error
+    if not isinstance(value, dict):
+        raise ValidationError(f"{path} must contain a JSON object")
+    return value
+
+
+def _require_keys(value: dict[str, Any], expected: set[str], label: str) -> None:
+    actual = set(value)
+    if actual != expected:
+        raise ValidationError(
+            f"{label} keys differ: missing={sorted(expected - actual)}, "
+            f"extra={sorted(actual - expected)}"
+        )
+
+
+def _repo_file(repo: Path, relative: str, label: str) -> Path:
+    if not isinstance(relative, str) or not relative or "\\" in relative:
+        raise ValidationError(f"{label} must be a non-empty POSIX path")
+    relative_path = Path(relative)
+    if relative_path.is_absolute() or ".." in relative_path.parts:
+        raise ValidationError(f"{label} escapes the repository: {relative}")
+    candidate = repo / relative_path
+    try:
+        candidate.lstat()
+    except OSError as error:
+        raise ValidationError(f"{label} is unavailable: {error}") from error
+    if candidate.is_symlink() or not candidate.is_file():
+        raise ValidationError(f"{label} must be a regular, non-symlink file")
+    try:
+        candidate.resolve().relative_to(repo.resolve())
+    except ValueError as error:
+        raise ValidationError(f"{label} resolves outside the repository") from error
+    return candidate
+
+
+def _read_text(path: Path, label: str) -> str:
+    try:
+        return path.read_text(encoding="utf-8")
+    except (OSError, UnicodeError) as error:
+        raise ValidationError(f"cannot read {label}: {error}") from error
+
+
+def _sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def _module_block(text: str) -> dict[str, str]:
+    code = _mask_rust_comments_and_literals(text)
+    starts = list(re.finditer(r"\bmodule!\s*\{", code))
+    if len(starts) != 1:
+        raise ValidationError("Rust source lacks a module! entry point")
+    opening = code.find("{", starts[0].start())
+    depth = 0
+    closing = None
+    for position in range(opening, len(code)):
+        if code[position] == "{":
+            depth += 1
+        elif code[position] == "}":
+            depth -= 1
+            if depth == 0:
+                closing = position
+                break
+    if closing is None:
+        raise ValidationError("Rust module! entry point lacks a closing brace")
+    body = text[opening + 1 : closing]
+    body_code = code[opening + 1 : closing]
+    fields = list(re.finditer(
+        r'^\s*([a-z_]+):\s*(?:"([^"\\]*)"|([A-Za-z_][A-Za-z0-9_]*)),$',
+        body,
+        re.MULTILINE,
+    ))
+    fields = [
+        match for match in fields
+        if body_code[match.start() : match.end()]
+        == _mask_rust_comments_and_literals(match.group(0))
+    ]
+    result = {
+        match.group(1): match.group(2) or match.group(3) for match in fields
+    }
+    if len(result) != len(fields):
+        raise ValidationError("module! metadata has duplicate or unparsable fields")
+    return result
+
+
+def _literal_string_constant(text: str, name: str) -> str:
+    code = _mask_rust_comments_and_literals(text)
+    matches = list(re.finditer(
+        rf'^const {re.escape(name)}:\s*&str\s*=\s*"([^"\\]*)";$',
+        text,
+        re.MULTILINE,
+    ))
+    matches = [
+        match for match in matches
+        if code[match.start() : match.end()]
+        == _mask_rust_comments_and_literals(match.group(0))
+    ]
+    if len(matches) != 1:
+        raise ValidationError(f"Rust source must define literal {name}: &str")
+    return matches[0].group(1)
+
+
+def _literal_usize_constant(text: str, name: str) -> int:
+    code = _mask_rust_comments_and_literals(text)
+    matches = list(re.finditer(
+        rf"^const {re.escape(name)}:\s*usize\s*=\s*([0-9]+);$",
+        text,
+        re.MULTILINE,
+    ))
+    matches = [
+        match for match in matches
+        if code[match.start() : match.end()] == match.group(0)
+    ]
+    if len(matches) != 1:
+        raise ValidationError(f"Rust source must define literal {name}: usize")
+    return int(matches[0].group(1))
+
+
+PARAMETER_PATTERN = re.compile(
+    r"""
+    ^numeric_parameter!\(\s*
+    name:\s*(?P<name>[a-z][a-z0-9_]*),\s*
+    storage:\s*(?P<storage>[A-Z][A-Z0-9_]*),\s*
+    descriptor:\s*(?P<descriptor>[A-Z][A-Z0-9_]*),\s*
+    rust_type:\s*(?P<rust_type>core::ffi::c_(?:uint|ulong)),\s*
+    ops:\s*(?P<ops>param_ops_(?:uint|ulong)),\s*
+    default:\s*(?P<default>[0-9]+),\s*
+    permission:\s*(?P<permission>0o[0-7]+),\s*
+    loadable_name_bytes:\s*b"(?P<loadable_name_bytes>[a-z][a-z0-9_]*\\0)",\s*
+    builtin_name_bytes:\s*b"(?P<builtin_name_bytes>[a-z][a-z0-9_.]*\\0)",\s*
+    \);$
+    """,
+    re.MULTILINE | re.VERBOSE,
+)
+
+
+MODINFO_PATTERN = re.compile(
+    r"""
+    ^modinfo_pair!\(\s*
+    (?P<loadable_name>[A-Z][A-Z0-9_]*),\s*
+    (?P<builtin_name>[A-Z][A-Z0-9_]*),\s*
+    b"(?P<loadable>[^"\\]*(?:\\.[^"\\]*)*)",\s*
+    b"(?P<builtin>[^"\\]*(?:\\.[^"\\]*)*)"\s*
+    \);$
+    """,
+    re.MULTILINE | re.VERBOSE,
+)
+
+
+def _validate_contract(contract: dict[str, Any]) -> None:
+    _require_keys(
+        contract,
+        {
+            "artifact_policy",
+            "control_device_shell",
+            "crate_modules",
+            "dependency_contract",
+            "gate_id",
+            "kbuild",
+            "kconfig",
+            "legacy_source_commit",
+            "lifecycle_logs",
+            "module",
+            "parameters",
+            "production_source",
+            "provider_lease",
+            "provider_source",
+            "reference_inventory",
+            "resource_foundation",
+            "os_resource_bridge",
+            "schema_version",
+            "stage_manifest",
+        },
+        "contract",
+    )
+    if contract["schema_version"] != 1 or contract["gate_id"] != "SMP-001":
+        raise ValidationError("unsupported SMP lifecycle contract identity")
+    if contract["legacy_source_commit"] != "3114d9e7101ad52030eb3effa849a5c108972a1f":
+        raise ValidationError("legacy source commit differs from the frozen oracle")
+    if contract["production_source"] != "host-kernel/native-rust/ihk_smp_x86_64.rs":
+        raise ValidationError("contract points at a different production crate")
+    if contract["provider_source"] != "host-kernel/native-rust/ihk.rs":
+        raise ValidationError("contract points at a different native IHK provider")
+    if contract["crate_modules"] != EXPECTED_CRATE_MODULES:
+        raise ValidationError("SMP lifecycle transitive Rust module graph differs")
+    if contract["resource_foundation"] != EXPECTED_RESOURCE_FOUNDATION:
+        raise ValidationError("SMP resource foundation differs or overclaims readiness")
+    if contract["os_resource_bridge"] != EXPECTED_OS_RESOURCE_BRIDGE:
+        raise ValidationError("SMP OS resource bridge differs or overclaims readiness")
+    if contract["provider_lease"] != EXPECTED_PROVIDER_LEASE:
+        raise ValidationError("SMP provider lease differs or overclaims readiness")
+    if contract["control_device_shell"] != EXPECTED_CONTROL_DEVICE_SHELL:
+        raise ValidationError("SMP mcd0 control-device shell differs or overclaims readiness")
+
+    _require_keys(
+        contract["artifact_policy"],
+        {"environment_generated_metadata", "rocky_10_2_build_and_load_required_for_gate"},
+        "contract.artifact_policy",
+    )
+    if contract["artifact_policy"] != {
+        "environment_generated_metadata": ["rhelversion", "srcversion", "vermagic"],
+        "rocky_10_2_build_and_load_required_for_gate": True,
+    }:
+        raise ValidationError("artifact policy weakens the Rocky 10.2 gate")
+
+    _require_keys(
+        contract["dependency_contract"],
+        {
+            "built_symbol_reference_validated",
+            "dependencies",
+            "import_namespaces",
+            "provider_symbol",
+            "scope",
+            "source_symbol_reference_required",
+        },
+        "contract.dependency_contract",
+    )
+    dependency = contract["dependency_contract"]
+    if dependency != {
+        "built_symbol_reference_validated": False,
+        "dependencies": ["ihk"],
+        "import_namespaces": ["MCKERNEL_IHK_V1"],
+        "provider_symbol": "ihk_provider_lifecycle_v1",
+        "scope": "source-bound namespaced symbol dependency; built relocation and runtime ordering require Rocky evidence",
+        "source_symbol_reference_required": True,
+    }:
+        raise ValidationError("provider dependency/import contract differs or overclaims runtime proof")
+
+    _require_keys(
+        contract["module"],
+        {"forbidden_static_metadata", "license", "name", "output"},
+        "contract.module",
+    )
+    if contract["module"] != {
+        "forbidden_static_metadata": ["author", "description", "version"],
+        "license": "Dual BSD/GPL",
+        "name": "ihk_smp_x86_64",
+        "output": "ihk-smp-x86_64.ko",
+    }:
+        raise ValidationError("module identity/metadata differs from the frozen legacy module")
+
+    _require_keys(contract["lifecycle_logs"], {"load", "unload"}, "contract.lifecycle_logs")
+    for phase in ("load", "unload"):
+        expected = f"lifecycle={phase} parameters={{}} dependency={{}} import_namespace={{}}"
+        if contract["lifecycle_logs"][phase] != expected:
+            raise ValidationError(f"{phase} lifecycle diagnostic is not the stable contract string")
+
+    _require_keys(
+        contract["kconfig"], {"path", "provider_symbol", "symbol", "type"}, "contract.kconfig"
+    )
+    if contract["kconfig"] != {
+        "path": "host-kernel/kbuild/Kconfig",
+        "provider_symbol": "MCKERNEL_IHK_RUST",
+        "symbol": "MCKERNEL_IHK_SMP_X86_64_RUST",
+        "type": "tristate",
+    }:
+        raise ValidationError("Kconfig contract differs from the native SMP target")
+    _require_keys(
+        contract["kbuild"],
+        {"composite_object", "config_symbol", "module_object", "path"},
+        "contract.kbuild",
+    )
+    if contract["kbuild"] != {
+        "composite_object": "ihk-smp-x86_64-y := ihk_smp_x86_64.o",
+        "config_symbol": "CONFIG_MCKERNEL_IHK_SMP_X86_64_RUST",
+        "module_object": "ihk-smp-x86_64.o",
+        "path": "host-kernel/kbuild/Kbuild.in",
+    }:
+        raise ValidationError("Kbuild contract differs from ihk-smp-x86_64.ko")
+
+    parameters = contract["parameters"]
+    if not isinstance(parameters, list) or len(parameters) != 6:
+        raise ValidationError("contract must contain exactly six SMP parameters")
+    expected_names = {
+        "ihk_cores",
+        "ihk_ikc_irq_core",
+        "ihk_mem",
+        "ihk_phys_start",
+        "ihk_start_irq",
+        "ihk_trampoline",
+    }
+    actual_names: set[str] = set()
+    for index, parameter in enumerate(parameters):
+        if not isinstance(parameter, dict):
+            raise ValidationError(f"contract.parameters[{index}] must be an object")
+        _require_keys(
+            parameter,
+            {
+                "default",
+                "description",
+                "legacy_source",
+                "name",
+                "ops",
+                "permission",
+                "rust_type",
+                "type",
+            },
+            f"contract.parameters[{index}]",
+        )
+        name = parameter["name"]
+        if not isinstance(name, str) or name in actual_names:
+            raise ValidationError("parameter names must be unique strings")
+        actual_names.add(name)
+        if parameter["default"] != 0 or parameter["permission"] != "0644":
+            raise ValidationError(f"{name} must retain default 0 and permission 0644")
+        type_contracts = {
+            "uint": ("core::ffi::c_uint", "param_ops_uint"),
+            "ulong": ("core::ffi::c_ulong", "param_ops_ulong"),
+        }
+        expected_type = type_contracts.get(parameter["type"])
+        if expected_type is None or (parameter["rust_type"], parameter["ops"]) != expected_type:
+            raise ValidationError(f"{name} has an inconsistent numeric type/ops contract")
+    if actual_names != expected_names:
+        raise ValidationError("SMP parameter names differ from the frozen six-name surface")
+
+
+def _expected_modinfo(contract: dict[str, Any]) -> tuple[set[str], set[str]]:
+    module_name = contract["module"]["name"]
+    loadable = {"import_ns=MCKERNEL_IHK_V1\\0"}
+    for parameter in (*contract["parameters"], EXPECTED_ADDITIVE_DIAGNOSTIC_PARAMETER):
+        loadable.add(f"parm={parameter['name']}:{parameter['description']}\\0")
+        loadable.add(f"parmtype={parameter['name']}:{parameter['type']}\\0")
+    builtin = {f"{module_name}.{record}" for record in loadable}
+    return loadable, builtin
+
+
+def _provider_symbols(contract: dict[str, Any]) -> tuple[str, str, str, str, str]:
+    lease = contract["provider_lease"]
+    control = contract["control_device_shell"]
+    return (
+        contract["dependency_contract"]["provider_symbol"],
+        lease["attach_symbol"],
+        lease["detach_symbol"],
+        control["open_symbol"],
+        control["close_symbol"],
+    )
+
+
+def _module_provider_symbols(contract: dict[str, Any]) -> tuple[str, ...]:
+    return _provider_symbols(contract) + ("ihk_os_create_unbooted_v6", "ihk_os_destroy_unbooted_v1")
+
+
+def _provider_import(contract: dict[str, Any]) -> str:
+    anchor, attach, detach, open_symbol, close_symbol = _provider_symbols(contract)
+    return (
+        'extern "C" {\n'
+        f'    #[link_name = "{anchor}"]\n'
+        "    static IHK_PROVIDER_LIFECYCLE_V1: u8;\n"
+        f'    #[link_name = "{attach}"]\n'
+        f"    fn {attach}(\n"
+        "        callback_abi: u32,\n"
+        "        flags: u32,\n"
+        "        init: Option<IhkSmpProviderInitV2>,\n"
+        "        exit: Option<IhkSmpProviderExitV2>,\n"
+        "    ) -> i64;\n"
+        f'    #[link_name = "{detach}"]\n'
+        f"    fn {detach}(token: i64, exit: Option<IhkSmpProviderExitV2>);\n"
+        f'    #[link_name = "{open_symbol}"]\n'
+        f"    fn {open_symbol}(minor: u32) -> i64;\n"
+        f'    #[link_name = "{close_symbol}"]\n'
+        f"    fn {close_symbol}(receipt: i64);\n"
+        '    #[link_name = "ihk_os_create_unbooted_v6"]\n'
+        '    fn ihk_os_create_unbooted_v6(\n'
+        '        provider_minor: u32,\n'
+        '        owner: *mut core::ffi::c_void,\n'
+        '        argument: u64,\n'
+        '        callback_abi: u32,\n'
+        '        ioctl: Option<IhkSmpOsIoctlV2>,\n'
+        '        release: Option<IhkSmpOsReleaseV2>,\n'
+        '        prepare: Option<IhkSmpPrepareBootV3>,\n'
+        '        start: Option<IhkSmpStartBootV3>,\n'
+        '        application_open: Option<application_abi::Open>,\n'
+        '        application_invoke: Option<application_abi::Invoke>,\n'
+        '        application_close: Option<application_abi::Close>,\n'
+        '        shutdown: Option<IhkSmpShutdownV6>,\n'
+        '    ) -> i64;\n'
+        '    #[link_name = "ihk_os_destroy_unbooted_v1"]\n'
+        "    fn ihk_os_destroy_unbooted_v1(provider_minor: u32, minor: u64) -> i64;\n"
+        "}"
+    )
+
+
+def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
+    code = _mask_rust_comments_and_literals(text)
+    resource_edge = "#[allow(dead_code)]\nmod smp_resource;"
+    _require_active_count(
+        text, code, resource_edge, 1, "Rust SMP private resource-policy edge"
+    )
+    _require_active_count(text, code, "mod smp_cpu;", 1, "Rust SMP Linux CPU adapter edge")
+    _require_active_count(text, code, "mod smp_memory;", 1, "Rust SMP Linux memory adapter edge")
+    _require_active_count(text, code, "#[allow(dead_code)]\nmod ihk_mapping;", 1,
+                          "Rust SMP reused mapping geometry edge")
+    _require_active_count(text, code, "#[allow(dead_code)]\nmod smp_image;", 1,
+                          "Rust SMP checked image policy edge")
+    _require_active_count(text, code, "mod smp_loader;", 1, "Rust SMP bounded image file edge")
+    _require_active_count(text, code, "mod smp_startup;", 1, "Rust SMP startup page-table edge")
+    metadata = _module_block(text)
+    expected_metadata = {
+        "type": "IhkSmpModule",
+        "name": contract["module"]["name"],
+        "license": contract["module"]["license"],
+    }
+    if metadata != expected_metadata:
+        raise ValidationError(
+            f"module! metadata differs from exact legacy-compatible fields: {metadata}"
+        )
+
+    parameters = {item["name"]: item for item in contract["parameters"]}
+    source_parameters = {
+        **parameters,
+        EXPECTED_ADDITIVE_DIAGNOSTIC_PARAMETER["name"]: EXPECTED_ADDITIVE_DIAGNOSTIC_PARAMETER,
+    }
+    if _literal_usize_constant(text, "IHK_SMP_PARAMETER_COUNT") != len(parameters):
+        raise ValidationError("Rust parameter count differs from the six-parameter contract")
+    if _literal_string_constant(text, "IHK_SMP_DEPENDENCY") != "ihk":
+        raise ValidationError("Rust provider dependency constant differs")
+    if _literal_string_constant(text, "IHK_SMP_IMPORT_NAMESPACE") != "MCKERNEL_IHK_V1":
+        raise ValidationError("Rust provider import namespace constant differs")
+    provider_import = _provider_import(contract)
+    _require_active_count(
+        text, code, provider_import, 1,
+        "Rust exact seven-symbol provider-symbol import",
+    )
+    callback_init_type = 'type IhkSmpProviderInitV2 = extern "C" fn() -> i32;'
+    callback_exit_type = 'type IhkSmpProviderExitV2 = extern "C" fn();'
+    callback_prepare_type = 'type IhkSmpPrepareBootV3 = unsafe extern "C" fn(u32, u64, u64, u64) -> i32;'
+    callback_start_type = 'type IhkSmpStartBootV3 = unsafe extern "C" fn(u32, u64) -> i32;'
+    callback_shutdown_type = 'type IhkSmpShutdownV6 = unsafe extern "C" fn(u32, u64) -> i64;'
+    callback_init = 'extern "C" fn ihk_smp_provider_init_v2() -> i32 {'
+    callback_exit = 'extern "C" fn ihk_smp_provider_exit_v2() {'
+    _validate_rust_escape_hatches(
+        text,
+        "Rust lifecycle",
+        allowed_extern_blocks=(
+            callback_init_type,
+            callback_exit_type,
+            callback_prepare_type,
+            callback_start_type,
+            callback_shutdown_type,
+            provider_import,
+            *EXPECTED_OS_CALLBACK_TYPES,
+            *EXPECTED_OS_CALLBACK_HEADERS,
+            callback_init,
+            callback_exit,
+            'unsafe extern "C" fn application_open(\n    slot: u32,\n    generation: u64,\n    pid: i32,\n    output: *mut *mut core::ffi::c_void,\n) -> i32 {',
+            'unsafe extern "C" fn application_invoke(\n    context: *mut core::ffi::c_void,\n    command: u32,\n    buffer: *mut u8,\n    bytes: usize,\n) -> i64 {',
+            'unsafe extern "C" fn application_close(context: *mut core::ffi::c_void) {',
+            'unsafe extern "C" fn ihk_smp_prepare_boot_v3(\n    slot: u32,\n    generation: u64,\n    kmsg: u64,\n    kmsg_bytes: u64,\n) -> i32 {',
+            'unsafe extern "C" fn ihk_smp_start_boot_v3(slot: u32, generation: u64) -> i32 {',
+            'unsafe extern "C" fn ihk_smp_shutdown_v6(slot: u32, generation: u64) -> i64 {',
+        ),
+        allow_buildid_include=True,
+    )
+    callback_bodies = (
+        '''extern "C" fn ihk_smp_provider_init_v2() -> i32 {
+    pr_info!("provider_callback=init status=complete callback_abi=1\\n");
+    0
+}''',
+        '''extern "C" fn ihk_smp_provider_exit_v2() {
+    pr_info!("provider_callback=exit status=complete callback_abi=1\\n");
+}''',
+    )
+    for callback_body in callback_bodies:
+        _require_active_count(
+            text,
+            code,
+            callback_body,
+            1,
+            "Rust scalar-only provider lifecycle callback",
+        )
+
+    # The OS ioctl callback has acquired reviewed additive command dispatches
+    # since the original contract snapshot.  Keep its ABI/header and every
+    # original safety/dispatch edge exact, while permitting those additive
+    # branches.  The release callback remains an exact body contract.
+    ioctl_header, release_header = EXPECTED_OS_CALLBACK_HEADERS
+    _require_active_count(text, code, ioctl_header, 1, "Rust checked OS ioctl callback")
+    ioctl_fragments = (
+        "if compat > 1 || (compat == 1 && argument > u32::MAX as u64) {",
+        "let owner = match unsafe { smp_resource::OsToken::from_ihk_lease_v2(slot, generation) } {",
+        "smp_loader::load(owner, argument as usize)",
+        "smp_cpu::handles_os(command)",
+        "smp_memory::handles_os(command)",
+        "Err(error) => error.to_errno() as i64,",
+    )
+    ioctl_start = _active_fragment_positions(text, code, ioctl_header)[0]
+    ioctl_end = _active_fragment_positions(text, code, release_header)[0]
+    for fragment in ioctl_fragments:
+        positions = [
+            position for position in _active_fragment_positions(text, code, fragment)
+            if ioctl_start <= position < ioctl_end
+        ]
+        if len(positions) != 1:
+            raise ValidationError(
+                "Rust checked OS ioctl callback edge active occurrence count differs "
+                f"for {fragment}: expected 1, got {len(positions)}"
+            )
+    _validate_top_level_item(code, ioctl_start,
+                             "OS resource callback")
+    release_body = EXPECTED_OS_CALLBACK_BODIES[1]
+    _require_active_count(text, code, release_body, 1, "Rust exact checked OS resource callback")
+    _validate_top_level_item(code, _active_fragment_positions(text, code, release_body)[0],
+                             "OS resource callback")
+
+    expected_status_adapter = """fn provider_status_error(status: i64) -> Error {
+    let errno = match status {
+        -2 | -12 | -16 | -19 | -22 | -75 | -116 | -117 => status as i32,
+        _ => -117,
+    };
+    match kernel::error::to_result(errno) {
+        Err(error) => error,
+        Ok(()) => EIO,
+    }
+}"""
+    if code.count(expected_status_adapter) != 1:
+        raise ValidationError(
+            "Rust provider lease errno adapter differs from the exact fail-closed map"
+        )
+
+    expected_lease_owner = """#[must_use = "the provider lease must remain owned until SMP module teardown"]
+struct ProviderLease {
+    token: i64,
+}"""
+    _require_active_count(
+        text, code, expected_lease_owner, 1, "Rust exact non-Copy provider lease owner"
+    )
+    if re.search(
+        r"#\[derive\([^\]]*(?:Copy|Clone)[^\]]*\)\]\s*"
+        r"(?:#\[[^\]]+\]\s*)*struct\s+ProviderLease\b",
+        code,
+    ) or re.search(r"\bimpl\s+(?:Copy|Clone)\s+for\s+ProviderLease\b", code):
+        raise ValidationError("Rust ProviderLease may not implement Copy or Clone")
+
+    required_lease_fragments = (
+        "impl ProviderLease {",
+        "fn attach() -> Result<Self>",
+        "let token = unsafe {\n            ihk_smp_provider_attach_v2(",
+        "IHK_SMP_PROVIDER_CALLBACK_ABI_V1,",
+        "IHK_SMP_PROVIDER_FLAG_SHARED,",
+        "Some(ihk_smp_provider_init_v2),",
+        "Some(ihk_smp_provider_exit_v2),",
+        "if token <= 0 {",
+        "return Err(provider_status_error(token));",
+        "Ok(Self { token })",
+        "impl Drop for ProviderLease {",
+        "unsafe { ihk_smp_provider_detach_v2(self.token, Some(ihk_smp_provider_exit_v2)) };",
+    )
+    for fragment in required_lease_fragments:
+        if code.count(fragment) != 1:
+            raise ValidationError(
+                f"Rust provider lease ownership path differs at: {fragment}"
+            )
+    attach_symbol = contract["provider_lease"]["attach_symbol"]
+    detach_symbol = contract["provider_lease"]["detach_symbol"]
+    if code.count(f"{attach_symbol}(") != 2 or code.count(f"{detach_symbol}(") != 2:
+        raise ValidationError(
+            "Rust provider lease must call each imported scalar function exactly once"
+        )
+    if code.count("ihk_smp_provider_init_v2") != 2 or code.count(
+        "ihk_smp_provider_exit_v2"
+    ) != 3:
+        raise ValidationError(
+            "Rust provider lifecycle callback definitions and exact retained identities differ"
+        )
+    for diagnostic in re.finditer(
+        r"\bpr_(?:alert|crit|debug|emerg|err|info|notice|warn)!\s*\((?P<body>.*?)\);",
+        code,
+        re.DOTALL,
+    ):
+        if re.search(r"\b(?:token|receipt)\b", diagnostic.group("body")):
+            raise ValidationError("Rust provider diagnostics may not expose a raw lease scalar")
+
+    control = contract["control_device_shell"]
+    open_symbol = control["open_symbol"]
+    close_symbol = control["close_symbol"]
+    expected_open_owner = '''#[must_use = "the provider-open receipt must remain owned until file release"]
+struct ProviderOpenLease {
+    receipt: i64,
+}'''
+    _require_active_count(
+        text, code, expected_open_owner, 1,
+        "Rust exact non-Copy per-file provider-open receipt owner",
+    )
+    if re.search(
+        r"#\[derive\([^\]]*(?:Copy|Clone)[^\]]*\)\]\s*"
+        r"(?:#\[[^\]]+\]\s*)*struct\s+ProviderOpenLease\b",
+        code,
+    ) or re.search(r"\bimpl\s+(?:Copy|Clone)\s+for\s+ProviderOpenLease\b", code):
+        raise ValidationError("Rust ProviderOpenLease may not implement Copy or Clone")
+
+    required_open_fragments = (
+        "impl ProviderOpenLease {",
+        "fn acquire() -> Result<Self>",
+        f"{open_symbol}(IHK_SMP_CONTROL_DEVICE_MINOR)",
+        "if receipt <= 0 {",
+        "return Err(provider_status_error(receipt));",
+        "Ok(Self { receipt })",
+        "impl Drop for ProviderOpenLease {",
+        f"unsafe {{ {close_symbol}(self.receipt) }};",
+        "type Ptr = Box<ProviderOpenLease>;",
+        "const MODULE: &'static ThisModule = &THIS_MODULE;",
+        "Box::new(ProviderOpenLease::acquire()?, GFP_KERNEL).map_err(|_| ENOMEM)",
+    )
+    for fragment in required_open_fragments:
+        if code.count(fragment) != 1:
+            raise ValidationError(
+                "Rust mcd0 open-receipt ownership path differs at: {0}".format(fragment)
+            )
+    if code.count(f"{open_symbol}(") != 2 or code.count(f"{close_symbol}(") != 2:
+        raise ValidationError(
+            "Rust mcd0 shell must call each imported scalar open/close function exactly once"
+        )
+    exact_open_method = '''fn open() -> Result<Self::Ptr> {
+        // Linux 6.12's `BoxExt::new` takes ownership before allocation.  If
+        // allocation fails, the temporary ProviderOpenLease is dropped and
+        // closes the already-acquired scalar receipt before ENOMEM is returned.
+        Box::new(ProviderOpenLease::acquire()?, GFP_KERNEL).map_err(|_| ENOMEM)
+    }'''
+    _require_active_count(
+        text, code, exact_open_method, 1,
+        "Rust exact fallible mcd0 open allocation/rollback method",
+    )
+    if _literal_usize_constant(text, "IHK_SMP_PARAMETER_COUNT") != len(parameters):
+        raise ValidationError("Rust parameter count differs from the six-parameter contract")
+    control_minor_matches = list(re.finditer(
+        r"^const IHK_SMP_CONTROL_DEVICE_MINOR:\s*u32\s*=\s*([0-9]+);$",
+        code,
+        re.MULTILINE,
+    ))
+    if len(control_minor_matches) != 1 or int(control_minor_matches[0].group(1)) != control["minor"]:
+        raise ValidationError("Rust mcd0 shell minor differs from exact scalar minor zero")
+
+    buildid_command = "const IHK_DEVICE_GET_BUILDID: u32 = 0x0011_290b;"
+    _require_active_count(
+        text, code, buildid_command, 1,
+        "Rust exact GET_BUILDID command",
+    )
+    expected_os_request = EXPECTED_OS_REQUEST.replace(
+        "ihk_os_create_unbooted_v2", "ihk_os_create_unbooted_v6"
+    ).replace(
+        "                    Some(ihk_smp_os_release_v2),\n",
+        "                    Some(ihk_smp_os_release_v2),\n"
+        "                    Some(ihk_smp_prepare_boot_v3),\n"
+        "                    Some(ihk_smp_start_boot_v3),\n"
+        "                    Some(application_open),\n"
+        "                    Some(application_invoke),\n"
+        "                    Some(application_close),\n"
+        "                    Some(ihk_smp_shutdown_v6),\n",
+    )
+    _require_active_count(text, code, expected_os_request, 1,
+                          "Rust exact unbooted OS request and module owner boundary")
+    request_start = _active_fragment_positions(text, code, expected_os_request)[0]
+    _validate_top_level_item(code, request_start, "unbooted OS dispatcher")
+    for constant in (
+        "const IHK_DEVICE_CREATE_OS: u32 = 0x0011_2900;",
+        "const IHK_DEVICE_DESTROY_OS: u32 = 0x0011_2901;",
+    ):
+        _require_active_count(text, code, constant, 1, "Rust exact OS command")
+    command_start = _active_fragment_positions(text, code, buildid_command)[0]
+    _validate_top_level_item(code, command_start, "GET_BUILDID command")
+    buildid_helper = '''fn compatibility_build_id(argument: usize) -> Result<isize> {
+    kernel::uaccess::UserSlice::new(argument, IHK_COMPAT_BUILD_ID.len())
+        .writer()
+        .write_slice(IHK_COMPAT_BUILD_ID)?;
+    Ok(0)
+}'''
+    _require_active_count(text, code, buildid_helper, 1,
+                          "Rust exact GET_BUILDID safe usercopy helper")
+    helper_start = _active_fragment_positions(text, code, buildid_helper)[0]
+    _validate_top_level_item(code, helper_start, "GET_BUILDID safe usercopy helper")
+    buildid_dispatch = '''fn control_device_ioctl(cmd: u32, arg: usize) -> Result<isize> {
+    match cmd {
+        IHK_DEVICE_GET_BUILDID => compatibility_build_id(arg),
+        _ => Err(EINVAL),
+    }
+}'''
+    _require_active_count(text, code, buildid_dispatch, 1,
+                          "Rust exact GET_BUILDID dispatcher")
+    dispatch_start = _active_fragment_positions(text, code, buildid_dispatch)[0]
+    _validate_top_level_item(code, dispatch_start, "GET_BUILDID dispatcher")
+    native_ioctl = '''fn ioctl(_device: &ProviderOpenLease, cmd: u32, arg: usize) -> Result<isize> {
+        if smp_cpu::handles(cmd) {
+            return smp_cpu::ioctl(cmd, arg, false);
+        }
+        if smp_memory::handles(cmd) {
+            return smp_memory::ioctl(cmd, arg, false);
+        }
+        control_device_request(cmd, arg)
+    }'''
+    compat_ioctl = '''#[cfg(CONFIG_COMPAT)]
+    fn compat_ioctl(_device: &ProviderOpenLease, cmd: u32, arg: usize) -> Result<isize> {
+        if smp_cpu::handles(cmd) {
+            return smp_cpu::ioctl(cmd, arg as u32 as usize, true);
+        }
+        if smp_memory::handles(cmd) {
+            return smp_memory::ioctl(cmd, arg as u32 as usize, true);
+        }
+        // This command takes a userspace pointer.  On x86_64 compat callers
+        // supply a 32-bit address; zero extension matches compat_ptr().
+        control_device_request(cmd, arg as u32 as usize)
+    }'''
+    _require_active_count(
+        text, code, native_ioctl, 1,
+        "Rust mcd0 exact native ioctl dispatch",
+    )
+    _require_active_count(
+        text, code, compat_ioctl, 1,
+        "Rust mcd0 exact explicit compat ioctl dispatch",
+    )
+    for item, label in (
+        (native_ioctl, "native ioctl dispatch"),
+        (compat_ioctl, "explicit compat ioctl dispatch"),
+    ):
+        item_start = _active_fragment_positions(text, code, item)[0]
+        _validate_item_prefix(code, item_start, label)
+    if "compat_ptr_ioctl" in code:
+        raise ValidationError("Rust mcd0 shell may not use implicit compat pointer conversion")
+    unsupported = "|".join(
+        re.escape(name) for name in control["unsupported_file_operations"]
+    )
+    if re.search(r"\bfn\s+(?:{0})\s*\(".format(unsupported), code):
+        raise ValidationError("Rust mcd0 shell exposes an unsupported file operation")
+    if re.search(r"\bfn\s+release\s*\(", code):
+        raise ValidationError(
+            "Rust mcd0 shell must use the default release that drops its receipt owner"
+        )
+    # Exempt precisely the already validated helper and its one-command
+    # dispatcher, retaining offsets and scanning every other active token for
+    # additional usercopy boundaries.  The helper owns the UserSlice call;
+    # blanking the historical inlined dispatcher would leave it spuriously
+    # visible and mask later fail-closed checks.
+    allowed_usercopy_ranges = sorted((
+        (helper_start, helper_start + len(buildid_helper)),
+        (dispatch_start, dispatch_start + len(buildid_dispatch)),
+    ))
+    usercopy_code_parts: list[str] = []
+    usercopy_cursor = 0
+    for range_start, range_end in allowed_usercopy_ranges:
+        usercopy_code_parts.append(code[usercopy_cursor:range_start])
+        usercopy_code_parts.append(" " * (range_end - range_start))
+        usercopy_cursor = range_end
+    usercopy_code_parts.append(code[usercopy_cursor:])
+    usercopy_code = "".join(usercopy_code_parts)
+    usercopy = re.search(
+        r"\b(?:User(?:Ptr|Slice[A-Za-z0-9_]*)|uaccess|copy_(?:from|to)_user)\b",
+        usercopy_code,
+    )
+    if usercopy:
+        raise ValidationError(
+            "Rust mcd0 exposes forbidden usercopy outside GET_BUILDID: {0}".format(
+                usercopy.group(0)
+            )
+        )
+    control_start = _active_fragment_positions(text, code, expected_open_owner)[0]
+    control_end = code.index("union KernelParameterValue", control_start)
+    control_code = code[control_start:control_end]
+    if re.search(r"\*(?:const|mut)\b|\bmem::forget\b", control_code):
+        raise ValidationError(
+            "Rust mcd0 shell exposes a raw pointer or forgets an owned receipt"
+        )
+    if code.count("impl MiscDevice for IhkSmpControlDevice") != 1:
+        raise ValidationError("Rust source must contain one exact mcd0 MiscDevice implementation")
+
+    registration = '''let control_device = Box::pin_init(
+            MiscDeviceRegistration::<IhkSmpControlDevice>::register(MiscDeviceOptions {
+                name: c_str!("mcd0"),
+            }),
+            GFP_KERNEL,
+        )?;'''
+    _require_active_count(
+        text, code, registration, 1,
+        "Rust exact pinned literal mcd0 registration",
+    )
+    control_owner = '''struct IhkSmpModule {
+    control_device: Option<core::pin::Pin<Box<MiscDeviceRegistration<IhkSmpControlDevice>>>>,
+    cpu_controller: Option<smp_cpu::CpuController>,
+    memory_controller: Option<smp_memory::MemoryController>,
+    provider_lease: Option<ProviderLease>,
+}'''
+    if code.count(control_owner) != 1:
+        raise ValidationError("Rust SMP module lacks the exact pinned mcd0/provider owners")
+    required_control_lifecycle = (
+        "control_device: Some(control_device),",
+        "cpu_controller: Some(cpu_controller),",
+        "memory_controller: Some(memory_controller),",
+        "drop(self.control_device.take());",
+        "drop(self.memory_controller.take());",
+        "drop(self.cpu_controller.take());",
+        "drop(self.provider_lease.take());",
+    )
+    for fragment in required_control_lifecycle:
+        if code.count(fragment) != 1:
+            raise ValidationError(
+                "Rust mcd0 registration lifecycle differs at: {0}".format(fragment)
+            )
+
+    required_abi_fragments = (
+        '#[link_section = "__param"]',
+        "struct KernelParameter",
+        "union KernelParameterValue",
+        "unsafe impl Sync for KernelParameter {}",
+        "core::mem::size_of::<kernel::bindings::kernel_param>()",
+        "core::mem::align_of::<kernel::bindings::kernel_param>()",
+        "module: THIS_MODULE.as_ptr()",
+        "core::ptr::addr_of!(kernel::bindings::$ops)",
+        "core::ptr::addr_of_mut!($storage)",
+        "core::ptr::read_volatile(core::ptr::addr_of!(IHK_PROVIDER_LIFECYCLE_V1))",
+        "level: -1",
+        "flags: 0",
+    )
+    for fragment in required_abi_fragments:
+        if '"' in fragment:
+            _require_active_count(
+                text, code, fragment, 1, "Rust parameter ABI required fragment"
+            )
+        elif fragment not in code:
+            raise ValidationError(f"Rust parameter ABI lacks required fragment: {fragment}")
+
+    parameter_name_selection = """name: {
+                #[cfg(MODULE)]
+                const PARAMETER_NAME: &[u8] = $loadable_name_bytes;
+                #[cfg(not(MODULE))]
+                const PARAMETER_NAME: &[u8] = $builtin_name_bytes;
+                PARAMETER_NAME.as_ptr() as *const core::ffi::c_char
+            },"""
+    if code.count(parameter_name_selection) != 1:
+        raise ValidationError(
+            "Rust parameter ABI must select Linux loadable/built-in descriptor names by MODULE"
+        )
+
+    matches = [
+        match for match in PARAMETER_PATTERN.finditer(text)
+        if code[match.start() : match.end()]
+        == _mask_rust_comments_and_literals(match.group(0))
+    ]
+    invocation_count = len(re.findall(r"^numeric_parameter!\(", code, re.MULTILINE))
+    if len(matches) != len(source_parameters) or invocation_count != len(matches):
+        raise ValidationError(
+            "Rust source must contain exactly six legacy and one additive diagnostic parameter descriptors"
+        )
+    actual_parameters: dict[str, dict[str, str]] = {}
+    for match in matches:
+        item = match.groupdict()
+        name = item["name"]
+        if name in actual_parameters:
+            raise ValidationError(f"duplicate Rust parameter descriptor: {name}")
+        expected = source_parameters.get(name)
+        if expected is None:
+            raise ValidationError(f"unexpected Rust parameter descriptor: {name}")
+        expected_storage = name.upper()
+        expected_descriptor = "PARAM_" + expected_storage
+        actual = {
+            "storage": item["storage"],
+            "descriptor": item["descriptor"],
+            "rust_type": item["rust_type"],
+            "ops": item["ops"],
+            "default": item["default"],
+            "permission": item["permission"],
+            "loadable_name_bytes": item["loadable_name_bytes"],
+            "builtin_name_bytes": item["builtin_name_bytes"],
+        }
+        wanted = {
+            "storage": expected_storage,
+            "descriptor": expected_descriptor,
+            "rust_type": expected["rust_type"],
+            "ops": expected["ops"],
+            "default": str(expected["default"]),
+            "permission": "0o" + expected["permission"].lstrip("0"),
+            "loadable_name_bytes": name + "\\0",
+            "builtin_name_bytes": contract["module"]["name"] + "." + name + "\\0",
+        }
+        if actual != wanted:
+            raise ValidationError(f"Rust descriptor for {name} differs: expected {wanted}, got {actual}")
+        actual_parameters[name] = actual
+    if set(actual_parameters) != set(source_parameters):
+        raise ValidationError("Rust parameter descriptor set is incomplete")
+
+    pairs = [
+        match for match in MODINFO_PATTERN.finditer(text)
+        if code[match.start() : match.end()]
+        == _mask_rust_comments_and_literals(match.group(0))
+    ]
+    expected_loadable, expected_builtin = _expected_modinfo(contract)
+    loadable = [match.group("loadable") for match in pairs]
+    builtin = [match.group("builtin") for match in pairs]
+    if (
+        len(pairs) != len(expected_loadable)
+        or len(set(loadable)) != len(loadable)
+        or set(loadable) != expected_loadable
+    ):
+        raise ValidationError("loadable Rust modinfo records differ from the exact SMP contract")
+    if len(set(builtin)) != len(builtin) or set(builtin) != expected_builtin:
+        raise ValidationError("built-in Rust modinfo records differ from the exact SMP contract")
+    for dependency in re.finditer(r'b"(?:ihk_smp_x86_64\.)?depends=', text):
+        if code[dependency.start() : dependency.start() + 2] == 'b"':
+            raise ValidationError(
+                "Rust source must let modpost derive depends=ihk from the provider symbol"
+            )
+
+    if "impl kernel::Module for IhkSmpModule" not in code or "impl Drop for IhkSmpModule" not in code:
+        raise ValidationError("Rust source lacks paired module init/drop lifecycle")
+    if "fn init(_module: &'static ThisModule) -> Result<Self>" not in code:
+        raise ValidationError("Rust SMP lifecycle lacks its initialization path")
+    if code.count("let provider_lease = ProviderLease::attach()?;") != 1:
+        raise ValidationError("Rust SMP initialization does not acquire exactly one provider lease")
+    if code.count("provider_lease: Some(provider_lease),") != 1:
+        raise ValidationError("Rust SMP initialization does not retain the provider lease")
+    if code.count("drop(self.provider_lease.take());") != 1:
+        raise ValidationError("Rust SMP teardown does not retire the provider lease exactly once")
+    for phase in ("load", "unload"):
+        expected = contract["lifecycle_logs"][phase]
+        _require_active_count(
+            text, code, f'"{expected}\\n"', 1,
+            f"Rust stable {phase} lifecycle diagnostic",
+        )
+    attach_at = code.index("let provider_lease = ProviderLease::attach()?;")
+    register_at = code.index("let control_device = Box::pin_init(")
+    load_at = _active_fragment_positions(
+        text, code, f'"{contract["lifecycle_logs"]["load"]}\\n"'
+    )[0]
+    retain_control_at = code.index("control_device: Some(control_device),")
+    retain_at = code.index("provider_lease: Some(provider_lease),")
+    deregister_at = code.index("drop(self.control_device.take());")
+    detach_at = code.index("drop(self.provider_lease.take());")
+    unload_at = _active_fragment_positions(
+        text, code, f'"{contract["lifecycle_logs"]["unload"]}\\n"'
+    )[0]
+    if not attach_at < register_at < load_at < retain_control_at < retain_at:
+        raise ValidationError(
+            "Rust SMP initialization must attach, register mcd0, log, then retain both owners"
+        )
+    construction_at = code.index("Ok(Self {", attach_at)
+    attach_end = attach_at + len("let provider_lease = ProviderLease::attach()?;")
+    if code[attach_end:register_at].strip() != (
+        "let cpu_controller = smp_cpu::CpuController::new()?;\n"
+        "        let memory_controller = smp_memory::MemoryController::new()?;\n"
+        "        smp_ikc::initialize_listeners()?;"
+    ):
+        raise ValidationError(
+            "Rust SMP provider attach must precede CPU/memory/IKC initialization and mcd0 registration"
+        )
+    register_end = register_at + len(registration)
+    if "?" in code[register_end:construction_at]:
+        raise ValidationError(
+            "Rust SMP mcd0 registration must remain the final fallible initialization step"
+        )
+    cpu_drop_at = code.index("drop(self.cpu_controller.take());")
+    memory_drop_at = code.index("drop(self.memory_controller.take());")
+    if not deregister_at < memory_drop_at < cpu_drop_at < detach_at < unload_at:
+        raise ValidationError(
+            "Rust SMP teardown must deregister mcd0, retire memory and CPU ownership, then detach provider"
+        )
+    for constant in (
+        "IHK_SMP_PARAMETER_COUNT",
+        "IHK_SMP_DEPENDENCY",
+        "IHK_SMP_IMPORT_NAMESPACE",
+    ):
+        if code.count(constant) < 3:
+            raise ValidationError(f"lifecycle diagnostics do not consume {constant}")
+
+    for match in re.finditer(r"^\s*use\s+([^;]+);", code, re.MULTILINE):
+        imported = match.group(1).strip()
+        if not imported.startswith(("kernel::", "core::")):
+            raise ValidationError(f"unreviewed Rust dependency: {imported}")
+
+
+def _validate_resource_foundation(repo: Path, contract: dict[str, Any]) -> Path:
+    for dependency in contract["crate_modules"]:
+        path = _repo_file(repo, dependency["path"], "SMP dependency")
+        if _sha256(path) != dependency["sha256"]:
+            raise ValidationError("SMP compiled dependency digest differs: " + dependency["path"])
+    module = contract["crate_modules"][0]
+    source_path = _repo_file(repo, module["path"], "SMP resource policy source")
+    if module["destination"] != "smp_resource.rs" or _sha256(source_path) != module["sha256"]:
+        raise ValidationError("SMP resource policy digest or staged destination differs")
+    text = _read_text(source_path, "SMP resource policy source")
+    marker = "#[cfg(test)]\nmod tests {"
+    if text.count(marker) != 1:
+        raise ValidationError("SMP resource policy lacks one exhaustive test module")
+    production = text.split(marker, 1)[0]
+    required = (
+        "pub(crate) const SMP_MAX_CPUS: usize = 512;",
+        "pub(crate) const OS_TOKEN_CAPACITY: u32 = 64;",
+        "pub(crate) const OS_TOKEN_MAX_GENERATION: u64 = (1_u64 << 41) - 1;",
+        "pub(crate) const X86_64_PAGE_SIZE: u64 = 4096;",
+        "pub(crate) struct CpuTransaction",
+        "pub(crate) struct MemoryTransaction<",
+        "pub(crate) fn begin_external_effects",
+        "pub(crate) fn compensated_rollback",
+        "CpuState::Quarantined",
+        "poisoned: bool",
+        "if self.poisoned {",
+        "#[cfg(test)]\n    pub(crate) fn test_only",
+        "#[cfg(test)]\n    pub(crate) fn commit_policy_only",
+    )
+    for fragment in required:
+        if fragment not in production:
+            raise ValidationError(f"SMP resource policy lacks locked marker: {fragment}")
+    for name in ("insert_free", "assign", "release", "release_all", "remove_free"):
+        if not re.search(
+            rf"#\[cfg\(test\)\]\n\s+pub\(crate\) fn {name}\(", production
+        ):
+            raise ValidationError(f"SMP resource production convenience is not test-gated: {name}")
+    masked_production = _validate_rust_escape_hatches(
+        production, "SMP resource policy"
+    )
+    _require_active_count(production, masked_production, EXPECTED_OS_LEASE_CONSTRUCTOR, 1,
+                          "SMP exact checked IHK lease constructor")
+    constructor_start = _active_fragment_positions(
+        production, masked_production, EXPECTED_OS_LEASE_CONSTRUCTOR)[0]
+    masked_production = (masked_production[:constructor_start]
+                         + " " * len(EXPECTED_OS_LEASE_CONSTRUCTOR)
+                         + masked_production[constructor_start + len(EXPECTED_OS_LEASE_CONSTRUCTOR):])
+    for forbidden in (
+        r"\bunsafe\b",
+        r"\b(?:alloc|std|kernel)::",
+        r"\b(?:Box|Vec|String|Arc|Rc)\b",
+    ):
+        if re.search(forbidden, masked_production):
+            raise ValidationError(f"SMP resource policy contains forbidden construct: {forbidden}")
+
+    fixture = contract["resource_foundation"]["fixture"]
+    positive_path = _repo_file(repo, fixture["positive_path"], "SMP resource fixture")
+    negative_path = _repo_file(repo, fixture["negative_path"], "SMP negative fixture")
+    if _sha256(positive_path) != fixture["positive_sha256"]:
+        raise ValidationError("SMP resource positive fixture digest differs")
+    if _sha256(negative_path) != fixture["negative_sha256"]:
+        raise ValidationError("SMP resource negative fixture digest differs")
+    positive = _read_text(positive_path, "SMP resource fixture")
+    negative = _read_text(negative_path, "SMP negative fixture")
+    if text.count("#[test]") != fixture["expected_in_file_tests"]:
+        raise ValidationError("SMP resource in-file Rust test count differs")
+    if positive.count("#[test]") != fixture["expected_fixture_tests"]:
+        raise ValidationError("SMP resource fixture Rust test count differs")
+    if fixture["expected_total_tests"] != (
+        fixture["expected_in_file_tests"] + fixture["expected_fixture_tests"]
+    ):
+        raise ValidationError("SMP resource fixture total is not additive")
+    for fragment in (
+        "fn forge_os_token() -> smp_resource::OsToken",
+        "#[cfg(lease_without_proof)]\nfn main() {",
+        "let _ = smp_resource::OsToken::from_ihk_lease_v2(0, 1);",
+        "smp_resource::OsToken {",
+        "&mut memory",
+    ):
+        if fragment not in negative:
+            raise ValidationError(f"SMP negative fixture lacks rejection marker: {fragment}")
+    return source_path
+
+
+def _validate_provider_source(text: str, contract: dict[str, Any]) -> None:
+    code = _mask_rust_comments_and_literals(text)
+    symbol, attach_symbol, detach_symbol, open_symbol, close_symbol = _provider_symbols(
+        contract
+    )
+    compatibility_attach, compatibility_detach = contract["provider_lease"][
+        "compatibility_exports"
+    ]
+    export_record_layout = """pub struct IhkExportSymbolRecord {
+    license: [u8; 4],
+    namespace: [u8; 16],
+    padding: [u8; 4],
+    symbol: *const u8,
+}"""
+    if code.count(export_record_layout) != 1:
+        raise ValidationError(
+            "native IHK provider anchor lacks the exact x86_64 .export_symbol record layout"
+        )
+    required = (
+        '#[repr(C, align(8))]',
+        "pub struct IhkExportSymbolRecord",
+        "unsafe impl Sync for IhkExportSymbolRecord {}",
+        "const _: [(); 32] = [(); core::mem::size_of::<IhkExportSymbolRecord>()];",
+        "const _: [(); 8] = [(); core::mem::align_of::<IhkExportSymbolRecord>()];",
+        f'#[export_name = "{symbol}"]',
+        f'#[export_name = "__export_symbol_{symbol}"]',
+        "symbol: core::ptr::addr_of!(IHK_PROVIDER_LIFECYCLE_V1)",
+        "use self::device_registry::{SharePolicy, IHK_DEVICE_REGISTRY};",
+        f'#[export_name = "{compatibility_attach}"]',
+        f'pub extern "C" fn {compatibility_attach}() -> i64',
+        "IHK_DEVICE_REGISTRY.attach_provider_token()",
+        f'#[export_name = "__export_symbol_{compatibility_attach}"]',
+        f"symbol: {compatibility_attach} as *const () as *const u8",
+        f'#[export_name = "{compatibility_detach}"]',
+        f'pub extern "C" fn {compatibility_detach}(token: i64)',
+        "IHK_DEVICE_REGISTRY.retire_owned_provider_token(token)",
+        f'#[export_name = "__export_symbol_{compatibility_detach}"]',
+        f"symbol: {compatibility_detach} as *const () as *const u8",
+        'type IhkSmpProviderInitV2 = extern "C" fn() -> i32;',
+        'type IhkSmpProviderExitV2 = extern "C" fn();',
+        f'#[export_name = "{attach_symbol}"]',
+        f'pub extern "C" fn {attach_symbol}(',
+        "IHK_DEVICE_REGISTRY.reserve(SharePolicy::Shared)",
+        "let init_status = provider_init_status(init());",
+        "reservation.publish()",
+        f'#[export_name = "__export_symbol_{attach_symbol}"]',
+        f"symbol: {attach_symbol} as *const () as *const u8",
+        f'#[export_name = "{detach_symbol}"]',
+        f'pub extern "C" fn {detach_symbol}(',
+        "let unregister = IHK_DEVICE_REGISTRY\n        .begin_unregister(handle)",
+        "IHK_DEVICE_REGISTRY\n        .snapshot(handle)",
+        "    exit();\n    unregister\n        .commit()",
+        f'#[export_name = "__export_symbol_{detach_symbol}"]',
+        f"symbol: {detach_symbol} as *const () as *const u8",
+        f'#[export_name = "{open_symbol}"]',
+        f'pub extern "C" fn {open_symbol}(minor: u32) -> i64',
+        "IHK_DEVICE_REGISTRY.acquire_open_token(minor as usize)",
+        f'#[export_name = "__export_symbol_{open_symbol}"]',
+        f"symbol: {open_symbol} as *const () as *const u8",
+        f'#[export_name = "{close_symbol}"]',
+        f'pub extern "C" fn {close_symbol}(receipt: i64)',
+        "IHK_DEVICE_REGISTRY.release_owned_open_token(receipt)",
+        f'#[export_name = "__export_symbol_{close_symbol}"]',
+        f"symbol: {close_symbol} as *const () as *const u8",
+    )
+    for fragment in required:
+        _require_active_count(
+            text, code, fragment, 1, "native IHK provider required fragment"
+        )
+    for lease_symbol in (
+        compatibility_attach,
+        compatibility_detach,
+        attach_symbol,
+        detach_symbol,
+        open_symbol,
+        close_symbol,
+    ):
+        _require_active_count(
+            text, code, f'#[export_name = "{lease_symbol}"]', 1,
+            "native IHK provider lease symbol",
+        )
+        _require_active_count(
+            text, code, f'#[export_name = "__export_symbol_{lease_symbol}"]', 1,
+            "native IHK provider lease export record",
+        )
+    _require_active_count(
+        text, code, '#[link_section = ".export_symbol"]', 7,
+        "native IHK provider export_symbol record",
+    )
+    _require_active_count(
+        text, code, 'license: *b"GPL\\0"', 7,
+        "native IHK provider GPL export",
+    )
+    _require_active_count(
+        text, code, 'namespace: *b"MCKERNEL_IHK_V1\\0"', 7,
+        "native IHK provider versioned namespace",
+    )
+    callback_init_type = 'type IhkSmpProviderInitV2 = extern "C" fn() -> i32;'
+    callback_exit_type = 'type IhkSmpProviderExitV2 = extern "C" fn();'
+    compatibility_attach_extern = (
+        f'pub extern "C" fn {compatibility_attach}() -> i64'
+    )
+    compatibility_detach_extern = (
+        f'pub extern "C" fn {compatibility_detach}(token: i64)'
+    )
+    attach_extern = f'pub extern "C" fn {attach_symbol}('
+    detach_extern = f'pub extern "C" fn {detach_symbol}('
+    open_extern = f'pub extern "C" fn {open_symbol}(minor: u32) -> i64'
+    close_extern = f'pub extern "C" fn {close_symbol}(receipt: i64)'
+    _validate_rust_escape_hatches(
+        text,
+        "native IHK provider",
+        allowed_extern_blocks=(
+            callback_init_type,
+            callback_exit_type,
+            compatibility_attach_extern,
+            compatibility_detach_extern,
+            attach_extern,
+            detach_extern,
+            open_extern,
+            close_extern,
+        ),
+    )
+    if len(_active_fragment_positions(text, code, 'pub extern "C" fn ')) != 6:
+        raise ValidationError(
+            "native IHK provider must expose exactly six reviewed C-ABI functions"
+        )
+    for diagnostic in re.finditer(
+        r"\bpr_(?:alert|crit|debug|emerg|err|info|notice|warn)!\s*\((?P<body>.*?)\);",
+        code,
+        re.DOTALL,
+    ):
+        if re.search(r"\b(?:token|receipt)\b", diagnostic.group("body")):
+            raise ValidationError(
+                "native IHK provider diagnostics may not expose a raw lease scalar"
+            )
+
+
+def _validate_kconfig(text: str, contract: dict[str, Any]) -> None:
+    try:
+        validate_native_rust_kconfig(text)
+    except KconfigPolicyError as error:
+        raise ValidationError(f"shared native Rust Kconfig policy violation: {error}") from error
+    symbol = contract["kconfig"]["symbol"]
+    matches = list(re.finditer(rf"^config {re.escape(symbol)}$", text, re.MULTILINE))
+    if len(matches) != 1:
+        raise ValidationError(f"Kconfig must define {symbol} exactly once")
+    tail = text[matches[0].end() :]
+    block = re.split(r"^config |^endmenu$", tail, maxsplit=1, flags=re.MULTILINE)[0]
+    if not re.search(r'^\s*tristate\s+"[^"\n]+"$', block, re.MULTILINE):
+        raise ValidationError("SMP Kconfig entry must remain a tristate")
+    dependencies = re.findall(r"^\s*depends on\s+(.+)$", block, re.MULTILINE)
+    if dependencies != [contract["kconfig"]["provider_symbol"]]:
+        raise ValidationError("SMP Kconfig provider dependency differs")
+    if re.search(r"^\s*(?:select|imply|default|def_bool|def_tristate)\b", block, re.MULTILINE):
+        raise ValidationError("SMP Kconfig entry may not hide a provider/configuration edge")
+
+
+def _validate_kbuild(text: str, contract: dict[str, Any]) -> None:
+    try:
+        validate_native_rust_kbuild(text)
+    except KconfigPolicyError as error:
+        raise ValidationError(f"shared native Rust Kbuild policy violation: {error}") from error
+    mapping = (
+        f"obj-$({contract['kbuild']['config_symbol']}) += "
+        f"{contract['kbuild']['module_object']}"
+    )
+    substantive = [line.strip() for line in text.splitlines() if line.strip()]
+    if substantive.count(mapping) != 1:
+        raise ValidationError("Kbuild lacks the exact ihk-smp-x86_64.ko mapping")
+    if substantive.count(contract["kbuild"]["composite_object"]) != 1:
+        raise ValidationError("Kbuild lacks the exact Rust crate composite mapping")
+    for line in substantive:
+        if contract["kbuild"]["config_symbol"] in line and line != mapping:
+            raise ValidationError("Kbuild contains an alternate SMP production mapping")
+    if re.search(r"\.(?:c|cc|cpp|a|so)\b", text, re.IGNORECASE):
+        raise ValidationError("Kbuild contains a forbidden project implementation input")
+
+
+def _validate_stage_manifest(
+    manifest: dict[str, Any], source_path: Path, provider_path: Path,
+    resource_path: Path, contract: dict[str, Any]
+) -> None:
+    build = manifest.get("build_contract", {})
+    if build.get("project_c_link_objects") != 0:
+        raise ValidationError("stage manifest does not enforce zero project C objects")
+    if build.get("allowed_project_source_suffixes") != [".rs"]:
+        raise ValidationError("stage manifest permits non-Rust project sources")
+    modules = [
+        item for item in manifest.get("modules", []) if item.get("crate") == "ihk_smp_x86_64"
+    ]
+    if len(modules) != 1:
+        raise ValidationError("stage manifest must contain exactly one SMP crate")
+    module = modules[0]
+    dependency = contract["dependency_contract"]
+    if module.get("dependencies") != dependency["dependencies"]:
+        raise ValidationError("stage manifest SMP provider dependency differs")
+    if module.get("required_import_namespaces") != dependency["import_namespaces"]:
+        raise ValidationError("stage manifest SMP import namespace differs")
+    if module.get("output") != contract["module"]["output"]:
+        raise ValidationError("stage manifest SMP output differs")
+    source = module.get("source", {})
+    if source.get("repository_path") != contract["production_source"]:
+        raise ValidationError("stage manifest points SMP at a different production source")
+    if source.get("destination") != "ihk_smp_x86_64.rs":
+        raise ValidationError("stage manifest SMP destination differs")
+    if source.get("sha256") != _sha256(source_path):
+        raise ValidationError("stage manifest SMP source digest is stale")
+    providers = [item for item in manifest.get("modules", []) if item.get("crate") == "ihk"]
+    if len(providers) != 1:
+        raise ValidationError("stage manifest must contain exactly one native IHK provider")
+    provider_source = providers[0].get("source", {})
+    if provider_source.get("repository_path") != contract["provider_source"]:
+        raise ValidationError("stage manifest points at a different native IHK provider")
+    if provider_source.get("sha256") != _sha256(provider_path):
+        raise ValidationError("stage manifest native IHK provider source digest is stale")
+    resource_inputs = [
+        item for item in manifest.get("inputs", [])
+        if item.get("destination") == "smp_resource.rs"
+    ]
+    if len(resource_inputs) != 1:
+        raise ValidationError("stage manifest must contain exactly one SMP resource policy")
+    resource = resource_inputs[0]
+    if resource.get("kind") != "rust_support_module":
+        raise ValidationError("stage manifest SMP resource kind differs")
+    if resource.get("repository_path") != contract["crate_modules"][0]["path"]:
+        raise ValidationError("stage manifest redirects the SMP resource policy")
+    if resource.get("sha256") != _sha256(resource_path):
+        raise ValidationError("stage manifest SMP resource policy digest is stale")
+
+
+def _validate_control_device_fixture(repo: Path, contract: dict[str, Any]) -> Path:
+    fixture = contract["control_device_shell"]["noncopy_fixture"]
+    path = _repo_file(repo, fixture["path"], "SMP provider-open non-Copy fixture")
+    try:
+        size = path.stat().st_size
+    except OSError as error:
+        raise ValidationError(
+            "cannot stat SMP provider-open non-Copy fixture: {0}".format(error)
+        ) from error
+    if size != fixture["size"] or _sha256(path) != fixture["sha256"]:
+        raise ValidationError("SMP provider-open non-Copy fixture identity differs")
+    text = _read_text(path, "SMP provider-open non-Copy fixture")
+    required = (
+        "struct ProviderOpenLease {\n    receipt: i64,\n}",
+        "impl Drop for ProviderOpenLease {",
+        "let _first_owner = owner;",
+        "let _second_owner = owner;",
+    )
+    for fragment in required:
+        if text.count(fragment) != 1:
+            raise ValidationError(
+                "SMP provider-open non-Copy fixture lacks exact marker: {0}".format(
+                    fragment
+                )
+            )
+    if re.search(r"\b(?:derive\s*\([^)]*(?:Copy|Clone)|impl\s+(?:Copy|Clone))", text):
+        raise ValidationError("SMP provider-open fixture may not make the receipt copyable")
+    return path
+
+
+def _validate_get_buildid_fixture(repo: Path, contract: dict[str, Any]) -> Path:
+    fixture = contract["control_device_shell"]["get_buildid"]["source_fixture"]
+    path = _repo_file(repo, fixture["path"], "SMP GET_BUILDID source fixture")
+    if path.stat().st_size != fixture["size"] or _sha256(path) != fixture["sha256"]:
+        raise ValidationError("SMP GET_BUILDID source fixture identity differs")
+    text = _read_text(path, "SMP GET_BUILDID source fixture")
+    for marker in (
+        "// PRODUCTION_BUILDID_CONSTANTS", "// PRODUCTION_BUILDID_DISPATCH",
+        "// PRODUCTION_NATIVE_IOCTL", "// PRODUCTION_COMPAT_IOCTL",
+    ):
+        if text.count(marker) != 1:
+            raise ValidationError("SMP GET_BUILDID source fixture lacks production insertion marker")
+    if text.count("#[test]") != fixture["expected_tests"]:
+        raise ValidationError("SMP GET_BUILDID source fixture test count differs")
+    return path
+
+
+def _validate_reference_inventory(
+    inventory: dict[str, Any], contract: dict[str, Any], repo: Path
+) -> None:
+    provenance = inventory.get("provenance", {})
+    if provenance.get("ihk_commit") != contract["legacy_source_commit"]:
+        raise ValidationError("reference inventory is not bound to the frozen IHK commit")
+    try:
+        source_parameters = inventory["source_capture"]["modules"]["ihk_smp_x86_64"][
+            "source_module_parameters"
+        ]
+        binary_values = inventory["binary_capture"]["modules"]["ihk_smp_x86_64"][
+            "modinfo"
+        ]["values"]
+    except (KeyError, TypeError) as error:
+        raise ValidationError("reference inventory lacks the SMP metadata oracle") from error
+
+    expected = {item["name"]: item for item in contract["parameters"]}
+    source: dict[str, dict[str, Any]] = {}
+    for item in source_parameters:
+        if not isinstance(item, dict) or not isinstance(item.get("name"), str):
+            raise ValidationError("reference source parameter entry is malformed")
+        name = item["name"]
+        if name in source:
+            raise ValidationError(f"reference source has duplicate parameter {name}")
+        source[name] = item
+    if set(source) != set(expected):
+        raise ValidationError("reference inventory parameter names differ from the contract")
+    for name, parameter in expected.items():
+        item = source[name]
+        oracle = {
+            "description": item.get("description"),
+            "permissions_expression": item.get("permissions_expression"),
+            "source": item.get("source"),
+            "type": item.get("type"),
+        }
+        wanted = {
+            "description": parameter["description"],
+            "permissions_expression": parameter["permission"],
+            "source": parameter["legacy_source"],
+            "type": parameter["type"],
+        }
+        if oracle != wanted:
+            raise ValidationError(f"reference source oracle differs for {name}")
+
+    if binary_values.get("name") != [contract["module"]["name"]]:
+        raise ValidationError("legacy binary module name differs")
+    if binary_values.get("license") != [contract["module"]["license"]]:
+        raise ValidationError("legacy binary license differs")
+    if binary_values.get("depends") != contract["dependency_contract"]["dependencies"]:
+        raise ValidationError("legacy binary provider dependency differs")
+    for forbidden in contract["module"]["forbidden_static_metadata"]:
+        if forbidden in binary_values:
+            raise ValidationError(f"legacy binary unexpectedly carries {forbidden} metadata")
+    parm = {value.split(":", 1)[0]: value.split(":", 1)[1] for value in binary_values.get("parm", [])}
+    parmtype = {
+        value.split(":", 1)[0]: value.split(":", 1)[1]
+        for value in binary_values.get("parmtype", [])
+    }
+    if parm != {name: item["description"] for name, item in expected.items()}:
+        raise ValidationError("legacy binary parameter descriptions differ")
+    if parmtype != {name: item["type"] for name, item in expected.items()}:
+        raise ValidationError("legacy binary parameter types differ")
+
+    source_texts: dict[str, str] = {}
+    for parameter in contract["parameters"]:
+        relative = parameter["legacy_source"]
+        if relative not in source_texts:
+            source_texts[relative] = _read_text(
+                _repo_file(repo, relative, f"legacy parameter source {relative}"),
+                f"legacy parameter source {relative}",
+            )
+        text = source_texts[relative]
+        c_type = "unsigned int" if parameter["type"] == "uint" else "unsigned long"
+        patterns = (
+            rf"\bstatic\s+{re.escape(c_type)}\s+{re.escape(parameter['name'])}\s*=\s*0\s*;",
+            rf"\bmodule_param\(\s*{re.escape(parameter['name'])}\s*,\s*{parameter['type']}\s*,\s*{parameter['permission']}\s*\)\s*;",
+            rf'\bMODULE_PARM_DESC\(\s*{re.escape(parameter["name"])}\s*,\s*"{re.escape(parameter["description"])}"\s*\)\s*;',
+        )
+        for pattern in patterns:
+            if len(re.findall(pattern, text)) != 1:
+                raise ValidationError(
+                    f"frozen source does not prove {parameter['name']} type/default/permission/description"
+                )
+
+
+def validate_repository(
+    repo: Path, contract_relative: Path = DEFAULT_CONTRACT
+) -> dict[str, Any]:
+    repo = repo.resolve()
+    contract_path = _repo_file(repo, contract_relative.as_posix(), "SMP lifecycle contract")
+    contract = _load_json(contract_path)
+    _validate_contract(contract)
+    source_path = _repo_file(repo, contract["production_source"], "production SMP Rust source")
+    _validate_rust_source(_read_text(source_path, "production SMP Rust source"), contract)
+    resource_path = _validate_resource_foundation(repo, contract)
+    control_fixture_path = _validate_control_device_fixture(repo, contract)
+    buildid_fixture_path = _validate_get_buildid_fixture(repo, contract)
+    provider_path = _repo_file(repo, contract["provider_source"], "native IHK provider source")
+    _validate_provider_source(_read_text(provider_path, "native IHK provider source"), contract)
+    _validate_kconfig(
+        _read_text(_repo_file(repo, contract["kconfig"]["path"], "production Kconfig"), "Kconfig"),
+        contract,
+    )
+    _validate_kbuild(
+        _read_text(_repo_file(repo, contract["kbuild"]["path"], "production Kbuild"), "Kbuild"),
+        contract,
+    )
+    _validate_stage_manifest(
+        _load_json(_repo_file(repo, contract["stage_manifest"], "stage manifest")),
+        source_path,
+        provider_path,
+        resource_path,
+        contract,
+    )
+    _validate_reference_inventory(
+        _load_json(_repo_file(repo, contract["reference_inventory"], "legacy inventory")),
+        contract,
+        repo,
+    )
+    return {
+        "artifact_validated": False,
+        "built_symbol_reference_validated": False,
+        "dependencies": contract["dependency_contract"]["dependencies"],
+        "gate_id": contract["gate_id"],
+        "import_namespaces": contract["dependency_contract"]["import_namespaces"],
+        "module": contract["module"]["name"],
+        "output": contract["module"]["output"],
+        "parameters": len(contract["parameters"]),
+        "provider_lease_credit_eligible": False,
+        "provider_lease_gate_status": contract["provider_lease"]["gate_status"],
+        "provider_lease_runtime_proven": False,
+        "provider_symbols": list(_module_provider_symbols(contract)),
+        "control_device_credit_eligible": False,
+        "control_device_gate_status": contract["control_device_shell"]["gate_status"],
+        "control_device_name": contract["control_device_shell"]["device_name"],
+        "control_device_runtime_proven": False,
+        "control_device_source_reachable": True,
+        "control_device_valid_ioctl_commands": contract["control_device_shell"]["valid_ioctl_commands"],
+        "control_device_usercopy_source_reachable": True,
+        "control_device_noncopy_fixture_sha256": _sha256(control_fixture_path),
+        "get_buildid_source_fixture_sha256": _sha256(buildid_fixture_path),
+        "get_buildid_source_fixture_tests": contract["control_device_shell"]["get_buildid"]["source_fixture"]["expected_tests"],
+        "rocky_build_load_validated": False,
+        "resource_foundation_credit_eligible": False,
+        "resource_foundation_linux_reachable": contract["resource_foundation"]["linux_reachable"],
+        "resource_foundation_source_sha256": _sha256(resource_path),
+        "resource_foundation_tests": contract["resource_foundation"]["fixture"]["expected_total_tests"],
+        "source_symbol_reference_present": True,
+        "runtime_symbol_reference_proven": False,
+        "source_sha256": _sha256(source_path),
+    }
+
+
+def _raw_modinfo_records(module_path: Path) -> list[str]:
+    executable = shutil.which("objcopy")
+    if executable is None:
+        raise ValidationError("objcopy is required for raw built-module validation")
+    source_sha256 = _sha256(module_path)
+    with tempfile.TemporaryDirectory(prefix="mckernel-smp-modinfo-") as temporary:
+        temporary_path = Path(temporary)
+        dump_path = temporary_path / "modinfo.bin"
+        output_path = temporary_path / "module.copy"
+        result = subprocess.run(
+            [
+                executable,
+                "--dump-section",
+                f".modinfo={dump_path}",
+                str(module_path),
+                str(output_path),
+            ],
+            check=False,
+            capture_output=True,
+        )
+        if result.returncode != 0:
+            error = result.stderr.decode("utf-8", errors="replace").strip()
+            raise ValidationError(
+                f"objcopy raw .modinfo extraction failed ({result.returncode}): {error}"
+            )
+        try:
+            data = dump_path.read_bytes()
+        except OSError as error:
+            raise ValidationError(
+                f"objcopy did not produce raw .modinfo bytes: {error}"
+            ) from error
+    if _sha256(module_path) != source_sha256:
+        raise ValidationError("objcopy modified the built SMP module during validation")
+    if not data:
+        raise ValidationError("built SMP module has an empty raw .modinfo section")
+    if not data.endswith(b"\0"):
+        raise ValidationError("built SMP module raw .modinfo is not NUL terminated")
+    # Linked kernel modules may contain zero padding between input `.modinfo`
+    # contributions.  Preserve every non-empty record exactly while treating
+    # only those all-zero spans as linker padding.
+    encoded_records = [record for record in data.split(b"\0") if record]
+    if not encoded_records:
+        raise ValidationError("built SMP module raw .modinfo has no records")
+    records: list[str] = []
+    for encoded in encoded_records:
+        try:
+            record = encoded.decode("ascii")
+        except UnicodeDecodeError as error:
+            raise ValidationError(
+                "built SMP module raw .modinfo is not exact ASCII"
+            ) from error
+        key, separator, _value = record.partition("=")
+        if not separator or not key:
+            raise ValidationError(
+                f"built SMP module raw .modinfo record is malformed: {record!r}"
+            )
+        records.append(record)
+    return records
+
+
+def _modinfo_execution(modinfo_fd: int | None) -> tuple[str, tuple[int, ...]]:
+    if modinfo_fd is None:
+        executable = shutil.which("modinfo")
+        if executable is None:
+            raise ValidationError("modinfo is required for built-module validation")
+        return executable, ()
+    if type(modinfo_fd) is not int or modinfo_fd < 3:
+        raise ValidationError("modinfo descriptor must be an open integer fd >= 3")
+    try:
+        descriptor_status = os.fstat(modinfo_fd)
+        executable_status = os.stat(f"/proc/self/fd/{modinfo_fd}")
+    except OSError as error:
+        raise ValidationError(f"modinfo descriptor is unavailable: {error}") from error
+    if (
+        not stat.S_ISREG(descriptor_status.st_mode)
+        or descriptor_status.st_dev != executable_status.st_dev
+        or descriptor_status.st_ino != executable_status.st_ino
+    ):
+        raise ValidationError("modinfo descriptor must identify one regular file")
+    if stat.S_IMODE(descriptor_status.st_mode) & 0o111 == 0:
+        raise ValidationError("modinfo descriptor target is not executable")
+    return f"/proc/self/fd/{modinfo_fd}", (modinfo_fd,)
+
+
+def _modinfo(
+    module_path: Path, field: str, modinfo_fd: int | None = None
+) -> list[str]:
+    executable, pass_fds = _modinfo_execution(modinfo_fd)
+    try:
+        result = subprocess.run(
+            ["modinfo", "-F", field, str(module_path)],
+            check=False,
+            capture_output=True,
+            env=dict(BOUND_MODINFO_ENVIRONMENT),
+            executable=executable,
+            pass_fds=pass_fds,
+            text=True,
+        )
+    except OSError as error:
+        raise ValidationError(f"bound modinfo execution failed: {error}") from error
+    if result.returncode != 0:
+        raise ValidationError(
+            f"modinfo -F {field} failed ({result.returncode}): "
+            f"{result.stderr.strip() or result.stdout.strip()}"
+        )
+    return [line for line in result.stdout.splitlines() if line]
+
+
+def _artifact_modinfo(
+    module_path: Path, field: str, modinfo_fd: int | None
+) -> list[str]:
+    if modinfo_fd is None:
+        return _modinfo(module_path, field)
+    return _modinfo(module_path, field, modinfo_fd=modinfo_fd)
+
+
+def _named_parameter_values(values: list[str], label: str) -> dict[str, str]:
+    parsed: dict[str, str] = {}
+    for value in values:
+        name, separator, detail = value.partition(":")
+        if not separator or not name or not detail:
+            raise ValidationError(f"built SMP module {label} is malformed: {value!r}")
+        if name in parsed:
+            raise ValidationError(
+                f"built SMP module {label} repeats parameter {name}"
+            )
+        parsed[name] = detail
+    return parsed
+
+
+def _undefined_symbols(module_path: Path) -> set[str]:
+    executable = shutil.which("nm")
+    if executable is None:
+        raise ValidationError("nm is required for built-module dependency validation")
+    result = subprocess.run(
+        [executable, "-u", str(module_path)],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        raise ValidationError(
+            f"nm -u failed ({result.returncode}): {result.stderr.strip() or result.stdout.strip()}"
+        )
+    return {line.split()[-1] for line in result.stdout.splitlines() if line.split()}
+
+
+def validate_module_artifact(
+    module_path: Path,
+    summary: dict[str, Any],
+    contract: dict[str, Any],
+    modinfo_fd: int | None = None,
+) -> None:
+    module_path = module_path.resolve()
+    if module_path.is_symlink() or not module_path.is_file():
+        raise ValidationError("built SMP module must be a regular, non-symlink file")
+    scalar_fields = {
+        "name": [contract["module"]["name"]],
+        "license": [contract["module"]["license"]],
+        "depends": contract["dependency_contract"]["dependencies"],
+        "import_ns": contract["dependency_contract"]["import_namespaces"],
+    }
+    for field, expected in scalar_fields.items():
+        actual = _artifact_modinfo(module_path, field, modinfo_fd)
+        if actual != expected:
+            raise ValidationError(
+                f"built SMP module {field} differs: expected {expected}, got {actual}"
+            )
+    for field in contract["module"]["forbidden_static_metadata"]:
+        if _artifact_modinfo(module_path, field, modinfo_fd):
+            raise ValidationError(f"built SMP module unexpectedly carries {field} metadata")
+    parameters = {
+        item["name"]: item
+        for item in (*contract["parameters"], EXPECTED_ADDITIVE_DIAGNOSTIC_PARAMETER)
+    }
+    raw_records = _raw_modinfo_records(module_path)
+    raw_parm = sorted(
+        record for record in raw_records if record.startswith("parm=")
+    )
+    expected_raw_parm = sorted(
+        f'parm={name}:{item["description"]}'
+        for name, item in parameters.items()
+    )
+    if raw_parm != expected_raw_parm:
+        raise ValidationError(
+            "built SMP module raw parameter descriptions differ: "
+            f"expected {expected_raw_parm}, got {raw_parm}"
+        )
+    raw_parmtype = sorted(
+        record for record in raw_records if record.startswith("parmtype=")
+    )
+    expected_raw_parmtype = sorted(
+        f'parmtype={name}:{item["type"]}'
+        for name, item in parameters.items()
+    )
+    if raw_parmtype != expected_raw_parmtype:
+        raise ValidationError(
+            "built SMP module raw parameter types differ: "
+            f"expected {expected_raw_parmtype}, got {raw_parmtype}"
+        )
+    parm_values = _artifact_modinfo(module_path, "parm", modinfo_fd)
+    type_values = _artifact_modinfo(module_path, "parmtype", modinfo_fd)
+    parm = _named_parameter_values(parm_values, "rendered parameter description")
+    parmtype = _named_parameter_values(type_values, "rendered parameter type")
+    # kmod deliberately renders `modinfo -F parm` by joining each raw
+    # `parm=name:description` record with its `parmtype=name:type` peer.  The
+    # resulting public representation is `name:description (type)`; asking for
+    # `parmtype` still returns the raw `name:type` record.
+    expected_parm = {
+        name: f'{item["description"]} ({item["type"]})'
+        for name, item in parameters.items()
+    }
+    if parm != expected_parm:
+        raise ValidationError(
+            "built SMP module parameter descriptions differ: "
+            f"expected {expected_parm}, got {parm}"
+        )
+    expected_parmtype = {name: item["type"] for name, item in parameters.items()}
+    if parmtype != expected_parmtype:
+        raise ValidationError(
+            "built SMP module parameter types differ: "
+            f"expected {expected_parmtype}, got {parmtype}"
+        )
+    undefined = _undefined_symbols(module_path)
+    missing_provider_symbols = sorted(set(_module_provider_symbols(contract)) - undefined)
+    if missing_provider_symbols:
+        raise ValidationError(
+            "built SMP module lacks provider relocations: "
+            + ", ".join(missing_provider_symbols)
+        )
+    data = module_path.read_bytes()
+    for phase in ("load", "unload"):
+        prefix = f"lifecycle={phase} parameters=".encode("ascii")
+        if prefix not in data:
+            raise ValidationError(f"built SMP module lacks {phase} diagnostic string")
+    summary["artifact_validated"] = True
+    summary["built_symbol_reference_validated"] = True
+
+
+def _parse_args(argv: list[str]) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--repo", type=Path, default=ROOT)
+    parser.add_argument("--contract", type=Path, default=DEFAULT_CONTRACT)
+    parser.add_argument(
+        "--module", type=Path, help="also validate built ihk-smp-x86_64.ko metadata"
+    )
+    parser.add_argument(
+        "--modinfo-fd",
+        type=int,
+        help="inherited descriptor for the identity-bound kmod executable",
+    )
+    parser.add_argument("--json", action="store_true")
+    return parser.parse_args(argv)
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = _parse_args(sys.argv[1:] if argv is None else argv)
+    try:
+        repo = args.repo.resolve()
+        contract_path = _repo_file(repo, args.contract.as_posix(), "SMP lifecycle contract")
+        contract = _load_json(contract_path)
+        summary = validate_repository(repo, args.contract)
+        if args.modinfo_fd is not None and args.module is None:
+            raise ValidationError("--modinfo-fd requires --module")
+        if args.module is not None:
+            validate_module_artifact(args.module, summary, contract, args.modinfo_fd)
+    except ValidationError as error:
+        print(f"ihk-smp-native-lifecycle-check: FAIL: {error}", file=sys.stderr)
+        return 1
+    if args.json:
+        print(json.dumps(summary, sort_keys=True))
+    else:
+        level = "ARTIFACT-CONTRACT-VERIFIED" if summary["artifact_validated"] else "SOURCE-CONTRACT-VERIFIED"
+        print(
+            "ihk-smp-native-lifecycle-check: "
+            f"{level} module={summary['module']} parameters={summary['parameters']} "
+            "provider_lease=TODO provider_lease_runtime=NOT_PROVEN "
+            "control_device=mcd0 control_device_gate=TODO "
+            "control_device_runtime=NOT_PROVEN "
+            "tracker_credit=FORBIDDEN rocky_build_load=NOT_EVALUATED "
+            "runtime_symbol_reference=NOT_PROVEN"
+        )
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

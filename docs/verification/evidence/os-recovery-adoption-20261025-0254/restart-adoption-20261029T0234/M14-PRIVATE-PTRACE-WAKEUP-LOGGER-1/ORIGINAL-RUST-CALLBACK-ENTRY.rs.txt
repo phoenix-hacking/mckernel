@@ -1,0 +1,24 @@
+pub unsafe extern "C" fn ptrace_wakeup_sig_body_result(
+    pid: CInt,
+    request: CLong,
+    data: CLong,
+    current_thread: CULong,
+    info_offset: CULong,
+    offsets: *const PtraceIoOffsets,
+    lock_node: *mut c_void,
+    find_fn: Option<PtraceFindThreadFn>,
+    unlock_fn: Option<PtraceThreadUnlockFn>,
+    log_fn: Option<PtraceControlLogFn>,
+    clear_saved_fn: Option<PtraceSavedContextClearFn>,
+    set_single_step_fn: Option<PtraceSetSingleStepFn>,
+    lock_fn: Option<PtraceRwlockFn>,
+    trace_syscall_update_fn: Option<PtraceTraceSyscallUpdateFn>,
+    unlock_lock_fn: Option<PtraceRwlockFn>,
+    take_pending_fn: Option<PtracePendingSignalTakeFn>,
+    free_fn: Option<PtraceFreeFn>,
+    do_kill_fn: Option<PtraceDoKillThreadFn>,
+    wakeup_fn: Option<PtraceWakeupThreadFn>,
+) -> CInt {
+    if let Some(log) = log_fn {
+        unsafe { log(PTRACE_CONTROL_LOG_WAKEUP_ENTER, pid, data as CInt) };
+    }

@@ -1,0 +1,134 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_SOURCE_AND_ONE_EXACT_CONDITIONAL_HELD_ONLY_RETIREMENT_RELEASE",
+  "source_review_decision": "PASS_SOURCE",
+  "independent": true,
+  "reviewer": "/root/guardian_execution_review",
+  "implementation_ownership": false,
+  "conditional_release": true,
+  "maximum_invocations": 1,
+  "signal": "SIGINT",
+  "maximum_signal_calls": 1,
+  "mechanism": "pidfd_open plus pidfd_send_signal only; no numeric/group fallback",
+  "holder": {
+    "path": "/run/lock/mckernel-development.lock",
+    "pid": 1815979,
+    "starttime": 95215128,
+    "device": 27,
+    "inode": 4,
+    "fd": 3
+  },
+  "original_positive_join_tool_session": 11857,
+  "reviewed_READY": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/READY.DIRECTORY-FSYNC-CORRECTED.json",
+    "bytes": 3083,
+    "sha256": "c654c3acf76be364caa31e75ece4ce22defcea52796b70aacc3cb360e2398c0d"
+  },
+  "reviewed_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/interrupt_exact_unlaunched_holder.DIRECTORY-FSYNC-CORRECTED.py",
+    "bytes": 11252,
+    "sha256": "10772f6af24e47198a9917036d74a13a9e8059d6adee8f4137313b360f1fb822"
+  },
+  "reviewed_profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/SOURCE-PROFILE.DIRECTORY-FSYNC-CORRECTED.NOT-A-GRANT.json",
+    "bytes": 6360,
+    "sha256": "3671c8625d3698e1fe62157637609077e2c0ac9ef66cbf4154ed1b28706780cb"
+  },
+  "reviewed_Root_grant_template": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/ROOT-GRANT.DIRECTORY-FSYNC-CORRECTED.TEMPLATE.NOT-A-GRANT.json",
+    "bytes": 1325,
+    "sha256": "0fab1167d0ea01115b7d2c5b21f7b89431b51b4eeb297c3b5ad4c6f850ee4b0d"
+  },
+  "reviewed_delta_controls": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/DIRECTORY-FSYNC-CORRECTION.CONTROLS.json",
+    "bytes": 1607,
+    "sha256": "146dff593fd103fa5e4c6abe9f05183ecac23e33e6156c7d3d0c597b6de315ae"
+  },
+  "preserved_original_READY": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/READY.json",
+    "bytes": 2277,
+    "sha256": "a21fbe64429b1a5c18502d4a2927296c07509f06c7259ecf48f3f3f8e92f49a0"
+  },
+  "preserved_original_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/interrupt_exact_unlaunched_holder.py",
+    "bytes": 11035,
+    "sha256": "570b306904398f8d36d7bca3f6bc3cc2725e8bf698ce93accbb55c4942c225af"
+  },
+  "preserved_initial_blocker": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/independent-source-review-1/INITIAL-BLOCKER.json",
+    "bytes": 4435,
+    "sha256": "d8e6590cef1ecbf9f531cf0b0864e3c9106205e73ef4c89ef56883c15e86da0b"
+  },
+  "approved_exact_command_after_Root_grant": [
+    "/usr/bin/python3",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/interrupt_exact_unlaunched_holder.DIRECTORY-FSYNC-CORRECTED.py",
+    "--grant",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/ROOT-ACTUAL-ONE-HOLDER-INTERRUPT-GRANT.json"
+  ],
+  "findings": [
+    {
+      "predicate": "Only directory durability correction",
+      "result": "PASS",
+      "evidence": "Actual successor source10772f6a differs from frozen570b source only by opening its containing directory with O_RDONLY|O_DIRECTORY|O_CLOEXEC|O_NOFOLLOW, fsyncing it inside try, and closing that own directory descriptor in finally. After removing exactly the added assignment and try AST statements, entire source AST equals original. Source profile changes only helper ref plus durability annotation; exact fixed target/refs/negative paths and all signal/guard/expiry predicates remain unchanged."
+    },
+    {
+      "predicate": "Original blocker resolved before any possible effect",
+      "result": "PASS",
+      "evidence": "Exclusive O_EXCL ACTION.jsonl creation and first flushed+fsynced ENTERED_NO_SIGNAL are followed immediately by parent directory fsync before verify_live, pidfd_open or signal attempt. File contents and its exclusive directory entry are durable before signaling. Any open/fsync/close failure enters existing failed-closed exception path without signal or retry. Directory descriptor belongs to helper; permanent lock FD3 is never closed by helper."
+    },
+    {
+      "predicate": "Exact held-only identity and original holder finally path",
+      "result": "PASS_STATIC_CONDITIONAL",
+      "evidence": "Exact immutable holder source d17bd waits for absent ROOT-BUILD-GRANT.READY with child_started=False/can_release=True. Default caught SIGINT produces KeyboardInterrupt through except BaseException; with no child it rethrows and finally closes only the holder ownFD. Root grant freezes all publisher/READY writes until positive join. Both future live checks require PID1815979/birth95215128/UID1000, one task/no children, exact source/bootstrap cmdline, SIGINT caught/notblocked/notignored, FD3 CLOEXEC to permanent27:4 and sole fullEOF WRITE flock. Reviewer made no live assertion."
+    },
+    {
+      "predicate": "Exactly one effect, no fallback or workload",
+      "result": "PASS_STATIC_CONDITIONAL",
+      "evidence": "Exactly one pidfd_send_signal(SIGINT) AST call remains. pidfd descriptor is verified for target PID between two independent birth/ownership/state/path checks. No group/numeric signal, SIGTERM, escalation, retry, unlock, deletion, Docker, compiler, native/watcher/server operation or subprocess is present. O_EXCL action journal consumes attempt; failure does not retry. Helper only closes its own pidfd/directory descriptor."
+    },
+    {
+      "predicate": "No build started and expired evidence preserved",
+      "result": "PASS_STATIC_CONDITIONAL",
+      "evidence": "Original holder-ready/bootstrap/source/runner/worker/profile and expired resource5748/pending3db1/refused91e5 refs remain exact. Refusal requires no execution approval/zero invocations. Ten negative paths reject approved build review, actual build grant, READY, RUNNER/streams/terminal/quarantine and OUTPUT before each live check. Root attests no runner/Docker and freezes publication until holder joins. Expired120s evidence is retained; cf36 is unused abandoned and cannot become build authority."
+    },
+    {
+      "predicate": "Fresh Root grant and live guard remain mandatory",
+      "result": "PASS_STATIC_CONDITIONAL",
+      "evidence": "Helper requires exact grant path, author/root decision, one invocation/SIGINT, exact source/profile/holder/tool11857, independent review ref/pass and both Root attestations. First guard enforces issued<=now<=expires<=issued+60 and earliest UTC cutoff; final guard enforces grant expiry and all current tightening cutoffs before signal. Exact v2 account/window1f152 is authenticated. Review is conditional on those actual checks; no grant or clock fact is fabricated here."
+    },
+    {
+      "predicate": "Signal is not retirement/current-free proof",
+      "result": "PASS_SCOPE",
+      "evidence": "SIGNAL_SENT_NOT_RETIREMENT explicitly reports current_free=false and requires Root positive join of original tool11857. Then separate independent current-free observation including original fullownership and two closed permanent-mutex probes is required. No build/native/guest/source-count progress or new runtime admission follows automatically."
+    }
+  ],
+  "conditions_for_exact_release": [
+    "Root fills fresh<=60s ROOT-ACTUAL-ONE-HOLDER-INTERRUPT-GRANT.json using corrected source10772f6a/profile3671c862 and this exact review ref; original reviewed helper570b is not released.",
+    "Root freezes every build publisher/grant/READY action until positive holder join; attests no runner/Docker launched. All helper double live identity/absence/flock predicates must pass.",
+    "Current v2 account/window/real holds allow the one operation; no widening of original clocks, budget, ownership or resource controls.",
+    "Exactly one pidfd SIGINT attempt; no fallback/retry on uncertainty. Preserve durable action journal and all expired records.",
+    "Root positively joins actual tool11857 and obtains separate independent full current-free/probes before any later operation; signal receipt alone does not release resources."
+  ],
+  "actual_Root_grant_reviewed": null,
+  "actual_live_identity_verified_by_reviewer": false,
+  "actual_guard_calls_by_reviewer": 0,
+  "actual_proc_queries_by_reviewer": 0,
+  "actual_signals_by_reviewer": 0,
+  "actual_retirement": null,
+  "current_free": false,
+  "build_or_native_execution_approval": false,
+  "compiler_or_guest_authority": false,
+  "runtime_authority": "CONDITIONAL_EXACT_HELD_ONLY_INTERRUPT_REQUIRES_ACTUAL_ROOT_GRANT_AND_HELPER_CHECKS",
+  "persistent_controls": {
+    "fixed_UTC_cutoff": "2026-10-28T05:36:09Z",
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "credit_run": "7f4af94a83b14cc08f97401f5891d965",
+    "credit_ceiling": 57774.852125,
+    "cumulative_spent_floor": 22812.3311,
+    "real_holds_effective": true,
+    "new_allowance": false,
+    "Root_owns_actual_execution_and_followup": true
+  },
+  "review_method": "Read-only successor refs/diff and whole-source AST equality after exact2statement removal, original source/control/holder path analysis reused from initial blocker. No helper import, guard/account/proc observation, pidfd/signal, workload, cleanup or canonical modification."
+}

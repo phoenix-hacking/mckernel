@@ -1,0 +1,50 @@
+{
+  "schema": "mckernel.stability.native-exact-retirement-integration-source-success.v1",
+  "recorded_at": "2026-09-29T05:37:27-07:00",
+  "status": "PASS_SOURCE_TEMPLATE_ONLY",
+  "base_fetched_commit": "fcc854f75fa3fc84e12630e12ceb0b5097f3c1c9",
+  "sources": {
+    "packet": {"path": "docs/verification/evidence/native-exact-candidate-retirement-67589154-1.py", "sha256": "f1cb3db715d836fa6f63409241dc6b08a8ddbe2de13c1d934be3b2af635ac363"},
+    "packet_test": {"path": "scripts/tests/test_native_exact_candidate_retirement_67589154.py", "sha256": "41ad8074f5832a2e848ca0421ec5c7d331f889cbac038772ec751c288179c4b6"},
+    "helper": {"path": "scripts/native_exact_candidate_retire.py", "sha256": "2218e7fef88d4cea176be351f1de75546e0a05449aadc01592c1a91306027010"},
+    "helper_test": {"path": "scripts/tests/test_native_exact_candidate_retire.py", "sha256": "c350fc3e5eae5752fed76cddfe1102f253ddf758fab5c9c50acae5f5c40b95c1"},
+    "observer": {"path": "docs/verification/evidence/native-exact-candidate-live-reference-observer-67589154-1.py", "sha256": "3562b1d3d4e9a1e09cb7fa2be30f8e320923d50cf628b7f42314318702653666"},
+    "observer_test": {"path": "scripts/tests/test_native_exact_candidate_live_reference_observer_67589154.py", "sha256": "b5f48e7b616f9ac517397455a1aebe0e13ce2a741388cf46046d0761adb922e4"},
+    "archive": {"path": "scripts/native_exact_candidate_retention_archive.py", "sha256": "6a28184e13e4ddec3a5e2fe6229c618929df29f235901083d55918c8291ac06e"},
+    "archive_test": {"path": "scripts/tests/test_native_exact_candidate_retention_archive.py", "sha256": "fa9d727d74e462a9d6fdb2d96f3a3a597ccdab331b4321b92a2d11eaeb48355e"}
+  },
+  "independent_review": {
+    "review_id": "retirement_raw_owner_review_125",
+    "decision": "PASS",
+    "scope": "source-template and temporary/mock/local-child test design only",
+    "verified_behaviors": [
+      "raw Popen, PID, session and streams are retained before decoration while TERM and INT are blocked",
+      "self-pidfd support and fdinfo identity are checked before spawning",
+      "transient first pidfd failure recovers only through an unreaped exact child and matching PID/session/starttime observations",
+      "replacement sessions never authorize member signalling",
+      "permanent pidfd failure signals only the proved unreaped direct child, reports surviving descendants and uncertainty, and blocks further operation",
+      "unreaped leader anchoring, pidfd member signalling, bounded TERM/KILL escalation and final empty proof remain fail closed",
+      "helper operation, failure-journal and close errors form an explicit bounded cycle-safe tree preserved in packet-failure.v2",
+      "descriptor-relative output, sealed observer/archive/helper, immutable exclusion and terminal publication ordering retain their reviewed contracts"
+    ],
+    "explicit_limitation": "Permanent per-child pidfd failure does not guarantee descendant cleanup. It yields explicit uncertainty and prevents retirement success or later work under the immutable tombstone.",
+    "post_publication_limitation": "The one-shot CLI closes its retained read-only terminal writer descriptor best effort after durable publication; process exit is the final descriptor release and cannot change the durable record."
+  },
+  "checks": [
+    {"argv": ["/usr/bin/python3.8", "-B", "-m", "unittest", "scripts.tests.test_native_exact_candidate_retirement_67589154", "scripts.tests.test_native_exact_candidate_retire", "scripts.tests.test_native_exact_candidate_live_reference_observer_67589154", "scripts.tests.test_native_exact_candidate_retention_archive"], "result": "PASS 106/106", "elapsed_seconds": 2.646},
+    {"argv": ["/home/holden/anaconda3/bin/python3.9", "-B", "-m", "unittest", "scripts.tests.test_native_exact_candidate_retirement_67589154", "scripts.tests.test_native_exact_candidate_retire", "scripts.tests.test_native_exact_candidate_live_reference_observer_67589154", "scripts.tests.test_native_exact_candidate_retention_archive"], "result": "PASS 106/106", "elapsed_seconds": 2.639},
+    {"check": "py_compile four changed source/test files on Python 3.8 and Python 3.9", "result": "PASS"},
+    {"check": "scoped git diff --check", "result": "PASS"}
+  ],
+  "preserved_failure_lineage": "docs/verification/stability-native-exact-retirement-integration-review-failures-20260929-1.json",
+  "release_state": "DRAFT_NOT_RELEASED",
+  "next_required_gates": [
+    "commit, push and fetch-verify this exact immutable template",
+    "mechanically create an acyclic release JSON and change only the packet release-hash sentinel plus the new release file",
+    "obtain an independent exact mechanical and execution review",
+    "run fresh live prerequisite and immutable-filesystem support gates before at most one sudo packet invocation"
+  ],
+  "not_run": ["live candidate or backup traversal", "canonical live Git object streaming", "immutable filesystem ioctl", "privileged retirement", "Docker mutation", "build", "module", "guest", "application"],
+  "runtime_acceptance": false,
+  "formal_counters_changed": false
+}

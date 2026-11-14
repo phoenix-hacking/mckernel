@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "record_kind": "layer_b_fast_completion_packet_review",
+  "recorded_utc": "2026-09-28T09:46:00Z",
+  "status": "FAIL_FAST_COMPLETION_PACKET",
+  "packet_path": "docs/verification/stability-layer-b-native-owner-fast-completion-correction-packet-20260928-18.md",
+  "packet_sha256": "f30561ea725dfd5afb3ecfef43c24d46b3f98c0e4b8c2dbd95dbc894e2df3375",
+  "blocking_findings": [
+    "systemctl show renders command argv by joining strings with spaces, so it cannot independently prove exact argument boundaries. Bind boundaries to retained literal submission plus verified v245 property-parser semantics and use show only for ordered rendered commands/statuses.",
+    "New sync/rename marker operations have no literal timeouts or observation-deadline accounting. Publication occurs at rename; a post-rename sync failure must clean up a possibly started compiler."
+  ],
+  "verified_strategy": "Repeated nonempty ExecStartPre properties append in order on systemd 245 and --no-block permits observation during start-pre. Fresh-root, prebound-cgroup cleanup and status discrimination are otherwise appropriate.",
+  "execution_released": false,
+  "acceptance_credit": false
+}

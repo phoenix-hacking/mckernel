@@ -1,0 +1,160 @@
+{
+  "status": "EXACT_CURRENT_MATCHING_ALIAS_ROWS_RETAINED_NO_REPLAY",
+  "result_sha256": "d93faf4cf06ce263ac373ac001f7a0b769d4855f3b8d7c280efe920ecfb12132",
+  "code_sha256": "2f93cbcbafc89ed4ced8d0bec0939ac6461b3f6c2328e07ee4f566cbce66ba92",
+  "ordinary_exit_code": 0,
+  "source_code_unchanged": true,
+  "source_de9_preserved": true,
+  "readable_stable_processes": 291,
+  "stat_mountinfo_gaps": [],
+  "process_set_stable": true,
+  "current_reject_count": 13,
+  "unique_full_rows": [
+    {
+      "raw": "4558 3565 7:36 / /var/lib/snapd/hostfs/home/holden/mckernel-work/scratch rw,nosuid,nodev,relatime master:151 - ext4 /dev/loop36 rw",
+      "PIDstart_rows": [
+        {
+          "pid": 4369,
+          "starttime": 8183,
+          "ppid": 1311,
+          "state": "S"
+        },
+        {
+          "pid": 4498,
+          "starttime": 8462,
+          "ppid": 4369,
+          "state": "S"
+        },
+        {
+          "pid": 4499,
+          "starttime": 8462,
+          "ppid": 4369,
+          "state": "S"
+        },
+        {
+          "pid": 4564,
+          "starttime": 8817,
+          "ppid": 4498,
+          "state": "S"
+        },
+        {
+          "pid": 4633,
+          "starttime": 9002,
+          "ppid": 4369,
+          "state": "S"
+        },
+        {
+          "pid": 771264,
+          "starttime": 8623785,
+          "ppid": 4369,
+          "state": "S"
+        },
+        {
+          "pid": 771326,
+          "starttime": 8624464,
+          "ppid": 4499,
+          "state": "S"
+        }
+      ]
+    },
+    {
+      "raw": "2416 953 7:36 / /var/lib/snapd/hostfs/home/holden/mckernel-work/scratch rw,nosuid,nodev,relatime master:151 - ext4 /dev/loop36 rw",
+      "PIDstart_rows": [
+        {
+          "pid": 511059,
+          "starttime": 4081605,
+          "ppid": 1,
+          "state": "S"
+        },
+        {
+          "pid": 511066,
+          "starttime": 4081606,
+          "ppid": 1,
+          "state": "S"
+        },
+        {
+          "pid": 511562,
+          "starttime": 4081758,
+          "ppid": 511059,
+          "state": "S"
+        },
+        {
+          "pid": 511563,
+          "starttime": 4081758,
+          "ppid": 511059,
+          "state": "S"
+        },
+        {
+          "pid": 511649,
+          "starttime": 4081828,
+          "ppid": 511066,
+          "state": "S"
+        },
+        {
+          "pid": 1281494,
+          "starttime": 16828124,
+          "ppid": 511649,
+          "state": "S"
+        }
+      ]
+    }
+  ],
+  "first_reject": {
+    "identity": {
+      "pid": 4369,
+      "starttime": 8183,
+      "ppid": 1311,
+      "state": "S"
+    },
+    "mount_namespace": "mnt:[4026532924]",
+    "row": {
+      "row": "4558 3565 7:36 / /var/lib/snapd/hostfs/home/holden/mckernel-work/scratch rw,nosuid,nodev,relatime master:151 - ext4 /dev/loop36 rw",
+      "mount_id": "4558",
+      "parent_mount_id": "3565",
+      "dev": "7:36",
+      "source_root": "/",
+      "target": "/var/lib/snapd/hostfs/home/holden/mckernel-work/scratch",
+      "mapped_scratch_source": "/home/holden/mckernel-work/scratch",
+      "exact_current_source_predicate_rejects": true
+    }
+  },
+  "namespace_link_permission_gaps": [
+    {
+      "pid": 511059,
+      "starttime": 4081605,
+      "errno": 13,
+      "path": "/proc/511059/ns/mnt"
+    },
+    {
+      "pid": 511066,
+      "starttime": 4081606,
+      "errno": 13,
+      "path": "/proc/511066/ns/mnt"
+    },
+    {
+      "pid": 511562,
+      "starttime": 4081758,
+      "errno": 13,
+      "path": "/proc/511562/ns/mnt"
+    },
+    {
+      "pid": 511563,
+      "starttime": 4081758,
+      "errno": 13,
+      "path": "/proc/511563/ns/mnt"
+    },
+    {
+      "pid": 511649,
+      "starttime": 4081828,
+      "errno": 13,
+      "path": "/proc/511649/ns/mnt"
+    },
+    {
+      "pid": 1281494,
+      "starttime": 16828124,
+      "errno": 13,
+      "path": "/proc/1281494/ns/mnt"
+    }
+  ],
+  "interpretation": "All13 rejecting rows map7:36 root/ at /var/lib/snapd/hostfs/.../scratch. Existing filesystem exposure alias, not a candidate-specific bind observed. No active consumer/writer or retirement conclusion from mountrow alone. Original historical error has no PID/row; fresh evidence cannot prove exact historical offender."
+}

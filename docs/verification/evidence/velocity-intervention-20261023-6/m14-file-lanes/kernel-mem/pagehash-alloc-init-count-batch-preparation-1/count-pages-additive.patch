@@ -1,0 +1,52 @@
+--- a/kernel/mem.c
++++ b/kernel/mem.c
+@@ -5414,6 +5414,9 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_PAGE_HELPERS
++extern int page_hash_count_pages(void);
++#else
+ static int page_hash_count_pages(void)
+ {
+ 	return page_hash_count_pages_body_result((unsigned long)page_hash,
+@@ -5422,6 +5425,7 @@
+ 			page_hash_lock_bridge, page_hash_unlock_bridge,
+ 			page_hash_count_all_result);
+ }
++#endif
+ 
+ struct page *phys_to_page(uintptr_t phys)
+ {
+--- a/kernel/rust/mem_helpers.rs
++++ b/kernel/rust/mem_helpers.rs
+@@ -6953,3 +6953,29 @@
+         );
+     }
+ }
++
++// Same already-selected Rust provider symbols, declared with the existing
++// page_helpers usize address ABI (unsigned long on supported x86_64).
++unsafe extern "C" {
++    #[link_name = "page_hash_lock_bridge"]
++    fn page_count_lock_callback(lock_addr: usize) -> CULong;
++    #[link_name = "page_hash_unlock_bridge"]
++    fn page_count_unlock_callback(lock_addr: usize, flags: CULong);
++}
++
++/// Count through the unchanged Rust orchestrator and exact existing geometry.
++#[no_mangle]
++pub unsafe extern "C" fn page_hash_count_pages() -> CInt {
++    unsafe {
++        crate::page_helpers::page_hash_count_pages_body_result(
++            core::ptr::addr_of!(PAGE_INIT_HASH_FIRST) as usize,
++            core::ptr::addr_of!(PAGE_INIT_LOCK_FIRST) as usize,
++            page_init_hash_bucket_count,
++            page_init_hash_head_stride,
++            page_unmap_lock_stride,
++            Some(page_count_lock_callback),
++            Some(page_count_unlock_callback),
++            Some(crate::page_helpers::page_hash_count_all_result),
++        )
++    }
++}

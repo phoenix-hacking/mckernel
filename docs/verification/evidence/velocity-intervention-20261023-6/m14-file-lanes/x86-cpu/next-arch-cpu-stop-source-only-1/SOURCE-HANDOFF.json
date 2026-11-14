@@ -1,0 +1,91 @@
+{
+  "ABI": "extern C void(void), preserve existing return type and nonreturning loop behavior",
+  "CPU_reserved": false,
+  "Rust_provider": "existing x86_cpu_helpers.rs::cpu_halt, HLT body at813; same not(mckernel_equivalence) selection",
+  "actual_Rust_caller": {
+    "bytes": 1554,
+    "path": "/home/holden/mckernel/kernel/rust/abort.rs",
+    "sha256": "443c480129b1191c0cd2b7ccf3663e185f5cb7cb386512854286404e11236d2a"
+  },
+  "actual_current78_U": {
+    "ctime_ns": 1792812117481455567,
+    "device": 66306,
+    "gid": 1000,
+    "inode": 56244726,
+    "mode": "0o600",
+    "mtime_ns": 1792812117481455567,
+    "nlink": 1,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/bounded-volatile-copy-correction-1/actual-correction-1/06-01-current78-three-body-Rust-symbols/stdout",
+    "sha256": "a87f1c73edb22639daf82698897956e0403f674b447e7903f5a704473e37f061",
+    "size": 167636,
+    "uid": 1000
+  },
+  "actual_fixture_result": null,
+  "actual_selected_C_T": {
+    "bytes": 15367,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/actual-retained-continuation-1/10-10-default-C-symbols/stdout",
+    "sha256": "de1dcc0c69f79731859b549599a2eb18679a39d6a276d185f07abffedf4aa9e5"
+  },
+  "candidate": {
+    "C": {
+      "bytes": 95681,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-arch-cpu-stop-source-only-1/candidate/arch/x86_64/kernel/cpu.c",
+      "sha256": "b5a1afa278095f3f8d7ef6c54f8931bb6b7c558a5d603417947e61042edde61c"
+    },
+    "Rust": {
+      "bytes": 93687,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-arch-cpu-stop-source-only-1/candidate/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "240e2b5b51196b67dc7cb5c15067a45cf8f4efde0f1938ea70a8f55d124ff437"
+    }
+  },
+  "canonical_preimages": {
+    "C": {
+      "bytes": 95605,
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+      "sha256": "c779079fb6de66991c861c823dca06b2a9ceec16ac4c984995200b668d7e78ce"
+    },
+    "Rust": {
+      "bytes": 93305,
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "98914e1ff4d50c2f42ccbdeb1f4f338024b7a9a2143fbad2f59ebd6f6b50dd0b"
+    }
+  },
+  "compiler_jobs": 0,
+  "default_GCC14_link_native": "OPEN",
+  "engineering_percentage": null,
+  "future_controlled_checks": {
+    "fragment_C": {
+      "bytes": 1289,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-arch-cpu-stop-source-only-1/FUTURE-CONTROLLED-CHILD-FIXTURE.c.inc",
+      "sha256": "6feda69239fa9359bf6e2be78e3d39982c8904700809910d041b48a6de888035"
+    },
+    "fragment_Rust": {
+      "bytes": 317,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-arch-cpu-stop-source-only-1/FUTURE-RUST-RECORDED-PROVIDER.inc",
+      "sha256": "d33fe15f9613a168251de442cee44d45c4426a83dce91543712130887f79d6b8"
+    },
+    "oracle": "C/Rust identical sequential 1..N tape, exit0/EOF, no ordinary return, one recorded callback per iteration",
+    "planned_child_counts_not_measured": [
+      1,
+      2,
+      3,
+      17,
+      257
+    ],
+    "unsafe_halt_isa_executed": false
+  },
+  "future_production_consumer": "current78 + selected guarded CPU TU; require one Rust T arch_cpu_stop, no Rust U arch_cpu_stop, no selected C T, exact prior Ts and actual partial; root grant/profile first",
+  "known_NULL_NMI_HOLD": "unchanged separate qualification; no guard or semantic repair",
+  "known_set_cputime_finding": "cpu.c has call sites but no body; x86_cpu_helpers.rs has no same-named core. Do not widen to another file from a caller-only finding.",
+  "literal_Cfallback_preserved": true,
+  "other_private_ports": "GPE/int3/debug excluded, unchanged, untested; passed NMI/stack/interrupt_exit candidate maintained separately",
+  "patch": {
+    "bytes": 792,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-arch-cpu-stop-source-only-1/cutover.patch",
+    "sha256": "d4eb1d3ec34f082e68bd56ab78adb2f5174b0bca480f29520d5838bb1f7ba6af"
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "selected_body": "arch/x86_64/kernel/cpu.c::arch_cpu_stop",
+  "selection": "currently unguarded actual C T; selected Rust abort.rs panic caller U; complete repeated existing Rust cpu_halt orchestration",
+  "status": "SOURCE_IMPLEMENTED_ONLY_NO_SECOND_EXECUTABLE_QUEUE"
+}

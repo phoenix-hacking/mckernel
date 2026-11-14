@@ -1,0 +1,11 @@
+--- syscall_policy.rs
++++ syscall_policy.rs
+@@ -35940,3 +35940,8 @@
+ #[cfg(f06_process_vm_entry_candidate)]
+ #[path = "f06_process_vm_entry.rs"]
+ mod f06_process_vm_entry;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(f06_copy_from_user_candidate)]
++#[path = "bridge.rs"]
++mod f06_copy_from_user_candidate;

@@ -1,0 +1,145 @@
+{
+  "archive_policy": {
+    "packet_0218_existing_inventory_may_be_structurally_attested": true,
+    "packet_0218_successor_v2_archive_blockers_required": true,
+    "raw_container_counts_as_reviewed": false,
+    "stablelists_successor_v2_inventory_status": "required-missing",
+    "kabi_dw_successor_v2_inventory_status": "required-missing"
+  },
+  "claims": {
+    "archive_expansion_complete": false,
+    "campaign_complete": false,
+    "credit_eligible": false,
+    "durable_archive": false,
+    "independent_legal_review_complete": false,
+    "provenance_review_complete": false,
+    "redistribution_approved": false,
+    "reviewer_registered": false,
+    "tracker_credit": false
+  },
+  "coverage_policy": {
+    "all_packet_responses_is_structural_only": true,
+    "content_group_count": 111004,
+    "packet_count": 219,
+    "packet_id_max": "0219",
+    "packet_id_min": "0001",
+    "packet_id_order": "four-digit-ascending-contiguous",
+    "packet_unit_count_stream_sha256": "3f50a8e9cad00d8d7d8b88bdebea332e3051fbd086bf56e30720ac6fed17d365",
+    "packet_unit_count_stream_size": 8321,
+    "review_unit_count": 115265,
+    "serialized_index_claims_live_verification": false,
+    "structural_entry_census_is_live_verification": false,
+    "zero_unresolved_does_not_establish_campaign_completion": true
+  },
+  "durability_policy": {
+    "actions_artifact_is_durable": false,
+    "credit_before_durable_registration": false,
+    "durable_authority_registration_status": "required-missing",
+    "immutable_object_version_required": true,
+    "index_file_is_durable_archive": false,
+    "outer_archive_digest_required": true
+  },
+  "gate": {
+    "credit_eligible": false,
+    "gate_id": "RK-001",
+    "points_awarded": 0,
+    "status": "TODO",
+    "tracker_credit": false
+  },
+  "identity_policy": {
+    "authority_identity_key_tuple": [
+      "reviewer_authority_id",
+      "reviewer_identity",
+      "reviewer_key_fingerprint"
+    ],
+    "duplicate_signed_response_root_forbidden": true,
+    "every_response_requires_existing_verifier_registration": true,
+    "mixed_registered_reviewers_allowed": true,
+    "self_asserted_identity_forbidden": true
+  },
+  "index_format": {
+    "atomic_publication": "linux-renameat2-noreplace-retained-fd-v1",
+    "canonical_json": "canonical-ascii-json-newline-v1",
+    "entry_order": "packet-id-ascending",
+    "entry_stream_algorithm": "sha256-canonical-index-entry-jsonl-v1",
+    "index_member": "rk001-license-review-response-index.json",
+    "maximum_index_bytes": 4194304,
+    "published_mode": "0444",
+    "package_digest_algorithm": "sha256-canonical-member-path-size-digest-jsonl-v1",
+    "path_layout": {
+      "packet_directory": "PACKETS_ROOT/NNNN",
+      "response_directory": "RESPONSES_ROOT/NNNN"
+    },
+    "response_directory_closure": "exact-packet-ids-0001-through-0219",
+    "schema_version": 1,
+    "signature_verification": "existing-frozen-response-v1-verifier-required",
+    "snapshot_policy": "descriptor-rooted-package-snapshot-before-index-retention"
+  },
+  "inputs": {
+    "campaign_authority": {
+      "path": "host-kernel/rocky/evidence/rk001-license-review-campaign-ef58-v1.json",
+      "sha256": "b5581cb9ad5707af65968a6e01ea69a7c46ebbe2542412c1a4cec0611da77852",
+      "size": 168050
+    },
+    "campaign_checker": {
+      "path": "scripts/rocky_kernel_license_review_campaign.py",
+      "sha256": "f5117c8af8fbf65f159cb06a69379b88f342bacccfb2aad2c5a44fe9559e3a63",
+      "size": 81188
+    },
+    "campaign_tests": {
+      "path": "scripts/tests/test_rocky_kernel_license_review_campaign.py",
+      "sha256": "9ea1b4254987141b6b78bcff4539c423ca913a328a401af511b293ba412666b5",
+      "size": 45546
+    },
+    "campaign_workflow": {
+      "path": ".github/workflows/rk001-license-review-campaign-v1.yml",
+      "sha256": "95dde8bed1697c792a05f5768ea7dd7ac32d3538f2bf41ce35b8a10d858fa370",
+      "size": 24447
+    },
+    "response_authority": {
+      "path": "host-kernel/rocky/evidence/rk001-license-review-response-contract-ef58-v1.json",
+      "sha256": "c71bbb5432d61106f7c86ec0f05a76e804586c57d2ad189b94e4b010bb4deaec",
+      "size": 8381
+    },
+    "response_checker": {
+      "path": "scripts/rocky_kernel_license_review_response.py",
+      "sha256": "ae27f84572bf74ef1d2ec22efd99e5aac6d117d4ef5b1fb8d7f38da823200b5c",
+      "size": 93401
+    },
+    "response_tests": {
+      "path": "scripts/tests/test_rocky_kernel_license_review_response.py",
+      "sha256": "115a623db997de726efc00e5163ead6136f2b51baf14ebf5286b41ef13c68d28",
+      "size": 38087
+    },
+    "response_workflow": {
+      "path": ".github/workflows/rk001-license-review-response-v1.yml",
+      "sha256": "1a3116d1a512bfc34e252ee83785aa0d06b6e493febf7303ea47c4a27592b791",
+      "size": 15388
+    }
+  },
+  "remaining_blockers": [
+    "No production reviewer identity, independence appointment, or SSH public key is registered in the frozen response-v1 authority.",
+    "No external signed reviewer response exists for any of the 219 campaign packets.",
+    "Packet 0218 cannot close the stablelists archive until a successor v2 child inventory is frozen and reviewed.",
+    "Packet 0218 cannot close the kabi-dw archive until a successor v2 child inventory is frozen and reviewed.",
+    "No immutable durable response archive authority or object version is registered.",
+    "A structurally complete 219-entry index is only a deterministic response census; it does not establish legal, provenance, redistribution, archive, gate, tracker, or credit completion.",
+    "This checker cannot modify the source lock or tracker and cannot award RK-001 credit."
+  ],
+  "response_index_contract_id": "rk-001-license-review-response-index-ef58860e-v1",
+  "schema_version": 1,
+  "source_commit": "ef58860e4806ee16e2c506e4e93c7b6ad8ad8f4b",
+  "time_policy": {
+    "aggregate_time_bounds_are_derived": true,
+    "clock_time_is_not_inserted_by_builder": true,
+    "completion_time_must_pass_existing_reviewer_validity_check": true,
+    "format": "rfc3339-utc-whole-seconds",
+    "packet_completion_times_need_not_be_monotonic": true
+  },
+  "verification_scope": {
+    "aggregate_index_supported": true,
+    "campaign_closure_can_be_established": false,
+    "mode": "complete-structural-response-index-only",
+    "required_campaign_packet_count": 219
+  }
+}

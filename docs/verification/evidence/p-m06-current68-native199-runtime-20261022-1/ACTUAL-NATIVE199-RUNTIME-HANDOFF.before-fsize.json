@@ -1,0 +1,230 @@
+{
+  "actual_native_manifest": {
+    "bytes": 6461,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/GENERATED-NATIVE199-MANIFEST.json",
+    "sha256": "148de42fca185ffd90c5347642f7825871e0ffc411af7d41834a252b48864386"
+  },
+  "actual_overlay": {
+    "output_ref": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/actual-native199-overlay-1.cpio.gz",
+      "sha256": "b1af2117557e2110dc87509bd44a98d88ca4527553c514c74f55efcde2474e6f",
+      "size": 13444115
+    },
+    "receipt": {
+      "bytes": 19635,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/actual-native199-overlay-1.manifest.json",
+      "sha256": "50714ebdb42bf91b603f0d4b0342620177226a3d5eefece41801e5f3f298afb1"
+    }
+  },
+  "actual_physical_release_credit": false,
+  "actual_raw_stage_manifest": {
+    "bytes": 20117,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/filled-stage-execution-1/nproc-profile-correction-1/actual-selfexec-199-stage-2/manifest.json",
+    "sha256": "3d41443dc1f20975e0b8a71dc7203b7dd7e44e17935ef4b210ff1bc0f29d9299"
+  },
+  "actual_stage_capture": {
+    "bytes": 4424,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/filled-stage-execution-1/nproc-profile-correction-1/ACTUAL-STAGE-199-CAPTURE-RESULT.json",
+    "sha256": "0427f9218a64538bf6fde7ca7ff17bb19ea872a568fd4621c76502259d82b335"
+  },
+  "actual_tests": {
+    "bytes": 2254,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/FINAL-ORDINARY-WHOLE-JOIN.json",
+    "sha256": "477f7eb853ef0cf1e48a2e119f33d57d89b6d53c270fc791670ac868dae2c95a"
+  },
+  "application_acceptance": false,
+  "current_git_reported_by_dispatcher": "d5a5e536b12640afca66614aba920cafdb2253d4",
+  "exact_native_execution_release": null,
+  "execution_authorized": false,
+  "existing_vm_profile": {
+    "memory_mib": 8192,
+    "name": "native-diagnostic-4vcpu-8192mib",
+    "numa_nodes": 2,
+    "vcpus": 4
+  },
+  "failure_history": [
+    {
+      "correction": "Only ordinary perUID nproc omitted; original failed capture retained; rawstage correctionPASS9.227976s",
+      "family": "supervisor perUID NPROC512 prespawn EAGAIN",
+      "receipt": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/filled-stage-execution-1/ACTUAL-FIRST-STAGE-PRESPAWN-FAILURE.json"
+    },
+    {
+      "family": "runtime mount test fixture AST selector",
+      "product_result": "Actual overlay/runtime schema positive +5refusals passed before test fixture failed; output retained.",
+      "receipt": {
+        "bytes": 3505,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/ACTUAL-RUNTIME-JOIN-CHECK-1.json",
+        "sha256": "b9a90b4023c12d29b1e7e65b9d73e3ac294ee7a228cb4b1c0b0fbe6d9d5cbd67"
+      }
+    },
+    {
+      "family": "mount test refusal helper exception class",
+      "product_result": "Actual production mount positive passed and deliberate writable requested mount was correctly refused OwnerError; helper failed to catch RuntimeError. Expert decision requested before another check.",
+      "receipt": {
+        "bytes": 3540,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/ACTUAL-RUNTIME-JOIN-CHECK-CORRECTION1.json",
+        "sha256": "9cd3a2e87b11f1b7911281efc176db2b76a3b6934f0c1c4f484b51dfc78bfc83"
+      }
+    },
+    {
+      "family": "expert-approved test-helper correction",
+      "outcome": "PASS12 checks .402471s; exact OwnerError catch/reason only; no production changes or transformer replay.",
+      "result": {
+        "bytes": 3550,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/ACTUAL-RUNTIME-JOIN-CHECK-EXPERT-CORRECTION1.json",
+        "sha256": "58e84305e4f5b77cb987d8cd1abfe7b6d7597ef9e86c4538eef828e3c31b80f6"
+      }
+    }
+  ],
+  "final_fixture_pass": true,
+  "final_scratch_manifest_path": "/home/holden/mckernel-work/scratch/p-m06-native199-261022-1/manifest.json",
+  "first_real_transformer_positive_retained": true,
+  "fresh_root_admission": null,
+  "inside_runner_argv": [
+    "/usr/bin/python3",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/native_diagnostic_runner.py",
+    "--manifest",
+    "/home/holden/mckernel-work/scratch/p-m06-native199-261022-1/manifest.json",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/p-m06-native199-261022-1/owner-parent",
+    "--attempt-name",
+    "attempt-c37000c46dc94ad786fe714a1c04e4f9",
+    "--timeout",
+    "300"
+  ],
+  "mount_delta": {
+    "bytes": 4300,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/MOUNT-DELTA.json",
+    "sha256": "9f04cc219cbaa3536a296e0a0e94214b3d7f8dbd9794ab962a928469e28b7687"
+  },
+  "native_runs": 0,
+  "ordinary_host_UID_NPROC": {
+    "hard": 126258,
+    "required": "Inherit host UID limits throughout every ordinary overlay/capture/runtime-parent wrapper. Do not set per-UID512; preserve Docker--pids-limit512. Root checks current inherited value and actualUIDtask headroom before release. Current measured126258/126258; dispatcher earlier census689UIDtasks/116processes is historical, not fresh admission.",
+    "soft": 126258
+  },
+  "owner_argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/native_diagnostic_container_owner.py",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/p-m06-native199-261022-1/owner-parent",
+    "--nonce",
+    "c37000c46dc94ad786fe714a1c04e4f9",
+    "--owner-sha256",
+    "565fdf100278f26e3415f234e3dc2362bb2012fde5568e54a526778fddd05c05",
+    "--manifest",
+    "/home/holden/mckernel-work/scratch/p-m06-native199-261022-1/manifest.json",
+    "--manifest-sha256",
+    "148de42fca185ffd90c5347642f7825871e0ffc411af7d41834a252b48864386"
+  ],
+  "owner_delta": {
+    "bytes": 68321,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/OWNER-COHORT-AND-MOUNTS.diff",
+    "sha256": "ab471acbad77fb5c2752e7131cf4d4eb20fc5a695ca19291b0d2ed52f318e1ec"
+  },
+  "physical_acceptance": {
+    "bytes": 1812,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/INDEPENDENT-ACTUAL-MATCHED-IMAGE-PHYSICAL-RETIREMENT-1.json",
+    "sha256": "5002fa143e93e5c40b6359210a2190d27ddb3ab85c1276d82c385165f30dc8fc"
+  },
+  "proposed_fresh_owner_nonce": "c37000c46dc94ad786fe714a1c04e4f9",
+  "publication_and_authentication_map": {
+    "bytes": 49794,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/EXACT-PUBLICATION-AND-SOURCE-AUTHENTICATION.json",
+    "sha256": "cf2e28cf7bb199edb3b897fb5359a8cdefc9c9ad3b4c02deded23b74b97eb917"
+  },
+  "remaining_dynamic_bindings": [
+    "focused_source_schema_mount_and_actual_check_review",
+    "fresh_root_admission_current_Git_resources_nonce_namespace_tool_capture_and_physical_predecessor",
+    "exact_native_execution_release",
+    "root scratch manifest metadata publication of byteidentical148de42f manifest and owner-parent0700"
+  ],
+  "root_copy_rule": "After exact source/runtime execution release, root creates fresh private uid/gid1000 scratch packet root and owner-parent0700, copies GENERATED-NATIVE199-MANIFEST.json bytes to manifest.json WITHOUT rewriting refs, then compares exact SHA256. Owner scratch-only manifest/parent rules unchanged. This is pending root metadata publication, not performed here.",
+  "root_next": "Bind final whole-joined test receipt and focused independent source/schema/mount acceptance. Root fresh admission rechecks current Git/tool/source pins, required readonly input visibility, exact manifest SHA, output absences/uid/gid/modes, latest physical predecessor, development mutex27:4/heavylease, full resource/capacity floors/backing sparse growth and existing owner capture/retirement profile. Publish scratch manifest/owner-parent, bind nonce and exact release, then execute owner argv once. No independent raw runner bypass.",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_cohort": [
+    {
+      "bytes": 92725,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/native_diagnostic_container_owner.py",
+      "sha256": "565fdf100278f26e3415f234e3dc2362bb2012fde5568e54a526778fddd05c05"
+    },
+    {
+      "bytes": 6005,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/native_diagnostic_runner.py",
+      "sha256": "25ea29f9b07232094e9df1db6094ad0a85ec678281749a1d6998abb7c700d499"
+    },
+    {
+      "bytes": 76466,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/native_diagnostic.py",
+      "sha256": "69d7bdb600309a4aea02f38746ba17438bf6e4758def35d6c2f90264c3ee75e3"
+    },
+    {
+      "bytes": 25398,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/native_diagnostic_backend.py",
+      "sha256": "cd0759c926876483665065cb320b9daf7d7c6b32f56e561805b4b0343f60d614"
+    },
+    {
+      "bytes": 9913,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/qmp_capture.py",
+      "sha256": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741"
+    },
+    {
+      "bytes": 26579,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/native_diagnostic_overlay.py",
+      "sha256": "46d41bc0727fa77e4126e739f25352c53eadf2e1fa8e23ef06a6e46c9b3ba27d"
+    },
+    {
+      "bytes": 6818,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/bind_native199.py",
+      "sha256": "ce5be5fb7d9ddbad98c36681acf7a004eee696b7149d7061662230834ed52047"
+    }
+  ],
+  "source_installation": "Execute retained private successor paths exactly; no canonical source installation. Publish only byteidentical scratch manifest and private0700 owner-parent using supplied mechanical publication argv after admission.",
+  "source_review": null,
+  "status": "READY_ACTUAL_RAW_STAGE_OVERLAY_AND_NATIVE_MANIFEST_BOUND_NOT_RELEASED",
+  "strict_payload": {
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "/apps/app"
+    ],
+    "cwd": "/case/work",
+    "env": {
+      "COKERNEL_PATH": "/apps",
+      "PATH": "/usr/bin:/bin"
+    },
+    "oracle": {
+      "exit_code": 37,
+      "stderr_hex": "",
+      "stdout_hex": "657865632d7265736574206265666f7265206361756768743d696e7374616c6c65642069676e6f7265643d69676e6f7265642064656661756c743d64656661756c74206d61736b3d3235363020616c743d656e61626c65642073697a653d36353533360a657865632d7265736574206166746572206361756768743d64656661756c742069676e6f7265643d69676e6f7265642064656661756c743d64656661756c74206d61736b3d3235363020616c743d64697361626c65642073703d302073697a653d300a"
+    },
+    "stderr_limit_bytes": 1024,
+    "stdout_limit_bytes": 1024
+  },
+  "supported_outer_profile": {
+    "CPU_affinity": "2-5",
+    "CPU_count": 4,
+    "container_gid": 1000,
+    "container_image": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+    "container_uid": 1000,
+    "heavy_operations": 1,
+    "memory_bytes": 12884901888,
+    "memory_swap_bytes": 12884901888,
+    "network": "none",
+    "no_relaxation": true,
+    "one_QEMU_guest": true,
+    "payload_timeout_ms": 10000,
+    "pids_limit": 512,
+    "readonly_root": true,
+    "runner_timeout_seconds": 300
+  },
+  "test_count": 12
+}

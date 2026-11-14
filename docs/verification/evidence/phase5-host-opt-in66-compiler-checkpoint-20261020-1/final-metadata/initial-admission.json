@@ -1,0 +1,39 @@
+{
+  "argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--fsize=33554432",
+    "--core=0",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase5-host-fork-adoption-opt-in-20261020-1/check-cfg-module-correction-1/bind_final_physical_metadata_v2.py",
+    "--physical",
+    "/home/holden/mckernel-work/host-preparation/phase5-opt-in-production-link-image-independent-review-20261020-1/ACTUAL-CURRENT-IMAGE-QUARANTINE-RECOVERY-PHYSICAL-REVIEW.json",
+    "--physical-sha256",
+    "49282d9f4b84aba979e9e953f382e0408ee856fa6b7fce405e40f4c8395d0157",
+    "--physical-bytes",
+    "13634"
+  ],
+  "controller": {
+    "pause_reason": null,
+    "phase": "running",
+    "stop_reason": null,
+    "usedPercent": 12
+  },
+  "growth_reserved": 134217728,
+  "host_available": 44955652096,
+  "memory_available": 29030932480,
+  "pins_verified": true,
+  "scratch_available": 14256013312,
+  "scratch_uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52"
+}

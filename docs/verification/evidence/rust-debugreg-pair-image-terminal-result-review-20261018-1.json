@@ -1,0 +1,66 @@
+{
+  "actual_operations": {
+    "cleanup": {
+      "direct_child_joined": true,
+      "pid": 1187529,
+      "result_status": "PASS_EXECUTED",
+      "returncode": 0,
+      "status_sha256": "20303ff60debe6b39e1418e78c72f1237601618998536917c2d5d08af49e0a6e",
+      "stderr_bytes": 0,
+      "stdout_sha256": "274e5302fa3c24684497b8f1185389bbe24b62cf12434dcad167c0f637af2013",
+      "terminal": true
+    },
+    "postjoin": {
+      "archive_bytes": 30720,
+      "archive_sha256": "ec622e6a70d534cd4a0cd98d80a735a12cf36377c4a291c8a99335368fac17d5",
+      "direct_child_joined": true,
+      "pid": 1187660,
+      "returncode": 0,
+      "status_sha256": "64ceacbe9de91bd5397374a7ab5b07e23a08bd2abe1c7f18768dd49f8fcc911a",
+      "stderr_sha256": "d2ce41f6de5c2657ea36cff43b0c7f9f72d6792acdc1abdb9703f67b86694ee8",
+      "stderr_status": "PASS_CLEANUP_POSTJOIN_READBACK_ONLY"
+    }
+  },
+  "decision": "PASS_ACTUAL_TERMINAL_PHYSICAL_RELEASE",
+  "findings": [],
+  "implementation_ownership": false,
+  "independently_verified": {
+    "complete_valid_journal_chain_entries": 9,
+    "exact_executed_commands_release_and_stream_hashes": true,
+    "genuine_boot_unchanged": true,
+    "plan_cid_owner_namespace_release_links_match": true,
+    "publisher_contract_preserved": true,
+    "retained_original_pairs": 15,
+    "stable_artifact_fd_rows_hashed_and_metadata_checked": 30,
+    "terminal_archive_members": 5,
+    "terminal_files_fd_checked": 5
+  },
+  "limitations": [
+    "No guest/native/hardware DR/language-retirement credit",
+    "Actual postjoin census reused; reviewer no Docker replay",
+    "Original pre-effect newlineguard failure preserved"
+  ],
+  "physical_release": {
+    "all_eight_client_processes_absent": true,
+    "archive_original_device_inode_bytes_preserved": true,
+    "common_and_shared_original_records_archived": true,
+    "common_exclusion_absent": true,
+    "container_absent": true,
+    "lease_absent": true,
+    "owner_process_absent": true,
+    "quarantine_absent": true,
+    "root_mutex_27_4_reacquired_by_actual_postjoin": true,
+    "shared_heavy_operation_absent": true
+  },
+  "release_sha256": "b9534eff63c2f2d577c2989acdb4e7da1ec0e8038ae005c72ec9ec3349abdee1",
+  "reviewed_cleanup_payload_sha256": "6f33c1a6c3454d25ea5da6100f38e5340177f4047bf4bb2a2bbb38fad4376b28",
+  "reviewer": "/root/debugreg_pair_terminal_review_1943",
+  "scope": "Completed image-build physical ownership release/preservation for functional Rust/assembly OS/apps",
+  "status": "PASS",
+  "target": {
+    "container_id": "975f4cdc00b37cedfbbab20143a447d13d425aa4427542cff9084d400e69da17",
+    "container_name": "mckernel-image-63d73ebfa99442de9b3c2ae806af22ab",
+    "owner_nonce": "95cc3fda929841c3aab34e4d4fe87789",
+    "owner_pid": 1164186
+  }
+}

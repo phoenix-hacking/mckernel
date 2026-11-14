@@ -1,0 +1,11 @@
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -22433,7 +22433,7 @@
+  sizeof(struct perf_event_attr),sizeof(struct mckfd),sizeof(struct mc_perf_event),__alignof__(struct mc_perf_event),
+  PERF_TYPE_RAW,PERF_TYPE_HARDWARE,PERF_TYPE_HW_CACHE,
+  PERF_FORMAT_TOTAL_TIME_ENABLED|PERF_FORMAT_TOTAL_TIME_RUNNING|PERF_FORMAT_ID,
+- 1UL<<63,__NR_perf_event_open,IHK_MC_AP_NOWAIT,F_SETSIG,
++ 1UL<<63,__NR_perf_event_open,IHK_MC_AP_NOWAIT,10, /* original perf_fcntl set_sig_cmd */
+ };
+ extern long sys_perf_event_open(int,ihk_mc_user_context_t *);
+ #else

@@ -1,0 +1,103 @@
+{
+  "BUILDID_reconciliation_independently_accepted": true,
+  "accepted_BUILDID": "3114d9e",
+  "accepted_sdk_files": 10,
+  "actual_CLI": 0,
+  "actual_compiler": 0,
+  "actual_configure": 0,
+  "actual_guard": 0,
+  "actual_install": 0,
+  "actual_link": 0,
+  "actual_native": 0,
+  "actual_test_command": [
+    "taskset",
+    "-c",
+    "0",
+    "prlimit",
+    "--as=2147483648",
+    "--cpu=30",
+    "python3",
+    "-B",
+    "docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-installed-consumer-restart-independent-review-20261028-1/review_checks.py"
+  ],
+  "actual_test_exit": 0,
+  "capacity": 8,
+  "compatible_proposed_BUILDID": "a7ddca2",
+  "credit_run_id": "7f4af94a83b14cc08f97401f5891d965",
+  "cumulative_credit_ceiling": "57774.852125",
+  "current_artifact_credit": false,
+  "current_configure_BUILDID_observed": false,
+  "current_source_files": 58,
+  "default_compiler_credit": false,
+  "execution_release": false,
+  "file_closure": false,
+  "files": {
+    "CHECKS.json": {
+      "bytes": 4434,
+      "sha256": "ca73e108830d16ff08abdc2970e7f2c4fe7832e47edba2feec9e3fd57e17dc8c"
+    },
+    "REVIEW.md": {
+      "bytes": 5762,
+      "sha256": "b1f77af91f552c4f4a0036445bbc2f44b5157a92784a521cd8d8f4f97b274f03"
+    },
+    "review_checks.py": {
+      "bytes": 6120,
+      "sha256": "e198bb7df4dbb1cbecff2130166981d771998f81f0e7324ef1d00aceb8fc0e52"
+    }
+  },
+  "fixed_cutoffs": {
+    "BOOT": 1051042.6959879305,
+    "MONO": 1035704.5689393478,
+    "UTC": 1793253600
+  },
+  "incompatible_proposed_BUILDID": "a7ddca26",
+  "incompatible_real_fallback": "1.7.0rc4",
+  "next_action": "Fresh actual controls/admission and execution review, then genuine isolated-source configure from guarded recipe; retain real generated config/links/install traversal and apply prelink guard before staging/linking.",
+  "next_owner": "/root",
+  "public_headers": 18,
+  "pure_negative_controls": 6,
+  "pure_positive_controls": 2,
+  "reviewed_bindings": {
+    "CMakeLists.txt.candidate": {
+      "bytes": 13891,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-installed-consumer-restart-20261028-1/CMakeLists.txt.candidate",
+      "sha256": "fd6b395982d4badb2e0574496cae19a7863b2f16d3841659de573ffdb14da4b2"
+    },
+    "GUARDED-CURRENT-CONSUMER-RECIPE.json": {
+      "bytes": 14409,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-installed-consumer-restart-20261028-1/GUARDED-CURRENT-CONSUMER-RECIPE.json",
+      "sha256": "c769a4a30c0434ff3fc964271661f4d913241e1eb1f59f081379154c934ccd59"
+    },
+    "PRELINK-CONTRACT.json": {
+      "bytes": 21707,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-installed-consumer-restart-20261028-1/PRELINK-CONTRACT.json",
+      "sha256": "4ad455c494631e685a5d3a78d281a4fbe2b0a56f079ed23475d3bf4e092d33dc"
+    },
+    "RESULT.md": {
+      "bytes": 4344,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-installed-consumer-restart-20261028-1/RESULT.md",
+      "sha256": "44d6831a8a02c6bef9ff9f4b564838085cca0f6ca6d46a8d6d19f817955b2be1"
+    },
+    "SOURCE-READY.json": {
+      "bytes": 6686,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-installed-consumer-restart-20261028-1/SOURCE-READY.json",
+      "sha256": "31413165357bb231f8ee1ebf4437b97c6e9d0fc497183ffa532f0a2dc78cb7f8"
+    },
+    "ihkconfig-runtime-component.ihk-relative.patch": {
+      "bytes": 912,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-installed-consumer-restart-20261028-1/ihkconfig-runtime-component.ihk-relative.patch",
+      "sha256": "f2dee32ef6bbd4d013390dee864ee161c59b8b2350c2272662f88ab4de272c5f"
+    },
+    "prelink_reuse_guard.py": {
+      "bytes": 6787,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-installed-consumer-restart-20261028-1/prelink_reuse_guard.py",
+      "sha256": "98ce1fc8f9fa6dfe9038e0db4eb4162dd59bdf61919395557e5fefc4f2345fa9"
+    }
+  },
+  "reviewed_source_ready_sha256": "31413165357bb231f8ee1ebf4437b97c6e9d0fc497183ffa532f0a2dc78cb7f8",
+  "reviewer": "/root/consumer_review",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "spent_floor": "22812.3311",
+  "status": "PASS_SOURCE_REUSE_ONLY_EXECUTION_UNRELEASED",
+  "unchanged_accepted_source_files": 57
+}

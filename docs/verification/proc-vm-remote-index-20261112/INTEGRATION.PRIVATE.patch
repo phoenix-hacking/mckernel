@@ -1,0 +1,35 @@
+--- a/arch/x86_64/kernel/syscall.c
++++ b/arch/x86_64/kernel/syscall.c
+@@ -3843,8 +3843,8 @@
+ 
+ 			/* Is base valid? */
+ 			range = lookup_process_memory_range(rvm,
+-					(uintptr_t)remote_iov[li].iov_base,
+-					(uintptr_t)(remote_iov[li].iov_base + 1));
++					(uintptr_t)remote_iov[ri].iov_base,
++					(uintptr_t)(remote_iov[ri].iov_base + 1));
+ 
+ 			if (range == NULL) {
+ 				ret = -EFAULT;
+@@ -3853,8 +3853,8 @@
+ 
+ 			/* Is range valid? */
+ 			range = lookup_process_memory_range(rvm,
+-					(uintptr_t)remote_iov[li].iov_base,
+-					(uintptr_t)(remote_iov[li].iov_base + remote_iov[li].iov_len));
++					(uintptr_t)remote_iov[ri].iov_base,
++					(uintptr_t)(remote_iov[ri].iov_base + remote_iov[ri].iov_len));
+ 
+ 			if (range == NULL) {
+ 				ret = -EINVAL;
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -10703,7 +10703,7 @@
+ 
+         if pri != ri {
+             vm_read_lock(rvm);
+-            let remote_check_index = li;
++            let remote_check_index = ri;
+             let remote_base = process_vm_iov_base(remote_iov, remote_check_index);
+             let remote_len = process_vm_iov_len(remote_iov, remote_check_index);
+             range = lookup_range(rvm, remote_base, remote_base.wrapping_add(1));

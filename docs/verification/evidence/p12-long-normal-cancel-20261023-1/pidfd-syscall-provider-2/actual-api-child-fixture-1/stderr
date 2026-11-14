@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/p12-long-normal-cancel-20261023-1/pidfd-syscall-provider-2/fixture_cancel_child.py", line 30, in <module>
+    out,err=p.communicate(timeout=3);assert p.returncode==42 and err==b'' and json.loads(out)==dict(received_SIGTERM=1,nonce='TESTONLY-never-live-owner')
+AssertionError

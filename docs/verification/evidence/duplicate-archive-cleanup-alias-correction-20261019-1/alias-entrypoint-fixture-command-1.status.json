@@ -1,0 +1,80 @@
+{
+  "status": "ACTUAL_ORDINARY_TOOL_COMMAND_COMPLETED_EXIT0",
+  "provenance": "2345 contemporaneous author receipt of functions.exec exec_command result; no fixture rerun and no invented PID/group census",
+  "tool_chunk_id": "0eead6",
+  "exec_tool_exit_code": 0,
+  "exec_tool_wall_seconds": 0.00467666,
+  "shell_reported_exit_code": 0,
+  "actual_argv": [
+    "taskset",
+    "-c",
+    "7",
+    "nice",
+    "-n",
+    "19",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "30s",
+    "/usr/bin/python3",
+    "-I",
+    "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/alias-entrypoint-fixture.py",
+    "--output",
+    "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/alias-entrypoint-fixture-attempt-1"
+  ],
+  "actual_shell_bounds": {
+    "RLIMIT_AS_KiB": 1048576,
+    "RLIMIT_CPU_seconds": 30,
+    "RLIMIT_FSIZE_shell_blocks": 32768,
+    "noclobber": true
+  },
+  "pre_capacity": {
+    "host_available_bytes": 52769075200,
+    "scratch_available_bytes": 13758107648
+  },
+  "source_sha256": "7d2825e5abf00a7f82bcba8b13cf064d20730077d3dc1dc5a8d3d5bd9dc033e6",
+  "fixture_sha256": "bfb0b9ae27ab28cee3c335a301ad36ea277a15699c4dc8920f79d0561d0be69e",
+  "oracle_sha256": "38f19e1592168a918c664229fe7cec2e5355c5fb3941fb45adcf55b158ef28ec",
+  "streams": {
+    "alias-entrypoint-fixture-command-1.stdout": {
+      "path": "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/alias-entrypoint-fixture-command-1.stdout",
+      "sha256": "6df886bd0bd0c0b315e3e29e57d347af980049dbc2ecd19b9a8cc3877cb9c981",
+      "bytes": 121,
+      "ordinary_current_fstat": {
+        "dev": 66306,
+        "inode": 47990011,
+        "mode": 384,
+        "uid": 1000,
+        "gid": 1000
+      }
+    },
+    "alias-entrypoint-fixture-command-1.stderr": {
+      "path": "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/alias-entrypoint-fixture-command-1.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "ordinary_current_fstat": {
+        "dev": 66306,
+        "inode": 47990012,
+        "mode": 384,
+        "uid": 1000,
+        "gid": 1000
+      }
+    }
+  },
+  "result": {
+    "path": "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/alias-entrypoint-fixture-attempt-1/result.json",
+    "sha256": "2f7a4af9df2b808b3769b27a468c65e774fc80b8c0312ee6a9f69c511c73b82d",
+    "cases": 33,
+    "status": "PASS_AFFECTED_ALIAS_ENTRYPOINT_SYNTHETIC_ONLY",
+    "idle_child_joined": true,
+    "rendezvous_threads_joined": true
+  },
+  "retirement": {
+    "outer_synchronous_tool_command_completed": true,
+    "fixture_source_known_child_and_thread_joins": true,
+    "independent_whole_group_census": false,
+    "PID_start_PGID_not_captured": true,
+    "limit": "Do not upgrade this ordinary tool direct completion + source-known child/threads wait into a separate root-style whole-group absence proof. No hanging/running exec session returned."
+  },
+  "cpu7_release": "Explicitly sent root immediately after exit0; no new test/cheap executors since."
+}

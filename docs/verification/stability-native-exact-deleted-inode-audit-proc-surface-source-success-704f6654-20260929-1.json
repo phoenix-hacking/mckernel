@@ -1,0 +1,71 @@
+{
+  "schema": "mckernel.native-exact-deleted-inode-audit-proc-surface-source.v1",
+  "timestamp": "2026-09-29T11:19:53-07:00",
+  "status": "PASS_SOURCE_ONLY",
+  "base_checkpoint": "dcc3f8f89a1a941dbdccab2bcc983962427aab6e",
+  "helper": {
+    "path": "scripts/native_exact_candidate_deleted_inode_audit.py",
+    "sha256": "47e741e7a601322b7554861d001864897b0bdf17e784cbfff0e48a63642d6d88"
+  },
+  "tests": {
+    "path": "scripts/tests/test_native_exact_candidate_deleted_inode_audit.py",
+    "sha256": "0e217fbbdd3e99715ba13942bf7e6b0c3a1fed09026d6db678997113da4909e3",
+    "python_3_8": {"result": "PASS", "count": 44},
+    "python_3_9": {"result": "PASS", "count": 44},
+    "independent_adversarial_complete_census_probes": 59
+  },
+  "blocked_release": {
+    "path": "docs/verification/stability-native-exact-deleted-inode-audit-execution-release-704f6654-20260929-1.json",
+    "sha256": "cd3aa38f07b60ae2ece804fdc8c450c3b0ae75571fd867f50e93b13216ec2e74",
+    "status": "REJECTED_NEVER_EXECUTED",
+    "reason": "stable PF_KTHREAD tasks legitimately lack process resources, so the original helper could not produce its promised clean census"
+  },
+  "failure_lineage": [
+    {
+      "helper_sha256": "997c8b808885c4eb89704bba46f69121d7def304d0aaa4480f09eb96ed352406",
+      "decision": "BLOCK_EXECUTION_ADMISSION",
+      "findings": ["stable kernel threads lack required process resources"]
+    },
+    {
+      "helper_sha256": "6ffb4f19ced39187eef9c70f5a5f4495f5d4deab119350107e05db25b3f4343e",
+      "test_sha256": "54184f4ef17be71e6c8e928a53199e569059ae95c9e0a426e1a7d4bc436f43bc",
+      "decision": "BLOCK_BOUNDED_CORRECTION",
+      "findings": ["negative flags granted PF_KTHREAD", "missing mount namespace skipped existing mountinfo aliases"]
+    },
+    {
+      "helper_sha256": "95db63bcce504db43bdf5f2b842b73d57f67e6ecf26d18ce36eee5056b7c48cc",
+      "test_sha256": "98490b7359c0a1e68f03f3e13d068825cc9481d9588217ff632c20866ab8ba1c",
+      "decision": "BLOCK_EXPERT_CANDIDATE",
+      "findings": ["out-of-range LP64 stat fields authenticated special absence", "mapping addresses above UINT64_MAX were accepted"]
+    }
+  ],
+  "verified_behavior": [
+    "fields 4 through 52 use Linux LP64 signed and unsigned bounds before classification",
+    "PF_KTHREAD derives only from a valid field-9 flag and zombie derives only from valid state Z",
+    "typed special-process absence is bound to unchanged PID or TID starttime and classification",
+    "existing filesystem, descriptor, namespace, mountinfo and mapping surfaces remain inspected",
+    "mount aliases remain findings even when namespace reads fail",
+    "ordinary absence, permission denial, malformed data, reuse, class changes and census churn fail closed",
+    "mapping names require zero through UINT64_MAX bounds and strict start less than end",
+    "final census revalidates every process and task classification"
+  ],
+  "baseline": {
+    "identities": 10611,
+    "root_counts": [10524, 87],
+    "canonical_identity_set_sha256": "3ee0942c4e5f1934220c8dafed3c4664ae47d05cb30ed4679ec0fe6cadd0a1e8"
+  },
+  "independent_review": {
+    "status": "PASS_SOURCE",
+    "privileged_execution_release": false,
+    "runtime_acceptance": false,
+    "retrospective_retirement_acceptance": false
+  },
+  "acceptance": {
+    "production_gate_changed": false,
+    "successful_current_candidate_builds": 0,
+    "real_guest_applications_this_window": 0,
+    "application_cases": "0/273",
+    "os_complete": false
+  },
+  "next": "Commit, push and fetch this corrected source; create a new attempt-2 basis and root read-only execution proposal bound to the fetched hashes; obtain fresh independent execution review before one privileged run. Never execute the rejected attempt-1 proposal."
+}

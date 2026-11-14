@@ -1,0 +1,110 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/current110_execution_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "recorded_at": "2026-10-27T18:08:20.790611+00:00",
+  "decision": "PASS_EXACT_TEN_NEW_ORDINARY_HOST_COMMANDS_SOURCE_PROFILE_PENDING_FRESH_ROOT_GRANT",
+  "runtime_authority": null,
+  "actual_commands_authorized_by_this_review": 0,
+  "blocking_findings": [],
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ordinary-host-new12h-runner-source-1/SOURCE-READY.json",
+    "bytes": 4351,
+    "sha256": "9e4f700a149bc499d405f67fb7f40da6915dbe79d1a28a039dda0244a3cfb734"
+  },
+  "profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ordinary-host-new12h-runner-source-1/PROFILE.NOT-GRANTED.json",
+    "bytes": 38819,
+    "sha256": "d824e4c873dc1eed45be303d190e9a0d1745f8e8f1e8ef827acb925b65943e26"
+  },
+  "runner": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ordinary-host-new12h-runner-source-1/run_new12h_host.py",
+    "bytes": 7521,
+    "sha256": "6e98a1fbcbce2e822a815a05516287e7122cbd8e06d43277134b27b70cf3ad34"
+  },
+  "admission": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ordinary-host-new12h-runner-source-1/admission_new12h.py",
+    "bytes": 2782,
+    "sha256": "7df167b39842976391b6461f831c1a1349e1f3880892c37268579378e8f15a76"
+  },
+  "capture": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/phase5-m03-handshake-runtime-checkpoint-20261020-1/sdk-physical-source/run_two_commands_source_bound_corrected.py",
+    "bytes": 14753,
+    "sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8"
+  },
+  "leaf_plans": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-supported-body-new12h-1/FUTURE-HOST-COMMAND-PLAN.NOT-GRANTED.json",
+      "bytes": 9077,
+      "sha256": "645f0fd33dbae021a5a0fffbae03ac5d20d7ec516dfcb09bbfbadeab184db09f"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-supported-body-new12h-1/FUTURE-HOST-COMMAND-PLAN.json",
+      "bytes": 6192,
+      "sha256": "6a297ceae6cc41f9d30bd682b0c61814db11d89bd80744d96484356fae04cd82"
+    }
+  ],
+  "original_failure_and_bounded_correction": {
+    "observed": "Initial profileb051 planned F03future-host-output-1, already present empty. Correct runner rejected existing outputs before command entry. No compiler or fixture ran.",
+    "old_profile_preserved": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ordinary-host-new12h-runner-source-1/PROFILE.NOT-GRANTED.json.PRE-OUTPUT-COLLISION-b051ce6c",
+      "bytes": 38819,
+      "sha256": "b051ce6c68650948717e091f8c994d3b8ce3940be52afe28f3776ce4d6ff3f8e"
+    },
+    "correction": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ordinary-host-new12h-runner-source-1/OUTPUT-COLLISION-CORRECTION.json",
+      "bytes": 1493,
+      "sha256": "ca92051b1082256ed87c1832042da82e028ac0e94a2cb4c1dd4735d21b4108ed"
+    },
+    "verified_delta": "Exactly9 F03 argv path strings, their derived argv hashes, F03 leaf output and plan reference changed to fresh future-host-output-2/plan645f0fd3. All104 input refs, bodies, oracles, resources, runner/admission/capture unchanged. Old output1 retained empty; new output2/F06 output/whole capture absent."
+  },
+  "verified_source_profile": [
+    "Original packet sources/predecessors and104 input hashes independently matched. Final source-ready refs and changed leaf plans match exact current bytes. Exact7 F03+3 F06 command argv equal their frozen leaf plans. Zero command argv overlap with completed HOST19; all output/capture targets now fresh.",
+    "F03 original scalar C callback slices occur literally in preimage; paired selectors occur literally in postimage and preserve original C fallback/logical lines. Both helper+callback defines are required for extern Rust selection; neither/single-selector C fallback paths have separate witness compiles.",
+    "F03 Rust mask/start/stop wrappers pass exact unsigned64 mask, signed32 flags and signed32 result through existing ABI without references, ownership, actual PMU access or extra validation. HOST fixture links all providers to explicit scalar trace mocks; no architecture PMU object is linked.",
+    "F03 independent driver compares432 originalC/Rust pairs and864 exact single-call traces across eight masks/six results/seven stop flags, verifies six C/Rust ABI words and selected3 callback addresses. Exact leaf stdout is fixed; exit0/joins/stream/error predicates are required.",
+    "F06 Rust allocator explicitly narrows usize to i32, retains64bit flags/raw result/pointer and forwards once to mock tracked providers with immutable filename pointer plus original385/391 lines. Mock originalC fixture compares832 allocations and8 frees including NULL/high-bit/overflow input words; pointers are never dereferenced.",
+    "F06 genuine C prologue/header closure and original #line382 bridge text preserve target ABI. Its one C filename metadata object is HOST-fixture context and a proposed unadopted production debt; this review grants no compute-C exception or canonical integration.",
+    "New runner reuses exact h990 capture implementation. Child creator birth is retained, fork/ownership signal window is blocked, bounded retirement precedes direct wait, numeric group absence is checked after join and stream FDs close before hashing. First failed return/error/retirement/join/group/stream/oracle stops suffix with prefix evidence.",
+    "CPU6/job1/AS2GiB/CPU60s/FSIZE64MiB/core0/wall90s are exact. Both original MemAvailable floors20GiB and23357213694B remain. HOST16GiB plus full2GiB output reserve and scratch12GiB remain required; aggregate7jobs/21.6619GiB reservation limits and no second heavy apply.",
+    "Fresh exact Root grant binds runner/profile/window/resources/nonce, issuance/expiry, actual other reservations and hash-pinned Root CPU6 exclusion observation. Reviewed v2guard1f152 dynamically enforces current guardian/account/boot/three clocks and all holds; admission requires full90s remaining before earliest actual inherited cutoff on every command.",
+    "Root owns campaign CPU6 exclusion and reservations throughout batch. Runner consumes fresh capture/nonce once before first child, rechecks all input/plan/profile/grant bytes and resident account/resources per command, and never resumes an interrupted/completed prefix."
+  ],
+  "validation": {
+    "eight_pure_policy_tests": "PASS; independent run8tests0.034s; no compiler/fixture",
+    "final_delta_checks": "PASS exactly9 argv path replacements; normalized corrected profile equals retained original",
+    "initial_input_hashes_verified": 104,
+    "fixture_commands_executed": 0,
+    "actual_compiler_commands": 0,
+    "live_guard_or_resource_query": false
+  },
+  "conditions_before_actual_entry": [
+    "Root supplies a genuinely fresh current CPU6 exclusion observation and exact one-use ordinary grant for final profiled824/runner6e98/admission7df. Record fresh unused nonce/current ledger, actual other job/memory reservations and finite unexpired lifetime; source-only schemas grant nothing.",
+    "Root ensures no competing CPU6 owner/ordinary job and truthful aggregate reservations, including any concurrent reviewed heavy workload. Actual input/account/physical capacity guards must pass; this review never creates heavy/native authority.",
+    "Run exact reviewed10 commands once. Preserve every command/PID/birth/direct join/group absence/closed capture, any first failure and completed prefix. Production/default/native/object-retirement acceptance remains separate after actual compiler/fixture results."
+  ],
+  "review_actions": {
+    "source_hash_AST_and_pure_tests_only": true,
+    "workloads_or_compilers_or_fixtures": false,
+    "Docker_or_root_or_guest": false,
+    "lease_or_cleanup": false,
+    "canonical_mutations": false,
+    "agents_spawned": false,
+    "only_this_review_file_written": true
+  },
+  "credit_and_scope": {
+    "same_run": "7f4af94a83b14cc08f97401f5891d965",
+    "ceiling": "57774.852125",
+    "spent_floor": "22812.3311",
+    "fixed_cutoffs": [
+      1793165769.0,
+      947874.5689514667,
+      963213.6960030915
+    ],
+    "all_real_holds_effective": true,
+    "native_credit_delta": 0,
+    "whole_file_delta": 0,
+    "production_acceptance": false
+  }
+}

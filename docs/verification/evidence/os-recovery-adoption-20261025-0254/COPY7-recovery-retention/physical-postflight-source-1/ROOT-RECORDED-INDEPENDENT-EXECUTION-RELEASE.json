@@ -1,0 +1,39 @@
+{
+  "status": "PASS_EXECUTION_RELEASE",
+  "reviewer": "/root/recovery_review",
+  "implementation_ownership": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Exact final COPY7 two-reader physical postflight only; no new workload.",
+  "ready_sha256": "d2cacf50838043a4961ccde8ab6eae2d7cea466cadbafb70f718bdc35614a476",
+  "runner_sha256": "16a6bfbd3d67fe6672b2dbcbe51287619666ad51dce179f09a0574bf7616347d",
+  "PROC_sha256": "e25f2bb4edfd838687c30f1db61d52e39da371df9cba468b63f4b195333c055e",
+  "physical_sha256": "01e7ea6cac6e00f97977ceaf34de9d57a9b73ad025e79da525813c74a6a967b5",
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-qualified-source-integration-1/current81-default-image-preparation/next-normal-cfg-only-source-preparation-1/namespace-request-preparation-cfg-only-1/bounded-runtime-import-binding-correction-1/expert-current-process-TID-source-identity-correction-1/retained-normal-prefix-continuation-preparation-1/copy7-normal-image-retirement-preparation-1/recovery-source-reconciliation-20261025-1/physical-postflight-source-1/run_once.py"
+  ],
+  "profile": {
+    "harness_sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8",
+    "ordinary_outer_CPU": 7,
+    "each_root_reader_CPU": 7,
+    "root_reader_AS": 2147483648,
+    "root_reader_CPU_seconds": 30,
+    "root_reader_fsize": 33554432,
+    "root_reader_nofile": 256,
+    "root_reader_core": 0,
+    "owned_capture_wall_seconds_each": 60,
+    "outer_timer_seconds_each": 70,
+    "cleanup_replay": false
+  },
+  "actual_physical_acceptance": false
+}

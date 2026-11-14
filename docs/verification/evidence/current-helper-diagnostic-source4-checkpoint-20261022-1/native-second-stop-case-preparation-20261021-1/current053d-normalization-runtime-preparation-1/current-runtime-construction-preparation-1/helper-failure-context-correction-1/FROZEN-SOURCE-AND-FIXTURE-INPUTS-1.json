@@ -1,0 +1,45 @@
+{
+  "M07_actual_whole_helper_proof": {
+    "bytes": 5521,
+    "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/boot-collector-profile-correction-1/bounded-compile-correction-1/actual-helper-controlpath-1/ACTUAL-HELPER-FAILURE-SERIALIZATION-AND-SUCCESS-RESULT-1.json",
+    "sha256": "21a6aa6b6e44cf9ff8e2e9f5e25e96b036710ef389141e352b55f0dbd4c3be77"
+  },
+  "M07_pattern": {
+    "bytes": 2637,
+    "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/boot-collector-profile-correction-1/bounded-compile-correction-1/source.diff",
+    "sha256": "6210ae40f2073a63c9fad7161e738033839235f329324ced9a9747dbc3ad0f33"
+  },
+  "actual_results": null,
+  "candidate_source": {
+    "bytes": 45981,
+    "path": "/home/holden/mckernel-work/host-preparation/native-second-stop-case-preparation-20261021-1/current053d-normalization-runtime-preparation-1/current-runtime-construction-preparation-1/helper-failure-context-correction-1/native-second-stop-collector.helper-failure.c",
+    "sha256": "e4a2a4f5278c6fd1588571431f0fe7ec3840af531e3ea18fa2fb750308d9f38b"
+  },
+  "cause": "Shared initial helper wrapper drops captured failed load/boot result; only guest filesystem holds streams before powerdown. Actual boot failure cause remains unknown.",
+  "diff": {
+    "bytes": 2677,
+    "path": "/home/holden/mckernel-work/host-preparation/native-second-stop-case-preparation-20261021-1/current053d-normalization-runtime-preparation-1/current-runtime-construction-preparation-1/helper-failure-context-correction-1/source.diff",
+    "sha256": "8a040204dbc6e0e86c08df089c93a6307c2f9c4fbdf554bc43916ec8c37e790f"
+  },
+  "fixtures": [
+    {
+      "bytes": 2335,
+      "path": "/home/holden/mckernel-work/host-preparation/native-second-stop-case-preparation-20261021-1/current053d-normalization-runtime-preparation-1/current-runtime-construction-preparation-1/helper-failure-context-correction-1/original.c",
+      "sha256": "02fdefcb679e2de116bc366fe9c868893a6a2b92e1b85d8b511fc1835e7bd0df"
+    },
+    {
+      "bytes": 2394,
+      "path": "/home/holden/mckernel-work/host-preparation/native-second-stop-case-preparation-20261021-1/current053d-normalization-runtime-preparation-1/current-runtime-construction-preparation-1/helper-failure-context-correction-1/corrected.c",
+      "sha256": "fb2be634c6d1c4d4c20284353c3892d4bce6ecb14af8da5334d8d1f6d0128932"
+    }
+  ],
+  "native_or_stage_permission": false,
+  "original_source": {
+    "bytes": 44478,
+    "path": "/home/holden/mckernel-work/host-preparation/native-second-stop-case-preparation-20261021-1/current053d-stage-runtime-preparation-1/two-cpu-boot-contract-correction-1/native-second-stop-collector.two-cpu.c",
+    "sha256": "a673c54b59efc57b71086468044665b635ba2c67416640c6d69924dddad6a8bb"
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "scope_limit": "Only shared helper() load/firstboot calls, each1024B stream limit. Existing direct lifecycle/resource/reboot helpers and 4096B resource chunk serializers remain unchanged.",
+  "success_oracles_unchanged": true
+}

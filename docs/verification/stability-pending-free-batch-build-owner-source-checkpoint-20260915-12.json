@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "record_kind": "pending_free_batch_build_owner_source_checkpoint",
+  "task_id": "M03-A/M03-B-candidate-12-owner",
+  "attempt": 12,
+  "status": "PASS_BUILD_PACKET",
+  "base_commit": "2e3fe26cf138c4d2170912b82fb8b6419e573c6b",
+  "source_sha256": {
+    "owner": "d82166afaab5a373649789777d43cafd4c739ef71f62245b51dedf0823a23ca0",
+    "harness": "298af617437bd5beef1643286532c3cff7e14c30f0be263d414f93de47dc3cfc",
+    "tests": "baa777f80f3d7966ceecd4549517403c58c4710a72d359d49b63f65f8c65598e"
+  },
+  "unit_tests": {
+    "python3": {"tests": 8, "status": "PASS", "stderr_sha256": "160cac8e6d9de7cf7d9772fed4bc24e23051d5a34ae890df8402d33f092934bf"},
+    "python3.8": {"tests": 8, "status": "PASS", "stderr_sha256": "0df194a81b71bedc41b0e92a6487d6b4f264487335f005ef700399d359f5fe0d"},
+    "pre_post_sources_equal": true,
+    "diff_check": "PASS"
+  },
+  "archive": {
+    "path": "docs/verification/evidence/stability-pending-free-batch-build-owner-source-success-20260915-12.tar.gz",
+    "size": 1514534,
+    "sha256": "96f2ee42df10115c999fc87fae7585de026cf7bab66aae755e79408cf6a1fbca",
+    "members": 38
+  },
+  "compiler_lane": {
+    "image_digest": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+    "rustc": {"path": "/usr/bin/rustc", "size": 15560, "sha256": "38eeb1652fb59753cb7736e354ec1579a543da9a2eb8a68be102a41e88eb5dc6"},
+    "gcc": {"path": "/usr/bin/gcc", "size": 1375456, "sha256": "2092e32fa9abee9ccbf777a5f893b9cc608582b660c93e742a17c3eb7da109c2"},
+    "regular_file_layer_mapping_reviewed": true,
+    "pre_start_copy_and_hash_required": true
+  },
+  "validated_result_contract": {
+    "exact_rows": 30,
+    "exact_artifacts": 51,
+    "trait_negative_controls": 5,
+    "partial_release_mutant_required_nonzero": true,
+    "canonical_nofollow_paths": true
+  },
+  "independent_review": {
+    "role": "Astra/high compiler and ownership reviewer",
+    "source_status": "PASS_SOURCE",
+    "build_status": "PASS_BUILD_PACKET",
+    "scope": "bounded focused pending-free fixture owner only"
+  },
+  "container_execution": false,
+  "focused_equivalence_accepted": false,
+  "runtime_acceptance": false,
+  "production_gate_credit": false
+}

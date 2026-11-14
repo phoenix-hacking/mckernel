@@ -1,0 +1,44 @@
+{
+  "schema": "mckernel-stability-shutdown-checkpoint-v1",
+  "checkpoint": 114,
+  "recorded_at": "2026-09-29T03:29:10-07:00",
+  "status": "PAUSED_INCOMPLETE",
+  "reason": "launcher stop request",
+  "head_before_checkpoint": "f6e9fb0081c893c2e49ef197273f201a85f24d5c",
+  "joined_children": {"active": 0, "retirement_packet_expert_113": "completed"},
+  "bounded_result": {
+    "packet": {"path": "docs/verification/evidence/native-exact-candidate-retirement-67589154-1.py", "sha256": "59b3bedf62638f1e938bf4b347f49af9790e574c451f1050bd1f179ff01dc483"},
+    "test": {"path": "scripts/tests/test_native_exact_candidate_retirement_67589154.py", "sha256": "8c57021a110262cba9521de5ebd43498096129d4cf7b0954f8308f6fd4abd5c8"},
+    "dispatcher_checks": ["python3.8: 15/15 PASS", "python3.9: 15/15 PASS", "python3.8/python3.9 py_compile PASS", "scoped git diff --check PASS"],
+    "acceptance": "UNREVIEWED_SOURCE_WIP"
+  },
+  "live_processes": [
+    {"pid": 3399308, "starttime": 83682487, "role": "launcher-wrapper"},
+    {"pid": 3399313, "starttime": 83682494, "role": "launcher-worker"},
+    {"pid": 3399317, "starttime": 83682500, "role": "codex-app-server"}
+  ],
+  "retained_roots": [
+    {"path": "/dev/shm/mckernel-exact-candidate-67589154-1", "device": 26, "inode": 25166, "uid": 1000, "gid": 1000, "mode": "0755"},
+    {"path": "/dev/shm/mckernel-exact-metadata-backup-67589154-1", "device": 26, "inode": 35798, "uid": 1000, "gid": 1000, "mode": "0755"},
+    {"path": "/home/holden/mckernel-work/scratch/native-exact-retention-preparation-evidence-67589154-1", "device": 1831, "inode": 2907338, "uid": 1000, "gid": 1000, "mode": "0700"},
+    {"path": "/home/holden/mckernel-work/scratch/native-exact-retention-preparation-evidence-67589154-2", "device": 1831, "inode": 2907339, "uid": 1000, "gid": 1000, "mode": "0700"}
+  ],
+  "retained_terminal_containers": [
+    {"id": "decd7cf92467e1214cc955d15a00b847587ada37016f206e9a82019cbb72c6b9", "status": "exited", "exit_code": 1, "pid": 0, "oom_killed": false, "restart": "no"},
+    {"id": "8943e49772f840ba5da6571c2e2c6fde60b61157f21f873d832669157ef9bc10", "status": "exited", "exit_code": 0, "pid": 0, "oom_killed": false, "restart": "no"}
+  ],
+  "capacity": {"host_free_bytes": 24276938752, "scratch_free_bytes": 21560459264, "tmpfs_free_bytes": 7516635136, "memory_available_bytes": 20682653696},
+  "operations_not_run": ["retirement packet", "privileged mutation", "candidate or backup traversal", "rename or deletion", "Docker mutation", "build", "module", "guest", "application"],
+  "next_tasks": [
+    "reconcile the recorded process, root, container, object-store and capacity identities",
+    "obtain fresh independent source review of the exact packet and test against all five retained blockers",
+    "if source review passes, checkpoint and fetch-verify the immutable template before creating the acyclic mechanical release",
+    "obtain a separate independent execution review and fetched release before any sudo retirement invocation",
+    "after independently accepted retirement and measured capacity recovery, review preparation 704f6654-1 before a heavy build"
+  ],
+  "formal_counters_changed": false,
+  "successful_current_candidate_builds": 0,
+  "accepted_application_cases": "0/273",
+  "os_complete": false,
+  "pause_temporary": true
+}

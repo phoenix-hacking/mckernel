@@ -1,0 +1,123 @@
+--- a/smp_application.rs
++++ b/smp_application.rs
+@@ -204,6 +204,7 @@
+     first_return_written:bool,
+     first_return_committed:bool,
+     first_return_published:bool,
++    host_start_return:Option<(u64,u64)>,
+     lease:core::mem::ManuallyDrop<Option<BackendForkLeaseV4>>,
+     host_revoke:Option<current_fork_control::OwnedRevoke>,
+ }
+@@ -372,7 +373,7 @@
+             child_task: core::mem::ManuallyDrop::new(child_task),
+             response: core::mem::ManuallyDrop::new(response), parent, child, finished: false,
+             response_location:ForkResponseLocation::Ticket,
+-            sealed:AtomicBool::new(false),carrier_nonce:0,first_return_written:false,first_return_committed:false,first_return_published:false,lease:core::mem::ManuallyDrop::new(None),host_revoke:None,
++            sealed:AtomicBool::new(false),carrier_nonce:0,first_return_written:false,first_return_committed:false,first_return_published:false,host_start_return:None,lease:core::mem::ManuallyDrop::new(None),host_revoke:None,
+         })
+     }
+ 
+@@ -829,6 +830,34 @@
+         // the response has released its memory, but under the same application
+         // mutex as RET completion. Its error must never retry that publication.
+         let published = self.finish_publication(&mut slots, result, notify)?;
++        if published {
++            // Record the original positive response at its real publication
++            // boundary, under the same slots guard as every later selector1
++            // admission. The sleeping RET waiter need not run first.
++            for index in 0..slots.len() {
++                let route=slots[index].as_ref().and_then(|entry|entry.fork_ingress.as_ref())
++                    .filter(|owner|owner.parent==token&&owner.first_return_committed
++                        &&!owner.first_return_published).map(|owner|owner.response.route());
++                let Some((worker,serial))=route else{continue;};
++                let parent=slots.iter().flatten().find(|entry|entry.key()==token).ok_or(ENOENT)?;
++                if parent.syscalls.returned(worker,serial).map_err(errno)? {
++                    slots[index].as_mut().unwrap().fork_ingress.as_mut().unwrap().first_return_published=true;
++                }
++            }
++            for index in 0..slots.len() {
++                let route=slots[index].as_ref().and_then(|entry|entry.fork_ingress.as_ref())
++                    .filter(|owner|owner.parent==token).and_then(|owner|owner.host_start_return);
++                let Some((worker,serial))=route else{continue;};
++                let parent=slots.iter().flatten().find(|entry|entry.key()==token).ok_or(ENOENT)?;
++                if parent.syscalls.returned(worker,serial).map_err(errno)? {
++                    // Exact successful selector1 RET has been published. This
++                    // is child admission, never destruction/final-ACK proof.
++                    let child=slots[index].as_mut().unwrap();
++                    child.scheduled=true;
++                    child.fork_ingress.as_mut().unwrap().host_start_return=None;
++                }
++            }
++        }
+         let entry = slots
+             .iter_mut()
+             .flatten()
+@@ -1277,6 +1306,37 @@
+         Ok(())
+     }
+ 
++    fn current_host_start_child(&self,slots:&[Option<Entry>],parent:Token,
++        worker:u64,serial:u64,cpu:i64,value:i64,length:u64)->Result<Option<usize>> {
++        let pe=slots.iter().flatten().find(|entry|entry.key()==parent).ok_or(ENOENT)?;
++        let request=pe.syscalls.delivered_fork_request(worker,serial).map_err(errno)?;
++        let Some(request)=request else{return Ok(None);};
++        let args=request.arguments();
++        if args[0]!=1||args[5]!=0x313030434b46434d{return Ok(None);}
++        if value!=0{return Ok(None);}
++        let a=request.arguments();
++        if cpu!=request.cpu() as i64||length!=0||request.pid()!=pe.cleanup.pid()
++            ||request.target()!=0{return Err(EACCES);}
++        let mut matched=None;
++        for (index,entry) in slots.iter().enumerate() {
++            let Some(ce)=entry else{continue;};
++            let Some(owner)=ce.fork_ingress.as_ref() else{continue;};
++            if owner.parent!=parent||owner.child_task.tgid() as u64!=a[1]{continue;}
++            let image=ce.inherited_root.as_ref().ok_or(EACCES)?;
++            let original=owner.response.request();
++            if matched.is_some()||ce.closed||ce.needs_cleanup||ce.quarantined||ce.scheduled
++                ||owner.host_start_return.is_some()||owner.host_revoke.is_some()
++                ||!owner.sealed.load(Ordering::Acquire)||!owner.first_return_published
++                ||owner.child!=ce.key()||!ce.syscalls.has_open_worker()
++                ||image.end-image.start!=a[2]||image.root!=a[3]
++                ||original.arguments()[4]!=a[4]||original.arguments()[5]!=a[5]
++                ||original.requester()!=request.requester()||original.cpu()!=request.cpu()
++                {return Err(EACCES);}
++            ce.backend_ready()?;matched=Some(index);
++        }
++        matched.map(Some).ok_or(EACCES)
++    }
++
+     pub(crate) fn return_syscall(
+         &self,
+         token: Token,
+@@ -1300,6 +1360,7 @@
+         }
+         bytes[48..56].fill(0); // Output: whether the continuing owner accepted the return.
+         let mut slots = self.slots.lock();
++        let started_child=self.current_host_start_child(&slots,token,worker,serial,cpu,value,length)?;
+         let owned_child=loop {
+             let child=slots.iter().position(|e|e.as_ref().and_then(|e|e.fork_ingress.as_ref()).is_some_and(|f|
+                 f.parent==token&&f.response.route()==(worker,serial)));
+@@ -1335,6 +1396,9 @@
+             });
+         entry.quarantined |= entry.syscalls.quarantined();
+         result.map_err(errno)?;
++        if let Some(child)=started_child {
++            slots[child].as_mut().unwrap().fork_ingress.as_mut().unwrap().host_start_return=Some((worker,serial));
++        }
+         if let Some(child)=owned_child {
+             slots[child].as_mut().unwrap().fork_ingress.as_mut().unwrap().first_return_committed=true;
+         }
+@@ -1350,7 +1414,11 @@
+             }
+             if entry.syscalls.returned(worker, serial).map_err(errno)? {
+                 if let Some(child)=owned_child {
+-                    slots[child].as_mut().unwrap().fork_ingress.as_mut().unwrap().first_return_published=true;
++                    // Only the continuing publisher records this observation.
++                    // The waiter validates it; it cannot publish it late.
++                    if !slots[child].as_ref().unwrap().fork_ingress.as_ref().unwrap().first_return_published {
++                        return Err(errno(-71));
++                    }
+                 }
+                 // A real first positive return is still not a runnable,
+                 // revoke/final-ACK, terminal release or scheduled-task receipt.

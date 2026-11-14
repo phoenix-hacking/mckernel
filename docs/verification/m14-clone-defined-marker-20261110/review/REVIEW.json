@@ -1,0 +1,302 @@
+{
+  "ABI_and_source_witness_findings": [
+    "C request/response struct text is byte-identical to actual current kernel header, with real x86 memconst.h empty IHK_DMA_ALIGN included. C staticasserts pin request72/align8/offsets0,4,8,16,24 and actualresponse48/ret24/pde40 plus LP64 scalar widths; no fabricated wire layout.",
+    "Full actual ff48 ABI module is imported read-only with selected native_linux_irq_work_v6_12/profile/perf/rusage cfgs. The seven request/TID/prepare/copy/release-publication/parentflags helper function ranges are byte-identical to current source and are the actual pure implementations, not external provider stubs.",
+    "The exact unchanged observer first condition and actual NR_CLONE56/MARKER value are copied as an explicitly labeled branch-only witness. Returning0 means only the discriminator matched; registry/carrier/ACK/revoke/destruction code is absent and unclaimed.",
+    "Raw aligned thread_token is only passed as a nonnull pointer to the guard; the witness never dereferences Thread or claims a valid runtime Thread. No Rust reference is created. C/Rust buffers are distinct live aligned objects across synchronous calls; bytecopy is nonoverlapping.",
+    "Packet.valid publication uses the unchanged AtomicU64 Release store on8byte-aligned actualstorage. This sequential regression verifies defined contents and publication value, not concurrent transport or native ordering acceptance.",
+    "Known clone/report/cleanup fields retain their actual assignment shape. Concrete VM/root values are labeled protocol inputs; no real VM/provider result is forged. Zero args4/args5 survive prepare/copy/publish/reuse; exact marker and wrong marker are distinguished without entering observer body."
+  ],
+  "Root_execution_requirements": [
+    "Root alone rechecks frozen source/tool/input bytes and current preimage/one-line patch compatibility before applying; preserve others dirty/private work. No whole-file postimage overwrite across the disjoint interrupt/outer source work.",
+    "Fresh CPU6/onejob/AS2GiB admission inside shared HOST4GiB/max3 TOTAL including Root/compiler/controller/other worker overhead and oldUNJOINED CPU0/256MiB/job1. Fresh26GiB available, prior18GiB/native2\u20135/12GiB/CPU1 and host16/scratch12GiB floors plus32MiB output reservation remain. No new grant or unreviewed overlap.",
+    "Create owned fresh nonsymlink output-1/tmp and executable output before env-i commands; reject any reused/nonempty output. Literal taskset/prlimit/env/tmpdir argv only. Perchild FSIZE16MiB/nofile64/CPU60 and wall20/60/30/5 under wholebatch120 remain enforced.",
+    "Use existing qualified afe740 Owner with positive PID/birth and process-family ownership, exact per-command waits/streams/deadline and cleanup. Every new record must reject timeout/error/group/adopted kill/reap/residual/UNKNOWN immediately; partial failure receipt preserves original primary/cleanup facts. Successful batch requires exactly4 operation records with expected statuses1/0/0/0, all joined and closed.",
+    "Stop first unexpected result; preserve original source/diagnostic/input/owner and one bounded meaningful correction policy. Do not execute unchanged failed baseline or replay other green suites. Any ownership UNKNOWN remains reserved."
+  ],
+  "blockers": [],
+  "confirmed_source_defect": {
+    "actual_consumer": {
+      "bytes": 18671,
+      "path": "/home/holden/mckernel/kernel/rust/fork_control_guest.rs",
+      "sha256": "26797f574fa1ba7006eb27ff3a1a7750ec04b83f71a2e90b8c35c4c536b33acd"
+    },
+    "actual_guard": "request.is_null()||response.is_null()||thread.is_null()||(*request).number!=NR_CLONE||(*request).args[5]!=MARKER",
+    "all_other_fields_branches_expressions_and_bytes_unchanged": true,
+    "declaration_line": 8030,
+    "exact_unified_patch_and_full_file_reverse_identity": true,
+    "finding": "Legacy request1 stack bytes have no initializer and neither nr56 producer sets args5; selected actual reply observer reads args5 in its first condition. Reading that indeterminate unsignedlong is not a valid legacy marker contract. The one-line initializer defines all original private request storage and preserves every later assigned field.",
+    "initialization_is_no_generic_or_exec_hold_release": true,
+    "legacy_producers": [
+      "syscall.c8282\u20138291 clone request args0\u20133",
+      "syscall.c8444\u20138447 clone report args0\u20131"
+    ],
+    "native_fork_default_OFF_unchanged": true,
+    "new_declaration": "\tstruct syscall_request request1 IHK_DMA_ALIGN = { 0 };",
+    "postimage_identity": {
+      "bytes": 932919,
+      "path": "kernel/syscall.c",
+      "sha256": "1804f7c252e036ab61badf41ed996074fc52868f6b87c7cf419bbcc3ac507356"
+    },
+    "preimage": {
+      "bytes": 932911,
+      "path": "/home/holden/mckernel/kernel/syscall.c",
+      "sha256": "f313b9f1dada0ed99b86951a1427ef24518d48a5c58faa3f45b6fe764c2f28f2"
+    }
+  },
+  "decision": "GO",
+  "exact_four_operations": [
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648",
+        "--cpu=60",
+        "--fsize=16777216",
+        "--nofile=64",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-syscall-boundary-1/clone-request-initialization-1/output-1/tmp",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "/usr/bin/cc",
+        "-std=c11",
+        "-O2",
+        "-g1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-Werror=uninitialized",
+        "-Werror=maybe-uninitialized",
+        "-fno-common",
+        "-I/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-syscall-boundary-1/clone-request-initialization-1/tests",
+        "-c",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-syscall-boundary-1/clone-request-initialization-1/tests/baseline_marker.c",
+        "-o",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-syscall-boundary-1/clone-request-initialization-1/output-1/baseline-marker.o"
+      ],
+      "expected_exit": 1,
+      "id": "baseline-typed-uninitialized-marker-reject",
+      "required_diagnostic": "uninitialized diagnostic must name request1 or its args[5] marker load; no unrelated compiler failure",
+      "required_no_output": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-syscall-boundary-1/clone-request-initialization-1/output-1/baseline-marker.o",
+      "scope": "compile-only old declaration plus actual consumed marker slot; never execute old undefined read",
+      "wall_seconds": 20
+    },
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648",
+        "--cpu=60",
+        "--fsize=16777216",
+        "--nofile=64",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-syscall-boundary-1/clone-request-initialization-1/output-1/tmp",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+        "--crate-name",
+        "clone_marker_protocol_witness",
+        "--crate-type",
+        "lib",
+        "--edition=2021",
+        "-Dwarnings",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "debuginfo=1",
+        "-C",
+        "force-unwind-tables=no",
+        "--cfg",
+        "native_linux_irq_work_v6_12",
+        "--cfg",
+        "enable_profile",
+        "--cfg",
+        "enable_perf",
+        "--cfg",
+        "enable_rusage",
+        "--emit=obj=/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-syscall-boundary-1/clone-request-initialization-1/output-1/protocol-witness.o",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-syscall-boundary-1/clone-request-initialization-1/tests/protocol_witness.rs"
+      ],
+      "expected_exit": 0,
+      "id": "actual-pure-protocol-witness-rust-object",
+      "required_stderr": "empty",
+      "scope": "actual full ff48 ABI and unchanged pure helpers/real first marker condition only; not kernel/provider artifact",
+      "wall_seconds": 60
+    },
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648",
+        "--cpu=60",
+        "--fsize=16777216",
+        "--nofile=64",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-syscall-boundary-1/clone-request-initialization-1/output-1/tmp",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "/usr/bin/cc",
+        "-std=c11",
+        "-O2",
+        "-g1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-Werror=uninitialized",
+        "-Werror=maybe-uninitialized",
+        "-fno-common",
+        "-I/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-syscall-boundary-1/clone-request-initialization-1/tests",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-syscall-boundary-1/clone-request-initialization-1/tests/candidate_wire.c",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-syscall-boundary-1/clone-request-initialization-1/output-1/protocol-witness.o",
+        "-Wl,--no-undefined",
+        "-o",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-syscall-boundary-1/clone-request-initialization-1/output-1/candidate-wire"
+      ],
+      "expected_exit": 0,
+      "id": "candidate-C-wire-ABI-link",
+      "required_stderr": "empty",
+      "scope": "actual candidate initializer and C wire declarations joined to real unchanged Rust pure protocol helpers; no kernel/platform dependencies",
+      "wall_seconds": 30
+    },
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648",
+        "--cpu=60",
+        "--fsize=16777216",
+        "--nofile=64",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-syscall-boundary-1/clone-request-initialization-1/output-1/tmp",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-syscall-boundary-1/clone-request-initialization-1/output-1/candidate-wire"
+      ],
+      "expected_exit": 0,
+      "id": "candidate-marker-known-fields-one-regression",
+      "required_stderr": "empty",
+      "required_stdout_json": {
+        "case": "legacy-clone-defined-marker-and-known-wire-fields",
+        "exact_marker_discriminated_only": true,
+        "known_args_preserved": true,
+        "legacy_marker_ignored": true,
+        "native_execution": false,
+        "real_helpers": true,
+        "status": "PASS"
+      },
+      "scope": "one sequential private request protocol case; no actual fork/kill/offload/ACK/native operation",
+      "wall_seconds": 5
+    }
+  ],
+  "inputs": {
+    "bytes": 2858,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-syscall-boundary-1/clone-request-initialization-1/INPUTS.json",
+    "sha256": "59a0d91f60093ddcc149bfd1ce600d376c4e4bc00d1229a2c2e1c2e9c17e1368"
+  },
+  "patch": {
+    "bytes": 335,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-syscall-boundary-1/clone-request-initialization-1/CLONE-REQUEST-DEFINED-MARKER.patch",
+    "sha256": "de67e1ef7db51b2ef42a28851cc686dba5b3d28b00a0d01a1b0ef16aed555e4b"
+  },
+  "preparation_result": {
+    "bytes": 2461,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-syscall-boundary-1/clone-request-initialization-1/RESULT.json",
+    "sha256": "753eae3bb9942386f4115d6324e1573ef52adfacf85ac0c99be30c75feef300b"
+  },
+  "preserved_original_scope": {
+    "C_retirement": false,
+    "M14_before_M15": true,
+    "native_currentfree_UNKNOWN_service_account_credit_holds": true,
+    "old_UNJOINED_release": false,
+    "original_acceptance": false,
+    "remaining_real_provider_ownership_and_full_image_gates": true,
+    "source_policy_replay_equivalent_and_known_fixture_holds": true
+  },
+  "profile": {
+    "all_other_workers_controllers_and_UNJOINED": "Root measures/counts all actual overhead plus retained CPU0/256MiB/job1 UNKNOWN inside shared4GiB/max3; native18GiB reservations and floor remain; no execution unless complete operation fits existing grant",
+    "batch_wall_seconds": 120,
+    "cpu": 6,
+    "fresh_MemAvailable_floor_GiB": 26,
+    "host_disk_floor_GiB": 16,
+    "jobs": 1,
+    "kind": "existing ordinary HOST compile lane; no quota expansion",
+    "max_address_space_bytes": 2147483648,
+    "max_aggregate_HOST_bytes": 4294967296,
+    "native_or_Docker_or_network": false,
+    "output_disk_reservation_bytes": 33554432,
+    "output_max_file_bytes": 16777216,
+    "scratch_disk_floor_GiB": 12
+  },
+  "request": {
+    "bytes": 10399,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-syscall-boundary-1/clone-request-initialization-1/REQUEST.json",
+    "sha256": "2f1e340329bbe4ebe81679960dea2566f2f3776aa6e00365c194f92059415e54"
+  },
+  "reused_boundaries": {
+    "existing_outer_boundary": {
+      "bytes": 19504,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-syscall-boundary-1/RESULT.json",
+      "sha256": "ba553d023f194a2964e6ade6fd68106996a26e20e485f02def35f388b0fc7494"
+    },
+    "old_qualification_suites_not_replayed": true,
+    "outer_implementation_spec": {
+      "bytes": 11155,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-syscall-boundary-1/IMPLEMENTATION-SPEC.json",
+      "sha256": "e7d1321c1e7839fd9f3208a439bc1afeaf1eabb0611c6c821c8360855067df33"
+    },
+    "pre_handoff_inert_static_correction_retained": {
+      "bytes": 657,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-syscall-boundary-1/clone-request-initialization-1/PRE-HANDOFF-STATIC-CORRECTION.json",
+      "sha256": "ab1b0cc3000f2506c1a5831713d718767b36880630f31d30d9557529e9fd41d7"
+    }
+  },
+  "reviewed_at_utc": "2026-11-10T17:48:18.958538+00:00",
+  "reviewer": "source_acquisition_review_max; independent same-Root Sol/MAX; no recursion",
+  "reviewer_operations": {
+    "canonical_or_packet_mutation": false,
+    "compiler_Rusthelper_Cprogram_test_Docker_network_native_or_fixture_execution": false,
+    "private_review_write_only": true,
+    "recursive_agents": false,
+    "source_data_hash_diff_and_range_comparisons_only": true
+  },
+  "schema": "mckernel.focused-independent-review.v1",
+  "scope": "Only defined legacy clone request storage and focused actual wire/helper/first-marker guard regression. No kernel outer entry, offload/clone/fork/kill/registry/carrier/ACK/native path execution or acceptance.",
+  "source_bindings": {
+    "bytes": 5276,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-syscall-boundary-1/clone-request-initialization-1/SOURCE-BINDINGS.json",
+    "sha256": "8dc082332835a526a72f9fbebb36fb2e08e1e376f68027dd88c52b57609ec61a"
+  },
+  "status": "GO_EXACT_ONE_LINE_INITIALIZER_AND_FOUR_COMMAND_CHANGED_PROTOCOL_CHECK_AFTER_ROOT_FRESH_ADMISSION",
+  "test_oracles": [
+    "Baseline C is compile-only; exit1 must specifically diagnose uninitialized request1/args5 and produce no baseline object. Missing tools/unsupported options/unrelated failure are not expected baseline. Old undefined marker is never executed.",
+    "Rust candidate pure-helper witness and C wire link must exit0 with empty stderr. -Dwarnings and C Wall/Wextra/Werror/uninitialized flags remain exact; no warning waiver or fake syscall/provider.",
+    "Only candidate-wire main runs once. Its assertions verify defined request bytes, real parentflags/preparation/copy/publication, preserved clone/report/kill wire fields, zero marker ignore and exact/wrong marker discrimination; no actual syscall/clone/kill/offload/controller is called.",
+    "Require exact stdout JSON declared in request and empty stderr, actual fresh output identities and positive allprocess ownership. A guard match is not a forkcontrol acceptance."
+  ]
+}

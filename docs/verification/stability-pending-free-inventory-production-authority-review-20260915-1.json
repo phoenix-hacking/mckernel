@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "record_kind": "pending_free_inventory_production_authority_review",
+  "task_id": "M03-pending-free-inventory-source-contract",
+  "review_attempt": 1,
+  "recorded_utc": "2026-09-16T05:23:00Z",
+  "status": "FAIL_AUTHORITY_PACKET",
+  "contract_sha256": "00141eb8f17d21ad3ad9b20829a333e6558e8859f70347d72bd3e9b893ae8be8",
+  "audit_sha256": "94445654a9a6aa1bb08b5243bfbd1250708ce1d6f42ec22e7aa15fb28e7b3faa",
+  "reviewed_source_sha256": {
+    "kernel/mem.c": "167ad2b976bcdec048a625dedf68a9b7c1ef6db7c57f3ceddf3582d54887101a",
+    "kernel/include/page.h": "c8f3f5e7804c71430c814395ea14a1ee93267180713caeb39880b662cc9cd0dc",
+    "kernel/cls.c": "071008b51aaa9f173b855a65791c2e24286d4b7f843d786227d68377e3c9a31f",
+    "kernel/xpmem.c": "d3399be775f86dbabb4feca6238dc45add64559b45a6091726c588acf8c24a89",
+    "kernel/process.c": "6480b1ab121acf17610495682cd9e58cba774427de9695b1ce8dd65a9bc07cb2",
+    "kernel/process_helpers.c": "c444c9c911b3dd231e6c8d8ae544c82f5d69893506f99bcff4be4ae3216a34f5",
+    "kernel/include/process.h": "907391bd99a38b48be54ff6700f1ca12143e5a9bfabf4826b6f09ab2b842bc6c",
+    "kernel/rust/mem_helpers.rs": "647825d8c51a9f584d1229a2389fbb81105e4bbf94bfcf95a12d172c5dde112b",
+    "kernel/rust/xpmem_helpers.rs": "e8c7970b672c724f14da2eb0a12fdbcd11df62f824422a5f8a98da4364328255",
+    "kernel/rust/x86_memory_helpers.rs": "4d290fa03da23644642bdd5a9b5699b8dc1646b4b29427026e96c401415c25e2",
+    "kernel/rust/page_helpers.rs": "fa2f68c00a1568acf6e9ebc4bbdfb0b2bf13e2e5eff758b9048acb06a6aec597",
+    "kernel/rust/lock_helpers.rs": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3",
+    "kernel/rust/process_helpers.rs": "b3a28ea8b0cd2594305644c224ae718eac384c0709305da315a6b8fd1285d00b",
+    "kernel/rust/cls.rs": "c0260e7634d53fcc0873746af8bd16b6691ee0a4b7f394ca18896aef070f6bba",
+    "arch/x86_64/kernel/memory.c": "6a51dfb852313d9e114579b53809182d3b7148b5444298429294419563ec65ea",
+    "arch/x86_64/kernel/lock.c": "fde952906e03d131dedb479b8405bfcd951605c8e4624c2105d81dc8c7583dca"
+  },
+  "findings": [
+    {
+      "id": "clear-failure-loses-ownership",
+      "evidence": "kernel/rust/xpmem_helpers.rs:5470-5504 logs page-table clear errors, then unrefs the memobj, erases/frees the range and returns success; xpmem_vm_munmap_bridge at 1596-1605 finishes unconditionally.",
+      "required_authority": "Preserve typed clear status plus range/backing ownership through the caller before any pending inventory can drain."
+    },
+    {
+      "id": "tlb-snapshot-permit-missing",
+      "evidence": "kernel/mem.c remote flush waits for counters but exposes no timeout/transaction generation; the public wrapper discards the result.",
+      "required_authority": "Retain address-buffer lifetime, generation and late-interrupt ownership while reconciling partial page-table mutation with failure rollback."
+    },
+    {
+      "id": "partial-lock-exclusion-only",
+      "evidence": "kernel/xpmem.c:8513-8567 holds memory_range_lock; kernel/rust/lock_helpers.rs:138-169 disables preemption but leaves IRQs enabled.",
+      "required_authority": "Specify a short IRQ-safe pending lease and lock order that never spans remote shootdown or deadlocks reciprocal interrupts."
+    },
+    {
+      "id": "descriptor-and-vm-generation-missing",
+      "evidence": "phys_to_page unlocks before returning a raw descriptor pointer; final page unmap can remove hash membership; VM refcount/release supplies no restart or incarnation generation and no quarantine owner.",
+      "required_authority": "Generation-bearing descriptor/VM pin acquisition under hash locking plus explicit final-release/quarantine handoff."
+    },
+    {
+      "id": "candidate-model-not-executable-evidence",
+      "evidence": "The Rust model rejects valid sentinel rings, vectors carry names/expected values only, the C reference constructs every case with count zero, and the Python harness checks strings.",
+      "required_authority": "Correct executable Rust/C constructors and compare real state transitions before requesting reference-equivalence credit."
+    }
+  ],
+  "smallest_prerequisite_packet": "A source-bound lifecycle/clear-authority design covering descriptor allocation/removal/destruction, VM creation/final release, XPMEM partial-clear error retention, late-TLB completion lifetime and quarantine ownership across OS destruction. It must specify generation allocation/exhaustion, pin acquisition under hash locking, IRQ-safe short critical sections, complete lock order and teardown/recovery handoff.",
+  "candidate_disposition": "rejected",
+  "implementation_released": false,
+  "compiler_execution": false,
+  "runtime_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

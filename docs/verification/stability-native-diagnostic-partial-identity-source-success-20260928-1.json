@@ -1,0 +1,49 @@
+{
+  "schema": "mckernel.stability-source-review.v1",
+  "recorded_at": "2026-09-28T09:32:00-07:00",
+  "base_commit": "778102e6f6ad594889e856969ac1d1f5e7d251de",
+  "scope": "progressive process-identity evidence during QEMU and Docker-client acquisition failure",
+  "decision": "PASS_PARTIAL_IDENTITY_SOURCE_READY_FOR_CHECKPOINT",
+  "supersedes_source_hashes_in": "docs/verification/stability-native-diagnostic-process-evidence-source-success-20260928-1.json",
+  "source_sha256": {
+    "scripts/application-tests/native_diagnostic.py": "a8017956af1424736a88be15ce7a38db5fe0e0f1f33e1eea006a6b38b4f7f392",
+    "scripts/application-tests/native_diagnostic_backend.py": "cd0759c926876483665065cb320b9daf7d7c6b32f56e561805b4b0343f60d614",
+    "scripts/application-tests/native_diagnostic_container_owner.py": "c46b7cb0e66d653f644777d140b8e152bf1a572711bcff3d9b6cbaa00bb34d00",
+    "scripts/tests/test_application_native_diagnostic.py": "48a5d158cadd7210f9ca8c73e20b2c9638a235230b795cc2861af2fe19108b6a",
+    "scripts/tests/test_application_native_diagnostic_backend.py": "1014639170fd5a128706152fa8a250439b8b7fd42c1adc5b18b14d953372e4b9",
+    "scripts/tests/test_application_native_diagnostic_container_owner.py": "7af734e00fc57dd3a47b03c435973318c2a358c8b8331d6ac872804dc026bb28"
+  },
+  "rejected_packet": {
+    "path": "docs/verification/stability-native-diagnostic-current-signal-execution-packet-20260928-4.md",
+    "sha256": "1c6701f6a76960d2725e2a9f45e7c2b3ebdfef5fb03361308a44605af4293ec6",
+    "review": "docs/verification/stability-native-diagnostic-current-signal-execution-review-failure-20260928-4.json",
+    "review_sha256": "363e3cf8e1209d0249b26f92dc934c26b50fb3fd80239f5fee512d9442a24d22",
+    "reusable": false
+  },
+  "verified_behavior": [
+    "PID is retained immediately after Popen/posix_spawn returns.",
+    "PGID, SID and starttime are each retained immediately after their individual successful reads.",
+    "A later read or validation failure preserves every earlier observed field and uses null only for fields not observed.",
+    "Acquisition failure retains the original exception and exact terminal reap status without post-retirement identity sampling.",
+    "Partial Docker-client identity cannot authorize process-group signaling; complete identity remains required.",
+    "The QEMU partial evidence ledger itself grants no signaling or ownership-transfer authority."
+  ],
+  "tests": {
+    "command": "/home/holden/anaconda3/bin/python3 -m unittest -v scripts.tests.test_application_native_diagnostic scripts.tests.test_application_native_diagnostic_backend scripts.tests.test_application_native_diagnostic_container_owner scripts.tests.test_application_native_diagnostic_overlay scripts.tests.test_application_native_diagnostic_runner scripts.tests.test_qmp_capture",
+    "result": "236 tests passed in 16.626 seconds; exit 0",
+    "evidence_root": "/home/holden/mckernel-work/scratch/native-diagnostic-process-evidence-tests-20260928-4",
+    "sha256sums_sha256": "e7632e5229e72ef5150fc73e9ada987a9949a31b8e96915766a28ec04944122f",
+    "stderr_sha256": "2690bf99fc21abc16c1b9951d0a8cea6c01a23c150dad6c5eab333883e6d14d4",
+    "timing_sha256": "dd28f0ef25bacc48251a605c876d315ae1550a1fd3b98fb78a2d5df2ada0c3f4",
+    "py_compile": "PASS",
+    "scoped_diff_check": "PASS",
+    "bound_manifest": "startup.argv-empty; ab2905811ae10eda6ba6d4ca7d023b0cc50fdaa7520968e45c2b41c733a1ecc6"
+  },
+  "independent_review": "PASS_PARTIAL_IDENTITY_SOURCE_READY_FOR_CHECKPOINT",
+  "limitations": [
+    "Packet 4, its parent and nonce are rejected and nonreusable.",
+    "This is source and unprivileged fixture evidence only.",
+    "A fresh packet 5 and separate exact one-shot review are required.",
+    "No root, Docker, QEMU, guest, application or production acceptance follows."
+  ]
+}

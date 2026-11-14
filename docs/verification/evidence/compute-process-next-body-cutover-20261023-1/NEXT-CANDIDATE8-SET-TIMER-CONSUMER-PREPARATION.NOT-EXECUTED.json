@@ -1,0 +1,104 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "EXACT_NEXT_PRODUCTION_C_CONSUMER_SOURCE_PREPARATION_PROPOSAL_NOT_EXECUTED",
+  "execution_authority": false,
+  "write_destination_proposed": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/candidate8-set-timer-production-consumer-preparation-1",
+  "frozen_inputs": {
+    "SOURCE-CONSUMER-JOIN.PREPARED.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-8/default-image-preparation-1/SOURCE-CONSUMER-JOIN.PREPARED.json",
+      "sha256": "aae39444ff12666afec434ee6b875eb4b208284e476150c697869b52d70f1abc",
+      "bytes": 4656
+    },
+    "native_rust_exact_mckernel_image_offline.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-8/default-image-preparation-1/native_rust_exact_mckernel_image_offline.py",
+      "sha256": "7b907d0b7748042bfa7e7a4753058591846018d75504b0e4f3783c7e23244d6e",
+      "bytes": 153210
+    },
+    "native_rust_exact_build_offline.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-8/default-image-preparation-1/native_rust_exact_build_offline.py",
+      "sha256": "e2d5176d457217bb8f16f32bd6fea5cabd48ca16deb20b649b62f57151ef070b",
+      "bytes": 41116
+    },
+    "materialize_source.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-8/default-image-preparation-1/materialize_source.py",
+      "sha256": "e50b76983d641ea71bc340a5972e9d99e1c491abf0419971b790f644c940f78d",
+      "bytes": 10396
+    },
+    "next-build-preparation-1/WHOLE-CANDIDATE8-HANDOFF.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-8/default-image-preparation-1/next-build-preparation-1/WHOLE-CANDIDATE8-HANDOFF.json",
+      "sha256": "eb4f858d7660df181443ea352740de1137d0c75cc5a1ea4a9eb0043f8a8a648d",
+      "bytes": 4469
+    },
+    "next-build-preparation-1/ACTUAL-MATERIALIZATION-AND-PURE-RECEIPT.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-8/default-image-preparation-1/next-build-preparation-1/ACTUAL-MATERIALIZATION-AND-PURE-RECEIPT.json",
+      "sha256": "02c93bfe4bc47c84ab4e0cbf1eec903c4dc868007020de7f74a3e60442c054ed",
+      "bytes": 10229
+    },
+    "next-build-preparation-1/image-request.PREPARED.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-8/default-image-preparation-1/next-build-preparation-1/image-request.PREPARED.json",
+      "sha256": "7cec6c196393deb7d4319e1d5b30150a3f38d3ba0ff82f10df9077bf2790e116",
+      "bytes": 26526040
+    },
+    "next-build-preparation-1/native_rust_exact_mckernel_image_container_owner.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-8/default-image-preparation-1/next-build-preparation-1/native_rust_exact_mckernel_image_container_owner.py",
+      "sha256": "0c9e0bda68fd6306d056c9125aa0e61e8f64dbbdc5f905b17a2f994708113c0f",
+      "bytes": 91366
+    }
+  },
+  "frozen_manifest": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-8/default-image-preparation-1/source-materialization-attempt-1/source-inputs.json",
+    "sha256": "550284bc2beba2db2221b16a61294034ec4cf1ada0d449b8b2f8fd70add74eb5",
+    "bytes": 10195479
+  },
+  "frozen_source_derivative": "45e52f93d4b676f5471988cd57464a55b6639c4f60ee83a0649c3b09ff45d6ed",
+  "overlays": {
+    "kernel/process.c": {
+      "candidate8_before_sha256": "7203019d2ba8143f9240a03d11bc8c5cfcd495d89183aa7ab643c6159a6bd02d",
+      "canonical_after": {
+        "path": "/home/holden/mckernel/kernel/process.c",
+        "sha256": "55872d7235a06364565ec7732b7a67c918ed7c006b1e55ababa88dbe42e2a93a",
+        "bytes": 161780
+      },
+      "preserve_materialized_mode": 420,
+      "preserve_kind": "file"
+    },
+    "kernel/rust/sched_helpers.rs": {
+      "candidate8_before_sha256": "449df570965855f992a0fe024fca7cd6527b20622b4b8e3b33af04900b02e923",
+      "canonical_after": {
+        "path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+        "sha256": "700a9e20349df5ae18ceea8c9195e38078a6bb05b81c79f7368fbdf6fc14abcc",
+        "bytes": 180017
+      },
+      "preserve_materialized_mode": 420,
+      "preserve_kind": "file"
+    },
+    "kernel/rust/tests/run_equivalence.sh": {
+      "candidate8_before_sha256": "fce1f3b9a5606eedb245996d4b88b5e93022ae56145729592c9d675ecb267386",
+      "canonical_after": {
+        "path": "/home/holden/mckernel/kernel/rust/tests/run_equivalence.sh",
+        "sha256": "5df92eff793c7ff0358567340a35b3d9e36188b142186c4fe962a40370490822",
+        "bytes": 5010196
+      },
+      "preserve_materialized_mode": 493,
+      "preserve_kind": "file"
+    }
+  },
+  "source_preparation_steps": [
+    "Create a new private successor under proposed destination only. Preserve frozen candidate8 producer/driver/request/owner/materialized tree and all failures byte-for-byte.",
+    "Derive the actual typed source manifest/materialization from candidate8 with exactly these3sourcefile overlays; preserve all other6959entries/modes and49symlinks, existing memory/idle overlays and full raw source bindings. New source derivative/materialization identities must be genuine, never relabel prior PASS.",
+    "Derive coherent producer/provenance/driver/owner/request metadata in the new destination. Update only actual changed source pins, new successor paths/identities, and explicit set_timer production consumer contract. Preserve existing19GiB aggregate profile and every old defaultlink/ABI/page_unmap/memory/export guard.",
+    "Use _m14_selected_row(...,kernel/process.c,MCKERNEL_RUST_PROCESS_HELPERS,...) unchanged to bind actual generated full-TU GCC14.3.1 compile row. Extend existing _validate_m14_default_link with the exact new slice contract below; no profile/cfg/oracle weakening.",
+    "Prepare complete pure _validate_request and non-executing source/ABI/contract fixtures under separately granted existing ordinary CPU6 profile. Do not ImageOwner.run/acquire, create production namespace, root/Docker/compiler/image/guest until separately released."
+  ],
+  "C_TU_contract": {
+    "preprocess": "Actual selected full process.c contains unchanged process.h set_timer declaration and no set_timer C body; !PUBLIC preserves exact reviewed fallback. No C import/relocation for set_timer is required: all three original process.c caller bodies are excluded by PUBLIC.",
+    "C_object": "No T/t set_timer; one global immutable R process_timer_runtime_offsets size120; one global T each of four process_timer_* callback providers; time_sharing one D size4. Preserve all prior selectedprocess idle consumers.",
+    "ABI": "Append witness assertions to ACTUAL process.c TU: sizeof int4/unsignedlong8, existing timer_runtime_offsets size120/align8, existing15ulong fields/headerlayout, exact public void(*)(int) getterABI, exact existing4callback functionpointer types; descriptor initializer remains production offsetof expressions, no invented layout.",
+    "Rust_object": "one T set_timer, no U set_timer; one T get_this_cpu_local_var/timer_set_timer_body_result/process_sched_set_timer_bridge; one U each descriptor+4Ccallbacks+time_sharing; retain previous memory exports/_end and geometry import.",
+    "final_image": "one Rust-owned T set_timer and no unresolved symbols; same uniquely defined C descriptor R120/fourcallback T/time_sharing D4; existing currentCPU and all prior candidate8 memory/idle/pageunmap guards unchanged.",
+    "call_binding": "Existing Rust process_helpers::process_sched_set_timer_bridge and cls.rs consumers bind actual exported Rust set_timer; sourcepins and RustT/noU prove ownership even when optimizer resolves internal calls without externalrelocation."
+  },
+  "authority": "This is an exact source-preparation proposal, not a compiler/heavy/runtime grant. Root owns successor integration, fresh headroom/physical/leases, sourcepublication, independent execution review and any eventual build.",
+  "current_image": "10972 frozen; candidate8 remains source/pure only; new slice whole C TU/defaultkernel/native OPEN",
+  "CPU6_held": false
+}

@@ -1,0 +1,127 @@
+--- /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-inner-subreeper-source-1/inner_retirement.py
++++ inner_retirement.successor.py
+@@ -12,6 +12,7 @@
+ import hashlib
+ import importlib.util
+ import json
++import math
+ import os
+ import resource
+ import signal
+@@ -332,9 +333,26 @@
+         return digest.hexdigest()
+     finally:os.close(fd)
+ 
++# Live values and their external authenticated issuer remain absent in this source.
++# The fixed UTC is an upper bound, not a release or a fresh operational clock.
++MAX_UTC=1793774133.0
++
++def _positive_finite(value):
++    return type(value) in (int,float) and math.isfinite(value) and value>0
++
++def _check_deadlines(binding, requested=None):
++    caps=binding.get('deadline_caps')
++    require(isinstance(caps,dict) and set(caps)=={'utc','boot','monotonic'} and all(_positive_finite(x) for x in caps.values()), 'deadline caps unbound or nonfinite')
++    require(caps['utc']<=MAX_UTC, 'UTC cutoff widened')
++    if requested is not None:
++        require(_positive_finite(requested) and requested<=caps['monotonic'], 'requested deadline outside monotonic cap')
++    utc=time.time();boot=time.clock_gettime(time.CLOCK_BOOTTIME);mono=time.monotonic()
++    require(all(_positive_finite(x) for x in (utc,boot,mono)) and utc<caps['utc'] and boot<caps['boot'] and mono<caps['monotonic'], 'deadline elapsed or clock unknown')
++    if requested is not None:require(mono<requested,'requested deadline elapsed')
++
+ def _inner_require_binding(binding, fds):
+-    require(isinstance(binding,dict) and set(binding)=={'operation','cid','nonce','profile_sha256','driver_sha256','observer_sha256','host_authority_sha256','boot_id','self_identity','views'}, 'inner binding shape')
+-    require(binding['operation']==INNER_OPERATION and _is_sha(binding['cid']) and _is_sha(binding['profile_sha256']) and _is_sha(binding['driver_sha256']) and _is_sha(binding['observer_sha256']) and _is_sha(binding['host_authority_sha256']), 'inner operation/hash binding')
++    require(isinstance(binding,dict) and set(binding)=={'operation','cid','nonce','profile_sha256','driver_sha256','observer_sha256','host_authority_sha256','caps_authority_sha256','deadline_caps','boot_id','self_identity','views'}, 'inner binding shape')
++    require(binding['operation']==INNER_OPERATION and _is_sha(binding['cid']) and _is_sha(binding['profile_sha256']) and _is_sha(binding['driver_sha256']) and _is_sha(binding['observer_sha256']) and _is_sha(binding['host_authority_sha256']) and _is_sha(binding['caps_authority_sha256']), 'inner operation/hash binding')
+     require(_inner_source_sha256()==binding['observer_sha256'], 'observer source binding differs')
+     require(isinstance(binding['nonce'],str) and len(binding['nonce'])==32 and all(c in '0123456789abcdef' for c in binding['nonce']), 'inner nonce')
+     require(isinstance(binding['views'],dict) and set(binding['views'])=={'pid','mount','proc'}, 'inner views')
+@@ -346,11 +364,19 @@
+         require([descriptor.st_dev,descriptor.st_ino]==expected==[current.st_dev,current.st_ino], 'view changed: '+name)
+     require(boot_id()==binding['boot_id'] and current_identity(os.getpid())==binding['self_identity'], 'inner self/boot changed')
+ 
++def _canonical_json(value):
++    return json.dumps(value,sort_keys=True,separators=(',',':'),allow_nan=False).encode()
++
+ def _host_exchange(phase, payload):
+     require(HOST_EXCHANGE is not None, 'authenticated external host exchange unbound')
+-    reply=HOST_EXCHANGE(phase,payload)
++    original=_canonical_json(payload)
++    sent=json.loads(original)
++    reply=HOST_EXCHANGE(phase,sent)
++    # The transport gets a detached copy. Check both copies after the callback:
++    # mutation and an aliased, identically mutated reply never make an ACK valid.
++    require(_canonical_json(payload)==original and _canonical_json(sent)==original, 'host callback mutated payload')
+     require(isinstance(reply,dict) and set(reply)=={'phase','payload','decision','authority_sha256'}, 'host ack shape')
+-    require(reply['phase']==phase and reply['payload']==payload and reply['decision']=='ACK' and _is_sha(reply['authority_sha256']), 'host ack mismatch')
++    require(reply['phase']==phase and _canonical_json(reply['payload'])==original and reply['decision']=='ACK' and _is_sha(reply['authority_sha256']), 'host ack mismatch')
+     return reply
+ 
+ class InnerConfigureOwner:
+@@ -364,6 +390,7 @@
+         require(self.state=='NEW', 'single use/UNKNOWN owner')
+         require(HOST_EXCHANGE is not None, 'authenticated external host exchange unbound')
+         try:
++            _check_deadlines(self.binding)
+             _inner_require_binding(self.binding,self.fds)
+             enable_subreaper()
+             self.pre=prepare_launch()
+@@ -373,6 +400,7 @@
+             ready={'binding':self.binding,'pre_launch':self.pre,'argv':argv,'cwd':cwd,'env_sha256':hashlib.sha256(json.dumps(env,sort_keys=True,separators=(',',':'),allow_nan=False).encode()).hexdigest()}
+             ready_digest=hashlib.sha256(json.dumps(ready,sort_keys=True,separators=(',',':'),allow_nan=False).encode()).hexdigest()
+             self.ready_ack=_host_exchange('READY',ready)
++            _check_deadlines(self.binding)
+             require(self.ready_ack['authority_sha256']==self.binding['host_authority_sha256'], 'host authority differs')
+             require(hashlib.sha256(json.dumps(ready,sort_keys=True,separators=(',',':'),allow_nan=False).encode()).hexdigest()==ready_digest, 'ready changed')
+             self.ready_digest=ready_digest
+@@ -380,6 +408,7 @@
+             _inner_require_binding(self.binding,self.fds)
+             pre2=prepare_launch()
+             require(pre2['observer']==self.pre['observer'] and pre2['boot_id']==self.pre['boot_id'] and pre2['monotonic_ns']>self.pre['monotonic_ns'], 'pre-spawn closure drift')
++            _check_deadlines(self.binding)
+             self.state='SPAWN_ATTEMPTED'
+             self.process=subprocess.Popen(argv,cwd=cwd,env=env,stdin=subprocess.DEVNULL,stdout=stdout,stderr=stderr,start_new_session=True)
+             self.proof=ProcessProof(self.process,privileged_wrapper=False,pre_launch=pre2)
+@@ -390,9 +419,10 @@
+     def wait(self,absolute_deadline):
+         require(INNER_DISABLED is False, 'SOURCE_ONLY: inner wait disabled')
+         require(self.state=='RUNNING' and self.process is not None and self.proof is not None, 'not running/UNKNOWN owner')
+-        require(type(absolute_deadline) in (int,float), 'deadline type')
+-        try:
++        try:
++            _check_deadlines(self.binding,absolute_deadline)
+             while True:
++                _check_deadlines(self.binding,absolute_deadline)
+                 left=absolute_deadline-time.monotonic()
+                 require(left>0,'deadline exhausted; retain ownership')
+                 self.proof.observe('waiting')
+@@ -400,14 +430,14 @@
+                 try:code=self.process.wait(timeout=min(0.1,left));break
+                 except subprocess.TimeoutExpired:continue
+             require(type(code) is int,'direct wait status missing')
+-            require(time.monotonic()<absolute_deadline,'direct wait crossed deadline')
++            _check_deadlines(self.binding,absolute_deadline)
+             proof=self.proof.joined(code)
+             require(proof.get('retirement_proven') is True,'descendant closure unknown')
+             validate_proof(proof)
+             require(proof['identity']['pid']==self.process.pid and proof['boot_id']==self.binding['boot_id'] and proof['containment']['pre_launch']['observer']==self.binding['self_identity'] and proof['direct_wait']['exit_code']==code, 'proof owner/wait mismatch')
+             _inner_require_binding(self.binding,self.fds)
+             require(hashlib.sha256(json.dumps(self.binding,sort_keys=True,separators=(',',':'),allow_nan=False).encode()).hexdigest()==self.binding_digest,'binding changed')
+-            require(time.monotonic()<absolute_deadline,'proof crossed deadline')
++            _check_deadlines(self.binding,absolute_deadline)
+             # The untrusted inner receipt cannot authorize its own acceptance.
+             # External host channel must authenticate CID, namespace, sender,
+             # owner and this exact canonical digest before a caller may continue.
+@@ -415,8 +445,10 @@
+             require(len(encoded)<=MAX_PROOF_BYTES,'proof exceeds transport bound')
+             receipt={'binding':self.binding,'ready_sha256':self.ready_digest,'proof_sha256':hashlib.sha256(encoded).hexdigest(),'proof':proof,'exit_code':code}
+             self.final_ack=_host_exchange('PROOF',receipt)
++            require(hashlib.sha256(_canonical_json(proof)).hexdigest()==receipt['proof_sha256'], 'proof changed during host ACK')
++            require(hashlib.sha256(_canonical_json(self.binding)).hexdigest()==self.binding_digest, 'binding changed during host ACK')
+             require(self.final_ack['authority_sha256']==self.ready_ack['authority_sha256'], 'host authority changed')
+-            require(time.monotonic()<absolute_deadline,'host ack crossed deadline')
++            _check_deadlines(self.binding,absolute_deadline)
+             self.state='PROOF_ACKED_SOURCE_ONLY'
+             return proof
+         except BaseException as exc:

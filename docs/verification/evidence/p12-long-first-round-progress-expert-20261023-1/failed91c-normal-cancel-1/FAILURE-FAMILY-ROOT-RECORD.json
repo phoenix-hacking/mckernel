@@ -1,0 +1,24 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "failure_family": "EXPERT91C_EVENTFD_SERVICE_ENOSYS",
+  "earliest_observed": {
+    "message": "0x46",
+    "service_errno": -38,
+    "trace_line": 1312,
+    "trace_seconds": 33.869492
+  },
+  "downstream": {
+    "wait_errno": -32,
+    "cleanup_intent_errno": -71,
+    "rust_failure": "Pair(-5)"
+  },
+  "guest_eventfd_type": null,
+  "root_cause_scope": "SelectedSDK5 Rust smp_service ffef omits publicEVENTFD0x46, returnsENOSYS and quarantines transport; exact guesttrigger stillunknown",
+  "private_repair_owner": "/root/case227_stage",
+  "retirement_owner": "/root/terminal_lifecycle_repair",
+  "retirement_review_owner": "/root/native235_release_review",
+  "current_live_postjoin": "FAILED_EXPERT91C_PENDING_NORMAL_RETIREMENT",
+  "new_guest_execution_authorized": false,
+  "accepted_launches": 0,
+  "accepted_mixed_minutes": 0
+}

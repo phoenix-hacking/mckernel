@@ -1,0 +1,77 @@
+{
+  "cli_version": "0.153.4",
+  "prior_without_exact_project_trust": {
+    "cli_version": "0.153.4",
+    "toml_syntax": "PASS",
+    "strict_config_read": "PASS",
+    "effective_agents": null,
+    "paid_model_requests": 0,
+    "guest_runs": 0,
+    "scope": "Local CLI app-server initialization and config/read only; no worker inference or account-quota test."
+  },
+  "with_invocation_project_trust": {
+    "command_argv": [
+      "codex",
+      "--strict-config",
+      "-C",
+      "/home/holden/mckernel",
+      "-c",
+      "projects.\"/home/holden/mckernel\".trust_level=\"trusted\"",
+      "app-server",
+      "--stdio"
+    ],
+    "strict_config_read": "PASS",
+    "effective_agents": null,
+    "layer_summary": [
+      {
+        "name": {
+          "type": "sessionFlags"
+        },
+        "disabledReason": null
+      },
+      {
+        "name": {
+          "type": "project",
+          "dotCodexFolder": "/home/holden/mckernel/.codex"
+        },
+        "disabledReason": "To load project-local config, hooks, and exec policies, add /home/holden/mckernel as a trusted project in /home/holden/.codex/config.toml."
+      },
+      {
+        "name": {
+          "type": "user",
+          "file": "/home/holden/.codex/config.toml",
+          "profile": null
+        },
+        "disabledReason": null
+      },
+      {
+        "name": {
+          "type": "system",
+          "file": "/etc/codex/config.toml"
+        },
+        "disabledReason": null
+      }
+    ]
+  },
+  "paid_model_requests": 0,
+  "guest_runs": 0,
+  "scope": "Local app-server configuration reads; project trust override applies to this diagnostic process only. Personal config unchanged.",
+  "validated_explicit_launch_defaults": {
+    "strict_config_read": "PASS",
+    "model": "gpt-6-astra",
+    "reasoning": "medium",
+    "agents": {
+      "enabled": null,
+      "max_concurrent_threads_per_session": 3,
+      "max_depth": null,
+      "default_subagent_model": "gpt-5.6-luna",
+      "default_subagent_reasoning_effort": "low",
+      "job_max_runtime_seconds": null,
+      "interrupt_message": null
+    },
+    "goals_enabled": true,
+    "paid_model_requests": 0,
+    "guest_runs": 0,
+    "scope": "Effective CLI launch defaults inspected through local config/read; custom role model execution remains untested."
+  }
+}

@@ -1,0 +1,118 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ORIGINAL_BODY_EXTRACTION_ONLY_NOT_COMPILED",
+  "original_project_C": "/home/holden/mckernel/host-kernel/native-rust/mcctrl_vm_write_compat.c",
+  "original_project_C_sha256": "dcbe065ede329b51b41abcaf0563015532920fe6a34391c7bf77ed1c2f0abdf0",
+  "compile_rule": "Compile original_project_C unchanged with generated mock Linux headers; never substitute a hand-written C reference.",
+  "exact_required_config": [
+    "CONFIG_X86_64=y",
+    "CONFIG_SMP=y",
+    "CONFIG_PER_VMA_LOCK=y",
+    "CONFIG_TRACING=y",
+    "CONFIG_TRACEPOINTS=y",
+    "CONFIG_MEMCG=y",
+    "CONFIG_JUMP_LABEL=y",
+    "CONFIG_HAVE_JUMP_LABEL_HACK=y",
+    "# CONFIG_KCSAN is not set",
+    "# CONFIG_DEBUG_VM is not set",
+    "# CONFIG_DEBUG_LOCK_ALLOC is not set",
+    "# CONFIG_PREEMPT_RT is not set",
+    "CONFIG_OBJTOOL=y",
+    "CONFIG_GENERIC_BUG=y",
+    "CONFIG_GENERIC_BUG_RELATIVE_POINTERS=y",
+    "CONFIG_DEBUG_BUGVERBOSE=y",
+    "CONFIG_BUG=y",
+    "CONFIG_X86_KERNEL_IBT=y",
+    "CONFIG_MITIGATION_RETHUNK=y"
+  ],
+  "definitions": [
+    {
+      "source": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/include/linux/rwsem.h",
+      "function": "rwsem_assert_held_write_nolockdep",
+      "body_sha256": "12071cfaec0900ad39090097f1842622d930e65cb149b451987faa12369439f6"
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/include/linux/rwsem.h",
+      "function": "rwsem_assert_held_write",
+      "body_sha256": "46d6757200bb46115427555255ee42adb81108f6f09ef614b0e376f42eac0a63"
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/include/linux/seqlock.h",
+      "function": "do_raw_write_seqcount_begin",
+      "body_sha256": "4f94f94b23f671b8e606c7f6d4b62823646dc22c70a1130459d1f8d9ca833ea9"
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/include/linux/seqlock.h",
+      "function": "do_raw_write_seqcount_end",
+      "body_sha256": "8e95c3c198f4e1ebffacebcd55e3ef99fe8d4d4c99dee7c312d713fdc2f1b238"
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/include/linux/mmap_lock.h",
+      "function": "__mmap_lock_trace_start_locking",
+      "body_sha256": "655f8a827217d5443181f8d09a30d86aae8d3332cb1e98cf0c9f477c0edf7aef"
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/include/linux/mmap_lock.h",
+      "function": "__mmap_lock_trace_acquire_returned",
+      "body_sha256": "4c9c896c92ebad9badd91c9c10db6663ec5dffc18265c9d35528a4589def9d41"
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/include/linux/mmap_lock.h",
+      "function": "__mmap_lock_trace_released",
+      "body_sha256": "8f452fcbb6ccc4829e8d111b558c7c16ca5af7ed0690c80eecfd35e8e68c5611"
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/include/linux/mmap_lock.h",
+      "function": "mmap_assert_write_locked",
+      "body_sha256": "cc10d00112a062df477b8bd83d8fb4d6f4717e414481ad0055c1de6ba4d8ac6a"
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/include/linux/mmap_lock.h",
+      "function": "mm_lock_seqcount_begin",
+      "body_sha256": "efbe0d16084ee2b3d574785eabfca1ecfec9fcd79ab310d9371959e468deefe0"
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/include/linux/mmap_lock.h",
+      "function": "mm_lock_seqcount_end",
+      "body_sha256": "9c984defe364a456528f6a38d19f638622f69b1ceabb54a2524a36b429eab56b"
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/include/linux/mmap_lock.h",
+      "function": "mmap_write_lock",
+      "body_sha256": "3bb42ccc104549989233017e2e786ad1fbc60ea2ab45328aacca70cf88dc67d1"
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/include/linux/mmap_lock.h",
+      "function": "vma_end_write_all",
+      "body_sha256": "70791f51b3fba35ad305838e7b2fa0b265a4733afe5de5241c32255ccc15d395"
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/include/linux/mmap_lock.h",
+      "function": "mmap_write_unlock",
+      "body_sha256": "7b0c30bcbf5bac5cb96a37957d149e969f1c06623b76f2e3f7007d09e575a609"
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/include/linux/mm.h",
+      "function": "__is_vma_write_locked",
+      "body_sha256": "f88a05b7e6eab4d18ca2373c3ccd8aceb9955938b948bcc87f17f3815626a92e"
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/include/linux/mm.h",
+      "function": "vma_start_write",
+      "body_sha256": "3db1c4935586469d95a2eee4c3ef38cb62412bbbebfae277b1aaf3b2c540e6af"
+    }
+  ],
+  "limitations": [
+    "Mocked primitives/warning callback do not prove actual Linux warning ABI or concurrency.",
+    "Rust successor source only; actual equivalence not run.",
+    "Exact-SDK leaf, assembly/objtool and module/native checks remain open."
+  ],
+  "private_original_project_C": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-13/m15-mm-finish/batch-1/generated/original/mcctrl_vm_write_compat.c",
+  "original_project_header": "/home/holden/mckernel/host-kernel/native-rust/mcctrl_vm_write_compat.h",
+  "original_project_header_sha256": "ff25bb43907149fc9303b0dd0a7db1c84b9fc2c6f49f1922f18ca9c32b57c527",
+  "predecessor_reference": "PREDECESSOR-CANDIDATE-INPUTS.json",
+  "effective_disabled_config": [
+    "CONFIG_LOCKDEP",
+    "CONFIG_NOINSTR_VALIDATION"
+  ]
+}

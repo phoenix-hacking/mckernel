@@ -1,0 +1,83 @@
+{
+  "kind": "EXPLICIT_NONEXECUTED_TWO_DATA_TARGET_PROFILE_AND_GUARD_ANALYSIS",
+  "decision": "GO_FINITE_RUST_TWO_OWNER_TARGET_PROFILE_PREPARATION_SUBJECT_TO_ORDINARY_ROOT_PACKET_REVIEW_AND_EXECUTION_ADMISSION",
+  "answer": "No inspected explicit rule forbids preparing and subsequently, if Root admits it, compiling a nonexecuted isolated Rust partial containing only the two actual existing data definitions for the source-supported linux-6.12 selection. Choosing that declared finite target profile is an authorized implementation choice. It is not observation of a matching host/SDK/native deployment or release of any held scope.",
+  "prior_pending_note_clarification": "The22:02 separate profile/guard binding requirement concerns making the exact finite proposal concrete and reviewable. It must not be interpreted as requiring a new external permission to choose this existing target profile. This new analysis supersedes that overly broad interpretation without editing old proof or the previous contract.",
+  "exact_existing_source_owners": [
+    {
+      "name": "time_sharing",
+      "source": "kernel/rust/process_helpers.rs17320-17341",
+      "guard": "#[cfg(process_global_storage_candidate)]",
+      "definition": "#[no_mangle] pub static mut time_sharing:CInt=1;",
+      "preserve": "Original plain Cint type, boot initializer1, non-atomic mutable storage and exact attributes; no lazy init, AtomicI32, bool or forcedzero."
+    },
+    {
+      "name": "process_timer_runtime_offsets",
+      "source": "kernel/rust/process_helpers.rs17548-17577",
+      "guard": "#[cfg(process_global_storage_candidate)]",
+      "definition": "#[no_mangle] pub static process_timer_runtime_offsets:actual TimerRuntimeOffsets with original15 offset_of! expressions over actual Thread,CpuLocalVar,Timer",
+      "preserve": "Full actual repr(C)15usize descriptor, source size120/align8 assertions and original field order/initializer expressions. No hardcoded offset table or replacement layout."
+    }
+  ],
+  "actual_selector_and_guards": [
+    {
+      "source": "kernel/CMakeLists.txt280-286",
+      "quoted_condition": "if (MCKERNEL_HOST_IRQ_ABI STREQUAL \"linux-6.12\")",
+      "quoted_action": "list(APPEND RUST_KERNEL_CFG \"--cfg\" \"process_global_storage_candidate\")",
+      "meaning": "Actual original source selection supports this named Linux6.12 target configuration. Neighboring IRQ/F03 flags are not needed to compile these two selected data definitions and must not import their held bodies."
+    },
+    {
+      "source": "kernel/CMakeLists.txt698-701",
+      "quoted_condition": "if (MCKERNEL_HOST_IRQ_ABI STREQUAL \"linux-6.12\")",
+      "quoted_action": "COMPILE_DEFINITIONS MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE",
+      "meaning": "Full build pairs Rust global-storage selection with C storage exclusion. Finite Rust data proof is only a subset and cannot assert complete global-storage/default-build adoption."
+    },
+    {
+      "source": "kernel/process.c785-787",
+      "quoted_condition": "#ifdef MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE\n#ifndef MCKERNEL_RUST_PROCESS_HELPERS",
+      "quoted_failure": "#error MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE requires MCKERNEL_RUST_PROCESS_HELPERS",
+      "meaning": "An actual selected Cprocess compilation must preserve this requirement. A Rust-only data compile does not compile C or evaluate/pass this guard, and must say so."
+    },
+    {
+      "source": "kernel/process.c59-96",
+      "quoted_condition": "DEBUG_PRINT_PROCESS branches under PROCESS_HELPERS+PROCESS_GLOBAL_STORAGE",
+      "quoted_failure": "_Static_assert((1) == 0, \"process_dump_tree_enabled selected supported configuration\"); in enabled-debug branch; disabled-debug branch retains _Static_assert((0) == 0,...)",
+      "meaning": "Do not edit/force past this actual C supported-configuration guard. It is outside the two Rust data definitions and remains unexecuted/unqualified until an actual C/global-storage cohort is admitted."
+    },
+    {
+      "source": "kernel/process.c136-162,804-813",
+      "quoted_condition": "#ifdef MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE",
+      "meaning": "C declares actual descriptor/time_sharing extern under global storage; otherwise owns corresponding Cdefinitions. Do not join a duplicate C storage owner. Two Rust objects alone do not replace every other global removed by that full Cselector."
+    }
+  ],
+  "compatible_concrete_finite_choice": {
+    "target_declaration": "Explicitly intended Linuxx86_64LP64 linux-6.12 process-storage source candidate, not a claim the running HOST kernel or original SDK/native cohort has been observed/matched.",
+    "unit_scope": "Only original two data definitions plus exact necessary original type/layout assertions and imports. Preserve their actual cfg guard; in a later reviewed proposal enable only its existing process_global_storage_candidate selector for this isolated data source. Do not include either entire guarded module or any neighboring F03 candidate.",
+    "types": "Current exact actual kernel/rust/abi.rs retained ff48bc2e Thread,CpuLocalVar,Timer,CInt and original sched_helpers.rs TimerRuntimeOffsets type. Retain current supported nonoptional feature-conditioned layouts; offset_of! derives from those actual source types.",
+    "qualified_partial_profile": "Current scheduler-provider-unit-1/COMPILE-PROPOSAL.json uses retained rustc1.95.0-nightly c04308580, compiler70ebcbba; no_std edition2021 large/static/no-redzone/no-vector/no-SSE partial-codegen flags and inherited exact warning policy. This two-data proposal would explicitly add the single real source guard value, not claim unchanged full config or final/native ABI.",
+    "compile_semantics": "Static initializers and offset metadata only; no function, module init, clock/APIC/IRQ or runtime execution. No invented hardware/native provider is needed.",
+    "source_hold_boundary": "These accepted-F02 process scheduler data owners have no generic/exec/notification implementation closure. Exact original held request membership and all original service/source/SDK/native/currentfree/perf/mmap/UNKNOWN controls remain unchanged; neither cfg selection nor this partial rereads/imports/reassigns held bodies."
+  },
+  "ordinary_next_obligations_not_new_permissions": [
+    "Root prepares a concrete exact source/profile packet identifying two owners, actual guard value, original types/initializers/assertions and explicit limits; independent source/ownership review precedes actual execution.",
+    "Fresh Root resource/admission control is required for any actual codegen or metadata command; this source analysis performs none.",
+    "If compiled, actual object predicates must confirm only the intended data owners, exact size/alignment/mutability/initializer/offset bytes, no unexpected code/providers and diagnostic contract before any join.",
+    "Before joining, reconcile latest saved partial/current producer owners and avoid duplicate C/Rust definitions; preserve existing bytes/relocations/ownership. No blind symbol count or complete storage closure claim."
+  ],
+  "still_missing_for_full_acceptance": [
+    "Actual selected Cguard/header/offset ABI proof at the exact original supported configuration",
+    "Complete full process-global-storage C/Rust ownership pairing and original delivered cohort",
+    "Original real source/SDK/native/currentfree admission and matching runtime/boot/lifecycle qualification"
+  ],
+  "why_these_do_not_block_the_finite_candidate": "Those are later original qualification facts. The candidate must preserve and explicitly defer them; it cannot count a Rust data partial as their satisfaction. No inspected guard says that actual native/SDK observation must precede nonexecuted Rust-only partial source/codegen.",
+  "actions": {
+    "CPU0_reads_only": true,
+    "cfg_enabled": false,
+    "unit_generated": false,
+    "preprocess_compile_link_test_runtime": false,
+    "canonical_source_or_oldproof_edited": false,
+    "goal_controls_or_spawn": false,
+    "sole_written_file": "/home/holden/mckernel-work/m14-m15-scheduler-resume-20261109T211802Z/timer-data-finite-profile-analysis-20261109T2222.json"
+  },
+  "acceptance_or_score_change": false
+}

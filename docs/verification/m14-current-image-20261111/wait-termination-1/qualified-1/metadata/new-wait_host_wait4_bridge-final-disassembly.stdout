@@ -1,0 +1,48 @@
+
+/work/output/build/kernel/mckernel.img:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+fffffffffe8e1640 <wait_host_wait4_bridge>:
+fffffffffe8e1640:	55                   	push   %rbp
+fffffffffe8e1641:	48 89 e5             	mov    %rsp,%rbp
+fffffffffe8e1644:	48 83 ec 50          	sub    $0x50,%rsp
+fffffffffe8e1648:	48 63 c7             	movslq %edi,%rax
+fffffffffe8e164b:	48 63 ce             	movslq %esi,%rcx
+fffffffffe8e164e:	48 c7 45 c0 00 00 00 00 	movq   $0x0,-0x40(%rbp)
+fffffffffe8e1656:	48 c7 45 b8 00 00 00 00 	movq   $0x0,-0x48(%rbp)
+fffffffffe8e165e:	48 c7 45 c8 3d 00 00 00 	movq   $0x3d,-0x38(%rbp)
+fffffffffe8e1666:	48 89 45 d0          	mov    %rax,-0x30(%rbp)
+fffffffffe8e166a:	48 c7 45 d8 00 00 00 00 	movq   $0x0,-0x28(%rbp)
+fffffffffe8e1672:	48 89 4d e0          	mov    %rcx,-0x20(%rbp)
+fffffffffe8e1676:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+fffffffffe8e167b:	0f 32                	rdmsr
+fffffffffe8e167d:	48 c1 e2 20          	shl    $0x20,%rdx
+fffffffffe8e1681:	89 c0                	mov    %eax,%eax
+fffffffffe8e1683:	48 09 d0             	or     %rdx,%rax
+fffffffffe8e1686:	48 c7 45 e8 00 00 00 00 	movq   $0x0,-0x18(%rbp)
+fffffffffe8e168e:	48 c7 45 f0 00 00 00 00 	movq   $0x0,-0x10(%rbp)
+fffffffffe8e1696:	48 c7 45 f8 00 00 00 00 	movq   $0x0,-0x8(%rbp)
+fffffffffe8e169e:	48 b9 20 79 96 fe ff ff ff ff 	movabs $0xfffffffffe967920,%rcx
+fffffffffe8e16a8:	48 8b 09             	mov    (%rcx),%rcx
+fffffffffe8e16ab:	be ff ff ff ff       	mov    $0xffffffff,%esi
+fffffffffe8e16b0:	48 39 c1             	cmp    %rax,%rcx
+fffffffffe8e16b3:	77 21                	ja     fffffffffe8e16d6 <wait_host_wait4_bridge+0x96>
+fffffffffe8e16b5:	48 ba c0 79 90 fe ff ff ff ff 	movabs $0xfffffffffe9079c0,%rdx
+fffffffffe8e16bf:	48 63 12             	movslq (%rdx),%rdx
+fffffffffe8e16c2:	48 c1 e2 0e          	shl    $0xe,%rdx
+fffffffffe8e16c6:	48 01 d1             	add    %rdx,%rcx
+fffffffffe8e16c9:	48 39 c1             	cmp    %rax,%rcx
+fffffffffe8e16cc:	72 08                	jb     fffffffffe8e16d6 <wait_host_wait4_bridge+0x96>
+fffffffffe8e16ce:	65 8b 34 25 00 00 00 00 	mov    %gs:0x0,%esi
+fffffffffe8e16d6:	48 b8 b0 d3 84 fe ff ff ff ff 	movabs $0xfffffffffe84d3b0,%rax
+fffffffffe8e16e0:	48 8d 7d b8          	lea    -0x48(%rbp),%rdi
+fffffffffe8e16e4:	ff d0                	call   *%rax
+fffffffffe8e16e6:	48 83 c4 50          	add    $0x50,%rsp
+fffffffffe8e16ea:	5d                   	pop    %rbp
+fffffffffe8e16eb:	c3                   	ret
+
+Disassembly of section .fixup:
+
+Disassembly of section .vsyscall:

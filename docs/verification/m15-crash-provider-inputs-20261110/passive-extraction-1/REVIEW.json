@@ -1,0 +1,221 @@
+{
+  "actual_acquisition_binding": "Bound actual5bab GET result records correct5254636B/SHA46980, curl0/direct waits and whole descendants joined/streamsclosed/no timeout/error/adopted kills/reaps/residual; oldUNJOINED explicitly unreleased. No refetch is proposed or performed by reviewer.",
+  "actual_input": {
+    "GET_result": {
+      "bytes": 1121,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/binary-acquisition-1/execution-1/RESULT.json",
+      "sha256": "5babd4120bf38317e8d418b5bc8611ec6a6ef9b4d75a189c8030b618533e7adc"
+    },
+    "actual_rows": {
+      "bytes": 8547,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/next-inputs-1/rows/CANDIDATES.json",
+      "sha256": "2ee72ba31cb4393f78752a3ef2c0a45745c03799e5a892200ed55004787264ec"
+    },
+    "actual_selection": {
+      "bytes": 14565,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/binary-acquisition-1/REQUEST.json",
+      "sha256": "6cb68e92791524e2d0bf11abbc059f61855f27b0b0189dc07526ebe5fea7a7ff"
+    },
+    "all_GET_waits_streams_descendants_joined": true,
+    "artifact": {
+      "bytes": 5254636,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/binary-acquisition-1/downloads/crash-9.0.1-1.el10.x86_64.rpm",
+      "sha256": "46980f6743755ef57fe82ff09bd04fc2088039fb8e983a02500ef537922830c7"
+    },
+    "no_refetch": true,
+    "signature_header_ELF_pending": true
+  },
+  "approved_exact_profile": {
+    "create_argv": [
+      "/usr/bin/sudo",
+      "-A",
+      "/usr/bin/docker",
+      "--host=unix:///var/run/docker.sock",
+      "create",
+      "--name",
+      "mck-m15-crash-passive-20261110-1",
+      "--label",
+      "mckernel.preparation-owner=crash-host-provider-passive-1",
+      "--init",
+      "--pull=never",
+      "--network=none",
+      "--ipc=private",
+      "--cpus=1",
+      "--cpuset-cpus=7",
+      "--memory=1g",
+      "--memory-swap=1g",
+      "--pids-limit=64",
+      "--user",
+      "1000:1000",
+      "--cap-drop=ALL",
+      "--security-opt=no-new-privileges",
+      "--read-only",
+      "--tmpfs",
+      "/tmp:rw,nodev,nosuid,noexec,size=64m,mode=1777",
+      "--ulimit",
+      "core=0:0",
+      "--ulimit",
+      "fsize=268435456:268435456",
+      "--ulimit",
+      "nofile=128:128",
+      "--ulimit",
+      "cpu=90:90",
+      "--env",
+      "PATH=/usr/bin:/bin",
+      "--env",
+      "LANG=C",
+      "--env",
+      "LC_ALL=C",
+      "--env",
+      "TZ=UTC",
+      "--env",
+      "PYTHONDONTWRITEBYTECODE=1",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/binary-acquisition-1/downloads/crash-9.0.1-1.el10.x86_64.rpm,dst=/packages/crash-9.0.1-1.el10.x86_64.rpm,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/passive-extraction-1/PACKAGES.json,dst=/producer/PACKAGES.json,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/passive-extraction-1/extract_providers.py,dst=/producer/extract_providers.py,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/passive-extraction-1/extracted,dst=/output",
+      "--workdir",
+      "/output",
+      "--entrypoint",
+      "/usr/bin/bash",
+      "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+      "--noprofile",
+      "--norc",
+      "-e",
+      "-c",
+      "ulimit -v 1048576; exec \"$@\"",
+      "crash-passive-as-limit",
+      "/usr/bin/python3",
+      "-I",
+      "-B",
+      "/producer/extract_providers.py"
+    ],
+    "image": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+    "max_wall_seconds": 120,
+    "private_output": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/passive-extraction-1/extracted",
+    "resource_profile": {
+      "CPU": [
+        7
+      ],
+      "CPU_seconds": 90,
+      "FSIZE_bytes": 268435456,
+      "HOST_jobs_max": 3,
+      "HOST_total_bytes": 4294967296,
+      "RLIMIT_AS_bytes": 1073741824,
+      "fixed_capture_reserve_bytes": 67108864,
+      "fresh_MemAvailable_min_GiB": 26,
+      "global_disk_budget_bytes": 2147483648,
+      "host_free_floor_GiB": 16,
+      "jobs": 1,
+      "memory_bytes": 1073741824,
+      "memory_swap_total_bytes": 1073741824,
+      "native2to5_and12GiB_held": true,
+      "old_UNJOINED_CPU0_bytes": 268435456,
+      "old_UNJOINED_CPU0_jobs": 1,
+      "old_UNJOINED_released": false,
+      "one_Root_image_owner_serial": true,
+      "pids": 64,
+      "retained_RPM_bytes": 5254636,
+      "scratch_free_floor_GiB": 12,
+      "tmpfs_bytes": 67108864,
+      "wall_seconds": 120
+    }
+  },
+  "contract": {
+    "bytes": 14125,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/provider-closure-1/CONTRACT.json",
+    "sha256": "d63cab4e7007bcebfcdf12e588ee512b9594e62ef6707e6c9f91f78350550760"
+  },
+  "decision": "The frozenf7a9 packet may perform the necessary genuine signature/header/private payload/ELF metadata operation on the exact acquired crash RPM. Actual missing exports or data-width mismatches remain further source/provider/ABI facts; this operation does not accept crash/header/BFD/runtime compatibility.",
+  "exact_patch": {
+    "bytes": 5855,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/passive-extraction-1/crash-only.patch",
+    "sha256": "ce614195ce9247bd8ab57fff90445b99b23b65707f7f233a2e7e7c4b27e3a859"
+  },
+  "focused_source_delta_review": {
+    "independent_diff_check": "Full unified byte diff equals the frozen5855B crash-only.patch. Existing identity/persist/disk/command/key functions and classes are AST-identical to the qualifiedaada preimage; only crash-specific Provides/SOURCERPM queries and the contained crash/ELF report branch are added. No existing trust, CPIO, output, ownership, timeout or failure rule is weakened.",
+    "names_and_widths": "Exact18 names equal the actual originald63 seven+eleven contract; four object comparison widths4/800/8/8 equal the retained typed contract. These remain observations/comparisons, not ABI acceptance.",
+    "only_manifest_case": "PACKAGES selects exactly one crash RPM5254636B/SHA46980f6743755ef57fe82ff09bd04fc2088039fb8e983a02500ef537922830c7/NEVRAcrash|0|9.0.1|1.el10|x86_64/SOURCERPMcrash-9.0.1-1.el10.src.rpm. Old BFD/CMake/libuv branches remain dormant and are not replayed."
+  },
+  "fresh_Root_admission_conditions": [
+    "SerialCPU7 after every current CPU7/current image-heavy owner positive release; fresh account/stop/source/permission/ownership/controller admission. OneRootimageowner; no competing Docker/compiler/native or implicit overlap grant.",
+    "New CPU7/onejob/container memory+swap1GiB/AS1GiB/tmpfs64MiB/64pids plus oldUNJOINED CPU0/256MiB/job1 and ALL other overhead remain inside HOST4GiB/max3. At least1.25GiB/2jobs is reserved for these two slices. Require fresh26GiB MemAvailable, prior18GiB/native2-5/12GiB/CPU1 exclusion/UNKNOWN held, host16/scratch12GiB floors plus declared2GiB global capture budget.",
+    "Root verifies exact acquired RPM/manifest/helper pins, exactnew name absence, fresh real empty1000-writable nonsymlink output. Review observed empty output. No old proof/source/GET/query/uncertain writer state is overwritten.",
+    "Actual created immutableID profile must match46d/user1000/ROroot/netnone/privateIPC/CPU7/memoryswap1GiB/capsALLdrop/no-new-privileges/tmpfs/ulimits and exact4 mount tuples/cardinality: three inputsRO, sole outputRW. Mount response list ordering is immaterial; exact Type/Source/Destination/RW identities remain required."
+  ],
+  "manifest": {
+    "bytes": 3107,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/passive-extraction-1/PACKAGES.json",
+    "sha256": "59392773db17947297b5e07b490763a63a1f9f9789fa66bfb3860da87a814daa"
+  },
+  "ownership_and_timeout_review": {
+    "outer_required": "Root owns exact create result ID/name/label/profile, fresh starts/attach/clientbirths/streams/waits, daemon-owned120s deadline with authenticated stop/kill/terminal inspection and exact-owned removal. Client timeout/model completion cannot release owners. All direct/cleanup waits and streams/descendants must join, terminal/nonOOM/exit evidence must be positive; anyUNKNOWN/residual prevents dependent use and remains charged.",
+    "unchanged_inner_owner": "Retained command helper persists exact pre-Popen command, captures dedicated exclusive streams, owns newly created direct child, records PID/birth observation, waits boundedly and kills only its own unreaped Popen child on timeout. Primary errors and secondary cleanup/capture errors are preserved. Unknown child outcome stays unjoined/held; no stale/recovered PID, global selector or old-source retirement is used."
+  },
+  "private_payload_and_ELF_review": {
+    "CPIO": "Retained qualified flow writes bounded rpm2cpio output<=256MiB, lists names, rejects absolute/parent/backslash escapes, and extracts only into new private target with no-absolute-filenames/no-preserve-owner. UID1000/capsdrop/ROroot contain this operation; no payload executable is run. Root must retain exact trust/input/profile and empty-output gates.",
+    "factual_result": "Keep all18 actual dynsym kind/binding/visibility/section/size/version/raw rows and missing/UND/nonexported names; record directNEEDED/interpreter/RPATH/RUNPATH/flags. Four actual exportedOBJECT width comparisons are recorded without requiring a match for extraction success.",
+    "global_disk": "Unchanged guard counts retained RPM5.25MiB/fixed64MiB capture reserve plus allocated output usage/dirs/symlinks, reserves bounded stdout+stderr growth before commands and additional CPIO payload+entry overhead before extraction within2GiB total. Captures inherit256MiB FSIZE; no source/SDK/toolchain/artifact tree is copied.",
+    "passive_command": "Only one readelf--wide--file-header--program-headers--dynamic--dyn-syms--version-info of that contained binary. Raw metadata is written to file; the new branch streams lines rather than materializing the whole ELF symbol table. ELF64/AMD64 is required for the selected native artifact.",
+    "scope": "PASS_ACQUISITION_AND_PASSIVE_EXTRACTION_ONLY means genuine archive/trust/header/contained extraction/readback passed. It leaves provider_header_BFD_ABI_accepted=false, keeps absent/mismatch facts open, and never runs crash-v/main/ELFloader/extension load/init/fini/API/dump/device/native behavior.",
+    "selected_binary": "Resolve private target/usr/bin/crash strictly and require its resolved relative path remain under the exact target; require regular positive-size<=128MiB. Actual identity/mode/symlink spelling/hash are recorded; it is private payload, not an installed RPMdb artifact or executed selected runtime."
+  },
+  "qualified_preimage": {
+    "bytes": 14375,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/consumer-native46d-1/libuv-provider-acquisition-1/libuv-passive-extraction-1/extract_providers.py",
+    "sha256": "aada38571c3bec9056ed0097610c9d437f5acc377384cf746e047903dc9204fc"
+  },
+  "remaining_original_provider_requirements": {
+    "holds_and_acceptance": "All generic/exec/replay/equivalentfalse/exact12/source/native/currentfree/UNKNOWN/service/account/finite durable credits unchanged. Preserve oldUNJOINED CPU0. Retain failure command/input/diagnostic/owner/blocker/next action; one failed candidate plus one bounded meaningful correction then focused escalation. No unchanged retry/green replay or permission/policy/hold bypass.",
+    "runtime_dependencies": "Actual RPMRequires/NEEDED identify further precise runtime-provider work; no actual loader or full dependency closure is admitted. Existing binutils2.41 header/archive/mcinspect and five libc proofs remain limited reused facts.",
+    "seven_crash_and_eleven_BFD": "Real producer source/headers/build/provider lineage still must prove all7+11 exact prototypes and data/callback ABI. Preserve consumed machdep unsignedlong flags/kvbase0/8, commandentry32/align8/offsets0,8,16,24/two-entry table, and BFD section name/flags/VMA/LMA/size/user_set_vma byte/mask. Do not infer complete machdep520 equality or BFD2.41 compatibility from bundledgdb16.2 or names.",
+    "source": "Actual source descriptor/primary/source-filename engineering is separate. This binary header supplies only exactSOURCERPM filename; sourceRPM URL/hash/signature/source payload/header compatibility remain separately bound/qualified."
+  },
+  "request": {
+    "bytes": 14025,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/passive-extraction-1/REQUEST.json",
+    "sha256": "f7a9a0b170b158d6d8dcbdac5c886428f9fe9fd8cf89a9cda1f582a452d2341a"
+  },
+  "reviewed_at_utc": "2026-11-10T15:43:37.938253+00:00",
+  "reviewer": "/root/source_acquisition_review_max",
+  "reviewer_actions": "Only frozen source/patch/manifest and prior actual GET/key proof data reads, byte/AST/contract/hash comparisons and this private REVIEW write. No RPM/query/signature/CPIO/extraction/ELF/parser/GET/network/Docker/compiler/test/crash/API/native execution, canonical/source/packet edits or recursive agents.",
+  "source": {
+    "bytes": 18755,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/passive-extraction-1/extract_providers.py",
+    "sha256": "9935de9a159a083415e4b4b3e0d606dfaefa52ecfdee28ff77c47d2b1a81e4d7"
+  },
+  "status": "GO_EXACT_CRASH_RPM_TRUST_HEADER_PASSIVE_EXTRACTION_ELF_METADATA_AFTER_SERIAL_ROOT_FRESH_ADMISSION",
+  "trust_and_header_review": {
+    "independent_proof_join": "Read exact prior e0b actual proof and matched the manifest reused trusted-key object to its full source-pinned public key/hash/fingerprint/packet equality/no-import facts. Immutable46d/read-only root with no key/RPMdb bind or mutation preserves that actual trust universe; no old full-key query/crypto implementation is replayed.",
+    "metadata": "Actual Requires/Provides/SOURCERPM/dump are saved; the new source filename must equal the actual binary-metadata declaration. These are passive queries, not package/RPMdb installation, scriptlet execution or proof of source artifact URL/hash/header/BFD ABI.",
+    "new_required_signature": "Every exact regular RPM is length/SHA checked; actual rpm-qp NEVRA must match, and genuine rpmkeys--checksig--verbose must exit0 with pinned6fedfc85/noNOKEY before extraction. FullfingerprintFC226859C0860BF0DDB95B085B106C736FEDFC85 is supplied by the exact existing source/packet trust proof, not inferred from short key ID alone. Missing/bad signature/trust/header stops with raw diagnostic.",
+    "same_image_full_key_reuse": {
+      "full_fingerprint": "FC226859C0860BF0DDB95B085B106C736FEDFC85",
+      "image": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+      "key": {
+        "already_trusted_material_equal": true,
+        "existing_rpm_key_record": "gpg-pubkey|6fedfc85|682ae1a9",
+        "full_fingerprint_basis": "existing source lock exactkeySHA/fullfingerprint binding; actual existing RPMdb packets equal source-pinned bytes, no new crypto implementation",
+        "full_primary_fingerprint": "FC226859C0860BF0DDB95B085B106C736FEDFC85",
+        "import_or_trust_mutation": false,
+        "key_packet_sha256": "1f09530c1d1fdcbe03279b565e9b7ff1ec4d6fccd663ac2710d0b2f0119dbb7e",
+        "source_pinned_file": {
+          "bytes": 1688,
+          "path": "/etc/pki/rpm-gpg/RPM-GPG-KEY-Rocky-10",
+          "sha256": "be8c4f070b696e64d8ce40e59a95a57e8b5c776f0015c2fd64e14b896622bdb4"
+        }
+      },
+      "proof": {
+        "bytes": 29632,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/EXTRACTION.json",
+        "sha256": "e0b12f0fa9677992570936436e3e4875034e495fd8f7fb473e686b3dcab35468"
+      },
+      "scope": "Same immutable46d read-only root/key/RPMdb, no key/RPMdb bind or mutation. Reuse actual keyfileSHA/fullfingerprint/already-trusted packet equality. Genuine rpmkeys --checksig --verbose is REQUIRED for this new RPM; no key import/trust change or old full-key query replay.",
+      "source_pinned_key_SHA256": "be8c4f070b696e64d8ce40e59a95a57e8b5c776f0015c2fd64e14b896622bdb4"
+    }
+  }
+}

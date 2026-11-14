@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "record_kind": "layer_b_owner_architecture_review",
+  "recorded_utc": "2026-09-28T08:10:00Z",
+  "status": "PASS_DESIGN_B",
+  "base_revision": "b777b3f69a5787ab5bb94dc3028b9fc1b89753b6",
+  "rejected_strategy": {
+    "name": "systemd-user-transient-service",
+    "reason": "systemd 245 on this host uses hybrid/legacy resource controllers; inspected controller files are empty/root-owned and installed documentation disables user resource control. TasksMax/MemoryMax and IPAddressDeny settings therefore cannot prove enforcement."
+  },
+  "selected_strategy": {
+    "name": "native-pidfd-subreaper-owner",
+    "requirements": [
+      "Single-threaded native owner sets PR_SET_CHILD_SUBREAPER, blocks TERM/INT/CHLD before spawn and consumes signals synchronously with signalfd/poll.",
+      "Each child waits behind a pipe handshake until pidfd_open succeeds and an immutable spawn record is durable.",
+      "Only pidfd_send_signal targets owned direct/adopted children; numeric PID/PGID signalling is forbidden.",
+      "waitid(P_PIDFD, WEXITED|WNOHANG|WNOWAIT) observes status before explicit bounded reap; success requires all acquired children reaped and P_ALL returning ECHILD.",
+      "Cleanup deadline emits UNRESOLVED and retains the live subreaper and pidfds until acknowledged management handoff.",
+      "Start, spawn and terminal records are separate O_EXCL files with file and directory fsync; records are never rewritten.",
+      "Per-process limits remain enforced; aggregate process/RSS/storage polling is labelled observational until separate hard-cap infrastructure exists.",
+      "A reviewed no-new-privileges/seccomp child bootstrap must reject network socket/connect operations while preserving AF_UNIX socketpairs and descriptor tests."
+    ]
+  },
+  "host_facts": {
+    "kernel": "5.15.0-139",
+    "systemd": "245.4",
+    "python_pidfd_api": false,
+    "native_pidfd_headers_present": true,
+    "native_pidfd_runtime_tested": false
+  },
+  "non_releases": [
+    "No owner implementation, compilation, execution profile or command is released.",
+    "No cleanup guarantee is claimed for owner SIGKILL, host failure, hostile same-UID mutation or uninterruptible tasks.",
+    "No application, production, language or whole-OS acceptance credit follows."
+  ],
+  "next": "Implement the exact native owner source and deterministic static/fault-injection harness, independently review ownership and ABI, then obtain a separate reviewed bootstrap compile packet before executing it."
+}

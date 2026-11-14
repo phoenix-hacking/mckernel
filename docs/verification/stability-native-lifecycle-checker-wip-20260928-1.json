@@ -1,0 +1,15 @@
+{
+  "schema": "mckernel.stability.failure-evidence.v1",
+  "date": "2026-09-28",
+  "status": "WIP_UNSTAGED",
+  "scope": "native lifecycle checker drift after accepted additive provider ABI changes",
+  "baseline_command": "PATH=/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin:$PATH python3 -m unittest -v scripts.tests.test_mckernel_irq_work scripts.tests.test_ihk_smp_native_lifecycle_check",
+  "baseline_result": "FAIL: IRQ-work producer test passed; lifecycle validation rejected the obsolete exact seven-symbol provider extern before intended negative assertions, producing 119 failed subcases and 4 errors across the combined 61-test run",
+  "wip_file": "scripts/ihk_smp_native_lifecycle_check.py",
+  "wip_file_sha256": "7a365ff51ce8f71ebbb74ebb221e161c87c87deffee67e772b5dccc85c0e452d",
+  "wip_diff_sha256": "069223e5db06045f4568e9439e043c01feac9a7d5bdd34af8390f21fa6153110",
+  "wip_result": "not accepted or staged; bounded rerun still produced 100 failed subcases and 4 errors across 60 lifecycle tests",
+  "remaining_deterministic_failure": "compatibility_build_id contains the current uaccess helper, but the exemption still blanks the obsolete EXPECTED_BUILDID_DISPATCH rather than the new helper boundary",
+  "next_action": "continue the single checker-correction family from this exact WIP, restore every intended fail-closed negative assertion, run all 60 lifecycle tests, py_compile and diff check, then independently review that no oracle was weakened",
+  "acceptance": "none"
+}

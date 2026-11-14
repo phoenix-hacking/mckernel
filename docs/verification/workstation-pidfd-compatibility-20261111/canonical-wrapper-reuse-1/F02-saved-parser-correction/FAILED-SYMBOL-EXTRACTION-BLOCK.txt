@@ -1,0 +1,4 @@
+extracted=[]
+for idx,value,size,kind,bind,vis,ndx,name in re.findall(r'^\s*(\d+):\s*([0-9a-fA-F]+)\s+(\d+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s*(.*)$',text,re.M):
+    extracted.append(dict(index=int(idx),name=name.strip(),bind={'LOCAL':0,'GLOBAL':1}[bind],type={'NOTYPE':0,'OBJECT':1,'FILE':4}[kind],visibility={'DEFAULT':0}[vis],section_index={'UND':0,'ABS':65521}.get(ndx,int(ndx) if ndx.isdigit() else -1),value=int(value,16),size=int(size)))
+assert extracted==syms,(extracted,syms)

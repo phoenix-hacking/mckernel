@@ -1,0 +1,1048 @@
+{
+  "clients": [
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TZ=UTC",
+        "/usr/bin/taskset",
+        "-c",
+        "0",
+        "/usr/bin/prlimit",
+        "--as=134217728:134217728",
+        "--cpu=10:10",
+        "--fsize=8388608:8388608",
+        "--nofile=64:64",
+        "--core=0:0",
+        "--",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "-c",
+        "import base64,datetime,errno,fcntl,hashlib,json,os,pathlib,stat,struct,sys,traceback,types,time\nGETFLAGS=0x80086601\nEXPECTED={'provider_pid': 1930708, 'provider_birth': '58283682', 'sudo_pid': 1930695, 'sudo_birth': '58283676', 'boot_id': '3ba4f2ca-4323-433d-bfb8-7859268121b6', 'runtime_path': '/usr/bin/python3.8', 'runtime_device': 66306, 'runtime_inode': 1048651, 'runtime_bytes': 5490456, 'runtime_sha256': '298a9e830ed52f36c299427565485d717d1ce0179c0597cc16560513eb780b06', 'old_flags': 524288, 'current_flags': 524304, 'driver_sha256': '26f3c97014bdf8dc5a3337746c919b291f79be41d212e94771f9395cecff773e', 'core_sha256': '36967accfb721f1b4eb7f39d8b7e86adef74a68b97d08ada5609a85fa5c4c8be'}\nNATIVE={'nonce': '8d1833a8a7552f40403c045abe0107e6e8118c49bc39c79bc4830f3a4bb3031f', 'operation_root': '/var/lib/mckernel-native-signal-8d1833a8a7552f40403c045abe0107e6e8118c49bc39c79bc4830f3a4bb3031f', 'supervisor_pid': 1930710, 'supervisor_birth': '58283729', 'original_session': 81012, 'config_sha256': 'cf10e68970ff286c7a14f59d968b944eeb5e71db0eef9a28d9f86e018aaaea2a', 'loader_sha256': 'ed2c91636cb8557fcab87add1993570116fa9dfa5e4a81cd9a528413b72fa1ad', 'source_manifest_sha256': 'd20e93337b6b14ab68345fc38e5eee09e3b81db399884772a6bffeb9abb1e5c7'}\nSAVED={'Root_uid0_mode0600_and_directory0700': True, 'bytes': 106329, 'identity': {'bytes': 106329, 'ctime_ns': 1794499296580720412, 'device': 66306, 'gid': 0, 'inode': 2253363, 'mode': 384, 'mtime_ns': 1794499296580720412, 'nlink': 1, 'uid': 0}, 'path': '/home/holden/mckernel-work/resume-20261112T094452Z-native-first-repeat-1f5f-binding-1/current81012-custody-read-1/enclosing-bookends-correction-1/ROOT-PRIVATE-RECORD-1/OWNER-RECORD.PRIVATE.json', 'sha256': '80a87af80ed3ea729651ade16045c89c4847a9378aad5d67a310d70c30c2d5cc'}\nRAW_OUTPUT='/home/holden/mckernel-work/resume-20261112T094452Z-native-first-repeat-1f5f-binding-1/current81012-custody-read-1/saved-native-result-projection-1/local-stable-binding-correction-1/ROOT-PRIVATE-PROJECTION-1'\nOWNED=[]\nRAW_CLOSE_ERRORS=[]\ndef stable(st): return st.st_dev, st.st_ino, st.st_mode, st.st_nlink, st.st_size, st.st_mtime_ns, st.st_ctime_ns\n\ndef check(ok,message):\n    if not ok:raise ValueError(message)\n\ndef flags(fd):\n    value=bytearray(4);fcntl.ioctl(fd,GETFLAGS,value,True)\n    return struct.unpack('I',value)[0]\n\ndef unique(pairs):\n    result={}\n    for key,value in pairs:\n        check(key not in result,'duplicate manifest key');result[key]=value\n    return result\n\ndef write_all(fd,raw):\n    position=0\n    while position<len(raw):\n        n=os.write(fd,raw[position:]);check(n>0,'short durable write');position+=n\n\ndef root_private(fd):\n    st=os.fstat(fd)\n    check(stat.S_ISDIR(st.st_mode) and st.st_uid==0 and stat.S_IMODE(st.st_mode)==0o700,'root-private operation directory')\n    try:os.getxattr(fd,'system.posix_acl_access')\n    except OSError as e:\n        if e.errno==errno.ENODATA:return\n        raise\n    raise ValueError('extended ACL on private operation root')\n\ndef open_exact(path):\n    \"\"\"Pin actual host path, refusing symlink components and noncanonical names.\"\"\"\n    check(type(path) is str and path.startswith('/') and '//' not in path,'absolute host path')\n    parts=path.split('/')[1:]\n    check(parts and all(x not in ('','.','..') for x in parts),'host path')\n    fd=os.open('/',os.O_RDONLY|os.O_DIRECTORY|os.O_CLOEXEC)\n    try:\n        for i,part in enumerate(parts):\n            st=os.stat(part,dir_fd=fd,follow_symlinks=False)\n            check(stat.S_ISDIR(st.st_mode) or stat.S_ISREG(st.st_mode),'symlink or special source path')\n            opts=os.O_RDONLY|os.O_NOFOLLOW|os.O_CLOEXEC\n            if i<len(parts)-1:opts|=os.O_DIRECTORY\n            child=os.open(part,opts,dir_fd=fd)\n            check(stable(os.fstat(child))==stable(st),'host identity changed while opening')\n            os.close(fd);fd=child\n        return fd\n    except BaseException:\n        os.close(fd);raise\n\ndef own(fd,label):\n    row={'fd':fd,'historical_fd':fd,'label':label,'state':'HELD'};OWNED.append(row);return row\n\ndef drain(rows):\n    for row in reversed(rows):\n        if row['state']!='HELD':continue\n        fd=row['fd'];row['fd']=None;row['state']='CLOSE_ATTEMPTED_UNKNOWN'\n        try:os.close(fd)\n        except BaseException as error:RAW_CLOSE_ERRORS.append((row['label'],error,error.__traceback__))\n        else:row['state']='CLOSED'\n\ndef read_path(path,limit):\n    with open(path,'rb') as stream:raw=stream.read(limit+1)\n    check(len(raw)<=limit,'read bound');return raw\n\ndef proc(pid,birth):\n    raw=read_path('/proc/%d/stat'%pid,8192);tail=raw.rsplit(b')',1)[1].split()\n    check(len(tail)>=20 and tail[0] not in (b'Z',b'X',b'x') and tail[19].decode()==birth,'exact live PID/birth required')\n    status=read_path('/proc/%d/status'%pid,32768).decode('ascii')\n    uid=next(x for x in status.splitlines() if x.startswith('Uid:')).split()[1:]\n    check(uid==['0','0','0','0'],'actual original Root identity required')\n    return {'pid':pid,'birth':birth,'state':tail[0].decode(),'ppid':int(tail[1]),'pgrp':int(tail[2]),'session':int(tail[3]),'uid':[int(x) for x in uid]}\n\ndef identity(st):\n    return {'device':st.st_dev,'inode':st.st_ino,'uid':st.st_uid,'gid':st.st_gid,'mode':stat.S_IMODE(st.st_mode),'nlink':st.st_nlink,'bytes':st.st_size,'mtime_ns':st.st_mtime_ns,'ctime_ns':st.st_ctime_ns}\n\ndef read_owned(row,limit):\n    before=os.fstat(row['fd']);check(stat.S_ISREG(before.st_mode) and 0<before.st_size<=limit,'exact bounded regular input')\n    raw=os.pread(row['fd'],before.st_size+1,0);after=os.fstat(row['fd'])\n    check(len(raw)==before.st_size and stable(before)==stable(after),'stable complete input read')\n    return before,raw\n\ndef raw_error(label,error,tb):\n    return {'label':label,'type':type(error).__name__,'message':str(error)[:1024],'traceback':''.join(traceback.format_exception(type(error),error,tb))[-16384:]}\n\ndef now():return datetime.datetime.now(datetime.timezone.utc).isoformat()\n\ndef persist_raw(value):\n    start=len(OWNED);primary=None;result=None\n    try:\n        parent=own(open_exact(str(pathlib.Path(RAW_OUTPUT).parent)),'evidence:parent-directory');name=pathlib.Path(RAW_OUTPUT).name\n        os.mkdir(name,0o700,dir_fd=parent['fd']);directory=own(os.open(name,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW|os.O_CLOEXEC,dir_fd=parent['fd']),'evidence:Root-private-directory');root_private(directory['fd'])\n        record=own(os.open('OWNER-RECORD.PRIVATE.json',os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW|os.O_CLOEXEC,0o600,dir_fd=directory['fd']),'evidence:private-writer');data=json.dumps(value,sort_keys=True,separators=(',',':')).encode()+b'\\n';check(len(data)<=4*1024*1024,'bounded private output');write_all(record['fd'],data);os.fsync(record['fd']);os.fsync(directory['fd']);os.fsync(parent['fd']);st=os.fstat(record['fd']);check(st.st_uid==st.st_gid==0 and stat.S_IMODE(st.st_mode)==0o600 and st.st_nlink==1,'Root-private output identity')\n        result={'path':RAW_OUTPUT+'/OWNER-RECORD.PRIVATE.json','bytes':len(data),'sha256':hashlib.sha256(data).hexdigest(),'identity':identity(st),'Root_uid0_mode0600_and_directory0700':True}\n    except BaseException as error:primary=(error,error.__traceback__)\n    finally:drain(OWNED[start:])\n    if primary is not None:raise BaseException.with_traceback(primary[0],primary[1])\n    check(not RAW_CLOSE_ERRORS,'own evidence close uncertain');return result\n\ndef scalar_fields(value,keys):\n    check(type(value) is dict,'saved object shape')\n    result={}\n    for key in keys:\n        if key not in value:continue\n        item=value[key]\n        check(item is None or type(item) in (bool,int,str),'safe scalar field type')\n        if type(item) is str:check(len(item)<=4096,'safe scalar field bound')\n        result[key]=item\n    return result\n\ndef exception_projection(value):\n    result=scalar_fields(value,('label','type','errno','message_sha256','message_encoding','raw_exception_and_traceback_retained','traceback_truncated'))\n    if 'message' in value:\n        check(type(value['message']) is str,'saved exception message type')\n        result['private_message_sha256']=hashlib.sha256(value['message'].encode()).hexdigest()\n    frames=value.get('traceback_frames',[]);check(type(frames) is list and len(frames)<=128,'saved traceback frame bound')\n    result['traceback_frames']=[scalar_fields(frame,('file','line','function')) for frame in frames]\n    # Raw args, messages and formatter payloads remain only in the original Root file.\n    return result\n\ndef native_record_projection(item):\n    result=scalar_fields(item,('name','observation','sha256','decode_observation','error_type','errno','actual_wait_or_release_authority'))\n    if 'identity' in item:result['identity']=item['identity']\n    if item.get('observation')!='COMPLETE_READONLY_SNAPSHOT':return result\n    body=base64.b64decode(item['raw_base64'],validate=True)\n    check(hashlib.sha256(body).hexdigest()==item['sha256'],'saved native record content hash')\n    name=item['name']\n    if name in ('ROOT-MATERIALIZATION.json','native-operation.json','registered-loader.json','source-manifest.json'):\n        result['contents']='PRIVATE_NOT_PROJECTED';return result\n    try:\n        parsed=json.loads(body,object_pairs_hook=unique)\n        rows=parsed if type(parsed) is list else [parsed]\n    except (ValueError,UnicodeError):\n        try:rows=[json.loads(line,object_pairs_hook=unique) for line in body.splitlines()]\n        except (ValueError,UnicodeError):result['contents']='PRIVATE_UNPARSED_BYTES_NOT_PROJECTED';return result\n    check(len(rows)<=4096,'bounded saved native row count')\n    safe=[]\n    common=('status','nonce','scope','config_sha256','root_lease_sha256','lease_sha256','source_manifest_sha256','native_pool_reservation','pid','birth','boot_id','path','device','inode','old_flags','new_flags','flags','phase','role','supervisor_pid','supervisor_birth','journal_device','journal_inode','wait_status','direct_wait_joined','kind','authority','functional_pass','application_acceptance','current_resource_state','source_state','container','container_absent','create_issued','create_completed','collection_sha256','effective_view_sha256','historical_scopes')\n    for row in rows:\n        if name.startswith('CALLER-DIAGNOSTIC-'):\n            value=scalar_fields(row,('schema','phase','pid','native_authority_or_release','raw_objects_retained'))\n            failures=row.get('exceptions',[]);check(type(failures) is list and len(failures)<=256,'saved diagnostic exception bound')\n            value['exceptions']=[exception_projection(x) for x in failures];safe.append(value)\n        elif name.startswith('GRAPH-WATCHDOG-UNKNOWN-'):\n            value=scalar_fields(row,('status','nonce'))\n            reason=row.get('reason')\n            value['known_supervisor_deadline_reason']=reason=='supervisor deadline'\n            if type(reason) is str:value['reason_sha256']=hashlib.sha256(reason.encode()).hexdigest()\n            safe.append(value)\n        else:safe.append(scalar_fields(row,common))\n    result['safe_rows']=safe;return result\n\ndef saved_native_fd_projection(value):\n    if value is None:return {'observation':'NOT_CAPTURED_UNPROVED'}\n    check(type(value) is dict,'saved native FD snapshot shape')\n    rows=value.get('matching_native_or_channel_pidfd_metadata',[])\n    check(type(rows) is list and len(rows)<=512,'saved native FD metadata bound')\n    result=[]\n    for row in rows:\n        item=scalar_fields(row,('fd','device','inode','target','observation'))\n        labels=row.get('labels',[]);check(type(labels) is list and len(labels)<=16 and all(type(x) is str and len(x)<=512 for x in labels),'saved native FD labels')\n        item['labels']=labels\n        text=row.get('raw_fdinfo')\n        if text is not None:\n            check(type(text) is str and len(text)<=32768,'saved native fdinfo bound')\n            item['fdinfo_sha256']=hashlib.sha256(text.encode()).hexdigest();fields={}\n            for line in text.splitlines():\n                if ':' not in line:continue\n                key,val=line.split(':',1);val=val.strip()\n                if key in ('pos','mnt_id','ino','Pid'):fields[key]=int(val)\n                elif key=='flags':fields[key]=int(val,8)\n                elif key=='NSpid':fields[key]=[int(x) for x in val.split()]\n            item['numeric_fdinfo_fields']=fields\n        result.append(item)\n    locks=value.get('matching_exact_known_file_lock_rows',[])\n    check(type(locks) is list and len(locks)<=512 and all(type(x) is str and len(x)<=1024 for x in locks),'saved known-file lock row bound')\n    return {'matching_native_channel_pidfd_metadata':result,'matching_exact_known_file_lock_rows':locks,'observation':'SAVED_METADATA_ONLY_NO_CURRENT_WAIT_OR_OWNERSHIP_PROOF'}\n\ndef saved_projection(value):\n    check(type(value) is dict and value.get('collector_pid')==1945218 and value.get('target')==EXPECTED,'exact failed saved reader/target binding')\n    native=value['native_context'];check(native['operation_root']==NATIVE['operation_root'] and native['nonce']==NATIVE['nonce'],'saved native operation binding')\n    items=native['files'];check(type(items) is list and len(items)==13,'exact existing thirteen native record slots')\n    names=['ROOT-MATERIALIZATION.json','CONTROL-FLAGS.jsonl','native-operation.json','registered-loader.json','source-manifest.json','CALLER-DIAGNOSTIC-1.json','CALLER-DIAGNOSTIC-2.json','GRAPH-LEASE-'+NATIVE['nonce'],'GRAPH-WATCHDOG-UNKNOWN-'+NATIVE['nonce']+'.json','NATIVE-CLAIM-'+NATIVE['nonce']+'.jsonl','NATIVE-SOURCE-FLAGS-'+NATIVE['nonce']+'.jsonl','PIDFD-CUSTODY-'+NATIVE['nonce']+'.jsonl','NATIVE-OPERATION-TERMINAL-'+NATIVE['nonce']+'.json']\n    check([x['name'] for x in items]==names,'saved finite native record roster')\n    journal=value['journal'];check(journal['path']=='/var/lib/mckernel-native-initial-data-1930708-58283682/RUNTIME-FLAGS-1930708-58283682.jsonl','saved journal path')\n    rows=journal['rows'];check(type(rows) is list and len(rows)==2,'saved prior/held row count')\n    check(rows[0]=={'path':EXPECTED['runtime_path'],'device':EXPECTED['runtime_device'],'inode':EXPECTED['runtime_inode'],'old_flags':EXPECTED['old_flags']},'saved exact first prior row')\n    check(rows[1]['status']=='RUNTIME_HELD' and rows[1]['pid']==EXPECTED['provider_pid'] and rows[1]['birth']==EXPECTED['provider_birth'] and rows[1]['native_driver_sha256']==EXPECTED['driver_sha256'],'saved held owner/driver row')\n    own_rows=value.get('own_read_FDs',[]);check(type(own_rows) is list and len(own_rows)<=512,'saved own FD rows bound')\n    close_errors=value.get('own_close_errors',[]);check(type(close_errors) is list and len(close_errors)<=512,'saved own close errors bound')\n    primary=value.get('primary');check(type(primary) is dict,'saved actual failure required')\n    result={'saved_scope':value.get('scope'),'saved_collector_pid':value['collector_pid'],'saved_collector_birth':value.get('collector_birth'),'saved_at':value.get('at'),'saved_process_before':value.get('process_before'),'saved_native_context':scalar_fields(native,('observation','utc_ns','mono_ns','utc_ns_after','mono_ns_after','actual_direct_wait_status','actual_request_python_type_identity','absent_or_missing_records_are_not_wait_or_cleanup_proof')),'saved_supervisor_before':native.get('supervisor_before'),'saved_supervisor_after':native.get('supervisor_after'),'saved_owner_command_state':native.get('original_owner_command_state'),'native_records':[native_record_projection(x) for x in items],'saved_journal':{'path':journal['path'],'identity':journal['identity'],'sha256':journal['sha256'],'first_prior_row':rows[0],'held_owner':scalar_fields(rows[1],('status','pid','birth','native_driver_sha256','actualRoot_input_sha256','native_permission_from_provider'))},'saved_failed_guard':{'type':primary.get('type'),'exact_unique_runtime_and_journal_guard':primary.get('message')=='unique original runtime lock FD and journal FD required','message_sha256':hashlib.sha256(str(primary.get('message')).encode()).hexdigest()},'saved_reader_own_FD_states':[scalar_fields(x,('historical_fd','label','state')) for x in own_rows],'saved_reader_own_close_errors':[exception_projection(x) for x in close_errors],'saved_raw_financial_controller_budget_caps_and_config_contents_projected':False,'actual_unpublished_direct_wait_type_or_earliest_constructor_exception':'UNPROVED; only genuine saved records above are DATA','native_or_runtime_restoration_or_release_inferred':False}\n    result['saved_native_fd_metadata_before']=saved_native_fd_projection(native.get('fd_and_locks_before'))\n    result['saved_native_fd_metadata_after']=saved_native_fd_projection(native.get('fd_and_locks_after'))\n    return result,journal\n\ndef matching_fd_snapshot(journal):\n    prefix='/proc/%d'%EXPECTED['provider_pid'];names=os.listdir(prefix+'/fd')\n    check(len(names)<=512 and all(x.isdecimal() for x in names),'bounded exact original Root descriptor table')\n    names=sorted(names,key=int);selected=[];wanted={'runtime':(EXPECTED['runtime_device'],EXPECTED['runtime_inode']),'journal':(journal['identity']['device'],journal['identity']['inode'])}\n    for name in names:\n        path=prefix+'/fd/'+name\n        try:\n            st=os.stat(path);labels=[key for key,pair in wanted.items() if (st.st_dev,st.st_ino)==pair]\n            if not labels:continue\n            target=os.readlink(path);text=read_path(prefix+'/fdinfo/'+name,32768).decode('ascii');fields={};lock_rows=[]\n            for line in text.splitlines():\n                if line.startswith('lock:'):lock_rows.append(line);continue\n                if ':' in line:\n                    key,val=line.split(':',1);check(key not in fields,'unique matching fdinfo field');fields[key]=val.strip()\n            check({'flags','pos','mnt_id','ino'}<=set(fields) and int(fields['ino'])==st.st_ino,'matching fdinfo inode/fields')\n            selected.append({'fd':int(name),'labels':labels,'device':st.st_dev,'inode':st.st_ino,'target':target,'flags':int(fields['flags'],8),'pos':int(fields['pos']),'mnt_id':int(fields['mnt_id']),'raw_lock_rows':lock_rows,'raw_fdinfo':text})\n        except FileNotFoundError:selected.append({'fd':int(name),'observation':'VANISHED_DURING_METADATA_SNAPSHOT_UNPROVED'})\n    locks=[]\n    for line in read_path('/proc/locks',1024*1024).decode('ascii').splitlines():\n        fields=line.split()\n        if len(fields)<8 or len(fields[5].split(':'))!=3:continue\n        a,b,c=fields[5].split(':')\n        try:pair=(os.makedev(int(a,16),int(b,16)),int(c))\n        except ValueError:continue\n        if pair in wanted.values():locks.append({'raw':line,'device':pair[0],'inode':pair[1]})\n    return {'matching_FDs':selected,'matching_runtime_FD_count':sum('runtime' in x.get('labels',[]) for x in selected),'matching_journal_FD_count':sum('journal' in x.get('labels',[]) for x in selected),'exact_runtime_or_journal_global_lock_rows':locks,'no_single_FD_or_FLOCK_OFD_identity_assumption':True,'peer_FDs_not_opened_duplicated_closed_or_modified':True}\n\ndef collect(raw):\n    check(os.getuid()==os.geteuid()==0 and os.sched_getaffinity(0)=={0},'admitted Root CPU0 metadata projection only')\n    check(pathlib.Path('/proc/sys/kernel/random/boot_id').read_text().strip()==EXPECTED['boot_id'],'same actual boot')\n    before={'provider':proc(EXPECTED['provider_pid'],EXPECTED['provider_birth']),'sudo':proc(EXPECTED['sudo_pid'],EXPECTED['sudo_birth'])};check(before['provider']['ppid']==EXPECTED['sudo_pid'],'exact current provider/sudo relation');raw['process_before']=before\n    parent=own(open_exact(str(pathlib.Path(SAVED['path']).parent)),'reader:exact-saved-Root-private-parent');root_private(parent['fd'])\n    source=own(os.open(pathlib.Path(SAVED['path']).name,os.O_RDONLY|os.O_NOFOLLOW|os.O_CLOEXEC,dir_fd=parent['fd']),'reader:exact-saved-Root-record');st,body=read_owned(source,SAVED['bytes'])\n    check(identity(st)==SAVED['identity'] and len(body)==SAVED['bytes'] and hashlib.sha256(body).hexdigest()==SAVED['sha256'],'exact saved Root record metadata/hash')\n    saved=json.loads(body,object_pairs_hook=unique);projection,journal=saved_projection(saved);raw['safe_saved_projection']=projection\n    check(journal['identity']['uid']==journal['identity']['gid']==0 and journal['identity']['mode']==0o600 and journal['identity']['nlink']==1,'saved exact private journal identity')\n    raw['metadata_utc_ns_before']=time.time_ns();raw['metadata_mono_ns_before']=time.monotonic_ns()\n    current_before=matching_fd_snapshot(journal);raw['current_runtime_journal_fd_metadata_before']=current_before\n    current_after=matching_fd_snapshot(journal);raw['current_runtime_journal_fd_metadata_after']=current_after\n    raw['metadata_utc_ns_after']=time.time_ns();raw['metadata_mono_ns_after']=time.monotonic_ns()\n    after={'provider':proc(EXPECTED['provider_pid'],EXPECTED['provider_birth']),'sudo':proc(EXPECTED['sudo_pid'],EXPECTED['sudo_birth'])};raw['process_after']=after\n    check([(before[k]['pid'],before[k]['birth'],before[k]['ppid'],before[k]['uid']) for k in before]==[(after[k]['pid'],after[k]['birth'],after[k]['ppid'],after[k]['uid']) for k in after],'original owner exact birth/Root/relation bookends')\n    check(pathlib.Path('/proc/sys/kernel/random/boot_id').read_text().strip()==EXPECTED['boot_id'],'boot unchanged')\n    check(identity(os.fstat(source['fd']))==SAVED['identity'] and identity(os.stat(SAVED['path'],follow_symlinks=False))==SAVED['identity'],'saved record path/inode/timestamps unchanged');root_private(parent['fd'])\n    return {'status':'SAVED_NATIVE_DATA_PROJECTED_AND_MISSING_CURRENT_RUNTIME_JOURNAL_FD_METADATA_COLLECTED_NO_DISPOSITION','saved_private_record':SAVED,'safe_saved_projection':projection,'original_provider':before['provider'],'original_sudo':before['sudo'],'current_runtime_journal_fd_metadata_before':current_before,'current_runtime_journal_fd_metadata_after':current_after,'matching_metadata_equal_between_snapshots':current_before==current_after,'same_original_PID_birth_Root_relation_and_saved_file_bookends':True,'no_native_record_reread_or_namespace_memory_RPC_signal_SETFLAGS_FLOCK_or_peerFD_action':True,'original_native_session81012_and_1610612736_charge_retained':True,'restoration_or_ownership_transfer_or_retirement':False}\n\ndef main():\n    raw={'schema':1,'at':now(),'scope':'PROTECTED_SAVED_NATIVE_RESULT_PROJECTION_AND_ONLY_MISSING_CURRENT_RUNTIME_JOURNAL_FD_METADATA','saved_private_record':SAVED,'target':EXPECTED,'collector_pid':os.getpid(),'collector_birth':read_path('/proc/self/stat',8192).rsplit(b')',1)[1].split()[19].decode()};primary=None;summary=None\n    try:summary=collect(raw)\n    except BaseException as error:primary=(error,error.__traceback__)\n    finally:drain(OWNED)\n    raw['own_read_FDs']=[{k:v for k,v in x.items() if k!='fd'} for x in OWNED]\n    if primary is not None:raw['primary']=raw_error('projection-and-metadata',primary[0],primary[1])\n    raw['own_close_errors']=[raw_error(*x) for x in RAW_CLOSE_ERRORS]\n    output=None;output_error=None\n    try:output=persist_raw(raw)\n    except BaseException as error:output_error=(error,error.__traceback__)\n    if primary is not None or RAW_CLOSE_ERRORS or output_error is not None:\n        print(json.dumps({'status':'SAVED_NATIVE_PROJECTION_FAILED_NO_DISPOSITION','collector_pid':os.getpid(),'error_type':type(primary[0]).__name__ if primary else type(output_error[0]).__name__ if output_error else 'OwnCloseUnknown','raw_private_record':output,'original_owner_runtime_native_and_charges_retained':True},sort_keys=True),flush=True)\n        if primary is not None:raise BaseException.with_traceback(primary[0],primary[1])\n        if output_error is not None:raise BaseException.with_traceback(output_error[0],output_error[1])\n        raise RAW_CLOSE_ERRORS[0][1]\n    summary.update({'collector_pid':raw['collector_pid'],'collector_birth':raw['collector_birth'],'all_collector_own_FDs_closed':all(x['state']=='CLOSED' for x in OWNED),'collector_close_errors':len(RAW_CLOSE_ERRORS),'raw_private_record':output,'remaining_collector_direct_children':pathlib.Path('/proc/self/task/%d/children'%os.getpid()).read_text().split()})\n    check(summary['all_collector_own_FDs_closed'] and not summary['remaining_collector_direct_children'],'own reader closure')\n    print(json.dumps(summary,sort_keys=True),flush=True);return 0\nif __name__=='__main__':raise SystemExit(main())\n"
+      ],
+      "attempt_id": 0,
+      "birth": "58722650",
+      "creation_attempted": true,
+      "direct_wait_joined": true,
+      "exit": 0,
+      "label": "project-saved-native-and-missing-runtime-journal-fds",
+      "lifecycle_UNKNOWN": false,
+      "pid": 1954044,
+      "popen_returned": true,
+      "primary_error": null,
+      "receipt_persisted": true,
+      "resource_charge_retained": false,
+      "secondary_errors": [],
+      "streams_closed": true
+    }
+  ],
+  "finished_at": "2026-11-12T16:29:20.610924+00:00",
+  "native_or_Root_disposition": false,
+  "new_reader_current_only_retirement_eligible_after_fullRoot": true,
+  "original_native_owner_flags_charge_and_all_UNKNOWN_retained": true,
+  "redacted_record": {
+    "all_collector_own_FDs_closed": true,
+    "collector_birth": "58722656",
+    "collector_close_errors": 0,
+    "collector_pid": 1954047,
+    "current_runtime_journal_fd_metadata_after": {
+      "exact_runtime_or_journal_global_lock_rows": [
+        {
+          "device": 66306,
+          "inode": 1048651,
+          "raw": "76: FLOCK  ADVISORY  WRITE 1930708 103:02:1048651 0 EOF"
+        }
+      ],
+      "matching_FDs": [
+        {
+          "device": 66306,
+          "fd": 22,
+          "flags": 689154,
+          "inode": 53525069,
+          "labels": [
+            "journal"
+          ],
+          "mnt_id": 29,
+          "pos": 586,
+          "raw_fdinfo": "pos:\t586\nflags:\t02502002\nmnt_id:\t29\nino:\t53525069\n",
+          "raw_lock_rows": [],
+          "target": "/var/lib/mckernel-native-initial-data-1930708-58283682/RUNTIME-FLAGS-1930708-58283682.jsonl"
+        },
+        {
+          "device": 66306,
+          "fd": 24,
+          "flags": 688128,
+          "inode": 1048651,
+          "labels": [
+            "runtime"
+          ],
+          "mnt_id": 29,
+          "pos": 0,
+          "raw_fdinfo": "pos:\t0\nflags:\t02500000\nmnt_id:\t29\nino:\t1048651\nlock:\t1: FLOCK  ADVISORY  WRITE 1930708 103:02:1048651 0 EOF\n",
+          "raw_lock_rows": [
+            "lock:\t1: FLOCK  ADVISORY  WRITE 1930708 103:02:1048651 0 EOF"
+          ],
+          "target": "/usr/bin/python3.8"
+        },
+        {
+          "device": 66306,
+          "fd": 151,
+          "flags": 688128,
+          "inode": 1048651,
+          "labels": [
+            "runtime"
+          ],
+          "mnt_id": 29,
+          "pos": 5490456,
+          "raw_fdinfo": "pos:\t5490456\nflags:\t02500000\nmnt_id:\t29\nino:\t1048651\n",
+          "raw_lock_rows": [],
+          "target": "/usr/bin/python3.8"
+        }
+      ],
+      "matching_journal_FD_count": 1,
+      "matching_runtime_FD_count": 2,
+      "no_single_FD_or_FLOCK_OFD_identity_assumption": true,
+      "peer_FDs_not_opened_duplicated_closed_or_modified": true
+    },
+    "current_runtime_journal_fd_metadata_before": {
+      "exact_runtime_or_journal_global_lock_rows": [
+        {
+          "device": 66306,
+          "inode": 1048651,
+          "raw": "76: FLOCK  ADVISORY  WRITE 1930708 103:02:1048651 0 EOF"
+        }
+      ],
+      "matching_FDs": [
+        {
+          "device": 66306,
+          "fd": 22,
+          "flags": 689154,
+          "inode": 53525069,
+          "labels": [
+            "journal"
+          ],
+          "mnt_id": 29,
+          "pos": 586,
+          "raw_fdinfo": "pos:\t586\nflags:\t02502002\nmnt_id:\t29\nino:\t53525069\n",
+          "raw_lock_rows": [],
+          "target": "/var/lib/mckernel-native-initial-data-1930708-58283682/RUNTIME-FLAGS-1930708-58283682.jsonl"
+        },
+        {
+          "device": 66306,
+          "fd": 24,
+          "flags": 688128,
+          "inode": 1048651,
+          "labels": [
+            "runtime"
+          ],
+          "mnt_id": 29,
+          "pos": 0,
+          "raw_fdinfo": "pos:\t0\nflags:\t02500000\nmnt_id:\t29\nino:\t1048651\nlock:\t1: FLOCK  ADVISORY  WRITE 1930708 103:02:1048651 0 EOF\n",
+          "raw_lock_rows": [
+            "lock:\t1: FLOCK  ADVISORY  WRITE 1930708 103:02:1048651 0 EOF"
+          ],
+          "target": "/usr/bin/python3.8"
+        },
+        {
+          "device": 66306,
+          "fd": 151,
+          "flags": 688128,
+          "inode": 1048651,
+          "labels": [
+            "runtime"
+          ],
+          "mnt_id": 29,
+          "pos": 5490456,
+          "raw_fdinfo": "pos:\t5490456\nflags:\t02500000\nmnt_id:\t29\nino:\t1048651\n",
+          "raw_lock_rows": [],
+          "target": "/usr/bin/python3.8"
+        }
+      ],
+      "matching_journal_FD_count": 1,
+      "matching_runtime_FD_count": 2,
+      "no_single_FD_or_FLOCK_OFD_identity_assumption": true,
+      "peer_FDs_not_opened_duplicated_closed_or_modified": true
+    },
+    "matching_metadata_equal_between_snapshots": true,
+    "no_native_record_reread_or_namespace_memory_RPC_signal_SETFLAGS_FLOCK_or_peerFD_action": true,
+    "original_native_session81012_and_1610612736_charge_retained": true,
+    "original_provider": {
+      "birth": "58283682",
+      "pgrp": 1930695,
+      "pid": 1930708,
+      "ppid": 1930695,
+      "session": 1930695,
+      "state": "S",
+      "uid": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "original_sudo": {
+      "birth": "58283676",
+      "pgrp": 1930695,
+      "pid": 1930695,
+      "ppid": 1930694,
+      "session": 1930695,
+      "state": "S",
+      "uid": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "raw_private_record": {
+      "Root_uid0_mode0600_and_directory0700": true,
+      "bytes": 23827,
+      "identity": {
+        "bytes": 23827,
+        "ctime_ns": 1794500960570432968,
+        "device": 66306,
+        "gid": 0,
+        "inode": 2253490,
+        "mode": 384,
+        "mtime_ns": 1794500960570432968,
+        "nlink": 1,
+        "uid": 0
+      },
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-native-first-repeat-1f5f-binding-1/current81012-custody-read-1/saved-native-result-projection-1/local-stable-binding-correction-1/ROOT-PRIVATE-PROJECTION-1/OWNER-RECORD.PRIVATE.json",
+      "sha256": "bbef9259d95a1803be5dcb04a8313982dd958410588379ef4f73c6eb6a05a6d1"
+    },
+    "remaining_collector_direct_children": [],
+    "restoration_or_ownership_transfer_or_retirement": false,
+    "safe_saved_projection": {
+      "actual_unpublished_direct_wait_type_or_earliest_constructor_exception": "UNPROVED; only genuine saved records above are DATA",
+      "native_or_runtime_restoration_or_release_inferred": false,
+      "native_records": [
+        {
+          "actual_wait_or_release_authority": false,
+          "contents": "PRIVATE_NOT_PROJECTED",
+          "identity": {
+            "bytes": 620,
+            "ctime_ns": 1794496571071529107,
+            "device": 66306,
+            "gid": 0,
+            "inode": 53525072,
+            "mode": 384,
+            "mtime_ns": 1794496571071529107,
+            "nlink": 1,
+            "uid": 0
+          },
+          "name": "ROOT-MATERIALIZATION.json",
+          "observation": "COMPLETE_READONLY_SNAPSHOT",
+          "sha256": "efcd46e648ab7d230b0ee1d7224c5d1a40bbbc183dd544a3cd91540e7b2b47b8"
+        },
+        {
+          "actual_wait_or_release_authority": false,
+          "identity": {
+            "bytes": 543,
+            "ctime_ns": 1794496571079529355,
+            "device": 66306,
+            "gid": 0,
+            "inode": 53525071,
+            "mode": 384,
+            "mtime_ns": 1794496571079529355,
+            "nlink": 1,
+            "uid": 0
+          },
+          "name": "CONTROL-FLAGS.jsonl",
+          "observation": "COMPLETE_READONLY_SNAPSHOT",
+          "safe_rows": [
+            {
+              "device": 66306,
+              "inode": 53525073,
+              "old_flags": 524288,
+              "path": "/var/lib/mckernel-native-signal-8d1833a8a7552f40403c045abe0107e6e8118c49bc39c79bc4830f3a4bb3031f/source-manifest.json"
+            },
+            {
+              "device": 66306,
+              "inode": 53525074,
+              "old_flags": 524288,
+              "path": "/var/lib/mckernel-native-signal-8d1833a8a7552f40403c045abe0107e6e8118c49bc39c79bc4830f3a4bb3031f/native-operation.json"
+            },
+            {
+              "device": 66306,
+              "inode": 53525075,
+              "old_flags": 524288,
+              "path": "/var/lib/mckernel-native-signal-8d1833a8a7552f40403c045abe0107e6e8118c49bc39c79bc4830f3a4bb3031f/registered-loader.json"
+            }
+          ],
+          "sha256": "db23f77446414d60664c7d0e34975c42a1ae66263d4b0b54e5bd71dbd628578a"
+        },
+        {
+          "actual_wait_or_release_authority": false,
+          "contents": "PRIVATE_NOT_PROJECTED",
+          "identity": {
+            "bytes": 2424,
+            "ctime_ns": 1794496571079529355,
+            "device": 66306,
+            "gid": 0,
+            "inode": 53525074,
+            "mode": 384,
+            "mtime_ns": 1794496571075529231,
+            "nlink": 1,
+            "uid": 0
+          },
+          "name": "native-operation.json",
+          "observation": "COMPLETE_READONLY_SNAPSHOT",
+          "sha256": "cf10e68970ff286c7a14f59d968b944eeb5e71db0eef9a28d9f86e018aaaea2a"
+        },
+        {
+          "actual_wait_or_release_authority": false,
+          "contents": "PRIVATE_NOT_PROJECTED",
+          "identity": {
+            "bytes": 8578,
+            "ctime_ns": 1794496571079529355,
+            "device": 66306,
+            "gid": 0,
+            "inode": 53525075,
+            "mode": 384,
+            "mtime_ns": 1794496571079529355,
+            "nlink": 1,
+            "uid": 0
+          },
+          "name": "registered-loader.json",
+          "observation": "COMPLETE_READONLY_SNAPSHOT",
+          "sha256": "ed2c91636cb8557fcab87add1993570116fa9dfa5e4a81cd9a528413b72fa1ad"
+        },
+        {
+          "actual_wait_or_release_authority": false,
+          "contents": "PRIVATE_NOT_PROJECTED",
+          "identity": {
+            "bytes": 22917,
+            "ctime_ns": 1794496571075529231,
+            "device": 66306,
+            "gid": 0,
+            "inode": 53525073,
+            "mode": 384,
+            "mtime_ns": 1794496571071529107,
+            "nlink": 1,
+            "uid": 0
+          },
+          "name": "source-manifest.json",
+          "observation": "COMPLETE_READONLY_SNAPSHOT",
+          "sha256": "d20e93337b6b14ab68345fc38e5eee09e3b81db399884772a6bffeb9abb1e5c7"
+        },
+        {
+          "actual_wait_or_release_authority": false,
+          "identity": {
+            "bytes": 1785,
+            "ctime_ns": 1794497160573677090,
+            "device": 66306,
+            "gid": 0,
+            "inode": 53525078,
+            "mode": 384,
+            "mtime_ns": 1794497160573677090,
+            "nlink": 1,
+            "uid": 0
+          },
+          "name": "CALLER-DIAGNOSTIC-1.json",
+          "observation": "COMPLETE_READONLY_SNAPSHOT",
+          "safe_rows": [
+            {
+              "exceptions": [
+                {
+                  "errno": null,
+                  "label": "primary",
+                  "message_encoding": "actual_exception_str",
+                  "message_sha256": "f9eea239351919d9efcddfe0962ab1669f3135785c70d19959486051518deed1",
+                  "private_message_sha256": "f9eea239351919d9efcddfe0962ab1669f3135785c70d19959486051518deed1",
+                  "raw_exception_and_traceback_retained": true,
+                  "traceback_frames": [
+                    {
+                      "file": "/home/holden/mckernel-work/resume-20261112T094452Z-native-first-repeat-1f5f-binding-1/normal_native_once.PROPOSED.py",
+                      "function": "main",
+                      "line": 487
+                    },
+                    {
+                      "file": "/home/holden/mckernel-work/resume-20261112T094452Z-native-first-repeat-1f5f-binding-1/normal_native_once.PROPOSED.py",
+                      "function": "run",
+                      "line": 272
+                    },
+                    {
+                      "file": "/var/lib/mckernel-code-1f5f59d76bfeb43ce0f738ee07d7148fc5f7a69498273f0be498efcb4ea30cfd/installed-source-1f5f59d76bfeb43ce0f738ee07d7148fc5f7a69498273f0be498efcb4ea30cfd/operation_watchdog.py",
+                      "function": "supervise",
+                      "line": 185
+                    },
+                    {
+                      "file": "/var/lib/mckernel-code-1f5f59d76bfeb43ce0f738ee07d7148fc5f7a69498273f0be498efcb4ea30cfd/installed-source-1f5f59d76bfeb43ce0f738ee07d7148fc5f7a69498273f0be498efcb4ea30cfd/native_resource_admission.py",
+                      "function": "__init__",
+                      "line": 558
+                    },
+                    {
+                      "file": "/var/lib/mckernel-code-1f5f59d76bfeb43ce0f738ee07d7148fc5f7a69498273f0be498efcb4ea30cfd/installed-source-1f5f59d76bfeb43ce0f738ee07d7148fc5f7a69498273f0be498efcb4ea30cfd/native_resource_admission.py",
+                      "function": "need",
+                      "line": 50
+                    }
+                  ],
+                  "traceback_truncated": false,
+                  "type": "builtins.RuntimeError"
+                }
+              ],
+              "native_authority_or_release": false,
+              "phase": "UNKNOWN_NATIVE_CUSTODY",
+              "pid": 1930708,
+              "raw_objects_retained": true,
+              "schema": "native-root-caller-failure-diagnostics-v1"
+            }
+          ],
+          "sha256": "ed7b49036610a0000170060b0df7d072d75255ee2b1b65e79071e15c970e29c1"
+        },
+        {
+          "actual_wait_or_release_authority": false,
+          "name": "CALLER-DIAGNOSTIC-2.json",
+          "observation": "ABSENT_UNPROVED"
+        },
+        {
+          "actual_wait_or_release_authority": false,
+          "identity": {
+            "bytes": 100,
+            "ctime_ns": 1794496571223533818,
+            "device": 66306,
+            "gid": 0,
+            "inode": 53525076,
+            "mode": 384,
+            "mtime_ns": 1794496571223533818,
+            "nlink": 1,
+            "uid": 0
+          },
+          "name": "GRAPH-LEASE-8d1833a8a7552f40403c045abe0107e6e8118c49bc39c79bc4830f3a4bb3031f",
+          "observation": "COMPLETE_READONLY_SNAPSHOT",
+          "safe_rows": [
+            {
+              "nonce": "8d1833a8a7552f40403c045abe0107e6e8118c49bc39c79bc4830f3a4bb3031f",
+              "status": "OWNED_LEASE"
+            }
+          ],
+          "sha256": "ff0b1a609c1be3466ba99dd928b3104feb6252f549b2bd63566ea260b3299cb2"
+        },
+        {
+          "actual_wait_or_release_authority": false,
+          "identity": {
+            "bytes": 136,
+            "ctime_ns": 1794497160561676722,
+            "device": 66306,
+            "gid": 0,
+            "inode": 53525077,
+            "mode": 384,
+            "mtime_ns": 1794497160561676722,
+            "nlink": 1,
+            "uid": 0
+          },
+          "name": "GRAPH-WATCHDOG-UNKNOWN-8d1833a8a7552f40403c045abe0107e6e8118c49bc39c79bc4830f3a4bb3031f.json",
+          "observation": "COMPLETE_READONLY_SNAPSHOT",
+          "safe_rows": [
+            {
+              "known_supervisor_deadline_reason": true,
+              "nonce": "8d1833a8a7552f40403c045abe0107e6e8118c49bc39c79bc4830f3a4bb3031f",
+              "reason_sha256": "928385662aea4b432602a4161539112853c5c97041bc5e577d5871bd3f2c5bd3",
+              "status": "UNKNOWN_RETAINED"
+            }
+          ],
+          "sha256": "6fe0a23b32920994f629161ae2fe71975b83b3668b40c62529fa33f993a41690"
+        },
+        {
+          "actual_wait_or_release_authority": false,
+          "name": "NATIVE-CLAIM-8d1833a8a7552f40403c045abe0107e6e8118c49bc39c79bc4830f3a4bb3031f.jsonl",
+          "observation": "ABSENT_UNPROVED"
+        },
+        {
+          "actual_wait_or_release_authority": false,
+          "name": "NATIVE-SOURCE-FLAGS-8d1833a8a7552f40403c045abe0107e6e8118c49bc39c79bc4830f3a4bb3031f.jsonl",
+          "observation": "ABSENT_UNPROVED"
+        },
+        {
+          "actual_wait_or_release_authority": false,
+          "name": "PIDFD-CUSTODY-8d1833a8a7552f40403c045abe0107e6e8118c49bc39c79bc4830f3a4bb3031f.jsonl",
+          "observation": "ABSENT_UNPROVED"
+        },
+        {
+          "actual_wait_or_release_authority": false,
+          "name": "NATIVE-OPERATION-TERMINAL-8d1833a8a7552f40403c045abe0107e6e8118c49bc39c79bc4830f3a4bb3031f.json",
+          "observation": "ABSENT_UNPROVED"
+        }
+      ],
+      "saved_at": "2026-11-12T16:01:36.535882+00:00",
+      "saved_collector_birth": "58556257",
+      "saved_collector_pid": 1945218,
+      "saved_failed_guard": {
+        "exact_unique_runtime_and_journal_guard": true,
+        "message_sha256": "094d46892d6979c3eebd87c227bf0dda534a611e771debf1379798bab472f05e",
+        "type": "ValueError"
+      },
+      "saved_journal": {
+        "first_prior_row": {
+          "device": 66306,
+          "inode": 1048651,
+          "old_flags": 524288,
+          "path": "/usr/bin/python3.8"
+        },
+        "held_owner": {
+          "actualRoot_input_sha256": "0eec8040ad98d9056db9c167d2d8c1222492a7c0b317888ffc56e24648c4e339",
+          "birth": "58283682",
+          "native_driver_sha256": "26f3c97014bdf8dc5a3337746c919b291f79be41d212e94771f9395cecff773e",
+          "native_permission_from_provider": false,
+          "pid": 1930708,
+          "status": "RUNTIME_HELD"
+        },
+        "identity": {
+          "bytes": 586,
+          "ctime_ns": 1794496570903523899,
+          "device": 66306,
+          "gid": 0,
+          "inode": 53525069,
+          "mode": 384,
+          "mtime_ns": 1794496570903523899,
+          "nlink": 1,
+          "uid": 0
+        },
+        "path": "/var/lib/mckernel-native-initial-data-1930708-58283682/RUNTIME-FLAGS-1930708-58283682.jsonl",
+        "sha256": "4910c5cd1ee0ba5ee94340de3e326cacdafb04f257cd1af4f617fe651d7331f8"
+      },
+      "saved_native_context": {
+        "absent_or_missing_records_are_not_wait_or_cleanup_proof": true,
+        "actual_direct_wait_status": null,
+        "actual_request_python_type_identity": null,
+        "mono_ns": 369368020083513,
+        "mono_ns_after": 369368059592058,
+        "observation": "FINITE_NATIVE_PRIVATE_RECORD_SNAPSHOTS_ONLY_NO_DISPOSITION",
+        "utc_ns": 1794499296542681343,
+        "utc_ns_after": 1794499296582189281
+      },
+      "saved_native_fd_metadata_after": {
+        "matching_exact_known_file_lock_rows": [
+          "75: FLOCK  ADVISORY  WRITE 1930708 103:02:53525076 0 EOF"
+        ],
+        "matching_native_channel_pidfd_metadata": [
+          {
+            "device": 66306,
+            "fd": 81,
+            "fdinfo_sha256": "0fe11c27541996a10b0ae095a42b050eb02bea8096361ab246fbc52c1f957147",
+            "inode": 53525071,
+            "labels": [
+              "native:CONTROL-FLAGS.jsonl"
+            ],
+            "numeric_fdinfo_fields": {
+              "flags": 688129,
+              "ino": 53525071,
+              "mnt_id": 29,
+              "pos": 543
+            },
+            "target": "/var/lib/mckernel-native-signal-8d1833a8a7552f40403c045abe0107e6e8118c49bc39c79bc4830f3a4bb3031f/CONTROL-FLAGS.jsonl"
+          },
+          {
+            "device": 66306,
+            "fd": 113,
+            "fdinfo_sha256": "76b6d1128d79b2e6ef520f91bbd17daaea67c026e93811f945883502b901988e",
+            "inode": 53525070,
+            "labels": [
+              "native_operation_root"
+            ],
+            "numeric_fdinfo_fields": {
+              "flags": 688128,
+              "ino": 53525070,
+              "mnt_id": 29,
+              "pos": 0
+            },
+            "target": "/var/lib/mckernel-native-signal-8d1833a8a7552f40403c045abe0107e6e8118c49bc39c79bc4830f3a4bb3031f"
+          },
+          {
+            "device": 66306,
+            "fd": 114,
+            "fdinfo_sha256": "e93c31c0d8d000997cf006a8b4a0e0419a25d94e216d87dd42d6b9d99f4dc495",
+            "inode": 53525072,
+            "labels": [
+              "native:ROOT-MATERIALIZATION.json"
+            ],
+            "numeric_fdinfo_fields": {
+              "flags": 688128,
+              "ino": 53525072,
+              "mnt_id": 29,
+              "pos": 0
+            },
+            "target": "/var/lib/mckernel-native-signal-8d1833a8a7552f40403c045abe0107e6e8118c49bc39c79bc4830f3a4bb3031f/ROOT-MATERIALIZATION.json"
+          },
+          {
+            "device": 66306,
+            "fd": 116,
+            "fdinfo_sha256": "3316c744e54b58e0a7b764d9cc2137a1aebb2132017a00e00c94745fcef6c5b2",
+            "inode": 53525073,
+            "labels": [
+              "native:source-manifest.json"
+            ],
+            "numeric_fdinfo_fields": {
+              "flags": 688128,
+              "ino": 53525073,
+              "mnt_id": 29,
+              "pos": 0
+            },
+            "target": "/var/lib/mckernel-native-signal-8d1833a8a7552f40403c045abe0107e6e8118c49bc39c79bc4830f3a4bb3031f/source-manifest.json"
+          },
+          {
+            "device": 66306,
+            "fd": 117,
+            "fdinfo_sha256": "4cc35e5c1736e8b5ba0d34a861a64c3f7ead3da590c0f11de6863dbf855d1a81",
+            "inode": 53525074,
+            "labels": [
+              "native:native-operation.json"
+            ],
+            "numeric_fdinfo_fields": {
+              "flags": 688128,
+              "ino": 53525074,
+              "mnt_id": 29,
+              "pos": 0
+            },
+            "target": "/var/lib/mckernel-native-signal-8d1833a8a7552f40403c045abe0107e6e8118c49bc39c79bc4830f3a4bb3031f/native-operation.json"
+          },
+          {
+            "device": 66306,
+            "fd": 118,
+            "fdinfo_sha256": "18db6253858bc864653b013d786277d0b251d5646cfa95a80ab4ab7376fa829d",
+            "inode": 53525075,
+            "labels": [
+              "native:registered-loader.json"
+            ],
+            "numeric_fdinfo_fields": {
+              "flags": 688128,
+              "ino": 53525075,
+              "mnt_id": 29,
+              "pos": 0
+            },
+            "target": "/var/lib/mckernel-native-signal-8d1833a8a7552f40403c045abe0107e6e8118c49bc39c79bc4830f3a4bb3031f/registered-loader.json"
+          },
+          {
+            "device": 66306,
+            "fd": 119,
+            "fdinfo_sha256": "9ee352d04e1378a373112dbf8cc650fb8142447cd1c36bf5b2431a438294f48e",
+            "inode": 53525075,
+            "labels": [
+              "native:registered-loader.json"
+            ],
+            "numeric_fdinfo_fields": {
+              "flags": 688128,
+              "ino": 53525075,
+              "mnt_id": 29,
+              "pos": 8578
+            },
+            "target": "/var/lib/mckernel-native-signal-8d1833a8a7552f40403c045abe0107e6e8118c49bc39c79bc4830f3a4bb3031f/registered-loader.json"
+          },
+          {
+            "device": 66306,
+            "fd": 120,
+            "fdinfo_sha256": "2c722aa06adbe625acf8ba6d115474cc2ab7084b2af9e70bd1a4733a9daa026c",
+            "inode": 53525074,
+            "labels": [
+              "native:native-operation.json"
+            ],
+            "numeric_fdinfo_fields": {
+              "flags": 688128,
+              "ino": 53525074,
+              "mnt_id": 29,
+              "pos": 2424
+            },
+            "target": "/var/lib/mckernel-native-signal-8d1833a8a7552f40403c045abe0107e6e8118c49bc39c79bc4830f3a4bb3031f/native-operation.json"
+          },
+          {
+            "device": 66306,
+            "fd": 149,
+            "fdinfo_sha256": "9ee352d04e1378a373112dbf8cc650fb8142447cd1c36bf5b2431a438294f48e",
+            "inode": 53525075,
+            "labels": [
+              "native:registered-loader.json"
+            ],
+            "numeric_fdinfo_fields": {
+              "flags": 688128,
+              "ino": 53525075,
+              "mnt_id": 29,
+              "pos": 8578
+            },
+            "target": "/var/lib/mckernel-native-signal-8d1833a8a7552f40403c045abe0107e6e8118c49bc39c79bc4830f3a4bb3031f/registered-loader.json"
+          },
+          {
+            "device": 66306,
+            "fd": 153,
+            "fdinfo_sha256": "b8066bfa7ce04cf89cbfa40044a74b7130fba977574e8ecf8b7f3e46aad1f971",
+            "inode": 53525076,
+            "labels": [
+              "native:GRAPH-LEASE-8d1833a8a7552f40403c045abe0107e6e8118c49bc39c79bc4830f3a4bb3031f"
+            ],
+            "numeric_fdinfo_fields": {
+              "flags": 688130,
+              "ino": 53525076,
+              "mnt_id": 29,
+              "pos": 100
+            },
+            "target": "/var/lib/mckernel-native-signal-8d1833a8a7552f40403c045abe0107e6e8118c49bc39c79bc4830f3a4bb3031f/GRAPH-LEASE-8d1833a8a7552f40403c045abe0107e6e8118c49bc39c79bc4830f3a4bb3031f"
+          },
+          {
+            "device": 14,
+            "fd": 154,
+            "fdinfo_sha256": "006d3ddbd006c5036e017dc3b3b8d19c24aad3caa02dee180c942a288bb44995",
+            "inode": 12541,
+            "labels": [],
+            "numeric_fdinfo_fields": {
+              "NSpid": [
+                -1
+              ],
+              "Pid": -1,
+              "flags": 524290,
+              "ino": 12541,
+              "mnt_id": 15,
+              "pos": 0
+            },
+            "target": "anon_inode:[pidfd]"
+          }
+        ],
+        "observation": "SAVED_METADATA_ONLY_NO_CURRENT_WAIT_OR_OWNERSHIP_PROOF"
+      },
+      "saved_native_fd_metadata_before": {
+        "matching_exact_known_file_lock_rows": [
+          "75: FLOCK  ADVISORY  WRITE 1930708 103:02:53525076 0 EOF"
+        ],
+        "matching_native_channel_pidfd_metadata": [
+          {
+            "device": 66306,
+            "fd": 81,
+            "fdinfo_sha256": "0fe11c27541996a10b0ae095a42b050eb02bea8096361ab246fbc52c1f957147",
+            "inode": 53525071,
+            "labels": [
+              "native:CONTROL-FLAGS.jsonl"
+            ],
+            "numeric_fdinfo_fields": {
+              "flags": 688129,
+              "ino": 53525071,
+              "mnt_id": 29,
+              "pos": 543
+            },
+            "target": "/var/lib/mckernel-native-signal-8d1833a8a7552f40403c045abe0107e6e8118c49bc39c79bc4830f3a4bb3031f/CONTROL-FLAGS.jsonl"
+          },
+          {
+            "device": 66306,
+            "fd": 113,
+            "fdinfo_sha256": "76b6d1128d79b2e6ef520f91bbd17daaea67c026e93811f945883502b901988e",
+            "inode": 53525070,
+            "labels": [
+              "native_operation_root"
+            ],
+            "numeric_fdinfo_fields": {
+              "flags": 688128,
+              "ino": 53525070,
+              "mnt_id": 29,
+              "pos": 0
+            },
+            "target": "/var/lib/mckernel-native-signal-8d1833a8a7552f40403c045abe0107e6e8118c49bc39c79bc4830f3a4bb3031f"
+          },
+          {
+            "device": 66306,
+            "fd": 114,
+            "fdinfo_sha256": "e93c31c0d8d000997cf006a8b4a0e0419a25d94e216d87dd42d6b9d99f4dc495",
+            "inode": 53525072,
+            "labels": [
+              "native:ROOT-MATERIALIZATION.json"
+            ],
+            "numeric_fdinfo_fields": {
+              "flags": 688128,
+              "ino": 53525072,
+              "mnt_id": 29,
+              "pos": 0
+            },
+            "target": "/var/lib/mckernel-native-signal-8d1833a8a7552f40403c045abe0107e6e8118c49bc39c79bc4830f3a4bb3031f/ROOT-MATERIALIZATION.json"
+          },
+          {
+            "device": 66306,
+            "fd": 116,
+            "fdinfo_sha256": "3316c744e54b58e0a7b764d9cc2137a1aebb2132017a00e00c94745fcef6c5b2",
+            "inode": 53525073,
+            "labels": [
+              "native:source-manifest.json"
+            ],
+            "numeric_fdinfo_fields": {
+              "flags": 688128,
+              "ino": 53525073,
+              "mnt_id": 29,
+              "pos": 0
+            },
+            "target": "/var/lib/mckernel-native-signal-8d1833a8a7552f40403c045abe0107e6e8118c49bc39c79bc4830f3a4bb3031f/source-manifest.json"
+          },
+          {
+            "device": 66306,
+            "fd": 117,
+            "fdinfo_sha256": "4cc35e5c1736e8b5ba0d34a861a64c3f7ead3da590c0f11de6863dbf855d1a81",
+            "inode": 53525074,
+            "labels": [
+              "native:native-operation.json"
+            ],
+            "numeric_fdinfo_fields": {
+              "flags": 688128,
+              "ino": 53525074,
+              "mnt_id": 29,
+              "pos": 0
+            },
+            "target": "/var/lib/mckernel-native-signal-8d1833a8a7552f40403c045abe0107e6e8118c49bc39c79bc4830f3a4bb3031f/native-operation.json"
+          },
+          {
+            "device": 66306,
+            "fd": 118,
+            "fdinfo_sha256": "18db6253858bc864653b013d786277d0b251d5646cfa95a80ab4ab7376fa829d",
+            "inode": 53525075,
+            "labels": [
+              "native:registered-loader.json"
+            ],
+            "numeric_fdinfo_fields": {
+              "flags": 688128,
+              "ino": 53525075,
+              "mnt_id": 29,
+              "pos": 0
+            },
+            "target": "/var/lib/mckernel-native-signal-8d1833a8a7552f40403c045abe0107e6e8118c49bc39c79bc4830f3a4bb3031f/registered-loader.json"
+          },
+          {
+            "device": 66306,
+            "fd": 119,
+            "fdinfo_sha256": "9ee352d04e1378a373112dbf8cc650fb8142447cd1c36bf5b2431a438294f48e",
+            "inode": 53525075,
+            "labels": [
+              "native:registered-loader.json"
+            ],
+            "numeric_fdinfo_fields": {
+              "flags": 688128,
+              "ino": 53525075,
+              "mnt_id": 29,
+              "pos": 8578
+            },
+            "target": "/var/lib/mckernel-native-signal-8d1833a8a7552f40403c045abe0107e6e8118c49bc39c79bc4830f3a4bb3031f/registered-loader.json"
+          },
+          {
+            "device": 66306,
+            "fd": 120,
+            "fdinfo_sha256": "2c722aa06adbe625acf8ba6d115474cc2ab7084b2af9e70bd1a4733a9daa026c",
+            "inode": 53525074,
+            "labels": [
+              "native:native-operation.json"
+            ],
+            "numeric_fdinfo_fields": {
+              "flags": 688128,
+              "ino": 53525074,
+              "mnt_id": 29,
+              "pos": 2424
+            },
+            "target": "/var/lib/mckernel-native-signal-8d1833a8a7552f40403c045abe0107e6e8118c49bc39c79bc4830f3a4bb3031f/native-operation.json"
+          },
+          {
+            "device": 66306,
+            "fd": 149,
+            "fdinfo_sha256": "9ee352d04e1378a373112dbf8cc650fb8142447cd1c36bf5b2431a438294f48e",
+            "inode": 53525075,
+            "labels": [
+              "native:registered-loader.json"
+            ],
+            "numeric_fdinfo_fields": {
+              "flags": 688128,
+              "ino": 53525075,
+              "mnt_id": 29,
+              "pos": 8578
+            },
+            "target": "/var/lib/mckernel-native-signal-8d1833a8a7552f40403c045abe0107e6e8118c49bc39c79bc4830f3a4bb3031f/registered-loader.json"
+          },
+          {
+            "device": 66306,
+            "fd": 153,
+            "fdinfo_sha256": "b8066bfa7ce04cf89cbfa40044a74b7130fba977574e8ecf8b7f3e46aad1f971",
+            "inode": 53525076,
+            "labels": [
+              "native:GRAPH-LEASE-8d1833a8a7552f40403c045abe0107e6e8118c49bc39c79bc4830f3a4bb3031f"
+            ],
+            "numeric_fdinfo_fields": {
+              "flags": 688130,
+              "ino": 53525076,
+              "mnt_id": 29,
+              "pos": 100
+            },
+            "target": "/var/lib/mckernel-native-signal-8d1833a8a7552f40403c045abe0107e6e8118c49bc39c79bc4830f3a4bb3031f/GRAPH-LEASE-8d1833a8a7552f40403c045abe0107e6e8118c49bc39c79bc4830f3a4bb3031f"
+          },
+          {
+            "device": 14,
+            "fd": 154,
+            "fdinfo_sha256": "006d3ddbd006c5036e017dc3b3b8d19c24aad3caa02dee180c942a288bb44995",
+            "inode": 12541,
+            "labels": [],
+            "numeric_fdinfo_fields": {
+              "NSpid": [
+                -1
+              ],
+              "Pid": -1,
+              "flags": 524290,
+              "ino": 12541,
+              "mnt_id": 15,
+              "pos": 0
+            },
+            "target": "anon_inode:[pidfd]"
+          }
+        ],
+        "observation": "SAVED_METADATA_ONLY_NO_CURRENT_WAIT_OR_OWNERSHIP_PROOF"
+      },
+      "saved_owner_command_state": [
+        {
+          "argument_count": 11,
+          "bytes": 27502,
+          "expected_birth": "58283682",
+          "observation": "BOUNDED_CMDLINE_HASH_ONLY_NO_ENV_OR_CONTENT_EXPORT",
+          "pid": 1930708,
+          "sha256": "86fd25c8425a4b2b18ebd3e923beccc57a52d4ba5b6a50965a0d7418c690e705"
+        },
+        {
+          "argument_count": 28,
+          "bytes": 27714,
+          "expected_birth": "58283676",
+          "observation": "BOUNDED_CMDLINE_HASH_ONLY_NO_ENV_OR_CONTENT_EXPORT",
+          "pid": 1930695,
+          "sha256": "b6b802afada4ca4d284b0773dad17b70b89c10f3da23b30187bc0d62eafd8fe5"
+        }
+      ],
+      "saved_process_before": {
+        "provider": {
+          "birth": "58283682",
+          "pgrp": 1930695,
+          "pid": 1930708,
+          "ppid": 1930695,
+          "session": 1930695,
+          "state": "S",
+          "uid": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "sudo": {
+          "birth": "58283676",
+          "pgrp": 1930695,
+          "pid": 1930695,
+          "ppid": 1930694,
+          "session": 1930695,
+          "state": "S",
+          "uid": [
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "saved_raw_financial_controller_budget_caps_and_config_contents_projected": false,
+      "saved_reader_own_FD_states": [
+        {
+          "historical_fd": 4,
+          "label": "reader:Root-private-operation-directory",
+          "state": "CLOSED"
+        },
+        {
+          "historical_fd": 3,
+          "label": "reader:original-journal",
+          "state": "CLOSED"
+        },
+        {
+          "historical_fd": 5,
+          "label": "reader:original-Root-admission-input",
+          "state": "CLOSED"
+        },
+        {
+          "historical_fd": 7,
+          "label": "reader:runtime-inode-read-only",
+          "state": "CLOSED"
+        },
+        {
+          "historical_fd": 8,
+          "label": "reader:actual-native-operation-root",
+          "state": "CLOSED"
+        },
+        {
+          "historical_fd": 6,
+          "label": "reader:native-record:ROOT-MATERIALIZATION.json",
+          "state": "CLOSED"
+        },
+        {
+          "historical_fd": 6,
+          "label": "reader:native-record:CONTROL-FLAGS.jsonl",
+          "state": "CLOSED"
+        },
+        {
+          "historical_fd": 6,
+          "label": "reader:native-record:native-operation.json",
+          "state": "CLOSED"
+        },
+        {
+          "historical_fd": 6,
+          "label": "reader:native-record:registered-loader.json",
+          "state": "CLOSED"
+        },
+        {
+          "historical_fd": 6,
+          "label": "reader:native-record:source-manifest.json",
+          "state": "CLOSED"
+        },
+        {
+          "historical_fd": 6,
+          "label": "reader:native-record:CALLER-DIAGNOSTIC-1.json",
+          "state": "CLOSED"
+        },
+        {
+          "historical_fd": 6,
+          "label": "reader:native-record:GRAPH-LEASE-8d1833a8a7552f40403c045abe0107e6e8118c49bc39c79bc4830f3a4bb3031f",
+          "state": "CLOSED"
+        },
+        {
+          "historical_fd": 6,
+          "label": "reader:native-record:GRAPH-WATCHDOG-UNKNOWN-8d1833a8a7552f40403c045abe0107e6e8118c49bc39c79bc4830f3a4bb3031f.json",
+          "state": "CLOSED"
+        }
+      ],
+      "saved_reader_own_close_errors": [],
+      "saved_scope": "READ_ONLY_CURRENT81012_PROVIDER_AND_BOUNDED_NATIVE_PRIVATE_CUSTODY_DATA_ONLY",
+      "saved_supervisor_after": {
+        "actual_wait_status": null,
+        "expected_birth": "58283729",
+        "observation": "ABSENT",
+        "pid": 1930710
+      },
+      "saved_supervisor_before": {
+        "actual_wait_status": null,
+        "expected_birth": "58283729",
+        "observation": "ABSENT",
+        "pid": 1930710
+      }
+    },
+    "same_original_PID_birth_Root_relation_and_saved_file_bookends": true,
+    "saved_private_record": {
+      "Root_uid0_mode0600_and_directory0700": true,
+      "bytes": 106329,
+      "identity": {
+        "bytes": 106329,
+        "ctime_ns": 1794499296580720412,
+        "device": 66306,
+        "gid": 0,
+        "inode": 2253363,
+        "mode": 384,
+        "mtime_ns": 1794499296580720412,
+        "nlink": 1,
+        "uid": 0
+      },
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-native-first-repeat-1f5f-binding-1/current81012-custody-read-1/enclosing-bookends-correction-1/ROOT-PRIVATE-RECORD-1/OWNER-RECORD.PRIVATE.json",
+      "sha256": "80a87af80ed3ea729651ade16045c89c4847a9378aad5d67a310d70c30c2d5cc"
+    },
+    "status": "SAVED_NATIVE_DATA_PROJECTED_AND_MISSING_CURRENT_RUNTIME_JOURNAL_FD_METADATA_COLLECTED_NO_DISPOSITION"
+  },
+  "remaining_direct_children": [],
+  "request_sha256": "56833e84064449ca0b283d164a3fa742b81f31b2f0a6d78dd343e77fa38d5e13",
+  "review_sha256": "9b8fdcef5029767a8548ab514ba7b42ef62695912a82b14230fae3ed9311f2d8",
+  "status": "PASS_READ_ONLY_ORIGINAL_PROVIDER_RECORD_PENDING_SAVED_QUALIFICATION"
+}

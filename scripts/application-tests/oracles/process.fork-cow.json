@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "process.fork-cow",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/process.fork-cow"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["parent_pattern=1 child_exit=1 child_code=23"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Parent and child writes to inherited MAP_PRIVATE storage remain independent", "Child exits 23 and parent retains pattern 0xa5 after wait"],
+  "unresolved_expectations": ["Copy-on-write page-fault and physical-page evidence require runtime review."],
+  "max_question_for_reviewer": "Confirm no cross-process overwrite and preserve page-level COW evidence."
+}

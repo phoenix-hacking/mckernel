@@ -1,0 +1,75 @@
+{
+  "scope": "Functional OS/apps and real compute C to Rust/reviewed assembly; execve/forkACK excluded",
+  "accepted_image": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-materialization-final-20261018-1/owner-work/output/build/kernel/mckernel.img",
+    "sha256": "3bfc1dfb5894fd56e073abeabc9037ff80139081e34776f65985a5f3c7d7968d",
+    "bytes": 7926720,
+    "dev": 66306,
+    "inode": 47862475,
+    "uid": 1000,
+    "mode": 493
+  },
+  "image_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-image-actual-review-20261018-1/actual-review.json",
+    "sha256": "671a0fa2050c6518ba90b233964c6be19c097bf91fff14d4151e365ee64da96b",
+    "bytes": 34413
+  },
+  "source_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-source-review-20261018-1/REVIEW.md",
+    "sha256": "3c997b605d72dfda3e0c51c87bed2a6475569f8666640c07326b256c1f80be10",
+    "bytes": 4368
+  },
+  "reviewed_patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-cutover-20261018-1/candidate.patch",
+    "sha256": "4ac5b8b23cf09ece58f65fc3537f30bed657a8c09e128d4e5a472108d3e84ff0",
+    "bytes": 3199
+  },
+  "private_delta": [
+    {
+      "path": "arch/x86_64/kernel/syscall.c",
+      "accepted_base": {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-materialization-final-20261018-1/materialized-source/arch/x86_64/kernel/syscall.c",
+        "sha256": "22be13dd5cbee2f0500ee49fd59b9a56649a940a243f0d529a193a0e465bb07c",
+        "bytes": 113347
+      },
+      "candidate": {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-integration-20261018-1/candidate/arch/x86_64/kernel/syscall.c",
+        "sha256": "dee40ef3ebfa237eb182124b3ac617a01a4cfffcfa3eaba29695e9adcee9de90",
+        "bytes": 113392
+      },
+      "repository_matches_accepted_base": true
+    },
+    {
+      "path": "kernel/rust/x86_cpu_helpers.rs",
+      "accepted_base": {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-materialization-final-20261018-1/materialized-source/kernel/rust/x86_cpu_helpers.rs",
+        "sha256": "8affc6730fc252564d0c728ef02f61a95e1bc892de0b5250701c4b6044b5d2d0",
+        "bytes": 81980
+      },
+      "candidate": {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-integration-20261018-1/candidate/kernel/rust/x86_cpu_helpers.rs",
+        "sha256": "60308ba5b471250aec4f0b67cfccddc014a94014e5fee5925130d3f8720eae01",
+        "bytes": 84142
+      },
+      "repository_matches_accepted_base": true
+    },
+    {
+      "path": "kernel/CMakeLists.txt",
+      "accepted_base": {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-materialization-final-20261018-1/materialized-source/kernel/CMakeLists.txt",
+        "sha256": "0fb8528175443a0cab4b1b12e62a2b9851b918b416f9a235f598cb143f616e35",
+        "bytes": 22670
+      },
+      "candidate": {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-integration-20261018-1/candidate/kernel/CMakeLists.txt",
+        "sha256": "dc265d048afefeccaba550a3174b7fe39908bb3552c66cd05e67f64194928789",
+        "bytes": 22705
+      },
+      "repository_matches_accepted_base": true
+    }
+  ],
+  "base_source_root": "/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-materialization-final-20261018-1/materialized-source",
+  "accepted_header_sha256": "907391bd99a38b48be54ff6700f1ca12143e5a9bfabf4826b6f09ab2b842bc6c",
+  "unchanged_scheduler_sha256": "d0845b55842ffb3f265d6585ecdd1d5821f107cd54949ef1d3d8a299ea0f45bb",
+  "conflicts": []
+}

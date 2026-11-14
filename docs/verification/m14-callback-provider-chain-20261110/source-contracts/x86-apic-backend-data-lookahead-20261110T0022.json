@@ -1,0 +1,97 @@
+{
+  "schema": "mckernel.x86-apic-backend-data-lookahead.v1",
+  "request": "2026-11-10T00:22Z exact compiled callback-target DATA dependency source lookahead",
+  "decision": "GO_EXACT_EXISTING_ACCEPTED_F04_TWO_DATA_OWNER_CUT_NO_MAPPING_INITIALIZATION",
+  "original_counted_credit": 0,
+  "owner": "Saved Root sole source/profile/review/admission/compositor owner",
+  "consumer": {
+    "directory": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-unit-1",
+    "request": "REQUEST.json",
+    "unit": "scheduler_callback_target_provider_unit.rs",
+    "declaration_source": "local_apic_io.rs:8–10",
+    "compiled_identity_user_supplied": "e55e73a7/2408B, one actualcompile at00:22; no compiler/metadata/gate replay here.",
+    "actual_names": "mapped_local_apic is a Rust declaration alias with #[link_name=\"lapic_vp\"]. Correct actual ELF import is lapic_vp, NOT lapic_virtpage.",
+    "source_verified_DATA_imports": [
+      {
+        "ELF": "lapic_vp",
+        "Rust_alias": "mapped_local_apic",
+        "type": "extern static mut *mut core::ffi::c_void"
+      },
+      {
+        "ELF": "x86_local_apic_base_msr",
+        "type": "extern static u32"
+      }
+    ],
+    "other_function_import": "wrmsr; existing function/provider reuse remains Root's separate scope."
+  },
+  "overlap_and_identity_reuse": {
+    "bounded_current_lookup": "Current Root211917 private Rust/request exact-symbol search finds only callback-target extern x86_local_apic_base_msr declaration, not ownerdefinitions/preparation. No matching lapic_vp/lapic_virtpage owner prepared there. Root must reuse any subsequent concurrent owner packet rather than duplicate it.",
+    "saved_partial_text": "Previously named scheduler-next-provider-join-1/joined-symbols.stdout(97owner4b4cc4a) contains neither dataowner; no GNU/hash/newmetadata census.",
+    "already_bound_source_segments": [
+      {
+        "source": "kernel/rust/x86_cpu_helpers.rs:4496–4497",
+        "REQUEST_segment_sha256": "379f0e95f74cd594ac9beb621a071a25d736bcbd2044558645c53584bd8c27c4",
+        "role": "Originalgenuine lapic_vp storage reference, explicitlyEXCLUDED from e55targetunit."
+      },
+      {
+        "source": "kernel/rust/x86_cpu_helpers.rs:6813–6814",
+        "REQUEST_segment_sha256": "37521e3388395e1d44da3cd9579aa92bd67f47490048c6218d1f3a86518f9fc4",
+        "role": "Originalgenuine MSRbase0x800storage reference, explicitlyEXCLUDED from targetunit."
+      },
+      {
+        "source": "arch/x86_64/kernel/cpu.c:339–348",
+        "REQUEST_segment_sha256": "ac8e1cbf64bf859c00d542dcadc5c9132ef8178e19e3a1556389f10107bbf6e8",
+        "role": "Actual mappedslot/MSRbase Cowner declarations only."
+      }
+    ],
+    "limit": "These are existing REQUEST sourceidentities reused, not newlycomputed hashes or proof that an unreviewed newer object already owns the data."
+  },
+  "eligibility": {
+    "positive_boundary": "Both exact definitions are original accepted-F04 declarative data in actual CPU source. No code or callbackbody is included, no held generic/notification/exec/ACK/TID/XPMEM request is prepared.",
+    "finite_scope": "Only2actualstatics plus actual core::ffi::c_void and CUInt=u32alias. No whole initialization_entries/selected_fixed_cpu_selectors module; no targetbody, descriptor, controllerregister layout or bootsequence.",
+    "profile": "Native x86_64 LP64 retainedpartial sourceprofile; these exact statics have no localoptionalcfg or guessed targetmapping. Supported finite source/data choice is normal localengineering; Root concrete source/profile/ownership review and fresh admission separately apply.",
+    "source_binding": "Readonly0x800 is the actual current Rust initializer and actual unconditional cpu.c:326 #define APIC_BASE_MSR0x800, not inferred from a runtimehardware read. Preserve source module's selected-C/header equality qualification condition; bind exact actual source/profile/macro evidence before integration, reuse any existing witness. Alternate headers/constants remain unqualified.",
+    "unchanged_holds": "No memory/lease/source/service/SDK/native/currentfree authority or UNKNOWN outcome changes."
+  },
+  "actual_owners": [
+    {
+      "name": "lapic_vp",
+      "source": "kernel/rust/x86_cpu_helpers.rs:4496–4497, initialization_entries",
+      "definition": "#[no_mangle] pub(crate) static mut lapic_vp:*mut c_void=core::ptr::null_mut();",
+      "types": "Exact core::ffi::c_void pointer, selected8byte pointer/alignment8.",
+      "C_pair": "arch/x86_64/kernel/cpu.c:339–347 Rustselected externvoid*lapic_vp; referenceoriginalstaticvoid*lapic_vp zero initialization.",
+      "object": "Unique mutable8byte original NULLinitialslot, zero initializedNOBITS/BSS (actual .lbss/sectionflags captured under retainedlarge model, no guessed fixedsection spelling).",
+      "runtime_limit": "This is pointer storage only, not a mappedpage/device address or ownershiplease. Actual mapping/publication is in excluded init_lapic source and requires original device/MSR/mapping/boot/lease/currentfree authority before any real dereference. Never replace NULL with a fabricated pointer/map or claim MMIO readiness."
+    },
+    {
+      "name": "x86_local_apic_base_msr",
+      "source": "kernel/rust/x86_cpu_helpers.rs:6813–6814, selected_fixed_cpu_selectors",
+      "definition": "#[no_mangle] pub static x86_local_apic_base_msr:CUInt=0x800;",
+      "types": "Actual existing CUInt=u32 alias; unsigned4byte readonly object/alignment4.",
+      "C_pair": "arch/x86_64/kernel/cpu.c:342–344 constunsignedint owner/reference and actual APIC_BASE_MSR define326.",
+      "object": "Unique readonly allocatedPROGBITS4byte value0x800 in selectedlittleendian target. No function/pointer relocation or mutable guessed registermap.",
+      "runtime_limit": "Source constant is the existing x2APIC MSR-index base used by actual callbacks; it is not evidence of enabled x2APIC, valid MSR/currentmode or runtime admission."
+    }
+  ],
+  "expected_finite_emission": {
+    "global_functions": [],
+    "global_objects": [
+      "lapic_vp mutable8byte NULLslot",
+      "x86_local_apic_base_msr readonly4byte0x800"
+    ],
+    "external_U": [],
+    "runtime_private_helpers": [],
+    "source_data_relocations": [],
+    "no_constructor": true,
+    "no_mapped_hardware_object": "Do not include init_lapic, map_fixed_area, lapic_vp writes, MSRquery, controlleraccess functions or any lease/state initializer.",
+    "join_effect": "Onceactualobject/type/content/uniqueownergates pass, dataonlyobject can resolve e55target's real lapic_vp and x86_local_apic_base_msr imports in Root's exact latest matchedcohort. Reuse qualifiedWRMSR/currentprovider; no callback-target rebuild or publishermetadata/join duplication."
+  },
+  "smallest_next_contract": {
+    "required_inputs": "Actual2source definitions/types + currentCmacro/owner/profilebinding, existingtargetREQUEST sourceidentities and exactlatestRootuniqueowners.",
+    "owner": "Root/private sourcepreparer plus concrete independent type/profile reviewer",
+    "done_when": "Reviewable private data-onlycut preserves originalnames, writable-vsreadonly storage, NULL/0x800 initializers and actual source/cfg/ABI with no competingowner or runtime/mappingbody.",
+    "verification_method": "Read exact source/type/initializer/attribute/profile correspondence, including required selected-C/header identity condition; later Root alone may admit smallest newdata compile/readbacks/actualcontent-ownergate and exactcurrent-onlyjoin. No code/function/runtime test is required or invented here.",
+    "missing_external_runtime_binding": "Actual mappedcontroller/device/boot/MSR/sourcecustody/lease/currentfree context remains a genuine separate prerequisite for runtime consumers. It does not prohibit this finite faithful source/data preparation."
+  },
+  "operations": "Read currentAGENTS/CAMPAIGN, exact e55 REQUEST/unit declarations and finite actualRust/Cdata/macro source, bounded currentRootownerlookup and existing saved97symboltext. WroteonlyauthorizedprivateJSON. No unitgeneration/sourceextraction/edit, compiler/GNU/parser/predicate/link/test/newmetadata/hashcensus, target/initializer/CPUlocal/mapping/device/boot/native action or canonical/index/launcher/goal/spawn changes."
+}

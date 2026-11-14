@@ -1,0 +1,76 @@
+{
+  "all_first15_prepared_inputs_oracles_unchanged": true,
+  "all_original16_inputs_and_oracles_unchanged": true,
+  "effects": "Complete three source AST functions with synthetic JSON local record/read/clock scripts only. No source main/issuer/controller/account API/real records/write/nonce/exec/native call.",
+  "families": [
+    {
+      "name": "coherent_accept",
+      "obligation": "Latest fresh event/controller/ledger tuple returns exact unchanged synthetic records as data only; never authority.",
+      "vectors": [
+        "coherent_latest_snapshot_returns_pure_data"
+      ]
+    },
+    {
+      "name": "interleaving_stabilizes",
+      "obligation": "New event credits cannot pass with two equal stale credit copies; bookend changes force a retry. Only subsequent coherent records accept.",
+      "vectors": [
+        "same_primary_new_credit_only_accepts_after_ledger_catches_up",
+        "changed_bookend_retries_then_returns_coherent_snapshot"
+      ]
+    },
+    {
+      "name": "persistent_mismatch_refuses",
+      "obligation": "Exactly3 attempts refuse persistent event/ledger mismatch and full-primary extra-field mismatch with no older fallback; controlled diagnostics only.",
+      "vectors": [
+        "same_primary_new_credit_two_old_matching_copies_refuse",
+        "full_primary_extra_field_no_older_fallback"
+      ]
+    },
+    {
+      "name": "hold_unknown_stale_veto",
+      "obligation": "Immediate current hold/unknown/exhaustion/stale or acceptance-time expiry, original ledger ID, fixed Root/run and nonfinite vetoes; no further attempt or query. PRIMARY-01 only: coherent bool, selected latest bool, missing first primary and invalid second primary refuse immediately without additional reads/attempts; actual shared checked_primary stays inside whole source helper.",
+      "vectors": [
+        "latest_event_age25_no_older_fallback",
+        "fresh_event_expires_at_acceptance",
+        "latest_spend_hold_immediate_veto",
+        "before_bookend_hold_immediate_veto",
+        "after_bookend_unknown_accounting_immediate_veto",
+        "latest_credit_unknown_immediate_veto",
+        "latest_credit_exhausted_immediate_veto",
+        "original_durable_ledger_identity_veto",
+        "same_root_worker_birth_veto",
+        "same_run_after_bookend_veto",
+        "nonfinite_ledger_balance_immediate_veto",
+        "coherent_bool_primary_immediate_veto",
+        "latest_event_bool_primary_no_older_fallback",
+        "first_bookend_missing_primary_immediate_veto",
+        "second_bookend_out_of_range_primary_immediate_veto"
+      ]
+    }
+  ],
+  "only_additional_primary01_veto_vectors": true,
+  "only_new_explicit_nonfinite_vector": false,
+  "previous_actual_preissue_failure_and_unknown_source_accounting_unmodified": true,
+  "selected_actual_functions": [
+    "amount",
+    "available_balance",
+    "current_account_snapshot"
+  ],
+  "source": {
+    "bytes": 20163,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/a2f-fixed30-normal-operation-proposal-1/correction-1/account-snapshot-correction-1/primary-guard-correction-1/ROOT-ISSUE-AND-EXECUTE-ONCE.py",
+    "sha256": "9daec4d582c13e58ca2ac467e1a0566440f17497eaad621c07df6ef6987695c3"
+  },
+  "source_contract": {
+    "bytes": 4088,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/a2f-fixed30-normal-operation-proposal-1/correction-1/account-snapshot-correction-1/primary-guard-correction-1/ACCOUNT-SNAPSHOT-CONTRACT.json",
+    "sha256": "22db41a514d64c5342d27e475e5dc05f36cce5c715dae81ccb62c3880bf4d96b"
+  },
+  "source_predicate_or_helper_reimplementation": false,
+  "source_proposal": {
+    "bytes": 2836,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/a2f-fixed30-normal-operation-proposal-1/correction-1/account-snapshot-correction-1/primary-guard-correction-1/FOCUSED-TEST-PROPOSAL.json",
+    "sha256": "92aefaf262225bc68518cfe3dac0f614e95ca30edf6cf63035ae2f377a8b1f70"
+  },
+  "vector_count": 20
+}

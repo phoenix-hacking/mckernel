@@ -1,0 +1,15 @@
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -11177,6 +11177,12 @@
+     }
+ }
+ 
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Frontend-only inclusion: does not select C replacements or owner adapters.
++#[cfg(f03_credential_snapshot_typecheck)]
++#[path = "f03_credential_snapshot_candidate.rs"]
++mod f03_credential_snapshot_typecheck;
++
+ #[no_mangle]
+ pub unsafe extern "C" fn sys_prctl(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+     if ctx.is_null() {

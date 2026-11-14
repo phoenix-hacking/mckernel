@@ -1,0 +1,259 @@
+{
+  "canonical_selected_old": {
+    "actual_artifacts": {
+      "Rust_object": {
+        "bytes": 44792,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/build-output/rust/ldump2mcdump_helpers.o",
+        "sha256": "615309a13bfb9978a0d0420194fd0b2564bff83ed64f160efefc4848bccf1578"
+      },
+      "candidate_build": {
+        "bytes": 41152,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/build-output/ldump2mcdump.so",
+        "sha256": "7d9a3aa0f106819abee32477b54fb1bdfd6f2c639d9a402ccbdd1e266a221dd6"
+      },
+      "candidate_stage": {
+        "bytes": 41152,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/build-output/stage-candidate/opt/mckernel-p04/lib/ldump2mcdump.so",
+        "sha256": "695845a9b2308bf679ddc8039f1a6fa7364c9dfc58344ad25d5920632ecec20b"
+      },
+      "real_BFD_generated_DATA": {
+        "bytes": 616,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/build-output/rust/ldump2_bfd_section_layout.rs",
+        "sha256": "0d5b261473c33d919980ee65ef3a8635ff7228b772dc34de0ffa0e7dee50709f"
+      }
+    },
+    "actual_original_link_and_compiler": {
+      "actual_Rust_command": "/usr/bin/cmake -E env MAKEFLAGS= MCKERNEL_LDUMP2_BFD_LAYOUT_RS=/output/rust/ldump2_bfd_section_layout.rs /usr/bin/rustc --crate-name ldump2mcdump_helpers --crate-type lib --edition=2021 --cfg ldump2_full_body -C panic=abort -C opt-level=2 -C debuginfo=1 -C relocation-model=pic -C force-unwind-tables=no --emit=obj=/output/rust/ldump2mcdump_helpers.o /source/rust/ldump2mcdump_helpers.rs",
+      "actual_candidate_link": "/usr/bin/cc -fPIC -O3 -DNDEBUG -Wl,--dependency-file=CMakeFiles/ldump2mcdump.dir/link.d -shared -Wl,-soname,ldump2mcdump.so -o ldump2mcdump.so rust/ldump2mcdump_helpers.o  -Wl,-rpath,:::::::::::::::::::::::",
+      "compiler": "Actual image Rust1.92 via /usr/bin/rustc and selected GCC14.3.1 cc2092 from reused matching provider receipt; configure reports GNU14.3.1. No compiler/image probes repeated.",
+      "project_object_ownership": "The actual verbose shared link selects only real Rust ldump2mcdump_helpers.o as the project object. No ldump2mcdump.c, fake converter, qualification ABI object or legacy C shim is linked. Normal compiler/linker system startup and libc dependencies retain their real owners."
+    },
+    "actual_production_qualification": {
+      "bytes": 38419,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/qualification-1/QUALIFICATION.json",
+      "sha256": "5de9523d2e265f61067ed83b06186173f75f5a92e4d1448534a477f2f0e34355"
+    },
+    "canonical_commit": "b0193d91910c622ad50c7cce909e522e847db3a8",
+    "canonical_source_and_recipe_blobs": {
+      "executer/user/CMakeLists.txt": {
+        "bytes": 29480,
+        "frozen_cleanup_preimage_sha256": "c66bfc9e5f904fcc37d07412b197d04bdcbdb7a4f434c4469715379b674eda6e",
+        "object_id": "2498153ab2c0c186015bc3eff81c704231f0fdca",
+        "sha256": "c66bfc9e5f904fcc37d07412b197d04bdcbdb7a4f434c4469715379b674eda6e",
+        "type": "blob"
+      },
+      "executer/user/cmake/SelectRustVmcore2mckdump.cmake": {
+        "bytes": 2426,
+        "frozen_cleanup_preimage_sha256": "b082d79c183cc3a19d872bc3252303b71871081036a89f9235d7ab049ed48c81",
+        "object_id": "e80c0e29564d4dccf8d62af8315fe929489732d8",
+        "sha256": "b082d79c183cc3a19d872bc3252303b71871081036a89f9235d7ab049ed48c81",
+        "type": "blob"
+      },
+      "executer/user/ldump2_crash_error_boundary.c": {
+        "header": "b0193d91910c622ad50c7cce909e522e847db3a8:executer/user/ldump2_crash_error_boundary.c missing",
+        "missing": true
+      },
+      "executer/user/rust/ldump2mcdump_helpers.rs": {
+        "bytes": 32826,
+        "frozen_cleanup_preimage_sha256": "5aab8a4270858287d4eb61a1109d96126bae9bf06913da31adf79c3e8c1b7c2a",
+        "object_id": "0db5bb211ed9ff1780f73cc21268153b96747880",
+        "sha256": "5aab8a4270858287d4eb61a1109d96126bae9bf06913da31adf79c3e8c1b7c2a",
+        "type": "blob"
+      }
+    },
+    "exact_Rust_body_source_materializations": [
+      {
+        "byte_identical": true,
+        "materialized": {
+          "bytes": 32826,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/source/rust/ldump2mcdump_helpers.rs",
+          "sha256": "5aab8a4270858287d4eb61a1109d96126bae9bf06913da31adf79c3e8c1b7c2a"
+        },
+        "production": {
+          "bytes": 32826,
+          "path": "/home/holden/mckernel/executer/user/rust/ldump2mcdump_helpers.rs",
+          "sha256": "5aab8a4270858287d4eb61a1109d96126bae9bf06913da31adf79c3e8c1b7c2a"
+        }
+      },
+      {
+        "byte_identical": true,
+        "materialized": {
+          "bytes": 2568,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/source/cmake/ldump2-selected-bfd/Ldump2SelectedBfdLayout.cmake",
+          "sha256": "78bc5d6faecd013d3bfb263c097831ce880b76f0a567b99b5787baa6805ad0c4"
+        },
+        "production": {
+          "bytes": 2568,
+          "path": "/home/holden/mckernel/executer/user/cmake/ldump2-selected-bfd/Ldump2SelectedBfdLayout.cmake",
+          "sha256": "78bc5d6faecd013d3bfb263c097831ce880b76f0a567b99b5787baa6805ad0c4"
+        }
+      },
+      {
+        "byte_identical": true,
+        "materialized": {
+          "bytes": 3223,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/source/cmake/ldump2-selected-bfd/section_layout_witness.c",
+          "sha256": "3375c309059ad65b0f18d0431b7c413d10d9ed8196beec82409bdf715c3dc427"
+        },
+        "production": {
+          "bytes": 3223,
+          "path": "/home/holden/mckernel/executer/user/cmake/ldump2-selected-bfd/section_layout_witness.c",
+          "sha256": "3375c309059ad65b0f18d0431b7c413d10d9ed8196beec82409bdf715c3dc427"
+        }
+      },
+      {
+        "byte_identical": true,
+        "materialized": {
+          "bytes": 2426,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/source/cmake/SelectRustVmcore2mckdump.cmake",
+          "sha256": "b082d79c183cc3a19d872bc3252303b71871081036a89f9235d7ab049ed48c81"
+        },
+        "production": {
+          "bytes": 2426,
+          "path": "/home/holden/mckernel/executer/user/cmake/SelectRustVmcore2mckdump.cmake",
+          "sha256": "b082d79c183cc3a19d872bc3252303b71871081036a89f9235d7ab049ed48c81"
+        }
+      },
+      {
+        "byte_identical": true,
+        "materialized": {
+          "bytes": 1076,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/source/vmcore2mckdump.in",
+          "sha256": "6dcf6421727fb048de7149f45ec66624e2d0d688bd9c9736f452a928104ba455"
+        },
+        "production": {
+          "bytes": 1076,
+          "path": "/home/holden/mckernel/executer/user/vmcore2mckdump.in",
+          "sha256": "6dcf6421727fb048de7149f45ec66624e2d0d688bd9c9736f452a928104ba455"
+        }
+      },
+      {
+        "byte_identical": true,
+        "materialized": {
+          "bytes": 206461,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/source/qualification/defs.h",
+          "sha256": "0cb677f0a2fd90dc3fbd04b9bc240c04a6409d4f751cb88ceff13d39308e8943"
+        },
+        "production": {
+          "bytes": 206461,
+          "path": "/home/holden/mckernel/executer/include/defs.h",
+          "sha256": "0cb677f0a2fd90dc3fbd04b9bc240c04a6409d4f751cb88ceff13d39308e8943"
+        }
+      }
+    ],
+    "installed_role": "/opt/mckernel-p04/lib/ldump2mcdump.so in actual privateDESTDIR packaging proof; current literal targetPREFIX-empty/installlib matches canonicalc66. No current deployment claimed.",
+    "limits": "Do not substitute private33ed/c420/C104 or headera875 into this old source/artifact row. The old typed header0cb/use-prefix proof is scoped; actual source9fd longjmp/Drop counterevidence still applies.",
+    "ownership": "Actual selected old Rust project object615309, compiler-generated startup/metadata and actuallibc/crash/BFD dependencies; no authored Cboundary exists in canonicalcommit. Known implementation/error cleanup counterevidence remains recorded, not an unknown owner.",
+    "source_recipe_equivalence": {
+      "Root_next_action": "Root alone may apply exact reviewed532d patch to matching current user CMake preimage046b, preserving others, publish through existing wrapper and reuse these successful14 phases. No green rerun or acceptance/default flip follows from this qualification.",
+      "canonical_state_read_only": {
+        "at_qualification": {
+          "bytes": 29480,
+          "path": "/home/holden/mckernel/executer/user/CMakeLists.txt",
+          "sha256": "c66bfc9e5f904fcc37d07412b197d04bdcbdb7a4f434c4469715379b674eda6e"
+        },
+        "equals_frozen_preimage": false,
+        "equals_proposed_postimage": true
+      },
+      "equivalence": "Independently derived exact two-site postimage from frozen current production preimage; generated unified diff equals532d byte-for-byte. Tested source cut applies exactly the same target PREFIX-empty and install-lib changes. No compiler/source/layout/dependency/default/ACK/cleanup/staging semantics changed.",
+      "materialized_baseline": {
+        "bytes": 2804,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/baseline/CMakeLists.txt",
+        "sha256": "cc03cd952c8d1631e52cb4a2a9755ba2487ac2f328941c4f5949f5ce782771f2"
+      },
+      "materialized_candidate": {
+        "bytes": 2900,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/candidate/CMakeLists.txt",
+        "sha256": "b1256a50db8dc67a59feaa5820f1280b8561dbf5f547b770bcb6458794638633"
+      },
+      "patch": {
+        "bytes": 922,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/candidate/production-packaging.patch",
+        "sha256": "532d84b10aa251e8ddd6795fcf9c5cccf2ba72e5fd5dcb8ff455983b6675ec55"
+      },
+      "postimage": {
+        "bytes": 29480,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/candidate/executer/user/CMakeLists.txt",
+        "sha256": "c66bfc9e5f904fcc37d07412b197d04bdcbdb7a4f434c4469715379b674eda6e"
+      },
+      "preimage": {
+        "bytes": 29328,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/baseline/executer-user-CMakeLists.txt",
+        "sha256": "046b1635bca3af73c9fc9ed37cc4fd0dc2026632c81bae9b2f4c2e078eb46959"
+      },
+      "scope": "Only ldump target PREFIX is set empty, ldump is removed from combined sched_yield install and installed to relative lib; sched_yield retains GNUInstallDirs libdir. All other current production source remains exact."
+    }
+  },
+  "private_repaired_candidate": {
+    "actual_normal_production_qualification": {
+      "bytes": 24497,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/consumed-abi-sdk-max-1/cleanup-repair-1/production-library-1/qualification-1/QUALIFICATION.json",
+      "sha256": "b2b6a6ab73c083409dec09cbe26b5717f5fb36a291f64b82c6b8a71e559844ba"
+    },
+    "actual_object_provider_join": {
+      "bytes": 102663,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/consumed-abi-sdk-max-1/cleanup-repair-1/production-library-1/qualification-1/OBJECT-AND-PROVIDER-JOINS.json",
+      "sha256": "39e59bbd0141f8c1f619f4407fbf206aed22ae9eb7a9c6bf341bd87f0e119251"
+    },
+    "canonical": false,
+    "exact_existing_patch": {
+      "bytes": 13188,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/consumed-abi-sdk-max-1/cleanup-repair-1/CLEANUP-BEFORE-RESTART.patch",
+      "sha256": "33ed93aa685eb0d8fc014b6ee37db7ded18fd447a3568dd5a3fa09b32a5dd45c"
+    },
+    "exact_four_afterimages": [
+      {
+        "before_bytes": 32826,
+        "before_sha256": "5aab8a4270858287d4eb61a1109d96126bae9bf06913da31adf79c3e8c1b7c2a",
+        "candidate": {
+          "bytes": 33990,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/consumed-abi-sdk-max-1/cleanup-repair-1/candidate/executer/user/rust/ldump2mcdump_helpers.rs",
+          "sha256": "9ea23c781d37c200674b71a67b4e5723d9571b8de7402cfef634881ff305c366"
+        },
+        "path": "executer/user/rust/ldump2mcdump_helpers.rs"
+      },
+      {
+        "before_bytes": null,
+        "before_sha256": null,
+        "candidate": {
+          "bytes": 3800,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/consumed-abi-sdk-max-1/cleanup-repair-1/candidate/executer/user/ldump2_crash_error_boundary.c",
+          "sha256": "9e03cdc4eb792e08f23f4335b8755851abb015185c41d69a3f82c7c5a286fea2"
+        },
+        "path": "executer/user/ldump2_crash_error_boundary.c"
+      },
+      {
+        "before_bytes": 29480,
+        "before_sha256": "c66bfc9e5f904fcc37d07412b197d04bdcbdb7a4f434c4469715379b674eda6e",
+        "candidate": {
+          "bytes": 30773,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/consumed-abi-sdk-max-1/cleanup-repair-1/candidate/executer/user/CMakeLists.txt",
+          "sha256": "1b0a5736da8c3af8b3408bdeec0544350af5ee9cd21f40545e41281c0e14b66b"
+        },
+        "path": "executer/user/CMakeLists.txt"
+      },
+      {
+        "before_bytes": 2426,
+        "before_sha256": "b082d79c183cc3a19d872bc3252303b71871081036a89f9235d7ab049ed48c81",
+        "candidate": {
+          "bytes": 2689,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/consumed-abi-sdk-max-1/cleanup-repair-1/candidate/executer/user/cmake/SelectRustVmcore2mckdump.cmake",
+          "sha256": "205047fccc539b325286f5eb7d4817b34c37b4fdea0b360c6705f0987f90b4c6"
+        },
+        "path": "executer/user/cmake/SelectRustVmcore2mckdump.cmake"
+      }
+    ],
+    "independent_normal_production_GO": {
+      "bytes": 44706,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/cleanup-review-sourceacq-max-1/production-library-1/qualification-1/REVIEW.json",
+      "sha256": "bcd34201162bc8cf1e4c5ef40059688103505260cf3de305539d774e73e4f1f4"
+    },
+    "integration_is_not_an_I01_accounting_prerequisite": "Both source/artifact universes are explicitly accounted. Functional repair selection remains the specific I03 ABI/lifetime/source TODO; neither row is concealed or mislabeled.",
+    "known_authored_C_debt": "Actual104-line C9e03 boundary, real Rust9ea production body and genuine a875 header; actual stagedc42042272B0755. All44 imports/16 roots and real pc8/CFI/lifetime bridge proof at statedscope, seven existing real-fragment regression cases reused. Not current canonical source until Root integrates.",
+    "real_header_namespace": {
+      "bytes": 5793,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/consumed-abi-sdk-max-1/cleanup-repair-1/production-inputs-1/INPUTS.json",
+      "sha256": "dd71446cb5e08300da310fe5c970eacfce3c813f61fa496757738be7ff8d3073"
+    }
+  }
+}

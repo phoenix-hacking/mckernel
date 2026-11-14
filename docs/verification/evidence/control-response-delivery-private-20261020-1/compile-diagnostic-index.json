@@ -1,0 +1,30 @@
+{
+  "diagnostics": [
+    {
+      "heading": "error[E0425]: cannot find function `fork_ack_publication_frozen` in this scope",
+      "location": "--> /home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/actual-control-delivery.rs:2724:16",
+      "text": "error[E0425]: cannot find function `fork_ack_publication_frozen` in this scope\n    --> /home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/actual-control-delivery.rs:2724:16\n     |\n2724 |             || fork_ack_publication_frozen(&mut slots, token, cpu)\n     |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: a function with a similar name exists: `fork_publication_frozen`\n...\n3092 | fn fork_publication_frozen(slots: &[Option<Entry>], parent: Token, cpu: i32) -> bool {\n     | ------------------------------------------------------------------------------------ similarly named function `fork_publication_frozen` defined here\n\n"
+    },
+    {
+      "heading": "error[E0425]: cannot find function `publish_fork_ack_in_slots` in this scope",
+      "location": "--> /home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/actual-control-delivery.rs:2727:22",
+      "text": "error[E0425]: cannot find function `publish_fork_ack_in_slots` in this scope\n    --> /home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/actual-control-delivery.rs:2727:22\n     |\n2727 |         let result = publish_fork_ack_in_slots(&mut slots, token, cpu, send);\n     |                      ^^^^^^^^^^^^^^^^^^^^^^^^^ not found in this scope\n\n"
+    },
+    {
+      "heading": "error[E0599]: no method named `fixture_response_identity_held` found for struct `smp_application_syscall::Mailbox<M>` in the current scope",
+      "location": "--> /home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/actual-control-delivery.rs:3286:21",
+      "text": "error[E0599]: no method named `fixture_response_identity_held` found for struct `smp_application_syscall::Mailbox<M>` in the current scope\n    --> /home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/actual-control-delivery.rs:3286:21\n     |\n 917 | pub(crate) struct Mailbox<M: ResponseMemory> {\n     | -------------------------------------------- method `fixture_response_identity_held` not found for this struct\n...\n3286 |  assert!(p.syscalls.fixture_response_identity_held(0x1c00000));\n     |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ method not found in `smp_application_syscall::Mailbox<storage::SyscallResponse>`\n\n"
+    },
+    {
+      "heading": "error[E0599]: no method named `fixture_response_identity_held` found for struct `smp_application_syscall::Mailbox<M>` in the current scope",
+      "location": "--> /home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/actual-control-delivery.rs:3287:63",
+      "text": "error[E0599]: no method named `fixture_response_identity_held` found for struct `smp_application_syscall::Mailbox<M>` in the current scope\n    --> /home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/actual-control-delivery.rs:3287:63\n     |\n 917 | pub(crate) struct Mailbox<M: ResponseMemory> {\n     | -------------------------------------------- method `fixture_response_identity_held` not found for this struct\n...\n3287 |  assert_eq!(request.response(),0x1d00000);assert!(!p.syscalls.fixture_response_identity_held(request.response()));\n     |                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ method not found in `smp_application_syscall::Mailbox<storage::SyscallResponse>`\n\n"
+    },
+    {
+      "heading": "error: aborting due to 4 previous errors",
+      "location": null,
+      "text": "error: aborting due to 4 previous errors\n\nSome errors have detailed explanations: E0425, E0599.\nFor more information about an error, try `rustc --explain E0425`.\n"
+    }
+  ],
+  "stderr_bytes": 2741
+}

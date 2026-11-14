@@ -1,0 +1,102 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_SOURCE_ONLY_READY_FOR_INDEPENDENT_REVIEW_AND_ROOT_HOST_QUALIFICATION",
+  "owner": "/root/f05_rust_causal_supervisor",
+  "write_set": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1",
+  "files": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/HOST-QUALIFICATION.json",
+      "bytes": 5083,
+      "sha256": "02631797e856e0281bc16c74b40cebfdeb5682110c7747abc458c6f732d2f3f0"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/PREDECESSORS.json",
+      "bytes": 11382,
+      "sha256": "bca826641219177394490ea05167daebffe864532a70577732d2f217f3bf87a4"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/README.md",
+      "bytes": 6030,
+      "sha256": "899bd022e42d8ed86e17749acd455de00447957d018d66f6acb16ce7dfa0ba93"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/SOURCE-CHECKS.json",
+      "bytes": 2078,
+      "sha256": "9dbaf2c7e51c1d30e76f505e175138641bc91fef4512eca873c6bd70acfc3bb8"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/SUPERVISOR-INTERFACE.json",
+      "bytes": 4144,
+      "sha256": "f38fca58c41b81154a593f468e34dd3ae6f43b5c3df73ecc36cef2fdb71c7304"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/host_tests.rs",
+      "bytes": 3941,
+      "sha256": "1944ee69fafd53813d523fe4b7e0e7a23645451217a43f0debbb47e5cfc4a493"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/lifecycle.rs",
+      "bytes": 16113,
+      "sha256": "7d9cfa292ed7f4520624b00bfb2227117db38908398880051fd32e1c1aab20ef"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/main.rs",
+      "bytes": 14310,
+      "sha256": "8d2d3775796e29d3a38790fa1b649c0fb5e53196d1bdaf6fc242ead1eea4fbb4"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/observer_tests.rs",
+      "bytes": 6335,
+      "sha256": "666c9d54767a6be56bf6f7cf06586dbd7a11ea85631ff62a76fbecf7b7205e28"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/report.rs",
+      "bytes": 2087,
+      "sha256": "9c55957c00355fef045efed65fecb2d80f93ab88d2f81afdac0c731489fb56fd"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/supervisor.rs",
+      "bytes": 25935,
+      "sha256": "5e674d825008806b14b90e2120cd0da9ff2aa61d56f3645f72c2b38691cb3a68"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/tests.rs",
+      "bytes": 9483,
+      "sha256": "87c7a6261e75c1ec84cb19718b7e0f7f81f9f50bdfc8aae02196c38ab3e7b4a0"
+    }
+  ],
+  "implementation": "One selected F05 Rust PID1 collector replacement of retained b3fc/Cc020 selected supervision, helper, serializer and retirement loops, with actual linked-child causal gate and separate raw sequence-checked kmsg observation. No new C, guest app duplicate, framework or kernel ownership mutation.",
+  "interface_sha256": "f38fca58c41b81154a593f468e34dd3ae6f43b5c3df73ecc36cef2fdb71c7304",
+  "preserved_failure": "Original v2 exact204B/stdout+raw0 remains wholecaseFAIL; no unchanged rerun, no fabricated DELETE/ACK/retirement/trace or old collector normalization.",
+  "prepared_controls": {
+    "pure_mocked": 13,
+    "mocked_observer_transport": 7,
+    "ordinary_HOST": 6,
+    "executed_Rust_controls": 0
+  },
+  "actual_checks": [
+    "rustfmt module parsing and final --check PASS",
+    "bounded read/hash/AST literal predecessor extraction; see SOURCE-CHECKS.json for retained first source-check failures"
+  ],
+  "actual_artifact": null,
+  "actual_source_qualification": null,
+  "actual_HOST_qualification": null,
+  "actual_native_qualification": null,
+  "compiler": 0,
+  "linker": 0,
+  "native": 0,
+  "account_clock_resource_queries": 0,
+  "sudo_Docker_cleanup": 0,
+  "canonical_Git_publication": 0,
+  "subagents": 0,
+  "unmet": [
+    "Independent source/ABI/ownership review",
+    "Root actual Rust test compilation and all26 controls, production artifact link/dependency closure",
+    "Root independent retained launcher source/object/config proof adoption and foreground app/oracle cross-binding",
+    "Actual pre-gate clone/write/wait trace visibility under retained ordinary64 sampling; no inference from128 LWK debug budget",
+    "Exact final raw kmsg/klogctl compatibility and full unchanged235/227/evaluator unknown-row acceptance",
+    "Fresh actual account/source/current native ownership/current ledger admission and independently reviewed Root runtime release"
+  ],
+  "hard_stop": "2026-10-28T05:36:09Z and inherited actual earlier clock clamps/account/real holds",
+  "credits": "Same run7f4af94a83b14cc08f97401f5891d965/57774.852125 cumulative ceiling; no reset/new allowance."
+}

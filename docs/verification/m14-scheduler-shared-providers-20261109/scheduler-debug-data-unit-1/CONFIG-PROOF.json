@@ -1,0 +1,145 @@
+{
+  "schema": "mckernel.scheduler-debug18.partial-config.v1",
+  "status": "EXPLICIT_FINITE_PARTIAL_PROFILE_BOUND_PENDING_INDEPENDENT_GO_AND_ROOT_EXECUTION_ADMISSION",
+  "selection_authority": "Root explicit assignment message in savedRoot01a18bc3-e072-7810-9426-75101b0856c0/manualresume20261109T211917Z-488788ba: enabled data and ENABLE_PROCESS_DEBUG_PRINT=ON; canonical current source directory. Deliberate source profile, not observed default/native config.",
+  "selected_source_values": {
+    "ENABLE_RUST_KERNEL": "ON",
+    "ARCH": "x86_64",
+    "RUST_KERNEL_ENABLED": "ON (derived source prerequisite only)",
+    "ENABLE_RUST_PROCESS_VERBOSE_DATA": "ON",
+    "ENABLE_PROCESS_DEBUG_PRINT": "ON",
+    "CMAKE_CURRENT_SOURCE_DIR": "/home/holden/mckernel/kernel",
+    "MCKERNEL_PROCESS_C_FILE": "/home/holden/mckernel/kernel/process.c",
+    "MCKERNEL_PROCESS_DDEBUG_FLAGS": "1"
+  },
+  "rust": {
+    "cfg": [
+      "process_verbose_data"
+    ],
+    "environment_overrides": {
+      "MCKERNEL_PROCESS_C_FILE": "/home/holden/mckernel/kernel/process.c",
+      "MCKERNEL_PROCESS_DDEBUG_FLAGS": "1"
+    },
+    "module_selector": "Exact kernel/rust/lib.rs46\u201347 cfg process_verbose_data; finite root includes only that one module and genuine Ddebug type.",
+    "validation": "Original env! and match/panic/filename assertion bytes retained; missing flags/file or non0/1 flags still reject at compilation."
+  },
+  "paired_C_source_contract": {
+    "translation_unit": "/home/holden/mckernel/kernel/process.c",
+    "definitions": [
+      "MCKERNEL_RUST_PROCESS_HELPERS",
+      "MCKERNEL_RUST_PROCESS_VERBOSE_DATA",
+      "DEBUG_PRINT_PROCESS",
+      "MCKERNEL_PROCESS_DDEBUG_FLAGS=1",
+      "MCKERNEL_PROCESS_DDEBUG_FILE=\"/home/holden/mckernel/kernel/process.c\""
+    ],
+    "expected_C_DEFAULT": "DEBUG_PRINT_PROCESS overrides original DDEBUG_DEFAULT to DDEBUG_PRINT=1; original C/Rust static assertions require exact flag and actual __FILE__ equality.",
+    "selection": "Exact18array is extern under both helper+verbose selectors; original C owner is the else branch and is not compiled/linked in this partial.",
+    "no_C_translation_unit_execution": true
+  },
+  "source_mapping": [
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "first_line": 37,
+      "last_line": 49,
+      "segment_sha256": "6c5fcbf99dd5f98ead49097f15a0415359c15e1210fc533870f761bc3d7337a4"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "first_line": 97,
+      "last_line": 100,
+      "segment_sha256": "654fa8359457cd17ac1a50a7e5b3a06dd34272af6d6538979a9fd32f87dbe9a3"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "first_line": 225,
+      "last_line": 247,
+      "segment_sha256": "55529dd22694bf9d737aa17ac089a4142ebc2a0d29792e8801d2d30d816c1211"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "first_line": 523,
+      "last_line": 524,
+      "segment_sha256": "c66b6ab9380204878ef7ace04fc606bfc93455f06fdb45875588957cc73538ca"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "first_line": 561,
+      "last_line": 561,
+      "segment_sha256": "3911a00e502d479429f156955831d16dac4c3e7b5096a9ba82c2fe474656788a"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "first_line": 667,
+      "last_line": 668,
+      "segment_sha256": "ba1e63d9b3b389c809492ae308d60db91ca84bd980ab2158f0993371a335e395"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "first_line": 699,
+      "last_line": 701,
+      "segment_sha256": "1d518d0906449ccc7f03940dd93a47a6763bb593d00d0479b55022a7a391d569"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "first_line": 900,
+      "last_line": 908,
+      "segment_sha256": "2e2aa6fb4bb3b03190e79ea56c82162b369e1c8efc5197b7cc5b2f2de20e78cd"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/process.c",
+      "first_line": 52,
+      "last_line": 64,
+      "segment_sha256": "ac228e89a783905210447c6f5deb3d3f4232f6ee08166c2c136df098340044b1"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/process.c",
+      "first_line": 351,
+      "last_line": 359,
+      "segment_sha256": "49c0df592802e3b752a4eb1c2b9aba53491dfdc6725e0abdba5f873b920101e7"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/process.c",
+      "first_line": 2957,
+      "last_line": 2984,
+      "segment_sha256": "f8382e52586bde477c799f221aad62aaf46075f825ae3b3caded890acf7cd65a"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/ihk/debug.h",
+      "first_line": 14,
+      "last_line": 25,
+      "segment_sha256": "bed5f78f8fa9a5fdef9d5ec3ad3189bc66789b06ae89959ea8c3cdea2ec4cd2e"
+    }
+  ],
+  "line_flags": [
+    16779353,
+    16779357,
+    16779363,
+    16779367,
+    16779373,
+    16779377,
+    16779383,
+    16779389,
+    16781564,
+    16781573,
+    16781577,
+    16781584,
+    16781590,
+    16781598,
+    16781606,
+    16781614,
+    16781629,
+    16777705
+  ],
+  "excluded_unrelated_selectors": [
+    "process_verbose_local_companions",
+    "MCKERNEL_RUST_PROCESS_VERBOSE_LOCAL_COMPANIONS",
+    "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE"
+  ],
+  "full_C_guard_preserved": "process.c58\u201361 rejects DEBUG_PRINT_PROCESS with MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE; CMake699\u2013701 adds that unrelated global storage for linux-6.12. This partial includes no global-storage body/selector and makes no wholeC/CMake/fullprofile compatibility claim. No IRQ ABI is selected by this data-only profile. Future complete profiles must satisfy the original guard.",
+  "source_proof": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-unit-1/SOURCE-PROOF.json",
+    "sha256": "3932ca70def6e7cbab9f6d4f99a6aaf0b169960fb973860ae6f3b21e4b8ebba6"
+  },
+  "native_or_default_config_observed": false,
+  "configuration_preprocessor_compiler_or_runtime_executed": false
+}

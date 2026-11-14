@@ -1,0 +1,28 @@
+--- /home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/boot-collector-profile-correction-1/init-only-stage-preparation-1/stage_m07_init_failure_context.py
++++ /home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/boot-collector-profile-correction-1/init-only-stage-preparation-1/runtime-visible-collector-correction-1/stage_m07_init_failure_context.py
+@@ -70,12 +70,13 @@
+   print(json.dumps(dict(status='PASS_EXACT_REVIEWED_IMAGE_STAGE_PREFLIGHT',case=a.case,archives=0,runtime_release=False)));return
+  need(not assets.exists()and not manifests.exists(),'fresh roots');assets.mkdir(mode=0o700);manifests.mkdir(mode=0o700)
+  private(assets);private(manifests);out.mkdir(mode=0o700);mp.mkdir(mode=0o700)
++ collector_visible=assets/'collector.init';write(collector_visible,Path(c['collector']['path']).read_bytes());collector_visible.chmod(0o755);collector_ref=ref(collector_visible);need(collector_ref['sha256']==c['collector']['sha256'] and collector_ref['size']==c['collector']['size'],'exact runtime-visible collector copy')
+  visible=Path(stage['image']['path']);launcher=Path(c['mcexec']['path']);launcher_ref=c['mcexec'];payload_visible=Path(c['payload']['path']);payload_ref=c['payload'];boot_ref=stage['native_boot']
+  image=stage['image'];m=json.loads(Path(c['old_manifest']['path']).read_text());ov=mod('scheduler_stage_overlay',b['overlay_source']['path']);nd=mod('scheduler_stage_nd',b['diagnostic_source']['path']);base_bytes=Path(c['old_base']['path']).read_bytes();raw=gzip.decompress(base_bytes)
+  need(image['sha256']=='053d59b533665eef9d56fe1b348e699d97159e954fbc1fbff973bbe46113f485' and image['size']==8435496,'accepted kernel bytes reused unchanged')
+  patched=raw;proof=[]
+  base=out/'base.cpio.gz';write(base,base_bytes);need(base.read_bytes()==base_bytes,'accepted compressed base copied byte-exact, no header mutation');overlay=out/'lifecycle.cpio.gz'
+- om=ov.build_overlay(str(base),str(payload_visible),c['collector']['path'],str(launcher),str(overlay),collector_sha256=c['collector']['sha256'],mcexec_sha256=c['mcexec']['sha256'],payload_sha256=c['payload']['sha256'],base_sha256=ref(base)['sha256'],base_size=base.stat().st_size,base_cpio_sha256=sha(patched),base_cpio_size=len(patched));js(out/'overlay-manifest.json',om)
++ om=ov.build_overlay(str(base),str(payload_visible),str(collector_visible),str(launcher),str(overlay),collector_sha256=c['collector']['sha256'],mcexec_sha256=c['mcexec']['sha256'],payload_sha256=c['payload']['sha256'],base_sha256=ref(base)['sha256'],base_size=base.stat().st_size,base_cpio_sha256=sha(patched),base_cpio_size=len(patched));js(out/'overlay-manifest.json',om)
+  old=json.loads(Path(c['old_overlay_manifest']['path']).read_text())['final_map'];full=ov._replay_records(ov.parse_newc(gzip.decompress(overlay.read_bytes()))[0]);final=ov._manifest(full);need(final==om['final_map']and len(final)==len(old)==60 and set(final)==set(old),'full60 concatenated replay')
+  deltas=verify_init_only_delta(old,final)
+  oldfull=ov._replay_records(ov.parse_newc(gzip.decompress(Path(c['old_overlay']['path']).read_bytes()))[0])
+@@ -84,8 +85,8 @@
+    if k not in {'data','size','sha256'}:need(full[n][k]==oldfull[n][k],'all final metadata '+n+' '+k)
+  m['case_id']='vector.enabled-avx-preservation';m['payload']=b['payload_contract'];m['artifacts']['payload']=payload_ref;m['artifacts']['mckernel_image']=image;m['artifacts']['mcexec']=launcher_ref;m['artifacts']['native_boot']=boot_ref
+  for k in ['initramfs','root_base']:m['artifacts'][k]=ref(base)
+- m['staging'].update(collector=c['collector'],base_initramfs=ref(base),derived_initramfs=ref(overlay),overlay_manifest=ref(out/'overlay-manifest.json'));js(mp/'manifest.json',m);nd.load_manifest(str(mp/'manifest.json'))
++ m['staging'].update(collector=collector_ref,base_initramfs=ref(base),derived_initramfs=ref(overlay),overlay_manifest=ref(out/'overlay-manifest.json'));js(mp/'manifest.json',m);nd.load_manifest(str(mp/'manifest.json'))
+  used=sum(p.stat().st_size for p in assets.rglob('*')if p.is_file());need(used<=64*1024**2,'64MiB aggregate stage output')
+- js(out/'stage-result.json',dict(status='PASS_M07_INIT_ONLY_STAGE_PENDING_ACTUAL_CONSUMER_BINDING_AND_REVIEW',manifest=ref(mp/'manifest.json'),image=image,mcexec=launcher_ref,payload=payload_ref,artifact_review=review,launcher_artifact_review=launcher_review,launcher_dependency_join=b['launcher_dependency_join'],base=ref(base),overlay=ref(overlay),deltas=deltas,raw_header_proof=proof,final_map=final,accepted_base_byte_exact=True,all_other_final_metadata_equal=True,aggregate_stage_bytes=used,runtime_release=False))
++ js(out/'stage-result.json',dict(status='PASS_M07_INIT_ONLY_STAGE_PENDING_ACTUAL_CONSUMER_BINDING_AND_REVIEW',manifest=ref(mp/'manifest.json'),collector=collector_ref,image=image,mcexec=launcher_ref,payload=payload_ref,artifact_review=review,launcher_artifact_review=launcher_review,launcher_dependency_join=b['launcher_dependency_join'],base=ref(base),overlay=ref(overlay),deltas=deltas,raw_header_proof=proof,final_map=final,accepted_base_byte_exact=True,all_other_final_metadata_equal=True,aggregate_stage_bytes=used,runtime_release=False))
+  print(json.dumps(dict(status='PASS_SINGLE_M07_INIT_ONLY_STAGE',case=a.case,image_sha256=image['sha256'],image_bytes=image['size'],aggregate_stage_bytes=used,guests=0,runtime_release=False)))
+ if __name__=='__main__':main()

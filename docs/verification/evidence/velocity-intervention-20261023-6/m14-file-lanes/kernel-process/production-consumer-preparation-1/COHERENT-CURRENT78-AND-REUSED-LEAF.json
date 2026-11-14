@@ -1,0 +1,76 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_READY_ONLY",
+  "source_identity": "1003f481cae91c012256264ea0c4eb960cbaaf66ea1e1616e2bed3b0e7bf177d",
+  "canonical_refresh": {
+    "kernel/rust/x86_cpu_helpers.rs": "26180e00c1d6673aa600f0ec9afed5d100ca6e0c39af803c3328e58f8cc88fb9",
+    "kernel/rust/x86_memory_helpers.rs": "245faf1198d9b7715714d236238172330257f4291776aced4e7cee6c3c518ce2"
+  },
+  "canonical_process": {
+    "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+    "sha256": "d04b48c887c834edd6380e3ae06fccdef7dfafaf67196fd28af7f9571993bd6d",
+    "bytes": 353812
+  },
+  "private_process": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/production-consumer-preparation-1/source/kernel/rust/process_helpers.rs",
+    "sha256": "70015d712c29e416881e2fbaccd67026ee15ac7eb915cb80e828485d6f34d71f",
+    "bytes": 355120
+  },
+  "current_scalar": {
+    "path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+    "sha256": "4635a252332cd369e36384f04a414e2b4c2d79726a4f95caafcf1d3ed1a56b4d",
+    "bytes": 203495
+  },
+  "current_syscall": {
+    "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+    "sha256": "f1f7866c0f2ccc8e1b0024dfb632ec7359dd2a0a4bcd8e22deb957d48ef6d770",
+    "bytes": 711734
+  },
+  "actual433_leaf": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/sourcehandoff/ACTUAL-FIRST-CANDIDATE-WHOLE-JOIN.json",
+    "sha256": "16fb6f066adb4783c8d5331bd715c5014b76bc555803b32d9ead161be2884859",
+    "bytes": 34838
+  },
+  "all20_leaf_commands_reused_without_replay": true,
+  "prior_full_production": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-process-diagnostic-next/production-consumer-preparation-1/bounded-correction-1/ACTUAL-PRODUCTION-WHOLE-JOIN.json",
+    "sha256": "7a0191a235c29356ab48f25fd28e6e33b698ae1bd9a539ab84c795c52fc9993f",
+    "bytes": 28854
+  },
+  "source_count": 78,
+  "headers": 73,
+  "expected_T_delta": {
+    "removed": [],
+    "added": [
+      "clear_range_l3",
+      "vm_range_insert_dump_bridge",
+      "x86_cpu_ulong_log_bridge"
+    ],
+    "before": 3044,
+    "after": 3047
+  },
+  "expected_U_delta": {
+    "removed": [
+      "vm_range_insert_dump_bridge"
+    ],
+    "added": [
+      "process_dump_tree_enabled",
+      "x86_clear_l3_child_walk",
+      "x86_clear_l3_effect_log",
+      "x86_clear_l3_memobj_flush",
+      "x86_clear_l3_memobj_rss_sub",
+      "x86_clear_l3_range_log",
+      "x86_clear_l3_rss_sub",
+      "x86_clear_l3_use_1gb_page"
+    ],
+    "before": 577,
+    "after": 584
+  },
+  "remaining_C_debt": [
+    "Readonly process_dump_tree_enabled data and original fallback only for this body",
+    "Other process.c compute bodies remain; next sync_one_page is separate source only"
+  ],
+  "compiler_jobs": 0,
+  "CPU_reservations": 0,
+  "default_image_native_credit": false
+}

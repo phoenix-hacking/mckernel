@@ -1,0 +1,59 @@
+{
+  "actual_build_acceptance": null,
+  "executed": false,
+  "failure_history": {
+    "bounded_correction": "one consolidated source correction, no runtime replay",
+    "findings": [
+      "SignalLatch absent from first candidate; corrected to one shared accepted helper module instance",
+      "complete evidence inventory seal/owner validation omitted; restored from accepted source"
+    ],
+    "first_candidate": "source review only; never build-executed"
+  },
+  "independent_execution_release": null,
+  "kernel_rebuilt": false,
+  "launcher_plan": {
+    "bytes": 3577,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-successor-preparation-1/launcher-plan.json",
+    "sha256": "58d346ad4f227cd9da07d36c6956216c85101ef34893bbf0ec5092f7383bff9d"
+  },
+  "lifecycle": "Existing lease/client/container/retire and conditional lease/shared exclusion release tail preserved; terminal container/common/shared retained for separately reviewed cleanup.",
+  "request_path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-successor-preparation-1/launcher-request.json",
+  "schema": "mckernel.launcher-only-consolidated-source-correction.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "sources": {
+    "launcher_only_container_owner": {
+      "corrected": {
+        "bytes": 91547,
+        "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-successor-preparation-1/correction-1/launcher_only_container_owner.py",
+        "sha256": "9beddcebdee6542e9357af666be340a59c628822c2e8c785e3c572bc5d5422ab"
+      },
+      "first_candidate": {
+        "bytes": 90068,
+        "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-successor-preparation-1/launcher_only_container_owner.py",
+        "sha256": "30a9427bbe2301e72a355bbde3fae66fe273174ffc06c5654a388d43ae1ab733"
+      }
+    },
+    "launcher_only_offline": {
+      "corrected": {
+        "bytes": 9439,
+        "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-successor-preparation-1/correction-1/launcher_only_offline.py",
+        "sha256": "8a401e04462ddec4ad9f1204fa811efb8a9adb6167df27be27845799d2155f59"
+      },
+      "first_candidate": {
+        "bytes": 8290,
+        "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-successor-preparation-1/launcher_only_offline.py",
+        "sha256": "af25a60ebd0f4ac39ab7c2cd987342f8d12b6b9da17e140886c2beb980b9671e"
+      }
+    }
+  },
+  "status": "SOURCE_ONLY_AWAITING_INDEPENDENT_REVIEW",
+  "target_argv": [
+    "/usr/bin/cmake",
+    "--build",
+    "/work/output/build",
+    "--target",
+    "mcexec",
+    "-j1"
+  ],
+  "validation": "Python AST parse of source only; no imports or candidate execution."
+}

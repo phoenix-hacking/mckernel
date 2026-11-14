@@ -1,0 +1,94 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOLE_BOUNDED_FIXTURE_REFERENCE_FUNCTION_CONTEXT_CORRECTION_NO_EXECUTION",
+  "original_failure": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/sourcehandoff/PAGE-FAULT-PREPARE96-FIRST-FAILURE-1.json",
+    "sha256": "de43da649e8970f488606c86b9593031cbee95718e8303e7b01a5858349b210f",
+    "bytes": 11945
+  },
+  "actual_stdout": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/sourcehandoff/actual-first-candidate-capture-1/04-actual-page-fault-prepare96-execute/stdout",
+    "sha256": "03dfdea2b711f809f5147f5e37603e79197a261f136b5b49aa43e712721a1f01",
+    "bytes": 87
+  },
+  "original_ready": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/sourcehandoff/EXECUTABLE-READY.PAGE-FAULT-PREPARE96.NOT-GRANTED.json",
+    "sha256": "5c72776bd8bd190bf4c3ff7c2c1151f243988379536916ec241a43e642ea7179",
+    "bytes": 5870
+  },
+  "original_driver": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/sourcehandoff/run_owned_page_fault_prepare96_once.py",
+    "sha256": "c798c584776443c8643764333b8ab5fefeab5071b0586a65e54ccb05b8371e03",
+    "bytes": 10203
+  },
+  "root_cause": "The original block uses __FUNCTION__ for its bounds logger. Its real enclosing function is page_fault_process_memory_range; the fixture wrapper is static int original. At scenario0/debug255 the C reference executes first and passes original to the unchanged strict %s oracle, failing before Rust invocation. The earlier debug0 comparison completed1.",
+  "exact_correction": "Restore only the original __FUNCTION__ lexical value in the extracted reference block, with scoped define/undef around its unchanged include. Do not alter the strict logger assertion, format/arguments, debug255, event/state/error oracle, scenario matrix or Rust implementation.",
+  "original_block": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/fixture/original_page_fault_prepare.ACTUAL-C-BLOCK.inc",
+    "sha256": "c73e0827801ebe96630129a30e573a68753f3616ca9c24701dc589fee43a7c4e",
+    "bytes": 1394
+  },
+  "original_full_function": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/fixture/original_page_fault.ACTUAL-C-FULL-REFERENCE.inc",
+    "sha256": "32cd70f2085cf2c8d3b190fde74266ffc7620b427d228903a85939266beb3a41",
+    "bytes": 9193
+  },
+  "corrected_C_fixture": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/bounded-reference-context-correction-1/fixture/actual_parity.c",
+    "sha256": "a630fb6bc1f69dc63f6c4cad97f233f620e0cf1c654ba7d9525c7dee443df154",
+    "bytes": 8822
+  },
+  "diff": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/bounded-reference-context-correction-1/ONLY-ORIGINAL-FUNCTION-LEXICAL-CONTEXT.diff",
+    "sha256": "74616542450d98ad73e10728a88ad25b863e621d2fe45c4260a6a62034a60cc6",
+    "bytes": 746
+  },
+  "unchanged_product_Rust": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/candidate/kernel/rust/process_helpers.rs",
+    "sha256": "035a629fd72d0ac95f4c9f518e583401a69fb790259c4b357b8bb15977062ead",
+    "bytes": 366476
+  },
+  "unchanged_product_C": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/candidate/kernel/process.c",
+    "sha256": "60065b0b2a9d542d74cd980d98951f36ec9917bd4160700056059c4eaaf710ac",
+    "bytes": 166125
+  },
+  "unchanged_Rust_object_reused": {
+    "ctime_ns": 1792814175310402297,
+    "device": 66306,
+    "gid": 1000,
+    "inode": 56246479,
+    "mode": "0o600",
+    "mtime_ns": 1792814175310402297,
+    "nlink": 1,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/output-first-candidate-1/actual_provider.o",
+    "sha256": "218f089a7b585e712663b9fd1f7d1f29a7f69a9d509e62d3538ac4fa959821fc",
+    "size": 3696,
+    "uid": 1000
+  },
+  "successful_Rust_and_ABI_results_reused": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/sourcehandoff/actual-first-candidate-capture-1/00-actual-Rust-page-fault-prepare/whole-join.json",
+      "sha256": "1d9f7202023fb7e0018ff86532f708a96b28150407f663d7aca9b65d6ba516c9",
+      "bytes": 1346
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/sourcehandoff/actual-first-candidate-capture-1/01-actual-real-header-ABI/whole-join.json",
+      "sha256": "b3b77445904e0d6441791f7cfcba0b348e6bc956ad057452f9acedc4fd53ed05",
+      "bytes": 1326
+    }
+  ],
+  "original_indices_reexecuted": [
+    2,
+    3,
+    4,
+    5
+  ],
+  "successful_vectors_not_counted_as_acceptance": 1,
+  "expected_comparisons": 96,
+  "strict_oracles_unchanged": true,
+  "compiler_jobs": 0,
+  "CPU_reservations": 0,
+  "history_not_reset": true,
+  "next_unexpected": "STOP_DIFFERENT_EXPERT_NO_FURTHER_AUTHOR_CORRECTION_OR_RETRY"
+}

@@ -1,0 +1,46 @@
+{
+  "status": "ONE_BOUNDED_CHECK_CORRECTION_UNRUN",
+  "scope": "Functional OS/apps plus active compute-C retirement into Rust/reviewed assembly; exact source-only checker representation correction.",
+  "original_proposal": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-accepted-timeout-preparation-20261020-1/source-closure-1/successor-proposal.json",
+    "bytes": 2983,
+    "sha256": "46ae09aac64b21e1ce5ceac7e049f3a761975baa55607459e21f02b2e8cdbb0a",
+    "mode": 33152
+  },
+  "original_check": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-accepted-timeout-preparation-20261020-1/source-closure-1/check_outside_owner.py",
+    "bytes": 5322,
+    "sha256": "c664dd237dc76a7ff23f11ef0203139f48a420ef7f8f541db5f4ad04db7d7c64",
+    "mode": 33152
+  },
+  "corrected_check": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-accepted-timeout-preparation-20261020-1/source-closure-1/check_outside_owner_correction.py",
+    "bytes": 6244,
+    "sha256": "be8b2fdbfb95bfefdd7eae683eebcf74638e9f575d1e6c3730e669c039231435",
+    "mode": 33152
+  },
+  "owner_unchanged": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-accepted-timeout-preparation-20261020-1/source-closure-1/native_diagnostic_container_owner.py",
+    "bytes": 107637,
+    "sha256": "5a6f6fb51043438d438d01f37e8d0705857036536b7dba1c235dbd89e05dd1ff",
+    "mode": 33216
+  },
+  "failure": {
+    "capture": "/home/holden/mckernel-work/host-preparation/phase5-exit7-accepted-timeout-preparation-20261020-1/source-closure-1/actual-outside-check-1",
+    "stderr_sha256": "6aff0c23952ef013e5d756e6e83793be9f946ec98856fa4b030e20187109b3b5",
+    "observed": "rc1 before existing binding engine verify; group absent/joined/streams closed/errors null. Preserved."
+  },
+  "exact_defect": "Pinned /usr/bin/python3=3.8.10 parsed ast.Constant has kind=None, manually constructed Constant(prior_path) omits kind; whole ast.dump differs although owner AST normalized source is otherwise equal. Ambient python3=3.9 did not expose missingkind dump.",
+  "correction": "Parse exact repr(prior path) literal into AST; preserve exact SELF/mount counts and full whole-owner equality. Add one actual parsed _inside deadline40->41 mutation refusal through unchanged whole-drift predicate. No owner/runtime/source pin changes.",
+  "ordinary_command": [
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase5-exit7-accepted-timeout-preparation-20261020-1/source-closure-1/check_outside_owner_correction.py"
+  ],
+  "profile": "Same conditional990807 owned capture CPU6AS1GCPU10wall15FS32Mcore0nofile256, fresh capture and source/service/resource admission; execution requires new root grant.",
+  "next_capture": "/home/holden/mckernel-work/host-preparation/phase5-exit7-accepted-timeout-preparation-20261020-1/source-closure-1/actual-outside-check-correction-1",
+  "runtime_release": null,
+  "future_LAST": null,
+  "native_timeout_acceptance": false
+}

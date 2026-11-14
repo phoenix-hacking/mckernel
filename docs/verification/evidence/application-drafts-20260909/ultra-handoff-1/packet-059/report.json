@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-059",
+  "packet_version": 1,
+  "context_sha256": "fd22a529d7e7e5d5799da4ab74eb474636ea069257a120b16fdd38ff60221e66",
+  "started_utc": "2026-09-09T13:00:00Z",
+  "finished_utc": "2026-09-09T13:02:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "ipc.epoll-ready",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/ipc/ipc.epoll-ready.c",
+      "oracle": "scripts/application-tests/oracles/ipc.epoll-ready.json",
+      "changed_files": ["scripts/application-tests/cases/ipc/ipc.epoll-ready.c", "scripts/application-tests/oracles/ipc.epoll-ready.json"],
+      "parameter_vectors": {"descriptor": ["pipe read end"], "event_mask": ["EPOLLIN"], "user_token": [4660], "payload": ["X"]},
+      "implemented_operations": ["epoll_create1 and registration", "queued pipe byte", "event token and readiness verification"],
+      "unresolved_oracle_notes": ["Epoll readiness delivery and event-data ABI require Max review."],
+      "max_reviewer_question": "Confirm epoll returns exactly one EPOLLIN event with token 0x1234 for the queued byte."
+    },
+    {
+      "case_id": "ipc.epoll-remove",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/ipc/ipc.epoll-remove.c",
+      "oracle": "scripts/application-tests/oracles/ipc.epoll-remove.json",
+      "changed_files": ["scripts/application-tests/cases/ipc/ipc.epoll-remove.c", "scripts/application-tests/oracles/ipc.epoll-remove.json"],
+      "parameter_vectors": {"descriptor": ["pipe read end"], "operation": ["EPOLL_CTL_DEL"], "wait_timeout_ms": [0], "payload": ["Y"]},
+      "implemented_operations": ["registration then deletion", "post-delete queued byte", "zero-time event suppression and direct read"],
+      "unresolved_oracle_notes": ["Epoll deletion lifetime and descriptor readiness isolation require Max review."],
+      "max_reviewer_question": "Confirm EPOLL_CTL_DEL suppresses events while leaving the pipe descriptor and queued byte usable."
+    },
+    {
+      "case_id": "ipc.dup-cloexec-flags",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/ipc/ipc.dup-cloexec-flags.c",
+      "oracle": "scripts/application-tests/oracles/ipc.dup-cloexec-flags.json",
+      "changed_files": ["scripts/application-tests/cases/ipc/ipc.dup-cloexec-flags.c", "scripts/application-tests/oracles/ipc.dup-cloexec-flags.json"],
+      "parameter_vectors": {"source_flags": ["FD_CLOEXEC clear"], "dup_command": ["F_DUPFD_CLOEXEC"], "initial_bytes": ["AB"], "reads": ["source then duplicate"]},
+      "implemented_operations": ["temporary file description", "CLOEXEC duplication", "shared-offset and per-descriptor flag checks"],
+      "unresolved_oracle_notes": ["Descriptor flag and shared open-file-description ABI require Max review."],
+      "max_reviewer_question": "Confirm F_DUPFD_CLOEXEC preserves the shared offset while setting close-on-exec only on the new descriptor."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/ipc/ipc.epoll-ready.c", "sha256": "71f52d7fff841162586300f59b5c18a66fdae4074e0f2a17c0fbf9340040584f"},
+    {"path": "scripts/application-tests/oracles/ipc.epoll-ready.json", "sha256": "e274853017820d3c9f3135fd4b6911e78ea743c4062ae716a38937a7b139f7c5"},
+    {"path": "scripts/application-tests/cases/ipc/ipc.epoll-remove.c", "sha256": "af8945326b25ca2ba311af4667355e23990cc38d67ed1462a948fcdb5f95c88f"},
+    {"path": "scripts/application-tests/oracles/ipc.epoll-remove.json", "sha256": "39bbc54ce4eeaee6ac03c7b8a994b48ba353d5c39726e248f4ad80d6eea4758c"},
+    {"path": "scripts/application-tests/cases/ipc/ipc.dup-cloexec-flags.c", "sha256": "2b901084828310a8a138ac2b3aea5b2a68685c789f5d453f6068da5ab4bdecbf"},
+    {"path": "scripts/application-tests/oracles/ipc.dup-cloexec-flags.json", "sha256": "1468e4fe6d6efc11a498610d26b6d9c1865f83cadb84be8700198576bea1fa38"},
+    {"path": "docs/verification/evidence/application-drafts-20260909/ultra-handoff-1/packet-059/context.json", "sha256": "fd22a529d7e7e5d5799da4ab74eb474636ea069257a120b16fdd38ff60221e66"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-059.json --emit-context /tmp/application-packet-059-context-20260909-1.json", "outcome": "PASS; planning metadata only; runtime_authorized=false"},
+    {"command": "python3 -m json.tool packet-059/report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Epoll readiness/removal and duplicate descriptor flag, offset, and lifetime semantics need final Max review."],
+  "blocked_execution_capabilities": ["runner-contract", "current-inputs", "runtime-transport-fault-injection"],
+  "first_failure_event": null,
+  "max_escalation": ["Review epoll event token and readiness", "Review EPOLL_CTL_DEL isolation", "Review F_DUPFD_CLOEXEC flags and offset sharing"],
+  "next_packet_id": "packet-060"
+}

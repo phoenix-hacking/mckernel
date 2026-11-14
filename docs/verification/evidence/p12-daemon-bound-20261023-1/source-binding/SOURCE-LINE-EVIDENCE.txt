@@ -1,0 +1,659 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Exact distro source line excerpts; paths relative to extracted/.
+
+engine/container/container.go:392-410
+392: // StartLogger starts a new logger driver for the container.
+393: func (container *Container) StartLogger() (logger.Logger, error) {
+394: 	cfg := container.HostConfig.LogConfig
+395: 	initDriver, err := logger.GetLogDriver(cfg.Type)
+396: 	if err != nil {
+397: 		return nil, errors.Wrap(err, "failed to get logging factory")
+398: 	}
+399: 	info := logger.Info{
+400: 		Config:              cfg.Config,
+401: 		ContainerID:         container.ID,
+402: 		ContainerName:       container.Name,
+403: 		ContainerEntrypoint: container.Path,
+404: 		ContainerArgs:       container.Args,
+405: 		ContainerImageID:    container.ImageID.String(),
+406: 		ContainerImageName:  container.Config.Image,
+407: 		ContainerCreated:    container.Created,
+408: 		ContainerEnv:        container.Config.Env,
+409: 		ContainerLabels:     container.Config.Labels,
+410: 		DaemonName:          "docker",
+
+engine/container/container.go:633-649
+633: func (container *Container) startLogging() error {
+634: 	if container.HostConfig.LogConfig.Type == "none" {
+635: 		return nil // do not start logging routines
+636: 	}
+637: 
+638: 	l, err := container.StartLogger()
+639: 	if err != nil {
+640: 		return fmt.Errorf("failed to initialize logging driver: %v", err)
+641: 	}
+642: 
+643: 	copier := logger.NewCopier(map[string]io.Reader{"stdout": container.StdoutPipe(), "stderr": container.StderrPipe()}, l)
+644: 	container.LogCopier = copier
+645: 	copier.Run()
+646: 	container.LogDriver = l
+647: 
+648: 	return nil
+649: }
+
+engine/daemon/logger/copier.go:20-24
+20: 	// defaultBufSize provides a reasonable default for loggers that do
+21: 	// not have an external limit to impose on log line size.
+22: 	defaultBufSize = 16 * 1024
+23: )
+24: 
+
+engine/daemon/logger/copier.go:56-66
+56: 	bufSize := defaultBufSize
+57: 	if sizedLogger, ok := c.dst.(SizedLogger); ok {
+58: 		size := sizedLogger.BufSize()
+59: 		// Loggers that wrap another loggers would have BufSize(), but cannot return the size
+60: 		// when the wrapped loggers doesn't have BufSize().
+61: 		if size > 0 {
+62: 			bufSize = size
+63: 		}
+64: 	}
+65: 	buf := make([]byte, bufSize)
+66: 
+
+engine/daemon/logger/copier.go:105-167
+105: 			for q := bytes.IndexByte(buf[p:n], '\n'); q >= 0; q = bytes.IndexByte(buf[p:n], '\n') {
+106: 				select {
+107: 				case <-c.closed:
+108: 					return
+109: 				default:
+110: 					msg := NewMessage()
+111: 					msg.Source = name
+112: 					msg.Line = append(msg.Line, buf[p:p+q]...)
+113: 
+114: 					if hasMorePartial {
+115: 						msg.PLogMetaData = &types.PartialLogMetaData{ID: partialid, Ordinal: ordinal, Last: true}
+116: 
+117: 						// reset
+118: 						partialid = ""
+119: 						ordinal = 0
+120: 						firstPartial = true
+121: 						hasMorePartial = false
+122: 					}
+123: 					if msg.PLogMetaData == nil {
+124: 						msg.Timestamp = time.Now().UTC()
+125: 					} else {
+126: 						msg.Timestamp = partialTS
+127: 					}
+128: 
+129: 					if logErr := c.dst.Log(msg); logErr != nil {
+130: 						logDriverError(c.dst.Name(), string(msg.Line), logErr)
+131: 					}
+132: 				}
+133: 				p += q + 1
+134: 			}
+135: 			// If there's no more coming, or the buffer is full but
+136: 			// has no newlines, log whatever we haven't logged yet,
+137: 			// noting that it's a partial log line.
+138: 			if eof || (p == 0 && n == len(buf)) {
+139: 				if p < n {
+140: 					msg := NewMessage()
+141: 					msg.Source = name
+142: 					msg.Line = append(msg.Line, buf[p:n]...)
+143: 
+144: 					// Generate unique partialID for first partial. Use it across partials.
+145: 					// Record timestamp for first partial. Use it across partials.
+146: 					// Initialize Ordinal for first partial. Increment it across partials.
+147: 					if firstPartial {
+148: 						msg.Timestamp = time.Now().UTC()
+149: 						partialTS = msg.Timestamp
+150: 						partialid = stringid.GenerateRandomID()
+151: 						ordinal = 1
+152: 						firstPartial = false
+153: 						totalPartialLogs.Inc(1)
+154: 					} else {
+155: 						msg.Timestamp = partialTS
+156: 					}
+157: 					msg.PLogMetaData = &types.PartialLogMetaData{ID: partialid, Ordinal: ordinal, Last: false}
+158: 					ordinal++
+159: 					hasMorePartial = true
+160: 
+161: 					if logErr := c.dst.Log(msg); logErr != nil {
+162: 						logDriverError(c.dst.Name(), string(msg.Line), logErr)
+163: 					}
+164: 					p = 0
+165: 					n = 0
+166: 				}
+167: 				if eof {
+
+engine/daemon/logger/loginfo.go:27-96
+27: // ExtraAttributes returns the user-defined extra attributes (labels,
+28: // environment variables) in key-value format. This can be used by log drivers
+29: // that support metadata to add more context to a log.
+30: func (info *Info) ExtraAttributes(keyMod func(string) string) (map[string]string, error) {
+31: 	extra := make(map[string]string)
+32: 	labels, ok := info.Config["labels"]
+33: 	if ok && len(labels) > 0 {
+34: 		for _, l := range strings.Split(labels, ",") {
+35: 			if v, ok := info.ContainerLabels[l]; ok {
+36: 				if keyMod != nil {
+37: 					l = keyMod(l)
+38: 				}
+39: 				extra[l] = v
+40: 			}
+41: 		}
+42: 	}
+43: 
+44: 	labelsRegex, ok := info.Config["labels-regex"]
+45: 	if ok && len(labelsRegex) > 0 {
+46: 		re, err := regexp.Compile(labelsRegex)
+47: 		if err != nil {
+48: 			return nil, err
+49: 		}
+50: 		for k, v := range info.ContainerLabels {
+51: 			if re.MatchString(k) {
+52: 				if keyMod != nil {
+53: 					k = keyMod(k)
+54: 				}
+55: 				extra[k] = v
+56: 			}
+57: 		}
+58: 	}
+59: 
+60: 	envMapping := make(map[string]string)
+61: 	for _, e := range info.ContainerEnv {
+62: 		if k, v, ok := strings.Cut(e, "="); ok {
+63: 			envMapping[k] = v
+64: 		}
+65: 	}
+66: 
+67: 	env, ok := info.Config["env"]
+68: 	if ok && len(env) > 0 {
+69: 		for _, l := range strings.Split(env, ",") {
+70: 			if v, ok := envMapping[l]; ok {
+71: 				if keyMod != nil {
+72: 					l = keyMod(l)
+73: 				}
+74: 				extra[l] = v
+75: 			}
+76: 		}
+77: 	}
+78: 
+79: 	envRegex, ok := info.Config["env-regex"]
+80: 	if ok && len(envRegex) > 0 {
+81: 		re, err := regexp.Compile(envRegex)
+82: 		if err != nil {
+83: 			return nil, err
+84: 		}
+85: 		for k, v := range envMapping {
+86: 			if re.MatchString(k) {
+87: 				if keyMod != nil {
+88: 					k = keyMod(k)
+89: 				}
+90: 				extra[k] = v
+91: 			}
+92: 		}
+93: 	}
+94: 
+95: 	return extra, nil
+96: }
+
+engine/daemon/logger/loggerutils/log_tag.go:13-25
+13: // ParseLogTag generates a context aware tag for consistency across different
+14: // log drivers based on the context of the running container.
+15: func ParseLogTag(info logger.Info, defaultTemplate string) (string, error) {
+16: 	tagTemplate := info.Config["tag"]
+17: 	if tagTemplate == "" {
+18: 		tagTemplate = defaultTemplate
+19: 	}
+20: 
+21: 	tmpl, err := templates.NewParse("log-tag", tagTemplate)
+22: 	if err != nil {
+23: 		return "", err
+24: 	}
+25: 	buf := new(bytes.Buffer)
+
+engine/daemon/logger/jsonfilelog/jsonfilelog.go:46-112
+46: // New creates new JSONFileLogger which writes to filename passed in
+47: // on given context.
+48: func New(info logger.Info) (logger.Logger, error) {
+49: 	var capval int64 = -1
+50: 	if capacity, ok := info.Config["max-size"]; ok {
+51: 		var err error
+52: 		capval, err = units.FromHumanSize(capacity)
+53: 		if err != nil {
+54: 			return nil, err
+55: 		}
+56: 		if capval <= 0 {
+57: 			return nil, fmt.Errorf("max-size must be a positive number")
+58: 		}
+59: 	}
+60: 	maxFiles := 1
+61: 	if maxFileString, ok := info.Config["max-file"]; ok {
+62: 		var err error
+63: 		maxFiles, err = strconv.Atoi(maxFileString)
+64: 		if err != nil {
+65: 			return nil, err
+66: 		}
+67: 		if maxFiles < 1 {
+68: 			return nil, fmt.Errorf("max-file cannot be less than 1")
+69: 		}
+70: 	}
+71: 
+72: 	var compress bool
+73: 	if compressString, ok := info.Config["compress"]; ok {
+74: 		var err error
+75: 		compress, err = strconv.ParseBool(compressString)
+76: 		if err != nil {
+77: 			return nil, err
+78: 		}
+79: 		if compress && (maxFiles == 1 || capval == -1) {
+80: 			return nil, fmt.Errorf("compress cannot be true when max-file is less than 2 or max-size is not set")
+81: 		}
+82: 	}
+83: 
+84: 	attrs, err := info.ExtraAttributes(nil)
+85: 	if err != nil {
+86: 		return nil, err
+87: 	}
+88: 
+89: 	// no default template. only use a tag if the user asked for it
+90: 	tag, err := loggerutils.ParseLogTag(info, "")
+91: 	if err != nil {
+92: 		return nil, err
+93: 	}
+94: 	if tag != "" {
+95: 		attrs["tag"] = tag
+96: 	}
+97: 
+98: 	var extra json.RawMessage
+99: 	if len(attrs) > 0 {
+100: 		var err error
+101: 		extra, err = json.Marshal(attrs)
+102: 		if err != nil {
+103: 			return nil, err
+104: 		}
+105: 	}
+106: 
+107: 	writer, err := loggerutils.NewLogFile(info.LogPath, capval, maxFiles, compress, decodeFunc, 0o640, getTailReader)
+108: 	if err != nil {
+109: 		return nil, err
+110: 	}
+111: 
+112: 	return &JSONFileLogger{
+
+engine/daemon/logger/jsonfilelog/jsonfilelog.go:136-151
+136: func marshalMessage(msg *logger.Message, extra json.RawMessage, buf *bytes.Buffer) error {
+137: 	logLine := msg.Line
+138: 	if msg.PLogMetaData == nil || (msg.PLogMetaData != nil && msg.PLogMetaData.Last) {
+139: 		logLine = append(msg.Line, '\n')
+140: 	}
+141: 	err := (&jsonlog.JSONLogs{
+142: 		Log:      logLine,
+143: 		Stream:   msg.Source,
+144: 		Created:  msg.Timestamp,
+145: 		RawAttrs: extra,
+146: 	}).MarshalJSONBuf(buf)
+147: 	if err != nil {
+148: 		return errors.Wrap(err, "error writing log message to buffer")
+149: 	}
+150: 	err = buf.WriteByte('\n')
+151: 	return errors.Wrap(err, "error finalizing log buffer")
+
+engine/daemon/logger/jsonfilelog/jsonlog/jsonlogbytes.go:10-145
+10: // JSONLogs marshals encoded JSONLog objects
+11: type JSONLogs struct {
+12: 	Log     []byte    `json:"log,omitempty"`
+13: 	Stream  string    `json:"stream,omitempty"`
+14: 	Created time.Time `json:"time"`
+15: 
+16: 	// json-encoded bytes
+17: 	RawAttrs json.RawMessage `json:"attrs,omitempty"`
+18: }
+19: 
+20: // MarshalJSONBuf is an optimized JSON marshaller that avoids reflection
+21: // and unnecessary allocation.
+22: func (mj *JSONLogs) MarshalJSONBuf(buf *bytes.Buffer) error {
+23: 	first := true
+24: 
+25: 	buf.WriteString(`{`)
+26: 	if len(mj.Log) != 0 {
+27: 		first = false
+28: 		buf.WriteString(`"log":`)
+29: 		ffjsonWriteJSONBytesAsString(buf, mj.Log)
+30: 	}
+31: 	if len(mj.Stream) != 0 {
+32: 		if first {
+33: 			first = false
+34: 		} else {
+35: 			buf.WriteString(`,`)
+36: 		}
+37: 		buf.WriteString(`"stream":`)
+38: 		ffjsonWriteJSONBytesAsString(buf, []byte(mj.Stream))
+39: 	}
+40: 	if len(mj.RawAttrs) > 0 {
+41: 		if first {
+42: 			first = false
+43: 		} else {
+44: 			buf.WriteString(`,`)
+45: 		}
+46: 		buf.WriteString(`"attrs":`)
+47: 		buf.Write(mj.RawAttrs)
+48: 	}
+49: 	if !first {
+50: 		buf.WriteString(`,`)
+51: 	}
+52: 
+53: 	created, err := fastTimeMarshalJSON(mj.Created)
+54: 	if err != nil {
+55: 		return err
+56: 	}
+57: 
+58: 	buf.WriteString(`"time":`)
+59: 	buf.WriteString(created)
+60: 	buf.WriteString(`}`)
+61: 	return nil
+62: }
+63: 
+64: func ffjsonWriteJSONBytesAsString(buf *bytes.Buffer, s []byte) {
+65: 	const hex = "0123456789abcdef"
+66: 
+67: 	buf.WriteByte('"')
+68: 	start := 0
+69: 	for i := 0; i < len(s); {
+70: 		if b := s[i]; b < utf8.RuneSelf {
+71: 			if 0x20 <= b && b != '\\' && b != '"' && b != '<' && b != '>' && b != '&' {
+72: 				i++
+73: 				continue
+74: 			}
+75: 			if start < i {
+76: 				buf.Write(s[start:i])
+77: 			}
+78: 			switch b {
+79: 			case '\\', '"':
+80: 				buf.WriteByte('\\')
+81: 				buf.WriteByte(b)
+82: 			case '\n':
+83: 				buf.WriteByte('\\')
+84: 				buf.WriteByte('n')
+85: 			case '\r':
+86: 				buf.WriteByte('\\')
+87: 				buf.WriteByte('r')
+88: 			default:
+89: 
+90: 				buf.WriteString(`\u00`)
+91: 				buf.WriteByte(hex[b>>4])
+92: 				buf.WriteByte(hex[b&0xF])
+93: 			}
+94: 			i++
+95: 			start = i
+96: 			continue
+97: 		}
+98: 		c, size := utf8.DecodeRune(s[i:])
+99: 		if c == utf8.RuneError && size == 1 {
+100: 			if start < i {
+101: 				buf.Write(s[start:i])
+102: 			}
+103: 			buf.WriteString(`\ufffd`)
+104: 			i += size
+105: 			start = i
+106: 			continue
+107: 		}
+108: 
+109: 		if c == '\u2028' || c == '\u2029' {
+110: 			if start < i {
+111: 				buf.Write(s[start:i])
+112: 			}
+113: 			buf.WriteString(`\u202`)
+114: 			buf.WriteByte(hex[c&0xF])
+115: 			i += size
+116: 			start = i
+117: 			continue
+118: 		}
+119: 		i += size
+120: 	}
+121: 	if start < len(s) {
+122: 		buf.Write(s[start:])
+123: 	}
+124: 	buf.WriteByte('"')
+125: }
+
+engine/daemon/logger/jsonfilelog/jsonlog/time_marshalling.go:9-23
+9: const jsonFormat = `"` + time.RFC3339Nano + `"`
+10: 
+11: // fastTimeMarshalJSON avoids one of the extra allocations that
+12: // time.MarshalJSON is making.
+13: func fastTimeMarshalJSON(t time.Time) (string, error) {
+14: 	if y := t.Year(); y < 0 || y >= 10000 {
+15: 		// RFC 3339 is clear that years are 4 digits exactly.
+16: 		// See golang.org/issue/4556#c15 for more discussion.
+17: 		return "", errors.New("time.MarshalJSON: year outside of range [0,9999]")
+18: 	}
+19: 	return t.Format(jsonFormat), nil
+20: }
+
+engine/daemon/logger/loggerutils/logfile.go:159-179
+159: func (w *LogFile) WriteLogEntry(timestamp time.Time, marshalled []byte) error {
+160: 	select {
+161: 	case <-w.closed:
+162: 		return errors.New("cannot write because the output file was closed")
+163: 	default:
+164: 	}
+165: 	w.mu.Lock()
+166: 	defer w.mu.Unlock()
+167: 
+168: 	// Are we due for a rotation?
+169: 	if w.capacity != -1 && w.pos.size >= w.capacity {
+170: 		if err := w.rotate(); err != nil {
+171: 			return errors.Wrap(err, "error rotating log file")
+172: 		}
+173: 	}
+174: 
+175: 	n, err := w.f.Write(marshalled)
+176: 	if err != nil {
+177: 		return errors.Wrap(err, "error writing log entry")
+178: 	}
+179: 	w.pos.size += int64(n)
+
+engine/daemon/logger/loggerutils/logfile.go:198-299
+198: func (w *LogFile) rotate() (retErr error) {
+199: 	w.rotateMu.Lock()
+200: 	noCompress := w.maxFiles <= 1 || !w.compress
+201: 	defer func() {
+202: 		// If we aren't going to run the goroutine to compress the log file, then we need to unlock in this function.
+203: 		// Otherwise the lock will be released in the goroutine that handles compression.
+204: 		if retErr != nil || noCompress {
+205: 			w.rotateMu.Unlock()
+206: 		}
+207: 	}()
+208: 
+209: 	fname := w.f.Name()
+210: 	if err := w.f.Close(); err != nil {
+211: 		// if there was an error during a prior rotate, the file could already be closed
+212: 		if !errors.Is(err, fs.ErrClosed) {
+213: 			return errors.Wrap(err, "error closing file")
+214: 		}
+215: 	}
+216: 
+217: 	file, err := func() (*os.File, error) {
+218: 		w.fsopMu.Lock()
+219: 		defer w.fsopMu.Unlock()
+220: 
+221: 		if err := rotate(fname, w.maxFiles, w.compress); err != nil {
+222: 			log.G(context.TODO()).WithError(err).Warn("Error rotating log file, log data may have been lost")
+223: 		} else {
+224: 			// We may have readers working their way through the
+225: 			// current log file so we can't truncate it. We need to
+226: 			// start writing new logs to an empty file with the same
+227: 			// name as the current one so we need to rotate the
+228: 			// current file out of the way.
+229: 			if w.maxFiles < 2 {
+230: 				if err := unlink(fname); err != nil && !errors.Is(err, fs.ErrNotExist) {
+231: 					log.G(context.TODO()).WithError(err).Error("Error unlinking current log file")
+232: 				}
+233: 			} else {
+234: 				if err := os.Rename(fname, fname+".1"); err != nil && !errors.Is(err, fs.ErrNotExist) {
+235: 					log.G(context.TODO()).WithError(err).Error("Error renaming current log file")
+236: 				}
+237: 			}
+238: 		}
+239: 
+240: 		// Notwithstanding the above, open with the truncate flag anyway
+241: 		// in case rotation didn't work out as planned.
+242: 		return openFile(fname, os.O_WRONLY|os.O_TRUNC|os.O_CREATE, w.perms)
+243: 	}()
+244: 	if err != nil {
+245: 		return err
+246: 	}
+247: 	w.f = file
+248: 	w.pos = logPos{rotation: w.pos.rotation + 1}
+249: 
+250: 	if noCompress {
+251: 		return nil
+252: 	}
+253: 
+254: 	ts := w.lastTimestamp
+255: 	go func() {
+256: 		defer w.rotateMu.Unlock()
+257: 		// No need to hold fsopMu as at no point will the filesystem be
+258: 		// in a state which would cause problems for readers. Opening
+259: 		// the uncompressed file is tried first, falling back to the
+260: 		// compressed one. compressFile only deletes the uncompressed
+261: 		// file once the compressed one is fully written out, so at no
+262: 		// point during the compression process will a reader fail to
+263: 		// open a complete copy of the file.
+264: 		if err := compressFile(fname+".1", ts); err != nil {
+265: 			log.G(context.TODO()).WithError(err).Error("Error compressing log file after rotation")
+266: 		}
+267: 	}()
+268: 
+269: 	return nil
+270: }
+271: 
+272: func rotate(name string, maxFiles int, compress bool) error {
+273: 	if maxFiles < 2 {
+274: 		return nil
+275: 	}
+276: 
+277: 	var extension string
+278: 	if compress {
+279: 		extension = ".gz"
+280: 	}
+281: 
+282: 	lastFile := fmt.Sprintf("%s.%d%s", name, maxFiles-1, extension)
+283: 	err := unlink(lastFile)
+284: 	if err != nil && !errors.Is(err, fs.ErrNotExist) {
+285: 		return errors.Wrap(err, "error removing oldest log file")
+286: 	}
+287: 
+288: 	for i := maxFiles - 1; i > 1; i-- {
+289: 		toPath := name + "." + strconv.Itoa(i) + extension
+290: 		fromPath := name + "." + strconv.Itoa(i-1) + extension
+291: 		err := os.Rename(fromPath, toPath)
+292: 		log.G(context.TODO()).WithError(err).WithField("source", fromPath).WithField("target", toPath).Trace("Rotating log file")
+293: 		if err != nil && !errors.Is(err, fs.ErrNotExist) {
+294: 			return err
+295: 		}
+296: 	}
+297: 
+298: 	return nil
+299: }
+
+engine/daemon/logger/loggerutils/logfile.go:400-456
+400: func (w *LogFile) readLogsLocked(currentPos logPos, config logger.ReadConfig, watcher *logger.LogWatcher) {
+401: 	defer close(watcher.Msg)
+402: 
+403: 	currentFile, err := open(w.f.Name())
+404: 	if err != nil {
+405: 		watcher.Err <- err
+406: 		return
+407: 	}
+408: 	defer currentFile.Close()
+409: 
+410: 	dec := w.createDecoder(nil)
+411: 	defer dec.Close()
+412: 
+413: 	currentChunk := io.NewSectionReader(currentFile, 0, currentPos.size)
+414: 	fwd := newForwarder(config)
+415: 
+416: 	if config.Tail != 0 {
+417: 		// TODO(@cpuguy83): Instead of opening every file, only get the files which
+418: 		// are needed to tail.
+419: 		// This is especially costly when compression is enabled.
+420: 		files, err := w.openRotatedFiles(config)
+421: 		if err != nil {
+422: 			watcher.Err <- err
+423: 			return
+424: 		}
+425: 
+426: 		closeFiles := func() {
+427: 			for _, f := range files {
+428: 				f.Close()
+429: 			}
+430: 		}
+431: 
+432: 		readers := make([]SizeReaderAt, 0, len(files)+1)
+433: 		for _, f := range files {
+434: 			switch ff := f.(type) {
+435: 			case SizeReaderAt:
+436: 				readers = append(readers, ff)
+437: 			case interface{ Stat() (fs.FileInfo, error) }:
+438: 				stat, err := ff.Stat()
+439: 				if err != nil {
+440: 					watcher.Err <- errors.Wrap(err, "error reading size of rotated file")
+441: 					closeFiles()
+442: 					return
+443: 				}
+444: 				readers = append(readers, io.NewSectionReader(f, 0, stat.Size()))
+445: 			default:
+446: 				panic(fmt.Errorf("rotated file value %#v (%[1]T) has neither Size() nor Stat() methods", f))
+447: 			}
+448: 		}
+449: 		if currentChunk.Size() > 0 {
+450: 			readers = append(readers, currentChunk)
+451: 		}
+452: 
+453: 		ok := tailFiles(readers, watcher, dec, w.getTailReader, config.Tail, fwd)
+454: 		closeFiles()
+455: 		if !ok {
+456: 			return
+
+engine/vendor/github.com/docker/go-units/size.go:10-32
+10: const (
+11: 	// Decimal
+12: 
+13: 	KB = 1000
+14: 	MB = 1000 * KB
+15: 	GB = 1000 * MB
+16: 	TB = 1000 * GB
+17: 	PB = 1000 * TB
+18: 
+19: 	// Binary
+20: 
+21: 	KiB = 1024
+22: 	MiB = 1024 * KiB
+23: 	GiB = 1024 * MiB
+24: 	TiB = 1024 * GiB
+25: 	PiB = 1024 * TiB
+26: )
+27: 
+28: type unitMap map[byte]int64
+29: 
+30: var (
+31: 	decimalMap = unitMap{'k': KB, 'm': MB, 'g': GB, 't': TB, 'p': PB}
+32: 	binaryMap  = unitMap{'k': KiB, 'm': MiB, 'g': GiB, 't': TiB, 'p': PiB}
+
+engine/vendor/github.com/docker/go-units/size.go:76-87
+76: // FromHumanSize returns an integer from a human-readable specification of a
+77: // size using SI standard (eg. "44kB", "17MB").
+78: func FromHumanSize(size string) (int64, error) {
+79: 	return parseSize(size, decimalMap)
+80: }
+81: 
+82: // RAMInBytes parses a human-readable string representing an amount of RAM
+83: // in bytes, kibibytes, mebibytes, gibibytes, or tebibytes and
+84: // returns the number of bytes, or -1 if the string is unparseable.
+85: // Units are case-insensitive, and the 'b' suffix is optional.
+86: func RAMInBytes(size string) (int64, error) {
+87: 	return parseSize(size, binaryMap)
+

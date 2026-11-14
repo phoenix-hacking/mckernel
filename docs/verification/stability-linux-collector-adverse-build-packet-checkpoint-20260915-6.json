@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_adverse_build_packet_checkpoint",
+  "task_id": "M02-B-adverse-v1",
+  "attempt": 6,
+  "status": "PASS_BUILD_PACKET",
+  "base_commit": "78faa2d3d8cf5e431e11efcd47c2d5fabfc63e27",
+  "scope": "bounded compilation of separately named instrumented Linux collectors for selectors 0-3 only",
+  "source_tests": {
+    "interpreter": "Python 3.8.10",
+    "tests": 13,
+    "status": "PASS",
+    "log_sha256": "534279b738506ec199429c027d129a0ecc71b313ee69b44a3c8edebb454b679e",
+    "pre_run_sources_sha256": "69c408d8108be492ca7e6c815f8743cad1374e441137a1dd177b0bad49e62712",
+    "worker_result_sha256": "45c026d73fee5414ec2f42cd78be9de910135571681bf2cc42c994ca32fd2401"
+  },
+  "corrected_source_sha256": {
+    "build_owner.py": "13aed529a56ba49a383c7d2f0110c1741d1f815a88d53a24e82619e38fc37352",
+    "root_profile.py": "e60e81cf4f83938fc1baa70eda843da5870721803b1bd4d813974da5d27a1b19",
+    "scripts/tests/test_collector_adverse_packet.py": "2d0c323477ca02676b664fbf72a16603111f1d21675903365dbdfefff9e25c69"
+  },
+  "loader_contract": {
+    "logical_prefix": "/lib64/",
+    "canonical_prefix": "/usr/lib64/",
+    "logical_symlink": "/lib64 -> usr/lib64",
+    "producer_and_verifier_bind_both": true,
+    "pinned_image_bound": true
+  },
+  "original_incomplete_diff_check": {
+    "preserved": true,
+    "status": 1,
+    "diagnostics_empty": true,
+    "interpretation": "no-index content-difference status caused the && chain to stop; it was not a whitespace error"
+  },
+  "additive_diff_checks": {
+    "status_sha256": "a2a62694ef0d85c611c1a83c01e6e1a9faa71b3723b933677d01e8178c305436",
+    "files": 3,
+    "each_status": 1,
+    "all_stdout_stderr_empty": true,
+    "status": "PASS_NO_WHITESPACE_ERRORS"
+  },
+  "evidence_archives": [
+    {"path": "docs/verification/evidence/stability-linux-collector-adverse-source-checkpoint-20260915-6.tar.gz", "size": 83161, "sha256": "33f87766d64033a7af3418f7ec1810af16b347c578b466df991faed2d291ed47", "members": 22},
+    {"path": "docs/verification/evidence/stability-linux-collector-adverse-build-packet-20260915-6.tar.gz", "size": 83622, "sha256": "72e8873a78eb8e6bc28611d8b4d90dab92cb519f7f04c2782aea728a9faaa4b4", "members": 36}
+  ],
+  "independent_review": {
+    "role": "Astra/high collector ownership reviewer",
+    "source_status": "PASS_SOURCE",
+    "build_status": "PASS_BUILD_PACKET",
+    "remaining": [
+      "fresh isolated compilation and complete compiler/dependency/output evidence",
+      "verified cleanup and watchdog retirement",
+      "independent exact-build evidence review",
+      "separate root execution release and four actual selector runs"
+    ]
+  },
+  "collector_compiled": false,
+  "root_execution": false,
+  "runtime_acceptance": false,
+  "production_gate_credit": false
+}

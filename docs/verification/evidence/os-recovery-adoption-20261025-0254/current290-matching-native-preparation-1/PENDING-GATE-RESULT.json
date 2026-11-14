@@ -1,0 +1,29 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_METADATA_ONLY_REFUSAL_BEFORE_STAGE_EFFECTS",
+  "command": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--core=0:0",
+    "--fsize=134217728",
+    "--",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-matching-native-preparation-1/stage_current290_startup.py",
+    "--inputs",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-matching-native-preparation-1/STAGE-INPUTS.PENDING.json",
+    "--inputs-sha256",
+    "c29073af42c48206b4ca22c43c56daa10cb0c25902f66841b34a9ac86c5d1007"
+  ],
+  "returncode": 1,
+  "expected_refusal": "current-image-ABI-link-qualification-pending",
+  "output_existed_before": false,
+  "output_exists_after": false,
+  "native_runs": 0,
+  "root_operations": 0,
+  "stage_source_sha256": "5befa8e0de182f841dfd8a32719109cea260e156ef598c97037492b4b40270f0"
+}

@@ -1,0 +1,2682 @@
+diff --git a/executer/user/rust/mcexec_buildid.rs.in b/executer/user/rust/mcexec_buildid.rs.in
+new file mode 100644
+--- /dev/null
++++ b/executer/user/rust/mcexec_buildid.rs.in
+@@ -0,0 +1,2 @@
++// Generated from the same BUILDID as config.h; contains data only.
++pub const BUILD_ID: &[u8] = b"@BUILDID@\0";
+diff --git a/executer/user/rust/mcexec_clone_child.rs b/executer/user/rust/mcexec_clone_child.rs
+new file mode 100644
+--- /dev/null
++++ b/executer/user/rust/mcexec_clone_child.rs
+@@ -0,0 +1,131 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Linux x86_64 glibc sem_t ABI is checked against the original C fixture.
++use super::{c_int,c_long,c_ulong,c_void,ForkSyncContainer,McexecSyscallWaitDesc};
++use core::ptr::{addr_of_mut,null_mut,read_volatile};
++#[repr(C)]
++struct FullForkSync { status:c_int, success:c_int, sem:[u64;4] }
++#[repr(C)]
++struct RpgtableDesc { rpgtable:usize, start:usize, len:usize }
++unsafe extern "C" {
++ static mut fork_sync_mutex:c_void;
++ static mut ischild:c_int;
++ static mut debug:c_int;
++ static mut stdout:*mut c_void;
++ static mut stderr:*mut c_void;
++ fn pthread_mutex_lock(p:*mut c_void)->c_int;
++ fn pthread_mutex_unlock(p:*mut c_void)->c_int;
++ fn pthread_mutex_init(p:*mut c_void,a:*const c_void)->c_int;
++ fn mmap(p:*mut c_void,n:usize,prot:c_int,flags:c_int,fd:c_int,off:c_long)->*mut c_void;
++ fn munmap(p:*mut c_void,n:usize)->c_int;
++ fn sem_init(p:*mut c_void,shared:c_int,value:u32)->c_int;
++ fn sem_trywait(p:*mut c_void)->c_int;
++ fn sem_post(p:*mut c_void)->c_int;
++ fn sem_destroy(p:*mut c_void)->c_int;
++ fn fork()->c_int;
++ fn waitpid(pid:c_int,status:*mut c_int,options:c_int)->c_int;
++ fn getppid()->c_int;
++ fn sched_yield()->c_int;
++ fn exit(status:c_int)->!;
++ fn fprintf(p:*mut c_void,fmt:*const u8,...)->c_int;
++ fn printf(fmt:*const u8,...)->c_int;
++ fn fflush(p:*mut c_void)->c_int;
++ fn strerror(error:c_int)->*const u8;
++}
++unsafe fn semaphore(fs:*mut FullForkSync)->*mut c_void { addr_of_mut!((*fs).sem).cast() }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_fork_sync_lock_bridge() { pthread_mutex_lock(addr_of_mut!(fork_sync_mutex)); }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_fork_sync_unlock_bridge() { pthread_mutex_unlock(addr_of_mut!(fork_sync_mutex)); }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_fork_sync_munmap_bridge(fs:*mut c_void) { munmap(fs,core::mem::size_of::<FullForkSync>()); }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_fork_sync_free_bridge(node:*mut c_void) { super::free(node.cast()); }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_clone_alloc_fork_sync_bridge()->*mut c_void {
++ let fs=mmap(null_mut(),core::mem::size_of::<FullForkSync>(),3,0x21,-1,0).cast::<FullForkSync>();
++ if fs as usize==usize::MAX { return null_mut(); }
++ core::ptr::write_bytes(fs.cast::<u8>(),0,core::mem::size_of::<FullForkSync>());
++ sem_init(semaphore(fs),1,0);
++ fs.cast()
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_clone_alloc_container_bridge()->*mut c_void {
++ let node=super::malloc(core::mem::size_of::<ForkSyncContainer>());
++ if !node.is_null() { core::ptr::write_bytes(node,0,core::mem::size_of::<ForkSyncContainer>()); }
++ node.cast()
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_clone_fork_bridge()->c_int { fork() }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_clone_fork_failed_bridge() { fprintf(stderr,b"fork(): error forking child process\n\0".as_ptr()); }
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_clone_child_bridge(w:*const McexecSyscallWaitDesc,sync:*mut c_void)->c_long {
++ let fs=sync.cast::<FullForkSync>();
++ let mut ret:c_int=1;
++ ischild=1;
++ super::close(super::MCEXEC_FD);
++ super::MCEXEC_FD=super::mcexec_opendev_body();
++ if super::MCEXEC_FD<0 {
++   (*fs).status = -*super::__errno_location();
++   fprintf(stderr,b"ERROR: opening %s\n\0".as_ptr(),super::mcexec_opendev_dev_bridge());
++ } else {
++   let mut rpt=RpgtableDesc { start:(*w).sr.args[1] as usize,len:(*w).sr.args[2] as usize,rpgtable:(*w).sr.args[3] as usize };
++   if super::ioctl(super::MCEXEC_FD,0x30a0290e as c_ulong,addr_of_mut!(rpt) as c_ulong)!=0 {
++     (*fs).status = -*super::__errno_location();
++     fprintf(stderr,b"ERROR: creating PPD %s\n\0".as_ptr(),super::mcexec_opendev_dev_bridge());
++   } else {
++     super::init_sigaction();
++     super::MCEXEC_THREAD_DATA=null_mut();
++     if debug!=0 {
++       printf(b"mcexec_clone_child_bridge: pid(%d): signals and syscall threads OK\n\0".as_ptr(),super::getpid());fflush(stdout);
++     }
++     ret=super::ioctl(super::MCEXEC_FD,0x30a02926 as c_ulong);
++     if ret<0 { fprintf(stderr,b"Error: obtaining thread pool count\n\0".as_ptr()); }
++     if ret==1 { super::MCEXEC_N_THREADS=4; }
++     ret=super::init_worker_threads(super::MCEXEC_FD);
++     if ret!=0 {
++       fprintf(stderr,b"mcexec_clone_child_bridge: Error: creating worker threads: %s\n\0".as_ptr(),strerror(-ret));
++       super::close(super::MCEXEC_FD);
++       exit(1);
++     }
++   }
++ }
++ // This cleanup intentionally runs after open/PPD failures but not worker failure.
++ let mut fp=super::MCEXEC_FORK_SYNC_TOP;
++ while !fp.is_null() {
++   let next=(*fp).next;
++   if !(*fp).fs.is_null() && (*fp).fs.cast::<FullForkSync>()!=fs {
++     munmap((*fp).fs.cast(),core::mem::size_of::<FullForkSync>());
++   }
++   super::free(fp.cast());
++   fp=next;
++ }
++ super::MCEXEC_FORK_SYNC_TOP=null_mut();
++ sem_post(semaphore(fs));
++ if (*fs).status!=0 { exit(1); }
++ pthread_mutex_init(addr_of_mut!(fork_sync_mutex),core::ptr::null());
++ while getppid()!=1 && read_volatile(addr_of_mut!((*fs).success))==0 { sched_yield(); }
++ if read_volatile(addr_of_mut!((*fs).success))==0 { exit(1); }
++ sem_destroy(semaphore(fs));
++ munmap(fs.cast(),core::mem::size_of::<FullForkSync>());
++ super::mcexec_join_all_threads_body();
++ ret as c_long
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_clone_sem_trywait_bridge(fs:*mut c_void)->c_int { sem_trywait(semaphore(fs.cast())) }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_clone_waitpid_nohang_bridge(pid:c_int)->c_int { let mut status=0;waitpid(pid,addr_of_mut!(status),1) }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_clone_sched_yield_bridge() { sched_yield(); }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_clone_child_after_fork_failed_bridge() { fprintf(stderr,b"fork(): error with child process after fork\n\0".as_ptr()); }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_clone_sem_destroy_bridge(fs:*mut c_void) { sem_destroy(semaphore(fs.cast())); }
++
++#[cfg(mcexec_clone_fixture)]
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_clone_fixture_abi(out:*mut usize) {
++ let values=[core::mem::size_of::<FullForkSync>(),core::mem::align_of::<FullForkSync>(),core::mem::offset_of!(FullForkSync,sem),core::mem::size_of::<ForkSyncContainer>(),core::mem::align_of::<ForkSyncContainer>(),core::mem::offset_of!(ForkSyncContainer,next),core::mem::offset_of!(ForkSyncContainer,fs),core::mem::size_of::<RpgtableDesc>(),core::mem::offset_of!(RpgtableDesc,start),core::mem::offset_of!(RpgtableDesc,len)];
++ core::ptr::copy_nonoverlapping(values.as_ptr(),out,values.len());
++}
+diff --git a/executer/user/rust/mcexec_cpu_topology.rs b/executer/user/rust/mcexec_cpu_topology.rs
+new file mode 100644
+--- /dev/null
++++ b/executer/user/rust/mcexec_cpu_topology.rs
+@@ -0,0 +1,174 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Requires batch04's exact descriptor type; CPU macros now implemented in Rust.
++use super::{c_int,c_ulong,c_void};
++use super::mcexec_load_descriptor::ProgramLoadDesc;
++use core::ptr::{addr_of_mut,read,write_bytes};
++#[repr(C,align(8))]
++struct StatStorage { bytes:[u8;144] }
++#[repr(C)]
++struct GetCpuSetArg {
++ nr_processes:c_int,req_cpu_list:*mut u8,req_cpu_list_len:c_int,
++ process_rank:*mut c_int,ppid:c_int,cpu_set:*mut c_void,cpu_set_size:usize,
++ target_core:*mut c_int,mcexec_linux_numa:*mut c_int,mcexec_cpu_set:*mut c_void,
++ mcexec_cpu_set_size:usize,ikc_mapped:*mut c_int,
++}
++unsafe extern "C" {
++ static mut ncpu:c_int;static mut nnodes:c_int;static mut numa_nodes:*mut u8;
++ static mut cpu_set_size:usize;static mut mcexec_partition_cpu_set_storage:[c_ulong;16];
++ static mut debug:c_int;static mut stdout:*mut c_void;static mut stderr:*mut c_void;
++ fn printf(fmt:*const u8,...)->c_int;fn fprintf(f:*mut c_void,fmt:*const u8,...)->c_int;fn fflush(f:*mut c_void)->c_int;
++ fn snprintf(buf:*mut u8,size:usize,fmt:*const u8,...)->c_int;
++ fn stat(path:*const u8,out:*mut StatStorage)->c_int;
++ fn getppid()->c_int;
++ fn sched_setaffinity(pid:c_int,size:usize,set:*const c_void)->c_int;
++ fn numa_run_on_node(node:c_int)->c_int;
++}
++unsafe fn node_ptr(nodes:*mut u8,size:usize,node:c_int)->*mut c_ulong {
++ nodes.add((node as usize).wrapping_mul(size)).cast()
++}
++unsafe fn cpu_isset(cpu:c_int,size:usize,set:*const c_ulong)->c_int {
++ let cpu=cpu as usize;
++ if cpu/8>=size {return 0;}
++ ((*set.add(cpu/64)&(1u64<<(cpu%64)))!=0) as c_int
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_numa_node_cpu_isset_bridge(node:c_int,cpu:c_int) -> c_int {
++ cpu_isset(cpu,cpu_set_size,node_ptr(numa_nodes,cpu_set_size,node))
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_main_get_cpu_bridge() -> c_int {
++ super::ioctl(super::MCEXEC_FD,0x30a02907 as c_ulong,0 as c_int)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_main_get_nodes_bridge() -> c_int {
++ super::ioctl(super::MCEXEC_FD,0x30a0290c as c_ulong,0 as c_int)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_main_no_cpu_bridge() {
++ fprintf(stderr,b"No CPU found.\n\0".as_ptr());
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_main_no_numa_node_bridge() {
++ fprintf(stderr,b"No numa node found.\n\0".as_ptr());
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_main_alloc_nodes_error_bridge() {
++ fprintf(stderr,b"Error allocating nodes cpu sets\n\0".as_ptr());
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_main_cpu_alloc_size_bridge(cpu_count:c_int) -> usize {
++ (cpu_count as usize).wrapping_add(63)/64*8
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_main_publish_topology_bridge(cpu_count:c_int,node_count:c_int,node_set_size:usize,nodes:*mut c_void) {
++ ncpu=cpu_count;nnodes=node_count;cpu_set_size=node_set_size;numa_nodes=nodes.cast();
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_main_numa_node_zero_bridge(nodes:*mut c_void,node_set_size:usize,node_id:c_int) {
++ write_bytes(node_ptr(nodes.cast(),node_set_size,node_id).cast::<u8>(),0,node_set_size);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_main_node_cpu_exists_bridge(node_id:c_int,cpu:c_int) -> c_int {
++ let mut buf=[0u8;4096];let mut sb:StatStorage=core::mem::zeroed();
++ snprintf(buf.as_mut_ptr(),buf.len(),b"/sys/class/mcos/mcos0/sys/devices/system/node/node%d/cpu%d\0".as_ptr(),node_id,cpu);
++ (stat(buf.as_ptr(),addr_of_mut!(sb))==0) as c_int
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_main_numa_node_set_cpu_bridge(nodes:*mut c_void,node_set_size:usize,node_id:c_int,cpu:c_int) {
++ let cpu=cpu as usize;
++ if cpu/8<node_set_size {let word=node_ptr(nodes.cast(),node_set_size,node_id).add(cpu/64);*word|=1u64<<(cpu%64);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_cpu_in_node_bridge(cpu:c_int,node:c_int) -> c_int {
++ if node<0||node>=nnodes||cpu<0||cpu>=ncpu {return 0;}
++ cpu_isset(cpu,cpu_set_size,node_ptr(numa_nodes,cpu_set_size,node))
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_partition_get_cpuset_bridge(desc:*mut ProgramLoadDesc,nr_processes:c_int,target_core:*mut c_int,process_rank:*mut c_int,mcexec_linux_numa:*mut c_int,ikc_mapped:*mut c_int) -> c_int {
++ write_bytes(addr_of_mut!(mcexec_partition_cpu_set_storage).cast::<u8>(),0,128);
++ let mut arg=GetCpuSetArg {nr_processes,req_cpu_list:core::ptr::null_mut(),req_cpu_list_len:0,
++ process_rank,ppid:getppid(),cpu_set:addr_of_mut!((*desc).cpu_set).cast(),cpu_set_size:128,
++ target_core,mcexec_linux_numa,mcexec_cpu_set:addr_of_mut!(mcexec_partition_cpu_set_storage).cast(),mcexec_cpu_set_size:128,ikc_mapped};
++ if !super::getenv(b"FLIB_AFFINITY_ON_PROCESS\0".as_ptr()).is_null() {
++  arg.req_cpu_list=super::getenv(b"FLIB_AFFINITY_ON_PROCESS\0".as_ptr());
++  arg.req_cpu_list_len=super::strlen(arg.req_cpu_list).wrapping_add(1) as c_int;
++  if debug!=0 {printf(b"mcexec_partition_get_cpuset_bridge: main: requesting CPUs: %s\n\0".as_ptr(),arg.req_cpu_list);fflush(stdout);}
++ }
++ super::ioctl(super::MCEXEC_FD,0x30a0290d as c_ulong,addr_of_mut!(arg))
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_partition_get_cpuset_failed_bridge() {
++ super::perror(b"getting CPU set for partitioned execution\0".as_ptr());super::close(super::MCEXEC_FD);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_partition_sched_setaffinity_bridge() -> c_int {
++ sched_setaffinity(0,128,addr_of_mut!(mcexec_partition_cpu_set_storage).cast())
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_partition_numa_run_bridge(node:c_int) -> c_int {
++ numa_run_on_node(node)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_numa_local_cpu_log_bridge(cpu:c_int) {
++ if debug!=0 {printf(b"mcexec_numa_local_cpu_log_bridge: %d belongs to local set\n\0".as_ptr(),cpu);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_numa_node_cpu_log_bridge(cpu:c_int,node:c_int) {
++ if debug!=0 {printf(b"mcexec_numa_node_cpu_log_bridge: %d belongs to node %d\n\0".as_ptr(),cpu,node);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_process_thread_plan_flib_log_bridge(count:c_int) {
++ if debug!=0 {printf(b"mcexec_process_thread_plan_flib_log_bridge: main: using FLIB_NUM_PROCESS_ON_NODE: %d\n\0".as_ptr(),count);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_partition_rank_log_bridge(rank:c_int,cpu:c_int) {
++ if debug!=0 {printf(b"mcexec_partition_rank_log_bridge: main: rank: %d, target CPU: %d\n\0".as_ptr(),rank,cpu);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_partition_sched_setaffinity_warning_bridge() {
++ if debug!=0 {printf(b"mcexec_partition_sched_setaffinity_warning_bridge: WARNING: couldn't bind to mcexec_cpu_set\n\0".as_ptr());fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_partition_numa_run_warning_bridge(node:c_int) {
++ if debug!=0 {printf(b"mcexec_partition_numa_run_warning_bridge: WARNING: couldn't bind to NUMA %d\n\0".as_ptr(),node);fflush(stdout);}
++}
++
++#[cfg(mcexec_topology_fixture)]
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_topology_fixture_abi(out:*mut usize)->usize {
++ let values=[core::mem::size_of::<StatStorage>(),core::mem::align_of::<StatStorage>(),128,8,core::mem::size_of::<GetCpuSetArg>(),core::mem::align_of::<GetCpuSetArg>(),
++ core::mem::offset_of!(GetCpuSetArg,nr_processes),
++ core::mem::offset_of!(GetCpuSetArg,req_cpu_list),
++ core::mem::offset_of!(GetCpuSetArg,req_cpu_list_len),
++ core::mem::offset_of!(GetCpuSetArg,process_rank),
++ core::mem::offset_of!(GetCpuSetArg,ppid),
++ core::mem::offset_of!(GetCpuSetArg,cpu_set),
++ core::mem::offset_of!(GetCpuSetArg,cpu_set_size),
++ core::mem::offset_of!(GetCpuSetArg,target_core),
++ core::mem::offset_of!(GetCpuSetArg,mcexec_linux_numa),
++ core::mem::offset_of!(GetCpuSetArg,mcexec_cpu_set),
++ core::mem::offset_of!(GetCpuSetArg,mcexec_cpu_set_size),
++ core::mem::offset_of!(GetCpuSetArg,ikc_mapped),
++ ];core::ptr::copy_nonoverlapping(values.as_ptr(),out,values.len());values.len()
++}
+diff --git a/executer/user/rust/mcexec_diagnostics.rs b/executer/user/rust/mcexec_diagnostics.rs
+new file mode 100644
+--- /dev/null
++++ b/executer/user/rust/mcexec_diagnostics.rs
+@@ -0,0 +1,545 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Ports only actual project diagnostics; formatting remains libc functionality.
++use super::{c_int,c_long,c_ulong,c_void};
++unsafe extern "C" {
++ static mut debug:c_int;static mut stdout:*mut c_void;static mut stderr:*mut c_void;
++ fn printf(fmt:*const u8,...)->c_int;
++ fn fprintf(stream:*mut c_void,fmt:*const u8,...)->c_int;
++ fn fflush(stream:*mut c_void)->c_int;
++ fn strerror(error:c_int)->*const u8;
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_load_too_large_interp_bridge() {
++ fprintf(stderr,b"mcexec_load_too_large_interp_bridge: too large PT_INTERP segment\n\0".as_ptr());fflush(stderr);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_load_cannot_read_interp_bridge() {
++ fprintf(stderr,b"mcexec_load_cannot_read_interp_bridge: cannot read PT_INTERP segment\n\0".as_ptr());fflush(stderr);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_search_file_path_too_long_bridge(root:*const u8,path:*const u8) {
++ fprintf(stderr,b"mcexec_search_file_path_too_long_bridge: modified path too long: %s/%s\n\0".as_ptr(),root,path);fflush(stderr);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_lookup_array_too_small_bridge() {
++ fprintf(stderr,b"lookup_exec_path(): array too small?\n\0".as_ptr());
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_lookup_stat_error_bridge(path:*const u8,error:c_int) {
++ if debug!=0 {printf(b"mcexec_lookup_stat_error_bridge: lookup_exec_path(): error stat for %s: %d\n\0".as_ptr(),path,error);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_lookup_not_found_bridge(filename:*const u8) {
++ fprintf(stderr,b"lookup_exec_path(): error finding file %s\n\0".as_ptr(),filename);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_lookup_success_bridge(path:*const u8) {
++ if debug!=0 {printf(b"mcexec_lookup_success_bridge: lookup_exec_path(): %s\n\0".as_ptr(),path);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_load_desc_not_executable_bridge(filename:*const u8,error:c_int) {
++ if debug!=0 {printf(b"mcexec_load_desc_not_executable_bridge: Error: %s is not an executable?, errno: %d\n\0".as_ptr(),filename,error);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_load_desc_zero_length_bridge(filename:*const u8) {
++ if debug!=0 {printf(b"mcexec_load_desc_zero_length_bridge: Error: file %s is zero length\n\0".as_ptr(),filename);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_load_desc_open_failed_bridge(filename:*const u8) {
++ if debug!=0 {printf(b"mcexec_load_desc_open_failed_bridge: Error: Failed to open %s\n\0".as_ptr(),filename);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_load_desc_header_failed_bridge(filename:*const u8) {
++ if debug!=0 {printf(b"mcexec_load_desc_header_failed_bridge: Error: Failed to read header from %s\n\0".as_ptr(),filename);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_load_desc_shebang_read_failed_bridge(filename:*const u8) {
++ if debug!=0 {printf(b"mcexec_load_desc_shebang_read_failed_bridge: Error: reading shebang path %s\n\0".as_ptr(),filename);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_load_desc_open_exec_failed_bridge(filename:*const u8,ret:c_int,fd_value:c_int) {
++ fprintf(stderr,b"Error: open_exec() fails for %s: %d (fd: %d)\n\0".as_ptr(),filename,ret,fd_value);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_load_desc_strdup_failed_bridge() {
++ fprintf(stderr,b"WARNING: strdup(filename) failed\n\0".as_ptr());
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_load_desc_getcwd_failed_bridge() {
++ fprintf(stderr,b"Error: getting current working dir pathname\n\0".as_ptr());
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_load_desc_alloc_exec_path_failed_bridge() {
++ fprintf(stderr,b"Error: allocating exec_path\n\0".as_ptr());
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_load_desc_build_exec_path_failed_bridge() {
++ fprintf(stderr,b"Error: building exec_path\n\0".as_ptr());
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_load_desc_parse_elf_failed_bridge() {
++ fprintf(stderr,b"Error: Failed to parse ELF!\n\0".as_ptr());
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_load_desc_interp_not_found_bridge(path:*const u8) {
++ fprintf(stderr,b"Error: interp not found: %s\n\0".as_ptr(),path);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_load_desc_interp_open_failed_bridge(path:*const u8) {
++ fprintf(stderr,b"Error: Failed to open %s\n\0".as_ptr(),path);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_load_desc_parse_interp_failed_bridge() {
++ fprintf(stderr,b"Error: Failed to parse interp!\n\0".as_ptr());
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_load_shebang_find_error_bridge(path:*const u8) {
++ if debug!=0 {printf(b"mcexec_load_shebang_find_error_bridge: error: finding file: %s\n\0".as_ptr(),path);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_load_shebang_load_error_bridge(path:*const u8) {
++ if debug!=0 {printf(b"mcexec_load_shebang_load_error_bridge: error: loading file: %s\n\0".as_ptr(),path);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_load_cannot_read_ehdr_bridge() {
++ fprintf(stderr,b"mcexec_load_cannot_read_ehdr_bridge: Cannot read Ehdr.\n\0".as_ptr());fflush(stderr);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_load_elfmag_mismatch_bridge() {
++ fprintf(stderr,b"mcexec_load_elfmag_mismatch_bridge: ELFMAG mismatched.\n\0".as_ptr());fflush(stderr);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_load_phdr_failed_bridge(index:c_int) {
++ fprintf(stderr,b"mcexec_load_phdr_failed_bridge: Loading phdr failed (%d)\n\0".as_ptr(),index);fflush(stderr);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_load_pt_interp_on_interp_bridge() {
++ fprintf(stderr,b"mcexec_load_pt_interp_on_interp_bridge: PT_INTERP on interp\n\0".as_ptr());fflush(stderr);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_load_section_log_bridge(index:c_int,vaddr:c_ulong,filesz:c_ulong,offset:c_ulong,len:c_ulong,prot:c_int) {
++ if debug!=0 {printf(b"mcexec_load_section_log_bridge: %d: (%s) %lx, %lx, %lx, %lx, %x\n\0".as_ptr(),index,b"PT_LOAD\0".as_ptr(),vaddr,filesz,offset,len,prot);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_transfer_seek_error_bridge() {
++ fprintf(stderr,b"transfer_image(): error: seeking file position\n\0".as_ptr());
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_transfer_access_error_bridge() {
++ fprintf(stderr,b"transfer_image(): error: accessing file\n\0".as_ptr());
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_transfer_short_error_bridge() {
++ fprintf(stderr,b"transfer_image(): file too short?\n\0".as_ptr());
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_transfer_seeked_bridge(offset:c_ulong,size:c_ulong) {
++ if debug!=0 {printf(b"mcexec_transfer_seeked_bridge: seeked to %lx | size %ld\n\0".as_ptr(),offset,size);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_print_flat_count_bridge(count:c_long) {
++ if debug!=0 {printf(b"mcexec_print_flat_count_bridge: counter: %ld\n\0".as_ptr(),count);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_print_flat_entry_bridge(entry:*const u8) {
++ if debug!=0 {printf(b"mcexec_print_flat_entry_bridge: %s\n\0".as_ptr(),entry);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_ompi_policy_log_bridge(mpol:*const u8) {
++ if debug!=0 {printf(b"mcexec_desc_ompi_policy_log_bridge: OMPI_MCA_plm_ple_memory_allocation_policy: %s\n\0".as_ptr(),mpol);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_main_reduce_stack_failed_bridge() {
++ fprintf(stderr,b"Error: Failed to reduce stack.\n\0".as_ptr());
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_reduce_stack_setrlimit_failed_bridge() {
++ fprintf(stderr,b"mcexec_reduce_stack_setrlimit_failed_bridge: failed to setrlimit(RLIMIT_STACK)\n\0".as_ptr());fflush(stderr);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_reduce_stack_readlink_failed_bridge() {
++ fprintf(stderr,b"mcexec_reduce_stack_readlink_failed_bridge: Could not readlink /proc/self/exe? %m\n\0".as_ptr());fflush(stderr);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_reduce_stack_execv_failed_bridge() {
++ fprintf(stderr,b"mcexec_reduce_stack_execv_failed_bridge: failed to execv(myself)\n\0".as_ptr());fflush(stderr);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_execve2_alloc_desc_failed_bridge() {
++ fprintf(stderr,b"execve(): error allocating desc\n\0".as_ptr());
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_execve2_transfer_desc_failed_bridge() {
++ fprintf(stderr,b"execve(): error obtaining ELF descriptor\n\0".as_ptr());
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_execve2_transfer_desc_ok_bridge() {
++ if debug!=0 {printf(b"mcexec_execve2_transfer_desc_ok_bridge: %s\0".as_ptr(),b"execve(): transfer ELF desc OK\n\0".as_ptr());fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_execve2_transfer_image_failed_bridge() {
++ fprintf(stderr,b"error: transferring image\n\0".as_ptr());
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_execve2_image_transferred_bridge() {
++ if debug!=0 {printf(b"mcexec_execve2_image_transferred_bridge: %s\0".as_ptr(),b"execve(): image transferred\n\0".as_ptr());fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_execve2_close_exec_failed_bridge(ret:c_int) {
++ fprintf(stderr,b"error: MCEXEC_UP_CLOSE_EXEC failed with %d\n\0".as_ptr(),ret);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_main_flush_bridge() {
++ fflush(stdout);
++ fflush(stderr);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_flib_affinity_log_bridge(old_affinity:*const u8,new_affinity:*const u8) {
++ if debug!=0 {printf(b"mcexec_flib_affinity_log_bridge: FLIB_AFFINITY_ON_PROCESS: %s -> %s\n\0".as_ptr(),old_affinity,new_affinity);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_execve1_load_desc_ok_bridge(filename:*const u8,sections:c_int) {
++ if debug!=0 {printf(b"mcexec_execve1_load_desc_ok_bridge: execve(): load_elf_desc() for %s OK, num sections: %d\n\0".as_ptr(),filename,sections);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_execve1_transfer_alloc_failed_bridge(filename:*const u8) {
++ fprintf(stderr,b"execve(): could not alloc transfer buffer for file %s\n\0".as_ptr(),filename);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_execve1_transfer_failed_bridge(filename:*const u8) {
++ fprintf(stderr,b"execve(): error transfering ELF for file %s\n\0".as_ptr(),filename);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_execve1_transfer_ok_bridge(filename:*const u8) {
++ if debug!=0 {printf(b"mcexec_execve1_transfer_ok_bridge: execve(): load_elf_desc() for %s OK\n\0".as_ptr(),filename);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_execve_invalid_phase_bridge() {
++ fprintf(stderr,b"execve(): ERROR: invalid execve phase\n\0".as_ptr());
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_main_loop_log_syscall_bridge(cpu:c_int,number:c_long) {
++ if debug!=0 {printf(b"mcexec_main_loop_log_syscall_bridge: [%d] got syscall: %ld\n\0".as_ptr(),cpu,number);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_main_loop_timeout_bridge() {
++ if debug!=0 {printf(b"mcexec_main_loop_timeout_bridge: timed out.\n\0".as_ptr());fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_add_env_list_invalid_bridge(add_string:*const u8) {
++ printf(b"\"%s\" is not env value.\n\0".as_ptr(),add_string);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_main_stack_debug_bridge(prem:c_long,max:c_long) {
++ if debug!=0 {printf(b"mcexec_main_stack_debug_bridge: stack_premap=%ld,stack_max=%ld\n\0".as_ptr(),prem,max);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_main_thread_plan_error_bridge() {
++ fprintf(stderr,b"error: nr_processes can't exceed nr. of CPUs\n\0".as_ptr());
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_main_load_desc_error_bridge(path:*const u8,ret:c_int) {
++ fprintf(stderr,b"%s: could not load program: %s\n\0".as_ptr(),path,strerror(ret));
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_opendev_path_error_bridge() {
++ fprintf(stderr,b"Error: Failed to build mcos device path.\n\0".as_ptr());
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_opendev_open_error_bridge(path:*const u8) {
++ fprintf(stderr,b"Error: Failed to open %s.\n\0".as_ptr(),path);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_opendev_query_error_bridge() {
++ fprintf(stderr,b"Error: IHK_OS_GET_BUILDID failed\0".as_ptr());
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_opendev_buildid_mismatch_bridge(buildid:*const u8,query_result:*const u8) {
++ fprintf(stderr,b"Error: build-id of mcexec (%s) didn't match that of IHK (%s)\n\0".as_ptr(),buildid,query_result);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_find_libdir_readlink_failed_bridge(error:c_int) {
++ fprintf(stderr,b"readlink /proc/self/exe: %d\n\0".as_ptr(),error);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_find_libdir_objdump_failed_bridge(error:c_int) {
++ fprintf(stderr,b"objdump /proc/self/exe: %d\n\0".as_ptr(),error);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_find_libdir_rpath_not_found_bridge(error:c_int) {
++ fprintf(stderr,b"RPATH not found: %d\n\0".as_ptr(),error);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_ld_preload_find_failed_bridge() {
++ fprintf(stderr,b"warning: did not set LD_PRELOAD\n\0".as_ptr());
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_ld_preload_line_too_long_bridge() {
++ fprintf(stderr,b"%s: warning: LD_PRELOAD line is too long\n\0".as_ptr(),b"ld_preload_init\0".as_ptr());
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_ld_preload_setenv_failed_bridge() {
++ printf(b"%s: warning: failed to set LD_PRELOAD environment variable\n\0".as_ptr(),b"ld_preload_init\0".as_ptr());
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_ld_preload_debug_bridge(envbuf:*const u8) {
++ if debug!=0 {printf(b"mcexec_ld_preload_debug_bridge: %s: preload library: %s\n\0".as_ptr(),b"ld_preload_init\0".as_ptr(),envbuf);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_kill_thread_not_found_bridge(tid:c_ulong,sig:c_int) {
++ printf(b"%s: ERROR: Thread not found (tid=%ld,sig=%d)\n\0".as_ptr(),b"kill_thread\0".as_ptr(),tid,sig);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_gettid_alloc_error_bridge() {
++ fprintf(stderr,b"__NR_gettid(): error allocating TIDs\n\0".as_ptr());
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_gettid_transfer_error_bridge() {
++ fprintf(stderr,b"__NR_gettid(): error transfering TIDs\n\0".as_ptr());
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_swapout_unavailable_bridge() {
++ printf(b"mcexec has not been compiled with ENABLE_QLMPI\n\0".as_ptr());
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_linux_spawn_invalid_arg_bridge() {
++ fprintf(stderr,b"linux_spawn(): ERROR: invalid argument \n\0".as_ptr());
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_linux_spawn_invalid_exec_path_bridge() {
++ fprintf(stderr,b"linux_spawn(): ERROR: invalid exec_path \n\0".as_ptr());
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_linux_spawn_alloc_exec_path_failed_bridge() {
++ fprintf(stderr,b"linux_spawn(): ERROR: failed to allocating exec_path\n\0".as_ptr());
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_linux_spawn_strncpy_failed_bridge() {
++ fprintf(stderr,b"linux_spawn(): ERROR: failed to strncpy from user\n\0".as_ptr());
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_linux_spawn_alloc_argv_failed_bridge(index:c_int) {
++ fprintf(stderr,b"linux_spawn(): ERROR: failed to allocating argv[%d]\n\0".as_ptr(),index);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_linux_spawn_posix_spawn_failed_bridge(rc:c_int) {
++ fprintf(stderr,b"linux_spawn(): ERROR: posix_spawn returned %d\n\0".as_ptr(),rc);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_util_thread_missing_desc_bridge() {
++ printf(b"%s: ERROR: uti_desc not found. Add --enable-uti option to mcexec.\n\0".as_ptr(),b"util_thread\0".as_ptr());
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_util_thread_desc_log_bridge(desc:*mut c_void) {
++ if debug!=0 {printf(b"mcexec_util_thread_desc_log_bridge: %s: uti_desc=%p\n\0".as_ptr(),b"util_thread\0".as_ptr(),desc);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_util_thread_worker_tid_log_bridge(tid:c_int) {
++ if debug!=0 {printf(b"mcexec_util_thread_worker_tid_log_bridge: %s: worker tid: %d\n\0".as_ptr(),b"util_thread\0".as_ptr(),tid);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_util_thread_intercept_warning_bridge(rc:c_int) {
++ fprintf(stderr,b"%s: WARNING: syscall_intercept returned %x\n\0".as_ptr(),b"util_thread\0".as_ptr(),rc);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_util_thread_get_ctx_error_bridge(error:c_int) {
++ fprintf(stderr,b"%s: Error: MCEXEC_UP_UTI_GET_CTX failed (%d)\n\0".as_ptr(),b"util_thread\0".as_ptr(),error);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_util_thread_param_large_bridge() {
++ fprintf(stderr,b"%s: ERROR: param is too large\n\0".as_ptr(),b"util_thread\0".as_ptr());
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_util_thread_attr_error_bridge(error:c_int) {
++ fprintf(stderr,b"%s: error: MCEXEC_UP_UTI_ATTR: %s\n\0".as_ptr(),b"util_thread\0".as_ptr(),strerror(error));
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_util_thread_switch_failed_bridge(rc:c_int) {
++ fprintf(stderr,b"%s: ERROR switch_ctx failed (%d)\n\0".as_ptr(),b"util_thread\0".as_ptr(),rc);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_util_thread_switch_returned_bridge(rc:c_int) {
++ fprintf(stderr,b"%s: ERROR: Returned from switch_ctx (%d)\n\0".as_ptr(),b"util_thread\0".as_ptr(),rc);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_sched_setaffinity_invalid_bridge(pid_arg:c_ulong) {
++ fprintf(stderr,b"mcexec_sched_setaffinity_invalid_bridge: __NR_sched_setaffinity: invalid argument (%lx)\n\0".as_ptr(),pid_arg);fflush(stderr);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_addfd_path_too_long_bridge() {
++ fprintf(stderr,b"%s: path too long\n\0".as_ptr(),b"overlay_addfd\0".as_ptr());
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_considering_bridge(dirfd:c_int,path:*const u8) {
++ if debug!=0 {printf(b"mcexec_overlay_considering_bridge: considering fd %d path %s\n\0".as_ptr(),dirfd,path);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_fd_path_truncated_bridge(dirfd:c_int) {
++ fprintf(stderr,b"%s: /proc/self/fd/%d path truncated\n\0".as_ptr(),b"overlay_path\0".as_ptr(),dirfd);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_readlink_fd_failed_bridge(dirfd:c_int,error:c_int) {
++ fprintf(stderr,b"%s: readlink /proc/self/fd/%d failed: %d\n\0".as_ptr(),b"overlay_path\0".as_ptr(),dirfd,error);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_truncated_bridge(path:*const u8) {
++ fprintf(stderr,b"%s: %s truncated\n\0".as_ptr(),b"overlay_path\0".as_ptr(),path);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_getcwd_failed_bridge(error:c_int) {
++ fprintf(stderr,b"%s: could not getcwd(): %d\n\0".as_ptr(),b"overlay_path\0".as_ptr(),error);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_glued_bridge(path:*const u8) {
++ if debug!=0 {printf(b"mcexec_overlay_glued_bridge: glued to %s\n\0".as_ptr(),path);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_find_libdir_failed_bridge() {
++ fprintf(stderr,b"error: failed to find library directory\n\0".as_ptr());
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_replaced_bridge(path:*const u8,mapped:*const u8) {
++ if debug!=0 {printf(b"mcexec_overlay_replaced_bridge: %s: %s replaced with %s\n\0".as_ptr(),b"overlay_path\0".as_ptr(),path,mapped);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_trying_bridge(path:*const u8,error:c_int) {
++ if debug!=0 {printf(b"mcexec_overlay_trying_bridge: trying %s: %d\n\0".as_ptr(),path,error);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_blacklisted_bridge(path:*const u8) {
++ if debug!=0 {printf(b"mcexec_overlay_blacklisted_bridge: blacklisted %s\n\0".as_ptr(),path);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_getdents_offset_bridge(offset:c_long) {
++ if debug!=0 {printf(b"mcexec_overlay_getdents_offset_bridge: offset: %ld\n\0".as_ptr(),offset);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_getdents_lower_failed_bridge(error:c_int) {
++ fprintf(stderr,b"%s: linux getdents failed: %d\n\0".as_ptr(),b"overlay_getdents\0".as_ptr(),error);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_getdents_blacklisted_bridge(path:*const u8) {
++ if debug!=0 {printf(b"mcexec_overlay_getdents_blacklisted_bridge: blacklisted: %s\n\0".as_ptr(),path);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_getdents_dupe_bridge(name:*const u8) {
++ if debug!=0 {printf(b"mcexec_overlay_getdents_dupe_bridge: dupe: %s\n\0".as_ptr(),name);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_getdents_offset_too_large_bridge(offset:c_long,mck_size:usize,linux_size:usize) {
++ fprintf(stderr,b"%s: offset (%ld) is too large (upper: %ld, lower: %ld)\n\0".as_ptr(),b"overlay_getdents\0".as_ptr(),offset,mck_size,linux_size);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_getdents_upper_small_bridge() {
++ if debug!=0 {printf(b"mcexec_overlay_getdents_upper_small_bridge: upper: Result buffer is too small\n\0".as_ptr());fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_getdents_lower_small_bridge() {
++ if debug!=0 {printf(b"mcexec_overlay_getdents_lower_small_bridge: lower: Result buffer is too small\n\0".as_ptr());fflush(stdout);}
++}
+diff --git a/executer/user/rust/mcexec_entry_metadata_options.rs b/executer/user/rust/mcexec_entry_metadata_options.rs
+new file mode 100644
+--- /dev/null
++++ b/executer/user/rust/mcexec_entry_metadata_options.rs
+@@ -0,0 +1,106 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++use super::{c_int,c_ulong,c_void};
++use core::ptr::addr_of_mut;
++include!(env!("MCEXEC_BUILDID_RS"));
++static mut QUERY_RESULT:[u8;BUILD_ID.len()]=[0;BUILD_ID.len()];
++#[repr(C)]struct UnshareDesc {flags:c_ulong}
++#[repr(C)]struct MountDesc {dev:*const u8,dir:*const u8,kind:*const u8,flags:c_ulong,data:*mut c_void}
++unsafe extern "C" {
++ static mut debug:c_int;static mut stdout:*mut c_void;static mut stderr:*mut c_void;
++ static mut mcexec_partition_cpu_set_storage:[c_ulong;16];
++ fn printf(fmt:*const u8,...)->c_int;fn fprintf(f:*mut c_void,fmt:*const u8,...)->c_int;fn fflush(f:*mut c_void)->c_int;
++ #[cfg(mcexec_syscall_mod_call)]fn mc_cmd_server_init()->c_int;
++ #[cfg(mcexec_syscall_mod_call)]fn mc_cmd_server_exit();
++ #[cfg(all(mcexec_syscall_mod_call,mcexec_cmd_dcfa))]fn ibmic_cmd_server_init()->c_int;
++ #[cfg(all(mcexec_syscall_mod_call,mcexec_cmd_dcfa))]fn ibmic_cmd_server_exit();
++ #[cfg(all(mcexec_syscall_mod_call,mcexec_cmd_dcfampi))]fn dcfampi_cmd_server_init()->c_int;
++ #[cfg(all(mcexec_syscall_mod_call,mcexec_cmd_dcfampi))]fn dcfampi_cmd_server_exit();
++ #[cfg(mcexec_bind_mount)]fn isunshare()->c_int;
++ #[cfg(mcexec_bind_mount)]fn strerror(error:c_int)->*const u8;
++ #[cfg(mcexec_debug)]fn numa_num_possible_cpus()->c_int;
++ #[cfg(mcexec_debug)]fn sched_getaffinity(pid:c_int,n:usize,set:*mut c_void)->c_int;
++ #[cfg(mcexec_debug)]fn exit(code:c_int)->!;
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_opendev_buildid_size_bridge()->usize {BUILD_ID.len()}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_opendev_buildid_bridge()->*const u8 {BUILD_ID.as_ptr()}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_opendev_query_result_bridge()->*mut u8 {
++ let result=addr_of_mut!(QUERY_RESULT).cast::<u8>();core::ptr::write_bytes(result,0,BUILD_ID.len());result
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_exit_cmd_servers_bridge() {
++ #[cfg(mcexec_syscall_mod_call)] {
++  #[cfg(mcexec_cmd_dcfa)] {ibmic_cmd_server_exit();}
++  #[cfg(mcexec_cmd_dcfampi)] {dcfampi_cmd_server_exit();}
++  mc_cmd_server_exit();if debug!=0 {printf(b"mcexec_exit_cmd_servers_bridge: mccmd server exited\n\0".as_ptr());fflush(stdout);}
++ }
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_main_cmd_servers_init_bridge()->c_int {
++ #[cfg(mcexec_syscall_mod_call)] {
++  if mc_cmd_server_init()!=0 {fprintf(stderr,b"Error: cmd server init failed\n\0".as_ptr());return 1;}
++  #[cfg(mcexec_cmd_dcfa)] {if ibmic_cmd_server_init()!=0 {fprintf(stderr,b"Error: Failed to initialize ibmic_cmd_server.\n\0".as_ptr());return -1;}}
++  #[cfg(mcexec_cmd_dcfampi)] {if dcfampi_cmd_server_init()!=0 {fprintf(stderr,b"Error: Failed to initialize dcfampi_cmd_server.\n\0".as_ptr());return -1;}}
++  if debug!=0 {printf(b"mcexec_main_cmd_servers_init_bridge: mccmd server initialized\n\0".as_ptr());fflush(stdout);}
++ }0
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_main_bind_mount_bridge()->c_int {
++ #[cfg(mcexec_bind_mount)] {
++  let error=isunshare();
++  if error==0 {
++   let unshare=UnshareDesc {flags:0x20000};
++   if super::ioctl(super::MCEXEC_FD,MCEXEC_SYS_UNSHARE,&unshare as *const UnshareDesc as c_ulong)!=0 {
++    fprintf(stderr,b"Error: Failed to unshare. (%s)\n\0".as_ptr(),strerror(*super::__errno_location()));return 1;
++   }
++   let mount=MountDesc {dev:core::ptr::null(),dir:b"/\0".as_ptr(),kind:core::ptr::null(),flags:0x40000|0x4000,data:core::ptr::null_mut()};
++   if super::ioctl(super::MCEXEC_FD,MCEXEC_SYS_MOUNT,&mount as *const MountDesc as c_ulong)!=0 {
++    fprintf(stderr,b"Error: Failed to privatize mounts. (%s)\n\0".as_ptr(),strerror(*super::__errno_location()));return 1;
++   }
++  } else if error == -1 {return 1;}
++ }0
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_partition_debug_ikc_binding_bridge() {
++ #[cfg(mcexec_debug)] {
++  let mut i=0;
++  while i<numa_num_possible_cpus() {
++   if i>=0&&i<1024&&mcexec_partition_cpu_set_storage[i as usize/64]&(1u64<<(i%64))!=0 {
++    if debug!=0 {printf(b"mcexec_partition_debug_ikc_binding_bridge: PID %d bound to CPU %d\n\0".as_ptr(),super::getpid(),i);fflush(stdout);}
++   }i+=1;
++  }
++ }
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_partition_debug_numa_binding_bridge() {
++ #[cfg(mcexec_debug)] {
++  let mut cpuset=[0u64;16];let mut affinity=[0u8;8192];let mut used=0;
++  if sched_getaffinity(0,128,cpuset.as_mut_ptr().cast())!=0 {super::perror(b"Error sched_getaffinity\0".as_ptr());exit(1);}
++  for i in 0..512 {
++   if cpuset[i/64]&(1u64<<(i%64))!=0 {
++    affinity[used]=b' ';used+=1;used+=super::write_i32_decimal(affinity.as_mut_ptr().add(used),i as c_int);affinity[used]=0;
++   }
++  }
++  if debug!=0 {printf(b"mcexec_partition_debug_numa_binding_bridge: PID: %d affinity: %s\n\0".as_ptr(),super::getpid(),affinity.as_ptr());fflush(stdout);}
++ }
++}
++#[cfg(not(mcexec_entry_fixture))]
++#[no_mangle]
++pub unsafe extern "C" fn main(argc:c_int,argv:*mut *mut u8)->c_int {super::mcexec_main_body(argc,argv)}
++#[cfg(mcexec_entry_fixture)]
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_main_entry_fixture(argc:c_int,argv:*mut *mut u8)->c_int {super::mcexec_main_body(argc,argv)}
++
++#[cfg(mcexec_bind_mount)]
++const MCEXEC_SYS_UNSHARE:c_ulong=0x30a02916;
++
++#[cfg(mcexec_bind_mount)]
++const MCEXEC_SYS_MOUNT:c_ulong=0x30a02914;
++
++#[cfg(mcexec_entry_fixture)]
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_entry_fixture_abi(out:*mut usize) {
++ let values=[core::mem::size_of::<UnshareDesc>(),core::mem::align_of::<UnshareDesc>(),core::mem::size_of::<MountDesc>(),core::mem::align_of::<MountDesc>(),core::mem::offset_of!(MountDesc,dev),core::mem::offset_of!(MountDesc,dir),core::mem::offset_of!(MountDesc,kind),core::mem::offset_of!(MountDesc,flags),core::mem::offset_of!(MountDesc,data)];core::ptr::copy_nonoverlapping(values.as_ptr(),out,values.len());
++}
+diff --git a/executer/user/rust/mcexec_helpers.rs b/executer/user/rust/mcexec_helpers.rs
+--- a/executer/user/rust/mcexec_helpers.rs
++++ b/executer/user/rust/mcexec_helpers.rs
+@@ -8719,3 +8719,39 @@
+         core::hint::spin_loop();
+     }
+ }
++
++#[path = "mcexec_overlay_fd.rs"]
++mod mcexec_overlay_fd;
++
++#[path = "mcexec_worker_lifecycle.rs"]
++mod mcexec_worker_lifecycle;
++
++#[path = "mcexec_clone_child.rs"]
++mod mcexec_clone_child;
++
++#[path = "mcexec_load_descriptor.rs"]
++mod mcexec_load_descriptor;
++
++#[path = "mcexec_signal_wait_exit.rs"]
++mod mcexec_signal_wait_exit;
++
++#[path = "mcexec_platform_syscalls.rs"]
++mod mcexec_platform_syscalls;
++
++#[path = "mcexec_cpu_topology.rs"]
++mod mcexec_cpu_topology;
++
++#[path = "mcexec_diagnostics.rs"]
++mod mcexec_diagnostics;
++
++#[path = "mcexec_launch_state.rs"]
++mod mcexec_launch_state;
++
++#[path = "mcexec_residual_functional.rs"]
++mod mcexec_residual_functional;
++
++#[path = "mcexec_entry_metadata_options.rs"]
++mod mcexec_entry_metadata_options;
++
++#[path = "mcexec_runtime_data.rs"]
++mod mcexec_runtime_data;
+diff --git a/executer/user/rust/mcexec_launch_state.rs b/executer/user/rust/mcexec_launch_state.rs
+new file mode 100644
+--- /dev/null
++++ b/executer/user/rust/mcexec_launch_state.rs
+@@ -0,0 +1,312 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Project launch-state/lifecycle callbacks now Rust; retain original global storage.
++use super::{c_int,c_long,c_ulong,c_void,McexecMainStatePtrs};
++use core::ptr::{addr_of_mut,null_mut};
++#[repr(C)]
++struct Rlimit { cur:c_ulong,max:c_ulong }
++unsafe extern "C" {
++ static mut nr_processes:c_int;
++ static mut nr_threads:c_int;
++ static mut mpol_threshold:c_ulong;
++ static mut heap_extension:c_ulong;
++ static mut straight_map_threshold:c_ulong;
++ static mut stack_premap:c_long;
++ static mut stack_max:c_long;
++ static mut uti_thread_rank:c_int;
++ static mut mcexec_flags:c_ulong;
++ static mut mpol_bind_nodes:*mut u8;
++ static mut enable_uti:c_int;
++ static mut enable_vdso:c_int;
++ static mut profile:c_int;
++ static mut mpol_no_heap:c_int;
++ static mut mpol_no_stack:c_int;
++ static mut mpol_no_bss:c_int;
++ static mut mpol_shm_premap:c_int;
++ static mut no_bind_ikc_map:c_int;
++ static mut straight_map:c_int;
++ static mut uti_use_last_cpu:c_int;
++ #[cfg(mcexec_enable_tofu)]
++ static mut enable_tofu:c_int;
++ static mut mcosid:c_int;static mut ischild:c_int;static mut exec_path:*mut u8;static mut altroot:*mut u8;
++ static mut rlim_stack:Rlimit;static mut disable_sched_yield:c_int;static mut dev:[u8;64];
++ static mut overlay_fd_lock:c_int;static mut mcexec_options:c_void;
++ static mut optarg:*mut u8;static mut optind:c_int;
++ static mut debug:c_int;static mut stdout:*mut c_void;static mut stderr:*mut c_void;
++ #[cfg(mcexec_syscall_mod_call)]static mut __glob_argc:c_int;
++ #[cfg(mcexec_syscall_mod_call)]static mut __glob_argv:*mut *mut u8;
++ fn fprintf(f:*mut c_void,fmt:*const u8,...)->c_int;fn printf(fmt:*const u8,...)->c_int;fn fflush(f:*mut c_void)->c_int;
++ fn getrlimit(resource:c_int,limit:*mut Rlimit)->c_int;fn setrlimit(resource:c_int,limit:*const Rlimit)->c_int;
++ fn execv(path:*const u8,argv:*mut *mut u8)->c_int;
++ fn unsetenv(name:*const u8)->c_int;
++ fn personality(persona:c_ulong)->c_int;
++ fn strerror(error:c_int)->*const u8;
++ fn getopt_long(argc:c_int,argv:*mut *mut u8,opts:*const u8,longopts:*const c_void,index:*mut c_int)->c_int;
++ fn pthread_spin_init(lock:*mut c_int,shared:c_int)->c_int;
++ fn open(path:*const u8,flags:c_int,...)->c_int;
++ fn popen(command:*const u8,mode:*const u8)->*mut c_void;fn pclose(file:*mut c_void)->c_int;
++ fn prctl(option:c_int,...)->c_int;
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_main_page_size_bridge() -> c_ulong {
++ super::sysconf(30) as c_ulong
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_main_publish_page_altroot_bridge(size:c_ulong,root:*const u8) {
++ super::MCEXEC_PAGE_SIZE=size;super::MCEXEC_PAGE_MASK=!(size.wrapping_sub(1));altroot=root.cast_mut();
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_altroot_bridge() -> *const u8 {
++ altroot
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_load_desc_publish_exec_path_bridge(path:*mut u8) {
++ if !exec_path.is_null(){super::free(exec_path);}exec_path=path;
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_main_load_stack_rlimit_bridge(cur:*mut c_ulong,max:*mut c_ulong) -> c_int {
++ if getrlimit(3,addr_of_mut!(rlim_stack))!=0 {fprintf(stderr,b"getrlimit failed\n\0".as_ptr());return 1;}
++ *cur=rlim_stack.cur;*max=rlim_stack.max;
++ if debug!=0 {printf(b"mcexec_main_load_stack_rlimit_bridge: rlim_stack=%ld,%ld\n\0".as_ptr(),rlim_stack.cur,rlim_stack.max);fflush(stdout);}0
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_reduce_stack_setenv_bridge(value:*const u8) -> c_int {
++ super::setenv(b"MCKERNEL_RLIMIT_STACK\0".as_ptr(),value,0)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_reduce_stack_setrlimit_bridge(cur:c_ulong,max:c_ulong) -> c_int {
++ let limit=Rlimit{cur,max};setrlimit(3,&limit)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_reduce_stack_readlink_bridge(out:*mut u8,size:usize) -> isize {
++ super::readlink(b"/proc/self/exe\0".as_ptr(),out,size)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_find_libdir_readlink_bridge(out:*mut u8,size:usize) -> isize {
++ super::readlink(b"/proc/self/exe\0".as_ptr(),out,size)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_reduce_stack_execv_bridge(path:*const u8,argv:*mut *mut u8) -> c_int {
++ execv(path,argv)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_execve1_enable_vdso_bridge() -> c_int {
++ enable_vdso
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_execve1_rlim_cur_bridge() -> c_ulong {
++ rlim_stack.cur
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_execve1_rlim_max_bridge() -> c_ulong {
++ rlim_stack.max
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_execve1_stack_premap_bridge() -> c_long {
++ stack_premap
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_main_loop_is_child_bridge() -> c_int {
++ ischild
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_opendev_mcosid_bridge() -> c_int {
++ mcosid
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_mcosid_bridge() -> c_int {
++ mcosid
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_ld_preload_enable_uti_bridge() -> c_int {
++ enable_uti
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_enable_uti_bridge() -> c_int {
++ enable_uti
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_ld_preload_disable_sched_yield_bridge() -> c_int {
++ disable_sched_yield
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_main_publish_args_bridge(argc:c_int,argv:*mut *mut u8) {
++ #[cfg(mcexec_syscall_mod_call)] {__glob_argc=argc;__glob_argv=argv;}
++ #[cfg(not(mcexec_syscall_mod_call))] {let _=(argc,argv);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_main_state_ptrs_bridge(state:*mut McexecMainStatePtrs) {
++ *state=core::mem::zeroed();
++ (*state).nr_processes=addr_of_mut!(nr_processes);
++ (*state).nr_threads=addr_of_mut!(nr_threads);
++ (*state).mpol_threshold=addr_of_mut!(mpol_threshold);
++ (*state).heap_extension=addr_of_mut!(heap_extension);
++ (*state).straight_map_threshold=addr_of_mut!(straight_map_threshold);
++ (*state).stack_premap=addr_of_mut!(stack_premap);
++ (*state).stack_max=addr_of_mut!(stack_max);
++ (*state).uti_thread_rank=addr_of_mut!(uti_thread_rank);
++ (*state).mcexec_flags=addr_of_mut!(mcexec_flags);
++ (*state).mpol_bind_nodes=addr_of_mut!(mpol_bind_nodes);
++ (*state).enable_uti=addr_of_mut!(enable_uti);
++ (*state).enable_vdso=addr_of_mut!(enable_vdso);
++ (*state).profile=addr_of_mut!(profile);
++ (*state).mpol_no_heap=addr_of_mut!(mpol_no_heap);
++ (*state).mpol_no_stack=addr_of_mut!(mpol_no_stack);
++ (*state).mpol_no_bss=addr_of_mut!(mpol_no_bss);
++ (*state).mpol_shm_premap=addr_of_mut!(mpol_shm_premap);
++ (*state).no_bind_ikc_map=addr_of_mut!(no_bind_ikc_map);
++ (*state).straight_map=addr_of_mut!(straight_map);
++ (*state).uti_use_last_cpu=addr_of_mut!(uti_use_last_cpu);
++ #[cfg(mcexec_enable_tofu)] {(*state).enable_tofu=addr_of_mut!(enable_tofu);}
++ (*state).rlim_cur=addr_of_mut!(rlim_stack.cur);
++ (*state).rlim_max=addr_of_mut!(rlim_stack.max);
++
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_main_personality_bridge(argv:*mut *mut u8) -> c_int {
++ let mut persona=personality(0xffffffff);
++ if persona&0x400000!=0 {persona &= !0x400000;persona=personality(persona as c_ulong);}
++ if debug!=0 {printf(b"mcexec_main_personality_bridge: persona=%08x\n\0".as_ptr(),persona);fflush(stdout);}
++ let env=b"MCEXEC_ADDR_NO_RANDOMIZE\0".as_ptr();
++ if persona&0x40000==0 {
++  if !super::getenv(env).is_null() {fprintf(stderr,b"mcexec_main_personality_bridge: personality() and then execv() failed\n\0".as_ptr());fflush(stderr);return 1;}
++  persona=personality((persona|0x40000) as c_ulong);
++  if persona == -1 {fprintf(stderr,b"mcexec_main_personality_bridge: personality failed, persona=%08x, strerror=%s\n\0".as_ptr(),persona,strerror(*super::__errno_location()));fflush(stderr);return 1;}
++  if super::setenv(env,b"1\0".as_ptr(),1)==-1 {fprintf(stderr,b"mcexec_main_personality_bridge: setenv failed\n\0".as_ptr());fflush(stderr);return 1;}
++  let mut path=[0u8;4096];
++  let error=super::readlink(b"/proc/self/exe\0".as_ptr(),path.as_mut_ptr(),path.len()) as c_int;
++  if error == -1 {fprintf(stderr,b"mcexec_main_personality_bridge: readlink failed: %m\n\0".as_ptr());fflush(stderr);return 1;}
++  if error as usize>=path.len() {core::ptr::copy_nonoverlapping(b"/proc/self/exe\0".as_ptr(),path.as_mut_ptr(),b"/proc/self/exe\0".len());}else{path[error as usize]=0;}
++  let error=execv(path.as_ptr(),argv);
++  if error == -1 {fprintf(stderr,b"mcexec_main_personality_bridge: execv failed, error=%d,strerror=%s\n\0".as_ptr(),error,strerror(*super::__errno_location()));fflush(stderr);return 1;}
++ }
++ if !super::getenv(env).is_null() && unsetenv(env)==-1 {fprintf(stderr,b"mcexec_main_personality_bridge: unsetenv failed\0".as_ptr());fflush(stderr);return 1;}
++ 0
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_main_next_option_bridge(argc:c_int,argv:*mut *mut u8) -> c_int {
++ getopt_long(argc,argv,b"+c:n:t:M:h:e:s:m:u:S:f:\0".as_ptr(),addr_of_mut!(mcexec_options),null_mut())
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_main_optarg_bridge() -> *mut u8 {
++ optarg
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_main_optind_bridge() -> c_int {
++ optind
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_main_publish_mcosid_bridge(id:c_int) {
++ mcosid=id;
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_main_uti_unavailable_bridge(enabled:c_int) -> c_int {
++ #[cfg(not(mcexec_enable_uti))] {if enabled!=0 {fprintf(stderr,b"mcexec_main_uti_unavailable_bridge: ERROR: uti is not available when not configured with --with-syscall_intercept=<path>\n\0".as_ptr());fflush(stderr);return 1;}}
++ #[cfg(mcexec_enable_uti)] {let _=enabled;}0
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_main_overlay_lock_init_bridge() {
++ pthread_spin_init(addr_of_mut!(overlay_fd_lock),0);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_opendev_dev_bridge() -> *mut u8 {
++ addr_of_mut!(dev).cast()
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_opendev_dev_size_bridge() -> usize {
++64
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_opendev_open_bridge(path:*const u8) -> c_int {
++ open(path,2)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_opendev_publish_fd_bridge(value:c_int) {
++super::MCEXEC_FD=value;
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_opendev_query_buildid_bridge(target:c_int,result:*mut u8) -> c_int {
++super::ioctl(target,0x112a37 as c_ulong,result)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_opendev_close_bridge(target:c_int) {
++super::close(target);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_find_libdir_popen_bridge(cmd:*const u8) -> *mut c_void {
++popen(cmd,b"r\0".as_ptr())
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_find_libdir_getline_bridge(line:*mut *mut u8,size:*mut usize,file:*mut c_void) -> isize {
++super::getline(line,size,file)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_find_libdir_pclose_bridge(file:*mut c_void) {
++pclose(file);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_find_libdir_free_bridge(line:*mut u8) {
++super::free(line);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_ld_preload_getenv_bridge(name:*const u8) -> *mut u8 {
++super::getenv(name)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_ld_preload_setenv_bridge(value:*const u8) -> c_int {
++super::setenv(b"LD_PRELOAD\0".as_ptr(),value,1)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_ld_preload_unsetenv_bridge() -> c_int {
++unsetenv(b"MCKERNEL_LD_PRELOAD\0".as_ptr())
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_ld_preload_enable_qlmpi_bridge() -> c_int {
++cfg!(mcexec_enable_qlmpi) as c_int
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_get_thp_disable_prctl_bridge() -> c_int {
++prctl(42,0 as c_int,0 as c_int,0 as c_int,0 as c_int)
++}
+diff --git a/executer/user/rust/mcexec_load_descriptor.rs b/executer/user/rust/mcexec_load_descriptor.rs
+new file mode 100644
+--- /dev/null
++++ b/executer/user/rust/mcexec_load_descriptor.rs
+@@ -0,0 +1,362 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++const _:()={assert!(core::mem::size_of::<core::ffi::c_ulong>()==8);assert!(core::mem::size_of::<usize>()==8);};
++// Exact uprotocol.h selected Linux x86_64 ABI; fixture compares every field offset.
++use super::{c_int,c_long,c_ulong,c_void};
++use core::ptr::addr_of_mut;
++#[repr(C)]
++pub struct Rlimit { pub rlim_cur:c_ulong, pub rlim_max:c_ulong }
++#[repr(C)]
++pub struct ImageSection {
++ pub vaddr:c_ulong,
++ pub len:c_ulong,
++ pub remote_pa:c_ulong,
++ pub filesz:c_ulong,
++ pub offset:c_ulong,
++ pub prot:c_int,
++ pub interp:u8,
++ pub padding:[u8;3],
++ pub fp:*mut c_void,
++}
++#[repr(C)]
++pub struct ProgramLoadDesc {
++ pub magic:c_ulong,
++ pub num_sections:c_int,
++ pub cpu:c_int,
++ pub pid:c_int,
++ pub stack_prot:c_int,
++ pub pgid:c_int,
++ pub cred:[c_int;8],
++ pub reloc:c_int,
++ pub enable_vdso:i8,
++ pub padding:[u8;7],
++ pub entry:c_ulong,
++ pub user_start:c_ulong,
++ pub user_end:c_ulong,
++ pub rprocess:c_ulong,
++ pub rpgtable:c_ulong,
++ pub at_phdr:c_ulong,
++ pub at_phent:c_ulong,
++ pub at_phnum:c_ulong,
++ pub at_entry:c_ulong,
++ pub at_clktck:c_ulong,
++ pub args:*mut u8,
++ pub args_len:c_ulong,
++ pub envs:*mut u8,
++ pub envs_len:c_ulong,
++ pub rlimit:[Rlimit;20],
++ pub interp_align:c_ulong,
++ pub mpol_flags:c_ulong,
++ pub mpol_threshold:c_ulong,
++ pub heap_extension:c_ulong,
++ pub stack_premap:c_long,
++ pub mpol_bind_mask:c_ulong,
++ pub mpol_mode:c_int,
++ pub mpol_nodemask:[c_ulong;4],
++ pub thp_disable:c_int,
++ pub enable_uti:c_int,
++ pub uti_thread_rank:c_int,
++ pub uti_use_last_cpu:c_int,
++ pub straight_map:c_int,
++ pub straight_map_threshold:usize,
++ #[cfg(mcexec_enable_tofu)]
++ pub enable_tofu:c_int,
++ pub mcexec_flags:c_ulong,
++ pub nr_processes:c_int,
++ pub process_rank:c_int,
++ pub cpu_set:[c_ulong;16],
++ pub profile:c_int,
++ pub sections:[ImageSection;0],
++}
++unsafe extern "C" {
++ static mut debug:c_int;
++ static mut stdout:*mut c_void;
++ fn printf(fmt:*const u8,...)->c_int;
++ fn fflush(f:*mut c_void)->c_int;
++ fn getrlimit(resource:c_int,limit:*mut Rlimit)->c_int;
++ fn numa_parse_nodestring_all(nodes:*const u8)->*mut c_void;
++ fn numa_max_possible_node()->c_int;
++ fn numa_bitmask_isbitset(mask:*const c_void,node:u32)->c_int;
++}
++unsafe fn section(d:*mut ProgramLoadDesc,index:c_int)->*mut ImageSection {
++ addr_of_mut!((*d).sections).cast::<ImageSection>().offset(index as isize)
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_load_alloc_desc_bridge(nsections:c_int) -> *mut ProgramLoadDesc {
++ let size=core::mem::size_of::<ProgramLoadDesc>().wrapping_add(core::mem::size_of::<ImageSection>().wrapping_mul(nsections as usize));
++ let desc=super::malloc(size).cast::<ProgramLoadDesc>();
++ if desc.is_null() { return desc; }
++ core::ptr::write_bytes(desc.cast::<u8>(),0,size);
++ (*desc).magic=0xcafecafe44332211;
++ (*desc).num_sections=nsections;
++ (*desc).stack_prot=7;
++ desc
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_load_publish_main_section_bridge(desc:*mut ProgramLoadDesc,index:c_int,vaddr:c_ulong,filesz:c_ulong,offset:c_ulong,len:c_ulong,prot:c_int,fp:*mut c_void) {
++ let s=section(desc,index);
++ (*s).vaddr=vaddr;(*s).filesz=filesz;(*s).offset=offset;(*s).len=len;(*s).interp=0;(*s).fp=fp;(*s).prot=prot;
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_publish_interp_section_bridge(desc:*mut ProgramLoadDesc,index:c_int,vaddr:c_ulong,filesz:c_ulong,offset:c_ulong,len:c_ulong,prot:c_int,fp:*mut c_void) {
++ let s=section(desc,index);
++ (*s).vaddr=vaddr;(*s).filesz=filesz;(*s).offset=offset;(*s).len=len;(*s).interp=1;(*s).fp=fp;(*s).prot=prot;
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_load_cred_bridge(desc:*mut ProgramLoadDesc) -> *mut c_int {
++ addr_of_mut!((*desc).cred).cast()
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_load_clk_tck_bridge() -> c_long {
++ super::sysconf(2) // _SC_CLK_TCK on pinned Linux glibc.
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_load_finalize_desc_bridge(desc:*mut ProgramLoadDesc,pid:c_int,pgid:c_int,reloc:c_int,entry:c_ulong,at_phdr:c_ulong,at_phent:c_ulong,at_phnum:c_ulong,at_entry:c_ulong,at_clktck:c_ulong,stack_prot:c_int) {
++ (*desc).pid=pid;
++ (*desc).pgid=pgid;
++ (*desc).reloc=reloc;
++ (*desc).entry=entry;
++ (*desc).at_phdr=at_phdr;
++ (*desc).at_phent=at_phent;
++ (*desc).at_phnum=at_phnum;
++ (*desc).at_entry=at_entry;
++ (*desc).at_clktck=at_clktck;
++ (*desc).stack_prot=stack_prot;
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_program_load_desc_size_bridge() -> usize {
++ core::mem::size_of::<ProgramLoadDesc>()
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_program_image_section_size_bridge() -> usize {
++ core::mem::size_of::<ImageSection>()
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_set_num_sections_bridge(desc:*mut ProgramLoadDesc,value:c_int) {
++ (*desc).num_sections=value;
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_set_entry_bridge(desc:*mut ProgramLoadDesc,value:c_ulong) {
++ (*desc).entry=value;
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_set_interp_align_bridge(desc:*mut ProgramLoadDesc,value:c_ulong) {
++ (*desc).interp_align=value;
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_set_args_len_bridge(desc:*mut ProgramLoadDesc,value:c_ulong) {
++ (*desc).args_len=value;
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_num_sections_bridge(desc:*const ProgramLoadDesc) -> c_int {
++ (*desc).num_sections
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_cpu_bridge(desc:*const ProgramLoadDesc) -> c_int {
++ (*desc).cpu
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_pid_bridge(desc:*const ProgramLoadDesc) -> c_int {
++ (*desc).pid
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_entry_bridge(desc:*const ProgramLoadDesc) -> c_ulong {
++ (*desc).entry
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_rprocess_bridge(desc:*const ProgramLoadDesc) -> c_ulong {
++ (*desc).rprocess
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_section_vaddr_bridge(desc:*const ProgramLoadDesc,index:c_int) -> c_ulong {
++ (*section(desc.cast_mut(),index)).vaddr
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_section_len_bridge(desc:*const ProgramLoadDesc,index:c_int) -> c_ulong {
++ (*section(desc.cast_mut(),index)).len
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_section_remote_pa_bridge(desc:*const ProgramLoadDesc,index:c_int) -> c_ulong {
++ (*section(desc.cast_mut(),index)).remote_pa
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_section_filesz_bridge(desc:*const ProgramLoadDesc,index:c_int) -> c_ulong {
++ (*section(desc.cast_mut(),index)).filesz
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_section_offset_bridge(desc:*const ProgramLoadDesc,index:c_int) -> c_ulong {
++ (*section(desc.cast_mut(),index)).offset
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_section_fp_bridge(desc:*const ProgramLoadDesc,index:c_int) -> *mut c_void {
++ (*section(desc.cast_mut(),index)).fp
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_partition_publish_cpu_rank_bridge(desc:*mut ProgramLoadDesc,target_core:c_int,process_rank:c_int) {
++ (*desc).cpu=target_core;(*desc).process_rank=process_rank;
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_partition_publish_rank_bridge(desc:*mut ProgramLoadDesc,process_rank:c_int) {
++ (*desc).process_rank=process_rank;
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_publish_mpol_base_bridge(desc:*mut ProgramLoadDesc,profile:c_int,nr_processes:c_int,flags:c_ulong,threshold:c_ulong,heap_ext:c_ulong,pld_mpol_max:c_int) {
++ (*desc).profile=profile;(*desc).nr_processes=nr_processes;(*desc).mpol_flags=flags;(*desc).mpol_threshold=threshold;
++ (*desc).heap_extension=heap_ext;(*desc).mpol_bind_mask=0;(*desc).mpol_mode=pld_mpol_max;
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_apply_bind_nodes_bridge(desc:*mut ProgramLoadDesc,nodes:*const u8) {
++ let mask=numa_parse_nodestring_all(nodes);
++ if !mask.is_null() {
++   let mut node:c_int=0;
++   while node<=numa_max_possible_node() {
++     if numa_bitmask_isbitset(mask,node as u32)!=0 {
++       // C 1UL<<node is defined only for node<64. Wrapping is an explicit
++       // extension outside that reference domain, not C parity evidence.
++       (*desc).mpol_bind_mask |= 1u64.wrapping_shl(node as u32);
++     }
++     node=node.wrapping_add(1);
++   }
++ } // Reference retains mask allocation; no silent ownership policy change.
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_apply_ompi_policy_bridge(desc:*mut ProgramLoadDesc,mode:c_int,nodemask_action:c_int) {
++ (*desc).mpol_mode=mode;
++ if nodemask_action==1 || nodemask_action==2 {
++   super::mcexec_numa_local_body(addr_of_mut!((*desc).cpu_set).cast(),addr_of_mut!((*desc).mpol_nodemask).cast(),(nodemask_action==2) as c_int);
++ } else if nodemask_action==3 { super::mcexec_numa_all_body(addr_of_mut!((*desc).mpol_nodemask).cast()); }
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_publish_runtime_flags_bridge(desc:*mut ProgramLoadDesc,enable_uti:c_int,uti_thread_rank:c_int,uti_use_last_cpu:c_int,thp_disable:c_int,straight_map:c_int,straight_map_threshold:c_ulong,enable_tofu:c_int,mcexec_flags:c_ulong) {
++ (*desc).enable_uti=enable_uti;(*desc).uti_thread_rank=uti_thread_rank;(*desc).uti_use_last_cpu=uti_use_last_cpu;(*desc).thp_disable=thp_disable;
++ (*desc).straight_map=straight_map;(*desc).straight_map_threshold=straight_map_threshold as usize;
++ #[cfg(mcexec_enable_tofu)] { (*desc).enable_tofu=enable_tofu; }
++ #[cfg(not(mcexec_enable_tofu))] { let _=enable_tofu; }
++ if mcexec_flags!=0 { (*desc).mcexec_flags=mcexec_flags; }
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_set_execve1_runtime_bridge(desc:*mut ProgramLoadDesc,vdso:c_int,rlim_cur:c_ulong,rlim_max:c_ulong,prem:c_long) {
++ (*desc).enable_vdso=vdso as i8;
++ // Original execve uses host RLIMIT_STACK=3, distinct from main MCK index15.
++ (*desc).rlimit[3].rlim_cur=rlim_cur;(*desc).rlimit[3].rlim_max=rlim_max;(*desc).stack_premap=prem;
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_main_stack_publish_bridge(desc:*mut ProgramLoadDesc,cur:c_ulong,max:c_ulong,prem:c_long) {
++ (*desc).rlimit[15].rlim_cur=cur;(*desc).rlimit[15].rlim_max=max;(*desc).stack_premap=prem;
++ if debug!=0 { printf(b"mcexec_main_stack_publish_bridge: desc->rlimit[MCK_RLIMIT_STACK]=%ld,%ld\n\0".as_ptr(),cur,max);fflush(stdout); }
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_snapshot_rlimits_bridge(desc:*mut ProgramLoadDesc) {
++ // (host resource, McKernel slot), all defined in selected Linux glibc headers.
++ let resources=[9,4,0,2,1,10,8,12,13,7,6,5,14,15,11,3];
++ for (slot,resource) in resources.into_iter().enumerate() { getrlimit(resource,addr_of_mut!((*desc).rlimit[slot])); }
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_publish_env_bridge(desc:*mut ProgramLoadDesc,envs_len:c_int,envs:*mut u8) {
++ (*desc).envs_len=envs_len as c_ulong;(*desc).envs=envs;
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_publish_args_cpu_bridge(desc:*mut ProgramLoadDesc,args_len:c_ulong,args:*mut u8,cpu:c_int,vdso:c_int) {
++ (*desc).args_len=args_len;(*desc).args=args;(*desc).cpu=cpu;(*desc).enable_vdso=vdso as i8;
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_clear_flags_bridge(desc:*mut ProgramLoadDesc) {
++ (*desc).mcexec_flags=0;
++}
++
++#[cfg(mcexec_desc_fixture)]
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_fixture_abi(out:*mut usize)->usize {
++ let values=[core::mem::size_of::<ProgramLoadDesc>(),core::mem::align_of::<ProgramLoadDesc>(),core::mem::size_of::<ImageSection>(),core::mem::align_of::<ImageSection>(),
++ core::mem::offset_of!(ProgramLoadDesc,magic),
++ core::mem::offset_of!(ProgramLoadDesc,num_sections),
++ core::mem::offset_of!(ProgramLoadDesc,cpu),
++ core::mem::offset_of!(ProgramLoadDesc,pid),
++ core::mem::offset_of!(ProgramLoadDesc,stack_prot),
++ core::mem::offset_of!(ProgramLoadDesc,pgid),
++ core::mem::offset_of!(ProgramLoadDesc,cred),
++ core::mem::offset_of!(ProgramLoadDesc,reloc),
++ core::mem::offset_of!(ProgramLoadDesc,enable_vdso),
++ core::mem::offset_of!(ProgramLoadDesc,padding),
++ core::mem::offset_of!(ProgramLoadDesc,entry),
++ core::mem::offset_of!(ProgramLoadDesc,user_start),
++ core::mem::offset_of!(ProgramLoadDesc,user_end),
++ core::mem::offset_of!(ProgramLoadDesc,rprocess),
++ core::mem::offset_of!(ProgramLoadDesc,rpgtable),
++ core::mem::offset_of!(ProgramLoadDesc,at_phdr),
++ core::mem::offset_of!(ProgramLoadDesc,at_phent),
++ core::mem::offset_of!(ProgramLoadDesc,at_phnum),
++ core::mem::offset_of!(ProgramLoadDesc,at_entry),
++ core::mem::offset_of!(ProgramLoadDesc,at_clktck),
++ core::mem::offset_of!(ProgramLoadDesc,args),
++ core::mem::offset_of!(ProgramLoadDesc,args_len),
++ core::mem::offset_of!(ProgramLoadDesc,envs),
++ core::mem::offset_of!(ProgramLoadDesc,envs_len),
++ core::mem::offset_of!(ProgramLoadDesc,rlimit),
++ core::mem::offset_of!(ProgramLoadDesc,interp_align),
++ core::mem::offset_of!(ProgramLoadDesc,mpol_flags),
++ core::mem::offset_of!(ProgramLoadDesc,mpol_threshold),
++ core::mem::offset_of!(ProgramLoadDesc,heap_extension),
++ core::mem::offset_of!(ProgramLoadDesc,stack_premap),
++ core::mem::offset_of!(ProgramLoadDesc,mpol_bind_mask),
++ core::mem::offset_of!(ProgramLoadDesc,mpol_mode),
++ core::mem::offset_of!(ProgramLoadDesc,mpol_nodemask),
++ core::mem::offset_of!(ProgramLoadDesc,thp_disable),
++ core::mem::offset_of!(ProgramLoadDesc,enable_uti),
++ core::mem::offset_of!(ProgramLoadDesc,uti_thread_rank),
++ core::mem::offset_of!(ProgramLoadDesc,uti_use_last_cpu),
++ core::mem::offset_of!(ProgramLoadDesc,straight_map),
++ core::mem::offset_of!(ProgramLoadDesc,straight_map_threshold),
++ #[cfg(mcexec_enable_tofu)]
++ core::mem::offset_of!(ProgramLoadDesc,enable_tofu),
++ core::mem::offset_of!(ProgramLoadDesc,mcexec_flags),
++ core::mem::offset_of!(ProgramLoadDesc,nr_processes),
++ core::mem::offset_of!(ProgramLoadDesc,process_rank),
++ core::mem::offset_of!(ProgramLoadDesc,cpu_set),
++ core::mem::offset_of!(ProgramLoadDesc,profile),
++ core::mem::offset_of!(ProgramLoadDesc,sections),
++ core::mem::offset_of!(ImageSection,vaddr),
++ core::mem::offset_of!(ImageSection,len),
++ core::mem::offset_of!(ImageSection,remote_pa),
++ core::mem::offset_of!(ImageSection,filesz),
++ core::mem::offset_of!(ImageSection,offset),
++ core::mem::offset_of!(ImageSection,prot),
++ core::mem::offset_of!(ImageSection,interp),
++ core::mem::offset_of!(ImageSection,padding),
++ core::mem::offset_of!(ImageSection,fp),
++ ];
++ core::ptr::copy_nonoverlapping(values.as_ptr(),out,values.len());values.len()
++}
+diff --git a/executer/user/rust/mcexec_overlay_fd.rs b/executer/user/rust/mcexec_overlay_fd.rs
+new file mode 100644
+--- /dev/null
++++ b/executer/user/rust/mcexec_overlay_fd.rs
+@@ -0,0 +1,210 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Port of selected overlay FD callbacks. Platform libc/pthread providers remain external.
++use super::{McexecListHead, PATH_MAX, ENOMEM, ENOENT, c_int, c_void};
++use core::ptr::{addr_of_mut, copy_nonoverlapping};
++
++#[repr(C)]
++pub struct OverlayFd {
++    pub fd: c_int,
++    pub getdents_fd: c_int,
++    pub linux_fd: c_int,
++    pub link: McexecListHead,
++    pub linux_path: [u8; PATH_MAX],
++    pub mck_path: [u8; PATH_MAX],
++    pub pathlen: usize,
++    pub mck_dirents: *mut u8,
++    pub mck_dirents_size: usize,
++    pub linux_dirents: *mut u8,
++    pub linux_dirents_size: usize,
++}
++unsafe extern "C" {
++    static mut overlay_fd_list: McexecListHead;
++    static mut overlay_fd_lock: c_int;
++    static mut debug: c_int;
++    static mut stdout: *mut c_void;
++    static mut stderr: *mut c_void;
++    fn pthread_spin_lock(lock: *mut c_int) -> c_int;
++    fn pthread_spin_unlock(lock: *mut c_int) -> c_int;
++    fn fprintf(stream: *mut c_void, format: *const u8, ...) -> c_int;
++    fn printf(format: *const u8, ...) -> c_int;
++    fn fflush(stream: *mut c_void) -> c_int;
++    fn open(path: *const u8, flags: c_int, ...) -> c_int;
++}
++
++unsafe fn lock() { pthread_spin_lock(addr_of_mut!(overlay_fd_lock)); }
++unsafe fn unlock() { pthread_spin_unlock(addr_of_mut!(overlay_fd_lock)); }
++unsafe fn entry(link: *mut McexecListHead) -> *mut OverlayFd {
++    link.cast::<u8>().sub(core::mem::offset_of!(OverlayFd, link)).cast()
++}
++unsafe fn find_unlocked(fd: c_int) -> *mut OverlayFd {
++    let head = addr_of_mut!(overlay_fd_list);
++    let mut link = (*head).next;
++    while link != head {
++        let ofd = entry(link);
++        if (*ofd).fd == fd { return ofd; }
++        link = (*link).next;
++    }
++    core::ptr::null_mut()
++}
++// Equivalent to strncpy(dst, src, PATH_MAX), including zero padding.
++unsafe fn copy_path(dst: *mut u8, src: *const u8) {
++    let mut ended = false;
++    for i in 0..PATH_MAX {
++        let value = if ended { 0 } else { *src.add(i) };
++        *dst.add(i) = value;
++        ended |= value == 0;
++    }
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_addfd_publish_bridge(
++    fd: c_int, linux_path: *const u8, mck_path: *const u8, pathlen: usize,
++) -> c_int {
++    let ofd = super::malloc(core::mem::size_of::<OverlayFd>()).cast::<OverlayFd>();
++    if ofd.is_null() {
++        fprintf(stderr, b"overlay_addfd: out of memory\n\0".as_ptr());
++        return -ENOMEM;
++    }
++    (*ofd).fd = fd;
++    (*ofd).getdents_fd = -1;
++    (*ofd).linux_fd = -1;
++    (*ofd).mck_dirents = core::ptr::null_mut();
++    (*ofd).mck_dirents_size = 0;
++    (*ofd).linux_dirents = core::ptr::null_mut();
++    (*ofd).linux_dirents_size = 0;
++    (*ofd).pathlen = pathlen;
++    copy_path(addr_of_mut!((*ofd).linux_path).cast(), linux_path);
++    copy_path(addr_of_mut!((*ofd).mck_path).cast(), mck_path);
++    lock();
++    super::mcexec_overlay_list_add_body(addr_of_mut!((*ofd).link), addr_of_mut!(overlay_fd_list));
++    unlock();
++    0
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_delfd_bridge(fd: c_int) {
++    lock();
++    let ofd = find_unlocked(fd);
++    if !ofd.is_null() {
++        super::mcexec_overlay_list_del_body(addr_of_mut!((*ofd).link));
++        if (*ofd).getdents_fd != -1 { super::close((*ofd).getdents_fd); }
++        if (*ofd).linux_fd != -1 { super::close((*ofd).linux_fd); }
++        super::free((*ofd).mck_dirents);
++        super::free((*ofd).linux_dirents);
++        super::free(ofd.cast());
++    }
++    unlock();
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_getdents_find_bridge(fd: c_int) -> *mut c_void {
++    lock();
++    let ofd = find_unlocked(fd);
++    if !ofd.is_null() && debug != 0 {
++        printf(b"mcexec_overlay_getdents_find_bridge: found overlay cache entry (%s)\n\0".as_ptr(), addr_of_mut!((*ofd).linux_path).cast::<u8>());
++        fflush(stdout);
++    }
++    unlock();
++    ofd.cast()
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_getdents_hide_orig_bridge(opaque: *mut c_void) -> c_int {
++    if opaque.is_null() { return 0; }
++    let ofd = opaque.cast::<OverlayFd>();
++    let path = addr_of_mut!((*ofd).linux_path).cast::<u8>();
++    let bytes = super::cstr_bytes(path);
++    (bytes.starts_with(b"/proc") && bytes.ends_with(b"task")) as c_int
++}
++
++macro_rules! accessor {
++    ($name:ident, $field:ident, $type:ty) => {
++        #[no_mangle]
++        pub unsafe extern "C" fn $name(opaque: *mut c_void) -> $type {
++            (*opaque.cast::<OverlayFd>()).$field
++        }
++    };
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_getdents_linux_path_bridge(opaque: *mut c_void) -> *const u8 {
++    addr_of_mut!((*opaque.cast::<OverlayFd>()).linux_path).cast()
++}
++accessor!(mcexec_overlay_getdents_pathlen_bridge, pathlen, usize);
++accessor!(mcexec_overlay_getdents_mck_dirents_bridge, mck_dirents, *mut u8);
++accessor!(mcexec_overlay_getdents_mck_size_bridge, mck_dirents_size, usize);
++accessor!(mcexec_overlay_getdents_linux_dirents_bridge, linux_dirents, *mut u8);
++accessor!(mcexec_overlay_getdents_linux_size_bridge, linux_dirents_size, usize);
++
++unsafe fn lazy_fd(ofd: *mut OverlayFd, linux: bool) -> c_int {
++    let fd = if linux { addr_of_mut!((*ofd).linux_fd) } else { addr_of_mut!((*ofd).getdents_fd) };
++    let path = if linux { addr_of_mut!((*ofd).linux_path).cast::<u8>() } else { addr_of_mut!((*ofd).mck_path).cast::<u8>() };
++    if *fd == -1 {
++        *fd = open(path, 0o200000); // O_RDONLY | O_DIRECTORY, Linux x86_64.
++        if *fd < 0 {
++            let error = *super::__errno_location();
++            if error != ENOENT {
++                fprintf(stderr, b"overlay_getdents: could not open %s: %d\n\0".as_ptr(), path, error);
++            }
++            return -error;
++        }
++    }
++    *fd
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_getdents_mck_fd_bridge(opaque: *mut c_void) -> c_int {
++    lazy_fd(opaque.cast(), false)
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_getdents_linux_fd_bridge(opaque: *mut c_void) -> c_int {
++    lazy_fd(opaque.cast(), true)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_getdents_append_mck_bridge(
++    opaque: *mut c_void, dirp: *const u8, len: usize, is64: c_int,
++) -> c_int {
++    let ofd = opaque.cast::<OverlayFd>();
++    // Reference parity: no new overflow policy in this batch.
++    let size = (*ofd).mck_dirents_size.wrapping_add(len);
++    let newbuf = super::realloc((*ofd).mck_dirents, size);
++    if newbuf.is_null() {
++        fprintf(stderr, b"overlay_getdents: not enough memory (%zd)\0".as_ptr(), size);
++        return -ENOMEM;
++    }
++    (*ofd).mck_dirents = newbuf;
++    copy_nonoverlapping(dirp, newbuf.add((*ofd).mck_dirents_size), len);
++    let rc = super::mcexec_dirent_rewrite_offsets_result(newbuf, (*ofd).mck_dirents_size, size, 0, is64);
++    if rc < 0 { return rc; }
++    (*ofd).mck_dirents_size = size;
++    0
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_getdents_append_linux_bridge(
++    opaque: *mut c_void, dirp: *const u8, len: usize, is64: c_int, old_ret: c_int,
++) -> c_int {
++    let ofd = opaque.cast::<OverlayFd>();
++    let size = (*ofd).linux_dirents_size.wrapping_add(len);
++    let newbuf = super::realloc((*ofd).linux_dirents, size);
++    if newbuf.is_null() {
++        fprintf(stderr, b"overlay_getdents: not enough memory (%zd)\0".as_ptr(), size);
++        return old_ret;
++    }
++    (*ofd).linux_dirents = newbuf;
++    copy_nonoverlapping(dirp, newbuf.add((*ofd).linux_dirents_size), len);
++    (*ofd).linux_dirents_size = size;
++    let rc = super::mcexec_dirent_rewrite_offsets_result(newbuf, 0, size, (*ofd).mck_dirents_size, is64);
++    if rc < 0 { return rc; }
++    0
++}
++
++#[cfg(mcexec_overlay_fixture)]
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_fixture_abi(out: *mut usize) {
++    let values = [core::mem::size_of::<OverlayFd>(), core::mem::align_of::<OverlayFd>(),
++        core::mem::offset_of!(OverlayFd, link), core::mem::offset_of!(OverlayFd, linux_path),
++        core::mem::offset_of!(OverlayFd, mck_path), core::mem::offset_of!(OverlayFd, pathlen),
++        core::mem::offset_of!(OverlayFd, mck_dirents), core::mem::offset_of!(OverlayFd, mck_dirents_size),
++        core::mem::offset_of!(OverlayFd, linux_dirents), core::mem::offset_of!(OverlayFd, linux_dirents_size)];
++    core::ptr::copy_nonoverlapping(values.as_ptr(), out, values.len());
++}
+diff --git a/executer/user/rust/mcexec_platform_syscalls.rs b/executer/user/rust/mcexec_platform_syscalls.rs
+new file mode 100644
+--- /dev/null
++++ b/executer/user/rust/mcexec_platform_syscalls.rs
+@@ -0,0 +1,176 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Project callback bodies now in Rust; genuine libc handles platform ABI.
++use super::{c_int,c_long,c_ulong,c_void,McexecSyscallWaitDesc,McexecTimespec};
++unsafe extern "C" {
++ static mut debug:c_int;static mut stdout:*mut c_void;
++ fn printf(fmt:*const u8,...)->c_int;fn fflush(p:*mut c_void)->c_int;
++ fn readlinkat(fd:c_int,path:*const u8,out:*mut u8,size:usize)->isize;
++ fn fstatat(fd:c_int,path:*const u8,out:*mut c_void,flags:c_int)->c_int;
++ fn stat(path:*const u8,out:*mut c_void)->c_int;
++ fn faccessat(fd:c_int,path:*const u8,mode:c_int,flags:c_int)->c_int;
++ fn getxattr(path:*const u8,name:*const u8,value:*mut c_void,size:usize)->isize;
++ fn lgetxattr(path:*const u8,name:*const u8,value:*mut c_void,size:usize)->isize;
++ fn openat(fd:c_int,path:*const u8,flags:c_int,...)->c_int;
++ fn open(path:*const u8,flags:c_int,...)->c_int;
++ fn setfsuid(uid:u32)->c_int;fn setfsgid(gid:u32)->c_int;
++ fn setresuid(r:u32,e:u32,s:u32)->c_int;fn setresgid(r:u32,e:u32,s:u32)->c_int;
++ fn setreuid(r:u32,e:u32)->c_int;fn setregid(r:u32,e:u32)->c_int;
++ fn setuid(uid:u32)->c_int;fn setgid(gid:u32)->c_int;
++ fn clock_gettime(clock:c_int,tv:*mut McexecTimespec)->c_int;
++}
++unsafe fn converted(ret:c_long)->c_long {super::mcexec_errno_return_result(ret,*super::__errno_location())}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_path_readlinkat_bridge(dirfd:c_int,path:*const u8,buf:*mut u8,size:usize) -> c_long {
++ let ret=converted(readlinkat(dirfd,path,buf,size) as c_long);
++ if debug!=0 {printf(b"mcexec_path_readlinkat_bridge: readlinkat: dirfd=%d, path=%s, buf=%s, ret=%ld\n\0".as_ptr(),dirfd,path,buf,ret);fflush(stdout);}
++ ret
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_path_readlink_bridge(path:*const u8,buf:*mut u8,size:usize) -> c_long {
++ let ret=converted(super::readlink(path,buf,size) as c_long);
++ if debug!=0 {printf(b"mcexec_path_readlink_bridge: readlink: path=%s, buf=%s, ret=%ld\n\0".as_ptr(),path,buf,ret);fflush(stdout);}
++ ret
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_path_fstatat_bridge(dirfd:c_int,path:*const u8,statbuf:*mut c_void,flags:c_int) -> c_long {
++ let ret=converted(fstatat(dirfd,path,statbuf,flags) as c_long);
++ if debug!=0 {printf(b"mcexec_path_fstatat_bridge: fstatat: dirfd=%d, pathname=%s, buf=%p, flags=%x, ret=%ld\n\0".as_ptr(),dirfd,path,statbuf,flags,ret);fflush(stdout);}
++ ret
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_path_stat_bridge(path:*const u8,statbuf:*mut c_void) -> c_long {
++ let ret=converted(stat(path,statbuf) as c_long);
++ if debug!=0 {printf(b"mcexec_path_stat_bridge: stat: path=%s, ret=%ld\n\0".as_ptr(),path,ret);fflush(stdout);}
++ ret
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_path_faccessat_bridge(dirfd:c_int,path:*const u8,mode:c_int,flags:c_int) -> c_long {
++ let ret=converted(faccessat(dirfd,path,mode,flags) as c_long);
++ if debug!=0 {printf(b"mcexec_path_faccessat_bridge: faccessat: dirfd=%d, pathname=%s, mode=%d, ret=%ld\n\0".as_ptr(),dirfd,path,mode,ret);fflush(stdout);}
++ ret
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_path_access_bridge(path:*const u8,mode:c_int) -> c_long {
++ let ret=converted(super::access(path,mode) as c_long);
++ if debug!=0 {printf(b"mcexec_path_access_bridge: access: path=%s, ret=%ld\n\0".as_ptr(),path,ret);fflush(stdout);}
++ ret
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_path_getxattr_bridge(path:*const u8,name:*const u8,value:*mut c_void,size:usize) -> c_long {
++ let ret=converted(getxattr(path,name,value,size) as c_long);
++ if debug!=0 {printf(b"mcexec_path_getxattr_bridge: getxattr: path=%s, name=%s, ret=%ld\n\0".as_ptr(),path,name,ret);fflush(stdout);}
++ ret
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_path_lgetxattr_bridge(path:*const u8,name:*const u8,value:*mut c_void,size:usize) -> c_long {
++ let ret=converted(lgetxattr(path,name,value,size) as c_long);
++ if debug!=0 {printf(b"mcexec_path_lgetxattr_bridge: lgetxattr: path=%s, name=%s, ret=%ld\n\0".as_ptr(),path,name,ret);fflush(stdout);}
++ ret
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_path_openat_log_bridge(dirfd:c_int,path:*const u8,tid:c_int) {
++ if debug!=0 {printf(b"mcexec_path_openat_log_bridge: openat: %d, %s,tid=%d\n\0".as_ptr(),dirfd,path,tid);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_path_open_log_bridge(path:*const u8) {
++ if debug!=0 {printf(b"mcexec_path_open_log_bridge: open: %s\n\0".as_ptr(),path);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_path_openat_bridge(dirfd:c_int,path:*const u8,flags:c_ulong,mode:c_ulong) -> c_long {
++ converted(openat(dirfd,path,flags as c_int,mode) as c_long)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_path_open_bridge(path:*const u8,flags:c_ulong,mode:c_ulong) -> c_long {
++ converted(open(path,flags as c_int,mode) as c_long)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_cred_get_bridge(fd:c_int,arg:c_ulong) {
++ super::ioctl(fd,0x30a0290a as c_ulong,arg);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_cred_setfsuid_bridge(uid:c_ulong) -> c_long {
++ setfsuid(uid as u32) as c_long
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_cred_setfsgid_bridge(gid:c_ulong) -> c_long {
++ setfsgid(gid as u32) as c_long
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_cred_setresuid_bridge(a0:c_ulong,a1:c_ulong,a2:c_ulong) -> c_long {
++ converted(setresuid(a0 as u32,a1 as u32,a2 as u32) as c_long)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_cred_setresgid_bridge(a0:c_ulong,a1:c_ulong,a2:c_ulong) -> c_long {
++ converted(setresgid(a0 as u32,a1 as u32,a2 as u32) as c_long)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_cred_setreuid_bridge(a0:c_ulong,a1:c_ulong) -> c_long {
++ converted(setreuid(a0 as u32,a1 as u32) as c_long)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_cred_setregid_bridge(a0:c_ulong,a1:c_ulong) -> c_long {
++ converted(setregid(a0 as u32,a1 as u32) as c_long)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_cred_setuid_bridge(a0:c_ulong) -> c_long {
++ converted(setuid(a0 as u32) as c_long)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_cred_setgid_bridge(a0:c_ulong) -> c_long {
++ converted(setgid(a0 as u32) as c_long)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_do_generic_syscall_raw_bridge(w:*const McexecSyscallWaitDesc) -> c_long {
++ let sr=&(*w).sr;super::syscall(sr.number as c_long,sr.args[0],sr.args[1],sr.args[2],sr.args[3],sr.args[4],sr.args[5])
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_do_generic_syscall_start_bridge(number:c_ulong) {
++ if debug!=0 {printf(b"mcexec_do_generic_syscall_start_bridge: do_generic_syscall(%ld)\n\0".as_ptr(),number);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_do_generic_syscall_done_bridge(number:c_ulong,ret:c_long) {
++ if debug!=0 {printf(b"mcexec_do_generic_syscall_done_bridge: do_generic_syscall(%ld):%ld (%#lx)\n\0".as_ptr(),number,ret,ret);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_do_generic_syscall_bridge(w:*const McexecSyscallWaitDesc) -> c_long {
++ super::mcexec_do_generic_syscall_body(w)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_perf_event_open_bridge() -> c_long {
++ open(b"/dev/null\0".as_ptr(),0) as c_long
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_clock_gettime_bridge(clock:c_int,tv:*mut McexecTimespec) -> c_long {
++ converted(clock_gettime(clock,tv) as c_long)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_clock_gettime_log_bridge(sec:c_long,nsec:c_long) {
++ if debug!=0 {printf(b"mcexec_clock_gettime_log_bridge: clock_gettime=%016ld,%09ld\n\0".as_ptr(),sec,nsec);fflush(stdout);}
++}
+diff --git a/executer/user/rust/mcexec_residual_functional.rs b/executer/user/rust/mcexec_residual_functional.rs
+new file mode 100644
+--- /dev/null
++++ b/executer/user/rust/mcexec_residual_functional.rs
+@@ -0,0 +1,228 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++use super::{c_int,c_long,c_ulong,c_void,McexecThreadData,McexecUtiSwitchCtxDesc};
++use super::mcexec_load_descriptor::ProgramLoadDesc;
++use core::ptr::{addr_of_mut,null_mut};
++#[repr(C,align(8))]
++struct StatStorage { bytes:[u8;144] }
++unsafe extern "C" {
++ static mut debug:c_int;static mut stdout:*mut c_void;static mut stderr:*mut c_void;
++ fn stat(path:*const u8,sb:*mut StatStorage)->c_int;
++ fn lstat(path:*const u8,sb:*mut StatStorage)->c_int;
++ fn printf(fmt:*const u8,...)->c_int;fn fprintf(f:*mut c_void,fmt:*const u8,...)->c_int;fn fflush(f:*mut c_void)->c_int;
++ fn fwrite(p:*const u8,size:usize,n:usize,f:*mut c_void)->usize;
++ fn mmap(p:*mut c_void,n:usize,prot:c_int,flags:c_int,fd:c_int,off:c_long)->*mut c_void;
++ fn mlock(p:*const c_void,n:usize)->c_int;
++ fn exit(status:c_int)->!;fn strerror(error:c_int)->*const u8;
++ fn switch_ctx(fd:c_int,cmd:c_ulong,desc:*mut McexecUtiSwitchCtxDesc,lctx:*mut c_void,rctx:*mut c_void)->c_int;
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_lookup_lstat_errno_bridge(path:*const u8) -> c_int {
++let mut sb:StatStorage=core::mem::zeroed();if lstat(path,addr_of_mut!(sb)) == -1 {*super::__errno_location()}else{0}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_load_desc_stat_size_bridge(path:*const u8,out:*mut c_long) -> c_int {
++let mut sb:StatStorage=core::mem::zeroed();
++ if stat(path,addr_of_mut!(sb)) == -1 {
++  if debug!=0 {printf(b"mcexec_load_desc_stat_size_bridge: Error: failed to stat %s\n\0".as_ptr(),path);fflush(stdout);}
++  return *super::__errno_location();
++ }
++ *out=sb.bytes.as_ptr().add(48).cast::<c_long>().read();0
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_stat_exists_bridge(path:*const u8) -> c_int {
++let mut sb:StatStorage=core::mem::zeroed();if stat(path,addr_of_mut!(sb))<0 {-*super::__errno_location()}else{0}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_stat_errno_bridge(path:*const u8) -> c_int {
++let mut sb:StatStorage=core::mem::zeroed();if stat(path,addr_of_mut!(sb)) == -1 {*super::__errno_location()}else{0}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_lstat_is_symlink_bridge(path:*const u8,out:*mut c_int) -> c_int {
++let mut sb:StatStorage=core::mem::zeroed();if lstat(path,addr_of_mut!(sb)) == -1 {return -*super::__errno_location();}
++ let mode=sb.bytes.as_ptr().add(24).cast::<u32>().read();*out=((mode&0o170000)==0o120000) as c_int;0
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_readlink_bridge(path:*const u8,out:*mut u8,size:usize) -> isize {
++super::readlink(path,out,size)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_find_libdir_bridge(out:*mut u8,size:usize) -> c_int {
++super::mcexec_find_libdir_body(out,size) as c_int
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_dma_mmap_bridge() -> *mut c_void {
++mmap(null_mut(),4096,3,0x22,-1,0)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_dma_mlock_bridge(buf:*mut c_void) -> c_int {
++mlock(buf,4096)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_create_ppd_bridge() -> c_int {
++super::ioctl(super::MCEXEC_FD,0x30a0290e as c_ulong,core::ptr::null::<c_void>())
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_dma_mmap_failed_bridge() -> ! {
++if debug!=0 {printf(b"mcexec_dma_mmap_failed_bridge: error: allocating DMA area\n\0".as_ptr());fflush(stdout);}exit(1)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_dma_mlock_failed_bridge() -> ! {
++if debug!=0 {printf(b"mcexec_dma_mlock_failed_bridge: ERROR: locking dma_buf\n\0".as_ptr());fflush(stdout);}exit(1)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_create_ppd_failed_bridge() -> ! {
++super::perror(b"creating mcctrl per-process structure\0".as_ptr());super::close(super::MCEXEC_FD);exit(1)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_main_prepare_image_failed_bridge() {
++super::perror(b"prepare\0".as_ptr());super::close(super::MCEXEC_FD);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_main_start_image_failed_bridge() {
++super::perror(b"exec\0".as_ptr());super::close(super::MCEXEC_FD);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_main_worker_threads_failed_bridge(error:c_int) {
++fprintf(stderr,b"main: Error: creating worker threads: %s\n\0".as_ptr(),strerror(-error));super::close(super::MCEXEC_FD);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_flib_affinity_alloc_failed_bridge() -> ! {
++fprintf(stderr,b"error: allocating memory for FLIB_AFFINITY_ON_PROCESS\n\0".as_ptr());exit(1)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_main_invalid_option_bridge(opt:c_int,argv:*mut *mut u8) -> ! {
++match opt {
++ 99=>{fprintf(stderr,b"error: -c: invalid target CPU\n\0".as_ptr());},
++ 110=>{fprintf(stderr,b"error: -n: invalid number of processes\n\0".as_ptr());},
++ 116=>{fprintf(stderr,b"error: -t: invalid number of threads\n\0".as_ptr());},
++ _=>{super::print_usage(argv);}
++ }exit(1)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_atobytes_set_errno_bridge(value:c_int) {
++*super::__errno_location()=value;
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_print_usage_add_envs_bridge() -> c_int {
++1 // ADD_ENVS_OPTION is always defined by current source.
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_print_usage_write_bridge(line:*const u8,len:usize) {
++fwrite(line,1,len,stderr);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_kill_thread_bridge(tid:c_ulong,sig:c_ulong,thread:*mut McexecThreadData) {
++super::mcexec_kill_thread_body(tid,sig,thread.cast());
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_sched_setaffinity_util_bridge(thread:*mut McexecThreadData,rp:c_ulong,tid:c_int,pattr:c_ulong,info:c_ulong,desc:c_ulong) -> c_long {
++super::mcexec_util_thread_body(thread,rp,tid,pattr,info,desc)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_util_thread_switch_ctx_bridge(desc:*mut McexecUtiSwitchCtxDesc,lctx:*mut c_void,rctx:*mut c_void) -> c_int {
++switch_ctx(super::MCEXEC_FD,0x30a02921 as c_ulong,desc,lctx,rctx)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_debug_mlock_bridge(addr:c_ulong,len:c_ulong) -> c_long {
++mlock(addr as *const c_void,len as usize) as c_long
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_debug_mlock_log_bridge(addr:c_ulong,len:c_ulong) {
++printf(b"linux mlock(%p, %ld)\n\0".as_ptr(),addr as *mut c_void,len);printf(b"str(%p)=%s\0".as_ptr(),addr as *mut c_void,addr as *const u8);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_mpol_log_bridge(desc:*const ProgramLoadDesc) {
++if debug!=0 {printf(b"mcexec_desc_mpol_log_bridge: mpol_mode: %d, mpol_nodemask: %ld\n\0".as_ptr(),(*desc).mpol_mode,(*desc).mpol_nodemask[0]);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_reduce_stack_newval_overflow_bridge() {
++fprintf(stderr,b"mcexec_reduce_stack_newval_overflow_bridge: snprintf(%s):buffer overflow\n\0".as_ptr(),b"MCKERNEL_RLIMIT_STACK\0".as_ptr());fflush(stderr);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_reduce_stack_setenv_failed_bridge() {
++fprintf(stderr,b"mcexec_reduce_stack_setenv_failed_bridge: failed to setenv(%s)\n\0".as_ptr(),b"MCKERNEL_RLIMIT_STACK\0".as_ptr());fflush(stderr);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_main_stack_parse_failed_bridge(rc:c_int) {
++fprintf(stderr,b"Error: Failed to parse %s %d\n\0".as_ptr(),b"MCKERNEL_RLIMIT_STACK\0".as_ptr(),rc);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_load_realloc_failed_bridge(size:c_ulong) {
++fprintf(stderr,b"mcexec_load_realloc_failed_bridge: realloc(%#lx) failed\n\0".as_ptr(),size as c_long);fflush(stderr);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_load_desc_sections_bridge(count:c_int) {
++if debug!=0 {printf(b"mcexec_load_desc_sections_bridge: # of sections: %d\n\0".as_ptr(),count);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_print_desc_intro_bridge(desc:*const c_void) {
++if debug!=0 {printf(b"print_desc: Desc (%p)\n\0".as_ptr(),desc);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_print_desc_main_bridge(cpu:c_int,pid:c_int,entry:c_ulong,rprocess:c_ulong) {
++if debug!=0 {printf(b"print_desc: CPU = %d, pid = %d, entry = %lx, rp = %lx\n\0".as_ptr(),cpu,pid,entry,rprocess);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_print_desc_section_bridge(vaddr:c_ulong,len:c_ulong,pa:c_ulong,filesz:c_ulong) {
++if debug!=0 {printf(b"print_desc: vaddr: %lx, mem_len: %lx, remote_pa: %lx, files: %lx\n\0".as_ptr(),vaddr,len,pa,filesz);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_getdents_upper_bridge(mck:c_int,ret:c_int,count:u32) {
++if debug!=0 {printf(b"mcexec_overlay_getdents_upper_bridge: getdents from upper: mck_ret: %d, ret: %d, count: %d\n\0".as_ptr(),mck,ret,count);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_getdents_lower_bridge(linux:c_int,ret:c_int,count:u32) {
++if debug!=0 {printf(b"mcexec_overlay_getdents_lower_bridge: getdents from lower: linux_ret: %d, ret: %d, count: %d\n\0".as_ptr(),linux,ret,count);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_getdents_mck_size_log_bridge(size:usize,offset:c_long,len:c_int,count:u32) {
++if debug!=0 {printf(b"mcexec_overlay_getdents_mck_size_log_bridge: mck_dirents_size: %ld, offset: %ld, mck_len: %d, count: %d\n\0".as_ptr(),size,offset,len,count);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_getdents_linux_size_log_bridge(size:usize,offset:c_long,len:c_int,count:u32) {
++if debug!=0 {printf(b"mcexec_overlay_getdents_linux_size_log_bridge: linux_dirents_size: %ld, offset: %ld, linux_len: %d, count: %d\n\0".as_ptr(),size,offset,len,count);fflush(stdout);}
++}
++
++#[cfg(mcexec_residual_fixture)]
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_residual_fixture_abi(out:*mut usize) {
++ let values=[core::mem::size_of::<StatStorage>(),core::mem::align_of::<StatStorage>(),24,48];core::ptr::copy_nonoverlapping(values.as_ptr(),out,4);
++}
+diff --git a/executer/user/rust/mcexec_runtime_data.rs b/executer/user/rust/mcexec_runtime_data.rs
+new file mode 100644
+--- /dev/null
++++ b/executer/user/rust/mcexec_runtime_data.rs
+@@ -0,0 +1,130 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Initialized production globals/option table replace the last default C provider.
++// Linux x86_64 glibc pthread storage ABI is checked against actual C headers.
++use super::{c_int,c_long,c_ulong,c_void,McexecThreadData,ForkSyncContainer,McexecListHead};
++use core::ptr::{addr_of_mut,null_mut};
++#[repr(C,align(8))]
++pub struct MutexStorage { bytes:[u8;40] }
++#[repr(C,align(8))]
++pub struct BarrierStorage { bytes:[u8;32] }
++#[repr(C)]
++pub struct GlobalRlimit { rlim_cur:c_ulong,rlim_max:c_ulong }
++#[repr(C)]
++pub struct GetOptOption {name:*const u8,has_arg:c_int,flag:*mut c_int,value:c_int}
++#[no_mangle]
++pub static mut mcosid:c_int=0;
++#[no_mangle]
++pub static mut fd:c_int=0;
++#[no_mangle]
++pub static mut ischild:c_int=0;
++#[no_mangle]
++pub static mut enable_vdso:c_int=1;
++#[no_mangle]
++pub static mut mpol_no_heap:c_int=0;
++#[no_mangle]
++pub static mut mpol_no_stack:c_int=0;
++#[no_mangle]
++pub static mut mpol_no_bss:c_int=0;
++#[no_mangle]
++pub static mut mpol_shm_premap:c_int=0;
++#[no_mangle]
++pub static mut no_bind_ikc_map:c_int=0;
++#[no_mangle]
++pub static mut straight_map:c_int=0;
++#[no_mangle]
++pub static mut profile:c_int=0;
++#[no_mangle]
++pub static mut disable_sched_yield:c_int=0;
++#[no_mangle]
++pub static mut uti_thread_rank:c_int=0;
++#[no_mangle]
++pub static mut uti_use_last_cpu:c_int=0;
++#[no_mangle]
++pub static mut enable_uti:c_int=0;
++#[no_mangle]
++pub static mut nr_processes:c_int=0;
++#[no_mangle]
++pub static mut nr_threads:c_int=-1;
++#[no_mangle]
++pub static mut master_tid:c_int=0;
++#[no_mangle]
++pub static mut ncpu:c_int=0;
++#[no_mangle]
++pub static mut nnodes:c_int=0;
++#[no_mangle]
++pub static mut n_threads:c_int=0;
++#[no_mangle]
++pub static mut overlay_fd_lock:c_int=0;
++#[no_mangle]
++pub static mut debug:c_int=cfg!(mcexec_debug) as c_int;
++#[no_mangle]
++pub static mut straight_map_threshold:c_ulong=1024*1024;
++#[no_mangle]
++pub static mut mpol_threshold:c_ulong=0;
++#[no_mangle]
++pub static mut heap_extension:c_ulong=c_ulong::MAX;
++#[no_mangle]
++pub static mut mcexec_flags:c_ulong=0;
++#[no_mangle]
++pub static mut page_size:c_ulong=0;
++#[no_mangle]
++pub static mut page_mask:c_ulong=0;
++#[no_mangle]
++pub static mut stack_premap:c_long=2*1024*1024;
++#[no_mangle]
++pub static mut stack_max:c_long=-1;
++#[cfg(mcexec_enable_tofu)]
++#[no_mangle]
++pub static mut enable_tofu:c_int=0;
++#[no_mangle]pub static mut exec_path:*mut u8=null_mut();
++#[no_mangle]pub static mut altroot:*mut u8=null_mut();
++#[no_mangle]pub static mut mpol_bind_nodes:*mut u8=null_mut();
++#[no_mangle]pub static mut dma_buf:*mut u8=null_mut();
++#[no_mangle]pub static mut thread_data:*mut McexecThreadData=null_mut();
++#[no_mangle]pub static mut fork_sync_top:*mut ForkSyncContainer=null_mut();
++#[no_mangle]pub static mut numa_nodes:*mut c_void=null_mut();
++#[no_mangle]pub static mut cpu_set_size:usize=0;
++#[no_mangle]pub static mut dev:[u8;64]=[0;64];
++#[no_mangle]pub static mut rlim_stack:GlobalRlimit=GlobalRlimit{rlim_cur:0,rlim_max:0};
++#[no_mangle]pub static mut lock:MutexStorage=MutexStorage{bytes:[0;40]};
++#[no_mangle]pub static mut fork_sync_mutex:MutexStorage=MutexStorage{bytes:[0;40]};
++#[no_mangle]pub static mut init_ready:BarrierStorage=BarrierStorage{bytes:[0;32]};
++#[no_mangle]pub static mut uti_init_ready:BarrierStorage=BarrierStorage{bytes:[0;32]};
++#[no_mangle]pub static mut mcexec_partition_cpu_set_storage:[c_ulong;16]=[0;16];
++#[no_mangle]pub static mut overlay_fd_list:McexecListHead=McexecListHead{next:addr_of_mut!(overlay_fd_list),prev:addr_of_mut!(overlay_fd_list)};
++#[cfg(mcexec_syscall_mod_call)]
++#[no_mangle]pub static mut __glob_argc:c_int=-1;
++#[cfg(mcexec_syscall_mod_call)]
++#[no_mangle]pub static mut __glob_argv:*mut *mut u8=null_mut();
++
++#[no_mangle]
++pub static mut mcexec_options:[GetOptOption;20+cfg!(mcexec_enable_tofu) as usize]=[
++ GetOptOption{name:b"disable-vdso\0".as_ptr(),has_arg:0,flag:addr_of_mut!(enable_vdso),value:0},
++ GetOptOption{name:b"enable-vdso\0".as_ptr(),has_arg:0,flag:addr_of_mut!(enable_vdso),value:1},
++ GetOptOption{name:b"profile\0".as_ptr(),has_arg:0,flag:addr_of_mut!(profile),value:1},
++ GetOptOption{name:b"mpol-no-heap\0".as_ptr(),has_arg:0,flag:addr_of_mut!(mpol_no_heap),value:1},
++ GetOptOption{name:b"mpol-no-stack\0".as_ptr(),has_arg:0,flag:addr_of_mut!(mpol_no_stack),value:1},
++ GetOptOption{name:b"mpol-no-bss\0".as_ptr(),has_arg:0,flag:addr_of_mut!(mpol_no_bss),value:1},
++ GetOptOption{name:b"mpol-shm-premap\0".as_ptr(),has_arg:0,flag:addr_of_mut!(mpol_shm_premap),value:1},
++ GetOptOption{name:b"no-bind-ikc-map\0".as_ptr(),has_arg:0,flag:addr_of_mut!(no_bind_ikc_map),value:1},
++ GetOptOption{name:b"mpol-threshold\0".as_ptr(),has_arg:1,flag:null_mut(),value:'M' as c_int},
++ GetOptOption{name:b"enable-straight-map\0".as_ptr(),has_arg:0,flag:addr_of_mut!(straight_map),value:1},
++ GetOptOption{name:b"straight-map-threshold\0".as_ptr(),has_arg:1,flag:null_mut(),value:'S' as c_int},
++ GetOptOption{name:b"disable-sched-yield\0".as_ptr(),has_arg:0,flag:addr_of_mut!(disable_sched_yield),value:1},
++ GetOptOption{name:b"extend-heap-by\0".as_ptr(),has_arg:1,flag:null_mut(),value:'h' as c_int},
++ GetOptOption{name:b"stack-premap\0".as_ptr(),has_arg:1,flag:null_mut(),value:'s' as c_int},
++ GetOptOption{name:b"uti-thread-rank\0".as_ptr(),has_arg:1,flag:null_mut(),value:'u' as c_int},
++ GetOptOption{name:b"uti-use-last-cpu\0".as_ptr(),has_arg:0,flag:addr_of_mut!(uti_use_last_cpu),value:1},
++ GetOptOption{name:b"enable-uti\0".as_ptr(),has_arg:0,flag:addr_of_mut!(enable_uti),value:1},
++ #[cfg(mcexec_enable_tofu)]
++ GetOptOption{name:b"enable-tofu\0".as_ptr(),has_arg:0,flag:addr_of_mut!(enable_tofu),value:1},
++ GetOptOption{name:b"debug-mcexec\0".as_ptr(),has_arg:0,flag:addr_of_mut!(debug),value:1},
++ GetOptOption{name:b"flags\0".as_ptr(),has_arg:1,flag:null_mut(),value:'f' as c_int},
++ GetOptOption{name:core::ptr::null(),has_arg:0,flag:null_mut(),value:0},
++];
++
++#[cfg(mcexec_data_fixture)]
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_data_fixture_abi(out:*mut usize) {
++ let values=[core::mem::size_of::<MutexStorage>(),core::mem::align_of::<MutexStorage>(),core::mem::size_of::<BarrierStorage>(),core::mem::align_of::<BarrierStorage>(),core::mem::size_of::<c_int>(),core::mem::align_of::<c_int>(),core::mem::size_of::<McexecListHead>(),core::mem::align_of::<McexecListHead>(),core::mem::size_of::<GetOptOption>(),core::mem::align_of::<GetOptOption>(),core::mem::offset_of!(GetOptOption,name),core::mem::offset_of!(GetOptOption,has_arg),core::mem::offset_of!(GetOptOption,flag),core::mem::offset_of!(GetOptOption,value),core::mem::size_of::<GlobalRlimit>(),core::mem::align_of::<GlobalRlimit>()];core::ptr::copy_nonoverlapping(values.as_ptr(),out,values.len());
++}
+diff --git a/executer/user/rust/mcexec_signal_wait_exit.rs b/executer/user/rust/mcexec_signal_wait_exit.rs
+new file mode 100644
+--- /dev/null
++++ b/executer/user/rust/mcexec_signal_wait_exit.rs
+@@ -0,0 +1,106 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// libc owns kernel signal ABI adaptation; Rust owns project action/lifecycle logic.
++use super::{c_int,c_long,c_ulong,c_void};
++use core::ptr::{addr_of_mut,null_mut};
++#[repr(C)]
++struct SigSet { bits:[c_ulong;16] }
++#[repr(C)]
++struct SigAction { handler:usize, mask:SigSet, flags:c_int, restorer:usize }
++#[repr(C,align(8))]
++struct SigInfo { bytes:[u8;128] }
++unsafe extern "C" {
++ static mut master_tid:c_int;
++ static mut debug:c_int;
++ static mut stdout:*mut c_void;
++ static mut stderr:*mut c_void;
++ fn sigaction(sig:c_int,action:*const SigAction,old:*mut SigAction)->c_int;
++ fn sigemptyset(set:*mut SigSet)->c_int;
++ fn sigdelset(set:*mut SigSet,sig:c_int)->c_int;
++ fn sigprocmask(how:c_int,set:*const SigSet,old:*mut SigSet)->c_int;
++ fn waitid(kind:c_int,pid:u32,info:*mut SigInfo,options:c_int)->c_int;
++ fn write(fd:c_int,buf:*const c_void,size:usize)->isize;
++ fn signal(sig:c_int,handler:usize)->usize;
++ fn kill(pid:c_int,sig:c_int)->c_int;
++ fn sleep(seconds:u32)->u32;
++ fn pause()->c_int;
++ fn exit(code:c_int)->!;
++ fn isatty(fd:c_int)->c_int;
++ fn fprintf(stream:*mut c_void,format:*const u8,...)->c_int;
++ fn printf(format:*const u8,...)->c_int;
++ fn fflush(stream:*mut c_void)->c_int;
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_sendsig_si_pid_bridge(info:*const c_void)->c_int { info.cast::<u8>().add(16).cast::<c_int>().read() }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_sendsig_si_signo_bridge(info:*const c_void)->c_int { info.cast::<c_int>().read() }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_sendsig_default_action_bridge(sig:c_int) {
++ signal(sig,0);kill(super::getpid(),sig);loop { sleep(1); }
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_act_signalfd4_write_bridge(fd:c_int,info:*const c_void,len:usize)->isize { write(fd,info,len) }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_act_signalfd4_write_error_bridge() { fprintf(stderr,b"error: writing sigpipe\n\0".as_ptr()); }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_act_sigaction_install_bridge(sig:c_int,ignored:c_int) {
++ let mut act:SigAction=core::mem::zeroed();
++ if ignored!=0 { act.handler=1; } else {act.handler=super::sendsig as usize;act.flags=4;}
++ sigaction(sig,&act,null_mut());
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_act_sigprocmask_apply_bridge(mask:c_ulong) {
++ let mut set:SigSet=core::mem::zeroed();
++ sigemptyset(addr_of_mut!(set));
++ set.bits[0]=mask;
++ sigdelset(addr_of_mut!(set),23); // LOCALSIG == SIGURG.
++ sigprocmask(2,&set,null_mut()); // SIG_SETMASK.
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_init_sigaction_set_master_tid_bridge(tid:c_int) { master_tid=tid; }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_init_sigaction_install_bridge(sig:c_int) {
++ // Deliberate defined extension: a failed query leaves zeros instead of the
++ // original uninitialized C struct. Defined successful-query behavior is parity.
++ let mut act:SigAction=core::mem::zeroed();
++ sigaction(sig,core::ptr::null(),addr_of_mut!(act));
++ act.handler=super::sendsig as usize;
++ act.flags=(act.flags & !0x10000000)|4; // clear SA_RESTART, set SA_SIGINFO.
++ sigaction(sig,&act,null_mut());
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_waitid_pid_bridge(pid:c_int,opt:c_int,errno_out:*mut c_int)->c_int {
++ let mut info:SigInfo=core::mem::zeroed();
++ let mut ret;
++ loop {
++   ret=waitid(1,pid as u32,addr_of_mut!(info),opt); // P_PID.
++   if ret!=-1 || *super::__errno_location()!=4 { break; }
++ }
++ if !errno_out.is_null() { *errno_out=*super::__errno_location(); }
++ if ret==0 {ret=mcexec_sendsig_si_pid_bridge(addr_of_mut!(info).cast());}
++ ret
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_wait4_error_bridge(pid:c_ulong,ret:c_int,error:c_int) { fprintf(stderr,b"ERROR: waiting for %lu rc=%d errno=%d\n\0".as_ptr(),pid,ret,error); }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_exit_debug_bridge(status:c_ulong,cpu:c_int) {
++ if debug!=0 {printf(b"mcexec_exit_debug_bridge: __NR_exit/__NR_exit_group: %ld (cpu_id: %d)\n\0".as_ptr(),status,cpu);fflush(stdout);}
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_exit_isatty_bridge(fd:c_int)->c_int { isatty(fd) }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_exit_report_signal_bridge(sig:c_int) {fprintf(stderr,b"Terminate by signal %d\n\0".as_ptr(),sig);}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_exit_report_status_bridge(term:c_int) {
++ if debug!=0 {printf(b"mcexec_exit_report_status_bridge: Exit status: %d\n\0".as_ptr(),term);fflush(stdout);}
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_exit_replay_signal_bridge(sig:c_int) {signal(sig,0);kill(super::getpid(),sig);pause();}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_exit_process_bridge(term:c_int) {exit(term);}
++#[cfg(mcexec_signal_fixture)]
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_signal_fixture_abi(out:*mut usize) {
++ let values=[core::mem::size_of::<SigInfo>(),core::mem::align_of::<SigInfo>(),0,16,
++ core::mem::size_of::<SigAction>(),core::mem::align_of::<SigAction>(),core::mem::offset_of!(SigAction,handler),core::mem::offset_of!(SigAction,mask),core::mem::offset_of!(SigAction,flags),core::mem::offset_of!(SigAction,restorer),core::mem::size_of::<SigSet>(),core::mem::align_of::<SigSet>()];
++ core::ptr::copy_nonoverlapping(values.as_ptr(),out,values.len());
++}
+diff --git a/executer/user/rust/mcexec_worker_lifecycle.rs b/executer/user/rust/mcexec_worker_lifecycle.rs
+new file mode 100644
+--- /dev/null
++++ b/executer/user/rust/mcexec_worker_lifecycle.rs
+@@ -0,0 +1,92 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Remaining worker callbacks use libc/pthread directly; existing Rust owns sequencing.
++use super::{c_int,c_void,McexecThreadData};
++use core::ptr::{addr_of_mut,null_mut};
++static mut NEXT_CPU: c_int = 0;
++unsafe extern "C" {
++    static mut lock: c_void;
++    static mut init_ready: c_void;
++    static mut uti_init_ready: c_void;
++    static mut stderr: *mut c_void;
++    fn pthread_mutex_init(lock: *mut c_void, attr: *const c_void) -> c_int;
++    fn pthread_barrier_init(barrier: *mut c_void, attr: *const c_void, count: u32) -> c_int;
++    fn pthread_barrier_wait(barrier: *mut c_void) -> c_int;
++    fn pthread_create(thread: *mut usize, attr: *const c_void,
++        entry: unsafe extern "C" fn(*mut c_void)->*mut c_void, arg:*mut c_void) -> c_int;
++    fn pthread_join(thread: usize, value: *mut *mut c_void) -> c_int;
++    fn pthread_kill(thread: usize, sig: c_int) -> c_int;
++    fn fprintf(stream: *mut c_void, format: *const u8, ...) -> c_int;
++    fn printf(format: *const u8, ...) -> c_int;
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_create_worker_thread_alloc_bridge() -> *mut McexecThreadData {
++    super::malloc(core::mem::size_of::<McexecThreadData>()).cast()
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_create_worker_thread_alloc_error_bridge() {
++    fprintf(stderr,b"create_worker_thread: error: allocating thread structure\n\0".as_ptr());
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_create_worker_thread_next_cpu_bridge() -> c_int {
++    let current = NEXT_CPU;
++    // Inputs in supported execution cannot exhaust int; preserve postincrement ordering.
++    NEXT_CPU = current.wrapping_add(1);
++    current
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_create_worker_thread_lock_bridge() -> *mut c_void { addr_of_mut!(lock) }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_create_worker_thread_publish_bridge(tp:*mut McexecThreadData,out:*mut *mut McexecThreadData) {
++    (*tp).next = super::MCEXEC_THREAD_DATA;
++    super::MCEXEC_THREAD_DATA = tp;
++    if !out.is_null() { *out=tp; }
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_create_worker_thread_pthread_create_bridge(tp:*mut McexecThreadData)->c_int {
++    pthread_create(addr_of_mut!((*tp).thread_id),core::ptr::null(),super::mcexec_main_loop_thread_func_body,tp.cast())
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_main_loop_thread_barrier_wait_bridge(barrier:*mut c_void)->c_int { pthread_barrier_wait(barrier) }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_init_worker_threads_lock_init_bridge() { pthread_mutex_init(addr_of_mut!(lock),core::ptr::null()); }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_init_worker_threads_barrier_init_bridge(count:c_int) {
++    pthread_barrier_init(addr_of_mut!(init_ready),core::ptr::null(),count as u32);
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_init_worker_threads_reset_cpuid_bridge() { NEXT_CPU=0; }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_init_worker_threads_create_bridge()->c_int {
++    super::mcexec_create_worker_thread_body(null_mut(),addr_of_mut!(init_ready))
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_init_worker_threads_wait_bridge() { pthread_barrier_wait(addr_of_mut!(init_ready)); }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_init_worker_threads_error_bridge(ret:c_int) {
++    printf(b"ERROR: creating worker threads (%d), check ulimit?\n\0".as_ptr(),ret);
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_join_all_threads_head_bridge()->*mut McexecThreadData { super::MCEXEC_THREAD_DATA }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_join_all_threads_join_bridge(tp:*mut McexecThreadData) { pthread_join((*tp).thread_id,null_mut()); }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_kill_thread_head_bridge()->*mut McexecThreadData { super::MCEXEC_THREAD_DATA }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_kill_thread_pthread_kill_bridge(tp:*mut McexecThreadData,sig:c_int)->c_int { pthread_kill((*tp).thread_id,sig) }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_util_thread_barrier_init_bridge() { pthread_barrier_init(addr_of_mut!(uti_init_ready),core::ptr::null(),2); }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_util_thread_create_worker_bridge(out:*mut *mut McexecThreadData)->c_int { super::mcexec_create_worker_thread_body(out,addr_of_mut!(uti_init_ready)) }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_util_thread_worker_error_bridge(rc:c_int) { printf(b"util_thread: Error: create_worker_thread failed (%d)\n\0".as_ptr(),rc); }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_util_thread_barrier_wait_bridge() { pthread_barrier_wait(addr_of_mut!(uti_init_ready)); }
++
++#[cfg(mcexec_worker_fixture)]
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_worker_fixture_abi(out:*mut usize) {
++ let values=[core::mem::size_of::<McexecThreadData>(),core::mem::align_of::<McexecThreadData>(),
++ core::mem::offset_of!(McexecThreadData,thread_id),core::mem::offset_of!(McexecThreadData,cpu),
++ core::mem::offset_of!(McexecThreadData,lock),core::mem::offset_of!(McexecThreadData,init_ready)];
++ core::ptr::copy_nonoverlapping(values.as_ptr(),out,values.len());
++}

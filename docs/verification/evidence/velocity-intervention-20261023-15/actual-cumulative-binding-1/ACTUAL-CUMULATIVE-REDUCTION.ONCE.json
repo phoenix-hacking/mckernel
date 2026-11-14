@@ -1,0 +1,180 @@
+{
+  "goal_version": "p12.cumulative-mixed-60m.v2.user-authorized-20261024",
+  "status": "CUMULATIVE_PASS",
+  "original_single_session_status": "FAIL",
+  "uninterrupted_pass": false,
+  "short_original_terminal_status": "FAIL",
+  "short_adjudicated_terminal_status": "SEGMENT_PASS",
+  "short_offline_adjudication": {
+    "schema": "p12.uart-onlcr-offline-adjudication.v1",
+    "original_terminal_status": "FAIL",
+    "original_failure_reason": "trace exact bytes/cap",
+    "adjudicated_terminal_status": "SEGMENT_PASS",
+    "transport_decoding": "uniform_CRLF_to_LF",
+    "replay_status": "PROTOCOL_PASS",
+    "raw_capture_sha256": "e0faa4484edef1a3beabcaaab36a9f8814781ba7d698d11055ea7970c675c994",
+    "original_result_sha256": "63e6742b1e97de0b8e5bd73528c188ad7f8c278cdd0a93465d841d9fb7c92bc7",
+    "manifest_sha256": "e2e264d97f952bfded2018d284b037aa37dfdb7d26c212a1c777ebc3b9aec98b",
+    "original_consumer_sha256": "daf8c6d8295a0d3f6db816e9216ea4e6c3140ae73d276acbce8d2817d677ffe4",
+    "successor_consumer_sha256": "359bea9a9824290e926f9e5250fcd1d4260688349e1c925bc9f8ebd998dc8232",
+    "unchanged_pair_checker_sha256": "2cc19500bdecdabf9fc419195df38c25636017bd038d94da688a2d4ad1fed7d3",
+    "raw_trace_sha256": "0a2d42fb8223760e6b760b4af3720f98a11e8edb180447ef9ac38bb5090256b6",
+    "decoded_trace_sha256": "bba008003e518f6363a3f5268ac9bad52632fcf49b147f14f1b184de88386e2b",
+    "replay_evidence_sha256": "340ff3e52a2b44298ff1e83621fbe3b53f624712aa6a6d2d6bcdeb6c3f307c1b"
+  },
+  "qualification_modes": [
+    "producer_checked_completed_prefix_with_independent_report_replay",
+    "strict_completed_short_segment_native"
+  ],
+  "segments": [
+    "4a76-completed-prefix0-through628",
+    "afcf017e-strict-offline-adjudicated-rounds0-through16"
+  ],
+  "actual_mixed_work_ns": 3612095869878,
+  "successful_launches": 1292,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\nFinite retained-data qualifier and unchanged reducer; no process/device/compiler/runtime operation.\n",
+  "actual_binding_sha256": "9b191c108930891b71839f8182de66333a7303930be4dbadffb0d2ac5b7805a1",
+  "short_qualifier_proof": {
+    "status": "QUALIFIED",
+    "qualification_mode": "strict_completed_short_segment_native",
+    "evidence_sha256": "e0faa4484edef1a3beabcaaab36a9f8814781ba7d698d11055ea7970c675c994",
+    "profile": {
+      "min_launches": 2,
+      "round_cap": 2048,
+      "trace_cap": 268435456,
+      "version": 2,
+      "wall_ns": 600000000000,
+      "work_ns": 90000000000
+    },
+    "offline_adjudication": {
+      "schema": "p12.uart-onlcr-offline-adjudication.v1",
+      "original_terminal_status": "FAIL",
+      "original_failure_reason": "trace exact bytes/cap",
+      "adjudicated_terminal_status": "SEGMENT_PASS",
+      "transport_decoding": "uniform_CRLF_to_LF",
+      "replay_status": "PROTOCOL_PASS",
+      "raw_capture_sha256": "e0faa4484edef1a3beabcaaab36a9f8814781ba7d698d11055ea7970c675c994",
+      "original_result_sha256": "63e6742b1e97de0b8e5bd73528c188ad7f8c278cdd0a93465d841d9fb7c92bc7",
+      "manifest_sha256": "e2e264d97f952bfded2018d284b037aa37dfdb7d26c212a1c777ebc3b9aec98b",
+      "original_consumer_sha256": "daf8c6d8295a0d3f6db816e9216ea4e6c3140ae73d276acbce8d2817d677ffe4",
+      "successor_consumer_sha256": "359bea9a9824290e926f9e5250fcd1d4260688349e1c925bc9f8ebd998dc8232",
+      "unchanged_pair_checker_sha256": "2cc19500bdecdabf9fc419195df38c25636017bd038d94da688a2d4ad1fed7d3",
+      "raw_trace_sha256": "0a2d42fb8223760e6b760b4af3720f98a11e8edb180447ef9ac38bb5090256b6",
+      "decoded_trace_sha256": "bba008003e518f6363a3f5268ac9bad52632fcf49b147f14f1b184de88386e2b",
+      "replay_evidence_sha256": "340ff3e52a2b44298ff1e83621fbe3b53f624712aa6a6d2d6bcdeb6c3f307c1b"
+    },
+    "wall": {
+      "mode": "source-bound-producer-entered-checks",
+      "checked_rounds": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "wall_ns": 600000000000,
+      "producer_source_binding": {
+        "Rust": {
+          "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/collector-source720/pair_long_producer.rs",
+          "sha256": "19f9710202b152ea1a91bc991bef08283f96497a3ab6d6a7deaf6d82bc8e3834",
+          "bytes": 13305
+        },
+        "actual_link": {
+          "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/cumulative-continuation-90s/root-actual-accounting-and-C720-1/C720-relink/RESULT.json",
+          "sha256": "055474e74868ed6f8b73bda048e7f32805bf6d16d37c85a9bec48afb96d24d3a",
+          "bytes": 1153
+        },
+        "actual_collector": {
+          "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/cumulative-continuation-90s/collector-cumulative-segment-720",
+          "sha256": "d788349c321ce05b0c4da0deef1dacc51804526550b7c8746a20654c4f3c6ed8",
+          "device": 66306,
+          "inode": 56261796,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": "0o700",
+          "nlink": 1,
+          "size": 1633128,
+          "mtime_ns": 1792818945131821239,
+          "ctime_ns": 1792818945131821239
+        },
+        "actual_stage": {
+          "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-capsule-preparation-1/actual-stage-1/stage-result.json",
+          "sha256": "dd4667c658b80b583e63499127fe4c909baad81eece90261a7eec1cc730d9e95",
+          "bytes": 1861
+        }
+      },
+      "root_admission_binding": {
+        "manifest": {
+          "path": "/home/holden/mckernel-work/scratch/p12c1/m.json",
+          "sha256": "e2e264d97f952bfded2018d284b037aa37dfdb7d26c212a1c777ebc3b9aec98b",
+          "bytes": 12809
+        },
+        "request": {
+          "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/runtime-successor-3/CAPTURE-REQUEST.json",
+          "sha256": "8341f8b3568445ac119be6a59e34a627216578204439288f6b2692535baf771a",
+          "bytes": 1929
+        },
+        "release": {
+          "path": "/home/holden/mckernel-work/scratch/p12c1/r.json",
+          "sha256": "208e15dc0a00002b95896a7a5217ac30c460d1dcd292da0f90c4a84f906c7465",
+          "bytes": 2947
+        },
+        "serialization": {
+          "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/runtime-successor-3/ACTUAL-FINAL-SERIALIZATION-AND-REALCLOCK-CONSUMER.json",
+          "sha256": "f374bb11b962f198e9edd0e00b3732d51ec09293bf377ad9c65f0e0da2d35443",
+          "bytes": 1332
+        },
+        "physical": {
+          "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/segment90-normal-retirement-1/physical-preparation-1/ACTUAL-PHYSICAL-ACCEPTANCE.ROOT-RECORD.json",
+          "sha256": "f0d0adedc97a91049e19a75387f2a6a5a130baf1decba779a66f231997b71eec",
+          "bytes": 3035
+        },
+        "postjoin": {
+          "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/segment90-normal-retirement-1/physical-preparation-1/current_live_postjoin.NONNULL.json",
+          "sha256": "f2e4489ba45499087872a50e03112b10ebcc38cd2714fa07a7f739945cdbc688",
+          "bytes": 979
+        }
+      }
+    },
+    "entered_timestamp": null,
+    "uninterrupted_pass": false
+  },
+  "original_result_unchanged": {
+    "path": "/home/holden/mckernel-work/l12c1/p/attempt-afcf017e155344a1ad3fa2c2057dbbf2/result.json",
+    "sha256": "63e6742b1e97de0b8e5bd73528c188ad7f8c278cdd0a93465d841d9fb7c92bc7",
+    "bytes": 2839
+  },
+  "actual_strict_replay": {
+    "status": "PROTOCOL_PASS",
+    "application_acceptance": false,
+    "native_acceptance": false,
+    "successful_launches": 34,
+    "successful_rounds": 17,
+    "actual_mixed_work_ns": 92404920166,
+    "elapsed_work_span_ns": 111997847758,
+    "trace_bytes": 3371321,
+    "physical_retirement_accepted": false
+  },
+  "actual_physical": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/segment90-normal-retirement-1/physical-preparation-1/ACTUAL-PHYSICAL-ACCEPTANCE.ROOT-RECORD.json",
+    "sha256": "f0d0adedc97a91049e19a75387f2a6a5a130baf1decba779a66f231997b71eec",
+    "bytes": 3035
+  },
+  "current_live_postjoin": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/segment90-normal-retirement-1/physical-preparation-1/current_live_postjoin.NONNULL.json",
+    "sha256": "f2e4489ba45499087872a50e03112b10ebcc38cd2714fa07a7f739945cdbc688",
+    "bytes": 979
+  }
+}

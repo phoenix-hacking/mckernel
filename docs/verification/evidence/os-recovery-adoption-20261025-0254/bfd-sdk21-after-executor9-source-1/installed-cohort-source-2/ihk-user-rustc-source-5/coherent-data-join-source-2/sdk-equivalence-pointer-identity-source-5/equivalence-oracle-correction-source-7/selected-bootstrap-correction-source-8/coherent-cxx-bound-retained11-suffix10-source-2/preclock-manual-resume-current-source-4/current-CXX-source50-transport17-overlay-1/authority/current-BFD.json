@@ -1,0 +1,77 @@
+{
+  "schema": "mckernel.bfd-semantic-sdk.post-reconciliation.independent-current-acceptance.v1",
+  "status": "PASS_PHYSICAL_AND_CURRENT",
+  "reviewer": "/root/execution_review",
+  "implementation_ownership": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual fresh manual-resume post-reconciliation physical/current state.",
+  "physical_acceptance": true,
+  "current_postjoin_acceptance": true,
+  "process_recovery_acceptance_sha256": "d9e84a4972b0b3e1f5530e939c689986e76fad50df418312ff42f70b6acf1351",
+  "reconciliation_acceptance_sha256": "d55341d320ce883a35ec319d6d4c8cfea83c248cacda21627c47efa02cfed80f",
+  "reconciliation_result_sha256": "ba35fdb2fef5254ee031aeb2319b6be92d9aec8f64fea6e5b8f04d32d23e7079",
+  "profile_sha256": "35edb7296b3e82b9b57ed952d775ebd4727181432c78b6b072fcf57f4ac2e5d2",
+  "stdout": {
+    "bytes": 108239,
+    "sha256": "d7a8843ca5d278ff49f5094b2aaeb5fcd81dcc844655eeaac9b8878ff46dfbea"
+  },
+  "whole_join_sha256": "566fde08854dc13b5707c2ead68bc3386cb82585e53497440be3caaefb2f3610",
+  "reader_identity": {
+    "pid": 832482,
+    "starttime": "76135575"
+  },
+  "direct_child": {
+    "pid": 832479,
+    "starttime": "76135567",
+    "returncode": 0,
+    "joined": true,
+    "group_absent": true,
+    "closed_streams": true
+  },
+  "raw_capture_sha256": {
+    "current1.process.json": "96a54bff6ad0f342293b6521dffbae4b499666a20fd091b7a9a4acce0eab206c",
+    "current2.process.json": "277f429b709f47cca2d8b2fd700ab4d0e56feb8a16e259d5ed1b5b315b64c41b",
+    "current1.containers.jsonl": "cc8c2f246c3f364dfc6cabe5837103e30d5e4cba760b77b10875adfc502a0102",
+    "current2.containers.jsonl": "f3a6cfbbc0b1221394baa735a3e64e41bfe570cff30d77331c8baee1dc5f96b6"
+  },
+  "complete_process_sweeps": 4,
+  "process_rows_per_sweep": [
+    315,
+    315,
+    319,
+    319
+  ],
+  "required_absent_pids": 22,
+  "required_pids_and_groups_absent": true,
+  "publishers_empty": true,
+  "docker_rows_per_snapshot": 44,
+  "all_containers_stopped": true,
+  "owned_container_id_name_and_nonce_absent": true,
+  "three_owned_records_absent": true,
+  "three_raw_archives_exact": true,
+  "active_original_inputs_preserved": 52,
+  "cleanup_evidence_files_preserved": 27,
+  "candidate_metadata_rows_preserved": 4481,
+  "owner_evidence_metadata_rows_preserved": 47,
+  "original_failed_ledger_and_owner_receipt_preserved": true,
+  "permanent_mutex": {
+    "device": 27,
+    "inode": 4,
+    "identity_unchanged": true,
+    "free_before": true,
+    "free_after": true,
+    "flock_operations": 0
+  },
+  "current_controllers_preserved": [
+    {
+      "pid": 831194,
+      "starttime": "76123783"
+    },
+    {
+      "pid": 831198,
+      "starttime": "76123791"
+    }
+  ],
+  "source_workload_status": "FAIL",
+  "native_acceptance": false,
+  "heavy_execution_released": false
+}

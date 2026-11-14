@@ -1,0 +1,28 @@
+{
+  "argv": [
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "taskset",
+    "-c",
+    "6",
+    "prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=30:30",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--nofile=256:256",
+    "--",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/prepare_current_M07_runtime_sources.PROC24e.py",
+    "runtime",
+    "--bindings",
+    "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/actual-normalization-bound-source-1/actual-constructor-wholecaller-1/FINAL-M07-RUNTIME-BINDINGS.SOURCE-REVIEW-BOUND.json",
+    "--bindings-sha256",
+    "444ea44a310eb8fa2f3246f2315ee9c0ed672949bdd58361d316dfb270a00dbd"
+  ],
+  "cwd": "/home/holden/mckernel"
+}

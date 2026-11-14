@@ -1,0 +1,36 @@
+warning: unnecessary `unsafe` block
+  --> postformat_cases.rs:51:17
+   |
+49 |     assert!(unsafe { call_formatter(pointer, || {
+   |             ------ because it's nested under this `unsafe` block
+50 |         emitted.set(emitted.get() + 1);
+51 |         assert!(unsafe { call_formatter(pointer, || emitted.set(emitted.get() + 1)) });
+   |                 ^^^^^^ unnecessary `unsafe` block
+   |
+   = note: `#[warn(unused_unsafe)]` (part of `#[warn(unused)]`) on by default
+
+warning: unnecessary `unsafe` block
+  --> postformat_cases.rs:79:17
+   |
+76 |     assert!(unsafe { call_formatter(pointer, || {
+   |             ------ because it's nested under this `unsafe` block
+...
+79 |         assert!(unsafe { call_formatter(pointer, || emitted.set(emitted.get() + 1)) });
+   |                 ^^^^^^ unnecessary `unsafe` block
+
+warning: static `F06_SIGNAL_LOG_STATE` is never used
+ --> postimage/kernel/rust/f06_signal_log_budget.rs:7:19
+  |
+7 | pub(super) static F06_SIGNAL_LOG_STATE: AtomicU64 = AtomicU64::new((u32::MAX as u64) << 32);
+  |                   ^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: static `F06_SIGNAL_LOG_STATE` is never used
+ --> old_budget_fixture.rs:6:19
+  |
+6 | pub(super) static F06_SIGNAL_LOG_STATE: AtomicU64 = AtomicU64::new((u32::MAX as u64) << 32);
+  |                   ^^^^^^^^^^^^^^^^^^^^
+
+warning: 4 warnings emitted
+

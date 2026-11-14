@@ -1,0 +1,62 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "NARROW_DESIGN_REVIEW_PASS_WITH_CROSS_PATH_LIFETIME_BLOCKERS",
+  "inputs": [
+    {
+      "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "bytes": 618027
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/procfs.rs",
+      "sha256": "6a3609c3ced73cafdffec032e3f2876e08eee5628ba2470137729ca7a804c90e",
+      "bytes": 36968
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/process.c",
+      "sha256": "12a8396d729e342d2d43130be73acf7960409cf4d2e432a415fb303a031fa055",
+      "bytes": 231146
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/process_helpers.c",
+      "sha256": "e436497031918d96d386afb7f3cbcc3af1e38692bb627b83dcf4d698c15be6c9",
+      "bytes": 170667
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "sha256": "07cb4bff5a0a9a0d582ebc18e344e5cf06ccd6fc37005292c757ef0501ea50eb",
+      "bytes": 1301841
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-LOOKUP-LIVE-REF-20261104-1/find_thread_live.rs.inc",
+      "sha256": "95dd0db6041de3e0556db5f9ebce7f4362181eaaf3bddaecd0537df58d124cf9",
+      "bytes": 3091
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-LOOKUP-LIVE-REF-20261104-1/LOOKUP-LIVE.PRIVATE-NOT-APPLIED.patch",
+      "sha256": "2483f168fbd94e95420a6a8154d2ac96b3403aa355e7d03961028cf788dcdbd1",
+      "bytes": 4007
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-LOOKUP-LIVE-REF-20261104-1/fixture.template.rs",
+      "sha256": "abf045e4050bdccbd6dae75694fd72bae4e2f33bb4f6d38b2464213144c9788d",
+      "bytes": 7337
+    }
+  ],
+  "findings": [
+    "Final ordinary and checked release atomically transitions refcount 1 to 0 before profile/procfs and writer-locked thread hash removal. The original find body increments unconditionally while the hash reader is held and can acquire 0 to 1 in the remaining linked interval; the final releaser subsequently destroys the returned object. Hash chaining increments VM refcount, not a thread reference; initial count 2 alone does not show hash-owned exclusion.",
+    "Candidate concrete Rust public find_thread only uses a conditional SeqCst CAS when 0 < count < INT_MAX under the hash reader; relative to a non-forced final atomic decrement this prevents resurrection. Overflow, zero and negative counts refuse lookup; exited warning follows successful hold. Existing generic extern callback ABI and ordinary hold_thread are untouched. Scope relies on matching reader/writer lock, live thread and Process fields until writer detach and no separate force reset.",
+    "Procfs Rust find_proc_thread returns a raw list member after releasing threads reader; process_procfs_request_inner invokes hold_thread only afterward, unlike the C body which holds while locked. Final destruction can remove/free in that gap. Even locking during hold alone does not address zero-to-one resurrection.",
+    "The direct process- and thread-directed do_kill selectors traverse under process or thread locks and call unconditional hold_thread; their exited-status exclusion and all failure/unwind paths require review. The C find_thread fallback still uses the unchecked generic callback.",
+    "Legacy C clone cleanup can publish a PS_RUNNING thread then force refcount to 1; this may erase acquired references. The full28 Rust supported CLONE_VM projection documents its error edges as pre-publication, so the legacy counterexample is not automatically applicable to that projection. terminate_host also force-sets a detached-thread reference and its exclusion requires proof."
+  ],
+  "fixture_limits": "Generic-c reports expanded fixture using actual candidate and both original release bodies with mock ABI and decrement, a host RwLock and a deterministic two-thread zero-before-lookup ordering. Includes PID mismatch/fallback/invalid, zero warning suppression and INT_MAX/negative. Reviewer did not rerun it. It is not a test of real MCS/IRQ providers, native behavior or unrelated acquisitions.",
+  "required_tests": [
+    "Actual selected lookup and both release bodies with deterministic final-decrement-before-lookup and lookup-before-decrement, then real concurrent read/write-lock exclusion in a bounded fixture.",
+    "Zero/negative/INT_MAX, exited warning and no warning on refusal, matching pid, wildcard fallback, duplicate and absent tid, lock balancing and no destruction while a successful reference is held.",
+    "Separately exercise procfs list protection/try-hold ordering, direct kill paths, and selected force-refcount cleanup with their real bodies before whole-lifecycle claims."
+  ],
+  "runtime_authority": null,
+  "native_execution": false,
+  "production_acceptance": false
+}

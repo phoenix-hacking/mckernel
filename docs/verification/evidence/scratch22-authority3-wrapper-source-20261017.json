@@ -1,0 +1,74 @@
+{
+  "schema": "scratch22-authority3.wrapper-source.v1",
+  "status": "SOURCE_READY_EXECUTION_DISABLED",
+  "author": "/root/scratch22_build_wrapper",
+  "model": "gpt-6.1-sol",
+  "source": {
+    "path": "scripts/native_exact_scratch22_authority3_build_wrapper.py",
+    "sha256": "2efda8b8bb44fa40c71edaed02a9d69d08b14035f2d2468b20444226cde67f42"
+  },
+  "tests": {
+    "path": "scripts/tests/test_native_exact_scratch22_authority3_build_wrapper.py",
+    "sha256": "3d23a755dab8522dcaa4293811debb39f85735569a6b344f9fe87d5644db3f8a",
+    "command_prefix": "timeout 120s taskset -c 0 prlimit --as=2147483648 -- python3 -B -m unittest -v",
+    "module_class": "scripts.tests.test_native_exact_scratch22_authority3_build_wrapper.WrapperTests",
+    "selected_cases": [
+      "test_authority2_release_and_preparation_cannot_enable_authority3",
+      "test_authority2_guard_bodies_remain_exact_after_namespace_adaptation",
+      "test_all_fresh_materialization_and_capture_paths_use_authority3",
+      "test_real_preparation_terminal_fields_and_canonical_validator_are_consumed",
+      "test_missing_authority2_retirement_blocks_source_and_prepared_use",
+      "test_preparation_review_must_bind_new_source_and_authority2_receipts",
+      "test_unreleased_adapter_refuses_before_release_read_or_lock",
+      "test_accepted_adapter_still_requires_release_before_lock",
+      "test_only_four_release_flags_change",
+      "test_fresh_namespace_and_frozen_runtime_profile"
+    ],
+    "cases_run": 10,
+    "exit_code": 0,
+    "reported_seconds": 0.039,
+    "profile": "CPU0, one job, 2-GiB planning share and per-process AS limit, 120 seconds. Disposable files and mocks only; no child processes, compiler, root, Docker, guest, network or Git writes. Accepted unchanged capture/signal/retirement baseline is reused."
+  },
+  "exact_baseline": {
+    "source_path": "scripts/native_exact_scratch22_authority2_build_wrapper.py",
+    "source_sha256": "7fab2909b65599e644a4541c691fc141dc96bebbea97d89b3764379778244659",
+    "tests_path": "scripts/tests/test_native_exact_scratch22_authority2_build_wrapper.py",
+    "tests_sha256": "30af2e041de08754c3a1ef2bf3fa3ac38e7d3f5ebfc8f2f0db222a4fcffc8a36",
+    "actual_behavior_reused": "Dispatcher reports authority2's actual precompiler FAIL was positively retired, with terminal evidence accepted by the corrected large-capture guard. This lane does not replay or recount that attempt."
+  },
+  "delta": [
+    "Fresh authority3 attempt, release/preparation schemas, source/test/adapter paths and all attempt-specific request/materialization/capture names; scratch18 owner exclusion ABI slot and original ancestor remain unchanged.",
+    "EXECUTION_ENABLED replaces the baseline activation flag and is initially false. Actual authority3 adapter is pinned by its frozen SHA256; no release JSON, CLI or environment can turn execution on.",
+    "Retain original authority1 retirement validation and add adapter.validate_authority2_retirement(preparation). Existing source-authority validator now delegates the actual six-file repair and current companion checks once, through the new adapter.",
+    "Independent preparation review must additionally bind current_source_checks_sha256, authority2_terminal_sha256, authority2_receipt_sha256, authority2_cleanup_sha256 and authority2_cleanup_review_sha256. All earlier prerequisite hashes remain mandatory."
+  ],
+  "bindings": {
+    "adapter": "scripts/prepare_native_exact_scratch22_authority3.py",
+    "adapter_sha256": "1f6aa36d4cf64d03ea62989248ed522b8575b1ab56d66cc66c211e9a8260fbf5",
+    "ancestor": "docs/verification/evidence/native-exact-candidate-delta-preparation-scratch18-20261001.py",
+    "ancestor_sha256": "23d2dcc45db9e9268456a202e46c0e25e982b13d91413271cf00452d0564a731",
+    "candidate_selected_by_dispatcher": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+    "candidate_tree_selected_by_dispatcher": "07d05c1bb2ea5f4b6a3817ba55cd32afe56c8d59",
+    "actual_source_contract": "Adapter validates the exact six-file repair and current mckernel.s22-digest-companion.v1 PASS_SOURCE_COMPANION_BINDINGS record, preserving immutable baseline checks and all unchanged source hashes.",
+    "actual_retirement_contract": "Adapter consumes actual authority2 positive FAIL terminal/receipt and exact request/container/seven-client retirement proof, followed by actual accepted cleanup-result and independent postflight. Wrapper consumes these actual validators and pointer hashes without manufacturing a success record.",
+    "namespace_contract": "Read actual new adapter NAMES and confirmed wrapper candidate/request/manifest/log/terminal/lease names match. Adapter owns authenticated nine-to-ten alias census; this lane performed no census or materialization."
+  },
+  "unchanged_invariants": {
+    "proof": "Focused AST comparison shows require_released_adapter, stable_regular, stable_large_capture, bind_release, acquire_development_lock, derive, publish, run_checked, retirement_proven, quarantine_wait, quarantine_root_lock and execute are identical to exact authority2 after mechanical namespace/activation-variable normalization.",
+    "limits": "128-MiB stdout/terminal evidence, 16-MiB other defaults; one heavy operation with four CPUs2-5, 12GiB RAM, no added swap, 512 tasks, no network, existing -j2 strict-fresh-output driver authority. No driver or generic guard changes.",
+    "ownership": "Root-lock lifetime, inherited descriptor, atomic HUP/INT/TERM/QUIT deferral, original child mask, nonreturning uncertainty quarantine and positive current retirement predicates are unchanged. A positively retired FAIL stays a failure."
+  },
+  "activation": {
+    "EXECUTION_ENABLED": false,
+    "remaining_gates": [
+      "Independent exact authority3 wrapper/adapter/source review and accepted current six-file source/companion checks",
+      "Actual authority2 terminal retirement and cleanup with independent accepted postflight, including all immutable prior proof joins",
+      "Exact committed/pushed/fetched source/controller proof before the bounded reviewed false-to-true activation",
+      "Separately reviewed fresh preparation, accepted actual artifacts/live identities and a new exact independent one-shot heavy execution release"
+    ],
+    "convention": "Dispatcher alone may apply the later independently reviewed EXECUTION_ENABLED=false-to-true change. Tests exercise false and true states explicitly, so no generic guard rewrite is needed. Activation alone cannot replace exact release/preflight ownership checks."
+  },
+  "preservation": "Only the three new allowlisted authority3 files were written. All previous source, WIP, candidates, failed captures, containers, guard processes, locks, leases and evidence remain untouched; inherited failure families and bounded-correction history are not reset.",
+  "execution_or_preparation_performed": false,
+  "acceptance_delta": {"current_candidate_builds": 0, "real_guest_apps": 0, "formal_applications": 0, "production_gates": 0}
+}

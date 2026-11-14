@@ -1,0 +1,770 @@
+{
+  "actual_guest_transport_fault_verified": false,
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/rustc",
+        "--version",
+        "--verbose"
+      ],
+      "collection": {
+        "application_acceptance": false,
+        "argv": [
+          "/usr/bin/rustc",
+          "--version",
+          "--verbose"
+        ],
+        "cleanup_complete": true,
+        "cleanup_timeout_seconds": 5.0,
+        "cwd": "/work/stability-service-failure-tests-20260913-3",
+        "descendant_records_omitted": 0,
+        "descendants": [],
+        "elapsed_seconds": 0.01836554700275883,
+        "env": {
+          "LANG": "C",
+          "LC_ALL": "C",
+          "PATH": "/usr/local/bin:/usr/bin:/bin",
+          "TZ": "UTC"
+        },
+        "events": [
+          {
+            "kind": "cleanup_started",
+            "monotonic": 505455.108500953,
+            "reason": "leader_exited"
+          }
+        ],
+        "executable": {
+          "path": "/usr/bin/rustc",
+          "sha256": "38eeb1652fb59753cb7736e354ec1579a543da9a2eb8a68be102a41e88eb5dc6",
+          "size": 15560
+        },
+        "executable_path": "/usr/bin/rustc",
+        "fd_setup": {
+          "close_fds": true,
+          "pass_fds": [],
+          "stderr": "separate owned pipe",
+          "stdin": "regular file or /dev/null",
+          "stdout": "owned pipe"
+        },
+        "gid": 1000,
+        "groups": [
+          1000
+        ],
+        "monotonic_finished": 505455.110794557,
+        "monotonic_started": 505455.09242901,
+        "payload_completion_observed_monotonic": 505455.108494987,
+        "payload_monotonic_deadline": 505485.093421539,
+        "payload_monotonic_started": 505455.093421539,
+        "process": {
+          "pgid": 8,
+          "pid": 8,
+          "ppid": 7,
+          "session": 8,
+          "starttime_ticks": 50545509,
+          "state": "R"
+        },
+        "provenance": "Linux process collection only; no McKernel evidence",
+        "raw_wait_status": 0,
+        "schema_version": 1,
+        "status": "COMPLETED",
+        "stderr_limit_bytes": 8388608,
+        "stdin": {
+          "kind": "devnull"
+        },
+        "stdin_path": null,
+        "stdout_limit_bytes": 8388608,
+        "streams": {
+          "stderr": {
+            "artifact": {
+              "path": "/work/stability-service-failure-tests-20260913-3/compiler-version-collection/stderr.bin",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            },
+            "bytes_observed": 0,
+            "bytes_retained": 0,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 8388608,
+            "truncated": false
+          },
+          "stdout": {
+            "artifact": {
+              "path": "/work/stability-service-failure-tests-20260913-3/compiler-version-collection/stdout.bin",
+              "sha256": "a8dc7b68607a44774c48c2a1fab52da313610a1573a160e87c480d386fdedc64",
+              "size": 220
+            },
+            "bytes_observed": 220,
+            "bytes_retained": 220,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 8388608,
+            "truncated": false
+          }
+        },
+        "supervisor_pid": 7,
+        "timeout_seconds": 30.0,
+        "uid": 1000,
+        "umask": "0022",
+        "wait_status": {
+          "code": 0,
+          "kind": "exited"
+        }
+      },
+      "label": "compiler-version"
+    },
+    {
+      "argv": [
+        "/usr/bin/gcc",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-Wno-unused-parameter",
+        "/work/stability-service-failure-tests-20260913-3/source/scripts/tests/fixtures/native-application-syscall.c",
+        "-o",
+        "/work/stability-service-failure-tests-20260913-3/c-reference"
+      ],
+      "collection": {
+        "application_acceptance": false,
+        "argv": [
+          "/usr/bin/gcc",
+          "-std=gnu11",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-Wno-unused-parameter",
+          "/work/stability-service-failure-tests-20260913-3/source/scripts/tests/fixtures/native-application-syscall.c",
+          "-o",
+          "/work/stability-service-failure-tests-20260913-3/c-reference"
+        ],
+        "cleanup_complete": true,
+        "cleanup_timeout_seconds": 5.0,
+        "cwd": "/work/stability-service-failure-tests-20260913-3",
+        "descendant_records_omitted": 0,
+        "descendants": [],
+        "elapsed_seconds": 0.12440690997755155,
+        "env": {
+          "LANG": "C",
+          "LC_ALL": "C",
+          "PATH": "/usr/local/bin:/usr/bin:/bin",
+          "TZ": "UTC"
+        },
+        "events": [
+          {
+            "kind": "cleanup_started",
+            "monotonic": 505455.323620563,
+            "reason": "leader_exited"
+          }
+        ],
+        "executable": {
+          "path": "/usr/bin/gcc",
+          "sha256": "2092e32fa9abee9ccbf777a5f893b9cc608582b660c93e742a17c3eb7da109c2",
+          "size": 1375456
+        },
+        "executable_path": "/usr/bin/gcc",
+        "fd_setup": {
+          "close_fds": true,
+          "pass_fds": [],
+          "stderr": "separate owned pipe",
+          "stdin": "regular file or /dev/null",
+          "stdout": "owned pipe"
+        },
+        "gid": 1000,
+        "groups": [
+          1000
+        ],
+        "monotonic_finished": 505455.331075497,
+        "monotonic_started": 505455.206668587,
+        "payload_completion_observed_monotonic": 505455.323614545,
+        "payload_monotonic_deadline": 505575.20898138,
+        "payload_monotonic_started": 505455.20898138,
+        "process": {
+          "pgid": 11,
+          "pid": 11,
+          "ppid": 10,
+          "session": 11,
+          "starttime_ticks": 50545520,
+          "state": "R"
+        },
+        "provenance": "Linux process collection only; no McKernel evidence",
+        "raw_wait_status": 0,
+        "schema_version": 1,
+        "status": "COMPLETED",
+        "stderr_limit_bytes": 8388608,
+        "stdin": {
+          "kind": "devnull"
+        },
+        "stdin_path": null,
+        "stdout_limit_bytes": 8388608,
+        "streams": {
+          "stderr": {
+            "artifact": {
+              "path": "/work/stability-service-failure-tests-20260913-3/c-build-collection/stderr.bin",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            },
+            "bytes_observed": 0,
+            "bytes_retained": 0,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 8388608,
+            "truncated": false
+          },
+          "stdout": {
+            "artifact": {
+              "path": "/work/stability-service-failure-tests-20260913-3/c-build-collection/stdout.bin",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            },
+            "bytes_observed": 0,
+            "bytes_retained": 0,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 8388608,
+            "truncated": false
+          }
+        },
+        "supervisor_pid": 10,
+        "timeout_seconds": 120.0,
+        "uid": 1000,
+        "umask": "0022",
+        "wait_status": {
+          "code": 0,
+          "kind": "exited"
+        }
+      },
+      "label": "c-build"
+    },
+    {
+      "argv": [
+        "/work/stability-service-failure-tests-20260913-3/c-reference"
+      ],
+      "collection": {
+        "application_acceptance": false,
+        "argv": [
+          "/work/stability-service-failure-tests-20260913-3/c-reference"
+        ],
+        "cleanup_complete": true,
+        "cleanup_timeout_seconds": 5.0,
+        "cwd": "/work/stability-service-failure-tests-20260913-3",
+        "descendant_records_omitted": 0,
+        "descendants": [],
+        "elapsed_seconds": 0.024082749034278095,
+        "env": {
+          "LANG": "C",
+          "LC_ALL": "C",
+          "PATH": "/usr/local/bin:/usr/bin:/bin",
+          "TZ": "UTC"
+        },
+        "events": [
+          {
+            "kind": "cleanup_started",
+            "monotonic": 505455.453300765,
+            "reason": "leader_exited"
+          }
+        ],
+        "executable": {
+          "path": "/work/stability-service-failure-tests-20260913-3/c-reference",
+          "sha256": "146f696a4442bd7f703e41f8a65c37d586dd8a1d7269f89116855bf6c293dc1c",
+          "size": 17536
+        },
+        "executable_path": "/work/stability-service-failure-tests-20260913-3/c-reference",
+        "fd_setup": {
+          "close_fds": true,
+          "pass_fds": [],
+          "stderr": "separate owned pipe",
+          "stdin": "regular file or /dev/null",
+          "stdout": "owned pipe"
+        },
+        "gid": 1000,
+        "groups": [
+          1000
+        ],
+        "monotonic_finished": 505455.455496534,
+        "monotonic_started": 505455.431413785,
+        "payload_completion_observed_monotonic": 505455.453291917,
+        "payload_monotonic_deadline": 505485.43249667,
+        "payload_monotonic_started": 505455.43249667,
+        "process": {
+          "pgid": 17,
+          "pid": 17,
+          "ppid": 16,
+          "session": 17,
+          "starttime_ticks": 50545543,
+          "state": "R"
+        },
+        "provenance": "Linux process collection only; no McKernel evidence",
+        "raw_wait_status": 0,
+        "schema_version": 1,
+        "status": "COMPLETED",
+        "stderr_limit_bytes": 8388608,
+        "stdin": {
+          "kind": "devnull"
+        },
+        "stdin_path": null,
+        "stdout_limit_bytes": 8388608,
+        "streams": {
+          "stderr": {
+            "artifact": {
+              "path": "/work/stability-service-failure-tests-20260913-3/c-reference-collection/stderr.bin",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            },
+            "bytes_observed": 0,
+            "bytes_retained": 0,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 8388608,
+            "truncated": false
+          },
+          "stdout": {
+            "artifact": {
+              "path": "/work/stability-service-failure-tests-20260913-3/c-reference-collection/stdout.bin",
+              "sha256": "12cc020471b5338a2d79e4794e46b68cf668f4751eae202c26a6ce1a577fab6f",
+              "size": 3948
+            },
+            "bytes_observed": 3948,
+            "bytes_retained": 3948,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 8388608,
+            "truncated": false
+          }
+        },
+        "supervisor_pid": 16,
+        "timeout_seconds": 30.0,
+        "uid": 1000,
+        "umask": "0022",
+        "wait_status": {
+          "code": 0,
+          "kind": "exited"
+        }
+      },
+      "label": "c-reference"
+    },
+    {
+      "argv": [
+        "/usr/bin/rustc",
+        "--edition",
+        "2021",
+        "-D",
+        "warnings",
+        "--test",
+        "/work/stability-service-failure-tests-20260913-3/source/scripts/tests/fixtures/native-application-syscall.rs",
+        "-o",
+        "/work/stability-service-failure-tests-20260913-3/syscall-tests"
+      ],
+      "collection": {
+        "application_acceptance": false,
+        "argv": [
+          "/usr/bin/rustc",
+          "--edition",
+          "2021",
+          "-D",
+          "warnings",
+          "--test",
+          "/work/stability-service-failure-tests-20260913-3/source/scripts/tests/fixtures/native-application-syscall.rs",
+          "-o",
+          "/work/stability-service-failure-tests-20260913-3/syscall-tests"
+        ],
+        "cleanup_complete": true,
+        "cleanup_timeout_seconds": 5.0,
+        "cwd": "/work/stability-service-failure-tests-20260913-3",
+        "descendant_records_omitted": 0,
+        "descendants": [],
+        "elapsed_seconds": 1.95675727003254,
+        "env": {
+          "LANG": "C",
+          "LC_ALL": "C",
+          "PATH": "/usr/local/bin:/usr/bin:/bin",
+          "TZ": "UTC"
+        },
+        "events": [
+          {
+            "kind": "cleanup_started",
+            "monotonic": 505457.494541279,
+            "reason": "leader_exited"
+          }
+        ],
+        "executable": {
+          "path": "/usr/bin/rustc",
+          "sha256": "38eeb1652fb59753cb7736e354ec1579a543da9a2eb8a68be102a41e88eb5dc6",
+          "size": 15560
+        },
+        "executable_path": "/usr/bin/rustc",
+        "fd_setup": {
+          "close_fds": true,
+          "pass_fds": [],
+          "stderr": "separate owned pipe",
+          "stdin": "regular file or /dev/null",
+          "stdout": "owned pipe"
+        },
+        "gid": 1000,
+        "groups": [
+          1000
+        ],
+        "monotonic_finished": 505457.502208236,
+        "monotonic_started": 505455.545450966,
+        "payload_completion_observed_monotonic": 505457.494534217,
+        "payload_monotonic_deadline": 505635.546296705,
+        "payload_monotonic_started": 505455.546296705,
+        "process": {
+          "pgid": 19,
+          "pid": 19,
+          "ppid": 18,
+          "session": 19,
+          "starttime_ticks": 50545554,
+          "state": "R"
+        },
+        "provenance": "Linux process collection only; no McKernel evidence",
+        "raw_wait_status": 0,
+        "schema_version": 1,
+        "status": "COMPLETED",
+        "stderr_limit_bytes": 8388608,
+        "stdin": {
+          "kind": "devnull"
+        },
+        "stdin_path": null,
+        "stdout_limit_bytes": 8388608,
+        "streams": {
+          "stderr": {
+            "artifact": {
+              "path": "/work/stability-service-failure-tests-20260913-3/rust-build-collection/stderr.bin",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            },
+            "bytes_observed": 0,
+            "bytes_retained": 0,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 8388608,
+            "truncated": false
+          },
+          "stdout": {
+            "artifact": {
+              "path": "/work/stability-service-failure-tests-20260913-3/rust-build-collection/stdout.bin",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            },
+            "bytes_observed": 0,
+            "bytes_retained": 0,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 8388608,
+            "truncated": false
+          }
+        },
+        "supervisor_pid": 18,
+        "timeout_seconds": 180.0,
+        "uid": 1000,
+        "umask": "0022",
+        "wait_status": {
+          "code": 0,
+          "kind": "exited"
+        }
+      },
+      "label": "rust-build"
+    },
+    {
+      "argv": [
+        "/work/stability-service-failure-tests-20260913-3/syscall-tests",
+        "--nocapture",
+        "--test-threads=4"
+      ],
+      "collection": {
+        "application_acceptance": false,
+        "argv": [
+          "/work/stability-service-failure-tests-20260913-3/syscall-tests",
+          "--nocapture",
+          "--test-threads=4"
+        ],
+        "cleanup_complete": true,
+        "cleanup_timeout_seconds": 5.0,
+        "cwd": "/work/stability-service-failure-tests-20260913-3",
+        "descendant_records_omitted": 0,
+        "descendants": [],
+        "elapsed_seconds": 0.20658043504226953,
+        "env": {
+          "LANG": "C",
+          "LC_ALL": "C",
+          "PATH": "/usr/local/bin:/usr/bin:/bin",
+          "TZ": "UTC"
+        },
+        "events": [
+          {
+            "kind": "cleanup_started",
+            "monotonic": 505457.774483509,
+            "reason": "leader_exited"
+          }
+        ],
+        "executable": {
+          "path": "/work/stability-service-failure-tests-20260913-3/syscall-tests",
+          "sha256": "36cb0a5efd1028b56e82d453311bcfaa95f7c31d309486ba4e8701fa4c542abe",
+          "size": 16549528
+        },
+        "executable_path": "/work/stability-service-failure-tests-20260913-3/syscall-tests",
+        "fd_setup": {
+          "close_fds": true,
+          "pass_fds": [],
+          "stderr": "separate owned pipe",
+          "stdin": "regular file or /dev/null",
+          "stdout": "owned pipe"
+        },
+        "gid": 1000,
+        "groups": [
+          1000
+        ],
+        "monotonic_finished": 505457.782239183,
+        "monotonic_started": 505457.575658748,
+        "payload_completion_observed_monotonic": 505457.774477719,
+        "payload_monotonic_deadline": 505547.596604169,
+        "payload_monotonic_started": 505457.596604169,
+        "process": {
+          "pgid": 45,
+          "pid": 45,
+          "ppid": 44,
+          "session": 45,
+          "starttime_ticks": 50545759,
+          "state": "R"
+        },
+        "provenance": "Linux process collection only; no McKernel evidence",
+        "raw_wait_status": 0,
+        "schema_version": 1,
+        "status": "COMPLETED",
+        "stderr_limit_bytes": 8388608,
+        "stdin": {
+          "kind": "devnull"
+        },
+        "stdin_path": null,
+        "stdout_limit_bytes": 8388608,
+        "streams": {
+          "stderr": {
+            "artifact": {
+              "path": "/work/stability-service-failure-tests-20260913-3/rust-tests-collection/stderr.bin",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            },
+            "bytes_observed": 0,
+            "bytes_retained": 0,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 8388608,
+            "truncated": false
+          },
+          "stdout": {
+            "artifact": {
+              "path": "/work/stability-service-failure-tests-20260913-3/rust-tests-collection/stdout.bin",
+              "sha256": "f611342d6630808e3707b6441242439f27cf8fb599422105ac3a9dab10cfe51b",
+              "size": 4315
+            },
+            "bytes_observed": 4315,
+            "bytes_retained": 4315,
+            "discarded_observed_bytes": 0,
+            "eof": true,
+            "limit_bytes": 8388608,
+            "truncated": false
+          }
+        },
+        "supervisor_pid": 44,
+        "timeout_seconds": 90.0,
+        "uid": 1000,
+        "umask": "0022",
+        "wait_status": {
+          "code": 0,
+          "kind": "exited"
+        }
+      },
+      "label": "rust-tests"
+    }
+  ],
+  "finished_utc": "2026-09-13T09:56:53.317016+00:00",
+  "inputs": [
+    {
+      "path": "/work/stability-service-failure-stage-20260913-3/source/executer/include/uprotocol.h",
+      "sha256": "1770a59cf4486380eb5aa483d3634dc1e4c9c9c16d1bf09865d4ff8f71191e69",
+      "size": 9756
+    },
+    {
+      "path": "/work/stability-service-failure-stage-20260913-3/source/executer/kernel/mcctrl/syscall.c",
+      "sha256": "6b769f9433be6c03dea41e5962d8ac44ce7c0903fe417d43eff7581ab2591450",
+      "size": 88788
+    },
+    {
+      "path": "/work/stability-service-failure-stage-20260913-3/source/host-kernel/native-rust/application_pager.rs",
+      "sha256": "adb65c878f6e9817cfb0932c38ac2f87d2715659468051957a1b747b7974ad19",
+      "size": 3196
+    },
+    {
+      "path": "/work/stability-service-failure-stage-20260913-3/source/host-kernel/native-rust/application_rpc.rs",
+      "sha256": "9f811c86c4e996294a6cd3be6b83315dabd20a3fb375419e091f4b9dedcfad39",
+      "size": 10080
+    },
+    {
+      "path": "/work/stability-service-failure-stage-20260913-3/source/host-kernel/native-rust/application_syscall.rs",
+      "sha256": "a1f5e98413a83f7c11c069d23d883379aa64578b55e011dff49c528a236321fd",
+      "size": 15406
+    },
+    {
+      "path": "/work/stability-service-failure-stage-20260913-3/source/host-kernel/native-rust/smp_application.rs",
+      "sha256": "c63a0179a648b0ab90c09c55cf5462779de12937cd5fa2dfa461e34ea29f94a0",
+      "size": 44257
+    },
+    {
+      "path": "/work/stability-service-failure-stage-20260913-3/source/host-kernel/native-rust/smp_application_syscall.rs",
+      "sha256": "4118de1401f33b2df17393660e6acbce2f337dca8a9cdfcf10965b1d3dc84c55",
+      "size": 21026
+    },
+    {
+      "path": "/work/stability-service-failure-stage-20260913-3/source/host-kernel/native-rust/smp_service.rs",
+      "sha256": "0747b5dbc7a529282c3073294e9ed7f121da927c59923a60455bc6f6aa610478",
+      "size": 39666
+    },
+    {
+      "path": "/work/stability-service-failure-stage-20260913-3/source/ihk/ikc/include/ikc/queue.h",
+      "sha256": "0acb85aee2d3b0b7620a0b222461815c6c96c530c5b7182fe60e8ae52ec4e461",
+      "size": 4501
+    },
+    {
+      "path": "/work/stability-service-failure-stage-20260913-3/source/kernel/include/syscall.h",
+      "sha256": "8c00adefe43d316dcb7d8f5db735f6281e572f536568d1584b6809e5445bdce5",
+      "size": 20836
+    },
+    {
+      "path": "/work/stability-service-failure-stage-20260913-3/source/kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "size": 76151
+    },
+    {
+      "path": "/work/stability-service-failure-stage-20260913-3/source/kernel/rust/host_helpers.rs",
+      "sha256": "79ec492e531d9793206cd9ebc84482ab695fcfdc284675492d81ee5a072eeaac",
+      "size": 180826
+    },
+    {
+      "path": "/work/stability-service-failure-stage-20260913-3/source/kernel/rust/syscall_policy.rs",
+      "sha256": "5e770e3375c7eb2f6f5aae23863a961123b5f200c77662780cb04a90dc13bf53",
+      "size": 694954
+    },
+    {
+      "path": "/work/stability-service-failure-stage-20260913-3/source/kernel/syscall.c",
+      "sha256": "ac80bb17e41979652e3dd90f8a94d205c28853cd6171975fcf4349f3d301ab58",
+      "size": 833975
+    },
+    {
+      "path": "/work/stability-service-failure-stage-20260913-3/source/scripts/tests/fixtures/native-application-committed-return-method.rs",
+      "sha256": "0250bc7033d48447c624980ee3f50ec829e8534576d7667705441ff87908f9d0",
+      "size": 2188
+    },
+    {
+      "path": "/work/stability-service-failure-stage-20260913-3/source/scripts/tests/fixtures/native-application-committed-return.rs",
+      "sha256": "c8f6fc0668a7d740f6193fa2edc39af49b18d603bd5f2332ca25cf8c4bce1829",
+      "size": 4877
+    },
+    {
+      "path": "/work/stability-service-failure-stage-20260913-3/source/scripts/tests/fixtures/native-application-syscall-c-completion.h",
+      "sha256": "5b4e3aacc0ac5dc691a344a59f775534e2afd33306959410dfa2d7378e15e222",
+      "size": 5203
+    },
+    {
+      "path": "/work/stability-service-failure-stage-20260913-3/source/scripts/tests/fixtures/native-application-syscall-c-layout.h",
+      "sha256": "aa92173ca1fcf634535616a8106b999db215f929a4ada84b9ee7eaa670dc2f08",
+      "size": 1667
+    },
+    {
+      "path": "/work/stability-service-failure-stage-20260913-3/source/scripts/tests/fixtures/native-application-syscall-c-producer.h",
+      "sha256": "84de0dc237cb1aaec545da67cbf1b2aa1a763b40a8d1c101aa9a45f17134c116",
+      "size": 1848
+    },
+    {
+      "path": "/work/stability-service-failure-stage-20260913-3/source/scripts/tests/fixtures/native-application-syscall-c.txt",
+      "sha256": "12cc020471b5338a2d79e4794e46b68cf668f4751eae202c26a6ce1a577fab6f",
+      "size": 3948
+    },
+    {
+      "path": "/work/stability-service-failure-stage-20260913-3/source/scripts/tests/fixtures/native-application-syscall-rust-producer.rs",
+      "sha256": "616881738c07b579283b1845a3f997a1a9bf2e3f4d4cbb0350e47c44e438f9fc",
+      "size": 3252
+    },
+    {
+      "path": "/work/stability-service-failure-stage-20260913-3/source/scripts/tests/fixtures/native-application-syscall-rust-wake.rs",
+      "sha256": "f4cd050093aab48e4143c05e4012813ee1c7336025a037c510b55008120c0ca1",
+      "size": 2358
+    },
+    {
+      "path": "/work/stability-service-failure-stage-20260913-3/source/scripts/tests/fixtures/native-application-syscall.c",
+      "sha256": "56168b002fc94419797d563bcc6dedba66126b4a3e467994f401c887b6b77dab",
+      "size": 6595
+    },
+    {
+      "path": "/work/stability-service-failure-stage-20260913-3/source/scripts/tests/fixtures/native-application-syscall.rs",
+      "sha256": "20d0ee3d5db385e418485ff6ff0ef38e0d3657ffc3c300f3b5d1bcddd81dfc80",
+      "size": 54392
+    },
+    {
+      "path": "/work/stability-service-failure-stage-20260913-3/source/scripts/tests/fixtures/native-application-transport-failure-methods.rs",
+      "sha256": "164d3a12ca4a4c055e49d07b727799dbe7c36ce8bb6887689672a5f6e755154a",
+      "size": 7058
+    },
+    {
+      "path": "/work/stability-service-failure-stage-20260913-3/source/scripts/tests/fixtures/native-application-transport-failure.rs",
+      "sha256": "d21b4e70f5dfbb85275b25ac9b1cc429b0246caa4f77e616484cf5eac8ff57b4",
+      "size": 12997
+    },
+    {
+      "path": "/work/stability-service-failure-stage-20260913-3/source/scripts/tests/fixtures/stability-service-failure-remote-methods.rs",
+      "sha256": "4360a836a6258068666a52268ce526a30cfd295184822a5debdff79e940b5e18",
+      "size": 7916
+    },
+    {
+      "path": "/work/stability-service-failure-stage-20260913-3/source/scripts/tests/fixtures/stability-service-failure-runtime-methods.rs",
+      "sha256": "9d7d2a44e394802372868ef29a98b6c1e1e46a8f3c39809b5ded289a15972405",
+      "size": 1351
+    },
+    {
+      "path": "/work/stability-service-failure-stage-20260913-3/source/scripts/tests/fixtures/stability-service-failure.rs",
+      "sha256": "725f0e5becf58a2b4e2f656ca8469e1a60670a5d971003f589089bf11de703c9",
+      "size": 13925
+    },
+    {
+      "path": "/workspace/host-kernel/native-rust/smp_application.rs",
+      "sha256": "de751736b2d102fae95f7ddc37d0d414f0fed174093de2f07b1f778f50a5351f",
+      "size": 43517
+    },
+    {
+      "path": "/workspace/host-kernel/native-rust/smp_service.rs",
+      "sha256": "38d336ee5d6d1dfaf739b78bf2c9b199a319c1ab2ddc1dedfd0aad0841c9919e",
+      "size": 39339
+    },
+    {
+      "path": "/workspace/kernel/rust/syscall_policy.rs",
+      "sha256": "5e770e3375c7eb2f6f5aae23863a961123b5f200c77662780cb04a90dc13bf53",
+      "size": 694954
+    },
+    {
+      "path": "/workspace/kernel/syscall.c",
+      "sha256": "ac80bb17e41979652e3dd90f8a94d205c28853cd6171975fcf4349f3d301ab58",
+      "size": 833975
+    },
+    {
+      "path": "/workspace/scripts/tests/fixtures/native-application-transport-failure.rs",
+      "sha256": "d21b4e70f5dfbb85275b25ac9b1cc429b0246caa4f77e616484cf5eac8ff57b4",
+      "size": 12997
+    }
+  ],
+  "phase": "rust-tests",
+  "production_gate_credit": false,
+  "scope": "exact production-method protocol tests with bounded Linux mocks; no native module or guest evidence",
+  "stage_record": {
+    "path": "/work/stability-service-failure-stage-20260913-3/record.json",
+    "sha256": "3dcd4e344a59adeb9ae05f26c9c9555987092cc0fddd8ea263b5b91c1678a8e2",
+    "size": 16203
+  },
+  "started_utc": "2026-09-13T09:56:50.528755+00:00",
+  "status": "PASS",
+  "supervisor": {
+    "path": "/work/stability-service-failure-tests-20260913-3/supervisor.py",
+    "sha256": "b1ae0ec26e98534a15c73a99d90748fbd05568e3035408654e3374d86bca6882",
+    "size": 24401
+  }
+}

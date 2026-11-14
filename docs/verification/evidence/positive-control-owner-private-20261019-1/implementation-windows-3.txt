@@ -1,0 +1,446 @@
+os_runtime.rs:2278
+    active: bool,
+}
+enum ForkClaimLookup { Pending(ForkProviderClaim), Completed }
+impl ForkProviderClaim {
+    // stage0 is private attachment/cancellation lookup, never a wire opcode.
+    fn acquire(object: &OsObject, identity: super::application_abi::ForkIdentityV1,
+        child_context: usize, stage: u32) -> Result<ForkClaimLookup>
+    {
+        let mut table = object.forks.lock();
+        if stage == super::application_abi::FORK_GUEST_DESTROYED_V1
+            && table.completed.iter().flatten().any(|receipt|
+                receipt.identity == identity && receipt.child_context == child_context
+                    && receipt.phase == ForkReceiptPhase::Finished)
+        { return Ok(ForkClaimLookup::Completed); }
+        let index = table.entries.iter().position(|entry| entry.as_ref().is_some_and(|entry|
+            entry.identity == Some(identity) && entry.child_context == child_context)).ok_or(ENOENT)?;
+        let entry = table.entries[index].as_ref().unwrap();
+        if stage == super::application_abi::FORK_HOST_REVOKED_V1 && entry.host_revoked {
+            return Ok(ForkClaimLookup::Completed);
+        }
+        if entry.phase == 0 || entry.phase == FORK_PROVIDER_BUSY
+            || stage == super::application_abi::FORK_GUEST_DESTROYED_V1 && !entry.host_revoked
+        { return Err(EBUSY); }
+        if stage != 0 && entry.capsule.is_none() { return Err(ENODEV); }
+        // Completion receipts have an independent lifetime from pending slots.
+        // Reserve before the first revoke effect; Finished cells are never
+        // evicted by pending-slot reuse. Until authenticated receipt retirement
+        // exists, exhaustion deliberately retains ownership and fails closed.
+        let receipt_index = if stage != 0 {
+            if let Some(receipt_index) = entry.receipt_index {
+                let receipt = table.completed[receipt_index].as_ref().ok_or(EIO)?;
+                if receipt.epoch != entry.epoch || receipt.identity != identity
+                    || receipt.child_context != child_context
+                    || receipt.phase == ForkReceiptPhase::Finished
+                { return Err(EIO); }
+                Some(receipt_index)
+            } else {
+                if stage != super::application_abi::FORK_HOST_REVOKED_V1 { return Err(EIO); }
+                let receipt_index = table.completed.iter().position(Option::is_none).ok_or(EBUSY)?;
+                let epoch = entry.epoch;
+                table.completed[receipt_index] = Some(ForkCompletedReceipt { identity, child_context,
+                    epoch, phase: ForkReceiptPhase::Reserved });
+                table.entries[index].as_mut().unwrap().receipt_index = Some(receipt_index);
+                Some(receipt_index)
+            }
+        } else { entry.receipt_index };
+        let entry = table.entries[index].as_mut().unwrap();
+        let claim = Self { object: ptr::from_ref(object), index, epoch: entry.epoch,
+            identity, previous_phase: entry.phase, guest_released: entry.guest_released,
+            attempted: entry.attempted, receipt_index, capsule: entry.capsule.clone(), payload: entry.payload.clone(), owner: entry.owner.clone(), active: true };
+        entry.phase = FORK_PROVIDER_BUSY;
+        if stage == super::application_abi::FORK_HOST_REVOKED_V1 { entry.attempted = true; }
+        drop(table);
+        Ok(ForkClaimLookup::Pending(claim))
+    }
+    fn begin_link_attempt(&mut self) -> Result {
+        let object = unsafe { &*self.object };
+        let mut table = object.forks.lock();
+        let entry = table.entries[self.index].as_mut().ok_or(EIO)?;
+        if entry.epoch != self.epoch || entry.identity != Some(self.identity)
+            || !Arc::ptr_eq(&entry.owner, &self.owner) || entry.phase != FORK_PROVIDER_BUSY
+            || entry.host_revoked || entry.guest_released || entry.capsule.is_none() || entry.payload.is_none()
+        { return Err(EBUSY); }
+        entry.attempted = true;
+        self.attempted = true;
+        Ok(())
+    }
+    fn restore(mut self) -> Result {
+        let object = unsafe { &*self.object };
+        let mut table = object.forks.lock();
+        let entry = table.entries[self.index].as_mut().ok_or(EIO)?;
+        if entry.epoch != self.epoch || entry.identity != Some(self.identity)
+            || !Arc::ptr_eq(&entry.owner, &self.owner) || entry.phase != FORK_PROVIDER_BUSY
+        { return Err(EIO); }
+        entry.phase = self.previous_phase;
+        self.active = false;
+        Ok(())
+    }
+    fn install_capsule(mut self, capsule: Arc<ForkConsumerCapsule>) -> Result {
+        let object = unsafe { &*self.object };
+        let mut table = object.forks.lock();
+        let entry = table.entries[self.index].as_mut().ok_or(EIO)?;
+        if entry.epoch != self.epoch || entry.identity != Some(self.identity)
+            || !Arc::ptr_eq(&entry.owner, &self.owner) || entry.phase != FORK_PROVIDER_BUSY
+            || entry.attempted || entry.capsule.is_some()
+        { return Err(EBUSY); }
+        entry.capsule = Some(capsule.clone());
+        entry.phase = self.previous_phase;
+        self.active = false;
+        Ok(())
+    }
+    fn cancel_capsule(mut self) -> Result {
+        let object = unsafe { &*self.object };
+
+os_runtime.rs:2820
+    Ok((child, object, registered))
+}
+
+struct ForkLinkResolverScope {
+    object: *const OsObject,
+    slot: u32,
+    generation: u64,
+}
+
+unsafe extern "C" fn resolve_fork_link_scope(
+    context: *mut c_void, descriptor: *mut super::application_abi::ForkLinkSealV1,
+    finish: Option<super::application_abi::ForkLinkFinishV1>, ticket: *mut c_void,
+) -> i32 {
+    let result = (|| -> Result {
+        use super::application_abi::{ForkLinkSealV1, VERSION};
+        if context.is_null() || descriptor.is_null() || ticket.is_null() { return Err(EINVAL); }
+        let finish = finish.ok_or(EINVAL)?;
+        let scope = unsafe { &*context.cast::<ForkLinkResolverScope>() };
+        let d = unsafe { &*descriptor };
+        let key = d.identity;
+        if d.version != VERSION || d.bytes as usize != core::mem::size_of::<ForkLinkSealV1>()
+            || d.reserved != 0 || key.reserved0 != 0 || key.reserved1 != 0
+            || key.slot != scope.slot || key.generation != scope.generation
+            || key.parent == 0 || key.child == 0 || key.parent == key.child
+            || key.worker == 0 || key.delivery == 0 || key.nonce == 0 || key.child_pid <= 0 || key.child_mm == 0
+            || d.second_worker == 0 || d.second_delivery == 0 || d.second_cpu < 0
+            || d.carrier_physical == 0 || d.carrier_sequence == 0 || d.gate.is_null()
+        { return Err(EACCES); }
+        let before = (d.version, d.bytes, d.identity, d.second_worker, d.second_delivery,
+            d.second_cpu, d.reserved, d.carrier_physical, d.carrier_sequence, d.gate);
+        let object = unsafe { &*scope.object };
+        // Copy only a scalar under exclusion. No context is dereferenced until
+        // acquire rechecks the full key and clones its actual owner/capsules.
+        let child_context = {
+            let table = object.forks.lock();
+            table.entries.iter().flatten().find(|entry| entry.identity == Some(key))
+                .map(|entry| entry.child_context).ok_or(ENOENT)?
+        };
+        let mut claim = match ForkProviderClaim::acquire(object, key, child_context, 0)? {
+            ForkClaimLookup::Pending(claim) => claim,
+            ForkClaimLookup::Completed => return Err(EIO),
+        };
+        claim.begin_link_attempt()?;
+        let capsule = claim.capsule.as_ref().ok_or(ENODEV)?;
+        let verify = capsule._link.ok_or(ENODEV)?;
+        let consumer_context = capsule.context.load(Ordering::Acquire);
+        let payload = claim.payload.as_ref().ok_or(ENODEV)?;
+        let payload_context = payload.context.load(Ordering::Acquire);
+        if consumer_context.is_null() || payload_context.is_null() { return Err(EIO); }
+        // Every exact epoch/capsule/module/OS pin remains owned by claim. No
+        // table/Remote/MM guard spans either callback. Cache the provider's
+        // continuation and ticket before consumer code can edit its descriptor.
+        let status = unsafe { verify(consumer_context, descriptor) };
+        let d = unsafe { &*descriptor };
+        let after = (d.version, d.bytes, d.identity, d.second_worker, d.second_delivery,
+            d.second_cpu, d.reserved, d.carrier_physical, d.carrier_sequence, d.gate);
+        if after != before { return Err(errno(-71)); }
+        if status != 0 { return Err(errno(if (-4095..0).contains(&status) { status } else { -71 })); }
+        if unsafe { &*before.9 }.load(Ordering::Acquire) != 2 { return Err(errno(-71)); }
+        let status = unsafe { finish(ticket, payload_context) };
+        if status != 0 { return Err(errno(if (-4095..0).contains(&status) { status } else { -71 })); }
+        // Restore only this exact BUSY epoch; all attempted errors instead
+        // quarantine and retain its contexts, including any SEALED link gate.
+        claim.restore()
+    })();
+    result.map_or_else(|e| e.to_errno(), |()| 0)
+}
+
+unsafe extern "C" fn resolve_fork_ack_scope(
+    context: *mut c_void, descriptor: *const super::application_abi::ForkGuestAckV1,
+    verify: Option<super::application_abi::ForkAckVerifyV1>,
+
+smp_fork_link.rs:106
+    pub(crate) fn begin_fork_link(self: &Arc<Self>, parent: Token, worker: u64,
+        serial: u64, cpu: i64, value: i64) -> Result<Option<PreparedLinkTicket>> {
+        let mut slots = self.slots.lock();
+        self.transport_health()?;
+        let pi = slots.iter().position(|s| s.as_ref().is_some_and(|e| e.key() == parent)).ok_or(ENOENT)?;
+        let p = slots[pi].as_ref().unwrap();
+        let proof = p.syscalls.unique_delivered(|request| {
+            request.number() == 56 && request.arguments()[0] == 1
+                && request.arguments()[5] == CARRIER_MARKER
+        }).map_err(errno)?;
+        let Some((actual_worker, actual_serial, request)) = proof else { return Ok(None); };
+        if actual_worker != worker || actual_serial != serial { return Ok(None); }
+        if p.closed || p.needs_cleanup || p.quarantined || !p.scheduled { return Err(EBUSY); }
+        if p.owner_slot != self.owner.slot() as i32 || p.owner_generation != self.owner.generation() { return Err(EACCES); }
+        if request.pid() != p.cleanup.pid() || request.cpu() as i64 != cpu || value != 0 { return Err(EACCES); }
+        let args = request.arguments();
+        let ci = slots.iter().position(|s| s.as_ref().and_then(|e| e.fork.as_ref()).is_some_and(|f| {
+            let k = f.reservation.identity;
+            k.parent == parent.wire() && k.child_pid as i64 == args[1] as i64
+        })).ok_or(ENOENT)?;
+        if ci == pi { return Err(EACCES); }
+        let parent_refs = p.fork_prepared_parent_refs.checked_add(1).ok_or(EOVERFLOW)?;
+        let c = slots[ci].as_mut().unwrap();
+        if c.closed || c.needs_cleanup || c.quarantined || c.prepare.is_some() { return Err(EBUSY); }
+        if c.owner_slot != self.owner.slot() as i32 || c.owner_generation != self.owner.generation() { return Err(EACCES); }
+        let child = c.key();
+        let fork = c.fork.as_mut().unwrap();
+        let key = fork.reservation.identity;
+        if key.slot != self.owner.slot() || key.generation != self.owner.generation()
+            || key.child != child.wire() || fork.owner.number != key.child_pid
+            || fork.owner.mm.as_ptr() as usize != key.child_mm || args[2] != key.length
+            || args[3] != key.root || !fork.reservation.return_published
+            || fork.reservation.return_value != Some(key.child_pid as i64)
+            || !matches!(fork.reservation.state.phase(), ForkPhase::FirstReturnPublished | ForkPhase::GuestLinkObserved)
+        { return Err(EACCES); }
+        let record = fork.link.as_mut().ok_or(EBUSY)?;
+        if record.identity != key || record.physical != args[4] || record.last_sequence == 0 || record.busy || record.published { return Err(EBUSY); }
+        let gate_state = record.gate.load(Ordering::Acquire);
+        if !matches!(gate_state, 0 | 2) { return Err(EBUSY); }
+        let second = LinkDelivery { worker, serial, cpu: request.cpu(), request: request.clone() };
+        if let Some(old) = record.second.as_ref() {
+            if !request_matches(old, worker, serial, cpu, &request) { return Err(EACCES); }
+        } else {
+            if gate_state != 0 { return Err(EACCES); }
+            record.last_sequence = record.last_sequence.checked_add(1).ok_or(EOVERFLOW)?;
+            record.second = Some(second.clone());
+        }
+        record.busy = true;
+        let ticket = PreparedLinkTicket { remote: self.clone(), child,
+            gate: record.gate.clone(), identity: key, second,
+            physical: record.physical, sequence: record.last_sequence };
+        slots[pi].as_mut().unwrap().fork_prepared_parent_refs = parent_refs;
+        Ok(Some(ticket))
+    }
+}
+
+/// The checked adoption finisher holds the SAME slots lock across its exact
+/// lease/seal validation, finish_lease transition and this first receipt write.
+/// No caller-supplied counter or prior-write assertion creates sequence1.
+pub(super) fn commit_adopted_fork_carrier_in_slots(owner: OsToken,
+    slots: &mut [Option<Entry>], child: Token, identity: ForkIdentity,
+    payload: &mut ForkPayload) -> Result {
+    if identity.slot != owner.slot() || identity.generation != owner.generation() { return Err(EACCES); }
+    let p = slots.iter().flatten().find(|e| e.key().wire() == identity.parent).ok_or(EBUSY)?;
+    if p.closed || p.needs_cleanup || p.quarantined || !p.scheduled
+        || p.owner_slot != owner.slot() as i32 || p.owner_generation != owner.generation() { return Err(EBUSY); }
+    let parent_pid = p.cleanup.pid();
+    let c = slots.iter_mut().flatten().find(|e| e.key() == child).ok_or(EBUSY)?;
+    if c.closed || c.needs_cleanup || c.quarantined || c.owner_slot != owner.slot() as i32
+        || c.owner_generation != owner.generation() { return Err(EBUSY); }
+    let fork = c.fork.as_mut().ok_or(EBUSY)?;
+    let first = fork.reservation.first.clone();
+    let args = first.arguments();
+    if fork.reservation.identity != identity || identity.child != child.wire()
+        || fork.owner.number != identity.child_pid || fork.owner.mm.as_ptr() as usize != identity.child_mm
+        || !fork.seal.sealed.load(Ordering::Acquire) || fork.reservation.state.prepared()
+        || fork.reservation.state.phase() != ForkPhase::AdoptedAwaitFirstReturn
+        || fork.reservation.return_published || fork.reservation.return_value.is_some()
+        || first.number() != 56 || first.pid() != parent_pid || first.cpu() != fork.reservation.cpu
+        || matches!(args[0], 1 | 2 | 3)
+        || args[1] != identity.start || args[2] != identity.length || args[3] != identity.root
+        || args[5] != CARRIER_MARKER
+    { return Err(EBUSY); }
+    let record = fork.link.as_mut().ok_or(EBUSY)?;
+    if record.identity != identity || record.physical != args[4]
+        || !payload_matches(payload, identity, record.physical, record.original_response)
+
+smp_fork_link.rs:194
+    if record.last_sequence == 1 { return Ok(()); }
+    if record.last_sequence != 0 { return Err(EACCES); }
+    // All storage was prepared before adoption sealed. Byte copy is the only
+    // fallible effect and its failure leaves sequence0 and every owner held.
+    let bytes = receipt_bytes(record, 1, 1, identity.child_pid as i64);
+    payload.copy_to_guest(&bytes)?;
+    record.last_sequence = 1;
+    Ok(())
+}
+
+/// Write the original unpublished first-clone cancellation receipt. Only the
+/// actual payload-progress finisher calls this under SAME slots exclusion,
+/// after its real backend drain and typed Mirror revoke callback. This helper
+/// grants no HostRevoked or publication permission; the caller must reconcile
+/// the original response and commit that phase before releasing the lock.
+pub(super) fn commit_revoked_fork_carrier_in_slots(owner: OsToken,
+    slots: &mut [Option<Entry>], child: Token, identity: ForkIdentity,
+    payload: &mut ForkPayload) -> Result {
+    if identity.slot != owner.slot() || identity.generation != owner.generation()
+        || identity.child != child.wire() { return Err(EACCES); }
+    let pi = slots.iter().position(|slot| slot.as_ref().is_some_and(|entry|
+        entry.key().wire() == identity.parent)).ok_or(EBUSY)?;
+    let ci = slots.iter().position(|slot| slot.as_ref().is_some_and(|entry|
+        entry.key() == child)).ok_or(EBUSY)?;
+    if pi == ci { return Err(EACCES); }
+    let parent = slots[pi].as_ref().unwrap();
+    let current = slots[ci].as_ref().unwrap();
+    if parent.owner_slot != owner.slot() as i32 || parent.owner_generation != owner.generation()
+        || current.owner_slot != owner.slot() as i32 || current.owner_generation != owner.generation()
+    { return Err(EACCES); }
+    // A closed parent may still own this unpublished response. Child service
+    // admission must already be closed and its real mailbox drained; absent
+    // PID or a scalar cancellation selector is never a release proof.
+    if !current.needs_cleanup || current.scheduled || current.prepare.is_some()
+        || current.procfs.is_some() || !current.syscalls.drained() { return Err(EBUSY); }
+    let fork = current.fork.as_ref().ok_or(EBUSY)?;
+    let first = fork.reservation.first.clone();
+    let value = fork.reservation.return_value;
+    let args = first.arguments();
+    if fork.reservation.identity != identity || fork.owner.number != identity.child_pid
+        || fork.owner.mm.as_ptr() as usize != identity.child_mm
+        || !fork.seal.sealed.load(Ordering::Acquire) || fork.reservation.state.prepared()
+        || !matches!(fork.reservation.state.phase(), ForkPhase::AbortRequested | ForkPhase::Quarantined)
+        || fork.reservation.return_published || first.number() != 56
+        || first.pid() != parent.cleanup.pid() || first.cpu() != fork.reservation.cpu
+        || matches!(args[0], 1 | 2 | 3) || args[1] != identity.start
+        || args[2] != identity.length || args[3] != identity.root || args[5] != CARRIER_MARKER
+    { return Err(EBUSY); }
+    let record = fork.link.as_ref().ok_or(EBUSY)?;
+    if record.identity != identity || record.physical != args[4]
+        || !payload_matches(payload, identity, record.physical, record.original_response)
+        || record.gate.load(Ordering::Acquire) != 1 || record.second.is_some()
+        || record.busy || record.receipt_written || record.return_accepted || record.published
+        || record.last_sequence > 1 { return Err(EACCES); }
+    // Check the SAME live response's atomic unpublished state under its actual
+    // mailbox ownership before replacing an unseen kind1 sequence1. No guest
+    // bytes, caller-supplied sequence or prior-written assertion authorize it.
+    slots[pi].as_mut().unwrap().syscalls.check_fork_abort(
+        identity.worker, identity.delivery, &first, value,
+    ).map_err(errno)?;
+    let record = slots[ci].as_mut().unwrap().fork.as_mut().unwrap().link.as_mut().unwrap();
+    let bytes = receipt_bytes(record, 1, 3, -125);
+    payload.copy_to_guest(&bytes)?;
+    record.last_sequence = 1;
+    record.revoked_receipt_written = true;
+    Ok(())
+}
+
+impl PreparedLinkTicket {
+    pub(crate) fn descriptor(&mut self) -> ForkLinkSealV1 {
+        ForkLinkSealV1 { version: 1, bytes: core::mem::size_of::<ForkLinkSealV1>() as u32,
+            identity: host_key(self.identity), second_worker: self.second.worker,
+            second_delivery: self.second.serial, second_cpu: self.second.cpu, reserved: 0,
+            carrier_physical: self.physical, carrier_sequence: self.sequence,
+            gate: (&*self.gate as *const AtomicU8).cast_mut() }
+    }
+
+    /// # Safety
+    /// Registered SMP Finish receives this SAME live stack ticket and a scoped
+    /// unique payload borrow from the IHK resolver's exact pending capsule.
+    /// No owned Rust object crosses the ABI; every outer pin survives return.
+    pub(crate) unsafe fn finish_with_payload(&mut self, payload: &mut ForkPayload) -> Result {
+
+ihk_smp_x86_64.rs:120
+    match cmd {
+        IHK_DEVICE_CREATE_OS => {
+            // SAFETY: This callback runs with the SMP control file pinning
+            // THIS_MODULE. IHK acquires its own module reference before the
+            // instance becomes live; the raw scalar argument is never a pointer.
+            let result = unsafe {
+                ihk_os_create_unbooted_v10(
+                    IHK_SMP_CONTROL_DEVICE_MINOR,
+                    THIS_MODULE.as_ptr().cast(),
+                    arg as u64,
+                    1,
+                    Some(ihk_smp_os_ioctl_v2),
+                    Some(ihk_smp_os_release_v2),
+                    Some(ihk_smp_prepare_boot_v3),
+                    Some(ihk_smp_start_boot_v3),
+                    Some(application_open),
+                    Some(application_invoke),
+                    Some(application_close),
+                    Some(ihk_smp_shutdown_v6),
+                    Some(application_adopt_fork),
+                    Some(application_fork_progress),
+                    Some(application_adopt_fork_scoped),
+                    Some(application_prepare_fork_link),
+                    Some(application_fork_progress_payload),
+                    Some(application_prepare_fork_ack),
+                    Some(application_fork_publication_verify),
+                    Some(application_release_fork_ack),
+                )
+            };
+            if result < 0 {
+                Err(provider_status_error(result))
+            } else {
+                Ok(result as isize)
+            }
+        }
+
+ihk_smp_x86_64.rs:420
+    command: u32,
+    argument: u64,
+    compat: u32,
+) -> i64 {
+    if compat > 1 || (compat == 1 && argument > u32::MAX as u64) {
+        return EINVAL.to_errno() as i64;
+    }
+    // SAFETY: IHK supplies the live lease proof described by this callback ABI;
+    // these identifiers are not derived from the user's ioctl arguments.
+    let owner = match unsafe { smp_resource::OsToken::from_ihk_lease_v2(slot, generation) } {
+        Ok(owner) => owner,
+        Err(_) => return EINVAL.to_errno() as i64,
+    };
+    let result = if command == abi::IHK_OS_GET_BUILDID {
+        compatibility_build_id(argument as usize)
+    } else if matches!(command, abi::MCEXEC_UP_GET_CPU | abi::MCEXEC_UP_GET_NODES) {
+        smp_memory::application_topology(owner, command)
+    } else if command == 0x0011_2a00 {
+        smp_loader::load(owner, argument as usize)
+    } else if command == abi::IHK_OS_SET_KARGS {
+        smp_memory::set_kernel_arguments(owner, argument as usize)
+    } else if smp_cpu::handles_os(command) {
+        smp_cpu::os_ioctl(owner, command, argument as usize, compat == 1)
+    } else if smp_memory::handles_os(command) {
+        smp_memory::os_ioctl(owner, command, argument as usize, compat == 1)
+    } else {
+        Err(EINVAL)
+    };
+    match result {
+        Ok(value) => value as i64,
+        Err(error) => error.to_errno() as i64,
+    }
+}
+
+// SAFETY: IHK invokes this only with the exclusive initial-state DestroyGuard
+// and the retained SMP module owner. No OS file, boot, or other resource call
+// can overlap cleanup for this generation. Errors leave its resources intact.
+unsafe extern "C" fn ihk_smp_os_release_v2(slot: u32, generation: u64) -> i32 {
+    // SAFETY: The versioned IHK exclusive destruction callback proves the
+    // exact generation remains owned until both resource maps are cleaned up.
+    let owner = match unsafe { smp_resource::OsToken::from_ihk_lease_v2(slot, generation) } {
+        Ok(owner) => owner,
+        Err(_) => return EINVAL.to_errno(),
+    };
+    match smp_cpu::release_os_resources(owner) {
+        Ok(()) => 0,
+        Err(error) => error.to_errno(),
+    }
+}
+
+// SAFETY: IHK holds its exact OS lease, per-OS operation mutex and SMP module
+// owner. kmsg scalars identify IHK's allocation, never an ioctl user pointer.
+unsafe extern "C" fn ihk_smp_prepare_boot_v3(
+    slot: u32,
+    generation: u64,
+    kmsg: u64,
+    kmsg_bytes: u64,
+) -> i32 {
+    // SAFETY: The v3 callback retains the same trusted IHK generation proof.
+    let owner = match unsafe { smp_resource::OsToken::from_ihk_lease_v2(slot, generation) } {
+        Ok(owner) => owner,
+        Err(_) => return EINVAL.to_errno(),
+    };
+    // SAFETY: The diagnostic parameter is read-only after module init.
+    let prepare_only = unsafe { NATIVE_BOOT_PREPARE_ONLY };
+    if prepare_only > 1 {
+        return EINVAL.to_errno();
+    }

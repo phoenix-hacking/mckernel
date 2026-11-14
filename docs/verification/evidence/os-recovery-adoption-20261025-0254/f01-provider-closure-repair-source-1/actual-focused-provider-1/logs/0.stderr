@@ -1,0 +1,684 @@
+warning: unknown and unstable feature specified for `-Ctarget-feature`: `ssse4.1`
+  |
+  = note: it is still passed through to the codegen backend, but use of this feature might be unsound and the behavior of this feature can change in the future
+  = help: consider filing a feature request
+
+warning: unknown and unstable feature specified for `-Ctarget-feature`: `ssse4.2`
+  |
+  = note: it is still passed through to the codegen backend, but use of this feature might be unsound and the behavior of this feature can change in the future
+  = help: consider filing a feature request
+
+warning: target feature `sse2` must be enabled to ensure that the ABI of the current target can be implemented correctly
+  |
+  = note: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+  = note: for more information, see issue #116344 <https://github.com/rust-lang/rust/issues/116344>
+
+warning: the feature `core_intrinsics` is internal to the compiler or standard library
+ --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/lib.rs:2:12
+  |
+2 | #![feature(core_intrinsics)]
+  |            ^^^^^^^^^^^^^^^
+  |
+  = note: using it is strongly discouraged
+  = note: `#[warn(internal_features)]` on by default
+
+warning: unused imports: `PhantomData` and `PhantomPinned`
+ --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:3:20
+  |
+3 | use core::marker::{PhantomData, PhantomPinned};
+  |                    ^^^^^^^^^^^  ^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `core::pin::Pin`
+ --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:4:5
+  |
+4 | use core::pin::Pin;
+  |     ^^^^^^^^^^^^^^
+
+warning: unused imports: `AtomicI32`, `AtomicI64`, `AtomicPtr`, `AtomicU64`, and `Ordering`
+ --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:6:26
+  |
+6 | use core::sync::atomic::{AtomicI32, AtomicI64, AtomicPtr, AtomicU64, Ordering};
+  |                          ^^^^^^^^^  ^^^^^^^^^  ^^^^^^^^^  ^^^^^^^^^  ^^^^^^^^
+
+warning: unused imports: `KmallocHeader`, `Memobj`, `PROCESS_HASH_SIZE`, `Process`, and `VmRange`
+  --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:10:68
+   |
+10 |     IhkCpuInfo, IhkMcPtAttribute, IhkSpinlock, KmallocCacheHeader, KmallocHeader, McsLockNode, Memobj, OffT, Process,
+   |                                                                    ^^^^^^^^^^^^^               ^^^^^^        ^^^^^^^
+11 |     ProcessVm, RusagePercpu, SizeT, TlbFlushEntry, VmRange, CPU_SET_WORDS, IHK_MAX_NUM_CPUS,
+   |                                                    ^^^^^^^
+12 |     IHK_MAX_NUM_NUMA_NODES, IHK_MAX_NUM_PGSIZES, PROCESS_HASH_SIZE,
+   |                                                  ^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `strcmp`, `strcpy`, and `strlen`
+  --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:16:21
+   |
+16 | use crate::string::{strcmp, strcpy, strlen, strstr};
+   |                     ^^^^^^  ^^^^^^  ^^^^^^
+
+warning: constant `KMALLOC_FRONT_MAGIC` is never used
+  --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:93:7
+   |
+93 | const KMALLOC_FRONT_MAGIC: u32 = 0x5c5c5c5c;
+   |       ^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `KMALLOC_END_MAGIC` is never used
+  --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:94:7
+   |
+94 | const KMALLOC_END_MAGIC: u32 = 0x6d6d6d6d;
+   |       ^^^^^^^^^^^^^^^^^
+
+warning: constant `KMALLOC_MIN_SIZE` is never used
+  --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:95:7
+   |
+95 | const KMALLOC_MIN_SIZE: CInt = 1 << 5;
+   |       ^^^^^^^^^^^^^^^^
+
+warning: constant `KMALLOC_MIN_MASK` is never used
+  --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:96:7
+   |
+96 | const KMALLOC_MIN_MASK: CInt = KMALLOC_MIN_SIZE - 1;
+   |       ^^^^^^^^^^^^^^^^
+
+warning: constant `OVERCOMMIT_ALWAYS` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:103:7
+    |
+103 | const OVERCOMMIT_ALWAYS: CInt = 1;
+    |       ^^^^^^^^^^^^^^^^^
+
+warning: constant `RUSAGE_OOM_MARGIN` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:104:7
+    |
+104 | const RUSAGE_OOM_MARGIN: CULong = 8 * 1024 * 1024;
+    |       ^^^^^^^^^^^^^^^^^
+
+warning: constant `IHK_OS_EVENTFD_TYPE_OOM` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:105:7
+    |
+105 | const IHK_OS_EVENTFD_TYPE_OOM: CInt = 0;
+    |       ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `IHK_MC_PG_KERNEL` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:107:7
+    |
+107 | const IHK_MC_PG_KERNEL: CInt = 0;
+    |       ^^^^^^^^^^^^^^^^
+
+warning: constant `IHK_MM_WRAPPER_FILE` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:111:7
+    |
+111 | const IHK_MM_WRAPPER_FILE: &[u8] = b"lib/include/ihk/mm.h\0";
+    |       ^^^^^^^^^^^^^^^^^^^
+
+warning: constant `KMALLOC_WRAPPER_FILE` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:112:7
+    |
+112 | const KMALLOC_WRAPPER_FILE: &[u8] = b"kernel/include/kmalloc.h\0";
+    |       ^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `KMALLOC_OOM_FMT` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:113:7
+    |
+113 | const KMALLOC_OOM_FMT: &[u8] = b"kmalloc: out of memory %s:%d no_preempt=%d\n\0";
+    |       ^^^^^^^^^^^^^^^
+
+warning: constant `VR_RESERVED` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:118:7
+    |
+118 | const VR_RESERVED: CULong = 0x2;
+    |       ^^^^^^^^^^^
+
+warning: constant `VR_IO_NOCACHE` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:119:7
+    |
+119 | const VR_IO_NOCACHE: CULong = 0x100;
+    |       ^^^^^^^^^^^^^
+
+warning: constant `VR_REMOTE` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:120:7
+    |
+120 | const VR_REMOTE: CULong = 0x200;
+    |       ^^^^^^^^^
+
+warning: constant `MF_REG_FILE` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:121:7
+    |
+121 | const MF_REG_FILE: CULong = 0x1000;
+    |       ^^^^^^^^^^^
+
+warning: constant `MF_DEV_FILE` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:122:7
+    |
+122 | const MF_DEV_FILE: CULong = 0x2000;
+    |       ^^^^^^^^^^^
+
+warning: constant `MF_PREMAP` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:123:7
+    |
+123 | const MF_PREMAP: CULong = 0x8000;
+    |       ^^^^^^^^^
+
+warning: constant `MF_XPMEM` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:124:7
+    |
+124 | const MF_XPMEM: CULong = 0x10000;
+    |       ^^^^^^^^
+
+warning: constant `MF_ZEROOBJ` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:125:7
+    |
+125 | const MF_ZEROOBJ: CULong = 0x20000;
+    |       ^^^^^^^^^^
+
+warning: constant `MF_HUGETLBFS` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:127:7
+    |
+127 | const MF_HUGETLBFS: CULong = 0x100000;
+    |       ^^^^^^^^^^^^
+
+warning: constant `IHK_OS_PGSIZE_4KB` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:156:7
+    |
+156 | const IHK_OS_PGSIZE_4KB: CInt = 0;
+    |       ^^^^^^^^^^^^^^^^^
+
+warning: constant `IHK_OS_PGSIZE_2MB` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:157:7
+    |
+157 | const IHK_OS_PGSIZE_2MB: CInt = 2;
+    |       ^^^^^^^^^^^^^^^^^
+
+warning: constant `IHK_OS_PGSIZE_1GB` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:158:7
+    |
+158 | const IHK_OS_PGSIZE_1GB: CInt = 4;
+    |       ^^^^^^^^^^^^^^^^^
+
+warning: constant `RUSAGE_CHECK_OOM_NAME` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:159:7
+    |
+159 | const RUSAGE_CHECK_OOM_NAME: &[u8] = b"rusage_check_oom\0";
+    |       ^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `RUSAGE_CHECK_OOM_FMT` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:160:7
+    |
+160 | const RUSAGE_CHECK_OOM_FMT: &[u8] = b"%s: memory used:%ld available:%ld\n\0";
+    |       ^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `RUSAGE_MEMORY_STAT_ADD_NAME` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:161:7
+    |
+161 | const RUSAGE_MEMORY_STAT_ADD_NAME: &[u8] = b"rusage_memory_stat_add\0";
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `RUSAGE_MEMORY_STAT_ADD_WITH_PAGE_NAME` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:162:7
+    |
+162 | const RUSAGE_MEMORY_STAT_ADD_WITH_PAGE_NAME: &[u8] = b"rusage_memory_stat_add_with_page\0";
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `RUSAGE_MEMORY_STAT_ADD_WARNING_FMT` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:163:7
+    |
+163 | const RUSAGE_MEMORY_STAT_ADD_WARNING_FMT: &[u8] = b"%s: WARNING !page,phys=%lx\n\0";
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: type alias `MemKmallocAllocPagesFn` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:802:6
+    |
+802 | type MemKmallocAllocPagesFn = unsafe extern "C" fn(CInt, CULong, CInt) -> *mut c_void;
+    |      ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: type alias `MemKmallocGetCpuLocalVarFn` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:803:6
+    |
+803 | type MemKmallocGetCpuLocalVarFn = unsafe extern "C" fn(CInt) -> *mut c_void;
+    |      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: type alias `MemKmallocSpinLockFn` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:804:6
+    |
+804 | type MemKmallocSpinLockFn = unsafe extern "C" fn(CULong) -> CULong;
+    |      ^^^^^^^^^^^^^^^^^^^^
+
+warning: type alias `MemKmallocSpinUnlockFn` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:805:6
+    |
+805 | type MemKmallocSpinUnlockFn = unsafe extern "C" fn(CULong, CULong);
+    |      ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: type alias `MemKmallocCorruptionFn` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:806:6
+    |
+806 | type MemKmallocCorruptionFn = unsafe extern "C" fn(*mut c_void);
+    |      ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: type alias `MemKmallocCacheAllocFn` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:807:6
+    |
+807 | type MemKmallocCacheAllocFn = unsafe extern "C" fn(SizeT, CULong) -> *mut c_void;
+    |      ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: type alias `MemKmallocCacheLogFn` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:808:6
+    |
+808 | type MemKmallocCacheLogFn = unsafe extern "C" fn(CInt, *mut c_void);
+    |      ^^^^^^^^^^^^^^^^^^^^
+
+warning: type alias `MemKmallocCachePreallocFn` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:809:6
+    |
+809 | type MemKmallocCachePreallocFn = unsafe extern "C" fn(*mut KmallocCacheHeader, SizeT, CInt);
+    |      ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: type alias `MemKmallocBaseAllocFn` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:810:6
+    |
+810 | type MemKmallocBaseAllocFn = unsafe extern "C" fn(CInt, CULong) -> *mut c_void;
+    |      ^^^^^^^^^^^^^^^^^^^^^
+
+warning: type alias `MemKmallocBaseFreeFn` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:811:6
+    |
+811 | type MemKmallocBaseFreeFn = unsafe extern "C" fn(*mut c_void);
+    |      ^^^^^^^^^^^^^^^^^^^^
+
+warning: type alias `MemKmallocSpinInitFn` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:812:6
+    |
+812 | type MemKmallocSpinInitFn = unsafe extern "C" fn(CULong);
+    |      ^^^^^^^^^^^^^^^^^^^^
+
+warning: type alias `MemKmallocTrackLogFn` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:813:6
+    |
+813 | type MemKmallocTrackLogFn = unsafe extern "C" fn(CInt, *mut c_void, *mut i8, CInt, CInt);
+    |      ^^^^^^^^^^^^^^^^^^^^
+
+warning: type alias `MemKmallocInvalidFreeFn` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:814:6
+    |
+814 | type MemKmallocInvalidFreeFn = unsafe extern "C" fn(*mut c_void, *mut i8, CInt);
+    |      ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: type alias `MemGetThisCpuLocalVarFn` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:815:6
+    |
+815 | type MemGetThisCpuLocalVarFn = unsafe extern "C" fn() -> *mut CpuLocalVar;
+    |      ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: type alias `MemPageallocBaseAllocFn` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:835:6
+    |
+835 | type MemPageallocBaseAllocFn =
+    |      ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: type alias `MemPageallocBaseFreeFn` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:837:6
+    |
+837 | type MemPageallocBaseFreeFn = unsafe extern "C" fn(*mut c_void, CInt, CInt);
+    |      ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: type alias `MemPageallocMetaAllocFn` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:838:6
+    |
+838 | type MemPageallocMetaAllocFn = unsafe extern "C" fn(CInt, CULong) -> *mut c_void;
+    |      ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: type alias `MemPageallocMetaFreeFn` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:839:6
+    |
+839 | type MemPageallocMetaFreeFn = unsafe extern "C" fn(*mut c_void);
+    |      ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: type alias `MemPageallocTrackLogFn` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:841:6
+    |
+841 | type MemPageallocTrackLogFn = unsafe extern "C" fn(CInt, *mut c_void, *mut i8, CInt, CInt);
+    |      ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: type alias `MemPageallocInvalidFreeFn` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:842:6
+    |
+842 | type MemPageallocInvalidFreeFn = unsafe extern "C" fn(*mut c_void, *mut i8, CInt);
+    |      ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: type alias `MemPageallocInvalidSizeFn` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:843:6
+    |
+843 | type MemPageallocInvalidSizeFn = unsafe extern "C" fn(*mut c_void, CInt, CInt, *mut i8, CInt);
+    |      ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: type alias `MemPageallocNoirqLockFn` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:844:6
+    |
+844 | type MemPageallocNoirqLockFn = unsafe extern "C" fn(CULong);
+    |      ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: type alias `MemPageallocNoirqUnlockFn` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:845:6
+    |
+845 | type MemPageallocNoirqUnlockFn = unsafe extern "C" fn(CULong);
+    |      ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: type alias `MemTrackLeakLogFn` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:846:6
+    |
+846 | type MemTrackLeakLogFn = unsafe extern "C" fn(CInt, *mut c_void, *mut i8, CInt, CInt, CInt, CInt);
+    |      ^^^^^^^^^^^^^^^^^
+
+warning: constant `KMALLOC_TRACK_HASH_MASK` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:848:7
+    |
+848 | const KMALLOC_TRACK_HASH_MASK: CInt = 255;
+    |       ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `KMALLOC_TRACK_HASH_SIZE` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:849:7
+    |
+849 | const KMALLOC_TRACK_HASH_SIZE: usize = (KMALLOC_TRACK_HASH_MASK as usize) + 1;
+    |       ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `KMALLOC_TRACK_LOG_ENTRY_ALLOC_FAILED` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:850:7
+    |
+850 | const KMALLOC_TRACK_LOG_ENTRY_ALLOC_FAILED: CInt = 1;
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `KMALLOC_TRACK_LOG_FILE_ALLOC_FAILED` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:851:7
+    |
+851 | const KMALLOC_TRACK_LOG_FILE_ALLOC_FAILED: CInt = 2;
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `KMALLOC_TRACK_LOG_ENTRY_ADDED` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:852:7
+    |
+852 | const KMALLOC_TRACK_LOG_ENTRY_ADDED: CInt = 3;
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `KMALLOC_TRACK_LOG_ADDR_ALLOC_FAILED` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:853:7
+    |
+853 | const KMALLOC_TRACK_LOG_ADDR_ALLOC_FAILED: CInt = 4;
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `KMALLOC_TRACK_LOG_ADDR_ADDED` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:854:7
+    |
+854 | const KMALLOC_TRACK_LOG_ADDR_ADDED: CInt = 5;
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `KMALLOC_TRACK_LOG_ADDR_REMOVED` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:855:7
+    |
+855 | const KMALLOC_TRACK_LOG_ADDR_REMOVED: CInt = 6;
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `KMALLOC_TRACK_LOG_ENTRY_REMOVED` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:856:7
+    |
+856 | const KMALLOC_TRACK_LOG_ENTRY_REMOVED: CInt = 7;
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `KMALLOC_CACHE_LOG_NO_CACHE` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:857:7
+    |
+857 | const KMALLOC_CACHE_LOG_NO_CACHE: CInt = 1;
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `KMALLOC_CACHE_LOG_ALLOC_FAILED` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:858:7
+    |
+858 | const KMALLOC_CACHE_LOG_ALLOC_FAILED: CInt = 2;
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `KMALLOC_CACHE_LOG_PREALLOC` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:859:7
+    |
+859 | const KMALLOC_CACHE_LOG_PREALLOC: CInt = 3;
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `PAGEALLOC_TRACK_LOG_ENTRY_ALLOC_FAILED` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:862:7
+    |
+862 | const PAGEALLOC_TRACK_LOG_ENTRY_ALLOC_FAILED: CInt = 1;
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `PAGEALLOC_TRACK_LOG_FILE_ALLOC_FAILED` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:863:7
+    |
+863 | const PAGEALLOC_TRACK_LOG_FILE_ALLOC_FAILED: CInt = 2;
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `PAGEALLOC_TRACK_LOG_ENTRY_ADDED` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:864:7
+    |
+864 | const PAGEALLOC_TRACK_LOG_ENTRY_ADDED: CInt = 3;
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `PAGEALLOC_TRACK_LOG_ADDR_ALLOC_FAILED` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:865:7
+    |
+865 | const PAGEALLOC_TRACK_LOG_ADDR_ALLOC_FAILED: CInt = 4;
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `PAGEALLOC_TRACK_LOG_ADDR_ADDED` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:866:7
+    |
+866 | const PAGEALLOC_TRACK_LOG_ADDR_ADDED: CInt = 5;
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `PAGEALLOC_TRACK_LOG_ADDR_REMOVED` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:867:7
+    |
+867 | const PAGEALLOC_TRACK_LOG_ADDR_REMOVED: CInt = 6;
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `PAGEALLOC_TRACK_LOG_ENTRY_REMOVED` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:868:7
+    |
+868 | const PAGEALLOC_TRACK_LOG_ENTRY_REMOVED: CInt = 7;
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `PAGEALLOC_TRACK_LOG_COVERING_FOUND` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:869:7
+    |
+869 | const PAGEALLOC_TRACK_LOG_COVERING_FOUND: CInt = 8;
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `PAGEALLOC_TRACK_LOG_ADDR_NEXT_ADDED` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:870:7
+    |
+870 | const PAGEALLOC_TRACK_LOG_ADDR_NEXT_ADDED: CInt = 9;
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `PAGEALLOC_TRACK_LOG_ADDR_MODIFIED` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:871:7
+    |
+871 | const PAGEALLOC_TRACK_LOG_ADDR_MODIFIED: CInt = 10;
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `MEM_TRACK_LEAK_DETAIL` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:872:7
+    |
+872 | const MEM_TRACK_LEAK_DETAIL: CInt = 1;
+    |       ^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `X86_USER_END` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:873:7
+    |
+873 | const X86_USER_END: CULong = 0x0000_8000_0000_0000;
+    |       ^^^^^^^^^^^^
+
+warning: constant `MEM_TRACK_LEAK_SUMMARY` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:874:7
+    |
+874 | const MEM_TRACK_LEAK_SUMMARY: CInt = 2;
+    |       ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `ihk_mc_pt_lookup_pte` is never used
+  --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:20:8
+   |
+20 |     fn ihk_mc_pt_lookup_pte(
+   |        ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `page_fault_process_vm` is never used
+  --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:24:8
+   |
+24 |     fn page_fault_process_vm(vm: *mut c_void, virt: *mut c_void, reason: CULong) -> CInt;
+   |        ^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `rdtsc` is never used
+  --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:26:8
+   |
+26 |     fn rdtsc() -> CULong;
+   |        ^^^^^
+
+warning: function `flush_tlb_single` is never used
+  --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:27:8
+   |
+27 |     fn flush_tlb_single(addr: CULong);
+   |        ^^^^^^^^^^^^^^^^
+
+warning: function `flush_tlb` is never used
+  --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:28:8
+   |
+28 |     fn flush_tlb();
+   |        ^^^^^^^^^
+
+warning: function `cpu_pause` is never used
+  --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:29:8
+   |
+29 |     fn cpu_pause();
+   |        ^^^^^^^^^
+
+warning: static `MEM_TLB_FLUSH_VECTOR_FIRST` is never used
+  --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:33:16
+   |
+33 |     static mut MEM_TLB_FLUSH_VECTOR_FIRST: TlbFlushEntry;
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: static `mem_remote_tlb_geometry` is never used
+  --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:34:12
+   |
+34 |     static mem_remote_tlb_geometry: [CInt; 3];
+   |            ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: static `RUSAGE` is never used
+  --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:37:16
+   |
+37 |     static mut RUSAGE: RusageGlobal;
+   |                ^^^^^^
+
+warning: function `ihk_mc_get_nr_numa_nodes` is never used
+  --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:48:8
+   |
+48 |     fn ihk_mc_get_nr_numa_nodes() -> CInt;
+   |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `ihk_mc_get_processor_id` is never used
+  --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:50:8
+   |
+50 |     fn ihk_mc_get_processor_id() -> CInt;
+   |        ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `ihk_mc_get_vector` is never used
+  --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:51:8
+   |
+51 |     fn ihk_mc_get_vector(type_: CInt) -> CInt;
+   |        ^^^^^^^^^^^^^^^^^
+
+warning: function `ihk_mc_interrupt_cpu` is never used
+  --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:52:8
+   |
+52 |     fn ihk_mc_interrupt_cpu(cpu: CInt, vector: CInt) -> CInt;
+   |        ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `visit_pte_range_safe` is never used
+  --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:53:8
+   |
+53 |     fn visit_pte_range_safe(
+   |        ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `get_this_cpu_local_var` is never used
+  --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:62:8
+   |
+62 |     fn get_this_cpu_local_var() -> *mut CpuLocalVar;
+   |        ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `kprintf` is never used
+  --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:63:8
+   |
+63 |     fn kprintf(format: *const i8, ...) -> CInt;
+   |        ^^^^^^^
+
+warning: function `eventfd` is never used
+  --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:64:8
+   |
+64 |     fn eventfd(type_: CInt);
+   |        ^^^^^^^
+
+warning: static `sysctl_overcommit_memory` is never used
+  --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:66:16
+   |
+66 |     static mut sysctl_overcommit_memory: CInt;
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: static `MEMDEBUG` is never used
+  --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:68:16
+   |
+68 |     static mut MEMDEBUG: *mut i8;
+   |                ^^^^^^^^
+
+warning: static `PAGEALLOC_RUNCOUNT` is never used
+  --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:80:16
+   |
+80 |     static mut PAGEALLOC_RUNCOUNT: CInt;
+   |                ^^^^^^^^^^^^^^^^^^
+
+warning: static `KMALLOC_TRACK_HASH` is never used
+  --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:82:16
+   |
+82 |     static mut KMALLOC_TRACK_HASH: [AbiListHead; KMALLOC_TRACK_HASH_SIZE];
+   |                ^^^^^^^^^^^^^^^^^^
+
+warning: static `KMALLOC_TRACK_HASH_LOCKS` is never used
+  --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:84:16
+   |
+84 |     static mut KMALLOC_TRACK_HASH_LOCKS: [IhkSpinlock; KMALLOC_TRACK_HASH_SIZE];
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: static `KMALLOC_ADDR_HASH` is never used
+  --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:86:16
+   |
+86 |     static mut KMALLOC_ADDR_HASH: [AbiListHead; KMALLOC_TRACK_HASH_SIZE];
+   |                ^^^^^^^^^^^^^^^^^
+
+warning: static `KMALLOC_ADDR_HASH_LOCKS` is never used
+  --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:88:16
+   |
+88 |     static mut KMALLOC_ADDR_HASH_LOCKS: [IhkSpinlock; KMALLOC_TRACK_HASH_SIZE];
+   |                ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: static `KMALLOC_RUNCOUNT` is never used
+  --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs:90:16
+   |
+90 |     static mut KMALLOC_RUNCOUNT: CInt;
+   |                ^^^^^^^^^^^^^^^^
+
+'-ssse4.1' is not a recognized feature for this target (ignoring feature)
+'-ssse4.2' is not a recognized feature for this target (ignoring feature)
+'-ssse4.1' is not a recognized feature for this target (ignoring feature)
+'-ssse4.2' is not a recognized feature for this target (ignoring feature)
+'-ssse4.1' is not a recognized feature for this target (ignoring feature)
+'-ssse4.2' is not a recognized feature for this target (ignoring feature)
+'-ssse4.1' is not a recognized feature for this target (ignoring feature)
+'-ssse4.2' is not a recognized feature for this target (ignoring feature)
+warning: 111 warnings emitted
+

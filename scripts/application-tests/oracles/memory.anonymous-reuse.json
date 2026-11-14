@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "case_id": "memory.anonymous-reuse",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/memory.anonymous-reuse"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "parameters": {"bytes": [1, 4095, 4096, 4097, 65553, 1048576], "rounds": [16]},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["bytes=1 rounds=16 first_nonzero_round=0", "bytes=4095 rounds=16 first_nonzero_round=0", "bytes=4096 rounds=16 first_nonzero_round=0", "bytes=4097 rounds=16 first_nonzero_round=0", "bytes=65553 rounds=16 first_nonzero_round=0", "bytes=1048576 rounds=16 first_nonzero_round=0"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Each of 16 fresh mappings is zero before writes", "The prior nonzero pattern is never observed in a fresh mapping", "Every mapping is unmapped before the next round"],
+  "unresolved_expectations": ["Freeze canonical output and reviewed input/oracle SHA256 before execution."],
+  "max_question_for_reviewer": "Confirm 16 fresh-map rounds per size and that zero-fill is the only accepted initial state."
+}

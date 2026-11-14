@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-045",
+  "packet_version": 1,
+  "context_sha256": "d30bce67655d2834a26ab3ce259270ef8aeb3a3a332ff40a2665d9a9314e0aa1",
+  "started_utc": "2026-09-09T11:24:00Z",
+  "finished_utc": "2026-09-09T11:25:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "signal.external-user1",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/signal/signal.external-user1.c",
+      "oracle": "scripts/application-tests/oracles/signal.external-user1.json",
+      "changed_files": ["scripts/application-tests/cases/signal/signal.external-user1.c", "scripts/application-tests/oracles/signal.external-user1.json"],
+      "parameter_vectors": {"signal": ["SIGUSR1"], "delivery": ["external after ready"], "handler_entries": [1]},
+      "implemented_operations": ["ready PID/TID handshake", "pause until external signal", "single handler acknowledgment"],
+      "unresolved_oracle_notes": ["Supervisor sender identity, task matching, and delivery timing require Max review."],
+      "max_reviewer_question": "Confirm the ready record gates one external SIGUSR1 to the intended guest task."
+    },
+    {
+      "case_id": "signal.read-eintr",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/signal/signal.read-eintr.c",
+      "oracle": "scripts/application-tests/oracles/signal.read-eintr.json",
+      "changed_files": ["scripts/application-tests/cases/signal/signal.read-eintr.c", "scripts/application-tests/oracles/signal.read-eintr.json"],
+      "parameter_vectors": {"read_bytes": [4], "signal": ["SIGUSR1"], "restart": ["disabled"], "sentinel": ["0xa5 repeated"]},
+      "implemented_operations": ["blocked pipe read", "handled signal without SA_RESTART", "EINTR and untouched-buffer capture"],
+      "unresolved_oracle_notes": ["Delegation boundary and blocked-read trace evidence require Max review."],
+      "max_reviewer_question": "Confirm EINTR returns directly with no partial buffer mutation while the writer remains open."
+    },
+    {
+      "case_id": "signal.read-restart",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/signal/signal.read-restart.c",
+      "oracle": "scripts/application-tests/oracles/signal.read-restart.json",
+      "changed_files": ["scripts/application-tests/cases/signal/signal.read-restart.c", "scripts/application-tests/oracles/signal.read-restart.json"],
+      "parameter_vectors": {"read_bytes": [4], "signal": ["SIGUSR1"], "restart": ["SA_RESTART"], "payload": ["ABCD"]},
+      "implemented_operations": ["blocked pipe read", "SA_RESTART handler", "fixed-byte write and exact read comparison"],
+      "unresolved_oracle_notes": ["Restart boundary and duplicate-read side effects require Max review."],
+      "max_reviewer_question": "Confirm restart does not duplicate or partially apply the read and returns exactly ABCD."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/signal/signal.external-user1.c", "sha256": "cbf3154d113856b69a5f82337aff3c25ecc814677b33a175d98e1db649d58289"},
+    {"path": "scripts/application-tests/oracles/signal.external-user1.json", "sha256": "6da67ffbac73423bbedb684e9136b1051476cabbe01e2358c3391819ef6e4f8d"},
+    {"path": "scripts/application-tests/cases/signal/signal.read-eintr.c", "sha256": "229e74605a5756da725a7aeb67446d0650f4b6ab426b77e275777f673c503610"},
+    {"path": "scripts/application-tests/oracles/signal.read-eintr.json", "sha256": "e5e71e6bb3021966b4a36700c6fa55f7e86495ea3de5596108626605d3f14238"},
+    {"path": "scripts/application-tests/cases/signal/signal.read-restart.c", "sha256": "49c6086488e52fe4f5572d470e5d4689398012c92d41477de02a948cdf72b71c"},
+    {"path": "scripts/application-tests/oracles/signal.read-restart.json", "sha256": "846471a9ca92fda2025aa8d713661e4f7bddd149a0006fc5f00d711ef974feeb"},
+    {"path": "docs/verification/evidence/application-drafts-20260909/ultra-handoff-1/packet-045/context.json", "sha256": "d30bce67655d2834a26ab3ce259270ef8aeb3a3a332ff40a2665d9a9314e0aa1"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-045.json --emit-context /tmp/application-packet-045-context-20260909-1.json", "outcome": "PASS; planning metadata only; runtime_authorized=false"},
+    {"command": "python3 -m json.tool packet-045/report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["External signal identity, EINTR read semantics, and SA_RESTART behavior need final supervisor, native ABI, I/O, and canonical record review."],
+  "blocked_execution_capabilities": ["current-inputs", "runtime-transport-fault-injection", "runner-contract"],
+  "first_failure_event": null,
+  "max_escalation": ["Review external SIGUSR1 identity and readiness", "Review EINTR untouched-buffer behavior", "Review SA_RESTART exact-byte read behavior"],
+  "next_packet_id": "packet-046"
+}

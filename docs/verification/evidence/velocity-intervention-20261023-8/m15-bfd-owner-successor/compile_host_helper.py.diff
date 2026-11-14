@@ -1,0 +1,19 @@
+--- /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/compile_host_helper.py
++++ /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-bfd-owner-successor/compile_host_helper.py
+@@ -20,13 +20,13 @@
+     import native_rust_exact_build_offline as provenance
+ 
+ LIMITS = {'NanoCpus': 1000000000, 'CpusetCpus': '6',
+-          'Memory': 4 * 2**30, 'MemorySwap': 4 * 2**30,
++          'Memory': 2 * 2**30, 'MemorySwap': 2 * 2**30,
+           'PidsLimit': 128, 'NetworkMode': 'none'}
+ # This is the reviewed host-wide aggregate budget.  A source on tmpfs consumes
+ # host memory in addition to the container's fixed cgroup reservation.
+ MEMORY_AGGREGATE_LIMIT = 24 * 2**30
+-RESOURCE_ARGS = ['--cpus=1', '--cpuset-cpus=6', '--memory=4g',
+-                 '--memory-swap=4g', '--pids-limit=128']
++RESOURCE_ARGS = ['--cpus=1', '--cpuset-cpus=6', '--memory=2g',
++                 '--memory-swap=2g', '--pids-limit=128']
+ ENV = {'PATH': '/usr/sbin:/usr/bin:/sbin:/bin', 'LANG': 'C', 'LC_ALL': 'C',
+        'TZ': 'UTC', 'PYTHONHASHSEED': '0', 'GIT_TERMINAL_PROMPT': '0',
+        'GIT_NO_REPLACE_OBJECTS': '1', 'GIT_CONFIG_NOSYSTEM': '1',

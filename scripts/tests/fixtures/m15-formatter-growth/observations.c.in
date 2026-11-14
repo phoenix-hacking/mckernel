@@ -1,0 +1,61 @@
+#define _GNU_SOURCE
+#include <assert.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <stdarg.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <ihk/ihklib_private.h>
+/* Actual declarations and genuine HOST libc storage/formatting. Controlled
+ * realloc failure returns NULL without freeing/changing its still-owned input. */
+__LOGLEVEL_DECL__
+struct Block{void *pointer;char kind;unsigned owner;};
+static struct Block blocks[64];
+static int live,allocated,freed,malloc_calls,calloc_calls,realloc_calls,real_realloc_success;
+static int failed_ordinal,failure_seen,failed_owner_frees,format_calls,checks;
+static unsigned next_owner,failed_owner;
+static size_t requested_sizes[4];
+static void *record(void *pointer,char kind){assert(pointer);for(int i=0;i<64;i++)if(!blocks[i].pointer){blocks[i]=(struct Block){pointer,kind,++next_owner};++live;++allocated;return pointer;}abort();}
+void *observation_malloc(size_t size){assert(++malloc_calls==1&&size==64);return record(malloc(size),'M');}
+void *observation_calloc(size_t n,size_t size){assert(!failure_seen);++calloc_calls;return record(calloc(n,size),'C');}
+void observation_free(void *pointer){
+ if(pointer){int found=0;for(int i=0;i<64;i++)if(blocks[i].pointer==pointer){if(blocks[i].owner==failed_owner)++failed_owner_frees;blocks[i].pointer=NULL;--live;++freed;found=1;break;}assert(found);}free(pointer);
+}
+void *observation_realloc(void *pointer,size_t size){
+ assert(pointer&&!failure_seen&&realloc_calls<4);int slot=-1;for(int i=0;i<64;i++)if(blocks[i].pointer==pointer){slot=i;break;}assert(slot>=0&&blocks[slot].kind=='M');
+ requested_sizes[realloc_calls++]=size;assert(size==(realloc_calls==1?128U:256U)&&realloc_calls<=2);
+ if(realloc_calls==failed_ordinal){failed_owner=blocks[slot].owner;failure_seen=1;errno=ENOMEM;return NULL;}
+ /* The slot was found BEFORE genuine realloc may consume/move its old object.
+  * Update one owned output handle; never inspect/free a consumed old pointer. */
+ void *replacement=realloc(pointer,size);assert(replacement);blocks[slot].pointer=replacement;++real_realloc_success;return replacement;
+}
+int observation_vsnprintf(char *out,size_t size,const char *format,va_list args){assert(!failure_seen&&out);++format_calls;return vsnprintf(out,size,format,args);}
+int observation_snprintf(char *out,size_t size,const char *format,...){assert(!failure_seen&&out);++format_calls;va_list args;va_start(args,format);int n=vsnprintf(out,size,format,args);va_end(args);return n;}
+static int output_owned(const void *pointer){for(int i=0;i<64;i++)if(blocks[i].pointer==pointer&&blocks[i].kind=='M')return 1;return 0;}
+static void reset(int failure){assert(live==0);for(int i=0;i<64;i++)assert(!blocks[i].pointer);allocated=freed=malloc_calls=calloc_calls=realloc_calls=real_realloc_success=failure_seen=failed_owner_frees=format_calls=0;failed_owner=0;failed_ordinal=failure;memset(requested_sizes,0,sizeof(requested_sizes));errno=ERANGE;}
+typedef char *(*CpuFormatter)(struct ihk_cpu_req *);
+typedef char *(*MemFormatter)(struct ihk_mem_req *);
+typedef char *(*IkcFormatter)(struct ihk_ikc_req *);
+static void check(int kind,int failure,CpuFormatter cpu,MemFormatter memory,IkcFormatter ikc){
+ reset(failure);int cpus[48],nodes[16],sources[48],destinations[48];size_t sizes[16];char expected[1024];size_t n=0;
+ for(int i=0;i<48;i++){cpus[i]=2*i;sources[i]=2*i;destinations[i]=i<24?0:1;}
+ for(int i=0;i<16;i++){sizes[i]=(size_t)40960*(size_t)(i+1);nodes[i]=i%2;}
+ if(kind==0){for(int i=0;i<48;i++)n+=(size_t)snprintf(expected+n,sizeof(expected)-n,"%s%d",i?",":"",cpus[i]);}
+ else if(kind==1){for(int i=0;i<16;i++)n+=(size_t)snprintf(expected+n,sizeof(expected)-n,"%s%zu@%d",i?",":"",sizes[i],nodes[i]);}
+ else{for(int group=0;group<2;group++){if(group)n+=(size_t)snprintf(expected+n,sizeof(expected)-n,"+");for(int i=0;i<24;i++)n+=(size_t)snprintf(expected+n,sizeof(expected)-n,"%s%d",i?",":"",sources[group*24+i]);n+=(size_t)snprintf(expected+n,sizeof(expected)-n,":%d",group);}}
+ assert(n>128&&n<256);
+ int old_cpus[48],old_nodes[16],old_sources[48],old_destinations[48];size_t old_sizes[16];memcpy(old_cpus,cpus,sizeof(cpus));memcpy(old_nodes,nodes,sizeof(nodes));memcpy(old_sources,sources,sizeof(sources));memcpy(old_destinations,destinations,sizeof(destinations));memcpy(old_sizes,sizes,sizeof(sizes));
+ struct ihk_cpu_req cpu_req={.cpus=cpus,.num_cpus=48};struct ihk_mem_req mem_req={.sizes=sizes,.numa_ids=nodes,.num_chunks=16,.min_chunk_size=0,.max_size_ratio_all=0,.timeout=0};struct ihk_ikc_req ikc_req={.src_cpus=sources,.dst_cpus=destinations,.num_cpus=48};
+ char *output=kind==0?cpu(&cpu_req):kind==1?memory(&mem_req):ikc(&ikc_req);int observed_errno=errno;
+ assert(!memcmp(old_cpus,cpus,sizeof(cpus))&&!memcmp(old_nodes,nodes,sizeof(nodes))&&!memcmp(old_sources,sources,sizeof(sources))&&!memcmp(old_destinations,destinations,sizeof(destinations))&&!memcmp(old_sizes,sizes,sizeof(sizes)));
+ assert(malloc_calls==1&&calloc_calls==(kind==2?5:0)&&allocated==(kind==2?6:1));
+ if(failure){assert(!output&&failure_seen&&realloc_calls==failure&&real_realloc_success==failure-1&&failed_owner_frees==1&&live==0&&freed==allocated);}
+ else{assert(output&&output_owned(output)&&!strcmp(output,expected)&&strlen(output)==n&&realloc_calls==2&&real_realloc_success==2&&live==1&&freed==allocated-1&&!failure_seen);}
+ if(output){observation_free(output);}
+ assert(live==0&&freed==allocated);
+ printf("CASE formatter=%s failure-ordinal=%d expected-bytes=%zu realloc-attempts=%d real-realloc-successes=%d capacity0=%zu capacity1=%zu returned=%s allocations=%d freed=%d failed-old-owner-freed=%d format-calls=%d observed-errno=%d\n",kind==0?"CPU":kind==1?"MEM":"IKC",failure,n,realloc_calls,real_realloc_success,requested_sizes[0],requested_sizes[1],failure?"NULL":"EXACT",allocated,freed,failed_owner_frees,format_calls,observed_errno);++checks;
+}
+int observation_run(CpuFormatter cpu,MemFormatter memory,IkcFormatter ikc){assert(getuid()==1000&&geteuid()==1000);for(int kind=0;kind<3;kind++){check(kind,0,cpu,memory,ikc);check(kind,1,cpu,memory,ikc);check(kind,2,cpu,memory,ikc);}assert(checks==9&&live==0);puts("candidate growth cases=9 exact-two-growth-successes=3 realloc-failures-NULL=6 failed-old-owner-freed-once=6 all-output-and-scratch-owners-released");return 0;}

@@ -1,0 +1,40 @@
+{
+  "status": "SOURCE_ONLY_NEW_CONTROL_RECEIPT_NO_GUEST_CONSUMER",
+  "length": 128,
+  "magic": "MCFKR001",
+  "u64_fields": {
+    "8": "epoch",
+    "16": "fresh_worker",
+    "24": "fresh_delivery",
+    "32": "fresh_response",
+    "48": "generation",
+    "56": "parent",
+    "64": "original_worker",
+    "72": "original_delivery",
+    "80": "child",
+    "88": "child_mm",
+    "96": "root",
+    "104": "start",
+    "112": "length",
+    "120": "nonce"
+  },
+  "u32_fields": {
+    "40": "slot",
+    "44": "child_pid"
+  },
+  "no_result_or_legacy_phase_field": true,
+  "consumer_pending": true,
+  "identity_abi_size": 96,
+  "packed_identity_wire_bytes": 88,
+  "packing": "custom nonreserved fields, NOT raw ForkIdentityV1 ABI; excludes reserved0/1",
+  "reserved_zero_premise": [
+    "Exact IHK descriptor validation rejects reserved0/1 nonzero",
+    "Backend host_key constructor initializes reserved0/1zero"
+  ],
+  "not_serialized": [
+    "cpu",
+    "carrier_physical"
+  ],
+  "not_serialized_binding": "Remain authenticated by exact parked descriptor and current originalpayload context",
+  "authority": "Actual registered Mirror verifier then private proof; not guest receipt acceptance or RET"
+}

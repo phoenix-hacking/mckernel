@@ -1,0 +1,27 @@
+--- a/kernel/rust/native_signal.rs
++++ b/kernel/rust/native_signal.rs
+@@ -78,6 +78,13 @@
+         return -14;
+     }
+     let gpr = &(*regs).gpr;
++    // The generic #UD entry retains synthetic vector 6 in orig_rax/error
++    // for interrupt dispatch. Only that assembly entry marks the otherwise
++    // cleared spare flags. Translate its separate metadata to Linux greg
++    // slots without changing the kernel context or guessing from SIGILL.
++    let invalid_opcode = (*regs).spare_flags6 == 0xa5
++        && (*regs).spare_flags5 == 6
++        && gpr.orig_rax == 6;
+     let mut rip = gpr.rip;
+     let mut rax = result;
+     if restart != 0 {
+@@ -119,8 +126,8 @@
+         rip,
+         gpr.rflags,
+         (gpr.cs & 0xffff) | ((gpr.ss & 0xffff) << 48),
+-        gpr.orig_rax,
+-        0,
++        if invalid_opcode { 0 } else { gpr.orig_rax },
++        if invalid_opcode { 6 } else { 0 },
+         saved_mask & !UNBLOCKABLE,
+         0,
+     ];

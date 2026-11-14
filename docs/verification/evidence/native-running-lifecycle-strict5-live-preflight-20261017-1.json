@@ -1,0 +1,102 @@
+{
+  "schema": "mckernel.native-running-strict5-live-preflight.v1",
+  "status": "PASS_LOCAL_PREFLIGHT",
+  "observed_at_epoch": 1792252882.8409007,
+  "pattern": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/practical-rust-std-current942-live-preflight-20261017-1.json",
+    "sha256": "4cddcfbdfa7ff2f9bea563901318bfa816ad411e98224faaaf49bb39403378f4",
+    "size": 4012
+  },
+  "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+  "mount": {
+    "target": "/home/holden/mckernel-work/scratch",
+    "source": "/dev/loop36",
+    "fstype": "ext4",
+    "options": "rw,nosuid,nodev,relatime",
+    "uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52",
+    "maj:min": "7:36"
+  },
+  "mount_command": [
+    "/usr/bin/findmnt",
+    "--json",
+    "--target",
+    "/home/holden/mckernel-work/scratch",
+    "--output",
+    "TARGET,SOURCE,FSTYPE,OPTIONS,UUID,MAJ:MIN"
+  ],
+  "scratch_device": 1828,
+  "root_lock": [
+    27,
+    4
+  ],
+  "root_lock_released": true,
+  "host_available_bytes": 19281412096,
+  "scratch_available_bytes": 18132828160,
+  "mem_available_bytes": 30209921024,
+  "floors_bytes": {
+    "host": 18253611008,
+    "scratch": 13958643712,
+    "mem_available": 17179869184
+  },
+  "affinity": [
+    0,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "affinity_scope": "Actual dispatcher affinity; guest remains reviewed cpuset2-5.",
+  "cgroups": {
+    "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_period_us": "100000",
+    "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_quota_us": "400000",
+    "/sys/fs/cgroup/memory/mckernel-dev/memory.limit_in_bytes": "12884901888",
+    "/sys/fs/cgroup/memory/mckernel-dev/memory.use_hierarchy": "1",
+    "/sys/fs/cgroup/pids/mckernel-dev/pids.max": "512"
+  },
+  "sources": {
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_runner.py": "25ea29f9b07232094e9df1db6094ad0a85ec678281749a1d6998abb7c700d499",
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic.py": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e",
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_backend.py": "cd0759c926876483665065cb320b9daf7d7c6b32f56e561805b4b0343f60d614",
+    "/home/holden/mckernel/scripts/application-tests/qmp_capture.py": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741"
+  },
+  "owner": {
+    "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+    "sha256": "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+    "size": 58828
+  },
+  "manifest": {
+    "path": "/home/holden/mckernel-work/scratch/native-running-lifecycle-strict5-preparation-20261017-1/manifest.json",
+    "sha256": "ef59f0f3557b88534198c6bbe18125aa5bb01e59b8118b0b415c774631a54f96",
+    "size": 5568
+  },
+  "parent": {
+    "device": 1828,
+    "gid": 1000,
+    "inode": 110178,
+    "mode": "0o700",
+    "path": "/home/holden/mckernel-work/scratch/ndnl2-c9a305f5",
+    "uid": 1000
+  },
+  "nonce": "c9a305f5832442e4be5ad81ca696ccb4",
+  "parent_empty": true,
+  "evidence_sibling_absent": true,
+  "all_shared_owner_exclusions_absent": {
+    "/home/holden/mckernel-work/scratch/native-running-external-modules.lease.json": true,
+    "/home/holden/mckernel-work/scratch/native-running-external-modules-operational-exclusion.json": true,
+    "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock": true,
+    "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch18-image-1.json": true,
+    "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch18.json": true
+  },
+  "active_image_owner_leases": [],
+  "unix_monitor_endpoints": [
+    {
+      "encoded_bytes": 99,
+      "max_bytes": 107,
+      "path": "/home/holden/mckernel-work/scratch/ndnl2-c9a305f5/attempt-c9a305f5832442e4be5ad81ca696ccb4/qmp.sock"
+    }
+  ],
+  "verified_checkpoint_by_dispatcher": "723d04f1f1005260ebd723776a0eb165a23af80f",
+  "scope": "Fresh strict5 helper/collector with unchanged176modules; no integrationWIP."
+}

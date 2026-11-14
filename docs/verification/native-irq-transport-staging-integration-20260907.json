@@ -1,0 +1,135 @@
+{
+  "artifacts": [
+    {
+      "path": "docs/verification/evidence/native-irq-transport-policy-tests-20260907-1.json.gz",
+      "sha256": "16a8ac79940630774594622ff335fcd7f9663485b7680fe7c3e097603a5b7bcd",
+      "size": 891,
+      "source": "/work/native-irq-transport-policy-tests-20260907-1.json",
+      "unpacked_sha256": "82cb95e9d1a25709bb7254bb0511db4196c07250155ff1c44579ad5d09c4f72a",
+      "unpacked_size": 2994
+    },
+    {
+      "path": "docs/verification/evidence/native-irq-transport-policy-tests-20260907-1.log.gz",
+      "sha256": "a09772dcfdd76d9ae24e11d5226af523779072b6861e4595b295dd92d981f519",
+      "size": 706,
+      "source": "/work/native-irq-transport-policy-tests-20260907-1.log",
+      "unpacked_sha256": "d0b3d39e927f30f7a698a4e786dc72c768091dfca26db7604f0eea5b3088d21e",
+      "unpacked_size": 2524
+    },
+    {
+      "path": "docs/verification/evidence/native-irq-transport-policy-tests-20260907-2.json.gz",
+      "sha256": "0e7e8d7f720e85f9671def15292db40caff3992f40fb118bdcba8b2dcb2bc62b",
+      "size": 944,
+      "source": "/work/native-irq-transport-policy-tests-20260907-2.json",
+      "unpacked_sha256": "2253b4cd7645c43ff337814340fa36970dd620a0ede5cd7566ca489bdd23c2aa",
+      "unpacked_size": 2348
+    },
+    {
+      "path": "docs/verification/evidence/native-irq-transport-policy-tests-20260907-2.log.gz",
+      "sha256": "21c491b4be6b4e10c9c6fbb4cf6f5914cccafed8b07b26e6bc0dd4229b35f824",
+      "size": 234,
+      "source": "/work/native-irq-transport-policy-tests-20260907-2.log",
+      "unpacked_sha256": "c0c9e29ae5fcf7d77c9a83e1676bdf1f8c94d673a1b07c2f98b550faa8ed1e3c",
+      "unpacked_size": 406
+    },
+    {
+      "archived_files": [
+        {
+          "path": "host-kernel/contracts/rs006-miscdevice-module-owner-followup-v1.json",
+          "sha256": "94677b7d18f6a801c3d15bd8683e66820ee973034a7b4b4adac368bbc77c7bbc",
+          "size": 21236
+        },
+        {
+          "path": "kernel.log",
+          "sha256": "b9a385612a82a12f7c06ebcb577fa3a4821e9439e9b25f1c0d431d9886df4e4b",
+          "size": 4349185
+        },
+        {
+          "path": "scripts/rs006_miscdevice_module_owner_followup.py",
+          "sha256": "581861946dae5a35ac3942b72584632397833a4eb55c2be13a3e630f164aada9",
+          "size": 76103
+        }
+      ],
+      "path": "docs/verification/evidence/native-irq-transport-policy-tests-20260907-2-source-overlays.tar.gz",
+      "sha256": "275377ee8c08b99e34f88d0511e21324a9bed5470ce546b15f1bcfd086d42e9b",
+      "size": 785863,
+      "source": "/work/native-irq-transport-policy-source-20260907-2"
+    },
+    {
+      "path": "docs/verification/evidence/native-irq-transport-staging-20260907-run-native-irq-transport-policy-tests.py.gz",
+      "sha256": "1ac0f4e93f3838aa13573a196ed0bd5978043d7520dbf7dacd3fd73d14565a80",
+      "size": 1774,
+      "source": "/work/run-native-irq-transport-policy-tests.py",
+      "unpacked_sha256": "6a9b1f789142f5bc39a65b71226540a270a16533be58208c391171247624621b",
+      "unpacked_size": 4244
+    },
+    {
+      "path": "docs/verification/evidence/native-irq-transport-staging-20260907-refresh-irq-transport-bindings.py.gz",
+      "sha256": "f8d154bf2f8f92208007e46d144625ceda41725caa516da554f185e0064ada27",
+      "size": 2582,
+      "source": "/work/refresh-irq-transport-bindings.py",
+      "unpacked_sha256": "56fd97714c9fdb80aac3ae89b22caccc54f5e87481c7ae518dee2fc7f2c4fc8f",
+      "unpacked_size": 7984
+    },
+    {
+      "path": "docs/verification/evidence/native-irq-transport-staging-20260907-retain-native-irq-transport-staging.py.gz",
+      "sha256": "eb4532df5f9685d403e4c0da659bbb7b634dcf2bb605ad004f9d9d8636894e38",
+      "size": 1535,
+      "source": "/work/retain-native-irq-transport-staging.py",
+      "unpacked_sha256": "bdbf3235f8dbf1b9c4915aab78c35fbe560effb2d5e6c426f8eec60a6c0b5559",
+      "unpacked_size": 3888
+    }
+  ],
+  "created_utc": "2026-09-07T19:39:11.645314+00:00",
+  "limitations": [
+    "Declared-stage rebuild and native-image guest replay remain next",
+    "Full repository suite still describes the earlier IRQ image checkpoint",
+    "Earlier intermittent Linux idle/RCU stall remains unresolved",
+    "No actual McKernel CPU startup, cross-kernel IKC or production acceptance"
+  ],
+  "mckernel_boot_proven": false,
+  "passed": [
+    "443 runtime/workflow/FP-0006/license checks before the first RS-006 failure",
+    "All 27 RS-006 checks after refreshing the current workflow-test byte binding",
+    "Repository diff and native IRQ fixture formatting"
+  ],
+  "production_gate_credit": false,
+  "runs": [
+    {
+      "attempt": "1",
+      "changed_inputs": [],
+      "exit_code": 1,
+      "finished_utc": "2026-09-07T19:36:36.507757+00:00",
+      "seconds": 101.142,
+      "source_parent": "262a6b634bdbaeadc6c2d90f5e8ac95809c5e141",
+      "started_utc": "2026-09-07T19:34:53.511545+00:00",
+      "tests": 444
+    },
+    {
+      "attempt": "2",
+      "changed_inputs": [
+        {
+          "path": "host-kernel/contracts/rs006-miscdevice-module-owner-followup-v1.json",
+          "sha256": "94677b7d18f6a801c3d15bd8683e66820ee973034a7b4b4adac368bbc77c7bbc",
+          "size": 21236
+        },
+        {
+          "path": "kernel.log",
+          "sha256": "b9a385612a82a12f7c06ebcb577fa3a4821e9439e9b25f1c0d431d9886df4e4b",
+          "size": 4349185
+        },
+        {
+          "path": "scripts/rs006_miscdevice_module_owner_followup.py",
+          "sha256": "581861946dae5a35ac3942b72584632397833a4eb55c2be13a3e630f164aada9",
+          "size": 76103
+        }
+      ],
+      "exit_code": 0,
+      "finished_utc": "2026-09-07T19:37:54.798815+00:00",
+      "seconds": 3.832,
+      "source_parent": "262a6b634bdbaeadc6c2d90f5e8ac95809c5e141",
+      "started_utc": "2026-09-07T19:37:49.721439+00:00",
+      "tests": 27
+    }
+  ]
+}

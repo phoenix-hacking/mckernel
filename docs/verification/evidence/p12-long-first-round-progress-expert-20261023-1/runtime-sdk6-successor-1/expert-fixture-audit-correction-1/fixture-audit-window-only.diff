@@ -1,0 +1,27 @@
+--- frozen-runtime-sdk6-fixture.py
++++ proposed-fixture-audit-window.py
+@@ -65,8 +65,9 @@
+  ('request_capture_name_drift',lambda r:r.update(capture_directory=str(F/'unexpected-capture')),'exact fresh capture path')]:
+  r=copy.deepcopy(corrected);mut(r);p,h=request_file(r);expect(name,D/'capture_root_LONG.NOT-RELEASED.py',p,h,reason)
+ tracked_open_paths=set()
++audit_active=False
+ def audit_open(event,args):
+- if event=='open' and args and isinstance(args[0],(str,bytes,os.PathLike)):
++ if audit_active and event=='open' and args and isinstance(args[0],(str,bytes,os.PathLike)):
+   path=os.fsdecode(args[0]);flags=args[2] if len(args)>2 and isinstance(args[2],int) else 0
+   if path.startswith('/home/holden/mckernel') and not flags&(os.O_WRONLY|os.O_RDWR|os.O_CREAT):tracked_open_paths.add(path)
+ sys.addaudithook(audit_open)
+@@ -75,7 +76,12 @@
+ assert module.HOST_PARENT==g.HOST_OUTPUT['parent']==field('--attempt-parent') and module.NONCE==field('--nonce')
+ assert module.MANIFEST_PATH==field('--manifest') and module.MANIFEST_SHA==field('--manifest-sha256') and module.RELEASE_PATH==r['long_profile_release']['path']==field('--long-profile-release')
+ assert r['wrapper_sha256']==g.EXTERNAL_CAPTURE_BINDING['controller_sha256']==sha((D/'capture_root_LONG.NOT-RELEASED.py').read_bytes()) and g.EXTERNAL_CAPTURE_BINDING['controller_path']==str(D/'capture_root_LONG.NOT-RELEASED.py') and g.EXTERNAL_CAPTURE_BINDING['request_path']==str(D/'CAPTURE-REQUEST.json') and g.EXTERNAL_CAPTURE_BINDING['capture_directory']==r['capture_directory']
+-d,m=o.bound_manifest(module.MANIFEST_PATH,module.MANIFEST_SHA);assert m['pair_long_session']==g.PROFILE and len(o.SOURCE_HASHES)==matrix['source_hash_rows']
++audit_active=True
++try:
++ d,m=o.bound_manifest(module.MANIFEST_PATH,module.MANIFEST_SHA)
++finally:
++ audit_active=False
++assert m['pair_long_session']==g.PROFILE and len(o.SOURCE_HASHES)==matrix['source_hash_rows']
+ checks.append(dict(name='actual_full_bound_manifest_current_and_controller_transport_owner_request_matrix',status='PASS',readonly_roots=len(o.EXTRA_READONLY)))
+ assert not factory_calls and not (D/'actual-capture-1').exists()
+ # Model exact actualcreateargv destinations, including most-specific ancestor shadow.

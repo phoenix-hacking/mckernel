@@ -1,0 +1,176 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_REAL_WHOLE_TU_PARTIAL_LIBRARY_SELECTION_READY_CLI459_HANDOFF_PENDING",
+  "original_C": {
+    "path": "/home/holden/mckernel/ihk/linux/user/ihklib.c",
+    "sha256": "6f2c7321667f405b3dc483c089eb5119db0d0a758c8e17a86460f9aad8dcdeab",
+    "bytes": 103430,
+    "dev": 66306,
+    "inode": 47467165,
+    "uid": 1000,
+    "mode": 33204
+  },
+  "selected_CMake": {
+    "path": "/home/holden/mckernel/ihk/linux/user/CMakeLists.txt",
+    "sha256": "2f827651e238bc81ee455eeb6b5aaa24425c9736e3c176d6abd3f0018df8f59f",
+    "bytes": 2262,
+    "dev": 66306,
+    "inode": 47467161,
+    "uid": 1000,
+    "mode": 33204
+  },
+  "actual_CMake_cache": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/CMakeCache.txt",
+    "sha256": "50e1523f485648386b9037630ce7306d8315c4dc08f8b9ca56f3a401f0ed0110",
+    "bytes": 26414,
+    "dev": 66306,
+    "inode": 48667014,
+    "uid": 1000,
+    "mode": 33188
+  },
+  "actual_target_command": {
+    "directory": "/work/output/build/ihk/linux/user",
+    "command": "/usr/bin/cc -DENABLE_PANIC_NOTIFIER_WORKAROUND -DIHK_IKC_USE_LINUX_WORK_IRQ -DPAGE_SIZE=4096 -DPROFILE_ENABLE -Dihklib_EXPORTS -I/src/ihk/linux/include -I/src/ihk/linux/include/ihk/arch/x86_64 -I/work/output/build/ihk/linux/include -I/work/output/build/ihk -g -fPIC -Wall -Wextra -Wno-unused-parameter -Wno-sign-compare -Wno-unused-function -Wno-implicit-fallthrough -Wno-stringop-truncation -o CMakeFiles/ihklib.dir/ihklib.c.o -c /src/ihk/linux/user/ihklib.c",
+    "file": "/src/ihk/linux/user/ihklib.c",
+    "output": "ihk/linux/user/CMakeFiles/ihklib.dir/ihklib.c.o"
+  },
+  "actual_link_recipe": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/ihk/linux/user/CMakeFiles/ihklib.dir/link.txt",
+    "sha256": "36b373332288647c3a90803940453f11407fbdb04d60194d2d9b16b9f245682f",
+    "bytes": 183,
+    "dev": 66306,
+    "inode": 48667044,
+    "uid": 1000,
+    "mode": 33188
+  },
+  "removed_C_definitions": [
+    "ihklib_device_open",
+    "ihk_reserve_cpu",
+    "ihk_release_cpu",
+    "ihk_get_num_reserved_cpus",
+    "ihk_query_cpu",
+    "ihk_reserve_mem",
+    "ihk_get_num_reserved_mem_chunks",
+    "ihk_query_mem",
+    "ihk_release_mem",
+    "ihk_get_num_os_instances",
+    "ihk_get_os_instances"
+  ],
+  "Rust_actual_passed_staticlib": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/memory-provider-bounded-correction-1/libihklib_memory.fixture.a",
+    "sha256": "553bef3f690333e79b91f7cfa9f7f2f52fe6af6a2e3e76c4d03b12ea3b28dfa3",
+    "bytes": 7255380,
+    "dev": 66306,
+    "inode": 56142116,
+    "uid": 1000,
+    "mode": 33152
+  },
+  "Rust_source": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/libihk_memory_chain.rs",
+    "sha256": "734d446f5f553ad2cb7b9e2f32c144b5557dbd511008a0b268d292e598631332",
+    "bytes": 5197,
+    "dev": 66306,
+    "inode": 56126319,
+    "uid": 1000,
+    "mode": 33152
+  },
+  "Rust_memory": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/ihklib_memory_os_dependencies.rs",
+    "sha256": "fa4e261bccd0353858b188e5d616c7158632ea4923380b9a0b1e88cdd29fdb9a",
+    "bytes": 17224,
+    "dev": 66306,
+    "inode": 56126318,
+    "uid": 1000,
+    "mode": 33152
+  },
+  "actual_state_providers": {
+    "reserve_mem_conf": "external actual C definition retained in whole remaining TU; six c_int fields; real setter retained",
+    "loglevel": "external actual C definition and ihk_set_loglevel retained; existing Rust failure logger consumes it",
+    "reserve_mem_conf_default": "static actual C datum remains in TU; no invented external getter; Rust reset literal qualified only selected4096/98/30 profile"
+  },
+  "prepared_compile_argv": [
+    "/usr/bin/gcc-9",
+    "-DENABLE_PANIC_NOTIFIER_WORKAROUND",
+    "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+    "-DPAGE_SIZE=4096",
+    "-DPROFILE_ENABLE",
+    "-Dihklib_EXPORTS",
+    "-I/home/holden/mckernel/ihk/linux/include",
+    "-I/home/holden/mckernel/ihk/linux/include/ihk/arch/x86_64",
+    "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/ihk/linux/include",
+    "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/ihk",
+    "-g",
+    "-fPIC",
+    "-Wall",
+    "-Wextra",
+    "-Wno-unused-parameter",
+    "-Wno-sign-compare",
+    "-Wno-unused-function",
+    "-Wno-implicit-fallthrough",
+    "-Wno-stringop-truncation",
+    "-o",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.o",
+    "-c",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c"
+  ],
+  "prepared_strict_shared_link_argv": [
+    "/usr/bin/gcc-9",
+    "-fPIC",
+    "-g",
+    "-shared",
+    "-Wl,-soname,libihk.so",
+    "-Wl,--gc-sections",
+    "-Wl,-z,defs",
+    "-o",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/libihk.partial-rust.so",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.o",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/memory-provider-bounded-correction-1/libihklib_memory.fixture.a",
+    "-lbfd"
+  ],
+  "CLI_459_source": null,
+  "CLI_public_link_argv": null,
+  "public_Rust_required_from_CLI": [
+    "ihk_reserve_cpu",
+    "ihk_reserve_mem",
+    "ihk_get_num_os_instances",
+    "ihk_get_os_instances"
+  ],
+  "fixture_only_providers_used": false,
+  "remaining_C_API_debt": "All C definitions except exactly the eleven removed bodies; state/configuration/logging setters remain genuine C. No whole-file or default C-free claim.",
+  "actual_compile": null,
+  "actual_link": null,
+  "native": null,
+  "canonical_changes": false,
+  "slot_reservation": false,
+  "profile": "Root grant required; existing CPU6 onejob2GiB/60CPU90+6/F32MiB/FD256/core0 GCC9 host-production-TU proof. Selected original container BFD/CC must qualify separately before default production binding.",
+  "stop": "No fake panic/personality/config getters. Strict shared link must refuse missing real provider; preserve and return exact symbol/provider blocker, no unreviewed stub.",
+  "newfiles": {
+    "ihklib.remaining.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c",
+      "sha256": "d754a7ba4c0e5399001afe1ae7e2e8f437b68e89c9065863342c8b7e0e85a816",
+      "bytes": 80494,
+      "dev": 66306,
+      "inode": 56142225,
+      "uid": 1000,
+      "mode": 33152
+    },
+    "ihklib.remaining.c.diff": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c.diff",
+      "sha256": "178be472dd7a57ad9d587a34feeb43a035914e5f564ef71a8914468e84a59d86",
+      "bytes": 24409,
+      "dev": 66306,
+      "inode": 56142226,
+      "uid": 1000,
+      "mode": 33152
+    },
+    "CMakeLists.partial-selection.PROPOSED.diff": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/CMakeLists.partial-selection.PROPOSED.diff",
+      "sha256": "837a6e2dd25bf7d24b95bf680f98c741faac0e78d4f7168f3a2306fa7fa44161",
+      "bytes": 1813,
+      "dev": 66306,
+      "inode": 56142227,
+      "uid": 1000,
+      "mode": 33152
+    }
+  }
+}

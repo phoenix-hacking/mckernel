@@ -1,0 +1,26 @@
+{
+  "schema": "mckernel.root.practical-check-and-native-deduplication.v1",
+  "recorded_at_epoch": 1792524344.6573074,
+  "semantic_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/ACTUAL-M03-PROTECTION-GRACE-NATIVE-SEMANTIC-AND-LITERAL-P-M03-01-REVIEW.json",
+    "sha256": "ebec559801d70a62a7ecab1f2c8c4c1e281457c8c3ab47a81b542890bdbc65b8",
+    "size": 11763
+  },
+  "physical_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/ACTUAL-M03-PROTECTION-GRACE-NATIVE-PHYSICAL-RETIREMENT-REVIEW.json",
+    "sha256": "498cd4a7dbedb9de21a3f41e5c97136b9a556c488e72b0da2a6047536beff8da",
+    "size": 25167
+  },
+  "criterion": "P-M03-01",
+  "criterion_status": "complete",
+  "checks_before": 15,
+  "checks_after": 16,
+  "whole_milestones": 3,
+  "whole_M03": "open",
+  "distinct_native_behaviors_before": 28,
+  "distinct_native_behaviors_after": 28,
+  "current_tuple_accepted_native_batches_delta": 1,
+  "production_Rust_paths": 17,
+  "native_Rust_paths": 14,
+  "reason": "Current tested205/HOST66 valid RO fault, unchanged byte, RW restoration/write plus bound b7aa invalid mprotect/map/unmap evidence satisfy the literal used-operation criterion. Same logical protection behavior as prior02bea; no additional distinct behavior. P-M03-02/03 ownership obligations remain open."
+}

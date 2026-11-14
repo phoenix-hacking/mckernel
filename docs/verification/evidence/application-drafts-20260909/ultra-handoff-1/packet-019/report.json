@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-019",
+  "packet_version": 1,
+  "context_sha256": "52fec12635f9cdc4c76cf5850a8c1723c25e51766342a0169c3f6384d1fc0487",
+  "started_utc": "2026-09-09T11:40:00Z",
+  "finished_utc": "2026-09-09T11:40:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {"case_id": "file.pwrite-offset", "status": "DRAFTED_WITH_UNRESOLVED", "fixture": "scripts/application-tests/cases/file/file.pwrite-offset.c", "oracle": "scripts/application-tests/oracles/file.pwrite-offset.json", "changed_files": ["scripts/application-tests/cases/file/file.pwrite-offset.c", "scripts/application-tests/oracles/file.pwrite-offset.json"], "parameter_vectors": {}, "unresolved_oracle_notes": ["Canonical output and reviewed input binding require confirmation."], "max_reviewer_question": "Confirm pwrite patches only bytes 20..23 while offset remains 7."},
+    {"case_id": "file.readv-boundaries", "status": "DRAFTED_WITH_UNRESOLVED", "fixture": "scripts/application-tests/cases/file/file.readv-boundaries.c", "oracle": "scripts/application-tests/oracles/file.readv-boundaries.json", "changed_files": ["scripts/application-tests/cases/file/file.readv-boundaries.c", "scripts/application-tests/oracles/file.readv-boundaries.json"], "parameter_vectors": {}, "unresolved_oracle_notes": ["Canonical output and reviewed input binding require confirmation."], "max_reviewer_question": "Confirm iovec lengths 1/7/16 and guard-byte preservation."},
+    {"case_id": "file.writev-boundaries", "status": "DRAFTED_WITH_UNRESOLVED", "fixture": "scripts/application-tests/cases/file/file.writev-boundaries.c", "oracle": "scripts/application-tests/oracles/file.writev-boundaries.json", "changed_files": ["scripts/application-tests/cases/file/file.writev-boundaries.c", "scripts/application-tests/oracles/file.writev-boundaries.json"], "parameter_vectors": {}, "unresolved_oracle_notes": ["Canonical output and reviewed input binding require confirmation."], "max_reviewer_question": "Confirm exact 3/5/4-byte concatenation with embedded NULs."}
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/file/file.pwrite-offset.c", "sha256": "1753da6bebecbb08b8ad6403350b95bda33210ab427f6d5b9214d2420daf9b62"},
+    {"path": "scripts/application-tests/oracles/file.pwrite-offset.json", "sha256": "e7b7294aa8cf3b6ba69448426622ab24cb4df2bf9adf7bcf5d32b6996eee2bb3"},
+    {"path": "scripts/application-tests/cases/file/file.readv-boundaries.c", "sha256": "f52b9696336f78aa4e528879706474fa5a34dce060b9a72808e77c559e380900"},
+    {"path": "scripts/application-tests/oracles/file.readv-boundaries.json", "sha256": "5607b0285257344b209f1f043d200f161c37c0f622ef3c5b1df1a1f00eb74a09"},
+    {"path": "scripts/application-tests/cases/file/file.writev-boundaries.c", "sha256": "c83fa5dc0ce6957610ee8350f8f420186352a0d8f2ec9d73b6ea9e78e6914e73"},
+    {"path": "scripts/application-tests/oracles/file.writev-boundaries.json", "sha256": "700ab8642012d9387d76123e43c08c52d0e71946779f94289895b3e5ad4defc8"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-019.json --emit-context /tmp/application-packet-019-context.json", "outcome": "PASS; metadata only"},
+    {"command": "python3 -m json.tool report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Three vectored file I/O cases need final canonical record and input review."],
+  "blocked_execution_capabilities": ["current-inputs", "runtime-transport-fault-injection", "runner-contract"],
+  "first_failure_event": null,
+  "max_escalation": ["Review offset isolation, iovec guard boundaries, embedded NUL handling, and exact input identities."],
+  "next_packet_id": "packet-020"
+}

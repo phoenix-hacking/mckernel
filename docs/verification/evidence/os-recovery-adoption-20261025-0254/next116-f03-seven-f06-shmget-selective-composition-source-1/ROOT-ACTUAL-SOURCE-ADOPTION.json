@@ -1,0 +1,224 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root",
+  "at": "2026-10-28T04:26:44.911966+00:00",
+  "status": "ROOT_ADOPTED_QUALIFIED_NEXT116_EIGHT_SOURCE_PATHS_ONLY_NOT_COMPILER_OR_NATIVE_ACCEPTANCE",
+  "source_recipe": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next116-f03-seven-f06-shmget-selective-composition-source-1/SELECTIVE-EIGHT-SOURCE-MAP.json",
+    "bytes": 62010,
+    "sha256": "eaaf7f21bc849e585d36bb288d9ef5646f85b36837af3f4ba6b8b6c5f6d685d4"
+  },
+  "source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next116-f03-seven-f06-shmget-selective-composition-source-1/independent-source-review-1/REVIEW.json",
+    "bytes": 19949,
+    "sha256": "4bd374524bef5c90e182289467a9691bb5d3261b4579064801ad32482082b7f9"
+  },
+  "production_recipe": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next116-f03-seven-f06-shmget-selective-composition-source-1/MINIMAL-PRODUCTION-CONTINUATION.NOT-GRANTED.json",
+    "bytes": 26765,
+    "sha256": "d612ce89f7b8d9b708609cf8c140ad3d3717b54696dcaea754ff2c6faad1f9d9"
+  },
+  "source_changes": [
+    {
+      "relative": "arch/x86_64/kernel/syscall.c",
+      "before": {
+        "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+        "bytes": 117757,
+        "sha256": "d060dbf5b83e29b1d5f16e7504972f05cb53d553fb754de1a67566d2c0f06b37"
+      },
+      "after": {
+        "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+        "bytes": 117955,
+        "sha256": "8d24cb88289de08ac581eaa9a88de7690a05b54db4897069e06a3a24ddd80561"
+      },
+      "retained_candidate": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next116-f03-seven-f06-shmget-selective-composition-source-1/candidate/arch/x86_64/kernel/syscall.c",
+        "bytes": 117955,
+        "sha256": "8d24cb88289de08ac581eaa9a88de7690a05b54db4897069e06a3a24ddd80561"
+      },
+      "retained_patch": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next116-f03-seven-f06-shmget-selective-composition-source-1/patches/arch__x86_64__kernel__syscall.c.patch",
+        "bytes": 484,
+        "sha256": "117b8d0a43c39faf8b63d637bd3eed7b82331c884cd3bed78c0fc7386dfcbb5f"
+      }
+    },
+    {
+      "relative": "kernel/rust/lib.rs",
+      "before": {
+        "path": "/home/holden/mckernel/kernel/rust/lib.rs",
+        "bytes": 2318,
+        "sha256": "c84205fd8d0b4c729bf5598d5b6d0e578617de8e8af3a00bdcf886e69a8019e2"
+      },
+      "after": {
+        "path": "/home/holden/mckernel/kernel/rust/lib.rs",
+        "bytes": 2381,
+        "sha256": "6dc007c983c21a43647cbc3864b27a5ff794a085aa2edf1eeb94057f87ac4b60"
+      },
+      "retained_candidate": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next116-f03-seven-f06-shmget-selective-composition-source-1/candidate/kernel/rust/lib.rs",
+        "bytes": 2381,
+        "sha256": "6dc007c983c21a43647cbc3864b27a5ff794a085aa2edf1eeb94057f87ac4b60"
+      },
+      "retained_patch": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next116-f03-seven-f06-shmget-selective-composition-source-1/patches/kernel__rust__lib.rs.patch",
+        "bytes": 244,
+        "sha256": "e3bbca4a05ef6847628ed831f96d80d37b044861f09beba96ff7fa5f90f83ccc"
+      }
+    },
+    {
+      "relative": "kernel/CMakeLists.txt",
+      "before": {
+        "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+        "bytes": 40587,
+        "sha256": "98b7bd3bb16384c32f5e268e34938c981ebe89474d80f143bc9b221881500a77"
+      },
+      "after": {
+        "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+        "bytes": 40960,
+        "sha256": "9650cc9f9d2396dfdb5ff74428de3b4e9965bf3b9910a0f6cbbcdc0f37cbd4a1"
+      },
+      "retained_candidate": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next116-f03-seven-f06-shmget-selective-composition-source-1/candidate/kernel/CMakeLists.txt",
+        "bytes": 40960,
+        "sha256": "9650cc9f9d2396dfdb5ff74428de3b4e9965bf3b9910a0f6cbbcdc0f37cbd4a1"
+      },
+      "retained_patch": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next116-f03-seven-f06-shmget-selective-composition-source-1/patches/kernel__CMakeLists.txt.patch",
+        "bytes": 771,
+        "sha256": "3e09d6b79a3f5e9c366a44e3d2415faf68595046445c91e65e69f6c45aefc74f"
+      }
+    },
+    {
+      "relative": "kernel/rust/f06_shmget_dispatch.rs",
+      "before": null,
+      "after": {
+        "path": "/home/holden/mckernel/kernel/rust/f06_shmget_dispatch.rs",
+        "bytes": 752,
+        "sha256": "6069b676a090b703d0b8b91ff701223857a7371524a05c5f94bd932982b97c4b"
+      },
+      "retained_candidate": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next116-f03-seven-f06-shmget-selective-composition-source-1/candidate/kernel/rust/f06_shmget_dispatch.rs",
+        "bytes": 752,
+        "sha256": "6069b676a090b703d0b8b91ff701223857a7371524a05c5f94bd932982b97c4b"
+      },
+      "retained_patch": null
+    },
+    {
+      "relative": "scripts/f06_origin_command_profile.json",
+      "before": {
+        "path": "/home/holden/mckernel/scripts/f06_origin_command_profile.json",
+        "bytes": 8956,
+        "sha256": "4306a26c60fd6904c0644087d7dcfb7481b985045e216b8bec5575aafab5d418"
+      },
+      "after": {
+        "path": "/home/holden/mckernel/scripts/f06_origin_command_profile.json",
+        "bytes": 9003,
+        "sha256": "f9f51aa43d4a572b08f26fae7340f16998044590c9c684489ed0cf4d15e17d6f"
+      },
+      "retained_candidate": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next116-f03-seven-f06-shmget-selective-composition-source-1/candidate/scripts/f06_origin_command_profile.json",
+        "bytes": 9003,
+        "sha256": "f9f51aa43d4a572b08f26fae7340f16998044590c9c684489ed0cf4d15e17d6f"
+      },
+      "retained_patch": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next116-f03-seven-f06-shmget-selective-composition-source-1/patches/scripts__f06_origin_command_profile.json.patch",
+        "bytes": 580,
+        "sha256": "a1633ac893e209744a702b39a45f5eedcfe438ebcf276dedb06f7cdba93d6a8e"
+      }
+    },
+    {
+      "relative": "scripts/derive_f06_origin.py",
+      "before": {
+        "path": "/home/holden/mckernel/scripts/derive_f06_origin.py",
+        "bytes": 7565,
+        "sha256": "c5e34ad75d4685d1532f8a36d6fdd33b5b82faea5b5368830c3b5e84abed38d0"
+      },
+      "after": {
+        "path": "/home/holden/mckernel/scripts/derive_f06_origin.py",
+        "bytes": 7565,
+        "sha256": "65e0782d72b63097f88289f0092c63acff8a369086ccfee6eaf18937e619ba37"
+      },
+      "retained_candidate": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next116-f03-seven-f06-shmget-selective-composition-source-1/candidate/scripts/derive_f06_origin.py",
+        "bytes": 7565,
+        "sha256": "65e0782d72b63097f88289f0092c63acff8a369086ccfee6eaf18937e619ba37"
+      },
+      "retained_patch": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next116-f03-seven-f06-shmget-selective-composition-source-1/patches/scripts__derive_f06_origin.py.patch",
+        "bytes": 341,
+        "sha256": "b71c5d19fdf0f9c6d6015e137315e1eb3cef318ec2c7de6388dafc66236685f0"
+      }
+    },
+    {
+      "relative": "kernel/syscall.c",
+      "before": {
+        "path": "/home/holden/mckernel/kernel/syscall.c",
+        "bytes": 918715,
+        "sha256": "d6e9c595364f72018b96ccba50e97ebc71ff438b8e91315982e287d63ff8bafb"
+      },
+      "after": {
+        "path": "/home/holden/mckernel/kernel/syscall.c",
+        "bytes": 920543,
+        "sha256": "c34318da009e2f834084c8e6beb24a9e788c3f6c91c19d1c5dc4e49ff48538ef"
+      },
+      "retained_candidate": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next116-f03-seven-f06-shmget-selective-composition-source-1/candidate/kernel/syscall.c",
+        "bytes": 920543,
+        "sha256": "c34318da009e2f834084c8e6beb24a9e788c3f6c91c19d1c5dc4e49ff48538ef"
+      },
+      "retained_patch": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next116-f03-seven-f06-shmget-selective-composition-source-1/patches/kernel__syscall.c.patch",
+        "bytes": 4287,
+        "sha256": "edf5e88422df2e458551028bcdf1534a344742fb8e10c6eeb3200b0479fcf6a8"
+      }
+    },
+    {
+      "relative": "kernel/rust/syscall_policy.rs",
+      "before": {
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "bytes": 1268725,
+        "sha256": "d2522903a4a1335aa551f87c17c8e8765f9f7373fb84984b2dd062ac301004c0"
+      },
+      "after": {
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "bytes": 1275861,
+        "sha256": "f7e198ea69673323175b90ee109e4c5e7d89d6316f7c0b9f878b0f2c7d6a25ae"
+      },
+      "retained_candidate": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next116-f03-seven-f06-shmget-selective-composition-source-1/candidate/kernel/rust/syscall_policy.rs",
+        "bytes": 1275861,
+        "sha256": "f7e198ea69673323175b90ee109e4c5e7d89d6316f7c0b9f878b0f2c7d6a25ae"
+      },
+      "retained_patch": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next116-f03-seven-f06-shmget-selective-composition-source-1/patches/kernel__rust__syscall_policy.rs.patch",
+        "bytes": 8114,
+        "sha256": "17f75a3ee06315df15fccef327dd9dcbb7ef9b8ece9a0ced06d832e1df1c42e2"
+      }
+    }
+  ],
+  "retained_CURRENT115_artifact_acceptance": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT115-INDEPENDENT-DEFAULT-ARTIFACT-ACCEPTANCE.json",
+    "bytes": 2866,
+    "sha256": "aae76fa20b438828b55662a196fc9266a4c0098262b7effb766f5063ad38b6f9"
+  },
+  "current_free": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/independent-postbuild-current-free-review-1/CURRENT-FREE.json",
+    "bytes": 5561,
+    "sha256": "270a93392db9d5c64c7546d43ac36cb604b85da4668884736b4920b623c3111d"
+  },
+  "current_Root54": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER54.json",
+    "bytes": 14162,
+    "sha256": "16554de5dc5600c123a4ae5ce5f541f730c1d28cc5c0b444db1976f74076ad57"
+  },
+  "scope_limits": [
+    "Only source adoption; actual neworigin/sourceexport/independentsource-profile/admission still required.",
+    "Retained original235/227 native subjects remain frozen; CURRENT115matchingnative de9f separate from future116.",
+    "Actual WAKE4HOSTbb8/SHM67f/trio93fb qualification reused at exact scope; actualfuturefinalconsumer proof remainsrequired.",
+    "No new retired-C/default/native/file counters fromsourcecopy."
+  ],
+  "actual_build": null,
+  "native": null,
+  "file_acceptance": null,
+  "Root_metadata_first_failure_preserved": "Initial record construction KeyError patch on new module row, before any receipt write. Corrected record preserves whole candidate and explicitlynull patch when newfile has no patch; no further canonical copy."
+}

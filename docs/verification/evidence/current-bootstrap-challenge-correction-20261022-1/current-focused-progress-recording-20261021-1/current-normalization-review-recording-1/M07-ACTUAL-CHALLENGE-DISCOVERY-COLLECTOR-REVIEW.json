@@ -1,0 +1,56 @@
+{
+  "status": "PASS_ACTUAL_COLLECTOR_CHALLENGE_AND_BOOT_DISCOVERY_BODY_ONLY",
+  "reviewer": "/root/numa_compiler_review",
+  "implementation_ownership": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "packet": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/boot-challenge-producer-correction-1",
+  "source": {
+    "collector_sha256": "04154cf8b2cc273f7bd50599239d9c28a1f3a8d2ed0af6de60e98047d83c4af4",
+    "pair_contract_sha256": "081921ed526b9cf874901554d1cc4a2bc5cb6ed1835f7f8237fb10b4cc166b2d",
+    "assignment_header_sha256": "29963c5088598368fe7565a6fba88f5712cece4105314e4d1f2205c6a936b643",
+    "fixture_sha256": "2b0991df110edb33f043ca3d2d4becc6988c1f93926e9470a254508dbbb1c04c",
+    "verified_fidelity": [
+      "New contract is the exact qualified pair_runtime.inc prefix before pair_results.",
+      "Assignment header is byte-identical to its qualified predecessor.",
+      "Fixture uses both complete original helper challenge and publication functions.",
+      "Exercised collector boot sequence is an exact production-source substring."
+    ]
+  },
+  "accepted_boundary": [
+    "Creates the nonzero 16-byte challenge with exclusive creation before invoking boot.",
+    "Runs discovery after successful boot and before starting the payload.",
+    "Requires exact 48-byte assignment, root ownership, mode0600, single link, nonce, OS0, count2, positive generation and physical CPUs1,2.",
+    "Requires matching-generation port501 logical-rank routes, device CPU count and exact sysfs profile.",
+    "Preparation or discovery failure enters the existing failed-publication and disposable-guest termination path without launching the payload."
+  ],
+  "actual_evidence": {
+    "result": "ACTUAL-COLLECTOR-AND-BOOT-CONTRACT-RESULTS-1.json",
+    "result_sha256": "c34fd784effe14cdb26bc41275c4927702470132b66c338a5ae524a52659801e",
+    "all_three_commands_returncode": 0,
+    "direct_children_joined": true,
+    "process_groups_absent": true,
+    "streams_closed": true,
+    "stderr_empty": true,
+    "timeouts_or_observer_errors": false,
+    "fixture_stdout_sha256": "2d31495e814e3eaf34518bdbd90b3bc533ab5a8bf147636889b1f25f2d7146c3",
+    "cases": 12,
+    "coverage": "Original missing-challenge refusal; corrected sequence reaches payload after discovery; existing challenge, missing/short/long challenge, absent/short assignment, wrong nonce, zero generation, mismatched log generation, wrong CPUs and nonroot assignment refuse.",
+    "fixture_limits": "Private path, metadata, randomness, ioctl and kernel-log substitutes. No actual device allocation, ioctl, module operation or guest execution."
+  },
+  "compiled_collector": {
+    "relative_path": "init",
+    "sha256": "2f8c87431a0ff2833f8f4254cec673fdee80a5c15d3fe4e01798d5a6852402b8",
+    "bytes": 1025784,
+    "observed_host_mode": "0700",
+    "format": "ELF64 little-endian x86_64 ET_EXEC",
+    "compile": "Static ND_CORE_THREADS production collector; Wall/Wextra/Werror; empty diagnostics."
+  },
+  "packaging_correction": "The emitted host init is mode0700, not the reported0755. Bind its actual mode in the source descriptor. Any guest /init0755 installation must remain an explicit operation of the qualified stager.",
+  "next_scope": "Eligible for separately bound init-only staging while preserving helper4312, payload, strict oracle and other archive members. No recompilation is required for the descriptor correction.",
+  "original_failure_preserved": true,
+  "runtime_release": false,
+  "guest_permission": false,
+  "native_acceptance": false,
+  "counter_delta": 0,
+  "provenance": "Independent read-only source, exact reuse-selection and retained actual-result review; no edits, tests, root actions or census."
+}

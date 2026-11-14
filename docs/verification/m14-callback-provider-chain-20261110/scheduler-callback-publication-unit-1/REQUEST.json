@@ -1,0 +1,364 @@
+{
+  "schema": "mckernel.scheduler-callback-publication.proposed-compile.v1",
+  "status": "PROPOSED_ONE_COMPILE_ONLY_NOT_RUN_PENDING_C_INDEPENDENT_GO_AND_ROOT_FRESH_ADMISSION",
+  "owner": "RootsoleactualHOSTadmission/execution",
+  "private_source_owner": "/root/scheduler_debug_data_review_high",
+  "cwd": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-unit-1",
+  "private_output": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-unit-1/output",
+  "commands": [
+    {
+      "label": "provider-compile",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-unit-1/provider-compile.metrics",
+        "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--crate-type=lib",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "code-model=large",
+        "-C",
+        "relocation-model=static",
+        "-C",
+        "no-redzone=yes",
+        "-C",
+        "no-vectorize-loops",
+        "-C",
+        "no-vectorize-slp",
+        "-C",
+        "target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma",
+        "--emit=obj",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-unit-1/output/scheduler_callback_publication_provider.o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-unit-1/scheduler_callback_publication_unit.rs"
+      ],
+      "environment_overrides": {},
+      "stdout_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-unit-1/provider-compile.stdout",
+      "stderr_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-unit-1/provider-compile.stderr",
+      "expected_returncode": 0
+    }
+  ],
+  "inputs": {
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-unit-1/scheduler_callback_publication_unit.rs": "00e07a248d8e198f1a01702c11290c7a04b201b4b617925a1e1f09e8572b6926",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-unit-1/target_declarations.rs": "d774e45797c89292aa950b8fbd71a8bf0c05b9df7ccacb7a5bc2fee6fcebb08b",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-unit-1/publisher.rs": "bc6d4d255084ea609c5ca9be60196695607871fae1c0b4717ed9f3775bd357a8",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-unit-1/SOURCE-MANIFEST.json": "16759c238f147ab8e7811509f7e83fb0047086a66aa97e769c10ed0db2ce4605",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-unit-1/PROFILE-PROOF.json": "2cab85336bf98e98cdb473600a559f796f4ea8fcc402357daf51e7bce78f10b2",
+    "/home/holden/mckernel-work/m14-m15-scheduler-resume-20261109T211802Z/x86-callback-publication-lookahead-20261109T2342.json": "e83fee9ae7c6b197b70ccad8ae4e9257859538452193d400ac0bd4e46010e16d",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/REQUEST.json": "fa8166319eed657c68c83efca2537c30c93a89b5a5e0325abe0d5ecf953c2783",
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "/home/holden/mckernel/docs/verification/m14-f03-adapters-unit-20261105-2/stderr.txt": "52aa1b68329c0e77b9847f4d1c1d5a4f88f802ffe2e6a69f2dace0fadf9add99",
+    "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc": "70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09"
+  },
+  "source_segment_bindings": [
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 5272,
+      "last_line": 5274,
+      "segment_sha256": "fa8f93b99bc76a0e602c3a5758abae01e45b183261baa62ca5f0a9a5e5142d90",
+      "role": "Exact addr_of_mut andactualCInt import context"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 5277,
+      "last_line": 5281,
+      "segment_sha256": "f1af96fc016eac5a6ca8ae7665c610f3ae51e480097c897927994e148b74d693",
+      "role": "Exact five originalcallbackaliases"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 5283,
+      "last_line": 5286,
+      "segment_sha256": "412cab6eec257827136c87345a744e13acbe344bb5ef7180ebad9441818dc65e",
+      "role": "Exact originalexport_name/selectedmode0 owner"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 5291,
+      "last_line": 5294,
+      "segment_sha256": "bf445a0d9e8fba34d4e19dcd28ad75d0b06d579a3e91c24967810a21d3116d21",
+      "role": "Exact originalICRwrite/waitNone8B owners only"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 5298,
+      "last_line": 5309,
+      "segment_sha256": "567242684b5a6e1157e5c54c1cff276cdd558b48dbd871f00d3aa165e7f4aa50",
+      "role": "Exact allfiveOptioncallbacksize8/align8 assertionblock"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 5311,
+      "last_line": 5317,
+      "segment_sha256": "48bdac493946a25fe5cedbed1020cb73eb0a55eeb4748ba95d4ed1f83d94deed",
+      "role": "Exact genuineintentionallyemptyx2APICwait leaf/doc/attribute"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 5319,
+      "last_line": 5348,
+      "segment_sha256": "334d74f3d5ff2b550acd70252164f3e03503f95c420f2a7961c287222b77b95d",
+      "role": "Exact fullsixcoupledstorepublisher/doc/attribute/BOTHbranches"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 5287,
+      "last_line": 5290,
+      "segment_sha256": "460a0d73aebbc154f408a16335ab36d5edcc2314cd7498dd5c214f3385de9940",
+      "role": "Existinglapicwrite/read originalownerreference only; definitionsEXCLUDED"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 5295,
+      "last_line": 5296,
+      "segment_sha256": "813f5cdbf054f06113dcfa7d50ce367d79d7632564fe1acaf61c9090bb10cd0e",
+      "role": "ExistingIPI originalownerreference only; definitionEXCLUDED"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 3945,
+      "last_line": 3945,
+      "segment_sha256": "a22bdcd6759ebb7cce38b9900e7e663e56559a7e96a8efe93b0d206b97eb8458",
+      "role": "Actualmappedwrite targetsignatureonly; bodyEXCLUDED"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 3962,
+      "last_line": 3962,
+      "segment_sha256": "7d9affd65db5fe9d0541b5f0b7d5dbaac87cc32d43c7e8c6e4fac134baf39db3",
+      "role": "Actualmappedread targetsignatureonly; bodyEXCLUDED"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 3977,
+      "last_line": 3977,
+      "segment_sha256": "550efb24ac12963e85109cab5989f5d7ed6d9a603b627a66be853d99e51c5f09",
+      "role": "Actualx2write targetsignatureonly; bodyEXCLUDED"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 3994,
+      "last_line": 3994,
+      "segment_sha256": "71e5ef97e31a32207bf619f739f89ff48fdca2a4788dbc8d0fb1483265c97bd6",
+      "role": "Actualx2read targetsignatureonly; bodyEXCLUDED"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 4088,
+      "last_line": 4088,
+      "segment_sha256": "ac3333456aee7ef82d549a58ce6cdb8486b0f86d07ae6f68019cb772132dd94f",
+      "role": "Genuinecompiledx2ICRtargetsignatureonly"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 4105,
+      "last_line": 4105,
+      "segment_sha256": "208d6c810bc977000c9f10ce297c51c65acf870e3497e1e68de6a4c0051bccb9",
+      "role": "GenuinecompiledAPICICRtargetsignatureonly"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 4122,
+      "last_line": 4122,
+      "segment_sha256": "d0ebd36a44a5080998949beacde0597c1723b822a66e3a67dac7f900d98239cb",
+      "role": "GenuinecompiledAPICwaittargetsignatureonly"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 4025,
+      "last_line": 4025,
+      "segment_sha256": "d27200bbe281c9edf65890e708187aac69ea0df20c30ecaf328c0c2cb8ac0f80",
+      "role": "Genuinecompiledx2IPItargetsignatureonly"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 4048,
+      "last_line": 4048,
+      "segment_sha256": "c574b1291986079f439d3c7048eb27d999141f36203d58d8259adeb5b55abc74",
+      "role": "GenuinecompiledAPICIPItargetsignatureonly"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "first_line": 5,
+      "last_line": 5,
+      "segment_sha256": "b09cd972ccaa959019e419236b46df2f11a8eebbae2cbcf8380be1a3c45e7ad6",
+      "role": "ActualCInt=i32"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/lib.rs",
+      "first_line": 94,
+      "last_line": 94,
+      "segment_sha256": "4fefcc69e0dc6f48051ca4ae83e2a725ccefc386861463a2e76508354c5bdbbc",
+      "role": "ActualCPUmodule selected"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "first_line": 187,
+      "last_line": 187,
+      "segment_sha256": "cce0758db812ec01f3ec037f576e8e612ca1ebc38bbd17bcf64ebc10284766cd",
+      "role": "ActualRustCPU buildinput"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "first_line": 729,
+      "last_line": 730,
+      "segment_sha256": "4256c5202df3cad22f53ced67131586dced0f7179e081c1740b6d95039cf352e",
+      "role": "PairedRustCPU Cselector"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+      "first_line": 1408,
+      "last_line": 1410,
+      "segment_sha256": "d4addae66cf9ac816d90ab4ab5e49e0eec162ee91db3f9bd2097d6aabbcbdb89",
+      "role": "PairedCpublisher prototypeonly"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+      "first_line": 1421,
+      "last_line": 1435,
+      "segment_sha256": "c6b1dbfa04b9d3a2f1af7808ae795dfc77178332a781acbb8c0af29a2c65f9c0",
+      "role": "Originalcoupledsixassignmentbothbranches reference only; noinitcallerprepared"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+      "first_line": 349,
+      "last_line": 353,
+      "segment_sha256": "5504c8c5690100df2cc7c772e00ca28e4746cc90a37923ac01e6ab570e08b871",
+      "role": "ActualselectedmodeCasmname/reference storage"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+      "first_line": 372,
+      "last_line": 381,
+      "segment_sha256": "8915a2e6fea34735198bee5d05796c7d18d4574f68c77d971409b1192eb7b3a0",
+      "role": "ActualICR/waitpointerC ABI/reference storage"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+      "first_line": 604,
+      "last_line": 609,
+      "segment_sha256": "fb580da280e6114f0a28d4e8ee643481e2f4c64c7e6f137811a82eec21fb1095",
+      "role": "ExistingIPIpointerC ABIonly"
+    }
+  ],
+  "compiler_profile": {
+    "source_receipt": "/home/holden/mckernel/docs/verification/m14-f03-adapters-unit-20261105-2/receipt.json",
+    "compiler": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+    "compiler_sha256": "70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09",
+    "compiler_version_from_receipt": "rustc 1.95.0-nightly (c04308580 2026-02-18)",
+    "no_std": true,
+    "warning_policy": "Require exact unchanged retained single target-feature sse2 ABI warning bytes; no extra warnings suppressed. This is inherited HOST partial-codegen scope, not final/native ABI acceptance.",
+    "expected_compile_stderr_path": "/home/holden/mckernel/docs/verification/m14-f03-adapters-unit-20261105-2/stderr.txt",
+    "expected_compile_stderr_sha256": "52aa1b68329c0e77b9847f4d1c1d5a4f88f802ffe2e6a69f2dace0fadf9add99",
+    "required_source_feature": "None beyond no_std/originalcoreptr/Option/types/statics; no asm/hardware/runtimefixture source.",
+    "retained_compiler_codegen_options_unchanged": true,
+    "source_selection_delta": "Onlyprivateunit/output/metrics/capturepaths; no extra cfg/env/feature/lint/targetchange."
+  },
+  "retained_profile_reference": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/REQUEST.json",
+    "sha256": "fa8166319eed657c68c83efca2537c30c93a89b5a5e0325abe0d5ecf953c2783",
+    "only_delta": "privateunit/output/metrics/capturepaths; no cfg/envchange"
+  },
+  "profile": {
+    "CPU": [
+      6
+    ],
+    "local_serial_jobs": 1,
+    "AS_bytes": 1073741824,
+    "CPU_seconds": 45,
+    "wall_seconds": 60,
+    "kill_after_seconds": 5,
+    "FSIZE_bytes": 67108864,
+    "core_bytes": 0,
+    "aggregate_HOST_CPUs": [
+      0,
+      6,
+      7
+    ],
+    "aggregate_jobs_max": 3,
+    "aggregate_HOST_total_bytes_all_overhead": 4294967296,
+    "retained_prior_bytes": 19327352832,
+    "host_floor_bytes": 4294967296,
+    "fresh_MemAvailable_minimum_bytes": 27917287424
+  },
+  "provider_object": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-unit-1/output/scheduler_callback_publication_provider.o",
+  "expected_public_T": [
+    "x86_lapic_bsp_select_bridge",
+    "x2apic_wait_icr_idle"
+  ],
+  "expected_new_global_B": [
+    {
+      "ELF_name": "x86_cpu_x2apic_mode",
+      "Rust_name": "selected_mode",
+      "source_attribute": "export_name=\"x86_cpu_x2apic_mode\"",
+      "type": "actualCInt",
+      "initial": 0,
+      "bytes": 4,
+      "alignment": 4,
+      "expected_kind": "B"
+    },
+    {
+      "ELF_name": "lapic_icr_write",
+      "type": "Option<actualWriteIcr>",
+      "initial": "None",
+      "bytes": 8,
+      "alignment": 8,
+      "expected_kind": "B"
+    },
+    {
+      "ELF_name": "lapic_wait_icr_idle",
+      "type": "Option<actualWaitIcr>",
+      "initial": "None",
+      "bytes": 8,
+      "alignment": 8,
+      "expected_kind": "B"
+    }
+  ],
+  "expected_existing_storage_U": [
+    "lapic_write",
+    "lapic_read",
+    "x86_issue_ipi"
+  ],
+  "expected_genuine_function_U": [
+    "x2apic_write",
+    "x2apic_read",
+    "apic_write",
+    "apic_read",
+    "x2apic_icr_write",
+    "apic_icr_write",
+    "apic_wait_icr_idle",
+    "x2apic_x86_issue_ipi",
+    "apic_x86_issue_ipi"
+  ],
+  "expected_standalone_counts": {
+    "T_names": 2,
+    "B_owners": 3,
+    "B_logical_source_bytes_before_alignment": 20,
+    "real_U": 12
+  },
+  "source_runtime_private_helpers": [],
+  "actual_emission_policy": "Actualcompilerfunction/branchbytes, sourceaddressrelocations/all6storageaddressowners+realbranchtargets, emptywaitcode, private/readonly/eh_framedata andBSSinitialdeclarations requirelatercalledobjectgate. No fixedinstructioncount or originalruntimepublication/atomicityclaim; unknownemission STOPs forreview.",
+  "diagnostic_policy": "ExactretainedsingleSSEABIwarning52aa/emptystdout, no addedsuppression. Firstunexpectedfailurepreserved/stopped/noautomaticretry.",
+  "metadata_or_join_commands_selected": false,
+  "future_actual_current_partial": "UNBOUND; Rootreuseactualmatchingexisting3slots/1ftargetowners andrejectnewmode/ICR/waitduplicates throughrealcurrentowner/collisionprejoingates. Neverinfer sourcepreparationiscompletedprovider/nativeevidence.",
+  "not_runnable_until": "SeparateCexactwhole6store/BOTHbranch/ABI/initialstorage/owner/profileGO andRootfreshactualHOSTadmission; nofixture/storeobservation/runtimeauthorized.",
+  "scope": "Exactpublisher+genuineemptywait+3missingoriginaldata only, 3existingdata+9actualfunctiontargets remainexternal. No bootselectorcaller/modequery/init/MSR/MMIO/hardware/callbackinvocation/native/default/Cretirement/score. Newf03_wait_release_process/thread UNKNOWN/NO_GO retainedwithoutinspection/preparation/reassignment."
+}

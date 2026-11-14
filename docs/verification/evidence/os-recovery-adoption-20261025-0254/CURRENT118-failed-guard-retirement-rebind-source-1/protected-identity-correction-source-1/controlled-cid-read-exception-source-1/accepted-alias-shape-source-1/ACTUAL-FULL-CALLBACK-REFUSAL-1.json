@@ -1,0 +1,51 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "runtime_authority": null,
+  "status": "PRESERVED_READONLY_PREFLIGHT_REFUSAL",
+  "source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/retire_exact_failed_guard.py",
+    "bytes": 19823,
+    "sha256": "5cc6900c98abbe1640259aad1f44555e15dd85796e2c417f80cbfbd6184d1f4f"
+  },
+  "bindings": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/BINDINGS.json",
+    "bytes": 37582,
+    "sha256": "6672c9eaa066b4c134c9fb3c30417bfc11a4e57b343837547b37d86029ea1ce2"
+  },
+  "script": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/actual_cid_preflight.py",
+    "bytes": 2657,
+    "sha256": "ea03756ccc01861af7ae438035d3b46945770aa8472938c8ce18ca43e036c099"
+  },
+  "actual_tool_chunk": "6bd2e2",
+  "actual_tool_exit_code": 1,
+  "error": "reviewed_exact_idle_guard_kernel_protocol.Refusal: protected regular file shape",
+  "first_refusing_protected_row_identified_by_exact_declared_metadata": {
+    "canonical": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3/FINITE-REVIEW-HANDOFF/physical.CHILD-STARTED.json",
+      "bytes": 514,
+      "sha256": "354af80613e32f416c2f993858671bc184dd33246496e4ba403992ff0b58e64f"
+    },
+    "alias": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3/FINITE-REVIEW-HANDOFF/physical.CHILD-STARTED.json.complete-source-2221578",
+      "bytes": 514,
+      "sha256": "354af80613e32f416c2f993858671bc184dd33246496e4ba403992ff0b58e64f"
+    },
+    "publisher_pid": 2221578,
+    "expected": {
+      "st_dev": 66306,
+      "st_ino": 1206855,
+      "st_mode": 33024,
+      "st_uid": 1000,
+      "st_gid": 1000,
+      "st_nlink": 2,
+      "st_size": 514,
+      "st_mtime_ns": 1793233973149786649,
+      "st_ctime_ns": 1793233973153786775
+    }
+  },
+  "actor_pid_birth_not_persisted": true,
+  "actual_guard_returned_before_callback_by_control_flow": true,
+  "guard_clock_not_persisted_by_failed_script": true,
+  "target_process_or_query_or_pidfd_or_signal_or_lock_effects": 0
+}

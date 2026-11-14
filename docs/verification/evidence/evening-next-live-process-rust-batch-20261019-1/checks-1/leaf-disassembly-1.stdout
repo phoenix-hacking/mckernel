@@ -1,0 +1,58 @@
+
+/home/holden/mckernel-work/host-preparation/evening-next-live-process-rust-batch-20261019-1/checks-1/leaf.o:     file format elf64-x86-64
+
+
+Disassembly of section .ltext.process_hash:
+
+Disassembly of section .ltext.process_list_detach_result:
+
+Disassembly of section .ltext.process_list_is_linked_result:
+
+Disassembly of section .ltext.process_release_hash_detach_bridge:
+
+Disassembly of section .ltext.process_release_sibling_detach_bridge:
+
+0000000000000000 <process_release_sibling_detach_bridge>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	41 56                	push   %r14
+   6:	53                   	push   %rbx
+   7:	48 83 e4 c0          	and    $0xffffffffffffffc0,%rsp
+   b:	48 81 ec 80 00 00 00 	sub    $0x80,%rsp
+  12:	49 89 fe             	mov    %rdi,%r14
+  15:	bb 40 01 00 00       	mov    $0x140,%ebx
+  1a:	48 03 9f 10 01 00 00 	add    0x110(%rdi),%rbx
+  21:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+  28:	00 00 00 
+			23: R_X86_64_64	process_mcs_writer_lock_bridge
+  2b:	48 89 e6             	mov    %rsp,%rsi
+  2e:	48 89 df             	mov    %rbx,%rdi
+  31:	ff d0                	callq  *%rax
+  33:	49 8b 86 88 01 00 00 	mov    0x188(%r14),%rax
+  3a:	48 85 c0             	test   %rax,%rax
+  3d:	74 3d                	je     7c <process_release_sibling_detach_bridge+0x7c>
+  3f:	49 8d 96 80 01 00 00 	lea    0x180(%r14),%rdx
+  46:	49 8b 8e 80 01 00 00 	mov    0x180(%r14),%rcx
+  4d:	48 85 c9             	test   %rcx,%rcx
+  50:	40 0f 94 c6          	sete   %sil
+  54:	48 39 d1             	cmp    %rdx,%rcx
+  57:	0f 94 c2             	sete   %dl
+  5a:	40 08 f2             	or     %sil,%dl
+  5d:	75 1d                	jne    7c <process_release_sibling_detach_bridge+0x7c>
+  5f:	48 89 41 08          	mov    %rax,0x8(%rcx)
+  63:	48 89 08             	mov    %rcx,(%rax)
+  66:	49 c7 86 80 01 00 00 	movq   $0x100129,0x180(%r14)
+  6d:	29 01 10 00 
+  71:	49 c7 86 88 01 00 00 	movq   $0x200229,0x188(%r14)
+  78:	29 02 20 00 
+  7c:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+  83:	00 00 00 
+			7e: R_X86_64_64	process_mcs_writer_unlock_bridge
+  86:	48 89 e6             	mov    %rsp,%rsi
+  89:	48 89 df             	mov    %rbx,%rdi
+  8c:	ff d0                	callq  *%rax
+  8e:	48 8d 65 f0          	lea    -0x10(%rbp),%rsp
+  92:	5b                   	pop    %rbx
+  93:	41 5e                	pop    %r14
+  95:	5d                   	pop    %rbp
+  96:	c3                   	retq   

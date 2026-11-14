@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "memory.munmap-unaligned",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/memory.munmap-unaligned"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["rc=-1 errno=22 intact=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["munmap returns -1", "errno is EINVAL (22) immediately", "Both original pages remain accessible and unchanged after rejection"],
+  "unresolved_expectations": ["Bind pinned guest EINVAL numeric value and canonical output/input hashes before execution."],
+  "max_question_for_reviewer": "Confirm unaligned munmap is rejected atomically and the two-page mapping remains intact."
+}

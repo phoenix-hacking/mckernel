@@ -1,0 +1,31 @@
+{
+  "schema": "mckernel.stability-rocky-lean-source-review.v1",
+  "recorded_at": "2026-09-28T12:16:00-07:00",
+  "decision": "PASS_WITH_EXACT_LIMITATION",
+  "candidate": {
+    "path": "docs/verification/stability-rocky-lean-source-candidate-20260928-1.json",
+    "sha256": "6ead21ce9069a2d09ccbc98eec584c00c44b9375bdfb80443cb730a2bd3d8628"
+  },
+  "root": "/home/holden/mckernel-work/scratch/rocky-lean-source-20260928-2",
+  "outer_commit": "f8941f1b5ad136c65b6a20424f10250253d2be0b",
+  "nested_ihk_commit": "21a0d1eb1705c3ee597aed41358ba4c0a92d5f8c",
+  "canonical_tar_sha256": "0804ffc60549a632b915566a61f4b3ee36b9b2581532082668684754b22dfae4",
+  "reviewed": [
+    "All required sparse worktree source/build paths and exact recursive submodules are present.",
+    "The intentional +21a IHK state is clean, campaign-authored and preserves the independently source-reviewed whitebox mirror.",
+    "Root Git metadata is read-only; the validator takes its already-initialized submodule branch and cannot reset the IHK selection.",
+    "The IHK compatibility patch is forward-applicable and wrapper/validator/patch identities match.",
+    "The tree has 8,420 files, 263,342,044 logical bytes and 277,737,472 allocated bytes rather than staging the 18-GiB evidence-heavy checkout and object store."
+  ],
+  "promisor_limitation": {
+    "missing_objects": 3135,
+    "constraint": "Do not run historical/tree/blob object traversal or permit lazy fetch in this stage.",
+    "allowed_git_operations": ["rev-parse HEAD", "submodule status --recursive", "the intentional failing root write probe", "IHK git apply --check and normal worktree patch application"],
+    "review_result": "The Rocky validator/build/source-retirement path consumes present filesystem paths and build outputs; under this frozen command set the incomplete promisor store does not block a diagnostic packet."
+  },
+  "limitations": [
+    "No current-candidate build, root operation, Rocky/QEMU guest or shutdown cycle has run.",
+    "A separately reviewed execution packet must freeze the no-object-traversal/no-lazy-fetch rule and the exact +21a IHK binding.",
+    "This source-stage result is not shutdown, production or whole-OS acceptance."
+  ]
+}

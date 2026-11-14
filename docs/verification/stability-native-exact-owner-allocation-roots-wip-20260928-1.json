@@ -1,0 +1,50 @@
+{
+  "schema": "mckernel.source-wip.v1",
+  "status": "WIP",
+  "recorded_at": "2026-09-29T01:17:29Z",
+  "source_revision_before_patch": "78e7178cc4a60162fe5ad37265501b5769469341",
+  "scope": "source-only owner admission for all preparation-owned memory allocation roots",
+  "changed_files": {
+    "scripts/native_rust_exact_build_container_owner.py": "32e0c28d8a5112e2d08126dcc2e1089104e396761ab6952bf0374e1ad16e0d5f",
+    "scripts/tests/test_native_rust_exact_build_container_owner.py": "d4db50d235020f7e579ae6c621f68a3e8a8197169d37401584a72484d248c3a9"
+  },
+  "implemented": [
+    "memory_allocation_roots is a mandatory nonempty list and must contain source_root",
+    "roots must be absolute existing nonsymlink directories without duplicate, alias, ancestor, or descendant overlap",
+    "each root has fail-closed filesystem classification and allocated-byte measurement",
+    "all tmpfs root allocations are summed with the pinned 12-GiB container reservation before lease or Docker activity",
+    "per-root allocation rows and aggregate totals are retained in the owner receipt"
+  ],
+  "verification": {
+    "command": "python3 -m unittest scripts.tests.test_native_rust_exact_build_container_owner && python3 -m py_compile scripts/native_rust_exact_build_container_owner.py scripts/tests/test_native_rust_exact_build_container_owner.py && git diff --check -- scripts/native_rust_exact_build_container_owner.py scripts/tests/test_native_rust_exact_build_container_owner.py",
+    "result": "PASS",
+    "tests": 48,
+    "elapsed_seconds": 3.240
+  },
+  "review": "PENDING: shutdown arrived before independent review of these exact bytes",
+  "execution": {
+    "candidate_preparation": false,
+    "lease": false,
+    "docker": false,
+    "build": false,
+    "guest": false
+  },
+  "retained_external_block": "The prior command-level candidate packet remains BLOCKED until these exact owner bytes receive independent review and a corrected packet uses durable scratch evidence/logs plus an explicit staging/emergency headroom bound.",
+  "resource_snapshot": {
+    "host_available_bytes": 25067454464,
+    "scratch_available_bytes": 21611433984,
+    "dev_shm_available_bytes": 16597475328,
+    "mem_available_kib": 29074920
+  },
+  "retained_failed_container": {
+    "id": "110dfe01e3fb5dea16c30911f3589dc49137dcaaff905a66dd4c0a6f731799b0",
+    "name": "mckernel-exact-272a777b73aa4a5185f607bfa8fad490",
+    "state": "Exited (1)"
+  },
+  "active_launcher_processes": [
+    {"role": "wrapper", "pid": 3399308, "starttime": 83682487},
+    {"role": "worker", "pid": 3399313, "starttime": 83682494},
+    {"role": "app-server", "pid": 3399317, "starttime": 83682500}
+  ],
+  "acceptance_credit": "none"
+}

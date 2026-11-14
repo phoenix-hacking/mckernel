@@ -1,0 +1,90 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_SOURCE16_CANDIDATE_AND_FIXTURE_SOURCE_ONLY",
+  "compiler_runtime_commands": 0,
+  "body_reused_unchanged": "unsafe extern \"C\" fn f06_process_vm_rw_lookup(vm: *mut c_void, start: CULong, end: CULong) -> *mut c_void {\n    unsafe { crate::process_helpers::lookup_process_memory_range(vm.cast(), start, end).cast() }\n}\n",
+  "selected_provider": "arch_process_vm_rw_lookup_range_bridge",
+  "borrow_contract": "Caller holds qualified memory_range_lock pair; VM and range remain live through final range use, before unlock. Cache writes are existing accepted behavior; no new concurrency claim.",
+  "closure_functions": [
+    "vm_range_from_rb_node",
+    "process_range_cache_hit_result",
+    "process_lookup_range_relation_result",
+    "process_range_cache_store_result",
+    "process_lookup_memory_range_body_result",
+    "process_range_public_log_result",
+    "process_lookup_memory_range_public_result",
+    "lookup_process_memory_range"
+  ],
+  "canonical_writes": 0,
+  "new_data_bytes": 0,
+  "lock_recompile": false,
+  "remaining": [
+    "source fixture validation",
+    "explicit ordinary execution grant",
+    "actual ABI/codegen/link/HOST fixture",
+    "central coherent current wholecrate/C integration",
+    "default image/native borrowed lifetime/cache concurrency proof"
+  ],
+  "sources": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-process-vm-rw-source-1/candidate/syscall_policy.process_vm_rw.FRAGMENT.rs",
+      "sha256": "3f9ecdfa165680224b983928939d5d81015cc9a075fae25210deafb7f9c1c3b5",
+      "bytes": 9251
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-15-process-vm-lock-callbacks/candidate/arch-syscall.c",
+      "sha256": "569dcdda86e88a84242f965165a3b124566d0bf8329ad8db25a2ffb44f948683",
+      "bytes": 113875
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "sha256": "a0ebb59bc2e8dc3ca0c3ea8a5d0461bf16bfae2183ccd931eb0be50a53da0220",
+      "bytes": 599927
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "bytes": 76151
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/rbtree.rs",
+      "sha256": "114e8dbd0b48abc156879bfd2f019071c30174019e97904c028ccee911840256",
+      "bytes": 22536
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup/candidate/arch-syscall.c",
+      "sha256": "695659b1101036a95d64bd59f8ab62e7cb6461cb115bff4e55586b4794391b75",
+      "bytes": 114100
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup/candidate/process-vm-lookup.FRAGMENT.rs",
+      "sha256": "0a02ef4f2af2244df6f6936d3b3fa188669c453bd9226caf46aef4f530d933cc",
+      "bytes": 755
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup/candidate/exact-one-C-provider.diff",
+      "sha256": "ab03757996a9dffccba58ba70a85ae058f5c26472a8ea4553bbbfa3026d387e5",
+      "bytes": 973
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup/fixture/original-lookup.ACTUAL.inc",
+      "sha256": "6d7cdb151574758ac6fb6ee79ede5eb04eca04ac5bce6bf9ac584ff9495e2d90",
+      "bytes": 194
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup/fixture/process_helpers.rs",
+      "sha256": "49bada43830962422a94f0ebf1dd7c94eaf00971eed1bb374c4c680eea3dd930",
+      "bytes": 4646
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup/fixture/original-C.c",
+      "sha256": "466de788750f78bc1cf70af75c976bd8463e408604e2c48e60273928a36422f6",
+      "bytes": 337
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup/fixture/lookup_actual.rs",
+      "sha256": "ea207b69b5192c49cbe0e4cf9e046ad6537b270b1e5ae7f4987a6cc112b52650",
+      "bytes": 807
+    }
+  ]
+}

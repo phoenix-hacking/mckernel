@@ -1,0 +1,40 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_EXACT_TWO_CANONICAL_PATHS_EXCLUDED_FROM_ACTIVE_256PINS_AND_FINITE_CONSUMED_PATH_REFS",
+  "owner": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-diagnostic-collector-successor-1/source/native_diagnostic_container_owner.py",
+    "sha256": "626bef088a1c8d60c5c41afb88d59faeb55c025c3f11c9d47c649c571e05e2eb",
+    "bytes": 139652
+  },
+  "cohort": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-diagnostic-collector-successor-1/COHORT-BINDINGS.json",
+    "sha256": "e746c77878591125fc7ad87a90cab5e3ada208f539cccbb06af0b43b8be66b85",
+    "bytes": 3249
+  },
+  "footprint": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-diagnostic-collector-successor-1/ACTUAL-MOUNT-AND-OPEN-FOOTPRINT-RESULT.json",
+    "sha256": "93d2ff8e8c183a6deb5550a3a736ab318bea0f45e598eb9231fb7529189496ca",
+    "bytes": 197652
+  },
+  "guarded_source_pin_count": 256,
+  "bound_manifest_line": 577,
+  "SOURCE_HASHES_line": 41,
+  "bound_manifest_source_sha256": "d65b222eca29d027cbe5ed0a940a739abd4966137fa38946569bcc25d0e8231a",
+  "checks": {
+    "/home/holden/mckernel/arch/x86_64/kernel/memory.c": {
+      "exact_guarded_source_pin": false,
+      "normalized_guarded_source_pin": false,
+      "exact_cohort_reference": false,
+      "exact_consumed_artifact_or_mount_reference": false
+    },
+    "/home/holden/mckernel/kernel/rust/x86_memory_helpers.rs": {
+      "exact_guarded_source_pin": false,
+      "normalized_guarded_source_pin": false,
+      "exact_cohort_reference": false,
+      "exact_consumed_artifact_or_mount_reference": false
+    }
+  },
+  "hold_required": false,
+  "qualification": "ASTliteral sourcepin extraction only; owner neverimported/executed. Finite COHORT/actualmount-open footprint exactscalarpath checks only, no recursiveaudit/probes. This is sourceintegration exclusion, not physicalretirement or nativeacceptance.",
+  "root_live_long10972_and_capsule_immutable_changes": 0
+}

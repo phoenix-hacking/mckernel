@@ -1,0 +1,115 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "milestone": "M15-P05",
+  "lane": 2,
+  "original": "/home/holden/mckernel/executer/user/mcps.in",
+  "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-mcps/mcps.rs",
+  "actual_behavior": "10-line installed Bash script ignores its own arguments and invokes ${prefix}/bin/mcinspect --kernel=${MCKERNELDIR}/mckernel.img --ps; no independent ps/proc parsing, options or filtering",
+  "reuse": {
+    "path": "executer/user/rust/mcinspect_helpers.rs",
+    "symbols": [
+      "mcinspect_mcps_body_result",
+      "mcps",
+      "mcinspect_ps_header_result",
+      "print_thread"
+    ],
+    "consumer": "continue invoking installed mcinspect --ps unchanged; do not copy unrelated crash/mcstat format helpers"
+  },
+  "candidate": "68-line no_std Linux x86_64 Rust C-main object; libc posix_spawn/waitpid with inherited descriptors/environment; configured prefix/kernel path compiled in; no custom shell runtime body",
+  "external_dependencies": [
+    "baseline libc posix_spawn/waitpid/opendir/closedir/strerror/fprintf/abort",
+    "existing installed mcinspect implementation and its current dependencies, including BFD shim debt owned by lane3"
+  ],
+  "preservation": {
+    "argv": [
+      "${prefix}/bin/mcinspect",
+      "--kernel=${MCKERNELDIR}/mckernel.img",
+      "--ps"
+    ],
+    "user_arguments": "ignored exactly as original, including --help",
+    "streams": "child stdin/stdout/stderr inherited without parsing or formatting",
+    "child_normal_exit": "status0-255 returned unchanged",
+    "signal_status": "128+signal implementation prepared; exact original Bash status/diagnostic parity unproven",
+    "missing_and_permission_errors": "C-locale line10 diagnostic and127/126 implementation prepared, untested",
+    "no_direct_proc": "actual process enumeration remains existing mcinspect Rust; no direct Linux ps command or /proc interface introduced"
+  },
+  "remaining_exact_parity_boundaries": [
+    "Bash signal-death stderr line is NOT implemented/accepted; two full parity cases intentionally remain in the matrix to expose actual difference. Fix only from retained executable evidence; do not exclude failed cases for PASS.",
+    "Legacy configured paths with whitespace, wildcard or shell syntax undergo shell evaluation/splitting; Rust proposal restricts literal configured paths instead of embedding a shell. Needs scope/contract review for supported install prefix.",
+    "Invalid non-native executable replacement files, missing shebang interpreters and Bash ENOEXEC fallback are not replicated; actual supported mcinspect must be a valid installed executable.",
+    "Non-C localized Bash diagnostics, resource-exhaustion fork/spawn retries and unexpected wait ownership errors need explicit contract/native evidence if in supported acceptance scope."
+  ],
+  "fixture": {
+    "driver": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-mcps/fixture/run_equivalence.py",
+    "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-mcps/reference/mcps.in",
+    "stub": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-mcps/fixture/mcinspect_stub.py",
+    "cases": 23,
+    "signal_parity_open_cases": 2,
+    "command": "/usr/bin/python3 -I /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-mcps/fixture/run_equivalence.py --execute --cc /usr/bin/cc --rustc /home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
+    "observations": [
+      "raw stdout bytes",
+      "raw stderr bytes",
+      "process exit status",
+      "exact mcinspect argv",
+      "cwd/environment sentinel/stdin inheritance"
+    ],
+    "normalization": "Only dynamic worker PID at the exact Bash diagnostic prefix is normalized for comparison; raw captures retained. No signal result/diagnostic is ignored.",
+    "records": "Synthetic process rows/header/empty/binary streams only; no real /proc, devices or McKernel image reads.",
+    "isolation": "Private configured prefix with Python mcinspect test executable; equal logical mcps symlink invocation switches original/Rust in isolated output. No external application writes.",
+    "ownership": "Driver after --execute admits PR_SET_CHILD_SUBREAPER for itself, starts each compiler/CLI in an owned process group, captures/joins leader and verifies group gone; timeouts or adopted descendants kill/reap and fail, never retry. Admission and actual retirement not yet exercised.",
+    "bounds": {
+      "cpu_count": 1,
+      "memory_mib": 1024,
+      "tasks_max": 64,
+      "wall_seconds": 130,
+      "work_deadline_seconds": 120,
+      "cleanup_grace_seconds_max": 4,
+      "storage_mib": 32,
+      "jobs": 1,
+      "root": "none",
+      "devices": "none",
+      "Docker": "none",
+      "guest": "none"
+    },
+    "retention": "fixture-output existence causes refusal; raw outputs/traces, commands, ownership and final summary retained; original failures never overwritten"
+  },
+  "selector": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-mcps/CMake-selection-proposal.cmake",
+    "edits": "Replace configure_file(mcps.in mcps @ONLY), remove only mcps install(PROGRAMS) item, add Rust target/install and mcinspect build dependency; no fallback shell runtime in default profile",
+    "shared_file_owner": "root coordinates executer/user/CMakeLists.txt with lane3 BFD selector work; proposal only"
+  },
+  "validation_performed": [
+    "/usr/bin/python3 -I fixture/run_equivalence.py preparation-only path passed with23 cases and2 open signal parity cases; no compilers or fixtures run",
+    "Python AST source parsing",
+    "retained original compared byte-for-byte with canonical source; no source hashing"
+  ],
+  "lane4_ihklib_abi_forward": {
+    "owner": "case227_stage",
+    "consumer": "previous frozen M15-F06 ihkconfig candidate",
+    "functions": [
+      "int ihk_reserve_cpu(int index,int *cpus,int num_cpus);",
+      "int ihk_reserve_mem(int index,struct ihk_mem_chunk *mem_chunks,int num_mem_chunks);",
+      "int ihk_get_num_os_instances(int index);",
+      "int ihk_get_os_instances(int index,int *indices,int num_os_instances);"
+    ],
+    "public_type": "struct ihk_mem_chunk {unsigned long size; int numa_node_number;}; x86_64 size16,node offset8",
+    "direct_kernel_uapi_types": [
+      "ihk_cpu_req {int *cpus; int num_cpus;} size16,count offset8",
+      "ihk_mem_req {size_t *sizes;int *numa_ids;int num_chunks,min_chunk_size,max_size_ratio_all,timeout;} size32,count offset16,timeout offset28"
+    ],
+    "private_api_imports": "none; preserve public ABI while libihk C is migrated"
+  },
+  "accounting": {
+    "source_ready_for_first_fixture": true,
+    "compiler_pass": false,
+    "fixture_pass": false,
+    "all_semantics_complete": false,
+    "default_canonical_selector": false,
+    "production_link": false,
+    "native_acceptance": false,
+    "script_retired": false,
+    "first_ihkconfig_candidate_changed": false,
+    "functional35_denominator_changed": false,
+    "M14_changed": false
+  }
+}

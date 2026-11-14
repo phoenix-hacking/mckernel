@@ -1,0 +1,177 @@
+{
+  "argv_by_phase": {
+    "normalization": [
+      "/usr/bin/timeout",
+      "--signal=TERM",
+      "--kill-after=2s",
+      "35s",
+      "/usr/bin/taskset",
+      "-c",
+      "6",
+      "/usr/bin/prlimit",
+      "--as=1073741824:1073741824",
+      "--cpu=30:30",
+      "--fsize=67108864:67108864",
+      "--core=0:0",
+      "--nofile=256:256",
+      "--",
+      "/home/holden/anaconda3/bin/python3.9",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/terminal-consumer-preparation-1/prepare_successor_sources_correction1.py",
+      "normalization",
+      "--bindings",
+      "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/terminal-consumer-preparation-1/ACTUAL-SOURCE-GENERATOR-BINDINGS-ARTIFACT-BOUND.json",
+      "--bindings-sha256",
+      "2f0bd8462d3d4bf25a1f110e78f1cafd89e3fb0414be94a7bb4dfaa4d2fcbccb"
+    ],
+    "runtime": [
+      "/usr/bin/timeout",
+      "--signal=TERM",
+      "--kill-after=2s",
+      "35s",
+      "/usr/bin/taskset",
+      "-c",
+      "6",
+      "/usr/bin/prlimit",
+      "--as=1073741824:1073741824",
+      "--cpu=30:30",
+      "--fsize=67108864:67108864",
+      "--core=0:0",
+      "--nofile=256:256",
+      "--",
+      "/home/holden/anaconda3/bin/python3.9",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/terminal-consumer-preparation-1/prepare_successor_sources_correction1.py",
+      "runtime",
+      "--bindings",
+      "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/terminal-consumer-preparation-1/ACTUAL-SOURCE-GENERATOR-BINDINGS-ARTIFACT-BOUND.json",
+      "--bindings-sha256",
+      "2f0bd8462d3d4bf25a1f110e78f1cafd89e3fb0414be94a7bb4dfaa4d2fcbccb"
+    ],
+    "stage": [
+      "/usr/bin/timeout",
+      "--signal=TERM",
+      "--kill-after=2s",
+      "35s",
+      "/usr/bin/taskset",
+      "-c",
+      "6",
+      "/usr/bin/prlimit",
+      "--as=1073741824:1073741824",
+      "--cpu=30:30",
+      "--fsize=67108864:67108864",
+      "--core=0:0",
+      "--nofile=256:256",
+      "--",
+      "/home/holden/anaconda3/bin/python3.9",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/terminal-consumer-preparation-1/prepare_successor_sources.py",
+      "stage",
+      "--bindings",
+      "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/terminal-consumer-preparation-1/ACTUAL-SOURCE-GENERATOR-BINDINGS-ARTIFACT-BOUND.json",
+      "--bindings-sha256",
+      "2f0bd8462d3d4bf25a1f110e78f1cafd89e3fb0414be94a7bb4dfaa4d2fcbccb"
+    ],
+    "terminal": [
+      "/usr/bin/timeout",
+      "--signal=TERM",
+      "--kill-after=2s",
+      "35s",
+      "/usr/bin/taskset",
+      "-c",
+      "6",
+      "/usr/bin/prlimit",
+      "--as=1073741824:1073741824",
+      "--cpu=30:30",
+      "--fsize=67108864:67108864",
+      "--core=0:0",
+      "--nofile=256:256",
+      "--",
+      "/home/holden/anaconda3/bin/python3.9",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/terminal-consumer-preparation-1/prepare_successor_sources_correction1.py",
+      "terminal",
+      "--bindings",
+      "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/terminal-consumer-preparation-1/ACTUAL-SOURCE-GENERATOR-BINDINGS-ARTIFACT-BOUND.json",
+      "--bindings-sha256",
+      "2f0bd8462d3d4bf25a1f110e78f1cafd89e3fb0414be94a7bb4dfaa4d2fcbccb"
+    ]
+  },
+  "followups": {
+    "normalization": {
+      "argv": [
+        "/home/holden/anaconda3/bin/python3.9",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/bound-normalization-source-1/prepare_native.py"
+      ],
+      "profile": "Existing normalization ordinary envelope only with fresh dispatcher grant; retain strict actual stage join and no-effect argv route."
+    },
+    "runtime": {
+      "next_argv": [
+        "/home/holden/anaconda3/bin/python3.9",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/bound-runtime-source-1/check_current_whole_caller.py"
+      ],
+      "profile": "Existing ordinary CPU6/1GiB/55CPU/52child/60outer wholecaller envelope only after independent eligibility and fresh root grant. No snapshot or guest in this check.",
+      "subsequent": "Existing pending19/static/final19/LASTsnapshot/machine/guard/oneowner chain; sole heavyCPUs2-5/4CPU12GiBnoSwap512tasks and aggregate22.7GiB/floors unchanged."
+    },
+    "stage": {
+      "argv": [
+        "/home/holden/anaconda3/bin/python3.9",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/bound-stage-source-1/stage_numa.py",
+        "--case",
+        "numa",
+        "--binding",
+        "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/bound-stage-source-1/binding.json",
+        "--binding-sha256",
+        null
+      ],
+      "expected_delta": [
+        "images/mckernel.img"
+      ],
+      "profile": "Existing independently eligible CPU6/1GiB/30CPU/35wall ordinary stage grant; fresh admission required.",
+      "source": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/bound-stage-source-1/stage_numa.py",
+      "unchanged": 59
+    },
+    "terminal": {
+      "operations": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/bound-terminal-source-1/EXECUTOR-SIX-OPERATIONS.json",
+      "ordinary": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/bound-terminal-source-1/ORDINARY-CHECK-OPERATION.json",
+      "profile": "Existing six-operation/read-only-preflight profiles copied exactly; separately reviewed observer/cleanup releases mandatory, not granted here."
+    }
+  },
+  "generator": {
+    "bytes": 22536,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/terminal-consumer-preparation-1/prepare_successor_sources_correction1.py",
+    "sha256": "ca056c99507197ec6b2bba222e1ef3b1ab969722f13e098177c0b05e64e72b5f"
+  },
+  "preserve": "No accepted prior file edits; no candidate imports/checks/stage/runtime/build/root calls by generator; only finite private source/DATA outputs.",
+  "profile": {
+    "Docker": false,
+    "as_bytes": 1073741824,
+    "core_bytes": 0,
+    "cpu": 6,
+    "cpu_seconds": 30,
+    "fsize_bytes": 67108864,
+    "grace_seconds": 2,
+    "jobs": 1,
+    "network": false,
+    "nofile": 256,
+    "root": false,
+    "wall_seconds": 35
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "stage_original_generator": {
+    "bytes": 21587,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/terminal-consumer-preparation-1/prepare_successor_sources.py",
+    "sha256": "dd44f0203c6f0e1729ea2f1cf86d2b655c8cfadff3630e168c8785886310b927"
+  },
+  "status": "ARTIFACT_BOUND_SOURCE_GENERATION_PROPOSAL_ONLY_FRESH_REVIEW_AND_GRANT_REQUIRED"
+}

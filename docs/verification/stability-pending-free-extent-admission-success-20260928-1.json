@@ -1,0 +1,62 @@
+{
+  "schema": "mckernel.stability-executable-fixture.v1",
+  "recorded_at": "2026-09-28T06:38:16-07:00",
+  "base_commit": "66bc9677c5573cd0aac4ec7d00303376ae6aa979",
+  "decision": "PASS_SOURCE_READY_FOR_NEXT_BUILD_PHYSICAL_EXTENT_PREFLIGHT_ONLY",
+  "source_sha256": {
+    "kernel/mem.c": "00c5e0fc6718bb3f1bd0940d2db88d0a5536390ced699ee435ec882c51eb7c72",
+    "kernel/rust/mem_helpers.rs": "5b1716af8c1f0381001199ed2332efb58562cb983143b0e58c2658abaabfcb3c",
+    "kernel/rust/tests/pending_free_batch_vectors.c": "e383220db41f5f73243de264798f78e0d299621e6c3161002a9fee16366741a5",
+    "kernel/rust/tests/pending_free_batch_vectors.rs": "b0142ecf00f2d67eaa2ac949f75bd8fcf24dc8d05817a1c2a0ce7019428fec25",
+    "kernel/rust/tests/pending_free_batch_actual_harness.py": "980f0c33b3867a20767e42937545db1f16cc574e2edf73c434ff4301d5a6e5df",
+    "kernel/rust/tests/pending_free_c_actual_harness.py": "75c85b8721a4da9413370d707602bf96259689b92926a7eb9b92093af9e6b9d9",
+    "scripts/tests/test_pending_free_c_actual_harness.py": "5d91d4a3f96d615d4ed8b3fc7edb24fa1e91c63bfc57ad67d23d0ac0e26eb87d"
+  },
+  "host_execution": {
+    "combined_root": "/tmp/m03-extent-admission-20260928-3",
+    "combined_manifest_sha256": "520ca7d15142252f3db01b06113f97502117e8657afa46a31f364c7088de3144",
+    "observed": "37 paired C/Rust snapshot rows, Rust production positives and 11 rejection/recovery cases, 15 trait negatives, the original partial-release mutant and four alignment/overlap mutants pass",
+    "unit_tests": "11 passed"
+  },
+  "container_execution": {
+    "root": "/home/holden/mckernel-work/scratch/m03-pending-c-preflight-20260928-2",
+    "container_id": "528455e418458b353915ae71293a0f9ffa589255b86767305fbabde151e5452a",
+    "image": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+    "profile": "UID 1000; CPUs 2-5; four CPUs; 12 GiB memory/no swap; 512 tasks; read-only source; no network; no capabilities; no-new-privileges",
+    "argv": [
+      "/usr/bin/python3",
+      "/src/kernel/rust/tests/pending_free_c_actual_harness.py",
+      "--cc",
+      "/usr/bin/gcc",
+      "--pinned-hashes",
+      "/work/pinned-hashes.json",
+      "--output-dir",
+      "/work/result"
+    ],
+    "exit_code": 0,
+    "oom_killed": false,
+    "stdout": "PASS_SCOPED_C_PENDING_PREFLIGHT",
+    "candidate_rows": 58,
+    "mutant_rows": 2,
+    "result_sha256": "addbc60b274a77c7ed14dca8feb0b649cfeedb6a0eb50718216e00155ca273d2",
+    "commands_sha256": "334eb973af18da5e0aa2a3f5f972dba284250147951e3fee23a05018cc7ed64a",
+    "candidate_stdout_sha256": "017d74cab78344d90a05143fb56c9f95764471ee0b18c76bef7d7ee5746b5d1c",
+    "mutant_stdout_sha256": "f2f34a470a3db1e9ccf4ae1d731d314911b42e65796bd7e1294bd9903dbea14e",
+    "pinned_hashes_sha256": "a1325f581c3c7b874eab05570735d80f92cebf79c508bd748a711120c9b89b7b",
+    "container_removed_and_absent": true
+  },
+  "verified_behavior": [
+    "Both C production finish routes and the Rust production finish reject unaligned or pairwise-overlapping physical extents before list mutation or allocator callbacks",
+    "Checked multiplication and end-address arithmetic precede overlap comparison; strict inequalities accept adjacency in either order",
+    "Every current rejection preserves the complete snapshot and emits zero callbacks, followed by successful repaired drain",
+    "The corrected standalone C fixture has three adjacent valid extents and explicit second/last overlap rejection and recovery",
+    "Public signatures, structures, callback arguments and existing Rust consumers are unchanged"
+  ],
+  "preserved_failure": "Independent review found the retained standalone C recovery fixture itself overlapped; that original failure drove the additive fixture correction and current pinned-container rerun.",
+  "limitations": [
+    "Pointer validity, descriptor lifetime, exclusivity, IRQ/migration and callback reentry remain caller obligations",
+    "The pairwise check is quadratic and has no independently trusted inventory bound",
+    "The production ABI lacks target owner/token/generation/epoch, invalidation acknowledgement, quarantine owner, retained backing and preallocated frozen inventory metadata",
+    "No kernel build, guest runtime, concurrency proof, full M03 closure, application acceptance or production gate credit follows"
+  ]
+}

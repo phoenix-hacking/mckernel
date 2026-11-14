@@ -1,0 +1,10 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "preimage_readiness_sha256": "5ff5623660df5f0c49af933756346be7e9913d48f19fbbf10e32578623ab8536",
+  "cause": [
+    "mcctrl_process request_cleanup calls BEGIN before intent logging; ACK can precede intent.",
+    "ACK entry key and retirement query token are separate namespaces; no numeric equality/order relation is required."
+  ],
+  "guards": "Both intent0 and realACK0 remain mandatory; all query tokens positive and distinct, queries afterACK, final0 afterDELETE; no shutdown retry.",
+  "source_acceptance": null
+}

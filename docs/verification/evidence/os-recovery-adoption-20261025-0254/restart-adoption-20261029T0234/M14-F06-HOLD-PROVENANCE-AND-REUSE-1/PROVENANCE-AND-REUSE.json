@@ -1,0 +1,159 @@
+{
+  "task_id": "M14-F06-HOLD-PROVENANCE-AND-REUSE-1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "READY_FOR_REVIEW_CLASSIFICATION_ONLY",
+  "bounded_method": "Follow exact supplied index five rows, named handoffs and direct predecessor/base fragments; no general evidence search, no service queries. Origins are earliest inspected explicit source decisions, not a claim of globally earliest restriction.",
+  "findings": [
+    {
+      "symbol": "arch_rt_sigreturn_xrstor_bridge",
+      "classification": "ISA_STATE_LIFETIME_AND_NATIVE_QUALIFICATION",
+      "origin": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-signal-runtime-adapters-source-1/sourcehandoff/SOURCE-IMPLEMENTATION-AND-ABI-PLAN.json",
+      "origin_field": "holds[0..1]",
+      "exact_origin": "XRSTOR raw legacy provider has original alignment/state/fault behavior; no HOST call or checked-recovery substitution",
+      "reuse": "Existing signal runtime fragment calls get_xsave_mask then existing x86_restore_xstate; visibility-only provider patch already cited.",
+      "root_prerequisite": "Review original raw XRSTOR alignment/valid-state/boot-mask/current-CPU exclusion and instruction/codegen contract; compose existing provider visibility centrally; qualify actual ABI/default unique provider and applicable native restore behavior. No checked-recovery substitution.",
+      "service_account_receipt": "UNKNOWN: none cited in bounded inspected index, originating handoffs/predecessor, candidates or worklist; absence is not clearance",
+      "hold_cleared": false
+    },
+    {
+      "symbol": "arch_native_signal_bad_frame_bridge",
+      "classification": "TERMINATION_OWNERSHIP_AND_NATIVE_QUALIFICATION",
+      "origin": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-signal-runtime-adapters-source-1/sourcehandoff/SOURCE-IMPLEMENTATION-AND-ABI-PLAN.json",
+      "origin_field": "holds[1]; fixture_proposal; provider_reuse",
+      "exact_origin": "actual kernel dispatcher/signal ownership/native provider behaviors unqualified",
+      "reuse": "Existing cfg(native_linux_irq_work_v6_12) fragment logs long error, calls void terminate(0,11), returns -EFAULT. Selected successor adds explicit errno.h witness.",
+      "root_prerequisite": "Independently review actual long/void/SIGSEGV/EFAULT ABI and diagnostic\u2192termination\u2192return order. Qualify returning controlled termination separately from genuine destructive native lifetime; compose existing fragment. No row-specific undefined-domain or service receipt cited.",
+      "service_account_receipt": "UNKNOWN: none cited in bounded inspected index, originating handoffs/predecessor, candidates or worklist; absence is not clearance",
+      "hold_cleared": false
+    },
+    {
+      "symbol": "arch_rt_sigreturn_context_bridge",
+      "classification": "GS_TSS_LAYOUT_LIFETIME_AND_NATIVE_QUALIFICATION",
+      "origin": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-sigreturn-shared-context-source-1/sourcehandoff/SOURCE-IMPLEMENTATION-AND-ABI-PLAN.json",
+      "origin_field": "native_holds; schema_dependency; exact_order",
+      "exact_origin": "GS/TSS kernel base/stack lifetime, actual XSAVE-size boot getter and multicore ownership/native proof",
+      "reuse": "Existing shared-context fragment plus combined whole-signal module; same GS/TSS provider and all-eight optional-output body proposal.",
+      "root_prerequisite": "Review genuine layout/GS offset and thread-size-regs output order, shared provider uniqueness and actual current-CPU/stack lifetime. Isolate this defined adapter from unrelated whole-signal undefined branch; existing composition/ABI and native prerequisites remain, not a requirement to reimplement.",
+      "service_account_receipt": "UNKNOWN: none cited in bounded inspected index, originating handoffs/predecessor, candidates or worklist; absence is not clearance",
+      "hold_cleared": false
+    },
+    {
+      "symbol": "do_signal",
+      "classification": "EXPLICIT_UNDEFINED_CALLER_DOMAIN_PLUS_OWNERSHIP_AND_NATIVE_QUALIFICATION",
+      "origin": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-do-signal-whole-entry-source-1/sourcehandoff/SOURCE-IMPLEMENTATION-AND-ABI-PLAN.json",
+      "origin_field": "explicit_holds[0..4]",
+      "exact_origin": "traced defaultSIGTRAP forwards original uninitialized local info. NO assume_init/zero; branch outside defined qualification and whole C remains default until root resolves exactcallercontract.",
+      "reuse": "Existing whole module and shared-context composition; trap_info is MaybeUninit and forwarded unchanged.",
+      "root_prerequisite": "Root must resolve exact traced-default-SIGTRAP caller/info consumer contract before whole default selection. Preserve old core-slot overwrite, unsynchronized diagnostic counter, legacy direct restorer store/XSAVE lock asymmetry and actual pending/process-ref/scheduling/termination obligations; review genuine ABI/schema and applicable native proof. No zero/assume_init repair or domain exclusion used as whole-function acceptance.",
+      "service_account_receipt": "UNKNOWN: none cited in bounded inspected index, originating handoffs/predecessor, candidates or worklist; absence is not clearance",
+      "hold_cleared": false
+    },
+    {
+      "symbol": "arch_ptrace_regset_log_bridge",
+      "classification": "UNDEFINED_VARIADIC_CONTRACT",
+      "origin": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-ptrace-runtime-callbacks-source-1/sourcehandoff/SOURCE-IMPLEMENTATION-AND-ABI-PLAN.json",
+      "origin_field": "held[3]; reuse[5]",
+      "exact_origin": "Original %x/long variadic format baseline outside generic portable C formatting claims; preserve x86_64 actual bits.",
+      "reuse": "Existing private fragment retains CLong with %x and claims low-int-bit observation; that source claim is not a defined C variadic contract or parity proof. Later original map expressly marks unresolved domain.",
+      "root_prerequisite": "Root may prepare separately reviewed ordinary defined diagnostic contract with explicit intended value/type/format and behavior change. Do not guess cast, claim parity or normalize frozen oracle. Until disposition retain C and undefined-domain restriction.",
+      "service_account_receipt": "UNKNOWN: none cited in bounded inspected index, originating handoffs/predecessor, candidates or worklist; absence is not clearance",
+      "hold_cleared": false
+    }
+  ],
+  "source_checks": [
+    {
+      "symbol": "arch_native_signal_bad_frame_bridge",
+      "handoff_hash_matches_index": true
+    },
+    {
+      "symbol": "arch_rt_sigreturn_context_bridge",
+      "handoff_hash_matches_index": true
+    },
+    {
+      "symbol": "arch_rt_sigreturn_xrstor_bridge",
+      "handoff_hash_matches_index": true
+    },
+    {
+      "symbol": "do_signal",
+      "handoff_hash_matches_index": true
+    },
+    {
+      "symbol": "arch_ptrace_regset_log_bridge",
+      "handoff_hash_matches_index": true
+    }
+  ],
+  "source_bindings": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-do-signal-whole-entry-source-1/candidate/syscall_policy.DO_SIGNAL_WHOLE_MODULE.FRAGMENT.rs",
+      "bytes": 57209,
+      "sha256": "56bf6895787ca2d6eba602e35e5b451a8e1058594952989eac354ef3f13d0b94"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-do-signal-whole-entry-source-1/sourcehandoff/SOURCE-IMPLEMENTATION-AND-ABI-PLAN.json",
+      "bytes": 9835,
+      "sha256": "62d39ea50183cfb8fa3312c089a2b5f570b6bc8e6a98531e1f1dd49dab180413"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-ptrace-runtime-callbacks-source-1/candidate/syscall_policy.ptrace_runtime_callbacks.FRAGMENT.rs",
+      "bytes": 8014,
+      "sha256": "c9507ff922e022698553a3daa92c6722b13f6ff76bd3a0f04b25cd40f41551e4"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-ptrace-runtime-callbacks-source-1/sourcehandoff/SOURCE-IMPLEMENTATION-AND-ABI-PLAN.json",
+      "bytes": 6531,
+      "sha256": "797ab39957fb4e2b91ec20724ac27a94042dc4dd0dcfe4d31b25c070a7fcea4e"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-signal-runtime-adapters-source-1/candidate/syscall_policy.signal_runtime_adapters.FRAGMENT.rs",
+      "bytes": 4876,
+      "sha256": "8bdc144795df245cfbae5731880906bba50215b61dfc2df0468ff1f6321c0ad0"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-signal-runtime-adapters-source-1/sourcehandoff/SOURCE-IMPLEMENTATION-AND-ABI-PLAN.SELECTED.json",
+      "bytes": 7109,
+      "sha256": "79c1fd6c2d5a378bb5cc45086b18ae3bb53d9975cdf1d2a5911582de24888f09"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-signal-runtime-adapters-source-1/sourcehandoff/SOURCE-IMPLEMENTATION-AND-ABI-PLAN.json",
+      "bytes": 6583,
+      "sha256": "9d1e7cbd503a96d7758f0bbf29f001eb38b0f9d67f0643ab00b831a6a2fdfb75"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-sigreturn-shared-context-source-1/candidate/syscall_policy.sigreturn_shared_context.FRAGMENT.rs",
+      "bytes": 2619,
+      "sha256": "9eb5e9f9215033c2756b5a27428e1fb9df6ad6a8a2e11ea6655b9b8f98e4218c"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-sigreturn-shared-context-source-1/sourcehandoff/SOURCE-IMPLEMENTATION-AND-ABI-PLAN.json",
+      "bytes": 5384,
+      "sha256": "d43af8a76d175805cbc8d891eff344e7c5afad315863d09cdac20a6161584406"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/whole-file-source-continuation-2/HELD-WORKLIST-SOURCE-INDEX.json",
+      "bytes": 43316,
+      "sha256": "f34080eaf0567f9484679806f7d2a72845e7ca3bda1cc69a61033543ffc96d1d"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m14-live-c-closure-worklist-1/FUNCTION-WORKLIST.json",
+      "bytes": 852316,
+      "sha256": "fe95ce3bcfabe0ab9a89d06b83b84e04b863d466df6046b5daa3cf5400aeb77a"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-ORIGINAL-CLOSURE-AND-POST119-REMAINING-1/ORIGINAL-CONTRACT-AND-POST119-MAP.json",
+      "bytes": 25607,
+      "sha256": "d2f203de81bb4c5f6e6b62f76b42009d9426c674e29397fe20f942a1f609b9f2"
+    }
+  ],
+  "unknowns": [
+    "Any genuine service/account restriction receipt outside this bounded cited chain remains UNKNOWN. Root must reconcile actual authoritative receipt if one exists; no hold cleared here.",
+    "Current compile/link/native qualification of private candidate bodies is not established by these source reads."
+  ],
+  "changes": "Additive report only; old held map and all source candidates preserved.",
+  "execution_counts": {
+    "compiler": 0,
+    "runtime": 0,
+    "service_queries": 0,
+    "canonical_edits": 0
+  },
+  "next_task": "Root disposition per row: separate technical proof scheduling from real service/account restrictions, reuse existing Rust; resolve explicit undefined caller/varargs contracts before affected whole-body selection."
+}

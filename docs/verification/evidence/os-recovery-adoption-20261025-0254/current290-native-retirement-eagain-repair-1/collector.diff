@@ -1,0 +1,124 @@
+--- scripts/application-tests/native_diagnostic_guest_collector.c
++++ private/native_diagnostic_guest_collector.c
+@@ -291,6 +291,102 @@
+     if (errno) empty = -1;
+     if (closedir(d)) empty = -1;
+     return empty;
++}
++
++/* The startup collector has exactly one registered application. Procfs
++ * deletion may precede the backend's separately authenticated retirement query.
++ * Read-only snapshots retain the kernel log for the unchanged host evaluator.
++ * Return 0 while the genuine query is pending, 1 after its final success, and
++ * -1 on malformed identity, a real failure, or an incomplete snapshot. */
++static const char *native_line_fields(const char *line, const char *end,
++                                      const char *marker)
++{
++    const char *found = strstr(line, marker);
++    return found && found < end ? found + strlen(marker) : NULL;
++}
++
++static int native_retirement_state(const char *log)
++{
++    static const char registration[] =
++        "application_process=registered os=0 generation=1 pid=";
++    int pid = 0, registrations = 0;
++    const char *line = log;
++    while (*line) {
++        const char *end = strchr(line, '\n');
++        if (!end) return -1;
++        const char *fields = native_line_fields(line, end, registration);
++        if (fields) {
++            int value = 0, used = 0;
++            if (sscanf(fields, "%d%n", &value, &used) != 1 ||
++                value <= 0 || fields + used != end) return -1;
++            pid = value;
++            ++registrations;
++        }
++        line = end + 1;
++    }
++    if (registrations != 1) return -1;
++    unsigned long long query_tokens[12];
++    unsigned queries = 0;
++    int complete = 0, terminals = 0, intents = 0, acknowledgements = 0;
++    line = log;
++    while (*line) {
++        const char *end = strchr(line, '\n');
++        const char *fields = native_line_fields(line, end,
++            "application_syscall=delivered os=0 generation=1 pid=");
++        int value = 0, result = 0, used = 0;
++        unsigned long long token = 0;
++        if (fields) {
++            unsigned long long worker = 0, delivery = 0;
++            int cpu = 0, number = 0;
++            if (sscanf(fields, "%d worker=%llu delivery=%llu cpu=%d number=%d%n",
++                       &value, &worker, &delivery, &cpu, &number, &used) != 5 ||
++                fields + used != end) return -1;
++            if (value == pid && number == 231 && ++terminals != 1) return -1;
++        }
++        fields = native_line_fields(line, end,
++            "application_process=cleanup_requested os=0 generation=1 pid=");
++        if (fields) {
++            if (sscanf(fields, "%d intent_errno=%d%n", &value, &result, &used) != 2 ||
++                fields + used != end) return -1;
++            if (value == pid && (result || ++intents != 1)) return -1;
++        }
++        fields = native_line_fields(line, end,
++            "application cleanup ACK os=0 generation=1 pid=");
++        if (fields) {
++            int abandoned = 0;
++            if (sscanf(fields, "%d token=%llu errno=%d abandoned=%d%n",
++                       &value, &token, &result, &abandoned, &used) != 4 ||
++                fields + used != end) return -1;
++            if (value == pid && (!token || result ||
++                (abandoned != 0 && abandoned != 1) || ++acknowledgements != 1)) return -1;
++        }
++        fields = native_line_fields(line, end,
++            "application retirement os=0 generation=1 pid=");
++        if (fields) {
++            if (sscanf(fields, "%d token=%llu errno=%d%n",
++                       &value, &token, &result, &used) != 3 ||
++                value <= 0 || !token || fields + used != end) return -1;
++            if (value == pid) {
++                if (terminals != 1 || acknowledgements != 1 || complete ||
++                    queries == 12 || (result != 0 && result != -11)) return -1;
++                for (unsigned i = 0; i < queries; ++i)
++                    if (query_tokens[i] == token) return -1;
++                query_tokens[queries++] = token;
++                complete = result == 0;
++            }
++        }
++        line = end + 1;
++    }
++    return complete && intents == 1;
++}
++
++static int native_retirement_at(void)
++{
++    static char log[262144];
++    int length = klogctl(3, log, sizeof log - 1);
++    if (length <= 0 || length >= (int)sizeof log - 1) return -1;
++    log[length] = 0;
++    return native_retirement_state(log);
+ }
+ 
+ static int append(char *b, size_t *n, const char *fmt, ...)
+@@ -502,9 +598,16 @@
+         uint64_t current = now_ns();
+         if (!current || current >= end) break;
+         int state = retired_at("/proc/mcos0");
+-        if (state == 1) { empty = 1; break; }
+         if (state < 0) break;
+-        struct timespec t = {0, 10000000}; nanosleep(&t, NULL);
++        if (state == 1) {
++            int retirement = native_retirement_at();
++            if (retirement < 0) break;
++            if (retirement == 1) { empty = 1; break; }
++        }
++        /* The retained broker retries EAGAIN at monotonic seconds + 1.
++         * Keep this existing five-second/outer deadline while awaiting its
++         * genuine final success; procfs emptiness alone cannot finish it. */
++        struct timespec t = {0, 100000000}; nanosleep(&t, NULL);
+     }
+ finish:;
+     /* native-boot deliberately retains the nested OS. Its modules/resources

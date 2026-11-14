@@ -1,0 +1,36 @@
+    if (-4095..0).contains(&result) {
+        result
+    } else {
+        -5
+    }
+}
+
+#[derive(Clone, Copy)]
+struct OsBackendBootV3 {
+    prepare: OsBackendPrepareBootV3,
+    start: OsBackendStartBootV3,
+    success_status: OsStatus,
+}
+
+#[derive(Clone, Copy)]
+struct ApplicationCallbacks {
+    open: super::application_abi::Open,
+    invoke: super::application_abi::Invoke,
+    close: super::application_abi::Close,
+    adopt_fork: Option<super::application_abi::ForkAdoptV1>,
+    fork_progress: Option<super::application_abi::ForkProgressV1>,
+    adopt_fork_scoped: Option<super::application_abi::ForkAdoptScopedV1>,
+    prepare_fork_link: Option<super::application_abi::ForkPrepareLinkV1>,
+    fork_progress_payload: Option<super::application_abi::ForkProgressPayloadV1>,
+    prepare_fork_ack: Option<super::application_abi::ForkPrepareAckV1>,
+    fork_publication_verify: Option<super::application_abi::ForkPublicationVerifyV1>,
+    release_fork_ack: Option<super::application_abi::ForkReleaseAckV1>,
+}
+
+#[derive(Clone, Copy)]
+struct OsBackend {
+    ioctl: OsBackendIoctlV2,
+    release: OsBackendReleaseV2,
+    boot: Option<OsBackendBootV3>,
+    application: Option<ApplicationCallbacks>,
+    shutdown: Option<OsBackendShutdown>,

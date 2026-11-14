@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "record_kind": "stability_linux_collector_storage_fault_v2_source_review_failure",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "review_attempt": 36,
+  "recorded_utc": "2026-09-16T08:05:00Z",
+  "status": "FAIL_SOURCE",
+  "review_input": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260916-39.tar.gz",
+    "sha256": "d0e8009235dce4bf61d59d28b538747af500891f42fec8cd584ebd9adea6f9bf",
+    "size": 37882069,
+    "members": 32,
+    "files": 22,
+    "safe_unique": true
+  },
+  "reviewed_source_sha256": {
+    "oracle.py": "fe5834786e0d914086368dfbf80d315f16ebeb657b6ebcec6a15cb5f29fc80db",
+    "witness_owner.py": "80da4ebec05b4cd4aee0f9ecbe6ef22d37cc2c2d9c916d99214b30f1814a9e02"
+  },
+  "findings": [
+    {
+      "id": "report_present_fifo_constants_remain",
+      "selectors": [0, 3, 5],
+      "source": "oracle.py:2495",
+      "mutation": "Change stdout/stderr inodes to 901/902 consistently in setup artifact, authenticated SETUP and report",
+      "setup_sha256": "097aa90a86bce91f05d010396f18f769a597abcc28042cc406211b6df1e787fe",
+      "observed": "selectors 0/3/5 reject; selector 4 accepts",
+      "required": "Remove synthetic constants and use independent dynamic SETUP identity joins."
+    },
+    {
+      "id": "selector4_full_setup_semantics_bypassed",
+      "selector": 4,
+      "source": "oracle.py:2211-2264",
+      "counterexamples": [
+        {
+          "mutation": "setup.bin and authenticated SETUP word 5 changed to PID 71 while leader/events/REAP remain 70",
+          "setup_sha256": "b68b44b5447f2eceb7923a2b78564fac49db3dca30d8b2d815e0cdb5021de418"
+        },
+        {
+          "mutation": "setup.bin and authenticated SETUP word 0 changed to zero",
+          "setup_sha256": "230a12a9de937455ce45e435a5ad98155aace4a757aca6ac3ede38c51b1b3d23"
+        }
+      ],
+      "also_accepted": ["UID mutation", "umask mutation", "stdin identity mutation", "reserved-word mutation"],
+      "required": "Before report-presence branching validate all 48 successful setup semantics and independent stdin/devnull evidence."
+    },
+    {
+      "id": "birth_pair_not_joined_to_setup_reap",
+      "selector": 4,
+      "source": "oracle.py:2192",
+      "mutation": "child-created and group-kill birth changed together to 81 while SETUP and REAP retain 80",
+      "events_sha256": "e44939b0097cb1e388fe972ae97bcc30e5f5a39c2f189a306bbc8d5464680064",
+      "required": "Join complete PID/birth across events, SETUP and REAP for every post-fork selector."
+    },
+    {
+      "id": "setup_ack_without_value_validation",
+      "source": "witness_owner.py:920",
+      "mutation": "SETUP setup_words replaced by null",
+      "packet_sha256": "bf8b75eda1052ade05986055ed2b01c90526111c66917a63e0a5919c88ed636d",
+      "required": "Before journaling and ACK validate exactly 48 u64 words, typed/bounded stat records, seals and positive leader identities."
+    }
+  ],
+  "verification": {
+    "retained_review_groups": 13,
+    "retained_review_scope": "reviews 24-33 and 35",
+    "retained_status": "PASS_IN_MEMORY",
+    "review34_controls": 9,
+    "review34_status": "ALL_REJECTED",
+    "positive_selectors": 7,
+    "offline_malformed_packet_controls": 8,
+    "generator_header_checks": 2,
+    "dispatcher_python39": "123/123 PASS",
+    "dispatcher_python38": "123/123 PASS",
+    "files_created_by_reviewer": false
+  },
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}

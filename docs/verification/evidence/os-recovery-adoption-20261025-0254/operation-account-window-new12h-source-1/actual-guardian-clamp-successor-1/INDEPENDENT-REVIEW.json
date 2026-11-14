@@ -1,0 +1,73 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/guardian_execution_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "at": "2026-10-27T17:45:50.003325+00:00",
+  "decision": "PASS_EXACT_OPERATION_GUARD_WRAPPER_SOURCE_ONLY",
+  "blocking_findings": [],
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/operation-account-window-new12h-source-1/actual-guardian-clamp-successor-1/SOURCE-READY.json",
+    "bytes": 3186,
+    "sha256": "884285c95e0c7b6201d3cc628b850b06798531171e5c031a57e72d88c8f226ea"
+  },
+  "source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/operation-account-window-new12h-source-1/actual-guardian-clamp-successor-1/actual_account_window_v2.py",
+    "bytes": 4521,
+    "sha256": "1f152e3f18384643cd35d203fcc2a4292950a1c90758734859bdb980cf45fda0"
+  },
+  "unchanged_predecessor": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/operation-account-window-new12h-source-1/actual_account_window.py",
+    "bytes": 4674,
+    "sha256": "8bf26bae56a019876c6a1463945733c85be5016d21ac5f6f955c29fd131a8cbe"
+  },
+  "parent_receipt": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/operation-account-window-new12h-source-1/actual-guardian-clamp-successor-1/ACTUAL-GUARDIAN-VERIFIED.json",
+    "bytes": 2462,
+    "sha256": "8a33c90172e4fea5f3d1541758fef205a5e6c24440875ebbfd45f6512c9021f9"
+  },
+  "verified": [
+    "Exact SOURCE-READY884285c9 and wrapper1f152e3f/4521B match. Every declared wrapper/receipt/window/test/predecessor file pin matches; copied receipt is byte-identical to actual parent receipt at restart1717.",
+    "Wrapper imports only exact pinned unchanged reviewed predecessor8bf26bae. check_account_state, available_balance and amount are reexported unchanged; canonical credit hash semantics, exact run7f/ceiling57774.852125/spent>=22812.3311/remaining accounting, prepaid/no purchase/no API billing, healthy current thread/account and all real holds remain effective.",
+    "UTC stays1793165769; MONOTONIC947874.5689514667 and BOOTTIME963213.6960030915 are stricter than original fixed window. load_window retains original actual-window pin and boot identity while replacing only cutoffs plus operation-guardian reference annotations.",
+    "Exact receipt8a33c901 requires live held-parent status, exact current thread, no native release and exact guardian1619833/start92037917/current journal path. Current process birth and nonzombie state match independently observed procfs.",
+    "Current journal must retain packet01b50e2e, boot7bfc5687, run7f, credit_started/initial_prepaid_guard true and watcher1616666/start92001383, with WAIT_EXISTING_CREDIT_WATCHER and no transition hold/stop intent/deadline-stop flag.",
+    "Current journal cutoffs must be positive finite nonbool numeric and <= each inherited cutoff. Current dynamically tighter values are returned by min, then all3 actual clocks must be strictly earlier. No recovery or journal may extend UTC/BOOT/MONO; wrong boot and malformed/nonfinite clocks reject through unchanged predecessor.",
+    "guard reads clocks, pinned receipt, current parent journal/process birth, boot and resident account state only. No write, process creation, signal, outerguardian arm/replacement, root, Docker, cleanup, nonce/release or workload path is added.",
+    "Retained9 predecessor controls and7 clamp controls were read as source/records, not replayed. Seven controls cover current parent identity/holds/birth, extended/malformed cutoffs, inherited earlier tail rejection, future tightening and exact reused account function identity."
+  ],
+  "live_readonly_observation": {
+    "guardian": {
+      "pid": 1619833,
+      "start": "92037917",
+      "state": "S"
+    },
+    "packet_sha256": "01b50e2ee16444bef512e6732a4f21d5169e8ac5080d02eca7886002a1cd853a",
+    "last_action": "WAIT_EXISTING_CREDIT_WATCHER",
+    "cutoffs_wall_monotonic_boot": [
+      1793165769.0,
+      947874.5689514667,
+      963213.6960029914
+    ],
+    "observed_clocks_wall_monotonic_boot": [
+      1793123150.0035954,
+      905256.572551921,
+      920594.69960295
+    ],
+    "fresh_account_RPC": false
+  },
+  "limits": [
+    "Explicit coordinated Root adoption remains required. Existing8bf source remains unchanged; this source review supplies no Source31 or other execution release.",
+    "Each actual operation still requires fresh exact source/request/map/account/ownership/resources/nonce/admission and separate independent release under the fixed window. Parent alone owns outerguardian/steering/phone.",
+    "Current resident snapshot remains canonical account polling/debit evidence; this wrapper performs no fresh account RPC and cannot clear any actual service/auth/policy/billing/user hold."
+  ],
+  "review_actions": {
+    "source_hash_AST_and_proc_journal_reads_only": true,
+    "guard_not_invoked": true,
+    "tests_not_replayed": true,
+    "no_arm_workload_root_Docker_cleanup_canonicalstate_mutation": true,
+    "only_this_review_file_written": true
+  },
+  "runtime_authority": null,
+  "execution_release": false
+}

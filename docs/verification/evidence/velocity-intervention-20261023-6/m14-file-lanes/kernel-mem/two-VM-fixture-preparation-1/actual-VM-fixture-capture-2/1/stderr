@@ -1,0 +1,10 @@
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/two-VM-fixture-preparation-1/fixture/fixture.c:14:5: error: conflicting types for ‘page_fault_process_vm’
+   14 | int page_fault_process_vm(struct process_vm *v,void *addr,unsigned long reason){event(2,(unsigned long)v,(unsigned long)addr,reason,(unsigned long)(long)faultret,0);return faultret;}
+      |     ^~~~~~~~~~~~~~~~~~~~~
+In file included from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-mem-next/production-consumer-preparation-1/current-L4-refresh-1/source/kernel/include/cls.h:16,
+                 from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-mem-next/production-consumer-preparation-1/current-L4-refresh-1/source/kernel/include/kmalloc.h:17,
+                 from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/two-VM-fixture-preparation-1/fixture/actual_kernel_declarations.h:3,
+                 from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/two-VM-fixture-preparation-1/fixture/fixture.c:2:
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-mem-next/production-consumer-preparation-1/current-L4-refresh-1/source/kernel/include/process.h:871:5: note: previous declaration of ‘page_fault_process_vm’ was here
+  871 | int page_fault_process_vm(struct process_vm *fault_vm, void *fault_addr,
+      |     ^~~~~~~~~~~~~~~~~~~~~

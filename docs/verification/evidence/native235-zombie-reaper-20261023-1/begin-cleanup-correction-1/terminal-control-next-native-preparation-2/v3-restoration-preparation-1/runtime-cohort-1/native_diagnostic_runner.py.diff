@@ -1,0 +1,40 @@
+--- current-reviewed/native_diagnostic_runner.py
++++ M05-hook-successor/native_diagnostic_runner.py
+@@ -7,6 +7,7 @@
+ """
+ 
+ import argparse
++import hashlib
+ import importlib.util
+ import json
+ import math
+@@ -49,6 +50,21 @@
+     diagnostic = _module("native_diagnostic_runner_diagnostic", _HERE / "native_diagnostic.py")
+     backend = _backend_module()
+     return diagnostic, backend
++
++
++def _bind_m05(diagnostic, manifest, manifest_path):
++    source = _HERE / 'native_diagnostic.py'
++    if (Path(diagnostic.__file__).resolve() != source or
++            hashlib.sha256(source.read_bytes()).hexdigest() != '059c40c95b2306265f21bce2a77c49edc7baeb4792e977b189770fc0d21685f1'):
++        raise ValueError('M05 private diagnostic binding only')
++    adapter_path = Path('/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/consumer-correction-1/case_evaluator.py')
++    if hashlib.sha256(adapter_path.read_bytes()).hexdigest() != '69f5f5405c9f2bf605f0b02412e22e508e9cf117108a13914387ae5b03e8a864':
++        raise ValueError('M05 adapter source identity drift')
++    adapter = _module('m05_runner_case', adapter_path)
++    _, _, frozen = adapter.binding(str(manifest_path), adapter.MANIFEST_SHA)
++    if not diagnostic._same_plan(diagnostic._freeze(diagnostic._thaw(manifest)), diagnostic._freeze(diagnostic._thaw(frozen))):
++        raise diagnostic.DiagnosticError('M05 original manifest plan changed')
++    diagnostic.evaluate = adapter.case_evaluate
+ 
+ 
+ def _canonical_file(value, label):
+@@ -120,6 +136,7 @@
+     if diagnostic is None or backend is None:
+         diagnostic, backend = _runtime()
+     manifest = diagnostic.load_manifest(str(manifest_path))
++    _bind_m05(diagnostic, manifest, manifest_path)
+     attempt = diagnostic.prepare_attempt(manifest, str(attempt_parent), attempt_name)
+     try:
+         plan = diagnostic.build_command(manifest, attempt)

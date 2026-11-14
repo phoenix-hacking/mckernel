@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "file.fcntl-flags",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/file.fcntl-flags"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "canonical-record-with-relations", "fields": ["set", "enabled", "access_same", "restore", "restored"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["F_SETFL returns 0 and F_GETFL shows O_NONBLOCK", "Access mode bits remain unchanged", "Restoring the original flags returns the exact initial flag word"],
+  "unresolved_expectations": ["Freeze canonical output and reviewed input/oracle SHA256 before execution."],
+  "max_question_for_reviewer": "Confirm mutable status flags change while access mode remains invariant and restoration is exact."
+}

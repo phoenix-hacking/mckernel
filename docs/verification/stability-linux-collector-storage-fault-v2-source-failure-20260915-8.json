@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_failure",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "attempt": 8,
+  "status": "FAIL_SOURCE_TEST",
+  "recorded_utc": "2026-09-15T18:43:00Z",
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-failure-20260915-8.tar.gz",
+    "sha256": "b623017859e7242f2d8640e0158e10800b00e7a7a394a6d3ded91c27c47a4c0b",
+    "size": 40752,
+    "members": 11
+  },
+  "failure": "the repaired positive chronology exposed an older negative mutation whose timestamp fell outside cleanup rather than violating cleanup-event order",
+  "next_correction": "move that negative timestamp inside the cleanup interval but before its preceding event, then rerun both pinned interpreters",
+  "original_test_stream_retained": true,
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

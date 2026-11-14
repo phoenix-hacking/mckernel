@@ -1,0 +1,12 @@
+--- review-correction-1/lifecycle.rs
++++ compiler-warning-correction-1/lifecycle.rs
+@@ -5,9 +5,7 @@
+ 
+ pub type Check<T> = Result<T, String>;
+ pub const RAW_LIMIT: usize = 262_144;
+-pub const GATE_BASENAME: &str = ".f05-gate-31770ebb739fea402ded939617921dda";
+ pub const GATE_PATH: &str = "/case/work/.f05-gate-31770ebb739fea402ded939617921dda";
+-pub const CASE_ID: &str = "M14-05-05-owned-processvm-v3-causal-204B";
+ 
+ fn need(ok: bool, why: &str) -> Check<()> {
+     if ok {

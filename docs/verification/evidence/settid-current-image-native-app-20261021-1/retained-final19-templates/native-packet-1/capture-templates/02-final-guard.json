@@ -1,0 +1,73 @@
+{
+  "operations": [
+    {
+      "argv_template": [],
+      "profile": "metadata",
+      "role": "UNUSED_INDEX_ZERO_DO_NOT_EXECUTE"
+    },
+    {
+      "argv_template": [
+        "/usr/bin/taskset",
+        "--cpu-list",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--core=0",
+        "--nofile=256",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/review_final_205_release.py",
+        "--config-sha256",
+        "89d4952d90a6e8199b2138f963f61bc99078d395f5042392fc0ec6178cfdc8df",
+        "--machine-sha256",
+        null,
+        "--snapshot-sha256",
+        null
+      ],
+      "profile": "metadata",
+      "role": "final-guard",
+      "status_path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/captures/02-final-guard/status.json",
+      "stderr_path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/captures/02-final-guard/stderr",
+      "stdout_path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/captures/02-final-guard/stdout"
+    }
+  ],
+  "profiles": {
+    "metadata": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 40,
+      "stream_fsize": 33554432
+    },
+    "native": {
+      "cpu": 7,
+      "parent_kill_grace_seconds": null,
+      "parent_wall_seconds": null,
+      "stream_fsize": 33554432
+    },
+    "reader": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 35,
+      "stream_fsize": 33554432
+    },
+    "snapshot": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 40,
+      "stream_fsize": 33554432
+    }
+  },
+  "release": {
+    "bytes": 23848,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-independent-review-20261020-1/HOST66-DRAIN-NATIVE-SOURCE-AND-NONTEMPORAL-RELEASE.json",
+    "sha256": "8adfbd584be9c3027ca82b4bda123ba55672c5c4c9ea062bd7a67c8f10765e77"
+  },
+  "root_installed_release_path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-independent-review-20261020-1/HOST66-DRAIN-NATIVE-SOURCE-AND-NONTEMPORAL-RELEASE.json"
+}

@@ -1,0 +1,49 @@
+{
+  "at": "2026-11-10T08:01:42.657571+00:00",
+  "status": "PASS",
+  "C_header_actual_layout_facts": 41,
+  "Rust_baseline_unsigned_type_mismatch_reproduced": true,
+  "Rust_candidate_three_layouts_and_unsigned_declaration_call_match": true,
+  "all4_waits_joined": true,
+  "CPU7_released": true,
+  "no_library_provider_tool_native_runtime": true,
+  "phases": [
+    {
+      "phase": "C-header-compile",
+      "pid": 800074,
+      "birth": "38396864",
+      "returncode": 0,
+      "joined": true,
+      "expected_result_verified": true
+    },
+    {
+      "phase": "C-header-layout",
+      "pid": 800081,
+      "birth": "38396867",
+      "returncode": 0,
+      "joined": true,
+      "expected_result_verified": true
+    },
+    {
+      "phase": "Rust-baseline",
+      "pid": 800084,
+      "birth": "38396867",
+      "returncode": 1,
+      "joined": true,
+      "expected_result_verified": true
+    },
+    {
+      "phase": "Rust-candidate",
+      "pid": 800090,
+      "birth": "38396870",
+      "returncode": 0,
+      "joined": true,
+      "expected_result_verified": true
+    }
+  ],
+  "canonical_change": "executer/user/rust/mcinspect_helpers.rs: dwarf_get_TAG_name argument and tag cast c_int ->core::ffi::c_uint",
+  "canonical_candidate_sha256": "e9a9a648035e71c430742ac3f505cc5f9cbaeadb344b4727792721682da5db88",
+  "actual_selected_header": "executer/user/lib/libdwarf/libdwarf/libdwarf.h.in",
+  "provider_build_and_existing_link_proof_reused": true,
+  "complete_original_I03_or_file_acceptance": false
+}

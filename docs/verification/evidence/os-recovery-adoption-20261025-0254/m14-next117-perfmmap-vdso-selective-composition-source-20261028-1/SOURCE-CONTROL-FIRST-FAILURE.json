@@ -1,0 +1,9 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "TEST_MUTATION_PATH_WAS_NOT_EXERCISED",
+  "test": "test_wrong_origin_compiler_context_rejected",
+  "observed": "AssertionError: ValueError not raised",
+  "cause": "Mutation matched retained candidate path but compose authenticates actual canonical adopted116 source path.",
+  "effect": "No workload/compiler/source candidate change; source composition positive checks passed.",
+  "bounded_correction": "Match exact /scripts/f06_origin_command_profile.json suffix rather than only /candidate/scripts/..."
+}

@@ -1,0 +1,30 @@
+--- /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/actual-first-candidate-1/run_actual_once.py
++++ /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/actual-correction-1/run_actual_once.py
+@@ -56,7 +56,7 @@
+   allowed.add(p)
+   try:p=int(Path('/proc/'+str(p)+'/stat').read_text().rsplit(')',1)[1].split()[1])
+   except FileNotFoundError:break
+- competitors=[]
++ competitors=[];exempt_kernel_threads=[]
+  for p in Path('/proc').iterdir():
+   if not p.name.isdigit() or int(p.name) in allowed:continue
+   try:
+@@ -64,10 +64,16 @@
+    line=next(l for l in status.splitlines() if l.startswith('Cpus_allowed_list:'))
+    state=next(l for l in status.splitlines() if l.startswith('State:'))
+    if line.split(':',1)[1].strip()=='6' and 'Z' not in state:
+-    competitors.append({'pid':int(p.name),'start':ns['process_start'](int(p.name)),'cmdline':(p/'cmdline').read_bytes().replace(b'\0',b' ').decode(errors='replace')[:300]})
++    tail=(p/'stat').read_text().rsplit(')',1)[1].split()
++    ppid=int(tail[1]);flags=int(tail[6]);birth=int(tail[19])
++    status_ppid=int(next(l for l in status.splitlines() if l.startswith('PPid:')).split()[1])
++    if flags&0x00200000 and ppid==status_ppid==2:
++     exempt_kernel_threads.append({'pid':int(p.name),'start':birth,'flags':flags,'PF_KTHREAD':True,'PPid':ppid,'comm':(p/'comm').read_text().strip()})
++     continue
++    competitors.append({'pid':int(p.name),'start':birth,'cmdline':(p/'cmdline').read_bytes().replace(b'\0',b' ').decode(errors='replace')[:300]})
+   except (FileNotFoundError,ProcessLookupError,PermissionError):continue
+  need(not competitors,('competing CPU6 profiles',competitors))
+- admission=headroom();write(A/'ADMISSION.json',{'scope':__doc__,'fresh_facts':admission,'competing_CPU6_profiles':competitors,'root_exclusive_grant':True})
++ admission=headroom();write(A/'ADMISSION.json',{'scope':__doc__,'fresh_facts':admission,'competing_CPU6_profiles':competitors,'positive_PF_KTHREAD_PPid2_exemptions':exempt_kernel_threads,'root_exclusive_grant':True})
+  need(not Path(plan['output_directory_must_be_fresh']).exists(),'fresh declared output')
+  Path(plan['output_directory_must_be_fresh']).mkdir(mode=0o700);os.umask(0o077)
+  write(A/'ACTUAL-PROFILE.json',{'scope':__doc__,'recipe_sha256':sha(rp),'context_precheck_sha256':sha(pp),'profile':plan['profile'],'actual_limits':{'AS':resource.getrlimit(resource.RLIMIT_AS),'CPU':resource.getrlimit(resource.RLIMIT_CPU),'FSIZE':resource.getrlimit(resource.RLIMIT_FSIZE),'NOFILE':resource.getrlimit(resource.RLIMIT_NOFILE),'CORE':resource.getrlimit(resource.RLIMIT_CORE),'STACK':resource.getrlimit(resource.RLIMIT_STACK)},'RUST_MIN_STACK':os.environ['RUST_MIN_STACK'],'helper_sha256':sha(H),'helper_globals_verified':True,'TERM_INT_ALRM_registered':True,'driver_sha256':sha(Path(__file__)),'raw_NMI_IRQ_IRET_kernelstack_execution':False})

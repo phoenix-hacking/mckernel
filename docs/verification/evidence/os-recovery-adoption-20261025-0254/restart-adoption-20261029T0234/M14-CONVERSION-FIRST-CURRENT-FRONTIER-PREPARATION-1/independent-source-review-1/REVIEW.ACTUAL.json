@@ -1,0 +1,92 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_READONLY_Q_GUARD_AND_OBSERVER_DELTA_SOURCE_BLOCKED_ON_DIRECT_PARENT_EXCEPTION_OWNERSHIP",
+  "reviewer": "/root/recovery_receipts",
+  "independent": true,
+  "implementation_ownership": false,
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-CURRENT-FRONTIER-PREPARATION-1/SOURCE-READY.json",
+    "bytes": 6878,
+    "sha256": "ef1127166c746b8349c1d4e332aebef426062c34bb623e4bf88df726eeca2ae4"
+  },
+  "inputs": {
+    "readonly_operation_guard.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-CURRENT-FRONTIER-PREPARATION-1/readonly_operation_guard.py",
+      "bytes": 9868,
+      "sha256": "29bc19df20118485418a96a2dd0fd9099ff550a5732a8dfcd402aa332b28d066"
+    },
+    "readonly_history_guard.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-CURRENT-FRONTIER-PREPARATION-1/readonly_history_guard.py",
+      "bytes": 1185,
+      "sha256": "f685851f5a2c6f302d6cf9da874bae42b67add66cefa13a3df9db998b983dfb0"
+    },
+    "observe_conversion_frontier.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-CURRENT-FRONTIER-PREPARATION-1/observe_conversion_frontier.py",
+      "bytes": 33485,
+      "sha256": "3459cd63d8dec1746008bfb4491e0ff693ec67efe873851d607b5f5eb502db75"
+    },
+    "root_capture_parent.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-CURRENT-FRONTIER-PREPARATION-1/root_capture_parent.py",
+      "bytes": 3737,
+      "sha256": "7e095e64d3fedda3854869c1523517f14161251a8f77b21990a7945e5bc99bea"
+    },
+    "ROOT-NEXT.md": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-CURRENT-FRONTIER-PREPARATION-1/ROOT-NEXT.md",
+      "bytes": 5337,
+      "sha256": "47b999acebe0f1a6ad3df534db2da6dfaf8fa041d2ae92c47e2a8567dd9781b8"
+    },
+    "test_readonly_guard.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-CURRENT-FRONTIER-PREPARATION-1/test_readonly_guard.py",
+      "bytes": 6110,
+      "sha256": "cdfb0afd10b008bb1c5481f8cde7cd19e93811f2c82d2dff0b3982cb6124add2"
+    },
+    "check_source_delta.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-CURRENT-FRONTIER-PREPARATION-1/check_source_delta.py",
+      "bytes": 2187,
+      "sha256": "9a43f1c3c572bbe195b9026f738d1af7a0bc09e17c6853bd2c1b1753198ef284"
+    }
+  },
+  "findings": [
+    "Distinct current-conversion-frontier-readonly operation; exact Root context, observer/physical_adapter/capture_parent sourceclosure, fixed Q/helper sources, operation independent review and guardbinding authenticate BYTErefs. Native/build operation aliases, prepaid fallback/APIcredit fields and inheritedgrant are refused.",
+    "Confirmed same-period Q algorithm and strict threeclock minima AST match source4. Semantic reset\u00b13 retains original maximum; unknown/pending/100percent or realperiodchange rejects. Effective caps are minima of operation/original/bootstrap/armed/current state before and after guardian.guard, with actual guarded clocks strictly below. No clock expansion or paidfallback.",
+    "Source4 frontier/validate_adoption/append_stage/append_resource1 algorithms AST unchanged;207rows202identities retained with all UNKNOWNs. Historical Root68/free3fd explicitly labeled; output current_free_candidate true but independent_acceptance false and current_physical_clearance_pending true. No native acceptance or owner clearance output.",
+    "Consumer only delegates accepted physicalhistory readonly observation,2exactCID/namequeries and original fullprocess census; no kernel/app/native entry, build, cleanup, signal or lease acquisition introduced. Existing physical resource/cgroup/locks/probe/headroom algorithms reused at prior accepted source scope; no history rereview.",
+    "Observer exclusive confined output creation plus exact release source/bindings/output/max1 and independent release_payload guard one-shot ordinary entry; CPU0/AS2GiB/CPU60 profile retained. Partial observation output cannot be independent currentfree; actual completed parentjoin and independent free remain required.",
+    "Parent7e095e has known exceptionownership defect: Popen creates owned child, then identity(child.pid) and STARTED.write_text run before wait4 without try/finally or captured error. ENOENT/writefailure exits parent without joining child. Normal-path wait4/streamclosure does not cover these failures. Must repair before release."
+  ],
+  "checks": [
+    {
+      "script": "test_readonly_guard.py",
+      "returncode": 0,
+      "result": "PASS historical refs plus syntheticreadonlycontext/sameperiod\u00b13/effectiveminima/25negativecases; no guard call"
+    },
+    {
+      "script": "check_source_delta.py",
+      "returncode": 0,
+      "result": "PASS unchanged4custodyfunctions/207scope/Qminima/read-onlydistinctoperation/historical3fd"
+    }
+  ],
+  "blocking_predicate": {
+    "source": "root_capture_parent.py:main after subprocess.Popen",
+    "problem": "Every post-Popen evidence failure must retain and positively join exactly that child before terminal reporting",
+    "minimal_fix": "Reuse accepted e72f parent exceptionownership pattern: initialize child_identity/evidence_error, catch identity/STARTED publication failures, always wait4 child and close streams, publish evidence_error, reject nonnull error. Use fsynced atomic final join publication; preserve old source/failure. No predicate weakening or newframework."
+  },
+  "required_actual_release_refs": [
+    "Root custody ACTUAL bytes: exact historical ledgerd948/boundaryaceb/free3fd plus0561/3587, UNKNOWNsource-tools/client retained and attestation of all later operations; not currentfree.",
+    "New readonly intent/successor and independentoperationreview ACTUAL; ROOT-READONLY-GUARD-BINDING.ACTUAL.json source29bc and exact currentarmed42c8/bootstrap caps, subjectclosure including corrected parent BYTEref.",
+    "Physicalhistory binding ACTUAL to adapterf685 and exact guardbinding, complete source_chain and independent physicalhistory review.",
+    "ROOT-ACTUAL-FRONTIER-OBSERVER-BINDING.json exactobserver3459/context/bothcustodies/history/querydir and independentobserverreview binding entire payload.",
+    "RELEASE.ACTUAL.json authorRoot/max1/exactobserver/bindings/output/no nativeorproducer authority and independently authored exact release_payload review; corrected parent/source/argv/finiteprofile explicitly bound by release/review and operation subjects.",
+    "Fresh output namespace and exact parent launch under reviewedCPU0/AS2GiB/CPU60/anaconda3 profile. Aftercapture require actual positiveparentjoin/errorfree/closedstreams/groupabsence/raw3queries and callerclosure; independently accept new currentfree/frontier ledger before buildadmission. Old3fd cannot fill newfree."
+  ],
+  "actual_operation": null,
+  "actual_release": null,
+  "actual_caller_join": null,
+  "actual_current_free": null,
+  "guard_calls": 0,
+  "proc_reads": 0,
+  "Docker_calls": 0,
+  "compiler": 0,
+  "native": 0,
+  "runtime_authority": null
+}

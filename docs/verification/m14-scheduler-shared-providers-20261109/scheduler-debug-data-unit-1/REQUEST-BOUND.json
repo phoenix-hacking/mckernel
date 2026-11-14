@@ -1,0 +1,152 @@
+{
+  "schema": "mckernel.scheduler-debug18.proposed-compile.v1",
+  "status": "PROPOSED_COMPILE_ONLY_NOT_RUN_PENDING_INDEPENDENT_GO_AND_ROOT_FRESH_HOST_ADMISSION",
+  "owner": "/root sole actual HOST admission/execution owner",
+  "private_source_owner": "/root/scheduler_debug_data_high",
+  "cwd": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-unit-1",
+  "private_output": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-unit-1/output",
+  "commands": [
+    {
+      "label": "provider-compile",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-unit-1/provider-compile.metrics",
+        "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--crate-type=lib",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "code-model=large",
+        "-C",
+        "relocation-model=static",
+        "-C",
+        "no-redzone=yes",
+        "-C",
+        "no-vectorize-loops",
+        "-C",
+        "no-vectorize-slp",
+        "-C",
+        "target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma",
+        "--cfg",
+        "process_verbose_data",
+        "--emit=obj",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-unit-1/output/scheduler_debug_data.o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-unit-1/scheduler_debug_data_unit.rs"
+      ],
+      "environment_overrides": {
+        "MCKERNEL_PROCESS_C_FILE": "/home/holden/mckernel/kernel/process.c",
+        "MCKERNEL_PROCESS_DDEBUG_FLAGS": "1"
+      },
+      "stdout_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-unit-1/provider-compile.stdout",
+      "stderr_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-unit-1/provider-compile.stderr",
+      "expected_returncode": 0
+    }
+  ],
+  "inputs": {
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-unit-1/scheduler_debug_data_unit.rs": "927c6851fb7cdbd25a43577c70c8c7055f77a590b1b8429570500102dd9083c2",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-unit-1/debug_type.rs": "67b9184d219de1eaf829abda4c51910c2e3ab6e090c126950dea8b5aa8470952",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-unit-1/process_verbose_data.rs": "840766326c379ac370653f8adaa230a12dbf6a68f59ee0ae1c4bf95127b76d2f",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-unit-1/SOURCE-PROOF.json": "3932ca70def6e7cbab9f6d4f99a6aaf0b169960fb973860ae6f3b21e4b8ebba6",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-unit-1/CONFIG-PROOF.json": "4b1e4a05e54c10437752b655e8b2047ca817d0ef913dd6661e8d462c9d31af2c"
+  },
+  "compiler_profile": {
+    "source_receipt": "/home/holden/mckernel/docs/verification/m14-f03-adapters-unit-20261105-2/receipt.json",
+    "compiler": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+    "compiler_sha256": "70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09",
+    "compiler_version_from_receipt": "rustc 1.95.0-nightly (c04308580 2026-02-18)",
+    "no_std": true,
+    "warning_policy": "Require exact unchanged retained single target-feature sse2 ABI warning bytes; no extra warnings suppressed. This is inherited HOST partial-codegen scope, not final/native ABI acceptance.",
+    "expected_compile_stderr_path": "/home/holden/mckernel/docs/verification/m14-f03-adapters-unit-20261105-2/stderr.txt",
+    "expected_compile_stderr_sha256": "52aa1b68329c0e77b9847f4d1c1d5a4f88f802ffe2e6a69f2dace0fadf9add99",
+    "required_source_feature": "None beyond no_std and exact original constants/type/static; no atomic or native asm source in this data-only cut.",
+    "retained_codegen_options_unchanged": true,
+    "source_selection_delta": "Required --cfg process_verbose_data plus actual MCKERNEL_PROCESS_C_FILE and MCKERNEL_PROCESS_DDEBUG_FLAGS env1; unchanged options are defined by retained profile reference, not a claim that the entire argv/environment is byte identical."
+  },
+  "profile": {
+    "CPU": [
+      6
+    ],
+    "local_serial_jobs": 1,
+    "AS_bytes": 1073741824,
+    "CPU_seconds": 45,
+    "wall_seconds": 60,
+    "kill_after_seconds": 5,
+    "FSIZE_bytes": 67108864,
+    "core_bytes": 0,
+    "aggregate_HOST_CPUs": [
+      0,
+      6,
+      7
+    ],
+    "aggregate_jobs_max": 3,
+    "aggregate_HOST_total_bytes_all_overhead": 4294967296,
+    "retained_prior_bytes": 19327352832,
+    "host_floor_bytes": 4294967296,
+    "fresh_MemAvailable_minimum_bytes": 27917287424
+  },
+  "retained_profile_reference": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/REQUEST.json",
+    "sha256": "fa8166319eed657c68c83efca2537c30c93a89b5a5e0325abe0d5ecf953c2783",
+    "difference": "Exact retained nightly1.95 no_std finite HOST partial flags; only source/output/metrics/capture paths plus required --cfg process_verbose_data and two original env! inputs differ. No compiler/metadata/link execution here."
+  },
+  "provider_object": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-unit-1/output/scheduler_debug_data.o",
+  "expected_diagnostics": "Exact inherited singleSSEwarning bytes only/noextra; compile stdoutempty/otherstderrsempty. Stopfirstunexpectedfailure/noautomaticretry.",
+  "expected_global_object": "process_remaining_range_scheduler_debug",
+  "expected_T": 0,
+  "expected_external_U": 0,
+  "expected_data": {
+    "record_count": 18,
+    "bytes": 576,
+    "alignment": 8,
+    "section": "__verbose",
+    "field_relocations": 36,
+    "fmt": "all NULL",
+    "flag": 1,
+    "literal_line_flags": [
+      16779353,
+      16779357,
+      16779363,
+      16779367,
+      16779373,
+      16779377,
+      16779383,
+      16779389,
+      16781564,
+      16781573,
+      16781577,
+      16781584,
+      16781590,
+      16781598,
+      16781606,
+      16781614,
+      16781629,
+      16777705
+    ]
+  },
+  "metadata_or_join_commands_selected": false,
+  "scope": "One proposed ordinary data-only compile. Actual emitted object must pass source/config-bound object predicate before any future ld-r. No function, logging, registry/init, scheduling, IRQ, boot, native/default/fullimage acceptance or C retirement.",
+  "supersedes_unexecuted_proposal": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-unit-1/REQUEST.json",
+    "sha256": "5f7840752d8f88ec17a3e4516da31776cbbcc688a8ec72dab0f8d399b8b071d6",
+    "reason": "Clarify inherited profile identity booleans: retained compiler/codegen options are unchanged; required cfg/env differ explicitly. No command or source changed."
+  }
+}

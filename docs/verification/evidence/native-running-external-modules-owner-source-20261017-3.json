@@ -1,0 +1,70 @@
+{
+  "application_acceptance": false,
+  "author": "/root/image_reconciliation_impl",
+  "checks": {
+    "focused_tests": {
+      "elapsed_seconds": 0.6355799709999701,
+      "returncode": 0
+    },
+    "syntax": {
+      "elapsed_seconds": 0.04455910500109894,
+      "returncode": 0
+    },
+    "test_count": 30
+  },
+  "contract": {
+    "admission_capture": "ROOT/native-running-modules-admission-<request nonce> (fresh, source-fixed)",
+    "all_observer_clients_in_retirement_proof": true,
+    "historical_observer": {
+      "path": "/home/holden/mckernel/scripts/native_exact_historical_lease_observer.py",
+      "prefix": [
+        "/usr/bin/sudo",
+        "-A",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B"
+      ],
+      "sha256": "463ae558e141c2a6fe5a016fb19baddb26ed883c3bf6d39c114b27711ee78a51",
+      "timeout_seconds": 30
+    },
+    "request_schema_unchanged": true,
+    "root_lock_held_through_admission": true,
+    "uncertain_observer_before_build": "root quarantine; no build entered",
+    "unknown_or_changed_historical_records": "reject"
+  },
+  "created_at": "2026-10-17T15:02:59.956173+00:00",
+  "evidence": {
+    "add-tests.py": "de810012f6d23c1f7b4e5111d3a88c9d2d6ea34ef2064f48cc1b39346b06d04e",
+    "edit-tests.py": "2c8ea0c4d2fa0d8d8b31ad17dfa92e2a858a2c2cb17b3282957c9561758ba093",
+    "native-running-external-modules-owner-source-20261017-2.json": "6d19e9149f62215554520a48aebf19ef9ff9985a40e2bf6e69d2f162598981e5",
+    "native_running_external_modules_owner.py": "dc021f75c05f37c1bf3613d4baa89370aaa63d9cfd012f1f8039a475608954c6",
+    "owner-corrected.py": "5c9799a8b44d2968dd57a396666548f2ad18227fa4b4291f9ac37c9decbbe961",
+    "run-checks.py": "c9dda9b307184f7171d970e1f8b23d89c2990d5f658ebc62617317f4511d080c",
+    "syntax-command.json": "100197865540c45234c4fcf99cfe84f3918ae0359f4e14b58c428edf4f9fec33",
+    "syntax-result.json": "d9c06a26d500e88f22802ddd8579fd0dc5e03814eccf14c3842c90fe37a3d4da",
+    "syntax.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "syntax.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "test_native_running_external_modules_owner.py": "e0c955b3e49a5592d0ad4fa89f006ef52e542c5f31de451153cc297d0d564356",
+    "tests-command.json": "25219eae95faa59973e4e6fb7cdc357a15c2789e085e549e45076aeacc0f245d",
+    "tests-corrected.py": "7076a5e1b8c20a0dc7bf6b12be42e884e85feaa0fdbcdf315bd49bbd1d40aab7",
+    "tests-result.json": "efb35651d0b9bbb6fdc685f93c079e10eaa2c722e5baed3ada99669dc4d1db20",
+    "tests.stderr": "192396e08fb494647595c292b238f52f38a84863f0882faa1b40d3a52aecf788",
+    "tests.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "next": "Independent source review; dispatcher alone constructs updated exact execution packet/release.",
+  "preserved_v2": {
+    "native-running-external-modules-owner-source-20261017-2.json": "6d19e9149f62215554520a48aebf19ef9ff9985a40e2bf6e69d2f162598981e5",
+    "native_running_external_modules_owner.py": "dc021f75c05f37c1bf3613d4baa89370aaa63d9cfd012f1f8039a475608954c6",
+    "test_native_running_external_modules_owner.py": "e0c955b3e49a5592d0ad4fa89f006ef52e542c5f31de451153cc297d0d564356"
+  },
+  "production_acceptance": false,
+  "schema": "mckernel.native-running-external-modules-owner-source-review-request.v3",
+  "scope": "Source-only fixed historical observer admission; no sudo, observer, Docker, build or guest executed.",
+  "source_sha256": {
+    "scripts/native_exact_historical_lease_observer.py": "463ae558e141c2a6fe5a016fb19baddb26ed883c3bf6d39c114b27711ee78a51",
+    "scripts/native_running_external_modules_owner.py": "5c9799a8b44d2968dd57a396666548f2ad18227fa4b4291f9ac37c9decbbe961",
+    "scripts/tests/test_native_running_external_modules_owner.py": "7076a5e1b8c20a0dc7bf6b12be42e884e85feaa0fdbcdf315bd49bbd1d40aab7"
+  },
+  "status": "READY_FOR_INDEPENDENT_SOURCE_REVIEW",
+  "task": "external-module-owner-correction3-historical-admission"
+}

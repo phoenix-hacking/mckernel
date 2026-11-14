@@ -1,0 +1,134 @@
+{
+  "OUTPUT": "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/normalization-runtime-data/runtime-source-preparation-1/bound-runtime-source-1/root-live-preflight-1.json",
+  "actual_snapshot_ref": null,
+  "actual_snapshot_sha256": null,
+  "actual_static_review": {
+    "bytes": null,
+    "path": null,
+    "sha256": null
+  },
+  "actual_timestamp": null,
+  "application_acceptance": false,
+  "bindings": {
+    "bytes": 22567,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/normalization-runtime-data/runtime-source-preparation-1/bound-runtime-source-1/fresh-snapshot-bindings.json",
+    "sha256": "6958fdaffd776fb05629c4e22234f94bb422bd09415859ff2bfe9cad5cfaaee1"
+  },
+  "current100percent_included_only": true,
+  "latest_physical": {
+    "bytes": 3213,
+    "path": "/home/holden/mckernel-work/host-preparation/process-owned-fork-rust-next-preparation-20261021-1/locking-correction-1/compiler-owner-preparation-1/exact-compiler-release-data-preparation-1/INDEPENDENT-ACTUAL-FOUR-OBJECT-COMPILER-PHYSICAL-ACCEPTANCE-1.json",
+    "sha256": "911d5c615b78b9c14875c48bd557ab00734f96558987637178b946c6a0b1de96"
+  },
+  "non_temporal_freeze": {
+    "bytes": 11842,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/normalization-runtime-data/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1/non-temporal-freeze.json",
+    "sha256": "55c09b8c8e996ee9b70bf15c9b5edd684cf81653c4fa10ffd3a517d8c44d8844"
+  },
+  "producer": {
+    "bytes": 23551,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/normalization-runtime-data/runtime-source-preparation-1/bound-runtime-source-1/root_manual_snapshot_threads.py",
+    "sha256": "b70a77c61403da3bb9859f8d04aff32bd194e244c1a278faefcdaa89ac94b60e"
+  },
+  "profile": {
+    "AS": 1073741824,
+    "CPU": 6,
+    "CPU_seconds": 30,
+    "kill_after_seconds": 2,
+    "stream_bytes": 33554432,
+    "wall_seconds": 35
+  },
+  "root_snapshot_argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--core=0",
+    "--nofile=256",
+    "--fsize=33554432",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/normalization-runtime-data/runtime-source-preparation-1/bound-runtime-source-1/root_manual_snapshot_threads.py",
+    "--bindings-sha256",
+    "6958fdaffd776fb05629c4e22234f94bb422bd09415859ff2bfe9cad5cfaaee1",
+    "--terminal",
+    "/home/holden/mckernel-work/host-preparation/process-owned-fork-rust-next-preparation-20261021-1/locking-correction-1/compiler-owner-preparation-1/exact-compiler-release-data-preparation-1/INDEPENDENT-ACTUAL-FOUR-OBJECT-COMPILER-PHYSICAL-ACCEPTANCE-1.json",
+    "--terminal-sha256",
+    "911d5c615b78b9c14875c48bd557ab00734f96558987637178b946c6a0b1de96"
+  ],
+  "schema": "mckernel.selected205.m03-current100-static-snapshot-projection.v1",
+  "snapshot_equal": {
+    "accepted_actual_stage_fixture_parent_review": {
+      "bytes": null,
+      "path": null,
+      "sha256": null
+    },
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "cgroup": {
+      "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_period_us": "100000",
+      "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_quota_us": "400000",
+      "/sys/fs/cgroup/memory/mckernel-dev/memory.limit_in_bytes": "12884901888",
+      "/sys/fs/cgroup/memory/mckernel-dev/memory.use_hierarchy": "1",
+      "/sys/fs/cgroup/pids/mckernel-dev/pids.max": "512"
+    },
+    "current_predecessor_container_absent": true,
+    "exclusive_heavy_accepted": true,
+    "guest_profile": {
+      "memory_mib": 8192,
+      "numa_nodes": 2,
+      "vcpus": 4
+    },
+    "heavy_profile": {
+      "cpus": 4,
+      "cpuset": "2-5",
+      "memory": 12884901888,
+      "memory_swap": 12884901888,
+      "network": "none",
+      "pids": 512
+    },
+    "image_id": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+    "independent_static_execution_decision": {
+      "bytes": null,
+      "path": null,
+      "sha256": null
+    },
+    "non_temporal_join_result": {
+      "bytes": 11842,
+      "path": "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/normalization-runtime-data/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1/non-temporal-freeze.json",
+      "sha256": "55c09b8c8e996ee9b70bf15c9b5edd684cf81653c4fa10ffd3a517d8c44d8844"
+    },
+    "parent_identity": {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 883370,
+      "mode": "0o700",
+      "uid": 1000
+    },
+    "released_paths_absent": [
+      "/home/holden/mckernel-work/scratch/native-held-host-control-fullmodule-external-modules-operational-exclusion.json",
+      "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock"
+    ],
+    "root_mutex_snapshot_free": true,
+    "status": "PASS_LIVE_PREEXECUTION_SNAPSHOT",
+    "terminal_acceptance": {
+      "bytes": 3213,
+      "path": "/home/holden/mckernel-work/host-preparation/process-owned-fork-rust-next-preparation-20261021-1/locking-correction-1/compiler-owner-preparation-1/exact-compiler-release-data-preparation-1/INDEPENDENT-ACTUAL-FOUR-OBJECT-COMPILER-PHYSICAL-ACCEPTANCE-1.json",
+      "sha256": "911d5c615b78b9c14875c48bd557ab00734f96558987637178b946c6a0b1de96"
+    }
+  },
+  "snapshot_equal_fields": 15,
+  "status": "PENDING_INDEPENDENT_STATIC_DATA_REVIEW",
+  "status_path": "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/normalization-runtime-data/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1/snapshot.status.json",
+  "stderr_path": "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/normalization-runtime-data/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1/snapshot.stderr",
+  "stdout_path": "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/normalization-runtime-data/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1/snapshot.stdout"
+}

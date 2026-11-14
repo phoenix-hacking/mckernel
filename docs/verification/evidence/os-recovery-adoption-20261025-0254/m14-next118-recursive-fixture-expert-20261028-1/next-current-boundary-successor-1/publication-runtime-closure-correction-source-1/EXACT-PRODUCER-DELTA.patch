@@ -1,0 +1,28 @@
+--- docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/prepare_publication_rows.py
++++ docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/publication-runtime-closure-correction-source-1/prepare_publication_rows.py
+@@ -3,7 +3,7 @@
+ """
+ from pathlib import Path
+ import hashlib,json
+-D=Path(__file__).resolve().parent;repo=Path('/home/holden/mckernel')
++D=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort');repo=Path('/home/holden/mckernel')
+ def read(p):return json.loads(Path(p).read_bytes())
+ def ref(p):
+  p=Path(p);b=p.read_bytes();return dict(path=str(p),bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+@@ -29,11 +29,14 @@
+ for key in ['successor','independent_review']:add(operation[key])
+ for row in operation['expected_subjects'].values():add(row)
+ 
+-# Include every nested runtime DATA dependency, including implicit sibling reads.
++# Publication-only correction: explicit loader roles; retained payloads remain opaque.
+ core_ref={'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/typed_current_boundary.py', 'bytes': 12354, 'sha256': '00483f2b97dbd03d76ee397ab9c80c050821ba1f705168d3606822b796e87514'}
+ assert ref(core_ref['path'])==core_ref
+ import importlib.util
+-_spec=importlib.util.spec_from_file_location('exact118_runtime_data_closure',core_ref['path'])
++publication_helper_ref={'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/publication-runtime-closure-correction-source-1/publication_runtime_closure.py', 'bytes': 15921, 'sha256': '2b4c4be8e7dd2c1a0ff0c3b5853d09d5b21b5564d9a6d0ffb2fabf1feae58a1c'}
++assert ref(publication_helper_ref['path'])==publication_helper_ref
++add(publication_helper_ref);add(ref(__file__))
++_spec=importlib.util.spec_from_file_location('exact118_runtime_data_closure',publication_helper_ref['path'])
+ _typed=importlib.util.module_from_spec(_spec);_spec.loader.exec_module(_typed)
+ typed_ref=actual_binding['typed_current_boundary_binding']
+ selection_ref={'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/UPSTREAM-SELECTION.SOURCE-ONLY.json', 'bytes': 2114, 'sha256': '596600fab7c3e8551c564187cce52e8207ecf088fe4ac618cf74028eeaee5312'}

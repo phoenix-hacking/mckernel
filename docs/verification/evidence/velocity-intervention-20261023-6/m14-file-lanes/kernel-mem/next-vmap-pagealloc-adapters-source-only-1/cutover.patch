@@ -1,0 +1,72 @@
+--- a/kernel/mem.c
++++ b/kernel/mem.c
+@@ -5931,11 +5931,8 @@
+ 	return vmap_allocator;
+ }
+ 
+-static void *mem_vmap_init_bridge(unsigned long start, unsigned long size,
+-		unsigned long unit)
+-{
+-	return ihk_pagealloc_init(start, size, unit);
+-}
++extern void *mem_vmap_init_bridge(unsigned long start, unsigned long size,
++		unsigned long unit);
+ 
+ static int mem_pt_prepare_map_bridge(page_table_t pt, void *virt,
+ 		unsigned long size, enum ihk_mc_pt_prepare_flag flag)
+@@ -5943,17 +5940,11 @@
+ 	return ihk_mc_pt_prepare_map(pt, virt, size, flag);
+ }
+ 
+-unsigned long mem_vmap_alloc_bridge(void *desc, int npages,
+-		int p2align)
+-{
+-	return ihk_pagealloc_alloc(desc, npages, p2align);
+-}
+-
+-void mem_vmap_free_bridge(void *desc, unsigned long address,
+-		int npages)
+-{
+-	ihk_pagealloc_free(desc, address, npages);
+-}
++extern unsigned long mem_vmap_alloc_bridge(void *desc, int npages,
++		int p2align);
++
++extern void mem_vmap_free_bridge(void *desc, unsigned long address,
++		int npages);
+ 
+ int mem_pt_set_page_bridge(page_table_t pt, void *virt,
+ 		unsigned long phys, enum ihk_mc_pt_attribute attr)
+--- a/kernel/rust/mem_helpers.rs
++++ b/kernel/rust/mem_helpers.rs
+@@ -176,8 +176,6 @@
+     fn mem_pending_free_bridge(phys: CULong, npages: CInt, is_user: CInt);
+     fn mem_finish_free_pages_pending_panic_bridge();
+     fn mem_vmap_allocator_bridge() -> *mut c_void;
+-    fn mem_vmap_alloc_bridge(desc: *mut c_void, npages: CInt, p2align: CInt) -> CULong;
+-    fn mem_vmap_free_bridge(desc: *mut c_void, address: CULong, npages: CInt);
+     fn mem_pt_set_page_bridge(
+         pt: *mut c_void,
+         virt: *mut c_void,
+@@ -6979,3 +6977,21 @@
+         )
+     }
+ }
++
++/// Same allocator-construction provider; ownership stays with the existing caller.
++#[no_mangle]
++pub unsafe extern "C" fn mem_vmap_init_bridge(start: CULong, size: CULong, unit: CULong) -> *mut c_void {
++    unsafe { crate::page_alloc::ihk_pagealloc_init(start, size, unit) }
++}
++
++/// Exact signed page-count/alignment arguments and zero/failure address return.
++#[no_mangle]
++pub unsafe extern "C" fn mem_vmap_alloc_bridge(desc: *mut c_void, npages: CInt, p2align: CInt) -> CULong {
++    unsafe { crate::page_alloc::ihk_pagealloc_alloc(desc, npages, p2align) }
++}
++
++/// Existing descriptor/address/count free provider; no added cleanup or ACK.
++#[no_mangle]
++pub unsafe extern "C" fn mem_vmap_free_bridge(desc: *mut c_void, address: CULong, npages: CInt) {
++    unsafe { crate::page_alloc::ihk_pagealloc_free(desc, address, npages) }
++}

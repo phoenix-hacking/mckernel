@@ -1,0 +1,72 @@
+{
+  "schema": "mckernel.native-exact-scratch14-preparation-success.v1",
+  "status": "PASS_POSTFLIGHT",
+  "scope": "source candidate preparation and validation only; no build, guest, runtime, or acceptance claim",
+  "release_commit": "36ff8fafe5986b67afac5e7f36bfba2afa5fb4ae",
+  "candidate": {
+    "sha": "c81aeaca5cedd893981a058444fa11a03a49a744",
+    "root": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-c81aeaca-scratch-14",
+    "identity": "1831:1464725",
+    "source_manifest_entries": 9404,
+    "main_index_entries": 8112
+  },
+  "ihk": {
+    "sha": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+    "index_entries": 1296,
+    "overlay_patch_sha256": "cbaaec7b649608674747e4d88acdd1f0a005cff6ff696046b8d96ed959af49e7",
+    "overlay_result_sha256": "7abb77fdc3049a54caebc3344de14c41e779502b4abcb7f301de4a647e15bf77"
+  },
+  "artifacts": {
+    "log": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-candidate-preparation-c81aeaca-scratch-14.log",
+      "sha256": "5b611d53e5f4dadd3614570500bb6075db0dbc2a9038ed965395bf3de5b26ad1"
+    },
+    "terminal": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-candidate-preparation-c81aeaca-scratch-14-terminal.json",
+      "sha256": "d41e80310c4af581e59a825936d73476e1e5f0a53e55dd6712eb60259069a6fd",
+      "pid": 2383539,
+      "returncode": 0
+    },
+    "input_manifest": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-inputs-c81aeaca-scratch-14.json",
+      "sha256": "1bf7aea3f3dbccc92a08f307e2b96626a4a24b879bdb592478851e3d2121eed3"
+    },
+    "request": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-build-request-c81aeaca-scratch-14.json",
+      "sha256": "fb0d0a5b232e5efe12ea39d68596ee1440ed10fa34875059634d91abb53e1164",
+      "preparation_only": true,
+      "execution_released": false
+    },
+    "metadata_backup": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-metadata-backup-c81aeaca-scratch-14",
+      "identity": "1831:1858963",
+      "entries": 86,
+      "receipt_sha256": "3b2a442932c07611d1f0c4cfdc0e7f374cd95568800c7a2d3a16170e9df63190"
+    }
+  },
+  "postflight": {
+    "decision": "PASS_POSTFLIGHT",
+    "process_retired": true,
+    "residual_open_references": 0,
+    "docker_total": 42,
+    "docker_running_unrelated": 2,
+    "output_empty": true,
+    "evidence_empty": true,
+    "lease_absent": true,
+    "exportset26_exclusion_absent": true,
+    "scratch_free_bytes": 16632545280,
+    "host_free_bytes": 24103518208,
+    "mem_available_kib": 27026156
+  },
+  "preserved_exportset25": {
+    "container": "aef5164c5209f62b5f1be6d545f34001779d2ed78008235114890f981635708b",
+    "state": "exited-1-pid0-not-oom",
+    "failed_object_sha256": "c32ff593dc6a11d490eb3d65ae4c72887e0fceb27e50fc0139d64c2dc48c23e2",
+    "exclusion_identity": "1831:90679",
+    "output_regular_files": 396,
+    "output_current_regular_bytes": 17456869,
+    "historical_summary_bytes": 17854181,
+    "limitation": "no original per-output inventory exists, so aggregate output byte identity is not certified"
+  },
+  "next": "prepare and independently execute a fresh candidate-bound source-free tool image receipt for c81aeaca, then prepare the fresh libdwarf gitlink and exportset-26 image request"
+}

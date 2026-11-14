@@ -1,0 +1,3 @@
+3127:pub(crate) fn close_worker_actual(remote:&Remote,parent:Token,worker:u64){let mut slots=remote.slots.lock();let p=slots.iter_mut().flatten().find(|p|p.key()==parent).unwrap();assert_eq!(p.syscalls.close_worker(worker),Err(EBUSY));abort_parent_forks(&mut slots,parent,Some(worker));}
+6669:fn control_request(change:Option<(usize,u64)>)->crate::Request {
+6673:fn control(j:&mut Joined,r:crate::Request)->(i32,u64,u64){let(w,s)=crate::smp_application::delivered(&j.remote,j.parent,&j.memory,r);let(p,_)=j.connections.as_mut().unwrap().raw();(unsafe{crate::provider_runtime::prepare_fork_control_application(p,w,s,0,-95)},w,s)}

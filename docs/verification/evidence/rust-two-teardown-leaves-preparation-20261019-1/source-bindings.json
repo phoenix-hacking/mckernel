@@ -1,0 +1,51 @@
+{
+  "status": "STATIC_COMPOSITION_ONLY",
+  "fixed_base": "1e7 image retained process.c and b3 process_helpers.rs",
+  "base_files": {
+    "kernel/process.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-next-process-leaf-20261018-1/production-integration-1/base/kernel/process.c",
+      "sha256": "d190ada53817aca4cc44e916e884e99bad430049393874b649806458b706f3de",
+      "bytes": 156675
+    },
+    "kernel/rust/process_helpers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-next-process-leaf-20261018-1/production-integration-1/base/kernel/rust/process_helpers.rs",
+      "sha256": "b3a28ea8b0cd2594305644c224ae718eac384c0709305da315a6b8fd1285d00b",
+      "bytes": 324283
+    }
+  },
+  "composed_files": {
+    "kernel/process.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-next-compatible-leaf-20261019-1/two-leaf-composition-1/candidate/kernel/process.c",
+      "sha256": "1e828bc0a7e84c9d4c194881b7777cd5b4c223a9b57b3633641547b109380a91",
+      "bytes": 156952
+    },
+    "kernel/rust/process_helpers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-next-compatible-leaf-20261019-1/two-leaf-composition-1/candidate/kernel/rust/process_helpers.rs",
+      "sha256": "106663ea9cb3e2636800a32e575bcfc46b34b22a67088249a19a22e7621b2d9f",
+      "bytes": 328358
+    }
+  },
+  "parent_packets": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-next-process-leaf-20261018-1/production-integration-1/review-packet.json",
+      "sha256": "9173069dd2573c512c863a528ebd2b5da5c6185935535694be7e6bcf4efa121f"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-next-process-leaf-20261018-1/production-integration-1/retention-correction-1/RESULT.json",
+      "sha256": "57203a6ca0f91ad2b4e9dc8150afed604fc953ee289730f96ccaacda0a12dd23"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-next-compatible-leaf-20261019-1/review-packet.json",
+      "sha256": "fed7e32f2b0ccc2e0d25bd0a1b45087812ac7816f4d36924c7a3d7c90da794a2"
+    }
+  ],
+  "root_review_status": "Root reports independent0034 PASS on both leaf source boundaries and21member retention; no fabricated external report identity",
+  "source_operations": [
+    "Apply reviewed TID selection/prototype/logger and exact Rust append to fixed baseline",
+    "Apply reviewed time callback C selection/prototype, remove its old Rust extern once, append exact reviewed time body",
+    "Retain both original C bodies byte-identically under fallback",
+    "Preserve exactly existing default callbacks; use unique time ABI aliases"
+  ],
+  "semantic_suite_replayed": false,
+  "compiler_or_runtime": false
+}

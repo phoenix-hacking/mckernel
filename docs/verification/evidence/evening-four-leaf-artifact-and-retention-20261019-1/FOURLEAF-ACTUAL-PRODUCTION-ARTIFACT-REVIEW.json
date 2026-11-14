@@ -1,0 +1,821 @@
+{
+  "schema": "mckernel.independent-rust-four-leaf-image-actual-review.v1",
+  "decision": "PASS_ACTUAL_PRODUCTION_IMAGE_ARTIFACT_AND_GUARD_RETIREMENT",
+  "reviewer": "resume_git_owner_review",
+  "implementation_ownership": false,
+  "time_unix": 1792393438.085719,
+  "scope": "Actual default four-leaf Rust production image artifact, originalC ABI compiler proofs, selected body/default consumer and exact descriptor Cstrings. Native execution and live computeC retirement credit remain pending.",
+  "production_artifact_acceptance": true,
+  "runtime_acceptance": false,
+  "compute_c_retirement_credit": false,
+  "actual_artifacts": {
+    "cpu": {
+      "bytes": 169984,
+      "ctime_ns": 1792389912322417840,
+      "dev": 66306,
+      "gid": 1000,
+      "inode": 48002584,
+      "mode": 420,
+      "mtime_ns": 1792389912322417840,
+      "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+      "sha256": "8f53fae270a167da2576b9ab27da5e91bbf1b6ca2c088495ec12520d9691c12f",
+      "uid": 1000
+    },
+    "image": {
+      "bytes": 7962040,
+      "ctime_ns": 1792389914114400421,
+      "dev": 66306,
+      "gid": 1000,
+      "inode": 48002602,
+      "mode": 493,
+      "mtime_ns": 1792389914114400421,
+      "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/owner-work/output/build/kernel/mckernel.img",
+      "sha256": "0eca91b13bd62ab98441104930eda1a63f247fecd939996858b16f90b7480550",
+      "uid": 1000
+    },
+    "process": {
+      "bytes": 309136,
+      "ctime_ns": 1792389912590415234,
+      "dev": 66306,
+      "gid": 1000,
+      "inode": 48002592,
+      "mode": 420,
+      "mtime_ns": 1792389912590415234,
+      "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+      "sha256": "918b1bab298541b0e6c0c9693672c667cf2a92161ff3ce6899e89d1c98a4b4a1",
+      "uid": 1000
+    },
+    "rust": {
+      "bytes": 12710888,
+      "ctime_ns": 1792389911742423481,
+      "dev": 66306,
+      "gid": 1000,
+      "inode": 48002575,
+      "mode": 420,
+      "mtime_ns": 1792389911742423481,
+      "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/owner-work/output/build/kernel/rust/mckernel_rust.o",
+      "sha256": "c5362ca808ac98a7a8f543cd28b77994b90cfefb459e682a1afdc8c16834b71a",
+      "uid": 1000
+    }
+  },
+  "source_request_bindings": {
+    "request": {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/image-request.json",
+      "sha256": "bc98516d19e79ac3cc4a0fd89ca4f9de7e60ee7b64c77ead65e808d44c61dba9"
+    },
+    "manifest": {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/thin-inputs.json",
+      "sha256": "83e047abf793f2de3bf1a6f260c1493bf9ba600609b547c0665033dd90e88954"
+    },
+    "materialization_receipt": {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/materialization-receipt.json",
+      "sha256": "4a4cdb6b3228b357f811be19056c3c1994e57b67fc670a3928a82113e749d64b"
+    }
+  },
+  "source_identity": {
+    "dev": 66306,
+    "file_type": 16384,
+    "gid": 1000,
+    "inode": 47992786,
+    "mode": 448,
+    "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/materialized-source",
+    "uid": 1000
+  },
+  "candidate_identity_scope": "base_git_commit_only",
+  "candidate_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+  "source_derivative_sha256": "8ca6e79ff41ee3a90b2dc5d85f020a65efebb35c5cffd24acd37da6fe17d4cfc",
+  "materialization_sha256": "8fbf585c1b151801663ee0a1346505fdc50663191a0cd09349227fb7386499b5",
+  "actual_source11": {
+    "count": 11,
+    "host_owner": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/adapters/native_rust_exact_build_container_owner.py",
+    "source11": {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/source-sha256.json",
+      "sha256": "ee61adc210497066f49c6f9bd31310fe20409b14efea3bf28c85271d3b05cc60"
+    },
+    "current_guard": {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/native_exact_scratch22_authority3_image_guard_corrected.py",
+      "sha256": "1225df5ac565f787144771ca61d678aaa504fc24b759f7bc229be3d543117886"
+    },
+    "request_lineage": {
+      "request": {
+        "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/image-request.json",
+        "sha256": "bc98516d19e79ac3cc4a0fd89ca4f9de7e60ee7b64c77ead65e808d44c61dba9"
+      },
+      "guard_result": {
+        "path": "/home/holden/mckernel-work/scratch/native-rust-four-leaf-image-guard-20261019-dd1e6fe2b7a54dfaa90e777674d58c86/guard-result.json",
+        "sha256": "001830bf933b9e2cfa101f39b9ecb4647863e9e0fdd08fc57c87de401e1e49d3"
+      },
+      "owner_receipt": {
+        "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/owner-evidence/owner-receipt.json",
+        "sha256": "237af8d77af2e3ae2dd9974142e8c890c079ff2be5175509ee7ad46421158281"
+      },
+      "postjoin_readback": {
+        "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/image-guard-postjoin-readback.json",
+        "sha256": "7dc405b4264cc296ed8185c3f47423a39c5509224d4dcb1d5ed2af80917763a8"
+      }
+    }
+  },
+  "actual21_originals": [
+    {
+      "action": "copy",
+      "kind": "CMakeCache.txt",
+      "original": {
+        "ctime_ns": 1792389866730866864,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 48002220,
+        "mode": "0o644",
+        "mtime_ns": 1792389866730866864,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/owner-work/output/build/CMakeCache.txt",
+        "sha256": "2dc15e5e36780c4e5869d16b1a62a94557a61dfc8cf3e2dd732f7e78c183ae36",
+        "size": 26282,
+        "uid": 1000
+      },
+      "retained": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/terminal-preparation-1/retained-production-objects/CMakeCache.txt",
+      "retained_authority_pending": false
+    },
+    {
+      "action": "copy",
+      "kind": "build.make",
+      "original": {
+        "ctime_ns": 1792389866774866425,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 48002433,
+        "mode": "0o644",
+        "mtime_ns": 1792389866774866425,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/owner-work/output/build/kernel/CMakeFiles/mckernel_rust_obj.dir/build.make",
+        "sha256": "6266a07d0a839c0175e5ca451678d69f78fe413f8a534348f5290f8133a58613",
+        "size": 7967,
+        "uid": 1000
+      },
+      "retained": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/terminal-preparation-1/retained-production-objects/build.make",
+      "retained_authority_pending": false
+    },
+    {
+      "action": "copy",
+      "kind": "build.stderr.log",
+      "original": {
+        "ctime_ns": 1792389914038401160,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 48002076,
+        "mode": "0o644",
+        "mtime_ns": 1792389914038401160,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/owner-work/evidence/build.stderr.log",
+        "sha256": "28e4618204977048486616e07d4a3e16669c16742b916715060e8e03b3593cd4",
+        "size": 57799,
+        "uid": 1000
+      },
+      "retained": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/terminal-preparation-1/retained-production-objects/build.stderr.log",
+      "retained_authority_pending": false
+    },
+    {
+      "action": "copy",
+      "kind": "build.stdout.log",
+      "original": {
+        "ctime_ns": 1792389914122400344,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 48002075,
+        "mode": "0o644",
+        "mtime_ns": 1792389914122400344,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/owner-work/evidence/build.stdout.log",
+        "sha256": "35e50671d759fbc384733bafdd60266ce194969541880c7c913f78cab459c020",
+        "size": 5770,
+        "uid": 1000
+      },
+      "retained": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/terminal-preparation-1/retained-production-objects/build.stdout.log",
+      "retained_authority_pending": false
+    },
+    {
+      "action": "copy",
+      "kind": "compile_commands.json",
+      "original": {
+        "ctime_ns": 1792389866786866306,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 48002249,
+        "mode": "0o644",
+        "mtime_ns": 1792389866786866306,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/owner-work/output/build/compile_commands.json",
+        "sha256": "bde9afd2f387b35a211f20866b3148d95bf6653f87095ebdeea431ebd2706eff",
+        "size": 74332,
+        "uid": 1000
+      },
+      "retained": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/terminal-preparation-1/retained-production-objects/compile_commands.json",
+      "retained_authority_pending": false
+    },
+    {
+      "action": "reuse",
+      "kind": "cpu.c.o",
+      "original": {
+        "ctime_ns": 1792389912322417840,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 48002584,
+        "mode": "0o644",
+        "mtime_ns": 1792389912322417840,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+        "sha256": "8f53fae270a167da2576b9ab27da5e91bbf1b6ca2c088495ec12520d9691c12f",
+        "size": 169984,
+        "uid": 1000
+      },
+      "retained": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/postbuild-readonly-1/retained-artifacts/cpu.artifact",
+      "retained_authority_pending": true
+    },
+    {
+      "action": "copy",
+      "kind": "link.txt",
+      "original": {
+        "ctime_ns": 1792389866778866386,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 48002449,
+        "mode": "0o644",
+        "mtime_ns": 1792389866778866386,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/link.txt",
+        "sha256": "d9d50ed84770a8bff5af2371e19245200d99d61fe3cda28e880bd88e6669e428",
+        "size": 759,
+        "uid": 1000
+      },
+      "retained": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/terminal-preparation-1/retained-production-objects/link.txt",
+      "retained_authority_pending": false
+    },
+    {
+      "action": "reuse",
+      "kind": "mckernel.img",
+      "original": {
+        "ctime_ns": 1792389914114400421,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 48002602,
+        "mode": "0o755",
+        "mtime_ns": 1792389914114400421,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/owner-work/output/build/kernel/mckernel.img",
+        "sha256": "0eca91b13bd62ab98441104930eda1a63f247fecd939996858b16f90b7480550",
+        "size": 7962040,
+        "uid": 1000
+      },
+      "retained": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/postbuild-readonly-1/retained-artifacts/image.artifact",
+      "retained_authority_pending": true
+    },
+    {
+      "action": "copy",
+      "kind": "mckernel.img.map",
+      "original": {
+        "ctime_ns": 1792389914114400421,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 48002601,
+        "mode": "0o644",
+        "mtime_ns": 1792389914114400421,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/owner-work/output/build/kernel/mckernel.img.map",
+        "sha256": "b67b6ca7a42f1a42e463cbf1ac8d16760dc88d12574b3840e55a1d31da1bcf4b",
+        "size": 743574,
+        "uid": 1000
+      },
+      "retained": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/terminal-preparation-1/retained-production-objects/mckernel.img.map",
+      "retained_authority_pending": false
+    },
+    {
+      "action": "reuse",
+      "kind": "mckernel_rust.o",
+      "original": {
+        "ctime_ns": 1792389911742423481,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 48002575,
+        "mode": "0o644",
+        "mtime_ns": 1792389911742423481,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/owner-work/output/build/kernel/rust/mckernel_rust.o",
+        "sha256": "c5362ca808ac98a7a8f543cd28b77994b90cfefb459e682a1afdc8c16834b71a",
+        "size": 12710888,
+        "uid": 1000
+      },
+      "retained": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/postbuild-readonly-1/retained-artifacts/rust.artifact",
+      "retained_authority_pending": true
+    },
+    {
+      "action": "reuse",
+      "kind": "process.c.o",
+      "original": {
+        "ctime_ns": 1792389912590415234,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 48002592,
+        "mode": "0o644",
+        "mtime_ns": 1792389912590415234,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+        "sha256": "918b1bab298541b0e6c0c9693672c667cf2a92161ff3ce6899e89d1c98a4b4a1",
+        "size": 309136,
+        "uid": 1000
+      },
+      "retained": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/postbuild-readonly-1/retained-artifacts/process.artifact",
+      "retained_authority_pending": true
+    },
+    {
+      "action": "copy",
+      "kind": "production-abi-checks.json",
+      "original": {
+        "ctime_ns": 1792389867042863751,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 48002540,
+        "mode": "0o644",
+        "mtime_ns": 1792389867042863751,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/owner-work/evidence/production-abi-checks.json",
+        "sha256": "5d91136baa4ec9c1c3c4cefa6ea97ac3668b51e834ed418f1194d12a2c5c682c",
+        "size": 4245,
+        "uid": 1000
+      },
+      "retained": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/terminal-preparation-1/retained-production-objects/production-abi-checks.json",
+      "retained_authority_pending": false
+    },
+    {
+      "action": "copy",
+      "kind": "production-abi-cpu.c",
+      "original": {
+        "ctime_ns": 1792389866902865148,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 48002537,
+        "mode": "0o644",
+        "mtime_ns": 1792389866902865148,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/owner-work/output/build/production-abi-cpu.c",
+        "sha256": "8e31891a24714475b3ed39e8edf66ed6f732c5e06ad74b344df33e93fc894741",
+        "size": 1123,
+        "uid": 1000
+      },
+      "retained": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/terminal-preparation-1/retained-production-objects/production-abi-cpu.c",
+      "retained_authority_pending": false
+    },
+    {
+      "action": "copy",
+      "kind": "production-abi-process.c",
+      "original": {
+        "ctime_ns": 1792389866974864430,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 48002539,
+        "mode": "0o644",
+        "mtime_ns": 1792389866974864430,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/owner-work/output/build/production-abi-process.c",
+        "sha256": "8b71de682a535c1c6a7a112c0044e86eb81e364af0c7a3f758cd45233ee399cf",
+        "size": 158455,
+        "uid": 1000
+      },
+      "retained": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/terminal-preparation-1/retained-production-objects/production-abi-process.c",
+      "retained_authority_pending": false
+    },
+    {
+      "action": "copy",
+      "kind": "receipt.json",
+      "original": {
+        "ctime_ns": 1792389952446031795,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 48002442,
+        "mode": "0o644",
+        "mtime_ns": 1792389952446031795,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/owner-work/evidence/receipt.json",
+        "sha256": "72d99ad62d4cdf5601e42043ba49391bd64c16b763f804ffa5a79f22a58cf349",
+        "size": 26767,
+        "uid": 1000
+      },
+      "retained": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/terminal-preparation-1/retained-production-objects/receipt.json",
+      "retained_authority_pending": false
+    },
+    {
+      "action": "copy",
+      "kind": "release-fallback-cpu.o",
+      "original": {
+        "ctime_ns": 1792389867942854777,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 48002544,
+        "mode": "0o644",
+        "mtime_ns": 1792389867942854777,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/owner-work/output/build/release-fp-regs-production/fallback-cpu.o",
+        "sha256": "a5b0976f667eef1c7814fc401eb78b43e454e894b3085d13b47ada8fa0a834a8",
+        "size": 202888,
+        "uid": 1000
+      },
+      "retained": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/terminal-preparation-1/retained-production-objects/release-fallback-cpu.o",
+      "retained_authority_pending": false
+    },
+    {
+      "action": "copy",
+      "kind": "release-fallback-process.o",
+      "original": {
+        "ctime_ns": 1792389897254564976,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 48002559,
+        "mode": "0o644",
+        "mtime_ns": 1792389897254564976,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/owner-work/output/build/release-tid-production/fallback-process.o",
+        "sha256": "9eae129855aeef531023887e972ca6a6becbb1871271585cd827364a08b5b0e8",
+        "size": 450656,
+        "uid": 1000
+      },
+      "retained": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/terminal-preparation-1/retained-production-objects/release-fallback-process.o",
+      "retained_authority_pending": false
+    },
+    {
+      "action": "copy",
+      "kind": "release-legacy-mckernel_rust.o",
+      "original": {
+        "ctime_ns": 1792389895410583067,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 48002549,
+        "mode": "0o644",
+        "mtime_ns": 1792389895410583067,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/owner-work/output/build/release-fp-regs-production/legacy-mckernel_rust.o",
+        "sha256": "01cd973851109e5fae7aedf5a1706a8b3ba2375e05c1cedce2ce5db20adcb29d",
+        "size": 12490536,
+        "uid": 1000
+      },
+      "retained": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/terminal-preparation-1/retained-production-objects/release-legacy-mckernel_rust.o",
+      "retained_authority_pending": false
+    },
+    {
+      "action": "copy",
+      "kind": "release-native-mckernel_rust.o",
+      "original": {
+        "ctime_ns": 1792389882970705597,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 48002548,
+        "mode": "0o644",
+        "mtime_ns": 1792389882970705597,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/owner-work/output/build/release-fp-regs-production/native-mckernel_rust.o",
+        "sha256": "c5362ca808ac98a7a8f543cd28b77994b90cfefb459e682a1afdc8c16834b71a",
+        "size": 12710888,
+        "uid": 1000
+      },
+      "retained": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/terminal-preparation-1/retained-production-objects/release-native-mckernel_rust.o",
+      "retained_authority_pending": false
+    },
+    {
+      "action": "copy",
+      "kind": "release-selected-cpu.o",
+      "original": {
+        "ctime_ns": 1792389867394860241,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 48002542,
+        "mode": "0o644",
+        "mtime_ns": 1792389867394860241,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/owner-work/output/build/release-fp-regs-production/selected-cpu.o",
+        "sha256": "c411b4975b290f1c534a42d029652a28d9fa8c934fef5bd2c7fbc866ccefaaf8",
+        "size": 169984,
+        "uid": 1000
+      },
+      "retained": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/terminal-preparation-1/retained-production-objects/release-selected-cpu.o",
+      "retained_authority_pending": false
+    },
+    {
+      "action": "copy",
+      "kind": "release-selected-process.o",
+      "original": {
+        "ctime_ns": 1792389896218575137,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 48002557,
+        "mode": "0o644",
+        "mtime_ns": 1792389896218575137,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/owner-work/output/build/release-tid-production/selected-process.o",
+        "sha256": "14c686b76109a24c9e14b63003bbfe0fe7b94b4be94189680d28c841da4bd672",
+        "size": 309280,
+        "uid": 1000
+      },
+      "retained": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/terminal-preparation-1/retained-production-objects/release-selected-process.o",
+      "retained_authority_pending": false
+    }
+  ],
+  "existing_primary_pairs": {
+    "count": 4,
+    "copier_receipt": {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/postbuild-readonly-1/retained-artifacts/retention-result.json",
+      "sha256": "db43532625bc51b6f0e6823cf892e874d3cb28d498c6ebcfbc1e77452d9666c9"
+    },
+    "pairs": [
+      {
+        "role": "cpu",
+        "original": {
+          "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+          "sha256": "8f53fae270a167da2576b9ab27da5e91bbf1b6ca2c088495ec12520d9691c12f",
+          "bytes": 169984,
+          "dev": 66306,
+          "inode": 48002584,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 420,
+          "mtime_ns": 1792389912322417840,
+          "ctime_ns": 1792389912322417840
+        },
+        "retained": {
+          "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/postbuild-readonly-1/retained-artifacts/cpu.artifact",
+          "sha256": "8f53fae270a167da2576b9ab27da5e91bbf1b6ca2c088495ec12520d9691c12f",
+          "bytes": 169984,
+          "dev": 66306,
+          "inode": 48004299,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 420,
+          "mtime_ns": 1792389912322417840,
+          "ctime_ns": 1792391180290153959
+        }
+      },
+      {
+        "role": "image",
+        "original": {
+          "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/owner-work/output/build/kernel/mckernel.img",
+          "sha256": "0eca91b13bd62ab98441104930eda1a63f247fecd939996858b16f90b7480550",
+          "bytes": 7962040,
+          "dev": 66306,
+          "inode": 48002602,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 493,
+          "mtime_ns": 1792389914114400421,
+          "ctime_ns": 1792389914114400421
+        },
+        "retained": {
+          "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/postbuild-readonly-1/retained-artifacts/image.artifact",
+          "sha256": "0eca91b13bd62ab98441104930eda1a63f247fecd939996858b16f90b7480550",
+          "bytes": 7962040,
+          "dev": 66306,
+          "inode": 48004302,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 493,
+          "mtime_ns": 1792389914114400421,
+          "ctime_ns": 1792391180358167584
+        }
+      },
+      {
+        "role": "process",
+        "original": {
+          "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+          "sha256": "918b1bab298541b0e6c0c9693672c667cf2a92161ff3ce6899e89d1c98a4b4a1",
+          "bytes": 309136,
+          "dev": 66306,
+          "inode": 48002592,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 420,
+          "mtime_ns": 1792389912590415234,
+          "ctime_ns": 1792389912590415234
+        },
+        "retained": {
+          "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/postbuild-readonly-1/retained-artifacts/process.artifact",
+          "sha256": "918b1bab298541b0e6c0c9693672c667cf2a92161ff3ce6899e89d1c98a4b4a1",
+          "bytes": 309136,
+          "dev": 66306,
+          "inode": 48004300,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 420,
+          "mtime_ns": 1792389912590415234,
+          "ctime_ns": 1792391180294154761
+        }
+      },
+      {
+        "role": "rust",
+        "original": {
+          "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/owner-work/output/build/kernel/rust/mckernel_rust.o",
+          "sha256": "c5362ca808ac98a7a8f543cd28b77994b90cfefb459e682a1afdc8c16834b71a",
+          "bytes": 12710888,
+          "dev": 66306,
+          "inode": 48002575,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 420,
+          "mtime_ns": 1792389911742423481,
+          "ctime_ns": 1792389911742423481
+        },
+        "retained": {
+          "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/postbuild-readonly-1/retained-artifacts/rust.artifact",
+          "sha256": "c5362ca808ac98a7a8f543cd28b77994b90cfefb459e682a1afdc8c16834b71a",
+          "bytes": 12710888,
+          "dev": 66306,
+          "inode": 48004301,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 420,
+          "mtime_ns": 1792389911742423481,
+          "ctime_ns": 1792391180334162775
+        }
+      }
+    ]
+  },
+  "remaining_retention": "PERFORMED_SEPARATELY_NOT_ACCEPTED_IN_THIS_REPORT",
+  "retention_separate_evidence": {
+    "outer_status": {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/terminal-preparation-1/actual-retention-1/status.json",
+      "sha256": "886debf86cb32beb616c30c9dad5e14f7dd4cdf2e3acef49109450d461e6570a"
+    },
+    "retained_objects": {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/terminal-preparation-1/retained-production-objects/retained-objects.json",
+      "sha256": "b870adec6719e631c5200bca36677f5ee421211b9fe0b3fb030b2bb4a48b82bc"
+    },
+    "engine_result": {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/terminal-preparation-1/retained-production-objects/result.json",
+      "sha256": "4d73b0d8c0cfd0214c8b5bb0be0f635c87bcb8d74d35040464be14ed63d7d5ca"
+    }
+  },
+  "guard_retirement": {
+    "retired": true,
+    "container_id": "ba93e7765e7e698393d7ab4c024e5a8d0f66d9a8bc2852872ed59c4ce463854f",
+    "owner_nonce": "48e71075e2414894ad296a85a23c8e41",
+    "owner_receipt": {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/owner-evidence/owner-receipt.json",
+      "sha256": "237af8d77af2e3ae2dd9974142e8c890c079ff2be5175509ee7ad46421158281"
+    },
+    "common_shared_cleanup_pending": true
+  },
+  "four_leaf_postbuild": {
+    "actual_build_acceptance": {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-ordinary-review-20261019-1/ACTUAL-BUILD-RESULT-REVIEW.json",
+      "sha256": "7cea7dc78ce9ae84258d7da5ac802cbce41d599c89f8a9a78b6d34b0c72cf05b"
+    },
+    "actual_C71_selected_and_fallback_full_TU_assertions": 71,
+    "actual_complete_native_legacy_crates": 2,
+    "actual_default_Rust_object": {
+      "bytes": 12710888,
+      "sha256": "c5362ca808ac98a7a8f543cd28b77994b90cfefb459e682a1afdc8c16834b71a"
+    },
+    "current_inspections": {
+      "original_successful": 13,
+      "original_new14": {
+        "declared_returncode": 0,
+        "observed_returncode": 1,
+        "accepted": false,
+        "reason": "Absent namedoutputsection__verbose, preserved actualfailure"
+      },
+      "remaining_descriptor_reads": 3,
+      "strict_v3_facts": true,
+      "actual_pointer_windows": 4,
+      "all_original14_pass": false,
+      "no_copy_or_1_through_13_replay": true
+    },
+    "default_consumer": {
+      "selected_process_object_release_tid_undefined_count": 1,
+      "selected_process_object_replace_tid_undefined_count": 1,
+      "Rust_and_image_release_tid_definition_count_each": 1,
+      "Rust_and_image_replace_tid_definition_count_each": 1,
+      "Rust_and_image_time_account_hash_detach_bridge_definitions_each": 1,
+      "selected_C_release_replace_bridge_definitions_each": 1,
+      "linked_bridge_target": "Uniqueactualimage nm targetaddress movabs immediate followedby indirectjmp%rax; selectedCobject relocation requires exactexport",
+      "actual_scalar_Rust_bodies": [
+        "time_account",
+        "hash_detach",
+        "__release_tid",
+        "__find_and_replace_tid"
+      ]
+    },
+    "descriptors": {
+      "Rust_input_section_indices": {
+        "RELEASE_TID_DEBUG": 3887,
+        "REPLACE_TID_DEBUG": 3889
+      },
+      "each_size": 32,
+      "minimum_alignment": 8,
+      "format_pointer_null": true,
+      "initial_debug_flags": 0,
+      "same_symbol_object_image_lineflags": true,
+      "image_descriptor_range": [
+        "0xfffffffffe8d0800",
+        "0xfffffffffe8d0840"
+      ],
+      "actual_output_section": ".data",
+      "file_cstring": "/src/kernel/rust/process_helpers.rs",
+      "function_cstrings": {
+        "RELEASE_TID_DEBUG": "process_release_tid_log_bridge",
+        "REPLACE_TID_DEBUG": "process_replace_tid_log_bridge"
+      },
+      "pointer_windows": {
+        "path": "/home/holden/mckernel-work/host-preparation/evening-git-owner-review-20261019-1/FOURLEAF-FOUR-POINTER-WINDOWS-ACTUAL-REVIEW.json",
+        "sha256": "7f7ef68c428e25d8284dd414cc7f7cd0dc83d2dc23c4945fb9455c82cedcdd01"
+      }
+    }
+  },
+  "four_leaf_typed_source": {
+    "source_identity": {
+      "dev": 66306,
+      "file_type": 16384,
+      "gid": 1000,
+      "inode": 47992786,
+      "mode": 448,
+      "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/materialized-source",
+      "uid": 1000
+    },
+    "source_derivative_sha256": "8ca6e79ff41ee3a90b2dc5d85f020a65efebb35c5cffd24acd37da6fe17d4cfc",
+    "materialization_sha256": "8fbf585c1b151801663ee0a1346505fdc50663191a0cd09349227fb7386499b5",
+    "actual_C71_and_CPU_fullcrate_refs": {
+      "actual_C71": {
+        "assertion_source": {
+          "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/production-process-assertions.inc",
+          "sha256": "3bb8960b7293238c94f963e8a1545a4101aef637aaad9b0c1da91fc42228e687"
+        },
+        "compiler_proof": {
+          "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/owner-work/evidence/release-tid-production-checks.json",
+          "sha256": "1721d4b5b8d399db863511b17703855b2993e98f236c9210a17075784f142cc8"
+        },
+        "full_actual_C_TU": {
+          "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/owner-work/output/build/release-tid-production/production-process.c",
+          "sha256": "78ef2d86cc94ad0435d6313add45e2009fe03c985fe826813d58b49316cc80d4"
+        }
+      },
+      "actual_CPU_fullcrate_proof": {
+        "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/owner-work/evidence/release-fp-regs-production-checks.json",
+        "sha256": "7fef1f12a46a556b9e34eb586ee0ad60cebe33c662b06013fa12644b4fef89d2"
+      }
+    }
+  },
+  "evidence": {
+    "accepted_build": {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-ordinary-review-20261019-1/ACTUAL-BUILD-RESULT-REVIEW.json",
+      "sha256": "7cea7dc78ce9ae84258d7da5ac802cbce41d599c89f8a9a78b6d34b0c72cf05b"
+    },
+    "failed14_and_fourcopy": {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-git-owner-review-20261019-1/FOURLEAF-POSTBUILD-ACTUAL-FAILED14-REVIEW.json",
+      "sha256": "7c8166fcb93301623ccf811a9bee945792f2b72ba01a901761c9117fe1c90089"
+    },
+    "original_outer_tool_limitation": {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-git-owner-review-20261019-1/FOURLEAF-POSTBUILD-FAILED14-OUTER-TOOL-JOIN-SUPPLEMENT.json",
+      "sha256": "34ff57f92183570ec4e7e268ef8d0032a3ceb871d86a30ee3ba4db0ea1a021a4"
+    },
+    "strict_remaining_actual": {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-git-owner-review-20261019-1/FOURLEAF-POSTBUILD-V3-ACTUAL-MECHANICAL-REVIEW.json",
+      "sha256": "30c61ea89a9ec0ac4611b3c185a15884bb845b5f892985234716d6ac2082bad6"
+    },
+    "four_pointer_windows_actual": {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-git-owner-review-20261019-1/FOURLEAF-FOUR-POINTER-WINDOWS-ACTUAL-REVIEW.json",
+      "sha256": "7f7ef68c428e25d8284dd414cc7f7cd0dc83d2dc23c4945fb9455c82cedcdd01"
+    },
+    "strict_facts": {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/postbuild-consumer-v3/actual-remaining/four-leaf-facts-v3.json",
+      "sha256": "17c5bd5aec8f584966240ce546ec3c78d7b97a62d321abe15f32ffe50d6a681b"
+    },
+    "original21_authority": {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/postbuild-readonly-1/retention21-original-engine-authorities.json",
+      "sha256": "2015211ca8a2f82252082b0106fea1d7cd580d18451b203da0e21cd0dea52b63"
+    },
+    "selected_provenance_refs": {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/terminal-preparation-1/canonical-selected-provenance-refs.json",
+      "sha256": "8c9bea0aa7df40805b96f9de5373484200d2ffc0b27b1c8c105687ce26dcf376"
+    },
+    "canonical_contract": {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-git-owner-review-20261019-1/FOURLEAF-CANONICAL-ACTUAL-REPORT-FIXED-CONTRACT-v2.json",
+      "sha256": "fc110ad61deedd97c6edbc44da1d430c5cdadf769ca263f049133519b5464e08"
+    },
+    "retention_fact_delta": {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-git-owner-review-20261019-1/FOURLEAF-CANONICAL-RETENTION-FACT-DELTA.json",
+      "sha256": "0357220888500e2b4c413c15a9b2da9fd6eba6ff9d7d3994319b33ede3b1d14b"
+    }
+  },
+  "verification_scope": [
+    "Selected requestdigest reused from acceptedactual7cea build. Sourceowner path/hash selected directly from immutable request and joined exact11map; selectedmanifest/materialization/currentguardSOURCE and genuine RESULT/owner/postjoin refhashes verified before originalprivate assembly paused on late17destination fact",
+    "All21 originalsource metadata and all4 currentretained FD9fields match accepted fullbytepair proof; no repeated large image/sourcecorpus hashes. Currentretainedimage remains FSbound for later staged consumption",
+    "Separate17retention completion is recorded by exactrefs only and not independently accepted in THIS artifactreport. Root separate independentreview governs it."
+  ],
+  "limitations": [
+    "Original full syscall-DWARF decoder gap remains OPEN; actualC71/CPU/fullcrate proofs support their literal ABI contracts only",
+    "Original currentcommand14 remains unexpectedfailure; three remaining descriptor observations correct the exact section/range surfaces without relabeling the failure or replayingcopies/1\u201313",
+    "OriginalV2producer outer lacked separate OS PID/start capture; tooltermination andall15childwaits bound separately. V3outer and fourwindowchildren have retained identities; no inventedouterproof",
+    "Original21authority rows preserve producer metadata; four reuse-pending flags are superseded only by existing_primary_pairs. Separate17retention scope corrected honestly by additive delta; no cleanup/native authority",
+    "Originalsource paths become historical evidence after separately accepted cleanup; later nativeconsumption binds the currentretainedimage fullFD/hash pair and doesnot require oldpath existence",
+    "Source/ABI/compiler/symbol/disassembly proofs accept this linked artifact. Actual native lifecycle, app behavior and actual retirement of live computeC remain unaccepted until separate runtime proof"
+  ],
+  "heavy_execution_authority": false,
+  "adapter_execution_authority": false,
+  "retention_execution_authority": false,
+  "root_execution_authority": false,
+  "cleanup_authority": false,
+  "native_execution_authority": false
+}

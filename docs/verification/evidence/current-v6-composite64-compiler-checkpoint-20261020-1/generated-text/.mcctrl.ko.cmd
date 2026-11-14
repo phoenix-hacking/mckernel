@@ -1,0 +1,1 @@
+savedcmd_/candidate/modules/mcctrl.ko := ld.lld -r -m elf_x86_64 -z noexecstack --build-id=sha1  -T scripts/module.lds -o /candidate/modules/mcctrl.ko /candidate/modules/mcctrl.o /candidate/modules/mcctrl.mod.o /candidate/modules/.module-common.o

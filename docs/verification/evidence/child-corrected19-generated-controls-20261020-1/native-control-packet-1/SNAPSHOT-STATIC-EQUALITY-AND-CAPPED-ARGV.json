@@ -1,0 +1,134 @@
+{
+  "OUTPUT": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/root-live-preflight-1.json",
+  "actual_snapshot_ref": null,
+  "actual_snapshot_sha256": null,
+  "actual_static_review": {
+    "bytes": 28369,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-affected-independent-review-20261020-1/CHILD-CORRECTED19-CONDITIONAL-SOURCE-DATA-PROFILE-DECISION.json",
+    "sha256": "9f76b41f6d77ac1d0331be12dede059d7d2da5da9e5e20f491961620e1449909"
+  },
+  "actual_timestamp": null,
+  "application_acceptance": false,
+  "bindings": {
+    "bytes": 43104,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/ROOT-SNAPSHOT-BINDINGS.json",
+    "sha256": "e6ffa9796190088423b41f47e06fe4d6f852d0cf2db4e0566f87eb0cc619a641"
+  },
+  "current100percent_included_only": true,
+  "latest_physical": {
+    "bytes": 25167,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/ACTUAL-M03-PROTECTION-GRACE-NATIVE-PHYSICAL-RETIREMENT-REVIEW.json",
+    "sha256": "498cd4a7dbedb9de21a3f41e5c97136b9a556c488e72b0da2a6047536beff8da"
+  },
+  "non_temporal_freeze": {
+    "bytes": 27056,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/non-temporal-freeze.json",
+    "sha256": "1de4355c3183cd1d84abf2af7167c30b0a901b589aeae92a01f0690a667aa0ab"
+  },
+  "producer": {
+    "bytes": 11920,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/source/root_manual_snapshot_child.py",
+    "sha256": "d62bf00642ce457a66d061f8ae6018555240a6a1430d7bfa26fd8781bc459327"
+  },
+  "profile": {
+    "AS": 1073741824,
+    "CPU": 6,
+    "CPU_seconds": 30,
+    "kill_after_seconds": 2,
+    "stream_bytes": 33554432,
+    "wall_seconds": 35
+  },
+  "root_snapshot_argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--core=0",
+    "--nofile=256",
+    "--fsize=33554432",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/source/root_manual_snapshot_child.py",
+    "--bindings-sha256",
+    "e6ffa9796190088423b41f47e06fe4d6f852d0cf2db4e0566f87eb0cc619a641",
+    "--terminal",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/ACTUAL-M03-PROTECTION-GRACE-NATIVE-PHYSICAL-RETIREMENT-REVIEW.json",
+    "--terminal-sha256",
+    "498cd4a7dbedb9de21a3f41e5c97136b9a556c488e72b0da2a6047536beff8da"
+  ],
+  "schema": "mckernel.current-child.raw235-current100-static-snapshot-projection.v1",
+  "snapshot_equal": {
+    "accepted_actual_stage_fixture_parent_review": {
+      "bytes": 28369,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-affected-independent-review-20261020-1/CHILD-CORRECTED19-CONDITIONAL-SOURCE-DATA-PROFILE-DECISION.json",
+      "sha256": "9f76b41f6d77ac1d0331be12dede059d7d2da5da9e5e20f491961620e1449909"
+    },
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "cgroup": {
+      "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_period_us": "100000",
+      "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_quota_us": "400000",
+      "/sys/fs/cgroup/memory/mckernel-dev/memory.limit_in_bytes": "12884901888",
+      "/sys/fs/cgroup/memory/mckernel-dev/memory.use_hierarchy": "1",
+      "/sys/fs/cgroup/pids/mckernel-dev/pids.max": "512"
+    },
+    "current_predecessor_container_absent": true,
+    "exclusive_heavy_accepted": true,
+    "guest_profile": {
+      "memory_mib": 8192,
+      "numa_nodes": 2,
+      "vcpus": 4
+    },
+    "heavy_profile": {
+      "cpus": 4,
+      "cpuset": "2-5",
+      "memory": 12884901888,
+      "memory_swap": 12884901888,
+      "network": "none",
+      "pids": 512
+    },
+    "image_id": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+    "independent_static_execution_decision": {
+      "bytes": 28369,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-affected-independent-review-20261020-1/CHILD-CORRECTED19-CONDITIONAL-SOURCE-DATA-PROFILE-DECISION.json",
+      "sha256": "9f76b41f6d77ac1d0331be12dede059d7d2da5da9e5e20f491961620e1449909"
+    },
+    "non_temporal_join_result": {
+      "bytes": 27056,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/non-temporal-freeze.json",
+      "sha256": "1de4355c3183cd1d84abf2af7167c30b0a901b589aeae92a01f0690a667aa0ab"
+    },
+    "parent_identity": {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 629752,
+      "mode": "0o700",
+      "uid": 1000
+    },
+    "released_paths_absent": [
+      "/home/holden/mckernel-work/scratch/native-phase5-paired-lease-external-modules-operational-exclusion.json",
+      "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock"
+    ],
+    "root_mutex_snapshot_free": true,
+    "status": "PASS_LIVE_PREEXECUTION_SNAPSHOT",
+    "terminal_acceptance": {
+      "bytes": 25167,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/ACTUAL-M03-PROTECTION-GRACE-NATIVE-PHYSICAL-RETIREMENT-REVIEW.json",
+      "sha256": "498cd4a7dbedb9de21a3f41e5c97136b9a556c488e72b0da2a6047536beff8da"
+    }
+  },
+  "snapshot_equal_fields": 15,
+  "status": "PASS_SOURCE_DERIVED_STATIC_DATA_ONLY_NO_SNAPSHOT",
+  "status_path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/snapshot.status.json",
+  "stderr_path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/snapshot.stderr",
+  "stdout_path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/snapshot.stdout"
+}

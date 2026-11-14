@@ -1,0 +1,60 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "MEMORY_CORRECTION_READY_PENDING_INDEPENDENT_REVIEW_AND_ONE_ROOT_DIRECT_REGRESSION",
+  "history": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/qmp-capacity-fix/pre-memory-correction-1",
+  "actual_first_failure": {
+    "first_failure_preserved": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/qmp-capacity-fix/pre-memory-correction-1/root-actual-qmp-fixture-1/RESULT.json",
+      "bytes": 1094,
+      "sha256": "4d5ae99ae3e91850280145c4af447253598d0a86860c110eb91019a95bcce8ec"
+    },
+    "first_failure_stderr": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/qmp-capacity-fix/pre-memory-correction-1/root-actual-qmp-fixture-1/stderr",
+      "bytes": 685,
+      "sha256": "a9495fd6bbe7c652a839921083aff551a975414ce0dfb694f87dbe6a6ef7e432"
+    },
+    "root_actual_returncode": 1,
+    "root_actual_tests": 24,
+    "passed": 23,
+    "failed": 1,
+    "actual_row_bytes": 542,
+    "old_allowance": 512,
+    "corrected_allowance": 640,
+    "only_candidate_test_and_model_changed": true,
+    "runtime_source_files_unchanged": true,
+    "no_second_test_execution": true,
+    "prior_packet": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/qmp-capacity-fix/pre-memory-correction-1"
+  },
+  "corrected_model": {
+    "status_queries_upper_with_64_control_allowance": 156064,
+    "raw_status_pair_allowance_bytes": 192,
+    "startup_raw_allowance_MiB": 1,
+    "modeled_raw_bytes": 31012864,
+    "modeled_encoded_bytes": 91990018,
+    "nominal_rows": 312128,
+    "ordinary_row_margin_ratio": 3.3594422800902195,
+    "legal_pending_capture_max_MiB": 564,
+    "shared_spare_MiB": 76,
+    "memory_assumptions": "PinnedPython3.9 actual decodedrow overhead542B preserved in rootactual23PASS/1FAIL. Revised640B allowance gives98B(18.1%) perrow margin incldict/keys/valueheaders/float/listreference, rawhex chars separately2*34MiB. Add256MiB fixedinterpreter/control allowance; revisedfixture measures its own VmSize and tests ALL process/overlap inequalities.",
+    "row_metadata_bound_MiB": 642.5,
+    "all_hex_character_bound_MiB": 68,
+    "encoded_unicode_and_bytes_bound_MiB": 272,
+    "inner_serialization_conservative_MiB": 1654.5,
+    "outer_readback_conservative_MiB": 1622.5,
+    "memory_qualification": "Writer follows teardown ATTEMPT, not a guaranteed successfulreap. Failedreap/QEMU8GiB overlap charged explicitly:10102.5MiB<12288MiB. Innerprocess1910.5MiB and outerreadback1878.5MiB each<2048MiB incl256MiB fixedallowance. Outerreadback occurs only afterabsence/release andinnerexit; no tripleconcurrent allocation assumed. Actualrerun MUSTcheck interpreterrow+fixtureVmSize and modelinequalities. Raw/encoded/row/sharedcaps and4224MiBlogicalgrowth unchanged; additional128.5MiB is RAMmetadata, not outputstorage.",
+    "fixed_interpreter_allowance_MiB": 256,
+    "inner_with_fixed_MiB": 1910.5,
+    "outer_with_fixed_MiB": 1878.5,
+    "inner_AS_headroom_MiB": 137.5,
+    "outer_AS_headroom_MiB": 169.5,
+    "failed_reap_QEMU_overlap_MiB": 10102.5,
+    "container_overlap_headroom_MiB": 2185.5
+  },
+  "new_test_source": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/qmp-capacity-fix/candidate/scripts/tests/test_qmp_capture.py",
+    "bytes": 24142,
+    "sha256": "421063d4ded1c80acec0ee3e0ad39a156737ac83cde7d7a4a68525f61a18d237"
+  },
+  "runtime_source_changes": false,
+  "tests_after_correction": 0
+}

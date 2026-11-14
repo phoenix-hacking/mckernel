@@ -1,0 +1,130 @@
+{
+  "status": "PASS_CANDIDATE_NO_OUTER_RESCUE_OR_ADOPTED_CHILD",
+  "variant": "candidate",
+  "wrapper_exit": 0,
+  "wrapper_parent_joined": true,
+  "binding": {
+    "wrapper": {
+      "pid": 850471,
+      "state": "R",
+      "ppid": 850470,
+      "pgid": 850471,
+      "sid": 850471,
+      "birth": 39339469
+    },
+    "peer": {
+      "pid": 850473,
+      "state": "R",
+      "ppid": 850471,
+      "pgid": 850473,
+      "sid": 850473,
+      "birth": 39339472
+    },
+    "descendant": {
+      "pid": 850474,
+      "state": "S",
+      "ppid": 850473,
+      "pgid": 850473,
+      "sid": 850473,
+      "birth": 39339474
+    },
+    "receipt": {
+      "pid": 850474,
+      "birth": 39339474,
+      "pgid": 850473,
+      "sid": 850473,
+      "hup_ignored": true,
+      "pty_fds_closed": true
+    },
+    "actual_SIGHUP_ignored": true,
+    "standard_PTY_fds_closed": true,
+    "self_held_pipe": [
+      {
+        "fd": 5,
+        "target": "pipe:[3043872]",
+        "access_mode": 0
+      },
+      {
+        "fd": 6,
+        "target": "pipe:[3043872]",
+        "access_mode": 1
+      }
+    ],
+    "all_pidfds_live_before_first_prompt": true
+  },
+  "peer_trace": {
+    "pid": 850473,
+    "argv": [
+      "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-2/successor/output/candidate/tools/crash",
+      "/usr/lib/debug/lib/modules/fixture-linux/vmlinux",
+      "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-2/successor/output/candidate/input"
+    ],
+    "commands": [
+      "mod -s ihk_smp_x86 /home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-2/successor/output/candidate/prefix/kmod/ihk-smp-x86.ko",
+      "extend /home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-2/successor/output/candidate/prefix/lib/ldump2mcdump.so",
+      "ldump2mcdump 0 -o /home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-2/successor/output/candidate/.vmcore2mckdump-850471-0.tmp",
+      "extend -u /home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-2/successor/output/candidate/prefix/lib/ldump2mcdump.so",
+      "quit"
+    ],
+    "synthetic_only": true,
+    "descendant": 850474,
+    "staging_output": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-2/successor/output/candidate/.vmcore2mckdump-850471-0.tmp",
+    "leader_exit": 0
+  },
+  "matched_exact_ACK": "MCKERNEL_LDUMP2MCDUMP_SUCCESS /home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-2/successor/output/candidate/.vmcore2mckdump-850471-0.tmp",
+  "staging_after_publication_absent": true,
+  "output_bytes_hex": "636f6e74726f6c6c6564206c6966656379636c65207061796c6f61643b206e6f742061207265616c2064756d700a",
+  "publication_observation": {
+    "first_observer_visibility_seconds": 0.07956487199408002,
+    "descendant_pidfd_readable": true,
+    "scope": "first observer visibility, not a syscall-order trace"
+  },
+  "ownership_evidence": "child pidfd dead at positive wrapper return; exact wait gives ECHILD; no outer signal/reap",
+  "candidate_wait_before_publication_scope": "Actual no-outer-adoption/pidfd observation plus independently reviewed candidate source: retire waits leader and adopted children to ECHILD, restores scope, returns from finish, then staging.publish. No syscall wait trace is claimed.",
+  "active": {
+    "phase": "descendant-at-positive-wrapper-return",
+    "variant": "candidate",
+    "argv": [
+      "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-2/successor/output/vmcore-candidate",
+      "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-2/successor/output/candidate/input",
+      "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-2/successor/output/candidate/mckdump"
+    ]
+  },
+  "identities": {
+    "wrapper": {
+      "pid": 850471,
+      "state": "R",
+      "ppid": 850470,
+      "pgid": 850471,
+      "sid": 850471,
+      "birth": 39339469
+    },
+    "peer": {
+      "pid": 850473,
+      "state": "R",
+      "ppid": 850471,
+      "pgid": 850473,
+      "sid": 850473,
+      "birth": 39339472
+    },
+    "descendant": {
+      "pid": 850474,
+      "state": "S",
+      "ppid": 850473,
+      "pgid": 850473,
+      "sid": 850473,
+      "birth": 39339474
+    }
+  },
+  "signals": [],
+  "adopted_waits": [],
+  "remaining_direct_children": [],
+  "subreaper_previous": 0,
+  "subreaper_restored": true,
+  "streams_closed": true,
+  "error": null,
+  "cleanup_errors": [],
+  "elapsed_seconds": 0.0807323349872604,
+  "production_acceptance": false,
+  "real_dump": false
+}

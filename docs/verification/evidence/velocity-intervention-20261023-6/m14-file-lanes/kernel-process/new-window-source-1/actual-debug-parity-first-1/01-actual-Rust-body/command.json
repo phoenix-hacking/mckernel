@@ -1,0 +1,27 @@
+{
+  "name": "01-actual-Rust-body",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 01-actual-Rust-body; original C/Rust diagnostic behavior parity with controlled mock layouts only.",
+  "argv": [
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+    "--edition=2021",
+    "--crate-type=lib",
+    "--emit=obj",
+    "--crate-name",
+    "m14_process_debug_parity",
+    "-C",
+    "panic=abort",
+    "-C",
+    "opt-level=1",
+    "-C",
+    "codegen-units=1",
+    "-C",
+    "relocation-model=static",
+    "-C",
+    "overflow-checks=off",
+    "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/fixture/parity.rs",
+    "-o",
+    "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/output-debug-parity-first-1/actual_rust.o"
+  ],
+  "cwd": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/output-debug-parity-first-1"
+}

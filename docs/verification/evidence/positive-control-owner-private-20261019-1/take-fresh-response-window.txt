@@ -1,0 +1,84 @@
+            let old = expected_value.unwrap_or(-512);
+            if expected_value.is_none() && !call.cancelled { return Err(-71); }
+            completion.reconcile_fork_unpublished(expected, old, None)
+        } else {
+            if expected_value.is_some() { return Err(-71); }
+            call.response.as_mut().ok_or(-16)?.check_fork_unpublished(expected)
+        }
+    }
+    pub(crate) fn reconcile_fork_abort(&mut self, handle: u64, serial: u64,
+        expected: &Request, expected_value: Option<i64>) -> Result
+    {
+        self.check_fork_abort(handle, serial, expected, expected_value)?;
+        let call = self.fork_abort_call(handle, serial, expected)?;
+        if let Some(completion) = &mut call.completion {
+            completion.reconcile_fork_unpublished(expected, expected_value.unwrap_or(-512), Some(-125))?;
+            // Preserve Returning versus Cancelling. In particular never mark
+            // an existing Returning completion cancelled after rewriting it.
+        } else {
+            call.delivery.cancel()?;
+            let response = call.response.take().ok_or(-71)?;
+            call.completion = Some(response.prepare(0, -125)?);
+            call.cancelled = true;
+        }
+        Ok(())
+    }
+    // END PRIVATE FORK MAILBOX RECONCILIATION
+
+    // BEGIN PRIVATE FORK INGRESS RESPONSE TICKET
+    /// Caller first reserves a real provisional parent-publication hold under
+    /// Remote.slots. The exact response is then moved, never duplicated. This
+    /// separate gate preserves ordinary user delivery/origin semantics.
+    pub(crate) fn take_fork_ingress_response(&mut self, handle: u64, serial: u64,
+        expected: &Request) -> Result<ForkIngressResponse<M>>
+    {
+        if self.closed || self.quarantined { return Err(-32); }
+        let call = self.fork_abort_call(handle, serial, expected)?;
+        if call.cancelled || call.fork_ingress_pending || call.completion.is_some() { return Err(-16); }
+        let worker = call.worker.ok_or(-71)?;
+        call.delivery.check_return(worker, expected.cpu() as i64)?;
+        call.response.as_mut().ok_or(-16)?.check_fork_unpublished(expected)?;
+        let response = call.response.take().ok_or(-71)?;
+        call.fork_ingress_pending = true;
+        Ok(ForkIngressResponse { response: Some(response), request: expected.clone(), worker: handle, serial })
+    }
+
+    /// Restore before the caller removes its publication hold. A close while
+    /// construction ran may mark cancellation, but cannot consume the ticket.
+    pub(crate) fn restore_fork_ingress_response(&mut self, ticket: &mut ForkIngressResponse<M>) -> Result {
+        let closed = self.closed;
+        if self.quarantined { return Err(-71); }
+        let call = self.fork_abort_call(ticket.worker, ticket.serial, &ticket.request)?;
+        if !call.fork_ingress_pending || call.response.is_some() || call.completion.is_some() { return Err(-16); }
+        let response = ticket.response.take().ok_or(-71)?;
+        call.response = Some(response);
+        call.fork_ingress_pending = false;
+        if closed || call.cancelled { Self::cancel_call(call)?; }
+        Ok(())
+    }
+    // END PRIVATE FORK INGRESS RESPONSE TICKET
+
+    /// Freeze-only observer for an authenticated carrier's second clone. It
+    /// includes queued and automatically cancelled responses before a link
+    /// ticket exists; matching grants no publication or lifecycle authority.
+    pub(crate) fn has_fork_link_response(&self, cpu: i32, matches: impl Fn(&Request) -> bool) -> bool {
+        self.has_private_fork_response(cpu, 1, matches)
+    }
+
+    /// A freeze observer only; no selector or wire scalar grants authority.
+    pub(crate) fn has_private_fork_response(&self, cpu: i32, selector: u64,
+        matches: impl Fn(&Request) -> bool) -> bool {
+        self.calls.iter().flatten().any(|call| {
+            let request = call.delivery.request();
+            !call.kernel && !call.service && request.number() == 56
+                && request.arguments()[0] == selector && request.cpu() == cpu && matches(request)
+        })
+    }
+
+    pub(crate) fn returned(&self, handle: u64, serial: u64) -> Result<bool> {
+        if self.quarantined {
+            return Err(-71);
+        }
+        let worker = self
+            .workers
+            .iter()

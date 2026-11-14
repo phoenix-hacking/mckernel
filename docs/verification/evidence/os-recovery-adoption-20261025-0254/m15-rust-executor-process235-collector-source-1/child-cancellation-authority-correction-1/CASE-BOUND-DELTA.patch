@@ -1,0 +1,606 @@
+--- qualified-startup-eb59/main.rs
++++ original-process235/main.rs
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ //! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+-//! Fixed original startup.argv-empty PID1 collector; no runtime profile modes.
++//! Fixed original process-exec-wait235 PID1 collector; no runtime profile modes.
+ #![allow(unsafe_op_in_unsafe_fn)]
+ #[cfg(not(all(
+     target_os = "linux",
+--- qualified-startup-eb59/profile.rs
++++ original-process235/profile.rs
+@@ -1,15 +1,14 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ //! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+-//! One source-owned original startup profile. No runtime case/argv selection.
+-pub const PAYLOAD_ARGV: &[&str] = &["/bin/mcexec", "-t", "1", "0", "app", "A", "", "B"];
++//! One source-owned original process-exec-wait235 profile. No runtime case/argv selection.
++pub const PAYLOAD_ARGV: &[&str] = &["/bin/mcexec", "-t", "1", "0", "/apps/app"];
+ pub const PAYLOAD_CWD: &str = "/case/work";
+-// This is the original Cstartup #else invocation. F05's process-only hidos /
+-// allow_oversubscribe arguments are deliberately not selected for startup.
+-pub const BOOT_ARGV: &[&str] = &["/bin/native-boot"];
++// Exact original process235 boot profile. This differs from the completed
++// startup case; the original strict contract explicitly selects oversubscription.
++pub const BOOT_ARGV: &[&str] = &["/bin/native-boot", "hidos", "allow_oversubscribe"];
+ 
+ pub fn argv_json() -> String {
+-    // All values are these fixed ASCII source literals, including one empty
+-    // element. There is no caller-provided text or general JSON/argv parser.
++    // All values are these fixed ASCII source literals, with no runtime arguments. There is no caller-provided text or general JSON/argv parser.
+     let mut json = String::from("[");
+     for (index, argument) in PAYLOAD_ARGV.iter().enumerate() {
+         if index != 0 {
+--- qualified-startup-eb59/tests.rs
++++ original-process235/tests.rs
+@@ -12,16 +12,19 @@
+     assert!(crate::report::stream_json(&stream).contains("\"discarded\":20,\"limit\":1024"));
+ }
+ #[test]
+-fn report_and_execution_share_exact_startup_argv_with_empty_element() {
++fn report_and_execution_share_exact_original_process235_argv() {
+     assert_eq!(
+         crate::profile::PAYLOAD_ARGV,
+-        ["/bin/mcexec", "-t", "1", "0", "app", "A", "", "B"]
++        ["/bin/mcexec", "-t", "1", "0", "/apps/app"]
+     );
+     assert_eq!(
+         crate::profile::argv_json(),
+-        "[\"/bin/mcexec\",\"-t\",\"1\",\"0\",\"app\",\"A\",\"\",\"B\"]"
++        "[\"/bin/mcexec\",\"-t\",\"1\",\"0\",\"/apps/app\"]"
+     );
+-    assert_eq!(crate::profile::BOOT_ARGV, ["/bin/native-boot"]);
++    assert_eq!(
++        crate::profile::BOOT_ARGV,
++        ["/bin/native-boot", "hidos", "allow_oversubscribe"]
++    );
+     assert!(crate::profile::PAYLOAD_ARGV
+         .iter()
+         .flat_map(|s| s.bytes())
+--- qualified-startup-eb59/host_tests.rs
++++ original-process235/host_tests.rs
+@@ -120,7 +120,7 @@
+     )
+ }
+ #[test]
+-fn host_startup_actual_exec_argv_empty_null_and_frame_pair() {
++fn host_process235_actual_exec_argv_null_and_frame_pair() {
+     let _guard = PROCESS_TEST.lock().unwrap();
+     own_orphans();
+     let r = supervise(
+@@ -131,7 +131,7 @@
+         1000,
+         now_ns() + 5000 * MS,
+     );
+-    let expected=b"{\"case\":\"startup.argv-empty\",\"argc\":4,\"argv\":[\"app\",\"A\",\"\",\"B\"],\"terminator_is_null\":true}\n";
++    let expected = include_bytes!("expected.stdout");
+     assert!(r.leader_pid > 1); // Actual spawned PID, not a discovered log PID.
+     assert_eq!(r.status, 0);
+     assert_eq!(r.out.data, expected);
+@@ -150,12 +150,13 @@
+     assert!(frame.contains(&format!("\"hex\":\"{expected_hex}\"")));
+ }
+ #[test]
+-fn host_startup_rejects_original_c020_noargs_and_dropped_empty_argument() {
++fn host_process235_rejects_startup_argv_and_missing_app_argument() {
+     let _guard = PROCESS_TEST.lock().unwrap();
+     own_orphans();
+     let wrong_cases: &[&[&str]] = &[
+-        &["/bin/mcexec", "-t", "1", "0", "/apps/app"],
+-        &["/bin/mcexec", "-t", "1", "0", "app", "A", "B"],
++        &["/bin/mcexec", "-t", "1", "0", "app", "A", "", "B"],
++        &["/bin/mcexec", "-t", "1", "0"],
++        &["/bin/mcexec", "-t", "1", "0", "app"],
+     ];
+     for argv in wrong_cases {
+         let r = supervise(
+@@ -171,7 +172,7 @@
+         assert_eq!(r.err.data, b"unexpected argc or argv terminator\n");
+         assert!(r.clean && !r.fault && !r.timeout && r.out.eof && r.err.eof);
+         // The fixed production startup frame is not used to relabel these
+-        // intentionally wrong generic supervisor invocations as startup PASS.
++        // intentionally wrong generic supervisor invocations as process235 PASS.
+     }
+ }
+ #[test]
+--- qualified-startup-eb59/fakeexec.rs
++++ original-process235/fakeexec.rs
+@@ -1,15 +1,15 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ //! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+ //! Ordinary HOST-only fake launcher. It inspects actual execve argc/argv/envp,
+-//! including the empty argument and final NULL. Never stage as real mcexec.
++//! including the exact /apps/app argument and final NULL. Never stage as real mcexec.
+ #![no_main]
+ use std::ffi::{c_char, c_int, c_void, CStr};
+ unsafe extern "C" {
+     fn write(fd: c_int, data: *const c_void, count: usize) -> isize;
+ }
+-const EXPECTED_ARGV: [&[u8]; 8] = [b"/bin/mcexec", b"-t", b"1", b"0", b"app", b"A", b"", b"B"];
++const EXPECTED_ARGV: [&[u8]; 5] = [b"/bin/mcexec", b"-t", b"1", b"0", b"/apps/app"];
+ const EXPECTED_ENV: [&[u8]; 2] = [b"PATH=/usr/bin:/bin", b"COKERNEL_PATH=/apps"];
+-const EXPECTED_OUTPUT: &[u8] = b"{\"case\":\"startup.argv-empty\",\"argc\":4,\"argv\":[\"app\",\"A\",\"\",\"B\"],\"terminator_is_null\":true}\n";
++const EXPECTED_OUTPUT: &[u8] = include_bytes!("expected.stdout");
+ unsafe fn exact_vector(pointer: *const *const c_char, expected: &[&[u8]]) -> bool {
+     if pointer.is_null() {
+         return false;
+@@ -31,7 +31,7 @@
+     argv: *const *const c_char,
+     envp: *const *const c_char,
+ ) -> c_int {
+-    if argc != 8
++    if argc != 5
+         || !unsafe { exact_vector(argv, &EXPECTED_ARGV) }
+         || !unsafe { exact_vector(envp, &EXPECTED_ENV) }
+     {
+--- qualified-startup-eb59/startup_retirement.rs
++++ original-process235/startup_retirement.rs
+@@ -1,9 +1,9 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ //! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+-//! One parent-only startup retirement observer. It observes existing real
++//! Original process235 retirement observer with source-bound child authority. It observes existing real
+ //! exchanges; it does not send an ACK/query, gate the app or change ownership.
+ use crate::supervisor::{startup_retirement_ready, Check};
+-use std::collections::BTreeSet;
++use std::collections::{BTreeMap, BTreeSet};
+ const RAW_LIMIT: usize = 262_144;
+ fn need(ok: bool, why: &str) -> Check<()> {
+     if ok {
+@@ -35,11 +35,22 @@
+         })
+         .collect()
+ }
+-fn owner(values: &[i128], pid: i32) -> Check<()> {
++fn owner(
++    values: &[i128],
++    target: i32,
++    parent: i32,
++    children: &BTreeMap<i32, usize>,
++) -> Check<bool> {
+     need(
+-        values[0] == 0 && values[1] == 1 && values[2] == pid as i128,
+-        "foreign startup lifecycle OS/generation/PID",
+-    )
++        values[0] == 0 && values[1] == 1 && values[2] > 0 && values[2] <= i32::MAX as i128,
++        "foreign process235 lifecycle OS/generation/PID",
++    )?;
++    let pid = values[2] as i32;
++    need(
++        pid == parent || children.contains_key(&pid),
++        "unlinked process235 lifecycle PID",
++    )?;
++    Ok(pid == target)
+ }
+ 
+ /// Exact selected raw klogctl envelope grammar reused from the reviewed F05
+@@ -91,7 +102,223 @@
+     Ok(messages)
+ }
+ 
+-fn lifecycle_complete(snapshot: &[u8], pid: i32) -> Check<bool> {
++// Exact existing5298 _audit_begin_children authority/correspondence algorithm.
++// Full snapshots permit child rows before parent RET logging. No PID is adopted
++// from first publication, numeric procfs visibility or heuristic ordering.
++#[derive(Default)]
++struct Syscalls {
++    delivered: BTreeMap<(i128, i128), (i128, i128, usize)>,
++    returned: BTreeMap<(i128, i128), (i128, i128, usize)>,
++    routes: BTreeMap<(i128, i128), (i128, i128, usize)>,
++}
++fn audit_children(messages: &[&str], parent: i32) -> Check<Option<BTreeMap<i32, usize>>> {
++    let mut groups: BTreeMap<i32, Syscalls> = BTreeMap::new();
++    let mut publications: BTreeMap<i32, Vec<usize>> = BTreeMap::new();
++    for (position, message) in messages.iter().enumerate() {
++        if let Some((_, row)) = message.split_once("application_syscall=") {
++            let (kind, row) = row
++                .split_once(' ')
++                .ok_or("malformed process235 syscall row")?;
++            let names = match kind {
++                "delivered" => [
++                    "os",
++                    "generation",
++                    "pid",
++                    "worker",
++                    "delivery",
++                    "cpu",
++                    "number",
++                ],
++                "returned" => [
++                    "os",
++                    "generation",
++                    "pid",
++                    "worker",
++                    "delivery",
++                    "cpu",
++                    "value",
++                ],
++                "return_route" => [
++                    "os",
++                    "generation",
++                    "pid",
++                    "worker",
++                    "delivery",
++                    "launcher_cpu",
++                    "guest_cpu",
++                ],
++                _ => return Err("unknown process235 syscall row kind".into()),
++            };
++            let values = fields(row, &names)?;
++            need(
++                values[0] == 0 && values[1] == 1 && values[2] > 0 && values[2] <= i32::MAX as i128,
++                "foreign process235 syscall identity",
++            )?;
++            need(
++                values[3] > 0
++                    && values[3] <= u64::MAX as i128
++                    && values[4] > 0
++                    && values[4] <= u64::MAX as i128,
++                "invalid process235 worker/delivery",
++            )?;
++            let group = groups.entry(values[2] as i32).or_default();
++            let records = match kind {
++                "delivered" => &mut group.delivered,
++                "returned" => &mut group.returned,
++                _ => &mut group.routes,
++            };
++            need(
++                records
++                    .insert((values[3], values[4]), (values[5], values[6], position))
++                    .is_none(),
++                "duplicate process235 syscall row",
++            )?;
++        } else if let Some((_, row)) = message.split_once("application procfs ") {
++            let (operation, row) = row
++                .split_once(' ')
++                .ok_or("malformed process235 procfs row")?;
++            let values = fields(row, &["os", "generation", "pid", "tid"])?;
++            need(
++                values[0] == 0
++                    && values[1] == 1
++                    && values[2] > 0
++                    && values[2] <= i32::MAX as i128
++                    && values[2] == values[3],
++                "foreign process235 procfs identity",
++            )?;
++            need(
++                matches!(operation, "published" | "deleted"),
++                "unknown process235 procfs operation",
++            )?;
++            if operation == "published" {
++                publications
++                    .entry(values[2] as i32)
++                    .or_default()
++                    .push(position);
++            }
++        }
++    }
++    let Some(parent_calls)=groups.get(&parent) else { return Ok(None); };
++    let mut children = BTreeMap::new();
++    let mut clone_pending = false;
++    for (key, (cpu, number, begin)) in &parent_calls.delivered {
++        if *number != 56 {
++            continue;
++        }
++        let Some((retcpu,value,end))=parent_calls.returned.get(key) else { clone_pending=true; continue; };
++        need(
++            *retcpu == 0 && *cpu == 0 && begin < end,
++            "parent process235 clone correspondence",
++        )?;
++        if *value <= 0 {
++            continue;
++        }
++        need(
++            *value <= i32::MAX as i128
++                && *value != parent as i128
++                && children.insert(*value as i32, *begin).is_none(),
++            "duplicate/parent process235 clone child",
++        )?;
++    }
++    // This is the original235 payload's exact twochildren contract, not a new
++    // runtime quota or a general process tree generator.
++    need(
++        children.len() <= 2,
++        "unexpected extra process235 linked child",
++    )?;
++    let observed: BTreeSet<i32> = groups.keys().chain(publications.keys()).copied().collect();
++    let unlinked = observed
++        .iter()
++        .any(|pid| *pid != parent && !children.contains_key(pid));
++    if unlinked {
++        if clone_pending {
++            return Ok(None);
++        }
++        return Err("unlinked process235 child syscall/publication PID".into());
++    }
++    if children.len() != 2 {
++        return Ok(None);
++    }
++    for (child, clone_position) in &children {
++        let Some(publication)=publications.get(child) else { return Ok(None); };
++        need(
++            publication.len() == 1 && publication[0] > *clone_position,
++            "missing/duplicate/premature process235 child publication",
++        )?;
++        let Some(group)=groups.get(child) else { continue; };
++        need(
++            !group.delivered.is_empty(),
++            "process235 child missing actual delivery",
++        )?;
++        let terminals: BTreeSet<_> = group
++            .delivered
++            .iter()
++            .filter_map(|(key, (_, number, _))| (*number == 60 || *number == 231).then_some(*key))
++            .collect();
++        need(terminals.len() <= 1, "duplicate process235 child terminal")?;
++        let ordinary: BTreeSet<_> = group
++            .delivered
++            .keys()
++            .filter(|key| !terminals.contains(*key))
++            .copied()
++            .collect();
++        need(
++            group.returned.keys().copied().collect::<BTreeSet<_>>() == ordinary
++                && group
++                    .routes
++                    .keys()
++                    .all(|key| group.returned.contains_key(key)),
++            "process235 child syscall correspondence",
++        )?;
++        let terminal = terminals.iter().next().map(|key| group.delivered[key].2);
++        let mut worker_slots = BTreeMap::new();
++        for (key, (cpu, _, begin)) in &group.delivered {
++            need(
++                *cpu == 0 && *begin > publication[0],
++                "process235 child CPU/publication order",
++            )?;
++            if terminals.contains(key) {
++                continue;
++            }
++            let (retcpu, _, end) = group.returned[key];
++            need(
++                retcpu == 0 && *begin < end && terminal.is_none_or(|terminal| end < terminal),
++                "process235 child syscall/terminal order",
++            )?;
++            let mut slot = 0;
++            if let Some((launcher, guest, position)) = group.routes.get(key) {
++                need(
++                    *launcher == 1 && *guest == 0 && *begin < *position && *position < end,
++                    "process235 child route identity/order",
++                )?;
++                slot = *launcher;
++            }
++            need(
++                *worker_slots.entry(key.0).or_insert(slot) == slot,
++                "process235 child worker route changed",
++            )?;
++        }
++    }
++    Ok(Some(children))
++}
++fn lifecycle_complete(snapshot: &[u8], parent: i32) -> Check<bool> {
++    let messages = snapshot_messages(snapshot)?;
++    let Some(children)=audit_children(&messages,parent)? else { return Ok(false); };
++    let complete = lifecycle_for_owner(&messages, parent, parent, &children)?;
++    // Validate every genuine child lifecycle row under independently established
++    // authority. Child final0 is not a new gate/deadline: original5298 requires
++    // parent final0 and full child correspondence, not a per-child run quota.
++    for child in children.keys() {
++        let _ = lifecycle_for_owner(&messages, *child, parent, &children)?;
++    }
++    Ok(complete)
++}
++fn lifecycle_for_owner(
++    messages: &[&str],
++    pid: i32,
++    parent: i32,
++    children: &BTreeMap<i32, usize>,
++) -> Check<bool> {
+     let mut registered = false;
+     let mut scheduled = false;
+     let mut published = false;
+@@ -101,10 +328,13 @@
+     let mut ack = false;
+     let mut retired = false;
+     let mut query_tokens = BTreeSet::new();
+-    for message in snapshot_messages(snapshot)? {
++    for message in messages {
+         if let Some((_, row)) = message.split_once("application SCHEDULE ") {
+             let values = fields(row, &["os", "generation", "pid", "cpu"])?;
+-            owner(&values, pid)?;
++            if !owner(&values, pid, parent, children)? {
++                continue;
++            }
++            need(pid == parent, "unexpected child process235 SCHEDULE")?;
+             need(
+                 !scheduled && values[3] == 0,
+                 "duplicate/foreign startup schedule",
+@@ -115,12 +345,14 @@
+                 .split_once(' ')
+                 .ok_or("malformed startup procfs lifecycle")?;
+             let values = fields(row, &["os", "generation", "pid", "tid"])?;
+-            owner(&values, pid)?;
++            if !owner(&values, pid, parent, children)? {
++                continue;
++            }
+             need(values[3] == pid as i128, "unexpected startup nonleader TID")?;
+             match operation {
+                 "published" => {
+                     need(
+-                        scheduled && !published && !deleted,
++                        (pid != parent || scheduled) && !published && !deleted,
+                         "duplicate/premature startup publication",
+                     )?;
+                     published = true;
+@@ -141,13 +373,17 @@
+             match operation {
+                 "registered" => {
+                     let values = fields(row, &["os", "generation", "pid"])?;
+-                    owner(&values, pid)?;
++                    if !owner(&values, pid, parent, children)? {
++                        continue;
++                    }
+                     need(!registered, "duplicate startup registration")?;
+                     registered = true;
+                 }
+                 "cleanup_requested" => {
+                     let values = fields(row, &["os", "generation", "pid", "intent_errno"])?;
+-                    owner(&values, pid)?;
++                    if !owner(&values, pid, parent, children)? {
++                        continue;
++                    }
+                     need(
+                         terminal && !intent && values[3] == 0,
+                         "premature/duplicate/failed startup cleanup intent",
+@@ -161,7 +397,9 @@
+                 row,
+                 &["os", "generation", "pid", "token", "errno", "abandoned"],
+             )?;
+-            owner(&values, pid)?;
++            if !owner(&values, pid, parent, children)? {
++                continue;
++            }
+             need(
+                 terminal
+                     && !ack
+@@ -176,7 +414,9 @@
+             ack = true;
+         } else if let Some((_, row)) = message.split_once("application retirement ") {
+             let values = fields(row, &["os", "generation", "pid", "token", "errno"])?;
+-            owner(&values, pid)?;
++            if !owner(&values, pid, parent, children)? {
++                continue;
++            }
+             need(
+                 terminal
+                     && ack
+@@ -228,7 +468,9 @@
+                 _ => return Err("unknown startup syscall row kind".into()),
+             };
+             let values = fields(row, &names)?;
+-            owner(&values, pid)?;
++            if !owner(&values, pid, parent, children)? {
++                continue;
++            }
+             need(
+                 values[3] > 0
+                     && values[3] <= u64::MAX as i128
+@@ -248,7 +490,7 @@
+                 need(values[6] >= 0, "negative startup syscall number")?;
+                 if values[6] == 60 || values[6] == 231 {
+                     need(
+-                        values[6] == 231 && published && !terminal,
++                        (pid != parent || values[6] == 231) && published && !terminal,
+                         "unexpected/premature/duplicate startup terminal",
+                     )?;
+                     terminal = true;
+@@ -303,11 +545,37 @@
+ #[cfg(test)]
+ mod tests {
+     use super::*;
+-    fn snapshot(rows: &[&str]) -> Vec<u8> {
++    const CHILD_ROWS: [&str;14] = [
++        "application_syscall=delivered os=0 generation=1 pid=258 worker=6 delivery=10 cpu=0 number=56",
++        "application procfs published os=0 generation=1 pid=259 tid=259",
++        "application_syscall=delivered os=0 generation=1 pid=259 worker=16 delivery=11 cpu=0 number=1",
++        "application_syscall=returned os=0 generation=1 pid=259 worker=16 delivery=11 cpu=0 value=0",
++        "application_syscall=delivered os=0 generation=1 pid=259 worker=16 delivery=12 cpu=0 number=231",
++        "application_syscall=returned os=0 generation=1 pid=258 worker=6 delivery=10 cpu=0 value=259",
++        "application procfs deleted os=0 generation=1 pid=259 tid=259",
++        "application_syscall=delivered os=0 generation=1 pid=258 worker=6 delivery=20 cpu=0 number=56",
++        "application_syscall=returned os=0 generation=1 pid=258 worker=6 delivery=20 cpu=0 value=260",
++        "application procfs published os=0 generation=1 pid=260 tid=260",
++        "application_syscall=delivered os=0 generation=1 pid=260 worker=26 delivery=21 cpu=0 number=1",
++        "application_syscall=returned os=0 generation=1 pid=260 worker=26 delivery=21 cpu=0 value=0",
++        "application_syscall=delivered os=0 generation=1 pid=260 worker=26 delivery=22 cpu=0 number=231",
++        "application procfs deleted os=0 generation=1 pid=260 tid=260",
++    ];
++    fn raw_rows(rows: &[&str]) -> Vec<u8> {
+         rows.iter()
+             .map(|row| format!("<6>[   34.000000] {row}\n"))
+             .collect::<String>()
+             .into_bytes()
++    }
++    fn snapshot(rows: &[&str]) -> Vec<u8> {
++        let mut actual = Vec::new();
++        for row in rows {
++            actual.push(*row);
++            if *row == "application procfs published os=0 generation=1 pid=258 tid=258" {
++                actual.extend(CHILD_ROWS);
++            }
++        }
++        raw_rows(&actual)
+     }
+     const PREFIX: [&str;6]=[
+         "application_process=registered os=0 generation=1 pid=258",
+@@ -353,7 +621,7 @@
+     fn wrong_owner_duplicate_token_bad_errno_and_excess_queries_fail() {
+         for bad in [
+             "application retirement os=0 generation=2 pid=258 token=514 errno=0",
+-            "application retirement os=0 generation=1 pid=259 token=514 errno=0",
++            "application retirement os=0 generation=1 pid=999 token=514 errno=0",
+             "application retirement os=0 generation=1 pid=258 token=513 errno=0",
+             "application retirement os=0 generation=1 pid=258 token=514 errno=-5",
+         ] {
+@@ -425,4 +693,59 @@
+             .observe(b"unknown raw continuation\n", 10, 50, Ok(true))
+             .is_err());
+     }
+-}
++    #[test]
++    fn original_two_children_bind_only_by_parent_clone_ret_with_early_publication_allowed() {
++        let raw = complete();
++        let messages = snapshot_messages(&raw).unwrap();
++        let children = audit_children(&messages, 258).unwrap().unwrap();
++        assert_eq!(children.keys().copied().collect::<Vec<_>>(), [259, 260]);
++        assert!(StartupRetirement::new(258)
++            .unwrap()
++            .observe(&raw, 10, 50, Ok(true))
++            .unwrap());
++        assert!(
++            raw.windows(CHILD_ROWS[1].len())
++                .position(|x| x == CHILD_ROWS[1].as_bytes())
++                .unwrap()
++                < raw
++                    .windows(CHILD_ROWS[5].len())
++                    .position(|x| x == CHILD_ROWS[5].as_bytes())
++                    .unwrap()
++        );
++    }
++    #[test]
++    fn foreign_or_duplicate_child_authority_and_premature_publication_fail() {
++        let raw = String::from_utf8(complete()).unwrap();
++        for changed in [
++            raw.replace("value=260", "value=259"),
++            raw.replace("pid=260", "pid=999"),
++            raw.replace("number=56", "number=57"),
++        ] {
++            assert!(StartupRetirement::new(258)
++                .unwrap()
++                .observe(changed.as_bytes(), 10, 50, Ok(true))
++                .is_err());
++        }
++        let mut rows = vec![CHILD_ROWS[1], CHILD_ROWS[0]];
++        rows.extend_from_slice(&CHILD_ROWS[2..]);
++        let raw = raw_rows(&rows);
++        let messages = snapshot_messages(&raw).unwrap();
++        assert!(audit_children(&messages, 258).is_err());
++    }
++    #[test]
++    fn child_missing_return_duplicate_or_foreign_rows_are_never_filtered() {
++        let raw = String::from_utf8(complete()).unwrap();
++        let returned = format!("<6>[   34.000000] {}\n", CHILD_ROWS[3]);
++        for changed in [
++            raw.replace(&returned, ""),
++            raw.replace(&returned, &format!("{returned}{returned}")),
++            raw.replace("generation=1 pid=259", "generation=2 pid=259"),
++            raw.replace("cpu=0 number=1", "cpu=2 number=1"),
++        ] {
++            assert!(StartupRetirement::new(258)
++                .unwrap()
++                .observe(changed.as_bytes(), 10, 50, Ok(true))
++                .is_err());
++        }
++    }
++}

@@ -1,0 +1,30 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/ROOT_capture_final_resource.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/resource-observer-window-correction-source-1/ROOT_capture_final_resource_new12h.py
+@@ -3,14 +3,14 @@
+ """
+ from pathlib import Path
+ import argparse,hashlib,importlib.util,json,os,sys,time,subprocess
+-A=Path(__file__).resolve().parent;E=A.parent.parent.parent
++A=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1');E=A.parent.parent.parent
+ sys.path.insert(0,str(A))
+ import sys
+-sys.path.insert(0,str(Path(__file__).resolve().parent))
++sys.path.insert(0,str(A))
+ import final_contract as mc
+ import final_owner as owner
+-OBSERVER=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F03-F06-RUSTMM-STRICT235-NATIVE-ADMISSION-1/check_postnative_current.py')
+-OBSERVER_SHA='9891cf1816c8639a8ca4a55e8ace130c049bd5ef65f1e126ef347353904be6fc'
++OBSERVER=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/resource-observer-window-correction-source-1/check_postnative_current_new12h.py')
++OBSERVER_SHA='2b7362126fbe70475a208e40df9eb56fa12df0993d83d0aa9b9a22a36638481c'
+ 
+ def ref(p):
+  p=Path(p);raw=p.read_bytes();return dict(path=str(p),bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+@@ -30,7 +30,7 @@
+ request=json.loads((A/'ADOPT-REQUEST.json').read_text());ledger=json.loads(Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER25.json').read_text())
+ assert ledger['complete_within_declared_current_boundary'] is True and ledger['root_attests_no_unlisted_post_boundary_execution_or_custody_operation'] is True and request['nonce'] not in ledger['consumed_nonces']
+ publication=A/'ACTUAL-STATIC-SOURCE-PUBLICATION.json';assert publication.is_file()
+-root=OBSERVER.parent.parent
++root=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254')
+ resources=dict(scope=__doc__.splitlines()[0],observed_clocks=clocks,boot_id=mc.BOOT,no_existing_heavy=True,physical_observer=ref(OBSERVER),current_physical_observation=physical,memory=mem,cgroups=cg,no_running_containers=dict(returncode=running.returncode,stdout=running.stdout,stderr=running.stderr),planned_profile=mc.PREP['profile'],nested_job_pids64_actual_proof='REQUIRED_DRIVER_BEFORE_THREE_CALLS_AND_AFTER_JOINS_NOT_YET_OBSERVED',other_reserved_memory_bytes=6*2**30,aggregate_ceiling_GiB=21.6619,CPU_eligible_count=7,nonce_ledger=ref('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER25.json'),account_guard='pinned new12h actual_account_window.guard called by owner.check_campaign',runtime_authority=None)
+ rp=A/'ROOT-FRESH-RESOURCE-PHYSICAL-1.json';write(rp,resources)
+ admission=json.loads((A/'CURRENT-ADMISSION.TEMPLATE.NOT-ACTUAL.json').read_text());admission.update(status='ROOT_RESERVED_DAEMON_PINNED_HELPER_SUFFIX64_SOLE_HEAVY',nonce=request['nonce'],request={k:v for k,v in ref(A/'ADOPT-REQUEST.json').items() if k!='bytes'},one_heavy=True,observed_clocks=clocks,expires_wall=min(clocks[0]+120,mc.CUTOFFS[0]),nonce_ledger_complete=True,consumed_nonces=ledger['consumed_nonces'],resource_physical=ref(rp),latest_postjoin_acceptance=ref(latest),source_publication=ref(publication))

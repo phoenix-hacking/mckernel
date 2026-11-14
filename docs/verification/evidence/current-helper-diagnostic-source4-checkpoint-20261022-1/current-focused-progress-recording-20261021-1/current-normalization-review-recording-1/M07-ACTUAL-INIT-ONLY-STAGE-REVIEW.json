@@ -1,0 +1,73 @@
+{
+  "schema": "mckernel.numa-native-app.actual-offline-stage-review.v1",
+  "status": "PASS_ACTUAL_OFFLINE_STAGE_AND_STRICT_MANIFEST_ONLY",
+  "decision": "ACCEPT_EXACT_ACTUAL_MANIFEST_FOR_DOWNSTREAM_SOURCE_NORMALIZATION_AND_RUNTIME_PREPARATION",
+  "actual_scope": "M07 init-only helper-failure-context collector stage",
+  "reviewer": "/root/insert_c_correction_review",
+  "implementation_ownership": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_sha256": "91c9f485f4864fdb83e5eadc77b311aa77ebd96a094383c9e800719b1b48223e",
+  "binding_sha256": "7af985479e5901a545c600e511d4df51ce054de8d6cb2c6d74564f2541900e75",
+  "actual_stage_result": {
+    "path": "/home/holden/mckernel/scratch/m07c-261021-1/numa/stage-result.json",
+    "sha256": "3fa436277f662eca56c9bbe3abc954cf35062bfe702822f73988076c162c9781",
+    "bytes": 19586
+  },
+  "actual_capture": {
+    "owned_result_sha256": "94d0bc695cc8e14e9b99e2a25b47a579335fa668a4619266a82428554407255e",
+    "stdout_sha256": "c94a0d97f2cb2a1e5515fff16ca417884470089977e7c061ec1c20e48a1a5ebe",
+    "pid": 2890478,
+    "start_ticks": 42693357,
+    "returncode": 0,
+    "elapsed_seconds": 10.745166930020787,
+    "direct_child_joined": true,
+    "group_absent": true,
+    "closed_streams": true,
+    "stderr_bytes": 0,
+    "error": null,
+    "retirement_error": null
+  },
+  "manifest": {
+    "path": "/home/holden/mckernel-work/scratch/m07cm-261021-1/numa/manifest.json",
+    "sha256": "e5e38a81ed3c15587b321e4a51d232947abe9639296ac391fc8b40c51d23cd33",
+    "size": 5152,
+    "mode": 33152
+  },
+  "overlay_manifest": {
+    "path": "/home/holden/mckernel/scratch/m07c-261021-1/numa/overlay-manifest.json",
+    "sha256": "beca7803f73ed70ec5992dfd4ab0ac389113626aa316d95f1b361899d6e2650f",
+    "size": 19265,
+    "mode": 33152
+  },
+  "verified": {
+    "final_members": 60,
+    "unchanged_final_members": 59,
+    "changed_final_members": ["init"],
+    "delta_fields": ["sha256", "size"],
+    "all_other_final_metadata_equal": true,
+    "accepted_base_byte_exact": true,
+    "final_map_matches_overlay_manifest": true,
+    "collector_visible_and_0755": true,
+    "collector_sha256": "9508643afbbd962cf24822896505b134d3d9ae7da4dc1163be861a2a3f65c0b4",
+    "manifest_collector_and_overlay_descriptors_join": true,
+    "image_launcher_payload_boot_modules_and_oracle_preserved": true,
+    "strict_manifest_loader_passed": true
+  },
+  "capture_source_provenance": {
+    "record_sha256": "8f0c528191706de36fa8b10ca45bb47cad1022955ae1bb0f7d4e567d4dfe67d7",
+    "scope": "Retains actual configured qualified96d capsule source pathname and7834 helper. It does not substitute the later preferred same-byte pathname or imply additional authority."
+  },
+  "mechanical_projection_authority": {
+    "authorized": true,
+    "scope": "Root may copy complete genuine stage-result fields and exact manifest descriptors into the existing downstream stage-consumer shape, preserving this independent attribution and init-only scope.",
+    "additional_descriptor_sources": "native_boot,modules,payload_contract,bzImage and overlay_manifest may be copied exactly from the actual accepted manifest.",
+    "constraints": "Retain originals, raw status, empty raw_header_proof and separately accepted artifact/helper evidence. Do not invent physical-record counts, new header observations, normalization results or runtime authority."
+  },
+  "blocking_findings": [],
+  "actual_boot_failure_cause": null,
+  "normalization_acceptance": false,
+  "runtime_permission": false,
+  "native_acceptance": false,
+  "M07_closure_credit": false,
+  "reviewer_quiescent": true
+}

@@ -1,0 +1,103 @@
+warning: type `process::Error` is more private than the item `DeferredModule::acquire`
+   --> /home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/candidate-actual.rs:154:73
+    |
+154 | pub(crate) mod mcctrl_vm {pub struct DeferredModule;impl DeferredModule{pub fn acquire()->super::Result<Self>{Ok(Self)}}}
+    |                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ associated function `DeferredModule::acquire` is reachable at visibility `pub(crate)`
+    |
+note: but type `process::Error` is only usable at visibility `pub(self)`
+   --> /home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/candidate-actual.rs:131:42
+    |
+131 | #[derive(Clone,Copy,Debug,PartialEq,Eq)] struct Error(i32);
+    |                                          ^^^^^^^^^^^^
+    = note: `#[warn(private_interfaces)]` on by default
+
+warning: calls to `std::mem::drop` with a value that implements `Copy` does nothing
+   --> /home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/candidate-actual.rs:223:9
+    |
+223 |         drop(executable);
+    |         ^^^^^----------^
+    |              |
+    |              argument has type `Option<()>`
+    |
+    = note: `#[warn(dropping_copy_types)]` on by default
+help: use `let _ = ...` to ignore the expression or result
+    |
+223 -         drop(executable);
+223 +         let _ = executable;
+    |
+
+
+thread 'coordinator' (3467071) panicked at /rustc-dev/ded5c06cf21d2b93bffd5d884aa6e96934ee4234/compiler/rustc_codegen_ssa/src/back/write.rs:1869:6:
+failed to spawn work thread: Os { code: 11, kind: WouldBlock, message: "Resource temporarily unavailable" }
+stack backtrace:
+   0:     0x7f3d9b0c2ab3 - <unknown>
+   1:     0x7f3d9b890b98 - <unknown>
+   2:     0x7f3d9ce5c351 - <unknown>
+   3:     0x7f3d9b088642 - <unknown>
+   4:     0x7f3d9b08e709 - <unknown>
+   5:     0x7f3d9b08e233 - <unknown>
+   6:     0x7f3d9a08c651 - <unknown>
+   7:     0x7f3d9b08eb2f - <unknown>
+   8:     0x7f3d9b08e8ea - <unknown>
+   9:     0x7f3d9b088789 - <unknown>
+  10:     0x7f3d9b06917d - <unknown>
+  11:     0x7f3d980214a0 - <unknown>
+  12:     0x7f3d979bc9f6 - <unknown>
+  13:     0x7f3d9cb0197d - <unknown>
+  14:     0x7f3d9cafba53 - <unknown>
+  15:     0x7f3d9c5d5877 - <unknown>
+  16:     0x7f3d9c5d55bf - <unknown>
+  17:     0x7f3d9c5d796f - <unknown>
+  18:     0x7f3d96438609 - <unknown>
+  19:     0x7f3d9635d353 - <unknown>
+  20:                0x0 - <unknown>
+
+error: the compiler unexpectedly panicked. this is a bug.
+
+note: we would appreciate a bug report: https://github.com/rust-lang/rust/issues/new?labels=C-bug%2C+I-ICE%2C+T-compiler&template=ice.md
+
+note: rustc 1.92.0 (ded5c06cf 2025-12-08) running on x86_64-unknown-linux-gnu
+
+query stack during panic:
+end of query stack
+
+thread 'rustc' (3467068) panicked at /rustc-dev/ded5c06cf21d2b93bffd5d884aa6e96934ee4234/compiler/rustc_codegen_ssa/src/back/write.rs:2097:17:
+/rustc-dev/ded5c06cf21d2b93bffd5d884aa6e96934ee4234/compiler/rustc_codegen_ssa/src/back/write.rs:2097:17: panic during codegen/LLVM phase
+stack backtrace:
+   0:     0x7f3d9b0c2ab3 - <unknown>
+   1:     0x7f3d9b890b98 - <unknown>
+   2:     0x7f3d9ce5c351 - <unknown>
+   3:     0x7f3d9b088642 - <unknown>
+   4:     0x7f3d9b08e709 - <unknown>
+   5:     0x7f3d9b08e233 - <unknown>
+   6:     0x7f3d9a08c651 - <unknown>
+   7:     0x7f3d9b08eb2f - <unknown>
+   8:     0x7f3d9a66d2a2 - <unknown>
+   9:     0x7f3d9a657ea6 - <unknown>
+  10:     0x7f3d9a6569b5 - <unknown>
+  11:     0x7f3d9a66d727 - <unknown>
+  12:     0x7f3d9a66d9fa - <unknown>
+  13:     0x7f3d9a65e9bb - <unknown>
+  14:     0x7f3d984101c0 - <unknown>
+  15:     0x7f3d9caf6e30 - <unknown>
+  16:     0x7f3d9caebb40 - <unknown>
+  17:     0x7f3d9ca23c76 - <unknown>
+  18:     0x7f3d9c5d9300 - <unknown>
+  19:     0x7f3d9c5d8fe4 - <unknown>
+  20:     0x7f3d9c5d796f - <unknown>
+  21:     0x7f3d96438609 - start_thread
+                               at /build/glibc-B3wQXB/glibc-2.31/nptl/pthread_create.c:477:8
+  22:     0x7f3d9635d353 - clone
+                               at /build/glibc-B3wQXB/glibc-2.31/misc/../sysdeps/unix/sysv/linux/x86_64/clone.S:95:0
+  23:                0x0 - <unknown>
+
+error: the compiler unexpectedly panicked. this is a bug.
+
+note: we would appreciate a bug report: https://github.com/rust-lang/rust/issues/new?labels=C-bug%2C+I-ICE%2C+T-compiler&template=ice.md
+
+note: rustc 1.92.0 (ded5c06cf 2025-12-08) running on x86_64-unknown-linux-gnu
+
+query stack during panic:
+end of query stack
+warning: 2 warnings emitted
+

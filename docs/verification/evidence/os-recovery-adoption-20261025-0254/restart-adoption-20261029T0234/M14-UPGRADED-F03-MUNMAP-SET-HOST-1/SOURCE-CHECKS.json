@@ -1,0 +1,50 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_SOURCE_ONLY_ALIAS_AND_PROVENANCE",
+  "symbol": "do_munmap_set_host_bridge",
+  "source_checks": [
+    "single frozen target and unchanged prefix/suffix",
+    "same line count; fallback tokens match original",
+    "callback typedef and both binding uses retained",
+    "Rust C ABI assertion and no_mangle provider match C signature",
+    "reviewed provider exact SHA256 and reachable prefix order",
+    "matching C/Rust x86 leaf selection predicates"
+  ],
+  "frozen_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-NINE-LEAF-BATCH-1/preimage/kernel/syscall.c",
+    "bytes": 928517,
+    "sha256": "7b33e5de55ddba41036a57ddba3694c51afe7153ca7d779ceec0206734a15fd0"
+  },
+  "preimage": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-MUNMAP-SET-HOST-1/preimage/kernel/syscall.c",
+    "bytes": 928517,
+    "sha256": "7b33e5de55ddba41036a57ddba3694c51afe7153ca7d779ceec0206734a15fd0"
+  },
+  "postimage": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-MUNMAP-SET-HOST-1/postimage/kernel/syscall.c",
+    "bytes": 928761,
+    "sha256": "95dad43baa2c0cae03e847b572924d4a829249966aa5cc520c9893b02149349f"
+  },
+  "patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-MUNMAP-SET-HOST-1/MUNMAP-SET-HOST.PRIVATE-NOT-APPLIED.patch",
+    "bytes": 826,
+    "sha256": "d698d54895f7ec12f6444eb3ad4819df9113fb7f0f4141bcc5e6ec1a384f3ce0"
+  },
+  "provider_patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-MPROTECT-HOST-VMA-BRIDGE-1/MPROTECT-HOST-VMA.PRIVATE-NOT-APPLIED.patch",
+    "bytes": 4462,
+    "sha256": "9713669dc82eec5251547a6f9fb1cb04a01b60fa6da582e022e8caab8f79b441"
+  },
+  "provider_leaf": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-MPROTECT-HOST-VMA-BRIDGE-1/postimage/kernel/rust/syscall_mprotect_host_vma.rs",
+    "bytes": 2745,
+    "sha256": "11a6131f8f8e826912602bf89fdd32bad7675d184f4e43c16b6375f54d17b881"
+  },
+  "provider_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-MPROTECT-HOST-VMA-BRIDGE-1/independent-source-review-1/REVIEW.ACTUAL.json",
+    "bytes": 7209,
+    "sha256": "d85af5b630a91f15ac2ae9ec99d40a6bca3d2c6aee3292ec7c8b7660cd7d2f90"
+  },
+  "dependency": "Compose with the complete reviewed full-prefix mprotect provider patch under its matching selection predicate; this alias alone cannot link the selected configuration.",
+  "limits": "Source-only; no compilation, linking, callback execution, native proof, C retirement or runtime authorization."
+}

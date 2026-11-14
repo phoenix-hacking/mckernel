@@ -1,0 +1,23 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root",
+  "decision": "CHOOSE_VM_SPECIFIC_OWNER_CHECKPOINT_AND_RESTART_DESIGN_FOR_PRIVATE_IMPLEMENTATION",
+  "recorded_utc": "2026-10-30T01:34:15.189619+00:00",
+  "implementation_owner": "/root/f03_mmap_fork_terra",
+  "design": [
+    "Replace CPU-boolean inference with a VM-specific writer-owner capability created only at an actual selected writer acquisition, carrying the real lock/node/IRQ ownership and a stable VM reference. Derive types from selected implementations; use internal Rust types, not guessed public C ABI.",
+    "The nested stack/fault callee must never drop a writer based on the CPU marker. Move suspension to a safe checkpoint owned by the actual clear_host_pte/offload caller BEFORE host offload can synchronously reenter fault handling.",
+    "At that owner checkpoint pin all VM/range/attachment/page objects still needed across offload, snapshot the transaction/restart boundary and reserve the precise affected intervals. Defer physical reclamation/reuse until the existing real host completion; never synthesize a response or ACK. If a safe checkpoint cannot be established, keep that exact path incomplete rather than release a lock unsafely.",
+    "The owner releases its own real writer/IRQ state at the checkpoint. Nested fault handling acquires the actual fault VM writer normally; no borrowed ownership is inferred for a different VM. Waiting for another reservation must release the waiter writer and revalidate after reacquisition.",
+    "After real offload completion the owner reacquires the same VM writer, discards all pre-unlock range-derived pointers/iteration assumptions, relooks up and revalidates before continuing or restarts from the recorded transaction boundary. All selected callers must consume the internal typed restart outcome.",
+    "Same-owner recursion must progress without waiting on its own reservation. Implement the real pending-transaction/fault path according to the existing logical mapping state; no invented errno, dummy completion, arbitrary timeout, feature exclusion or assumed non-overlap. Preserve interval overlap and alias checks, mutation/teardown participation and exact reference drops."
+  ],
+  "deliverables": [
+    "real internal owner-frame/token, checkpoint/resume and stack-provider code",
+    "selected clear_host_pte/offload and stack/fault caller integration with exact restart points",
+    "caller/mutator coverage and lock/ref/IRQ state transition tests",
+    "explicit remaining genuinely unimplemented paths; no claimed safety from a prototype"
+  ],
+  "limits": "Private source implementation and experimental compile contribution only. Canonical/shared ABI adoption belongs Root. Independent changed lifetime/locking review required before runtime. No native/build/resource/controller/policy/billing grant, no service hold clearance.",
+  "runtime_authority": null
+}

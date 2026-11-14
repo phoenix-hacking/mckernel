@@ -1,0 +1,50 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": "2026-10-24T08:41:48.138798+00:00",
+  "review_for": [
+    "2026-10-24T08:12Z",
+    "2026-10-24T08:32Z"
+  ],
+  "goal_status": "active",
+  "actual_delta": {
+    "M14": "Corrected retained callback leaf PASS.112216s; receiptshape7PASS.108588s; original defaultimage compile/link alreadycomplete, fullretainedvalidation notrun. Normalfailedimage archive/removal PASS then postjoin1.701129s/cleanjoin/finalphysical8a7c+nonnull6ada accepted. Newprivatewholebody batches source-only.",
+    "M15": "Actualeventfd900 ownership/error regressions PASS.381125s; toolcohort7HOSTcompile/link/import commands PASS CPU.577132, native/defaultopen with13transitiveC imports. Executor C/Rust linksPASS, metadataobserverFAIL beforebehavior; observer3 grantedCPU0, no outcome inferred.",
+    "native_qualified_new": 0,
+    "C_boundaries_retired_new": 0
+  },
+  "M12": "accepted35/35 no replay",
+  "source_occupancy": "sixactualnewfileturns confirmedrunning08:33; sourcefreeze/finalreturns not counted as currentactive",
+  "critical_path": "rootfreshretainedadmission517421 query then exactoneheavyrelease dcb/e3c/6ab andrunretainedvalidators; SDK53ab/c0nextsoleheavy; no unchangedkernelbuild",
+  "latency": {
+    "foreground_grant_handoff": "twoinitial5minutegrants expiredunused; renewed, bothactualbatches ranconcurrently andclosed; exactterminal282aadf3. Do not count expiry aswork.",
+    "tool_ready_to_compile": "roughly35minutes from07:44handoff to08:19execution; source/coordinationdelay dominates .577CPUsec; not precisionbenchmark",
+    "failure_to_validated_fix": "callbackleaf andreceiptshape narrowfixes actualPASS; GoASpreflight fix normalretirementPASS; executorwarningfixedcompilePASS butbehaviorstillunrun. Source-onlySDK3delta isnotvalidatedruntimefix."
+  },
+  "resources_snapshot": {
+    "disks": {
+      "/home/holden/mckernel": {
+        "available_bytes": 164666138624,
+        "ismount": false,
+        "st_dev": 66306
+      },
+      "/home/holden/mckernel-work/scratch": {
+        "available_bytes": 14101053440,
+        "ismount": true,
+        "st_dev": 1828
+      }
+    },
+    "load_average": [
+      1.04,
+      1.24,
+      1.35
+    ],
+    "memory": {
+      "MemAvailable_kib": 27549836,
+      "MemTotal_kib": 32421580
+    }
+  },
+  "peak_memory": "not captured; MemAvailable snapshot is headroom not peak",
+  "scheduling_change": "delegatedactualordinaryslots0/6 ratherthanrootserialcompilerhandoff, source6fileturns reactivated, wholearchmemoryclosurefirst, retainedartifactsrevalidatedwithoutrebuild",
+  "engineering_percentage": null,
+  "checkpoint": "dbf809bb pushed/FETCH_HEAD verified; nextsource/artifactcheckpoint pending"
+}

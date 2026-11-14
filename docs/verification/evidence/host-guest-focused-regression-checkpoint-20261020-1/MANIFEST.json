@@ -1,0 +1,1903 @@
+{
+  "adapter_limits": [
+    "Host memory mapping/callbacks, outer owner/locking environment and transport scheduler are explicit adapters. current_fork_host source equality does not establish execution of its Registration producer or real MM revoke callback.",
+    "Guest constructor, VM callback, physical mapping, host transport and single-thread preempt/interrupt context are explicit adapters; runtime VM/write/runqueue providers are not exercised.",
+    "Five retained allocations refers to tracked kmalloc allocations; constructor graph ownership is indirect, while four carrier/request addresses are observed exactly."
+  ],
+  "archive_or_binary_or_protected_raw_copies": 0,
+  "canonical_sources_rehashed": false,
+  "decision": {
+    "bytes": 6878,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-host-guest-focused-regression-independent-review-20261020-1/DECISION.json",
+    "sha256": "d74ed0bec0085df8e8dd614f5343252c253e538213999f5da7e4c8713b4ad748"
+  },
+  "external_sources": [
+    {
+      "disposition": "EXTERNAL_PIN_NO_DUPLICATED_PRODUCTION_PAYLOAD",
+      "role": "HOST_UNCHANGED_FROZEN_INPUT",
+      "source": {
+        "bytes": 5785,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-host-postexit-delivery-source-20261020-1/response-counter-correction-1/focused-test-1/application.rs",
+        "sha256": "80183a0d743aa266fa8931f6cd1915de1e7de7ea9cfb26c3215db4505b711ec5"
+      }
+    },
+    {
+      "disposition": "EXTERNAL_PIN_NO_DUPLICATED_PRODUCTION_PAYLOAD",
+      "role": "HOST_UNCHANGED_FROZEN_INPUT",
+      "source": {
+        "bytes": 10080,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-host-postexit-delivery-source-20261020-1/response-counter-correction-1/focused-test-1/application_rpc.rs",
+        "sha256": "9f811c86c4e996294a6cd3be6b83315dabd20a3fb375419e091f4b9dedcfad39"
+      }
+    },
+    {
+      "disposition": "EXTERNAL_PIN_NO_DUPLICATED_PRODUCTION_PAYLOAD",
+      "role": "HOST_UNCHANGED_FROZEN_INPUT",
+      "source": {
+        "bytes": 10580,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-host-postexit-delivery-source-20261020-1/response-counter-correction-1/source/host-kernel/native-rust/current_fork_control.rs",
+        "sha256": "89e3c6a26826ef48c2d5420759e462cebe12e2ffe437b9cb5a83627d37699304"
+      }
+    },
+    {
+      "disposition": "EXTERNAL_PIN_NO_DUPLICATED_PRODUCTION_PAYLOAD",
+      "role": "HOST_UNCHANGED_FROZEN_INPUT",
+      "source": {
+        "bytes": 10844,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-host-postexit-delivery-source-20261020-1/response-counter-correction-1/source/host-kernel/native-rust/current_fork_host.rs",
+        "sha256": "5a68633144eb60f941a73ceff9f2d5b0d30c7b9c1c1d0c25d5e8135dfde959b4"
+      }
+    },
+    {
+      "disposition": "EXTERNAL_FULL_PIN_NO_CURRENT_SOURCE_REHASH",
+      "private_fixture": {
+        "bytes": 76151,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/fixture/abi.rs",
+        "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+      },
+      "role": "GUEST_CURRENT_PRODUCTION_SOURCE",
+      "source": {
+        "bytes": 76151,
+        "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+        "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+      },
+      "test_accessors_appended": false
+    },
+    {
+      "disposition": "EXTERNAL_FULL_PIN_NO_CURRENT_SOURCE_REHASH",
+      "private_fixture": {
+        "bytes": 19390,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/fixture/fork_control_guest.rs",
+        "sha256": "16599cdb2b05baf92917fec9a052add48c9b169549b74227bbe72d59ba2b5933"
+      },
+      "role": "GUEST_CURRENT_PRODUCTION_SOURCE",
+      "source": {
+        "bytes": 18671,
+        "path": "/home/holden/mckernel/kernel/rust/fork_control_guest.rs",
+        "sha256": "26797f574fa1ba7006eb27ff3a1a7750ec04b83f71a2e90b8c35c4c536b33acd"
+      },
+      "test_accessors_appended": true
+    },
+    {
+      "disposition": "EXTERNAL_FULL_PIN_NO_CURRENT_SOURCE_REHASH",
+      "private_fixture": {
+        "bytes": 14785,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/fixture/fork_control_registry.rs",
+        "sha256": "a2f92bb11cba42fef0d95e1f1e1a4c526351ff90860baed7913fa26c91137ba5"
+      },
+      "role": "GUEST_CURRENT_PRODUCTION_SOURCE",
+      "source": {
+        "bytes": 14785,
+        "path": "/home/holden/mckernel/kernel/rust/fork_control_registry.rs",
+        "sha256": "a2f92bb11cba42fef0d95e1f1e1a4c526351ff90860baed7913fa26c91137ba5"
+      },
+      "test_accessors_appended": false
+    },
+    {
+      "disposition": "EXTERNAL_FULL_PIN_NO_CURRENT_SOURCE_REHASH",
+      "private_fixture": {
+        "bytes": 28612,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/fixture/fork_child_credits.rs",
+        "sha256": "63b82c97cc6e1204585cfaf2b89ef378b88c1d207a8e82c2f1400bc352f9c98d"
+      },
+      "role": "GUEST_CURRENT_PRODUCTION_SOURCE",
+      "source": {
+        "bytes": 28612,
+        "path": "/home/holden/mckernel/kernel/rust/fork_child_credits.rs",
+        "sha256": "63b82c97cc6e1204585cfaf2b89ef378b88c1d207a8e82c2f1400bc352f9c98d"
+      },
+      "test_accessors_appended": false
+    },
+    {
+      "disposition": "EXTERNAL_FULL_PIN_NO_CURRENT_SOURCE_REHASH",
+      "private_fixture": {
+        "bytes": 10534,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/fixture/fork_constructed_credits.rs",
+        "sha256": "4c1e96ef4fbf5cb66acc54d900d37fcd68fb4d50dd1337c4428b3f5e2ecd1972"
+      },
+      "role": "GUEST_CURRENT_PRODUCTION_SOURCE",
+      "source": {
+        "bytes": 10534,
+        "path": "/home/holden/mckernel/kernel/rust/fork_constructed_credits.rs",
+        "sha256": "4c1e96ef4fbf5cb66acc54d900d37fcd68fb4d50dd1337c4428b3f5e2ecd1972"
+      },
+      "test_accessors_appended": false
+    },
+    {
+      "disposition": "EXTERNAL_FULL_PIN_NO_CURRENT_SOURCE_REHASH",
+      "private_fixture": {
+        "bytes": 5506,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/fixture/fork_final_ack.rs",
+        "sha256": "093f742dfe4969d78b2ca6b8b643df94042945e890d26003dec9d1818c34826b"
+      },
+      "role": "GUEST_CURRENT_PRODUCTION_SOURCE",
+      "source": {
+        "bytes": 5506,
+        "path": "/home/holden/mckernel/kernel/rust/fork_final_ack.rs",
+        "sha256": "093f742dfe4969d78b2ca6b8b643df94042945e890d26003dec9d1818c34826b"
+      },
+      "test_accessors_appended": false
+    },
+    {
+      "disposition": "EXTERNAL_FULL_PIN_NO_CURRENT_SOURCE_REHASH",
+      "private_fixture": {
+        "bytes": 12855,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/fixture/fork_runnable_child.rs",
+        "sha256": "a9387ae13b85785176b95fc6ddc79b08bd31dd7960b0730307b41b5a05b5d137"
+      },
+      "role": "GUEST_CURRENT_PRODUCTION_SOURCE",
+      "source": {
+        "bytes": 12855,
+        "path": "/home/holden/mckernel/kernel/rust/fork_runnable_child.rs",
+        "sha256": "a9387ae13b85785176b95fc6ddc79b08bd31dd7960b0730307b41b5a05b5d137"
+      },
+      "test_accessors_appended": false
+    },
+    {
+      "disposition": "EXTERNAL_ACCEPTED_HARNESS_NO_REHASH",
+      "role": "GUEST_CANONICAL_HARNESS",
+      "source": {
+        "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-20261020-1/phase4-revoke-ack-correction-1/guest-fixture-1/actual-phase4.rs",
+        "sha256": "4e6791e72f323a388e167d8a557522d5f78c7d5018e75ca95e44d5ae573f6f0e"
+      }
+    }
+  ],
+  "fetched_source_proof": null,
+  "functional_scope": "Functional supported-profile OS/apps plus active compute C retirement into Rust/reviewed assembly",
+  "limits": [
+    "No native or linked production-default acceptance.",
+    "No blanket kernel/Linux ABI or unexecuted runtime-provider correctness claim.",
+    "No parent-exit producer, actual MM/runtime-child retirement or registry-detach refusal-injection acceptance.",
+    "No production fix, source integration, current SDK change or whole-OS/Rust-retirement completion claim."
+  ],
+  "native_acceptance": false,
+  "new_compilers": 0,
+  "new_guest_runs": 0,
+  "new_observed_tests": {
+    "guest": 3,
+    "host": 1
+  },
+  "new_root_operations": 0,
+  "new_tests": 0,
+  "original_fixture_failures_preserved": true,
+  "production_changes": 0,
+  "rows": [
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697190466862,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388875,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697190466862,
+        "st_nlink": 1,
+        "st_size": 14313,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-host-postexit-delivery-source-20261020-1/response-counter-correction-1/focused-test-1/actual.rs",
+      "source": {
+        "bytes": 14313,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-host-postexit-delivery-source-20261020-1/response-counter-correction-1/focused-test-1/actual.rs",
+        "sha256": "05e47d350c92ab858da0cc06075f5cf8ae64dad42e5456c8ee730c92e71a3513"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792520952782788713,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388528,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792520952782788713,
+        "st_nlink": 1,
+        "st_size": 14313,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697190466862,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388876,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697190466862,
+        "st_nlink": 1,
+        "st_size": 20555,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-host-postexit-delivery-source-20261020-1/response-counter-correction-1/focused-test-1/application_syscall.rs",
+      "source": {
+        "bytes": 20555,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-host-postexit-delivery-source-20261020-1/response-counter-correction-1/focused-test-1/application_syscall.rs",
+        "sha256": "b56600c4e02337f5e16c659723320f0779de54c97b5331c85d1f29d0b3f6d1fa"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792520952778788586,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388532,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792520761456702601,
+        "st_nlink": 1,
+        "st_size": 20555,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697190466862,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388877,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697190466862,
+        "st_nlink": 1,
+        "st_size": 10664,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-host-postexit-delivery-source-20261020-1/response-counter-correction-1/focused-test-1/current_fork_control.rs",
+      "source": {
+        "bytes": 10664,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-host-postexit-delivery-source-20261020-1/response-counter-correction-1/focused-test-1/current_fork_control.rs",
+        "sha256": "df606a373c7a10d920b3c8ae2c28b5bf9478a39ad911a9a7dfc4715ebd98b842"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792520952778788586,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388531,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792520761456702601,
+        "st_nlink": 1,
+        "st_size": 10664,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697190466862,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388878,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697190466862,
+        "st_nlink": 1,
+        "st_size": 33609,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-host-postexit-delivery-source-20261020-1/response-counter-correction-1/focused-test-1/smp_application_syscall.rs",
+      "source": {
+        "bytes": 33609,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-host-postexit-delivery-source-20261020-1/response-counter-correction-1/focused-test-1/smp_application_syscall.rs",
+        "sha256": "07d94c5e579e142ccd9c859b415714b8f8613dd7fe69762f4010fb06f9d22412"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792520952778788586,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388527,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792520761456702601,
+        "st_nlink": 1,
+        "st_size": 33609,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697190466862,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388879,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697190466862,
+        "st_nlink": 1,
+        "st_size": 1992,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-host-postexit-delivery-source-20261020-1/response-counter-correction-1/SOURCE-FREEZE.json",
+      "source": {
+        "bytes": 1992,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-host-postexit-delivery-source-20261020-1/response-counter-correction-1/SOURCE-FREEZE.json",
+        "sha256": "fe4d4616b887710577c991d0641b6207ad9fc68564ec3a10d3d55c6d048fd67e"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792520952782788713,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388533,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792520952782788713,
+        "st_nlink": 1,
+        "st_size": 1992,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697190466862,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388880,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697190466862,
+        "st_nlink": 1,
+        "st_size": 1901,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-host-postexit-delivery-source-20261020-1/response-counter-correction-1/ORDINARY-CHECK-PROPOSAL.json",
+      "source": {
+        "bytes": 1901,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-host-postexit-delivery-source-20261020-1/response-counter-correction-1/ORDINARY-CHECK-PROPOSAL.json",
+        "sha256": "7d5552f890597b18a38e427be7b0d3da04976773f7cdefe171fa9f62fc3081ed"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792520976095530280,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388535,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792520976095530280,
+        "st_nlink": 1,
+        "st_size": 1901,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697190466862,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388881,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697190466862,
+        "st_nlink": 1,
+        "st_size": 574,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-host-postexit-delivery-source-20261020-1/response-counter-correction-1/ADMISSION-PREFLIGHT-2.json",
+      "source": {
+        "bytes": 574,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-host-postexit-delivery-source-20261020-1/response-counter-correction-1/ADMISSION-PREFLIGHT-2.json",
+        "sha256": "cacae307cf527dd888d051398d7f9c4ee780667c5b736522568a4b095bffbe2c"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792521008576563478,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388609,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521008576563478,
+        "st_nlink": 1,
+        "st_size": 574,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697194466989,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388882,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697194466989,
+        "st_nlink": 1,
+        "st_size": 3937,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-host-postexit-delivery-source-20261020-1/response-counter-correction-1/run-check-1.py",
+      "source": {
+        "bytes": 3937,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-host-postexit-delivery-source-20261020-1/response-counter-correction-1/run-check-1.py",
+        "sha256": "c31fcd9007e1cc74af14fe6f6bc4d6b32f40109e693c9ed2d93a9c17572365e1"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792520952782788713,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388534,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792520952782788713,
+        "st_nlink": 1,
+        "st_size": 3937,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697194466989,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388883,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697194466989,
+        "st_nlink": 1,
+        "st_size": 852,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-host-postexit-delivery-source-20261020-1/response-counter-correction-1/DEFECT-EVIDENCE.json",
+      "source": {
+        "bytes": 852,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-host-postexit-delivery-source-20261020-1/response-counter-correction-1/DEFECT-EVIDENCE.json",
+        "sha256": "cf8905f5d8a3206facb434f397206fe654c0a217f53b034dd07c076cf63b9860"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792520980703676862,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388544,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792520980703676862,
+        "st_nlink": 1,
+        "st_size": 852,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697194466989,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388885,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697194466989,
+        "st_nlink": 1,
+        "st_size": 224,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-host-postexit-delivery-source-20261020-1/response-counter-correction-1/capture-2/PROFILE.json",
+      "source": {
+        "bytes": 224,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-host-postexit-delivery-source-20261020-1/response-counter-correction-1/capture-2/PROFILE.json",
+        "sha256": "3106bb4d4a54be4c0a789fe77fd2f16fc659d0bc1bcc21abfe2657d9a1a389f5"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792521014016736525,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388611,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521014016736525,
+        "st_nlink": 1,
+        "st_size": 224,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697194466989,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388886,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697194466989,
+        "st_nlink": 1,
+        "st_size": 463,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-host-postexit-delivery-source-20261020-1/response-counter-correction-1/capture-2/compile.command.json",
+      "source": {
+        "bytes": 463,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-host-postexit-delivery-source-20261020-1/response-counter-correction-1/capture-2/compile.command.json",
+        "sha256": "77d4d8c58c68f437060db26bd94d45a3f8de26272d3dd4027fdd6d242228603e"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792521014016736525,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388612,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521014016736525,
+        "st_nlink": 1,
+        "st_size": 463,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697194466989,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388887,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697194466989,
+        "st_nlink": 1,
+        "st_size": 144,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-host-postexit-delivery-source-20261020-1/response-counter-correction-1/capture-2/compile.wait.json",
+      "source": {
+        "bytes": 144,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-host-postexit-delivery-source-20261020-1/response-counter-correction-1/capture-2/compile.wait.json",
+        "sha256": "4d579c7ab612889a35ca6ebb9b2fdd1479b6050e32b10db160b3fb6b286ed9bc"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792521014836762610,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388616,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521014836762610,
+        "st_nlink": 1,
+        "st_size": 144,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697194466989,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388888,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697194466989,
+        "st_nlink": 1,
+        "st_size": 0,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-host-postexit-delivery-source-20261020-1/response-counter-correction-1/capture-2/compile.stdout",
+      "source": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-host-postexit-delivery-source-20261020-1/response-counter-correction-1/capture-2/compile.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792521014016736525,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388613,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521014016736525,
+        "st_nlink": 1,
+        "st_size": 0,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697194466989,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388889,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697194466989,
+        "st_nlink": 1,
+        "st_size": 0,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-host-postexit-delivery-source-20261020-1/response-counter-correction-1/capture-2/compile.stderr",
+      "source": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-host-postexit-delivery-source-20261020-1/response-counter-correction-1/capture-2/compile.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792521014016736525,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388614,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521014016736525,
+        "st_nlink": 1,
+        "st_size": 0,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697194466989,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388890,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697194466989,
+        "st_nlink": 1,
+        "st_size": 262,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-host-postexit-delivery-source-20261020-1/response-counter-correction-1/capture-2/test.command.json",
+      "source": {
+        "bytes": 262,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-host-postexit-delivery-source-20261020-1/response-counter-correction-1/capture-2/test.command.json",
+        "sha256": "04556911f9767a7a424b1035f9d25ca29adde1b221de8ffaf32e7ffc1a53da50"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792521014836762610,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388617,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521014836762610,
+        "st_nlink": 1,
+        "st_size": 262,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697194466989,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388891,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697194466989,
+        "st_nlink": 1,
+        "st_size": 146,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-host-postexit-delivery-source-20261020-1/response-counter-correction-1/capture-2/test.wait.json",
+      "source": {
+        "bytes": 146,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-host-postexit-delivery-source-20261020-1/response-counter-correction-1/capture-2/test.wait.json",
+        "sha256": "71af28e97dfe803730b3b8dc2d0131b225b486bdb6d6e46f6252f91ca48d89df"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792521014840762737,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388622,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521014840762737,
+        "st_nlink": 1,
+        "st_size": 146,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697194466989,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388892,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697194466989,
+        "st_nlink": 1,
+        "st_size": 195,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-host-postexit-delivery-source-20261020-1/response-counter-correction-1/capture-2/test.stdout",
+      "source": {
+        "bytes": 195,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-host-postexit-delivery-source-20261020-1/response-counter-correction-1/capture-2/test.stdout",
+        "sha256": "0389cb2ebaa9c773af4ba3e087fe7d963b134772babbc439f7cbada7976b6ae2"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792521014840762737,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388619,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521014840762737,
+        "st_nlink": 1,
+        "st_size": 195,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697194466989,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388893,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697194466989,
+        "st_nlink": 1,
+        "st_size": 0,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-host-postexit-delivery-source-20261020-1/response-counter-correction-1/capture-2/test.stderr",
+      "source": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-host-postexit-delivery-source-20261020-1/response-counter-correction-1/capture-2/test.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792521014836762610,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388620,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521014836762610,
+        "st_nlink": 1,
+        "st_size": 0,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697194466989,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388895,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697194466989,
+        "st_nlink": 1,
+        "st_size": 224,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-host-postexit-delivery-source-20261020-1/capture-1/PROFILE.json",
+      "source": {
+        "bytes": 224,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-host-postexit-delivery-source-20261020-1/capture-1/PROFILE.json",
+        "sha256": "3106bb4d4a54be4c0a789fe77fd2f16fc659d0bc1bcc21abfe2657d9a1a389f5"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792520914549572530,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388504,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792520914549572530,
+        "st_nlink": 1,
+        "st_size": 224,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697194466989,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388896,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697194466989,
+        "st_nlink": 1,
+        "st_size": 403,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-host-postexit-delivery-source-20261020-1/capture-1/compile.command.json",
+      "source": {
+        "bytes": 403,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-host-postexit-delivery-source-20261020-1/capture-1/compile.command.json",
+        "sha256": "b6b6d9e260e694ce83ac304d15354ce3a87c46f665f5dad51ecd37f085726720"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792520914549572530,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388505,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792520914549572530,
+        "st_nlink": 1,
+        "st_size": 403,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697194466989,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388897,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697194466989,
+        "st_nlink": 1,
+        "st_size": 144,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-host-postexit-delivery-source-20261020-1/capture-1/compile.wait.json",
+      "source": {
+        "bytes": 144,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-host-postexit-delivery-source-20261020-1/capture-1/compile.wait.json",
+        "sha256": "ec8ec4e8f61bc0e5635ff290a5785d74446c4ba45e2688d22a8e5980a3bfc997"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792520915169592252,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388509,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792520915169592252,
+        "st_nlink": 1,
+        "st_size": 144,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697194466989,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388898,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697194466989,
+        "st_nlink": 1,
+        "st_size": 0,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-host-postexit-delivery-source-20261020-1/capture-1/compile.stdout",
+      "source": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-host-postexit-delivery-source-20261020-1/capture-1/compile.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792520914549572530,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388506,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792520914549572530,
+        "st_nlink": 1,
+        "st_size": 0,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697194466989,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388899,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697194466989,
+        "st_nlink": 1,
+        "st_size": 0,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-host-postexit-delivery-source-20261020-1/capture-1/compile.stderr",
+      "source": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-host-postexit-delivery-source-20261020-1/capture-1/compile.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792520914549572530,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388507,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792520914549572530,
+        "st_nlink": 1,
+        "st_size": 0,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697194466989,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388900,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697194466989,
+        "st_nlink": 1,
+        "st_size": 232,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-host-postexit-delivery-source-20261020-1/capture-1/test.command.json",
+      "source": {
+        "bytes": 232,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-host-postexit-delivery-source-20261020-1/capture-1/test.command.json",
+        "sha256": "f682c33bfc146f6ab231cd34e415248a7ee9edffeeb935f16aa7c2725c46a0ba"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792520915169592252,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388510,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792520915169592252,
+        "st_nlink": 1,
+        "st_size": 232,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697194466989,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388901,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697194466989,
+        "st_nlink": 1,
+        "st_size": 149,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-host-postexit-delivery-source-20261020-1/capture-1/test.wait.json",
+      "source": {
+        "bytes": 149,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-host-postexit-delivery-source-20261020-1/capture-1/test.wait.json",
+        "sha256": "7f8a5a40df51c2f6b9a90440b684c42fc6e0b6cc79e2ca7a4c5b37aa2f45e77d"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792520915169592252,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388516,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792520915169592252,
+        "st_nlink": 1,
+        "st_size": 149,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697194466989,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388902,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697194466989,
+        "st_nlink": 1,
+        "st_size": 748,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-host-postexit-delivery-source-20261020-1/capture-1/test.stdout",
+      "source": {
+        "bytes": 748,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-host-postexit-delivery-source-20261020-1/capture-1/test.stdout",
+        "sha256": "bf70ddb92e5fb2356e5ecfe20c9ed407bf9b23fd4d19a662875428055305ee8b"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792520915169592252,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388513,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792520915169592252,
+        "st_nlink": 1,
+        "st_size": 748,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697194466989,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388903,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697194466989,
+        "st_nlink": 1,
+        "st_size": 0,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-host-postexit-delivery-source-20261020-1/capture-1/test.stderr",
+      "source": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-host-postexit-delivery-source-20261020-1/capture-1/test.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792520915169592252,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388514,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792520915169592252,
+        "st_nlink": 1,
+        "st_size": 0,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697194466989,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388904,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697194466989,
+        "st_nlink": 1,
+        "st_size": 175,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-host-postexit-delivery-source-20261020-1/response-counter-correction-1/capture-2/RESULT.json",
+      "source": {
+        "bytes": 175,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-host-postexit-delivery-source-20261020-1/response-counter-correction-1/capture-2/RESULT.json",
+        "sha256": "6fdae46e57cfd4567da25b0f67586842fe5e14bf866ac2ac801c70502921807e"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792521014840762737,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388623,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521014840762737,
+        "st_nlink": 1,
+        "st_size": 175,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697194466989,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388907,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697194466989,
+        "st_nlink": 1,
+        "st_size": 12814,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-guest-finalack-uncertainty-regression-20261020-1/fixture/actual-finalack.rs",
+      "source": {
+        "bytes": 12814,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/fixture/actual-finalack.rs",
+        "sha256": "727e709d0d389a00d5f839f561a39cd8eb0d98d14924c66200266f1aa5c47e1e"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792520877368389801,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388497,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792520877368389801,
+        "st_nlink": 1,
+        "st_size": 12814,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697194466989,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388908,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697194466989,
+        "st_nlink": 1,
+        "st_size": 19390,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-guest-finalack-uncertainty-regression-20261020-1/fixture/fork_control_guest.rs",
+      "source": {
+        "bytes": 19390,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/fixture/fork_control_guest.rs",
+        "sha256": "16599cdb2b05baf92917fec9a052add48c9b169549b74227bbe72d59ba2b5933"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792521004480433184,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388487,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521004480433184,
+        "st_nlink": 1,
+        "st_size": 19390,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697194466989,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388909,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697194466989,
+        "st_nlink": 1,
+        "st_size": 4878,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-guest-finalack-uncertainty-regression-20261020-1/SOURCE-BINDING.json",
+      "source": {
+        "bytes": 4878,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/SOURCE-BINDING.json",
+        "sha256": "a50e51c22ff1d43632990301a7b62bff935a8f919337447569430b78e333a01e"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792520877368389801,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388498,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792520877368389801,
+        "st_nlink": 1,
+        "st_size": 4878,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697194466989,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388910,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697194466989,
+        "st_nlink": 1,
+        "st_size": 2581,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-guest-finalack-uncertainty-regression-20261020-1/HELPER-BODY-BINDING.json",
+      "source": {
+        "bytes": 2581,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/HELPER-BODY-BINDING.json",
+        "sha256": "3eefa94b463d37d21ca9e019ebeba390c268f8d448fb02e8fbdb7df19371971f"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792520915037588053,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388511,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792520915037588053,
+        "st_nlink": 1,
+        "st_size": 2581,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697194466989,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388911,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697194466989,
+        "st_nlink": 1,
+        "st_size": 3353,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-guest-finalack-uncertainty-regression-20261020-1/CANONICAL-REGRESSION-DELTA.json",
+      "source": {
+        "bytes": 3353,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/CANONICAL-REGRESSION-DELTA.json",
+        "sha256": "d83639d5ae505ac305775cb742f5a0a8732fc7f0020d5266910e85763e890c04"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792521150689083912,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388650,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521150689083912,
+        "st_nlink": 1,
+        "st_size": 3353,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697194466989,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388912,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697194466989,
+        "st_nlink": 1,
+        "st_size": 7375,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-guest-finalack-uncertainty-regression-20261020-1/existing-harness-regression.patch",
+      "source": {
+        "bytes": 7375,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/existing-harness-regression.patch",
+        "sha256": "33d5cfa72f2febd92f0a7995fe2c2627b6068565ed37f0f8102153e661ae80a8"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792521136688638579,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388648,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521136688638579,
+        "st_nlink": 1,
+        "st_size": 7375,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697194466989,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388913,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697194466989,
+        "st_nlink": 1,
+        "st_size": 7144,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-guest-finalack-uncertainty-regression-20261020-1/prepare_corrected.py",
+      "source": {
+        "bytes": 7144,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/prepare_corrected.py",
+        "sha256": "22634e839ccea9fe630691c79d8425110ed13fa856bf614fc07fad9c1a296818"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792521150689083912,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388649,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521150689083912,
+        "st_nlink": 1,
+        "st_size": 7144,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697198467117,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388914,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697198467117,
+        "st_nlink": 1,
+        "st_size": 2297,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-guest-finalack-uncertainty-regression-20261020-1/run_checks_correction.py",
+      "source": {
+        "bytes": 2297,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/run_checks_correction.py",
+        "sha256": "2115fdbcc6fce754365a1c47db312709cc05469aa9572c58beade7c5a76cd27f"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792521004480433184,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388607,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521004480433184,
+        "st_nlink": 1,
+        "st_size": 2297,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697198467117,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388915,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697198467117,
+        "st_nlink": 1,
+        "st_size": 3283,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-guest-finalack-uncertainty-regression-20261020-1/CHECK-CORRECTION-PROPOSAL.json",
+      "source": {
+        "bytes": 3283,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/CHECK-CORRECTION-PROPOSAL.json",
+        "sha256": "1169476ea087e131f130fa23e83fdc8a4b60a2c63a10427b98ba2daece35ae41"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792521004484433311,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388608,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521004484433311,
+        "st_nlink": 1,
+        "st_size": 3283,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697198467117,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388916,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697198467117,
+        "st_nlink": 1,
+        "st_size": 905,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-guest-finalack-uncertainty-regression-20261020-1/ROOT-CORRECTION-ADMISSION.json",
+      "source": {
+        "bytes": 905,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/ROOT-CORRECTION-ADMISSION.json",
+        "sha256": "e9786ca5b7a198e448e7b07049dfe9010f0abf3b68060c5d7a35cd2447a67e32"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792521039329541702,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388624,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521039329541702,
+        "st_nlink": 1,
+        "st_size": 905,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697198467117,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388917,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697198467117,
+        "st_nlink": 1,
+        "st_size": 10069,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-guest-finalack-uncertainty-regression-20261020-1/ACTUAL-BODY-REGRESSION-HANDOFF.json",
+      "source": {
+        "bytes": 10069,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/ACTUAL-BODY-REGRESSION-HANDOFF.json",
+        "sha256": "a68104977b00c827e306b524cf47ddfc8238c922908676f9e4703763860024c0"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792521098267416451,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388640,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521098267416451,
+        "st_nlink": 1,
+        "st_size": 10069,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697198467117,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388919,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697198467117,
+        "st_nlink": 1,
+        "st_size": 4878,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-guest-finalack-uncertainty-regression-20261020-1/failed-candidate-1/SOURCE-BINDING.json",
+      "source": {
+        "bytes": 4878,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/failed-candidate-1/SOURCE-BINDING.json",
+        "sha256": "a50e51c22ff1d43632990301a7b62bff935a8f919337447569430b78e333a01e"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792521004480433184,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388606,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521004480433184,
+        "st_nlink": 1,
+        "st_size": 4878,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697198467117,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388920,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697198467117,
+        "st_nlink": 1,
+        "st_size": 3096,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-guest-finalack-uncertainty-regression-20261020-1/failed-candidate-1/CHECK-PROPOSAL.json",
+      "source": {
+        "bytes": 3096,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/failed-candidate-1/CHECK-PROPOSAL.json",
+        "sha256": "3e3b5f81467b3fe7377a2b208af9eb52b2fc354d7bbf78fa49361bd42f3285ba"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792521004480433184,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388604,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521004480433184,
+        "st_nlink": 1,
+        "st_size": 3096,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697198467117,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388923,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697198467117,
+        "st_nlink": 1,
+        "st_size": 458,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-guest-finalack-uncertainty-regression-20261020-1/check-2/compile/command.json",
+      "source": {
+        "bytes": 458,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/check-2/compile/command.json",
+        "sha256": "9c2364871e61e9cc6a8c58fdb41265acca79d630174f63df4ff27d86bd87eb4a"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792521050901909808,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388627,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521050901909808,
+        "st_nlink": 1,
+        "st_size": 458,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697198467117,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388924,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697198467117,
+        "st_nlink": 1,
+        "st_size": 115,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-guest-finalack-uncertainty-regression-20261020-1/check-2/compile/status.json",
+      "source": {
+        "bytes": 115,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/check-2/compile/status.json",
+        "sha256": "63890f4d40da0d919a28aff4f114f6a764ba0febe3a27b4b70398cd051d2aad2"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792521051569931057,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388631,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521051569931057,
+        "st_nlink": 1,
+        "st_size": 115,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697198467117,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388925,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697198467117,
+        "st_nlink": 1,
+        "st_size": 44,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-guest-finalack-uncertainty-regression-20261020-1/check-2/compile/started.json",
+      "source": {
+        "bytes": 44,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/check-2/compile/started.json",
+        "sha256": "584fec9ec5db270c9ab80a6a67dfdf2de6a957b990b9ec4576bf160d60ecbd0f"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792521050905909935,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388630,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521050905909935,
+        "st_nlink": 1,
+        "st_size": 44,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697198467117,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388926,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697198467117,
+        "st_nlink": 1,
+        "st_size": 0,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-guest-finalack-uncertainty-regression-20261020-1/check-2/compile/stdout",
+      "source": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/check-2/compile/stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792521050901909808,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388628,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521050901909808,
+        "st_nlink": 1,
+        "st_size": 0,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697198467117,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388927,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697198467117,
+        "st_nlink": 1,
+        "st_size": 0,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-guest-finalack-uncertainty-regression-20261020-1/check-2/compile/stderr",
+      "source": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/check-2/compile/stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792521050901909808,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388629,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521050901909808,
+        "st_nlink": 1,
+        "st_size": 0,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697198467117,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388929,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697198467117,
+        "st_nlink": 1,
+        "st_size": 179,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-guest-finalack-uncertainty-regression-20261020-1/check-2/test/command.json",
+      "source": {
+        "bytes": 179,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/check-2/test/command.json",
+        "sha256": "5314f2df4801c0c60b83a1b22384b9f9c499f3acd95bcd388f83649e7f6d932f"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792521051569931057,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388634,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521051569931057,
+        "st_nlink": 1,
+        "st_size": 179,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697198467117,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388930,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697198467117,
+        "st_nlink": 1,
+        "st_size": 117,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-guest-finalack-uncertainty-regression-20261020-1/check-2/test/status.json",
+      "source": {
+        "bytes": 117,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/check-2/test/status.json",
+        "sha256": "b27c6a10c2efacab116412716de1616cd23eb127a056e8abb4bc6553b5f868ff"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792521051577931311,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388638,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521051577931311,
+        "st_nlink": 1,
+        "st_size": 117,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697198467117,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388931,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697198467117,
+        "st_nlink": 1,
+        "st_size": 44,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-guest-finalack-uncertainty-regression-20261020-1/check-2/test/started.json",
+      "source": {
+        "bytes": 44,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/check-2/test/started.json",
+        "sha256": "afab5f77bc80a8612c035ecd82698a02564a24493e3c856b7eb77dc042f37f25"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792521051573931184,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388637,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521051573931184,
+        "st_nlink": 1,
+        "st_size": 44,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697198467117,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388932,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697198467117,
+        "st_nlink": 1,
+        "st_size": 375,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-guest-finalack-uncertainty-regression-20261020-1/check-2/test/stdout",
+      "source": {
+        "bytes": 375,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/check-2/test/stdout",
+        "sha256": "2fdcb9278831d9fef8a9eb3da7196577ca7db130414431fe3f77cc05074b08f5"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792521051573931184,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388635,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521051573931184,
+        "st_nlink": 1,
+        "st_size": 375,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697198467117,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388933,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697198467117,
+        "st_nlink": 1,
+        "st_size": 0,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-guest-finalack-uncertainty-regression-20261020-1/check-2/test/stderr",
+      "source": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/check-2/test/stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792521051569931057,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388636,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521051569931057,
+        "st_nlink": 1,
+        "st_size": 0,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697198467117,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388936,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697198467117,
+        "st_nlink": 1,
+        "st_size": 458,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-guest-finalack-uncertainty-regression-20261020-1/check-1/compile/command.json",
+      "source": {
+        "bytes": 458,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/check-1/compile/command.json",
+        "sha256": "42d1d31c5d2916a450d84605c850db2b6f120054649c260bb936bd3f611cb974"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792520965555194998,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388539,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792520965555194998,
+        "st_nlink": 1,
+        "st_size": 458,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697198467117,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388937,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697198467117,
+        "st_nlink": 1,
+        "st_size": 115,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-guest-finalack-uncertainty-regression-20261020-1/check-1/compile/status.json",
+      "source": {
+        "bytes": 115,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/check-1/compile/status.json",
+        "sha256": "44069e49de905e815d2edefb05677e9cb238bb98913ceb10e72c39a13b559996"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792520965919206577,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388543,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792520965919206577,
+        "st_nlink": 1,
+        "st_size": 115,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697198467117,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388938,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697198467117,
+        "st_nlink": 1,
+        "st_size": 44,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-guest-finalack-uncertainty-regression-20261020-1/check-1/compile/started.json",
+      "source": {
+        "bytes": 44,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/check-1/compile/started.json",
+        "sha256": "6290d599909c2b691926cc300467dae8ee93722d5871566da00a1bde2dad4bbe"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792520965555194998,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388542,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792520965555194998,
+        "st_nlink": 1,
+        "st_size": 44,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697198467117,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388939,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697198467117,
+        "st_nlink": 1,
+        "st_size": 0,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-guest-finalack-uncertainty-regression-20261020-1/check-1/compile/stdout",
+      "source": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/check-1/compile/stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792520965555194998,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388540,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792520965555194998,
+        "st_nlink": 1,
+        "st_size": 0,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697198467117,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388940,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697198467117,
+        "st_nlink": 1,
+        "st_size": 485,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-guest-finalack-uncertainty-regression-20261020-1/check-1/compile/stderr",
+      "source": {
+        "bytes": 485,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/check-1/compile/stderr",
+        "sha256": "e14b773d467e5cb15a21c019705a46408bc38b91012168a25a4660abd8a1cfed"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792520965891205687,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388541,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792520965891205687,
+        "st_nlink": 1,
+        "st_size": 485,
+        "st_uid": 1000
+      }
+    },
+    {
+      "destination_identity": {
+        "st_ctime_ns": 1792521697198467117,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388942,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521697198467117,
+        "st_nlink": 1,
+        "st_size": 6878,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/host-guest-focused-regression-checkpoint-20261020-1/sources/phase5-host-guest-focused-regression-independent-review-20261020-1/DECISION.json",
+      "source": {
+        "bytes": 6878,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-host-guest-focused-regression-independent-review-20261020-1/DECISION.json",
+        "sha256": "d74ed0bec0085df8e8dd614f5343252c253e538213999f5da7e4c8713b4ad748"
+      },
+      "source_identity": {
+        "st_ctime_ns": 1792521289021484025,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48388703,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792521289021484025,
+        "st_nlink": 1,
+        "st_size": 6878,
+        "st_uid": 1000
+      }
+    }
+  ],
+  "schema": "mckernel.host-guest.focused-regression-closed-checkpoint.v1",
+  "selection": {
+    "bytes": 54854,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-host-guest-focused-regression-publication-20261020-1/FINITE-CHECKPOINT-SELECTION.json",
+    "sha256": "6d5faabd2a0b1e25818912158464deda37a4e95b62179fee2653fb76ff8e5d35"
+  },
+  "source_bytehold_confirmed": true
+}

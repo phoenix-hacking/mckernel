@@ -1,0 +1,29 @@
+```json
+{
+  "status": "PASS",
+  "decision": "PASS_ACTUAL_M07_CONTROL_CLOSURE_CURRENT_NORMAL9_ROLE_SOURCE_BODY_AND_PENDING_DATA_ONLY",
+  "reviewer": "/root/m07_outer_control_closure_expert",
+  "implementation_ownership": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "findings": [],
+  "evidence_handoff_sha256": "9878e20c4f2fd1a36b2c784fa23d07b155f1c55aff76cc8bcec0fc5b7525009a",
+  "constructor_sha256": "7916a35498e7ddd999d9fb46d19e4efcd40f79785b2f1d7e2605b6f5ce4bb4dd",
+  "binder_sha256": "3b72a4f2743e8ce419afff6295ec25d5789c76b522587fc77e2de567e9bd3a54",
+  "checker_sha256": "16d980db4bcff63644e3a82e6af75df51e9e6c7a0bc028bb1a58ef0b11a37265",
+  "runtime_release": false,
+  "native_acceptance": false,
+  "application_acceptance": false
+}
+```
+
+Accepted the exact [current-normal9 handoff](/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/remaining-components-functional-case-preparation-20261022-1/joint-mpx-exact-fault-correction-1/current053d-stage-preparation-1/ordinary-normalization-runtime-integration-1/outer-runtime-preparation-1/bound-runtime-control-closure-correction-1/current-normal9-role-binding-1/ACTUAL-CURRENT-NORMAL9-ROLE-BINDING-HANDOFF-1.json) for this bounded scope:
+
+- Both Q controls match the qualified bytes. The executor is the actual generated pending postimage, separately identified from ancestry. Complete closure records 17 Python objects, descriptor and helper: 19 FD observations, with no retained FD lease.
+- All 19 pending outputs match their descriptors; 46 internal path/hash/byte joins match. Seven ordered steps, 49 fresh effect paths and the distinct 12-source runtime FD-map contract are preserved.
+- Native87f CID/nonce remain separate from current C9 normal9. `successful_native_terminal_joins` invokes the qualified current decoder, compares its complete projection and enforces carried admission-name equality and absence. Role DATA and decoder are pinned through snapshot/config sources.
+- Raw captures support successful constructor/wholecaller completion for both corrections: direct joins, absent groups, closed streams and empty stderr. Current wholecaller records one positive case and four refusals.
+- Immutable raw/canonical joins and the typed remaining-component oracle remain intact; STOP/all-inapplicable credit stays zero.
+
+This decision can serve as the genuine source/data review input to the existing finite final binder. Its final outputs must retain the reviewed joins and bind this recorded decision’s exact descriptor.
+
+Final-mode output materialization, actual snapshot, final guard invocation, source publication/fetched proof and fresh runtime execution review are outside this acceptance. No continuing global clearance, native permission or migration credit is granted.

@@ -1,0 +1,77 @@
+--- a/arch/x86_64/kernel/cpu.c
++++ b/arch/x86_64/kernel/cpu.c
+@@ -2910,6 +2910,9 @@
+ 
+ /* KPRINTF_LOCAL_BUF_LEN is 1024, useless to go further */
+ #define STACK_BUF_LEN (1024-sizeof("[  0]: "))
++#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
++void __print_stack(struct stack *rbp, unsigned long first);
++#else
+ static void __print_stack(struct stack *rbp, unsigned long first) {
+ 	char buf[STACK_BUF_LEN];
+ 	size_t len;
+@@ -2930,6 +2933,8 @@
+ 	}
+ 	__kprintf("%s\n", buf);
+ }
++
++#endif
+ 
+ #ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+ void x86_stack_frame_log_bridge(unsigned long ip, unsigned long sp,
+--- a/kernel/rust/x86_cpu_helpers.rs
++++ b/kernel/rust/x86_cpu_helpers.rs
+@@ -103,6 +103,8 @@
+     fn x86_running_on_kvm_bridge() -> CInt;
+     fn x86_cpuid6_bridge(eaxp: *mut CULong, ecxp: *mut CULong);
+     fn kprintf(format: *const i8, ...) -> CInt;
++    fn __kprintf(format: *const i8, ...) -> CInt;
++    fn snprintf(buf: *mut i8, size: usize, format: *const i8, ...) -> CInt;
+     fn arch_delay(us: CInt);
+     fn do_arch_prctl(code: CULong, address: CULong) -> CLong;
+     fn x86_lapic_write_bridge(reg: CInt, value: CUInt);
+@@ -3099,3 +3101,44 @@
+         _ => {},
+     }
+ }
++
++
++/// Build the existing single addr2line stack diagnostic with existing Rust
++/// snprintf and unlocked-print providers. The caller supplies the same live
++/// two-word C stack frames; no frame/context or local-buffer pointer is retained.
++/// Frame reads stay separated by snprintf as in C so a provider may affect the
++/// next-link word before that word is read.
++#[no_mangle]
++pub unsafe extern "C" fn __print_stack(mut rbp: *mut CULong, first: CULong) {
++    // Exact existing C STACK_BUF_LEN: 1024-sizeof("[  0]: ").
++    const BUF_LEN: usize = 1024 - b"[  0]: \0".len();
++    let mut buf = [0i8; BUF_LEN];
++    let out = buf.as_mut_ptr();
++    let mut len = unsafe {
++        snprintf(
++            out, BUF_LEN,
++            b"addr2line -e smp-x86/kernel/mckernel.img -fpia\0".as_ptr().cast(),
++        )
++    } as usize;
++    if first != 0 {
++        len = len.wrapping_add(unsafe {
++            snprintf(
++                out.wrapping_add(len), BUF_LEN.wrapping_sub(len),
++                b" %#16lx\0".as_ptr().cast(), first,
++            )
++        } as usize);
++    }
++    while (rbp as CULong) > 0xffff880000000000
++        && BUF_LEN.wrapping_sub(len) > b" 0x0123456789abcdef\0".len()
++    {
++        let ip = unsafe { rbp.add(1).read() };
++        len = len.wrapping_add(unsafe {
++            snprintf(
++                out.wrapping_add(len), BUF_LEN.wrapping_sub(len),
++                b" %#16lx\0".as_ptr().cast(), ip,
++            )
++        } as usize);
++        rbp = unsafe { rbp.read() } as *mut CULong;
++    }
++    unsafe { __kprintf(b"%s\n\0".as_ptr().cast(), out); }
++}

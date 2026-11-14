@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-003",
+  "packet_version": 2,
+  "context_sha256": "967df87ecbd8fc1031e1463a7160ce325e2132943bb9be2f4d75b43827ad1714",
+  "started_utc": "2026-09-09T10:06:20Z",
+  "finished_utc": "2026-09-09T10:11:55Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "file.closed-read",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/file/file.closed-read.c",
+      "oracle": "scripts/application-tests/oracles/file.closed-read.json",
+      "changed_files": [
+        "scripts/application-tests/cases/file/file.closed-read.c",
+        "scripts/application-tests/oracles/file.closed-read.json"
+      ],
+      "unresolved_oracle_notes": [
+        "Buffer immutability rule remains line-based; execution capture may request stronger structured proof."
+      ],
+      "max_reviewer_question": "Can the read-before-close operation remain deterministic for all descriptors and platforms?"
+    },
+    {
+      "case_id": "file.closed-write",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/file/file.closed-write.c",
+      "oracle": "scripts/application-tests/oracles/file.closed-write.json",
+      "changed_files": [
+        "scripts/application-tests/cases/file/file.closed-write.c",
+        "scripts/application-tests/oracles/file.closed-write.json"
+      ],
+      "unresolved_oracle_notes": [
+        "The payload line output is draft-normalized; execution may require richer metadata for write attempts."
+      ],
+      "max_reviewer_question": "Should closed-write include descriptor table checks outside the targeted fd for this case scope?"
+    },
+    {
+      "case_id": "file.closed-close",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/file/file.closed-close.c",
+      "oracle": "scripts/application-tests/oracles/file.closed-close.json",
+      "changed_files": [
+        "scripts/application-tests/cases/file/file.closed-close.c",
+        "scripts/application-tests/oracles/file.closed-close.json"
+      ],
+      "unresolved_oracle_notes": [
+        "Post-close failure behavior is fixed to EBADF in expectation but may include implementation-specific descriptor state differences."
+      ],
+      "max_reviewer_question": "Is EBADF for close-on-opened descriptor mandatory here, or does test need implementation-independent fallback checks?"
+    }
+  ],
+  "changed_files_with_sha256": [
+    {
+      "path": "scripts/application-tests/cases/file/file.closed-read.c",
+      "sha256": "24cc7ec1d240df1bc34870a0e7ab685d11c38b80c1a5a2a40e3291bcf20a8d9c"
+    },
+    {
+      "path": "scripts/application-tests/oracles/file.closed-read.json",
+      "sha256": "7b2a2c124d1ffa6884cb18a5ecfcff098ad66a7712dae8b06e7a22e720feeb66"
+    },
+    {
+      "path": "scripts/application-tests/cases/file/file.closed-write.c",
+      "sha256": "c85ea56833b27cd7c96f5d0432cbbe02bb4ff213c23d93b01e57d0d671ce41a7"
+    },
+    {
+      "path": "scripts/application-tests/oracles/file.closed-write.json",
+      "sha256": "087f150efb327c3cf1ec4cd834b7376cbf3a946b2dbcc36065aeaae327bbb1c8"
+    },
+    {
+      "path": "scripts/application-tests/cases/file/file.closed-close.c",
+      "sha256": "7a76105329be6523b0715c659bbe7d045c7274c6d41428544b72c14d1d7b1d87"
+    },
+    {
+      "path": "scripts/application-tests/oracles/file.closed-close.json",
+      "sha256": "692cbc1106e52bdfa5dd27c61e39a174f7f3479dcb9a6345f231f02d74763951"
+    }
+  ],
+  "commands_and_outcomes": [
+    {
+      "command": "python3 -B /home/holden/mckernel/scripts/application-tests/validate.py --packet /home/holden/mckernel/scripts/application-tests/packets/packet-003.json",
+      "outcome": "PASS"
+    },
+    {
+      "command": "python3 -B /home/holden/mckernel/scripts/application-tests/validate.py --packet /home/holden/mckernel/scripts/application-tests/packets/packet-003.json --emit-context /home/holden/mckernel-work/scratch/application-test-drafts-20260909/packet-003-context-attempt-1.json",
+      "outcome": "PASS"
+    },
+    {
+      "command": "git diff --check",
+      "outcome": "PASS"
+    }
+  ],
+  "unresolved_oracles": [
+    "File cases rely on fixed line output for planning stage",
+    "descriptor-state assumptions should be cross-validated with final execution semantics"
+  ],
+  "blocked_execution_capabilities": [
+    "runner-contract",
+    "current-inputs",
+    "runtime-transport-fault-injection",
+    "dynamic-etexec",
+    "file-basic"
+  ],
+  "first_failure_event": null,
+  "max_escalation": [
+    "Need confirmation on portability expectations for EBADF handling after explicit close."
+  ],
+  "next_packet_id": "packet-004"
+}

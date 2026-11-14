@@ -1,0 +1,63 @@
+{
+  "status": "FROZEN_REQUIRES_AFFECTED_SOURCE_REVIEW_AND_CONDITIONAL_ROOT_FRESH_ADMISSION",
+  "functional_scope": "Functional OS/apps plus Rust/reviewed assembly compute cutover",
+  "outer_argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--fsize=33554432",
+    "--core=0",
+    "--nofile=256",
+    "--",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-preparation-1/native-packet-1/current-execution-tuple-correction-1/run_checks_once.py"
+  ],
+  "fixture": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-preparation-1/native-packet-1/current-execution-tuple-correction-1/check_current_execution.py",
+    "sha256": "53821541030988f2882bb462bd8dfb7dd7fe60ee087c2334112621c73be7c871",
+    "bytes": 2034
+  },
+  "runner": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-preparation-1/native-packet-1/current-execution-tuple-correction-1/run_checks_once.py",
+    "sha256": "72e965dd3fd2105fd6f7fff1587b033fbd625ff5aa9b365079a28e4d4db835a2",
+    "bytes": 2596
+  },
+  "inputs": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-preparation-1/native-packet-1/current-execution-tuple-correction-1/INPUTS.json",
+    "sha256": "265e3a7e9a16e2bd96f5dab8e8030ef6814aa2f1dee0a91d78f16b1a011c5972",
+    "bytes": 1353
+  },
+  "case_count": 3,
+  "profile": {
+    "cpu": 6,
+    "jobs": 1,
+    "AS_bytes": 1073741824,
+    "CPU_seconds": 30,
+    "wall_seconds": 35,
+    "kill_grace_seconds": 2,
+    "perstream_bytes": 33554432,
+    "core_bytes": 0,
+    "nofile": 256,
+    "minimum_MemAvailable_bytes": 5368709120,
+    "minimum_host_available_bytes": 18887655424,
+    "minimum_scratch_available_bytes": 14026801152
+  },
+  "outputs": [
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-preparation-1/native-packet-1/current-execution-tuple-correction-1/RESULT.json",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-preparation-1/native-packet-1/current-execution-tuple-correction-1/ordinary-capture-1",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-preparation-1/native-packet-1/current-execution-tuple-correction-1/outer-1.stdout",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-preparation-1/native-packet-1/current-execution-tuple-correction-1/outer-1.stderr"
+  ],
+  "no_physical_report_or_projection": true,
+  "no_snapshot_root_guest": true,
+  "history": "Originalb913/47a source-only decision preserved; current7aacf schema/fullbody/inline5 differs from legacy; exactly three focused new helper cases, no old source/stage fixtures replay."
+}

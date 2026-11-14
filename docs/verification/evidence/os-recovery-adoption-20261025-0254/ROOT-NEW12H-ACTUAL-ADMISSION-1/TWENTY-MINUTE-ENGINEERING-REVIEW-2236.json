@@ -1,0 +1,101 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "thread": "01a17e6f-112f-7660-8771-85d15e07a26c",
+  "recorded_at": "2026-10-27T22:37:17.063394+00:00",
+  "review_cadence_minutes": 20,
+  "measurement_bucket_start": "2026-10-27T22:06:09Z",
+  "measurement_bucket_end": "2026-10-27T22:36:09Z",
+  "original_baseline": "2026-10-27T17:36:09Z",
+  "production_compiler_commands": 0,
+  "new_selected_C_body_replacements": 0,
+  "new_production_metadata_replacements": 0,
+  "new_native_qualified_cases": 0,
+  "new_whole_file_closures": 0,
+  "actual_guest_attempts": 1,
+  "actual_native_result": "FAIL guest launch contract argv",
+  "actual_payload_observed_argv": [
+    "/bin/mcexec",
+    "-t",
+    "1",
+    "0",
+    "/apps/app"
+  ],
+  "original_required_argv": [
+    "/bin/mcexec",
+    "-t",
+    "1",
+    "0",
+    "app",
+    "A",
+    "",
+    "B"
+  ],
+  "raw_wait_status": 10496,
+  "decoded_exit": 41,
+  "stderr": "unexpected argc or argv terminator\n",
+  "native_owner_wall_seconds": 39.026020765304565,
+  "native_controller_cpu_seconds": 0.858482,
+  "native_controller_peak_rss_kib": 53172,
+  "guest_CPU_and_peak_memory": null,
+  "source_review_ready_to_entry_seconds": 591.7315390110016,
+  "resource_to_entry_seconds": [
+    35.97144317626953,
+    35.97144335403573,
+    35.97144365205895
+  ],
+  "time_to_first_production_compiler_since_baseline_seconds": 2608.941661,
+  "first_compile_current_bucket": null,
+  "ordinary_suffix_commands_passed": 4,
+  "ordinary_suffix_wall_seconds": 8.0077223777771,
+  "ordinary_prefix_compilers_replayed": 0,
+  "ordinary_suffix_qualification": "Independent acceptance pending; unchangedGNU_RETAIN guard passed",
+  "failure_to_suffix_actual_PASS_seconds": 605.8993291,
+  "failure_to_independently_validated_fix_seconds": null,
+  "accepted_selected_counts": {
+    "C_functions": 87,
+    "Rust_qualified_exports": 52,
+    "process_C_objects": 67
+  },
+  "retired_C_native_boundaries": 0,
+  "practical": "35/35",
+  "M14_supported_files": "2/6",
+  "M15_supported_files": "1/8",
+  "native_ownership": "Independent current-free review pending; Root35 not advanced from liveness",
+  "largest_avoidable_handoff": "591.731539s from exact source/binding review to native entry; publication/model handoff dominates39.026s caller runtime",
+  "scheduling_adjustment": "Keep full publication and prewritten entry command complete before fresh capture; qualify F05v3 new908f/125c overlay independently while source owner repairs exact startup collectorargv; no unchanged failed guest replay.",
+  "critical_path_owner": "/root + /root/f05_adapter_export",
+  "critical_path_next_command": "Compose exact new v3 derived overlay using actual908f supervisor and125c payload after source plan review; normal fresh native release after currentfree. M15 argv diagnosis proceeds disjointly.",
+  "active_owners": {
+    "v3_overlay_source": "/root/f05_adapter_export",
+    "startup_argv_source": "/root/mcexec_default_prepare",
+    "corrected113_batch": "/root/current111_build_prepare",
+    "actual_native_retirement": "/root/daemon_execution_review",
+    "metadata_actual_qualification": "/root/guardian_execution_review"
+  },
+  "resources": {
+    "disks": {
+      "/home/holden/mckernel": {
+        "available_bytes": 149245300736,
+        "ismount": false,
+        "st_dev": 66306
+      },
+      "/home/holden/mckernel-work/scratch": {
+        "available_bytes": 47869120512,
+        "ismount": true,
+        "st_dev": 1828
+      }
+    },
+    "load_average": [
+      1.3,
+      1.25,
+      1.1
+    ],
+    "memory": {
+      "MemAvailable_kib": 26743368,
+      "MemTotal_kib": 32421580
+    }
+  },
+  "weekly_refresh": "Fresh resident primary usedPercent0 confirmed; included first; same creditrun7f4/cumulative debits/ceiling/fixeddeadline, no settings changed",
+  "deadline": "2026-10-28T05:36:09Z",
+  "target95percent_achieved": false
+}

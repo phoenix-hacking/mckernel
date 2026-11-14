@@ -1,0 +1,799 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_manifest": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-ACTUAL-SNAPSHOT-1/EXACT-RUST-SNAPSHOT-MANIFEST.ACTUAL.json",
+    "bytes": 63036,
+    "sha256": "18ac3dc3b6a79e49817adda73983f7340bf5a201fd2fd914ab43ed33c01d8f57"
+  },
+  "snapshot_files": 149,
+  "Rust_files": 138,
+  "inherited_source_files_byte_equal": 131,
+  "changed_existing_sources": [
+    "lib.rs",
+    "syscall_policy.rs"
+  ],
+  "added_sources": [
+    "f03_context_forward_pair.rs",
+    "f03_wakeup_writer_pair.rs",
+    "ptrace_clone_noirq.rs",
+    "syscall_clear_host_pte_logger.rs",
+    "syscall_exit_group_current_pid.rs",
+    "syscall_exit_group_logger.rs",
+    "syscall_exit_group_terminate.rs",
+    "syscall_mprotect_host_vma.rs",
+    "syscall_munmap_clear_host_forward.rs",
+    "syscall_perf_open_forward.rs",
+    "syscall_ptrace_clone_logger.rs",
+    "syscall_ptrace_detach_kfree.rs",
+    "syscall_ptrace_detach_wakeup.rs",
+    "syscall_settid_logger.rs",
+    "syscall_terminate_mcexec_forward.rs",
+    "syscall_util_clone_disabled_logger.rs"
+  ],
+  "external3": [
+    {
+      "relative": "scripts/tests/fixtures/mckernel_guest_sysfs.rs",
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/scripts/tests/fixtures/mckernel_guest_sysfs.rs",
+        "bytes": 14227,
+        "sha256": "2262fddd9cb33052d7259fe3f0ee47cd4a56502fba97cc93797c9f7f394cac4c"
+      },
+      "container_path": "/src/scripts/tests/fixtures/mckernel_guest_sysfs.rs"
+    },
+    {
+      "relative": "host-kernel/native-rust/abi/vdso.rs",
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/host-kernel/native-rust/abi/vdso.rs",
+        "bytes": 17839,
+        "sha256": "d796e3a0723d6a21096a1455c35a7820437dfc2b99e5bb0e1c1f4db79f1c7d7d"
+      },
+      "container_path": "/src/host-kernel/native-rust/abi/vdso.rs"
+    },
+    {
+      "relative": "host-kernel/native-rust/zero_pages.rs",
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/host-kernel/native-rust/zero_pages.rs",
+        "bytes": 4354,
+        "sha256": "47a4e27b63f50366229af4045d79dc5dee6ace179307cc19c08cc338c68b1def"
+      },
+      "container_path": "/src/host-kernel/native-rust/zero_pages.rs"
+    }
+  ],
+  "retained9": [
+    {
+      "link_token": "CMakeFiles/mckernel.img.dir/mem.c.o",
+      "source": {
+        "bytes": 2848,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/mem.c.o",
+        "sha256": "4b595744494abba0493d75a1475e48b3745e1a668f5575543e81797b994e4f7c"
+      },
+      "host_mountpoint_placeholder": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CONVERSION-FIRST-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/mem.c.o",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "container_readonly_bind_source": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/mem.c.o",
+      "container_target": "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/mem.c.o"
+    },
+    {
+      "link_token": "CMakeFiles/mckernel.img.dir/process.c.o",
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+        "bytes": 2864,
+        "sha256": "3717ed77bd1761c734e93a72d4e5a0b770698f17760470286019f6ec6a6973dd"
+      },
+      "host_mountpoint_placeholder": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CONVERSION-FIRST-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "container_readonly_bind_source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+      "container_target": "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o"
+    },
+    {
+      "link_token": "CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o",
+      "source": {
+        "bytes": 2880,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o",
+        "sha256": "e139686acfa04f6d7576da5656693d13c4235e5beefb7f8ae3c9f7ccf03ea9b0"
+      },
+      "host_mountpoint_placeholder": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CONVERSION-FIRST-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "container_readonly_bind_source": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o",
+      "container_target": "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o"
+    },
+    {
+      "link_token": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/context.S.o",
+      "source": {
+        "bytes": 2344,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/context.S.o",
+        "sha256": "dce0972b3291f970d49a5fa6d64f25c587423aafa63efc8b47bcfdbdfb679c7a"
+      },
+      "host_mountpoint_placeholder": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CONVERSION-FIRST-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/context.S.o",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "container_readonly_bind_source": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/context.S.o",
+      "container_target": "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/context.S.o"
+    },
+    {
+      "link_token": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+      "source": {
+        "bytes": 2872,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+        "sha256": "3bed7de9807b6d8e70e87722a11b3d103119203822b9e022ebd0ecbc570bbce1"
+      },
+      "host_mountpoint_placeholder": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CONVERSION-FIRST-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "container_readonly_bind_source": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+      "container_target": "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o"
+    },
+    {
+      "link_token": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/interrupt.S.o",
+      "source": {
+        "bytes": 16056,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/interrupt.S.o",
+        "sha256": "66bcbec1fc5086cac18a8009f0e1b36ecaba7bf11f38cadd5de9f03e3873ee44"
+      },
+      "host_mountpoint_placeholder": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CONVERSION-FIRST-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/interrupt.S.o",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "container_readonly_bind_source": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/interrupt.S.o",
+      "container_target": "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/interrupt.S.o"
+    },
+    {
+      "link_token": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o",
+      "source": {
+        "bytes": 2888,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o",
+        "sha256": "d3207c7a7844086196676c82d66e6aa4f1233e37b167460e23ba089ec71aca85"
+      },
+      "host_mountpoint_placeholder": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CONVERSION-FIRST-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "container_readonly_bind_source": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o",
+      "container_target": "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o"
+    },
+    {
+      "link_token": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CURRENT119-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "bytes": 77736,
+        "sha256": "30bddb4cf0e8083fcce83fe691410b6d4a0e8eabec3cb6ce3b6ab190be8ab3da"
+      },
+      "host_mountpoint_placeholder": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CONVERSION-FIRST-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "container_readonly_bind_source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CURRENT119-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+      "container_target": "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o"
+    },
+    {
+      "link_token": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/trampoline.S.o",
+      "source": {
+        "bytes": 5568,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/trampoline.S.o",
+        "sha256": "ebd728290101289164a887deb52dc7977d896e9627a2cb1323fd649db89055c5"
+      },
+      "host_mountpoint_placeholder": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CONVERSION-FIRST-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/trampoline.S.o",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "container_readonly_bind_source": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/trampoline.S.o",
+      "container_target": "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/trampoline.S.o"
+    }
+  ],
+  "configuration10": [
+    {
+      "source": {
+        "bytes": 26772,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/CMakeCache.txt",
+        "sha256": "0a76d32d26170bc88370a013dd189af7cd04a342222be2f2f0c03723dee74019"
+      },
+      "host_mountpoint_placeholder": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CONVERSION-FIRST-BUILD-ADMISSION-1/OUTPUT/work/output/build/CMakeCache.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "container_readonly_bind_source": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/CMakeCache.txt",
+      "container_target": "/work/output/build/CMakeCache.txt"
+    },
+    {
+      "source": {
+        "bytes": 74750,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/compile_commands.json",
+        "sha256": "8355a2fa83310991bd21d3ddea7106d1e40134f2f90b4f0c5d4eb2e218869139"
+      },
+      "host_mountpoint_placeholder": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CONVERSION-FIRST-BUILD-ADMISSION-1/OUTPUT/work/output/build/compile_commands.json",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "container_readonly_bind_source": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/compile_commands.json",
+      "container_target": "/work/output/build/compile_commands.json"
+    },
+    {
+      "source": {
+        "bytes": 30122,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/build.make",
+        "sha256": "d038ece565cc965f11288eac31da307e56bd3c9ec40e9470f89d0756e1decb2f"
+      },
+      "host_mountpoint_placeholder": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CONVERSION-FIRST-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/build.make",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "container_readonly_bind_source": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/build.make",
+      "container_target": "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/build.make"
+    },
+    {
+      "source": {
+        "bytes": 3993,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/flags.make",
+        "sha256": "eb3f8f83cf8fffd7599118c70881f7203bee5e4a68894069212287ea54444b24"
+      },
+      "host_mountpoint_placeholder": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CONVERSION-FIRST-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/flags.make",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "container_readonly_bind_source": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/flags.make",
+      "container_target": "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/flags.make"
+    },
+    {
+      "source": {
+        "bytes": 759,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/link.txt",
+        "sha256": "d9d50ed84770a8bff5af2371e19245200d99d61fe3cda28e880bd88e6669e428"
+      },
+      "host_mountpoint_placeholder": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CONVERSION-FIRST-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/link.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "container_readonly_bind_source": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/link.txt",
+      "container_target": "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/link.txt"
+    },
+    {
+      "source": {
+        "bytes": 9297,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel_rust_obj.dir/build.make",
+        "sha256": "51a872a778d2b3e914918fab0de573392a645f58509c25b64bcb3c1cb56fe8d5"
+      },
+      "host_mountpoint_placeholder": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CONVERSION-FIRST-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel_rust_obj.dir/build.make",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "container_readonly_bind_source": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel_rust_obj.dir/build.make",
+      "container_target": "/work/output/build/kernel/CMakeFiles/mckernel_rust_obj.dir/build.make"
+    },
+    {
+      "source": {
+        "bytes": 915,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/config/smp-x86.lds",
+        "sha256": "b95d62a32abad215818adbde3597fad0607d4d14dddc7fc9adea09d9cd133bbd"
+      },
+      "host_mountpoint_placeholder": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CONVERSION-FIRST-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/config/smp-x86.lds",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "container_readonly_bind_source": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/config/smp-x86.lds",
+      "container_target": "/work/output/build/kernel/config/smp-x86.lds"
+    },
+    {
+      "source": {
+        "bytes": 878,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/include/swapfmt.h",
+        "sha256": "e14e0134c80c2a4bfcda779285b57d46e01a70702eb608fb6b378ff763d90183"
+      },
+      "host_mountpoint_placeholder": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CONVERSION-FIRST-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/include/swapfmt.h",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "container_readonly_bind_source": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/include/swapfmt.h",
+      "container_target": "/work/output/build/kernel/include/swapfmt.h"
+    },
+    {
+      "source": {
+        "bytes": 151688,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/tmp.resolve_MODULES_END/driver.ko",
+        "sha256": "0c5c6d38362e859db21c28cba14101e8bc62119d4b33f5e38820294196444ff6"
+      },
+      "host_mountpoint_placeholder": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CONVERSION-FIRST-BUILD-ADMISSION-1/OUTPUT/work/output/build/tmp.resolve_MODULES_END/driver.ko",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "container_readonly_bind_source": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/tmp.resolve_MODULES_END/driver.ko",
+      "container_target": "/work/output/build/tmp.resolve_MODULES_END/driver.ko"
+    },
+    {
+      "source": {
+        "bytes": 1055,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/config.h",
+        "sha256": "da78d6a8c94b274adad3159b1cc373b00e5de7fea6cc2ae7955a700078db6b2f"
+      },
+      "host_mountpoint_placeholder": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CONVERSION-FIRST-BUILD-ADMISSION-1/OUTPUT/work/output/build/config.h",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "container_readonly_bind_source": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/config.h",
+      "container_target": "/work/output/build/config.h"
+    }
+  ],
+  "SDK21_and_toolchain_reused_unchanged": true,
+  "postimages": {
+    "kernel/CMakeLists.txt": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-COMPOSITION-1/postimage/kernel/CMakeLists.txt",
+      "bytes": 44891,
+      "sha256": "30e3a04bf48777d4891f7390804e574ca221e4234e9a8d7879bb068910a13fbd"
+    },
+    "kernel/process.c": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next115-f02-local31-f06-cpuid-source-integration-preparation-1/candidate/kernel/process.c",
+      "bytes": 231146,
+      "sha256": "12a8396d729e342d2d43130be73acf7960409cf4d2e432a415fb303a031fa055"
+    },
+    "kernel/syscall.c": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-COMPOSITION-1/postimage/kernel/syscall.c",
+      "bytes": 930548,
+      "sha256": "3388adb79adff66eb85ae65a443af2c18e7b2057dd76d0ec99b531d62a36cab3"
+    },
+    "arch/x86_64/kernel/syscall.c": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+      "bytes": 121256,
+      "sha256": "b5e9a382491d0f6dc4b71a55f54f76f3d4ca610fa9f81adc60e70ec97a194669"
+    },
+    "kernel/rust/f06-origin/f06_rt_sigreturn_origin.h": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/m14-exclusive-producer-binding-1/ROOT-ACTUAL-ORIGIN119-1/f06_rt_sigreturn_origin.h",
+      "bytes": 268,
+      "sha256": "aeece54c3b6f01c326fff3eb925b89b88acd3b198b0047393c8c9c0d78f74ded"
+    },
+    "kernel/rust/f06-origin/f06_clone_cpuid_metadata.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/m14-exclusive-producer-binding-1/ROOT-ACTUAL-ORIGIN119-1/f06_clone_cpuid_metadata.rs",
+      "bytes": 201,
+      "sha256": "71e4b0ab7f5ca612e4cd06bf2150e2e6b7b5e3e39717e466cfb626b1ce249a48"
+    }
+  },
+  "link_dependency": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CONVERSION-FIRST-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/link.d",
+    "bytes": 1290,
+    "sha256": "a10ae257f2d0672f5ce8048b889fd83ee656e715aa87561d769d848f79f53a28"
+  },
+  "raw_link_order": [
+    "CMakeFiles/mckernel.img.dir/mem.c.o",
+    "CMakeFiles/mckernel.img.dir/syscall.c.o",
+    "CMakeFiles/mckernel.img.dir/process.c.o",
+    "CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o",
+    "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/context.S.o",
+    "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+    "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/interrupt.S.o",
+    "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o",
+    "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+    "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/trampoline.S.o",
+    "rust/mckernel_rust.o"
+  ],
+  "exact_C_alias": {
+    "removed": "do_munmap_set_host_bridge",
+    "provider": "mprotect_set_host_vma_bridge",
+    "macro": "#define do_munmap_set_host_bridge mprotect_set_host_vma_bridge"
+  },
+  "selected_ABI": [
+    {
+      "name": "clear_host_pte_log_bridge",
+      "Rust_source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-ACTUAL-SNAPSHOT-1/rust-subtree/syscall_clear_host_pte_logger.rs",
+        "bytes": 772,
+        "sha256": "1982650efce731c33d02084b809b10fa9f2e44ceee69ef755325e253f5bf33f5"
+      },
+      "Rust_signature": "pub(super) extern \"C\" fn clear_host_pte_log_bridge(error: CLong)",
+      "C_source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-COMPOSITION-1/postimage/kernel/syscall.c",
+        "bytes": 930548,
+        "sha256": "3388adb79adff66eb85ae65a443af2c18e7b2057dd76d0ec99b531d62a36cab3"
+      },
+      "C_signature": "extern void clear_host_pte_log_bridge(long error)",
+      "parameter_types": [
+        "CLong"
+      ],
+      "return_type": "()",
+      "type_check": "PASS_SELECTED_X86_64_LP64_EXTERN_C",
+      "source_borrow_scope": "Synchronous caller-owned pointers/node/context; no ownership widening inferred from source or ELF"
+    },
+    {
+      "name": "do_munmap_clear_host_bridge",
+      "Rust_source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-ACTUAL-SNAPSHOT-1/rust-subtree/syscall_munmap_clear_host_forward.rs",
+        "bytes": 1417,
+        "sha256": "8c0f771b28c76551f387b4936064b05ef8c646d22045ad296b98cd4abd7c6ec1"
+      },
+      "Rust_signature": "pub(super) unsafe extern \"C\" fn do_munmap_clear_host_bridge( addr: CULong, len: SizeT, holding_lock: CInt, ) -> CLong",
+      "C_source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-COMPOSITION-1/postimage/kernel/syscall.c",
+        "bytes": 930548,
+        "sha256": "3388adb79adff66eb85ae65a443af2c18e7b2057dd76d0ec99b531d62a36cab3"
+      },
+      "C_signature": "extern long do_munmap_clear_host_bridge(unsigned long addr, size_t len, int holding_lock)",
+      "parameter_types": [
+        "CULong",
+        "SizeT",
+        "CInt"
+      ],
+      "return_type": "CLong",
+      "type_check": "PASS_SELECTED_X86_64_LP64_EXTERN_C",
+      "source_borrow_scope": "Synchronous caller-owned pointers/node/context; no ownership widening inferred from source or ELF"
+    },
+    {
+      "name": "exit_group_current_pid_bridge",
+      "Rust_source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-ACTUAL-SNAPSHOT-1/rust-subtree/syscall_exit_group_current_pid.rs",
+        "bytes": 1221,
+        "sha256": "6e2ac4f0635147bef0776f694213638f6a6ec580df7db7ab920137a148e50112"
+      },
+      "Rust_signature": "pub(super) unsafe extern \"C\" fn exit_group_current_pid_bridge() -> CInt",
+      "C_source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-COMPOSITION-1/postimage/kernel/syscall.c",
+        "bytes": 930548,
+        "sha256": "3388adb79adff66eb85ae65a443af2c18e7b2057dd76d0ec99b531d62a36cab3"
+      },
+      "C_signature": "extern int exit_group_current_pid_bridge(void)",
+      "parameter_types": [],
+      "return_type": "CInt",
+      "type_check": "PASS_SELECTED_X86_64_LP64_EXTERN_C",
+      "source_borrow_scope": "Synchronous caller-owned pointers/node/context; no ownership widening inferred from source or ELF"
+    },
+    {
+      "name": "exit_group_log_bridge",
+      "Rust_source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-ACTUAL-SNAPSHOT-1/rust-subtree/syscall_exit_group_logger.rs",
+        "bytes": 1719,
+        "sha256": "2f88ddd3dc2957d589abb61f0e1f23412039753bad5c5d2719d17d33bdd79f09"
+      },
+      "Rust_signature": "pub(super) extern \"C\" fn exit_group_log_bridge(pid: CInt)",
+      "C_source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-COMPOSITION-1/postimage/kernel/syscall.c",
+        "bytes": 930548,
+        "sha256": "3388adb79adff66eb85ae65a443af2c18e7b2057dd76d0ec99b531d62a36cab3"
+      },
+      "C_signature": "extern void exit_group_log_bridge(int pid)",
+      "parameter_types": [
+        "CInt"
+      ],
+      "return_type": "()",
+      "type_check": "PASS_SELECTED_X86_64_LP64_EXTERN_C",
+      "source_borrow_scope": "Synchronous caller-owned pointers/node/context; no ownership widening inferred from source or ELF"
+    },
+    {
+      "name": "exit_group_terminate_bridge",
+      "Rust_source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-ACTUAL-SNAPSHOT-1/rust-subtree/syscall_exit_group_terminate.rs",
+        "bytes": 866,
+        "sha256": "a093c7cd6f36a35d9602a16297045aedf86f9ee50446300a7f39bc8c8aa1fc7a"
+      },
+      "Rust_signature": "pub unsafe extern \"C\" fn exit_group_terminate_bridge(status: c_int, group: c_int)",
+      "C_source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-COMPOSITION-1/postimage/kernel/syscall.c",
+        "bytes": 930548,
+        "sha256": "3388adb79adff66eb85ae65a443af2c18e7b2057dd76d0ec99b531d62a36cab3"
+      },
+      "C_signature": "extern void exit_group_terminate_bridge(int status, int group)",
+      "parameter_types": [
+        "c_int",
+        "c_int"
+      ],
+      "return_type": "()",
+      "type_check": "PASS_SELECTED_X86_64_LP64_EXTERN_C",
+      "source_borrow_scope": "Synchronous caller-owned pointers/node/context; no ownership widening inferred from source or ELF"
+    },
+    {
+      "name": "mprotect_set_host_vma_bridge",
+      "Rust_source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-ACTUAL-SNAPSHOT-1/rust-subtree/syscall_mprotect_host_vma.rs",
+        "bytes": 2745,
+        "sha256": "11a6131f8f8e826912602bf89fdd32bad7675d184f4e43c16b6375f54d17b881"
+      },
+      "Rust_signature": "pub(super) unsafe extern \"C\" fn mprotect_set_host_vma_bridge( start: CULong, len: SizeT, prot: CInt, holding_lock: CInt, ) -> CInt",
+      "C_source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-COMPOSITION-1/postimage/kernel/syscall.c",
+        "bytes": 930548,
+        "sha256": "3388adb79adff66eb85ae65a443af2c18e7b2057dd76d0ec99b531d62a36cab3"
+      },
+      "C_signature": "extern int mprotect_set_host_vma_bridge(unsigned long start, size_t len, int prot, int holding_lock)",
+      "parameter_types": [
+        "CULong",
+        "SizeT",
+        "CInt",
+        "CInt"
+      ],
+      "return_type": "CInt",
+      "type_check": "PASS_SELECTED_X86_64_LP64_EXTERN_C",
+      "source_borrow_scope": "Synchronous caller-owned pointers/node/context; no ownership widening inferred from source or ELF"
+    },
+    {
+      "name": "perf_event_open_do_syscall_bridge",
+      "Rust_source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-ACTUAL-SNAPSHOT-1/rust-subtree/syscall_perf_open_forward.rs",
+        "bytes": 705,
+        "sha256": "173f53168ce6e746b7251499ee99177852908b2a4f58edc226d51b332d0c7606"
+      },
+      "Rust_signature": "pub unsafe extern \"C\" fn perf_event_open_do_syscall_bridge(request: *mut SyscallRequest, cpu: CInt) -> CLong",
+      "C_source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-COMPOSITION-1/postimage/kernel/syscall.c",
+        "bytes": 930548,
+        "sha256": "3388adb79adff66eb85ae65a443af2c18e7b2057dd76d0ec99b531d62a36cab3"
+      },
+      "C_signature": "extern long perf_event_open_do_syscall_bridge(struct syscall_request *request, int cpu)",
+      "parameter_types": [
+        "*mut SyscallRequest",
+        "CInt"
+      ],
+      "return_type": "CLong",
+      "type_check": "PASS_SELECTED_X86_64_LP64_EXTERN_C",
+      "source_borrow_scope": "Synchronous caller-owned pointers/node/context; no ownership widening inferred from source or ELF"
+    },
+    {
+      "name": "ptrace_detach_wakeup_bridge",
+      "Rust_source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-ACTUAL-SNAPSHOT-1/rust-subtree/syscall_ptrace_detach_wakeup.rs",
+        "bytes": 720,
+        "sha256": "ead6502fdf1009f0916d7857a5c6fddec6ba0265cc900d2fbb3e27429d3fabcd"
+      },
+      "Rust_signature": "pub unsafe extern \"C\" fn ptrace_detach_wakeup_bridge(thread: *mut c_void, valid_states: c_int)",
+      "C_source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-COMPOSITION-1/postimage/kernel/syscall.c",
+        "bytes": 930548,
+        "sha256": "3388adb79adff66eb85ae65a443af2c18e7b2057dd76d0ec99b531d62a36cab3"
+      },
+      "C_signature": "extern void ptrace_detach_wakeup_bridge(void *thread, int valid_states)",
+      "parameter_types": [
+        "*mut c_void",
+        "c_int"
+      ],
+      "return_type": "()",
+      "type_check": "PASS_SELECTED_X86_64_LP64_EXTERN_C",
+      "source_borrow_scope": "Synchronous caller-owned pointers/node/context; no ownership widening inferred from source or ELF"
+    },
+    {
+      "name": "ptrace_report_clone_log_bridge",
+      "Rust_source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-ACTUAL-SNAPSHOT-1/rust-subtree/syscall_ptrace_clone_logger.rs",
+        "bytes": 3003,
+        "sha256": "049cb248d35af6f8f6362c4a3caeafe78ec50a5e6b0432ee2934a09cf9b6d4e9"
+      },
+      "Rust_signature": "pub(super) extern \"C\" fn ptrace_report_clone_log_bridge( event: CInt, _value: CInt, _result: CInt, )",
+      "C_source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-COMPOSITION-1/postimage/kernel/syscall.c",
+        "bytes": 930548,
+        "sha256": "3388adb79adff66eb85ae65a443af2c18e7b2057dd76d0ec99b531d62a36cab3"
+      },
+      "C_signature": "extern void ptrace_report_clone_log_bridge(int event, int value, int result)",
+      "parameter_types": [
+        "CInt",
+        "CInt",
+        "CInt"
+      ],
+      "return_type": "()",
+      "type_check": "PASS_SELECTED_X86_64_LP64_EXTERN_C",
+      "source_borrow_scope": "Synchronous caller-owned pointers/node/context; no ownership widening inferred from source or ELF"
+    },
+    {
+      "name": "ptrace_report_clone_noirq_lock_bridge",
+      "Rust_source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-ACTUAL-SNAPSHOT-1/rust-subtree/ptrace_clone_noirq.rs",
+        "bytes": 1184,
+        "sha256": "a3466b4decd926036048c70f56ca8de3ef206bab6e26dd4db75d0f9af4d39dbe"
+      },
+      "Rust_signature": "pub unsafe extern \"C\" fn ptrace_report_clone_noirq_lock_bridge( lock_addr: CULong, node: *mut c_void, )",
+      "C_source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-COMPOSITION-1/postimage/kernel/syscall.c",
+        "bytes": 930548,
+        "sha256": "3388adb79adff66eb85ae65a443af2c18e7b2057dd76d0ec99b531d62a36cab3"
+      },
+      "C_signature": "extern void ptrace_report_clone_noirq_lock_bridge(unsigned long lock_addr, void *node)",
+      "parameter_types": [
+        "CULong",
+        "*mut c_void"
+      ],
+      "return_type": "()",
+      "type_check": "PASS_SELECTED_X86_64_LP64_EXTERN_C",
+      "source_borrow_scope": "Synchronous caller-owned pointers/node/context; no ownership widening inferred from source or ELF"
+    },
+    {
+      "name": "ptrace_report_clone_noirq_unlock_bridge",
+      "Rust_source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-ACTUAL-SNAPSHOT-1/rust-subtree/ptrace_clone_noirq.rs",
+        "bytes": 1184,
+        "sha256": "a3466b4decd926036048c70f56ca8de3ef206bab6e26dd4db75d0f9af4d39dbe"
+      },
+      "Rust_signature": "pub unsafe extern \"C\" fn ptrace_report_clone_noirq_unlock_bridge( lock_addr: CULong, node: *mut c_void, )",
+      "C_source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-COMPOSITION-1/postimage/kernel/syscall.c",
+        "bytes": 930548,
+        "sha256": "3388adb79adff66eb85ae65a443af2c18e7b2057dd76d0ec99b531d62a36cab3"
+      },
+      "C_signature": "extern void ptrace_report_clone_noirq_unlock_bridge(unsigned long lock_addr, void *node)",
+      "parameter_types": [
+        "CULong",
+        "*mut c_void"
+      ],
+      "return_type": "()",
+      "type_check": "PASS_SELECTED_X86_64_LP64_EXTERN_C",
+      "source_borrow_scope": "Synchronous caller-owned pointers/node/context; no ownership widening inferred from source or ELF"
+    },
+    {
+      "name": "ptrace_wakeup_update_lock_bridge",
+      "Rust_source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-ACTUAL-SNAPSHOT-1/rust-subtree/f03_wakeup_writer_pair.rs",
+        "bytes": 2109,
+        "sha256": "2aa6a13ed432a5edfb03bb8af6ff25b847eaddf9502a994147af6bfe08df9dc2"
+      },
+      "Rust_signature": "pub unsafe extern \"C\" fn ptrace_wakeup_update_lock_bridge(lock_addr: CULong, node: *mut c_void)",
+      "C_source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-COMPOSITION-1/postimage/kernel/syscall.c",
+        "bytes": 930548,
+        "sha256": "3388adb79adff66eb85ae65a443af2c18e7b2057dd76d0ec99b531d62a36cab3"
+      },
+      "C_signature": "extern void ptrace_wakeup_update_lock_bridge(unsigned long lock_addr, void *node)",
+      "parameter_types": [
+        "CULong",
+        "*mut c_void"
+      ],
+      "return_type": "()",
+      "type_check": "PASS_SELECTED_X86_64_LP64_EXTERN_C",
+      "source_borrow_scope": "Synchronous caller-owned pointers/node/context; no ownership widening inferred from source or ELF"
+    },
+    {
+      "name": "ptrace_wakeup_update_unlock_bridge",
+      "Rust_source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-ACTUAL-SNAPSHOT-1/rust-subtree/f03_wakeup_writer_pair.rs",
+        "bytes": 2109,
+        "sha256": "2aa6a13ed432a5edfb03bb8af6ff25b847eaddf9502a994147af6bfe08df9dc2"
+      },
+      "Rust_signature": "pub unsafe extern \"C\" fn ptrace_wakeup_update_unlock_bridge(lock_addr: CULong, node: *mut c_void)",
+      "C_source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-COMPOSITION-1/postimage/kernel/syscall.c",
+        "bytes": 930548,
+        "sha256": "3388adb79adff66eb85ae65a443af2c18e7b2057dd76d0ec99b531d62a36cab3"
+      },
+      "C_signature": "extern void ptrace_wakeup_update_unlock_bridge(unsigned long lock_addr, void *node)",
+      "parameter_types": [
+        "CULong",
+        "*mut c_void"
+      ],
+      "return_type": "()",
+      "type_check": "PASS_SELECTED_X86_64_LP64_EXTERN_C",
+      "source_borrow_scope": "Synchronous caller-owned pointers/node/context; no ownership widening inferred from source or ELF"
+    },
+    {
+      "name": "syscall_forward_context_bridge",
+      "Rust_source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-ACTUAL-SNAPSHOT-1/rust-subtree/f03_context_forward_pair.rs",
+        "bytes": 1543,
+        "sha256": "f9592e3e6fd7c63d4ae7fdebb8a8595565dff3ee368a00b9bc7bdaac38f771eb"
+      },
+      "Rust_signature": "pub unsafe extern \"C\" fn syscall_forward_context_bridge(number: CInt, context: *mut c_void) -> CLong",
+      "C_source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-COMPOSITION-1/postimage/kernel/syscall.c",
+        "bytes": 930548,
+        "sha256": "3388adb79adff66eb85ae65a443af2c18e7b2057dd76d0ec99b531d62a36cab3"
+      },
+      "C_signature": "extern long syscall_forward_context_bridge(int syscall_nr, void *ctx)",
+      "parameter_types": [
+        "CInt",
+        "*mut c_void"
+      ],
+      "return_type": "CLong",
+      "type_check": "PASS_SELECTED_X86_64_LP64_EXTERN_C",
+      "source_borrow_scope": "Synchronous caller-owned pointers/node/context; no ownership widening inferred from source or ELF"
+    },
+    {
+      "name": "syscall_policy_forward_context_bridge",
+      "Rust_source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-ACTUAL-SNAPSHOT-1/rust-subtree/f03_context_forward_pair.rs",
+        "bytes": 1543,
+        "sha256": "f9592e3e6fd7c63d4ae7fdebb8a8595565dff3ee368a00b9bc7bdaac38f771eb"
+      },
+      "Rust_signature": "pub unsafe extern \"C\" fn syscall_policy_forward_context_bridge(number: CInt, context: *mut c_void) -> CLong",
+      "C_source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-COMPOSITION-1/postimage/kernel/syscall.c",
+        "bytes": 930548,
+        "sha256": "3388adb79adff66eb85ae65a443af2c18e7b2057dd76d0ec99b531d62a36cab3"
+      },
+      "C_signature": "long syscall_policy_forward_context_bridge(int syscall_nr, void *ctx)",
+      "parameter_types": [
+        "CInt",
+        "*mut c_void"
+      ],
+      "return_type": "CLong",
+      "type_check": "PASS_SELECTED_X86_64_LP64_EXTERN_C",
+      "source_borrow_scope": "Synchronous caller-owned pointers/node/context; no ownership widening inferred from source or ELF"
+    },
+    {
+      "name": "syscall_settid_log_bridge",
+      "Rust_source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-ACTUAL-SNAPSHOT-1/rust-subtree/syscall_settid_logger.rs",
+        "bytes": 768,
+        "sha256": "895f6a205232e503f6f737ce363425c3d9571faaf99c517ced9ed95723c22a29"
+      },
+      "Rust_signature": "pub(super) extern \"C\" fn syscall_settid_log_bridge(ret: CInt)",
+      "C_source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-COMPOSITION-1/postimage/kernel/syscall.c",
+        "bytes": 930548,
+        "sha256": "3388adb79adff66eb85ae65a443af2c18e7b2057dd76d0ec99b531d62a36cab3"
+      },
+      "C_signature": "extern void syscall_settid_log_bridge(int ret)",
+      "parameter_types": [
+        "CInt"
+      ],
+      "return_type": "()",
+      "type_check": "PASS_SELECTED_X86_64_LP64_EXTERN_C",
+      "source_borrow_scope": "Synchronous caller-owned pointers/node/context; no ownership widening inferred from source or ELF"
+    },
+    {
+      "name": "syscall_util_indicate_clone_disabled_bridge",
+      "Rust_source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-ACTUAL-SNAPSHOT-1/rust-subtree/syscall_util_clone_disabled_logger.rs",
+        "bytes": 870,
+        "sha256": "b74a4c390c6baf1a52becf03275725b49944678b4907e4848db19f365fae44fd"
+      },
+      "Rust_signature": "pub(super) extern \"C\" fn syscall_util_indicate_clone_disabled_bridge()",
+      "C_source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-COMPOSITION-1/postimage/kernel/syscall.c",
+        "bytes": 930548,
+        "sha256": "3388adb79adff66eb85ae65a443af2c18e7b2057dd76d0ec99b531d62a36cab3"
+      },
+      "C_signature": "extern void syscall_util_indicate_clone_disabled_bridge(void)",
+      "parameter_types": [],
+      "return_type": "()",
+      "type_check": "PASS_SELECTED_X86_64_LP64_EXTERN_C",
+      "source_borrow_scope": "Synchronous caller-owned pointers/node/context; no ownership widening inferred from source or ELF"
+    },
+    {
+      "name": "terminate_mcexec_do_syscall_bridge",
+      "Rust_source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-ACTUAL-SNAPSHOT-1/rust-subtree/syscall_terminate_mcexec_forward.rs",
+        "bytes": 706,
+        "sha256": "d18362b696388d532a332e87d646e0c0de769480b5c89eebd06f158bde854d05"
+      },
+      "Rust_signature": "pub unsafe extern \"C\" fn terminate_mcexec_do_syscall_bridge(request: *mut SyscallRequest, cpu: CInt) -> CLong",
+      "C_source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-COMPOSITION-1/postimage/kernel/syscall.c",
+        "bytes": 930548,
+        "sha256": "3388adb79adff66eb85ae65a443af2c18e7b2057dd76d0ec99b531d62a36cab3"
+      },
+      "C_signature": "extern long terminate_mcexec_do_syscall_bridge(struct syscall_request *request, int cpu)",
+      "parameter_types": [
+        "*mut SyscallRequest",
+        "CInt"
+      ],
+      "return_type": "CLong",
+      "type_check": "PASS_SELECTED_X86_64_LP64_EXTERN_C",
+      "source_borrow_scope": "Synchronous caller-owned pointers/node/context; no ownership widening inferred from source or ELF"
+    }
+  ],
+  "request_abi_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-ACTUAL-SNAPSHOT-1/rust-subtree/abi.rs",
+    "bytes": 76151,
+    "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+  },
+  "request_layout_unchanged_from_actual119": true,
+  "ABI29_new_codegen_proof": false,
+  "native_acceptance": false,
+  "wholefile_retirement": false
+}

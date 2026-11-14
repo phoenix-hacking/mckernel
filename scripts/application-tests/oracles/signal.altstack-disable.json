@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "signal.altstack-disable",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/signal.altstack-disable"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["installed_match=1 disabled=1 handled=1 handler_on_alt=0"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["The installed alternate-stack snapshot matches the requested storage", "Disabling it outside a handler reports SS_DISABLE", "A handler without SA_ONSTACK executes on the ordinary stack"],
+  "unresolved_expectations": ["Freeze altstack lifetime and ordinary-handler stack evidence before execution."],
+  "max_question_for_reviewer": "Confirm disabling an alternate stack outside a handler is accepted and ordinary handlers do not use it implicitly."
+}

@@ -1,0 +1,268 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "FAIL_ACTUAL_PRODUCER_OWNERSHIP_NOT_FULL_LIFECYCLE_ACCEPTANCE",
+  "candidate": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-11/m15-vmcore2mckdump/ldump2mcdump_helpers.ack-candidate.rs",
+    "bytes": 29466,
+    "sha256": "5205663e825abfb26d8eb0e01c225c1eb7cecd95051832b7234890dba5f3de78"
+  },
+  "baseline": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-11/m15-vmcore2mckdump/reference/ldump2mcdump_helpers.rs",
+    "bytes": 28439,
+    "sha256": "4e036420cd4f3e62694c33d235747d23dabc4ac54236fe46b9cdf0290c93a9f0"
+  },
+  "actual_matrix": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/RESULT.json",
+    "bytes": 19982,
+    "sha256": "c960989857e411d8b03ed12e76df436ac715d269a239bf31bad7016613b874ae"
+  },
+  "actual_ownership_failures": [
+    {
+      "case": "candidate-success-0",
+      "live_allocations": 3,
+      "live_bytes": 96
+    },
+    {
+      "case": "candidate-metadata-5",
+      "live_allocations": 1,
+      "live_bytes": 72
+    },
+    {
+      "case": "candidate-metadata-6",
+      "live_allocations": 1,
+      "live_bytes": 72
+    },
+    {
+      "case": "candidate-physical-1",
+      "live_allocations": 3,
+      "live_bytes": 96
+    },
+    {
+      "case": "candidate-physical-2",
+      "live_allocations": 3,
+      "live_bytes": 96
+    },
+    {
+      "case": "candidate-physical-3",
+      "live_allocations": 3,
+      "live_bytes": 96
+    },
+    {
+      "case": "candidate-write-1",
+      "live_allocations": 5,
+      "live_bytes": 1048744
+    },
+    {
+      "case": "candidate-write-2",
+      "live_allocations": 5,
+      "live_bytes": 1048744
+    },
+    {
+      "case": "candidate-write-3",
+      "live_allocations": 5,
+      "live_bytes": 1048744
+    },
+    {
+      "case": "candidate-write-4",
+      "live_allocations": 5,
+      "live_bytes": 1048744
+    },
+    {
+      "case": "candidate-write-5",
+      "live_allocations": 5,
+      "live_bytes": 1048744
+    },
+    {
+      "case": "candidate-write-6",
+      "live_allocations": 5,
+      "live_bytes": 1048744
+    },
+    {
+      "case": "candidate-write-7",
+      "live_allocations": 5,
+      "live_bytes": 1048744
+    },
+    {
+      "case": "candidate-close-1",
+      "live_allocations": 5,
+      "live_bytes": 1048744
+    },
+    {
+      "case": "candidate-physchunks-null-1",
+      "live_allocations": 3,
+      "live_bytes": 96
+    },
+    {
+      "case": "candidate-allocation-3",
+      "live_allocations": 1,
+      "live_bytes": 72
+    },
+    {
+      "case": "candidate-allocation-4",
+      "live_allocations": 1,
+      "live_bytes": 72
+    },
+    {
+      "case": "candidate-allocation-5",
+      "live_allocations": 2,
+      "live_bytes": 1048648
+    },
+    {
+      "case": "candidate-allocation-6",
+      "live_allocations": 3,
+      "live_bytes": 1048680
+    },
+    {
+      "case": "candidate-allocation-7",
+      "live_allocations": 4,
+      "live_bytes": 1048712
+    }
+  ],
+  "bitmap_cleanup_assertion": "Both FALSE bitmap reads free their own allocated bitmap. Second-pass bitmap FALSE also leaves the previously allocated72B outer mem_chunks live; this remains an actual ownership failure.",
+  "attribution": [
+    {
+      "defect": "Three32B physmem_name buffers remain live after success and all three physical-read-fault runs",
+      "delta_attribution": "Existing source behavior, unchanged by ACK patch; success and physical faults directly matched original Rust body callback allocation/free observations",
+      "source_alloc_lines": [
+        905
+      ],
+      "actual_success": {
+        "kind": "success",
+        "position": 0,
+        "ack": 1,
+        "flushes": 1,
+        "read_calls": 10,
+        "physical_reads": 3,
+        "physical_writes": 3,
+        "physical_read_mask": 7,
+        "physical_write_mask": 7,
+        "writes": 7,
+        "closes": 1,
+        "read_diagnostics": 0,
+        "bfd_errors": 0,
+        "alloc_attempts": 7,
+        "allocations": 7,
+        "map_buffers_freed": 2,
+        "map_buffers_live": 0,
+        "live_allocations": 3,
+        "live_bytes": 96,
+        "close_event": 58,
+        "payload_free_event": 59,
+        "chunks_free_event": 60,
+        "ack_event": 61,
+        "ownership_complete": false
+      },
+      "matched_reference": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/reference-success-0/stdout",
+        "bytes": 432,
+        "sha256": "10559702b73a3cf49a0dde92e1e75e7741fa385c99baf4bc5a7ff71ffa78394c"
+      }
+    },
+    {
+      "defect": "BFD contents-write and close failures retain payload1MiB, mem_chunks72B and three namebuffers96B",
+      "delta_attribution": "Existing early-return behavior; all7 write-fault and close-fault cases directly match original full Rust body observations",
+      "source_close_lines": [
+        1039
+      ],
+      "actual_close": {
+        "kind": "close",
+        "position": 1,
+        "ack": 0,
+        "flushes": 0,
+        "read_calls": 10,
+        "physical_reads": 3,
+        "physical_writes": 3,
+        "physical_read_mask": 7,
+        "physical_write_mask": 7,
+        "writes": 7,
+        "closes": 1,
+        "read_diagnostics": 0,
+        "bfd_errors": 1,
+        "alloc_attempts": 7,
+        "allocations": 7,
+        "map_buffers_freed": 2,
+        "map_buffers_live": 0,
+        "live_allocations": 5,
+        "live_bytes": 1048744,
+        "close_event": 58,
+        "payload_free_event": 0,
+        "chunks_free_event": 0,
+        "ack_event": 0,
+        "ownership_complete": false
+      },
+      "matched_reference": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/reference-close-1/stdout",
+        "bytes": 433,
+        "sha256": "be6007565173e41cce337d85993cb054d652ae0470bd3abdd94aabba7a834334"
+      }
+    },
+    {
+      "defect": "Second-pass page-header or bitmap FALSE leaves72B mem_chunks live",
+      "delta_attribution": "New checked metadata-read return routes enter the preexisting outer read_dump_pages-failure return without freeing mem_chunks. No baseline FALSE/uninitialized metadata execution was attempted or claimed.",
+      "source_outer_return_lines": [
+        780
+      ],
+      "actual_header": {
+        "kind": "metadata",
+        "position": 5,
+        "ack": 0,
+        "flushes": 0,
+        "read_calls": 5,
+        "physical_reads": 0,
+        "physical_writes": 0,
+        "physical_read_mask": 0,
+        "physical_write_mask": 0,
+        "writes": 0,
+        "closes": 0,
+        "read_diagnostics": 0,
+        "bfd_errors": 0,
+        "alloc_attempts": 2,
+        "allocations": 2,
+        "map_buffers_freed": 1,
+        "map_buffers_live": 0,
+        "live_allocations": 1,
+        "live_bytes": 72,
+        "close_event": 0,
+        "payload_free_event": 0,
+        "chunks_free_event": 0,
+        "ack_event": 0,
+        "ownership_complete": false
+      },
+      "actual_bitmap": {
+        "kind": "metadata",
+        "position": 6,
+        "ack": 0,
+        "flushes": 0,
+        "read_calls": 6,
+        "physical_reads": 0,
+        "physical_writes": 0,
+        "physical_read_mask": 0,
+        "physical_write_mask": 0,
+        "writes": 0,
+        "closes": 0,
+        "read_diagnostics": 0,
+        "bfd_errors": 0,
+        "alloc_attempts": 3,
+        "allocations": 3,
+        "map_buffers_freed": 2,
+        "map_buffers_live": 0,
+        "live_allocations": 1,
+        "live_bytes": 72,
+        "close_event": 0,
+        "payload_free_event": 0,
+        "chunks_free_event": 0,
+        "ack_event": 0,
+        "ownership_complete": false
+      }
+    },
+    {
+      "defect": "Allocation-failure positions3through7 retain previously allocated outer buffers",
+      "delta_attribution": "Retained allocation/early-return control flow in source; candidate failures are actual observations; baseline allocation-failure runtime comparison not performed"
+    }
+  ],
+  "candidate_or_baseline_source_edits": 0,
+  "full_lifecycle_pass": false,
+  "SDK_native_or_whole_file_acceptance": false,
+  "next_source_repair": "Separate reviewed ownership cleanup change preserving ACK and callback observations; do not silently integrate the current ACK candidate as lifecycle-complete.",
+  "runtime_authority": null
+}

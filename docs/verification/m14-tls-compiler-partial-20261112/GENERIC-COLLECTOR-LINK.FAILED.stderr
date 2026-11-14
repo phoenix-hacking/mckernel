@@ -1,0 +1,33 @@
+Using built-in specs.
+COLLECT_GCC=/usr/bin/cc
+COLLECT_LTO_WRAPPER=/usr/libexec/gcc/x86_64-redhat-linux/14/lto-wrapper
+OFFLOAD_TARGET_NAMES=nvptx-none:amdgcn-amdhsa
+OFFLOAD_TARGET_DEFAULT=1
+Target: x86_64-redhat-linux
+Configured with: ../configure --enable-bootstrap --enable-languages=c,c++,fortran,lto --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=https://bugs.rockylinux.org --enable-shared --enable-threads=posix --enable-checking=release --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --enable-plugin --enable-initfini-array --enable-libstdcxx-backtrace --with-libstdcxx-zoneinfo=/usr/share/zoneinfo --without-isl --enable-host-pie --enable-host-bind-now --enable-multilib --with-linker-hash-style=gnu --enable-offload-targets=nvptx-none,amdgcn-amdhsa --enable-offload-defaulted --without-cuda-driver --enable-gnu-indirect-function --enable-cet --with-tune=generic --with-arch_64=x86-64-v3 --with-arch_32=x86-64 --build=x86_64-redhat-linux --with-build-config=bootstrap-lto --enable-link-serialization=1
+Thread model: posix
+Supported LTO compression algorithms: zlib zstd
+gcc version 14.3.1 20251022 (Red Hat 14.3.1-4) (GCC) 
+COLLECT_GCC_OPTIONS='-v' '-std=c11' '-O2' '-g' '-Wall' '-Wextra' '-Werror' '-static' '-no-pie' '-MD' '-MF' '/output/collector.d' '-o' '/output/collector' '-mtune=generic' '-march=x86-64-v3' '-dumpdir' '/output/collector-'
+ /usr/libexec/gcc/x86_64-redhat-linux/14/cc1 -quiet -v -MD /output/collector.d -MF /output/collector.d -MQ /output/collector /collector/native_diagnostic_guest_collector.c -quiet -dumpdir /output/collector- -dumpbase native_diagnostic_guest_collector.c -dumpbase-ext .c -mtune=generic -march=x86-64-v3 -g -O2 -Wall -Wextra -Werror -std=c11 -version -o /tmp/ccfz0yki.s
+GNU C11 (GCC) version 14.3.1 20251022 (Red Hat 14.3.1-4) (x86_64-redhat-linux)
+	compiled by GNU C version 14.3.1 20251022 (Red Hat 14.3.1-4), GMP version 6.2.1, MPFR version 4.2.1, MPC version 1.3.1, isl version none
+GGC heuristics: --param ggc-min-expand=65 --param ggc-min-heapsize=131072
+ignoring nonexistent directory "/usr/lib/gcc/x86_64-redhat-linux/14/include-fixed"
+ignoring nonexistent directory "/usr/lib/gcc/x86_64-redhat-linux/14/../../../../x86_64-redhat-linux/include"
+#include "..." search starts here:
+#include <...> search starts here:
+ /usr/lib/gcc/x86_64-redhat-linux/14/include
+ /usr/local/include
+ /usr/include
+End of search list.
+Compiler executable checksum: e7e74dcffac3dd326c1fdacc202bf84f
+COLLECT_GCC_OPTIONS='-v' '-std=c11' '-O2' '-g' '-Wall' '-Wextra' '-Werror' '-static' '-no-pie' '-MD' '-MF' '/output/collector.d' '-o' '/output/collector' '-mtune=generic' '-march=x86-64-v3' '-dumpdir' '/output/collector-'
+ as -v --gdwarf-5 --64 -o /tmp/ccEtlaGz.o /tmp/ccfz0yki.s
+GNU assembler version 2.41 (x86_64-redhat-linux) using BFD version version 2.41-63.el10
+COMPILER_PATH=/usr/libexec/gcc/x86_64-redhat-linux/14/:/usr/libexec/gcc/x86_64-redhat-linux/14/:/usr/libexec/gcc/x86_64-redhat-linux/:/usr/lib/gcc/x86_64-redhat-linux/14/:/usr/lib/gcc/x86_64-redhat-linux/
+LIBRARY_PATH=/usr/lib/gcc/x86_64-redhat-linux/14/:/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/usr/lib/gcc/x86_64-redhat-linux/14/../../../:/lib/:/usr/lib/
+COLLECT_GCC_OPTIONS='-v' '-std=c11' '-O2' '-g' '-Wall' '-Wextra' '-Werror' '-static' '-no-pie' '-MD' '-MF' '/output/collector.d' '-o' '/output/collector' '-mtune=generic' '-march=x86-64-v3' '-dumpdir' '/output/collector.'
+ /usr/libexec/gcc/x86_64-redhat-linux/14/collect2 -plugin /usr/libexec/gcc/x86_64-redhat-linux/14/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/x86_64-redhat-linux/14/lto-wrapper -plugin-opt=-fresolution=/tmp/ccGALVYg.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_eh -plugin-opt=-pass-through=-lc --build-id --no-add-needed --hash-style=gnu -m elf_x86_64 -static -o /output/collector /usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crt1.o /usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crti.o /usr/lib/gcc/x86_64-redhat-linux/14/crtbeginT.o -L/usr/lib/gcc/x86_64-redhat-linux/14 -L/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib/gcc/x86_64-redhat-linux/14/../../.. -z noexecstack -Map /output/collector.link.map /tmp/ccEtlaGz.o --start-group -lgcc -lgcc_eh -lc --end-group /usr/lib/gcc/x86_64-redhat-linux/14/crtend.o /usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crtn.o
+/usr/bin/ld: cannot find -lc: No such file or directory
+collect2: error: ld returned 1 exit status

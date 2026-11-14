@@ -1,0 +1,32 @@
+--- /home/holden/mckernel-work/host-preparation/native-second-stop-case-preparation-20261021-1/current053d-normalization-runtime-preparation-1/runtime-source-1/two-generation-namespace-4/native_diagnostic.py
++++ /home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/runtime-current68-filebound-successor-1/native_diagnostic.py
+@@ -12,6 +12,7 @@
+ import os
+ from pathlib import Path
+ import re
++import resource
+ import stat
+ import tempfile
+ import time
+@@ -399,7 +400,13 @@
+     return out
+ 
+ 
++
++def require_short_fsize():
++    _need(resource.getrlimit(resource.RLIMIT_FSIZE) == (33554432, 33554432),
++          "exact inherited SHORT32 FSIZE required")
++
+ def prepare_attempt(manifest, parent, name):
++    require_short_fsize()
+     """Reserve evidence space, not a bootable guest; see STAGING_BLOCKER."""
+     parent = Path(parent)
+     _need(parent.is_absolute() and parent.is_dir() and not parent.is_symlink(), "attempt parent")
+@@ -636,6 +643,7 @@
+ def run_diagnostic(manifest, attempt, process_factory=None, qmp_factory=None, timeout=300,
+                    expected_plan=None):
+     """Exercise only explicit injected factories after the staging join."""
++    require_short_fsize()
+     try:
+         _need(process_factory is not None and qmp_factory is not None and
+               callable(process_factory) and callable(qmp_factory), "explicit diagnostic factories required")

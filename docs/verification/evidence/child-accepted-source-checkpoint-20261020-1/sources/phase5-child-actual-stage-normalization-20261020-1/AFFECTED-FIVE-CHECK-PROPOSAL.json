@@ -1,0 +1,75 @@
+{
+  "argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=30:30",
+    "--core=0:0",
+    "--nofile=256:256",
+    "--fsize=33554432:33554432",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/check_raw_stage_once.py"
+  ],
+  "check_count": 5,
+  "effects": "Read-only accepted source/data/hash checks and module imports, no mkdir/process/socket/root/archive execution.",
+  "executions": 0,
+  "expected_witness_lines": 5,
+  "fresh_capture_root": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/raw-loader-check-capture-1",
+  "future_parent_or_whole_owner_fixture": null,
+  "input_pins": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/CHECK-INPUT-PINS.json",
+    "sha256": "d70898da12cf56613b35f070b246b1c172067d99a089a7e608504515b0f2be03",
+    "size": 11120
+  },
+  "priority": "M03 helper repair retains first admission priority",
+  "profile": {
+    "as_bytes": 1073741824,
+    "capture_budget_bytes": 1048576,
+    "core_bytes": 0,
+    "cpu": 6,
+    "cpu_seconds": 30,
+    "fsize_bytes": 33554432,
+    "host_floor_bytes": 17179869184,
+    "host_full_growth_bytes": 67108864,
+    "jobs": 1,
+    "kill_after_seconds": 2,
+    "nofile": 256,
+    "scratch_floor_bytes": 12884901888,
+    "scratch_full_growth_bytes": 1048576,
+    "wall_seconds": 35
+  },
+  "readonly_closure": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/COMPLETE-READONLY-INPUT-CLOSURE.json",
+    "sha256": "e242a3661ed4e400cac9f0d0a15a68d02c6d0ea1c94e5fe50fe9e44e7b93a579",
+    "size": 16980
+  },
+  "root_execution_grant": null,
+  "schema": "mckernel.child-raw-loader-affected-five-check-ordinary-proposal.v1",
+  "scope": "Functional supported-profile OS/apps PLUS actual compute-C retirement into Rust/reviewed assembly.",
+  "source_delta": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/PRIVATE-SOURCE-DELTA.json",
+    "sha256": "e7b0057d32af214a89863e35a567dec824d5d967e28fa9b41af02e84fc9f7c57",
+    "size": 1936
+  },
+  "status": "SOURCE_ONLY_AWAITING_INDEPENDENT_REVIEW_AND_ROOT_GRANT",
+  "stop": "Any assertion/effect/service/auth/quota failure preserves all evidence and stops this one attempt.",
+  "test_source": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/check_raw_stage_once.py",
+    "sha256": "4c5c752487491dd2f5233284efb544b5d306688ca0292ce3cf81a93e10efb359",
+    "size": 4551
+  },
+  "whole_capture_required": true
+}

@@ -1,0 +1,133 @@
+{
+  "status": "PASS_CALLED_FINITE_CPU_IPI_SOURCE_OBJECT_GATE",
+  "object_sha256": "602d24e8bd14ac0d9a38f5e90114b1aa4945d81e49dedbe61c64c8ec6dc54777",
+  "actual3T": {
+    "ihk_mc_interrupt_cpu": 142,
+    "x86_get_interrupt_id_result": 38,
+    "x86_interrupt_cpu_result": 147
+  },
+  "genuine4U": [
+    "get_x86_cpu_local_variable",
+    "num_processors",
+    "x86_interrupt_log_bridge",
+    "x86_issue_ipi_bridge"
+  ],
+  "actual_private_adapter_names": [],
+  "function_owners": {
+    "ihk_mc_interrupt_cpu": {
+      "bytes": 142,
+      "sha256": "40e4483b8d2cdd9bc53a1fcf946c5547c3b4ea17c320ab04ff7faa6c424e235a",
+      "actual_source_relocations": [
+        {
+          "section": 3,
+          "offset": 14,
+          "type": 1,
+          "symbol": {
+            "name": "num_processors",
+            "bind": 1,
+            "type": 0,
+            "other": 0,
+            "section": 0,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 0
+        },
+        {
+          "section": 3,
+          "offset": 28,
+          "type": 1,
+          "symbol": {
+            "name": "get_x86_cpu_local_variable",
+            "bind": 1,
+            "type": 0,
+            "other": 0,
+            "section": 0,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 0
+        },
+        {
+          "section": 3,
+          "offset": 64,
+          "type": 1,
+          "symbol": {
+            "name": "x86_interrupt_log_bridge",
+            "bind": 1,
+            "type": 0,
+            "other": 0,
+            "section": 0,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 0
+        },
+        {
+          "section": 3,
+          "offset": 92,
+          "type": 1,
+          "symbol": {
+            "name": "x86_issue_ipi_bridge",
+            "bind": 1,
+            "type": 0,
+            "other": 0,
+            "section": 0,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 0
+        },
+        {
+          "section": 3,
+          "offset": 113,
+          "type": 1,
+          "symbol": {
+            "name": "x86_interrupt_log_bridge",
+            "bind": 1,
+            "type": 0,
+            "other": 0,
+            "section": 0,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 0
+        }
+      ]
+    },
+    "x86_get_interrupt_id_result": {
+      "bytes": 38,
+      "sha256": "6b3945712e094bf51738d76c191db835fc30a5212efd04235d8338b5d8ffcecd",
+      "actual_source_relocations": []
+    },
+    "x86_interrupt_cpu_result": {
+      "bytes": 147,
+      "sha256": "abbfc466a2f70c9d44e8674b545caa65b8b4af7f7196c465b953d2c27619cf7a",
+      "actual_source_relocations": []
+    }
+  },
+  "source_readonly_sections": [
+    {
+      "name": ".eh_frame",
+      "bytes": 208,
+      "sha256": "4abd445bd2bdad3ae215d994e2b2c70f837023ebaedeff86d645b0ca54fa4bb1",
+      "kind": "retained_profile_native_unwind_for_actual_source_functions",
+      "targets": [
+        [
+          "ihk_mc_interrupt_cpu"
+        ],
+        [
+          "x86_get_interrupt_id_result"
+        ],
+        [
+          "x86_interrupt_cpu_result"
+        ]
+      ]
+    }
+  ],
+  "real_num_processors_is_U_not_defined": true,
+  "packed_ABI_APIC_offset8": "Actual repr(C,packed) first2CULong fields, CULong=u64 and unchanged original size_of expression; source/type binding only, no runtime/register-layout substitute",
+  "all_actual_metadata_retained": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-metadata-1/ACTUAL-ELF-METADATA.json",
+  "future_current80_or_later_partial_unbound": true,
+  "no_getter_IPI_logger_body_slot_storage_hardware_function_or_native_execution": true
+}

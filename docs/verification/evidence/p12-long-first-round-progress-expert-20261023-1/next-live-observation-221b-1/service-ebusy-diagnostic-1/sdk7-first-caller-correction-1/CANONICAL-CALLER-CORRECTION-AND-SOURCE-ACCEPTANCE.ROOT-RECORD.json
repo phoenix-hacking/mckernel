@@ -1,0 +1,35 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "utc": "2026-10-23T20:53:17.493818+00:00",
+  "decision": "PASS_SOURCE_AND_FOCUSED_ACTUAL_FIXTURE",
+  "status": "CANONICAL_SOLE_SDK7_CALLER_CORRECTION_INTEGRATED",
+  "source_reviewer": "/root/native235_release_review",
+  "source_verdict": "PASS_SOURCE",
+  "fixture_expert": "/root/p12_consumer_fixture_expert",
+  "fixture": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/sdk7-first-caller-correction-1/ACTUAL-FIXTURE-RECEIPT.EXPERT.json",
+    "sha256": "81924439007e82e9c6d7eef4bcbbf795a411f93ca4448beb5f695eaae64b6249"
+  },
+  "preimage_sha256": "f5e862cf7f833a4a63b27820b4a594f7ce2b64302f08ccfbba9c8bf66ef2b398",
+  "postimage_sha256": "7d4948d7b0a5139048cf8085863ffcca43cbfff53024c34b5fd4281caed6f639",
+  "patch_sha256": "955a8e11b92a250f81b95d86a96202cb0ae9d64a67c0c9c850b0e581b9db8f33",
+  "candidate_sha256_by_relative": {
+    "smp_service.rs": "7d4948d7b0a5139048cf8085863ffcca43cbfff53024c34b5fd4281caed6f639",
+    "sysfs_memory.rs": "aa98b251e973cee018cec6d69586d99a56c9ea1d208f69c4a645696254af2004",
+    "sysfs_zeroing.rs": "6d35d46758ccf5092db91780bbc35f8e0cacc0e8a3201379d5af95e6bf97f94e",
+    "sysfs_remote.rs": "b9bb72eb6c4986067e2557e15ac625d90cfddcb53f38c8b99cc3648e85f0d117",
+    "sysfs_rpc.rs": "39c5ff87b671c498afffcff9feb10833918d75207559462952803858fb218131",
+    "abi/sysfs_request.rs": "1b89d1261d218c39d531cfe00181a30562d9953deae5ac0956641f407239df0f",
+    "smp_application.rs": "6adb4d11e7285caadd699bf22359bf21922f7dbfa4828b12b7a96fb7a1b07be0"
+  },
+  "other_six_changes_preserved": true,
+  "current_live_postjoin": "FAILED_SDK7_COMPILER_POSITIVELY_RETIRED",
+  "latest_physical_sha256": "8158cea214a85db50fb747d730e07b865ecae9db86ae614b022275bc18dbb9c9",
+  "failure_history": "SDK7fullmoduleE0061, stale observerpreimage failure, observerregex failure allpreserved; expertfixture corrected andpassed; nextfullmodulebuild is soleproductcorrection.",
+  "acceptance_limits": [
+    "focusedmodeledconsumerfixture",
+    "SDK8fullmodule/nativeunproven",
+    "EBUSYcauseunknown",
+    "notsemanticrepair"
+  ]
+}

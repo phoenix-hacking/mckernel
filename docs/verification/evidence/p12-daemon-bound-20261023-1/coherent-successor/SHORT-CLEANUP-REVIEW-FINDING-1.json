@@ -1,0 +1,8 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/p12_successor_review",
+  "finding": "Predecessor cleanup logs used allow_failure=True; successor _capture_logs always called _call defaultFalse. SHORT nonzero logs incorrectly becomes owner failure. Count-only SHORT test did not observe it.",
+  "retained_draft": "draft1-retained-before-short-correction",
+  "source_family_history": "One concrete independent-review finding; this is the single bounded correction. No replay of unchanged failed candidate.",
+  "correction": "Pass explicit allow_failure through gate to _call; cleanup passesTrue, run.finally defaultFalse. Preserve LONG noRestart/stopped/max1 and all strict app oracles."
+}

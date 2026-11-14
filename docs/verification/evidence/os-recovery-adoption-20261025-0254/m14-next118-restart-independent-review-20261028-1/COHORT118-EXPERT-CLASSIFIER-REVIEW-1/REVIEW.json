@@ -1,0 +1,107 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/m14_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "at": "2026-10-28T20:04:05.207736+00:00",
+  "decision": "PASS_COHERENT_COMPLETE_RETAINED_QUERY_CLASSIFIER_FOR_ONE_EXPERT_PURE_FULL_FIXTURE",
+  "runtime_authority": null,
+  "source_packet": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/CLASSIFIER-REVIEW-PACKET.json",
+    "bytes": 3198,
+    "sha256": "f30fd92e51a28551b39a5e696b41ba52af8db2ae1f8bdffa98acf4f43727ec8a"
+  },
+  "oracle_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/retained_effect_oracle.py",
+    "bytes": 7745,
+    "sha256": "9e6ef78fb3b2e56429194c76bf16f92f5871be254573c09fdc539facd50eead8"
+  },
+  "prospective_patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/PROSPECTIVE-COMPLETE-QUERY-CLASSIFIER.patch",
+    "bytes": 1442,
+    "sha256": "8491908ce16a2ac5f74cae5af821712f9248aa8fe9ee0711687e5642d0807ff5"
+  },
+  "query_manifest": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/COMPLETE-ORACLE-CLASSIFIER-SOURCE-MANIFEST.json",
+    "bytes": 864849,
+    "sha256": "0fa28e5e4c39ddc700d464cfc9f8b7ccc2adb6f89118e9c06e1c10cb47c4ec4e"
+  },
+  "classifier_checks": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/COHORT118-EXPERT-CLASSIFIER-REVIEW-1/CLASSIFIER-CHECKS.json",
+    "bytes": 2549,
+    "sha256": "4f8bf9e15280f83e8f56ecf2c6a4027b1a916c85bcbd1d827d74615a3512ddc9"
+  },
+  "classifier_only_audit_program": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/COHORT118-EXPERT-CLASSIFIER-REVIEW-1/audit_classifier.py",
+    "bytes": 5409,
+    "sha256": "13999d189de54415ae4db88fd9027ad85bea13c65f840b7b406ecd6aaa153f24"
+  },
+  "unchanged_full_fixture": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/test_recursive_routing_expert.py",
+    "bytes": 15086,
+    "sha256": "b9e27a5dce71310a943d393688153cdb72cbf191959f5b556bd16450ac17661a"
+  },
+  "unchanged_routing_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/recursive-routing-correction-1/prepare_routing.py",
+    "bytes": 11297,
+    "sha256": "63061f77d27bfc0c81188312628923fe6fe27afd6fb348db6220fdfdeadb1086"
+  },
+  "prior_cohort_blocking_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/COHORT118-REVIEW-1/REVIEW.json",
+    "bytes": 10854,
+    "sha256": "26afcaa2206154b839fa3579474e7f6ae5ad57d11afc9bd7f90cec566d997c03"
+  },
+  "original_failures": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/EXPERT-FIRST-PURE-RECURSIVE.stdout",
+      "bytes": 5305,
+      "sha256": "d4be2811be41f6244960a277483bb035ad009b68ae341b54f36fd09145ca85a2"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/EXPERT-CLASSIFIER-FIRST-PURE-RECURSIVE.stdout",
+      "bytes": 4198,
+      "sha256": "d4d6aa5bae13cf6c6c9a95508ed7fc4e5078acd81a9ee178badd2268d9e6bc0a"
+    }
+  ],
+  "findings": [
+    "The prospective patch8491908c changes only query() AST versus retained first expert classifier. Every other oracle function, including authentication, receipt collection,terminalprojection,priority/conflict handling and exact-key get(), is unchanged. Production observer functions, source routing, case,Root adoption and fourargv are untouched.",
+    "Qualifier accepts recorded ps/inspect rows for fixed unix Docker daemon with all four observed sudo/Docker executable spellings. Qualifier is only a constructor filter over authenticated retained receipts; it does not grant command execution or manufacture argument combinations. Actual admission remains get(argv) exact tuple membership, with unsupported tuples raising AssertionError and no fallback/default/blankresponse.",
+    "Independently rebuilding only the finite oracle from the prescribed eight-source physical dependency chain exactly reproduces full864849B manifest0fa28e5e:54authenticated inputs,94keys. Prefix counts38/9/38/9 cover absolute/bare sudo and absolute/bare Docker. Only sudo path aliasing is generated; Docker spellings remain exactly present in original query records. No shell/path normalization,filter synthesis,CID shortening,ordering rewrite or guessedemptyqueryresponse occurs.",
+    "All92rawresponse keys independently resolve their authenticated receiptBYTEref and JSONpointer to exact returncode/stdout/stderr. Sudo alias variants differ solely in argv0; Docker/options/socket/restofargv remain original. Two explicitly derived inspect keys use one authenticated stoppedterminal containerId/State with RunningFalse/Pid0 and exact recordedstate; derived reply cannot replace an existing rawqueryreply.",
+    "All12 recorded historical conflicts independently authenticate both receipt variants and agree on fulltypedId+State. Nonprojection fullobjects are identical when only fullMounts records are compared as a multiset. This comparison is fixture provenance analysis; observer predicates and actualreturnedreply bytes are unchanged. The latest capture-first/rawreply-over-projection priority is deterministic and retained.",
+    "Classifier-only tests exercise all94members and14unsupported exact tuples covering allfourprefixes,unrecordedpsoptions,unknowninspectCID,nonqueryverb,wrongdaemon andwrongsudooption. All unsupported tuples refuse. No fullrecursivefixture,observer,liveguard/account,subprocess,Docker,root,native,nonce,compiler oractualproducer was invoked by thisreview."
+  ],
+  "source_blockers": [],
+  "next_pure_fixture": {
+    "owner": "/root/original227",
+    "maximum_invocations": 1,
+    "allowed": "One existing expert full recursive pure fixture execution using exact full-test b9e27a5d and classifier9e6ef78f, with only authenticated retained command replies and existing proc/account/clock effect leaves substituted.",
+    "CPU": 0,
+    "jobs": 1,
+    "AS_bytes": 2147483648,
+    "hash_before_run": true,
+    "retain_complete_stdout_stderr_results_and_new_fixture_namespace": true,
+    "observer_functions_may_not_be_replaced": true,
+    "actual_commands_may_not_run": true,
+    "unsupported_keys_must_refuse": true,
+    "on_failure": "Retain exact original result and stop this failure family; no per-command guessed reply, blank fallback, predicate weakening or incremental retry loop. Report the concrete new finding for focused steering."
+  },
+  "limitations": [
+    "This clears only the finite fixture classifier omission family. Full recursive observer correctness is still pending that one expert pure execution; original cohort blocker and all prior failures remain preserved.",
+    "No actual source export/materializer/origin/guard/physical observation/native admission is released. Source-only review is not current-clearance or kernel/application acceptance. Defaultartifact116 remains accepted while canonical118source is WIP; all389registry/ABI/provider/matchingnative/fullfile obligations remain.",
+    "Immutablecaps1793253600/MONO1035704.5689393478/BOOT1051042.6959879305,original7f4creditrun57774.852125ceiling/22812.3311floor and all parentalcontrols/holds/exclusions/scratch21/permanent27:4remain unchanged."
+  ],
+  "counts": {
+    "classifier_source_reviews": 1,
+    "classifier_only_oracle_constructions": 1,
+    "exact_keys_verified": 94,
+    "authenticated_inputs": 54,
+    "unsupported_keys_refused": 14,
+    "historical_conflicts_verified": 12,
+    "reviewer_full_fixture_runs": 0,
+    "actual_commands": 0,
+    "actual_guard_account_observations": 0,
+    "native_cases": 0,
+    "file_closures": 0
+  }
+}

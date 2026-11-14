@@ -1,0 +1,18 @@
+In file included from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/pagehash-alloc-init-count-batch-preparation-1/fixture/fixture.c:13:
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/pagehash-alloc-init-count-batch-preparation-1/fixture/actual-original-three-untested-bodies.inc: In function ‘original_page_init’:
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/pagehash-alloc-init-count-batch-preparation-1/fixture/actual-original-three-untested-bodies.inc:11:32: error: ‘page_hash_bucket_init_result’ undeclared (first use in this function); did you mean ‘page_hash_count_all_result’?
+   11 |    page_hash_lock_init_bridge, page_hash_bucket_init_result);
+      |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                                page_hash_count_all_result
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/pagehash-alloc-init-count-batch-preparation-1/fixture/actual-original-three-untested-bodies.inc:11:32: note: each undeclared identifier is reported only once for each function it appears in
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/pagehash-alloc-init-count-batch-preparation-1/fixture/actual-original-three-untested-bodies.inc: In function ‘mem_query_free_node_pages_bridge’:
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/pagehash-alloc-init-count-batch-preparation-1/fixture/actual-original-three-untested-bodies.inc:24:10: error: ‘memory_nodes’ undeclared (first use in this function)
+   24 |  pages = memory_nodes[node].nr_free_pages;
+      |          ^~~~~~~~~~~~
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/pagehash-alloc-init-count-batch-preparation-1/fixture/actual-original-three-untested-bodies.inc: At top level:
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/pagehash-alloc-init-count-batch-preparation-1/fixture/actual-original-three-untested-bodies.inc:15: error: unterminated #ifdef
+   15 | #ifdef MCKERNEL_RUST_MEM_HELPERS
+      | 
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/pagehash-alloc-init-count-batch-preparation-1/fixture/actual-original-three-untested-bodies.inc:14:12: warning: ‘original_page_hash_count_pages’ used but never defined
+   14 | static int original_page_hash_count_pages(void);
+      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

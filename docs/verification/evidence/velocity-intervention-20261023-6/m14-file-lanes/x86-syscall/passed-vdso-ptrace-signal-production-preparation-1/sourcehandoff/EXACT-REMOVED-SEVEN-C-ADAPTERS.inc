@@ -1,0 +1,56 @@
+static void
+arch_ptrace_signal_lock_bridge(void *lock, void *node)
+{
+	mcs_rwlock_writer_lock((struct mcs_rwlock_lock *)lock,
+			(struct mcs_rwlock_node_irqsave *)node);
+}
+
+static void
+arch_ptrace_signal_unlock_bridge(void *lock, void *node)
+{
+	mcs_rwlock_writer_unlock((struct mcs_rwlock_lock *)lock,
+			(struct mcs_rwlock_node_irqsave *)node);
+}
+
+static void
+arch_ptrace_save_debugreg_bridge(void *debugreg)
+{
+	save_debugreg((unsigned long *)debugreg);
+}
+
+static void
+arch_ptrace_waitq_wake_bridge(void *waitq)
+{
+	waitq_wakeup((waitq_t *)waitq);
+}
+
+static long
+arch_ptrace_do_kill_bridge(void *thread, int pid, int tid, int sig,
+		const void *info, int ptracecont)
+{
+	return do_kill((struct thread *)thread, pid, tid, sig,
+			(struct siginfo *)info, ptracecont);
+}
+
+static void
+arch_ptrace_schedule_bridge(void)
+{
+	schedule();
+}
+
+static void
+arch_ptrace_signal_log_bridge(int event, int value, int result)
+{
+	if (event == 8) {
+		dkprintf("ptrace_report_signal, tid=%d, pid=%d\n",
+				value, result);
+	}
+	else if (event == 9) {
+		dkprintf("ptrace_report_signal,sleeping\n");
+	}
+	else if (event == 10) {
+		dkprintf("ptrace_report_signal,wake up\n");
+	}
+}
+
+

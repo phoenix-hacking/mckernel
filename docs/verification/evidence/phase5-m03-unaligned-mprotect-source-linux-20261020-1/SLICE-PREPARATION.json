@@ -1,0 +1,54 @@
+{
+  "check": "P-M03-01",
+  "coverage": {
+    "existing_core": "scripts/tests/fixtures/native-application-core.c:21 successful map/RW/RO/RW/unmap only",
+    "existing_invalid_input": "Accepted current3bfc zero-length mmap/EINVAL; distinct operation and preserved unchanged",
+    "existing_protection": "scripts/application-tests/practical_memory_protection.c: actual protectedwrite SIGSEGV/ACCERR/exactaddress and RWrestore; owner native_shutdown_drain_helpers; independent current942 PASS02bea8dd490489e56429cf7414bdc7a1186ad18a02abd406dd44afb9c9f40b7b",
+    "new_slice": "Unaligned mprotect refusal plus unchanged live mapping/data/writeability and checked release",
+    "not_closed": [
+      "M03 whole",
+      "P-M03-02 failed-invalidation ownership",
+      "P-M03-03 release/quarantine authority",
+      "current205 native execution",
+      "Rust kernel path retirement"
+    ]
+  },
+  "invariants": [
+    "No computeC or sharedkernel/source edit",
+    "No protection-candidate duplication or new ownership mechanism",
+    "No unsafe release or pointer reuse on failed operation; process exit/retirement independently required on any failure",
+    "No tests/builds/root/guest executed by this preparation"
+  ],
+  "next_observation": {
+    "first": "After separate ordinary CPU admission: compile this source under accepted pinnedRust/staticmusl toolchain, run unchanged Linux binary and compare exact frozen stdout/empty stderr/exit0 with direct join/group absence",
+    "native": "After Linux/source acceptance and independent affected stage/owner release: one unchanged static /apps/app invocation through existing single-app observer on accepted205 image plus complete accepted normal-ABI host set; same exact73B output/exit0/emptyerr, full PID/CPU/streams/kernel/retirement evidence",
+    "prerequisites": [
+      "No current typedfork/positiveCREATE_PPD dependency; uses ordinary mmap/mprotect/munmap libc ABI only",
+      "One-app collector/stager must bind this exact payload/oracle in a NEW namespace; process_exec_wait235B/futex/oldstartup profile cannot be silently reused",
+      "Root owns compiler/guest admission and integration; no job authorized here"
+    ]
+  },
+  "oracle": {
+    "exit_status": 0,
+    "page_size": 4096,
+    "real_operation": "mprotect(original_base+1,4096,PROT_NONE)",
+    "required_post_failure_access": "All8192originalbytes unchanged; actual volatile writes/reads across both original pages; original base/length successfully unmapped once",
+    "required_result": "-1/EINVAL22",
+    "stderr_bytes": 0,
+    "stdout": {
+      "bytes": 73,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-independent-functional-slice-20261020-1/expected.stdout",
+      "sha256": "ed373b840d0c0cf1eeaff3a88c50770d7f999b90ebdfa404b9e964737085dc1a"
+    }
+  },
+  "owner": "/root/resume20_diagnostics",
+  "schema": "mckernel.practical-m03.unaligned-mprotect-source-preparation.v1",
+  "scope": "Functional supported-profile OS/apps plus Rust/reviewed assembly compute-C cutover; one independent missing invalid-input application slice",
+  "source": {
+    "bytes": 3404,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-independent-functional-slice-20261020-1/mprotect_unaligned.rs",
+    "sha256": "8773be69598e42fc5214b774bdd998ed30aeafdcb740aacd95608c4fca0fce39"
+  },
+  "status": "SOURCE_ONLY_NOT_COMPILED_OR_TESTED",
+  "write_allowlist": "/home/holden/mckernel-work/host-preparation/phase5-m03-independent-functional-slice-20261020-1"
+}

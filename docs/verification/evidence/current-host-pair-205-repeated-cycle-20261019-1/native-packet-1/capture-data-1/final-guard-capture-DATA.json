@@ -1,0 +1,69 @@
+{
+  "operations": [
+    null,
+    {
+      "role": "final-guard",
+      "profile": "metadata",
+      "argv_template": [
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--nofile=256",
+        "--core=0",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "30s",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-independent-review-20261019-1/review_final_ihk_logging_release.py",
+        "--config-sha256",
+        "6f3cc8af4cd9ff43038f065ba3a3aa7dcd14173f8860485d22b3cf4f889be4a0",
+        "--machine-sha256",
+        "ACTUAL_MACHINE_SHA256",
+        "--snapshot-sha256",
+        "ACTUAL_SNAPSHOT_SHA256"
+      ],
+      "stdout_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/native-packet-1/final-guard.stdout",
+      "stderr_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/native-packet-1/final-guard.stderr",
+      "status_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/native-packet-1/final-guard.status.json"
+    }
+  ],
+  "profiles": {
+    "metadata": {
+      "cpu": 7,
+      "stream_fsize": 33554432,
+      "parent_wall_seconds": 35,
+      "parent_kill_grace_seconds": 4,
+      "cpu_limits": 30,
+      "as_limit": 1073741824
+    },
+    "native": {
+      "cpu": 7,
+      "stream_fsize": 33554432,
+      "parent_wall_seconds": null,
+      "parent_kill_grace_seconds": null,
+      "cpu_limits": null,
+      "as_limit": null
+    },
+    "snapshot_metadata": {
+      "cpu": 6,
+      "stream_fsize": 33554432,
+      "parent_wall_seconds": 35,
+      "parent_kill_grace_seconds": 4,
+      "cpu_limits": 30,
+      "as_limit": 1073741824
+    }
+  },
+  "release": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-physical-review-20261020-1/decision.json",
+    "sha256": "33e1d2c5e000b789f9adf0595e02a5e50075cbe54a61e6154f267a92bb9ca196",
+    "bytes": 16451
+  },
+  "root_installed_release_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-physical-review-20261020-1/decision.json"
+}

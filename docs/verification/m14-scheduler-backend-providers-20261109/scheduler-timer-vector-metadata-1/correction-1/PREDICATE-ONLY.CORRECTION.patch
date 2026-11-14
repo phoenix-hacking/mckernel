@@ -1,0 +1,62 @@
+--- original/timer_vector_checks.py
++++ correction-1/timer_vector_checks.py
+@@ -18,6 +18,7 @@
+     spec.loader.exec_module(reader)
+     image = reader.Image(q['compiled_input']['path'])
+     contract = json.loads(Path(q['source_emission_contract']).read_text())
++    relocation_bindings = json.loads(Path(q['relocation_source_bindings']).read_text())
+     definitions, imports = reader.parse_nm(Path(q['actual_nm']).read_text())
+     assert Path(q['actual_elf']).read_bytes()
+     sections = []
+@@ -70,11 +71,29 @@
+         assert section['name']=='.eh_frame' and section['type']==0x70000001 and section['flags']==2 and section['align']==8, ('Unreviewed readonly/offset/callback table; retained actual emission requires review',section['name'],section['size'])
+         rows = [row for row in image.relocations if row['section']==section['index']]
+         assert rows
++        assert rows == [item['actual_relocation'] for item in relocation_bindings['actual_unwind3_PC64_edges']], 'Exact retained source-owned PC64 unwind edges'
+         references = []
+         for row in rows:
+             target = row['symbol']
+             references.append(dict(actual_relocation=row,source_functions=owners(target['section'],target['value']+row['addend'])))
+         readonly.append(dict(kind='retained_profile_unwind_for_selected_source_only',name=section['name'],bytes=section['size'],actual_source_references=references))
++    # One reviewed correction: exact retained R64 edges, including ONLY the
++    # actual source-used descriptor members. No arbitrary addends or all-field
++    # allowlist; offsets are addresses within the genuine external descriptor.
++    descriptor_fields = contract['descriptor_fields_in_original_order']
++    assert descriptor_fields == relocation_bindings['full_original15_descriptor_fields']
++    exact_by_owner = {}
++    for binding in relocation_bindings['actual_set_timer17_R64_edges']:
++        member = binding.get('descriptor_member')
++        if member is not None:
++            index = descriptor_fields.index(member['field_name'])
++            assert index == member['ordinal_in_original15']
++            assert member['declared_type'] == 'usize' and member['selected_LP64_usize_bytes'] == 8
++            assert binding['addend'] == member['member_byte_offset'] == index * 8
++            assert binding['target_symbol'] == contract['external_descriptor']
++        else:
++            assert binding['addend'] == 0 and binding['target_symbol'] in contract['genuine7_U']
++        exact_by_owner.setdefault(binding['owner'], []).append((binding['relative_offset'], binding['target_symbol'], binding['symbol_bind'], binding['symbol_type'], binding['symbol_section'], binding['relocation_type'], binding['addend']))
+     function_evidence = {}
+     public_targets = {}
+     for symbol in functions:
+@@ -88,12 +107,8 @@
+             assert not targets, ('Unexpected direct project provider from source-body/vector',label,targets)
+         else:
+             assert label in contract['source_private_functions'] and not targets
+-        for row in rows:
+-            target=row['symbol']
+-            if target['bind']==1:
+-                assert row['type']==1 and row['addend']==0, 'Exact retained large-static source address relocation'
+-            else:
+-                assert all(labels[name] in contract['source_private_functions'] for name in owners(target['section'],target['value']+row['addend']))
++        actual_edges = [(row['offset']-symbol['value'], row['symbol']['name'], row['symbol']['bind'], row['symbol']['type'], row['symbol']['section'], row['type'], row['addend']) for row in rows]
++        assert actual_edges == exact_by_owner.get(label, []), ('Exact actual source-use/member-address relocation binding', label, actual_edges)
+         function_evidence[symbol['name']] = dict(source_owner=label,bytes=symbol['size'],bytes_sha256=hashlib.sha256(image.symbol_bytes(symbol)).hexdigest(),actual_source_relocations=rows)
+         if symbol['bind']==1:
+             public_targets[symbol['name']]=targets
+@@ -103,5 +118,6 @@
+                 original_descriptor_and_time_sharing_remain_genuine_U=True, no_data_or_synthetic_offsets_instance=True,
+                 actual_function_and_private_listhelper_owners=function_evidence, actual_source_unwind=readonly,
+                 actual_set_timer_CPU_state_descriptor_callback_bindings=public_targets['set_timer'],
++                actual_descriptor_member_address_bindings=relocation_bindings,
+                 actual_metadata_capture=q['actual_metadata_capture'], future_actual_partial_join_unbound=True,
+                 no_timer_vector_list_lock_IRQ_cpu_native_function_runtime=True)

@@ -1,0 +1,39 @@
+{
+  "schema": "mckernel.native-diagnostic-container-owner-source-success.v1",
+  "recorded_at": "2026-09-28T07:19:00-07:00",
+  "base_commit": "2757b190f5343ce78992a3a6726d183b8e712f4e",
+  "scope": "unprivileged source and local-process ownership validation only",
+  "files": {
+    "scripts/application-tests/native_diagnostic_container_owner.py": "91a9c035878ff2ec93d66149a682870342fe7c02f16b945522acbaaa715dbfae",
+    "scripts/tests/test_application_native_diagnostic_container_owner.py": "ada330f0ef241607a82d392f6e081d1fad3054c8c1977b9da556c824abeff4ee"
+  },
+  "result": {
+    "review": "PASS_SOURCE_READY_FOR_EXACT_EXECUTION_PACKET",
+    "tests": "62/62 PASS",
+    "python": "/home/holden/anaconda3/bin/python3 (3.9)",
+    "command": "PYTHONDONTWRITEBYTECODE=1 /home/holden/anaconda3/bin/python3 -B -m unittest -v scripts.tests.test_application_native_diagnostic_container_owner",
+    "py_compile": "PASS",
+    "raw_stderr": "/home/holden/mckernel-work/scratch/native-diagnostic-container-owner-source-20260928-3/unittest.stderr",
+    "raw_stderr_sha256": "77addb5c4c9abee8bac8e0087b83845a99b867c2692dc9e36b488a9cc0746c00"
+  },
+  "verified_behavior": [
+    "POSIX spawn uses the host-supported setpgroup=0 path, restores the child signal mask/defaults, and establishes a child-led process group before deferred cancellation is delivered",
+    "exact reap state prevents a later cancellation from signaling a reused process-group ID",
+    "unreaped local Docker clients remain in a persistent ledger, block subsequent commands and lease release, and are retried without discarding kill or wait errors",
+    "an issued create is unresolved until its exact successful response or an authenticated exact name/label/container observation; any finite sequence of empty lookups retains the lock",
+    "cleanup publishes absence only after exact client retirement, resolved creation, authenticated container retirement and a final empty lookup",
+    "evidence writers remain deferred until container absence and lock release"
+  ],
+  "preserved_failure_history": [
+    "The first corrected predecessor allowed fatal cancellation after Popen created a child but before ownership was established and could later signal a reused process group",
+    "The next candidate used os.posix_spawn(..., setsid=True), which host Python 3.9 rejected; 52 tests passed and three errored",
+    "The first setpgroup=0 candidate passed 55 tests but finite two-second empty sampling could falsely discharge an in-flight daemon create, tentative absence could escape on interruption, and local-child retirement failure was swallowed",
+    "The fail-closed ledger correction initially had one mock-interface expectation failure; the exact ledger binding was corrected before the final 62-test run"
+  ],
+  "limits": [
+    "An unresolved Docker create intentionally retains the owner process and development lock indefinitely until its exact container is observed and retired",
+    "Fake-backend and local-process evidence does not establish actual Docker, QEMU, guest or McKernel behavior",
+    "This source review is not an execution release, application acceptance, production-gate credit or whole-OS acceptance"
+  ],
+  "next_action": "Bind these exact source bytes and all current-signal inputs, resource limits, deadlines, evidence and cleanup semantics into an independently reviewed execution packet before any root, Docker, QEMU or guest command."
+}

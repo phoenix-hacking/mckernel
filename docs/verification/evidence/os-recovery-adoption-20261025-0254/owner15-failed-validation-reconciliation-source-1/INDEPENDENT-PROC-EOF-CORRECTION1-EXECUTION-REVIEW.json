@@ -1,0 +1,60 @@
+{
+  "action_budget": {
+    "group_signal": 0,
+    "normal_release": 0,
+    "numeric_signal": 0,
+    "permanent_mutations": 0,
+    "pidfd_sigkill": 1,
+    "shared_unlink": 1
+  },
+  "actual_actions_performed_by_reviewer": 0,
+  "change_scope": "Only bounded proc read-to-EOF transport and binding; action code, identity checks and sole-holder parser unchanged. Prior failed grant consumed; fresh correction attempt required.",
+  "conditions": [
+    "Fresh Root grant binds this review hash, exact source/packet hashes and actual argv enforcing all reviewed limits.",
+    "Archive exact shared bytes and metadata durably before unlink while caller holds27:4; consume durable signal budget before one pidfd SIGKILL; no uncertain-action retry.",
+    "Root tool10088 creator join/group proof and independent final postflight required before any new heavy admission."
+  ],
+  "deadlines": [
+    1793030133,
+    812240.493656513,
+    827578.62070498
+  ],
+  "decision": "PASS_FAILED_VALIDATION_RECOVERY_EXECUTION",
+  "default_native_or_retirement_credit": false,
+  "implementation_ownership": false,
+  "new_heavy_admission": false,
+  "normal_cleanup_credit": false,
+  "packet_sha256": "300a647bde91b68d09f4463ff30299a0a22fc103a87d2147851b68a623ebadd7",
+  "prior_review_sha256": "7b283b42314e70037d0bb9ec591f45dda3d77133d80d94d84f068744b1ba8e32",
+  "profile": {
+    "cpus": [
+      7
+    ],
+    "outer_wall_or_cpu_kill": false,
+    "pidfd_exit_poll_max_seconds": 30,
+    "processes": 1,
+    "rlimits_hard_and_soft": {
+      "AS": 2147483648,
+      "CORE": 0,
+      "CPU": "unlimited",
+      "FSIZE": 33554432,
+      "NOFILE": 256,
+      "STACK": 2097152
+    },
+    "subprocesses": 0,
+    "threads_added": 0,
+    "uid_euid_gid_egid": 1000
+  },
+  "pure_eof_tests_passed": 9,
+  "pure_result_sha256": "f296f00cdeeaa19047167fd3c6627305d7ad207053773ecf1d8c0c4b1c97c817",
+  "reviewer": "/root/perf_review18h",
+  "schema": "owner15.proc-eof-correction1-independent-execution-review.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_sha256": "95adb255159c7ef496c1d9af73aa6af0d5f7d33122bef46aab7775b6e53ee984",
+  "target": {
+    "fd": 3,
+    "parent": 842942,
+    "pid": 997661,
+    "starttime": "79134158"
+  }
+}

@@ -1,0 +1,998 @@
+{
+  "QEMU_PID_is_container_namespace": true,
+  "actual_capture": {
+    "bytes": 2028,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1/actual-199-owner-capture-1/status.json",
+    "sha256": "451d99c6ce5e9e1e4e4813f314291ccf323b9fcf6078fb41b2c65ceee3f2a062"
+  },
+  "actual_capture_returncode": 1,
+  "actual_readonly_export": {
+    "bytes": 1129,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1/actual-status-failure-retirement-1/ROOT-READONLY-OWNER-EXPORT-RESULT.json",
+    "sha256": "24d5920be6badbaf007606666c00fce6bb472b34d543a14c4862ac2774696d3f"
+  },
+  "closed_Docker_command_count": 25,
+  "closed_Docker_commands": [
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "ps",
+        "-aq",
+        "--no-trunc",
+        "--filter",
+        "name=^/mckernel-native-diagnostic-e696db0e49884b968eaebc267731b88b$"
+      ],
+      "command": {
+        "pgid": 3362576,
+        "pid": 3362576,
+        "proc_starttime": 50674437,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 3362571
+      },
+      "evidence": {
+        "bytes": 308,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1/actual-status-failure-retirement-1/retained/root-owner-journal/001-ps.json",
+        "sha256": "e4e79785c29ea64ba438732045426f9d5d278cc6fcbb43a2b04b832b098b947d"
+      },
+      "failure": null,
+      "returncode": 0
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "ps",
+        "-aq",
+        "--no-trunc",
+        "--filter",
+        "label=mckernel.native-diagnostic.owner=e696db0e49884b968eaebc267731b88b"
+      ],
+      "command": {
+        "pgid": 3362582,
+        "pid": 3362582,
+        "proc_starttime": 50674438,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 3362571
+      },
+      "evidence": {
+        "bytes": 312,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1/actual-status-failure-retirement-1/retained/root-owner-journal/002-ps.json",
+        "sha256": "b518fcc787dfdc5a0b4bb1e933cf164c8cd0c7cfa779d81be6d15c4ad8a27f02"
+      },
+      "failure": null,
+      "returncode": 0
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "image",
+        "inspect",
+        "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94"
+      ],
+      "command": {
+        "pgid": 3362588,
+        "pid": 3362588,
+        "proc_starttime": 50674440,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 3362571
+      },
+      "evidence": {
+        "bytes": 295,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1/actual-status-failure-retirement-1/retained/root-owner-journal/003-image.json",
+        "sha256": "c79ba971af3fdbe183d30d5a4ed67b15a23ad4e7c8987e39beccf3badf73866f"
+      },
+      "failure": null,
+      "returncode": 0
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "create",
+        "--pull=never",
+        "--attach=stdout",
+        "--attach=stderr",
+        "--init",
+        "--name",
+        "mckernel-native-diagnostic-e696db0e49884b968eaebc267731b88b",
+        "--label",
+        "mckernel.native-diagnostic.owner=e696db0e49884b968eaebc267731b88b",
+        "--cpus=4",
+        "--cpuset-cpus=2-5",
+        "--cgroup-parent=/mckernel-dev",
+        "--memory=12g",
+        "--memory-swap=12g",
+        "--pids-limit=512",
+        "--cap-drop=ALL",
+        "--security-opt=no-new-privileges",
+        "--read-only",
+        "--network=none",
+        "--user=1000:1000",
+        "--ulimit",
+        "core=0",
+        "--ulimit",
+        "nofile=4096:4096",
+        "--ulimit",
+        "fsize=33554432:33554432",
+        "--tmpfs",
+        "/tmp:rw,nodev,nosuid,size=256m",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel,dst=/home/holden/mckernel,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/scratch,dst=/home/holden/mckernel-work/scratch,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/repaired-affinity-n3-variant-20261019-1,dst=/home/holden/mckernel-work/host-preparation/repaired-affinity-n3-variant-20261019-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1,dst=/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/image-request.json,dst=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/image-request.json,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/thin-inputs.json,dst=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/thin-inputs.json,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/materialization-receipt.json,dst=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/materialization-receipt.json,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/postbuild-preparation-1,dst=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/postbuild-preparation-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1,dst=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/heavy-proposal-1/source-sha256.json,dst=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/heavy-proposal-1/source-sha256.json,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1,dst=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/postbuild-execution-preparation-1/copy-pin-correction-1/facts-inline-correction-1/actual-positive-fixture-facts.json,dst=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/postbuild-execution-preparation-1/copy-pin-correction-1/facts-inline-correction-1/actual-positive-fixture-facts.json,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1,dst=/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-independent-review-20261019-1,dst=/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-independent-review-20261019-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-independent-review-20261019-1,dst=/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-independent-review-20261019-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1,dst=/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-independent-review-20261019-1,dst=/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-independent-review-20261019-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1,dst=/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-independent-review-20261020-1,dst=/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-independent-review-20261020-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1,dst=/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/launch-expansion-source-review-20261020-1,dst=/home/holden/mckernel-work/host-preparation/launch-expansion-source-review-20261020-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1,dst=/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1,dst=/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1,dst=/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-independent-review-20261020-1/ALLOCATOR-CORRECTION1-ACTUAL-COMPOSITE64-MODULE-SOURCE-FFI-LINK-ACCEPTANCE.json,dst=/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-independent-review-20261020-1/ALLOCATOR-CORRECTION1-ACTUAL-COMPOSITE64-MODULE-SOURCE-FFI-LINK-ACCEPTANCE.json,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-independent-review-20261020-1/ALLOCATOR-CORRECTION1-ACTUAL-PHYSICAL-RETIREMENT-REVIEW.json,dst=/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-independent-review-20261020-1/ALLOCATOR-CORRECTION1-ACTUAL-PHYSICAL-RETIREMENT-REVIEW.json,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/current-v6-composite-sdk-preparation-20261020-1/compiler-allocator-correction-1/request.json,dst=/home/holden/mckernel-work/host-preparation/current-v6-composite-sdk-preparation-20261020-1/compiler-allocator-correction-1/request.json,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1,dst=/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-20352dabb9c94403a03c224ec2826ff2/modules,dst=/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-20352dabb9c94403a03c224ec2826ff2/modules,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/mckernel.img,dst=/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/mckernel.img,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/p-m06-01-pinned-launcher-process-inputs-20261022-1/pinned-launcher-attempt-1/owner-work/evidence/artifacts/mcexec,dst=/home/holden/mckernel-work/host-preparation/p-m06-01-pinned-launcher-process-inputs-20261022-1/pinned-launcher-attempt-1/owner-work/evidence/artifacts/mcexec,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/native-exec-reset-self-exec-case-preparation-20261021-1/ordinary-reference-1/result/app,dst=/home/holden/mckernel-work/host-preparation/native-exec-reset-self-exec-case-preparation-20261021-1/ordinary-reference-1/result/app,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-child-exec-wait-native-preparation-20261020-1/process-exec-wait-collector,dst=/home/holden/mckernel-work/host-preparation/phase5-child-exec-wait-native-preparation-20261020-1/process-exec-wait-collector,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/scratch/n199b1/p,dst=/home/holden/mckernel-work/scratch/n199b1/p",
+        "--env",
+        "HOME=/tmp",
+        "--env",
+        "TMPDIR=/tmp",
+        "--env",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "--workdir=/home/holden/mckernel-work/scratch/n199b1/p",
+        "--entrypoint=/usr/bin/python3",
+        "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/native_diagnostic_container_owner.py",
+        "--inside",
+        "--owner-sha256",
+        "4d7ae097cae866389ed044a6247e01f1bc78ff8744fc8d72f39fb294b55bb298",
+        "--manifest",
+        "/home/holden/mckernel-work/scratch/n199b1/m.json",
+        "--manifest-sha256",
+        "d63985a14c2a4a898bda4713c192ac935df0da0f31b93728ebb00df53618dffb",
+        "--attempt-parent",
+        "/home/holden/mckernel-work/scratch/n199b1/p",
+        "--nonce",
+        "e696db0e49884b968eaebc267731b88b"
+      ],
+      "command": {
+        "pgid": 3362594,
+        "pid": 3362594,
+        "proc_starttime": 50674441,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 3362571
+      },
+      "evidence": {
+        "bytes": 10890,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1/actual-status-failure-retirement-1/retained/root-owner-journal/004-create.json",
+        "sha256": "41efb63895d46f7a2e66b09c29a99ee31542770e9c52eca9282e323137a1d444"
+      },
+      "failure": null,
+      "returncode": 0
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "ps",
+        "-aq",
+        "--no-trunc",
+        "--filter",
+        "name=^/mckernel-native-diagnostic-e696db0e49884b968eaebc267731b88b$"
+      ],
+      "command": {
+        "pgid": 3362600,
+        "pid": 3362600,
+        "proc_starttime": 50674444,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 3362571
+      },
+      "evidence": {
+        "bytes": 308,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1/actual-status-failure-retirement-1/retained/root-owner-journal/005-ps.json",
+        "sha256": "60c81c965ac4dc9cd24b6c0927d0848180e9b69933cded7d75dab4898dd39b86"
+      },
+      "failure": null,
+      "returncode": 0
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "ps",
+        "-aq",
+        "--no-trunc",
+        "--filter",
+        "label=mckernel.native-diagnostic.owner=e696db0e49884b968eaebc267731b88b"
+      ],
+      "command": {
+        "pgid": 3362606,
+        "pid": 3362606,
+        "proc_starttime": 50674446,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 3362571
+      },
+      "evidence": {
+        "bytes": 312,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1/actual-status-failure-retirement-1/retained/root-owner-journal/006-ps.json",
+        "sha256": "945505b04349027a7b38805ad30c96f11efd0c3014a512ddfe60a84e0cf0e330"
+      },
+      "failure": null,
+      "returncode": 0
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "ps",
+        "-aq",
+        "--no-trunc",
+        "--filter",
+        "id=7c54fc6b0681a82c6259adff718628221bec1edb0b6ba6087055fdc9d662c53f"
+      ],
+      "command": {
+        "pgid": 3362612,
+        "pid": 3362612,
+        "proc_starttime": 50674448,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 3362571
+      },
+      "evidence": {
+        "bytes": 308,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1/actual-status-failure-retirement-1/retained/root-owner-journal/007-ps.json",
+        "sha256": "af87285a2a16bb99c8db595fa26ea64d81e4fb03064abf9bb56a0712e37a654b"
+      },
+      "failure": null,
+      "returncode": 0
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "inspect",
+        "7c54fc6b0681a82c6259adff718628221bec1edb0b6ba6087055fdc9d662c53f"
+      ],
+      "command": {
+        "pgid": 3362618,
+        "pid": 3362618,
+        "proc_starttime": 50674450,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 3362571
+      },
+      "evidence": {
+        "bytes": 280,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1/actual-status-failure-retirement-1/retained/root-owner-journal/008-inspect.json",
+        "sha256": "8d560e8791883189db222110fcf3faebdbff2ef71cd1268038327374ba664449"
+      },
+      "failure": null,
+      "returncode": 0
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "start",
+        "--attach",
+        "7c54fc6b0681a82c6259adff718628221bec1edb0b6ba6087055fdc9d662c53f"
+      ],
+      "command": {
+        "pgid": 3362624,
+        "pid": 3362624,
+        "proc_starttime": 50674451,
+        "reaped": true,
+        "returncode": 1,
+        "sid": 3362571
+      },
+      "evidence": {
+        "bytes": 298,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1/actual-status-failure-retirement-1/retained/root-owner-journal/009-start.json",
+        "sha256": "660cc6d015e7faf2217d6ac5c6af156a8a653ce0e7c163dad9534788f00fecce"
+      },
+      "failure": "OwnerError",
+      "returncode": 1
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "wait",
+        "7c54fc6b0681a82c6259adff718628221bec1edb0b6ba6087055fdc9d662c53f"
+      ],
+      "command": {
+        "pgid": 3362730,
+        "pid": 3362730,
+        "proc_starttime": 50675917,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 3362571
+      },
+      "evidence": {
+        "bytes": 276,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1/actual-status-failure-retirement-1/retained/root-owner-journal/010-wait.json",
+        "sha256": "75e7e52c7c2b547e5255c0ed49487d1d46d9d6a9de4dc2a20d61dea06eb6b3ae"
+      },
+      "failure": null,
+      "returncode": 0
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "logs",
+        "--timestamps",
+        "7c54fc6b0681a82c6259adff718628221bec1edb0b6ba6087055fdc9d662c53f"
+      ],
+      "command": {
+        "pgid": 3362736,
+        "pid": 3362736,
+        "proc_starttime": 50675920,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 3362571
+      },
+      "evidence": {
+        "bytes": 291,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1/actual-status-failure-retirement-1/retained/root-owner-journal/011-logs.json",
+        "sha256": "2b0179a4aba9db5df5c234522c324b8c98434dcb9ab0b2065b40cd66b0f80e89"
+      },
+      "failure": null,
+      "returncode": 0
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "inspect",
+        "7c54fc6b0681a82c6259adff718628221bec1edb0b6ba6087055fdc9d662c53f"
+      ],
+      "command": {
+        "pgid": 3362742,
+        "pid": 3362742,
+        "proc_starttime": 50675922,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 3362571
+      },
+      "evidence": {
+        "bytes": 279,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1/actual-status-failure-retirement-1/retained/root-owner-journal/012-inspect.json",
+        "sha256": "91235d9658bec8019483345a7c7d8e7b136e4f812c26fca9808647d6a0cd69bf"
+      },
+      "failure": null,
+      "returncode": 0
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "ps",
+        "-aq",
+        "--no-trunc",
+        "--filter",
+        "name=^/mckernel-native-diagnostic-e696db0e49884b968eaebc267731b88b$"
+      ],
+      "command": {
+        "pgid": 3362748,
+        "pid": 3362748,
+        "proc_starttime": 50675924,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 3362571
+      },
+      "evidence": {
+        "bytes": 308,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1/actual-status-failure-retirement-1/retained/root-owner-journal/013-ps.json",
+        "sha256": "c881d5b0840c609fbc1fb2c1629e2ef7575973691ef23fcff9c271d4e3d6b045"
+      },
+      "failure": null,
+      "returncode": 0
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "ps",
+        "-aq",
+        "--no-trunc",
+        "--filter",
+        "label=mckernel.native-diagnostic.owner=e696db0e49884b968eaebc267731b88b"
+      ],
+      "command": {
+        "pgid": 3362754,
+        "pid": 3362754,
+        "proc_starttime": 50675926,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 3362571
+      },
+      "evidence": {
+        "bytes": 312,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1/actual-status-failure-retirement-1/retained/root-owner-journal/014-ps.json",
+        "sha256": "794dd9e203d87c7e13aa7e1fed41116034a2c8ec06bd72ecdbd62bbae1491450"
+      },
+      "failure": null,
+      "returncode": 0
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "ps",
+        "-aq",
+        "--no-trunc",
+        "--filter",
+        "id=7c54fc6b0681a82c6259adff718628221bec1edb0b6ba6087055fdc9d662c53f"
+      ],
+      "command": {
+        "pgid": 3362760,
+        "pid": 3362760,
+        "proc_starttime": 50675927,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 3362571
+      },
+      "evidence": {
+        "bytes": 308,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1/actual-status-failure-retirement-1/retained/root-owner-journal/015-ps.json",
+        "sha256": "1f036a9adadd0131b0f942ed7dfaca9bbe68fe7764d0cd96aebc82113e8cc948"
+      },
+      "failure": null,
+      "returncode": 0
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "inspect",
+        "7c54fc6b0681a82c6259adff718628221bec1edb0b6ba6087055fdc9d662c53f"
+      ],
+      "command": {
+        "pgid": 3362767,
+        "pid": 3362767,
+        "proc_starttime": 50675928,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 3362571
+      },
+      "evidence": {
+        "bytes": 280,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1/actual-status-failure-retirement-1/retained/root-owner-journal/016-inspect.json",
+        "sha256": "78574f1fbebbd4faa990e42e890e0ca6ebcff993f8c69ebbdd82a0db18ab5478"
+      },
+      "failure": null,
+      "returncode": 0
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "stop",
+        "--time=2",
+        "7c54fc6b0681a82c6259adff718628221bec1edb0b6ba6087055fdc9d662c53f"
+      ],
+      "command": {
+        "pgid": 3362773,
+        "pid": 3362773,
+        "proc_starttime": 50675930,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 3362571
+      },
+      "evidence": {
+        "bytes": 287,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1/actual-status-failure-retirement-1/retained/root-owner-journal/017-stop.json",
+        "sha256": "fbcaf816550e34bc62d16d944926027645165184cf552d9cf613e679a59cc0f1"
+      },
+      "failure": null,
+      "returncode": 0
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "kill",
+        "7c54fc6b0681a82c6259adff718628221bec1edb0b6ba6087055fdc9d662c53f"
+      ],
+      "command": {
+        "pgid": 3362779,
+        "pid": 3362779,
+        "proc_starttime": 50675931,
+        "reaped": true,
+        "returncode": 1,
+        "sid": 3362571
+      },
+      "evidence": {
+        "bytes": 276,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1/actual-status-failure-retirement-1/retained/root-owner-journal/018-kill.json",
+        "sha256": "494118b49ef41fdd0fb00852e061db2024719fcfea34ccf7c86ee8d583d06adc"
+      },
+      "failure": null,
+      "returncode": 1
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "wait",
+        "7c54fc6b0681a82c6259adff718628221bec1edb0b6ba6087055fdc9d662c53f"
+      ],
+      "command": {
+        "pgid": 3362785,
+        "pid": 3362785,
+        "proc_starttime": 50675933,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 3362571
+      },
+      "evidence": {
+        "bytes": 276,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1/actual-status-failure-retirement-1/retained/root-owner-journal/019-wait.json",
+        "sha256": "bfc75b9b93eb670355d92ecf660fa49191b68cbc6adf6f0bb4be845db8b3264f"
+      },
+      "failure": null,
+      "returncode": 0
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "logs",
+        "--timestamps",
+        "7c54fc6b0681a82c6259adff718628221bec1edb0b6ba6087055fdc9d662c53f"
+      ],
+      "command": {
+        "pgid": 3362791,
+        "pid": 3362791,
+        "proc_starttime": 50675934,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 3362571
+      },
+      "evidence": {
+        "bytes": 291,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1/actual-status-failure-retirement-1/retained/root-owner-journal/020-logs.json",
+        "sha256": "3826d0180c3be832878de7e3015b53fa5e3573abd4ceace4183f5eb1ed8a0f1f"
+      },
+      "failure": null,
+      "returncode": 0
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "inspect",
+        "7c54fc6b0681a82c6259adff718628221bec1edb0b6ba6087055fdc9d662c53f"
+      ],
+      "command": {
+        "pgid": 3362797,
+        "pid": 3362797,
+        "proc_starttime": 50675935,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 3362571
+      },
+      "evidence": {
+        "bytes": 279,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1/actual-status-failure-retirement-1/retained/root-owner-journal/021-inspect.json",
+        "sha256": "092b1685064c757dcd61424ae2d36c634bceab00e75e2d13d559da248aa6c56c"
+      },
+      "failure": null,
+      "returncode": 0
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "rm",
+        "--force",
+        "7c54fc6b0681a82c6259adff718628221bec1edb0b6ba6087055fdc9d662c53f"
+      ],
+      "command": {
+        "pgid": 3362803,
+        "pid": 3362803,
+        "proc_starttime": 50675937,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 3362571
+      },
+      "evidence": {
+        "bytes": 284,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1/actual-status-failure-retirement-1/retained/root-owner-journal/022-rm.json",
+        "sha256": "7b5fae0656967cb15eb7f92968afa6f1e6d26c4c1cdde5062bdf0afb91882fd5"
+      },
+      "failure": null,
+      "returncode": 0
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "ps",
+        "-aq",
+        "--no-trunc",
+        "--filter",
+        "name=^/mckernel-native-diagnostic-e696db0e49884b968eaebc267731b88b$"
+      ],
+      "command": {
+        "pgid": 3362809,
+        "pid": 3362809,
+        "proc_starttime": 50675940,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 3362571
+      },
+      "evidence": {
+        "bytes": 308,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1/actual-status-failure-retirement-1/retained/root-owner-journal/023-ps.json",
+        "sha256": "f74785b73f8a8a2bfa3fefb5d4167652e059bdc155981d601b38276a2b7120d8"
+      },
+      "failure": null,
+      "returncode": 0
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "ps",
+        "-aq",
+        "--no-trunc",
+        "--filter",
+        "label=mckernel.native-diagnostic.owner=e696db0e49884b968eaebc267731b88b"
+      ],
+      "command": {
+        "pgid": 3362816,
+        "pid": 3362816,
+        "proc_starttime": 50675941,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 3362571
+      },
+      "evidence": {
+        "bytes": 312,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1/actual-status-failure-retirement-1/retained/root-owner-journal/024-ps.json",
+        "sha256": "5aef265cdc1905c1631b652de388502403827dbb4c7fd4ca48bf044e7b412099"
+      },
+      "failure": null,
+      "returncode": 0
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "ps",
+        "-aq",
+        "--no-trunc",
+        "--filter",
+        "id=7c54fc6b0681a82c6259adff718628221bec1edb0b6ba6087055fdc9d662c53f"
+      ],
+      "command": {
+        "pgid": 3362822,
+        "pid": 3362822,
+        "proc_starttime": 50675943,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 3362571
+      },
+      "evidence": {
+        "bytes": 308,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1/actual-status-failure-retirement-1/retained/root-owner-journal/025-ps.json",
+        "sha256": "75995887c50febddac1f9b8ab582726ceed5ffb1543d295fd7858c7fe32f4323"
+      },
+      "failure": null,
+      "returncode": 0
+    }
+  ],
+  "container": "7c54fc6b0681a82c6259adff718628221bec1edb0b6ba6087055fdc9d662c53f",
+  "current_attempt_application_acceptance": false,
+  "current_attempt_guest_boots": 1,
+  "current_attempt_successful_app_launches": 0,
+  "elapsed_seconds": 15.607590507017449,
+  "fresh_root_clearance": {
+    "elapsed_seconds": 0.22942601901013404,
+    "mutation": false,
+    "no_new_heavy_admitted": true,
+    "permanent_mutex27_4_acquired_released": true,
+    "queries": [
+      {
+        "argv": [
+          "/usr/bin/taskset",
+          "-c",
+          "7",
+          "/usr/bin/prlimit",
+          "--as=2147483648:2147483648",
+          "--cpu=10:10",
+          "--fsize=1048576:1048576",
+          "--core=0:0",
+          "--",
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "ps",
+          "-aq",
+          "--no-trunc",
+          "--filter",
+          "name=^/mckernel-native-diagnostic-e696db0e49884b968eaebc267731b88b$"
+        ],
+        "direct_joined_closed_group_absent": true,
+        "empty_streams": true,
+        "pid": 3364243,
+        "returncode": 0
+      },
+      {
+        "argv": [
+          "/usr/bin/taskset",
+          "-c",
+          "7",
+          "/usr/bin/prlimit",
+          "--as=2147483648:2147483648",
+          "--cpu=10:10",
+          "--fsize=1048576:1048576",
+          "--core=0:0",
+          "--",
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "ps",
+          "-aq",
+          "--no-trunc",
+          "--filter",
+          "label=mckernel.native-diagnostic.owner=e696db0e49884b968eaebc267731b88b"
+        ],
+        "direct_joined_closed_group_absent": true,
+        "empty_streams": true,
+        "pid": 3364251,
+        "returncode": 0
+      }
+    ],
+    "shared_heavy_record_absent": true,
+    "status": "PASS_CURRENT_NATIVE_OWNER_READONLY_ABSENCE"
+  },
+  "fresh_root_current_name_label_mutex_sharedheavy": {
+    "bytes": 1447,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1/actual-status-failure-retirement-1/actual-e696-readonly-closure-1/result.json",
+    "sha256": "e9a2c2d12e12b3eb690c4a55934bbe5ab0490ea0b22551c00adec071a6a9cdcc"
+  },
+  "full_native_restoration_acceptance": false,
+  "guest_QEMU": {
+    "argv": [
+      "/usr/libexec/qemu-kvm",
+      "-machine",
+      "q35",
+      "-accel",
+      "tcg,thread=multi",
+      "-cpu",
+      "max,la57=off",
+      "-smp",
+      "4,sockets=2,cores=2,threads=1",
+      "-m",
+      "8192",
+      "-object",
+      "memory-backend-ram,size=4G,id=ram-node0",
+      "-object",
+      "memory-backend-ram,size=4G,id=ram-node1",
+      "-numa",
+      "node,nodeid=0,cpus=0-1,memdev=ram-node0",
+      "-numa",
+      "node,nodeid=1,cpus=2-3,memdev=ram-node1",
+      "-nic",
+      "none",
+      "-display",
+      "none",
+      "-no-reboot",
+      "-no-shutdown",
+      "-S",
+      "-monitor",
+      "none",
+      "-qmp",
+      "unix:/home/holden/mckernel-work/scratch/n199b1/p/attempt-e696db0e49884b968eaebc267731b88b/qmp.sock,server=on,wait=off",
+      "-serial",
+      "file:/home/holden/mckernel-work/scratch/n199b1/p/attempt-e696db0e49884b968eaebc267731b88b/serial.log",
+      "-debugcon",
+      "file:/home/holden/mckernel-work/scratch/n199b1/p/attempt-e696db0e49884b968eaebc267731b88b/debugcon.log",
+      "-global",
+      "isa-debugcon.iobase=0xe9",
+      "-kernel",
+      "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/bzImage",
+      "-initrd",
+      "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1/actual-199-overlay-1.cpio.gz",
+      "-append",
+      "console=ttyS0,115200n8 rdinit=/init nokaslr panic=-1 memmap=4K%0x80000-1"
+    ],
+    "pgid": 10,
+    "pid": 10,
+    "returncode": -9,
+    "sid": 10,
+    "starttime_ticks": 50674556
+  },
+  "guest_capture_errors": [],
+  "guest_cleanup": {
+    "errors": [],
+    "reaped": true
+  },
+  "guest_failure": {
+    "error": "guest timestamp",
+    "phase": "evaluation",
+    "type": "DiagnosticError"
+  },
+  "independent_actual_physical_acceptance": null,
+  "last_inspect021_state": {
+    "Dead": false,
+    "Error": "",
+    "ExitCode": 1,
+    "FinishedAt": "2026-10-22T22:48:34.442503182Z",
+    "OOMKilled": false,
+    "Paused": false,
+    "Pid": 0,
+    "Restarting": false,
+    "Running": false,
+    "StartedAt": "2026-10-22T22:48:19.983197935Z",
+    "Status": "exited"
+  },
+  "manifest_sha256": "d63985a14c2a4a898bda4713c192ac935df0da0f31b93728ebb00df53618dffb",
+  "new_collector_sha256": "c020a8e0ab43e222caf901d92bfecb2a8d8cf20ea0b539910a17a578f1fd12fc",
+  "new_diagnostics_raw_frames": {
+    "bytes": 891,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1/actual-status-failure-retirement-1/ACTUAL-ND-HELPER-FRAMES.bin",
+    "sha256": "e9243ceb7d7d9e7567946215041cae7c84bce09daba39e0bdede9f299f5f5529"
+  },
+  "new_helper_frame_count": 3,
+  "nonce": "e696db0e49884b968eaebc267731b88b",
+  "outer_process_absence_readbacks": [
+    {
+      "group_absent": true,
+      "pid": 3362571,
+      "proc_absent": true
+    },
+    {
+      "group_absent": true,
+      "pid": 3362574,
+      "proc_absent": true
+    },
+    {
+      "group_absent": true,
+      "pid": 3364355,
+      "proc_absent": true
+    }
+  ],
+  "owner_final_name_label_CID_queries_empty": true,
+  "owner_record": {
+    "bytes": 791,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1/actual-status-failure-retirement-1/retained/root-owner-journal/owner.json",
+    "sha256": "2ba2bff639b712d107c49dd200a54c6328a95fc3298c65b38da2a43366a9d6c6"
+  },
+  "owner_source_sha256": "4d7ae097cae866389ed044a6247e01f1bc78ff8744fc8d72f39fb294b55bb298",
+  "owner_terminal": {
+    "absence_verified": true,
+    "application_acceptance": false,
+    "container": "7c54fc6b0681a82c6259adff718628221bec1edb0b6ba6087055fdc9d662c53f",
+    "failure": "OwnerError",
+    "lease_retained": false,
+    "secondary": [],
+    "secondary_omitted": 0,
+    "signal_number": null,
+    "status": "FAIL"
+  },
+  "owner_terminal_ref": {
+    "bytes": 256,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1/actual-status-failure-retirement-1/retained/root-owner-journal/result.json",
+    "sha256": "181a85c2cf8a9f16e8a07558f129b1bc8e6f5467d197df2ef4ca53dc5e8f3af2"
+  },
+  "remaining": "Independent review must accept exact closed sourceowner/25reapedcommands/containerremoval/name+label+CIDabsence/rootcurrent2queries/permanentmutex27:4/sharedheavyabsence/QEMUreap before next release. Foreground OS_STATUS/helper assertion repair and corrected source/actualcheck/newdata/native release separate; never replay unchanged failure.",
+  "remove022": {
+    "argv": [
+      "/usr/bin/sudo",
+      "-A",
+      "/usr/bin/docker",
+      "rm",
+      "--force",
+      "7c54fc6b0681a82c6259adff718628221bec1edb0b6ba6087055fdc9d662c53f"
+    ],
+    "command": {
+      "pgid": 3362803,
+      "pid": 3362803,
+      "proc_starttime": 50675937,
+      "reaped": true,
+      "returncode": 0,
+      "sid": 3362571
+    },
+    "failure": null,
+    "returncode": 0,
+    "timeout": 4
+  },
+  "retention_map": {
+    "bytes": 117869,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1/actual-status-failure-retirement-1/COMPLETE-STATUS-FAILURE-RETENTION-MAP.json",
+    "sha256": "4f899c0194b8dccb103e53836bc653e83e14dc3a7a0f46fe984a70d8d38b5815"
+  },
+  "root_cleanup_Docker_guest_compiler_execution_by_worker": 0,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_OS_STATUS_enum_callback_diagnosis_owner": "foreground review_usage_retries explicitly owns; no duplicate source diagnosis here.",
+  "status": "CURRENT_FAILED_STATUS_OPERATION_GUEST_CLOSED_PHYSICAL_FACTS_READY_FOR_INDEPENDENT_REVIEW"
+}

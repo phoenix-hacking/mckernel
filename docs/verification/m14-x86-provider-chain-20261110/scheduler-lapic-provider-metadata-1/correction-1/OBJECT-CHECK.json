@@ -1,0 +1,119 @@
+{
+  "status": "PASS_CALLED_ACTUAL_LAPIC_FIVE_T_ONE_REAL_NONE_SLOT_ZERO_U_GATE",
+  "object_sha256": "2f149772ebb539640d2a5eafcffaef6768ce40e57ed0a0a180934f5d91903ecb",
+  "actual_function_sizes": {
+    "lapic_timer_disable": 22,
+    "lapic_timer_enable": 51,
+    "x86_lapic_timer_disable_body_result": 31,
+    "x86_lapic_timer_enable_body_result": 56,
+    "x86_lapic_write_bridge": 15
+  },
+  "slot": {
+    "name": "lapic_write",
+    "kind": "B",
+    "bytes": 8,
+    "section": ".lbss.lapic_write",
+    "flags": 268435459,
+    "alignment": 8,
+    "NOBITS_declaration_only": true
+  },
+  "genuine_U": [],
+  "private_owners": [],
+  "aliases": [],
+  "source_bound_relocations": [
+    {
+      "section": ".ltext.lapic_timer_disable",
+      "offset": 2,
+      "type": 1,
+      "symbol_name": "lapic_write",
+      "symbol_section": ".lbss.lapic_write",
+      "symbol_type": 1,
+      "symbol_bind": 1,
+      "addend": 0,
+      "source_binding": "Original real slot address after bridge/engine source inlining; R_X86_64_64 exact captured+0, no fabricated callback target."
+    },
+    {
+      "section": ".ltext.lapic_timer_enable",
+      "offset": 8,
+      "type": 1,
+      "symbol_name": "lapic_write",
+      "symbol_section": ".lbss.lapic_write",
+      "symbol_type": 1,
+      "symbol_bind": 1,
+      "addend": 0,
+      "source_binding": "Original real slot address after bridge/engine source inlining; R_X86_64_64 exact captured+0, no fabricated callback target."
+    },
+    {
+      "section": ".ltext.x86_lapic_write_bridge",
+      "offset": 2,
+      "type": 1,
+      "symbol_name": "lapic_write",
+      "symbol_section": ".lbss.lapic_write",
+      "symbol_type": 1,
+      "symbol_bind": 1,
+      "addend": 0,
+      "source_binding": "Original real slot address after bridge/engine source inlining; R_X86_64_64 exact captured+0, no fabricated callback target."
+    },
+    {
+      "section": ".eh_frame",
+      "offset": 32,
+      "type": 24,
+      "symbol_name": "",
+      "symbol_section": ".ltext.lapic_timer_disable",
+      "symbol_type": 3,
+      "symbol_bind": 0,
+      "addend": 0,
+      "source_binding": "Compiler unwind PC64 exact captured code-section+0 reference to one actual original function, not data/provider import."
+    },
+    {
+      "section": ".eh_frame",
+      "offset": 64,
+      "type": 24,
+      "symbol_name": "",
+      "symbol_section": ".ltext.lapic_timer_enable",
+      "symbol_type": 3,
+      "symbol_bind": 0,
+      "addend": 0,
+      "source_binding": "Compiler unwind PC64 exact captured code-section+0 reference to one actual original function, not data/provider import."
+    },
+    {
+      "section": ".eh_frame",
+      "offset": 104,
+      "type": 24,
+      "symbol_name": "",
+      "symbol_section": ".ltext.x86_lapic_timer_disable_body_result",
+      "symbol_type": 3,
+      "symbol_bind": 0,
+      "addend": 0,
+      "source_binding": "Compiler unwind PC64 exact captured code-section+0 reference to one actual original function, not data/provider import."
+    },
+    {
+      "section": ".eh_frame",
+      "offset": 144,
+      "type": 24,
+      "symbol_name": "",
+      "symbol_section": ".ltext.x86_lapic_timer_enable_body_result",
+      "symbol_type": 3,
+      "symbol_bind": 0,
+      "addend": 0,
+      "source_binding": "Compiler unwind PC64 exact captured code-section+0 reference to one actual original function, not data/provider import."
+    },
+    {
+      "section": ".eh_frame",
+      "offset": 184,
+      "type": 24,
+      "symbol_name": "",
+      "symbol_section": ".ltext.x86_lapic_write_bridge",
+      "symbol_type": 3,
+      "symbol_bind": 0,
+      "addend": 0,
+      "source_binding": "Compiler unwind PC64 exact captured code-section+0 reference to one actual original function, not data/provider import."
+    }
+  ],
+  "ordered_source_callbacks_and_actual_inlining_bytes_preserved": true,
+  "actual_metadata_capture": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-metadata-1/correction-1/ACTUAL-ELF-METADATA.json",
+  "standalone_unique_owners_only": true,
+  "future_cohort_unique_owner_join_UNBOUND": true,
+  "preboot_None_never_runtime_target_readiness": true,
+  "no_function_boot_hardware_native_execution": true
+}

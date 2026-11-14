@@ -1,0 +1,55 @@
+{
+  "C_postimage": {
+    "bytes": 113695,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-move-pages-smp-handler-source-1/candidate/syscall.c",
+    "sha256": "0c44e5462d483d803b16651f028d6906336b0bde6a5420dcfe0ae1f216eaacf7"
+  },
+  "C_preimage": {
+    "bytes": 113504,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/source/arch/x86_64/kernel/syscall.c",
+    "sha256": "912fb97a58cc797407979ce835c422578949ff876ac519193d2ebc4855cce791"
+  },
+  "C_selection_patch": {
+    "bytes": 522,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-move-pages-smp-handler-source-1/patch/syscall.c.diff",
+    "sha256": "e727965cc58558865151be26eeb939f1eddbb12275946d6e7c637bab8f75d52e"
+  },
+  "Rust_private_fragment": {
+    "bytes": 16526,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-move-pages-smp-handler-source-1/candidate/syscall_policy.move_pages_smp_handler.FRAGMENT.rs",
+    "sha256": "d2daa6fb4520d7ff802ceeae96f7ea15ada9e486d192406e785ffde6bca86092"
+  },
+  "actual_compile": null,
+  "actual_fixture": null,
+  "difficulty": "High: parallel shared phases, per-worker page-table switching, large-page partition/reference defects and physical copy/free/update ordering. First gate is exact real ABI + original C/Rust owned-host callback comparison, then full78/wholeTU/partial/default/native separately.",
+  "engineering_percentage": null,
+  "exact_borrowing": "Request/arrays/process/VM/page table are caller-owned through synchronous SMP join; no new owner refs. Returned raw PTE/physical allocations stay valid until copy/free/update. Temporary PT restored on every original out path.",
+  "exclusions": "Does not fold or alter accepted VDSO/ptrace, or untested FP/processVM/restart/cloneCPU fragments. No canonical/shared writes or jobs.",
+  "existing_Rust_reuse": [
+    "abi::MovePagesSmpReq104/Process/ProcessVm/Thread/CpuLocalVar",
+    "atomic_helpers::ihk_atomic_inc/read",
+    "string::memcpy/__inline_memcpy/__inline_memset",
+    "bitops::test_bit",
+    "pte_helpers::pte_is_present/pte_is_fileoff/pte_get_phys/pte_update_phys",
+    "x86_memory_helpers::get_init_page_table/ihk_mc_load_page_table/virt_to_phys/phys_to_virt/flush_tlb_single",
+    "mem_helpers::_ihk_mc_alloc_aligned_pages_node/_ihk_mc_free_pages/phys_to_nid"
+  ],
+  "file_retired": false,
+  "fixture_proposal": {
+    "bytes": 4180,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-move-pages-smp-handler-source-1/fixture/SMALLEST-ACTUAL-C-RUST-EQUIVALENCE.PROPOSAL.json",
+    "sha256": "9cde00217bae5113b2950275be30a2438ede6a03a7300e4a2fffbb2baf591cfe"
+  },
+  "native": null,
+  "policy_integration": "Append this private fragment after root central merge. No shared imports/types/ABI or old extern removal required. F03 outer fragment alias link_name=move_pages_smp_handler resolves this public export. Compose C selection regions centrally; do not overwrite other accepted fragments.",
+  "production_default_link": null,
+  "remaining_existing_C_providers": [
+    "ihk_mc_pt_lookup_pte: current arch memory C logging/wrapper invokes existing Rust lookup mechanism",
+    "ihk_mc_get_nr_numa_nodes: existing selected NUMA topology getter",
+    "lower existing allocator/physical conversion/panic/logging provider graph retains its already declared C boundaries; not credited retired by this port"
+  ],
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "shared_int_model": "nodes_ready uses AtomicI32 release/acquire on original int; phase_ret relaxed AtomicI32 same storage; phase_done exact existing atomic_helpers read/inc. No static-lifetime reference escapes. x86 ready load/store remain MOV; no added barrier rounds or mutex. Requires focused concurrency review before integration.",
+  "source_tracking": "Allocation/free and __verbose descriptors use Rust file!/line!, preserving argument roles and actual source provenance; user messages/function names and physical ownership unchanged.",
+  "status": "FULL_SMP_CALLBACK_IMPLEMENTED_SOURCE_ONLY_UNCOMPILED"
+}

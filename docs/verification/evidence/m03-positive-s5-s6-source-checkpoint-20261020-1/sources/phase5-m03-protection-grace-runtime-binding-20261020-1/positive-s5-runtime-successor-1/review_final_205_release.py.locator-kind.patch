@@ -1,0 +1,20 @@
+--- /home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/s4-q4-source-preparation-1/non-temporal-source-4/review_final_205_release.py
++++ /home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/positive-s5-runtime-successor-1/non-temporal-source-6/review_final_205_release.py
+@@ -1,7 +1,7 @@
+ """Finite final-data check only; never invokes root, owner, backend or guest."""
+ from pathlib import Path
+ import argparse,hashlib,json,math,os,stat,time
+-R=Path('/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/s4-q4-source-preparation-1/native-control-packet-4')
++R=Path('/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/positive-s5-runtime-successor-1/native-control-packet-6')
+ CONFIG=R/'FINAL-IHK-LOGGING-CHECK-CONFIG.json'
+ OUTPUT=R/'FINAL-205-MATCHED-SDK-NATIVE-MACHINE-REVIEW.json'
+ STABLE=('st_dev','st_ino','st_uid','st_gid','st_mode','st_nlink','st_size','st_mtime_ns','st_ctime_ns')
+@@ -12,7 +12,7 @@
+ def m03_contract():
+  import importlib.util
+  p=Path(__file__).resolve().parent/'m03_protection_normalization_contract.py'
+- assert p.parent==Path('/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/s4-q4-source-preparation-1/non-temporal-source-4') and p.resolve()==p
++ assert p.parent==Path('/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/positive-s5-runtime-successor-1/non-temporal-source-6') and p.resolve()==p
+  assert hashlib.sha256(p.read_bytes()).hexdigest()=='2a90a35fff7480997996547cd16ddef61ccab1928a806aa7c68f7557d0fb1953'
+  spec=importlib.util.spec_from_file_location('exact_m03_protection_contract',p)
+  m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);return m

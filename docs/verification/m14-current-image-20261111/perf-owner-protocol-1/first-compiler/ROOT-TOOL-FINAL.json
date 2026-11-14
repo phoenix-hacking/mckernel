@@ -1,0 +1,16 @@
+{
+  "initial": {
+    "chunk_id": "33d34b",
+    "wall_time_seconds": 1.001810865,
+    "session_id": 66282,
+    "original_token_count": 0,
+    "output": ""
+  },
+  "final": {
+    "chunk_id": "20bcb9",
+    "wall_time_seconds": 0.00001859,
+    "exit_code": 1,
+    "original_token_count": 181,
+    "output": "Traceback (most recent call last):\n  File \"/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/first-whole-compile-1/run_root_once.py\", line 96, in <module>\n    phase('compile', spec['create_argv'], spec['expected_mounts'], 2 * 2**30, 256, spec['max_wall_seconds'])\n  File \"/home/holden/mckernel-work/m14-blocker-resolution-20261110/root-reviewed-capture-correction-1/correction-1/phase-cpu6.py\", line 46, in phase\n    terminal=json.loads(call(label+'-terminal',docker+['inspect',cid]))[0];save(label+'-TERMINAL.json',terminal);state=terminal['State'];assert rc==0 and state['ExitCode']==0 and not state['Running'] and state['Pid']==0 and not state['OOMKilled']\nAssertionError\n"
+  }
+}

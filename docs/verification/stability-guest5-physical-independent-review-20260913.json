@@ -1,0 +1,1285 @@
+{
+  "accepted_return_physical_capture_verified": false,
+  "application_acceptance": false,
+  "archive": {
+    "path": "docs/verification/evidence/stability-guest5-physical-independent-review-20260913.tar.gz",
+    "sha256": "2fbba1b51b4e8c47a7855cc46e85ab95c6a5786c97e578070223b739bc0d5957",
+    "size": 748734
+  },
+  "archive_verification": {
+    "all_member_bytes_types_modes_verified": true,
+    "complete_membership_no_duplicates": true,
+    "member_count": 183,
+    "source_trees_unchanged": true
+  },
+  "build_execution": false,
+  "findings": {
+    "consumed_original_request": {
+      "offset": 2496,
+      "sequence": 654,
+      "sha256": "8fb2db57d4b17c9d0db8eb7e341c85794a89c8cae683f7a02f94468e1592d147",
+      "slot": 19
+    },
+    "only_changed_field": "selected APP.closed false -> true",
+    "original_guest_error": "terminal inventories changed",
+    "original_guest_status": "FAIL",
+    "outbound_publication_intervals": [
+      {
+        "begin": 135,
+        "end": 135,
+        "matching_wakes": 0
+      },
+      {
+        "begin": 135,
+        "end": 135,
+        "matching_wakes": 0
+      }
+    ],
+    "qmp_capture_resume_bindings_verified": 3,
+    "response40_bytes": "Blocked0/2 to terminal prepared stid276/wake1/result16 with status0; plus5 exactly equal; opaque fields preserved",
+    "ret_elapsed_ns": 45361352,
+    "ret_errno": -71,
+    "terminal_inventory_rows": 31,
+    "terminal_plus_five_interval_ns": 5066534433,
+    "uart_exact_manifest_ack_bindings_verified": 3,
+    "unchanged_terminal_inventory_rows": 30
+  },
+  "guest_execution": false,
+  "members": [
+    {
+      "mode": 448,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu",
+      "type": "directory"
+    },
+    {
+      "mode": 509,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs",
+      "type": "directory"
+    },
+    {
+      "mode": 509,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/repository",
+      "type": "directory"
+    },
+    {
+      "mode": 509,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/repository/scripts",
+      "type": "directory"
+    },
+    {
+      "mode": 509,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/repository/scripts/application-tests",
+      "type": "directory"
+    },
+    {
+      "mode": 436,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/repository/scripts/application-tests/owner_observations.py",
+      "sha256": "97466f94dff53fc250509859d164a9858a4f361405ad62b82bb59ab621f77bcf",
+      "size": 33019,
+      "type": "file"
+    },
+    {
+      "mode": 436,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/repository/scripts/application-tests/physical_observations.py",
+      "sha256": "bf343ff9b3e59e2b92cf6481b6b181e45e9204afed5dfaf8ded4e7b063a0460a",
+      "size": 6677,
+      "type": "file"
+    },
+    {
+      "mode": 509,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work",
+      "type": "directory"
+    },
+    {
+      "mode": 509,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-fault-guest-root-20260913-prepublish-hard-4",
+      "type": "directory"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-fault-guest-root-20260913-prepublish-hard-4/record.json",
+      "sha256": "ea3bd5362dce9cad884d73b5f94a5da13e456c6f33800561df4e0c5e52111582",
+      "size": 32516,
+      "type": "file"
+    },
+    {
+      "mode": 509,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-hard-physical-diagnostic-20260913-1",
+      "type": "directory"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-hard-physical-diagnostic-20260913-1/helper.py",
+      "sha256": "2af31d463acc134488306b634dbf6e60071160b8499996dcb7102c6d77cdd5f1",
+      "size": 5413,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-hard-physical-diagnostic-20260913-1/owner_observations.py",
+      "sha256": "97466f94dff53fc250509859d164a9858a4f361405ad62b82bb59ab621f77bcf",
+      "size": 33019,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-hard-physical-diagnostic-20260913-1/physical_observations.py",
+      "sha256": "bf343ff9b3e59e2b92cf6481b6b181e45e9204afed5dfaf8ded4e7b063a0460a",
+      "size": 6677,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-hard-physical-diagnostic-20260913-1/record.json",
+      "sha256": "7523f24beb22686e3a0f23a93d5db7429a8c24800e8bcfaeab6532f0ca7b49cd",
+      "size": 130969,
+      "type": "file"
+    },
+    {
+      "mode": 509,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5",
+      "type": "directory"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-reference.original.py",
+      "sha256": "887c790cb79c7f499ee44311537076318923efd7e91bd4ac420f08102eadde53",
+      "size": 34727,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-reference.py",
+      "sha256": "fdf3111f55d4e68759dadee10f7410ea95a4db35568bf28aeaf81d44d7812ff0",
+      "size": 34727,
+      "type": "file"
+    },
+    {
+      "mode": 509,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-1-PRE_INPUT",
+      "type": "directory"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-1-PRE_INPUT/capture-manifest.json",
+      "sha256": "094c0242599282e8ec6aed68ddea938df3616e1575b35d536f7396bb790265ff",
+      "size": 3679,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-1-PRE_INPUT/control-501-receive.bin",
+      "sha256": "ad615a746ecd71d2b1dc31a0c71da91d3836a39cd8cd124e96798b5368e3b967",
+      "size": 16384,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-1-PRE_INPUT/control-501-send.bin",
+      "sha256": "491277662b63e5abf72573c50df116ba90df2bef4fecbf7c9aadb726ae409c70",
+      "size": 16384,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-1-PRE_INPUT/control-503-receive.bin",
+      "sha256": "543e03c56aeeeae392cf44c73e3c7367f42a3b86d6a3b5b559f8490d624d9992",
+      "size": 16384,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-1-PRE_INPUT/control-503-send.bin",
+      "sha256": "7b166af68a06e456c6892803d31f15eefe18cd9651ad677eede67d8cd1fd0563",
+      "size": 16384,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-1-PRE_INPUT/cpus.json",
+      "sha256": "30a27445cc8fc23a3e772d033a323bea221983adab2b2fc4cb5dd6d8d2959b5c",
+      "size": 1047,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-1-PRE_INPUT/kmsg.bin",
+      "sha256": "2b96423efd38fcb1eeb3f891384dabb8c3abaac4c401b96426c9b7afabcc36dc",
+      "size": 4194304,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-1-PRE_INPUT/kmsg.txt",
+      "sha256": "eb7ac8ff7b28a7f9b1088b409d630be1f7f29e0250bb7f81b6b8fe5e0d98fe9e",
+      "size": 66131,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-1-PRE_INPUT/master-receive.bin",
+      "sha256": "a31540ed9bd04bc6a24b92588582ffc7c092f00fbe9de3aae78b3427cfc9c089",
+      "size": 4096,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-1-PRE_INPUT/master-send.bin",
+      "sha256": "d89340474243c9604b650288421cd6322c495f2f1d97f351b79d1183a1ae507e",
+      "size": 4096,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-1-PRE_INPUT/params.bin",
+      "sha256": "6abf2fd989301426ab1c6357a32532b0c069d6ec43de6deaade4b5782950cbd2",
+      "size": 8192,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-1-PRE_INPUT/registers.txt",
+      "sha256": "c856f7588c2f83129f7eb7b9ca379556a6b85990d94cd4e141f2444184b372ea",
+      "size": 10450,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-1-PRE_INPUT/selected-response.bin",
+      "sha256": "c7d20d8131a0acd0e2bc7ab747d61af85a483df42c716f3e3e3bc4149972a7d1",
+      "size": 40,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-1-PRE_INPUT/selected-response.json",
+      "sha256": "d323b28b65bb3bf21cbe6fe4ca410a20fbffe147578117bcf4f68cc95e40b665",
+      "size": 661,
+      "type": "file"
+    },
+    {
+      "mode": 509,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-2-POST_RET",
+      "type": "directory"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-2-POST_RET/capture-manifest.json",
+      "sha256": "f0eb0bd83458d92ac2b489dc49c70b57ad3d0944878ff96ed28c9f7846bb4f72",
+      "size": 3664,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-2-POST_RET/control-501-receive.bin",
+      "sha256": "ad615a746ecd71d2b1dc31a0c71da91d3836a39cd8cd124e96798b5368e3b967",
+      "size": 16384,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-2-POST_RET/control-501-send.bin",
+      "sha256": "491277662b63e5abf72573c50df116ba90df2bef4fecbf7c9aadb726ae409c70",
+      "size": 16384,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-2-POST_RET/control-503-receive.bin",
+      "sha256": "543e03c56aeeeae392cf44c73e3c7367f42a3b86d6a3b5b559f8490d624d9992",
+      "size": 16384,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-2-POST_RET/control-503-send.bin",
+      "sha256": "7b166af68a06e456c6892803d31f15eefe18cd9651ad677eede67d8cd1fd0563",
+      "size": 16384,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-2-POST_RET/cpus.json",
+      "sha256": "30a27445cc8fc23a3e772d033a323bea221983adab2b2fc4cb5dd6d8d2959b5c",
+      "size": 1047,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-2-POST_RET/kmsg.bin",
+      "sha256": "2b96423efd38fcb1eeb3f891384dabb8c3abaac4c401b96426c9b7afabcc36dc",
+      "size": 4194304,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-2-POST_RET/kmsg.txt",
+      "sha256": "eb7ac8ff7b28a7f9b1088b409d630be1f7f29e0250bb7f81b6b8fe5e0d98fe9e",
+      "size": 66131,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-2-POST_RET/master-receive.bin",
+      "sha256": "a31540ed9bd04bc6a24b92588582ffc7c092f00fbe9de3aae78b3427cfc9c089",
+      "size": 4096,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-2-POST_RET/master-send.bin",
+      "sha256": "d89340474243c9604b650288421cd6322c495f2f1d97f351b79d1183a1ae507e",
+      "size": 4096,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-2-POST_RET/params.bin",
+      "sha256": "6abf2fd989301426ab1c6357a32532b0c069d6ec43de6deaade4b5782950cbd2",
+      "size": 8192,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-2-POST_RET/registers.txt",
+      "sha256": "5acf8a04bc7b6ade17ef820d274a097c153e4bbcfcab74471ea330d260471a60",
+      "size": 10450,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-2-POST_RET/selected-response.bin",
+      "sha256": "871c3b758e69a19a5173a9f6a33538ffffac941fc4ae72feb845bfdedf1ee5bb",
+      "size": 40,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-2-POST_RET/selected-response.json",
+      "sha256": "4c6f887664f2cf9b91bec3a1cc6f623fdb71dcad7f7fe334b8d43edb2673a793",
+      "size": 663,
+      "type": "file"
+    },
+    {
+      "mode": 509,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-3-QUIET",
+      "type": "directory"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-3-QUIET/capture-manifest.json",
+      "sha256": "7bc703f1f5c1cfa1331eb42cff1aad390ebb948251f5a7e737f1cb9b20040c20",
+      "size": 3618,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-3-QUIET/control-501-receive.bin",
+      "sha256": "ad615a746ecd71d2b1dc31a0c71da91d3836a39cd8cd124e96798b5368e3b967",
+      "size": 16384,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-3-QUIET/control-501-send.bin",
+      "sha256": "491277662b63e5abf72573c50df116ba90df2bef4fecbf7c9aadb726ae409c70",
+      "size": 16384,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-3-QUIET/control-503-receive.bin",
+      "sha256": "543e03c56aeeeae392cf44c73e3c7367f42a3b86d6a3b5b559f8490d624d9992",
+      "size": 16384,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-3-QUIET/control-503-send.bin",
+      "sha256": "7b166af68a06e456c6892803d31f15eefe18cd9651ad677eede67d8cd1fd0563",
+      "size": 16384,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-3-QUIET/cpus.json",
+      "sha256": "30a27445cc8fc23a3e772d033a323bea221983adab2b2fc4cb5dd6d8d2959b5c",
+      "size": 1047,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-3-QUIET/kmsg.bin",
+      "sha256": "2b96423efd38fcb1eeb3f891384dabb8c3abaac4c401b96426c9b7afabcc36dc",
+      "size": 4194304,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-3-QUIET/kmsg.txt",
+      "sha256": "eb7ac8ff7b28a7f9b1088b409d630be1f7f29e0250bb7f81b6b8fe5e0d98fe9e",
+      "size": 66131,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-3-QUIET/master-receive.bin",
+      "sha256": "a31540ed9bd04bc6a24b92588582ffc7c092f00fbe9de3aae78b3427cfc9c089",
+      "size": 4096,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-3-QUIET/master-send.bin",
+      "sha256": "d89340474243c9604b650288421cd6322c495f2f1d97f351b79d1183a1ae507e",
+      "size": 4096,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-3-QUIET/params.bin",
+      "sha256": "6abf2fd989301426ab1c6357a32532b0c069d6ec43de6deaade4b5782950cbd2",
+      "size": 8192,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-3-QUIET/registers.txt",
+      "sha256": "455ac9f33651aeb7f3c38647688ad0268a4174c4c78050ef8593c7d86cb1ec8a",
+      "size": 10450,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-3-QUIET/selected-response.bin",
+      "sha256": "871c3b758e69a19a5173a9f6a33538ffffac941fc4ae72feb845bfdedf1ee5bb",
+      "size": 40,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-3-QUIET/selected-response.json",
+      "sha256": "47659212e70d4b32f015df8f87a48b6edce8ebfe44aa2a8f7603d625d265e5f0",
+      "size": 660,
+      "type": "file"
+    },
+    {
+      "mode": 509,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/guest-artifacts",
+      "type": "directory"
+    },
+    {
+      "mode": 509,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/guest-artifacts/files",
+      "type": "directory"
+    },
+    {
+      "mode": 509,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/guest-artifacts/files/mckernel",
+      "type": "directory"
+    },
+    {
+      "mode": 384,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/guest-artifacts/files/mckernel/events.jsonl",
+      "sha256": "c24ae4533654465c1f8b32ca36bb8de13de169d2640181b0c1fbd4048eceae0b",
+      "size": 4683,
+      "type": "file"
+    },
+    {
+      "mode": 384,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/guest-artifacts/files/mckernel/report.json",
+      "sha256": "a1318eca481d1fd63a3283f83e3acde52bc294accd6f848ee1d548b5c7792f05",
+      "size": 1616,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/helper.py",
+      "sha256": "c047955e27903fa8ee2c5cb571a83d4438c11f8c9d349912acc110f78d3fa5f6",
+      "size": 28796,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/native-dmesg.canonical.bin",
+      "sha256": "858fa70a00cdfda9e8338dc1d1aab05ad8ae3b041a000a5d033446a0c3e5c273",
+      "size": 137368,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/native-prefix-mapping.json",
+      "sha256": "5f6187036ef92d0c979adf0af225eb21604c26a17b0b5bb18ceda0855fe03581",
+      "size": 33998,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/owner-observations.json",
+      "sha256": "8c723c7c622cf021863fbe7f18f192bed05bdf76aaed15e6a83f934fbae15236",
+      "size": 261634,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/qmp-recovery.json",
+      "sha256": "c897011ca7efe5d5982972464faa0b56ca0d33d7f7e247a2b5bca36379358b26",
+      "size": 1051,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/qmp-transcript.json",
+      "sha256": "79201f16ecd4400d8a5052104384580e9393b66576a6df9ac7b7fa427f5b157d",
+      "size": 1670926,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/record.json",
+      "sha256": "9688af81cbf249f03f3e8f6762f8c099bb956a131d65fac911a5f105d6cce3a8",
+      "size": 40863,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/serial.log",
+      "sha256": "040bce415cf6d395272ccaa75fa66c4563867710d702788a601dd78cae48d491",
+      "size": 141324,
+      "type": "file"
+    },
+    {
+      "mode": 509,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/source",
+      "type": "directory"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/source/fault_control.py",
+      "sha256": "b7ed7c6b131ff2106a1317a0d535d3a032c6c1117210a9bac4d10eebea9f68fc",
+      "size": 21520,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/source/owner-contract.json",
+      "sha256": "025ffc1bb8722c321912169825ef7c4ff0dc452c9f14dd8f82667778a29cc665",
+      "size": 1098,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/source/owner_observations.py",
+      "sha256": "97466f94dff53fc250509859d164a9858a4f361405ad62b82bb59ab621f77bcf",
+      "size": 33019,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/source/phase_observations.py",
+      "sha256": "589694ee603b096743682225ff964b39612439a3082ae7f6a80707c4755f7102",
+      "size": 25144,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/source/prepare_stability_fault_guest.py",
+      "sha256": "922f0b4d60edae9bdec36c960cacb50ef6c11cd31b216c0e89b5279ff36af0c8",
+      "size": 16163,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/source/qmp_capture.py",
+      "sha256": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741",
+      "size": 9913,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/source/receiver.py",
+      "sha256": "aa9e165044e9567c992a0354dacdc49b884794b31841a3871d977eeae9c8c5d9",
+      "size": 18043,
+      "type": "file"
+    },
+    {
+      "mode": 509,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/uart",
+      "type": "directory"
+    },
+    {
+      "mode": 384,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/uart/events.jsonl",
+      "sha256": "67947a98577d3c74890f44d0905f96cabd1a65a459dd44b0d0aadbe95bca1ef3",
+      "size": 4160,
+      "type": "file"
+    },
+    {
+      "mode": 384,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/uart/report.json",
+      "sha256": "0a22182daaef0d2a46f75d8db96300c83ca8171daaac48955401248e4d53169f",
+      "size": 888,
+      "type": "file"
+    },
+    {
+      "mode": 384,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/uart/rx.bin",
+      "sha256": "1285e4f1dc2986578e7b14ebaa85c28c7f300f22cf0e7ccf8625f1adcdef3522",
+      "size": 244,
+      "type": "file"
+    },
+    {
+      "mode": 384,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/uart/tx.bin",
+      "sha256": "ab26a56da12ece94e05d913884651eaa8f78c7f6b13d32171d24fde78794c0be",
+      "size": 469,
+      "type": "file"
+    },
+    {
+      "mode": 436,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/review.json",
+      "sha256": "7f97c2b0bffd4c9d2b7d1f9a72578f9f50d72e80f7865575dcc10d111a9769a4",
+      "size": 29277,
+      "type": "file"
+    },
+    {
+      "mode": 436,
+      "path": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/review_artifacts.py",
+      "sha256": "b89fc7187f004f140d53937230d8c55f78d4242b91eeffdc5bbc60831541339c",
+      "size": 15735,
+      "type": "file"
+    },
+    {
+      "mode": 448,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv",
+      "type": "directory"
+    },
+    {
+      "mode": 509,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs",
+      "type": "directory"
+    },
+    {
+      "mode": 509,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/repository",
+      "type": "directory"
+    },
+    {
+      "mode": 509,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/repository/scripts",
+      "type": "directory"
+    },
+    {
+      "mode": 509,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/repository/scripts/application-tests",
+      "type": "directory"
+    },
+    {
+      "mode": 436,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/repository/scripts/application-tests/owner_observations.py",
+      "sha256": "97466f94dff53fc250509859d164a9858a4f361405ad62b82bb59ab621f77bcf",
+      "size": 33019,
+      "type": "file"
+    },
+    {
+      "mode": 436,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/repository/scripts/application-tests/physical_observations.py",
+      "sha256": "bf343ff9b3e59e2b92cf6481b6b181e45e9204afed5dfaf8ded4e7b063a0460a",
+      "size": 6677,
+      "type": "file"
+    },
+    {
+      "mode": 509,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work",
+      "type": "directory"
+    },
+    {
+      "mode": 509,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-fault-guest-root-20260913-prepublish-hard-4",
+      "type": "directory"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-fault-guest-root-20260913-prepublish-hard-4/record.json",
+      "sha256": "ea3bd5362dce9cad884d73b5f94a5da13e456c6f33800561df4e0c5e52111582",
+      "size": 32516,
+      "type": "file"
+    },
+    {
+      "mode": 509,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-hard-physical-diagnostic-20260913-1",
+      "type": "directory"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-hard-physical-diagnostic-20260913-1/helper.py",
+      "sha256": "2af31d463acc134488306b634dbf6e60071160b8499996dcb7102c6d77cdd5f1",
+      "size": 5413,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-hard-physical-diagnostic-20260913-1/owner_observations.py",
+      "sha256": "97466f94dff53fc250509859d164a9858a4f361405ad62b82bb59ab621f77bcf",
+      "size": 33019,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-hard-physical-diagnostic-20260913-1/physical_observations.py",
+      "sha256": "bf343ff9b3e59e2b92cf6481b6b181e45e9204afed5dfaf8ded4e7b063a0460a",
+      "size": 6677,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-hard-physical-diagnostic-20260913-1/record.json",
+      "sha256": "7523f24beb22686e3a0f23a93d5db7429a8c24800e8bcfaeab6532f0ca7b49cd",
+      "size": 130969,
+      "type": "file"
+    },
+    {
+      "mode": 509,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5",
+      "type": "directory"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-reference.original.py",
+      "sha256": "887c790cb79c7f499ee44311537076318923efd7e91bd4ac420f08102eadde53",
+      "size": 34727,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-reference.py",
+      "sha256": "fdf3111f55d4e68759dadee10f7410ea95a4db35568bf28aeaf81d44d7812ff0",
+      "size": 34727,
+      "type": "file"
+    },
+    {
+      "mode": 509,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-1-PRE_INPUT",
+      "type": "directory"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-1-PRE_INPUT/capture-manifest.json",
+      "sha256": "094c0242599282e8ec6aed68ddea938df3616e1575b35d536f7396bb790265ff",
+      "size": 3679,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-1-PRE_INPUT/control-501-receive.bin",
+      "sha256": "ad615a746ecd71d2b1dc31a0c71da91d3836a39cd8cd124e96798b5368e3b967",
+      "size": 16384,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-1-PRE_INPUT/control-501-send.bin",
+      "sha256": "491277662b63e5abf72573c50df116ba90df2bef4fecbf7c9aadb726ae409c70",
+      "size": 16384,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-1-PRE_INPUT/control-503-receive.bin",
+      "sha256": "543e03c56aeeeae392cf44c73e3c7367f42a3b86d6a3b5b559f8490d624d9992",
+      "size": 16384,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-1-PRE_INPUT/control-503-send.bin",
+      "sha256": "7b166af68a06e456c6892803d31f15eefe18cd9651ad677eede67d8cd1fd0563",
+      "size": 16384,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-1-PRE_INPUT/cpus.json",
+      "sha256": "30a27445cc8fc23a3e772d033a323bea221983adab2b2fc4cb5dd6d8d2959b5c",
+      "size": 1047,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-1-PRE_INPUT/kmsg.bin",
+      "sha256": "2b96423efd38fcb1eeb3f891384dabb8c3abaac4c401b96426c9b7afabcc36dc",
+      "size": 4194304,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-1-PRE_INPUT/kmsg.txt",
+      "sha256": "eb7ac8ff7b28a7f9b1088b409d630be1f7f29e0250bb7f81b6b8fe5e0d98fe9e",
+      "size": 66131,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-1-PRE_INPUT/master-receive.bin",
+      "sha256": "a31540ed9bd04bc6a24b92588582ffc7c092f00fbe9de3aae78b3427cfc9c089",
+      "size": 4096,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-1-PRE_INPUT/master-send.bin",
+      "sha256": "d89340474243c9604b650288421cd6322c495f2f1d97f351b79d1183a1ae507e",
+      "size": 4096,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-1-PRE_INPUT/params.bin",
+      "sha256": "6abf2fd989301426ab1c6357a32532b0c069d6ec43de6deaade4b5782950cbd2",
+      "size": 8192,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-1-PRE_INPUT/registers.txt",
+      "sha256": "c856f7588c2f83129f7eb7b9ca379556a6b85990d94cd4e141f2444184b372ea",
+      "size": 10450,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-1-PRE_INPUT/selected-response.bin",
+      "sha256": "c7d20d8131a0acd0e2bc7ab747d61af85a483df42c716f3e3e3bc4149972a7d1",
+      "size": 40,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-1-PRE_INPUT/selected-response.json",
+      "sha256": "d323b28b65bb3bf21cbe6fe4ca410a20fbffe147578117bcf4f68cc95e40b665",
+      "size": 661,
+      "type": "file"
+    },
+    {
+      "mode": 509,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-2-POST_RET",
+      "type": "directory"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-2-POST_RET/capture-manifest.json",
+      "sha256": "f0eb0bd83458d92ac2b489dc49c70b57ad3d0944878ff96ed28c9f7846bb4f72",
+      "size": 3664,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-2-POST_RET/control-501-receive.bin",
+      "sha256": "ad615a746ecd71d2b1dc31a0c71da91d3836a39cd8cd124e96798b5368e3b967",
+      "size": 16384,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-2-POST_RET/control-501-send.bin",
+      "sha256": "491277662b63e5abf72573c50df116ba90df2bef4fecbf7c9aadb726ae409c70",
+      "size": 16384,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-2-POST_RET/control-503-receive.bin",
+      "sha256": "543e03c56aeeeae392cf44c73e3c7367f42a3b86d6a3b5b559f8490d624d9992",
+      "size": 16384,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-2-POST_RET/control-503-send.bin",
+      "sha256": "7b166af68a06e456c6892803d31f15eefe18cd9651ad677eede67d8cd1fd0563",
+      "size": 16384,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-2-POST_RET/cpus.json",
+      "sha256": "30a27445cc8fc23a3e772d033a323bea221983adab2b2fc4cb5dd6d8d2959b5c",
+      "size": 1047,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-2-POST_RET/kmsg.bin",
+      "sha256": "2b96423efd38fcb1eeb3f891384dabb8c3abaac4c401b96426c9b7afabcc36dc",
+      "size": 4194304,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-2-POST_RET/kmsg.txt",
+      "sha256": "eb7ac8ff7b28a7f9b1088b409d630be1f7f29e0250bb7f81b6b8fe5e0d98fe9e",
+      "size": 66131,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-2-POST_RET/master-receive.bin",
+      "sha256": "a31540ed9bd04bc6a24b92588582ffc7c092f00fbe9de3aae78b3427cfc9c089",
+      "size": 4096,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-2-POST_RET/master-send.bin",
+      "sha256": "d89340474243c9604b650288421cd6322c495f2f1d97f351b79d1183a1ae507e",
+      "size": 4096,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-2-POST_RET/params.bin",
+      "sha256": "6abf2fd989301426ab1c6357a32532b0c069d6ec43de6deaade4b5782950cbd2",
+      "size": 8192,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-2-POST_RET/registers.txt",
+      "sha256": "5acf8a04bc7b6ade17ef820d274a097c153e4bbcfcab74471ea330d260471a60",
+      "size": 10450,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-2-POST_RET/selected-response.bin",
+      "sha256": "871c3b758e69a19a5173a9f6a33538ffffac941fc4ae72feb845bfdedf1ee5bb",
+      "size": 40,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-2-POST_RET/selected-response.json",
+      "sha256": "4c6f887664f2cf9b91bec3a1cc6f623fdb71dcad7f7fe334b8d43edb2673a793",
+      "size": 663,
+      "type": "file"
+    },
+    {
+      "mode": 509,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-3-QUIET",
+      "type": "directory"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-3-QUIET/capture-manifest.json",
+      "sha256": "7bc703f1f5c1cfa1331eb42cff1aad390ebb948251f5a7e737f1cb9b20040c20",
+      "size": 3618,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-3-QUIET/control-501-receive.bin",
+      "sha256": "ad615a746ecd71d2b1dc31a0c71da91d3836a39cd8cd124e96798b5368e3b967",
+      "size": 16384,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-3-QUIET/control-501-send.bin",
+      "sha256": "491277662b63e5abf72573c50df116ba90df2bef4fecbf7c9aadb726ae409c70",
+      "size": 16384,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-3-QUIET/control-503-receive.bin",
+      "sha256": "543e03c56aeeeae392cf44c73e3c7367f42a3b86d6a3b5b559f8490d624d9992",
+      "size": 16384,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-3-QUIET/control-503-send.bin",
+      "sha256": "7b166af68a06e456c6892803d31f15eefe18cd9651ad677eede67d8cd1fd0563",
+      "size": 16384,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-3-QUIET/cpus.json",
+      "sha256": "30a27445cc8fc23a3e772d033a323bea221983adab2b2fc4cb5dd6d8d2959b5c",
+      "size": 1047,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-3-QUIET/kmsg.bin",
+      "sha256": "2b96423efd38fcb1eeb3f891384dabb8c3abaac4c401b96426c9b7afabcc36dc",
+      "size": 4194304,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-3-QUIET/kmsg.txt",
+      "sha256": "eb7ac8ff7b28a7f9b1088b409d630be1f7f29e0250bb7f81b6b8fe5e0d98fe9e",
+      "size": 66131,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-3-QUIET/master-receive.bin",
+      "sha256": "a31540ed9bd04bc6a24b92588582ffc7c092f00fbe9de3aae78b3427cfc9c089",
+      "size": 4096,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-3-QUIET/master-send.bin",
+      "sha256": "d89340474243c9604b650288421cd6322c495f2f1d97f351b79d1183a1ae507e",
+      "size": 4096,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-3-QUIET/params.bin",
+      "sha256": "6abf2fd989301426ab1c6357a32532b0c069d6ec43de6deaade4b5782950cbd2",
+      "size": 8192,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-3-QUIET/registers.txt",
+      "sha256": "455ac9f33651aeb7f3c38647688ad0268a4174c4c78050ef8593c7d86cb1ec8a",
+      "size": 10450,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-3-QUIET/selected-response.bin",
+      "sha256": "871c3b758e69a19a5173a9f6a33538ffffac941fc4ae72feb845bfdedf1ee5bb",
+      "size": 40,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/capture-uart-3-QUIET/selected-response.json",
+      "sha256": "47659212e70d4b32f015df8f87a48b6edce8ebfe44aa2a8f7603d625d265e5f0",
+      "size": 660,
+      "type": "file"
+    },
+    {
+      "mode": 509,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/guest-artifacts",
+      "type": "directory"
+    },
+    {
+      "mode": 509,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/guest-artifacts/files",
+      "type": "directory"
+    },
+    {
+      "mode": 509,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/guest-artifacts/files/mckernel",
+      "type": "directory"
+    },
+    {
+      "mode": 384,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/guest-artifacts/files/mckernel/events.jsonl",
+      "sha256": "c24ae4533654465c1f8b32ca36bb8de13de169d2640181b0c1fbd4048eceae0b",
+      "size": 4683,
+      "type": "file"
+    },
+    {
+      "mode": 384,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/guest-artifacts/files/mckernel/report.json",
+      "sha256": "a1318eca481d1fd63a3283f83e3acde52bc294accd6f848ee1d548b5c7792f05",
+      "size": 1616,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/helper.py",
+      "sha256": "c047955e27903fa8ee2c5cb571a83d4438c11f8c9d349912acc110f78d3fa5f6",
+      "size": 28796,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/native-dmesg.canonical.bin",
+      "sha256": "858fa70a00cdfda9e8338dc1d1aab05ad8ae3b041a000a5d033446a0c3e5c273",
+      "size": 137368,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/native-prefix-mapping.json",
+      "sha256": "5f6187036ef92d0c979adf0af225eb21604c26a17b0b5bb18ceda0855fe03581",
+      "size": 33998,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/owner-observations.json",
+      "sha256": "8c723c7c622cf021863fbe7f18f192bed05bdf76aaed15e6a83f934fbae15236",
+      "size": 261634,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/qmp-recovery.json",
+      "sha256": "c897011ca7efe5d5982972464faa0b56ca0d33d7f7e247a2b5bca36379358b26",
+      "size": 1051,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/qmp-transcript.json",
+      "sha256": "79201f16ecd4400d8a5052104384580e9393b66576a6df9ac7b7fa427f5b157d",
+      "size": 1670926,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/record.json",
+      "sha256": "9688af81cbf249f03f3e8f6762f8c099bb956a131d65fac911a5f105d6cce3a8",
+      "size": 40863,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/serial.log",
+      "sha256": "040bce415cf6d395272ccaa75fa66c4563867710d702788a601dd78cae48d491",
+      "size": 141324,
+      "type": "file"
+    },
+    {
+      "mode": 509,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/source",
+      "type": "directory"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/source/fault_control.py",
+      "sha256": "b7ed7c6b131ff2106a1317a0d535d3a032c6c1117210a9bac4d10eebea9f68fc",
+      "size": 21520,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/source/owner-contract.json",
+      "sha256": "025ffc1bb8722c321912169825ef7c4ff0dc452c9f14dd8f82667778a29cc665",
+      "size": 1098,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/source/owner_observations.py",
+      "sha256": "97466f94dff53fc250509859d164a9858a4f361405ad62b82bb59ab621f77bcf",
+      "size": 33019,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/source/phase_observations.py",
+      "sha256": "589694ee603b096743682225ff964b39612439a3082ae7f6a80707c4755f7102",
+      "size": 25144,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/source/prepare_stability_fault_guest.py",
+      "sha256": "922f0b4d60edae9bdec36c960cacb50ef6c11cd31b216c0e89b5279ff36af0c8",
+      "size": 16163,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/source/qmp_capture.py",
+      "sha256": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741",
+      "size": 9913,
+      "type": "file"
+    },
+    {
+      "mode": 420,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/source/receiver.py",
+      "sha256": "aa9e165044e9567c992a0354dacdc49b884794b31841a3871d977eeae9c8c5d9",
+      "size": 18043,
+      "type": "file"
+    },
+    {
+      "mode": 509,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/uart",
+      "type": "directory"
+    },
+    {
+      "mode": 384,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/uart/events.jsonl",
+      "sha256": "67947a98577d3c74890f44d0905f96cabd1a65a459dd44b0d0aadbe95bca1ef3",
+      "size": 4160,
+      "type": "file"
+    },
+    {
+      "mode": 384,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/uart/report.json",
+      "sha256": "0a22182daaef0d2a46f75d8db96300c83ca8171daaac48955401248e4d53169f",
+      "size": 888,
+      "type": "file"
+    },
+    {
+      "mode": 384,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/uart/rx.bin",
+      "sha256": "1285e4f1dc2986578e7b14ebaa85c28c7f300f22cf0e7ccf8625f1adcdef3522",
+      "size": 244,
+      "type": "file"
+    },
+    {
+      "mode": 384,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/inputs/work/stability-transport-fault-guest-20260913-prepublish-hard-5/uart/tx.bin",
+      "sha256": "ab26a56da12ece94e05d913884651eaa8f78c7f6b13d32171d24fde78794c0be",
+      "size": 469,
+      "type": "file"
+    },
+    {
+      "mode": 436,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/prior-review-attempt.json",
+      "sha256": "fbb3801959503a534d3ec557e2410fbb96c401c3829a9eed79cc4bddfd888640",
+      "size": 514,
+      "type": "file"
+    },
+    {
+      "mode": 436,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/review.json",
+      "sha256": "bff04808af7c3d2ce2d09dd4b0e13be2588c31b4e9a7ec484445f0e24fd566b3",
+      "size": 35403,
+      "type": "file"
+    },
+    {
+      "mode": 436,
+      "path": "stability-guest5-physical-independent-review-20260913-7wwqodsv/review_artifacts.py",
+      "sha256": "4a82ec5e404ccabf90691f75c373560cdc1fabbbd27a80e84d0c1927b0761f12",
+      "size": 16167,
+      "type": "file"
+    }
+  ],
+  "new_physical_reads": false,
+  "original_sources_rehashed_after_review": true,
+  "physical_full_ring_verified": false,
+  "prior_failed_review": {
+    "archive_member": "stability-guest5-physical-independent-review-20260913-hlTRNTAu/review.json",
+    "cause": "Reviewer assumed one JSON object per QMP recv chunk. Actual coalesced newline frames require stream framing; corrected only in fresh review attempt. Original guest/diagnostic evidence unchanged.",
+    "original_path": "/tmp/stability-guest5-physical-independent-review-20260913-hlTRNTAu/review.json",
+    "sha256": "7f97c2b0bffd4c9d2b7d1f9a72578f9f50d72e80f7865575dcc10d111a9769a4"
+  },
+  "production_gate_credit": false,
+  "review": {
+    "archive_member": "stability-guest5-physical-independent-review-20260913-7wwqodsv/review.json",
+    "original_path": "/tmp/stability-guest5-physical-independent-review-20260913-7wwqodsv/review.json",
+    "sha256": "bff04808af7c3d2ce2d09dd4b0e13be2588c31b4e9a7ec484445f0e24fd566b3"
+  },
+  "schema_version": 1,
+  "scope": "Independent source and exact retained guest5 physical/QMP/UART artifact review. No subject helper import or rerun.",
+  "source_input_count": 72,
+  "status": "MATCH_RETAINED_PHYSICAL_DIAGNOSTIC_ORIGINAL_GUEST_FAIL",
+  "subject_helpers_imported_or_executed": false,
+  "tests_executed": false,
+  "transport_acceptance": false
+}

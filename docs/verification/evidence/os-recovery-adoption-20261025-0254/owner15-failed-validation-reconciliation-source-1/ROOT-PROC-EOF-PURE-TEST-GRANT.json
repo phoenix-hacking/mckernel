@@ -1,0 +1,38 @@
+{
+  "authority": "/root",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "GRANT_PROC_EOF_PURE_MOCKS_ONLY",
+  "source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/owner15-failed-validation-reconciliation-source-1/failed_validation_recovery.proc-eof-correction1.py",
+    "bytes": 28958,
+    "sha256": "95adb255159c7ef496c1d9af73aa6af0d5f7d33122bef46aab7775b6e53ee984"
+  },
+  "tests": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/owner15-failed-validation-reconciliation-source-1/test_proc_eof_observer_correction1.py",
+    "bytes": 8043,
+    "sha256": "02aab6fd814b5df20348c18724473797038e79ae31bf0758d299655c44e4e0ca"
+  },
+  "packet": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/owner15-failed-validation-reconciliation-source-1/FAILED-VALIDATION-RECOVERY.PROC-EOF-CORRECTION1.PACKET.NOT-GRANTED.json",
+    "bytes": 41756,
+    "sha256": "300a647bde91b68d09f4463ff30299a0a22fc103a87d2147851b68a623ebadd7"
+  },
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=60:60",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--stack=2097152:2097152",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/owner15-failed-validation-reconciliation-source-1/test_proc_eof_observer_correction1.py"
+  ],
+  "real_recovery_authority": false
+}

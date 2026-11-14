@@ -1,0 +1,78 @@
+{
+  "F06_overlap": false,
+  "F06_symbols_untouched": [
+    "arch_ptrace_syscall_event",
+    "vdso_map_global_pages",
+    "ptrace_syscall_event"
+  ],
+  "canonical_C_preimage": {
+    "bytes": 843071,
+    "path": "/home/holden/mckernel/kernel/syscall.c",
+    "sha256": "1035622a96a5441a85d60a9db15d3ac452b60266d1f8123eb807ce3849c41081"
+  },
+  "canonical_changes": false,
+  "canonical_policy_preimage": {
+    "bytes": 711734,
+    "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+    "sha256": "f1f7866c0f2ccc8e1b0024dfb632ec7359dd2a0a4bcd8e22deb957d48ef6d770"
+  },
+  "coherent_fixture_cohort_created": false,
+  "combined_fragment": {
+    "bytes": 2333,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/coherent-signalfd-pendingmask-source-1/F03-SIGNALFD-PENDING-MASK.RUST-FRAGMENT.rs.inc",
+    "sha256": "e26448e68023692c528866bc2f041fe5e1e549a51f1727ab2dc83483c7d8255e"
+  },
+  "compiler_invocations": 0,
+  "existing_C_fallbacks_byteexact": true,
+  "expected_C_postimage_sha256": "a28c1ef2cab18d48818b31fcc72f3cac65a23a891fb045a4a7eed7e3499aa15c",
+  "expected_policy_postimage_sha256": "f727aafb05c94f88d1d4cb5935c108fd9314827fc29d4a76abf2d2c8b75f93b9",
+  "exports": [
+    "syscall_signalfd_create_bridge",
+    "syscall_pending_mask_bridge"
+  ],
+  "insert_before_exact_anchor": "#[no_mangle]\npub unsafe extern \"C\" fn rt_sigpending_body_result(",
+  "merged_C_oracle": null,
+  "merged_default_link": null,
+  "merged_full78_production_Rust": null,
+  "native": false,
+  "no_duplicate_C_or_Rust_selected_exports_source": true,
+  "patch": {
+    "bytes": 3145,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/coherent-signalfd-pendingmask-source-1/F03-SIGNALFD-PENDING-MASK.NONOVERLAPPING.patch",
+    "sha256": "0ca7689901d7e359a4089bdc33cbe245a085940beec16caa3879067777b02540"
+  },
+  "pendingmask_actual": null,
+  "private_helpers": [
+    "syscall_pending_mask_list_locked_f03"
+  ],
+  "remove_exact_extern_lines": [
+    "    fn syscall_pending_mask_bridge(thread: *mut c_void) -> CULong;\n",
+    "    fn syscall_signalfd_create_bridge(syscall_nr: CInt, flags: CInt) -> CLong;\n"
+  ],
+  "root_central_merge_only": true,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "shared_imports_or_ABI_changes": false,
+  "signalfd_actual_qualified": {
+    "bytes": 30617,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/sourcehandoff/ACTUAL-SIGNALFD-CREATE-QUALIFIED-HANDOFF.json",
+    "sha256": "383bc3b8a90185998481db8bc964b059960b2b34b8429d81534cf7ef8644f364"
+  },
+  "signalfd_actual_warning_qualification": {
+    "bytes": 6724,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/sourcehandoff/ACTUAL-GCC9-WARNINGS.QUALIFICATION.json",
+    "sha256": "7871fa2e0758edb8415f5e5d31ba75cdb120f17046e067c6262f9ca2abdb5fda"
+  },
+  "source_members": [
+    {
+      "bytes": 653,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/candidate/signalfd_create.RUST-FRAGMENT.rs.inc",
+      "sha256": "9432164cfb0d0643b03d2d1dd690f0d26f8006cf4bce679a965360187e775ea4"
+    },
+    {
+      "bytes": 1679,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-pending-mask-source-1/pending_mask.RUST-FRAGMENT.rs.inc",
+      "sha256": "79f60afb17469878a3e8e7d676e48176deb1d8afca07ebfe72a1c3b6040acb38"
+    }
+  ],
+  "status": "COHERENT_TWO_BODY_PRIVATE_FRAGMENT_MERGE_SOURCE_ONLY"
+}

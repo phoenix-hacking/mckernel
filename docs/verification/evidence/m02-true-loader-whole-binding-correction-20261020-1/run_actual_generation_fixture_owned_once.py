@@ -1,0 +1,68 @@
+#!/usr/bin/env python3
+"""Exact ordinary once caller; execution requires root dispatcher's external grant."""
+import hashlib
+import importlib.util
+import json
+import os
+from pathlib import Path
+import resource
+import sys
+import time
+sys.dont_write_bytecode = True
+HERE = Path(__file__).resolve().parent
+CAPTURE = HERE / 'actual-full-fixture-capture-1'
+HELPER = Path('/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1/stage-preparation-1/run_two_commands_source_bound_corrected.py')
+HELPER_SHA = '990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8'
+PINS = {'current-sources/bind_m03_handshake_native_packet.py': '582914664e9a4b872c6375be6201cc6e2e585be7b44fdbf406c74b1fac5a39f2', 'current-sources/materialize_current_m02_once.py': '452b69fce80c33aab99ebbcc9e8f68360c6145dc3554294442bd3bd528790f85', 'current-sources/review_final_205_release.py': '8ebb8f92ccb5ebe40a6a98fd11f937e1ce4c2a88a3f426e10dcfe26df8bcb2e5', 'current-sources/machine_assembly_caller.py': 'd5ce0f360e4511c38681ce83624c35ea729d0006c3ec03774ab9aef007034103', 'current-sources/root_manual_snapshot_m03.py': 'ba1cd2d230dc79ddb37cff935371b11ca11e184fcf10270ed6b32b4c6d36ff9d', 'current-sources/CURRENT-SOURCE-CONTEXT.json': '9a74a643ac2b524dac1bbf78f715df94980b448c0b5fa4e9193245b71e355e3a', 'current-sources/current_m02_contract.py': '5900686a474d8f9a707a899343ae94c16fdb3f25cf77263d00ca73883e2d4f68', 'CURRENT-CASE-DATA.reader-bound.json': '1ab2b9723eabfe40808188453d12ca3e114be0281daf54939654422b6890627b', 'prepare_current_parent_once.py': '5934f0d6eff4f1f43b5910f2593cf58e30ad04da977a134429d1cd742f20d520', 'FIXTURE-SETTINGS.json': 'b5d0c2729793b094c41799e7708939294cd086ad6a22f6f77de7c47bdefa4a8d', 'run_actual_generation_fixture_once.py': 'a22e909efa765efb117d0b3d0aab759578511793283eb8cad52b32ec1f98f73e'}
+
+def main():
+    assert os.getuid() == os.geteuid() == 1000 and os.sched_getaffinity(0) == {6}
+    assert resource.getrlimit(resource.RLIMIT_AS) == (2 << 30, 2 << 30)
+    assert resource.getrlimit(resource.RLIMIT_CPU) == (35, 35)
+    assert resource.getrlimit(resource.RLIMIT_FSIZE) == (32 << 20, 32 << 20)
+    assert resource.getrlimit(resource.RLIMIT_CORE) == (0, 0)
+    assert resource.getrlimit(resource.RLIMIT_NOFILE) == (256, 256)
+    assert len(sys.argv) == 1, 'fixed fixture once caller, no late authority args'
+    helperbytes = HELPER.read_bytes()
+    assert len(helperbytes) == 14753 and hashlib.sha256(helperbytes).hexdigest() == HELPER_SHA and HELPER.stat().st_mode == 33152
+    for name, digest in PINS.items():
+        assert hashlib.sha256((HERE / name).read_bytes()).hexdigest() == digest, name
+    state = json.loads(Path('/home/holden/mckernel/.git/os-autopilot/state.json').read_text())
+    used = state['last_rate_limits']['primary']['usedPercent']
+    assert used < 100
+    mem = int(next(line.split()[1] for line in Path('/proc/meminfo').read_text().splitlines() if line.startswith('MemAvailable:'))) * 1024
+    assert mem >= 12 << 30
+    hoststat, scratchstat = os.statvfs(HERE), os.statvfs('/home/holden/mckernel-work/scratch')
+    hostfree = hoststat.f_bavail * hoststat.f_frsize
+    scratchfree = scratchstat.f_bavail * scratchstat.f_frsize
+    assert hostfree >= (16 << 30) + (64 << 20) and scratchfree >= (12 << 30) + (1 << 20)
+    assert not os.path.lexists(CAPTURE)
+    spec = importlib.util.spec_from_file_location('m02_exact_outside_owned_capture_990807_once', HELPER)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    CAPTURE.mkdir(mode=0o700)
+    module.write(CAPTURE / 'admission.json', dict(cpu=6, usage_percent=used, mem_available=mem,
+        host_free=hostfree, scratch_free=scratchfree, source_pins=PINS,
+        helper_sha256=HELPER_SHA, external_root_CPU6_and_aggregate_grant_required=True))
+    command = {'argv': ['/usr/bin/python3', '-I', '-B', str(HERE / 'run_actual_generation_fixture_once.py')]}
+    module.write(CAPTURE / 'command.json', command)
+    def limits():
+        os.sched_setaffinity(0, {6})
+        for which, value in ((resource.RLIMIT_AS, 2 << 30), (resource.RLIMIT_CPU, 20),
+                (resource.RLIMIT_FSIZE, 32 << 20), (resource.RLIMIT_CORE, 0), (resource.RLIMIT_NOFILE, 256)):
+            resource.setrlimit(which, (value, value))
+    started = time.monotonic()
+    record = module.owned_capture(command, CAPTURE, wall_seconds=30, limits=limits)
+    module.write(CAPTURE / 'status.json', record)
+    ok = (record['returncode'] == 0 and record['direct_child_joined'] and record['group_absent'] and
+        not record['timed_out'] and record['error'] is None and record['retirement_error'] is None and
+        record['closed_streams'] and record['captures']['stderr']['size'] == 0)
+    whole = dict(status='PASS_ACTUAL_GENERATION_FIXTURE_COMMAND_ONLY' if ok else 'FAIL_PRESERVE_FIRST_FAILURE',
+        record=record, elapsed_seconds=time.monotonic() - started, CPU6_released_after_return=True,
+        native_timeout_acceptance=False, runtime_release=None)
+    module.write(CAPTURE / 'whole.json', whole)
+    print(json.dumps(dict(status=whole['status'], elapsed_seconds=whole['elapsed_seconds'], capture=str(CAPTURE))))
+    return 0 if ok else 1
+
+if __name__ == '__main__':
+    raise SystemExit(main())

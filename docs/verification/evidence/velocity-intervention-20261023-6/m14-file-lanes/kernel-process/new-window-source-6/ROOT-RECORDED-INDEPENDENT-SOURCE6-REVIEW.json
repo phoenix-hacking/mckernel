@@ -1,0 +1,20 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_SOURCE_AND_CURRENT39_HOST_ARTIFACT",
+  "reviewer": "/root/f02_review",
+  "implementation_ownership": false,
+  "C_preimage_sha256": "120f75ec367ff01a7b3928714bbc95d56053594ea0d9e360f4f6ad33a87e1eb1",
+  "C_postimage_sha256": "3330ba92abc17005ee9bbe1048483428d8a4a2eb50c63420fa1d72804719dfea",
+  "Rust_preimage_sha256": "4efa2509c37189b57b5236ea65d6df707a36358a748a2886d5ba66afe9f86ace",
+  "Rust_postimage_sha256": "5dfcc6cc5baa784e7bf081b9093c3549fe21b14062c8e2507d65f88a092080ef",
+  "body_sha256": "ab245616f9290f0b8243318ae1b3b724b19b3900dea3503ee3674aa3dc6b64c1",
+  "fixture_result_sha256": "0071273452fd15f281e5362b684f46286c7b61bd78adb2cc2f57086175811e54",
+  "object_result_sha256": "07cfc64d9b17d4e88c6e4921c827b5c724237f35b0ceb7b4bc513bc6cca78bee",
+  "comparisons": 38,
+  "ABI_rows": 16,
+  "joined_commands": 13,
+  "target_Rust_providers_once": 8,
+  "source_integration_recommended_after_active_freeze_released": true,
+  "findings": "No blocking unsafe ownership or ABI finding; lock/backend/unlock and error/nullable/IRQ contracts preserved; genuine C/Rust raw spinlock4 align4 head_tail0. Selected C absent target definitions, fallback retained; exact partial definition union and UND difference checked.",
+  "limits": "Current39 HOST cohort only; live page-table/IRQ/concurrent flag, production/default/native and whole-file retirement remain open."
+}

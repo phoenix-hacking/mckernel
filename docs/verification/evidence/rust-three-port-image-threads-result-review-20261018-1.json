@@ -1,0 +1,323 @@
+{
+  "schema": "mckernel.rust-three-port-image-threads-result-review.v1",
+  "status": "PASS",
+  "reviewer": "/root/three_port_threads_actual_review_0807",
+  "implementation_ownership": false,
+  "created_utc": "2026-10-18T08:11:14.242414+00:00",
+  "scope": "Functional PRACTICAL-GOAL kernel/apps and actual compute C retirement into Rust/reviewed assembly; original qualification deferred.",
+  "image_sha256": "da0f1bf760d5472693ed1d24f0bee717d8bf4c0880d4eb92d98203cd737e814f",
+  "actual_acceptance": {
+    "status": "PASS",
+    "raw_wait_status": 9472,
+    "exit_code": 37,
+    "stdout_hex": "4e41544956455f434f5245205041535320746872656164730a",
+    "stdout_bytes": 25,
+    "stderr_bytes": 0,
+    "discarded_bytes": 0,
+    "fixture": "Unchanged original dynamic-libc threads: two workers, TLS, three-party barrier, mutex counter2000 and both joins",
+    "guest_pid": 255,
+    "overlapping_worker_tids": [
+      257,
+      256
+    ],
+    "procfs_deletions": 3,
+    "tid_transfer_bytes": 512,
+    "retirement_token": 530,
+    "cleanup_errno": 0,
+    "preserved_initial_retirement": {
+      "token": 528,
+      "errno": -11,
+      "ownership_retained": true
+    }
+  },
+  "positive_retirement": {
+    "status": "PASS",
+    "owner_pid": 917342,
+    "owner_starttime": 10832150,
+    "owner_returncode": 0,
+    "owner_join_seconds": 36.88211431399395,
+    "distinct_client_identity_reap_receipts": 30,
+    "container_id": "f26a03529efbc98ee8d77a0a823cc0a25d84105af49c53c547e851eb71f1f65e",
+    "container_removed": true,
+    "successful_container_waits": 3,
+    "final_name_nonce_id_queries_empty": true,
+    "oom": false,
+    "recovery": false,
+    "retained_lease": false,
+    "cgroup_profile": {
+      "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_period_us": "100000",
+      "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_quota_us": "400000",
+      "/sys/fs/cgroup/memory/mckernel-dev/memory.limit_in_bytes": "12884901888",
+      "/sys/fs/cgroup/memory/mckernel-dev/memory.use_hierarchy": "1",
+      "/sys/fs/cgroup/pids/mckernel-dev/pids.max": "512"
+    },
+    "root_mutex": "27:4 release proven by exact checked zero-exit owner path; no new live observation",
+    "qmp": "Guest shutdown observed before reviewed QEMU -9 teardown; app exit37 independently raw-wait-bound"
+  },
+  "native_production_language_retirement": {
+    "status": "SCOPED_NATIVE_PATH_PROOF_PASS",
+    "paths": [
+      "copy_fp_regs -> rust_x86_copy_fp_regs",
+      "schedule -> sched_schedule_fp_admit",
+      "post-switch exited-thread cleanup -> sched_schedule_exit_cleanup",
+      "save_fp_regs -> rust_x86_save_fp_regs",
+      "restore_fp_regs/default -> Rust/assembly helpers"
+    ],
+    "basis": "Combined exact-image production default/link/ABI proof, accepted exact-image AVX predecessor and this unchanged pthread/thread-exit execution. Native behavior exercises applicable paths; individual internal branches are not separately instrumented.",
+    "whole_kernel_Rust_retirement": false
+  },
+  "distinct_behavior_increment": 0,
+  "distinct_native_behaviors_total": 16,
+  "formal_acceptance_credit": 0,
+  "archive_review": {
+    "owner_members": 101,
+    "attempt_members": 7,
+    "validated_before_private_extraction": true,
+    "no_traversal_or_links": true,
+    "expected_warning": "qmp.sock ignored by default tar"
+  },
+  "checks": {
+    "frozen_release_and_source_closure": "PASS",
+    "immutable_overlay_image_modules_payload_join": "PASS",
+    "actual_module_load_image_boot_and_schedule": "PASS",
+    "original_payload_bytes_status_streams": "PASS",
+    "production_evaluator_replay_and_sampled_syscall_routes": "PASS",
+    "three_overlapping_procfs_TIDs_and_deletions": "PASS",
+    "owner_all_clients_container_cgroup_lease_positive_retirement": "PASS"
+  },
+  "execution_release": {
+    "path": "/home/holden/mckernel-work/scratch/rust-three-port-guest-execution-preparation-20261018-1/threads/execution-release-1.json",
+    "sha256": "a5b8784537ed2a3ee125de2f836e1e8dab787ff53da71c1464425bc77c6789ae",
+    "size": 3219
+  },
+  "production_default_link_predecessor": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/rust-three-port-image-actual-review-20261018-1.json",
+    "sha256": "87e37ba180382acc488fe76ad7565ca9f2951a90c9f818bd552efc6790e9656f",
+    "size": 40805
+  },
+  "avx_predecessor": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/rust-three-port-image-avx-result-review-20261018-1.json",
+    "sha256": "33d0386003955ecfb4a5dbd2e17a0c8335adcede3768182968db192fc294b9d0",
+    "size": 16314
+  },
+  "captures": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-guest-execution-preparation-20261018-1/threads/owner-join.json",
+      "sha256": "a5736db31cf0c9a3e657b60aad577837105e140d5f8e1a45d4de3ad98ff591ea",
+      "size": 926
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-guest-execution-preparation-20261018-1/threads/owner.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-guest-execution-preparation-20261018-1/threads/owner.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-guest-execution-preparation-20261018-1/threads/readback-1.stdout",
+      "sha256": "4c5616d05b4df8f09671ea62875db2abf124d4dada8c8e7514e127aeb26d68bb",
+      "size": 686080
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-guest-execution-preparation-20261018-1/threads/readback-2.stdout",
+      "sha256": "a0b44bfed69914819ad17fa7a1478447158545754b6f3f6e27483ee08ac94ca6",
+      "size": 149338
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-guest-execution-preparation-20261018-1/threads/readback-3.stdout",
+      "sha256": "38882087b4ed4cb901248f97ada25eaaad0bee57d847774129a40aa4b784bba9",
+      "size": 542720
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-guest-execution-preparation-20261018-1/threads/readback-1.command.json",
+      "sha256": "1324d5ee37a51d42398f8fc7f01d0a2d82e4ee78359171a008d0c2ef6cac7510",
+      "size": 332
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-guest-execution-preparation-20261018-1/threads/readback-2.command.json",
+      "sha256": "90a08e93cb4620de9e1d2b1c24e7177ff44c46c34e1477234741296005557b09",
+      "size": 294
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-guest-execution-preparation-20261018-1/threads/readback-3.command.json",
+      "sha256": "263b5c5bf45a9ceec37f22e5cbeaee24ae86b4ba0015b0c72edee86472ced406",
+      "size": 335
+    }
+  ],
+  "reviewer_failure_history": [
+    "Initial QMP checker assumed one JSON object per receive chunk. Original checker/failure preserved; one bounded correction parses every nonempty newline-delimited message, retaining all frames. No runtime replay."
+  ],
+  "evidence": {
+    "archive_validation": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-threads-actual-review-20261018-1/archive-validation.json",
+      "sha256": "a8741d484740712aa117db20b2af4576ab22bc83d621e44bab96710637fc9fb2",
+      "size": 17128
+    },
+    "review_script": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-threads-actual-review-20261018-1/review_actual.py",
+      "sha256": "82c33d26d5f699b664d7cb74c1ae4a4f2038777f6502d623dfeb6243851815d5",
+      "size": 12560
+    },
+    "original_checker": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-threads-actual-review-20261018-1/review_actual-attempt-1.py",
+      "sha256": "5b5584fe8b66c2176aa123a308ae2628b6b8550cfd6e7700d9065d45cce55e51",
+      "size": 12185
+    },
+    "checker_failure": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-threads-actual-review-20261018-1/review-attempt-1-failure.json",
+      "sha256": "ac6cefc1c46357f00cd5dfa7cc288ccd2104756f5820d64dbb29fd2d8487684f",
+      "size": 459
+    },
+    "verified_references": [
+      {
+        "path": "/home/holden/mckernel-work/scratch/rust-three-port-guest-execution-preparation-20261018-1/threads/execution-release-1.json",
+        "sha256": "a5b8784537ed2a3ee125de2f836e1e8dab787ff53da71c1464425bc77c6789ae",
+        "size": 3219
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/rust-three-port-guest-execution-review-20261018-1/threads-decision.json",
+        "sha256": "e190bc6ad15335418242ead2227875d87b49f25093bcc7ccadddecc4d6f15438",
+        "size": 5214
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/rust-three-port-guest-execution-preparation-20261018-1/threads/fresh-live-preflight-1.json",
+        "sha256": "d2bc47ae1dda6fea1c4a4f02d48da1e5d1a2079df3d2cde7c6869c1b7241badd",
+        "size": 2103
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/rust-three-port-guest-execution-preparation-20261018-1/threads/conditional-metadata.json",
+        "sha256": "82cfc4d91204ea0d067e315b905db02c5287ef9b88841de671193e3b66e44eaa",
+        "size": 6595
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/rust-three-port-guest-execution-preparation-20261018-1/threads/execution-proposal.json",
+        "sha256": "f204398163970781a33338890920d5f2319dc913b2d991eacca4e615ceb2b0c7",
+        "size": 21096
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/rust-three-port-guest-execution-review-20261018-1/source-closure.json",
+        "sha256": "e1d80721e1bc7fc89e5e0cec9a5df81e8bdab5f73db3831aaa31248c1528b3d2",
+        "size": 10753
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/rust-three-port-native-case-review-20261018-1/actual-result/report.json",
+        "sha256": "c08469ea3f5f200208175b975651670b7d957ad8f7d23765fdc7a380152968ea",
+        "size": 8345
+      },
+      {
+        "path": "/home/holden/mckernel/docs/verification/evidence/rust-three-port-image-actual-review-20261018-1.json",
+        "sha256": "87e37ba180382acc488fe76ad7565ca9f2951a90c9f818bd552efc6790e9656f",
+        "size": 40805
+      },
+      {
+        "path": "/home/holden/mckernel/docs/verification/evidence/rust-three-port-image-avx-result-review-20261018-1.json",
+        "sha256": "33d0386003955ecfb4a5dbd2e17a0c8335adcede3768182968db192fc294b9d0",
+        "size": 16314
+      },
+      {
+        "path": "/home/holden/mckernel/docs/verification/evidence/rust-three-port-image-terminal-result-review-20261018-1.json",
+        "sha256": "4d75d8e5e11e43fe5039a11a37380be1580a5c1e0671ce41598822de92cfb1a6",
+        "size": 12463
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/rust-three-port-native-case-preparation-20261018-1/stage-threads/manifest.json",
+        "sha256": "0f21b6b8cf64969eec25548b49a65e72efd64a5113085edc855bae4039e313ae",
+        "size": 5467
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/bzImage",
+        "sha256": "032653ee0661b059c325e2a0911a9d492805f1a889c4df515473d69a8be105bc",
+        "size": 16130048
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/rust-three-port-native-case-preparation-20261018-1/stage-avx/base.cpio.gz",
+        "sha256": "405c4036fa7df3395b95e1c967f7bbe481f5717f950510c6676bbc25a88011d3",
+        "size": 12744541
+      },
+      {
+        "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/native-proposal/stage-correction-1/stage/root/lib64/libc.so.6",
+        "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+        "size": 2339896
+      },
+      {
+        "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/native-proposal/stage-correction-1/stage/root/lib64/ld-linux-x86-64.so.2",
+        "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b",
+        "size": 930600
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/mcexec-preload-fastpath-build-20260928-1/rust/executer/user/mcexec",
+        "sha256": "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b",
+        "size": 453352
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/rust-next-three-port-image-preparation-20261018-1/owner-work/output/build/kernel/mckernel.img",
+        "sha256": "da0f1bf760d5472693ed1d24f0bee717d8bf4c0880d4eb92d98203cd737e814f",
+        "size": 7920368
+      },
+      {
+        "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/native-proposal/stage-correction-1/stage/root/bin/native-boot",
+        "sha256": "6b9f753e34d12da474c701ca64ce62825788295646b60f67482ef9ec8690c417",
+        "size": 31208
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-application-core-build-20260908-1/native-application-core",
+        "sha256": "558d1607e4648321c9537215084e759496937d9591c319a21443f443193fda9a",
+        "size": 39488
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/rust-three-port-native-case-preparation-20261018-1/stage-avx/base.cpio.gz",
+        "sha256": "405c4036fa7df3395b95e1c967f7bbe481f5717f950510c6676bbc25a88011d3",
+        "size": 12744541
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/nsd-c-a7d84db0d8b54b9b94347fd0aff57594/modules/ihk.ko",
+        "sha256": "51b48a9e42eaa2411cab2a28edf9bb5db8b2d648675d083473e926f91dd0e038",
+        "size": 1440392
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/nsd-c-a7d84db0d8b54b9b94347fd0aff57594/modules/ihk-smp-x86_64.ko",
+        "sha256": "82c9021f7491fa8bc6d178fe99e7d4b7b6f90838474a9c91b62ddb8edb3d13f8",
+        "size": 11630064
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/nsd-c-a7d84db0d8b54b9b94347fd0aff57594/modules/mcctrl.ko",
+        "sha256": "6571ac7eca13559d8bab65125d54facbbc65e84f815d4ff3fc77ec6aa1104972",
+        "size": 1913904
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/rust-three-port-native-case-preparation-20261018-1/stage-avx/base.cpio.gz",
+        "sha256": "405c4036fa7df3395b95e1c967f7bbe481f5717f950510c6676bbc25a88011d3",
+        "size": 12744541
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/rust-three-port-native-case-preparation-20261018-1/stage-threads/lifecycle.cpio.gz",
+        "sha256": "26091ad5546f5777f67038c6f727851ea4dd1b2296a5c1ea2c47445e2e0e80ee",
+        "size": 13338420
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/init",
+        "sha256": "268b967064e44a61340e43a23940ef2bba16ad22e3615a6f5d0e7108428890b6",
+        "size": 1021992
+      },
+      {
+        "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_overlay.py",
+        "sha256": "46d41bc0727fa77e4126e739f25352c53eadf2e1fa8e23ef06a6e46c9b3ba27d",
+        "size": 26579
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/rust-three-port-native-case-preparation-20261018-1/stage-threads/overlay-manifest.json",
+        "sha256": "8343c10189610608247a3da44340aa974a14e17719a9e5f0eeca3e4dd99c1996",
+        "size": 19430
+      }
+    ]
+  },
+  "limitations": [
+    "No hardware allocation-failure injection or individual internal-branch instrumentation",
+    "No transitive allocator retirement, multicore McKernel or whole-kernel Rust retirement",
+    "Raw protocol flags remain diagnostic-only; this independent review supplies scoped actual acceptance",
+    "Repeated current-image regression adds no distinct behavior or deferred qualification credit"
+  ]
+}

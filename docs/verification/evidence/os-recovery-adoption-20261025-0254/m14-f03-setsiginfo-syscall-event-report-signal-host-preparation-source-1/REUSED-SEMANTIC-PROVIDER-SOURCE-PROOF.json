@@ -1,0 +1,43 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "runtime_authority": null,
+  "actual114_profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/PROFILE.SOURCE-ONLY.json",
+    "bytes": 119861,
+    "sha256": "971120d12e67d0b26d031ccec384ccd98f1c65e4ed669a2078e5af15ab31fff8"
+  },
+  "retained_actual_Rust": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o",
+    "bytes": 18312048,
+    "sha256": "bc882d2b168140bfc99e56fbe94308c0cdc89234af9f59b4b1f9430b9ded7cb3"
+  },
+  "body_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/rust-subtree/syscall_policy.rs",
+    "bytes": 1268496,
+    "sha256": "2975c9c2d0c398a8acffb52b0936ae46ab2b73d65d45113be93730802fe276d7"
+  },
+  "helpers": [
+    {
+      "name": "ptrace_setsiginfo_body_result",
+      "source_sha256": "6108db00eecb8578cbdb457168dbaf1ec03d2c2ec82b2c5c2f95faac36e01b34",
+      "bytes": 3996,
+      "unchanged": true
+    },
+    {
+      "name": "ptrace_syscall_event_body_result",
+      "source_sha256": "dd945388de2d48a1e1cebe3633d120a4a1a7138e915b13f2bf914c2bd6b067c5",
+      "bytes": 574,
+      "unchanged": true
+    },
+    {
+      "name": "ptrace_report_signal",
+      "source_sha256": "731a24d16a52183f91624ffe1c6e7308e2a563ee576981185940fa11dfc42506",
+      "bytes": 817,
+      "unchanged": true
+    }
+  ],
+  "new_algorithms": 0,
+  "dynamic_new_wrapper_semantic_cases_run": 0,
+  "retained_wholehelper_test_source": "kernel/rust/run_equivalence.sh:39487/39510 in frozen6777 references; not replayed or claimed newlypassing",
+  "native_or_whole_file_credit": 0
+}

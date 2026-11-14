@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "record_kind": "pending_free_validated_inventory_source_review",
+  "recorded_utc": "2026-09-28T09:51:00Z",
+  "status": "FAIL_VALIDATED_INVENTORY_SOURCE",
+  "source_hashes": {
+    "kernel/rust/mem_helpers.rs": "423547dbfa8a39070c8dd6c8ce5b56d67cfd082ba091e12431359ffde46cf985",
+    "kernel/rust/tests/pending_free_batch_actual_harness.py": "67f0b99453b8ebd8a946ca141f805837b0481a17f26920bcd75c16bd3213ee43",
+    "kernel/rust/tests/pending_free_batch_vectors.rs": "42d02ade38c1556697435cabaa4c916b798a43a113eb001c044d13178e87900d"
+  },
+  "remaining_findings": [
+    "Harness does not extract/invoke mem_mckernel_free_pages_body_result for active-capture versus immediate allocator fallback.",
+    "Oversized-cardinality control also has insufficient callback capacity and therefore does not isolate the cardinality guard.",
+    "Invalid-destination and repeated-drain rejection controls do not completely assert destination/state nonmutation and zero new callbacks."
+  ],
+  "verified_implementation_scope": "Cardinality preflight, independently supplied membership, token-consuming pinned transfer, source reset, argument capture before callbacks, no post-release descriptor read and exact C partial-release controls are source-coherent. Product callers remain unwired.",
+  "convergence_decision": "Freeze the reviewed product helper hash. The remaining failure is evidence-fixture coverage, so change to an evidence-only repair confined to the harness/vectors; do not alter product code or reset product failure history.",
+  "compilation_or_execution_released": false,
+  "production_integration_released": false,
+  "acceptance_credit": false
+}

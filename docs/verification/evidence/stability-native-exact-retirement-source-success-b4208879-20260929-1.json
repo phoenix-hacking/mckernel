@@ -1,0 +1,122 @@
+{
+  "schema": "mckernel.native-exact-retirement-source-review.v1",
+  "status": "PASS_SOURCE",
+  "recorded_at": "2026-09-29T21:03:09+00:00",
+  "base_commit": "b4208879ea1f0c0549e33fa42a60efd57bb439f6",
+  "scope": "immutable retirement template source eligibility only",
+  "execution_authorized": false,
+  "runtime_acceptance": false,
+  "os_acceptance": false,
+  "failure_family": {
+    "name": "f5 two-root exact-candidate retirement admission, live-reference proof and post-delete census",
+    "history": [
+      "initial candidate independently blocked on revision/count routing, Docker-set inconsistency, incomplete namespace proof, absent typed special-process handling, non-immutable release-transition tests and no post-delete census",
+      "bounded correction reproduced 112 tests with one failure and six errors: docker_callback NameError, two deleted-audit fixture KeyErrors, stale inventory schema, three callback-masked errors and one signal-cleanup assertion",
+      "expert escalation repaired the complete six-file boundary"
+    ]
+  },
+  "policy_sha256": {
+    "GOAL.md": "76c4f5d12e3f233c8dc4f8f1a77dd1f2eae9df2ff8fb9f4000ef5a2e94c0bcc3",
+    "START.md": "1698d3429e71083634584dea7f78d22ff9e2927858de0dc714f829f9b3d6216c",
+    "CONVERGENCE.md": "f6938bd207d6fa2c0898def482e9bb4bd0cf173937fe55c2111a369d3393e86a"
+  },
+  "inputs": {
+    "candidate_revision": "f5d8d914f816d4a677990719854f7b4d312a430b",
+    "ihk_revision": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+    "inventory_sha256": "841dedac9c2a2f1bff7ecb903bd34500b6c5e8184a5466e744ee1a7154734f89",
+    "retention_archive_sha256": "624da324e6559bbee08c34e1cc70a12eb46727b0c338a0828815ba70c55ea6a4",
+    "deleted_inode_audit_sha256": "641c39a3f3be3a1012a47f6e073c5e9df4149512acb1944b45d90e3f900d7ab2",
+    "deleted_inode_audit_test_sha256": "af9ab213144c295783d8a6274a3cf73955f4af36d4d3c887d96c512936126904"
+  },
+  "reviewed_sha256": {
+    "docs/verification/evidence/native-exact-candidate-retirement-1c00d2b8-1.py": "efef4b6ea3842349c3b4d14e93c0f2e62deade17a92974e8475f19d50dc54ee7",
+    "scripts/tests/test_native_exact_candidate_retirement_1c00d2b8.py": "3399b957044317fc747afe1c97a43dd11b19365e666186f0d508c0b9b8b17959",
+    "scripts/native_exact_candidate_retire_1c00d2b8.py": "f589ba4303543caad42d3aee2ec7ee47a79a5818e50746f3b0ac1d12ef8d378a",
+    "scripts/tests/test_native_exact_candidate_retire_1c00d2b8.py": "5774766d209fad92af678f11a011fdb33a6e2e10e15eb2b3e5ac0898562a515e",
+    "docs/verification/evidence/native-exact-candidate-live-reference-observer-1c00d2b8-1.py": "e8800a59c8126d9b0b8f7b949cbfb92d5e268cd03cbe9a1bf53788b116f5374d",
+    "scripts/tests/test_native_exact_candidate_live_reference_observer_1c00d2b8.py": "b4eaac8271c54df3349ae26ea2b131bfe81e17fc3521e371ed315c25804e1321"
+  },
+  "verified_contract": {
+    "inventory_entries": 10714,
+    "main_reconstructible_non_directories": 7833,
+    "ihk_reconstructible_non_directories": 1296,
+    "capsule_required_entries": 918,
+    "post_delete_identity_count": 10716,
+    "post_delete_root_counts": [10629, 87],
+    "rejected_historical_identity_count": 10611,
+    "terminal_container_ids": [
+      "1e92f6fbe5d053ad5e1078d231cb0fbd2df77cdc47009a235f4f97ba4e0828c4",
+      "3c169e5cb840557bf43314aed0e12427bac5a71b206d7334236072e50f075366",
+      "8943e49772f840ba5da6571c2e2c6fde60b61157f21f873d832669157ef9bc10"
+    ],
+    "post_delete_rounds": 3,
+    "release_literal": "RELEASE_HASH_REQUIRED"
+  },
+  "checks": [
+    {
+      "owner": "expert author",
+      "runtime": "Python 3.9",
+      "command_scope": "three retirement unittest modules plus committed deleted-inode audit module",
+      "tests": 183,
+      "seconds": 15.069,
+      "result": "PASS"
+    },
+    {
+      "owner": "expert author",
+      "runtime": "Python 3.8",
+      "command_scope": "three retirement unittest modules",
+      "tests": 127,
+      "seconds": 13.132,
+      "result": "PASS"
+    },
+    {
+      "owner": "expert author",
+      "runtime": "Python 3.8",
+      "command_scope": "committed deleted-inode audit module",
+      "tests": 56,
+      "seconds": 10.523,
+      "result": "PASS"
+    },
+    {
+      "owner": "independent reviewer",
+      "runtime": "Python 3.9, two CPUs, 4 GiB virtual-memory cap",
+      "command_scope": "three retirement unittest modules plus committed deleted-inode audit module",
+      "tests": 183,
+      "seconds": 15.351,
+      "result": "PASS"
+    },
+    {
+      "owner": "expert author",
+      "command_scope": "explicit temporary-cfile py_compile of all six reviewed files",
+      "result": "PASS"
+    },
+    {
+      "owner": "expert author and independent reviewer",
+      "command_scope": "six-path git diff --check",
+      "result": "PASS"
+    }
+  ],
+  "independent_review": {
+    "decision": "PASS_SOURCE",
+    "blocking_findings": [],
+    "nonblocking_observation": "scan_identity does not increment field_counts ns/mnt; authorization uses explicit namespace coverage, so the diagnostic counter must not be interpreted quantitatively"
+  },
+  "live_reconciliation": {
+    "candidate": {"device": 26, "inode": 47678, "allocated_bytes": 9140117504},
+    "metadata_backup": {"device": 26, "inode": 58429, "allocated_bytes": 1355776},
+    "active_retirement_process": false,
+    "active_build_lease": false,
+    "launcher_identities": [
+      {"role": "wrapper", "pid": 4041681, "starttime": 92434707},
+      {"role": "worker", "pid": 4041684, "starttime": 92434713},
+      {"role": "app-server", "pid": 4041686, "starttime": 92434719}
+    ],
+    "docker_observation": "three required containers present, exited, pid zero, restart count zero, restart policy no, required mounts present; current-state observation only"
+  },
+  "next": "Commit, push and fetch-verify this immutable source template. Then create a mechanically limited release JSON and release-hash-only packet finalization, obtain independent execution review, repeat fresh live reconciliation and only then consider one execution.",
+  "limitations": [
+    "No retirement, deletion or restore was executed.",
+    "No build, kernel, guest or application behavior was executed.",
+    "The result grants no production gate, language gate or application acceptance."
+  ]
+}

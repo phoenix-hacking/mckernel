@@ -1,0 +1,83 @@
+#[no_mangle]
+pub unsafe extern "C" fn transfer_image(fd: c_int, desc: *mut c_void) -> c_int {
+    let sections = unsafe { mcexec_desc_num_sections_bridge(desc as *const c_void) };
+    let page_size = unsafe { MCEXEC_PAGE_SIZE };
+    let page_mask = unsafe { MCEXEC_PAGE_MASK };
+    let dma_buf = unsafe { MCEXEC_DMA_BUF };
+    let mut index = 0;
+
+    while index < sections {
+        let fp = unsafe { mcexec_desc_section_fp_bridge(desc as *const c_void, index) };
+        let vaddr = unsafe { mcexec_desc_section_vaddr_bridge(desc as *const c_void, index) };
+        let len = unsafe { mcexec_desc_section_len_bridge(desc as *const c_void, index) };
+        let offset = unsafe { mcexec_desc_section_offset_bridge(desc as *const c_void, index) };
+        let mut s = vaddr & page_mask;
+        let e = vaddr
+            .wrapping_add(len)
+            .wrapping_add(page_size.wrapping_sub(1))
+            & page_mask;
+        let mut rpa = unsafe { mcexec_desc_section_remote_pa_bridge(desc as *const c_void, index) };
+
+        if unsafe { fseek(fp, offset as c_long, SEEK_SET) } != 0 {
+            unsafe { mcexec_transfer_seek_error_bridge() };
+            return -1;
+        }
+
+        let mut flen = unsafe { mcexec_desc_section_filesz_bridge(desc as *const c_void, index) };
+        unsafe { mcexec_transfer_seeked_bridge(offset, flen) };
+
+        while s < e {
+            let mut transfer = RemoteTransfer {
+                rphys: rpa,
+                userp: dma_buf as *mut c_void,
+                size: page_size,
+                direction: MCEXEC_UP_TRANSFER_TO_REMOTE,
+            };
+            let mut lr = 0usize;
+
+            unsafe { zero_bytes(dma_buf, page_size as usize) };
+            if s < vaddr {
+                let l = vaddr & page_size.wrapping_sub(1);
+                let mut read_len = page_size - l;
+                if read_len > flen {
+                    read_len = flen;
+                }
+                lr = read_len as usize;
+                if unsafe { transfer_read_exact(fp, dma_buf.add(l as usize), lr) } != 0 {
+                    return -EINVAL;
+                }
+                flen -= read_len;
+            } else if flen > 0 {
+                let read_len = if flen > page_size { page_size } else { flen };
+                lr = read_len as usize;
+                if unsafe { transfer_read_exact(fp, dma_buf, lr) } != 0 {
+                    return -EINVAL;
+                }
+                flen -= read_len;
+            }
+
+            s = s.wrapping_add(page_size);
+            rpa = rpa.wrapping_add(page_size);
+
+            if lr == 0 && flen == 0 {
+                break;
+            }
+
+            if unsafe {
+                ioctl(
+                    fd,
+                    MCEXEC_UP_TRANSFER,
+                    &mut transfer as *mut RemoteTransfer as c_ulong,
+                )
+            } != 0
+            {
+                unsafe { perror(DMA_PERROR_TAG.as_ptr()) };
+                break;
+            }
+        }
+
+        index += 1;
+    }
+
+    0
+}

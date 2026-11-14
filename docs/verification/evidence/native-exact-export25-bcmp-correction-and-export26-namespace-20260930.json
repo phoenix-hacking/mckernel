@@ -1,0 +1,66 @@
+{
+  "schema": "mckernel.native-exact-export25-bcmp-correction-and-export26-namespace.v1",
+  "recorded_at": "2026-09-30T20:26:40-07:00",
+  "base_commit": "b42c7018b3cd5c5d732e54cc361a797dedd0a603",
+  "failure_evidence": "docs/verification/evidence/native-exact-export25-heavy-build-attempt2-bcmp-failure-20260930.json",
+  "production_correction": {
+    "path": "kernel/rust/string.rs",
+    "sha256": "579d8c06bb766a270548399a8820733516a167bb8af5d1fea46d8a51f7e8fbf3",
+    "behavior": "Rust-owned no_mangle extern-C bcmp; zero for equality, one for mismatch; length checked before volatile unsigned-byte loads; no delegation to memcmp."
+  },
+  "focused_tests": {
+    "vectors": {
+      "path": "kernel/rust/tests/string_bcmp.rs",
+      "sha256": "2b9971c05894f2dc2c3b5fa6612df172ff17d9df083cf2623160dd753b2e79d6"
+    },
+    "harness": {
+      "path": "kernel/rust/tests/string_bcmp_harness.py",
+      "sha256": "08d5fcd0c0382e2cb15dc877afafe268a72acc4f3224ca4ceea6bdf21be6fe8d"
+    },
+    "rustc": "/home/holden/mckernel-work/scratch/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+    "command": "taskset -c 0 prlimit --as=2147483648 -- /usr/bin/python3 -I -B kernel/rust/tests/string_bcmp_harness.py --rustc <exact-retained-nightly>",
+    "result": "PASS 3/3",
+    "coverage": "Null/inaccessible zero length, equal prefixes, high-bit data, every mismatch position in both orders, unaligned starts, 64 independently guarded boundary lengths and final-byte mismatches.",
+    "evidence_root": "/tmp/mckernel-bcmp-tqaqcs68",
+    "commands_sha256": "0107f80e06ffb8044d66d153ef21795d201a2bdb292c5ee7d3451de68b317ccf",
+    "optimized_object_sha256": "4a483883d762162a2c33126713ad5f300a710b00fec041b2918457652974a223",
+    "object_result": "Global T bcmp; scalar byte code; no bcmp/memcmp unresolved symbol, relocation, call or SIMD in .text.bcmp. Tools pinned to /usr/bin/nm and /usr/bin/objdump."
+  },
+  "independent_review": {
+    "result": "PASS_SOURCE_BCMP_CORRECTION_FINAL",
+    "scope": "Production source and retained-nightly microtest/object behavior only; no full image linkage or guest result."
+  },
+  "preserved_test_failure": {
+    "command": "/usr/bin/python3 -B -m unittest scripts.tests.test_native_irq_descriptor_production",
+    "result": "FAIL before compile because default PATH selected rustc 1.60.0-nightly instead of the test's required 1.92.0",
+    "classification": "Tool-selection failure unrelated to the bcmp production or focused exact-nightly harness. It is retained and must not be counted as descriptor validation."
+  },
+  "export26_namespace": {
+    "owner_path": "scripts/native_rust_exact_mckernel_image_container_owner.py",
+    "owner_sha256": "1e1e05b2cf07f599c8c6157c4e6921d25a668a5be0ae5bd6bd36b195c3694a1b",
+    "test_path": "scripts/tests/test_native_rust_exact_mckernel_image_container_owner.py",
+    "test_sha256": "a83359e848a70caf0300f805520d915030267872ade07e7a347e4b2823e5eaad",
+    "active_exclusion": "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-26.json",
+    "retired_exclusion_added": "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-25.json",
+    "focused_result": "PASS 2/2",
+    "full_owner_result": "PASS 27/27 under Python 3.9, CPU 2, 2-GiB address-space limit",
+    "independent_review": "PASS_EXPORT26_NAMESPACE_SOURCE",
+    "preserved_python38_result": "Namespace and entrypoint cases pass; full suite has two pre-existing Path.readlink AttributeErrors because Python 3.8 lacks that method. Python 3.9 full suite passes 27/27.",
+    "execution_release": false
+  },
+  "postlink_preparation": {
+    "postlink_tests": "PASS 181/181",
+    "linked_text_tests": "PASS 9/9",
+    "postlink_sha256": "c22255b2acddc40c0ad1435561984e1c8c4fe757545ccc323bcc393db8d92731",
+    "linked_text_sha256": "e44f414373169e1453a321922931a9f4fef579229eda3d2777f4922956797fcd",
+    "scope": "Light regressions only; no artifact report because no linked image exists."
+  },
+  "side_effects": {
+    "docker": false,
+    "build": false,
+    "guest": false,
+    "cleanup": false,
+    "acceptance_counter_change": false
+  },
+  "next_action": "Commit/push/fetch the independently accepted correction, then solve the 6.96-GiB scratch preparation shortfall with separately reviewed retention-backed retirement or a reviewed source-only candidate design before preparing scratch-14/exportset-26."
+}

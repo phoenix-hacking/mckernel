@@ -1,0 +1,26 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/custody_release_review",
+  "implementation_ownership": false,
+  "decision": "PASS_PINNED_POLICY_NULL_WITH_KNOWN_FINITE_POSITIVE_CREDITS",
+  "canonical_source": {
+    "path": "/home/holden/mckernel/scripts/os_goal_credits.py",
+    "bytes": 5178,
+    "sha256": "adf5187240ed8199746eef3b59b79d4d38c4ae8ac5821c8d8324833926b21ec3"
+  },
+  "method": "Independent read-only installed-source comparison and pure AST-extracted available_balance checks",
+  "accepted_controls": [
+    "actual null with known finitepositive credits",
+    "missing with known finitepositive credits",
+    "false with known finitepositive credits"
+  ],
+  "refused_controls": [
+    "truthy spending-control flag",
+    "unknown credits",
+    "zero balance",
+    "unlimited credits"
+  ],
+  "required_correction": "Privately reviewed successor calls hash-pinned pure available_balance and retains phase/budget/freshness/goal/cutoff and actual holds; no CreditBudget.observe ledger writes",
+  "existing_passive_holder_may_resume": false,
+  "runtime_authority": null
+}

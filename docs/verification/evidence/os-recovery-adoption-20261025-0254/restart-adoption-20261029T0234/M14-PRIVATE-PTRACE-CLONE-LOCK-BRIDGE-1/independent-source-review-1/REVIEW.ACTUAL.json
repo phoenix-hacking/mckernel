@@ -1,0 +1,110 @@
+{
+  "additional_inspected_sources": {
+    "arch/x86_64/kernel/include/arch-lock.h": {
+      "bytes": 4603,
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch-lock.h",
+      "sha256": "ca8baa66ed77634cd6319a918211b3eb8fe80fc7dcb2ac0110ab6bfbd0c1b81b"
+    },
+    "arch/x86_64/kernel/lock.c": {
+      "bytes": 5162,
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/lock.c",
+      "sha256": "fde952906e03d131dedb479b8405bfcd951605c8e4624c2105d81dc8c7583dca"
+    },
+    "kernel/rust/abi.rs": {
+      "bytes": 76151,
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    "kernel/rust/lock_helpers.rs": {
+      "bytes": 12202,
+      "path": "/home/holden/mckernel/kernel/rust/lock_helpers.rs",
+      "sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3"
+    },
+    "kernel/rust/spinlock_helpers.rs": {
+      "bytes": 3105,
+      "path": "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs",
+      "sha256": "7b6c1e87f521eaf4674128afd7bff71785bead4ff7c9eb3c9a668d6a0cb0cbe7"
+    },
+    "kernel/rust/syscall_policy.rs": {
+      "bytes": 1301841,
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "sha256": "07cb4bff5a0a9a0d582ebc18e344e5cf06ccd6fc37005292c757ef0501ea50eb"
+    }
+  },
+  "canonical_applied": false,
+  "checks": [
+    {
+      "command": "python3 -B /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-PTRACE-CLONE-LOCK-BRIDGE-1/check_source.py",
+      "exit_status": 0,
+      "kind": "source-only read/hash/structural assertions",
+      "stdout": "PASS source snapshots, exact ABI/delegation, paired caller nodes and lock sequence, x86 selection, original logger line projection, untouched parent body\n"
+    },
+    {
+      "coverage": [
+        "exact seven input snapshot byte refs",
+        "additional ABI/body/lock sources",
+        "paired CMake condition nesting",
+        "C callback branch and function-pointer typedef",
+        "synchronous stack node ownership and matching call order"
+      ],
+      "kind": "independent bounded source inspection",
+      "result": "PASS"
+    }
+  ],
+  "compiler_executed": false,
+  "current_free": false,
+  "decision": "PASS_SOURCE",
+  "execution_authority": null,
+  "findings": [
+    "The selected x86_64 callback C ABI void(unsigned long, void*) matches unsafe extern C fn(CULong,*mut c_void), with CULong=u64; both exported Rust names have exactly one no_mangle definition in the proposed module. The selected C preprocessor branch contains only extern declarations and removes its static definitions, while unselected profiles retain their original C definitions.",
+    "Both leaf functions perform precisely one direct call to the existing selected lock_helpers writer noirq counterpart, forwarding lock_addr and node unchanged. The cast preserves the live lock address and introduces no reference, allocation, retained pointer, node dereference, IRQ save/restore, or alternate lock algorithm.",
+    "The selected x86 SPINLOCK_IN_MCS_RWLOCK header and existing Rust layout agree on the 64-byte aligned lock with slock at offset zero. Both old C and existing Rust noirq writer functions ignore the caller node and operate on slock. The Rust spinlock functions retain preempt_disable before acquisition, existing atomic ordering, and preempt_enable after unlock; this leaf does not change them.",
+    "Unchanged ptrace_report_clone owns distinct lock and updatelock stack nodes and passes both through a synchronous Rust-body call. The existing body validates callback/node presence before acquisition, performs lock(update_lock,lock_node)/unlock of the same pair, and conditionally lock(new_update_lock,new_lock_node)/unlock of the same pair, without returning between a successful acquisition and matching release. No callback or node escapes from this leaf; no new lifetime or alias requirement is introduced.",
+    "C and Rust selection are paired within the existing Linux6.12 x86_64 non-UBSAN cohort; the explicit Rust source dependency and cfg module are added together. The patch does not modify the parent C body or Rust body, registry, existing lock functions, callback order or oracle.",
+    "The added #line 7274 restores the original logger logical start and three dkprintf metadata rows 7279/7283/7288. Composition with the separately owned logger patch must retain both postimages and its own line reset; this receipt reviews the standalone leaf patch, not an unseen composed patch."
+  ],
+  "guard_executed": false,
+  "host_payload_executed": false,
+  "implementation_ownership": false,
+  "independent": true,
+  "native_executed": false,
+  "open_requirements": [
+    "Review the exact composed logger+lock patch before integration.",
+    "Fresh applicable actual compiler/header ABI witness and selected/unselected object/symbol/link checks are still required.",
+    "Current119 actual feedback and explicit canonical integration decision remain required.",
+    "Native behavior, whole-file C retirement and M14 acceptance remain open."
+  ],
+  "original_unknown_preserved": true,
+  "patch": {
+    "bytes": 5042,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-PTRACE-CLONE-LOCK-BRIDGE-1/PTRACE-CLONE-NOIRQ.PRIVATE-NOT-APPLIED.patch",
+    "sha256": "e731d058ffcec16508dd37c2b732943a9455f428bbcd91773981c4c5ff4842a2"
+  },
+  "preserved_failures": [
+    "Original source-check fixture substring error counting lock inside unlock remains described in ROOT-NEXT; the anchored ordered-tuple correction is source-test-only."
+  ],
+  "reviewer": "/root/recovery_review",
+  "schema": "mckernel.independent-focused-source-review.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source": {
+    "bytes": 1184,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-PTRACE-CLONE-LOCK-BRIDGE-1/PRIVATE-LEAF.rs",
+    "sha256": "a3466b4decd926036048c70f56ca8de3ef206bab6e26dd4db75d0f9af4d39dbe"
+  },
+  "source_check": {
+    "bytes": 3803,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-PTRACE-CLONE-LOCK-BRIDGE-1/check_source.py",
+    "sha256": "2cfb839b492434d2b436a3a3966207501ab98ee53500b157ba4dd381b782c947"
+  },
+  "source_inputs": {
+    "bytes": 974,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-PTRACE-CLONE-LOCK-BRIDGE-1/SOURCE-INPUTS.json",
+    "sha256": "b941f1860d3e92451ad9907480ec3f86bdd73f72410560f5f6e89c71b80ae823"
+  },
+  "source_ready": {
+    "bytes": 2129,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-PTRACE-CLONE-LOCK-BRIDGE-1/SOURCE-READY.json",
+    "sha256": "a226edfb4f0a963cbf2fc6cc813b0330c5021e817a96a4d0ab995f320802c8b4"
+  },
+  "subject": "Private paired ptrace_report_clone noirq writer callback Rust leaf; source equivalence only"
+}

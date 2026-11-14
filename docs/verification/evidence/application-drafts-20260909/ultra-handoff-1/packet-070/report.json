@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-070",
+  "packet_version": 1,
+  "context_sha256": "b7bb11a1f7b514dd9454a56bd936447abb6e8f84fc9e0806315f4ea36ba8356c",
+  "started_utc": "2026-09-09T14:50:00Z",
+  "finished_utc": "2026-09-09T14:54:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "numerical.integer-reduction",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/numerical/numerical.integer-reduction.c",
+      "oracle": "scripts/application-tests/oracles/numerical.integer-reduction.json",
+      "changed_files": ["scripts/application-tests/cases/numerical/numerical.integer-reduction.c", "scripts/application-tests/oracles/numerical.integer-reduction.json"],
+      "parameter_vectors": {"range": ["0..999999"], "threads": [1, 2, 4], "sum": [499999500000]},
+      "implemented_operations": ["independent scalar sum", "partitioned pthread reductions", "joined equality checks"],
+      "unresolved_oracle_notes": ["Thread scheduling provenance and reduction lifetime require Max review."],
+      "max_reviewer_question": "Confirm partition boundaries cover every integer exactly once and thread join/reduction ordering is observable."
+    },
+    {
+      "case_id": "numerical.integer-matrix",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/numerical/numerical.integer-matrix.c",
+      "oracle": "scripts/application-tests/oracles/numerical.integer-matrix.json",
+      "changed_files": ["scripts/application-tests/cases/numerical/numerical.integer-matrix.c", "scripts/application-tests/oracles/numerical.integer-matrix.json"],
+      "parameter_vectors": {"dimension": ["64x64"], "threads": [1, 2, 4], "formula": ["fixed integer matrices"], "checksum": [294328320]},
+      "implemented_operations": ["scalar 64x64 product", "four-thread row partition", "cell equality and corner/checksum invariants"],
+      "unresolved_oracle_notes": ["Thread partitioning, signed int64 arithmetic, and complete cell retention require Max review."],
+      "max_reviewer_question": "Confirm the independent matrix formulas, corner/checksum constants, and four-way row partition coverage."
+    },
+    {
+      "case_id": "numerical.prefix-scan",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/numerical/numerical.prefix-scan.c",
+      "oracle": "scripts/application-tests/oracles/numerical.prefix-scan.json",
+      "changed_files": ["scripts/application-tests/cases/numerical/numerical.prefix-scan.c", "scripts/application-tests/oracles/numerical.prefix-scan.json"],
+      "parameter_vectors": {"count": [4096], "scan": ["exclusive"], "value_formula": ["(i mod17)-8"], "total": [-8]},
+      "implemented_operations": ["exclusive prefix array", "signed deterministic formula", "first/last/total checks"],
+      "unresolved_oracle_notes": ["Signed overflow bounds, output retention, and scan coverage require Max review."],
+      "max_reviewer_question": "Confirm exclusive indexing, signed-value formula, and independently computed count4096/total-8 constants."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/numerical/numerical.integer-reduction.c", "sha256": "ab2830849b96af7a6685a1f287e2c2d7762f4470c435a659e051ae5807018b71"},
+    {"path": "scripts/application-tests/oracles/numerical.integer-reduction.json", "sha256": "6247d2be139e52d138fb1530538eb88629face78f86025e02443185f70b2daae"},
+    {"path": "scripts/application-tests/cases/numerical/numerical.integer-matrix.c", "sha256": "5d22b646aa1c249fb1e92fd82723c007285d1d7076cc194a8901048ad4662188"},
+    {"path": "scripts/application-tests/oracles/numerical.integer-matrix.json", "sha256": "666a9582c208c578c44127eb44f7cb305489650634a33f8b160de2c36c0529fa"},
+    {"path": "scripts/application-tests/cases/numerical/numerical.prefix-scan.c", "sha256": "5a1d928f67e0ad163db8d09fe714bea13412e11831d7f3d42e2dbeafc452412b"},
+    {"path": "scripts/application-tests/oracles/numerical.prefix-scan.json", "sha256": "5dec6e05a004dc18af220ec2ca88b5e1bfcc2536e6e94d369f3def95d1a89665"},
+    {"path": "docs/verification/evidence/application-drafts-20260909/ultra-handoff-1/packet-070/context.json", "sha256": "b7bb11a1f7b514dd9454a56bd936447abb6e8f84fc9e0806315f4ea36ba8356c"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-070.json --emit-context /tmp/application-packet-070-context-20260909-1.json", "outcome": "PASS; planning metadata only; runtime_authorized=false"},
+    {"command": "python3 -m json.tool packet-070/report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Thread scheduling, numeric partition coverage, signed arithmetic bounds, and output retention need final Max review."],
+  "blocked_execution_capabilities": ["runner-contract", "current-inputs", "runtime-transport-fault-injection"],
+  "first_failure_event": null,
+  "max_escalation": ["Review integer reduction partition/join", "Review matrix formulas and thread rows", "Review exclusive prefix semantics"],
+  "next_packet_id": "packet-071"
+}

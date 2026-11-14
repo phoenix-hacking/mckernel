@@ -1,0 +1,1880 @@
+#!/usr/bin/env python3
+"""Validate and stage the native Rust-for-Linux host-module build inputs."""
+
+from __future__ import print_function
+
+import argparse
+import ctypes
+import difflib
+import errno
+import hashlib
+import json
+import os
+import re
+import shutil
+import stat
+import subprocess
+import sys
+import tarfile
+import tempfile
+
+if __package__:
+    from .native_rust_kconfig_policy import (
+        KconfigPolicyError,
+        validate_native_rust_kbuild,
+        validate_native_rust_kconfig,
+    )
+else:
+    from native_rust_kconfig_policy import (
+        KconfigPolicyError,
+        validate_native_rust_kbuild,
+        validate_native_rust_kconfig,
+    )
+
+
+SCHEMA_VERSION = 2
+PARENT_SCHEMA_VERSION = 1
+PRODUCTION_STAGE_ENABLED = False
+EVIDENCE_STAGE_PURPOSE = "compiler-evidence-only"
+PROFILE_ID = "rocky-10.2-native-rust-host-modules-v1"
+DEFAULT_MANIFEST = "host-kernel/kbuild/stage-manifest.json"
+COMPAT_BUILD_ID_FILE = "ihk-compat-build-id.bin"
+IHK_COMPAT_CMAKE_SHA256 = "7d91805dac7ed1fb0514e536383dd6cde43b91fe8b4114fe6ed00ba3e4b0e65d"
+VENDORED_IHK_CMAKE_SHA256 = "ac793a4062b2d3142c48c07348adac3014968e25af6cbe204aea4d41852313b1"
+VENDORED_IHK_REVISION = "8d288b8bd81b50cc3a3f814d949b89bf416a6ec7"
+COMPAT_BUILD_ID_INCLUDE = (
+    'const IHK_COMPAT_BUILD_ID: &[u8] = include_bytes!("ihk-compat-build-id.bin");'
+)
+EXPECTED_DESTINATION = {
+    "kernel_relative_root": "drivers/misc/mckernel",
+    "parent_kbuild_integration": "drivers/misc/Makefile",
+    "parent_kconfig_integration": "drivers/misc/Kconfig",
+}
+EXPECTED_BUILD_CONTRACT = {'allowed_project_source_suffixes': ['.rs', '.S'], 'build_system': 'Linux in-tree Kbuild with Rust-for-Linux', 'compiler_invocation_owner': 'Linux Kbuild', 'forbidden_project_input_suffixes': ['.a', '.c', '.cc', '.cpp', '.o', '.so'], 'linux_control_compat_functions': [], 'linux_control_compat_objects': [], 'manual_rustc_invocation_forbidden': True, 'prebuilt_project_objects_forbidden': True, 'project_c_link_objects': 0}
+EXPECTED_TARGET = {
+    "architecture": "x86_64",
+    "config_policy_lock_id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-config-policy-v1",
+    "distribution": "Rocky Linux",
+    "kernel_nvr_base": "kernel-6.12.0-211.44.1.el10_2",
+    "release": "10.2",
+    "resolved_config_sha256": None,
+    "resolved_kernel_nvr": None,
+    "resolved_toolchain_manifest_sha256": None,
+    "source_lock_id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-source-v1",
+    "source_rpm_sha256": "2bfeda65bd9bdd4b86650074c81e061c37822b80317ac0d4f5aacc89c85589cb",
+    "toolchain_lock_id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-toolchain-v1",
+}
+EXPECTED_INPUTS = [{'destination': 'Kbuild', 'kind': 'kbuild_template', 'repository_path': 'host-kernel/kbuild/Kbuild.in', 'sha256': '192c744b53fe2158f8f81ab6165107753b2fb66a9642db02c3a85c3c3843a4e3'}, {'destination': 'Kconfig', 'kind': 'kconfig', 'repository_path': 'host-kernel/kbuild/Kconfig', 'sha256': '48c6ba25186281a3a4fe4690c7520b02d8bbe43965e78d3301d2613477c3874f'}, {'destination': 'abi/x86_64.rs', 'kind': 'shared_rust_abi', 'repository_path': 'host-kernel/native-rust/abi/x86_64.rs', 'sha256': '89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3'}, {'destination': 'ikc_queue.rs', 'kind': 'rust_module', 'repository_path': 'host-kernel/native-rust/ikc_queue.rs', 'sha256': '3163d9cc7541941e49059aed7f8824a62229cbe8a650e02f79a4eb7a3944e9c5'}, {'destination': 'os_registry.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/os_registry.rs', 'sha256': 'b776668f4746a309c59c3de5318eff4723e5d485d88235c089ebac5ec9bd0ad6'}, {'destination': 'device_registry.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/device_registry.rs', 'sha256': '43c3a4badd09bb70a31c9120d23e3b2b63ffa735412d172e0f0ac3d2edc85af5'}, {'destination': 'ikc_master.rs', 'kind': 'rust_module', 'repository_path': 'host-kernel/native-rust/ikc_master.rs', 'sha256': '1e52c69093936291f309a0317fac707c47858c6d0151cb2d288ced12353853f3'}, {'destination': 'ihk_ioctl.rs', 'kind': 'rust_ioctl_dispatch', 'repository_path': 'host-kernel/native-rust/ihk_ioctl.rs', 'sha256': '60739598352b236a0d698abae0c6104e7adfc05524be9a0653b2477b8728519e'}, {'destination': 'page_allocator.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/page_allocator.rs', 'sha256': '8e2af0cde06cbb70204540b493e8a0a66d5203195ed671235b64bed44d328bc5'}, {'destination': 'page_owner_registry.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/page_owner_registry.rs', 'sha256': '443d58fa5b2e423f538c6622ef04d8e34338abc43c5e0fd34811d52fc21f4869'}, {'destination': 'smp_resource.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/smp_resource.rs', 'sha256': 'd4a5794f60be7fa5e549e7c9b806e366276d87370adbc5df94e51b8d464e8dcd'}, {'destination': 'smp_cpu.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/smp_cpu.rs', 'sha256': 'f65f3aea00dfdd0a7905d3dd396e67684fd428c71cf34dd6e15a56896c73f912'}, {'destination': 'smp_memory.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/smp_memory.rs', 'sha256': '60758aeafac150bd8aac62455844e3f4e4200a082f82f80ce66c3c871d4909be'}, {'destination': 'os_runtime.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/os_runtime.rs', 'sha256': '4acedfe7e50e51183f0e58d3ab9fd9225eccf4bd5bfdb4101a49e4a201fd55f5'}, {'destination': 'os_service.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/os_service.rs', 'sha256': 'f5fc0c7fa0f62e0c3d1cef366a280c74ce083030ee6569b8c52979d9b361a572'}, {'destination': 'abi/os_service.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/abi/os_service.rs', 'sha256': '9dac670ec6567d379c346106d3b164ddb6d607be1dedc2be21283d4adffa5937'}, {'destination': 'abi/application.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/abi/application.rs', 'sha256': 'b51c8066f6f7002ddd26fe98c330c1dcebc10e31182955cfcf764879d60d4e88'}, {'destination': 'ihk_mapping.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/ihk_mapping.rs', 'sha256': '085f4f4e7935bd273d89ae4c7f7d600da557ce1da8873f57a142dc12bf9677dc'}, {'destination': 'smp_image.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/smp_image.rs', 'sha256': '4f35ec396494fa428c55298c91ffe14aa0142d0282dd37d922f94a901a692689'}, {'destination': 'smp_loader.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/smp_loader.rs', 'sha256': 'fa86ebb489454cd95c2607bba3a3d564ca36d6e65c5eea6bd6aa319bb40100e6'}, {'destination': 'smp_startup.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/smp_startup.rs', 'sha256': '12c3a816af6ff20dcf916c946b780ff988e90650300ab7c00e07a83cda1474a2'}, {'destination': 'abi/sysfs.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/abi/sysfs.rs', 'sha256': '63b25ac0df5fe3da4c0989196ea9e45e8d57b573e6e7603ca523452b2f19718e'}, {'destination': 'abi/sysfs_request.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/abi/sysfs_request.rs', 'sha256': '1b89d1261d218c39d531cfe00181a30562d9953deae5ac0956641f407239df0f'}, {'destination': 'abi/vdso.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/abi/vdso.rs', 'sha256': 'd796e3a0723d6a21096a1455c35a7820437dfc2b99e5bb0e1c1f4db79f1c7d7d'}, {'destination': 'application_image.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/application_image.rs', 'sha256': '25b7810c273c9f4b5dbff073f54e67db52c69636e63760c7d5f62e471b7a61b2'}, {'destination': 'application_pager.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/application_pager.rs', 'sha256': 'adb65c878f6e9817cfb0932c38ac2f87d2715659468051957a1b747b7974ad19'}, {'destination': 'application_rpc.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/application_rpc.rs', 'sha256': '9f811c86c4e996294a6cd3be6b83315dabd20a3fb375419e091f4b9dedcfad39'}, {'destination': 'application_syscall.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/application_syscall.rs', 'sha256': 'daaa3b0fabb002b40cafdc4d7c74ed6cdfd606e18dc82d3bb32bc3055e1a96e0'}, {'destination': 'mcctrl_exec.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/mcctrl_exec.rs', 'sha256': '4ebf73c46cf12a05fc76b078fbfcf218190dd372b335f886123125a012ae26b0'}, {'destination': 'mcctrl_process.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/mcctrl_process.rs', 'sha256': '8bf30cd8ae79cc778bd91816f30aaf7a37ccc2aab59822ca2a03587426a212b8'}, {'destination': 'mcctrl_vm.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/mcctrl_vm.rs', 'sha256': '4c19b54344980a20520cdf3660b31c50d62525e6fed0ab58f950e38d880a5864'}, {'destination': 'procfs_objects.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/procfs_objects.rs', 'sha256': '4d1247a87706e94fa75d7bea667d9349d48b7c525eba99d02688a87f5369411c'}, {'destination': 'smp_application.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/smp_application.rs', 'sha256': '6adb4d11e7285caadd699bf22359bf21922f7dbfa4828b12b7a96fb7a1b07be0'}, {'destination': 'smp_application_image.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/smp_application_image.rs', 'sha256': 'cf3eb651aac4a5510f8ddcf9cc5376479e3379528582a33e1fc55c084f1317b5'}, {'destination': 'smp_application_syscall.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/smp_application_syscall.rs', 'sha256': 'b99874d9c1a80720f154086d40f4427f83732824dad85d8d391cc3a8a4de4360'}, {'destination': 'smp_boot_code.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/smp_boot_code.rs', 'sha256': '0f94af32383cc6e6108e0203619642eef0e492286131dac4b35d5e1248564a7f'}, {'destination': 'smp_file_pager.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/smp_file_pager.rs', 'sha256': '655c029bcddf937b6445ee01d076978ff9606832d60fd038e07076bee939e96c'}, {'destination': 'smp_ikc.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/smp_ikc.rs', 'sha256': '4d1cd859dbea602f8232095fc66dd4d337848ea61ad94436da191fb316628b03'}, {'destination': 'smp_procfs.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/smp_procfs.rs', 'sha256': '4ae39992d0354b2f0b32de4a3e26ce8a621ede6dff69dd92ce303d4ab90232ea'}, {'destination': 'smp_service.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/smp_service.rs', 'sha256': '7d4948d7b0a5139048cf8085863ffcca43cbfff53024c34b5fd4281caed6f639'}, {'destination': 'smp_topology.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/smp_topology.rs', 'sha256': '6d925fa50279e7eca938fd5b9d0b2a73105ef875793623024c681f40d70d08e6'}, {'destination': 'smp_trampoline.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/smp_trampoline.rs', 'sha256': '4a110936d52a80664943b5dd605fbf9ad1c99460fe8ff0a16327ca015d2d0bcb'}, {'destination': 'smp_vdso.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/smp_vdso.rs', 'sha256': 'dd94d677c97b0c3271c746f1795289fdaadff89e1c08a660bd7659b14466d488'}, {'destination': 'sysfs_memory.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/sysfs_memory.rs', 'sha256': 'aa98b251e973cee018cec6d69586d99a56c9ea1d208f69c4a645696254af2004'}, {'destination': 'sysfs_objects.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/sysfs_objects.rs', 'sha256': '2b04c57b43516550f0c3bdaf115b667d4a64393030494e79b553248c42aa7453'}, {'destination': 'sysfs_os.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/sysfs_os.rs', 'sha256': 'ce44efe98498383862bd2d897f3fe17201917aa141a144853459a0cac7ecffd2'}, {'destination': 'sysfs_remote.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/sysfs_remote.rs', 'sha256': 'b9bb72eb6c4986067e2557e15ac625d90cfddcb53f38c8b99cc3648e85f0d117'}, {'destination': 'sysfs_rpc.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/sysfs_rpc.rs', 'sha256': '39c5ff87b671c498afffcff9feb10833918d75207559462952803858fb218131'}, {'destination': 'sysfs_setup.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/sysfs_setup.rs', 'sha256': 'aef0af92406948da3a4519c937dcfd32724b18d81ab00e394e66c89753863d62'}, {'destination': 'sysfs_snoop.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/sysfs_snoop.rs', 'sha256': 'c795209a3d116142c6da2ab969d3cdb88ba69796287b20adbab2f59bdbe7249d'}, {'destination': 'sysfs_tree.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/sysfs_tree.rs', 'sha256': '3ee25a02b17654b6f23776d13aaa62de5b597e23cb214ca9c519b5886c29b232'}, {'destination': 'sysfs_zeroing.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/sysfs_zeroing.rs', 'sha256': '6d35d46758ccf5092db91780bbc35f8e0cacc0e8a3201379d5af95e6bf97f94e'}, {'destination': 'user_string.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/user_string.rs', 'sha256': 'fa83818bc26d52ffff1a763a34a92684dff47775ba389fa6ac831d0835bf62d2'}, {'destination': 'zero_pages.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/zero_pages.rs', 'sha256': '47a4e27b63f50366229af4045d79dc5dee6ace179307cc19c08cc338c68b1def'}, {'destination': 'smp_startup_entry.S', 'kind': 'embedded_assembly_source', 'repository_path': 'host-kernel/native-rust/smp_startup_entry.S', 'sha256': 'b65dc8545456edc714fe2913e8bafe0c87bb287ab84e4769cf9575263a59d9b2'}, {'destination': 'smp_trampoline.S', 'kind': 'embedded_assembly_source', 'repository_path': 'host-kernel/native-rust/smp_trampoline.S', 'sha256': '18c960336e3803f2b554481a2f6fc7c3927190bfeeee1516264c37de6c126bcf'}, {'destination': 'current_fork_task_mm.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/current_fork_task_mm.rs', 'sha256': 'e2e124e84030aa6be957af6ff9c2a03116ac1b20118e28c974d24e05048b6dfe'}, {'destination': 'mcctrl_mm_write.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/mcctrl_mm_write.rs', 'sha256': '6e1d6d65fcad10aa673bd546646b96f28fd7280250ad05a6ca560a0dc2877107'}, {'destination': 'm15_mmap_trace_gates.S', 'kind': 'embedded_assembly_source', 'repository_path': 'host-kernel/native-rust/m15_mmap_trace_gates.S', 'sha256': '365305ba7f9d7a22615d5fdf0a600715f63a9fc56c4f4ac9f0e126d19a812161'}, {'destination': 'm15_mm_write_warning.S', 'kind': 'embedded_assembly_source', 'repository_path': 'host-kernel/native-rust/m15_mm_write_warning.S', 'sha256': '24bd1ebcd59ac1de5761282cac404540a2324fd819576f5d39dd51c1c7f18550'}, {'destination': 'current_fork_control.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/current_fork_control.rs', 'sha256': '81228204d50bd5e95bcad7671d4c6bb272ef9c516d0163b2b39a0f6a5c23a126'}, {'destination': 'current_fork_host.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/current_fork_host.rs', 'sha256': '5a68633144eb60f941a73ceff9f2d5b0d30c7b9c1c1d0c25d5e8135dfde959b4'}, {'destination': 'exec_delivery.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/exec_delivery.rs', 'sha256': '65ab86c4aff79e04e46a0f6b9b2eb2397e4e94d16bc5163579e55663eac83b7d'}, {'destination': 'exec_transfer_checked.rs', 'kind': 'rust_support_module', 'repository_path': 'host-kernel/native-rust/exec_transfer_checked.rs', 'sha256': 'a7dae8a829da028cab0ad2d9de233304a587fd7d09059f4bf87c4fee16b67907'}]
+EXPECTED_PARENT_INTEGRATION_REF = {
+    "repository_path": "host-kernel/kbuild/parent-integration-v1.json",
+    "sha256": "19b18ece742950b2ef5fc9314579849e763a307982a3a91c99dfaad5917d4b55",
+}
+EXPECTED_PARENT_SOURCE = {
+    "archive_basename": "linux-6.12.0-211.44.1.el10_2.tar.xz",
+    "archive_sha256": "4a174d47b8874a2139efcd1ac1ab2d6b80ae7a0ca62f0ae4596fd20cf62a3533",
+    "archive_root": "linux-6.12.0-211.44.1.el10_2",
+    "source_lock_id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-source-v1",
+    "source_lock_repository_path": "host-kernel/rocky/source-lock.json",
+    "source_lock_sha256": "b70df1e475072dbfa31fdc712900ac59d30eeb139219c7076aacaa19abf0fded",
+    "source_rpm_sha256": "2bfeda65bd9bdd4b86650074c81e061c37822b80317ac0d4f5aacc89c85589cb",
+}
+EXPECTED_PARENT_PATCH = {
+    "format": "unified-diff",
+    "path_strip": 1,
+    "repository_path": "host-kernel/kbuild/patches/0001-drivers-misc-add-mckernel-rust-host-modules.patch",
+    "sha256": "25b0724a2523c3fd5d6d8b824b72c6e6b19c2b16edebaa6719b53c22d4d5c7d9",
+}
+EXPECTED_PARENT_FILES = [
+    {
+        "insertion": {
+            "anchor": "obj-y\t\t\t\t+= keba/",
+            "line": "obj-$(CONFIG_MCKERNEL_IHK_RUST)\t+= mckernel/",
+            "placement": "after",
+        },
+        "path": "drivers/misc/Makefile",
+        "postimage_sha256": "548e7eed491c9287908870a4783be57c15a360f03ecc68a4c4856e7c5c51a74f",
+        "preimage_sha256": "3f998f3c28cae01f8cb6e3b283f25175635ff2510ba40ce60235a3c059a9a238",
+    },
+    {
+        "insertion": {
+            "anchor": "endmenu",
+            "line": 'source "drivers/misc/mckernel/Kconfig"',
+            "placement": "before",
+        },
+        "path": "drivers/misc/Kconfig",
+        "postimage_sha256": "ed57d452061fb74e62d5dce3aa3680aec0b70811b87b57a25554dc4dd4c33e4a",
+        "preimage_sha256": "679b6c945aebec04f936c184b724f1b0d6daa6d760ec3bb4d6b56db905c19683",
+    },
+]
+EXPECTED_PARENT_ABSENT_PATHS = [
+    "drivers/misc/mckernel",
+    "drivers/misc/mckernel/Kbuild",
+    "drivers/misc/mckernel/Kconfig",
+]
+PARENT_VERIFICATION_SCOPE = (
+    "byte-exact parent preimages, intended insertions, postimages, and patch bytes only; "
+    "no build, runtime, or RK-007 credit"
+)
+MODULE_BLOCKERS = []
+READINESS_BLOCKERS = ['selected Rocky kernel source, toolchain, and config evidence is not gate-ready',
+ 'upstream Rust-for-Linux sample has not built through this staging path',
+ 'production namespace and import metadata has not been proven from built modules',
+ 'reviewed Linux-control compatibility final link manifests have not been captured']
+EXPECTED_MODULES = ({'crate': 'ihk', 'dependencies': [], 'kconfig_symbol': 'CONFIG_MCKERNEL_IHK_RUST', 'normalized_name': 'ihk', 'output': 'ihk.ko', 'production_namespace': 'MCKERNEL_IHK_V1', 'required_import_namespaces': [], 'source_destination': 'ihk.rs', 'source_repository_path': 'host-kernel/native-rust/ihk.rs', 'source_sha256': '8ae67d7208229c22c503508d16d2c9718a7f19123542270cf5589569d21a51ec'}, {'crate': 'ihk_smp_x86_64', 'dependencies': ['ihk'], 'kconfig_symbol': 'CONFIG_MCKERNEL_IHK_SMP_X86_64_RUST', 'normalized_name': 'ihk_smp_x86_64', 'output': 'ihk-smp-x86_64.ko', 'production_namespace': None, 'required_import_namespaces': ['MCKERNEL_IHK_V1'], 'source_destination': 'ihk_smp_x86_64.rs', 'source_repository_path': 'host-kernel/native-rust/ihk_smp_x86_64.rs', 'source_sha256': 'aa5752bfcf737c013a3721dcb3c454232acf72dcd477cdb210c1cfeb6efc1ac0'}, {'crate': 'mcctrl', 'dependencies': ['ihk'], 'kconfig_symbol': 'CONFIG_MCKERNEL_MCCTRL_RUST', 'normalized_name': 'mcctrl', 'output': 'mcctrl.ko', 'production_namespace': None, 'required_import_namespaces': ['MCKERNEL_IHK_V1'], 'source_destination': 'mcctrl_rust.rs', 'source_repository_path': 'host-kernel/native-rust/mcctrl.rs', 'source_sha256': 'de4793814c7ab3834d0d284c7e28ab2fbfdbfb63f50aac286c5082909d392dee'})
+AUDITED_PROVIDER_EXTERN = (
+    'extern "Rust" {\n'
+    '    #[link_name = "ihk_provider_lifecycle_v1"]\n'
+    "    static IHK_PROVIDER_LIFECYCLE_V1: u8;\n"
+    "}"
+)
+AUDITED_MCCTRL_SERVICE_PROVIDER_EXTERN = (
+    'extern "C" {\n'
+    '    fn ihk_os_service_register_v1(\n'
+    '        owner: *mut c_void,\n'
+    '        version: u32,\n'
+    '        open: Option<service_abi::Open>,\n'
+    '        ioctl: Option<service_abi::Ioctl>,\n'
+    '        close: Option<service_abi::Close>,\n'
+    '    ) -> i32;\n'
+    '    fn ihk_os_service_unregister_v1(owner: *mut c_void);\n'
+    '    fn ihk_os_topology_query_v1(slot: u32, generation: u64, command: u32) -> i64;\n'
+    '}'
+)
+AUDITED_MCCTRL_SERVICE_OPEN_EXTERN = (
+    '// SAFETY: IHK supplies an exact live OS identity, retains this module and gives\n'
+    '// exclusive writable output storage. Pinned mutexes protect process bindings\n'
+    '// during concurrent ioctls; no user memory or independently running work escapes.\n'
+    'unsafe extern "C" fn open(slot: u32, generation: u64, output: *mut *mut c_void) -> i32 {'
+)
+AUDITED_MCCTRL_SERVICE_IOCTL_EXTERN = (
+    '// SAFETY: IHK retains the successful context and module pin, excludes final\n'
+    '// release and supplies normalized compat arguments. No service/file/OS lock\n'
+    '// crosses this call; the IHK topology query may take its short operation lock.\n'
+    'unsafe extern "C" fn ioctl(context: *mut c_void, command: u32, argument: u64, compat: u32) -> i64 {'
+)
+AUDITED_MCCTRL_SERVICE_CLOSE_EXTERN = (
+    '// SAFETY: IHK transfers back the unique Box after every ioctl has finished,\n'
+    '// retaining both the OS generation and our module until this returns.\n'
+    'unsafe extern "C" fn close(context: *mut c_void) {'
+)
+AUDITED_IHK_INIT_CALLBACK_TYPE = (
+    '// SAFETY: This C-ABI callback has no arguments, borrows no caller memory, and\n'
+    '// returns only a scalar status consumed before provider publication.\n'
+    'type IhkSmpProviderInitV2 = extern "C" fn() -> i32;'
+)
+AUDITED_IHK_EXIT_CALLBACK_TYPE = (
+    '// SAFETY: This C-ABI callback has no arguments, borrows no caller memory, and\n'
+    '// returns only after the dependent has completed its scalar lifecycle exit.\n'
+    'type IhkSmpProviderExitV2 = extern "C" fn();'
+)
+AUDITED_IHK_ATTACH_EXTERN = (
+    '#[doc(hidden)]\n'
+    '// SAFETY: This C-ABI scalar boundary owns no caller memory.  A positive return\n'
+    '// is a versioned opaque token for the single published minor-zero provider;\n'
+    '// every failure is a negative errno and leaves no live reservation behind.\n'
+    '#[export_name = "ihk_smp_provider_attach_v1"]\n'
+    '// SAFETY: This exported C ABI accepts no caller-owned state and returns only\n'
+    '// the registry-owned scalar token or a negative errno.\n'
+    'pub extern "C" fn ihk_smp_provider_attach_v1() -> i64 {'
+)
+AUDITED_IHK_DETACH_EXTERN = (
+    '#[doc(hidden)]\n'
+    '// SAFETY: This C-ABI scalar boundary consumes the exact v1 token owned by the\n'
+    '// reviewed namespaced SMP dependent.  The token is an ownership receipt, not\n'
+    '// a security boundary against other privileged in-kernel code.  Any malformed,\n'
+    '// stale, duplicated, busy, or corrupt state fails stop before unload succeeds.\n'
+    '#[export_name = "ihk_smp_provider_detach_v1"]\n'
+    '// SAFETY: This exported C ABI accepts only the opaque scalar issued by attach\n'
+    '// and cannot return while the owned provider entry remains live.\n'
+    'pub extern "C" fn ihk_smp_provider_detach_v1(token: i64) {'
+)
+AUDITED_IHK_ATTACH_V2_EXTERN = (
+    '#[doc(hidden)]\n'
+    '// SAFETY: This C ABI accepts only scalars and nullable C-ABI function pointers.\n'
+    '// The reviewed SMP dependent owns both callback targets for the full returned\n'
+    '// lease lifetime.  Initialization runs while the registry slot is Publishing;\n'
+    '// only a zero result permits publication.  Every failed path aborts or retires\n'
+    '// its reservation and leaves no retained callback identity.\n'
+    '#[export_name = "ihk_smp_provider_attach_v2"]\n'
+    '// SAFETY: The exact nullable function-pointer ABI is validated before either\n'
+    '// callback is invoked; no Rust object or caller-owned data crosses the export.\n'
+    'pub extern "C" fn ihk_smp_provider_attach_v2(\n'
+    '    callback_abi: u32,\n'
+    '    flags: u32,\n'
+    '    init: Option<IhkSmpProviderInitV2>,\n'
+    '    exit: Option<IhkSmpProviderExitV2>,\n'
+    ') -> i64 {'
+)
+AUDITED_IHK_DETACH_V2_EXTERN = (
+    '#[doc(hidden)]\n'
+    '// SAFETY: The exact callback identity was retained before the named token was\n'
+    '// published.  The unregister guard first makes the provider Unpublishing and\n'
+    '// rejects new references.  The callback executes only after all existing open\n'
+    '// and OS references have drained, remains bound throughout the call, and is\n'
+    '// cleared only after exit completes and the slot commits to Vacant.\n'
+    '#[export_name = "ihk_smp_provider_detach_v2"]\n'
+    '// SAFETY: The token and exact retained exit identity name the sole live v2\n'
+    '// lease; invariant violations fail stop before provider retirement can return.\n'
+    'pub extern "C" fn ihk_smp_provider_detach_v2(token: i64, exit: Option<IhkSmpProviderExitV2>) {'
+)
+AUDITED_IHK_OPEN_EXTERN = (
+    '#[doc(hidden)]\n'
+    '// SAFETY: This C-ABI boundary accepts only the scalar device minor and returns\n'
+    '// either a positive opaque provider-generation receipt or a negative errno.\n'
+    '// The receipt does not encode a pointer or Rust layout.  Its open reference is\n'
+    '// owned exactly once by the caller\'s non-Copy per-file wrapper.\n'
+    '#[export_name = "ihk_smp_provider_open_v1"]\n'
+    '// SAFETY: This exported C ABI carries only a u32 argument and i64 result;\n'
+    '// every expected failure becomes a negative errno and no unwind may cross it.\n'
+    'pub extern "C" fn ihk_smp_provider_open_v1(minor: u32) -> i64 {'
+)
+AUDITED_IHK_CLOSE_EXTERN = (
+    '#[doc(hidden)]\n'
+    '// SAFETY: This C-ABI boundary accepts only a positive scalar generation token\n'
+    '// returned by open.  Shared opens intentionally receive the same scalar, so\n'
+    '// the trusted caller\'s non-Copy per-file owners must keep calls count-balanced;\n'
+    '// malformed, stale, and zero-reference closes fail stop.\n'
+    '#[export_name = "ihk_smp_provider_close_v1"]\n'
+    '// SAFETY: This exported C ABI carries only an i64 receipt; detectable ownership\n'
+    '// faults fail stop inside the kernel and no unwind may cross the module boundary.\n'
+    'pub extern "C" fn ihk_smp_provider_close_v1(receipt: i64) {'
+)
+AUDITED_SMP_INIT_CALLBACK_TYPE = (
+    '// SAFETY: This scalar C-ABI callback borrows no provider or caller memory.\n'
+    'type IhkSmpProviderInitV2 = extern "C" fn() -> i32;'
+)
+AUDITED_SMP_EXIT_CALLBACK_TYPE = (
+    '// SAFETY: This scalar C-ABI callback borrows no provider or caller memory.\n'
+    'type IhkSmpProviderExitV2 = extern "C" fn();'
+)
+AUDITED_SMP_PROVIDER_EXTERN = ('extern "C" {\n'
+ '    #[link_name = "ihk_provider_lifecycle_v1"]\n'
+ '    static IHK_PROVIDER_LIFECYCLE_V1: u8;\n'
+ '    #[link_name = "ihk_smp_provider_attach_v2"]\n'
+ '    fn ihk_smp_provider_attach_v2(\n'
+ '        callback_abi: u32,\n'
+ '        flags: u32,\n'
+ '        init: Option<IhkSmpProviderInitV2>,\n'
+ '        exit: Option<IhkSmpProviderExitV2>,\n'
+ '    ) -> i64;\n'
+ '    #[link_name = "ihk_smp_provider_detach_v2"]\n'
+ '    fn ihk_smp_provider_detach_v2(token: i64, exit: Option<IhkSmpProviderExitV2>);\n'
+ '    #[link_name = "ihk_smp_provider_open_v1"]\n'
+ '    fn ihk_smp_provider_open_v1(minor: u32) -> i64;\n'
+ '    #[link_name = "ihk_smp_provider_close_v1"]\n'
+ '    fn ihk_smp_provider_close_v1(receipt: i64);\n'
+ '    #[link_name = "ihk_os_create_unbooted_v6"]\n'
+ '    fn ihk_os_create_unbooted_v6(\n'
+ '        provider_minor: u32,\n'
+ '        owner: *mut core::ffi::c_void,\n'
+ '        argument: u64,\n'
+ '        callback_abi: u32,\n'
+ '        ioctl: Option<IhkSmpOsIoctlV2>,\n'
+ '        release: Option<IhkSmpOsReleaseV2>,\n'
+ '        prepare: Option<IhkSmpPrepareBootV3>,\n'
+ '        start: Option<IhkSmpStartBootV3>,\n'
+ '        application_open: Option<application_abi::Open>,\n'
+ '        application_invoke: Option<application_abi::Invoke>,\n'
+ '        application_close: Option<application_abi::Close>,\n'
+ '        shutdown: Option<IhkSmpShutdownV6>,\n'
+ '    ) -> i64;\n'
+ '    #[link_name = "ihk_os_destroy_unbooted_v1"]\n'
+ '    fn ihk_os_destroy_unbooted_v1(provider_minor: u32, minor: u64) -> i64;\n'
+ '}')
+AUDITED_SMP_OS_IOCTL_TYPE = 'type IhkSmpOsIoctlV2 = unsafe extern "C" fn(u32, u64, u32, u64, u32) -> i64;'
+AUDITED_SMP_OS_RELEASE_TYPE = 'type IhkSmpOsReleaseV2 = unsafe extern "C" fn(u32, u64) -> i32;'
+AUDITED_SMP_PREPARE_BOOT_TYPE = (
+    '// SAFETY: IHK supplies its own live kmsg physical address and allocation size.\n'
+    '// Preparation cannot start CPUs or publish guest work into Linux queues.\n'
+    'type IhkSmpPrepareBootV3 = unsafe extern "C" fn(u32, u64, u64, u64) -> i32;'
+)
+AUDITED_SMP_START_BOOT_TYPE = (
+    '// SAFETY: IHK publishes Booting first and retains owners after any start result.\n'
+    'type IhkSmpStartBootV3 = unsafe extern "C" fn(u32, u64) -> i32;'
+)
+AUDITED_SMP_SHUTDOWN_TYPE = (
+    '// SAFETY: IHK invokes this under the exact operation lock and generation lease.\n'
+    '// The tagged scalar result distinguishes rollback-safe failure from an effect\n'
+    '// which must remain closed for later reconciliation.\n'
+    'type IhkSmpShutdownV6 = unsafe extern "C" fn(u32, u64) -> i64;'
+)
+AUDITED_SMP_OS_IOCTL_EXTERN = 'unsafe extern "C" fn ihk_smp_os_ioctl_v2(\n    slot: u32,\n    generation: u64,\n    command: u32,\n    argument: u64,\n    compat: u32,\n) -> i64 {'
+AUDITED_SMP_OS_RELEASE_EXTERN = 'unsafe extern "C" fn ihk_smp_os_release_v2(slot: u32, generation: u64) -> i32 {'
+AUDITED_SMP_APPLICATION_OPEN_EXTERN = (
+    '// SAFETY: IHK owns writable kernel output, the operation guard and an exact\n'
+    '// OS/module lease. Acquiring a connection cannot publish guest work.\n'
+    'unsafe extern "C" fn application_open(\n'
+    '    slot: u32,\n'
+    '    generation: u64,\n'
+    '    pid: i32,\n'
+    '    output: *mut *mut core::ffi::c_void,\n'
+    ') -> i32 {'
+)
+AUDITED_SMP_APPLICATION_INVOKE_EXTERN = (
+    'unsafe extern "C" fn application_invoke(\n'
+    '    context: *mut core::ffi::c_void,\n'
+    '    command: u32,\n'
+    '    buffer: *mut u8,\n'
+    '    bytes: usize,\n'
+    ') -> i64 {'
+)
+AUDITED_SMP_APPLICATION_CLOSE_EXTERN = (
+    '// SAFETY: IHK returns the unique connection after every invocation has ended,\n'
+    '// retaining the OS/module lease until after this destructor returns.\n'
+    'unsafe extern "C" fn application_close(context: *mut core::ffi::c_void) {'
+)
+AUDITED_SMP_PREPARE_BOOT_EXTERN = (
+    '// SAFETY: IHK holds its exact OS lease, per-OS operation mutex and SMP module\n'
+    '// owner. kmsg scalars identify IHK\'s allocation, never an ioctl user pointer.\n'
+    'unsafe extern "C" fn ihk_smp_prepare_boot_v3(\n'
+    '    slot: u32,\n'
+    '    generation: u64,\n'
+    '    kmsg: u64,\n'
+    '    kmsg_bytes: u64,\n'
+    ') -> i32 {'
+)
+AUDITED_SMP_START_BOOT_EXTERN = (
+    '// SAFETY: IHK has already published Booting and excludes resource mutation.\n'
+    '// The native adapter retains every owner before the first CPU-start effect.\n'
+    'unsafe extern "C" fn ihk_smp_start_boot_v3(slot: u32, generation: u64) -> i32 {'
+)
+AUDITED_SMP_SHUTDOWN_EXTERN = (
+    '// SAFETY: IHK supplies the exact generation lease and serializes this call\n'
+    '// with every OS operation. Sender closure completes before any CPU reset;\n'
+    '// all owners remain retained on either failure class.\n'
+    'unsafe extern "C" fn ihk_smp_shutdown_v6(slot: u32, generation: u64) -> i64 {'
+)
+AUDITED_OS_LEASE_CONSTRUCTOR = '    pub(crate) unsafe fn from_ihk_lease_v2(\n        slot: u32,\n        generation: u64,\n    ) -> Result<Self, ResourceError> {\n        let token = Self { slot, generation };\n        token.validate()?;\n        Ok(token)\n    }'
+
+AUDITED_SMP_INIT_CALLBACK_EXTERN = (
+    '// SAFETY: The callback owns no foreign state and returns only a literal errno\n'
+    '// status through the exact v2 function-pointer ABI.\n'
+    'extern "C" fn ihk_smp_provider_init_v2() -> i32 {'
+)
+AUDITED_SMP_EXIT_CALLBACK_EXTERN = (
+    '// SAFETY: The callback owns no foreign state and returns only after its local\n'
+    '// lifecycle diagnostic completes through the exact v2 function-pointer ABI.\n'
+    'extern "C" fn ihk_smp_provider_exit_v2() {'
+)
+EXPECTED_TOP_LEVEL_KEYS = {
+    "build_contract",
+    "destination",
+    "inputs",
+    "modules",
+    "parent_integration",
+    "profile_id",
+    "readiness",
+    "schema_version",
+    "target",
+}
+HEX64 = re.compile(r"^[0-9a-f]{64}$")
+
+
+class ValidationError(Exception):
+    pass
+
+
+_RUST_FORBIDDEN_CAPABILITIES = frozenset(
+    ("include", "include_bytes", "asm", "global_asm")
+)
+
+
+def _blank_rust_span(masked, text, start, end, preserved=()):
+    """Blank a lexical non-code span while retaining offsets and newlines."""
+
+    preserved = set(preserved)
+    for offset in range(start, end):
+        if offset not in preserved and text[offset] not in "\r\n":
+            masked[offset] = " "
+
+
+def _rust_char_literal_end(text, start):
+    """Return the end of a Rust character literal, or None for a lifetime."""
+
+    cursor = start + 1
+    if cursor >= len(text) or text[cursor] in "\r\n'":
+        return None
+    if text[cursor] == "\\":
+        cursor += 1
+        if cursor >= len(text) or text[cursor] in "\r\n":
+            return None
+        if text[cursor] == "u" and cursor + 1 < len(text) and text[cursor + 1] == "{":
+            closing = text.find("}", cursor + 2)
+            if closing < 0:
+                return None
+            cursor = closing + 1
+        elif text[cursor] == "x":
+            cursor += 3
+        else:
+            cursor += 1
+    else:
+        cursor += 1
+    if cursor < len(text) and text[cursor] == "'":
+        return cursor + 1
+    return None
+
+
+def _mask_rust_comments_and_literals(text):
+    """Return Rust code with comments and literal contents lexically masked."""
+
+    masked = list(text)
+    cursor = 0
+    length = len(text)
+    while cursor < length:
+        if text.startswith("//", cursor):
+            end = text.find("\n", cursor + 2)
+            if end < 0:
+                end = length
+            _blank_rust_span(masked, text, cursor, end)
+            cursor = end
+            continue
+        if text.startswith("/*", cursor):
+            depth = 1
+            end = cursor + 2
+            while end < length and depth:
+                if text.startswith("/*", end):
+                    depth += 1
+                    end += 2
+                elif text.startswith("*/", end):
+                    depth -= 1
+                    end += 2
+                else:
+                    end += 1
+            if depth:
+                raise ValidationError("unterminated Rust block comment")
+            _blank_rust_span(masked, text, cursor, end)
+            cursor = end
+            continue
+
+        raw_prefix_length = None
+        if cursor == 0 or not (text[cursor - 1].isalnum() or text[cursor - 1] == "_"):
+            for prefix in ("br", "cr", "r"):
+                if text.startswith(prefix, cursor):
+                    probe = cursor + len(prefix)
+                    while probe < length and text[probe] == "#":
+                        probe += 1
+                    if probe < length and text[probe] == '"':
+                        raw_prefix_length = len(prefix)
+                        break
+        if raw_prefix_length is not None:
+            quote = cursor + raw_prefix_length
+            while quote < length and text[quote] == "#":
+                quote += 1
+            hashes = text[cursor + raw_prefix_length : quote]
+            closing = text.find('"' + hashes, quote + 1)
+            if closing < 0:
+                raise ValidationError("unterminated Rust raw string literal")
+            end = closing + 1 + len(hashes)
+            _blank_rust_span(masked, text, quote + 1, closing)
+            cursor = end
+            continue
+
+        if text[cursor] == '"':
+            end = cursor + 1
+            closed = False
+            while end < length:
+                if text[end] == "\\":
+                    end += 2
+                elif text[end] == '"':
+                    end += 1
+                    closed = True
+                    break
+                else:
+                    end += 1
+            if not closed:
+                raise ValidationError("unterminated Rust string literal")
+            _blank_rust_span(masked, text, cursor, end, (cursor, end - 1))
+            cursor = end
+            continue
+
+        char_start = cursor
+        if (
+            text[cursor] == "b"
+            and cursor + 1 < length
+            and text[cursor + 1] == "'"
+            and (cursor == 0 or not (text[cursor - 1].isalnum() or text[cursor - 1] == "_"))
+        ):
+            char_start = cursor + 1
+        if text[char_start] == "'":
+            end = _rust_char_literal_end(text, char_start)
+            if end is not None:
+                _blank_rust_span(masked, text, char_start, end)
+                cursor = end
+                continue
+        cursor += 1
+    return "".join(masked)
+
+
+def _rust_identifier_start(character):
+    return character == "_" or character.isidentifier()
+
+
+def _rust_identifier_continue(character):
+    return character == "_" or ("a" + character).isidentifier()
+
+
+def _rust_identifiers(text):
+    """Yield Rust-like Unicode identifiers without Python ``\b`` ambiguity."""
+
+    cursor = 0
+    length = len(text)
+    while cursor < length:
+        raw = False
+        name_start = cursor
+        if (
+            text.startswith("r#", cursor)
+            and cursor + 2 < length
+            and _rust_identifier_start(text[cursor + 2])
+        ):
+            raw = True
+            name_start = cursor + 2
+        elif not _rust_identifier_start(text[cursor]):
+            cursor += 1
+            continue
+        end = name_start + 1
+        while end < length and _rust_identifier_continue(text[end]):
+            end += 1
+        yield text[name_start:end], cursor, end, raw
+        cursor = end
+
+
+def _validate_bare_audited_extern(masked, start, label):
+    line_start = masked.rfind("\n", 0, start) + 1
+    if masked[line_start:start].strip():
+        raise ValidationError(
+            "{0} exact audited extern boundary has an unreviewed modifier".format(label)
+        )
+    prefix = masked[:start].rstrip()
+    if prefix and prefix[-1] not in ";}":
+        raise ValidationError(
+            "{0} exact audited extern boundary has an unreviewed outer attribute".format(
+                label
+            )
+        )
+
+
+def _validate_rust_escape_hatches(text, label, allowed_extern_blocks=()):
+    """Reject unreviewed Rust source inclusion, assembly, and extern edges."""
+
+    masked = _mask_rust_comments_and_literals(text)
+    identifiers = list(_rust_identifiers(masked))
+    forbidden = next(
+        (name for name, _start, _end, _raw in identifiers
+         if name in _RUST_FORBIDDEN_CAPABILITIES),
+        None,
+    )
+    if forbidden is not None:
+        raise ValidationError(
+            "{0} contains forbidden Rust macro boundary: {1}!".format(
+                label, forbidden
+            )
+        )
+
+    extern_starts = [
+        start for name, start, _end, raw in identifiers
+        if name == "extern" and not raw
+    ]
+    allowed_starts = set()
+    for exact in allowed_extern_blocks:
+        starts = []
+        extern_offset = exact.find("extern")
+        if extern_offset < 0:
+            raise ValidationError(
+                "{0} audited extern allowlist item lacks extern".format(label)
+            )
+        search_from = 0
+        while True:
+            exact_start = text.find(exact, search_from)
+            if exact_start < 0:
+                break
+            extern_start = exact_start + extern_offset
+            if extern_start in extern_starts:
+                starts.append((exact_start, extern_start))
+            search_from = exact_start + 1
+        if len(starts) != 1:
+            raise ValidationError(
+                "{0} lacks one exact audited extern boundary".format(label)
+            )
+        exact_start, extern_start = starts[0]
+        _validate_bare_audited_extern(masked, exact_start, label)
+        allowed_starts.add(extern_start)
+    if any(start not in allowed_starts for start in extern_starts):
+        raise ValidationError(
+            "{0} contains an additional unreviewed extern boundary".format(label)
+        )
+    return masked
+
+
+def _object_without_duplicates(pairs):
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValidationError("duplicate JSON key: {0}".format(key))
+        result[key] = value
+    return result
+
+
+def load_json(path):
+    try:
+        with open(path, "r") as stream:
+            return json.load(stream, object_pairs_hook=_object_without_duplicates)
+    except (IOError, OSError, ValueError) as error:
+        raise ValidationError("cannot load {0}: {1}".format(path, error))
+
+
+def canonical_json_bytes(value):
+    return (json.dumps(value, sort_keys=True, separators=(",", ":")) + "\n").encode("utf-8")
+
+
+def sha256_bytes(value):
+    return hashlib.sha256(value).hexdigest()
+
+
+def sha256_file(path):
+    digest = hashlib.sha256()
+    with open(path, "rb") as stream:
+        while True:
+            chunk = stream.read(1024 * 1024)
+            if not chunk:
+                break
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def _require_keys(value, expected, label):
+    if not isinstance(value, dict):
+        raise ValidationError("{0} must be an object".format(label))
+    actual = set(value)
+    if actual != set(expected):
+        raise ValidationError(
+            "{0} keys differ: missing={1}, extra={2}".format(
+                label, sorted(set(expected) - actual), sorted(actual - set(expected))
+            )
+        )
+
+
+def _require_string_list(value, label, allow_empty=True):
+    if not isinstance(value, list) or (not allow_empty and not value):
+        raise ValidationError("{0} must be a {1}list".format(label, "non-empty " if not allow_empty else ""))
+    if any(not isinstance(item, str) or not item.strip() for item in value):
+        raise ValidationError("{0} entries must be non-empty strings".format(label))
+    if len(value) != len(set(value)):
+        raise ValidationError("{0} contains duplicates".format(label))
+
+
+def _safe_relative_path(value, label):
+    if not isinstance(value, str) or not value:
+        raise ValidationError("{0} must be a non-empty relative path".format(label))
+    if "\\" in value or value.startswith("/") or value != os.path.normpath(value):
+        raise ValidationError("{0} is not a normalized POSIX-style relative path".format(label))
+    if value == "." or value.startswith("../") or "/../" in value or value.endswith("/.."):
+        raise ValidationError("{0} escapes its root".format(label))
+    return value
+
+
+def _repo_regular_file(repo_root, relative, label):
+    relative = _safe_relative_path(relative, label)
+    repo_real = os.path.realpath(repo_root)
+    candidate = os.path.join(repo_real, relative)
+    candidate_real = os.path.realpath(candidate)
+    try:
+        inside = os.path.commonpath([repo_real, candidate_real]) == repo_real
+    except ValueError:
+        inside = False
+    if not inside:
+        raise ValidationError("{0} resolves outside the repository".format(label))
+    try:
+        info = os.lstat(candidate)
+    except OSError as error:
+        raise ValidationError("{0} is unavailable: {1}".format(label, error))
+    if stat.S_ISLNK(info.st_mode) or not stat.S_ISREG(info.st_mode):
+        raise ValidationError("{0} must be a regular, non-symlink file".format(label))
+    if candidate_real != candidate:
+        raise ValidationError("{0} traverses a symlink".format(label))
+    return candidate
+
+
+def _validate_digest(path, expected, label):
+    if not isinstance(expected, str) or not HEX64.match(expected):
+        raise ValidationError("{0}.sha256 must be lowercase SHA-256".format(label))
+    actual = sha256_file(path)
+    if actual != expected:
+        raise ValidationError("{0} digest mismatch: expected {1}, got {2}".format(label, expected, actual))
+
+
+def _read_text(path, label):
+    try:
+        with open(path, "r") as stream:
+            return stream.read()
+    except (IOError, OSError, UnicodeError) as error:
+        raise ValidationError("cannot read {0}: {1}".format(label, error))
+
+
+def _validate_parent_integration(repo_root, reference):
+    if reference != EXPECTED_PARENT_INTEGRATION_REF:
+        raise ValidationError("parent_integration differs from the hard-locked parent bundle")
+    bundle_path = _repo_regular_file(
+        repo_root, reference["repository_path"], "parent_integration.repository_path"
+    )
+    _validate_digest(bundle_path, reference["sha256"], "parent_integration")
+    bundle = load_json(bundle_path)
+    _require_keys(
+        bundle,
+        {
+            "checkpoint",
+            "credit_eligible",
+            "parent_files",
+            "patch",
+            "profile_id",
+            "required_absent_paths",
+            "schema_version",
+            "selected_source",
+            "verification_scope",
+        },
+        "parent integration bundle",
+    )
+    if bundle["schema_version"] != PARENT_SCHEMA_VERSION or bundle["profile_id"] != PROFILE_ID:
+        raise ValidationError("parent integration bundle identity differs")
+    if bundle["checkpoint"] != "integrity_only" or bundle["credit_eligible"] is not False:
+        raise ValidationError("parent integration bundle may not claim readiness or credit")
+    if bundle["selected_source"] != EXPECTED_PARENT_SOURCE:
+        raise ValidationError("parent integration selected source differs from the locked Rocky source")
+    selected = bundle["selected_source"]
+    source_lock_path = _repo_regular_file(
+        repo_root, selected["source_lock_repository_path"], "parent integration source lock"
+    )
+    _validate_digest(source_lock_path, selected["source_lock_sha256"], "parent integration source lock")
+    source_lock = load_json(source_lock_path)
+    if source_lock.get("lock_id") != selected["source_lock_id"]:
+        raise ValidationError("parent integration source-lock ID differs")
+    if source_lock.get("source_rpm", {}).get("sha256") != selected["source_rpm_sha256"]:
+        raise ValidationError("parent integration source RPM differs from its source lock")
+    archive_objects = [
+        item
+        for item in source_lock.get("embedded_objects", [])
+        if item.get("path") == "SOURCES/" + selected["archive_basename"]
+    ]
+    if len(archive_objects) != 1 or archive_objects[0].get("sha256") != selected["archive_sha256"]:
+        raise ValidationError("parent integration source archive differs from its source lock")
+    if bundle["patch"] != EXPECTED_PARENT_PATCH:
+        raise ValidationError("parent integration patch identity differs")
+    if bundle["parent_files"] != EXPECTED_PARENT_FILES:
+        raise ValidationError("parent integration preimages, insertions, or postimages differ")
+    if bundle["required_absent_paths"] != EXPECTED_PARENT_ABSENT_PATHS:
+        raise ValidationError("parent integration destination absence contract differs")
+    if bundle["verification_scope"] != PARENT_VERIFICATION_SCOPE:
+        raise ValidationError("parent integration verification scope differs")
+
+    patch_path = _repo_regular_file(
+        repo_root, bundle["patch"]["repository_path"], "parent integration patch"
+    )
+    _validate_digest(patch_path, bundle["patch"]["sha256"], "parent integration patch")
+    try:
+        with open(patch_path, "rb") as stream:
+            patch_bytes = stream.read()
+    except (IOError, OSError) as error:
+        raise ValidationError("cannot read parent integration patch: {0}".format(error))
+    if not patch_bytes.endswith(b"\n") or b"\r" in patch_bytes or b"\0" in patch_bytes:
+        raise ValidationError("parent integration patch must be LF-only text ending in a newline")
+    return {
+        "bundle": bundle,
+        "bundle_path": bundle_path,
+        "bundle_sha256": reference["sha256"],
+        "patch_bytes": patch_bytes,
+        "patch_path": patch_path,
+    }
+
+
+def _apply_parent_insertion(preimage, item):
+    label = item["path"]
+    if sha256_bytes(preimage) != item["preimage_sha256"]:
+        raise ValidationError("parent preimage digest mismatch: {0}".format(label))
+    if b"\r" in preimage or not preimage.endswith(b"\n"):
+        raise ValidationError("parent preimage must be LF-only text ending in a newline: {0}".format(label))
+    try:
+        text = preimage.decode("utf-8")
+    except UnicodeError as error:
+        raise ValidationError("parent preimage is not UTF-8 text ({0}): {1}".format(label, error))
+    lines = text.splitlines()
+    insertion = item["insertion"]
+    matches = [index for index, line in enumerate(lines) if line == insertion["anchor"]]
+    if len(matches) != 1:
+        raise ValidationError(
+            "parent insertion anchor must occur exactly once ({0}): got {1}".format(label, len(matches))
+        )
+    index = matches[0]
+    if insertion["placement"] == "after":
+        index += 1
+    elif insertion["placement"] != "before":
+        raise ValidationError("unsupported parent insertion placement: {0}".format(label))
+    lines.insert(index, insertion["line"])
+    postimage = ("\n".join(lines) + "\n").encode("utf-8")
+    if sha256_bytes(postimage) != item["postimage_sha256"]:
+        raise ValidationError("parent postimage digest mismatch: {0}".format(label))
+    return postimage
+
+
+def _render_parent_patch(parent_files, preimages, postimages):
+    chunks = []
+    for item in parent_files:
+        path = item["path"]
+        chunks.append("diff --git a/{0} b/{0}\n".format(path))
+        chunks.extend(
+            difflib.unified_diff(
+                preimages[path].decode("utf-8").splitlines(True),
+                postimages[path].decode("utf-8").splitlines(True),
+                fromfile="a/" + path,
+                tofile="b/" + path,
+                n=3,
+            )
+        )
+    return "".join(chunks).encode("utf-8")
+
+
+def verify_parent_source_archive(plan, archive_path):
+    parent = plan["parent_integration"]
+    bundle = parent["bundle"]
+    selected = bundle["selected_source"]
+    archive_path = os.path.abspath(archive_path)
+    try:
+        info = os.lstat(archive_path)
+    except OSError as error:
+        raise ValidationError("selected source archive is unavailable: {0}".format(error))
+    if stat.S_ISLNK(info.st_mode) or not stat.S_ISREG(info.st_mode):
+        raise ValidationError("selected source archive must be a regular, non-symlink file")
+    if os.path.basename(archive_path) != selected["archive_basename"]:
+        raise ValidationError("selected source archive basename differs")
+    _validate_digest(archive_path, selected["archive_sha256"], "selected source archive")
+
+    try:
+        with tarfile.open(archive_path, mode="r:xz") as archive:
+            members = archive.getmembers()
+            normalized_names = [member.name.rstrip("/") for member in members]
+            root = selected["archive_root"]
+            for relative in bundle["required_absent_paths"]:
+                locked = root + "/" + relative
+                if any(name == locked or name.startswith(locked + "/") for name in normalized_names):
+                    raise ValidationError("selected source already contains locked destination: {0}".format(relative))
+
+            preimages = {}
+            for item in bundle["parent_files"]:
+                member_name = root + "/" + item["path"]
+                matching = [member for member in members if member.name.rstrip("/") == member_name]
+                if len(matching) != 1 or not matching[0].isfile():
+                    raise ValidationError(
+                        "selected source must contain one regular parent file: {0}".format(item["path"])
+                    )
+                stream = archive.extractfile(matching[0])
+                if stream is None:
+                    raise ValidationError("cannot read selected source parent: {0}".format(item["path"]))
+                preimages[item["path"]] = stream.read()
+    except (IOError, OSError, tarfile.TarError) as error:
+        raise ValidationError("cannot inspect selected source archive: {0}".format(error))
+
+    postimages = {}
+    for item in bundle["parent_files"]:
+        postimages[item["path"]] = _apply_parent_insertion(preimages[item["path"]], item)
+    rendered = _render_parent_patch(bundle["parent_files"], preimages, postimages)
+    if rendered != parent["patch_bytes"]:
+        raise ValidationError("parent integration patch bytes differ from exact intended insertions")
+    return {
+        "archive_sha256": selected["archive_sha256"],
+        "parent_files": [
+            {
+                "path": item["path"],
+                "postimage_sha256": item["postimage_sha256"],
+                "preimage_sha256": item["preimage_sha256"],
+            }
+            for item in bundle["parent_files"]
+        ],
+        "patch_sha256": bundle["patch"]["sha256"],
+    }
+
+
+def _validate_kbuild(text):
+    try:
+        return validate_native_rust_kbuild(text)
+    except KconfigPolicyError as error:
+        raise ValidationError("Kbuild policy violation: {0}".format(error))
+
+
+def _validate_kconfig(text):
+    try:
+        return validate_native_rust_kconfig(text)
+    except KconfigPolicyError as error:
+        raise ValidationError("Kconfig policy violation: {0}".format(error))
+
+
+# These reached sources already contain assembly or foreign ABI surfaces. Their
+# exact bytes are pinned by EXPECTED_INPUTS; changing any byte needs a new
+# explicit boundary review instead of an automatic escape-hatch allowance.
+LOCKED_ESCAPE_SUPPORT = frozenset((
+    'current_fork_control.rs', 'current_fork_host.rs', 'exec_delivery.rs', 'exec_transfer_checked.rs',
+    "os_service.rs", "abi/os_service.rs", "abi/application.rs", "abi/sysfs_request.rs",
+    "abi/vdso.rs", "application_pager.rs", "mcctrl_exec.rs", "mcctrl_process.rs",
+    "mcctrl_vm.rs", "mcctrl_mm_write.rs", "procfs_objects.rs", "smp_boot_code.rs", "smp_file_pager.rs",
+    "smp_procfs.rs", "smp_service.rs", "smp_trampoline.rs", "smp_vdso.rs",
+    "sysfs_memory.rs", "sysfs_objects.rs", "sysfs_os.rs", "sysfs_setup.rs",
+    "sysfs_tree.rs", "sysfs_zeroing.rs", "zero_pages.rs", "current_fork_task_mm.rs", "smp_application.rs", "smp_application_syscall.rs", "application_syscall.rs",
+))
+
+
+# Inactive C references remain in the repository; this selected profile admits no project C.
+LINUX_MM_COMPAT_INPUTS = {}
+RUST_STAGE_ALIASES = {"mcctrl_rust.rs": "mcctrl.rs"}
+
+
+def _validate_input(repo_root, item, index):
+    label = "inputs[{0}]".format(index)
+    _require_keys(item, {"destination", "kind", "repository_path", "sha256"}, label)
+    if index >= len(EXPECTED_INPUTS) or item != EXPECTED_INPUTS[index]:
+        raise ValidationError("{0} differs from the hard-locked staging input".format(label))
+    expected_destination = {
+        "kbuild_template": "Kbuild",
+        "kconfig": "Kconfig",
+        "shared_rust_abi": "abi/x86_64.rs",
+        "rust_ioctl_dispatch": "ihk_ioctl.rs",
+    }.get(item["kind"])
+    if item["destination"] in LINUX_MM_COMPAT_INPUTS and item["kind"] in ("linux_mm_compat_source", "linux_mm_compat_header"):
+        expected_destination = item["destination"]
+    elif item["kind"] == "rust_module":
+        expected_destination = item["destination"]
+    elif item["kind"] == "rust_support_module" and item["destination"].endswith(".rs"):
+        expected_destination = item["destination"]
+    elif item["kind"] == "embedded_assembly_source" and item["destination"].endswith(".S"):
+        expected_destination = item["destination"]
+    if expected_destination is None:
+        raise ValidationError("{0}.kind is not a locked staging input kind".format(label))
+    if item["destination"] != expected_destination:
+        raise ValidationError("{0}.destination must be {1}".format(label, expected_destination))
+    path = _repo_regular_file(repo_root, item["repository_path"], label + ".repository_path")
+    _validate_digest(path, item["sha256"], label)
+    if item["kind"] == "embedded_assembly_source":
+        return {"destination": item["destination"], "path": path, "sha256": item["sha256"]}
+    if item["destination"] in LINUX_MM_COMPAT_INPUTS:
+        if {k: item[k] for k in ("repository_path", "sha256")} != LINUX_MM_COMPAT_INPUTS[item["destination"]]:
+            raise ValidationError("Linux MM compatibility input differs from reviewed bytes")
+        return {"destination": item["destination"], "path": path, "sha256": item["sha256"]}
+    text = _read_text(path, label)
+    if item["destination"] in ("os_runtime.rs", "smp_cpu.rs", "smp_memory.rs"):
+        if __package__:
+            from .native_rust_host_audit import reject_unreviewed_rust_escapes
+        else:
+            from native_rust_host_audit import reject_unreviewed_rust_escapes
+        try:
+            reject_unreviewed_rust_escapes(item["repository_path"], text)
+        except SystemExit as error:
+            raise ValidationError("native Linux adapter boundary differs: {0}".format(error))
+    elif item["kind"] not in ("kbuild_template", "kconfig") and item["destination"] not in LOCKED_ESCAPE_SUPPORT:
+        _validate_rust_escape_hatches(text, label)
+    if item["kind"] == "kbuild_template":
+        _validate_kbuild(text)
+    elif item["kind"] == "kconfig":
+        _validate_kconfig(text)
+    elif item["kind"] == "shared_rust_abi":
+        required = (
+            "pub struct IhkIkcQueueHead",
+            "assert_layout!(IhkIkcQueueHead, 64, 8,",
+            '#[cfg(not(target_endian = "little"))]',
+            '#[cfg(not(target_pointer_width = "64"))]',
+        )
+        for token in required:
+            if text.count(token) != 1:
+                raise ValidationError("{0} lacks a unique ABI marker: {1}".format(label, token))
+        lowered = text.lower()
+        for forbidden in ("unsafe", "module!"):
+            if forbidden in lowered:
+                raise ValidationError("{0} contains forbidden executable/boundary construct: {1}".format(label, forbidden))
+    elif item["destination"] == "ikc_queue.rs":
+        required = (
+            "use super::abi::IhkIkcQueueHead;",
+            "pub(crate) struct SharedQueue",
+            "pub(crate) fn try_dequeue",
+        )
+        for token in required:
+            if text.count(token) != 1:
+                raise ValidationError("{0} lacks a unique queue marker: {1}".format(label, token))
+        if text.count("pub(crate) unsafe fn attach") != 2:
+            raise ValidationError("{0} requires exactly two queue attach contexts".format(label))
+        enqueue_matches = list(re.finditer(r"pub\(crate\) fn try_enqueue\s*\(", text))
+        if len(enqueue_matches) != 2:
+            raise ValidationError(
+                "{0} requires exactly two queue producers, found {1}".format(
+                    label, len(enqueue_matches)
+                )
+            )
+        wrapper = enqueue_matches[0]
+        wrapper_impl = text.rfind("impl", 0, wrapper.start())
+        if wrapper_impl < 0 or not re.match(
+            r"impl<'mapping> SharedProducer<'mapping>\s*\{", text[wrapper_impl:]
+        ):
+            raise ValidationError("{0} queue wrapper producer context differs".format(label))
+        wrapper_end = text.find("\n    }", wrapper.end())
+        wrapper_body = text[wrapper.end():wrapper_end] if wrapper_end >= 0 else ""
+        if "self.0.try_enqueue(packet)" not in wrapper_body:
+            raise ValidationError("{0} queue wrapper producer redirect differs".format(label))
+        raw = enqueue_matches[1]
+        raw_impl = text.rfind("impl", 0, raw.start())
+        if raw_impl < 0 or not re.match(
+            r"impl<'mapping> SharedQueue<'mapping>\s*\{", text[raw_impl:]
+        ):
+            raise ValidationError("{0} raw queue producer context differs".format(label))
+        lowered = text.lower()
+        for forbidden in ("module!",):
+            if forbidden in lowered:
+                raise ValidationError("{0} contains forbidden executable/boundary construct: {1}".format(label, forbidden))
+    elif item["destination"] == "os_registry.rs":
+        required = (
+            "pub(crate) const OS_CAPACITY: usize = 64;",
+            "const MAX_GENERATION: u64 = u64::MAX >> GENERATION_SHIFT;",
+            "impl Drop for ReservationGuard<'_>",
+            "impl Drop for DestroyGuard<'_>",
+            "RegistryError::StaleHandle",
+        )
+        for token in required:
+            if text.count(token) < 1:
+                raise ValidationError("{0} lacks registry marker: {1}".format(label, token))
+        lowered = text.lower()
+        for forbidden in ("unsafe", "module!"):
+            if forbidden in lowered:
+                raise ValidationError("{0} contains forbidden executable/boundary construct: {1}".format(label, forbidden))
+    elif item["destination"] == "device_registry.rs":
+        required = (
+            "pub(crate) const DEVICE_CAPACITY: usize = 64;",
+            "pub(crate) struct DeviceRegistry",
+            "pub(crate) fn reserve",
+            "pub(crate) fn acquire_open",
+            "pub(crate) fn acquire_os",
+            "pub(crate) fn begin_unregister",
+            "impl Drop for ReservationGuard<'_>",
+            "impl Drop for UnregisterGuard<'_>",
+            "DeviceRegistryError::RegistryIdentityExhausted",
+        )
+        for token in required:
+            if text.count(token) < 1:
+                raise ValidationError("{0} lacks device-registry marker: {1}".format(label, token))
+        lowered = text.lower()
+        for forbidden in ("unsafe", "module!"):
+            if forbidden in lowered:
+                raise ValidationError("{0} contains forbidden executable/boundary construct: {1}".format(label, forbidden))
+    elif item["destination"] == "ikc_master.rs":
+        required = (
+            "pub(crate) struct ListenerRegistry",
+            "pub(crate) struct ListenerLease",
+            "pub(crate) struct MasterRouter",
+            "pub(crate) struct ConnectTransaction",
+            "pub(crate) struct ChannelLifecycle",
+            "use super::abi::",
+        )
+        for token in required:
+            if text.count(token) != 1:
+                raise ValidationError("{0} lacks a unique master-registry marker: {1}".format(label, token))
+        lowered = text.lower()
+        for forbidden in ("unsafe", "module!"):
+            if forbidden in lowered:
+                raise ValidationError("{0} contains forbidden executable/boundary construct: {1}".format(label, forbidden))
+    elif item["destination"] == "page_allocator.rs":
+        required = (
+            "pub(crate) struct BitmapPageAllocator",
+            "pub(crate) struct PageAllocation",
+            "pub(crate) struct PageReservation",
+            "operation_lock: AtomicBool,",
+        )
+        for token in required:
+            if text.count(token) != 1:
+                raise ValidationError("{0} lacks a unique page-allocator marker: {1}".format(label, token))
+        lowered = text.lower()
+        for forbidden in ("unsafe", "module!"):
+            if forbidden in lowered:
+                raise ValidationError("{0} contains forbidden executable/boundary construct: {1}".format(label, forbidden))
+    elif item["destination"] == "page_owner_registry.rs":
+        required = (
+            "pub(crate) struct RawPageOwnerRegistry",
+            "pub(crate) struct RawPageOwnerSlot",
+            "pub(crate) struct RawPageAllocationHandle",
+            "static NEXT_REGISTRY_ID: AtomicU64",
+        )
+        for token in required:
+            if text.count(token) != 1:
+                raise ValidationError("{0} lacks a unique page-owner marker: {1}".format(label, token))
+        lowered = text.lower()
+        for forbidden in ("unsafe", "module!"):
+            if forbidden in lowered:
+                raise ValidationError("{0} contains forbidden executable/boundary construct: {1}".format(label, forbidden))
+    elif item["destination"] == "smp_resource.rs":
+        required = (
+            "pub(crate) const SMP_MAX_CPUS: usize = 512;",
+            "pub(crate) struct CpuTransaction",
+            "pub(crate) struct MemoryTransaction<",
+            "pub(crate) fn begin_external_effects",
+            "pub(crate) fn compensated_rollback",
+            "CpuState::Quarantined",
+            "poisoned: bool",
+        )
+        for token in required:
+            if text.count(token) < 1:
+                raise ValidationError("{0} lacks SMP-resource marker: {1}".format(label, token))
+        if text.count(AUDITED_OS_LEASE_CONSTRUCTOR) != 1:
+            raise ValidationError("{0} lacks the exact checked IHK lease constructor".format(label))
+        lowered = text.replace(AUDITED_OS_LEASE_CONSTRUCTOR, "", 1).lower()
+        for forbidden in ("unsafe", "module!"):
+            if forbidden in lowered:
+                raise ValidationError("{0} contains forbidden executable/boundary construct: {1}".format(label, forbidden))
+    elif item["destination"] == "smp_cpu.rs":
+        for token in ("struct DeviceHotplugGuard", "struct ResourceModulePin;",
+                      "struct CpuContext", "pub(super) struct CpuController",
+                      "transaction.execute_hotplug(&mut host)",
+                      "impl HostCpuHotplug for LinuxCpuBatch<'_>"):
+            if text.count(token) != 1:
+                raise ValidationError("{0} lacks CPU adapter boundary: {1}".format(label, token))
+    elif item["destination"] == "smp_memory.rs":
+        for token in ("struct MemoryHotplugGuard", "struct PageOwner {",
+                      "impl Drop for PageOwner", "struct MemoryContext {",
+                      "pub(super) struct MemoryController",
+                      ".prepare_insert_free_batch(&ranges, &mut workspace)",
+                      ".prepare_remove_free_batch(&ranges, &mut workspace)",
+                      "bindings::__alloc_pages_noprof", "bindings::alloc_pages_noprof",
+                      "struct StartupTables {",
+                      "tables: ManuallyDrop<StartupTables>,",
+                      "let tables = StartupTables::new(layout, direct_map)?;",
+                      "tables: ManuallyDrop::new(tables),",
+                      "bindings::__free_pages",
+                      "drop(core::mem::take(&mut context.pages));"):
+            if text.count(token) != 1:
+                raise ValidationError("{0} lacks memory owner boundary: {1}".format(label, token))
+        loaded_image_started = """impl LoadedImage {
+    fn started(&self) -> bool {
+        self.boot.as_ref().is_some_and(|boot| boot.started)
+    }
+}"""
+        loaded_image_release = """impl Drop for LoadedImage {
+    fn drop(&mut self) {
+        if !self.started() {
+            // SAFETY: No CPU-start effect occurred. This is the only destructor
+            // for the original startup allocation; the field has no auto-drop.
+            unsafe { ManuallyDrop::drop(&mut self.tables) };
+        }
+        // A started image deliberately retains both tables and BootStorage.
+        // The resource-map guards separately forbid freeing assigned memory.
+    }
+}"""
+        if text.count(loaded_image_started) != 1 or text.count(loaded_image_release) != 1:
+            raise ValidationError(
+                "{0} lacks exact LoadedImage started-state table retention/release".format(label)
+            )
+    elif item["destination"] == "os_runtime.rs":
+        for token in ("pub(crate) struct OsDeviceFamily {\n"
+                      "    _services: super::os_service::Registry,\n}",
+                      "struct KmsgPages(usize);",
+                      "struct ProviderModule(*mut bindings::module);",
+                      "const OS_FOPS: bindings::file_operations"):
+            if text.count(token) != 1:
+                raise ValidationError("{0} lacks unbooted OS owner: {1}".format(label, token))
+    elif item["destination"] == "ihk_mapping.rs":
+        for token in ("pub(crate) struct PageGeometry", "pub(crate) struct PhysicalRange",
+                      "pub(crate) struct AlignedPhysicalRange", "pub(crate) fn from_start_length"):
+            if text.count(token) != 1:
+                raise ValidationError("{0} lacks reused mapping geometry: {1}".format(label, token))
+    elif item["destination"] == "smp_image.rs":
+        for token in ("pub(crate) struct BootLayout", "pub(crate) struct ImagePlan<'image>",
+                      "pub(crate) const KERNEL_WINDOW_BYTES: u64 = 8 << 20;",
+                      "ImageError::SegmentOverlap", "ImageError::BadEntry"):
+            if token not in text:
+                raise ValidationError("{0} lacks image preflight boundary: {1}".format(label, token))
+    elif item["destination"] == "smp_startup.rs":
+        for token in ("pub(crate) struct PageTablePlan", "pub(crate) fn fill",
+                      "pub(crate) const TABLE_PAGES: usize = 260;",
+                      "end > 1_u64 << 32", "StartupError::StorageSize"):
+            if text.count(token) < 1:
+                raise ValidationError("{0} lacks startup table boundary: {1}".format(label, token))
+        for forbidden in ("unsafe", "kernel::", "bindings::", "module!"):
+            if forbidden in text.lower():
+                raise ValidationError("{0} contains forbidden boundary: {1}".format(label, forbidden))
+    elif item["destination"] == "smp_loader.rs":
+        for token in ("struct ImageFile {", "impl Drop for ImageFile",
+                      "const MAX_IMAGE_FILE_BYTES: usize = 64 << 20;",
+                      "const MAX_FILENAME_BYTES: usize = 256;",
+                      "bindings::kernel_read_file_from_path(",
+                      "bindings::kvfree(self.buffer.as_ptr())",
+                      "super::smp_memory::invalidate_os_image(owner)?;",
+                      "super::smp_cpu::load_os_image(owner, image.bytes())?;"):
+            if text.count(token) != 1:
+                raise ValidationError("{0} lacks bounded image file owner: {1}".format(label, token))
+    elif item["destination"] == "ihk_ioctl.rs":
+        required = (
+            "pub(crate) struct IhkIoctlDispatcher",
+            "pub(crate) fn prepare_device",
+            "commit_after_external_success",
+            "NATIVE_DEVICE_REGISTRATION_SUPPORTED: bool = true",
+            "USER_COPY_REACHABLE_FROM_IOCTL: bool = false",
+        )
+        for token in required:
+            if text.count(token) < 1:
+                raise ValidationError("{0} lacks ioctl-dispatch marker: {1}".format(label, token))
+        lowered = text.lower()
+        for forbidden in ("unsafe", "kernel::", "bindings::", "module!"):
+            if forbidden in lowered:
+                raise ValidationError("{0} contains forbidden executable/boundary construct: {1}".format(label, forbidden))
+    return {
+        "destination": item["destination"],
+        "path": path,
+        "sha256": item["sha256"],
+    }
+
+
+def _validate_module(repo_root, module, expected, index):
+    label = "modules[{0}]".format(index)
+    _require_keys(
+        module,
+        {
+            "blockers",
+            "crate",
+            "dependencies",
+            "kconfig_symbol",
+            "normalized_name",
+            "output",
+            "production_namespace",
+            "required_import_namespaces",
+            "source",
+        },
+        label,
+    )
+    for field in (
+        "crate",
+        "dependencies",
+        "kconfig_symbol",
+        "normalized_name",
+        "output",
+        "production_namespace",
+        "required_import_namespaces",
+    ):
+        if module[field] != expected[field]:
+            raise ValidationError("{0}.{1} differs from the locked module contract".format(label, field))
+    if module["blockers"] != MODULE_BLOCKERS:
+        raise ValidationError("{0}.blockers differs from the locked crate-root checkpoint".format(label))
+    _require_keys(module["source"], {"destination", "repository_path", "sha256"}, label + ".source")
+    source = module["source"]
+    if source["destination"] != expected["source_destination"]:
+        raise ValidationError("{0}.source.destination differs from the locked crate root".format(label))
+    if source["repository_path"] != expected["source_repository_path"]:
+        raise ValidationError("{0}.source.repository_path differs from the locked crate root".format(label))
+    if source["sha256"] != expected["source_sha256"]:
+        raise ValidationError("{0}.source.sha256 differs from the locked crate root".format(label))
+    path = _repo_regular_file(repo_root, source["repository_path"], label + ".source.repository_path")
+    if not path.endswith(".rs"):
+        raise ValidationError("{0}.source must be a Rust source file".format(label))
+    _validate_digest(path, source["sha256"], label + ".source")
+    text = _read_text(path, label + ".source")
+    allowed_extern_blocks = ()
+    if module["crate"] == "ihk":
+        allowed_extern_blocks = (
+            AUDITED_IHK_INIT_CALLBACK_TYPE,
+            AUDITED_IHK_EXIT_CALLBACK_TYPE,
+            AUDITED_IHK_ATTACH_EXTERN,
+            AUDITED_IHK_DETACH_EXTERN,
+            AUDITED_IHK_ATTACH_V2_EXTERN,
+            AUDITED_IHK_DETACH_V2_EXTERN,
+            AUDITED_IHK_OPEN_EXTERN,
+            AUDITED_IHK_CLOSE_EXTERN,
+        )
+    elif module["crate"] == "ihk_smp_x86_64":
+        allowed_extern_blocks = (
+            AUDITED_SMP_INIT_CALLBACK_TYPE,
+            AUDITED_SMP_EXIT_CALLBACK_TYPE,
+            AUDITED_SMP_PROVIDER_EXTERN,
+            AUDITED_SMP_OS_IOCTL_TYPE,
+            AUDITED_SMP_OS_RELEASE_TYPE,
+            AUDITED_SMP_PREPARE_BOOT_TYPE,
+            AUDITED_SMP_START_BOOT_TYPE,
+            AUDITED_SMP_SHUTDOWN_TYPE,
+            AUDITED_SMP_OS_IOCTL_EXTERN,
+            AUDITED_SMP_OS_RELEASE_EXTERN,
+            AUDITED_SMP_APPLICATION_OPEN_EXTERN,
+            AUDITED_SMP_APPLICATION_INVOKE_EXTERN,
+            AUDITED_SMP_APPLICATION_CLOSE_EXTERN,
+            AUDITED_SMP_PREPARE_BOOT_EXTERN,
+            AUDITED_SMP_START_BOOT_EXTERN,
+            AUDITED_SMP_SHUTDOWN_EXTERN,
+            AUDITED_SMP_INIT_CALLBACK_EXTERN,
+            AUDITED_SMP_EXIT_CALLBACK_EXTERN,
+        )
+    elif module["crate"] == "mcctrl":
+        allowed_extern_blocks = (
+            AUDITED_PROVIDER_EXTERN,
+            AUDITED_MCCTRL_SERVICE_PROVIDER_EXTERN,
+            AUDITED_MCCTRL_SERVICE_OPEN_EXTERN,
+            AUDITED_MCCTRL_SERVICE_IOCTL_EXTERN,
+            AUDITED_MCCTRL_SERVICE_CLOSE_EXTERN,
+        )
+    escape_text = text
+    if module["crate"] == "ihk_smp_x86_64":
+        if text.count(COMPAT_BUILD_ID_INCLUDE) != 1:
+            raise ValidationError("SMP compatibility build identity must use the exact generated metadata input")
+        escape_text = text.replace(COMPAT_BUILD_ID_INCLUDE, "", 1)
+    if module["crate"] == "ihk_smp_x86_64":
+        # This exact current-v6 root was independently reviewed and compiled.
+        # Its static manifest/module digest is authoritative, never a resealed fixture.
+        if __package__:
+            from .native_rust_host_audit import reject_unreviewed_rust_escapes
+        else:
+            from native_rust_host_audit import reject_unreviewed_rust_escapes
+        try:
+            reject_unreviewed_rust_escapes(source["repository_path"], text)
+        except SystemExit as error:
+            raise ValidationError("native current-v6 root boundary differs: {0}".format(error))
+    else:
+        _validate_rust_escape_hatches(
+            escape_text, label + ".source", allowed_extern_blocks=allowed_extern_blocks
+        )
+    if "module!" not in text or "impl kernel::Module" not in text:
+        raise ValidationError("{0}.source lacks a native Rust-for-Linux module entry point".format(label))
+    if module["crate"] == "ihk":
+        for fragment in (
+            '#[path = "abi/x86_64.rs"]\nmod abi;',
+            "mod ikc_queue;",
+            "mod os_registry;",
+            "mod device_registry;",
+            "mod ikc_master;",
+            "mod ihk_ioctl;",
+            "mod page_allocator;",
+            "mod page_owner_registry;",
+            "mod os_runtime;",
+        ):
+            if text.count(fragment) != 1:
+                raise ValidationError(
+                    "{0}.source does not bind the staged IHK queue graph: {1}".format(
+                        label, fragment
+                    )
+                )
+    elif module["crate"] == "ihk_smp_x86_64":
+        for fragment in (
+            "#[allow(dead_code)]\nmod smp_resource;",
+            "mod smp_cpu;",
+            "mod smp_memory;",
+            "#[allow(dead_code)]\nmod ihk_mapping;",
+            "#[allow(dead_code)]\nmod smp_image;",
+            "mod smp_loader;",
+            "mod smp_startup;",
+            "use kernel::{\n    c_str,\n    miscdevice::{MiscDevice, MiscDeviceOptions, MiscDeviceRegistration},\n    prelude::*,\n};",
+            "struct ProviderOpenLease {",
+            "impl MiscDevice for IhkSmpControlDevice {",
+            "const MODULE: &'static ThisModule = &THIS_MODULE;",
+            'name: c_str!("mcd0"),',
+            "drop(self.control_device.take());",
+            "drop(self.provider_lease.take());",
+        ):
+            if text.count(fragment) != 1:
+                raise ValidationError(
+                    "{0}.source does not bind the staged SMP control-device graph: {1}".format(
+                        label, fragment
+                    )
+                )
+    return {
+        "destination": source["destination"],
+        "path": path,
+        "sha256": source["sha256"],
+    }, list(module["blockers"])
+
+
+def validate_manifest(repo_root, manifest_path):
+    repo_root = os.path.realpath(repo_root)
+    manifest_path = os.path.abspath(manifest_path)
+    try:
+        original_info = os.lstat(manifest_path)
+    except OSError as error:
+        raise ValidationError("manifest is unavailable: {0}".format(error))
+    if stat.S_ISLNK(original_info.st_mode) or not stat.S_ISREG(original_info.st_mode):
+        raise ValidationError("manifest must be a regular, non-symlink file")
+    manifest_real = os.path.realpath(manifest_path)
+    try:
+        inside = os.path.commonpath([repo_root, manifest_real]) == repo_root
+    except ValueError:
+        inside = False
+    if not inside:
+        raise ValidationError("manifest resolves outside the repository")
+    if manifest_real != manifest_path:
+        raise ValidationError("manifest traverses a symlink")
+    manifest = load_json(manifest_path)
+    _require_keys(manifest, EXPECTED_TOP_LEVEL_KEYS, "manifest")
+    if manifest["schema_version"] != SCHEMA_VERSION:
+        raise ValidationError("unsupported schema_version")
+    if manifest["profile_id"] != PROFILE_ID:
+        raise ValidationError("profile_id differs from the selected Rocky profile")
+    if manifest["build_contract"] != EXPECTED_BUILD_CONTRACT:
+        raise ValidationError("build_contract does not enforce the locked native Rust-only path")
+    if manifest["destination"] != EXPECTED_DESTINATION:
+        raise ValidationError("destination does not match the locked in-tree staging path")
+    if manifest["target"] != EXPECTED_TARGET:
+        raise ValidationError("target differs from the locked Rocky identity or overclaims resolved evidence")
+    parent_integration = _validate_parent_integration(repo_root, manifest["parent_integration"])
+
+    inputs = manifest["inputs"]
+    if not isinstance(inputs, list) or len(inputs) != len(EXPECTED_INPUTS):
+        raise ValidationError("inputs must contain exactly the hard-locked staging inputs")
+    staged_files = [_validate_input(repo_root, item, index) for index, item in enumerate(inputs)]
+    destinations = [item["destination"] for item in staged_files]
+    if destinations != [item["destination"] for item in EXPECTED_INPUTS]:
+        raise ValidationError("inputs differ from the hard-locked staging order")
+
+    modules = manifest["modules"]
+    if not isinstance(modules, list) or len(modules) != len(EXPECTED_MODULES):
+        raise ValidationError("modules must contain exactly the three locked modules")
+    blockers = []
+    for index, expected in enumerate(EXPECTED_MODULES):
+        source, module_blockers = _validate_module(repo_root, modules[index], expected, index)
+        blockers.extend(module_blockers)
+        staged_files.append(source)
+    if __package__:
+        from .native_rust_build_surface_audit import AuditError, CRATE_ROOTS, discover_native_closure
+    else:
+        from native_rust_build_surface_audit import AuditError, CRATE_ROOTS, discover_native_closure
+    try:
+        closure = discover_native_closure(repo_root)
+    except AuditError as error:
+        raise ValidationError("recursive Rust staging closure differs: {0}".format(error))
+    staged_native = {RUST_STAGE_ALIASES.get(item["destination"], item["destination"]) for item in staged_files if item["destination"] not in {"Kbuild", "Kconfig"} | set(LINUX_MM_COMPAT_INPUTS)}
+    if staged_native != closure or not set(CRATE_ROOTS).issubset(staged_native):
+        raise ValidationError("recursive Rust staging closure differs: missing={0}, extra={1}".format(
+            sorted(closure - staged_native), sorted(staged_native - closure)))
+
+    _require_keys(manifest["readiness"], {"blockers", "checkpoint", "credit_eligible"}, "readiness")
+    if manifest["readiness"] != {
+        "blockers": READINESS_BLOCKERS,
+        "checkpoint": "crate_roots_bound",
+        "credit_eligible": False,
+    }:
+        raise ValidationError("readiness must remain the locked crate-roots-bound state")
+    blockers.extend(manifest["readiness"]["blockers"])
+    if len({item["destination"] for item in staged_files}) != len(staged_files):
+        raise ValidationError("staged destinations must be unique")
+    if len({item["path"] for item in staged_files}) != len(staged_files):
+        raise ValidationError("each staged destination must have a distinct repository input")
+
+    deduplicated = []
+    for blocker in blockers:
+        if blocker not in deduplicated:
+            deduplicated.append(blocker)
+    return {
+        "blockers": deduplicated,
+        "credit_eligible": False,
+        "destination": manifest["destination"]["kernel_relative_root"],
+        "files": staged_files,
+        "manifest": manifest,
+        "manifest_path": manifest_path,
+        "manifest_sha256": sha256_file(manifest_path),
+        "parent_integration": parent_integration,
+        "repo_root": repo_root,
+    }
+
+
+def _compatibility_build_identity(repo_root):
+    """Reproduce the unchanged IHK consumer's BUILDID, including its width.
+
+    ihkconfig allocates sizeof(BUILDID); substituting a longer native-source
+    digest would violate that buffer contract.  The native candidate remains
+    identified independently by the staging manifest and input digests.
+    """
+    source = _repo_regular_file(repo_root, "ihk/CMakeLists.txt", "IHK consumer BUILDID rule")
+    if os.path.lexists(os.path.join(repo_root, "ihk", "VENDORED-REVISION")):
+        _validate_digest(source, VENDORED_IHK_CMAKE_SHA256, "vendored IHK consumer BUILDID rule")
+        marker = _repo_regular_file(repo_root, "ihk/VENDORED-REVISION", "vendored IHK revision")
+        with open(marker, "rb") as stream:
+            if stream.read() != (VENDORED_IHK_REVISION + "\n").encode("ascii"):
+                raise ValidationError("vendored IHK revision differs from the reviewed source")
+        if os.path.lexists(os.path.join(repo_root, "ihk", ".git")):
+            raise ValidationError("vendored IHK source must not contain nested Git metadata")
+        value = VENDORED_IHK_REVISION[:7]
+        payload = value.encode("ascii") + b"\0"
+        return {
+            "path": COMPAT_BUILD_ID_FILE,
+            "value": value,
+            "origin": "ihk-vendored-revision",
+            "source_rule_path": "ihk/CMakeLists.txt",
+            "source_rule_sha256": sha256_file(source),
+            "sha256": sha256_bytes(payload),
+            "bytes": len(payload),
+        }
+    _validate_digest(source, IHK_COMPAT_CMAKE_SHA256, "IHK consumer BUILDID rule")
+    cmake = _read_text(source, "IHK consumer BUILDID rule")
+    version = re.search(r'^set\(IHK_VERSION "([A-Za-z0-9.+_-]{1,40})"\)$', cmake, re.MULTILINE)
+    command = "git --git-dir=${PROJECT_SOURCE_DIR}/.git rev-parse --short HEAD"
+    if version is None or cmake.count(command) != 1 or "set(BUILDID ${IHK_VERSION})" not in cmake:
+        raise ValidationError("IHK consumer BUILDID rule differs from the reviewed git/version rule")
+    git_dir = os.path.join(repo_root, "ihk", ".git")
+    try:
+        process = subprocess.Popen(
+            ["git", "--git-dir=" + git_dir, "rev-parse", "--short", "HEAD"],
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+        )
+        output, unused_error = process.communicate()
+        del unused_error
+    except OSError as error:
+        raise ValidationError("cannot execute IHK consumer BUILDID command: {0}".format(error))
+    value = output.rstrip(b"\r\n") if process.returncode == 0 else b""
+    origin = "ihk-git-short-head"
+    if value:
+        if re.match(br"^[0-9a-f]{4,40}$", value) is None:
+            raise ValidationError("IHK consumer git BUILDID is not one lowercase abbreviated object identity")
+        # Match the unchanged consumer command, then independently require the
+        # reviewed default abbreviation policy.  An inherited core.abbrev or
+        # GIT_* override must not silently change this size-sensitive payload.
+        # Fail on a mismatch instead of changing the value returned to clients.
+        git_environment = {
+            key: item for key, item in os.environ.items()
+            if not key.startswith("GIT_")
+        }
+        git_environment["GIT_CONFIG_GLOBAL"] = os.devnull
+        git_environment["GIT_CONFIG_SYSTEM"] = os.devnull
+        git_environment["LC_ALL"] = "C"
+        try:
+            pinned = subprocess.check_output(
+                ["git", "-c", "core.abbrev=7", "--git-dir=" + git_dir,
+                 "rev-parse", "--short=7", "HEAD"],
+                stderr=subprocess.PIPE, env=git_environment,
+            ).rstrip(b"\r\n")
+            full = subprocess.check_output(
+                ["git", "--git-dir=" + git_dir, "rev-parse", "--verify", "HEAD^{commit}"],
+                stderr=subprocess.PIPE, env=git_environment,
+            ).rstrip(b"\r\n")
+        except (OSError, subprocess.CalledProcessError) as error:
+            raise ValidationError("cannot bind IHK consumer BUILDID to sanitized Git authority: {0}".format(error))
+        if (value != pinned or re.match(br"^[0-9a-f]{40}$", full) is None
+                or not full.startswith(value)):
+            raise ValidationError("IHK consumer BUILDID differs from the pinned default Git abbreviation recipe")
+    else:
+        if os.path.lexists(git_dir):
+            raise ValidationError("IHK Git checkout has no usable consumer BUILDID; refusing an unbound version fallback")
+        value = version.group(1).encode("ascii")
+        origin = "ihk-version-fallback"
+    payload = value + b"\0"
+    return {
+        "path": COMPAT_BUILD_ID_FILE,
+        "value": value.decode("ascii"),
+        "origin": origin,
+        "source_rule_path": "ihk/CMakeLists.txt",
+        "source_rule_sha256": sha256_file(source),
+        "sha256": sha256_bytes(payload),
+        "bytes": len(payload),
+    }
+
+
+def _stage_lock(plan):
+    parent = plan["parent_integration"]
+    identity = _compatibility_build_identity(plan["repo_root"])
+    files = [
+        {"path": item["destination"], "sha256": item["sha256"]}
+        for item in plan["files"]
+    ]
+    files.append({"path": identity["path"], "sha256": identity["sha256"]})
+    return {
+        "files": sorted(files, key=lambda value: value["path"]),
+        "compatibility_build_identity": identity,
+        "manifest_sha256": plan["manifest_sha256"],
+        "parent_integration": {
+            "bundle_sha256": parent["bundle_sha256"],
+            "parent_files": [
+                {
+                    "path": item["path"],
+                    "postimage_sha256": item["postimage_sha256"],
+                    "preimage_sha256": item["preimage_sha256"],
+                }
+                for item in parent["bundle"]["parent_files"]
+            ],
+            "patch_sha256": parent["bundle"]["patch"]["sha256"],
+        },
+        "profile_id": PROFILE_ID,
+        "schema_version": SCHEMA_VERSION,
+        "target": EXPECTED_TARGET,
+    }
+
+
+def _evidence_stage_lock(plan):
+    lock = _stage_lock(plan)
+    lock.update(
+        {
+            "credit_eligible": False,
+            "production_readiness_blockers": list(READINESS_BLOCKERS),
+            "purpose": EVIDENCE_STAGE_PURPOSE,
+        }
+    )
+    return lock
+
+
+def _kernel_target(kernel_tree, destination):
+    kernel_tree = os.path.abspath(kernel_tree)
+    try:
+        info = os.lstat(kernel_tree)
+    except OSError as error:
+        raise ValidationError("kernel tree is unavailable: {0}".format(error))
+    if stat.S_ISLNK(info.st_mode) or not stat.S_ISDIR(info.st_mode):
+        raise ValidationError("kernel tree must be a real directory, not a symlink")
+    kernel_real = os.path.realpath(kernel_tree)
+    target = os.path.join(kernel_real, _safe_relative_path(destination, "destination"))
+    parent = os.path.dirname(target)
+    parent_real = os.path.realpath(parent)
+    if not os.path.isdir(parent) or parent_real != parent:
+        raise ValidationError("staging parent must already exist without symlink traversal")
+    if os.path.commonpath([kernel_real, parent_real]) != kernel_real:
+        raise ValidationError("staging destination escapes the kernel tree")
+    return target, parent
+
+
+def _rename_directory_noreplace(parent, temporary, target):
+    parent = os.path.abspath(parent)
+    temporary = os.path.abspath(temporary)
+    target = os.path.abspath(target)
+    if os.path.dirname(temporary) != parent or os.path.dirname(target) != parent:
+        raise ValidationError("no-replace rename requires sibling directories")
+    old_name = os.path.basename(temporary)
+    new_name = os.path.basename(target)
+    if old_name in ("", ".", "..") or new_name in ("", ".", ".."):
+        raise ValidationError("no-replace rename received an unsafe directory name")
+
+    try:
+        libc = ctypes.CDLL(None, use_errno=True)
+        renameat2 = libc.renameat2
+    except (AttributeError, OSError) as error:
+        raise ValidationError("renameat2 is unavailable; refusing a racy staging rename: {0}".format(error))
+    renameat2.argtypes = [ctypes.c_int, ctypes.c_char_p, ctypes.c_int, ctypes.c_char_p, ctypes.c_uint]
+    renameat2.restype = ctypes.c_int
+    flags = os.O_RDONLY
+    flags |= getattr(os, "O_DIRECTORY", 0)
+    flags |= getattr(os, "O_CLOEXEC", 0)
+    try:
+        parent_fd = os.open(parent, flags)
+    except OSError as error:
+        raise ValidationError("cannot open staging parent for atomic rename: {0}".format(error))
+    try:
+        ctypes.set_errno(0)
+        result = renameat2(
+            parent_fd,
+            os.fsencode(old_name),
+            parent_fd,
+            os.fsencode(new_name),
+            1,
+        )
+        if result != 0:
+            number = ctypes.get_errno()
+            if number in (errno.EEXIST, errno.ENOTEMPTY):
+                raise ValidationError("staging destination appeared concurrently: {0}".format(target))
+            if number in (errno.ENOSYS, errno.EINVAL, errno.EOPNOTSUPP):
+                raise ValidationError("atomic no-replace rename is unsupported; staging remains unchanged")
+            raise ValidationError("atomic no-replace rename failed: {0}".format(os.strerror(number)))
+    finally:
+        os.close(parent_fd)
+
+
+def _stage_locked(plan, kernel_tree, lock):
+    target, parent = _kernel_target(kernel_tree, plan["destination"])
+    if os.path.lexists(target):
+        raise ValidationError("staging destination already exists: {0}".format(target))
+    temporary = tempfile.mkdtemp(prefix=".mckernel-stage-", dir=parent)
+    try:
+        os.chmod(temporary, 0o755)
+        for item in plan["files"]:
+            destination = os.path.join(temporary, item["destination"])
+            destination_parent = os.path.dirname(destination)
+            if destination_parent != temporary and not os.path.isdir(destination_parent):
+                os.makedirs(destination_parent, 0o755)
+                os.chmod(destination_parent, 0o755)
+            with open(item["path"], "rb") as source, open(destination, "wb") as output:
+                shutil.copyfileobj(source, output)
+            os.chmod(destination, 0o644)
+        identity = lock["compatibility_build_identity"]
+        metadata_path = os.path.join(temporary, COMPAT_BUILD_ID_FILE)
+        with open(metadata_path, "wb") as stream:
+            stream.write(identity["value"].encode("ascii") + b"\0")
+        os.chmod(metadata_path, 0o644)
+        lock_path = os.path.join(temporary, "stage-lock.json")
+        with open(lock_path, "wb") as stream:
+            stream.write(canonical_json_bytes(lock))
+        os.chmod(lock_path, 0o644)
+        expected = {item["destination"]: item["sha256"] for item in plan["files"]}
+        expected[COMPAT_BUILD_ID_FILE] = identity["sha256"]
+        expected["stage-lock.json"] = sha256_bytes(canonical_json_bytes(lock))
+        for name, digest in expected.items():
+            if sha256_file(os.path.join(temporary, name)) != digest:
+                raise ValidationError("staged temporary file digest mismatch: {0}".format(name))
+        _rename_directory_noreplace(parent, temporary, target)
+        temporary = None
+    finally:
+        if temporary is not None:
+            shutil.rmtree(temporary)
+    _verify_locked_stage(plan, kernel_tree, lock)
+    return target
+
+
+def _verify_locked_stage(plan, kernel_tree, lock):
+    target, unused_parent = _kernel_target(kernel_tree, plan["destination"])
+    del unused_parent
+    try:
+        info = os.lstat(target)
+    except OSError as error:
+        raise ValidationError("staged directory is unavailable: {0}".format(error))
+    if stat.S_ISLNK(info.st_mode) or not stat.S_ISDIR(info.st_mode):
+        raise ValidationError("staged destination must be a real directory")
+    if stat.S_IMODE(info.st_mode) != 0o755:
+        raise ValidationError("staged destination mode must be 0755")
+    expected = {item["destination"]: item["sha256"] for item in plan["files"]}
+    expected[COMPAT_BUILD_ID_FILE] = lock["compatibility_build_identity"]["sha256"]
+    expected["stage-lock.json"] = sha256_bytes(canonical_json_bytes(lock))
+    actual = []
+    actual_directories = []
+    for root, directories, files in os.walk(target):
+        for directory in directories:
+            actual_directories.append(os.path.relpath(os.path.join(root, directory), target))
+        for name in files:
+            actual.append(os.path.relpath(os.path.join(root, name), target))
+    expected_directories = set()
+    for name in expected:
+        parent = os.path.dirname(name)
+        while parent:
+            expected_directories.add(parent)
+            parent = os.path.dirname(parent)
+    if set(actual_directories) != expected_directories:
+        raise ValidationError("staged directory closure differs")
+    for name in expected_directories:
+        path = os.path.join(target, name)
+        info = os.lstat(path)
+        if stat.S_ISLNK(info.st_mode) or not stat.S_ISDIR(info.st_mode):
+            raise ValidationError("staged directory must be real and non-symlink: {0}".format(name))
+        if stat.S_IMODE(info.st_mode) != 0o755:
+            raise ValidationError("staged directory mode must be 0755: {0}".format(name))
+    if set(actual) != set(expected):
+        raise ValidationError(
+            "staged file closure differs: missing={0}, extra={1}".format(
+                sorted(set(expected) - set(actual)), sorted(set(actual) - set(expected))
+            )
+        )
+    for name, digest in expected.items():
+        path = os.path.join(target, name)
+        info = os.lstat(path)
+        if stat.S_ISLNK(info.st_mode) or not stat.S_ISREG(info.st_mode):
+            raise ValidationError("staged file must be regular and non-symlink: {0}".format(name))
+        if sha256_file(path) != digest:
+            raise ValidationError("staged file digest mismatch: {0}".format(name))
+    if load_json(os.path.join(target, "stage-lock.json")) != lock:
+        raise ValidationError("stage-lock.json content differs from the deterministic lock")
+    return target
+
+
+def stage(plan, kernel_tree):
+    if not PRODUCTION_STAGE_ENABLED:
+        raise ValidationError(
+            "crate-roots-bound schema v{0} cannot stage production modules without build evidence".format(
+                SCHEMA_VERSION
+            )
+        )
+    if plan.get("credit_eligible") is not True or plan["blockers"]:
+        raise ValidationError("staging is blocked: {0}".format("; ".join(plan["blockers"])))
+    return _stage_locked(plan, kernel_tree, _stage_lock(plan))
+
+
+def verify_stage(plan, kernel_tree):
+    if not PRODUCTION_STAGE_ENABLED:
+        raise ValidationError(
+            "crate-roots-bound schema v{0} has no verifiable production stage".format(
+                SCHEMA_VERSION
+            )
+        )
+    if plan.get("credit_eligible") is not True or plan["blockers"]:
+        raise ValidationError("stage verification requires a gate-ready manifest")
+    return _verify_locked_stage(plan, kernel_tree, _stage_lock(plan))
+
+
+def _require_evidence_only_plan(plan):
+    if plan.get("credit_eligible") is not False:
+        raise ValidationError("compiler-evidence staging may never claim gate credit")
+    if plan.get("blockers") != READINESS_BLOCKERS:
+        raise ValidationError("compiler-evidence staging requires the exact readiness blockers")
+
+
+def stage_for_evidence(plan, kernel_tree):
+    _require_evidence_only_plan(plan)
+    return _stage_locked(plan, kernel_tree, _evidence_stage_lock(plan))
+
+
+def verify_evidence_stage(plan, kernel_tree):
+    _require_evidence_only_plan(plan)
+    return _verify_locked_stage(plan, kernel_tree, _evidence_stage_lock(plan))
+
+
+def _print_blockers(plan, stream):
+    for blocker in plan["blockers"]:
+        print("BLOCKED: {0}".format(blocker), file=stream)
+
+
+def parse_args(argv):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--repo", default=os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    parser.add_argument("--manifest", default=DEFAULT_MANIFEST)
+    action = parser.add_mutually_exclusive_group(required=True)
+    action.add_argument("--check", action="store_true")
+    action.add_argument("--gate-ready", action="store_true")
+    action.add_argument("--verify-parent-source-archive", metavar="SOURCE_TAR_XZ")
+    action.add_argument("--stage", metavar="KERNEL_TREE")
+    action.add_argument("--verify-stage", metavar="KERNEL_TREE")
+    action.add_argument("--stage-for-evidence", metavar="KERNEL_TREE")
+    action.add_argument("--verify-evidence-stage", metavar="KERNEL_TREE")
+    return parser.parse_args(argv)
+
+
+def main(argv=None):
+    args = parse_args(argv)
+    repo_root = os.path.realpath(args.repo)
+    manifest_path = args.manifest
+    if not os.path.isabs(manifest_path):
+        manifest_path = os.path.join(repo_root, manifest_path)
+    try:
+        plan = validate_manifest(repo_root, manifest_path)
+        if args.check:
+            print("Rocky Rust staging manifest integrity: PASS")
+            if plan["blockers"]:
+                print("Rocky Rust staging gate: NOT READY ({0} blockers)".format(len(plan["blockers"])))
+                _print_blockers(plan, sys.stdout)
+            return 0
+        if args.gate_ready:
+            print("Rocky Rust staging gate: NOT READY", file=sys.stderr)
+            _print_blockers(plan, sys.stderr)
+            return 1
+        if args.verify_parent_source_archive:
+            result = verify_parent_source_archive(plan, args.verify_parent_source_archive)
+            print(
+                "Rocky parent integration source verification: PASS ({0}, patch {1})".format(
+                    result["archive_sha256"], result["patch_sha256"]
+                )
+            )
+            print(
+                "RK-007 credit: NOT ELIGIBLE (crate-roots-bound schema v{0})".format(
+                    SCHEMA_VERSION
+                )
+            )
+            return 0
+        if args.stage:
+            print("Staged native Rust inputs at {0}".format(stage(plan, args.stage)))
+            return 0
+        if args.verify_stage:
+            print("Verified native Rust stage at {0}".format(verify_stage(plan, args.verify_stage)))
+            return 0
+        if args.stage_for_evidence:
+            print(
+                "Staged credit-forbidden compiler evidence inputs at {0}".format(
+                    stage_for_evidence(plan, args.stage_for_evidence)
+                )
+            )
+            print("RK-007 credit: NOT ELIGIBLE (compiler evidence only)")
+            return 0
+        print(
+            "Verified credit-forbidden compiler evidence stage at {0}".format(
+                verify_evidence_stage(plan, args.verify_evidence_stage)
+            )
+        )
+        print("RK-007 credit: NOT ELIGIBLE (compiler evidence only)")
+        return 0
+    except (OSError, ValidationError) as error:
+        print("Rocky Rust staging validation failed: {0}".format(error), file=sys.stderr)
+        return 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

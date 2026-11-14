@@ -1,0 +1,73 @@
+{
+  "schema": "mckernel.native-exact-tool-image-execution-proposal.v1",
+  "status": "PROPOSED_NOT_RELEASED",
+  "scope": "one fresh source-free Rocky tool-image preparation followed sequentially by one offline identity probe for candidate c81aeaca",
+  "base_commit": "36ff8fafe5986b67afac5e7f36bfba2afa5fb4ae",
+  "candidate_sha": "c81aeaca5cedd893981a058444fa11a03a49a744",
+  "command": [
+    "/usr/bin/python3",
+    "-B",
+    "/home/holden/mckernel/scripts/native_rust_exact_build_image_prepare.py",
+    "--candidate-sha",
+    "c81aeaca5cedd893981a058444fa11a03a49a744",
+    "--output-root",
+    "/home/holden/mckernel-exact-image-c81aeaca-7",
+    "--evidence-root",
+    "/home/holden/mckernel-exact-image-evidence-c81aeaca-7",
+    "--lease-path",
+    "/home/holden/mckernel-work/scratch/native-exact-image-preparation-lease-c81aeaca-7.json",
+    "--toolchain-lock",
+    "/home/holden/mckernel/host-kernel/rocky/toolchain-lock.json"
+  ],
+  "source_sha256": {
+    "scripts/native_rust_exact_build_image_prepare.py": "7ffa3a75a4d45f350803282eeeabce2d608377a4ccd4536bab2c4080412118ad",
+    "scripts/tests/test_native_rust_exact_build_image_prepare.py": "95c9e6da810bee4a75a92a2ca538089b98c208d7353547a7344c5842c9b25cf3",
+    "scripts/native_rust_exact_build_container_owner.py": "a8c4c9fc61fab312e3a6e48e93b417453ec12e6543d6adbb7038933f92e79155",
+    "host-kernel/rocky/toolchain-lock.json": "fd3d7a13e1b8b5d103f7e59d22f17c9e4b99cc937637decaa66749acfae6c802"
+  },
+  "retained_precedent": {
+    "candidate": "6fed3a1022db0b4f9828dd42a8bd8f88fc052053",
+    "evidence": "docs/verification/evidence/native-exact-tool-image-6fed3a10-attempt6-success-20260930.json",
+    "source_hash_equal": true,
+    "result": "PASS_RESULT_ATTEMPT6",
+    "reuse": "The old candidate-bound receipt is not reused; the exact reviewed producer is rerun to create a fresh c81aeaca-bound receipt."
+  },
+  "fresh_paths": {
+    "output": "/home/holden/mckernel-exact-image-c81aeaca-7",
+    "evidence": "/home/holden/mckernel-exact-image-evidence-c81aeaca-7",
+    "lease": "/home/holden/mckernel-work/scratch/native-exact-image-preparation-lease-c81aeaca-7.json"
+  },
+  "limits": {
+    "cpus": "2-5",
+    "cpu_count": 4,
+    "memory_bytes": 12884901888,
+    "memory_swap_bytes": 12884901888,
+    "pids": 512,
+    "preparation_network": "bridge",
+    "offline_network": "none",
+    "offline_read_only": true,
+    "offline_user": "caller uid/gid",
+    "offline_capabilities": "drop ALL"
+  },
+  "required_preflight": [
+    "all three attempt7 paths absent",
+    "host free at least 16 GiB and scratch free at least 12 GiB plus measured packet headroom",
+    "aggregate memory budget and 4 GiB emergency headroom pass",
+    "no live heavy owner, QEMU or mcexec and all protected historical lease owners absent",
+    "full Docker census matches reviewed retained state"
+  ],
+  "required_result": [
+    "exact package, executable and four-library closure",
+    "online and offline observations exactly equal",
+    "immutable image ID and full inspect evidence",
+    "both owned containers retired and removed, lease absent and client retirement proven",
+    "PASS read-only receipt bound to candidate c81aeaca"
+  ],
+  "prohibitions": [
+    "never reuse or overwrite any prior tool-image path or receipt",
+    "no host source mounts or copies",
+    "no mckernel image build or guest",
+    "no acceptance inference"
+  ],
+  "authorization": "requires independent PASS_EXECUTION_ATTEMPT7 for this exact fetched proposal, command and live preflight"
+}

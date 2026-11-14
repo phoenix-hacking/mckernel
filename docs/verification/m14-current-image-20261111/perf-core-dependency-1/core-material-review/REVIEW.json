@@ -1,0 +1,170 @@
+{
+  "bounded_actual_material_inputs_verified": [
+    {
+      "bytes": 645792,
+      "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+      "sha256": "70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09"
+    },
+    {
+      "bytes": 1414,
+      "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/Cargo.toml",
+      "sha256": "234c3bd2559267eefe9daf6f2b96c63ce4c3e8cb79c11a9d871ed2a493c9413a"
+    },
+    {
+      "bytes": 12484,
+      "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/lib.rs",
+      "sha256": "e274e9d5ccee70b26d254f9bf9f41df337c482bc7e5d0ff8b9115992b18fbe75"
+    },
+    {
+      "bytes": 18998,
+      "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/panicking.rs",
+      "sha256": "805a33d479ebcdf2c640f43fb01b7a6707038bc248b4830d15f30a8a60d40303"
+    },
+    {
+      "bytes": 99047,
+      "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs",
+      "sha256": "9029212daf02c14124586536e64577e18b43c83d56403f643a031303e271f422"
+    },
+    {
+      "bytes": 73702,
+      "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs",
+      "sha256": "fc9cedba2ca1bb3d07b07d0f15160ed0277ed9a9cbc91fa5045125a73cdacb1d"
+    },
+    {
+      "bytes": 37800,
+      "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/fmt/num.rs",
+      "sha256": "0beb56ce116b6dcee9c25677aca707ec28aa5ff0ec5fd7d5255f212c392022cb"
+    },
+    {
+      "bytes": 18458,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2/rust/Makefile",
+      "sha256": "ea5a2f26d7a8ec607c35b568dff02c7cde712d7ff356e0edcc759a8ac79376e9"
+    },
+    {
+      "bytes": 5257,
+      "path": "/home/holden/mckernel/kernel/rust/lib.rs",
+      "sha256": "5e41a37bf262dd91169c19bad2b69bdb06d9d5ea82582a1efd2bd82024b70575"
+    },
+    {
+      "bytes": 29158,
+      "path": "/home/holden/mckernel/kernel/rust/x86_setup.rs",
+      "sha256": "1bf9b326873b22034dfba47165c95bdcc599d41533a112c64de72950e99589fe"
+    },
+    {
+      "bytes": 67075,
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "sha256": "de2bcd1241ae01e5fcd2d7235d744e518fb3963df17e692bfbc5f035bc4744c1"
+    }
+  ],
+  "compiler_and_codegen_profile_join": {
+    "compiler": "Same retained70eb Rust1.95 executable, exact full toolchain+rust-src RO namespace, image46d. Reuse prior real compiler/runtime mapping; no new version/loader/compiler probe requested by reviewer.",
+    "first_diagnostics_required": "Compiler correctness, support of this selected all-SIMD-off profile, object/metadata existence and codegen are deliberately UNPROVED, not prerequisites for this first eligible compile. Preserve any actual diagnostic/failure before a meaningful scoped repair; do not repeat unchanged input.",
+    "isolated_metadata": "-Cmetadata=mckernel_kernel_195 deliberately creates the source-built core crate identity; it is not assumed equal the old HOST sysroot core. Later builtins/whole consumer must use this same generated metadata and get newly compiled, not use the old object with guessed/mangled aliases.",
+    "literal_compiler_argv_equals_helper": true,
+    "no_host_fallback": "sysroot=/dev/null with explicit core source entry, no --externHOST library or libstd/CRT, no prebuilt HOST rlib/builtins dependency in this compiler command.",
+    "same_kernel_codegen_flags_exact_sequence": [
+      "-C",
+      "panic=abort",
+      "-C",
+      "opt-level=2",
+      "-C",
+      "debuginfo=2",
+      "-C",
+      "code-model=large",
+      "-C",
+      "relocation-model=static",
+      "-C",
+      "no-redzone=yes",
+      "-C",
+      "force-frame-pointers=yes",
+      "-C",
+      "overflow-checks=off",
+      "-C",
+      "force-unwind-tables=no",
+      "-C",
+      "no-vectorize-loops",
+      "-C",
+      "no-vectorize-slp",
+      "-C",
+      "target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma"
+    ],
+    "upstream_source": "Whole actual retained core/src/lib.rs and its original included source tree, no source edits/copies of panic/Option/Result/fmt/bounds routines. Root must keep this readonly tree/cohort frozen through compilation; actual depfile/source/output qualification follows."
+  },
+  "decision": "GO_MATERIAL_FIRST_CORE_COMPILER_INPUT_ONLY__OUTPUT_TYPE_CODEGEN_LINK_AND_IMAGE_UNPROVED",
+  "effects_and_phase_boundary": {
+    "expected_outputs": [
+      "core.o",
+      "libcore.rmeta",
+      "core.raw.d",
+      "core-elf.stdout",
+      "core-symbols-relocations.stdout",
+      "core-disassembly.stdout"
+    ],
+    "literal_commands_match_request": true,
+    "one_phase": "Exactly core-build then3 read-only metadata commands on the newly produced core.o. Shell set-euo pipefail prevents metadata on compiler failure; noclobber outputs/fresh Root-owned namespace required.",
+    "only_writes": "Fresh /core-output bind and existing bounded /tmp; whole retained compiler/src tree+helper read-only. No canonical/cache/consumer/image access or mutation in the payload.",
+    "passive_readback": "New readelf ELF/section/symbol/relocation tables plus objdump disassembly are necessary changed-provider evidence. They do not execute the produced object or constitute successful provider/ABI qualification by themselves."
+  },
+  "exact_request": {
+    "bytes": 13856,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/first-core-compile-1/REQUEST.json",
+    "sha256": "87afd55bad2355f4d626a215c0299e0fec921d6e25f901cabcde960cdda93824"
+  },
+  "genuine_Linux_core_recipe_join": {
+    "actual_core_Cargo": {
+      "bytes": 1414,
+      "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/Cargo.toml",
+      "sha256": "234c3bd2559267eefe9daf6f2b96c63ce4c3e8cb79c11a9d871ed2a493c9413a"
+    },
+    "edition": "Actual core Cargo.toml is edition2024; Linux recipe selects2024 for rustc>=1.87, which the exact retained1.95 compiler satisfies at already-qualified identity.",
+    "no_fp_fmt_parse": "Actual retained Linux6.12 rust/Makefile52-53 core-cfgs contains this exact cfg; it is not a made-up panic/check-removal strategy.",
+    "output_shape": "Linux rustc_library rule explicitly uses crate-type rlib with object+metadata+dep-info outputs and sysroot=/dev/null. First packet follows that source-defined library dependency shape, not an unrelated HOST archive import.",
+    "source": {
+      "bytes": 18458,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2/rust/Makefile",
+      "sha256": "ea5a2f26d7a8ec607c35b568dff02c7cde712d7ff356e0edcc759a8ac79376e9"
+    },
+    "target_scope_limit": "Linux recipe evidence establishes this finite shape/flags rationale; it does not prove the produced object instructions/ABI or whole Rust consumer/kernel compatibility. Actual compiler/profile/depfile/readelf/objdump outcomes remain required."
+  },
+  "inputs": {
+    "bytes": 8029,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/first-core-compile-1/INPUTS.json",
+    "sha256": "742bde259c2220f98371dff3cfda9fb2a463ebe71b130ae6a175907b17d3a254"
+  },
+  "invariant_and_fatal_preservation": {
+    "all_project_bodies": "Payload mounts no canonical source/cache and changes no28 perf project bodies/assert/expect/unwrap/checked-index conditions. Kernel lib.rs/panic handler/source5e41 and x86_setup1bf9 verified unchanged. No source/body/check disable, panic shim or forged Rust symbol is supplied.",
+    "core_safety_paths": "Genuine core panic,panic_fmt,panic_bounds_check,Option expect/unwrap,Resultunwrap and integer formatting sources remain original. no_fp_fmt_parse is the grounded FP-format/parse cfg; it does not remove the original integer/bounds/invariant failure conditions.",
+    "no_presumed_runtime_proof": "This compile does not execute a panic/native/image. Necessary changed fatal/provider-path tests remain later scoped work and do not block first source/core compiler diagnostics.",
+    "panic_strategy": "panic=abort and force-unwind-tables=no retained; no immediate-abort substitute, duplicate handler, hand-defined mangled exports or guessed ABI.",
+    "terminal_route": "Matched core panic_fmt constructs actual PanicInfo and invokes compiler Rust lang panic_impl, which future correctly bound consumer must resolve to the existing nonreturning handler. Existing handler emits early debug marker then spin_loop; no unwinding or return/default-success route is introduced."
+  },
+  "literal_helper": {
+    "bytes": 1339,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/first-core-compile-1/input/build_core.sh",
+    "sha256": "b931db46cf25ad74f1956995e08f929f8b1d1eef0abd7bd9bb08dcc206fc5fb8"
+  },
+  "mandatory_saved_result_limits": [
+    "First actual compiler exit/diagnostics+all source depfile/actual output hashes and kernel ELF/ISA/relocation/import evidence need independent saved qualification before any consumer uses them.",
+    "Do not claim the missing nine Rust providers resolved until actual core symbols+subsequent genuine builtins/consumer+normal image link show unique routes and no unsupported HOST/unwind imports.",
+    "Reuse unchanged18 HOST greens at exact scope; do not replay them for this source-independent dependency compile. Original image/DEFAULT/FUNCTIONAL/native and all UNKNOWN/source/resource holds remain."
+  ],
+  "material_findings": [],
+  "ready": {
+    "bytes": 2448,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/first-core-compile-1/SOURCE-READY.NOT-EXECUTED.json",
+    "sha256": "263b17dfac7d78d0eccfa0bdbe4abf4ca33bdc3a8708a305043fa80fca541f30"
+  },
+  "repair_contract": {
+    "bytes": 6256,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/first-core-compile-1/REPAIR-CONTRACT.json",
+    "sha256": "dfe8d833c2ea4a1e90c0d6fe460f680f7d32c5e7c975411172afd953e8ff34c5"
+  },
+  "resource_and_operation_boundary": {
+    "material_profile": "CPU6/j1/2GiB=swap, readonly root/unpriv1000/netnone/capdrop/no-new-privileges/image46d/3 exact mounts; fresh output. Source/profile inputs align with inherited kernel work rules; Root all-overhead HOST4/max3/fresh26/floors and current-owner serialization remain.",
+    "no_future_phase_grant": "No compiler-builtins/consumer/image/panic/PMU/native action authorized by this first packet. Their genuine same-metadata source/profile/actual-output joins remain later. Do not wait for them merely to run the first core compiler.",
+    "separate_reviewer": "SourceAcq independently owns protected-parent677a/e0887266 custody/capture/current-resource operation review. This material verdict is not Root admission or execution authority."
+  },
+  "reviewer": "/root/public_abi_join_max",
+  "reviewer_actions": "Named frozen source/recipe/helper/input byte reads, shlex literal-argv comparison and source flag/identity analysis; exclusive private REVIEW write. No helper/import/compiler/readelf/objdump/test/native execution or source/canonical/capture edits; no recursive agents.",
+  "schema": "mckernel.perf.first-kernel-core-compile.material-source-profile-review.v1"
+}

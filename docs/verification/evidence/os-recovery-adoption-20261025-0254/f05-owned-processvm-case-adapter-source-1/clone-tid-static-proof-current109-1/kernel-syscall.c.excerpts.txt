@@ -1,0 +1,60 @@
+
+# /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-current26eb-next-default-source-1/candidate/kernel/syscall.c:8147
+8147: 	if (clone_parent_tid_store_needed_result(clone_flags)) {
+8148: 		dkprintf("clone_flags & CLONE_PARENT_SETTID: 0x%lX\n",
+8149: 		         parent_tidptr);
+8150: 
+8151: 		err = setint_user((int *)parent_tidptr, new->tid);
+8152: #ifdef MCKERNEL_NATIVE_CLONE_TID
+8153: 		/* Linux kernel_clone() ignores a failed parent-TID put_user. */
+8154: 		err = 0;
+8155: #endif
+8156: 		if (err) {
+8157: 			goto release_ids;
+8158: 		}
+8159: 	}
+8160: 	
+8161: 	if (clone_child_cleartid_needed_result(clone_flags)) {
+8162: 		dkprintf("clone_flags & CLONE_CHILD_CLEARTID: 0x%lX\n", 
+8163: 			     child_tidptr);
+8164: 
+8165: 		new->clear_child_tid = (int*)child_tidptr;
+8166: 	}
+8167: 	
+8168: 	if (clone_child_tid_store_needed_result(clone_flags)) {
+8169: #ifdef MCKERNEL_NATIVE_CLONE_TID
+8170: 		/* The child is held and not runnable yet. Use its explicit VM so
+8171: 		 * private mappings fault/COW there, and copy the complete int by
+8172: 		 * virtual page with normal user-write permissions. Like Linux's
+8173: 		 * child-start put_user, a failed store does not cancel the clone.
+8174: 		 */
+8175: 		(void)write_process_vm(new->vm, (void *)child_tidptr,
+8176: 				      &new->tid, sizeof(new->tid));
+8177: #else
+8178: 		unsigned long phys;
+8179: 		dkprintf("clone_flags & CLONE_CHILD_SETTID: 0x%lX\n",
+8180: 				child_tidptr);
+8181: 
+8182: 		if (ihk_mc_pt_virt_to_phys(new->vm->address_space->page_table, 
+8183: 					(void *)child_tidptr, &phys)) { 
+8184: 			kprintf("ERROR: looking up physical addr for child process\n");
+8185: 			err = -EFAULT;
+8186: 			goto release_ids;
+8187: 		}
+8188: 	
+
+# /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-current26eb-next-default-source-1/candidate/kernel/syscall.c:25208
+25208: 	return rc;
+25209: #endif
+25210: }
+25211: #endif
+25212: 
+25213: #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+25214: extern long f03_ptrace_peektext_v1(int, long, long);
+25215: extern long f03_ptrace_poketext_v1(int, long, long);
+25216: #define ptrace_peektext f03_ptrace_peektext_v1
+25217: #define ptrace_poketext f03_ptrace_poketext_v1
+25218: struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_ptrace_text_debug[2] = {
+25219:     { .file=__FILE__, .func="ptrace_text_log_bridge", .line=23490, .flags=DDEBUG_DEFAULT },
+25220:     { .file=__FILE__, .func="ptrace_text_log_bridge", .line=23493, .flags=DDEBUG_DEFAULT },
+25221: };

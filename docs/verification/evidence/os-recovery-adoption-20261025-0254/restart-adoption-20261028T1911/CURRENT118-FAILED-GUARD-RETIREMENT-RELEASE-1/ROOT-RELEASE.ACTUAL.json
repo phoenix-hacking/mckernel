@@ -1,0 +1,465 @@
+{
+  "schema": "mckernel.current118.failed-idle-helper.retirement-release.v1",
+  "author": "/root",
+  "decision": "GRANT_ONE_EXACT_IDLE_FAILED_HELPER_PIDFD_RETIREMENT",
+  "maximum_invocations": 1,
+  "signal_budget": 1,
+  "target": {
+    "pid": 2232651,
+    "starttime": "103343097",
+    "parent_pid": 2232650,
+    "parent_birth": "103343093",
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "uid": 1000,
+    "gid": 1000,
+    "threads": 1,
+    "pgrp": 2232651,
+    "session": 2232651,
+    "exe": "/usr/bin/python3.8",
+    "exe_device": 66306,
+    "exe_inode": 1048651,
+    "exe_size": 5490456,
+    "exe_sha256": "298a9e830ed52f36c299427565485d717d1ce0179c0597cc16560513eb780b06",
+    "source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/retire_exact_current118_stopped_container.py",
+    "source_sha256": "4179233c5a604b2a5924b98469e0dba5fe782eb76e3ff54286767b69288e4488",
+    "argv": [
+      "/usr/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/retire_exact_current118_stopped_container.py",
+      "--release",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-NORMAL-RETIREMENT-RELEASE-1/ROOT-RELEASE.ACTUAL.json",
+      "--release-sha256",
+      "f3b9c5d63bc2c6649e52a754fd3228e6f564466c25358fb8a4c57eaa7824d3dd",
+      "--execute"
+    ],
+    "root_lock": {
+      "path": "/run/lock/mckernel-development.lock",
+      "device": 27,
+      "inode": 4,
+      "fd": 4
+    },
+    "parent_exe": "/home/holden/anaconda3/bin/python3.9",
+    "parent_threads": 1,
+    "parent_pgrp": 2232649,
+    "parent_session": 2232649
+  },
+  "files": {
+    "executor": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/retire_exact_failed_guard.py",
+      "bytes": 18395,
+      "sha256": "4ed5a02f1d64dbd1ed9280fbe039e3700e0e0ead321af2def0c4cf3e16b4c300"
+    },
+    "bindings": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/BINDINGS.json",
+      "bytes": 36138,
+      "sha256": "b58dd562cef34d08cae2d9028f80024ae723b11e3d37320bd82b4c8e68868c6b"
+    },
+    "profile": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/PROFILE.SOURCE-ONLY.json",
+      "bytes": 2415,
+      "sha256": "c124bd7d3895b3e7165b476a58def4fc1f062fb4fa018fb974e787c4c4370a03"
+    },
+    "primitive": {
+      "path": "/home/holden/mckernel/scripts/native_exact_scratch22_authority1_quarantine_recovery.py",
+      "bytes": 28680,
+      "sha256": "3fdb4dde4dbbd5d07d85d68c02e68d4aee3acca45dce12be3479f3252765abd6"
+    },
+    "historical_profile": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/scratch22-authority1-root-quarantine-recovery-independent-review-20261017.json",
+      "bytes": 11131,
+      "sha256": "be4ea78f63872e69f9f1463d0587a9d6ebe6eeab5fbec923588101c5c89e4a19"
+    },
+    "transport_executor": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/compatibility-source-1/retire_exact_current118_stopped_container.py",
+      "bytes": 42041,
+      "sha256": "44fd69ba6d2a10282a73fd00c48a5cbdd420b30597538753347039cc9ffd36aa"
+    },
+    "transport_bindings": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/compatibility-source-1/BINDINGS.json",
+      "bytes": 26640,
+      "sha256": "49c0deaafbe38894335577b5b1d0512aed6e5e297477d45c0b96295df6b554f8"
+    },
+    "portable_converter": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/compatibility-source-1/wait_status_compat.py",
+      "bytes": 552,
+      "sha256": "c895898a0a0162d78e521f4ded5ea7c75b46bd47d7764003f31c09d2d2f31d0a"
+    },
+    "guardian": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/guardian_guard.py",
+      "bytes": 13388,
+      "sha256": "48893862bb3262a2c81d282215e4b9771b8f659e635a21856096c41233774f18"
+    },
+    "reconciliation_facts": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/CURRENT118-FAILED-RETIREMENT-OWNER-RECONCILIATION-1/FACTS.json",
+      "bytes": 6105,
+      "sha256": "503496d7f29d0fe3ac4028160de66218272d80bc02fb01aa13e9cf2b5ae3b7c0"
+    },
+    "reconciliation_review": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/CURRENT118-FAILED-RETIREMENT-OWNER-RECONCILIATION-1/REVIEW.json",
+      "bytes": 9162,
+      "sha256": "156735f9f21165d1b0a869e6cdf2ba5cc235cc9ecd053a30e542935fd4466221"
+    }
+  },
+  "protected_inputs": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/CURRENT118-FAILED-RETIREMENT-OWNER-RECONCILIATION-1/FACTS.json",
+      "bytes": 6105,
+      "sha256": "503496d7f29d0fe3ac4028160de66218272d80bc02fb01aa13e9cf2b5ae3b7c0"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/CURRENT118-FAILED-RETIREMENT-OWNER-RECONCILIATION-1/REVIEW.json",
+      "bytes": 9162,
+      "sha256": "156735f9f21165d1b0a869e6cdf2ba5cc235cc9ecd053a30e542935fd4466221"
+    },
+    {
+      "bytes": 6158,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-NORMAL-RETIREMENT-RELEASE-1/ROOT-RELEASE.ACTUAL.json",
+      "sha256": "f3b9c5d63bc2c6649e52a754fd3228e6f564466c25358fb8a4c57eaa7824d3dd"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/retire_exact_current118_stopped_container.py",
+      "bytes": 41515,
+      "sha256": "4179233c5a604b2a5924b98469e0dba5fe782eb76e3ff54286767b69288e4488"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/BINDINGS.json",
+      "bytes": 24950,
+      "sha256": "e402b73ca6b21763228fe14e37a0e7a85c86468280ca6e3693a3c227071e4d1c"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/actual-retirement-root1-e984/STARTED.json",
+      "bytes": 669,
+      "sha256": "33d75c7a7bc4b50240d9b6d9e289bb8dc87df9fc70722c80b0033077c623a546"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/actual-retirement-root1-e984/UNCERTAIN.json",
+      "bytes": 5329,
+      "sha256": "b55d0dacff804048650c98b98470b3b995ccf7f6500f7f0121179c147886571c"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/actual-retirement-root1-e984/QUARANTINE.json",
+      "bytes": 86,
+      "sha256": "3801e526d399f1d76a7d26ff6e5f39ada4018f5c1d5608d66a83912585914c1b"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/actual-retirement-root1-e984/command-084afc5797304dd8ae8f8771d955f771/JOIN-WAIT4.json",
+      "bytes": 5869,
+      "sha256": "310195b5c10b577db9bc638dbfdd08433b824606b2abe87fc75903efe007ea6e"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/actual-retirement-root1-e984/command-084afc5797304dd8ae8f8771d955f771/status.json",
+      "bytes": 4681,
+      "sha256": "7ad2ebed05bc7afbc49beb0d9d0666ab4b13b26b85786e51eb836750948ecf1f"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/actual-retirement-root1-e984/command-084afc5797304dd8ae8f8771d955f771/stdout",
+      "bytes": 35087,
+      "sha256": "337c464eabe5084367e2bbac8948433a09ef1ad6cf3025b61ca17d8fc47de5aa"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/actual-retirement-root1-e984/command-084afc5797304dd8ae8f8771d955f771/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/PROTECTED-ORIGINALS.json",
+      "bytes": 18461,
+      "sha256": "78e6f7e159c9b20d205ea17cb15cd6ffe4992619c10b37e119b2e3c8a95b1a84"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/NORMAL-RETIREMENT-PACKET.json",
+      "bytes": 50631,
+      "sha256": "d5896f48eb78b8be423d2bf01136d79155d40523d254ae88a6612c1ee543443c"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/compatibility-source-1/FAILED-ATTEMPT-RETAINED.json",
+      "bytes": 3266,
+      "sha256": "73261d7d54aee284a8eb931c00c8ba838bff59694edff71687b01f29c2ca196d"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-FRESH-A3-1/ACTUAL-HOLDER-TOOL-JOIN.json",
+      "bytes": 782,
+      "sha256": "967945842af3d5e8ba183d35d9ae0880bcb226f98e6855fd6cbd5460df8727e4"
+    },
+    {
+      "path": "/usr/bin/python3.8",
+      "bytes": 5490456,
+      "sha256": "298a9e830ed52f36c299427565485d717d1ce0179c0597cc16560513eb780b06"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3/run_build_only.py",
+      "bytes": 26518,
+      "sha256": "b0998fe0c5878eb34b967a144d846223cf7e7049c90ebf45907a00fdf7d2c4e8"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3/hold_and_run_build_only.py",
+      "bytes": 7010,
+      "sha256": "d17bd70e3e3e6ef7febe48b6f0f892ab6f1a94c74e89d43808bbea8b5dc21551"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3/build_only_worker.py",
+      "bytes": 4115,
+      "sha256": "04e67f1f1f3e299bb948c518ad64b2ad92c93e9ca08f3919fdbbd67631c56d59"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3/PROFILE.SOURCE-ONLY.json",
+      "bytes": 128051,
+      "sha256": "b2f30422d9b4e29bac2046f789ff4023e8b7855325330171ca687c831734538d"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3/ROOT-HOLDER-BOOTSTRAP-GRANT.json",
+      "bytes": 1887,
+      "sha256": "122f2c29f9b61a5873ce1b6228413134a913f44083a0fd1b039f828254e2a071"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3/ROOT-ACTUAL-ONE-BUILD-ONLY-GRANT.json",
+      "bytes": 2651,
+      "sha256": "b92f5bab37e10241aafcdf7b51de70049c8bc978d7df11d61616b473502c6fdd"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3/ROOT-ACTUAL-BUILD-RESOURCE-AUTHORITY.json",
+      "bytes": 11717,
+      "sha256": "86c4ae54279f345b579c19d75cf777cfe9052cb1983eea0465ba7337cb865d4a"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3/ACTUAL-INDEPENDENT-BUILD-EXECUTION-REVIEW.json",
+      "bytes": 2522,
+      "sha256": "e54f83871d9848d8a6a49869c6c3bad1ee52f6aec91ed4ae7a616b8b8b8880c5"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3/ROOT-ACTUAL-READONLY-INPUT-EXPORT-AUTHORITY.json",
+      "bytes": 70180,
+      "sha256": "a18e05ed81f877534d78f75b46d28da8dbfc6e5fcfeddeb1ba8056685cd52e40"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3/ROOT-ACTUAL-STATIC-SOURCE-PUBLICATION.json",
+      "bytes": 449057,
+      "sha256": "9481687242d332f6256979cd3722d304ad7a62a20736d1187088e653cf724942"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3/HOLDER/RUNNER.STARTED.json",
+      "bytes": 484,
+      "sha256": "e57abdc3e1c278d65dacfb6be24862e68d915f3088bb30e6d42fe2a00c1ca991"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3/HOLDER/RUNNER.JOINED.json",
+      "bytes": 84,
+      "sha256": "85dfa2a682f409274278e398678ef53d3ca68e98afd88ca424a2cc722a958634"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3/HOLDER/HOLDER.READY.json",
+      "bytes": 1323,
+      "sha256": "69b952ec6a77468edbe939f3b86ca2c26936d3e690dc6ceb13560fd77a52891a"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3/HOLDER/BUILD-LOCAL-TERMINAL.json",
+      "bytes": 247,
+      "sha256": "2a88f4778d245c13c297d7e9117155d3635cdb32900d0ab5c5700314b2cf7f57"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3/HOLDER/runner.stdout",
+      "bytes": 307,
+      "sha256": "618856858515d2e7d465239c885b1dcbd138a8708307dde5cd215fa0765fcecd"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3/HOLDER/runner.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3/OUTPUT/terminal.json",
+      "bytes": 459,
+      "sha256": "78c85beb666bb69e2dcd15f696092ff2719b64834278cb1b71fe284a613c8891"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3/OUTPUT/container.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3/OUTPUT/container.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3/OUTPUT/container.cid",
+      "bytes": 64,
+      "sha256": "605f038785d3c1cf2ca5987487a2e2aeba309518f8ef32a6b7981e3d0bf50b76"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3/OUTPUT/claim.json",
+      "bytes": 24569,
+      "sha256": "d0c3cf985bc0ee45968285f725f8b2365da63651c7a80dcb4b1f4aa15aa4c3b4"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3/OUTPUT/plan.json",
+      "bytes": 24390,
+      "sha256": "85b62a6b7b4559dc7ac22045e36f40b66f77541af656963d86bee16fcf7db654"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3/OUTPUT/work/evidence/worker-result.json",
+      "bytes": 15234,
+      "sha256": "7b6cb2abadd736955d36765515701b0be08604e36fd556321e663925716153b6"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o",
+      "bytes": 18401808,
+      "sha256": "6133a664f9900a9c5e70ebdac167f9c26460308f8d9704b115d4e283fcd0bd1b"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+      "bytes": 350360,
+      "sha256": "2a470b932ddcf43a46e4d82a5df43237806fbdb90128b82dde6c6ee39d81a037"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+      "bytes": 91040,
+      "sha256": "999ac14daa868028327a570bcd42a513d796db90f40d02aaecdd6f17e051ad1f"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3/OUTPUT/work/output/build/kernel/mckernel.img",
+      "bytes": 10285416,
+      "sha256": "7e5dca2b68d1e8c6da21c8be19e85d2fe28bf79d3451ece90146279b56551416"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3/FINITE-REVIEW-HANDOFF/FINITE-STARTED.json",
+      "bytes": 1512,
+      "sha256": "cbbc70af6641aab1a2968b08a3aeace6a715bd55316a473d9317b2330ff03720"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3/FINITE-REVIEW-HANDOFF/FINITE-JOINED.json",
+      "bytes": 1086,
+      "sha256": "5fdff27d93c3c8feff5140ffd4940d2f5a6f622a162d2954f400df107b5ab81d"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3/FINITE-REVIEW-HANDOFF/physical.CHILD-STARTED.json",
+      "bytes": 514,
+      "sha256": "354af80613e32f416c2f993858671bc184dd33246496e4ba403992ff0b58e64f"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3/FINITE-REVIEW-HANDOFF/held.CHILD-STARTED.json",
+      "bytes": 674,
+      "sha256": "2b818b332c78a0838c167d382b6a3a19b4347707ebd81b889b05442ac609e623"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3/FINITE-REVIEW-HANDOFF/ROOT-PHYSICAL-CAPTURE.COMPLETE.json",
+      "bytes": 2514,
+      "sha256": "d3c0abf34a9b3ed9d3d8fd66ec59597b281e6081c261694afc5b6a7ad06614e3"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3/FINITE-REVIEW-HANDOFF/ROOT-HELD-CAPTURE.COMPLETE.json",
+      "bytes": 4232,
+      "sha256": "6ac13dfa223f3ba133b832d4c376d4d21525dbb9b4835557efe761c9c7c8b304"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3/FINITE-REVIEW-HANDOFF/FINITE-COMPLETION.PASS.json",
+      "bytes": 2161,
+      "sha256": "66d799b15b05773e757c7e9a597f438efdf6fe176f49ac781b85cda72e519ff3"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3/FINITE-REVIEW-HANDOFF/INDEPENDENT-FINITE-REVIEW.PASS.json",
+      "bytes": 2550,
+      "sha256": "38e49a7b453d678413b5093ef1e525cc8c90cb680fefd3ccd3d7bd0d88c9c5b7"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3/FINITE-REVIEW-HANDOFF/PREWARM_READY.json",
+      "bytes": 2227,
+      "sha256": "2ec36b493c8f5b3bb9997237e35e639ef9eb6df652dc21d7a187e11bf60ac9f9"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current62-after-bfd-default-build-source-20261028-1/review-correction-source-1/attempt2-binding-successor-1/retirement-parent-abi-correction-source-1/actual-postjoin-capture-root1/OBSERVATION.json",
+      "bytes": 24570393,
+      "sha256": "4606c2f8315a23ae3f7581eb1141b9688807507c82ac69432c429c94ee2f7c74"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT62-POSTJOIN-CAPTURE-1/CURRENT-FREE.json",
+      "bytes": 10633,
+      "sha256": "e13be6df9c8297234bc9cd23c8825da002e7aa4e896b09523d62b11eb06cd9c8"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-FRESH-A3-1/ROOT-CLOSED-UNLAUNCHED-FRONTIER.ACTUAL.json",
+      "bytes": 2509,
+      "sha256": "e59a728ad8dbe7829761411da56fed3550df95e317c049a0348ae714b185ae3d"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-postbuild-current-successor-preparation-1/ACTUAL-CURRENT118-RECORDED-ACTORS.json",
+      "bytes": 4572,
+      "sha256": "eab7a17410cf4fdde3fe4ea9a9b7dd8b263c4096adf79fb0b37897b60f694854"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next-attempt-after-expired-capture-preparation-1/A3-source-successor-1/ROOT-A3-FRESH-REOBSERVATION-OUTPUT/command-c167e4b7a0184b4cb3073cf40500f067/JOIN-WAIT4.json",
+      "bytes": 6280,
+      "sha256": "3e550d0bece74df033b560beb700c143509d1127baf5b1df1057499fecb7830c"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next-attempt-after-expired-capture-preparation-1/A3-source-successor-1/ROOT-A3-FRESH-REOBSERVATION-OUTPUT/command-f95b2d8ef18c4a279d1fe37d31fe58e1/JOIN-WAIT4.json",
+      "bytes": 1868,
+      "sha256": "b60f0a8dd552567d4228469482ea00cfe7a5bf995c73812ed94aef5741f432ff"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next-attempt-after-expired-capture-preparation-1/A3-source-successor-1/ROOT-A3-FRESH-REOBSERVATION-OUTPUT/command-ffb601a65fe44f8d9856c15e13ad2bbe/JOIN-WAIT4.json",
+      "bytes": 1949,
+      "sha256": "afb22b77d98c80a74ea336b05f623a508d231475a12f8bf992fad628b59d0cde"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next-attempt-after-expired-capture-preparation-1/A3-source-successor-1/ROOT-A3-FRESH-REOBSERVATION-OUTPUT/command-517e434babda453697e912ba5c2c4dae/JOIN-WAIT4.json",
+      "bytes": 1960,
+      "sha256": "bf756be2c52962cf810f456105faf4bd65c5b223a9abed488a48ee9cdc85a3cd"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next-attempt-after-expired-capture-preparation-1/A3-source-successor-1/ROOT-A3-FRESH-REOBSERVATION-OUTPUT/command-a5da3344ac474209ba848d7d132ec77d/JOIN-WAIT4.json",
+      "bytes": 6279,
+      "sha256": "1742db1ee1753d81a59fcfd6deeb3e4ba77aebd52cd300273916616c0ae4d10b"
+    }
+  ],
+  "failed_client_status": "UNKNOWN",
+  "parent_positive_join_mandatory": true,
+  "container_mutations_allowed": 0,
+  "records_released": [],
+  "cutoffs": [
+    1793253600.0,
+    1035704.5689393478,
+    1051042.6959879305
+  ],
+  "credit_run_id": "7f4af94a83b14cc08f97401f5891d965",
+  "credit_ceiling": "57774.852125",
+  "minimum_cumulative_spent": "22812.3311",
+  "actual_control_authorities": {
+    "controls": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/new-run-until-20261028-2300-pacific-1/restart-20261028-1200-pacific-1/ACTUAL-CONTROLS-ARMED.json",
+      "bytes": 3171,
+      "sha256": "fe3c2193600ce06c98f769d4659faaf52d3035437a98c5fa8d33ab43a7ed8202"
+    },
+    "earliest_caps": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/new-run-until-20261028-2300-pacific-1/restart-20261028-1200-pacific-1/EARLIEST-CONTROL-CAPS.json",
+      "bytes": 858,
+      "sha256": "a28da98b506a4e51a0f42985f346cc0e4036836731d682dbdeae2423ba236eb0"
+    }
+  },
+  "actual_account_identity_operation_admission_accepted": true,
+  "Root_attests_no_unlisted_intervening_operation": true,
+  "current_operation": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-FAILED-GUARD-RETIREMENT-RELEASE-1/CURRENT-OWNER-RETIREMENT-OPERATION.ACTUAL.json",
+    "bytes": 3758,
+    "sha256": "65e45dd3c59889f4b38aacde07378a81ba534cb7044acede21dd180fdd3a2e96"
+  },
+  "source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/CURRENT118-FAILED-GUARD-RETIREMENT-REVIEW-1/SOURCE-REVIEW.FETCHED.json",
+    "bytes": 14524,
+    "sha256": "2157280ecd24b41ec68dbf42eeaf90757eee31fdd2d0023247aad8d805df1dde"
+  },
+  "source_publication": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-FAILED-GUARD-RETIREMENT-RELEASE-1/SOURCE-PUBLICATION.ACTUAL.json",
+    "bytes": 5784,
+    "sha256": "a7732e7d8288360ca41a021301361d943ecd3e17bd79adb5528f95966104ed6d"
+  },
+  "source_checkpoint": "be4d5232074545bc1b973409dd8cbb5b2858b228",
+  "fetched_source_verified": true,
+  "execution_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/CURRENT118-FAILED-GUARD-RETIREMENT-REVIEW-1/EXECUTION-REVIEW.json",
+    "bytes": 5400,
+    "sha256": "f19eed025a85786c7cd944035683426aaaff32e113431875e7b7a62e4609bc36"
+  },
+  "output": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/actual-guard-retirement-root1"
+}

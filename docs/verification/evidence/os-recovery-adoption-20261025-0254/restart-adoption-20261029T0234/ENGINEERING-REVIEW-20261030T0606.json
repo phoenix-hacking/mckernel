@@ -1,0 +1,128 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": "2026-10-30T06:08:04.441965+00:00",
+  "review_interval": 1494450,
+  "thread": "01a18a76-4f1e-7900-8ed6-127394e93689",
+  "measurement_bucket": {
+    "start_epoch": 1793339189.8921316,
+    "end_epoch_exclusive": 1793340389.8921316,
+    "start_utc": "2026-10-30T05:46:29.892132+00:00",
+    "end_utc": "2026-10-30T06:06:29.892132+00:00",
+    "seconds": 1200,
+    "nonoverlap": "Begins at preceding bucket end; no baseline reset."
+  },
+  "actual_delta": {
+    "helper_Rust_compiler_passes": 1,
+    "helper_behavior_cases_passed": 5,
+    "kernel_Rust_object_passes": 1,
+    "arch_C_object_passes": 1,
+    "HOST_raw_links": 1,
+    "additional_original_C_name_with_HOST_Rust_provider": 1,
+    "HOST_Rust_provider_total": 13,
+    "utility_negative_cases_passed_after_one_runtime_correction": 7,
+    "synthetic_release_schema_cases_passed": 5,
+    "production_links": 0,
+    "native_qualified": 0,
+    "C_retired": 0,
+    "file_closures": 0,
+    "guest_apps": 0,
+    "privileged_parent_attempts": 1,
+    "Docker_queries": 0
+  },
+  "job_metrics": {
+    "helper_compile": {
+      "user_seconds": "0.07",
+      "system_seconds": "0.04",
+      "peak_RSS_KiB": "126812",
+      "wall_clock": "0:00.13",
+      "CPU_seconds": 0.11000000000000001
+    },
+    "helper_fixture": {
+      "user_seconds": "0.00",
+      "system_seconds": "0.00",
+      "peak_RSS_KiB": "2744",
+      "wall_clock": "0:00.00",
+      "CPU_seconds": 0.0
+    },
+    "Rust_object": {
+      "user_seconds": "18.01",
+      "system_seconds": "0.28",
+      "peak_RSS_KiB": "601420",
+      "wall_clock": "0:18.30",
+      "CPU_seconds": 18.290000000000003
+    },
+    "architecture_C": {
+      "user_seconds": "0.02",
+      "system_seconds": "0.01",
+      "peak_RSS_KiB": "23040",
+      "wall_clock": "0:00.03",
+      "CPU_seconds": 0.03
+    },
+    "link": {
+      "user_seconds": "0.06",
+      "system_seconds": "0.03",
+      "peak_RSS_KiB": "26796",
+      "wall_clock": "0:00.10",
+      "CPU_seconds": 0.09
+    }
+  },
+  "overlap": "Kernel Rust, architecture C and link serial; CPU6 groups observed empty. Pure read-only artifact review on CPU0 was separate; no guest/native workload. V3 pure test has typed wrapper completion but no measured group census, retain its 512MiB planning share.",
+  "failure_to_validated_fix": {
+    "AST_runtime_exit_marker_to_corrected7case_result_seconds": 112.3687424659729,
+    "scope": "Timestamp proxy from first exit file mtime to actual corrected result, not exact first error Popen. All13 source/segment hashes matched under both runtimes; AST hashes differ under3.9 and all match under pinned3.8. Frozen oracle/adapter unchanged.",
+    "Root_missing_service_field": "Runtime correction not attempted/validated. V3 synthetic5/5/source review only; original root-owned release and missing parent birth retained UNKNOWN."
+  },
+  "selected_acceptance": "Unchanged1cd7e4e6, original23generic+5arch C cursor; M14 4/6, practical35/35 separate, M15 queued. HOST d16444de is not selected/default/native.",
+  "first_compiler_and_queue": "Earliest invocation stream418.7782335s proxy retained. Exact source-ready/queue/Popen/compiler start unmeasured.",
+  "blocked_duration": "Exact native and matching-SDK blocked seconds unmeasured. No inference from liveness. Current-free/intervening-custody missing throughout observations.",
+  "largest_avoidable_handoff": "Prior181.048s successful status marker to validator; immediate terminal+group validation continues. New avoidable Root data omission prevented query before fork.",
+  "concrete_scheduling_change": "Build each sealed release from the complete required schema and run the cheap preseal check before sudo; keep code compilation and artifact review progressing while physical admission is unresolved.",
+  "original_thirty_minute_baseline": "Preserved; 95% not achieved/claimed.",
+  "critical_path": {
+    "owner": "Root",
+    "next": "Validate every actual v3 field and fresh controls/resources; new unique release/namespace only after reviewed v3+pure5case record. Exact reviewed sudo-A argv in DIRECT-PARENT-V3.SOURCE-ONLY.json; no SDK/create/native release.",
+    "historical_missing_field": "no_unlisted_physical_or_custody_operations_since_retirement remains UNKNOWN for old postjoin recipe."
+  },
+  "active_owners": "Root canonical engineering/docs/next admission; composition completed SDK13/v3 source; signal_review completed pure regression; custody_review completed HOST13/SDK13/v3 independent reviews. No compiler or observer active.",
+  "resources_point_in_time": {
+    "current_snapshot_epoch": 1793340412.2655478,
+    "previous_snapshot_epoch": 1793339210.5838106,
+    "resources": {
+      "disks": {
+        "/home/holden/mckernel": {
+          "available_bytes": 144284360704,
+          "ismount": false,
+          "st_dev": 66306
+        },
+        "/home/holden/mckernel-work/scratch": {
+          "available_bytes": 47696433152,
+          "ismount": true,
+          "st_dev": 1828
+        }
+      },
+      "load_average": [
+        0.63,
+        0.61,
+        0.65
+      ],
+      "memory": {
+        "MemAvailable_kib": 27803456,
+        "MemTotal_kib": 32421580
+      }
+    },
+    "scope": "Observations only, not retroactive job admission."
+  },
+  "weekly": {
+    "at": "2026-10-30T06:07:35.061923+00:00",
+    "primary": {
+      "resetsAt": 1793774133,
+      "usedPercent": 67,
+      "windowDurationMins": 10080
+    }
+  },
+  "Root_reconciliation": {
+    "stale_transaction_status": "CONVERSION_STOPPED_OCI_RETIRED_PENDING_INDEPENDENT_POSTJOIN_CURRENT",
+    "current": "Accepted retirement69216 retained, old4709 consumed and stopped OCI retained; no current-free. V2 root sealed record/parent early-validation failure is new evidence; no observer/query started and parent birth unknown. Old BUILD3/CID5487 instructions not replayed."
+  },
+  "constraints": "Included-only100% stop/original+tighter caps, no prepaid/model-controller change; one heavy27:4/scratch21/oldOCI/UNKNOWN and held generic_c/direct-TID/terminate_host/execve transferACK retained."
+}

@@ -1,0 +1,38 @@
+{
+  "schema": "mckernel.selected-retention.phase-i-failure.v1",
+  "status": "FAIL_PHASE_I_DIAGNOSTIC_RECORD",
+  "root": "/home/holden/mckernel-work/scratch/m01b-generic-row03-row12-expert-correction-packet-20260928-58",
+  "diagnostics_root": "/home/holden/mckernel-work/scratch/m01b-generic-row03-row12-validator-diagnostics-20260928-62",
+  "packet": "docs/verification/stability-selected-retention-generic-row03-row12-validator-recovery-expert-packet-20260928-62.md",
+  "packet_sha256": "63bf79fc38cabf0787030f1e770fd178edd599e5e1371bdbc3a6f9feee6261be",
+  "packet_review_status": "PASS_PACKET",
+  "result": {
+    "stagers_passed": 2,
+    "installed_candidate_files": 10,
+    "candidate_files_before_failure_record": 326,
+    "validator_exit_status": 0,
+    "validator_stdout": "PASS_WHITESPACE\n",
+    "validator_stderr": "",
+    "diagnostic_recorded_status": -1,
+    "first_failure_stage": "validator-diagnostic-record",
+    "defect": "The execution shell did not export the validator status before constructing validation.json, so the diagnostic record stored -1 despite the observed validator exit status 0.",
+    "handoff_created": false,
+    "phase_ii_started": false,
+    "compiler_started": false,
+    "runtime_started": false,
+    "acceptance_credit": false
+  },
+  "preservation": {
+    "failure_record": "/home/holden/mckernel-work/scratch/m01b-generic-row03-row12-expert-correction-packet-20260928-58/phase-i-failure.txt",
+    "failure_record_sha256": "a9492e70c7175518dfe171a8e306b28c26450d13bbfd206d3804f268dadbc490",
+    "validation_record": "/home/holden/mckernel-work/scratch/m01b-generic-row03-row12-validator-diagnostics-20260928-62/validation.json",
+    "validation_record_sha256": "d44aed7b068cc4eec945fa18a530f66cc41cd83dbc2c5701ad34f588b4fad999",
+    "final_candidate_regular_files": 327,
+    "diagnostic_regular_files": 8,
+    "archive": "docs/verification/evidence/stability-selected-retention-generic-row03-row12-phase-i-failure-20260928-58.tar.gz",
+    "archive_sha256": "88b7d69c828ecf2ed399ed609c2b91563877068c7e11f5b380158f2f53ec487a",
+    "archive_size": 1018189,
+    "archive_members": 347
+  },
+  "next_action": "Preserve root58 and diagnostics root62 without repair or reuse. Independently review the raw failure. Then issue one bounded fresh-root execution correction that captures the subprocess return code directly in the diagnostic writer rather than through an unexported shell variable."
+}

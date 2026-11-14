@@ -1,0 +1,11 @@
+        return supervise(args, REPO, directory, forwarded, Lease, atomic_json)
+    directory.mkdir(mode=0o700, parents=True, exist_ok=True)
+    lease = Lease(directory / "run.lock")
+    try:
+        if args.fresh_session or args.fresh_recovery_proof:
+            saved = json.loads((directory / "state.json").read_text()) if (directory / "state.json").exists() else {}
+            if saved.get("transport_uncertain") or (saved.get("resume_instruction") or {}).get(
+                    "status") in {"sending", "delivery_uncertain"}:
+                raise RuntimeError("Uncertain RPC delivery cannot be cleared by session archival")
+            if args.fresh_recovery_proof and not (args.recovery_goal_sha256 or args.recovery_require_active):
+                raise RuntimeError("Fresh automatic recovery needs live predecessor goal provenance")

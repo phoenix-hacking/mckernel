@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "file.rmdir-nonempty",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/file.rmdir-nonempty"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["rc=-1 errno=39 intact=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["rmdir returns -1/ENOTEMPTY", "Directory and contained regular file remain intact after rejection", "Cleanup removes both objects"],
+  "unresolved_expectations": ["Bind pinned guest ENOTEMPTY numeric value and canonical output/input hashes before execution."],
+  "max_question_for_reviewer": "Confirm nonempty rmdir is atomic and returns ENOTEMPTY on the pinned guest."
+}

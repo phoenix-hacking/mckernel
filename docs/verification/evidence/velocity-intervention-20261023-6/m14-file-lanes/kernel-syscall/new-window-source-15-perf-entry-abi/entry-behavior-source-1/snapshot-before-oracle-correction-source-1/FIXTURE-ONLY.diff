@@ -1,0 +1,28 @@
+--- /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-15-perf-entry-abi/entry-behavior-source-1/driver.c
++++ /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-15-perf-entry-abi/entry-behavior-source-1/snapshot-before-oracle-correction-source-1/driver.c
+@@ -1,10 +1,11 @@
+ /* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
+-#include "reference.c"
++#include "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-15-perf-entry-abi/entry-behavior-source-1/reference.c"
+ extern long sys_perf_event_open(int,ihk_mc_user_context_t *);
+ extern const unsigned long f03_perf_entry_fixture_Rust_ABI[56];
+ extern int printf(const char *,...);
+ extern void abort(void);
+-static void require(int value){if(!value)abort();}
++extern int dprintf(int,const char *,...);
++#define require(value) do { if(!(value)){ dprintf(2,"FAIL perf entry assertion line=%d expr=%s\n",__LINE__,#value); abort(); } } while(0)
+ static struct cpu_local_var cpu_state;
+ static struct thread task;
+ static struct process process_state;
+@@ -193,9 +194,9 @@
+  const int counters[]={0,1,63,64};unsigned tested=0;
+  for(int selected=0;selected<18;selected++)for(unsigned p=0;p<5;p++)for(unsigned f=0;f<5;f++)for(unsigned k=0;k<4;k++)for(int mutation=0;mutation<2;mutation++){
+   reset(pids[p],descriptors[f],counters[k],mutation,selected);
+-  long old=original_sys_perf_event_open(-77,&context_state);independent_oracles(old);snapshot();struct observations baseline=observed;
++  long old=original_sys_perf_event_open(-77,&context_state);snapshot();independent_oracles(old);struct observations baseline=observed;
+   reset(pids[p],descriptors[f],counters[k],mutation,selected);
+-  long new=sys_perf_event_open(298,&context_state);independent_oracles(new);snapshot();
++  long new=sys_perf_event_open(298,&context_state);snapshot();independent_oracles(new);
+   require(old==new);require(!memcmp(&baseline,&observed,sizeof(observed)));tested++;
+  }
+  require(tested==3600);

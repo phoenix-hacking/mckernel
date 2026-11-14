@@ -1,0 +1,260 @@
+{
+  "status": "PASS_4_OWNED_COMPLETEDPROCESS_FLOCK_CASES",
+  "results": [
+    {
+      "extraction": {
+        "argv": {
+          "caller_pid": 1073276,
+          "caller_starttime": "80580110",
+          "challenge_bytes": 48,
+          "challenge_sha256": "97daac0ee9998dfcad6c9c0970da5ca411c86233a944c25b47566f6a7bc1ddd5",
+          "code_bytes": 139,
+          "code_sha256": "0dbe285f98c45a7adb39b1b83e11298dd837ddf34f00e19b3059d10a2a9df1ac",
+          "prefix": [
+            "/usr/bin/python3",
+            "-I",
+            "-B",
+            "-c"
+          ]
+        },
+        "co_filename": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-root-command-result-read-source-1/FIXTURE-ONLY-ROOT-COMMAND.py",
+        "co_name": "root_command",
+        "exception_type": "Refusal",
+        "layout": "typed CPython3.9 positive instance dict offset; four keys; one-byte dict indices; <=128slots",
+        "local": "result",
+        "returncode": 17,
+        "status": "PASS_EXACT_ROOT_COMMAND_RESULT_READ",
+        "stderr": {
+          "bytes": 23,
+          "raw_hex": "4f574e45445f5354444552525f323032363130323600fe",
+          "sha256": "f3d2bd9e9bf6ba670d68f39449dd323e16de5699be9fed7ee46f225c73e36bce"
+        },
+        "stdout": {
+          "bytes": 23,
+          "raw_hex": "4f574e45445f5354444f55545f323032363130323600ff",
+          "sha256": "d9819fa04522870db9a1d2560588d3828f046dc83a004bbb61f7beec1fc8cd2a"
+        },
+        "traceback_nodes": 2
+      },
+      "mode": "success",
+      "fixture_pid": 1073276,
+      "birth": "80580110",
+      "debugger_result": 0,
+      "same_fd_inode_flock": true,
+      "alive_resumed_after": true,
+      "before": {
+        "fd": 3,
+        "fdinfo": "pos:\t0\nflags:\t02500000\nmnt_id:\t29\nino:\t59657797\nlock:\t1: FLOCK  ADVISORY  WRITE 1073276 103:02:59657797 0 EOF\n",
+        "link": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-root-command-result-read-source-1/fixture-lock-57a0d31af81643019b5f7439ef956a93",
+        "identity": {
+          "device": 66306,
+          "inode": 59657797,
+          "mode": 384,
+          "uid": 1000,
+          "gid": 1000,
+          "nlink": 1,
+          "size": 0
+        },
+        "global_lock": [
+          "FLOCK",
+          "ADVISORY",
+          "WRITE",
+          "1073276",
+          "103:02:59657797",
+          "0",
+          "EOF"
+        ]
+      },
+      "after": {
+        "fd": 3,
+        "fdinfo": "pos:\t0\nflags:\t02500000\nmnt_id:\t29\nino:\t59657797\nlock:\t1: FLOCK  ADVISORY  WRITE 1073276 103:02:59657797 0 EOF\n",
+        "link": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-root-command-result-read-source-1/fixture-lock-57a0d31af81643019b5f7439ef956a93",
+        "identity": {
+          "device": 66306,
+          "inode": 59657797,
+          "mode": 384,
+          "uid": 1000,
+          "gid": 1000,
+          "nlink": 1,
+          "size": 0
+        },
+        "global_lock": [
+          "FLOCK",
+          "ADVISORY",
+          "WRITE",
+          "1073276",
+          "103:02:59657797",
+          "0",
+          "EOF"
+        ]
+      },
+      "normal_exit": 0
+    },
+    {
+      "mode": "helper_error",
+      "fixture_pid": 1073294,
+      "birth": "80580196",
+      "debugger_result": 0,
+      "same_fd_inode_flock": true,
+      "alive_resumed_after": true,
+      "before": {
+        "fd": 3,
+        "fdinfo": "pos:\t0\nflags:\t02500000\nmnt_id:\t29\nino:\t59657804\nlock:\t1: FLOCK  ADVISORY  WRITE 1073294 103:02:59657804 0 EOF\n",
+        "link": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-root-command-result-read-source-1/fixture-lock-5606b98b065b43fd93dcd6d566fb5e70",
+        "identity": {
+          "device": 66306,
+          "inode": 59657804,
+          "mode": 384,
+          "uid": 1000,
+          "gid": 1000,
+          "nlink": 1,
+          "size": 0
+        },
+        "global_lock": [
+          "FLOCK",
+          "ADVISORY",
+          "WRITE",
+          "1073294",
+          "103:02:59657804",
+          "0",
+          "EOF"
+        ]
+      },
+      "after": {
+        "fd": 3,
+        "fdinfo": "pos:\t0\nflags:\t02500000\nmnt_id:\t29\nino:\t59657804\nlock:\t1: FLOCK  ADVISORY  WRITE 1073294 103:02:59657804 0 EOF\n",
+        "link": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-root-command-result-read-source-1/fixture-lock-5606b98b065b43fd93dcd6d566fb5e70",
+        "identity": {
+          "device": 66306,
+          "inode": 59657804,
+          "mode": 384,
+          "uid": 1000,
+          "gid": 1000,
+          "nlink": 1,
+          "size": 0
+        },
+        "global_lock": [
+          "FLOCK",
+          "ADVISORY",
+          "WRITE",
+          "1073294",
+          "103:02:59657804",
+          "0",
+          "EOF"
+        ]
+      },
+      "normal_exit": 0
+    },
+    {
+      "mode": "debugger_timeout",
+      "fixture_pid": 1073310,
+      "birth": "80580289",
+      "debugger_result": "own-debugger-timeout-killed-reaped",
+      "same_fd_inode_flock": true,
+      "alive_resumed_after": true,
+      "before": {
+        "fd": 3,
+        "fdinfo": "pos:\t0\nflags:\t02500000\nmnt_id:\t29\nino:\t59657811\nlock:\t1: FLOCK  ADVISORY  WRITE 1073310 103:02:59657811 0 EOF\n",
+        "link": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-root-command-result-read-source-1/fixture-lock-5418ba926a83450eaaae7c606a269e0f",
+        "identity": {
+          "device": 66306,
+          "inode": 59657811,
+          "mode": 384,
+          "uid": 1000,
+          "gid": 1000,
+          "nlink": 1,
+          "size": 0
+        },
+        "global_lock": [
+          "FLOCK",
+          "ADVISORY",
+          "WRITE",
+          "1073310",
+          "103:02:59657811",
+          "0",
+          "EOF"
+        ]
+      },
+      "after": {
+        "fd": 3,
+        "fdinfo": "pos:\t0\nflags:\t02500000\nmnt_id:\t29\nino:\t59657811\nlock:\t1: FLOCK  ADVISORY  WRITE 1073310 103:02:59657811 0 EOF\n",
+        "link": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-root-command-result-read-source-1/fixture-lock-5418ba926a83450eaaae7c606a269e0f",
+        "identity": {
+          "device": 66306,
+          "inode": 59657811,
+          "mode": 384,
+          "uid": 1000,
+          "gid": 1000,
+          "nlink": 1,
+          "size": 0
+        },
+        "global_lock": [
+          "FLOCK",
+          "ADVISORY",
+          "WRITE",
+          "1073310",
+          "103:02:59657811",
+          "0",
+          "EOF"
+        ]
+      },
+      "normal_exit": 0
+    },
+    {
+      "mode": "combined_cap",
+      "fixture_pid": 1073325,
+      "birth": "80580402",
+      "debugger_result": 0,
+      "same_fd_inode_flock": true,
+      "alive_resumed_after": true,
+      "before": {
+        "fd": 3,
+        "fdinfo": "pos:\t0\nflags:\t02500000\nmnt_id:\t29\nino:\t59657818\nlock:\t1: FLOCK  ADVISORY  WRITE 1073325 103:02:59657818 0 EOF\n",
+        "link": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-root-command-result-read-source-1/fixture-lock-9e8b91a65f284918998d2868c2e7a679",
+        "identity": {
+          "device": 66306,
+          "inode": 59657818,
+          "mode": 384,
+          "uid": 1000,
+          "gid": 1000,
+          "nlink": 1,
+          "size": 0
+        },
+        "global_lock": [
+          "FLOCK",
+          "ADVISORY",
+          "WRITE",
+          "1073325",
+          "103:02:59657818",
+          "0",
+          "EOF"
+        ]
+      },
+      "after": {
+        "fd": 3,
+        "fdinfo": "pos:\t0\nflags:\t02500000\nmnt_id:\t29\nino:\t59657818\nlock:\t1: FLOCK  ADVISORY  WRITE 1073325 103:02:59657818 0 EOF\n",
+        "link": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-root-command-result-read-source-1/fixture-lock-9e8b91a65f284918998d2868c2e7a679",
+        "identity": {
+          "device": 66306,
+          "inode": 59657818,
+          "mode": 384,
+          "uid": 1000,
+          "gid": 1000,
+          "nlink": 1,
+          "size": 0
+        },
+        "global_lock": [
+          "FLOCK",
+          "ADVISORY",
+          "WRITE",
+          "1073325",
+          "103:02:59657818",
+          "0",
+          "EOF"
+        ]
+      },
+      "normal_exit": 0
+    }
+  ],
+  "actual_actor_attached": false
+}

@@ -1,0 +1,97 @@
+{
+  "actual_result": null,
+  "canonical_preimages": {
+    "C": {
+      "bytes": 843257,
+      "path": "/home/holden/mckernel/kernel/syscall.c",
+      "sha256": "34ec8a08c5790aa7533e5a8e3905d1dd1d4989bf0f431b8517ae6d50bbaa54f4"
+    },
+    "policy": {
+      "bytes": 713471,
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "sha256": "3ef8288617db7bcc26c56039491295d3f48c53d4f76d111b68dfcc3186546f7d"
+    }
+  },
+  "compiler_jobs": 0,
+  "default_link": false,
+  "driver": null,
+  "engineering_percentage": null,
+  "existing_Rust_reuse": [
+    "existing syscall_policy::kprintf C-variadic ABI",
+    "existing actual Rust debug::{kprintf,__kprintf} formatting provider",
+    "existing five MOVE_PAGES_LOG_* constants and MovePagesLogFn ABI"
+  ],
+  "file_retired": false,
+  "full78_production": false,
+  "future_smallest_consumer": [
+    "SOURCE ONLY 120 controlled differential C/Rust logger pairs across every event/unknowns/UL boundaries/error extremes; no live log read",
+    "real selected kernel TU/typed MovePagesLogFn widths and selection preprocessing",
+    "actual C caller allocated relocation to Rust export, unique Rust T/C U plus existing kprintf provider, partial link",
+    "full current78 Rust production and eventual default image/native observation after independent execution grant"
+  ],
+  "integration": {
+    "C": "Standalone patch selects Rust logger for still-live C sys_move_pages; original static fallback byteexact.",
+    "future_move_pages": "Source43a60 remains untested/excluded. Its unique f03_move_pages_log link_name alias resolves this export. Combined root merge must replace retained selected C logger definition with this declaration; do not apply the two overlapping C-region patches blindly.",
+    "policy": "Append only move_pages_log_bridge export; reuse existing constants/kprintf declaration. No shared edits."
+  },
+  "native": false,
+  "outputs": {
+    "candidate/syscall.c": {
+      "bytes": 843385,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-move-pages-log-source-1/candidate/syscall.c",
+      "sha256": "9271db51a834abdc28ff15e633a295881bee250530a4143785aa6e72c6ef66cd"
+    },
+    "fixture-source-only/formatter_actual.rs": {
+      "bytes": 309,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-move-pages-log-source-1/fixture-source-only/formatter_actual.rs",
+      "sha256": "d362803409deb294d6a919370c078adbb2d1a1fda245f8ec9c12ac79332115e3"
+    },
+    "fixture-source-only/formatter_original_actual.c": {
+      "bytes": 2313,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-move-pages-log-source-1/fixture-source-only/formatter_original_actual.c",
+      "sha256": "efeefcb3a6a2d93137f8f03dd95ea234704d5432e3ab5abb201bdce129527702"
+    },
+    "move-pages-log.NONOVERLAPPING-SOURCE.patch": {
+      "bytes": 2022,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-move-pages-log-source-1/move-pages-log.NONOVERLAPPING-SOURCE.patch",
+      "sha256": "f295fe2fd3f1cc1ca782ff3399b5fbae965166fc013ea6485b19b5a4ca97a892"
+    },
+    "move-pages-log.REAL-TU-ABI.SOURCE-ONLY.c": {
+      "bytes": 737,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-move-pages-log-source-1/move-pages-log.REAL-TU-ABI.SOURCE-ONLY.c",
+      "sha256": "e68b914e1174eb7e5c4daf53c5ea4dee4a1f35fe1c19980e6f383c4f30a76b6c"
+    },
+    "move_pages_log.C-SELECTION-FRAGMENT.inc": {
+      "bytes": 838,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-move-pages-log-source-1/move_pages_log.C-SELECTION-FRAGMENT.inc",
+      "sha256": "2292235c939b688611c0045094a222f8266843de2b3235d5c3095ccfa48bce8a"
+    },
+    "move_pages_log.ORIGINAL-C.inc": {
+      "bytes": 710,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-move-pages-log-source-1/move_pages_log.ORIGINAL-C.inc",
+      "sha256": "19da97282ba5802f6829a6bd60d01eaac7601f7329934f59b91b8450bab1a0d3"
+    },
+    "move_pages_log.RUST-FRAGMENT.rs.inc": {
+      "bytes": 1369,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-move-pages-log-source-1/move_pages_log.RUST-FRAGMENT.rs.inc",
+      "sha256": "bacf54194dfc928a3fc81af3f3cee1c37d6994bf388be4bc4f8a00cd783d1563"
+    },
+    "move_pages_log.UNCHANGED-CONSTANTS.rs.inc": {
+      "bytes": 230,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-move-pages-log-source-1/move_pages_log.UNCHANGED-CONSTANTS.rs.inc",
+      "sha256": "12c2f311582c9d8409742b6c3e30d803e5f393b5cf622d9c9f770686e078a3fd"
+    }
+  },
+  "ownership": "No allocation, ownership transfer, locking, callback scheduling or lifetime policy changed; same pre-existing logging effects.",
+  "preserved_behavior": [
+    "same five format strings including numeric trailing space and LF",
+    "same sys_move_pages %s argument and unsigned-long %lu value",
+    "one ignored-return kprintf call for each known event",
+    "ignored error parameter and zero calls for all unknown events",
+    "entire original C body byteexact under #else"
+  ],
+  "queued_recipe": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "selected_live_body": "kernel/syscall.c::move_pages_log_bridge",
+  "status": "IMPLEMENTED_PRIVATE_SOURCE_ONLY_NO_EXECUTABLE_QUEUE"
+}

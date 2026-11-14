@@ -1,0 +1,69 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "EXPORT_SOURCE_READY_WAIT_NATIVE_CAPTURE_CLOSED_AND_ROOT_RELEASE",
+  "nonce": "aeae44e7a7a642278ee77289c7caade8",
+  "parent": "/home/holden/mckernel-work/scratch/n235b2/p",
+  "owner_root": "/home/holden/mckernel-work/scratch/n235b2/p.owner-aeae44e7a7a642278ee77289c7caade8",
+  "producer_source": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/begin-cleanup-native-successor-2/runtime-cleanup-schema2-1/native_diagnostic_container_owner.py",
+    "sha256": "795827c10d6908940b9771176a2e7297effc285b61eeae37c83a49d8cf1b8a73",
+    "bytes": 93071
+  },
+  "producer_ast_evidence_assignment": "self.evidence = self.parent.with_name(self.parent.name + '.owner-' + self.nonce)",
+  "predecessor_export": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/next-native-preparation/retirement-readiness/readonly_export_exact_owner.py",
+    "sha256": "2cdb224f957e1f5efb5c2c20aeca49a7f53939e54a89a278607cb4c883c336ee",
+    "bytes": 1638
+  },
+  "export_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/next-native-preparation/post-native-physical-preparation-1/readonly_export_exact_owner.py",
+    "sha256": "9a045cd650ef6af4cae2f85434fc08cc0c2bbacafe7a60647b47c1b0578ae4ae",
+    "bytes": 1638
+  },
+  "normalized_executable_AST_equal_except_ROOT": true,
+  "source_algorithm_changes": 0,
+  "readonly_export_argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=30:30",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--nofile=256",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/next-native-preparation/post-native-physical-preparation-1/readonly_export_exact_owner.py"
+  ],
+  "profile": {
+    "AS_bytes": 2147483648,
+    "CPU_seconds": 30,
+    "NPROC": "inherited",
+    "cpu": [
+      7
+    ],
+    "jobs": 1,
+    "stderr_cap_bytes": 1048576,
+    "stdout_FSIZE_bytes": 33554432,
+    "wall_seconds": 35
+  },
+  "fresh_exact_CID": null,
+  "actual_native_result": null,
+  "actual_closed_capture": null,
+  "actual_export": null,
+  "physical_clearance": false,
+  "execution_authorized": false,
+  "worker_effects": {
+    "root": 0,
+    "Docker": 0,
+    "active_attempt_probes": 0,
+    "cleanup": 0,
+    "workload": 0
+  },
+  "elapsed_seconds": 0.03285249701002613
+}

@@ -1,0 +1,9 @@
+# SPDX-License-Identifier: GPL-2.0
+
+# Staged as drivers/misc/mckernel/Kbuild in the selected Rocky kernel tree.
+# Linux Kbuild owns every Rust compiler and module linker invocation.
+
+obj-$(CONFIG_MCKERNEL_IHK_RUST) += ihk.o
+obj-$(CONFIG_MCKERNEL_IHK_SMP_X86_64_RUST) += ihk-smp-x86_64.o
+ihk-smp-x86_64-y := ihk_smp_x86_64.o
+obj-$(CONFIG_MCKERNEL_MCCTRL_RUST) += mcctrl.o

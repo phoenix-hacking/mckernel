@@ -1,0 +1,356 @@
+{
+  "payload": {
+    "mode": 33261,
+    "path": "/home/holden/mckernel-work/scratch/native-application-core-build-20260908-1/native-application-core",
+    "sha256": "558d1607e4648321c9537215084e759496937d9591c319a21443f443193fda9a",
+    "size": 39488
+  },
+  "payload_contract": {
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "app",
+      "threads"
+    ],
+    "cwd": "/case/work",
+    "env": {
+      "COKERNEL_PATH": "/apps",
+      "PATH": "/usr/bin:/bin"
+    },
+    "oracle": {
+      "exit_code": 37,
+      "stderr_hex": "",
+      "stdout_hex": "4e41544956455f434f5245205041535320746872656164730a"
+    },
+    "stderr_limit_bytes": 1024,
+    "stdout_limit_bytes": 1024
+  },
+  "oracle_semantics": "Unchanged generic native_diagnostic.evaluate exact25-byte stdout NATIVE_CORE PASS threads newline, empty stderr, raw exited37, both1024 limits, stream EOF/accounting and full unchanged lifecycle/error checks. No AVX typed parser or AVX acceptance claims.",
+  "collector": {
+    "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/init",
+    "sha256": "268b967064e44a61340e43a23940ef2bba16ad22e3615a6f5d0e7108428890b6",
+    "size": 1021992,
+    "mode": 33216
+  },
+  "native_boot": {
+    "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/native-proposal/stage-correction-1/stage/root/bin/native-boot",
+    "sha256": "6b9f753e34d12da474c701ca64ce62825788295646b60f67482ef9ec8690c417",
+    "size": 31208,
+    "mode": 33261
+  },
+  "collector_boot_argv": [
+    "/bin/native-boot",
+    "hidos",
+    "allow_oversubscribe"
+  ],
+  "bzImage": {
+    "mode": 33188,
+    "path": "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/bzImage",
+    "sha256": "032653ee0661b059c325e2a0911a9d492805f1a889c4df515473d69a8be105bc",
+    "size": 16130048
+  },
+  "matched_native_modules": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-a7d84db0d8b54b9b94347fd0aff57594/modules/ihk.ko",
+      "sha256": "51b48a9e42eaa2411cab2a28edf9bb5db8b2d648675d083473e926f91dd0e038",
+      "size": 1440392,
+      "mode": 33188
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-a7d84db0d8b54b9b94347fd0aff57594/modules/ihk-smp-x86_64.ko",
+      "sha256": "82c9021f7491fa8bc6d178fe99e7d4b7b6f90838474a9c91b62ddb8edb3d13f8",
+      "size": 11630064,
+      "mode": 33188
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-a7d84db0d8b54b9b94347fd0aff57594/modules/mcctrl.ko",
+      "sha256": "6571ac7eca13559d8bab65125d54facbbc65e84f815d4ff3fc77ec6aa1104972",
+      "size": 1913904,
+      "mode": 33188
+    }
+  ],
+  "module_source_candidate": "d99edf2f58ee44b1a7e9aa726cbb49eee7850248",
+  "failure_policy": "One released fresh attempt only. First unexpected setup/payload/evaluation/retirement failure stops affected work and retains original evidence; manual dispatcher review first. No renamed retry, weakened oracle, automatic cleanup/replay, or acceptance inference.",
+  "runtime_growth_reserve_bytes": 402653184,
+  "host_floor_bytes": 17179869184,
+  "scratch_floor_bytes": 12884901888,
+  "scope": "AVX/threads native regressions for exact reset image; clear_fp_regs sole execve callsite and null-fpstate reset require separate native proof and receive no credit here.",
+  "d99_module_compatibility": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-cpu-reacquire-external-modules-result-review-20261017-1.json",
+    "sha256": "0cc6f31e9c8f92696abcd9390c937c6414f0917fc065061bef24c28034bf0ec5",
+    "size": 11103
+  },
+  "schema": "mckernel.scheduler-debug-case-exact-execution-proposal.v1",
+  "task_id": "rust-scheduler-debug-threads-20261018-1",
+  "status": "ACTUAL_STAGE_PARENT_AND_SOURCE_BOUND_PENDING_TERMINAL_AND_EXACT_RUNTIME_RELEASE",
+  "functional_scope": "Working supported OS/apps plus real compute Rust/reviewed assembly retirement. No new compute C; qualification deferred; execve/fork ACK excluded.",
+  "case": "threads",
+  "execution_count": 1,
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-B",
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/sdn-5cf76f33/t",
+    "--nonce",
+    "9906b0245b74b78898142b4e686ce8dd",
+    "--owner-sha256",
+    "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+    "--manifest",
+    "/home/holden/mckernel-work/scratch/sdm-5cf76f33/threads/manifest.json",
+    "--manifest-sha256",
+    "6c70107b8f3736cfdfaeea39edb8fee5927b5bcd83b5692acba8932551b3601a"
+  ],
+  "owner": {
+    "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+    "sha256": "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+    "size": 58828,
+    "mode": 33152
+  },
+  "runner": {
+    "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_runner.py",
+    "sha256": "25ea29f9b07232094e9df1db6094ad0a85ec678281749a1d6998abb7c700d499",
+    "size": 6005,
+    "mode": 33152
+  },
+  "owner_source_hashes": {
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_runner.py": "25ea29f9b07232094e9df1db6094ad0a85ec678281749a1d6998abb7c700d499",
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic.py": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e",
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_backend.py": "cd0759c926876483665065cb320b9daf7d7c6b32f56e561805b4b0343f60d614",
+    "/home/holden/mckernel/scripts/application-tests/qmp_capture.py": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741",
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py": "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200"
+  },
+  "manifest": {
+    "path": "/home/holden/mckernel-work/scratch/sdm-5cf76f33/threads/manifest.json",
+    "sha256": "6c70107b8f3736cfdfaeea39edb8fee5927b5bcd83b5692acba8932551b3601a",
+    "size": 5199,
+    "mode": 33152
+  },
+  "staged_manifest": {
+    "path": "/home/holden/mckernel-work/scratch/sdm-5cf76f33/threads/manifest.json",
+    "sha256": "6c70107b8f3736cfdfaeea39edb8fee5927b5bcd83b5692acba8932551b3601a",
+    "size": 5199,
+    "mode": 33152
+  },
+  "base": {
+    "path": "/home/holden/mckernel/scratch/sd-assets-5cf76f33/threads/base.cpio.gz",
+    "sha256": "615e71656ae116c18b54ecbbfab5b9777abc70d80257c5c586ca481ce7e1b7ef",
+    "size": 12746354,
+    "mode": 33152
+  },
+  "overlay": {
+    "path": "/home/holden/mckernel/scratch/sd-assets-5cf76f33/threads/lifecycle.cpio.gz",
+    "sha256": "14c1bfbc0a4c69b0eefe07899773b0b8329e15870afd35ff14c065aec5eb22f7",
+    "size": 13339698,
+    "mode": 33152
+  },
+  "mckernel_image": {
+    "path": "/home/holden/mckernel/scratch/sd-assets-5cf76f33/image.artifact",
+    "sha256": "3bfc1dfb5894fd56e073abeabc9037ff80139081e34776f65985a5f3c7d7968d",
+    "size": 7926720,
+    "mode": 33261
+  },
+  "image_artifact_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-image-actual-review-20261018-1/actual-review.json",
+    "sha256": "671a0fa2050c6518ba90b233964c6be19c097bf91fff14d4151e365ee64da96b",
+    "size": 34413,
+    "mode": 33152
+  },
+  "image_build_observations": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-materialization-final-20261018-1/heavy-proposal-1/postbuild-readonly-1/execution-result.json",
+    "sha256": "33e48234df1e974a8a7b9faa44ddba828951167e6bd879688938a716cc8aacbc",
+    "size": 3414,
+    "mode": 33152
+  },
+  "actual_stage_result": {
+    "path": "/home/holden/mckernel/scratch/sd-assets-5cf76f33/threads/stage-result.json",
+    "sha256": "b9dab3757b757c6226abd99820245972a2331f7e003ff2b12f5e2f49c0f3747e",
+    "size": 18697
+  },
+  "stage_result": {
+    "path": "/home/holden/mckernel/scratch/sd-assets-5cf76f33/threads/stage-result.json",
+    "sha256": "b9dab3757b757c6226abd99820245972a2331f7e003ff2b12f5e2f49c0f3747e",
+    "size": 18697
+  },
+  "actual_stage_receipt": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-guest-continuation-20261018-1/actual-image-joins-1/actual-stage-result.json",
+    "sha256": "fef4ea5ab57b55b02b90b781f2e728c15bae6c32a84a766e5ef898db2d52f5e6",
+    "size": 4865,
+    "mode": 33152
+  },
+  "actual_stage_independent_acceptance": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-actual-stage-acceptance-20261018-1.json",
+    "sha256": "afb6695c5c8f4a2603b4ba0e8c15663d9f88a9c406059b51eb7bee7e893fa247",
+    "size": 8213
+  },
+  "private_consumer_checks": {
+    "status": "PASS_NEW_MANIFEST_BOUND_BY_UNCHANGED_CANONICAL_OWNER_AND_RUNNER",
+    "fixture_rerun": false
+  },
+  "private_consumer_source_pins": {
+    "status": "UNCHANGED_FIVE_SOURCE_CANONICAL_CLOSURE",
+    "source_hashes": {
+      "/home/holden/mckernel/scripts/application-tests/native_diagnostic_runner.py": "25ea29f9b07232094e9df1db6094ad0a85ec678281749a1d6998abb7c700d499",
+      "/home/holden/mckernel/scripts/application-tests/native_diagnostic.py": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e",
+      "/home/holden/mckernel/scripts/application-tests/native_diagnostic_backend.py": "cd0759c926876483665065cb320b9daf7d7c6b32f56e561805b4b0343f60d614",
+      "/home/holden/mckernel/scripts/application-tests/qmp_capture.py": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741",
+      "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py": "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200"
+    }
+  },
+  "collector_SOURCE_contract": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-guest-continuation-20261018-1/collector-source-contract.json",
+    "sha256": "b0e447c2b8b50b5fa5a6067d2109fd1d87784e6243b72b183d51d379f8331172",
+    "size": 5110,
+    "mode": 33152
+  },
+  "parent": {
+    "path": "/home/holden/mckernel-work/scratch/sdn-5cf76f33/t",
+    "identity": {
+      "device": 1828,
+      "inode": 755804,
+      "uid": 1000,
+      "gid": 1000,
+      "mode": "0o700"
+    }
+  },
+  "nonce": "9906b0245b74b78898142b4e686ce8dd",
+  "unix_monitor_endpoints": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/sdn-5cf76f33/t/attempt-9906b0245b74b78898142b4e686ce8dd/qmp.sock",
+      "encoded_bytes": 99,
+      "max_bytes": 107
+    }
+  ],
+  "other_monitor_endpoints": [],
+  "parent_creation_proposal": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-guest-continuation-20261018-1/actual-image-joins-1/consumer-binding-1/ordinary-parent-proposal.json",
+    "sha256": "cde0690598bf4b374dadad13fbe385d6720c9ba78696cceecaa063a2e7f00032",
+    "size": 1896,
+    "mode": 33152
+  },
+  "runtime_wrapper_template": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/bound/threads/dispatch-runtime.py",
+    "sha256": "04289da45835760a1ffa6b0a86274e6f8cfd783206b5f1ab3c17cb34a442f217",
+    "size": 4759,
+    "mode": 33152
+  },
+  "runtime_wrapper_live_binding": {
+    "status": "PASS_ACTUAL_NEW_PARENT_IDENTITY_BOUND",
+    "parent_identity": {
+      "device": 1828,
+      "inode": 755804,
+      "uid": 1000,
+      "gid": 1000,
+      "mode": "0o700"
+    },
+    "all_wrapper_function_bodies_unchanged": true,
+    "accepted_template": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/bound/threads/dispatch-runtime.py",
+      "sha256": "04289da45835760a1ffa6b0a86274e6f8cfd783206b5f1ab3c17cb34a442f217",
+      "size": 4759,
+      "mode": 33152
+    },
+    "wrapper": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-guest-continuation-20261018-1/actual-image-joins-1/consumer-binding-1/final-execution-1/threads/dispatch-runtime.py",
+      "sha256": "a5fdd2e2e3b3d46dc16bd3e6424203de868904e08f4e6a8c070e751a50f04156",
+      "size": 4759,
+      "mode": 33152
+    }
+  },
+  "profile": {
+    "cleanup_timeout_seconds": 15,
+    "cpus": 4,
+    "cpuset": "2-5",
+    "guest_memory_mib": 8192,
+    "guest_numa_nodes": 2,
+    "guest_timeout_seconds": 300,
+    "guest_vcpus": 4,
+    "heavy_operations": 1,
+    "mckernel_cpus": 1,
+    "mckernel_memory_mib": 128,
+    "memory": 12884901888,
+    "memory_swap": 12884901888,
+    "network": "none",
+    "payload_timeout_seconds": 10,
+    "pids": 512
+  },
+  "prospective_runtime_ordinary_sources_visible_via": [
+    "/home/holden/mckernel",
+    "/home/holden/mckernel-work/scratch"
+  ],
+  "terminal_common_shared_release": {
+    "status": "PENDING_ROOT_OBSERVER_AND_CLEANUP_ACCEPTANCE"
+  },
+  "fresh_live_admission": {
+    "status": "PENDING_AT_ROOT_EXECUTION"
+  },
+  "separate_execution_release": {
+    "status": "PENDING_INDEPENDENT_NEW_SOURCE_AND_EXECUTION_DECISION"
+  },
+  "accepted_current_image_AVX_predecessor": {
+    "status": "PENDING_EXACT_SCHEDULER_IMAGE_AVX_ACTUAL_ACCEPTANCE_AND_POSITIVE_RETIREMENT"
+  },
+  "scheduling": "AVX first; threads only after exact3bfc1dfb image AVX accepted actual result plus positive retirement and its own fresh admission.",
+  "application_acceptance": false,
+  "production_acceptance": false,
+  "runtime_release": false,
+  "distinct_behavior_increment": 0,
+  "source_or_mock_is_native_acceptance": false,
+  "parent_identity_receipt": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-guest-continuation-20261018-1/actual-image-joins-1/consumer-binding-1/runtime-parent-receipt.json",
+    "sha256": "a13ca1d5be511e46f80b48168b59f3f87bedf721df1a42c6b179ca2197cfcbec",
+    "size": 961,
+    "mode": 33152
+  },
+  "parent_namespace": "mnt:[4026531841]",
+  "runtime_wrapper": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-guest-continuation-20261018-1/actual-image-joins-1/consumer-binding-1/final-execution-1/threads/dispatch-runtime.py",
+    "sha256": "a5fdd2e2e3b3d46dc16bd3e6424203de868904e08f4e6a8c070e751a50f04156",
+    "size": 4759,
+    "mode": 33152
+  },
+  "postjoin_readback": {
+    "requested": true,
+    "approved": "CONDITIONAL_ON_EXACT_INDEPENDENT_EXECUTION_RELEASE",
+    "argv": [
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/sdn-5cf76f33/t.owner-9906b0245b74b78898142b4e686ce8dd",
+        "."
+      ],
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/cat",
+        "/home/holden/mckernel-work/scratch/sdn-5cf76f33/t/attempt-9906b0245b74b78898142b4e686ce8dd/result.json"
+      ],
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/sdn-5cf76f33/t/attempt-9906b0245b74b78898142b4e686ce8dd",
+        "."
+      ]
+    ],
+    "timeout_seconds_per_command": 30,
+    "capture_limit_bytes_per_command": 33554432,
+    "conditions": "Only after direct owner child joins exit0 proving accepted source-known retirement, lease release and complete evidence. Exact root-owned directory/regular single-link result identity checks precede bounded non-dereference readbacks. Failure stops; no retry or cleanup authority inferred."
+  },
+  "accepted_consumer_and_parent_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-consumer-parent-review-20261018-1.json",
+    "sha256": "b82fe529e23dd00866b7d62c79702773310db4d106485bacedfcca91b33e34bc",
+    "size": 11216,
+    "mode": 33152
+  },
+  "source_commit_policy": "No new fetched/push gate introduced. Preserve any actual existing --release-commit clauses and checked release/conditional metadata/terminal/common/positive direct-owner-join contract when deriving live wrappers."
+}

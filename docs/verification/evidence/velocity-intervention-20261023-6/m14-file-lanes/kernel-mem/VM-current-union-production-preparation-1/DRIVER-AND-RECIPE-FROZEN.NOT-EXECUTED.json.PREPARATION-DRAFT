@@ -1,0 +1,35 @@
+{
+  "actual": null,
+  "commands": 13,
+  "driver": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/VM-current-union-production-preparation-1/run_current_VM_production_once.py",
+    "sha256": "7319934331f21025f2c6dfbcca7287c04dad059aafe362211b21b334bff3b811"
+  },
+  "execution_grant": null,
+  "next_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=60:60",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--core=0:0",
+    "--stack=2097152:2097152",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/VM-current-union-production-preparation-1/run_current_VM_production_once.py"
+  ],
+  "observer": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/VM-current-union-production-preparation-1/observe_current_VM_production.py",
+    "sha256": "c536064126833c442a12d2636aa5b99c09d5039cf0e19d25da37af41715d7f0b"
+  },
+  "ready": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/VM-current-union-production-preparation-1/EXECUTABLE-READY.NOT-EXECUTED.json",
+    "sha256": "0a5cd822840d70f13e4f594e3e235211741c92943a82bc73a4f7b4a533140a5a"
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Exact current78 VM source preparation only."
+}

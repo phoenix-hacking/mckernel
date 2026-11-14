@@ -1,0 +1,84 @@
+--- /home/holden/mckernel-work/host-preparation/settid-current-image-native-app-preparation-20261021-1/runtime-preparation-1/whole-caller-source-2/bind_threads_native_packet.py
++++ /home/holden/mckernel-work/host-preparation/settid-current-image-native-app-preparation-20261021-1/runtime-preparation-1/whole-caller-path-correction-1/bind_threads_native_packet.py
+@@ -12,6 +12,65 @@
+  p=Path(p);b=p.read_bytes();return dict(path=str(p),sha256=hashlib.sha256(b).hexdigest(),bytes=len(b))
+ def need(v,s):
+  if not v:raise ValueError(s)
++
++def derive_current_readbacks(binding,pre):
++ """Host readback operands follow the actual owner's accepted parent/nonce."""
++ parent=Path(binding['attempt_parent']);nonce=binding['nonce']
++ argv=pre['root_owner_argv']
++ need(argv[argv.index('--attempt-parent')+1]==str(parent) and argv[argv.index('--nonce')+1]==nonce,'actual owner parent/nonce for host readbacks')
++ need(argv[argv.index('--manifest')+1]==binding['manifest']['path'] and argv[argv.index('--manifest-sha256')+1]==binding['manifest']['sha256'],'actual owner manifest for host readbacks')
++ need(pre['binding']['nonce']==nonce and pre['binding']['attempt_parent']==str(parent),'actual preflight binding parent/nonce')
++ attempt=parent/('attempt-'+nonce);evidence=parent.with_name(parent.name+'.owner-'+nonce)
++ need(str(attempt)==pre['paths']['attempt'] and str(attempt/'qmp.sock')==pre['paths']['qmp_socket'],'actual owner attempt/QMP path')
++ return [['/usr/bin/sudo','-A','/usr/bin/tar','--create','--file=-','--directory='+str(evidence),'.'],
++         ['/usr/bin/sudo','-A','/usr/bin/cat',str(attempt/'result.json')],
++         ['/usr/bin/sudo','-A','/usr/bin/tar','--create','--file=-','--directory='+str(attempt),'--exclude=./qmp.sock','.']]
++
++def validate_current_path_join(outputs,root,binding,pre):
++ """Whole generated owner/meta/config/seven-row/template/output/hash boundary."""
++ root=Path(root);packet=root/'native-packet-1'
++ def data(path):return json.loads(outputs[Path(path)])
++ raw=derive_current_readbacks(binding,pre)
++ parent=Path(binding['attempt_parent']);nonce=binding['nonce'];attempt=parent/('attempt-'+nonce);evidence=parent.with_name(parent.name+'.owner-'+nonce)
++ prop=data(packet/'proposal.json');meta=data(packet/'conditional-metadata.json');cfg=data(packet/'FINAL-IHK-LOGGING-CHECK-CONFIG.json');seven=data(packet/'FINAL-SEVEN-ROOT-CALL-DATA.json')
++ need(prop['parent']['path']==str(parent) and prop['nonce']==nonce and prop['argv']==pre['root_owner_argv'],'whole current proposal/owner join')
++ need(meta['postjoin_readback']['argv']==raw,'whole current host readback operands')
++ need(cfg['postjoin_readback']==meta['postjoin_readback'] and cfg['launch_argv']==pre['root_owner_argv'],'whole current config/readback/owner join')
++ need(cfg['parent']==prop['parent'] and cfg['attempt']==str(attempt) and cfg['owner_evidence']==str(evidence),'whole current config owner output derivation')
++ need(seven['native_allowed_argv']==pre['root_owner_argv'],'whole current seven owner command')
++ rows=seven['steps'];names=['LAST-snapshot','machine-assembly','final-guard','native-owner','readback-1','readback-2','readback-3']
++ need(len(rows)==7 and [r['name'] for r in rows]==names and rows[3]['argv_template']==pre['root_owner_argv'],'whole current seven row order/owner')
++ for row,expected in zip(rows[4:],raw):
++  argv=row['argv_template'];program='/usr/bin/tar' if '/usr/bin/tar' in expected else '/usr/bin/cat';at=argv.index(program)
++  need(argv[:2]==expected[:2] and argv[at:]==expected[2:],'whole current wrapped host readback argv '+row['name'])
++ need(seven['snapshot_output']==str(root/'root-live-preflight-1.json') and seven['final_machine_output']==str(packet/'execution-release.json') and seven['final_guard_output']==str(packet/'FINAL-205-MATCHED-SDK-NATIVE-MACHINE-REVIEW.json'),'whole current late output paths')
++ need(cfg['snapshot_path']==seven['snapshot_output'] and cfg['machine_path']==seven['final_machine_output'],'whole config late output paths')
++ actual=[]
++ for index,row in enumerate(rows):
++  name=row['name'];base=packet if index==0 else packet/'captures'/('%02d-'%index+name)
++  expected_paths=[str(base/('snapshot.'+v if index==0 else v)) for v in ['stdout','stderr','status.json']]
++  if index==0:expected_paths[2]=str(packet/'snapshot.status.json')
++  need([row[k] for k in ['stdout','stderr','status']]==expected_paths,'whole current capture locator '+name)
++  expected_capture=expected_paths+[row['status']+v for v in ['.command.json','.child.json','.direct-join.json']]
++  need(row['capture_outputs']==expected_capture,'whole current six capture paths '+name)
++  material=str(packet/'actual-command-data'/('%02d-'%index+name+'.json'))
++  need(row['materialized_command_data']==material,'whole current command data locator '+name)
++  need(row['caller_argv_template'][3]==str(packet/'root-run-exact-readonly-stage.py') and row['caller_argv_template'][row['caller_argv_template'].index('--commands-file')+1]==material and row['caller_argv_template'][row['caller_argv_template'].index('--commands-sha256')+1] is None,'whole current caller command binding '+name)
++  template=data(row['template']['path']);op=template['operations'][1]
++  need(op['argv_template']==row['argv_template'] and [op[k+'_path'] for k in ['stdout','stderr','status']]==expected_paths,'whole current capture template join '+name)
++  actual.extend(expected_capture+[material])
++ need(seven['fresh_capture_and_actual_command_paths']==actual and len(actual)==len(set(actual))==49,'whole current49 fresh output paths')
++ need(len(outputs)==19 and len(set(outputs))==19 and not (set(map(str,outputs))&set(actual)),'whole current19 control/49 effect path disjointness')
++ def walk(value):
++  if isinstance(value,dict):
++   if {'path','sha256','bytes'}<=set(value) and value['path'] is not None and Path(value['path']) in outputs:
++    b=outputs[Path(value['path'])];need(value['sha256']==hashlib.sha256(b).hexdigest() and value['bytes']==len(b),'whole generated descriptor hash/bytes '+value['path'])
++   for v in value.values():walk(v)
++  elif isinstance(value,list):
++   for v in value:walk(v)
++ for path,b in outputs.items():
++  if path.suffix=='.json':walk(json.loads(b))
++ return raw
+ c=load(D/'STATIC-NONTEMPORAL-INPUTS.json')
+ need(len(sys.argv) in (1,3),'usage: bind_threads_native_packet.py [GENUINE_STATIC_DECISION SHA256]')
+ final=len(sys.argv)==3
+@@ -59,6 +118,7 @@
+ prop['stage_manifest']=c['stage_manifest']
+ pref=add(Q/'proposal.json',prop)
+ meta=transform(load(OQ/'conditional-metadata.json'));meta.update(accepted_stage_manifest=prop['stage_manifest'],actual_metadata_review=ref(A),effective_current_controller_stop_percent=100,independent_static_execution_decision=static,normalized_manifest=prop['normalized_manifest'],parent_full_ninefield_identity=full,parent_identity=five,proposal=pref)
++meta['postjoin_readback']=dict(meta['postjoin_readback'],argv=derive_current_readbacks(binding,pre))
+ meta['status']='PASS_NONTEMPORAL_DATA_ONLY' if final else 'PENDING_INDEPENDENT_STATIC_DATA_REVIEW'
+ mref=add(Q/'conditional-metadata.json',meta)
+ base=transform(load(OQ/'machine-base.json'));base.update(accepted_actual_stage_fixture_parent_review=ref(A),conditional_metadata_release=mref,exclusive_queue_predecessor=physical_ref(),independent_static_execution_decision=static,parent_identity=five,terminal_cleanup_and_common_shared_release=dict(status='PASS',ref=physical_ref()))
+@@ -127,6 +187,7 @@
+ packet['binding_source']=ref(Path(__file__))
+ add(Q/'ROOT-SEVEN-REVIEW-REF-1.json',static)
+ packetref=add(Q/'NATIVE-COHERENT-REVIEW-PACKET.json',packet)
++validate_current_path_join(outputs,D,binding,pre)
+ for path,raw in outputs.items():
+  out=path if final else path.with_name(path.name+('.PENDING-PHYSICAL' if physical_pending else '.PENDING-STATIC-CORRECTED'));need(not os.path.lexists(out),'fresh one-time data binding '+str(out))
+  with out.open('xb') as f:os.fchmod(f.fileno(),0o600);f.write(raw);f.flush();os.fsync(f.fileno())

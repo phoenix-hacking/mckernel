@@ -1,0 +1,98 @@
+{
+  "accepted_materializer": {
+    "bytes": 4292,
+    "path": "/home/holden/mckernel/docs/verification/evidence/current68-native235-sdk-v3-source-binding-20261022-1/accepted-materializer/prepare_actual_inputs2.py",
+    "sha256": "88475c77af7758769fd0b5e35e879593b470284117901d7340b871a9fd226252"
+  },
+  "after_materialization_source11_prep_68closure_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=30:30",
+    "--core=0:0",
+    "--fsize=8388608",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport sys,json,hashlib\nsys.path.insert(0,'/home/holden/mckernel/scripts')\nimport native_running_external_modules_owner as o\nimport native_running_external_modules_offline as d\nassert o.__file__=='/home/holden/mckernel/scripts/native_running_external_modules_owner.py' and d.__file__=='/home/holden/mckernel/scripts/native_running_external_modules_offline.py'\nC=Path(sys.argv[1]);expected=json.loads((C/'private-cohort/EXACT-CANONICAL-SOURCE11-AUTH-DATASET.json').read_text())['source_sha256']\no.validate_runtime_source_bindings(expected)\nprep=Path('/home/holden/mckernel/docs/verification/evidence/current68-native235-v3-host-control-sdk-preparation-20261022-1.json')\nm=d.load_preparation(prep);o.validate_preparation(m)\nassert d.ihk_export_profile(m)=='current-v6-adopt-v4-control-v1'\nassert len(m['closure'])==68 and m['closure_bytes']==1353815 and m['source_identity']=='b3f80c34011dca51674b0566ea08a2aff0e23f3e65e5f82b5a96b7dad47c924c'\nif len(sys.argv)==3:\n request=json.loads(Path(sys.argv[2]).read_text());actual,rows=d.closure(m,Path(request['candidate_root']));assert set(actual)==set(rows) and len(actual)==68\n a=Path(request['candidate_root'])/'modules/mcctrl.rs';b=Path(request['candidate_root'])/'modules/mcctrl_rust.rs';assert a.stat().st_nlink==b.stat().st_nlink==1 and (a.stat().st_dev,a.stat().st_ino)!=(b.stat().st_dev,b.stat().st_ino) and a.read_bytes()==b.read_bytes()\nprint('PASS_CURRENT_CANONICAL_SOURCE11_AND_EXACT_V3_PREPARATION'+('_ACTUAL68_SOURCE_CLOSURE'if len(sys.argv)==3 else''))\n",
+    "/home/holden/mckernel/docs/verification/evidence/current68-native235-sdk-v3-source-binding-20261022-1",
+    "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/actual-sdk-v3-build-attempt-1/request.json"
+  ],
+  "before_materialization_source11_and_prep_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=30:30",
+    "--core=0:0",
+    "--fsize=8388608",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport sys,json,hashlib\nsys.path.insert(0,'/home/holden/mckernel/scripts')\nimport native_running_external_modules_owner as o\nimport native_running_external_modules_offline as d\nassert o.__file__=='/home/holden/mckernel/scripts/native_running_external_modules_owner.py' and d.__file__=='/home/holden/mckernel/scripts/native_running_external_modules_offline.py'\nC=Path(sys.argv[1]);expected=json.loads((C/'private-cohort/EXACT-CANONICAL-SOURCE11-AUTH-DATASET.json').read_text())['source_sha256']\no.validate_runtime_source_bindings(expected)\nprep=Path('/home/holden/mckernel/docs/verification/evidence/current68-native235-v3-host-control-sdk-preparation-20261022-1.json')\nm=d.load_preparation(prep);o.validate_preparation(m)\nassert d.ihk_export_profile(m)=='current-v6-adopt-v4-control-v1'\nassert len(m['closure'])==68 and m['closure_bytes']==1353815 and m['source_identity']=='b3f80c34011dca51674b0566ea08a2aff0e23f3e65e5f82b5a96b7dad47c924c'\nif len(sys.argv)==3:\n request=json.loads(Path(sys.argv[2]).read_text());actual,rows=d.closure(m,Path(request['candidate_root']));assert set(actual)==set(rows) and len(actual)==68\n a=Path(request['candidate_root'])/'modules/mcctrl.rs';b=Path(request['candidate_root'])/'modules/mcctrl_rust.rs';assert a.stat().st_nlink==b.stat().st_nlink==1 and (a.stat().st_dev,a.stat().st_ino)!=(b.stat().st_dev,b.stat().st_ino) and a.read_bytes()==b.read_bytes()\nprint('PASS_CURRENT_CANONICAL_SOURCE11_AND_EXACT_V3_PREPARATION'+('_ACTUAL68_SOURCE_CLOSURE'if len(sys.argv)==3 else''))\n",
+    "/home/holden/mckernel/docs/verification/evidence/current68-native235-sdk-v3-source-binding-20261022-1"
+  ],
+  "canonical_install_operations": 0,
+  "data_only_materializer": {
+    "bytes": 4470,
+    "path": "/home/holden/mckernel/docs/verification/evidence/current68-native235-sdk-v3-source-binding-20261022-1/next-commands/prepare_actual_v3_inputs.DATA-ONLY.py",
+    "sha256": "ce754102bdbc4577794ef470d680543d3f9131aa0b6312dbea2d66ecddcbc35e"
+  },
+  "extra_standalone_historical_observer": false,
+  "function_class_AST_identical_to_accepted_materializer": true,
+  "literal_delta": {
+    "bytes": 6432,
+    "path": "/home/holden/mckernel/docs/verification/evidence/current68-native235-sdk-v3-source-binding-20261022-1/next-commands/MATERIALIZER-DATA-ONLY.diff",
+    "sha256": "56c956574e91377f07f6c999a3a65fb6b18b489bed6be1e7b167a6069c48d85c"
+  },
+  "materializer_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=30:30",
+    "--core=0:0",
+    "--fsize=8388608",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/current68-native235-sdk-v3-source-binding-20261022-1/next-commands/prepare_actual_v3_inputs.DATA-ONLY.py"
+  ],
+  "materializer_profile": {
+    "AS_bytes": 1073741824,
+    "CPU_seconds": 30,
+    "NPROC": "inherited",
+    "cpu": 7,
+    "jobs": 1,
+    "new_materialization_logical_bytes_less_than": 4194304,
+    "output_cap_bytes": 8388608,
+    "wall_seconds": 35
+  },
+  "required_before_effects": [
+    "Genuine SDK SOURCEPASS already copied; exactdata-only materializer delta must be consumed by root executionreview/admission.",
+    "Root canonical3installation/publish/fetch, current11sourceauth+prep, positiveP05physical and currentlivepostjoin, no competingheavy, fresh fullsparsegrowth/storage/namespace/ownership admission.",
+    "Run before-static argv; then exactlyone fresh materializer; retain result; run after-static argv. Actual build stillrequires separate exactrelease and dynamicobservations."
+  ],
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_capture_unchanged": true,
+  "static_profile": {
+    "AS_bytes": 2147483648,
+    "CPU_seconds": 30,
+    "NPROC": "inherited",
+    "cpu": 7,
+    "jobs": 1,
+    "output_cap_bytes": 8388608,
+    "wall_seconds": 35
+  },
+  "status": "INERT_PROPOSAL_NOT_EXECUTED_NO_EXECUTION_RELEASE",
+  "worker_command_executions": 0
+}

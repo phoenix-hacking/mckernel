@@ -110,6 +110,19 @@ size_t iov_length(const struct iovec *iov, unsigned long nr_segs)
 #undef	SYSCALL_DELEGATED
 
 /* generate syscall_table[] */
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT) && defined(MCKERNEL_RUST_F03_SYSCALL_TABLE)
+/* Rust owns immutable slot storage; genuine C fallback stays below. */
+#ifdef PROFILE_ENABLE
+_Static_assert(PROFILE_EVENT_MAX == 4024, "qualify changed profile syscall slot");
+#define F03_SYSCALL_TABLE_SLOTS (PROFILE_EVENT_MAX + 1)
+#else
+#define F03_SYSCALL_TABLE_SLOTS 812
+#endif
+extern long (*const f03_syscall_handler_table_v1[F03_SYSCALL_TABLE_SLOTS])
+	(int, ihk_mc_user_context_t *);
+#define syscall_table f03_syscall_handler_table_v1
+#else
+#line 113
 static long (*syscall_table[])(int, ihk_mc_user_context_t *) = {
 #define	SYSCALL_HANDLED(number,name)	[number] = &sys_##name,
 #define	SYSCALL_DELEGATED(number,name)
@@ -117,6 +130,43 @@ static long (*syscall_table[])(int, ihk_mc_user_context_t *) = {
 #undef	SYSCALL_HANDLED
 #undef	SYSCALL_DELEGATED
 };
+#endif
+#line 119
+
+
+#ifdef MCKERNEL_RUST_SYSCALL_OFFLOAD
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
+/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
+/* Readonly ABI binding to the unchanged genuine C table; its C data remains debt. */
+struct f03_syscall_dispatch_binding_v1 {
+#ifdef MCKERNEL_RUST_F03_SYSCALL_TABLE
+#line 126
+ long (*const *handlers)(int,ihk_mc_user_context_t *);
+#else
+#line 126
+ long (**handlers)(int,ihk_mc_user_context_t *);
+#endif
+#line 127
+ unsigned long count;
+};
+_Static_assert(sizeof(syscall_table)/sizeof(syscall_table[0]) <= 2147483647UL,
+ "genuine syscall table count fits the original int ns");
+const struct f03_syscall_dispatch_binding_v1 f03_syscall_dispatch_binding_v1 = {
+ .handlers=syscall_table,.count=sizeof(syscall_table)/sizeof(syscall_table[0])
+};
+extern long syscall_dispatch_context_bridge(int num,ihk_mc_user_context_t *ctx);
+#else
+long syscall_dispatch_context_bridge(int num, ihk_mc_user_context_t *ctx)
+{
+	int ns = sizeof(syscall_table) / sizeof(syscall_table[0]);
+
+	if (num < 0 || num >= ns || !syscall_table[num])
+		return -ENOSYS;
+
+	return syscall_table[num](num, ctx);
+}
+#endif /* MCKERNEL_RUST_F03_DISPATCH_CONTEXT */
+#endif
 
 /* generate syscall_name[] */
 #define	MCKERNEL_UNUSED	__attribute__ ((unused))
@@ -217,6 +267,14 @@ static unsigned long uti_desc; /* Address of struct uti_desc object in syscall_i
 #define PTRACE_DISPATCH_GETREGSET 16
 #define PTRACE_DISPATCH_SETREGSET 17
 #define PTRACE_DISPATCH_GETEVENTMSG 18
+/* Private waitid selector for PGID 1: -1 is reserved for all children. Public
+ * wait4 rejects INT_MIN before dispatch, so it cannot request this encoding. */
+#define WAIT_PGID_ONE INT_MIN
+/* Internal stop cause, confined to do_wait's local status. wait4 restores 0x7f
+ * before copyout; waitid reports CLD_TRAPPED. All event bits stay untouched. */
+#define WAIT_STATUS_PTRACED_STOP 0x7e
+_Static_assert(_NSIG < WAIT_STATUS_PTRACED_STOP,
+		"private wait stop tag must not overlap supported signals");
 #define WAIT_STOP_SOURCE_NONE 0
 #define WAIT_STOP_SOURCE_THREAD 1
 #define WAIT_STOP_SOURCE_PROCESS 2
@@ -576,7 +634,7 @@ typedef void (*munmap_log_fn_t)(int event, int cpu, unsigned long addr,
 typedef void (*do_munmap_void_fn_t)(void);
 typedef int (*do_munmap_remove_range_fn_t)(void *vm, unsigned long start,
 		unsigned long end, int *ro_freedp);
-typedef void (*do_munmap_clear_host_fn_t)(unsigned long addr, size_t len,
+typedef long (*do_munmap_clear_host_fn_t)(unsigned long addr, size_t len,
 		int holding_lock);
 typedef void (*do_munmap_log_fn_t)(unsigned long addr, size_t len,
 		int error);
@@ -1017,16 +1075,58 @@ long syscall_copy_from_user_bridge(void *dst_addr,
 		unsigned long src_addr, size_t bytes);
 long syscall_copy_to_user_bridge(unsigned long dst_addr,
 		const void *src, size_t bytes);
-static long syscall_do_syscall2_bridge(int syscall_nr, unsigned long arg0,
-		unsigned long arg1);
-static long syscall_do_syscall3_bridge(int syscall_nr, unsigned long arg0,
-		unsigned long arg1, unsigned long arg2);
-long syscall_policy_do_syscall3_bridge(int syscall_nr, unsigned long arg0,
-		unsigned long arg1, unsigned long arg2);
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_FORWARD_ADAPTERS)
+extern long syscall_do_syscall2_bridge(int syscall_nr, unsigned long arg0, unsigned long arg1);
+extern long syscall_policy_do_syscall2_bridge(int syscall_nr, unsigned long arg0, unsigned long arg1);
+#else
+static long syscall_do_syscall2_bridge(int syscall_nr, unsigned long arg0, unsigned long arg1);
+#endif
+#if (defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_FORWARD_ADAPTERS)) || defined(MCKERNEL_RUST_F03_MEMORY_HOST_OFFLOAD)
+extern long syscall_do_syscall3_bridge(int syscall_nr, unsigned long arg0, unsigned long arg1, unsigned long arg2); _Static_assert(__builtin_types_compatible_p(__typeof__(&syscall_do_syscall3_bridge), syscall_do_syscall3_fn_t), "three-argument offload ABI"); _Static_assert(sizeof(struct syscall_request)==72 && __alignof__(struct syscall_request)==8, "current request ABI");
+#else
+static long syscall_do_syscall3_bridge(int syscall_nr, unsigned long arg0, unsigned long arg1, unsigned long arg2);
+#endif
+long syscall_policy_do_syscall3_bridge(int syscall_nr, unsigned long arg0, unsigned long arg1, unsigned long arg2);
+
+
+
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long syscall_do_syscall_request_bridge(struct syscall_request *request,
+		int cpu);
+#else
 static long syscall_do_syscall_request_bridge(struct syscall_request *request,
 		int cpu);
+#endif
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern unsigned long syscall_virt_to_phys_bridge(void *addr);
+#else
 static unsigned long syscall_virt_to_phys_bridge(void *addr);
+#endif
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_SIGNAL_FORWARD_PROVIDER)
+extern long syscall_forward_context_bridge(int syscall_nr, void *ctx);
+extern long syscall_forward_rt_sigprocmask_bridge(unsigned long sigmask);
+extern long syscall_forward_sigaction_update_bridge(int sig, const void *actp);
+_Static_assert(__builtin_types_compatible_p(__typeof__(&syscall_forward_context_bridge),
+    syscall_forward_context_fn_t), "signal context forwarding ABI");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&syscall_forward_rt_sigprocmask_bridge),
+    syscall_forward_sigmask_fn_t), "signal mask forwarding ABI");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&syscall_forward_sigaction_update_bridge),
+    syscall_sigaction_forward_fn_t), "signal action forwarding ABI");
+_Static_assert(sizeof(int) == 4 && _Alignof(int) == 4 && sizeof(long) == 8
+    && sizeof(unsigned long) == 8 && sizeof(void *) == 8, "signal scalar ABI");
+_Static_assert(sizeof(ihk_mc_user_context_t) == 224 && _Alignof(ihk_mc_user_context_t) == 8
+    && __builtin_offsetof(ihk_mc_user_context_t, gpr) == 56, "signal context ABI");
+_Static_assert(sizeof(struct k_sigaction) == 32 && _Alignof(struct k_sigaction) == 8
+    && __builtin_offsetof(struct k_sigaction, sa) == 0
+    && __builtin_offsetof(struct sigaction, sa_handler) == 0
+    && __builtin_offsetof(struct sigaction, sa_flags) == 8, "signal action ABI");
+_Static_assert(__NR_rt_sigaction == 13 && __NR_rt_sigprocmask == 14,
+    "signal forwarding syscall numbers");
+#else
+#line 1082
 static long syscall_forward_context_bridge(int syscall_nr, void *ctx);
+#endif
+#line 1083
 void syscall_tsc_to_ts_bridge(unsigned long tsc, void *ts);
 unsigned long syscall_timespec_to_jiffy_bridge(const void *ts);
 void syscall_ts_add_bridge(void *dst, const void *src);
@@ -1163,6 +1263,7 @@ extern int syscall_send_prepare_result(struct syscall_request *req,
 		struct syscall_response *res);
 extern int syscall_request_copy_result(struct syscall_request *dst,
 		const struct syscall_request *src);
+extern int syscall_request_publish_result(struct syscall_request *req);
 extern long syscall_generic_forwarding_body_result(struct syscall_request *req,
 		int n, unsigned long arg0, unsigned long arg1,
 		unsigned long arg2, unsigned long arg3, unsigned long arg4,
@@ -2074,7 +2175,7 @@ extern long wait4_body_result(int pid, unsigned long status_addr, int options,
 		unsigned long rusage_addr, wait4_do_wait_fn_t do_wait_fn,
 		syscall_copy_to_user_fn_t copy_to_fn);
 extern int waitid_siginfo_needed_result(int rc, int has_infop);
-extern void waitid_copy_siginfo_result(int rc, unsigned long infop_addr,
+extern long waitid_copy_siginfo_result(int rc, unsigned long infop_addr,
 		int status, long utime_sec, long utime_usec,
 		long stime_sec, long stime_usec,
 		syscall_copy_to_user_fn_t copy_to_fn);
@@ -2593,6 +2694,8 @@ SYSCALL_POLICY_HELPER_PROTO int syscall_send_prepare_result(
 		struct syscall_request *req, struct syscall_response *res);
 SYSCALL_POLICY_HELPER_PROTO int syscall_request_copy_result(
 		struct syscall_request *dst, const struct syscall_request *src);
+SYSCALL_POLICY_HELPER_PROTO int syscall_request_publish_result(
+		struct syscall_request *req);
 SYSCALL_POLICY_HELPER_PROTO long syscall_generic_forwarding_body_result(
 		struct syscall_request *req, int n, unsigned long arg0,
 		unsigned long arg1, unsigned long arg2, unsigned long arg3,
@@ -3423,7 +3526,7 @@ SYSCALL_POLICY_HELPER_PROTO long wait4_body_result(int pid,
 		syscall_copy_to_user_fn_t copy_to_fn);
 SYSCALL_POLICY_HELPER_PROTO int waitid_siginfo_needed_result(int rc,
 		int has_infop);
-SYSCALL_POLICY_HELPER_PROTO void waitid_copy_siginfo_result(int rc,
+SYSCALL_POLICY_HELPER_PROTO long waitid_copy_siginfo_result(int rc,
 		unsigned long infop_addr, int status, long utime_sec,
 		long utime_usec, long stime_sec, long stime_usec,
 		syscall_copy_to_user_fn_t copy_to_fn);
@@ -3889,6 +3992,7 @@ SYSCALL_POLICY_HELPER_PROTO int clone_child_cleartid_needed_result(
 		int clone_flags);
 SYSCALL_POLICY_HELPER_PROTO int clone_child_tid_store_needed_result(
 		int clone_flags);
+
 SYSCALL_POLICY_HELPER_PROTO int clone_tls_source_result(int clone_flags);
 SYSCALL_POLICY_HELPER_PROTO int clone_use_last_cpu_result(int mod_clone,
 		int uti_use_last_cpu);
@@ -3930,6 +4034,42 @@ SYSCALL_POLICY_HELPER_PROTO long do_futex_body_result(int n,
 		do_futex_dispatch_fn_t futex_fn, do_futex_log_fn_t log_fn);
 #endif
 
+/* F03 private composite: declarations only, original providers unchanged. */
+/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern int f03_execveat_filename_admission_v1(struct process_vm *vm,
+        const void *filename);
+#endif
+/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern void *f03_execveat_allocate_descriptor_v1(const char *file,
+        int source_line, int *error);
+#endif
+/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+ * Declarative ABI fragment only, insert before original do_execveat definition.
+ * Tracking line data in the call fragment is bound to the saved C preimage;
+ * root must rebind this origin data explicitly if rebasing that preimage. */
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern void f03_execveat_release_temporaries_v1(void *envp_flat, void *argv_flat,
+        void *descriptor, const char *file, int envp_line, int argv_line,
+        int descriptor_line);
+#endif
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern void f03_clone_release_mod_argument_v1(struct thread *,const char *,int);
+extern void f03_clone_release_empty_tid_table_v1(struct process *,int,const char *,int);
+#endif
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern void f03_clone_initialize_execution_state_v1(struct thread *,struct thread *,int,unsigned long,int,struct ddebug *);
+#endif
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern int f03_clone_prepare_remote_argument_v1(struct thread *,struct thread *,int *,const char *,int);
+#endif
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern void f03_clone_publish_thread_process_v1(struct thread *, struct process *,
+                                               struct process *, int);
+#endif
+
+
 #undef SYSCALL_POLICY_HELPER_PROTO
 
 void save_syscall_return_value(int num, unsigned long rc);
@@ -3966,6 +4106,7 @@ long (*linux_wait_event)(void *_resp, unsigned long nsec_timeout);
 int (*linux_printk)(const char *fmt, ...);
 int (*linux_clock_gettime)(clockid_t clk_id, struct timespec *tp);
 
+#ifndef MCKERNEL_RUST_SYSCALL_OFFLOAD
 static void send_syscall(struct syscall_request *req, int cpu,
 			 struct syscall_response *res)
 {
@@ -3992,8 +4133,12 @@ static void send_syscall(struct syscall_request *req, int cpu,
 		return;
 	}
 
-	barrier();
-	smp_store_release_ulong(&packet.req.valid, 1);
+	prep_rc = syscall_request_publish_result(&packet.req);
+	if (prep_rc) {
+		kprintf("%s: ERROR: publishing syscall request failed: %d\n",
+				__func__, prep_rc);
+		return;
+	}
 
 #ifdef SYSCALL_BY_IKC
 	prep_rc = syscall_packet_traditional_prepare_result(&packet,
@@ -4020,7 +4165,54 @@ static void send_syscall(struct syscall_request *req, int cpu,
 	}
 #endif
 }
+#else
+extern void send_syscall(struct syscall_request *req, int cpu,
+		struct syscall_response *res);
+extern void syscall_offload_wait_reply(struct syscall_request *req,
+		struct syscall_response *res, int cpu, struct thread *thread);
+#endif
 
+/* Preserve the original logical C source locations in every fallback profile.
+ * The original last active #line is127 for the selected inner Rust dispatch
+ * cohort, or119 for the other C baseline. These private constants are source
+ * metadata only, never a provider or runtime selector. */
+#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && \
+    defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && \
+    defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
+#define MCKERNEL_DO_SYSCALL_ORIGINAL_ENTRY_LINE 4128
+#define MCKERNEL_DO_SYSCALL_ORIGINAL_AFTER_LINE 4431
+#else
+#define MCKERNEL_DO_SYSCALL_ORIGINAL_ENTRY_LINE 4135
+#define MCKERNEL_DO_SYSCALL_ORIGINAL_AFTER_LINE 4438
+#endif
+/* Real Rust outer entry; existing inner OFFLOAD selection remains broader. */
+#ifdef MCKERNEL_RUST_DO_SYSCALL_OUTER
+#if !defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) || !defined(PROFILE_ENABLE) || \
+    !defined(MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS) || !defined(MCKERNEL_DO_SYSCALL_C_FILE)
+#error "Rust do_syscall outer requires its paired transport/profile/debug inputs"
+#endif
+_Static_assert(DDEBUG_DEFAULT == MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS,
+    "Rust do_syscall debug flags must match C DDEBUG_DEFAULT");
+_Static_assert(__builtin_strcmp(__FILE__, MCKERNEL_DO_SYSCALL_C_FILE) == 0,
+    "Rust do_syscall filename must match actual C __FILE__");
+_Static_assert(sizeof(struct ddebug) == 32 && __alignof__(struct ddebug) == 8,
+    "Rust do_syscall Ddebug ABI");
+_Static_assert(__NR_exit_group == 231 && __NR_sched_setaffinity == 203 &&
+    IHK_SCD_REQ_THREAD_SPINNING == 0 && IHK_OS_MONITOR_KERNEL_OFFLOAD == 5 &&
+    PROFILE_SYSCALL_MAX == 2000, "Rust do_syscall protocol constants");
+_Static_assert(__builtin_offsetof(struct thread, in_syscall_offload) == 4792 &&
+    __builtin_offsetof(struct thread, profile) == 4796 &&
+    __builtin_offsetof(struct process, nohost) == 500,
+    "Rust do_syscall newly accessed fields require the actual C profile");
+_Static_assert(_Generic(&do_syscall,
+    long (*)(struct syscall_request *, int): 1, default: 0),
+    "Rust do_syscall entry ABI");
+#ifdef ENABLE_TOFU
+_Static_assert(__NR_ioctl == 16 && __NR_openat == 257 && MAX_FD_PDE == 1024,
+    "Rust do_syscall TOFU constants");
+#endif
+#else
+#line MCKERNEL_DO_SYSCALL_ORIGINAL_ENTRY_LINE
 long do_syscall(struct syscall_request *req, int cpu)
 {
 	struct syscall_response res;
@@ -4087,6 +4279,9 @@ long do_syscall(struct syscall_request *req, int cpu)
 	dkprintf("%s: syscall num: %d waiting for Linux.. \n",
 		__FUNCTION__, req->number);
 
+#ifdef MCKERNEL_RUST_SYSCALL_OFFLOAD
+	syscall_offload_wait_reply(req, &res, cpu, thread);
+#else
 #define	STATUS_IN_PROGRESS	0
 #define	STATUS_COMPLETED	1
 #define	STATUS_PAGE_FAULT	3
@@ -4248,6 +4443,7 @@ schedule:
 			send_syscall(&req2, cpu, &res);
 		}
 	}
+#endif
 	if (syscall_preempt_disable_needed_result(req->rtid)) {
 		preempt_enable();
 	}
@@ -4320,7 +4516,10 @@ schedule:
 	monitor->counter++;
 	return rc;
 }
+#endif /* MCKERNEL_RUST_DO_SYSCALL_OUTER */
+#line MCKERNEL_DO_SYSCALL_ORIGINAL_AFTER_LINE
 
+#ifndef MCKERNEL_RUST_SYSCALL_OFFLOAD
 long syscall_generic_forwarding(int n, ihk_mc_user_context_t *ctx)
 {
 	struct syscall_request request IHK_DMA_ALIGN;
@@ -4332,7 +4531,21 @@ long syscall_generic_forwarding(int n, ihk_mc_user_context_t *ctx)
 			ihk_mc_syscall_arg4(ctx), ihk_mc_syscall_arg5(ctx),
 			ihk_mc_get_processor_id(), do_syscall);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern int f03_wait_stopped_v1(void *, void *, void *, int *, int);
+extern int f03_wait_continued_v1(void *, void *, void *, int *, int);
+/* Declarative names select actual Rust entries at existing callback/data uses. */
+#define wait_stopped_bridge f03_wait_stopped_v1
+#define wait_continued_bridge f03_wait_continued_v1
+struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_wait_state_debug[3] = {
+    { .file=__FILE__, .func="wait_stopped", .line=4370, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="wait_stopped", .line=4381, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="wait_continued", .line=4396, .flags=DDEBUG_DEFAULT },
+};
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static int wait_stopped(struct thread *thread, struct process *child, struct thread *c_thread, int *status, int options)
 {
 	dkprintf("wait_stopped,proc->pid=%d,child->pid=%d,options=%08x\n",
@@ -4350,7 +4563,9 @@ static int wait_stopped(struct thread *thread, struct process *child, struct thr
 			 child->pid, status ? *status : -1);
 	return ret;    
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static int wait_continued(struct thread *thread, struct process *child,
 			  struct thread *c_thread, int *status, int options)
 {
@@ -4365,45 +4580,77 @@ static int wait_continued(struct thread *thread, struct process *child,
 			 child->pid, status ? *status : -1);
 	return ret;
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern void f03_thread_exit_signal_v1(struct thread *);
+extern void f03_finalize_process_v1(struct process *);
+#define thread_exit_signal f03_thread_exit_signal_v1
+#define finalize_process f03_finalize_process_v1
+struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_exit_notify_debug[2] = {
+    { .file=__FILE__, .func="thread_exit_log_bridge", .line=4410, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="finalize_process_wakeup_log_bridge", .line=4436, .flags=DDEBUG_DEFAULT },
+};
+#endif
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_EXIT_WAITQ_WAKE)
+extern void f03_exit_notify_wake(void *);
+#define thread_exit_waitq_wake_bridge f03_exit_notify_wake
+#else
 static void
 thread_exit_waitq_wake_bridge(void *waitq)
 {
 	waitq_wakeup((waitq_t *)waitq);
 }
+#endif
+#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
+#line 4490
+#else
+#line 4499
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
 thread_exit_log_bridge(int sig, long error)
 {
 	dkprintf("terminate,klll %d,error=%ld\n", sig, error);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
 finalize_process_writer_lock_bridge(void *lock, void *node)
 {
 	mcs_rwlock_writer_lock_noirq((struct mcs_rwlock_lock *)lock,
 			(struct mcs_rwlock_node *)node);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
 finalize_process_writer_unlock_bridge(void *lock, void *node)
 {
 	mcs_rwlock_writer_unlock_noirq((struct mcs_rwlock_lock *)lock,
 			(struct mcs_rwlock_node *)node);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
 finalize_process_release_bridge(void *proc)
 {
 	release_process((struct process *)proc);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
 finalize_process_wakeup_log_bridge(void)
 {
 	dkprintf("terminate,wakeup\n");
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
 thread_exit_signal(struct thread *thread)
 {
@@ -4421,7 +4668,9 @@ thread_exit_signal(struct thread *thread)
 			syscall_do_kill_thread_bridge, thread_exit_waitq_wake_bridge,
 			thread_exit_log_bridge);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
 finalize_process(struct process *proc)
 {
@@ -4448,27 +4697,42 @@ finalize_process(struct process *proc)
 			thread_exit_waitq_wake_bridge,
 			thread_exit_log_bridge);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern void f03_ptrace_detach_thread_v1(struct thread *, int);
+extern void f03_ptrace_detach_wait_callback_v1(void *);
+#define ptrace_detach_thread f03_ptrace_detach_thread_v1
+#define wait_thread_ptrace_detach_bridge f03_ptrace_detach_wait_callback_v1
+const char f03_ptrace_detach_source_file[] = __FILE__;
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
 ptrace_detach_reader_lock_bridge(void *lock, void *node)
 {
 	mcs_rwlock_reader_lock((struct mcs_rwlock_lock *)lock,
 			(struct mcs_rwlock_node_irqsave *)node);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
 ptrace_detach_reader_unlock_bridge(void *lock, void *node)
 {
 	mcs_rwlock_reader_unlock((struct mcs_rwlock_lock *)lock,
 			(struct mcs_rwlock_node_irqsave *)node);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
 ptrace_detach_list_detach_bridge(void *entry)
 {
 	process_list_detach_result((struct list_head *)entry);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static int
 ptrace_detach_main_reparent_bridge(void *process,
 		unsigned long parent_offset, void *parent, void *ptraced_entry,
@@ -4480,7 +4744,9 @@ ptrace_detach_main_reparent_bridge(void *process,
 			(struct list_head *)sibling_entry,
 			(struct list_head *)children_head);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static int
 ptrace_detach_report_detach_bridge(void *thread,
 		unsigned long report_proc_offset, void *report_proc,
@@ -4490,7 +4756,9 @@ ptrace_detach_report_detach_bridge(void *thread,
 			report_proc_offset, report_proc,
 			(struct list_head *)entry);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void *
 ptrace_detach_cleanup_bridge(void *thread, unsigned long ptrace_offset,
 		unsigned long saved_valid_offset, unsigned long debugreg_offset)
@@ -4498,19 +4766,37 @@ ptrace_detach_cleanup_bridge(void *thread, unsigned long ptrace_offset,
 	return process_thread_ptrace_cleanup_result(thread, ptrace_offset,
 			saved_valid_offset, debugreg_offset);
 }
+#endif
 
+/* Preserve this original tracked-free origin in every C fallback profile. */
+#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
+#define MCKERNEL_PTRACE_FREE_ORIGINAL_ENTRY_LINE 4654
+#define MCKERNEL_PTRACE_FREE_ORIGINAL_AFTER_LINE 4659
+#else
+#define MCKERNEL_PTRACE_FREE_ORIGINAL_ENTRY_LINE 4661
+#define MCKERNEL_PTRACE_FREE_ORIGINAL_AFTER_LINE 4666
+#endif
+#ifdef MCKERNEL_RUST_F06_PTRACE_RESUME_CALLBACKS
+extern void ptrace_detach_kfree_bridge(void *);
+#else
+#line MCKERNEL_PTRACE_FREE_ORIGINAL_ENTRY_LINE
 static void
 ptrace_detach_kfree_bridge(void *ptr)
 {
 	kfree_tracked(ptr, __FILE__, __LINE__);
 }
+#endif
+#line MCKERNEL_PTRACE_FREE_ORIGINAL_AFTER_LINE
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
 ptrace_detach_clear_single_step_bridge(void *thread)
 {
 	clear_single_step((struct thread *)thread);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static int
 ptrace_detach_report_attach_bridge(void *thread,
 		unsigned long termsig_offset, int update_termsig, int termsig,
@@ -4522,13 +4808,21 @@ ptrace_detach_report_attach_bridge(void *thread,
 			report_proc, (struct list_head *)entry,
 			(struct list_head *)head);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
 ptrace_detach_thread_exit_signal_bridge(void *thread)
 {
 	thread_exit_signal((struct thread *)thread);
 }
+#endif
 
+#if defined(MCKERNEL_RUST_F03_FORWARD_ADAPTERS) || defined(MCKERNEL_RUST_F06_PTRACE_RESUME_CALLBACKS)
+extern long ptrace_detach_do_kill_bridge(void *, int, int, int,
+		const void *, int);
+extern void ptrace_detach_wakeup_bridge(void *, int);
+#else
 static long
 ptrace_detach_do_kill_bridge(void *current_thread, int pid, int tid,
 		int sig, const void *info, int ptracecont)
@@ -4542,18 +4836,23 @@ ptrace_detach_wakeup_bridge(void *thread, int valid_states)
 {
 	sched_wakeup_thread((struct thread *)thread, valid_states);
 }
+#endif /* MCKERNEL_RUST_F03_FORWARD_ADAPTERS */
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
 ptrace_detach_release_thread_bridge(void *thread)
 {
 	release_thread((struct thread *)thread);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
 ptrace_detach_finalize_bridge(void *proc)
 {
 	finalize_process((struct process *)proc);
 }
+#endif
 
 static const struct ptrace_detach_offsets ptrace_detach_kernel_offsets = {
 	.thread_proc_offset = __builtin_offsetof(struct thread, proc),
@@ -4590,6 +4889,7 @@ static const struct ptrace_detach_offsets ptrace_detach_kernel_offsets = {
 		__builtin_offsetof(struct process, report_threads_list),
 };
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
 ptrace_detach_thread(struct thread *thread, int data)
 {
@@ -4617,7 +4917,9 @@ ptrace_detach_thread(struct thread *thread, int data)
 			ptrace_detach_finalize_bridge,
 			&lock);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static int
 wait_stopped_bridge(void *thread, void *child_proc, void *child_thread,
 		int *status, int options)
@@ -4626,7 +4928,9 @@ wait_stopped_bridge(void *thread, void *child_proc, void *child_thread,
 			(struct process *)child_proc,
 			(struct thread *)child_thread, status, options);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static int
 wait_continued_bridge(void *thread, void *child_proc, void *child_thread,
 		int *status, int options)
@@ -4635,6 +4939,7 @@ wait_continued_bridge(void *thread, void *child_proc, void *child_thread,
 			(struct process *)child_proc,
 			(struct thread *)child_thread, status, options);
 }
+#endif
 
 static void
 wait_rwlock_writer_lock_bridge(void *lock, void *node)
@@ -4663,24 +4968,43 @@ wait_process_list_add_tail_bridge(void *entry, void *head)
 			(struct list_head *)head);
 }
 
-static int
-wait_host_wait4_bridge(int pid, int options)
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_WAIT_HOST_PROVIDER)
+extern int wait_host_wait4_bridge(int pid, int options); _Static_assert(__builtin_types_compatible_p(__typeof__(&wait_host_wait4_bridge), wait_host_wait4_fn_t), "wait host callback ABI"); _Static_assert(sizeof(int)==4 && sizeof(long)==8 && sizeof(unsigned long)==8 && sizeof(void *)==8 && sizeof(struct syscall_request)==72 && __alignof__(struct syscall_request)==8 && __builtin_offsetof(struct syscall_request,rtid)==0 && __builtin_offsetof(struct syscall_request,ttid)==4 && __builtin_offsetof(struct syscall_request,valid)==8 && __builtin_offsetof(struct syscall_request,number)==16 && __builtin_offsetof(struct syscall_request,args)==24 && __NR_wait4==61, "wait host request ABI");
+#elif defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_FORWARD_ADAPTERS)
+extern int wait_host_wait4_bridge(int pid, int options);
+#else
+static int wait_host_wait4_bridge(int pid, int options)
 {
 	struct syscall_request request IHK_DMA_ALIGN;
-
 	request.number = __NR_wait4;
 	request.args[0] = pid;
 	request.args[1] = 0;
 	request.args[2] = options;
 	return do_syscall(&request, ihk_mc_get_processor_id());
 }
+#endif
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_WAIT_PROCESS_RELEASE)
+extern void f03_wait_release_process(void *);
+#define wait_process_release_bridge f03_wait_release_process
+#else
 static void
 wait_process_release_bridge(void *proc)
 {
 	release_process((struct process *)proc);
 }
 
+#endif
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
+struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_wait_zombie_log_debug_v1[2]={
+    {.file=__FILE__,.func="wait_zombie_log_bridge",.line=4862,.flags=DDEBUG_DEFAULT},
+    {.file=__FILE__,.func="wait_zombie_log_bridge",.line=4868,.flags=DDEBUG_DEFAULT}
+};
+extern void f03_wait_zombie_log_v1(int,int,int,int);
+#define wait_zombie_log_bridge f03_wait_zombie_log_v1
+#else
+#line 4864
 static void
 wait_zombie_log_bridge(int event, int pid, int status, int ret)
 {
@@ -4700,6 +5024,13 @@ wait_zombie_log_bridge(int event, int pid, int status, int ret)
 		break;
 	}
 }
+#endif
+#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
+#line 4872
+#else
+#line 4881
+#endif
+
 
 static const struct wait_zombie_offsets wait_zombie_kernel_offsets = {
 	.thread_ptrace_offset = __builtin_offsetof(struct thread, ptrace),
@@ -4779,18 +5110,26 @@ wait_thread_report_detach_bridge(void *thread)
 			NULL, &child->report_siblings_list);
 }
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
 wait_thread_ptrace_detach_bridge(void *thread)
 {
 	ptrace_detach_thread((struct thread *)thread, 0);
 }
+#endif
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_WAIT_RELEASE)
+extern void f03_wait_release_thread(void *);
+#define wait_thread_release_bridge f03_wait_release_thread
+#else
 static void
 wait_thread_release_bridge(void *thread)
 {
 	release_thread((struct thread *)thread);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static int
 wait_proc(int pid, int *status, int options, void *rusage, int *empty)
 {
@@ -4820,7 +5159,9 @@ wait_proc(int pid, int *status, int options, void *rusage, int *empty)
 			&lock, &child_lock, &updatelock, &child_update_lock,
 			&childlock);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static int
 wait_thread(int tid, int *status, int options, void *rusage, int *empty)
 {
@@ -4840,6 +5181,7 @@ wait_thread(int tid, int *status, int options, void *rusage, int *empty)
 			wait_thread_release_bridge,
 			&lock);
 }
+#endif
 
 /*
  * From glibc: INLINE_SYSCALL (wait4, 4, pid, stat_loc, options, NULL);
@@ -4870,6 +5212,19 @@ static void do_wait_schedule_bridge(void)
 	schedule();
 }
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
+struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_wait_log_debug_v1[5]={
+    {.file=__FILE__,.func="do_wait_log_bridge",.line=5061,.flags=DDEBUG_DEFAULT},
+    {.file=__FILE__,.func="do_wait_log_bridge",.line=5065,.flags=DDEBUG_DEFAULT},
+    {.file=__FILE__,.func="do_wait_log_bridge",.line=5068,.flags=DDEBUG_DEFAULT},
+    {.file=__FILE__,.func="do_wait_log_bridge",.line=5071,.flags=DDEBUG_DEFAULT},
+    {.file=__FILE__,.func="do_wait_log_bridge",.line=5074,.flags=DDEBUG_DEFAULT}
+};
+extern void f03_wait_log_v1(int,int,int);
+#define do_wait_log_bridge f03_wait_log_v1
+#else
+#line 5064
 static void do_wait_log_bridge(int event, int current_pid, int wait_pid)
 {
 	switch (event) {
@@ -4893,7 +5248,36 @@ static void do_wait_log_bridge(int event, int current_pid, int wait_pid)
 		break;
 	}
 }
+#endif
+#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
+#line 5076
+#else
+#line 5085
+#endif
 
+
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+/* Declarative addresses of unchanged existing C endpoint bodies only. */
+struct f03_wait_c_dependencies {
+    int (*host_wait4)(int, int);
+    int (*stopped)(void *, void *, void *, int *, int);
+    int (*continued)(void *, void *, void *, int *, int);
+    void (*ptrace_detach)(void *);
+    void (*zombie_log)(int, int, int, int);
+    void (*wait_log)(int, int, int);
+};
+const struct f03_wait_c_dependencies f03_wait_c_dependencies = {
+    .host_wait4 = wait_host_wait4_bridge,
+    .stopped = wait_stopped_bridge,
+    .continued = wait_continued_bridge,
+    .ptrace_detach = wait_thread_ptrace_detach_bridge,
+    .zombie_log = wait_zombie_log_bridge,
+    .wait_log = do_wait_log_bridge,
+};
+#endif
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+int wait4_do_wait_bridge(int, int *, int, struct rusage *);
+#else
 static int
 do_wait(int pid, int *status, int options, void *rusage)
 {
@@ -4915,7 +5299,12 @@ int wait4_do_wait_bridge(int pid, int *status, int options,
 {
 	return do_wait(pid, status, options, usage);
 }
+#endif
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_ATOMIC_HELPERS) && defined(MCKERNEL_RUST_F03_TERMINATE_CMPXCHG)
+/* Genuine ihk/atomic.h declares the existing selected Rust provider. */
+#define terminate_mcexec_cmpxchg_bridge atomic_cmpxchg_ulong
+#else
 static unsigned long
 terminate_mcexec_cmpxchg_bridge(unsigned long *value,
 		unsigned long old_value, unsigned long new_value)
@@ -4923,18 +5312,28 @@ terminate_mcexec_cmpxchg_bridge(unsigned long *value,
 	return atomic_cmpxchg_ulong(value, old_value, new_value);
 }
 
+#endif
+#ifndef MCKERNEL_RUST_F03_TERMINATE_HOST_PROVIDER
+#line 5145
 static long
 terminate_mcexec_do_syscall_bridge(struct syscall_request *request, int cpu)
 {
 	return do_syscall(request, cpu);
 }
+#endif
+#line 5150
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_ATOMIC_HELPERS) && defined(MCKERNEL_RUST_F03_TERMINATE_REFCOUNT)
+extern void f03_terminate_host_refcount_set_v1(void *, int);
+#define terminate_host_refcount_set_bridge f03_terminate_host_refcount_set_v1
+#else
 static void
 terminate_host_refcount_set_bridge(void *refcount, int value)
 {
 	ihk_atomic_set((ihk_atomic_t *)refcount, value);
 }
 
+#endif
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_wait4(int n, ihk_mc_user_context_t *ctx);
 long sys_waitid(int n, ihk_mc_user_context_t *ctx);
@@ -4963,6 +5362,34 @@ long sys_waitid(int n, ihk_mc_user_context_t *ctx)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_F03_TERMINATE_HOST_PROVIDER
+extern void terminate_mcexec(int rc, int sig);
+_Static_assert(__builtin_types_compatible_p(__typeof__(&terminate_mcexec),
+    void (*)(int, int)), "terminate_mcexec C ABI");
+_Static_assert(sizeof(int) == 4 && sizeof(long) == 8 &&
+    sizeof(unsigned long) == 8 && sizeof(void *) == 8,
+    "terminate_mcexec LP64 types");
+_Static_assert(sizeof(struct syscall_request) == 72 &&
+    _Alignof(struct syscall_request) == 8 &&
+    __builtin_offsetof(struct syscall_request, rtid) == 0 &&
+    __builtin_offsetof(struct syscall_request, ttid) == 4 &&
+    __builtin_offsetof(struct syscall_request, valid) == 8 &&
+    __builtin_offsetof(struct syscall_request, number) == 16 &&
+    __builtin_offsetof(struct syscall_request, args) == 24 &&
+    sizeof(((struct syscall_request *)0)->args) == 48,
+    "terminate_mcexec request ABI");
+_Static_assert(sizeof(struct cpu_local_var) == 8128 &&
+    _Alignof(struct cpu_local_var) == 64 &&
+    __builtin_offsetof(struct cpu_local_var, current) == 7848 &&
+    sizeof(struct thread) == 5568 && _Alignof(struct thread) == 64 &&
+    __builtin_offsetof(struct thread, proc) == 4304 &&
+    sizeof(struct process) == 1728 && _Alignof(struct process) == 64 &&
+    __builtin_offsetof(struct process, group_exit_status) == 424 &&
+    __builtin_offsetof(struct process, nohost) == 500,
+    "terminate_mcexec current thread/process ABI");
+_Static_assert(__NR_exit_group == 231, "terminate_mcexec exit-group number");
+#else
+#line 5190
 void terminate_mcexec(int rc, int sig)
 {
 	struct thread *mythread = get_this_cpu_local_var()->current;
@@ -4976,19 +5403,37 @@ void terminate_mcexec(int rc, int sig)
 			terminate_mcexec_cmpxchg_bridge,
 			terminate_mcexec_do_syscall_bridge);
 }
+#endif
+#line 5203
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern unsigned long f03_sync_child_perf_read_v2(int);
+#define sync_child_perf_read_bridge f03_sync_child_perf_read_v2
+#else
 static unsigned long
 sync_child_perf_read_bridge(int counter_id)
 {
 	return ihk_mc_perfctr_read(counter_id);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern void f03_sync_child_count_set_v2(void *, long);
+#define sync_child_count_set_bridge f03_sync_child_count_set_v2
+#else
 static void
 sync_child_count_set_bridge(void *count, long value)
 {
 	ihk_atomic64_set((ihk_atomic64_t *)count, value);
 }
+#endif
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_SYNC_CHILD_EVENT)
+#if !defined(__x86_64__) || __BYTE_ORDER__ != __ORDER_LITTLE_ENDIAN__ || defined(__GENKSYMS__)
+#error "sync child event requires qualified x86_64 little-endian runtime perf ABI"
+#endif
+extern void sync_child_event(struct mc_perf_event *);
+#else
 void sync_child_event(struct mc_perf_event *event)
 {
 	(void)sync_child_event_body_result(event,
@@ -5004,7 +5449,57 @@ void sync_child_event(struct mc_perf_event *event)
 			sync_child_perf_read_bridge,
 			sync_child_count_set_bridge);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_F03_TERMINATE
+#if defined(ENABLE_TOFU) || defined(DCFA_KMOD)
+#error "Rust terminate selector requires the reviewed non-TOFU non-DCFA profile"
+#endif
+#if !(defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT))
+#error "Rust terminate requires the exact selected offload/policy/dispatch origin"
+#endif
+#if !defined(__x86_64__) || defined(ENABLE_UBSAN) || !defined(PROFILE_ENABLE)
+#error "Rust terminate requires x86_64 PROFILE and the non-UBSAN ABI"
+#endif
+/* New direct fields are checked by the actual changed image C compile. */
+_Static_assert(__builtin_offsetof(struct process, hash_list) == 0, "Rust terminate Process.hash_list ABI");
+_Static_assert(__builtin_offsetof(struct process, update_lock) == 64, "Rust terminate Process.update_lock ABI");
+_Static_assert(__builtin_offsetof(struct process, report_threads_list) == 152, "Rust terminate Process.report_threads_list ABI");
+_Static_assert(__builtin_offsetof(struct process, threads_lock) == 192, "Rust terminate Process.threads_lock ABI");
+_Static_assert(__builtin_offsetof(struct process, ppid_parent) == 280, "Rust terminate Process.ppid_parent ABI");
+_Static_assert(__builtin_offsetof(struct process, children_list) == 288, "Rust terminate Process.children_list ABI");
+_Static_assert(__builtin_offsetof(struct process, ptraced_children_list) == 304, "Rust terminate Process.ptraced_children_list ABI");
+_Static_assert(__builtin_offsetof(struct process, children_lock) == 320, "Rust terminate Process.children_lock ABI");
+_Static_assert(__builtin_offsetof(struct process, siblings_list) == 384, "Rust terminate Process.siblings_list ABI");
+_Static_assert(__builtin_offsetof(struct process, ptraced_siblings_list) == 400, "Rust terminate Process.ptraced_siblings_list ABI");
+_Static_assert(__builtin_offsetof(struct process, saved_cmdline) == 1136, "Rust terminate Process.saved_cmdline ABI");
+_Static_assert(__builtin_offsetof(struct process, utime) == 1312, "Rust terminate Process.utime ABI");
+_Static_assert(__builtin_offsetof(struct thread, exit_status) == 4188, "Rust terminate Thread.exit_status ABI");
+_Static_assert(__builtin_offsetof(struct thread, termsig) == 4196, "Rust terminate Thread.termsig ABI");
+_Static_assert(__builtin_offsetof(struct thread, siblings_list) == 4312, "Rust terminate Thread.siblings_list ABI");
+_Static_assert(__builtin_offsetof(struct thread, report_siblings_list) == 4368, "Rust terminate Thread.report_siblings_list ABI");
+_Static_assert(__builtin_offsetof(struct thread, system_tsc) == 5040, "Rust terminate Thread.system_tsc ABI");
+_Static_assert(__builtin_offsetof(struct thread, user_tsc) == 5048, "Rust terminate Thread.user_tsc ABI");
+#ifndef SPINLOCK_IN_MCS_RWLOCK
+#error "Rust terminate requires the selected ticket-spinlock MCS representation"
+#endif
+_Static_assert(sizeof(struct mcs_rwlock_lock) == 64 && __alignof__(struct mcs_rwlock_lock) == 64
+    && __builtin_offsetof(struct mcs_rwlock_lock, slock) == 0,
+    "Rust terminate ABI/runtime MCS lock representation");
+_Static_assert(sizeof(ihk_spinlock_t) == 4 && __alignof__(ihk_spinlock_t) == 4
+    && __builtin_offsetof(ihk_spinlock_t, head_tail) == 0,
+    "Rust terminate ABI/runtime ticket lock representation");
+_Static_assert(sizeof(struct mcs_rwlock_node) == 64 && __alignof__(struct mcs_rwlock_node) == 64, "Rust terminate noirq node ABI");
+_Static_assert(sizeof(struct mcs_rwlock_node_irqsave) == 64 && __alignof__(struct mcs_rwlock_node_irqsave) == 64, "Rust terminate irq node ABI");
+_Static_assert(DDEBUG_DEFAULT == DDEBUG_NONE, "Rust terminate original debug default");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&do_kill), unsigned long (*)(struct thread *, int, int, int, struct siginfo *, int)), "Rust terminate do_kill ABI");
+extern void terminate(int rc, int sig);
+#else
+#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
+#line 5239
+#else
+#line 5248
+#endif
 void terminate(int rc, int sig)
 {
 	struct resource_set *resource_set = get_this_cpu_local_var()->resource_set;
@@ -5294,7 +5789,33 @@ void terminate(int rc, int sig)
 	kprintf("%s: ERROR: returned from terminate() -> schedule()\n", __FUNCTION__);
 	panic("panic");
 }
+#endif /* MCKERNEL_RUST_F03_TERMINATE */
+#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
+#line 5528
+#else
+#line 5537
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern int __process_cleanup_fd(struct process *, int);
+extern int process_cleanup_fd(int, int);
+extern int process_cleanup_before_terminate(int);
+struct ddebug __attribute__((aligned(8),section("__verbose")))
+    f03_process_cleanup_missing_debug_v1 = {
+    .file=__FILE__, .func="process_cleanup_missing_log_bridge",
+    .line=5360, .flags=DDEBUG_DEFAULT,
+};
+#ifdef ENABLE_TOFU
+struct ddebug __attribute__((aligned(8),section("__verbose")))
+    f03_process_cleanup_release_debug_v1 = {
+    .file=__FILE__, .func="__process_cleanup_fd",
+    .line=5115, .flags=DDEBUG_DEFAULT,
+};
+const char f03_process_cleanup_source_file_v1[] = __FILE__;
+const int f03_process_cleanup_free_line_v1 = 5122;
+#endif
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 int __process_cleanup_fd(struct process *proc, int fd)
 {
 #ifdef ENABLE_TOFU
@@ -5315,19 +5836,25 @@ int __process_cleanup_fd(struct process *proc, int fd)
 #endif
 	return 0;
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static long
 process_cleanup_fd_bridge(void *proc, int fd)
 {
 	return __process_cleanup_fd((struct process *)proc, fd);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
 process_cleanup_missing_log_bridge(int pid)
 {
 	dkprintf("%s: PID %d couldn't be found\n", "process_cleanup_fd", pid);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 int process_cleanup_fd(int pid, int fd)
 {
 	struct mcs_rwlock_node_irqsave lock;
@@ -5337,7 +5864,9 @@ int process_cleanup_fd(int pid, int fd)
 			process_cleanup_fd_bridge,
 			process_cleanup_missing_log_bridge);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 int process_cleanup_before_terminate(int pid)
 {
 	struct mcs_rwlock_node_irqsave lock;
@@ -5352,8 +5881,12 @@ int process_cleanup_before_terminate(int pid)
 			syscall_process_unlock_bridge, process_cleanup_fd_bridge);
 #endif
 }
+#endif
 
 
+#if defined(MCKERNEL_RUST_F03_FORWARD_ADAPTERS) || defined(MCKERNEL_RUST_F03_HOST_CLEANUP)
+extern void terminate_host(int pid, struct thread *thread);
+#else
 void
 terminate_host(int pid, struct thread *thread)
 {
@@ -5368,12 +5901,19 @@ terminate_host(int pid, struct thread *thread)
 			wait_thread_release_bridge, wait_process_release_bridge,
 			syscall_do_kill_thread_bridge);
 }
+#endif /* MCKERNEL_RUST_F03_FORWARD_ADAPTERS || MCKERNEL_RUST_F03_HOST_CLEANUP */
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static int syscall_ikc_send_bridge(void *channel, void *packet, int opt)
 {
 	return ihk_ikc_send((struct ihk_ikc_channel_desc *)channel, packet, opt);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern void eventfd(int);
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void eventfd(int type)
 {
 	struct ihk_ikc_channel_desc *syscall_channel;
@@ -5382,11 +5922,20 @@ void eventfd(int type)
 	(void)syscall_eventfd_send_result(syscall_channel, SCD_MSG_EVENTFD,
 			type, syscall_ikc_send_bridge);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_F03_INTERRUPT_SYSCALL
+extern void interrupt_syscall(struct thread *thread, int sig);
+#else
+#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
+#line 5657
+#else
+#line 5666
+#endif
 void
 interrupt_syscall(struct thread *thread, int sig)
 {
-	ihk_mc_user_context_t ctx;
+	ihk_mc_user_context_t ctx = { 0 };
 	long lerror;
 
 	dkprintf("interrupt_syscall pid=%d tid=%d sig=%d\n", thread->proc->pid,
@@ -5401,7 +5950,34 @@ interrupt_syscall(struct thread *thread, int sig)
 	}
 	return;
 }
+#endif /* MCKERNEL_RUST_F03_INTERRUPT_SYSCALL */
+#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
+#line 5675
+#else
+#line 5684
+#endif
 
+/* Original logical source positions; no provider or runtime selector. */
+#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
+#define MCKERNEL_EXIT_GROUP_ORIGINAL_START_LINE 5679
+#define MCKERNEL_EXIT_GROUP_ORIGINAL_AFTER_LINE 5698
+#else
+#define MCKERNEL_EXIT_GROUP_ORIGINAL_START_LINE 5686
+#define MCKERNEL_EXIT_GROUP_ORIGINAL_AFTER_LINE 5705
+#endif
+#ifdef MCKERNEL_RUST_F03_EXIT_GROUP_BRIDGES
+#if !defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) || !defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) || !defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT) || !defined(PROFILE_ENABLE) || !defined(MCKERNEL_DO_SYSCALL_C_FILE) || !defined(MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS)
+#error "Rust exit_group bridges require paired current syscall/debug/profile inputs"
+#endif
+_Static_assert(DDEBUG_DEFAULT == MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS,
+    "Rust exit_group debug flags must match C DDEBUG_DEFAULT");
+_Static_assert(__builtin_strcmp(__FILE__, MCKERNEL_DO_SYSCALL_C_FILE) == 0,
+    "Rust exit_group filename must match actual C __FILE__");
+extern void exit_group_log_bridge(int pid);
+extern void exit_group_terminate_bridge(int status, int group);
+extern int exit_group_current_pid_bridge(void);
+#else
+#line MCKERNEL_EXIT_GROUP_ORIGINAL_START_LINE
 void
 exit_group_log_bridge(int pid)
 {
@@ -5421,6 +5997,8 @@ exit_group_current_pid_bridge(void)
 
 	return thread->proc->pid;
 }
+#endif /* MCKERNEL_RUST_F03_EXIT_GROUP_BRIDGES */
+#line MCKERNEL_EXIT_GROUP_ORIGINAL_AFTER_LINE
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_exit_group(int n, ihk_mc_user_context_t *ctx);
@@ -5435,23 +6013,44 @@ long sys_exit_group(int n, ihk_mc_user_context_t *ctx)
 }
 #endif
 
-static void
-clear_host_pte_log_bridge(long error)
-{
-	kprintf("clear_host_pte failed. %ld\n", error);
-}
+#ifdef MCKERNEL_RUST_F03_MEMORY_HOST_OFFLOAD
+void clear_host_pte_log_bridge(long error); _Static_assert(__builtin_types_compatible_p(__typeof__(&clear_host_pte_log_bridge), clear_host_pte_log_fn_t), "memory-host callback ABI");
+#else
+static void clear_host_pte_log_bridge(long error) { kprintf("clear_host_pte failed. %ld\n", error); }
+#endif
 
-void clear_host_pte(uintptr_t addr, size_t len, int holding_memory_range_lock)
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
+struct f03_clear_host_pte_binding {
+	int munmap_nr;
+	syscall_do_syscall3_fn_t forward;
+	clear_host_pte_log_fn_t log;
+};
+const struct f03_clear_host_pte_binding f03_clear_host_pte_binding_v1 = {
+	.munmap_nr = __NR_munmap,
+	.forward = syscall_do_syscall3_bridge,
+	.log = clear_host_pte_log_bridge,
+};
+extern long clear_host_pte(uintptr_t, size_t, int);
+#else
+#line 5721
+long clear_host_pte(uintptr_t addr, size_t len, int holding_memory_range_lock)
 {
 	struct thread *thread = get_this_cpu_local_var()->current;
 
-	(void)clear_host_pte_body_result(thread->vm, addr, len,
+	return clear_host_pte_body_result(thread->vm, addr, len,
 			holding_memory_range_lock,
 			offsetof(struct process_vm, is_memory_range_lock_taken),
 			ihk_mc_get_processor_id(), __NR_munmap,
 			syscall_do_syscall3_bridge, clear_host_pte_log_bridge);
-	return;
 }
+#endif
+#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
+#line 5720
+#else
+#line 5729
+#endif
+
 
 static int set_host_vma(uintptr_t addr, size_t len, int prot, int holding_memory_range_lock)
 {
@@ -5504,45 +6103,97 @@ out:
 	return (int)lerror;
 }
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_UNMAP_BEGIN)
+extern void f03_unmap_begin(void);
+#define do_munmap_begin_bridge f03_unmap_begin
+#else
 static void
 do_munmap_begin_bridge(void)
 {
 	begin_free_pages_pending();
 }
+#endif
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_UNMAP_REMOVE)
+extern int f03_unmap_remove(void *, unsigned long, unsigned long, int *);
+#define do_munmap_remove_range_bridge f03_unmap_remove
+#else
 static int
 do_munmap_remove_range_bridge(void *vm, unsigned long start,
 		unsigned long end, int *ro_freedp)
 {
 	return remove_process_memory_range(vm, start, end, ro_freedp);
 }
+#endif
 
-static void
-do_munmap_clear_host_bridge(unsigned long addr, size_t len, int holding_lock)
-{
-	clear_host_pte(addr, len, holding_lock);
-}
+#ifdef MCKERNEL_RUST_F03_MEMORY_HOST_OFFLOAD
+long do_munmap_clear_host_bridge(unsigned long addr, size_t len, int holding_lock); _Static_assert(__builtin_types_compatible_p(__typeof__(&do_munmap_clear_host_bridge), do_munmap_clear_host_fn_t), "memory-host callback ABI");
+#else
+static long do_munmap_clear_host_bridge(unsigned long addr, size_t len, int holding_lock) { return clear_host_pte(addr, len, holding_lock); }
+#endif
 
-static int
-do_munmap_set_host_bridge(unsigned long addr, size_t len, int prot,
-		int holding_lock)
-{
-	return set_host_vma(addr, len, prot, holding_lock);
-}
+#ifdef MCKERNEL_RUST_F03_MEMORY_HOST_OFFLOAD
+int do_munmap_set_host_bridge(unsigned long addr, size_t len, int prot, int holding_lock); _Static_assert(__builtin_types_compatible_p(__typeof__(&do_munmap_set_host_bridge), mprotect_set_host_vma_fn_t), "memory-host callback ABI");
+#else
+static int do_munmap_set_host_bridge(unsigned long addr, size_t len, int prot, int holding_lock) { return set_host_vma(addr, len, prot, holding_lock); }
+#endif
 
+
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_UNMAP_FINISH)
+extern void f03_unmap_finish(void);
+#define do_munmap_finish_bridge f03_unmap_finish
+#else
 static void
 do_munmap_finish_bridge(void)
 {
 	finish_free_pages_pending();
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
+struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_do_munmap_log_debug_v1[1]={
+    {.file=__FILE__,.func="do_munmap_log_bridge",.line=5826,.flags=DDEBUG_DEFAULT}
+};
+extern void f03_do_munmap_log_v1(unsigned long,size_t,int);
+#define do_munmap_log_bridge f03_do_munmap_log_v1
+#else
+#line 5830
 static void
 do_munmap_log_bridge(unsigned long addr, size_t len, int error)
 {
-	dkprintf("%s: 0x%lx:%lu, error: %ld\n",
+	dkprintf("%s: 0x%lx:%lu, error: %d\n",
 		"do_munmap", addr, len, error);
 }
+#endif
+#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
+#line 5825
+#else
+#line 5834
+#endif
 
+
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
+struct f03_do_munmap_binding {
+	do_munmap_void_fn_t begin;
+	do_munmap_remove_range_fn_t remove_range;
+	do_munmap_clear_host_fn_t clear_host;
+	mprotect_set_host_vma_fn_t set_host;
+	do_munmap_void_fn_t finish;
+	do_munmap_log_fn_t log;
+};
+const struct f03_do_munmap_binding f03_do_munmap_binding_v1 = {
+	.begin = do_munmap_begin_bridge,
+	.remove_range = do_munmap_remove_range_bridge,
+	.clear_host = do_munmap_clear_host_bridge,
+	.set_host = do_munmap_set_host_bridge,
+	.finish = do_munmap_finish_bridge,
+	.log = do_munmap_log_bridge,
+};
+extern int do_munmap(void *, size_t, int);
+#else
+#line 5837
 int do_munmap(void *addr, size_t len, int holding_memory_range_lock)
 {
 	struct thread *thread = get_this_cpu_local_var()->current;
@@ -5555,7 +6206,25 @@ int do_munmap(void *addr, size_t len, int holding_memory_range_lock)
 			do_munmap_clear_host_bridge, do_munmap_set_host_bridge,
 			do_munmap_finish_bridge, do_munmap_log_bridge);
 }
+#endif
+#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
+#line 5838
+#else
+#line 5847
+#endif
 
+
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern int f03_search_free_space_v1(size_t, int, uintptr_t *);
+#define search_free_space f03_search_free_space_v1
+extern int f03_shmat_search_free_v1(size_t, int, unsigned long *);
+#define shmat_search_free_bridge f03_shmat_search_free_v1
+struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_search_debug_v1[2] = {
+    { .file=__FILE__, .func="search_free_space_log_bridge", .line=5595, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="search_free_space_log_bridge", .line=5603, .flags=DDEBUG_DEFAULT },
+};
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
 search_free_space_log_bridge(int event, size_t len, int pgshift,
 		unsigned long addr, int error)
@@ -5574,14 +6243,18 @@ search_free_space_log_bridge(int event, size_t len, int pgshift,
 		(void)error;
 	}
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static struct vm_range *
 search_free_space_lookup_bridge(struct process_vm *vm, unsigned long start,
 		unsigned long end)
 {
 	return lookup_process_memory_range(vm, start, end);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static int search_free_space(size_t len, int pgshift, uintptr_t *addrp)
 {
 	struct thread *thread = get_this_cpu_local_var()->current;
@@ -5599,13 +6272,91 @@ static int search_free_space(size_t len, int pgshift, uintptr_t *addrp)
 		*addrp = addr;
 	return error;
 }
+#endif
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_MMAP_PAGE_CALLBACK)
+extern int f03_do_mmap_smaller_page_v2(size_t, int *);
+#define do_mmap_smaller_page_bridge f03_do_mmap_smaller_page_v2
+#else
 static int
 do_mmap_smaller_page_bridge(size_t size, int *p2alignp)
 {
 	return arch_get_smaller_page_size(NULL, size, NULL, p2alignp);
 }
+#endif
 
+/* Preserve the actual original logical origins in both existing profiles. */
+#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
+#define MCKERNEL_DO_MMAP_ORIGINAL_START_LINE 5914
+#define MCKERNEL_DO_MMAP_ORIGINAL_AFTER_LINE 6675
+#else
+#define MCKERNEL_DO_MMAP_ORIGINAL_START_LINE 5921
+#define MCKERNEL_DO_MMAP_ORIGINAL_AFTER_LINE 6682
+#endif
+#ifdef MCKERNEL_RUST_F03_DO_MMAP
+#if !defined(__x86_64__) || !defined(MCKERNEL_NATIVE_SIGNAL_STACK) || !defined(PROFILE_ENABLE) || !defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) || defined(ENABLE_FUGAKU_HACKS) || defined(ENABLE_TOFU) || defined(ATTACHED_MIC)
+#error "Rust do_mmap requires the paired ordinary x86/Linux6.12/PROFILE profile"
+#endif
+#if !defined(MCKERNEL_DO_SYSCALL_C_FILE) || !defined(MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS)
+#error "Rust do_mmap requires actual C source/debug input bindings"
+#endif
+_Static_assert(DDEBUG_DEFAULT == MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS,
+    "Rust do_mmap debug flags must match C");
+_Static_assert(__builtin_strcmp(__FILE__, MCKERNEL_DO_SYSCALL_C_FILE) == 0,
+    "Rust do_mmap source filename must match C");
+typedef intptr_t (*mckernel_do_mmap_signature_t)(uintptr_t, size_t, int, int,
+    int, off_t, int, void *);
+_Static_assert(__builtin_types_compatible_p(__typeof__(&do_mmap),
+    mckernel_do_mmap_signature_t), "do_mmap complete eight-argument ABI");
+_Static_assert(sizeof(size_t) == 8 && _Alignof(size_t) == 8
+    && sizeof(unsigned long) == 8 && _Alignof(unsigned long) == 8,
+    "Rust do_mmap lossless size_t/unsigned long conversions");
+_Static_assert(sizeof(struct memobj) == 56 && _Alignof(struct memobj) == 8,
+    "Rust do_mmap memobj geometry");
+_Static_assert(offsetof(struct memobj, status) == 12 && offsetof(struct memobj, size) == 16,
+    "Rust do_mmap status and size");
+_Static_assert(offsetof(struct memobj, pages) == 32 && offsetof(struct memobj, nr_pages) == 40
+    && offsetof(struct memobj, path) == 48 && offsetof(struct memobj_ops, free) == 0,
+    "Rust do_mmap object pages/path/free");
+_Static_assert(sizeof(struct shmid_ds) == 112 && offsetof(struct shmid_ds, init_pgshift) == 108
+    && offsetof(struct shmid_ds, shm_segsz) == 48, "Rust do_mmap shared-object ABI");
+_Static_assert(sizeof(ihk_rwspinlock_t) == 4 && _Alignof(ihk_rwspinlock_t) == 4
+    && offsetof(ihk_rwspinlock_t, v) == 0 && offsetof(ihk_atomic_t, counter) == 0
+    && IHK_RWSPINLOCK_WRITELOCKED == 0xff000000U,
+    "Rust do_mmap exact existing four-byte lock protocol");
+_Static_assert(offsetof(struct process_vm, memory_range_lock) == 180
+    && offsetof(struct vm_range, straight_start) == 48 && offsetof(struct vm_range, memobj) == 56,
+    "Rust do_mmap range and lock ABI");
+_Static_assert(sizeof(struct mckfd) == 80 && offsetof(struct mckfd, mmap_cb) == 48
+    && sizeof(ihk_mc_user_context_t) == 224, "Rust do_mmap descriptor/context ABI");
+_Static_assert(offsetof(struct thread, vm) == 4200 && offsetof(struct thread, proc) == 4304
+    && offsetof(struct process, vm) == 128 && offsetof(struct process, mckfd_lock) == 1284
+    && offsetof(struct process, mckfd) == 1288 && offsetof(struct process, mpol_flags) == 1376
+    && offsetof(struct process, mpol_threshold) == 1384 && offsetof(struct process, thp_disable) == 1428
+    && offsetof(struct process, straight_map) == 1432 && offsetof(struct process, straight_map_threshold) == 1440
+    && offsetof(struct process, straight_va) == 1624 && offsetof(struct process, straight_len) == 1632
+    && offsetof(struct process, straight_pa) == 1640,
+    "Rust do_mmap complete selected Thread/Process field ABI");
+_Static_assert(PROFILE_mmap_anon_contig_phys == 4008 && PROFILE_mmap_anon_straight == 4009
+    && PROFILE_mmap_anon_not_straight == 4010 && PROFILE_mmap_anon_no_contig_phys == 4011
+    && PROFILE_mmap_regular_file == 4012 && PROFILE_mmap_device_file == 4013,
+    "Rust do_mmap actual profile event identities");
+_Static_assert(MAP_SHARED == 1 && MAP_FIXED == 0x10 && MAP_ANONYMOUS == 0x20
+    && MAP_LOCKED == 0x2000 && MAP_POPULATE == 0x8000 && MAP_STACK == 0x20000,
+    "Rust do_mmap actual mapping flags");
+_Static_assert(VR_AP_USER == 4 && VR_DEMAND_PAGING == 0x1000 && VR_PROT_MASK == 0x70000
+    && VR_MEMTYPE_MASK == 0x0f000000 && VR_MEMTYPE_UC == 0x01000000,
+    "Rust do_mmap actual range flags");
+_Static_assert(MF_ZEROFILL == 0x10 && MF_DEV_FILE == 0x2000 && MF_PREMAP == 0x8000
+    && MF_XPMEM == 0x10000 && MF_HUGETLBFS == 0x100000
+    && MPOL_NO_STACK == 2 && MPOL_SHM_PREMAP == 8 && SHM_DEST == 01000,
+    "Rust do_mmap actual object/policy flags");
+_Static_assert(PAGE_SHIFT == 12 && PAGE_SIZE == 4096 && PAGE_P2ALIGN == 0
+    && PF_POPULATE == (1UL << 30) && NOPHYS == (uintptr_t)-1
+    && IHK_MC_AP_NOWAIT == 2 && IHK_MC_AP_USER == 0x1000 && IHK_MC_PG_USER == 1,
+    "Rust do_mmap actual architecture/allocation values");
+#else
+#line MCKERNEL_DO_MMAP_ORIGINAL_START_LINE
 intptr_t
 do_mmap(const uintptr_t addr0, const size_t len0, const int prot,
 	const int flags, const int fd, const off_t off0,
@@ -6367,22 +7118,60 @@ out:
 		(range->straight_start ? range->straight_start : addr) :
 		error;
 }
+#endif /* MCKERNEL_RUST_F03_DO_MMAP */
+#line MCKERNEL_DO_MMAP_ORIGINAL_AFTER_LINE
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+void munmap_write_lock_bridge(void *);
+void munmap_write_unlock_bridge(void *);
+void mprotect_flush_nfo_bridge(void);
+extern struct vm_range *f03_mprotect_lookup_bridge_v1(struct process_vm *, unsigned long,
+        unsigned long);
+extern struct vm_range *f03_mprotect_next_bridge_v1(struct process_vm *, struct vm_range *);
+extern int f03_mprotect_split_bridge_v1(struct process_vm *, struct vm_range *, unsigned long,
+        struct vm_range **);
+extern int f03_mprotect_join_bridge_v1(struct process_vm *, struct vm_range *, struct vm_range *);
+extern int f03_mprotect_change_bridge_v1(struct process_vm *, struct vm_range *, unsigned long);
+extern void f03_mprotect_flush_tlb_bridge_v1(void);
+#define mprotect_lookup_bridge f03_mprotect_lookup_bridge_v1
+#define mprotect_next_bridge f03_mprotect_next_bridge_v1
+#define mprotect_split_bridge f03_mprotect_split_bridge_v1
+#define mprotect_join_bridge f03_mprotect_join_bridge_v1
+#define mprotect_change_bridge f03_mprotect_change_bridge_v1
+#define mprotect_flush_tlb_bridge f03_mprotect_flush_tlb_bridge_v1
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void munmap_write_lock_bridge(void *lock)
 {
 	ihk_rwspinlock_write_lock_noirq((ihk_rwspinlock_t *)lock);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void munmap_write_unlock_bridge(void *lock)
 {
 	ihk_rwspinlock_write_unlock_noirq((ihk_rwspinlock_t *)lock);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern int munmap_do_bridge(void *addr, size_t len, int holding_lock);
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 int munmap_do_bridge(void *addr, size_t len, int holding_lock)
 {
 	return do_munmap(addr, len, holding_lock);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern void munmap_log_bridge(int, int, unsigned long, size_t, int);
+struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_munmap_public_debug_v1[2] = {
+    { .file=__FILE__, .func="munmap_log_bridge", .line=6421, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="munmap_log_bridge", .line=6424, .flags=DDEBUG_DEFAULT },
+};
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void munmap_log_bridge(int event, int cpu, unsigned long addr,
 		size_t len, int error)
 {
@@ -6399,6 +7188,7 @@ void munmap_log_bridge(int event, int cpu, unsigned long addr,
 	}
 #endif
 }
+#endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_munmap(int n, ihk_mc_user_context_t *ctx);
@@ -6418,53 +7208,76 @@ long sys_munmap(int n, ihk_mc_user_context_t *ctx)
 }
 #endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static struct vm_range *mprotect_lookup_bridge(struct process_vm *vm,
 		unsigned long start, unsigned long end)
 {
 	return lookup_process_memory_range(vm, start, end);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static struct vm_range *mprotect_next_bridge(struct process_vm *vm,
 		struct vm_range *range)
 {
 	return next_process_memory_range(vm, range);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static int mprotect_split_bridge(struct process_vm *vm,
 		struct vm_range *range, unsigned long addr,
 		struct vm_range **new_range)
 {
 	return split_process_memory_range(vm, range, addr, new_range);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static int mprotect_join_bridge(struct process_vm *vm, struct vm_range *left,
 		struct vm_range *right)
 {
 	return join_process_memory_range(vm, left, right);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static int mprotect_change_bridge(struct process_vm *vm,
 		struct vm_range *range, unsigned long protflags)
 {
 	return change_prot_process_memory_range(vm, range, protflags);
 }
+#endif
+#ifdef MCKERNEL_RUST_F03_MPROTECT_HOST_PROVIDER
+extern int mprotect_set_host_vma_bridge(unsigned long, size_t, int, int); _Static_assert(__builtin_types_compatible_p(__typeof__(&mprotect_set_host_vma_bridge), mprotect_set_host_vma_fn_t), "mprotect host callback ABI"); _Static_assert(sizeof(unsigned long)==8 && sizeof(size_t)==8 && sizeof(int)==4, "mprotect host scalar ABI");
+#else
+static int mprotect_set_host_vma_bridge(unsigned long start, size_t len, int prot, int holding_lock)
+{ return set_host_vma(start, len, prot, holding_lock); }
+#endif
 
-static int mprotect_set_host_vma_bridge(unsigned long start, size_t len,
-		int prot, int holding_lock)
-{
-	return set_host_vma(start, len, prot, holding_lock);
-}
-
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void mprotect_flush_nfo_bridge(void)
 {
 	flush_nfo_tlb();
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void mprotect_flush_tlb_bridge(void)
 {
 	flush_tlb();
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern void f03_mprotect_log_bridge_v1(const struct mprotect_log_record *);
+#define mprotect_log_bridge f03_mprotect_log_bridge_v1
+struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_mprotect_debug_v1[2] = {
+    { .file=__FILE__, .func="mprotect_log_bridge", .line=6505, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="mprotect_log_bridge", .line=6563, .flags=DDEBUG_DEFAULT },
+};
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void mprotect_log_bridge(const struct mprotect_log_record *record)
 {
 	if (!record)
@@ -6534,7 +7347,38 @@ static void mprotect_log_bridge(const struct mprotect_log_record *record)
 				record->error);
 	}
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+long sys_mprotect(int, ihk_mc_user_context_t *);
+struct f03_mprotect_providers {
+	__typeof__(&munmap_write_lock_bridge) lock;
+	__typeof__(&munmap_write_unlock_bridge) unlock;
+	__typeof__(&mprotect_lookup_bridge) lookup;
+	__typeof__(&mprotect_next_bridge) next;
+	__typeof__(&mprotect_split_bridge) split;
+	__typeof__(&mprotect_join_bridge) join;
+	__typeof__(&mprotect_change_bridge) change;
+	__typeof__(&mprotect_set_host_vma_bridge) set_host_vma;
+	__typeof__(&mprotect_flush_nfo_bridge) flush_nfo;
+	__typeof__(&mprotect_flush_tlb_bridge) flush_tlb;
+	__typeof__(&mprotect_log_bridge) log;
+};
+const struct f03_mprotect_providers f03_mprotect_providers_v1 = {
+	.lock = munmap_write_lock_bridge,
+	.unlock = munmap_write_unlock_bridge,
+	.lookup = mprotect_lookup_bridge,
+	.next = mprotect_next_bridge,
+	.split = mprotect_split_bridge,
+	.join = mprotect_join_bridge,
+	.change = mprotect_change_bridge,
+	.set_host_vma = mprotect_set_host_vma_bridge,
+	.flush_nfo = mprotect_flush_nfo_bridge,
+	.flush_tlb = mprotect_flush_tlb_bridge,
+	.log = mprotect_log_bridge,
+};
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_mprotect(int n, ihk_mc_user_context_t *ctx)
 {
 	const uintptr_t start = ihk_mc_syscall_arg0(ctx);
@@ -6557,29 +7401,46 @@ long sys_mprotect(int n, ihk_mc_user_context_t *ctx)
 			mprotect_flush_nfo_bridge, mprotect_flush_tlb_bridge,
 			mprotect_log_bridge);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void brk_flush_bridge(void)
 {
 	flush_nfo_tlb();
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void brk_write_lock_bridge(void *lock)
 {
 	ihk_rwspinlock_write_lock_noirq((ihk_rwspinlock_t *)lock);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void brk_write_unlock_bridge(void *lock)
 {
 	ihk_rwspinlock_write_unlock_noirq((ihk_rwspinlock_t *)lock);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 unsigned long brk_extend_bridge(void *vm, unsigned long old_end,
 		unsigned long address, unsigned long vrflag)
 {
 	return extend_process_region((struct process_vm *)vm, old_end, address,
 			vrflag);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern void brk_log_bridge(int, int, unsigned long, unsigned long, unsigned long);
+struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_brk_debug_v1[2] = {
+    { .file=__FILE__, .func="brk_log_bridge", .line=6618, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="brk_log_bridge", .line=6622, .flags=DDEBUG_DEFAULT },
+};
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void brk_log_bridge(int event, int cpu, unsigned long brk_start,
 		unsigned long brk_end, unsigned long value)
 {
@@ -6592,6 +7453,7 @@ void brk_log_bridge(int event, int cpu, unsigned long brk_start,
 				cpu, value);
 	}
 }
+#endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_brk(int n, ihk_mc_user_context_t *ctx);
@@ -6630,8 +7492,29 @@ long sys_getppid(int n, ihk_mc_user_context_t *ctx)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern int syscall_settid_body_result(struct syscall_request *request,
+		int nr_tids, int *tids, int gettid_nr,
+		syscall_virt_to_phys_fn_t virt_to_phys_fn,
+		syscall_get_cpu_fn_t get_cpu_fn,
+		syscall_request_call_fn_t syscall_fn, void (*log_fn)(int));
+
+static void syscall_settid_log_bridge(int ret)
+{
+	kprintf("settid: WARNING: do_syscall returns %d\n", ret);
+}
+#endif
+
 static int settid(struct thread *thread, int nr_tids, int *tids)
 {
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+	struct syscall_request request IHK_DMA_ALIGN;
+
+	return syscall_settid_body_result(&request, nr_tids, tids, __NR_gettid,
+			syscall_virt_to_phys_bridge, ihk_mc_get_processor_id,
+			syscall_do_syscall_request_bridge,
+			syscall_settid_log_bridge);
+#else
 	int ret;
 	struct syscall_request request IHK_DMA_ALIGN;
 
@@ -6649,6 +7532,7 @@ static int settid(struct thread *thread, int nr_tids, int *tids)
 			__FUNCTION__, ret);
 	}
 	return ret;
+#endif
 }
 
 #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
@@ -6661,11 +7545,18 @@ long sys_gettid(int n, ihk_mc_user_context_t *ctx)
 
 extern void ptrace_report_signal(struct thread *thread, int sig);
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PTRACE_ENTRY)
+extern void f03_exec_report_signal_v1(void *thread, int sig);
+#define ptrace_report_signal_bridge f03_exec_report_signal_v1
+#else
+#line 7100
 static void
 ptrace_report_signal_bridge(void *thread, int sig)
 {
 	ptrace_report_signal((struct thread *)thread, sig);
 }
+#endif
+#line 7105
 
 static long
 ptrace_report_exec_arch_event_bridge(void *thread, void *ctx, long setret)
@@ -6673,6 +7564,11 @@ ptrace_report_exec_arch_event_bridge(void *thread, void *ctx, long setret)
 	return arch_ptrace_syscall_event((struct thread *)thread,
 			(ihk_mc_user_context_t *)ctx, setret);
 }
+#endif
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+#line 7110
+#else
+#line 7119
 #endif
 
 static int ptrace_report_exec(struct thread *thread,
@@ -6729,6 +7625,14 @@ static int ptrace_report_exec(struct thread *thread,
 #endif
 }
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PTRACE_ENTRY)
+extern void ptrace_syscall_event(struct thread *thread);
+#else
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+#line 7165
+#else
+#line 7174
+#endif
 void ptrace_syscall_event(struct thread *thread)
 {
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
@@ -6743,6 +7647,12 @@ void ptrace_syscall_event(struct thread *thread)
 	}
 #endif
 }
+#endif
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+#line 7179
+#else
+#line 7188
+#endif
 
 static int ptrace_check_clone_event(struct thread *thread, int clone_flags)
 {
@@ -6750,41 +7660,65 @@ static int ptrace_check_clone_event(struct thread *thread, int clone_flags)
 }
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern int f03_ptrace_attach_thread_v1(struct thread *, struct process *);
+extern int f03_ptrace_attach_thread_addr_v1(unsigned long, unsigned long);
+extern int f03_ptrace_attach_v1(int);
+#define ptrace_attach_thread f03_ptrace_attach_thread_v1
+#define ptrace_attach_thread_bridge f03_ptrace_attach_thread_addr_v1
+#define ptrace_attach f03_ptrace_attach_v1
+struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_ptrace_attach_parent_debug = {
+    .file=__FILE__, .func="process_ptrace_attach_log_bridge", .line=6849, .flags=DDEBUG_DEFAULT,
+};
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static int ptrace_attach_thread_bridge(unsigned long thread_addr,
 		unsigned long proc_addr);
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
 process_ptrace_attach_mcs_lock_bridge(unsigned long lock_addr, void *node)
 {
 	mcs_rwlock_writer_lock((struct mcs_rwlock_lock *)lock_addr,
 			(struct mcs_rwlock_node_irqsave *)node);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
 process_ptrace_attach_mcs_unlock_bridge(unsigned long lock_addr, void *node)
 {
 	mcs_rwlock_writer_unlock((struct mcs_rwlock_lock *)lock_addr,
 			(struct mcs_rwlock_node_irqsave *)node);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static int
 process_ptrace_attach_alloc_debugreg_bridge(void *thread)
 {
 	return (int)alloc_debugreg((struct thread *)thread);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
 process_ptrace_attach_clear_single_step_bridge(void *thread)
 {
 	clear_single_step((struct thread *)thread);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
 process_ptrace_attach_hold_thread_bridge(void *thread)
 {
 	hold_thread((struct thread *)thread);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
 process_ptrace_attach_log_bridge(int event, int pid,
 		unsigned long value, int error)
@@ -6796,6 +7730,7 @@ process_ptrace_attach_log_bridge(int event, int pid,
 		dkprintf("ptrace_attach() parent->pid=%d\n", pid);
 	}
 }
+#endif
 
 static void
 ptrace_report_clone_noirq_lock_bridge(unsigned long lock_addr, void *node)
@@ -6829,6 +7764,7 @@ ptrace_report_clone_log_bridge(int event, int value, int result)
 }
 #endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static int ptrace_attach_thread(struct thread *thread, struct process *proc)
 {
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
@@ -6924,6 +7860,7 @@ out:
 	return error;
 #endif
 }
+#endif
 
 static int ptrace_report_clone(struct thread *thread, struct thread *new, int event)
 {
@@ -7015,19 +7952,28 @@ static int ptrace_report_clone(struct thread *thread, struct thread *new, int ev
 #endif
 }
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
 munmap_all_free_ranges_bridge(void *vm)
 {
 	free_process_memory_ranges(vm);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
 munmap_all_log_bridge(unsigned long addr, size_t size, int error)
 {
 	kprintf("munmap_all():do_munmap(%p,%lx) failed. %d\n",
 			(void *)addr, size, error);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern void f03_munmap_all_current_v1(void);
+#define munmap_all f03_munmap_all_current_v1
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void munmap_all(void)
 {
 	struct thread *thread = get_this_cpu_local_var()->current;
@@ -7043,6 +7989,18 @@ static void munmap_all(void)
 			munmap_do_bridge, munmap_all_free_ranges_bridge,
 			munmap_all_log_bridge);
 } /* munmap_all() */
+#endif
+
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+_Static_assert(_NSIG == 64 && SS_DISABLE == 2, "Rust exec signal constants");
+extern void exec_reset_signal_state_current_v1(struct thread *thread);
+#endif
+
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_EXEC_DEFINED_TAIL) && defined(__x86_64__)
+extern void f03_execveat_install_user_context_v1(struct thread *, struct process_vm *, unsigned long);
+extern int f03_execveat_ptrace_report_v1(struct thread *, ihk_mc_user_context_t *);
+extern long f03_execveat_finish_switch_v1(struct thread *, long);
+#endif
 
 static int do_execveat(ihk_mc_user_context_t *ctx, int dirfd,
 		const char *filename, char **argv, char **envp, int flags)
@@ -7062,10 +8020,18 @@ static int do_execveat(ihk_mc_user_context_t *ctx, int dirfd,
 	struct vm_range *range;
 	struct process *proc = thread->proc;
 	ihk_mc_user_context_t execve_ctx;
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 	int i;
+#endif
 
 	memcpy(&execve_ctx, ctx, sizeof(execve_ctx));
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+	error = f03_execveat_filename_admission_v1(vm, filename);
+	if (error) {
+		return error;
+	}
+#else
 	ihk_rwspinlock_read_lock_noirq(&vm->memory_range_lock);
 
 	range = lookup_process_memory_range(vm, (unsigned long)filename, 
@@ -7078,7 +8044,14 @@ static int do_execveat(ihk_mc_user_context_t *ctx, int dirfd,
 	}
 	
 	ihk_rwspinlock_read_unlock_noirq(&vm->memory_range_lock);
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+	desc = f03_execveat_allocate_descriptor_v1(__FILE__, 7142, &error);
+	if (!desc) {
+		return error;
+	}
+#else
 	desc = _ihk_mc_alloc_aligned_pages_node(4, PAGE_P2ALIGN, IHK_MC_AP_NOWAIT, -1, IHK_MC_PG_KERNEL, -1, __FILE__, __LINE__);
 	if (!desc) {
 		kprintf("execve(): ERROR: allocating program descriptor\n");
@@ -7086,6 +8059,7 @@ static int do_execveat(ihk_mc_user_context_t *ctx, int dirfd,
 	}
 
 	memset((void*)desc, 0, 4 * PAGE_SIZE);
+#endif
 
 	/* Request host to open executable and load ELF section descriptions */
 	request.number = __NR_execve;  
@@ -7150,6 +8124,9 @@ static int do_execveat(ihk_mc_user_context_t *ctx, int dirfd,
 	/* Unmap all memory areas of the process, userspace will be gone */
 	munmap_all();
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_EXEC_DEFINED_TAIL) && defined(__x86_64__)
+	f03_execveat_install_user_context_v1(thread, vm, desc->entry);
+#else
 	/* Code assumes no process switch from here on */
 	preempt_disable();
 	ihk_mc_init_user_process(&thread->ctx, &thread->uctx,
@@ -7161,6 +8138,7 @@ static int do_execveat(ihk_mc_user_context_t *ctx, int dirfd,
 	 */
 	vm->region.map_start = vm->region.map_end = LD_TASK_UNMAPPED_BASE;
 
+#endif
 	/* Create virtual memory ranges and update args/envs */
 	if ((ret = prepare_process_ranges_args_envs(thread, desc, desc,
 			PTATTR_NO_EXECUTE | PTATTR_WRITABLE | PTATTR_FOR_USER,
@@ -7191,6 +8169,9 @@ static int do_execveat(ihk_mc_user_context_t *ctx, int dirfd,
 		goto end;
 	}
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+	exec_reset_signal_state_current_v1(thread);
+#else
 	for(i = 0; i < _NSIG; i++){
 		if(thread->sigcommon->action[i].sa.sa_handler != SIG_IGN &&
 		   thread->sigcommon->action[i].sa.sa_handler != SIG_DFL)
@@ -7205,7 +8186,13 @@ static int do_execveat(ihk_mc_user_context_t *ctx, int dirfd,
 	thread->sigstack.ss_flags = SS_DISABLE;
 	thread->sigstack.ss_size = 0;
 
+#endif
+
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_EXEC_DEFINED_TAIL) && defined(__x86_64__)
+	error = f03_execveat_ptrace_report_v1(thread, &execve_ctx);
+#else
 	error = ptrace_report_exec(thread, &execve_ctx);
+#endif
 	if (error) {
 		kprintf("execve(): ERROR: ptrace_report_exec()\n");
 	}
@@ -7216,6 +8203,10 @@ static int do_execveat(ihk_mc_user_context_t *ctx, int dirfd,
 	
 	ret = 0;
 end:
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+	f03_execveat_release_temporaries_v1(envp_flat, argv_flat, desc,
+			__FILE__, 7285, 7288, 7290);
+#else
 	if (envp_flat) {
 		kfree_tracked(envp_flat, __FILE__, __LINE__);
 	}
@@ -7223,7 +8214,11 @@ end:
 		kfree_tracked(argv_flat, __FILE__, __LINE__);
 	}
 	_ihk_mc_free_pages(desc, 4, IHK_MC_PG_KERNEL, __FILE__, __LINE__);
+#endif
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_EXEC_DEFINED_TAIL) && defined(__x86_64__)
+	return f03_execveat_finish_switch_v1(thread, ret);
+#else
 	if (!ret) {
 		unsigned long irqstate;
 
@@ -7243,8 +8238,21 @@ end:
 	/* no preempt_enable, errors can only happen before we disabled it */
 
 	return ret;
+#endif
 }
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+int
+syscall_execveat_bridge(void *ctx, int dirfd, const char *filename,
+		char **argv, char **envp, int flags)
+{
+	return do_execveat((ihk_mc_user_context_t *)ctx, dirfd, filename,
+			argv, envp, flags);
+}
+
+long sys_execve(int n, ihk_mc_user_context_t *ctx);
+#else
+#line 7705
 static int
 syscall_execveat_bridge(void *ctx, int dirfd, const char *filename,
 		char **argv, char **envp, int flags)
@@ -7261,7 +8269,156 @@ long sys_execve(int n, ihk_mc_user_context_t *ctx)
 			(char **)ihk_mc_syscall_arg2(ctx),
 			syscall_execveat_bridge);
 }
+#endif
+#line 7721
 
+#ifdef MCKERNEL_RUST_SCHED_POLICY_HELPERS
+extern int sched_clone_affinity_snapshot_result(unsigned long thread_mask,
+        unsigned long process_mask, unsigned long snapshot,
+        size_t bytes, int nr_cpus);
+extern int sched_clone_affinity_inherit_result(unsigned long child_mask,
+        unsigned long snapshot, size_t bytes);
+#endif
+
+/* Private integration proposal: no build profile defines this activation gate.
+ * Metadata describes ownership only; Rust keeps all transferred resources.
+ */
+#ifdef MCKERNEL_NATIVE_FORK_OWNED_TRANSACTION
+struct owned_fork_caller_outcome {
+    unsigned int disposition;
+    int error;
+    struct { unsigned int slot, reserved; unsigned long epoch; } handle;
+};
+extern struct thread *process_fork_construct_current_v1(struct thread *,
+        unsigned long, unsigned long, int, int, void **);
+extern int process_fork_cancel_constructed_current_v1(void *);
+extern int process_fork_runtime_drain_current_v1(void);
+extern int process_fork_owned_caller_runnable_current_v2(struct thread *, struct thread *,
+        int, unsigned long, void *, int, int, unsigned long, struct owned_fork_caller_outcome *);
+#endif
+
+#ifdef MCKERNEL_RUST_F03_DO_FORK
+#if !defined(__x86_64__) || !defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) || !defined(MCKERNEL_RUST_SCHED_POLICY_HELPERS) || !defined(MCKERNEL_NATIVE_CLONE3) || !defined(MCKERNEL_NATIVE_CLONE_TID) || defined(MCKERNEL_NATIVE_FORK_OWNED_TRANSACTION)
+#error "do_fork Rust selection requires the exact current ordinary legacy-host profile"
+#endif
+unsigned long do_fork(int, unsigned long, unsigned long, unsigned long,
+                      unsigned long, unsigned long, unsigned long);
+_Static_assert(__builtin_types_compatible_p(__typeof__(&do_fork),
+    unsigned long (*)(int,unsigned long,unsigned long,unsigned long,unsigned long,unsigned long,unsigned long)), "do_fork seven-argument ABI");
+_Static_assert(sizeof(struct syscall_request)==72 && __alignof__(struct syscall_request)==8, "do_fork current request ABI");
+_Static_assert(sizeof(struct mcexec_tid)==16 && __builtin_offsetof(struct mcexec_tid,thread)==8, "do_fork TID slot ABI");
+_Static_assert(__builtin_offsetof(struct address_space,pids)==__builtin_offsetof(struct address_space,nslots)+sizeof(int), "do_fork trailing flexible pids offset");
+struct f03_fork_dma_request { struct syscall_request request IHK_DMA_ALIGN; };
+_Static_assert(sizeof(struct f03_fork_dma_request)==72 && __alignof__(struct f03_fork_dma_request)==8, "selected x86 DMA request annotation");
+/* Readback-only genuine C compiler ABI words; no implementation callback. */
+__attribute__((used)) const unsigned long f03_do_fork_c_abi_words[] = {
+    sizeof(int), /* sizeof int */
+    __alignof__(int), /* alignof int */
+    sizeof(unsigned long), /* sizeof unsigned long */
+    __alignof__(unsigned long), /* alignof unsigned long */
+    sizeof(cpu_set_t), /* sizeof cpu_set_t */
+    __alignof__(cpu_set_t), /* alignof cpu_set_t */
+    sizeof(struct syscall_request), /* sizeof struct syscall_request */
+    __alignof__(struct syscall_request), /* alignof struct syscall_request */
+    sizeof(struct mcexec_tid), /* sizeof struct mcexec_tid */
+    __alignof__(struct mcexec_tid), /* alignof struct mcexec_tid */
+    sizeof(struct thread), /* sizeof struct thread */
+    __alignof__(struct thread), /* alignof struct thread */
+    sizeof(struct process), /* sizeof struct process */
+    __alignof__(struct process), /* alignof struct process */
+    sizeof(struct process_vm), /* sizeof struct process_vm */
+    __alignof__(struct process_vm), /* alignof struct process_vm */
+    sizeof(struct address_space), /* sizeof struct address_space */
+    __alignof__(struct address_space), /* alignof struct address_space */
+    sizeof(struct vm_range), /* sizeof struct vm_range */
+    __alignof__(struct vm_range), /* alignof struct vm_range */
+    sizeof(struct memobj), /* sizeof struct memobj */
+    __alignof__(struct memobj), /* alignof struct memobj */
+    sizeof(struct mcs_rwlock_lock), /* sizeof struct mcs_rwlock_lock */
+    __alignof__(struct mcs_rwlock_lock), /* alignof struct mcs_rwlock_lock */
+    sizeof(struct mcs_rwlock_node_irqsave), /* sizeof struct mcs_rwlock_node_irqsave */
+    __alignof__(struct mcs_rwlock_node_irqsave), /* alignof struct mcs_rwlock_node_irqsave */
+    sizeof(struct mcs_rwlock_node), /* sizeof struct mcs_rwlock_node */
+    __alignof__(struct mcs_rwlock_node), /* alignof struct mcs_rwlock_node */
+    sizeof(struct perf_event_attr), /* sizeof struct perf_event_attr */
+    __alignof__(struct perf_event_attr), /* alignof struct perf_event_attr */
+    __builtin_offsetof(struct syscall_request,rtid), /* struct syscall_request::rtid */
+    __builtin_offsetof(struct syscall_request,ttid), /* struct syscall_request::ttid */
+    __builtin_offsetof(struct syscall_request,valid), /* struct syscall_request::valid */
+    __builtin_offsetof(struct syscall_request,number), /* struct syscall_request::number */
+    __builtin_offsetof(struct syscall_request,args), /* struct syscall_request::args */
+    __builtin_offsetof(struct mcexec_tid,tid), /* struct mcexec_tid::tid */
+    __builtin_offsetof(struct mcexec_tid,thread), /* struct mcexec_tid::thread */
+    __builtin_offsetof(struct thread,cpu_id), /* struct thread::cpu_id */
+    __builtin_offsetof(struct thread,tid), /* struct thread::tid */
+    __builtin_offsetof(struct thread,pthread_routine), /* struct thread::pthread_routine */
+    __builtin_offsetof(struct thread,status), /* struct thread::status */
+    __builtin_offsetof(struct thread,exit_status), /* struct thread::exit_status */
+    __builtin_offsetof(struct thread,termsig), /* struct thread::termsig */
+    __builtin_offsetof(struct thread,vm), /* struct thread::vm */
+    __builtin_offsetof(struct thread,uctx), /* struct thread::uctx */
+    __builtin_offsetof(struct thread,proc), /* struct thread::proc */
+    __builtin_offsetof(struct thread,report_proc), /* struct thread::report_proc */
+    __builtin_offsetof(struct thread,report_siblings_list), /* struct thread::report_siblings_list */
+    __builtin_offsetof(struct thread,ptrace), /* struct thread::ptrace */
+    __builtin_offsetof(struct thread,ptrace_eventmsg), /* struct thread::ptrace_eventmsg */
+    __builtin_offsetof(struct thread,refcount), /* struct thread::refcount */
+    __builtin_offsetof(struct thread,clear_child_tid), /* struct thread::clear_child_tid */
+    __builtin_offsetof(struct thread,cpu_set), /* struct thread::cpu_set */
+    __builtin_offsetof(struct thread,clone_pthread_start_routine), /* struct thread::clone_pthread_start_routine */
+    __builtin_offsetof(struct thread,mod_clone), /* struct thread::mod_clone */
+    __builtin_offsetof(struct process,threads_lock), /* struct process::threads_lock */
+    __builtin_offsetof(struct process,tids), /* struct process::tids */
+    __builtin_offsetof(struct process,nr_tids), /* struct process::nr_tids */
+    __builtin_offsetof(struct process,parent), /* struct process::parent */
+    __builtin_offsetof(struct process,ppid_parent), /* struct process::ppid_parent */
+    __builtin_offsetof(struct process,refcount), /* struct process::refcount */
+    __builtin_offsetof(struct process,status), /* struct process::status */
+    __builtin_offsetof(struct process,waitpid_q), /* struct process::waitpid_q */
+    __builtin_offsetof(struct process,pid), /* struct process::pid */
+    __builtin_offsetof(struct process,saved_cmdline), /* struct process::saved_cmdline */
+    __builtin_offsetof(struct process,cpu_set), /* struct process::cpu_set */
+    __builtin_offsetof(struct process,report_threads_list), /* struct process::report_threads_list */
+    __builtin_offsetof(struct process,uti_thread_rank), /* struct process::uti_thread_rank */
+    __builtin_offsetof(struct process,uti_use_last_cpu), /* struct process::uti_use_last_cpu */
+    __builtin_offsetof(struct process,clone_count), /* struct process::clone_count */
+    __builtin_offsetof(struct process,monitoring_event), /* struct process::monitoring_event */
+    __builtin_offsetof(struct process,coredump_barrier_count), /* struct process::coredump_barrier_count */
+    __builtin_offsetof(struct process,update_lock), /* struct process::update_lock */
+    __builtin_offsetof(struct process_vm,address_space), /* struct process_vm::address_space */
+    __builtin_offsetof(struct process_vm,region), /* struct process_vm::region */
+    __builtin_offsetof(struct process_vm,memory_range_lock), /* struct process_vm::memory_range_lock */
+    __builtin_offsetof(struct address_space,page_table), /* struct address_space::page_table */
+    __builtin_offsetof(struct address_space,cpu_set), /* struct address_space::cpu_set */
+    __builtin_offsetof(struct address_space,cpu_set_lock), /* struct address_space::cpu_set_lock */
+    __builtin_offsetof(struct address_space,nslots), /* struct address_space::nslots */
+    __builtin_offsetof(struct vm_range,memobj), /* struct vm_range::memobj */
+    __builtin_offsetof(struct memobj,path), /* struct memobj::path */
+    __builtin_offsetof(struct address_space,pids), /* struct address_space::pids flexible */
+    __builtin_offsetof(struct process_vm,region.user_start), /* struct process_vm::region.user_start */
+    __builtin_offsetof(struct process_vm,region.user_end), /* struct process_vm::region.user_end */
+    __builtin_offsetof(struct mc_perf_event,attr), /* mc_perf_event::attr */
+    __builtin_offsetof(struct perf_event_attr,wakeup_events), /* perf flags unit end */
+    sizeof(struct f03_fork_dma_request), /* DMA request sizeof */
+    __alignof__(struct f03_fork_dma_request), /* DMA request align */
+    __NR_clone, /* clone number */
+    __NR_clone3, /* clone3 number */
+    __NR_kill, /* kill number */
+    __NR_gettid, /* gettid number */
+    CLONE_VM, /* CLONE_VM */
+    CLONE_THREAD, /* CLONE_THREAD */
+    SIGKILL, /* SIGKILL */
+    EAGAIN, /* EAGAIN */
+    ENOMEM, /* ENOMEM */
+    EINVAL, /* EINVAL */
+    IHK_MC_AP_NOWAIT, /* NOWAIT */
+    OVERSUBSCRIBED_NR_TIDS, /* oversubscribed TIDs */
+    PATH_MAX, /* PATH_MAX */
+    sizeof(((struct thread*)0)->pthread_routine), /* pthread routine capacity */
+    DDEBUG_DEFAULT, /* DDEBUG default */
+};
+#else
+#line 7747
 unsigned long do_fork(int clone_flags, unsigned long newsp,
                       unsigned long parent_tidptr, unsigned long child_tidptr,
                       unsigned long tlsblock_base, unsigned long curpc,
@@ -7273,7 +8430,7 @@ unsigned long do_fork(int clone_flags, unsigned long newsp,
 	struct process *oldproc = old->proc;
 	struct process *newproc;
 	struct thread *new;
-	struct syscall_request request1 IHK_DMA_ALIGN;
+	struct syscall_request request1 IHK_DMA_ALIGN = { 0 };
 	int ptrace_event = 0;
 	int termsig = clone_flags & 0x000000ff;
 #if 0
@@ -7283,7 +8440,14 @@ unsigned long do_fork(int clone_flags, unsigned long newsp,
 	unsigned long clone_pthread_start_routine = 0;
 	struct vm_range *range = NULL;
 	int helper_thread = 0;
+#ifdef MCKERNEL_RUST_SCHED_POLICY_HELPERS
+    cpu_set_t clone_cpu_set;
+    int inherit_clone_affinity = 0;
+#endif
 	int tid_table_created = 0;
+#ifdef MCKERNEL_NATIVE_FORK_OWNED_TRANSACTION
+    void *owned_fork_constructor = NULL;
+#endif
 
 	dkprintf("%s,flags=%08x,newsp=%lx,ptidptr=%lx,"
 		"ctidptr=%lx,tls=%lx,curpc=%lx,cursp=%lx",
@@ -7294,7 +8458,11 @@ unsigned long do_fork(int clone_flags, unsigned long newsp,
 			 newsp, cursp);
 
 	/* CLONE_VM and newsp == parent_tidptr impiles pthread start routine addr */
-	if (clone_pthread_marker_result(clone_flags, newsp, parent_tidptr)) {
+	if (
+#ifdef MCKERNEL_NATIVE_CLONE3
+		ihk_mc_syscall_number(old->uctx) != __NR_clone3 &&
+#endif
+		clone_pthread_marker_result(clone_flags, newsp, parent_tidptr)) {
 		old->clone_pthread_start_routine = parent_tidptr;
 		dkprintf("%s: clone_pthread_start_routine: 0x%lx\n", __func__,
 			old->clone_pthread_start_routine);
@@ -7357,20 +8525,43 @@ unsigned long do_fork(int clone_flags, unsigned long newsp,
 		//cpuid = obtain_clone_cpuid(&oldproc->cpu_set, 1);
 	}
 	else {
-		cpuid = obtain_clone_cpuid(&oldproc->cpu_set,
-				clone_use_last_cpu_result(old->mod_clone,
-					oldproc->uti_use_last_cpu));
+#ifdef MCKERNEL_RUST_SCHED_POLICY_HELPERS
+        /* Keep UTI and non-thread clone policy on their existing route. */
+        if ((clone_flags & CLONE_THREAD) && !oldproc->uti_thread_rank &&
+                !old->mod_clone && !oldproc->uti_use_last_cpu) {
+            if (sched_clone_affinity_snapshot_result(
+                    (unsigned long)&old->cpu_set,
+                    (unsigned long)&oldproc->cpu_set,
+                    (unsigned long)&clone_cpu_set,
+                    sizeof(clone_cpu_set), num_processors))
+                return -EAGAIN;
+            inherit_clone_affinity = 1;
+            cpuid = obtain_clone_cpuid(&clone_cpu_set, 0);
+        } else
+#endif
+        cpuid = obtain_clone_cpuid(&oldproc->cpu_set,
+                clone_use_last_cpu_result(old->mod_clone,
+                    oldproc->uti_use_last_cpu));
 		if (cpuid == -1) {
 			kprintf("do_fork,core not available\n");
 			return -EAGAIN;
 		}
 	}
 
-	new = clone_thread(old, curpc,
-	                    newsp ? newsp : cursp, clone_flags);
+#ifdef MCKERNEL_NATIVE_FORK_OWNED_TRANSACTION
+    if (!(clone_flags & CLONE_VM))
+        new = process_fork_construct_current_v1(old, curpc,
+                newsp ? newsp : cursp, clone_flags, cpuid, &owned_fork_constructor);
+    else
+#endif
+        new = clone_thread(old, curpc,
+                            newsp ? newsp : cursp, clone_flags);
 	
 	if (!new) {
 		err =  -ENOMEM;
+		/* Helper selection did not obtain a CPU reservation. */
+		if (helper_thread)
+			return err;
 		goto release_cpuid;
 	}
 
@@ -7386,6 +8577,16 @@ unsigned long do_fork(int clone_flags, unsigned long newsp,
 	}
 
 	newproc = new->proc;
+
+#ifdef MCKERNEL_RUST_SCHED_POLICY_HELPERS
+    if (inherit_clone_affinity && sched_clone_affinity_inherit_result(
+            (unsigned long)&new->cpu_set, (unsigned long)&clone_cpu_set,
+            sizeof(clone_cpu_set))) {
+        err = -EINVAL;
+        goto destroy_thread;
+    }
+#endif
+
 
 	cpu_set(cpuid, &new->vm->address_space->cpu_set,
 	        &new->vm->address_space->cpu_set_lock);
@@ -7464,6 +8665,23 @@ retry_tid:
 	}
 	/* fork() a new process on the host */
 	else {
+#ifdef MCKERNEL_NATIVE_FORK_OWNED_TRANSACTION
+        struct owned_fork_caller_outcome outcome;
+        err = process_fork_owned_caller_runnable_current_v2(old, new, cpuid,
+                clone_host_parent_flags_result(clone_flags,
+                    oldproc->ppid_parent->pid), owned_fork_constructor,
+                clone_flags, parent_cpuid, child_tidptr, &outcome);
+        if (err)
+            goto destroy_thread;
+        if (outcome.disposition == 0) {
+            err = outcome.error;
+            goto destroy_thread;
+        }
+        /* Rust transfers a supported child's constructor graph only after
+         * the actual selector1 response and retains a separate runtime pin.
+         * All uncertain paths remain owned; the default gate is undefined. */
+        return outcome.error;
+#else
 		request1.number = __NR_clone;
 		request1.args[0] = 0;
 		request1.args[1] = new->vm->region.user_start;
@@ -7489,6 +8707,7 @@ retry_tid:
 		   oldproc->monitoring_event->attr.inherit){
 			newproc->monitoring_event = oldproc->monitoring_event;
 		}
+#endif
 	}
 
 	if (clone_parent_tid_store_needed_result(clone_flags)) {
@@ -7496,6 +8715,10 @@ retry_tid:
 		         parent_tidptr);
 
 		err = setint_user((int *)parent_tidptr, new->tid);
+#ifdef MCKERNEL_NATIVE_CLONE_TID
+		/* Linux kernel_clone() ignores a failed parent-TID put_user. */
+		err = 0;
+#endif
 		if (err) {
 			goto release_ids;
 		}
@@ -7509,6 +8732,15 @@ retry_tid:
 	}
 	
 	if (clone_child_tid_store_needed_result(clone_flags)) {
+#ifdef MCKERNEL_NATIVE_CLONE_TID
+		/* The child is held and not runnable yet. Use its explicit VM so
+		 * private mappings fault/COW there, and copy the complete int by
+		 * virtual page with normal user-write permissions. Like Linux's
+		 * child-start put_user, a failed store does not cancel the clone.
+		 */
+		(void)write_process_vm(new->vm, (void *)child_tidptr,
+				      &new->tid, sizeof(new->tid));
+#else
 		unsigned long phys;
 		dkprintf("clone_flags & CLONE_CHILD_SETTID: 0x%lX\n",
 				child_tidptr);
@@ -7521,8 +8753,16 @@ retry_tid:
 		}
 	
 		*((int*)phys_to_virt(phys)) = new->tid;
+#endif
 	}
 	
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ { static struct ddebug __attribute__((aligned(8),section("__verbose"))) tls_debug={
+    .file=__FILE__,.func=__func__,.line=7690,.flags=DDEBUG_DEFAULT,
+   };
+   f03_clone_initialize_execution_state_v1(old,new,clone_flags,tlsblock_base,parent_cpuid,&tls_debug);
+ }
+#else
 	if (clone_tls_source_result(clone_flags) == CLONE_TLS_SOURCE_ARGUMENT) {
 		dkprintf("clone_flags & CLONE_SETTLS: 0x%lX\n", 
 			     tlsblock_base);
@@ -7539,6 +8779,10 @@ retry_tid:
 
 	new->status = PS_RUNNING;
 	
+#endif
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+	if (f03_clone_prepare_remote_argument_v1(old,new,&err,__FILE__,7710)) goto release_ids;
+#else
 	/* Only the first do_fork() call creates a thread on a Linux CPU */
 	if (clone_remote_spawn_result(atomic_cmpxchg_int(&old->mod_clone,
 					SPAWN_TO_REMOTE, SPAWN_TO_LOCAL))) {
@@ -7555,6 +8799,10 @@ retry_tid:
 			       sizeof(struct uti_attr));
 		}
 	}
+#endif
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+	f03_clone_publish_thread_process_v1(new, oldproc, newproc, clone_flags);
+#else
 	chain_thread(new);
 	if (!(clone_flags & CLONE_VM)) {
 		newproc->status = PS_RUNNING;
@@ -7581,6 +8829,7 @@ retry_tid:
 		else
 			chain_process(newproc);
 	}
+#endif
 
 	if (old->ptrace) {
 		ptrace_event = ptrace_check_clone_event(old, clone_flags);
@@ -7626,17 +8875,25 @@ retry_tid:
 	return new->tid;
 
 free_mod_clone_arg:
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+	f03_clone_release_mod_argument_v1(new,__FILE__,7792);
+#else
 	kfree_tracked(new->mod_clone_arg, __FILE__, __LINE__);
 	new->mod_clone_arg = NULL;
 
 	ihk_atomic_dec(&new->vm->refcount);
 
+#endif
 release_ids:
 	if (clone_flags & CLONE_VM) {
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+	f03_clone_release_empty_tid_table_v1(newproc,tid_table_created,__FILE__,7800);
+#else
 		if (tid_table_created && !newproc->nr_tids) {
 			kfree_tracked(newproc->tids, __FILE__, __LINE__);
 			newproc->tids = NULL;
 		}
+#endif
 	} else {
 		request1.number = __NR_kill;
 		request1.args[0] = newproc->pid;
@@ -7645,6 +8902,14 @@ release_ids:
 	}
 
 destroy_thread:
+#ifdef MCKERNEL_NATIVE_FORK_OWNED_TRANSACTION
+    if (owned_fork_constructor) {
+        int cancel = process_fork_cancel_constructed_current_v1(owned_fork_constructor);
+        if (cancel)
+            return cancel;
+        goto release_cpuid;
+    }
+#endif
 	if (!(clone_flags & CLONE_VM)) {
 		/* in case of fork, destroy struct process */
 		ihk_atomic_set(&new->proc->refcount, 1);
@@ -7658,6 +8923,8 @@ release_cpuid:
 	release_cpuid(cpuid);
 	return err;
 }
+#endif
+#line 8251
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_set_tid_address(int n, ihk_mc_user_context_t *ctx);
@@ -7672,23 +8939,29 @@ long sys_set_tid_address(int n, ihk_mc_user_context_t *ctx)
 }
 #endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 syscall_tsc_to_ts_bridge(unsigned long tsc, void *ts)
 {
 	tsc_to_ts(tsc, ts);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 unsigned long
 syscall_timespec_to_jiffy_bridge(const void *ts)
 {
 	return timespec_to_jiffy((const struct timespec *)ts);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 syscall_ts_add_bridge(void *dst, const void *src)
 {
 	ts_add(dst, (struct timespec *)src);
 }
+#endif
 
 #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static const struct syscall_times_offsets syscall_times_offsets = {
@@ -7720,6 +8993,11 @@ long sys_times(int n, ihk_mc_user_context_t *ctx)
 }
 #endif
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_SIGNAL_PROCESS_BRIDGES)
+extern long
+syscall_do_kill_thread_bridge(void *thread, int pid, int tid, int sig,
+		const void *info, int ptracecont);
+#else
 long
 syscall_do_kill_thread_bridge(void *thread, int pid, int tid, int sig,
 		const void *info, int ptracecont)
@@ -7727,7 +9005,16 @@ syscall_do_kill_thread_bridge(void *thread, int pid, int tid, int sig,
 	return do_kill((struct thread *)thread, pid, tid, sig,
 			(struct siginfo *)info, ptracecont);
 }
+#endif /* MCKERNEL_RUST_F03_SIGNAL_PROCESS_BRIDGES */
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_SIGNAL_PROCESS_BRIDGES)
+struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_kill_log_debug_v1[2] = {
+ {.file=__FILE__,.func="syscall_kill_log_bridge",.line=8313,.flags=DDEBUG_DEFAULT},
+ {.file=__FILE__,.func="syscall_kill_log_bridge",.line=8315,.flags=DDEBUG_DEFAULT},
+};
+extern void
+syscall_kill_log_bridge(int event, int pid, int sig, int error);
+#else
 void
 syscall_kill_log_bridge(int event, int pid, int sig, int error)
 {
@@ -7738,6 +9025,7 @@ syscall_kill_log_bridge(int event, int pid, int sig, int error)
 				pid, sig, error);
 	}
 }
+#endif /* MCKERNEL_RUST_F03_SIGNAL_PROCESS_BRIDGES */
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_kill(int n, ihk_mc_user_context_t *ctx);
@@ -8371,6 +9659,17 @@ syscall_request_copy_result(struct syscall_request *dst,
 		return -EINVAL;
 
 	memcpy(dst, src, sizeof(*dst));
+
+	return 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+syscall_request_publish_result(struct syscall_request *req)
+{
+	if (!req)
+		return -EINVAL;
+
+	__atomic_store_n(&req->valid, 1, __ATOMIC_RELEASE);
 
 	return 0;
 }
@@ -9390,9 +10689,12 @@ do_munmap_body_result(void *vm, void *proc, unsigned long addr, size_t len,
 	if (!straight_va || addr < straight_va ||
 			addr + len > straight_va + straight_len) {
 		if (error || !ro_freed) {
-			if (clear_host_pte_fn)
-				clear_host_pte_fn(addr, len,
+			if (clear_host_pte_fn) {
+				long clear_error = clear_host_pte_fn(addr, len,
 						holding_memory_range_lock);
+				if (!error)
+					error = (int)clear_error;
+			}
 		}
 		else {
 			error = set_host_vma_fn ? set_host_vma_fn(addr, len,
@@ -12962,6 +14264,12 @@ sigaltstack_body_result(void *thread, size_t sigstack_offset,
 	stack_t wss;
 	int error;
 
+	/* Snapshot the request before copyout: ss and oss may overlap. */
+	if (ss_addr && (!copy_from_fn ||
+			copy_from_fn(&wss, ss_addr, sizeof(wss)))) {
+		return -EFAULT;
+	}
+
 	if (oss_addr) {
 		if (!copy_to_fn ||
 				copy_to_fn(oss_addr, thread_sigstack,
@@ -12972,10 +14280,6 @@ sigaltstack_body_result(void *thread, size_t sigstack_offset,
 
 	if (!ss_addr) {
 		return 0;
-	}
-
-	if (!copy_from_fn || copy_from_fn(&wss, ss_addr, sizeof(wss))) {
-		return -EFAULT;
 	}
 
 	error = sigaltstack_validate(wss.ss_flags, wss.ss_size);
@@ -14404,10 +15708,16 @@ SYSCALL_POLICY_HELPER_SCOPE int
 waitid_to_wait_pid_result(int idtype, int id, int *pidp)
 {
 	if (idtype == P_PID) {
+		if (id <= 0) {
+			return -EINVAL;
+		}
 		*pidp = id;
 	}
 	else if (idtype == P_PGID) {
-		*pidp = -id;
+		if (id < 0) {
+			return -EINVAL;
+		}
+		*pidp = id == 1 ? WAIT_PGID_ONE : -id;
 	}
 	else if (idtype == P_ALL) {
 		*pidp = -1;
@@ -14451,6 +15761,9 @@ SYSCALL_POLICY_HELPER_SCOPE int
 wait_process_pid_matches_result(int pid, int parent_pgid, int child_pgid,
 		int child_pid)
 {
+	if (pid == WAIT_PGID_ONE) {
+		return child_pgid == 1;
+	}
 	if (pid == -1) {
 		return 1;
 	}
@@ -14782,6 +16095,9 @@ wait_process_candidate_body_result(int current_ret, int pid, int *status,
 	if (wait_ptraced_stop_candidate_result(child_ptrace, child_status)) {
 		ret = stopped_fn(thread, child_proc, NULL, status, options);
 		if (ret == child_pid) {
+			if (ret > 0) {
+				*status = (*status & ~0xff) | WAIT_STATUS_PTRACED_STOP;
+			}
 			if (pid == child_tid) {
 				ret = child_tid;
 			}
@@ -14885,6 +16201,9 @@ wait_thread_candidate_body_result(int current_ret, int tid, int *status,
 		ret = stopped_fn(thread, child_proc, child_thread, status,
 				options);
 		if (ret == child_tid) {
+			if (ret > 0) {
+				*status = (*status & ~0xff) | WAIT_STATUS_PTRACED_STOP;
+			}
 			reap_fn(child_thread, thread_signal_flags_offset,
 					options, SIGNAL_STOP_STOPPED);
 			unlock_fn(threads_lock, threads_lock_node);
@@ -15318,6 +16637,9 @@ wait_thread_empty_candidate_result(int is_main_thread, int termsig)
 SYSCALL_POLICY_HELPER_SCOPE int
 waitid_status_code_result(int status)
 {
+	if ((status & 0xff) == WAIT_STATUS_PTRACED_STOP) {
+		return CLD_TRAPPED;
+	}
 	if ((status & 0x000000ff) == 0x0000007f) {
 		return CLD_STOPPED;
 	}
@@ -15325,7 +16647,7 @@ waitid_status_code_result(int status)
 		return CLD_CONTINUED;
 	}
 	else if (status & 0x000000ff) {
-		return CLD_KILLED;
+		return (status & 0x80) ? CLD_DUMPED : CLD_KILLED;
 	}
 	return CLD_EXITED;
 }
@@ -15408,7 +16730,7 @@ wait_thread_reap_action_result(int options, int ptrace)
 SYSCALL_POLICY_HELPER_SCOPE int
 wait_status_copy_needed_result(int rc, int has_status)
 {
-	return rc >= 0 && has_status;
+	return rc > 0 && has_status;
 }
 
 SYSCALL_POLICY_HELPER_SCOPE int
@@ -15422,7 +16744,7 @@ wait4_body_result(int pid, unsigned long status_addr, int options,
 		unsigned long rusage_addr, wait4_do_wait_fn_t do_wait_fn,
 		syscall_copy_to_user_fn_t copy_to_fn)
 {
-	int status;
+	int status = 0;
 	int rc;
 	struct rusage usage;
 
@@ -15430,14 +16752,27 @@ wait4_body_result(int pid, unsigned long status_addr, int options,
 	if (rc) {
 		return rc;
 	}
+	if (pid == INT_MIN) {
+		return -ESRCH;
+	}
 
 	memset(&usage, '\0', sizeof(usage));
 	rc = do_wait_fn(pid, &status, WEXITED | options, &usage);
+	if (rc <= 0) {
+		return rc;
+	}
+	if ((status & 0xff) == WAIT_STATUS_PTRACED_STOP) {
+		status = (status & ~0xff) | 0x7f;
+	}
 	if (wait_status_copy_needed_result(rc, status_addr != 0)) {
-		copy_to_fn(status_addr, &status, sizeof(status));
+		if (copy_to_fn(status_addr, &status, sizeof(status)) != 0) {
+			return -EFAULT;
+		}
 	}
 	if (wait_rusage_copy_needed_result(rusage_addr != 0)) {
-		copy_to_fn(rusage_addr, &usage, sizeof(usage));
+		if (copy_to_fn(rusage_addr, &usage, sizeof(usage)) != 0) {
+			return -EFAULT;
+		}
 	}
 	return rc;
 }
@@ -15445,10 +16780,10 @@ wait4_body_result(int pid, unsigned long status_addr, int options,
 SYSCALL_POLICY_HELPER_SCOPE int
 waitid_siginfo_needed_result(int rc, int has_infop)
 {
-	return rc > 0 && has_infop;
+	return rc >= 0 && has_infop;
 }
 
-SYSCALL_POLICY_HELPER_SCOPE void
+SYSCALL_POLICY_HELPER_SCOPE long
 waitid_copy_siginfo_result(int rc, unsigned long infop_addr, int status,
 		long utime_sec, long utime_usec, long stime_sec,
 		long stime_usec, syscall_copy_to_user_fn_t copy_to_fn)
@@ -15457,18 +16792,35 @@ waitid_copy_siginfo_result(int rc, unsigned long infop_addr, int status,
 	struct timeval utime = { .tv_sec = utime_sec, .tv_usec = utime_usec };
 	struct timeval stime = { .tv_sec = stime_sec, .tv_usec = stime_usec };
 
-	if (!waitid_siginfo_needed_result(rc, infop_addr != 0) || !copy_to_fn) {
-		return;
+	if (!waitid_siginfo_needed_result(rc, infop_addr != 0)) {
+		return 0;
+	}
+	if (!copy_to_fn) {
+		return -EFAULT;
 	}
 
 	memset(&info, '\0', sizeof(info));
-	info.si_signo = SIGCHLD;
-	info._sifields._sigchld.si_pid = rc;
-	info._sifields._sigchld.si_status = status;
-	info._sifields._sigchld.si_utime = timeval_to_jiffy(&utime);
-	info._sifields._sigchld.si_stime = timeval_to_jiffy(&stime);
-	info.si_code = waitid_status_code_result(status);
-	copy_to_fn(infop_addr, &info, sizeof(info));
+	if (rc > 0) {
+		info.si_signo = SIGCHLD;
+		info._sifields._sigchld.si_pid = rc;
+		info.si_code = waitid_status_code_result(status);
+		if (info.si_code == CLD_EXITED) {
+			info._sifields._sigchld.si_status = (status >> 8) & 0xff;
+		}
+		else if (info.si_code == CLD_STOPPED || info.si_code == CLD_TRAPPED) {
+			/* Preserve ptrace event bits above the stop signal byte. */
+			info._sifields._sigchld.si_status = status >> 8;
+		}
+		else if (info.si_code == CLD_CONTINUED) {
+			info._sifields._sigchld.si_status = SIGCONT;
+		}
+		else {
+			info._sifields._sigchld.si_status = status & 0x7f;
+		}
+		info._sifields._sigchld.si_utime = timeval_to_jiffy(&utime);
+		info._sifields._sigchld.si_stime = timeval_to_jiffy(&stime);
+	}
+	return copy_to_fn(infop_addr, &info, sizeof(info)) != 0 ? -EFAULT : 0;
 }
 
 SYSCALL_POLICY_HELPER_SCOPE long
@@ -15477,7 +16829,7 @@ waitid_body_result(int idtype, int id, unsigned long infop_addr, int options,
 		syscall_copy_to_user_fn_t copy_to_fn)
 {
 	int pid;
-	int status;
+	int status = 0;
 	int rc;
 	struct rusage usage;
 
@@ -15497,11 +16849,10 @@ waitid_body_result(int idtype, int id, unsigned long infop_addr, int options,
 		return rc;
 	}
 
-	waitid_copy_siginfo_result(rc, infop_addr, status,
+	return waitid_copy_siginfo_result(rc, infop_addr, status,
 			usage.ru_utime.tv_sec, usage.ru_utime.tv_usec,
 			usage.ru_stime.tv_sec, usage.ru_stime.tv_usec,
 			copy_to_fn);
-	return 0;
 }
 
 SYSCALL_POLICY_HELPER_SCOPE int
@@ -17533,6 +18884,12 @@ perf_event_open_linux_fd_body_result(struct syscall_request *request,
 
 	request->number = perf_event_open_nr;
 	request->args[0] = 0;
+	/* The selected executor ignores these slots; define the complete payload. */
+	request->args[1] = 0;
+	request->args[2] = 0;
+	request->args[3] = 0;
+	request->args[4] = 0;
+	request->args[5] = 0;
 	fd = syscall_fn(request, cpu);
 	if (fd < 0) {
 		return fd;
@@ -18883,6 +20240,9 @@ long sys_tkill(int n, ihk_mc_user_context_t *ctx)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern int *getcred(int *);
+#else
 int *
 getcred(int *_buf)
 {
@@ -18909,7 +20269,11 @@ getcred(int *_buf)
 	return buf;
 #endif
 }
+#endif
 
+#if (defined(MCKERNEL_RUST_F03_FORWARD_ADAPTERS) || defined(MCKERNEL_RUST_F03_CREDENTIAL_REFRESH)) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS)
+extern void do_setresuid(void);
+#else
 void
 do_setresuid()
 {
@@ -18937,7 +20301,11 @@ do_setresuid()
 	proc->fsuid = buf[3];
 #endif
 }
+#endif
 
+#if (defined(MCKERNEL_RUST_F03_FORWARD_ADAPTERS) || defined(MCKERNEL_RUST_F03_CREDENTIAL_REFRESH)) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS)
+extern void do_setresgid(void);
+#else
 void
 do_setresgid()
 {
@@ -18965,6 +20333,7 @@ do_setresgid()
 	proc->fsgid = buf[7];
 #endif
 }
+#endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_setresuid(int n, ihk_mc_user_context_t *ctx);
@@ -19072,45 +20441,59 @@ long sys_geteuid(int n, ihk_mc_user_context_t *ctx)
 }
 #endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long
 syscall_copy_int_to_user_bridge(unsigned long dst_addr, const int *src)
 {
 	return copy_to_user((void *)dst_addr, src, sizeof(*src));
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long
 syscall_copy_from_user_bridge(void *dst, unsigned long src_addr, size_t bytes)
 {
 	return copy_from_user(dst, (const void *)src_addr, bytes);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long
 syscall_copy_to_user_bridge(unsigned long dst_addr, const void *src,
 		size_t bytes)
 {
 	return copy_to_user((void *)dst_addr, src, bytes);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void *
 syscall_find_process_bridge(int pid, void *lock_arg)
 {
 	return find_process(pid, (struct mcs_rwlock_node_irqsave *)lock_arg);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 syscall_process_unlock_bridge(void *proc, void *lock_arg)
 {
 	process_unlock(proc, (struct mcs_rwlock_node_irqsave *)lock_arg);
 }
+#endif
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && (defined(MCKERNEL_RUST_F03_SIGNAL_FORWARD) || defined(MCKERNEL_RUST_F03_SIGNAL_FORWARD_PROVIDER))
+extern long syscall_forward_rt_sigprocmask_bridge(unsigned long sigmask);
+#else
 long
 syscall_forward_rt_sigprocmask_bridge(unsigned long sigmask)
 {
-	ihk_mc_user_context_t ctx0;
+	ihk_mc_user_context_t ctx0 = { 0 };
 
 	ihk_mc_syscall_set_arg0(&ctx0, sigmask);
 	return syscall_generic_forwarding(__NR_rt_sigprocmask, &ctx0);
 }
+#endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_getresuid(int n, ihk_mc_user_context_t *ctx);
@@ -19214,23 +20597,14 @@ long sys_set_robust_list(int n, ihk_mc_user_context_t *ctx)
 #endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
-static void
-syscall_sigcommon_writer_lock_bridge(void *lock, void *node)
-{
-	mcs_rwlock_writer_lock(lock, node);
-}
-
-static void
-syscall_sigcommon_writer_unlock_bridge(void *lock, void *node)
-{
-	mcs_rwlock_writer_unlock(lock, node);
-}
-
-static long
+#if defined(MCKERNEL_RUST_F03_SIGNAL_FORWARD) || defined(MCKERNEL_RUST_F03_SIGNAL_FORWARD_PROVIDER)
+extern long syscall_forward_sigaction_update_bridge(int sig, const void *actp);
+#else
+long
 syscall_forward_sigaction_update_bridge(int sig, const void *actp)
 {
 	const struct k_sigaction *act = actp;
-	ihk_mc_user_context_t ctx0;
+	ihk_mc_user_context_t ctx0 = { 0 };
 
 	ihk_mc_syscall_set_arg0(&ctx0, sig);
 	ihk_mc_syscall_set_arg1(&ctx0,
@@ -19240,24 +20614,15 @@ syscall_forward_sigaction_update_bridge(int sig, const void *actp)
 }
 #endif
 
+int do_sigaction(int sig, struct k_sigaction *act, struct k_sigaction *oact);
+#else
 int
 do_sigaction(int sig, struct k_sigaction *act, struct k_sigaction *oact)
 {
 	struct thread *thread = get_this_cpu_local_var()->current;
-#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
-	struct mcs_rwlock_node_irqsave mcs_rw_node;
-
-	return do_sigaction_body_result(sig, act, oact, thread->sigcommon,
-			__builtin_offsetof(struct sig_common, action),
-			sizeof(struct k_sigaction),
-			__builtin_offsetof(struct sig_common, lock),
-			&mcs_rw_node, syscall_sigcommon_writer_lock_bridge,
-			syscall_sigcommon_writer_unlock_bridge,
-			syscall_forward_sigaction_update_bridge);
-#else
 	struct k_sigaction *k;
 	struct mcs_rwlock_node_irqsave mcs_rw_node;
-	ihk_mc_user_context_t ctx0;
+	ihk_mc_user_context_t ctx0 = { 0 };
 	int error;
 
 	error = sigaction_validate(sig, act != NULL);
@@ -19280,8 +20645,8 @@ do_sigaction(int sig, struct k_sigaction *act, struct k_sigaction *oact)
 		syscall_generic_forwarding(__NR_rt_sigaction, &ctx0);
 	}
 	return 0;
-#endif
 }
+#endif
 
 #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static const struct syscall_mckfd_offsets syscall_mckfd_offsets = {
@@ -19330,6 +20695,9 @@ long sys_ioctl(int n, ihk_mc_user_context_t *ctx)
 #endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long syscall_strlen_user_bridge(const void *path);
+#else
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long
 #else
 static long
@@ -19338,7 +20706,11 @@ syscall_strlen_user_bridge(const void *path)
 {
 	return strlen_user(path);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long syscall_xpmem_open_bridge(const char *pathname, int flags, void *ctx);
+#else
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long
 #else
@@ -19348,7 +20720,11 @@ syscall_xpmem_open_bridge(const char *pathname, int flags, void *ctx)
 {
 	return xpmem_open(pathname, flags, (ihk_mc_user_context_t *)ctx);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long syscall_xpmem_openat_bridge(const char *pathname, int flags, void *ctx);
+#else
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long
 #else
@@ -19358,6 +20734,7 @@ syscall_xpmem_openat_bridge(const char *pathname, int flags, void *ctx)
 {
 	return xpmem_openat(pathname, flags, (ihk_mc_user_context_t *)ctx);
 }
+#endif
 
 #if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && !defined(ENABLE_TOFU)
 long sys_open(int n, ihk_mc_user_context_t *ctx);
@@ -19495,6 +20872,10 @@ out:
 }
 #endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+long sys_execveat(int n, ihk_mc_user_context_t *ctx);
+#else
+#line 20124
 long sys_execveat(int n, ihk_mc_user_context_t *ctx)
 {
 	int dirfd = (int)ihk_mc_syscall_arg0(ctx);
@@ -19506,6 +20887,8 @@ long sys_execveat(int n, ihk_mc_user_context_t *ctx)
 			(char **)ihk_mc_syscall_arg3(ctx), flags,
 			filename[0], syscall_execveat_bridge);
 }
+#endif
+#line 20135
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_close(int n, ihk_mc_user_context_t *ctx);
@@ -19538,14 +20921,18 @@ long sys_fcntl(int n, ihk_mc_user_context_t *ctx)
 }
 #endif
 
+#if !defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) || !defined(MCKERNEL_RUST_F03_SIGNAL_FORWARD_PROVIDER)
+#line 20167
 static long
 syscall_forward_context_bridge(int syscall_nr, void *ctx)
 {
 	return syscall_generic_forwarding(syscall_nr,
 			(ihk_mc_user_context_t *)ctx);
 }
+#endif
+#line 20173
 
-#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && !defined(MCKERNEL_RUST_F03_POLICY_FORWARD_CONTEXT_BRIDGE)
 long
 syscall_policy_forward_context_bridge(int syscall_nr, void *ctx)
 {
@@ -19553,30 +20940,51 @@ syscall_policy_forward_context_bridge(int syscall_nr, void *ctx)
 }
 #endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long
 syscall_mckfd_lock_bridge(void *lock)
 {
 	return ihk_mc_spinlock_lock((ihk_spinlock_t *)lock);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 syscall_mckfd_unlock_bridge(void *lock, long irqstate)
 {
 	ihk_mc_spinlock_unlock((ihk_spinlock_t *)lock, irqstate);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+const char f03_mckfd_alloc_origin_file_v1[] = __FILE__;
+const int f03_mckfd_alloc_origin_line_v1 = __LINE__ + 6;
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void *
 syscall_alloc_bridge(size_t size, unsigned long flags)
 {
 	return kmalloc_tracked(size, flags, __FILE__, __LINE__);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+const char f03_mckfd_free_origin_file_v1[] = __FILE__;
+const int f03_mckfd_free_origin_line_v1 = __LINE__ + 6;
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 syscall_mckfd_free_bridge(void *fdp)
 {
 	kfree_tracked(fdp, __FILE__, __LINE__);
 }
+#endif
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_LEAF_CALLBACKS) && !defined(ENABLE_TOFU)
+extern long
+syscall_tofu_ioctl_bridge(void *threadp, int fd, unsigned long cmd,
+		unsigned long arg, int *handled);
+#else
 long
 syscall_tofu_ioctl_bridge(void *threadp, int fd, unsigned long cmd,
 		unsigned long arg, int *handled)
@@ -19611,7 +21019,18 @@ syscall_tofu_ioctl_bridge(void *threadp, int fd, unsigned long cmd,
 #endif
 	return 0;
 }
+#endif /* MCKERNEL_RUST_F03_LEAF_CALLBACKS */
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(ENABLE_TOFU)
+const char f03_tofu_close_source_file_v1[] = __FILE__;
+const int f03_tofu_close_free_line_v1 = __LINE__ + 26;
+struct ddebug __attribute__((aligned(8),section("__verbose")))
+f03_tofu_close_debug_v1[2] = {
+    { .file=__FILE__, .func="syscall_tofu_close_bridge", .line=__LINE__ + 15, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="syscall_tofu_close_bridge", .line=__LINE__ + 21, .flags=DDEBUG_DEFAULT },
+};
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 syscall_tofu_close_bridge(void *threadp, int fd)
 {
@@ -19639,7 +21058,11 @@ syscall_tofu_close_bridge(void *threadp, int fd)
 	(void)fd;
 #endif
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+unsigned long syscall_pending_mask_bridge(void *threadp);
+#else
 unsigned long
 syscall_pending_mask_bridge(void *threadp)
 {
@@ -19668,7 +21091,12 @@ syscall_pending_mask_bridge(void *threadp)
 
 	return mask;
 }
+#endif /* !MCKERNEL_RUST_SYSCALL_POLICY_HELPERS: retained C fallback */
 
+
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+long syscall_signalfd_create_bridge(int syscall_nr, int flags);
+#else
 long
 syscall_signalfd_create_bridge(int syscall_nr, int flags)
 {
@@ -19680,7 +21108,9 @@ syscall_signalfd_create_bridge(int syscall_nr, int flags)
 	request.args[1] = flags;
 	return do_syscall(&request, ihk_mc_get_processor_id());
 }
+#endif /* !MCKERNEL_RUST_SYSCALL_POLICY_HELPERS: retained C fallback */
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long
 syscall_signalfd_publish_bridge(void *threadp, int fd,
 		const unsigned long *maskp, int create)
@@ -19715,6 +21145,7 @@ syscall_signalfd_publish_bridge(void *threadp, int fd,
 	ihk_mc_spinlock_unlock(&proc->mckfd_lock, irqstate);
 	return sfd->fd;
 }
+#endif /* !MCKERNEL_RUST_SYSCALL_POLICY_HELPERS: retained C fallback */
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_epoll_pwait(int n, ihk_mc_user_context_t *ctx);
@@ -19825,18 +21256,36 @@ long sys_signalfd4(int n, ihk_mc_user_context_t *ctx)
 #endif
 
 #ifdef ENABLE_PERF
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PERF_PROVIDER_NEXT3_BRIDGES)
+extern int perf_counter_extra_set_bridge(void *event);
+#else
+#line 20498
 static int
 perf_counter_extra_set_bridge(void *event)
 {
 	return ihk_mc_perfctr_set_extra((struct mc_perf_event *)event);
 }
+#endif
+#line 20503
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PERF_PROVIDER_NEXT3_BRIDGES)
+extern int perf_counter_init_raw_bridge(int counter_id, unsigned long hw_config, int mode);
+_Static_assert(sizeof(unsigned long)==8 && sizeof(unsigned int)==4, "supported Rust perf init code narrowing ABI");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&ihk_mc_perfctr_init_raw), int (*)(int,unsigned int,int)), "selected x86 Rust provider requires original u32 code ABI");
+#else
+#line 20504
 static int
 perf_counter_init_raw_bridge(int counter_id, unsigned long hw_config, int mode)
 {
 	return ihk_mc_perfctr_init_raw(counter_id, hw_config, mode);
 }
+#endif
+#line 20509
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PERF_ATTR_CALLBACKS)
+extern int f03_perf_counter_attr_flags_v1(const void *, int *, int *);
+#define perf_counter_attr_flags_bridge f03_perf_counter_attr_flags_v1
+#else
 static int
 perf_counter_attr_flags_bridge(const void *attr, int *exclude_kernel,
 			       int *exclude_user)
@@ -19851,7 +21300,22 @@ perf_counter_attr_flags_bridge(const void *attr, int *exclude_kernel,
 	*exclude_user = perf_attr->exclude_user;
 	return 0;
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern int perf_counter_set(struct mc_perf_event *);
+extern void perf_start(struct mc_perf_event *);
+extern void perf_reset(struct mc_perf_event *);
+extern void f03_perf_stop_v1(struct mc_perf_event *);
+extern void f03_perf_start_bridge_v1(void *);
+extern void f03_perf_stop_bridge_v1(void *);
+extern void f03_perf_reset_bridge_v1(void *);
+#define perf_stop f03_perf_stop_v1
+#define perf_start_bridge f03_perf_start_bridge_v1
+#define perf_stop_bridge f03_perf_stop_bridge_v1
+#define perf_reset_bridge f03_perf_reset_bridge_v1
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 int perf_counter_set(struct mc_perf_event *event)
 {
 	return perf_counter_set_entry_body_result(event,
@@ -19864,19 +21328,39 @@ int perf_counter_set(struct mc_perf_event *event)
 			perf_counter_extra_set_bridge,
 			perf_counter_init_raw_bridge);
 }
+#endif
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PERF_EVENT_PROVIDER_BRIDGES)
+extern unsigned long perf_event_update_bridge(void *event);
+#else
+#line 20558
 static unsigned long
 perf_event_update_bridge(void *event)
 {
 	return ihk_mc_event_update((struct mc_perf_event *)event);
 }
+#endif
+#line 20563
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PERF_PROVIDER_NEXT3_BRIDGES)
+extern long syscall_atomic64_read_bridge(void *value);
+#define perf_event_atomic64_read_bridge syscall_atomic64_read_bridge
+_Static_assert(sizeof(ihk_atomic64_t)==8 && __alignof__(ihk_atomic64_t)==8 && __builtin_offsetof(ihk_atomic64_t,counter64)==0, "existing atomic64 provider layout ABI");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&ihk_atomic64_read), long (*)(const ihk_atomic64_t *)), "existing atomic64 read provider C ABI");
+#else
+#line 20564
 static long
 perf_event_atomic64_read_bridge(void *value)
 {
 	return ihk_atomic64_read((ihk_atomic64_t *)value);
 }
+#endif
+#line 20569
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PERF_ATTR_CALLBACKS)
+extern int f03_perf_read_attr_flags_v1(const void *, int *, int *, int *);
+#define perf_read_attr_flags_bridge f03_perf_read_attr_flags_v1
+#else
 static int
 perf_read_attr_flags_bridge(const void *attr, int *exclude_user,
 			    int *exclude_kernel, int *inherit)
@@ -19892,7 +21376,72 @@ perf_read_attr_flags_bridge(const void *attr, int *exclude_user,
 	*inherit = perf_attr->inherit;
 	return 0;
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern unsigned long perf_event_read_value(struct mc_perf_event *);
+extern unsigned long f03_perf_read_value_bridge_v1(void *);
+extern int f03_perf_read_group_v1(struct mc_perf_event *, unsigned long, char *);
+extern int f03_perf_read_one_v1(struct mc_perf_event *, unsigned long, char *);
+extern long f03_perf_read_group_bridge_v1(void *, unsigned long, unsigned long);
+extern long f03_perf_read_one_bridge_v1(void *, unsigned long, unsigned long);
+extern long f03_perf_read_v1(struct mckfd *, ihk_mc_user_context_t *);
+#define perf_event_read_value_bridge f03_perf_read_value_bridge_v1
+#define perf_event_read_group f03_perf_read_group_v1
+#define perf_event_read_one f03_perf_read_one_v1
+#define perf_event_read_group_bridge f03_perf_read_group_bridge_v1
+#define perf_event_read_one_bridge f03_perf_read_one_bridge_v1
+#define perf_read f03_perf_read_v1
+struct f03_perf_read_layout {
+	size_t attr;
+	size_t pid;
+	size_t use_invariant_tsc;
+	size_t count;
+	size_t child_count_total;
+	size_t base_user_tsc;
+	size_t stopped_user_tsc;
+	size_t user_accum_count;
+	size_t base_system_tsc;
+	size_t stopped_system_tsc;
+	size_t system_accum_count;
+	size_t group_leader;
+	size_t nr_siblings;
+	size_t sibling_list;
+	size_t group_entry;
+	size_t read_format;
+	unsigned long group_flag;
+};
+const struct f03_perf_read_layout f03_perf_read_layout_v1 = {
+	.attr = __builtin_offsetof(struct mc_perf_event, attr),
+	.pid = __builtin_offsetof(struct mc_perf_event, pid),
+	.use_invariant_tsc = __builtin_offsetof(struct mc_perf_event, use_invariant_tsc),
+	.count = __builtin_offsetof(struct mc_perf_event, count),
+	.child_count_total = __builtin_offsetof(struct mc_perf_event, child_count_total),
+	.base_user_tsc = __builtin_offsetof(struct mc_perf_event, base_user_tsc),
+	.stopped_user_tsc = __builtin_offsetof(struct mc_perf_event, stopped_user_tsc),
+	.user_accum_count = __builtin_offsetof(struct mc_perf_event, user_accum_count),
+	.base_system_tsc = __builtin_offsetof(struct mc_perf_event, base_system_tsc),
+	.stopped_system_tsc = __builtin_offsetof(struct mc_perf_event, stopped_system_tsc),
+	.system_accum_count = __builtin_offsetof(struct mc_perf_event, system_accum_count),
+	.group_leader = __builtin_offsetof(struct mc_perf_event, group_leader),
+	.nr_siblings = __builtin_offsetof(struct mc_perf_event, nr_siblings),
+	.sibling_list = __builtin_offsetof(struct mc_perf_event, sibling_list),
+	.group_entry = __builtin_offsetof(struct mc_perf_event, group_entry),
+	.read_format = __builtin_offsetof(struct mc_perf_event, attr.read_format),
+	.group_flag = PERF_FORMAT_GROUP,
+};
+struct f03_perf_read_providers {
+	perf_read_attr_flags_fn_t attr_flags;
+	perf_event_update_fn_t update;
+	syscall_atomic64_read_fn_t atomic_read;
+};
+const struct f03_perf_read_providers f03_perf_read_providers_v1 = {
+	.attr_flags = perf_read_attr_flags_bridge,
+	.update = perf_event_update_bridge,
+	.atomic_read = perf_event_atomic64_read_bridge,
+};
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 unsigned long perf_event_read_value(struct mc_perf_event *event)
 {
 	struct thread *thread = get_this_cpu_local_var()->current;
@@ -19922,13 +21471,17 @@ unsigned long perf_event_read_value(struct mc_perf_event *event)
 			perf_event_update_bridge,
 			perf_event_atomic64_read_bridge);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static unsigned long
 perf_event_read_value_bridge(void *event)
 {
 	return perf_event_read_value((struct mc_perf_event *)event);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static int
 perf_event_read_group(struct mc_perf_event *event, unsigned long read_format, char  *buf)
 {
@@ -19946,7 +21499,9 @@ perf_event_read_group(struct mc_perf_event *event, unsigned long read_format, ch
 			perf_event_read_value_bridge,
 			syscall_copy_to_user_bridge);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static int
 perf_event_read_one(struct mc_perf_event *event, unsigned long read_format, char *buf)
 {
@@ -19956,7 +21511,9 @@ perf_event_read_one(struct mc_perf_event *event, unsigned long read_format, char
 			perf_event_read_value_bridge,
 			syscall_copy_to_user_bridge);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static long
 perf_event_read_group_bridge(void *event, unsigned long read_format,
 		unsigned long buf_addr)
@@ -19964,7 +21521,9 @@ perf_event_read_group_bridge(void *event, unsigned long read_format,
 	return perf_event_read_group((struct mc_perf_event *)event,
 			read_format, (char *)buf_addr);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static long
 perf_event_read_one_bridge(void *event, unsigned long read_format,
 		unsigned long buf_addr)
@@ -19972,50 +21531,170 @@ perf_event_read_one_bridge(void *event, unsigned long read_format,
 	return perf_event_read_one((struct mc_perf_event *)event,
 			read_format, (char *)buf_addr);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static long
 perf_read(struct mckfd *sfd, ihk_mc_user_context_t *ctx)
 {
 	char *buf  = (char *)ihk_mc_syscall_arg1(ctx);
+	unsigned long count = ihk_mc_syscall_arg2(ctx);
 	struct mc_perf_event *event = (struct mc_perf_event*)sfd->data;
 	unsigned long read_format = event->attr.read_format;
+	size_t required = sizeof(unsigned long);
+
+	if (read_format & PERF_FORMAT_GROUP) {
+		struct mc_perf_event *leader = event->group_leader;
+		int nr_siblings;
+
+		if (!leader || (nr_siblings = leader->nr_siblings) < 0) {
+			return -EINVAL;
+		}
+		/* Widen before adding the group header and leader value. */
+		required = ((size_t)nr_siblings + 2) * sizeof(unsigned long);
+	}
+	if (count < required) {
+		return -EINVAL;
+	}
 
 	return perf_read_body_result(event, (unsigned long)buf,
 			read_format, PERF_FORMAT_GROUP,
 			perf_event_read_group_bridge,
 			perf_event_read_one_bridge);
 }
+#endif
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PERF_COUNTER_CONTROL_BRIDGES)
+extern int perf_counter_mask_check_bridge(unsigned long counter_mask);
+#else
+#line 20761
 static int
 perf_counter_mask_check_bridge(unsigned long counter_mask)
 {
 	return ihk_mc_perf_counter_mask_check(counter_mask);
 }
+#endif
+#line 20766
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PERF_EVENT_PROVIDER_BRIDGES)
+extern int perf_event_set_period_bridge(void *event);
+#else
+#line 20767
 static int
 perf_event_set_period_bridge(void *event)
 {
 	return ihk_mc_event_set_period((struct mc_perf_event *)event);
 }
+#endif
+#line 20772
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static int
 perf_counter_set_bridge(void *event)
 {
 	return perf_counter_set((struct mc_perf_event *)event);
 }
+#endif
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PERF_COUNTER_CONTROL_BRIDGES)
+extern int perf_counter_start_bridge(unsigned long counter_mask);
+#else
+#line 20781
 static int
 perf_counter_start_bridge(unsigned long counter_mask)
 {
 	return ihk_mc_perfctr_start(counter_mask);
 }
+#endif
+#line 20786
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PERF_COUNTER_CONTROL_BRIDGES)
+extern int perf_counter_stop_bridge(unsigned long counter_mask, int flags);
+#else
+#line 20787
 static int
 perf_counter_stop_bridge(unsigned long counter_mask, int flags)
 {
 	return ihk_mc_perfctr_stop(counter_mask, flags);
 }
+#endif
+#line 20792
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+struct f03_perf_event_layout {
+	size_t group_leader;
+	size_t sibling_list;
+	size_t group_entry;
+	size_t counter_id;
+	size_t state;
+	size_t use_invariant_tsc;
+	size_t base_user_tsc;
+	size_t stopped_user_tsc;
+	size_t user_accum_count;
+	size_t base_system_tsc;
+	size_t stopped_system_tsc;
+	size_t system_accum_count;
+	size_t count;
+	size_t attr;
+	size_t hw_config;
+	size_t extra_reg_reg;
+	int kernel_mode;
+	int user_mode;
+	int inactive_state;
+	int active_state;
+	int pp_count;
+	int pp_none;
+};
+const struct f03_perf_event_layout f03_perf_event_layout_v1 = {
+	.group_leader = __builtin_offsetof(struct mc_perf_event, group_leader),
+	.sibling_list = __builtin_offsetof(struct mc_perf_event, sibling_list),
+	.group_entry = __builtin_offsetof(struct mc_perf_event, group_entry),
+	.counter_id = __builtin_offsetof(struct mc_perf_event, counter_id),
+	.state = __builtin_offsetof(struct mc_perf_event, state),
+	.use_invariant_tsc = __builtin_offsetof(struct mc_perf_event, use_invariant_tsc),
+	.base_user_tsc = __builtin_offsetof(struct mc_perf_event, base_user_tsc),
+	.stopped_user_tsc = __builtin_offsetof(struct mc_perf_event, stopped_user_tsc),
+	.user_accum_count = __builtin_offsetof(struct mc_perf_event, user_accum_count),
+	.base_system_tsc = __builtin_offsetof(struct mc_perf_event, base_system_tsc),
+	.stopped_system_tsc = __builtin_offsetof(struct mc_perf_event, stopped_system_tsc),
+	.system_accum_count = __builtin_offsetof(struct mc_perf_event, system_accum_count),
+	.count = __builtin_offsetof(struct mc_perf_event, count),
+	.attr = __builtin_offsetof(struct mc_perf_event, attr),
+	.hw_config = __builtin_offsetof(struct mc_perf_event, hw_config),
+	.extra_reg_reg = __builtin_offsetof(struct mc_perf_event, extra_reg.reg),
+	.kernel_mode = PERFCTR_KERNEL_MODE,
+	.user_mode = PERFCTR_USER_MODE,
+	.inactive_state = PERF_EVENT_STATE_INACTIVE,
+	.active_state = PERF_EVENT_STATE_ACTIVE,
+	.pp_count = PP_COUNT,
+	.pp_none = PP_NONE,
+};
+struct f03_perf_counter_providers {
+	perf_counter_attr_flags_fn_t attr_flags;
+	perf_counter_extra_set_fn_t extra_set;
+	perf_counter_init_raw_fn_t init_raw;
+	perf_counter_mask_check_fn_t mask_check;
+	perf_event_int_fn_t set_period;
+	perf_counter_start_fn_t counter_start;
+	perf_counter_stop_fn_t counter_stop;
+	perf_event_update_fn_t event_update;
+	perf_read_value_fn_t read_value;
+	sync_child_atomic64_set_fn_t atomic_set;
+};
+const struct f03_perf_counter_providers f03_perf_counter_providers_v1 = {
+	.attr_flags = perf_counter_attr_flags_bridge,
+	.extra_set = perf_counter_extra_set_bridge,
+	.init_raw = perf_counter_init_raw_bridge,
+	.mask_check = perf_counter_mask_check_bridge,
+	.set_period = perf_event_set_period_bridge,
+	.counter_start = perf_counter_start_bridge,
+	.counter_stop = perf_counter_stop_bridge,
+	.event_update = perf_event_update_bridge,
+	.read_value = perf_event_read_value_bridge,
+	.atomic_set = sync_child_count_set_bridge,
+};
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void perf_start(struct mc_perf_event *event)
 {
 	struct thread *thread = get_this_cpu_local_var()->current;
@@ -20048,7 +21727,9 @@ void perf_start(struct mc_perf_event *event)
 			perf_event_set_period_bridge, perf_counter_set_bridge,
 			perf_counter_start_bridge);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 perf_reset(struct mc_perf_event *event)
 {
@@ -20079,7 +21760,9 @@ perf_reset(struct mc_perf_event *event)
 			perf_event_read_value_bridge,
 			sync_child_count_set_bridge);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
 perf_stop(struct mc_perf_event *event)
 {
@@ -20107,25 +21790,57 @@ perf_stop(struct mc_perf_event *event)
 			perf_counter_stop_bridge,
 			perf_event_update_bridge);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
 perf_start_bridge(void *event)
 {
 	perf_start((struct mc_perf_event *)event);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
 perf_stop_bridge(void *event)
 {
 	perf_stop((struct mc_perf_event *)event);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
 perf_reset_bridge(void *event)
 {
 	perf_reset((struct mc_perf_event *)event);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern int f03_perf_ioctl_v1(struct mckfd *, ihk_mc_user_context_t *);
+#define perf_ioctl f03_perf_ioctl_v1
+struct f03_perf_ioctl_data {
+	size_t event_pid;
+	unsigned long enable;
+	unsigned long disable;
+	unsigned long reset;
+	unsigned long refresh;
+	int pp_reset;
+	size_t attr;
+	perf_read_attr_flags_fn_t attr_flags;
+};
+const struct f03_perf_ioctl_data f03_perf_ioctl_data_v1 = {
+	.event_pid = __builtin_offsetof(struct mc_perf_event, pid),
+	.enable = PERF_EVENT_IOC_ENABLE,
+	.disable = PERF_EVENT_IOC_DISABLE,
+	.reset = PERF_EVENT_IOC_RESET,
+	.refresh = PERF_EVENT_IOC_REFRESH,
+	.pp_reset = PP_RESET,
+	.attr = __builtin_offsetof(struct mc_perf_event, attr),
+	.attr_flags = perf_read_attr_flags_bridge,
+};
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static int
 perf_ioctl(struct mckfd *sfd, ihk_mc_user_context_t *ctx)
 {
@@ -20145,7 +21860,29 @@ perf_ioctl(struct mckfd *sfd, ihk_mc_user_context_t *ctx)
 			syscall_find_process_bridge,
 			syscall_process_unlock_bridge);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern int f03_perf_close_v1(struct mckfd *, ihk_mc_user_context_t *);
+extern int f03_perf_fcntl_v1(struct mckfd *, ihk_mc_user_context_t *);
+#define perf_close f03_perf_close_v1
+#define perf_fcntl f03_perf_fcntl_v1
+struct f03_perf_descriptor_layout {
+	size_t counter_id;
+	size_t extra_reg_reg;
+	size_t extra_reg_idx;
+	int fcntl_nr;
+	syscall_forward_context_fn_t forward;
+};
+const struct f03_perf_descriptor_layout f03_perf_descriptor_layout_v1 = {
+	.counter_id = __builtin_offsetof(struct mc_perf_event, counter_id),
+	.extra_reg_reg = __builtin_offsetof(struct mc_perf_event, extra_reg.reg),
+	.extra_reg_idx = __builtin_offsetof(struct mc_perf_event, extra_reg.idx),
+	.fcntl_nr = __NR_fcntl,
+	.forward = syscall_forward_context_bridge,
+};
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static int
 perf_close(struct mckfd *sfd, ihk_mc_user_context_t *ctx)
 {
@@ -20162,7 +21899,9 @@ perf_close(struct mckfd *sfd, ihk_mc_user_context_t *ctx)
 			__builtin_offsetof(struct thread, extra_reg_alloc_map),
 			syscall_mckfd_free_bridge);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static int
 perf_fcntl(struct mckfd *sfd, ihk_mc_user_context_t *ctx)
 {
@@ -20173,7 +21912,30 @@ perf_fcntl(struct mckfd *sfd, ihk_mc_user_context_t *ctx)
 			10, 0xf, __builtin_offsetof(struct mckfd, sig_no),
 			syscall_forward_context_bridge);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
+extern long f03_perf_mmap_v1(struct mckfd *, ihk_mc_user_context_t *);
+#define perf_mmap f03_perf_mmap_v1
+struct f03_perf_mmap_binding {
+	int map_anonymous;
+	int prot_write;
+	size_t data_head;
+	size_t capabilities;
+	unsigned long cap_user_rdpmc;
+	perf_do_mmap_fn_t do_mmap;
+};
+const struct f03_perf_mmap_binding f03_perf_mmap_binding_v1 = {
+	.map_anonymous = MAP_ANONYMOUS,
+	.prot_write = PROT_WRITE,
+	.data_head = __builtin_offsetof(struct perf_event_mmap_page, data_head),
+	.capabilities = __builtin_offsetof(struct perf_event_mmap_page, capabilities),
+	.cap_user_rdpmc = 1UL << 2,
+	.do_mmap = do_mmap,
+};
+#else
+#line 21087
 static long
 perf_mmap(struct mckfd *sfd, ihk_mc_user_context_t *ctx)
 {
@@ -20194,23 +21956,59 @@ perf_mmap(struct mckfd *sfd, ihk_mc_user_context_t *ctx)
 					   capabilities),
 			1UL << 2, do_mmap);
 }
+#endif
+#line 21106
 
+
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern int f03_perf_counter_allocate_v1(void *,void *);
+#define perf_event_open_counter_alloc_bridge f03_perf_counter_allocate_v1
+#else
+#line 21108
 static int
 perf_event_open_counter_alloc_bridge(void *thread, void *event)
 {
 	return ihk_mc_perfctr_alloc((struct thread *)thread,
 			(struct mc_perf_event *)event);
 }
+#endif
+#line 21113
 
+
+#ifdef MCKERNEL_RUST_F03_PERF_OWNER_PROTOCOL
+extern long perf_event_open_do_syscall_bridge(struct syscall_request *,int);
+#else
+#line 21115
 static long
 perf_event_open_do_syscall_bridge(struct syscall_request *request, int cpu)
 {
 	return do_syscall(request, cpu);
 }
-#endif /*ENABLE_PERF*/
+#endif
+#line 21120
 
+#endif /*ENABLE_PERF*/
+#ifdef ENABLE_PERF
+#line 21118
+#else
+#line 21150
+#endif
+
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern struct vm_range_numa_policy *
+syscall_vm_range_policy_search_body_result(struct process_vm *vm,
+		unsigned long addr);
+#endif
+
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern struct vm_range_numa_policy *vm_range_policy_search(struct process_vm *, uintptr_t);
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 struct vm_range_numa_policy *vm_range_policy_search(struct process_vm *vm, uintptr_t addr)
 {
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+	return syscall_vm_range_policy_search_body_result(vm, addr);
+#else
 	struct rb_root *root = &vm->vm_range_numa_policy_tree;
 	struct rb_node *node = root->rb_node;
 	struct vm_range_numa_policy *numa_policy = NULL;
@@ -20227,11 +22025,96 @@ struct vm_range_numa_policy *vm_range_policy_search(struct process_vm *vm, uintp
 	}
 
 	return NULL;
+#endif
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern int syscall_vm_policy_insert_body_result(struct process_vm *vm,
+		struct vm_range_numa_policy *newrange,
+		void (*link)(struct rb_node *, struct rb_node *, struct rb_node **),
+		void (*insert_color)(struct rb_node *, struct rb_root *),
+		void (*log)(struct process_vm *, struct vm_range_numa_policy *,
+			struct vm_range_numa_policy *));
+
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+static void syscall_vm_policy_link_bridge(struct rb_node *node,
+		struct rb_node *parent, struct rb_node **link)
+{
+	rb_link_node(node, parent, link);
+}
+#endif
+
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+static void syscall_vm_policy_color_bridge(struct rb_node *node,
+		struct rb_root *root)
+{
+	rb_insert_color(node, root);
+}
+#endif
+
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
+#ifdef ENABLE_PERF
+#define F03_POLICY_LOG_SOURCE_LINE 21193
+#else
+#define F03_POLICY_LOG_SOURCE_LINE 21223
+#endif
+struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_vm_policy_insert_log_debug_v1[1]={
+    {.file=__FILE__,.func="syscall_vm_policy_insert_log_bridge",.line=F03_POLICY_LOG_SOURCE_LINE,.flags=DDEBUG_DEFAULT}
+};
+#undef F03_POLICY_LOG_SOURCE_LINE
+extern void f03_vm_policy_insert_log_v1(struct process_vm *,struct vm_range_numa_policy *,struct vm_range_numa_policy *);
+#define syscall_vm_policy_insert_log_bridge f03_vm_policy_insert_log_v1
+#else
+#ifdef ENABLE_PERF
+#line 21178
+#else
+#line 21210
+#endif
+static void syscall_vm_policy_insert_log_bridge(struct process_vm *vm,
+		struct vm_range_numa_policy *newrange,
+		struct vm_range_numa_policy *overlap)
+{
+	if (overlap) {
+		ekprintf("%s(%p,%lx-%lx (nodemask)%lx (policy)%d): overlap %lx-%lx (nodemask)%lx (policy)%d\n",
+				"vm_policy_insert", vm, newrange->start,
+				newrange->end, newrange->numa_mask,
+				newrange->numa_mem_policy, overlap->start,
+				overlap->end, overlap->numa_mask,
+				overlap->numa_mem_policy);
+	} else {
+		dkprintf("%s: %p,%p: %lx-%lx (nodemask)%lx (policy)%d\n",
+				"vm_policy_insert", vm, newrange, newrange->start,
+				newrange->end, newrange->numa_mask,
+				newrange->numa_mem_policy);
+	}
+}
+#endif
+#ifdef ENABLE_PERF
+#line 21195
+#else
+#line 21227
+#endif
+
+#endif
+
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern int f03_vm_policy_insert_v1(struct process_vm *, struct vm_range_numa_policy *);
+#define vm_policy_insert f03_vm_policy_insert_v1
+void (*const f03_vm_policy_insert_log_provider_v1)(struct process_vm *,
+        struct vm_range_numa_policy *, struct vm_range_numa_policy *) =
+        syscall_vm_policy_insert_log_bridge;
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static int vm_policy_insert(struct process_vm *vm,
 		struct vm_range_numa_policy *newrange)
 {
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+	return syscall_vm_policy_insert_body_result(vm, newrange,
+			syscall_vm_policy_link_bridge, syscall_vm_policy_color_bridge,
+			syscall_vm_policy_insert_log_bridge);
+#else
 	struct rb_root *root = &vm->vm_range_numa_policy_tree;
 	struct rb_node **new = &(root->rb_node), *parent = NULL;
 	struct vm_range_numa_policy *range;
@@ -20262,11 +22145,63 @@ static int vm_policy_insert(struct process_vm *vm,
 	rb_insert_color(&newrange->policy_rb_node, root);
 
 	return 0;
+#endif
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern int syscall_vm_policy_clear_range_body_result(struct process_vm *,
+ unsigned long,unsigned long,size_t,unsigned long,
+ void *(*)(size_t,unsigned long),void (*)(struct vm_range_numa_policy *),
+ int (*)(struct process_vm *,struct vm_range_numa_policy *),
+ void (*)(struct rb_node *,struct rb_root *),void (*)(void *),
+ struct rb_node *(*)(const struct rb_root *),
+ struct rb_node *(*)(const struct rb_node *),void (*)(int,int));
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+const char f03_vm_policy_clear_source_file_v1[] = __FILE__;
+const int f03_vm_policy_clear_alloc_line_v1 = 20506;
+const int f03_vm_policy_clear_free_line_v1 = 20510;
+struct ddebug __attribute__((aligned(8),section("__verbose")))
+    f03_vm_policy_clear_alloc_debug_v1 = {
+    .file=__FILE__, .func="syscall_vm_policy_clear_log_bridge",
+    .line=20513, .flags=DDEBUG_DEFAULT,
+};
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+static void *syscall_vm_policy_clear_alloc_bridge(size_t size,unsigned long flags)
+{ return kmalloc_tracked(size,flags,__FILE__,__LINE__); }
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+static void syscall_vm_policy_clear_rb_bridge(struct vm_range_numa_policy *p)
+{ RB_CLEAR_NODE(&p->policy_rb_node); }
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+static void syscall_vm_policy_clear_free_bridge(void *p)
+{ kfree_tracked(p,__FILE__,__LINE__); }
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+static void syscall_vm_policy_clear_log_bridge(int event,int error)
+{
+ if (event == 0) { dkprintf("%s: error allocating range_policy\n","vm_policy_clear_range"); }
+ else { kprintf("%s: ERROR: could not insert range: %d\n","vm_policy_clear_range",error); }
+}
+#endif
+#endif
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern int f03_vm_policy_clear_range_v1(struct process_vm *, unsigned long, unsigned long);
+#define vm_policy_clear_range f03_vm_policy_clear_range_v1
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static int vm_policy_clear_range(struct process_vm *vm,
 		unsigned long start, unsigned long end)
 {
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ return syscall_vm_policy_clear_range_body_result(vm,start,end,
+ sizeof(struct vm_range_numa_policy),IHK_MC_AP_NOWAIT,
+ syscall_vm_policy_clear_alloc_bridge,syscall_vm_policy_clear_rb_bridge,
+ vm_policy_insert,rb_erase,syscall_vm_policy_clear_free_bridge,
+ rb_first,rb_next,syscall_vm_policy_clear_log_bridge);
+#else
 	struct rb_root *root = &vm->vm_range_numa_policy_tree;
 	struct vm_range_numa_policy *range, *range_policy_iter;
 	struct vm_range_numa_policy *range_policy;
@@ -20359,27 +22294,75 @@ again_search:
 
 out:
 	return error;
+#endif
 }
+#endif
 
 #ifdef ENABLE_PERF
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PERF_ALLOC_BRIDGES)
+extern void * perf_event_alloc_kmalloc_bridge(size_t size, unsigned long flags);
+#else
+#line 21401
 static void *
 perf_event_alloc_kmalloc_bridge(size_t size, unsigned long flags)
 {
 	return kmalloc_tracked(size, flags, __FILE__, __LINE__);
 }
+#endif
+#line 21406
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PERF_ALLOC_BRIDGES)
+extern void perf_event_alloc_free_bridge(void *event);
+#else
+#line 21407
 static void
 perf_event_alloc_free_bridge(void *event)
 {
 	kfree_tracked(event, __FILE__, __LINE__);
 }
+#endif
+#line 21412
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PERF_ALLOC_BRIDGES)
+extern int perf_event_alloc_hw_init_bridge(void *event);
+#else
+#line 21413
 static int
 perf_event_alloc_hw_init_bridge(void *event)
 {
 	return hw_perf_event_init((struct mc_perf_event *)event);
 }
+#endif
+#line 21418
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_SYNC_CHILD_EVENT)
+/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
+struct f03_perf_allocation_binding {
+    unsigned long alloc_flags,hardware_type,cache_type,raw_type,reference_cycles;
+    syscall_policy_alloc_fn_t allocate;
+    syscall_mckfd_free_fn_t release;
+    sync_child_atomic64_set_fn_t atomic_set;
+    perf_event_map_fn_t hardware_map,cache_map,cache_extra_map,raw_map;
+    perf_event_validate_fn_t validate;
+    perf_extra_reg_id_fn_t extra_id;
+    perf_extra_reg_msr_fn_t extra_msr;
+    perf_extra_reg_idx_fn_t extra_index;
+    perf_hw_event_init_fn_t initialize;
+};
+const struct f03_perf_allocation_binding f03_perf_allocation_binding_v1={
+    .alloc_flags=IHK_MC_AP_NOWAIT,.hardware_type=PERF_TYPE_HARDWARE,.cache_type=PERF_TYPE_HW_CACHE,
+    .raw_type=PERF_TYPE_RAW,.reference_cycles=PERF_COUNT_HW_REF_CPU_CYCLES,
+    .allocate=perf_event_alloc_kmalloc_bridge,.release=perf_event_alloc_free_bridge,
+    .atomic_set=sync_child_count_set_bridge,.hardware_map=ihk_mc_hw_event_map,
+    .cache_map=ihk_mc_hw_cache_event_map,.cache_extra_map=ihk_mc_hw_cache_extra_reg_map,
+    .raw_map=ihk_mc_raw_event_map,.validate=ihk_mc_validate_event,.extra_id=ihk_mc_get_extra_reg_id,
+    .extra_msr=ihk_mc_get_extra_reg_msr,.extra_index=ihk_mc_get_extra_reg_idx,
+    .initialize=perf_event_alloc_hw_init_bridge,
+};
+extern int f03_perf_event_allocate_v1(void **,void *);
+#define perf_event_open_alloc_event_bridge f03_perf_event_allocate_v1
+#else
+#line 21419
 static int mc_perf_event_alloc(struct mc_perf_event **out,
 			       struct perf_event_attr *attr)
 {
@@ -20426,13 +22409,35 @@ perf_event_open_alloc_event_bridge(void **event_out, void *attr)
 	return mc_perf_event_alloc((struct mc_perf_event **)event_out,
 			(struct perf_event_attr *)attr);
 }
+#endif
+#line 21464
 
+
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern int f03_perf_attr_frequency_v1(const void *);
+#define perf_event_open_attr_freq_bridge f03_perf_attr_frequency_v1
+#else
+#line 21466
 static int
 perf_event_open_attr_freq_bridge(const void *attr)
 {
 	return ((const struct perf_event_attr *)attr)->freq;
 }
+#endif
+#line 21470
 
+
+#ifdef MCKERNEL_RUST_F03_PERF_OWNER_PROTOCOL
+/* Genuine immutable headers; layout/source participation only, no activation. */
+const unsigned long f03_perf_owner_entry_constants_v1[12]={
+ sizeof(struct perf_event_attr),sizeof(struct mckfd),sizeof(struct mc_perf_event),__alignof__(struct mc_perf_event),
+ PERF_TYPE_RAW,PERF_TYPE_HARDWARE,PERF_TYPE_HW_CACHE,
+ PERF_FORMAT_TOTAL_TIME_ENABLED|PERF_FORMAT_TOTAL_TIME_RUNNING|PERF_FORMAT_ID,
+ 1UL<<63,__NR_perf_event_open,IHK_MC_AP_NOWAIT,10, /* original perf_fcntl set_sig_cmd */
+};
+extern long sys_perf_event_open(int,ihk_mc_user_context_t *);
+#else
+#line 21472
 long sys_perf_event_open(int n, ihk_mc_user_context_t *ctx)
 {
 	struct syscall_request request IHK_DMA_ALIGN;
@@ -20490,8 +22495,15 @@ long sys_perf_event_open(int n, ihk_mc_user_context_t *ctx)
 			syscall_mckfd_lock_bridge,
 			syscall_mckfd_unlock_bridge);
 }
+#endif
+#line 21529
+
 #endif /* ENABLE_PERF */
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+const char f03_rt_sigtimedwait_source_file[] = __FILE__;
+long sys_rt_sigtimedwait(int n, ihk_mc_user_context_t *ctx);
+#else
 long sys_rt_sigtimedwait(int n, ihk_mc_user_context_t *ctx)
 {
 	const sigset_t *set = (const sigset_t *)ihk_mc_syscall_arg0(ctx);
@@ -20647,13 +22659,19 @@ long sys_rt_sigtimedwait(int n, ihk_mc_user_context_t *ctx)
 
 	return sig;
 }
+#endif
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_SIGNAL_PROCESS_BRIDGES)
+extern long
+syscall_do_kill_current_bridge(int pid, int sig, const void *info);
+#else
 long
 syscall_do_kill_current_bridge(int pid, int sig, const void *info)
 {
 	return do_kill(get_this_cpu_local_var()->current, pid, -1, sig,
 			(struct siginfo *)info, 0);
 }
+#endif /* MCKERNEL_RUST_F03_SIGNAL_PROCESS_BRIDGES */
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_rt_sigqueueinfo(int n, ihk_mc_user_context_t *ctx);
@@ -20670,6 +22688,7 @@ long sys_rt_sigqueueinfo(int n, ihk_mc_user_context_t *ctx)
 }
 #endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static int
 do_sigsuspend(struct thread *thread, const sigset_t *set)
 {
@@ -20763,6 +22782,7 @@ syscall_sigsuspend_bridge(void *thread, void *set)
 {
 	return do_sigsuspend(thread, set);
 }
+#endif /* !MCKERNEL_RUST_SYSCALL_POLICY_HELPERS: retained C fallback */
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_pause(int n, ihk_mc_user_context_t *ctx);
@@ -20793,11 +22813,15 @@ long sys_rt_sigsuspend(int n, ihk_mc_user_context_t *ctx)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+int syscall_do_sigaction_bridge(int sig, void *act, void *oact);
+#else
 int
 syscall_do_sigaction_bridge(int sig, void *act, void *oact)
 {
 	return do_sigaction(sig, act, oact);
 }
+#endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_rt_sigaction(int n, ihk_mc_user_context_t *ctx);
@@ -20835,6 +22859,15 @@ long sys_sigaltstack(int n, ihk_mc_user_context_t *ctx)
 }
 #endif
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_MINCORE)
+extern long sys_mincore(int n, ihk_mc_user_context_t *ctx);
+struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_mincore_debug_v1[4] = {
+ { .file=__FILE__, .func="mincore_log_bridge", .line=21899, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="mincore_log_bridge", .line=21903, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="mincore_log_bridge", .line=21907, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="mincore_log_bridge", .line=21911, .flags=DDEBUG_DEFAULT },
+};
+#else
 static void
 mincore_range_read_lock_bridge(void *lock)
 {
@@ -20934,6 +22967,7 @@ long sys_mincore(int n, ihk_mc_user_context_t *ctx)
 			mincore_memobj_lookup_bridge, mincore_copy_byte_bridge,
 			mincore_log_bridge);
 } /* sys_mincore() */
+#endif /* MCKERNEL_RUST_F03_MINCORE */
 
 static int
 set_memory_range_flag(struct vm_range *range, unsigned long arg)
@@ -21020,12 +23054,20 @@ out:
 	return error;
 }
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern void syscall_madvise_log_bridge(int, unsigned long, size_t, int);
+struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_syscall_madvise_log_bridge_debug_v1[1] = {
+    { .file=__FILE__, .func="syscall_madvise_log_bridge", .line=21291, .flags=DDEBUG_DEFAULT },
+};
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 syscall_madvise_log_bridge(int cpu, unsigned long start, size_t len0,
 		int advice)
 {
 	dkprintf("[%d]sys_madvise(%lx,%lx,%x)\n", cpu, start, len0, advice);
 }
+#endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_madvise(int n, ihk_mc_user_context_t *ctx);
@@ -21517,6 +23559,32 @@ SHM_PERM_HELPER_SCOPE int shmlock_rlimit_result(int has_cap, rlim_t rlim_cur,
 
 #undef SHM_PERM_HELPER_SCOPE
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+int shmobj_list_lookup(int, struct shmobj **);
+int shmobj_list_lookup_by_key(key_t, struct shmobj **);
+int shmobj_list_lookup_by_index(int, struct shmobj **);
+struct f03_shmobj_lookup_data {
+	size_t chain;
+	size_t index;
+	size_t seq;
+	size_t key;
+	size_t mode;
+	size_t memobj;
+	int destroyed_flag;
+	int eidrm;
+};
+const struct f03_shmobj_lookup_data f03_shmobj_lookup_data_v1 = {
+	.chain = __builtin_offsetof(struct shmobj, chain),
+	.index = __builtin_offsetof(struct shmobj, index),
+	.seq = __builtin_offsetof(struct shmobj, ds.shm_perm.seq),
+	.key = __builtin_offsetof(struct shmobj, ds.shm_perm.key),
+	.mode = __builtin_offsetof(struct shmobj, ds.shm_perm.mode),
+	.memobj = __builtin_offsetof(struct shmobj, memobj),
+	.destroyed_flag = SHM_DEST,
+	.eidrm = EIDRM,
+};
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 int shmobj_list_lookup(int shmid, struct shmobj **objp)
 {
 	int index;
@@ -21541,8 +23609,11 @@ int shmobj_list_lookup(int shmid, struct shmobj **objp)
 	memobj_ref(&obj->memobj);
 	*objp = obj;
 	return 0;
-} /* shmobj_list_lookup() */
+} 
+#endif
+/* shmobj_list_lookup() */
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 int shmobj_list_lookup_by_key(key_t key, struct shmobj **objp)
 {
 	struct shmobj *obj;
@@ -21560,8 +23631,11 @@ int shmobj_list_lookup_by_key(key_t key, struct shmobj **objp)
 	memobj_ref(&obj->memobj);
 	*objp = obj;
 	return 0;
-} /* shmobj_list_lookup_by_key() */
+} 
+#endif
+/* shmobj_list_lookup_by_key() */
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 int shmobj_list_lookup_by_index(int index, struct shmobj **objp)
 {
 	struct shmobj *obj;
@@ -21578,8 +23652,30 @@ int shmobj_list_lookup_by_index(int index, struct shmobj **objp)
 	memobj_ref(&obj->memobj);
 	*objp = obj;
 	return 0;
-} /* shmobj_list_lookup_by_index() */
+} 
+#endif
+/* shmobj_list_lookup_by_index() */
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern int do_shmget(key_t, size_t, int);
+struct f03_shmget_constants { int private_key, create, exclusive, exists, no_space; };
+const struct f03_shmget_constants f03_shmget_constants_v1 = {
+    IPC_PRIVATE, IPC_CREAT, IPC_EXCL, EEXIST, ENOSPC,
+};
+struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_shmget_debug_v1[11] = {
+    { .file=__FILE__, .func="do_shmget", .line=21858, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="do_shmget", .line=21861, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="do_shmget", .line=21874, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="do_shmget", .line=21879, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="do_shmget", .line=21885, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="do_shmget", .line=21898, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="do_shmget", .line=21905, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="do_shmget", .line=21911, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="do_shmget", .line=21917, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="do_shmget", .line=21963, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="do_shmget", .line=21975, .flags=DDEBUG_DEFAULT },
+};
+#else
 int do_shmget(const key_t key, const size_t size, const int shmflg)
 {
 	struct thread *thread = get_this_cpu_local_var()->current;
@@ -21711,19 +23807,53 @@ int do_shmget(const key_t key, const size_t size, const int shmflg)
 	dkprintf("do_shmget(%#lx,%#lx,%#x): %d\n", key, size, shmflg, shmid);
 	return shmid;
 } /* do_shmget()() */
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern void f03_shmat_list_lock_v1(void);
+#define shmat_shmobj_list_lock_bridge f03_shmat_list_lock_v1
+extern void f03_shmat_list_unlock_v1(void);
+#define shmat_shmobj_list_unlock_bridge f03_shmat_list_unlock_v1
+extern int f03_shmat_lookup_obj_v1(int, void **);
+#define shmat_lookup_obj_bridge f03_shmat_lookup_obj_v1
+extern void f03_shmat_memobj_unref_v1(void *);
+#define shmat_memobj_unref_bridge f03_shmat_memobj_unref_v1
+extern struct vm_range * f03_mprotect_lookup_bridge_v1(struct process_vm *, unsigned long, unsigned long);
+#define shmat_lookup_range_bridge f03_mprotect_lookup_bridge_v1
+extern int f03_shmat_add_range_v1(struct process_vm *, unsigned long, unsigned long, unsigned long, unsigned long, void *, long, int);
+#define shmat_add_range_bridge f03_shmat_add_range_v1
+extern int f03_shmctl_lookup_index_v1(int, void **);
+#define shmctl_lookup_by_index_bridge f03_shmctl_lookup_index_v1
+extern void f03_shmctl_memobj_unref_v1(void *);
+#define shmctl_memobj_unref_bridge f03_shmctl_memobj_unref_v1
+extern void f03_shmctl_users_lock_v1(void);
+#define shmctl_shmlock_users_lock_bridge f03_shmctl_users_lock_v1
+extern void f03_shmctl_users_unlock_v1(void);
+#define shmctl_shmlock_users_unlock_bridge f03_shmctl_users_unlock_v1
+extern int f03_shmctl_user_get_v1(uid_t, void **);
+#define shmctl_shmlock_user_get_bridge f03_shmctl_user_get_v1
+extern void f03_shmctl_user_free_v1(void *);
+#define shmctl_shmlock_user_free_bridge f03_shmctl_user_free_v1
+extern int f03_shmctl_refcnt_read_v1(void *);
+#define shmctl_memobj_refcnt_read_bridge f03_shmctl_refcnt_read_v1
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
 shmat_shmobj_list_lock_bridge(void)
 {
 	shmobj_list_lock();
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
 shmat_shmobj_list_unlock_bridge(void)
 {
 	shmobj_list_unlock();
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static int
 shmat_lookup_obj_bridge(int shmid, void **objp)
 {
@@ -21734,20 +23864,26 @@ shmat_lookup_obj_bridge(int shmid, void **objp)
 		*objp = obj;
 	return error;
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
 shmat_memobj_unref_bridge(void *memobj)
 {
 	memobj_unref(memobj);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static struct vm_range *
 shmat_lookup_range_bridge(struct process_vm *vm, unsigned long start,
 		unsigned long end)
 {
 	return lookup_process_memory_range(vm, start, end);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static int
 shmat_search_free_bridge(size_t len, int pgshift, unsigned long *addrp)
 {
@@ -21758,7 +23894,9 @@ shmat_search_free_bridge(size_t len, int pgshift, unsigned long *addrp)
 		*addrp = addr;
 	return error;
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static int
 shmat_add_range_bridge(struct process_vm *vm, unsigned long start,
 		unsigned long end, unsigned long phys, unsigned long flags,
@@ -21767,7 +23905,24 @@ shmat_add_range_bridge(struct process_vm *vm, unsigned long start,
 	return add_process_memory_range(vm, start, end, phys, flags, memobj,
 			objoff, pgshift, NULL, NULL);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern void f03_shmat_log_bridge_v1(int, int, unsigned long, int, long);
+#define shmat_log_bridge f03_shmat_log_bridge_v1
+struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_shmat_log_bridge_debug_v1[9] = {
+    { .file=__FILE__, .func="shmat_log_bridge", .line=22040, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="shmat_log_bridge", .line=22044, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="shmat_log_bridge", .line=22048, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="shmat_log_bridge", .line=22052, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="shmat_log_bridge", .line=22056, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="shmat_log_bridge", .line=22061, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="shmat_log_bridge", .line=22065, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="shmat_log_bridge", .line=22069, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="shmat_log_bridge", .line=22074, .flags=DDEBUG_DEFAULT },
+};
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
 shmat_log_bridge(int event, int shmid, unsigned long shmaddr, int shmflg,
 		long error)
@@ -21811,7 +23966,54 @@ shmat_log_bridge(int event, int shmid, unsigned long shmaddr, int shmflg,
 				(void *)shmaddr, shmflg, error, error);
 	}
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+long sys_shmat(int, ihk_mc_user_context_t *);
+struct f03_shmat_data {
+	size_t pgshift;
+	size_t real_segsz;
+	size_t memobj;
+	size_t uid;
+	size_t cuid;
+	size_t gid;
+	size_t cgid;
+	size_t mode;
+	__typeof__(&shmat_shmobj_list_lock_bridge) list_lock;
+	__typeof__(&shmat_shmobj_list_unlock_bridge) list_unlock;
+	__typeof__(&shmat_lookup_obj_bridge) lookup_obj;
+	__typeof__(&shmat_memobj_unref_bridge) unref;
+	__typeof__(&munmap_write_lock_bridge) range_lock;
+	__typeof__(&munmap_write_unlock_bridge) range_unlock;
+	__typeof__(&shmat_lookup_range_bridge) lookup_range;
+	__typeof__(&shmat_search_free_bridge) search_free;
+	__typeof__(&mprotect_set_host_vma_bridge) set_host_vma;
+	__typeof__(&shmat_add_range_bridge) add_range;
+	__typeof__(&shmat_log_bridge) log;
+};
+const struct f03_shmat_data f03_shmat_data_v1 = {
+	.pgshift = __builtin_offsetof(struct shmobj, pgshift),
+	.real_segsz = __builtin_offsetof(struct shmobj, real_segsz),
+	.memobj = __builtin_offsetof(struct shmobj, memobj),
+	.uid = __builtin_offsetof(struct shmobj, ds.shm_perm.uid),
+	.cuid = __builtin_offsetof(struct shmobj, ds.shm_perm.cuid),
+	.gid = __builtin_offsetof(struct shmobj, ds.shm_perm.gid),
+	.cgid = __builtin_offsetof(struct shmobj, ds.shm_perm.cgid),
+	.mode = __builtin_offsetof(struct shmobj, ds.shm_perm.mode),
+	.list_lock = shmat_shmobj_list_lock_bridge,
+	.list_unlock = shmat_shmobj_list_unlock_bridge,
+	.lookup_obj = shmat_lookup_obj_bridge,
+	.unref = shmat_memobj_unref_bridge,
+	.range_lock = munmap_write_lock_bridge,
+	.range_unlock = munmap_write_unlock_bridge,
+	.lookup_range = shmat_lookup_range_bridge,
+	.search_free = shmat_search_free_bridge,
+	.set_host_vma = mprotect_set_host_vma_bridge,
+	.add_range = shmat_add_range_bridge,
+	.log = shmat_log_bridge,
+};
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_shmat(int n, ihk_mc_user_context_t *ctx)
 {
 	const int shmid = ihk_mc_syscall_arg0(ctx);
@@ -21838,10 +24040,12 @@ long sys_shmat(int n, ihk_mc_user_context_t *ctx)
 			shmat_lookup_range_bridge, shmat_search_free_bridge,
 			mprotect_set_host_vma_bridge, shmat_add_range_bridge,
 			shmat_log_bridge);
-} /* sys_shmat() */
+} 
+#endif
+/* sys_shmat() */
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
-static const struct shmctl_offsets shmctl_syscall_offsets = {
+const struct shmctl_offsets f03_shmctl_offsets_v1 = {
 	.obj_memobj_offset = offsetof(struct shmobj, memobj),
 	.obj_pgshift_offset = offsetof(struct shmobj, pgshift),
 	.obj_real_segsz_offset = offsetof(struct shmobj, real_segsz),
@@ -21860,6 +24064,7 @@ static const struct shmctl_offsets shmctl_syscall_offsets = {
 	.shm_info_size = sizeof(struct shm_info),
 };
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static int
 shmctl_lookup_by_index_bridge(int index, void **objp)
 {
@@ -21870,25 +24075,33 @@ shmctl_lookup_by_index_bridge(int index, void **objp)
 		*objp = obj;
 	return error;
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
 shmctl_memobj_unref_bridge(void *memobj)
 {
 	memobj_unref(memobj);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
 shmctl_shmlock_users_lock_bridge(void)
 {
 	shmlock_users_lock();
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
 shmctl_shmlock_users_unlock_bridge(void)
 {
 	shmlock_users_unlock();
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static int
 shmctl_shmlock_user_get_bridge(uid_t ruid, void **userp)
 {
@@ -21899,19 +24112,41 @@ shmctl_shmlock_user_get_bridge(uid_t ruid, void **userp)
 		*userp = user;
 	return error;
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
 shmctl_shmlock_user_free_bridge(void *user)
 {
 	shmlock_user_free(user);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static int
 shmctl_memobj_refcnt_read_bridge(void *memobj)
 {
 	return ihk_atomic_read(&((struct memobj *)memobj)->refcnt);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern void f03_shmctl_log_bridge_v1(int, int, int, unsigned long, long);
+#define shmctl_log_bridge f03_shmctl_log_bridge_v1
+struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_shmctl_log_bridge_debug_v1[10] = {
+    { .file=__FILE__, .func="shmctl_log_bridge", .line=22186, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="shmctl_log_bridge", .line=22189, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="shmctl_log_bridge", .line=22193, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="shmctl_log_bridge", .line=22196, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="shmctl_log_bridge", .line=22200, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="shmctl_log_bridge", .line=22204, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="shmctl_log_bridge", .line=22207, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="shmctl_log_bridge", .line=22211, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="shmctl_log_bridge", .line=22219, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="shmctl_log_bridge", .line=22223, .flags=DDEBUG_DEFAULT },
+};
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
 shmctl_log_bridge(int event, int shmid, int cmd, unsigned long buf_addr,
 		long error)
@@ -21959,8 +24194,46 @@ shmctl_log_bridge(int event, int shmid, int cmd, unsigned long buf_addr,
 		dkprintf("shmctl(%#x,%d,%p): EINVAL\n", shmid, cmd, buf);
 	}
 }
+#endif
+
 #endif /* MCKERNEL_RUST_SYSCALL_POLICY_HELPERS */
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+long sys_shmctl(int, ihk_mc_user_context_t *);
+struct f03_shmctl_providers {
+	__typeof__(&shmat_shmobj_list_lock_bridge) list_lock;
+	__typeof__(&shmat_shmobj_list_unlock_bridge) list_unlock;
+	__typeof__(&shmat_lookup_obj_bridge) lookup_obj;
+	__typeof__(&shmctl_lookup_by_index_bridge) lookup_index;
+	__typeof__(&shmctl_memobj_unref_bridge) unref;
+	__typeof__(&syscall_copy_from_user_bridge) copy_from;
+	__typeof__(&syscall_copy_to_user_bridge) copy_to;
+	__typeof__(&get_shmid_max_index) max_index;
+	__typeof__(&shmctl_shmlock_users_lock_bridge) users_lock;
+	__typeof__(&shmctl_shmlock_users_unlock_bridge) users_unlock;
+	__typeof__(&shmctl_shmlock_user_get_bridge) user_get;
+	__typeof__(&shmctl_shmlock_user_free_bridge) user_free;
+	__typeof__(&shmctl_memobj_refcnt_read_bridge) refcnt_read;
+	__typeof__(&shmctl_log_bridge) log;
+};
+const struct f03_shmctl_providers f03_shmctl_providers_v1 = {
+	.list_lock = shmat_shmobj_list_lock_bridge,
+	.list_unlock = shmat_shmobj_list_unlock_bridge,
+	.lookup_obj = shmat_lookup_obj_bridge,
+	.lookup_index = shmctl_lookup_by_index_bridge,
+	.unref = shmctl_memobj_unref_bridge,
+	.copy_from = syscall_copy_from_user_bridge,
+	.copy_to = syscall_copy_to_user_bridge,
+	.max_index = get_shmid_max_index,
+	.users_lock = shmctl_shmlock_users_lock_bridge,
+	.users_unlock = shmctl_shmlock_users_unlock_bridge,
+	.user_get = shmctl_shmlock_user_get_bridge,
+	.user_free = shmctl_shmlock_user_free_bridge,
+	.refcnt_read = shmctl_memobj_refcnt_read_bridge,
+	.log = shmctl_log_bridge,
+};
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_shmctl(int n, ihk_mc_user_context_t *ctx)
 {
 	const int shmid = ihk_mc_syscall_arg0(ctx);
@@ -22253,15 +24526,48 @@ long sys_shmctl(int n, ihk_mc_user_context_t *ctx)
 		return -EINVAL;
 	}
 #endif
-} /* sys_shmctl() */
+} 
+#endif
+/* sys_shmctl() */
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+long sys_shmdt(int, ihk_mc_user_context_t *);
+struct f03_shmdt_data { size_t memobj_flags; unsigned long ok_flag; };
+const struct f03_shmdt_data f03_shmdt_data_v1 = {
+	__builtin_offsetof(struct memobj, flags), MF_SHMDT_OK,
+};
+struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_shmdt_debug_v1[3] = {
+    { .file=__FILE__, .func="shmdt_log_bridge", .line=22533, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="shmdt_log_bridge", .line=22536, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="shmdt_log_bridge", .line=22539, .flags=DDEBUG_DEFAULT },
+};
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern struct vm_range *f03_mprotect_lookup_bridge_v1(struct process_vm *,
+    unsigned long, unsigned long);
+#define shmdt_lookup_range_bridge f03_mprotect_lookup_bridge_v1
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static struct vm_range *
 shmdt_lookup_range_bridge(struct process_vm *vm, unsigned long start,
 		unsigned long end)
 {
 	return lookup_process_memory_range(vm, start, end);
 }
+#endif
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern void f03_shmdt_log_bridge_v1(int, unsigned long, int);
+#define shmdt_log_bridge f03_shmdt_log_bridge_v1
+struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_shmdt_log_bridge_debug_v1[3] = {
+    { .file=__FILE__, .func="shmdt_log_bridge", .line=22533, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="shmdt_log_bridge", .line=22536, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="shmdt_log_bridge", .line=22539, .flags=DDEBUG_DEFAULT },
+};
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
 shmdt_log_bridge(int event, unsigned long addr, int error)
 {
@@ -22275,7 +24581,9 @@ shmdt_log_bridge(int event, unsigned long addr, int error)
 		dkprintf("shmdt(%p): %d\n", (void *)addr, error);
 	}
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_shmdt(int n, ihk_mc_user_context_t *ctx)
 {
 	void * const shmaddr = (void *)ihk_mc_syscall_arg0(ctx);
@@ -22291,8 +24599,11 @@ long sys_shmdt(int n, ihk_mc_user_context_t *ctx)
 			munmap_write_lock_bridge, munmap_write_unlock_bridge,
 			shmdt_lookup_range_bridge, munmap_do_bridge,
 			shmdt_log_bridge);
-} /* sys_shmdt() */
+} 
+#endif
+/* sys_shmdt() */
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static const char *do_futex_op_name(int op)
 {
 	return (op == FUTEX_WAIT) ? "FUTEX_WAIT" :
@@ -22304,12 +24615,22 @@ static const char *do_futex_op_name(int op)
 		(op == FUTEX_REQUEUE) ? "FUTEX_REQUEUE (NOT IMPL!)" :
 		"unknown";
 }
+#endif
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_NATIVE_FUTEX)
+extern int f03_futex_native_syscall_time_v2(int, int, struct timespec *);
+#define do_futex_syscall_time_bridge f03_futex_native_syscall_time_v2
+#else
 static int do_futex_syscall_time_bridge(int syscall_nr, int clock_id,
 		struct timespec *ats)
 {
+#ifdef MCKERNEL_NATIVE_FUTEX
+	struct syscall_request request IHK_DMA_ALIGN = { 0 };
+	struct timespec tv[2] = { { 0 } };
+#else
 	struct syscall_request request IHK_DMA_ALIGN;
 	struct timespec tv[2];
+#endif
 	struct timespec *tv_now = tv;
 	int r;
 
@@ -22322,30 +24643,44 @@ static int do_futex_syscall_time_bridge(int syscall_nr, int clock_id,
 
 	r = do_syscall(&request, ihk_mc_get_processor_id());
 	if (r < 0)
+#ifdef MCKERNEL_NATIVE_FUTEX
+		return r;
+#else
 		return -EFAULT;
+#endif
 
 	ats->tv_sec = tv_now->tv_sec;
 	ats->tv_nsec = tv_now->tv_nsec;
 	return 0;
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void do_futex_local_time_bridge(struct timespec *ats)
 {
 	calculate_time_from_tsc(ats);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static int do_futex_linux_time_bridge(int clock_id, struct timespec *ats)
 {
 	if (!linux_clock_gettime)
 		return -EFAULT;
 	return linux_clock_gettime(clock_id, ats);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+#define do_futex_ns_per_tsc_bridge syscall_ns_per_tsc_bridge
+#else
 static unsigned long do_futex_ns_per_tsc_bridge(void)
 {
 	return ihk_mc_get_ns_per_tsc();
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static int do_futex_dispatch_bridge(unsigned long uaddr, int op, uint32_t val,
 		uint64_t timeout, unsigned long uaddr2, uint32_t val2,
 		uint32_t val3, int fshared)
@@ -22353,8 +24688,13 @@ static int do_futex_dispatch_bridge(unsigned long uaddr, int op, uint32_t val,
 	return futex((uint32_t *)uaddr, op, val, timeout, (uint32_t *)uaddr2,
 			val2, val3, fshared);
 }
+#endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+#if defined(MCKERNEL_RUST_F03_FUTEX_ATOMIC) && !defined(__UACCESS__)
+extern int futex_atomic_access_ok_bridge(int *,unsigned long);
+#else
+#line 23712
 int futex_atomic_access_ok_bridge(int *uaddr, unsigned long size)
 {
 #ifdef __UACCESS__
@@ -22365,7 +24705,14 @@ int futex_atomic_access_ok_bridge(int *uaddr, unsigned long size)
 	return 1;
 #endif
 }
+#endif /* original access_ok enabled profile retained */
+#line 23722
 
+#ifdef MCKERNEL_RUST_F03_FUTEX_ATOMIC
+extern int futex_atomic_cmpxchg_inatomic_bridge(int *,int,int);
+extern int futex_atomic_op_inuser_bridge(int,int *,int,int *);
+#else
+#line 23723
 int futex_atomic_cmpxchg_inatomic_bridge(int *uaddr, int oldval, int newval)
 {
 	asm volatile("1:\tlock; cmpxchgl %3, %1\n"
@@ -22453,8 +24800,21 @@ int futex_atomic_op_inuser_bridge(int op, int *uaddr, int oparg, int *oldval)
 
 	return ret;
 }
+#endif /* original futex atomic instruction/fixup fallback */
 #endif
+#line 23811
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern void f03_futex_log_bridge_v2(const struct do_futex_log_record *);
+#define do_futex_log_bridge f03_futex_log_bridge_v2
+struct ddebug __attribute__((aligned(8),section("__verbose")))
+f03_futex_log_debug_v2[4] = {
+    { .file=__FILE__, .func="do_futex_log_bridge", .line=__LINE__ + 9, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="do_futex_log_bridge", .line=__LINE__ + 15, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="do_futex_log_bridge", .line=__LINE__ + 18, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="do_futex_log_bridge", .line=__LINE__ + 21, .flags=DDEBUG_DEFAULT },
+};
+#else
 static void do_futex_log_bridge(const struct do_futex_log_record *record)
 {
 	if (record->event == DO_FUTEX_LOG_ENTER) {
@@ -22481,7 +24841,21 @@ static void do_futex_log_bridge(const struct do_futex_log_record *record)
 				record->ret);
 	}
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+struct f03_futex_retained_providers {
+	do_futex_syscall_time_fn_t syscall_time;
+	do_futex_ns_per_tsc_fn_t ns_per_tsc;
+	do_futex_log_fn_t log;
+};
+const struct f03_futex_retained_providers f03_futex_retained_providers_v1 = {
+	do_futex_syscall_time_bridge,
+	do_futex_ns_per_tsc_bridge,
+	do_futex_log_bridge,
+};
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long do_futex(int n, unsigned long arg0, unsigned long arg1,
 			  unsigned long arg2, unsigned long arg3,
 			  unsigned long arg4, unsigned long arg5,
@@ -22521,7 +24895,11 @@ long do_futex(int n, unsigned long arg0, unsigned long arg1,
 			do_futex_linux_time_bridge, do_futex_ns_per_tsc_bridge,
 			do_futex_dispatch_bridge, do_futex_log_bridge);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+long sys_futex(int n, ihk_mc_user_context_t *ctx);
+#else
 long sys_futex(int n, ihk_mc_user_context_t *ctx)
 {
 	return do_futex(n, ihk_mc_syscall_arg0(ctx), ihk_mc_syscall_arg1(ctx),
@@ -22529,7 +24907,17 @@ long sys_futex(int n, ihk_mc_user_context_t *ctx)
 					ihk_mc_syscall_arg4(ctx), ihk_mc_syscall_arg5(ctx),
 					0UL, NULL, NULL, NULL, NULL);
 }
+#endif
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DO_EXIT_V2) && !defined(DCFA_KMOD) && defined(__x86_64__)
+extern void f03_do_exit_supported_v2(int);
+#define do_exit f03_do_exit_supported_v2
+struct ddebug __attribute__((aligned(8),section("__verbose")))
+f03_do_exit_debug_v2[2] = {
+    { .file=__FILE__, .func="do_exit", .line=__LINE__ + 16, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="do_exit", .line=__LINE__ + 24, .flags=DDEBUG_DEFAULT },
+};
+#else
 static void
 do_exit(int code)
 {
@@ -22601,12 +24989,17 @@ do_exit(int code)
 
 	return;
 }
+#endif
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DO_EXIT_V2) && !defined(DCFA_KMOD) && defined(__x86_64__)
+extern void exit_do_exit_bridge(int);
+#else
 void
 exit_do_exit_bridge(int code)
 {
 	do_exit(code);
 }
+#endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_exit(int n, ihk_mc_user_context_t *ctx);
@@ -22725,6 +25118,9 @@ RLIMIT_HELPER_SCOPE int prlimit_to_mckernel_resource(int resource)
 
 #undef RLIMIT_HELPER_SCOPE
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PRLIMIT_BODY) && defined(__x86_64__)
+extern long syscall_do_prlimit64_bridge(int, int, unsigned long, unsigned long);
+#else
 static int do_prlimit64(int pid, int resource, struct rlimit *_new_limit,
 			struct rlimit *old_limit)
 {
@@ -22849,6 +25245,8 @@ syscall_do_prlimit64_bridge(int pid, int resource,
 			(struct rlimit *)old_limit_addr);
 }
 
+#endif
+
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_setrlimit(int n, ihk_mc_user_context_t *ctx);
 #else
@@ -22916,25 +25314,40 @@ static const struct syscall_cputime_offsets syscall_cputime_offsets = {
 							  maxrss_children),
 };
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_SIGNAL_PROCESS_BRIDGES)
+extern void
+syscall_threads_reader_lock_bridge(void *proc, void *lock_arg);
+#else
 void
 syscall_threads_reader_lock_bridge(void *proc, void *lock_arg)
 {
 	mcs_rwlock_reader_lock_noirq(&((struct process *)proc)->threads_lock,
 			(struct mcs_rwlock_node *)lock_arg);
 }
+#endif /* MCKERNEL_RUST_F03_SIGNAL_PROCESS_BRIDGES */
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_SIGNAL_PROCESS_BRIDGES)
+extern void
+syscall_threads_reader_unlock_bridge(void *proc, void *lock_arg);
+#else
 void
 syscall_threads_reader_unlock_bridge(void *proc, void *lock_arg)
 {
 	mcs_rwlock_reader_unlock_noirq(&((struct process *)proc)->threads_lock,
 			(struct mcs_rwlock_node *)lock_arg);
 }
+#endif /* MCKERNEL_RUST_F03_SIGNAL_PROCESS_BRIDGES */
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_SIGNAL_PROCESS_BRIDGES)
+extern void
+syscall_interrupt_cpu_bridge(int cpu_id);
+#else
 void
 syscall_interrupt_cpu_bridge(int cpu_id)
 {
 	ihk_mc_interrupt_cpu(cpu_id, ihk_mc_get_vector(IHK_GV_IKC));
 }
+#endif /* MCKERNEL_RUST_F03_SIGNAL_PROCESS_BRIDGES */
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_getrusage(int n, ihk_mc_user_context_t *ctx);
@@ -22992,18 +25405,34 @@ static const struct ptrace_io_offsets ptrace_wakeup_io_offsets = {
 		__builtin_offsetof(struct process, update_lock),
 };
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_WAKEUP_FIND)
+extern unsigned long f03_ptrace_io_find(int, int);
+#define ptrace_wakeup_find_thread_bridge f03_ptrace_io_find
+#else
 static unsigned long
 ptrace_wakeup_find_thread_bridge(int tgid, int tid)
 {
 	return (unsigned long)find_thread(tgid, tid);
 }
+#endif
+#line 24418
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_WAKEUP_UNLOCK)
+extern void f03_ptrace_io_unlock(unsigned long);
+#define ptrace_wakeup_thread_unlock_bridge f03_ptrace_io_unlock
+#else
 static void
 ptrace_wakeup_thread_unlock_bridge(unsigned long thread_addr)
 {
 	thread_unlock((struct thread *)thread_addr);
 }
+#endif
+#line 24424
 
+#ifdef MCKERNEL_RUST_F06_PTRACE_RESUME_CALLBACKS
+extern void ptrace_wakeup_log_bridge(int, int, int);
+#else
+#line 24425
 static void
 ptrace_wakeup_log_bridge(int event, int value, int result)
 {
@@ -23012,7 +25441,13 @@ ptrace_wakeup_log_bridge(int event, int value, int result)
 				value, result);
 	}
 }
+#endif
+#line 24433
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PTRACE_ENTRY)
+extern int ptrace_wakeup_clear_saved_bridge(unsigned long, unsigned long);
+#else
+#line 24434
 static int
 ptrace_wakeup_clear_saved_bridge(unsigned long thread_addr,
 		unsigned long offset)
@@ -23020,20 +25455,38 @@ ptrace_wakeup_clear_saved_bridge(unsigned long thread_addr,
 	return process_thread_ptrace_saved_context_clear_result(
 			(void *)thread_addr, offset);
 }
+#endif
+#line 24441
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PTRACE_ENTRY)
+extern void ptrace_wakeup_set_single_step_bridge(unsigned long);
+#else
+#line 24442
 static void
 ptrace_wakeup_set_single_step_bridge(unsigned long thread_addr)
 {
 	set_single_step((struct thread *)thread_addr);
 }
+#endif
+#line 24447
 
+#ifdef MCKERNEL_RUST_F06_PTRACE_RESUME_CALLBACKS
+extern void ptrace_wakeup_update_lock_bridge(unsigned long, void *);
+#else
+#line 24448
 static void
 ptrace_wakeup_update_lock_bridge(unsigned long lock_addr, void *node)
 {
 	mcs_rwlock_writer_lock((struct mcs_rwlock_lock *)lock_addr,
 			(struct mcs_rwlock_node_irqsave *)node);
 }
+#endif
+#line 24454
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PTRACE_ENTRY)
+extern int ptrace_wakeup_trace_syscall_bridge(unsigned long, unsigned long, int);
+#else
+#line 24455
 static int
 ptrace_wakeup_trace_syscall_bridge(unsigned long thread_addr,
 		unsigned long ptrace_offset, int trace_syscall)
@@ -23041,14 +25494,27 @@ ptrace_wakeup_trace_syscall_bridge(unsigned long thread_addr,
 	return process_thread_ptrace_trace_syscall_update_result(
 			(void *)thread_addr, ptrace_offset, trace_syscall);
 }
+#endif
+#line 24462
 
+#ifdef MCKERNEL_RUST_F06_PTRACE_RESUME_CALLBACKS
+extern void ptrace_wakeup_update_unlock_bridge(unsigned long, void *);
+#else
+#line 24463
 static void
 ptrace_wakeup_update_unlock_bridge(unsigned long lock_addr, void *node)
 {
 	mcs_rwlock_writer_unlock((struct mcs_rwlock_lock *)lock_addr,
 			(struct mcs_rwlock_node_irqsave *)node);
 }
+#endif
+#line 24469
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PTRACE_ENTRY)
+extern unsigned long ptrace_wakeup_pending_take_bridge(unsigned long,
+		unsigned long, unsigned long, int);
+#else
+#line 24470
 static unsigned long
 ptrace_wakeup_pending_take_bridge(unsigned long thread_addr,
 		unsigned long sendsig_offset, unsigned long recvsig_offset,
@@ -23058,6 +25524,65 @@ ptrace_wakeup_pending_take_bridge(unsigned long thread_addr,
 			(void *)thread_addr, sendsig_offset, recvsig_offset,
 			source);
 }
+#endif
+#line 24479
+#endif
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+#define MCKERNEL_PTRACE_WAKEUP_ORIGINAL_AFTER_LINE 24590
+#else
+#define MCKERNEL_PTRACE_WAKEUP_ORIGINAL_AFTER_LINE 24602
+#endif
+#ifdef MCKERNEL_RUST_F06_PTRACE_RESUME_CALLBACKS
+#if !defined(__x86_64__) || !defined(PROFILE_ENABLE) || defined(ENABLE_UBSAN) || \
+    !defined(SPINLOCK_IN_MCS_RWLOCK) || !defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) || \
+    !defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) || \
+    !defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT) || \
+    !defined(MCKERNEL_RUST_F03_PTRACE_ENTRY) || \
+    !defined(MCKERNEL_DO_SYSCALL_C_FILE) || !defined(MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS)
+#error "Rust ptrace resume callbacks require the paired current profile/types/providers"
+#endif
+extern int ptrace_wakeup_sig(int, long, long);
+_Static_assert(DDEBUG_DEFAULT == MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS,
+    "Rust ptrace resume Ddebug flags must match C");
+_Static_assert(__builtin_strcmp(__FILE__, MCKERNEL_DO_SYSCALL_C_FILE) == 0,
+    "Rust ptrace resume filename must match actual C __FILE__");
+_Static_assert(sizeof(int) == 4 && sizeof(unsigned int) == 4 && sizeof(long) == 8 && sizeof(unsigned long) == 8 && sizeof(void *) == 8,
+    "Rust ptrace resume scalar ABI");
+_Static_assert(sizeof(struct mcs_rwlock_node_irqsave) == 64 && __alignof__(struct mcs_rwlock_node_irqsave) == 64 && __builtin_offsetof(struct mcs_rwlock_node_irqsave, irqsave) == 0,
+    "Rust ptrace resume live IRQ node ABI");
+_Static_assert(sizeof(struct mcs_rwlock_lock) == 64 && __alignof__(struct mcs_rwlock_lock) == 64 && __builtin_offsetof(struct mcs_rwlock_lock, slock) == 0,
+    "Rust ptrace resume actual MCS lock ABI");
+_Static_assert(sizeof(struct siginfo) == 128 && __builtin_offsetof(struct sig_pending, info) == 24,
+    "Rust ptrace resume pending info ABI");
+_Static_assert(sizeof(struct ptrace_io_offsets) == 88 && sizeof(struct ptrace_syscall_ops) == 152 && __alignof__(struct ptrace_syscall_ops) == 8 && __builtin_offsetof(struct ptrace_syscall_ops, wakeup_fn) == 8,
+    "Rust ptrace resume real offset/ops table ABI");
+_Static_assert(sizeof(struct ddebug) == 32 && __alignof__(struct ddebug) == 8 && PTRACE_CONTROL_LOG_WAKEUP_ENTER == 4,
+    "Rust ptrace resume debug ABI/event");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&ptrace_wakeup_sig),
+    ptrace_wakeup_sig_fn_t), "Rust ptrace resume ptrace_wakeup_sig ABI");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&ptrace_wakeup_update_lock_bridge),
+    void (*)(unsigned long, void *)), "Rust ptrace resume ptrace_wakeup_update_lock_bridge ABI");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&ptrace_wakeup_update_unlock_bridge),
+    void (*)(unsigned long, void *)), "Rust ptrace resume ptrace_wakeup_update_unlock_bridge ABI");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&ptrace_detach_kfree_bridge),
+    void (*)(void *)), "Rust ptrace resume ptrace_detach_kfree_bridge ABI");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&ptrace_wakeup_log_bridge),
+    void (*)(int, int, int)), "Rust ptrace resume ptrace_wakeup_log_bridge ABI");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&ptrace_detach_do_kill_bridge),
+    long (*)(void *, int, int, int, const void *, int)), "Rust ptrace resume ptrace_detach_do_kill_bridge ABI");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&ptrace_detach_wakeup_bridge),
+    void (*)(void *, int)), "Rust ptrace resume ptrace_detach_wakeup_bridge ABI");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&do_kill),
+    unsigned long (*)(struct thread *, int, int, int, struct siginfo *, int)), "Rust ptrace resume do_kill ABI");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&sched_wakeup_thread),
+    int (*)(struct thread *, int)), "Rust ptrace resume sched_wakeup_thread ABI");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&kfree_tracked),
+    void (*)(void *, char *, int)), "Rust ptrace resume kfree_tracked ABI");
+#else
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+#line 24477
+#else
+#line 24491
 #endif
 
 static int ptrace_wakeup_sig(int pid, long request, long data) {
@@ -23169,6 +25694,8 @@ out:
 	return error;
 #endif
 }
+#endif /* MCKERNEL_RUST_F06_PTRACE_RESUME_CALLBACKS */
+#line MCKERNEL_PTRACE_WAKEUP_ORIGINAL_AFTER_LINE
 
 extern long ptrace_read_user(struct thread *thread, long addr, unsigned long *value);
 extern long ptrace_write_user(struct thread *thread, long addr, unsigned long value);
@@ -23198,18 +25725,29 @@ static const struct ptrace_io_offsets ptrace_io_kernel_offsets = {
 		__builtin_offsetof(struct process, update_lock),
 };
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PTRACE_IO_FIND)
+extern unsigned long f03_ptrace_io_find(int, int);
+#define ptrace_find_thread_bridge f03_ptrace_io_find
+#else
 static unsigned long
 ptrace_find_thread_bridge(int tgid, int tid)
 {
 	return (unsigned long)find_thread(tgid, tid);
 }
+#endif
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PTRACE_IO_UNLOCK)
+extern void f03_ptrace_io_unlock(unsigned long);
+#define ptrace_thread_unlock_bridge f03_ptrace_io_unlock
+#else
 static void
 ptrace_thread_unlock_bridge(unsigned long thread_addr)
 {
 	thread_unlock((struct thread *)thread_addr);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
 ptrace_text_log_bridge(int event, unsigned long addr)
 {
@@ -23220,7 +25758,19 @@ ptrace_text_log_bridge(int event, unsigned long addr)
 		dkprintf("ptrace_poketext: bad address 0x%llx\n", addr);
 	}
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern int f03_ptrace_setoptions_v1(int, int);
+extern void f03_ptrace_control_log_v1(int, int, int);
+#define ptrace_setoptions f03_ptrace_setoptions_v1
+#define ptrace_control_log_bridge f03_ptrace_control_log_v1
+struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_ptrace_control_debug[2] = {
+    { .file=__FILE__, .func="ptrace_control_log_bridge", .line=23506, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="ptrace_control_log_bridge", .line=23519, .flags=DDEBUG_DEFAULT },
+};
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
 ptrace_control_log_bridge(int event, int value, int result)
 {
@@ -23246,19 +25796,24 @@ ptrace_control_log_bridge(int event, int value, int result)
 		dkprintf("ptrace_attach,returning,error=%d\n", result);
 	}
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static int
 ptrace_attach_thread_bridge(unsigned long thread_addr, unsigned long proc_addr)
 {
 	return ptrace_attach_thread((struct thread *)thread_addr,
 			(struct process *)proc_addr);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
 ptrace_detach_call_bridge(unsigned long thread_addr, int data)
 {
 	ptrace_detach_thread((struct thread *)thread_addr, data);
 }
+#endif
 #endif
 
 static long
@@ -23275,6 +25830,7 @@ ptrace_write_user_word_bridge(unsigned long thread_addr, long addr,
 	return ptrace_write_user((struct thread *)thread_addr, addr, value);
 }
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static long
 ptrace_read_vm_word_bridge(unsigned long vm_addr, unsigned long addr,
 		unsigned long *value)
@@ -23282,7 +25838,9 @@ ptrace_read_vm_word_bridge(unsigned long vm_addr, unsigned long addr,
 	return read_process_vm((struct process_vm *)vm_addr, value,
 			(void *)addr, sizeof(*value));
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static long
 ptrace_write_vm_word_bridge(unsigned long vm_addr, unsigned long addr,
 		unsigned long value)
@@ -23290,6 +25848,7 @@ ptrace_write_vm_word_bridge(unsigned long vm_addr, unsigned long addr,
 	return patch_process_vm((struct process_vm *)vm_addr, (void *)addr,
 			&value, sizeof(value));
 }
+#endif
 
 static long
 ptrace_read_fpregs_bridge(unsigned long thread_addr, unsigned long data_addr)
@@ -23303,11 +25862,16 @@ ptrace_write_fpregs_bridge(unsigned long thread_addr, unsigned long data_addr)
 	return ptrace_write_fpregs((struct thread *)thread_addr, (void *)data_addr);
 }
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PTRACE_IO_COPY_FROM)
+extern long syscall_copy_from_user_bridge(void *, unsigned long, size_t);
+#define ptrace_copy_from_user_bridge syscall_copy_from_user_bridge
+#else
 static long
 ptrace_copy_from_user_bridge(void *dst, unsigned long src_addr, size_t bytes)
 {
 	return copy_from_user(dst, (void *)src_addr, bytes);
 }
+#endif
 
 static long
 ptrace_copy_to_user_bridge(unsigned long dst_addr, const void *src, size_t bytes)
@@ -23329,6 +25893,7 @@ ptrace_write_regset_bridge(unsigned long thread_addr, long type, void *iovp)
 			(struct iovec *)iovp);
 }
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static long ptrace_pokeuser(int pid, long addr, long data)
 {
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
@@ -23354,7 +25919,9 @@ static long ptrace_pokeuser(int pid, long addr, long data)
 	return rc;
 #endif
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static long ptrace_peekuser(int pid, long addr, long data)
 {
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
@@ -23389,7 +25956,19 @@ static long ptrace_peekuser(int pid, long addr, long data)
 	return rc;
 #endif
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long f03_ptrace_getregs_v1(int, long);
+extern long f03_ptrace_setregs_v1(int, long);
+extern long f03_ptrace_peekuser_v1(int, long, long);
+extern long f03_ptrace_pokeuser_v1(int, long, long);
+#define ptrace_getregs f03_ptrace_getregs_v1
+#define ptrace_setregs f03_ptrace_setregs_v1
+#define ptrace_peekuser f03_ptrace_peekuser_v1
+#define ptrace_pokeuser f03_ptrace_pokeuser_v1
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static long ptrace_getregs(int pid, long data)
 {
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
@@ -23423,7 +26002,9 @@ static long ptrace_getregs(int pid, long data)
 	return rc;
 #endif
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static long ptrace_setregs(int pid, long data)
 {
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
@@ -23457,7 +26038,19 @@ static long ptrace_setregs(int pid, long data)
 	return rc;
 #endif
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long f03_ptrace_getfpregs_v1(int, long);
+extern long f03_ptrace_setfpregs_v1(int, long);
+extern long f03_ptrace_getregset_v1(int, long, long);
+extern long f03_ptrace_setregset_v1(int, long, long);
+#define ptrace_getfpregs f03_ptrace_getfpregs_v1
+#define ptrace_setfpregs f03_ptrace_setfpregs_v1
+#define ptrace_getregset f03_ptrace_getregset_v1
+#define ptrace_setregset f03_ptrace_setregset_v1
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static long ptrace_getfpregs(int pid, long data)
 {
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
@@ -23478,7 +26071,9 @@ static long ptrace_getfpregs(int pid, long data)
 	return rc;
 #endif
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static long ptrace_setfpregs(int pid, long data)
 {
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
@@ -23499,7 +26094,9 @@ static long ptrace_setfpregs(int pid, long data)
 	return rc;
 #endif
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static long ptrace_getregset(int pid, long type, long data)
 {
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
@@ -23532,7 +26129,9 @@ static long ptrace_getregset(int pid, long type, long data)
 	return rc;
 #endif
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static long ptrace_setregset(int pid, long type, long data)
 {
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
@@ -23565,7 +26164,19 @@ static long ptrace_setregset(int pid, long type, long data)
 	return rc;
 #endif
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long f03_ptrace_peektext_v1(int, long, long);
+extern long f03_ptrace_poketext_v1(int, long, long);
+#define ptrace_peektext f03_ptrace_peektext_v1
+#define ptrace_poketext f03_ptrace_poketext_v1
+struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_ptrace_text_debug[2] = {
+    { .file=__FILE__, .func="ptrace_text_log_bridge", .line=23490, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="ptrace_text_log_bridge", .line=23493, .flags=DDEBUG_DEFAULT },
+};
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static long ptrace_peektext(int pid, long addr, long data)
 {
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
@@ -23601,7 +26212,9 @@ static long ptrace_peektext(int pid, long addr, long data)
 	return rc;
 #endif
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static long ptrace_poketext(int pid, long addr, long data)
 {
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
@@ -23632,7 +26245,9 @@ static long ptrace_poketext(int pid, long addr, long data)
 	return rc;
 #endif
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static int ptrace_setoptions(int pid, int flags)
 {
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
@@ -23688,7 +26303,9 @@ out:
 	return ret;
 #endif
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static int ptrace_attach(int pid)
 {
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
@@ -23736,8 +26353,10 @@ static int ptrace_attach(int pid)
 	return error;
 #endif
 }
+#endif
 
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 int ptrace_detach(int pid, int data)
 {
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
@@ -23778,7 +26397,13 @@ out:
 	return error;
 #endif
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long f03_ptrace_geteventmsg_v1(int, long);
+#define ptrace_geteventmsg f03_ptrace_geteventmsg_v1
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static long ptrace_geteventmsg(int pid, long data)
 {
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
@@ -23811,7 +26436,13 @@ static long ptrace_geteventmsg(int pid, long data)
 	return rc;
 #endif
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long f03_ptrace_getsiginfo_v1(int pid, siginfo_t *data);
+#define ptrace_getsiginfo f03_ptrace_getsiginfo_v1
+#else
+#line 25298
 static long
 ptrace_getsiginfo(int pid, siginfo_t *data)
 {
@@ -23846,7 +26477,14 @@ ptrace_getsiginfo(int pid, siginfo_t *data)
 	return rc;
 #endif
 }
+#endif
+#line 25332
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PTRACE_ENTRY)
+extern long f03_ptrace_setsiginfo_v1(int pid, siginfo_t *data);
+#define ptrace_setsiginfo f03_ptrace_setsiginfo_v1
+#else
+#line 25333
 static long
 ptrace_setsiginfo(int pid, siginfo_t *data)
 {
@@ -23938,7 +26576,41 @@ ptrace_setsiginfo(int pid, siginfo_t *data)
 	return rc;
 #endif
 }
+#endif
+#line 25424
 
+#ifdef MCKERNEL_RUST_F03_PTRACE_ENTRY
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+#error "Rust ptrace entry requires existing Rust syscall policy helpers"
+#endif
+const struct ptrace_syscall_ops f03_ptrace_entry_ops_v1 = {
+		.traceme_fn = ptrace_traceme,
+		.wakeup_fn = ptrace_wakeup_sig,
+		.getregs_fn = ptrace_getregs,
+		.setregs_fn = ptrace_setregs,
+		.getfpregs_fn = ptrace_getfpregs,
+		.setfpregs_fn = ptrace_setfpregs,
+		.peekuser_fn = ptrace_peekuser,
+		.pokeuser_fn = ptrace_pokeuser,
+		.peektext_fn = ptrace_peektext,
+		.poketext_fn = ptrace_poketext,
+		.setoptions_fn = ptrace_setoptions,
+		.attach_fn = ptrace_attach,
+		.detach_fn = ptrace_detach,
+		.getsiginfo_fn = ptrace_getsiginfo,
+		.setsiginfo_fn = ptrace_setsiginfo,
+		.getregset_fn = ptrace_getregset,
+		.setregset_fn = ptrace_setregset,
+		.geteventmsg_fn = ptrace_geteventmsg,
+		.arch_fn = arch_ptrace,
+	};
+struct ddebug __attribute__((aligned(8),section("__verbose")))
+f03_ptrace_entry_debug_v1 = {
+ .file=__FILE__, .func="sys_ptrace", .line=25454, .flags=DDEBUG_DEFAULT
+};
+extern long sys_ptrace(int, ihk_mc_user_context_t *);
+#else
+#line 25425
 long sys_ptrace(int n, ihk_mc_user_context_t *ctx)
 {
 	const long request = (long)ihk_mc_syscall_arg0(ctx);
@@ -23971,6 +26643,8 @@ long sys_ptrace(int n, ihk_mc_user_context_t *ctx)
 	dkprintf("ptrace(%d,%ld,%p,%p): returning %d\n", request, pid, addr, data, error);
 	return error;
 }
+#endif
+#line 25457
 
 #define SCHED_CHECK_SAME_OWNER        0x01
 #define SCHED_CHECK_ROOT              0x02
@@ -24539,8 +27213,23 @@ SCHED_POLICY_HELPER_SCOPE long sched_getaffinity_body_result(int tid,
 
 /* We do not have actual scheduling classes so we just make sure we store
  * policies and priorities in a POSIX/Linux complaint manner */
+#ifdef MCKERNEL_RUST_SCHED_POLICY_HELPERS
+extern int setscheduler_body_result(unsigned long thread_addr, int policy,
+		unsigned long param_addr, size_t param_size,
+		size_t priority_offset, size_t thread_param_offset,
+		size_t thread_policy_offset);
+#endif
+
+#if !(defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_SCHED_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_SCHED_BRIDGES))
 static int setscheduler(struct thread *thread, int policy, struct sched_param *param)
 {
+#ifdef MCKERNEL_RUST_SCHED_POLICY_HELPERS
+	return setscheduler_body_result((unsigned long)thread, policy,
+			(unsigned long)param, sizeof(*param),
+			__builtin_offsetof(struct sched_param, sched_priority),
+			__builtin_offsetof(struct thread, sched_param),
+			__builtin_offsetof(struct thread, sched_policy));
+#else
 	int ret;
 
 	ret = setscheduler_validate(policy, param->sched_priority);
@@ -24552,7 +27241,10 @@ static int setscheduler(struct thread *thread, int policy, struct sched_param *p
 	thread->sched_policy = policy;
 
 	return 0;
+#endif
 }
+
+#endif /* original setscheduler fallback */
 
 static const struct sched_syscall_offsets sched_syscall_offsets = {
 	.thread_proc_offset = __builtin_offsetof(struct thread, proc),
@@ -24566,6 +27258,18 @@ static const struct sched_syscall_offsets sched_syscall_offsets = {
 	.proc_cpu_set_offset = __builtin_offsetof(struct process, cpu_set),
 };
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_SCHED_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_SCHED_BRIDGES)
+struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_sched_setparam_debug_v1 = {
+ .file=__FILE__, .func="sched_setparam_log_bridge", .line=26052, .flags=DDEBUG_DEFAULT
+};
+extern unsigned long sched_find_thread_bridge(int pid);
+extern void sched_thread_unlock_bridge(unsigned long thread_addr);
+extern int sched_apply_scheduler_bridge(unsigned long thread_addr, int policy, unsigned long param_addr);
+extern int sched_hold_thread_bridge(unsigned long thread_addr);
+extern void sched_release_thread_bridge(unsigned long thread_addr);
+extern void sched_request_migrate_bridge(int cpu_id, unsigned long thread_addr);
+extern void sched_setparam_log_bridge(int pid, unsigned long uparam_addr);
+#else
 unsigned long
 sched_find_thread_bridge(int pid)
 {
@@ -24610,6 +27314,8 @@ sched_setparam_log_bridge(int pid, unsigned long uparam_addr)
 	dkprintf("sched_setparam: pid: %d, uparam: 0x%lx\n", pid,
 			uparam_addr);
 }
+
+#endif /* MCKERNEL_RUST_F03_SCHED_BRIDGES */
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_sched_setparam(int n, ihk_mc_user_context_t *ctx);
@@ -24835,17 +27541,21 @@ long sys_sched_getaffinity(int n, ihk_mc_user_context_t *ctx)
 }
 #endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 int
 syscall_get_processor_id_bridge(void)
 {
 	return ihk_mc_get_processor_id();
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 int
 syscall_get_numa_id_bridge(void)
 {
 	return ihk_mc_get_numa_id();
 }
+#endif
 
 #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_get_cpu_id(int n, ihk_mc_user_context_t *ctx)
@@ -24897,12 +27607,15 @@ long sys_getitimer(int n, ihk_mc_user_context_t *ctx)
 }
 #endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 syscall_gettime_bridge(void *ts)
 {
 	calculate_time_from_tsc(ts);
 }
+#endif
 
+#if !defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) || !defined(MCKERNEL_RUST_F03_FORWARD_ADAPTERS)
 static long
 syscall_do_syscall2_bridge(int syscall_nr, unsigned long arg0,
 		unsigned long arg1)
@@ -24915,7 +27628,7 @@ syscall_do_syscall2_bridge(int syscall_nr, unsigned long arg0,
 	return do_syscall(&request, ihk_mc_get_processor_id());
 }
 
-#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && !defined(MCKERNEL_RUST_F03_DO_SYSCALL2_BRIDGE)
 long
 syscall_policy_do_syscall2_bridge(int syscall_nr, unsigned long arg0,
 		unsigned long arg1)
@@ -24924,19 +27637,18 @@ syscall_policy_do_syscall2_bridge(int syscall_nr, unsigned long arg0,
 }
 #endif
 
+#ifndef MCKERNEL_RUST_F03_MEMORY_HOST_OFFLOAD
 static long
 syscall_do_syscall3_bridge(int syscall_nr, unsigned long arg0,
 		unsigned long arg1, unsigned long arg2)
 {
 	struct syscall_request request IHK_DMA_ALIGN;
-
 	request.number = syscall_nr;
 	request.args[0] = arg0;
 	request.args[1] = arg1;
 	request.args[2] = arg2;
 	return do_syscall(&request, ihk_mc_get_processor_id());
 }
-
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long
 syscall_policy_do_syscall3_bridge(int syscall_nr, unsigned long arg0,
@@ -24945,24 +27657,32 @@ syscall_policy_do_syscall3_bridge(int syscall_nr, unsigned long arg0,
 	return syscall_do_syscall3_bridge(syscall_nr, arg0, arg1, arg2);
 }
 #endif
+#endif
+#endif /* C forwarding adapters; Rust owns the explicit candidate selection. */
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static long
 syscall_do_syscall_request_bridge(struct syscall_request *request, int cpu)
 {
 	return do_syscall(request, cpu);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static unsigned long
 syscall_virt_to_phys_bridge(void *addr)
 {
 	return virt_to_phys(addr);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 syscall_set_timer_bridge(int runq_locked)
 {
 	set_timer(runq_locked);
 }
+#endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_clock_gettime(int n, ihk_mc_user_context_t *ctx);
@@ -25000,42 +27720,66 @@ long sys_gettimeofday(int n, ihk_mc_user_context_t *ctx)
 }
 #endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 syscall_settimeofday_lock_bridge(void *lock)
 {
 	ihk_mc_spinlock_lock_noirq((ihk_spinlock_t *)lock);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 syscall_settimeofday_unlock_bridge(void *lock)
 {
 	ihk_mc_spinlock_unlock_noirq((ihk_spinlock_t *)lock);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long
 syscall_atomic64_read_bridge(void *value)
 {
 	return ihk_atomic64_read((ihk_atomic64_t *)value);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 syscall_atomic64_inc_bridge(void *value)
 {
 	ihk_atomic64_inc((ihk_atomic64_t *)value);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 syscall_wmb_bridge(void)
 {
 	wmb();
 }
+#endif
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_LEAF_CALLBACKS)
+extern void
+syscall_settimeofday_panic_bridge(void);
+#else
 void
 syscall_settimeofday_panic_bridge(void)
 {
 	panic("settimeofday");
 }
+#endif /* MCKERNEL_RUST_F03_LEAF_CALLBACKS */
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern void syscall_settimeofday_log_bridge(int, unsigned long, unsigned long, long, long, long);
+struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_settimeofday_debug_v1[3] = {
+    { .file=__FILE__, .func="syscall_settimeofday_log_bridge", .line=25332, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="syscall_settimeofday_log_bridge", .line=25336, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="syscall_settimeofday_log_bridge", .line=25340, .flags=DDEBUG_DEFAULT },
+};
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 syscall_settimeofday_log_bridge(int event, unsigned long utv,
 		unsigned long utz, long sec, long nsec, long error)
@@ -25053,6 +27797,7 @@ syscall_settimeofday_log_bridge(int event, unsigned long utv,
 				(void *)utz, error);
 	}
 }
+#endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_settimeofday(int n, ihk_mc_user_context_t *ctx);
@@ -25076,29 +27821,37 @@ long sys_settimeofday(int n, ihk_mc_user_context_t *ctx)
 }
 #endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 unsigned long
 syscall_rdtsc_bridge(void)
 {
 	return rdtsc();
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 unsigned long
 syscall_ns_per_tsc_bridge(void)
 {
 	return ihk_mc_get_ns_per_tsc();
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 int
 syscall_has_sigpending_bridge(void *thread)
 {
 	return hassigpending(thread) != NULL;
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 syscall_cpu_pause_bridge(void)
 {
 	cpu_pause();
 }
+#endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_nanosleep(int n, ihk_mc_user_context_t *ctx);
@@ -25123,23 +27876,29 @@ long sys_nanosleep(int n, ihk_mc_user_context_t *ctx)
 #endif
 
 //#define DISABLE_SCHED_YIELD
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long
 sched_yield_lock_bridge(void *lock)
 {
 	return ihk_mc_spinlock_lock((ihk_spinlock_t *)lock);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 sched_yield_unlock_bridge(void *lock, long irqstate)
 {
 	ihk_mc_spinlock_unlock((ihk_spinlock_t *)lock, irqstate);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 sched_yield_schedule_bridge(void)
 {
 	schedule();
 }
+#endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_sched_yield(int n, ihk_mc_user_context_t *ctx);
@@ -25161,51 +27920,75 @@ long sys_sched_yield(int n, ihk_mc_user_context_t *ctx)
 }
 #endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 memlock_write_lock_bridge(void *lock)
 {
 	ihk_rwspinlock_write_lock_noirq((ihk_rwspinlock_t *)lock);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 memlock_write_unlock_bridge(void *lock)
 {
 	ihk_rwspinlock_write_unlock_noirq((ihk_rwspinlock_t *)lock);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 struct vm_range *
 memlock_lookup_range_bridge(struct process_vm *vm, unsigned long start,
 		unsigned long end)
 {
 	return lookup_process_memory_range(vm, start, end);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 struct vm_range *
 memlock_next_range_bridge(struct process_vm *vm, struct vm_range *range)
 {
 	return next_process_memory_range(vm, range);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 int
 memlock_split_range_bridge(struct process_vm *vm, struct vm_range *range,
 		unsigned long addr, struct vm_range **new_range)
 {
 	return split_process_memory_range(vm, range, addr, new_range);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 int
 memlock_join_range_bridge(struct process_vm *vm, struct vm_range *left,
 		struct vm_range *right)
 {
 	return join_process_memory_range(vm, left, right);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 int
 memlock_populate_bridge(struct process_vm *vm, unsigned long start, size_t len)
 {
 	return populate_process_memory(vm, (void *)start, len);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern void memlock_log_bridge(const struct memlock_log_record *);
+struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_memlock_debug_v1[4] = {
+    { .file=__FILE__, .func="memlock_log_bridge", .line=25512, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="memlock_log_bridge", .line=25515, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="memlock_log_bridge", .line=25528, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="memlock_log_bridge", .line=25536, .flags=DDEBUG_DEFAULT },
+};
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 memlock_log_bridge(const struct memlock_log_record *record)
 {
@@ -25249,6 +28032,7 @@ memlock_log_bridge(const struct memlock_log_record *record)
 				error);
 	}
 }
+#endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_mlock(int n, ihk_mc_user_context_t *ctx);
@@ -25305,6 +28089,7 @@ static const struct syscall_mlockall_offsets syscall_mlockall_offsets = {
 };
 #endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 syscall_mlockall_log_bridge(int flags, int error)
 {
@@ -25325,7 +28110,9 @@ syscall_mlockall_log_bridge(int flags, int error)
 
 	kprintf("mlockall(0x%x):no lock permitted: EPERM\n", flags);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 syscall_munlockall_log_bridge(int value, int error)
 {
@@ -25333,6 +28120,7 @@ syscall_munlockall_log_bridge(int value, int error)
 	(void)error;
 	kprintf("munlockall(): 0\n");
 }
+#endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_mlockall(int n, ihk_mc_user_context_t *ctx);
@@ -25356,26 +28144,40 @@ long sys_munlockall(int n, ihk_mc_user_context_t *ctx)
 } /* sys_munlockall() */
 #endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 int
 remap_file_pages_callable_bridge(void *memobj)
 {
 	return is_callable_remap_file_pages((struct memobj *)memobj);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 int
 remap_file_pages_remap_bridge(struct process_vm *vm, struct vm_range *range,
 		unsigned long start, unsigned long end, off_t off)
 {
 	return remap_process_memory_range(vm, range, start, end, off);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 remap_file_pages_clear_host_bridge(unsigned long start, size_t size,
 		int holding_lock)
 {
 	clear_host_pte(start, size, holding_lock);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern void remap_file_pages_log_bridge(const struct remap_file_pages_log_record *);
+struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_remap_file_debug_v1[2] = {
+    { .file=__FILE__, .func="remap_file_pages_log_bridge", .line=25674, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="remap_file_pages_log_bridge", .line=25705, .flags=DDEBUG_DEFAULT },
+};
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 remap_file_pages_log_bridge(const struct remap_file_pages_log_record *record)
 {
@@ -25419,6 +28221,7 @@ remap_file_pages_log_bridge(const struct remap_file_pages_log_record *record)
 				record->pgoff, record->flags, record->error);
 	}
 }
+#endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_remap_file_pages(int n, ihk_mc_user_context_t *ctx);
@@ -25449,13 +28252,16 @@ long sys_remap_file_pages(int n, ihk_mc_user_context_t *ctx)
 }
 #endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 int
 mremap_extend_bridge(struct process_vm *vm, struct vm_range *range,
 		unsigned long newend)
 {
 	return extend_up_process_memory_range(vm, range, newend);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 int
 mremap_search_bridge(size_t size, unsigned long pgshift,
 		unsigned long *newstartp)
@@ -25467,19 +28273,25 @@ mremap_search_bridge(size_t size, unsigned long pgshift,
 		*newstartp = newstart;
 	return error;
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 mremap_memobj_ref_bridge(void *memobj)
 {
 	memobj_ref(memobj);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 mremap_memobj_unref_bridge(void *memobj)
 {
 	memobj_unref(memobj);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 int
 mremap_add_range_bridge(struct process_vm *vm, unsigned long start,
 		unsigned long end, long pgshift, unsigned long flags,
@@ -25488,19 +28300,25 @@ mremap_add_range_bridge(struct process_vm *vm, unsigned long start,
 	return add_process_memory_range(vm, start, end, pgshift, flags,
 			memobj, objoff, 0, NULL, NULL);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 mremap_pte_lock_bridge(void *lock)
 {
 	ihk_mc_spinlock_lock_noirq((ihk_spinlock_t *)lock);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 mremap_pte_unlock_bridge(void *lock)
 {
 	ihk_mc_spinlock_unlock_noirq((ihk_spinlock_t *)lock);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 int
 mremap_move_pte_bridge(void *page_table, struct process_vm *vm,
 		void *oldstart, void *newstart, size_t size,
@@ -25508,7 +28326,15 @@ mremap_move_pte_bridge(void *page_table, struct process_vm *vm,
 {
 	return move_pte_range(page_table, vm, oldstart, newstart, size, range);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern void mremap_log_bridge(const struct mremap_log_record *);
+struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_mremap_debug_v1[2] = {
+    { .file=__FILE__, .func="mremap_log_bridge", .line=25807, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="mremap_log_bridge", .line=25918, .flags=DDEBUG_DEFAULT },
+};
+#else
 void
 mremap_log_bridge(const struct mremap_log_record *record)
 {
@@ -25635,6 +28461,7 @@ mremap_log_bridge(const struct mremap_log_record *record)
 				record->newstart);
 	}
 }
+#endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_mremap(int n, ihk_mc_user_context_t *ctx);
@@ -25672,51 +28499,74 @@ long sys_mremap(int n, ihk_mc_user_context_t *ctx)
 }
 #endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 msync_read_lock_bridge(void *lock)
 {
 	ihk_rwspinlock_read_lock_noirq((ihk_rwspinlock_t *)lock);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 msync_read_unlock_bridge(void *lock)
 {
 	ihk_rwspinlock_read_unlock_noirq((ihk_rwspinlock_t *)lock);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 struct vm_range *
 msync_lookup_range_bridge(struct process_vm *vm, unsigned long start,
 		unsigned long end)
 {
 	return lookup_process_memory_range(vm, start, end);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 struct vm_range *
 msync_next_range_bridge(struct process_vm *vm, struct vm_range *range)
 {
 	return next_process_memory_range(vm, range);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 int
 msync_has_pager_bridge(void *memobj)
 {
 	return memobj_has_pager(memobj);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 int
 msync_sync_range_bridge(struct process_vm *vm, struct vm_range *range,
 		unsigned long start, unsigned long end)
 {
 	return sync_process_memory_range(vm, range, start, end);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 int
 msync_invalidate_range_bridge(struct process_vm *vm, struct vm_range *range,
 		unsigned long start, unsigned long end)
 {
 	return invalidate_process_memory_range(vm, range, start, end);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern void msync_log_bridge(int, unsigned long, size_t, int, int);
+struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_msync_debug_v1[3] = {
+    { .file=__FILE__, .func="msync_log_bridge", .line=26013, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="msync_log_bridge", .line=26028, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="msync_log_bridge", .line=26040, .flags=DDEBUG_DEFAULT },
+};
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 msync_log_bridge(int event, unsigned long start, size_t len, int flags,
 		int error)
@@ -25753,6 +28603,7 @@ msync_log_bridge(int event, unsigned long start, size_t len, int flags,
 				start, len, flags, error);
 	}
 }
+#endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_msync(int n, ihk_mc_user_context_t *ctx);
@@ -25791,58 +28642,94 @@ long sys_getcpu(int n, ihk_mc_user_context_t *ctx)
 } /* sys_getcpu() */
 #endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 syscall_mbind_write_lock_bridge(void *lock)
 {
 	ihk_rwspinlock_write_lock_noirq((ihk_rwspinlock_t *)lock);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 syscall_mbind_write_unlock_bridge(void *lock)
 {
 	ihk_rwspinlock_write_unlock_noirq((ihk_rwspinlock_t *)lock);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 struct vm_range *
 syscall_mbind_lookup_range_bridge(struct process_vm *vm,
 		unsigned long start, unsigned long end)
 {
 	return lookup_process_memory_range(vm, start, end);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 struct vm_range_numa_policy *
 syscall_mbind_policy_search_bridge(struct process_vm *vm, unsigned long addr)
 {
 	return vm_range_policy_search(vm, addr);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 int
 syscall_mbind_clear_range_bridge(struct process_vm *vm, unsigned long start,
 		unsigned long end)
 {
 	return vm_policy_clear_range(vm, start, end);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+const char f03_mbind_alloc_source_file_v1[] = __FILE__;
+const int f03_mbind_alloc_source_line_v1 = 26117;
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void *
 syscall_mbind_policy_alloc_bridge(size_t size, unsigned long flags)
 {
 	return kmalloc_tracked(size, flags, __FILE__, __LINE__);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 syscall_mbind_policy_rb_clear_bridge(
 		struct vm_range_numa_policy *range_policy)
 {
 	RB_CLEAR_NODE(&range_policy->policy_rb_node);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 int
 syscall_mbind_policy_insert_bridge(struct process_vm *vm,
 		struct vm_range_numa_policy *range_policy)
 {
 	return vm_policy_insert(vm, range_policy);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern void syscall_mbind_log_bridge(int, unsigned long, unsigned long, int);
+struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_syscall_mbind_log_bridge_debug_v1[10] = {
+    { .file=__FILE__, .func="syscall_mbind_log_bridge", .line=26140, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="syscall_mbind_log_bridge", .line=26144, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="syscall_mbind_log_bridge", .line=26148, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="syscall_mbind_log_bridge", .line=26152, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="syscall_mbind_log_bridge", .line=26156, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="syscall_mbind_log_bridge", .line=26160, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="syscall_mbind_log_bridge", .line=26163, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="syscall_mbind_log_bridge", .line=26167, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="syscall_mbind_log_bridge", .line=26173, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="syscall_mbind_log_bridge", .line=26180, .flags=DDEBUG_DEFAULT },
+};
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 syscall_mbind_log_bridge(int event, unsigned long arg0, unsigned long arg1,
 		int arg2)
@@ -25894,8 +28781,16 @@ syscall_mbind_log_bridge(int event, unsigned long arg0, unsigned long arg1,
 		break;
 	}
 }
+#endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern void syscall_mbind_entry_log_bridge(unsigned long, unsigned long, int, unsigned long, unsigned long);
+struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_syscall_mbind_entry_log_bridge_debug_v1[1] = {
+    { .file=__FILE__, .func="syscall_mbind_entry_log_bridge", .line=26191, .flags=DDEBUG_DEFAULT },
+};
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 syscall_mbind_entry_log_bridge(unsigned long addr, unsigned long len,
 		int mode, unsigned long nodemask_addr, unsigned long flags)
@@ -25904,6 +28799,7 @@ syscall_mbind_entry_log_bridge(unsigned long addr, unsigned long len,
 		"nodemask: 0x%lx, flags: %lx\n",
 		"sys_mbind", addr, len, mode, nodemask_addr, flags);
 }
+#endif
 
 long sys_mbind(int n, ihk_mc_user_context_t *ctx);
 #else
@@ -26185,6 +29081,20 @@ out:
 } /* sys_mbind() */
 #endif /* MCKERNEL_RUST_SYSCALL_POLICY_HELPERS */
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern void syscall_set_mempolicy_log_bridge(int, int, int);
+struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_syscall_set_mempolicy_log_bridge_debug_v1[8] = {
+    { .file=__FILE__, .func="syscall_set_mempolicy_log_bridge", .line=26481, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="syscall_set_mempolicy_log_bridge", .line=26485, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="syscall_set_mempolicy_log_bridge", .line=26489, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="syscall_set_mempolicy_log_bridge", .line=26493, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="syscall_set_mempolicy_log_bridge", .line=26497, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="syscall_set_mempolicy_log_bridge", .line=26501, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="syscall_set_mempolicy_log_bridge", .line=26504, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="syscall_set_mempolicy_log_bridge", .line=26513, .flags=DDEBUG_DEFAULT },
+};
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 syscall_set_mempolicy_log_bridge(int event, int value, int pid)
 {
@@ -26227,6 +29137,7 @@ syscall_set_mempolicy_log_bridge(int event, int value, int pid)
 		break;
 	}
 }
+#endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_set_mempolicy(int n, ihk_mc_user_context_t *ctx);
@@ -26245,32 +29156,41 @@ long sys_set_mempolicy(int n, ihk_mc_user_context_t *ctx)
 } /* sys_set_mempolicy() */
 #endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 syscall_get_mempolicy_read_lock_bridge(void *lock)
 {
 	ihk_rwspinlock_read_lock_noirq((ihk_rwspinlock_t *)lock);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 syscall_get_mempolicy_read_unlock_bridge(void *lock)
 {
 	ihk_rwspinlock_read_unlock_noirq((ihk_rwspinlock_t *)lock);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 struct vm_range *
 syscall_get_mempolicy_lookup_range_bridge(struct process_vm *vm,
 		unsigned long start, unsigned long end)
 {
 	return lookup_process_memory_range(vm, start, end);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 struct vm_range_numa_policy *
 syscall_get_mempolicy_policy_search_bridge(struct process_vm *vm,
 		unsigned long addr)
 {
 	return vm_range_policy_search(vm, addr);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 int
 syscall_get_mempolicy_lookup_node_bridge(struct process_vm *vm, void *addr)
 {
@@ -26278,7 +29198,17 @@ syscall_get_mempolicy_lookup_node_bridge(struct process_vm *vm, void *addr)
 
 	return lookup_node(vm, addr);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern void syscall_get_mempolicy_log_bridge(int, unsigned long, int);
+struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_syscall_get_mempolicy_log_bridge_debug_v1[3] = {
+    { .file=__FILE__, .func="syscall_get_mempolicy_log_bridge", .line=26575, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="syscall_get_mempolicy_log_bridge", .line=26579, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="syscall_get_mempolicy_log_bridge", .line=26582, .flags=DDEBUG_DEFAULT },
+};
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 syscall_get_mempolicy_log_bridge(int event, unsigned long addr, int value)
 {
@@ -26296,6 +29226,7 @@ syscall_get_mempolicy_log_bridge(int event, unsigned long addr, int value)
 		break;
 	}
 }
+#endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_get_mempolicy(int n, ihk_mc_user_context_t *ctx);
@@ -26322,11 +29253,19 @@ long sys_get_mempolicy(int n, ihk_mc_user_context_t *ctx)
 } /* sys_get_mempolicy() */
 #endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern void syscall_migrate_pages_log_bridge(void);
+struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_syscall_migrate_pages_log_bridge_debug_v1[1] = {
+    { .file=__FILE__, .func="syscall_migrate_pages_log_bridge", .line=26616, .flags=DDEBUG_DEFAULT },
+};
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 syscall_migrate_pages_log_bridge(void)
 {
 	dkprintf("sys_migrate_pages\n");
 }
+#endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_migrate_pages(int n, ihk_mc_user_context_t *ctx);
@@ -26338,6 +29277,9 @@ long sys_migrate_pages(int n, ihk_mc_user_context_t *ctx)
 } /* sys_migrate_pages() */
 #endif
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_MOVE_PAGES)
+extern long sys_move_pages(int n, ihk_mc_user_context_t *ctx);
+#else
 static int
 move_pages_verify_bridge(struct process_vm *vm, unsigned long addr,
 		size_t bytes)
@@ -26420,6 +29362,7 @@ long sys_move_pages(int n, ihk_mc_user_context_t *ctx)
 			move_pages_smp_call_bridge, move_pages_smp_handler,
 			syscall_rdtsc_bridge, move_pages_log_bridge);
 }
+#endif /* MCKERNEL_RUST_F03_MOVE_PAGES */
 
 extern int do_process_vm_read_writev(int pid,
 	const struct iovec *local_iov,
@@ -26524,6 +29467,11 @@ static void do_mod_exit(int status){
 extern void save_uctx(void *, void *);
 
 /* TODO: use copy_from_user() */
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
+extern int util_show_syscall_profile(void);
+#else
+#line 28277
 int util_show_syscall_profile()
 {
 	int i;
@@ -26545,6 +29493,9 @@ int util_show_syscall_profile()
 
 	return 0;
 }
+#endif
+#line 28297
+
 
 int util_thread(struct uti_attr *arg)
 {
@@ -26605,6 +29556,8 @@ int util_thread(struct uti_attr *arg)
 	request.args[3] = (unsigned long)uti_info;
 	request.args[4] = uti_desc;
 	thread->uti_state = UTI_STATE_RUNNING_IN_LINUX;
+	/* Defined unused wire slot; transport copies all six arguments. */
+	request.args[5] = 0;
 	rc = do_syscall(&request, ihk_mc_get_processor_id());
 	dkprintf("%s: returned from do_syscall,tid=%d,rc=%lx\n", __FUNCTION__, thread->tid, rc);
 
@@ -26648,12 +29601,19 @@ int util_thread(struct uti_attr *arg)
 	return rc;
 }
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long syscall_util_thread_bridge(void *);
+#else
 long
 syscall_util_thread_bridge(void *arg)
 {
 	return util_thread(arg);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern void utilthr_migrate(void);
+#else
 void
 utilthr_migrate()
 {
@@ -26665,6 +29625,7 @@ utilthr_migrate()
 		util_thread(thread->mod_clone_arg);
 	}
 }
+#endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_util_migrate_inter_kernel(int n, ihk_mc_user_context_t *ctx);
@@ -26724,6 +29685,12 @@ long sys_get_system(int n, ihk_mc_user_context_t *ctx)
  * swapoout(const char *filename, void *workarea, size_t size)
  */
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+#ifdef MCKERNEL_RUST_F03_IO_DIAGNOSTICS
+struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_swapout_callback_debug_v1 = {
+ .file=__FILE__, .func="syscall_swapout_log_bridge", .line=28275, .flags=DDEBUG_DEFAULT
+};
+extern void syscall_swapout_log_bridge(const void *fname, void *buf, size_t size, int flag);
+#else
 void
 syscall_swapout_log_bridge(const void *fname, void *buf, size_t size, int flag)
 {
@@ -26731,6 +29698,7 @@ syscall_swapout_log_bridge(const void *fname, void *buf, size_t size, int flag)
 			ihk_mc_get_processor_id(), (unsigned long)fname,
 			(unsigned long)buf, (unsigned long)size, (long)flag);
 }
+#endif /* MCKERNEL_RUST_F03_IO_DIAGNOSTICS */
 
 long sys_swapout(int n, ihk_mc_user_context_t *ctx);
 #else
@@ -26765,11 +29733,15 @@ long sys_linux_mlock(int n, ihk_mc_user_context_t *ctx)
 #endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+#ifdef MCKERNEL_RUST_F03_IO_DIAGNOSTICS
+extern void syscall_linux_mlock_log_bridge(unsigned long addr, unsigned long len);
+#else
 void
 syscall_linux_mlock_log_bridge(unsigned long addr, unsigned long len)
 {
 	kprintf("linux_mlock: %p %ld\n", (void *)addr, len);
 }
+#endif /* MCKERNEL_RUST_F03_IO_DIAGNOSTICS */
 #endif
 
 #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
@@ -26830,6 +29802,12 @@ long sys_util_register_desc(int n, ihk_mc_user_context_t *ctx)
 #endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
+extern struct ddebug f03_util_register_desc_debug_v1[1];
+extern void syscall_util_register_desc_log_bridge(int,unsigned long);
+#else
+#line 28602
 void
 syscall_util_register_desc_log_bridge(int tid, unsigned long desc)
 {
@@ -26837,7 +29815,14 @@ syscall_util_register_desc_log_bridge(int tid, unsigned long desc)
 			tid, desc);
 }
 #endif
+#line 28607
 
+#endif
+
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+void reset_cputime(void);
+void set_cputime(enum set_cputime_mode mode);
+#else
 void
 reset_cputime()
 {
@@ -26961,7 +29946,57 @@ set_cputime(enum set_cputime_mode mode)
 	}
 	cpu_restore_interrupt(irq_flags);
 }
+#endif
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_SYSCALL_ENTRY) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT) && defined(PROFILE_ENABLE)
+/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
+struct f03_syscall_entry_config_v1 {
+	const char *const *names;
+	unsigned long name_count;
+	int (*fork_drain)(void);
+	int profile_max, profile_nr, exit_nr, exit_group_nr, sched_yield_nr;
+	int epoll_wait_nr, epoll_pwait_nr, ppoll_nr, mode_u2k, mode_k2u;
+	int sigkill, disable_yield, fugaku;
+	unsigned int resched_mask;
+};
+struct ddebug f03_syscall_entry_debug_v1[6] __aligned(8)
+	__attribute__((section("__verbose"))) = {
+	{ .file = __FILE__, .func = "syscall", .line = 28800, .flags = DDEBUG_DEFAULT },
+	{ .file = __FILE__, .func = "syscall", .line = 28812, .flags = DDEBUG_DEFAULT },
+	{ .file = __FILE__, .func = "syscall", .line = 28821, .flags = DDEBUG_DEFAULT },
+	{ .file = __FILE__, .func = "syscall", .line = 28828, .flags = DDEBUG_DEFAULT },
+	{ .file = __FILE__, .func = "syscall", .line = 28831, .flags = DDEBUG_DEFAULT },
+	{ .file = __FILE__, .func = "syscall", .line = 28876, .flags = DDEBUG_DEFAULT },
+};
+const struct f03_syscall_entry_config_v1 f03_syscall_entry_config_v1 = {
+	.names = (const char *const *)syscall_name,
+	.name_count = sizeof(syscall_name) / sizeof(syscall_name[0]),
+#ifdef MCKERNEL_NATIVE_FORK_OWNED_TRANSACTION
+	.fork_drain = process_fork_runtime_drain_current_v1,
+#else
+	.fork_drain = NULL,
+#endif
+	.profile_max = PROFILE_SYSCALL_MAX, .profile_nr = __NR_profile,
+	.exit_nr = __NR_exit, .exit_group_nr = __NR_exit_group,
+	.sched_yield_nr = __NR_sched_yield, .epoll_wait_nr = __NR_epoll_wait,
+	.epoll_pwait_nr = __NR_epoll_pwait, .ppoll_nr = __NR_ppoll,
+	.mode_u2k = CPUTIME_MODE_U2K, .mode_k2u = CPUTIME_MODE_K2U,
+	.sigkill = SIGKILL,
+#ifdef DISABLE_SCHED_YIELD
+	.disable_yield = 1,
+#else
+	.disable_yield = 0,
+#endif
+#ifdef ENABLE_FUGAKU_HACKS
+	.fugaku = 1,
+#else
+	.fugaku = 0,
+#endif
+	.resched_mask = CPU_FLAG_NEED_RESCHED,
+};
+long syscall(int num, ihk_mc_user_context_t *ctx);
+#else
+#line 28734
 long syscall(int num, ihk_mc_user_context_t *ctx)
 {
 	long l;
@@ -27012,6 +30047,12 @@ long syscall(int num, ihk_mc_user_context_t *ctx)
 	}
 
 	cpu_enable_interrupt();
+
+#ifdef MCKERNEL_NATIVE_FORK_OWNED_TRANSACTION
+	/* Current live-parent process context; rejection and IRQ enable precede
+	 * Rust's unlocked, non-reentrant retirement drain. */
+	(void)process_fork_runtime_drain_current_v1();
+#endif
 
 	if (get_this_cpu_local_var()->current->ptrace) {
 		arch_ptrace_syscall_event(get_this_cpu_local_var()->current,
@@ -27136,6 +30177,12 @@ long syscall(int num, ihk_mc_user_context_t *ctx)
 	return l;
 }
 
+#endif
+#line 28913
+
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+void check_sig_pending(void);
+#else
 void
 check_sig_pending()
 {
@@ -27213,7 +30260,13 @@ check_sig_pending()
 	}
 	return;
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern struct sig_pending *getsigpending(struct thread *, int);
+/* hassigpending retains its exact existing process.h declaration. */
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 struct sig_pending *
 getsigpending(struct thread *thread, int delflag)
 {
@@ -27291,7 +30344,15 @@ hassigpending(struct thread *thread)
 
 	return getsigpending(thread, 0);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_check_signal_empty_debug = {
+    .file = __FILE__, .func = "__check_signal", .line = 27641, .flags = DDEBUG_DEFAULT,
+};
+void check_signal(unsigned long, void *, int);
+void check_signal_irq_disabled(unsigned long, void *, int);
+#else
 static void
 __check_signal(unsigned long rc, void *regs0, int num, int irq_disabled)
 {
@@ -27370,3 +30431,4 @@ check_signal_irq_disabled(unsigned long rc, void *regs0, int num)
 {
 	__check_signal(rc, regs0, num, 1);
 }
+#endif

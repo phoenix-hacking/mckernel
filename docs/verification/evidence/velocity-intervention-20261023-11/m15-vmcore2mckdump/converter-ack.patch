@@ -1,0 +1,138 @@
+--- a/executer/user/rust/ldump2mcdump_helpers.rs
++++ b/executer/user/rust/ldump2mcdump_helpers.rs
+@@ -231,6 +231,7 @@
+     fn free(ptr: *mut c_void);
+     fn perror(s: *const c_char);
+     fn fprintf(stream: *mut File, format: *const c_char, ...) -> c_int;
++    fn fflush(stream: *mut File) -> c_int;
+     fn gethostname(name: *mut c_char, len: usize) -> c_int;
+     fn getuid() -> c_uint;
+     fn getpwuid(uid: c_uint) -> *mut Passwd;
+@@ -625,12 +626,14 @@
+ 
+     while i < (*dump_page_set).count {
+         let mut ihk_dump_page = MaybeUninit::<IhkDumpPage>::uninit();
+-        read_or_return(
++        if read_or_return(
+             ihk_dump_page_addr,
+             ihk_dump_page.as_mut_ptr().cast::<c_void>(),
+             size_of::<IhkDumpPage>(),
+             FAULT_ON_ERROR,
+-        );
++        ) != TRUE {
++            return -1;
++        }
+         let ihk_dump_page = ihk_dump_page.assume_init();
+         let map_size = size_of::<c_ulong>().wrapping_mul(ihk_dump_page.map_count as usize);
+         let map_buf = malloc(map_size).cast::<c_ulong>();
+@@ -640,12 +643,15 @@
+         }
+ 
+         memset(map_buf.cast::<c_void>(), 0, map_size);
+-        read_or_return(
++        if read_or_return(
+             ihk_dump_page_addr.wrapping_add(size_of::<IhkDumpPage>() as c_ulong),
+             map_buf.cast::<c_void>(),
+             map_size,
+             FAULT_ON_ERROR,
+-        );
++        ) != TRUE {
++            free(map_buf.cast::<c_void>());
++            return -1;
++        }
+ 
+         let chunk_count = if count_only {
+             ldump2_count_chunks_result(map_buf.cast::<usize>(), ihk_dump_page.map_count as usize)
+@@ -694,6 +700,9 @@
+ #[no_mangle]
+ #[cfg(ldump2_full_body)]
+ pub unsafe extern "C" fn cmd_ldump2mcdump() {
++    // Private acknowledgment proposal: retain existing failure observations and
++    // data-writing behavior, but never acknowledge a partial conversion.
++    let mut conversion_complete = true;
+     static mut PATH: [c_char; PATH_MAX] = [0; PATH_MAX];
+     static mut HNAME: [c_char; HOST_NAME_MAX + 1] = [0; HOST_NAME_MAX + 1];
+ 
+@@ -734,20 +743,24 @@
+ 
+     let symbol_dump_page_set = symbol_value(cstr_mut(DUMP_MEM_SYMBOL));
+     let mut dump_page_set_addr: c_ulong = 0;
+-    read_or_return(
++    if read_or_return(
+         symbol_dump_page_set,
+         addr_of_mut!(dump_page_set_addr).cast::<c_void>(),
+         size_of::<c_ulong>(),
+         FAULT_ON_ERROR,
+-    );
++    ) != TRUE {
++        return;
++    }
+ 
+     let mut dump_page_set = MaybeUninit::<IhkDumpPageSet>::uninit();
+-    read_or_return(
++    if read_or_return(
+         dump_page_set_addr,
+         dump_page_set.as_mut_ptr().cast::<c_void>(),
+         size_of::<IhkDumpPageSet>(),
+         FAULT_ON_ERROR,
+-    );
++    ) != TRUE {
++        return;
++    }
+     let dump_page_set = dump_page_set.assume_init();
+ 
+     let mut mem_num: c_int = 0;
+@@ -770,12 +783,15 @@
+ 
+     let symbol_bootstrap_mem = symbol_value(cstr_mut(BOOTSTRAP_MEM_SYMBOL));
+     let mut bootstrap_mem: c_ulong = 0;
+-    read_or_return(
++    if read_or_return(
+         symbol_bootstrap_mem,
+         addr_of_mut!(bootstrap_mem).cast::<c_void>(),
+         size_of::<c_ulong>(),
+         FAULT_ON_ERROR,
+-    );
++    ) != TRUE {
++        free(mem_chunks.cast::<c_void>());
++        return;
++    }
+     (*mem_chunks).kernel_base = bootstrap_mem
+         .wrapping_add(LARGE_PAGE_SIZE * 2)
+         .wrapping_sub(1)
+@@ -945,6 +961,9 @@
+     }
+ 
+     scn = bfd_get_section_by_name(abfd, cstr(SECTION_PHYSCHUNKS));
++    if scn.is_null() {
++        conversion_complete = false;
++    }
+     if !scn.is_null()
+         && bfd_set_section_contents(
+             abfd,
+@@ -1007,6 +1026,9 @@
+                 }
+                 phys_offset = phys_offset.wrapping_add(cpsize as c_ulong);
+             } else {
++                // Preserve the original diagnostic and continued observation of
++                // later chunks, while suppressing a successful-conversion ack.
++                conversion_complete = false;
+                 fprintf(fp, cstr(READMEM_ERROR), read_mem_ret);
+             }
+             addr = addr.wrapping_add(cpsize as c_ulong);
+@@ -1021,6 +1043,15 @@
+ 
+     free(buf);
+     free(mem_chunks.cast::<c_void>());
++    if conversion_complete {
++        if fprintf(
++            fp,
++            cstr(b"MCKERNEL_LDUMP2MCDUMP_SUCCESS %s\n\0"),
++            addr_of_mut!(PATH).cast::<c_char>(),
++        ) >= 0 {
++            let _ = fflush(fp);
++        }
++    }
+ }
+ 
+ #[panic_handler]

@@ -1,0 +1,36 @@
+{
+  "decision": "FAIL_SOURCE_RAW_RESET_EQUALITY",
+  "findings": [
+    {
+      "defect": "Raw confirmed row resetsAt equality to canonical1793774133 rejects valid same-authorized-period reporting corrections accepted by frozen Q authoritative policy368ef9/guardian5d99.",
+      "evidence": "Guard19case fixture explicitly treats resetsAt+1 as a refusal. No exact Q confirmed-row semantic validator is used in this preliminary check.",
+      "function": "confirmed_weekly_ceiling",
+      "required_correction": "Use the exact Q confirmed-row semantic validator; keep canonical maximum/no paid fallback and actual/effective three-clock minimum. Cover valid confirmed same-period corrections, truly changed period, unknown/100percent and actual earlier effective ends through the operation admission path."
+    }
+  ],
+  "guard": {
+    "bytes": 9531,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/CURRENT119-PRODUCER-GUARD-1/runtime_guard.py",
+    "sha256": "57d3090ff04b7c8df75c7ee7c530a78baba3599d71aab7c0ca1b9e3f1e6401cc"
+  },
+  "implementation_ownership": false,
+  "independent": true,
+  "reviewer": "/root/recovery_review",
+  "reviewer_executed_compiler": false,
+  "reviewer_executed_guard": false,
+  "runtime_authority": null,
+  "schema": "mckernel.independent-focused-source-review.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_correction_author": "Terra assigned one immutable child by Root",
+  "source_ready": {
+    "bytes": 3542,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/CURRENT119-PRODUCER-GUARD-1/SOURCE-READY.json",
+    "sha256": "799fb4c9f5ba1449bf9c201d9460379e2313c2df22e8d1b8ef2496ce7051cb80"
+  },
+  "test": {
+    "bytes": 3782,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/CURRENT119-PRODUCER-GUARD-1/test_producer_guard.py",
+    "sha256": "e215c1a43b34a95343493a55b4ad65b7864c7d18ffff7079e274c7de3cb5fae0"
+  },
+  "unbound": true
+}

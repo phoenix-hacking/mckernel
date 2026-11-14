@@ -1,0 +1,39 @@
+--- actual142dsource/long_bridge.inc
++++ private-error-only-diagnostic/long_bridge.inc
+@@ -28,6 +28,19 @@
+     int n=snprintf(line,sizeof line,"P12_LONG_PHASE round=%u stage=%s\n",round,phase);
+     return n<=0 || (size_t)n>=sizeof line || write_all(ctx->console,line,(size_t)n)?-1:0;
+ }
++/* Emit only after the original ABORT and only on existing snapshot-error paths.
++ * errno_after is raw libc errno; it is meaningful as errno only for n<0. */
++static void long_snapshot_error_line(int console,const char *site,int n,int error,
++                                     size_t bound,unsigned round,int pid0,int pid1)
++{
++    int saved_errno=errno;
++    char line[320];
++    int count=snprintf(line,sizeof line,
++        "P12_LONG_SNAPSHOT_ERROR site=%s n=%d errno_after=%d errno_valid=%d bound=%zu round=%u pid0=%d pid1=%d\n",
++        site,n,error,n<0,bound,round,pid0,pid1);
++    if(count>0 && (size_t)count<sizeof line)(void)write_all(console,line,(size_t)count);
++    errno=saved_errno;
++}
+ static int long_failure_export(int console,int ownership_complete)
+ {
+     struct long_context ctx={.console=console};
+@@ -43,8 +56,16 @@
+     static const char abort_line[]="ND_PAIR_LONG_ABORT\n";
+     if(write_all(console,abort_line,sizeof abort_line-1) ||
+        long_phase(&ctx,long_observed_round,"failure-trace-snapshot"))return -1;
++    if(pair_settlement_snapshot_error.valid)
++        long_snapshot_error_line(console,"settlement",pair_settlement_snapshot_error.n,
++            pair_settlement_snapshot_error.errno_after,pair_settlement_snapshot_error.bound,
++            pair_settlement_snapshot_error.round,pair_settlement_snapshot_error.pid0,
++            pair_settlement_snapshot_error.pid1);
+     n=long_kernel_snapshot(log,sizeof log-1);
++    int snapshot_errno=errno;
+     if(n<=0 || n==(int)sizeof log-1) {
++        long_snapshot_error_line(console,"failure_export",n,snapshot_errno,sizeof log-1,
++                                 long_observed_round,pair_results[0].pid,pair_results[1].pid);
+         static const char error[]="P12_LONG_FAILURE_TRACE_ERROR stage=snapshot\n";
+         (void)write_all(console,error,sizeof error-1);return -1;
+     }

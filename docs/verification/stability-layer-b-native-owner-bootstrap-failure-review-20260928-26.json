@@ -1,0 +1,40 @@
+{
+  "schema": "mckernel.layer-b-failure-review.v1",
+  "status": "FAIL_RECORD_PASS_PRESENT_QUIESCENCE",
+  "reviewer": "/root/root12_failure_review",
+  "attempt_record": "docs/verification/stability-layer-b-native-owner-bootstrap-failure-20260928-12.json",
+  "archive": "docs/verification/evidence/stability-layer-b-native-owner-bootstrap-failure-20260928-12.tar.gz",
+  "archive_sha256": "82574a70f22300c92fc01b1a5caaab39c3540b85e780d4b6974d8007fa312056",
+  "corrections": {
+    "preack_query_count": 1204,
+    "query_1205_scope": "post-stop cleanup",
+    "archive_proves_original_cgroup_absence": false,
+    "reset_command_status_and_timing_fully_retained": false,
+    "best_effort_query_before_stop_present": false
+  },
+  "accepted_archive_observations": {
+    "invocation_id": "a9ba8caace454337b6ef600c695fa75b",
+    "control_pid": 3112143,
+    "state": "activating/start-pre",
+    "main_pid": 0,
+    "main_started": false,
+    "writer_record_present": false,
+    "compiler_output_present": false,
+    "first_failure": "preack deadline",
+    "stop_status": 0
+  },
+  "present_reconciliation": {
+    "observed_local": "2026-09-28T03:28:51-07:00",
+    "unit_state": "not-found/inactive/dead",
+    "main_pid": 0,
+    "control_pid": 0,
+    "correct_original_group": "/sys/fs/cgroup/systemd/user.slice/user-1000.slice/user@1000.service/layer-b-native-owner-bootstrap-20260928-12-5a3a3fe8-03a9-4dc6-86fc-9666747decc4.service",
+    "correct_original_group_absent": true,
+    "proc_control_pid_absent": true,
+    "matching_residual_process": false,
+    "systemd_hierarchy_mount": "/sys/fs/cgroup/systemd",
+    "hierarchy_parent_accessible": true,
+    "heavy_lease_released": true
+  },
+  "next_action": "Preserve attempt12. A reviewed root13 packet must bind the observer implementation, derive the hierarchy from mountinfo plus name=systemd with mount-root offsets, reject ambiguity, retain parent/original-path identities and reuse the original mapping during cleanup."
+}

@@ -1,0 +1,55 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_OBSERVED_GROUPS_EMPTY",
+  "at": 1793395495.8908823,
+  "recorded_owned_chain": [
+    {
+      "pgid": 3071293,
+      "pid": 3071295,
+      "ppid": 3071294,
+      "session": 3071293,
+      "start": "119291758",
+      "state": "R"
+    },
+    {
+      "pgid": 3071293,
+      "pid": 3071294,
+      "ppid": 3071293,
+      "session": 3071293,
+      "start": "119291758",
+      "state": "S"
+    },
+    {
+      "pgid": 3071293,
+      "pid": 3071293,
+      "ppid": 3071292,
+      "session": 3071293,
+      "start": "119291757",
+      "state": "S"
+    },
+    {
+      "pgid": 3071292,
+      "pid": 3071292,
+      "ppid": 2996005,
+      "session": 3071292,
+      "start": "119291756",
+      "state": "S"
+    }
+  ],
+  "observed_groups": [
+    3071292,
+    3071293
+  ],
+  "observed_sessions": [
+    3071292,
+    3071293
+  ],
+  "remaining": [],
+  "read_errors": [],
+  "proc_visible": true,
+  "proc_mount": [
+    "25 29 0:23 / /proc rw,nosuid,nodev,noexec,relatime shared:15 - proc proc rw"
+  ],
+  "tool_exit_code": 0,
+  "limits": "After direct tool exit, two observed sessions/groups and recorded identities absent in visible proc census. No generic claim about escaped unobserved descendants; fixed extractor source makes no subprocess calls."
+}

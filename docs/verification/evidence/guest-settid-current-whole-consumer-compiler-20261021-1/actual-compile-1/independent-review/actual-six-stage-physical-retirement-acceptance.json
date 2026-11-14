@@ -1,0 +1,254 @@
+{
+  "all_client_statuses_exited0_and_final_groups_empty": true,
+  "archived_three_raw_record_bytes_verified": true,
+  "artifact_acceptance_separate": true,
+  "authorized_and_completed_release_match_archive": true,
+  "capacity_clients": [
+    {
+      "pid": 2368991,
+      "positive_client_count": 1,
+      "scope": "outer"
+    },
+    {
+      "pid": 2369013,
+      "positive_client_count": 1,
+      "scope": "inner"
+    }
+  ],
+  "closed_outer_receipt_sha256": "24c24026ec3db6803f244b77a4ae623170046486874729bbe05d5e65adda014f",
+  "closed_owner_control_status_sha256": "595e12f77e43fdf32af54ff8adcce37b64d062080eae577620f75131995a039f",
+  "closed_owner_receipt_sha256": "dcaad2852fc552daf40e0c1637891049d226a1f929fbb38e1b34fe4c4769ad53",
+  "container_id": "421cc6d2d17cbb600de5abad82c05c84d8786b09100e1ba63c9a75b794d1256d",
+  "current_three_attempt_records_absent": true,
+  "decision": "PASS_EXACT_COMPILER_OWNER_CONTAINER_13CLIENTS_SIX_INNER_COMPILERS_AND_OUTER_PHYSICAL_RETIREMENT",
+  "exact_terminal_nonOOM_exit0_and_three_absence_queries": true,
+  "native_default_link_or_compute_C_retirement_acceptance": false,
+  "new_root_or_runtime_actions_by_reviewer": 0,
+  "outer": {
+    "closed_streams_verified": true,
+    "direct_join": true,
+    "group_absent": true,
+    "pid": 2368989,
+    "returncode": 0,
+    "seconds": 43.352293729782104,
+    "start": 34724596
+  },
+  "owner_client_count": 11,
+  "owner_clients": [
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "rm",
+        "421cc6d2d17cbb600de5abad82c05c84d8786b09100e1ba63c9a75b794d1256d"
+      ],
+      "exit_code": 0,
+      "pid": 2369305,
+      "state": "exited"
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "image",
+        "inspect",
+        "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5"
+      ],
+      "exit_code": 0,
+      "pid": 2369031,
+      "state": "exited"
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "wait",
+        "mckernel-settid-compiler-715b8466266b"
+      ],
+      "exit_code": 0,
+      "pid": 2369118,
+      "state": "exited"
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "create",
+        "--name",
+        "mckernel-settid-compiler-715b8466266b",
+        "--label",
+        "mckernel.owner=715b8466266b4be297da9d4fa915daab",
+        "--network=none",
+        "--ipc=private",
+        "--cpus=4",
+        "--cpuset-cpus=2-5",
+        "--memory=12g",
+        "--memory-swap=12g",
+        "--pids-limit=512",
+        "--user",
+        "1000:1000",
+        "--read-only",
+        "--cap-drop=ALL",
+        "--security-opt=no-new-privileges",
+        "--init",
+        "--tmpfs",
+        "/tmp:rw,nodev,nosuid,size=256m",
+        "--entrypoint",
+        "/usr/bin/python3",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/guest-settid-rust-candidate-20261021-1/compile-execution-preparation-1/materialized-source,dst=/src,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/scratch/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu,dst=/nightly,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/guest-settid-rust-candidate-20261021-1/compile-execution-preparation-1/compile_retirement_current_driver.py,dst=/driver.py,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/guest-settid-rust-candidate-20261021-1/compile-execution-preparation-1/source-manifest.json,dst=/inputs.json,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/guest-settid-rust-candidate-20261021-1/compile-execution-preparation-1/guest-compiler-commands.json,dst=/commands.json,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/guest-settid-rust-candidate-20261021-1/compile-execution-preparation-1/compiler-attempt-1/work,dst=/work",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/current-fullcrate-owner-1/owned_capture_helpers.py,dst=/owned-capture.py,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/adapters/native_rust_exact_build_container_owner.py,dst=/accepted-host-owner.py,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/guest-settid-rust-candidate-20261021-1/compile-execution-preparation-1/actual_retirement_consumer_and_FAM_assertions.h,dst=/prototype-assertions.h,readonly",
+        "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5",
+        "/driver.py",
+        "--execute"
+      ],
+      "exit_code": 0,
+      "pid": 2369040,
+      "state": "exited"
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "ps",
+        "--all",
+        "--quiet",
+        "--no-trunc",
+        "--filter",
+        "id=421cc6d2d17cbb600de5abad82c05c84d8786b09100e1ba63c9a75b794d1256d"
+      ],
+      "exit_code": 0,
+      "pid": 2369329,
+      "state": "exited"
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "ps",
+        "--all",
+        "--quiet",
+        "--no-trunc",
+        "--filter",
+        "name=^/mckernel-settid-compiler-715b8466266b$"
+      ],
+      "exit_code": 0,
+      "pid": 2369313,
+      "state": "exited"
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "inspect",
+        "mckernel-settid-compiler-715b8466266b"
+      ],
+      "exit_code": 0,
+      "pid": 2369051,
+      "state": "exited"
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "start",
+        "mckernel-settid-compiler-715b8466266b"
+      ],
+      "exit_code": 0,
+      "pid": 2369060,
+      "state": "exited"
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "ps",
+        "--all",
+        "--quiet",
+        "--no-trunc",
+        "--filter",
+        "label=mckernel.owner=715b8466266b4be297da9d4fa915daab"
+      ],
+      "exit_code": 0,
+      "pid": 2369321,
+      "state": "exited"
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "inspect",
+        "mckernel-settid-compiler-715b8466266b"
+      ],
+      "exit_code": 0,
+      "pid": 2369289,
+      "state": "exited"
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "logs",
+        "mckernel-settid-compiler-715b8466266b"
+      ],
+      "exit_code": 0,
+      "pid": 2369297,
+      "state": "exited"
+    }
+  ],
+  "owner_controller": {
+    "closed_streams_verified": true,
+    "direct_join": true,
+    "group_absent": true,
+    "pid": 2369010,
+    "returncode": 0,
+    "seconds": 43.05864119529724,
+    "start": 34724625
+  },
+  "ownership_archive_sha256": "e881e41361338e5301422587216f3873e50ed45b2be6a1f3184a5625ba939e43",
+  "permanent_mutex_27_4_retained": true,
+  "physical_acceptance": true,
+  "preserve_Scratch21_exclusions57687_57688_and_original_failures": true,
+  "root_may_release_only_this_attempt_resource_reservation": true,
+  "schema": "mckernel.settid.actual-six-stage-physical-retirement-review.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "six_inner_compiler_closure_source": "closed driver result and owner PASS; independently checked in actual-six-stage-artifact-acceptance.json",
+  "total_host_docker_clients": 13
+}

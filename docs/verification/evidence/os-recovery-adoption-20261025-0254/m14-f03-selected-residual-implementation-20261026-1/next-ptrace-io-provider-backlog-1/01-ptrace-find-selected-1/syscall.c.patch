@@ -1,0 +1,19 @@
+--- kernel/syscall.c
++++ kernel/syscall.c
+@@ -24653,11 +24653,16 @@
+ 		__builtin_offsetof(struct process, update_lock),
+ };
+ 
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PTRACE_IO_FIND)
++extern unsigned long f03_ptrace_io_find(int, int);
++#define ptrace_find_thread_bridge f03_ptrace_io_find
++#else
+ static unsigned long
+ ptrace_find_thread_bridge(int tgid, int tid)
+ {
+ 	return (unsigned long)find_thread(tgid, tid);
+ }
++#endif
+ 
+ static void
+ ptrace_thread_unlock_bridge(unsigned long thread_addr)

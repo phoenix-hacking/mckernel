@@ -1,0 +1,66 @@
+{
+  "decision": "NO_GO_PREEXECUTION_EXACT_RETAINED_UNWIND_SECTION_TYPE_MISMATCH",
+  "reviewer": "/root/create_empty_entry_parity_high",
+  "request": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-metadata-1/REQUEST.json",
+    "sha256": "3a064c4debcd8a9d0990510f61c73f4e156f28ec81f4072dc056871fcffe5775"
+  },
+  "predicate": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-metadata-1/lapic_checks.py",
+    "sha256": "ca5a3461366cea0c6bf4f8a26c4b80d61330af243269f76a0c13dc9b56182efb"
+  },
+  "controller": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-metadata-1/run_metadata.py",
+    "sha256": "7f3408867a7256972bbb683131d36df95eee5a02bdcd1ca21fec2a91b0ea28cf"
+  },
+  "emission_source_contract": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-metadata-1/EMISSION-SOURCE-CONTRACT.json",
+    "sha256": "2506b0e1c1d5f5ce7a450205b09e46230fcd291a1174ad125f48d4ec45ee0afa"
+  },
+  "retained_actual_capture": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-metadata-1/ACTUAL-CAPTURE-BEFORE-GATE.json",
+    "sha256": "151e4399fef50201ab76ed9c131150a333e2d0d906dd19711fb0a6f6551fa916",
+    "is_not_gate_PASS": true
+  },
+  "compiled_input": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-unit-1/output/scheduler_lapic_provider.o",
+    "sha256": "2f149772ebb539640d2a5eafcffaef6768ce40e57ed0a0a180934f5d91903ecb",
+    "bytes": 2448,
+    "actual_producer_RESULT": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/shared-next-join-and-lapic-ipi-producers-1/RESULT.json",
+    "actual_producer_RESULT_sha256": "941c0ecde84e6123a36e131087ffcfbb45b398d0b4b47f87b0f51652c15f0417",
+    "actual_compile_pid": 650168,
+    "actual_compile_birth": "35262484",
+    "actual_compile_wait_joined": true,
+    "compile_replay": false
+  },
+  "source_GO_reused": "e41454b118fc362f8b138fa8a2a5411595565bc62b902361b5ee6035abcbdac0; unit68eb4863/manifeste30bb725/profilea4658e94 unchanged, no source/producer replay.",
+  "blocking_defect": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-metadata-1/lapic_checks.py",
+    "context": "Final nonempty allocated-readonly section tuple assertion",
+    "frozen_expected_tuple": [
+      ".eh_frame",
+      1,
+      2,
+      8,
+      208
+    ],
+    "actual_retained_tuple": [
+      ".eh_frame",
+      1879048193,
+      2,
+      8,
+      208
+    ],
+    "actual_section_index": 14,
+    "explanation": "Bound retained capture section14 has SHT_X86_64_UNWIND0x70000001/1879048193, not PROGBITS1. Predicate earlier requires exact full actual section identity against this same retained record. Its final hardcoded type1 comparison must therefore fail on the unchanged admitted object. This is a predicate defect, not an observed workload/object/source failure; no gate ran."
+  },
+  "one_bounded_correction": "Preserve original request/check/controller/captures/source/object. New exact predicate version must require actual .eh_frame type0x70000001, preserving size208/flags2/align8/exact bytes/5source unwind references and every other owner/content/relocation assertion. No alternate type wildcard, new object, compiler/source change or runtime. Rebind changed predicate/request hashes and obtain focused independent correction GO plus fresh Root admission before execution.",
+  "other_material_reviewed": {
+    "bindings": "23 frozen input hashes verified; actual retained producer650168 birth35262484 joined0, exact object2f149772/2448B and warning policy verified from retained steps schema.",
+    "source_emission": "Retained capture has exactly5distinct T code owners22/51/31/56/15 and one real None B8 .lbss.lapic_write flags0x10000003 align8,0U/private. Contract exact8 relocation rows bind3R64 slot edges and5PC64 local code references, actual addends0. Byte sequences preserve original inlining/callback order/-22 returns and slot forwarding; no alias or fabricated target.",
+    "controller": "Exactly2serial CPU6 nm/readelf commands, exclusive raw captures, hash preflight/PID+birth persistence before finally direct waits/stdios SHA/time-v paths. Explicit actual_object_gate CALL follows both successful reads; unexpected read/gate failure stops/no retry. Root outer must separately bind controller/predicate to CPU6 as inherited profile; literal driver currently has no own taskset.",
+    "future_join": "UNBOUND; no static closure or preboot-slot readiness/native/original acceptance claim."
+  },
+  "review_inspection_note": "Initial read-only receipt lookup assumed commands key; actual retained producer receipt uses steps. Narrow key inspection located same unique650168 row. No source/artifact/payload mutation or review write occurred before this receipt.",
+  "operations": "Read frozen packet/check/controller/source-emission contract, retained JSON capture and narrow producer metadata; verified hashes and AST syntax only. Wrote this private NO_GO. No GNU metadata, ELF reader/parser, gate/controller/compiler/link/test/function/slot/hardware/native execution, canonical/index/state edits or recursive delegation."
+}

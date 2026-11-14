@@ -1,0 +1,17 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk6-successor-1/fixture_actual_controller_guards.py", line 41, in expect
+    try:consume(controller,p,h)
+  File "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk6-successor-1/fixture_actual_controller_guards.py", line 37, in consume
+    try:m.main()
+  File "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk6-successor-1/capture_root_LONG.NOT-RELEASED.py", line 38, in main
+    def main():
+__main__.ReachedPreEffect
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk6-successor-1/fixture_actual_controller_guards.py", line 66, in <module>
+    r=copy.deepcopy(corrected);mut(r);p,h=request_file(r);expect(name,D/'capture_root_LONG.NOT-RELEASED.py',p,h,reason)
+  File "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk6-successor-1/fixture_actual_controller_guards.py", line 43, in expect
+    assert reason is None,'accepted invalidbinding '+label;checks.append(dict(name=label,status='PASS_REACHED_EXACT_PRE_MKDIR_PRE_POPEN_BOUNDARY'));return
+AssertionError: accepted invalidbinding request_release_digest_argv_mismatch

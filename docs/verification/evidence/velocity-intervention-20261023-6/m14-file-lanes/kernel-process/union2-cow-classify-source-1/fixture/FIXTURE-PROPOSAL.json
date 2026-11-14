@@ -1,0 +1,21 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_FRAGMENTS_ONLY_NO_EXECUTABLE_QUEUE",
+  "reference": "original_reference.SOURCE-ONLY.c.inc",
+  "actual_Rust": "cow_classify.ACTUAL-RUST.inc",
+  "real_provider_requirement": "Use exact existing page_helpers::Page and both actual exported predicates. Do not recreate private Page or substitute offset layout; actual Page predicates read mode/count volatile.",
+  "strict_cases": [
+    "NULL Page with NULL/present memobj and every held memobj flag, preserving OR semantics",
+    "nonNULL Page with each PM mode and count at INT_MIN,-1,0,1,2,INT_MAX",
+    "private/shared, PF_PATCH on/off, write/read-only cross-product, including irrelevant high bits",
+    "observe first predicate then only conditionally second predicate even for non-private/non-patch ranges; snapshot all range/memobj/Page bytes; no mutation/ref/free/lock changes"
+  ],
+  "checks": [
+    "actual real-header signatures, reason64 and mode/count sign",
+    "unique actual helper/provider definitions and real default C caller relocation; exact bytes/all allocated relocations object to partial",
+    "original C fallback preprocessor and exact source statements retained"
+  ],
+  "compiler_jobs": 0,
+  "actual_tests": 0,
+  "default_native_acceptance": false
+}

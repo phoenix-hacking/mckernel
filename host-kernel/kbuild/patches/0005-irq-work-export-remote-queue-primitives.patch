@@ -1,0 +1,32 @@
+From: McKernel native Rust integration
+Subject: [PATCH] irq work: export existing per-CPU queue and address translation
+
+Make the existing raised queue and per-CPU physical-address translator available
+through explicit GPL exports. The Rust remote producer uses the pinned native
+irq_work layout and Linux's APIC IRQ-work vector. Callers must hold CPU topology
+exclusion, retain work/callback storage until senders stop and work drains, and
+obey Linux's list and IRQ context rules. No function body or queue implementation
+changes, and no project C bridge is introduced.
+
+--- a/kernel/irq_work.c
++++ b/kernel/irq_work.c
+@@ -24,7 +24,8 @@
+ 
+ #include <trace/events/ipi.h>
+ 
+-static DEFINE_PER_CPU(struct llist_head, raised_list);
++DEFINE_PER_CPU(struct llist_head, raised_list);
++EXPORT_PER_CPU_SYMBOL_GPL(raised_list);
+ static DEFINE_PER_CPU(struct llist_head, lazy_list);
+ static DEFINE_PER_CPU(struct task_struct *, irq_workd);
+ 
+--- a/mm/percpu.c
++++ b/mm/percpu.c
+@@ -2390,6 +2390,7 @@ phys_addr_t per_cpu_ptr_to_phys(void *addr)
+ 		return page_to_phys(pcpu_addr_to_page(addr)) +
+ 		       offset_in_page(addr);
+ }
++EXPORT_SYMBOL_GPL(per_cpu_ptr_to_phys);
+ 
+ /**
+  * pcpu_alloc_alloc_info - allocate percpu allocation info

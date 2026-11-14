@@ -1,0 +1,57 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_PREPARED_UNEXECUTED_DEFAULT_OFF",
+  "canonical_preimage": {
+    "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+    "sha256": "c7b0c46302a133b017dbd9176dfe523e3f05fb0e3d268acd32b63679e6493605"
+  },
+  "selected_functions": [
+    "arch_rt_sigreturn_alloc_bridge",
+    "arch_rt_sigreturn_free_bridge"
+  ],
+  "new_C_metadata_objects_proposed": 1,
+  "files": {
+    "genuine_prologue.inc": {
+      "sha256": "e69cb389f69cf92a6e81e114a0bb03391a137fa3ba0c7b15d49a51606c1359de",
+      "bytes": 982
+    },
+    "syscall_policy.rs.fragment": {
+      "sha256": "e2715ca0b9978fcdddce8e9c0c1f94e7c99af8d0d31427881f7bf4c555aa91de",
+      "bytes": 313
+    },
+    "fixture.c": {
+      "sha256": "fb08cce970377e1bd3f23156d47992b57d468e833436e563710ece828c925dda",
+      "bytes": 3604
+    },
+    "syscall.c.diff": {
+      "sha256": "c99fcc5a721d24a29312ad369c8923de00163f3bb7cbbe2b179f0068a2afc888",
+      "bytes": 1092
+    },
+    "fixture.rs": {
+      "sha256": "c3b812f820e6e53baf51ff7d20a75a04634ded0d8ad4cd6015d6339d5343d321",
+      "bytes": 1120
+    },
+    "HANDOFF.md": {
+      "sha256": "c268ae872b5a56a2a3e2df278ce1443dbf09b81cd913e79993ec2972951c0ce6",
+      "bytes": 2699
+    },
+    "original_bridge.inc": {
+      "sha256": "bb0270c56724a057e32c6fea51751c11dadf3a50311f18b468ede0ed31ab0f94",
+      "bytes": 268
+    },
+    "f06_rt_sigreturn_alloc_free.rs": {
+      "sha256": "87e1b40611305c1881df92ba26c5d8df529a6d9889bbdf5ebf762fd56db02b95",
+      "bytes": 1605
+    },
+    "FUTURE-HOST-COMMAND-PLAN.json": {
+      "sha256": "6a297ceae6cc41f9d30bd682b0c61814db11d89bd80744d96484356fae04cd82",
+      "bytes": 6192
+    },
+    "syscall.c": {
+      "sha256": "379c1d727d7036fffcdbab48ab019e9ab24cc45da7213627209438606d95d112",
+      "bytes": 116692
+    }
+  },
+  "compiler_results": null,
+  "native_results": null
+}

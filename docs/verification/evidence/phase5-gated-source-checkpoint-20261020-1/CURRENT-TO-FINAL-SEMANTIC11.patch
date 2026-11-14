@@ -1,0 +1,991 @@
+--- a/kernel/CMakeLists.txt
++++ b/kernel/CMakeLists.txt
+@@ -81,6 +81,9 @@
+ 			"${CMAKE_CURRENT_SOURCE_DIR}/rust/fork_control_guest.rs"
+ 			"${CMAKE_CURRENT_SOURCE_DIR}/rust/fork_control_registry.rs"
+ 			"${CMAKE_CURRENT_SOURCE_DIR}/rust/fork_child_credits.rs"
++			"${CMAKE_CURRENT_SOURCE_DIR}/rust/fork_constructed_credits.rs"
++			"${CMAKE_CURRENT_SOURCE_DIR}/rust/fork_final_ack.rs"
++        "${CMAKE_CURRENT_SOURCE_DIR}/rust/fork_runnable_child.rs"
+ 			"${CMAKE_CURRENT_SOURCE_DIR}/rust/futex.rs"
+ 			"${CMAKE_CURRENT_SOURCE_DIR}/rust/gencore.rs"
+ 			"${CMAKE_CURRENT_SOURCE_DIR}/rust/freeze.rs"
+--- a/kernel/rust/fork_child_credits.rs
++++ b/kernel/rust/fork_child_credits.rs
+@@ -12,6 +12,8 @@
+ use super::{registry, Carrier, Handle, EACCES, EBUSY, EINVAL, NR_CLONE};
+ 
+ const EOVERFLOW: i32 = -75;
++#[path="fork_constructed_credits.rs"]
++pub(super) mod constructed;
+ 
+ #[must_use = "private child/VM/CPU credits must be cancelled or retained"]
+ pub(crate) struct ChildCredits {
+@@ -21,6 +23,7 @@
+     vm: NonNull<ProcessVm>,
+     reserved_cpu: i32,
+     private_child_cpu: i32,
++    constructor:Option<NonNull<constructed::ConstructedFork>>,
+ }
+ 
+ /// Exactly the original caller's cleanup obligation, returned once. No new
+@@ -34,6 +37,38 @@
+ }
+ 
+ impl ChildCredits {
++    pub(super) unsafe fn runtime_processes_match(&self,parent:*mut Process,child:*mut Process)->bool {
++        self.process.as_ptr()==child&&(*self.parent.as_ptr()).proc==parent
++    }
++    pub(super) unsafe fn prepare_runtime(&mut self)->Result<constructed::RuntimePermit,i32> {
++        if !self.still_private(){return Err(EACCES);}
++        let mut graph=self.constructor.ok_or(EACCES)?;
++        if !graph.as_ref().matches(self.parent.as_ptr(),self.child.as_ptr(),self.reserved_cpu){return Err(EACCES);}
++        graph.as_mut().prepare_runtime()
++    }
++    unsafe fn acquire_constructed(parent:*mut Thread,child:*mut Thread,cpu:i32,token:*mut core::ffi::c_void)->Result<Self,i32> {
++        let graph=NonNull::new(token.cast::<constructed::ConstructedFork>()).ok_or(EINVAL)?;
++        if !graph.as_ref().matches(parent,child,cpu){return Err(EACCES);}
++        let mut credits=Self::acquire_from_caller(parent,child,cpu)?;
++        credits.constructor=Some(graph);Ok(credits)
++    }
++
++    pub(super) unsafe fn prepare_revoked_destruction(&mut self)->Result<constructed::DestructionPermit,i32> {
++        if !self.still_private(){return Err(EACCES);}
++        let mut graph=self.constructor.ok_or(EACCES)?;
++        graph.as_mut().permit()
++    }
++    pub(super) fn destruction_complete(&self)->bool {
++        self.constructor.is_some_and(|graph|unsafe {graph.as_ref().destroyed()})
++    }
++    pub(super) unsafe fn release_after_ack(self)->Result<(),Self> {
++        if !self.destruction_complete(){return Err(self);}
++        // No child/VM/Process pointer is used after checked final destruction.
++        let graph=self.constructor.unwrap();
++        constructed::release_cpuid(self.reserved_cpu);
++        crate::process_helpers::release_thread(self.parent.as_ptr());
++        crate::mem_helpers::kfree(graph.as_ptr().cast());Ok(())
++    }
+     /// # Safety
+     /// Caller exclusively owns the successful non-CLONE_VM constructor's
+     /// unpublished child/process/VM and exact reserved CPU cleanup credits.
+@@ -89,7 +124,7 @@
+                 Err(actual) => old = actual,
+             }
+         }
+-        Ok(Self { parent, child, process, vm, reserved_cpu, private_child_cpu })
++        Ok(Self { parent, child, process, vm, reserved_cpu, private_child_cpu,constructor:None })
+     }
+ 
+     unsafe fn still_private(&self) -> bool {
+@@ -108,6 +143,7 @@
+     /// Only a credit owner that has never entered Carrier can call this.
+     /// The actual parent reference release runs outside every registry guard.
+     pub(crate) unsafe fn cancel_unpublished(self) -> Result<CallerCredits, Self> {
++        if self.constructor.is_some(){return Err(self);}
+         if !self.still_private() { return Err(self); }
+         let returned = CallerCredits { child: self.child, process: self.process,
+             vm: self.vm, reserved_cpu: self.reserved_cpu };
+@@ -121,6 +157,7 @@
+ /// It is either freed after private cancellation, or retained in the Carrier.
+ pub(crate) struct ForkRequestSlot { request: NonNull<SyscallRequest> }
+ impl ForkRequestSlot {
++    pub(super) unsafe fn free_completed(self){crate::mem_helpers::kfree(self.request.as_ptr().cast());}
+     unsafe fn allocate(flags: u64, start: u64, length: u64, root: u64) -> Result<Self, i32> {
+         if matches!(flags, 1 | 2 | 3) || !super::geometry(root, start, length) {
+             return Err(EINVAL);
+@@ -388,9 +425,54 @@
+     parent: *mut Thread, child: *mut Thread, reserved_cpu: i32, host_flags: u64,
+     out: *mut CallerForkOutcome,
+ ) -> i32 {
++    owned_caller_current(parent,child,reserved_cpu,host_flags,core::ptr::null_mut(),out,None)
++}
++/// Exact constructor-issued opaque token, consumed only when disposition1
++/// transfers all obligations to the durable Carrier. C never sees its fields.
++#[no_mangle]
++pub(crate) unsafe extern "C" fn process_fork_owned_caller_current_v2(
++    parent:*mut Thread,child:*mut Thread,reserved_cpu:i32,host_flags:u64,
++    constructor:*mut core::ffi::c_void,out:*mut CallerForkOutcome,
++) ->i32 {
++    if constructor.is_null(){return EINVAL;}
++    owned_caller_current(parent,child,reserved_cpu,host_flags,constructor,out,None)
++}
++/// Disabled callsite's vanilla-fork runtime route. Existing v1/v2 keep their
++/// safe-abort behavior; this route cannot treat a first receipt as run credit.
++#[no_mangle]
++pub(crate) unsafe extern "C" fn process_fork_owned_caller_runnable_current_v1(
++    parent:*mut Thread,child:*mut Thread,reserved_cpu:i32,host_flags:u64,
++    constructor:*mut core::ffi::c_void,flags:i32,parent_cpu:i32,out:*mut CallerForkOutcome,
++)->i32 {
++    if flags!=17 {
++        if out.is_null(){return EINVAL;}
++        core::ptr::write(out,CallerForkOutcome{disposition:CALLER_KEEPS_CREDITS,error:EINVAL,handle:Handle::EMPTY});
++        return 0;
++    }
++    owned_caller_current(parent,child,reserved_cpu,host_flags,constructor,out,
++        Some(super::runnable::RunOptions{flags,parent_cpu,child_tid:0}))
++}
++/// Current libc's child-TID pointer is the original syscall argument, borrowed
++/// only while the constructor graph owns the unpublished child's exact VM.
++#[no_mangle]
++pub(crate) unsafe extern "C" fn process_fork_owned_caller_runnable_current_v2(
++    parent:*mut Thread,child:*mut Thread,reserved_cpu:i32,host_flags:u64,
++    constructor:*mut core::ffi::c_void,flags:i32,parent_cpu:i32,child_tid:u64,out:*mut CallerForkOutcome,
++)->i32 {
++    owned_caller_current(parent,child,reserved_cpu,host_flags,constructor,out,
++        Some(super::runnable::RunOptions{flags,parent_cpu,child_tid}))
++}
++unsafe fn owned_caller_current(
++    parent:*mut Thread,child:*mut Thread,reserved_cpu:i32,host_flags:u64,
++    constructor:*mut core::ffi::c_void,out:*mut CallerForkOutcome,run:Option<super::runnable::RunOptions>,
++) -> i32 {
+     if out.is_null() { return EINVAL; }
+     core::ptr::write(out, CallerForkOutcome { disposition: CALLER_KEEPS_CREDITS,
+         error: EINVAL, handle: Handle::EMPTY });
++    if let Some(options)=run {
++        let admitted=super::runnable::admit(parent,child,options);
++        if admitted!=0||constructor.is_null(){(*out).error=if admitted!=0{admitted}else{EACCES};return 0;}
++    }
+     if parent.is_null() || child.is_null() || reserved_cpu < 0 || (*child).vm.is_null() {
+         return 0;
+     }
+@@ -409,7 +491,8 @@
+     };
+     let handle = pointer.as_ref().handle;
+     pointer.as_mut().owned_request = Some(slot);
+-    let credits = match ChildCredits::acquire_from_caller(parent, child, reserved_cpu) {
++    let credits = match if constructor.is_null(){ChildCredits::acquire_from_caller(parent, child, reserved_cpu)}
++        else{ChildCredits::acquire_constructed(parent,child,reserved_cpu,constructor)} {
+         Ok(credits) => credits,
+         Err(error) => {
+             // This private handle has never escaped this producer, and private
+@@ -441,11 +524,21 @@
+         request_lifetime: PhantomData };
+     (*out).error = match escaped.offload() {
+         OwnedOffloadReturn::ReceiptObserved { owner, .. } => {
++            if let Some(options)=run {
++                let result=super::runnable::start_and_publish(owner.handle(),options);
++                drop(owner);
++                if result>0{(*out).disposition=3;}
++                result
++            } else {
+             // Consume the actual next selector2 producer with its separately
+             // owned request. This remains observation, never terminal handoff.
+             let mut observation=super::ControlObservation::ZERO;
+             let error=super::process_fork_guest_control_submit_current_v1(owner.handle(),&mut observation);
+-            drop(owner); if error==0 { EBUSY } else { error }
++            if error!=0{drop(owner);error}else if constructor.is_null(){drop(owner);EBUSY}else{
++                let terminal=super::destroy_and_ack_current(owner.handle());drop(owner);
++                if terminal==0{(*out).disposition=2;-11}else{terminal}
++            }
++            }
+         },
+         OwnedOffloadReturn::Uncertain { owner, .. } => owner.error,
+     };
+--- /dev/null
++++ b/kernel/rust/fork_constructed_credits.rs
+@@ -0,0 +1,149 @@
++//! Constructor-issued ownership graph for the disabled normal-fork route.
++//! Two Thread references are issued by the successful constructor. Its final
++//! Thread owns the VM release; that VM owns one Process release. Only the extra
++//! constructor Process reference is independent. No count supplies a token.
++use super::*;
++use core::ffi::c_void;
++// Coupled to the real process.h assertions supplied to the genuine complete C
++// consumers. A fixture compile alone cannot close this production ABI check.
++const _:()={assert!(core::mem::offset_of!(crate::abi::AddressSpace,nslots)==164);
++    assert!(size_of::<crate::abi::CInt>()==4);
++    assert!(core::mem::offset_of!(crate::abi::AddressSpace,nslots)+size_of::<crate::abi::CInt>()==168);};
++#[derive(Clone,Copy,Debug,Eq,PartialEq)]
++enum Stage {Constructed,Permitted,FirstConsumed,ThreadVmDestroyed,Destroyed,
++    RuntimePrepared,RuntimePublished,Uncertain}
++pub(super) struct ConstructedFork {
++    parent:NonNull<Thread>,child:NonNull<Thread>,process:NonNull<Process>,vm:NonNull<ProcessVm>,
++    reserved_cpu:i32,stage:Stage,runtime_pin:bool,
++}
++unsafe extern "C" {
++    fn clone_thread(parent:*mut Thread,pc:u64,sp:u64,flags:i32)->*mut Thread;
++    pub(super) fn release_cpuid(cpu:i32);
++}
++/// # Safety
++/// The actual normal do_fork callsite passes its existing reservation and live
++/// parent. Output receives one unique opaque constructor result. C may borrow
++/// child but must not drop/reset constructor credits while this result exists.
++#[no_mangle]
++pub(crate) unsafe extern "C" fn process_fork_construct_current_v1(parent:*mut Thread,pc:u64,sp:u64,
++    flags:i32,reserved_cpu:i32,out:*mut *mut c_void)->*mut Thread {
++    if out.is_null(){return core::ptr::null_mut();}core::ptr::write(out,core::ptr::null_mut());
++    let cls=crate::cls::get_this_cpu_local_var();
++    if parent.is_null()||cls.is_null()||(*cls).current!=parent||flags&0x100!=0||reserved_cpu<0{return core::ptr::null_mut();}
++    // Allocate the result before entering the actual constructor. On failure
++    // it has minted no child references and no destructor may be inferred.
++    let storage=crate::mem_helpers::kmalloc(size_of::<ConstructedFork>() as i32,0).cast::<ConstructedFork>();
++    if storage.is_null(){return core::ptr::null_mut();}
++    let child=clone_thread(parent,pc,sp,flags);
++    if child.is_null(){crate::mem_helpers::kfree(storage.cast());return child;}
++    // This is the exact successful constructor return, before publication or
++    // any C borrow. Its normal-fork contract creates the ownership graph.
++    let graph=ConstructedFork{parent:NonNull::new_unchecked(parent),child:NonNull::new_unchecked(child),
++        process:NonNull::new_unchecked((*child).proc),vm:NonNull::new_unchecked((*child).vm),reserved_cpu,stage:Stage::Constructed,runtime_pin:false};
++    core::ptr::write(storage,graph);core::ptr::write(out,storage.cast());child
++}
++impl ConstructedFork {
++    /// Transfer starts with a NEW checked Thread pin while the constructor
++    /// still owns the unpublished child. Counts only guard this increment;
++    /// constructor provenance, not a count, supplies the original graph.
++    pub(super) unsafe fn prepare_runtime(&mut self)->Result<RuntimePermit,i32> {
++        if self.stage!=Stage::Constructed||self.runtime_pin{return Err(EBUSY);}
++        let counter=AtomicI32::from_ptr(addr_of_mut!((*self.child.as_ptr()).refcount.counter));
++        let mut old=counter.load(Ordering::SeqCst);
++        loop {
++            if old<=0{return Err(EBUSY);}if old==i32::MAX{return Err(EOVERFLOW);}
++            match counter.compare_exchange_weak(old,old+1,Ordering::SeqCst,Ordering::SeqCst){
++                Ok(_)=>break,Err(actual)=>old=actual,
++            }
++        }
++        self.runtime_pin=true;self.stage=Stage::RuntimePrepared;
++        Ok(RuntimePermit{graph:NonNull::from(self)})
++    }
++    pub(super) fn permit(&mut self)->Result<DestructionPermit,i32>{
++        if self.stage!=Stage::Constructed{return Err(EBUSY);}
++        self.stage=Stage::Permitted;Ok(DestructionPermit{graph:NonNull::from(self)})
++    }
++    pub(super) unsafe fn matches(&self,parent:*mut Thread,child:*mut Thread,cpu:i32)->bool {
++        self.stage==Stage::Constructed&&self.parent.as_ptr()==parent&&self.child.as_ptr()==child
++            &&self.reserved_cpu==cpu&&(*child).proc==self.process.as_ptr()&&(*child).vm==self.vm.as_ptr()
++    }
++    /// Each call consumes exactly the constructor-issued graph edge once.
++    /// Mark uncertain BEFORE a destructive call; no error is retried and no
++    /// child/VM pointer is read after that call may have destroyed it.
++    unsafe fn destroy(&mut self)->Result<(),i32> {
++        if !matches!(self.stage,Stage::Constructed|Stage::Permitted){return Err(EBUSY);}
++        self.stage=Stage::Uncertain;
++        if crate::process_helpers::release_thread_checked(self.child.as_ptr())!=0{return Err(EBUSY);}
++        self.stage=Stage::FirstConsumed;
++        // The retained extra Process token pins this independent allocation.
++        let command=(*self.process.as_ptr()).saved_cmdline;
++        (*self.process.as_ptr()).saved_cmdline=core::ptr::null_mut();
++        if !command.is_null(){crate::mem_helpers::kfree(command.cast());}
++        self.stage=Stage::Uncertain;
++        if crate::process_helpers::release_thread_checked(self.child.as_ptr())!=2{return Err(EBUSY);}
++        self.stage=Stage::ThreadVmDestroyed;
++        // The VM's embedded Process edge was consumed. This is the ONE extra
++        // constructor Process edge, which still pins its main Thread pages.
++        self.stage=Stage::Uncertain;
++        if crate::process_helpers::release_process_checked(self.process.as_ptr())!=1{return Err(EBUSY);}
++        self.stage=Stage::Destroyed;Ok(())
++    }
++    pub(super) fn destroyed(&self)->bool{self.stage==Stage::Destroyed}
++}
++/// The original graph is surrendered before the first discoverable list
++/// insertion. The additional Thread pin remains Carrier-owned across exit
++/// and wait. No failure/Drop retries a release or restores private cleanup.
++pub(crate) struct RuntimePermit{graph:NonNull<ConstructedFork>}
++impl RuntimePermit {
++    pub(crate) unsafe fn publish(mut self,pid:i32,parent_cpu:i32,flags:i32,child_tid:u64)->i32 {
++        let graph=self.graph.as_mut();
++        if graph.stage!=Stage::RuntimePrepared||!graph.runtime_pin||pid<=0||parent_cpu<0{return EINVAL;}
++        let child=graph.child.as_ptr();let process=graph.process.as_ptr();let vm=graph.vm.as_ptr();
++        let space=(*vm).address_space;
++        if space.is_null()||(*space).nslots<=0{return EINVAL;}
++        // Real process.h has int nslots immediately followed by int pids[].
++        // The successful constructor owns that flexible-array allocation.
++        // sizeof(AddressSpace) may include tail padding: use the actual last
++        // field's end, never assume sizeof(prefix) is offsetof(pids).
++        core::ptr::write_volatile(core::ptr::addr_of_mut!((*space).nslots).add(1),pid);
++        (*process).pid=pid;(*child).tid=pid;
++        if flags&0x00200000!=0{(*child).clear_child_tid=child_tid as *mut i32;}
++        if flags&0x01000000!=0 {
++            // Match the existing native child-start put_user contract: a
++            // fault, including a partial store, does not cancel the clone.
++            // This exact VM, graph and new runtime pin remain owned across
++            // all fault/COW effects; publication follows the store attempt.
++            let _=crate::x86_memory_helpers::write_process_vm(vm,child_tid as *mut c_void,
++                core::ptr::addr_of!((*child).tid).cast(),size_of::<i32>());
++        }
++        (*child).tlsblock_base=(*graph.parent.as_ptr()).tlsblock_base;
++        (*child).parent_cpuid=parent_cpu;
++        crate::x86_cpu_helpers::ihk_mc_syscall_set_ret((*child).uctx,0);
++        (*child).status=1;(*process).status=1;
++        if crate::process_helpers::chain_thread_checked(child)<0
++            ||crate::process_helpers::chain_process_checked(process)<0 {
++            graph.stage=Stage::Uncertain;return EBUSY;
++        }
++        // chain_thread issued the normal additional VM edge. Terminate,
++        // scheduler and wait now consume the ordinary constructor graph.
++        // runq_add consumes the CPU reservation; never release_cpuid here.
++        let result=crate::sched_helpers::runq_add_thread_checked(child,graph.reserved_cpu);
++        if result!=0{graph.stage=Stage::Uncertain;return result;}
++        graph.stage=Stage::RuntimePublished;0
++    }
++}
++/// Issued once from the Carrier-owned graph. It grants only the destructive
++/// critical scope; the Carrier retains all graph/parent/CPU obligations.
++pub(crate) struct DestructionPermit {graph:NonNull<ConstructedFork>}
++impl DestructionPermit {
++    pub(crate) unsafe fn destroy(mut self)->Result<(),i32>{self.graph.as_mut().destroy()}
++}
++/// Private pre-publication cleanup only. A failed/partial destructor retains
++/// its opaque result and CPU obligation; C must bypass its reset-based cleanup.
++#[no_mangle]
++pub(crate) unsafe extern "C" fn process_fork_cancel_constructed_current_v1(token:*mut c_void)->i32 {
++    if token.is_null(){return EINVAL;}
++    let graph=&mut*token.cast::<ConstructedFork>();
++    if graph.destroy().is_err(){return EBUSY;}
++    crate::mem_helpers::kfree(token);0
++}
+--- a/kernel/rust/fork_control_guest.rs
++++ b/kernel/rust/fork_control_guest.rs
+@@ -1,7 +1,12 @@
+-//! Current guest carrier and receipt observer. No task-publication, revoke
+-//! permit, final ACK, or terminal-release API is provided by this module.
++//! Current owned carrier, real revoke receipt and checked-destructor ACK.
++//! The native selection remains disabled. No runnable-child API is provided.
+ #[path="fork_child_credits.rs"]
+ pub(crate) mod child_credits;
++#[path="fork_final_ack.rs"]
++mod final_ack;
++#[path="fork_runnable_child.rs"]
++pub(crate) mod runnable;
++use final_ack::destroy_and_ack_current;
+ use core::ffi::c_void;
+ use core::mem::size_of;
+ use core::ptr::{addr_of, addr_of_mut, read_volatile, write, NonNull};
+@@ -12,6 +17,9 @@
+ const ENOMEM:i32=-12;const EIO:i32=-5;const EPROTO:i32=-71;
+ const NR_CLONE:u64=56;const MARKER:u64=0x313030434b46434d;
+ const SUBMITTED:u32=0;const FIRST_POSITIVE:u32=1;const RETAINED:u32=3;
++const HOST_REVOKED:u32=4;const DESTRUCTING:u32=5;const GUEST_DESTROYED:u32=6;const FINAL_ACK:u32=7;
++const HOST_STARTED:u32=8;const RUNTIME_PUBLISHED:u32=9;
++const RUNTIME_PUBLISHING:u32=10;const WAIT_REAP_PENDING:u32=11;const WAIT_REAPED:u32=12;
+ const IDLE:u32=0;const PENDING:u32=1;const OBSERVED:u32=2;
+ 
+ // This is the packed guest identity (88 bytes), not ForkIdentityV1's 96-byte
+@@ -51,6 +59,7 @@
+         Ok(Self{request})
+     }
+     unsafe fn free_private(self){crate::mem_helpers::kfree(self.request.as_ptr().cast());}
++    unsafe fn free_completed(self){crate::mem_helpers::kfree(self.request.as_ptr().cast());}
+ }
+ struct ControlPending {
+     owned_request:Option<ControlRequestSlot>,
+@@ -71,7 +80,8 @@
+     physical:u64,nonce:u64,root:u64,start:u64,length:u64,phase:u32,error:i32,
+     owned_credits:Option<child_credits::ChildCredits>,
+     owned_request:Option<child_credits::ForkRequestSlot>,
+-    identity:GuestIdentity,control:ControlPending,bytes:[u8;128],
++    identity:GuestIdentity,control:ControlPending,revoke:ControlObservation,
++    retired_control:Option<ControlRequestSlot>,host_start:runnable::StartPending,bytes:[u8;128],runtime_committed:bool,
+ }
+ unsafe extern "C" { fn do_syscall(request:*mut SyscallRequest,cpu:CInt)->CLong; }
+ 
+@@ -136,7 +146,8 @@
+         request:request as usize,cpu:(*parent).cpu_id,initial_args:original,physical:0,nonce:0,root:original[3],
+         start:original[1],length:original[2],phase:SUBMITTED,error:0,
+         owned_credits:None,owned_request:None,
+-        identity:GuestIdentity::ZERO,control:ControlPending::ZERO,bytes:[0;128]});
++        identity:GuestIdentity::ZERO,control:ControlPending::ZERO,revoke:ControlObservation::ZERO,
++        retired_control:None,host_start:runnable::StartPending::ZERO,runtime_committed:false,bytes:[0;128]});
+     let physical=crate::x86_memory_helpers::virt_to_phys(addr_of_mut!((*raw).bytes).cast::<c_void>())as u64;
+     if physical==0||physical%8!=0||physical.checked_add(128).is_none(){crate::mem_helpers::kfree(raw.cast());return Err(EINVAL);}
+     let handle=match registry::insert_private(pointer){Ok(handle)=>handle,Err((error,pointer))=>{
+@@ -174,16 +185,21 @@
+     carrier.identity=identity;carrier.phase=FIRST_POSITIVE;Ok(())
+ }
+ fn control_receipt(carrier:&Carrier,frame:&[u8;128],response:u64)->Result<ControlObservation,i32>{
+-    if frame[..8]!=*b"MCFKR001"{return Err(EPROTO);}
++    let final_ack=carrier.control.args[0]==3;
++    if frame[..8]!=if final_ack{*b"MCFKA001"}else{*b"MCFKR001"}{return Err(EPROTO);}
+     let identity=key(frame);let epoch=word(frame,8);let worker=word(frame,16);let delivery=word(frame,24);
+     if identity!=carrier.identity||!carrier_geometry(carrier,&identity)||epoch==0||worker==0
+         ||delivery==0||delivery==identity.delivery||word(frame,32)!=response{return Err(EACCES);}
++    if final_ack&&(carrier.phase!=GUEST_DESTROYED||epoch!=carrier.revoke.epoch
++        ||delivery==carrier.revoke.delivery){return Err(EACCES);}
+     Ok(ControlObservation{identity,epoch,worker,delivery,response,state:OBSERVED,error:0})
+ }
+ 
+ struct ReplyContext{request:*mut SyscallRequest,response:*mut SyscallResponse,cpu:i32,thread:*mut Thread}
+ unsafe fn observe_one(pointer:NonNull<Carrier>,context:&ReplyContext)->i32{
+     let carrier=&mut*pointer.as_ptr();
++    let started=runnable::observe_start(carrier,context);
++    if started!=0{return started;}
+     let control=carrier.control.state==PENDING&&carrier.control.request==context.request as usize
+         &&carrier.control.thread==context.thread as usize;
+     let first=carrier.phase==SUBMITTED&&carrier.request==context.request as usize
+@@ -215,6 +231,7 @@
+             // First bind of opaque IHK epoch/worker/delivery, ONLY after the
+             // exact actual response Acquire. Registry epoch is unrelated.
+             carrier.control.observation=observation;carrier.control.state=OBSERVED;
++            if carrier.control.args[0]==3{carrier.phase=FINAL_ACK;}
+         },Err(e)=>error=e}}
+     }
+     if error!=0{carrier.error=error;carrier.phase=RETAINED;carrier.control.error=error;carrier.control.state=RETAINED;return error;}
+@@ -276,10 +293,11 @@
+             ||c.control.owned_request.as_ref().is_none_or(|slot|slot.request!=request){return EACCES;}
+         if actual!=0{return transport_error(actual);}
+         if c.control.state!=OBSERVED{return if c.control.error!=0{c.control.error}else{EIO};}
+-        observation=c.control.observation;0
++        observation=c.control.observation;c.revoke=observation;c.phase=HOST_REVOKED;0
+     });
+     if result!=0{return result;}
+     write(out,observation);guard.armed=false;0
+ }
+ 
+-const _:()={assert!(size_of::<GuestIdentity>()==88);assert!(size_of::<ControlObservation>()==128);};
++const _:()={assert!(size_of::<GuestIdentity>()==88);assert!(size_of::<ControlObservation>()==128);
++    assert!(core::mem::offset_of!(Carrier,bytes)%8==0);};
+--- a/kernel/rust/fork_control_registry.rs
++++ b/kernel/rust/fork_control_registry.rs
+@@ -183,6 +183,21 @@
+     result
+ }
+ 
++/// # Safety
++/// The unique current producer has acquired the SAME final ACK Response and
++/// positively checked its constructor graph destruction. No observer/transport
++/// retains a Carrier borrow. This only detaches metadata; destruction runs
++/// outside this lock. Stale snapshots can no longer discover the allocation.
++pub(crate) unsafe fn detach_terminal(handle:Handle,expected:NonNull<Carrier>)->Result<NonNull<Carrier>,i32>{
++    if !handle.valid(){return Err(EINVAL);}
++    REGISTRY.lock();
++    let result=match (&mut *REGISTRY.state.get()).matching(handle){
++        Some(slot) if !slot.busy&&slot.phase!=Phase::Private&&slot.carrier==Some(expected)=>Ok(slot.carrier.take().unwrap()),
++        Some(_)=>Err(EBUSY),None=>Err(ENOENT),
++    };
++    REGISTRY.unlock();result
++}
++
+ /// Execute one exclusive, scoped carrier callback outside the registry lock.
+ /// Reentrant visits/cancel/retain/begin on this handle see EBUSY. A callback that
+ /// does not return leaves the allocation busy and retained by the registry.
+--- /dev/null
++++ b/kernel/rust/fork_final_ack.rs
+@@ -0,0 +1,69 @@
++//! Real post-revoke destructor and final selector3 producer. Every uncertain
++//! path keeps constructor/CPU/parent/request owners; no Drop infers an ACK.
++use super::*;
++
++pub(super) unsafe fn destroy_and_ack_current(handle:Handle)->i32 {
++    // This request allocation precedes every destructive guest effect.
++    let mut slot=match ControlRequestSlot::allocate(){Ok(slot)=>Some(slot),Err(error)=>return error};
++    let request=slot.as_ref().unwrap().request;let mut permit=None;let mut cpu=-1;let mut parent=0;
++    let prepared=registry::visit(handle,|pointer|{
++        let c=&mut*pointer.as_ptr();
++        let cls=crate::cls::get_this_cpu_local_var();
++        if cls.is_null()||(*cls).current as usize!=c.parent||c.phase!=HOST_REVOKED
++            ||c.control.state!=OBSERVED||c.retired_control.is_some(){return EACCES;}
++        let current=snapshot(c);
++        match control_receipt(c,&current,c.revoke.response){
++            Ok(observation)if observation.epoch==c.revoke.epoch&&observation.worker==c.revoke.worker
++                &&observation.delivery==c.revoke.delivery=>{},_=>return EACCES,
++        }
++        let Some(credits)=c.owned_credits.as_mut()else{return EACCES;};
++        permit=match credits.prepare_revoked_destruction(){Ok(permit)=>Some(permit),Err(error)=>return error};
++        cpu=c.control.cpu;parent=c.parent;c.phase=DESTRUCTING;0
++    });
++    if prepared!=0 {if let Some(slot)=slot{slot.free_private();}return prepared;}
++    // No registry lock or Carrier reference survives a destructive callback.
++    let destroyed=permit.take().unwrap().destroy();
++    let rebound=registry::visit(handle,|pointer|{
++        let c=&mut*pointer.as_ptr();
++        if c.phase!=DESTRUCTING||c.owned_credits.is_none(){return EACCES;}
++        if destroyed.is_err(){c.phase=RETAINED;c.error=EBUSY;return EBUSY;}
++        if !c.owned_credits.as_ref().unwrap().destruction_complete(){c.phase=RETAINED;return EBUSY;}
++        // The saved real revoke receipt binds nonce, original request/root,
++        // opaque epoch and delivery. Only the checked graph can reach here.
++        c.bytes[..8].copy_from_slice(b"MCFKD001");
++        (*request.as_ptr()).args=[3,2,c.length,c.root,c.physical,MARKER];
++        c.retired_control=c.control.owned_request.take();
++        c.control=ControlPending{owned_request:slot.take(),request:request.as_ptr() as usize,
++            thread:parent,cpu,args:(*request.as_ptr()).args,state:PENDING,error:0,
++            observation:ControlObservation::ZERO};
++        c.phase=GUEST_DESTROYED;0
++    });
++    if rebound!=0 {
++        if let Some(slot)=slot{slot.free_private();}
++        let _=registry::retain(handle);return rebound;
++    }
++    let mut guard=SubmitGuard{handle,armed:true};
++    let actual=do_syscall(request.as_ptr(),cpu);
++    let mut expected=None;
++    let observed=registry::visit(handle,|pointer|{
++        let c=&mut*pointer.as_ptr();
++        if actual!=0{return transport_error(actual);}
++        if c.phase!=FINAL_ACK||c.control.state!=OBSERVED||c.control.request!=request.as_ptr() as usize
++            ||c.control.thread!=parent||c.control.cpu!=cpu
++            ||c.control.owned_request.as_ref().is_none_or(|slot|slot.request!=request)
++            ||c.owned_credits.as_ref().is_none_or(|credits|!credits.destruction_complete()){return EACCES;}
++        expected=Some(pointer);0
++    });
++    if observed!=0{return observed;}
++    let mut pointer=match registry::detach_terminal(handle,expected.unwrap()){
++        Ok(pointer)=>pointer,Err(error)=>return error,
++    };
++    // No new observer can obtain a Carrier borrow; all three real calls have
++    // acquired their actual completed Responses. Destruction is outside locks.
++    let c=pointer.as_mut();let credits=c.owned_credits.take().unwrap();
++    if let Err(credits)=credits.release_after_ack(){c.owned_credits=Some(credits);guard.armed=false;return EBUSY;}
++    if let Some(slot)=c.owned_request.take(){slot.free_completed();}
++    if let Some(slot)=c.retired_control.take(){slot.free_completed();}
++    if let Some(slot)=c.control.owned_request.take(){slot.free_completed();}
++    guard.armed=false;crate::mem_helpers::kfree(pointer.as_ptr().cast());0
++}
+--- /dev/null
++++ b/kernel/rust/fork_runnable_child.rs
+@@ -0,0 +1,161 @@
++//! Existing nr56/selector1 host-child start, followed by the existing guest
++//! scheduler lifecycle. No revoke/destruction permit is inferred from RET0.
++use super::*;
++
++pub(super) struct StartPending {
++    owned_request:Option<ControlRequestSlot>,request:usize,thread:usize,cpu:i32,
++    args:[u64;6],state:u32,error:i32,response:u64,stid:i32,
++}
++impl StartPending {
++    pub(super) const ZERO:Self=Self{owned_request:None,request:0,thread:0,cpu:-1,
++        args:[0;6],state:IDLE,error:0,response:0,stid:0};
++}
++
++#[derive(Clone,Copy)]
++pub(super) struct RunOptions{pub(super) flags:i32,pub(super) parent_cpu:i32,pub(super) child_tid:u64}
++
++/// Support ordinary fork and the exact retained native libc-fork producer.
++/// Refuse other flags rather than silently omit their ABI effects.
++/// This does not silently omit ptrace, CLONE_PARENT/PARENT_SETTID/SETTLS or
++/// remote-spawn semantics.
++pub(super) unsafe fn admit(parent:*mut Thread,child:*mut Thread,options:RunOptions)->i32 {
++    let flags=options.flags;
++    if parent.is_null()||child.is_null()||options.parent_cpu<0
++        ||(flags!=17&&!(flags==0x01200011&&cfg!(native_linux_irq_work_v6_12))){return EINVAL;}
++    let local=crate::cls::get_this_cpu_local_var();
++    if local.is_null()||(*local).current!=parent||(*parent).proc.is_null()
++        ||(*child).uctx.is_null()||(*parent).ptrace!=0||(*parent).mod_clone!=0
++        ||!(*parent).mod_clone_arg.is_null()||!(*(*parent).proc).monitoring_event.is_null()
++    {return EACCES;}
++    0
++}
++
++pub(super) unsafe fn observe_start(c:&mut Carrier,context:&ReplyContext)->i32 {
++    if c.host_start.state!=PENDING||c.host_start.request!=context.request as usize
++        ||c.host_start.thread!=context.thread as usize{return 0;}
++    let request=&*context.request;let response=&*context.response;
++    let physical=crate::x86_memory_helpers::virt_to_phys(context.response.cast::<c_void>())as u64;
++    let end=physical.checked_add(size_of::<SyscallResponse>()as u64);
++    let carrier_end=c.physical.checked_add(128);
++    let frame=snapshot(c);
++    let valid=c.phase==FIRST_POSITIVE&&c.error==0&&c.parent==context.thread as usize
++        &&request.number==NR_CLONE&&request.args==c.host_start.args&&request.args[0]==1
++        &&request.args[1]==c.identity.child_pid as u64&&request.args[4]==c.physical
++        &&request.args[5]==MARKER&&request.rtid==(*context.thread).tid&&request.rtid>0
++        &&request.ttid==0&&request.valid==0&&context.cpu==c.host_start.cpu&&context.cpu>=0
++        &&physical!=0&&physical%8==0&&response.stid>0
++        &&crate::x86_cpu_helpers::smp_load_acquire_ulong(addr_of!(response.status))==1
++        &&end.is_some()&&carrier_end.is_some()
++        &&!(physical<carrier_end.unwrap()&&c.physical<end.unwrap())
++        &&crate::x86_memory_helpers::virt_to_phys(addr_of_mut!(c.bytes).cast::<c_void>())as u64==c.physical
++        &&frame[..8]==*b"MCFKW001"&&word(&frame,24)==1
++        &&word(&frame,32)==c.identity.child_pid as u64&&key(&frame)==c.identity
++        &&carrier_geometry(c,&c.identity);
++    let error=if !valid{EACCES}else if response.ret!=0{transport_error(response.ret)}else{0};
++    if error!=0{c.host_start.error=error;c.host_start.state=RETAINED;c.error=error;c.phase=RETAINED;return error;}
++    c.host_start.response=physical;c.host_start.stid=response.stid;c.host_start.state=OBSERVED;1
++}
++
++struct StartGuard{handle:Handle,armed:bool}
++impl Drop for StartGuard {
++    fn drop(&mut self){if !self.armed{return;}
++        unsafe{let _=registry::visit(self.handle,|pointer|{let c=&mut*pointer.as_ptr();
++            if c.host_start.state==PENDING{c.host_start.state=RETAINED;c.host_start.error=EIO;c.phase=RETAINED;}0});}
++        let _=registry::retain(self.handle);
++    }
++}
++
++unsafe fn submit_start(handle:Handle)->i32 {
++    let local=crate::cls::get_this_cpu_local_var();if local.is_null(){return EACCES;}
++    let parent=(*local).current;if parent.is_null(){return EACCES;}let cpu=(*parent).cpu_id;
++    let mut slot=match ControlRequestSlot::allocate(){Ok(slot)=>Some(slot),Err(error)=>return error};
++    let request=slot.as_ref().unwrap().request;
++    let prepared=registry::visit(handle,|pointer|{let c=&mut*pointer.as_ptr();
++        if c.handle!=handle||c.phase!=FIRST_POSITIVE||c.error!=0||c.parent!=parent as usize
++            ||c.host_start.state!=IDLE||!carrier_geometry(c,&c.identity){return EACCES;}
++        (*request.as_ptr()).args=[1,c.identity.child_pid as u64,c.length,c.root,c.physical,MARKER];
++        c.host_start=StartPending{owned_request:slot.take(),request:request.as_ptr()as usize,
++            thread:parent as usize,cpu,args:(*request.as_ptr()).args,state:PENDING,
++            error:0,response:0,stid:0};0
++    });
++    if prepared!=0{if let Some(slot)=slot{slot.free_private();}return prepared;}
++    let mut guard=StartGuard{handle,armed:true};
++    // Registry owns the exact request before the synchronous transport. The
++    // actual outer wait must observe this same Response, not a scalar replay.
++    let actual=do_syscall(request.as_ptr(),cpu);
++    let result=registry::visit(handle,|pointer|{let c=&mut*pointer.as_ptr();
++        if actual!=0{return transport_error(actual);}
++        if c.phase!=FIRST_POSITIVE||c.error!=0||c.host_start.state!=OBSERVED
++            ||c.host_start.request!=request.as_ptr()as usize||c.host_start.thread!=parent as usize
++            ||c.host_start.cpu!=cpu||c.host_start.response==0||c.host_start.stid<=0
++            ||c.host_start.owned_request.as_ref().is_none_or(|slot|slot.request!=request)
++        {return if c.host_start.error!=0{c.host_start.error}else{EIO};}
++        c.phase=HOST_STARTED;0
++    });
++    if result==0{guard.armed=false;}result
++}
++
++/// The returned PID is produced only after the actual selector1 response and
++/// real runqueue insertion. A separate retained Thread pin prevents exit/wait
++/// from invalidating the registry's storage. It is deliberately not released
++/// by phase4's pre-publication destructor/ACK route.
++pub(super) unsafe fn start_and_publish(handle:Handle,options:RunOptions)->i32 {
++    let started=submit_start(handle);if started!=0{return started;}
++    let mut permit=None;let mut pid=0;
++    let prepared=registry::visit(handle,|pointer|{let c=&mut*pointer.as_ptr();
++        if c.phase!=HOST_STARTED||c.error!=0||c.host_start.state!=OBSERVED{return EACCES;}
++        let admitted=admit(c.parent as *mut Thread,c.child as *mut Thread,options);
++        if admitted!=0{return admitted;}
++        let Some(credits)=c.owned_credits.as_mut()else{return EACCES;};
++        match credits.prepare_runtime(){Ok(owner)=>{permit=Some(owner);pid=c.identity.child_pid;c.runtime_committed=true;c.phase=RUNTIME_PUBLISHING;0},Err(error)=>error}
++    });
++    if prepared!=0{return prepared;}
++    // No registry/publication/MM lock is held across lifecycle callbacks.
++    let published=permit.unwrap().publish(pid,options.parent_cpu,options.flags,options.child_tid);
++    let _=registry::visit(handle,|pointer|{let c=&mut*pointer.as_ptr();
++        if published==0{if c.phase==RUNTIME_PUBLISHING{c.phase=RUNTIME_PUBLISHED;}}
++        else{c.phase=RETAINED;c.error=published;}0});
++    if published==0{pid}else{published}
++}
++
++/// Called only by the real wait-zombie body after its actual host wait4 result,
++/// with the parent's children lock held. This metadata CAS removes the normal
++/// wait obligation once; no release callback runs under the registry lock.
++#[derive(Clone,Copy)]
++pub(crate) enum WaitReap {Ordinary,Retained(i32),Prepared(Handle)}
++pub(crate) unsafe fn prepare_wait_reap(thread:*mut Thread,parent:*mut crate::abi::Process,
++    child:*mut crate::abi::Process,pid:i32,options:i32,actual:i32)->WaitReap {
++    if pid<=0||thread.is_null()||parent.is_null()||child.is_null()
++        ||crate::syscall_policy::wait_reap_needed_result(options)==0{return WaitReap::Ordinary;}
++    let local=crate::cls::get_this_cpu_local_var();
++    if local.is_null()||(*local).current!=thread||(*thread).proc!=parent{return WaitReap::Ordinary;}
++    let mut handles=[Handle::EMPTY;registry::CAPACITY];registry::snapshot_handles(&mut handles);
++    for handle in handles{if handle.epoch==0{continue;}
++        let mut matched=false;
++        let found=registry::visit(handle,|pointer|{let c=&mut*pointer.as_ptr();
++            if !c.runtime_committed
++                ||c.identity.child_pid!=pid||c.host_start.state!=OBSERVED{return 0;}
++            let Some(credits)=c.owned_credits.as_ref()else{return 0;};
++            // The additional Thread pin keeps these exact allocations live.
++            // Do not inspect/mutate the graph while publish() may own it.
++            if !credits.runtime_processes_match(parent,child)
++                ||(*child).pid!=pid||(*child).status!=8{return 0;}
++            matched=true;
++            if c.error!=0{return c.error;}
++            if !matches!(c.phase,RUNTIME_PUBLISHING|RUNTIME_PUBLISHED){return EBUSY;}
++            if actual!=pid{let error=if actual<0{actual}else{EIO};c.phase=RETAINED;c.error=error;return error;}
++            c.phase=WAIT_REAP_PENDING;1
++        });
++        if found==1{return WaitReap::Prepared(handle);}
++        // A busy ownership visitor cannot authorize falling through to the
++        // generic destructive reap. Refuse without consuming any wait edge.
++        if found<0&&(matched||found==EBUSY){return WaitReap::Retained(found);}
++    }
++    WaitReap::Ordinary
++}
++
++pub(crate) unsafe fn finish_wait_reap(handle:Handle,error:i32){
++    let _=registry::visit(handle,|pointer|{let c=&mut*pointer.as_ptr();
++        if c.phase!=WAIT_REAP_PENDING{return EACCES;}
++        if error==0{c.phase=WAIT_REAPED;}else{c.phase=RETAINED;c.error=error;}0});
++}
+--- a/kernel/rust/process_helpers.rs
++++ b/kernel/rust/process_helpers.rs
+@@ -9802,26 +9802,30 @@
+ 
+ #[no_mangle]
+ pub unsafe extern "C" fn chain_process(proc: *mut Process) {
++    let _ = chain_process_checked(proc);
++}
++
++pub(crate) unsafe fn chain_process_checked(proc: *mut Process) -> CInt {
+     if proc.is_null() || (*proc).parent.is_null() {
+-        return;
++        return -EINVAL;
+     }
+ 
+     let cpu = get_this_cpu_local_var();
+     if cpu.is_null() || (*cpu).resource_set.is_null() {
+-        return;
++        return -EINVAL;
+     }
+     let phash = (*(*cpu).resource_set).process_hash;
+     if phash.is_null() {
+-        return;
++        return -EINVAL;
+     }
+     let hash = process_hash((*proc).pid);
+     if hash < 0 || hash as usize >= PROCESS_HASH_SIZE {
+-        return;
++        return -EINVAL;
+     }
+ 
+     let parent = (*proc).parent;
+     let mut lock = MaybeUninit::<McsRwlockNodeIrqsave>::uninit();
+-    let _ = process_chain_process_body_result(
++    process_chain_process_body_result(
+         &raw mut (*proc).siblings_list,
+         &raw mut (*parent).children_list,
+         (&raw mut (*parent).children_lock) as *mut _ as CULong,
+@@ -9831,32 +9835,57 @@
+         lock.as_mut_ptr().cast(),
+         Some(process_mcs_writer_lock_bridge),
+         Some(process_mcs_writer_unlock_bridge),
+-    );
++    )
++}
++
++/// The real wait body already removed the child-list entry while holding the
++/// parent's children lock. Remove the retained process from hash discovery
++/// before consuming the original wait-owned Process edge. Self links allow
++/// the existing eventual final-release callbacks to observe no membership.
++pub(crate) unsafe fn unpublish_waited_process(proc:*mut Process)->CInt {
++    if proc.is_null(){return -EINVAL;}
++    let local=get_this_cpu_local_var();
++    if local.is_null()||(*local).resource_set.is_null(){return -EINVAL;}
++    let phash=(*(*local).resource_set).process_hash;
++    let hash=process_hash((*proc).pid);
++    if phash.is_null()||hash<0||hash as usize>=PROCESS_HASH_SIZE{return -EINVAL;}
++    let mut lock=MaybeUninit::<McsRwlockNodeIrqsave>::uninit();
++    let lock_addr=(&raw mut (*phash).lock[hash as usize])as CULong;
++    process_mcs_writer_lock_bridge(lock_addr,lock.as_mut_ptr().cast());
++    let entry=&raw mut (*proc).hash_list;
++    let result=if process_list_is_linked_result(entry)==0{-EINVAL}else{
++        process_list_detach_result(entry);(*entry).next=entry;(*entry).prev=entry;0
++    };
++    process_mcs_writer_unlock_bridge(lock_addr,lock.as_mut_ptr().cast());result
+ }
+ 
+ #[no_mangle]
+ pub unsafe extern "C" fn chain_thread(thread: *mut Thread) {
++    let _ = chain_thread_checked(thread);
++}
++
++pub(crate) unsafe fn chain_thread_checked(thread: *mut Thread) -> CInt {
+     if thread.is_null() || (*thread).proc.is_null() || (*thread).vm.is_null() {
+-        return;
++        return -EINVAL;
+     }
+ 
+     let cpu = get_this_cpu_local_var();
+     if cpu.is_null() || (*cpu).resource_set.is_null() {
+-        return;
++        return -EINVAL;
+     }
+     let thash = (*(*cpu).resource_set).thread_hash;
+     if thash.is_null() {
+-        return;
++        return -EINVAL;
+     }
+     let hash = thread_hash((*thread).tid);
+     if hash < 0 || hash as usize >= PROCESS_HASH_SIZE {
+-        return;
++        return -EINVAL;
+     }
+ 
+     let proc = (*thread).proc;
+     let vm = (*thread).vm;
+     let mut lock = MaybeUninit::<McsRwlockNodeIrqsave>::uninit();
+-    let _ = process_chain_thread_body_result(
++    process_chain_thread_body_result(
+         &raw mut (*thread).siblings_list,
+         &raw mut (*proc).threads_list,
+         (&raw mut (*proc).threads_lock) as *mut _ as CULong,
+@@ -9869,7 +9898,7 @@
+         Some(process_mcs_writer_lock_bridge),
+         Some(process_mcs_writer_unlock_bridge),
+         None,
+-    );
++    )
+ }
+ 
+ #[no_mangle]
+@@ -10015,6 +10044,32 @@
+     );
+ }
+ 
++
++// Additive checked wrapper: returns the existing actual destructor result.
++#[no_mangle]
++pub unsafe extern "C" fn release_process_checked(proc: *mut Process) -> CInt {
++    process_release_process_body_result(
++        proc.cast(),
++        offset_of!(Process, refcount) as CULong,
++        offset_of!(Process, tids) as CULong,
++        offset_of!(Process, main_thread) as CULong,
++        offset_of!(Process, mckfd) as CULong,
++        offset_of!(Process, mckfd_lock) as CULong,
++        offset_of!(Mckfd, next) as CULong,
++        None,
++        Some(process_current_resource_set_bridge),
++        Some(process_release_hash_detach_bridge),
++        Some(process_release_sibling_detach_bridge),
++        Some(process_release_profile_bridge),
++        Some(process_free_thread_pages_bridge),
++        Some(process_spin_lock_bridge),
++        Some(process_spin_unlock_bridge),
++        Some(process_mckfd_free_bridge),
++        Some(process_optional_free_bridge),
++        Some(process_release_final_cleanup_bridge),
++    )
++}
++
+ #[no_mangle]
+ pub unsafe extern "C" fn release_process_vm(vm: *mut ProcessVm) {
+     let _ = process_release_vm_body_result(
+--- a/kernel/rust/sched_helpers.rs
++++ b/kernel/rust/sched_helpers.rs
+@@ -2665,14 +2665,18 @@
+ 
+ #[no_mangle]
+ pub unsafe extern "C" fn runq_add_thread(thread: *mut Thread, cpu_id: CInt) {
++    let _ = runq_add_thread_checked(thread, cpu_id);
++}
++
++pub(crate) unsafe fn runq_add_thread_checked(thread: *mut Thread, cpu_id: CInt) -> CInt {
+     if thread.is_null() {
+-        return;
++        return -EINVAL;
+     }
+     let cpu_addr = unsafe { process_sched_cpu_local_bridge(cpu_id) };
+     let reservation_lock_addr =
+         core::ptr::addr_of_mut!(runq_reservation_lock) as *mut IhkSpinlock as usize;
+     let offsets = sched_runqueue_offsets();
+-    let _ = unsafe {
++    unsafe {
+         sched_runq_add_thread_body_result(
+             thread as usize,
+             cpu_addr,
+@@ -2696,7 +2700,7 @@
+             Some(process_sched_interrupt_bridge),
+             Some(process_sched_runq_log_bridge),
+         )
+-    };
++    }
+ }
+ 
+ #[no_mangle]
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -18150,6 +18150,35 @@
+         ret,
+     );
+ 
++    // A retained owned-fork runtime pin keeps Process storage alive. Reaping
++    // that child must remove discoverability before the normal wait edge is
++    // consumed, rather than leave a pinned zombie on pid1's child list.
++    let owned_reap=crate::fork_control_guest::runnable::prepare_wait_reap(
++        thread.cast(),parent_proc.cast(),child_proc.cast(),child_pid,options,ret,
++    );
++    if let crate::fork_control_guest::runnable::WaitReap::Retained(error)=owned_reap {
++        unlock_fn(parent_children_lock,parent_children_lock_node);return error;
++    }
++    if let crate::fork_control_guest::runnable::WaitReap::Prepared(handle)=owned_reap {
++        if parent_update_lock_node.is_null(){
++            crate::fork_control_guest::runnable::finish_wait_reap(handle,-EINVAL);
++            unlock_fn(parent_children_lock,parent_children_lock_node);return -EINVAL;
++        }
++        let parent_update_lock=field_ptr::<c_void>(parent,offsets.proc_update_lock_offset);
++        lock_fn(parent_update_lock,parent_update_lock_node);
++        wait_process_accumulate_child_rusage(parent,child,offsets);
++        wait_process_fill_rusage(child,rusage,offsets);
++        unlock_fn(parent_update_lock,parent_update_lock_node);
++        let siblings=field_ptr::<crate::abi::AbiListHead>(child,offsets.proc_siblings_list_offset);
++        list_detach_fn(siblings.cast());
++        (*siblings).next=siblings;(*siblings).prev=siblings;
++        unlock_fn(parent_children_lock,parent_children_lock_node);
++        let removed=crate::process_helpers::unpublish_waited_process(child_proc.cast());
++        if removed==0{release_process_fn(child_proc);}
++        crate::fork_control_guest::runnable::finish_wait_reap(handle,removed);
++        return ret;
++    }
++
+     let reparent_needed =
+         wait_process_reparent_needed_result(options, (parent_field == ppid_parent) as CInt) != 0;
+     if reparent_needed {
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -7310,8 +7310,11 @@
+     int error;
+     struct { unsigned int slot, reserved; unsigned long epoch; } handle;
+ };
+-extern int process_fork_owned_caller_current_v1(struct thread *, struct thread *,
+-        int, unsigned long, struct owned_fork_caller_outcome *);
++extern struct thread *process_fork_construct_current_v1(struct thread *,
++        unsigned long, unsigned long, int, int, void **);
++extern int process_fork_cancel_constructed_current_v1(void *);
++extern int process_fork_owned_caller_runnable_current_v2(struct thread *, struct thread *,
++        int, unsigned long, void *, int, int, unsigned long, struct owned_fork_caller_outcome *);
+ #endif
+ 
+ unsigned long do_fork(int clone_flags, unsigned long newsp,
+@@ -7340,6 +7343,9 @@
+     int inherit_clone_affinity = 0;
+ #endif
+ 	int tid_table_created = 0;
++#ifdef MCKERNEL_NATIVE_FORK_OWNED_TRANSACTION
++    void *owned_fork_constructor = NULL;
++#endif
+ 
+ 	dkprintf("%s,flags=%08x,newsp=%lx,ptidptr=%lx,"
+ 		"ctidptr=%lx,tls=%lx,curpc=%lx,cursp=%lx",
+@@ -7440,8 +7446,14 @@
+ 		}
+ 	}
+ 
+-	new = clone_thread(old, curpc,
+-	                    newsp ? newsp : cursp, clone_flags);
++#ifdef MCKERNEL_NATIVE_FORK_OWNED_TRANSACTION
++    if (!(clone_flags & CLONE_VM))
++        new = process_fork_construct_current_v1(old, curpc,
++                newsp ? newsp : cursp, clone_flags, cpuid, &owned_fork_constructor);
++    else
++#endif
++        new = clone_thread(old, curpc,
++                            newsp ? newsp : cursp, clone_flags);
+ 	
+ 	if (!new) {
+ 		err =  -ENOMEM;
+@@ -7550,17 +7562,19 @@
+ 	else {
+ #ifdef MCKERNEL_NATIVE_FORK_OWNED_TRANSACTION
+         struct owned_fork_caller_outcome outcome;
+-        err = process_fork_owned_caller_current_v1(old, new, cpuid,
++        err = process_fork_owned_caller_runnable_current_v2(old, new, cpuid,
+                 clone_host_parent_flags_result(clone_flags,
+-                    oldproc->ppid_parent->pid), &outcome);
++                    oldproc->ppid_parent->pid), owned_fork_constructor,
++                clone_flags, parent_cpuid, child_tidptr, &outcome);
+         if (err)
+             goto destroy_thread;
+         if (outcome.disposition == 0) {
+             err = outcome.error;
+             goto destroy_thread;
+         }
+-        /* Existing registry owns request/parent/child/VM/reserved CPU. A first
+-         * positive receipt supplies no runnable/cleanup authority. */
++        /* Rust transfers a supported child's constructor graph only after
++         * the actual selector1 response and retains a separate runtime pin.
++         * All uncertain paths remain owned; the default gate is undefined. */
+         return outcome.error;
+ #else
+ 		request1.number = __NR_clone;
+@@ -7759,6 +7773,14 @@
+ 	}
+ 
+ destroy_thread:
++#ifdef MCKERNEL_NATIVE_FORK_OWNED_TRANSACTION
++    if (owned_fork_constructor) {
++        int cancel = process_fork_cancel_constructed_current_v1(owned_fork_constructor);
++        if (cancel)
++            return cancel;
++        goto release_cpuid;
++    }
++#endif
+ 	if (!(clone_flags & CLONE_VM)) {
+ 		/* in case of fork, destroy struct process */
+ 		ihk_atomic_set(&new->proc->refcount, 1);

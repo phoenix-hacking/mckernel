@@ -1,0 +1,100 @@
+{
+  "status": "ISOLATED_CHAIN_STOPPED_FIRST_FAILURE",
+  "outer_exit": 1,
+  "readback_ns": 1792453583077847189,
+  "commands": [
+    {
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--test",
+        "-Wrust_2018_idioms",
+        "-Dwarnings",
+        "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/actual-control-park-isolated.rs",
+        "-C",
+        "link-arg=/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/guest.o",
+        "-C",
+        "link-arg=/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/codec.o",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-4/actual"
+      ],
+      "pid": 1712259,
+      "started_unix_ns": 1792453570290780737,
+      "finished_unix_ns": 1792453572761666026,
+      "elapsed_ns": 2470885467,
+      "returncode": 0,
+      "direct_join": true,
+      "closed_streams": {
+        "stdout": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stderr": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "process_group_absent": true,
+      "timedout": false
+    },
+    {
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-4/actual",
+        "--exact",
+        "consumer_fixture::actual::actual_control_fresh_response_parked_once_and_blocks_link_return_removal",
+        "--test-threads=1",
+        "--nocapture"
+      ],
+      "pid": 1712314,
+      "started_unix_ns": 1792453572762152391,
+      "finished_unix_ns": 1792453572778490910,
+      "elapsed_ns": 16339439,
+      "returncode": 101,
+      "direct_join": true,
+      "closed_streams": {
+        "stdout": {
+          "bytes": 357,
+          "sha256": "80a30b75c0b72110b55698a1648eea8f9b5607c92c6d8e881f7c20c5fc319d73"
+        },
+        "stderr": {
+          "bytes": 437,
+          "sha256": "9f3846d22ace23d1f571c2772467ed85f4bd80d9f143bb94263d6da901d78463"
+        }
+      },
+      "process_group_absent": true,
+      "timedout": false
+    }
+  ],
+  "streams": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/whole-check-isolated.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/whole-check-isolated.stderr",
+      "bytes": 534,
+      "sha256": "c2ac146fe20d0a2d8bd0f0b2f85b8f085abaf60666cc277477beb4c27b5b6e1b"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-4/scenario-1.stdout",
+      "bytes": 357,
+      "sha256": "80a30b75c0b72110b55698a1648eea8f9b5607c92c6d8e881f7c20c5fc319d73"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-4/compile.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-4/scenario-1.stderr",
+      "bytes": 437,
+      "sha256": "9f3846d22ace23d1f571c2772467ed85f4bd80d9f143bb94263d6da901d78463"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-4/compile.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

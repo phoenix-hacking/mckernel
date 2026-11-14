@@ -1,3 +1,134 @@
+Active stability and full-verification goal (2026-09-13)
+=====================================================
+Implement the entire roadmap in docs/verification/stability-goal-20260913.txt.
+The user removed the timelines: prioritize functionality and OS stability,
+then satisfy all remaining native production and Rust/assembly requirements.
+Continue via docs/verification/stability-run-20260913.md.
+Preserve evidence, runtime gates, resource limits and verified GitHub checkpoints.
+Do not stop after the first subset or claim historical scores prove completion.
+
+Historical completed drafting goal follows
+-----------------------------------------
+Active Codex Spark goal (2026-09-09; start after the user selects Spark or Luna)
+============================================================================
+Work in `/home/holden/mckernel` on `codex/local-native-staging-repair`.
+Complete the released application-test drafting queue: **273 logical cases
+across 97 packets, including 56 vector instruction/state cases**. Create the
+specified test fixtures or pinned-application input specifications and their
+independent oracle JSON files. Produce useful, specific tests that expose bugs.
+This goal completes test drafting; it does not execute or accept the new suite.
+
+First read `docs/verification/codex-spark-runbook-20260909.md` and follow its
+startup checks and file-reading order. The Ultra release was accepted at
+commit `7b32298119df13a83240e082c275c34d184f7ccc`; the runbook identifies its
+retained GitHub verification proof. Preserve the released catalog, packets,
+validator, contexts, input/capability manifests, kernel and launcher unchanged.
+
+Start with packet 001 and continue automatically through packet 097. Use only
+one packet and at most three logical cases at a time. Load selected case bodies
+through the existing context emitter; do not load the whole catalog, other
+packet bodies, historical kernel.log or complete evidence archives into context.
+Replace completed case bodies with report hashes and a short dependency note.
+Do not ask for permission between packets, routine edits or checkpoints.
+
+For every active case, implement its exact operation, parameter vectors,
+resource bounds, cleanup and expected output contract. Write a versioned
+independent oracle with fixed bytes, values or named relational assertions.
+Retain every required parameter; parameter executions do not add logical cases.
+Do not finish with empty files, comment-only fixtures, unconditional success,
+or tests that never exercise the specified behavior. Do not invent expected
+results or resolve an uncertain errno by accepting multiple arbitrary values.
+
+All packets are `draft-only` with execution disabled. Missing runtime support
+does not prevent drafting a well-specified test. Record a drafting blocker only
+when a concrete missing interface, input or semantic expectation actually
+prevents that draft. Complete the independent work, record the exact missing
+item and smallest question for Max, then continue the next independent packet.
+Do not implement a runner or supervisor, compile/run payloads, launch guests,
+modify production code, weaken an oracle or change the released plan to clear
+a blocker. Those actions require a later reviewed execution scope.
+
+For vector cases, preserve the reviewed per-engine CPUID/OSXSAVE/XCR0 gates,
+independent scalar/math expectations and emitted-instruction requirements.
+Cover SSE/XMM, AVX/AVX2/YMM and the specified optional extensions. AVX-512 stays
+conditional on the actual guest feature and enabled-state checks. Host CPU
+flags alone never authorize guest instructions; missing support is not PASS.
+
+Preserve each original failure before diagnosis. Use the immutable per-packet
+reports and append-only failure log defined by the packet and runbook. Small
+fixture/oracle corrections must preserve independent expectations, stay inside
+the active write allowlist, and respect one candidate, 15 minutes, two files
+and 80 changed lines. Escalate unsafe, kernel/ABI/lifetime/scheduler/transport,
+unclear or unsuccessful repairs to Max. No production repair is enabled here.
+
+After every packet, report its index out of 97, exact case statuses, files
+created, unresolved expectations, original failures and next packet. Checkpoint
+the drafted files and immutable reports to GitHub after coherent packet groups,
+about every 30 minutes, and before stopping. Verify the fetched commit and file
+hashes. Preserve prior evidence and active inputs. Follow the runbook's bounded
+coordination permissions for contexts, reporting, logging and Git checkpoints.
+
+Finish only when all 97 immutable packet reports account for all 273 unique
+case IDs exactly once, with meaningful drafts wherever the specification allows
+them and precise evidence for every remaining blocker. Create the immutable
+queue summary with separate `DRAFTED`, `DRAFTED_WITH_UNRESOLVED`, `BLOCKED` and
+`FAILED` counts, report/file hashes and prioritized Max questions. Verify the
+final GitHub checkpoint. State **"The Spark drafting queue is complete and
+ready for Max review"**, identify any blockers, and stop. Do not claim that
+drafted tests passed or that the OS is production-ready.
+
+
+END ACTIVE SPARK GOAL
+
+Historical Ultra preparation and older goals follow
+--------------------------------------------------
+Current execution phase (2026-09-09): Ultra gates and bounded drafting release
+----------------------------------------------------------------------------
+Review the accepted Max baseline, fix and verify prerequisite defects, and
+produce a very broad, precise application test plan with bounded executor
+packets usable by Luna or Spark. Clearly notify the user when the handoff is
+ready. Preserve every failure and log candidate fixes for Max to investigate
+narrowly after the executor tests widely. Do not switch models automatically.
+Periodically commit, push and verify GitHub progress about every30minutes during
+sustained work, after coherent checkpoints, and before long runs/session end.
+New source changes require new validation; historical baseline PASS is retained
+only for its exact original binaries. Follow current AGENTS.md and Ultra reviews.
+Release authority is docs/verification/ultra-drafting-handoff-20260909.json plus
+its successful exact fetched-blob verification. Once released, explicitly tell
+the user "We're ready to run Codex Spark" and stop for their chosen model switch.
+Next phase drafts273 cases (56 vector cases) through97 bounded packets; it does
+not automatically enable guest execution. Follow scripts/application-tests/
+handoff-start.md, preserve immutable failure/review reports, and return difficult
+kernel diagnosis to Max. Do not load the whole catalog/history into the executor.
+
+Historical completed Max phase follows
+-------------------------------------
+Current execution goal (2026-09-08)
+----------------------------------
+Stay on Max until the native kernel has a reproducible application-testing
+baseline: real application execution, working delegated syscalls, clean process
+retirement, repeated launches and representative application smoke checks.
+Retain the commands, source and image identities, results and failure evidence.
+Use docs/verification/native-application-service-plan.md, section
+"Application readiness and model handoff, 2026-09-08", for the readiness criteria.
+
+Continue saving coherent checkpoints to GitHub, aiming for about every 30
+minutes during sustained work and before long validation or ending a session.
+Verify the pushed commit. Once the readiness criteria pass, save the handoff,
+mark this phase complete and stop for the user's switch to Astra Ultra.
+Explicitly tell the user "We're ready to switch to Astra Ultra" at that point.
+Astra will review the implementation and evidence, fix issues it finds and
+produce the detailed application/further-testing plan. After that review, the
+user intends to switch to Codex Spark to implement and run those tests.
+Do not switch models or begin the later phases automatically.
+
+This goal's completion means readiness for broader testing. Full production
+acceptance and the Rust/assembly end state remain subsequent obligations.
+The historical request below is preserved as background, not this phase's
+stopping condition.
+
+Historical full-port request
+----------------------------
 › Awesome put this in full-port.txt with a plan to see it completed please and update AGENTS.md for
   this as well. Also please make somethign that I can push to goal mode and complete it. All code
   should be verified and QEMU and virtualization tools like KVM should be used to make sure that

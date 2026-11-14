@@ -1,0 +1,45 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_NARROW_ACTUAL_RUNNER_OUTPUT_AND_SINK_INSPECTION",
+  "explicit_print_sites": [
+    {
+      "source": "native_diagnostic_runner.py",
+      "line": 175
+    },
+    {
+      "source": "native_diagnostic_runner.py",
+      "line": 173
+    }
+  ],
+  "success_fixture_bytes": 116,
+  "handled_failures": [
+    {
+      "kind": "newlines",
+      "stderr_bytes": 8225
+    },
+    {
+      "kind": "unicode",
+      "stderr_bytes": 32801
+    },
+    {
+      "kind": "surrogates",
+      "stderr_bytes": 49185
+    }
+  ],
+  "handled_failure_encoded_upper_bytes": 1349540,
+  "max_size16m_bytes": 16000000,
+  "handled_failure_cannot_rotate_alone": true,
+  "success_condition": "Actual case_id and final manifest not yet bound; fixture is formatting evidence only.",
+  "remaining_channels": [
+    "container Init=True tini output",
+    "Python startup/import diagnostics",
+    "uncaught owner.main/_inside setup exceptions and default interpreter traceback",
+    "runner BaseException/write-failure paths outside its except Exception handler"
+  ],
+  "full_container_output_bound_proved": false,
+  "physical_allocation_bound_proved": false,
+  "root": 0,
+  "docker": 0,
+  "workloads": 0,
+  "native_credit": 0
+}

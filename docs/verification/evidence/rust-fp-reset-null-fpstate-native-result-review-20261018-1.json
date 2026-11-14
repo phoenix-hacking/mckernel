@@ -1,0 +1,58 @@
+{
+  "schema": "mckernel.practical.native-result-independent-review.v1",
+  "status": "PASS",
+  "decision": "PASS_EXACT_RESET_IMAGE_NULL_FPSTATE_ACTUAL_AND_RETIREMENT",
+  "reviewer": "/root/null_completed_acceptance_1220",
+  "implementation_ownership": false,
+  "publication_by": "root dispatcher after new manual-resume independent retained-capture review",
+  "review_scope": "Completed NULL-fpstate guest only; no guest or refused task replay",
+  "retained_actual_result": {
+    "path": "/home/holden/mckernel-work/host-preparation/null-fpstate-probe-independent-review-20261018-1/native-actual-result.json",
+    "sha256": "377d978ed4fe4196becd2de4da6d5cb5debcdb9ffd0ec74f719bf4579a63dab0",
+    "size": 4990
+  },
+  "retained_checker_sha256": "494afcb5d433970956a9e13e61b987de043dcb1f6119a916faac94dac63af4c4",
+  "verified_bound_files": 66,
+  "native_application": {
+    "actual_native_execution_independently_accepted": true,
+    "stdout_bytes": 53,
+    "application_stderr_bytes": 0,
+    "raw_wait_status": 0,
+    "complete_streams": true,
+    "truncation_or_loss": false,
+    "sigusr1_deliveries": 2,
+    "normal_pointer_restore_then_null_reset": true,
+    "x87_FCW": "037f",
+    "x87_FSW": 0,
+    "x87_FTW": 0,
+    "published_and_deleted_tid": 257,
+    "retirement_token": 12,
+    "retirement_errno": 0,
+    "dynamic_pager": "N/A static payload"
+  },
+  "owner_and_retirement": {
+    "owner_join_exit": 0,
+    "owner_elapsed_seconds": 34.56752620500629,
+    "all_local_clients_physically_reaped": 30,
+    "authenticated_container_removal": true,
+    "final_authenticated_absence_queries": 3,
+    "lease_retained": false,
+    "owner_source_known_positive_retirement": true,
+    "root_mutex_device": 27,
+    "root_mutex_inode": 4
+  },
+  "selected_rust_path": "native_signal::sigreturn -> arch_native_signal_restore_fp_bridge(NULL) -> rust_x86_native_signal_reset_fp -> checked XRSTOR",
+  "scope_limits": [
+    "NULL x87 reset on accepted current492 XSAVE profile only",
+    "No complete SSE/MXCSR/AVX reset, fallback/error branch, whole-kernel or formal qualification claim"
+  ],
+  "recommendation": {
+    "distinct_native_behaviors": 19,
+    "selected_production_rust_bodies": 8,
+    "applicable_native_rust_paths": 7,
+    "practical_checks_complete": 5,
+    "practical_checks_open": 30
+  },
+  "service_stop_preserved": "docs/verification/os-milestones-20260914/SUPERVISOR-STOP-20261018T121008Z.md",
+  "new_guest_or_payload_execution": false
+}

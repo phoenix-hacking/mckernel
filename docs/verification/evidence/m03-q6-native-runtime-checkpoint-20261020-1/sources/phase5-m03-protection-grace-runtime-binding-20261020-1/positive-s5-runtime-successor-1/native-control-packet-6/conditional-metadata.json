@@ -1,0 +1,88 @@
+{
+  "accepted_stage_manifest": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-stage-20261020-1/ordinary-stage-1/manifest.json",
+    "sha256": "bddc79460178fb6d89fb4f84b9e3a04fdaf9b49c17fb9d0584e4e8f8bd60617c",
+    "size": 5805
+  },
+  "actual_metadata_review": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-valid-protection-closure-independent-review-20261020-1/ACTUAL-PROTECTION-GRACE-NORMALIZATION-ACCEPTANCE.json",
+    "sha256": "ebd6ddf1083953d7e601d7c39acbbcc1a3248be603517c41773302f2e41052a2",
+    "size": 14561
+  },
+  "effective_current_controller_stop_percent": 100,
+  "execution_route": "DIRECT_OWNER_AND_THREE_BOUNDED_SUCCESS_ONLY_READERS",
+  "independent_static_execution_decision": {
+    "bytes": 13149,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/M03-POSITIVE-S5-S6Q6-NATIVE-SOURCE-AND-NONTEMPORAL-RELEASE.json",
+    "sha256": "d656dd4fba1f462cc908a05a040efad1be2644e1bf15cbe55cc5fda67c5fdeed"
+  },
+  "normalized_manifest": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/scratch/vpg-n261020-1/manifest.json",
+    "sha256": "bddc79460178fb6d89fb4f84b9e3a04fdaf9b49c17fb9d0584e4e8f8bd60617c",
+    "size": 5805
+  },
+  "parent_full_ninefield_identity": {
+    "ctime_ns": 1792519096027674013,
+    "device": 1828,
+    "gid": 1000,
+    "inode": 882023,
+    "mode": "0o700",
+    "mtime_ns": 1792519096027674013,
+    "nlink": 2,
+    "path": "/home/holden/mckernel-work/scratch/vpg-s261020-1/p",
+    "size": 4096,
+    "uid": 1000
+  },
+  "parent_identity": {
+    "device": 1828,
+    "gid": 1000,
+    "inode": 882023,
+    "mode": "0o700",
+    "uid": 1000
+  },
+  "postjoin_readback": {
+    "approved": "CONDITIONAL_ON_EXACT_INDEPENDENT_EXECUTION_RELEASE",
+    "argv": [
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/vpg-s261020-1/p.owner-10134fa809c34d048c37df62f32b31cc",
+        "."
+      ],
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/cat",
+        "/home/holden/mckernel-work/scratch/vpg-s261020-1/p/attempt-10134fa809c34d048c37df62f32b31cc/result.json"
+      ],
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/vpg-s261020-1/p/attempt-10134fa809c34d048c37df62f32b31cc",
+        "--exclude=./qmp.sock",
+        "."
+      ]
+    ],
+    "capture_limit_bytes_per_command": 33554432,
+    "requested": true,
+    "timeout_seconds_per_command": 30
+  },
+  "proposal": {
+    "bytes": 4971,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/positive-s5-runtime-successor-1/native-control-packet-6/proposal.json",
+    "sha256": "5231f8615d2678c09d1579049d033a9aecb3ae734ed7b8f98cd6b5a5295fd7ff"
+  },
+  "runtime_release": false,
+  "runtime_wrapper": null,
+  "schema": "mckernel.native-diagnostic.nontemporal-metadata.v1",
+  "status": "PASS_NONTEMPORAL_DATA_ONLY"
+}

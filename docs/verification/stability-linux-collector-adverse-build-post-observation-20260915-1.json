@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_adverse_build_post_observation",
+  "task_id": "M02-B-adverse-v1-build",
+  "attempt": 1,
+  "observed_utc": "2026-09-15T07:19:00Z",
+  "development_lock_probe": {
+    "command": ["sudo", "-A", "/usr/bin/flock", "-n", "/run/lock/mckernel-development.lock", "/usr/bin/true"],
+    "exit_status": 0,
+    "meaning": "lock was acquirable after the owner returned"
+  },
+  "container_absence_probe": {
+    "command": ["sudo", "-A", "/usr/bin/docker", "ps", "-a", "--no-trunc", "--filter", "label=org.mckernel.validation=linux-collector-adverse-v1"],
+    "exit_status": 0,
+    "matching_rows": 0
+  },
+  "outer_invocation_retention": {
+    "shell_exit_status": 0,
+    "stdout_bytes": 0,
+    "stderr_bytes": 0,
+    "limitation": "The direct dispatcher tool invocation returned exit zero but did not write a separate filesystem command/wait record. The owner result, watchdog wait and internal command collections are retained in the complete archive; this additive record does not reconstruct a missing outer raw wait."
+  },
+  "collector_runtime_execution": false,
+  "runtime_acceptance": false
+}

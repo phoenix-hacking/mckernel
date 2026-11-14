@@ -1,0 +1,84 @@
+{
+  "status": "ACTUAL_FOUR_BODY_CASES_AND_FOUR_SOURCE_SYNTAX_PASS_REVIEW_PENDING",
+  "source_freeze": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-kernel-panic-free-link-repair-20261020-1/SOURCE-FREEZE.json",
+    "sha256": "869acddedb4aaa8af3cca892a49e9a97f4d6f1621174acb129bc2737781abae5",
+    "bytes": 2848
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-kernel-panic-free-link-repair-20261020-1/PANIC-FREE-FOUR-SOURCE.patch",
+    "sha256": "9c6851c17901204fa3cdb29da61ba9de6cf778d25468d14eb2ddc481e3c5a8ca",
+    "bytes": 13212
+  },
+  "original_failed_image_preimages": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-kernel-panic-free-link-repair-20261020-1/ORIGINAL-FOUR-SOURCE-PINS.json",
+    "sha256": "92779455e6d98f0c2986578fc12779db78ab2daac54ea037fbfbcbcd0bcd8430",
+    "bytes": 1830
+  },
+  "initial_actual_checks": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-kernel-panic-free-link-repair-20261020-1/ordinary-check-result-1.json",
+    "sha256": "4249456f0a894b03f5129d10661456e30865ac0af8e2d9f73e49cafb2fd6df98",
+    "bytes": 4112
+  },
+  "initial_exits": [
+    0,
+    0,
+    0,
+    0,
+    1
+  ],
+  "initial_fixture_failure": "E0425 newtest called insert not actual insert_private",
+  "one_bounded_fixture_correction": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-kernel-panic-free-link-repair-20261020-1/FIXTURE-API-CORRECTION-2.json",
+    "sha256": "cf8ffc2410e453f44280b94c4e3c6e9747ac956a052803144cf5ffdbdd89d491",
+    "bytes": 2010
+  },
+  "remaining_actual_checks": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-kernel-panic-free-link-repair-20261020-1/ordinary-check-result-2.json",
+    "sha256": "6d388882e0c6886f5ffae676b022349c1097fcc2fd1d08844768daac21656116",
+    "bytes": 1856
+  },
+  "remaining_exits": [
+    0,
+    0
+  ],
+  "actual_test_stdout": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-kernel-panic-free-link-repair-20261020-1/panic-free-four-affected-cases-2.stdout",
+    "sha256": "f5e8451f7f39421b7d9c8d76df412457fae0c6f8fa931d59d212de3ec8fc52d5",
+    "bytes": 494
+  },
+  "new_actual_body_tests_passed": 4,
+  "old_tests_filtered": 17,
+  "all_directjoins_and_groups_absent": true,
+  "CPU6_released": true,
+  "active_child": null,
+  "production_sourcebody_changes_after_freeze": false,
+  "root_four_preimage_comparison": [
+    {
+      "path": "/home/holden/mckernel/kernel/rust/fork_control_registry.rs",
+      "sha256": "99f04dc22882afcda60fe4af6ac3fba90f2d93fed9afdcaecac458613b417e9d",
+      "matches_failed_image_preimage": true
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/fork_child_credits.rs",
+      "sha256": "c31914d5914961ca4620484d657518cb0e6f40f36240da53e2f85b1174c2669a",
+      "matches_failed_image_preimage": true
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/fork_runnable_child.rs",
+      "sha256": "3cc895ffa6e02a04af5b15ad6d2a94ac370adc9662b295f027ad5e5eee38940b",
+      "matches_failed_image_preimage": true
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/fork_final_ack.rs",
+      "sha256": "9701e5ab00bd083c398f364c17b222bc59461be40a804bea7cb9b2817e47a2dc",
+      "matches_failed_image_preimage": true
+    }
+  ],
+  "independent_review": null,
+  "actual_production_wholecrate_object": null,
+  "unsupported_panic_symbols_absent_in_actual_object": null,
+  "actual_kernel_LD": null,
+  "whole_kernel_Rust_retirement_acceptance": false,
+  "adapters": "Existing accepted actual-body host/physical/Cconstructor/VMcallback adapters; stdtest link NOT genuine no_std/core or kernelLD proof"
+}

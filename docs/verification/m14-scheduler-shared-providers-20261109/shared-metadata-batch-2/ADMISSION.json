@@ -1,0 +1,60 @@
+{
+  "status": "ROOT_FRESH_SHARED_5_METADATA_READS_AND_TWO_CALLED_GATES_ADMISSION",
+  "at": "2026-11-09T22:05:09.813997+00:00",
+  "steps": [
+    {
+      "label": "primitive",
+      "request": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-metadata-1/REQUEST.json",
+      "request_sha256": "6846a28eb9768c51d880e52c44b8f28b094250cffac2ec0340f4c69dae2ab200",
+      "review": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-review-1/PRIMITIVE-METADATA-REVIEW.json",
+      "review_sha256": "503a00444447fede4db3affa407d5adbf8d211cd4198d6dfb3e8aaef611a13e6",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/python3",
+        "-B",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-metadata-1/run_metadata.py",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-metadata-1/REQUEST.json"
+      ],
+      "payload_count": 3,
+      "cwd": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-metadata-1"
+    },
+    {
+      "label": "debug18",
+      "request": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-metadata-1/REQUEST.json",
+      "request_sha256": "6b614b4275991b2f15b8678ca48592941fe77d932b694af91d5df0059e0c9b09",
+      "review": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-review-1/METADATA-REVIEW.json",
+      "review_sha256": "6649051b3f4b805ac3ea85fc5e39717963faa286a98d6ead20c2600192ffa47b",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/python3",
+        "-B",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-metadata-1/run_metadata.py",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-metadata-1/REQUEST.json"
+      ],
+      "payload_count": 2,
+      "cwd": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-metadata-1"
+    }
+  ],
+  "MemAvailable": 29793034240,
+  "disk_free": {
+    "/home/holden/mckernel": 132168912896,
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba": 132168912896
+  },
+  "usage": {
+    "at": "2026-11-09T22:05:09.805895+00:00",
+    "used_percent": 36,
+    "remaining_percent": 64,
+    "window_minutes": 10080,
+    "normal_Campaign_record_rate_limits_guard_passed": true,
+    "spendControlReached": false,
+    "rateLimitReachedType": null,
+    "included_only_no_model_or_credit_fallback": true
+  },
+  "aggregate_HOST": "CPUs0/6/7,max3LIGHTjobs,4GiBTOTALalloverhead; serial1job explicitouter/payloadCPU6",
+  "outer_taskset6_condition": true,
+  "no_compiler_link_runtime_native_or_source_release": true
+}

@@ -1,0 +1,68 @@
+{
+  "acceptance_credit": false,
+  "base_checkpoint": "f58a2d9cf642429f557686fa421eab3b91dbf02b",
+  "checks": [
+    {
+      "command": "python3 -B -m unittest scripts.tests.test_native_exact_candidate_quarantine_recovery_v2 -v",
+      "exit_status": 0,
+      "result": "26 tests passed"
+    },
+    {
+      "command": "python3 -B docs/verification/evidence/native-exact-candidate-quarantine-recover-68cf089a-2.py --self-test",
+      "exit_status": 0,
+      "result": "pure synthetic assertions passed"
+    },
+    {
+      "command": "python3 -m py_compile helper and tests with PYTHONPYCACHEPREFIX in a temporary directory",
+      "exit_status": 0
+    },
+    {
+      "command": "bash -n docs/verification/evidence/native-exact-candidate-quarantine-recovery-execution-68cf089a-2.sh",
+      "exit_status": 0
+    },
+    {
+      "command": "python3 -m json.tool docs/verification/evidence/native-exact-candidate-quarantine-recovery-release-basis-68cf089a-2.json",
+      "exit_status": 0
+    },
+    {
+      "command": "git diff --check -- exact four recovery-v2 template paths",
+      "exit_status": 0
+    }
+  ],
+  "created_at_utc": "2026-09-29T06:59:43Z",
+  "execution_authorized": false,
+  "failure_family_history": {
+    "bounded_expert_correction": "BLOCK",
+    "initial_draft": "BLOCK",
+    "strategy_change": "larger coherent four-file boundary replacement",
+    "strategy_change_review": "PASS_DRAFT_SOURCE_TEMPLATE_ONLY"
+  },
+  "independent_review": {
+    "decision": "PASS_DRAFT_SOURCE_TEMPLATE_ONLY",
+    "execution_authorized": false,
+    "limitations": [
+      "operational exclusion of privileged or adversarial mutation and reference acquisition or transfer must hold throughout observation and deletion",
+      "no atomic process census is claimed",
+      "no live observer, deletion, Docker, root, build, guest or application operation was reviewed or executed",
+      "template checkpoint, mechanical finalization, fetched verification and a separate exact execution release remain required"
+    ],
+    "runtime_acceptance": false
+  },
+  "inputs": {
+    "observer_v2_sha256": "71fc9f54c6f7ac8a2e8030ac5a802e2c1354ac0f0ed4cf2737c0c9486a7d3bfa",
+    "original_failure_record_sha256": "d2150a0a8173c0caaa4c5a6050653947e372480cd059d8d9ff49656dac76ed97",
+    "original_raw_archive_sha256": "cc38687005d52ecc4b0d48ffa9ff650832169ba9d426add604b0c4e0f8893eea",
+    "recovery1_failure_record_sha256": "2cb8dc42fccd68bcb9c5db1b6a78fa0eb9b478e9f81e5c46c14a8514d7948a7c",
+    "recovery1_raw_archive_sha256": "0a3e13ec06ba3e7efd0282ab3efd9f51ad18e6261bef6c0691a1ec29700878b5"
+  },
+  "record_kind": "native_exact_candidate_quarantine_recovery2_template_readiness",
+  "runtime_acceptance": false,
+  "schema_version": 1,
+  "status": "PASS_DRAFT_SOURCE_TEMPLATE_ONLY",
+  "template": {
+    "basis_sha256": "f2a19915a2ae4adea7e97c8087a40fdd9e41516d27c6dbcd55014003f17411ff",
+    "helper_sha256": "fb22948992ad058be7027dcccf12ea7f0359037118f9ea0bba0a8e80ce8f8d8c",
+    "packet_sha256": "5bafd30475bfaf6b1764e9a71bd8e96686843ff6c38e644233ddc441d606d1d7",
+    "test_sha256": "5d25dc0779568f652f6d11d13d20e7e0862f92c2fc95da85eeaf2f15ee86b195"
+  }
+}

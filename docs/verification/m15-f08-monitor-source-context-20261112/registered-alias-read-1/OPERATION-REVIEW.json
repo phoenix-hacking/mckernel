@@ -1,0 +1,238 @@
+{
+  "F08_or_original_acceptance": false,
+  "Root_thread_id": "01a18bc3-e072-7810-9426-75101b0856c0",
+  "actual_changed_binding": {
+    "actual_candidate_existence_or_package_metadata": "UNPROVED; this review does not query or infer it.",
+    "expected_target": {
+      "MainPID": 420,
+      "birth": "281",
+      "boot_id": "3ba4f2ca-4323-433d-bfb8-7859268121b6",
+      "exe_path": "/usr/lib/systemd/systemd-udevd",
+      "executable": {
+        "bytes": 760392,
+        "ctime_ns": "1743629919571215524",
+        "device": 66306,
+        "gid": 0,
+        "inode": 1051524,
+        "mode": "0o755",
+        "mtime_ns": "1718656179000000000",
+        "nlink": 1,
+        "sha256": "bdf695b3e26cb10bb767b32dae1a5eb8c0c0e4395c0a7850417ca603085a7286",
+        "status": "OBSERVED",
+        "uid": 0
+      },
+      "namespaces": {
+        "mnt": {
+          "device": 4,
+          "inode": 4026532322,
+          "link": "mnt:[4026532322]"
+        },
+        "net": {
+          "device": 4,
+          "inode": 4026531840,
+          "link": "net:[4026531840]"
+        },
+        "pid": {
+          "device": 4,
+          "inode": 4026531836,
+          "link": "pid:[4026531836]"
+        },
+        "user": {
+          "device": 4,
+          "inode": 4026531837,
+          "link": "user:[4026531837]"
+        }
+      },
+      "root_identity": {
+        "device": 66306,
+        "inode": 2
+      }
+    },
+    "expected_target_equals_actual_saved_before_and_after": true,
+    "new_candidate": "/lib/systemd/systemd-udevd",
+    "old_query": {
+      "argv": [
+        "/usr/bin/dpkg-query",
+        "--search",
+        "/usr/lib/systemd/systemd-udevd"
+      ],
+      "exit": 1,
+      "preserved_not_replayed": true,
+      "status": "UNAVAILABLE_INSTALLED_PACKAGE_OWNER"
+    }
+  },
+  "actual_context_binding": {
+    "bytes": 12332,
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/actual-downstream-monitor-context-1/current-service-context-read-1/actual-context-binding-1/ACTUAL-CONTEXT-BINDING.json",
+    "sha256": "17c445ec7e1510d5c41854d3db5cfad4711364b5d7964d9c430547d52aeb335c"
+  },
+  "approved": {
+    "actual_context_sha256": "73db43897f9e8781ef7fbdd877690739cc4a9d0a10c48c2b8fec0afcbd8a561c",
+    "named_tools_sha256": "324dc7f0daec72f5f5f57c17ad92d200d6fc26de6dcfc6654e92811b9a7df0c9",
+    "oracle_sha256": "59e7b3ad367d3ad780f82dfa894cad5dd47d607104735fa83cd771eb8e70f052",
+    "parent_sha256": "5d63cd56af916358456db18abd2efda0a217435cb833c41d4168f05e04bc138b",
+    "profile_sha256": "a9369891fc6aa99e2181be9b0e09b2a3137a459814f26fa4d703b30108b6205f",
+    "read_only_scope_sha256": "9796c031e446c25810d9981931e9b081c7605564bc117ecd0b248b96fdb55ccc",
+    "reader_sha256": "b1aa094373b25e70feb19aef3735d633728a2cef2bba7a8f54b84e36cdfd801c",
+    "request_sha256": "d149dc6f0c165e8f65132ae5bd60d565e9534a927576387a198fd59517134faa",
+    "source_contract_sha256": "519defcd6719e1e55e44fb0de4f607061c59dd2cdf6d45024e3ad470c414a4ea"
+  },
+  "at": "2026-11-12T21:41:49.521463+00:00",
+  "capture": {
+    "bytes": 4237,
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/actual-downstream-monitor-context-1/current-service-context-read-1/actual-context-binding-1/CAPTURE.json",
+    "sha256": "23d96cb5d771093466021f8a1200f113e05bd8a7887a7c5f6523351afdc98c53"
+  },
+  "clause_attribution": "Existing local campaign functional contract, not an authenticated external quotation.",
+  "complete_parent_reader_admission_union": {
+    "bytes": 5002,
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/actual-downstream-monitor-context-1/current-service-context-read-1/actual-context-binding-1/independent-operation-review-1/ADMISSION-FIELD-UNION.json",
+    "sha256": "861d56c16da6fbd30269b62300dc3bb52af0bfad1a46fad2cfb3e1d77ee3536a"
+  },
+  "decision": "GO_F08_READ_ONLY_EXACT_BINARY_PACKAGE_PROVENANCE",
+  "excluded_rejected_task": {
+    "disposition": "Excluded from replay, rephrasing and reassignment.",
+    "request": "signal/frame/xstate collector",
+    "turn": "01a1ce01-20cf-7e03-9442-f6d521fb8b02",
+    "worker": "01a1c48d-4d96-7cc3-b733-73a97973152f"
+  },
+  "invocation": "invocation20261112T094452Z-12a4bea0",
+  "literal_conditional_metadata_argv": {
+    "first": [
+      "/usr/bin/dpkg-query",
+      "--search",
+      "/lib/systemd/systemd-udevd"
+    ],
+    "query_count": "0 when target/alias unproved; otherwise1, plus1 only for unique owner; serialized, no retry.",
+    "second_exact_format": "${binary:Package}\\t${Version}\\t${Architecture}\\t${source:Package}\\t${source:Version}\\t${db:Status-Abbrev}\\t${Status}\\n",
+    "second_rule": [
+      "/usr/bin/dpkg-query",
+      "--show",
+      "--showformat=${binary:Package}\\t${Version}\\t${Architecture}\\t${source:Package}\\t${source:Version}\\t${db:Status-Abbrev}\\t${Status}\\n",
+      "<exact one owner from command1; absent/ambiguous => no command2>"
+    ]
+  },
+  "literal_full_proposed_argv": {
+    "bytes": 5757,
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/actual-downstream-monitor-context-1/current-service-context-read-1/actual-context-binding-1/ROOT-ARGV.PROPOSED.json",
+    "sha256": "6bbf03ce3e31e4f825e2d34666e8705839883981a7d6188b4ed0751af79fa208"
+  },
+  "literal_original_clause": "Derive required daemon/service/udev and real IHK event/kmsg/hung-up behavior obligations from the selected supervisor and its actual contracts, bind the installed artifacts/providers and admitted operations, and demonstrate matching behavior/cleanup evidence for every required scenario.",
+  "minimum_changed_checks": "Only two new source files nonimporting syntax, followed by one finite admitted conditional alias/package receipt; no old service/source proof rerun.",
+  "native12_source_service_historicalUNKNOWNs_finite7c6_preserved": true,
+  "no_reviewer_execution_syntax_parse_import_helper_account_query_or_probe": true,
+  "original_c964_a2f_f133_unchanged": true,
+  "packet": {
+    "bytes": 7135,
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/actual-downstream-monitor-context-1/current-service-context-read-1/actual-context-binding-1/PREPARED-SOURCE.json",
+    "sha256": "1f104bc30219f9056dc3cb8a64ad13dc931f50d8f93a16fd200dd929a4e4f1ea"
+  },
+  "profile": {
+    "CPU": [
+      6
+    ],
+    "actual_UID0_permission_source_account_exclusive_and_resource_grant_required": true,
+    "actual_admission_issued": false,
+    "additional_capture_parent_bytes": 67108864,
+    "all_actual_retained_charges_and_worker_controller_overhead_counted": true,
+    "fresh_available_bytes_min": 27917287424,
+    "fresh_host_free_bytes_min": 18253611008,
+    "fresh_scratch_free_bytes_min": 13958643712,
+    "jobs": 1,
+    "max_actual_jobs": 3,
+    "max_actual_total_bytes": 4294967296,
+    "parent_AS_CPU_and_reader_CPU_unlimited": "Unchanged keeper custody requirement, not enlarged SUT profile. Planning amounts and all actual overhead remain counted.",
+    "reader_family_bytes": 268435456,
+    "total_new_bytes": 335544320
+  },
+  "remaining_actual_operation_inputs": [
+    "Root current supported UID0 read-only permission/source/account/owner/all34 fields and references/no exclusive conflict",
+    "Fresh aggregate measured grant including every retained family and all overhead",
+    "Actual exact syntax/case full tool/FD/wait/stream/session closure and independent saved Q before Root-only scoped retirement"
+  ],
+  "remaining_original_F08": [
+    "Actual unchanged monitor sees genuine control/devtmpfs precondition in a specifically admitted matching context",
+    "Actual monitor event-netns association with publisher",
+    "Actual group2 readiness and processed event delivery",
+    "Provider lifetime and all original event/kmsg/hung-up/normal cleanup scenarios"
+  ],
+  "resource_or_source_or_native_release": false,
+  "reused_evidence": {
+    "E088": {
+      "bytes": 3449,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-operation-sdk-max-1/capture-correction-1/call_capture.py",
+      "sha256": "e088b7ecbc27598e450395eb9c18672da2696c8c4da8bc1c8e4b492b8f2037b4"
+    },
+    "actual_metadata_Q": {
+      "bytes": 16324,
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/actual-downstream-monitor-context-1/current-service-context-read-1/independent-actual-qualification-1/QUALIFICATION.json",
+      "sha256": "58e136673e1d3582ad9165e7cab158addf3ff30454dffa2778b84d7cfaa341d9"
+    },
+    "actual_saved_DATA": {
+      "bytes": 13124,
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/actual-downstream-monitor-context-1/current-service-context-read-1/execution-1/READONLY-CONTEXT.DATA.json",
+      "sha256": "73db43897f9e8781ef7fbdd877690739cc4a9d0a10c48c2b8fec0afcbd8a561c"
+    },
+    "five_actual_keeper_text_bindings": [
+      {
+        "body_sha256": "af317544ab64debe1002ef207e84fa074d79edad07f575d3fd4b46d1f241ccca",
+        "function": "keeper_record",
+        "new_parent_and_reader_equal_prior_qualified_body": true
+      },
+      {
+        "body_sha256": "da5d1d671376b849b72c3d1076fb9d72640a867613273fb9eef1aee4fbb479c1",
+        "function": "preserve_original_pending_waits",
+        "new_parent_and_reader_equal_prior_qualified_body": true
+      },
+      {
+        "body_sha256": "eb483bf77cb115149b32e7d7cf0af2b2cb566bab1390879a88cd737b065bec93",
+        "function": "retain_outer_error",
+        "new_parent_and_reader_equal_prior_qualified_body": true
+      },
+      {
+        "body_sha256": "1fa0800e95d23f974b8314b813372aa5e03097b6ed441e1b256ffb96af6624c1",
+        "function": "retain_original_pending_nonescaping",
+        "new_parent_and_reader_equal_prior_qualified_body": true
+      },
+      {
+        "body_sha256": "eb5d36723c02bc8fa2aefb4467efe482689dac7b245c9bd12b85fd98d7fa0ec7",
+        "function": "entry_once_with_original_custody",
+        "new_parent_and_reader_equal_prior_qualified_body": true
+      }
+    ],
+    "named_tools_DATA": {
+      "bytes": 1662,
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-F08-context-read-tool-pins-1/ROOT-NAMED-TOOLS.METADATA.DATA.json",
+      "sha256": "324dc7f0daec72f5f5f57c17ad92d200d6fc26de6dcfc6654e92811b9a7df0c9"
+    },
+    "no_old_service_or_source_check_replayed": true,
+    "prior_operation_GO": {
+      "bytes": 12887,
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/actual-downstream-monitor-context-1/current-service-context-read-1/independent-operation-review-1/REVIEW.json",
+      "sha256": "247ad021c77d1d8b985e11b31d4f2cc0ddc1cedc48cd76a41c4a123e03d1b983"
+    },
+    "required_context_contract": {
+      "bytes": 5378,
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/actual-downstream-monitor-context-1/source-interpretation-1/REQUIRED-REAL-PROVIDER-CONTEXT.INPUTS.json",
+      "sha256": "8547a6609bbb15d7a51497955fd8c22fbe3f9ad7f3026591ac4f9e745bf94fae"
+    },
+    "selected_source_contract": {
+      "bytes": 16037,
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/actual-downstream-monitor-context-1/source-interpretation-1/SELECTED-DOWNSTREAM-MONITOR-CONTRACT.json",
+      "sha256": "519defcd6719e1e55e44fb0de4f607061c59dd2cdf6d45024e3ad470c414a4ea"
+    }
+  },
+  "reviewed_changed_predicates": [
+    "BEFORE package queries, same_target_and_alias requires saved boot, exact PID420/birth281, reader and service root66306:2, exact exe link, exact four namespace identities, candidate canonical resolution to saved executable, proc-exe and candidate full physical identity, and candidate regular760392B/SHA/full metadata equal the saved executable.",
+    "Missing/foreign/changed target or candidate uses the existing bounded metadata attempt classification and starts zero package queries, no retry, other candidate, canonical /usr query or service refresh.",
+    "Only exact new /lib candidate --search is issued. Exactly one unambiguous exact-path owner permits one --show with seven fixed fields; normal positive joined query nonzero remains unavailable DATA. Details format has exactly six one-backslash tab escapes and one newline escape, matching actual seven-tab-field parsing.",
+    "The post-query same target/alias bookend determines binding_status; changed target/package state remains UNPROVED. Installed database metadata does not authenticate archive, signature, selected downstream source or protocol compatibility.",
+    "Parent verify_receipt binds exact request/nonce/actualDATA/candidate and 0..2 labels, exact conditional argv, original births/direct waits/streams/receipts/noUNKNOWN/no secondaries. No query branch requires its truthful no-query reason; started queries require the first target proof.",
+    "Both changed sources retain qualified original-Popen keepers and E088, raw main primary/TB before diagnostics, actual FD close/bookends/empty-child checks. Timeout/reporting/capture error keeps original contexts/handles/charges; no signal/kill/retry/replacement.",
+    "Source diff removes service/socket/FD-table observation and conditional canonical package lookup; no systemctl, socket/control/event read or send, inventory, service/namespace/mount/cap/device/network expansion, daemon/native action or protected account/raw read by reviewer."
+  ],
+  "reviewer": "/root/functional_delta_review; explicit gpt-6.1-sol/MAX; independent changed-only source/profile/operation review; depth1/no recursion",
+  "schema": "mckernel.M15-F08-exact-binary-package-independent-operation-review.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration ONLY; NO security testing.",
+  "source_findings": []
+}

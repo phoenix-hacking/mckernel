@@ -1,0 +1,22 @@
+{
+  "argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/scripts/tests/test_native_rust_cutover_image_terminal_cleanup.py"
+  ],
+  "returncode": 0,
+  "direct_child_joined": true,
+  "elapsed_seconds": 1.7558667300036177
+}

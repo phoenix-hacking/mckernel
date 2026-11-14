@@ -1,0 +1,27 @@
+    pub(crate) fn has_private_fork_response(&self, cpu: i32, selector: u64,
+        matches: impl Fn(&Request) -> bool) -> bool {
+        self.calls.iter().flatten().any(|call| {
+            let request = call.delivery.request();
+            !call.kernel && !call.service && request.number() == 56
+                && request.arguments()[0] == selector && request.cpu() == cpu && matches(request)
+        })
+    }
+
+    pub(crate) fn returned(&self, handle: u64, serial: u64) -> Result<bool> {
+        if self.quarantined {
+            return Err(-71);
+        }
+        let worker = self
+            .workers
+            .iter()
+            .flatten()
+            .find(|state| state.worker.wire() == handle)
+            .ok_or(-2)?;
+        if worker.completed.map(Token::wire) == Some(serial) {
+            return Ok(true);
+        }
+        if worker.delivery.map(Token::wire) != Some(serial) {
+            return Err(-16);
+        }
+        Ok(false)
+    }

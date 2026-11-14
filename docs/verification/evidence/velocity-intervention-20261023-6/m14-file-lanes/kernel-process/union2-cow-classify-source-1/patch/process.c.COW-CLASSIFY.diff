@@ -1,0 +1,42 @@
+--- a/kernel/process.c
++++ b/kernel/process.c
+@@ -2845,6 +2845,10 @@
+         pte_t *, size_t, int, uintptr_t *, unsigned long *, int *);
+ #endif
+ 
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++int process_page_fault_cow_classify_body_result(struct vm_range *, uint64_t, struct page *);
++#endif
++
+ int page_fault_process_memory_range(struct process_vm *vm,
+ 				    struct vm_range *range,
+ 				    uintptr_t fault_addr, uint64_t reason)
+@@ -2858,8 +2862,10 @@
+ 	uintptr_t phys;
+ 	struct page *page = NULL;
+ 	unsigned long memobj_flag = 0;
++#ifndef MCKERNEL_RUST_PROCESS_HELPERS
+ 	int private_range, patching_to_rdonly;
+ 	int devfile_or_hugetlbfs_or_premap, regfile_or_shm;
++#endif
+ 
+ 	if (get_this_cpu_local_var()->current->profile) {
+ 		dkprintf("%s: 0x%lx @ %s\n",
+@@ -3010,6 +3016,9 @@
+ 
+ 	/* Copy on write */
+ 
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++    if (process_page_fault_cow_classify_body_result(range, reason, page)) {
++#else
+ 	private_range = (range->flag & VR_PRIVATE);
+ 	patching_to_rdonly =
+ 		((reason & PF_PATCH) && !(range->flag & VR_PROT_WRITE));
+@@ -3026,6 +3035,7 @@
+ 
+ 	if ((private_range || patching_to_rdonly) &&
+ 	    (devfile_or_hugetlbfs_or_premap || regfile_or_shm)) {
++#endif
+ 
+ 		if (!(attr & PTATTR_DIRTY)) {
+ 			attr &= ~PTATTR_WRITABLE;

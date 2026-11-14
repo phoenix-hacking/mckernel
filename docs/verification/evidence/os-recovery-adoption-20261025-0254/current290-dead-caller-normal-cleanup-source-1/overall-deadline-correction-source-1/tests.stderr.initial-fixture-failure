@@ -1,0 +1,30 @@
+test_actual_production_branch_shape_and_helpers (__main__.Tests) ... ok
+test_actual_production_rejects_running (__main__.Tests) ... ok
+test_actual_stdlib_run_deadline_kills_and_reaps_own_mock_child (__main__.Tests) ... ok
+test_bootstrap_current_source_pins (__main__.Tests) ... ok
+test_busy_newOFD_refuses_and_closes_without_mutation (__main__.Tests) ... ok
+test_exact_configure_keys (__main__.Tests) ... ok
+test_existing_alarm_refused_untouched (__main__.Tests) ... ok
+test_main_expiry_before_and_after_lock_no_pass_and_unlock (__main__.Tests) ... FAIL
+test_owned_alarm_expiry_and_restore (__main__.Tests) ... ok
+test_query_deadline_preserves_raw_and_propagates (__main__.Tests) ... ok
+test_raw_capture_precedes_guard_and_failure (__main__.Tests) ... ok
+test_raw_success_and_timeout (__main__.Tests) ... ok
+test_readable_lossless_binding (__main__.Tests) ... ok
+test_source_no_cleanup_or_ownership_calls (__main__.Tests) ... ok
+
+======================================================================
+FAIL: test_main_expiry_before_and_after_lock_no_pass_and_unlock (__main__.Tests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/overall-deadline-correction-source-1/test_observation_producer.py", line 118, in test_main_expiry_before_and_after_lock_no_pass_and_unlock
+    else:close.assert_not_called()
+  File "/home/holden/anaconda3/lib/python3.9/unittest/mock.py", line 868, in assert_not_called
+    raise AssertionError(msg)
+AssertionError: Expected 'close' to not have been called. Called 2 times.
+Calls: [call(3), call(4)].
+
+----------------------------------------------------------------------
+Ran 14 tests in 0.087s
+
+FAILED (failures=1)

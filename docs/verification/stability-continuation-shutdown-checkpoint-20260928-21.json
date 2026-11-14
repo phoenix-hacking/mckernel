@@ -1,0 +1,58 @@
+{
+  "schema": "mckernel.stability-continuation-shutdown-checkpoint.v1",
+  "recorded_at": "2026-09-28T07:30:41-07:00",
+  "base_commit": "891a7971dcdd400b2315e0c0dbac2ef4cad09e91",
+  "launcher": {
+    "run_directory": ".git/os-autopilot/runs/20260928T120120Z-056cff0a",
+    "launcher_pid": 3125264,
+    "worker_pid": 3170135,
+    "app_server_pid": 3170137,
+    "launcher_started": "2026-09-28T03:47:42-07:00",
+    "worker_and_server_started": "2026-09-28T05:01:20-07:00",
+    "observed_at_shutdown": "all three identities remain alive; no launcher-owned state was edited",
+    "future_continuations_paused": true
+  },
+  "agents": {
+    "child_count": 8,
+    "all_terminal": true,
+    "new_dispatch_after_shutdown_request": false
+  },
+  "resources_at_shutdown": {
+    "host_free_bytes": 45754019840,
+    "scratch_free_bytes": 22277754880,
+    "memory_available_kib": 30000996,
+    "heavy_lease": "free",
+    "active_project_compiler": false,
+    "active_qemu_mcexec_guest_or_diagnostic_owner": false
+  },
+  "completed_result": {
+    "name": "released current-signal diagnostic attempt 1",
+    "result": "FAIL_BEFORE_QEMU_OBSERVER_VERSION_DRIFT",
+    "evidence": "docs/verification/stability-native-diagnostic-current-signal-attempt-failure-20260928-1.json",
+    "raw_evidence": "/home/holden/mckernel-work/scratch/ndcs-20260928-1.owner-6ea6a57520d94590b709b46dc011167c",
+    "container_id": "16e3d5e4cd8c1023deb47a141b540c560adbac4e3f4a7c38a9fe275438aa5924",
+    "cleanup": "exact container removed; three final lookups empty; lease released",
+    "limits": "No QEMU launch, guest, application bytes, McKernel behavior, current-candidate build or acceptance credit"
+  },
+  "next_tasks": [
+    "Correct the observer to compare the exact retained pinned QEMU version output and add local suffix/extra-output drift regressions",
+    "Run the cheap unprivileged owner and combined suites and obtain independent source review",
+    "Commit the corrected source, choose a fresh parent and nonce, prepare a newly bound packet and obtain a fresh independent execution release",
+    "After resource and lease reconciliation, run one corrected current-signal diagnostic and preserve application bytes, exit, kernel log, QMP/serial, process identities and teardown",
+    "Continue pending-free owner/token/generation, invalidation acknowledgement and durable-quarantine work after the diagnostic signal"
+  ],
+  "do_not_repeat": [
+    "Do not reuse ndcs-20260928-1 or nonce 6ea6a57520d94590b709b46dc011167c",
+    "Do not replay owner 4ed6f8498b99f5df7e8203bad440e1e9d722a2d7b343e6fcb3de3fe9acc6b3d3 unchanged",
+    "Do not count this observer failure as guest or application evidence"
+  ],
+  "counters": {
+    "real_guest_applications": "0/273",
+    "current_candidate_builds_added_by_attempt": 0,
+    "narrow_fault_modes": "2/4",
+    "production_gates": "6/130",
+    "points": "350/10000",
+    "language_gates": "0/7"
+  },
+  "whole_os_complete": false
+}

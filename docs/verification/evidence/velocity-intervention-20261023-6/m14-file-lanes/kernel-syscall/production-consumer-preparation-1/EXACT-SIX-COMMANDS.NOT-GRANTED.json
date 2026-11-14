@@ -1,0 +1,156 @@
+{
+  "C_recipe": {
+    "bytes": 10720,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/REUSED-WHOLE-GCC9-TU-REAL-ABI.NOT-GRANTED.json",
+    "sha256": "a77a9796a8f951cbacae898073b794054af2a5cfc495f622aa8472f065eef1f7"
+  },
+  "GCC14_default_link": null,
+  "Rust_recipe": {
+    "bytes": 66034,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/EXACT-CURRENT78-RUST.NOT-GRANTED.json",
+    "sha256": "1beb8f61b54274135d7c560efe0db251ec66055866fbe6352837ffeba0c615bb"
+  },
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/cmake",
+        "-E",
+        "env",
+        "MAKEFLAGS=",
+        "MCKERNEL_RUST_VERSION=1.8.0",
+        "MCKERNEL_RUST_BUILDID=3114d9e",
+        "/home/holden/mckernel-work/scratch/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+        "--crate-name",
+        "mckernel_rust",
+        "--crate-type",
+        "lib",
+        "--edition=2021",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "debuginfo=2",
+        "-C",
+        "code-model=large",
+        "-C",
+        "relocation-model=static",
+        "-C",
+        "no-redzone=yes",
+        "-C",
+        "force-frame-pointers=yes",
+        "-C",
+        "overflow-checks=off",
+        "-C",
+        "force-unwind-tables=no",
+        "-C",
+        "no-vectorize-loops",
+        "-C",
+        "no-vectorize-slp",
+        "-C",
+        "target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma",
+        "--cfg",
+        "native_linux_irq_work_v6_12",
+        "--cfg",
+        "enable_profile",
+        "--cfg",
+        "enable_perf",
+        "--cfg",
+        "enable_rusage",
+        "-C",
+        "codegen-units=1",
+        "--emit=obj=/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/output-1/mckernel_rust.o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/lib.rs"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/output-1",
+      "label": "00-production-Rust-compile",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual full78 signalfd-only production Rust/allocated caller relocation and retained complete GCC9 syscall TU partial consumer."
+    },
+    {
+      "argv": [
+        "/usr/bin/nm",
+        "-g",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/output-1/mckernel_rust.o"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/output-1",
+      "label": "01-production-Rust-NM",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual full78 signalfd-only production Rust/allocated caller relocation and retained complete GCC9 syscall TU partial consumer."
+    },
+    {
+      "argv": [
+        "/usr/bin/readelf",
+        "--wide",
+        "--syms",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/output-1/mckernel_rust.o"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/output-1",
+      "label": "02-production-Rust-ELF",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual full78 signalfd-only production Rust/allocated caller relocation and retained complete GCC9 syscall TU partial consumer."
+    },
+    {
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/read_signalfd_allocated_relocations.py",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/output-1/mckernel_rust.o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/COMPILE-OBJECT-RECEIPT.json"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/output-1",
+      "label": "03-actual-signalfd-caller-relocations",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual full78 signalfd-only production Rust/allocated caller relocation and retained complete GCC9 syscall TU partial consumer."
+    },
+    {
+      "argv": [
+        "/usr/bin/ld",
+        "-r",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/output-1/syscall-fullRust-partial.o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/fixture/selected-syscall.o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/output-1/mckernel_rust.o"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/output-1",
+      "label": "04-actual-whole-syscall-fullRust-partial-link",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual full78 signalfd-only production Rust/allocated caller relocation and retained complete GCC9 syscall TU partial consumer."
+    },
+    {
+      "argv": [
+        "/usr/bin/nm",
+        "-g",
+        "-S",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/output-1/syscall-fullRust-partial.o"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/output-1",
+      "label": "05-partial-symbols",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual full78 signalfd-only production Rust/allocated caller relocation and retained complete GCC9 syscall TU partial consumer."
+    }
+  ],
+  "leaf_replays": 0,
+  "native": false,
+  "new_C_compiler_invocations": 0,
+  "new_Rust_compiler_invocations": 1,
+  "original_leaf_recipe": {
+    "bytes": 27285,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/fixture/EXACT-CANDIDATE-FIXTURE.NOT-GRANTED.json",
+    "sha256": "35f799dc1eb013623ca5e60d3845ae7f624dbbea291de9a8e8031cc8a3f3b930"
+  },
+  "parser": {
+    "bytes": 3984,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/read_signalfd_allocated_relocations.py",
+    "sha256": "ab52b43199779c0b09088cef0eaaf07908925ff5e92e930e9a79b607d593239f"
+  },
+  "profile": {
+    "AS": 2147483648,
+    "CPU": 6,
+    "CPU_seconds": 60,
+    "FSIZE": 33554432,
+    "NOFILE": 256,
+    "RUST_MIN_STACK": 2097152,
+    "core": 0,
+    "jobs": 1,
+    "retirement_seconds": 6,
+    "wall_seconds": 90
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "EXECUTABLE_SOURCE_READY_NOT_GRANTED"
+}

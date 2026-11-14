@@ -1,0 +1,59 @@
+{
+  "schema": "mckernel.native-exact-evidence-retirement-result.v1",
+  "status": "RETIRE_PASS",
+  "scope": "diagnostic capacity recovery only; no build, image, guest, or acceptance credit",
+  "source": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-build-evidence-f021bdee-scratch-8",
+    "identity": "1831:6684763",
+    "final_state": "absent"
+  },
+  "archive": {
+    "path": "/home/holden/mckernel-work/retained-exact-candidates/native-exact-build-evidence-f021bdee-scratch-8-20260930.tar.gz",
+    "identity": "66306:47496368",
+    "size": 68378647,
+    "sha256": "ac7d20264bc870e5ec0529a6c7b820840a008d4e9667950cdb8f44ca9c1313d0"
+  },
+  "map": {
+    "path": "/home/holden/mckernel-work/retained-exact-candidates/native-exact-build-evidence-f021bdee-scratch-8-20260930.map.json",
+    "identity": "66306:47496380",
+    "size": 109775078,
+    "sha256": "23e418e1b3cc135d59b2abb171040c36b8f081dbf673bb6f6564cf4a8bdfc2f9",
+    "members": 286318,
+    "files": 285811,
+    "directories": 452,
+    "symlinks": 55
+  },
+  "audit": {
+    "command": "/usr/bin/python3 -I docs/verification/evidence/native-exact-f021bdee-evidence-retirement-20260930.py --audit",
+    "returncode": 0,
+    "status": "AUDIT_PASS",
+    "verified_members": 286318
+  },
+  "retirement": {
+    "command": "/usr/bin/python3 -I docs/verification/evidence/native-exact-f021bdee-evidence-retirement-20260930.py --retire",
+    "returncode": 0,
+    "result_path": "/home/holden/mckernel-work/retained-exact-candidates/native-exact-build-evidence-f021bdee-scratch-8-retirement-20260930.result.json",
+    "result_identity": "66306:47475584",
+    "result_size": 298,
+    "result_mode": "0600",
+    "result_sha256": "bd37b8cfb21ac76a2e6bda515379dfc22be7a6338021626848bc544a1858852f"
+  },
+  "preserved_failures": [
+    "native-exact-f021bdee-evidence-retirement-docker-inspect-failure-20260930.json",
+    "native-exact-f021bdee-evidence-retirement-map-canonicalization-failure-20260930.json"
+  ],
+  "protected_state": {
+    "compiled_output": "/home/holden/mckernel-work/scratch/native-exact-build-output-f021bdee-scratch-8",
+    "candidate": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-f021bdee-scratch-8",
+    "container": "b34323f6c4352e8bae669d006e11076a64a5734ed165a6ce866bd4e7aa04c001",
+    "container_state": "exited",
+    "container_exit_code": 1,
+    "container_oom_killed": false
+  },
+  "trim": {
+    "mount": "/home/holden/mckernel-work/scratch",
+    "returned_bytes": 3785367552,
+    "scratch_available_bytes_after": 23786360832,
+    "host_available_bytes_after": 36719865856
+  }
+}

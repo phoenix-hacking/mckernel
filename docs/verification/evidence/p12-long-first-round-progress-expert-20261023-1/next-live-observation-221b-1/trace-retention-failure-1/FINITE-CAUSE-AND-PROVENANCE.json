@@ -1,0 +1,622 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "FINITE_SOURCE_BOUND_DIAGNOSIS_ACTUAL_HOST_SERVICE_EBUSY_DURING_ROUND48_LAUNCH",
+  "retained_capture": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/actual-read-2/stdout",
+    "sha256": "c67b277d9432e13b17cccc1b97df73cd98e5a6e4be960796db6485ab8c61b45e",
+    "bytes": 1650366
+  },
+  "failure_trace": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/trace-retention-failure-1/actual-failure-snapshot.CRLF-normalized.log",
+    "sha256": "440c1791cc95609ebfbe16e5360f5dd18a3be9a0b1edc12d9ad0d76931dbc938",
+    "bytes": 1048474
+  },
+  "failure": {
+    "serial_line": 955,
+    "text": "P12_LONG_FAILURE round=48 stage=callback-launch pair_stage=trace_retention result=-5 ownership_complete=0 rounds=48 launches=96 trace_bytes=11016561"
+  },
+  "classification_correction": "The historical folder name trace-retention-failure-1 is retained, but round48 failed during callback-launch. pair_stage trace_retention is stale from successful round47; current trace gate/retention were never entered.",
+  "last_complete_progress": {
+    "cumulative_work_ns": 255716059969,
+    "launches": 96,
+    "round": 47,
+    "work_ns": 6925754808
+  },
+  "reported_completed_launches": 96,
+  "reported_completed_rounds": 48,
+  "reported_mixed_work_ns": 255716059969,
+  "current_started_pids": [
+    {
+      "serial_line": 9031,
+      "text": "<6>[  468.062659] ihk_smp_x86_64: IHK-SMP: application SCHEDULE os=0 generation=1 pid=641 cpu=0"
+    },
+    {
+      "serial_line": 9057,
+      "text": "<6>[  468.170874] ihk_smp_x86_64: IHK-SMP: application SCHEDULE os=0 generation=1 pid=642 cpu=1"
+    }
+  ],
+  "failed_or_uncompleted_current_apps_not_added_to_count": true,
+  "first_service_error": {
+    "serial_line": 9304,
+    "text": "<3>[  471.409831] ihk_smp_x86_64: IHK-SMP: continuing service error os=0 generation=1 errno=-16; workers and all started owners retained"
+  },
+  "first_service_context": [
+    {
+      "serial_line": 9288,
+      "text": "<6>[  470.832938] mcctrl: application_syscall=delivered os=0 generation=1 pid=642 worker=55447 delivery=56286 cpu=1 number=228"
+    },
+    {
+      "serial_line": 9289,
+      "text": "<6>[  470.837194] mcctrl: application_syscall=returned os=0 generation=1 pid=642 worker=55447 delivery=56286 cpu=1 value=0"
+    },
+    {
+      "serial_line": 9290,
+      "text": "<6>[  470.874191] mcctrl: application_syscall=delivered os=0 generation=1 pid=642 worker=55447 delivery=56296 cpu=1 number=228"
+    },
+    {
+      "serial_line": 9291,
+      "text": "<6>[  470.979854] mcctrl: application_syscall=returned os=0 generation=1 pid=642 worker=55447 delivery=56296 cpu=1 value=0"
+    },
+    {
+      "serial_line": 9292,
+      "text": "<6>[  471.018121] mcctrl: application_syscall=delivered os=0 generation=1 pid=642 worker=55447 delivery=56343 cpu=1 number=228"
+    },
+    {
+      "serial_line": 9293,
+      "text": "<6>[  471.163942] mcctrl: application_syscall=returned os=0 generation=1 pid=642 worker=55447 delivery=56343 cpu=1 value=0"
+    },
+    {
+      "serial_line": 9294,
+      "text": "<6>[  471.199790] mcctrl: application_syscall=delivered os=0 generation=1 pid=642 worker=55447 delivery=56404 cpu=1 number=228"
+    },
+    {
+      "serial_line": 9295,
+      "text": "<6>[  471.203065] mcctrl: application_syscall=returned os=0 generation=1 pid=642 worker=55447 delivery=56404 cpu=1 value=0"
+    },
+    {
+      "serial_line": 9296,
+      "text": "<6>[  471.239094] mcctrl: application_syscall=delivered os=0 generation=1 pid=642 worker=55448 delivery=56413 cpu=1 number=228"
+    },
+    {
+      "serial_line": 9297,
+      "text": "<6>[  471.239437] mcctrl: application_syscall=return_route os=0 generation=1 pid=642 worker=55448 delivery=56413 launcher_cpu=0 guest_cpu=1"
+    },
+    {
+      "serial_line": 9298,
+      "text": "<6>[  471.343859] mcctrl: application_syscall=returned os=0 generation=1 pid=642 worker=55448 delivery=56413 cpu=1 value=0"
+    },
+    {
+      "serial_line": 9299,
+      "text": "<6>[  471.379973] mcctrl: application_syscall=delivered os=0 generation=1 pid=642 worker=55448 delivery=56458 cpu=1 number=228"
+    },
+    {
+      "serial_line": 9300,
+      "text": "<6>[  471.380154] mcctrl: application_syscall=return_route os=0 generation=1 pid=642 worker=55448 delivery=56458 launcher_cpu=0 guest_cpu=1"
+    },
+    {
+      "serial_line": 9301,
+      "text": "<6>[  471.396136] ihk_smp_x86_64: host_mapping=invalidated os=0 generation=1 pid=641 worker=55430 delivery=56465 value=0 completed=0"
+    },
+    {
+      "serial_line": 9302,
+      "text": "<6>[  471.405724] ihk_smp_x86_64: IHK-SMP: application procfs deleted os=0 generation=1 pid=641 tid=643"
+    },
+    {
+      "serial_line": 9303,
+      "text": "<6>[  471.407066] ihk_smp_x86_64: host_mapping=invalidated os=0 generation=1 pid=641 worker=55431 delivery=56468 value=0 completed=0"
+    },
+    {
+      "serial_line": 9304,
+      "text": "<3>[  471.409831] ihk_smp_x86_64: IHK-SMP: continuing service error os=0 generation=1 errno=-16; workers and all started owners retained"
+    },
+    {
+      "serial_line": 9305,
+      "text": "<6>[  471.409929] mcctrl: application_wait=failed os=0 generation=1 pid=641 phase=operation errno=-32"
+    },
+    {
+      "serial_line": 9306,
+      "text": "<6>[  471.409977] mcctrl: application_wait=failed os=0 generation=1 pid=642 phase=operation errno=-32"
+    },
+    {
+      "serial_line": 9307,
+      "text": "<3>[  471.416684] mcctrl: application_worker=reap_retained os=0 generation=1 pid=642 errno=-71"
+    },
+    {
+      "serial_line": 9308,
+      "text": "<3>[  471.416791] mcctrl: application_worker=reap_retained os=0 generation=1 pid=641 errno=-71"
+    },
+    {
+      "serial_line": 9309,
+      "text": "<6>[  471.417128] mcctrl: application_file=close os=0 generation=1"
+    },
+    {
+      "serial_line": 9310,
+      "text": "<6>[  471.417217] mcctrl: application_process=cleanup_requested os=0 generation=1 pid=641 intent_errno=-71"
+    },
+    {
+      "serial_line": 9311,
+      "text": "<6>[  471.417585] mcctrl: application_file=close os=0 generation=1"
+    },
+    {
+      "serial_line": 9312,
+      "text": "<6>[  471.417623] mcctrl: application_process=cleanup_requested os=0 generation=1 pid=642 intent_errno=-71"
+    }
+  ],
+  "adjacent_valid_invalidations": [
+    {
+      "serial_line": 9301,
+      "text": "<6>[  471.396136] ihk_smp_x86_64: host_mapping=invalidated os=0 generation=1 pid=641 worker=55430 delivery=56465 value=0 completed=0"
+    },
+    {
+      "serial_line": 9303,
+      "text": "<6>[  471.407066] ihk_smp_x86_64: host_mapping=invalidated os=0 generation=1 pid=641 worker=55431 delivery=56468 value=0 completed=0"
+    }
+  ],
+  "adjacent_peer_delivery_route": [
+    {
+      "serial_line": 9299,
+      "text": "<6>[  471.379973] mcctrl: application_syscall=delivered os=0 generation=1 pid=642 worker=55448 delivery=56458 cpu=1 number=228"
+    },
+    {
+      "serial_line": 9300,
+      "text": "<6>[  471.380154] mcctrl: application_syscall=return_route os=0 generation=1 pid=642 worker=55448 delivery=56458 launcher_cpu=0 guest_cpu=1"
+    }
+  ],
+  "offending_packet_message": null,
+  "offending_packet_type": null,
+  "offending_packet_response_physical": null,
+  "offending_worker_delivery": null,
+  "packet_attribution_limit": "The log prints no rejected packet or Runtime pump origin. Adjacent successful host invalidations and peer delivery228 identify recent work, not the causal failed packet. Do not label delivery56465/56468/56458 as the failing request.",
+  "capacity_and_window": {
+    "snapshot_bytes": 1048474,
+    "snapshot_read_capacity": 1048576,
+    "snapshot_is_below_rejection_boundary": true,
+    "retained_trace_bytes_reported": 11016561,
+    "total_trace_capacity": 268435456,
+    "retained_bytes_below_capacity": true,
+    "first_exported_trace_line": "<6>[  274.419822] mcctrl: application_syscall=returned os=0 generation=1 pid=489 worker=33503 delivery=33576 cpu=0 value=0",
+    "last_exported_trace_line": "<6>[  471.417623] mcctrl: application_process=cleanup_requested os=0 generation=1 pid=642 intent_errno=-71",
+    "history_window_excludes_early_logs": true,
+    "physical_ring_rollover_versus_bounded_READ_ALL_window": "UNKNOWN without additional evidence; do not infer exact kernel ring geometry.",
+    "current_retention_capacity_or_identity_failure": "Not indicated: current code never reaches gate/retention, prior complete progress proves round47 passed it; exported failure snapshot saved1/ENDpresent. No cap or oracle relaxation justified."
+  },
+  "collector_provenance": {
+    "compiled_build_receipt": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/ACTUAL-COMPILED-ELF.DURABLE.json",
+      "sha256": "7d2a3089170ba300ca21f234ad29d9bd33290bb5e8d6c97ab93c1b03c60b37ae",
+      "bytes": 18567
+    },
+    "ELF_artifact": {
+      "ctime_ns": 1792782819472489751,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 55742992,
+      "mode": "0o700",
+      "mtime_ns": 1792782819472489751,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/pair-long-collector",
+      "sha256": "142d55fb2ef5e5f1d7377a4731e3f65751984848de1e8543c5b31183e94ab5e7",
+      "size": 1633024,
+      "uid": 1000
+    },
+    "ELF_rehashed": false,
+    "source_file_count": 17,
+    "all17_current_source_files_match_recorded_hashes": true,
+    "source_closure": {
+      "long_bridge.inc": {
+        "accepted_preimage": {
+          "bytes": 9503,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/long_bridge.inc",
+          "sha256": "e48e06f14bb7415695fc58a9a8d330aee2af37df7ed604f69a33fd2e68560d58"
+        },
+        "materialized": {
+          "bytes": 9511,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/production-source/long_bridge.inc",
+          "sha256": "56780e38e347e0f88c1b911525d56a2165e291387c260caf9ec3b031b1ddb4d8"
+        },
+        "selected": {
+          "bytes": 9511,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-correction-1/bounded-correction-1/long_bridge.inc",
+          "sha256": "56780e38e347e0f88c1b911525d56a2165e291387c260caf9ec3b031b1ddb4d8"
+        },
+        "unchanged": false
+      },
+      "long_empty.inc": {
+        "accepted_preimage": {
+          "bytes": 448,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/long_empty.inc",
+          "sha256": "829151c8080deeeaf56de7b71c5c7493ecbc73cb83e8c010bac38bcafb23a588"
+        },
+        "materialized": {
+          "bytes": 448,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/production-source/long_empty.inc",
+          "sha256": "829151c8080deeeaf56de7b71c5c7493ecbc73cb83e8c010bac38bcafb23a588"
+        },
+        "selected": {
+          "bytes": 448,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/long_empty.inc",
+          "sha256": "829151c8080deeeaf56de7b71c5c7493ecbc73cb83e8c010bac38bcafb23a588"
+        },
+        "unchanged": true
+      },
+      "long_provider_decl.inc": {
+        "accepted_preimage": {
+          "bytes": 224,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/long_provider_decl.inc",
+          "sha256": "92d4da589e28f1177c0edcedb71206220bc0185a1fa5282a8021bdba181bf836"
+        },
+        "materialized": {
+          "bytes": 224,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/production-source/long_provider_decl.inc",
+          "sha256": "92d4da589e28f1177c0edcedb71206220bc0185a1fa5282a8021bdba181bf836"
+        },
+        "selected": {
+          "bytes": 224,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/long_provider_decl.inc",
+          "sha256": "92d4da589e28f1177c0edcedb71206220bc0185a1fa5282a8021bdba181bf836"
+        },
+        "unchanged": true
+      },
+      "long_support.inc": {
+        "accepted_preimage": {
+          "bytes": 10887,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/long_support.inc",
+          "sha256": "306d889b49249caecc2852454308ed4692d5bb8699fc70314cd07e844fa2cc03"
+        },
+        "materialized": {
+          "bytes": 10893,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/production-source/long_support.inc",
+          "sha256": "1eb80bf416ec15d108c48ab3be1e4c5e3f8f159e01eb3e85ee0864e646d0db44"
+        },
+        "selected": {
+          "bytes": 10893,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-correction-1/bounded-correction-1/long_support.inc",
+          "sha256": "1eb80bf416ec15d108c48ab3be1e4c5e3f8f159e01eb3e85ee0864e646d0db44"
+        },
+        "unchanged": false
+      },
+      "long_trace_retention.inc": {
+        "accepted_preimage": {
+          "bytes": 6588,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/long_trace_retention.inc",
+          "sha256": "66ad73a4b7da9ccb775247c2d32a803f445e93a1e5b8762cabc5a4968adf099f"
+        },
+        "materialized": {
+          "bytes": 6588,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/production-source/long_trace_retention.inc",
+          "sha256": "66ad73a4b7da9ccb775247c2d32a803f445e93a1e5b8762cabc5a4968adf099f"
+        },
+        "selected": {
+          "bytes": 6588,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/long_trace_retention.inc",
+          "sha256": "66ad73a4b7da9ccb775247c2d32a803f445e93a1e5b8762cabc5a4968adf099f"
+        },
+        "unchanged": true
+      },
+      "pair_assignment.h": {
+        "accepted_preimage": {
+          "bytes": 3010,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_assignment.h",
+          "sha256": "29963c5088598368fe7565a6fba88f5712cece4105314e4d1f2205c6a936b643"
+        },
+        "materialized": {
+          "bytes": 3010,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/production-source/pair_assignment.h",
+          "sha256": "29963c5088598368fe7565a6fba88f5712cece4105314e4d1f2205c6a936b643"
+        },
+        "selected": {
+          "bytes": 3010,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_assignment.h",
+          "sha256": "29963c5088598368fe7565a6fba88f5712cece4105314e4d1f2205c6a936b643"
+        },
+        "unchanged": true
+      },
+      "pair_collector.c": {
+        "accepted_preimage": {
+          "bytes": 25323,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_collector.c",
+          "sha256": "5ffe7ef09c601ab3fe13cb25fc4745c538f34f1b8eb3d5858b21a9969f6b0834"
+        },
+        "materialized": {
+          "bytes": 25323,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/production-source/pair_collector.c",
+          "sha256": "5ffe7ef09c601ab3fe13cb25fc4745c538f34f1b8eb3d5858b21a9969f6b0834"
+        },
+        "selected": {
+          "bytes": 25323,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_collector.c",
+          "sha256": "5ffe7ef09c601ab3fe13cb25fc4745c538f34f1b8eb3d5858b21a9969f6b0834"
+        },
+        "unchanged": true
+      },
+      "pair_collector.inc": {
+        "accepted_preimage": {
+          "bytes": 4616,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_collector.inc",
+          "sha256": "dcfbb3a9c7199c4d06e014a7b9df9933da7c6f26ed552bc2bdca9e272a082020"
+        },
+        "materialized": {
+          "bytes": 4616,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/production-source/pair_collector.inc",
+          "sha256": "dcfbb3a9c7199c4d06e014a7b9df9933da7c6f26ed552bc2bdca9e272a082020"
+        },
+        "selected": {
+          "bytes": 4616,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_collector.inc",
+          "sha256": "dcfbb3a9c7199c4d06e014a7b9df9933da7c6f26ed552bc2bdca9e272a082020"
+        },
+        "unchanged": true
+      },
+      "pair_launch_expansion_run.inc": {
+        "accepted_preimage": {
+          "bytes": 3340,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_launch_expansion_run.inc",
+          "sha256": "6a948ebc2a68b9f3e18cb5fded0eb8309a1bc31a94ecf4e1dccdf1bc620dacbd"
+        },
+        "materialized": {
+          "bytes": 3340,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/production-source/pair_launch_expansion_run.inc",
+          "sha256": "6a948ebc2a68b9f3e18cb5fded0eb8309a1bc31a94ecf4e1dccdf1bc620dacbd"
+        },
+        "selected": {
+          "bytes": 3340,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_launch_expansion_run.inc",
+          "sha256": "6a948ebc2a68b9f3e18cb5fded0eb8309a1bc31a94ecf4e1dccdf1bc620dacbd"
+        },
+        "unchanged": true
+      },
+      "pair_launch_expansion_support.inc": {
+        "accepted_preimage": {
+          "bytes": 8799,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_launch_expansion_support.inc",
+          "sha256": "9348bce5f046b3285547e1348966c18b0f09cbfaa9592d04fcc3c7d2c4a64379"
+        },
+        "materialized": {
+          "bytes": 8799,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/production-source/pair_launch_expansion_support.inc",
+          "sha256": "9348bce5f046b3285547e1348966c18b0f09cbfaa9592d04fcc3c7d2c4a64379"
+        },
+        "selected": {
+          "bytes": 8799,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_launch_expansion_support.inc",
+          "sha256": "9348bce5f046b3285547e1348966c18b0f09cbfaa9592d04fcc3c7d2c4a64379"
+        },
+        "unchanged": true
+      },
+      "pair_long_producer.h": {
+        "accepted_preimage": {
+          "bytes": 1432,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_long_producer.h",
+          "sha256": "c929df9548b9660857c55fb6c01886df5a7363e7f992f7032941c81a054ef599"
+        },
+        "materialized": {
+          "bytes": 1432,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/production-source/pair_long_producer.h",
+          "sha256": "c929df9548b9660857c55fb6c01886df5a7363e7f992f7032941c81a054ef599"
+        },
+        "selected": {
+          "bytes": 1432,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_long_producer.h",
+          "sha256": "c929df9548b9660857c55fb6c01886df5a7363e7f992f7032941c81a054ef599"
+        },
+        "unchanged": true
+      },
+      "pair_long_producer.rs": {
+        "accepted_preimage": {
+          "bytes": 13292,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_long_producer.rs",
+          "sha256": "9f5c980fb616d07a4c9816ea2474c7c6a8d045099df1ae2db11c12a2ebc92917"
+        },
+        "materialized": {
+          "bytes": 13292,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/production-source/pair_long_producer.rs",
+          "sha256": "9f5c980fb616d07a4c9816ea2474c7c6a8d045099df1ae2db11c12a2ebc92917"
+        },
+        "selected": {
+          "bytes": 13292,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_long_producer.rs",
+          "sha256": "9f5c980fb616d07a4c9816ea2474c7c6a8d045099df1ae2db11c12a2ebc92917"
+        },
+        "unchanged": true
+      },
+      "pair_long_static.rs": {
+        "accepted_preimage": {
+          "bytes": 13483,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_long_static.rs",
+          "sha256": "fc8d6f783b761f6e0552cbac7ad62de2732bace959cd76e442b64717fead1ddb"
+        },
+        "materialized": {
+          "bytes": 13483,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/production-source/pair_long_static.rs",
+          "sha256": "fc8d6f783b761f6e0552cbac7ad62de2732bace959cd76e442b64717fead1ddb"
+        },
+        "selected": {
+          "bytes": 13483,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_long_static.rs",
+          "sha256": "fc8d6f783b761f6e0552cbac7ad62de2732bace959cd76e442b64717fead1ddb"
+        },
+        "unchanged": true
+      },
+      "pair_round_oracles.h": {
+        "accepted_preimage": {
+          "bytes": 2469,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_round_oracles.h",
+          "sha256": "4f7fbd55ffa528e59bdb2445bb74ee681fab4e2cd4ca4e5a016d7c0d525d7bbc"
+        },
+        "materialized": {
+          "bytes": 2469,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/production-source/pair_round_oracles.h",
+          "sha256": "4f7fbd55ffa528e59bdb2445bb74ee681fab4e2cd4ca4e5a016d7c0d525d7bbc"
+        },
+        "selected": {
+          "bytes": 2469,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_round_oracles.h",
+          "sha256": "4f7fbd55ffa528e59bdb2445bb74ee681fab4e2cd4ca4e5a016d7c0d525d7bbc"
+        },
+        "unchanged": true
+      },
+      "pair_runtime.inc": {
+        "accepted_preimage": {
+          "bytes": 5686,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_runtime.inc",
+          "sha256": "6fb3c422bd11ecfa2cfdd29eb3665f9d81eb29039cf379ebd415f07087634899"
+        },
+        "materialized": {
+          "bytes": 5686,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/production-source/pair_runtime.inc",
+          "sha256": "6fb3c422bd11ecfa2cfdd29eb3665f9d81eb29039cf379ebd415f07087634899"
+        },
+        "selected": {
+          "bytes": 5686,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_runtime.inc",
+          "sha256": "6fb3c422bd11ecfa2cfdd29eb3665f9d81eb29039cf379ebd415f07087634899"
+        },
+        "unchanged": true
+      },
+      "pair_trace_retention.inc": {
+        "accepted_preimage": {
+          "bytes": 11255,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_trace_retention.inc",
+          "sha256": "5b59e01a608740b8e830c5cf2fb94a1610163b961324bce31a0f3d7295856a8d"
+        },
+        "materialized": {
+          "bytes": 11255,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/production-source/pair_trace_retention.inc",
+          "sha256": "5b59e01a608740b8e830c5cf2fb94a1610163b961324bce31a0f3d7295856a8d"
+        },
+        "selected": {
+          "bytes": 11255,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_trace_retention.inc",
+          "sha256": "5b59e01a608740b8e830c5cf2fb94a1610163b961324bce31a0f3d7295856a8d"
+        },
+        "unchanged": true
+      },
+      "retirement_settlement.inc": {
+        "accepted_preimage": null,
+        "materialized": {
+          "bytes": 2780,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/production-source/retirement_settlement.inc",
+          "sha256": "efafd4127ee976c9ed0a24e1902a2d136600244a2b70113fc1fcd0db91dd5da6"
+        },
+        "selected": {
+          "bytes": 2780,
+          "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-correction-1/bounded-correction-1/retirement_settlement.inc",
+          "sha256": "efafd4127ee976c9ed0a24e1902a2d136600244a2b70113fc1fcd0db91dd5da6"
+        },
+        "unchanged": false
+      }
+    },
+    "Rust_archive_receipt": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/ACTUAL-RUST-ARCHIVE-POSTBUILD.json",
+      "sha256": "feef715703e391e57afb3a75a324d9b270a7da7ab880008513fc16d92d6f71c5",
+      "bytes": 477
+    },
+    "Rust_archive_identity": {
+      "ctime_ns": 1792754660875068007,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 48902707,
+      "mode": "0o600",
+      "mtime_ns": 1792754660875068007,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/final-gate-correction-1/attempt-1/libpair_long.a",
+      "sha256": "45a8d7572bb0ffa1bbdf9d069960c8f0a7040c8c2a103334e7bb746b155a4950",
+      "size": 7261594,
+      "uid": 1000
+    },
+    "Rust_archive_rehashed": false
+  },
+  "SDK6_provenance": {
+    "source_identity": "2093e464dd2dfb976016a71197a120929e16bfd830f4d643126b96ea1ea0a2e8",
+    "input_map": {
+      "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/prepared-sdk/CURRENT68-PROCFS-DELETE-INPUT-MAP.json",
+      "sha256": "c89b43285c01eb5e8f180b981eb1bec560cc6a6c05e0d491f5609754bdb8796e",
+      "bytes": 35251
+    },
+    "focused_sources": {
+      "smp_service.rs": {
+        "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/prepared-sdk/source-modules/smp_service.rs",
+        "sha256": "f439e780dd179f03813736f1526be0ecddb3b905b106bbcb6b9f9b8be9ce5bb7",
+        "bytes": 49492
+      },
+      "smp_application.rs": {
+        "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/prepared-sdk/source-modules/smp_application.rs",
+        "sha256": "f5c56d83a13f10a712a4555849f52078c2d410254080150d34408011daf527a5",
+        "bytes": 72744
+      },
+      "smp_application_syscall.rs": {
+        "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/prepared-sdk/source-modules/smp_application_syscall.rs",
+        "sha256": "b99874d9c1a80720f154086d40f4427f83732824dad85d8d391cc3a8a4de4360",
+        "bytes": 34808
+      },
+      "application_syscall.rs": {
+        "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/prepared-sdk/source-modules/application_syscall.rs",
+        "sha256": "daaa3b0fabb002b40cafdc4d7c74ed6cdfd606e18dc82d3bb32bc3055e1a96e0",
+        "bytes": 20310
+      },
+      "sysfs_memory.rs": {
+        "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/prepared-sdk/source-modules/sysfs_memory.rs",
+        "sha256": "a06bef19cc2f0c847a4e394703f3cb0e9450c8a8453252c46745e324fe83d600",
+        "bytes": 36934
+      },
+      "smp_procfs.rs": {
+        "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/prepared-sdk/source-modules/smp_procfs.rs",
+        "sha256": "4ae39992d0354b2f0b32de4a3e26ce8a621ede6dff69dd92ce303d4ab90232ea",
+        "bytes": 28512
+      },
+      "smp_cpu.rs": {
+        "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/prepared-sdk/source-modules/smp_cpu.rs",
+        "sha256": "f65f3aea00dfdd0a7905d3dd396e67684fd428c71cf34dd6e15a56896c73f912",
+        "bytes": 78237
+      },
+      "smp_ikc.rs": {
+        "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/prepared-sdk/source-modules/smp_ikc.rs",
+        "sha256": "4d1cd859dbea602f8232095fc66dd4d337848ea61ad94436da191fb316628b03",
+        "bytes": 12886
+      }
+    }
+  },
+  "source_return_paths": [
+    {
+      "source": "long_bridge.inc:81-94",
+      "fact": "Actual launch returns before load on !safe or nonzero code. pair_fail_phase is not reset here; last strict gate phase remains from round47."
+    },
+    {
+      "source": "pair_collector.inc:60-105",
+      "fact": "pair_run_assigned keeps safe0 on uncertain owner wait; exited worker2 sets safe0. This launch failure is consistent with retained failed service/worker rows, not a trace-retention rejection."
+    },
+    {
+      "source": "smp_service.rs:162-166",
+      "fact": "Runtime.fail logs only errno after application.fail_service; it omits origin, packet type and claim state."
+    },
+    {
+      "source": "smp_service.rs:494-509",
+      "fact": "pump_regular retains pending only for EAGAIN. Any other dispatch error clears that pending slot and calls fail; no general EBUSY retry is authorized."
+    },
+    {
+      "source": "smp_service.rs:576-595,720-728",
+      "fact": "pump stages and metadata/zeroing worker results use the same generic fail. Retained errno-16 alone does not distinguish these origins."
+    },
+    {
+      "source": "smp_application.rs:958-970",
+      "fact": "fail_service records first service error, invokes quarantine_transport on retained slots, then wakes waiters; WAIT-32/reap-retained-71/cleanup-intent-71 follow this retained ownership policy."
+    },
+    {
+      "source": "sysfs_memory.rs:348-379 -> smp_application_syscall.rs:174-208 -> smp_application.rs:770-782",
+      "fact": "One reachable exact EBUSY predicate is ledger.conflicts(response_span,true) during Memory.syscall. Response-slot capacity exhaustion is EAGAIN, not EBUSY. Remote.syscall_request quarantines non-EAGAIN admission errors. This is a candidate path, not proved actual cause, because response physical/ledger ownership is absent."
+    },
+    {
+      "source": "smp_service.rs:289-305; smp_application.rs:974-999",
+      "fact": "Existing sysfs mapping duplicate EBUSY and prepublication queue EBUSY/EAGAIN have explicit local handling. Their presence shows error classification is boundary-specific; do not treat every EBUSY as retriable."
+    }
+  ],
+  "concrete_semantic_fix": null,
+  "reason_no_semantic_fix": "First fatal EBUSY and its ownership consequences are observed; the packet/origin/claim predicate is not retained. Changing admission, quarantine, retry policy or ownership before identifying that predicate would be unsupported.",
+  "next_owned_lane": "Root assigned /root/m14_actual_consumer_fix private service-ebusy-diagnostic-1 to retain exact failure origin/packet/ownership context before unchanged quarantine; this lane supplies facts and performs no duplicate implementation.",
+  "compiler_tests": 0,
+  "live_queries_PROC_root_Docker_QMP_signals": 0,
+  "production_or_canonical_edits": 0,
+  "native_acceptance": false,
+  "application_acceptance": false,
+  "physical_clearance": false
+}

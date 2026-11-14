@@ -1,0 +1,116 @@
+{
+  "schema": "mckernel.independent-mixed-rust-std-native-preparation-review.v1",
+  "created_utc": "2026-10-18T08:15:33.274745+00:00",
+  "reviewer": "/root/mixed_rust_native_prep_review_0811",
+  "implementation_ownership": false,
+  "status": "PASS",
+  "decision": "PASS_EXACT_ORDINARY_STAGE_AND_AFFECTED_STAGED_CONSUMER_REPLAY_ONLY",
+  "scope": "Functional PRACTICAL-GOAL kernel/apps AND active compute C retirement into Rust plus reviewed assembly; no compute C expansion; broad original qualification remains deferred.",
+  "inputs": {
+    "proposal.json": {
+      "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-native-preparation-20261018-1/proposal.json",
+      "sha256": "f5f50a3aa634ef5aa73734e8339f676bc3482d15459d9779eb0529123f50d642",
+      "size": 56345
+    },
+    "result.json": {
+      "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-native-preparation-20261018-1/result.json",
+      "sha256": "bea058002927e1c29831ef6cc661e7854ddac000f8abbfbadd24132b88a7e507",
+      "size": 2824
+    },
+    "future_stage.py": {
+      "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-native-preparation-20261018-1/future_stage.py",
+      "sha256": "380120726184a119b75297d3707668f18306775c8f53f5831f66f3e116fc9615",
+      "size": 4307
+    },
+    "replay_contract.py": {
+      "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-native-preparation-20261018-1/replay_contract.py",
+      "sha256": "943f1f0771ae978e67ac005e5cbc03260251a18682ffad1340e7ffc0ea860980",
+      "size": 5452
+    },
+    "host-fixture-replay-result.json": {
+      "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-native-preparation-20261018-1/host-fixture-replay-result.json",
+      "sha256": "a8129176733c5a57ebb9d2506c2982c8e3cd565c3d25b0c9e57cc2f0a146f2ce",
+      "size": 1727
+    }
+  },
+  "source_linux_review": {
+    "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-review-20261018-1/result.json",
+    "sha256": "1512621c0fae57e185e818ee0381166e4a9ab608136dc87b8d3f05786baa364f",
+    "size": 7378,
+    "mode": 33152
+  },
+  "checks": {
+    "status": "PASS_READ_ONLY_REVIEW_CHECK",
+    "input_refs_checked": 88,
+    "missing_refs": [],
+    "base_raw_records": 60,
+    "base_uncompressed_bytes": 40775416,
+    "base_changed_records": [
+      "images/mckernel.img"
+    ],
+    "unchanged_final_members": 60,
+    "collector_contract_fields_equal": 5,
+    "stdout_bytes": 156,
+    "host_positive_consumers": 2,
+    "host_negative_rejections": 8,
+    "stage_executed": false,
+    "new_guest_runs": 0
+  },
+  "reasoning": [
+    "All88 proposal file references match hashes and supplied size/mode fields, with no missing references. No payload recompilation or Linux-oracle rerun was performed.",
+    "Exact da0f1bf7 image and d99-compatible three modules equal the accepted AVX manifest. Existing image-only base remains reused unchanged. Independent read-only old/new raw parsing finds60records and only images/mckernel.img size/data/hash delta; every other parsed metadata field and record order matches. Saved old/new110-byte image headers each occur once in their actual raw archive and differ only in size field54:62. The retained full producer metadata is preserved verbatim in proposal.json.",
+    "future_stage.py verifies proposal SHA, source manifest and selected artifact identities, CPU6/1GiB envelope, fresh fixed stage output and16/12GiB host/scratch floors plus192MiB. Existing build_overlay authenticates every source, retains duplicate allowlist, creates output exclusively and verifies output reread and final map. Stager requires unchanged60member namespace, exactly init/apps/app hash-size-mode deltas, and equality of every other replayed raw final field including ino/archive/link/device metadata. No image build or compute source changes.",
+    "Existing accepted staticND_FUTEX collector ead247cd matches pattern manifest; launch is /bin/native-boot hidos allow_oversubscribe then /bin/mcexec -t1 0 /apps/app, cwd /case/work, frozen PATH/COKERNEL_PATH.4096-byte stdout/stderr limits cover exact156-byte stdout and empty stderr; exit0. Existing collector supervision has10s payload timeout and120s shared deadline; proposal retains300s outer guest timeout, kernel-error scans, fresh workdir, failure preservation and positive retirement requirements.",
+    "Unstaged fixture is explicitly synthetic and retains genuine old archive/payload refs. Actual canonical runner.run and owner._inner_result accepted changed launch/oracle once and rejected stdout/stderr/exit/argv in both consumers (8refusals). No source-hash bypass or oracle weakening. Host factories replace process/QMP only; owner replay backend fails on any host-authority call. This establishes contract handling only.",
+    "--staged replay invokes unchanged owner.bound_manifest and actual runner strict loader with same-plan equality, checks exact case/payload contract, then the same positive and four dual-consumer negatives. Thus actual new archive/payload identity and strict consumer binding remain mandatory observations after staging, with no guest started.",
+    "First host fixture qmp.sock path failure and its sole bounded correction remain retained. Corrected h1 maximum75bytes; proposed h2 also75bytes. Prospective nonce runtime endpoint99bytes<=107 remains uncreated. Do not rerun h1 or reuse failed attempt names.",
+    "CPU6,one job,1GiBAS,30CPU seconds,35wall seconds matches the accepted predecessor staging class (CPU7 previously).40,775,416-byte reused uncompressed base and finite inputs fit that bounded operation. Both approved commands below enforce the complete same prlimit envelope. Timeout/OOM/resource failure is preserved and requires family-aware escalation rather than automatic renaming/retry."
+  ],
+  "approved_commands": [
+    "taskset -c 6 timeout 35s prlimit --as=1073741824 --cpu=30 --core=0 --fsize=268435456 --nofile=256 -- /home/holden/anaconda3/bin/python3 -B /home/holden/mckernel-work/scratch/practical-mixed-rust-std-native-preparation-20261018-1/future_stage.py --proposal-sha256 f5f50a3aa634ef5aa73734e8339f676bc3482d15459d9779eb0529123f50d642",
+    "taskset -c 6 timeout 35s prlimit --as=1073741824 --cpu=30 --core=0 --fsize=268435456 --nofile=256 -- /home/holden/anaconda3/bin/python3 -B /home/holden/mckernel-work/scratch/practical-mixed-rust-std-native-preparation-20261018-1/replay_contract.py --staged"
+  ],
+  "execution_order": [
+    "Dispatcher verifies exact approved input/script hashes, canonical private parent identity, fresh stage and h2 absence, capacity floors and aggregate cheap resource availability. Runtime reservation remains uncreated.",
+    "Run exact stage command once; require exit0, strict load success, stage-result exact two-member delta and retained full map. Preserve any failure output.",
+    "Run exact --staged replay once under same envelope; require exit0, PASS_ACTUAL_STAGED_MANIFEST_RUNNER_OWNER_HOST_REPLAY, positive2 and negative8, actual new manifest binding, zero guests.",
+    "Dispatcher binds actual stage/replay hashes and current checkpoint/predecessor evidence into separate native execution review and fresh live admission."
+  ],
+  "ordinary_write_scope": [
+    "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-native-preparation-20261018-1/stage",
+    "/home/holden/mckernel-work/scratch/rsm-t-82a6c19f/h2",
+    "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-native-preparation-20261018-1/post-stage-replay-result.json",
+    "Dispatcher-selected new stdout/stderr/status capture files only"
+  ],
+  "runtime_release": false,
+  "root_or_docker_authority": false,
+  "staging_executed_by_reviewer": false,
+  "new_guest_runs": 0,
+  "new_builds": 0,
+  "new_native_behavior_credit": 0,
+  "formal_case_credit": false,
+  "production_acceptance": false,
+  "blocking_findings": [],
+  "late_binding": {
+    "dispatcher_reported_checkpoint": "0442eb5fd79193bd5b9d3811922ac17a7cd2ad27",
+    "checkpoint_proof": "/home/holden/mckernel-work/scratch/checkpoint-three-port-native-proof-20261018-1/verification.json",
+    "artifact_bytes_unchanged": true,
+    "runtime_head_and_predecessor_joins": "Dispatcher-owned, not inferred from stale proposal predecessor text. No extra per-stage publication gate."
+  },
+  "review_artifacts": {
+    "check_script": {
+      "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-native-prep-review-20261018-1/check.py",
+      "sha256": "84ebf7974d9bb27c1178f4c1a4f32f904e217419a5f55762a31d0a88b420d145",
+      "size": 4197
+    },
+    "check_result": {
+      "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-native-prep-review-20261018-1/check-result.json",
+      "sha256": "c3d1172ee0ce526cc275022a62652bfab0dd5aa427f40eabde2fc0534922918d",
+      "size": 431
+    }
+  },
+  "reviewer_read_errors": [
+    "Initial bounded read requested a nonexistent predecessor future_stage.py; actual predecessor derive_actual_avx.py identified without mutation.",
+    "Initial collector source guessed Rust filename; selected actual native_diagnostic_guest_collector.c and existing compiled provenance, no implementation change."
+  ]
+}

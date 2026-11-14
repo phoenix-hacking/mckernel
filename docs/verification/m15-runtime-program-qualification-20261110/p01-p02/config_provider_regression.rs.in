@@ -1,0 +1,16 @@
+// Source-derived current shell provider contract, isolated from Native execution.
+#[path = "@_boot_build@/config.rs"]
+mod config;
+fn selected_boot_config() -> config::Config {
+    config::Config::@P01P02_mcreboot_CTOR@()
+}
+fn selected_stop_config() -> config::Config {
+    config::Config::@P01P02_mcstop_CTOR@()
+}
+#[test]
+fn nondefault_stop_sbindir_preserves_boot_provider() {
+    assert_eq!(selected_stop_config().sbin, "@SBINDIR@",
+        "stop provider must use current shell's configured SBINDIR");
+    assert_eq!(selected_boot_config().sbin, "@prefix@/sbin",
+        "boot provider must retain current shell's prefix/sbin");
+}

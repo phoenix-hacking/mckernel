@@ -1,0 +1,54 @@
+{
+  "decision": "PASS_AFFECTED_PREPARATION_ONLY",
+  "reviewer": "/root/sched_image_abi_prep_review_1355",
+  "recorded_by": "root dispatcher from completed independent review",
+  "scope": "Functional OS/apps and Rust scheduler debug handoff; no compute C expansion",
+  "evidence": {
+    "result.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-image-preparation-20261018-1/result.json",
+      "sha256": "c73bd7c3fdba3f1c72d90d77f84b4567012b5bb5870e0cd47697ad7ed4b7eb2e",
+      "bytes": 1221
+    },
+    "materializer-commands-DRAFT.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-image-preparation-20261018-1/materializer-commands-DRAFT.json",
+      "sha256": "2b87e4b429113c9a95df9a94230fdb20cbc06bb28963cd20979d2934a7468c83",
+      "bytes": 2740
+    },
+    "production-layout-command-DRAFT.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-image-preparation-20261018-1/production-layout-command-DRAFT.json",
+      "sha256": "c3f72158e1bf312936d2f86b6c0de8edd6363c3b8dc2a2624fe643b812fc6ffe",
+      "bytes": 2911
+    },
+    "future-prepare-inputs-DRAFT.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-image-preparation-20261018-1/future-prepare-inputs-DRAFT.json",
+      "sha256": "1dd65f5b8f62a8c24931adc53b7a2a94d62deffd045828588e71bb9eacb9daac",
+      "bytes": 153803
+    }
+  },
+  "verified": {
+    "artifact_hashes": 39,
+    "consumed_inputs": 27,
+    "consumed_bytes": 80883007,
+    "materialized": 6927,
+    "authority": 9760,
+    "restoration": 2833,
+    "symlinks": 49,
+    "stale_negative_cases": 4
+  },
+  "production_abi_assertions": {
+    "offset": 5016,
+    "size": 5568,
+    "alignment": 64,
+    "actually_compiled": false
+  },
+  "pending": [
+    "safe source publication/fetched proof",
+    "fresh post-IHK resource/ownership admission",
+    "ordinary materialization and actual consumers",
+    "separate production GCC14/image execution release",
+    "linked default and native proof"
+  ],
+  "scratch_initial_minimum_bytes": 13680351424,
+  "runtime_authority": false,
+  "excluded_work": "Refused execve GO/NO-GO and held fork/ACK excluded"
+}

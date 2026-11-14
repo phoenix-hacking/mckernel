@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "file.pwrite-offset",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/file.pwrite-offset"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["written=4 offset=7 bad_index=32"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["pwrite changes only bytes 20 through 23", "The descriptor offset remains 7", "The independent reread matches the patched vector exactly"],
+  "unresolved_expectations": ["Freeze canonical output and reviewed input/oracle SHA256 before execution."],
+  "max_question_for_reviewer": "Confirm pwrite offset 20 does not alter current offset 7 or neighboring bytes."
+}

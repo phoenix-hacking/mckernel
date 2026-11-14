@@ -1,0 +1,83 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=2147483648",
+    "--cpu=60",
+    "--fsize=33554432",
+    "--nofile=256",
+    "--core=0",
+    "/bin/bash",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-1/m14-memory/run-fixture.sh"
+  ],
+  "rust_min_stack": "2097152",
+  "compiler_jobs": 1,
+  "rust_codegen_units": 1,
+  "utc_start": "2026-10-23T05:23:30.877486+00:00",
+  "wall_limit_seconds": 90,
+  "cleanup_grace_seconds": 6,
+  "leader_pid": 3516228,
+  "pgid": 3516228,
+  "exit_code": 0,
+  "timed_out": false,
+  "joined_group_absent": true,
+  "elapsed_seconds": 1.01657202700153,
+  "utc_end": "2026-10-23T05:23:31.894060+00:00",
+  "sources_sha256": {
+    "fixture.c": "33b3569700f71c495923a54b0ff52908640e91f3e1d54a287205505b22edb869",
+    "fixture.rs": "c322b172a6f6bc60ddaa2ad72f27649b2eebd7f7592db0c7004084f80dd69e5d",
+    "original-clear-range.c.inc": "2a991775015b96ecb7dd941e30bdbe19a6f1bb95a1d68b64a20fdf7a5a5415e0",
+    "run-fixture.sh": "74ad071370420acf721722be334347ccb9476a7e67134a04a4d2700c4ba0036e",
+    "candidate/kernel/rust/x86_memory_helpers.rs": "9cba23c3b1e9ba94205c5b8234c5be0408d8c41722b5a0e094ca5a0d1211d067",
+    "baseline/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "baseline/kernel/rust/page_helpers.rs": "fa2f68c00a1568acf6e9ebc4bbdfb0b2bf13e2e5eff758b9048acb06a6aec597"
+  },
+  "artifacts_sha256": {
+    "fixture": "af7c60229afd5dd7083e979790911e27dea94bc28c09353f62df6ad8ea0c03f5",
+    "fixture-rust.o": "6e0ab912cd9462e9088c701d120e5cb6f4734e0b565542bdd14386a34cde04dd",
+    "fixture.stdout": "338e884248d93ab632b593c304986c1c8341e079a1556393f9d0512a00b7854f",
+    "fixture.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "compiler_argv": [
+    [
+      "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2021",
+      "--crate-name",
+      "m14_memory_fixture",
+      "--crate-type=lib",
+      "--emit=obj",
+      "-C",
+      "codegen-units=1",
+      "-C",
+      "opt-level=2",
+      "-C",
+      "panic=abort",
+      "fixture.rs",
+      "-o",
+      "fixture-rust.o"
+    ],
+    [
+      "/usr/bin/gcc-9",
+      "-std=c11",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-ffunction-sections",
+      "-fdata-sections",
+      "fixture.c",
+      "fixture-rust.o",
+      "-Wl,--gc-sections",
+      "-o",
+      "fixture"
+    ]
+  ],
+  "fixture_result": {
+    "cases": 129888,
+    "digest": "b2dcc6cc17fd6765",
+    "actual_c_slice_verbatim": true
+  }
+}

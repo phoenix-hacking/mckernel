@@ -1,0 +1,401 @@
+{
+  "schema": "mckernel.narrow-wait-host-provider-material-source-review.v1",
+  "at": "2026-11-11T07:35:44.860736+00:00",
+  "reviewer": "source_acquisition_review_max",
+  "decision": "GO_GENUINE_NARROW_WAIT_PROVIDER_SOURCE_AND_NECESSARY_FOCUSED_TEST_DESIGN_ONLY",
+  "original_check": "M14-03-04-DEFAULT required wait_host_wait4_bridge table48.slot0 current-C ownership gap; original whole condition remains unaccepted.",
+  "source_ready": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-1/SOURCE-READY.NOT-EXECUTED.json",
+    "bytes": 1563,
+    "sha256": "81b060daa653097747564511dc840d6a6487e9640105b9d6155093f7827b64e9"
+  },
+  "reviewed_input_bindings": {
+    "candidate": {
+      "bytes": 2788,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-1/candidate/kernel/rust/f03_wait_host_provider.rs",
+      "sha256": "400ad42def827a0516dbe3a5a918802b929fae1c8861a6589f48f80bff4b0753"
+    },
+    "consumer_contract": {
+      "bytes": 27521,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-1/CONSUMER-CONTRACT.json",
+      "sha256": "a9f7d2f7981246f6cf7bf078f41adcaa3eb717ead4bf4ff229d838edb180c32f"
+    },
+    "patch": {
+      "bytes": 6846,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-1/WAIT-HOST-PROVIDER.patch",
+      "sha256": "13a3e8eb4e980be231ab264c0ea81f5fa61d47b8d85721b5e3de0918484fdede"
+    },
+    "source_bindings": {
+      "bytes": 3330,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-1/SOURCE-BINDINGS.json",
+      "sha256": "67ad22a9476a64d7553502f8e203fc0d20fd87a627d4dc5ed2f417d83bb736b5"
+    },
+    "test_recipe": {
+      "bytes": 4084,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-1/TEST-RECIPE.json",
+      "sha256": "3abb9a5db0c3fe0ac5b3c56b995c32f6142a560b0b9dba7796466738ff770adf"
+    }
+  },
+  "four_path_patch_and_all_declared_source_pre_postimages_equal": true,
+  "preimage_cohort": "f1992ec2c5f18bb3a7f139647edde6818c34991b",
+  "scoped_authority": {
+    "prior_material_review": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-review-sourceacq-max-1/REVIEW.json",
+      "bytes": 14786,
+      "sha256": "04ef02aaf13a660891c95534b78f32fe9e07f1da637d9af1070b3d06cd0b42f8"
+    },
+    "source_engineering_eligible": true,
+    "known_rejected_or_prohibited_equivalent_replayed": false,
+    "no_per_name_ban_inferred_from_comment_or_opaque_oldscope": true,
+    "no_new_external_release_or_inventory_prerequisite": true
+  },
+  "actual_consumer_proof": {
+    "twelve_exact_bounded_source_rows": [
+      {
+        "id": "byte_copy_and_publish_contract",
+        "source": {
+          "bytes": 1240794,
+          "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+          "sha256": "76ce6016d6ddd1cfa6c41070c0cf35e87b94ddc31e67c805adbe3b94b3f17469"
+        },
+        "start_line": 2445,
+        "end_line": 2488,
+        "literal_source_equal_allowing_only_terminal_LF": true
+      },
+      {
+        "id": "guest_prepare_overwrites_routing",
+        "source": {
+          "bytes": 1240794,
+          "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+          "sha256": "76ce6016d6ddd1cfa6c41070c0cf35e87b94ddc31e67c805adbe3b94b3f17469"
+        },
+        "start_line": 3099,
+        "end_line": 3130,
+        "literal_source_equal_allowing_only_terminal_LF": true
+      },
+      {
+        "id": "guest_rusage_owned_locally",
+        "source": {
+          "bytes": 1240794,
+          "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+          "sha256": "76ce6016d6ddd1cfa6c41070c0cf35e87b94ddc31e67c805adbe3b94b3f17469"
+        },
+        "start_line": 18954,
+        "end_line": 19005,
+        "literal_source_equal_allowing_only_terminal_LF": true
+      },
+      {
+        "id": "host_decode_exact72_fields",
+        "source": {
+          "bytes": 20310,
+          "path": "/home/holden/mckernel/host-kernel/native-rust/application_syscall.rs",
+          "sha256": "daaa3b0fabb002b40cafdc4d7c74ed6cdfd606e18dc82d3bb32bc3055e1a96e0"
+        },
+        "start_line": 39,
+        "end_line": 76,
+        "literal_source_equal_allowing_only_terminal_LF": true
+      },
+      {
+        "id": "host_private_wait_output",
+        "source": {
+          "bytes": 20310,
+          "path": "/home/holden/mckernel/host-kernel/native-rust/application_syscall.rs",
+          "sha256": "daaa3b0fabb002b40cafdc4d7c74ed6cdfd606e18dc82d3bb32bc3055e1a96e0"
+        },
+        "start_line": 183,
+        "end_line": 192,
+        "literal_source_equal_allowing_only_terminal_LF": true
+      },
+      {
+        "id": "launcher_actual_wait4_consumer",
+        "source": {
+          "bytes": 256059,
+          "path": "/home/holden/mckernel/executer/user/rust/mcexec_helpers.rs",
+          "sha256": "ab6aaa29b9a9b8d07077a9bb27e02c7dc7a353fe3a0d0b538b119e41bd264a24"
+        },
+        "start_line": 1779,
+        "end_line": 1793,
+        "literal_source_equal_allowing_only_terminal_LF": true
+      },
+      {
+        "id": "launcher_actual_waitid_provider",
+        "source": {
+          "bytes": 5234,
+          "path": "/home/holden/mckernel/executer/user/rust/mcexec_signal_wait_exit.rs",
+          "sha256": "d04d3de7606ac893335782f46a3fb0ff5496271e03690b101ee1f3f0f92d7a25"
+        },
+        "start_line": 69,
+        "end_line": 81,
+        "literal_source_equal_allowing_only_terminal_LF": true
+      },
+      {
+        "id": "launcher_exact61_dispatch",
+        "source": {
+          "bytes": 256059,
+          "path": "/home/holden/mckernel/executer/user/rust/mcexec_helpers.rs",
+          "sha256": "ab6aaa29b9a9b8d07077a9bb27e02c7dc7a353fe3a0d0b538b119e41bd264a24"
+        },
+        "start_line": 2832,
+        "end_line": 2862,
+        "literal_source_equal_allowing_only_terminal_LF": true
+      },
+      {
+        "id": "launcher_real_request_type",
+        "source": {
+          "bytes": 256059,
+          "path": "/home/holden/mckernel/executer/user/rust/mcexec_helpers.rs",
+          "sha256": "ab6aaa29b9a9b8d07077a9bb27e02c7dc7a353fe3a0d0b538b119e41bd264a24"
+        },
+        "start_line": 978,
+        "end_line": 995,
+        "literal_source_equal_allowing_only_terminal_LF": true
+      },
+      {
+        "id": "outer_real_selected",
+        "source": {
+          "bytes": 13252,
+          "path": "/home/holden/mckernel/kernel/rust/syscall_offload_entry.rs",
+          "sha256": "378bd1373807833442cb72a602061157fd1109ee559f7b8f25e6d2a67a5112cf"
+        },
+        "start_line": 143,
+        "end_line": 191,
+        "literal_source_equal_allowing_only_terminal_LF": true
+      },
+      {
+        "id": "real_send_packet_copy_and_publish",
+        "source": {
+          "bytes": 1240794,
+          "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+          "sha256": "76ce6016d6ddd1cfa6c41070c0cf35e87b94ddc31e67c805adbe3b94b3f17469"
+        },
+        "start_line": 2525,
+        "end_line": 2560,
+        "literal_source_equal_allowing_only_terminal_LF": true
+      },
+      {
+        "id": "send_prepare_valid_zero",
+        "source": {
+          "bytes": 1240794,
+          "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+          "sha256": "76ce6016d6ddd1cfa6c41070c0cf35e87b94ddc31e67c805adbe3b94b3f17469"
+        },
+        "start_line": 2430,
+        "end_line": 2444,
+        "literal_source_equal_allowing_only_terminal_LF": true
+      }
+    ],
+    "selected_header_host_launcher_proof_pins": [
+      {
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/stage-lock.json",
+        "bytes": 9140,
+        "sha256": "f0f7cf6f846efdec7f826a1f07589bb396da1b430d3cc998189e58539ebd97ef"
+      },
+      {
+        "path": "/home/holden/mckernel/host-kernel/native-rust/application_syscall.rs",
+        "bytes": 20310,
+        "sha256": "daaa3b0fabb002b40cafdc4d7c74ed6cdfd606e18dc82d3bb32bc3055e1a96e0"
+      },
+      {
+        "path": "/home/holden/mckernel/kernel/rust/syscall_offload_entry.rs",
+        "bytes": 13252,
+        "sha256": "378bd1373807833442cb72a602061157fd1109ee559f7b8f25e6d2a67a5112cf"
+      },
+      {
+        "path": "/home/holden/mckernel/kernel/include/syscall.h",
+        "bytes": 20836,
+        "sha256": "459e6d0faec3f1b8366a0d329571ef5ea813042706be11f9423b0399bbba6ffa"
+      },
+      {
+        "path": "/home/holden/mckernel/executer/include/uprotocol.h",
+        "bytes": 9756,
+        "sha256": "1770a59cf4486380eb5aa483d3634dc1e4c9c9c16d1bf09865d4ff8f71191e69"
+      },
+      {
+        "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+        "bytes": 76151,
+        "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+      },
+      {
+        "path": "/home/holden/mckernel/ihk/cokernel/smp/x86_64/include/ihk/memconst.h",
+        "bytes": 198,
+        "sha256": "38b25a9fedbcf50d9eae799681aff60705d6e2e5e3559bcb721b0541ce98dc61"
+      },
+      {
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-production-review-source-acquisition-max-1/qualification-1/REVIEW.json",
+        "bytes": 14426,
+        "sha256": "a6f130387ea40f2543f98a687980c9f4be899b7518a5282f08c0229cebd09068"
+      },
+      {
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/production-packet-1/qualification-1/QUALIFICATION.json",
+        "bytes": 44796,
+        "sha256": "dc0c975c362caba38100e13b5ca951cb864fc8ecba698096f24e72edf0115296"
+      },
+      {
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/SOURCE-PROFILE.json",
+        "bytes": 18484,
+        "sha256": "fdd440fd6a565703ff1fd426b9c07f174a2aac4809077e9a1b37a3948455a659"
+      }
+    ],
+    "guest_before_send": "Actual syscall_offload_entry.do_syscall calls syscall_offload_prepare_result, which overwrites rtid=current_tid and ttid=0 for nr61 before their selected routing/preemption reads. syscall_send_prepare_result writes valid=0, genuine send copies all72 bytes and publishes packet valid=1 Release. No new ACK or reply is introduced.",
+    "host_carrier": "Actual compiled daaa decoder consumes packet requester/target/valid and copies exactly72 bytes; stage-lock f0f7 pins that same current source. Host wait_output acknowledges only its private packet copy, not a new candidate operation.",
+    "launcher": "Qualified actual ab6aaa mcexec_helpers act_wait4 dispatch for nr61 reads only args0 and args2, casts back to CInt, calls d04d mcexec_waitid_pid_bridge(P_PID, initialized local SigInfo, WEXITED | options&WNOWAIT), then returns its actual result. It does not select libc wait4 or generic syscall61 fallback.",
+    "args3_and_rusage": "No args3 pointer is read or passed by this selected host action. Guest wait4_body_result owns initialized guest RUsage and performs its own user copy. Therefore defining args3..5=0 does not suppress a defined host rusage effect.",
+    "defined_storage_boundary": "All72 bytes become defined on the private request. Existing initialized number61/args0/args1/args2 behavior is preserved; prior unspecified ignored words become0 after actual consumer proof. This is explicitly not byte parity with uninitialized C stack storage.",
+    "field_table_source": [
+      {
+        "field": "rtid",
+        "first_selected_semantic_access": "do_syscall->syscall_offload_prepare_result writes actual current_tid before send and before rtid debug/preemption reads",
+        "new_initial_value": 0,
+        "offset_bytes": [
+          0,
+          4
+        ],
+        "old_C_initialization": "unspecified",
+        "reason": "Zero is private initial storage only, never published instead of requester identity.",
+        "wire_value": "actual current_tid written by existing outer"
+      },
+      {
+        "field": "ttid",
+        "first_selected_semantic_access": "syscall_offload_prepare_result writes0 because nr61 is not sched_setaffinity203; routing/debug read afterwards",
+        "new_initial_value": 0,
+        "offset_bytes": [
+          4,
+          4
+        ],
+        "old_C_initialization": "unspecified",
+        "reason": "Exact existing wait target selection is unchanged.",
+        "wire_value": 0
+      },
+      {
+        "field": "valid",
+        "first_selected_semantic_access": "send_syscall->syscall_send_prepare_result writes0 before copying, existing publish stores1 Release on packet copy; host wait_output resets only its privatecopy",
+        "new_initial_value": 0,
+        "offset_bytes": [
+          8,
+          8
+        ],
+        "old_C_initialization": "unspecified",
+        "reason": "Local0 is not ACK/completion and does not replace any response producer.",
+        "wire_value": "existing publisher1, not new wrapper authority"
+      },
+      {
+        "field": "number",
+        "first_selected_semantic_access": "outer debug/count/prepare read; host dispatchexactSYS_WAIT4",
+        "new_initial_value": 61,
+        "offset_bytes": [
+          16,
+          8
+        ],
+        "old_C_initialization": 61,
+        "reason": "Actual supported x86_64 nr61 unchanged.",
+        "wire_value": 61
+      },
+      {
+        "field": "args0",
+        "first_selected_semantic_access": "outer prepare reads arg0; launcher casts arg0 back to c_int then waitid(P_PID,pid as u32)",
+        "new_initial_value": "pid as CULong",
+        "offset_bytes": [
+          24,
+          8
+        ],
+        "old_C_initialization": "pid int converted to unsignedlong",
+        "reason": "Exact source C conversion/sign representation and original caller PID preserved."
+      },
+      {
+        "field": "args1",
+        "first_selected_semantic_access": "copied as carrier; dedicated act_wait4 does not read it",
+        "new_initial_value": 0,
+        "offset_bytes": [
+          32,
+          8
+        ],
+        "old_C_initialization": 0,
+        "reason": "No hoststatus destination; guest wait transaction owns statuscopy."
+      },
+      {
+        "field": "args2",
+        "first_selected_semantic_access": "launcher casts c_int then WEXITED|(options&WNOWAIT)",
+        "new_initial_value": "options as CULong",
+        "offset_bytes": [
+          40,
+          8
+        ],
+        "old_C_initialization": "options int converted to unsignedlong",
+        "reason": "Wrapper does not apply a new options filter or alter caller wait semantics."
+      },
+      {
+        "field": "args3",
+        "first_selected_semantic_access": "complete72B byte transport only; dedicated nr61 act_wait4 never reads/passes it",
+        "new_initial_value": 0,
+        "offset_bytes": [
+          48,
+          8
+        ],
+        "old_C_initialization": "unspecified",
+        "reason": "Not a Linux wait4 rusage pointer on this selected path: act_wait4 invokeswaitid with localSigInfo, while guest wait4_body_result handles its own rusage pointer/copy. Defining this previously unspecified carrier word preserves all defined supported wait behavior."
+      },
+      {
+        "field": "args4,args5",
+        "first_selected_semantic_access": "complete72B transport/storage; no nr61 consumer read",
+        "new_initial_value": [
+          0,
+          0
+        ],
+        "offset_bytes": [
+          56,
+          16
+        ],
+        "old_C_initialization": "unspecified",
+        "reason": "Fully defined carrier fulfills existing publication contract without changing selected waitid action."
+      }
+    ]
+  },
+  "ABI_type_and_lifetime_review": {
+    "wrapper": "unsafe extern C fn(CInt,CInt)->CInt with exact no-cast Rust function pointer checks for wrapper, real do_syscall and CPU getter.",
+    "geometry": "CInt4/align4, CLong/CULong8; SyscallRequest72/align8 offsets0,4,8,16,24. Matching C typedef is declared before the candidate static type/geometry/nr61 guards; x86 IHK_DMA_ALIGN is empty.",
+    "conversions": "Signed CInt to CULong retains original C modulo unsigned conversion for pid/options; actual CLong result narrows to original supported signed32 bits. No errno/options filtering is added.",
+    "calls": "One actual CPU getter, followed by one genuine selected synchronous do_syscall with the same returned CPU and live private request pointer.",
+    "lifetime": "No new references, refcount, asynchronous ownership, lock/IRQ/reap decision, saved request pointer or post-return read. Existing current Thread/Process/IKC transaction preconditions remain as in C.",
+    "all_C_fallback_statement_tokens_preserved": true,
+    "physical_C_source_lines_preserved": 30379
+  },
+  "selection_review": {
+    "narrow_predicate": "MCKERNEL_RUST_F06_WHOLE_DEFAULT AND ENABLE_RUST_F06_SYSCALL_WHOLE AND MCKERNEL_DO_SYSCALL_OUTER_SELECTED AND NOT ENABLE_NATIVE_FORK_OWNED_TRANSACTION AND NOT DCFA_KMOD",
+    "inherited_ordinary_profile": "Whole-default predicate includes real Rust/x86/Linux6.12/!UBSAN/PROFILE/PERF/RUSAGE/workIRQ and excludes TOFU/Fugaku/broad/experimental; new predicate additionally requires real outer, whole option, !owned transaction and !DCFA.",
+    "paired_cfg_macro": {
+      "Rust": "f03_wait_host_provider_candidate",
+      "C": "MCKERNEL_RUST_F03_WAIT_HOST_PROVIDER",
+      "internal": "MCKERNEL_WAIT_HOST_PROVIDER_SELECTED initializedOFF"
+    },
+    "module": "New module included once by its cfg; compile guards require actual supported outer and reject duplicate broad adapter cfg.",
+    "C_branches": "New narrow extern plus ABI assertions, original broad extern retained, original C body fallback retained. No broad switch/default or actual table changes.",
+    "unique_runtime_owner_pending": "The actual normal next image must show one Rust wait_host_wait4_bridge, no selected C duplicate, and real48-byte wait dependency slot0 pointing to that provider. No source-only retirement claimed."
+  },
+  "focused_test_design_review": {
+    "source_recipe": {
+      "bytes": 4084,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-1/TEST-RECIPE.json",
+      "sha256": "3abb9a5db0c3fe0ac5b3c56b995c32f6142a560b0b9dba7796466738ff770adf"
+    },
+    "materially_sufficient_at_proposed_scope": true,
+    "six_finite_vectors": "Covers positive/negative/extreme signed pid/options, WNOWAIT-compatible carrier, CPU identity and high-bit CLong->CInt narrowing.",
+    "necessary_oracles": "Exact whole candidate and real ABI; one CPU query then one controlled synchronous do_syscall; all72 initialized bytes/type/offset/alignment; call order/lifetime and exact return narrowing.",
+    "HOST_only_lower_controls": "CPU and do_syscall are explicit test-only effects; no actual offload, wait/reap/native/API/ACK/GS/IRQ action.",
+    "no_UB_baseline": "No partial/uninitialized old C request or old held ACK/generic fixture is executed.",
+    "execution_GO": false,
+    "independent_actual_request_profile_review_required": true
+  },
+  "not_claimed": [
+    "No compiler/test/image/provider/main/native operation by reviewer.",
+    "No acceptance or C retirement from source/header/mock/type evidence.",
+    "No complete M14-03-04, wholeF06 FUNCTIONAL/native/currentfree or final milestone acceptance.",
+    "Separate pending-signal termination provider and all genuine generic/exec/replay/native/UNKNOWN holds remain unchanged.",
+    "No canonical/source/peer packet/state changes or recursive agents."
+  ],
+  "next_action": {
+    "tests_owner": "P04Tests",
+    "action": "Freeze independently authored exact whole-module HOST capture fixture/request with positive ordinary ownership and existing resource limits; Root executes only after separate material GO and fresh admission.",
+    "integration_owner": "Root",
+    "later_action": "Compose reviewed source with other ready disjoint providers, then normal changed-image build and affected owner/table/ABI/provider readback; reuse matching unchanged proofs."
+  }
+}

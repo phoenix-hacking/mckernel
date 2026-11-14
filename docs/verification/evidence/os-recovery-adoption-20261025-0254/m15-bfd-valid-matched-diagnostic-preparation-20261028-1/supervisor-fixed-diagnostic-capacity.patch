@@ -1,0 +1,13 @@
+--- a/supervisor.rs
++++ b/supervisor.rs
+@@ -9,7 +9,9 @@
+ use std::os::unix::fs::OpenOptionsExt;
+ 
+ pub const MS: u64 = 1_000_000;
+-pub const STREAM_LIMIT: usize = 1024;
++// Fixed diagnostic capture budget: retain ordinary DWARF declaration traces.
++// Original app collectors retain their existing 1024-byte profile unchanged.
++pub const STREAM_LIMIT: usize = 65_536;
+ pub const PAYLOAD_ENV: &[&str] = &["PATH=/usr/bin:/bin", "COKERNEL_PATH=/apps"];
+ pub const HELPER_ENV: &[&str] = &["PATH=/bin:/sbin:/usr/bin:/usr/sbin", "LC_ALL=C"];
+ const EINTR: i32 = 4;

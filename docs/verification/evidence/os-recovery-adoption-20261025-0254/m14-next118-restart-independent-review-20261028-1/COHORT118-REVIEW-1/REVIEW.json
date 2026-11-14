@@ -1,0 +1,115 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/m14_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "reviewed_at": "2026-10-28T19:42:37.447416+00:00",
+  "decision": "BLOCKED_ONE_REACHABLE_RETIRED_RECURSIVE_OBSERVER_GUARD_ROUTE",
+  "runtime_authority": null,
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/SOURCE-READY.json",
+    "bytes": 5937,
+    "sha256": "d1230784b22cb2e32b59348507518bae281f718acbdaf92ddda73065499d4de6"
+  },
+  "source_manifest": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/FILES.json",
+    "bytes": 26508,
+    "sha256": "d10a9797e020a9cbcc4a3743f864dc2c0c42f652e528b684f4998cbf6e52444d"
+  },
+  "source_derivation": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/SOURCE-DERIVATION-MAP.json",
+    "bytes": 23388,
+    "sha256": "e5643561d11783713be039b98e7e8b4ee4c05a528c0916e672013818ac6bdf23"
+  },
+  "reused_composition_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/REVIEW.json",
+    "bytes": 12645,
+    "sha256": "8ddeb7a6ed06e9a1d190ceee02fd3266c0991ec1f23652822e0571e92719e98e"
+  },
+  "reused_current118_guard_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-restart-independent-review-20261028-1/CURRENT118-GUARD-REVIEW-1/REVIEW.json",
+    "bytes": 7864,
+    "sha256": "07ecbe8d12787cc9f380c743ea31e46df913a455192eebf203bbd61b5330e0bc"
+  },
+  "source_and_profile_checks": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/COHORT118-REVIEW-1/SOURCE-AND-PROFILE-CHECKS.json",
+    "bytes": 47929,
+    "sha256": "cfb41ac45da7c235a8aaa5e4eb1acfe7b101bae515a01bb745de40231732e9da"
+  },
+  "pure_result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/COHORT118-REVIEW-1/PURE-RESULT.json",
+    "bytes": 865,
+    "sha256": "d0ffe7d46a685711d743afa4ee53994df214d7d8d804f0ec517ff6e853a64ad4"
+  },
+  "pure_source_contract_stdout": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/COHORT118-REVIEW-1/SOURCE-CONTRACT.stdout",
+    "bytes": 104,
+    "sha256": "f43fd80b763f1d31867e83a230a0cb88da6873b8333e788c6c4f6c66a9fb5297"
+  },
+  "pure_pipeline_stdout": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/COHORT118-REVIEW-1/PIPELINE.stdout",
+    "bytes": 279,
+    "sha256": "ba94d2c5b874ed33c66d10a91d750d39b49c7b8cac4e9e0126aa5f4afa1b87f1"
+  },
+  "pure_test_wrapper": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/COHORT118-REVIEW-1/run_existing_tests.py",
+    "bytes": 2074,
+    "sha256": "c77d55240e4f8328f3f0c5a4a0fa1dd6c3e8a115bec7b9d6a5c632bde5dc1b35"
+  },
+  "blocker_evidence": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/COHORT118-REVIEW-1/RECURSIVE-ROUTING-BLOCKER.json",
+    "bytes": 3816,
+    "sha256": "d9afcc155c28fc31b6a086ecb114f91a87f36b464aea9075ea8dc4aa392b617a"
+  },
+  "verified_scope": [
+    "Exact SOURCE-READYd1230784,82-file manifest and24-source derivation refs authenticate.16changed patches apply independently by line-numbered unified hunks;8sourcecopies are byte-identical, including holder,Hot predicates,once capture/publish,approval publishers,boundaryjoin and prewritten resourceinput.162 sourcecontract reference checks pass;145uniqueBYTE refs separately authenticate. Source counts earn no implementation/artifact/filecredit.",
+    "Exporter and materializer validate genuineRootc161 receipt phaseEXACT_NINE_PATH_CANONICAL_SOURCE_ADOPTED,nineunique rows,sevenarchivedexistingpreimages,twoPATH_ABSENT newleaves,nine actualcanonical postimages; joins to exact118map/source-review8dde/recipe89ade and defaultartifact116/zeroaddedcredit are preserved. No historical composer is rerun against changed canonical preimages.",
+    "Exact123directory files/112.rs andthreeexternalrelative modules are enforced by exporter/materializer/runner/Cold; exactsource6153path/container origins and actualreadonly /src bytes authenticate. Closure adds allthreeexternalrefs to inputauthority,Cold expectedfiles andpublicationrows. Eight retained objectrecords remain byte-identical; runner rejects drift in retainedtoken/hashes or foursealedargv. Exactlythree newobjectslots andeleven-inputlink remain.",
+    "Allfive freshorigin outputs must belong to one actualpositivejoinedreceipt with exactnew118argv,archsource/profile/context/header/environment metadata and literalrust/f06-origin consumerpaths. No origin/export/admission output was produced by thisreview.",
+    "Resource/CPU/RAM/pid/network/onceentry/physicalownership/PREWARM predicates remain unchanged apart from reviewedrouting,higherclosurechecks and tighterfixedclocktriplet. Holder/Hot/once/publish sources are byte-identical. Guardd027/adapter3a90 are reused through accepted07ecreview at their exactpaths; actual operation/config fields remain unfilled.",
+    "Existingpure sourcecontract and2pipelinegroups pass once underCPU0/jobs1/AS2GiB using reviewer-owned temporaryfixtures. Actualmaterializer outputs feed realrunner,Cold/Hot andPREWARM parser with syntheticorigin/resource/account/processleaves. Genuineadoption and70nonce/61actor retainedhistory validate; oldoverlay/profile,eight-rowadoption,122closure,duplicatefile,missingexternalmodule,changedargv/objecthash andstaleresource controls reject. These tests supply no liveclearance."
+  ],
+  "source_blockers": [
+    {
+      "id": "CURRENT118_RECURSIVE_OLD_GUARD_ROUTE",
+      "severity": "EXECUTABILITY_BLOCKER",
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/observe_current61_current118.py",
+        "bytes": 12126,
+        "sha256": "bad31cb9e8a642c273c77e8cbe33104fb55148819ad3dc54aba8bafdf74cfb88"
+      },
+      "trigger": "Actual current118 observer.observe() reaches old=load(PINS[current60_source]);history=old.observe().",
+      "dependency_chain": [
+        "118 observer bad31cb9 -> historical current60 observer de9f6a1b",
+        "historical current60 ACTUAL-PINS -> common5877 and immutable common_dependencies eb5c30c6",
+        "common_dependencies -> old current116 adapter af2f25cb and config ac6f7334",
+        "old config -> shared guard082b1654,operation current116 and retired guardiane8a117df"
+      ],
+      "consequence": "Both old shared guard and old guardian require retired dispatcher01a18111-26a7-7ef2-bbd6-e33d1c8dc803. Configuring only the new top-level current118 adapter cannot change this immutable nested path/config chain. A real observer invocation cannot satisfy the current restart control identity through that route.",
+      "test_gap": "The passing pipeline replaces the historical current60 module.observe with lambda returning a retained capture. It therefore does not exercise recursive common/physical guard routing and cannot clear this blocker.",
+      "bounded_correction": "Prepare an additive current118 recursive common/current60 source-and-DATA successor, preserving old sources and every retained predicate. Reuse the just-reviewed original227 recursive approach and exact af7c physical API where appropriate; route the same actual final current118 adapter/config through common,physical,current60 andRoot61. Bind source/schema/config/dependencyreviews/publication without a hashcycle. Extend the existing pure recursive fixture to exercise that full actual producer-consumer chain with only liveeffects substituted.",
+      "failure_family": "First independent current118 nested retiredguard routing finding; no runtime attempt or retry performed."
+    }
+  ],
+  "conditions_after_correction": [
+    "Independent exactreview of bounded recursivecorrection must clear the one identified source blocker before this whole cohort is used for actualobserver/resource/entry. Retain current subsetchecks; do not replay acceptedSDK/ports/sourceexports/buildprefixes.",
+    "Parent must bind/review actualcurrent118operation subjects,exactadapter/sharedguard/guardianconfig,noncecontinuity/sourceadoption/currentboundary and allrecursiveDATA/sourceclosure; sourcePASS supplies none of these runtimefacts. Root61/free6c83 remain historical until actualfreshclearance, and any intervening native/custodyboundary requires genuine reviewedtypedsuccessor.",
+    "Use fresh118origin,oneactual123/112readonlyexport andactualmaterializer only after normalactualgates. Preserve genuineRootadoptionc161 and canonical118WIP while accepteddefaultartifact remains116/image42473e03. Do not relabel plannedCdelta orHOSTresults as default/native/fileacceptance.",
+    "Freshactual independentexecutionreviewer must fill inheritedobserverreviewrole or receive narrowreviewedrolebinding; modelretirement does not revive anactor. Preserve actualwaitingPID/birth,PREWARM beforephysicalclocks,4GiBreserve,soleheavyCPU2-5/12GiB/no-swap/512tasks/-j<=4,host16GiB/scratch12GiBfloors,120sfreshness anddurableonceentry/custody/cleanupconditions.",
+    "All389registry,source/ABI/provider/trackedallocationprovenance/defaultimage/matchinghostPTE/signalFP/perfVDSOnative andfullfileobligations remainOPEN. Fixedcaps1793253600/MONO1035704.5689393478/BOOT1051042.6959879305,same7f4creditrun/57774.852125ceiling/22812.3311floor,allholds/exclusions/scratch21/permanent27:4andoriginalfailuresremain unchanged."
+  ],
+  "counts": {
+    "existing_pure_pipeline_groups_passed": 2,
+    "actual_export": 0,
+    "actual_materializer": 0,
+    "actual_origin": 0,
+    "actual_live_guard": 0,
+    "actual_compiler": 0,
+    "actual_native": 0,
+    "new_default_artifacts": 0,
+    "C_retirements": 0,
+    "file_closures": 0
+  },
+  "next_owner": "/root and canonical cohort source owner",
+  "next_concrete_step": "Bounded additive recursive118 current60/common/physicaldependency routing successor; reuse existing predicates and source-ready exporter/materializer profile; focused independent correction review."
+}

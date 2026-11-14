@@ -1,0 +1,149 @@
+{
+  "schema": "mckernel.f05-v2.native-entry-context.independent-source-review.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/daemon_execution_review",
+  "implementation_ownership": false,
+  "independent": true,
+  "decision": "PASS_SOURCE",
+  "at": "2026-10-27T19:44:30.927438+00:00",
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/native-entry-context-preparation-1/SOURCE-READY.json",
+    "bytes": 8750,
+    "sha256": "6d0247b8be8382ef83e28209d80419baeef079dc50d5a1d3e5b9d942871f15e8"
+  },
+  "source_sha256": {
+    "run_native_f05_v2_capture.py": "b577abdfe5e466fe4cb4e9afacd7cfcf2a8c0ac7c673a75c0131bde1cc21c8a6",
+    "capture_fresh_f05_v2_resource.py": "bdb3bec8364c8bbd12cfe32527d917c0a9e3ff892765868154875bee224396b6",
+    "prepare_f05_v2_bindings.py": "aa85ea996e1dfd6e36b751a700543f6174f524944282ef9be6752a702ac3f465",
+    "bind_f05_v2_resource.py": "fa42eb4ec10ca67f9287fa0cee7b9d4725c4b71dc9139739e10dc5a762f33de5",
+    "run_f05_v2_resource_once.py": "98b00a1eede2ac341f5c3f3c703dc414801320ca5d9beb2d1f629bdd03f43404"
+  },
+  "source_references": {
+    "run_native_f05_v2_capture.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/native-entry-context-preparation-1/run_native_f05_v2_capture.py",
+      "bytes": 3256,
+      "sha256": "b577abdfe5e466fe4cb4e9afacd7cfcf2a8c0ac7c673a75c0131bde1cc21c8a6"
+    },
+    "capture_fresh_f05_v2_resource.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/native-entry-context-preparation-1/capture_fresh_f05_v2_resource.py",
+      "bytes": 9591,
+      "sha256": "bdb3bec8364c8bbd12cfe32527d917c0a9e3ff892765868154875bee224396b6"
+    },
+    "prepare_f05_v2_bindings.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/native-entry-context-preparation-1/prepare_f05_v2_bindings.py",
+      "bytes": 5242,
+      "sha256": "aa85ea996e1dfd6e36b751a700543f6174f524944282ef9be6752a702ac3f465"
+    },
+    "bind_f05_v2_resource.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/native-entry-context-preparation-1/bind_f05_v2_resource.py",
+      "bytes": 3936,
+      "sha256": "fa42eb4ec10ca67f9287fa0cee7b9d4725c4b71dc9139739e10dc5a762f33de5"
+    },
+    "run_f05_v2_resource_once.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/native-entry-context-preparation-1/run_f05_v2_resource_once.py",
+      "bytes": 2833,
+      "sha256": "98b00a1eede2ac341f5c3f3c703dc414801320ca5d9beb2d1f629bdd03f43404"
+    }
+  },
+  "selected_context": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/native-entry-context-preparation-1/SELECTED-ENTRY-CONTEXT.json",
+    "bytes": 6456,
+    "sha256": "38d9534535bcb4da17d3d217fd9068dd7f0d68077603174371dbe8cbadfccb74"
+  },
+  "prior_F05_bound_source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/independent-source-review-1/REVIEW.json",
+    "bytes": 14632,
+    "sha256": "ca8becc123a112260c553532cfa977f0756f5e61c5b1c73198c547e5b64e55ba"
+  },
+  "actual_binding": {
+    "owner_sha256": "af2b1f57a19949e9867de2496b16063859c47298e9cf03b401e95de5bded5a10",
+    "evaluator_sha256": "529830adcd6fafa13979bf6036b2812c88630c5e0112ce4d80f9fc28cc30d4da",
+    "image_sha256": "60e62f97ef48ecaf14174af1c5b75d7181969f439c1b45c618d6c16d4bc40d57",
+    "Root32_ledger_sha256": "822f05a582d3bc536b77111457944b7082dc6829d86ef0c956df4e35f4a03010",
+    "current111_free_sha256": "9904aa3c39b0a83d8675a77b97631f3731f2f3e568c5fde65b6ef91c28f64d19",
+    "fixed_cutoffs_wall_monotonic_boottime": [
+      1793165769.0,
+      947874.5689514667,
+      963213.6960030915
+    ]
+  },
+  "verified": [
+    "READY6d0247b8 andall20declaredreferences independentlymatch size/SHA256;all5sources ASTparse. Originalselected5helper bytepins checked. No helper import/main/guard/account/resource/ownerfactory called.",
+    "Captureentry changes exactgrant/case/image/owner/evaluator and selects full literalguardv21f152 withgenuinefile/speccontext. Guardcheckscurrentaccount/realholds/all3minclampedclocks;entryrequiresresource/pendingcutoffequality andfreshness<120s. Originalstrict235 C=CAPTURE throughSTARTED/exclusivestreams/Popenpositivewait/CPU-RSS/JOINED code is independently AST-identical;onlyfinalprintlabel changes.",
+    "Resourcecapture retains outputcollision preflight beforeguard/clock/observer/Docker andexclusive final/stdout/stderr outputs. ExactRoot32 ledger822f/current111free9904 andallreferencedpriorholder/runner/terminalrecords are checked beforeobservation. Liveactor absence/currentcensus plusstopped5c92 inspection are required;oldhistorical2b736 source remains45-check baseline only,notnewF05postjoinacceptance.",
+    "Root32 consumes32unique currentnonces andnamesactual111free. Currentfreeholder1659765/start92650542 andrunner1660450/start92662958/permanentmutex27:4fd3/stoppedCID5c92terminal0 schema independentlymatches retaineddata. Sourceandresourcebindings preservefreshemptyCAPTURE/attemptparent,currentcgroup0/no runningcontainers,24GiBmemoryfloor,scratch/HOSTfloors,4CPU12GiB512tasks/noNet andoneheavy/aggregateceilings.",
+    "Staticprepare uses onlyexactcheckedauthority/capability/map/ledger/owner/manifest/payload/overlay refs. Itimports genuine5298evaluator/af2bowner fororiginalfullmanifest APIs onlywhenRootinvokes. Exactnewcase204B/60eCURRENT110/module887dc+57546 checks replaceold235/685/f368 context. Unknownactualrefs/nonce/resource/grant remainNULL in templatesandcannotqualifyentry.",
+    "NormalRoot manifestcopytoscratch isrequired;staticprepareverifies actualscratchstage,samehash,outsidewritableattemptparent,owner._manifest_identity andowner._manifest_outside_writable_parent without weakeningeither. Thecorrectlyrejectedrepositorypath attempt remainspreserved;ordinaryscratchstaging isnotnewownerlogic.",
+    "Resource-once retainsref/require_absent/retain functions AST-identical. Itverifiesall5capturedsources plusactualstaticblob in publishedfiles,doesone exactfinitecapture,positivelyjoins/closesretainsbothstreams andimmediatelyinvokesdatabinder. Binderrequirescapturereturn0/hash/exactargv/emptyerrorstream,boundRoot32/currentfree/cutoffs andwritesexclusivependingpacket/template only. No grantorindependentreviewisfabricated.",
+    "Pendingpacket bindscapture5source tuple/actualmanifest/sourceauthority/casecapability/mapacceptance/currentresource/exactargv/nonce. Entrysource requiresRootoneinvocationgrant andindependentPASS_EXECUTION with exactpendingpacketpayload_sha256. Existingaf2b/5298owner-runner-backend-QMP custody/cleanup remainsunchanged;reviewedhelpersintroducenocompetingcontroller orcleanupblock."
+  ],
+  "schema_checks": {
+    "template_refs": {
+      "STATIC-NATIVE-BINDINGS.TEMPLATE.NOT-RELEASED.json": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/native-entry-context-preparation-1/STATIC-NATIVE-BINDINGS.TEMPLATE.NOT-RELEASED.json",
+        "bytes": 6516,
+        "sha256": "9823f5b463248f06bb66b81e2e62b81814beb1a038c6b3637493501314c7ed6b"
+      },
+      "ROOT-SOURCE-AUTHORITY.TEMPLATE.NOT-ATTESTED.json": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/native-entry-context-preparation-1/ROOT-SOURCE-AUTHORITY.TEMPLATE.NOT-ATTESTED.json",
+        "bytes": 6728,
+        "sha256": "35a1b5559c30fa6466bfb23444f4f493174193d5466b96e59154d96d38ed5f8b"
+      },
+      "CASE-CAPABILITY.TEMPLATE.NOT-GRANTED.json": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/native-entry-context-preparation-1/CASE-CAPABILITY.TEMPLATE.NOT-GRANTED.json",
+        "bytes": 3227,
+        "sha256": "525470532b57c387622f1e3231381d3e75edb171208db9f7d10d4ed1d3a72b50"
+      },
+      "ROOT-EXECUTION-REQUEST.TEMPLATE.NOT-ISSUED.json": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/native-entry-context-preparation-1/ROOT-EXECUTION-REQUEST.TEMPLATE.NOT-ISSUED.json",
+        "bytes": 6813,
+        "sha256": "a00a351183c6e8a3b005c99ad9242f7d2985d2eacc87dcc09531bbdecb6c7f83"
+      },
+      "ROOT-GRANT.SCHEMA.NOT-RELEASED.json": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/native-entry-context-preparation-1/ROOT-GRANT.SCHEMA.NOT-RELEASED.json",
+        "bytes": 997,
+        "sha256": "8299118c5e6e90c2bf1805094ff20bb1c0b7e90cb7b8d996124343be35205da9"
+      },
+      "ROOT-FRESH-RESOURCE.SCHEMA.NOT-OBSERVED.json": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/native-entry-context-preparation-1/ROOT-FRESH-RESOURCE.SCHEMA.NOT-OBSERVED.json",
+        "bytes": 1338,
+        "sha256": "c0a1f02c02a068e4fc554905111464eccf136de822eb22343c699ba71495d1fc"
+      },
+      "GENUINE-ACTOR-SCHEMA.NOT-OBSERVED.json": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/native-entry-context-preparation-1/GENUINE-ACTOR-SCHEMA.NOT-OBSERVED.json",
+        "bytes": 1881,
+        "sha256": "fa910da69339e155c5292e2526b8639fca4765e0f3e04c6774a56b1310451dc2"
+      }
+    },
+    "unknown_final_manifest_map_cap_authority_nonce_resource_release": "NULL_NO_ACTUAL_AUTHORITY",
+    "grant_schema_distinct_from_generated_grant_template": true,
+    "execution_review_required_field": "payload_sha256 ofexactpendingpacketrawbytes"
+  },
+  "actual_review_actions": {
+    "AST_parse_scripts": 5,
+    "declared_reference_checks": 20,
+    "capture_tail_AST_equal": true,
+    "resource_retention_helpers_AST_equal": true,
+    "current32_retained_data_schema_checked": true,
+    "helper_imports": 0,
+    "guard_account_resource_queries": 0,
+    "owner_factory_calls": 0,
+    "compiler_reference_Docker_guest_stage_native_cleanup_calls": 0
+  },
+  "blocking_source_findings": [],
+  "approved_static_next_steps": [
+    "Rootmayadopt exact5source helpers andfillactualsourceauthority/map/v2capability/stageacceptance references withoutchangingthissource tuple.",
+    "Rootnormalapproved scratchmanifestcopy/identity andemptyplannedattemptparent binding;literalcomplete API checks andfreshnonce/staticpublication beforeanyresourceclock.",
+    "Finishallstatic/sourcebinding reviews beforeRootonecaptureplusimmediatebinder;thenindependentexactPASS_EXECUTION/Rootoneusegrant underactualfreshresource."
+  ],
+  "execution_predicates_open": [
+    "Actualmanifest/finalmap/sourceauthority/v2casecapability/staticbindings/scratchstage/nonce/sourcepublication.",
+    "Actualcurrentaccount/guardian/Root32+nativeownership/resources andfresh120s pendingpacket.",
+    "Exactindependentone-useexecutionreview andRootgrant;actualnativeF05trace/output/ACK/wait/teardown/retirementacceptance."
+  ],
+  "runtime_authority": null,
+  "execution_release": false,
+  "native_acceptance": false,
+  "F05_protocol_acceptance": false,
+  "original_v1_HOLD_preserved": true
+}

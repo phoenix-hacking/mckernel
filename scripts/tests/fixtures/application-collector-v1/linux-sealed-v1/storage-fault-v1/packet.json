@@ -1,0 +1,59 @@
+{
+  "schema_version": 2,
+  "kind": "linux-sealed-collector-storage-fault-v2",
+  "status": "SOURCE_PACKET_ONLY",
+  "backend_enabled": false,
+  "application_acceptance": false,
+  "supervisor": {
+    "path": "supervise.py",
+    "owner_path": "witness_owner.py",
+    "oracle_path": "oracle.py",
+    "schema_version": 1,
+    "preflight_seconds": 5,
+    "owner_wait_seconds": 220,
+    "cleanup_seconds": 22,
+    "publication_seconds": 6,
+    "total_seconds": 248,
+    "preflight_total_seconds": 33,
+    "stream_limit_bytes": 1048576
+  },
+  "collector": {
+    "path": "../collector.c",
+    "sha256": "09a63a343fa8cc9f511a26693371f5ba4f55ac5ca56fcb47abdc44759830cf1f",
+    "guard": "M02_STORAGE_FAULT_TEST_ONLY",
+    "guard_value": 1,
+    "selector_macro": "M02_STORAGE_FAULT_CASE"
+  },
+  "retained_input": {
+    "request_bytes": 406,
+    "request_sha256": "e81b38bbe6116bf1df2807fa968e12dccfd28fe8c3ad225c45f282b36cab6716",
+    "selected_inputs_bytes": 76,
+    "selected_inputs_sha256": "6b8761a9d2094147f02b9fe2a4c709246905a04c5122d68f6b9951162e01317d",
+    "fixture_bytes": 27448,
+    "fixture_sha256": "9ad70dd23d699e72ad805f59446aec371c4e80b955056b845af921b4ce51f725",
+    "prefix_hex": "41435251303030",
+    "prefix_sha256": "793665677edfa8c879c38d37c8c5300c54ff78e980eae26a96913d7aab9d8d91"
+  },
+  "witness": {
+    "schema_version": 2,
+    "fd": 198,
+    "socket_type": "AF_UNIX/SOCK_SEQPACKET",
+    "nonce_hex_chars": 32,
+    "packet_bytes_max": 4096,
+    "packet_count_max": 32,
+    "ack_timeout_seconds": 2,
+    "pre_release_timeout_seconds": 10,
+    "outer_cleanup_seconds": 22,
+    "release": "RELEASE <nonce>\\n",
+    "ack": "ACK <nonce> <sequence>\\n"
+  },
+  "cases": [
+    {"id":"control","selector":0,"phase":"post-fork","raw_wait":0,"report":"complete","status":"COMPLETED","first_failure":"none","errno":0,"witness_packets":22},
+    {"id":"events-create-enospc","selector":1,"phase":"pre-fork","raw_wait":256,"report":"complete","status":"PREPARATION_ERROR","first_failure":"artifact-create","errno":28,"witness_packets":10},
+    {"id":"request-write-seven-enospc","selector":2,"phase":"pre-fork","raw_wait":256,"report":"complete","status":"COLLECTOR_ERROR","first_failure":"artifact-write","errno":28,"witness_packets":17},
+    {"id":"request-artifact-fsync-eio","selector":3,"phase":"post-fork","raw_wait":256,"report":"complete","status":"COLLECTOR_ERROR","first_failure":"artifact-fsync","errno":5,"witness_packets":22},
+    {"id":"report-open-enospc","selector":4,"phase":"post-fork","raw_wait":32000,"report":"absent","status":null,"first_failure":null,"errno":28,"witness_packets":17},
+    {"id":"report-fsync-eio","selector":5,"phase":"post-fork","raw_wait":32000,"report":"complete-undurable","status":"COMPLETED","first_failure":"none","errno":0,"witness_packets":22},
+    {"id":"combined-write-artifact-report-fsync","selector":6,"phase":"pre-fork","raw_wait":32000,"report":"complete-undurable","status":"COLLECTOR_ERROR","first_failure":"artifact-write","errno":28,"witness_packets":17}
+  ]
+}

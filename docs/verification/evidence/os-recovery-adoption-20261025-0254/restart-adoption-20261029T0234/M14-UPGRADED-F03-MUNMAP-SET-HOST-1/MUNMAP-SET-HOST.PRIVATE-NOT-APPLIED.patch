@@ -1,0 +1,21 @@
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -5894,12 +5894,12 @@
+ 	return clear_host_pte(addr, len, holding_lock);
+ }
+ 
+-static int
+-do_munmap_set_host_bridge(unsigned long addr, size_t len, int prot,
+-		int holding_lock)
+-{
+-	return set_host_vma(addr, len, prot, holding_lock);
+-}
++#if defined(MCKERNEL_RUST_F03_LEAF_CALLBACKS) && defined(__x86_64__)
++extern int mprotect_set_host_vma_bridge(unsigned long start, size_t len, int prot, int holding_lock);
++#define do_munmap_set_host_bridge mprotect_set_host_vma_bridge
++#else
++static int do_munmap_set_host_bridge(unsigned long addr, size_t len, int prot, int holding_lock) { return set_host_vma(addr, len, prot, holding_lock); }
++#endif
+ 
+ #if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_UNMAP_FINISH)
+ extern void f03_unmap_finish(void);

@@ -1,0 +1,451 @@
+{
+  "schema": "mckernel.publisher.actual-emission-six-store-source-contract.v1",
+  "actual_capture": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-metadata-1/ACTUAL-CAPTURE-BEFORE-GATE.json",
+    "sha256": "fa11792824361129f2a7565e5d66aa0a19cab5b115c49a905bdd65248ea7f908",
+    "not_prior_gate_PASS": true
+  },
+  "unit_source_request": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-unit-1/REQUEST.json",
+    "sha256": "bf78914c60b7ce9d3471c6014231259d05043636086e1c0eb7e6a6b73dbaca82"
+  },
+  "actual_function_bytes": {
+    "x2apic_wait_icr_idle": {
+      "section": 3,
+      "size": 1,
+      "code_hex": "c3",
+      "source": "Original intentionallyempty function at5311-5317, not fabricatednop/stub"
+    },
+    "x86_lapic_bsp_select_bridge": {
+      "section": 4,
+      "size": 205,
+      "code_hex": "31c085ff0f95c048b9000000000000000048ba0000000000000000480f45d148b9000000000000000048be0000000000000000480f45f148b9000000000000000048bf0000000000000000480f45f948b9000000000000000049b800000000000000004c0f45c148b9000000000000000049b900000000000000004c0f45c948b90000000000000000890148b8000000000000000048891048b8000000000000000048893048b8000000000000000048893848b800000000000000004c890048b800000000000000004c8908c3",
+      "source": "Original whole5326-5348 two branches/coupled mode+five slots, optimized genuinecmovne selection then six ordered stores; no targetinvocation"
+    }
+  },
+  "zero_nonzero_mode": {
+    "offset": 0,
+    "hex": "31c085ff0f95c0",
+    "meaning": "xor eax,eax;test edi,edi;setne al preservesoriginalCInt zero/nonzero\u21920/1 branch"
+  },
+  "target_selections": [
+    {
+      "slot": "lapic_write",
+      "x2_target": "x2apic_write",
+      "apic_target": "apic_write",
+      "x2_reloc_offset": 9,
+      "apic_reloc_offset": 19,
+      "select_offset": 27,
+      "select_hex": "480f45d1",
+      "selected_register": "rdx"
+    },
+    {
+      "slot": "lapic_read",
+      "x2_target": "x2apic_read",
+      "apic_target": "apic_read",
+      "x2_reloc_offset": 33,
+      "apic_reloc_offset": 43,
+      "select_offset": 51,
+      "select_hex": "480f45f1",
+      "selected_register": "rsi"
+    },
+    {
+      "slot": "lapic_icr_write",
+      "x2_target": "x2apic_icr_write",
+      "apic_target": "apic_icr_write",
+      "x2_reloc_offset": 57,
+      "apic_reloc_offset": 67,
+      "select_offset": 75,
+      "select_hex": "480f45f9",
+      "selected_register": "rdi"
+    },
+    {
+      "slot": "lapic_wait_icr_idle",
+      "x2_target": "x2apic_wait_icr_idle",
+      "apic_target": "apic_wait_icr_idle",
+      "x2_reloc_offset": 81,
+      "apic_reloc_offset": 91,
+      "select_offset": 99,
+      "select_hex": "4c0f45c1",
+      "selected_register": "r8"
+    },
+    {
+      "slot": "x86_issue_ipi",
+      "x2_target": "x2apic_x86_issue_ipi",
+      "apic_target": "apic_x86_issue_ipi",
+      "x2_reloc_offset": 105,
+      "apic_reloc_offset": 115,
+      "select_offset": 123,
+      "select_hex": "4c0f45c9",
+      "selected_register": "r9"
+    }
+  ],
+  "ordered_six_stores": [
+    {
+      "slot": "x86_cpu_x2apic_mode",
+      "address_reloc_offset": 129,
+      "store_offset": 137,
+      "store_hex": "8901",
+      "bytes": 4,
+      "value": "eax zero/nonzero\u21920/1"
+    },
+    {
+      "slot": "lapic_write",
+      "address_reloc_offset": 141,
+      "store_offset": 149,
+      "store_hex": "488910",
+      "bytes": 8,
+      "value": "selected rdx"
+    },
+    {
+      "slot": "lapic_read",
+      "address_reloc_offset": 154,
+      "store_offset": 162,
+      "store_hex": "488930",
+      "bytes": 8,
+      "value": "selected rsi"
+    },
+    {
+      "slot": "lapic_icr_write",
+      "address_reloc_offset": 167,
+      "store_offset": 175,
+      "store_hex": "488938",
+      "bytes": 8,
+      "value": "selected rdi"
+    },
+    {
+      "slot": "lapic_wait_icr_idle",
+      "address_reloc_offset": 180,
+      "store_offset": 188,
+      "store_hex": "4c8900",
+      "bytes": 8,
+      "value": "selected r8"
+    },
+    {
+      "slot": "x86_issue_ipi",
+      "address_reloc_offset": 193,
+      "store_offset": 201,
+      "store_hex": "4c8908",
+      "bytes": 8,
+      "value": "selected r9"
+    }
+  ],
+  "all_actual_relocations": [
+    {
+      "section": 4,
+      "offset": 9,
+      "type": 1,
+      "symbol": {
+        "name": "x2apic_write",
+        "bind": 1,
+        "type": 0,
+        "other": 0,
+        "section": 0,
+        "value": 0,
+        "size": 0
+      },
+      "addend": 0
+    },
+    {
+      "section": 4,
+      "offset": 19,
+      "type": 1,
+      "symbol": {
+        "name": "apic_write",
+        "bind": 1,
+        "type": 0,
+        "other": 0,
+        "section": 0,
+        "value": 0,
+        "size": 0
+      },
+      "addend": 0
+    },
+    {
+      "section": 4,
+      "offset": 33,
+      "type": 1,
+      "symbol": {
+        "name": "x2apic_read",
+        "bind": 1,
+        "type": 0,
+        "other": 0,
+        "section": 0,
+        "value": 0,
+        "size": 0
+      },
+      "addend": 0
+    },
+    {
+      "section": 4,
+      "offset": 43,
+      "type": 1,
+      "symbol": {
+        "name": "apic_read",
+        "bind": 1,
+        "type": 0,
+        "other": 0,
+        "section": 0,
+        "value": 0,
+        "size": 0
+      },
+      "addend": 0
+    },
+    {
+      "section": 4,
+      "offset": 57,
+      "type": 1,
+      "symbol": {
+        "name": "x2apic_icr_write",
+        "bind": 1,
+        "type": 0,
+        "other": 0,
+        "section": 0,
+        "value": 0,
+        "size": 0
+      },
+      "addend": 0
+    },
+    {
+      "section": 4,
+      "offset": 67,
+      "type": 1,
+      "symbol": {
+        "name": "apic_icr_write",
+        "bind": 1,
+        "type": 0,
+        "other": 0,
+        "section": 0,
+        "value": 0,
+        "size": 0
+      },
+      "addend": 0
+    },
+    {
+      "section": 4,
+      "offset": 81,
+      "type": 1,
+      "symbol": {
+        "name": "x2apic_wait_icr_idle",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "section": 3,
+        "value": 0,
+        "size": 1
+      },
+      "addend": 0
+    },
+    {
+      "section": 4,
+      "offset": 91,
+      "type": 1,
+      "symbol": {
+        "name": "apic_wait_icr_idle",
+        "bind": 1,
+        "type": 0,
+        "other": 0,
+        "section": 0,
+        "value": 0,
+        "size": 0
+      },
+      "addend": 0
+    },
+    {
+      "section": 4,
+      "offset": 105,
+      "type": 1,
+      "symbol": {
+        "name": "x2apic_x86_issue_ipi",
+        "bind": 1,
+        "type": 0,
+        "other": 0,
+        "section": 0,
+        "value": 0,
+        "size": 0
+      },
+      "addend": 0
+    },
+    {
+      "section": 4,
+      "offset": 115,
+      "type": 1,
+      "symbol": {
+        "name": "apic_x86_issue_ipi",
+        "bind": 1,
+        "type": 0,
+        "other": 0,
+        "section": 0,
+        "value": 0,
+        "size": 0
+      },
+      "addend": 0
+    },
+    {
+      "section": 4,
+      "offset": 129,
+      "type": 1,
+      "symbol": {
+        "name": "x86_cpu_x2apic_mode",
+        "bind": 1,
+        "type": 1,
+        "other": 0,
+        "section": 8,
+        "value": 0,
+        "size": 4
+      },
+      "addend": 0
+    },
+    {
+      "section": 4,
+      "offset": 141,
+      "type": 1,
+      "symbol": {
+        "name": "lapic_write",
+        "bind": 1,
+        "type": 0,
+        "other": 0,
+        "section": 0,
+        "value": 0,
+        "size": 0
+      },
+      "addend": 0
+    },
+    {
+      "section": 4,
+      "offset": 154,
+      "type": 1,
+      "symbol": {
+        "name": "lapic_read",
+        "bind": 1,
+        "type": 0,
+        "other": 0,
+        "section": 0,
+        "value": 0,
+        "size": 0
+      },
+      "addend": 0
+    },
+    {
+      "section": 4,
+      "offset": 167,
+      "type": 1,
+      "symbol": {
+        "name": "lapic_icr_write",
+        "bind": 1,
+        "type": 1,
+        "other": 0,
+        "section": 6,
+        "value": 0,
+        "size": 8
+      },
+      "addend": 0
+    },
+    {
+      "section": 4,
+      "offset": 180,
+      "type": 1,
+      "symbol": {
+        "name": "lapic_wait_icr_idle",
+        "bind": 1,
+        "type": 1,
+        "other": 0,
+        "section": 7,
+        "value": 0,
+        "size": 8
+      },
+      "addend": 0
+    },
+    {
+      "section": 4,
+      "offset": 193,
+      "type": 1,
+      "symbol": {
+        "name": "x86_issue_ipi",
+        "bind": 1,
+        "type": 0,
+        "other": 0,
+        "section": 0,
+        "value": 0,
+        "size": 0
+      },
+      "addend": 0
+    },
+    {
+      "section": 11,
+      "offset": 32,
+      "type": 24,
+      "symbol": {
+        "name": "",
+        "bind": 0,
+        "type": 3,
+        "other": 0,
+        "section": 3,
+        "value": 0,
+        "size": 0
+      },
+      "addend": 0
+    },
+    {
+      "section": 11,
+      "offset": 64,
+      "type": 24,
+      "symbol": {
+        "name": "",
+        "bind": 0,
+        "type": 3,
+        "other": 0,
+        "section": 4,
+        "value": 0,
+        "size": 0
+      },
+      "addend": 0
+    }
+  ],
+  "relocation_binding": "Exactly16R_X86_64_64 originaltarget/storage addresses observed+0:10target choices+6slotaddresses. Two physical PC64unwindrefs observed+0. Everytargetchoice/slot named explicitly; no arbitraryaddend or fakecallbacks.",
+  "original_new_NOBITS_owners": {
+    "x86_cpu_x2apic_mode": {
+      "type": 1,
+      "size": 4,
+      "align": 4,
+      "source": "Original selected_mode:CInt=0, export_name mapping unchanged"
+    },
+    "lapic_icr_write": {
+      "type": 1,
+      "size": 8,
+      "align": 8,
+      "source": "OriginalOption<WriteIcr>=None"
+    },
+    "lapic_wait_icr_idle": {
+      "type": 1,
+      "size": 8,
+      "align": 8,
+      "source": "OriginalOption<WaitIcr>=None"
+    }
+  },
+  "actual_genuine_U": [
+    "apic_icr_write",
+    "apic_read",
+    "apic_wait_icr_idle",
+    "apic_write",
+    "apic_x86_issue_ipi",
+    "lapic_read",
+    "lapic_write",
+    "x2apic_icr_write",
+    "x2apic_read",
+    "x2apic_write",
+    "x2apic_x86_issue_ipi",
+    "x86_issue_ipi"
+  ],
+  "allocated_unwind": {
+    "section": 11,
+    "type": 1879048193,
+    "flags": 2,
+    "align": 8,
+    "size": 88,
+    "bytes": "1400000000000000017a5200017810011c0c0708900100001c0000001c0000000000000000000000010000000000000000000000000000001c0000003c0000000000000000000000cd000000000000000000000000000000"
+  },
+  "aliases": [],
+  "private_runtime_owners_or_extra_readonly": [],
+  "limits": "Preboot0/None declaration only; store scenarioclosedNO_GO and notexecuted; realtargets/controller/bootcaller/IRQ/nativepublication/lifetimes not qualified. Future actualcurrentuniqueownerpartialjoin separate."
+}

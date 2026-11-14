@@ -1,0 +1,52 @@
+{
+  "command": [
+    "taskset",
+    "-c",
+    "0",
+    "prlimit",
+    "--as=2147483648:2147483648",
+    "--core=0:0",
+    "--",
+    "python3",
+    "-B",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-late-retirement-publication-source-1",
+    "-p",
+    "test_publication.py",
+    "-v"
+  ],
+  "exit_code": 0,
+  "files": {
+    "FIXTURES.stderr": {
+      "bytes": 1004,
+      "sha256": "62dcabc8f1cbab4e6ae7c8b0f99fe35fb35b7663da281491e07c9024eb028710"
+    },
+    "FIXTURES.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "prepare_retirement_grant.py": {
+      "bytes": 9259,
+      "sha256": "06ab808e7331d64d6e30afb63ebed10b8bcd32475628b8c023f186b443a19425"
+    },
+    "publish_reviewed_retirement.py": {
+      "bytes": 2925,
+      "sha256": "49907404723b7ba7c2756d80db5a71799b35cdce0a3f8b03150c099bb57f26cc"
+    },
+    "test_publication.py": {
+      "bytes": 8186,
+      "sha256": "7d994da9a5027084c4de0f321c31428ebc813efe84dc6e57012a7b67422ef009"
+    }
+  },
+  "native_workload_launches": false,
+  "private_root_inbox_ownership_simulated": true,
+  "privileged_operations": false,
+  "production_inputs_read": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "signals": false,
+  "status": "PASS_PRIVATE_METADATA_ONLY",
+  "tests_run": 10
+}

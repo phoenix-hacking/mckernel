@@ -1,0 +1,110 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\nFinite four selected existing-port bridge compositions; no compiler or canonical writes.\n",
+  "spec": {
+    "name": "ptrace-alloc",
+    "symbol": "arch_ptrace_alloc_bridge",
+    "begin": "\nvoid *\narch_ptrace_alloc_bridge(",
+    "end": "\nunsigned long\narch_ptrace_find_thread_bridge(",
+    "C": "MCKERNEL_RUST_F06_PTRACE_ALLOC",
+    "Rust": "f06_ptrace_alloc_candidate",
+    "leaf": "f06_ptrace_alloc.rs",
+    "old": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-ptrace-runtime-callbacks-source-1/candidate/syscall_policy.ptrace_runtime_callbacks.FRAGMENT.rs",
+    "provider": "kernel/rust/mem_helpers.rs"
+  },
+  "before": [
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+      "bytes": 114150,
+      "sha256": "affa9b6d2fdc2514c6d7414f4f7854410ae18ebea02db738665065a5179db893"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "bytes": 1249379,
+      "sha256": "f4ed7080659863662e1de75c432b89fd94aadf312efb5e924b1d0e60ef93dbd6"
+    }
+  ],
+  "old_fragment": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-ptrace-runtime-callbacks-source-1/candidate/syscall_policy.ptrace_runtime_callbacks.FRAGMENT.rs",
+    "bytes": 8014,
+    "sha256": "c9507ff922e022698553a3daa92c6722b13f6ff76bd3a0f04b25cd40f41551e4"
+  },
+  "existing_provider": {
+    "path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+    "bytes": 444772,
+    "sha256": "f544c5177156ad5de8544bb95c46bbc8e2ac870a25c4895ca4cefb7c8cc79680"
+  },
+  "selected_proof": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-alloc/SELECTED-SYMBOL.json",
+    "bytes": 1152,
+    "sha256": "d008870b38f9dc24646d9004ff262ea5b68649945b6ce58123801ea3967e03e3"
+  },
+  "genuine_headers": [
+    {
+      "path": "/home/holden/mckernel/kernel/include/process.h",
+      "bytes": 26602,
+      "sha256": "8848d536f2fa847a59af72d573ec9c55838c27cea664d46438ab4e038bf83649"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/kmalloc.h",
+      "bytes": 1171,
+      "sha256": "fff00b6875c3f87a0d9c4bdfeadf3c3d3eb731d843dc0650f6364352ac2b1144"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/ihk/mm.h",
+      "bytes": 9548,
+      "sha256": "a1b412608df7512a1b7295c6f19b3ec5a77e6364e8f24b208ab1a29e7556e5b1"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/ihk/types.h",
+      "bytes": 1074,
+      "sha256": "c37a7c748f2439ddfd847725a4d559c008f2aca09c45114fb07e73337013f449"
+    }
+  ],
+  "after": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-alloc/syscall.c",
+      "bytes": 114197,
+      "sha256": "97abbfd0a33b1c9e5a5d7705e4f4ddee6ee04956f01136a5970c51da09dd4bf2"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-alloc/syscall_policy.rs",
+      "bytes": 1249555,
+      "sha256": "f156ce837f2907777e24d8e5468613ac43f715d6da3ff3199acf8e2dac6f93dd"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-alloc/f06_ptrace_alloc.rs",
+      "bytes": 773,
+      "sha256": "bcb605d9ae7d117b7ce87b51d1bb3468e4dd62a46606cc9d0bde6972ca57b9b0"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-alloc/original_bridge.inc",
+      "bytes": 130,
+      "sha256": "c68fd3c30026c80e10fc0927fcefd02961a3008bfa516a3832de81abf593b05d"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-alloc/genuine_prologue.inc",
+      "bytes": 982,
+      "sha256": "e69cb389f69cf92a6e81e114a0bb03391a137fa3ba0c7b15d49a51606c1359de"
+    }
+  ],
+  "compiler": null,
+  "native": null,
+  "private_rebase": {
+    "reason": "Root central promotion changed only common canonical C/policy base during source turn",
+    "previous_before": [
+      {
+        "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+        "bytes": 113935,
+        "sha256": "d6bf00d0a46755f37f511bff0c098487f04a155842f11a4ac64f2a1795faa8c1"
+      },
+      {
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "bytes": 1228858,
+        "sha256": "fefec3eb05be2f714dfeca34310901a566557f82ee08de9b9ad0ef0344f74d62"
+      }
+    ],
+    "retained_preimage": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-alloc/PRE-CENTRAL-PROMOTION-1",
+    "all_existing_Root_changes_preserved": true,
+    "adapter_Rust_ABI_fixture_prologue_unchanged": true
+  }
+}

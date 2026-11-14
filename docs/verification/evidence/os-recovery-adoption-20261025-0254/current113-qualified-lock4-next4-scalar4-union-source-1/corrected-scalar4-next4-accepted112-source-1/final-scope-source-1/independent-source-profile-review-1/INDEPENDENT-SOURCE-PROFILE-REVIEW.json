@@ -1,0 +1,362 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/current110_execution_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "recorded_at": "2026-10-27T22:39:15.279425+00:00",
+  "decision": "PASS_SOURCE_PROFILE_CORRECTED_SCALAR4_NEXT4_UNION_ON_ACCEPTED112",
+  "blocking_findings": [],
+  "execution_release": false,
+  "runtime_authority": null,
+  "native_acceptance": false,
+  "inputs": {
+    "profile": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/final-scope-source-1/PROFILE.SOURCE-ONLY.json",
+      "bytes": 108637,
+      "sha256": "b027f2a5d1f2ef909638056815f6a066561df2dcd7a9a9532e9d0304a583bfe1"
+    },
+    "commands": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/final-scope-source-1/EXACT-FOUR-COMMAND-PROPOSAL.NOT-GRANTED.json",
+      "bytes": 17225,
+      "sha256": "a3661857bd5a2e036ba61e01aa4a16445f9b9bb32474aa4cf4149621c95c2630"
+    },
+    "export": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/final-scope-source-1/INPUT-EXPORT.TEMPLATE.NOT-AUTHORITY.json",
+      "bytes": 65519,
+      "sha256": "cc10b1b41bccb7c81630efef42cde3fef5551c80fbbc6daec1a59c5741371a72"
+    },
+    "source_map": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/RUST-SUBTREE-CLOSED-SOURCE-MAP.json",
+      "bytes": 133125,
+      "sha256": "2f63074afd989bc655f820c09776299899bb965ba31171d2b1076a0b6d6c31f1"
+    },
+    "composition": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/COMPOSITION-DERIVATION.json",
+      "bytes": 6681,
+      "sha256": "f97d2c90bb9fb2e2eff77dae1886680af29adb4742426e3ada6a435c017f09c7"
+    },
+    "root_context": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/final-scope-source-1/ROOT35-CLOSED-SOURCE-CONTEXT.NOT-AUTHORITY.json",
+      "bytes": 4448,
+      "sha256": "4bce665197662afc86a6039ab32f63bd68d4b1dda0db7fa61a7c6d6d72b45a5b"
+    },
+    "new_origin_obligation": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/NEW-ORIGIN-PRODUCER.NOT-GRANTED.json",
+      "bytes": 6699,
+      "sha256": "18b8f99440d97596bab948989ea864f91619830ddc810995b41c2a16073359ba"
+    }
+  },
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/final-scope-source-1/SOURCE-READY.json",
+    "bytes": 6516,
+    "sha256": "7340d457ebb4735240452c6c009fd9b0a0da98539f69b30629437430fca2526b"
+  },
+  "accepted_base": {
+    "acceptance": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT112-EVENT2-ALLOC2-BUILD-ADMISSION-1/independent-postbuild-review-1/INDEPENDENT-ACCEPTANCE.json",
+      "bytes": 13924,
+      "sha256": "c2e8bba1120d2e289819c1991b2e5d18321741074b3ec1bbc16dee3f628ec323"
+    },
+    "actual_source_profile": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT112-EVENT2-ALLOC2-BUILD-ADMISSION-1/PROFILE.SOURCE-ONLY.json",
+      "bytes": 100127,
+      "sha256": "a95aa8ee04f2f26b3f1275dfe5e5c471dbb793ee5d15c15533949f976dfcc3fe"
+    },
+    "source_adoption": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/root-source-adoption-1/ROOT-SOURCE-ADOPTION.json",
+      "bytes": 6510,
+      "sha256": "497e0cd8e354973a63437bc5db0f0f893e035a84dbf5a34a96cf6e88f10f095a"
+    },
+    "actual_acceptance_names_same_profile": true,
+    "accepted_Rust_sha256": "658374d540367a667ffaf97f709bed14205040dc54ff07b2497e906755d5e323",
+    "retained_kernel_C": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT112-EVENT2-ALLOC2-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+      "bytes": 361168,
+      "sha256": "43a65c9e6f540fd511c36a4c908e17c83ad52e00c111d9ba04b1684c5eac3b55"
+    },
+    "canonical_112_sources_not_overwritten": true
+  },
+  "source_composition": {
+    "corrected_scalar_C_sha256": "dd7fd305dd648a8f9d81e3503dab133ab3083fc8b50597ebc0e1577504c14457",
+    "corrected_scalar_source": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/conditional-line-correction-source-1/SOURCE-READY.json",
+      "bytes": 14316,
+      "sha256": "551586efa51f717be3982d9251abf905cdeeceb67fa8be91fb98ee27dc717a18"
+    },
+    "corrected_scalar_independent_review": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/conditional-line-correction-source-1/independent-source-review-1/INDEPENDENT-SOURCE-REVIEW.json",
+      "bytes": 12624,
+      "sha256": "d9a1ce2d77322d669b3e0f6bceb5ce9d5b77bfe8615ab6481325f2b6db495b29"
+    },
+    "scalar_HOST": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/independent-source-profile-review-1/INDEPENDENT-ACTUAL-HOST-ACCEPTANCE.json",
+      "bytes": 30544,
+      "sha256": "735c748a9894056a71231128677cab10990edbc0fbeb13f9ce5c62c70372bcf2"
+    },
+    "F06_next4_HOST": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-clone-ptrace-provider-next4-source-1/ordinary-host-composition-profile-1/independent-review-1/INDEPENDENT-ACTUAL-HOST-COMPOSITION-ACCEPTANCE.json",
+      "bytes": 30647,
+      "sha256": "a8a98914228d43438d2bf52efb602a35391aaf10a94346cb986052aff314b6e3"
+    },
+    "process_C_matches_reviewed_corrected_bytes_exactly": true,
+    "process_Rust_matches_actual_HOST_candidate_exactly": true,
+    "scalar_LOCATION_scope": "Reuses independent d9a1 acceptance of 7 bounded restores/32 known controls, selected init3430/3435 and all original7045lines. No second source-line pipeline or HOST replay. Original bce300 old113 source blocker remains preserved for its old source/profile.",
+    "F06": "Five exact qualified leaf/provider files and appended policy fragment match retained actualHOST sources. Actualreader lock/unlock typedIRQsave node, signedCInt find_thread and thread pointer conversion retained. Their unchanged backend proof scope is reused; actual newproduction/native MCS/IRQ semantics remain OPEN.",
+    "kernel_syscall_C_byte_identical_accepted112": true,
+    "CMake": "Only four F06cfgs/four archCdefines/five source dependencies inserted beside existing selected F06 providers in linux6.12/x86/NOTUBSAN branch; existing paired GLOBAL_STORAGE selects scalar4. No LOCK4/WAKE3/debug32 selection.",
+    "architecture_FILE_LINE": "Four F06 fallback bodies preserved verbatim with numeric restore anchors635/641/673/680 and joins640/646/679/686. Original112 active #line615 before this scope makes physical711=>635 and749=>673, with no intermediate #line; restores are outside inserted four local selector blocks. All26 tracked call expressions unchanged. No filename #line token introduced.",
+    "LOCK4_excluded": true,
+    "WAKE3_excluded": true,
+    "debug32_excluded": true,
+    "new_C_runtime_objects": 0
+  },
+  "closure_and_commands": {
+    "closed_Rust_files": 118,
+    "cohort_bindings": 123,
+    "all_snapshot_original_refs_match": true,
+    "Rust_tree_exact_inventory_and_regular_nosymlink_singlelink_files": true,
+    "all_cohort_postimages_and_141_export_refs_match": true,
+    "exact_commands": [
+      "full current default Rust object",
+      "selected process object",
+      "selected x86 syscall object",
+      "exact eleven-input raw link"
+    ],
+    "command_count": 4,
+    "new_objects": 3,
+    "retained_objects": 8,
+    "objects": [
+      {
+        "action": "Retain exact accepted CURRENT111 input; do not recompile",
+        "build_relative": "kernel/CMakeFiles/mckernel.img.dir/mem.c.o",
+        "link_token": "CMakeFiles/mckernel.img.dir/mem.c.o",
+        "replace": false,
+        "retained_archive_member": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/mem.c.o",
+        "source": {
+          "bytes": 2848,
+          "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/mem.c.o",
+          "sha256": "4b595744494abba0493d75a1475e48b3745e1a668f5575543e81797b994e4f7c"
+        }
+      },
+      {
+        "action": "Retain unchanged actual accepted112 kernelC43a65c9e; no replay",
+        "build_relative": "kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "link_token": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "replace": false,
+        "retained_archive_member": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT112-EVENT2-ALLOC2-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "source": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT112-EVENT2-ALLOC2-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+          "bytes": 361168,
+          "sha256": "43a65c9e6f540fd511c36a4c908e17c83ad52e00c111d9ba04b1684c5eac3b55"
+        }
+      },
+      {
+        "action": "Rebuild corrected CURRENT113 scalar4 processC; prior actual process object provenance only",
+        "build_relative": "kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+        "link_token": "CMakeFiles/mckernel.img.dir/process.c.o",
+        "replace": true,
+        "retained_archive_member": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT111-COUNTER3-RUNQUEUE208-BUILD-ADMISSION-2/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+        "source": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT111-COUNTER3-RUNQUEUE208-BUILD-ADMISSION-2/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+          "bytes": 66600,
+          "sha256": "a4309e34ffe1a1c7c99eee1a2f2fb665cab907a33341956a96078b095edb63bf"
+        }
+      },
+      {
+        "action": "Retain exact accepted CURRENT111 input; do not recompile",
+        "build_relative": "kernel/CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o",
+        "link_token": "CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o",
+        "replace": false,
+        "retained_archive_member": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o",
+        "source": {
+          "bytes": 2880,
+          "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o",
+          "sha256": "e139686acfa04f6d7576da5656693d13c4235e5beefb7f8ae3c9f7ccf03ea9b0"
+        }
+      },
+      {
+        "action": "Retain exact accepted CURRENT111 input; do not recompile",
+        "build_relative": "kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/context.S.o",
+        "link_token": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/context.S.o",
+        "replace": false,
+        "retained_archive_member": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/context.S.o",
+        "source": {
+          "bytes": 2344,
+          "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/context.S.o",
+          "sha256": "dce0972b3291f970d49a5fa6d64f25c587423aafa63efc8b47bcfdbdfb679c7a"
+        }
+      },
+      {
+        "action": "Retain exact accepted CURRENT111 input; do not recompile",
+        "build_relative": "kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+        "link_token": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+        "replace": false,
+        "retained_archive_member": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+        "source": {
+          "bytes": 2872,
+          "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+          "sha256": "3bed7de9807b6d8e70e87722a11b3d103119203822b9e022ebd0ecbc570bbce1"
+        }
+      },
+      {
+        "action": "Retain exact accepted CURRENT111 input; do not recompile",
+        "build_relative": "kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/interrupt.S.o",
+        "link_token": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/interrupt.S.o",
+        "replace": false,
+        "retained_archive_member": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/interrupt.S.o",
+        "source": {
+          "bytes": 16056,
+          "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/interrupt.S.o",
+          "sha256": "66bcbec1fc5086cac18a8009f0e1b36ecaba7bf11f38cadd5de9f03e3873ee44"
+        }
+      },
+      {
+        "action": "Retain exact accepted CURRENT111 input; do not recompile",
+        "build_relative": "kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o",
+        "link_token": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o",
+        "replace": false,
+        "retained_archive_member": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o",
+        "source": {
+          "bytes": 2888,
+          "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o",
+          "sha256": "d3207c7a7844086196676c82d66e6aa4f1233e37b167460e23ba089ec71aca85"
+        }
+      },
+      {
+        "action": "Rebuild changed CURRENT112 object; prior provenance only",
+        "build_relative": "kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "link_token": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "replace": true,
+        "retained_archive_member": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT112-EVENT2-ALLOC2-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "source": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT112-EVENT2-ALLOC2-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+          "bytes": 108624,
+          "sha256": "aceed087b23f07d55804d590e89cae93501827c57251bbda5872a6d85205a1ed"
+        }
+      },
+      {
+        "action": "Retain exact accepted CURRENT111 input; do not recompile",
+        "build_relative": "kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/trampoline.S.o",
+        "link_token": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/trampoline.S.o",
+        "replace": false,
+        "retained_archive_member": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/trampoline.S.o",
+        "source": {
+          "bytes": 5568,
+          "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/trampoline.S.o",
+          "sha256": "ebd728290101289164a887deb52dc7977d896e9627a2cb1323fd649db89055c5"
+        }
+      },
+      {
+        "action": "Rebuild changed CURRENT112 object; prior provenance only",
+        "build_relative": "kernel/rust/mckernel_rust.o",
+        "link_token": "rust/mckernel_rust.o",
+        "replace": true,
+        "retained_archive_member": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT112-EVENT2-ALLOC2-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o",
+        "source": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT112-EVENT2-ALLOC2-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o",
+          "bytes": 18280544,
+          "sha256": "658374d540367a667ffaf97f709bed14205040dc54ff07b2497e906755d5e323"
+        }
+      }
+    ],
+    "eleven_link_tokens_match_object_set": true,
+    "rawlink_argv_byteidentical_accepted112": true,
+    "only_added_Rust_cfgs": [
+      "f06_clone_reader_lock_candidate",
+      "f06_clone_reader_unlock_candidate",
+      "f06_ptrace_find_thread_candidate",
+      "f06_ptrace_thread_unlock_candidate"
+    ],
+    "kernel_C_source_and_object_retained_no_replay": true,
+    "configuration_records_verified": 10,
+    "SDK_or_configure_or_HOST_replay": false
+  },
+  "finite_source_reference_correction": {
+    "preserved_failures": [
+      {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/PREPARATION-FIRST-FAILURE.json",
+        "bytes": 614,
+        "sha256": "6aef48d823699a0642560ea1aec4b5cd11bb61d463ed20b6401619f44d8d05f8"
+      },
+      {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/PREPARATION-SECOND-FAILURE.json",
+        "bytes": 614,
+        "sha256": "370d483567d5a52eafa7cbce1c96178f5bb912f67d83213ec7335549be94c8b7"
+      }
+    ],
+    "actual_base": "Genuine accepted112 PROFILE.SOURCE-ONLY a95aa8, OUTPUT/work/evidence/producer-contract.json and actual OUTPUT objects provide source/flag/object provenance.",
+    "static_proposal_only": "Existing actual-origin-bound112 EXACT-FOUR-COMMAND-PROPOSAL contributes tool metadata only; new commands/profile/contract replaced explicitly. It is not pretended to exist at Root112admission path.",
+    "export_derivation": "Genuine ROOT-ACTUAL-READONLY-INPUT-EXPORT-AUTHORITY.json supplies existing export layout. New source template clears author/decision/request/runtime authority and removes prior actualorigin context/receipt;141 qualified refs rebuilt from new profile. No false actual export grant.",
+    "final_scope_delta": "Finalscope profile changes parent producer_contract wording and adds Root35/currentfree52e preparation context; commands/postimages/maps remain literal parent sources. Runner4helpers byteidentical privateparent.",
+    "tool_delta": "Compared accepted112 runner: only processC replaces kernelC in expected outputs/source paths plus current112\u2192current113 containername. Worker/holder/publisher unchanged. Four-command/eightretained/threefresh validators and all custody/account/resource guards preserved.",
+    "no_generator_or_helper_main_executed": true
+  },
+  "origin_obligation": {
+    "proposal": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/NEW-ORIGIN-PRODUCER.NOT-GRANTED.json",
+      "bytes": 6699,
+      "sha256": "18b8f99440d97596bab948989ea864f91619830ddc810995b41c2a16073359ba"
+    },
+    "status": "FRESH_CURRENT113_SOURCE_PRODUCER_REQUIRED_NOT_EXECUTED",
+    "actual_producer_receipt": null,
+    "actual_generated_header": null,
+    "actual_origin_binding": null,
+    "actual_Rust_environment": null,
+    "actual_CMake_origin": null,
+    "new_proposed_arch_command_equals_third_profile_command": true,
+    "header_preview_is_not_actual_proof": true,
+    "predecessor112_origin_receipt_historical_only": true,
+    "exact_origin": "/src/arch/x86_64/kernel/syscall.c",
+    "Root_required": "Fresh actual producer/header/env/binding receipt for new source+argv; additive profile/export/cohort rebind and actualRootsourceadoption/publication before compiler release. SourcePASS is not acceptance of old112origin for changed113source. No OCI /src/scripts helper mount or newCfilename owner."
+  },
+  "predictions": {
+    "C_functions": 83,
+    "Rust_function_exports": 56,
+    "process_C_OBJECTs": 63,
+    "accepted": false,
+    "postbuild": "Preserve all original112/111 logger/FILELINE/Ddebug3430/3435/timer120/idle116/runqueue208/ABI/consumer/import/PMU/default proofs against actual newRust/processC/archC/finalimage; exact source-supported elisions and all retained original OPEN/FAIL must be reported. HOST/mock evidence never supplies native/file credit."
+  },
+  "Root_controls": {
+    "context": {
+      "runtime_authority": null,
+      "Root35": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER35.json",
+        "bytes": 3682,
+        "sha256": "5cc235f9518e488ba50d700c7b9c256410e77495a7117a3b912101b71baf05c1"
+      },
+      "accepted_current_free": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT112-EVENT2-ALLOC2-BUILD-ADMISSION-1/independent-postbuild-review-1/CURRENT-FREE.json",
+        "bytes": 5660,
+        "sha256": "52e1dc0902642855c11df0c726dbc365720db1623fc4082748b010255ff844aa"
+      },
+      "actual_admission_required": true
+    },
+    "fixed_three_clock_cutoffs": [
+      1793165769.0,
+      947874.5689514667,
+      963213.6960030915
+    ],
+    "CPU": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "memory_bytes": 12884901888,
+    "pids": 512,
+    "aggregate_memory_budget_bytes": 23259332608,
+    "actual_nonce": null,
+    "actual_holder": null,
+    "actual_output_root": null,
+    "actual_resource_authority": null,
+    "actual_execution_release": null,
+    "assessment": "Source context Root35/52e only. Fresh actualaccount/source/nativeownership/resources/nonce/holder and existing independent execution review remain Root-controlled before oneheavy grant. No fresh query or authority asserted here; M15/F05 work independent and need not wait for this source candidate."
+  },
+  "review_actions": {
+    "read_hash_AST_literal_diff_only": true,
+    "no_workload_query_guard_resource_compiler_preprocessor_runtime_Git_cleanup_operations": true,
+    "canonical_or_implementation_changes": 0,
+    "subagents": 0,
+    "only_owned_new_review_directory_written": true
+  }
+}

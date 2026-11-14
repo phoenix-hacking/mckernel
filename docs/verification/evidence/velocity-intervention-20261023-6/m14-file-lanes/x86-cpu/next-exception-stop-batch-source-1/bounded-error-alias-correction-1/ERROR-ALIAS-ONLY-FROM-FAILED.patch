@@ -1,0 +1,29 @@
+--- a/kernel/rust/x86_cpu_helpers.rs
++++ b/kernel/rust/x86_cpu_helpers.rs
+@@ -3311,7 +3311,7 @@
+         });
+         kprintf(
+             b"General protection fault (err: %lx, %lx:%lx)\n\0".as_ptr().cast(),
+-            core::ptr::addr_of!((*regs).gpr.error).read(),
++            core::ptr::addr_of!((*regs).gpr.orig_rax).read(),
+             core::ptr::addr_of!((*regs).gpr.cs).read(),
+             core::ptr::addr_of!((*regs).gpr.rip).read(),
+         );
+@@ -3361,7 +3361,7 @@
+         if X86_INT3_DEBUG_PRINT_ENABLED != 0 {
+             kprintf(
+                 b"int3 exception (err: %lx, %lx:%lx)\n\0".as_ptr().cast(),
+-                core::ptr::addr_of!((*regs).gpr.error).read(),
++                core::ptr::addr_of!((*regs).gpr.orig_rax).read(),
+                 core::ptr::addr_of!((*regs).gpr.cs).read(),
+                 core::ptr::addr_of!((*regs).gpr.rip).read(),
+             );
+@@ -3414,7 +3414,7 @@
+         if X86_DEBUG_HANDLER_DEBUG_PRINT_ENABLED != 0 {
+             kprintf(
+                 b"debug exception (err: %lx, %lx:%lx)\n\0".as_ptr().cast(),
+-                core::ptr::addr_of!((*regs).gpr.error).read(),
++                core::ptr::addr_of!((*regs).gpr.orig_rax).read(),
+                 core::ptr::addr_of!((*regs).gpr.cs).read(),
+                 core::ptr::addr_of!((*regs).gpr.rip).read(),
+             );

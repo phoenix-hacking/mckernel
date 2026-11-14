@@ -1,0 +1,100 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "QUALIFY_STRICT235_ACTUAL_F05_VERIFY_FROM_USER_TO_USER_SCOPE_ONLY_FULL_M14_05_05_OPEN",
+  "file_id": "M14-F05",
+  "subgoal_id": "M14-05-05",
+  "whole_file_closure_eligible": false,
+  "full_subgoal_native_acceptance": false,
+  "independent_file_acceptance": false,
+  "canonical_changes": false,
+  "runtime_authority": null,
+  "prior_route_decision": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m14-f05-nearest-file-closure-1/F05-FILES-AND-NEXT-CONSUMER-DECISION.json",
+    "bytes": 19484,
+    "sha256": "a47fc50dbe7066a373a63757f0835c770a70bfaed656377f49293061d90a2d30"
+  },
+  "actual_accepted_summary": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/F02-RUSTMM-STRICT235-ACTUAL-ACCEPTED-SUMMARY.json",
+    "bytes": 1597,
+    "sha256": "3d04f0e6393cbb4f9d82644bdeca8b832688a93b1328993dc7b1b78d96fa7bee"
+  },
+  "independent_case_and_postjoin": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-RUSTMM-STRICT235-NATIVE-ADMISSION-1/INDEPENDENT-CASE-AND-POSTJOIN-REVIEW.json",
+    "bytes": 1691,
+    "sha256": "a4620f1885b03f96dea753aa05f7164f119dadee8cfdbe55ecd6e1d6848e7c18"
+  },
+  "matching_cohort": {
+    "image_sha256": "2ed7ef68530ff625772684af500c8b97e471b2b3a4e877c69792568507f1cd0f",
+    "smp_sha256": "887dc3567e6035c921588e61b45b41a8ef32a972d142fe2ba82ec48442353b12",
+    "mcctrl_sha256": "57546af5110c0674b307e5ac5a328228abbe784f890f69521db5f594f21f6ae8"
+  },
+  "actual": {
+    "case_id": "P-M06-01-process-exec-wait-235B",
+    "consumed_nonce": "2005b0dd8446ae5356152dfb13144dab",
+    "stdout_bytes": 235,
+    "exit_status": 0,
+    "caller_joined": true,
+    "commands_reaped": 30,
+    "postjoin": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-RUSTMM-STRICT235-NATIVE-ADMISSION-1/POSTNATIVE-CURRENT.stdout",
+      "bytes": 122991,
+      "sha256": "4eb1c1162761eaa80c41c4db87ea038604d4db58e14300d10cf13613a63a7f20"
+    },
+    "parent_ACK": {
+      "pid": 256,
+      "token": 3,
+      "errno": 0,
+      "abandoned": 1,
+      "frozen_evaluator_permits_close_path": true,
+      "abandoned_zero_claim": false
+    },
+    "no_child_retirement_zero_claim_inferred": true
+  },
+  "qualifiable_native_scope": [
+    {
+      "entrypoints": [
+        "copy_from_user",
+        "getlong_user",
+        "strlen_user",
+        "strcpy_from_user",
+        "verify_process_vm"
+      ],
+      "route": "Successful guest exec -> McKernel do_execveat -> flatten_strings_from_user(argv/envp) -> getlong_user/copy_from_user plus strlen_user/strcpy_from_user -> x86_user_verify_bridge -> verify_process_vm",
+      "behavior": "Frozen successful-exec token and child exit37 establish successful argv/envp transfer on this accepted native consumer; missing-executable branch does not receive flattening credit."
+    },
+    {
+      "entrypoints": [
+        "copy_to_user"
+      ],
+      "route": "Native syscall61 sys_wait4 -> wait4_body_result -> syscall_copy_to_user_bridge -> F05 copy_to_user",
+      "behavior": "Frozen parent waitpid with nonnull status observes and checks child exit37/42 and subsequent ECHILD; accepted current native exec/wait consumer exercises successful status destination copy.",
+      "limit": "One-CInt successful copy; no crosspage, partial-fault or direct processVM entrypoint claim."
+    }
+  ],
+  "not_proved": [
+    "Direct read_process_vm entrypoint behavior",
+    "Direct write_process_vm entrypoint behavior",
+    "Direct patch_process_vm entrypoint behavior",
+    "Usercopy/processVM partial-transfer or recoverable fault-fixup branches"
+  ],
+  "frozen_obligation": "M14-05-05: Usercopy and process-VM verify/read/write/patch entrypoints, bounded mapping lifetimes and fault fixups. Native proof scope must remain explicit; matching HOST/link proofs do not invent unobserved native branches.",
+  "smallest_already_supported_consumer_for_uncovered_branch": null,
+  "exact_supported_runner_blocker": {
+    "existing_catalog": {
+      "path": "/home/holden/mckernel/scripts/application-tests/cases.json",
+      "bytes": 1387917,
+      "sha256": "e8402f71283634f53923b57a1a920d9bc5e4a0670c6c6aba03eb967f893bf316"
+    },
+    "matching_direct_processVM_ptrace_case_ids": [],
+    "known_selected_profiles": "Existing core memory/files/threads/signals and frozen235 exec/wait payloads do not invoke direct processVM read/write/patch or deliberate partial-fault transactions.",
+    "retained_worklist": {
+      "path": "/home/holden/mckernel/docs/verification/os-milestones-20260914/rust-cutover-m14.json",
+      "bytes": 212623,
+      "sha256": "6c7262dec43daeb341037ffb6194c89a79d51eea817f5f25372e569e89302ee5"
+    },
+    "no_existing_native_evidence_for_subgoal_direct_entries": "The retained F05 M14-05-05 native_validation evidence list has no bound direct-processVM consumer. Earlier generic unassessed labels are not themselves the reason for nonacceptance.",
+    "available_kernel_route_not_released_consumer": "Selected f03_ptrace_peektext_v1 uses f03_ptrace_vm_read -> read_process_vm; f03_ptrace_poketext_v1 uses f03_ptrace_vm_write -> patch_process_vm. This is production call-graph availability, not an existing supported frozen payload/manifest/oracle/native release. No equivalent native direct write_process_vm consumer is established by the retained plan.",
+    "blocker": "No already-supported frozen payload+oracle+native-runner binding for the uncovered direct read/write/patch_processVM and partial-fault behavior was established in the retained F05 worklist/catalog/known consumers. Treat this as a runtime-consumer/evidence gap; no new test quota, framework or automatic run is authorized."
+  },
+  "reuse_and_next": "Reuse this consumed strict235 result and existing HOST/source/default/link evidence. Root may update only the exact F05 verify/from-user/to-user native scope; leave the full M14-05-05 and whole-file flags open pending a separately supported direct-runtime consumer and independent final file decision. Do not replay strict235 or successful core cases."
+}

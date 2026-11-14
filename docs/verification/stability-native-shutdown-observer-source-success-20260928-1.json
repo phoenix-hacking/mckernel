@@ -1,0 +1,40 @@
+{
+  "schema": "mckernel.stability-source-review.v1",
+  "recorded_at": "2026-09-28T12:14:00-07:00",
+  "source_commit_before_change": "f8941f1b5ad136c65b6a20424f10250253d2be0b",
+  "scope": "pure fail-closed seven-phase native shutdown evidence validator",
+  "decision": "PASS_SOURCE_READY_FOR_ROCKY_INTEGRATION",
+  "files": {
+    "scripts/application-tests/native_shutdown_observer.py": "c86c819092dc6d831a0db42af6fd7b7ca72e235843b3f97e1c20d899d07c94a6",
+    "scripts/tests/test_application_native_shutdown_observer.py": "2612f44262a97a5c015e31b2934507b0f636543070dde3cac5b01f9754415c77"
+  },
+  "verification": {
+    "py_compile": "PASS",
+    "unittest": "7 tests passed",
+    "diff_check": "PASS",
+    "hostile_probes": [
+      "final IRQ affinity mutation rejected",
+      "procfs status digest mutation rejected",
+      "process starttime mutation rejected",
+      "procfs numeric-node mutation rejected"
+    ]
+  },
+  "contract": [
+    "Exactly ordered clean_baseline, booted, workload_live, workload_retired_pre_stop, destroyed_resources_released_provider_present, fully_unloaded and policy_restored phases.",
+    "Independent immutable expectations bind process identities/starttimes, procfs state/nodes/status/maps digests, devices/sysfs, module refcounts/holders, CPU mask, IRQ inventory/affinity and policy.",
+    "CPU and per-NUMA reserve queries must succeed and be empty before provider unload.",
+    "Missing, duplicate, out-of-order, unknown, truncated or error observations fail closed; exclusive evidence publication failure cannot pass.",
+    "Output remains diagnostic-only and explicitly denies application acceptance."
+  ],
+  "preserved_failure": {
+    "original_source_sha256": "ac4336570ab92105627a3a94ad383ab3109a950b5801c18b784dbde73d53aafa",
+    "original_test_sha256": "42ebe5f13be0c6879084020d7df14f4884a42304cc745756a6a8603da266ff8c",
+    "finding": "The first candidate accepted IRQ affinity drift and self-supplied process/procfs expectations; independent review rejected it.",
+    "correction_budget": "one bounded correction consumed"
+  },
+  "limitations": [
+    "No Rocky integration, root operation, build, QEMU guest, shutdown or recreate cycle has run.",
+    "Internal mapping and callback ledgers and recreate remain explicitly unobserved.",
+    "A separate integration review and execution release remain required."
+  ]
+}

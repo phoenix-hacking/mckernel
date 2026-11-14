@@ -1,0 +1,38 @@
+{
+  "claims": {
+    "credit_eligible": false,
+    "tracker_credit": false
+  },
+  "contract_id": "secondary-reset-build-supplement-evidence-v1",
+  "inputs": {
+    "checker": {
+      "path": "scripts/secondary_reset_build_supplement.py",
+      "sha256": "8a3121e04d4707a2a54b9442df75b85583382daec0ba79c1274958fc9fd04cdd"
+    },
+    "manifest": {
+      "path": "host-kernel/kbuild/secondary-reset-build-supplement-v1.json",
+      "sha256": "dbb0f8aeb9758158961f3d33a86c36d63b95ef8146990220750c196547102ec9"
+    }
+  },
+  "licensing": {
+    "target_spdx": [
+      {"patch":"0006","path":"arch/x86/include/asm/smp.h","spdx":"GPL-2.0"},
+      {"patch":"0006","path":"arch/x86/kernel/head_64.S","spdx":"GPL-2.0"},
+      {"patch":"0006","path":"arch/x86/kernel/smpboot.c","spdx":"GPL-2.0-or-later"},
+      {"patch":"0007","path":"rust/bindings/bindings_helper.h","spdx":"GPL-2.0"},
+      {"patch":"0008","path":"arch/x86/entry/vdso/vma.c","spdx":"GPL-2.0-only"},
+      {"patch":"0008","path":"include/vdso/datapage.h","spdx":"GPL-2.0"},
+      {"patch":"0008","path":"lib/vdso/datastore.c","spdx":"GPL-2.0-only"},
+      {"patch":"0008","path":"rust/bindings/bindings_helper.h","spdx":"GPL-2.0"},
+      {"patch":"0009","path":"drivers/base/cacheinfo.c","spdx":"GPL-2.0"},
+      {"patch":"0010-v2","path":"arch/x86/include/asm/smp.h","spdx":"GPL-2.0"},
+      {"patch":"0010-v2","path":"arch/x86/kernel/smpboot.c","spdx":"GPL-2.0-or-later"}
+    ]
+  },
+  "lock": {
+    "evidence_member": "secondary-reset-build-supplement.lock",
+    "source_member": ".mckernel-secondary-reset-build.lock",
+    "verify_before_configuration": true
+  },
+  "schema_version": 1
+}

@@ -1,0 +1,363 @@
+--- a/host-kernel/native-rust/smp_service.rs
++++ b/host-kernel/native-rust/smp_service.rs
+@@ -73,8 +73,32 @@
+ fn errno(code: i32) -> Error {
+     kernel::error::to_result(code).err().unwrap_or(EIO)
+ }
+ 
++// Diagnostic-only types. They carry host-owned route fields or the already
++// decoded message header, never packet padding or an inferred worker/delivery.
++#[derive(Clone, Copy, Debug, Eq, PartialEq)]
++enum FailureOrigin {
++    Packet { channel: usize, guest_cpu: u32, port: i32, message: i32 },
++    ControlPump,
++    RegularPump,
++    PublishRemote,
++    PublishApplications,
++    PublishSyscalls,
++    AdvanceApplications,
++    PublishProcfs,
++    Metadata,
++    Zeroing,
++}
++
++// A separate saturating diagnostic budget does not change existing counters,
++// admission, ownership, errors, quarantine or the service's work scheduling.
++fn diagnostic_ticket(counter: &AtomicU64) -> bool {
++    counter.fetch_update(Ordering::Relaxed, Ordering::Relaxed, |old| {
++        if old < 16 { Some(old + 1) } else { None }
++    }).is_ok()
++}
++
+ struct Metadata {
+     claim: memory::Claim,
+     request: wire::Request,
+ }
+@@ -141,8 +165,9 @@
+     status_address: u64,
+     error: AtomicI32,
+     completed: AtomicU64,
+     rejected: AtomicU64,
++    failure_contexts: AtomicU64,
+     zeroed: AtomicU64,
+     eventfd_notifications: [AtomicU64; 3],
+     #[pin]
+     transport: Mutex<Transport>,
+@@ -158,9 +183,13 @@
+     zero_pending: Mutex<Vec<zero_pages::Request>>,
+ }
+ 
+ impl Runtime {
+-    fn fail(&self, error: Error) {
++    fn fail(&self, error: Error, origin: FailureOrigin) {
++        if diagnostic_ticket(&self.failure_contexts) {
++            pr_err!("IHK-SMP: service failure context os={} generation={} origin={:?} errno={}; diagnostic only, owners unchanged\n",
++                self.owner.slot(), self.owner.generation(), origin, error.to_errno());
++        }
+         if self.application.fail_service(&self.error, error) {
+             pr_err!("IHK-SMP: continuing service error os={} generation={} errno={}; workers and all started owners retained\n",
+                 self.owner.slot(), self.owner.generation(), error.to_errno());
+         }
+@@ -465,9 +494,9 @@
+ 
+     fn pump_regular(&self) -> Result {
+         for index in 0..self.cpus.len() + 1 {
+             for _ in 0..16 {
+-                let (port, packet) = {
++                let (port, guest_cpu, packet) = {
+                     let mut transport = self.transport.lock();
+                     let Some(entry) = transport.channels.get_mut(index) else {
+                         break;
+                     };
+@@ -486,9 +515,9 @@
+                             entry.pending = Some(packet);
+                             packet
+                         }
+                     };
+-                    (entry.channel.port, packet)
++                    (entry.channel.port, entry.channel.guest_cpu, packet)
+                 };
+                 // No channel/tree/resource mutex spans reply completion or
+                 // metadata admission. The two workers cannot wait on each
+                 // other's tree lock during active callback removal.
+@@ -505,9 +534,12 @@
+                     .get_mut(index)
+                     .ok_or(EIO)?
+                     .pending = None;
+                 if let Err(error) = result {
+-                    self.fail(error);
++                    self.fail(error, FailureOrigin::Packet {
++                        channel: index, guest_cpu, port,
++                        message: i32::from_le_bytes(packet[8..12].try_into().unwrap()),
++                    });
+                 }
+             }
+         }
+         Ok(())
+@@ -573,27 +605,27 @@
+         // already-published exchanges from draining in the other service.
+         // Handle each result before invoking the next service. An array of
+         // Results would eagerly publish later work before recording failure.
+         if let Err(error) = self.pump_master() {
+-            self.fail(error);
++            self.fail(error, FailureOrigin::ControlPump);
+         }
+         if let Err(error) = self.pump_regular() {
+-            self.fail(error);
++            self.fail(error, FailureOrigin::RegularPump);
+         }
+         if let Err(error) = self.publish_remote() {
+-            self.fail(error);
++            self.fail(error, FailureOrigin::PublishRemote);
+         }
+         if let Err(error) = self.publish_applications() {
+-            self.fail(error);
++            self.fail(error, FailureOrigin::PublishApplications);
+         }
+         if let Err(error) = self.publish_syscalls() {
+-            self.fail(error);
++            self.fail(error, FailureOrigin::PublishSyscalls);
+         }
+         if let Err(error) = self.application.advance() {
+-            self.fail(error);
++            self.fail(error, FailureOrigin::AdvanceApplications);
+         }
+         if let Err(error) = self.publish_procfs() {
+-            self.fail(error);
++            self.fail(error, FailureOrigin::PublishProcfs);
+         }
+     }
+ 
+     fn publish_procfs(&self) -> Result {
+@@ -719,14 +751,14 @@
+         match entry.role {
+             Role::Packets => entry.runtime.pump(),
+             Role::Metadata => {
+                 if let Err(error) = entry.runtime.metadata() {
+-                    entry.runtime.fail(error);
++                    entry.runtime.fail(error, FailureOrigin::Metadata);
+                 }
+             }
+             Role::Zeroing => {
+                 if let Err(error) = entry.runtime.zeroing() {
+-                    entry.runtime.fail(error);
++                    entry.runtime.fail(error, FailureOrigin::Zeroing);
+                 }
+             }
+         }
+         // Polling also notices host-initiated show/store calls; waiting solely
+@@ -1228,8 +1260,9 @@
+             owner, memory, cpus, data, remote, application, procfs, master,
+             master_receive: receive, master_send: send, master_bytes: queue_bytes,
+             status_address,
+             error: AtomicI32::new(0), completed: AtomicU64::new(0), rejected: AtomicU64::new(0),
++            failure_contexts: AtomicU64::new(0),
+             zeroed: AtomicU64::new(0),
+             eventfd_notifications: [AtomicU64::new(0), AtomicU64::new(0), AtomicU64::new(0)],
+             transport <- new_mutex!(Transport { channels: Vec::new(), master_reply: None }),
+             service <- new_mutex!(None),
+--- a/host-kernel/native-rust/sysfs_memory.rs
++++ b/host-kernel/native-rust/sysfs_memory.rs
+@@ -41,8 +41,37 @@
+ #[derive(Clone, Copy)]
+ struct Tagged {
+     span: Span,
+     serial: u64,
++}
++
++// Diagnostic snapshots contain only initialized, host-owned ledger fields.
++#[derive(Clone, Copy, Debug, Eq, PartialEq)]
++enum ConflictKind { Fixed, Request, Payload, Response, ExecPayload, Snoop, Procfs, Zeroing }
++
++#[derive(Clone, Copy, Debug, Eq, PartialEq)]
++struct FailureConflict {
++    kind: ConflictKind,
++    slot: usize,
++    member: Option<usize>,
++    serial: Option<u64>,
++    span: Span,
++}
++
++#[derive(Clone, Copy, Debug, Eq, PartialEq)]
++struct SyscallFailureContext {
++    cpu: i32, pid: i32, requester: i32, target: i32, number: u64,
++    response: u64, response_end: Option<u64>,
++    conflict: Option<FailureConflict>,
++}
++
++fn syscall_failure_context(request: &SyscallRequest, conflict: Option<FailureConflict>) -> SyscallFailureContext {
++    SyscallFailureContext {
++        cpu: request.cpu(), pid: request.pid(), requester: request.requester(),
++        target: request.target(), number: request.number(),
++        response: request.response(), response_end: request.response().checked_add(RESPONSE_BYTES as u64),
++        conflict,
++    }
+ }
+ 
+ struct Ledger {
+     fixed: Vec<Span>,
+@@ -80,8 +109,47 @@
+             || self.procfs.iter().any(|old| old.span.overlaps(span))
+             || self.zeroing.iter().any(|old| old.span.overlaps(span))
+     }
+ 
++    // Read-only diagnostic traversal after the ORIGINAL conflicts predicate
++    // already chose EBUSY. Keep its first-match order; never use this observer
++    // to admit/reject, retire a tag, acquire a claim or interpret guest bytes.
++    fn diagnostic_conflict(&self, span: Span, snoops: bool) -> Option<FailureConflict> {
++        for (slot, old) in self.fixed.iter().enumerate() {
++            if old.overlaps(span) {
++                return Some(FailureConflict { kind: ConflictKind::Fixed, slot, member: None, serial: None, span: *old });
++            }
++        }
++        for (kind, slots) in [(ConflictKind::Request, &self.requests), (ConflictKind::Payload, &self.payloads), (ConflictKind::Response, &self.responses)] {
++            for (slot, old) in slots.iter().enumerate() {
++                if let Some(old) = old {
++                    if old.span.overlaps(span) {
++                        return Some(FailureConflict { kind, slot, member: None, serial: Some(old.serial), span: old.span });
++                    }
++                }
++            }
++        }
++        for (slot, group) in self.exec_payloads.iter().enumerate() {
++            if let Some(group) = group {
++                for (member, old) in group.iter().enumerate() {
++                    if old.span.overlaps(span) {
++                        return Some(FailureConflict { kind: ConflictKind::ExecPayload, slot, member: Some(member), serial: Some(old.serial), span: old.span });
++                    }
++                }
++            }
++        }
++        for (kind, tags, enabled) in [(ConflictKind::Snoop, &self.snoops, snoops), (ConflictKind::Procfs, &self.procfs, true), (ConflictKind::Zeroing, &self.zeroing, true)] {
++            if enabled {
++                for (slot, old) in tags.iter().enumerate() {
++                    if old.span.overlaps(span) {
++                        return Some(FailureConflict { kind, slot, member: None, serial: Some(old.serial), span: old.span });
++                    }
++                }
++            }
++        }
++        None
++    }
++
+     fn tag(&mut self, span: Span) -> Result<Tagged> {
+         self.serial = self.serial.checked_add(1).ok_or_else(|| errno(-75))?;
+         Ok(Tagged {
+             span,
+@@ -96,8 +164,9 @@
+     pub(super) direct_map: u64,
+     extents: Vec<MemoryExtent>,
+     layout: crate::smp_image::BootLayout,
+     numa_nodes: usize,
++    failure_contexts: AtomicU64,
+     #[pin]
+     ledger: Mutex<Ledger>,
+ }
+ 
+@@ -166,8 +235,9 @@
+         let procfs = Vec::with_capacity(4096 + METADATA_CAPACITY + 2, GFP_KERNEL)?;
+         Arc::pin_init(
+             pin_init!(Self {
+                 owner, direct_map, extents, layout, numa_nodes,
++                failure_contexts: AtomicU64::new(0),
+                 ledger <- new_mutex!(Ledger { fixed, requests, responses, payloads, exec_payloads, snoops: Vec::new(), procfs, zeroing: Vec::new(), serial: 0 }),
+             }),
+             GFP_KERNEL,
+         )
+@@ -345,44 +415,60 @@
+         })
+     }
+ 
+     pub(super) fn syscall(self: &Arc<Self>, request: &SyscallRequest) -> Result<SyscallResponse> {
+-        let physical = request.response();
+-        if physical % 8 != 0 {
+-            return Err(EINVAL);
+-        }
+-        let address = self.address(physical, RESPONSE_BYTES)?;
+-        let span = Span::new(physical, RESPONSE_BYTES)?;
+-        let mut ledger = self.ledger.lock();
+-        if ledger.conflicts(span, true) {
+-            return Err(EBUSY);
+-        }
+-        let slot = ledger
+-            .responses
+-            .iter()
+-            .position(Option::is_none)
+-            .ok_or(EAGAIN)?;
+-        // SAFETY: The checked exact-generation RAM is aligned and disjoint
+-        // from every active service access. The guest owns only atomic state.
+-        let status = unsafe { AtomicU64::from_ptr((address as *mut u8).add(8).cast()) };
+-        // SAFETY: The same retained, response-sized mapping covers the
+-        // eight-byte-aligned state word at offset 16. The held ledger claim
+-        // excludes host aliases, while the guest accesses this shared word
+-        // atomically; this creates no Rust reference to guest memory.
+-        let state = unsafe { AtomicU64::from_ptr((address as *mut u8).add(16).cast()) };
+-        if status.load(Ordering::Acquire) != 0 || !matches!(state.load(Ordering::Acquire), 0 | 2) {
+-            return Err(errno(-71));
+-        }
+-        let tag = ledger.tag(span)?;
+-        ledger.responses[slot] = Some(tag);
+-        Ok(SyscallResponse {
+-            memory: self.clone(),
+-            address,
+-            tag,
+-            slot,
+-            payload: None,
+-            exec_group: None,
+-        })
++        let mut conflict = None;
++        let result = (|| {
++            let physical = request.response();
++            if physical % 8 != 0 {
++                return Err(EINVAL);
++            }
++            let address = self.address(physical, RESPONSE_BYTES)?;
++            let span = Span::new(physical, RESPONSE_BYTES)?;
++            let mut ledger = self.ledger.lock();
++            if ledger.conflicts(span, true) {
++                conflict = ledger.diagnostic_conflict(span, true);
++                return Err(EBUSY);
++            }
++            let slot = ledger
++                .responses
++                .iter()
++                .position(Option::is_none)
++                .ok_or(EAGAIN)?;
++            // SAFETY: The checked exact-generation RAM is aligned and disjoint
++            // from every active service access. The guest owns only atomic state.
++            let status = unsafe { AtomicU64::from_ptr((address as *mut u8).add(8).cast()) };
++            // SAFETY: The same retained, response-sized mapping covers the
++            // eight-byte-aligned state word at offset 16. The held ledger claim
++            // excludes host aliases, while the guest accesses this shared word
++            // atomically; this creates no Rust reference to guest memory.
++            let state = unsafe { AtomicU64::from_ptr((address as *mut u8).add(16).cast()) };
++            if status.load(Ordering::Acquire) != 0 || !matches!(state.load(Ordering::Acquire), 0 | 2) {
++                return Err(errno(-71));
++            }
++            let tag = ledger.tag(span)?;
++            ledger.responses[slot] = Some(tag);
++            Ok(SyscallResponse {
++                memory: self.clone(),
++                address,
++                tag,
++                slot,
++                payload: None,
++                exec_group: None,
++            })
++        
++        })();
++        // The original ledger guard has ended. The copied snapshot has no
++        // borrowed tag/pointer, and this diagnostic runs BEFORE returning the
++        // same error to the unchanged mailbox/Remote quarantine path.
++        if let Err(error) = &result {
++            if *error != EAGAIN && super::diagnostic_ticket(&self.failure_contexts) {
++                let context = syscall_failure_context(request, conflict);
++                pr_err!("IHK-SMP: service failure context os={} generation={} origin=syscall_response_claim errno={} route={:?}; diagnostic only, owners unchanged\n",
++                    self.owner.slot(), self.owner.generation(), error.to_errno(), context);
++            }
++        }
++        result
+     }
+ 
+     /// Reserve queue aliases while the caller allocates and stores both owned
+     /// endpoints. This lock never spans a remote callback or response wait.

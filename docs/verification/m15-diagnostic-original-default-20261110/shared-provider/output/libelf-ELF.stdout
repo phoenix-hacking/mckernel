@@ -1,0 +1,359 @@
+ELF Header:
+  Magic:   7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00 
+  Class:                             ELF64
+  Data:                              2's complement, little endian
+  Version:                           1 (current)
+  OS/ABI:                            UNIX - System V
+  ABI Version:                       0
+  Type:                              DYN (Shared object file)
+  Machine:                           Advanced Micro Devices X86-64
+  Version:                           0x1
+  Entry point address:               0x0
+  Start of program headers:          64 (bytes into file)
+  Start of section headers:          109848 (bytes into file)
+  Flags:                             0x0
+  Size of this header:               64 (bytes)
+  Size of program headers:           56 (bytes)
+  Number of program headers:         12
+  Size of section headers:           64 (bytes)
+  Number of section headers:         32
+  Section header string table index: 31
+
+Section Headers:
+  [Nr] Name              Type            Address          Off    Size   ES Flg Lk Inf Al
+  [ 0]                   NULL            0000000000000000 000000 000000 00      0   0  0
+  [ 1] .note.gnu.property NOTE            00000000000002e0 0002e0 000040 00   A  0   0  8
+  [ 2] .note.gnu.build-id NOTE            0000000000000320 000320 000024 00   A  0   0  4
+  [ 3] .note.package     NOTE            0000000000000344 000344 000078 00   A  0   0  4
+  [ 4] .gnu.hash         GNU_HASH        00000000000003c0 0003c0 0003f4 00   A  5   0  8
+  [ 5] .dynsym           DYNSYM          00000000000007b8 0007b8 0010c8 18   A  6   1  8
+  [ 6] .dynstr           STRTAB          0000000000001880 001880 00095a 00   A  0   0  1
+  [ 7] .gnu.version      VERSYM          00000000000021da 0021da 000166 02   A  5   0  2
+  [ 8] .gnu.version_d    VERDEF          0000000000002340 002340 000158 00   A  6  10  8
+  [ 9] .gnu.version_r    VERNEED         0000000000002498 002498 000090 00   A  6   1  8
+  [10] .rela.dyn         RELA            0000000000002528 002528 000060 18   A  5   0  8
+  [11] .rela.plt         RELA            0000000000002588 002588 000630 18  AI  5  26  8
+  [12] .relr.dyn         RELR            0000000000002bb8 002bb8 000010 08   A  0   0  8
+  [13] .init             PROGBITS        0000000000003000 003000 00001b 00  AX  0   0  4
+  [14] .plt              PROGBITS        0000000000003020 003020 000420 10  AX  0   0 16
+  [15] .plt.sec          PROGBITS        0000000000003440 003440 000410 10  AX  0   0 16
+  [16] .text             PROGBITS        0000000000003880 003880 011535 00  AX  0   0 64
+  [17] .fini             PROGBITS        0000000000014db8 014db8 00000d 00  AX  0   0  4
+  [18] .rodata           PROGBITS        0000000000015000 015000 0017a5 00   A  0   0 32
+  [19] .eh_frame_hdr     PROGBITS        00000000000167a8 0167a8 00060c 00   A  0   0  4
+  [20] .eh_frame         PROGBITS        0000000000016db8 016db8 001e78 00   A  0   0  8
+  [21] .tbss             NOBITS          0000000000019950 019950 000004 00 WAT  0   0  4
+  [22] .init_array       INIT_ARRAY      0000000000019950 019950 000008 08  WA  0   0  8
+  [23] .fini_array       FINI_ARRAY      0000000000019958 019958 000008 08  WA  0   0  8
+  [24] .data.rel.ro      PROGBITS        0000000000019960 019960 0001e0 00  WA  0   0 32
+  [25] .dynamic          DYNAMIC         0000000000019b40 019b40 000260 10  WA  6   0  8
+  [26] .got              PROGBITS        0000000000019da0 019da0 000250 08  WA  0   0  8
+  [27] .bss              NOBITS          000000000001a000 019ff0 000010 00  WA  0   0  4
+  [28] .gnu.build.attributes NOTE            000000000001c010 019ff0 000024 00      0   0  4
+  [29] .gnu_debuglink    PROGBITS        0000000000000000 01a014 000038 00      0   0  4
+  [30] .gnu_debugdata    PROGBITS        0000000000000000 01a04c 000b78 00      0   0  1
+  [31] .shstrtab         STRTAB          0000000000000000 01abc4 00014f 00      0   0  1
+Key to Flags:
+  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
+  L (link order), O (extra OS processing required), G (group), T (TLS),
+  C (compressed), x (unknown), o (OS specific), E (exclude),
+  D (mbind), l (large), p (processor specific)
+
+Dynamic section at offset 0x19b40 contains 33 entries:
+  Tag        Type                         Name/Value
+ 0x0000000000000001 (NEEDED)             Shared library: [libz.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libzstd.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
+ 0x000000000000000e (SONAME)             Library soname: [libelf.so.1]
+ 0x000000000000000c (INIT)               0x3000
+ 0x000000000000000d (FINI)               0x14db8
+ 0x0000000000000019 (INIT_ARRAY)         0x19950
+ 0x000000000000001b (INIT_ARRAYSZ)       8 (bytes)
+ 0x000000000000001a (FINI_ARRAY)         0x19958
+ 0x000000000000001c (FINI_ARRAYSZ)       8 (bytes)
+ 0x000000006ffffef5 (GNU_HASH)           0x3c0
+ 0x0000000000000005 (STRTAB)             0x1880
+ 0x0000000000000006 (SYMTAB)             0x7b8
+ 0x000000000000000a (STRSZ)              2394 (bytes)
+ 0x000000000000000b (SYMENT)             24 (bytes)
+ 0x0000000000000003 (PLTGOT)             0x19da0
+ 0x0000000000000002 (PLTRELSZ)           1584 (bytes)
+ 0x0000000000000014 (PLTREL)             RELA
+ 0x0000000000000017 (JMPREL)             0x2588
+ 0x0000000000000007 (RELA)               0x2528
+ 0x0000000000000008 (RELASZ)             96 (bytes)
+ 0x0000000000000009 (RELAENT)            24 (bytes)
+ 0x000000006ffffffc (VERDEF)             0x2340
+ 0x000000006ffffffd (VERDEFNUM)          10
+ 0x0000000000000018 (BIND_NOW)           
+ 0x000000006ffffffb (FLAGS_1)            Flags: NOW
+ 0x000000006ffffffe (VERNEED)            0x2498
+ 0x000000006fffffff (VERNEEDNUM)         1
+ 0x000000006ffffff0 (VERSYM)             0x21da
+ 0x0000000000000024 (RELR)               0x2bb8
+ 0x0000000000000023 (RELRSZ)             16 (bytes)
+ 0x0000000000000025 (RELRENT)            8 (bytes)
+ 0x0000000000000000 (NULL)               0x0
+
+Symbol table '.dynsym' contains 179 entries:
+   Num:    Value          Size Type    Bind   Vis      Ndx Name
+     0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND 
+     1: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND free@GLIBC_2.2.5 (11)
+     2: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __errno_location@GLIBC_2.2.5 (11)
+     3: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND strncmp@GLIBC_2.2.5 (11)
+     4: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND _ITM_deregisterTMCloneTable
+     5: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND inflate
+     6: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND ZSTD_isError
+     7: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND qsort@GLIBC_2.2.5 (11)
+     8: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND fcntl@GLIBC_2.2.5 (11)
+     9: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND ZSTD_decompress
+    10: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND ZSTD_freeCCtx
+    11: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND msync@GLIBC_2.2.5 (11)
+    12: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND dcgettext@GLIBC_2.2.5 (11)
+    13: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND strlen@GLIBC_2.2.5 (11)
+    14: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __stack_chk_fail@GLIBC_2.4 (12)
+    15: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND mmap@GLIBC_2.2.5 (11)
+    16: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND ZSTD_compressStream2
+    17: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND ftruncate@GLIBC_2.2.5 (11)
+    18: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __assert_fail@GLIBC_2.2.5 (11)
+    19: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND deflate
+    20: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND memset@GLIBC_2.2.5 (11)
+    21: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND ZSTD_createCCtx
+    22: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND close@GLIBC_2.2.5 (11)
+    23: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND tdelete@GLIBC_2.2.5 (11)
+    24: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND memchr@GLIBC_2.2.5 (11)
+    25: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND rawmemchr@GLIBC_2.2.5 (11)
+    26: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND calloc@GLIBC_2.2.5 (11)
+    27: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND strcmp@GLIBC_2.2.5 (11)
+    28: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND deflateInit_
+    29: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __memcpy_chk@GLIBC_2.3.4 (13)
+    30: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND __gmon_start__
+    31: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND memcpy@GLIBC_2.14 (14)
+    32: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND posix_fallocate@GLIBC_2.2.5 (11)
+    33: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND inflateEnd
+    34: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __isoc23_strtol@GLIBC_2.38 (15)
+    35: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND malloc@GLIBC_2.2.5 (11)
+    36: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND deflateEnd
+    37: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND mremap@GLIBC_2.2.5 (11)
+    38: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND realloc@GLIBC_2.2.5 (11)
+    39: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND tsearch@GLIBC_2.2.5 (11)
+    40: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND munmap@GLIBC_2.2.5 (11)
+    41: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pwrite@GLIBC_2.2.5 (11)
+    42: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND fchmod@GLIBC_2.2.5 (11)
+    43: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND inflateInit_
+    44: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND memmove@GLIBC_2.2.5 (11)
+    45: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND memrchr@GLIBC_2.2.5 (11)
+    46: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND open@GLIBC_2.2.5 (11)
+    47: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __pread_chk@GLIBC_2.4 (12)
+    48: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND sysconf@GLIBC_2.2.5 (11)
+    49: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pread@GLIBC_2.2.5 (11)
+    50: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND inflateReset
+    51: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __memset_chk@GLIBC_2.3.4 (13)
+    52: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND posix_memalign@GLIBC_2.2.5 (11)
+    53: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND _ITM_registerTMCloneTable
+    54: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND memccpy@GLIBC_2.2.5 (11)
+    55: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND fstat@GLIBC_2.33 (16)
+    56: 0000000000000000     0 FUNC    WEAK   DEFAULT  UND __cxa_finalize@GLIBC_2.2.5 (11)
+    57: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND tdestroy@GLIBC_2.2.5 (11)
+    58: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __ctype_b_loc@GLIBC_2.3 (17)
+    59: 0000000000014440  1053 FUNC    GLOBAL DEFAULT   16 nlist@@ELFUTILS_1.0
+    60: 00000000000097a0    59 FUNC    GLOBAL DEFAULT   16 elf_version@@ELFUTILS_1.0
+    61: 000000000000a090    22 FUNC    GLOBAL DEFAULT   16 elf_getbase@@ELFUTILS_1.0
+    62: 000000000000dca0   127 FUNC    GLOBAL DEFAULT   16 elf_flagelf@@ELFUTILS_1.0
+    63: 000000000000b140   828 FUNC    GLOBAL DEFAULT   16 elf64_newphdr@@ELFUTILS_1.0
+    64: 000000000000d2b0   148 FUNC    GLOBAL DEFAULT   16 elf_rawdata@@ELFUTILS_1.0
+    65: 000000000000a7b0   107 FUNC    GLOBAL DEFAULT   16 elf64_getehdr@@ELFUTILS_1.0
+    66: 000000000000ded0   135 FUNC    GLOBAL DEFAULT   16 elf_flagshdr@@ELFUTILS_1.0
+    67: 000000000000c690   195 FUNC    GLOBAL DEFAULT   16 gelf_getshdr@@ELFUTILS_1.0
+    68: 000000000000b4a0   619 FUNC    GLOBAL DEFAULT   16 gelf_update_phdr@@ELFUTILS_1.0
+    69: 0000000000013d20   988 FUNC    GLOBAL DEFAULT   16 elf_compress@@ELFUTILS_1.7
+    70: 0000000000013040   172 FUNC    GLOBAL DEFAULT   16 elf64_getchdr@@ELFUTILS_1.7
+    71: 00000000000126c0   132 FUNC    GLOBAL DEFAULT   16 elf_getshdrnum@@ELFUTILS_1.5
+    72: 000000000000a1c0   123 FUNC    GLOBAL DEFAULT   16 gelf_fsize@@ELFUTILS_1.0
+    73: 000000000000a4c0   316 FUNC    GLOBAL DEFAULT   16 elf64_xlatetof@@ELFUTILS_1.0
+    74: 000000000000c1e0   160 FUNC    GLOBAL DEFAULT   16 elf_nextscn@@ELFUTILS_1.0
+    75: 0000000000011b90   171 FUNC    GLOBAL DEFAULT   16 gelf_getauxv@@ELFUTILS_1.3
+    76: 0000000000011820   187 FUNC    GLOBAL DEFAULT   16 gelf_getdyn@@ELFUTILS_1.0
+    77: 00000000000125c0   243 FUNC    GLOBAL DEFAULT   16 elf_getphdrnum@@ELFUTILS_1.6
+    78: 000000000000bfd0   120 FUNC    GLOBAL DEFAULT   16 elf_rawfile@@ELFUTILS_1.0
+    79: 00000000000118e0   259 FUNC    GLOBAL DEFAULT   16 gelf_update_dyn@@ELFUTILS_1.0
+    80: 0000000000012ff0    67 FUNC    GLOBAL DEFAULT   16 gelf_offscn@@ELFUTILS_1.1.1
+    81: 0000000000011a50    44 FUNC    GLOBAL DEFAULT   16 gelf_update_move@@ELFUTILS_1.0
+    82: 0000000000012d10   279 FUNC    GLOBAL DEFAULT   16 elf32_offscn@@ELFUTILS_1.1.1
+    83: 000000000000c050    75 FUNC    GLOBAL DEFAULT   16 elf_cntl@@ELFUTILS_1.0
+    84: 000000000000a600   308 FUNC    GLOBAL DEFAULT   16 elf64_xlatetom@@ELFUTILS_1.0
+    85: 000000000000de40   135 FUNC    GLOBAL DEFAULT   16 elf_flagscn@@ELFUTILS_1.0
+    86: 000000000000a840   163 FUNC    GLOBAL DEFAULT   16 elf32_newehdr@@ELFUTILS_1.0
+    87: 0000000000011250   123 FUNC    GLOBAL DEFAULT   16 gelf_getvernaux@@ELFUTILS_1.0
+    88: 0000000000014af0   670 FUNC    GLOBAL DEFAULT   16 elf64_checksum@@ELFUTILS_1.0
+    89: 000000000000a0b0    47 FUNC    GLOBAL DEFAULT   16 elf_getident@@ELFUTILS_1.0
+    90: 000000000000b480    21 FUNC    GLOBAL DEFAULT   16 gelf_newphdr@@ELFUTILS_1.0
+    91: 000000000000dd20   139 FUNC    GLOBAL DEFAULT   16 elf_flagehdr@@ELFUTILS_1.0
+    92: 000000000000a820    19 FUNC    GLOBAL DEFAULT   16 gelf_getehdr@@ELFUTILS_1.0
+    93: 0000000000012270   123 FUNC    GLOBAL DEFAULT   16 gelf_update_vernaux@@ELFUTILS_1.0
+    94: 0000000000009880   168 FUNC    GLOBAL DEFAULT   16 elf_hash@@ELFUTILS_1.0
+    95: 000000000000d640    19 FUNC    GLOBAL DEFAULT   16 elf_getdata@@ELFUTILS_1.0
+    96: 0000000000012a40   217 FUNC    GLOBAL DEFAULT   16 elf_clone@@ELFUTILS_1.0
+    97: 00000000000130f0   123 FUNC    GLOBAL DEFAULT   16 gelf_getchdr@@ELFUTILS_1.7
+    98: 000000000000a070    28 FUNC    GLOBAL DEFAULT   16 gelf_getclass@@ELFUTILS_1.0
+    99: 000000000000c510   123 FUNC    GLOBAL DEFAULT   16 elf32_getshdr@@ELFUTILS_1.0
+   100: 000000000000a150   100 FUNC    GLOBAL DEFAULT   16 elf64_fsize@@ELFUTILS_1.0
+   101: 000000000000c280    27 FUNC    GLOBAL DEFAULT   16 elf_ndxscn@@ELFUTILS_1.0
+   102: 0000000000012750   752 FUNC    GLOBAL DEFAULT   16 elf_getshstrndx@@ELFUTILS_1.0
+   103: 000000000000abf0    75 FUNC    GLOBAL DEFAULT   16 elf64_getphdr@@ELFUTILS_1.0
+   104: 00000000000122f0   139 FUNC    GLOBAL DEFAULT   16 gelf_update_verdef@@ELFUTILS_1.0
+   105: 000000000000b710    67 FUNC    GLOBAL DEFAULT   16 elf_getarhdr@@ELFUTILS_1.0
+   106: 0000000000009ce0    91 FUNC    GLOBAL DEFAULT   16 elf_rand@@ELFUTILS_1.0
+   107: 0000000000012b20   155 FUNC    GLOBAL DEFAULT   16 gelf_getlib@@ELFUTILS_1.1
+   108: 0000000000012750   752 FUNC    GLOBAL DEFAULT   16 elf_getshdrstrndx@@ELFUTILS_1.5
+   109: 0000000000009960   226 FUNC    GLOBAL DEFAULT   16 elf_errmsg@@ELFUTILS_1.0
+   110: 0000000000011350   123 FUNC    GLOBAL DEFAULT   16 gelf_getverdaux@@ELFUTILS_1.0
+   111: 0000000000012bc0   171 FUNC    GLOBAL DEFAULT   16 gelf_update_lib@@ELFUTILS_1.1
+   112: 0000000000011eb0   307 FUNC    GLOBAL DEFAULT   16 gelf_getsymshndx@@ELFUTILS_1.0
+   113: 000000000000a240   308 FUNC    GLOBAL DEFAULT   16 elf32_xlatetof@@ELFUTILS_1.0
+   114: 0000000000012380   123 FUNC    GLOBAL DEFAULT   16 gelf_update_verdaux@@ELFUTILS_1.0
+   115: 000000000000a0e0   100 FUNC    GLOBAL DEFAULT   16 elf32_fsize@@ELFUTILS_1.0
+   116: 00000000000114a0   251 FUNC    GLOBAL DEFAULT   16 gelf_getrela@@ELFUTILS_1.0
+   117: 00000000000126c0   132 FUNC    GLOBAL DEFAULT   16 elf_getshnum@@ELFUTILS_1.0
+   118: 000000000000df60   151 FUNC    GLOBAL DEFAULT   16 elf_flagdata@@ELFUTILS_1.0
+   119: 00000000000111d0   123 FUNC    GLOBAL DEFAULT   16 gelf_getverneed@@ELFUTILS_1.0
+   120: 0000000000000000     0 OBJECT  GLOBAL DEFAULT  ABS ELFUTILS_1.1.1
+   121: 0000000000009a60   479 FUNC    GLOBAL DEFAULT   16 elf_begin@@ELFUTILS_1.0
+   122: 00000000000113d0   203 FUNC    GLOBAL DEFAULT   16 gelf_getrel@@ELFUTILS_1.0
+   123: 000000000000a380   308 FUNC    GLOBAL DEFAULT   16 elf32_xlatetom@@ELFUTILS_1.0
+   124: 000000000000c760   378 FUNC    GLOBAL DEFAULT   16 gelf_update_shdr@@ELFUTILS_1.0
+   125: 00000000000115a0   275 FUNC    GLOBAL DEFAULT   16 gelf_update_rel@@ELFUTILS_1.0
+   126: 0000000000012c70    77 FUNC    GLOBAL DEFAULT   16 elf_getaroff@@ELFUTILS_1.1.1
+   127: 0000000000011d40   368 FUNC    GLOBAL DEFAULT   16 gelf_getnote@@ELFUTILS_1.3
+   128: 00000000000121f0   123 FUNC    GLOBAL DEFAULT   16 gelf_update_verneed@@ELFUTILS_1.0
+   129: 0000000000010f20   235 FUNC    GLOBAL DEFAULT   16 gelf_getsym@@ELFUTILS_1.0
+   130: 0000000000011010   308 FUNC    GLOBAL DEFAULT   16 gelf_update_sym@@ELFUTILS_1.0
+   131: 000000000000ae10   812 FUNC    GLOBAL DEFAULT   16 elf32_newphdr@@ELFUTILS_1.0
+   132: 000000000000a740   107 FUNC    GLOBAL DEFAULT   16 elf32_getehdr@@ELFUTILS_1.0
+   133: 0000000000011c40   244 FUNC    GLOBAL DEFAULT   16 gelf_update_auxv@@ELFUTILS_1.3
+   134: 0000000000012e30   172 FUNC    GLOBAL DEFAULT   16 elf32_getchdr@@ELFUTILS_1.7
+   135: 000000000000ddb0   135 FUNC    GLOBAL DEFAULT   16 elf_flagphdr@@ELFUTILS_1.0
+   136: 000000000000ac40   460 FUNC    GLOBAL DEFAULT   16 gelf_getphdr@@ELFUTILS_1.0
+   137: 0000000000014100   774 FUNC    GLOBAL DEFAULT   16 elf_compress_gnu@@ELFUTILS_1.7
+   138: 0000000000012160   139 FUNC    GLOBAL DEFAULT   16 gelf_update_versym@@ELFUTILS_1.0
+   139: 000000000000e000    67 FUNC    GLOBAL DEFAULT   16 elf_memory@@ELFUTILS_1.0
+   140: 00000000000112d0   123 FUNC    GLOBAL DEFAULT   16 gelf_getverdef@@ELFUTILS_1.0
+   141: 000000000000a8f0   163 FUNC    GLOBAL DEFAULT   16 elf64_newehdr@@ELFUTILS_1.0
+   142: 0000000000012ee0   271 FUNC    GLOBAL DEFAULT   16 elf64_offscn@@ELFUTILS_1.1.1
+   143: 000000000000aa60   315 FUNC    GLOBAL DEFAULT   16 gelf_update_ehdr@@ELFUTILS_1.0
+   144: 00000000000119f0    83 FUNC    GLOBAL DEFAULT   16 gelf_getmove@@ELFUTILS_1.0
+   145: 000000000000ced0   979 FUNC    GLOBAL DEFAULT   16 elf_strptr@@ELFUTILS_1.0
+   146: 000000000000e050 10975 FUNC    GLOBAL DEFAULT   16 elf_update@@ELFUTILS_1.0
+   147: 0000000000009a50    11 FUNC    GLOBAL DEFAULT   16 elf_fill@@ELFUTILS_1.0
+   148: 000000000000c0a0   319 FUNC    GLOBAL DEFAULT   16 elf_getscn@@ELFUTILS_1.0
+   149: 000000000000a060    15 FUNC    GLOBAL DEFAULT   16 elf_kind@@ELFUTILS_1.0
+   150: 000000000000c610   123 FUNC    GLOBAL DEFAULT   16 elf64_getshdr@@ELFUTILS_1.0
+   151: 0000000000011a80   123 FUNC    GLOBAL DEFAULT   16 gelf_getsyminfo@@ELFUTILS_1.0
+   152: 0000000000012cc0    65 FUNC    GLOBAL DEFAULT   16 elf_gnu_hash@@ELFUTILS_1.2
+   153: 0000000000013450    43 FUNC    GLOBAL DEFAULT   16 gelf_xlatetof@@ELFUTILS_1.0
+   154: 0000000000013340   272 FUNC    GLOBAL DEFAULT   16 elf_scnshndx@@ELFUTILS_1.4
+   155: 000000000000c2a0   492 FUNC    GLOBAL DEFAULT   16 elf_newscn@@ELFUTILS_1.0
+   156: 0000000000014860   654 FUNC    GLOBAL DEFAULT   16 elf32_checksum@@ELFUTILS_1.0
+   157: 0000000000011b00   139 FUNC    GLOBAL DEFAULT   16 gelf_update_syminfo@@ELFUTILS_1.0
+   158: 000000000000aba0    75 FUNC    GLOBAL DEFAULT   16 elf32_getphdr@@ELFUTILS_1.0
+   159: 00000000000116c0   339 FUNC    GLOBAL DEFAULT   16 gelf_update_rela@@ELFUTILS_1.0
+   160: 0000000000000000     0 OBJECT  GLOBAL DEFAULT  ABS ELFUTILS_1.0
+   161: 0000000000000000     0 OBJECT  GLOBAL DEFAULT  ABS ELFUTILS_1.1
+   162: 000000000000d7a0  1275 FUNC    GLOBAL DEFAULT   16 elf_getdata_rawchunk@@ELFUTILS_1.3
+   163: 0000000000000000     0 OBJECT  GLOBAL DEFAULT  ABS ELFUTILS_1.2
+   164: 0000000000009c40   146 FUNC    GLOBAL DEFAULT   16 elf_next@@ELFUTILS_1.0
+   165: 0000000000000000     0 OBJECT  GLOBAL DEFAULT  ABS ELFUTILS_1.3
+   166: 000000000000a9a0   179 FUNC    GLOBAL DEFAULT   16 gelf_newehdr@@ELFUTILS_1.0
+   167: 0000000000000000     0 OBJECT  GLOBAL DEFAULT  ABS ELFUTILS_1.4
+   168: 0000000000014410    43 FUNC    GLOBAL DEFAULT   16 gelf_xlatetom@@ELFUTILS_1.0
+   169: 0000000000011ff0   364 FUNC    GLOBAL DEFAULT   16 gelf_update_symshndx@@ELFUTILS_1.0
+   170: 0000000000000000     0 OBJECT  GLOBAL DEFAULT  ABS ELFUTILS_1.5
+   171: 000000000000d660   306 FUNC    GLOBAL DEFAULT   16 elf_newdata@@ELFUTILS_1.0
+   172: 0000000000009d40   798 FUNC    GLOBAL DEFAULT   16 elf_end@@ELFUTILS_1.0
+   173: 0000000000000000     0 OBJECT  GLOBAL DEFAULT  ABS ELFUTILS_1.6
+   174: 0000000000009930    41 FUNC    GLOBAL DEFAULT   16 elf_errno@@ELFUTILS_1.0
+   175: 0000000000011150   123 FUNC    GLOBAL DEFAULT   16 gelf_getversym@@ELFUTILS_1.0
+   176: 0000000000000000     0 OBJECT  GLOBAL DEFAULT  ABS ELFUTILS_1.7
+   177: 0000000000014d90    37 FUNC    GLOBAL DEFAULT   16 gelf_checksum@@ELFUTILS_1.0
+   178: 000000000000b760  2152 FUNC    GLOBAL DEFAULT   16 elf_getarsym@@ELFUTILS_1.0
+
+Version symbols section '.gnu.version' contains 179 entries:
+ Addr: 0x00000000000021da  Offset: 0x000021da  Link: 5 (.dynsym)
+  000:   0 (*local*)       b (GLIBC_2.2.5)   b (GLIBC_2.2.5)   b (GLIBC_2.2.5)
+  004:   1 (*global*)      1 (*global*)      1 (*global*)      b (GLIBC_2.2.5)
+  008:   b (GLIBC_2.2.5)   1 (*global*)      1 (*global*)      b (GLIBC_2.2.5)
+  00c:   b (GLIBC_2.2.5)   b (GLIBC_2.2.5)   c (GLIBC_2.4)     b (GLIBC_2.2.5)
+  010:   1 (*global*)      b (GLIBC_2.2.5)   b (GLIBC_2.2.5)   1 (*global*)   
+  014:   b (GLIBC_2.2.5)   1 (*global*)      b (GLIBC_2.2.5)   b (GLIBC_2.2.5)
+  018:   b (GLIBC_2.2.5)   b (GLIBC_2.2.5)   b (GLIBC_2.2.5)   b (GLIBC_2.2.5)
+  01c:   1 (*global*)      d (GLIBC_2.3.4)   1 (*global*)      e (GLIBC_2.14) 
+  020:   b (GLIBC_2.2.5)   1 (*global*)      f (GLIBC_2.38)    b (GLIBC_2.2.5)
+  024:   1 (*global*)      b (GLIBC_2.2.5)   b (GLIBC_2.2.5)   b (GLIBC_2.2.5)
+  028:   b (GLIBC_2.2.5)   b (GLIBC_2.2.5)   b (GLIBC_2.2.5)   1 (*global*)   
+  02c:   b (GLIBC_2.2.5)   b (GLIBC_2.2.5)   b (GLIBC_2.2.5)   c (GLIBC_2.4)  
+  030:   b (GLIBC_2.2.5)   b (GLIBC_2.2.5)   1 (*global*)      d (GLIBC_2.3.4)
+  034:   b (GLIBC_2.2.5)   1 (*global*)      b (GLIBC_2.2.5)  10 (GLIBC_2.33) 
+  038:   b (GLIBC_2.2.5)   b (GLIBC_2.2.5)  11 (GLIBC_2.3)     2 (ELFUTILS_1.0)
+  03c:   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)
+  040:   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)
+  044:   2 (ELFUTILS_1.0)   a (ELFUTILS_1.7)   a (ELFUTILS_1.7)   8 (ELFUTILS_1.5)
+  048:   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)   6 (ELFUTILS_1.3)
+  04c:   2 (ELFUTILS_1.0)   9 (ELFUTILS_1.6)   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)
+  050:   4 (ELFUTILS_1.1.1)    2 (ELFUTILS_1.0)   4 (ELFUTILS_1.1.1)    2 (ELFUTILS_1.0)
+  054:   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)
+  058:   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)
+  05c:   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)
+  060:   2 (ELFUTILS_1.0)   a (ELFUTILS_1.7)   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)
+  064:   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)
+  068:   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)   3 (ELFUTILS_1.1)
+  06c:   8 (ELFUTILS_1.5)   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)   3 (ELFUTILS_1.1)
+  070:   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)
+  074:   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)
+  078:   4 (ELFUTILS_1.1.1)    2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)
+  07c:   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)   4 (ELFUTILS_1.1.1)    6 (ELFUTILS_1.3)
+  080:   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)
+  084:   2 (ELFUTILS_1.0)   6 (ELFUTILS_1.3)   a (ELFUTILS_1.7)   2 (ELFUTILS_1.0)
+  088:   2 (ELFUTILS_1.0)   a (ELFUTILS_1.7)   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)
+  08c:   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)   4 (ELFUTILS_1.1.1)    2 (ELFUTILS_1.0)
+  090:   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)
+  094:   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)
+  098:   5 (ELFUTILS_1.2)   2 (ELFUTILS_1.0)   7 (ELFUTILS_1.4)   2 (ELFUTILS_1.0)
+  09c:   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)
+  0a0:   2 (ELFUTILS_1.0)   3 (ELFUTILS_1.1)   6 (ELFUTILS_1.3)   5 (ELFUTILS_1.2)
+  0a4:   2 (ELFUTILS_1.0)   6 (ELFUTILS_1.3)   2 (ELFUTILS_1.0)   7 (ELFUTILS_1.4)
+  0a8:   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)   8 (ELFUTILS_1.5)   2 (ELFUTILS_1.0)
+  0ac:   2 (ELFUTILS_1.0)   9 (ELFUTILS_1.6)   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)
+  0b0:   a (ELFUTILS_1.7)   2 (ELFUTILS_1.0)   2 (ELFUTILS_1.0)
+
+Version definition section '.gnu.version_d' contains 10 entries:
+ Addr: 0x0000000000002340  Offset: 0x00002340  Link: 6 (.dynstr)
+  000000: Rev: 1  Flags: BASE  Index: 1  Cnt: 1  Name: libelf.so.1
+  0x001c: Rev: 1  Flags: none  Index: 2  Cnt: 1  Name: ELFUTILS_1.0
+  0x0038: Rev: 1  Flags: none  Index: 3  Cnt: 2  Name: ELFUTILS_1.1
+  0x0054: Parent 1: ELFUTILS_1.0
+  0x005c: Rev: 1  Flags: none  Index: 4  Cnt: 2  Name: ELFUTILS_1.1.1
+  0x0078: Parent 1: ELFUTILS_1.1
+  0x0080: Rev: 1  Flags: none  Index: 5  Cnt: 2  Name: ELFUTILS_1.2
+  0x009c: Parent 1: ELFUTILS_1.1.1
+  0x00a4: Rev: 1  Flags: none  Index: 6  Cnt: 2  Name: ELFUTILS_1.3
+  0x00c0: Parent 1: ELFUTILS_1.2
+  0x00c8: Rev: 1  Flags: none  Index: 7  Cnt: 2  Name: ELFUTILS_1.4
+  0x00e4: Parent 1: ELFUTILS_1.3
+  0x00ec: Rev: 1  Flags: none  Index: 8  Cnt: 2  Name: ELFUTILS_1.5
+  0x0108: Parent 1: ELFUTILS_1.4
+  0x0110: Rev: 1  Flags: none  Index: 9  Cnt: 2  Name: ELFUTILS_1.6
+  0x012c: Parent 1: ELFUTILS_1.5
+  0x0134: Rev: 1  Flags: none  Index: 10  Cnt: 2  Name: ELFUTILS_1.7
+  0x0150: Parent 1: ELFUTILS_1.6
+
+Version needs section '.gnu.version_r' contains 1 entry:
+ Addr: 0x0000000000002498  Offset: 0x00002498  Link: 6 (.dynstr)
+  000000: Version: 1  File: libc.so.6  Cnt: 8
+  0x0010:   Name: GLIBC_ABI_DT_RELR  Flags: none  Version: 18
+  0x0020:   Name: GLIBC_2.3  Flags: none  Version: 17
+  0x0030:   Name: GLIBC_2.33  Flags: none  Version: 16
+  0x0040:   Name: GLIBC_2.38  Flags: none  Version: 15
+  0x0050:   Name: GLIBC_2.14  Flags: none  Version: 14
+  0x0060:   Name: GLIBC_2.3.4  Flags: none  Version: 13
+  0x0070:   Name: GLIBC_2.4  Flags: none  Version: 12
+  0x0080:   Name: GLIBC_2.2.5  Flags: none  Version: 11

@@ -1,0 +1,99 @@
+{
+  "direct_executor_join_confirmed": true,
+  "observed_at": 1792516987.9051845,
+  "owner_status": {
+    "argv": [
+      "/usr/bin/sudo",
+      "-A",
+      "/home/holden/anaconda3/bin/python3",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/runtime-source-1/native_diagnostic_container_owner.py",
+      "--owner-sha256",
+      "3e52d1341248b6fb480d523c45de492890fe5baef18c0ce9d391b1de1aaef08d",
+      "--attempt-parent",
+      "/home/holden/mckernel-work/scratch/e7s-261020-1/p",
+      "--nonce",
+      "7d7dc8220e24aa11d9eb5df926873ffe",
+      "--manifest",
+      "/home/holden/mckernel-work/scratch/e7n-261020-1/manifest.json",
+      "--manifest-sha256",
+      "dc8c04d13e216e3044aafad9e592eabbd31bfb3e8033404d108f4e48c578a886"
+    ],
+    "direct_child_joined": true,
+    "elapsed_seconds": 38.08586707798531,
+    "observer_error": null,
+    "pid": 2156964,
+    "process_group_absent": true,
+    "returncode": 1,
+    "role": "native-owner",
+    "start": "31436121",
+    "streams": {
+      "stderr": {
+        "metadata": {
+          "ctime_ns": 1792516954584063987,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48387464,
+          "mode": 384,
+          "mtime_ns": 1792516954584063987,
+          "nlink": 1,
+          "size": 1850,
+          "uid": 1000
+        },
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-native-data-20261020-1/native-control-packet-2/captures/03-native-owner/stderr",
+        "sha256": "45b092a7a96fd6cbd771c28aeef9dc62460581b5565de8a0de54c8a2a570769a"
+      },
+      "stdout": {
+        "metadata": {
+          "ctime_ns": 1792516916510901624,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48387463,
+          "mode": 384,
+          "mtime_ns": 1792516916510901624,
+          "nlink": 1,
+          "size": 0,
+          "uid": 1000
+        },
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-native-data-20261020-1/native-control-packet-2/captures/03-native-owner/stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  },
+  "schema": "mckernel.root.exit7-joined-executor-observation.v1",
+  "scope": "Closed owner failure; no application or physical acceptance. No success readbacks ran. Manual failure readbacks require their genuine release.",
+  "tool_exit_code": 1,
+  "tool_session": 6413,
+  "whole_result": {
+    "failed_stage": "native-owner",
+    "finished_at": 1792516954.6077209,
+    "rows": [
+      {
+        "elapsed_seconds": 0.6676655240007676,
+        "name": "LAST-snapshot",
+        "returncode": 0,
+        "status_path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-native-data-20261020-1/native-control-packet-2/root-seven1-LAST-snapshot.status.json"
+      },
+      {
+        "elapsed_seconds": 0.08406843000557274,
+        "name": "machine-assembly",
+        "returncode": 0,
+        "status_path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-native-data-20261020-1/native-control-packet-2/root-seven1-machine-assembly.status.json"
+      },
+      {
+        "elapsed_seconds": 0.11674276500707492,
+        "name": "final-guard",
+        "returncode": 0,
+        "status_path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-native-data-20261020-1/native-control-packet-2/root-seven1-final-guard.status.json"
+      },
+      {
+        "elapsed_seconds": 38.13162324699806,
+        "name": "native-owner",
+        "returncode": 1,
+        "status_path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-native-data-20261020-1/native-control-packet-2/root-seven1-native-owner.status.json"
+      }
+    ],
+    "started_at": 1792516915.6053903,
+    "status": "FAIL_STOPPED"
+  }
+}

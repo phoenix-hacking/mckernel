@@ -1,0 +1,97 @@
+{
+  "C_oracle_and_independent_event_state_driver": {
+    "bytes": 6682,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body4-restart-20261028-1/driver.c",
+    "sha256": "37bd5d5be7a12f63360ad975c73847fee4625b5de83b1b05d98588c99a5722c9"
+  },
+  "actual_HOST": {
+    "bytes": 14060,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body4-restart-20261028-1/output-PENDING-ROOT/ACTUAL-HOST-RESULT.json",
+    "sha256": "7a4eeb99bf3dc882e5f2fed6e0863b8cf20b6ebf1def264979982509d789b58e"
+  },
+  "actual_caps": [
+    1793253600,
+    1035704.5689393478,
+    1051042.6959879305
+  ],
+  "actual_commands_reviewed": 3,
+  "actual_direct_joins": [
+    {
+      "birth": "101521743",
+      "parent_streams_closed": true,
+      "pid": 2129788,
+      "positive_wait4_join": true,
+      "returncode": 0
+    },
+    {
+      "birth": "101521751",
+      "parent_streams_closed": true,
+      "pid": 2129795,
+      "positive_wait4_join": true,
+      "returncode": 0
+    },
+    {
+      "birth": "101521764",
+      "parent_streams_closed": true,
+      "pid": 2129800,
+      "positive_wait4_join": true,
+      "returncode": 0
+    }
+  ],
+  "actual_pairs_reviewed": 72,
+  "composition": "Merge exact source fragment and C extern/fallback with adopted118 and qualified do_munmap; preserve logical C lines/ABI and existing selectors. Fullcrate/selected+fallbackTU/defaultlink/matching-native obligations remain.",
+  "credit_ceiling": "57774.852125",
+  "credit_run_id": "7f4af94a83b14cc08f97401f5891d965",
+  "decision": "PASS_PRIVATE_SOURCE_VARIADIC_ABI_OWNERSHIP_AND_ACTUAL_HOST72_ONLY",
+  "evidence_checks": {
+    "bytes": 34377,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/BODY4-REVIEW-1/CHECKS.json",
+    "sha256": "be87e64ef4785d8dbcfff912a0be6d5b2ba251d2507a114cbbf037df5f009374"
+  },
+  "explanation": {
+    "bytes": 6773,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/BODY4-REVIEW-1/README.md",
+    "sha256": "844edc256e057e02eda1e01905561d9db19c9340b42afa22fc640da50182d5c5"
+  },
+  "functional_findings": [
+    "One descriptor captured before first log; two ordered512-slot sections; zero suppression; signed-long64 counts and int32 indices; exact varargs and ignored logger results.",
+    "Production function matches compiled fixture; existing complete UTI Rust layouts reused; genuine header ABI26 and verbatim original C oracle.",
+    "Independent expected events/full primary+decoy bytes and logger mutations test future-slot live reads, already-visited slots, pointer capture and no extra writes.",
+    "Raw foreign pointer only; original caller lifetime/synchronization/TODO usercopy contract retained."
+  ],
+  "genuine_ABI_words": 26,
+  "grant": {
+    "bytes": 8869,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body4-restart-20261028-1/ROOT-ORDINARY-HOST-GRANT.json",
+    "sha256": "c9e3741f3f008be008d2019c23c9723865d54193cc59b820fe34b0d24a00b9e2"
+  },
+  "implementation_ownership": false,
+  "independent": true,
+  "new_C_retirements": 0,
+  "new_default_artifacts": 0,
+  "new_file_closures": 0,
+  "new_native_cases": 0,
+  "original_C": {
+    "bytes": 454,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body4-restart-20261028-1/util-profile-original.C.inc",
+    "sha256": "dae0dda221b0c38a05d04167f50abd1e3c2791932505a9b9d027d02c69186f52"
+  },
+  "ownership_limit": "Direct wait4 joins and parent closure verified; F03 group scanner skips inaccessible proc entries, so empty-group rows are not global native/physical clearance.",
+  "reviewer": "/root/consumer_review",
+  "reviewer_compiler_fixture_guard_replays": 0,
+  "runtime_authority": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source": {
+    "bytes": 2385,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body4-restart-20261028-1/util-profile-entry.Rust.inc",
+    "sha256": "ab89da6152751fb73ad6c6e0429bf7bf3d1923d27c4eb32e0a776b646ac6d825"
+  },
+  "source_blockers": [],
+  "source_ready": {
+    "bytes": 10734,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body4-restart-20261028-1/SOURCE-READY.json",
+    "sha256": "2492759568f3682c54ee539931e7692e8b461c3dc899c7bf338490d8b7a46bc3"
+  },
+  "spent_floor": "22812.3311",
+  "target": "util_show_syscall_profile"
+}

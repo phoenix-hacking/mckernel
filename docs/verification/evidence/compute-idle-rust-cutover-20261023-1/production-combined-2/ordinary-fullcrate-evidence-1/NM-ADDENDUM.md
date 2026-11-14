@@ -1,0 +1,7 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+The separately granted read-only /usr/bin/nm --defined-only -g on the unchanged54449c60 full-crate object passed exit0 in0.05259539099643007s. Child3569071/start53843555 joined; group absent and streams closed; error/retirement_error null. All10 required exports, derived directly from accepted correction1 driver M14_RUST_EXPORTS, appear exactly once as T. This includes idle orchestration/currentCPU bridges and both memory callbacks. Full nm output/stderr remain retained in nm.stdout/nm.stderr and HOST nm-capture-1.
+
+Optional post-success text source-location derivation failed because x86_local.rs contains two cfg-dependent processor-ID definitions. This parser family stopped without correction or rerun; no location-selection inference or false unique-source claim. OPTIONAL-SOURCE-LOCATION-POSTPROCESS-FAILURE.json preserves the observed assertion and candidates. Actual object symbol uniqueness remains proved by nm-result.json; input-bindings.json retains the exact manifest,80 hashed Rust input files, recipe and accepted3path maps. No compiler/nm failure occurred.
+
+Object13632104B/SHA54449c60ed1afe9f18d49968d3b879493f64cecded27e845481162bdd86d867c unchanged. Earlier unexecuted nm proposal and report remain chronological history. No linker/native operation ran. Production selected C TU imports/relocations, final image/defaultlink/native/C retirement remain open. CPU0 compiler and nm groups have fully joined.

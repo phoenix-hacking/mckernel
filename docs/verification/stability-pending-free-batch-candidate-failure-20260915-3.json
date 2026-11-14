@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "record_kind": "pending_free_batch_candidate_failure",
+  "task_id": "M03-A/M03-B",
+  "attempt": 3,
+  "status": "FAIL_SOURCE_REVIEW",
+  "base_commit": "55ad29bb3fbb0a843e939701de6d109c484d9ff5",
+  "candidate_files": [
+    {"path": "kernel/rust/mem_helpers.rs", "sha256": "1914c1ee858e97a14847e19ee2bfe260281ac51c742f9627be6032f2b89cddf4"},
+    {"path": "kernel/rust/tests/run_equivalence.sh", "sha256": "26ccc5ea8f341b8cd276957984402994ab9b52d3eb6e4a8582c81b59158e16ce"},
+    {"path": "kernel/rust/tests/pending_free_batch_vectors.rs", "sha256": "6f0555989406254ed695597872593eed9d89c6cd80cc7f26dca04c1f5261061f"},
+    {"path": "kernel/rust/tests/pending_free_batch_vectors.c", "sha256": "3522c13b42a7c1d92f45b5300e98241998905533d367eeccf0ef31bb5cb12313"},
+    {"path": "kernel/rust/tests/pending_free_batch_not_send.rs", "sha256": "29c3130ef8157a4acdcd7f3673ae96c9c6c6aab17a3f5c02de976b97b8a86fec"},
+    {"path": "kernel/rust/tests/pending_free_batch_not_unpin.rs", "sha256": "9fd4346dd82f4cee12bb2d74efbcee0bba6e2256cc6e989803cc49c65f8d0b61"},
+    {"path": "kernel/rust/tests/pending_free_batch_not_sync.rs", "sha256": "da0f2bb1d7039f641dac6586e1b236215312900aa01ff18dc5a0c371c2e16694"}
+  ],
+  "archive": {
+    "path": "docs/verification/evidence/stability-pending-free-batch-candidate-failure-20260915-3.tar.gz",
+    "size": 721731,
+    "sha256": "e9b54abb94249b533b337b6129b8c6ff4b7ce61bc5158141236dc937b0e24da0",
+    "members": 7
+  },
+  "independent_review": {
+    "role": "Astra/high ownership and unsafe-code reviewer",
+    "status": "FAIL",
+    "findings": [
+      {"severity": "P1", "finding": "Actual cfg(test) helpers are excluded by the library runner; external vectors and trait checks still use substitute types."},
+      {"severity": "P1", "finding": "The embedded test violates the mutable Pin borrow and does not compile."},
+      {"severity": "P1", "finding": "Drain returns two descriptors, but the test incorrectly expects the callback page sum of five."},
+      {"severity": "P2", "finding": "Later-invalid drain, full preservation, retained/source isolation, repeated drain and independent capture coverage remain absent."}
+    ]
+  },
+  "accepted_observations": [
+    "Empty detach resets the source and mixed destination states reject before mutation.",
+    "Mismatched source and drained-state checks reject before release.",
+    "Safety comments now state stable descriptors, exclusive ownership, pin lifetime and callback restrictions."
+  ],
+  "compiled": false,
+  "runtime_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}

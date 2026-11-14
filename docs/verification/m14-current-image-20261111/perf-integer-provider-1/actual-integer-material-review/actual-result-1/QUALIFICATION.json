@@ -1,0 +1,57 @@
+{
+  "ISA": {
+    "bytes": 5639,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-builtin-integer-closure-review-publicabi-max-1/actual-result-1/ISA-SCAN.json",
+    "sha256": "7f5a717c7b0b586a6804ad885b260afbfdd693647703184a1c4e31ea044c74ed"
+  },
+  "actual_result": {
+    "bytes": 10872,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/integer-builtins-1/execution-1/RESULT.json",
+    "sha256": "109745aaae649682facf789f171e0af6b9b97be4a2f7202156505a89c10ae66b"
+  },
+  "at_utc": "2026-11-11T17:02:52.000173+00:00",
+  "decision": "GO",
+  "effects": "Pure saved-byte/ELF/text parser only. No compiler/readelf/objdump/helper/source/test/runtime/native/canonical replay or action.",
+  "facts": {
+    "ELF": "ELF64LE ET_REL X86_64;45sections/47symbols, no program headers",
+    "ISA": "19 nonempty executable sections/4830bytes/1558instructions, all saved bytes matched; no SIMD/MMX/x87/privileged/native-IO observations or EH/TLS.",
+    "exports": "Nine genuine WEAK HIDDEN unsigned C-ABI functions plus nine strong HIDDEN mangled source functions; all nonempty. Real __udivti3 is50B and its real u128_div_rem helper is1018B.",
+    "imports": "Zero named UND of any binding; all six code relocations resolve within this object to the local genuine helper.",
+    "metadata": "Actual new76400B metadata7068131f is paired with134528B object8cf38cfa. Exact7ec5 input is bound by actual compiler result/request and both identical10dependency lists (facade+8upstream+coremetadata). No old failed metadata adopted."
+  },
+  "full_Root_completion": {
+    "bytes": 2351,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/integer-builtins-1/execution-1/ROOT-EXEC-COMPLETION.json",
+    "sha256": "1d94b87487a0111e2f4038177862fe5bf9e7a6e315263d0b8bbf96afafc0ffe5"
+  },
+  "limits": [
+    "SSE2 ABI warning retained and not waived.",
+    "No arithmetic execution/fatal test/whole consumer type+link/new image/native acceptance from this producer.",
+    "Five remaining real core memory/handler roots and any new consumer imports still require actual link/provider joins.",
+    "SourceAcq independently qualifies saved source-custody and current process retirement; this material review releases no resource or UNKNOWN hold."
+  ],
+  "material_source_GO": {
+    "bytes": 13547,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-builtin-integer-closure-review-publicabi-max-1/REVIEW.json",
+    "sha256": "c4fe53515a932c7b8b20fe8e199a94411691e1245c8bb8280841e9113fae610a"
+  },
+  "original_acceptance": false,
+  "provider": {
+    "bytes": 14095,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-builtin-integer-closure-review-publicabi-max-1/actual-result-1/ELF-PROVIDERS-IMPORTS.json",
+    "sha256": "6797daa80cb999d129ee75f610e5144476c1fe993deceb992bbd3124ff9a2836"
+  },
+  "reused_core_material_ISA": {
+    "bytes": 5310,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-review-publicabi-max-1/first-core-compile-1/actual-result-1/QUALIFICATION.json",
+    "sha256": "8b21f19d339e7a318ac3649a38156a166eb69be4b296abe8c34efc4a3fff7a57"
+  },
+  "reviewer": "/root/public_abi_join_max; actual Sol/MAX",
+  "schema": 1,
+  "status": "GO_ACTUAL_INTEGER_BUILTINS_PROVIDER_ISA_METADATA_AT_DEPENDENCY_SCOPE",
+  "tuple": {
+    "bytes": 6405,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-builtin-integer-closure-review-publicabi-max-1/actual-result-1/INTEGER-BUILTINS-OUTPUT-TUPLE.json",
+    "sha256": "6a0477b6fa44f89e0ef840d10b7dafbcb4b0acbe71079b5f0d0e060781da521b"
+  }
+}

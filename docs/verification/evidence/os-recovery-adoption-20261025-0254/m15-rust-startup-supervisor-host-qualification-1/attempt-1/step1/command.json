@@ -1,0 +1,16 @@
+{
+  "purpose": "Functional OS only; no security testing. Compile16ordinarycontrols",
+  "argv": [
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+    "--edition=2021",
+    "-D",
+    "warnings",
+    "-C",
+    "codegen-units=1",
+    "--test",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-supervisor-source-1/main.rs",
+    "-o",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-supervisor-host-qualification-1/attempt-1/startup-tests"
+  ],
+  "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-supervisor-source-1"
+}

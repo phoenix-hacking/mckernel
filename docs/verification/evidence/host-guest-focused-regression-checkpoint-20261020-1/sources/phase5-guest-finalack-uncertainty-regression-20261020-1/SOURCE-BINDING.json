@@ -1,0 +1,114 @@
+{
+  "current_whole_modules_before_test_append": [
+    {
+      "current_production": {
+        "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+        "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+        "bytes": 76151
+      },
+      "fixture": {
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/fixture/abi.rs",
+        "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+        "bytes": 76151
+      },
+      "whole_module_equal": true
+    },
+    {
+      "current_production": {
+        "path": "/home/holden/mckernel/kernel/rust/fork_control_guest.rs",
+        "sha256": "26797f574fa1ba7006eb27ff3a1a7750ec04b83f71a2e90b8c35c4c536b33acd",
+        "bytes": 18671
+      },
+      "fixture": {
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/fixture/fork_control_guest.rs",
+        "sha256": "26797f574fa1ba7006eb27ff3a1a7750ec04b83f71a2e90b8c35c4c536b33acd",
+        "bytes": 18671
+      },
+      "whole_module_equal": true
+    },
+    {
+      "current_production": {
+        "path": "/home/holden/mckernel/kernel/rust/fork_control_registry.rs",
+        "sha256": "a2f92bb11cba42fef0d95e1f1e1a4c526351ff90860baed7913fa26c91137ba5",
+        "bytes": 14785
+      },
+      "fixture": {
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/fixture/fork_control_registry.rs",
+        "sha256": "a2f92bb11cba42fef0d95e1f1e1a4c526351ff90860baed7913fa26c91137ba5",
+        "bytes": 14785
+      },
+      "whole_module_equal": true
+    },
+    {
+      "current_production": {
+        "path": "/home/holden/mckernel/kernel/rust/fork_child_credits.rs",
+        "sha256": "63b82c97cc6e1204585cfaf2b89ef378b88c1d207a8e82c2f1400bc352f9c98d",
+        "bytes": 28612
+      },
+      "fixture": {
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/fixture/fork_child_credits.rs",
+        "sha256": "63b82c97cc6e1204585cfaf2b89ef378b88c1d207a8e82c2f1400bc352f9c98d",
+        "bytes": 28612
+      },
+      "whole_module_equal": true
+    },
+    {
+      "current_production": {
+        "path": "/home/holden/mckernel/kernel/rust/fork_constructed_credits.rs",
+        "sha256": "4c1e96ef4fbf5cb66acc54d900d37fcd68fb4d50dd1337c4428b3f5e2ecd1972",
+        "bytes": 10534
+      },
+      "fixture": {
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/fixture/fork_constructed_credits.rs",
+        "sha256": "4c1e96ef4fbf5cb66acc54d900d37fcd68fb4d50dd1337c4428b3f5e2ecd1972",
+        "bytes": 10534
+      },
+      "whole_module_equal": true
+    },
+    {
+      "current_production": {
+        "path": "/home/holden/mckernel/kernel/rust/fork_final_ack.rs",
+        "sha256": "093f742dfe4969d78b2ca6b8b643df94042945e890d26003dec9d1818c34826b",
+        "bytes": 5506
+      },
+      "fixture": {
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/fixture/fork_final_ack.rs",
+        "sha256": "093f742dfe4969d78b2ca6b8b643df94042945e890d26003dec9d1818c34826b",
+        "bytes": 5506
+      },
+      "whole_module_equal": true
+    },
+    {
+      "current_production": {
+        "path": "/home/holden/mckernel/kernel/rust/fork_runnable_child.rs",
+        "sha256": "a9387ae13b85785176b95fc6ddc79b08bd31dd7960b0730307b41b5a05b5d137",
+        "bytes": 12855
+      },
+      "fixture": {
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/fixture/fork_runnable_child.rs",
+        "sha256": "a9387ae13b85785176b95fc6ddc79b08bd31dd7960b0730307b41b5a05b5d137",
+        "bytes": 12855
+      },
+      "whole_module_equal": true
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "item": "release_thread_runtime_final_checked",
+      "sha256": "e34b3dd27823941ca3fcb549e581fb6510b64731075dea84b4efd04c484e9f76",
+      "actual_body_equal": true
+    }
+  ],
+  "old_actual_body_harness": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-20261020-1/phase4-revoke-ack-correction-1/guest-fixture-1/actual-phase4.rs",
+    "sha256": "4e6791e72f323a388e167d8a557522d5f78c7d5018e75ca95e44d5ae573f6f0e",
+    "bytes": 9967
+  },
+  "adapters": [
+    "existing clone constructor and VM-release callback",
+    "host physical identity and final transport fault injection",
+    "unprivileged single-thread preempt and IF context",
+    "unexecuted runtime-final VM/write/runqueue paths panic; no runtime proof"
+  ],
+  "tests": "finalack_uncertainty_ only",
+  "source_modifications": "none; test-only accessors appended to private guest copy"
+}

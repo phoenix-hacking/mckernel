@@ -1,0 +1,378 @@
+{
+  "accepted_build_scope": {
+    "bytes": 21986,
+    "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-boundary-review-20261018-1/ACTUAL-GUARD-BUILD-PREBUILD-REVIEW.json",
+    "sha256": "5f9cc1d74a819d68c3ca9301a4cbb2df1879514c8ce9ad0575f7e19de2ad8ecd"
+  },
+  "actual_primary_artifacts": {
+    "bytes": 1821,
+    "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/actual-artifacts.json",
+    "sha256": "d8365d5b089a55587f24d1db6314a918f5fe612315da862affcfe1a061f7a8a0"
+  },
+  "all17_passed": false,
+  "artifact_report_interface": {
+    "bytes": 8592,
+    "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-boundary-review-20261018-1/PRODUCTION-ARTIFACT-INTERFACE.json",
+    "sha256": "01d89e6ad99aafedb26e866de97a962dc2327ac2e9d54fda1b2c9bcbe3142fc8"
+  },
+  "command15_failure": {
+    "direct_child_joined": true,
+    "elapsed_seconds": 0.4068456340173725,
+    "observer_error": null,
+    "preservation": "Retain original status and full stdout/stderr byte-identically; no unchanged retry or automatic larger cap.",
+    "prohibited_inference": "The timeout diagnostic is not proof that a separate core file exists. This failed capped capture is not a successful complete readelf run or artifact acceptance.",
+    "raw_tail_diagnosis": "Complete output reaches .rela.debug_loc28169 entries then .rela.debug_info134663 entries; the8MiB file ends mid .debug_str relocation row. This establishes output-file exhaustion while dumping all relocations, not a DWARF decoder error or invalid kernel/object.",
+    "returncode": -25,
+    "signal": "SIGXFSZ",
+    "status": {
+      "bytes": 860,
+      "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/captures/rust-data-relocations-sections.status.json",
+      "sha256": "2e11733d4980d9e9dae34f1ed09422e1e8f4549901acb7ca99610f84babebfc5"
+    },
+    "stderr": {
+      "bytes": 52,
+      "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/captures/rust-data-relocations-sections.stderr",
+      "sha256": "f8cc08bbf284c01f9fd9df6d765c76313aee1f800406b91d27e1cc9a6b785026"
+    },
+    "stderr_bytes": 52,
+    "stderr_text": "/usr/bin/timeout: the monitored command dumped core\n",
+    "stdout": {
+      "bytes": 8388608,
+      "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/captures/rust-data-relocations-sections.stdout",
+      "sha256": "bd518e881acb31ebba99c41805b54d670c36745f187e1102c08504311682cddb"
+    },
+    "stdout_bytes": 8388608,
+    "stdout_hard_cap_bytes": 8388608,
+    "symbol_path": "dispatch_fp_postbuild_first_stage.py:62 command-15; readelf -WrS normal mckernel_rust.o"
+  },
+  "compute_c_retirement_credit": false,
+  "copy_status": {
+    "bytes": 3474,
+    "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/copy.status.json",
+    "sha256": "fa6f70299be31372c009f6f525fa2d950b1f31934674810b2c550a037aaa5a89"
+  },
+  "copy_stderr": {
+    "bytes": 0,
+    "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/copy.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "copy_stdout": {
+    "bytes": 40,
+    "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/copy.stdout",
+    "sha256": "04987ab7a8f2617f6bf9d3b8ed69e01c1efa743de992d1bfccaa33ac21436641"
+  },
+  "decision": "ACCEPT_SUCCESSFUL_PREFIX_RETAIN_COMMAND15_TOOL_FAILURE",
+  "dispatcher_records_decision": true,
+  "exact_execution_release": {
+    "bytes": 4642,
+    "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/postbuild-execution-release.json",
+    "sha256": "e2cf6f80957161f57f9e88a7ce9eb4532ef0eca8d84c8831a274f37cc95e2ccf"
+  },
+  "executed_plan": {
+    "bytes": 26836,
+    "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/exact-first-stage-command-plan.json",
+    "sha256": "b1da3554419a415256c66c9c597c6fc29edff89788d33c20ac0ac12a29f16417"
+  },
+  "final_artifact_default_link_body_descriptor_decision": "PENDING_REMAINING_AUTHORIZED_PROOF",
+  "first_stage_status": "FAIL_COMMAND15_CAPTURE_LIMIT",
+  "heavy_execution_authority": false,
+  "historical_scope": "Original paired syscall13 decoder failure and full-DWARF gap remain preserved and independent of this new command15 cap failure. New successful FP1-14 are not a repair/relabel of the historical sequence.",
+  "implementation_ownership": false,
+  "kernel_or_compiler_failure_inferred": false,
+  "observation_execution_authority": false,
+  "original_paired_all14_passed": false,
+  "parent_outer_join_notification": "Root tool84473 chunk57f5fa completed exit1; original traceback chunks2bbc89/57f5fa retained by dispatcher. Final outer status was being recorded at notification and was not read as a completed record by this reviewer.",
+  "remaining_scope": {
+    "descriptor_facts_derivation": "UNRUN per parent notification; no mechanical/semantic fact PASS inferred.",
+    "normalRust_descriptor_section_and_data_relocations": "Still needs clean successful bounded capture evidence under unchanged01d89/adapter status0 contract. Complete literal fragments within failed15 may be preserved as qualified diagnosis, never relabeled a successful operation.",
+    "operations16and19": "UNRUN per joined parent notification; not read or accepted here.",
+    "smallest_next_proposal": "Separately reviewed remaining-only targeted pinned objdump -r -j __verbose plus readelf -SW, then still-unrun16/19 and narrowly adapted fact grammar as necessary. Retain all prior failures; explicitly recompute cumulative already-retained bytes plus proposed finite remaining limits against existing reserve; no blind cap raise, alternate decoder or replay.",
+    "string_windows17and18": "PENDING actual mapping, exact late-bound review and separate execution approval."
+  },
+  "review_actions": "Read genuine completed raw/status evidence through15 and four copy identities only after root wholejoin failure notification. No tests/compiler/root/Git/build/cleanup/decoder execution, candidate/helper edits, counters or subagents. Wrote this report only.",
+  "reviewer": "/root/fp_release_boundary_review_2046",
+  "runtime_acceptance": false,
+  "schema": "mckernel.fp-release-actual-postbuild-prefix-review.v1",
+  "scope": "Functional PRACTICAL-GOAL Rust/reviewed-assembly OS/apps: genuine completed first-stage captures through command15 only; four preserved copies and successful1-14 operational evidence. No final artifact or native acceptance.",
+  "source_plan": {
+    "bytes": 6828,
+    "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/source-profile-review-request-v4.json",
+    "sha256": "4d5380fe05fffb18029a09892765e5d637ac7cfe051c40f3a7eaf4e9129e689d"
+  },
+  "successful_capture_refs": [
+    {
+      "index": 1,
+      "status": {
+        "bytes": 887,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/captures/cpu-nm.txt.status.json",
+        "sha256": "287fa7650ab0804c96a1d2ec6cdc05dd4784ea9f6efcee35a414a2fc33a4458f"
+      },
+      "stderr": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/captures/cpu-nm.txt.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 11182,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/captures/cpu-nm.txt",
+        "sha256": "76cfc551ca6664605d54de0149d1e7f42276c25e3fdcf29017845ae3dd47c22d"
+      }
+    },
+    {
+      "index": 2,
+      "status": {
+        "bytes": 894,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/captures/cpu-objdump.txt.status.json",
+        "sha256": "8987f368f2bfbe146d05c32be67f889e3dff75d9aa298575d01fd2a75f058491"
+      },
+      "stderr": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/captures/cpu-objdump.txt.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 175635,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/captures/cpu-objdump.txt",
+        "sha256": "d1a80fe7e8acd4e484859d15a57470c4c63942a4fb41b972ad732249321eeeaf"
+      }
+    },
+    {
+      "index": 3,
+      "status": {
+        "bytes": 894,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/captures/cpu-readelf.txt.status.json",
+        "sha256": "ba8d90faea5bc221a0d854fab1428642fc969f01fb7a2d4a68887f7a3e21ba99"
+      },
+      "stderr": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/captures/cpu-readelf.txt.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 24118,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/captures/cpu-readelf.txt",
+        "sha256": "b361855f96d41f1dbb3efc658067100bab7ed687287e5cf50df44456fbc1d941"
+      }
+    },
+    {
+      "index": 4,
+      "status": {
+        "bytes": 864,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/captures/fallback-nm.txt.status.json",
+        "sha256": "63066a4430986670d95a4ae008bb57812199390e4641590b345c8bc09438e760"
+      },
+      "stderr": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/captures/fallback-nm.txt.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 10632,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/captures/fallback-nm.txt",
+        "sha256": "e21e083e97df1c58dec3edacb59f038268efd24c6078e08cb1d66a1262b4ea56"
+      }
+    },
+    {
+      "index": 5,
+      "status": {
+        "bytes": 871,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/captures/fallback-objdump.txt.status.json",
+        "sha256": "6258fb76f0b8a77baa892cbdb3f109b194d6679ebbebcec8b28b1c58dd679a10"
+      },
+      "stderr": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/captures/fallback-objdump.txt.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 225278,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/captures/fallback-objdump.txt",
+        "sha256": "016c7361003a234975fee84e24bc80fa23229a005ef32d4f7db746a132f9ab3b"
+      }
+    },
+    {
+      "index": 6,
+      "status": {
+        "bytes": 870,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/captures/fallback-readelf.txt.status.json",
+        "sha256": "cea7d912c3785c6c52049d49a49d6906894e1ab63da3ab119dadd16af52f541a"
+      },
+      "stderr": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/captures/fallback-readelf.txt.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 23768,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/captures/fallback-readelf.txt",
+        "sha256": "ad2963a08a2db8279a6cde2056ed4857f3e632666d2e3ace9c2e43fb388af307"
+      }
+    },
+    {
+      "index": 7,
+      "status": {
+        "bytes": 851,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/captures/rust-nm.txt.status.json",
+        "sha256": "f7d29ddc04c9949ddffb698264a38e5892865b2e5c24fcc5c15d9a132d6114dd"
+      },
+      "stderr": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/captures/rust-nm.txt.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 339078,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/captures/rust-nm.txt",
+        "sha256": "604d33bce796d84c61d645b407ad9d4e2a7bb201d378a2ed26ca82c8bdc2de3f"
+      }
+    },
+    {
+      "index": 8,
+      "status": {
+        "bytes": 855,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/captures/rust-objdump.txt.status.json",
+        "sha256": "362599442a1f4d03d43b1e67ee3d0bd98914f2d245a5f878e11ca2f5fb1cac1d"
+      },
+      "stderr": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/captures/rust-objdump.txt.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 9248601,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/captures/rust-objdump.txt",
+        "sha256": "f9ad72980f15f84d57f0cb296908a3f2416ab82a8988cb19a79ff8052d0a4d07"
+      }
+    },
+    {
+      "index": 9,
+      "status": {
+        "bytes": 858,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/captures/rust-readelf.txt.status.json",
+        "sha256": "1dea67cf8e0f6a5604589229f5bf9e31cd9869c8b2012f0a25415caf8749aa89"
+      },
+      "stderr": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/captures/rust-readelf.txt.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 506493,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/captures/rust-readelf.txt",
+        "sha256": "6dd99a915f4396dab3f18c22cd42e170324f3d35257435b0acfea22401bc4ede"
+      }
+    },
+    {
+      "index": 10,
+      "status": {
+        "bytes": 843,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/captures/image-nm.txt.status.json",
+        "sha256": "d8ad916346e3e3a16ffc32fdcc7bf7a38d073f1e20a74e144b421681f2a9b28b"
+      },
+      "stderr": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/captures/image-nm.txt.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 224668,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/captures/image-nm.txt",
+        "sha256": "81b07c05a43c9043a12d06851c1e0aaba5074ea579e4b806d1316ae5f4046786"
+      }
+    },
+    {
+      "index": 11,
+      "status": {
+        "bytes": 851,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/captures/image-objdump.txt.status.json",
+        "sha256": "cc49dede4a7f75205a2085e4cb30e2da5137e42a94d0a58ee03476241dfa14f2"
+      },
+      "stderr": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/captures/image-objdump.txt.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 13996537,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/captures/image-objdump.txt",
+        "sha256": "3d8cfe42678492366e6e4635caa8a011d25fcd32bdca4cf922f00939b78d9844"
+      }
+    },
+    {
+      "index": 12,
+      "status": {
+        "bytes": 851,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/captures/image-readelf.txt.status.json",
+        "sha256": "bcf88dcf2af840c364e96d476115074e6dd49569c1cd31af2e790996bdc2453b"
+      },
+      "stderr": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/captures/image-readelf.txt.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 425695,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/captures/image-readelf.txt",
+        "sha256": "ff5797bc449af2a99a8139ccb5e81078bf857b3374a2255199d073cf251f8bf4"
+      }
+    },
+    {
+      "index": 13,
+      "status": {
+        "bytes": 880,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/captures/rust-release-descriptor.txt.status.json",
+        "sha256": "aeb4dd8e1af3459f0831d432a36c77ea38c1332f6e38c0da9b5772c6d27c73ef"
+      },
+      "stderr": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/captures/rust-release-descriptor.txt.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 324,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/captures/rust-release-descriptor.txt",
+        "sha256": "8bac63bdce7a74d59a71b3e55fe575eab4fb58477f97e29a7ed298a52dc490b3"
+      }
+    },
+    {
+      "index": 14,
+      "status": {
+        "bytes": 871,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/captures/image-release-descriptor.txt.status.json",
+        "sha256": "ee6016b0963e65892d7791c13bb866413a50ef47feb0e037474b1b3c1b517635"
+      },
+      "stderr": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/captures/image-release-descriptor.txt.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 212592,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/postbuild-first-stage-1/captures/image-release-descriptor.txt",
+        "sha256": "65710a0c374a94845ffcc7660a2cfea54b0e17872f3c199cabb3c275690686b2"
+      }
+    }
+  ],
+  "successful_prefix": {
+    "checks": "All exact executed argv match planned argv; statuses exit0/direct_child_joined true/observer_error null; stderr empty; stdout below individual caps; actual stream bytes/SHA256 match recorded status.",
+    "commands": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14
+    ],
+    "copies": 4,
+    "copy_checks": "CPU/process/normalRust/image originals and copies independently rechecked against bound SHA256 and sizes; distinct dev/inode identities and nlink1 on both; exact copy child joined0 and zero stderr.",
+    "reuse": "Preserve/reuse these exact captures and retained artifacts with their current authenticated identities. Do not replay operations1-14 or the four copies."
+  }
+}

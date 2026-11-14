@@ -1,0 +1,22 @@
+{
+  "status": "RELEASED_EXACT_READONLY_ONCE",
+  "review": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/runtime-current68-filebound-successor-1/logging-revision-1/terminal-preparation-1/INDEPENDENT-READONLY-ORCHESTRATION-REVIEW-1.json",
+  "admission": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/runtime-current68-filebound-successor-1/logging-revision-1/terminal-preparation-1/ROOT-FRESH-READONLY-ADMISSION-1.json",
+  "command": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=60:60",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/runtime-current68-filebound-successor-1/logging-revision-1/terminal-preparation-1/run_readonly_export_and_two_queries_once.py"
+  ],
+  "outer_supervisor": "exact accepted owned_capture990807ab, sameAPI,83wall,exclusive actual-readonly-whole-1; no implementationchange",
+  "no_new_native_or_build_authorized": true
+}

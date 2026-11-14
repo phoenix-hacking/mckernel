@@ -1,0 +1,23 @@
+{
+  "status": "PASS_ELF64_X86_64_REL_UNIQUE_CURRENT_CREDENTIAL_BINDING",
+  "actual_provider_defined_functions": {
+    "getcred_body_result": {
+      "bytes": 272,
+      "section": "4"
+    },
+    "syscall_refresh_cred_fields_body_result": {
+      "bytes": 163,
+      "section": "5"
+    },
+    "getcred": {
+      "bytes": 259,
+      "section": "2"
+    }
+  },
+  "actual_credential_entry_relocations": {
+    ".rela.ltext.do_setresuid": "    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n000000000000004e  0000001b00000001 R_X86_64_64            0000000000000000 get_this_cpu_local_var + 0\n0000000000000066  0000002500000001 R_X86_64_64            0000000000000000 getcred + 0\n0000000000000070  0000001d00000001 R_X86_64_64            0000000000000000 syscall_refresh_cred_fields_body_result + 0",
+    ".rela.ltext.do_setresgid": "    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n000000000000004e  0000001b00000001 R_X86_64_64            0000000000000000 get_this_cpu_local_var + 0\n0000000000000066  0000002500000001 R_X86_64_64            0000000000000000 getcred + 0\n0000000000000070  0000001d00000001 R_X86_64_64            0000000000000000 syscall_refresh_cred_fields_body_result + 0"
+  },
+  "target_getcred_and_refresh_are_defined_unique_current_provider": true,
+  "all_remaining_imports_intentionally_unresolved": true
+}

@@ -1,0 +1,30 @@
+{
+  "label": "compile1",
+  "argv": [
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+    "--edition=2021",
+    "-D",
+    "warnings",
+    "-C",
+    "opt-level=1",
+    "-C",
+    "codegen-units=1",
+    "-C",
+    "target-feature=+crt-static",
+    "-C",
+    "relocation-model=static",
+    "-C",
+    "link-arg=-no-pie",
+    "-C",
+    "link-arg=-Wl,-z,noexecstack",
+    "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/app1.rs",
+    "-o",
+    "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/app1"
+  ],
+  "cwd": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1",
+  "extra_env": {},
+  "pid": 1351101,
+  "returncode": 0,
+  "direct_join": true,
+  "elapsed_ns": 364892584
+}

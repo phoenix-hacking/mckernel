@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/check.py", line 95, in <module>
+    if __name__=='__main__':main()
+  File "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/check.py", line 71, in main
+    run(label+'-leaf-object',[rc,'--edition=2021','--crate-type=lib','-Awarnings']+cfg+rf+['--emit=obj',str(E/'extracted.rs'),'-o',str(target/'leaf.o')])
+  File "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/check.py", line 46, in run
+    assert not timed_out and p.returncode==0 and all(x['within_cap'] and not x['cap_reached'] for x in captures.values()),(n,'STOP unexpected failure, retained file-backed streams')
+AssertionError: ('tofu-leaf-object', 'STOP unexpected failure, retained file-backed streams')

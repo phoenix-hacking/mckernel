@@ -1,0 +1,21 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Root executes these once, with actual reviewed inputs. No source edits or nonce reset.
+The existing prepared input command is intentionally absent; preserve request55d8/nonce1fff.
+
+Root fresh resource/admission capture; existing writer, never executed by worker
+/home/holden/anaconda3/bin/python3 -I -B /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/ROOT_capture_mock64_resource.py
+
+propose exact payload/hash using isolated existing frontend; zero Target calls
+/home/holden/anaconda3/bin/python3 -I -B /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/ROOT-STATIC-ADOPTION-BATCH-1/adopt_mock64_batch.py propose
+
+after actual sole reviewer PASS; verify supplied exact SHA and publish Root-reviewed release; zero Target calls
+/home/holden/anaconda3/bin/python3 -I -B /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/ROOT-STATIC-ADOPTION-BATCH-1/adopt_mock64_batch.py publish --review ACTUAL_EXECUTION_REVIEW_PATH --review-sha256 ACTUAL_EXECUTION_REVIEW_SHA256
+
+actual Root-owned isolated entry once only
+/home/holden/anaconda3/bin/python3 -I -B /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/ROOT-STATIC-ADOPTION-BATCH-1/adopt_mock64_batch.py entry
+
+after actual external parent tool exit0 is retained as raw JSON
+/home/holden/anaconda3/bin/python3 -I -B /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/ROOT-STATIC-ADOPTION-BATCH-1/adopt_mock64_batch.py afterjoin --parent-tool-result ACTUAL_PARENT_TOOL_RESULT_PATH --parent-tool-sha256 ACTUAL_PARENT_TOOL_RESULT_SHA256
+
+bind only actual independent postjoin acceptance; report observed <=180s upperbound or blocker
+/home/holden/anaconda3/bin/python3 -I -B /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/ROOT-STATIC-ADOPTION-BATCH-1/adopt_mock64_batch.py bind-acceptance --review ACTUAL_AFTERJOIN_ACCEPTANCE_PATH --review-sha256 ACTUAL_AFTERJOIN_ACCEPTANCE_SHA256

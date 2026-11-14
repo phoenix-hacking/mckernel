@@ -1,0 +1,219 @@
+{
+  "status": "PASS_F05_V3_CAUSAL_OWNED_LINUX_REFERENCE_ONLY",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "results": [
+    {
+      "pid": 1710891,
+      "start": 93510514,
+      "returncode": 0,
+      "direct_child_joined": true,
+      "group_absent": true,
+      "remaining_group_members": [],
+      "unexpected_group_members": [],
+      "timed_out": false,
+      "error": null,
+      "retirement_error": null,
+      "seconds": 0.251025578007102,
+      "closed_streams": true,
+      "captures": {
+        "stdout": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-v3-causal-host-qualification-1/actual-capture-1/0/stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "device": 66306,
+          "inode": 59796705,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": "0o600",
+          "nlink": 1,
+          "size": 0,
+          "mtime_ns": 1793137660449835128,
+          "ctime_ns": 1793137660449835128
+        },
+        "stderr": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-v3-causal-host-qualification-1/actual-capture-1/0/stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "device": 66306,
+          "inode": 59796706,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": "0o600",
+          "nlink": 1,
+          "size": 0,
+          "mtime_ns": 1793137660449835128,
+          "ctime_ns": 1793137660449835128
+        }
+      },
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/f05-owned-processvm-v3-causal-source-1",
+      "command_started_wall": 1793137660.4516277,
+      "index": 0,
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "-D",
+        "warnings",
+        "-C",
+        "opt-level=1",
+        "-C",
+        "codegen-units=1",
+        "-C",
+        "target-feature=+crt-static",
+        "-C",
+        "relocation-model=static",
+        "-C",
+        "link-arg=-no-pie",
+        "-C",
+        "link-arg=-Wl,-z,noexecstack",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/f05-owned-processvm-v3-causal-source-1/app.rs",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-v3-causal-host-qualification-1/future-host-output-1/app"
+      ],
+      "finished_wall": 1793137660.703952,
+      "cpu_user_seconds": 0.176479,
+      "cpu_system_seconds": 0.032362,
+      "max_RSS_children_KiB": 127000
+    },
+    {
+      "pid": 1710902,
+      "start": 93510541,
+      "returncode": 0,
+      "direct_child_joined": true,
+      "group_absent": true,
+      "remaining_group_members": [],
+      "unexpected_group_members": [],
+      "timed_out": false,
+      "error": null,
+      "retirement_error": null,
+      "seconds": 0.0266227520769462,
+      "closed_streams": true,
+      "captures": {
+        "stdout": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-v3-causal-host-qualification-1/actual-capture-1/1/stdout",
+          "sha256": "acfceb0597e63b1a38554244cd806cb7c333622b7456a285c2cbdd2f56423bd3",
+          "device": 66306,
+          "inode": 59796716,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": "0o600",
+          "nlink": 1,
+          "size": 2620,
+          "mtime_ns": 1793137660721843770,
+          "ctime_ns": 1793137660721843770
+        },
+        "stderr": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-v3-causal-host-qualification-1/actual-capture-1/1/stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "device": 66306,
+          "inode": 59796717,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": "0o600",
+          "nlink": 1,
+          "size": 0,
+          "mtime_ns": 1793137660717843643,
+          "ctime_ns": 1793137660717843643
+        }
+      },
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/f05-owned-processvm-v3-causal-source-1",
+      "command_started_wall": 1793137660.7213895,
+      "index": 1,
+      "argv": [
+        "/usr/bin/readelf",
+        "-W",
+        "-h",
+        "-l",
+        "-d",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-v3-causal-host-qualification-1/future-host-output-1/app"
+      ],
+      "finished_wall": 1793137660.74921,
+      "cpu_user_seconds": 0.0015270000000000006,
+      "cpu_system_seconds": 0.0,
+      "max_RSS_children_KiB": 127000
+    },
+    {
+      "pid": 1710903,
+      "start": 93510545,
+      "returncode": 0,
+      "direct_child_joined": true,
+      "group_absent": true,
+      "remaining_group_members": [],
+      "unexpected_group_members": [],
+      "timed_out": false,
+      "error": null,
+      "retirement_error": null,
+      "seconds": 0.03138314199168235,
+      "closed_streams": true,
+      "captures": {
+        "stdout": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-v3-causal-host-qualification-1/actual-capture-1/2/stdout",
+          "sha256": "bb5952e803baae65378534b8fde8b9686795b3343c5429096297a372b1f1f46e",
+          "device": 66306,
+          "inode": 59796727,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": "0o600",
+          "nlink": 1,
+          "size": 204,
+          "mtime_ns": 1793137660765845168,
+          "ctime_ns": 1793137660765845168
+        },
+        "stderr": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-v3-causal-host-qualification-1/actual-capture-1/2/stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "device": 66306,
+          "inode": 59796728,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": "0o600",
+          "nlink": 1,
+          "size": 0,
+          "mtime_ns": 1793137660761845041,
+          "ctime_ns": 1793137660761845041
+        }
+      },
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-v3-causal-host-qualification-1/fresh-reference-cwd-1",
+      "command_started_wall": 1793137660.7636385,
+      "index": 2,
+      "argv": [
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-v3-causal-host-qualification-1/future-host-output-1/app"
+      ],
+      "finished_wall": 1793137660.7961621,
+      "cpu_user_seconds": 0.0013209999999999888,
+      "cpu_system_seconds": 0.0,
+      "max_RSS_children_KiB": 127000
+    }
+  ],
+  "executable": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-v3-causal-host-qualification-1/future-host-output-1/app",
+    "bytes": 5627368,
+    "sha256": "125c0dc8d59c30b618bae9c53308a9f61341eec729a6bc9b69016355491f1033"
+  },
+  "source": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/f05-owned-processvm-v3-causal-source-1/app.rs",
+    "bytes": 15845,
+    "sha256": "50d654641b1b00e1ad08f79609cb99a1d5445027f9d719efa99ec5a90fba23d5"
+  },
+  "oracle": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/f05-owned-processvm-v3-causal-source-1/v3-oracle.json",
+    "bytes": 3240,
+    "sha256": "6d5946ab99f795a7e9887cdba163a4271511b5be9e8f30f6fef19b9360d2f392"
+  },
+  "CPU6_released": true,
+  "native_M14_05_05": "OPEN",
+  "conditional_CLONE_TID_writeproof": "OPEN",
+  "host_gate_protocol": {
+    "case_id": "M14-05-05-owned-processvm-v3-causal-204B",
+    "nonce": "31770ebb739fea402ded939617921dda",
+    "reference_cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-v3-causal-host-qualification-1/fresh-reference-cwd-1",
+    "gate_relative": ".f05-gate-31770ebb739fea402ded939617921dda",
+    "go_byte_u8": 71,
+    "native_causal_proof": false,
+    "prepared_before_payload_launch": true
+  },
+  "gate_proof": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-v3-causal-host-qualification-1/HOST-REFERENCE-GATE-PROOF.json",
+    "bytes": 1549,
+    "sha256": "5288202b0b1b69258141c260fe6b3f70e7b2a0b8bda73f4f69202bf188a620f6"
+  },
+  "native_causal_proof": false,
+  "limits": "Linux reference and static ELF/source bindings only; no McKernel/native/default acceptance"
+}

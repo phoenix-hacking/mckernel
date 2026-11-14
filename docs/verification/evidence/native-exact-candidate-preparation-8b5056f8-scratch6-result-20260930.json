@@ -1,0 +1,52 @@
+{
+  "schema": "mckernel.native-exact-candidate-preparation-result.v1",
+  "status": "PASS_PREPARATION_ONLY",
+  "acceptance_credit": false,
+  "candidate": {
+    "commit": "8b5056f836ecd3e6916625696750c4dfadbaaf9f",
+    "ihk_commit": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+    "root": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-8b5056f8-scratch-6",
+    "identity": "1831:5111816",
+    "allocated_bytes": 9235599360
+  },
+  "release": {
+    "commit": "79a0dd3d1b18c5a92f9a4b54bfb73eeb9ee3194c",
+    "packet": "docs/verification/evidence/native-exact-candidate-preparation-scratch-20260930-6.sh",
+    "packet_sha256": "e7ec55b2c263e2c9afd94a1f7c99ed96576a0f069ec7d1d91ec21ac41c2d5f4a",
+    "test_sha256": "329ef5a91f85c298306c61ad430bc94fbb1b160b9276823986c891d846b756bd",
+    "focused_tests": "35 passed",
+    "independent_source_review": "PASS_SOURCE",
+    "independent_execution_review": "PASS_EXECUTION"
+  },
+  "execution": {
+    "exit_status": 0,
+    "terminal_returncode": 0,
+    "terminal_pid": 567132,
+    "terminal_starttime": "96766335",
+    "terminal_sha256": "dd243ae0f14025bccafeab21654478780f102ddc64668770820d79b5a0379b95",
+    "log_identity": "1831:57593",
+    "log_sha256": "08e4004f000e939ac877bb0442904738e4d8b55ec4a1c213a3c3a9c16bb1d76b",
+    "topology": "PASS device=1831 filesystem=ext4",
+    "log_final_fsync": "PASS"
+  },
+  "build_inputs": {
+    "manifest": "/home/holden/mckernel-work/scratch/native-exact-inputs-8b5056f8-scratch-6.json",
+    "manifest_sha256": "c1ad79ea8b0bba63e41b9a1e34d43b32e008ee97dec357ad6a3295b972bdd719",
+    "request": "/home/holden/mckernel-work/scratch/native-exact-build-request-8b5056f8-scratch-6.json",
+    "request_sha256": "f234ca2cb443f0014f626bbbf1e72991dd1c6a51598c5b675f895354847300d4",
+    "output_identity": "1831:6553623",
+    "evidence_identity": "1831:6553638",
+    "output_allocated_bytes": 4096,
+    "evidence_allocated_bytes": 4096,
+    "lease_absent": true,
+    "objtoolbinding_11_exclusion_absent": true
+  },
+  "capacity": {
+    "host_free_bytes_before": 27564584960,
+    "scratch_free_bytes_before": 29113753600,
+    "host_free_bytes_after": 18263384064,
+    "scratch_free_bytes_after": 19875364864,
+    "next_gate": "Restore additional host emergency headroom with separately reviewed exact duplicate-evidence cleanup before acquiring the heavy build lease."
+  },
+  "scope": "Prepared and validated source/request roots only. No build lease, Docker container, kernel artifact, boot, diagnostic application, or acceptance result was produced."
+}

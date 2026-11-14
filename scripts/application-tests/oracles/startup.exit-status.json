@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "case_id": "startup.exit-status",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {
+    "argv": ["/apps/startup.exit-status"],
+    "cwd": "/case/work",
+    "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}
+  },
+  "wait_status": {"kind": "exited", "code": 37},
+  "stdout": {"kind": "exact-bytes", "hex": ""},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": [
+    "Raw wait status satisfies WIFEXITED",
+    "WEXITSTATUS equals 37",
+    "The payload is not classified as signaled and no shell status transformation is accepted"
+  ],
+  "unresolved_expectations": [
+    "Freeze the canonical empty-stream record and bind the exact input-manifest and oracle SHA256 before execution."
+  ],
+  "max_question_for_reviewer": "Confirm that this normal-return case must be retained as raw exit 37, including no stdout or stderr bytes."
+}

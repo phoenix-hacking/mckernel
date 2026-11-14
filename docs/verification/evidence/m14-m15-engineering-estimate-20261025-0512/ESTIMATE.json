@@ -1,0 +1,89 @@
+{
+  "schema": "m14-m15-engineering-estimate-v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "user_request": "please measure and estimate the M14 and M15",
+  "saved_at_utc": "2026-10-25T05:13:05.722053+00:00",
+  "evidence_window_utc": "2026-10-25T05:09Z to05:10Z, with private M14 cohort05:08:50Z and canonical CURRENT05:06Z",
+  "classification": "LOW_CONFIDENCE_SUPPORTED_SCOPE_ENGINEERING_PLANNING_ESTIMATE_NOT_VERIFIED_ACCEPTANCE",
+  "measured_vs_estimated": "Exact scoped source selection, artifact, test and status counters are measured. Effort weights and semantic completion intervals are expert judgments, not observed person-hours, formal gate ratios or statistical confidence intervals.",
+  "M14": {
+    "overall_display": "about70%",
+    "overall_rounded_percent": 70,
+    "rough_planning_range_percent": [
+      60,
+      85
+    ],
+    "implementation_only_range_percent": [
+      80,
+      95
+    ],
+    "unrounded_weighted_interval_percent": [
+      59.0155,
+      83.25999999999999
+    ],
+    "native_stage_caveat": "Upper endpoint includes a favorable historical-evidence reuse scenario. Final changed-cohort native file acceptance is zero, and source/check/build preparation receives no second native credit.",
+    "strict_no_final_native_credit_interval_percent": [
+      59.0155,
+      77.41
+    ],
+    "acceptance_status": "OPEN"
+  },
+  "M15": {
+    "overall_display": "about65\u201370% (roughly two-thirds)",
+    "rough_planning_range_percent": [
+      60,
+      75
+    ],
+    "broader_uncertainty_percent": [
+      55,
+      80
+    ],
+    "implementation_only_range_percent": [
+      85,
+      95
+    ],
+    "unrounded_weighted_interval_percent": [
+      61.0,
+      75.25
+    ],
+    "scope_limit": "Retained supported profile; final delivered inventory and conditional-product dispositions remain incomplete. Existing native module proof has exact limited scope.",
+    "acceptance_status": "OPEN"
+  },
+  "arithmetic_verified": true,
+  "source_records": {
+    "M14": {
+      "retained_copy": "docs/verification/evidence/m14-m15-engineering-estimate-20261025-0512/M14.json",
+      "original_path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-2/m14-progress-estimate-1/ASSESSMENT.json",
+      "bytes": 16155,
+      "sha256": "3024fc74e2f52f8417728ab7cf0a1f8837a06ff9c4525c0e7dc4cd471c98915a"
+    },
+    "M15": {
+      "retained_copy": "docs/verification/evidence/m14-m15-engineering-estimate-20261025-0512/M15.json",
+      "original_path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-2/m15-progress-estimate-1/M15-PROGRESS.json",
+      "bytes": 16154,
+      "sha256": "4ab0d69f7b3119e14ee627a33b51ca201d4fa97533058b1f054b7be16fb9e7ee"
+    },
+    "independent_review": {
+      "retained_copy": "docs/verification/evidence/m14-m15-engineering-estimate-20261025-0512/independent_review.json",
+      "original_path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-2/progress-estimate-method-review-1/INDEPENDENT-METHOD-REVIEW.json",
+      "bytes": 9602,
+      "sha256": "b0f193a7ee058ead92e4f1a9292d6386e2757abf0d39b9071ec18359a82b92a8"
+    },
+    "measured_baseline": {
+      "retained_copy": "docs/verification/evidence/m14-m15-engineering-estimate-20261025-0512/measured_baseline.json",
+      "original_path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-2/m14-m15-progress-estimate-20261025-0508/MEASURED-BASELINE.json",
+      "bytes": 6497,
+      "sha256": "e6d7f53ca3d0430b0a06deb5461222d5e4154e9f957b31854aa058a27af5b70c"
+    }
+  },
+  "comparison_policy": "Preserve this baseline. Compare future assessments with the same supported scope, component/effort weights and stage definitions; changed assumptions require a new baseline. Use material implementation/default/native evidence changes, not provider/test counts as direct percentage increments.",
+  "principal_remaining_work": [
+    "M14 F02/F03/F06 residual semantic behavior, callbacks/data/header closure and private-to-canonical integration.",
+    "Coherent default Rust/assembly image and matching application/lifecycle native qualification.",
+    "M15 target executor/BFD/daemon qualification, remaining default selectors and four interpreted runtime programs.",
+    "Complete delivered dependency/ownership joins and resolve optional-profile disposition."
+  ],
+  "campaign_controls_changed": false,
+  "builds_or_native_workloads_started_by_assessment": 0,
+  "milestone_acceptance_changed": false
+}

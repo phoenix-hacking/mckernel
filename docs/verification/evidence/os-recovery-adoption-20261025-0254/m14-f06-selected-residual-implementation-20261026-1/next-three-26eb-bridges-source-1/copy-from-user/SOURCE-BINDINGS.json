@@ -1,0 +1,44 @@
+{
+  "symbol": "arch_copy_from_user_bridge",
+  "selected_cursor": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT26EB-SELECTED-F03-F06-REMAINING-SOURCE-CURSOR.json",
+    "bytes": 5561,
+    "sha256": "aa2ec71f9317efbe9f527345df973573c1b22382128a63639e14015ea8d592b9"
+  },
+  "selected_object": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-SYNC-PROCESSVM-HOST13-FIVE-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+    "bytes": 113648,
+    "sha256": "1ceffd6dfbba55025440938e7c6884b1beaab336083c64aa77b3ae50ab5bf7c9"
+  },
+  "canonical_before": [
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+      "bytes": 114757,
+      "sha256": "060ae704f105aff84cfdadb9a4f3846ae1b4a2e8192947a479336b2c05d05ea8"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "bytes": 1259403,
+      "sha256": "02ddaecff895693d389b0a6710c0ff4579c91caf2b53ea5f62746f4b8125d812"
+    }
+  ],
+  "reused_fragment": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-usercopy-entry-bridges-source-1/candidate/syscall_policy.usercopy_entry_bridges.EXPLICIT-RESULT.FRAGMENT.rs",
+    "bytes": 1500,
+    "sha256": "b2d73c99c9150de0a8afb5b040a08ebe32e9fb961da550bf9597c1a699458cb7"
+  },
+  "reused_exact_body_sha256": "c10ee2af4bd43504d72219d5f524ef0d89a82cc94295ff91f748e9d72013b4c6",
+  "original_C": "\nlong\narch_copy_from_user_bridge(void *dst, unsigned long src_addr, size_t bytes)\n{\n\treturn copy_from_user(dst, (void *)src_addr, bytes);\n}\n",
+  "C_wrapper": "\n#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_COPY_FROM_USER)\nextern long\narch_copy_from_user_bridge(void *dst, unsigned long src_addr, size_t bytes);\n#else\n\nlong\narch_copy_from_user_bridge(void *dst, unsigned long src_addr, size_t bytes)\n{\n\treturn copy_from_user(dst, (void *)src_addr, bytes);\n}\n\n#endif\n",
+  "rust_selection": "\n// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\n#[cfg(f06_copy_from_user_candidate)]\n#[path = \"bridge.rs\"]\nmod f06_copy_from_user_candidate;\n",
+  "selectors": {
+    "C": "MCKERNEL_RUST_F06_COPY_FROM_USER",
+    "Rust": "f06_copy_from_user_candidate"
+  },
+  "real_provider": "copy_from_user",
+  "provider_source": {
+    "path": "/home/holden/mckernel/kernel/rust/x86_memory_helpers.rs",
+    "bytes": 311375,
+    "sha256": "5c60055053656751ea490be95c09d7343b0391797c21d5e6c97de97cb8d34c68"
+  }
+}

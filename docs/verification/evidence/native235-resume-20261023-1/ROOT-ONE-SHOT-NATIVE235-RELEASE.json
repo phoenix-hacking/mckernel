@@ -1,0 +1,144 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "RELEASED_ONE_EXACT_NATIVE235",
+  "created_unix": 1792724917.82139,
+  "execution_count": 1,
+  "nonce": "8646cb69db21440ca31573ab1b3d0691",
+  "packet": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-resume-20261023-1/preparation/EXACT-NATIVE235-CONDITIONAL-PACKET.json",
+    "sha256": "34eb22786e3927141c1de50de99eb2fb565a0e405eac2fea063129687cb0d876",
+    "bytes": 14049
+  },
+  "independent_conditional_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-resume-20261023-1/INDEPENDENT-CONDITIONAL-REVIEW.json",
+    "sha256": "6551226cf500cf22f8547834324c726260f9e2dd8112e28f268c92f4273f7617",
+    "bytes": 682
+  },
+  "current_identities": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-resume-20261023-1/preparation/BOUND-CURRENT-IDENTITIES.json",
+    "sha256": "5300f9879609e7b8ba700b6657e4a6f46f2d9077e741ac3e4e4acefd983c9c91",
+    "bytes": 128040
+  },
+  "current_live_postjoin": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-resume-20261023-1/ADDITIVE-CURRENT-LIVE-POSTJOIN.json",
+    "sha256": "230eb960e46561ba2707dbef7de1326e7dcc364ffeec4a7ab2be97596cfc45db",
+    "bytes": 6631
+  },
+  "fetched_checkpoint": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-resume-20261023-1/FETCHED-CHECKPOINT.json",
+    "sha256": "c39a39353834925e081c93748b7515d4098089a8a734c2737c9531a752ae6dbd",
+    "bytes": 252
+  },
+  "metadata_capture": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-resume-20261023-1/metadata-publication/receipt.json",
+    "sha256": "822cad2177b9a21328a658d9c3bbf5051c4690e359a1e5013d55762e39c4e82e",
+    "bytes": 1184
+  },
+  "metadata_identity": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-resume-20261023-1/metadata-publication/IDENTITIES.json",
+    "sha256": "df7ca5373fe667bcdc3d3adac3cccd0c5a6eccb35a43783874281ed238bfade0",
+    "bytes": 510
+  },
+  "guard_capture": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-resume-20261023-1/production-guard/receipt.json",
+    "sha256": "cdbc0c6f158f6f5e56c7d4dd8b6c816b023a338a86b12ffc86328427ed8b0729",
+    "bytes": 2188
+  },
+  "guard_stdout": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-resume-20261023-1/production-guard/stdout",
+    "sha256": "8dc924638f8ace87e69a244cc71209d57c6f5f68e643f50c4a728ebea201db70",
+    "bytes": 122
+  },
+  "operation": {
+    "bytes": 2002,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-235/NATIVE-OPERATION.ACTUAL.json",
+    "sha256": "2586d60727c0caae9b80c67856bb63d924f8bccb899e72208e73a271db54ebff"
+  },
+  "capture_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/capture_native199_owner.py",
+    "--operation",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-235/NATIVE-OPERATION.ACTUAL.json",
+    "--sha256",
+    "2586d60727c0caae9b80c67856bb63d924f8bccb899e72208e73a271db54ebff"
+  ],
+  "owner_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--fsize=33554432",
+    "--as=2147483648:2147483648",
+    "--core=0:0",
+    "--",
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/native_diagnostic_container_owner.py",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/n235v1/p",
+    "--nonce",
+    "8646cb69db21440ca31573ab1b3d0691",
+    "--owner-sha256",
+    "4d7ae097cae866389ed044a6247e01f1bc78ff8744fc8d72f39fb294b55bb298",
+    "--manifest",
+    "/home/holden/mckernel-work/scratch/n235v1/m.json",
+    "--manifest-sha256",
+    "2f05f97f082b2a3d9efc48c4ba9f2a46239d8697ae543370aca3a901f1b0e8c7"
+  ],
+  "profile": {
+    "container_CPU_affinity": "2-5",
+    "container_CPU_count": 4,
+    "container_fsize": [
+      33554432,
+      33554432
+    ],
+    "container_memory_bytes": 12884901888,
+    "container_network": "none",
+    "container_swap_bytes": 0,
+    "container_tasks": 512,
+    "cpu": 7,
+    "host_UID_NPROC": "inherited126258:126258; no per-UID512",
+    "jobs": 1,
+    "outer_grace_kill": null,
+    "outer_wall_kill": null,
+    "owner_CPU_limits": [
+      -1,
+      -1
+    ],
+    "owner_as_bytes": [
+      2147483648,
+      2147483648
+    ],
+    "payload_timeout_ms": 10000,
+    "required_inherited_cpu_limits": [
+      -1,
+      -1
+    ],
+    "runner_timeout_seconds": 300,
+    "stream_fsize": 33554432
+  },
+  "oracle": {
+    "exit_code": 0,
+    "stderr": {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/expected.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr_bytes_hex": "",
+    "stdout": {
+      "bytes": 235,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/expected.stdout",
+      "sha256": "0e7aa2ed289b122be9c38f44dc284cbb7bda64a662c2b09b4036a030f3f2d17b"
+    },
+    "stdout_bytes_hex": "706172656e742073746172740a6368696c642065786563207375636365737320746f6b656e3d66697865642d76310a706172656e742077616974207375636365737320657869743d333720656f663d31207265617065643d3120656368696c643d310a6368696c642065786563206572726f72206572726e6f3d454e4f454e542073746174653d333720756e6368616e6765643d310a706172656e742077616974206572726f7220657869743d343220656f663d31207265617065643d3120656368696c643d310a706172656e7420636f6d706c657465206368696c6472656e3d32206f776e65643d300a"
+  },
+  "conditions": "No intervening incompatible operation or resize; one-heavy acquisition enforced by owner; preserve original failure and stop new service error; strict app bytes/native retirement required before acceptance."
+}

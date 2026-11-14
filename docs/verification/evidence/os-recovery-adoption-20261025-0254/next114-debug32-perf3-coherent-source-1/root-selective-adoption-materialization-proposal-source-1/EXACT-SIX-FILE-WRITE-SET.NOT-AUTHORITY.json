@@ -1,0 +1,117 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "runtime_authority": null,
+  "source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/outer-perf-line-restore-source-1/independent-source-review-1/INDEPENDENT-SOURCE-REVIEW.json",
+    "bytes": 8472,
+    "sha256": "941b98394b1600300165d97527059822f78860da5dba03eded90abf89940a801"
+  },
+  "accepted_CURRENT113": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT113-ABI-PRIVATE-CORRECTION-BUILD-ADMISSION-1/independent-artifact-review-1/INDEPENDENT-ACCEPTANCE.json",
+    "bytes": 5905,
+    "sha256": "02c1001e037ea4d57d3d2dc5fdffa3655ce6d94c36a77ff6ea84b409f1f18cbd"
+  },
+  "source_profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/outer-perf-line-restore-source-1/PROFILE.SOURCE-ONLY.json",
+    "bytes": 118438,
+    "sha256": "b61944ddc4574d4d2aded2e4e6d557098366524232258ff59d8b6692e6d6299a"
+  },
+  "files": [
+    {
+      "relative": "kernel/CMakeLists.txt",
+      "canonical_path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "preimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/candidate/kernel/CMakeLists.txt",
+        "bytes": 36627,
+        "sha256": "4b8cb0c5b61991618a6effbd34d1a64315bdc2a4676d6c899e7227023cbb29fe"
+      },
+      "candidate": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/candidate/kernel/CMakeLists.txt",
+        "bytes": 38957,
+        "sha256": "872aad13259b7ea9af399c186c03d0c7e4fda3eeabc6b71086f5a7917776fbdc"
+      },
+      "mode_if_new": 420
+    },
+    {
+      "relative": "kernel/process.c",
+      "canonical_path": "/home/holden/mckernel/kernel/process.c",
+      "preimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/candidate/kernel/process.c",
+        "bytes": 221203,
+        "sha256": "dd7fd305dd648a8f9d81e3503dab133ab3083fc8b50597ebc0e1577504c14457"
+      },
+      "candidate": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/newdebug32-next114-source/candidate/kernel/process.c",
+        "bytes": 226577,
+        "sha256": "110e3e820fed06adbbf647e2f52bc06a157b7001653157863e7e6733b878d172"
+      },
+      "mode_if_new": 420
+    },
+    {
+      "relative": "kernel/syscall.c",
+      "canonical_path": "/home/holden/mckernel/kernel/syscall.c",
+      "preimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/candidate/kernel/syscall.c",
+        "bytes": 917339,
+        "sha256": "a96938c6f650f5ed7d8183bd7bb8da1a03c477e13e4093b68a1099ea252a35b2"
+      },
+      "candidate": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/outer-perf-line-restore-source-1/candidate/kernel/syscall.c",
+        "bytes": 918715,
+        "sha256": "d6e9c595364f72018b96ccba50e97ebc71ff438b8e91315982e287d63ff8bafb"
+      },
+      "mode_if_new": 420
+    },
+    {
+      "relative": "kernel/rust/lib.rs",
+      "canonical_path": "/home/holden/mckernel/kernel/rust/lib.rs",
+      "preimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/abi-private-field-correction-source-1/rust-subtree/lib.rs",
+        "bytes": 2252,
+        "sha256": "fe60e37167124fba9599112683332c75e1f18ee046afd351a075f3bcf03ed3f7"
+      },
+      "candidate": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/rust-subtree/lib.rs",
+        "bytes": 2318,
+        "sha256": "c84205fd8d0b4c729bf5598d5b6d0e578617de8e8af3a00bdcf886e69a8019e2"
+      },
+      "mode_if_new": 420
+    },
+    {
+      "relative": "kernel/rust/process_verbose_data.rs",
+      "canonical_path": "/home/holden/mckernel/kernel/rust/process_verbose_data.rs",
+      "preimage": null,
+      "candidate": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/rust-subtree/process_verbose_data.rs",
+        "bytes": 11499,
+        "sha256": "8eaa8f0bff3d10a433fa88b899e56b9bd4aefd719c49f15c1487ffe335d65b27"
+      },
+      "mode_if_new": 420
+    },
+    {
+      "relative": "kernel/rust/syscall_policy.rs",
+      "canonical_path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "preimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/abi-private-field-correction-source-1/rust-subtree/syscall_policy.rs",
+        "bytes": 1267117,
+        "sha256": "c5dd22944c164dde6580ee9825742dcd3de023617736c712ab693b26321d5d56"
+      },
+      "candidate": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/rust-subtree/syscall_policy.rs",
+        "bytes": 1268496,
+        "sha256": "2975c9c2d0c398a8acffb52b0936ae46ab2b73d65d45113be93730802fe276d7"
+      },
+      "mode_if_new": 420
+    }
+  ],
+  "canonical_writes_performed": 0,
+  "new_runtime_C_bodies": 0,
+  "excluded": [
+    "LOCAL14+configs4bb0",
+    "ptrace_setsiginfo6777",
+    "LOCK4",
+    "WAKE3"
+  ],
+  "retained_arch_source_and_object_unchanged": true,
+  "origin_replay": false
+}

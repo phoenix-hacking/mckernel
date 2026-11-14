@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_adverse_root_execution_release",
+  "task_id": "M02-B-adverse-v1-root",
+  "status": "REVIEW_PENDING",
+  "source_commit": "2e3fe26cf138c4d2170912b82fb8b6419e573c6b",
+  "build_record": {"path": "/home/holden/mckernel-work/scratch/stability-linux-adverse-build-20260915-1/profile/work/build/build-record.json", "sha256": "e3e399e902efed7c868cb8f63a6570d4b7a689fde852161be9fb7b248cb0bd12"},
+  "compiled_inputs": {
+    "fixture": {"sha256": "b9acdd6ae239185598e0583aef7100db8aec7e3988de6dcac86cb397e4320aa8", "size": 27336},
+    "control": {"sha256": "c8daf0f52cfa0df5de0deac81816cbeb7cd8e6e2cdde5342ad2ac771282cc436", "size": 151424},
+    "missing-setup": {"sha256": "f1863ba2361d43c0348c7d09557f13949fe8748626c6e31fbbf86979429b8e21", "size": 151232},
+    "partial-setup": {"sha256": "563fcc1606fe8457ad062a594f4f5d2c6d4268b7b0cdc761366e84338778da20", "size": 151560},
+    "interrupt-completed-wait": {"sha256": "946b2b93a6451da511bd3aacc314eb9d9049442fabf7e9166e4fe35c7c54a87d", "size": 152648}
+  },
+  "runtime_sources": {
+    "packet.json": "b9d61a1f74a63d84ffd5dcbdccabdcc950fe5264dc4fbc3c1ac4948b4d883306",
+    "run.py": "fc60f6ce355c0807ac219a7208e36f21435c002c868a1dfdb4c1e25e4b356692",
+    "oracle.py": "36d4c86df3363cae6a034a24d9b943aa310b4de6f1099b09c217dbb7b1fbf8e6",
+    "root_inside.py": "438084f5c962caa93b191c1ca0ae2eff822e3123539aba52f838ed8a3f228520",
+    "root_profile.py": "e60e81cf4f83938fc1baa70eda843da5870721803b1bd4d813974da5d27a1b19",
+    "root_orchestrator.py": "be77a3585f94e159b8dd5222bd7cc894c083879cd82495fccf6e408749f18b2b"
+  },
+  "case_order": ["control", "missing-setup", "partial-setup", "interrupt-completed-wait"],
+  "bounds": {"case_seconds": 40, "cleanup_seconds": 15, "container_seconds": 300, "cpus": 4, "memory_bytes": 12884901888},
+  "required_evidence": ["prospective outer invocation and raw wait", "case requests", "setup and stream bytes", "boundary witnesses", "events and reports", "PID/startticks identities", "watchdog and cleanup journal", "exact container absence", "development lock release"],
+  "stop_on_first_unexpected_result": true,
+  "review_required_before_execution": true,
+  "collector_runtime_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

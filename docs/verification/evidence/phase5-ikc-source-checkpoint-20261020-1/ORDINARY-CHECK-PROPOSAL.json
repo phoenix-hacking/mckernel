@@ -1,0 +1,72 @@
+{
+  "status": "READY_UNRUN_REQUIRES_ROOT_CPU6_GRANT",
+  "source_freeze": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/SOURCE-FREEZE.json",
+    "sha256": "d5e8a474d124717610b2e984fc1607053d2badd271f96afd68ed7f1d7243a2c6",
+    "size": 6317,
+    "mode": 33152
+  },
+  "commands": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/COMMANDS.json",
+    "sha256": "a9a1d5fe1c1eafe7db592923e29ce53c08aa9f8312fb2e7bfab450f405997ecd",
+    "size": 2633,
+    "mode": 33152
+  },
+  "input_pins": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/CHECK-PINS.json",
+    "sha256": "09b638fc9e4a116556057c98a084a014a2bcab73d2d8448e0d00698fea54c8e9",
+    "size": 3209,
+    "mode": 33152
+  },
+  "runner": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/run-ikc-checks-1.py",
+    "sha256": "23d8b6a55730584a8ec4baa889c71488742c96acdc332625fdb682bf2e85d024",
+    "size": 3986,
+    "mode": 33152
+  },
+  "reviewed_capture_ancestor": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-kernel-panic-free-link-repair-20261020-1/run-panic-free-checks-1.py",
+    "sha256": "c35c2ed0196f586201e62c3e462773b250f2bcc00bb3f2c16c216abd78bf514e",
+    "size": 3661,
+    "mode": 33152
+  },
+  "outer_argv": [
+    "taskset",
+    "-c",
+    "6",
+    "prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--fsize=33554432",
+    "--core=0",
+    "--nofile=256",
+    "--",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/run-ikc-checks-1.py"
+  ],
+  "expected_exits": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "profile": "CPU6/1job1GiBAS30CPU35+2wall32MiBperfile/core0nofile256/statusFIRST/directwait/groupabsence/fresh2GiBMemAvailable+host16GiB/scratch12GiB+512MiB",
+  "affected_body_cases": {
+    "native": 6,
+    "legacy": 4
+  },
+  "old_case_replay": 0,
+  "failure_history": "UNRUN executablecandidate. Preserved76ffalignmentdraft and8f3pre-stale-full source/proposal areUNRUN. Root/reviewer confirmed >=correction beforeexecution. No unchangeddeterministicreplay; actualfirstfailure thenoneboundedcorrection beforeexpert.",
+  "forbidden_effects": "No root/Docker/guest/module/newprotocol/fakeResponse/defaultactivation/sharedsource/Git. No postexitretirementclaim.",
+  "legacy_oracle": "Eight nine-byte roundtrips including unalignedslots/wrap; no newlegacyrefusal. Native-only existingunsupportedgeometry refuses beforemutation. Legacycount1 fullpreserved.",
+  "deterministic_stale_and_CAS_witness": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/ACTUAL-BODY-BINDING.json",
+    "sha256": "d76c446c79f0630119560cbc3f199379ede741ea48e0530b50f0b90d7783b2d0",
+    "size": 2471,
+    "mode": 33152
+  }
+}

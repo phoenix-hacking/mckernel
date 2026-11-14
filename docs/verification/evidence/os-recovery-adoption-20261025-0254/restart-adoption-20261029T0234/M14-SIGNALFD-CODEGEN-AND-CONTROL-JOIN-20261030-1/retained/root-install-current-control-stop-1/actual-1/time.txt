@@ -1,0 +1,54 @@
+	Command being timed: "/usr/bin/sudo -A /usr/bin/taskset -c 6 /usr/bin/prlimit --as=67108864:67108864 --cpu=5:5 --nofile=128:128 --fsize=1048576:1048576 --core=0:0 -- /usr/bin/python3 -I -B -c import hashlib,json,os,stat,sys,types
+CONTROL='/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-current-control-stop-1/control_stop.py'
+CONTROL_SHA='9b62caf7e5e0b47e7bb714248445150d09618b554fcdb19d112ae1b9af678e14'
+COMPAT='/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-source-10/package/pidfd_compat.py'
+COMPAT_SHA='068e8316ef03a03d1977d05ce755dfa8133c13bd4dfa56254c27b0066be2575c'
+held=[]
+def source(path,expected):
+ fd=os.open(path,os.O_RDONLY|os.O_NOFOLLOW|os.O_CLOEXEC);held.append(fd)
+ st=os.fstat(fd)
+ if not stat.S_ISREG(st.st_mode) or st.st_size>2097152:raise ValueError('source bound')
+ raw=b''
+ while len(raw)<=2097152:
+  b=os.read(fd,min(65536,2097153-len(raw)))
+  if not b:break
+  raw+=b
+ after=os.fstat(fd)
+ if len(raw)!=st.st_size or len(raw)>2097152 or (st.st_dev,st.st_ino,st.st_size,st.st_mtime_ns,st.st_ctime_ns)!=(after.st_dev,after.st_ino,after.st_size,after.st_mtime_ns,after.st_ctime_ns) or hashlib.sha256(raw).hexdigest()!=expected:raise ValueError('source bytes')
+ return raw
+def module(name,path,raw):
+ obj=types.ModuleType(name);obj.__file__=path;sys.modules[name]=obj
+ exec(compile(raw,path,'exec'),obj.__dict__);return obj
+if len(sys.argv)!=3:raise ValueError('exact stop release arguments')
+release_path,release_sha=sys.argv[1:]
+if len(release_sha)!=64 or any(c not in '0123456789abcdef' for c in release_sha):raise ValueError('release SHA')
+compat=module('pidfd_compat',COMPAT,source(COMPAT,COMPAT_SHA))
+control=module('owned_control_stop',CONTROL,source(CONTROL,CONTROL_SHA))
+raw=control.bounded(release_path,65536)
+if hashlib.sha256(raw).hexdigest()!=release_sha:raise ValueError('release hash')
+release=json.loads(raw,object_pairs_hook=control.unique)
+if control.canonical(release)!=raw:raise ValueError('canonical release bytes required')
+control.guarded_run(compat,release,release_sha)
+ /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-current-control-stop-1/actual-1/ROOT-ONE-SHOT-RELEASE.json 27269b5c5b8a2adf8ac191bc59feea4800a1744c290ef08faeca5d818b11834f"
+	User time (seconds): 0.08
+	System time (seconds): 0.02
+	Percent of CPU this job got: 56%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.20
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 13784
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 6725
+	Voluntary context switches: 19
+	Involuntary context switches: 11
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 16
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

@@ -1,0 +1,32 @@
+--- a/kernel/mem.c
++++ b/kernel/mem.c
+@@ -3991,7 +3991,11 @@
+ 
+ void sbox_write(int offset, unsigned int value);
+ 
++#ifdef MCKERNEL_RUST_PAGE_HELPERS
++extern int page_hash_count_pages(void);
++#else
+ static int page_hash_count_pages(void);
++#endif
+ #ifdef MCKERNEL_RUST_MEM_HELPERS
+ static int mem_query_free_node_pages_bridge(int node)
+ {
+@@ -5414,6 +5418,9 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_PAGE_HELPERS
++extern int page_hash_count_pages(void);
++#else
+ static int page_hash_count_pages(void)
+ {
+ 	return page_hash_count_pages_body_result((unsigned long)page_hash,
+@@ -5422,6 +5429,7 @@
+ 			page_hash_lock_bridge, page_hash_unlock_bridge,
+ 			page_hash_count_all_result);
+ }
++#endif
+ 
+ struct page *phys_to_page(uintptr_t phys)
+ {

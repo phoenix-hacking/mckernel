@@ -1,0 +1,50 @@
+{
+  "already_completed_actual_qualification": {
+    "bytes": 15344,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/f02-complete-abi-behavior-review-sourceacq-max-1/host-wire-witness-1/operation-1/docker-as-limit-correction-1/actual-result-1/QUALIFICATION.json",
+    "sha256": "cde5037e004105fd698ef0ab3e8a013ecb4b8aa383775cd512f2ee1037e160c9"
+  },
+  "already_completed_binary_and_text_row_join": {
+    "bytes": 4186,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/f02-complete-abi-behavior-review-sourceacq-max-1/host-wire-witness-1/operation-1/docker-as-limit-correction-1/actual-result-1/ELF-SYMBOL-JOINS.json",
+    "sha256": "bda687bbe9d7a567845e98ed76b7b433cbceb154eef17aa6528bab6261d3c5a2"
+  },
+  "already_completed_full78word_comparison": {
+    "bytes": 24589,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/f02-complete-abi-behavior-review-sourceacq-max-1/host-wire-witness-1/operation-1/docker-as-limit-correction-1/actual-result-1/ACTUAL-78-WORD-COMPARISON.json",
+    "sha256": "bed857ea017b7e36473985e310c8be27bd8a2a6a469cd36270eea6b5e6be01ef"
+  },
+  "bounded_patch": {
+    "bytes": 850,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/f02-complete-abi-behavior-review-sourceacq-max-1/host-wire-witness-1/operation-1/docker-as-limit-correction-1/actual-result-1/symbol-parser-correction-record-1/LINE-BOUNDED-SYMBOL-EXTRACTION.patch",
+    "sha256": "106a0277a54e5f104e7dd4e91dc108e118bb3ac3c5342c899dfe6256204d8160"
+  },
+  "cause": "Whole-text multiline regex used \\s* after Ndx. For the mandatory null symbol row, the empty name allowed \\s* to consume the newline, folding the next FILE ABS row into the null symbol name. This produced2decodedtextrows versus3actualbinaryrows.",
+  "claims": {
+    "new_SUT_failure": false,
+    "new_test_or_proof_replay": false,
+    "old_failed_error_relabelled_pass": false,
+    "producer_source_or_guard_changed": false,
+    "wholeF02_or_native_acceptance": false
+  },
+  "corrected_block": {
+    "bytes": 563,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/f02-complete-abi-behavior-review-sourceacq-max-1/host-wire-witness-1/operation-1/docker-as-limit-correction-1/actual-result-1/symbol-parser-correction-record-1/CORRECTED-SYMBOL-EXTRACTION-BLOCK.txt",
+    "sha256": "5e077f804c09c8621c604847e98b7f4a96d35d06c5a3b3d61d8fdac75631e6c2"
+  },
+  "failed_block": {
+    "bytes": 483,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/f02-complete-abi-behavior-review-sourceacq-max-1/host-wire-witness-1/operation-1/docker-as-limit-correction-1/actual-result-1/symbol-parser-correction-record-1/FAILED-SYMBOL-EXTRACTION-BLOCK.txt",
+    "sha256": "7b31a69272d12783eb0fc13c1cc32087adb9113d0dafc264f0084d56e81f31bc"
+  },
+  "fix": "Iterate splitlines and use fullmatch with only horizontal [ \\t] spacing. Empty null-symbol name stays empty; FILE ABS and GLOBAL OBJECT are separate rows. All binary ELF parsing and ABI-byte logic unchanged.",
+  "outcome": "Corrected completed Q contains all3actual symbols per object: mandatory nullUND/localNOTYPE, localFILE/ABS and oneGLOBAL/OBJECT624. Both actual624B data records and all78u64words match; fullF02 remainsNO_GO.",
+  "raw_original_tool_error": {
+    "bytes": 1175,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/f02-complete-abi-behavior-review-sourceacq-max-1/host-wire-witness-1/operation-1/docker-as-limit-correction-1/actual-result-1/symbol-parser-correction-record-1/ORIGINAL-FAILED-TOOL-RESULT.json",
+    "sha256": "5291432ba056a69ae6ecb2a139ab967d1eeb4959022a7b2624b0167072555f21"
+  },
+  "recorded_at": "2026-11-11T21:19:33.239864+00:00",
+  "schema": 1,
+  "scope": "Reviewer saved-data readelf-text decoder correction only; actual F02 compiler/header/Rust/C objects/source/producer did not fail here and are unchanged. No code, compiler, readelf, container or parser replay performed for this preservation step."
+}

@@ -1,0 +1,49 @@
+{
+  "status": "PASS_EXACT_REVIEWED_SHARED_SOURCE_INTEGRATION_ONLY",
+  "reviewer": "/root/rust_idle_scan_review",
+  "recorder": "/root",
+  "sources": [
+    {
+      "path": "kernel/process.c",
+      "preimage": "/home/holden/mckernel-work/host-preparation/rust-idle-runqueue-scan-20261022-1/preimage/kernel/process.c",
+      "postimage": "/home/holden/mckernel-work/host-preparation/rust-idle-runqueue-scan-20261022-1/postimage/kernel/process.c",
+      "preimage_sha256": "a400590c51d4badeca9af7f75fa2aaca2c15a7182020380fed79bdf9d007ac33",
+      "postimage_sha256": "910771e0908d3fc69fcad13e94a2f0da13a964ce0293911fa2dcd5180b6e9ca7",
+      "preimage_matches_81dd8caf": true
+    },
+    {
+      "path": "kernel/rust/sched_helpers.rs",
+      "preimage": "/home/holden/mckernel-work/host-preparation/rust-idle-runqueue-scan-20261022-1/preimage/kernel/rust/sched_helpers.rs",
+      "postimage": "/home/holden/mckernel-work/host-preparation/rust-idle-runqueue-scan-20261022-1/postimage/kernel/rust/sched_helpers.rs",
+      "preimage_sha256": "a5b8ed0f048adcfa6908094f7b8b5d459b9b14aa0ed4b75e5250abe6f8387c57",
+      "postimage_sha256": "8b5c15fe52c59964105561d560bca5c648464872a44ead44b672e180c44acbd1",
+      "preimage_matches_81dd8caf": true
+    },
+    {
+      "path": "kernel/include/sched_helpers.h",
+      "preimage": "/home/holden/mckernel-work/host-preparation/rust-idle-runqueue-scan-20261022-1/preimage/kernel/include/sched_helpers.h",
+      "postimage": "/home/holden/mckernel-work/host-preparation/rust-idle-runqueue-scan-20261022-1/postimage/kernel/include/sched_helpers.h",
+      "preimage_sha256": "a11c196aef4398cb39694258889da2586ae9203df1c177afd7bd93418d184493",
+      "postimage_sha256": "15e506c4a6e6bd359e704a29e89bff20ea65a14ea69f24171aeb43024847d474",
+      "preimage_matches_81dd8caf": true
+    }
+  ],
+  "test": {
+    "path": "/home/holden/mckernel/scripts/tests/test_rust_idle_runqueue_scan_20261022.py",
+    "sha256": "982f7f273930a54658fcd07f00ac05829790980f6d40b85eb930cac909cf4d14"
+  },
+  "body_cases": 80,
+  "actual_full_TU_ABI": null,
+  "production_build": null,
+  "linked_default_image": null,
+  "native_evidence": null,
+  "accepted_cbb04_image_unchanged": true,
+  "source_units": 101,
+  "OS_source_units": 41,
+  "infrastructure_source_units": 60,
+  "compiler_batches": 35,
+  "native_batches": 13,
+  "native_behaviors": 31,
+  "production_Rust_paths": 21,
+  "native_Rust_paths": 18
+}

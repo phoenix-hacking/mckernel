@@ -1,0 +1,23 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_IMPLEMENTATION_AND_ACTUAL_FIXTURE_PASS_PENDING_INDEPENDENT_REVIEW",
+  "displaced_C_body": "Only x86_clear_free_pages_user_bridge callback body under existing MCKERNEL_RUST_X86_MEMORY_PUBLIC selector; private candidate only. Original fallback text retained.",
+  "Rust_consumer": "Actual extracted new Rust callback calls existing _ihk_mc_free_pages public ABI once with exact addr/nr and C data-derived USER/file/line. No new allocator body, guards, null policy or runtime C shim.",
+  "C_data_ABI": "const char file[] (Rust extern [i8;1] used as address only), const int line and flag (Rust CInt). Data-only C declarations capture compile-time provenance at replaced callback source site. Future edits may naturally shift diagnostic metadata line; no immutable historical line guarantee.",
+  "source_pins": {
+    "preimage/arch/x86_64/kernel/memory.c": "49244e64283fa51f4ab7a9eed42a388934a9227b640657d34a7eca4d8f18136b",
+    "preimage/kernel/rust/x86_memory_helpers.rs": "dbaefd727a0a9786547d06effeb634782cba17741898d9b5515333c5b7b94297",
+    "candidate/arch/x86_64/kernel/memory.c": "25c13c856dff0a1219a316ac3cf38cbe40f79c16561813b98a408f8cb62c24ed",
+    "candidate/kernel/rust/x86_memory_helpers.rs": "35664d46edaa3674d633b3c1ff96e85723fd21e5daf517d53c2438de35d5c4a3"
+  },
+  "fixture": "28 actual original-C/Rust callback vectors: null/valid/noncanonical pointer bit patterns and signed count extremes; recorder never dereferences payload. Both original callsite and selected descriptor expected diagnostic metadata checked independently; Rust output must equal descriptor exactly.",
+  "actual_checks": "Existing GCC9 selected full-source preprocess baseline/candidate; Rust1.92 CGU1 callback object, GCC9 boundary fixture link/run. All5 actual commands exit0, directjoin/groupabsent/closedstreams/no errors. No candidate failures/corrections.",
+  "remaining": [
+    "Independent exact ABI/data/provenance source review",
+    "Dispatcher canonical integration if accepted",
+    "Actual complete selected C TU and complete Rust crate build/link ownership",
+    "Reviewed native allocator/lifecycle behavior"
+  ],
+  "unchanged": "Canonical sources, current image and frozen235 unchanged. Prior fullcrate/consumer proof not extended to these candidates.",
+  "failure_retention": "Executable driver and command sources were saved before invocation; all successful capture streams retained. Earlier unrelated callback3 failed inline metadata source/output remain unavailable per its clarification."
+}

@@ -1,0 +1,13 @@
+--- root43935-bookended-consumer
++++ root-live-owner-bookended-consumer
+@@ -89,7 +89,9 @@
+             pid = expected_owner[kind + '_pid']
+             assert type(pid) is int and pid > 0
+             raw = pathlib.Path('/proc/%d/stat' % pid).read_text()
+-            assert raw.rsplit(')', 1)[1].split()[19] == expected_owner[kind + '_start']
++            fields = raw.rsplit(')', 1)[1].split()
++            assert fields[0] in ('R', 'S', 'D', 'T', 't', 'W', 'K', 'P', 'I')
++            assert fields[19] == expected_owner[kind + '_start']
+         rate = value.get('last_rate_limits')
+         assert type(rate) is dict and type(rate.get('primary')) is dict
+         used = rate['primary'].get('usedPercent')

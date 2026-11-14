@@ -1,0 +1,92 @@
+{
+  "actual_actor_retirement": false,
+  "actual_root_fd_transfer": false,
+  "blocking_finding": {
+    "additive_successor_pending": true,
+    "id": "POST_GETFD_ADAPTER_FAILURE_BEFORE_KEEPER_OWNERSHIP",
+    "mechanism": "Rawhold is returned by realgetfd helper before LocalCustody re-reads/compiles adoption module and fstats FD. If adapter initialization raises, assignment to Keeper.custody has not occurred. serve sees None and re-raises/exits, losing the copied descriptor even when rawhold is unverified because oldactorstate becameunknown.",
+    "owner_acknowledged": true,
+    "required": "Persistent ops/keeper rawhold ownership immediately afterhelperreturn before anyfallibleadaptersetup; emergencyunverifiedcustody/quarantine fallback if adapterfails. Whole runtime exception/finalization gate must retain rawhold even if Keeper.custody was neverassigned. Add explicitpostcopyadapterfaultfixture proving no exit/close/signal and heldOFD continuity.",
+    "source": "keeper942 LocalOps.acquire / LocalCustody.__init__ / Keeper.start / Keeper.serve"
+  },
+  "bridge_related_review": {
+    "bytes": 4006,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-process-census-lifecycle-review-1/related-deltas-review-1/BRIDGE-REVIEW.json",
+    "sha256": "dd820aed7c26be3a0f9c478a260355e8e13e97e0ca8cf3bd15c685617e49115a"
+  },
+  "cleanup_mutation": false,
+  "completion_or_free_acceptance": false,
+  "credential_correction": {
+    "bytes": 3774,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-post-recovery-retirement-review-1/REVIEW-CORRECTION-SUDO-CREDENTIAL-ATTRIBUTION.json",
+    "sha256": "5d39c99a278fb316a4ff946a8104e0579f237a97e6bc3f7d1bc4ea22e3bff0b0"
+  },
+  "decision": "PHASE_BOOTSTRAP_SOURCE_VALIDATED_KEEPER_RUNTIME_REQUIRES_POSTCOPY_RETENTION_FIX",
+  "fixed_standby": {
+    "bytes": 7818,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/keeper-phase-adoption-source-1/fixed_root_custody_standby.WITH-OUTER.SOURCE-ONLY.py",
+    "sha256": "5f7c9cd748b68116a958ed9d23be4ee69def6a4fa383c7638d92689e384ba6f1"
+  },
+  "future_mutator_requirements": [
+    "No standaloneborrowedTxclose/oldrecoverfinally/LOCK_UN on sharedrootOFD. A future borrowedadapter may close only its separatelyownedcopy/auxFDs and must prove independentnewopen remainsblocked whileKeeperretainscustody.",
+    "Currentphasebootstrap hasno sharedmutator and run/close refuse. Shared-only remaining index1, original4-rowjournalprefix/oldplan immutableprovenance, originalquarantinepreservation and laterfinalphysicalrelease remain separatelyreviewed operations.",
+    "Deadguard45fd lifecycle correction was reported CHANGES_REQUIRED by separatecensusreviewer; no runtimeauthority tobindthatcandidate is assumed."
+  ],
+  "genuine_configure": {
+    "bytes": 4581,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/keeper-phase-adoption-source-1/ACTUAL-SOURCE-READONLY-CONFIGURE-ATTEMPT2.json",
+    "sha256": "ade40b986ac3e8a4d237cc06539e4013f6a7d240ff0b878b1f32bb248085e27d"
+  },
+  "genuine_configure_and_bridge": {
+    "bytes": 8105,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/keeper-phase-adoption-source-1/ACTUAL-SOURCE-READONLY-CONFIGURE-AND-BRIDGE.json",
+    "sha256": "8231b39494fefa8c7a3fef67a1e6a924d79063872afa2aa8643debdd95812312"
+  },
+  "implementation_ownership": false,
+  "independent_test": {
+    "command": "taskset -c 0 prlimit --as=2147483648:2147483648 --core=0:0 -- /usr/bin/python3 -I -B docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/keeper-phase-adoption-source-1/test_keeper_phase_adoption.py",
+    "exit_code": 0,
+    "production_actions": false,
+    "reported_seconds": 0.216,
+    "tests": 23
+  },
+  "keeper": {
+    "bytes": 22574,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/keeper-phase-adoption-source-1/keeper_protocol.SOURCE-ONLY.py",
+    "sha256": "942342288186d5ba186297b5a4b65fccff5940f31effe4dce1f2c8607e927027"
+  },
+  "manifest": {
+    "bytes": 3960,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/keeper-phase-adoption-source-1/MANIFEST.json",
+    "sha256": "a1f31300fa3fd350580eda6e0630abbc875f1cab765542422d9b183c69c49efe"
+  },
+  "phase_bootstrap": {
+    "bytes": 12140,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/keeper-phase-adoption-source-1/phase_bootstrap.SOURCE-ONLY.py",
+    "sha256": "83df82d4e5bdb6310b7510bbcb2b42685ac460e66b93ef69b9c24ef6ba0d3ea7"
+  },
+  "positive_findings": [
+    "Only completedcommon logicalreadalias, exactarchive/object/hash and liveoldplan/journal/quarantine/commonabsence checks; wraps fullunchangede49configure and restoresbothreaders in finally beforeTx/effects.",
+    "Genuine unprivileged actual77-rowoldconfigure and reviewedc9afbridge composition passed withoutcollector/root/Tx/actorFD calls; oldcanonicalrelease57c6/plan279b retained. Relatedbridge source review reused, not broad-repeated; actualruntimeauthorization remains separate.",
+    "Late immutable-launch/actualkeeper bound Rootgrant+independentreview commandenvelopes remove futureauthhashcycle; lateauthenticatedjoins required after positiveoldpidfdexit, includingexactoldroot/sudo/outertool identities. Originalimagecaller1043200 JOIN is not fabricated.",
+    "Fixedwall/monotonic/boottime cutoffs and standbydeadline rechecked afterconfigure and immediatelypresignal. Durablebudgetintent distinguishes allowedcall1/attempted0 beforeactualsinglepidfdSIGKILL attempt; no numeric/group signals/retry.",
+    "HeldTx derives originalclass from genuinecustodyFD, retains oldRELEASE/plan, checksoriginalpinned metadata/oldgenerationmutex/loadplan/state/protected data. Currentrun/close refuse; bootstraperror closesauxFDs only, retainspermanentkeeperFD. No oldrecover orLOCK_UN is introduced.",
+    "Postexit custody validatescurrenthelddescription and globaloldPIDlineage as kernel fixture proved; oldPIDabsence never impliesfree. Exactactualroot/sudo all0 and outer1000 credentialdomains are nowfrozen correctly."
+  ],
+  "recorded_at": "2026-10-26T10:53:57.456808+00:00",
+  "result": {
+    "bytes": 5911,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/keeper-phase-adoption-source-1/RESULT.json",
+    "sha256": "099359059ac47c2bc91f03f1fc2bfd86846307568979b0ee6be6ba1dc383bbd5"
+  },
+  "reviewer": "/root/current_owner_retirement",
+  "runtime_execution_authority": false,
+  "schema": "mckernel.current290.keeper-phase.source.independent-findings.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "signals": false,
+  "tests": {
+    "bytes": 26827,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/keeper-phase-adoption-source-1/test_keeper_phase_adoption.py",
+    "sha256": "4294701fa2d24620903376e28acdf73f4810dc617b9961b0d21e243d28934d30"
+  }
+}

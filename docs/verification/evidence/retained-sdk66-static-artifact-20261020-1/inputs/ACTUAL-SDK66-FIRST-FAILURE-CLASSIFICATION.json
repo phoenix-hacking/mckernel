@@ -1,0 +1,136 @@
+{
+  "actual_symbols": {
+    "mcctrl.ko": {
+      "artifact": {
+        "bytes": 2171208,
+        "path": "/home/holden/mckernel-work/scratch/nsd-c-df75d8453eab42ff918731acbd2573c4/modules/mcctrl.ko",
+        "sha256": "c3ca5052aa93e129702c21cf5ac9adf1831d516327f749c068faa55a951f5716"
+      },
+      "rows": [
+        {
+          "binding": 1,
+          "name": "mckernel_inherited_mmap_write_unlock",
+          "section_index": 5,
+          "symbol_type": 2
+        },
+        {
+          "binding": 1,
+          "name": "mckernel_inherited_mmap_write_lock",
+          "section_index": 5,
+          "symbol_type": 2
+        },
+        {
+          "binding": 1,
+          "name": "mckernel_inherited_vma_start_write",
+          "section_index": 5,
+          "symbol_type": 2
+        }
+      ]
+    },
+    "mcctrl.o": {
+      "artifact": {
+        "bytes": 2063008,
+        "path": "/home/holden/mckernel-work/scratch/nsd-c-df75d8453eab42ff918731acbd2573c4/modules/mcctrl.o",
+        "sha256": "e634ae994d932bb7bc1ffba8bffc8b5dae794dc76f53ca450b954758c61202dc"
+      },
+      "rows": [
+        {
+          "binding": 1,
+          "name": "mckernel_inherited_mmap_write_unlock",
+          "section_index": 1,
+          "symbol_type": 2
+        },
+        {
+          "binding": 1,
+          "name": "mckernel_inherited_mmap_write_lock",
+          "section_index": 1,
+          "symbol_type": 2
+        },
+        {
+          "binding": 1,
+          "name": "mckernel_inherited_vma_start_write",
+          "section_index": 1,
+          "symbol_type": 2
+        }
+      ]
+    },
+    "mcctrl_rust.o": {
+      "artifact": {
+        "bytes": 1899264,
+        "path": "/home/holden/mckernel-work/scratch/nsd-c-df75d8453eab42ff918731acbd2573c4/modules/mcctrl_rust.o",
+        "sha256": "c095dfb09ea5cb40f73968fc4c55e4b00271da06ff9bbfb6e74fce7d5182060a"
+      },
+      "rows": [
+        {
+          "binding": 1,
+          "name": "mckernel_inherited_mmap_write_unlock",
+          "section_index": 0,
+          "symbol_type": 0
+        }
+      ]
+    },
+    "mcctrl_vm_write_compat.o": {
+      "artifact": {
+        "bytes": 134400,
+        "path": "/home/holden/mckernel-work/scratch/nsd-c-df75d8453eab42ff918731acbd2573c4/modules/mcctrl_vm_write_compat.o",
+        "sha256": "ed1caaa49604b422af6bca7f89b748a73eac7209df3f3f6abebf9525d9f352dd"
+      },
+      "rows": [
+        {
+          "binding": 1,
+          "name": "mckernel_inherited_mmap_write_lock",
+          "section_index": 2,
+          "symbol_type": 2
+        },
+        {
+          "binding": 1,
+          "name": "mckernel_inherited_mmap_write_unlock",
+          "section_index": 2,
+          "symbol_type": 2
+        },
+        {
+          "binding": 1,
+          "name": "mckernel_inherited_vma_start_write",
+          "section_index": 2,
+          "symbol_type": 2
+        }
+      ]
+    }
+  },
+  "automatic_fifth_compiler_authorized": false,
+  "classification": "BUILD_EXIT_ZERO_DRIVER_RUST_LEAF_UNDEFINED_EXPECTATION_REJECTED",
+  "compiler_calls_in_this_classification": 0,
+  "driver_requirement": "For each bridge, Rust leaf expects exactly0definitions/1undefined. C leaf, composite and final each require1definition/0undefined STT_FUNC.",
+  "first_failure": "ValueError: MM provider D/U mismatch: mcctrl_rust.o:mckernel_inherited_mmap_write_lock",
+  "frozen_driver": {
+    "bytes": 24562,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/host-control-fullmodule-integration-1/compiler-ffi-correction-1/fresh-fullmodule-attempt-1/capsule/scripts/native_running_external_modules_offline.py",
+    "sha256": "c08b212ccf80084d4951998f95a40f36082cb7b05ff1f68589e4239de57e53d1"
+  },
+  "inference": "Unused Rust externs or consumer paths may be optimized out; requiring every declaration in undefined symbol table is invalid. Exact cause of dead consumer selection is not established here.",
+  "make_returncode": 0,
+  "make_stderr": {
+    "bytes": 875,
+    "path": "/home/holden/mckernel-work/scratch/nsd-c-df75d8453eab42ff918731acbd2573c4/evidence/make.stderr",
+    "sha256": "25670b4b3190b91e5524d62fd3a6f3244abe779799bcde308f1bdf27b5c8f763"
+  },
+  "make_stdout": {
+    "bytes": 949,
+    "path": "/home/holden/mckernel-work/scratch/nsd-c-df75d8453eab42ff918731acbd2573c4/evidence/make.stdout",
+    "sha256": "221f1f88e3a164ef8354487178fa68d4cae092a89a43a385e0a7d166e3abd7c2"
+  },
+  "observed_final_linkage": "All3 bridge symbols uniquely defined GLOBAL STT_FUNC in C leaf, composite and final module; no undefined bridge reference in composite/final. Rust leaf has only unlock reference; lock/vma absent.",
+  "receipt": {
+    "bytes": 26257,
+    "path": "/home/holden/mckernel-work/scratch/nsd-c-df75d8453eab42ff918731acbd2573c4/evidence/receipt.json",
+    "sha256": "52fb7eaf42a02937c182ccb014661b1bb7781b40bd539896952bd0c8aac9ea34"
+  },
+  "remaining": [
+    "Independent physical retirement decision",
+    "Expert disposition of invalid intermediate Rust leaf expectation before any checker correction",
+    "All subsequent existing outputs/compiler-command/protection gates remain unrun; no overall compile/module/native acceptance"
+  ],
+  "schema": "mckernel.sdk66.actual-closed-diagnostic-classification.v1",
+  "scope": "Functional OS/apps and active Rust compute cutover; private retained SDK diagnostic only",
+  "source_or_frozen_capture_mutations": 0
+}

@@ -1,0 +1,32 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_FRAGMENT_ONLY_UNRUN_NO_SECOND_EXECUTABLE_QUEUE",
+  "headers": [
+    "ihk/linux/include/ihk/ihklib.h",
+    "ihk/linux/include/ihk/ihk_host_user.h"
+  ],
+  "ABI": {
+    "public": "int ihk_os_get_eventfd(int,int)",
+    "eventfd_desc_size": 8,
+    "type_offset": 4,
+    "eventfd_signature": "int eventfd(unsigned int,int)",
+    "register_request": 1124885,
+    "types": [
+      0,
+      2,
+      101
+    ]
+  },
+  "fixture_invariants": [
+    "os_open precedes type validation, including all error cases",
+    "invalid types: -1,1,3,100,102,INT_MIN,INT_MAX =>-EINVAL after open then close",
+    "os_open=-1 skips close; other negatives close(exactnegative) with original savedreturn",
+    "eventfd init0/flags0 exactlyonce; eventfd failure still reachesioctl as original",
+    "ioctl nonzero includingpositive =>negative errno captured beforeclose; close maymutateerrno",
+    "ioctl success returns actual descriptor field, including controlled provider mutation",
+    "retained eventfd on ioctl failure is C-parity leak debt, not silently repaired",
+    "success owned eventfd is returned unclosed; only /dev/mcos fd closed",
+    "real header sizeof/offsetof and int-signature witnesses; no device access"
+  ],
+  "actual_result": null
+}

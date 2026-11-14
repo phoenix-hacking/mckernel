@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_review",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "review_attempt": 15,
+  "status": "FAIL_SOURCE",
+  "recorded_utc": "2026-09-16T01:33:47Z",
+  "review_input": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260915-17.tar.gz",
+    "sha256": "73ebe9fcb85c1de6e1d2dcedd227ee11dd6309e361f8fb7e822efb3c26c6ce8d",
+    "size": 330459,
+    "members": 26
+  },
+  "source_sha256": {
+    "prepare.py": "1d09a2f4f143af79de7eb98e7cc6d5c6a01efa89e15fa925d2c7869c78ab2df4",
+    "witness_owner.py": "4554efcda371a395681ff7f7353e05d98adf6ab4aae656b40d524f128fdf4670",
+    "supervise.py": "34a19477db81cb8cb6b6766a71c3d0c8f83e4916458fa4a1758125d9c451a5b6",
+    "oracle.py": "2bd26fc8cd200157ee49becc23222be852df154dc4ce16f89f45ea5e77667faa",
+    "test_collector_storage_fault_packet.py": "4cb5986d5795845c3788ed6805163d184eceb0684e76b20dd8d5b4f2cc2d8f75"
+  },
+  "checks_before_review": {
+    "python3.9.12": "86/86 PASS",
+    "python3.8.10": "86/86 PASS",
+    "pycompile": "PASS on both interpreters",
+    "review_envelope": "PASS_REVIEW_ENVELOPE_ONLY"
+  },
+  "corrected_prior_findings": [
+    "Adopted signal-error expiration no longer accepts ECHILD after the error and before the deadline.",
+    "Preflight failure and already-incomplete cleanup branches now retain publication finalization.",
+    "Duplicate publication-finish deadline records are rejected.",
+    "Boolean schema_version values are rejected by exact integer typing."
+  ],
+  "findings": [
+    "The two initial post-fork observe_identity calls are outside the protected failure path. A first observation exception bypasses cleanup, pipe retirement and publication; a second observation exception also discards the first retained observation.",
+    "The oracle accepts duplicate direct wait-timeout records. It must require exactly one direct timeout when applicable while preserving separately joined TERM and KILL stage timeouts."
+  ],
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

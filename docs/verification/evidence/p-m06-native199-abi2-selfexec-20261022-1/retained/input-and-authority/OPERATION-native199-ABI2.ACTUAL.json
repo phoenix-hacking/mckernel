@@ -1,0 +1,68 @@
+{
+  "actual_release": null,
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--fsize=33554432",
+    "--as=2147483648:2147483648",
+    "--core=0:0",
+    "--",
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/native_diagnostic_container_owner.py",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/n199c1/p",
+    "--nonce",
+    "6ed8a27da1d5481ea88d4a6d00ee5245",
+    "--owner-sha256",
+    "4d7ae097cae866389ed044a6247e01f1bc78ff8744fc8d72f39fb294b55bb298",
+    "--manifest",
+    "/home/holden/mckernel-work/scratch/n199c1/m.json",
+    "--manifest-sha256",
+    "fef195b306eeb032e0ad44c42e597a8053e384f2df45d8bac099aa70f1f0cbc4"
+  ],
+  "capture_directory": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/abi2-boothelper-substitution-1/actual-abi2-native199-owner-capture-1",
+  "cpu": 7,
+  "execution_review": null,
+  "fresh_root_admission": null,
+  "profile": {
+    "container_CPU_affinity": "2-5",
+    "container_CPU_count": 4,
+    "container_fsize": [
+      33554432,
+      33554432
+    ],
+    "container_memory_bytes": 12884901888,
+    "container_network": "none",
+    "container_swap_bytes": 0,
+    "container_tasks": 512,
+    "cpu": 7,
+    "host_UID_NPROC": "inherited126258:126258; no per-UID512",
+    "jobs": 1,
+    "outer_grace_kill": null,
+    "outer_wall_kill": null,
+    "owner_CPU_limits": [
+      -1,
+      -1
+    ],
+    "owner_as_bytes": [
+      2147483648,
+      2147483648
+    ],
+    "payload_timeout_ms": 10000,
+    "required_inherited_cpu_limits": [
+      -1,
+      -1
+    ],
+    "runner_timeout_seconds": 300,
+    "stream_fsize": 33554432
+  },
+  "role": "native199-owner",
+  "status": "ACTUAL_MANIFEST_BOUND_NOT_RELEASED",
+  "stream_cap_bytes": 33554432
+}

@@ -1,0 +1,152 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ROOT_READY_EXACT_TWO_FILE_PROCESS_INTEGRATION_NOT_EXECUTED_REVIEW_PENDING",
+  "copyset": [
+    {
+      "target": "/home/holden/mckernel/kernel/process.c",
+      "preimage": {
+        "path": "/home/holden/mckernel/kernel/process.c",
+        "sha256": "e2f2562b32ec462d9ee78c74dee4222485a69c4a3e2a81a332663fcef7e2b52d",
+        "bytes": 161751
+      },
+      "staged_postimage": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-process-next/canonical-integration-preparation-1/staged/kernel/process.c",
+        "sha256": "64af918855ea361bd850d6ad7480d304634c28814e04127fe3dec8c013f21044",
+        "bytes": 161959
+      },
+      "accepted_private_postimage": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-process-next/candidate/process.c",
+        "sha256": "64af918855ea361bd850d6ad7480d304634c28814e04127fe3dec8c013f21044",
+        "bytes": 161959
+      },
+      "mode": 384,
+      "old_inode": {
+        "device": 66306,
+        "inode": 47486417,
+        "nlink": 1,
+        "uid": 1000,
+        "gid": 1000
+      }
+    },
+    {
+      "target": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "preimage": {
+        "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+        "sha256": "526baf9363a0845ad50aade7e9b2296d27c8840527f3510d95a1105fc626d8d3",
+        "bytes": 351847
+      },
+      "staged_postimage": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-process-next/canonical-integration-preparation-1/staged/kernel/rust/process_helpers.rs",
+        "sha256": "3f2c3dc03445147addee47d77e3ad2b31207fb3bfaa591ad99b6d0d9c897932e",
+        "bytes": 352627
+      },
+      "accepted_private_postimage": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-process-next/candidate/process_helpers.rs",
+        "sha256": "3f2c3dc03445147addee47d77e3ad2b31207fb3bfaa591ad99b6d0d9c897932e",
+        "bytes": 352627
+      },
+      "mode": 384,
+      "old_inode": {
+        "device": 66306,
+        "inode": 47468766,
+        "nlink": 1,
+        "uid": 1000,
+        "gid": 1000
+      }
+    }
+  ],
+  "exact_combined_patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-process-next/canonical-integration-preparation-1/EXACT-TWO-FILE.patch",
+    "sha256": "9583704021a2b30680b3b71c7a2374721fdc007feab1278b67ccfead4b6b615f",
+    "bytes": 2690
+  },
+  "original_patches": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-process-next/patch/process.c.diff",
+      "sha256": "8c295b51fdcd92f021c4e9df29de853ddf6aae93bc4e61e30159ac3035abfc30",
+      "bytes": 1445
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-process-next/patch/process_helpers.rs.diff",
+      "sha256": "63db3aa593af2c9df8d1447589eee20dd5e0aecffdd527889e93e51669540c1c",
+      "bytes": 1245
+    }
+  ],
+  "patch_preparation": {
+    "argv": [
+      "/usr/bin/patch",
+      "--batch",
+      "--fuzz=0",
+      "--forward",
+      "--no-backup-if-mismatch",
+      "--strip=1",
+      "--directory",
+      "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-process-next/canonical-integration-preparation-1/staged",
+      "--input",
+      "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-process-next/canonical-integration-preparation-1/EXACT-TWO-FILE.patch"
+    ],
+    "returncode": 0,
+    "stdout": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-process-next/canonical-integration-preparation-1/patch-source-preparation.stdout",
+      "sha256": "971a6832e4e51b2d36c60a7eb1bee3db0e324bfc0f197ae882a34980bbcccb6e",
+      "bytes": 76
+    },
+    "stderr": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-process-next/canonical-integration-preparation-1/patch-source-preparation.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "zero_fuzz_zero_offset": true,
+    "only_private_staging_written": true
+  },
+  "active_consumer_exclusion": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-process-next/canonical-integration-preparation-1/ACTIVE-CONSUMER-EXCLUSION.json",
+    "sha256": "8ca4330bfa443b1bb57c8beec778b6aa403db6507fc03905a30c3c2cb3f5cd6b",
+    "bytes": 2343
+  },
+  "active_source_hold_required": false,
+  "actual_1088_and_corrected_leaf_observer": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-process-next/bounded-observer-correction-1/ACTUAL-OBSERVER-WHOLE-JOIN.json",
+    "sha256": "9d58cc3f67edfe96ea72b9025e0db945dd95f3187ba6f904115ba0c94e568fea",
+    "bytes": 1836
+  },
+  "actual_leaf_result": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-process-next/bounded-observer-correction-1/OBSERVER-RESULT.json",
+    "sha256": "9d26fd21498dcafd58bec9014b3c4fb7f546fd7af850075901b3fe49907117a7",
+    "bytes": 7752
+  },
+  "actual_CURRENT78_completeGCC9_ABI_two_callers_partial12": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-process-next/production-consumer-preparation-1/coherent-current78-refresh-1/ACTUAL-PRODUCTION-WHOLE-JOIN.json",
+    "sha256": "11a772d7dc46b8d35cf9ddfad585409403245414ebfd58bf3521345464d6b764",
+    "bytes": 23630
+  },
+  "independent_actual_review_pending": "m14_callback_review current assignment; root records positive final verdict before executing.",
+  "root_operation": {
+    "argv": [
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-process-next/canonical-integration-preparation-1/ROOT-ATOMIC-INTEGRATE.py"
+    ],
+    "script": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-process-next/canonical-integration-preparation-1/ROOT-ATOMIC-INTEGRATE.py",
+      "sha256": "99d0ba39dba18c13115f1d58a0ab06a8e11b31827ce65b514c92a910c45b8f26",
+      "bytes": 4732
+    },
+    "reused_atomic_pattern": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/canonical-integration-preparation-1/ROOT-ATOMIC-INTEGRATE.py",
+      "sha256": "ce429bc9610f8eeb7821aa8d47bf2f5c956cd4fa9cb03b99abe3ff36b181675a",
+      "bytes": 4475
+    },
+    "executed": false,
+    "sequence": "Check exact2preimages/2stagedpostimages and selected4activeauthorities; fsyncstagedsiblings originalmodes; recheckbothpreimagesbeforefirstreplace; replaceeachpath+parentfsync; verifybothpostimages. No inode inplacewrite; prior hardlinks retained.",
+    "dispatcher_prerequisite": "Root confirms current selected activeP12owner626/cohorte746/controllerf744/footprint93d2 and independent review acceptance; no conflict bypass."
+  },
+  "preserved_idle_and_process_correctness": "Exact canonical preimages e2f256/526baf are patched without other edits; staged hashes match accepted candidate64af9188/3f2c3dc0. Existing idle/process fixes remain byte-identical outside accepted source diff.",
+  "remaining_debt": "Two C diagnostic callbacks(vm_range_insert_log_bridge and vm_range_insert_dump_bridge/dump_tree optional dtree) remain. No wholefile/defaultGCC14link/native retirement claim.",
+  "canonical_mutations": 0,
+  "compiler_jobs": 0,
+  "test_jobs": 0,
+  "root_Docker_or_workload_jobs": 0,
+  "CPU_slots_held": 0
+}

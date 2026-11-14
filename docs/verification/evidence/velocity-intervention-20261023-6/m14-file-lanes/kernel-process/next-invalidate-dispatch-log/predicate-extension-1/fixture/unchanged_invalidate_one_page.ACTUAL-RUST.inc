@@ -1,0 +1,31 @@
+pub unsafe extern "C" fn invalidate_one_page(
+    arg0: *mut c_void,
+    page_table: *mut c_void,
+    ptep: *mut c_void,
+    pgaddr: *mut c_void,
+    pgshift: CInt,
+) -> CInt {
+    process_invalidate_one_page_body_result(
+        arg0,
+        page_table,
+        ptep,
+        pgaddr,
+        pgshift,
+        Some(process_pte_is_null_bridge),
+        Some(process_pte_is_fileoff_bridge),
+        Some(process_pte_get_phys_bridge),
+        Some(process_phys_to_page_bridge),
+        Some(process_page_offset_bridge),
+        Some(process_pte_make_fileoff_bridge),
+        Some(process_pte_xchg_bridge),
+        Some(process_flush_tlb_single_bridge),
+        Some(process_pte_is_contiguous_bridge),
+        Some(process_page_is_contiguous_head_bridge),
+        Some(process_pgsize_to_tbllv_bridge),
+        Some(process_tbllv_to_contpgsize_bridge),
+        Some(process_page_unmap_bridge),
+        Some(process_panic_bridge),
+        Some(process_memobj_invalidate_page_bridge),
+        Some(process_invalidate_one_page_log_bridge),
+    )
+}

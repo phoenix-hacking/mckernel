@@ -1,0 +1,62 @@
+{
+  "schema": "mckernel.owned-child-source-build-stage-proposal.v1",
+  "status": "SOURCE_ONLY_NOT_A_RELEASE",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "primary_source": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/f05-owned-processvm-consumer-source-1/app.rs",
+    "sha256": "4aef0b5f30bc8090bdbe102332e39895b328b3ebe2735c3d011d5c035c602e68",
+    "size": 10987
+  },
+  "optional_source": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/f05-owned-processvm-consumer-source-1/f06_processvm.rs",
+    "sha256": "f760d4d1fd4135b9b618ee76a011746321a1195d7fc0ce2b92c946b339e1d149",
+    "size": 10115
+  },
+  "compiler_proposal": {
+    "argv": [
+      "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2021",
+      "-D",
+      "warnings",
+      "-C",
+      "opt-level=1",
+      "-C",
+      "codegen-units=1",
+      "-C",
+      "target-feature=+crt-static",
+      "-C",
+      "relocation-model=static",
+      "-C",
+      "link-arg=-no-pie",
+      "-C",
+      "link-arg=-Wl,-z,noexecstack",
+      "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/f05-owned-processvm-consumer-source-1/app.rs",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/f05-owned-processvm-consumer-source-1/app"
+    ],
+    "jobs": 1,
+    "memory_limit_bytes": 1073741824,
+    "cpu_slot": "background owner allocation required; no assumed CPU grant",
+    "outer_wall_seconds": 180,
+    "reference_run": "Same exact artifact on ordinary Linux, separately granted and captured; exact frozen bytes/exit0; no oracle inferred from reference stdout."
+  },
+  "staging_proposal": {
+    "required_repository_export": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-consumer-source-1",
+    "export_is_created": false,
+    "steps": [
+      "After ordinary source/compiler/ELF/reference approval and execution, owner snapshots source/oracle/exact executable and captures to fresh repository export. Bind every runtime artifact by SHA256, size and stable identity. No host-preparation runtime path may enter a container manifest.",
+      "Reuse existing native_diagnostic_stager.py/native_diagnostic_overlay.py final-map and source identity joins; payload snapshot in export becomes apps/app. Preserve actual matched image, mcexec, modules, loader/libc and collector identities.",
+      "Use retained ND_PROCESS_EXEC_WAIT collector profile for parent/child oversubscription and original no-ND_FUTEX STREAM_LIMIT1024. Its app A empty B argv is acceptable: these apps ignore argv. Manifest must freeze exact same argv.",
+      "Bind manifest stdout_limit_bytes=1024 and stderr_limit_bytes=1024, exactly equal collector stream.limit; exact stdout_hex from primary-oracle and empty stderr, exit0; require EOF, no truncation/discard and observed=retained.",
+      "Keep existing payload10s timeout and owner physical teardown/postjoin controls. Parent/child schedule and syscall logs must be consumed by a reviewed lifecycle evaluator. Generic native_diagnostic.py currently asserts exactly one schedule event: do not use that as proof for a child workload or weaken its oracle. Reuse/qualify the accepted process235 lifecycle evaluator under owner review before release.",
+      "Use same one-heavy4CPU/12GiB/512task campaign grant; source-only preparation creates no compiler/staging/native/cleanup authority. Retain first failure and all originals."
+    ]
+  },
+  "collector_stream_limit_bytes": 1024,
+  "manifest_stdout_limit_bytes": 1024,
+  "manifest_stderr_limit_bytes": 1024,
+  "runtime_release": false,
+  "compiler_release": false,
+  "native_release": false,
+  "existing_functional_check_count": 35
+}

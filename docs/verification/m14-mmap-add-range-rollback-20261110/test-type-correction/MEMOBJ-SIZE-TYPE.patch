@@ -1,0 +1,11 @@
+--- tests/rollback_regression.rs
++++ tests/rollback_regression.memobj-size-correction-1.rs
+@@ -65,7 +65,7 @@
+     let space = Box::into_raw(Box::new(MaybeUninit::<AddressSpace>::zeroed().assume_init()));
+     let object = Box::into_raw(Box::new(MaybeUninit::<Memobj>::zeroed().assume_init()));
+     (*object).refcnt.counter = 1;
+-    (*object).size = end - start;
++    (*object).size = SizeT::try_from(end - start).expect("controlled HOST length fits Memobj.size");
+     (*object).flags = 0x40000; // real MF_SHM; only caller owns this reference
+     (*vm).address_space = space;
+     (*vm).proc = proc.cast();

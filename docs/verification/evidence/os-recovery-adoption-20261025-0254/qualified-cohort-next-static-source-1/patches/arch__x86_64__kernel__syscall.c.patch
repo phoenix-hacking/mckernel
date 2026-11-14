@@ -1,0 +1,54 @@
+--- arch/x86_64/kernel/syscall.c
++++ arch/x86_64/kernel/syscall.c
+@@ -650,18 +650,24 @@
+ 	thread_unlock((struct thread *)thread_addr);
+ }
+ 
++#ifndef MCKERNEL_RUST_F06_PRCTL_SET_REGISTER
+ int
+ arch_prctl_set_register_bridge(int type, unsigned long value)
+ {
+ 	return ihk_mc_arch_set_special_register(type, value);
+ }
+ 
++#endif
++
++#ifndef MCKERNEL_RUST_F06_PRCTL_GET_REGISTER
+ int
+ arch_prctl_get_register_bridge(int type, unsigned long *addr)
+ {
+ 	return ihk_mc_arch_get_special_register(type, addr);
+ }
+ 
++#endif
++
+ void
+ arch_prctl_log_bridge(int event, int cpu, unsigned long value)
+ {
+@@ -691,6 +697,7 @@
+ }
+ 
+ 
++#ifndef MCKERNEL_RUST_F06_MMAP_DISPATCH_BRIDGE
+ long
+ arch_do_mmap_bridge(unsigned long addr, size_t len, int prot, int flags,
+ 		int fd, long off, int vrf0, void *private_data)
+@@ -699,6 +706,9 @@
+ }
+ 
+ 
++#endif
++
++#ifndef MCKERNEL_RUST_F06_MMAP_FLAG_PROVIDERS
+ int
+ arch_mmap_supported_flags_bridge(void)
+ {
+@@ -736,6 +746,8 @@
+ 		| MAP_EXECUTABLE
+ 		| MAP_NONBLOCK;
+ }
++#endif
++
+ #endif
+ 
+ #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS

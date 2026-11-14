@@ -1,0 +1,9 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+The exact current-free e13be6df and actual review119318b9 are now authenticated. Root alone fills the null authority fields and actuallinks in templates01–03 at the planned paths in ROOT-FILL-ORDER-AND-NEXT-COMMAND.NOT-AUTHORITY.json. Preserve71nonce order and all typed native/history/failure fields. The ledger target changes only prior_ledger_retained, newfree/pending flags and Root actual adoption metadata. The nine-field descriptor uses actualfree e13, current schema1739d17e and schema-review ca304324; candidate69736e8c is a separate schema-review receipt.
+
+The existing actualpostjoin review119 is retained as physical current-boundary evidence. Exact typed descriptor/runtime consumer review remains required before any new runtime/heavy/native ingress. Template04 supplies that same existing independent owner with the newactual ledger/boundary refs and accepted_current phase. No newrecapture is required.
+
+After Root writes actual01/02/03, execute the exact next_pure_validator_argv in ROOT-FILL-ORDER-AND-NEXT-COMMAND.NOT-AUTHORITY.json. This imports the reviewedsource and calls validate_current_adoption(bindings,validate_retained()) only; it never calls runtime_dependencies, guard or observe. independent_review may remainnull during that purecheck. Fill actual04 and its exactref in actual03 before the actual accepted-current observer is callable. Runtime-dependency guards will reject absent or stale review/phase/ledger/free/boundary/config bindings.
+
+The successful capture2164662/b102148912 and its five recorded clients remain custody history. Future accepted-current reobservation adds those six rows to the prior87 (93total); unknown inherited observer/producer births remain explicitly unmeasured. Native/default/file acceptance scope does not change.

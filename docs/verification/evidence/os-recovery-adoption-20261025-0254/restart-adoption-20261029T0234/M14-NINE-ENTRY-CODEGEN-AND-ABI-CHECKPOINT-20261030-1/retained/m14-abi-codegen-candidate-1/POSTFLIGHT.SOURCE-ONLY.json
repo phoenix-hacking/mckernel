@@ -1,0 +1,111 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_NO_EXECUTION_ADMISSION",
+  "source_bindings": {
+    "rust_profile_sha256": "54052128d8857cbac30bcb2431d7e514cf96e8e535b1a82dc4b41c2383f77aa6",
+    "C_profile_sha256": "36237d96a743e192ec4cfa2192e39f64921955a5aa76449481305f34d35d3ea9",
+    "abi_comparator_sha256": "2dbbc723477db776890f311c667a1b53848f9fa4dd244149bede8c4335761372"
+  },
+  "artifacts": {
+    "rust_object": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-abi-codegen-candidate-1/work-1/out/mckernel_rust.o",
+    "rust_actual_sha256": null,
+    "c_object": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-abi-codegen-candidate-1/work-1/out/clone_header_witness.o",
+    "c_actual_sha256": null
+  },
+  "abi_pairs": [
+    {
+      "rust_symbol_fragment": "f03_do_fork_Rust_ABI_v1",
+      "C_exact_symbol": "f03_do_fork_C_ABI_v1",
+      "word_count": 46
+    },
+    {
+      "rust_symbol_fragment": "f03_clone_lifetime_vm_Rust_ABI_v1",
+      "C_exact_symbol": "f03_clone_lifetime_vm_C_ABI_v1",
+      "word_count": 10
+    }
+  ],
+  "comparison_argv_template": [
+    "/usr/bin/python3",
+    "-s",
+    "-E",
+    "-S",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-abi-codegen-candidate-1/compare_clone_abi.py",
+    "--rust-object",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-abi-codegen-candidate-1/work-1/out/mckernel_rust.o",
+    "--rust-sha256",
+    "<actual captured Rust object SHA256>",
+    "--c-object",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-abi-codegen-candidate-1/work-1/out/clone_header_witness.o",
+    "--c-sha256",
+    "<actual captured C object SHA256>"
+  ],
+  "comparison_requirements": [
+    "confirm x86_64 ELF64 little endian relocatable objects and exact supplied content hashes",
+    "C witness contains no defined STT_FUNC and each C exact object is unique, right size, allocated and not relocated",
+    "Rust private mangled symbol must uniquely contain each exact source identifier, have correct extent and no data relocation",
+    "compare all 46 and 10 decoded u64 words without changing either original witness; report raw actual symbols and words",
+    "the comparator source is unrun and requires independent functional review; invocation is a separate admitted workload"
+  ],
+  "codegen_symbol_postflight": {
+    "required_reference_statics": [
+      {
+        "static": "REF_CRED_UID",
+        "target": "do_setresuid",
+        "prototype": "unsafe extern C fn() -> ()"
+      },
+      {
+        "static": "REF_CRED_GID",
+        "target": "do_setresgid",
+        "prototype": "unsafe extern C fn() -> ()"
+      },
+      {
+        "static": "REF_DO_SYSCALL",
+        "target": "f03_do_syscall_supported_v1",
+        "prototype": "unsafe extern C fn(*mut SyscallRequest,CInt)->CLong"
+      },
+      {
+        "static": "REF_UTIL_THREAD",
+        "target": "f03_util_thread_whole_v1",
+        "prototype": "unsafe extern C fn(*mut UtiAttr)->CInt"
+      },
+      {
+        "static": "REF_DO_SYSCALL2",
+        "target": "syscall_do_syscall2_bridge",
+        "prototype": "unsafe extern C fn(CInt,CULong,CULong)->CLong"
+      },
+      {
+        "static": "REF_POLICY_SYSCALL2",
+        "target": "syscall_policy_do_syscall2_bridge",
+        "prototype": "unsafe extern C fn(CInt,CULong,CULong)->CLong"
+      },
+      {
+        "static": "REF_DO_SYSCALL3",
+        "target": "syscall_do_syscall3_bridge",
+        "prototype": "unsafe extern C fn(CInt,CULong,CULong,CULong)->CLong"
+      },
+      {
+        "static": "REF_POLICY_SYSCALL3",
+        "target": "syscall_policy_do_syscall3_bridge",
+        "prototype": "unsafe extern C fn(CInt,CULong,CULong,CULong)->CLong"
+      },
+      {
+        "static": "REF_WAIT4",
+        "target": "wait_host_wait4_bridge",
+        "prototype": "unsafe extern C fn(CInt,CInt)->CInt"
+      }
+    ],
+    "requirements": [
+      "capture actual ELF symbols and resolve each private Rust static identifier uniquely; do not guess compiler-generated mangled bytes",
+      "each 8-byte used reference must have a relocation attributable to its exact intended function entry; resolve section-symbol/addend form where used rather than asserting a guessed name",
+      "retain unresolved-symbol inventory; actual ABI/typechecked references do not provide missing C owner externs or link production",
+      "do not infer function execution, C selection, C retirement or caller lifetime from code emission"
+    ]
+  },
+  "limitations": [
+    "previous generic syscall.o has held exec-tail selector; 11-input link remains unavailable",
+    "C metadata declaration is source-bound but isolated header config needs exact independent review",
+    "values not compared until both actual object hashes and admitted comparator result exist",
+    "original389 oracle retained unchanged and remains separate"
+  ]
+}

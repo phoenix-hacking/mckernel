@@ -1,0 +1,368 @@
+{
+  "ABI35_reused": {
+    "actual_result": {
+      "bytes": 32589,
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-UTI-ABI35-rust-cwd-correction-1/execution-1/capture/RESULT.json",
+      "sha256": "1d359e8c55101cbf0620ec3ae2195335a61d448ac95b0c27e68b1cb8b784e7e8"
+    },
+    "bytes": 280,
+    "raw_sha256": "27859d4e73c746e0a5eccdeda7b72fa7da9eb8b66854649ebb0dc607c5b09b85",
+    "words": 35
+  },
+  "C_commit": "fe0b8400",
+  "C_git_blob": "8541a230d72879f4484682d79bc6921eff593365",
+  "C_line_controls": [
+    "extern immediately before original #line 28297",
+    "call replaces only clv/thread/global twelve-assignment block",
+    "reset #line 28346 immediately before request.number"
+  ],
+  "C_postimage": {
+    "bytes": 966986,
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-UTI-private-data-provider-1/paired-info-initializer-1/candidate/kernel/syscall.c",
+    "sha256": "e8797e0a759bfeb331ebdea1bd40480cce78c671681e72448958e29b22460d07"
+  },
+  "C_preimage": {
+    "bytes": 967651,
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-UTI-private-data-provider-1/paired-info-initializer-1/preimage/kernel/syscall.c",
+    "sha256": "9f5aa63d124784d772734bff1c0c63dd719cb814fd43d4ebf41f3bf7ce188b2e"
+  },
+  "C_request_number_to_EOF_byte_equal": true,
+  "C_request_number_to_EOF_sha256": "1b314a59ea293161841c1890d5202b9fb54d6b24b6ea6c1cb21b68c70cbc447c",
+  "C_whole_inverse_exact": true,
+  "Rust_existing_imports_types_metadata_aliases_provider_record_byte_equal": true,
+  "Rust_other_delta": [
+    "update header documentation to describe private paired candidate",
+    "append addr_of_mut and Thread imports",
+    "append one unsafe no_mangle extern C void helper"
+  ],
+  "Rust_postimage": {
+    "bytes": 10722,
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-UTI-private-data-provider-1/paired-info-initializer-1/candidate/kernel/rust/uti_data_providers.rs",
+    "sha256": "9b8c1127f1427329ff17a73ff49336a310eff29985e32b95e50f279eb4163634"
+  },
+  "Rust_preimage": {
+    "bytes": 6491,
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-UTI-private-data-provider-1/candidate/kernel/rust/uti_data_providers.rs",
+    "sha256": "4612b65d108e52e03c90b5fa7644c8e7ead74b9eef1b8070fa7ec4e8beb0a439"
+  },
+  "author_subject_execution_import_test_compiler_Docker_account_native_or_live_selection": false,
+  "baseline_contract": {
+    "bytes": 17314,
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-UTI-private-data-provider-1/PROVIDER-ABI-AND-CALLERS.json",
+    "sha256": "cd7fd451d31892ef7043eafd313bdd7b202818ce3998b7e0c416264efd5c73b3"
+  },
+  "caller_obligations": [
+    "Successful aligned original allocation and live captured Thread.",
+    "Original current-CPU/CLS/thread/VM/futex/idle initialization, synchronization, exclusion and pointee lifetimes remain caller-owned.",
+    "Original nine host-owned slots and padding remain untouched; helper does not claim a whole initialized UtiInfo.",
+    "Original allocator and source/logical origins, null cleanup, request/submit/ACK/refill/exit/free tail remain unchanged.",
+    "No provider/address conversion grants host completion, ACK, drain, TID/refill access, final-stack lifetime or safe-free permission."
+  ],
+  "candidate_allocation_and_free_origins": [
+    {
+      "logical_origin": 28314,
+      "physical_line": 29516,
+      "source": "rctx = kmalloc_tracked(sizeof(struct uti_ctx), IHK_MC_AP_NOWAIT, __FILE__, __LINE__);"
+    },
+    {
+      "logical_origin": 28323,
+      "physical_line": 29525,
+      "source": "uti_info = kmalloc_tracked(sizeof(struct uti_info), IHK_MC_AP_NOWAIT, __FILE__, __LINE__);"
+    },
+    {
+      "logical_origin": 28371,
+      "physical_line": 29557,
+      "source": "kfree_tracked(rctx, __FILE__, __LINE__);"
+    },
+    {
+      "logical_origin": 28374,
+      "physical_line": 29560,
+      "source": "kfree_tracked(uti_info, __FILE__, __LINE__);"
+    },
+    {
+      "logical_origin": 28397,
+      "physical_line": 29583,
+      "source": "kfree_tracked(rctx, __FILE__, __LINE__);"
+    },
+    {
+      "logical_origin": 28398,
+      "physical_line": 29584,
+      "source": "kfree_tracked(uti_info, __FILE__, __LINE__);"
+    }
+  ],
+  "measured_current_types": {
+    "bytes": 77702,
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-time-functional-1/uti-abi-data-1/proposal/postimage/kernel/rust/abi.rs",
+    "sha256": "c19d2f6f42f861e4b1dfe7af710fba024b93a5c17082bbdc5a2b4bf914278523"
+  },
+  "ordered_twelve_fields": [
+    {
+      "Rust_raw_store": "addr_of_mut!((*info).thread_va).write(...)",
+      "field": "thread_va",
+      "meaning": "fresh CLS[1].current POINTER VALUE as CULong kernel VA",
+      "offset": 0,
+      "order": 1,
+      "original_C": "uti_info->thread_va = (unsigned long)get_this_cpu_local_var()->current;",
+      "original_origin": {
+        "logical_line": 28329,
+        "physical_line": 29530
+      },
+      "width_bytes": 8
+    },
+    {
+      "Rust_raw_store": "addr_of_mut!((*info).uti_futex_resp_pa).write(...)",
+      "field": "uti_futex_resp_pa",
+      "meaning": "physical value of fresh CLS[2].uti_futex_resp POINTER VALUE",
+      "offset": 24,
+      "order": 2,
+      "original_C": "uti_info->uti_futex_resp_pa = virt_to_phys((void *)get_this_cpu_local_var()->uti_futex_resp);",
+      "original_origin": {
+        "logical_line": 28330,
+        "physical_line": 29531
+      },
+      "width_bytes": 8
+    },
+    {
+      "Rust_raw_store": "addr_of_mut!((*info).ikc2linux_pa).write(...)",
+      "field": "ikc2linux_pa",
+      "meaning": "physical value of fresh CLS[3].ikc2linux POINTER VALUE",
+      "offset": 32,
+      "order": 3,
+      "original_C": "uti_info->ikc2linux_pa = virt_to_phys((void *)get_this_cpu_local_var()->ikc2linux);",
+      "original_origin": {
+        "logical_line": 28331,
+        "physical_line": 29532
+      },
+      "width_bytes": 8
+    },
+    {
+      "Rust_raw_store": "addr_of_mut!((*info).tid).write(...)",
+      "field": "tid",
+      "meaning": "ordinary CInt initially captured Thread.tid read",
+      "offset": 40,
+      "order": 4,
+      "original_C": "uti_info->tid = thread->tid;",
+      "original_origin": {
+        "logical_line": 28334,
+        "physical_line": 29535
+      },
+      "width_bytes": 4
+    },
+    {
+      "Rust_raw_store": "addr_of_mut!((*info).cpu).write(...)",
+      "field": "cpu",
+      "meaning": "one actual processor_id CInt result",
+      "offset": 44,
+      "order": 5,
+      "original_C": "uti_info->cpu = ihk_mc_get_processor_id();",
+      "original_origin": {
+        "logical_line": 28335,
+        "physical_line": 29536
+      },
+      "width_bytes": 4
+    },
+    {
+      "Rust_raw_store": "addr_of_mut!((*info).status_pa).write(...)",
+      "field": "status_pa",
+      "meaning": "physical ADDRESS of captured Thread.status",
+      "offset": 88,
+      "order": 6,
+      "original_C": "uti_info->status_pa = virt_to_phys((void *)&thread->status);",
+      "original_origin": {
+        "logical_line": 28336,
+        "physical_line": 29537
+      },
+      "width_bytes": 8
+    },
+    {
+      "Rust_raw_store": "addr_of_mut!((*info).spin_sleep_lock_pa).write(...)",
+      "field": "spin_sleep_lock_pa",
+      "meaning": "physical ADDRESS of captured Thread.spin_sleep_lock",
+      "offset": 96,
+      "order": 7,
+      "original_C": "uti_info->spin_sleep_lock_pa = virt_to_phys((void *)&thread->spin_sleep_lock);",
+      "original_origin": {
+        "logical_line": 28337,
+        "physical_line": 29538
+      },
+      "width_bytes": 8
+    },
+    {
+      "Rust_raw_store": "addr_of_mut!((*info).spin_sleep_pa).write(...)",
+      "field": "spin_sleep_pa",
+      "meaning": "physical ADDRESS of captured Thread.spin_sleep",
+      "offset": 104,
+      "order": 8,
+      "original_C": "uti_info->spin_sleep_pa = virt_to_phys((void *)&thread->spin_sleep);",
+      "original_origin": {
+        "logical_line": 28338,
+        "physical_line": 29539
+      },
+      "width_bytes": 8
+    },
+    {
+      "Rust_raw_store": "addr_of_mut!((*info).vm_pa).write(...)",
+      "field": "vm_pa",
+      "meaning": "physical value of captured Thread.vm POINTER VALUE",
+      "offset": 112,
+      "order": 9,
+      "original_C": "uti_info->vm_pa = virt_to_phys((void *)thread->vm);",
+      "original_origin": {
+        "logical_line": 28339,
+        "physical_line": 29540
+      },
+      "width_bytes": 8
+    },
+    {
+      "Rust_raw_store": "addr_of_mut!((*info).futex_q_pa).write(...)",
+      "field": "futex_q_pa",
+      "meaning": "physical ADDRESS of captured Thread embedded futex_q",
+      "offset": 120,
+      "order": 10,
+      "original_C": "uti_info->futex_q_pa = virt_to_phys((void *)&thread->futex_q);",
+      "original_origin": {
+        "logical_line": 28340,
+        "physical_line": 29541
+      },
+      "width_bytes": 8
+    },
+    {
+      "Rust_raw_store": "addr_of_mut!((*info).mc_idle_halt).write(...)",
+      "field": "mc_idle_halt",
+      "meaning": "ordinary plain CInt idle_halt DATA read",
+      "offset": 128,
+      "order": 11,
+      "original_C": "uti_info->mc_idle_halt = idle_halt;",
+      "original_origin": {
+        "logical_line": 28343,
+        "physical_line": 29544
+      },
+      "width_bytes": 4
+    },
+    {
+      "Rust_raw_store": "addr_of_mut!((*info).futex_queue_pa).write(...)",
+      "field": "futex_queue_pa",
+      "meaning": "physical value of POINTER RETURNED by futex_queues",
+      "offset": 152,
+      "order": 12,
+      "original_C": "uti_info->futex_queue_pa = virt_to_phys((void *)get_futex_queues());",
+      "original_origin": {
+        "logical_line": 28344,
+        "physical_line": 29545
+      },
+      "width_bytes": 8
+    }
+  ],
+  "original_allocation_and_free_origins": [
+    {
+      "logical_origin": 28314,
+      "physical_line": 29515,
+      "source": "rctx = kmalloc_tracked(sizeof(struct uti_ctx), IHK_MC_AP_NOWAIT, __FILE__, __LINE__);"
+    },
+    {
+      "logical_origin": 28323,
+      "physical_line": 29524,
+      "source": "uti_info = kmalloc_tracked(sizeof(struct uti_info), IHK_MC_AP_NOWAIT, __FILE__, __LINE__);"
+    },
+    {
+      "logical_origin": 28371,
+      "physical_line": 29572,
+      "source": "kfree_tracked(rctx, __FILE__, __LINE__);"
+    },
+    {
+      "logical_origin": 28374,
+      "physical_line": 29575,
+      "source": "kfree_tracked(uti_info, __FILE__, __LINE__);"
+    },
+    {
+      "logical_origin": 28397,
+      "physical_line": 29598,
+      "source": "kfree_tracked(rctx, __FILE__, __LINE__);"
+    },
+    {
+      "logical_origin": 28398,
+      "physical_line": 29599,
+      "source": "kfree_tracked(uti_info, __FILE__, __LINE__);"
+    }
+  ],
+  "pair_ABI": {
+    "C": "extern void (struct uti_info *info, struct thread *thread)",
+    "Rust": "pub unsafe extern C fn(info: *mut UtiInfo, thread: *mut Thread) -> ()",
+    "name": "f03_uti_info_data_initialize_v1"
+  },
+  "partial_initialization": {
+    "align": 8,
+    "disjoint_complete_partition": true,
+    "kernel_bytes_written": 84,
+    "size": 160,
+    "untouched_host_bytes": 72,
+    "untouched_host_slots": [
+      {
+        "field": "uti_futex_resp",
+        "offset": 8,
+        "width_bytes": 8
+      },
+      {
+        "field": "ikc2linux",
+        "offset": 16,
+        "width_bytes": 8
+      },
+      {
+        "field": "status",
+        "offset": 48,
+        "width_bytes": 8
+      },
+      {
+        "field": "spin_sleep_lock",
+        "offset": 56,
+        "width_bytes": 8
+      },
+      {
+        "field": "spin_sleep",
+        "offset": 64,
+        "width_bytes": 8
+      },
+      {
+        "field": "vm",
+        "offset": 72,
+        "width_bytes": 8
+      },
+      {
+        "field": "futex_q",
+        "offset": 80,
+        "width_bytes": 8
+      },
+      {
+        "field": "futex_queue",
+        "offset": 136,
+        "width_bytes": 8
+      },
+      {
+        "field": "os",
+        "offset": 144,
+        "width_bytes": 8
+      }
+    ],
+    "untouched_padding": {
+      "bytes": 4,
+      "end_exclusive": 136,
+      "start": 132
+    },
+    "whole_UtiInfo_reference_value_read_copy_zero_assume_init": false
+  },
+  "plain_idle_halt_DATA_reads": 1,
+  "private_crate_root_unchanged": {
+    "bytes": 5417,
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-UTI-private-data-provider-1/metadata-typecheck-1/overlays/kernel/rust/lib.rs",
+    "sha256": "2d023506547e1e34e35d09f3fcf59abfe588d583e24bd393315611bfbc384646"
+  },
+  "schema": "mckernel.private-paired-UTI-info-twelve-field-source-proof.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_provider_call_counts": {
+    "current_cpu_local": 3,
+    "futex_queues": 1,
+    "processor_id": 1,
+    "virtual_to_physical": 8
+  },
+  "status": "SOURCE_DERIVATION_ONLY_NOT_INDEPENDENT_REVIEW_OR_COMPILER_PROOF"
+}

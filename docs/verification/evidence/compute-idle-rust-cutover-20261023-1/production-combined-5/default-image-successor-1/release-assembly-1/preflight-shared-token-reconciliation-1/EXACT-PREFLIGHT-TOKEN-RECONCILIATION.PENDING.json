@@ -1,0 +1,34 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PENDING_EXACT_NORMAL_API_METADATA_RECONCILIATION_RELEASE",
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=30:30",
+    "--fsize=33554432:33554432",
+    "--nofile=256",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/release-assembly-1/preflight-shared-token-reconciliation-1/reconcile_shared_token.PENDING.py"
+  ],
+  "source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/release-assembly-1/preflight-shared-token-reconciliation-1/reconcile_shared_token.PENDING.py",
+    "sha256": "ba962fd6d0b0767658934d4c5d8964e138f27d36e0555e06afc0196aa9e4fe1a"
+  },
+  "physical_only_receipt": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/release-assembly-1/preflight-shared-token-reconciliation-1/ACTUAL-PREFLIGHT-PHYSICAL-ONLY-RECEIPT.json",
+    "sha256": "6da26bb30beaf2b45f7a8b1ff2ae1f96d3feb97da57bf6df349e1192b70e5209"
+  },
+  "normal_release_contract": {
+    "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/adapters/native_rust_exact_disk_build_wrapper.py",
+    "sha256": "c252ee341eb61752704f8b818503c0a5dc97400845494707ca3110f5f23df6d1"
+  },
+  "changes": "Calls exact existing _release_exclusion only with realphysical-onlyPASS receipt afterfailedpreflight; no fabricatedbuildPASS/no rawunlink/no root/no kill/no otherownerflags.",
+  "execution_authorized": false
+}

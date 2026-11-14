@@ -1,0 +1,303 @@
+{
+  "Root_only_integration_execution_acceptance": true,
+  "actual_alias_callers": [
+    {
+      "args": "0,0; selected native clock-miss fallback line11652; non-native line11665 remains outside this selection",
+      "caller": "time",
+      "lines": [
+        11652,
+        11665
+      ],
+      "number": 201
+    },
+    {
+      "args": "original context clock-id, user timespec address; direct native fallback and unchanged helper callback",
+      "caller": "sys_clock_gettime",
+      "lines": [
+        11821,
+        11860
+      ],
+      "number": 228
+    },
+    {
+      "args": "original tv,tz addresses; unchanged helper local/no-op/fallback policy",
+      "caller": "sys_gettimeofday",
+      "lines": [
+        11895
+      ],
+      "number": 96
+    },
+    {
+      "args": "original request/remainder pointers; unchanged local-support and error paths",
+      "caller": "sys_nanosleep",
+      "lines": [
+        11949
+      ],
+      "number": 35
+    },
+    {
+      "args": "existing scheduler same-owner check selector, normalized pid; does not grow an argument list",
+      "caller": "sys_sched_setparam",
+      "lines": [
+        12068
+      ],
+      "number": 142
+    },
+    {
+      "args": "existing CHECK_ROOT,0 or CHECK_SAME_OWNER,normalized pid; it deliberately calls SYS_SCHED_SETPARAM, not Linux three-argument sched_setscheduler",
+      "caller": "sys_sched_setscheduler",
+      "lines": [
+        12120
+      ],
+      "number": 142
+    },
+    {
+      "args": "which,old-address on existing real-timer offload branch",
+      "caller": "sys_getitimer",
+      "lines": [
+        12298
+      ],
+      "number": 36
+    },
+    {
+      "args": "id converted through existing CInt->CULong cast,0; existing returned-ID conversion and credential refresh remain",
+      "caller": "sys_setfsuid",
+      "lines": [
+        12618
+      ],
+      "number": 122
+    },
+    {
+      "args": "id converted through existing CInt->CULong cast,0; existing returned-ID conversion and credential refresh remain",
+      "caller": "sys_setfsgid",
+      "lines": [
+        12661
+      ],
+      "number": 123
+    },
+    {
+      "args": "address,length; actual current mcexec C and Rust debug dispatcher read exactly args0/1",
+      "caller": "sys_linux_mlock",
+      "lines": [
+        13082
+      ],
+      "number": 802
+    }
+  ],
+  "at": "2026-11-11T01:43:31.915831+00:00",
+  "current_source_binding": {
+    "Root_composition_rule": "Root applies the focused four-path hunks against its live source, accommodating the disjoint fork owner; do not replace shared files with old full postimages.",
+    "canonical_or_index_mutated": false,
+    "canonical_preimages_match_at_review": true,
+    "eligibility": "Current user/AGENTS source-derived ordinary functional engineering authority applies to this genuine newly selected provider. No historical plaintext/per-name inventory prerequisite is invented; actual prohibited generic/exec/equivalent replay and source/native/UNKNOWN controls remain unchanged.",
+    "source_baseline_commit": "f37463cdd25f7f25e6c92c3f418c6dce3054a74f"
+  },
+  "independent_findings": [
+    {
+      "evidence": "All 23 packet/source pin records checked by saved-byte SHA/length. Four patch paths only. C postimage is exactly one compound preprocessor-line replacement with unchanged line count/body; lib.rs is exactly one two-line cfg module insertion; CMake contains exactly three addition-only hunks (selection flag, pre-custom-command cfg/source dependency, final per-source macro). New-module bytes equal the added-file patch text. No existing body rewrite, symbol renaming or flag clearing.",
+      "id": "exact-small-delta",
+      "verdict": "PASS"
+    },
+    {
+      "evidence": "Current C27325..27344 local request sets number,args0,args1 then calls actual do_syscall(&request,ihk_mc_get_processor_id()). The exported policy wrapper has the exact same int/unsigned-long/long ABI as the candidate CInt/CULong/CLong signature and pointer assertion. SyscallRequest repr(C) is 72B/align8: rtid0,ttid4,valid8,number16,args24. Existing abi.rs1905..1911 and paired abi_checks.c116..129 assert those exact fields. Selected x86 memconst.h defines IHK_DMA_ALIGN empty; no 64B-alignment fiction or replacement ABI is introduced.",
+      "id": "actual-C-and-ABI",
+      "verdict": "PASS"
+    },
+    {
+      "evidence": "MaybeUninit<SyscallRequest>::zeroed defines all 72 bytes; all six fields are integer/array representations with valid zero bits and natural alignment. Actual unchanged syscall_generic_forwarding_body_result2946 writes the syscall number plus all six argument words, preserving arg0/1 and zeroing unused2..5. The stack allocation is live through the synchronous call. Only its raw pointer crosses builder/transport/nested scheduling; no exclusive/reference borrow spans that boundary. No pointer is retained, response fabricated, callback substituted, unrelated owner freed or request published early.",
+      "id": "fully-initialized-request-and-lifetime",
+      "verdict": "PASS"
+    },
+    {
+      "evidence": "Candidate supplies Some(real extern C do_syscall), whose exact request-pointer/CInt->CLong type matches SyscallRequestCallFn and current syscall_offload_entry.rs106/298. Actual builder cannot take its missing-callback/null error branches for this concrete Some function and live stack pointer, writes the request, invokes it once, and returns CLong unchanged. One real x86_local processor lookup occurs; no production test recorder or dummy implementation exists in this patch.",
+      "id": "real-provider-type-and-one-call",
+      "verdict": "PASS"
+    },
+    {
+      "evidence": "Actual do_syscall reads the live current Thread/Process/monitor, counts offload, calls syscall_offload_prepare_result3101 to write requester/target TIDs, then actual send/wait/nested/preemption/reply logic. send_syscall2525 calls prepare2430 to set response.status/request.valid0, copies the complete request, and publication2480 uses aligned AtomicU64 release-store1. The existing outer provider retains profile timestamps, monitor status/counter, logging, proxy-death handling and genuine signed response result. The new bridge adds no duplicate accounting, timeout, retry, cleanup, cancellation or native authority.",
+      "id": "real-publication-and-accounting",
+      "verdict": "PASS"
+    },
+    {
+      "evidence": "Exact-name current-source search corroborated all 12 policy-body reference lines, including one unselected non-native time branch; declaration and the existing alternate broad-module definition are separately classified. All ten caller families below retain their source bytes. Read actual helper invocation sites, including setfsid refresh/casts, nanosleep/getitimer/gettimeofday fallbacks, both scheduler special-check transactions and real custom802 C/Rust dispatcher. No selected caller requires args2..5; initialization defines previously unspecified unused storage rather than removing required input.",
+      "id": "complete-current-alias-callers",
+      "verdict": "PASS"
+    },
+    {
+      "evidence": "Original number:CInt is converted by the actual builder to CULong with the same supported C unsigned conversion, including sign extension. Existing raw pointer bits, pid/id casts, order, NULL/zero arguments and scheduler142 protocol remain unchanged. Arbitrary positive or negative CLong from real do_syscall is propagated without cast or interpretation by the new bridge; caller-specific narrowing/refresh logic remains in its original helper. CPU lookup precedes only pure private request stores before real do_syscall, adding no observable side effect or scheduling operation relative to the original C path.",
+      "id": "argument-order-and-return",
+      "verdict": "PASS"
+    },
+    {
+      "evidence": "The existing noncached MCKERNEL_RUST_F06_WHOLE_DEFAULT is explicitly initialized OFF then enabled only by the qualified 12-term ordinary predicate: Rust kernel,x86_64,linux6.12,!UBSAN,PROFILE/PERF/RUSAGE/workIRQ ON,TOFU/Fugaku/broad-adapter/experimental-forward OFF. Candidate selects this exact profile variable independently of the cached whole-F06 option. It implies the existing real do_syscall outer-provider selector and compiled ABI/providers. The distinct cfg/source dependency is appended before the actual Rust custom command; the matching single C source guard is appended after prior source-property resets. Nonqualified profiles retain the old C policy wrapper; existing broad-adapter mode excludes this narrow module and keeps its own mutually exclusive owner.",
+      "id": "narrow-profile-and-owner-pairing",
+      "verdict": "PASS"
+    },
+    {
+      "evidence": "New-module compile_error independently rejects non-x86/non-linux6.12/missing PROFILE/PERF/RUSAGE/TOFU/Fugaku/broad-adapter cfg. CMake additionally enforces !UBSAN/workIRQ/experimental exclusions. No new option/default/broad-adapter selection, syscall filter or system support reduction is introduced. Explicit whole-F06 OFF leaves this independent qualified policy helper available, while ON outside the profile does not select it. Existing three-argument adapter/static C helper and unrelated callers remain unchanged.",
+      "id": "unsupported-configs-and-scope",
+      "verdict": "PASS"
+    }
+  ],
+  "inputs": {
+    "ACTUAL-POLICY-CALLERS.json": {
+      "bytes": 5158,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-time-fallback-bridge-ownership-1/ACTUAL-POLICY-CALLERS.json",
+      "sha256": "0d4141846987f4d7f8bf2eaa79cb18f04eab06fb6c068eb0e0bbc667d000eb62"
+    },
+    "CONTRACT.json": {
+      "bytes": 9013,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-time-fallback-bridge-ownership-1/CONTRACT.json",
+      "sha256": "c7898c1f86ba1907435cc2879a81b7f8b483bd7a33f5c1e59bb58603ac09c2ee"
+    },
+    "DO-SYSCALL2-NARROW-OWNERSHIP.patch": {
+      "bytes": 5537,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-time-fallback-bridge-ownership-1/DO-SYSCALL2-NARROW-OWNERSHIP.patch",
+      "sha256": "78eb6dfa719221e4dc600aea8ff8e81cc6672053800786c5cfad4de691696339"
+    },
+    "SOURCE-BINDINGS.json": {
+      "bytes": 5142,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-time-fallback-bridge-ownership-1/SOURCE-BINDINGS.json",
+      "sha256": "70fda1c1445d8d99865d1e46b5fe5baea12a282e54fbd0ad71e6d066b969113a"
+    },
+    "SOURCE-READY.NOT-EXECUTED.json": {
+      "bytes": 1788,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-time-fallback-bridge-ownership-1/SOURCE-READY.NOT-EXECUTED.json",
+      "sha256": "6b631ea4650f2630e97a3d570d91cb0e8181c2b47c087f71cf8d5f06458fca0c"
+    }
+  },
+  "next_eligible_work": [
+    "P04Tests may prepare one focused changed source/request/return HOST check using the exact candidate, unchanged genuine builder and ABI. Recorder effects must be test-only and independently reviewed as such; preserve real argument bits/zero unused bytes/one CPU lookup/one synchronous call and positive/error CLong returns. Do not execute the old C request with unspecified bytes or any prohibited retained fixture.",
+    "Root may compose the reviewed tiny source hunks with peer fork work. A separately frozen, independently reviewed normal named-image operation and fresh source/resource admission are still required before any compiler runs.",
+    "Actual affected image evidence must prove new cfg/dependency/C macro, one nonempty Rust policy2 owner with real builder/outer-provider closure, corresponding C policy-wrapper exclusion, exact ABI/import/provider ownership/no duplicates or unresolved required symbols, retention of prior selected owners and observed actual remaining-C ledger. This review does not predict emitted byte counts or retire C."
+  ],
+  "original_condition": "M14-06-04-DEFAULT: named 55B project-C time/clock/gettimeofday fallback-provider ownership, after separately reviewed actual image qualification. No source-only leaf credit.",
+  "retained_conditions": [
+    "M14-06-04 whole DEFAULT/FUNCTIONAL/native/ACCEPT remain open until their literal original requirements actually pass. Source-only GO is not an emitted artifact or behavior result.",
+    "M14-06-03 ptrace_wakeup_sig and six required resume callbacks remain real C-provider debt; original overly broad historical assessment is preserved, not waived.",
+    "Whole M14/M15, remaining F03/F06 migration, full signal/native/restoration, source custody, live current-free and actual controller/service/account/resource/native/UNKNOWN holds remain unchanged.",
+    "Prior qualified I02 build integration/E1/E2/E3/ACCEPT and already closed source scopes are not reopened. No old green/parser/PTY/partial-object/generic/exec/equivalent replay or new scenario quota is requested."
+  ],
+  "review_operations": {
+    "SUT_import_or_helper_execution": false,
+    "application_or_native_or_device": false,
+    "canonical_or_source_postimage_writes": false,
+    "compiler_or_build_or_tests": false,
+    "containers_or_network": false,
+    "kind": "Read-only current source/JSON/text and local stdlib saved-data SHA/diff checks only; private review JSON write.",
+    "minor_read_note": "One optional guessed executer/user/mcexec.h lookup reported ENOENT; it was not a bound request input. Actual bound mcexec.c/mcexec_helpers.rs were read directly. No payload or changed source resulted.",
+    "permissions": "Developer environment reports danger-full-access, approval never. This is not Unix-root or execution/native authority; sudo/credentials were not used.",
+    "recursive_agents": false
+  },
+  "reviewer": "/root/p03_cutover_source_max; existing direct Sol/MAX route; no recursive agents",
+  "schema": "m14-f06-time-fallback-bridge-independent-source-review-v1",
+  "scope": "SOURCE_ONLY: exact 78eb6 patch / 872a module / c789 contract, genuine two-argument policy fallback provider and its complete unchanged alias callers. No execution-profile or acceptance GO is implied.",
+  "unchanged_proof_reuse": {
+    "description": "Reuse the prior actual paired ff48 Rust ABI / f8deda C-assert source and current genuine full-image/builder/outer-provider proof at their unchanged source scopes. No C ABI/compiler/provider/test result is newly claimed by this source review.",
+    "matching_default_reproduction_review": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/i02-e2-review-p03-max-1/REVIEW.json",
+      "sha256": "1f1d7bd2e364bf754fb55751cb7104fd23ab57f52e68e804fd4ab9560b402cab"
+    },
+    "whole_image_prior_qualification": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/qualification-1/QUALIFICATION.json",
+      "sha256": "2074b6aa194b210581bd5ec0700833f3c4477e21f2e7bac09ae81356cd379453"
+    }
+  },
+  "verdict": "GO",
+  "verified_frozen_preimages": {
+    "kernel/CMakeLists.txt": {
+      "bytes": 55960,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-time-fallback-bridge-ownership-1/preimage/kernel/CMakeLists.txt",
+      "sha256": "e682145f34bbdb1311537139c1d3d6062bedc56a072b0737a3e4952e39eb6439"
+    },
+    "kernel/rust/lib.rs": {
+      "bytes": 4333,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-time-fallback-bridge-ownership-1/preimage/kernel/rust/lib.rs",
+      "sha256": "1bbe24ffb98810c83f70cf3d37999b26c9fd06ce048f5d733b6a96a2b6a61959"
+    },
+    "kernel/syscall.c": {
+      "bytes": 946602,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-time-fallback-bridge-ownership-1/preimage/kernel/syscall.c",
+      "sha256": "81682ae8cac4a0792d521f5cca240cf81db837f087bdc1c898a9a6561621e9be"
+    }
+  },
+  "verified_private_postimages": {
+    "kernel/CMakeLists.txt": {
+      "bytes": 56689,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-time-fallback-bridge-ownership-1/candidate/kernel/CMakeLists.txt",
+      "sha256": "7b9722d6cb91c3bb84f5c2d04de1db117e32e5ded285b6c5242cd983e8a782dc"
+    },
+    "kernel/rust/f03_do_syscall2_bridge.rs": {
+      "bytes": 2724,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-time-fallback-bridge-ownership-1/candidate/kernel/rust/f03_do_syscall2_bridge.rs",
+      "sha256": "872a99877d33a1f25814fe801bbc51104225cbc1dc8904cfe38acd3c0f524685"
+    },
+    "kernel/rust/lib.rs": {
+      "bytes": 4402,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-time-fallback-bridge-ownership-1/candidate/kernel/rust/lib.rs",
+      "sha256": "42100f72f985e5fc11fcec3f8bb46270fc7224f94d1565a973de98f3ad665927"
+    },
+    "kernel/syscall.c": {
+      "bytes": 946658,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-time-fallback-bridge-ownership-1/candidate/kernel/syscall.c",
+      "sha256": "cfbed54debd0af3d8afa0bee2786acf836d9b1fbf4e0254a482b519e9001bb13"
+    }
+  },
+  "verified_unchanged_production_dependencies": {
+    "executer/user/mcexec.c": {
+      "bytes": 221908,
+      "path": "/home/holden/mckernel/executer/user/mcexec.c",
+      "sha256": "061569def2bfead8070b0332ff4a994a4e88f870b24eccda45b26d662688f2f5"
+    },
+    "executer/user/rust/mcexec_helpers.rs": {
+      "bytes": 256059,
+      "path": "/home/holden/mckernel/executer/user/rust/mcexec_helpers.rs",
+      "sha256": "ab6aaa29b9a9b8d07077a9bb27e02c7dc7a353fe3a0d0b538b119e41bd264a24"
+    },
+    "ihk/cokernel/smp/x86_64/include/ihk/memconst.h": {
+      "bytes": 198,
+      "path": "/home/holden/mckernel/ihk/cokernel/smp/x86_64/include/ihk/memconst.h",
+      "sha256": "38b25a9fedbcf50d9eae799681aff60705d6e2e5e3559bcb721b0541ce98dc61"
+    },
+    "kernel/include/syscall.h": {
+      "bytes": 20836,
+      "path": "/home/holden/mckernel/kernel/include/syscall.h",
+      "sha256": "459e6d0faec3f1b8366a0d329571ef5ea813042706be11f9423b0399bbba6ffa"
+    },
+    "kernel/rust/abi.rs": {
+      "bytes": 76151,
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    "kernel/rust/abi_checks.c": {
+      "bytes": 65125,
+      "path": "/home/holden/mckernel/kernel/rust/abi_checks.c",
+      "sha256": "f8deda08de0eccda152a6416a01bec00e6984c1cf4c998e9ca877b1bbe31c23a"
+    },
+    "kernel/rust/f03_forward_adapters.rs": {
+      "bytes": 3543,
+      "path": "/home/holden/mckernel/kernel/rust/f03_forward_adapters.rs",
+      "sha256": "f4644c6f36fd07f482fdddd4a4e1f1d16725ee2617551abec1200d5cb758ba4b"
+    },
+    "kernel/rust/sched_helpers.rs": {
+      "bytes": 186213,
+      "path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "sha256": "c4e6153bef33ec018d2efc88c93854a4dc351f78c901ed3cb25f73524d7c0020"
+    },
+    "kernel/rust/syscall_offload_entry.rs": {
+      "bytes": 13252,
+      "path": "/home/holden/mckernel/kernel/rust/syscall_offload_entry.rs",
+      "sha256": "378bd1373807833442cb72a602061157fd1109ee559f7b8f25e6d2a67a5112cf"
+    },
+    "kernel/rust/syscall_policy.rs": {
+      "bytes": 1240596,
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "sha256": "3c91a22fdae204240201969957036a175fa207cb1d076ff5723650ce5a9adb8f"
+    },
+    "kernel/rust/x86_local.rs": {
+      "bytes": 4525,
+      "path": "/home/holden/mckernel/kernel/rust/x86_local.rs",
+      "sha256": "9f102654a22895615da854b08ea8e043a6c17b9157e4b77e5b58783e70abeb3f"
+    }
+  }
+}

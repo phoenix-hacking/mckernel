@@ -1,0 +1,20 @@
+--- actual-control-delivery-corrected.rs
++++ actual-control-delivery-identity-fixed.rs
+@@ -3353,7 +3353,7 @@
+ }
+ pub(crate) fn delivered(remote:&Remote,parent:Token,memory:&Arc<crate::smp_memory::storage::Memory>,request:Request)->(u64,u64){let mut slots=remote.slots.lock();let p=slots.iter_mut().flatten().find(|p|p.key()==parent).unwrap();let w=p.syscalls.open_worker(201).unwrap();p.syscalls.admit(request,|r|memory.syscall(r)).unwrap();let(s,_)=p.syscalls.reserve(w).unwrap().unwrap();p.syscalls.copied(w,s,true).unwrap();(w,s)}
+ 
+-pub(crate) fn delivered_unrelated(remote:&Remote,parent:Token,memory:&Arc<crate::smp_memory::storage::Memory>,request:Request)->(u64,u64){assert_eq!(request.requester(),202);assert_eq!(request.response(),0x1d00000);assert_eq!(request.number(),39);let mut slots=remote.slots.lock();let p=slots.iter_mut().flatten().find(|p|p.key()==parent).unwrap();let w=p.syscalls.open_worker(202).unwrap();p.syscalls.admit(request,|r|memory.syscall(r)).unwrap();let(s,_)=p.syscalls.reserve(w).unwrap().unwrap();p.syscalls.copied(w,s,true).unwrap();(w,s)}
++pub(crate) fn delivered_unrelated(remote:&Remote,parent:Token,memory:&Arc<crate::smp_memory::storage::Memory>,request:Request)->(u64,u64){assert_eq!(request.requester(),101);assert_eq!(request.target(),202);assert_eq!(request.response(),0x1d00000);assert_eq!(request.number(),39);let mut slots=remote.slots.lock();let p=slots.iter_mut().flatten().find(|p|p.key()==parent).unwrap();let w=p.syscalls.open_worker(202).unwrap();p.syscalls.admit(request,|r|memory.syscall(r)).unwrap();let(s,_)=p.syscalls.reserve(w).unwrap().unwrap();p.syscalls.copied(w,s,true).unwrap();(w,s)}
+ pub(crate) fn transport_observation(remote:&Remote)->(bool,bool,bool,bool){fork_link::transport_observation(remote)}
+ pub(crate) fn transport_waits(remote:&Remote)->usize{remote.changed.waits.load(Ordering::Acquire)}
+ pub(crate) fn queue_control_actual(remote:&Remote,parent:Token,w:u64,s:u64)->Result{
+@@ -6944,7 +6944,7 @@
+  assert_eq!(crate::smp_application::queue_control_transfer_actual(&j.remote,j.parent,w,s,0,1),Err(-22));
+  assert_eq!(crate::smp_application::transport_observation(&j.remote),(false,false,false,true));
+  assert_eq!(transport_fields(0x1c00000),(0,0,0));assert_eq!(carrier_bytes(),bytes);assert_eq!(crate::smp_memory::storage::claims(&j.memory),claims);
+- guest_transport_word(16,3);assert_eq!(crate::smp_application::queue_control_actual(&j.remote,j.parent,w,s),Err(-71));
++ guest_transport_word(16,3);assert_eq!(crate::smp_application::queue_control_actual(&j.remote,j.parent,w,s),Err(-16));
+  assert_eq!(crate::smp_application::transport_observation(&j.remote),(false,false,true,true));
+  assert_eq!(transport_fields(0x1c00000),(0,3,0));assert_eq!(carrier_bytes(),bytes);assert_eq!(crate::smp_memory::storage::claims(&j.memory),claims);assert_eq!(crate::smp_application::control_state(&j.remote).0,state.0);j.retain();
+ }

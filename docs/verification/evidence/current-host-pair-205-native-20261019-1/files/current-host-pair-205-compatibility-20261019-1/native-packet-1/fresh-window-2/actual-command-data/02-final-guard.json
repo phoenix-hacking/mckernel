@@ -1,0 +1,73 @@
+{
+  "operations": [
+    {
+      "argv_template": [],
+      "profile": "metadata",
+      "role": "UNUSED_INDEX_ZERO_DO_NOT_EXECUTE"
+    },
+    {
+      "argv_template": [
+        "/usr/bin/taskset",
+        "--cpu-list",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--core=0",
+        "--nofile=256",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-independent-review-20261019-1/fresh2/review_final_205_release.py",
+        "--config-sha256",
+        "982d9da0a5b2cff140b0bf544037d8ae8b676611d53411050fc6b60a432d0621",
+        "--machine-sha256",
+        "f62d48ae7679a5e12d175c57cca82339492877ab4b11e1d7cc29e80875c2c587",
+        "--snapshot-sha256",
+        "28d3bc25158f874a778216c2bdc7161ff800328bfc128fd2c09090956b6e4893"
+      ],
+      "profile": "metadata",
+      "role": "final-guard",
+      "status_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/02-final-guard/status.json",
+      "stderr_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/02-final-guard/stderr",
+      "stdout_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/02-final-guard/stdout"
+    }
+  ],
+  "profiles": {
+    "metadata": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 40,
+      "stream_fsize": 33554432
+    },
+    "native": {
+      "cpu": 7,
+      "parent_kill_grace_seconds": null,
+      "parent_wall_seconds": null,
+      "stream_fsize": 33554432
+    },
+    "reader": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 35,
+      "stream_fsize": 33554432
+    },
+    "snapshot": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 40,
+      "stream_fsize": 33554432
+    }
+  },
+  "release": {
+    "bytes": 5433,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-independent-review-20261019-1/FINAL-N3-SDK-SNAPSHOT-SOURCE-AND-NONTEMPORAL-REVIEW.json",
+    "sha256": "d9c02604d05b67259552dd976fcef430c3bf5b16d74323ee36dd3c0f78201df3"
+  },
+  "root_installed_release_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-independent-review-20261019-1/FINAL-N3-SDK-SNAPSHOT-SOURCE-AND-NONTEMPORAL-REVIEW.json"
+}

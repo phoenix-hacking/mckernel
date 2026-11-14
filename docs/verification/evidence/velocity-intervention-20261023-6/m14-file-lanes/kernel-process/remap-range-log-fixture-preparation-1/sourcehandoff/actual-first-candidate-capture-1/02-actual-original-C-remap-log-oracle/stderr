@@ -1,0 +1,9 @@
+remaining_parity.c:34:14: error: conflicting types for ‘phys_to_page’
+In file included from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/production-batch-preparation-1/bounded-source-correction-1/source/lib/include/ihk/mm.h:23,
+                 from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/production-batch-preparation-1/bounded-source-correction-1/source/kernel/include/process.h:19,
+                 from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/remap-range-log-fixture-preparation-1/fixture/remaining_parity.c:5:
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/production-batch-preparation-1/bounded-source-correction-1/source/kernel/include/page.h:41:14: note: previous declaration of ‘phys_to_page’ was here
+   41 | struct page *phys_to_page(uintptr_t phys);
+      |              ^~~~~~~~~~~~
+remaining_parity.c: In function ‘setup’:
+remaining_parity.c:10:156: warning: assignment to ‘int (*)(struct memobj *, uintptr_t,  size_t)’ {aka ‘int (*)(struct memobj *, long long unsigned int,  long long unsigned int)’} from incompatible pointer type ‘int (*)(struct memobj *, long unsigned int,  size_t)’ {aka ‘int (*)(struct memobj *, long unsigned int,  long long unsigned int)’} [-Wincompatible-pointer-types]

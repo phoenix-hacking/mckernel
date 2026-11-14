@@ -1,0 +1,7 @@
+{
+  "scope": "Functional OS only; no security testing",
+  "failure": "AssertionError: original.strip() in block",
+  "diagnosis": "Retained old original-C snippet omits blank lines between functions; current selected block retains blank lines. No C tokens differ.",
+  "correction": "Normalize whitespace only for source-equivalence assertion; preserve and compile both exact original input snippets",
+  "compiler_started": false
+}

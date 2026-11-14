@@ -1,0 +1,12 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "failure": "First dependency validator compared lexical path strings; rustc records two selected #[path] imports via ../.. while admission stores their canonical paths.",
+  "exit_code": 1,
+  "unexpected_lexical_paths": [
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/nonheld-host-rust-metadata-preparation-1/src/kernel/rust/../../host-kernel/native-rust/abi/vdso.rs",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/nonheld-host-rust-metadata-preparation-1/src/kernel/rust/../../host-kernel/native-rust/zero_pages.rs"
+  ],
+  "compiler_error": false,
+  "tool_chunk": "1981d0",
+  "correction": "Normalize to actual canonical path while retaining original spelling, require admitted canonical membership and exact admitted bytes; do not ignore unknown inputs."
+}

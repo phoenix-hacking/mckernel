@@ -1,0 +1,121 @@
+{
+  "status": "NOT_RELEASED_SOURCE_ONLY",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/overall-deadline-correction-source-1/produce_actual_owner1043716_cleanup_observation.EXACT-DEAD-CALLER.READONLY.NOT_RELEASED.py",
+    "bytes": 13341,
+    "sha256": "158d406c5fdf6dabea1e71a10c23aba6d89741922e62b2b7e414f91c170162be"
+  },
+  "profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/overall-deadline-correction-source-1/EXACT-OWNER1043716-DEAD-CALLER-READONLY-OBSERVATION-PROFILE.json",
+    "bytes": 30230,
+    "sha256": "f00b2fa763829ed96b29528674606e88d7c3ad2f39d4dfe4052f8fea61a589a4"
+  },
+  "tests": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/overall-deadline-correction-source-1/test_observation_producer.py",
+    "bytes": 12110,
+    "sha256": "7345e8b43a4628b35b037edea2a92ea2a90a4cd1ff7577293a2e588a03de5f64"
+  },
+  "test_result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/overall-deadline-correction-source-1/tests.status.json",
+    "bytes": 999,
+    "sha256": "d678320162b82adffa0cdfe00d654fffd992a9e94a1d7510101741d286b5fb4b"
+  },
+  "cleanup_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/bounded-observer-correction-source-1/native_rust_cutover_image_terminal_cleanup.CURRENT290.EXACT-DEAD-CALLER.py",
+    "bytes": 128910,
+    "sha256": "e49eaf2a7bacc6a64523f9f6c91516b9a3abefc875cdc1d8941c4e6b55473de3"
+  },
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "--",
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/overall-deadline-correction-source-1/produce_actual_owner1043716_cleanup_observation.EXACT-DEAD-CALLER.READONLY.NOT_RELEASED.py",
+    "--execute-readonly"
+  ],
+  "stdin": "DEVNULL; no sameOFD inheritance claimed",
+  "resources": {
+    "cpu_affinity": "0",
+    "jobs": 1,
+    "address_space_bytes": 2147483648,
+    "individual_file_limit_bytes": 33554432,
+    "core_bytes": 0,
+    "query_timeout_seconds": 30,
+    "overall_observer_deadline_seconds": 240,
+    "capture_headroom_bytes": 134217728
+  },
+  "queries": {
+    "findmnt": [
+      "/usr/bin/findmnt",
+      "-J",
+      "-T",
+      "/home/holden/mckernel-work/scratch",
+      "-o",
+      "TARGET,SOURCE,FSTYPE,OPTIONS,UUID,MAJ:MIN"
+    ],
+    "inspect": [
+      "/usr/bin/docker",
+      "--host=unix:///var/run/docker.sock",
+      "inspect",
+      "--type=container",
+      "0715da07649768d4347212f4214bc523c2e5b07227f06bcb9697ec7ad67890f8"
+    ]
+  },
+  "query_raw_caps_bytes": {
+    "inspect": 1048576,
+    "findmnt": 65536
+  },
+  "raw_capture_plan": {
+    "directory": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/overall-deadline-correction-source-1/actual-owner1043716-readonly-observation-1",
+    "files": [
+      "inspect.stdout",
+      "inspect.stderr",
+      "inspect.status.json",
+      "findmnt.stdout",
+      "findmnt.stderr",
+      "findmnt.status.json",
+      "OBSERVATION.json",
+      "dead-caller-proc-evidence.json"
+    ],
+    "outer": "retain complete root command stdout/stderr/status and direct JOIN, no truncation; on refusal keep partial captures; no removal",
+    "process": "lossless first rawfullEOF snapshotpair and everyfailure raw plus compact verified hashes/counts per reread"
+  },
+  "custody": "Fresh readonly open permanent27:4 followed LOCK_EX|LOCK_NB; reject busy/changed/any old process; lock held entire produce/capture, close in finally. No cleanup effects or original caller JOIN claim.",
+  "base_candidate_tree_binding": {
+    "argv": [
+      "/usr/bin/git",
+      "-C",
+      "/home/holden/mckernel",
+      "rev-parse",
+      "eb3ce544eb1f479a56933a5c7fa8300ab6dfe533^{tree}"
+    ],
+    "returncode": 0,
+    "stdout": "a2da2013134a682d8c22c1843eda39f85e96176a\n",
+    "authority": "Root actual read-only query reported during this task; no producer Git query added."
+  },
+  "preserved_predicates": [
+    "21 exact observation keys",
+    "all seven exited client statuses",
+    "current protocol required_static_references AND required_runtime_references",
+    "native normal ownerJOIN/typedsource predicates",
+    "request-derived source identity/backup/mount/container inspect/inventory",
+    "full fresh root process oracle and exact originalchild JOIN refs"
+  ],
+  "execution_needs": [
+    "Independent source/profile/execution review of these new exactbytes",
+    "Root exact bounded grant and fresh admission; source-only artifacts confer no release"
+  ],
+  "deadline_enforcement": "Own observer240s ITIMER_REAL/SIGALRM beforebootstrap through evidence and mutexclose. Reject any existingtimer untouched; restore prior handler/cancel own timer in finally. No external group signals. Query subprocess.run handles BaseExceptionkill/reap own query child;30s perquery unchanged.",
+  "UID1000_access": "Root capture originals0600 under root0700 retained. Finalstdout structured readable_evidence contains exact OBSERVATION.json and proc-evidence rawUTF8/sha256/bytes; outerUID1000 fullEOFcapturedstdout decodes exact bytes without another rootread. On refusal prints REFUSED+available process bundle, never PASS."
+}

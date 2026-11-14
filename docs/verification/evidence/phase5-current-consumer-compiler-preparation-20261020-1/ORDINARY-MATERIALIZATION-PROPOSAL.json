@@ -1,0 +1,58 @@
+{
+  "argv": [
+    "/usr/bin/timeout",
+    "-k",
+    "2",
+    "35",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--fsize=33554432",
+    "--core=0",
+    "--nofile=256",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/run_materialization_once.py"
+  ],
+  "derivedlib": "same kernel/rust/lib.rs originalbytes+newline+exactFAMsuffix, explicit original/outputpins",
+  "executed": false,
+  "materializer": {
+    "bytes": 2363,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/materialize_sources.py",
+    "sha256": "29f26418aa11a89a4247fa69b84fdd4c8d0ed5d649c8ae8f3300f5703d21fc25"
+  },
+  "materializer_delta": "explicit derived-append input/output integrity; no scratchwrites; omit unrelated creation of workdirs",
+  "normalizer": "unchanged accepted posixpath normalization/escape/normalizedcollision guard",
+  "outputs": [
+    "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/materialized-source",
+    "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/materialization-result.json",
+    "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/source-materialization-capture-1"
+  ],
+  "profile": {
+    "AS_bytes": 1073741824,
+    "CPU_seconds": 30,
+    "FSIZE_bytes": 33554432,
+    "core": 0,
+    "cpu": 6,
+    "jobs": 1,
+    "kill_seconds": 2,
+    "nofile": 256,
+    "wall_seconds": 35
+  },
+  "runner": {
+    "bytes": 1728,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/run_materialization_once.py",
+    "sha256": "6bfe3c74f6cf4967a236be8b8cb72b131f3868046b2123c94dcdb67dbbb38a35"
+  },
+  "schema": "mckernel.phase5-current160-ordinary-materialization-proposal.v1",
+  "source": {
+    "bytes": 53165,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/source-manifest.json",
+    "sha256": "feb3a86c6f3830ac192ab165cb81a61d2e56d18dc53f3f3cb81647900502c8cc"
+  }
+}

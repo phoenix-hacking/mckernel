@@ -1,0 +1,105 @@
+{
+  "PTfree_state": "Prior816af238 source-only fields/line807 retained; no PTfree fixture/TU credit.",
+  "Rust_reuse": "Existing kprintf production ABI and crate::debug::Ddebug; no logging model in product.",
+  "actual_fixture_TU_partial_default_native": null,
+  "already_held_residuals_ranked_with_uncertainty": [
+    {
+      "body": "PTfree/allocator backing providers",
+      "rank": "highest ownership uncertainty",
+      "reuse": "Existing Rust tracked allocator; private wrapper source prepared, metadata/real allocation-chain proof pending"
+    },
+    {
+      "body": "range/effect log providers",
+      "rank": "moderate tracing/ABI uncertainty",
+      "reuse": "Existing Rust logger/debug descriptor ABI; these complete source ports need actual output/selector/vararg/relocation proof"
+    },
+    {
+      "body": "PT physical translator",
+      "rank": "small wrapper, untested",
+      "reuse": "Existing actual Rust phys_to_virt; separate a914/3fc source excluded"
+    },
+    {
+      "body": "x86_pt_alloc_pages_bridge and destroy panic callbacks",
+      "rank": "separate allocator/error boundary",
+      "reuse": "Existing allocator helpers and Rust panic; C bodies still live"
+    }
+  ],
+  "callback_identity": "Existing typed const x86_clear_l3_effect_log/range_log remain byte-identical; future whole-TU allocated section-aware relocations must target the new unique Rust globals, not local C bodies.",
+  "canonical_Git_sharedABI_P12_changes": false,
+  "defaultlink_native": "Six passed provider batch has current78/GCC9/partial proof only; defaultGCC14/finalimage/native remain OPEN. New PTfree/logging ports have SOURCE proof only.",
+  "descriptor_callsite_basis": {
+    "bytes": 89444,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/passed-six-provider-current-union-production-preparation-1/source/arch/x86_64/kernel/memory.c",
+    "sha256": "ceed123214cd293f5afefd21dd071e39aa824cf3424cc6355a841c1ae5467f39"
+  },
+  "descriptor_semantics": "Actual mutable32B/align8 C ddebug objects in __verbose: file __FILE__, original function spelling, original accepted macro line, fmt NULL, flags DDEBUG_DEFAULT. No new C function/getter. Each Rust event reads only its own flags byte via established volatile32 line_flags >>24; any nonzero byte enables it.",
+  "engineering_percentage": null,
+  "fallback": "Both original C function bodies are byte-identical. Numeric-only #line anchors retain accepted callsite selector lines, then resume actual following physical lines. __FILE__ remains compilation-unit source path, never a baked private path.",
+  "five_original_descriptor_sites": {
+    "x86_clear_effect_child_free_debug": {
+      "event": "X86_CLEAR_EFFECT_CHILD_FREE",
+      "function": "x86_clear_effect_log_bridge",
+      "function_start": 1375,
+      "line": 1391
+    },
+    "x86_clear_effect_free_anon_debug": {
+      "event": "X86_CLEAR_EFFECT_FREE_ANON",
+      "function": "x86_clear_effect_log_bridge",
+      "function_start": 1375,
+      "line": 1380
+    },
+    "x86_clear_effect_free_unmapped_debug": {
+      "event": "X86_CLEAR_EFFECT_FREE_UNMAPPED",
+      "function": "x86_clear_effect_log_bridge",
+      "function_start": 1375,
+      "line": 1387
+    },
+    "x86_clear_effect_xpmem_keep_debug": {
+      "event": "X86_CLEAR_EFFECT_XPMEM_KEEP",
+      "function": "x86_clear_effect_log_bridge",
+      "function_start": 1375,
+      "line": 1384
+    },
+    "x86_clear_range_large_phys_debug": {
+      "event": "X86_CLEAR_RANGE_LOG_LARGE_PHYS",
+      "function": "x86_clear_range_log_bridge",
+      "function_start": 1421,
+      "line": 1446
+    }
+  },
+  "format_and_vararg_semantics": "Exact literal bytes/argument order, CInt error/event, raw args/ptep, unsigned64 base/start/end/phys and SizeT pgsize preserved. Original signed-format/unsigned-argument bit behavior preserved; no printf counter or return propagation. Split always prints; large-phys/effect sites obey separate selectors; unknown events no output.",
+  "lifetime": "No pointer dereference, lock, page free/accounting, page reference, callback retention or borrowed reference crosses the logger call; strings have static lifetime. Existing effect and traversal order untouched.",
+  "new_driver_queue_CPU_reservation": null,
+  "next_body": "x86_pt_alloc_pages_bridge: retain actual allocation flags/error/page ownership; no new inventory required.",
+  "patch": {
+    "bytes": 6541,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-clear-logging-source-only-1/EXACT-CLEAR-LOGGING-SOURCE.patch",
+    "sha256": "b6bb2ef7b788ab82030af66eaa80c6b8539f6c8cc825124eb2c062031e678ebc"
+  },
+  "postimages": [
+    {
+      "bytes": 91300,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-clear-logging-source-only-1/candidate/arch/x86_64/kernel/memory.c",
+      "sha256": "564f786adabfc9f0e6d3593ff734b19afc622e4d6c691f11c3995e061a83f220"
+    },
+    {
+      "bytes": 208505,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-clear-logging-source-only-1/candidate/kernel/rust/x86_memory_helpers.rs",
+      "sha256": "2d96bc6a916387cbe896f4f80e64d2dab45047ba920c4a90c2fad993144a1d54"
+    }
+  ],
+  "preimages": [
+    {
+      "bytes": 89732,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-pt-free-source-only-1/candidate/arch/x86_64/kernel/memory.c",
+      "sha256": "63d13923395767d80b0d219140bd97f28b6feec84fad02554760de51f5d07c5c"
+    },
+    {
+      "bytes": 204908,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-pt-free-source-only-1/candidate/kernel/rust/x86_memory_helpers.rs",
+      "sha256": "6e8e21f3dae7ef5f3e02bd2df486ccb10e244856ec860572d73289cbd21f2e5d"
+    }
+  ],
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\nSource-only range/effect logging providers over private PTfree. No executable queue.\n",
+  "status": "COMPLETE_TWO_LOGGING_PROVIDER_SOURCE_ONLY_NOT_TESTED"
+}

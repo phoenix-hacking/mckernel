@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "record_kind": "m01b_expert_correction_packet_review",
+  "review_attempt": 52,
+  "recorded_utc": "2026-09-28T08:54:00Z",
+  "status": "PASS_PACKET",
+  "packet_path": "docs/verification/stability-selected-retention-generic-row03-row12-expert-correction-packet-20260928-52.md",
+  "packet_sha256": "846605e3c35c48e65ff892ae65ec67182eee1c5e38a43f3d5e83e651aa968568",
+  "attempt48_archive_path": "docs/verification/evidence/stability-selected-retention-generic-row03-row12-phase-i-attempt-20260928-48.tar.gz",
+  "attempt48_archive_sha256": "6bb534ea6893e113e136a890660ccebe9f1b122d10f84546c2e1fbffb92d6cd8",
+  "accepted_contract": [
+    "Use an unconditional generic Vec Default implementation while preserving fallible allocation calls.",
+    "Parse actual observer begin/end bytes for independent 1/0, 2/1 and 3/2 counter observations.",
+    "Destroy detached Box ownership outside the ledger lock before recording deallocation.",
+    "Preserve wake-none Err(-71), row03 -125 lifetime, real row12 transitions, exact callback packets and the complete baseline/owner/teardown/drain assertion matrix."
+  ],
+  "authenticated_scope": "All 327 attempt48 archive files, both 51-member source authorities and all named hashes match; root52 was absent at review.",
+  "release_scope": "One future source-only attempt at absent root52 after immediate dispatcher reauthentication. Preserve first result and require independent handoff review.",
+  "source_staging_released": true,
+  "phase_ii_released": false,
+  "compilation_or_runtime": false,
+  "acceptance_credit": false,
+  "whole_os_acceptance": false
+}

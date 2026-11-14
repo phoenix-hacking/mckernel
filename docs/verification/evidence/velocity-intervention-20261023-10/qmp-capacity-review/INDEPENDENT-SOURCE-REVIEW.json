@@ -1,0 +1,73 @@
+{
+  "schema": "mckernel.independent-QMP-capacity-source-review.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ACCEPT_FROZEN_SOURCE_FOR_ROOT_GRANTED_ORDINARY_REGRESSION_ONLY",
+  "review": "INDEPENDENT-SOURCE-REVIEW.md",
+  "author_marker": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/qmp-capacity-fix/SOURCE-READY.json",
+    "sha256": "b727d6a9ea91adb0e7d6e3b2e9d74f333a7fd3404f1e0a48dc56939b2bcfae00"
+  },
+  "reviewed_selected_source_count": 6,
+  "reviewed_selected_sources": {
+    "qmp_capture.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/qmp-capacity-fix/candidate/scripts/application-tests/qmp_capture.py",
+      "sha256": "d1d8ed4f72e4b8804c41b4d979ba738e16656b6bab786031e8bd8585a8137b2c"
+    },
+    "native_diagnostic_backend.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/qmp-capacity-fix/candidate/scripts/application-tests/native_diagnostic_backend.py",
+      "sha256": "9e93445ea5710f64b1f55438470e8bcfe8e0766d77a8841d6e0059341f2a28d2"
+    },
+    "native_diagnostic_runner.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/qmp-capacity-fix/candidate/scripts/application-tests/native_diagnostic_runner.py",
+      "sha256": "ba64561121d1858d1b82251ee53f4ff338cbb06b223f7da5b45159cf5952479f"
+    },
+    "native_diagnostic.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/qmp-capacity-fix/candidate/scripts/application-tests/native_diagnostic.py",
+      "sha256": "2cc19500bdecdabf9fc419195df38c25636017bd038d94da688a2d4ad1fed7d3"
+    },
+    "native_diagnostic_container_owner.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/qmp-capacity-fix/candidate/scripts/application-tests/native_diagnostic_container_owner.py",
+      "sha256": "9cfec9f96f18ecff992bf913a70fa017973bc23e64ae504e49c44ab689bc9f3a"
+    },
+    "long_transport.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/qmp-capacity-fix/candidate/scripts/application-tests/long_transport.py",
+      "sha256": "87566b0fa18af50e2fdd99de3d4718ead23555c14299c641daf72ba08c17e0ce"
+    }
+  },
+  "reviewed_test_source": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/qmp-capacity-fix/candidate/scripts/tests/test_qmp_capture.py",
+    "bytes": 21540,
+    "sha256": "d89459b8a9c6877d9bdfb7e1253a48b27a591cfe0e20104ef39ae1c97cac5329"
+  },
+  "source_control_blockers": [],
+  "test_acceptance": false,
+  "native_execution_release": false,
+  "kernel_application_or_P12_acceptance": false,
+  "partial_time_credit": false,
+  "reviewer_test_compiler_root_guest_cleanup_release_calls": 0,
+  "candidate_modified_by_reviewer": false,
+  "remaining_conditions": [
+    "Actual ordinary regression results and exact-interpreter row-memory assumption",
+    "Fresh source/owner/runner/profile/validator cohort and namespace binding",
+    "Fresh4224MiB-growth resource admission after normal positive physical retirement",
+    "Independent fresh unchanged-kernel LONG release and matching strict native result"
+  ],
+  "capacity_joins": {
+    "raw_ordinary_MiB": 32,
+    "encoded_ordinary_MiB": 128,
+    "raw_reserve_MiB": 2,
+    "encoded_reserve_MiB": 8,
+    "ordinary_records": 1048576,
+    "reserve_records": 4096,
+    "file_MiB": 136,
+    "capture_seconds": 10,
+    "readback_seconds": 10,
+    "pending_legal_MiB": 564,
+    "pending_cap_MiB": 640,
+    "logical_growth_MiB": 4224,
+    "inner_seconds": 7800,
+    "query_sleep_seconds": 0.05
+  },
+  "evidence_limit": "Failed actual QMP transcript absent; capacity model is not an observed raw/encoded-rate measurement.",
+  "phase_memory_qualification": "Normal writer follows positiveQEMUreap; failed/uncertain-reap capture remains attempted, so possible8GiB guest+~1.5GiB serializer and otheroverhead must remain within12GiB with physicalhold retained. Ownerreadback requires positiveabsence/release."
+}

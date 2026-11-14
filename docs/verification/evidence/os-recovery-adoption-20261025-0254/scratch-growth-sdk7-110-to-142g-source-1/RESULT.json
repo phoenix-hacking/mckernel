@@ -1,0 +1,82 @@
+{
+  "task_id": "scratch_growth_mutator_source",
+  "status": "READY_FOR_INDEPENDENT_SOURCE_REVIEW",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "checks": [
+    {
+      "command": "python3 -B -m unittest discover -s docs/verification/evidence/os-recovery-adoption-20261025-0254/scratch-growth-sdk7-110-to-142g-source-1 -p test_grow_scratch.py",
+      "scope": "pure sequence/capacity/reserve/account/authority checks; no actual root or growth",
+      "returncode": 0,
+      "tests": 13
+    }
+  ],
+  "evidence": {
+    "grow_scratch.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/scratch-growth-sdk7-110-to-142g-source-1/grow_scratch.py",
+      "bytes": 20901,
+      "sha256": "40ef9655ea594ebeec6d73e6b45e595dcd8b2bb0bece20046e08d4d0b8e1a469"
+    },
+    "test_grow_scratch.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/scratch-growth-sdk7-110-to-142g-source-1/test_grow_scratch.py",
+      "bytes": 10909,
+      "sha256": "07bf70953dbd8427fef4d064ce078d1b004a1cd4174676bdc1573cea0b640caa"
+    },
+    "EXECUTION-FIELDS.md": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/scratch-growth-sdk7-110-to-142g-source-1/EXECUTION-FIELDS.md",
+      "bytes": 6478,
+      "sha256": "2536e04ce19d45c058e00b474d0efd2060b631ad2853517f57d4346df47a9a8d"
+    },
+    "TEST.stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/scratch-growth-sdk7-110-to-142g-source-1/TEST.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "TEST.stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/scratch-growth-sdk7-110-to-142g-source-1/TEST.stderr",
+      "bytes": 112,
+      "sha256": "799a1eccbe8913a4214c637ac83fc778cd5caadb315f5f664c645ee44d2a6bc9"
+    },
+    "grow_scratch.c5a34743.SOURCE-ONLY-PREIMAGE.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/scratch-growth-sdk7-110-to-142g-source-1/grow_scratch.c5a34743.SOURCE-ONLY-PREIMAGE.py",
+      "bytes": 17505,
+      "sha256": "c5a347435a57808af4d6f422f94ed4e01dec51e067498c90865d8807a8e4902a"
+    },
+    "grow_scratch.f94eb591.SOURCE-ONLY-PREIMAGE.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/scratch-growth-sdk7-110-to-142g-source-1/grow_scratch.f94eb591.SOURCE-ONLY-PREIMAGE.py",
+      "bytes": 17580,
+      "sha256": "f94eb591af0f44dd106dd91f76e93a534cf4a690851c00de8de66a4003c8d463"
+    },
+    "TEST-FIRST-FAILURE-fixed-cutoff-fixture.stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/scratch-growth-sdk7-110-to-142g-source-1/TEST-FIRST-FAILURE-fixed-cutoff-fixture.stderr",
+      "bytes": 1079,
+      "sha256": "e6c497194f88b83f60e5d76c095b14fe1bedb74cb1908d51cdef81da038ec474"
+    }
+  },
+  "actual_grant": null,
+  "actual_execution_review": null,
+  "actual_commands": null,
+  "normal_fd_release": null,
+  "fresh_physical_acceptance": null,
+  "growth_closure": null,
+  "original_discovery_error": "Retained: broad rg file discovery before implementation reported Permission denied in unrelated root-owned evidence trees. Dispatcher authorized narrow continuation; no operation/candidate failure occurred.",
+  "blocker": "Independent source review and dispatcher actual grant/review/current quiescence required before execution.",
+  "next_task": "Dispatcher independent review, actual grant and separately owned execution; source preparation alone grants no execution authority.",
+  "pre_review_correction": {
+    "reason": "120-second standing admission snapshots accommodate independent review; no deadline extension or live-guard changes",
+    "max_snapshot_age_seconds": 120,
+    "boundary_checks": "account_guard and quiescence: age120 accepted; age121 refused",
+    "historical_source_only_preimage": "grow_scratch.c5a34743.SOURCE-ONLY-PREIMAGE.py"
+  },
+  "pre_execution_review_correction": {
+    "historical_source_only_preimage": "grow_scratch.f94eb591.SOURCE-ONLY-PREIMAGE.py",
+    "changes": [
+      "Independent child spawn/positive-wait bookkeeping including read-only timeout and unknown acquisition; raw proc-stat/starttime and handled-signal masking",
+      "Exact fixed cutoff proof/three clocks/boot at entry, launches and final release",
+      "Truthful POST_CLOSE_EVIDENCE_FAULT after FD close, no reacquisition",
+      "Existing RLIMIT_FSIZE unlimited or >= exact target; no limit widening"
+    ],
+    "first_test_failure_preserved": "TEST-FIRST-FAILURE-fixed-cutoff-fixture.stderr",
+    "bounded_fixture_correction": "Added newly required fixed_cutoff dummyref under mocked guard; retest PASS",
+    "actual_execution": false
+  }
+}

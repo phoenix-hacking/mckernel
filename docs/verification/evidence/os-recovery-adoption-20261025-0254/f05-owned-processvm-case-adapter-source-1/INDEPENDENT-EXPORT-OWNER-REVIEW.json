@@ -1,0 +1,90 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/guardian_execution_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "at": "2026-10-27T17:44:46.921029+00:00",
+  "decision": "PASS_EXACT_FIVE_FILE_SOURCE_EXPORT_ONLY",
+  "proposal": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/f05-owned-processvm-case-adapter-source-1/private-export-20261027-1/EXPORT-PROPOSAL.json",
+    "bytes": 8343,
+    "sha256": "f8ed0c3e84b17bdfba8c5143b1458700cbb0b72237e8c83cefc161a5f811c86d"
+  },
+  "owner_diff": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/f05-owned-processvm-case-adapter-source-1/private-export-20261027-1/owner-export-context.patch",
+    "bytes": 37509,
+    "sha256": "39781f17b7e6fefca0bd7ede12343050c9cce2ae80028685d8c9f1577a38d210"
+  },
+  "retained_review_terminal_excerpt": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/f05-owned-processvm-case-adapter-source-1/private-export-20261027-1/RETAINED-REVIEW-TERMINAL.txt",
+    "bytes": 4499,
+    "sha256": "4fdf58a5b219ae21a7a2978d9ad0eeeb09cdd10cdfa30c04a27ae01c1a2fb3da"
+  },
+  "candidate_files": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/f05-owned-processvm-case-adapter-source-1/private-export-20261027-1/native/native_diagnostic.py",
+      "sha256": "c3a1a4b5755813bf94289fb8091078ca58c96a4d8026f00ce14e2c7626a62484",
+      "size": 97074,
+      "mode": 33152,
+      "proposed_destination": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-case-adapter-source-1/native/native_diagnostic.py"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/f05-owned-processvm-case-adapter-source-1/private-export-20261027-1/native/native_diagnostic_backend.py",
+      "sha256": "cd0759c926876483665065cb320b9daf7d7c6b32f56e561805b4b0343f60d614",
+      "size": 25398,
+      "mode": 33152,
+      "proposed_destination": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-case-adapter-source-1/native/native_diagnostic_backend.py"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/f05-owned-processvm-case-adapter-source-1/private-export-20261027-1/native/native_diagnostic_container_owner.py",
+      "sha256": "9c6b744ef4b7100f6ce28e67b94a532ad90f15ed14513f74bcae9ab7c9e10f51",
+      "size": 94068,
+      "mode": 33152,
+      "proposed_destination": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-case-adapter-source-1/native/native_diagnostic_container_owner.py"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/f05-owned-processvm-case-adapter-source-1/private-export-20261027-1/native/native_diagnostic_runner.py",
+      "sha256": "25ea29f9b07232094e9df1db6094ad0a85ec678281749a1d6998abb7c700d499",
+      "size": 6005,
+      "mode": 33152,
+      "proposed_destination": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-case-adapter-source-1/native/native_diagnostic_runner.py"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/f05-owned-processvm-case-adapter-source-1/private-export-20261027-1/native/qmp_capture.py",
+      "sha256": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741",
+      "size": 9913,
+      "mode": 33152,
+      "proposed_destination": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-case-adapter-source-1/native/qmp_capture.py"
+    }
+  ],
+  "target_runtime_directory": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-case-adapter-source-1/native",
+  "owner_sha256": "9c6b744ef4b7100f6ce28e67b94a532ad90f15ed14513f74bcae9ab7c9e10f51",
+  "execution_authority": false,
+  "canonical_mutation_performed": false,
+  "verified": [
+    "Exact proposal SHA256f8ed0c3e84b17bdfba8c5143b1458700cbb0b72237e8c83cefc161a5f811c86d and all six retained preimages/all five candidate runtime files match actual bytes/sizes. Five unique destinations equal their names under the exact proposed canonical native directory; all five destinations and directory are absent with no symlink component.",
+    "New owner is derived directly from retained45010e54. Full module AST equals predecessor after only the documented RUNNER/SELF/bound_manifest source literal substitutions and one SOURCE_HASHES extension. All29 function/class names are identical; bound_manifest alone changes one literal source path, and every other function/class AST is identical.",
+    "Original139 SOURCE_HASHES entries remain AST/byte-identical and all139 actual retained files currently match their pins. Four added canonical sibling paths/hashes exactly equal the proposal, are disjoint from original keys, and introduce no private temporary source keys.",
+    "Exact adapterc3a1a4b5755813bf94289fb8091078ca58c96a4d8026f00ce14e2c7626a62484 and unchanged runner25ea/backendcd075/QMP5bcc bytes are reused. Retained completed07:49 source review log matches full pinned SHA2567c60a94b; its89 controls and strict235 comparison are retained historical PASS, not replayed here.",
+    "Bound owner loads canonical exported evaluator and runs canonical exported runner. Runner lazily loads its same-directory evaluator/backend and temporarily binds the same-directory QMP module for backend import; no ambient-module substitution is added.",
+    "Container ownership/lifecycle methods, verified retirement, pid/birth/lock/cgroup/mount/stream/cleanup code are unchanged. Profile retains CPUs2-5/four CPUs,12GiB/no swap,512tasks/no network and exact read-only mounts with existing bounded capture behavior.",
+    "Adapter retains exact source4aef/payloadbe508/oraclede8c/HOSTca6f identities,204 stdout bytes/empty stderr/exit0,1024-byte each stream and payload_timeout_ms10000, exact c020 collector and source/oracle/HOST joins. Source/oracle/HOST actual retained byte hashes were independently checked.",
+    "Parent positive SCHEDULE, exactly one positive distinct clone-linked child, same-generation owned publication/deletion, syscall/route correspondence, ordinary child RET, sole child raw exit60 and exactly one matched parent wait4 returning that child after terminal and before parent exit231 are unchanged. Parent real ACK and bounded retirement-success predicates remain literal. No child successful-query predicate is invented.",
+    "Historical235/227 identity/evaluator chain remains byte-unchanged; F05 requires its exact case/profile and rejects pair. No process_vm310/311 substitution or read/patch coverage claim is introduced."
+  ],
+  "root_adoption_conditions": [
+    "Root alone may publish exactly these five pinned siblings together at the stated canonical destinations after rechecking absence/current provider hashes. Export grants source adoption only; it supplies no runtime, root, staging, capability or native release.",
+    "Final manifest/runtime artifact/source/oracle/HOST/payload/collector bindings, matched image/modules and complete staging joins remain required. This review does not validate or refresh those runtime prerequisites.",
+    "Actual CloneTID conditional branch, object call/relocation, final Rust write_process_vm provider and image proof remain OPEN. New owner source hash/path must be bound in the actual fresh original-contract release before runtime.",
+    "Native execution, guest behavior, physical postjoin retirement, current109-image credit and M14-05-05/file/native closure remain OPEN; practical35 remains unchanged.",
+    "Same fixed window ending2026-10-28T05:36:09Z and creditrun7f4af94a83b14cc08f97401f5891d965/ceiling57774.852125/cumulative spent>=22812.3311 persist. All real holds, permanent exclusions, free floors and one-heavy resource/ownership controls remain effective; no account observation or spending release is claimed."
+  ],
+  "review_actions": {
+    "AST_and_readonly_hash_checks_only": true,
+    "all139_original_source_hashes_checked": true,
+    "no_adapter_control_or_strict235_replay": true,
+    "no_import_or_execution_of_runtime_modules": true,
+    "no_runtime_compiler_Docker_root_cleanup_guest_or_canonical_mutation": true,
+    "only_this_review_file_written": true
+  }
+}

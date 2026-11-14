@@ -1,0 +1,65 @@
+{
+  "schema": "mckernel.quarantine-continuation-sudo-parent-source.v1",
+  "timestamp": "2026-09-29T09:49:44-07:00",
+  "status": "PASS_SOURCE_ONLY",
+  "head_before_checkpoint": "253e5fa42110e2038ef052b2412b1aa4febf0fbb",
+  "failure_family": "quarantine continuation conflict census rejected its exact direct sudo parent and initially exempted mutable bare PIDs",
+  "live_reproducer": {
+    "command_profile": "harmless sudo ancestry probe; no packet execution",
+    "python_parent_executable": "/usr/bin/sudo",
+    "parent_credentials": {"uid": [0, 0, 0, 0], "gid": [0, 0, 0, 0]},
+    "finding": "the canonical sudo parent retains the packet pathname in argv and therefore intersects the unchanged forbidden basename set"
+  },
+  "rejected_bounded_correction": {
+    "packet_sha256": "6a29b462d6611b4bb77a2283e6a7798cc3e50ba7593ca151772ec65290b00882",
+    "test_sha256": "c77f7037333b687ef09b089fbea3728cbf7f4b51f3dd585e9403dda4a18c35e9",
+    "independent_review": "BLOCK",
+    "reproduced_defects": [
+      "bare admitted parent PID could be reused after validation and skipped by the census",
+      "whole status comparison rejected harmless volatile counter changes",
+      "rstrip-based argv parsing admitted extra trailing empty arguments"
+    ]
+  },
+  "expert_correction": {
+    "packet_path": "docs/verification/evidence/native-exact-candidate-quarantine-recover-704f6654-1.py",
+    "packet_sha256": "ae2f6d078c79a424d7d974d3ca218c32d68791bd012d7bc447815600ddeea1e9",
+    "test_path": "scripts/tests/test_native_exact_candidate_quarantine_recovery_704f6654.py",
+    "test_sha256": "fadd032209173d597713d3f12e16f95fd830a80bc435e5d730ca07d2b1af18b6",
+    "wrapper_sha256": "7b41bb6f34c8b5fe3888b0663495fcff936ed8bd7e417520c588e4a52368e4ef",
+    "basis_sha256": "241feb5c98a330c348179019bd2b06990ef4f947cce0538c650ec3db8211ac1f",
+    "behavior": [
+      "retains direct sudo parent and child PID/starttime/PPID identity tokens",
+      "requires exact sudo executable, exact NUL-terminated canonical argv and parsed root Uid/Gid fields",
+      "revalidates sudo and launcher identities at each census exemption and before success",
+      "retains the complete forbidden basename coverage and rejects bare PID allowances"
+    ],
+    "template_inert": true,
+    "execution_release_exists": false
+  },
+  "verification": [
+    {"command": "python3.8 scripts/tests/test_native_exact_candidate_quarantine_recovery_704f6654.py", "result": "PASS", "tests": 35},
+    {"command": "python3.9 scripts/tests/test_native_exact_candidate_quarantine_recovery_704f6654.py", "result": "PASS", "tests": 35},
+    {"command": "python3.8 -m py_compile <packet> <test>", "result": "PASS"},
+    {"command": "python3.9 -m py_compile <packet> <test>", "result": "PASS"},
+    {"command": "git diff --check -- <packet> <test>", "result": "PASS"}
+  ],
+  "independent_review": {
+    "status": "PASS_SOURCE",
+    "prior_exploit_windows_replayed": 4,
+    "runtime_acceptance": false
+  },
+  "resources": {
+    "host_available_bytes": 23451791360,
+    "scratch_available_bytes": 21529010176,
+    "tmpfs_available_bytes": 7502475264,
+    "mem_available_kib": 19161364
+  },
+  "acceptance": {
+    "successful_current_candidate_builds": 0,
+    "real_guest_applications_this_window": 0,
+    "application_cases": "0/273",
+    "formal_counters_changed": false,
+    "os_complete": false
+  },
+  "next": "Commit, push and fetch this inert source correction. Use that fetched commit as the new template ancestor; mechanically finalize exactly packet, wrapper and basis and add the safe external release as the fourth changed path. Obtain independent mechanical and execution review and repeat all live preflight gates before any one-shot sudo continuation."
+}

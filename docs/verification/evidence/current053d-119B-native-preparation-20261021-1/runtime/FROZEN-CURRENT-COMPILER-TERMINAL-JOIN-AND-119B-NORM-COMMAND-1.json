@@ -1,0 +1,60 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "snapshot": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/normalization-runtime-data/runtime-source-preparation-1/root_manual_snapshot_threads.compiler-latest-UNBOUND.py",
+    "sha256": "e577c5ae8b95b934bf61fc3ab9a7a104626a3ce745bec48bf8e12aee6b437d0a",
+    "bytes": 23540
+  },
+  "diff": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/normalization-runtime-data/runtime-source-preparation-1/actual-compiler-terminal-branch-only.patch",
+    "sha256": "00ae2c932d9e9c2a3787282b64d3e281fa2c5217714536269cd38baa88b22621",
+    "bytes": 7548
+  },
+  "data": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/normalization-runtime-data/runtime-source-preparation-1/ACTUAL-COMPILER-LATEST-NATIVE-ANCESTOR-AND-119B-NORM-DATA-1.json",
+    "sha256": "4f7d2ef0ab13d7cc7080cef0af3ca95b3bd5891fd57cc698bb4404bda1fe9c16",
+    "bytes": 9336
+  },
+  "checker": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/normalization-runtime-data/runtime-source-preparation-1/check_actual_compiler_terminal_body.py",
+    "sha256": "2c752214757e0260bcb0c3484f04ac72b3cd889cd3d915d06bc541612151e198",
+    "bytes": 1575
+  },
+  "normalization_same_binder_snapshot_ref": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/normalization-runtime-data/ROOT-MECHANICAL-119B-NORMALIZATION-FLAT-CONSUMER-REPORT-1.json",
+    "sha256": "37937cd660e7e68b09ae08386acacdc284a7acf63ec4ec984dd75835d06356cf",
+    "bytes": 22194
+  },
+  "actual_compiler_independent_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/process-owned-fork-rust-next-preparation-20261021-1/locking-correction-1/compiler-owner-preparation-1/exact-compiler-release-data-preparation-1/INDEPENDENT-ACTUAL-FOUR-OBJECT-COMPILER-PHYSICAL-ACCEPTANCE-1.json",
+    "sha256": "911d5c615b78b9c14875c48bd557ab00734f96558987637178b946c6a0b1de96",
+    "bytes": 3213
+  },
+  "native_ancestor": "7c156 only; not latest after actual compiler",
+  "earlier_build": "23057/978 only; separate from native and compiler",
+  "command": [
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "taskset",
+    "-c",
+    "6",
+    "prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=30:30",
+    "--fsize=67108864:67108864",
+    "--core=0:0",
+    "--nofile=256:256",
+    "--",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/normalization-runtime-data/runtime-source-preparation-1/check_actual_compiler_terminal_body.py"
+  ],
+  "capture": "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/normalization-runtime-data/runtime-source-preparation-1/actual-compiler-terminal-body-capture-1",
+  "future_static_review": null,
+  "runtime_execution_release": null,
+  "fresh_grant": null,
+  "not_executed": true
+}

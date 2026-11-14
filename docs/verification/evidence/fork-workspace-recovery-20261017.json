@@ -1,0 +1,83 @@
+{
+  "schema": "mckernel-bounded-workspace-recovery-v1",
+  "recorded_utc": "2026-10-17T03:01:44Z",
+  "status": "PASS_SPARSE_WORKTREE_RECOVERED",
+  "scope": "Dispatcher-created isolated worktree only; no OS/build/root/guest execution",
+  "worktree": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1",
+  "head": "09f438751c28df0f497ed45a6bf6a4c6e0821d7b",
+  "scratch": {
+    "source": "/dev/loop36",
+    "filesystem_uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52",
+    "available_before_bytes": 26721050624,
+    "available_after_sparse_prune_bytes": 33538772992,
+    "available_final_bytes": 33520893952,
+    "worktree_allocated_before_bytes": 6839050240,
+    "worktree_allocated_after_sparse_prune_bytes": 8192,
+    "worktree_allocated_final_bytes": 17887232,
+    "host_available_final_bytes": 29475127296,
+    "trim_executed": false
+  },
+  "inherited_failure": {
+    "source": "Dispatcher task packet; not replayed",
+    "sequence": [
+      "git worktree --no-checkout created detached worktree",
+      "sparse init/set failed because worktree info directory was missing",
+      "shell continued a full checkout",
+      "dispatcher interrupted exact checkout PID 32945",
+      "dispatcher repaired isolated index with git read-tree HEAD and installed sparse-checkout file",
+      "initial git read-tree -mu HEAD refused the partial archive"
+    ],
+    "original_checkout_pid": 32945,
+    "pid_observation": "ps -p 32945 found no process before recovery"
+  },
+  "partial_preservation": {
+    "original_path": "docs/verification/evidence/native-vdso-service-guest-20260907-prepare-1.tar.gz",
+    "retained_path": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1.interrupted-checkout.partial",
+    "retained_bytes": 21315584,
+    "sha256": "69a05d66c392f5143eea091281ce394f576cb3a68114556074eb5a87307280a8",
+    "device": 1828,
+    "inode_before_and_after": 4461420,
+    "original_git_blob": "0356f0f91dffef6299deb62bd86a7b24e3fcce79",
+    "original_git_blob_bytes": 34432872,
+    "git_blob_prefix_bytes": 21315584,
+    "git_blob_prefix_sha256": "69a05d66c392f5143eea091281ce394f576cb3a68114556074eb5a87307280a8",
+    "destination_absent_before_move": true,
+    "move_command": "test ! -e /home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1.interrupted-checkout.partial && mv -T -n /home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/docs/verification/evidence/native-vdso-service-guest-20260907-prepare-1.tar.gz /home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1.interrupted-checkout.partial",
+    "preserved_byte_for_byte": true
+  },
+  "recovery": {
+    "sparse_patterns": ["/host-kernel/native-rust/", "/kernel/syscall.c", "/scripts/tests/"],
+    "core_sparseCheckout_worktree_config": true,
+    "command": "git -C /home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1 read-tree -mu HEAD",
+    "exit_status": 0,
+    "before_status_counts": {"modified_worktree": 1, "deleted_worktree": 5975},
+    "after_status_counts": {"deleted_worktree": 709},
+    "included_index_entries": 709,
+    "remaining_actual_files": [".git"],
+    "source_availability_check": "FAIL: host-kernel/native-rust, kernel/syscall.c and scripts/tests are absent",
+    "finding": "Sparse pruning succeeded. read-tree did not materialize allowed source entries that were already absent with unchanged index entries. No further recovery mutation attempted after this failed postcondition.",
+    "candidate_command_at_initial_stop": "git -C /home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1 restore --source=HEAD --worktree -- host-kernel/native-rust kernel/syscall.c scripts/tests"
+  },
+  "final_completion": {
+    "authority": "Dispatcher explicitly authorized one targeted source-materialization command after the intermediate stop; selected paths are new/empty and have no user or worker edits",
+    "command": "git -C /home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1 restore --source=09f438751c28df0f497ed45a6bf6a4c6e0821d7b --worktree -- host-kernel/native-rust kernel/syscall.c scripts/tests",
+    "exit_status": 0,
+    "full_worktree_porcelain_status": "",
+    "source_files_verified_present": [
+      "host-kernel/native-rust/os_runtime.rs",
+      "host-kernel/native-rust/smp_memory.rs",
+      "kernel/syscall.c",
+      "scripts/tests/test_ihk_os_runtime.py"
+    ],
+    "actual_files_outside_sparse_allowlist_except_git_pointer": [],
+    "partial_inode_size_and_sha256_reverified": true,
+    "heavy_execution_authority_or_acceptance_granted": false
+  },
+  "preservation": {
+    "main_worktree_or_index_mutated_by_recovery": false,
+    "main_changes": "Only this new evidence record is written by this worker; preexisting WIP untouched",
+    "raw_recursive_deletion": false,
+    "partial_archive_deleted": false,
+    "source_or_runtime_acceptance_claim": false
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "additive_correction": "Exact floor of developer aggregate22.7098GiB; original arithmetic ceiling exceeded this by774B, no workload was admitted. Planned allocation unchanged15GiB.",
+  "allocations": [
+    {
+      "cpus": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "jobs": 1,
+      "memory_bytes": 12884901888,
+      "network": false,
+      "role": "one launcher container",
+      "swap_extra": 0,
+      "tasks": 512
+    },
+    {
+      "address_space_bytes": 2147483648,
+      "cpu_limit": "inherited unlimited",
+      "cpus": [
+        7
+      ],
+      "jobs": 1,
+      "role": "host guard",
+      "wall_timeout": null
+    },
+    {
+      "address_space_bytes": 1073741824,
+      "admission": "Only outside exclusive census; complete and quiesce before heavy admission",
+      "cpus": [
+        6
+      ],
+      "jobs": 1,
+      "role": "ordinary M05"
+    }
+  ],
+  "current_successful_physical": {
+    "bytes": 229711,
+    "path": "/home/holden/mckernel/docs/verification/evidence/current053d-m07-vector-native12-20261022-1/ROOT-MECHANICAL-ACTUAL-CURRENT-M07-NATIVE-PHYSICAL-REPORT-1.json",
+    "sha256": "87f988a81eb0fcff882bcf5d5f2224ade2065bf8ea69d7bd450c13fabaec4348"
+  },
+  "exclusive_admission": "Dispatcher reserves sole heavy slot; guard must acquire permanent mutex and recheck identities/records immediately before effect. Snapshot test is no lasting lock.",
+  "grantor": "/root",
+  "included_plan_usage_percent": 92,
+  "maximum_aggregate_bytes": 24384462074,
+  "maximum_aggregate_jobs": 7,
+  "mem_available_bytes": 28051337216,
+  "no_resize_delete_or_reserve_change": true,
+  "observed_at_utc": "2026-10-22T02:29:42.104933+00:00",
+  "one_heavy": true,
+  "other_heavy_admission": false,
+  "paid_or_API_billing": false,
+  "permanent_mutex_identity": [
+    27,
+    4
+  ],
+  "planned_bytes": 16106127360,
+  "planned_jobs": 3,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "snapshot": {
+    "bytes": 3346,
+    "path": "/home/holden/mckernel-work/host-preparation/native-exec-delivery-transfer-rust-repair-20261021-1/launcher-error-propagation-1/target-build-preparation-1/latest-native12-release-binding-preparation-1/actual-current-readonly-snapshot-capture-1/stdout",
+    "sha256": "c7ff41a5c0f6c8de80956d6b6a2ae154c411227da9814c786bfa08f5c6a9c240"
+  },
+  "snapshot_owned_result": {
+    "bytes": 1336,
+    "path": "/home/holden/mckernel-work/host-preparation/native-exec-delivery-transfer-rust-repair-20261021-1/launcher-error-propagation-1/target-build-preparation-1/latest-native12-release-binding-preparation-1/actual-current-readonly-snapshot-capture-1/owned-result.json",
+    "sha256": "d2831809676e97054cee51bde7502b3c88d00efa063febb63a4318bda11a3446"
+  },
+  "storage": {
+    "host": {
+      "available_bytes": 38462939136,
+      "budget": {
+        "compiler_and_control_growth_bytes": 328935465,
+        "emergency_reserve_bytes": 536870912,
+        "floor_bytes": 17179869184,
+        "postbuild_growth_bytes": 377487360
+      },
+      "device": 66306,
+      "path": "/home/holden",
+      "required_bytes": 18423162921
+    },
+    "scratch": {
+      "available_bytes": 14132518912,
+      "budget": {
+        "compiler_and_control_growth_bytes": 67108864,
+        "emergency_reserve_bytes": 536870912,
+        "floor_bytes": 12884901888,
+        "postbuild_growth_bytes": 0
+      },
+      "device": 1828,
+      "path": "/home/holden/mckernel-work/scratch",
+      "required_bytes": 13488881664
+    }
+  }
+}

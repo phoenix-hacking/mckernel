@@ -1,0 +1,164 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_READY_NOT_GRANTED",
+  "owner": "/root/m14_f03_next_body",
+  "selected_C_names": [
+    "perf_counter_mask_check_bridge",
+    "perf_counter_start_bridge",
+    "perf_counter_stop_bridge"
+  ],
+  "reused_Rust_providers": [
+    "crate::x86_perfctr::ihk_mc_perf_counter_mask_check",
+    "crate::x86_perfctr::ihk_mc_perfctr_start",
+    "crate::x86_perfctr::ihk_mc_perfctr_stop"
+  ],
+  "existing_gates": [
+    "MCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+    "ENABLE_PERF/enable_perf",
+    "supported Linux6.12/x86/runtime/noUBSAN"
+  ],
+  "proposed_C_define": "MCKERNEL_RUST_F03_PERF_COUNTER_CONTROL_BRIDGES",
+  "proposed_Rust_cfg": "f03_perf_counter_control_bridges_selected_candidate",
+  "new_C_algorithm_bodies": 0,
+  "new_Rust_callback_bodies": 3,
+  "actual_compiler_commands": 0,
+  "actual_behavioral_tests": 0,
+  "actual_default_builds": 0,
+  "actual_native_apps": 0,
+  "native_or_whole_file_acceptance": false,
+  "expected_mock_C_Rust_pairs": 432,
+  "expected_exact_single_call_traces": 864,
+  "expected_ABI_words": 6,
+  "canonical_writes": 0,
+  "next": "Root independent source/ABI review and fresh ordinary seven-command HOST grant; then Root reconciles exact canonical source + CMake gates into next production cohort. No HOST19/current109 replay.",
+  "files": {
+    "CMakeLists.txt.proposal.patch": {
+      "bytes": 2194,
+      "sha256": "6bc0dfa0da6e28ddb39d3259387afe4cf15a83cc8a8ec05a1fbcf8b712c8e21e"
+    },
+    "EXACT-PREIMAGES.json": {
+      "bytes": 918,
+      "sha256": "043b938a98f05ad5a930b238d07abac77754d0a94429bcf6082e02d7d3cd110a"
+    },
+    "FUTURE-HOST-COMMAND-PLAN.NOT-GRANTED.json": {
+      "bytes": 9077,
+      "sha256": "d5e423f7a3b06c54cf5098556a275ac573f30e78418ecd920820ea309ff9c0ae"
+    },
+    "README.md": {
+      "bytes": 3954,
+      "sha256": "9b9af50f7c5bf49aa05bd04fbeade19bf773082dc66e29d4eba643737b11f796"
+    },
+    "SOURCE-CONSISTENCY.json": {
+      "bytes": 379,
+      "sha256": "1944cb28aa770e9f5a091d15c6ef512ae01a804d3265a09a61d531ff17a3d9b6"
+    },
+    "SOURCE-SLICES.json": {
+      "bytes": 2158,
+      "sha256": "f5cd5e20647863956f9d51b7d92e1039b1944397f879786ac984bacc282c0499"
+    },
+    "driver.c": {
+      "bytes": 3863,
+      "sha256": "582c62b422fe95fd813ca5a04c14a7a0d85fb7f422776291560c128b34739663"
+    },
+    "finalize_source.py": {
+      "bytes": 4873,
+      "sha256": "c2d407c39239dd597b1b50bd14992b99800f44210f243cb9d389c6d8b4a6cafa"
+    },
+    "lib.fixture.rs": {
+      "bytes": 1121,
+      "sha256": "87e89682ed23533f92019c7df4d3226d1be5380f084010ecfbbc6a52bf7dc328"
+    },
+    "original.C.inc": {
+      "bytes": 372,
+      "sha256": "c134f4e1fac6927ba387bb5a3fa1e2e0c470f66df8c21e70aa37d4018fb7edff"
+    },
+    "paired-selectors.C.inc": {
+      "bytes": 1023,
+      "sha256": "61cf7243d3871ba4e5b23cf34d8e08b1feaf2acdfa926047fde19b7cbd8869e0"
+    },
+    "perf_counter_mask_check_bridge.original.C.inc": {
+      "bytes": 128,
+      "sha256": "031dfaf1d09b60c0e5f6ebb9a57f3d2b5ae46a66dd50751910e6b9cdeb7519c6"
+    },
+    "perf_counter_mask_check_bridge.paired-selector.C.inc": {
+      "bytes": 345,
+      "sha256": "76d032213dc2ada50d8d327f345b8af25ad9c856290a5f63c27fe2204ecbd8bb"
+    },
+    "perf_counter_start_bridge.original.C.inc": {
+      "bytes": 113,
+      "sha256": "cda54ec906231e3e7f923d89ea8a62a017749897778444f119988754506f1550"
+    },
+    "perf_counter_start_bridge.paired-selector.C.inc": {
+      "bytes": 325,
+      "sha256": "946e3bb031929b1f4f618194363f70ff3b31184f77a92f7dd30fdeca674400c7"
+    },
+    "perf_counter_stop_bridge.original.C.inc": {
+      "bytes": 129,
+      "sha256": "649dddd1ec265202b60dc8f4cc01638ecebc7cbf04c348981164c4a70f3c8985"
+    },
+    "perf_counter_stop_bridge.paired-selector.C.inc": {
+      "bytes": 351,
+      "sha256": "261184104926fcbe69ff4c412b8a8da57bd539846fddc3b5025f045f7b153e3c"
+    },
+    "postimage.syscall.c": {
+      "bytes": 916935,
+      "sha256": "7d30396958fd57e6e5274d8a4745d832176468c255fccc2b54be872a30aa4cb5"
+    },
+    "preimage.syscall.c": {
+      "bytes": 916284,
+      "sha256": "d9187c6eeb63f134602218db3b3b50683e1ca45b416199fcaa8ca4976c352713"
+    },
+    "prepare_source.py": {
+      "bytes": 3585,
+      "sha256": "1e68625599008bc4713940e5c15e4142dad6c87f292933a88f46a5d0fe862607"
+    },
+    "retained-abi-types.Rust.inc": {
+      "bytes": 44,
+      "sha256": "e27a868d2a7208df018da040bfb9228703774da5280bc31bc3bbd28767510f7c"
+    },
+    "selected-bridges.Rust.inc": {
+      "bytes": 1618,
+      "sha256": "dbf85c8bccf64bcdbd2e9465acbbae87b19d9b835a3740f8e455d8c015ff06ab"
+    },
+    "selector-witness.c": {
+      "bytes": 564,
+      "sha256": "8d91880c4f573905936caaecaa6b9d4fd88c6b5ec782e01a2097ade7f1a17b5c"
+    },
+    "syscall.c.patch": {
+      "bytes": 1318,
+      "sha256": "8be5558bc782f80901c5df00e2bd21919cf5422c8ef26be396b32bc5117ac469"
+    },
+    "syscall_policy.rs.patch": {
+      "bytes": 1895,
+      "sha256": "efcee06ceb2b0be17a4bd8bce26a9a37245a3069517b15800cf9d6b357b5dd3c"
+    },
+    "pin_rust_tool.py": {
+      "bytes": 2885,
+      "sha256": "05ef497365c481e2dc5a4f3ce9a3748deaf957b96d46ee3a0db0fa0cc105984b"
+    },
+    "RUST-TOOL-BINDING-CORRECTION.SOURCE-ONLY.json": {
+      "bytes": 1094,
+      "sha256": "8a102d2ce7eb88b4819443066936fc9da20f9c4f76d1b6724200a41f9089d527"
+    },
+    "FUTURE-HOST-COMMAND-PLAN.PRE-SHIM-CORRECTION.json": {
+      "bytes": 8180,
+      "sha256": "79d37295b08a2c1c77d2e6b60fa290ae1783aa26820fccafd55dd4cf1aa22d2f"
+    },
+    "SOURCE-HANDOFF.PRE-SHIM-CORRECTION.json": {
+      "bytes": 5047,
+      "sha256": "3857c2dcfa0fb82b42eaead538b02b8b909fd5929596f2c257c0dc9b09a47941"
+    }
+  },
+  "tool_refs": {
+    "stable_Rust": {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "bytes": 654904,
+      "sha256": "028fd60b0e0add5505c661cd3ccde91393d615c8729bd95d94ab1e91409b36a1"
+    },
+    "retained_HOST19_F03_source_plan": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-perf-alloc-three-bridges-1/FUTURE-HOST-COMMAND-PLAN.NOT-GRANTED.json",
+      "bytes": 11466,
+      "sha256": "46fd2971d3d6989ee31d490e2e3ce97803a5281c7fc0b0c334791af61cc9bc58"
+    }
+  }
+}

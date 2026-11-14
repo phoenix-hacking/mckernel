@@ -1,0 +1,78 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-default-actual-qualification-1/qualify_actual_f02_profile.py
++++ qualify_actual_f02_profile.py
+@@ -4,12 +4,12 @@
+ import ast,hashlib,json,os,re,shlex,stat,struct,subprocess,traceback
+ from pathlib import Path as HostPath, PurePosixPath
+ D=HostPath(__file__).resolve().parent;E=D.parent
+-B=E/'ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build'
+-A=E/'ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/evidence'
++B=E/'ROOT-F03-F06-QUALIFIED-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build'
++A=E/'ROOT-F03-F06-QUALIFIED-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/evidence'
+ DRIVER=E/'current290-driver-identity-repair-source-1/native_rust_exact_mckernel_image_offline.CURRENT290.VIEW-AND-FRESH-OBJECT-GATE.py'
+-P=json.loads((E/'ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/PROFILE.SOURCE-ONLY.json').read_text())
++P=json.loads((E/'ROOT-F03-F06-QUALIFIED-DEFAULT-BUILD-ADMISSION-1/PROFILE.SOURCE-ONLY.json').read_text())
+ producer=json.loads((A/'producer-contract.json').read_text())
+-seed=HostPath(P['inputs']['retained_seed']);policy=next(r['postimage']['path'] for r in P['inputs']['postimages'] if r['relative']=='kernel/rust/syscall_policy.rs')
++seed=HostPath(P['inputs']['retained_seed']);policy=str(HostPath(P['inputs']['source_directory_exports'][0]['host_path'])/'syscall_policy.rs')
+ 
+ def ref(path):
+  p=HostPath(path);raw=p.read_bytes();return dict(path=str(p),bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+@@ -27,14 +27,16 @@
+ validate=scoped_clone_witness.validate
+ profile_proof=json.loads((D/'CLONE-FINAL-POINTER-AND-WARNINGS.json').read_text())
+ F02_OWNERS={'idle_halt','allow_oversubscribe','time_sharing','process_idle_callbacks'}
++NEXT_REMOVED={'arch_mmap_ignored_flags_bridge', 'arch_mmap_error_flags_bridge', 'arch_mmap_supported_flags_bridge', 'arch_prctl_set_register_bridge', 'exit_do_exit_bridge', 'syscall_do_prlimit64_bridge', 'reset_cputime', 'arch_prctl_get_register_bridge', 'arch_do_mmap_bridge', 'set_cputime'}
++NEXT_ADDED={'sync_child_event', 'f03_do_exit_debug_v2'}
+ scoped_clone_witness.PROOF_SHA=hashlib.sha256(json.dumps(profile_proof,sort_keys=True,separators=(',',':')).encode()).hexdigest()
+ assert F02_OWNERS<=set(scoped_clone_witness.EXPECTED_PROVIDERS)
+-scoped_clone_witness.EXPECTED_PROVIDERS=sorted(set(scoped_clone_witness.EXPECTED_PROVIDERS)-F02_OWNERS)
++scoped_clone_witness.EXPECTED_PROVIDERS=sorted((set(scoped_clone_witness.EXPECTED_PROVIDERS)-F02_OWNERS-NEXT_REMOVED)|NEXT_ADDED)
+ source=DRIVER.read_bytes();assert hashlib.sha256(source).hexdigest()=='9d2d39a0f4a28dc15638fe2c1a01052e64886078d39c3b1e7bf57eccf68bbdfd'
+ old_assert="assert _reuse_elf_undefined(new) == _reuse_elf_undefined(old) - set(original_panics), 'unexpected whole-object import change'"
+-new_assert="assert _reuse_elf_undefined(new) == _reuse_elf_undefined(old) - set(original_panics) - {'idle_halt','allow_oversubscribe','time_sharing','process_idle_callbacks'}, 'unexpected whole-object import change outside four proven F02 Rust definitions'"
++new_assert="assert _reuse_elf_undefined(new) == _reuse_elf_undefined(old) - set(original_panics) - {'idle_halt','allow_oversubscribe','time_sharing','process_idle_callbacks'} - {'arch_mmap_ignored_flags_bridge', 'arch_mmap_error_flags_bridge', 'arch_mmap_supported_flags_bridge', 'arch_prctl_set_register_bridge', 'exit_do_exit_bridge', 'syscall_do_prlimit64_bridge', 'reset_cputime', 'arch_prctl_get_register_bridge', 'arch_do_mmap_bridge', 'set_cputime'} | {'sync_child_event', 'f03_do_exit_debug_v2'}, 'unexpected imports outside exact F02 and next-qualified provider delta'"
+ assert source.decode().count(old_assert)==1
+-adapted=source.decode().replace(old_assert,new_assert).replace('whole_undefined_set_exact_except_removed_panics','whole_undefined_set_exact_except_removed_panics_and_four_F02_owners')
++adapted=source.decode().replace(old_assert,new_assert).replace('whole_undefined_set_exact_except_removed_panics','whole_undefined_set_exact_except_removed_panics_F02_and_exact_next_provider_delta')
+ tree=ast.parse(adapted)
+ names={'_fail','_sha256','_canonical','_regular','_artifact','_reuse_require','_reuse_elf_owning_relocations','_reuse_elf_object_bytes','_reuse_elf_cstring','_reuse_elf_descriptor','_reuse_elf_function','_reuse_elf_undefined','_reuse_elf_panic_targets','_reuse_validate_changed_rust_object','_no_core_panic_undefined'}
+ nodes=[n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name in names or isinstance(n,ast.ClassDef) and n.name=='_ReuseElf']
+@@ -42,15 +44,15 @@
+ exec(compile(ast.Module(body=nodes,type_ignores=[]),str(DRIVER)+':UNCHANGED_READONLY_RUST_GATES','exec'),ns)
+ report=dict(scope=__doc__.splitlines()[0],producer=ref(A/'producer-contract.json'),worker_result=ref(A/'worker-result.json'),validator_source=ref(DRIVER),status='IN_PROGRESS',phases={})
+ try:
+- assert producer['source_profile']==ref(E/'ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/PROFILE.SOURCE-ONLY.json')
++ assert producer['source_profile']==ref(E/'ROOT-F03-F06-QUALIFIED-DEFAULT-BUILD-ADMISSION-1/PROFILE.SOURCE-ONLY.json')
+  for index,row in enumerate(producer['commands']):
+   assert row['returncode']==0 and row['argv']==P['exact_commands'][index]['argv']
+-  actual=B/'kernel'/['rust/mckernel_rust.o','CMakeFiles/mckernel.img.dir/process.c.o','mckernel.img'][index]
++  actual=B/'kernel'/['rust/mckernel_rust.o','CMakeFiles/mckernel.img.dir/syscall.c.o','CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o','mckernel.img'][index]
+   assert ref(actual)==dict(row['output'],path=str(actual))
+- report['phases']['producer']='PASS_EXACT_THREE_ARGV_AND_FRESH_OUTPUT_IDENTITIES'
++ report['phases']['producer']='PASS_EXACT_FOUR_ARGV_AND_FRESH_OUTPUT_IDENTITIES'
+  proof=ns['_reuse_validate_changed_rust_object'](B,D)
+  report['phases']['changed_Rust_9d2d_gate_exact_four_F02_import_removals']=dict(status=proof['status'],proof=str(D/'fresh-compiled-rust-ownership-proof.json'))
+- Elf=ns['_ReuseElf'];rust=Elf(B/'kernel/rust/mckernel_rust.o');process=Elf(B/'kernel/CMakeFiles/mckernel.img.dir/process.c.o')
++ Elf=ns['_ReuseElf'];rust=Elf(B/'kernel/rust/mckernel_rust.o');process=Elf(HostPath(next(r['source']['path'] for r in P['inputs']['objects'] if r['link_token']=='CMakeFiles/mckernel.img.dir/process.c.o')))
+  storage={}
+  for name,size,align in [('resource_set_list',16,16),('resource_set_lock',64,64),('runq_reservation_lock',4,4)]:
+   owned=[s for s in rust.symbols if s['name']==name and s['shndx']!=0]
+@@ -67,13 +69,14 @@
+  for elf in (old,rust):
+   clone=ns['_reuse_elf_function'](elf,'clone_thread')
+   assert clone['bind']==1 and clone['type']==2 and clone['size']==27 and clone['shndx']!=0
+- expected=(E/'current290-actual-build3-qualification-source-1/new-production-rust-undefined.nm').read_text()
+- expected='\n'.join(line for line in expected.splitlines() if line.split()[-1] not in F02_OWNERS)+'\n'
+- assert undefined.stdout==expected, 'all other provider witnesses must remain exact outside exactly four new F02 definitions'
++ expected=(E/'f02-default-actual-qualification-1/production-rust-undefined.nm').read_text()
++ expected_names={line.split(None,1)[1] for line in expected.splitlines()}
++ actual_names={line.split(None,1)[1] for line in undefined.stdout.splitlines()}
++ assert actual_names==(expected_names-NEXT_REMOVED)|NEXT_ADDED, 'all other provider witnesses must remain exact beyond frozen next-cohort source ABI'
+  report['phases']['current_profile_clone_source_object_final_proof']=profile_proof
+  report['phases']['both_old_new_clone_global_defined_27B']=True
+  report['phases']['all_other_undefined_provider_witnesses_exact']=True
+- report['status']='PASS_ACTUAL_F02_PROFILE_PRODUCER_RUST_STORAGE_PANIC_LOGGER_CLONE_FINAL_GATES'
++ report['status']='PASS_ACTUAL_NEXT_PROFILE_PRODUCER_RUST_STORAGE_PANIC_LOGGER_CLONE_FINAL_GATES'
+ except BaseException as error:
+  report['status']='FAIL_FIRST_ACTUAL_VALIDATOR_PRESERVED';report['first_failure']=repr(error);report['traceback']=traceback.format_exc()
+ write(D/'RESULT.json',report)

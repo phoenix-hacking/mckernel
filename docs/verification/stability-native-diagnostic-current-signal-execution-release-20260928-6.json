@@ -1,0 +1,30 @@
+{
+  "schema": "mckernel.execution-release.v1",
+  "recorded_at": "2026-09-28T09:53:35-07:00",
+  "decision": "PASS_EXACT_ONE_SHOT_EXECUTION_RELEASE",
+  "packet": "docs/verification/stability-native-diagnostic-current-signal-execution-packet-20260928-6.md",
+  "packet_sha256": "6cc79499689a8d5d0c15e5f48a13e8e95eaca96f28d7289235647dcfcbf99de3",
+  "bound_commit": "846ebe49c15bf885cb8982890759bb46746e9591",
+  "parent": "/home/holden/mckernel-work/scratch/ndcs-20260928-6",
+  "nonce": "0f54526bcbdfd2433bbc5ac7d783a9e2",
+  "owner_sha256": "038fe29246bb7977565a53f2346fa981072975eb3c55fdb3571ff6e1da6173f1",
+  "command": "/usr/bin/sudo -A /home/holden/anaconda3/bin/python3 -B /home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py --attempt-parent /home/holden/mckernel-work/scratch/ndcs-20260928-6 --nonce 0f54526bcbdfd2433bbc5ac7d783a9e2 --owner-sha256 038fe29246bb7977565a53f2346fa981072975eb3c55fdb3571ff6e1da6173f1",
+  "attempts_released": 1,
+  "preconditions": [
+    "Fresh coordinator capacity, process, container and development-lock checks pass immediately before setup.",
+    "Parent, inner attempt and evidence sibling remain absent before creating the parent once as uid/gid 1000 mode 0700.",
+    "Packets 3, 4 and 5 plus every old parent and nonce remain nonreusable.",
+    "No source, manifest, artifact, profile, command, deadline, oracle, status policy or cleanup rule drifts."
+  ],
+  "verified": [
+    "pushed/fetched source commit and all six runtime source blobs",
+    "strict manifest, complete artifact closure and overlay member replay",
+    "exact 42-argument QEMU plan and 100-byte QMP pathname",
+    "UID1000 CPUs2-5 12GiB 512-task no-network profile",
+    "91-byte stdout, empty stderr, exit-zero and complete-stream oracle",
+    "exact allowed QEMU retirement statuses 0, -SIGTERM and -SIGKILL",
+    "progressive process identity, exact reap and authenticated cleanup evidence",
+    "uncertain creation/client retirement retains owner and development lock"
+  ],
+  "limitations": "One diagnostic protocol attempt only; no retry, application, M04, production-gate or whole-OS acceptance."
+}

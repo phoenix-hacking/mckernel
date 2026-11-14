@@ -1,0 +1,141 @@
+{
+  "artifacts": {
+    "bzImage": {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/bzImage",
+      "sha256": "032653ee0661b059c325e2a0911a9d492805f1a889c4df515473d69a8be105bc",
+      "size": 16130048
+    },
+    "initramfs": {
+      "path": "/home/holden/mckernel/scratch/m07a-261021-1/numa/base.cpio.gz",
+      "sha256": "8c27304dc693f275c470144dbb3af10286ff62d58b7d516bb1080fd1ff3398c9",
+      "size": 12875255,
+      "mode": 33152
+    },
+    "libc": {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/native-proposal/stage-correction-1/stage/root/lib64/libc.so.6",
+      "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+      "size": 2339896,
+      "mode": 33261
+    },
+    "loader": {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/native-proposal/stage-correction-1/stage/root/lib64/ld-linux-x86-64.so.2",
+      "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b",
+      "size": 930600,
+      "mode": 33261
+    },
+    "mcexec": {
+      "path": "/home/holden/mckernel/scratch/m07a-261021-1/mcexec",
+      "sha256": "33f88082a995857c17ca07dab698e51d78064632462b4069b3c2396e0d29a131",
+      "size": 394656,
+      "mode": 33261
+    },
+    "mckernel_image": {
+      "path": "/home/holden/mckernel/scratch/m07a-261021-1/image.artifact",
+      "sha256": "053d59b533665eef9d56fe1b348e699d97159e954fbc1fbff973bbe46113f485",
+      "size": 8435496,
+      "mode": 33261
+    },
+    "native_boot": {
+      "path": "/home/holden/mckernel/scratch/m07a-261021-1/native-boot-two",
+      "sha256": "4312f9a8f53d8db7b2b6be4c7d5e409f5c0f82cf8215728209be0f6ff4a5d5c5",
+      "size": 35784,
+      "mode": 33261
+    },
+    "payload": {
+      "path": "/home/holden/mckernel/scratch/m07a-261021-1/m07.app",
+      "sha256": "5b116839f8cfbb796793d88f7792d21e5e29bd0510d527e8782284ae18239177",
+      "size": 1522832,
+      "mode": 33261
+    },
+    "root_base": {
+      "path": "/home/holden/mckernel/scratch/m07a-261021-1/numa/base.cpio.gz",
+      "sha256": "8c27304dc693f275c470144dbb3af10286ff62d58b7d516bb1080fd1ff3398c9",
+      "size": 12875255,
+      "mode": 33152
+    }
+  },
+  "case_id": "vector.enabled-avx-preservation",
+  "kind": "native-diagnostic-manifest",
+  "modules": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-a7d84db0d8b54b9b94347fd0aff57594/modules/ihk.ko",
+      "sha256": "51b48a9e42eaa2411cab2a28edf9bb5db8b2d648675d083473e926f91dd0e038",
+      "size": 1440392,
+      "mode": 33188
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-a7d84db0d8b54b9b94347fd0aff57594/modules/ihk-smp-x86_64.ko",
+      "sha256": "82c9021f7491fa8bc6d178fe99e7d4b7b6f90838474a9c91b62ddb8edb3d13f8",
+      "size": 11630064,
+      "mode": 33188
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-a7d84db0d8b54b9b94347fd0aff57594/modules/mcctrl.ko",
+      "sha256": "6571ac7eca13559d8bab65125d54facbbc65e84f815d4ff3fc77ec6aa1104972",
+      "size": 1913904,
+      "mode": 33188
+    }
+  ],
+  "payload": {
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "app",
+      "threads"
+    ],
+    "cwd": "/case/work",
+    "env": {
+      "COKERNEL_PATH": "/apps",
+      "PATH": "/usr/bin:/bin"
+    },
+    "oracle": {
+      "exit_code": 0,
+      "stderr_hex": "",
+      "stdout_hex": "454e41424c45445f52455155495245445f584352303d303030303030303030303030303030370a454e41424c45445f53595343414c4c5f504153530a454e41424c45445f46555445585f504153530a454e41424c45445f5349474e414c5f504153530a454e41424c45445f50524f46494c455f504153530a"
+    },
+    "stderr_limit_bytes": 1024,
+    "stdout_limit_bytes": 1024
+  },
+  "profile": {
+    "memory_mib": 8192,
+    "name": "native-diagnostic-4vcpu-8192mib",
+    "numa_nodes": 2,
+    "vcpus": 4
+  },
+  "schema_version": 1,
+  "staging": {
+    "base_initramfs": {
+      "path": "/home/holden/mckernel/scratch/m07a-261021-1/numa/base.cpio.gz",
+      "sha256": "8c27304dc693f275c470144dbb3af10286ff62d58b7d516bb1080fd1ff3398c9",
+      "size": 12875255,
+      "mode": 33152
+    },
+    "derived_initramfs": {
+      "path": "/home/holden/mckernel/scratch/m07a-261021-1/numa/lifecycle.cpio.gz",
+      "sha256": "a12b05c9cc46362b82284a8ed4f16bb3bfb5076938df9160de1bd0e061f823a0",
+      "size": 14023607,
+      "mode": 33152
+    },
+    "collector": {
+      "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/boot-collector-profile-correction-1/bounded-compile-correction-1/init",
+      "sha256": "9508643afbbd962cf24822896505b134d3d9ae7da4dc1163be861a2a3f65c0b4",
+      "size": 1022088,
+      "mode": 33216
+    },
+    "overlay_source": {
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_overlay.py",
+      "sha256": "46d41bc0727fa77e4126e739f25352c53eadf2e1fa8e23ef06a6e46c9b3ba27d",
+      "size": 26579,
+      "mode": 33152
+    },
+    "overlay_manifest": {
+      "path": "/home/holden/mckernel/scratch/m07a-261021-1/numa/overlay-manifest.json",
+      "sha256": "86126b0b4ba4250397b63758a486ee5ccd63234cc24889c384aa8dd01e670869",
+      "size": 19299,
+      "mode": 33152
+    }
+  }
+}

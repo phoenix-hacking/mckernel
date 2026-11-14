@@ -1,0 +1,7 @@
+open /dev/mcd0 flags=2
+ioctl fd=17 request=112903
+cpu_release count=3
+cpu[0]=1
+cpu[1]=2
+cpu[2]=3
+close 17

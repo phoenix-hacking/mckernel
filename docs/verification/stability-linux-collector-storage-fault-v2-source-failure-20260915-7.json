@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_failure",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "attempt": 7,
+  "status": "FAIL_SOURCE_TEST",
+  "recorded_utc": "2026-09-15T15:59:35Z",
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-failure-20260915-7.tar.gz",
+    "sha256": "2e8548f282932e35d847b1084cd8279f0fdac3a2a828912ee7471611e50293c6",
+    "size": 37203,
+    "members": 11
+  },
+  "failure": "selector 4 setup-capture construction reread the intentionally absent report while adding positional report-artifact bindings",
+  "correction": "construct the setup words independently before report creation and use those bytes for both present-report and absent-report post-fork fixtures",
+  "original_test_stream_retained": true,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

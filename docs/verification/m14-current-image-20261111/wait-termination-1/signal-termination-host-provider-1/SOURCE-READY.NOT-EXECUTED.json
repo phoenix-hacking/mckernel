@@ -1,0 +1,84 @@
+{
+  "schema": "m14-signal-termination-host-source-ready-v1",
+  "utc": "2026-11-11T07:37:29.311042+00:00",
+  "status": "SOURCE_READY_NOT_EXECUTED",
+  "patch": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/signal-termination-host-provider-1/SIGNAL-TERMINATE-HOST-PROVIDER.patch",
+    "bytes": 7950,
+    "sha256": "f010dbd46c8b49b0b97350f977dfc4688c53db17b49443998462922d267ce20c"
+  },
+  "manifest": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/signal-termination-host-provider-1/PATCH-MANIFEST.json",
+    "bytes": 2339,
+    "sha256": "946624f4c33c38975e0f6bf0e2b4fd4836cbca478c3867f50d83a55994d96ff5"
+  },
+  "source_checks": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/signal-termination-host-provider-1/SOURCE-CHECKS.json",
+    "bytes": 2851,
+    "sha256": "fdd4d56271c31d9e16a06e3f529a88de06da54248179f34c89963c0ba6d7e6c5"
+  },
+  "contract": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/signal-termination-host-provider-1/CONTRACT.json",
+    "bytes": 9609,
+    "sha256": "56b6b244b4a684a9aa69ada6cfe3bf6eb638960eae8455693e4a84a53d4ba52e"
+  },
+  "source_bindings": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/signal-termination-host-provider-1/SOURCE-BINDINGS.json",
+    "bytes": 16518,
+    "sha256": "d3cd482a494c7718ae54b5a183d35134c46edb9cc53d52112158f53e43792f9d"
+  },
+  "next_validation_proposal": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/signal-termination-host-provider-1/NEXT-VALIDATION.PROPOSED.json",
+    "bytes": 3555,
+    "sha256": "1636181dfd331efef3eda8286eab2707853532605bde363d9d07b933d64419b2"
+  },
+  "candidate_Rust": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/signal-termination-host-provider-1/candidate/kernel/rust/f03_terminate.rs",
+    "bytes": 24237,
+    "sha256": "f62d22c9f5b395617135f84869aebc100270cab34fdee2f810e980c29ba739f3"
+  },
+  "canonical_source_preimages": [
+    {
+      "relative_path": "kernel/CMakeLists.txt",
+      "baseline": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/signal-termination-host-provider-1/baseline/kernel/CMakeLists.txt",
+        "bytes": 62796,
+        "sha256": "06e818515cb5a79e9e8355b1f10db1dd44c70d67312a238855a4df8c640dc7c8"
+      },
+      "candidate": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/signal-termination-host-provider-1/candidate/kernel/CMakeLists.txt",
+        "bytes": 63702,
+        "sha256": "1e67ca92144f68bea1a17424c9231c05a804e5724e62b73d8172e5ef45ee8dbc"
+      }
+    },
+    {
+      "relative_path": "kernel/syscall.c",
+      "baseline": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/signal-termination-host-provider-1/baseline/kernel/syscall.c",
+        "bytes": 964476,
+        "sha256": "e2bb3e910dcaecf23a8e131b347b401d7baf372f3d749a073e03458c429f1947"
+      },
+      "candidate": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/signal-termination-host-provider-1/candidate/kernel/syscall.c",
+        "bytes": 966076,
+        "sha256": "657bb821e651ccaeaff79c14a5f456d2ea81937ed0efc271a319d3563343e0a3"
+      }
+    },
+    {
+      "relative_path": "kernel/rust/f03_terminate.rs",
+      "baseline": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/signal-termination-host-provider-1/baseline/kernel/rust/f03_terminate.rs",
+        "bytes": 21974,
+        "sha256": "c32cbef93b4441aa8adc12090b9d02d3c9bedbcc8fd99aa3a1b6111f0f3dd328"
+      },
+      "candidate": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/signal-termination-host-provider-1/candidate/kernel/rust/f03_terminate.rs",
+        "bytes": 24237,
+        "sha256": "f62d22c9f5b395617135f84869aebc100270cab34fdee2f810e980c29ba739f3"
+      }
+    }
+  ],
+  "new_module_or_stub": false,
+  "existing_transaction_body_bytes_unchanged": true,
+  "tests_compilers_SUT_native_or_canonical_actions": false
+}

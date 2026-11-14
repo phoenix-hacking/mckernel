@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "record_kind": "native_collector_lifecycle_raw_expanded_depth_source_checkpoint",
+  "task_id": "M02-C-lifecycle-raw-expanded-depth-source",
+  "attempt": 2,
+  "status": "PASS_RAW_EXPANDED_DEPTH_SOURCE_CHECKPOINT_ONLY",
+  "recorded_utc": "2026-09-15T12:49:00Z",
+  "base_commit": "24f07b9873cbf5083a05a8c70e2c1e8a96d97c31",
+  "reviews": {
+    "packet": "PASS_RAW_EXPANDED_DEPTH_PACKET_ONLY",
+    "source_attempt_1": "FAIL_EXACT_VALIDATIONERROR_CLASS_ASSERTIONS_MISSING",
+    "source_attempt_2": "PASS_RAW_EXPANDED_DEPTH_SOURCE_ONLY",
+    "preliminary_evidence": "PASS_RAW_EXPANDED_DEPTH_SOURCE_PRELIM_ONLY",
+    "evidence": "PASS_RAW_EXPANDED_DEPTH_EVIDENCE_ONLY"
+  },
+  "preserved_failures": {
+    "materialization_attempt_1": "FAIL_RECORD_INSERTED_IN_ORDINARY_VECTORS",
+    "test_invocation_attempt_1": "FAIL_WRONG_UNITTEST_CLASS_SELECTOR_TWO_LOADER_ERRORS",
+    "source_test_attempt_1": "FAIL_SEVEN_STALE_133_INVENTORY_ASSERTIONS",
+    "source_review_attempt_1": "FAIL_EXACT_VALIDATIONERROR_CLASS_ASSERTIONS_MISSING"
+  },
+  "source": {
+    "harness_sha256": "98481fc3f3077cc9c580d24f1f8aad1519f93e75afbb0c9d9980400308d8ecb9",
+    "vectors_sha256": "b4586b6c107a9ba5e300000e771bbd267e90218ea1e59fdad25f52711a16a90e",
+    "expected_sha256": "86473f7b4027b9a06e064788d7ed41115b28705a62edc199879990310323a7f7",
+    "test_sha256": "191c9e27e34cb057353069bc4e39ed57e35b6dd4077fb4c69b2a690c6a8eed5b"
+  },
+  "artifact": {
+    "path": "scripts/tests/fixtures/native-lifecycle-model-v1/raw-invalid/oversized-document.json",
+    "sha256": "9a6384d7058b15fa74ef39f6bd6e5745a1fbec565abb06491714704d3d88e07c",
+    "size": 1048577
+  },
+  "archive": {
+    "path": "docs/verification/evidence/stability-native-collector-lifecycle-raw-expanded-depth-source-checkpoint-20260915-1.tar.gz",
+    "sha256": "596179500c6cb873812b8a5836e08b401625101fb8103d18a638dbc595752779",
+    "members": 13
+  },
+  "checks": {
+    "python_3_9_12": {"tests_passed": 14, "tests_failed": 0},
+    "python_3_8_10": {"tests_passed": 14, "tests_failed": 0},
+    "positive_input_bytes": 346,
+    "negative_input_bytes": 348,
+    "first_133_lexical_sha256": "7b84246f678c8239edd5fc504b63c2696dc64c0b5a71075cf3d71a493f0c9db8",
+    "new_raw_cases": 1,
+    "cumulative_raw_cases": 134,
+    "scope": "RAW_EXPANDED_ARGUMENT_DEPTH_SOURCE_ONLY"
+  },
+  "raw_full_matrix_frozen": false,
+  "corpus_complete": false,
+  "compiler_execution": false,
+  "model_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

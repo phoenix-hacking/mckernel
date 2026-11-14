@@ -1,0 +1,46 @@
+{
+  "cwd": "/home/holden/mckernel",
+  "limits": "CPU0; AS512MiB; CPU45s; nofile128; fsize16MiB; core0; monotonic wall60s TERM then 5s KILL",
+  "matcher": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/MANUAL-RESUME-M14-20261030-2/perf-counter-runner-successor-1/serial_supervised.py",
+    "sha256": "7d8e744c755b37213abb81e9ce8b2220edc2b982fdfcbd9b61b3b45815e1dbfd"
+  },
+  "nightly_rehashed": false,
+  "owner_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=536870912:536870912",
+    "--cpu=45:45",
+    "--nofile=128:128",
+    "--fsize=16777216:16777216",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-nonheld13-source-map-1/current-source6153-1/run_fixed_source_once.py"
+  ],
+  "prlimit_sha256": "06a57e4767f1bdfcc8c5a39b4b58decb9366447b007a8bdd9d6b12d1e6698d8c",
+  "python": {
+    "path": "/home/holden/anaconda3/bin/python3.9",
+    "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb"
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "supervisor": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-nonheld13-source-map-1/current-source6153-1/run_fixed_source_once.py",
+    "sha256": "bdd1729b1fe5346879f122b1bdd3c78de74be9c5ccc763f2bc0967a60ce56fc1"
+  },
+  "taskset_sha256": "28f2dd426247d7d1d794c0fb8a723efc6a1ae3c56393a238b180fe9a0dc32f1c",
+  "worker": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-nonheld13-source-map-1/current-source6153-1/validate_fixed_source.py",
+    "sha256": "803f77224649377398cf32a00f98a518c23f807bcaa7d932be21d837d955b77b"
+  },
+  "worker_argv": [
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-nonheld13-source-map-1/current-source6153-1/validate_fixed_source.py"
+  ]
+}

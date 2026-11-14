@@ -1,0 +1,48 @@
+warning: struct `Native` is never constructed
+  --> /home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01p02-production-cutover-1/output-1/build/rust-boot-tools/platform.rs:33:12
+   |
+33 | pub struct Native {pub sudo:bool}
+   |            ^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: associated function `new` is never used
+  --> /home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01p02-production-cutover-1/output-1/build/rust-boot-tools/platform.rs:35:21
+   |
+35 | impl Native {pub fn new()->Self{Self{sudo:unsafe{geteuid()!=0}}}}
+   | -----------         ^^^
+   | |
+   | associated function in this implementation
+
+warning: function `umask` is never used
+  --> /home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01p02-production-cutover-1/output-1/build/rust-boot-tools/platform.rs:34:16
+   |
+34 | extern "C" {fn umask(mask:u32)->u32;fn geteuid()->u32;}
+   |                ^^^^^
+
+warning: function `geteuid` is never used
+  --> /home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01p02-production-cutover-1/output-1/build/rust-boot-tools/platform.rs:34:40
+   |
+34 | extern "C" {fn umask(mask:u32)->u32;fn geteuid()->u32;}
+   |                                        ^^^^^^^
+
+warning: struct `Options` is never constructed
+ --> /home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01p02-production-cutover-1/output-1/build/rust-boot-tools/stop.rs:4:47
+  |
+4 | #[derive(Default,Debug,PartialEq)] pub struct Options {pub rmmod:String,pub kill:bool,pub retain:bool}
+  |                                               ^^^^^^^
+
+warning: function `parse` is never used
+ --> /home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01p02-production-cutover-1/output-1/build/rust-boot-tools/stop.rs:5:8
+  |
+5 | pub fn parse(args:&[String])->Result<Options,String> {
+  |        ^^^^^
+
+warning: function `execute` is never used
+  --> /home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01p02-production-cutover-1/output-1/build/rust-boot-tools/stop.rs:11:8
+   |
+11 | pub fn execute(h:&mut dyn Host,c:&Config,o:&Options)->i32 {
+   |        ^^^^^^^
+
+warning: 7 warnings emitted
+

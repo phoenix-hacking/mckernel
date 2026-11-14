@@ -1,0 +1,65 @@
+{
+  "argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=3",
+    "60",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=55:55",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/stage-preparation-1/run_two_commands_source_bound.py"
+  ],
+  "execution_profile": {
+    "bytes": 2857,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/stage-preparation-1/EXECUTION-PROFILE-SOURCE-BOUND.json",
+    "sha256": "d0baa0a9a82a17edb172d20d29b61b55de10377d8fa6a8820ce5f89dbc7d92bd"
+  },
+  "executor": {
+    "bytes": 14700,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/stage-preparation-1/run_two_commands_source_bound.py",
+    "sha256": "6d4b947afbd7ef8f678c523854689a32137fc8ece81ae2dd0b50f83d7f5c68e0"
+  },
+  "fixed_commands": [
+    {
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/stage-preparation-1/stage_three_round_init.py"
+      ],
+      "cpu_seconds": 45,
+      "role": "metadata-preserving-init-only-stage",
+      "wall_seconds": 45
+    },
+    {
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/stage-preparation-1/prepare_current_pair_consumer.py"
+      ],
+      "cpu_seconds": 10,
+      "role": "actual-owner-runner-full-parent",
+      "wall_seconds": 10
+    }
+  ],
+  "native_runtime_release": false,
+  "required_absent_paths": [
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/stage-preparation-1/stage-three-rounds-1",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/stage-preparation-1/ordinary-chain-capture-1",
+    "/home/holden/mckernel-work/scratch/r2053-261020-1",
+    "/home/holden/mckernel-work/scratch/r2053m-261020-1",
+    "/home/holden/mckernel-work/scratch/r2053f-261020-1",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/stage-preparation-1/actual-native-preflight-fresh8b.json",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/stage-preparation-1/actual-fresh8b-consumer-parent-result.json"
+  ],
+  "status": "PENDING_INDEPENDENT_ORDINARY_REVIEW_AND_ROOT_CPU7_ADMISSION"
+}

@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-055",
+  "packet_version": 1,
+  "context_sha256": "d64e5ff4f705a24f2aeea873bf014e46a5da6b976e039c295a1d920cf23d447c",
+  "started_utc": "2026-09-09T12:20:00Z",
+  "finished_utc": "2026-09-09T12:21:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "ipc.pipe-same-process",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/ipc/ipc.pipe-same-process.c",
+      "oracle": "scripts/application-tests/oracles/ipc.pipe-same-process.json",
+      "changed_files": ["scripts/application-tests/cases/ipc/ipc.pipe-same-process.c", "scripts/application-tests/oracles/ipc.pipe-same-process.json"],
+      "parameter_vectors": {"payload": ["PING"], "bytes": [4], "writers": [1], "readers": [1]},
+      "implemented_operations": ["same-process pipe", "concurrent reader/writer threads", "exact bytes and writer-close EOF"],
+      "unresolved_oracle_notes": ["Thread scheduling and descriptor-retirement evidence require Max review."],
+      "max_reviewer_question": "Confirm exact byte ordering and EOF after the final writer closes."
+    },
+    {
+      "case_id": "ipc.pipe-nonblock",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/ipc/ipc.pipe-nonblock.c",
+      "oracle": "scripts/application-tests/oracles/ipc.pipe-nonblock.json",
+      "changed_files": ["scripts/application-tests/cases/ipc/ipc.pipe-nonblock.c", "scripts/application-tests/oracles/ipc.pipe-nonblock.json"],
+      "parameter_vectors": {"read_flags": ["O_NONBLOCK"], "initial_bytes": [0], "sentinel": ["0xa5 repeated"], "later_payload": ["OK"]},
+      "implemented_operations": ["empty nonblocking read", "EAGAIN and sentinel capture", "later write/read while writer remains open"],
+      "unresolved_oracle_notes": ["Nonblocking flag and endpoint lifetime evidence require Max review."],
+      "max_reviewer_question": "Confirm EAGAIN causes no buffer mutation and later data remains readable."
+    },
+    {
+      "case_id": "ipc.poll-readable",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/ipc/ipc.poll-readable.c",
+      "oracle": "scripts/application-tests/oracles/ipc.poll-readable.json",
+      "changed_files": ["scripts/application-tests/cases/ipc/ipc.poll-readable.c", "scripts/application-tests/oracles/ipc.poll-readable.json"],
+      "parameter_vectors": {"initial_timeout_ms": [0], "payload": ["DATA"], "payload_bytes": [4], "after_timeout_ms": [1000]},
+      "implemented_operations": ["zero-timeout pre-poll", "fixed write", "POLLIN post-poll and exact read"],
+      "unresolved_oracle_notes": ["Poll transition ordering and descriptor-retirement evidence require Max review."],
+      "max_reviewer_question": "Confirm readiness is observed by poll itself without sleep-based synchronization."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/ipc/ipc.pipe-same-process.c", "sha256": "7c6498329d45c435e5142a622cfef0d626e1807c73a10f377b784853842021b8"},
+    {"path": "scripts/application-tests/oracles/ipc.pipe-same-process.json", "sha256": "5bcbcdfad75d5bcd8c7eeae10f73a5f02ef94e8e6d301e4901d71ad487858484"},
+    {"path": "scripts/application-tests/cases/ipc/ipc.pipe-nonblock.c", "sha256": "9e965ce525789413bcf30ede3838990f36ff09a7e204ceae9763f3f08f93bb6a"},
+    {"path": "scripts/application-tests/oracles/ipc/ipc.pipe-nonblock.json", "sha256": "223f5a4ae55c6ca5b9717a1f7dc6c24387d54ce11d40b52aaa5f7f476c84a370"},
+    {"path": "scripts/application-tests/cases/ipc/ipc.poll-readable.c", "sha256": "4ca5c83250d24443ec19b0e8fd9615f12bd840232146eedffb8c765be483683b"},
+    {"path": "scripts/application-tests/oracles/ipc/ipc.poll-readable.json", "sha256": "2f2db5c27c91df16e0a7d19e7e1f40558c65e9933b7cba4ff3aabea8a9accd42"},
+    {"path": "docs/verification/evidence/application-drafts-20260909/ultra-handoff-1/packet-055/context.json", "sha256": "d64e5ff4f705a24f2aeea873bf014e46a5da6b976e039c295a1d920cf23d447c"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-055.json --emit-context /tmp/application-packet-055-context-20260909-1.json", "outcome": "PASS; planning metadata only; runtime_authorized=false"},
+    {"command": "python3 -m json.tool packet-055/report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Same-process pipe transfer, nonblocking EAGAIN, and poll readability cases need final IPC, descriptor, scheduler, and canonical record review."],
+  "blocked_execution_capabilities": ["current-inputs", "runtime-transport-fault-injection", "runner-contract"],
+  "first_failure_event": null,
+  "max_escalation": ["Review pipe transfer and EOF", "Review O_NONBLOCK EAGAIN and sentinel", "Review poll readiness transition"],
+  "next_packet_id": "packet-056"
+}

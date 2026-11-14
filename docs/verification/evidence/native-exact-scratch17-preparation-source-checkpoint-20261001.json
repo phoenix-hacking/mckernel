@@ -1,0 +1,69 @@
+{
+  "schema": "mckernel.native-exact-scratch17-preparation-source-checkpoint.v1",
+  "recorded_at_utc": "2026-10-01T12:04:13Z",
+  "status": "PASS_SOURCE_PREPARATION_ONLY",
+  "target_commit": "50b084322610a9326b1b7b528edd4cd73b635632",
+  "target_tree": "d28aaf4fa3df195e7ea36c4fa51b9392bfcb5620",
+  "target_remote_ancestor": "41c7f1b1a2dd35ace15ef702e4a74c25d4f7d74a",
+  "target_delta": {
+    "base": "1e95abdc2b124c19f16b88cdb21600c768a10c2d",
+    "additions": 21,
+    "modifications": 13
+  },
+  "scratch17_preparation": {
+    "packet": {
+      "path": "docs/verification/evidence/native-exact-candidate-delta-preparation-scratch17-20261001.py",
+      "sha256": "c5c8d8ca9c4bc4d18f439ce811646c48b57246b9adc6e516d620b9e6f8cc8a10"
+    },
+    "tests": {
+      "path": "scripts/tests/test_native_exact_candidate_delta_preparation_scratch17_20261001.py",
+      "sha256": "e62409558f2a84dd2b51848863be6a0347206e987cb62491c4fd5717e9051c92",
+      "result": "PASS 12 tests"
+    },
+    "production_validate_only": {
+      "result": "PASS",
+      "elapsed_seconds": 55.315,
+      "authenticated_prior_pairs": 486,
+      "initial_link_count": 2,
+      "expected_final_link_count": 3,
+      "artifacts_created": false
+    },
+    "review_decision": "PASS_SOURCE_PREPARATION_ONLY",
+    "production_preparation_executed": false
+  },
+  "future_image_exclusion": {
+    "owner_path": "scripts/native_rust_exact_mckernel_image_container_owner.py",
+    "owner_sha256": "1737f0605cfaf4598703c11ad1d0f50647684595997fa367b2b77ade64f9cfb5",
+    "test_path": "scripts/tests/test_native_rust_exact_mckernel_image_container_owner.py",
+    "test_sha256": "44af86b1646b26efa4493f7838402cee62a622510f002d8be63cb09f4440dc48",
+    "tests_result": "PASS 28 tests plus three independent mutations",
+    "active_exclusion": "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch17-image-1.json",
+    "review_decision": "PASS_SOURCE_REVIEW",
+    "execution_released": false
+  },
+  "future_tool_image": {
+    "packet_path": "docs/verification/evidence/native-exact-tool-image-scratch17-toolimage-1-execution-packet-20261001.py",
+    "packet_sha256": "89ffa8e6fb7603ac562310796ca9662018a6ebcc5f4dffe6cd141787c96d6545",
+    "test_path": "scripts/tests/test_native_exact_tool_image_scratch17_toolimage_1_20261001.py",
+    "test_sha256": "d34cb6f6aad52082aebb9fcab05851bc56e9cbc523b0691057d9d93c17ecc12a",
+    "tests_result": "PASS 25 packet/producer tests and eight independent negative probes",
+    "review_decision": "PASS_SOURCE_PACKET_ONLY",
+    "execution_released": false,
+    "missing_execution_gate": "separate reviewed release binding live process/container/lease reconciliation and resource measurements"
+  },
+  "rejected_wip": {
+    "path": "scripts/tests/test_native_shutdown_v5_abi_blocker_20261001.py",
+    "sha256": "831307c07cf1c45300e216c4fe966cd23ab00fca9bfde97f9e051027c7405a1f",
+    "decision": "BLOCK_SEMANTIC_REGRESSION_COVERAGE",
+    "staged_or_accepted": false,
+    "reason": "manual transaction model still does not execute production admission/registry paths"
+  },
+  "acceptance": {
+    "source_preparation_ready": true,
+    "production_preparation_executed": false,
+    "build_executed": false,
+    "guest_executed": false,
+    "formal_application_acceptance": false,
+    "os_complete": false
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "schema": "mckernel.native-exact-mckernel-image-exportset-release.v1",
+  "recorded_at": "2026-09-30T12:36:59-07:00",
+  "head": "ceb49f3c98baa28e210bc8291a4f3167662c365e",
+  "status": "PASS_EXECUTION",
+  "candidate_sha": "4e99a82c9b87a7cf3d6002b75ec380fef37af7a1",
+  "ihk_sha": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+  "packet": {
+    "toolchain": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-toolchain-4e99a82c-exportset-17.json",
+      "sha256": "471ed7e365a1a676713292691bdf5501efa10036cab7b41b0fd89d7aaece9d72",
+      "size": 80765577,
+      "identity": "1831:1712398",
+      "mode": "0600"
+    },
+    "request": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-request-4e99a82c-exportset-17.json",
+      "sha256": "36abddefabeead3889027646ec732e497a10688b607eefbfd55aa304d8827488",
+      "size": 43891119,
+      "identity": "1831:1712400",
+      "mode": "0600"
+    },
+    "image_id": "sha256:5315d34307c6658907d3e74997b8e0b0637d237a26c070fe5dc5b03ee7667080",
+    "image_receipt_sha256": "1ea38c3372a34de11ed0ca23aa76a87706fe172617d2dcb3e955a0a65a7baf08",
+    "toolchain_lock_sha256": "fd3d7a13e1b8b5d103f7e59d22f17c9e4b99cc937637decaa66749acfae6c802",
+    "inventory_entries": {
+      "out_closure": 140053,
+      "nightly": 35973,
+      "kernel": 18924,
+      "backup": 86,
+      "producer_evidence_files": 92
+    }
+  },
+  "roots": {
+    "work": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-work-4e99a82c-exportset-17",
+      "identity": "1831:1704202",
+      "mode": "0700",
+      "empty": true
+    },
+    "owner_evidence": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-owner-evidence-4e99a82c-exportset-17",
+      "identity": "1831:1704601",
+      "mode": "0700",
+      "empty": true
+    },
+    "output_evidence_attempt_lease_exclusion_absent": true
+  },
+  "source_sha256": {
+    "owner": "74eb5f720381be43eb581ed89919b44d598f35f004433350a6506849ba7e8c3d",
+    "preparer": "0de9550ba2421e22271987bb5a6295ae5d5e1a54bb6fb609062112d55fd49ba8",
+    "driver": "3867f6ccfe345f69d15dbca9bc6b1a3b2f7df28d74ab5156eaa073c9ed885fcf",
+    "provenance": "cc243126ab8cc0754c62175c77e46d6ba0d98294f8168cc77893a2c12249cd1a",
+    "host_owner": "a8c4c9fc61fab312e3a6e48e93b417453ec12e6543d6adbb7038933f92e79155"
+  },
+  "reviews": {
+    "source": {
+      "reviewer": "/root/image_request_source_review_233",
+      "result": "PASS_SOURCE"
+    },
+    "packet": {
+      "reviewer": "/root/actual_image_packet_audit_235",
+      "result": "PASS_PACKET",
+      "owner_validate": "PASS"
+    },
+    "execution": {
+      "reviewer": "/root/actual_image_packet_execution_review_235",
+      "result": "PASS_EXECUTION",
+      "scope": "one exact serialized image-build invocation only"
+    }
+  },
+  "profile": {
+    "cpus": "2-5",
+    "jobs": 4,
+    "memory_bytes": 12884901888,
+    "swap_bytes": 12884901888,
+    "pids": 512,
+    "network": "none",
+    "ipc": "private",
+    "read_only_root": true,
+    "capabilities": "drop ALL",
+    "no_new_privileges": true,
+    "sole_rw_bind": "/work",
+    "tmpfs": "/tmp:rw,nodev,nosuid,size=256m"
+  },
+  "resources": {
+    "host_free_bytes": 19862888448,
+    "scratch_free_bytes": 15371608064,
+    "memory_available_kib": 30057872,
+    "host_floor_bytes": 17179869184,
+    "scratch_floor_bytes": 12884901888,
+    "heavy_owner_absent": true
+  },
+  "released_command": [
+    "python3", "-I", "-B",
+    "scripts/native_rust_exact_mckernel_image_container_owner.py",
+    "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-request-4e99a82c-exportset-17.json"
+  ],
+  "conditions": [
+    "remeasure host/scratch floors immediately before start",
+    "run at most this one serialized heavy image owner",
+    "preserve every failure, terminal container identity, lease and cleanup evidence",
+    "do not retry automatically"
+  ],
+  "acceptance": "This releases one current-image build attempt only. It is not build success, guest behavior, application acceptance or OS completion."
+}

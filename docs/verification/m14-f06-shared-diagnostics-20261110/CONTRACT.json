@@ -1,0 +1,241 @@
+{
+  "ABI_reuse": {
+    "metadata": "Actual generated20a f06_signal_metadata.rs0da870f9/siteJSONf4b74627/origin5d8287b9 from real arch4f6ea41/profile49dba541/sourcebinding2f27. WholeON must provide the real generated include path, retain origin filename/logical lines and no hostfile prefix rewrite.",
+    "native_frame": "Real current C sigsp and Rust native_signal::Frame already assert regs40/fpregs224/sigmask296/info424/size552; C assertions remain outside do_signal body guard and were actually compiled in20a. Do not introduce a new ABI/layout source producer or change source-origin SHA.",
+    "other": "Existing ff48 ABI has Thread/Process/SigCommon/SigPending/KSigAction128-info and realMCS node; current TSS104 align1/rsp0off4 +x86CpuLocaltss176, userctx224. Existing XSAVE boot extent/mask and generated config are retained, never guessed fixed hardware size."
+  },
+  "acceptance_delta": 0,
+  "all_five_areas": [
+    {
+      "id": "M14-06-01-DEFAULT",
+      "preserved": "No wrapper/TLS/clone/mmap/shm source, ABI, selector or current72cfg dependency is removed; accepted helper proofs remain only at their exact scope."
+    },
+    {
+      "advance": "Real signal delivery, native frame/error/altstack/restart, shared context and xstate entry plus real writable debug constants can receive coherent whole-image Rust ownership after source correction and actual qualification.",
+      "id": "M14-06-02-DEFAULT"
+    },
+    {
+      "advance": "Real ptrace diagnostic owner plus complete stop/trap event/notify/wakeup/schedule signal behavior; old regset proof is not replayed or substituted for runtime.",
+      "id": "M14-06-03-DEFAULT"
+    },
+    {
+      "id": "M14-06-04-DEFAULT",
+      "preserved": "No vDSO mapping/state/time/TSC source/selector/data ownership changes. Actual saved mappings/providers remain matching baseline, must still join the new whole image."
+    },
+    {
+      "id": "M14-06-05-DEFAULT",
+      "preserved": "No cross-process memory, move-pages, target reference or NUMA callback changes. No old private mmap/exec/TERMRESET/DIRECT-TID/LIVE-REF fixture is read or replayed."
+    }
+  ],
+  "at": "2026-11-10T19:50:33.796849+00:00",
+  "decision": {
+    "default": "Current option literalOFF staysOFF. Proposed explicit wholeON is a new source/profile qualification, not supported-default or native acceptance. Actual matching complete coverage and applicable original behavior remain prerequisites to any later supported-profile default promotion.",
+    "remaining_four": "All four have genuine complete current Rust source and an existing paired whole-F06 selector. The discovered shared mutable diagnostic state must be corrected before selecting the whole entry. No placeholder/unsupported-branch exclusion or invented external contract is needed.",
+    "scope": "One production Rust file changes. No shared CMake/lib/archC/source-origin/witness/caller/ABI/default flag edit. The current frozen four-change cohort remains independent."
+  },
+  "diagnostic_fix": {
+    "concurrency_limit": "A defined atomic state strengthens formerly racy sharing; no claim that an undefined C concurrent interleaving must be reproduced. No pre-call log ticket, strict global64 cap under overlap, new kernel lock/IRQ/refcount/allocation or formatter callback ordering. On x86_64 actual codegen must use supported lock-free atomic operations, no unexpected libatomic/runtime edge.",
+    "correction": "Packed AtomicU64 PIDhigh32/countlow32, Relaxed CAS. Atomicity defines diagnostic sharing only; no kernel state is published. C sequential entry-reset, samePID budget preservation, preprint<64 and fresh postformatter reread/increment are retained, including PID change during formatting.",
+    "defect": "Two raw static mut PID/count values are shared across processes/CPUs. Entry reset occurs before locking, and different sigcommon locks do not serialize one another. Raw pointers/volatile do not establish atomicity; old helper comments explicitly excluded this valid-concurrency race.",
+    "needed_test": "Only exact changed atomic functions are compiled/run as an isolated stdHOST counter regression. No baseline UB execution, kernel signal/frame/GS/XSAVE/allocator/coredump/terminate/reset/release/native operation or fake provider function.",
+    "public_helper": "Original arch_do_signal_core_terminate_result ABI and caller-owned counter order are retained; no shared global pointer passes to it. Production atomic wrapper calls same exact formatter and same exact allocation/copy/dump/terminate tail."
+  },
+  "four_owners": [
+    {
+      "ABI": "unsafe extern C fn(CULong,*mut c_void,*mut Thread,*mut SigPending,CInt)->CInt",
+      "C_source": "arch/x86_64/kernel/syscall.c:1995",
+      "Rust_source": "kernel/rust/f06_signal_tail.rs: whole module; public do_signal and complete real sub-bodies",
+      "baseline_C_bytes": 4220,
+      "callers": [
+        "current real check_signal dispatch: syscall_policy.rs24667/24772, consumes detached pending and changes num only on nonzero restart",
+        "real rt_sigtimedwait source caller24432/24630, same C declaration process.h911",
+        "root C fallback callers retain existing guards; no extra supported caller removed"
+      ],
+      "name": "do_signal",
+      "ownership": "Detached pending, current live Thread/sigcommon and original process/parent/report references; exact writerIRQ lock/node through ignore/handler/default transfer path; pending is never accessed after consume. No added refcount/reset/finalrelease authority.",
+      "selector": [
+        "f06_do_signal_whole_candidate",
+        "MCKERNEL_RUST_F06_DO_SIGNAL_WHOLE"
+      ]
+    },
+    {
+      "ABI": "extern C fn(CInt,CLong) -> void",
+      "C_source": "arch/x86_64/kernel/syscall.c:1649",
+      "Rust_source": "kernel/rust/f06_signal_ptrace_diagnostics.rs",
+      "baseline_C_bytes": 72,
+      "callers": "Actual Rust ptrace_read_regset/ptrace_write_regset unsupported-type branches via current extern declaration290; old regset-length proofs reused only at exact unchanged scope",
+      "complete_behavior": "event1 read format, event2 write format, other no formatter; type low32 is passed as unsigned int for exact%x; no target/register ownership change",
+      "name": "arch_ptrace_regset_log_bridge",
+      "selector": [
+        "f06_signal_ptrace_diagnostics_candidate",
+        "MCKERNEL_RUST_F06_PTRACE_REGSET_LOG"
+      ]
+    },
+    {
+      "ABI": "unsafe extern C fn(CLong)->CLong",
+      "C_source": "arch/x86_64/kernel/syscall.c:518",
+      "Rust_source": "kernel/rust/f06_signal_ptrace_diagnostics.rs",
+      "baseline_C_bytes": 59,
+      "callers": "Actual sys_rt_sigreturn native sigreturn Err branch11258; live current-thread/IRQ termination obligations unchanged",
+      "complete_behavior": "Exact native signal return rejected:%ld diagnostic, real void terminate(0,SIGSEGV=11), -EFAULT=-14 if endpoint returns; no noreturn substitution",
+      "name": "arch_native_signal_bad_frame_bridge",
+      "selector": [
+        "f06_signal_ptrace_diagnostics_candidate",
+        "MCKERNEL_RUST_F06_NATIVE_SIGNAL_BAD_FRAME"
+      ]
+    },
+    {
+      "ABI": "unsafe extern C fn(*mut c_void)->void",
+      "C_source": "arch/x86_64/kernel/syscall.c:459",
+      "Rust_source": "kernel/rust/f06_rt_sigreturn_xrstor.rs",
+      "baseline_C_bytes": 42,
+      "callers": "Legacy rt_sigreturn body; supported native branch uses unchanged native restore/validation/check path instead. Keep exact public entry without dropping that source path.",
+      "complete_behavior": "Real get_xsave_mask then real x86_restore_xstate; full64 request split EDX:EAX; XRSTOR memory effect, nostack/preserves_flags; kernel target excludes compiler FP/SIMD. No HOST execution of this entry.",
+      "lifetime": "Caller owns live aligned full configured XSAVE extent/mask and CPU exclusion/hardware fault context; no fake xstate or new hardware admission",
+      "name": "arch_rt_sigreturn_xrstor_bridge",
+      "selector": [
+        "f06_rt_sigreturn_xrstor_candidate",
+        "MCKERNEL_RUST_F06_RT_SIGRETURN_XRSTOR"
+      ]
+    }
+  ],
+  "inputs": {
+    "bytes": 8728,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-remaining-ownership-1/INPUTS.json",
+    "sha256": "3d88f34adc0a62ed780dc50e4e73638018ac72097616d760e6236ac2a26bd73a"
+  },
+  "next_action": "Independent material source/unsafe/ABI/profile review of this one-file patch and exact changed-counter test. Root may run the two-counter commands after fresh HOST admission. After current four-change cohort joins and source composition freezes, Root admits the explicit one-option wholeON normal configure/build/readback delta; no standalone full held-module/partial link or compiler here. Default promotion requires its own reviewed matching whole-proof decision.",
+  "no_source_or_fixture_runtime_by_preparer": true,
+  "original_criteria": {
+    "M14-06-01-DEFAULT": {
+      "done_when": "Every required original region in this scope has a complete implementation/selection mapping to Rust or allowed assembly, compatible actual ABI/providers, and a unique supported-default definition in the coherent image; no required behavior is supplied by a held object, guessed provider, live project C or compiler-elided placeholder.",
+      "id": "M14-06-01-DEFAULT",
+      "scope_limit": "Requires admissible final source/artifact cohort; source compilation or opt-in linking is insufficient.",
+      "title": "Verify complete supported-default Rust/allowed-assembly selection, real ABI/provider and no duplicate live C ownership",
+      "verification_method": "Join source/config/toolchain/provider identities to the admitted final cohort; inspect actual selected/emitted/link ownership and execute only the original applicable defined functional scenarios after Root admission. Record exact command, result, cleanup and matching artifact identity; skipped/UNKNOWN results do not satisfy this step."
+    },
+    "M14-06-02-DEFAULT": {
+      "done_when": "Every required original region in this scope has a complete implementation/selection mapping to Rust or allowed assembly, compatible actual ABI/providers, and a unique supported-default definition in the coherent image; no required behavior is supplied by a held object, guessed provider, live project C or compiler-elided placeholder.",
+      "id": "M14-06-02-DEFAULT",
+      "scope_limit": "Requires admissible final source/artifact cohort; source compilation or opt-in linking is insufficient.",
+      "title": "Verify complete supported-default Rust/allowed-assembly selection, real ABI/provider and no duplicate live C ownership",
+      "verification_method": "Join source/config/toolchain/provider identities to the admitted final cohort; inspect actual selected/emitted/link ownership and execute only the original applicable defined functional scenarios after Root admission. Record exact command, result, cleanup and matching artifact identity; skipped/UNKNOWN results do not satisfy this step."
+    },
+    "M14-06-03-DEFAULT": {
+      "done_when": "Every required original region in this scope has a complete implementation/selection mapping to Rust or allowed assembly, compatible actual ABI/providers, and a unique supported-default definition in the coherent image; no required behavior is supplied by a held object, guessed provider, live project C or compiler-elided placeholder.",
+      "id": "M14-06-03-DEFAULT",
+      "scope_limit": "Requires admissible final source/artifact cohort; source compilation or opt-in linking is insufficient.",
+      "title": "Verify complete supported-default Rust/allowed-assembly selection, real ABI/provider and no duplicate live C ownership",
+      "verification_method": "Join source/config/toolchain/provider identities to the admitted final cohort; inspect actual selected/emitted/link ownership and execute only the original applicable defined functional scenarios after Root admission. Record exact command, result, cleanup and matching artifact identity; skipped/UNKNOWN results do not satisfy this step."
+    },
+    "M14-06-04-DEFAULT": {
+      "done_when": "Every required original region in this scope has a complete implementation/selection mapping to Rust or allowed assembly, compatible actual ABI/providers, and a unique supported-default definition in the coherent image; no required behavior is supplied by a held object, guessed provider, live project C or compiler-elided placeholder.",
+      "id": "M14-06-04-DEFAULT",
+      "scope_limit": "Requires admissible final source/artifact cohort; source compilation or opt-in linking is insufficient.",
+      "title": "Verify complete supported-default Rust/allowed-assembly selection, real ABI/provider and no duplicate live C ownership",
+      "verification_method": "Join source/config/toolchain/provider identities to the admitted final cohort; inspect actual selected/emitted/link ownership and execute only the original applicable defined functional scenarios after Root admission. Record exact command, result, cleanup and matching artifact identity; skipped/UNKNOWN results do not satisfy this step."
+    },
+    "M14-06-05-DEFAULT": {
+      "done_when": "Every required original region in this scope has a complete implementation/selection mapping to Rust or allowed assembly, compatible actual ABI/providers, and a unique supported-default definition in the coherent image; no required behavior is supplied by a held object, guessed provider, live project C or compiler-elided placeholder.",
+      "id": "M14-06-05-DEFAULT",
+      "scope_limit": "Requires admissible final source/artifact cohort; source compilation or opt-in linking is insufficient.",
+      "title": "Verify complete supported-default Rust/allowed-assembly selection, real ABI/provider and no duplicate live C ownership",
+      "verification_method": "Join source/config/toolchain/provider identities to the admitted final cohort; inspect actual selected/emitted/link ownership and execute only the original applicable defined functional scenarios after Root admission. Record exact command, result, cleanup and matching artifact identity; skipped/UNKNOWN results do not satisfy this step."
+    },
+    "M14-F06-DEFAULT": {
+      "done_when": "Every required original region in this scope has a complete implementation/selection mapping to Rust or allowed assembly, compatible actual ABI/providers, and a unique supported-default definition in the coherent image; no required behavior is supplied by a held object, guessed provider, live project C or compiler-elided placeholder.",
+      "id": "M14-F06-DEFAULT",
+      "scope_limit": "Requires admissible final source/artifact cohort; source compilation or opt-in linking is insufficient.",
+      "title": "Verify complete supported-default Rust/allowed-assembly selection, real ABI/provider and no duplicate live C ownership",
+      "verification_method": "Join source/config/toolchain/provider identities to the admitted final cohort; inspect actual selected/emitted/link ownership and execute only the original applicable defined functional scenarios after Root admission. Record exact command, result, cleanup and matching artifact identity; skipped/UNKNOWN results do not satisfy this step."
+    },
+    "M14-F06-FUNCTIONAL": {
+      "done_when": "Qualify architecture ABI, signal/context/xstate, ptrace, mappings/time and cross-process-memory behavior on the matching admissible coherent image; exact matching proof has no unresolved required owner, ABI/provider obligation, unexplained failure or unreviewed project-C implementation.",
+      "id": "M14-F06-FUNCTIONAL",
+      "scope_limit": "Requires actual applicable native/source-view/resource ownership admission; not an authorization to execute held work.",
+      "title": "Qualify architecture ABI, signal/context/xstate, ptrace, mappings/time and cross-process-memory behavior on the matching admissible coherent image",
+      "verification_method": "Join source/config/toolchain/provider identities to the admitted final cohort; inspect actual selected/emitted/link ownership and execute only the original applicable defined functional scenarios after Root admission. Record exact command, result, cleanup and matching artifact identity; skipped/UNKNOWN results do not satisfy this step."
+    }
+  },
+  "owner": "p04_tests_max source/test preparation; Root sole compositor/executor; independent material review still required",
+  "patch": {
+    "bytes": 10983,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-remaining-ownership-1/F06-WHOLE-SIGNAL-DEFINED-DIAGNOSTICS.patch",
+    "sha256": "4cfb55a019190935c8db062c7146a89a82f4869e008fefb93046d3b6c1c865be"
+  },
+  "real_lower_provider_debt": "Actual a541 uniquely binds do_kill, coredump, scheduler, usercopy, ptrace report, set/check signal, bootXSAVE getters and native frame helpers to Rust. Actual terminate is3273B project C in kernel/syscall.c.o, deliberately retained as real complete callee. Whole arch selection alone cannot claim no live project C across the image or close original provider/default/native conditions.",
+  "required_data_owner": {
+    "ABI": "pub static mut repr(C,align(32)) wrapper whose sole offset0 field is [usize;12], size96; real writable object, not readonly const or function",
+    "Rust_source": "kernel/rust/f06_rt_sigreturn_xrstor.rs",
+    "baseline_C_bytes": 96,
+    "basis": "Actual selected PROFILE/PERF/RUSAGEON, TOFU/FugakuOFF ABIff48 and real C debug_constants sizeof/offsetof array; new actual emitted data must agree. No new field-layout witness is fabricated.",
+    "name": "debug_constants",
+    "selected20a_expected_words": [
+      8128,
+      7848,
+      7872,
+      7920,
+      64,
+      4208,
+      4328,
+      4304,
+      4184,
+      456,
+      20,
+      18446744073709551615
+    ],
+    "selector": [
+      "f06_debug_constants_candidate",
+      "MCKERNEL_RUST_F06_DEBUG_CONSTANTS"
+    ]
+  },
+  "schema": "m14-f06-four-remaining-source-contract-v1",
+  "selector_closure": {
+    "C_definitions": [
+      "MCKERNEL_RUST_F06_RT_SIGRETURN_XRSTOR",
+      "MCKERNEL_RUST_F06_DEBUG_CONSTANTS",
+      "MCKERNEL_RUST_F06_SIGNAL_CONTEXT",
+      "MCKERNEL_RUST_F06_DO_SIGNAL_WHOLE",
+      "MCKERNEL_RUST_F06_NATIVE_SIGNAL_BAD_FRAME",
+      "MCKERNEL_RUST_F06_PTRACE_REGSET_LOG",
+      "MCKERNEL_RUST_F06_SIGNAL_TRAP_INFO"
+    ],
+    "additional_real_dependencies": [
+      "kernel/rust/f06_rt_sigreturn_xrstor.rs",
+      "kernel/rust/f06_signal_tail.rs",
+      "kernel/rust/f06_signal_ptrace_diagnostics.rs",
+      "kernel/rust/f06_signal_trap_info.rs",
+      "generated kernel/rust/f06-origin/f06_signal_metadata.rs"
+    ],
+    "generated_env": "MCKERNEL_F06_SIGNAL_METADATA_RS=/work/output/build/kernel/rust/f06-origin/f06_signal_metadata.rs (current wholeOFF command has empty value)",
+    "no_duplicate": "Context selected once with reuse marker; current standalone-context if(NOT whole) branch stays paired. Diagnostics/trap-info source appended by whole iff broad adaptersOFF; otherwise reused from broad branch. Compile_errors reject context-without-reuse, whole-without-trap-info and any whole+partial handler/xsave/frame/core/trap selection.",
+    "root_imports": "syscall_policy imports tail unconditionally; its whole module remains cfg gated. Root lib imports xrstor if either func/data cfg and diagnostics/trap-info once. No new module-registration edit needed.",
+    "supported_predicate": "ENABLE_RUST_KERNEL && ARCH=x86_64 && MCKERNEL_HOST_IRQ_ABI=linux-6.12 && !ENABLE_UBSAN; preserve actual PROFILE/PERF/RUSAGEON, workIRQON, TOFU/FugakuOFF and genuine production195 flags; other-profile C fallbacks remain.",
+    "whole_added_cfgs": [
+      "f06_signal_context_candidate",
+      "f06_do_signal_whole_candidate",
+      "f06_do_signal_reuse_qualified_context",
+      "f06_rt_sigreturn_xrstor_candidate",
+      "f06_debug_constants_candidate",
+      "f06_signal_ptrace_diagnostics_candidate",
+      "f06_signal_trap_info_candidate"
+    ]
+  },
+  "source_bindings": {
+    "bytes": 2413,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-remaining-ownership-1/SOURCE-BINDINGS.json",
+    "sha256": "b5d152f6ffff5367de48821ec517cce0363de14730c6d64b339e601b1d560da3"
+  },
+  "status": "PRIVATE_COMPLETE_SOURCE_CUT_NOT_EXECUTED_NOT_DEFAULT_ACCEPTED",
+  "whole_signal_behavior_and_lifetime": [
+    "Snapshot proc/original signal/fault pointer bytes/PID before pending release; select original highest set mask bit; ptraced nonSIGKILL/noncontinued remaps SIGSTOP before action lookup. Entry PID reset remains before sigcommon lock, even when no log is produced.",
+    "regsNULL performs the real GS/TSS.rsp0 load at selected offset180 and subtracts X86UserContext224. NonNULL uses supplied context and replaces rc with gpr.rax. Same currentThread/process/pending lifetime, not a new null/geometry policy.",
+    "WriterIRQ lock uses real64-byte align64 irqsave node. SIG_IGN frees pending then unlocks and returns restart0. Handler preserves full zeroed frame, native/legacy geometry, alternate-stack behavior, restart evaluation and actual usercopy/context preparation.",
+    "XSAVE uses actual boot size/mask, original size+64 allocation and align64 interior pointer, zeroes extent, real XSAVE plus checked usercopy, frees original base exactly. Native failures keep pending/lock until native bad-frame consume+unlock+diagnostic+void terminate; legacy frees/unlocks/logs/terminate/goto-out exactly. No new allocation, fault or termination exclusion.",
+    "Copy full128 SigInfo and full selected frame; native restorer publish must succeed before committing saved sigstack/register/action state. Handler register rdi/rsi/rdx/rip/rsp, SA_RESETHAND/SA_NODEFER/mask, pendingfree then unlock remain in source order. TF cleanup uses genuine set_signal/check_need_resched/check_signal after unlock.",
+    "Default helper caches ptracecont before any pending free; ptrace transfer preserves old recv/send node retirement/assignment order, otherwise consumes pending, then unlocks. No dangling pending dereference or invented target reference.",
+    "STOP/TSTP/TTIN/TTOU preserve ptrace_report_signal or original complete stopped-status/update-lock/main-vs-report notification/waitq/schedule order. SIGTRAP untraced still goes to core; traced uses fully initialized128-byte SIGCHLD/CLD_TRAPPED with stopped TID/status, original main/report process branching, optional report waitq wake and schedule. No supported SIGTRAP path is excluded.",
+    "Nine core labels plus untraced SIGTRAP preserve actual kmalloc_tracked(sizeof224,NOWAIT), publication to thread.coredump_regs evenNULL, original old-slot overwrite rule (no invented free), complete memcpy, coredump result0=>0x80/-EBUSY=>no bit/other log, unconditional real void terminate(0,sig|bit). Helper tail is byte-identical after factoring. Return behavior retained if void endpoint returns.",
+    "SIGCONT/SIGCHLD/SIGURG/SIGWINCH default no-action and all other default terminate remain. Restart excludes native sigreturn15, KILL/STOP, negative syscall, rc other than unsigned-EINTR and the exact16 original never-restart calls; no narrowed error bits or new allowlist."
+  ]
+}

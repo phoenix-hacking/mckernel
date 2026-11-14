@@ -1,0 +1,44 @@
+{
+  "at": "2026-10-25T03:46:50.498617+00:00",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/f02_review",
+  "decision": "PASS_SOURCE conditional62ABI/object/provider now satisfied at HOST diagnostic scope",
+  "integration_owner": "/root",
+  "transitions": [
+    {
+      "preimage": {
+        "bytes": 894644,
+        "path": "/home/holden/mckernel/kernel/syscall.c",
+        "sha256": "905e359118f5d5338414a294e7a15b3103653a4437e53a9857a4ac833d3cce37"
+      },
+      "postimage": {
+        "bytes": 899374,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-3/source/kernel/syscall.c",
+        "sha256": "29f253ace40b33b387e210b26b160ec20ef173cb250ce632e12b4e9f6bd0bb0d"
+      }
+    },
+    {
+      "preimage": {
+        "bytes": 1048112,
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "sha256": "8d42e6071211ed68fb03ef9ed0535f183abab57f1ede987a453750962e5530b7"
+      },
+      "postimage": {
+        "bytes": 1079598,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-3/source/kernel/rust/syscall_policy.rs",
+        "sha256": "9251397ea66b36cf6989da51112d1c2ffb10f9a3dccd63922a87e75f0c211c5e"
+      }
+    }
+  ],
+  "corrected_62ABI_result": "b5aec51bdfa3ed38130510d9aa5581acf06df11fdb6fbd6cd66c23ebf27e274a",
+  "current_process8_union_object_result": "22b89d0c5a5fd469d6309409278342b7a83ee481d8bfcd5a58f480af20c0b3b9",
+  "F03_exports_once": 31,
+  "process_exports_once": 8,
+  "ABI_words_equal": 20,
+  "union_unresolved": 97,
+  "wall_seconds": 18.618,
+  "CPU_seconds": 18.68,
+  "original_ABI_failure_retained": true,
+  "new_fork_ACK_or_ownership_policy": false,
+  "production_default_native_wholefile_accepted": false
+}

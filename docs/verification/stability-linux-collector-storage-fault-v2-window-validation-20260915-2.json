@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_window_validation",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "correction_attempt": 28,
+  "recorded_utc": "2026-09-16T05:28:56Z",
+  "status": "FOCUSED_PASS_SOURCE_REVIEW_REQUIRED",
+  "changed_source_sha256": {
+    "oracle.py": "dc7dd7d2a33b694e607fa3e70c7767649f9da353c48f5af21d3bdbb4241d0874",
+    "test_collector_storage_fault_packet.py": "42a159c2e4fd08c7b005d9eac4775753ad5b06de4797e5d7c87f5123a2bf1ad2"
+  },
+  "bounded_changes": [
+    "Require lowercase even proc-exe sample hex, no NUL and at most 254 decoded bytes while retaining the valid empty sample.",
+    "Require a positive exact preparation start and exact zero/false/empty pre-fork lifecycle and ownership state.",
+    "Require linux_child.kill_sent false on the accepted pinned-group cleanup path.",
+    "Add full-fixture controls bound to all review-28 canonical hashes and valid sample controls."
+  ],
+  "checks": {
+    "review_24_through_28_focused_controls": "7/7 PASS",
+    "git_diff_check": "PASS",
+    "dual_full_suites": "NOT_RERUN_FOR_ATTEMPT_28_AT_WINDOW_CLOSE",
+    "dual_pycompile": "NOT_RERUN_FOR_ATTEMPT_28_AT_WINDOW_CLOSE"
+  },
+  "source_accepted": false,
+  "compiler_packet_released": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

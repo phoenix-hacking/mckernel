@@ -1,0 +1,40 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_UNEXECUTED_CORRECTION",
+  "failure_family": "EXEC-RESET-SHARED-SIGHAND-1",
+  "cause": "Original C and original scalar Rust reset live shared sigcommon.action fields without the SigCommon writer lock used by peer sigaction; preempt_disable is CPU-local, not shared-table exclusion.",
+  "correction": "Existing __mcs_rwlock_writer_lock/unlock with actual aligned node around handler loop only; unlock before FP callback; unchanged literal C fallback.",
+  "preserved_original_packet": "/home/holden/mckernel-work/host-preparation/process-owned-fork-rust-next-preparation-20261021-1",
+  "original_actual_result": "actual-body-comparison-1: root reports exit0/0.188053286s; original eight-seed scalar C/Rust PASS; no concurrency/production/native acceptance",
+  "ownership_invariant": "Live Thread+SigCommon lifetime stays caller-owned; one nested lock acquired/released, original IRQ state/preempt nesting restored before FP callback, no allocations or refcount transfer. Only caught-handler pointers, existing FP state, alternate stack fields and legitimate ticket-lock counters change.",
+  "baseline": {
+    "kernel/syscall.c": {
+      "sha256": "bca4d642d927da7a034124a25cdc1fd80189e48c1ffd6a2f44282f33340ea24f",
+      "bytes": 842598
+    },
+    "kernel/rust/syscall_policy.rs": {
+      "sha256": "3234a38477355e9f0a671853046a0aefe12672958906240a5e471c8992c5206a",
+      "bytes": 707836
+    },
+    "kernel/rust/abi.rs": {
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "bytes": 76151
+    },
+    "kernel/rust/lock_helpers.rs": {
+      "sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3",
+      "bytes": 12202
+    },
+    "kernel/rust/spinlock_helpers.rs": {
+      "sha256": "7b6c1e87f521eaf4674128afd7bff71785bead4ff7c9eb3c9a668d6a0cb0cbe7",
+      "bytes": 3105
+    }
+  },
+  "source_refs": [
+    "kernel/syscall.c:19391 shared sigcommon writer bridge",
+    "kernel/rust/syscall_policy.rs:10018 do_sigaction locked action access",
+    "kernel/rust/lock_helpers.rs:339 existing writer lock and347unlock",
+    "kernel/rust/spinlock_helpers.rs:90 ticket acquire;108irqsave;116release;122irqrestore"
+  ],
+  "stop_condition": "Independent source decision and root ordinary actual-body check before integration. One bounded correction in actual shared-table family; preserve any failure then expert escalation. Production headers/crate/link/native remain required.",
+  "hostwork": "QUIESCENT after source writes, CPU6/256MiB/10CPU-seconds/1MiB, no compile/test/root/Docker/guest/census/signals/leases/recursive agents"
+}

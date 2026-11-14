@@ -1,0 +1,34 @@
+{
+  "schema": "mckernel.stability.lifecycle-oracle-correction.v1",
+  "date": "2026-09-28",
+  "status": "PHASE1_SOURCE_PASS_CONTRACT_CLOSURE_BLOCKED",
+  "original_failure": {
+    "path": "docs/verification/evidence/stability-native-ihk-lifecycle-oracle-correction-failure-20260928-1.log.gz",
+    "sha256": "b20ebb6f07e31d71155df79e0502f5596872024b63b34bad6e009149b64ad43c",
+    "uncompressed_sha256": "83f7e72ec90c8f14278b647d7f71e8ae1b7db17995caabe855c3b4fd01cd242c"
+  },
+  "independent_decision": "Production detach is intact. Correct only stale checker formatting expectations in phase 1; do not rebind stale contracts without separate source-contract review.",
+  "implementation": [
+    "Rustfmt-insensitive function-local ordering checks.",
+    "Active-code multiline snapshot matching.",
+    "Exact snapshot, dual-reference drain, callback exit, unregister commit and callback-clear ordering.",
+    "Missing/wrong snapshot, weakened guard, inversion and comment/string decoy rejection.",
+    "Current SharePolicy/IHK_DEVICE_REGISTRY import ordering."
+  ],
+  "files": {
+    "scripts/ihk_native_lifecycle_check.py": "cadf4b2ebdd54c6bec5175b4bc6264cb8f612a034fe542ad72e786ab088ea26f",
+    "scripts/ihk_device_registry_check.py": "cbe0feb90df55970ee8853a93d290b71534acfa2ecbea14875a711fc1796d108",
+    "scripts/tests/test_ihk_native_lifecycle_check.py": "7eed86ee20ce1f2ccf4f2711cc5698aa75eacfc1d643c43a2080890ab5a885a2",
+    "scripts/tests/test_ihk_device_registry_check.py": "6cba1520d7af695a286b017dd13719688bff0e3c9db0c3db3d4062494bffb861"
+  },
+  "focused_tests": {
+    "result": "Five dispatcher-replayed focused tests PASS in 0.710 seconds with the pinned Rust 1.92 path",
+    "raw_log_sha256": "f18f69c77fa9b241957a889a44d3d4838a78ad26ddcf891d8600956713c791ea",
+    "compressed_log": "docs/verification/evidence/stability-native-ihk-lifecycle-oracle-phase1-tests-20260928-1.log.gz",
+    "compressed_log_sha256": "029685e3f710752b7e52b835722e61e3dfa3f67e40ed1dc221c7f5586e5b2118",
+    "py_compile": "PASS",
+    "diff_check": "PASS"
+  },
+  "remaining_blocker": "Stale reviewed identities span the device, lifecycle, ioctl, OS-registry and OS-runtime contract closure plus two checker-locked module hashes. Hash rebinding requires independent semantic source-contract review; the full suites remain intentionally fail-closed.",
+  "limitations": "This is checker source evidence only. It changes no Rust behavior and grants no module, runtime, shutdown, application or production acceptance."
+}

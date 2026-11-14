@@ -1,0 +1,308 @@
+{
+  "schema": "mckernel.scheduler-debug18.metadata-request.v1",
+  "status": "FROZEN_TWO_LITERAL_METADATA_READBACKS_AND_SOURCE_BOUND_CALLED_OBJECT_GATE_PENDING_REVIEW_AND_ROOT_FRESH_ADMISSION",
+  "owner": "/root/scheduler_debug_data_high privatepreparation;Rootsoleactualadmission/execution",
+  "cwd": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-metadata-1",
+  "commands": [
+    {
+      "label": "provider-symbols",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-metadata-1/provider-symbols.metrics",
+        "/usr/bin/nm",
+        "-S",
+        "--format=posix",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-unit-1/output/scheduler_debug_data.o"
+      ],
+      "stdout_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-metadata-1/provider-symbols.stdout",
+      "stderr_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-metadata-1/provider-symbols.stderr"
+    },
+    {
+      "label": "provider-elf",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-metadata-1/provider-elf.metrics",
+        "/usr/bin/readelf",
+        "-h",
+        "-SW",
+        "-Ws",
+        "-Wr",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-unit-1/output/scheduler_debug_data.o"
+      ],
+      "stdout_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-metadata-1/provider-elf.stdout",
+      "stderr_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-metadata-1/provider-elf.stderr"
+    }
+  ],
+  "environment_replace": {
+    "PATH": "/usr/bin:/bin",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "inputs": {
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-unit-1/scheduler_debug_data_unit.rs": "927c6851fb7cdbd25a43577c70c8c7055f77a590b1b8429570500102dd9083c2",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-unit-1/debug_type.rs": "67b9184d219de1eaf829abda4c51910c2e3ab6e090c126950dea8b5aa8470952",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-unit-1/process_verbose_data.rs": "840766326c379ac370653f8adaa230a12dbf6a68f59ee0ae1c4bf95127b76d2f",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-unit-1/SOURCE-PROOF.json": "3932ca70def6e7cbab9f6d4f99a6aaf0b169960fb973860ae6f3b21e4b8ebba6",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-unit-1/CONFIG-PROOF.json": "4b1e4a05e54c10437752b655e8b2047ca817d0ef913dd6661e8d462c9d31af2c",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-unit-1/REQUEST-BOUND.json": "9a994bb7d88a04da732209c14e3ec3c46ad9ea642416d54745bee45e779297dc",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-review-1/FINAL-REVIEW.json": "e0691796e9dae07b593f1ba219689526f5346e3e24d47357e99d8fefe89b4827",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/shared-provider-batch-1/RESULT.json": "a554f5725e5d151e36819d5aa93195294a7e4363b8cc2898b7b8fcf186a6867a",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/shared-provider-batch-1/ADMISSION.json": "4f5134acde2f66ea397d85847bf9a0adbe9d26dc909a74b7ea19cfed5d4c1706",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-metadata-1/SOURCE-EMISSION-CONTRACT.json": "138993976bc81d7935ec9b69c1ebb5b3301fa60994dd1ef57f5945da94dd4a67",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-metadata-1/debug_data_metadata_checks.py": "7e99cd60a9624edee9b8fdbafe8d28d5b3c6c578f4532cc6a2a4b6e51d00ebc9",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-metadata-1/run_metadata.py": "a5f215f00c5bcb132b7b3991eee2dd5688e03cdd1332ca4f81e88cc02eff9dd9",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-unit-1/output/scheduler_debug_data.o": "4bb40a5e0f7165c6e4d5e3f55a93b3ca11cf21d08ae75cb53516f7a548cf2159",
+    "/usr/bin/nm": "5fb0dd8acc18e3f348ed0acbcada0580dbdddd1eb5de3c8323613af13580032b",
+    "/usr/bin/readelf": "41a813335a74480f145fba9400aa7fb5c0ec7ffcaa7af7f33e832dc75eb90ffb",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/storage_predicate.py": "a4df81bb2b86d97f4199ae816dab7965213ceba05dca17945f9eae861dc31892"
+  },
+  "source_bindings": {
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-unit-1/scheduler_debug_data_unit.rs": "927c6851fb7cdbd25a43577c70c8c7055f77a590b1b8429570500102dd9083c2",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-unit-1/debug_type.rs": "67b9184d219de1eaf829abda4c51910c2e3ab6e090c126950dea8b5aa8470952",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-unit-1/process_verbose_data.rs": "840766326c379ac370653f8adaa230a12dbf6a68f59ee0ae1c4bf95127b76d2f",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-unit-1/SOURCE-PROOF.json": "3932ca70def6e7cbab9f6d4f99a6aaf0b169960fb973860ae6f3b21e4b8ebba6",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-unit-1/CONFIG-PROOF.json": "4b1e4a05e54c10437752b655e8b2047ca817d0ef913dd6661e8d462c9d31af2c",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-unit-1/REQUEST-BOUND.json": "9a994bb7d88a04da732209c14e3ec3c46ad9ea642416d54745bee45e779297dc",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-review-1/FINAL-REVIEW.json": "e0691796e9dae07b593f1ba219689526f5346e3e24d47357e99d8fefe89b4827"
+  },
+  "source_segments": [
+    {
+      "path": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "first_line": 26,
+      "last_line": 32,
+      "segment_sha256": "67b9184d219de1eaf829abda4c51910c2e3ab6e090c126950dea8b5aa8470952"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/process_verbose_data.rs",
+      "first_line": 4,
+      "last_line": 27,
+      "segment_sha256": "a3ef4202dd2826bc7aa9579c94bc6767c517c29f387d4d10e53416e24f637b18"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/process_verbose_data.rs",
+      "first_line": 76,
+      "last_line": 99,
+      "segment_sha256": "217b2dfcec515b057fd23eacad0fe918f50375347cbf28c8ef21f51aeb1e3aaf"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/process_verbose_data.rs",
+      "first_line": 344,
+      "last_line": 353,
+      "segment_sha256": "b32332053975153cd48172578efc04d1d3119812a0d83052d71ddeb5caccc716"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/lib.rs",
+      "first_line": 46,
+      "last_line": 47,
+      "segment_sha256": "2bd2f101ebcf60610db18d7380a77d907004ada5393d7c7fae1f07894c4ada80"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/process.c",
+      "first_line": 351,
+      "last_line": 359,
+      "segment_sha256": "49c0df592802e3b752a4eb1c2b9aba53491dfdc6725e0abdba5f873b920101e7"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/process.c",
+      "first_line": 2957,
+      "last_line": 2984,
+      "segment_sha256": "f8382e52586bde477c799f221aad62aaf46075f825ae3b3caded890acf7cd65a"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "first_line": 37,
+      "last_line": 49,
+      "segment_sha256": "6c5fcbf99dd5f98ead49097f15a0415359c15e1210fc533870f761bc3d7337a4"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "first_line": 225,
+      "last_line": 247,
+      "segment_sha256": "55529dd22694bf9d737aa17ac089a4142ebc2a0d29792e8801d2d30d816c1211"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "first_line": 523,
+      "last_line": 524,
+      "segment_sha256": "c66b6ab9380204878ef7ace04fc606bfc93455f06fdb45875588957cc73538ca"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "first_line": 900,
+      "last_line": 908,
+      "segment_sha256": "2e2aa6fb4bb3b03190e79ea56c82162b369e1c8efc5197b7cc5b2f2de20e78cd"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/ihk/debug.h",
+      "first_line": 14,
+      "last_line": 25,
+      "segment_sha256": "bed5f78f8fa9a5fdef9d5ec3ad3189bc66789b06ae89959ea8c3cdea2ec4cd2e"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "first_line": 37,
+      "last_line": 49,
+      "segment_sha256": "6c5fcbf99dd5f98ead49097f15a0415359c15e1210fc533870f761bc3d7337a4"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "first_line": 97,
+      "last_line": 100,
+      "segment_sha256": "654fa8359457cd17ac1a50a7e5b3a06dd34272af6d6538979a9fd32f87dbe9a3"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "first_line": 225,
+      "last_line": 247,
+      "segment_sha256": "55529dd22694bf9d737aa17ac089a4142ebc2a0d29792e8801d2d30d816c1211"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "first_line": 523,
+      "last_line": 524,
+      "segment_sha256": "c66b6ab9380204878ef7ace04fc606bfc93455f06fdb45875588957cc73538ca"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "first_line": 561,
+      "last_line": 561,
+      "segment_sha256": "3911a00e502d479429f156955831d16dac4c3e7b5096a9ba82c2fe474656788a"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "first_line": 667,
+      "last_line": 668,
+      "segment_sha256": "ba1e63d9b3b389c809492ae308d60db91ca84bd980ab2158f0993371a335e395"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "first_line": 699,
+      "last_line": 701,
+      "segment_sha256": "1d518d0906449ccc7f03940dd93a47a6763bb593d00d0479b55022a7a391d569"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "first_line": 900,
+      "last_line": 908,
+      "segment_sha256": "2e2aa6fb4bb3b03190e79ea56c82162b369e1c8efc5197b7cc5b2f2de20e78cd"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/process.c",
+      "first_line": 52,
+      "last_line": 64,
+      "segment_sha256": "ac228e89a783905210447c6f5deb3d3f4232f6ee08166c2c136df098340044b1"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/process.c",
+      "first_line": 351,
+      "last_line": 359,
+      "segment_sha256": "49c0df592802e3b752a4eb1c2b9aba53491dfdc6725e0abdba5f873b920101e7"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/process.c",
+      "first_line": 2957,
+      "last_line": 2984,
+      "segment_sha256": "f8382e52586bde477c799f221aad62aaf46075f825ae3b3caded890acf7cd65a"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/ihk/debug.h",
+      "first_line": 14,
+      "last_line": 25,
+      "segment_sha256": "bed5f78f8fa9a5fdef9d5ec3ad3189bc66789b06ae89959ea8c3cdea2ec4cd2e"
+    }
+  ],
+  "compiled_input": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-unit-1/output/scheduler_debug_data.o",
+    "sha256": "4bb40a5e0f7165c6e4d5e3f55a93b3ca11cf21d08ae75cb53516f7a548cf2159",
+    "bytes": 2544,
+    "actual_compile_RESULT": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/shared-provider-batch-1/RESULT.json",
+    "actual_compile_RESULT_sha256": "a554f5725e5d151e36819d5aa93195294a7e4363b8cc2898b7b8fcf186a6867a",
+    "compile_already_joined_CPU6_released": true,
+    "no_compiler_replay": true
+  },
+  "actual_nm": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-metadata-1/provider-symbols.stdout",
+  "actual_elf": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-metadata-1/provider-elf.stdout",
+  "actual_metadata_capture": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-metadata-1/ACTUAL-ELF-METADATA.json",
+  "source_emission_contract": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-metadata-1/SOURCE-EMISSION-CONTRACT.json",
+  "qualified_ELF_reader": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/storage_predicate.py",
+    "sha256": "a4df81bb2b86d97f4199ae816dab7965213ceba05dca17945f9eae861dc31892",
+    "qualification_receipt": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/RESULT.json",
+    "scope": "Reuse existing exact Image/parse_nm for ELF64-LE/x86_64 REL metadata/bytes only, not storage predicate re-review or new parser/loader."
+  },
+  "object_predicate": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-metadata-1/debug_data_metadata_checks.py",
+    "sha256": "7e99cd60a9624edee9b8fdbafe8d28d5b3c6c578f4532cc6a2a4b6e51d00ebc9",
+    "callable": "actual_object_gate(q)",
+    "must_IMPORT_and_CALL_after_both_actual_readbacks_before_any_future_link": true,
+    "allactualmetadata_retained_before_source_owner_assertions": true
+  },
+  "controller": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-metadata-1/run_metadata.py",
+    "sha256": "a5f215f00c5bcb132b7b3991eee2dd5688e03cdd1332ca4f81e88cc02eff9dd9",
+    "literal_argv": [
+      "/usr/bin/python3",
+      "-B",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-metadata-1/run_metadata.py",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-metadata-1/REQUEST.json"
+    ],
+    "only2literalpayloads_no_compiler_or_link": true
+  },
+  "inherited_resource_profile": {
+    "CPU": [
+      6
+    ],
+    "local_serial_jobs": 1,
+    "AS_bytes": 1073741824,
+    "CPU_seconds": 45,
+    "wall_seconds": 60,
+    "kill_after_seconds": 5,
+    "FSIZE_bytes": 67108864,
+    "core_bytes": 0,
+    "aggregate_CPUs": [
+      0,
+      6,
+      7
+    ],
+    "aggregate_jobs_max": 3,
+    "aggregate_HOST_total_bytes_all_overhead": 4294967296,
+    "retained_prior_GiB": 18,
+    "floor_GiB": 4,
+    "minimum_MemAvailable_GiB": 26
+  },
+  "source_expected": "Exactlyone576Balignment8mutableGLOBALOBJECT__verbose,0T0U;18actualflag1records/fmtNULL/36exactfile+funcfieldRELAresolvedtogenuineobjectownedNULcontents;noassumedpaddingvalueorpoolcount. No functions/init/registry/runtime.",
+  "future_base_and_join": "UNBOUND; no link command or predicted current base/hash/count. Root sole compositor after actual object gate and independent review/admission.",
+  "no_current_metadata_or_compiler_or_runtime_executed_in_preparation": true,
+  "no_canonical_index_or_other_worker_edits": true
+}

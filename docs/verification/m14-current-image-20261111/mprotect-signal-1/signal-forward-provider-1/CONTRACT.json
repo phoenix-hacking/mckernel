@@ -1,0 +1,121 @@
+{
+  "schema": 1,
+  "status": "SOURCE_ONLY_GENUINE_THREE_PROVIDER_CUT_NOT_COMPILED",
+  "original_check": "M14-03-04-DEFAULT",
+  "shared_dependencies": [
+    "M14-03-01-DEFAULT",
+    "M14-03-05-DEFAULT"
+  ],
+  "actual_delta": "Replace exactly current C context12B/mask80B/action132B providers with three genuine Rust definitions; keep complete current caller behavior and retained C fallbacks.",
+  "not_same_symbol": {
+    "new": "syscall_forward_context_bridge",
+    "already_selected_unchanged": "syscall_policy_forward_context_bridge",
+    "already_selected_source": "kernel/rust/f03_policy_forward_context_bridge.rs",
+    "also_unchanged": "arch_syscall_forward_context_bridge"
+  },
+  "eligibility": {
+    "authority": "Root exact new current-source signal/context provider task, source preparation only",
+    "same_held_executable_or_equivalent_replay_selected": false,
+    "known_rejected_request_retried": false,
+    "existing_experimental_module": "Unchanged, unselected in the new ordinary profile; its option remains OFF. No experimental/replay operation is enabled.",
+    "held_generic_exec_TID_perf_util_credential_modes": "Unchanged and not executed. Reuse already selected genuine Rust forwarding/setter providers only.",
+    "no_external_owner_inventory_required": true,
+    "no_execution_authority_from_this_packet": true
+  },
+  "selection": {
+    "new_rust_cfg": "f03_signal_forward_provider_candidate",
+    "new_C_macro": "MCKERNEL_RUST_F03_SIGNAL_FORWARD_PROVIDER",
+    "ordinary_condition": "MCKERNEL_RUST_F06_WHOLE_DEFAULT AND ENABLE_RUST_F06_SYSCALL_WHOLE AND NOT ENABLE_NATIVE_FORK_OWNED_TRANSACTION AND NOT DCFA_KMOD",
+    "inherited_required": "Rust x86_64/linux-6.12/!UBSAN/PROFILE/PERF/RUSAGE/LinuxWorkIRQ; !TOFU/!FUGAKU; broad adapters OFF and signal experiment OFF",
+    "ordinary_source_default": true,
+    "new_option_or_FORCE": false,
+    "outside_profile": "Original exact C providers/fallback selection retained. Existing explicit broad/experimental flags retain their old behavior.",
+    "pairing": "The same internal selected boolean appends the new Rust cfg/dependencies and the C exclusion macro. Existing policy10208 remains separately selected/unchanged."
+  },
+  "signatures": {
+    "syscall_forward_context_bridge": "unsafe extern C fn(CInt,*mut c_void)->CLong; actual C syscall_forward_context_fn_t",
+    "syscall_forward_rt_sigprocmask_bridge": "unsafe extern C fn(CULong)->CLong; actual C syscall_forward_sigmask_fn_t",
+    "syscall_forward_sigaction_update_bridge": "unsafe extern C fn(CInt,*const c_void)->CLong; actual C syscall_sigaction_forward_fn_t"
+  },
+  "borrow_and_order": {
+    "context": "No added dereference/reference/check/copy/lock/retain. Pass exact CInt and original opaque context address once to actual selected Rust syscall_generic_forwarding; return its unchanged CLong. Original synchronous caller lifetime and current CPU/thread contract persists. Existing null handling remains in that actual provider.",
+    "mask": "Original caller already checks sigsetsize/how, copies oldset before set, returns -EINVAL/-EFAULT before forwarding on invalid/copy failures, clears SIGKILL/SIGSTOP in its existing apply helper, and returns0 after ignoring forward result. The new provider does none of that orchestration again. It creates exactly zeroed224B integer context, genuine volatile setter0(mask), then actual forwarder nr14 once; arg1..5 and validity/unused fields remain zero as actual C {0}.",
+    "action": "Existing do_sigaction validates first, holds real writer IRQ lock only for old/new action copies, restores original saved IRQ with same node before forwarding, forwards only nonnull act, ignores returned CLong and returns0. New provider retains no lock/node/ref. Borrowed initialized aligned KSigAction stays live: zero context; setter0(CInt as CULong); read handler bits; setter1; read flags; setter2; actual forwarder nr13. No act write, handler call, pointer ownership transfer or new null check.",
+    "error": "Each new provider propagates exact underlying CLong including negative errors; actual higher signal callers keep their prior ignored result and original normal/error returns.",
+    "lifetime": "The local fully initialized stack context remains live throughout synchronous forwarding/offload. Its six values are copied into genuine request storage by unchanged Rust lower code; new code retains no pointer. X86 context contains only u64 and u8 integer fields, so zero initialization is valid before genuine setter field references."
+  },
+  "ABI_guards": {
+    "C_and_Rust": [
+      "CInt4/align4,CLong8,CULong8,pointer8",
+      "X86UserContext224/align8/gpr56",
+      "KSigAction32/align8/sa0; handler0/flags8",
+      "Three bridge function pointer types"
+    ],
+    "C_number_guards": [
+      "__NR_rt_sigaction==13",
+      "__NR_rt_sigprocmask==14"
+    ],
+    "genuine_types": [
+      "arch/x86_64/kernel/include/ihk/context.h",
+      "arch/x86_64/kernel/include/registers.h",
+      "arch/x86_64/kernel/include/signal.h",
+      "kernel/rust/abi.rs"
+    ],
+    "guard_execution": "Proposed compile assertions; not yet compiled or claimed passed."
+  },
+  "unchanged_required_providers": [
+    {
+      "name": "do_sigaction",
+      "owner": "rust/mckernel_rust.o",
+      "final_bytes": 580
+    },
+    {
+      "name": "sys_rt_sigprocmask",
+      "owner": "rust/mckernel_rust.o",
+      "final_bytes": 399
+    },
+    {
+      "name": "syscall_generic_forwarding",
+      "owner": "rust/mckernel_rust.o",
+      "final_bytes": 448
+    },
+    {
+      "name": "do_sigaction_body_result",
+      "owner": "rust/mckernel_rust.o",
+      "final_bytes": 297
+    },
+    {
+      "name": "rt_sigprocmask_body_result",
+      "owner": "rust/mckernel_rust.o",
+      "final_bytes": 296
+    },
+    {
+      "name": "ihk_mc_syscall_set_arg1",
+      "owner": "rust/mckernel_rust.o",
+      "final_bytes": 18
+    },
+    {
+      "name": "ihk_mc_syscall_set_arg2",
+      "owner": "rust/mckernel_rust.o",
+      "final_bytes": 18
+    },
+    {
+      "name": "ihk_mc_syscall_set_arg0",
+      "owner": "rust/mckernel_rust.o",
+      "final_bytes": 18
+    },
+    {
+      "name": "syscall_policy_forward_context_bridge",
+      "owner": "rust/mckernel_rust.o",
+      "final_bytes": 17
+    },
+    {
+      "name": "arch_syscall_forward_context_bridge",
+      "owner": "rust/mckernel_rust.o",
+      "final_bytes": 17
+    }
+  ],
+  "changed_state": "No new static mutable/readonly data, debug descriptors, allocation/free, IRQ/lock/signal call, thread/process reference or provider implementation. No changed do_syscall/generic/body semantics.",
+  "source_origin": "All unchanged C lines retain their original logical line values; new bridge has no debug origin; filename and original fallback text retained.",
+  "remaining_acceptance": "Source alone retires no C, verifies no whole original check, native/runtime/default image or parent condition. Actual matching image needs unique3 Rust owners/nonempty code, C exclusions, real selected caller/table target updates and all genuine lower ABI/provider closure with prior owners preserved."
+}

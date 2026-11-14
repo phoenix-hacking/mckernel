@@ -1,0 +1,76 @@
+{
+  "application_acceptance": false,
+  "application_observer_implemented": false,
+  "collector_implemented": false,
+  "compiler_execution": false,
+  "document": {
+    "path": "docs/verification/stability-application-collector-proposal-20260913.md",
+    "sha256": "15808b0e919cb36b581bd0d1d6c2b52b44042feee715cff01cea2e71c2c383f5",
+    "size": 12429
+  },
+  "execution_backend_implemented": false,
+  "existing_prepared_root_python_named_paths": [],
+  "guest_execution": false,
+  "kind": "application-guest-collector-proposal",
+  "production_gate_credit": false,
+  "recommended_next_component": "New guest-native C Linux process collector; retain Python supervisor for host/container orchestration.",
+  "request_wire_schema_implemented": false,
+  "required_separate_records": [
+    "linux-process-collection",
+    "mckernel-application-observation",
+    "application-stream-partition",
+    "application-attempt-observations"
+  ],
+  "schema_version": 1,
+  "source_capture": "/tmp/stability-application-collector-proposal-20260913-6mzsqikw",
+  "sources": [
+    {
+      "path": "scripts/tests/fixtures/stability-transport-fault/owner-phase-v1/controller.c",
+      "sha256": "92307db9af4cdaa76e85f9c985575f4aec413789751a1e1f012f1d9962fbb06f",
+      "size": 45151
+    },
+    {
+      "path": "scripts/application-tests/supervisor.py",
+      "sha256": "8b8700175e6673c3a6b652d4a93bd18b56def83dfa3ac4ec821d4ae6c554e873",
+      "size": 24564
+    },
+    {
+      "path": "scripts/application-tests/runtime_contracts.py",
+      "sha256": "6d25c35718c056e9ee67dc8c0f132a650d1020a67cb9d9503a36092bba58b13e",
+      "size": 27703
+    },
+    {
+      "path": "scripts/application-tests/run.py",
+      "sha256": "75bd82edb4ac6bc55519e18c8eb1b89056793af871ef2b85b0bdb5f19d9f0347",
+      "size": 13264
+    },
+    {
+      "path": "scripts/application-tests/owner_observations.py",
+      "sha256": "97466f94dff53fc250509859d164a9858a4f361405ad62b82bb59ab621f77bcf",
+      "size": 33019
+    },
+    {
+      "path": "scripts/application-tests/phase_observations.py",
+      "sha256": "589694ee603b096743682225ff964b39612439a3082ae7f6a80707c4755f7102",
+      "size": 25144
+    },
+    {
+      "path": "docs/verification/stability-packet001-review-20260913.json",
+      "sha256": "61fc92ad9b60ec2ca39121a32dae0ebce67055cf6bc4478dffbf9bc751dca07c",
+      "size": 64134
+    },
+    {
+      "path": "docs/verification/stability-application-backend-map-20260913.md",
+      "sha256": "b1e459e61a41a4232e30df59d5ff686ad9ab4dc75d3912e7ed7a4b3c8a7e6142",
+      "size": 12802
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-fault-guest-root-20260913-prepublish-hard-4/record.json",
+      "sha256": "ea3bd5362dce9cad884d73b5f94a5da13e456c6f33800561df4e0c5e52111582",
+      "size": 32516
+    }
+  ],
+  "status": "SOURCE_ONLY_PROPOSAL",
+  "test_execution": false,
+  "transport_acceptance": false
+}

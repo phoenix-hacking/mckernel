@@ -1,0 +1,270 @@
+{
+  "schema": "mckernel.sdk-source-binding.correction-independent-review.v1",
+  "at": "2026-11-10T08:43:50.200927+00:00",
+  "review_owner": "/root/p03_cutover_source_max direct same-Root Sol/MAX; no recursion",
+  "decision": "GO_EXACT_SIX_FILE_BINDING_SUCCESSOR_AND_THREE_FOCUSED_METHODS_PENDING_ROOT_FRESH_ADMISSION",
+  "scope": "Bounded SDK/current-IHK source-binding correction only; compiler/build/native/production acceptance remain separate.",
+  "frozen_delivery": {
+    "RESULT.json": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sdk-binding-source-1/correction-1/RESULT.json",
+      "git_blob_sha1": "ed96ff7890afffb89b35c16759f436ee54c05457",
+      "sha256": "4e924d7f2d7cf0efb4b1539f469c7579fc47b1aba82626da672e24b3402012da",
+      "size": 3521
+    },
+    "SOURCE-BINDINGS.json": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sdk-binding-source-1/correction-1/SOURCE-BINDINGS.json",
+      "git_blob_sha1": "f174682c9f48fc1257c879a3090f38172a2e8c2c",
+      "sha256": "947888eaa01083a5c0f9f46e7ab9b0aaea66ce12a25c90485bc95545737e9eea",
+      "size": 10597
+    },
+    "NEXT-OPERATION.json": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sdk-binding-source-1/correction-1/NEXT-OPERATION.json",
+      "git_blob_sha1": "f8a4d24d79b7cbffee81be9faf52345120031603",
+      "sha256": "259807f2ca7172777cba5500070153b5b52ea75d6bcf4fc7115a9fcbec8f2f10",
+      "size": 5608
+    },
+    "current-ihk-source-binding-correction.patch": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sdk-binding-source-1/correction-1/current-ihk-source-binding-correction.patch",
+      "git_blob_sha1": "7543a14c418afb6f0909cdd73680e0b90f19c3fa",
+      "sha256": "aed5a73aa8326aa17edba3fd4f6844bee716de12a8cdabe29412ce9fe0b9f629",
+      "size": 8753
+    }
+  },
+  "prior_failed_candidate": {
+    "patch": {
+      "git_blob_sha1": "73533dba0387095390628545f2fcbc6c670b427e",
+      "sha256": "b709bd76b9c2c95f129687d8a9417b8a945d928b4bc8d3c25054e6917e8eff1c",
+      "size": 4031
+    },
+    "review": {
+      "git_blob_sha1": "87cc67f7e220a20ff899f95e7e4a572c82316c06",
+      "sha256": "ea63b66dc39a3f5c4ec7b6f307391d757fb95eb814b11be69c83e18fe567ed06",
+      "size": 11680
+    },
+    "preserved": true
+  },
+  "source_rows": [
+    {
+      "relative": ".github/workflows/native-rust-host-modules-exact-build.yml",
+      "preimage": {
+        "git_blob_sha1": "ae0bfb987dc85f90815076cbe361128a729f59a1",
+        "sha256": "a60c8468c151a8598997d1ba9e8f3c3693ecf1785866e99e7edbc0dc75c4add6",
+        "size": 95439
+      },
+      "candidate": {
+        "git_blob_sha1": "b9450515f7069e2314cc40f3c196b1889ca015d6",
+        "sha256": "d76c52d3ee0472483e3f32ffda0a8a33d264ec79e2b8d9cbeb567402cdd1754a",
+        "size": 95439
+      },
+      "frozen_preimage_matches": true,
+      "frozen_candidate_matches": true,
+      "current_canonical_matches_preimage": true,
+      "candidate_mode": "0o644",
+      "canonical_mode": "0o600"
+    },
+    {
+      "relative": "host-kernel/contracts/native-rust-runtime-evidence-v1.json",
+      "preimage": {
+        "git_blob_sha1": "344615852bebe8be5b9a8428e58841c79c35e123",
+        "sha256": "a2cbfcffe491879b0732ed2c0cc7b615254ab11c4d8cbaf3614f6c3361fd99e6",
+        "size": 19595
+      },
+      "candidate": {
+        "git_blob_sha1": "ad293cc34a9721cd192536e9a5d7618aab8d0876",
+        "sha256": "8eac1a0fa60d26545e23776147cd7ae784c2ae94cc37be5ff30f7a659e950409",
+        "size": 19595
+      },
+      "frozen_preimage_matches": true,
+      "frozen_candidate_matches": true,
+      "current_canonical_matches_preimage": true,
+      "candidate_mode": "0o644",
+      "canonical_mode": "0o644"
+    },
+    {
+      "relative": "scripts/native_rust_exact_build_input_manifest.py",
+      "preimage": {
+        "git_blob_sha1": "19c4bf9b069cf966b3b3f31dd1427bba0d0a0091",
+        "sha256": "9723cec5c36ad77e90d7619f1ad9fae3e193f1b92a9b152193f2c223b3453b38",
+        "size": 9311
+      },
+      "candidate": {
+        "git_blob_sha1": "a2d22ac21023ffad1867effd8689ffbca48d22fa",
+        "sha256": "d2855b96b285e5485e82a47a1579099e49fea011a236a9910127fc8cdb7d1dd0",
+        "size": 9311
+      },
+      "frozen_preimage_matches": true,
+      "frozen_candidate_matches": true,
+      "current_canonical_matches_preimage": true,
+      "candidate_mode": "0o644",
+      "canonical_mode": "0o600"
+    },
+    {
+      "relative": "scripts/native_rust_exact_build_offline.py",
+      "preimage": {
+        "git_blob_sha1": "4f8d0e63d02271833141959105eb14ad0ec0e5d2",
+        "sha256": "cc243126ab8cc0754c62175c77e46d6ba0d98294f8168cc77893a2c12249cd1a",
+        "size": 27338
+      },
+      "candidate": {
+        "git_blob_sha1": "432758790d66371338cef40fee1a7c6e07c64713",
+        "sha256": "db5e8f8399b713be645b25d6a6e61632c4aaae258b22959e4344da048198b043",
+        "size": 27519
+      },
+      "frozen_preimage_matches": true,
+      "frozen_candidate_matches": true,
+      "current_canonical_matches_preimage": true,
+      "candidate_mode": "0o644",
+      "canonical_mode": "0o600"
+    },
+    {
+      "relative": "scripts/native_rust_runtime_evidence.py",
+      "preimage": {
+        "git_blob_sha1": "3a9e301db2613bb6dd07d46d0c8f6fab04155a16",
+        "sha256": "c6a971686b872eabe0835f64e4585e83b732b32672cfee06ac925ecdac463c45",
+        "size": 365411
+      },
+      "candidate": {
+        "git_blob_sha1": "70d8bf53cfea4dcd87517ded7e8a623c80e82313",
+        "sha256": "e77b2e3d5728cc0e8f2c1c28313c1760da60fe66a0e2162dbf7d411a89ff30ec",
+        "size": 365411
+      },
+      "frozen_preimage_matches": true,
+      "frozen_candidate_matches": true,
+      "current_canonical_matches_preimage": true,
+      "candidate_mode": "0o644",
+      "canonical_mode": "0o644"
+    },
+    {
+      "relative": "scripts/tests/test_native_rust_exact_build_workflow.py",
+      "preimage": {
+        "git_blob_sha1": "1ba30b89144953bb39e97f04fe20390406e70533",
+        "sha256": "574861b4dbdbbb51a095d60b7ebd7e483c72b8ac7d933c8e5e01f57c031827ba",
+        "size": 117061
+      },
+      "candidate": {
+        "git_blob_sha1": "d1954513246d2fcb3d74aedf0bef05b465348edc",
+        "sha256": "f1ca4e4e000c9bf5227179164f040b139df0d1bf54c4597f3407bac7ff69a991",
+        "size": 117061
+      },
+      "frozen_preimage_matches": true,
+      "frozen_candidate_matches": true,
+      "current_canonical_matches_preimage": true,
+      "candidate_mode": "0o644",
+      "canonical_mode": "0o644"
+    }
+  ],
+  "checks": {
+    "six_frozen_preimages_candidates_match": true,
+    "six_current_canonical_preimages_still_match": true,
+    "candidate_files_are0644": true,
+    "sole_normalized_self_marker": true,
+    "normalized_self_digest_exact": true,
+    "final_runtime_identity_exact": true,
+    "all8_step_names_and_hashes_exact": true,
+    "compile_step_unchanged17076": true,
+    "source_step7fd72": true,
+    "metadata_step282efa": true,
+    "current_actual_semantic_identities_match_code_and_contract": true,
+    "whole_candidate_workflow_identity_matches_code_and_contract": true,
+    "checker_AST_behavior_unchanged_besides_exact_binding_assignments": true,
+    "contract_changes_only3_registered_identity_rows": true,
+    "operation_six_candidate_SHA_bindings_exact": true,
+    "operation_unchanged_semantic_inputs_exact": true,
+    "qualified_interpreter_exact": true,
+    "three_selected_methods_exact": true,
+    "old_failed_packet_preserved": true,
+    "policy_diff_and_raw_receipt_match": true
+  },
+  "corrected_failure_family": {
+    "metadata": "Actual retained qualified B collector adds .mcctrl_rust.o.cmd, .m15_mmap_trace_gates.o.cmd and .m15_mm_write_warning.o.cmd only to metadata. Candidate retains all those current bytes; enforced metadata digest now282efa. Unchanged compile hash17076 remains.",
+    "semantic_source_workflow_contract": "Both checker and existing contract register exact current kbuilddcf60, committed clean policy3e3e73/c28c7e4 and whole candidate workflowd76c52/b9450515; kconfig_solver unchanged. Current actual source bytes independently match all3 semantic authority maps. Existing helper/runtime-workflow identities and every contract gate/claim/requirement remain unchanged.",
+    "normalized_self": "One exact marker is normalized to64zeros over final checker bytes; derived60f1d2fd...fc8eb5fe equals registered value and final checkerSHAe77b2e3d...ff30ec.",
+    "enforcement": "Actual _validate_exact_build_workflow dispatch still immediately calls v2, which checks every8named step. All digest and byte-identity enforcement remains; no bypass, exception widening or held-code qualification is introduced."
+  },
+  "source_policy_review": {
+    "actual_identity": {
+      "git_blob_sha1": "c28c7e4dc1c85941002f61f15803bea3e9c270c6",
+      "sha256": "3e3e73a3ea0ef090dba1a7e79ff250e3ff3cb80377d51d5398edb7b74ee6467b",
+      "size": 8623
+    },
+    "Root_current_source_disposition": "Root explicitly supplies clean HEAD/index/worktree3e3e73/c28c7e4 from9173f76, predecessor f546871. This review consumes that source disposition plus exact raw diff/provenance; it makes no independent permission/native release.",
+    "diff_identity": {
+      "git_blob_sha1": "d575d38855ee07212a0c7b4a8556cd7d674802d7",
+      "sha256": "380dab24a826fd30bad1eed7ec152e04a255ebefda20e9586467417b77eece59",
+      "size": 2899
+    },
+    "raw_receipt_identity": {
+      "git_blob_sha1": "02bc33b09f769505b96f1ffbb40cd31d47d2ebbb",
+      "sha256": "994664cd6f696c2703815f628306115f5aa7cbd137b29d09649d4b3c77061722",
+      "size": 973
+    },
+    "conclusion": "Only locked KBUILD_LINES changes and mcctrl- return prefix: existing mcctrl Rust/two-ASM composite, explicit --check-cfg definitions and opt-in accepted only empty/0/1 with --cfg selected only at1. Tuple equality remains exact; no parser/behavior validation weakening. The current recipe remains defaultOFF. No policy/collector source edit is part of this six-file patch."
+  },
+  "source_pin_and_history": "Current EXPECTED_IHK_HEAD is8d288 in manifest/offline/workflow/test. REVIEWED_IHK_HEAD remains3114 solely for original exact historical overlay preimage; assetcbaaec7/base91fe5688/result7abb77 and strict helper checks unchanged. Since current != reviewed, production_overlay is false and current source must pass ordinary exact Git/index/tree/mode inventory; unexpected ihk_overlay is refused. No historical overlay replay or worktree mutation is admitted.",
+  "operation": {
+    "argv": [
+      "/usr/bin/env",
+      "-i",
+      "LANG=C",
+      "LC_ALL=C",
+      "PATH=/usr/bin:/bin",
+      "TZ=UTC",
+      "TMPDIR=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sdk-binding-source-1/correction-1/qualification-1/tmp",
+      "/home/holden/anaconda3/bin/python3",
+      "-B",
+      "-E",
+      "-s",
+      "-m",
+      "unittest",
+      "-v",
+      "scripts.tests.test_native_rust_exact_build_workflow.NativeRustExactBuildWorkflowTests.test_frozen_legacy_oracle_and_shared_evidence_path_are_available",
+      "scripts.tests.test_native_rust_runtime_evidence.NativeRustRuntimeEvidenceTests.test_exact_build_workflow_step_hashes_match_source_and_contract",
+      "scripts.tests.test_native_rust_runtime_evidence.NativeRustRuntimeEvidenceTests.test_isolated_checker_normalized_self_digest_is_exact"
+    ],
+    "cwd": "/home/holden/mckernel",
+    "selectors": [
+      "scripts.tests.test_native_rust_exact_build_workflow.NativeRustExactBuildWorkflowTests.test_frozen_legacy_oracle_and_shared_evidence_path_are_available",
+      "scripts.tests.test_native_rust_runtime_evidence.NativeRustRuntimeEvidenceTests.test_exact_build_workflow_step_hashes_match_source_and_contract",
+      "scripts.tests.test_native_rust_runtime_evidence.NativeRustRuntimeEvidenceTests.test_isolated_checker_normalized_self_digest_is_exact"
+    ],
+    "interpreter": "Exact already-qualified /home/holden/anaconda3/bin/python3 from Root authority; no new interpreter/tool/version/PyYAML probe executed.",
+    "effects": "Exactly3 existing unittest methods; one synchronous isolated Python config semantic worker; private temp/capture roots. No SUT import or selected method execution occurred in this review; Root test run earns only source/contract qualification.",
+    "required_profile": {
+      "address_space_bytes": 1073741824,
+      "aggregate_HOST_RAM_bytes_total_including_controllers_and_workers": 4294967296,
+      "aggregate_HOST_jobs_max": 3,
+      "core_bytes": 0,
+      "cpu_seconds": 45,
+      "cpu_set": [
+        7
+      ],
+      "file_size_bytes": 67108864,
+      "host_disk_floor_GiB": 16,
+      "kill_after_seconds": 2,
+      "minimum_fresh_MemAvailable_GiB": 26,
+      "parallel_jobs": 1,
+      "scratch_disk_floor_GiB": 12,
+      "wall_seconds": 58
+    },
+    "Root_preconditions": "Root alone composes matching exact six candidate postimages preserving all other dirty work, checks current semantic/B-collector input bytes, and supplies fresh CPU7/one-job shared4GiB/max3jobs admission with26GiB available and host16/scratch12GiB floors. Root creates fresh disjoint qualification/tmp roots, wraps full58s/45CPU/AS1GiB/core0/FSIZE64MiB and bounded2s retirement, captures PID/birth/argv/env/raw output/positive wait/stream closure. No command runs here.",
+    "modes": "Private candidates are0644 as indexed. Captured canonical workflow/offline/manifest modes600 remain visible in source_rows; normal exact-file integration must preserve required indexed644 mode before any later pristine manifest/build operation. No broad chmod, ownership change or source-inventory waiver is authorized.",
+    "pass": "All3 methods execute without skips/errors/failures and return0; source/contract qualification only. On failure preserve actual failed command/check/source/owner/diagnostic, retain original + bounded successor, stop unchanged retry and seek focused escalation."
+  },
+  "remaining_original_work": "Actual matched SDK preparation, selected Linux ASM/fixdep/modpost/current .ko, production image/runtime/native and resource-restoring evidence remain unproved. This source review and future3methods accept no original M14/M15 gate or C retirement.",
+  "holds": "Original generic/exec/equivalent/replayfalse, exact source exclusions, native/current-free/lifetime/UNKNOWN owners/reservations and service/account/credit holds unchanged; original M14 acceptance precedes M15.",
+  "preparation_diagnostic": {
+    "command": "rg -n 'kbuild_fragment|KBUILD_LINES|native-rust-kbuild|MCKERNEL_CURRENT_FORK_ADOPTION_OPT_IN' scripts/native_rust_kconfig_policy.py host-kernel/contracts/native-rust-runtime-evidence-v1.json host-kernel/rocky/mckernel/Kbuild host-kernel/rust/Kbuild",
+    "exit_code": 2,
+    "diagnostic": "Two guessed Kbuild file paths do not exist; actual locked policy source match was returned. This was a source-path lookup only, not a build/test failure, and those nonexistent paths are neither blockers nor new prerequisites. No external/permission retry or probe."
+  },
+  "operations": "Read/parse frozen source/contract/raw provenance, stdlib AST/literal and byte/hash comparison only; no SUT import, compiler/test/semantic worker/CMake/Docker/download/native/service/network or canonical/index/source edit. Only this private REVIEW.json write.",
+  "executed": false,
+  "review_bookkeeping_correction": {
+    "initial_review_result": "NO_GO_SOURCE_BINDING_REVIEW_CHECK_FAILED from reviewer-only wrong argv index",
+    "initial_failed_check": "qualified_interpreter_exact",
+    "diagnostic": "Review helper inspected command_argv[9], which is -E; the exact supplied qualified interpreter is command_argv[7]. The source request itself was correct and unchanged.",
+    "bounded_correction": "Compare the entire literal interpreter/flags/3selector suffix at index7 with the expected list; no source/test command change, SUT import, interpreter probe or test rerun.",
+    "actual_interpreter": "/home/holden/anaconda3/bin/python3",
+    "correct_suffix_matches": true
+  }
+}

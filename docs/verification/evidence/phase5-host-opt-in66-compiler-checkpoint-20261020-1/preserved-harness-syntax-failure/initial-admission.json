@@ -1,0 +1,84 @@
+{
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--core=0",
+        "--",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/phase5-host-fork-adoption-opt-in-20261020-1/check-cfg-module-correction-1/check_module_cfg.py"
+      ],
+      "label": "affected-guard"
+    },
+    {
+      "argv": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--core=0",
+        "--",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/phase5-host-fork-adoption-opt-in-20261020-1/check-cfg-module-correction-1/prepare_fullmodule_inputs.py"
+      ],
+      "label": "generate"
+    },
+    {
+      "argv": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--core=0",
+        "--",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/phase5-host-fork-adoption-opt-in-20261020-1/check-cfg-module-correction-1/materialize_request.py",
+        "--materialize"
+      ],
+      "label": "materialize"
+    }
+  ],
+  "controller": {
+    "pause_reason": null,
+    "phase": "running",
+    "stop_reason": null,
+    "usedPercent": 9
+  },
+  "growth_reserved_bytes": 134217728,
+  "host_available_bytes": 45125660672,
+  "memory_available_bytes": 29019471872,
+  "pins_verified": true,
+  "proposal_sha256": "a5ebe28df4499ad7d982d96ae55692eb53af95c8626013b99591ca44e2281400",
+  "scratch_available_bytes": 14258126848,
+  "scratch_uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52"
+}

@@ -1,0 +1,10 @@
+{
+  "status": "FAILED_PRESERVED_NO_RETRY",
+  "started_at": "2026-11-10T21:51:33.983870+00:00",
+  "finished_at": "2026-11-10T21:51:33.992488+00:00",
+  "error": "NameError: name 'time' is not defined",
+  "traceback": "Traceback (most recent call last):\n  File \"/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/host-validation-1/run_root_once.py\", line 27, in <module>\n    stamp=guard();available=int(next(x.split()[1] for x in pathlib.Path('/proc/meminfo').read_text().splitlines() if x.startswith('MemAvailable:')))*1024;over=overhead();host=shutil.disk_usage(str(ROOT)).free;scratch=shutil.disk_usage(str(HERE)).free\n  File \"/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/run_once.py\", line 28, in guard\n    assert time.time()-datetime.datetime.fromisoformat(s['updated_at']).timestamp()<90\nNameError: name 'time' is not defined\n",
+  "phases": [],
+  "native_or_application_executed": false,
+  "old_UNKNOWN_released": false
+}

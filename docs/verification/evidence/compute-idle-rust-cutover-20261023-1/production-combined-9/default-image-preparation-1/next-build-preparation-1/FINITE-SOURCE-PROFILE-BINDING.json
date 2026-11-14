@@ -1,0 +1,57 @@
+{
+  "Rust_final_guarded_providers": [
+    "set_timer",
+    "get_this_cpu_local_var",
+    "timer_set_timer_body_result",
+    "process_sched_set_timer_bridge",
+    "sched_idle_loop_body_result",
+    "sched_idle_current_cpu_bridge",
+    "x86_clear_old_action_bridge",
+    "x86_clear_phys_to_virt_bridge",
+    "x86_clear_page_unmap_bridge",
+    "x86_clear_free_pages_user_bridge",
+    "page_unmap",
+    "x86_init_normal_set_large_bridge",
+    "x86_init_text_map_kernel_start_bridge",
+    "x86_init_text_end_bridge",
+    "sched_idle_begin_body_result",
+    "sched_idle_iteration_body_result",
+    "sched_idle_runqueue_has_running_result",
+    "process_sched_cpu_local_bridge",
+    "get_cpu_local_var",
+    "ihk_mc_get_processor_id"
+  ],
+  "actual_compiler_defaultlink_native": null,
+  "driver": {
+    "bytes": 158965,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-9/default-image-preparation-1/native_rust_exact_mckernel_image_offline.py",
+    "sha256": "aa5da2053b3ea8dbc1fd37f2eea088674523511525152e84a3352235f77b4583"
+  },
+  "existing_changed_functions": [
+    "_validate_m14_default_link",
+    "_validate_release_tid_production"
+  ],
+  "four_actual_C_memory_imports": [
+    "x86_clear_old_action_bridge",
+    "x86_clear_phys_to_virt_bridge",
+    "x86_clear_page_unmap_bridge",
+    "x86_clear_free_pages_user_bridge"
+  ],
+  "new_functions": [
+    "_m14_check_set_timer_symbols",
+    "_validate_m14_set_timer_contract"
+  ],
+  "observer_cap_bytes": 1048576,
+  "prepared_actualwholeprocessABIcompile": true,
+  "process_capture_observer_AST_unchanged": true,
+  "release_tid_change": "ExactcanonicalprocesswholefileSHA literal only; priorbodychecks/actualABI witnesses unchanged",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "set_timer_C_U_or_relocation_required": false,
+  "status": "SOURCE_BINDING_ONLY_NO_COMPILER_CREDIT",
+  "timer_C_callback_providers": [
+    "process_timer_spin_lock_bridge",
+    "process_timer_spin_unlock_bridge",
+    "process_timer_lapic_enable_bridge",
+    "process_timer_lapic_disable_bridge"
+  ]
+}

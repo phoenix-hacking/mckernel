@@ -1,0 +1,42 @@
+{
+  "actual_command": "taskset -c 6 prlimit --as=2147483648:2147483648 --core=0:0 -- python3 -I -B docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-proc-snapshot-lifecycle-source-1/test_dead_caller_snapshot_lifecycle.PURE.py",
+  "argv": [
+    "taskset",
+    "-c",
+    "6",
+    "prlimit",
+    "--as=2147483648:2147483648",
+    "--core=0:0",
+    "--",
+    "python3",
+    "-I",
+    "-B",
+    "docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-proc-snapshot-lifecycle-source-1/test_dead_caller_snapshot_lifecycle.PURE.py"
+  ],
+  "baseline_hypothesis_proven": true,
+  "cpu_slot_released": true,
+  "direct_command_joined": true,
+  "manifest": {
+    "bytes": 3536,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-proc-snapshot-lifecycle-source-1/FOCUSED-FUNCTION-DELTA-MANIFEST.SOURCE-ONLY.NOT-RELEASED.json",
+    "sha256": "342693d4f809f27bdae5fcd5485fd0d50f10c3856105a49e0a20a40a3d317fca"
+  },
+  "new_execution_release": false,
+  "observed_failure_cause_claim": false,
+  "returncode": 0,
+  "root_or_runtime_or_current_fd_changes": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_only": true,
+  "status": "PASS_SOURCE_DIAGNOSTIC_DELTA_NOT_EXECUTION_ACCEPTANCE",
+  "stderr": {
+    "bytes": 1533,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-proc-snapshot-lifecycle-source-1/actual-final-pure.stderr",
+    "sha256": "d4eb02151c60300b4a31792ac23518c705e031530042650298d4ec27a38e77f9"
+  },
+  "stdout": {
+    "bytes": 0,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-proc-snapshot-lifecycle-source-1/actual-final-pure.stdout",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "tests": 20
+}

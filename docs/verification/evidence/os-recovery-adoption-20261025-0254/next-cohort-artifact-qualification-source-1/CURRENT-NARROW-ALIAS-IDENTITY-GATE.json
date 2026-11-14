@@ -1,0 +1,126 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_ONLY_TWO_REVIEWED_ALIAS_PAIRS_WITH_FULL_OBJECT_FINAL_IDENTITY",
+  "current_decision": {
+    "status": "PASS_ONLY_TWO_REVIEWED_ALIAS_PAIRS_WITH_FULL_OBJECT_FINAL_IDENTITY",
+    "aliases": [
+      {
+        "offset": 8,
+        "original": "process_spin_lock_bridge",
+        "actual": "mem_kmalloc_remote_lock_bridge"
+      },
+      {
+        "offset": 16,
+        "original": "process_spin_unlock_bridge",
+        "actual": "mem_kmalloc_remote_unlock_bridge"
+      }
+    ],
+    "all_ten_original_named_final_function_addresses": true
+  },
+  "predicate": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next-cohort-artifact-qualification-source-1/narrow_f02_alias_identity.py",
+    "bytes": 2649,
+    "sha256": "0422b8a096631b41cc6e5e28f739f690767e70bce26c997012c2d65f09b6ff49"
+  },
+  "predicate_unchanged_from_accepted_F02": true,
+  "current_alias_identities": [
+    {
+      "offset": 8,
+      "original_name": "process_spin_lock_bridge",
+      "actual_name": "mem_kmalloc_remote_lock_bridge",
+      "original_object_symbol": {
+        "index": 8016,
+        "name": "process_spin_lock_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 2368,
+        "value": 0,
+        "size": 171,
+        "other": 0
+      },
+      "actual_object_symbol": {
+        "index": 4084,
+        "name": "mem_kmalloc_remote_lock_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 2368,
+        "value": 0,
+        "size": 171,
+        "other": 0
+      },
+      "original_final_symbol": {
+        "index": 4728,
+        "name": "process_spin_lock_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684879472,
+        "size": 171
+      },
+      "actual_final_symbol": {
+        "index": 867,
+        "name": "mem_kmalloc_remote_lock_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684879472,
+        "size": 171
+      },
+      "object_code_sha256": "bfbdfbdd2e7d3f49cbaa8896daaecf07650fe6eb71a4babde689283602537710",
+      "final_code_sha256": "441369cb8432de18bb8f274c45c84fd4e9f23e951414e1bca3b0d1173aa764ea",
+      "original_named_final_pointer": 18446744073684879472
+    },
+    {
+      "offset": 16,
+      "original_name": "process_spin_unlock_bridge",
+      "actual_name": "mem_kmalloc_remote_unlock_bridge",
+      "original_object_symbol": {
+        "index": 7891,
+        "name": "process_spin_unlock_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 2370,
+        "value": 0,
+        "size": 132,
+        "other": 0
+      },
+      "actual_object_symbol": {
+        "index": 4083,
+        "name": "mem_kmalloc_remote_unlock_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 2370,
+        "value": 0,
+        "size": 132,
+        "other": 0
+      },
+      "original_final_symbol": {
+        "index": 4618,
+        "name": "process_spin_unlock_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684879648,
+        "size": 132
+      },
+      "actual_final_symbol": {
+        "index": 1126,
+        "name": "mem_kmalloc_remote_unlock_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684879648,
+        "size": 132
+      },
+      "object_code_sha256": "d7495b604cb2d1c886c2f36c453f97a07f808a21d4a998e5fa4e7d8413e02a97",
+      "final_code_sha256": "eef784c9fff25f34a8bee389096a3de378aa177f2ccde2dec5fdb1894be42fbd",
+      "original_named_final_pointer": 18446744073684879648
+    }
+  ],
+  "general_alias_waiver": false,
+  "native_acceptance": false
+}

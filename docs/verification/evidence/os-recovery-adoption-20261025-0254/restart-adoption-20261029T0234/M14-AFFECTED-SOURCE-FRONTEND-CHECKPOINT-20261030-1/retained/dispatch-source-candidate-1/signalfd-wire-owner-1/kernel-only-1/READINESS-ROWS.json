@@ -1,0 +1,27 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "milestone": "M14_ONLY",
+  "rows": [
+    {
+      "original_C_function": "syscall_signalfd_create_bridge",
+      "original_C_path": "/home/holden/mckernel/kernel/syscall.c",
+      "original_C_sha256": "7b33e5de55ddba41036a57ddba3694c51afe7153ca7d779ceec0206734a15fd0",
+      "current_Rust_source_path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-combined-frontend-candidate-2/work-1/src/kernel/rust/syscall_policy.rs",
+      "current_Rust_source_sha256": "aa751edb617692c1da8ed2fe59c897bb2e20e6357f8a3431a16d27443becadeb",
+      "exact_function_preimage_sha256": "51eb544714c24f2e1fffe42aec22fff553b24767db59f11d3f6f5ab924f0a1bd",
+      "replacement_function_sha256": "992e54553c00b817f89a0e741f5997ac1946fee645814604513c78a585e3a0d6",
+      "actual_prototype": "unsafe extern C fn(CInt, CInt) -> CLong",
+      "correction": "Replace caller whole-zero storage with exact number+six raw wire field writes; preserve existing defined wire vector and helper-owned rtid/ttid/valid",
+      "callable_provider": "existing syscall_policy::do_syscall and ihk_mc_get_processor_id; unchanged",
+      "provider_gap": "Existing synchronous request/response/current-thread/stack/channel lifetime contract retained; no additional global selection or ACK",
+      "status": "READY_FOR_ONE_AFFECTED_ACTUAL_KERNEL_FRONTEND_AFTER_OWNER_BINDING",
+      "new_C_retirement_credit": 0,
+      "new_guest_apps": 0,
+      "new_current_candidate_builds": 0,
+      "tests_or_compiler_run": false
+    }
+  ],
+  "host_runtime_patch_included": false,
+  "M15_host_draft_deferred": true,
+  "next_check": "Root/compositor one actual kernel Rust frontend with existing passed 172-source cfg/environment/tool tuple and fresh private output, changing only this exact function; no new cfg/selector required."
+}

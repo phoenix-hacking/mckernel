@@ -1,0 +1,796 @@
+{
+  "task_id": "native-core-threads-current942-preparation-20261017-1",
+  "status": "READY_FOR_INDEPENDENT_VARIANT_AND_PREPARATION_REVIEW",
+  "scope": "Original retained dynamic libc core threads mode with two real workers; one new scratch collector variant only. No payload recompile or host/guest rerun; existing collector/default source and production sources unchanged.",
+  "frozen_inputs": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-application-core-build-20260908-1/record.json",
+      "sha256": "fdad31da77cdea1115a2db6d486d55cca650dcf4b899e36089bd59f12ca2e765",
+      "size": 32248,
+      "mode": 33188
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-application-core-build-20260908-1/native-application-core",
+      "sha256": "558d1607e4648321c9537215084e759496937d9591c319a21443f443193fda9a",
+      "size": 39488,
+      "mode": 33261
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-application-core-build-20260908-1/native-application-core.c",
+      "sha256": "525bb7416c579da09c5f780b3ff6962287f07143488b6669bbee5ae744412743",
+      "size": 5758,
+      "mode": 33188
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/tests/fixtures/native-application-core.c",
+      "sha256": "525bb7416c579da09c5f780b3ff6962287f07143488b6669bbee5ae744412743",
+      "size": 5758,
+      "mode": 33204
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-application-core-build-20260908-1/linux-reference-threads.log",
+      "sha256": "cfe15383daf9fc40bcdaf5433bf9bc9b8f3f7001f84ada6131306eb07bcff700",
+      "size": 25,
+      "mode": 33188
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_guest_collector.c",
+      "sha256": "82825cf128689ba8f8a74d9528c1acffb724a9356a2c6192c67c8abe4a74965e",
+      "size": 22952,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/collector-threads.c",
+      "sha256": "60921bc30463be3fa7bbf49e7589cb23ba31cff0fb56c767075a06927e7d4b70",
+      "size": 23008,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/signal-mask-restore-compile-profile-review-20261017.json",
+      "sha256": "320d19452c638e0853d21798628d59387d551ff2b212806e1061d9d0b644ff31",
+      "size": 11266,
+      "mode": 33152
+    },
+    {
+      "path": "/usr/bin/gcc",
+      "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f",
+      "size": 1158288,
+      "mode": 33261
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libc.a",
+      "sha256": "f9831edeccd3a87eb3fbba795f92bfa83409b3951f05ec40ca5df432b8699127",
+      "size": 5747618,
+      "mode": 33188
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/libgcc.a",
+      "sha256": "82b6c0bfc28d5314fffaaa2a920516575f347972f685b5805f5749a87a617df0",
+      "size": 3045214,
+      "mode": 33188
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/libgcc_eh.a",
+      "sha256": "1dc66e2a55a6cefe1458b4e94f9b321e453a5b7279638cd7d12e1ddf83ec59f8",
+      "size": 58252,
+      "mode": 33188
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/crt1.o",
+      "sha256": "27daac7b3f9e861ef8df49f45b2a8ffb7130a1899f86efe53c6f84d63fd3cd0d",
+      "size": 2040,
+      "mode": 33188
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/crti.o",
+      "sha256": "2f1c31070d95f398fe4c1388408e83283cc7e0cee0ebb64882e0b331e8e178e8",
+      "size": 1360,
+      "mode": 33188
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/crtbeginT.o",
+      "sha256": "9fe07384ef0078de4a23fe2acc4137cb5aeeddcc715cf189cc0d985b602d348a",
+      "size": 3120,
+      "mode": 33188
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/crtend.o",
+      "sha256": "c29d8ba35b3afad85993fa8f64b1a4d91678deaeb0f1cae952f12c0bdd4c83c1",
+      "size": 1360,
+      "mode": 33188
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/crtn.o",
+      "sha256": "a2266079f95b84ccc2162ebbf279bcd78858a748aa1882e0bdb912316c76a58f",
+      "size": 760,
+      "mode": 33188
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/cc1",
+      "sha256": "c09275e2d3f811e23d255eac415bfedd9e68ba8b5cf4b261d2fce136b5e8fc99",
+      "size": 25675096,
+      "mode": 33261
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/collect2",
+      "sha256": "5228dbf1e15d16694059023d16e7f13f201ea0d76a82e8837c6483dc21d66682",
+      "size": 622960,
+      "mode": 33261
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-manifest-20261017-1.json",
+      "sha256": "47eb95897b0a4f2d8b2cb2673c2ed3b3feff11895654ac160c854710cc7582da",
+      "size": 5455,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-20261017-1/root/lib64/ld-linux-x86-64.so.2",
+      "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b",
+      "size": 930600,
+      "mode": 33261
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-application-core-build-20260908-1/runtime/lib64/ld-linux-x86-64.so.2",
+      "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b",
+      "size": 930600,
+      "mode": 33188
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-20261017-1/root/lib64/libc.so.6",
+      "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+      "size": 2339896,
+      "mode": 33261
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-application-core-build-20260908-1/runtime/lib64/libc.so.6",
+      "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+      "size": 2339896,
+      "mode": 33188
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-20261017-1/root/bin/native-application-core",
+      "sha256": "558d1607e4648321c9537215084e759496937d9591c319a21443f443193fda9a",
+      "size": 39488,
+      "mode": 33261
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-20261017-1/manifest.json",
+      "sha256": "daab6d41de9866ca015cbd58766f855a41419686754d3438baaabeba301446f3",
+      "size": 19535,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-20261017-1/initramfs.cpio.gz",
+      "sha256": "bd503adcd1d45b437eb91902a50b09b9eeb094368ca4085546ef682fd1a5a694",
+      "size": 12347108,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-dispatch-20261017-2/attempt-result.json",
+      "sha256": "b9a49cb23d48279acb2bdd45d1bc238fb2aa4d81f66a21dc99851aa70b57883d",
+      "size": 79636,
+      "mode": 33152
+    }
+  ],
+  "collector_variant": {
+    "contract": {
+      "original_path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_guest_collector.c",
+      "original_sha256": "82825cf128689ba8f8a74d9528c1acffb724a9356a2c6192c67c8abe4a74965e",
+      "variant_path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/collector-threads.c",
+      "variant_sha256": "60921bc30463be3fa7bbf49e7589cb23ba31cff0fb56c767075a06927e7d4b70",
+      "changed_guards": [
+        "#if defined(ND_FUTEX)\nstatic char *const futex_boot_argv[] = {",
+        "#if defined(ND_FUTEX)\n    if (helper(\"boot\", \"/bin/native-boot\", futex_boot_argv, &safe))"
+      ],
+      "expected_boot_argv": [
+        "/bin/native-boot",
+        "hidos",
+        "allow_oversubscribe"
+      ],
+      "retained_macro": "ND_CORE_THREADS",
+      "stream_limit": 1024,
+      "supervisor_serializer_helper_bodies": "unchanged"
+    },
+    "source": {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/collector-threads.c",
+      "size": 23008,
+      "sha256": "60921bc30463be3fa7bbf49e7589cb23ba31cff0fb56c767075a06927e7d4b70"
+    },
+    "original_snapshot": {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/collector-original.c",
+      "size": 22952,
+      "sha256": "82825cf128689ba8f8a74d9528c1acffb724a9356a2c6192c67c8abe4a74965e"
+    },
+    "exact_diff": {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/collector-two-guard.diff",
+      "size": 922,
+      "sha256": "70cfe7bfecb64b410b33c3470c8b9f9289fb364283647a6bbd324d592a8d83e4"
+    },
+    "actual_change": "Only ND_FUTEX guards at boot argv definition and boot helper call extend to ND_FUTEX||ND_CORE_THREADS. All existing supervisor/serializer/helper/default behavior bodies byte-identical; ND_CORE_THREADS only, no ND_FUTEX flag, so1024-byte streams unchanged.",
+    "compile_macro": "ND_CORE_THREADS",
+    "independent_review_required": true
+  },
+  "prepared_manifest": {
+    "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/manifest.json",
+    "size": 5467,
+    "sha256": "923664a0ae87c477d028ad7be5ea8c01a65964846e0010bbd03123f034262951"
+  },
+  "collector": {
+    "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/init",
+    "sha256": "268b967064e44a61340e43a23940ef2bba16ad22e3615a6f5d0e7108428890b6",
+    "size": 1021992,
+    "mode": 33216
+  },
+  "payload": {
+    "path": "/home/holden/mckernel-work/scratch/native-application-core-build-20260908-1/native-application-core",
+    "sha256": "558d1607e4648321c9537215084e759496937d9591c319a21443f443193fda9a",
+    "size": 39488,
+    "mode": 33261
+  },
+  "payload_contract": {
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "app",
+      "threads"
+    ],
+    "cwd": "/case/work",
+    "env": {
+      "COKERNEL_PATH": "/apps",
+      "PATH": "/usr/bin:/bin"
+    },
+    "oracle": {
+      "exit_code": 37,
+      "stdout_hex": "4e41544956455f434f5245205041535320746872656164730a",
+      "stderr_hex": ""
+    },
+    "stderr_limit_bytes": 1024,
+    "stdout_limit_bytes": 1024
+  },
+  "retained_reference": {
+    "build_record_sha256": "fdad31da77cdea1115a2db6d486d55cca650dcf4b899e36089bd59f12ca2e765",
+    "result": {
+      "case": "threads",
+      "exit_code": 37,
+      "mckernel": false,
+      "stdout": "NATIVE_CORE PASS threads\n"
+    },
+    "stdout": {
+      "path": "/home/holden/mckernel-work/scratch/native-application-core-build-20260908-1/linux-reference-threads.log",
+      "sha256": "cfe15383daf9fc40bcdaf5433bf9bc9b8f3f7001f84ada6131306eb07bcff700",
+      "size": 25,
+      "mode": 33188
+    },
+    "same_binary_sha256": "558d1607e4648321c9537215084e759496937d9591c319a21443f443193fda9a",
+    "same_source_sha256": "525bb7416c579da09c5f780b3ff6962287f07143488b6669bbee5ae744412743",
+    "not_rerun": true
+  },
+  "runtime_closure": "Retained loader0853c866/libcb058f87d byte hashes match current942 staged manifest and retained library copies; baseline /bin/native-application-core matches same558d binary. Existing59member baseline retained.",
+  "original_threads_assertions": "Two pthread workers use barrier3 with main, each checks initially-zero TLS, unique TLS value,1000 mutex-protected increments, unchanged TLS and returned thread value; main joins both, requires counter2000 and its own TLS0, destroys barrier/mutex. Original default pthread stack behavior and all CHECKs unchanged.",
+  "boot_profile": {
+    "actual_compiled_array": {
+      "argv": [
+        "/bin/native-boot",
+        "hidos",
+        "allow_oversubscribe"
+      ],
+      "preprocessed_main_uses_same_actual_array": true
+    },
+    "proof": {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/boot-profile-proof.json",
+      "size": 4956,
+      "sha256": "26b5733d3496cfbd35313a9ad6f53d06bc32be4755e28ad89c954f64d778fe1a"
+    },
+    "interpretation": "Compiled harmless wrapper reads actual futex_boot_argv array. Preprocessed actual PID1 main uses that same array in boot helper. No boot/helper/PID1 function executed."
+  },
+  "checks": {
+    "result": {
+      "status": "READY_FOR_INDEPENDENT_REVIEW",
+      "mode": "threads",
+      "manifest": {
+        "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/manifest.json",
+        "sha256": "923664a0ae87c477d028ad7be5ea8c01a65964846e0010bbd03123f034262951",
+        "size": 5467,
+        "mode": 33152
+      },
+      "payload": {
+        "path": "/home/holden/mckernel-work/scratch/native-application-core-build-20260908-1/native-application-core",
+        "sha256": "558d1607e4648321c9537215084e759496937d9591c319a21443f443193fda9a",
+        "size": 39488,
+        "mode": 33261
+      },
+      "collector": {
+        "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/init",
+        "sha256": "268b967064e44a61340e43a23940ef2bba16ad22e3615a6f5d0e7108428890b6",
+        "size": 1021992,
+        "mode": 33216
+      },
+      "payload_recompiled": false,
+      "payload_rerun": false,
+      "reference_reused": {
+        "case": "threads",
+        "exit_code": 37,
+        "mckernel": false,
+        "stdout": "NATIVE_CORE PASS threads\n"
+      },
+      "reference_log": {
+        "path": "/home/holden/mckernel-work/scratch/native-application-core-build-20260908-1/linux-reference-threads.log",
+        "sha256": "cfe15383daf9fc40bcdaf5433bf9bc9b8f3f7001f84ada6131306eb07bcff700",
+        "size": 25,
+        "mode": 33188
+      },
+      "metadata_members": 59,
+      "producer_positive": "PROTOCOL_PASS",
+      "negatives": {
+        "limit": "stream accounting",
+        "bytes": "wrong payload bytes",
+        "exit": "wrong payload exit"
+      },
+      "source_unchanged": true,
+      "variant_only_two_guards": true,
+      "application_acceptance": false,
+      "runtime_release": false
+    },
+    "execution": {
+      "command": {
+        "argv": [
+          "/home/holden/anaconda3/bin/python3.9",
+          "-B",
+          "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/prepare.py"
+        ],
+        "cwd": "/home/holden/mckernel",
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/tmp",
+          "TZ": "UTC",
+          "PYTHONDONTWRITEBYTECODE": "1"
+        },
+        "cpu_affinity": [
+          7
+        ],
+        "address_space_limit_bytes": 1073741824,
+        "cpu_limit_seconds": 150,
+        "wall_timeout_seconds": 180,
+        "driver_sha256": "8fa0abe072b85fd0923e52462490b5dc4b2d486781c5e69af0808d9ea493042b",
+        "interpreter": {
+          "path": "/home/holden/anaconda3/bin/python3.9",
+          "version": "3.9.12 (main, Apr  5 2022, 06:56:58) \n[GCC 7.5.0]",
+          "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb"
+        }
+      },
+      "result": {
+        "returncode": 0,
+        "elapsed_seconds": 9.751871781998489,
+        "stdout_sha256": "df2ccf1b31f821fd11cd1504989702c4e7491ba851f443310dc8dec12e427cad",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "subprocesses": [
+        {
+          "label": "collector-compile",
+          "argv": [
+            "/usr/bin/gcc",
+            "-std=gnu11",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-static",
+            "-fno-pie",
+            "-no-pie",
+            "-Wl,-z,noexecstack",
+            "-DND_CORE_THREADS",
+            "-MD",
+            "-MF",
+            "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/collector.d",
+            "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/collector-threads.c",
+            "-o",
+            "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/init"
+          ],
+          "environment": {
+            "PATH": "/usr/bin:/bin",
+            "LANG": "C",
+            "LC_ALL": "C",
+            "TZ": "UTC",
+            "HOME": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/home",
+            "TMPDIR": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/tmp",
+            "PYTHONDONTWRITEBYTECODE": "1"
+          },
+          "cwd": "/home/holden/mckernel",
+          "timeout_seconds": 45,
+          "returncode": 0,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "label": "collector-preprocess",
+          "argv": [
+            "/usr/bin/gcc",
+            "-std=gnu11",
+            "-DND_CORE_THREADS",
+            "-E",
+            "-P",
+            "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/collector-threads.c",
+            "-o",
+            "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/collector.preprocessed.c"
+          ],
+          "environment": {
+            "PATH": "/usr/bin:/bin",
+            "LANG": "C",
+            "LC_ALL": "C",
+            "TZ": "UTC",
+            "HOME": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/home",
+            "TMPDIR": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/tmp",
+            "PYTHONDONTWRITEBYTECODE": "1"
+          },
+          "cwd": "/home/holden/mckernel",
+          "timeout_seconds": 45,
+          "returncode": 0,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "label": "payload-elf",
+          "argv": [
+            "/usr/bin/readelf",
+            "-h",
+            "-l",
+            "-d",
+            "/home/holden/mckernel-work/scratch/native-application-core-build-20260908-1/native-application-core"
+          ],
+          "environment": {
+            "PATH": "/usr/bin:/bin",
+            "LANG": "C",
+            "LC_ALL": "C",
+            "TZ": "UTC",
+            "HOME": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/home",
+            "TMPDIR": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/tmp",
+            "PYTHONDONTWRITEBYTECODE": "1"
+          },
+          "cwd": "/home/holden/mckernel",
+          "timeout_seconds": 45,
+          "returncode": 0,
+          "stdout_sha256": "2d0d9b880b84eda39f522b6282612df1b3bbf3ec90f37e94eeacdc2040497500",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "label": "overlay",
+          "argv": [
+            "/home/holden/anaconda3/bin/python3.9",
+            "-B",
+            "/home/holden/mckernel/scripts/application-tests/native_diagnostic_overlay.py",
+            "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-20261017-1/initramfs.cpio.gz",
+            "/home/holden/mckernel-work/scratch/native-application-core-build-20260908-1/native-application-core",
+            "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/init",
+            "/home/holden/mckernel-work/scratch/mcexec-preload-fastpath-build-20260928-1/rust/executer/user/mcexec",
+            "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/overlay.cpio.gz",
+            "--collector-sha256",
+            "268b967064e44a61340e43a23940ef2bba16ad22e3615a6f5d0e7108428890b6",
+            "--mcexec-sha256",
+            "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b",
+            "--payload-sha256",
+            "558d1607e4648321c9537215084e759496937d9591c319a21443f443193fda9a",
+            "--base-sha256",
+            "bd503adcd1d45b437eb91902a50b09b9eeb094368ca4085546ef682fd1a5a694",
+            "--base-size",
+            "12347108",
+            "--base-cpio-sha256",
+            "7e69601b68dafb44c945d2998b10ec024a73518303bb505f275490d83e4c6767",
+            "--base-cpio-size",
+            "39677952"
+          ],
+          "environment": {
+            "PATH": "/usr/bin:/bin",
+            "LANG": "C",
+            "LC_ALL": "C",
+            "TZ": "UTC",
+            "HOME": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/home",
+            "TMPDIR": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/tmp",
+            "PYTHONDONTWRITEBYTECODE": "1"
+          },
+          "cwd": "/home/holden/mckernel",
+          "timeout_seconds": 60,
+          "returncode": 0,
+          "stdout_sha256": "8e9d59f63b20b05dcf7d3742201a14d16c85916b5628ff6238b273bbfe67d048",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "label": "producer-compile",
+          "argv": [
+            "/usr/bin/gcc",
+            "-std=gnu11",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-static",
+            "-fno-pie",
+            "-no-pie",
+            "-Wl,-z,noexecstack",
+            "-DND_CORE_THREADS",
+            "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/producer-wrapper.c",
+            "-o",
+            "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/producer-wrapper"
+          ],
+          "environment": {
+            "PATH": "/usr/bin:/bin",
+            "LANG": "C",
+            "LC_ALL": "C",
+            "TZ": "UTC",
+            "HOME": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/home",
+            "TMPDIR": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/tmp",
+            "PYTHONDONTWRITEBYTECODE": "1"
+          },
+          "cwd": "/home/holden/mckernel",
+          "timeout_seconds": 45,
+          "returncode": 0,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "label": "producer-frame",
+          "argv": [
+            "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/producer-wrapper"
+          ],
+          "environment": {
+            "PATH": "/usr/bin:/bin",
+            "LANG": "C",
+            "LC_ALL": "C",
+            "TZ": "UTC",
+            "HOME": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/home",
+            "TMPDIR": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/tmp",
+            "PYTHONDONTWRITEBYTECODE": "1"
+          },
+          "cwd": "/home/holden/mckernel",
+          "timeout_seconds": 5,
+          "returncode": 0,
+          "stdout_sha256": "0b71354766d1930903b31434d9581bccc498739e91dce9d2f7fa0148c6e2766e",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    "metadata": "All59 members/all9 metadata fields match authenticated retained base plus six reviewed overlay rows; current942 image/modules untouched.",
+    "actual_producer": "Compiled new60921 variant with ND_CORE_THREADS; actual global payload argv/env/boot array and actual publish/frame serializer match selected manifest and exit37. Harmless injected capture only.",
+    "evaluator_positive": "PROTOCOL_PASS on copy of retained signal-mask observation with only ND_PAYLOAD replaced by actual C frame; no guest credit.",
+    "evaluator_negatives": {
+      "limit": "stream accounting",
+      "bytes": "wrong payload bytes",
+      "exit": "wrong payload exit"
+    }
+  },
+  "prior_inspection_issue": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-core-current942-preparation-inspection-failure-20261017-1.json",
+    "sha256": "fd62964951851875fe7557fb12fd676903f7fae1b0072e9d2ac1ac56f17af382",
+    "resolution": "Dispatcher authorized display-only outputs-list correction; original error retained. No further core-family failure."
+  },
+  "memory_preparation": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-core-memory-current942-preparation-20261017-1.json",
+    "sha256": "0df94c1709ac7cf036d76f516d1996b9dd5b7628b969a07dda7cd7fd4cc2bb92"
+  },
+  "artifacts": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/actual-boot-argv.json",
+      "size": 135,
+      "sha256": "1c9f912a988cbfdd4dc00ba135a99987db912688d135142c4d0ef22211a912ea"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/boot-profile-proof.json",
+      "size": 4956,
+      "sha256": "26b5733d3496cfbd35313a9ad6f53d06bc32be4755e28ad89c954f64d778fe1a"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/collector-compile.stderr",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/collector-compile.stdout",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/collector-original.c",
+      "size": 22952,
+      "sha256": "82825cf128689ba8f8a74d9528c1acffb724a9356a2c6192c67c8abe4a74965e"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/collector-preprocess.stderr",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/collector-preprocess.stdout",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/collector-threads.c",
+      "size": 23008,
+      "sha256": "60921bc30463be3fa7bbf49e7589cb23ba31cff0fb56c767075a06927e7d4b70"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/collector-two-guard.diff",
+      "size": 922,
+      "sha256": "70cfe7bfecb64b410b33c3470c8b9f9289fb364283647a6bbd324d592a8d83e4"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/collector.d",
+      "size": 7558,
+      "sha256": "e3fb9a9fbb376d2244598e905d3f6df26e786f0b037c3354d71a837ef62bde39"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/collector.preprocessed.c",
+      "size": 102276,
+      "sha256": "69cf1165729a8ef9967e69ca09d7158e7e2f7c951cbed6aaa09354459f811cfc"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/command.json",
+      "size": 1026,
+      "sha256": "4e98b6f550f8c0411134d7c4852b52a0fd8e9c7681950c94913fd543b6ec5e68"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/commands.json",
+      "size": 7182,
+      "sha256": "f20f992ba854f8982888d19b769d7d07b99da594545c0929ea3b7e6d5d471797"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/consumed-headers.json",
+      "size": 18584,
+      "sha256": "79aa783e34352991a2daa2090951aa9f99f76d87d5fe4a2ee363e31b2ad96163"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/expected.stdout",
+      "size": 25,
+      "sha256": "cfe15383daf9fc40bcdaf5433bf9bc9b8f3f7001f84ada6131306eb07bcff700"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/init",
+      "size": 1021992,
+      "sha256": "268b967064e44a61340e43a23940ef2bba16ad22e3615a6f5d0e7108428890b6"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/inputs.json",
+      "size": 6113,
+      "sha256": "7e14b4335cfc08f2daeda45360b7b7460115d3574bfcf5ec9820407e88057fdc"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/manifest.json",
+      "size": 5467,
+      "sha256": "923664a0ae87c477d028ad7be5ea8c01a65964846e0010bbd03123f034262951"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/metadata-59-joins.json",
+      "size": 48461,
+      "sha256": "a0059a87dcf36945f16e0770fc0ce8194dd8d322814306a668fb83b8edabb4c7"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/negative-bytes-consumer-input.json",
+      "size": 76342,
+      "sha256": "4c8ca9799d69cf3407ccaa60a0b883822eaee16a239146995ef249e166f8ffad"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/negative-consumer-results.json",
+      "size": 101,
+      "sha256": "32af43994e65408018dc0efb842b654317e586f77f3107919bd8a2fe49fe21f1"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/negative-exit-consumer-input.json",
+      "size": 76339,
+      "sha256": "0666a57ba9e34bb2bdbde7ba7f8d17d1a92375f33d0e2e3333ef2876c263be37"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/negative-limit-consumer-input.json",
+      "size": 76342,
+      "sha256": "ce427423aa17c0f8c0ce6c0f3ea9d86b47d63b415dc15020e63b9327fa2ea662"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/overlay.cpio.gz",
+      "size": 12940860,
+      "sha256": "edd29a0a1ff707d696cb9cb2cb7b34d0cf24b2df906708f091e5e7deef25dcd5"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/overlay.json",
+      "size": 14850,
+      "sha256": "8e9d59f63b20b05dcf7d3742201a14d16c85916b5628ff6238b273bbfe67d048"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/overlay.stderr",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/overlay.stdout",
+      "size": 14850,
+      "sha256": "8e9d59f63b20b05dcf7d3742201a14d16c85916b5628ff6238b273bbfe67d048"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/payload-elf.stderr",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/payload-elf.stdout",
+      "size": 5087,
+      "sha256": "2d0d9b880b84eda39f522b6282612df1b3bbf3ec90f37e94eeacdc2040497500"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/positive-consumer-input.json",
+      "size": 76342,
+      "sha256": "bf0b8f362f42c418f8e414cbdda6c9ebdff69ebbc2e699b3fddce65de46df6fe"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/positive-consumer-result.json",
+      "size": 77642,
+      "sha256": "27da2d6174afcb46b9786457cc18f2d7a7cc3696d882b8f0d0efbb227f3a22dd"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/prepare.py",
+      "size": 13461,
+      "sha256": "8fa0abe072b85fd0923e52462490b5dc4b2d486781c5e69af0808d9ea493042b"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/producer-compile.stderr",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/producer-compile.stdout",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/producer-frame.stderr",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/producer-frame.stdout",
+      "size": 692,
+      "sha256": "0b71354766d1930903b31434d9581bccc498739e91dce9d2f7fa0148c6e2766e"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/producer-wrapper",
+      "size": 1022192,
+      "sha256": "9bb1a048e3da34f345443522ffe8962ab9affd6ee1a25ff68d878856ade4a894"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/producer-wrapper.c",
+      "size": 947,
+      "sha256": "f58c8603f455909bbeb64e05a6eb80775d13f9f62e18b314034d603c0d5420bb"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/result-check.json",
+      "size": 1609,
+      "sha256": "a3cb0872da76aabd2664993b27f2d40f25c0fbc18ea1a2aab73dd26dde47c222"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/result.json",
+      "size": 236,
+      "sha256": "0f29e5a4f5cdab477bd52e3e828124d065cf147d08b16ef5c7a40e11bfa84392"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/stderr",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/stdout",
+      "size": 144,
+      "sha256": "df2ccf1b31f821fd11cd1504989702c4e7491ba851f443310dc8dec12e427cad"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/variant-contract.json",
+      "size": 828,
+      "sha256": "e11195010fb6469c6fb4ed3ac5235f20dfff35a897e1ffc6955d023fc3242bfd"
+    }
+  ],
+  "application_acceptance": false,
+  "runtime_release": false,
+  "formal_case_credit": false,
+  "blocker": null,
+  "next_task": "Independent exact two-guard variant/boot/serializer/preparation review before separately reviewed threads execution packet. Execute memory first under dispatcher-owned release, then threads with existing allow_oversubscribe boot option."
+}

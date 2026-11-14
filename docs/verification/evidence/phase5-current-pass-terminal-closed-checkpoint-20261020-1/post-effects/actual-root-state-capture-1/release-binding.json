@@ -1,0 +1,22 @@
+{
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--fsize=33554432:33554432",
+    "--cpu=30:30",
+    "--core=0:0",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase5-current-pass-image-terminal-20261020-1/post-effects-quarantine-recovery-preparation-1/observe_exact_post_effect_quarantine.py"
+  ],
+  "execution_review_sha256": "87a50b1305620064a4627c1e810cb1ab625d7affb0ba1a42cdbf441610384beb",
+  "operation_sha256": "a46129235486579588adc6161a300bf491c41579d58429be9ab4207b5138390c",
+  "source_base_sha256": "a6ce818b1eabea2d13ed811487b88b2b811a4abbdb7dbb6b2cd43058b400e2d1"
+}

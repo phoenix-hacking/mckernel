@@ -1,0 +1,294 @@
+{
+  "schema": "mckernel.p01-p02.current-selection-sbindir.source-execution-review.v1",
+  "at": "2026-11-10T08:55:52.051305+00:00",
+  "decision": "GO_EXACT_PRIVATE_CPU6_BATCH_PENDING_ROOT_FRESH_ADMISSION",
+  "review_owner": "/root/source_acquisition_review_max; direct same-Root; no recursion",
+  "permissions": "Active thread danger-full-access/approval never. Reviewer performed source/packet reads and this private review write only; no compiler,CMake,test,program,Native,device,sudo,Docker,network,service or process-control execution.",
+  "scope": "OriginalM15-P01/P02 source selection, concrete configured-stop-provider fix, one failing retained config observer/corrected observer, first8 retained FakeHost cases, named main compile/link andELF readback only. This is a bounded execution/source GO, not original acceptance.",
+  "packet_bindings": {
+    "request": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1/REQUEST.PROPOSED.json",
+      "sha256": "ae641c0d4d652824b76c153069892b961b7e700c10b101f1fb80ac89d5587ed2"
+    },
+    "complete_eight_file_patch": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1/P01-P02-CURRENT-SELECTION-STOP-SBINDIR.PRIVATE.patch",
+      "sha256": "4348b1d130f22f15f94e9bc8854550e5d6edc95b56e47909ce5fac07099200ad"
+    },
+    "corrected_source_ready": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1/SOURCE-READY.STOP-SBINDIR-CORRECTION.NOT-EXECUTED.json",
+      "sha256": "08115920455e09b8cac73c5db2a45f9578165b36ffac17f340429ff1267e8447"
+    },
+    "bounded_three_file_correction": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1/P02-STOP-SBINDIR.BOUNDED-CORRECTION.patch",
+      "sha256": "357dc7e17eca6f876cb1f88700a50fe6be21e4dc728fc19f1438cf9b52080c51"
+    },
+    "actual_current_top_preimage": {
+      "path": "/home/holden/mckernel/CMakeLists.txt",
+      "sha256": "ba9f0efe1afd4f136e9b8b9cb8ab19f0d5e9eab919df65b460c79acb23c94316",
+      "matches_private_preimage": true
+    },
+    "candidate_top": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1/source/CMakeLists.txt",
+      "sha256": "eb47132388de4fec0f50b4e25d7633da87dec3c9b251a93ac1a3bc2201f642fc"
+    },
+    "producer": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1/host-producer/CMakeLists.txt",
+      "bytes": 1492,
+      "sha256": "d3ef281f7a9011f485ac1968e41f3f70ce73c38e6ea7d3f5be19202ce3c66937"
+    },
+    "regression": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1/qualification/config_provider_regression.rs.in",
+      "bytes": 634,
+      "sha256": "ea3671860815e52cfd772f9181532a843e1c2585371d83bae8e9eaf741476525"
+    },
+    "fixture8": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1/qualification/fixture.rs",
+      "bytes": 5496,
+      "sha256": "46a1f99b4b3728757251e3aab9766b81e3ba7dae4293c240e01537e22a9de814"
+    },
+    "existing_HOST_toolchain_binding": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-source-1/HOST-TOOLCHAIN-BINDING.json",
+      "sha256": "e27a98348bd44a341a37db8528008303111f7753af6a8fb441cd14199ec243ac",
+      "reuse": "Existing actual HOST1.95compiler/std/linker/readelf profile; no new availability probe or native SDK claim. Binding includes installed libtest rlib/rmeta used by the selected--test compiles."
+    }
+  },
+  "source_review": {
+    "top_level_integration": "Exact current topCMake hash matches the frozen preimage. Patch replaces only boot/stop shell configure lines with SelectRustBootTools include and removes only their old install block. Existing P03 SelectRustEclairBacktrace include and surrounding current definitions remain. No compute compiler or other program selector is rebound.",
+    "default_and_install": "ENABLE_RUST_BOOT_TOOLS defaultsOFF. OFF retains the two current shell configure paths; ON compiles the exact retained Rust mains at shipped mcreboot.sh andmcstop+release.sh names. Selector owns the sole install(PROGRAMS...) for both into unchangedCMAKE_INSTALL_SBINDIR. This packet runs no install or default flip.",
+    "target_compilation": "Only mcreboot_rust_program andmcstop_rust_program named custom targets are built with--parallel1. Their commands invoke the absolute pinned MCKERNEL_RUNTIME_TOOL_RUSTC with edition2021,crate-name,panicabort,optlevel2. No generated main is run by configure or these targets; P03 target is not built/retested.",
+    "actual_defect": "Canonical stop shell setsSBINDIR from@SBINDIR@ atline13 and uses that provider for ihkconfig. Top CMake setsSBINDIR=CMAKE_INSTALL_FULL_SBINDIR atline263. Canonical boot shell independently sets${prefix}/sbin atline24. Retained shared Config::installed suppliedprefix/sbin to both, so only the nondefault stop provider is wrong; no existing delivered-profile failure is assumed.",
+    "minimal_correction": "Add Config::installed_stop overriding only sbin from@SBINDIR@ via struct update; route only mcstop_main to it; addSBINDIR to the existing configured-literal check. Config::installed,mcreboot_main,reboot,stop andplatform bodies remain byte-identical to retained source.",
+    "candidate_input_verification": "All7candidate Rust/config/selector files match corrected source-ready size/SHA rows. Retained behavioral bodies are not reimplemented. Source work and controlled qualification do not prove Native dispatch, whole supported behavior or lifecycle.",
+    "scope_limits_preserved": "Existing source contract explicitly leaves full argv/startup/error-diagnostic parity, actual installed/default cohort and matching native lifecycle open. No source-only result retires the Bash programs or acceptsP01/P02/I01."
+  },
+  "test_review": {
+    "config_observer": "Host-producer LANGUAGESNONE includes the actual retained/candidate selector. It reads each selected actual main, extracts its config::Config constructor and configures a test that calls only those generated Config constructors. The known one-line mains each have one matching constructor. Observer imports onlyconfig, never platform/Native/reboot/stop.",
+    "controlled_profile": "Nondefault CMAKE_INSTALL_SBINDIR=admin-tools under the same private prefix, ARCHx86_64/buildidfixture-build. The expected stop path comes from@SBINDIR@ and boot path from@prefix@/sbin, matching current shell sources rather than a candidate-specific branch.",
+    "baseline_expected_failure": "Retained constructor installed returnsprivateprefix/sbin for stop; one test nondefault_stop_sbindir_preserves_boot_provider must fail with101 and the exact leftprefix/sbin versus expectedprefix/admin-tools assertion. Root must inspect that named failure and diagnostic; an unrelated101 or compile/runtime failure is not the expected baseline and stops the batch.",
+    "candidate_expected_result": "Same producer/template/profile selectsinstalled_stop from corrected actual mcstop_main andinstalled from unchanged boot main. Named single config test returns0 only if stop usesprefix/admin-tools and boot retainsprefix/sbin.",
+    "first_eight_cases": [
+      "cli_options",
+      "cpu_masks_cross_word",
+      "boot_existing_resources",
+      "boot_failure_keeps_preexisting_reservations",
+      "boot_new_resources_reverse_rollback",
+      "destroy_last_attempt_success",
+      "stop_retain_releases_without_unload",
+      "stop_failed_mem_does_not_unload"
+    ],
+    "fixture_custody": "Actual fixture46a1f99b\u2026 is byte-identical to the retained SOURCE_ONLY fixture and has exactly8test functions. Root confirmed no existing boot8PASS receipt; this is first eligible execution, not an unchanged green rerun.",
+    "FakeHost_boundary": "Every fixture case constructs onlyFake. Host calls/reads/lists/exists/files/sleeps/umask/diagnostics are in-memory maps/vectors. It never constructsNative; strings naming systemctl,kill,rmmod,proc/sys/dev are recorded data. Platform Native code is compiled into this source graph but not invoked.",
+    "main_readback": "readelf-h-d-Ws reads the two actual compiled selector outputs. Neither output is an argv0execution target anywhere in the packet. Root captures actualELF architecture,neededlibraries and symbols rather than inferring them from source.",
+    "no_extra_cases_or_reruns": "Only the changed1case baseline/candidate and the first8retained cases are selected. No P03/P05/ABI/native/control suite, whole source audit or old accepted body is rerun."
+  },
+  "exact_commands_go": [
+    {
+      "name": "configure-retained-nondefault-sbindir",
+      "argv": [
+        "/usr/bin/cmake",
+        "-S",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1/host-producer",
+        "-B",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1/output/baseline-config",
+        "-DENABLE_RUST_BOOT_TOOLS=ON",
+        "-DCMAKE_INSTALL_SBINDIR=admin-tools",
+        "-DMCKERNEL_RUNTIME_TOOL_RUSTC=/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+        "-DP01P02_SOURCE_ROOT=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1/retained/source"
+      ],
+      "cwd": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1",
+      "expected_returncode": 0,
+      "wall_seconds_max": 30,
+      "profile": "one-job ordinary unprivileged HOST, proposed CPU6/AS2GiB/CPU60s/FSIZE64MiB/CORE0; Root admission only"
+    },
+    {
+      "name": "compile-retained-config-regression",
+      "argv": [
+        "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--test",
+        "-C",
+        "opt-level=2",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1/output/baseline-config/config_provider_regression.rs",
+        "-o",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1/output/retained-config-regression"
+      ],
+      "cwd": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1",
+      "expected_returncode": 0,
+      "wall_seconds_max": 30,
+      "profile": "one-job ordinary unprivileged HOST, proposed CPU6/AS2GiB/CPU60s/FSIZE64MiB/CORE0; Root admission only"
+    },
+    {
+      "name": "retained-config-contract-failure",
+      "argv": [
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1/output/retained-config-regression",
+        "--test-threads=1"
+      ],
+      "cwd": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1",
+      "expected_returncode": 101,
+      "wall_seconds_max": 5,
+      "profile": "one-job ordinary unprivileged HOST, proposed CPU6/AS2GiB/CPU60s/FSIZE64MiB/CORE0; Root admission only"
+    },
+    {
+      "name": "configure-corrected-nondefault-sbindir",
+      "argv": [
+        "/usr/bin/cmake",
+        "-S",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1/host-producer",
+        "-B",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1/output/candidate-host",
+        "-DENABLE_RUST_BOOT_TOOLS=ON",
+        "-DCMAKE_INSTALL_SBINDIR=admin-tools",
+        "-DMCKERNEL_RUNTIME_TOOL_RUSTC=/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+        "-DP01P02_SOURCE_ROOT=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1/source"
+      ],
+      "cwd": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1",
+      "expected_returncode": 0,
+      "wall_seconds_max": 30,
+      "profile": "one-job ordinary unprivileged HOST, proposed CPU6/AS2GiB/CPU60s/FSIZE64MiB/CORE0; Root admission only"
+    },
+    {
+      "name": "build-actual-selector-programs-compile-only",
+      "argv": [
+        "/usr/bin/cmake",
+        "--build",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1/output/candidate-host",
+        "--target",
+        "mcreboot_rust_program",
+        "mcstop_rust_program",
+        "--parallel",
+        "1"
+      ],
+      "cwd": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1",
+      "expected_returncode": 0,
+      "wall_seconds_max": 45,
+      "profile": "one-job ordinary unprivileged HOST, proposed CPU6/AS2GiB/CPU60s/FSIZE64MiB/CORE0; Root admission only"
+    },
+    {
+      "name": "compile-corrected-config-regression",
+      "argv": [
+        "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--test",
+        "-C",
+        "opt-level=2",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1/output/candidate-host/config_provider_regression.rs",
+        "-o",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1/output/corrected-config-regression"
+      ],
+      "cwd": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1",
+      "expected_returncode": 0,
+      "wall_seconds_max": 30,
+      "profile": "one-job ordinary unprivileged HOST, proposed CPU6/AS2GiB/CPU60s/FSIZE64MiB/CORE0; Root admission only"
+    },
+    {
+      "name": "corrected-config-contract",
+      "argv": [
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1/output/corrected-config-regression",
+        "--test-threads=1"
+      ],
+      "cwd": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1",
+      "expected_returncode": 0,
+      "wall_seconds_max": 5,
+      "profile": "one-job ordinary unprivileged HOST, proposed CPU6/AS2GiB/CPU60s/FSIZE64MiB/CORE0; Root admission only"
+    },
+    {
+      "name": "stage-exact-original-eight-fixture",
+      "argv": [
+        "/usr/bin/cp",
+        "--",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1/qualification/fixture.rs",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1/output/candidate-host/rust-boot-tools/fixture.rs"
+      ],
+      "cwd": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1",
+      "expected_returncode": 0,
+      "wall_seconds_max": 5,
+      "profile": "one-job ordinary unprivileged HOST, proposed CPU6/AS2GiB/CPU60s/FSIZE64MiB/CORE0; Root admission only"
+    },
+    {
+      "name": "compile-original-eight-fake-cases",
+      "argv": [
+        "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--test",
+        "-C",
+        "opt-level=2",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1/output/candidate-host/rust-boot-tools/fixture.rs",
+        "-o",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1/output/original-eight-fake-cases"
+      ],
+      "cwd": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1",
+      "expected_returncode": 0,
+      "wall_seconds_max": 30,
+      "profile": "one-job ordinary unprivileged HOST, proposed CPU6/AS2GiB/CPU60s/FSIZE64MiB/CORE0; Root admission only"
+    },
+    {
+      "name": "first-original-eight-fake-cases",
+      "argv": [
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1/output/original-eight-fake-cases",
+        "--test-threads=1"
+      ],
+      "cwd": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1",
+      "expected_returncode": 0,
+      "wall_seconds_max": 5,
+      "profile": "one-job ordinary unprivileged HOST, proposed CPU6/AS2GiB/CPU60s/FSIZE64MiB/CORE0; Root admission only"
+    },
+    {
+      "name": "actual-host-program-elf-readback",
+      "argv": [
+        "/usr/bin/readelf",
+        "-h",
+        "-d",
+        "-Ws",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1/output/candidate-host/mcreboot.sh",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1/output/candidate-host/mcstop+release.sh"
+      ],
+      "cwd": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1",
+      "expected_returncode": 0,
+      "wall_seconds_max": 10,
+      "profile": "one-job ordinary unprivileged HOST, proposed CPU6/AS2GiB/CPU60s/FSIZE64MiB/CORE0; Root admission only"
+    }
+  ],
+  "execution_profile": {
+    "proposal": {
+      "affinity": [
+        6
+      ],
+      "jobs": 1,
+      "AS_bytes": 2147483648,
+      "CPU_seconds_per_command": 60,
+      "FSIZE_bytes": 67108864,
+      "CORE_bytes": 0,
+      "one_shared_HOST_grant": true,
+      "whole_wall_seconds_max": 180,
+      "no_root_sudo_Docker_network_devices_native": true,
+      "storage_expected_MiB_max": 128
+    },
+    "environment": {
+      "clean_PATH": "/usr/bin:/bin",
+      "LC_ALL": "C",
+      "CMAKE_BUILD_PARALLEL_LEVEL": "1",
+      "MAKEFLAGS": "-j1",
+      "OMP_NUM_THREADS": "1",
+      "RUST_TEST_THREADS": "1",
+      "clear": [
+        "LD_PRELOAD",
+        "LD_LIBRARY_PATH",
+        "RUSTFLAGS",
+        "CARGO_ENCODED_RUSTFLAGS",
+        "RUSTC_WRAPPER",
+        "IHK_TRAMPOLINE_PHYS"
+      ]
+    },
+    "Root_admission_required": "Fresh same-Root service/account/model/credit identity; CPU6one serial lightjob within HOSTCPUs0,6,7/max3aggregatejobs/4GiB TOTAL including controllers/workers; fresh MemAvailable>=26GiB; host>=16GiB andscratch>=12GiB floors plus128MiBprivateoutput/captures and any larger inherited requirement. CPU1excluded and native2-5/12GiB/UNKNOWN reservations retained.",
+    "fresh_output": "Root confirms private/output is new and unowned for this first batch and creates only required disjoint output/capture directories. CMake/rustc/cp do not themselves prevent overwriting old evidence, so existing failed outputs must not be reused or deleted.",
+    "enforcement": "Root existing bounded capture appliesCPU6affinity,AS2GiB,CPU60s/core0/file64MiB to every serial child; command-specific wall limits in frozen request and cumulative180s wholebatch apply. Bare command argv do not enforce these limits. Children inherit reviewed bounds; the one resource grant is not multiplied across compiler/build processes.",
+    "environment_requirement": "Use the requested cleanHOST PATH/locale/onejob settings and clear the listed loader/Rust/trampoline inputs; no caller override may select another compiler,linker,producer or test body. Compiler/std/linker qualified inputs are reused.",
+    "lifetime": "Root owns and captures every directPID/birth/argv/env/stdout/stderr/wait/streamclosure/metrics; waits for each bounded command before the next. CMakemake--parallel1 and rustc/linker descendants remain in that same ownedHOST operation. On timeout or unknown join use existing exact-birth retirement/delivery reconciliation and retain UNKNOWN reservations, never broad PID selectors.",
+    "expected_results": "Exact11orderedcommands: all0 except third retained-config-contract-failure101 with its named expected assertion. Stop on any other result; preserve actual command/check/source/input/owner/diagnostic and completed outputs.",
+    "prohibited_runtime": "Never execute mcreboot.sh ormcstop+release.sh, construct Native, invoke sudo/boot/stop/release/module/device actions,install/defaultcutover, network/Docker or any held compute/generic/exec body."
+  },
+  "integration_and_credit": "Root sole compositor/publisher may integrate the reviewed8file candidate coherently with later qualified canonical changes after actual matching results. Preserve P03 and oneinstallowner. This source review grants no original acceptance,percentage,Cretirement,native/cohort/lifecycle proof or source/native/currentfree/UNKNOWN/resource/account hold release. M14 acceptance precedesM15.",
+  "next_action": "Root performs fresh actualCPU6aggregate/source/output/lifetime admission and runs only this exact11command controlled batch, preserving the retained expected failure and smallest corrected input separately. Assess results at their exact scope before source publication.",
+  "executed": false,
+  "acceptance_claimed": false
+}

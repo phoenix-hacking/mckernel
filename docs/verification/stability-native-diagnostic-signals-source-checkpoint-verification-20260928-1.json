@@ -1,0 +1,21 @@
+{
+  "schema": "mckernel.stability-source-checkpoint-verification.v1",
+  "recorded_at": "2026-09-28T12:12:00-07:00",
+  "branch": "codex/local-native-staging-repair",
+  "head": "f8941f1b5ad136c65b6a20424f10250253d2be0b",
+  "origin_tracking": "f8941f1b5ad136c65b6a20424f10250253d2be0b",
+  "origin_ls_remote": "f8941f1b5ad136c65b6a20424f10250253d2be0b",
+  "decision": "PASS_EXACT_REMOTE_COMMIT_AND_SOURCE_BLOBS",
+  "sources": [
+    {"path": "scripts/application-tests/native_diagnostic_container_owner.py", "blob": "08e83f1efd7f6d62470e3f2e0e2f0177cd0e8de9", "sha256": "c6a6423712fc117ebba9eb56b1e1af1aca718a1a9f1ec9d4ccfc15c2b33ac4b7"},
+    {"path": "scripts/application-tests/native_diagnostic_runner.py", "blob": "2ad970eeea139b772527cfb16e66ab05e63e67f8", "sha256": "25ea29f9b07232094e9df1db6094ad0a85ec678281749a1d6998abb7c700d499"},
+    {"path": "scripts/application-tests/native_diagnostic.py", "blob": "9b14d9d2303c0d23fe5dcb7a5e18b9ff9bb7ace6", "sha256": "65a2b9ee037fdf21255a3500bbac408bd9a0916467375c252d04c6356ca50043"},
+    {"path": "scripts/application-tests/native_diagnostic_backend.py", "blob": "41b4432ba2e88a0f2b8048f0eecac411b2b88ef6", "sha256": "cd0759c926876483665065cb320b9daf7d7c6b32f56e561805b4b0343f60d614"},
+    {"path": "scripts/application-tests/qmp_capture.py", "blob": "99956cb81b570d24d66f4673fb04c375c5783a13", "sha256": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741"},
+    {"path": "scripts/application-tests/native_diagnostic_overlay.py", "blob": "2423251d03041aff95d311c9b7c9b5493e04afcd", "sha256": "46d41bc0727fa77e4126e739f25352c53eadf2e1fa8e23ef06a6e46c9b3ba27d"}
+  ],
+  "limitations": [
+    "This verifies the already-pushed runtime source checkpoint only.",
+    "The new signals packet and evidence still require their own commit, push and fetched-blob verification before execution."
+  ]
+}

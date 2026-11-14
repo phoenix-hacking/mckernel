@@ -1,0 +1,79 @@
+{
+  "schema": "scratch21.cleanup-source-record.v1",
+  "status": "NOT_RELEASED",
+  "execution_released": false,
+  "base_head": "2fd71645bfae65d9e82feb1f0c7347c7961f0edd",
+  "files": {
+    "scripts/native_exact_scratch21_terminal_cleanup.py": "6606af40114eb5b6019438c4127948081d80bbe65144d841e906a7cba84aabed",
+    "scripts/tests/test_native_exact_scratch21_terminal_cleanup.py": "e1467625cfcc848c7834e23c6bff26a535b40115a0d85bb512f488bf8fcb7d90"
+  },
+  "frozen_inputs": {
+    "docs/verification/evidence/os-preparation-20261016/scratch21-live.json": "2f37c4f52d92ea873288cba818845fb725fb21edb71ca9439c6524c89add0723",
+    "docs/verification/evidence/native-exact-scratch18-retry2-build-cleanup-20261001.py": "01e24b5b5b5a1c69d3c512d196862418f3f4e28d2295a06132aad81795ce3b8a"
+  },
+  "invariant": "Uncertain cleanup cannot transfer ownership. Root development flock remains held indefinitely after uncertain mutation, even when quarantine evidence cannot be written. Original records exchange with sentinels and are durably archived, never unlinked.",
+  "target": {
+    "container_id": "e1f6dd145149c026c46adb82c3f3addb9e3c9e2a12b0d71a6813f00895220ea9",
+    "exit_code": 1,
+    "filesystem_uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52",
+    "live_device_policy": "A fresh independently reviewed release binds current st_dev, boot, root lock and full evidence identities. Historical st_dev 1831 is not execution authority."
+  },
+  "validation": {
+    "command": "timeout 180s python3 -B -m unittest -v scripts.tests.test_native_exact_scratch21_terminal_cleanup",
+    "resource_share": "one cheap Python process; 1 CPU / 2 GiB planning share",
+    "final_returncode": 0,
+    "final_stdout": "",
+    "final_stderr_summary": "Ran 32 tests in 1.633s\n\nOK\n",
+    "scope": "Disposable temporary files and seven disposable fork children only; Docker, sudo, root development lock and live ownership mutations were not executed. Twelve crash frontiers and six ordinary termination scenarios are subtests. Exact child PIDs are reaped after explicit SIGKILL testing.",
+    "passed_intermediate_runs": [
+      {"tests": 21, "seconds": 1.060},
+      {"tests": 26, "seconds": 1.211},
+      {"tests": 28, "seconds": 1.231},
+      {"tests": 32, "seconds": 1.641, "note": "Before adding explicit post-SIGKILL persistence assertions"}
+    ],
+    "preserved_failures": [
+      {
+        "family": "disposable-unbound-preparation-quarantine-expectation",
+        "initial_result": "Ran 21 tests in 1.146s; failures=1",
+        "failure": "test_unbound_preparation_crash_refuses_without_transfer expected an unchanged tree but omitted the newly durable quarantine record",
+        "bounded_correction": "Assert the quarantine addition explicitly and require every preexisting object and ownership record to remain identical",
+        "outcome": "PASS; no live execution"
+      },
+      {
+        "family": "prior-transaction-quarantine-after-mutation-frontier-refinement",
+        "initial_result": "Ran 28 tests in 1.220s; failures=1",
+        "failure": "test_torn_journal_is_retained_with_quarantine found no quarantine on a prior completed plan after mutation tracking was moved to actual file mutations",
+        "bounded_correction": "After positively acquiring root and transaction flocks, an existing plan marks reconciliation of prior transaction mutations; failed mutex acquisition still creates no quarantine",
+        "outcome": "PASS; no live execution"
+      },
+      {
+        "family": "expert-root-lock-termination-and-closed-stdout-boundary",
+        "initial_result": "Independent source review BLOCK_SOURCE on script 0ef02b9a63aa9269101fd45a548dd05cc1350ab4d6f7731957fda3b6d20ccff0 and tests 306d886e3ab3840c67f73a7aa7e7c7b281c1b88553f8478c6f565e3aef4edd3f despite 28 unit tests passing",
+        "failure": "Actual-body reviewer reproducer injects Refusal after durable after_exchange then BrokenPipeError from quarantine print: recover exits, quarantine_wait is never called, and root flock is reacquirable. Ordinary termination likewise had a gap before signal blocking.",
+        "original_source": {"path": "docs/verification/evidence/scratch21-cleanup-precorrection-source-20261017.txt", "sha256": "0ef02b9a63aa9269101fd45a548dd05cc1350ab4d6f7731957fda3b6d20ccff0"},
+        "original_tests": {"path": "docs/verification/evidence/scratch21-cleanup-precorrection-tests-20261017.txt", "sha256": "306d886e3ab3840c67f73a7aa7e7c7b281c1b88553f8478c6f565e3aef4edd3f"},
+        "expert_design_decision": "Block HUP/INT/TERM/QUIT before transaction acquisition and all potential mutations. Restore the previous signal mask only after successful or preflight lock closure. Quarantine serialization, evidence writing and flushed status printing are separately best effort; the indefinite hold catches exceptional waits and cannot return normally. SIGKILL remains an unavoidable crash frontier protected by persistent exclusions/sentinels.",
+        "actual_child_regressions": "Seven real fork children use broken stdout pipes plus failed quarantine evidence writes. HUP/INT/TERM are each sent while paused before the first mutation and during the quarantine evidence attempt. Parent verifies pending/blocked signals, live child and unreacquirable root flock. Exact child SIGKILL is then observed and reaped; root flock becomes available while sentinel, original shared bytes, archived ownership bytes and two-row journal remain intact.",
+        "outcome": "32 tests PASS; corrected exact source awaits independent rereview; no live execution"
+      }
+    ]
+  },
+  "read_only_api": {
+    "python": "prepare_release(observation, git_commit, git_tree)",
+    "cli": "python3 -B scripts/native_exact_scratch21_terminal_cleanup.py --prepare-observation FRESH_OBSERVATION --observation-sha256 EXACT_SHA256 --git-commit FETCHED_COMMIT --git-tree FETCHED_TREE",
+    "result": "scratch21.cleanup-release.v1 status NOT_RELEASED; binds current direct request consumers and directories without copying Docker fields manually"
+  },
+  "terminal_result": {
+    "schema": "scratch21.cleanup-result.v1",
+    "status": ["PASS_EXECUTED", "PASS_TERMINAL_REPLAY"],
+    "terminal": true,
+    "container_absent": true,
+    "identity_fields": ["container_id", "filesystem_uuid", "boot_id", "release_sha256", "plan_sha256"],
+    "file_identity_fields": ["plan", "journal", "capture", "archives"],
+    "file_digest_semantics": "sha256 in each identity hashes exact file bytes; plan_sha256 hashes canonical plan JSON without its trailing newline",
+    "postflight": "Independent dispatcher-owned postflight binds actual captured stdout and exact plan/journal/capture/archive hashes. No normalized PASS_CLEANUP is produced here."
+  },
+  "next_executable_observation": "Independent source review of the exact hashes above, then dispatcher commit/push/fetch verification and refreshed read-only live observation. A fresh independently reviewed execution release remains required before any sudo execution.",
+  "not_authorized_by_this_record": ["container removal", "ownership release", "scratch21 replay", "scratch22 materialization", "build", "guest"],
+  "acceptance_credit": false
+}

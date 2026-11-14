@@ -1,0 +1,42 @@
+--- a/scripts/native_rust_kbuild_link_closure.py
++++ b/scripts/native_rust_kbuild_link_closure.py
+@@ -226,7 +226,27 @@
+         "$(wildcard include/config/HYPERV_TIMER)",
+         "$(wildcard include/config/AMD_MEM_ENCRYPT)",
+     ),
+-    "mcctrl": (),
++    "mcctrl": (
++        "$(wildcard include/config/X86_64)",
++        "$(wildcard include/config/SMP)",
++        "$(wildcard include/config/PER_VMA_LOCK)",
++        "$(wildcard include/config/TRACING)",
++        "$(wildcard include/config/MEMCG)",
++        "$(wildcard include/config/HAVE_JUMP_LABEL_HACK)",
++        "$(wildcard include/config/KCSAN)",
++        "$(wildcard include/config/DEBUG_LOCK_ALLOC)",
++        "$(wildcard include/config/DEBUG_VM)",
++        "$(wildcard include/config/LOCKDEP)",
++        "$(wildcard include/config/NOINSTR_VALIDATION)",
++        "$(wildcard include/config/PREEMPT_RT)",
++        "$(wildcard include/config/TRACEPOINTS)",
++        "$(wildcard include/config/JUMP_LABEL)",
++        "$(wildcard include/config/OBJTOOL)",
++        "$(wildcard include/config/GENERIC_BUG)",
++        "$(wildcard include/config/GENERIC_BUG_RELATIVE_POINTERS)",
++        "$(wildcard include/config/DEBUG_BUGVERBOSE)",
++        "$(wildcard include/config/BUG)",
++    ),
+ }
+ _FIXDEP_CONFIG_AFTER_SOURCE = {
+     "ihk": {"os_runtime.rs": ("$(wildcard include/config/COMPAT)",)},
+@@ -235,7 +255,9 @@
+         "smp_memory.rs": _FIXDEP_CONFIG_DEPENDENCIES["ihk-smp-x86_64"][1:6],
+         "smp_vdso.rs": _FIXDEP_CONFIG_DEPENDENCIES["ihk-smp-x86_64"][6:],
+     },
+-    "mcctrl": {},
++    "mcctrl": {
++        "mcctrl_mm_write.rs": _FIXDEP_CONFIG_DEPENDENCIES["mcctrl"],
++    },
+ }
+ _KERNEL_RUST_DEPENDENCIES = (
+     "./rust/libcore.rmeta",

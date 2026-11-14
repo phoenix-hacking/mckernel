@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "record_kind": "native_collector_lifecycle_output_oracle_source_checkpoint",
+  "task_id": "M02-C-lifecycle-output-oracle-source",
+  "attempt": 3,
+  "status": "PASS_OUTPUT_ORACLE_SOURCE_CHECKPOINT_ONLY",
+  "recorded_utc": "2026-09-15T12:33:00Z",
+  "base_commit": "4a8b217d4073e7ea4dd1286c6aca3e0a6747118a",
+  "reviews": {
+    "packet_attempt_1": "FAIL_PACKET_MISSING_BOTH_ONE_SIDED_COMPARISONS",
+    "packet_attempt_2": "PASS_OUTPUT_ORACLE_PACKET_ONLY",
+    "source_attempt_1": "FAIL_HELPER_SITE_ASSERTION_SCOPE",
+    "source_attempt_2": "FAIL_HELPER_SITE_CALL_SUBSTRING_COUNTS_DEFINITION",
+    "source_attempt_3": "PASS_OUTPUT_ORACLE_SOURCE_ONLY",
+    "preliminary_evidence": "PASS_OUTPUT_ORACLE_SOURCE_PRELIM_ONLY",
+    "evidence_attempt_1": "FAIL_LITERAL_ROW_COUNT_CONFLATED_WITH_CORRUPTION_CASE_COUNT",
+    "evidence_attempt_2": "PASS_OUTPUT_ORACLE_EVIDENCE_ONLY"
+  },
+  "source": {
+    "harness_sha256": "a11fee5dc377b7386b2528c01a8e362f4757b4d95e55fd920e448d8b08b98219",
+    "vectors_sha256": "3e845d032938fef1854638529a3d21bb0c992780d65fb76b555dd62721e9da2f",
+    "expected_sha256": "86473f7b4027b9a06e064788d7ed41115b28705a62edc199879990310323a7f7",
+    "test_sha256": "c4ee1541e1a2d3940cc032a0752efd689e8bb47cd62acd87b4cbf3c22c630db4"
+  },
+  "independent_expected_rows_literal": {
+    "rows": 1,
+    "compact_json_bytes": 192,
+    "sha256": "4a7ebba05f2481c55dfd4565d5e81567b3fdb17691551a82b9b5d7d88b99dc8a"
+  },
+  "artifact": {
+    "path": "scripts/tests/fixtures/native-lifecycle-model-v1/raw-invalid/oversized-document.json",
+    "sha256": "9a6384d7058b15fa74ef39f6bd6e5745a1fbec565abb06491714704d3d88e07c",
+    "size": 1048577
+  },
+  "failed_archive": {
+    "path": "docs/verification/evidence/stability-native-collector-lifecycle-output-oracle-source-evidence-failure-20260915-1.tar.gz",
+    "sha256": "59ad0f5eee6019cbdcd6eefe657b3a2c19bbac11c44885fa52b0a2dac6c9a7dd",
+    "members": 10
+  },
+  "archive": {
+    "path": "docs/verification/evidence/stability-native-collector-lifecycle-output-oracle-source-checkpoint-20260915-1.tar.gz",
+    "sha256": "7fdf27c5538479b06a0cbfe49ab81f82602b833be81fae81bc18a28f8033101c",
+    "members": 10
+  },
+  "checks": {
+    "python_3_9_12": {"tests_passed": 3, "tests_failed": 0},
+    "python_3_8_10": {"tests_passed": 3, "tests_failed": 0},
+    "oracle_corruption_cases": 13,
+    "baseline_terminal_lf_variants": 2,
+    "cumulative_raw_cases": 133,
+    "scope": "OUTPUT_ORACLE_SOURCE_ONLY"
+  },
+  "raw_full_matrix_frozen": false,
+  "corpus_complete": false,
+  "compiler_execution": false,
+  "model_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

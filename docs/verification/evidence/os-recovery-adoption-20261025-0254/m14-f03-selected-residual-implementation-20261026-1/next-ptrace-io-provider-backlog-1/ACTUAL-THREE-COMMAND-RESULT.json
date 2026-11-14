@@ -1,0 +1,444 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_ACTUAL_THREE_COMMANDS_PTRACE_FIND90_UNLOCK3_COPY108_ABI16",
+  "records": [
+    {
+      "command": {
+        "label": "00-existing-ptrace-IO-providers-and-public-copy-Rust-object",
+        "argv": [
+          "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+          "--crate-name",
+          "f03_ptrace_io_provider_backlog",
+          "--crate-type",
+          "lib",
+          "--edition=2021",
+          "-C",
+          "panic=abort",
+          "-C",
+          "opt-level=2",
+          "--cfg",
+          "enable_profile",
+          "--cfg",
+          "enable_perf",
+          "--cfg",
+          "f03_ptrace_io_find_selected_candidate",
+          "--cfg",
+          "f03_ptrace_io_unlock_selected_candidate",
+          "--emit=obj=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-ptrace-io-provider-backlog-1/output-PENDING-ROOT/providers.o",
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-ptrace-io-provider-backlog-1/lib.fixture.rs"
+        ],
+        "cwd": "/home/holden/mckernel",
+        "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Controlled HOST actual-selected C callback/ABI forwarding for ptrace thread find/unlock and copy-from-user bridge. find_thread/thread_unlock/usercopy are explicit identity and initialized-normal-buffer mocks. No actual tracee lookup/lock/usercopy/fault/reference/current-stack/IRQ/MSR/CR/FSGS/context-switch/syscall/kernel/native or ptrace_setsiginfo transaction effect.",
+        "argv_compact_json_LF_sha256": "e532e5f67efe8b050b5a33ef0f0a1f638ae913cac22b415166c8fbda44fca5f7"
+      },
+      "join": {
+        "pid": 1353020,
+        "start": 86395899,
+        "returncode": 0,
+        "direct_child_joined": true,
+        "group_absent": true,
+        "remaining_group_members": [],
+        "unexpected_group_members": [],
+        "timed_out": false,
+        "error": null,
+        "retirement_error": null,
+        "seconds": 0.09607545693870634,
+        "closed_streams": true,
+        "captures": {
+          "stdout": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-ptrace-io-provider-backlog-1/actual-three-command-capture-1/00-existing-ptrace-IO-providers-and-public-copy-Rust-object/stdout",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 59662082,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1793066514297722837,
+            "ctime_ns": 1793066514297722837
+          },
+          "stderr": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-ptrace-io-provider-backlog-1/actual-three-command-capture-1/00-existing-ptrace-IO-providers-and-public-copy-Rust-object/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 59662083,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1793066514297722837,
+            "ctime_ns": 1793066514297722837
+          }
+        }
+      },
+      "metrics": {
+        "started_UTC": "2026-10-27T02:01:54.300854+00:00",
+        "wall_seconds": 0.0973234249977395,
+        "child_user_CPU_seconds": 0.031735,
+        "child_system_CPU_seconds": 0.027767,
+        "fresh_batch_peak_child_RSS_KiB": 92256,
+        "peak_RSS_scope": "fresh batch cumulative actual child rusage high water; not an invented per-command peak",
+        "environment_relevant": {
+          "PATH": "/home/holden/.codex/packages/standalone/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/holden/.local/bin:/home/holden/.codex/tmp/arg0-linux/codex-arg0zhkCqC:/home/holden/.codex/packages/standalone/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/holden/anaconda3/bin:/home/holden/anaconda3/condabin:/home/holden/.cargo/bin:/home/holden/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
+          "LC_ALL": "C",
+          "LANG": "en_US.UTF-8",
+          "RUST_MIN_STACK": "2097152",
+          "OMP_NUM_THREADS": "1",
+          "RAYON_NUM_THREADS": "1",
+          "CARGO_BUILD_JOBS": "7",
+          "MAKEFLAGS": "-j7",
+          "C_INCLUDE_PATH": null,
+          "LIBRARY_PATH": null,
+          "LD_LIBRARY_PATH": null,
+          "RUSTFLAGS": null,
+          "RUSTUP_TOOLCHAIN": null
+        },
+        "admission": {
+          "wall": 1793066514.299067,
+          "monotonic": 848620.868024454,
+          "boottime": 863958.995075545,
+          "fixed_cutoff_ref": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW18H-20261026-FIXED-CUTOFF-BINDING.json",
+            "bytes": 952,
+            "sha256": "2e1d3fa8338e51973cf0af5677e7e256259aff539adb164be0fb53240d834b35"
+          },
+          "memory_available_bytes": 27269931008,
+          "aggregate_reserved_bytes": 21474836480,
+          "budget": {
+            "schema_version": 2,
+            "id": "7f4af94a83b14cc08f97401f5891d965",
+            "budget": "57774.852125",
+            "initial_balance": "57774.8521250000",
+            "minimum_balance": "52079.8011050000",
+            "last_balance": "52079.8011050000",
+            "spent": "22812.3311000000",
+            "remaining": "34962.5210250000",
+            "scope": "Cumulative account-wide observed balance decreases; increases never restore allowance; stale snapshots may count conservatively; in-flight charges can settle later"
+          },
+          "heartbeat_at": "2026-10-27T02:01:42.865767+00:00",
+          "phase": "running",
+          "account_wall": 1793066514.2994409,
+          "heartbeat_age_seconds": 11.433673858642578,
+          "available_prepaid_balance": "52079.8011050000",
+          "spendControlReached": null,
+          "loadavg": [
+            0.88,
+            1.03,
+            1.1
+          ],
+          "CPU_affinity": [
+            6
+          ],
+          "HOST_available_bytes": 150948167680,
+          "scratch_available_bytes": 47873171456
+        }
+      }
+    },
+    {
+      "command": {
+        "label": "01-genuine-header-original-C-and-selected-alias-branches-link",
+        "argv": [
+          "/usr/bin/gcc-9",
+          "-Werror=incompatible-pointer-types",
+          "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+          "-DIHK_OS_MANYCORE",
+          "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+          "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+          "-DMCKERNEL_NATIVE_CLONE3",
+          "-DMCKERNEL_NATIVE_CLONE_TID",
+          "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+          "-DMCKERNEL_NATIVE_FUTEX",
+          "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+          "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+          "-DMCKERNEL_RUST_BITOPS",
+          "-DMCKERNEL_RUST_LIST_HELPERS",
+          "-DMCKERNEL_RUST_LOCK_HELPERS",
+          "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+          "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+          "-DMCKERNEL_RUST_PTE_HELPERS",
+          "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+          "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+          "-DPROFILE_ENABLE",
+          "-D__KERNEL__",
+          "-DMCKERNEL_NATIVE_FORK_OWNED_TRANSACTION",
+          "-DMCKERNEL_RUST_RLIMIT_HELPERS",
+          "-DMCKERNEL_RUST_SCHED_POLICY_HELPERS",
+          "-DMCKERNEL_RUST_SCHED_PRIO_HELPERS",
+          "-DMCKERNEL_RUST_SHMID_HELPERS",
+          "-DMCKERNEL_RUST_SHM_PERM_HELPERS",
+          "-DMCKERNEL_RUST_SIGNAL_HELPERS",
+          "-DMCKERNEL_RUST_SYSCALL_OFFLOAD",
+          "-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+          "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/current-composition10-compiler-preparation-1/bounded-storage-nominal-correction-current80-1/expert-conditional-projection-correction-1/generated-build/kernel/include",
+          "-I/home/holden/mckernel/kernel/include",
+          "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/current-composition10-compiler-preparation-1/bounded-storage-nominal-correction-current80-1/expert-conditional-projection-correction-1/generated-build/kernel",
+          "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/current-composition10-compiler-preparation-1/bounded-storage-nominal-correction-current80-1/expert-conditional-projection-correction-1/generated-build",
+          "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64/include",
+          "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64",
+          "-I/home/holden/mckernel/ihk/ikc/include",
+          "-I/home/holden/mckernel/ihk/linux/include",
+          "-I/home/holden/mckernel/lib/include",
+          "-I/home/holden/mckernel/arch/x86_64/kernel/include",
+          "-g",
+          "-Wall",
+          "-Wextra",
+          "-Wno-unused-parameter",
+          "-Wno-sign-compare",
+          "-Wno-unused-function",
+          "-Wno-implicit-fallthrough",
+          "-Wno-stringop-truncation",
+          "-ffreestanding",
+          "-O2",
+          "-nostdinc",
+          "-isystem",
+          "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+          "-fno-omit-frame-pointer",
+          "-mcmodel=large",
+          "-mno-red-zone",
+          "-mno-sse",
+          "-DMCKERNEL_RUST_X86_CPU_HELPERS",
+          "-DMCKERNEL_RUST_F03_PTRACE_IO_FIND",
+          "-DMCKERNEL_RUST_F03_PTRACE_IO_UNLOCK",
+          "-DMCKERNEL_RUST_F03_PTRACE_IO_COPY_FROM",
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-ptrace-io-provider-backlog-1/driver.c",
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-ptrace-io-provider-backlog-1/output-PENDING-ROOT/providers.o",
+          "-no-pie",
+          "-o",
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-ptrace-io-provider-backlog-1/output-PENDING-ROOT/parity"
+        ],
+        "cwd": "/home/holden/mckernel",
+        "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Controlled HOST actual-selected C callback/ABI forwarding for ptrace thread find/unlock and copy-from-user bridge. find_thread/thread_unlock/usercopy are explicit identity and initialized-normal-buffer mocks. No actual tracee lookup/lock/usercopy/fault/reference/current-stack/IRQ/MSR/CR/FSGS/context-switch/syscall/kernel/native or ptrace_setsiginfo transaction effect.",
+        "argv_compact_json_LF_sha256": "777d580e69537a35adda685298f9310a035951c4c9a77a7aa6b66dfa11eb64a8"
+      },
+      "join": {
+        "pid": 1353027,
+        "start": 86395911,
+        "returncode": 0,
+        "direct_child_joined": true,
+        "group_absent": true,
+        "remaining_group_members": [],
+        "unexpected_group_members": [],
+        "timed_out": false,
+        "error": null,
+        "retirement_error": null,
+        "seconds": 0.14365104702301323,
+        "closed_streams": true,
+        "captures": {
+          "stdout": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-ptrace-io-provider-backlog-1/actual-three-command-capture-1/01-genuine-header-original-C-and-selected-alias-branches-link/stdout",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 59662091,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1793066514413726232,
+            "ctime_ns": 1793066514413726232
+          },
+          "stderr": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-ptrace-io-provider-backlog-1/actual-three-command-capture-1/01-genuine-header-original-C-and-selected-alias-branches-link/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 59662092,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1793066514413726232,
+            "ctime_ns": 1793066514413726232
+          }
+        }
+      },
+      "metrics": {
+        "started_UTC": "2026-10-27T02:01:54.416050+00:00",
+        "wall_seconds": 0.1449830550700426,
+        "child_user_CPU_seconds": 0.094617,
+        "child_system_CPU_seconds": 0.017749999999999995,
+        "fresh_batch_peak_child_RSS_KiB": 92256,
+        "peak_RSS_scope": "fresh batch cumulative actual child rusage high water; not an invented per-command peak",
+        "environment_relevant": {
+          "PATH": "/home/holden/.codex/packages/standalone/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/holden/.local/bin:/home/holden/.codex/tmp/arg0-linux/codex-arg0zhkCqC:/home/holden/.codex/packages/standalone/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/holden/anaconda3/bin:/home/holden/anaconda3/condabin:/home/holden/.cargo/bin:/home/holden/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
+          "LC_ALL": "C",
+          "LANG": "en_US.UTF-8",
+          "RUST_MIN_STACK": "2097152",
+          "OMP_NUM_THREADS": "1",
+          "RAYON_NUM_THREADS": "1",
+          "CARGO_BUILD_JOBS": "7",
+          "MAKEFLAGS": "-j7",
+          "C_INCLUDE_PATH": null,
+          "LIBRARY_PATH": null,
+          "LD_LIBRARY_PATH": null,
+          "RUSTFLAGS": null,
+          "RUSTUP_TOOLCHAIN": null
+        },
+        "admission": {
+          "wall": 1793066514.41427,
+          "monotonic": 848620.983227008,
+          "boottime": 863959.110278135,
+          "fixed_cutoff_ref": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW18H-20261026-FIXED-CUTOFF-BINDING.json",
+            "bytes": 952,
+            "sha256": "2e1d3fa8338e51973cf0af5677e7e256259aff539adb164be0fb53240d834b35"
+          },
+          "memory_available_bytes": 27268108288,
+          "aggregate_reserved_bytes": 21474836480,
+          "budget": {
+            "schema_version": 2,
+            "id": "7f4af94a83b14cc08f97401f5891d965",
+            "budget": "57774.852125",
+            "initial_balance": "57774.8521250000",
+            "minimum_balance": "52079.8011050000",
+            "last_balance": "52079.8011050000",
+            "spent": "22812.3311000000",
+            "remaining": "34962.5210250000",
+            "scope": "Cumulative account-wide observed balance decreases; increases never restore allowance; stale snapshots may count conservatively; in-flight charges can settle later"
+          },
+          "heartbeat_at": "2026-10-27T02:01:42.865767+00:00",
+          "phase": "running",
+          "account_wall": 1793066514.41463,
+          "heartbeat_age_seconds": 11.548862934112549,
+          "available_prepaid_balance": "52079.8011050000",
+          "spendControlReached": null,
+          "loadavg": [
+            0.88,
+            1.03,
+            1.1
+          ],
+          "CPU_affinity": [
+            6
+          ],
+          "HOST_available_bytes": 150948126720,
+          "scratch_available_bytes": 47873171456
+        }
+      }
+    },
+    {
+      "command": {
+        "label": "02-find90-unlock3-copy108-ABI16-HOST",
+        "argv": [
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-ptrace-io-provider-backlog-1/output-PENDING-ROOT/parity"
+        ],
+        "cwd": "/home/holden/mckernel",
+        "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Controlled HOST actual-selected C callback/ABI forwarding for ptrace thread find/unlock and copy-from-user bridge. find_thread/thread_unlock/usercopy are explicit identity and initialized-normal-buffer mocks. No actual tracee lookup/lock/usercopy/fault/reference/current-stack/IRQ/MSR/CR/FSGS/context-switch/syscall/kernel/native or ptrace_setsiginfo transaction effect.",
+        "argv_compact_json_LF_sha256": "4b74d0b6e497985c5d1b548ef5c2ba9773ffcec21de878bfbb1ad399cfdd45aa"
+      },
+      "join": {
+        "pid": 1353032,
+        "start": 86395927,
+        "returncode": 0,
+        "direct_child_joined": true,
+        "group_absent": true,
+        "remaining_group_members": [],
+        "unexpected_group_members": [],
+        "timed_out": false,
+        "error": null,
+        "retirement_error": null,
+        "seconds": 0.02520730998367071,
+        "closed_streams": true,
+        "captures": {
+          "stdout": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-ptrace-io-provider-backlog-1/actual-three-command-capture-1/02-find90-unlock3-copy108-ABI16-HOST/stdout",
+            "sha256": "e9e499d2d9d67dba94ec5faaa1988962e75b79e351a04e82453dbd22cc7ebeff",
+            "device": 66306,
+            "inode": 59662100,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 193,
+            "mtime_ns": 1793066514577731033,
+            "ctime_ns": 1793066514577731033
+          },
+          "stderr": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-ptrace-io-provider-backlog-1/actual-three-command-capture-1/02-find90-unlock3-copy108-ABI16-HOST/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 59662101,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1793066514573730915,
+            "ctime_ns": 1793066514573730915
+          }
+        }
+      },
+      "metrics": {
+        "started_UTC": "2026-10-27T02:01:54.577241+00:00",
+        "wall_seconds": 0.02710575598757714,
+        "child_user_CPU_seconds": 0.0007599999999999829,
+        "child_system_CPU_seconds": 0.000343000000000003,
+        "fresh_batch_peak_child_RSS_KiB": 92256,
+        "peak_RSS_scope": "fresh batch cumulative actual child rusage high water; not an invented per-command peak",
+        "environment_relevant": {
+          "PATH": "/home/holden/.codex/packages/standalone/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/holden/.local/bin:/home/holden/.codex/tmp/arg0-linux/codex-arg0zhkCqC:/home/holden/.codex/packages/standalone/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/holden/anaconda3/bin:/home/holden/anaconda3/condabin:/home/holden/.cargo/bin:/home/holden/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
+          "LC_ALL": "C",
+          "LANG": "en_US.UTF-8",
+          "RUST_MIN_STACK": "2097152",
+          "OMP_NUM_THREADS": "1",
+          "RAYON_NUM_THREADS": "1",
+          "CARGO_BUILD_JOBS": "7",
+          "MAKEFLAGS": "-j7",
+          "C_INCLUDE_PATH": null,
+          "LIBRARY_PATH": null,
+          "LD_LIBRARY_PATH": null,
+          "RUSTFLAGS": null,
+          "RUSTUP_TOOLCHAIN": null
+        },
+        "admission": {
+          "wall": 1793066514.5756207,
+          "monotonic": 848621.144577586,
+          "boottime": 863959.271628475,
+          "fixed_cutoff_ref": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW18H-20261026-FIXED-CUTOFF-BINDING.json",
+            "bytes": 952,
+            "sha256": "2e1d3fa8338e51973cf0af5677e7e256259aff539adb164be0fb53240d834b35"
+          },
+          "memory_available_bytes": 27263332352,
+          "aggregate_reserved_bytes": 21474836480,
+          "budget": {
+            "schema_version": 2,
+            "id": "7f4af94a83b14cc08f97401f5891d965",
+            "budget": "57774.852125",
+            "initial_balance": "57774.8521250000",
+            "minimum_balance": "52079.8011050000",
+            "last_balance": "52079.8011050000",
+            "spent": "22812.3311000000",
+            "remaining": "34962.5210250000",
+            "scope": "Cumulative account-wide observed balance decreases; increases never restore allowance; stale snapshots may count conservatively; in-flight charges can settle later"
+          },
+          "heartbeat_at": "2026-10-27T02:01:42.865767+00:00",
+          "phase": "running",
+          "account_wall": 1793066514.575914,
+          "heartbeat_age_seconds": 11.7101469039917,
+          "available_prepaid_balance": "52079.8011050000",
+          "spendControlReached": null,
+          "loadavg": [
+            0.88,
+            1.03,
+            1.1
+          ],
+          "CPU_affinity": [
+            6
+          ],
+          "HOST_available_bytes": 150948052992,
+          "scratch_available_bytes": 47873171456
+        }
+      }
+    }
+  ],
+  "seconds": 0.3535342700779438,
+  "peak_child_RSS_KiB": 92256,
+  "actual_stdout": "PASS ptrace-IO provider callbacks:90 find pairs +3 unlock identities +108 copy forwarding pairs +16 ABI words; explicit HOST mocks only; real tracee/usercopy/lifetime/setsiginfo ownership OPEN\n",
+  "first_compiler_UTC": "2026-10-27T02:01:54.300854+00:00",
+  "canonical_mutations": 0,
+  "native": false,
+  "default_link": false,
+  "whole_file_retired": false
+}

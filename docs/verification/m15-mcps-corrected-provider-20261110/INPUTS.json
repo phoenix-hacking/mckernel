@@ -1,0 +1,189 @@
+{
+  "actual_stage_or_program_execution_by_preparer": false,
+  "configured_process_contract": {
+    "MCPS_MCKERNELDIR": "/usr/local/smp-x86/kernel",
+    "MCPS_PREFIX": "/usr/local",
+    "actual_object_ELF_argument_data": [
+      {
+        "ELF_file_offset": 8196,
+        "nul_terminated_bytes": "/usr/local/bin/mcinspect",
+        "object_file_offset": 605
+      },
+      {
+        "ELF_file_offset": 8221,
+        "nul_terminated_bytes": "--kernel=/usr/local/smp-x86/kernel/mckernel.img",
+        "object_file_offset": 630
+      },
+      {
+        "ELF_file_offset": 8370,
+        "nul_terminated_bytes": "--ps",
+        "object_file_offset": 678
+      }
+    ],
+    "argv": [
+      "/usr/local/bin/mcinspect",
+      "--kernel=/usr/local/smp-x86/kernel/mckernel.img",
+      "--ps",
+      null
+    ],
+    "binding": "Source constants env!(MCPS_PREFIX/MCPS_MCKERNELDIR) and fixed --ps construct this3argument/null-terminated vector; same actual compile command has exact env values, both emitted artifacts contain those precise bytes, and saved source main passes that vector to posix_spawn. Byte presence is corroboration, not sole behavior acceptance."
+  },
+  "corrected_provider_provenance": {
+    "built": {
+      "bytes": 7081592,
+      "mode": "0755",
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcinspect-bool-matching-provider-build-1/build-output/mcinspect",
+      "sha256": "8c8ccf64714698df869e8bc69e2365db16926639212e460ef5226daa2a8b404f"
+    },
+    "installed": {
+      "bytes": 7081592,
+      "mode": "0755",
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcinspect-bool-matching-provider-build-1/build-output/stage/usr/local/bin/mcinspect",
+      "sha256": "9af6abfd8f8eb4214538cf1a3ee5f1a9189ef68639ec8c67323516e91bda1133"
+    },
+    "installed_RPATH_change": {
+      "after": "/usr/local/lib64",
+      "before": "::::::::::::::::",
+      "bytes": 16,
+      "offset": 5482
+    },
+    "scope": "Stage uses qualified installed9af6 bytes with /usr/local/lib64 RPATH, rather than pre-install8c8cc bytes. No RPATH editing or mcinspect build/install is repeated.",
+    "source": {
+      "bytes": 100935,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcinspect-bool-matching-provider-build-1/source/rust/mcinspect_helpers.rs",
+      "sha256": "88b6c5254ff9b4377d67f7da8f44d17a4c330a82c609c65ec9c557d9ec7dc50f"
+    },
+    "source_commit": "4adf52e4248300e220dc4e6a55e50484b658a53b"
+  },
+  "mcps_exact_target": {
+    "bytes": 1865,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-build-1/producer/production-mcps-target.cmake",
+    "sha256": "a17ef0474db793dea1d61ce504ff23c7aa942a90c805ba731f9e42aff4f9c45c"
+  },
+  "mcps_source": {
+    "bytes": 3902,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-build-1/producer/rust/mcps.rs",
+    "sha256": "11bbecd7a0a6f4d098bb737ccca1e64e974e7c91bcc124b989fdc40b552c3b53"
+  },
+  "new_output_directory": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-corrected-provider-update-1/output-1",
+  "old_private_pair_preserved": {
+    "directory": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-build-1/output-1/stage/usr/local/bin",
+    "mcps_sha256": "bfbc4a63e3eda8edabe58efbfeeb206ee994c3668f39248ae1e61c11b2f086e7",
+    "modified": false,
+    "old_mcinspect_sha256": "63502c5748397c28ad465a0c0c537cf4480eadbb63be6a40d0a6ca2ff4479dab"
+  },
+  "owner": "/root/p03_cutover_source_max",
+  "prepared_at": "2026-11-10T23:11:41.989295+00:00",
+  "programs": [
+    {
+      "name": "mcps",
+      "relative_destination": "stage/usr/local/bin/mcps",
+      "runtime_path": "/usr/local/bin/mcps",
+      "source": {
+        "bytes": 18944,
+        "mode": "0755",
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-build-1/output-1/stage/usr/local/bin/mcps",
+        "sha256": "bfbc4a63e3eda8edabe58efbfeeb206ee994c3668f39248ae1e61c11b2f086e7"
+      }
+    },
+    {
+      "name": "mcinspect",
+      "relative_destination": "stage/usr/local/bin/mcinspect",
+      "runtime_path": "/usr/local/bin/mcinspect",
+      "source": {
+        "bytes": 7081592,
+        "mode": "0755",
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcinspect-bool-matching-provider-build-1/build-output/stage/usr/local/bin/mcinspect",
+        "sha256": "9af6abfd8f8eb4214538cf1a3ee5f1a9189ef68639ec8c67323516e91bda1133"
+      }
+    }
+  ],
+  "receipts": {
+    "mcinspect_corrected_independent_result_review": {
+      "bytes": 7126,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcinspect-bool-production-review-p03-max-1/qualification-1/REVIEW.json",
+      "sha256": "eaf85291f3ecebd184d4b89028c1762d63e5446f36c2e3309679813ef116def6"
+    },
+    "mcinspect_corrected_provider_joins": {
+      "bytes": 295576,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcinspect-bool-matching-provider-build-1/qualification-1/PROVIDER-JOINS.json",
+      "sha256": "7dec94a582fd10588a09edf081dcc47ba2ff07b8144bf27a954f37e2dbef36c5"
+    },
+    "mcinspect_corrected_qualification": {
+      "bytes": 31320,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcinspect-bool-matching-provider-build-1/qualification-1/QUALIFICATION.json",
+      "sha256": "a22690aa8c491f55e25df392ab5973bf4d3a5adac2d9899128dab1b80bf62fdd"
+    },
+    "mcinspect_corrected_six_phase_actual": {
+      "bytes": 23369,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcinspect-bool-matching-provider-build-1/production-execution-1/RESULT.json",
+      "sha256": "f36568a82d09227bfbfcd2b81d2b75792016916a6d54d0e2df156847cf3d9f11"
+    },
+    "mcinspect_source_provider_binding": {
+      "bytes": 12187,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcinspect-bool-matching-provider-build-1/SOURCE-PROVIDER-BINDING.json",
+      "sha256": "a09b35653f146db1aee62d7add1e63edb8eb57ba99c1b99b441bfe9d0334d67f"
+    },
+    "mcps_five_phase_actual": {
+      "bytes": 5682,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-build-1/execution-1/RESULT.json",
+      "sha256": "99669a59b035cfe2ff4c5c39f1ce928230b1bc94eabf2d8b1fb204566a766a85"
+    },
+    "mcps_independent_result_review": {
+      "bytes": 18725,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-review-tests-max-1/result-1/REVIEW.json",
+      "sha256": "b0ff6390e0261d6efad39948fe5ab602c4437014e2ec120b5d835fc089d5c678"
+    },
+    "mcps_qualification": {
+      "bytes": 40187,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-build-1/qualification-1/QUALIFICATION.json",
+      "sha256": "ba4722b8ff7f3d35d516f243f1327656407a91b58d72a84fc04ed7d365d4d86a"
+    },
+    "mcps_retained_23case_result": {
+      "bytes": 2141,
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-8/m15-mcps/signal-diagnostic-correction-1/actual-host-fixture-1/ACTUAL-MCPS-COMPACT-RESULT.json",
+      "sha256": "8713bf4954ca2d15040c3e19cf1ac543596f4df30e1d02caafcca53655feb355"
+    },
+    "mcps_retained_compile": {
+      "bytes": 886,
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-8/m15-mcps/signal-diagnostic-correction-1/fixture-output/rust-compile.command.json",
+      "sha256": "0a78d97288802480e625bda2874263fa49dd6d3785d8e3ee4ca90d9d201a3d80"
+    }
+  },
+  "remaining_conditions": [
+    "Private-pair copy/hash/mode result must actually pass under independent review and Root fresh admission; this input manifest is not an execution result.",
+    "Existing23cases retain their exact old source/stub/compiler/locale/signal scope; no new functional run against corrected mcinspect is claimed.",
+    "No real /usr/local/bin is modified. Private prefix preserves exact installed namespace contract and does not execute posix_spawn or mcinspect --ps.",
+    "Matching mckernel.img, actual deployment/device/runtime/provider selection, complete original P05 behavior and I01/I03/milestone acceptance remain separate.",
+    "M14-before-M15 acceptance; all genuine native/source/currentfree/replay/service/account/resource holds and both UNKNOWN jobs remain binding."
+  ],
+  "reuse_without_replay": {
+    "mcinspect_current_six_phases": true,
+    "mcps_23case_scope": {
+      "actual_23case_receipt": {
+        "bytes": 2141,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-8/m15-mcps/signal-diagnostic-correction-1/actual-host-fixture-1/ACTUAL-MCPS-COMPACT-RESULT.json",
+        "sha256": "8713bf4954ca2d15040c3e19cf1ac543596f4df30e1d02caafcca53655feb355"
+      },
+      "all_23_original_pass": true,
+      "old_23_rerun": false,
+      "old_compile_profile": {
+        "bytes": 886,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-8/m15-mcps/signal-diagnostic-correction-1/fixture-output/rust-compile.command.json",
+        "sha256": "0a78d97288802480e625bda2874263fa49dd6d3785d8e3ee4ca90d9d201a3d80"
+      },
+      "retained_limit": "Other/inherited/parent-directed signals, core-dump/stop-continue/non-C locale and original supported-install-profile boundaries remain unqualified.",
+      "retained_source": {
+        "bytes": 3902,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-8/m15-mcps/signal-diagnostic-correction-1/mcps.rs",
+        "sha256": "11bbecd7a0a6f4d098bb737ccca1e64e974e7c91bcc124b989fdc40b552c3b53"
+      },
+      "signal_scope": "Preserved ordinary C-locale observed TERM143/TerminatedLF and KILL137 normalizedPID diagnostics. Other/inherited/parent-directed signal/core-dump/stop-continue/non-C locale and other explicit original profile semantics remain open. New currentRust195 artifact does not expand that behavior acceptance."
+    },
+    "mcps_current_five_phases": true,
+    "mcps_source_equal_retained_23case": true,
+    "new_23case_or_ELF_tool_execution": false
+  },
+  "schema": "mckernel.mcps.corrected-provider.private-pair.inputs.v1",
+  "scope": "Saved-artifact composition only: unchanged qualified mcps and corrected already-installed mcinspect. No program or ELF tools execute."
+}

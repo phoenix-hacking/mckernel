@@ -1,0 +1,507 @@
+{
+  "schema": "mckernel.private-paired-UTI-info-initializer-independent-source-review.v1",
+  "reviewer": "/root/m15_installed_leaf_review; explicit gpt-6.1-sol/MAX; independent complete C-plus-Rust boundary source review; depth1/no recursion",
+  "decision": "GO_PRIVATE_PAIRED_UTI_INFO_TWELVE_FIELD_INITIALIZER_SOURCE_ONLY",
+  "at_utc": "2026-11-13T08:35:44Z",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Original M14-03-01-DEFAULT/M14-I01-E2/E3 private paired initializer source prerequisite only.",
+  "Root_thread_id": "01a18bc3-e072-7810-9426-75101b0856c0",
+  "invocation": "20261112T094452Z-12a4bea0",
+  "same_Root_finite_credit_run_id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+  "findings": [],
+  "checks": {
+    "all_exact_pair_source_and_metadata_pins": true,
+    "C_exact_extern_and_call_once": true,
+    "C_whole_inverse_exact": true,
+    "C_request_number_tail_byte_equal": true,
+    "C_logical_allocation_free_origins": true,
+    "Rust_baseline_code_unchanged_except_documentation_and_appended_helper": true,
+    "exact_C_and_Rust_twelve_write_order": true,
+    "exact_provider_call_counts": true,
+    "partial_raw_only": true,
+    "captured_thread_separate_and_fresh_CLS": true,
+    "C_ABI_void_pointers_match": true,
+    "derived_measured_partial_partition": true,
+    "measured_UtiInfo_size160_align8": true
+  },
+  "approved_pair": {
+    "C": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-UTI-private-data-provider-1/paired-info-initializer-1/candidate/kernel/syscall.c",
+      "bytes": 966986,
+      "sha256": "e8797e0a759bfeb331ebdea1bd40480cce78c671681e72448958e29b22460d07"
+    },
+    "Rust": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-UTI-private-data-provider-1/paired-info-initializer-1/candidate/kernel/rust/uti_data_providers.rs",
+      "bytes": 10722,
+      "sha256": "9b8c1127f1427329ff17a73ff49336a310eff29985e32b95e50f279eb4163634"
+    },
+    "patch": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-UTI-private-data-provider-1/paired-info-initializer-1/PRIVATE-PAIRED-UTI-INFO-INITIALIZER.patch",
+      "bytes": 6719,
+      "sha256": "5cbc04ae20991e63804fa88d70f2d8bf062050c5a26ee025c7bf07761babb247"
+    },
+    "source_proof": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-UTI-private-data-provider-1/paired-info-initializer-1/TYPED-TWELVE-FIELD-AND-PARTIAL-INIT.PROOF.json",
+      "bytes": 12758,
+      "sha256": "e08fe0419af8cf2453d2889a658aee3f24f18a0f76f84bc335930ce0cd90a03f"
+    },
+    "changed_compile_link_use_proposal": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-UTI-private-data-provider-1/paired-info-initializer-1/NECESSARY-CHANGED-PAIR-COMPILE-LINK-USE.NOT-A-GRANT.json",
+      "bytes": 5231,
+      "sha256": "e24a7f8ecfeb88aa0374e8c43a372f195b684c7de345e317a80c9039d0c54e8d"
+    }
+  },
+  "reviewed_prepared_pair": {
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-UTI-private-data-provider-1/paired-info-initializer-1/PREPARED-PAIR.SOURCE.json",
+    "bytes": 5344,
+    "sha256": "0fa97fd100f951cbd80b52d652d5486cfee7f11f8227aa40c73e20b005791a52"
+  },
+  "C_source_boundary": {
+    "baseline_private_preimage": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-UTI-private-data-provider-1/paired-info-initializer-1/preimage/kernel/syscall.c",
+      "bytes": 967651,
+      "sha256": "9f5aa63d124784d772734bff1c0c63dd719cb814fd43d4ebf41f3bf7ce188b2e"
+    },
+    "actual_extern": "extern void f03_uti_info_data_initialize_v1(struct uti_info *info, struct thread *thread);",
+    "extern_immediately_before_original_line28297": true,
+    "original_twelve_assignments_replaced_only_by": "f03_uti_info_data_initialize_v1(uti_info, thread);",
+    "reset_line28346_immediately_before_original_request_number": true,
+    "whole_inverse_of_only_extern_and_initializer_block_restores_entire_preimage": true,
+    "request_number_through_EOF_byte_identical": true,
+    "request_number_through_EOF_sha256": "1b314a59ea293161841c1890d5202b9fb54d6b24b6ea6c1cb21b68c70cbc447c",
+    "preserved_logical_allocation_free_origins": [
+      {
+        "physical_line": 29516,
+        "logical_line": 28314,
+        "logical_file": "/src/kernel/syscall.c",
+        "source": "rctx = kmalloc_tracked(sizeof(struct uti_ctx), IHK_MC_AP_NOWAIT, __FILE__, __LINE__);"
+      },
+      {
+        "physical_line": 29525,
+        "logical_line": 28323,
+        "logical_file": "/src/kernel/syscall.c",
+        "source": "uti_info = kmalloc_tracked(sizeof(struct uti_info), IHK_MC_AP_NOWAIT, __FILE__, __LINE__);"
+      },
+      {
+        "physical_line": 29557,
+        "logical_line": 28371,
+        "logical_file": "/src/kernel/syscall.c",
+        "source": "kfree_tracked(rctx, __FILE__, __LINE__);"
+      },
+      {
+        "physical_line": 29560,
+        "logical_line": 28374,
+        "logical_file": "/src/kernel/syscall.c",
+        "source": "kfree_tracked(uti_info, __FILE__, __LINE__);"
+      },
+      {
+        "physical_line": 29583,
+        "logical_line": 28397,
+        "logical_file": "/src/kernel/syscall.c",
+        "source": "kfree_tracked(rctx, __FILE__, __LINE__);"
+      },
+      {
+        "physical_line": 29584,
+        "logical_line": 28398,
+        "logical_file": "/src/kernel/syscall.c",
+        "source": "kfree_tracked(uti_info, __FILE__, __LINE__);"
+      }
+    ],
+    "logical_source_file_assumption": "Same original /src/kernel/syscall.c compile source mapping; the private host filename is not claimed as a changed __FILE__ producer.",
+    "allocation_flags_sizes_null_paths_free_paths_and_request_submit_ACK_refill_exit_tail_unchanged": true,
+    "no_new_allocator_zeroing_failure_fallback_or_generic_bridge": true
+  },
+  "exact_twelve_field_order": [
+    {
+      "order": 1,
+      "field": "thread_va",
+      "offset": 0,
+      "width_bytes": 8,
+      "meaning": "fresh CLS[1].current POINTER VALUE as CULong kernel VA",
+      "old_C": "uti_info->thread_va = (unsigned long)get_this_cpu_local_var()->current;"
+    },
+    {
+      "order": 2,
+      "field": "uti_futex_resp_pa",
+      "offset": 24,
+      "width_bytes": 8,
+      "meaning": "physical value of fresh CLS[2].uti_futex_resp POINTER VALUE",
+      "old_C": "uti_info->uti_futex_resp_pa = virt_to_phys((void *)get_this_cpu_local_var()->uti_futex_resp);"
+    },
+    {
+      "order": 3,
+      "field": "ikc2linux_pa",
+      "offset": 32,
+      "width_bytes": 8,
+      "meaning": "physical value of fresh CLS[3].ikc2linux POINTER VALUE",
+      "old_C": "uti_info->ikc2linux_pa = virt_to_phys((void *)get_this_cpu_local_var()->ikc2linux);"
+    },
+    {
+      "order": 4,
+      "field": "tid",
+      "offset": 40,
+      "width_bytes": 4,
+      "meaning": "ordinary CInt initially captured Thread.tid read",
+      "old_C": "uti_info->tid = thread->tid;"
+    },
+    {
+      "order": 5,
+      "field": "cpu",
+      "offset": 44,
+      "width_bytes": 4,
+      "meaning": "one actual processor_id CInt result",
+      "old_C": "uti_info->cpu = ihk_mc_get_processor_id();"
+    },
+    {
+      "order": 6,
+      "field": "status_pa",
+      "offset": 88,
+      "width_bytes": 8,
+      "meaning": "physical ADDRESS of captured Thread.status",
+      "old_C": "uti_info->status_pa = virt_to_phys((void *)&thread->status);"
+    },
+    {
+      "order": 7,
+      "field": "spin_sleep_lock_pa",
+      "offset": 96,
+      "width_bytes": 8,
+      "meaning": "physical ADDRESS of captured Thread.spin_sleep_lock",
+      "old_C": "uti_info->spin_sleep_lock_pa = virt_to_phys((void *)&thread->spin_sleep_lock);"
+    },
+    {
+      "order": 8,
+      "field": "spin_sleep_pa",
+      "offset": 104,
+      "width_bytes": 8,
+      "meaning": "physical ADDRESS of captured Thread.spin_sleep",
+      "old_C": "uti_info->spin_sleep_pa = virt_to_phys((void *)&thread->spin_sleep);"
+    },
+    {
+      "order": 9,
+      "field": "vm_pa",
+      "offset": 112,
+      "width_bytes": 8,
+      "meaning": "physical value of captured Thread.vm POINTER VALUE",
+      "old_C": "uti_info->vm_pa = virt_to_phys((void *)thread->vm);"
+    },
+    {
+      "order": 10,
+      "field": "futex_q_pa",
+      "offset": 120,
+      "width_bytes": 8,
+      "meaning": "physical ADDRESS of captured Thread embedded futex_q",
+      "old_C": "uti_info->futex_q_pa = virt_to_phys((void *)&thread->futex_q);"
+    },
+    {
+      "order": 11,
+      "field": "mc_idle_halt",
+      "offset": 128,
+      "width_bytes": 4,
+      "meaning": "ordinary plain CInt idle_halt DATA read",
+      "old_C": "uti_info->mc_idle_halt = idle_halt;"
+    },
+    {
+      "order": 12,
+      "field": "futex_queue_pa",
+      "offset": 152,
+      "width_bytes": 8,
+      "meaning": "physical value of POINTER RETURNED by futex_queues",
+      "old_C": "uti_info->futex_queue_pa = virt_to_phys((void *)get_futex_queues());"
+    }
+  ],
+  "actual_operand_semantics": {
+    "fresh_CLS_reads": 3,
+    "current_thread_pointer_VALUE_stored_as_CULong_kernel_VA_not_phys": true,
+    "fresh_uti_futex_resp_and_ikc2linux_pointer_VALUES_converted_not_addresses_of_their_slots": true,
+    "captured_Thread_tid_plain_CInt_read_then_actual_processor_CInt_once": true,
+    "captured_Thread_status_spin_sleep_lock_spin_sleep_ADDRESSES_converted_not_their_stored_values": true,
+    "captured_Thread_vm_pointer_VALUE_converted_not_the_vm_slot_address": true,
+    "captured_Thread_embedded_futex_q_ADDRESS_converted": true,
+    "idle_halt_plain_existing_CInt_DATA_read_once_no_Atomic_volatile_or_snapshot_change": true,
+    "futex_queues_existing_getter_RETURNPOINTER_converted_once": true,
+    "physical_conversion_calls": 8,
+    "processor_calls": 1,
+    "queue_getter_calls": 1,
+    "captured_C_thread_argument_remains_distinct_from_fresh_CLS_current_thread_value": true,
+    "every_read_or_provider_call_precedes_its_own_raw_field_store_in_original_order": true,
+    "source_counts_are_not_claimed_post_inline_machine_CALL_counts": true
+  },
+  "Rust_partial_initialization": {
+    "preimage_baseline4612": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-UTI-private-data-provider-1/candidate/kernel/rust/uti_data_providers.rs",
+      "bytes": 6491,
+      "sha256": "4612b65d108e52e03c90b5fa7644c8e7ead74b9eef1b8070fa7ec4e8beb0a439"
+    },
+    "existing_imports_types_metadata_aliases_provider_record_and_existing_static_declaration_byte_equal": true,
+    "baseline_difference_only_documentation_and_append_addr_of_mut_Thread_imports_one_exported_unsafe_C_void_function": true,
+    "no_parked4272_static_items_or_new_type_reconstruction_or_module_selector_CMake_change": true,
+    "helper_signature": "pub unsafe extern C fn(info: *mut UtiInfo, thread: *mut Thread) -> ()",
+    "output_storage": "Only addr_of_mut!((*info).field).write(value), twelve individual raw fields.",
+    "whole_object_reference_or_value_read_or_copy_or_zero_or_assume_init": false,
+    "UtiInfo_size": 160,
+    "UtiInfo_align": 8,
+    "twelve_kernel_field_writes": [
+      {
+        "field": "thread_va",
+        "type": "CULong",
+        "offset": 0,
+        "width": 8
+      },
+      {
+        "field": "uti_futex_resp_pa",
+        "type": "CULong",
+        "offset": 24,
+        "width": 8
+      },
+      {
+        "field": "ikc2linux_pa",
+        "type": "CULong",
+        "offset": 32,
+        "width": 8
+      },
+      {
+        "field": "tid",
+        "type": "CInt",
+        "offset": 40,
+        "width": 4
+      },
+      {
+        "field": "cpu",
+        "type": "CInt",
+        "offset": 44,
+        "width": 4
+      },
+      {
+        "field": "status_pa",
+        "type": "CULong",
+        "offset": 88,
+        "width": 8
+      },
+      {
+        "field": "spin_sleep_lock_pa",
+        "type": "CULong",
+        "offset": 96,
+        "width": 8
+      },
+      {
+        "field": "spin_sleep_pa",
+        "type": "CULong",
+        "offset": 104,
+        "width": 8
+      },
+      {
+        "field": "vm_pa",
+        "type": "CULong",
+        "offset": 112,
+        "width": 8
+      },
+      {
+        "field": "futex_q_pa",
+        "type": "CULong",
+        "offset": 120,
+        "width": 8
+      },
+      {
+        "field": "mc_idle_halt",
+        "type": "CInt",
+        "offset": 128,
+        "width": 4
+      },
+      {
+        "field": "futex_queue_pa",
+        "type": "CULong",
+        "offset": 152,
+        "width": 8
+      }
+    ],
+    "kernel_written_bytes": 84,
+    "nine_untouched_host_fields": [
+      {
+        "field": "uti_futex_resp",
+        "type": "*mut c_void",
+        "offset": 8,
+        "width": 8
+      },
+      {
+        "field": "ikc2linux",
+        "type": "*mut c_void",
+        "offset": 16,
+        "width": 8
+      },
+      {
+        "field": "status",
+        "type": "*mut c_void",
+        "offset": 48,
+        "width": 8
+      },
+      {
+        "field": "spin_sleep_lock",
+        "type": "*mut c_void",
+        "offset": 56,
+        "width": 8
+      },
+      {
+        "field": "spin_sleep",
+        "type": "*mut c_void",
+        "offset": 64,
+        "width": 8
+      },
+      {
+        "field": "vm",
+        "type": "*mut c_void",
+        "offset": 72,
+        "width": 8
+      },
+      {
+        "field": "futex_q",
+        "type": "*mut c_void",
+        "offset": 80,
+        "width": 8
+      },
+      {
+        "field": "futex_queue",
+        "type": "*mut c_void",
+        "offset": 136,
+        "width": 8
+      },
+      {
+        "field": "os",
+        "type": "*mut c_void",
+        "offset": 144,
+        "width": 8
+      }
+    ],
+    "host_slot_bytes_untouched": 72,
+    "untouched_padding": {
+      "start": 132,
+      "end": 136,
+      "bytes": 4
+    },
+    "all160_bytes_partitioned_without_overlap": true,
+    "successful_allocation_is_not_promoted_to_whole_initialized_UtiInfo": true,
+    "raw_reads_of_live_CLS_Thread_fields_create_no_Rust_reference_or_ownership_promise": true
+  },
+  "actual_type_provider_module_binding": {
+    "measured_ABI_source": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-time-functional-1/uti-abi-data-1/proposal/postimage/kernel/rust/abi.rs",
+      "bytes": 77702,
+      "sha256": "c19d2f6f42f861e4b1dfe7af710fba024b93a5c17082bbdc5a2b4bf914278523"
+    },
+    "unchanged_private_crate_root": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-UTI-private-data-provider-1/metadata-typecheck-1/overlays/kernel/rust/lib.rs",
+      "bytes": 5417,
+      "sha256": "2d023506547e1e34e35d09f3fcf59abfe588d583e24bd393315611bfbc384646"
+    },
+    "existing_provider_contract": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-UTI-private-data-provider-1/PROVIDER-ABI-AND-CALLERS.json",
+      "bytes": 17314,
+      "sha256": "cd7fd451d31892ef7043eafd313bdd7b202818ce3998b7e0c416264efd5c73b3"
+    },
+    "private_root_actual_path_attribute": "#[path = \"/uti-data-provider/uti_data_providers.rs\"] mod uti_data_providers;",
+    "private_root_pub_mod_abi_selects_existing_c19_overlay_and_same_production_modules": true,
+    "C_header_struct_uti_info_fields_compared_to_actual_repr_C_UtiInfo": true,
+    "CInt": "i32",
+    "CULong": "u64",
+    "target_scope": "Existing supported x86_64/LP64 source and reused ABI35 profile only",
+    "actual_Thread_fields_checked": {
+      "tid": "CInt",
+      "status": "CInt",
+      "vm": "*mut ProcessVm",
+      "spin_sleep_lock": "IhkSpinlock",
+      "spin_sleep": "CInt",
+      "futex_q": "FutexQ"
+    },
+    "actual_CpuLocalVar_fields_checked": {
+      "current": "*mut Thread",
+      "uti_futex_resp": "*mut c_void",
+      "ikc2linux": "*mut c_void"
+    },
+    "actual_provider_signatures_and_selected_source_definitions_checked": [
+      {
+        "field": "current_cpu_local",
+        "actual": "crate::cls::get_this_cpu_local_var",
+        "ABI": "unsafe extern C fn()->*mut CpuLocalVar",
+        "source": "kernel/rust/cls.rs:173"
+      },
+      {
+        "field": "virtual_to_physical",
+        "actual": "crate::x86_memory_helpers::virt_to_phys",
+        "ABI": "unsafe extern C fn(*mut c_void)->CULong",
+        "source": "kernel/rust/x86_memory_helpers.rs:5472"
+      },
+      {
+        "field": "processor_id",
+        "actual": "crate::x86_local::ihk_mc_get_processor_id",
+        "ABI": "unsafe extern C fn()->CInt",
+        "source": "kernel/rust/x86_local.rs:147; not(mckernel_equivalence) production definition"
+      },
+      {
+        "field": "futex_queues",
+        "actual": "crate::futex::get_futex_queues",
+        "ABI": "unsafe extern C fn()->*mut FutexHashBucket",
+        "source": "kernel/rust/futex.rs:229; returns existing queue pointer"
+      },
+      {
+        "field": "idle_halt_storage",
+        "actual": "existing extern static mut idle_halt CInt",
+        "ABI": "*const CInt; ordinary read",
+        "source": "kernel/rust/process_helpers.rs:17422; existing unique storage"
+      }
+    ],
+    "baseline_typed_assignments_already_qualified_by_Source5052_metadata_and_actual_objectQ29bc_reused": true,
+    "no_old_seven_FUNC_idle_OBJECT_or_ABI_recompile_or_reinspection": true
+  },
+  "caller_safety_obligations_preserved": [
+    "Caller retains successful correctly aligned allocation and live captured Thread.",
+    "Current-CPU/CLS/thread/VM/futex/global synchronization/exclusion and all pointee lifetimes remain the original caller's obligations.",
+    "Kernel VA bits, physical bits and later host-written converted pointer slots remain distinct; no returned pointer or field address grants ownership, pin, reference, completion or ACK.",
+    "No new whole-info validity, host completion, refill/TID, final-stack, free or storage lifetime permission is introduced."
+  ],
+  "prior_qualified_evidence_reused": {
+    "SourceGO5052": {
+      "bytes": 11825,
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-UTI-private-data-provider-1/independent-review-1/REVIEW.json",
+      "sha256": "5052acc5c7233cefc3233914ef8dd02c8f3dc595ea5f34d8d5e0cce698159658"
+    },
+    "actual_object_Q29bc": {
+      "bytes": 57648,
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-UTI-private-data-provider-1/codegen-object-1/independent-operation-review-1/actual-result-qualification-1/QUALIFICATION.json",
+      "sha256": "29bc58e5cf98ff8c65e5fa735d2d02582cd23b76950af88c1c77414122017327"
+    },
+    "ABI35": {
+      "actual_result": {
+        "bytes": 32589,
+        "path": "/home/holden/mckernel-work/resume-20261112T094452Z-UTI-ABI35-rust-cwd-correction-1/execution-1/capture/RESULT.json",
+        "sha256": "1d359e8c55101cbf0620ec3ae2195335a61d448ac95b0c27e68b1cb8b784e7e8"
+      },
+      "bytes": 280,
+      "raw_sha256": "27859d4e73c746e0a5eccdeda7b72fa7da9eb8b66854649ebb0dc607c5b09b85",
+      "words": 35
+    }
+  },
+  "necessary_next_changed_evidence": {
+    "proposal": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-UTI-private-data-provider-1/paired-info-initializer-1/NECESSARY-CHANGED-PAIR-COMPILE-LINK-USE.NOT-A-GRANT.json",
+      "bytes": 5231,
+      "sha256": "e24a7f8ecfeb88aa0374e8c43a372f195b684c7de345e317a80c9039d0c54e8d"
+    },
+    "source_review_is_not_operation_review_or_admission": true,
+    "required_after_source_review": [
+      "One actual changed production C compile with unchanged matching tool/header/flags and preserved logical source mapping.",
+      "One actual changed genuine Rust production-crate object emission at same root/c19/core/target/no-SIMD/cfg and necessary paired source/output mapping.",
+      "Focused passive C helper reference/relocation to unique Rust definition and actual provider/storage/use joins; any necessary relocatable pair link requires exact separately reviewed real tools/argv/profile.",
+      "Actual full provider/import/link/cfg/current caller selection, ownership/body/ACK/lifetime/native/default/C4/original acceptance remain unproved."
+    ],
+    "no_ABI35_metadata_C_witness_old_object_green_suite_build_stage_or_native_replay_required_by_this_review": true,
+    "actual_execution_requires_separate_exact_operation_GO_and_genuine_fresh_Root_shared_fit_after_current_failed_scope_disposition": true
+  },
+  "no_publication_selection_current_runtime_change_or_resource_C4_native_original_acceptance_authorized": true,
+  "current30017_a2d_2GiB_lease_source_native12_and_globalUNKNOWNs_preserved_until_genuine_Root_disposition": true,
+  "reviewer_actions": "Source text and exact named private input bytes compared; actual needed ABI/header/provider/module snippets read and qualified evidence reused. No source mutation, compile/typecheck/test/fixture/import, provider execution, object/ABI rerun, default/installed selection, account/proc/native or custody action.",
+  "excluded_task": {
+    "status": "EXCLUDED_FROM_REPLAY_REPHRASE_REASSIGNMENT",
+    "task": "signal/frame/xstate collector and equivalents",
+    "turn": "01a1ce01-20cf-7e03-9442-f6d521fb8b02",
+    "worker": "01a1c48d-4d96-7cc3-b733-73a97973152f"
+  },
+  "preserved": "Same Root/finite7c6, all actual service/account/source/resource/native12/lease/current and historical UNKNOWN and execACK/TID/XPMEM holds, original M14-before-M15 order and all other writers' dirty edits."
+}

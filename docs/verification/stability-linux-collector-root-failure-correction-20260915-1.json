@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "record_kind": "evidence_summary_correction",
+  "status": "PASS_ADDITIVE_CORRECTION_ONLY",
+  "task_id": "M02-B",
+  "corrects": {
+    "path": "docs/verification/stability-linux-collector-root-failure-20260915-1.json",
+    "sha256": "b002d703a263b252ea53c17e80a0b44e69c63e14313fc179159d49b81d2b9728",
+    "json_pointer": "/first_failure/setup_words_prefix/0",
+    "preserved_value": 826032961,
+    "correct_value": 827081537,
+    "correct_value_hex": "0x314c4341"
+  },
+  "source_evidence": {
+    "archive": "docs/verification/evidence/stability-linux-sealed-root-attempt-20260913-1.tar.gz",
+    "archive_sha256": "99c9da8d429fd7740a1efc6541d07d028fa678b27d255e08534af67a76c3ff81",
+    "member": "stability-linux-sealed-root-tests-20260913-1/work/cases/literal/collection/setup.bin",
+    "member_size": 384,
+    "member_sha256": "8b02815ce17c37593e8210442eadff04cc1171a3ca70189095b4b69f46536861",
+    "uint64_le_prefix": [827081537, 1, 2, 1, 1]
+  },
+  "interpretation": "ACL1 version 1 ERROR, setup stage 1, errno EPERM; all remaining uint64 words are zero.",
+  "historical_record_modified": false,
+  "runtime_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}

@@ -1,0 +1,182 @@
+{
+  "schema": 1,
+  "status": "SOURCE_ONLY_UNCOMPILED_PENDING_INDEPENDENT_CHANGED_BINDING_REVIEW",
+  "time_utc": "2026-11-10T22:43:09.361758+00:00",
+  "source_baseline": {
+    "commit": "c0522ae43c111e427bcfa9c20f4bc961494f208c",
+    "compiled_code_commit": "f8cf0bd7e0b33bfed8f5d2ce6f69b16c20a9ec21",
+    "private_original_patch": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/REBASED-COMPOSITION.patch",
+      "bytes": 58116,
+      "sha256": "428c3168cb2b327ac50745e208d33608f355afe40402e1f060ccdb963ff5efb0"
+    },
+    "preimages": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/PREIMAGES.json",
+      "bytes": 3096,
+      "sha256": "447a1366997d8b73957af20289e0af5909f7cd29507749d8eac4be467400bea4"
+    }
+  },
+  "reused_material_review": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-final-review-publicabi-max-1/REVIEW.json",
+    "bytes": 24944,
+    "sha256": "b3db9552313f9f218bd449f24364776ccb183c34e7854cfbfebf75b16572e5bc"
+  },
+  "original_known_bad_rust": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/candidate/kernel/rust/f03_do_mmap.rs",
+    "bytes": 30728,
+    "sha256": "5961fe04c786323bbe8640a4ee66b883f9062f311f69447b6bcd36219c7536d5"
+  },
+  "finite_failure_family": [
+    {
+      "original_line": 159,
+      "callee": "ihk_mc_syscall_set_arg1",
+      "actual_type": "value: CULong = u64",
+      "input_type": "len: SizeT = usize",
+      "correction": "len as CULong"
+    },
+    {
+      "original_lines": [
+        192,
+        193
+      ],
+      "callee": "arch_get_smaller_page_size",
+      "actual_types": [
+        "cursize: SizeT",
+        "newsizep: *mut SizeT",
+        "p2alignp: *mut CInt"
+      ],
+      "input_types": [
+        "end.wrapping_sub(start): CULong",
+        "&mut psize: *mut CULong",
+        "&mut alignment: *mut CInt (already matching)"
+      ],
+      "correction": [
+        "span as SizeT",
+        "genuine query_psize: SizeT output local; no pointer reinterpretation",
+        "alignment argument unchanged"
+      ]
+    }
+  ],
+  "type_source_bindings": [
+    {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "bytes": 256003,
+      "sha256": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/candidate/kernel/rust/x86_memory_helpers.rs",
+      "bytes": 325789,
+      "sha256": "19aa46052d53f7e725a787b5ad516ba3dec0c6680645d5dd00aad81b935d8156"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/ihk/types.h",
+      "bytes": 1074,
+      "sha256": "c37a7c748f2439ddfd847725a4d559c008f2aca09c45114fb07e73337013f449"
+    }
+  ],
+  "lossless_contract": {
+    "rust_aliases": [
+      "CULong = u64 (abi.rs:7)",
+      "SizeT = usize (abi.rs:10)"
+    ],
+    "c_source_aliases": [
+      "uint64_t = unsigned long long (arch x86 types.h:20)",
+      "size_t = uint64_t (arch x86 types.h:29)"
+    ],
+    "paired_new_guards": "Rust SizeT/CULong size8 align8; selected C size_t/unsigned long size8 align8. No alias global change. These guards are source-only until actual production compile succeeds.",
+    "value_domain": "All values are unsigned64 on the existing selected x86_64 profile; conversions preserve all64 bits including wrapping span.",
+    "page_query": "Typed local initialized to PAGE_SIZE, same query/error/break order and alignment output. Successful query size is intentionally discarded by original C512MiB override, retained as CULong with same arithmetic/masks. No cast between pointer types."
+  },
+  "scope_preserved": {
+    "original5961_and428c_unmodified": true,
+    "rejected_provider_candidate_not_used": true,
+    "four_composition_paths_byte_identical_to428c": [
+      "kernel/CMakeLists.txt",
+      "kernel/rust/lib.rs",
+      "kernel/rust/process_helpers.rs",
+      "kernel/rust/x86_memory_helpers.rs"
+    ],
+    "correct_shared_provider_sha256": [
+      "d3be0ac4bfc9a103db7709fb8ba1d40b3e3e4eb144cc5c96fe3d54cbfefbcafe",
+      "19aa46052d53f7e725a787b5ad516ba3dec0c6680645d5dd00aad81b935d8156"
+    ],
+    "selector_and_profile_delta": false,
+    "existing14_rust_selections_preserved": true,
+    "term_cast_and_representation_guards_preserved": true,
+    "clone_zero_initializer_preserved": true,
+    "F06_source_defaultOFF_preserved": true,
+    "current_wholeF06ONcache_unchanged": true,
+    "cache_or_shared_output_modified": false,
+    "canonical_or_index_modified": false
+  },
+  "candidate_paths": [
+    {
+      "relative_path": "kernel/CMakeLists.txt",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/candidate/kernel/CMakeLists.txt",
+      "bytes": 55676,
+      "sha256": "25158df4ed1b0a94ef6433265c4b92035096289972feb89213ea0185ff3c08c8"
+    },
+    {
+      "relative_path": "kernel/rust/lib.rs",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/candidate/kernel/rust/lib.rs",
+      "bytes": 4333,
+      "sha256": "1bbe24ffb98810c83f70cf3d37999b26c9fd06ce048f5d733b6a96a2b6a61959"
+    },
+    {
+      "relative_path": "kernel/syscall.c",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/candidate/kernel/syscall.c",
+      "bytes": 946602,
+      "sha256": "81682ae8cac4a0792d521f5cca240cf81db837f087bdc1c898a9a6561621e9be"
+    },
+    {
+      "relative_path": "kernel/rust/f03_do_mmap.rs",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/candidate/kernel/rust/f03_do_mmap.rs",
+      "bytes": 30921,
+      "sha256": "75a1f11b33af4e663f857d54190ec0b14c4193fb944d20ed0d7a7b54c5e1298e"
+    },
+    {
+      "relative_path": "kernel/rust/process_helpers.rs",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/candidate/kernel/rust/process_helpers.rs",
+      "bytes": 619886,
+      "sha256": "d3be0ac4bfc9a103db7709fb8ba1d40b3e3e4eb144cc5c96fe3d54cbfefbcafe"
+    },
+    {
+      "relative_path": "kernel/rust/x86_memory_helpers.rs",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/candidate/kernel/rust/x86_memory_helpers.rs",
+      "bytes": 325789,
+      "sha256": "19aa46052d53f7e725a787b5ad516ba3dec0c6680645d5dd00aad81b935d8156"
+    }
+  ],
+  "patches": {
+    "minimal_two_path_delta": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/TYPE-CORRECTION.patch",
+      "bytes": 2973,
+      "sha256": "f3381128ab1cf70701ce648c0b1afeafcb80e289a65148fa28fce77d207bc67a"
+    },
+    "six_path_complete_current_rebase": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/REBASED-COMPOSITION.patch",
+      "bytes": 58114,
+      "sha256": "09df57577b901f31f96406dc5d1705b2b2ce0e29b4015200b02abbacb280f382"
+    }
+  },
+  "execution": {
+    "compiler_or_test_or_container_or_native_actions": false,
+    "next_command_only_after_material_GO_root_composition_fresh_admission": [
+      "/usr/bin/cmake",
+      "--build",
+      "/work/output/build",
+      "--target",
+      "mckernel.img",
+      "--parallel",
+      "1",
+      "--verbose"
+    ],
+    "expected_source_delta_only": "Rust do_mmap replaces C do_mmap; actual genericC33\u219232 must be observed, not assumed. Full normal image and passive owner/provider/ELF/map proof remain required.",
+    "no_original_acceptance_or_native_credit": true
+  }
+}

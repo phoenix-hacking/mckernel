@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "signal.default-segv",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/signal.default-segv"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "signaled", "signal": "SIGSEGV", "signal_number": 11, "core_dump": "record-supervisor-bit"},
+  "stdout": {"kind": "exact-bytes", "hex": ""},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["The volatile unmapped write reaches the default disposition", "Supervisor raw wait status is WIFSIGNALED with SIGSEGV rather than a normal exit code 139"],
+  "unresolved_expectations": ["Freeze raw wait-status/core-dump bits and architecture-specific fault evidence before execution."],
+  "max_question_for_reviewer": "Confirm supervisor must preserve WIFSIGNALED/SIGSEGV distinction and record the core-dump bit independently."
+}

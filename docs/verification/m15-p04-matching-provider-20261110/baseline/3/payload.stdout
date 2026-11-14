@@ -1,0 +1,32 @@
+/usr/bin/cmake -S/source -B/output --check-build-system CMakeFiles/Makefile.cmake 0
+/usr/bin/make  -f CMakeFiles/Makefile2 ldump2mcdump
+make[1]: Entering directory '/output'
+/usr/bin/cmake -S/source -B/output --check-build-system CMakeFiles/Makefile.cmake 0
+/usr/bin/cmake -E cmake_progress_start /output/CMakeFiles 3
+/usr/bin/make  -f CMakeFiles/Makefile2 CMakeFiles/ldump2mcdump.dir/all
+make[2]: Entering directory '/output'
+/usr/bin/make  -f CMakeFiles/ldump2mcdump_rust_helpers.dir/build.make CMakeFiles/ldump2mcdump_rust_helpers.dir/depend
+make[3]: Entering directory '/output'
+cd /output && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /source /source /output /output /output/CMakeFiles/ldump2mcdump_rust_helpers.dir/DependInfo.cmake "--color="
+make[3]: Leaving directory '/output'
+/usr/bin/make  -f CMakeFiles/ldump2mcdump_rust_helpers.dir/build.make CMakeFiles/ldump2mcdump_rust_helpers.dir/build
+make[3]: Entering directory '/output'
+[ 33%] Building Rust ldump2mcdump helpers
+/usr/bin/cmake -E make_directory /output/rust
+/usr/bin/cmake -E env MAKEFLAGS= MCKERNEL_LDUMP2_BFD_LAYOUT_RS=/output/rust/ldump2_bfd_section_layout.rs /usr/bin/rustc --crate-name ldump2mcdump_helpers --crate-type lib --edition=2021 --cfg ldump2_full_body -C panic=abort -C opt-level=2 -C debuginfo=1 -C relocation-model=pic -C force-unwind-tables=no --emit=obj=/output/rust/ldump2mcdump_helpers.o /source/rust/ldump2mcdump_helpers.rs
+make[3]: Leaving directory '/output'
+[ 33%] Built target ldump2mcdump_rust_helpers
+/usr/bin/make  -f CMakeFiles/ldump2mcdump.dir/build.make CMakeFiles/ldump2mcdump.dir/depend
+make[3]: Entering directory '/output'
+cd /output && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /source /source /output /output /output/CMakeFiles/ldump2mcdump.dir/DependInfo.cmake "--color="
+make[3]: Leaving directory '/output'
+/usr/bin/make  -f CMakeFiles/ldump2mcdump.dir/build.make CMakeFiles/ldump2mcdump.dir/build
+make[3]: Entering directory '/output'
+[ 66%] Linking C shared library libldump2mcdump.so
+/usr/bin/cmake -E cmake_link_script CMakeFiles/ldump2mcdump.dir/link.txt --verbose=1
+/usr/bin/cc -fPIC -O3 -DNDEBUG -Wl,--dependency-file=CMakeFiles/ldump2mcdump.dir/link.d -shared -Wl,-soname,libldump2mcdump.so -o libldump2mcdump.so rust/ldump2mcdump_helpers.o  -Wl,-rpath,:::::::::::::::::::::::
+make[3]: Leaving directory '/output'
+[100%] Built target ldump2mcdump
+make[2]: Leaving directory '/output'
+/usr/bin/cmake -E cmake_progress_start /output/CMakeFiles 0
+make[1]: Leaving directory '/output'

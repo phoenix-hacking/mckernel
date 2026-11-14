@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-043",
+  "packet_version": 1,
+  "context_sha256": "8f35db8089cf74b473062fa94608c4236e69f75955e953f33ffe06b3311f89e0",
+  "started_utc": "2026-09-09T11:14:00Z",
+  "finished_utc": "2026-09-09T11:15:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "signal.altstack-small",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/signal/signal.altstack-small.c",
+      "oracle": "scripts/application-tests/oracles/signal.altstack-small.json",
+      "changed_files": ["scripts/application-tests/cases/signal/signal.altstack-small.c", "scripts/application-tests/oracles/signal.altstack-small.json"],
+      "parameter_vectors": {"stack_size": ["MINSIGSTKSZ-1"], "prior_stack": ["unchanged"]},
+      "implemented_operations": ["undersized alternate-stack request", "errno capture", "pre/post configuration comparison"],
+      "unresolved_oracle_notes": ["Platform minimum size and ENOMEM binding require Max review."],
+      "max_reviewer_question": "Confirm selected MINSIGSTKSZ and ENOMEM behavior for undersized stacks."
+    },
+    {
+      "case_id": "signal.altstack-autodisarm",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/signal/signal.altstack-autodisarm.c",
+      "oracle": "scripts/application-tests/oracles/signal.altstack-autodisarm.json",
+      "changed_files": ["scripts/application-tests/cases/signal/signal.altstack-autodisarm.c", "scripts/application-tests/oracles/signal.altstack-autodisarm.json"],
+      "parameter_vectors": {"stack_size": [16384], "flags": ["SS_AUTODISARM"], "expected_target_policy": ["EINVAL rejection"]},
+      "implemented_operations": ["valid alternate-stack storage", "SS_AUTODISARM request", "prior-stack preservation check"],
+      "unresolved_oracle_notes": ["Native support policy and exact EINVAL binding require Max review; Linux divergence is retained."],
+      "max_reviewer_question": "Confirm native EINVAL rejection is intentional and distinct from Linux support."
+    },
+    {
+      "case_id": "signal.altstack-change-active",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/signal/signal.altstack-change-active.c",
+      "oracle": "scripts/application-tests/oracles/signal.altstack-change-active.json",
+      "changed_files": ["scripts/application-tests/cases/signal/signal.altstack-change-active.c", "scripts/application-tests/oracles/signal.altstack-change-active.json"],
+      "parameter_vectors": {"handler_flags": ["SA_ONSTACK"], "active_change": ["replacement stack"], "expected_errno": ["EPERM"]},
+      "implemented_operations": ["alternate-stack handler", "active sigaltstack replacement attempt", "original-stack validity check"],
+      "unresolved_oracle_notes": ["Active-handler stack-state evidence and EPERM binding require Max review."],
+      "max_reviewer_question": "Confirm active alternate-stack changes return EPERM and preserve the original configuration."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/signal/signal.altstack-small.c", "sha256": "70d2fbbf176dd68cb9fc53d86d4059d79e8b6c6023cee82ff7822d4aa8ec8afd"},
+    {"path": "scripts/application-tests/oracles/signal.altstack-small.json", "sha256": "192791c2f9ac890059a138f580742ab36279b1319b14812ce0a92ba732ff89dd"},
+    {"path": "scripts/application-tests/cases/signal/signal.altstack-autodisarm.c", "sha256": "f78bc8f10b2483becd30297e65e3a6ee821c0e3ceb0ad49ef6c235981073a920"},
+    {"path": "scripts/application-tests/oracles/signal.altstack-autodisarm.json", "sha256": "461028974a8d81222bcede308141832c19729c616036a75a56dfddb4284d5249"},
+    {"path": "scripts/application-tests/cases/signal/signal.altstack-change-active.c", "sha256": "1adf44e9e2aafcca7656988afd64afbe4359cf54c7fb8067c58033910741adc9"},
+    {"path": "scripts/application-tests/oracles/signal.altstack-change-active.json", "sha256": "4d68c42fde5d00e5d6bfa37010c6f89984f258c86f94a605c027c764c50473e5"},
+    {"path": "docs/verification/evidence/application-drafts-20260909/ultra-handoff-1/packet-043/context.json", "sha256": "8f35db8089cf74b473062fa94608c4236e69f75955e953f33ffe06b3311f89e0"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-043.json --emit-context /tmp/application-packet-043-context-20260909-1.json", "outcome": "PASS; planning metadata only; runtime_authorized=false"},
+    {"command": "python3 -m json.tool packet-043/report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Undersized, autodisarm, and active-altstack-change cases need final native ABI, signal-stack, lifetime, and canonical record review."],
+  "blocked_execution_capabilities": ["current-inputs", "runtime-transport-fault-injection", "runner-contract"],
+  "first_failure_event": null,
+  "max_escalation": ["Review MINSIGSTKSZ rejection", "Confirm SS_AUTODISARM policy", "Review active altstack EPERM and preservation"],
+  "next_packet_id": "packet-044"
+}

@@ -1,0 +1,45 @@
+{
+  "status": "FAILED_PRESERVED_NO_HELPER_OR_PERMISSION_OR_UNCHANGED_RETRY",
+  "at": "2026-11-11T23:08:02.086116+00:00",
+  "started_at": "2026-11-11T23:08:01.965614+00:00",
+  "error": "AssertionError: ('kernel-parent-prepare', 1)",
+  "traceback": "Traceback (most recent call last):\n  File \"/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-kernel-parent-root-capture-p04source-max-1/run_root_once.py\", line 32, in <module>\n    raw=call('kernel-parent-prepare',q['literal_helper_argv'],timeout=30);err=(OUT/'kernel-parent-prepare.stderr').read_bytes();assert len(raw)<=q['max_raw_stdout_acceptance_bytes'] and len(err)<=q['max_raw_stderr_acceptance_bytes']\n  File \"/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-operation-sdk-max-1/capture-correction-1/call_capture.py\", line 42, in call\n    if primary is not None:raise primary.with_traceback(primary_tb)\nAssertionError: ('kernel-parent-prepare', 1)\n",
+  "clients": [
+    {
+      "attempt_id": 0,
+      "label": "kernel-parent-prepare",
+      "argv": [
+        "sudo",
+        "-A",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/sbin:/usr/bin:/sbin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TZ=UTC",
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/v1-kernel-parent-1/prepare_kernel_parent.py"
+      ],
+      "creation_attempted": true,
+      "popen_returned": true,
+      "pid": 1586751,
+      "birth": "52474803",
+      "exit": 1,
+      "direct_wait_joined": true,
+      "streams_closed": true,
+      "primary_error": "AssertionError: ('kernel-parent-prepare', 1)",
+      "secondary_errors": [],
+      "lifecycle_UNKNOWN": false,
+      "resource_charge_retained": false,
+      "receipt_persisted": true
+    }
+  ],
+  "pending_original_attempts": [],
+  "partial_kernel_objects_retained": true,
+  "no_delete_killpg_sudo_client_fallback_or_replay": true
+}

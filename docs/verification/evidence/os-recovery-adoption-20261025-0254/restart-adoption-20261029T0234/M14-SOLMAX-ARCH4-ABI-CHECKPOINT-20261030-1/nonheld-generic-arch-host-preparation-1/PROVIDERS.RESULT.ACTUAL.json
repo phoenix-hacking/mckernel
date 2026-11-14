@@ -1,0 +1,180 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": "2026-10-30T05:31:40.434865+00:00",
+  "status": "PASS_HOST_DIAGNOSTIC_TWELVE_RUST_PROVIDERS",
+  "image": {
+    "path": "/home/holden/mckernel-work/scratch/native-cheap-20261017-0zb2cg1a/mckernel.img",
+    "bytes": 10420016,
+    "sha256": "bd1ef83d0489dcb2b5d435a39483b959f8410b3081c116f38601b0f113620932"
+  },
+  "new_Rust_object": {
+    "path": "/home/holden/mckernel-work/scratch/native-cheap-20261017-0zb2cg1a/mckernel_rust.o",
+    "bytes": 18644736,
+    "sha256": "4ee1de9f3d9ae6c14deb4c7c5de3847cbf0bd5beea6c7e8b2006627e0252d7f0"
+  },
+  "new_archC_object": {
+    "path": "/home/holden/mckernel-work/scratch/native-cheap-20261017-0zb2cg1a/arch_syscall.o",
+    "bytes": 87624,
+    "sha256": "b6b94ed3ae40afb09be84a62626ea3dfb5909a673ec7a946cf63460ed06605a7"
+  },
+  "all12unique_strong_input_providers": {
+    "sys_perf_event_open": [
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-cheap-20261017-0zb2cg1a/mckernel_rust.o",
+        "row": "0000000000000000 T sys_perf_event_open",
+        "sha256": "4ee1de9f3d9ae6c14deb4c7c5de3847cbf0bd5beea6c7e8b2006627e0252d7f0"
+      }
+    ],
+    "syscall_forward_rt_sigprocmask_bridge": [
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-cheap-20261017-0zb2cg1a/mckernel_rust.o",
+        "row": "0000000000000000 T syscall_forward_rt_sigprocmask_bridge",
+        "sha256": "4ee1de9f3d9ae6c14deb4c7c5de3847cbf0bd5beea6c7e8b2006627e0252d7f0"
+      }
+    ],
+    "syscall_forward_sigaction_update_bridge": [
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-cheap-20261017-0zb2cg1a/mckernel_rust.o",
+        "row": "0000000000000000 T syscall_forward_sigaction_update_bridge",
+        "sha256": "4ee1de9f3d9ae6c14deb4c7c5de3847cbf0bd5beea6c7e8b2006627e0252d7f0"
+      }
+    ],
+    "syscall_do_syscall2_bridge": [
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-cheap-20261017-0zb2cg1a/mckernel_rust.o",
+        "row": "0000000000000000 T syscall_do_syscall2_bridge",
+        "sha256": "4ee1de9f3d9ae6c14deb4c7c5de3847cbf0bd5beea6c7e8b2006627e0252d7f0"
+      }
+    ],
+    "syscall_policy_do_syscall2_bridge": [
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-cheap-20261017-0zb2cg1a/mckernel_rust.o",
+        "row": "0000000000000000 T syscall_policy_do_syscall2_bridge",
+        "sha256": "4ee1de9f3d9ae6c14deb4c7c5de3847cbf0bd5beea6c7e8b2006627e0252d7f0"
+      }
+    ],
+    "syscall_do_syscall3_bridge": [
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-cheap-20261017-0zb2cg1a/mckernel_rust.o",
+        "row": "0000000000000000 T syscall_do_syscall3_bridge",
+        "sha256": "4ee1de9f3d9ae6c14deb4c7c5de3847cbf0bd5beea6c7e8b2006627e0252d7f0"
+      }
+    ],
+    "syscall_policy_do_syscall3_bridge": [
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-cheap-20261017-0zb2cg1a/mckernel_rust.o",
+        "row": "0000000000000000 T syscall_policy_do_syscall3_bridge",
+        "sha256": "4ee1de9f3d9ae6c14deb4c7c5de3847cbf0bd5beea6c7e8b2006627e0252d7f0"
+      }
+    ],
+    "wait_host_wait4_bridge": [
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-cheap-20261017-0zb2cg1a/mckernel_rust.o",
+        "row": "0000000000000000 T wait_host_wait4_bridge",
+        "sha256": "4ee1de9f3d9ae6c14deb4c7c5de3847cbf0bd5beea6c7e8b2006627e0252d7f0"
+      }
+    ],
+    "arch_rt_sigreturn_xrstor_bridge": [
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-cheap-20261017-0zb2cg1a/mckernel_rust.o",
+        "row": "0000000000000000 T arch_rt_sigreturn_xrstor_bridge",
+        "sha256": "4ee1de9f3d9ae6c14deb4c7c5de3847cbf0bd5beea6c7e8b2006627e0252d7f0"
+      }
+    ],
+    "arch_native_signal_bad_frame_bridge": [
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-cheap-20261017-0zb2cg1a/mckernel_rust.o",
+        "row": "0000000000000000 T arch_native_signal_bad_frame_bridge",
+        "sha256": "4ee1de9f3d9ae6c14deb4c7c5de3847cbf0bd5beea6c7e8b2006627e0252d7f0"
+      }
+    ],
+    "arch_rt_sigreturn_context_bridge": [
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-cheap-20261017-0zb2cg1a/mckernel_rust.o",
+        "row": "0000000000000000 T arch_rt_sigreturn_context_bridge",
+        "sha256": "4ee1de9f3d9ae6c14deb4c7c5de3847cbf0bd5beea6c7e8b2006627e0252d7f0"
+      }
+    ],
+    "arch_ptrace_regset_log_bridge": [
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-cheap-20261017-0zb2cg1a/mckernel_rust.o",
+        "row": "0000000000000000 T arch_ptrace_regset_log_bridge",
+        "sha256": "4ee1de9f3d9ae6c14deb4c7c5de3847cbf0bd5beea6c7e8b2006627e0252d7f0"
+      }
+    ]
+  },
+  "all12_final_FUNC_symbols": {
+    "sys_perf_event_open": {
+      "value_hex": "fffffffffe8c6450",
+      "size": 1570,
+      "section": "1"
+    },
+    "syscall_forward_rt_sigprocmask_bridge": {
+      "value_hex": "fffffffffe8cd630",
+      "size": 88,
+      "section": "1"
+    },
+    "syscall_forward_sigaction_update_bridge": {
+      "value_hex": "fffffffffe8cd690",
+      "size": 90,
+      "section": "1"
+    },
+    "syscall_do_syscall2_bridge": {
+      "value_hex": "fffffffffe8cd210",
+      "size": 161,
+      "section": "1"
+    },
+    "syscall_policy_do_syscall2_bridge": {
+      "value_hex": "fffffffffe8cd210",
+      "size": 161,
+      "section": "1"
+    },
+    "syscall_do_syscall3_bridge": {
+      "value_hex": "fffffffffe8cd2c0",
+      "size": 157,
+      "section": "1"
+    },
+    "syscall_policy_do_syscall3_bridge": {
+      "value_hex": "fffffffffe8cd2c0",
+      "size": 157,
+      "section": "1"
+    },
+    "wait_host_wait4_bridge": {
+      "value_hex": "fffffffffe8dc970",
+      "size": 168,
+      "section": "1"
+    },
+    "arch_rt_sigreturn_xrstor_bridge": {
+      "value_hex": "fffffffffe83c090",
+      "size": 29,
+      "section": "1"
+    },
+    "arch_native_signal_bad_frame_bridge": {
+      "value_hex": "fffffffffe839970",
+      "size": 59,
+      "section": "1"
+    },
+    "arch_rt_sigreturn_context_bridge": {
+      "value_hex": "fffffffffe83bf80",
+      "size": 165,
+      "section": "1"
+    },
+    "arch_ptrace_regset_log_bridge": {
+      "value_hex": "fffffffffe83b400",
+      "size": 53,
+      "section": "1"
+    }
+  },
+  "architecture_C_function_names": [
+    "do_signal"
+  ],
+  "C_doSignal_still_selected_in_diagnostic": true,
+  "old_arch30bd_excluded": true,
+  "witness_slots_geometry_and_inactive_terminate_helper_absent": true,
+  "all11_exact_input_paths_in_actual_map": true,
+  "selected_production_artifact_unchanged": "1cd7e4e6,23generic+5arch C",
+  "production_link_delta": 0,
+  "native_qualification_delta": 0,
+  "C_retirement_delta": 0,
+  "limits": "MixedHOST GCC9/ld2.34/nightly diagnostic only, no SDK21/default/389/GS/TSS/lifetime/native/retirement acceptance. Actual new dependency closure still requires readback. Whole doSignal and held conversions remain off; no Root70 cleanup/currentfree implied."
+}

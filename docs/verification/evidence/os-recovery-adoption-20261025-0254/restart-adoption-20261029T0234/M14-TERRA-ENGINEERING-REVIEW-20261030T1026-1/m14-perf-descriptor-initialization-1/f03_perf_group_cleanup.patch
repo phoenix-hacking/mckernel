@@ -1,0 +1,45 @@
+--- a/kernel/rust/f03_perf_group_cleanup.rs
++++ b/kernel/rust/f03_perf_group_cleanup.rs
+@@ -49,6 +49,12 @@
+     if request.is_null() || thread.is_null() || proc.is_null() || attr.is_null() {
+         return -EINVAL as CLong;
+     }
++    // This private specialization is bound to the x86 Mckfd layout below.
++    // Reject a mismatched allocator extent before allocating an event or issuing
++    // the host request; no out-of-bounds field initialization is permitted.
++    if mckfd_size != core::mem::size_of::<Mckfd>() {
++        return -EINVAL as CLong;
++    }
+     let Some(event_alloc) = event_alloc_fn else {
+         return -EINVAL as CLong;
+     };
+@@ -123,6 +129,13 @@
+     if sfd.is_null() {
+         return -ENOMEM as CLong;
+     }
++
++    // Fresh private allocation, not yet visible in the process descriptor list.
++    // kmalloc is not zeroing. Initialize the two fields that the publisher does
++    // not assign, without borrowing or changing the C sig_no slot.
++    let descriptor = sfd.cast::<Mckfd>();
++    core::ptr::addr_of_mut!((*descriptor).opt).write(core::ptr::null_mut());
++    core::ptr::addr_of_mut!((*descriptor).dup_cb).write(core::ptr::null_mut());
+ 
+     ret = perf_event_open_mckfd_publish_body_result(
+         sfd,
+@@ -287,3 +300,15 @@
+         unlock_fn,
+     )
+ }
++
++// Paired C assertions bind these offsets to the selected x86 C header.
++const _: () = {
++    assert!(core::mem::size_of::<Mckfd>() == 80);
++    assert!(core::mem::align_of::<Mckfd>() == 8);
++    assert!(core::mem::offset_of!(Mckfd, opt) == 24);
++    assert!(core::mem::offset_of!(Mckfd, dup_cb) == 72);
++};
++
++#[cfg(test)]
++#[path = "f03_perf_descriptor_init_tests.rs"]
++mod f03_perf_descriptor_init_tests;

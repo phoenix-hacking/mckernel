@@ -1,0 +1,57 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS",
+  "checks": [
+    {
+      "case": "prior-boot-backtrace-missing-compiler-dependency",
+      "target": "mcreboot.sh",
+      "compiler_dependency_present": false,
+      "expected": false,
+      "compiler_leaf_executable": false
+    },
+    {
+      "case": "prior-boot-backtrace-missing-compiler-dependency",
+      "target": "mcstop+release.sh",
+      "compiler_dependency_present": false,
+      "expected": false,
+      "compiler_leaf_executable": false
+    },
+    {
+      "case": "prior-boot-backtrace-missing-compiler-dependency",
+      "target": "eclair-dump-backtrace.exp",
+      "compiler_dependency_present": false,
+      "expected": false,
+      "compiler_leaf_executable": false
+    },
+    {
+      "case": "fixed-boot-backtrace-compiler-dependency",
+      "target": "mcreboot.sh",
+      "compiler_dependency_present": true,
+      "expected": true,
+      "compiler_leaf_executable": false
+    },
+    {
+      "case": "fixed-boot-backtrace-compiler-dependency",
+      "target": "mcstop+release.sh",
+      "compiler_dependency_present": true,
+      "expected": true,
+      "compiler_leaf_executable": false
+    },
+    {
+      "case": "fixed-boot-backtrace-compiler-dependency",
+      "target": "eclair-dump-backtrace.exp",
+      "compiler_dependency_present": true,
+      "expected": true,
+      "compiler_leaf_executable": false
+    },
+    {
+      "case": "vmcore-retained-ack-graph-only",
+      "target": "executer/user/vmcore2mckdump",
+      "compiler_dependency_present": true,
+      "expected": true,
+      "compiler_leaf_executable": false
+    }
+  ],
+  "compiler_calls": 0,
+  "runtime_authority": null
+}

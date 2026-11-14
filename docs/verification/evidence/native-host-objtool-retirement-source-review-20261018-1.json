@@ -1,0 +1,351 @@
+{
+  "checks": {
+    "author_source_regressions": {
+      "adapter": 26,
+      "independent_proof_pair": 2,
+      "note": "Retained final reports and exact test bodies inspected; unchanged corpora not replayed by reviewer.",
+      "producer": 24
+    },
+    "execution_layers": {
+      "Docker": false,
+      "build": false,
+      "container_cleanup": false,
+      "guest": false,
+      "ownership_release": false,
+      "root": false
+    },
+    "profile": "Independent executable checks: timeout TERM35s, taskset CPU7, AS1GiB, CPU30s, one job; harmless local processes only.",
+    "reviewer_actual_checks": {
+      "actual_adapter_joint_checks": 9,
+      "actual_adapter_negative_vectors": 7,
+      "escaped_child_explicitly_terminated_and_reaped": true,
+      "next_command_refused_before_capture_or_spawn": true,
+      "normal_local_child_positive": true,
+      "postcleanup_kernel_ECHILD": true,
+      "same_retained_setsid_escape_refused": true,
+      "unpatched_actual_request_root_mutex": true
+    }
+  },
+  "decision": "SOURCE_AND_LOCAL_SUBPROCESS_PROOF_ONLY",
+  "evidence": [
+    {
+      "bytes": 5390,
+      "path": "/home/holden/mckernel-work/scratch/native-host-objtool-retirement-joint-review-20261018-1/source-review-round-1.json",
+      "sha256": "20f7a624bf9b40a23b3392ceee8f690f72ddc433402bbca5a4e7a1eb86d0ce49"
+    },
+    {
+      "bytes": 2191,
+      "path": "/home/holden/mckernel-work/scratch/native-host-objtool-retirement-joint-review-20261018-1/escaped_child_reproduction.py",
+      "sha256": "5c3824d1b8e922027b21a1de71ff107a02568813328ea5ecdfeb9fb42265de38"
+    },
+    {
+      "bytes": 628,
+      "path": "/home/holden/mckernel-work/scratch/native-host-objtool-retirement-joint-review-20261018-1/escaped-child-result.json",
+      "sha256": "ff51af708f9981d5e01bd9148f175edd7579249a5d831a24e49fbabff41f2d92"
+    },
+    {
+      "bytes": 258,
+      "path": "/home/holden/mckernel-work/scratch/native-host-objtool-retirement-joint-review-20261018-1/adapter-escape-result.json",
+      "sha256": "f507d8c58c2f412c7961638b6c892cdaf50af75660ec777cdd6029ccd2595c48"
+    },
+    {
+      "bytes": 698,
+      "path": "/home/holden/mckernel-work/scratch/native-host-objtool-retirement-joint-review-20261018-1/actual-interface-result.json",
+      "sha256": "1515bfc256884231e354a03a711575a4e27b640fa4da557371790854ec87f5de"
+    },
+    {
+      "bytes": 3272,
+      "path": "/home/holden/mckernel-work/scratch/native-host-objtool-retirement-joint-review-20261018-1/corrected-source-check/check_corrected_producer.py",
+      "sha256": "6ffb013b2b85df854ae4fa1be23fd5395c036d95d07e5f43b273083dfb234152"
+    },
+    {
+      "bytes": 1207,
+      "path": "/home/holden/mckernel-work/scratch/native-host-objtool-retirement-joint-review-20261018-1/corrected-source-check/corrected-producer-result.json",
+      "sha256": "6ac27d89317d6844c76270df6c49f8d2fbf18dab4643e8cbb3a44e6996aa9825"
+    },
+    {
+      "bytes": 2731,
+      "path": "/home/holden/mckernel-work/scratch/native-host-objtool-retirement-joint-review-20261018-1/corrected-source-check/check_joint_consumer.py",
+      "sha256": "c8dd1ee901d108937ee4f75366af128858254797701216e0483236c70b487ae3"
+    },
+    {
+      "bytes": 1064,
+      "path": "/home/holden/mckernel-work/scratch/native-host-objtool-retirement-joint-review-20261018-1/corrected-source-check/joint-consumer-result.json",
+      "sha256": "27e927222cac8407ab82180b7fc4726ed4e19b80b37373047dfb6922404000d3"
+    },
+    {
+      "bytes": 6614,
+      "path": "/home/holden/mckernel-work/scratch/native-host-objtool-retirement-producer-20261018-1/regression-result.json",
+      "sha256": "25f4dca01b0ba04545ff8a5b2454d0250d64b8563be206dece01271ecc5d88e3"
+    },
+    {
+      "bytes": 1218,
+      "path": "/home/holden/mckernel-work/scratch/native-host-objtool-retirement-producer-20261018-1/source-pins.json",
+      "sha256": "4ba2817943fb7795a1268d8341a3e11b2ad069e894c478658f98eccc94674e5a"
+    },
+    {
+      "bytes": 2157,
+      "path": "/home/holden/mckernel-work/scratch/native-host-objtool-retirement-producer-20261018-1/review-packet.json",
+      "sha256": "6ff5d89d9883f5f37cbb9a1a15f317e96f421fa4baa28dcfcca1e9dcf03e8f5b"
+    },
+    {
+      "bytes": 4820,
+      "path": "/home/holden/mckernel-work/scratch/native-host-objtool-retirement-producer-20261018-1/artifact-manifest.json",
+      "sha256": "8c0990cedae8984226ec63c7c79d196cde0a3e52047655d431ea721343eacce8"
+    },
+    {
+      "bytes": 644,
+      "path": "/home/holden/mckernel-work/scratch/native-host-objtool-terminal-preparation-20261018-1/adapter-implementation/regression-result.json",
+      "sha256": "5903c222527f34c567d164d62077772b61936f3c80df9e42d57dab275cdfe771"
+    },
+    {
+      "bytes": 9959,
+      "path": "/home/holden/mckernel-work/scratch/native-host-objtool-terminal-preparation-20261018-1/adapter-implementation/paired-correction-result.json",
+      "sha256": "dbc4eccfd0e9b2b2a25e7e4189830fb174374467a7ba17c11f7d2c8fb9a0ac7e"
+    },
+    {
+      "bytes": 8679,
+      "path": "/home/holden/mckernel-work/scratch/native-host-objtool-terminal-preparation-20261018-1/adapter-implementation/affected-review-request.json",
+      "sha256": "13bbc7b37fd48555b1d1383c6548607b7c79c9593553fd6bc457b14667c5bd41"
+    },
+    {
+      "bytes": 16507,
+      "path": "/home/holden/mckernel-work/scratch/native-host-objtool-terminal-preparation-20261018-1/adapter-implementation/artifact-manifest.json",
+      "sha256": "2e42dcbdbc0b44ebae442b00c4343eb8596984233abce6aaa6322c3c444c3a09"
+    }
+  ],
+  "execution_authority": false,
+  "findings": [
+    {
+      "cause": "Snapshot ancestry and recorded group/session membership miss a child spawned and reparented between observations.",
+      "correction": "Positive descendant closure established before launch and joined through terminal proof; source-known uncertainty must retain ownership.",
+      "evidence": [
+        "escaped-child-result.json",
+        "adapter-escape-result.json"
+      ],
+      "fact": "Actual producer call accepted retirement with an unknown live setsid descendant present in final raw census. Actual adapter retirement_body also accepted that proof.",
+      "id": "R1",
+      "invariant": "Positive complete descendant retirement",
+      "severity": "blocking",
+      "status": "CLOSED_BY_ONE_PAIRED_BOUNDED_CORRECTION",
+      "verified_resolution": "Dedicated single-task child subreaper is SET/GET checked before launches; empty raw children and kernel waitid ECHILD admission precede Popen; direct normal join plus two raw terminal censuses and two postjoin kernel ECHILD observations prove closure. Unknown adopted live or waitable children refuse. Uncertainty throws and latches every next command before capture/spawn. Actual retained escape sequence now refuses; adapter rejects missing or forged closure and unsafe v1 evidence."
+    },
+    {
+      "correction": "Bind the fixed root mutex independently of the request operational exclusion record; test actual request boundary without replacing configure_root_lock.",
+      "evidence": [
+        "actual-interface-result.json"
+      ],
+      "fact": "Unpatched configure_root_lock(actual request,{}) refuses fixed-root-mutex. Actual request operational_exclusion_path names scratch18 JSON, not the root mutex.",
+      "id": "R2",
+      "invariant": "Actual request/root mutex interface",
+      "severity": "blocking",
+      "status": "CLOSED_BY_ONE_PAIRED_BOUNDED_CORRECTION",
+      "verified_resolution": "Fixed /run/lock/mckernel-development.lock binds ROOT27:4 independently; original scratch18 selector is checked separately. Both author regression and independent unpatched read-only actual-request check pass."
+    },
+    {
+      "correction": "Join actual full token including device and inode to full observed shared ownership metadata; test accepted imported primitive shape.",
+      "evidence": [
+        "actual-interface-result.json"
+      ],
+      "fact": "Pinned heavy._acquire_lock persists and returns device and inode; adapter expected_heavy omits both and cannot match actual owner receipt/shared token.",
+      "id": "R3",
+      "invariant": "Full actual shared token generation binding",
+      "severity": "blocking",
+      "status": "CLOSED_BY_ONE_PAIRED_BOUNDED_CORRECTION",
+      "verified_resolution": "Full shared record includes actual writer-produced device and inode and joins both to full observed metadata. Author actual pinned heavy._acquire_lock disposable token test passes, with metadata/start/request mutations refused."
+    }
+  ],
+  "formal_acceptance_delta": 0,
+  "functional_acceptance_delta": 0,
+  "history": {
+    "bounded_correction_rounds": 1,
+    "initial_failed_source_review": "/home/holden/mckernel-work/scratch/native-host-objtool-retirement-joint-review-20261018-1/source-review-round-1.json",
+    "initial_failed_source_review_sha256": "20f7a624bf9b40a23b3392ceee8f690f72ddc433402bbca5a4e7a1eb86d0ce49",
+    "original_adapter_preserved": "/home/holden/mckernel-work/scratch/native-host-objtool-terminal-preparation-20261018-1/adapter-implementation/frozen-v1",
+    "original_producer_preserved": "/home/holden/mckernel-work/scratch/native-host-objtool-retirement-producer-20261018-1/round-1-frozen",
+    "policy": "Do not reset this family history or replay old execution release; source success is not runtime acceptance."
+  },
+  "next": "Dispatcher may use this exact source subject for the source gate. A separately reviewed exact execution packet is still required before any acquisition/root/Docker/cleanup operation.",
+  "producer_derivative_sources": [
+    {
+      "bytes": 28088,
+      "path": "/home/holden/mckernel-work/scratch/native-host-objtool-retirement-producer-20261018-1/retirement_producer.py",
+      "sha256": "760c2764a309481680c80afa30a90d3222a10efe78f14495c102a0415ea28699"
+    },
+    {
+      "bytes": 11163,
+      "path": "/home/holden/mckernel-work/scratch/native-host-objtool-driver-20261018-1/tool_owner.py",
+      "sha256": "194f4ac133fa8e4aea1e47eea0e13f8757e70f195e629788b9dcb78d6fb5a1cf"
+    },
+    {
+      "bytes": 51420,
+      "path": "/home/holden/mckernel/scripts/native_rust_exact_build_container_owner.py",
+      "sha256": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1"
+    },
+    {
+      "bytes": 27338,
+      "path": "/home/holden/mckernel/scripts/native_rust_exact_build_offline.py",
+      "sha256": "cc243126ab8cc0754c62175c77e46d6ba0d98294f8168cc77893a2c12249cd1a"
+    },
+    {
+      "bytes": 57015,
+      "path": "/home/holden/mckernel/scripts/native_rust_exact_disk_build_wrapper.py",
+      "sha256": "c252ee341eb61752704f8b818503c0a5dc97400845494707ca3110f5f23df6d1"
+    }
+  ],
+  "remaining_gates": [
+    "New exact independent derivative execution release binding corrected producer closure, original request and still-unconsumed original release, fresh outer evidence path and measured resources.",
+    "Future cleanup execution review binds complete actual raw receipts, captures, retirement proofs, retained byte copies, current exact CID, both actual generation records, root lock/mount/boot and sole-publisher contract.",
+    "Finite actual readback, retained logs and verified cleanup remain runtime evidence; source/mocked transaction success cannot substitute."
+  ],
+  "reviewer": "/root/host_objtool_retirement_joint_review_0843",
+  "schema": "mckernel.objtool-retirement-joint-source-review.v2",
+  "scope": "Functional PRACTICAL-GOAL kernel/apps and active compute C retirement into Rust plus reviewed assembly. Linux host compatibility remains allowed; original broad qualification deferred.",
+  "source_pins": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-host-objtool-retirement-producer-20261018-1/retirement_producer.py",
+      "sha256": "760c2764a309481680c80afa30a90d3222a10efe78f14495c102a0415ea28699"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-host-objtool-retirement-producer-20261018-1/test_retirement_producer.py",
+      "sha256": "d35d9349b93f80a054db5e5ca03c2ec2a7cf66023d45b11c2d36b46791f2540b"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-host-objtool-terminal-preparation-20261018-1/adapter-implementation/tool_terminal_cleanup.py",
+      "sha256": "0a625b1df0991cabda8cbf2c2b496b389a6b38265cd769a9f485b7574509c8a6"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-host-objtool-terminal-preparation-20261018-1/adapter-implementation/test_tool_terminal_cleanup.py",
+      "sha256": "906634119833b06a3d65868b8ac0dbba41d937651d3e2b99f8240aa49b28144b"
+    }
+  ],
+  "status": "PASS",
+  "subject": {
+    "adapter": {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 627773,
+      "mode": "0o600",
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/scratch/native-host-objtool-terminal-preparation-20261018-1/adapter-implementation/tool_terminal_cleanup.py",
+      "sha256": "0a625b1df0991cabda8cbf2c2b496b389a6b38265cd769a9f485b7574509c8a6",
+      "size": 39170,
+      "uid": 1000
+    },
+    "engine": {
+      "device": 66306,
+      "gid": 1000,
+      "inode": 47485614,
+      "mode": "0o600",
+      "nlink": 1,
+      "path": "/home/holden/mckernel/scripts/native_rust_cutover_image_terminal_cleanup.py",
+      "sha256": "b3017b081d0b263f452fc46d96e708441244840337e8bf357b2fbdc580d6aeef",
+      "size": 71220,
+      "uid": 1000
+    },
+    "packet": {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 114295,
+      "mode": "0o600",
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/scratch/native-host-objtool-execution-preparation-20261018-1/execution-packet.json",
+      "sha256": "3c0c8bbdf6fd5f48134622104049fb4f9d1456a7ba1e811952aeb28e2d84d026",
+      "size": 8586,
+      "uid": 1000
+    },
+    "request": {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 114157,
+      "mode": "0o600",
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/scratch/native-host-objtool-driver-20261018-1/request-proposal.json",
+      "sha256": "f024e73cc2fc35919283d4ef3f5533d6c9acbad5ebc05c5bbb578346110f6003",
+      "size": 1015,
+      "uid": 1000
+    },
+    "sources": [
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 115049,
+        "mode": "0o600",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/native-host-objtool-retirement-producer-20261018-1/retirement_producer.py",
+        "sha256": "760c2764a309481680c80afa30a90d3222a10efe78f14495c102a0415ea28699",
+        "size": 28088,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 114141,
+        "mode": "0o600",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/native-host-objtool-driver-20261018-1/tool_owner.py",
+        "sha256": "194f4ac133fa8e4aea1e47eea0e13f8757e70f195e629788b9dcb78d6fb5a1cf",
+        "size": 11163,
+        "uid": 1000
+      },
+      {
+        "device": 66306,
+        "gid": 1000,
+        "inode": 47485337,
+        "mode": "0o600",
+        "nlink": 1,
+        "path": "/home/holden/mckernel/scripts/native_rust_exact_build_container_owner.py",
+        "sha256": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1",
+        "size": 51420,
+        "uid": 1000
+      },
+      {
+        "device": 66306,
+        "gid": 1000,
+        "inode": 47485298,
+        "mode": "0o600",
+        "nlink": 2,
+        "path": "/home/holden/mckernel/scripts/native_rust_exact_build_offline.py",
+        "sha256": "cc243126ab8cc0754c62175c77e46d6ba0d98294f8168cc77893a2c12249cd1a",
+        "size": 27338,
+        "uid": 1000
+      },
+      {
+        "device": 66306,
+        "gid": 1000,
+        "inode": 47474249,
+        "mode": "0o600",
+        "nlink": 1,
+        "path": "/home/holden/mckernel/scripts/native_rust_exact_disk_build_wrapper.py",
+        "sha256": "c252ee341eb61752704f8b818503c0a5dc97400845494707ca3110f5f23df6d1",
+        "size": 57015,
+        "uid": 1000
+      }
+    ],
+    "tests": {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 627822,
+      "mode": "0o600",
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/scratch/native-host-objtool-terminal-preparation-20261018-1/adapter-implementation/test_tool_terminal_cleanup.py",
+      "sha256": "906634119833b06a3d65868b8ac0dbba41d937651d3e2b99f8240aa49b28144b",
+      "size": 32510,
+      "uid": 1000
+    }
+  },
+  "subject_sha256": "9f0a203911145e30c781173f7d49018d897cce5657d15fca8e2027af1528aef6",
+  "verified_invariants": [
+    "Frozen tool_owner.run remains unchanged and calls derived Docker implementation before first wait.",
+    "Normal workload failures keep original raw command streams and status separate from physical retirement.",
+    "Sentinel archival transaction imports exact engine; no bare Lease.release or raw ownership unlink.",
+    "Both ownership generations and raw selected-file retention are checked before effects and after archival; crash journal/quarantine/reconfiguration revocation paths remain present.",
+    "Source/evidence distinction retains evidence nlink1 and permits immutable source hardlinks only under exact nofollow metadata and byte hash joins.",
+    "Original execution release remains unconsumed; new exact derivative and cleanup execution releases remain required.",
+    "New process-retirement v2 is required at both ends; no v1 or summary-only positive proof accepted.",
+    "Client closure anchor must equal actual sidecar owner; outer proof identity must match tool-owner lease identity. Boot, raw process rows, PID starttime, group/session, full command ledger, streams and original receipt joins remain bound.",
+    "Unknown or live CID is rejected by read-only admission before persistent cleanup files. Actual sentinel transaction rechecks protected evidence, process absence, current exact CID and both ownership generations before effects and sentinel release.",
+    "Source-known command/proof/identity/snapshot/stream bounds fail closed and retain captured bytes and ownership.",
+    "CPU0 and inherited per-process AS/CPU/FSIZE gates are distinct from explicit Docker CPU2-5/12GiB/no-swap/512task/networknone container limits; no cgroup inheritance is claimed."
+  ]
+}

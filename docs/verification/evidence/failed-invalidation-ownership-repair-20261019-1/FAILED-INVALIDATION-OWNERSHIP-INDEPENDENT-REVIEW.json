@@ -1,0 +1,293 @@
+{
+  "actual_evidence": {
+    "actual_Rpc_syscall_pager_compiled": true,
+    "baseline": {
+      "actual_failed_test": {
+        "bytes": 1265,
+        "path": "/home/holden/mckernel-work/host-preparation/failed-invalidation-ownership-repair-20261019-1/baseline-checks-1/ownership-repro/status.json",
+        "sha256": "d10a4ece3ad64851e2724f43fa84f2da189df806fa38699be144054a94b1624a"
+      },
+      "expected_test_exit": 101,
+      "observed_witness": "(Ok(-14), Ok(true), response_status1, releases1, claimedfalse)",
+      "stderr": {
+        "bytes": 461,
+        "path": "/home/holden/mckernel-work/host-preparation/failed-invalidation-ownership-repair-20261019-1/baseline-checks-1/ownership-repro/stderr",
+        "sha256": "7d6bebffb956da03685860fd9cf08e9e8f2609274a8f210a20475defc360ad6b"
+      },
+      "whole_record": {
+        "bytes": 3964,
+        "path": "/home/holden/mckernel-work/host-preparation/failed-invalidation-ownership-repair-20261019-1/baseline-checks-1/result.json",
+        "sha256": "a3f295e5fb4e1e3a0f7707c02c34836cae424468a63c80a67469b7ac3f465cd9"
+      }
+    },
+    "bounded_test_correction": {
+      "actual_test": {
+        "bytes": 1336,
+        "path": "/home/holden/mckernel-work/host-preparation/failed-invalidation-ownership-repair-20261019-1/candidate-correction-1-checks-1/affected-negative-errno-case/status.json",
+        "sha256": "b2f1391cf6b0709c4d7be95aa501610e92f703760b40782bb1d7a67381263370"
+      },
+      "change": "Exactly one expected test result Ok(None)->Err(-16); production candidate unchanged; only affected failed case rerun.",
+      "passing_cases": [
+        "every_valid_negative_mm_errno_retains_until_proven_success"
+      ],
+      "stderr": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/failed-invalidation-ownership-repair-20261019-1/candidate-correction-1-checks-1/affected-negative-errno-case/stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 183,
+        "path": "/home/holden/mckernel-work/host-preparation/failed-invalidation-ownership-repair-20261019-1/candidate-correction-1-checks-1/affected-negative-errno-case/stdout",
+        "sha256": "eca742bf63f05245f086ce9a8e381cb866334042019f908bb7606918c1492931"
+      },
+      "whole_record": {
+        "bytes": 2933,
+        "path": "/home/holden/mckernel-work/host-preparation/failed-invalidation-ownership-repair-20261019-1/candidate-correction-1-checks-1/result.json",
+        "sha256": "cae9a060ba0c86fc54b00faa04aa744b7b3df37bd38184293dacd6c2a873c311"
+      }
+    },
+    "combined_focused_cases": 6,
+    "completed_children": [
+      {
+        "direct_child_joined": true,
+        "label": "rust-version",
+        "pid": 1635782,
+        "process_group_absent": true,
+        "returncode": 0,
+        "run": "baseline-checks-1",
+        "start": 23974454
+      },
+      {
+        "direct_child_joined": true,
+        "label": "compile",
+        "pid": 1635784,
+        "process_group_absent": true,
+        "returncode": 0,
+        "run": "baseline-checks-1",
+        "start": 23974456
+      },
+      {
+        "direct_child_joined": true,
+        "label": "ownership-repro",
+        "pid": 1635801,
+        "process_group_absent": true,
+        "returncode": 101,
+        "run": "baseline-checks-1",
+        "start": 23974498
+      },
+      {
+        "direct_child_joined": true,
+        "label": "rust-version",
+        "pid": 1635973,
+        "process_group_absent": true,
+        "returncode": 0,
+        "run": "candidate-checks-1",
+        "start": 23981382
+      },
+      {
+        "direct_child_joined": true,
+        "label": "compile",
+        "pid": 1635975,
+        "process_group_absent": true,
+        "returncode": 0,
+        "run": "candidate-checks-1",
+        "start": 23981383
+      },
+      {
+        "direct_child_joined": true,
+        "label": "focused-ownership-cases",
+        "pid": 1635992,
+        "process_group_absent": true,
+        "returncode": 101,
+        "run": "candidate-checks-1",
+        "start": 23981425
+      },
+      {
+        "direct_child_joined": true,
+        "label": "compile",
+        "pid": 1636675,
+        "process_group_absent": true,
+        "returncode": 0,
+        "run": "candidate-correction-1-checks-1",
+        "start": 23989236
+      },
+      {
+        "direct_child_joined": true,
+        "label": "affected-negative-errno-case",
+        "pid": 1636692,
+        "process_group_absent": true,
+        "returncode": 0,
+        "run": "candidate-correction-1-checks-1",
+        "start": 23989277
+      }
+    ],
+    "full_actual_mailbox_compiled": true,
+    "initial_candidate": {
+      "actual_test": {
+        "bytes": 1233,
+        "path": "/home/holden/mckernel-work/host-preparation/failed-invalidation-ownership-repair-20261019-1/candidate-checks-1/focused-ownership-cases/status.json",
+        "sha256": "4c2497bbca68046ea523eb4bc013551052922a4dafddbd8b5d59bde2a0856a8a"
+      },
+      "failed_case": "every_valid_negative_mm_errno_retains_until_proven_success",
+      "failure": "Fixture expected reserve(active kernel worker)==Ok(None); actual Err(-16) is the required blocked reuse.",
+      "passing_cases": [
+        "close_and_worker_cancellation_cannot_release_failed_clear",
+        "failed_mm_error_retains_response_and_allows_exact_success_retry",
+        "normal_success_keeps_publication_retry_and_exact_one_release",
+        "repeated_error_and_finish_never_duplicate_completion_or_release",
+        "wrong_worker_serial_and_invalid_result_preserve_valid_retry"
+      ],
+      "stderr": {
+        "bytes": 352,
+        "path": "/home/holden/mckernel-work/host-preparation/failed-invalidation-ownership-repair-20261019-1/candidate-checks-1/focused-ownership-cases/stderr",
+        "sha256": "95501e2440d8cacac477296e8331964258faa000c3b6b0e1c5b1d4c807c96c85"
+      },
+      "stdout": {
+        "bytes": 644,
+        "path": "/home/holden/mckernel-work/host-preparation/failed-invalidation-ownership-repair-20261019-1/candidate-checks-1/focused-ownership-cases/stdout",
+        "sha256": "638d316b64fda59b00eb11fc4efe67d06919f76ec35153938c112130ffd9bcb5"
+      },
+      "whole_record": {
+        "bytes": 3874,
+        "path": "/home/holden/mckernel-work/host-preparation/failed-invalidation-ownership-repair-20261019-1/candidate-checks-1/result.json",
+        "sha256": "b8d20abe02f1536d877ca2472e3b5c23c01f426a70bfb8d28797e8676cc1b5aa"
+      }
+    },
+    "oracle": {
+      "bytes": 2468,
+      "path": "/home/holden/mckernel-work/host-preparation/failed-invalidation-ownership-repair-20261019-1/OWNERSHIP-ORACLE.json",
+      "sha256": "1ab4f0d28a3a130a7c4a6d92cad430b9138d2037ecc15db35e11f9518a3357ac"
+    },
+    "substitutions": "Existing allocation-only kernel Vec shim and existing test ResponseMemory; handconstructed valid request selects actual decoder. Full actualMailbox/RPC/syscall/pager modules compiled. Actual Linux Mirror PTE zap and outer host modules not executed."
+  },
+  "callers": {
+    "mcctrl_process.rs": {
+      "current": {
+        "bytes": 41389,
+        "path": "/home/holden/mckernel/host-kernel/native-rust/mcctrl_process.rs",
+        "sha256": "148134730b5fed7f14770eb070529b5227bb6ab790b7199f8800968219dffc70"
+      },
+      "original": {
+        "bytes": 41389,
+        "path": "/home/holden/mckernel-work/host-preparation/failed-invalidation-ownership-repair-20261019-1/original/mcctrl_process.rs",
+        "sha256": "148134730b5fed7f14770eb070529b5227bb6ab790b7199f8800968219dffc70"
+      }
+    },
+    "mcctrl_vm.rs": {
+      "current": {
+        "bytes": 16884,
+        "path": "/home/holden/mckernel/host-kernel/native-rust/mcctrl_vm.rs",
+        "sha256": "83630dbe469466c7f69f51feb3a85438e2ae20049346b5e940d89d355f590ab3"
+      },
+      "original": {
+        "bytes": 16884,
+        "path": "/home/holden/mckernel-work/host-preparation/failed-invalidation-ownership-repair-20261019-1/original/mcctrl_vm.rs",
+        "sha256": "83630dbe469466c7f69f51feb3a85438e2ae20049346b5e940d89d355f590ab3"
+      }
+    },
+    "smp_application.rs": {
+      "current": {
+        "bytes": 46152,
+        "path": "/home/holden/mckernel/host-kernel/native-rust/smp_application.rs",
+        "sha256": "127829f3dd35b3d44c2b098279b7439dccb31a53508055e3cdd1fd9e450682e2"
+      },
+      "original": {
+        "bytes": 46152,
+        "path": "/home/holden/mckernel-work/host-preparation/failed-invalidation-ownership-repair-20261019-1/original/smp_application.rs",
+        "sha256": "127829f3dd35b3d44c2b098279b7439dccb31a53508055e3cdd1fd9e450682e2"
+      }
+    }
+  },
+  "candidate_source": {
+    "bytes": 21681,
+    "path": "/home/holden/mckernel-work/host-preparation/failed-invalidation-ownership-repair-20261019-1/candidate/smp_application_syscall.rs",
+    "sha256": "33e7b92712ca90fdc2b88cff234ad2a981f3538fbd38fc705dfc2cde937a7378"
+  },
+  "changed_functions": [
+    "Mailbox::finish_invalidation"
+  ],
+  "compute_C_expansion": false,
+  "decision": "PASS_SOURCE_INTEGRATION_EXACT_FAILED_INVALIDATION_OWNERSHIP_REPAIR",
+  "implementation_author": "next_live_process_rust_batch",
+  "implementation_file": "host-kernel/native-rust/smp_application_syscall.rs",
+  "implementation_ownership": false,
+  "integration_conditions": [
+    "Apply exactly the reviewed one-file patch against baseline4118de; preserve unrelated WIP and all prior attempts.",
+    "Keep current immutable FP1e7/oldSMP/mcctrl/IHK module/source catalogs and runtime packet authorities separate; this source patch is not authority to substitute a module.",
+    "Any future changed-host-module build/runtime uses its matching full source/request/SDK and its existing independent resource/root/guest release; no compile or execution is released by this report."
+  ],
+  "limitations": [
+    "Mailbox API exact later0 can end the held reservation, but current mcctrl WAIT loop does not automatically re-clear or retry CLEAR_DONE after a negative MM error. This is deliberate fail-closed retention, not demonstrated recovery or liveness.",
+    "Persistent failure/task death may keep the bounded mailbox response/slot busy until a separately proven resolution or existing OS teardown. No new global quarantine policy, forced cancellation or unsafe abandonment is authorized.",
+    "Standalone tests use allocation-only Vec and ResponseMemory shims, not real Linux Mirror PTE zap, module SDK or native fault injection.",
+    "Full SDK host-module compile and actual native failed-invalidation error ownership remain pending; source/standalone PASS is not production/native acceptance."
+  ],
+  "native_acceptance": false,
+  "original_mailbox": {
+    "bytes": 21026,
+    "path": "/home/holden/mckernel-work/host-preparation/failed-invalidation-ownership-repair-20261019-1/original/smp_application_syscall.rs",
+    "sha256": "4118de1401f33b2df17393660e6acbce2f337dca8a9cdfcf10965b1d3dc84c55"
+  },
+  "patch": {
+    "bytes": 1491,
+    "path": "/home/holden/mckernel-work/host-preparation/failed-invalidation-ownership-repair-20261019-1/candidate.patch",
+    "sha256": "0e55b5e9b95346bd174710dfa505c0167856aa216a2dfcb611f27c72ad083d9c"
+  },
+  "production_artifact_acceptance": false,
+  "review_packet": {
+    "bytes": 9579,
+    "path": "/home/holden/mckernel-work/host-preparation/failed-invalidation-ownership-repair-20261019-1/REVIEW-PACKET.json",
+    "sha256": "21cdeca5edd5681fa02e89db033bd9ca1d686549841d1ae802f6a30f958befa3"
+  },
+  "reviewed_at": "2026-10-19T20:44:02.003635+00:00",
+  "reviewer": "/root/next_replace_tid_review",
+  "reviewer_test_or_compiler_execution": 0,
+  "root_or_guest_authority": false,
+  "schema": "mckernel.independent-failed-invalidation-ownership-source-review.v1",
+  "scope": "Functional OS/apps and Rust/reviewed assembly: one project-owned negative-MM-result ownership repair; no compute-C expansion",
+  "shared_sources_changed_by_reviewer": false,
+  "source_authority_reuse": {
+    "active_logging_stage_producer": {
+      "bytes": 21700,
+      "path": "/home/holden/mckernel-work/host-preparation/native-kmsg-logging-stage-join-20261019-1/stage_logging.py",
+      "sha256": "6d1ebe2eef40d1128c9d6ae5750aa29f94d94c606acc61d77fe83491a4150514"
+    },
+    "actual_consumed_live_target": false,
+    "complete_original_catalog_review": {
+      "bytes": 1800936,
+      "path": "/home/holden/mckernel-work/host-preparation/current-ihk-module-result-review-20261019-1/COMPLETE-ORIGINAL-CATALOGS-AND-IHK-ABI-JOIN.json",
+      "sha256": "6c53b9083b48ec7bf734660f8b0eb32439c4b582b9b109f7d75ebf859797d1c9"
+    },
+    "no_global_HEAD_gate": true
+  },
+  "source_findings": [
+    {
+      "decision": "PASS",
+      "evidence": "For valid errno -4095..-1, find exactserial, validate invalidation request, reject quarantine, require boundworker + kernelreservation + matching opaquehandle + no completion. Return originalerrno before any mutation, callback, response.take, begin_return, prepare or publication. The immutable borrow adds no unsafe operation or ABI/layout change.",
+      "id": "negative-MM-result"
+    },
+    {
+      "decision": "PASS",
+      "evidence": "Serial tokens and opaque Worker handles retain current identity. Wrong handle/serial or invalid result is side-effect free. close_worker cannot remove an owned active delivery: kernel cancellation sets cancelled and returns EBUSY; open/reserve cannot reuse it. Calls/workers are serialized by the existing application slots mutex, including close and finish. No new lock order.",
+      "id": "identity-and-reuse"
+    },
+    {
+      "decision": "PASS",
+      "evidence": "Mailbox::cancel_call only marks cancelled while kernel=true. publish has no completion to send; drained staysfalse while the call exists. smp_application::Entry release_ready/request_cleanup/close_inner preserve the slot and gate guest/process cleanup on drained. Negative finish never sets completion or clears kernel. Later exact0 follows existing finish_kernel, producing normal completion or one deferred -512 cancellation, and publication releases once.",
+      "id": "close-publication-drain"
+    },
+    {
+      "decision": "PASS_WITH_EXPLICIT_SCOPE",
+      "evidence": "mcctrl wait_syscall retains local Arc<HostWorker>; Registration.workers also retains that exact identity and Arc<Mirror>. Mirror.clear checks original MM/range, holds a transient MM reference and mmap write lock through preflight+zap, then reports errno. smp_application::clear_syscall propagates negative Err before completion bytes/log/returned wait. If the task dies, reap_workers leaves the HostWorker in the vector on EBUSY. No success or release proof is inferred from a failed zap.",
+      "id": "caller-MM-lifetime"
+    },
+    {
+      "decision": "PASS_NO_ACTUAL_MUTABLE_CONSUMER_CONFLICT",
+      "evidence": "Current live target still equals baseline4118de and selected caller bytes match frozen inputs. The active FP1e7 logging stage full_authority validates complete original catalog/report descriptors and immutable module bytes, explicitly does not reopen original source bytes. Frozen oldSMP82c/mcctrl657 and new IHK artifact authority remain historical and must be retained; applying this file does not upgrade those module bytes. No global HEAD equality condition is introduced.",
+      "id": "current-source-authority"
+    }
+  ],
+  "status": "PASS",
+  "unchanged_outside_selected_function": true,
+  "zero_result_completion_tail_unchanged": true
+}

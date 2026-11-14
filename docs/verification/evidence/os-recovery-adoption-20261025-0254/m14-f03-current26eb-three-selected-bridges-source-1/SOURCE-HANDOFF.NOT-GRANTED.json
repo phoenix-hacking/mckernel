@@ -1,0 +1,105 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "THREE_GENUINE_CURRENT26EB_REUSED_CALLBACK_SLICES_SOURCE_READY_HOST_NOT_ADMITTED",
+  "source_slices": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/THREE-SOURCE-SLICES.json",
+    "bytes": 7820,
+    "sha256": "f65137a4c6ab4f64e06512336456a716c68513ec4b44bf0eb23d60cabbd28471"
+  },
+  "source_check": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/RESULT.SOURCE-ONLY.json",
+    "bytes": 2415,
+    "sha256": "8f213178aedb8f3bf5cff6ae29f2fd47e07c42468f7e3218a35809de02107515"
+  },
+  "verifier": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/verify_source.py",
+    "bytes": 6216,
+    "sha256": "21f3b313c06a682876de01fc64516846823b2f5f10c5c5407e48cd8e52ea83d2"
+  },
+  "future_literal_HOST_plan": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/FUTURE-HOST-COMMAND-PLAN.NOT-GRANTED.json",
+    "bytes": 17128,
+    "sha256": "af26202462633f6d0d0cb96d8a7c80797e236404b8c42a66e7f72edd6f3ed8dd"
+  },
+  "recipe": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/README.md",
+    "bytes": 4453,
+    "sha256": "7821a60aa096371b9d06002dfec7f48aac5bcc01f192b8fe6dbdd4f9a08e2b37"
+  },
+  "source_postimages": {
+    "kernel/syscall.c": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/candidate/kernel/syscall.c",
+      "bytes": 915683,
+      "sha256": "eb3ec7202a3f6b6a0a13ae14d008ddfb6ff717f413e5b2e287c3eabba40243d1"
+    },
+    "kernel/rust/syscall_policy.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/candidate/kernel/rust/syscall_policy.rs",
+      "bytes": 1259465,
+      "sha256": "488a2da40042cd577e503007aed43d818939026cacf831a3dd66e36ba77254ab"
+    }
+  },
+  "actual_current_object": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-SYNC-PROCESSVM-HOST13-FIVE-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+    "bytes": 366696,
+    "sha256": "351b652e511bde906867a4751591c4915a84e275359c74609db6d3b6cd169afb"
+  },
+  "chosen_C_names": [
+    "ptrace_wakeup_find_thread_bridge",
+    "ptrace_wakeup_thread_unlock_bridge",
+    "thread_exit_waitq_wake_bridge"
+  ],
+  "selected_Rust_providers": [
+    "f03_ptrace_io_find",
+    "f03_ptrace_io_unlock",
+    "f03_exit_notify_wake"
+  ],
+  "new_algorithm_bodies": 0,
+  "already_exported_Rust_providers": 2,
+  "new_export_of_existing_Rust_body": 1,
+  "source_C_count": 75,
+  "expected_after_selection": 72,
+  "CMake_plan": {
+    "preimage": {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "bytes": 30707,
+      "sha256": "cd41d90e4b1dae5893c96cc0327aedf644dc7952300e25907543656df6e63586"
+    },
+    "kernel_C_defines": [
+      "MCKERNEL_RUST_F03_WAKEUP_FIND",
+      "MCKERNEL_RUST_F03_WAKEUP_UNLOCK",
+      "MCKERNEL_RUST_F03_EXIT_WAITQ_WAKE"
+    ],
+    "new_Rust_cfgs": [
+      "f03_exit_waitq_wake_selected_candidate"
+    ],
+    "required_existing_Rust_cfgs": [
+      "f03_ptrace_io_find_selected_candidate",
+      "f03_ptrace_io_unlock_selected_candidate"
+    ],
+    "new_source_files": [],
+    "placement": "Append centrally inside existing supported Linux6.12/x86_64 non-UBSAN branch; preserve enable_perf and current non-DCFA lock ABI; no NOCACHE expansion"
+  },
+  "HOST_expected": {
+    "find_pairs": 90,
+    "unlock_pairs": 3,
+    "waitq_pairs": 3,
+    "ABI_words": 19
+  },
+  "actual_grant": null,
+  "actual_compiler": null,
+  "actual_HOST": null,
+  "actual_first_compiler_timestamp": null,
+  "actual_blocked_duration_timestamp": null,
+  "source_ready_observation_mtime_ns": 1793081163844874781,
+  "all_real_find_unlock_waitq_lifecycle_locking_reference_holds_preserved": true,
+  "canonical_shared_policy_CMake_Git_compiler_Docker_guest_actions": 0,
+  "F06_disjoint_symbols": [
+    "arch_copy_to_user_bridge",
+    "arch_copy_from_user_bridge",
+    "arch_syscall_forward_context_bridge"
+  ],
+  "prior_report_corrections_untouched": true,
+  "default_acceptance": false,
+  "native_acceptance": false,
+  "whole_file_retired": false
+}

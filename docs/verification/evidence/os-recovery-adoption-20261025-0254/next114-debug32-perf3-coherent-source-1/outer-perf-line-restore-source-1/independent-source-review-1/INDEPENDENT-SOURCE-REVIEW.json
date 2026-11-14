@@ -1,0 +1,191 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/current110_execution_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "recorded_at": "2026-10-27T23:44:40.305854+00:00",
+  "decision": "PASS_SOURCE_BOUNDED_OUTER_PERF_FILELINE_RESTORE",
+  "blocking_findings": [],
+  "execution_release": false,
+  "runtime_authority": null,
+  "native_acceptance": false,
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/outer-perf-line-restore-source-1/SOURCE-READY.json",
+    "bytes": 5421,
+    "sha256": "a5898dbe8d189a5c462bb5d5088ecdda6d5898a5efa12302f8e634906d65542d"
+  },
+  "profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/outer-perf-line-restore-source-1/PROFILE.SOURCE-ONLY.json",
+    "bytes": 118438,
+    "sha256": "b61944ddc4574d4d2aded2e4e6d557098366524232258ff59d8b6692e6d6299a"
+  },
+  "corrected_kernel": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/outer-perf-line-restore-source-1/candidate/kernel/syscall.c",
+    "bytes": 918715,
+    "sha256": "d6e9c595364f72018b96ccba50e97ebc71ff438b8e91315982e287d63ff8bafb"
+  },
+  "patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/outer-perf-line-restore-source-1/kernel-syscall-outer-perf-restore.patch",
+    "bytes": 300,
+    "sha256": "76e3e82758ea5c9cce3c53b0347f5477f45268ed88e98067bb74749aca3d59a2"
+  },
+  "line_proof": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/outer-perf-line-restore-source-1/CHANGED-ONLY-CONDITIONAL-LINE-PROOF.json",
+    "bytes": 8081,
+    "sha256": "23a56f40d42141237d2b680b9b84b781c74d470be53dfc6e2dbb69e558028365"
+  },
+  "closed_Rust_map_unchanged": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/RUST-SUBTREE-CLOSED-SOURCE-MAP.json",
+    "bytes": 130515,
+    "sha256": "015762b0a7e5e3ad54b8a43cd9b109f4dabe29b16e662058c306f372361c90aa"
+  },
+  "preserved_original_BLOCKED_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/independent-source-profile-review-1/INDEPENDENT-SOURCE-PROFILE-REVIEW.json",
+    "bytes": 12031,
+    "sha256": "cc6f24fb7d6e1c5c9f442f0a855ed924e642889bad568eaf42b8644414559798"
+  },
+  "verified": {
+    "exact_READY_profile_kernel_patch_proof_refs_match": true,
+    "exact_five_line_insertion_only": true,
+    "restoration_location": "Immediately after outer #endif /*ENABLE_PERF*/, outside skipped block.",
+    "inserted": [
+      "#ifdef ENABLE_PERF",
+      "#line 21118",
+      "#else",
+      "#line 21150",
+      "#endif"
+    ],
+    "conditional_arithmetic": "PERF-on next original blank gets21121: active#line21118 followed by three physical directive lines. PERF-off next original blank gets21151: active#line21150 followed by one physical#endif. These are the original outer-join identities for both helperstates. The following source is otherwise unchanged; restoring this join preserves all subsequent inherited FILE/LINE until original later resets.",
+    "known_profiles": [
+      {
+        "helpers": false,
+        "ENABLE_PERF": false,
+        "active_original_C_identities_checked": 285,
+        "base_live_physical": 21341,
+        "base_live_identity": [
+          21223,
+          null,
+          false
+        ],
+        "before_live_physical": 21364,
+        "before_live_identity": [
+          21246,
+          null,
+          false
+        ],
+        "after_live_physical": 21369,
+        "after_live_identity": [
+          21223,
+          null,
+          false
+        ],
+        "active_original_C_locations_equal": true
+      },
+      {
+        "helpers": false,
+        "ENABLE_PERF": true,
+        "active_original_C_identities_checked": 690,
+        "base_live_physical": 21341,
+        "base_live_identity": [
+          21193,
+          null,
+          false
+        ],
+        "before_live_physical": 21364,
+        "before_live_identity": [
+          21193,
+          null,
+          false
+        ],
+        "after_live_physical": 21369,
+        "after_live_identity": [
+          21193,
+          null,
+          false
+        ],
+        "active_original_C_locations_equal": true
+      },
+      {
+        "helpers": true,
+        "ENABLE_PERF": false,
+        "active_original_C_identities_checked": 113,
+        "base_live_physical": 21341,
+        "base_live_identity": [
+          21223,
+          null,
+          true
+        ],
+        "before_live_physical": 21364,
+        "before_live_identity": [
+          21246,
+          null,
+          true
+        ],
+        "after_live_physical": 21369,
+        "after_live_identity": [
+          21223,
+          null,
+          true
+        ],
+        "active_original_C_locations_equal": true
+      },
+      {
+        "helpers": true,
+        "ENABLE_PERF": true,
+        "active_original_C_identities_checked": 390,
+        "base_live_physical": 21341,
+        "base_live_identity": [
+          21193,
+          null,
+          true
+        ],
+        "before_live_physical": 21364,
+        "before_live_identity": [
+          21193,
+          null,
+          true
+        ],
+        "after_live_physical": 21369,
+        "after_live_identity": [
+          21193,
+          null,
+          true
+        ],
+        "active_original_C_locations_equal": true
+      }
+    ],
+    "source_proof_assessment": "Owner retained four fixedhelper/PERFprofiles use only unchanged known-guard identityfunction on boundedinterval with one-line normalized known-defined conjunctions; physical line counts preserved. Independent review read exactsource/proof/preimages and verified minimal conditional arithmetic and rebindings. No checker/CPP/compiler/controlmain rerun or new genericparserpipeline.",
+    "live_witness": {
+      "function": "syscall_vm_policy_insert_log_bridge",
+      "macro": "dkprintf",
+      "condition": "MCKERNEL_RUST_SYSCALL_POLICY_HELPERS on, ENABLE_PERF off",
+      "base_line": 21223,
+      "old_blocked_line": 21246,
+      "corrected_line": 21223,
+      "actual_metadata_basis": "Existingdkprintf macro declares __verbose Ddebug.line=__LINE__; defaultflags0 does not remove that data."
+    },
+    "all_original_C_lines_preserved_inorder": true,
+    "Rust_changes": 0,
+    "commands_unchanged": true,
+    "objects_unchanged": true,
+    "closed_Rust_map_unchanged": true,
+    "genuine113origin_unchanged": true,
+    "profile_rebound_only": [
+      "status",
+      "kernel/syscall.c postimage",
+      "matching cohort binding",
+      "postbuild obligation prose"
+    ],
+    "export_rebound_only": "One exactold kernelpostimage ref replaced with corrected d6e9c595 ref.",
+    "helpers_byteidentical_parent": true
+  },
+  "retained_positive_scope": "Retain all unaffectedcc6f findings: exactGLOBAL32/96processsourcecontrols/10d98source/HOST11d85, perf3HOST4af93/two newwrappers+oneexistingatomicprovider/CMakepairedcfg/defaultflags0/LOCAL14C/configowners,119mapcorrectedABIcac599+witness59 and same4commands/3new8retained/raw11link/archda1e/origin2c419. No duplicated port or compiler/HOST/producer replay. Thisa589/b619 successor resolves only old541879/f761outerguard sourceblocker; originalBLOCKED record stays unchanged.",
+  "limits_and_next_action": "Source/profile is eligible for Root selectiveactualadoption and coherentmaterializer/publication/newcurrentledger/actualaccount/nativeownership/freshresources/exact independentexecutionreview. Actualproducer/compiler/currentdefaultABI/metadata/registry/consumer/native/fileproof remains separate. C80/Rust59/process31 remain candidatecounts; no originalOPEN/FAIL is relabelled. No new gate/framework/quota or F05/startup dependency.",
+  "review_actions": {
+    "read_hash_literal_delta_known_guard_proof_and_directive_arithmetic_only": true,
+    "known_controls_or_CPP_compiler_query_guard_workload_Git_canonical_operations": 0,
+    "no_full119walk_or_HOSt_or_origin_replay": true,
+    "subagents": 0,
+    "only_owned_review_directory_written": true
+  }
+}

@@ -1,0 +1,97 @@
+--- /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/production-context-consumer-preparation-1/retained-observer-adaptation-1/observe_retained_context.py
++++ /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/production-context-consumer-preparation-1/retained-observer-stack2m-adaptation-1/observe_retained_context_stack2m.py
+@@ -1,5 +1,5 @@
+ """Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+-Retained-only d21c observer, prepared without execution. No subprocess or object hashing.
++Retained-only d21c stack2MiB correction observer, prepared without execution. No subprocess or object hashing.
+ Root supplies actual launch/source bindings and already-durable object metadata.
+ """
+ from pathlib import Path
+@@ -58,11 +58,10 @@
+     assert r[3] == "FUNC" and r[4] == "GLOBAL", r
+     assert (r[6] != "UND") == defined, r
+ 
+-def observe_retained(execution, durable_objects):
+-    """execution is ROOT-authored actual evidence, not a synthesized launch.
+-    Required: ready_sha256, source_identity, commands (actual11 exact argv),
+-    preflight_source_headers_verified and postflight_source_headers_verified.
+-    The root wholejoin must bind execution itself and its actual capture cohort.
++def observe_retained():
++    """Read only ROOT's corrected actual cohort and its sealed metadata.
++    No first-cohort output is reused as a corrected-profile observation.
++    This function does not launch a process, rehash an object, or write a receipt.
+     """
+     ready_path = ROOT / "PRODUCTION-CONTEXT-CONSUMER-READY.json"
+     assert hashed_small(ready_path)["sha256"] == "d21c285b22d0b3375c21fb504ffa89c4afd931ab339ddc9f20dc3485267f864d"
+@@ -70,22 +69,49 @@
+     rust = load_bound(ready["Rust_recipe"])
+     c = load_bound(ready["C_recipe"])
+     oracle = load_bound(ready["exact_symbol_oracle"])
+-    assert execution["ready_sha256"] == hashed_small(ready_path)["sha256"]
+-    assert execution["source_identity"] == rust["source_identity"] == ready["source_identity"]
+-    assert execution["preflight_source_headers_verified"] is True
+-    assert execution["postflight_source_headers_verified"] is True
+-    assert len(execution["commands"]) == len(ready["commands"]) == 11
+-    for actual, frozen in zip(execution["commands"], ready["commands"]):
+-        assert actual["argv"] == frozen["argv"], frozen["label"]
++    cap = ROOT / "root-owned-exact11-stack2m-correction-1"
++    root_record = json.loads((cap/"ACTUAL-WHOLE-JOIN.json").read_bytes())
++    profile = load_bound(root_record["profile"])
++    commands = load_bound(root_record["commands"])
++    assert root_record["CPU6_released"] is True
++    assert root_record["ready_sha256"] == hashed_small(ready_path)["sha256"]
++    assert root_record["source_identity"] == rust["source_identity"] == ready["source_identity"]
++    assert profile["original_ready_sha256"] == root_record["ready_sha256"]
++    assert profile["source_identity"] == root_record["source_identity"]
++    for key, value in {"AS": 2<<30, "CPU": [6], "CPU_seconds": 60,
++                       "FSIZE": 32<<20, "NOFILE": 256, "core": 0,
++                       "RUST_MIN_STACK": "2097152", "stack": 2<<20,
++                       "wall_seconds": 90, "grace": 6}.items():
++        assert profile[key] == value, (key, profile.get(key))
++    assert len(commands) == len(ready["commands"]) == 11
++    old_output, new_output = str(ROOT/"output-1"), str(ROOT/"output-stack2m-1")
++    for actual, frozen in zip(commands, ready["commands"]):
++        assert actual["label"] == frozen["label"]
++        assert actual["argv"] == [arg.replace(old_output,new_output) for arg in frozen["argv"]], frozen["label"]
++    # Check frozen private source/header/witness bytes, never historical canonical
++    # bytes which may legitimately advance in another implementation lane.
++    assert len(rust["source_inputs"]) == 78 and len(c["actual_header_closure"]) == 56
++    source_rows = [v["private"] for v in rust["source_inputs"].values()]
++    source_rows += list(c["actual_header_closure"].values())
++    source_rows += [c["private_source"], c["ABI_witness"], c["selected_declaration_source"]]
++    for row in source_rows:
++        fact = hashed_small(row["path"])
++        assert fact["sha256"] == row["sha256"], row["path"]
++        assert fact["bytes"] == row["bytes"], row["path"]
++    durable_objects = {Path(row["path"]).name: row for row in root_record["objects"]}
+     assert set(durable_objects) == {"mckernel_rust.o", "cpu.c.o", "cpu-rust-partial.o"}
+     for row in durable_objects.values():
+         stable_object(row)
+         assert len(row["sha256"]) == 64
+-    cap = ROOT / "root-owned-exact11-1"
+     results, texts, identities = [], [], []
+     for i in range(11):
+         p = cap / str(i)
++        command = json.loads((p/"command.json").read_bytes())
++        assert command["argv"] == commands[i]["argv"]
++        assert command["label"] == commands[i]["label"]
++        assert command["profile"] == root_record["profile"]
+         j = json.loads((p/"RESULT.json").read_bytes())
++        assert j == root_record["results"][i]
+         assert j["returncode"] == 0 and not j["timed_out"], i
+         assert j["direct_child_joined"] and j["group_absent"] and j["closed_streams"], i
+         assert j["error"] is None and j["retirement_error"] is None, i
+@@ -139,6 +165,13 @@
+     return {
+         "scope": __doc__.splitlines()[0],
+         "status": "PASS_ACTUAL_CURRENT78_RUST_AND_SELECTED_COMPLETE_GCC9_CONTEXT_CONSUMER_ONLY",
++        "root_wholejoin": hashed_small(cap/"ACTUAL-WHOLE-JOIN.json"),
++        "actual_profile": root_record["profile"],
++        "actual_commands": root_record["commands"],
++        "explicit_RLIMIT_STACK_2MiB_and_RUST_MIN_STACK_2MiB": True,
++        "original_8MiB_cohort_preserved_not_profile_accepted": True,
++        "source_identity": rust["source_identity"],
++        "private_source78_headers56_and_ABI_bytes_verified": True,
+         "result_bindings": identities, "actual_results": results,
+         "durable_objects_not_rehashed": durable_objects,
+         "Rust_T_count": len(ts), "Rust_U_count": len(us),

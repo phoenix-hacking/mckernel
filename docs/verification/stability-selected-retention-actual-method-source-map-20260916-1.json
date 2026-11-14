@@ -1,0 +1,188 @@
+{
+  "schema_version": 1,
+  "record_kind": "stability_selected_retention_actual_method_source_map",
+  "task_id": "M01-B",
+  "attempt": 2,
+  "created_utc": "2026-09-16T06:46:00Z",
+  "status": "SOURCE_MAP_ONLY_TEST_ADAPTER_MISSING",
+  "scope": "Read-only map for replacing the rejected structural scaffold with an actual production-type method runner in exact staged source trees.",
+  "retained_inputs": [
+    {
+      "path": "docs/verification/stability-selected-retention-provenance-checkpoint-20260915.json",
+      "sha256": "ca68800afbe9a71ff4d0518ebed49d663d348170ab33c2baa772f6e651a952ed"
+    },
+    {
+      "path": "docs/verification/stability-selected-retention-source-authority-20260915.json",
+      "sha256": "868d6a90b8acd56b7cf1c3b61884c76abad605a1a6c31215607b098a99da73e1"
+    },
+    {
+      "path": "docs/verification/stability-selected-retention-method-scaffold-failure-20260915.json",
+      "sha256": "7b79f286bdd26ea413dc223a44c1af6a63222406281039575741c1c22d2bdfd4"
+    },
+    {
+      "path": "docs/verification/evidence/stability-selected-retention-method-scaffold-failure-20260915.tar.gz",
+      "sha256": "d70428a4f498bdb7cd78b9739955b2d103a9c134714aae686872be2f1351d97b"
+    },
+    {
+      "path": "docs/verification/evidence/stability-selected-retention-provenance-20260915.tar.gz",
+      "sha256": "35c31f276acca117cefc894dccfda772fdd6b5f4a1d3537149e5a41b425925a9"
+    }
+  ],
+  "authority_records": {
+    "mode_2": {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-hold-module-20260913-postpublish-notify-1/record.json",
+      "sha256": "3bded4f7bfc206b4e64b03a58243d0e3a7783a5a493dd4095be5916a07e7ed48"
+    },
+    "mode_3_base": {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-recoverable-backpressure-1/record.json",
+      "sha256": "11de2af873b88fe6afb19749195294b10b41879b6f0e99e97b95065cf25de968"
+    },
+    "mode_3_held": {
+      "path": "/home/holden/mckernel-work/scratch/stability-published-held-source-20260915-recoverable-backpressure-3/held/record.json",
+      "sha256": "a5cee2ec4397bd37f1abe75a313f6de6a96fbd8983cc49c6f1e9437681fe435d"
+    }
+  },
+  "mode_3_source_root": "/home/holden/mckernel-work/scratch/stability-published-held-source-20260915-recoverable-backpressure-3/held/source",
+  "candidate_generation_authority": {
+    "rule": "The held mode trees are authenticated inputs, not selected-retention candidates. Run the exact stager and bind its complete generated output manifest and inverse-checked diff before adding any test adapter.",
+    "stager": {
+      "path": "scripts/tests/prepare_stability_selected_retention.py",
+      "sha256": "c2b8b256bc4ee0997fed3c210f9d6aef1878a6dc507d3fd96fe66ea011b843b0",
+      "anchor": "248-286 exact application_syscall, smp_application_syscall and stability_phase transformations"
+    },
+    "source_manifests": {
+      "path": "scripts/tests/fixtures/stability-selected-retention-v1/source-manifests.json",
+      "sha256": "d9d439bff0a90bddcc3920f36b8fac81d6e1515fd83f035e18a34464cc8498d0"
+    },
+    "templates": [
+      {"path": "response-prepare.rs", "sha256": "38f5202ca358fc89cf440e4633cf6d98aa5549d550740da3acadd1fd040d8421"},
+      {"path": "return-prepare.rs", "sha256": "3ea01848a34cbefd202de4947d4598b10ad55b298b170a60158b43ded840ac7c"},
+      {"path": "cancel-guard.rs", "sha256": "39c75e46564da98a5d06d709bf31e309b46ba6bf2166a381d6f2e5354cdeb3e6"},
+      {"path": "mailbox-retention.append.rs", "sha256": "b47f7f78f1b6d385a99de811eec46e7888f76219838fbeee1aff463d32d0a69a"},
+      {"path": "phase-retention.append.rs", "sha256": "cf67a5c2b944c312e6467208ef3c87519be284a896a46dc23d598f7d3fbf5089"}
+    ]
+  },
+  "sources": [
+    {
+      "name": "application_syscall.rs",
+      "sha256": "83c76e277f759e920a91f4fd3bb601268aee39082acbe3f4cd732ec3c58feb92",
+      "anchors": [
+        "160 Worker",
+        "166 Worker::new",
+        "316 ResponseMemory",
+        "322 ResponseMemory::address",
+        "327 ResponseMemory::release",
+        "385 Response::from_memory",
+        "402 Response::prepare",
+        "437 Completion",
+        "446 Completion::publish"
+      ]
+    },
+    {
+      "name": "smp_application_syscall.rs",
+      "sha256": "b18b2356189a42b9083e09b477bba4b81011a9c3c42aafb9564daebb0f813ee2",
+      "anchors": [
+        "35 Mailbox",
+        "44 Mailbox::new",
+        "61 Mailbox::open_worker",
+        "563 Mailbox::publish",
+        "660 Mailbox::cancel_call",
+        "980 send overlay"
+      ]
+    },
+    {
+      "name": "smp_application.rs",
+      "sha256": "78e9d817247ab73fa246563b0665afc3eb7ee2d8aa4df361449438fcf57d2a41"
+    },
+    {
+      "name": "stability_phase.rs",
+      "sha256": "d81bb72e67ae0db6a69c6dfed6c9db96c33ec33ffc9aeef015970b431884d4ea",
+      "anchors": [
+        "37 release counter",
+        "114 publication gate",
+        "198-207 release commit state"
+      ]
+    },
+    {
+      "name": "sysfs_memory.rs",
+      "sha256": "a06db09b3e823636405888cd636e1a6fbf79ca7a0400bb0355899384638d629a",
+      "anchors": [
+        "548 SyscallResponse",
+        "559 prepare_pager",
+        "630 ResponseMemory::address",
+        "634 ResponseMemory::release"
+      ]
+    },
+    {
+      "name": "smp_memory.rs",
+      "sha256": "abdaa082804a79b25a749245febc954cf7dcdcbd599d9e56accd79a299c36fb6"
+    },
+    {
+      "name": "smp_service.rs",
+      "sha256": "96737eb497b3e84a71747b18d1d93133efd75b2a0d7c23e5d1c452869e82d197"
+    }
+  ],
+  "rejected_current_scaffold": {
+    "reason": "The Rust snippets are include_str data, the Case rows never construct or call production objects, and the Python tests check only names and substrings.",
+    "native_method_coverage": false
+  },
+  "required_test_adapter": {
+    "location": "fresh selected-retention candidate output produced from each exact authenticated mode input under cfg(test), never the held input tree, repository fixture or released production source",
+    "interfaces": [
+      "TestResponseMemory::new(NonNull<u8>, u64, Arc<Ledger>) -> Self",
+      "Ledger::record(Event)",
+      "Mailbox::test_insert(Call)",
+      "Mailbox::test_cancel_pending()",
+      "Mailbox::test_publish(cpu, FnOnce(...))"
+    ],
+    "construction_path": "Mailbox::new -> open_worker -> real admission and selection -> actual Call containing Response or Completion",
+    "reason": "Private Call fields and kernel allocator types prevent a truthful standalone constructor; the adapter must expose construction while calling unchanged production methods."
+  },
+  "response_memory_contract": [
+    "non-null and at least eight-byte-aligned backing covering every RESPONSE_BYTES field",
+    "physical identity exactly matches the retained owner Claim",
+    "exclusive mapping remains valid through final status store and explicit release",
+    "send, address, status, release and Drop observations use atomics and an explicit deterministic ledger",
+    "each row records a post-construction/preparation ledger baseline because Response::from_memory and successful preparation already call address; hold assertions compare deltas from that boundary"
+  ],
+  "required_rows": [
+    "selected stages 0, 1, 2, 4, 5, 6 and invalid hold with zero send/address/status/release/drop and retained owner",
+    "selected stage 3 commit 0 with wake None and wake Some holds identically",
+    "selected stage 3 commit 2 with wake None and wake Some holds identically",
+    "selected stage 3 commit 1 with wake None executes the unchanged no-send publication and one release",
+    "selected stage 3 commit 1 with wake Some is mode-specific: mode 3 first records one send attempt and -11 while retaining ownership, then only a deterministic-clock recovery after two seconds publishes and releases; mode 2 follows its exact selected-notification contract",
+    "changed owner follows the unselected unchanged behavior",
+    "selection false follows the unchanged behavior",
+    "pre-release cancel-after executes the real guard, returns -71, latches first invalid -125 and retains/quarantines the owner; post-commit cancellation must follow the unchanged released path and cannot be expected to relatch or roll back"
+  ],
+  "required_negative_paths": [
+    "negative servicing TID",
+    "initial nonzero completed status",
+    "invalid wake state",
+    "failed second compare-exchange after prefix writes",
+    "pre-start cancellation with Response",
+    "in-flight cancellation around Completion construction",
+    "post-publication cancellation after committed release without rollback"
+  ],
+  "implementation_write_allowlist": [
+    "a fresh stager-produced mode-2 selected-retention candidate output plus cfg(test) adapter and generated-output manifest",
+    "a fresh stager-produced mode-3 selected-retention candidate output plus cfg(test) adapter and generated-output manifest",
+    "a new isolated executable runner and exact result parser in a fresh scratch packet",
+    "new repository-side source-envelope tests only after separate source review"
+  ],
+  "mode_divergence": "Mode 2 and mode 3 retain separate exact trees; smp_application_syscall.rs and stability_phase.rs are mode-specific and must never be substituted across modes.",
+  "cheap_precompile_checks": [
+    "exact SHA256 and manifest member comparison",
+    "git diff --check on generated patches",
+    "existing Python structural suite retained only as envelope coverage",
+    "anchor and duplicate/missing-hook checks",
+    "independent source review of the exact adapter and runner"
+  ],
+  "implementation_released": false,
+  "compiled": false,
+  "native_method_coverage": false,
+  "guest_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}

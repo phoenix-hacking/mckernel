@@ -1,0 +1,164 @@
+smp_application.rs:1
+// SPDX-License-Identifier: GPL-2.0
+//! Bounded application connections and independently pumped prepare/cleanup.
+
+use super::{
+    application_pager::Operation as PagerOperation,
+    application_rpc::{Exchange, Token},
+    application_syscall::Request,
+    smp_application_image::{Preparation, ForkAdoption, ForkGeometry, ForkIdentity, ForkPhase,
+        ForkReservation, FORK_NATIVE_MARKER},
+    smp_application_syscall::Mailbox,
+    smp_file_pager::{Prepared as PagerFile, Registry as Pagers},
+    smp_memory::{ProcfsProcess, ProcfsRemote, SyscallResponse},
+    smp_resource::OsToken,
+};
+use core::sync::atomic::{AtomicBool, AtomicI32, AtomicUsize, Ordering};
+use core::ptr::{self, NonNull};
+use kernel::{
+    bindings,
+    prelude::*,
+    sync::{new_condvar, new_mutex, Arc, CondVar, Mutex},
+};
+
+pub(crate) const CAPACITY: usize = 64;
+const PUBLICATION_TIMEOUT_SECONDS: u64 = 5;
+
+#[path = "smp_fork_link.rs"]
+mod fork_link;
+pub(crate) use fork_link::PreparedLinkTicket;
+
+smp_fork_ingress.rs:275
+                let _ = unsafe { ihk_os_application_abort_fork_payload_v1(scope_pointer) };
+                return Err(error);
+            }
+        };
+        let request = ticket.request().clone();
+        let mut output: *mut c_void = ptr::null_mut();
+        let attached = (|| -> Result {
+            let response = ticket.response().map_err(errno)?;
+            // SAFETY: This is the SAME actual delivered response, now owned by
+            // this non-Copy ticket outside slots, under genuine IHK admission.
+            let mut seed = unsafe { ForkPayloadSeed::new(response.memory_mut(), &request, self.owner) };
+            let attach = scope.attach.ok_or(EACCES)?;
+            let status = unsafe { attach(scope.context, Some(fork_payload_construct),
+                ptr::from_mut(&mut seed).cast(), Some(fork_payload_abort), Some(fork_payload_complete), &mut output) };
+            if status != 0 { return Err(errno(if (-4095..0).contains(&status) { status } else { -71 })); }
+            if output.is_null() { return Err(EIO); }
+            Ok(())
+        })();
+        if let Err(error) = attached {
+            let _ = core::mem::replace(&mut output, ptr::null_mut());
+            // No payload borrow survives across actual IHK Abort.
+            let _ = unsafe { rollback_provisional(self, parent, child, token, ticket, scope_pointer) };
+            return Err(error);
+        }
+        // The actual attach success was checked for a nonnull initialized
+        // borrowed context above. Keep the sole pointer in an Option so every
+        // failed bind clears it before an IHK Abort can free the capsule.
+        let mut payload = Some(NonNull::new(core::mem::replace(&mut output, ptr::null_mut()).cast::<ForkPayload>())
+            .expect("checked attach returned a null payload"));
+        let mut restore_failed = false;
+        let bound = (|| -> Result<(PreparedForkLease, ForkIngressMarker)> {
+            // SAFETY: Actual IHK owns this initialized payload capsule and
+            // returns only this scoped borrow; nothing else may access bytes.
+            let payload_ref = unsafe { payload.as_ref().unwrap().as_ref() };
+            let descriptor = payload_ref.descriptor();
+            let args = request.arguments();
+            if payload_ref.owner() != self.owner || payload_ref.physical() != args[4]
+                || payload_ref.original_response() != request.response()
+                || descriptor.nonce == 0 || descriptor.root != geometry.root
+                || descriptor.start != geometry.start || descriptor.length != geometry.length { return Err(EACCES); }
+            let mut slots = self.slots.lock();
+            self.transport_health()?;
+            let (pi, ci) = indexes(&slots, parent, child)?;
+
+smp_application.rs:2008
+        || !fork.seal.sealed.load(Ordering::Acquire)
+    { return Err(EACCES); }
+    // Positive first-publication pins have no reviewed terminal consumer yet.
+    // Enforce retention at this generic destruction API as well as ACK release,
+    // before changing a phase or permitting any child-slot removal.
+    if stage == FORK_GUEST_DESTROYED_V1 && fork.retained_parent.is_some() { return Err(EBUSY); }
+    if stage == FORK_HOST_REVOKED_V1 {
+        // A sealed LINK grants irreversible same-kind2 handoff permission.
+        // Host abort cannot alter that phase or close admissions afterwards.
+        if let Some(link) = &fork.link { link.cancel_if_open()?; }
+        // Close ACTUAL existing service admission before drain. Every current
+        // prepare/start/worker/wait/with_prepared path observes this gate under
+        // the same slots mutex. No child image was prepared or scheduled at
+        // this original-first-RET boundary; foreign active state fails closed.
+        entry.needs_cleanup = true;
+        if fork.reservation.state.phase() != ForkPhase::Quarantined {
+            fork.reservation.state.request_abort(identity)?;
+        }
+        entry.syscalls.close().map_err(errno)?;
+    } else if stage != FORK_GUEST_DESTROYED_V1 { return Err(EINVAL); }
+    if !entry.needs_cleanup || entry.scheduled || entry.prepare.is_some()
+        || entry.procfs.is_some() || !entry.syscalls.drained()
+    { return Err(EBUSY); }
+    fork.reservation.state.revoke_drained(identity)?;
+    let first = fork.reservation.first.clone();
+    let value = fork.reservation.return_value;
+    let published = fork.reservation.return_published;
+    if stage == FORK_GUEST_DESTROYED_V1 {
+        fork.reservation.state.permit_guest_destroy(identity)?;
+        if !published || value != Some(super::application_abi::FORK_ABORT_RETURN_V1) { return Err(EBUSY); }
+        // Publication retained the authenticated full child key and terminal
+        // value. The parent's normally retired mailbox is no longer needed.
+        return Ok((None, child_index));
+    } else if published { return Err(EBUSY); }
+    let parent_index = slots.iter().position(|slot| slot.as_ref().is_some_and(|entry| entry.key().wire() == identity.parent)).ok_or(ENOENT)?;
+    if stage == FORK_HOST_REVOKED_V1 {
+        // Establish exact response ownership/unpublished state BEFORE any MM
+
+mcctrl_process.rs:836
+        }
+        let mut bytes = [0; 72];
+        bytes[..8].copy_from_slice(&worker.handle.to_le_bytes());
+        bytes[8..16].copy_from_slice(&serial.to_le_bytes());
+        let cpu = worker.delivery_cpu.load(Ordering::Relaxed) as i64;
+        bytes[16..24].copy_from_slice(&cpu.to_le_bytes());
+        bytes[24..32].copy_from_slice(&descriptor[8..16]);
+        bytes[32..48].copy_from_slice(&descriptor[24..40]);
+        if length != 0 {
+            let source = image::word(&descriptor, 16).map_err(errno)? as usize;
+            source.checked_add(length as usize).ok_or(errno(-75))?;
+            UserSlice::new(source, length as usize)
+                .reader()
+                .read_slice(&mut bytes[56..56 + length as usize])?;
+        }
+        let launcher_cpu = image::word(&descriptor, 0).map_err(errno)? as i64;
+        if launcher_cpu != cpu && traced {
+            pr_info!("application_syscall=return_route os={} generation={} pid={} worker={} delivery={} launcher_cpu={} guest_cpu={}\n",
+                self.slot, self.generation, self.pid, worker.handle, serial, launcher_cpu, cpu);
+        }
+        // This private operation inspects the actual owned delivery. Ordinary
+        // returns are unchanged; only the new carrier's second clone can seal
+        // LINK. A failure leaves the delivery owned for exact retry.
+        let value = image::word(&bytes, 24).map_err(errno)? as i64;
+        // SAFETY: This live fd/worker pins our return frame and connection. IHK
+        // authenticates the backend delivery and dispatches only its own capsule.
+        kernel::error::to_result(unsafe { ihk_os_application_prepare_fork_link_v1(
+            self.context.as_ptr(), worker.handle, serial, cpu, value,
+        ) })?;
+        // The provider derives a final-ACK ticket only from this exact owned
+        // Delivered selector3. A decoded guest frame alone cannot release any
+        // capsule, registration, root or module owner. Ordinary returns pass.
+        // SAFETY: The same live fd/worker/connection pins this call and return;
+        // IHK lends only its own retained payload while all callbacks are scoped.
+        kernel::error::to_result(unsafe { ihk_os_application_prepare_fork_ack_v1(
+            self.context.as_ptr(), worker.handle, serial, cpu, value,
+        ) })?;
+        let result = self.invoke(super::application_abi::RETURN_SYSCALL, &mut bytes);
+        if image::word(&bytes, 48).map_err(errno)? == 1 {
+            // This includes interrupted waits after acceptance. The independent
+            // pump retains the original result; WAIT cannot rebind this worker
+            // until its status and any required wake have actually published.
+            worker.delivery.store(0, Ordering::Release);
+        }
+        result?;
+        if traced {
+            pr_info!("application_syscall=returned os={} generation={} pid={} worker={} delivery={} cpu={} value={}\n",
+                self.slot, self.generation, self.pid, worker.handle, serial,
+                image::word(&bytes, 16).map_err(errno)?, image::word(&bytes, 24).map_err(errno)? as i64);

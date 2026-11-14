@@ -1,0 +1,48 @@
+{
+  "task_id": "M14-F06-VDSO-ADD-RANGE-HOST",
+  "status": "READY_FOR_INDEPENDENT_HOST_REVIEW",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "leaf": "vdso-add-range",
+  "cases": 112,
+  "plan": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-add-range/FUTURE-HOST-COMMAND-PLAN.json",
+    "bytes": 12673,
+    "sha256": "6ed5a342562f54d99a1f3105ca385d52b41effe09cc02d63fe080368035cc4ff"
+  },
+  "source_bindings": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-add-range/SOURCE-BINDINGS.json",
+    "bytes": 5454,
+    "sha256": "ce9db804b30dc175b7d54c2d19de8a9d7fb2be3602e59499eb8bd1d8441ba505"
+  },
+  "actual_leaf": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-context-range-host-1/vdso-add-range.RESULTS.json",
+    "bytes": 15279,
+    "sha256": "8b903860b2347b3dbf4356cc39ffb5b38d493788534919fdfb4b83c0831109a8"
+  },
+  "commands": 3,
+  "all_returncodes_zero": true,
+  "all_PID_births_retained": true,
+  "all_direct_waited": true,
+  "all_groups_absent": true,
+  "all_streams_closed": true,
+  "first_compiler_started_wall": 1793067003.285419,
+  "initial_account_age_seconds": 7.960011005401611,
+  "CPU_seconds": 0.11676199999999999,
+  "wall_seconds": 0.14956562593579292,
+  "max_child_RSS_KiB": 88084,
+  "artifacts": {
+    "libadapter.a": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-add-range/future-host-output-1/libadapter.a",
+      "bytes": 7240948,
+      "sha256": "577fb54037f9de73e56976f1cc06a8bf8a0fb5e74dbbf3b47020df2591d0b776"
+    },
+    "fixture": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-add-range/future-host-output-1/fixture",
+      "bytes": 44688,
+      "sha256": "183a84661415269929db54bb4936aab16877460092939352523d7d90413af093"
+    }
+  },
+  "effect_scope": "C add_process_memory_range mock records all10args and writes only a valid nonnull caller output slot, including controlled error-return paths; no VM/ref/allocator/mapping operation.",
+  "no_actual_failure_correction_or_replay": true,
+  "production_native_acceptance": false
+}

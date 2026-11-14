@@ -1,0 +1,27 @@
+{
+  "task_id": "M14-F06-SIGTRAP-DEFINED-CORRECTION-1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_DEFINED_CORRECTION_READY_FOR_SOURCE_REVIEW_NOT_SELECTED",
+  "contract": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-F06-CONTEXT-DOSIGNAL-COMPOSITION-1/ROOT-SIGTRAP-INFO-CONTRACT.APPROVED.json",
+    "sha256": "42846dde85248d75ed093bcac7a04099ccd82b49622b7dd8ffd36d9a6f8fc322"
+  },
+  "review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-F06-CONTEXT-DOSIGNAL-COMPOSITION-1/sigtrap-focused-review-1/REVIEW.ACTUAL.json",
+    "sha256": "2a9400121dc9ece48dba40613748e705686de9670f18ff186206863a6faf3c1e"
+  },
+  "patch_base": "Parent composition postimage; apply parent patch then this successor, not directly to canonical119.",
+  "preimage_sha256": "022f8591030d27310c1b28cedbc872d31c1f8047f9e52279f8ff88061b71aa5e",
+  "postimage_sha256": "0b30a2b2e804a91d964a52e45b6a4888991838a85e963ebfbde4501a034cb7dd",
+  "implementation": "Initialize caller-owned aligned info only after traced exit_status/status assignments; byte-zero entire SigInfo then SIGCHLD/CLD_TRAPPED/tid/exit_status field writes using existing selected constructor pattern. Preserve helper ABI and original notification/lock/wake/schedule order.",
+  "metadata": "No descriptor edits in this successor; original six tuples retained from parent composition.",
+  "still_open": [
+    "Actual ABI20/codegen",
+    "Thread/parent/report and synchronous info lifetimes",
+    "GS/TSS/currentCPU and xstate constraints",
+    "Matched original389/link/native functional proof",
+    "Any actual service/account restriction; unknown provenance not clearance"
+  ],
+  "selection": "Whole selectors remain unchanged/OFF; no compiler/native/runtime authority.",
+  "next": "Compositor applies this source successor after parent, independent review and permitted focused checks; Root owns all selection/compiler/native disposition."
+}

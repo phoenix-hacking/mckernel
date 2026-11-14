@@ -1,0 +1,120 @@
+{
+  "schema": "mckernel.guardian-status-text-validation.v1",
+  "verified_at": "2026-11-10T05:13:35.200684+00:00",
+  "source_parent": "e1cd683369b15296d7d259953f081d6e78a54ca5",
+  "canonical_ledger_updated_at": "2026-11-10T00:52:03.274556+00:00",
+  "scope": "Generated complete M14/M15 progress and recorded agent-state view; no new milestone acceptance or workstation activation",
+  "tests": {
+    "command": "python3 -B -m unittest -q scripts.tests.test_os_goal_guardian scripts.tests.test_os_goal_mailbox scripts.tests.test_os_goal_service scripts.tests.test_os_goal_mailbox_workflow scripts.tests.test_os_goal_overnight scripts.tests.test_os_goal_stop_log scripts.tests.test_os_goal_repair scripts.tests.test_os_goal_continuous scripts.tests.test_os_goal_handoff_provenance scripts.tests.test_os_goal_status_text scripts.tests.test_os_goal_status_publish scripts.tests.test_os_goal_status_feed scripts.tests.test_os_goal_instruction_order",
+    "run": 213,
+    "failures": 0,
+    "errors": 0,
+    "result": "PASS",
+    "seconds": 2.198,
+    "external_actions": "faked; no real service/model/native workload"
+  },
+  "coverage": {
+    "requirements": 31,
+    "tasks": 391,
+    "counted_evidence_tasks": 156,
+    "verified_counted_tasks": 73,
+    "uncounted_tasks": 235,
+    "optional_decisions": 3,
+    "every_requirement_and_task_exactly_once": true
+  },
+  "initial_publication": {
+    "path": "status.txt",
+    "bytes": 179850,
+    "row_counts": {
+      "requirements": 31,
+      "tasks": 391,
+      "optional_or_deferred_decisions": 3
+    },
+    "sha256": "70e7528dc3981af463fa5bf0b9fc8eb408b8c7ffeedc128a404c2c572fa2c2b3",
+    "git_blob_sha": "f8be1e1b403e0c1f4b1119c29427faf6ac919347",
+    "generated_at": "2026-11-10T05:12:10.598064+00:00",
+    "source_commit": "e1cd683369b15296d7d259953f081d6e78a54ca5",
+    "runtime": "UNAVAILABLE",
+    "branch": "codex/mckernel-control-mailbox",
+    "commit": "920b3019b7b5856000ebc0277ff7f3a979dd8364",
+    "url": "https://github.com/phoenix-hacking/mckernel/blob/codex/mckernel-control-mailbox/status.txt",
+    "remote_complete_text_verified": true
+  },
+  "runtime": {
+    "workstation_observed_live": false,
+    "guardian_activated": false,
+    "first_mailbox_poll_verified": false,
+    "current_agent_count": "UNKNOWN",
+    "last_recorded_checkpoint": "e1cd683369b15296d7d259953f081d6e78a54ca5",
+    "checkpoint_result": "Completed control repairs and original source/binding impasse; normal BLOCKED handoff"
+  },
+  "semantics": {
+    "report_interval_seconds": 600,
+    "stale_after_seconds": 900,
+    "unavailable_runtime_is_not_zero_agents": true,
+    "birth_and_freshness_required_for_current_agent_activity": true,
+    "report_failure_preserves_mailbox_reply": true,
+    "publication_unknown_response_reconciled_before_newer_snapshot": true,
+    "local_preview_does_not_publish_or_delay_schedule": true,
+    "public_file_max_bytes": 204800,
+    "public_row_truncation": false
+  },
+  "ci": {
+    "last_completed_tracker": {
+      "id": 42757273379,
+      "source_commit": "ad526fc4e8484fced90265668486167566d7087d",
+      "conclusion": "cancelled",
+      "reason": "10 minute timeout",
+      "fail_entries": 182,
+      "error_entries": 232,
+      "new_failure_ids_vs_prior_repaired_baseline": 0
+    },
+    "latest_observed_tracker": {
+      "id": 42760141013,
+      "source_commit": "e1cd683369b15296d7d259953f081d6e78a54ca5",
+      "status": "in_progress"
+    },
+    "notification_workflow": {
+      "id": 42756298558,
+      "conclusion": "success"
+    }
+  },
+  "preserved_upstream_repairs": [
+    "durable instruction submission chronology",
+    "explicit service argument opt-ins"
+  ],
+  "files": {
+    "scripts/os_goal_status_text.py": {
+      "bytes": 21629,
+      "sha256": "89c686fc2873d28cea9dc0dc38db7a071463a3c55021e81766c893b05e7afc49"
+    },
+    "scripts/os_goal_status_publish.py": {
+      "bytes": 10630,
+      "sha256": "99f0a39381b403962abf9423d6c0b65d90b2cbee005b6673e62358d714222ad6"
+    },
+    "scripts/os_goal_status_feed.py": {
+      "bytes": 4715,
+      "sha256": "d5f8622f0742965c5fe1c4fb3589fb3da4cd8dc084895f19ca23b017644406a8"
+    },
+    "scripts/os_goal_service.py": {
+      "bytes": 21397,
+      "sha256": "548b933b9bfe854dc55e2ebca76ae2156c40bde6cf78808d1362a3be2cb8922b"
+    },
+    "scripts/tests/test_os_goal_status_text.py": {
+      "bytes": 10257,
+      "sha256": "15fcce7485934b1d3fe4fbde8b6af3068946001bd5be3d374120f20af51e0286"
+    },
+    "scripts/tests/test_os_goal_status_publish.py": {
+      "bytes": 13997,
+      "sha256": "7b0558821dafde6c49421007606b000a5486cd08e0fc8a925b57a167e3ff60db"
+    },
+    "scripts/tests/test_os_goal_status_feed.py": {
+      "bytes": 7930,
+      "sha256": "23cfeb19265e7531000820aa778959359017f1e7687d6e21b0e788afe8e12a4d"
+    },
+    "scripts/tests/test_os_goal_service.py": {
+      "bytes": 27657,
+      "sha256": "cf3e3dab7a773dc444ef498d5f5ee098dfa12aa82e22f9d8f8de459b15449e08"
+    }
+  }
+}

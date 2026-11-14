@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_test_failure",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "attempt": 15,
+  "status": "FAIL_SOURCE_TEST",
+  "recorded_utc": "2026-09-16T04:36:48Z",
+  "finding": "The first focused review-25 correction run stopped on a test-only NameError: the imported producer module is named owner, not witness_owner. The source correction itself was not evaluated by the four affected subtests.",
+  "failure_archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-failure-20260915-31.tar.gz",
+    "sha256": "90f985d3491b16fd29300a7619eb735d7a19e64441b2dad5fed7f8704c2a90f1",
+    "size": 63343
+  },
+  "failing_source_sha256": {
+    "oracle.py": "485b094b1fbbe283635550cc4f46de21880fbf12295ee03ac21c479ffe6fcc68",
+    "test_collector_storage_fault_packet.py": "1c4064aaa4588a13e4602033165b4b34f3db35772da2141cca19761bf66f7325"
+  },
+  "focused_status": 1,
+  "focused_log_sha256": "73e752ca912bf311dbd65eb1f24acc66e0777f28d090ac829e0286f8e1b858e7",
+  "required_next": "Use the existing owner module binding, then rerun the exact old-accept/new-reject controls before the complete suites.",
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

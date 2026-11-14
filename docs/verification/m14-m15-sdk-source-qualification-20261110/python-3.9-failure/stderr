@@ -1,0 +1,24 @@
+Traceback (most recent call last):
+  File "/home/holden/anaconda3/lib/python3.9/runpy.py", line 197, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/home/holden/anaconda3/lib/python3.9/runpy.py", line 87, in _run_code
+    exec(code, run_globals)
+  File "/home/holden/anaconda3/lib/python3.9/unittest/__main__.py", line 18, in <module>
+    main(module=None)
+  File "/home/holden/anaconda3/lib/python3.9/unittest/main.py", line 100, in __init__
+    self.parseArgs(argv)
+  File "/home/holden/anaconda3/lib/python3.9/unittest/main.py", line 147, in parseArgs
+    self.createTests()
+  File "/home/holden/anaconda3/lib/python3.9/unittest/main.py", line 158, in createTests
+    self.test = self.testLoader.loadTestsFromNames(self.testNames,
+  File "/home/holden/anaconda3/lib/python3.9/unittest/loader.py", line 220, in loadTestsFromNames
+    suites = [self.loadTestsFromName(name, module) for name in names]
+  File "/home/holden/anaconda3/lib/python3.9/unittest/loader.py", line 220, in <listcomp>
+    suites = [self.loadTestsFromName(name, module) for name in names]
+  File "/home/holden/anaconda3/lib/python3.9/unittest/loader.py", line 154, in loadTestsFromName
+    module = __import__(module_name)
+  File "/home/holden/mckernel/scripts/tests/test_native_rust_exact_build_workflow.py", line 19, in <module>
+    from scripts import native_rust_runtime_evidence as runtime_evidence
+  File "/home/holden/mckernel/scripts/native_rust_runtime_evidence.py", line 67, in <module>
+    def _bootstrap_worker_authority_fds() -> dict[str, int] | None:
+TypeError: unsupported operand type(s) for |: 'types.GenericAlias' and 'NoneType'

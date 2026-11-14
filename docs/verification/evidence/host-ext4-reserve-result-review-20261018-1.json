@@ -1,0 +1,24 @@
+{
+  "decision": "PASS_EXACT_HOST_RESERVE_CHANGE_AND_MUTEX_RELEASE",
+  "reviewer": "/root/fpu_terminal_cleanup_review",
+  "implementation_ownership": false,
+  "release_sha256": "0b03e4de088b7f04b318ea13f73da5504a66e7a2ae1c6c6a1426e72bc9b200c1",
+  "evidence_root": "/home/holden/mckernel-work/scratch/host-ext4-reserve-execution-preparation-20261018-1",
+  "old_reserved_blocks": 12495987,
+  "new_reserved_blocks": 2499198,
+  "retained_reserve_bytes": 10236715008,
+  "nominal_accessibility_increase_bytes": 40946847744,
+  "measured_available_increase_bytes": 40946618368,
+  "measured_total_free_change_bytes": -229376,
+  "allocation_reclaimed_bytes": 0,
+  "mutation_count": 1,
+  "clients_retired": true,
+  "root_mutex_released": true,
+  "automatic_rollback": false,
+  "unchanged": [
+    "root UUID/device/block count/block size",
+    "boot",
+    "110GiB scratch backing identity"
+  ],
+  "scope": "Capacity operation only; no kernel/runtime acceptance. Executed reviewed guard and seven positive client ledgers establish retirement; no independent live process probe."
+}

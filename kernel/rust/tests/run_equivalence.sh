@@ -11,6 +11,14 @@ fi
 
 cd "${repo_root}"
 
+# The pending-free fixture is appended to exact production source slices by
+# its harness; compiling it alone would test a different ABI. The focused
+# harness retains its own source snapshots, commands, and first failure.
+rustc_path="${RUSTC:-$(command -v rustc)}"
+cc_path="${CC:-$(command -v cc)}"
+python3 -B kernel/rust/tests/pending_free_batch_actual_harness.py \
+	--rustc "${rustc_path}" --cc "${cc_path}"
+
 cat > "${tmpdir}/rbtree_equiv.c" <<'EOF_RBTREE'
 #include <stddef.h>
 #include <stdio.h>
@@ -2778,9 +2786,9 @@ extern int mem_virtual_allocator_init_body_result(void **, unsigned long,
 	unsigned long, unsigned long, int,
 	void *(*)(unsigned long, unsigned long, unsigned long),
 	int (*)(void *, void *, unsigned long, int));
-extern void *mem_map_virtual_body_result(void *, unsigned long, int, int,
+extern void *mem_map_virtual_body_result(void *, unsigned long, int, unsigned long,
 	unsigned long (*)(void *, int, int),
-	int (*)(void *, void *, unsigned long, int),
+	int (*)(void *, void *, unsigned long, unsigned long),
 	int (*)(void *, void *), void (*)(void *, unsigned long, int),
 	void (*)(unsigned long), void (*)(void));
 extern int mem_unmap_virtual_body_result(void *, void *, int,
@@ -3366,7 +3374,7 @@ static int vmap_set_count;
 static void *vmap_set_pt[8];
 static unsigned long vmap_set_virt[8];
 static unsigned long vmap_set_phys[8];
-static int vmap_set_attr[8];
+static unsigned long vmap_set_attr[8];
 static int vmap_set_fail_at;
 static int vmap_clear_count;
 static void *vmap_clear_pt[8];
@@ -4285,7 +4293,7 @@ static void fake_vmap_free(void *desc, unsigned long addr, int npages)
 }
 
 static int fake_vmap_set_page(void *pt, void *virt, unsigned long phys,
-			      int attr)
+			      unsigned long attr)
 {
 	int idx = vmap_set_count++;
 
@@ -4911,11 +4919,11 @@ int mem_virtual_allocator_init_body_result(void **vmap_allocator_slot,
 }
 
 void *mem_map_virtual_body_result(void *vmap_allocator, unsigned long phys,
-				  int npages, int attr,
+				  int npages, unsigned long attr,
 				  unsigned long (*pagealloc_alloc_fn)(void *,
 					int, int),
 				  int (*pt_set_page_fn)(void *, void *,
-					unsigned long, int),
+					unsigned long, unsigned long),
 				  int (*pt_clear_page_fn)(void *, void *),
 				  void (*pagealloc_free_fn)(void *,
 					unsigned long, int),
@@ -5244,7 +5252,7 @@ static unsigned long mem_runtime_orchestration_digest(void)
 		reset_vmap_trace();
 		vmap_alloc_return = 0x80000000UL;
 		ptr = mem_map_virtual_body_result(&vmap_allocator_token,
-			0x12345UL, 3, 0x55, fake_vmap_alloc,
+			0x12345UL, 3, 0x8000000000000055UL, fake_vmap_alloc,
 			fake_vmap_set_page, fake_vmap_clear_page,
 			fake_vmap_free, fake_vmap_flush, fake_vmap_barrier);
 		require(ptr == (void *)0x80000345UL);
@@ -5257,7 +5265,7 @@ static unsigned long mem_runtime_orchestration_digest(void)
 		require(vmap_set_virt[2] == 0x80002000UL);
 		require(vmap_set_phys[0] == 0x12000UL);
 		require(vmap_set_phys[2] == 0x14000UL);
-		require(vmap_set_attr[1] == 0x55);
+		require(vmap_set_attr[1] == 0x8000000000000055UL);
 		require(vmap_clear_count == 0);
 		require(vmap_flush_count == 3);
 		require(vmap_flush_addr[2] == 0x80002000UL);
@@ -18955,6 +18963,7 @@ static int fake_do_munmap_ro_freed;
 static unsigned long fake_do_munmap_remove_start;
 static unsigned long fake_do_munmap_remove_end;
 static int fake_do_munmap_clear_calls;
+static long fake_do_munmap_clear_rc;
 static unsigned long fake_do_munmap_clear_addr;
 static size_t fake_do_munmap_clear_len;
 static int fake_do_munmap_clear_holding;
@@ -21746,6 +21755,7 @@ fake_do_munmap_reset(int remove_rc, int ro_freed)
 	fake_do_munmap_remove_start = 0;
 	fake_do_munmap_remove_end = 0;
 	fake_do_munmap_clear_calls = 0;
+	fake_do_munmap_clear_rc = 0;
 	fake_do_munmap_clear_addr = 0;
 	fake_do_munmap_clear_len = 0;
 	fake_do_munmap_clear_holding = 0;
@@ -21781,7 +21791,7 @@ fake_do_munmap_remove(void *vm, unsigned long start, unsigned long end,
 	return fake_do_munmap_remove_rc;
 }
 
-static void
+static long
 fake_do_munmap_clear(unsigned long addr, size_t len, int holding)
 {
 	fake_do_munmap_clear_calls++;
@@ -21791,6 +21801,7 @@ fake_do_munmap_clear(unsigned long addr, size_t len, int holding)
 	mix(&fake_do_munmap_digest, addr);
 	mix(&fake_do_munmap_digest, len);
 	mix_signed(&fake_do_munmap_digest, holding);
+	return fake_do_munmap_clear_rc;
 }
 
 static int
@@ -25425,10 +25436,13 @@ extern int syscall_send_prepare_result(struct fake_syscall_request *,
 				       struct fake_syscall_response *);
 extern int syscall_request_copy_result(struct fake_syscall_request *,
 				       const struct fake_syscall_request *);
+extern int syscall_request_publish_result(struct fake_syscall_request *);
 extern long syscall_generic_forwarding_body_result(
 	struct fake_syscall_request *, int, unsigned long, unsigned long,
 	unsigned long, unsigned long, unsigned long, unsigned long, int,
 	long (*)(struct fake_syscall_request *, int));
+extern void syscall_offload_wait_reply(struct fake_syscall_request *,
+	struct fake_syscall_response *, int, void *);
 extern int syscall_packet_traditional_prepare_result(
 	struct fake_ikc_scd_packet *, int, int, int, unsigned long);
 extern int syscall_eventfd_packet_prepare_result(
@@ -25483,7 +25497,7 @@ extern int do_munmap_body_result(void *, void *, unsigned long, size_t, int,
 				 size_t, size_t, void (*)(void),
 				 int (*)(void *, unsigned long, unsigned long,
 					 int *),
-				 void (*)(unsigned long, size_t, int),
+				 long (*)(unsigned long, size_t, int),
 				 int (*)(unsigned long, size_t, int, int),
 				 void (*)(void),
 				 void (*)(unsigned long, size_t, int));
@@ -29561,6 +29575,24 @@ static void exercise_unmap_protect(unsigned long *digest)
 			require(fake_do_munmap_remove_start == 0x14000UL);
 			require(fake_do_munmap_remove_end == 0x15000UL);
 			require(fake_do_munmap_clear_holding == 1);
+			require(fake_do_munmap_log_calls == 1);
+			mix(digest, fake_do_munmap_digest);
+			mix_signed(digest, rc);
+
+			fake_do_munmap_reset(0, 0);
+			fake_do_munmap_clear_rc = -44;
+			rc = do_munmap_body_result(&fake_vm, &proc, 0x14800UL,
+				PAGE_SIZE, 1,
+				offsetof(struct fake_do_munmap_proc,
+					 straight_va),
+				offsetof(struct fake_do_munmap_proc,
+					 straight_len),
+				fake_do_munmap_begin, fake_do_munmap_remove,
+				fake_do_munmap_clear, fake_do_munmap_sethost,
+				fake_do_munmap_finish, fake_do_munmap_log);
+			require(rc == -44);
+			require(fake_do_munmap_clear_calls == 1);
+			require(fake_do_munmap_log_calls == 1);
 			mix(digest, fake_do_munmap_digest);
 			mix_signed(digest, rc);
 
@@ -29603,6 +29635,7 @@ static void exercise_unmap_protect(unsigned long *digest)
 			mix_signed(digest, rc);
 
 			fake_do_munmap_reset(-12, 0);
+			fake_do_munmap_clear_rc = -45;
 			rc = do_munmap_body_result(&fake_vm, &proc, 0x17000UL,
 				PAGE_SIZE, 1,
 				offsetof(struct fake_do_munmap_proc,
@@ -29615,6 +29648,7 @@ static void exercise_unmap_protect(unsigned long *digest)
 			require(rc == -12);
 			require(fake_do_munmap_clear_calls == 1);
 			require(fake_do_munmap_sethost_calls == 0);
+			require(fake_do_munmap_log_calls == 1);
 			mix(digest, fake_do_munmap_digest);
 			mix_signed(digest, rc);
 
@@ -43215,6 +43249,9 @@ int main(void)
 		require(send_res.pde_data == (void *)0x1234);
 		require(syscall_send_prepare_result(NULL, &send_res) == -22);
 		require(syscall_send_prepare_result(&send_req, NULL) == -22);
+		require(syscall_request_publish_result(&send_req) == 0);
+		require(send_req.valid == 1);
+		require(syscall_request_publish_result(NULL) == -22);
 		mix(&digest, send_req.valid);
 		mix(&digest, send_res.status);
 	}
@@ -43247,6 +43284,59 @@ int main(void)
 		mix_signed(&digest, dst_req.ttid);
 		mix(&digest, dst_req.valid);
 		mix(&digest, dst_req.args[5]);
+	}
+	{
+		struct fake_syscall_request src_req;
+		struct fake_syscall_request roundtrip_req;
+		_Alignas(struct fake_syscall_request)
+			unsigned char src_bytes[sizeof(src_req) + 1];
+		_Alignas(struct fake_syscall_request)
+			unsigned char dst_bytes[sizeof(roundtrip_req) + 1];
+		const struct fake_syscall_request *unaligned_src =
+			(const void *)(src_bytes + 1);
+		struct fake_syscall_request *unaligned_dst =
+			(void *)(dst_bytes + 1);
+
+		memset(&src_req, 0xa5, sizeof(src_req));
+		src_req.rtid = -1234567;
+		src_req.ttid = 7654321;
+		src_req.valid = 0x0123456789abcdefUL;
+		src_req.number = 0xfedcba9876543210UL;
+		src_req.args[0] = 0x1111111111111111UL;
+		src_req.args[1] = 0x2222222222222222UL;
+		src_req.args[2] = 0x3333333333333333UL;
+		src_req.args[3] = 0x4444444444444444UL;
+		src_req.args[4] = 0x5555555555555555UL;
+		src_req.args[5] = 0x6666666666666666UL;
+		memset(src_bytes, 0x3c, sizeof(src_bytes));
+		memcpy(src_bytes + 1, &src_req, sizeof(src_req));
+		memset(dst_bytes, 0xc3, sizeof(dst_bytes));
+
+		require((uintptr_t)unaligned_src % _Alignof(struct fake_syscall_request)
+			!= 0);
+		require((uintptr_t)unaligned_dst % _Alignof(struct fake_syscall_request)
+			!= 0);
+		require(syscall_request_copy_result(unaligned_dst,
+			unaligned_src) == 0);
+		require(memcmp(dst_bytes + 1, src_bytes + 1,
+			sizeof(src_req)) == 0);
+		memcpy(&roundtrip_req, dst_bytes + 1, sizeof(roundtrip_req));
+		require(roundtrip_req.rtid == -1234567);
+		require(roundtrip_req.ttid == 7654321);
+		require(roundtrip_req.valid == 0x0123456789abcdefUL);
+		require(roundtrip_req.number == 0xfedcba9876543210UL);
+		require(roundtrip_req.args[0] == 0x1111111111111111UL);
+		require(roundtrip_req.args[1] == 0x2222222222222222UL);
+		require(roundtrip_req.args[2] == 0x3333333333333333UL);
+		require(roundtrip_req.args[3] == 0x4444444444444444UL);
+		require(roundtrip_req.args[4] == 0x5555555555555555UL);
+		require(roundtrip_req.args[5] == 0x6666666666666666UL);
+		mix_signed(&digest, roundtrip_req.rtid);
+		mix_signed(&digest, roundtrip_req.ttid);
+		mix(&digest, roundtrip_req.valid);
+		mix(&digest, roundtrip_req.number);
+		mix(&digest, roundtrip_req.args[0]);
+		mix(&digest, roundtrip_req.args[5]);
 	}
 	{
 		struct fake_syscall_request generic_req = {
@@ -43293,6 +43383,36 @@ int main(void)
 		mix(&digest, generic_req.number);
 		mix(&digest, generic_req.args[0]);
 		mix(&digest, generic_req.args[5]);
+	}
+	{
+		struct fake_syscall_request completed_req = {
+			.rtid = 1,
+			.ttid = 2,
+			.valid = 3,
+			.number = 39,
+			.args = { 4, 5, 6, 7, 8, 9 },
+		};
+		struct fake_syscall_response completed_res = {
+			.ttid = 10,
+			.stid = 11,
+			.status = 1,
+			.req_thread_status = 12,
+			.ret = 13,
+			.fault_address = 14,
+			.pde_data = (void *)0x1234,
+		};
+		struct fake_syscall_request before_req = completed_req;
+		struct fake_syscall_response before_res = completed_res;
+		struct {
+			unsigned char bytes[5568];
+		} __attribute__((aligned(64))) thread_storage = { { 0 } };
+
+		syscall_offload_wait_reply(&completed_req, &completed_res, 7,
+			&thread_storage);
+		require(memcmp(&completed_req, &before_req, sizeof(completed_req)) == 0);
+		require(memcmp(&completed_res, &before_res, sizeof(completed_res)) == 0);
+		mix(&digest, completed_res.status);
+		mix_signed(&digest, completed_res.ret);
 	}
 	{
 		struct fake_ikc_scd_packet packet = {
@@ -90850,7 +90970,15 @@ extern unsigned long x86_set_pte_value_result(unsigned long, unsigned long,
 					      unsigned long);
 extern void set_pte(unsigned long *, unsigned long, unsigned long)
 	__attribute__((weak));
+extern unsigned long x86_init_text_map_kernel_start_bridge(void)
+	__attribute__((weak));
+extern const unsigned long x86_map_kernel_start_geometry;
+extern unsigned long x86_init_text_end_bridge(void)
+	__attribute__((weak));
+extern char _end[];
 extern int set_pt_large_page(void *, void *, unsigned long, unsigned long)
+	__attribute__((weak));
+extern int x86_init_normal_set_large_bridge(void *, unsigned long, unsigned long, unsigned long)
 	__attribute__((weak));
 extern int ihk_mc_pt_set_large_page(void *, void *, unsigned long, unsigned long)
 	__attribute__((weak));
@@ -93826,6 +93954,11 @@ int main(void)
 		set_pte(&slot, 0x12345000UL, PTATTR_WRITABLE | PTATTR_USER);
 		require(slot == expected);
 	}
+	if (x86_init_text_map_kernel_start_bridge)
+		require(x86_init_text_map_kernel_start_bridge() ==
+				x86_map_kernel_start_geometry);
+	if (x86_init_text_end_bridge)
+		require(x86_init_text_end_bridge() == (unsigned long)_end);
 	if (set_pt_large_page && ihk_mc_pt_set_large_page &&
 			ihk_mc_pt_set_page) {
 		x86_rust_stub_pt_set_page_calls = 0;
@@ -93863,6 +93996,19 @@ int main(void)
 		require(x86_rust_stub_pt_set_page_phys == 0x99990000UL);
 		require(x86_rust_stub_pt_set_page_attr ==
 				(PTATTR_USER | PTATTR_ACTIVE));
+		if (x86_init_normal_set_large_bridge) {
+			x86_rust_stub_pt_set_page_calls = 0;
+			require(x86_init_normal_set_large_bridge((void *)0xaaaaUL,
+					~0UL, 0xdddd0000UL,
+					PTATTR_NO_EXECUTE | PTATTR_WRITABLE) == -5);
+			require(x86_rust_stub_pt_set_page_calls == 1);
+			require(x86_rust_stub_pt_set_page_pt == (void *)0xaaaaUL);
+			require(x86_rust_stub_pt_set_page_virt == ~0UL);
+			require(x86_rust_stub_pt_set_page_phys == 0xdddd0000UL);
+			require(x86_rust_stub_pt_set_page_attr ==
+					(PTATTR_NO_EXECUTE | PTATTR_WRITABLE |
+					PTATTR_LARGEPAGE | PTATTR_ACTIVE));
+		}
 		x86_rust_stub_pt_set_page_rc = 0;
 	}
 	size_t sizes[] = {
@@ -102439,6 +102585,28 @@ int main(void)
 
 		reset_find_libdir_fakes();
 		reset_ld_preload_fakes();
+		fake_ld_preload_cleanup_present = 1;
+		mcexec_ld_preload_init_body();
+		require(fake_find_libdir_readlink_count == 0);
+		require(fake_find_libdir_popen_count == 0);
+		require(fake_ld_preload_find_failed_count == 0);
+		require(fake_ld_preload_setenv_count == 0);
+		require(fake_ld_preload_debug_count == 0);
+		require(fake_ld_preload_unsetenv_count == 1);
+		require(fake_ld_preload_getenv_count == 2);
+
+		reset_find_libdir_fakes();
+		reset_ld_preload_fakes();
+		mcexec_ld_preload_init_body();
+		require(fake_find_libdir_readlink_count == 0);
+		require(fake_find_libdir_popen_count == 0);
+		require(fake_ld_preload_find_failed_count == 0);
+		require(fake_ld_preload_getenv_count == 2);
+		require(fake_ld_preload_setenv_count == 0);
+		require(fake_ld_preload_unsetenv_count == 0);
+
+		reset_find_libdir_fakes();
+		reset_ld_preload_fakes();
 		snprintf(fake_find_libdir_readlink_target,
 			 sizeof(fake_find_libdir_readlink_target), "%s",
 			 "/self/mcexec");
@@ -102449,18 +102617,84 @@ int main(void)
 			 "/opt/mck/lib\n");
 		fake_find_libdir_getline_ret =
 			(ssize_t)strlen(fake_find_libdir_getline_line);
-		fake_ld_preload_cleanup_present = 1;
+		fake_ld_preload_existing_present = 1;
+		snprintf(fake_ld_preload_existing,
+			 sizeof(fake_ld_preload_existing), "%s", "EXISTING");
 		mcexec_ld_preload_init_body();
-		require(fake_ld_preload_setenv_count == 0);
-		require(fake_ld_preload_debug_count == 0);
-		require(fake_ld_preload_unsetenv_count == 1);
+		require(fake_find_libdir_readlink_count == 1);
+		require(fake_find_libdir_popen_count == 1);
+		require(fake_ld_preload_setenv_count == 1);
+		require(strcmp(fake_ld_preload_setenv_value, "EXISTING") == 0);
+		require(fake_ld_preload_debug_count == 1);
+		require(fake_ld_preload_unsetenv_count == 0);
+
+		reset_find_libdir_fakes();
+		reset_ld_preload_fakes();
+		snprintf(fake_find_libdir_readlink_target,
+			 sizeof(fake_find_libdir_readlink_target), "%s",
+			 "/self/mcexec");
+		fake_find_libdir_readlink_ret =
+			(ssize_t)strlen(fake_find_libdir_readlink_target);
+		snprintf(fake_find_libdir_getline_line,
+			 sizeof(fake_find_libdir_getline_line), "%s",
+			 "/opt/mck/lib\n");
+		fake_find_libdir_getline_ret =
+			(ssize_t)strlen(fake_find_libdir_getline_line);
+		fake_ld_preload_enable_uti = 1;
+		mcexec_ld_preload_init_body();
+		require(fake_find_libdir_readlink_count == 1);
+		require(fake_find_libdir_popen_count == 1);
+		require(fake_ld_preload_setenv_count == 1);
+		require(strcmp(fake_ld_preload_setenv_value,
+			       "/opt/mck/lib/libmck_syscall_intercept.so") == 0);
+
+		reset_find_libdir_fakes();
+		reset_ld_preload_fakes();
+		snprintf(fake_find_libdir_readlink_target,
+			 sizeof(fake_find_libdir_readlink_target), "%s",
+			 "/self/mcexec");
+		fake_find_libdir_readlink_ret =
+			(ssize_t)strlen(fake_find_libdir_readlink_target);
+		snprintf(fake_find_libdir_getline_line,
+			 sizeof(fake_find_libdir_getline_line), "%s",
+			 "/opt/mck/lib\n");
+		fake_find_libdir_getline_ret =
+			(ssize_t)strlen(fake_find_libdir_getline_line);
+		fake_ld_preload_disable_sched_yield = 1;
+		mcexec_ld_preload_init_body();
+		require(fake_find_libdir_readlink_count == 1);
+		require(fake_find_libdir_popen_count == 1);
+		require(fake_ld_preload_setenv_count == 1);
+		require(strcmp(fake_ld_preload_setenv_value,
+			       "/opt/mck/lib/libsched_yield.so.1.0.0") == 0);
+
+		reset_find_libdir_fakes();
+		reset_ld_preload_fakes();
+		snprintf(fake_find_libdir_readlink_target,
+			 sizeof(fake_find_libdir_readlink_target), "%s",
+			 "/self/mcexec");
+		fake_find_libdir_readlink_ret =
+			(ssize_t)strlen(fake_find_libdir_readlink_target);
+		snprintf(fake_find_libdir_getline_line,
+			 sizeof(fake_find_libdir_getline_line), "%s",
+			 "/opt/mck/lib\n");
+		fake_find_libdir_getline_ret =
+			(ssize_t)strlen(fake_find_libdir_getline_line);
+		fake_ld_preload_enable_qlmpi = 1;
+		mcexec_ld_preload_init_body();
+		require(fake_find_libdir_readlink_count == 1);
+		require(fake_find_libdir_popen_count == 1);
+		require(fake_ld_preload_setenv_count == 1);
+		require(strcmp(fake_ld_preload_setenv_value,
+			       "/opt/mck/lib/libqlfort.so") == 0);
 
 		reset_find_libdir_fakes();
 		reset_ld_preload_fakes();
 		fake_find_libdir_readlink_ret = -1;
+		fake_ld_preload_enable_uti = 1;
 		mcexec_ld_preload_init_body();
 		require(fake_ld_preload_find_failed_count == 1);
-		require(fake_ld_preload_getenv_count == 0);
+		require(fake_ld_preload_getenv_count == 1);
 		require(fake_ld_preload_setenv_count == 0);
 
 		reset_find_libdir_fakes();
@@ -141297,7 +141531,32 @@ __attribute__((weak)) void smp_store_release_int(int *p, int value)
 }
 __attribute__((weak)) void arch_delay(int us) { (void)us; }
 __attribute__((weak)) void ihk_mc_delay_us(int us) { (void)us; }
-__attribute__((weak)) void set_timer(int runq_locked) { (void)runq_locked; }
+struct timer_runtime_offsets {
+	unsigned long thread_status_offset;
+	unsigned long thread_sched_list_offset;
+	unsigned long thread_spin_sleep_lock_offset;
+	unsigned long thread_spin_sleep_offset;
+	unsigned long thread_itimer_enabled_offset;
+	unsigned long cpu_runq_lock_offset;
+	unsigned long cpu_runq_offset;
+	unsigned long cpu_runq_len_offset;
+	unsigned long cpu_current_offset;
+	unsigned long cpu_timer_enabled_offset;
+	unsigned long cpu_backlog_list_offset;
+	unsigned long timer_timeout_offset;
+	unsigned long timer_waitq_offset;
+	unsigned long timer_list_offset;
+	unsigned long timer_thread_offset;
+};
+/* Only host equivalence bindings; production providers remain process.c. */
+__attribute__((weak)) const struct timer_runtime_offsets process_timer_runtime_offsets;
+__attribute__((weak)) unsigned long process_timer_spin_lock_bridge(unsigned long p)
+{ (void)p; return 0; }
+__attribute__((weak)) void process_timer_spin_unlock_bridge(unsigned long p, unsigned long s)
+{ (void)p; (void)s; }
+__attribute__((weak)) void process_timer_lapic_enable_bridge(unsigned int c) { (void)c; }
+__attribute__((weak)) void process_timer_lapic_disable_bridge(void) {}
+
 __attribute__((weak)) int ihk_ikc_send(void *channel, void *packet, int opt)
 {
 	(void)channel;
@@ -142295,6 +142554,35 @@ struct rust_stub_pager_map_result {
 	char padding[4];
 	char path[4096];
 };
+struct rust_stub_syscall_request {
+	int rtid;
+	int ttid;
+	unsigned long valid;
+	unsigned long number;
+	unsigned long args[6];
+};
+__attribute__((weak)) long do_syscall(struct rust_stub_syscall_request *req,
+		int cpu)
+{
+	(void)cpu;
+	if (!req)
+		return -22;
+	if (req->args[0] == 5) {
+		struct rust_stub_pager_map_result *result =
+			(struct rust_stub_pager_map_result *)req->args[4];
+		if (result) {
+			result->handle = 0x12345000UL;
+			result->maxprot = (int)req->args[5];
+			result->path[0] = 0;
+		}
+	}
+	else if (req->args[0] == 6) {
+		unsigned long *pfn = (unsigned long *)req->args[3];
+		if (pfn)
+			*pfn = (1UL << 63) | 1UL | 0x2000UL;
+	}
+	return 0;
+}
 __attribute__((weak)) long syscall_generic_forwarding(int n,
 		struct rust_stub_user_context *ctx)
 {
@@ -142360,7 +142648,7 @@ __attribute__((weak)) void mem_vmap_free_bridge(void *desc,
 	(void)npages;
 }
 __attribute__((weak)) int mem_pt_set_page_bridge(void *pt, void *virt,
-		unsigned long phys, int attr)
+		unsigned long phys, unsigned long attr)
 {
 	(void)pt;
 	(void)virt;
@@ -142564,15 +142852,6 @@ unsigned long x86_init_normal_get_memory_address_bridge(int type, int arg)
 	(void)arg;
 	return type ? 0x400000UL : 0x200000UL;
 }
-int x86_init_normal_set_large_bridge(void *pt, unsigned long virt,
-		unsigned long phys, unsigned long attr)
-{
-	(void)pt;
-	(void)virt;
-	(void)phys;
-	(void)attr;
-	return 0;
-}
 void x86_init_normal_log_bridge(int event, unsigned long a,
 		unsigned long b, unsigned long c)
 {
@@ -142623,14 +142902,7 @@ void x86_init_text_log_bridge(int event, unsigned long a,
 	(void)b;
 	(void)c;
 }
-unsigned long x86_init_text_map_kernel_start_bridge(void)
-{
-	return 0xfffffe0000000000UL;
-}
-unsigned long x86_init_text_end_bridge(void)
-{
-	return 0xfffffe0000200000UL;
-}
+const unsigned long x86_map_kernel_start_geometry = 0xfffffe0000000000UL;
 void x86_init_text_panic_bridge(void)
 {
 }
@@ -142754,7 +143026,7 @@ __attribute__((weak)) int ihk_mc_get_interrupt_id(int cpu)
 {
 	return cpu + 0x40;
 }
-__attribute__((weak)) void spin_sleep_or_schedule(void) {}
+/* spin_sleep_or_schedule is supplied by the actual Rust scheduler object. */
 struct sig_pending;
 __attribute__((weak)) struct sig_pending *hassigpending(struct thread *thread)
 {
@@ -142811,6 +143083,21 @@ __attribute__((weak)) int futex_atomic_op_inuser_bridge(int op, int *uaddr,
 }
 static void *rust_stub_ikc2linux_entries[8];
 __attribute__((weak)) void **ikc2linuxs = rust_stub_ikc2linux_entries;
+__attribute__((weak)) void check_sig_pending(void) {}
+__attribute__((weak)) long syscall_dispatch_context_bridge(int num, void *ctx)
+{
+	(void)num;
+	(void)ctx;
+	return -38;
+}
+__attribute__((weak)) void syscall_offload_wait_reply(void *req, void *res,
+		int cpu, void *thread)
+{
+	(void)req;
+	(void)res;
+	(void)cpu;
+	(void)thread;
+}
 __attribute__((weak)) void schedule(void) {}
 unsigned long shmid_index[512];
 __attribute__((weak)) unsigned long attr_mask =
@@ -143014,6 +143301,10 @@ cc "${kflags[@]}" -I"${tmpdir}" -ffunction-sections -fdata-sections \
 	-DMCKERNEL_SCHED_POLICY_HELPERS_TEST_EXPORT \
 	-DMCKERNEL_SYSCALL_POLICY_HELPERS_TEST_EXPORT -c kernel/syscall.c \
 	-o "${tmpdir}/out/syscall_shmid_c.o"
+cc "${kflags[@]}" -I"${tmpdir}" -ffunction-sections -fdata-sections \
+	-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS \
+	-DMCKERNEL_RUST_SYSCALL_OFFLOAD -c kernel/syscall.c \
+	-o "${tmpdir}/out/syscall_offload_dispatch_c.o"
 cc "${kflags[@]}" -I"${tmpdir}" -ffunction-sections -fdata-sections \
 	-DMCKERNEL_XPMEM_HELPERS_TEST_EXPORT -c kernel/xpmem.c \
 	-o "${tmpdir}/out/xpmem_helpers_c.o"
@@ -143721,6 +144012,8 @@ diff -u "${tmpdir}/out/x86_cpu_helpers_c.out" "${tmpdir}/out/x86_cpu_helpers_rus
 
 nm -u "${tmpdir}/out/mckernel_rust.o" | tee "${tmpdir}/out/rust.undefined"
 nm -g "${tmpdir}/out/mckernel_rust.o" > "${tmpdir}/out/rust.global"
+nm -g "${tmpdir}/out/syscall_offload_dispatch_c.o" \
+	> "${tmpdir}/out/syscall_offload_dispatch.global"
 nm -g "${tmpdir}/out/ihk_core_helpers.o" > "${tmpdir}/out/ihk_core_helpers.global"
 nm -g "${tmpdir}/out/mcexec_helpers.o" > "${tmpdir}/out/mcexec_helpers.global"
 nm -g "${tmpdir}/out/eclair_helpers.o" > "${tmpdir}/out/eclair_helpers.global"
@@ -143876,6 +144169,21 @@ grep -Eq ' T futex_atomic_op_inuser$' "${tmpdir}/out/rust.global"
 grep -Eq ' T ihk_atomic_inc_return$' "${tmpdir}/out/rust.global"
 grep -Eq ' T ihk_atomic_dec_return$' "${tmpdir}/out/rust.global"
 grep -Eq ' T mc_jhash2$' "${tmpdir}/out/rust.global"
+for sym in send_syscall syscall_generic_forwarding \
+	syscall_offload_wait_reply syscall_request_publish_result
+do
+	grep -Eq " T ${sym}$" "${tmpdir}/out/rust.global"
+done
+grep -Eq ' T do_syscall$' "${tmpdir}/out/syscall_offload_dispatch.global"
+grep -Eq ' T syscall_dispatch_context_bridge$' \
+	"${tmpdir}/out/syscall_offload_dispatch.global"
+for sym in send_syscall syscall_generic_forwarding syscall_offload_wait_reply
+do
+	grep -Eq " U ${sym}$" "${tmpdir}/out/syscall_offload_dispatch.global"
+	if grep -Eq " T ${sym}$" "${tmpdir}/out/syscall_offload_dispatch.global"; then
+		exit 1
+	fi
+done
 grep -Eq ' T futex_atomic_cmpxchg_inatomic$' "${tmpdir}/out/mcctrl_helpers.global"
 grep -Eq ' T futex_atomic_op_inuser$' "${tmpdir}/out/mcctrl_helpers.global"
 grep -Eq ' T mc_jhash2$' "${tmpdir}/out/mcctrl_helpers.global"
@@ -144795,7 +145103,8 @@ grep -Eq 'U runq_reservation_lock' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U waitq_sched_wakeup_thread_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U waitq_sched_wakeup_thread_locked_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U schedule' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U spin_sleep_or_schedule' "${tmpdir}/out/rust.undefined"
+grep -Eq ' T spin_sleep_or_schedule$' "${tmpdir}/out/rust.global"
+! grep -Eq 'U spin_sleep_or_schedule$' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U time$' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U arch_copy_to_user_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U arch_copy_from_user_bridge' "${tmpdir}/out/rust.undefined"
@@ -144973,7 +145282,13 @@ grep -Eq 'U ihk_mc_register_interrupt_handler' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_unregister_interrupt_handler' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U init_process_stack' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U kmalloc_init' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U set_timer' "${tmpdir}/out/rust.undefined"
+grep -Eq ' T set_timer$' "${tmpdir}/out/rust.global"
+! grep -Eq 'U set_timer$' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_timer_runtime_offsets$' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_timer_spin_lock_bridge$' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_timer_spin_unlock_bridge$' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_timer_lapic_enable_bridge$' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_timer_lapic_disable_bridge$' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U pvti$' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U pvti_npages' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U pvti_msr' "${tmpdir}/out/rust.undefined"
@@ -145019,7 +145334,12 @@ grep -Eq 'U cpu_enable_interrupt_save' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U cpu_interrupt_disabled' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U phys_to_page' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U phys_to_page_insert_hash' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U syscall_generic_forwarding' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U do_syscall' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U check_sig_pending' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_dispatch_context_bridge' "${tmpdir}/out/rust.undefined"
+if grep -Eq 'U syscall_generic_forwarding' "${tmpdir}/out/rust.undefined"; then
+	exit 1
+fi
 grep -Eq 'U syscall_rdtsc_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U syscall_ns_per_tsc_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U syscall_has_sigpending_bridge' "${tmpdir}/out/rust.undefined"
@@ -145168,7 +145488,8 @@ grep -Eq 'U x86_map_fixed_area_log_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_pt_set_page_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_move_flush_tlb_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_init_normal_get_memory_address_bridge' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U x86_init_normal_set_large_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq ' T x86_init_normal_set_large_bridge$' "${tmpdir}/out/rust.global"
+! grep -Eq 'U x86_init_normal_set_large_bridge$' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_init_normal_log_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_init_normal_panic_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_init_linux_find_command_line_bridge' "${tmpdir}/out/rust.undefined"
@@ -145177,8 +145498,12 @@ grep -Eq 'U x86_init_linux_get_memory_chunk_bridge' "${tmpdir}/out/rust.undefine
 grep -Eq 'U x86_init_linux_log_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_init_linux_panic_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_init_text_log_bridge' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U x86_init_text_map_kernel_start_bridge' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U x86_init_text_end_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq ' T x86_init_text_map_kernel_start_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq 'U x86_map_kernel_start_geometry$' "${tmpdir}/out/rust.undefined"
+! grep -Eq 'U x86_init_text_map_kernel_start_bridge$' "${tmpdir}/out/rust.undefined"
+grep -Eq ' T x86_init_text_end_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq 'U _end$' "${tmpdir}/out/rust.undefined"
+! grep -Eq 'U x86_init_text_end_bridge$' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_init_text_panic_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_init_low_panic_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_init_fixed_panic_bridge' "${tmpdir}/out/rust.undefined"
@@ -145193,7 +145518,40 @@ grep -Eq 'U x86_xsave_size_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_xsave_mask_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U xpmem_page_in_remote_on_attach' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U uti_desc' "${tmpdir}/out/rust.undefined"
-test "$(grep -c ' U ' "${tmpdir}/out/rust.undefined")" -eq 577
+test "$(grep -c ' U ' "${tmpdir}/out/rust.undefined")" -eq 596
+
+python3 - "${repo_root}/kernel/rust/syscall_policy.rs" <<'PY'
+import sys
+
+source = open(sys.argv[1], "r").read()
+signature = 'pub unsafe extern "C" fn syscall_request_copy_result('
+start = source.index(signature)
+end = source.index("\n}\n", start)
+body = source[start:end]
+for required in (
+    "copy_nonoverlapping(",
+    "src.cast::<u8>()",
+    "dst.cast::<u8>()",
+    "size_of::<SyscallRequest>()",
+):
+    if required not in body:
+        raise SystemExit(
+            "syscall request copy lost byte-oriented memcpy contract: " + required
+        )
+for forbidden in (
+    "(*src).",
+    "(*dst).",
+    "addr_of!((*src)",
+    "addr_of_mut!((*dst)",
+    "read(src",
+    "write(dst",
+):
+    if forbidden in body:
+        raise SystemExit(
+            "syscall request copy reintroduced typed unaligned access: " + forbidden
+        )
+print("syscall request copy byte-orientation check ok")
+PY
 
 for rust_kernel_context_obj in \
 	"${tmpdir}/out/mckernel_rust.o" \

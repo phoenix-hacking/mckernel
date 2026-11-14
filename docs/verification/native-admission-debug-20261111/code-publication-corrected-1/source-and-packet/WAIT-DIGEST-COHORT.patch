@@ -1,0 +1,278 @@
+--- /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/WAIT-INSTALL-CODE-current.py
++++ /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/WAIT-INSTALL-CODE-current.py
+@@ -1,5 +1,5 @@
+ import fcntl,hashlib,json,os,select,signal,struct,sys,time,types
+-EXPECTED='d87594a07ecd27d0760b418cb51c64f67f0b01e889d5c3b587cadd080944d8f5'
++EXPECTED='8076a13c5c47230f2059c150036b0aac6d4c9b1ae64bd1d0f6de011ecaf8521c'
+ if len(sys.argv)!=17:raise ValueError('exact waiting-installer argv required')
+ source_fd,ready_fd,go_fd,root_fd,package_fd,code_fd,lease_fd,closure_fd,controls_fd,capacity_fd,host_fd,owner_fd=map(int,sys.argv[1:13])
+ nonce,deadline,installer_path,boot_id=sys.argv[13:17];deadline=int(deadline)
+--- /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/preliminary-current.py
++++ /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/preliminary-current.py
+@@ -14,7 +14,7 @@
+ RETAINED_READER=HERE.parent.parent/'DISPATCHER-SOL-MAX-20261030-1'/'sdk21-nonheld13-owner-source-1'/'sdk13_daemon_metadata_reader.v4.py'
+ RETAINED_READER_SHA='ef5eadb127f024275e10cbe2d4c8b2f2a8cf1a3fe301a20cd7d23a627df1d9f8'
+ RELEASE=HERE/'ROOT-PRELIMINARY-RELEASE.ACTUAL.json';OUTPUT=HERE/'preliminary-direct-parent-1';INNER=HERE/'preliminary-observation-1'
+-CURRENT=Path('/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1')
++CURRENT=Path('/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1')
+ CONTROLS=CURRENT/'ACTUAL-CONTROLS-CURRENT.json';CAPACITY=CURRENT/'ACTUAL-CAPACITY-CURRENT.json'
+ LAUNCHER_STATE=Path('/home/holden/mckernel/.git/os-autopilot/state.json')
+ USAGE_EVIDENCE=CURRENT/'ACTUAL-ACCOUNT-CURRENT.json'
+--- /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/prepare-install-current.py
++++ /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/prepare-install-current.py
+@@ -7,8 +7,8 @@
+ from datetime import datetime
+ from pathlib import Path
+ 
+-PRELIM=Path('/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/preliminary-current.py')
+-PRELIM_SHA='7342da356f761486313e48e4cdb468a56529ad4a37daa469a37e9ecdfe7ca508'
++PRELIM=Path('/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/preliminary-current.py')
++PRELIM_SHA='bd17fc02c88db4bdd0de0f598392308af4e939d7a68533643220947c912a9caf'
+ OUTER_PID=762050
+ OUTER_BIRTH='37669567'
+ 
+--- /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/direct-entry-current.py
++++ /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/direct-entry-current.py
+@@ -9,8 +9,8 @@
+ import types
+ 
+ BASE='/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1'
+-HERE='/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1'
+-CURRENT='/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1'
++HERE='/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1'
++CURRENT='/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1'
+ PACKAGE='/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-real-binding-source-1/complete-interface-1/complete-candidate-2/correction-1/package'
+ PRELIM=CURRENT+'/preliminary-current.py'
+ IPC=BASE+'/root-install-parent-successor-1/parent_control.py'
+@@ -23,10 +23,10 @@
+ ISSUER_SHA='db5086a8f7574a6536ffe31d5d2a443ddfaaf1c51244223ddb7288936c9bd2d3'
+ COMPLETION_SHA='06b0501d38d9c3bc0b5e1b919676cd9eb727ece8f7c5997bf8d40248c60f2e22'
+ PHASE_SHA='f0771fbd3bfe4dcf7cfa89f6259e46011fb96fb81786113365ab4ea75118fab5'
+-WAIT_SHA='2ed1a7a3cc5cd72d70d6c4a3a05f8b4f2dcc524fcada7ae75a84e099b2ce5719'
++WAIT_SHA='da47f7fcc4cc1e44b68cacd8115941d5358de68ea3e415eec33cf854f7605b5d'
+ IPC_SHA='eda1ff0139c3bbf0c713009fc7728eccf3418cc7ce5d028731bc443837d49bbe'
+ CLOSURE_SHA='56df8d9ba9ee78c8955b80861bb1fcbc39305f64439129b1174e457d91c85ce5'
+-PRELIM_SHA='7342da356f761486313e48e4cdb468a56529ad4a37daa469a37e9ecdfe7ca508'
++PRELIM_SHA='bd17fc02c88db4bdd0de0f598392308af4e939d7a68533643220947c912a9caf'
+ HELD=[]
+ CLOSE_HISTORY=[]
+ LOAD_STATE='NEW'
+--- /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/BOOTSTRAP-current.py
++++ /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/BOOTSTRAP-current.py
+@@ -3,12 +3,12 @@
+ from decimal import Decimal
+ 
+ BASE='/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1'
+-PARENT_PATH='/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/root_parent-current.py'
+-ENTRY_PATH='/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/direct-entry-current.py'
++PARENT_PATH='/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/root_parent-current.py'
++ENTRY_PATH='/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/direct-entry-current.py'
+ DATA_PATH=BASE+'/root-install-caller-data-output-1/data_output.py'
+ DATA_SHA='6e1197061e4c7f99abcea965c6b1fd6beb18556497174ed38e725dbbeeef3b22'
+ PARENT_SHA='fc2b4942ec04f1ed1f301cf47a2dd12bd36cd517989ddc4e514b91422e42066b'
+-ENTRY_SHA='c5ee9db292a1834bda2ef6b41740a3cae91bc93826d1d23f56699dd7f3ce7c48'
++ENTRY_SHA='64068642a1911e7d2e3a10566618dac984aec084f647d493e6078286b4262430'
+ MAX=2097152
+ hold=[]
+ 
+--- /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/prepare_current.py
++++ /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/prepare_current.py
+@@ -10,16 +10,16 @@
+ import pathlib
+ 
+ BASE=Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1')
+-HERE=Path('/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1')
++HERE=Path('/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1')
+ PARENT=HERE
+ CHILD=HERE
+-PREP=Path('/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/prepare-install-current.py')
+-PREP_SHA='69cb7331c2b3d106714f3b61f441b3f782ff597ae37379ddc0e2dda02f99e440'
+-PARENT_SHA='22c49acb6e0a1450d1c3e0da61b01a6a3ac0b07013366949f3738e90ff8f1873'
+-PROFILE_SHA='da76a4572dacc41439a09823c8e5b2bc1578e5f2feaf9ddf036ca2a1b98e5661'
+-BOOT_SHA='927483d66ff9bf2cbfae451793b15ffc8a75d92c7234062143cdaa91e508237f'
+-CHILD_SHA='c5ee9db292a1834bda2ef6b41740a3cae91bc93826d1d23f56699dd7f3ce7c48'
+-CHILD_MANIFEST_SHA='91bea7db612daa31bc2c18f25c8f46be750375c2778360bc8397aedaaffe4b26'
++PREP=Path('/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/prepare-install-current.py')
++PREP_SHA='877a617388ad8fe17a66f117f7631b4e82e71a400387ac567ddb4df6078792f6'
++PARENT_SHA='a2bf7a4af7ed027a4e58451f9b68752261735ecbda591fffa13ddfba35dc9a34'
++PROFILE_SHA='b6ed570dace44d4c6eb636a89b66edf9af3c8da6d36be008183f2cfd5535edf8'
++BOOT_SHA='414c7c0e93c7a67fc183ad9ae81426669b080e02756122942a3dfb55479843a2'
++CHILD_SHA='64068642a1911e7d2e3a10566618dac984aec084f647d493e6078286b4262430'
++CHILD_MANIFEST_SHA='fe14ff6637a2ad5a9ccb9547592234a087da99f7ea8cec1b93ea255ce33fdd20'
+ CLOSURE_SHA='56df8d9ba9ee78c8955b80861bb1fcbc39305f64439129b1174e457d91c85ce5'
+ IPC_SHA='eda1ff0139c3bbf0c713009fc7728eccf3418cc7ce5d028731bc443837d49bbe'
+ MODEL_SHA='98ea72583a41f747f01c5bdb04b545319fc08cedf443366a6c2637a35562ed04'
+--- /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/ROOT-ISSUE-AND-EXECUTE-ONCE.py
++++ /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/ROOT-ISSUE-AND-EXECUTE-ONCE.py
+@@ -10,7 +10,7 @@
+ import secrets
+ import time
+ 
+-HERE = Path('/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1')
++HERE = Path('/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1')
+ REPO = Path('/home/holden/mckernel')
+ BOOT = '3ba4f2ca-4323-433d-bfb8-7859268121b6'
+ GIB = 1024**3
+--- /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/SOURCE-BOUND.json
++++ /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/SOURCE-BOUND.json
+@@ -4,23 +4,23 @@
+   "source_closure_sha256": "56df8d9ba9ee78c8955b80861bb1fcbc39305f64439129b1174e457d91c85ce5",
+   "source_paths": {
+     "DIRECT-MODEL.json": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-child-successor-4/DIRECT-MODEL.json",
+-    "WAIT-INSTALL-CODE.py": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/WAIT-INSTALL-CODE-current.py",
+-    "direct_entry.py": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/direct-entry-current.py",
+-    "install_completion.py": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/install_completion.py",
+-    "install_issuer.py": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/issuer-current.py",
+-    "install_source_closure.py": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/install-source-current.py",
+-    "phase0.py": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/phase0-current.py",
+-    "preliminary.py": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/preliminary-current.py"
++    "WAIT-INSTALL-CODE.py": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/WAIT-INSTALL-CODE-current.py",
++    "direct_entry.py": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/direct-entry-current.py",
++    "install_completion.py": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/install_completion.py",
++    "install_issuer.py": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/issuer-current.py",
++    "install_source_closure.py": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/install-source-current.py",
++    "phase0.py": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/phase0-current.py",
++    "preliminary.py": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/preliminary-current.py"
+   },
+   "source_sha256": {
+     "DIRECT-MODEL.json": "98ea72583a41f747f01c5bdb04b545319fc08cedf443366a6c2637a35562ed04",
+-    "WAIT-INSTALL-CODE.py": "2ed1a7a3cc5cd72d70d6c4a3a05f8b4f2dcc524fcada7ae75a84e099b2ce5719",
+-    "direct_entry.py": "c5ee9db292a1834bda2ef6b41740a3cae91bc93826d1d23f56699dd7f3ce7c48",
++    "WAIT-INSTALL-CODE.py": "da47f7fcc4cc1e44b68cacd8115941d5358de68ea3e415eec33cf854f7605b5d",
++    "direct_entry.py": "64068642a1911e7d2e3a10566618dac984aec084f647d493e6078286b4262430",
+     "install_completion.py": "06b0501d38d9c3bc0b5e1b919676cd9eb727ece8f7c5997bf8d40248c60f2e22",
+     "install_issuer.py": "db5086a8f7574a6536ffe31d5d2a443ddfaaf1c51244223ddb7288936c9bd2d3",
+     "install_source_closure.py": "8076a13c5c47230f2059c150036b0aac6d4c9b1ae64bd1d0f6de011ecaf8521c",
+     "phase0.py": "f0771fbd3bfe4dcf7cfa89f6259e46011fb96fb81786113365ab4ea75118fab5",
+-    "preliminary.py": "7342da356f761486313e48e4cdb468a56529ad4a37daa469a37e9ecdfe7ca508"
++    "preliminary.py": "bd17fc02c88db4bdd0de0f598392308af4e939d7a68533643220947c912a9caf"
+   },
+   "status": "SOURCE_ONLY_FIXED_NATIVE_CODE30_CURRENT_ROOT_NOT_RELEASED"
+ }
+--- /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/PROFILE.SOURCE-ONLY.json
++++ /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/PROFILE.SOURCE-ONLY.json
+@@ -17,7 +17,7 @@
+     "-I",
+     "-B",
+     "-c",
+-    "\"\"\"One-shot root parent bootstrap, source-only; hashes must be reviewed.\"\"\"\nimport fcntl,hashlib,json,os,signal,stat,sys,types\nfrom decimal import Decimal\n\nBASE='/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1'\nPARENT_PATH='/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/root_parent-current.py'\nENTRY_PATH='/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/direct-entry-current.py'\nDATA_PATH=BASE+'/root-install-caller-data-output-1/data_output.py'\nDATA_SHA='6e1197061e4c7f99abcea965c6b1fd6beb18556497174ed38e725dbbeeef3b22'\nPARENT_SHA='fc2b4942ec04f1ed1f301cf47a2dd12bd36cd517989ddc4e514b91422e42066b'\nENTRY_SHA='c5ee9db292a1834bda2ef6b41740a3cae91bc93826d1d23f56699dd7f3ce7c48'\nMAX=2097152\nhold=[]\n\n\ndef unique(pairs):\n    out={}\n    for key,value in pairs:\n        if key in out:raise ValueError('duplicate JSON key')\n        out[key]=value\n    return out\n\n\ndef read_fd(fd,maximum):\n    st=os.fstat(fd)\n    if not stat.S_ISREG(st.st_mode) or st.st_size>maximum:raise ValueError('bounded regular input')\n    os.lseek(fd,0,os.SEEK_SET);chunks=[];total=0\n    while total<=maximum:\n        chunk=os.read(fd,min(65536,maximum+1-total))\n        if not chunk:break\n        chunks.append(chunk);total+=len(chunk)\n    now=os.fstat(fd);raw=b''.join(chunks)\n    if total!=st.st_size or total>maximum or (st.st_dev,st.st_ino,st.st_size,st.st_mtime_ns,st.st_ctime_ns)!=(now.st_dev,now.st_ino,now.st_size,now.st_mtime_ns,now.st_ctime_ns):raise ValueError('input changed')\n    return raw\n\n\nSTOPS=(signal.SIGINT,signal.SIGTERM,signal.SIGHUP,signal.SIGQUIT,signal.SIGALRM)\n\n\ndef owned_open(path,flags,dir_fd=None):\n    # Register before allocation; a deferred handler sees a recorded leaf.\n    old=signal.pthread_sigmask(signal.SIG_BLOCK,STOPS)\n    try:\n        record={'state':'PENDING_OPEN','fd':None,'historical_fd':None};hold.append(record)\n        try:fd=os.open(path,flags,dir_fd=dir_fd)\n        except BaseException:\n            record['state']='OPEN_UNKNOWN';raise\n        record['fd']=fd;record['state']='OWNED'\n        return record\n    finally:signal.pthread_sigmask(signal.SIG_SETMASK,old)\n\n\ndef close_ancestor(record):\n    old=signal.pthread_sigmask(signal.SIG_BLOCK,STOPS)\n    try:\n        if record['state']!='OWNED' or type(record['fd']) is not int:raise ValueError('ancestor disposition')\n        fd=record['fd'];record['fd']=None;record['historical_fd']=fd;record['state']='CLOSING'\n        try:os.close(fd)\n        except BaseException:\n            record['state']='CLOSURE_UNKNOWN'\n            raise\n        record['state']='VERIFIED_CLOSED'\n    finally:signal.pthread_sigmask(signal.SIG_SETMASK,old)\n\n\ndef open_absolute(path):\n    if type(path) is not str or not path.startswith('/') or '//' in path:raise ValueError('absolute source path')\n    parts=path.split('/')[1:]\n    if not parts or any(x in ('','.','..') for x in parts):raise ValueError('path component')\n    current=owned_open('/',os.O_RDONLY|os.O_DIRECTORY|os.O_CLOEXEC)\n    for component in parts[:-1]:\n        child=owned_open(component,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW|os.O_CLOEXEC,dir_fd=current['fd'])\n        close_ancestor(current);current=child\n    leaf=owned_open(parts[-1],os.O_RDONLY|os.O_NOFOLLOW|os.O_CLOEXEC,dir_fd=current['fd'])\n    close_ancestor(current)\n    return leaf['fd']\n\n\ndef verified(path,digest):\n    fd=open_absolute(path);raw=read_fd(fd,MAX)\n    if hashlib.sha256(raw).hexdigest()!=digest:raise ValueError('fixed source/input hash')\n    return raw\n\n\ndef load(name,path,raw):\n    if name in sys.modules:raise ValueError('preloaded module')\n    module=types.ModuleType(name);module.__file__=path;sys.modules[name]=module\n    exec(compile(raw,path,'exec'),module.__dict__)\n    return module\n\n\ndef main():\n    if os.getuid()!=0 or os.geteuid()!=0 or len(sys.argv)!=6:raise ValueError('root and exact arguments')\n    admission_sha,review_path,review_sha,capture_device,capture_inode=sys.argv[1:]\n    if not capture_device.isdigit() or not capture_inode.isdigit():raise ValueError('capture identity arguments')\n    capture=os.fstat(1);flags=fcntl.fcntl(1,fcntl.F_GETFL)\n    if (not stat.S_ISREG(capture.st_mode) or capture.st_uid!=1000 or capture.st_nlink!=1 or\n        stat.S_IMODE(capture.st_mode)!=0o600 or (flags&os.O_ACCMODE)==os.O_RDONLY or\n        (capture.st_dev,capture.st_ino)!=(int(capture_device),int(capture_inode))):\n        raise ValueError('actual caller stdout capture identity differs')\n    if any(len(x)!=64 or any(c not in '0123456789abcdef' for c in x) for x in (admission_sha,review_sha)):raise ValueError('input digest')\n    admission_raw=read_fd(0,MAX)\n    if hashlib.sha256(admission_raw).hexdigest()!=admission_sha:raise ValueError('stdin admission bytes')\n    review_raw=verified(review_path,review_sha)\n    entry_raw=verified(ENTRY_PATH,ENTRY_SHA);parent_raw=verified(PARENT_PATH,PARENT_SHA)\n    entry=load('direct_entry',ENTRY_PATH,entry_raw)\n    entry.load_for_parent()\n    data_raw=verified(DATA_PATH,DATA_SHA)\n    load('caller_data_output',DATA_PATH,data_raw)\n    parent=load('root_parent',PARENT_PATH,parent_raw)\n    parent.EXPECTED_CAPTURE=(capture.st_dev,capture.st_ino)\n    request=json.loads(admission_raw,object_pairs_hook=unique)\n    if type(request) is not dict or request.get('outer_pid')!=762050 or request.get('outer_birth')!='37669567':raise ValueError('actual Root outer identity')\n    prelim=sys.modules['reviewed_controller_reader'];issuer=sys.modules['install_issuer']\n    issuer.require_outer_ancestor(prelim,request['outer_pid'],request['outer_birth'])\n    controls_raw,_=prelim.read_bound(prelim.CONTROLS,1<<20);capacity_raw,_=prelim.read_bound(prelim.CAPACITY,1<<20)\n    controls=prelim.strict_json(controls_raw);capacity=prelim.strict_json(capacity_raw)\n    if controls.get('nonce')!=request.get('nonce'):raise ValueError('current publication nonce differs')\n    cap=controls.get('owner_cap')\n    if type(cap) is not dict or cap.get('profile_sha256')!=request.get('profile_sha256') or cap.get('independent_review_sha256')!=review_sha:\n        raise ValueError('current publication profile or review differs')\n    review=json.loads(review_raw,object_pairs_hook=unique)\n    keys={'status','scope','proposal_sha256','driver_sha256','parent_manifest_sha256','child_manifest_sha256',\n          'native_release','native_currentfree','retire_operation_only'}\n    if (type(review) is not dict or set(review)!=keys or review['status']!='PASS_ACTUAL_INSTALL_ONLY' or\n        review['scope']!='ROOT_CODE_INSTALL_ONLY' or review['native_release'] is not False or\n        review['native_currentfree'] is not None or type(review['retire_operation_only']) is not bool or review['retire_operation_only'] is not request.get('retire_operation_only') or\n        review['driver_sha256']!=cap.get('driver_sha256') or review['parent_manifest_sha256']!=cap.get('parent_manifest_sha256') or\n        review['child_manifest_sha256']!=cap.get('child_manifest_sha256') or\n        any(type(review[k]) is not str or len(review[k])!=64 or any(c not in '0123456789abcdef' for c in review[k]) for k in\n            ('proposal_sha256','driver_sha256','parent_manifest_sha256','child_manifest_sha256'))):\n        raise ValueError('current independent publication review differs')\n    live=prelim.controller_checks(controls,capacity,__import__('time').time())\n    ns=lambda x:int(Decimal(str(x))*1000000000)\n    caps={'boot_ns':request['deadline_boot_ns'],'mono_ns':request['deadline_mono_ns'],'utc_ns':request['utc_cap_ns']}\n    if any(type(x) is not int for x in caps.values()) or caps['boot_ns']>ns(live['boot_deadline']) or caps['mono_ns']>ns(live['monotonic_deadline']) or caps['utc_ns']>ns(live['deadline']):raise ValueError('inherited caps')\n    roles=list(controls['binding'].values())\n    actor_pids=[row['pid'] for row in roles]\n    # The parent publishes the full DATA and its final disposition itself.\n    parent.serve(admission_raw,admission_sha,review_raw,review_sha,request['nonce'],caps,actor_pids)\n\n\nif __name__=='__main__':main()\n",
++    "\"\"\"One-shot root parent bootstrap, source-only; hashes must be reviewed.\"\"\"\nimport fcntl,hashlib,json,os,signal,stat,sys,types\nfrom decimal import Decimal\n\nBASE='/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1'\nPARENT_PATH='/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/root_parent-current.py'\nENTRY_PATH='/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/direct-entry-current.py'\nDATA_PATH=BASE+'/root-install-caller-data-output-1/data_output.py'\nDATA_SHA='6e1197061e4c7f99abcea965c6b1fd6beb18556497174ed38e725dbbeeef3b22'\nPARENT_SHA='fc2b4942ec04f1ed1f301cf47a2dd12bd36cd517989ddc4e514b91422e42066b'\nENTRY_SHA='64068642a1911e7d2e3a10566618dac984aec084f647d493e6078286b4262430'\nMAX=2097152\nhold=[]\n\n\ndef unique(pairs):\n    out={}\n    for key,value in pairs:\n        if key in out:raise ValueError('duplicate JSON key')\n        out[key]=value\n    return out\n\n\ndef read_fd(fd,maximum):\n    st=os.fstat(fd)\n    if not stat.S_ISREG(st.st_mode) or st.st_size>maximum:raise ValueError('bounded regular input')\n    os.lseek(fd,0,os.SEEK_SET);chunks=[];total=0\n    while total<=maximum:\n        chunk=os.read(fd,min(65536,maximum+1-total))\n        if not chunk:break\n        chunks.append(chunk);total+=len(chunk)\n    now=os.fstat(fd);raw=b''.join(chunks)\n    if total!=st.st_size or total>maximum or (st.st_dev,st.st_ino,st.st_size,st.st_mtime_ns,st.st_ctime_ns)!=(now.st_dev,now.st_ino,now.st_size,now.st_mtime_ns,now.st_ctime_ns):raise ValueError('input changed')\n    return raw\n\n\nSTOPS=(signal.SIGINT,signal.SIGTERM,signal.SIGHUP,signal.SIGQUIT,signal.SIGALRM)\n\n\ndef owned_open(path,flags,dir_fd=None):\n    # Register before allocation; a deferred handler sees a recorded leaf.\n    old=signal.pthread_sigmask(signal.SIG_BLOCK,STOPS)\n    try:\n        record={'state':'PENDING_OPEN','fd':None,'historical_fd':None};hold.append(record)\n        try:fd=os.open(path,flags,dir_fd=dir_fd)\n        except BaseException:\n            record['state']='OPEN_UNKNOWN';raise\n        record['fd']=fd;record['state']='OWNED'\n        return record\n    finally:signal.pthread_sigmask(signal.SIG_SETMASK,old)\n\n\ndef close_ancestor(record):\n    old=signal.pthread_sigmask(signal.SIG_BLOCK,STOPS)\n    try:\n        if record['state']!='OWNED' or type(record['fd']) is not int:raise ValueError('ancestor disposition')\n        fd=record['fd'];record['fd']=None;record['historical_fd']=fd;record['state']='CLOSING'\n        try:os.close(fd)\n        except BaseException:\n            record['state']='CLOSURE_UNKNOWN'\n            raise\n        record['state']='VERIFIED_CLOSED'\n    finally:signal.pthread_sigmask(signal.SIG_SETMASK,old)\n\n\ndef open_absolute(path):\n    if type(path) is not str or not path.startswith('/') or '//' in path:raise ValueError('absolute source path')\n    parts=path.split('/')[1:]\n    if not parts or any(x in ('','.','..') for x in parts):raise ValueError('path component')\n    current=owned_open('/',os.O_RDONLY|os.O_DIRECTORY|os.O_CLOEXEC)\n    for component in parts[:-1]:\n        child=owned_open(component,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW|os.O_CLOEXEC,dir_fd=current['fd'])\n        close_ancestor(current);current=child\n    leaf=owned_open(parts[-1],os.O_RDONLY|os.O_NOFOLLOW|os.O_CLOEXEC,dir_fd=current['fd'])\n    close_ancestor(current)\n    return leaf['fd']\n\n\ndef verified(path,digest):\n    fd=open_absolute(path);raw=read_fd(fd,MAX)\n    if hashlib.sha256(raw).hexdigest()!=digest:raise ValueError('fixed source/input hash')\n    return raw\n\n\ndef load(name,path,raw):\n    if name in sys.modules:raise ValueError('preloaded module')\n    module=types.ModuleType(name);module.__file__=path;sys.modules[name]=module\n    exec(compile(raw,path,'exec'),module.__dict__)\n    return module\n\n\ndef main():\n    if os.getuid()!=0 or os.geteuid()!=0 or len(sys.argv)!=6:raise ValueError('root and exact arguments')\n    admission_sha,review_path,review_sha,capture_device,capture_inode=sys.argv[1:]\n    if not capture_device.isdigit() or not capture_inode.isdigit():raise ValueError('capture identity arguments')\n    capture=os.fstat(1);flags=fcntl.fcntl(1,fcntl.F_GETFL)\n    if (not stat.S_ISREG(capture.st_mode) or capture.st_uid!=1000 or capture.st_nlink!=1 or\n        stat.S_IMODE(capture.st_mode)!=0o600 or (flags&os.O_ACCMODE)==os.O_RDONLY or\n        (capture.st_dev,capture.st_ino)!=(int(capture_device),int(capture_inode))):\n        raise ValueError('actual caller stdout capture identity differs')\n    if any(len(x)!=64 or any(c not in '0123456789abcdef' for c in x) for x in (admission_sha,review_sha)):raise ValueError('input digest')\n    admission_raw=read_fd(0,MAX)\n    if hashlib.sha256(admission_raw).hexdigest()!=admission_sha:raise ValueError('stdin admission bytes')\n    review_raw=verified(review_path,review_sha)\n    entry_raw=verified(ENTRY_PATH,ENTRY_SHA);parent_raw=verified(PARENT_PATH,PARENT_SHA)\n    entry=load('direct_entry',ENTRY_PATH,entry_raw)\n    entry.load_for_parent()\n    data_raw=verified(DATA_PATH,DATA_SHA)\n    load('caller_data_output',DATA_PATH,data_raw)\n    parent=load('root_parent',PARENT_PATH,parent_raw)\n    parent.EXPECTED_CAPTURE=(capture.st_dev,capture.st_ino)\n    request=json.loads(admission_raw,object_pairs_hook=unique)\n    if type(request) is not dict or request.get('outer_pid')!=762050 or request.get('outer_birth')!='37669567':raise ValueError('actual Root outer identity')\n    prelim=sys.modules['reviewed_controller_reader'];issuer=sys.modules['install_issuer']\n    issuer.require_outer_ancestor(prelim,request['outer_pid'],request['outer_birth'])\n    controls_raw,_=prelim.read_bound(prelim.CONTROLS,1<<20);capacity_raw,_=prelim.read_bound(prelim.CAPACITY,1<<20)\n    controls=prelim.strict_json(controls_raw);capacity=prelim.strict_json(capacity_raw)\n    if controls.get('nonce')!=request.get('nonce'):raise ValueError('current publication nonce differs')\n    cap=controls.get('owner_cap')\n    if type(cap) is not dict or cap.get('profile_sha256')!=request.get('profile_sha256') or cap.get('independent_review_sha256')!=review_sha:\n        raise ValueError('current publication profile or review differs')\n    review=json.loads(review_raw,object_pairs_hook=unique)\n    keys={'status','scope','proposal_sha256','driver_sha256','parent_manifest_sha256','child_manifest_sha256',\n          'native_release','native_currentfree','retire_operation_only'}\n    if (type(review) is not dict or set(review)!=keys or review['status']!='PASS_ACTUAL_INSTALL_ONLY' or\n        review['scope']!='ROOT_CODE_INSTALL_ONLY' or review['native_release'] is not False or\n        review['native_currentfree'] is not None or type(review['retire_operation_only']) is not bool or review['retire_operation_only'] is not request.get('retire_operation_only') or\n        review['driver_sha256']!=cap.get('driver_sha256') or review['parent_manifest_sha256']!=cap.get('parent_manifest_sha256') or\n        review['child_manifest_sha256']!=cap.get('child_manifest_sha256') or\n        any(type(review[k]) is not str or len(review[k])!=64 or any(c not in '0123456789abcdef' for c in review[k]) for k in\n            ('proposal_sha256','driver_sha256','parent_manifest_sha256','child_manifest_sha256'))):\n        raise ValueError('current independent publication review differs')\n    live=prelim.controller_checks(controls,capacity,__import__('time').time())\n    ns=lambda x:int(Decimal(str(x))*1000000000)\n    caps={'boot_ns':request['deadline_boot_ns'],'mono_ns':request['deadline_mono_ns'],'utc_ns':request['utc_cap_ns']}\n    if any(type(x) is not int for x in caps.values()) or caps['boot_ns']>ns(live['boot_deadline']) or caps['mono_ns']>ns(live['monotonic_deadline']) or caps['utc_ns']>ns(live['deadline']):raise ValueError('inherited caps')\n    roles=list(controls['binding'].values())\n    actor_pids=[row['pid'] for row in roles]\n    # The parent publishes the full DATA and its final disposition itself.\n    parent.serve(admission_raw,admission_sha,review_raw,review_sha,request['nonce'],caps,actor_pids)\n\n\nif __name__=='__main__':main()\n",
+     "<FRESH_ADMISSION_SHA256>",
+     "<REVIEWED_SOURCE_REVIEW_PATH>",
+     "<REVIEWED_SOURCE_REVIEW_SHA256>",
+--- /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/FROZEN-SOURCE.json
++++ /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/FROZEN-SOURCE.json
+@@ -1,17 +1,17 @@
+ {
+-  "child_manifest_sha256": "91bea7db612daa31bc2c18f25c8f46be750375c2778360bc8397aedaaffe4b26",
++  "child_manifest_sha256": "fe14ff6637a2ad5a9ccb9547592234a087da99f7ea8cec1b93ea255ce33fdd20",
+   "files": {
+-    "BOOTSTRAP-current.py": "927483d66ff9bf2cbfae451793b15ffc8a75d92c7234062143cdaa91e508237f",
+-    "PROFILE.SOURCE-ONLY.json": "da76a4572dacc41439a09823c8e5b2bc1578e5f2feaf9ddf036ca2a1b98e5661",
++    "BOOTSTRAP-current.py": "414c7c0e93c7a67fc183ad9ae81426669b080e02756122942a3dfb55479843a2",
++    "PROFILE.SOURCE-ONLY.json": "b6ed570dace44d4c6eb636a89b66edf9af3c8da6d36be008183f2cfd5535edf8",
+     "root_parent.py": "fc2b4942ec04f1ed1f301cf47a2dd12bd36cd517989ddc4e514b91422e42066b"
+   },
+   "native_currentfree": null,
+   "native_release": false,
+   "scope": "ROOT_CODE_INSTALL_ONLY",
+   "source_paths": {
+-    "BOOTSTRAP-current.py": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/BOOTSTRAP-current.py",
+-    "PROFILE.SOURCE-ONLY.json": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/PROFILE.SOURCE-ONLY.json",
+-    "root_parent.py": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/root_parent-current.py"
++    "BOOTSTRAP-current.py": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/BOOTSTRAP-current.py",
++    "PROFILE.SOURCE-ONLY.json": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/PROFILE.SOURCE-ONLY.json",
++    "root_parent.py": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/root_parent-current.py"
+   },
+   "status": "SOURCE_ONLY_FIXED_CODE30_CURRENT_ROOT_NOT_RELEASED"
+ }
+--- /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/RESOURCE-PROPOSAL-CURRENT.json
++++ /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/RESOURCE-PROPOSAL-CURRENT.json
+@@ -30,64 +30,64 @@
+   "shared_overhead_max_bytes": 2147483648,
+   "source_bindings": {
+     "bootstrap": {
+-      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/BOOTSTRAP-current.py",
+-      "sha256": "927483d66ff9bf2cbfae451793b15ffc8a75d92c7234062143cdaa91e508237f"
++      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/BOOTSTRAP-current.py",
++      "sha256": "414c7c0e93c7a67fc183ad9ae81426669b080e02756122942a3dfb55479843a2"
+     },
+     "child_entry": {
+-      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/direct-entry-current.py",
+-      "sha256": "c5ee9db292a1834bda2ef6b41740a3cae91bc93826d1d23f56699dd7f3ce7c48"
++      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/direct-entry-current.py",
++      "sha256": "64068642a1911e7d2e3a10566618dac984aec084f647d493e6078286b4262430"
+     },
+     "child_manifest": {
+-      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/SOURCE-BOUND.json",
+-      "sha256": "91bea7db612daa31bc2c18f25c8f46be750375c2778360bc8397aedaaffe4b26"
++      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/SOURCE-BOUND.json",
++      "sha256": "fe14ff6637a2ad5a9ccb9547592234a087da99f7ea8cec1b93ea255ce33fdd20"
+     },
+     "closure": {
+-      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/SOURCE-CLOSURE.json",
++      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/SOURCE-CLOSURE.json",
+       "sha256": "56df8d9ba9ee78c8955b80861bb1fcbc39305f64439129b1174e457d91c85ce5"
+     },
+     "completion": {
+-      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/install_completion.py",
++      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/install_completion.py",
+       "sha256": "06b0501d38d9c3bc0b5e1b919676cd9eb727ece8f7c5997bf8d40248c60f2e22"
+     },
+     "installer": {
+-      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/install-source-current.py",
++      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/install-source-current.py",
+       "sha256": "8076a13c5c47230f2059c150036b0aac6d4c9b1ae64bd1d0f6de011ecaf8521c"
+     },
+     "issuer": {
+-      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/issuer-current.py",
++      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/issuer-current.py",
+       "sha256": "db5086a8f7574a6536ffe31d5d2a443ddfaaf1c51244223ddb7288936c9bd2d3"
+     },
+     "parent_body": {
+-      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/root_parent-current.py",
++      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/root_parent-current.py",
+       "sha256": "fc2b4942ec04f1ed1f301cf47a2dd12bd36cd517989ddc4e514b91422e42066b"
+     },
+     "parent_manifest": {
+-      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/FROZEN-SOURCE.json",
+-      "sha256": "22c49acb6e0a1450d1c3e0da61b01a6a3ac0b07013366949f3738e90ff8f1873"
++      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/FROZEN-SOURCE.json",
++      "sha256": "a2bf7a4af7ed027a4e58451f9b68752261735ecbda591fffa13ddfba35dc9a34"
+     },
+     "phase0": {
+-      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/phase0-current.py",
++      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/phase0-current.py",
+       "sha256": "f0771fbd3bfe4dcf7cfa89f6259e46011fb96fb81786113365ab4ea75118fab5"
+     },
+     "preliminary": {
+-      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/preliminary-current.py",
+-      "sha256": "7342da356f761486313e48e4cdb468a56529ad4a37daa469a37e9ecdfe7ca508"
++      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/preliminary-current.py",
++      "sha256": "bd17fc02c88db4bdd0de0f598392308af4e939d7a68533643220947c912a9caf"
+     },
+     "prep_reader": {
+-      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/prepare-install-current.py",
+-      "sha256": "69cb7331c2b3d106714f3b61f441b3f782ff597ae37379ddc0e2dda02f99e440"
++      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/prepare-install-current.py",
++      "sha256": "877a617388ad8fe17a66f117f7631b4e82e71a400387ac567ddb4df6078792f6"
+     },
+     "profile": {
+-      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/PROFILE.SOURCE-ONLY.json",
+-      "sha256": "da76a4572dacc41439a09823c8e5b2bc1578e5f2feaf9ddf036ca2a1b98e5661"
++      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/PROFILE.SOURCE-ONLY.json",
++      "sha256": "b6ed570dace44d4c6eb636a89b66edf9af3c8da6d36be008183f2cfd5535edf8"
+     },
+     "root_binding": {
+-      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/CURRENT-ROOT-BINDING.json",
++      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/CURRENT-ROOT-BINDING.json",
+       "sha256": "d043e00a3048912b95cd8031f8b0876495a9fe5ab96be26932b3fe0a85e9ec60"
+     },
+     "wait_literal": {
+-      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/WAIT-INSTALL-CODE-current.py",
+-      "sha256": "2ed1a7a3cc5cd72d70d6c4a3a05f8b4f2dcc524fcada7ae75a84e099b2ce5719"
++      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/WAIT-INSTALL-CODE-current.py",
++      "sha256": "da47f7fcc4cc1e44b68cacd8115941d5358de68ea3e415eec33cf854f7605b5d"
+     }
+   },
+   "status": "ROOT_RESOURCE_PROPOSAL_CURRENT_NOT_ADMITTED"

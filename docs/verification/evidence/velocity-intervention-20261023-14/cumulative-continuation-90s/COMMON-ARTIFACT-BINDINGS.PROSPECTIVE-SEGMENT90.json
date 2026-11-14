@@ -1,0 +1,80 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "EXACT_COMMON_FROZEN_MANIFEST_TUPLE_MATCH_SHORT_NATIVE_NOT_EXECUTED",
+  "artifact_bindings": {
+    "bzImage": {
+      "sha256": "032653ee0661b059c325e2a0911a9d492805f1a889c4df515473d69a8be105bc",
+      "size": 16130048,
+      "mode": 33188
+    },
+    "libc": {
+      "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+      "size": 2339896,
+      "mode": 33261
+    },
+    "loader": {
+      "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b",
+      "size": 930600,
+      "mode": 33261
+    },
+    "mcexec": {
+      "sha256": "dca0250159ce04a272a72dd1217213a4b6e0f21ec8c21da211eede250c451954",
+      "size": 394648,
+      "mode": 33261
+    },
+    "mckernel_image": {
+      "sha256": "10972f87277e8429e2badd238d3ac53e451b8a2351a8ebf013941e1dfb95e1e2",
+      "size": 8439816,
+      "mode": 33261
+    },
+    "native_boot": {
+      "sha256": "4312f9a8f53d8db7b2b6be4c7d5e409f5c0f82cf8215728209be0f6ff4a5d5c5",
+      "size": 35784,
+      "mode": 33261
+    },
+    "payload": {
+      "sha256": "03ac419d72a7e8c1584aa6e0fda1032f239bef90c25d3f996167f9191dd1d87e",
+      "size": 5710216,
+      "mode": 33216
+    },
+    "modules": {
+      "ihk.ko": {
+        "sha256": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c",
+        "size": 1527808,
+        "mode": 33188
+      },
+      "ihk-smp-x86_64.ko": {
+        "sha256": "887dc3567e6035c921588e61b45b41a8ef32a972d142fe2ba82ec48442353b12",
+        "size": 13098896,
+        "mode": 33188
+      },
+      "mcctrl.ko": {
+        "sha256": "06e8b9b571f21b41821aa03a32ebf4ae20ae19cf4b110c3af2c81b491b92ef86",
+        "size": 2662320,
+        "mode": 33188
+      }
+    },
+    "applications": {
+      "0": {
+        "sha256": "03ac419d72a7e8c1584aa6e0fda1032f239bef90c25d3f996167f9191dd1d87e",
+        "size": 5710216,
+        "mode": 33216
+      },
+      "1": {
+        "sha256": "266d73698c3440129f4510def7c43787a5eb2065c20dc03f26e175c962b2fa10",
+        "size": 5690440,
+        "mode": 33216
+      }
+    },
+    "pair_contract_sha256": "b2e02d1f3bcde1fef73b6fa34a2138ba92600f7655c14e21ff48061e5adb1d40",
+    "profile": {
+      "append": "console=ttyS0,115200n8 rdinit=/init nokaslr panic=-1 memmap=4K%0x80000-1",
+      "memory_mib": 8192,
+      "name": "native-diagnostic-4vcpu-8192mib",
+      "numa_nodes": 2,
+      "vcpus": 4
+    },
+    "cleanup_profile_sha256": "fa2fa7afee5822044dea167e93f189bbd3ab0308b2dc6d6463fe826e94b8742b"
+  },
+  "short_qualification": null
+}

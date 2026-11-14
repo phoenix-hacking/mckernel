@@ -1,0 +1,52 @@
+{
+  "schema": "mckernel.native-exact-retained-candidate-evidence-cleanup-result.v1",
+  "status": "PASS",
+  "scope": "Removal of exact committed duplicate evidence files from the relocated dce800af source checkout only; no build, boot, runtime, or application acceptance",
+  "candidate": {
+    "commit": "dce800af8c19d014ef509e102ca4f4b1c473e2ab",
+    "root": "/home/holden/mckernel-work/retained-exact-candidates/mckernel-exact-candidate-dce800af-scratch-5",
+    "identity": "66306:47736554",
+    "allocated_bytes_after": 142954496
+  },
+  "released_packet": {
+    "commit": "1a10e76123bd378e03853b1ccf6b3c8af879c93c",
+    "path": "docs/verification/evidence/native-exact-retained-candidate-dce800af-evidence-cleanup-20260930.py",
+    "sha256": "8960a087cdbf1e712007123602e7e4f75b22921ddbb973f2d6bd28813baedde2",
+    "focused_tests": "5 passed",
+    "independent_source_review": "PASS_SOURCE",
+    "independent_execution_review": "PASS_EXECUTION"
+  },
+  "audit_plan": {
+    "sha256_before_apply": "fcef6364372f8799ec6055c579b0c79bdf965cab2268ecb3cee00e077ba7d51f",
+    "identity_before_apply": "1831:57597",
+    "size_before_apply": 1521566,
+    "target_count": 2437,
+    "recorded_allocated_bytes": 9100873728
+  },
+  "apply": {
+    "exit_status": 0,
+    "terminal_status": "APPLY_PASS",
+    "removed_count": 2437,
+    "remaining_target_count": 0,
+    "terminal_plan_sha256": "f11db2aee90d6275b810502c42fd6968b3a6a356633662f13692a3868d92ed9a",
+    "terminal_plan_identity": "1831:57598",
+    "terminal_plan_size": 1986128,
+    "host_free_bytes_before_review": 18237796352,
+    "host_free_bytes_after": 27232235520
+  },
+  "portable_restoration_map": {
+    "path": "docs/verification/evidence/native-exact-retained-candidate-dce800af-evidence-cleanup-map-20260930.json.gz",
+    "sha256": "2281877fda026f212dc97857a02ca6d69ad51dd56d7d83bd9d240bfaca980515",
+    "size": 235565,
+    "gzip_test": "PASS",
+    "contains_terminal_apply_plan": true
+  },
+  "preserved": {
+    "diagnostic_output_identity": "1831:5373997",
+    "diagnostic_evidence_identity": "1831:5373998",
+    "diagnostic_receipt_sha256": "b36a9d8f7bd923d0ff37d9d5d0b3e5c53ea9d48e857a53bf2c1270607458e0af",
+    "failure_archive_sha256": "f8522be9649def629b04a93d065f3ab79a5c7acdd7a2f2f221b7d759384c5952",
+    "stopped_container": "6efd149e8b8c4333ff62080ea7031f1dc1c47c718e1222bed3b6c4dbdeb85870",
+    "fresh_candidate_identity": "1831:5111816"
+  }
+}

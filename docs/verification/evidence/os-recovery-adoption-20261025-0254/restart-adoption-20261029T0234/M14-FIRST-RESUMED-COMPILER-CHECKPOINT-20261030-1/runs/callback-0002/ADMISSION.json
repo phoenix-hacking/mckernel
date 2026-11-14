@@ -1,0 +1,171 @@
+{
+  "actors": {
+    "capacity": {
+      "pid": 2996161,
+      "start": "118034604",
+      "state": "S"
+    },
+    "guardian": {
+      "pid": 2996157,
+      "start": "118034389",
+      "state": "S"
+    },
+    "monitor": {
+      "pid": 2996160,
+      "start": "118034501",
+      "state": "S"
+    },
+    "server": {
+      "pid": 2996005,
+      "start": "118034116",
+      "state": "S"
+    },
+    "watcher": {
+      "pid": 2996001,
+      "start": "118034086",
+      "state": "S"
+    },
+    "worker": {
+      "pid": 2996003,
+      "start": "118034102",
+      "state": "R"
+    }
+  },
+  "argv": [
+    "/usr/bin/env",
+    "-i",
+    "PATH=/usr/bin:/bin",
+    "LC_ALL=C",
+    "TMPDIR=/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/callback-0002/tmp",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=536870912",
+    "--cpu=30",
+    "--core=0",
+    "--nofile=128",
+    "--",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "45s",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/callback-0002/time.txt",
+    "/usr/bin/python3",
+    "-s",
+    "-E",
+    "-S",
+    "-B",
+    "-m",
+    "unittest",
+    "-v",
+    "test_callback_handoff"
+  ],
+  "at": 1793390984.5757978,
+  "caps": {
+    "boot_deadline": 1571567.6959065471,
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "deadline": 1793774133,
+    "monotonic_deadline": 1556229.568859425
+  },
+  "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/child-callback-expert-1",
+  "free_bytes": {
+    "host": 142498230272,
+    "scratch": 47613485056
+  },
+  "grant": {
+    "cpu": [
+      6
+    ],
+    "cpu_seconds": 30,
+    "heavy_lease": false,
+    "jobs": 1,
+    "max_address_space_bytes": 536870912,
+    "native_access": false,
+    "wall_seconds": 45
+  },
+  "grant_id": "ROOT_LIGHT_TEST_CALLBACK6_2_20261030",
+  "graph_sha256": "a0c5c4d0222fac7906a1591449efefab36d9f97a076a9cc47c913de06614ea1b",
+  "guardian_effective_clock": {
+    "journal": 1793390990.052441,
+    "lower": 1793390994.5675097,
+    "upper": 1793390994.567576
+  },
+  "mem_available_bytes": 27455950848,
+  "nonce": "9a20741c5febddc4c459e0d4b6c9c3f31d484aac206f5f4da738c24afdd0a8bd",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_exclusion": "Root-confirmed private source ownership for this fixture",
+  "source_manifest_sha256": "dc95927633174fcd5e17151da8b67688bbd9908e1a3fcd88331b4b4d64d2e72c",
+  "sources": {
+    "adapter.py": "6a9d2da8e345502e5789d50afcd05d69275dac2e7081adf8cf964c8ab69dcc93",
+    "compositor.py": "1216868bc7d1ea2a7daa322ce7a2d58173ec5c99befa553c0f789bcef84918a3",
+    "deferred_fork.py": "6dfe920a25dbc09f0ced7bafd9b5ba949c9d5c7b608ae4e66c0923d4eabd7675",
+    "operation_supervisor.py": "1a1e1ed738a5fa8a62f010bacbb2a06b529f577fe93d37539e19f6c839b2be90",
+    "operation_watchdog.py": "6f1ddee0c59588413f5c8a70600f2d24ad2131684228ba8c71bffe4a7442183c",
+    "ownership_latch.py": "fb264b1e6f12852e6a11c44239089a015a02e25019f9094af586422398bfa390",
+    "pidfd_compat.py": "068e8316ef03a03d1977d05ce755dfa8133c13bd4dfa56254c27b0066be2575c",
+    "pidfd_custody.py": "74e5f4b4f62a255fd66fecda8eb17ab4d78731f370e50f9e98177b15bb3162d0",
+    "root_bootstrap.py": "25c31cb155ba7be687d297cbda98296dc7f493fd5c99c270276d4cb6dffa2da4",
+    "runtime_binding.py": "629b7b65d8d28169dffa71d86fbddeda8e1e0ef87f0dc4e91b264f8175717414",
+    "supervisor_entry.py": "e85c03563699d3ea08d1f3b3eaaaa56c6cf47f59a6aeead43ec1f1951d99ab4c",
+    "test_callback_handoff.py": "c529a06971df496c733ae9c5dc5662f1a71f7e40cd2ffa1bf547823406434859",
+    "test_child_restore.py": "003cbb276d0848e11323a66420b71a12282b451aebeb8fbaacfdb98b47a7bfaf",
+    "test_pidfd_custody.py": "ea4165151fa88e66ca4de2eadd74feb611eabc791e55cf99fedc8f306748de4e",
+    "test_pidfd_self.py": "fb8ccdcd7145ba6c86a90b3f7f0a8c44c1d4f46973b4216d8ac722d8a4677923",
+    "validator_entry.py": "7c166a39dccf1458cc395ca3d3f8bb538bcba4975cb182bf99f5da3d5341f19c"
+  },
+  "status": "ONE_SYNTHETIC_FIXTURE_PRE_EXEC",
+  "tools": {
+    "/usr/bin/env": {
+      "device": 66306,
+      "inode": 1048858,
+      "mode": 33261,
+      "sha256": "5f7c7882898e9e280e93579b459e22b339c4f38cfd54a05b46b81dfb60c557cc",
+      "uid": 0
+    },
+    "/usr/bin/prlimit": {
+      "device": 66306,
+      "inode": 1052683,
+      "mode": 33261,
+      "sha256": "06a57e4767f1bdfcc8c5a39b4b58decb9366447b007a8bdd9d6b12d1e6698d8c",
+      "uid": 0
+    },
+    "/usr/bin/python3.8": {
+      "device": 66306,
+      "inode": 1048651,
+      "mode": 33261,
+      "sha256": "298a9e830ed52f36c299427565485d717d1ce0179c0597cc16560513eb780b06",
+      "uid": 0
+    },
+    "/usr/bin/taskset": {
+      "device": 66306,
+      "inode": 1052691,
+      "mode": 33261,
+      "sha256": "28f2dd426247d7d1d794c0fb8a723efc6a1ae3c56393a238b180fe9a0dc32f1c",
+      "uid": 0
+    },
+    "/usr/bin/time": {
+      "device": 66306,
+      "inode": 1049782,
+      "mode": 33261,
+      "sha256": "f3c4104d963b00e1b3a3dcf80722fea57f15f67b57a512cc30adc434b60e6e03",
+      "uid": 0
+    },
+    "/usr/bin/timeout": {
+      "device": 66306,
+      "inode": 1049784,
+      "mode": 33261,
+      "sha256": "91db1e64064f0bf5ee99abda3a054cc6f05748dad2af5a145f890c9172d28d73",
+      "uid": 0
+    }
+  },
+  "weekly": {
+    "at": "2026-10-30T20:09:42.740351+00:00",
+    "resetsAt": 1793774133,
+    "usedPercent": 90,
+    "windowDurationMins": 10080
+  }
+}

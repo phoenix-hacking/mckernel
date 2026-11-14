@@ -1,0 +1,115 @@
+{
+  "schema": "scratch22.heavy-build-independent-execution-review.v1",
+  "decision": "BLOCKED_EXECUTION",
+  "reviewer": "/root/scratch21_source_review",
+  "implementation_ownership": false,
+  "implementation_author": "/root/scratch22_build_wrapper",
+  "model": "gpt-6.1-sol",
+  "reasoning_effort": "high",
+  "scope": "One exact scratch22 heavy-build admission boundary. No build/root cleanup/guest/compiler execution was performed or released.",
+  "proposal": {
+    "path": "docs/verification/evidence/scratch22-heavy-build-proposal-20261017.json",
+    "sha256": "1532fe077cbd7aae06f1ee733a40e873786ae5b4e6db74abca11c1bcb9f31dc6",
+    "status": "DRAFT",
+    "intended_released_payload_sha256": "938394a27150b068e26068a8f853e6aafca61b8095fd98642babe964c42dfeaa",
+    "payload_semantics": "Independently checked SHA256 of sorted compact ensure_ascii JSON with allow_nan=false plus newline, after changing status to PASS_EXECUTION_RELEASE and excluding execution_review only. This hash is descriptive and does not grant finalization authority."
+  },
+  "source": {
+    "scripts/native_exact_scratch22_build_wrapper.py": "4cd885cb03a34d8e82f184a071c22e656d833eba0c0bcdac43bc790e3bac66a7",
+    "scripts/tests/test_native_exact_scratch22_build_wrapper.py": "70e61c0110415bd659ce0ae8fd3a34ba0e580cef089bd65ebe770f7db5a0e039",
+    "scripts/prepare_native_exact_scratch22.py": "3c3dd179301ee9d16ecf8c9e918fee304ee76cb6a89bc2a987235c1f52ec6663",
+    "docs/verification/evidence/native-exact-candidate-delta-preparation-scratch18-20261001.py": "23d2dcc45db9e9268456a202e46c0e25e982b13d91413271cf00452d0564a731"
+  },
+  "independent_reviews_consumed": {
+    "corrected_wrapper_source": {
+      "path": "docs/verification/evidence/scratch22-build-wrapper-correction-independent-review-20261017.json",
+      "sha256": "fe83f6f42bcd9b10673f87f18cf18562d721d30174a9299289712987cb7ad37d",
+      "decision": "PASS_SOURCE",
+      "tests": "27 independently passing cases, including five real temporary child/flock quarantine scenarios. Not repeated by this execution reviewer."
+    },
+    "actual_prepared_artifacts": {
+      "path": "docs/verification/evidence/scratch22-prepared-artifact-independent-review-20261017.json",
+      "sha256": "90b3b9234c3b5361124d562d48283df50825737bcfcffd9dd7737921d7056fee",
+      "decision": "PASS_PREPARED_ARTIFACT",
+      "coverage": "Independent actual candidate/index/tree/delta, 9,733 manifest paths, four gitlinks, 486 shared inputs and seven-link metadata checks; full approximately 9-GiB corpus was not rehashed again by this reviewer."
+    }
+  },
+  "passed_static_and_artifact_checks": {
+    "seven_proposal_artifact_file_hashes_and_identities": true,
+    "four_source_file_hashes": true,
+    "preparation_release_sha256": "ce0ff2356372f7c3ecec44ace5967fd0e7b2ab94adad3e7cf295ea29808d86e5",
+    "candidate_sha": "0a40e44230b9bb19c4e2e3a1109b2797b6c3afe1",
+    "candidate_tree": "5a2a17e3155b61ab3e2f2e18a8bbaceb95a89bb2",
+    "prepared_request_sha256": "ac0fedafa61fbf1b10e037933f96cdb5937137a8c81da0099d24b6535673ea8e",
+    "derived_request_sha256": "538f4d276f7116320dc23e76156de2ff64341751d739f637a0ad77a09808fceb",
+    "derivation": "Only preparation_only, executable, execution_released and release_required change; exact canonical newline request digest verified.",
+    "preparation_terminal_sha256": "698a5902003ca7e0ecc705797831bf4057f2e5bde8a62cd8ed91d3f1d5dc731f",
+    "preparation_log_sha256": "0c03fae4dc580215a03d4fe36fdbc30bd461c785c2223bed6da06990edf8c777",
+    "profile": "Exactly CPUs 2-5 / four CPUs / 12 GiB RAM / MemorySwap equal to RAM / 512 tasks / network none / owner timeout 19,800 seconds / jobs<=4; one serialized heavy owner and no outer execution timeout. Aggregate campaign ceiling remains seven jobs / 24 GiB; canonical inherited owner aggregate remains the stricter 16.2158 GiB.",
+    "current_resources": {
+      "host_free_bytes": 29258252288,
+      "scratch_free_bytes": 33229987840,
+      "memavailable_kib": 29761284,
+      "host_floor_bytes": 17179869184,
+      "scratch_floor_bytes": 12884901888,
+      "additional_canonical_emergency_bytes": 536870912
+    },
+    "current_identity": {
+      "filesystem_uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52",
+      "scratch_device": 1828,
+      "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+      "root_lock": [27, 4]
+    }
+  },
+  "preserved_failed_admission": {
+    "command": "timeout 180s /usr/bin/python3 -B /home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22/scripts/native_rust_exact_disk_build_wrapper.py /home/holden/mckernel-work/scratch/native-exact-delta-request-scratch-22.json --launcher-aggregate-gib 16.2158 --census-only --request-sha256 ac0fedafa61fbf1b10e037933f96cdb5937137a8c81da0099d24b6535673ea8e",
+    "returncode": 1,
+    "elapsed_seconds": 0.155386245,
+    "stdout": "{\"schema\":\"mckernel.heavy-recovery-census.v1\",\"status\":\"REFUSED\"}\n",
+    "stderr": "",
+    "profile": "Reviewed canonical read-only census, including authenticated sudo -A observers only. Inherited affinity retained because the canonical resource check must see CPUs 2-5. No RLIMIT_AS, no build/guest/compiler, no ownership lock or lease mutation.",
+    "unchanged_retry_performed": false
+  },
+  "bounded_cause_extraction": {
+    "method": "Load the unchanged canonical wrapper with Python -i -B and --help, then invoke its existing census_request in a fixed stdin try/except traceback block. The genuine canonical script remains the interpreter operand, preserving the privileged process observer's required caller ancestry. No source files or runtime identities were modified.",
+    "initial_harness_failure": "Interactive Python clears __file__ after the expected argparse --help SystemExit. The first diagnostic reached _dispatcher_leases -> _historical_lease_observation but raised NameError: name '__file__' is not defined at line 588. This is a diagnostic harness defect, not the production admission error.",
+    "bounded_harness_correction": "Set the interactive module's __file__ to the exact actual canonical wrapper pathname before invoking census_request. No production source or authority change.",
+    "corrected_command": "timeout 180s /usr/bin/python3 -i -B /home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22/scripts/native_rust_exact_disk_build_wrapper.py --help",
+    "corrected_stdin": "import traceback\n__file__='/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22/scripts/native_rust_exact_disk_build_wrapper.py'\ntry:\n    census_request('/home/holden/mckernel-work/scratch/native-exact-delta-request-scratch-22.json', 'ac0fedafa61fbf1b10e037933f96cdb5937137a8c81da0099d24b6535673ea8e', '16.2158')\nexcept Exception:\n    traceback.print_exc()\n",
+    "diagnostic_process_returncode": 0,
+    "production_exception": "AdmissionError: historical lease observer unavailable",
+    "traceback_callsites": [
+      "census_request line 1006: domains = _dispatcher_reconcile(request)",
+      "_dispatcher_reconcile line 644: 'leases': _dispatcher_leases(request)",
+      "_dispatcher_leases line 552: PermissionError reading root-owned native-exact-build-lease-67589154-1.json; this correctly selects the authenticated root observer.",
+      "_dispatcher_leases line 555: authenticated = _historical_lease_observation()",
+      "_historical_lease_observation line 596: nonzero observer result raises AdmissionError('historical lease observer unavailable')"
+    ]
+  },
+  "blocking_findings": [
+    {
+      "id": "S22-HISTORICAL-LEASE-BOOT-1",
+      "invariant": "New build admission must authenticate every retained historical lease against its immutable evidence and current filesystem/boot authority; historical observations cannot silently authorize a new boot or remount.",
+      "source": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22/scripts/native_exact_historical_lease_observer.py",
+      "source_sha256": "fad2dd08fdc098c1dcda1d2fa8eaf9fc885f64d4054c9ca85ad71f7a5000fed0",
+      "actual_error": "Canonical admission cannot obtain its authenticated historical-lease observation and refuses before any build/request/exclusion mutation.",
+      "source_argument": "The exact hash-authenticated observer defines BOOT='c733d83b-a5ae-4f91-9ce6-9f8ccf119afd'. observe() lines 70-71 reject any other current /proc boot ID with Refusal('retained boot identity differs; fresh review required'). Current boot is 7bfc5687-6c04-4d15-84eb-b92ab9a55dcb. Even after that check, lines 79-80 require historical st_dev 1831, whereas current stable-UUID scratch has live st_dev 1828. Thus the retained source is deterministically ineligible on this boot/remount; this conclusion uses exact source and actual current values, without another unchanged privileged retry.",
+      "required_next_step": "Dispatcher-selected coherent repair of the source-bound historical-lease authority and its canonical consumer, independently reviewed against all seven immutable original leases/evidence, stable UUID plus freshly bound live device/inodes/boot/process identities. Preserve every old source, lease, evidence, prepared scratch22 namespace and this failed admission. Do not raw alter leases, weaken census, copy old boot/device authority, or count a renamed attempt as a fresh failure-family budget.",
+      "release_effect": "No mechanical finalization, external PASS_EXECUTION report, execution request publication or heavy build may proceed from this proposal while this prerequisite refuses. Any changed source/artifact requires a newly exact reviewed binding and appropriate preserved-attempt reconciliation."
+    }
+  ],
+  "remaining_boundaries": [
+    "After repaired authenticated historical-lease admission, rerun only the relevant changed read-only check and independently review its concrete result.",
+    "Fresh idle process/container/lease census and bound development lock must pass before mutation; current failed census cannot be treated as an idle receipt.",
+    "Only then mechanically finalize a source/artifact-bound release, commit/push/fetch exact blobs and externally bind the final release commit and digest.",
+    "Keep all HUP/INT/TERM/QUIT deferral, inherited root-lock descriptor, no outer build timeout and nonreturning uncertain-retirement quarantine from the accepted corrected wrapper."
+  ],
+  "failure_family": {
+    "name": "Canonical build admission historical-lease authority across boot/remount",
+    "current_attempt": "Initial concrete read-only admission failure; one bounded diagnostic harness correction, no production correction attempted by reviewer.",
+    "prior_separate_families_preserved": ["scratch21 phase-0 source authority failure", "S22-LOCK-1 source initial SIGQUIT quarantine defect and accepted bounded correction"]
+  },
+  "execution_performed": false,
+  "acceptance_credit": false,
+  "no_claim_of_idle_or_build_success": true
+}

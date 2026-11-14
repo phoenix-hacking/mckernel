@@ -1,0 +1,121 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_BOUND_FIXTURE_ONLY_FIX_PROPOSED_NO_EXECUTION",
+  "failure_stderr": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-remote-flush/actual-owned-capture-observer-correction-1/02-focused-C-Rust-recorder-link/stderr",
+    "sha256": "41f3d3b2a194326532006f67559fdf803f5d4f667cb131e9d611ec02e272e7f9",
+    "bytes": 568
+  },
+  "failure_receipt": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-remote-flush/FAILURE-OBSERVER-CORRECTION-1.json",
+    "sha256": "3b16c1077acadb71651b440eb1da7cd8819d9c9f91b1836029aa634b30dafa74",
+    "bytes": 6219
+  },
+  "durable_Rust_receipt": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-remote-flush/DURABLE-RUST-OBJECT.json",
+    "sha256": "cd8d38994a47d81bfa7c205606b2bea6f3aacdbf7801b48240ee1ebb7327daef",
+    "bytes": 996
+  },
+  "retained_Rust": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-remote-flush/output-1/rust-entry.o",
+    "sha256": "40a90553d2e6825b9b6d8a6b01913ae4a25b7dea992fe02fead763846fe3b94f",
+    "bytes": 2664
+  },
+  "retained_C": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-remote-flush/output-1/recorder.o",
+    "sha256": "019db85e24c2a627b22ed4fca9ef5bc277a7367f75bdec3a303a993cbf3e07b9",
+    "bytes": 49152
+  },
+  "C_undefined_symbols": [
+    [
+      "__inline_memset",
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "memcpy",
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "remote_flush_tlb_array_cpumask",
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "memcmp",
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "printf",
+      1,
+      0,
+      0,
+      0,
+      0
+    ]
+  ],
+  "actual_header_sources": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-9/default-image-preparation-1/source-materialization-attempt-1/materialized-source/arch/x86_64/kernel/include/arch-string.h",
+      "sha256": "98fe2c9021167e9b08d75dbe5ffc6b25bc84d708a8baeaf60d16fcb88e5b3831",
+      "bytes": 238
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-9/default-image-preparation-1/source-materialization-attempt-1/materialized-source/lib/include/string.h",
+      "sha256": "f612dad80dd16ff0d4d6232f155cc879522de6203ce015afa3ef0c36c3dd5636",
+      "bytes": 1588
+    }
+  ],
+  "cause": "Pinned lib/include/string.h defines memset as __inline_memset when ARCH_FAST_MEMSET is set by arch-string.h. Recorder main lines142/144 therefore require that symbol; the focused host link does not include the McKernel fast-string provider.",
+  "fix": "Supply exactly this host-fixture ABI symbol via a separate adapter to already-linked libc memset; retain both compiled objects, all original assertions, actual header closure and product bytes.",
+  "adapter": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-remote-flush/expert-fixture-repair-1/fixture/host_inline_memset_adapter.c",
+    "sha256": "41c01e02efcc719dd8aeefa855d995411d1ed6368c87038fd69e98f36664017b",
+    "bytes": 675
+  },
+  "observer_data_binding": "Same existing ELF/callback/layout assertions, fresh output root plus exact retained Rust object path.",
+  "observer": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-remote-flush/expert-fixture-repair-1/fixture/observe_actual_artifacts.py",
+    "sha256": "14022bffccb250b5a991808e8c12a5fb5cc84f637b750765d830ed32da23cccc",
+    "bytes": 4233
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-remote-flush/expert-fixture-repair-1/FIXTURE-ONLY-REPAIR.patch",
+    "sha256": "c0937f8bd2bae6acad76018e2e03e130f0b2b7218658a54e41ff39da51fb7112",
+    "bytes": 2578
+  },
+  "recipe": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-remote-flush/expert-fixture-repair-1/EXACT-FIXTURE-REPRODUCER.NOT-GRANTED.json",
+    "sha256": "c2009d7aba5dca1047454f86142d15f4f40103eed139c237a91e3e9f69554aa6",
+    "bytes": 65550
+  },
+  "product_source_bindings": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-remote-flush/SOURCE-AND-FIXTURE-PREPARATION.json",
+    "sha256": "a0da532809b053f84de1d0872e00192e24ecbbd2e39746652ee77d33dfccfe3d",
+    "bytes": 52528
+  },
+  "product_patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-remote-flush/PRIVATE-REMOTE-FLUSH.patch",
+    "sha256": "8dc28a0c3729a77e702507e33b6cd62ae9c262722c3c4f195c78ccc442ff084b",
+    "bytes": 5900
+  },
+  "product_changes": 0,
+  "compiler_jobs": 0,
+  "test_executions": 0,
+  "parity_proven": false,
+  "native": false
+}

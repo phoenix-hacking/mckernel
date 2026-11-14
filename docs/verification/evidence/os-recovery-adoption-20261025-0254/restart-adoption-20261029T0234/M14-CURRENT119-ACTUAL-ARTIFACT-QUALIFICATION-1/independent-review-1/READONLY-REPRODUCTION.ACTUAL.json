@@ -1,0 +1,38 @@
+{
+  "actual_reader_failure_dispositions": "Exact four supplements accepted; original failures and oracle preserved.",
+  "authenticated_declared_byte_refs": 44,
+  "checks": [
+    {
+      "one_report_write_removed": true,
+      "recomputed_exact": true,
+      "report": "ACTUAL119-ARTIFACT-FACTS.json",
+      "script": "inspect_actual119.py"
+    },
+    {
+      "one_report_write_removed": true,
+      "recomputed_exact": true,
+      "report": "FOUR-READER-LIMIT-SUPPLEMENT.json",
+      "script": "supplement_four_reader_limits.py"
+    },
+    {
+      "one_report_write_removed": true,
+      "recomputed_exact": true,
+      "report": "INHERITED-SOURCE-WARNING-SUPPLEMENT.json",
+      "script": "supplement_inherited119.py"
+    },
+    {
+      "one_report_write_removed": true,
+      "recomputed_exact": true,
+      "report": "QUALIFIED-BODY5-ACTUAL119-READBACK.json",
+      "script": "readback_qualified_body5.py"
+    }
+  ],
+  "compiler_HOST_Docker_native_cleanup_calls": 0,
+  "evidence_rewrites": 0,
+  "original_389_counter_equal": true,
+  "python": "3.8.10",
+  "reviewer_environment_failure": "First checker attempt on Python3.9 failed the frozen validator AST hash before artifact checks; Python3.8.10 matches frozen AST contract and all four full readbacks exactly. No reader/report/source changed.",
+  "schema": "mckernel.independent-readonly-artifact-reproduction.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_EXACT_RECOMPUTED_FOUR_ARTIFACT_REPORTS"
+}

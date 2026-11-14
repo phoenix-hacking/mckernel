@@ -1,0 +1,36 @@
+{
+  "schema": "mckernel.stability-source-review.v1",
+  "recorded_at": "2026-09-28T09:46:03-07:00",
+  "base_commit": "826442c0470747cb6b2d344db6d2c25a1147386c",
+  "scope": "outer diagnostic join for intentional post-QMP QEMU retirement status",
+  "decision": "PASS_SOURCE_READY_FOR_FRESH_PACKET",
+  "original_failure": "docs/verification/stability-native-diagnostic-current-signal-attempt-failure-20260928-3.json",
+  "source_sha256": {
+    "scripts/application-tests/native_diagnostic_container_owner.py": "038fe29246bb7977565a53f2346fa981072975eb3c55fdb3571ff6e1da6173f1",
+    "scripts/tests/test_application_native_diagnostic_container_owner.py": "da1a11b67a4f424688cd2e864216856102fb3ad4fe75d7040a9fb48fa781c16e"
+  },
+  "verified_behavior": [
+    "The outer join preserves exact argv, complete process identity, mirrored inner/observation evidence, cleanup, capture and independent oracle replay checks.",
+    "Only exact integer QEMU statuses zero, -SIGTERM and -SIGKILL are accepted for the reviewed QMP-quit/TERM/KILL/reap path.",
+    "Boolean, null, string, positive failure and unrelated signal statuses reject.",
+    "The exact observed -SIGKILL status is preserved rather than normalized.",
+    "Corrected _inner_result replays the unchanged packet-5 raw result and captures without modifying them."
+  ],
+  "tests": {
+    "command": "/home/holden/anaconda3/bin/python3 -m unittest -v scripts.tests.test_application_native_diagnostic scripts.tests.test_application_native_diagnostic_backend scripts.tests.test_application_native_diagnostic_container_owner scripts.tests.test_application_native_diagnostic_overlay scripts.tests.test_application_native_diagnostic_runner scripts.tests.test_qmp_capture",
+    "result": "244 tests passed in 16.507 seconds; exit 0",
+    "evidence_root": "/home/holden/mckernel-work/scratch/native-diagnostic-qemu-status-tests-20260928-1",
+    "unittest_typescript_sha256": "2f98aa2c2053305c6f3174aa698bed4bca84b9499c0d9170ff7c8ce40304be52",
+    "timing_sha256": "55be2622762f77e0904f097e75e92bc6919c7bd9eea6c6c26129d05210c21acd",
+    "elapsed_seconds": 16.61,
+    "py_compile": "PASS",
+    "scoped_diff_check": "PASS",
+    "bound_manifest": "startup.argv-empty; ab2905811ae10eda6ba6d4ca7d023b0cc50fdaa7520968e45c2b41c733a1ecc6"
+  },
+  "independent_review": "PASS; exact source/diff/status matrix and read-only replay of packet-5 evidence verified",
+  "limitations": [
+    "Packet 5 remains a failed consumed attempt and cannot be retried.",
+    "A fresh packet, parent, nonce, checkpoint and independent execution release remain required.",
+    "No formal application, M04, production-gate or whole-OS acceptance follows."
+  ]
+}

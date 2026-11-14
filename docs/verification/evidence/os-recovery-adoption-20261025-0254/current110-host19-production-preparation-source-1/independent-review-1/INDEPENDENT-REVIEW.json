@@ -1,0 +1,114 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/current110_execution_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "recorded_at": "2026-10-27T17:52:15.635935+00:00",
+  "decision": "PASS_FROZEN_SOURCE_AND_FIVE_COMMAND_DERIVATION_EXECUTION_NOT_READY",
+  "runtime_authority": null,
+  "execution_release": false,
+  "reviewed_inputs": {
+    "source_ready": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/SOURCE-READY.json",
+      "bytes": 5952,
+      "sha256": "188f37c53ff423bcae7b038b1ac981faded386204bfa1b44f1389bdd1d31727b"
+    },
+    "profile": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/PROFILE.SOURCE-ONLY.json",
+      "bytes": 93987,
+      "sha256": "5e5c65105bdf17213292bfd06ae9376761a9451842adbd98da4a92b91a1de2d2"
+    },
+    "commands": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/EXACT-FIVE-COMMAND-PROPOSAL.NOT-GRANTED.json",
+      "bytes": 17752,
+      "sha256": "60095f306ae15e43e8ac599f604c362a5ebaf7f65a4890335c3f8f12990bd08c"
+    },
+    "closed_Rust_map": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/RUST-SUBTREE-CLOSED-SOURCE-MAP.json",
+      "bytes": 108889,
+      "sha256": "360db4e410f2cd7cc38648fc0056c69333b7e413a37b643669773d8d1983fd2a"
+    },
+    "runner": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/run_build_only.py",
+      "bytes": 23902,
+      "sha256": "f762bb42932ee7fb400a6e8e91219ae6bba4febefcfaa5a0d10e4a3f54bc5a7e"
+    },
+    "worker": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/build_only_worker.py",
+      "bytes": 4113,
+      "sha256": "317a2499e49eb528fe90e243bbe7a4c0149a234ccc06a12232a0ea1cf183b9f1"
+    },
+    "holder": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/hold_and_run_build_only.py",
+      "bytes": 7010,
+      "sha256": "d17bd70e3e3e6ef7febe48b6f0f892ab6f1a94c74e89d43808bbea8b5dc21551"
+    },
+    "publisher": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/publish_approved_ready.py",
+      "bytes": 3497,
+      "sha256": "af39ab7d55b8a11ca5a4a5361ce41639dd6207ffc3d9b0e55d64355d44697401"
+    }
+  },
+  "verified_source_facts": [
+    "All declared ready/profile/map/next-step/tool/diff references match actual bytes. All112 Rust snapshot files match a closed exact set, ordinary files with link count1; all retained configuration/seven selected object hashes match.",
+    "All9 adopted canonical HOST19 files match Root candidate hashes and this packet snapshots; no canonical source mutation or HOST19 replay performed.",
+    "Exact5 new commands consist of whole Rust, process C, kernel syscall C, architecture syscall C and exact11-input raw link. Process/link argv equal accepted109. Removing only four added Rust cfgs, one F03 C define and three F06 C defines reproduces accepted109 argv exactly.",
+    "Four replacements are not mounted from accepted109; seven unchanged C/assembly objects are retained readonly. New output absence is checked per command and first failed command stops suffix. Configuration is reused directly; no fresh configure/SDK compile claim.",
+    "New6 forwarding callbacks preserve C pointer/integer ABI, synchronous callback behavior, set_signal const-cast behavior and check_signal signed-int-to-unsigned-long conversion. Source contains selected C externs and retained inactive C alternatives.",
+    "Idle Rust data derives10 offsets through offset_of with80B/alignment8 assertion and nine original values with36B/alignment4 assertion. Selected C checks original CPU/thread/monitor constants. Actual object origin, exact bytes and consumer proof remain future obligations.",
+    "Worker is pinned CPU2-5/UID1000 and three-clock/same-boot bounds; runner uses existing reviewed one-heavy4CPU/12GiB/no-swap/512tasks/no-network profile and aggregate23259332608B budget. Holder verifies exact27:4 flock/birth, retains sole FD custody, joins child and requires positive no-launch/container-terminal evidence before release; uncertain launch stays quarantined.",
+    "Publisher is byte-identical to prior protocol. Its generated review label is Root-attested metadata, not a substitute for an actual independent exact-input approval. Current reviewer identity/input SHA must be recorded truthfully in external approval receipt.",
+    "CURRENT109e87f/C100/process70 and original folded-argument/timer supplemental acceptance remain scoped historical acceptance; no rebuild/replay of its consumed ea92 operation is proposed."
+  ],
+  "blocking_original_contract_conditions": [
+    {
+      "id": "G1",
+      "condition": "Replace runner v1 operation guard path/hash8bf26 with reviewed actual_account_window_v2.py1f152e3f18384643cd35d203fcc2a4292950a1c90758734859bdb980cf45fda0. V1 plus static receipt comparison omits dynamic guardian journal/process/hold checks required by current parent-bound admission. Preserve stricter inherited UTC1793165769/MONO947874.5689514667/BOOT963213.6960030915 and any dynamically tighter cutoffs. Rehash successor runner/holder/tool/profile/export/request closure; leave originals intact."
+    },
+    {
+      "id": "G2",
+      "condition": "Fresh Root source/account/native-custody/ownership admission, actual ledger25 and new unused nonce are absent by design. Bind exact new request SHA/profile/export/publication/fetch verification, fresh disjoint output and one holder-only bootstrap; old releases/ea92 never authorize entry."
+    },
+    {
+      "id": "G3",
+      "condition": "Fresh held resource facts are absent. Reuse the separately corrected Source31 observer with minimal binding to exact current110 holder/27:4/birth, current operation guard, original custody clearance, nonce and request/profile/export. Preserve one heavy, aggregate7jobs and23259332608B budget, host16GiB/scratch12GiB and any greater packet floor (prior capture required scratch14091616256B). Do not invoke old CURRENT109 capture helper unchanged."
+    },
+    {
+      "id": "G4",
+      "condition": "After live HOLDER.READY and fresh<=120s resource facts, obtain actual independent exact5-command review and Root one-use grant; only then publish READY and enter. Preserve direct-source command derivation, exact Docker client prefix and complete positive terminal/joins/stream/first-failure captures."
+    }
+  ],
+  "postcompile_acceptance_conditions": [
+    "Prepare a minimal source-bound CURRENT110 successor of existing object/ELF/default qualifiers. Preserve inherited exact source/flag/toolchain/ABI/logger/RELA/MM/usercopy/lifetime/native-symbol gates, seven retained origins and four fresh objects in same11-input link.",
+    "Check actual exact C removal sets, six unique selected Rust function origins and no duplicate C providers. Planned C69+25=94/process68/Rust45 are expectations until actual records prove them; explain source-supported compiler elision explicitly.",
+    "Check current13 folded allocator arguments and tracked filename/line semantics, full timer120B/15words with nine actual consumed fields, idle80+36B full bytes/current descriptor consumers/readonly origins and six new callback imports/ABI/consumer bindings.",
+    "Keep scripted OPEN and any independent supplements separate. Actual build/default/native/whole-file acceptance are distinct; matching native and whole-file obligations remain OPEN."
+  ],
+  "review_actions": {
+    "hash_and_AST_source_reads": true,
+    "independent_source_closure_python_checks": "PASS",
+    "guard_invoked": false,
+    "compiler_or_Docker_or_root_workloads": 0,
+    "source_mutations": false,
+    "canonical_writes": false,
+    "agents_spawned": false,
+    "cleanup": false
+  },
+  "scope_counts": {
+    "Rust_sources_checked": 112,
+    "canonical_adopted_files_checked": 9,
+    "retained_objects_checked": 7,
+    "future_commands": 5,
+    "actual_commands": 0,
+    "future_replacements": 4,
+    "new_native_apps": 0,
+    "native_credit_delta": 0,
+    "whole_file_credit_delta": 0
+  },
+  "policy_hashes_adopted": {
+    "CONVERGENCE.md": "fe3e27a2255f410645deeb92fa4a912b0fe52d8705665e05a5953c42a1a2f145",
+    "GOAL.md": "183b4fe6c7470d43e0e10bf840cfc5f1efd3aa2ae4a30dd69818f85af7f7c328",
+    "HANDOFF.md": "cfd70020ed626bd34e4e43b6ee15adf3153520a807404fa003c680e8ff4d50fb",
+    "START.md": "5e82e288f7059ad73e01f49956a16039040c3c448b098e4f45dc917cf4620341"
+  }
+}

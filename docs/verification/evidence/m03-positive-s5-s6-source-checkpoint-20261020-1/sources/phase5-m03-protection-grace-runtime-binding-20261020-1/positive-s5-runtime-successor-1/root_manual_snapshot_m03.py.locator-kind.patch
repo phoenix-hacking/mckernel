@@ -1,0 +1,19 @@
+--- /home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/s4-q4-source-preparation-1/non-temporal-source-4/root_manual_snapshot_m03.py
++++ /home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/positive-s5-runtime-successor-1/non-temporal-source-6/root_manual_snapshot_m03.py
+@@ -1,14 +1,14 @@
+ """Case-specific read-only root admission recipe; no owner or guest invocation."""
+ from pathlib import Path
+ import argparse,fcntl,hashlib,importlib.util,json,os,re,stat,subprocess,time
+-N=Path('/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/s4-q4-source-preparation-1/native-control-packet-4')
++N=Path('/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/positive-s5-runtime-successor-1/native-control-packet-6')
+ OUTPUT=N/'root-live-preflight-1.json'
+ class Refusal(RuntimeError):pass
+ 
+ def m03_contract():
+  import importlib.util
+  p=Path(__file__).resolve().parent/'m03_protection_normalization_contract.py'
+- assert p.parent==Path('/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/s4-q4-source-preparation-1/non-temporal-source-4') and p.resolve()==p
++ assert p.parent==Path('/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/positive-s5-runtime-successor-1/non-temporal-source-6') and p.resolve()==p
+  assert hashlib.sha256(p.read_bytes()).hexdigest()=='2a90a35fff7480997996547cd16ddef61ccab1928a806aa7c68f7557d0fb1953'
+  spec=importlib.util.spec_from_file_location('exact_m03_protection_contract',p)
+  m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);return m

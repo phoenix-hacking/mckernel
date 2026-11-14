@@ -5,6 +5,8 @@ use core::ffi::c_void;
 pub type CInt = i32;
 pub type CLong = i64;
 pub type CULong = u64;
+// x86_64's C enum includes PTATTR_NO_EXECUTE at bit 63, so its ABI is u64.
+pub type IhkMcPtAttribute = CULong;
 pub type SizeT = usize;
 pub type SSizeT = isize;
 pub type OffT = i64;
@@ -1901,8 +1903,21 @@ const _: () = {
     assert_eq_usize(offset_of!(IkcScdInitParam, response_page), 8);
     assert_eq_usize(offset_of!(IkcScdInitParam, post_page), 24);
     assert_eq_usize(size_of::<SyscallRequest>(), 72);
+    assert_eq_usize(align_of::<SyscallRequest>(), 8);
+    assert_eq_usize(offset_of!(SyscallRequest, rtid), 0);
+    assert_eq_usize(offset_of!(SyscallRequest, ttid), 4);
+    assert_eq_usize(offset_of!(SyscallRequest, valid), 8);
+    assert_eq_usize(offset_of!(SyscallRequest, number), 16);
     assert_eq_usize(offset_of!(SyscallRequest, args), 24);
     assert_eq_usize(size_of::<SyscallResponse>(), 48);
+    assert_eq_usize(align_of::<SyscallResponse>(), 8);
+    assert_eq_usize(offset_of!(SyscallResponse, ttid), 0);
+    assert_eq_usize(offset_of!(SyscallResponse, stid), 4);
+    assert_eq_usize(offset_of!(SyscallResponse, status), 8);
+    assert_eq_usize(offset_of!(SyscallResponse, req_thread_status), 16);
+    assert_eq_usize(offset_of!(SyscallResponse, ret), 24);
+    assert_eq_usize(offset_of!(SyscallResponse, fault_address), 32);
+    assert_eq_usize(offset_of!(SyscallResponse, pde_data), 40);
     assert_eq_usize(size_of::<SyscallPost>(), 64);
     assert_eq_usize(size_of::<Coretable>(), 16);
     assert_eq_usize(offset_of!(Coretable, addr), 8);
@@ -1968,8 +1983,20 @@ const _: () = {
     assert_eq_usize(offset_of!(SysfsBitmapParam, ptr), 8);
     assert_eq_usize(size_of::<IhkIkcPacketHeader>(), 8);
     assert_eq_usize(size_of::<IkcScdPacketTraditional>(), 104);
+    assert_eq_usize(align_of::<IkcScdPacketTraditional>(), 8);
+    assert_eq_usize(offset_of!(IkcScdPacketTraditional, ref_), 0);
+    assert_eq_usize(offset_of!(IkcScdPacketTraditional, osnum), 4);
+    assert_eq_usize(offset_of!(IkcScdPacketTraditional, pid), 8);
+    assert_eq_usize(offset_of!(IkcScdPacketTraditional, arg), 16);
+    assert_eq_usize(offset_of!(IkcScdPacketTraditional, req), 24);
+    assert_eq_usize(offset_of!(IkcScdPacketTraditional, resp_pa), 96);
     assert_eq_usize(size_of::<IkcScdPacket>(), 128);
     assert_eq_usize(align_of::<IkcScdPacket>(), 8);
+    assert_eq_usize(offset_of!(IkcScdPacket, header), 0);
+    assert_eq_usize(offset_of!(IkcScdPacket, msg), 8);
+    assert_eq_usize(offset_of!(IkcScdPacket, err), 12);
+    assert_eq_usize(offset_of!(IkcScdPacket, reply), 16);
+    assert_eq_usize(offset_of!(IkcScdPacket, body), 24);
 
     assert_eq_usize(size_of::<X86BasicRegs>(), 168);
     assert_eq_usize(size_of::<X86Sregs>(), 48);
@@ -2333,9 +2360,11 @@ const _: () = {
     assert_eq_usize(size_of::<Thread>(), 5568);
     assert_eq_usize(align_of::<Thread>(), 64);
     assert_eq_usize(offset_of!(Thread, cpu_id), 16);
+    assert_eq_usize(offset_of!(Thread, tid), 20);
     assert_eq_usize(offset_of!(Thread, status), 4184);
     assert_eq_usize(offset_of!(Thread, vm), 4200);
     assert_eq_usize(offset_of!(Thread, ctx), 4208);
+    assert_eq_usize(offset_of!(Thread, uctx), 4296);
     assert_eq_usize(offset_of!(Thread, proc), 4304);
     assert_eq_usize(offset_of!(Thread, sched_list), 4328);
     assert_eq_usize(offset_of!(Thread, sched_policy), 4344);
@@ -2355,6 +2384,7 @@ const _: () = {
     assert_eq_usize(offset_of!(Thread, pmc_alloc_map), 5464);
     assert_eq_usize(offset_of!(Thread, coredump_regs), 5480);
     assert_eq_usize(offset_of!(Thread, rpf_backlog), 5520);
+    assert_eq_usize(offset_of!(Thread, rpf_arg), 5528);
     #[cfg(enable_tofu)]
     assert_eq_usize(offset_of!(Thread, fd_path_in_open), 5536);
 
@@ -2436,6 +2466,10 @@ const _: () = {
     #[cfg(enable_tofu)]
     assert_eq_usize(offset_of!(CpuLocalVar, idle_asp), 24120);
     #[cfg(not(enable_tofu))]
+    assert_eq_usize(offset_of!(CpuLocalVar, runq_lock), 7832);
+    #[cfg(enable_tofu)]
+    assert_eq_usize(offset_of!(CpuLocalVar, runq_lock), 24288);
+    #[cfg(not(enable_tofu))]
     assert_eq_usize(offset_of!(CpuLocalVar, current), 7848);
     #[cfg(enable_tofu)]
     assert_eq_usize(offset_of!(CpuLocalVar, current), 24304);
@@ -2444,6 +2478,14 @@ const _: () = {
     #[cfg(enable_tofu)]
     assert_eq_usize(offset_of!(CpuLocalVar, runq), 24328);
     #[cfg(not(enable_tofu))]
+    assert_eq_usize(offset_of!(CpuLocalVar, runq_len), 7888);
+    #[cfg(enable_tofu)]
+    assert_eq_usize(offset_of!(CpuLocalVar, runq_len), 24344);
+    #[cfg(not(enable_tofu))]
+    assert_eq_usize(offset_of!(CpuLocalVar, ikc2linux), 7904);
+    #[cfg(enable_tofu)]
+    assert_eq_usize(offset_of!(CpuLocalVar, ikc2linux), 24360);
+    #[cfg(not(enable_tofu))]
     assert_eq_usize(offset_of!(CpuLocalVar, status), 7920);
     #[cfg(enable_tofu)]
     assert_eq_usize(offset_of!(CpuLocalVar, status), 24376);
@@ -2451,6 +2493,10 @@ const _: () = {
     assert_eq_usize(offset_of!(CpuLocalVar, pending_free_pages), 7928);
     #[cfg(enable_tofu)]
     assert_eq_usize(offset_of!(CpuLocalVar, pending_free_pages), 24384);
+    #[cfg(not(enable_tofu))]
+    assert_eq_usize(offset_of!(CpuLocalVar, flags), 7944);
+    #[cfg(enable_tofu)]
+    assert_eq_usize(offset_of!(CpuLocalVar, flags), 24400);
     #[cfg(not(enable_tofu))]
     assert_eq_usize(offset_of!(CpuLocalVar, migq), 7952);
     #[cfg(enable_tofu)]

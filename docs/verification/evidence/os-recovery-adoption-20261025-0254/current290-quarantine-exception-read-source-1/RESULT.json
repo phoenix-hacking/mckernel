@@ -1,0 +1,49 @@
+{
+  "status": "PASS_SOURCE_AND_OWNED_FIXTURE_ONLY",
+  "helper": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/read_exact_recover_error.gdb.py",
+    "bytes": 4178,
+    "sha256": "8c445cb73209ec8b08bcd5c63bf73cd67ffc6a4b748ac85da8d0a9157c41f795"
+  },
+  "fixture": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/owned_fixture.py",
+    "bytes": 811,
+    "sha256": "9fdecc22e9a9b19a495c28b6d0a826253e98ecad5ecc0ecdfd93a96cd7fd6df8"
+  },
+  "test": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/test_owned_fixture.py",
+    "bytes": 3012,
+    "sha256": "8faccb7eb908cf2809693a6ad1cf9599f4030d52f8c7311f38f041d8c1c3bbd7"
+  },
+  "failure_test": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/test_fixture_failure_detach.py",
+    "bytes": 3243,
+    "sha256": "cfebcf8c94036e36f9cc6309bb35ad2aeceb6c693216f3aaeb25b08f49d37593"
+  },
+  "success": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/FIXTURE-RESULT.json",
+    "bytes": 722,
+    "sha256": "41f693fe9e28f3fa4ea02184a5730b1952b7c71de065e1d5682a57faa5b56461"
+  },
+  "failure_detach": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/FAILURE-DETACH-RESULT.json",
+    "bytes": 680,
+    "sha256": "d0ae6003263ec4d7569676604aaecf9f499ac565443d699fd174d8a21f904e6b"
+  },
+  "proposal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/EXACT-ROOT-READ-PROPOSAL.NOT-RELEASED.json",
+    "bytes": 4490,
+    "sha256": "e0001b4c930d71302cdd3627124b3b17c8c9010a9d107beedcc89ffd066d61ea"
+  },
+  "commands": [
+    "taskset -c 0 bash -c 'ulimit -v 2097152; exec /home/holden/anaconda3/bin/python3.9 -I -B /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/test_owned_fixture.py'",
+    "taskset -c 0 bash -c 'ulimit -v 2097152; exec /home/holden/anaconda3/bin/python3.9 -I -B /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/test_fixture_failure_detach.py'"
+  ],
+  "test_exit_codes": [
+    0,
+    0
+  ],
+  "initial_fixture_failure": "First error-case test incorrectly assumed GDB exitnonzero on customcommanderror. ActualGDB -ex followingdetach yields exit0, so corrected oracle requires explicit exceptiontext/noPASS and post-detach state. All original actualactor sources untouched.",
+  "no_privileged_actions": true,
+  "no_actual_actor_attach_or_signal": true
+}

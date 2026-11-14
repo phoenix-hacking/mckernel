@@ -1,0 +1,764 @@
+--- a/host-kernel/native-rust/smp_service.rs
++++ b/host-kernel/native-rust/smp_service.rs
+@@ -73,8 +73,44 @@
+ fn errno(code: i32) -> Error {
+     kernel::error::to_result(code).err().unwrap_or(EIO)
+ }
+ 
++// Diagnostic-only types. They carry host-owned route fields or the already
++// decoded message header, never packet padding or an inferred worker/delivery.
++#[derive(Clone, Copy, Debug, Eq, PartialEq)]
++enum FailureOrigin {
++    Packet { channel: usize, guest_cpu: u32, port: i32, message: i32 },
++    ControlPump,
++    RegularPump,
++    PublishRemote,
++    PublishApplications,
++    PublishSyscalls,
++    AdvanceApplications,
++    PublishProcfs,
++    Metadata,
++    Zeroing,
++}
++
++impl FailureOrigin {
++    fn label(self) -> &'static str {
++        match self {
++            Self::Packet { .. } => "packet_dispatch",
++            Self::ControlPump => "control_pump", Self::RegularPump => "regular_pump",
++            Self::PublishRemote => "publish_remote", Self::PublishApplications => "publish_apps",
++            Self::PublishSyscalls => "publish_syscalls", Self::AdvanceApplications => "advance_apps",
++            Self::PublishProcfs => "publish_procfs", Self::Metadata => "metadata", Self::Zeroing => "zeroing",
++        }
++    }
++}
++
++// A separate saturating diagnostic budget does not change existing counters,
++// admission, ownership, errors, quarantine or the service's work scheduling.
++fn diagnostic_ticket(counter: &AtomicU64) -> Option<u64> {
++    counter.fetch_update(Ordering::Relaxed, Ordering::Relaxed, |old| {
++        if old < 16 { Some(old + 1) } else { None }
++    }).ok().map(|old| old + 1)
++}
++
+ struct Metadata {
+     claim: memory::Claim,
+     request: wire::Request,
+ }
+@@ -141,8 +177,9 @@
+     status_address: u64,
+     error: AtomicI32,
+     completed: AtomicU64,
+     rejected: AtomicU64,
++    failure_contexts: AtomicU64,
+     zeroed: AtomicU64,
+     eventfd_notifications: [AtomicU64; 3],
+     #[pin]
+     transport: Mutex<Transport>,
+@@ -158,9 +195,21 @@
+     zero_pending: Mutex<Vec<zero_pages::Request>>,
+ }
+ 
+ impl Runtime {
+-    fn fail(&self, error: Error) {
++    fn failure_context(&self, error: Error, origin: FailureOrigin) {
++        if let Some(diag) = diagnostic_ticket(&self.failure_contexts) {
++            pr_err!("IHK-E os={} g={} d={} at={} e={}\n",
++                self.owner.slot(), self.owner.generation(), diag, origin.label(), error.to_errno());
++            if let FailureOrigin::Packet { channel, guest_cpu, port, message } = origin {
++                pr_err!("IHK-P os={} g={} d={} ch={} c={} port={} m={:x}\n",
++                    self.owner.slot(), self.owner.generation(), diag, channel, guest_cpu, port, message);
++            }
++        }
++    }
++
++    fn fail(&self, error: Error, origin: FailureOrigin) {
++        self.failure_context(error, origin);
+         if self.application.fail_service(&self.error, error) {
+             pr_err!("IHK-SMP: continuing service error os={} generation={} errno={}; workers and all started owners retained\n",
+                 self.owner.slot(), self.owner.generation(), error.to_errno());
+         }
+@@ -465,9 +514,9 @@
+ 
+     fn pump_regular(&self) -> Result {
+         for index in 0..self.cpus.len() + 1 {
+             for _ in 0..16 {
+-                let (port, packet) = {
++                let (port, guest_cpu, packet) = {
+                     let mut transport = self.transport.lock();
+                     let Some(entry) = transport.channels.get_mut(index) else {
+                         break;
+                     };
+@@ -486,9 +535,9 @@
+                             entry.pending = Some(packet);
+                             packet
+                         }
+                     };
+-                    (entry.channel.port, packet)
++                    (entry.channel.port, entry.channel.guest_cpu, packet)
+                 };
+                 // No channel/tree/resource mutex spans reply completion or
+                 // metadata admission. The two workers cannot wait on each
+                 // other's tree lock during active callback removal.
+@@ -505,9 +554,12 @@
+                     .get_mut(index)
+                     .ok_or(EIO)?
+                     .pending = None;
+                 if let Err(error) = result {
+-                    self.fail(error);
++                    self.fail(error, FailureOrigin::Packet {
++                        channel: index, guest_cpu, port,
++                        message: i32::from_le_bytes(packet[8..12].try_into().unwrap()),
++                    });
+                 }
+             }
+         }
+         Ok(())
+@@ -573,27 +625,27 @@
+         // already-published exchanges from draining in the other service.
+         // Handle each result before invoking the next service. An array of
+         // Results would eagerly publish later work before recording failure.
+         if let Err(error) = self.pump_master() {
+-            self.fail(error);
++            self.fail(error, FailureOrigin::ControlPump);
+         }
+         if let Err(error) = self.pump_regular() {
+-            self.fail(error);
++            self.fail(error, FailureOrigin::RegularPump);
+         }
+         if let Err(error) = self.publish_remote() {
+-            self.fail(error);
++            self.fail(error, FailureOrigin::PublishRemote);
+         }
+         if let Err(error) = self.publish_applications() {
+-            self.fail(error);
++            self.fail(error, FailureOrigin::PublishApplications);
+         }
+         if let Err(error) = self.publish_syscalls() {
+-            self.fail(error);
++            self.fail(error, FailureOrigin::PublishSyscalls);
+         }
+         if let Err(error) = self.application.advance() {
+-            self.fail(error);
++            self.fail(error, FailureOrigin::AdvanceApplications);
+         }
+         if let Err(error) = self.publish_procfs() {
+-            self.fail(error);
++            self.fail(error, FailureOrigin::PublishProcfs);
+         }
+     }
+ 
+     fn publish_procfs(&self) -> Result {
+@@ -719,14 +771,14 @@
+         match entry.role {
+             Role::Packets => entry.runtime.pump(),
+             Role::Metadata => {
+                 if let Err(error) = entry.runtime.metadata() {
+-                    entry.runtime.fail(error);
++                    entry.runtime.fail(error, FailureOrigin::Metadata);
+                 }
+             }
+             Role::Zeroing => {
+                 if let Err(error) = entry.runtime.zeroing() {
+-                    entry.runtime.fail(error);
++                    entry.runtime.fail(error, FailureOrigin::Zeroing);
+                 }
+             }
+         }
+         // Polling also notices host-initiated show/store calls; waiting solely
+@@ -1228,8 +1280,9 @@
+             owner, memory, cpus, data, remote, application, procfs, master,
+             master_receive: receive, master_send: send, master_bytes: queue_bytes,
+             status_address,
+             error: AtomicI32::new(0), completed: AtomicU64::new(0), rejected: AtomicU64::new(0),
++            failure_contexts: AtomicU64::new(0),
+             zeroed: AtomicU64::new(0),
+             eventfd_notifications: [AtomicU64::new(0), AtomicU64::new(0), AtomicU64::new(0)],
+             transport <- new_mutex!(Transport { channels: Vec::new(), master_reply: None }),
+             service <- new_mutex!(None),
+--- a/host-kernel/native-rust/sysfs_memory.rs
++++ b/host-kernel/native-rust/sysfs_memory.rs
+@@ -41,8 +41,62 @@
+ #[derive(Clone, Copy)]
+ struct Tagged {
+     span: Span,
+     serial: u64,
++}
++
++// Diagnostic snapshots contain only initialized, host-owned ledger fields.
++#[derive(Clone, Copy, Debug, Eq, PartialEq)]
++enum ConflictKind { Fixed, Request, Payload, Response, ExecPayload, Snoop, Procfs, Zeroing }
++
++#[derive(Clone, Copy, Debug, Eq, PartialEq)]
++struct FailureConflict {
++    kind: ConflictKind,
++    slot: usize,
++    member: Option<usize>,
++    serial: Option<u64>,
++    span: Span,
++}
++
++#[derive(Clone, Copy, Debug, Eq, PartialEq)]
++struct SyscallFailureContext {
++    cpu: i32, pid: i32, requester: i32, target: i32, number: u64,
++    response: u64, response_end: Option<u64>,
++    conflict: Option<FailureConflict>,
++}
++
++fn syscall_failure_context(request: &SyscallRequest, conflict: Option<FailureConflict>) -> SyscallFailureContext {
++    SyscallFailureContext {
++        cpu: request.cpu(), pid: request.pid(), requester: request.requester(),
++        target: request.target(), number: request.number(),
++        response: request.response(), response_end: request.response().checked_add(RESPONSE_BYTES as u64),
++        conflict,
++    }
++}
++
++fn log_conflict(os: u32, generation: u64, diag: u64, conflict: Option<FailureConflict>) {
++    if let Some(old) = conflict {
++        pr_err!("IHK-C os={} g={} d={} k={:?} i={} j={:?} s={:?}\n",
++            os, generation, diag, old.kind, old.slot, old.member, old.serial);
++        pr_err!("IHK-O os={} g={} d={} a={:x} b={:x}\n",
++            os, generation, diag, old.span.physical, old.span.end);
++    } else {
++        pr_err!("IHK-C os={} g={} d={} k=none\n", os, generation, diag);
++    }
++}
++
++fn log_syscall_failure(os: u32, generation: u64, diag: u64, error: Error, context: SyscallFailureContext) {
++    pr_err!("IHK-E os={} g={} d={} at=syscall_claim e={}\n", os, generation, diag, error.to_errno());
++    pr_err!("IHK-P os={} g={} d={} c={} p={} rq={} to={}\n",
++        os, generation, diag, context.cpu, context.pid, context.requester, context.target);
++    if let Some(end) = context.response_end {
++        pr_err!("IHK-S os={} g={} d={} n={:x} a={:x} b={:x}\n",
++            os, generation, diag, context.number, context.response, end);
++    } else {
++        pr_err!("IHK-S os={} g={} d={} n={:x} a={:x} b=none\n",
++            os, generation, diag, context.number, context.response);
++    }
++    log_conflict(os, generation, diag, context.conflict);
+ }
+ 
+ struct Ledger {
+     fixed: Vec<Span>,
+@@ -80,8 +134,47 @@
+             || self.procfs.iter().any(|old| old.span.overlaps(span))
+             || self.zeroing.iter().any(|old| old.span.overlaps(span))
+     }
+ 
++    // Read-only diagnostic traversal after the ORIGINAL conflicts predicate
++    // already chose EBUSY. Keep its first-match order; never use this observer
++    // to admit/reject, retire a tag, acquire a claim or interpret guest bytes.
++    fn diagnostic_conflict(&self, span: Span, snoops: bool) -> Option<FailureConflict> {
++        for (slot, old) in self.fixed.iter().enumerate() {
++            if old.overlaps(span) {
++                return Some(FailureConflict { kind: ConflictKind::Fixed, slot, member: None, serial: None, span: *old });
++            }
++        }
++        for (kind, slots) in [(ConflictKind::Request, &self.requests), (ConflictKind::Payload, &self.payloads), (ConflictKind::Response, &self.responses)] {
++            for (slot, old) in slots.iter().enumerate() {
++                if let Some(old) = old {
++                    if old.span.overlaps(span) {
++                        return Some(FailureConflict { kind, slot, member: None, serial: Some(old.serial), span: old.span });
++                    }
++                }
++            }
++        }
++        for (slot, group) in self.exec_payloads.iter().enumerate() {
++            if let Some(group) = group {
++                for (member, old) in group.iter().enumerate() {
++                    if old.span.overlaps(span) {
++                        return Some(FailureConflict { kind: ConflictKind::ExecPayload, slot, member: Some(member), serial: Some(old.serial), span: old.span });
++                    }
++                }
++            }
++        }
++        for (kind, tags, enabled) in [(ConflictKind::Snoop, &self.snoops, snoops), (ConflictKind::Procfs, &self.procfs, true), (ConflictKind::Zeroing, &self.zeroing, true)] {
++            if enabled {
++                for (slot, old) in tags.iter().enumerate() {
++                    if old.span.overlaps(span) {
++                        return Some(FailureConflict { kind, slot, member: None, serial: Some(old.serial), span: old.span });
++                    }
++                }
++            }
++        }
++        None
++    }
++
+     fn tag(&mut self, span: Span) -> Result<Tagged> {
+         self.serial = self.serial.checked_add(1).ok_or_else(|| errno(-75))?;
+         Ok(Tagged {
+             span,
+@@ -96,8 +189,9 @@
+     pub(super) direct_map: u64,
+     extents: Vec<MemoryExtent>,
+     layout: crate::smp_image::BootLayout,
+     numa_nodes: usize,
++    failure_contexts: AtomicU64,
+     #[pin]
+     ledger: Mutex<Ledger>,
+ }
+ 
+@@ -166,8 +260,9 @@
+         let procfs = Vec::with_capacity(4096 + METADATA_CAPACITY + 2, GFP_KERNEL)?;
+         Arc::pin_init(
+             pin_init!(Self {
+                 owner, direct_map, extents, layout, numa_nodes,
++                failure_contexts: AtomicU64::new(0),
+                 ledger <- new_mutex!(Ledger { fixed, requests, responses, payloads, exec_payloads, snoops: Vec::new(), procfs, zeroing: Vec::new(), serial: 0 }),
+             }),
+             GFP_KERNEL,
+         )
+@@ -210,8 +305,10 @@
+         let address = self.address(physical, bytes)?;
+         let span = Span::new(physical, bytes)?;
+         let mut ledger = self.ledger.lock();
+         if ledger.conflicts(span, true) {
++            self.diagnostic_conflict_failure("procfs_overlap", span,
++                ledger.diagnostic_conflict(span, true), None, false, None);
+             return Err(EBUSY);
+         }
+         if ledger.procfs.len() == 4096 + METADATA_CAPACITY + 2 {
+             return Err(EAGAIN);
+@@ -219,12 +316,17 @@
+         // SAFETY: `address` names the checked four-byte, four-byte-aligned
+         // CREATE field in a retained owner extent. Holding `ledger` excludes
+         // every host alias; the guest shares this field only through atomic
+         // accesses, and `from_ptr` creates no borrowed reference.
+-        if create
+-            && unsafe { AtomicI32::from_ptr(address as *mut i32) }.load(Ordering::Acquire) != 0
+-        {
+-            return Err(EBUSY);
++        if create {
++            let done = unsafe { AtomicI32::from_ptr(address as *mut i32) }.load(Ordering::Acquire);
++            if done != 0 {
++                if let Some(diag) = super::diagnostic_ticket(&self.failure_contexts) {
++                    pr_err!("IHK-W os={} g={} d={} at=procfs_create a={:x} v={} e=-16\n",
++                        self.owner.slot(), self.owner.generation(), diag, physical, done);
++                }
++                return Err(EBUSY);
++            }
+         }
+         let tag = ledger.tag(span)?;
+         ledger.procfs.push(tag, GFP_KERNEL)?;
+         Ok(ProcfsRegion {
+@@ -344,45 +446,91 @@
+             active: true,
+         })
+     }
+ 
++    fn diagnostic_conflict_failure(&self, at: &'static str, span: Span,
++        conflict: Option<FailureConflict>, own: Option<Tagged>, node_overlap: bool,
++        route: Option<(i32, i32)>) {
++        if let Some(diag) = super::diagnostic_ticket(&self.failure_contexts) {
++            pr_err!("IHK-E os={} g={} d={} at={} e=-16 node={}\n",
++                self.owner.slot(), self.owner.generation(), diag, at, node_overlap as u8);
++            pr_err!("IHK-S os={} g={} d={} a={:x} b={:x}\n",
++                self.owner.slot(), self.owner.generation(), diag, span.physical, span.end);
++            if let Some((pid, cpu)) = route {
++                pr_err!("IHK-P os={} g={} d={} p={} c={}\n",
++                    self.owner.slot(), self.owner.generation(), diag, pid, cpu);
++            }
++            if let Some(own) = own {
++                pr_err!("IHK-T os={} g={} d={} s={} a={:x} b={:x}\n",
++                    self.owner.slot(), self.owner.generation(), diag, own.serial, own.span.physical, own.span.end);
++            }
++            log_conflict(self.owner.slot(), self.owner.generation(), diag, conflict);
++        }
++    }
++
++    fn diagnostic_completion_failure(&self, kind: wire::Kind, tag: Tagged, operation_error: i32, busy: i32) {
++        if let Some(diag) = super::diagnostic_ticket(&self.failure_contexts) {
++            pr_err!("IHK-M os={} g={} d={} k={:?} busy={} op_e={} e=-16\n",
++                self.owner.slot(), self.owner.generation(), diag, kind, busy, operation_error);
++            pr_err!("IHK-T os={} g={} d={} s={} a={:x} b={:x}\n",
++                self.owner.slot(), self.owner.generation(), diag, tag.serial, tag.span.physical, tag.span.end);
++        }
++    }
++
+     pub(super) fn syscall(self: &Arc<Self>, request: &SyscallRequest) -> Result<SyscallResponse> {
+-        let physical = request.response();
+-        if physical % 8 != 0 {
+-            return Err(EINVAL);
+-        }
+-        let address = self.address(physical, RESPONSE_BYTES)?;
+-        let span = Span::new(physical, RESPONSE_BYTES)?;
+-        let mut ledger = self.ledger.lock();
+-        if ledger.conflicts(span, true) {
+-            return Err(EBUSY);
+-        }
+-        let slot = ledger
+-            .responses
+-            .iter()
+-            .position(Option::is_none)
+-            .ok_or(EAGAIN)?;
+-        // SAFETY: The checked exact-generation RAM is aligned and disjoint
+-        // from every active service access. The guest owns only atomic state.
+-        let status = unsafe { AtomicU64::from_ptr((address as *mut u8).add(8).cast()) };
+-        // SAFETY: The same retained, response-sized mapping covers the
+-        // eight-byte-aligned state word at offset 16. The held ledger claim
+-        // excludes host aliases, while the guest accesses this shared word
+-        // atomically; this creates no Rust reference to guest memory.
+-        let state = unsafe { AtomicU64::from_ptr((address as *mut u8).add(16).cast()) };
+-        if status.load(Ordering::Acquire) != 0 || !matches!(state.load(Ordering::Acquire), 0 | 2) {
+-            return Err(errno(-71));
+-        }
+-        let tag = ledger.tag(span)?;
+-        ledger.responses[slot] = Some(tag);
+-        Ok(SyscallResponse {
+-            memory: self.clone(),
+-            address,
+-            tag,
+-            slot,
+-            payload: None,
+-            exec_group: None,
+-        })
++        let mut conflict = None;
++        let result = (|| {
++            let physical = request.response();
++            if physical % 8 != 0 {
++                return Err(EINVAL);
++            }
++            let address = self.address(physical, RESPONSE_BYTES)?;
++            let span = Span::new(physical, RESPONSE_BYTES)?;
++            let mut ledger = self.ledger.lock();
++            if ledger.conflicts(span, true) {
++                conflict = ledger.diagnostic_conflict(span, true);
++                return Err(EBUSY);
++            }
++            let slot = ledger
++                .responses
++                .iter()
++                .position(Option::is_none)
++                .ok_or(EAGAIN)?;
++            // SAFETY: The checked exact-generation RAM is aligned and disjoint
++            // from every active service access. The guest owns only atomic state.
++            let status = unsafe { AtomicU64::from_ptr((address as *mut u8).add(8).cast()) };
++            // SAFETY: The same retained, response-sized mapping covers the
++            // eight-byte-aligned state word at offset 16. The held ledger claim
++            // excludes host aliases, while the guest accesses this shared word
++            // atomically; this creates no Rust reference to guest memory.
++            let state = unsafe { AtomicU64::from_ptr((address as *mut u8).add(16).cast()) };
++            if status.load(Ordering::Acquire) != 0 || !matches!(state.load(Ordering::Acquire), 0 | 2) {
++                return Err(errno(-71));
++            }
++            let tag = ledger.tag(span)?;
++            ledger.responses[slot] = Some(tag);
++            Ok(SyscallResponse {
++                memory: self.clone(),
++                address,
++                tag,
++                slot,
++                payload: None,
++                exec_group: None,
++            })
++        
++        })();
++        // The original ledger guard has ended. The copied snapshot has no
++        // borrowed tag/pointer, and this diagnostic runs BEFORE returning the
++        // same error to the unchanged mailbox/Remote quarantine path.
++        if let Err(error) = &result {
++            if *error != EAGAIN {
++                if let Some(diag) = super::diagnostic_ticket(&self.failure_contexts) {
++                    log_syscall_failure(self.owner.slot(), self.owner.generation(), diag,
++                        *error, syscall_failure_context(request, conflict));
++                }
++            }
++        }
++        result
+     }
+ 
+     /// Reserve queue aliases while the caller allocates and stores both owned
+     /// endpoints. This lock never spans a remote callback or response wait.
+@@ -550,9 +698,13 @@
+         self.active = false;
+         // SAFETY: The unique original claim is still excluded by the ledger
+         // lock. Completion writes error/handle before its final release store;
+         // no guest memory is accessed by us after that store.
+-        unsafe { wire::complete(self.kind, self.address as *mut u8, error, handle) }.map_err(errno)
++        unsafe { wire::complete_observed(self.kind, self.address as *mut u8, error, handle, |busy| {
++            // This is the original failed busy load, under the still-held
++            // exclusive ledger mutex, before any final store or peer reuse.
++            self.memory.diagnostic_completion_failure(busy.kind, self.tag, error, busy.value);
++        }) }.map_err(errno)
+     }
+ 
+     pub(super) fn complete(mut self, result: Result<Option<u64>>) -> Result {
+         match result {
+--- a/host-kernel/native-rust/sysfs_zeroing.rs
++++ b/host-kernel/native-rust/sysfs_zeroing.rs
+@@ -67,8 +67,10 @@
+         let control;
+         {
+             let mut ledger = self.ledger.lock();
+             if ledger.conflicts(control_span, true) {
++                self.diagnostic_conflict_failure("zero_control", control_span,
++                    ledger.diagnostic_conflict(control_span, true), None, false, Some((request.pid, request.cpu)));
+                 return Err(EBUSY);
+             }
+             // SAFETY: The complete aligned node is in retained OS extents.
+             // Its immutable ID identifies an actual boot NUMA rank. Atomic
+@@ -93,8 +95,10 @@
+                 let chunk_physical =
+                     wire::Chunk::header_physical(link, self.direct_map).map_err(errno)?;
+                 let header = Span::new(chunk_physical, wire::HEADER_BYTES)?;
+                 if header.overlaps(node_span) || ledger.conflicts(header, true) {
++                    self.diagnostic_conflict_failure("zero_header", header,
++                        ledger.diagnostic_conflict(header, true), Some(control), header.overlaps(node_span), Some((request.pid, request.cpu)));
+                     return Err(EBUSY);
+                 }
+                 let chunk_address = self.zero_address(chunk_physical, wire::HEADER_BYTES)?;
+                 // SAFETY: The acquired private chain owns this header. Check
+@@ -110,8 +114,10 @@
+                 let checked = wire::Chunk::decode(link, self.direct_map, stored_address, size)
+                     .map_err(errno)?;
+                 let span = Span::new(checked.physical, checked.bytes)?;
+                 if span.overlaps(node_span) || ledger.conflicts(span, true) {
++                    self.diagnostic_conflict_failure("zero_chunk", span,
++                        ledger.diagnostic_conflict(span, true), Some(control), span.overlaps(node_span), Some((request.pid, request.cpu)));
+                     return Err(EBUSY);
+                 }
+                 let chunk_address = self.zero_address(checked.physical, checked.bytes)?;
+                 let tag = ledger.tag(span)?;
+@@ -231,8 +237,11 @@
+                 let physical =
+                     wire::Chunk::header_physical(first, self.direct_map).map_err(errno)?;
+                 self.zero_address(physical, wire::HEADER_BYTES)?;
+                 if ledger.conflicts(Span::new(physical, wire::HEADER_BYTES)?, true) {
++                    let candidate = Span::new(physical, wire::HEADER_BYTES)?;
++                    self.diagnostic_conflict_failure("zeroed_head", candidate,
++                        ledger.diagnostic_conflict(candidate, true), Some(chunk.tag), false, None);
+                     return Err(EBUSY);
+                 }
+             }
+             // SAFETY: This chunk's retained, aligned header remains private
+--- a/host-kernel/native-rust/sysfs_remote.rs
++++ b/host-kernel/native-rust/sysfs_remote.rs
+@@ -8,9 +8,9 @@
+     sysfs_setup::SharedData,
+ };
+ use core::{
+     ptr,
+-    sync::atomic::{AtomicBool, Ordering},
++    sync::atomic::{AtomicBool, AtomicU64, Ordering},
+ };
+ use kernel::{
+     prelude::*,
+     sync::{new_condvar, new_mutex, Arc, CondVar, Mutex},
+@@ -50,8 +50,9 @@
+ 
+ #[pin_data]
+ pub(crate) struct Remote {
+     data: SharedData,
++    failure_contexts: AtomicU64,
+     #[pin]
+     state: Mutex<State>,
+     #[pin]
+     changed: CondVar,
+@@ -77,8 +78,9 @@
+         }
+         Arc::pin_init(
+             pin_init!(Self {
+                 data,
++                failure_contexts: AtomicU64::new(0),
+                 state <- new_mutex!(State { exchange: Exchange::new(), caller: false, callbacks: 0, peer_stopped: false }),
+                 changed <- new_condvar!(),
+             }),
+             GFP_KERNEL,
+@@ -140,9 +142,23 @@
+         let mut state = self.state.lock();
+         if state.peer_stopped {
+             return Err(ENODEV);
+         }
+-        state.exchange.accept(packet).map_err(errno)?;
++        if let Err(error) = state.exchange.accept(packet) {
++            if error == -16 {
++                if let Some(context) = state.exchange.reply_failure_context(packet) {
++                    if let Ok(diag) = self.failure_contexts.fetch_update(Ordering::Relaxed, Ordering::Relaxed,
++                        |old| if old < 16 { Some(old + 1) } else { None }) {
++                        pr_err!("IHK-R os={} g={} d={} m={:x} t={:x} pt={:x} ph={:?} e=-16\n",
++                            self.data.owner.slot(), self.data.owner.generation(), diag + 1,
++                            context.message, context.token, context.pending_token, context.phase);
++                        pr_err!("IHK-V os={} g={} d={} peer_e={} value={}\n",
++                            self.data.owner.slot(), self.data.owner.generation(), diag + 1, context.error, context.result);
++                    }
++                }
++            }
++            return Err(errno(error));
++        }
+         drop(state);
+         self.changed.notify_all();
+         Ok(())
+     }
+--- a/host-kernel/native-rust/sysfs_rpc.rs
++++ b/host-kernel/native-rust/sysfs_rpc.rs
+@@ -67,8 +67,16 @@
+     token: Token,
+     client: Client,
+     call: Call,
+     phase: Phase,
++}
++
++#[derive(Clone, Copy, Debug, Eq, PartialEq)]
++pub(crate) enum ReplyFailurePhase { Queued, Published, Complete }
++#[derive(Clone, Copy, Debug, Eq, PartialEq)]
++pub(crate) struct ReplyFailureContext {
++    pub(crate) message: i32, pub(crate) error: i32, pub(crate) token: u64,
++    pub(crate) result: i64, pub(crate) pending_token: u64, pub(crate) phase: ReplyFailurePhase,
+ }
+ 
+ pub(crate) struct Exchange {
+     pending: Option<Pending>,
+@@ -176,8 +184,22 @@
+         pending.phase = Phase::Complete(status);
+         Ok(())
+     }
+ 
++    pub(crate) fn reply_failure_context(&self, packet: &[u8]) -> Option<ReplyFailureContext> {
++        if packet.len() != PACKET_BYTES { return None; }
++        let pending = self.pending?;
++        Some(ReplyFailureContext {
++            message: i32::from_le_bytes(packet[8..12].try_into().unwrap()),
++            error: i32::from_le_bytes(packet[12..16].try_into().unwrap()),
++            token: u64::from_le_bytes(packet[24..32].try_into().unwrap()),
++            result: i64::from_le_bytes(packet[32..40].try_into().unwrap()),
++            pending_token: pending.token.wire(),
++            phase: match pending.phase { Phase::Queued => ReplyFailurePhase::Queued,
++                Phase::Published => ReplyFailurePhase::Published, Phase::Complete(_) => ReplyFailurePhase::Complete },
++        })
++    }
++
+     pub(crate) fn completed(&self, token: Token) -> Result<bool, i32> {
+         let pending = self.pending.ok_or(-2)?;
+         if pending.token != token {
+             return Err(-2);
+--- a/host-kernel/native-rust/abi/sysfs_request.rs
++++ b/host-kernel/native-rust/abi/sysfs_request.rs
+@@ -214,13 +214,21 @@
+ /// # Safety
+ /// The same claim and complete mapping as read remain live. Namespace effects
+ /// and all new owners are published (or failure recorded) before this call.
+ /// This must be the final access: the peer can free/reuse RAM after busy=0.
+-pub(crate) unsafe fn complete(
++#[derive(Clone, Copy, Debug, Eq, PartialEq)]
++pub(crate) struct CompletionBusy { pub(crate) kind: Kind, pub(crate) value: i32 }
++
++pub(crate) unsafe fn complete(kind: Kind, request: *mut u8, error: i32, handle: Option<u64>) -> Result<(), i32> {
++    unsafe { complete_observed(kind, request, error, handle, |_| {}) }
++}
++
++pub(crate) unsafe fn complete_observed(
+     kind: Kind,
+     request: *mut u8,
+     error: i32,
+     handle: Option<u64>,
++    on_busy: impl FnOnce(CompletionBusy),
+ ) -> Result<(), i32> {
+     let layout = kind.layout();
+     if request.is_null()
+         || request as usize % layout.alignment != 0
+@@ -233,9 +241,11 @@
+     // SAFETY: The caller retains the complete kind-specific request through
+     // this final response, so `layout.busy` is an aligned, in-bounds AtomicI32
+     // field. No Rust reference escapes before its release permits peer reuse.
+     let busy = unsafe { AtomicI32::from_ptr(request.add(layout.busy).cast()) };
+-    if busy.load(Ordering::Relaxed) != 1 {
++    let value = busy.load(Ordering::Relaxed);
++    if value != 1 {
++        on_busy(CompletionBusy { kind, value });
+         return Err(-16);
+     }
+     if let Some(handle) = handle {
+         // SAFETY: A successful handle-returning kind uses the aligned,
+--- a/host-kernel/native-rust/smp_application.rs
++++ b/host-kernel/native-rust/smp_application.rs
+@@ -10,9 +10,9 @@
+     smp_file_pager::{Prepared as PagerFile, Registry as Pagers},
+     smp_memory::{ProcfsProcess, ProcfsRemote, SyscallResponse},
+     smp_resource::OsToken,
+ };
+-use core::sync::atomic::{AtomicBool, AtomicI32, AtomicUsize, Ordering};
++use core::sync::atomic::{AtomicBool, AtomicI32, AtomicU64, AtomicUsize, Ordering};
+ use kernel::{
+     bindings,
+     prelude::*,
+     sync::{new_condvar, new_mutex, Arc, CondVar, Mutex},
+@@ -282,8 +282,9 @@
+     slots: Mutex<Vec<Option<Entry>>>,
+     #[pin]
+     changed: CondVar,
+     syscall_cursor: AtomicUsize,
++    failure_contexts: AtomicU64,
+     transport_error: AtomicI32,
+     shutdown_closed: AtomicBool,
+     pagers: Arc<Pagers>,
+     release_token: Token,
+@@ -301,9 +302,9 @@
+             slots.push(None, GFP_KERNEL)?;
+         }
+         Arc::pin_init(
+             pin_init!(Self { owner, procfs, slots <- new_mutex!(slots), changed <- new_condvar!(),
+-                syscall_cursor: AtomicUsize::new(0), transport_error: AtomicI32::new(0), shutdown_closed: AtomicBool::new(false), pagers, release_token,
++                syscall_cursor: AtomicUsize::new(0), failure_contexts: AtomicU64::new(0), transport_error: AtomicI32::new(0), shutdown_closed: AtomicBool::new(false), pagers, release_token,
+                 releases <- new_mutex!(releases) }),
+             GFP_KERNEL,
+         )
+     }
+@@ -533,16 +534,40 @@
+         }
+         Ok(())
+     }
+ 
++    fn diagnostic_application_failure(&self, at: &'static str, entry: &Entry, cpu: i32, error: Error) {
++        if let Ok(ticket) = self.failure_contexts.fetch_update(Ordering::Relaxed, Ordering::Relaxed,
++            |old| if old < 16 { Some(old + 1) } else { None }) {
++            let diag = ticket + 1;
++            let prepare = entry.prepare.as_ref().and_then(|image| image.result());
++            let revoke = entry.fork_ingress.as_ref().is_some_and(|owner| owner.host_revoke.is_some());
++            let sealed = entry.fork_ingress.as_ref().map(|owner| owner.sealed.load(Ordering::Acquire));
++            pr_err!("IHK-A os={} g={} d={} at={} p={} c={} e={}\n",
++                self.owner.slot(), self.owner.generation(), diag, at, entry.cleanup.pid(), cpu, error.to_errno());
++            pr_err!("IHK-B os={} g={} d={} prep={} ret={:?} rev={} inh={} seal={:?}\n",
++                self.owner.slot(), self.owner.generation(), diag, entry.prepare.is_some() as u8,
++                prepare, revoke as u8, entry.inherited_root.is_some() as u8, sealed);
++            pr_err!("IHK-F os={} g={} d={} need={} sch={} q={} closed={} drain={} res={} ret={:?}\n",
++                self.owner.slot(), self.owner.generation(), diag, entry.needs_cleanup as u8,
++                entry.scheduled as u8, entry.quarantined as u8, entry.closed as u8,
++                entry.syscalls.drained() as u8, entry.cleanup.reserved() as u8, entry.cleanup.result());
++            pr_err!("IHK-K os={} g={} d={} token={:x}\n",
++                self.owner.slot(), self.owner.generation(), diag, entry.cleanup.token().wire());
++        }
++    }
++
+     pub(crate) fn procfs_process(&self, pid: i32, cpu: i32) -> Result<Arc<ProcfsProcess>> {
+         let slots = self.slots.lock();
+         let entry = slots
+             .iter()
+             .flatten()
+             .find(|entry| entry.cleanup.pid() == pid)
+             .ok_or(ENOENT)?;
+-        entry.backend_ready()?;
++        if let Err(error) = entry.backend_ready() {
++            self.diagnostic_application_failure("procfs_backend", entry, cpu, error);
++            return Err(error);
++        }
+         if entry.quarantined || cpu < 0 {
+             return Err(EINVAL);
+         }
+         entry.procfs.as_ref().cloned().ok_or(EIO)
+@@ -643,9 +668,14 @@
+                             self.owner.slot(), self.owner.generation(), prepare.input.pid,
+                             prepare.exchange.token().wire(), prepare.result().unwrap(),
+                             prepare.exchange.abandoned() as u8, entry.quarantined as u8);
+                         if entry.needs_cleanup && !entry.quarantined {
+-                            entry.request_cleanup()?;
++                            if let Err(error) = entry.request_cleanup() {
++                                // Returned sub-guard context only; no inference
++                                // about a delivery or cleanup phase is made.
++                                self.diagnostic_application_failure("prepare_cleanup", entry, entry.cleanup.cpu(), error);
++                                return Err(error);
++                            }
+                         }
+                         return Ok(());
+                     }
+                     Err(-2 | -16) => continue,

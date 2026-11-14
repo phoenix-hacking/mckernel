@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/p-m06-01-pinned-launcher-process-inputs-20261022-1/terminal-correction-1/check-whole-terminal-consumer.py", line 34, in <module>
+    inventory=next(n for n in ast.walk(run) if isinstance(n,ast.Assign) and any(isinstance(t,ast.Subscript) and isinstance(t.value,ast.Name) and t.value.id=='result' and isinstance(t.slice,ast.Constant) and t.slice.value=='inventory' for t in n.targets))
+StopIteration

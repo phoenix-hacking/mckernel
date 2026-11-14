@@ -1,0 +1,144 @@
+--- controller.c
++++ controller.original.c
+@@ -27,7 +27,6 @@
+ #include <time.h>
+ #include <unistd.h>
+ #include "uprotocol.h"
+-#include "phase_client.h"
+ 
+ #define STREAM_LIMIT 65536u
+ #define UART_LIMIT 16384u
+@@ -77,8 +76,6 @@
+ static char ack_prefix[384], ack_digest[65], ack_line[512];
+ static size_t ack_length;
+ static volatile sig_atomic_t interrupted;
+-static bool owner_guest;
+-static struct op_identity owner_identity;
+ 
+ static uint64_t now_ns(void)
+ {
+@@ -828,76 +825,11 @@
+     if (n < 0 || (size_t)n >= sizeof report || !put_all(report_fd, report, (size_t)n)) fail("report-write", errno);
+ }
+ 
+-/* These ioctls collect native owner phases; UART ACKs separately bind the
+- * host's stopped-machine captures and verified continuation. Neither is an
+- * application or fault acceptance decision. */
+-static bool collect_owner_phase(uint32_t phase, const char *name)
+-{
+-    if (!owner_guest) return true;
+-    active_phase = name;
+-    uint64_t deadline = phase_deadline(10000);
+-    struct op_observation observation;
+-    while (before(deadline)) {
+-        enum op_result result = op_call(&owner_identity, phase, attempt_fd, pump, &observation);
+-        event("\"event\":\"owner-phase-client\",\"phase\":%u,\"attempt\":%u,\"last_consumed_sequence\":%" PRIu64 ",\"result\":%d,\"ioctl_result\":%d,\"ioctl_errno\":%d,\"probe_reaped\":%s",
+-              phase, owner_identity.attempt, owner_identity.sequence, result, observation.ioctl_result,
+-              observation.ioctl_errno, observation.reaped ? "true" : "false");
+-        if (!before(deadline)) return false;
+-        if (result == OP_FAILED) { fail("owner-phase-incomplete-or-invalid", EPROTO); return false; }
+-        if (result == OP_OK) {
+-            const char *retained = phase == OP_SELECT ? "owner-selected-response.bin" :
+-                phase == OP_RECOVERY ? "owner-recovery-response.bin" : NULL;
+-            if (retained && !op_artifact(attempt_fd, retained, observation.reply, OP_BYTES)) {
+-                fail("owner-state-retain", errno); return false;
+-            }
+-            return true;
+-        }
+-        /* Only op_call's explicit consumed-sequence proof, or unchanged
+-         * busy-Permit EAGAIN, can reach this bounded retry. */
+-        pump(250);
+-    }
+-    return false;
+-}
+-
+-static bool owner_normal_completion(void)
+-{
+-    active_phase = "NATURAL_COMPLETION";
+-    uint64_t deadline = input_ns + UINT64_C(15000) * NS_PER_MS;
+-    if (deadline > overall_deadline) deadline = overall_deadline;
+-    while ((!launcher_done || !streams[0].eof || !streams[1].eof) && before(deadline)) pump(5);
+-    if (!before(deadline)) return false;
+-    siginfo_t si;
+-    memset(&si, 0, sizeof si);
+-    if (waitid(P_PID, (id_t)launcher, &si, WEXITED | WNOHANG | WNOWAIT) < 0) {
+-        fail("owner-natural-waitid", errno); return false;
+-    }
+-    event("\"event\":\"owner-natural-waitid\",\"pid\":%d,\"si_code\":%d,\"si_status\":%d", si.si_pid, si.si_code, si.si_status);
+-    if (!before(deadline)) return false;
+-    if (si.si_pid != launcher || si.si_code != CLD_EXITED || si.si_status != 37 || launcher_kill_sent ||
+-        streams[0].sink.stored != sizeof complete - 1 || memcmp(streams[0].bytes, complete, sizeof complete - 1) ||
+-        streams[1].sink.stored || !streams[0].eof || !streams[1].eof || streams[0].sink.truncated || streams[1].sink.truncated) {
+-        fail("owner-natural-byte-and-exit-oracle", EPROTO); return false;
+-    }
+-    return true;
+-}
+-
+-static void owner_summary(void)
+-{
+-    if (!owner_guest || attempt_fd < 0) return;
+-    char record[768];
+-    int n = snprintf(record, sizeof record,
+-        "{\"schema_version\":1,\"scope\":\"verification-phase-client-only\",\"os\":%u,\"generation\":%" PRIu64 ",\"selected_pid\":%d,\"selected\":%s,\"attempts\":%u,\"last_consumed_sequence\":%" PRIu64 ",\"application_acceptance\":false,\"transport_acceptance\":false}\n",
+-        owner_identity.os, owner_identity.generation, owner_identity.pid, owner_identity.selected ? "true" : "false", owner_identity.attempt, owner_identity.sequence);
+-    if (n <= 0 || (size_t)n >= sizeof record || !op_artifact(attempt_fd, "owner-phase-summary.json", record, (size_t)n)) fail("owner-summary-retain", errno);
+-}
+-
+ int main(int argc, char **argv)
+ {
+     /* --guest MODE NONCE ATTEMPT_DIR MCEEXEC PAYLOAD
+-     * --owner-guest MODE NONCE ATTEMPT_DIR MCEEXEC PAYLOAD OS GENERATION
+      * --linux-reference NONCE ATTEMPT_DIR PAYLOAD */
+-    owner_guest = argc == 9 && !strcmp(argv[1], "--owner-guest");
+-    guest = owner_guest || (argc == 7 && !strcmp(argv[1], "--guest"));
++    guest = argc == 7 && !strcmp(argv[1], "--guest");
+     bool reference = argc == 5 && !strcmp(argv[1], "--linux-reference");
+     if (!guest && !reference) { dprintf(2, "STF1 invalid arguments\n"); return 2; }
+     if (guest) mode = argv[2];
+@@ -908,7 +840,6 @@
+     char *mcexec = guest ? argv[5] : payload;
+     if (!lower_hex(nonce, 32) || attempt[0] != '/' || payload[0] != '/' || mcexec[0] != '/' ||
+         strlen(attempt) >= PATH_MAX || strlen(payload) >= PATH_MAX || strlen(mcexec) >= PATH_MAX) return 2;
+-    if (owner_guest && !op_initialize(&owner_identity, argv[7], argv[8], nonce, 0)) return 2;
+     terminal_mode = guest && strcmp(mode, "recoverable-backpressure");
+     started_ns = now_ns(); overall_deadline = started_ns + UINT64_C(90000) * NS_PER_MS;
+     for (int fd = 0; fd < 3; ++fd)
+@@ -934,18 +865,11 @@
+     if (guest && !setup_uart()) goto finish;
+     active_phase = "BLOCKED_READ";
+     if (!start_child(mcexec, payload) || !prepare_read()) goto cleanup;
+-    if (owner_guest) owner_identity.pid = launcher;
+-    if (!collect_owner_phase(OP_SELECT, "OWNER_BLOCKED_READ")) goto cleanup;
+     if (guest && !capture("PRE_INPUT")) goto cleanup;
+     active_phase = "INPUT";
+     if (!release_input()) goto cleanup;
+     active_phase = "OBSERVE_RET";
+     if (guest && !observe_return()) goto cleanup;
+-    if (owner_guest) {
+-        if (!terminal_mode && !owner_normal_completion()) goto cleanup;
+-        if (!collect_owner_phase(terminal_mode ? OP_TERMINAL : OP_RECOVERY,
+-                                 terminal_mode ? "OWNER_TERMINAL" : "OWNER_RECOVERY")) goto cleanup;
+-    }
+     if (guest) {
+         if (!capture("POST_RET")) goto cleanup;
+         post_ack_ns = now_ns();
+@@ -954,9 +878,9 @@
+         active_phase = "QUIET_INTERVAL";
+         uint64_t quiet_until = post_ack_ns + UINT64_C(5000) * NS_PER_MS;
+         while (now_ns() < quiet_until && before(overall_deadline)) pump(5);
+-        if (failed || !collect_owner_phase(OP_QUIET, "OWNER_TERMINAL_PLUS_FIVE") || !capture("QUIET")) goto cleanup;
++        if (failed || !capture("QUIET")) goto cleanup;
+         quiet_ack_ns = now_ns();
+-    } else if (!owner_guest) {
++    } else {
+         active_phase = "NORMAL_COMPLETION";
+         uint64_t deadline = input_ns + UINT64_C(15000) * NS_PER_MS;
+         if (deadline > overall_deadline) deadline = overall_deadline;
+@@ -975,7 +899,6 @@
+     active_phase = "NEW_ADMISSION";
+     if (!failed && terminal_mode) probe_admission();
+ finish:
+-    owner_summary();
+     if (failed) emergency_capture();
+     event("\"event\":\"collection-finish\",\"collection_status\":\"%s\",\"failure\":\"%s\",\"errno\":%d,\"application_acceptance\":false,\"transport_acceptance\":false",
+           failed ? "FAIL" : "COMPLETE", first_failure, first_errno);

@@ -1,0 +1,89 @@
+{
+  "Rust_runtime_changed": false,
+  "authoritative_contract": {
+    "functions": "https://www.sourceware.org/binutils/docs/bfd/symbol-handling-functions.html",
+    "note": "GNU documents canonical symbol pointers and BFD-owned storage lifetime through close; it does not promise identical symbol addresses across separate canonicalize calls. This is supporting context, not the missing pinned C/C observation.",
+    "symbols": "https://sourceware.org/binutils/docs/bfd.html"
+  },
+  "failed_index": 9,
+  "first_failure": "equivalence-run rc -6; /candidate/tests/equivalence.c:98 left[i] == right[i]",
+  "hypothesis": "Cross-call asymbol pointer identity may not be guaranteed. Must run original-C/original-C control against SAME pinned 2.41 backend/fixture before accepting snapshot oracle correction.",
+  "no_retry_or_SDK": true,
+  "retained": {
+    "FAILURE.json": {
+      "bytes": 138,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/materialized-coherent-tuple-1/workspace/native-running-modules-candidate-0ccec66ed738427296d4e7b6bff0b4c5/qualification-1/FAILURE.json",
+      "sha256": "ce8c67f71cd0a0336be5a03a1cb2d81a4549833edaa45a628bf8cd5d372e0e07"
+    },
+    "bfd_accessors.o": {
+      "bytes": 5256,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/materialized-coherent-tuple-1/workspace/native-running-modules-candidate-0ccec66ed738427296d4e7b6bff0b4c5/qualification-1/bfd_accessors.o",
+      "sha256": "e3bba0de5076371c1b5c7b9736c7cf1add861f67303c55385c564f85be7f21d8"
+    },
+    "bfd_layout.rs": {
+      "bytes": 259,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/materialized-coherent-tuple-1/workspace/native-running-modules-candidate-0ccec66ed738427296d4e7b6bff0b4c5/qualification-1/bfd_layout.rs",
+      "sha256": "e21b4d9975984b7c14e13760c232dda4e755c5955f1649df77ebdc38e065530b"
+    },
+    "commands.json": {
+      "bytes": 3379,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/materialized-coherent-tuple-1/workspace/native-running-modules-candidate-0ccec66ed738427296d4e7b6bff0b4c5/qualification-1/commands.json",
+      "sha256": "22caa7fec9186c30a7c5d2596553f7913dfe305584761ce6eff84ef902833c55"
+    },
+    "eclair-original-renamed.o": {
+      "bytes": 1496,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/materialized-coherent-tuple-1/workspace/native-running-modules-candidate-0ccec66ed738427296d4e7b6bff0b4c5/qualification-1/eclair-original-renamed.o",
+      "sha256": "8cb0d3cea9ded4c2798317061ca93e76569a0b0ab9ab3c95b9111899b20b408b"
+    },
+    "equivalence": {
+      "bytes": 6512968,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/materialized-coherent-tuple-1/workspace/native-running-modules-candidate-0ccec66ed738427296d4e7b6bff0b4c5/qualification-1/equivalence",
+      "sha256": "8277e59baf2e4f8c81dce11ebb04ceb518aa15484d398dedaaa933d7ed0ceb1f"
+    },
+    "equivalence-run.stderr": {
+      "bytes": 106,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/materialized-coherent-tuple-1/workspace/native-running-modules-candidate-0ccec66ed738427296d4e7b6bff0b4c5/qualification-1/equivalence-run.stderr",
+      "sha256": "a2432c86b608851887f0cb289e7be8dd1963e1c31c907bdb2ab1f437773447cf"
+    },
+    "equivalence-run.stdout": {
+      "bytes": 0,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/materialized-coherent-tuple-1/workspace/native-running-modules-candidate-0ccec66ed738427296d4e7b6bff0b4c5/qualification-1/equivalence-run.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "fixture.o": {
+      "bytes": 3128,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/materialized-coherent-tuple-1/workspace/native-running-modules-candidate-0ccec66ed738427296d4e7b6bff0b4c5/qualification-1/fixture.o",
+      "sha256": "a6176c3bc554b55a593056cf41737cc22d95aa76d2de28cd1db4a5663bc26a88"
+    },
+    "mcinspect-original-renamed.o": {
+      "bytes": 1504,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/materialized-coherent-tuple-1/workspace/native-running-modules-candidate-0ccec66ed738427296d4e7b6bff0b4c5/qualification-1/mcinspect-original-renamed.o",
+      "sha256": "a180e46408c79d35f7482d5c4cfb510f46a5a892ab18ba1b39de4b067e8cf4a6"
+    },
+    "original-equivalence.c": {
+      "bytes": 5600,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/materialized-coherent-tuple-1/candidate/tests/equivalence.c",
+      "sha256": "616b86ca4082bd4918ce9adc5f80754f94231d181605bbe7f89d2f86882dd446"
+    },
+    "stripped.o": {
+      "bytes": 896,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/materialized-coherent-tuple-1/workspace/native-running-modules-candidate-0ccec66ed738427296d4e7b6bff0b4c5/qualification-1/stripped.o",
+      "sha256": "029e97d0340e8b35b3c92f6bdf06dd14b924de62aa169ab8bc3297234ee30495"
+    }
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ACTUAL_FIRST_BFD_SDK_FAILURE_RETAINED_SOURCE_DIAGNOSIS_ONLY",
+  "successful_prefix_count": 9,
+  "successful_prefix_labels": [
+    "witness-build",
+    "witness-run",
+    "witness-preprocessed",
+    "rust-build",
+    "mcinspect-original-compile",
+    "eclair-original-compile",
+    "equivalence-link",
+    "fixture-compile",
+    "fixture-strip"
+  ],
+  "third_party_BFD_unchanged": true
+}

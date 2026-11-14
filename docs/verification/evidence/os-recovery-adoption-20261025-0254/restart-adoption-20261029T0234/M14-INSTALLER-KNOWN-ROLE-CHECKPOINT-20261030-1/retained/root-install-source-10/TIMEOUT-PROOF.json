@@ -1,0 +1,64 @@
+{
+  "task": "timeout-known-role-proof-1",
+  "recorder": "/root/root_history_audit",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "invocation": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "60s",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "-c",
+    "<pinned waiting installer>"
+  ],
+  "binary_binding": "ACTUAL-BINARY-BINDING.json",
+  "downloads": "DOWNLOADS.json",
+  "source": {
+    "upstream_path": "coreutils-8.30/src/timeout.c",
+    "upstream_sha256": "f692bbabc10dc7a0d04727386c51233b70d44a860a8faa586e703f88ab87a380",
+    "patched_path": "timeout.ubuntu-patched.c",
+    "patched_sha256": "13f60e41326c12ba4bcbb7ae93b2e5149bf70fa1d0074e4766cb30fad76159b8",
+    "patch": "debian/patches/85_timer_settime.patch",
+    "patch_sha256": "f4b24dc6e78cab9561039e83e4ca98136f39538c3b9904819c96108486f51d7a",
+    "patch_scope": "Only series patch targeting timeout.c; wraps timer branch in if(true) on Linux, conditional duration<100000 on FreeBSD kernel. No added fork/exec/wait behavior. Other patch file headers retained.",
+    "source_archives_match_dsc_checksums": true
+  },
+  "findings": [
+    {
+      "lines": "patched499-500,509-521",
+      "fact": "Without --foreground, timeout calls setpgid(0,0) once before one fork. setpgid return is unchecked: actual PGID must be measured. Successful fork creates exactly one direct command child; child inherits PGID and SID and execvp replaces that PID with the command. No setsid and no second timeout-source fork/spawn/system/popen path. Fork failure returns125 without a command child."
+    },
+    {
+      "lines": "patched533-545,547-581; cleanup block upstream382-404/patched388-410",
+      "fact": "Parent installs timer, blocks cleanup signals and SIGCHLD, then polls waitpid(monitored_pid,&status,WNOHANG), sleeping with sigsuspend restoring old mask. A positive waitpid reaps this one command child. Normal command exit0 yields timeout exit0; child signal status or timeout status are handled separately. waitpid failure returns125. Cleanup signals remain blocked after reap to avoid signalling a reused child PID. It does not wait/reap installer-created descendants."
+    },
+    {
+      "lines": "patched114-158,186-231",
+      "fact": "Timer uses timer_create(CLOCK_REALTIME,NULL,...)/timer_settime where configured, with alarm fallback; no timeout-source helper process. At60s SIGALRM maps to TERM, arms a5s second timer, sends TERM directly to child and group0, then CONT directly and to group. At second alarm sends KILL to child/group; KILL cannot be ignored, so timeout itself can die without reaping. An external TERM/INT/HUP/QUIT also enters cleanup and can initiate the5s kill timer before60s."
+    },
+    {
+      "lines": "patched515-526",
+      "fact": "execvp called directly with absolute /usr/bin/python3 and supplied argv; no explicit shell wrapper. execvp fallback behavior is trusted libc scope; fallback changes child image rather than creating another timeout-source child. Actual Python executable/loader and pinned installer no-fork behavior require their separate existing bindings."
+    }
+  ],
+  "actual_binary_direct_call_offsets": {
+    "fork": "0x2b4f",
+    "execvp": "0x2b8c",
+    "waitpid": "0x2cb4",
+    "setpgid": "0x2d61",
+    "timer_create": "0x2fc9",
+    "timer_settime": "0x305e",
+    "alarm": "0x3008",
+    "sigsuspend": "0x2ca1"
+  },
+  "verdict": "Timeout side supports a bounded known-role model with exactly one command child, under explicit same-platform libc/kernel/tool trust and successful actual launch/identity checks. It does not establish actual retirement: require measured exact identities and positive direct waits. KILL/timeout/unknown paths retain ownership; do not infer installer reaped from outer timeout death.",
+  "limitations": [
+    "No timeout execution, test, build or native operation performed.",
+    "Official Ubuntu HTTPS package payload is byte-identical to installed timeout; source .dsc archive hashes match. No independent archive signature verification, reproducible rebuild or complete compiler/libc/kernel provenance proof.",
+    "Source inspection and package identity do not guarantee process-group syscall success or current resource/custody freedom.",
+    "Timer libc internals trusted within same-platform scope; no claim that all libraries are source-proven single-threaded.",
+    "No acceptance or runtime authority created."
+  ]
+}

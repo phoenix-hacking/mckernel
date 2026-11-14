@@ -1,0 +1,337 @@
+{
+  "actual_gap": {
+    "bytes": 16133,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f03-signal-whole-default-review-sdk-max-1/WAIT-BOUNDARY.json",
+    "sha256": "cf6887728983e1ecd3022398ba1a8c0c68c24d5a160af77ce54d76eb7769749b"
+  },
+  "actual_known_exclusions": "No rejectedturn/retainedExecDefinedTail/partialrequestACKfixture/DIRECT-TID/TERMRESET/590e or known prohibited equivalent is recreated or executed. No original rejection equivalence is inferred merely from comments. Candidate is this fully source-derived selected wait boundary only; any later actual exact restriction match stops that operation.",
+  "args3_rusage_explicit_decision": "The selected consumer is mcexec act_wait4 ->mcexec_waitid_pid_bridge ->waitid(P_PID,pid,local initialized SigInfo,WEXITED|(options&WNOWAIT)); it never calls libc wait4 or uses request.args3. No genericfallback syscall(number,args0..5) is selected for61. Source hash is exact qualified currentab6aaa/d04d consumer; this proof does not rely on broadadapter parity comments.",
+  "authenticated_Root_task": "Current source4b6f/Root specifically authorizes actual wait consumer field derivation and narrowRust slot0 source preparation, preserving actual known rejected modes without blanket per-name ban.",
+  "bounded_source_evidence": {
+    "byte_copy_and_publish_contract": {
+      "end_line": 2488,
+      "identity": {
+        "bytes": 1240794,
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "sha256": "76ce6016d6ddd1cfa6c41070c0cf35e87b94ddc31e67c805adbe3b94b3f17469"
+      },
+      "start_line": 2445,
+      "text": "/// Copies one syscall request with the legacy protocol's `memcpy` semantics.\n///\n/// # Safety\n/// Unless null, `src` must be readable and `dst` writable for\n/// `size_of::<SyscallRequest>()` bytes, and those byte ranges must not overlap.\n/// Neither pointer needs to be aligned for `SyscallRequest`.\n#[no_mangle]\npub unsafe extern \"C\" fn syscall_request_copy_result(\n    dst: *mut SyscallRequest,\n    src: *const SyscallRequest,\n) -> CInt {\n    if dst.is_null() || src.is_null() {\n        return -EINVAL;\n    }\n\n    // The Linux proxy protocol historically copies this wire object with\n    // memcpy.  In particular, a nested request can begin at an address that\n    // is not aligned for `SyscallRequest`; keeping the operation byte-typed\n    // preserves those semantics without creating an unaligned Rust reference.\n    copy_nonoverlapping(\n        src.cast::<u8>(),\n        dst.cast::<u8>(),\n        size_of::<SyscallRequest>(),\n    );\n\n    0\n}\n\n/// Publishes a fully initialized syscall request to the Linux-side consumer.\n///\n/// # Safety\n/// `request` must point to an aligned, live `SyscallRequest` whose non-`valid`\n/// fields have already been initialized.  No non-atomic access to `valid` may\n/// race with this store.\n#[no_mangle]\npub unsafe extern \"C\" fn syscall_request_publish_result(request: *mut SyscallRequest) -> CInt {\n    if request.is_null() {\n        return -EINVAL;\n    }\n\n    AtomicU64::from_ptr(addr_of_mut!((*request).valid)).store(1, Ordering::Release);\n    0\n}\n"
+    },
+    "guest_prepare_overwrites_routing": {
+      "end_line": 3130,
+      "identity": {
+        "bytes": 1240794,
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "sha256": "76ce6016d6ddd1cfa6c41070c0cf35e87b94ddc31e67c805adbe3b94b3f17469"
+      },
+      "start_line": 3099,
+      "text": "\n#[no_mangle]\npub unsafe extern \"C\" fn syscall_offload_prepare_result(\n    request: *mut SyscallRequest,\n    response: *mut SyscallResponse,\n    current_tid: CInt,\n    syscall_nr: CInt,\n    arg0: CULong,\n    sched_setaffinity_nr: CInt,\n    spinning_status: CULong,\n) -> CInt {\n    if request.is_null() || response.is_null() {\n        return -EINVAL;\n    }\n\n    let use_requester_tid =\n        syscall_use_requester_tid_result(syscall_nr, arg0, sched_setaffinity_nr);\n    let target_tid = syscall_target_tid_result(use_requester_tid, current_tid);\n\n    write(core::ptr::addr_of_mut!((*request).rtid), current_tid);\n    write(core::ptr::addr_of_mut!((*request).ttid), target_tid);\n    write(\n        core::ptr::addr_of_mut!((*response).req_thread_status),\n        spinning_status,\n    );\n    write(\n        core::ptr::addr_of_mut!((*response).pde_data),\n        core::ptr::null_mut(),\n    );\n\n    use_requester_tid\n}"
+    },
+    "guest_rusage_owned_locally": {
+      "end_line": 19005,
+      "identity": {
+        "bytes": 1240794,
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "sha256": "76ce6016d6ddd1cfa6c41070c0cf35e87b94ddc31e67c805adbe3b94b3f17469"
+      },
+      "start_line": 18954,
+      "text": "pub unsafe extern \"C\" fn wait4_body_result(\n    pid: CInt,\n    status_addr: CULong,\n    options: CInt,\n    rusage_addr: CULong,\n    do_wait_fn: Wait4DoWaitFn,\n    copy_to_fn: SyscallCopyToUserFn,\n) -> CLong {\n    let valid = wait4_options_result(options);\n    if valid != 0 {\n        return valid as CLong;\n    }\n    if pid == CInt::MIN {\n        return -(ESRCH as CLong);\n    }\n\n    let mut status: CInt = 0;\n    let mut usage = MaybeUninit::<RUsage>::uninit();\n    let usage_ptr = usage.as_mut_ptr();\n    zero_rusage(usage_ptr);\n\n    let rc = do_wait_fn(pid, &mut status as *mut CInt, WEXITED | options, usage_ptr);\n    if rc <= 0 {\n        return rc as CLong;\n    }\n    if (status & 0xff) == WAIT_STATUS_PTRACED_STOP {\n        status = (status & !0xff) | 0x7f;\n    }\n    if wait_status_copy_needed_result(rc, (status_addr != 0) as CInt) != 0 {\n        let src = &status as *const CInt as *const u8;\n        if copy_to_fn(status_addr, src, size_of::<CInt>()) != 0 {\n            return -(EFAULT as CLong);\n        }\n    }\n    if wait_rusage_copy_needed_result((rusage_addr != 0) as CInt) != 0 {\n        if copy_to_fn(rusage_addr, usage_ptr as *const u8, size_of::<RUsage>()) != 0 {\n            return -(EFAULT as CLong);\n        }\n    }\n    rc as CLong\n}\n\n#[no_mangle]\npub extern \"C\" fn waitid_siginfo_needed_result(rc: CInt, has_infop: CInt) -> CInt {\n    (rc >= 0 && has_infop != 0) as CInt\n}\n\nfn timeval_to_jiffy_result(sec: CLong, usec: CLong) -> CLong {\n    sec * 100 + usec / 10000\n}\n\n#[no_mangle]"
+    },
+    "host_decode_exact72_fields": {
+      "end_line": 76,
+      "identity": {
+        "bytes": 20310,
+        "path": "/home/holden/mckernel/host-kernel/native-rust/application_syscall.rs",
+        "sha256": "daaa3b0fabb002b40cafdc4d7c74ed6cdfd606e18dc82d3bb32bc3055e1a96e0"
+      },
+      "start_line": 39,
+      "text": "\nimpl Request {\n    /// The queue consumer supplies the exact OS generation and acquires packet\n    /// publication before decoding. The existing producer leaves osnum zero.\n    pub(crate) fn decode(packet: &[u8], cpus: usize) -> Result<Self, i32> {\n        if packet.len() != 128 {\n            return Err(-22);\n        }\n        let integer = |offset| i32::from_le_bytes(packet[offset..offset + 4].try_into().unwrap());\n        let word = |offset| u64::from_le_bytes(packet[offset..offset + 8].try_into().unwrap());\n        let cpu = integer(24);\n        let pid = integer(32);\n        let requester = integer(48);\n        let target = integer(52);\n        let response = word(120);\n        if integer(8) != REQUEST_MESSAGE\n            || cpu < 0\n            || cpu as usize >= cpus\n            || pid <= 0\n            || requester <= 0\n            || target < 0\n            || word(56) != 1\n            || response == 0\n            || response % 8 != 0\n            || response.checked_add(RESPONSE_BYTES as u64).is_none()\n        {\n            return Err(-22);\n        }\n        Ok(Self {\n            cpu,\n            pid,\n            requester,\n            target,\n            response,\n            bytes: packet[48..120].try_into().unwrap(),\n        })\n    }\n"
+    },
+    "host_private_wait_output": {
+      "end_line": 192,
+      "identity": {
+        "bytes": 20310,
+        "path": "/home/holden/mckernel/host-kernel/native-rust/application_syscall.rs",
+        "sha256": "daaa3b0fabb002b40cafdc4d7c74ed6cdfd606e18dc82d3bb32bc3055e1a96e0"
+      },
+      "start_line": 183,
+      "text": "    /// Exactly the two fields copied by mcexec_wait_syscall. The trailing pid\n    /// field is not written by the original host path and remains untouched.\n    pub(crate) fn wait_output(&self) -> [u8; 80] {\n        let mut bytes = [0; 80];\n        bytes[..8].copy_from_slice(&(self.cpu as u64).to_le_bytes());\n        bytes[8..].copy_from_slice(&self.bytes);\n        bytes[16..24].fill(0); // The host acknowledges its private packet copy.\n        bytes\n    }\n"
+    },
+    "launcher_actual_wait4_consumer": {
+      "end_line": 1793,
+      "identity": {
+        "bytes": 256059,
+        "path": "/home/holden/mckernel/executer/user/rust/mcexec_helpers.rs",
+        "sha256": "ab6aaa29b9a9b8d07077a9bb27e02c7dc7a353fe3a0d0b538b119e41bd264a24"
+      },
+      "start_line": 1779,
+      "text": "#[no_mangle]\npub unsafe extern \"C\" fn act_wait4(w: *const McexecSyscallWaitDesc, fd: c_int, cpu: c_int) {\n    let requested_pid = unsafe { (*w).sr.args[0] };\n    let pid = requested_pid as c_int;\n    let options = unsafe { (*w).sr.args[2] } as c_int;\n    let opt = WEXITED | (options & WNOWAIT);\n    let mut errno_value = 0;\n    let ret = unsafe { mcexec_waitid_pid_bridge(pid, opt, &mut errno_value) };\n    if ret != pid {\n        unsafe { mcexec_wait4_error_bridge(requested_pid, ret, errno_value) };\n    }\n    unsafe { do_syscall_return(fd, cpu, ret as c_long, 0, 0, 0, 0) };\n}\n\n#[no_mangle]"
+    },
+    "launcher_actual_waitid_provider": {
+      "end_line": 81,
+      "identity": {
+        "bytes": 5234,
+        "path": "/home/holden/mckernel/executer/user/rust/mcexec_signal_wait_exit.rs",
+        "sha256": "d04d3de7606ac893335782f46a3fb0ff5496271e03690b101ee1f3f0f92d7a25"
+      },
+      "start_line": 69,
+      "text": "}\n#[no_mangle]\npub unsafe extern \"C\" fn mcexec_waitid_pid_bridge(pid:c_int,opt:c_int,errno_out:*mut c_int)->c_int {\n let mut info:SigInfo=core::mem::zeroed();\n let mut ret;\n loop {\n   ret=waitid(1,pid as u32,addr_of_mut!(info),opt); // P_PID.\n   if ret!=-1 || *super::__errno_location()!=4 { break; }\n }\n if !errno_out.is_null() { *errno_out=*super::__errno_location(); }\n if ret==0 {ret=mcexec_sendsig_si_pid_bridge(addr_of_mut!(info).cast());}\n ret\n}"
+    },
+    "launcher_exact61_dispatch": {
+      "end_line": 2862,
+      "identity": {
+        "bytes": 256059,
+        "path": "/home/holden/mckernel/executer/user/rust/mcexec_helpers.rs",
+        "sha256": "ab6aaa29b9a9b8d07077a9bb27e02c7dc7a353fe3a0d0b538b119e41bd264a24"
+      },
+      "start_line": 2832,
+      "text": "    main_loop_ret: *mut c_long,\n    is_child: c_int,\n) -> c_int {\n    let number = unsafe { (*w).sr.number as c_long };\n\n    match number {\n        SYS_OPENAT => unsafe { act_openat(w, fd, cpu, pathbuf, tmpbuf) },\n        SYS_FUTEX => unsafe { act_futex_clock(w, fd, cpu) },\n        SYS_KILL => unsafe { act_kill(w, fd, cpu, my_thread) },\n        SYS_EXIT | SYS_EXIT_GROUP => {\n            unsafe { act_exit(w, cpu, is_child) };\n            if !main_loop_ret.is_null() {\n                unsafe {\n                    *main_loop_ret = (*w).sr.args[0] as c_long;\n                }\n            }\n            return 1;\n        }\n        SYS_MMAP | SYS_MUNMAP | SYS_MPROTECT => unsafe { act_reserved_memory_syscall(w, fd, cpu) },\n        SYS_GETTID => unsafe { act_gettid(w, fd, cpu) },\n        SYS_CLONE => {\n            let flag = unsafe { (*w).sr.args[0] };\n            if flag == 1 {\n                unsafe { act_clone_complete(w, fd, cpu) };\n            } else if unsafe { act_clone_start(w, fd, cpu, main_loop_ret) } != 0 {\n                return 1;\n            }\n        }\n        SYS_WAIT4 => unsafe { act_wait4(w, fd, cpu) },\n        SYS_EXECVE => {\n            if unsafe { act_execve(w, fd, cpu, pathbuf, main_loop_ret) } != 0 {"
+    },
+    "launcher_real_request_type": {
+      "end_line": 995,
+      "identity": {
+        "bytes": 256059,
+        "path": "/home/holden/mckernel/executer/user/rust/mcexec_helpers.rs",
+        "sha256": "ab6aaa29b9a9b8d07077a9bb27e02c7dc7a353fe3a0d0b538b119e41bd264a24"
+      },
+      "start_line": 978,
+      "text": "\n#[repr(C)]\npub struct McexecSyscallRequest {\n    rtid: c_int,\n    ttid: c_int,\n    valid: c_ulong,\n    number: c_ulong,\n    args: [c_ulong; 6],\n}\n\n#[repr(C)]\npub struct McexecSyscallWaitDesc {\n    cpu: c_ulong,\n    sr: McexecSyscallRequest,\n    pid: c_int,\n}\n\n#[repr(C)]"
+    },
+    "outer_real_selected": {
+      "end_line": 191,
+      "identity": {
+        "bytes": 13252,
+        "path": "/home/holden/mckernel/kernel/rust/syscall_offload_entry.rs",
+        "sha256": "378bd1373807833442cb72a602061157fd1109ee559f7b8f25e6d2a67a5112cf"
+      },
+      "start_line": 143,
+      "text": "    unsafe { core::arch::asm!(\"\", options(nostack, preserves_flags)) };\n\n    unsafe {\n        if syscall_policy::syscall_offload_counted_result(\n            read(addr_of!((*request).number)) as CInt, SYS_EXIT_GROUP,\n        ) != 0 {\n            let count = addr_of_mut!((*thread).in_syscall_offload);\n            write(count, read(count).wrapping_add(1));\n        }\n    }\n\n    let use_requester_tid = unsafe {\n        syscall_policy::syscall_offload_prepare_result(\n            request, response,\n            (*(*crate::cls::get_this_cpu_local_var()).current).tid,\n            read(addr_of!((*request).number)) as CInt,\n            read(addr_of!((*request).args[0])),\n            SYS_SCHED_SETAFFINITY, REQUEST_THREAD_SPINNING,\n        )\n    };\n    if use_requester_tid < 0 {\n        // Keep the original early-return point; this is not a newly invented\n        // recovery or cleanup policy for invalid original caller arguments.\n        return use_requester_tid as CLong;\n    }\n    unsafe {\n        if use_requester_tid != 0 && debug_enabled(addr_of!(REQUESTER_DEBUG)) {\n            crate::debug::kprintf(\n                b\"%s: uti, ttid=%d\\n\\0\".as_ptr().cast(),\n                FUNCTION_NAME.as_ptr().cast::<i8>(), read(addr_of!((*request).ttid)),\n            );\n        }\n        syscall_policy::send_syscall(request, cpu, response);\n        if syscall_policy::syscall_preempt_disable_needed_result(read(addr_of!((*request).rtid))) != 0 {\n            crate::cls::preempt_disable();\n        }\n        if debug_enabled(addr_of!(WAIT_DEBUG)) {\n            crate::debug::kprintf(\n                b\"%s: syscall num: %d waiting for Linux.. \\n\\0\".as_ptr().cast(),\n                FUNCTION_NAME.as_ptr().cast::<i8>(), read(addr_of!((*request).number)) as CInt,\n            );\n        }\n        // Actual Rust state machine: IRQ/waitq/runqueue scheduling, nested\n        // services and genuine outer fork-control observation stay unchanged.\n        syscall_policy::syscall_offload_wait_reply(request, response, cpu, thread);\n        if syscall_policy::syscall_preempt_disable_needed_result(read(addr_of!((*request).rtid))) != 0 {\n            crate::cls::preempt_enable();\n        }\n        if debug_enabled(addr_of!(REPLY_DEBUG)) {"
+    },
+    "real_send_packet_copy_and_publish": {
+      "end_line": 2560,
+      "identity": {
+        "bytes": 1240794,
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "sha256": "76ce6016d6ddd1cfa6c41070c0cf35e87b94ddc31e67c805adbe3b94b3f17469"
+      },
+      "start_line": 2525,
+      "text": "pub unsafe extern \"C\" fn send_syscall(\n    request: *mut SyscallRequest,\n    cpu: CInt,\n    response: *mut SyscallResponse,\n) {\n    let prep_rc = syscall_send_prepare_result(request, response);\n    if prep_rc != 0 {\n        kprintf(\n            c\"send_syscall: ERROR: preparing syscall request failed: %d\\n\"\n                .as_ptr()\n                .cast(),\n            prep_rc,\n        );\n        return;\n    }\n\n    // The IKC queue copies all 128 bytes as u64 words.  Zero-initializing the\n    // complete packet prevents reads of indeterminate union/padding bytes.\n    let mut packet = MaybeUninit::<IkcScdPacket>::zeroed().assume_init();\n    let traditional = addr_of_mut!(packet.body).cast::<IkcScdPacketTraditional>();\n    let packet_request = addr_of_mut!((*traditional).req);\n    let prep_rc = syscall_request_copy_result(packet_request, request);\n    if prep_rc != 0 {\n        kprintf(\n            c\"send_syscall: ERROR: copying syscall request failed: %d\\n\"\n                .as_ptr()\n                .cast(),\n            prep_rc,\n        );\n        return;\n    }\n    let prep_rc = syscall_request_publish_result(packet_request);\n    if prep_rc != 0 {\n        kprintf(\n            c\"send_syscall: ERROR: publishing syscall request failed: %d\\n\"\n                .as_ptr()"
+    },
+    "send_prepare_valid_zero": {
+      "end_line": 2444,
+      "identity": {
+        "bytes": 1240794,
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "sha256": "76ce6016d6ddd1cfa6c41070c0cf35e87b94ddc31e67c805adbe3b94b3f17469"
+      },
+      "start_line": 2430,
+      "text": "#[no_mangle]\npub unsafe extern \"C\" fn syscall_send_prepare_result(\n    request: *mut SyscallRequest,\n    response: *mut SyscallResponse,\n) -> CInt {\n    if request.is_null() || response.is_null() {\n        return -EINVAL;\n    }\n\n    write(core::ptr::addr_of_mut!((*response).status), 0);\n    write(core::ptr::addr_of_mut!((*request).valid), 0);\n\n    0\n}\n"
+    }
+  },
+  "carrier": "SyscallRequest reprC72/align8, CInt4, CLong/CULong/pointer8, offsets0,4,8,16,24; x86IHK_DMA_ALIGN empty",
+  "defined_storage_repair": "Current C leaves rtids/valid/args3..5 unspecified; guest overwrites routing/valid before semantic read and selected host action ignores args3..5, but whole72B carrier is copied/stored and its publisher requires fully initialized nonvalidfields. Candidate constructs every field explicitly; previously unspecified ignored words become0. This is an explicit defined-storage extension, not parity with stack bytes, a new ACK or broad-mode admission. Unsupported-profile C fallback remains byte-semantic equivalent.",
+  "entry_ABI": "unsafe extern C fn(CInt,CInt)->CInt",
+  "fields": [
+    {
+      "field": "rtid",
+      "first_selected_semantic_access": "do_syscall->syscall_offload_prepare_result writes actual current_tid before send and before rtid debug/preemption reads",
+      "new_initial_value": 0,
+      "offset_bytes": [
+        0,
+        4
+      ],
+      "old_C_initialization": "unspecified",
+      "reason": "Zero is private initial storage only, never published instead of requester identity.",
+      "wire_value": "actual current_tid written by existing outer"
+    },
+    {
+      "field": "ttid",
+      "first_selected_semantic_access": "syscall_offload_prepare_result writes0 because nr61 is not sched_setaffinity203; routing/debug read afterwards",
+      "new_initial_value": 0,
+      "offset_bytes": [
+        4,
+        4
+      ],
+      "old_C_initialization": "unspecified",
+      "reason": "Exact existing wait target selection is unchanged.",
+      "wire_value": 0
+    },
+    {
+      "field": "valid",
+      "first_selected_semantic_access": "send_syscall->syscall_send_prepare_result writes0 before copying, existing publish stores1 Release on packet copy; host wait_output resets only its privatecopy",
+      "new_initial_value": 0,
+      "offset_bytes": [
+        8,
+        8
+      ],
+      "old_C_initialization": "unspecified",
+      "reason": "Local0 is not ACK/completion and does not replace any response producer.",
+      "wire_value": "existing publisher1, not new wrapper authority"
+    },
+    {
+      "field": "number",
+      "first_selected_semantic_access": "outer debug/count/prepare read; host dispatchexactSYS_WAIT4",
+      "new_initial_value": 61,
+      "offset_bytes": [
+        16,
+        8
+      ],
+      "old_C_initialization": 61,
+      "reason": "Actual supported x86_64 nr61 unchanged.",
+      "wire_value": 61
+    },
+    {
+      "field": "args0",
+      "first_selected_semantic_access": "outer prepare reads arg0; launcher casts arg0 back to c_int then waitid(P_PID,pid as u32)",
+      "new_initial_value": "pid as CULong",
+      "offset_bytes": [
+        24,
+        8
+      ],
+      "old_C_initialization": "pid int converted to unsignedlong",
+      "reason": "Exact source C conversion/sign representation and original caller PID preserved."
+    },
+    {
+      "field": "args1",
+      "first_selected_semantic_access": "copied as carrier; dedicated act_wait4 does not read it",
+      "new_initial_value": 0,
+      "offset_bytes": [
+        32,
+        8
+      ],
+      "old_C_initialization": 0,
+      "reason": "No hoststatus destination; guest wait transaction owns statuscopy."
+    },
+    {
+      "field": "args2",
+      "first_selected_semantic_access": "launcher casts c_int then WEXITED|(options&WNOWAIT)",
+      "new_initial_value": "options as CULong",
+      "offset_bytes": [
+        40,
+        8
+      ],
+      "old_C_initialization": "options int converted to unsignedlong",
+      "reason": "Wrapper does not apply a new options filter or alter caller wait semantics."
+    },
+    {
+      "field": "args3",
+      "first_selected_semantic_access": "complete72B byte transport only; dedicated nr61 act_wait4 never reads/passes it",
+      "new_initial_value": 0,
+      "offset_bytes": [
+        48,
+        8
+      ],
+      "old_C_initialization": "unspecified",
+      "reason": "Not a Linux wait4 rusage pointer on this selected path: act_wait4 invokeswaitid with localSigInfo, while guest wait4_body_result handles its own rusage pointer/copy. Defining this previously unspecified carrier word preserves all defined supported wait behavior."
+    },
+    {
+      "field": "args4,args5",
+      "first_selected_semantic_access": "complete72B transport/storage; no nr61 consumer read",
+      "new_initial_value": [
+        0,
+        0
+      ],
+      "offset_bytes": [
+        56,
+        16
+      ],
+      "old_C_initialization": "unspecified",
+      "reason": "Fully defined carrier fulfills existing publication contract without changing selected waitid action."
+    }
+  ],
+  "implementation": {
+    "actual_lower_calls": [
+      "crate::x86_local::ihk_mc_get_processor_id",
+      "crate::syscall_offload_entry::do_syscall"
+    ],
+    "new_module": {
+      "bytes": 2788,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-1/candidate/kernel/rust/f03_wait_host_provider.rs",
+      "sha256": "400ad42def827a0516dbe3a5a918802b929fae1c8861a6589f48f80bff4b0753"
+    },
+    "new_public_owner": "wait_host_wait4_bridge",
+    "no_held_broad_module_selected": true,
+    "typed_C_and_Rust_guards": true
+  },
+  "matching_selected_inputs": {
+    "actual_host67_stage_lock": {
+      "bytes": 9140,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/stage-lock.json",
+      "sha256": "f0f7cf6f846efdec7f826a1f07589bb396da1b430d3cc998189e58539ebd97ef"
+    },
+    "compiled_host_request_decoder": {
+      "bytes": 20310,
+      "path": "/home/holden/mckernel/host-kernel/native-rust/application_syscall.rs",
+      "sha256": "daaa3b0fabb002b40cafdc4d7c74ed6cdfd606e18dc82d3bb32bc3055e1a96e0"
+    },
+    "f199_outer": {
+      "bytes": 13252,
+      "path": "/home/holden/mckernel/kernel/rust/syscall_offload_entry.rs",
+      "sha256": "378bd1373807833442cb72a602061157fd1109ee559f7b8f25e6d2a67a5112cf"
+    },
+    "headers": [
+      {
+        "bytes": 20836,
+        "path": "/home/holden/mckernel/kernel/include/syscall.h",
+        "sha256": "459e6d0faec3f1b8366a0d329571ef5ea813042706be11f9423b0399bbba6ffa"
+      },
+      {
+        "bytes": 9756,
+        "path": "/home/holden/mckernel/executer/include/uprotocol.h",
+        "sha256": "1770a59cf4486380eb5aa483d3634dc1e4c9c9c16d1bf09865d4ff8f71191e69"
+      },
+      {
+        "bytes": 76151,
+        "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+        "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+      },
+      {
+        "bytes": 198,
+        "path": "/home/holden/mckernel/ihk/cokernel/smp/x86_64/include/ihk/memconst.h",
+        "sha256": "38b25a9fedbcf50d9eae799681aff60705d6e2e5e3559bcb721b0541ce98dc61"
+      }
+    ],
+    "qualified_launcher_independent_GO": {
+      "bytes": 14426,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-production-review-source-acquisition-max-1/qualification-1/REVIEW.json",
+      "sha256": "a6f130387ea40f2543f98a687980c9f4be899b7518a5282f08c0229cebd09068"
+    },
+    "qualified_launcher_production_result": {
+      "bytes": 44796,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/production-packet-1/qualification-1/QUALIFICATION.json",
+      "sha256": "dc0c975c362caba38100e13b5ca951cb864fc8ecba698096f24e72edf0115296"
+    },
+    "qualified_launcher_source_profile": {
+      "bytes": 18484,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/SOURCE-PROFILE.json",
+      "sha256": "fdd440fd6a565703ff1fd426b9c07f174a2aac4809077e9a1b37a3948455a659"
+    }
+  },
+  "material_scope_GO": {
+    "bytes": 14786,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-review-sourceacq-max-1/REVIEW.json",
+    "sha256": "04ef02aaf13a660891c95534b78f32fe9e07f1da637d9af1070b3d06cd0b42f8"
+  },
+  "not_claimed": [
+    "No native wait/reap behavior or originalwhole04 credit",
+    "No terminationprovider port (separateP03owner)",
+    "No fullsource/provider/default/native hold release",
+    "No actualtests/compiler/image/module/runtime bypreparer"
+  ],
+  "original_check": "M14-03-04-DEFAULT",
+  "request_lifetime_and_return": "One private naturally aligned fully initialized stackcarrier; actual CPU queried once as original; pointer passed only to genuine selected synchronous Rust do_syscall. Existing outer owns monitor/count/preempt/send/wait/reply, no reference crosses a new async boundary. Return underlyingCLong asCInt with original supportedtarget narrowing; caller scan locks/reap/warnings/WNOWAIT/status/rusage behavior unchanged.",
+  "schema": 1,
+  "selection": {
+    "C_source_total_lines_preserved": 30379,
+    "condition": "MCKERNEL_RUST_F06_WHOLE_DEFAULT AND ENABLE_RUST_F06_SYSCALL_WHOLE AND MCKERNEL_DO_SYSCALL_OUTER_SELECTED AND NOT ENABLE_NATIVE_FORK_OWNED_TRANSACTION AND NOT DCFA_KMOD",
+    "inherited_profile": "x86_64/Rust/Linux6.12/!UBSAN/PROFILE/PERF/RUSAGE/workIRQ and ordinarybroadOFF/experimentalOFF; no userflag/default expansion",
+    "internal_boolean": "MCKERNEL_WAIT_HOST_PROVIDER_SELECTED",
+    "new_C_macro": "MCKERNEL_RUST_F03_WAIT_HOST_PROVIDER",
+    "new_Rust_cfg": "f03_wait_host_provider_candidate",
+    "paired_C": "Narrowextern+ABIguard OR unchanged oldbroadextern; same oldCbodyelse",
+    "real_table": "f03_wait_c_dependencies48B.host_wait4 atslot0 must resolve new actualRust definition after production build; no table mutation"
+  },
+  "source_baseline": "actual f199 kernel source consumed by image1aee; later documentation/user-case changes leave these kernel preimages unchanged",
+  "status": "SOURCE_DERIVED_COMPLETE_FIELD_CONTRACT_FOR_NARROW_WAIT_PROVIDER_CANDIDATE_NOT_EXECUTED"
+}

@@ -1,0 +1,215 @@
+{
+  "status": "SOURCE_CONTRACT_ONLY",
+  "observed_declared_call_order": [
+    "get_this_cpu_local_var",
+    "ihk_mc_syscall_set_arg0",
+    "ihk_mc_syscall_set_arg1",
+    "ihk_mc_syscall_set_arg2",
+    "set_host_vma_body_result"
+  ],
+  "actual_existing_helper_routes": {
+    "ihk_mc_syscall_set_arg0": {
+      "selector": 0,
+      "volatile_field": "gpr.rdi",
+      "C_value_type": "unsigned long",
+      "Rust_value_type": "CULong"
+    },
+    "ihk_mc_syscall_set_arg1": {
+      "selector": 1,
+      "volatile_field": "gpr.rsi",
+      "C_value_type": "unsigned long",
+      "Rust_value_type": "CULong"
+    },
+    "ihk_mc_syscall_set_arg2": {
+      "selector": 2,
+      "volatile_field": "gpr.rdx",
+      "C_value_type": "unsigned long",
+      "Rust_value_type": "CULong"
+    }
+  },
+  "zero_valid_nested_struct_shapes": {
+    "X86BasicRegs": [
+      [
+        "r15",
+        "CULong"
+      ],
+      [
+        "r14",
+        "CULong"
+      ],
+      [
+        "r13",
+        "CULong"
+      ],
+      [
+        "r12",
+        "CULong"
+      ],
+      [
+        "rbp",
+        "CULong"
+      ],
+      [
+        "rbx",
+        "CULong"
+      ],
+      [
+        "r11",
+        "CULong"
+      ],
+      [
+        "r10",
+        "CULong"
+      ],
+      [
+        "r9",
+        "CULong"
+      ],
+      [
+        "r8",
+        "CULong"
+      ],
+      [
+        "rax",
+        "CULong"
+      ],
+      [
+        "rcx",
+        "CULong"
+      ],
+      [
+        "rdx",
+        "CULong"
+      ],
+      [
+        "rsi",
+        "CULong"
+      ],
+      [
+        "rdi",
+        "CULong"
+      ],
+      [
+        "orig_rax",
+        "CULong"
+      ],
+      [
+        "rip",
+        "CULong"
+      ],
+      [
+        "cs",
+        "CULong"
+      ],
+      [
+        "rflags",
+        "CULong"
+      ],
+      [
+        "rsp",
+        "CULong"
+      ],
+      [
+        "ss",
+        "CULong"
+      ]
+    ],
+    "X86Sregs": [
+      [
+        "fs_base",
+        "CULong"
+      ],
+      [
+        "gs_base",
+        "CULong"
+      ],
+      [
+        "ds",
+        "CULong"
+      ],
+      [
+        "es",
+        "CULong"
+      ],
+      [
+        "fs",
+        "CULong"
+      ],
+      [
+        "gs",
+        "CULong"
+      ]
+    ],
+    "X86UserContext": [
+      [
+        "sr",
+        "X86Sregs"
+      ],
+      [
+        "is_gpr_valid",
+        "u8"
+      ],
+      [
+        "is_sr_valid",
+        "u8"
+      ],
+      [
+        "spare_flags6",
+        "u8"
+      ],
+      [
+        "spare_flags5",
+        "u8"
+      ],
+      [
+        "spare_flags4",
+        "u8"
+      ],
+      [
+        "spare_flags3",
+        "u8"
+      ],
+      [
+        "spare_flags2",
+        "u8"
+      ],
+      [
+        "spare_flags1",
+        "u8"
+      ],
+      [
+        "gpr",
+        "X86BasicRegs"
+      ]
+    ]
+  },
+  "defined_C_conversion": [
+    {
+      "prot": -2147483648,
+      "C_unsigned_long": 18446744071562067968,
+      "narrowed_u32": 2147483648
+    },
+    {
+      "prot": -1,
+      "C_unsigned_long": 18446744073709551615,
+      "narrowed_u32": 4294967295
+    },
+    {
+      "prot": 0,
+      "C_unsigned_long": 0,
+      "narrowed_u32": 0
+    },
+    {
+      "prot": 1,
+      "C_unsigned_long": 1,
+      "narrowed_u32": 1
+    },
+    {
+      "prot": 2147483647,
+      "C_unsigned_long": 2147483647,
+      "narrowed_u32": 2147483647
+    }
+  ],
+  "scratch_pointer_escape": false,
+  "existing_provider": "syscall_policy::set_host_vma_body_result"
+}

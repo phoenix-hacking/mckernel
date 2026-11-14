@@ -1,0 +1,439 @@
+{
+  "application_acceptance": false,
+  "author": "/root/native_running_publication",
+  "baseline_source_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+  "binds": [
+    {
+      "destination": "/out",
+      "read_only": true,
+      "source": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output"
+    },
+    {
+      "destination": "/candidate",
+      "read_only": false,
+      "source": "/home/holden/mckernel-work/scratch/nsd-c-23e0839d85fe47c4ab296fbe3f5a384c"
+    },
+    {
+      "destination": "/inputs",
+      "read_only": true,
+      "source": "/home/holden/mckernel-work/scratch/nsd-i-23e0839d85fe47c4ab296fbe3f5a384c"
+    },
+    {
+      "destination": "/driver.py",
+      "read_only": true,
+      "source": "/home/holden/mckernel-work/scratch/native-shutdown-external-modules-preparation-20261017-1/capsule/scripts/native_running_external_modules_offline.py"
+    },
+    {
+      "destination": "/request.json",
+      "read_only": true,
+      "source": "/home/holden/mckernel/docs/verification/evidence/native-shutdown-external-modules-request-20261017-1.json"
+    }
+  ],
+  "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+  "build": {
+    "Linux_or_image_build": false,
+    "all_three_matched_modules": [
+      "ihk.ko",
+      "ihk-smp-x86_64.ko",
+      "mcctrl.ko"
+    ],
+    "argv": [
+      "/usr/bin/env",
+      "-i",
+      "KBUILD_BUILD_HOST=rocky-10.2-x86_64",
+      "KBUILD_BUILD_TIMESTAMP=Tue, 11 Aug 2026 07:40:34 +0000",
+      "KBUILD_BUILD_USER=mckernel",
+      "KBUILD_BUILD_VERSION=1",
+      "SOURCE_DATE_EPOCH=1786434034",
+      "PATH=/usr/bin:/bin",
+      "LANG=C",
+      "LC_ALL=C",
+      "TZ=UTC",
+      "BASH_ENV=",
+      "ENV=",
+      "GNUMAKEFLAGS=",
+      "MAKEFILES=",
+      "MAKEFLAGS=",
+      "MAKEOVERRIDES=",
+      "MFLAGS=",
+      "LD_LIBRARY_PATH=",
+      "LD_PRELOAD=",
+      "HOME=/candidate/home",
+      "TMPDIR=/candidate/tmp",
+      "/usr/bin/make",
+      "-C",
+      "/out/source/linux-6.12.0-211.44.1.el10_2",
+      "O=/out/build",
+      "M=/candidate/modules",
+      "ARCH=x86_64",
+      "LLVM=1",
+      "LOCALVERSION=-211.44.1.el10_2.mckernel1.x86_64",
+      "KBUILD_BUILD_HOST=rocky-10.2-x86_64",
+      "KBUILD_BUILD_TIMESTAMP=Tue, 11 Aug 2026 07:40:34 +0000",
+      "KBUILD_BUILD_USER=mckernel",
+      "KBUILD_BUILD_VERSION=1",
+      "SOURCE_DATE_EPOCH=1786434034",
+      "-j2",
+      "modules"
+    ],
+    "compiler_make_execution_demonstrated": false,
+    "cwd": "/out/build",
+    "environment": {
+      "BASH_ENV": "",
+      "ENV": "",
+      "GNUMAKEFLAGS": "",
+      "HOME": "/candidate/home",
+      "KBUILD_BUILD_HOST": "rocky-10.2-x86_64",
+      "KBUILD_BUILD_TIMESTAMP": "Tue, 11 Aug 2026 07:40:34 +0000",
+      "KBUILD_BUILD_USER": "mckernel",
+      "KBUILD_BUILD_VERSION": "1",
+      "LANG": "C",
+      "LC_ALL": "C",
+      "LD_LIBRARY_PATH": "",
+      "LD_PRELOAD": "",
+      "MAKEFILES": "",
+      "MAKEFLAGS": "",
+      "MAKEOVERRIDES": "",
+      "MFLAGS": "",
+      "PATH": "/usr/bin:/bin",
+      "SOURCE_DATE_EPOCH": "1786434034",
+      "TMPDIR": "/candidate/tmp",
+      "TZ": "UTC"
+    },
+    "make_jobs": 2,
+    "prior_176_external_build_demonstrated": true,
+    "retries": 0
+  },
+  "checks": {
+    "inputs": 14,
+    "owner_evidence_absent": true,
+    "scope": "Fresh ordinary retained176 closure plus9 authenticated reviewed production deltas; selected6 injected metadata/path-binding tests PASS. No compiler, owner, admission or client execution.",
+    "source_bytes": 1205365,
+    "source_files": 60,
+    "test_status": {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-external-modules-preparation-20261017-1/selected-tests-status.json",
+      "sha256": "2699a2f531f96072f54d8b7f7dfd5c5029b75b6b305c7f5b1f5ac05995dbf164"
+    }
+  },
+  "closure_sha256": "a39c8cb67919f5fb11271596d00ad738d4edf6667cc45cf4a5c78892b32b2540",
+  "compatibility_build_id": {
+    "meaning": "Retained ABI compatibility only; not proof of unchanged942 compiled source",
+    "path": "ihk-compat-build-id.bin",
+    "sha256": "6836dd3f0fd3d273816c58b067eeea1b53a2a7ab760c68e3d918eb14e80c38f0"
+  },
+  "derivation": {
+    "independent_review": "Pending exact scratch tool diff and request execution review; no release",
+    "previous_profile": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-running-external-modules-execution-proposal-20261017-4.json",
+      "sha256": "a71ff9af4d14fd05069b2b34ff01c8cee47cb99d6b7e8acd917b054a61e5b495"
+    },
+    "scope": "New scratch tools only: sourcecandidate/preparation/closure/provenance constants and destination pins. Runtime algorithms, .o parser, resource limits, ownership and historical contracts unchanged."
+  },
+  "driver": {
+    "path": "/home/holden/mckernel-work/scratch/native-shutdown-external-modules-preparation-20261017-1/capsule/scripts/native_running_external_modules_offline.py",
+    "sha256": "ae3c61a147b4956b57d1e1fc8a9bd7a2828f4d9fb3cb05df2d0e483b9167fe4e"
+  },
+  "driver_cli": [
+    "/usr/bin/python3",
+    "/driver.py",
+    "--execute"
+  ],
+  "excluded_working_tree": "Only the9 reviewed coherent shutdown production files are read from working tree; all other files use retained176 frozen bytes.",
+  "execution_authority": false,
+  "execution_count": 1,
+  "formal_case_credit": false,
+  "free_space_at_preparation": {
+    "host": {
+      "device": 66306,
+      "free_bytes": 19244679168
+    },
+    "scratch": {
+      "device": 1828,
+      "free_bytes": 18111184896
+    }
+  },
+  "historical_admission": {
+    "argv": [
+      "/usr/bin/sudo",
+      "-A",
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "-c",
+      "#!/usr/bin/env python3\n\"\"\"Bounded read-only observer for seven immutable historical build leases.\n\nSource-only: privileged execution needs an independent release. No mutation,\narbitrary pathname, external command, credential access, or lease retirement.\n\"\"\"\nimport fcntl\nimport hashlib\nimport json\nimport os\nfrom pathlib import Path\nimport stat\nimport struct\nimport uuid\n\nROOT = Path('/home/holden/mckernel-work/scratch')\nEVIDENCE = Path('/home/holden/mckernel/docs/verification')\n# Original retirement identities remain historical evidence, not mount authority.\nHISTORICAL_BOOT = 'c733d83b-a5ae-4f91-9ce6-9f8ccf119afd'\nHISTORICAL_DEVICE = 1831\n# This single reviewed generation must refuse every later boot/remount until reviewed.\nCURRENT_BOOT = '7bfc5687-6c04-4d15-84eb-b92ab9a55dcb'\nCURRENT_DEVICE = 1828\nFILESYSTEM_UUID = '2a5768c8-718d-4914-bdc0-6b32c5a92a52'\nBLOCK_DEVICE = Path('/dev/loop36')\nEVIDENCE_BINDINGS = {\n '675': ('stability-native-exact-retirement-runtime-success-20260929-1.json', 'cdb1eabf257940fbfd91e86accde5bbab342e47b2568261462ed9da06b9f842c'),\n '704': ('stability-native-exact-retirement-704f6654-failure-20260929-1.json', '1e63a02eb9b29f1ec3ec0a4142543ca523720e19c0676f6a30048c3f1b34d7e0'),\n '76': ('evidence/stability-native-exact-candidate-retirement-postflight-76ae20b5-1.release.json', 'aba167b8ac6cf3167e6946f30197c079e2d6df534ebb28c06f2c75934096522d'),\n 'f5': ('evidence/stability-native-exact-candidate-retirement-success-5386f60c-20260929-1.json', '7af1a1575f3c584c16fd3d8cc8e7f5a9d6de2f52e3509f3e4e3ed1d633b1766f'),\n}\n# name suffix, inode, bytes, SHA256, PID, starttime, retained evidence key.\nLEASES = (\n ('67589154-1', 31470, 426, 'ac3d18953da2871ae6e9702143ba05a98abbb3412d512cc65eaa480517772f34', 3871619, '89921507', '675'),\n ('704f6654-1', 31474, 426, '482bdf30e7320693c338832695932fdf1be261ed081de225e4cbdaf7e4c2c123', 3912447, '90493097', '704'),\n ('76ae20b5-1', 31509, 426, 'a68867c85058eac82013575427851b4cc2ec38b310e8572e399fa5107166d8a2', 4194054, '93880605', '76'),\n ('76ae20b5-disk-1', 31510, 431, 'b25bd68e9b03249c57b8538e7192ef01b1acc6e0f686c81b79f55076efff31dd', 4194054, '93880605', '76'),\n ('76ae20b5-disk-retirement-1', 31512, 442, '4716843b04b58a4c8004ab4381197b9a78ba2179fdeb11f1a63b52dda3ea4b9f', 4194054, '93880605', '76'),\n ('76ae20b5-disk-validation-2', 31511, 442, '027b4db20d377c5b9f7e7c0eb999452e40fa3ef110e191db68713efcdaf83e88', 4194054, '93880605', '76'),\n ('f5d8d914-1', 31487, 426, '30477fdce5425bb6e1a76b801e21542062eb99d8c7ec6d7333f8b31dda3e29e5', 4061014, '92686869', 'f5'),\n)\n\nclass Refusal(ValueError): pass\n\ndef _directory(path):\n    fds = []\n    try:\n        fd = os.open('/', os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW | os.O_CLOEXEC)\n        fds.append(fd)\n        chain = [_directory_identity(os.fstat(fd))]\n        for part in path.parts[1:]:\n            if part in ('.', '..'): raise Refusal('invalid directory path')\n            fd = os.open(part, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW | os.O_CLOEXEC, dir_fd=fd)\n            fds.append(fd)\n            chain.append(_directory_identity(os.fstat(fd)))\n        for parent in fds[:-1]: os.close(parent)\n        return fd, chain\n    except BaseException:\n        for fd in reversed(fds): os.close(fd)\n        raise\n\ndef _directory_identity(meta):\n    return (meta.st_dev, meta.st_ino, meta.st_mode, meta.st_uid, meta.st_gid)\n\ndef _block_identity(meta):\n    return (meta.st_dev, meta.st_ino, meta.st_rdev, meta.st_mode,\n            meta.st_uid, meta.st_gid, meta.st_nlink)\n\nclass ScratchBinding:\n    \"\"\"Pin current mount and fixed backing block descriptor across all observations.\"\"\"\n    def __enter__(self):\n        self.root_fd = self.block_parent = self.block_fd = None\n        try:\n            self.root_fd, self.root_chain = _directory(ROOT)\n            self.root_identity = _directory_identity(os.fstat(self.root_fd))\n            if self.root_identity != (CURRENT_DEVICE, 2, stat.S_IFDIR | 0o700, 1000, 1000):\n                raise Refusal('current scratch root binding differs')\n            self.block_parent, self.block_chain = _directory(BLOCK_DEVICE.parent)\n            self.block_fd = os.open(BLOCK_DEVICE.name, os.O_RDONLY | os.O_NOFOLLOW |\n                                    os.O_NONBLOCK | os.O_CLOEXEC | os.O_NOATIME, dir_fd=self.block_parent)\n            meta = os.fstat(self.block_fd)\n            if (not stat.S_ISBLK(meta.st_mode) or meta.st_rdev != CURRENT_DEVICE or\n                    meta.st_uid != 0 or meta.st_nlink != 1):\n                raise Refusal('current backing block binding differs')\n            self.block_identity = _block_identity(meta)\n            self.check()\n            return self\n        except BaseException:\n            self.__exit__(None, None, None)\n            raise\n\n    def check(self):\n        if Path('/proc/sys/kernel/random/boot_id').read_text().strip() != CURRENT_BOOT:\n            raise Refusal('current boot identity differs; fresh review required')\n        if _directory_identity(os.fstat(self.root_fd)) != self.root_identity:\n            raise Refusal('current scratch root identity changed')\n        for path, expected in ((ROOT, self.root_chain), (BLOCK_DEVICE.parent, self.block_chain)):\n            fd, chain = _directory(path)\n            os.close(fd)\n            if chain != expected: raise Refusal('current mount ancestry changed')\n        if (_block_identity(os.fstat(self.block_fd)) != self.block_identity or\n                _block_identity(os.stat(BLOCK_DEVICE.name, dir_fd=self.block_parent,\n                                        follow_symlinks=False)) != self.block_identity):\n            raise Refusal('current backing block identity changed')\n        # ext4's primary superblock starts at byte 1024; only this fixed bounded\n        # region is read. Its UUID authenticates the same rdev as scratch st_dev.\n        data = os.pread(self.block_fd, 1024, 1024)\n        if (len(data) != 1024 or data[0x38:0x3a] != b'\\x53\\xef' or\n                str(uuid.UUID(bytes=data[0x68:0x78])) != FILESYSTEM_UUID):\n            raise Refusal('current ext4 filesystem UUID proof differs')\n        if (_block_identity(os.fstat(self.block_fd)) != self.block_identity or\n                Path('/proc/sys/kernel/random/boot_id').read_text().strip() != CURRENT_BOOT):\n            raise Refusal('current mount or boot changed during UUID read')\n\n    def __exit__(self, *args):\n        for name in ('block_fd', 'block_parent', 'root_fd'):\n            fd = getattr(self, name, None)\n            if fd is not None:\n                os.close(fd)\n                setattr(self, name, None)\n\ndef _read(path, immutable=False):\n    \"\"\"Descriptor-relative NOFOLLOW, NOATIME bounded stable regular read.\"\"\"\n    path = Path(path)\n    fds = []\n    try:\n        fd = os.open('/', os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)\n        fds.append(fd)\n        for part in path.parts[1:-1]:\n            if part in ('.', '..'): raise Refusal('invalid path')\n            fd = os.open(part, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=fd)\n            fds.append(fd)\n        fd = os.open(path.name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NOATIME | os.O_CLOEXEC, dir_fd=fd)\n        fds.append(fd)\n        before = os.fstat(fd)\n        if not stat.S_ISREG(before.st_mode) or before.st_nlink != 1 or before.st_size > 1 << 20:\n            raise Refusal('unbounded or nonunique file')\n        if immutable:\n            flags = struct.unpack('I', fcntl.ioctl(fd, 0x80086601, struct.pack('I', 0)))[0]\n            if not flags & 0x10: raise Refusal('lease is not immutable')\n        data = b''\n        while len(data) <= before.st_size:\n            block = os.read(fd, min(65536, before.st_size + 1 - len(data)))\n            if not block: break\n            data += block\n        after = os.fstat(fd)\n        if before != after or len(data) != before.st_size:\n            raise Refusal('file changed while observed')\n        if immutable and struct.unpack('I', fcntl.ioctl(fd, 0x80086601, struct.pack('I', 0)))[0] != flags:\n            raise Refusal('immutable lease flags changed while observed')\n        current = os.stat(path.name, dir_fd=fds[-2], follow_symlinks=False)\n        if (current.st_dev, current.st_ino) != (before.st_dev, before.st_ino):\n            raise Refusal('file pathname changed while observed')\n        return data, before\n    finally:\n        for fd in reversed(fds): os.close(fd)\n\ndef observe():\n    if os.geteuid() != 0: raise Refusal('privileged read-only observer required')\n    if Path('/proc/sys/kernel/random/boot_id').read_text().strip() != CURRENT_BOOT:\n        raise Refusal('current boot identity differs; fresh review required')\n    with ScratchBinding() as binding:\n        result = _observe_leases()\n        binding.check()\n        return result\n\ndef _observe_leases():\n    for relative, expected in EVIDENCE_BINDINGS.values():\n        data, _ = _read(EVIDENCE / relative)\n        if hashlib.sha256(data).hexdigest() != expected: raise Refusal('retirement evidence changed')\n    rows = []\n    for suffix, inode, size, expected, pid, start, evidence in LEASES:\n        path = ROOT / ('native-exact-build-lease-' + suffix + '.json')\n        data, meta = _read(path, immutable=True)\n        if ((meta.st_dev, meta.st_ino, meta.st_size, meta.st_mode, meta.st_uid, meta.st_gid)\n                != (CURRENT_DEVICE, inode, size, stat.S_IFREG | 0o600, 0, 0) or\n                hashlib.sha256(data).hexdigest() != expected):\n            raise Refusal('historical lease binding changed')\n        # The exact retained bytes bind the tombstone schema, state, owner and\n        # release. Never accept self-declared retired:true from an unknown file.\n        try:\n            current = Path('/proc').joinpath(str(pid), 'stat').read_text()\n        except FileNotFoundError:\n            current = None\n        if current is not None and current.rsplit(')', 1)[1].split()[19] == start:\n            raise Refusal('historical owner is live')\n        rows.append({'path': str(path), 'sha256': expected, 'device': meta.st_dev,\n                     'inode': inode, 'size': size, 'pid': pid, 'starttime': start,\n                     'evidence_sha256': EVIDENCE_BINDINGS[evidence][1]})\n    return {'schema': 'mckernel.historical-lease-observation.v1', 'boot_id': CURRENT_BOOT,\n            'status': 'PASS_READ_ONLY', 'leases': rows,\n            'authority': {'historical_boot_id': HISTORICAL_BOOT,\n                          'historical_device': HISTORICAL_DEVICE,\n                          'current_device': CURRENT_DEVICE, 'filesystem_uuid': FILESYSTEM_UUID,\n                          'block_device': str(BLOCK_DEVICE),\n                          'uuid_proof': 'ext4-primary-superblock-pread-1024-at-1024'}}\n\ndef main():\n    import sys\n    if len(sys.argv) != 1: raise Refusal('observer accepts no arguments')\n    print(json.dumps(observe(), sort_keys=True))\n    return 0\n\nif __name__ == '__main__': raise SystemExit(main())\n"
+    ],
+    "contract": "Read-only existing fixed observer, exact source bytes and constrained command, one bounded captured client; positive observer-client and descendant retirement joins all Docker-client proofs. Unknown/missing/replaced/live historical record rejects; any uncertain observer group retains root quarantine. No ignored, deleted or released historical records.",
+    "evidence_root": "/home/holden/mckernel-work/scratch/nsd-a-23e0839d85fe47c4ab296fbe3f5a384c",
+    "operation_executed": false,
+    "root_lock": "Authenticated root27:4 held through source-authenticated observation and exact seven-record reconciliation",
+    "source_binding": "Exact historical_observer object above is required verbatim in final one-shot release; its source is eleventh pinned runtime input.",
+    "timeout_seconds": 30
+  },
+  "historical_observer": {
+    "path": "/home/holden/mckernel-work/scratch/native-shutdown-external-modules-preparation-20261017-1/capsule/scripts/native_exact_historical_lease_observer.py",
+    "prefix": [
+      "/usr/bin/sudo",
+      "-A",
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B"
+    ],
+    "sha256": "463ae558e141c2a6fe5a016fb19baddb26ed883c3bf6d39c114b27711ee78a51",
+    "timeout_seconds": 30
+  },
+  "incremental_nine_deltas": [
+    {
+      "candidate_sha256": "5b12bf77664095c966245ac8a1312a41c2fc16dd4a8233abd9e6c602305ecd6d",
+      "parent176_sha256": "33b783c1e34727c0ae2e7202447a0516f7b8841a683b7580805c2b7d4fb0dc54",
+      "path": "ihk_smp_x86_64.rs"
+    },
+    {
+      "candidate_sha256": "127829f3dd35b3d44c2b098279b7439dccb31a53508055e3cdd1fd9e450682e2",
+      "parent176_sha256": "6b37a71ba79bf5746fd72123b82ebe5afc71c809310a2a942cea08a3d66cf5e8",
+      "path": "smp_application.rs"
+    },
+    {
+      "candidate_sha256": "52b77ecad0d686a57eaa1c5a5385686129eb7ae6af0d014296317ddf6468d7b3",
+      "parent176_sha256": "ed5520878d89e9a79d7ffeb128ccbb54fbab5472b4b0f57abd00a0399fc8e9cb",
+      "path": "smp_cpu.rs"
+    },
+    {
+      "candidate_sha256": "655c029bcddf937b6445ee01d076978ff9606832d60fd038e07076bee939e96c",
+      "parent176_sha256": "9876f1b374ecfb44fba09395aa9fca1ed840619488f9b4f8cde38a6693004cd9",
+      "path": "smp_file_pager.rs"
+    },
+    {
+      "candidate_sha256": "8b2f2074417c8f681fa8972a40bbab3aa25a48f72bc7f145f7d553d64d3217ba",
+      "parent176_sha256": "db0c5f94b5ea41610c501002ff359b7f23a38841715a0307e8b8f7872ac65522",
+      "path": "smp_memory.rs"
+    },
+    {
+      "candidate_sha256": "4ae39992d0354b2f0b32de4a3e26ce8a621ede6dff69dd92ce303d4ab90232ea",
+      "parent176_sha256": "7aba4319fdc6fa76761ca01128c7a7d920c4be85244737167122c914fc1268d5",
+      "path": "smp_procfs.rs"
+    },
+    {
+      "candidate_sha256": "cd97c1528602323c43aaf70f528342fc3874fe9da1660cf1a767d27284cb5b5a",
+      "parent176_sha256": "bd0a109fe6c402e21b702b0fa96d99c2d9edbd5179877aa61f9f27bd595fe0e4",
+      "path": "smp_service.rs"
+    },
+    {
+      "candidate_sha256": "d64efe15ff3545e6f21733cdc6dcbf026df370049484a7221a653d502612bfc1",
+      "parent176_sha256": "c4bb558432a85c565977a7820d42eaf06530398d7fe9b916bf58f6741ca78d81",
+      "path": "sysfs_memory.rs"
+    },
+    {
+      "candidate_sha256": "fe4ec42333148770a36843a82f0c4cdf675a27065dbed1f13449a2b61472dfa9",
+      "parent176_sha256": "8a33f152307d66f7c205fe7557da1a4e02e5d230335dd9b36f16797e11db53ee",
+      "path": "sysfs_remote.rs"
+    }
+  ],
+  "nonce": "23e0839d85fe47c4ab296fbe3f5a384c",
+  "owner": {
+    "path": "/home/holden/mckernel-work/scratch/native-shutdown-external-modules-preparation-20261017-1/capsule/scripts/native_running_external_modules_owner.py",
+    "sha256": "4cd39e2cd2b0da57d375786886835f22f9f380efa0664cbd5014c0caa282d31d"
+  },
+  "owner_cli_template": [
+    "/home/holden/anaconda3/bin/python3",
+    "-B",
+    "/home/holden/mckernel-work/scratch/native-shutdown-external-modules-preparation-20261017-1/capsule/scripts/native_running_external_modules_owner.py",
+    "--request",
+    "/home/holden/mckernel/docs/verification/evidence/native-shutdown-external-modules-request-20261017-1.json",
+    "--request-sha256",
+    "22db59405684c11b7214a37cf7edf455cde8525b875761b22d46afb91ef62881",
+    "--release",
+    "<dispatcher-reviewed-one-shot-release-path>",
+    "--release-sha256",
+    "<exact-reviewed-release-sha256>"
+  ],
+  "owner_source_report": {
+    "original": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-running-external-modules-owner-source-20261017-3.json",
+      "sha256": "353d8e397f0ce72ce54a7d1c7a9d0574a050f03f25c8d77fce5f697185b60b1f"
+    },
+    "scratch_changes": "Exact diffs and6 selected tests bound by new tools-preparation record; independent review pending"
+  },
+  "ownership": {
+    "acquired": false,
+    "common": "/home/holden/mckernel-work/scratch/native-shutdown-external-modules-operational-exclusion.json",
+    "historical_records": "Seven exact source-bound historical records require fixed read-only observer reconciliation before build admission; none ignored or deleted. Only this operation current lease/common/shared records are eligible for positively proven postflight archive/release.",
+    "lease": "/home/holden/mckernel-work/scratch/native-shutdown-external-modules.lease.json",
+    "observed_conflicts": [
+      "/home/holden/mckernel-work/scratch/native-exact-build-lease-f5d8d914-1.json",
+      "/home/holden/mckernel-work/scratch/native-exact-build-lease-76ae20b5-disk-retirement-1.json",
+      "/home/holden/mckernel-work/scratch/native-exact-build-lease-67589154-1.json",
+      "/home/holden/mckernel-work/scratch/native-exact-build-lease-76ae20b5-disk-1.json",
+      "/home/holden/mckernel-work/scratch/native-exact-build-lease-704f6654-1.json",
+      "/home/holden/mckernel-work/scratch/native-exact-build-lease-76ae20b5-1.json",
+      "/home/holden/mckernel-work/scratch/native-exact-build-lease-76ae20b5-disk-validation-2.json"
+    ],
+    "serialization": "Dispatcher serializes with all heavy operations; fresh root-mutex boot/mount/resource/conflict admission required.",
+    "shared": "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock"
+  },
+  "parent_source_candidate_sha": "1769263c751befa9983d19705833d3d5ac6a1ace",
+  "pending": [
+    "Independent exact scratch tool diff/source review",
+    "Independent exact request/proposal review",
+    "Dispatcher checkpoint/fetched-source binding if required",
+    "One-shot release authenticating11sources and fixed observer",
+    "Fresh live admission and exclusive serialized heavy slot"
+  ],
+  "postflight": {
+    "failure_policy": "Preserve original compiler status/streams/partial output. Uncertain client/container/record proof retains/quarantines ownership; no automatic recovery. No forced removal or broad cleanup.",
+    "required": [
+      "Exact admitted name/nonce/containerID",
+      "positive owned terminal state and unchanged full profile",
+      "all Docker client exits reaped",
+      "owned terminal rm by exact ID",
+      "empty id/name/label queries",
+      "all three ownership records snapshot by descriptor and exact bytes archived",
+      "ownership-archive + release-authorized hashes bound to request and reviewed sources before any unlink",
+      "all exact records revalidated before removal and parent fsync",
+      "release-complete proof before root mutex release",
+      "All observer and Docker normal-exit descendants positively reaped; uncertainty quarantines root/ownership even before build entry"
+    ],
+    "terminal_policy": "remove-owned-terminal"
+  },
+  "preparation": {
+    "path": "/home/holden/mckernel-work/scratch/native-shutdown-external-modules-preparation-20261017-1/capsule/docs/verification/evidence/native-shutdown-external-modules-preparation-20261017-1.json",
+    "sha256": "75f9af4fb318afcde2ba1a5030e1587a750a702a4f02719bb48beb0436b48bca"
+  },
+  "preserved_original_failure": {
+    "corrected_176_postcheck": "b54e0e94c0da9bca2fc23eef895ccbebd797f7cc2f61381b62b546048760e827",
+    "original_176_make0_postcheck_failure": "853a5ff0cc3d5f7d91b6688ccf111d201ba38d86871939402a39b35606c908c6",
+    "preserved": true
+  },
+  "production_acceptance": false,
+  "profile": {
+    "candidate_disk_budget_bytes": 536870912,
+    "cap_drop": [
+      "ALL"
+    ],
+    "cpu_limit": 4,
+    "cpu_set": "2-5",
+    "ipc": "private",
+    "memory_bytes": 12884901888,
+    "memory_swap_bytes": 12884901888,
+    "network": "none",
+    "no_new_privileges": true,
+    "owner_capture_budget_bytes": 67108864,
+    "pids_limit": 512,
+    "read_only_container": true,
+    "timeout_seconds": 1800,
+    "tmpfs": {
+      "/tmp": "rw,nodev,nosuid,size=256m"
+    },
+    "user": "1000:1000"
+  },
+  "request": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-shutdown-external-modules-request-20261017-1.json",
+    "sha256": "22db59405684c11b7214a37cf7edf455cde8525b875761b22d46afb91ef62881"
+  },
+  "root_mutex": {
+    "acquired": false,
+    "expected_device": 27,
+    "expected_gid": 0,
+    "expected_inode": 4,
+    "expected_uid": 0,
+    "observed": {
+      "device": 27,
+      "gid": 0,
+      "inode": 4,
+      "mode": 420,
+      "path": "/run/lock/mckernel-development.lock",
+      "uid": 0
+    },
+    "path": "/run/lock/mckernel-development.lock"
+  },
+  "schema": "mckernel.native-running-external-modules-execution-proposal.v1",
+  "scratch_mount": {
+    "device": 1828,
+    "major_minor": "7:36",
+    "observed": {
+      "fstype": "ext4",
+      "maj:min": "7:36",
+      "options": "rw,nosuid,nodev,relatime",
+      "target": "/home/holden/mckernel-work/scratch",
+      "uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52"
+    },
+    "uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52"
+  },
+  "source_candidate_sha": "942d1218f45f7e9ffab3d8d14768e40b43250af8",
+  "source_deltas": [
+    {
+      "baseline_sha256": "a353b2915a4038e7739d01cc440376daf091367f976cf6de297bceb1dd59fce8",
+      "path": "ihk_smp_x86_64.rs",
+      "source_candidate_sha256": "5b12bf77664095c966245ac8a1312a41c2fc16dd4a8233abd9e6c602305ecd6d"
+    },
+    {
+      "baseline_sha256": "9519b7f35f5d28c88cdf366fe5c67a244ea005db713690a3686afe8c2a60fcab",
+      "path": "os_runtime.rs",
+      "source_candidate_sha256": "65107aafb28868e76640cb2e1862e5d9e36a930a2e9dab850824d5108879225a"
+    },
+    {
+      "baseline_sha256": "6b37a71ba79bf5746fd72123b82ebe5afc71c809310a2a942cea08a3d66cf5e8",
+      "path": "smp_application.rs",
+      "source_candidate_sha256": "127829f3dd35b3d44c2b098279b7439dccb31a53508055e3cdd1fd9e450682e2"
+    },
+    {
+      "baseline_sha256": "ed5520878d89e9a79d7ffeb128ccbb54fbab5472b4b0f57abd00a0399fc8e9cb",
+      "path": "smp_cpu.rs",
+      "source_candidate_sha256": "52b77ecad0d686a57eaa1c5a5385686129eb7ae6af0d014296317ddf6468d7b3"
+    },
+    {
+      "baseline_sha256": "9876f1b374ecfb44fba09395aa9fca1ed840619488f9b4f8cde38a6693004cd9",
+      "path": "smp_file_pager.rs",
+      "source_candidate_sha256": "655c029bcddf937b6445ee01d076978ff9606832d60fd038e07076bee939e96c"
+    },
+    {
+      "baseline_sha256": "db0c5f94b5ea41610c501002ff359b7f23a38841715a0307e8b8f7872ac65522",
+      "path": "smp_memory.rs",
+      "source_candidate_sha256": "8b2f2074417c8f681fa8972a40bbab3aa25a48f72bc7f145f7d553d64d3217ba"
+    },
+    {
+      "baseline_sha256": "7aba4319fdc6fa76761ca01128c7a7d920c4be85244737167122c914fc1268d5",
+      "path": "smp_procfs.rs",
+      "source_candidate_sha256": "4ae39992d0354b2f0b32de4a3e26ce8a621ede6dff69dd92ce303d4ab90232ea"
+    },
+    {
+      "baseline_sha256": "bd0a109fe6c402e21b702b0fa96d99c2d9edbd5179877aa61f9f27bd595fe0e4",
+      "path": "smp_service.rs",
+      "source_candidate_sha256": "cd97c1528602323c43aaf70f528342fc3874fe9da1660cf1a767d27284cb5b5a"
+    },
+    {
+      "baseline_sha256": "c4bb558432a85c565977a7820d42eaf06530398d7fe9b916bf58f6741ca78d81",
+      "path": "sysfs_memory.rs",
+      "source_candidate_sha256": "d64efe15ff3545e6f21733cdc6dcbf026df370049484a7221a653d502612bfc1"
+    },
+    {
+      "baseline_sha256": "8a33f152307d66f7c205fe7557da1a4e02e5d230335dd9b36f16797e11db53ee",
+      "path": "sysfs_remote.rs",
+      "source_candidate_sha256": "fe4ec42333148770a36843a82f0c4cdf675a27065dbed1f13449a2b61472dfa9"
+    }
+  ],
+  "source_report": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-shutdown-integration-source-20261017-2.json",
+    "sha256": "753fb8d359d1fda1383a5d837c179c1c3a8f9af352b7fb6521cd5dcac936fffb"
+  },
+  "source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-shutdown-integration-independent-review-20261017-2.json",
+    "sha256": "830027f665fcbe5cdc99a8b787ff01defd70804e5ec80fc72db78f282d48f476"
+  },
+  "source_root": "/home/holden/mckernel-work/scratch/native-shutdown-external-modules-preparation-20261017-1/capsule",
+  "source_sha256": {
+    "scripts/native_exact_historical_lease_observer.py": "463ae558e141c2a6fe5a016fb19baddb26ed883c3bf6d39c114b27711ee78a51",
+    "scripts/native_running_external_modules_offline.py": "ae3c61a147b4956b57d1e1fc8a9bd7a2828f4d9fb3cb05df2d0e483b9167fe4e",
+    "scripts/native_running_external_modules_owner.py": "4cd39e2cd2b0da57d375786886835f22f9f380efa0664cbd5014c0caa282d31d",
+    "scripts/native_rust_exact_build_container_owner.py": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1",
+    "scripts/native_rust_exact_build_image_prepare.py": "45cb12e0fd58d164468badfb99a3ed922e65e06046bf38b4a50e27e18595a27b",
+    "scripts/native_rust_exact_build_image_rebind.py": "f10ab116e55a24e8db7a8157d71efdd01198ba3453a8141bc8bbf596eda6b61e",
+    "scripts/native_rust_exact_build_image_rebind_probe.py": "412d46de7e078746a7ec979a13ccb25753d6fa34708610932e35be8f02a89635",
+    "scripts/native_rust_exact_build_offline.py": "cc243126ab8cc0754c62175c77e46d6ba0d98294f8168cc77893a2c12249cd1a",
+    "scripts/native_rust_exact_disk_build_wrapper.py": "c252ee341eb61752704f8b818503c0a5dc97400845494707ca3110f5f23df6d1",
+    "scripts/native_rust_exact_mckernel_image_container_owner.py": "e9861cf73b0328c9fe2eacb987ea179933146cbeddbc3951405d4e60e89560f4",
+    "scripts/tests/test_native_running_external_modules_owner.py": "22f30b785d02b0ff3b917b2f53f7d884e085aefff15336b8d0bebf09e2e66aba"
+  },
+  "status": "PROPOSAL_PENDING_INDEPENDENT_REVIEW_AND_DISPATCHER_RELEASE",
+  "task_id": "native-shutdown-external-modules-preparation-20261017-1",
+  "tool_image_id": "sha256:0f8ad280e47d76b23554de4aec411752e1f779f9b2fc7fece6b0b3375dc9775d"
+}

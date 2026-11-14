@@ -1,0 +1,28 @@
+--- a/arch/x86_64/kernel/syscall.c
++++ b/arch/x86_64/kernel/syscall.c
+@@ -1736,6 +1736,17 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++extern int arch_signal_restart_result(int num, unsigned long rc, int sig,
++		int restart, int native_signal_stack);
++#ifdef MCKERNEL_NATIVE_SIGNAL_STACK
++#define isrestart(num, rc, sig, restart) \
++	arch_signal_restart_result((num), (rc), (sig), (restart), 1)
++#else
++#define isrestart(num, rc, sig, restart) \
++	arch_signal_restart_result((num), (rc), (sig), (restart), 0)
++#endif
++#else
+ static int
+ isrestart(int num, unsigned long rc, int sig, int restart)
+ {
+@@ -1775,6 +1786,7 @@
+ 		return 1;
+ 	return 0;
+ }
++#endif
+ 
+ int
+ do_signal(unsigned long rc, void *regs0, struct thread *thread, struct sig_pending *pending, int num)

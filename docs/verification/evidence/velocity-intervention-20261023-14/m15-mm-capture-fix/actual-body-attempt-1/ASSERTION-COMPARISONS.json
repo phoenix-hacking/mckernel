@@ -1,0 +1,62 @@
+[
+  {
+    "id": "no_writer_warns_every_time",
+    "result": {
+      "equal": true,
+      "warnings": 3,
+      "assertion_reads": 3,
+      "low": 0,
+      "high": 0
+    }
+  },
+  {
+    "id": "writer_locked",
+    "result": {
+      "equal": true,
+      "warnings": 0,
+      "assertion_reads": 3,
+      "low": 1,
+      "high": 0
+    }
+  },
+  {
+    "id": "read_count_without_writer",
+    "result": {
+      "equal": true,
+      "warnings": 3,
+      "assertion_reads": 3,
+      "low": 2,
+      "high": 0
+    }
+  },
+  {
+    "id": "high_only_no_writer",
+    "result": {
+      "equal": true,
+      "warnings": 2,
+      "assertion_reads": 2,
+      "low": 0,
+      "high": 2147483648
+    }
+  },
+  {
+    "id": "negative_count_with_writer",
+    "result": {
+      "equal": true,
+      "warnings": 0,
+      "assertion_reads": 2,
+      "low": 4294967295,
+      "high": 4294967295
+    }
+  },
+  {
+    "id": "negative_count_without_writer",
+    "result": {
+      "equal": true,
+      "warnings": 2,
+      "assertion_reads": 2,
+      "low": 4294967294,
+      "high": 4294967295
+    }
+  }
+]

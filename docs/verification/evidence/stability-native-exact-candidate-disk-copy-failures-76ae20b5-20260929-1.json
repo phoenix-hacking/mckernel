@@ -1,0 +1,43 @@
+{
+  "schema": "mckernel.native-exact-candidate-disk-copy-failures.v1",
+  "status": "FAIL_PRESERVED",
+  "candidate": "76ae20b5-1",
+  "copy": {
+    "packet_sha256": "47ba9d86d96ff2bf5f70b5fa92282fa6d153255e49fd93e5210ce424b7b39ea2",
+    "log_sha256": "87f2494a6bfb08339e587cfdbd19c47064b4ef7cfe3c0fbef0209b7af090820c",
+    "source_inventory_sha256": "e2a7cd887df743587dd05c9d9e63252829e4ad004f7954a143760b3af752190c",
+    "destination_inventory_sha256": "6afcf2d1f260bc30b08f21ebf133af3cfc0a9410f3c69f0dfd221ecff4e4c2ba",
+    "result": "exit 0; later postflight rejected stale final-tree evidence after Git refreshed two index files"
+  },
+  "correction": {
+    "packet_sha256": "431e26b1d2c5acb2c4c0c586b3f3bcbd1dea88e51ac5bdf57613fe774cd7f2d3",
+    "log_sha256": "b55411a9259806c99391988216117943984b68bfe826e2eb81cf237de0d482d9",
+    "source_final_sha256": "5d7f6c035d03518349512d7818a2d00d28213c2e0f3f04f3325632c7536efd71",
+    "destination_final_sha256": "842f4522c0ff318aee68cb3387eca604e435f06aef334e125c7d2c6897d526ae",
+    "outer_event_id": "exec-3f154ead-1135-49ec-a009-63a6fb6e8f09",
+    "outer_event_sha256": "4ad29c1bbaf0036c926f9907ae3c3933f105eaf0f834fc37e1d0776f255de1d2",
+    "result": "exit 1 with outer LOG_FINAL_FSYNC=PASS; failed before validate-only on portable source/destination inequality"
+  },
+  "observed_divergence": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260916-57.tar.gz",
+    "zero_based_offset": 37352801,
+    "tmpfs_byte_hex": "bb",
+    "authenticated_byte_hex": "3b",
+    "tmpfs_sha256": "192f8fe161ee0e486b0c0532f64bc34bb0684da2b113d01d13dc4f4ba7bb1c2c",
+    "authenticated_sha256": "dbe24f5b7cdd94f9ba2f9846073b6b2cd6e5f00ffca55f4ce99d4343261b5100",
+    "tmpfs_gzip_test": "FAIL_CRC",
+    "disk_and_pinned_git_gzip_test": "PASS",
+    "cause": "unknown; evidence establishes later tmpfs content divergence but not a hardware cause"
+  },
+  "restored_disk": {
+    "candidate_identity": "1831:4194306",
+    "backup_identity": "1831:4204970",
+    "rows": 10751,
+    "result": "PASS_RESTORED_DEST against the original authenticated copy-time inventory; correction attempt itself remains failed"
+  },
+  "limitations": [
+    "No build, boot, guest or application acceptance is claimed.",
+    "The corrupted tmpfs candidate is not an authority and must not be used for a build or new copy.",
+    "A fresh validation-only packet and independent postflight are required before retirement or build."
+  ]
+}

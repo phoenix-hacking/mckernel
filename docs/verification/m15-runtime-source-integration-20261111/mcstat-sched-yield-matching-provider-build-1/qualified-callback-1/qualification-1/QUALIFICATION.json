@@ -1,0 +1,435 @@
+{
+  "actual_admission": {
+    "bytes": 469,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcstat-sched-yield-matching-provider-build-1/qualified-callback-1/production-execution-1/ADMISSION.json",
+    "sha256": "5bfdda151e2757dfe501ccf07fc91b2f4a9c269a0fc3c20ae19dc00b896473f9"
+  },
+  "actual_artifacts": {
+    "mcstat": {
+      "DT_NEEDED": [
+        "libihk.so",
+        "libz.so.1",
+        "libgcc_s.so.1",
+        "libm.so.6",
+        "libc.so.6"
+      ],
+      "ELF_kind": 2,
+      "SONAME": [],
+      "built": {
+        "bytes": 25576,
+        "mode": "0o755",
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcstat-sched-yield-matching-provider-build-1/output-1/tools/mcstat/mcstat",
+        "sha256": "2a299f0c482e66093fc48bbeb37db14152c31ab1f25c28700e71c3bd124b751c"
+      },
+      "only_changed_storage": {
+        "actual_differing_byte_count": 15,
+        "after": "/usr/local/lib64",
+        "before": "/provider:::::::",
+        "bytes": 16,
+        "offset": 1959
+      },
+      "project_code_data_symbols_relocations_and_versions_unchanged": true,
+      "stage": {
+        "bytes": 25576,
+        "mode": "0o755",
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcstat-sched-yield-matching-provider-build-1/output-1/stage/usr/local/bin/mcstat",
+        "sha256": "1e322290b90a221e5449903c8951010e1e85b702180904ff600801e168c18900"
+      }
+    },
+    "sched_yield": {
+      "DT_NEEDED": [
+        "libc.so.6"
+      ],
+      "ELF_kind": 3,
+      "SONAME": [
+        "libsched_yield.so.1.0.0"
+      ],
+      "built": {
+        "bytes": 17240,
+        "mode": "0o755",
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcstat-sched-yield-matching-provider-build-1/output-1/executer/user/libsched_yield.so.1.0.0",
+        "sha256": "f1b94db4e4c15b7a990eb2abae272c5e7e61bbf18226bcb0c8c0c438e6765ecd"
+      },
+      "only_changed_storage": {
+        "actual_differing_byte_count": 16,
+        "after": "/usr/local/lib64",
+        "before": "::::::::::::::::",
+        "bytes": 16,
+        "offset": 1126
+      },
+      "project_code_data_symbols_relocations_and_versions_unchanged": true,
+      "stage": {
+        "bytes": 17240,
+        "mode": "0o755",
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcstat-sched-yield-matching-provider-build-1/output-1/stage/usr/local/lib64/libsched_yield.so.1.0.0",
+        "sha256": "3be4a51bcc0be4b141a02c83cba5c0a7199f7a1868edc0c1c32a392cbceb2279"
+      }
+    }
+  },
+  "actual_callback_reconciliation": {
+    "bytes": 18167,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-qualification-sdk-max-1/QUALIFICATION.json",
+    "sha256": "4b7f747e17a426c4485bae5217810fe5f0be7dd2c0c23592c01fcdf1187ebb15"
+  },
+  "actual_current_job_positive_release": {
+    "bytes": 176,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcstat-sched-yield-matching-provider-build-1/qualified-callback-1/production-execution-1/RESOURCE-RELEASE.json",
+    "sha256": "b83f316bc643e89883c9b748b92d96c93ffc2a2f4b14fbe1c56d5b64b57f4bcf"
+  },
+  "actual_execution": {
+    "bytes": 49979,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcstat-sched-yield-matching-provider-build-1/qualified-callback-1/production-execution-1/RESULT.json",
+    "sha256": "8de5930954908e7746711a7240f1676fac38e06d5a8e24af4a45de2a500db240"
+  },
+  "actual_full_Root_completion": {
+    "bytes": 279,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcstat-sched-yield-matching-provider-build-1/qualified-callback-1/ROOT-EXEC-COMPLETION.json",
+    "sha256": "c6314ff9f58a7ca78dcbeaa000ecc43a84562536adf24ce27eb03de93b7327c5"
+  },
+  "actual_full_producer_commands": {
+    "C_link": [
+      "/usr/bin/cc -O3 -DNDEBUG  -Wl,--trace -Wl,-Map=/output/mcstat.map -Wl,--dependency-file=CMakeFiles/mcstat.dir/link.d rust/mcstat.o -o mcstat  -Wl,-rpath,/provider::::::: /provider/libihk.so -lbfd -Wl,@/provider/native-static-libs.rsp",
+      "/usr/bin/cc -fPIC -O3 -DNDEBUG  -Wl,--trace -Wl,-Map=/output/sched_yield.map -Wl,--dependency-file=CMakeFiles/sched_yield.dir/link.d -shared -Wl,-soname,libsched_yield.so.1.0.0 -o libsched_yield.so.1.0.0 rust/libsched_yield.o  -Wl,-rpath,:::::::::::::::: -ldl"
+    ],
+    "Rust": [
+      "cd /output/tools/mcstat && /usr/bin/cmake -E env MAKEFLAGS= /home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc --crate-name mcstat --crate-type lib --edition=2021 -C panic=abort -C opt-level=2 -C debuginfo=1 -C force-unwind-tables=no --emit=obj=/output/tools/mcstat/rust/mcstat.o /source/tools/mcstat/rust/mcstat.rs",
+      "cd /output/executer/user && /usr/bin/cmake -E env MAKEFLAGS= /home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc --crate-name libsched_yield --crate-type lib --edition=2021 -C panic=abort -C opt-level=2 -C debuginfo=1 -C relocation-model=pic -C force-unwind-tables=no --emit=obj=/output/executer/user/rust/libsched_yield.o /source/executer/user/rust/libsched_yield.rs"
+    ],
+    "all6stderr_empty": true,
+    "raw": {
+      "bytes": 8253,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcstat-sched-yield-matching-provider-build-1/qualified-callback-1/production-execution-1/named-build-payload.stdout",
+      "sha256": "fa80be756433b2e085ada1e246849e5cb0fff899d75e3994b03c242061cea8d7"
+    }
+  },
+  "all6_terminal0_nonOOM_PID0_ownremovals_and44_original_positive_client_waits_streams": true,
+  "claims": {
+    "compiler_or_producer_or_case_replayed_by_qualifier": false,
+    "original_I01_I03_M15_or_M14_accepted": false,
+    "other_ownership_resource_or_service_holds_released": false,
+    "percentage_delta": 0,
+    "program_interposer_thread_dlsym_syscall_device_API_or_native_executed": false,
+    "source_or_default_or_C_retirement": false
+  },
+  "compiler_and_SDK": {
+    "current_IHK": "8d288b8bd81b50cc3a3f814d949b89bf416a6ec7",
+    "exact_immutable_image": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+    "real195": {
+      "actual195_on46d_loader_closure": {
+        "bytes": 14290,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihklib-matching-provider-build-1/compiler195-binding-1/LOADER-CLOSURE.json",
+        "sha256": "abdd794d3bafb6ea5717532a64b27f792c2f4a38eb13590b0e2da798fafa31cb"
+      },
+      "actual_newlibrary_run": {
+        "bytes": 7679,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihklib-matching-provider-build-1/compiler195-binding-1/production-execution-1/RESULT.json",
+        "sha256": "0ffc181bec75a3ed6ce3c5fe2cb58a6ed4b7ceff7a500de4fe49e30b57ceba5c"
+      },
+      "needed_SDK_inputs_only": "QualifiedCMakebinary/moduledata/libuv + BFDscript/staticarchive/sframe/iberty + complete real195tree + actualDSO/RSP + privatecaller source/output. UnusedfourBFDheader mounts andallwhole70 metadata/archive payloads omitted; their qualifyingheader/providerproof is reused. No newtoolprobe/GET/providerinventory.",
+      "qualified_fullcompiler_std_binding": {
+        "bytes": 47937,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihklib-matching-provider-build-1/compiler195-binding-1/COMPILER-BINDING.json",
+        "sha256": "978a22dab7d017d6daf201f6fffcc2eee2bc7a0d63b83c0af89a5361ca4e9b96"
+      },
+      "same_native_image_C_compiler_dependencies": {
+        "C_compiler": {
+          "bytes": 1375456,
+          "expected_sha256": "2092e32fa9abee9ccbf777a5f893b9cc608582b660c93e742a17c3eb7da109c2",
+          "gid": 0,
+          "matches_expected": true,
+          "mode": "0o755",
+          "path": "/usr/bin/cc",
+          "resolved_path": "/usr/bin/gcc",
+          "rpm_owner": {
+            "argv": [
+              "/usr/bin/rpm",
+              "-qf",
+              "--qf",
+              "%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\\n",
+              "/usr/bin/cc"
+            ],
+            "returncode": 0,
+            "stderr": "",
+            "stdout": "gcc-14.3.1-4.4.el10.x86_64\n",
+            "wait_joined": true
+          },
+          "sha256": "2092e32fa9abee9ccbf777a5f893b9cc608582b660c93e742a17c3eb7da109c2",
+          "uid": 0
+        },
+        "Python_for_CMake_build_orchestration": {
+          "at_least_3_10": true,
+          "executable": "/usr/bin/python3",
+          "executable_identity": {
+            "bytes": 15800,
+            "expected_sha256": null,
+            "gid": 0,
+            "matches_expected": null,
+            "mode": "0o755",
+            "path": "/usr/bin/python3",
+            "resolved_path": "/usr/bin/python3.12",
+            "sha256": "42b3a3a44457f52d1aa661b115f6604605941aee0956d4edc64b80aa802c7828",
+            "uid": 0
+          },
+          "version": "3.12.14 (main, Aug 13 2026, 00:00:00) [GCC 14.3.1 20251022 (Red Hat 14.3.1-4)]",
+          "version_info": [
+            3,
+            12,
+            14
+          ]
+        },
+        "image_id": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+        "libc": {
+          "bytes": 2339896,
+          "expected_sha256": null,
+          "gid": 0,
+          "matches_expected": null,
+          "mode": "0o755",
+          "path": "/usr/lib64/libc.so.6",
+          "readelf": {
+            "GLIBC_2_38_symbols": {
+              "__isoc23_sscanf": true,
+              "__isoc23_strtol": true,
+              "__isoc23_strtoul": true
+            },
+            "argv": [
+              "/usr/bin/readelf",
+              "--wide",
+              "--dyn-syms",
+              "/usr/lib64/libc.so.6"
+            ],
+            "returncode": 0,
+            "selected_dynsym_lines": [
+              "1051: 000000000005afd0   317 FUNC    GLOBAL DEFAULT   16 __isoc23_sscanf@@GLIBC_2.38",
+              "1455: 0000000000050c10    28 FUNC    GLOBAL DEFAULT   16 __isoc23_strtol@@GLIBC_2.38",
+              "2580: 0000000000053d80    28 FUNC    GLOBAL DEFAULT   16 __isoc23_strtoul@@GLIBC_2.38"
+            ],
+            "stderr": "",
+            "wait_joined": true
+          },
+          "resolved_path": "/usr/lib64/libc.so.6",
+          "rpm_owner": {
+            "argv": [
+              "/usr/bin/rpm",
+              "-qf",
+              "--qf",
+              "%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\\n",
+              "/usr/lib64/libc.so.6"
+            ],
+            "returncode": 0,
+            "stderr": "",
+            "stdout": "glibc-2.39-121.el10_2.x86_64\n",
+            "wait_joined": true
+          },
+          "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+          "uid": 0
+        }
+      },
+      "selected_real195_compiler": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc"
+    },
+    "same_b7bc_source_config_RSP": true,
+    "source_config": {
+      "bytes": 464,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcstat-sched-yield-matching-provider-build-1/output-1/config.h",
+      "sha256": "01628a5a3edb44b73d0b0fc63eeb04be063998944156396594d13565924b6535"
+    }
+  },
+  "exact_direct_import_provider_version_type_and_install_joins": {
+    "bytes": 119068,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcstat-sched-yield-matching-provider-build-1/qualified-callback-1/qualification-1/IMPORT-PROVIDER-AND-INSTALL-JOINS.json",
+    "sha256": "48c68e1fe1cfeaae384898fe020cb18d980362793f5bf662a44cefd0080a84f2"
+  },
+  "independent_operation_GO": {
+    "bytes": 16291,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcstat-sched-yield-review-p03-max-1/qualified-callback-1/REVIEW.json",
+    "sha256": "2f093bb4e61e170b1244846c6415ba5d1c130ce2a1c5a4b01c9675970875c18f"
+  },
+  "inputs": {
+    "bytes": 19761,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcstat-sched-yield-matching-provider-build-1/qualified-callback-1/INPUTS.json",
+    "sha256": "3f3bc44618ef2bdeb4262f7d589c84425d08a0d18b8defc4e99ee29a2e97a017"
+  },
+  "limitations": [
+    "Only HOST artifact/type/static/dynamic link/provider/private install scope. No preload namespace/runtime order, loader/API/thread/clone/ioctl/statistics behavior or native lifecycle acceptance.",
+    "Root current1GiB job release is exact; all other native/scratch/UNKNOWN/service/source/account/budget holds and M14-before-M15 final order remain.",
+    "Known cleanup104-line project C and three-call Linux-platform adapter/public C header/macro boundaries retain explicit classifications from originalmanifest; no blanket zeroC or Cretirement claimed.",
+    "Fast terminal memory samples/highwaters are not universal exact full peaks or an extra resource grant.",
+    "Source994320 remains a private qualified body until Root integrates reviewed patch; no source commit was guessed and no canonical/index/source defaults changed by qualifier."
+  ],
+  "object_data_code_and_all_runtime_relocation_joins": {
+    "bytes": 197528,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcstat-sched-yield-matching-provider-build-1/qualified-callback-1/qualification-1/OBJECT-DATA-LINK-JOINS.json",
+    "sha256": "9508393672028fb8b16533ddd32870aae453c114aefc6913d7346d2c957954fe"
+  },
+  "operations": "Saved JSON/source/text/ELF byte metadata only; no compiler/CMake/readelf/nm/test/controller/provider/target/API/native/container/network replay. Empty leading readelf display fragment was skipped during one analysis-output formatter correction; raw producer records unchanged and no SUT failure/retry occurred.",
+  "original_scope_assessment": {
+    "complete_I01_selected_linked_I03_ABI": "Requires separately frozen whole-condition decision below and independent original-condition review; this component alone does not claim alloriginalscope.",
+    "new_specific_contracts_closed": [
+      "mcstat full named Rust main/object/actual 3IHK ABI/provider/rusage/monitor source/data/statistics imports/private0755/install/RPATH",
+      "sched_yield full named Rust interposer object/publiccallback/libdl-libc imports/version/defaultprovider/cache/ELF/source/SONAME/versionedalias/private0755/RPATH"
+    ],
+    "next_precise_original_input": "P03 corrected path producer actually completed fourconfigs/newguard/newRustELF d7e049/0755stage, but unsupported private0700/0755 checker failure is retained; one saved-postgate-only correction b862 awaits independentGO/PASS then exact full P03 saved-result qualification. No oldconfig/build/parser/PTY replay or external inventory."
+  },
+  "owner": "/root/sdk_binding_source_max",
+  "ownership_classification": {
+    "late_lookup": "Actual default real pthread provider/header/type is joined statically, without inventing the result of RTLD_NEXT under deployment.",
+    "platform": "Actual GCC14 CRT/startup/fini/compiler library/native/BFD/libc/Linux/unwind generated input at existing pinned same46d recipe/provider scope. No new authored project C runtime object or library/CLI/monitor target compiled.",
+    "project_runtime": "Only exact full selected Rust mcstat and corrected Rust libsched_yield objects, seven real source-owned function bodies plus complete RO switch/format/constant contributions, private8B cache and compiler unwind metadata. All input/final types/widths/body bytes outside exact patches, code/GOT/relative data/FDE targets and map owners joined; no name/count-only acceptance.",
+    "weak_imports": "Only exact3 unversioned optional compiler hooks per ELF; actual versioned weak cxa_finalize resolves real libc definition."
+  },
+  "qualified_at": "2026-11-11T01:10:10.042408+00:00",
+  "request": {
+    "bytes": 50982,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcstat-sched-yield-matching-provider-build-1/qualified-callback-1/REQUEST.json",
+    "sha256": "015648661b094206c499f81731ee79a8fc7869e8f2c0da90ee18a49fec2860c5"
+  },
+  "schema": "mckernel-two-existing-original-userspace-target-actual-qualification-v1",
+  "six_actual_profiles": [
+    {
+      "CID": "00417878d1976e6546efa10f59d802eeaddce512e5d4569770033f3e61a823d2",
+      "exact_argv_mount_profile_and_positive_retirement": true,
+      "phase": "configure",
+      "profile": {
+        "bytes": 16973,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcstat-sched-yield-matching-provider-build-1/qualified-callback-1/production-execution-1/configure-PROFILE.json",
+        "sha256": "f03242ebc886accfd7e79f2dc1f702ea909db45c9fa9d0a761272ea9c579fa7b"
+      },
+      "terminal": {
+        "bytes": 17632,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcstat-sched-yield-matching-provider-build-1/qualified-callback-1/production-execution-1/configure-TERMINAL.json",
+        "sha256": "b24a953a00bbf44d7dceca66e4af274fdf91ac60fd8dcec4089bf6b457655c84"
+      }
+    },
+    {
+      "CID": "660e70b45c1b412fbfe976d6ef7cc0e277a0872f4c99e3d303101afac6f6b71e",
+      "exact_argv_mount_profile_and_positive_retirement": true,
+      "phase": "named-build",
+      "profile": {
+        "bytes": 15605,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcstat-sched-yield-matching-provider-build-1/qualified-callback-1/production-execution-1/named-build-PROFILE.json",
+        "sha256": "a147e3f46ea1c0d491f392930752b545bd1e82a9686b1973118d536292e35bbc"
+      },
+      "terminal": {
+        "bytes": 16265,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcstat-sched-yield-matching-provider-build-1/qualified-callback-1/production-execution-1/named-build-TERMINAL.json",
+        "sha256": "a7ff9337b31c1268a7ea0c6a38457fcf70908374c6829ca3272094f61150a25c"
+      }
+    },
+    {
+      "CID": "d8a0e4a522e1973d3796ddb68865cc92354b169f61e56adc62621f196965caed",
+      "exact_argv_mount_profile_and_positive_retirement": true,
+      "phase": "built-object-ELF",
+      "profile": {
+        "bytes": 16052,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcstat-sched-yield-matching-provider-build-1/qualified-callback-1/production-execution-1/built-object-ELF-PROFILE.json",
+        "sha256": "ecadc612517b064225df03c4c7740330f77bb06368536570b66f5748b6131423"
+      },
+      "terminal": {
+        "bytes": 16712,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcstat-sched-yield-matching-provider-build-1/qualified-callback-1/production-execution-1/built-object-ELF-TERMINAL.json",
+        "sha256": "c62de5e9e02dd03b0200e4a99963205051d84df37c2b49629f6911747511a58c"
+      }
+    },
+    {
+      "CID": "e03ae409639932a0e8e46eaec75a545a3beb325403a5556e216c7c7b7ca85f19",
+      "exact_argv_mount_profile_and_positive_retirement": true,
+      "phase": "symbols",
+      "profile": {
+        "bytes": 15793,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcstat-sched-yield-matching-provider-build-1/qualified-callback-1/production-execution-1/symbols-PROFILE.json",
+        "sha256": "fc24b14785cd516cdbff3adb03718ccde3cac945748ab41bc455fdb8202c6c90"
+      },
+      "terminal": {
+        "bytes": 16452,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcstat-sched-yield-matching-provider-build-1/qualified-callback-1/production-execution-1/symbols-TERMINAL.json",
+        "sha256": "57d1618a9132f17405d6b4f4dc7bed0c2c965f64ab4bdeaf05d3008195da2ab2"
+      }
+    },
+    {
+      "CID": "15afe2ae87724c0dde89eeb121948ea4620ffbbaf64695eb5e11244b6d5085b0",
+      "exact_argv_mount_profile_and_positive_retirement": true,
+      "phase": "private-install",
+      "profile": {
+        "bytes": 15579,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcstat-sched-yield-matching-provider-build-1/qualified-callback-1/production-execution-1/private-install-PROFILE.json",
+        "sha256": "f02dd04db71987d90c5314353a48e63e362881544585edb78d63a661657c1dd0"
+      },
+      "terminal": {
+        "bytes": 16238,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcstat-sched-yield-matching-provider-build-1/qualified-callback-1/production-execution-1/private-install-TERMINAL.json",
+        "sha256": "897585db3dec1a938322d2d14ff7d98bd83d2042e71946a9a347ffe2274693c8"
+      }
+    },
+    {
+      "CID": "b4c96747ce683ba5908f82d6dae999f2af685ce838fd7f72dfb5340666088d01",
+      "exact_argv_mount_profile_and_positive_retirement": true,
+      "phase": "staged-ELF",
+      "profile": {
+        "bytes": 15886,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcstat-sched-yield-matching-provider-build-1/qualified-callback-1/production-execution-1/staged-ELF-PROFILE.json",
+        "sha256": "f7743201ea65e2420f1b6f76582a4918df8cadc5d816bb0bd15fb7906e99e7ae"
+      },
+      "terminal": {
+        "bytes": 16546,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcstat-sched-yield-matching-provider-build-1/qualified-callback-1/production-execution-1/staged-ELF-TERMINAL.json",
+        "sha256": "d193059a5b0410327ea88f3b37a37c91e3b4d2a8a6fa535a1e86acd5a9d876b6"
+      }
+    }
+  ],
+  "source_actual_files": [
+    {
+      "materialized": {
+        "bytes": 1919,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcstat-sched-yield-matching-provider-build-1/source/CMakeLists.txt",
+        "sha256": "b9ba006a46aafaed00126546690ec344e79329d1bcf1c5d2c47238f5bcde8641"
+      },
+      "relative_path": "CMakeLists.txt",
+      "role": "Private target-only driver from exact prior CLI imported-provider interface plus frozen production target dependencies/guard/RPATH; nonshipped."
+    },
+    {
+      "materialized": {
+        "bytes": 1506,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcstat-sched-yield-matching-provider-build-1/source/executer/user/CMakeLists.txt",
+        "sha256": "b16bc680ba8ed68580316583d5b09670bade7db880aed4ed477112a95b51b269"
+      },
+      "relative_path": "executer/user/CMakeLists.txt",
+      "role": "Exact two current executable recipe slices: sched_yield target and its original install clause."
+    },
+    {
+      "materialized": {
+        "bytes": 1513,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcstat-sched-yield-matching-provider-build-1/source/tools/mcstat/CMakeLists.txt",
+        "sha256": "bfb578a9e8a49c2fa55b5986659b84ad18e0bd20a59374b6afd154eb48b5d404"
+      },
+      "relative_path": "tools/mcstat/CMakeLists.txt",
+      "role": "Exact current mcstat production prefix+install; only EXCLUDE_FROM_ALL runtest/test body omitted."
+    },
+    {
+      "materialized": {
+        "bytes": 1793,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcstat-sched-yield-matching-provider-build-1/source/executer/user/rust/libsched_yield.rs",
+        "sha256": "994320f31a1e421f78a93ee56ca40d24bd94d24a130b2b26effce838d5573ea8"
+      },
+      "relative_path": "executer/user/rust/libsched_yield.rs",
+      "role": "Exact private reviewed-candidate source; not canonical yet; strict callback test/result is a required precondition."
+    },
+    {
+      "materialized": {
+        "bytes": 17509,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcstat-sched-yield-matching-provider-build-1/source/tools/mcstat/rust/mcstat.rs",
+        "sha256": "69609bee1602ba37849be3dd6e1e745d957b56c729e5206a444e69f160bef2d2"
+      },
+      "relative_path": "tools/mcstat/rust/mcstat.rs",
+      "role": "Exact current unchanged production mcstat Rust body; no test/helper/source substitution."
+    },
+    {
+      "materialized": {
+        "bytes": 464,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcstat-sched-yield-matching-provider-build-1/source/qualified-provider-config.h",
+        "sha256": "01628a5a3edb44b73d0b0fc63eeb04be063998944156396594d13565924b6535"
+      },
+      "relative_path": "qualified-provider-config.h",
+      "role": "Exact actual qualified b7bc/IHK8d/MEMDUMP config copied read-only into fresh project build config."
+    }
+  ],
+  "status": "PASS_ACTUAL_MCSTAT_SCHED_YIELD_COMPLETE_SOURCE_OBJECT_LINK_DIRECT_PROVIDER_TYPE_PRIVATE_INSTALL_COMPONENTS_PENDING_INDEPENDENT_RESULT_REVIEW"
+}

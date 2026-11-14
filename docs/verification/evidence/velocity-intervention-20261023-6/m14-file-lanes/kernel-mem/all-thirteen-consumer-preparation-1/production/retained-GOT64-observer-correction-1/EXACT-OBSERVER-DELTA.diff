@@ -1,0 +1,12 @@
+--- /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/all-thirteen-consumer-preparation-1/production/observe_exact_production.py
++++ /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/all-thirteen-consumer-preparation-1/production/retained-GOT64-observer-correction-1/observe_exact_production_corrected.py
+@@ -36,6 +36,7 @@
+    assert where<target[5]
+    proof.append({'symbol':name,'symbol_binding':sym[1]>>4,'symbol_type':sym[1]&15,'symbol_shndx':sym[3],'relocation_section_index':i,'relocation_section':text(shstr,s[0]),'target_section_index':s[7],'target_section':text(shstr,target[0]),'target_allocated':True,'offset':where,'type':typ,'addend':addend})
+  selected=[x for x in proof if x['symbol']=='mem_tlb_atomic_dec_bridge']
+- assert selected and all(x['symbol_shndx']==0 and x['symbol_binding']==1 and x['type']==1 and x['addend']==0 for x in selected),selected
++ assert len(selected)==1,selected
++ assert selected[0]=={'symbol':'mem_tlb_atomic_dec_bridge','symbol_binding':1,'symbol_type':0,'symbol_shndx':0,'relocation_section_index':2,'relocation_section':'.rela.text','target_section_index':1,'target_section':'.text','target_allocated':True,'offset':18051,'type':27,'addend':0},selected
+  after=path.stat();assert (before.st_dev,before.st_ino,before.st_size,before.st_mtime_ns,before.st_ctime_ns)==(after.st_dev,after.st_ino,after.st_size,after.st_mtime_ns,after.st_ctime_ns)
+- return {'ELF':'ELF64 little-endian ET_REL x86_64','allocated_callback_relocations':proof,'handler_real_completion_import_exact_R_X86_64_64_addend0':selected,'object_stat_unchanged':True,'object_rehashed':False}
++ return {'ELF':'ELF64 little-endian ET_REL x86_64','allocated_callback_relocations':proof,'handler_real_completion_import_exact_R_X86_64_GOT64_addend0':selected,'object_stat_unchanged':True,'object_rehashed':False}

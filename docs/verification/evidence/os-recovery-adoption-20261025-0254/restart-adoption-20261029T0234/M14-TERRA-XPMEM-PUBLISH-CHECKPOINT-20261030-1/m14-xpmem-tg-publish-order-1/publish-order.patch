@@ -1,0 +1,21 @@
+--- a/kernel/rust/xpmem_helpers.rs
++++ b/kernel/rust/xpmem_helpers.rs
+@@ -3962,6 +3962,9 @@
+     }
+ 
+     tg_not_destroyable_fn(tg);
++    // Initialize the leader while the TG is still private: bucket readers
++    // may observe the object as soon as its hash entry is linked.
++    *field_ptr::<*mut c_void>(tg, offsets.tg_group_leader_offset) = current_thread;
+ 
+     let index = xpmem_tg_hashtable_index_result(pid) as SizeT;
+     let hashlist = (part as *mut u8)
+@@ -3975,8 +3978,6 @@
+         field_ptr::<c_void>(hashlist, offsets.hashlist_list_offset),
+     );
+     rwlock_unlock_fn(hash_lock, rwlock_node);
+-
+-    *field_ptr::<*mut c_void>(tg, offsets.tg_group_leader_offset) = current_thread;
+ 
+     0
+ }

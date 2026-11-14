@@ -1,0 +1,69 @@
+{
+  "checks": {
+    "all_declared_refs_authenticated": true,
+    "all_function_AST_unchanged": true,
+    "allowed_assignment_deltas": {
+      "accepted_bindings.py": [
+        "GUARDIAN",
+        "ORIGINAL_MAX",
+        "WEEKLY_GUARDIAN_REF"
+      ],
+      "seal_root_current119_inputs.py": [
+        "NEWSC"
+      ]
+    },
+    "author_pure_check": {
+      "bytes": 557,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recovery-quota-confirmation-binding-1/actual-control-binding-2/current119-live-1/PURE-CONTROL-PIN-REGRESSION.json",
+      "sha256": "e414082495fefdf3fadbe75fb532c0dc2f93a6a46cdd61dc75d907bcc50af1af"
+    },
+    "exhausted_metadata_refuses": true,
+    "pure_actual_metadata_minimumcaps_pass": true,
+    "three_frozen_local_hashes_exact": true
+  },
+  "compiler_executed": false,
+  "current_free": false,
+  "decision": "PASS_SOURCE",
+  "findings": [
+    "Helper differs from exact prior current119 helper only in GUARDIAN, WEEKLY_GUARDIAN_REF and ORIGINAL_MAX assignments; all function ASTs remain exact. The prior sole observer literal already names exact routing2 observer331d and remains unchanged.",
+    "Sealer differs only in NEWSC assignment to the actual Q control directory; unchanged INITIAL expression therefore resolves exact Q earliest-control caps. All function ASTs and existing current-free/Root65/history/nonce/origin/sourcepublication/finalguard predicates remain.",
+    "All three local runner/holder/input-template byte hashes equal their accepted frozen values48bf/d17/02c9. Kernel source6153, SDK21, retained objects, four producer commands and original389 are outside this delta and receive no new qualification.",
+    "Pure armed metadata and minimum_caps accept exact actual Q receipt/bootstrap and yield [1793774133,1556235.568922472,1571573.6959699572];100percent usage refuses. No current-adoption, sealer, state/proc, guardian or workload function was invoked."
+  ],
+  "guard_executed": false,
+  "helper": {
+    "bytes": 6139,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recovery-quota-confirmation-binding-1/actual-control-binding-2/current119-live-1/accepted_bindings.py",
+    "sha256": "fc24c6019e5cf244d7a481670984af7894bb1fe5b4699fffcd4bd4043820f47c"
+  },
+  "implementation_ownership": false,
+  "independent": true,
+  "inputs": {
+    "bytes": 2019,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recovery-quota-confirmation-binding-1/actual-control-binding-2/current119-live-1/INPUTS.json",
+    "sha256": "2f86d56754982784ed477d91144f9b3b937c4df2a3daf03a7cae78bf40b1221d"
+  },
+  "native_executed": false,
+  "original_unknown_preserved": true,
+  "reused_Q_guard_review": {
+    "bytes": 8194,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recovery-quota-confirmation-binding-1/actual-control-binding-2/independent-source-review-1/SOURCE-REVIEW.ACTUAL.json",
+    "sha256": "fc9f3710f65e37c8e9c197b8f5251ceabad902c776f56e1bee4daf9d4fb66542"
+  },
+  "review_check_failure_preserved": "Initial independent comparison assumed runner copy existed in current119 predecessor directory; FileNotFoundError occurred before metadata checks. Corrected comparison authenticates exact accepted48bf/d17/02c9 byte hashes; no source or author evidence was changed.",
+  "reviewer": "/root/recovery_review",
+  "runtime_authority": null,
+  "schema": "mckernel.independent-focused-source-review.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "sealer": {
+    "bytes": 9197,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recovery-quota-confirmation-binding-1/actual-control-binding-2/current119-live-1/seal_root_current119_inputs.py",
+    "sha256": "e76a6cb90010da963f13d852432742245c2fd306a5ffef420280f9ff513a6623"
+  },
+  "source_ready": {
+    "bytes": 4377,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recovery-quota-confirmation-binding-1/actual-control-binding-2/current119-live-1/READY.SOURCE-ONLY.json",
+    "sha256": "87515207e60250fb2a2095227e7bd19622076a3e5b928aa56202f312c5b225a8"
+  },
+  "source_seal_invoked": false
+}

@@ -1,0 +1,26 @@
+--- preserved5fe0/root_once_startup_entry.py
++++ freshRoot44/root_once_startup_entry.py
+@@ -14,7 +14,7 @@
+ import subprocess
+ import time
+ 
+-BASE = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-native-entry-source-1')
++BASE = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-native-entry-source-1/publication-files-correction-source-1')
+ STARTUP = BASE/'root-adopted-retirement-entry-1'
+ AUTH = STARTUP/'ROOT-CONDITIONAL-ONCE-ENTRY-AUTHORIZATION.json'
+ STATIC = STARTUP/'STATIC-NATIVE-BINDINGS.NOT-RELEASED.json'
+@@ -30,12 +30,12 @@
+ STDOUT = STARTUP/'ROOT-ONCE-ENTRY.stdout'
+ STDERR = STARTUP/'ROOT-ONCE-ENTRY.stderr'
+ HELPER = STARTUP/'run_native_startup_capture.py'
+-GUARD = BASE.parent/'operation-account-window-new12h-source-1/actual-guardian-clamp-successor-1/actual_account_window_v2.py'
++GUARD = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254')/'operation-account-window-new12h-source-1/actual-guardian-clamp-successor-1/actual_account_window_v2.py'
+ STATIC_SHA = 'ROOT_FINAL_STATIC_SHA256'
+ HELPER_SHA = '32354b7717eb63e100ad04309c7cfcb4bcd75badf5d05704617e2e6487a6de68'
+ GUARD_SHA = '1f152e3f18384643cd35d203fcc2a4292950a1c90758734859bdb980cf45fda0'
+ PROFILE_SHA = 'e5584b2c6fecbec0660dfeda3193468cf78af6a9dee0f4cc849e64abbdca1081'
+-NONCE = '5fe0acdfcc75309f0cb40ddb1178b88b'
++NONCE = '22a1d92ed402f4d333bf527185e792b2'
+ CASE = 'startup.argv-empty'
+ REVIEWER = '/root/daemon_execution_review'
+ HELPER_ARGV = ['/home/holden/anaconda3/bin/python3','-I','-B',str(HELPER)]

@@ -1,0 +1,65 @@
+{
+  "schema": "scratch22-authority3.readiness-source-independent-review.v1",
+  "decision": "PASS_SOURCE",
+  "reviewer": "/root/scratch22_adapter_review",
+  "implementation_ownership": false,
+  "model": "gpt-6.1-sol",
+  "scope": "Changed authority3 adapter/wrapper source boundaries only. Reuses accepted ownership, capture and retirement algorithms. No cleanup acceptance, materialization, native build or runtime execution is released.",
+  "reviewed_inputs_sha256": {
+    "scripts/prepare_native_exact_scratch22_authority3.py": "1f6aa36d4cf64d03ea62989248ed522b8575b1ab56d66cc66c211e9a8260fbf5",
+    "scripts/tests/test_prepare_native_exact_scratch22_authority3.py": "8f4c613d7e1b2ce98b506a16c0852b921b15bfe743654b298d2a3129de0bbb06",
+    "scripts/native_exact_scratch22_authority3_build_wrapper.py": "2efda8b8bb44fa40c71edaed02a9d69d08b14035f2d2468b20444226cde67f42",
+    "scripts/tests/test_native_exact_scratch22_authority3_build_wrapper.py": "3d23a755dab8522dcaa4293811debb39f85735569a6b344f9fe87d5644db3f8a",
+    "docs/verification/evidence/scratch22-authority3-adapter-source-20261017.json": "a0dc5efdef5f22a7b0a0c5bdd2dafa2e7944ec236f98bc495d7bc776eb1537c4",
+    "docs/verification/evidence/scratch22-authority3-wrapper-source-20261017.json": "6aa4f5fe2a69a0a69c9f8e5115ea5fc9b5d0e905e6b2554edc391eb5fa23f3b7"
+  },
+  "accepted_baselines_unchanged": {
+    "scripts/prepare_native_exact_scratch22_authority2.py": "dbdc8c6711f4502328b37cec4b200d999c102af53f87aa183debbe160379dc0f",
+    "scripts/tests/test_prepare_native_exact_scratch22_authority2.py": "8afa9a23f102595bd7c7d97bed2be6e578e9b16325b8cfecf0ebafd05da06f6c",
+    "scripts/native_exact_scratch22_authority2_build_wrapper.py": "7fab2909b65599e644a4541c691fc141dc96bebbea97d89b3764379778244659",
+    "scripts/tests/test_native_exact_scratch22_authority2_build_wrapper.py": "30af2e041de08754c3a1ef2bf3fa3ac38e7d3f5ebfc8f2f0db222a4fcffc8a36"
+  },
+  "source_contract_checked": {
+    "review_path": "docs/verification/evidence/s22-digest-companion-independent-review-20261017.json",
+    "review_sha256": "d55c92fee4a5ab2617063a337ead78f64365d75b68b557dd74e9a21e8a5cc07a",
+    "current_checks_path": "docs/verification/evidence/s22-digest-companion-20261017.json",
+    "current_checks_sha256": "090a13048362c740e4d134bc7091c99f65e6aba4c4fa1badc570e932a97e6e09",
+    "selected_minimal_target": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+    "selected_minimal_tree": "07d05c1bb2ea5f4b6a3817ba55cd32afe56c8d59",
+    "finding": "Actual producer schemas/field names match the new consumer. Exactly six modified paths are admitted: the two previously reviewed byte-exact literal replacements plus four independently hash-bound active metadata companions. Current author record must contain exactly five ordered successful checks and exactly the four target companion hashes. Independent review joins exact target/tree/baseline and current author pointer.",
+    "baseline_preservation": "Original77c98238 author/5457654a review pointers remain immutable, their baseline file hashes are still verified against the released baseline, and every unaffected target hash must remain identical. The four changed metadata bindings are accepted solely through the exact six-file independent review; no ledger readiness/compiler/runtime status is promoted."
+  },
+  "adapter_findings": [
+    "All new candidate/backup/output/evidence/manifest/request/log/terminal/lease names and strict attempt/schemas are authority3. Authority2 is added as ninth retained alias; all486 authenticated files remain required. Nine initial links and ten materialized links are conditional on the actual complete dynamic census, not a substituted fixed count.",
+    "Inherited default binding, source target/tree/parent/fetched-ref/delta, canonical manifest/driver/owner/request checks and pinned scratch18 exclusion ABI slot remain unchanged. Existing scratch21 cleanup and authority1 recovery/cleanup joins remain mandatory.",
+    "New authority2 gate consumes exact raw request c38fdd28, actual returncode1 terminal/wrapper result and FAIL receipt, exact stopped non-OOM container63c2d257, positive retirement and seven separately hash-bound exited-zero client status records with no forced/unproven/survivor/reap-error flags. A failed build remains a failure.",
+    "Authority2 then requires a separately accepted actual cleanup result and independent postflight with exact terminal/receipt/result/release/archive/plan/journal/capture joins and absence claims. Generic journal validation changes only its schema parameter; authority1 default remains unchanged, while authority2 explicitly selects its own schema. Draft/missing/uncertain cleanup cannot admit source preparation.",
+    "Independent preparation-review inputs additionally bind current_source_checks and all four authority2 terminal/receipt/cleanup/review pointers. No prior input is removed."
+  ],
+  "wrapper_findings": [
+    "Adapter path/hash and all attempt-specific paths/schemas match authority3. EXECUTION_ENABLED is false and cannot be enabled by request, environment or CLI. The disabled guard refuses before release read or lock acquisition.",
+    "Preflight retains authority1 retirement, original cleanup and source/observer authority, adds actual authority2 retirement validation, and binds all five new prerequisite digests in the preparation review. Missing authority2 proof prevents canonical prepared-request use.",
+    "After mechanical namespace/activation-variable normalization, accepted root-lock, signal, capture/publication, retirement/quarantine and execute bodies remain identical to authority2. Existing128-MiB stdout/terminal and16-MiB other bounds, four CPUs2-5/12GiB/no added swap/512tasks/network-none profile and exact derived four-flag request rules remain intact. No healthy-build timeout or release predicate changes."
+  ],
+  "independent_validation": {
+    "exit_code": 0,
+    "focused_cases": 16,
+    "reported_seconds": 0.247,
+    "profile": "CPU2, one ordinary disposable Python job,2-GiB AS/100CPU/120wall limits; no root, Docker, Git, network, compiler, guest, child processes or live preparation/census.",
+    "coverage": "Six adapter cases cover fresh nine-alias namespace, exact six-file/unchanged baseline authority, current five-check/four-companion requirements, rejected extra production edits, positive failed authority2 retirement and rejected uncertain/pending cleanup. Ten wrapper cases cover old-attempt rejection, matching fresh paths, canonical terminal consumption, missing new proof, all new reviewed-input digests, disabled activation, continued release requirement, normalized ownership/capture/execute AST, four-flag derivation and unchanged resource profile.",
+    "baseline_suites_repeated": false,
+    "large_hash_census_repeated": false,
+    "new_failures": []
+  },
+  "activation_conditions": [
+    "Actual authority2 cleanup execution and independent accepted postflight must exist and satisfy the new exact consumer contract. This source review does not assert cleanup is completed.",
+    "Dispatcher verifies actual current ordered checks, exact independently reviewed six-file target/tree/parent/delta and pushed/fetched controller/code/evidence identities.",
+    "Only after those prerequisites may dispatcher apply the bounded reviewed EXECUTION_ENABLED false-to-true activation and bind the resulting exact source hash in subsequent execution authority; no generic ownership algorithm change is permitted by this activation convention.",
+    "Fresh preparation still needs its own exact release/live/resource/alias prerequisites and independent actual artifact review. Heavy execution then needs a new one-shot release and current root-lock/process/container/lease/isolation checks. Activation alone grants none of these."
+  ],
+  "blocking_source_findings": [],
+  "execution_enabled_in_reviewed_source": false,
+  "execution_released": false,
+  "acceptance_credit": false,
+  "failure_history": "Existing S22-DIGEST-COMPANION-1 and earlier ownership/retirement failure families remain preserved. Authority3 naming does not reset bounded correction history or authorize replay of any prior request/materialization."
+}

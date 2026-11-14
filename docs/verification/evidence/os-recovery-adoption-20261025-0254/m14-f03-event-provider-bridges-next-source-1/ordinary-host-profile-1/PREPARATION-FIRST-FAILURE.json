@@ -1,0 +1,23 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRESERVED_STATIC_INCLUDE_OVERAPPROXIMATION_FAILURE",
+  "source_sha256": "197553589d598359202f29e5d01e9d4da7d6352f308f7c1752018f1379fe94f4",
+  "unresolved": [
+    {
+      "parent": "/usr/include/limits.h",
+      "name": "limits.h",
+      "condition": "include_next guarded by !_GCC_LIMITS_H_; actual GCC9 limits header defines that before system header"
+    },
+    {
+      "parent": "/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h",
+      "name": "machine/ansi.h",
+      "condition": "defined(__NetBSD__)"
+    },
+    {
+      "parent": "/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h",
+      "name": "sys/_types.h",
+      "condition": "defined(__FreeBSD__)"
+    }
+  ],
+  "bounded_correction": "Resolve top-level includes through actual ordered GCC9 include roots and record only these exact frozen conditional alternatives as inactive for the pinned x86_64-linux-gnu/default-feature command. No compiler or workload ran; no partial profile/output/capture created."
+}

@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "file.truncate-shrink",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/file.truncate-shrink"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["read=7 bad_index=7 size=7 eof=0"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["ftruncate reduces size exactly to 7", "The retained seven-byte prefix is unchanged", "Read at the new EOF returns 0"],
+  "unresolved_expectations": ["Freeze canonical output and reviewed input/oracle SHA256 before execution."],
+  "max_question_for_reviewer": "Confirm shrink truncates only the suffix and reports EOF at the new size."
+}

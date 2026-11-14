@@ -1,0 +1,38 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_SOURCE_ONLY_REBINDER_PURE_TESTS",
+  "runtime_authority": null,
+  "interpreter": "/usr/bin/python3 -I -B",
+  "test_groups": 6,
+  "last_actual_test_output": "Ran 6 tests in 0.082s; OK",
+  "validation_function_ast_unchanged_except_declared_identity_constants": true,
+  "actual_new_guardian_generated": false,
+  "actual_controls_armed_by_agent": false,
+  "constructors_invoked": false,
+  "source": {
+    "rebind_guardian_source.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CURRENT118-COMPATIBILITY-CLEANUP-PREPARATION/rebind_guardian_source.py",
+      "bytes": 8793,
+      "sha256": "2b85201627aad2e50fd915108cba286a4575328f2462a34b2374b4c155e72ce3"
+    },
+    "test_rebind_guardian_source.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CURRENT118-COMPATIBILITY-CLEANUP-PREPARATION/test_rebind_guardian_source.py",
+      "bytes": 5519,
+      "sha256": "cde705cad4116285280fbf062b712c66e567aacb6f69ee425037bf97394cdf44"
+    },
+    "prepare_current_guardian_successor.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CURRENT118-COMPATIBILITY-CLEANUP-PREPARATION/prepare_current_guardian_successor.py",
+      "bytes": 3599,
+      "sha256": "0ab1ef3c0ceea63c0e7d5ac89df592abb70f2a1c8459487b3750e0a62bbe52d5"
+    }
+  },
+  "required_actual_input_refs": [
+    "NEWSC/ACTUAL-CONTROLS-ARMED.json",
+    "NEWSC/armed-controller/CONFIG.json",
+    "NEWSC/armed-controller/FROZEN-PACKET.json",
+    "NEWSC/armed-controller/bridge-start.json"
+  ],
+  "current_thread": "01a18582-1fc6-77b1-bfb6-15c86483f579",
+  "blocked_on": "External parent actual armed receipt/config/packet/bridge followed by independent source review and fetched publication",
+  "runtime_actions": 0
+}

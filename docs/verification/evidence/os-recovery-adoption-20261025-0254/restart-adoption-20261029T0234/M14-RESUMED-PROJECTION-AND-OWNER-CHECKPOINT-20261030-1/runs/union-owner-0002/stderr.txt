@@ -1,0 +1,81 @@
+test_fresh_observation_and_cross_bound_request_required (test_source_owner_fixed.FramedLease) ... ok
+test_operation_root_commitment_binds_identity_and_lease (test_source_owner_fixed.FramedLease) ... ok
+test_guard_loss_prevents_flag_mutation (test_source_owner_fixed.ImmutableActions) ... ok
+test_fd_inventory_matches_shared_graph_row_digest (test_source_owner_fixed.Inventory) ... ok
+test_full_membership_rejects_extra_empty_directory_and_bytes_drift (test_source_owner_fixed.Inventory) ... ok
+test_symlink_is_literal_and_extra_file_never_ignored (test_source_owner_fixed.Inventory) ... ok
+test_pinned_bytes_and_named_identity_reject_replacement (test_source_owner_fixed.LoaderBinding) ... ok
+test_epoch_rejects_named_inode_change_without_full_rehash (test_source_owner_fixed.ReadyAndEpoch) ... ERROR
+test_paused_prepare_never_commits_until_post_accept_checks (test_source_owner_fixed.ReadyAndEpoch) ... ERROR
+test_post_accept_failure_never_commits_and_unknown_is_sticky (test_source_owner_fixed.ReadyAndEpoch) ... ERROR
+test_ready_missing_durable_receipt_never_sends (test_source_owner_fixed.ReadyAndEpoch) ... ERROR
+test_real_receipt_producer_matches_actual_consumer_mode (test_source_owner_fixed.ReadyAndEpoch) ... ok
+test_unknown_revokes_existing_readiness (test_source_owner_fixed.ReadyAndEpoch) ... ERROR
+test_failed_unknown_publication_is_explicit (test_source_owner_fixed.Unknown) ... ok
+test_partial_intent_retains_unknown_and_publishes_to_parent (test_source_owner_fixed.Unknown) ... ok
+test_revalidation_requires_two_matching_real_observations (test_source_owner_fixed.Unknown) ... ok
+
+======================================================================
+ERROR: test_epoch_rejects_named_inode_change_without_full_rehash (test_source_owner_fixed.ReadyAndEpoch)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/union-owner-guarded-test-binding-1/test_source_owner_fixed.py", line 251, in test_epoch_rejects_named_inode_change_without_full_rehash
+    obj=self.owner();obj.freeze=mock.Mock();obj.freeze.epoch_check=mock.Mock()
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/union-owner-guarded-test-binding-1/test_source_owner_fixed.py", line 195, in owner
+    obj.lease.assert_live.return_value=True
+  File "/usr/lib/python3.8/unittest/mock.py", line 642, in __getattr__
+    raise AttributeError("Attributes cannot start with 'assert' "
+AttributeError: Attributes cannot start with 'assert' or 'assret'
+
+======================================================================
+ERROR: test_paused_prepare_never_commits_until_post_accept_checks (test_source_owner_fixed.ReadyAndEpoch)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/union-owner-guarded-test-binding-1/test_source_owner_fixed.py", line 204, in test_paused_prepare_never_commits_until_post_accept_checks
+    obj=self.owner();result=self.result();entered=threading.Event();resume=threading.Event();events=[];errors=[]
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/union-owner-guarded-test-binding-1/test_source_owner_fixed.py", line 195, in owner
+    obj.lease.assert_live.return_value=True
+  File "/usr/lib/python3.8/unittest/mock.py", line 642, in __getattr__
+    raise AttributeError("Attributes cannot start with 'assert' "
+AttributeError: Attributes cannot start with 'assert' or 'assret'
+
+======================================================================
+ERROR: test_post_accept_failure_never_commits_and_unknown_is_sticky (test_source_owner_fixed.ReadyAndEpoch)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/union-owner-guarded-test-binding-1/test_source_owner_fixed.py", line 227, in test_post_accept_failure_never_commits_and_unknown_is_sticky
+    obj=self.owner();obj.intent=True;obj.created=True;obj.parentfd=4
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/union-owner-guarded-test-binding-1/test_source_owner_fixed.py", line 195, in owner
+    obj.lease.assert_live.return_value=True
+  File "/usr/lib/python3.8/unittest/mock.py", line 642, in __getattr__
+    raise AttributeError("Attributes cannot start with 'assert' "
+AttributeError: Attributes cannot start with 'assert' or 'assret'
+
+======================================================================
+ERROR: test_ready_missing_durable_receipt_never_sends (test_source_owner_fixed.ReadyAndEpoch)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/union-owner-guarded-test-binding-1/test_source_owner_fixed.py", line 241, in test_ready_missing_durable_receipt_never_sends
+    obj=self.owner()
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/union-owner-guarded-test-binding-1/test_source_owner_fixed.py", line 195, in owner
+    obj.lease.assert_live.return_value=True
+  File "/usr/lib/python3.8/unittest/mock.py", line 642, in __getattr__
+    raise AttributeError("Attributes cannot start with 'assert' "
+AttributeError: Attributes cannot start with 'assert' or 'assret'
+
+======================================================================
+ERROR: test_unknown_revokes_existing_readiness (test_source_owner_fixed.ReadyAndEpoch)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/union-owner-guarded-test-binding-1/test_source_owner_fixed.py", line 246, in test_unknown_revokes_existing_readiness
+    obj=self.owner();obj.state='HELD';obj.ready=True;obj.intent=True;obj.created=True;obj.parentfd=4
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/union-owner-guarded-test-binding-1/test_source_owner_fixed.py", line 195, in owner
+    obj.lease.assert_live.return_value=True
+  File "/usr/lib/python3.8/unittest/mock.py", line 642, in __getattr__
+    raise AttributeError("Attributes cannot start with 'assert' "
+AttributeError: Attributes cannot start with 'assert' or 'assret'
+
+----------------------------------------------------------------------
+Ran 16 tests in 0.022s
+
+FAILED (errors=5)

@@ -1,0 +1,22 @@
+{
+  "task_id": "native-core-current942-preparation-inspection-failure-20261017-1",
+  "status": "STOPPED_READ_ONLY_INSPECTION",
+  "command": "python3 read-only inline JSON inspection of native-application-core-build-20260908-1/record.json; failing expression: {k:v for k,v in r[\"outputs\"].items() if \"reference-memory\" in k or \"reference-threads\" in k}",
+  "environment": "Inherited read-only shell environment, repository cwd; no compiler/payload/root/guest action. Correction/evidence writer uses explicit Python3.9 CPU7/1GiB clean private environment.",
+  "returncode": 1,
+  "error": "Traceback (most recent call last):\n  File \"<stdin>\", line 2, in <module>\nAttributeError: 'list' object has no attribute 'items'\n",
+  "scope": "Display helper mistakenly assumed outputs object rather than list. No application assertion, compile, staging or production failure.",
+  "retained_error": {
+    "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/inspection-original.stderr",
+    "sha256": "55ad219cc5da594f4ed8db6280eeacc588dc4b6c9770391df0cc9490dc4c4012"
+  },
+  "sources_and_artifacts_changed": false,
+  "known_valid_facts_before_error": {
+    "payload_sha256_from_retained_record": "558d1607e4648321c9537215084e759496937d9591c319a21443f443193fda9a",
+    "source_sha256_from_retained_record": "525bb7416c579da09c5f780b3ff6962287f07143488b6669bbee5ae744412743",
+    "retained_reference": "memory and threads each exit37; exact NATIVE_CORE PASS MODE newline",
+    "runtime_closure": "ld0853c866 and libcb058f87d match current942 manifest library references"
+  },
+  "blocker": "Dispatcher must acknowledge bounded inspection schema correction before affected preparation resumes.",
+  "next_task": "Iterate retained outputs list, authenticate same-binary source/reference/runtime closure; prepare unchanged memory macro first, then exact two-guard thread variant under independent review."
+}

@@ -1,0 +1,24 @@
+--- /home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/expert-controller-binding-repair-1/source/repaired_image_authority.py
++++ /home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-next-native-preparation-1/authority-successor-1/repaired_image_authority.py
+@@ -6,7 +6,7 @@
+ from pathlib import Path
+ import hashlib,json,stat
+ D=Path(__file__).resolve().parent
+-LINKS_SHA='14bc2034e4f11fe679ebef354b367dc61d5133321d0718a236f7e92aa1776d02'
++LINKS_SHA='49e8352350ae01154e491a862ace503fafcf02dcff7994500ab2cf35d7334334'
+ def need(ok,message):
+     if not ok:raise ValueError(message)
+ def read(reference):
+@@ -15,10 +15,10 @@
+     need(path.is_absolute() and len(raw)==reference['bytes'] and hashlib.sha256(raw).hexdigest()==reference['sha256'],'genuine authoritative proof drift')
+     return json.loads(raw)
+ def links():
+-    raw=(D/'CURRENT68-SDK5-AUTHORITY-LINKS.json').read_bytes()
++    raw=(D/'CURRENT68-SDK6-AUTHORITY-LINKS.PENDING.json').read_bytes()
+     need(hashlib.sha256(raw).hexdigest()==LINKS_SHA,'private source authority link identity')
+     value=json.loads(raw)
+-    need(value['kind']=='private-current68-SDK5-source-authority-successor-links','private authority link kind')
++    need(value['kind']=='private-current68-SDK6-source-authority-successor-links','private authority link kind')
+     return value
+ def artifact(reference,expected):
+     need(set(reference)=={'path','sha256','size','mode'},'actual artifact descriptor keys')

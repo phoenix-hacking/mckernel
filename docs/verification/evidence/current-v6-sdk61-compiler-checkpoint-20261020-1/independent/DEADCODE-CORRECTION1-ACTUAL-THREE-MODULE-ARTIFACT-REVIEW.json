@@ -1,0 +1,276 @@
+{
+  "actual_module_order": [
+    "/candidate/modules/ihk.o",
+    "/candidate/modules/ihk-smp-x86_64.o",
+    "/candidate/modules/mcctrl.o"
+  ],
+  "actual_request": {
+    "bytes": 2437,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-sdk-preparation-20261020-1/deadcode-correction-1/request.json",
+    "sha256": "454e5882863c84b6c8593acee6a918994b2c05560bc154dd471b7b225c63c705"
+  },
+  "application_acceptance": false,
+  "artifacts": {
+    "ihk": {
+      "bytes": 1503880,
+      "compiler_binding": {
+        "command_sha256": "fe3319e019ceb141a534092e29014bf4bf817b34072d5848813e5ebe810c8b44",
+        "saved_command": "RUST_MODFILE=/candidate/modules/ihk rustc --edition=2021 -Zbinary_dep_depinfo=y -Astable_features -Dunsafe_op_in_unsafe_fn -Dnon_ascii_idents -Wrust_2018_idioms -Wunreachable_pub -Wmissing_docs -Wrustdoc::missing_crate_level_docs -Wclippy::all -Wclippy::mut_mut -Wclippy::needless_bitwise_bool -Wclippy::needless_continue -Wclippy::no_mangle_with_rust_abi -Wclippy::dbg_macro -Cpanic=abort -Cembed-bitcode=n -Clto=n -Cforce-unwind-tables=n -Ccodegen-units=1 -Csymbol-mangling-version=v0 -Crelocation-model=static -Zfunction-sections=n -Wclippy::float_arithmetic --target=./scripts/target.json -Ctarget-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2 -Zcf-protection=branch -Zno-jump-tables -Ztune-cpu=generic -Cno-redzone=y -Ccode-model=kernel -Zfunction-return=thunk-extern -Zpatchable-function-entry=16,16 -Copt-level=2 -Cdebug-assertions=n -Coverflow-checks=n -Dwarnings -Cdebuginfo=2  --cfg MODULE  @./include/generated/rustc_cfg -Zallow-features=arbitrary_self_types,new_uninit,used_with_arg -Zcrate-attr=no_std -Zcrate-attr='feature(arbitrary_self_types,new_uninit,used_with_arg)' -Zunstable-options --extern force:alloc --extern kernel --crate-type rlib -L ./rust/ --crate-name ihk --sysroot=/dev/null --out-dir /candidate/modules/ --emit=dep-info=/candidate/modules/.ihk.o.d --emit=obj=/candidate/modules/ihk.o /candidate/modules/ihk.rs  ; ./tools/objtool/objtool --hacks=jump_label --hacks=noinstr --hacks=skylake --ibt --mcount --mnop --orc --retpoline --rethunk --sls --static-call --uaccess --prefix=16  --link  --module /candidate/modules/ihk.o",
+        "sources": [
+          "abi/application.rs",
+          "abi/os_service.rs",
+          "abi/x86_64.rs",
+          "device_registry.rs",
+          "ihk.rs",
+          "ihk_ioctl.rs",
+          "ikc_master.rs",
+          "ikc_queue.rs",
+          "os_registry.rs",
+          "os_runtime.rs",
+          "os_service.rs",
+          "page_allocator.rs",
+          "page_owner_registry.rs"
+        ]
+      },
+      "modinfo": {
+        "author": "McKernel Rust port",
+        "depends": "",
+        "description": "Native Rust IHK host core",
+        "license": "GPL v2",
+        "name": "ihk",
+        "retpoline": "Y",
+        "rhelversion": "10.2",
+        "srcversion": "B49A8ED24F9261DE19DECAE",
+        "vermagic": "6.12.0-211.44.1.el10_2.mckernel1.x86_64 SMP preempt mod_unload ",
+        "version": "1.7.0rc4"
+      },
+      "sha256": "e03272665758edf8b2fb85be848cb5a5873359a6391aa83ee1903d68ef54850e"
+    },
+    "ihk-smp-x86_64": {
+      "bytes": 11865296,
+      "compiler_binding": {
+        "command_sha256": "1729fd7eed2ddd6baa2506e09c7323386d8418a90dfc43cabcb242827a8a19d5",
+        "saved_command": "RUST_MODFILE=/candidate/modules/ihk-smp-x86_64 rustc --edition=2021 -Zbinary_dep_depinfo=y -Astable_features -Dunsafe_op_in_unsafe_fn -Dnon_ascii_idents -Wrust_2018_idioms -Wunreachable_pub -Wmissing_docs -Wrustdoc::missing_crate_level_docs -Wclippy::all -Wclippy::mut_mut -Wclippy::needless_bitwise_bool -Wclippy::needless_continue -Wclippy::no_mangle_with_rust_abi -Wclippy::dbg_macro -Cpanic=abort -Cembed-bitcode=n -Clto=n -Cforce-unwind-tables=n -Ccodegen-units=1 -Csymbol-mangling-version=v0 -Crelocation-model=static -Zfunction-sections=n -Wclippy::float_arithmetic --target=./scripts/target.json -Ctarget-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2 -Zcf-protection=branch -Zno-jump-tables -Ztune-cpu=generic -Cno-redzone=y -Ccode-model=kernel -Zfunction-return=thunk-extern -Zpatchable-function-entry=16,16 -Copt-level=2 -Cdebug-assertions=n -Coverflow-checks=n -Dwarnings -Cdebuginfo=2  --cfg MODULE  @./include/generated/rustc_cfg -Zallow-features=arbitrary_self_types,new_uninit,used_with_arg -Zcrate-attr=no_std -Zcrate-attr='feature(arbitrary_self_types,new_uninit,used_with_arg)' -Zunstable-options --extern force:alloc --extern kernel --crate-type rlib -L ./rust/ --crate-name ihk_smp_x86_64 --sysroot=/dev/null --out-dir /candidate/modules/ --emit=dep-info=/candidate/modules/.ihk_smp_x86_64.o.d --emit=obj=/candidate/modules/ihk_smp_x86_64.o /candidate/modules/ihk_smp_x86_64.rs",
+        "sources": [
+          "abi/application.rs",
+          "abi/sysfs.rs",
+          "abi/sysfs_request.rs",
+          "abi/vdso.rs",
+          "abi/x86_64.rs",
+          "application_image.rs",
+          "application_pager.rs",
+          "application_rpc.rs",
+          "application_syscall.rs",
+          "current_fork_task_mm.rs",
+          "ihk-compat-build-id.bin",
+          "ihk_mapping.rs",
+          "ihk_smp_x86_64.rs",
+          "ikc_master.rs",
+          "ikc_queue.rs",
+          "procfs_objects.rs",
+          "smp_application.rs",
+          "smp_application_image.rs",
+          "smp_application_syscall.rs",
+          "smp_boot_code.rs",
+          "smp_cpu.rs",
+          "smp_file_pager.rs",
+          "smp_ikc.rs",
+          "smp_image.rs",
+          "smp_loader.rs",
+          "smp_memory.rs",
+          "smp_procfs.rs",
+          "smp_resource.rs",
+          "smp_service.rs",
+          "smp_startup.rs",
+          "smp_startup_entry.S",
+          "smp_topology.rs",
+          "smp_trampoline.S",
+          "smp_trampoline.rs",
+          "smp_vdso.rs",
+          "sysfs_memory.rs",
+          "sysfs_objects.rs",
+          "sysfs_os.rs",
+          "sysfs_remote.rs",
+          "sysfs_rpc.rs",
+          "sysfs_setup.rs",
+          "sysfs_snoop.rs",
+          "sysfs_tree.rs",
+          "sysfs_zeroing.rs",
+          "user_string.rs",
+          "zero_pages.rs"
+        ]
+      },
+      "modinfo": {
+        "depends": "ihk",
+        "import_ns": "MCKERNEL_IHK_V1",
+        "license": "Dual BSD/GPL",
+        "name": "ihk_smp_x86_64",
+        "parm": "ihk_ikc_irq_core:Target CPU of IHK IKC IRQ",
+        "parmtype": "ihk_ikc_irq_core:uint",
+        "retpoline": "Y",
+        "rhelversion": "10.2",
+        "srcversion": "E55EBC8216121DB1E4E9E66",
+        "vermagic": "6.12.0-211.44.1.el10_2.mckernel1.x86_64 SMP preempt mod_unload "
+      },
+      "sha256": "ba000183567ae7a206a0bf65096c659dab192b51f9c0bc721e07fd846efa0b97"
+    },
+    "mcctrl": {
+      "bytes": 1913952,
+      "compiler_binding": {
+        "command_sha256": "26ce7cc6cd3599dd0580dc000d67b1d68f287d7f9d7e79d7254f6301610bc8b9",
+        "saved_command": "RUST_MODFILE=/candidate/modules/mcctrl rustc --edition=2021 -Zbinary_dep_depinfo=y -Astable_features -Dunsafe_op_in_unsafe_fn -Dnon_ascii_idents -Wrust_2018_idioms -Wunreachable_pub -Wmissing_docs -Wrustdoc::missing_crate_level_docs -Wclippy::all -Wclippy::mut_mut -Wclippy::needless_bitwise_bool -Wclippy::needless_continue -Wclippy::no_mangle_with_rust_abi -Wclippy::dbg_macro -Cpanic=abort -Cembed-bitcode=n -Clto=n -Cforce-unwind-tables=n -Ccodegen-units=1 -Csymbol-mangling-version=v0 -Crelocation-model=static -Zfunction-sections=n -Wclippy::float_arithmetic --target=./scripts/target.json -Ctarget-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2 -Zcf-protection=branch -Zno-jump-tables -Ztune-cpu=generic -Cno-redzone=y -Ccode-model=kernel -Zfunction-return=thunk-extern -Zpatchable-function-entry=16,16 -Copt-level=2 -Cdebug-assertions=n -Coverflow-checks=n -Dwarnings -Cdebuginfo=2  --cfg MODULE  @./include/generated/rustc_cfg -Zallow-features=arbitrary_self_types,new_uninit,used_with_arg -Zcrate-attr=no_std -Zcrate-attr='feature(arbitrary_self_types,new_uninit,used_with_arg)' -Zunstable-options --extern force:alloc --extern kernel --crate-type rlib -L ./rust/ --crate-name mcctrl --sysroot=/dev/null --out-dir /candidate/modules/ --emit=dep-info=/candidate/modules/.mcctrl.o.d --emit=obj=/candidate/modules/mcctrl.o /candidate/modules/mcctrl.rs  ; ./tools/objtool/objtool --hacks=jump_label --hacks=noinstr --hacks=skylake --ibt --mcount --mnop --orc --retpoline --rethunk --sls --static-call --uaccess --prefix=16  --link  --module /candidate/modules/mcctrl.o",
+        "sources": [
+          "abi/application.rs",
+          "abi/os_service.rs",
+          "abi/x86_64.rs",
+          "application_image.rs",
+          "mcctrl.rs",
+          "mcctrl_exec.rs",
+          "mcctrl_process.rs",
+          "mcctrl_vm.rs",
+          "user_string.rs"
+        ]
+      },
+      "modinfo": {
+        "depends": "ihk",
+        "import_ns": "MCKERNEL_IHK_V1",
+        "license": "GPL v2",
+        "name": "mcctrl",
+        "retpoline": "Y",
+        "rhelversion": "10.2",
+        "srcversion": "5F594BDBDA7CE8A8F53093E",
+        "vermagic": "6.12.0-211.44.1.el10_2.mckernel1.x86_64 SMP preempt mod_unload "
+      },
+      "sha256": "f34ca461cabefd67ff7ac8ae8264fd943b6d3164e00b2001ce09bf3d7e88b4d4"
+    }
+  },
+  "compiler_phases": {
+    "BTF [M]": 3,
+    "CC [M]": 4,
+    "LD [M]": 4,
+    "MODPOST": 1,
+    "RUSTC [M]": 3
+  },
+  "compiler_receipt": {
+    "bytes": 32682,
+    "path": "/home/holden/mckernel-work/scratch/nsd-c-6900f33d0a3c41c49000611baaf6b1ba/evidence/receipt.json",
+    "sha256": "8ebc9f7d8ffc7a04d7ee04bffa227c00ab7bb1b07fe9aed0f7b2e67127ebc475"
+  },
+  "compute_C_retirement_acceptance": false,
+  "counts": {
+    "compiler_sources": {
+      "ihk": 13,
+      "ihk-smp-x86_64": 46,
+      "mcctrl": 9
+    },
+    "materialized_inputs": 76,
+    "modules": 3,
+    "original_sdk_inputs": 14,
+    "retained_files": 96,
+    "runtime": 11,
+    "sources": 61
+  },
+  "decision": "ACCEPT_EXACT_CURRENT61_PHASE1_THREE_MODULE_BUILD_SOURCE_BINDINGS_AND_V6_LINK_ARTIFACTS_ONLY",
+  "default_consumer_acceptance": false,
+  "driver": {
+    "bytes": 19525,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-sdk-preparation-20261020-1/deadcode-correction-1/capsule/scripts/native_running_external_modules_offline.py",
+    "sha256": "9c47257306f6be42340339f0854daa8428b35b5fca91b3d3d16daa2c570ef4fc"
+  },
+  "execution_release": {
+    "bytes": 5776,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-sdk-preparation-20261020-1/deadcode-correction-1/execution-release.json",
+    "sha256": "043cbe0566f779e002aeb0a98848efe98cc4ce8d047e13d4040c0f31d1472b4f"
+  },
+  "execution_review": {
+    "bytes": 13008,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-sdk-independent-review-20261020-1/DEADCODE-CORRECTION1-FINAL-EXECUTION-REVIEW.json",
+    "sha256": "7476ee5a986368f5288fd2633de08feb4d3a5c1529f9855aeaa0f9644cbf09f4"
+  },
+  "findings": [
+    "Actualmake0 and exact3module artifact hashes/ELF64x86_64relocatable modinfo/names/singlevermagic/generationinputs/moduleorder/export/sourcecmd dependency gates independentlyprojected from retainedbytes; originalpureoutputs result exactlyequals closedreceipt.",
+    "Allretainedfilebytes/set and all76materialized inputs match frozenreceipts/approvedplan; sourceclosure61/sourceprovenance matches actualreceipt.13/46/9compiler sourcebindings select realRust ihk/SMP/mcctrl crates, with realtaskMM source in SMPdependency closure.",
+    "Unique actualv6symbolprovider: ihk finalELF contains1definedglobalFUNC/noU and Module.symvers contains1properihkexport row. Other2modules have0definitions; observedUcounts separatelyreported without inventing MM/defaultconsumers. Modpost and exactsinglevermagic completed on same frozenSDK; no unresolvedlink failure observed.",
+    "OriginalsingleRustmcctrlleaf remains selected; no held66composite/CMMwrapper bytes. NewtaskMM helper/mm_count expressions compile in actualSMPcrate, but compiler mayelide dormantpaths and this doesnotprove nativeLinuxMM invocation/lifetimes.",
+    "Savedmake.stderr is exactlyempty and commandphases complete; no compiler/objtoolwarning observed in thisattempt. Original2current61failedreceipts/errors and historicalheld66warnings remain preserved separately."
+  ],
+  "first_failure_history": [
+    "Originalphase1current61:E0425EOVERFLOW2sites,physical5405; preservedFAIL",
+    "Errnocorrection1:dead_code2privateaccessors,physicald1e5; preservedFAIL",
+    "Deadcodecorrection1:actualmake0/fulloriginalartifactgatesPASS,physicald2f2; no priorfailure relabel"
+  ],
+  "functional_scope": "Functional supported OS/apps AND active compute-C retirement into Rust/reviewed assembly; exact frozenphase1 current-v6 compile evidence only",
+  "implementation_ownership": false,
+  "make_stderr": {
+    "bytes": 0,
+    "path": "/home/holden/mckernel-work/scratch/nsd-c-6900f33d0a3c41c49000611baaf6b1ba/evidence/make.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "make_stdout": {
+    "bytes": 852,
+    "path": "/home/holden/mckernel-work/scratch/nsd-c-6900f33d0a3c41c49000611baaf6b1ba/evidence/make.stdout",
+    "sha256": "d6263ae9593d46e1052cdc0f2ff3e48485c3e19cf927ea72defd93a7a26e3d7d"
+  },
+  "native_acceptance": false,
+  "not_accepted": [
+    "Moduleload/controlABI/native/defaultactivation/positive nonnullCREATE_PPD/MMseal/ACK/app or computeCretirement",
+    "Phase2/3sourceintegration or lifetimeadvisoryresolution",
+    "WholeLinuxMMbinding/runtime correctness inferred from dormantcompiledsource",
+    "Comprehensiveproductionqualification"
+  ],
+  "physical_retirement_review": {
+    "bytes": 26881,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-sdk-independent-review-20261020-1/DEADCODE-CORRECTION1-ACTUAL-PHYSICAL-RETIREMENT-REVIEW.json",
+    "sha256": "d2f2a41eeb08f916300bfb92081de309f3fdcf65cb0130829d09f3c9a55d2cdf"
+  },
+  "production_acceptance": false,
+  "reviewed_at": "2026-10-20T05:28:16.241726+00:00",
+  "reviewer": "/root/sdk66_boundary_review",
+  "reviewer_target_compiler_root_guest_execution": 0,
+  "schema": "mckernel.independent-current-v6-sdk.actual-three-module-artifact-review.v1",
+  "source_identity": "d5d775d58d3457a4eaa75fe95c55c98f564eed1327b8a717f70e78086933e598",
+  "source_request_review": {
+    "bytes": 10497,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-sdk-independent-review-20261020-1/DEADCODE-CORRECTION1-SOURCE-AND-ACTUAL-REQUEST-REVIEW.json",
+    "sha256": "6bca7cfb56ddf0a6bb2f1dcc3e11455f0e06106eb8d735f5a7b062388d22692e"
+  },
+  "status": "PASS_BUILD_ARTIFACTS_ONLY_NO_ACTIVATION",
+  "unique_v6_export": [
+    "0x00000000",
+    "ihk_os_create_unbooted_v6",
+    "/candidate/modules/ihk",
+    "EXPORT_SYMBOL_GPL",
+    "MCKERNEL_IHK_V1"
+  ],
+  "v6_ELF_symbol_vector": {
+    "ihk": {
+      "defined": 1,
+      "rows": [
+        {
+          "binding": 1,
+          "name": "ihk_os_create_unbooted_v6",
+          "section_index": 4,
+          "symbol_type": 2
+        }
+      ],
+      "undefined": 0
+    },
+    "ihk-smp-x86_64": {
+      "defined": 0,
+      "rows": [
+        {
+          "binding": 1,
+          "name": "ihk_os_create_unbooted_v6",
+          "section_index": 0,
+          "symbol_type": 0
+        }
+      ],
+      "undefined": 1
+    },
+    "mcctrl": {
+      "defined": 0,
+      "rows": [],
+      "undefined": 0
+    }
+  }
+}

@@ -1,0 +1,37 @@
+--- a/kernel/CMakeLists.txt
++++ b/kernel/CMakeLists.txt
+@@ -309,6 +309,34 @@
+ 				set_property(SOURCE "${MCKERNEL_F06_C_SOURCE}" APPEND PROPERTY
+ 				    COMPILE_DEFINITIONS "MCKERNEL_RUST_F06_VDSO_INFO")
+ 
++				# Exact F06 BODY3-9 cumulative selection; storage has one Rust owner each.
++				list(APPEND RUST_KERNEL_CFG
++				    "--cfg" "f06_ptrace_xstate_copy_to_candidate"
++				    "--cfg" "f06_ptrace_xstate_copy_from_candidate"
++				    "--cfg" "f06_vdso_setup_log_candidate"
++				    "--cfg" "f06_vdso_state_candidate"
++				    "--cfg" "f06_vdso_storage_candidate"
++				    "--cfg" "f06_ptrace_user_bridges_candidate"
++				    "--cfg" "f06_ptrace_gpregs_bridges_candidate"
++				    "--cfg" "f06_prctl_log_candidate"
++				    "--cfg" "f06_prctl_log_storage_candidate"
++				    "--cfg" "f06_vdso_map_log_candidate"
++				)
++				list(APPEND RUST_KERNEL_SRCS
++				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_ptrace_xstate_copy_to.rs"
++				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_ptrace_xstate_copy_from.rs"
++				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_vdso_setup_log.rs"
++				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_vdso_state.rs"
++				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_vdso_storage.rs"
++				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_ptrace_user_bridges.rs"
++				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_ptrace_gpregs_bridges.rs"
++				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_prctl_log.rs"
++				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_prctl_log_storage.rs"
++				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_vdso_map_log.rs"
++				)
++				set_property(SOURCE "${MCKERNEL_F06_C_SOURCE}" APPEND PROPERTY
++				    COMPILE_DEFINITIONS "MCKERNEL_RUST_F06_PTRACE_XSTATE_COPY_TO;MCKERNEL_RUST_F06_PTRACE_XSTATE_COPY_FROM;MCKERNEL_RUST_F06_VDSO_SETUP_LOG;MCKERNEL_RUST_F06_VDSO_STATE;MCKERNEL_RUST_F06_VDSO_STORAGE;MCKERNEL_RUST_F06_PTRACE_USER_BRIDGES;MCKERNEL_RUST_F06_PTRACE_GPREGS_BRIDGES;MCKERNEL_RUST_F06_PRCTL_LOG;MCKERNEL_RUST_F06_PRCTL_LOG_STORAGE;MCKERNEL_RUST_F06_VDSO_MAP_LOG")
++
+ 				set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
+ 				    "${MCKERNEL_F06_ORIGIN_PROFILE}"
+ 				    "${MCKERNEL_F06_ORIGIN_PRODUCER}"

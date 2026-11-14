@@ -1,0 +1,63 @@
+{
+  "schema": "mckernel.m15-mm-ordinary-fixture-profile.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "REQUEST_FRESH_ORDINARY_GRANT_NO_EXECUTION",
+  "argv": [
+    "/usr/bin/python3",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-7/ihk-rust-module-closure/mm-rust-candidate/run_candidate_fixture.py",
+    "--execute-after-campaign-grant",
+    "--output",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-7/ihk-rust-module-closure/mm-rust-candidate/ordinary-fixture-attempt-1",
+    "--cc",
+    "/usr/bin/cc",
+    "--rustc",
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+    "--objtool",
+    "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/tools/objtool/objtool"
+  ],
+  "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-7/ihk-rust-module-closure/mm-rust-candidate",
+  "resources": {
+    "ordinary_compiler_slots": 1,
+    "cpus": 1,
+    "memory_bytes": 1073741824,
+    "whole_job_timeout_seconds": 120,
+    "each_command_timeout_seconds": 30,
+    "maximum_private_output_bytes": 67108864,
+    "network": "none",
+    "root": false,
+    "Docker": false,
+    "kernel_module_or_guest": false
+  },
+  "required_gate": "Existing background campaign independent source review plus fresh ordinary-slot grant and its existing capture/resource/ownership controls; this file is not a grant.",
+  "first_failure": "Preserve actual command/stdout/stderr/return and RESULT.json; stop, no automatic retry or alternate environment.",
+  "pending_proofs": [
+    "Independent jump-label source acceptance",
+    "Independent shared-word/LKMM source acceptance",
+    "Actual ordinary result plus separately reviewed exactSDK witnesses/leaf/all3-module proof",
+    "Matching native changed-path proof"
+  ],
+  "tool_bindings": "CANDIDATE-INPUTS.json",
+  "fixture_inputs": [
+    "mcctrl_mm_write_candidate.rs",
+    "m15_mmap_trace_gates.S",
+    "fixture_root.rs",
+    "fixture_bindings.rs",
+    "fixture_runtime.h",
+    "fixture_driver.c",
+    "gate_probe.c",
+    "run_candidate_fixture.py",
+    "FIXTURE-VECTORS.json",
+    "generated/original/mcctrl_vm_write_compat.c",
+    "generated/original/mcctrl_vm_write_compat.h",
+    "generated/original_linux_mm_bodies.h",
+    "generated/include/linux/mm.h",
+    "generated/include/linux/mmap_lock.h",
+    "generated/ORIGINAL-REFERENCE.json",
+    "layout_witness.c",
+    "layout_witness.rs",
+    "layout_witness_v2.c",
+    "sdk_leaf_probe.rs"
+  ],
+  "candidate_source_only": true,
+  "new_native_or_retirement_credit": false
+}

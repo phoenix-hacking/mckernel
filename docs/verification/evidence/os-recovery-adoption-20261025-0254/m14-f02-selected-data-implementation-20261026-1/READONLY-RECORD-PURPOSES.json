@@ -1,0 +1,462 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "count": 39,
+  "objects": [
+    {
+      "name": "process_schedule_exit_debug_input",
+      "bytes": 8,
+      "purpose": "Original schedule-exit diagnostic input value; remains live C data.",
+      "canonical_source_lines": [
+        6281,
+        6284
+      ],
+      "declaration_context": [
+        "#ifdef RUSAGE_DEBUG\nconst struct sched_exit_debug *const process_schedule_exit_debug_input =\n &process_sched_exit_debug;\n#else\nconst struct sched_exit_debug *const process_schedule_exit_debug_input = NULL;",
+        "#else\nconst struct sched_exit_debug *const process_schedule_exit_debug_input = NULL;\n#endif\nvoid schedule(void);\n#else"
+      ]
+    },
+    {
+      "name": "process_sched_runqueue_offsets",
+      "bytes": 208,
+      "purpose": "Genuine C offsetof/sizeof ABI layout witness consumed by Rust; remains live C data.",
+      "canonical_source_lines": [
+        5906,
+        6334
+      ],
+      "declaration_context": [
+        "#ifdef MCKERNEL_RUST_PROCESS_HELPERS\nconst struct sched_runqueue_offsets process_sched_runqueue_offsets = {\n\t.thread_cpu_id_offset = __builtin_offsetof(struct thread, cpu_id),\n\t.thread_tid_offset = __builtin_offsetof(struct thread, tid),\n\t.thread_status_offset = __builtin_offsetof(struct thread, status),",
+        "\t\t\tSPAWNING_TO_REMOTE, CPU_STATUS_IDLE,\n\t\t\tCPU_STATUS_RESERVED, &process_sched_runqueue_offsets,\n\t\t\t&schedule_result, process_sched_irq_save_bridge,\n\t\t\tprocess_sched_irq_restore_bridge,\n\t\t\tprocess_sched_noirq_lock_bridge,"
+      ]
+    },
+    {
+      "name": "process_sched_timer_configuration",
+      "bytes": 8,
+      "purpose": "Genuine C configuration/layout and callback binding record consumed by Rust; remains live C data.",
+      "canonical_source_lines": [
+        5777,
+        5779
+      ],
+      "declaration_context": [
+        "#ifdef TIMER_CPU_ID\nconst int process_sched_timer_configuration[2] = { 1, TIMER_CPU_ID };\n#else\nconst int process_sched_timer_configuration[2] = { 0, 0 };\n#endif",
+        "#else\nconst int process_sched_timer_configuration[2] = { 0, 0 };\n#endif\nvoid process_sched_timer_init_bridge(int cpu);\n#else"
+      ]
+    },
+    {
+      "name": "process_idle_callbacks",
+      "bytes": 80,
+      "purpose": "Live callback address table/slot; callback targets retain their actual implementation language and are not retired by this candidate.",
+      "canonical_source_lines": [
+        5615
+      ],
+      "declaration_context": [
+        "};\nconst struct sched_idle_callbacks process_idle_callbacks = {\n\t.current_cpu = sched_idle_current_cpu_bridge,\n\t.lock = process_spin_lock_bridge, .unlock = process_spin_unlock_bridge,\n\t.enable_interrupt = cpu_enable_interrupt, .disable_interrupt = cpu_disable_interrupt,"
+      ]
+    },
+    {
+      "name": "process_idle_values",
+      "bytes": 36,
+      "purpose": "Genuine C enum/configuration values consumed by Rust; remains live C data.",
+      "canonical_source_lines": [
+        5608
+      ],
+      "declaration_context": [
+        "};\nconst struct sched_idle_values process_idle_values = {\n\t.cpu_running = CPU_STATUS_RUNNING, .cpu_idle = CPU_STATUS_IDLE,\n\t.cpu_reserved = CPU_STATUS_RESERVED, .thread_running = PS_RUNNING,\n\t.thread_stopped = PS_STOPPED, .thread_interruptible = PS_INTERRUPTIBLE,"
+      ]
+    },
+    {
+      "name": "process_idle_offsets",
+      "bytes": 80,
+      "purpose": "Genuine C offsetof/sizeof ABI layout witness consumed by Rust; remains live C data.",
+      "canonical_source_lines": [
+        5596
+      ],
+      "declaration_context": [
+        "#ifdef MCKERNEL_RUST_PROCESS_HELPERS\nconst struct sched_idle_offsets process_idle_offsets = {\n\t.cpu_runq_lock_offset = offsetof(struct cpu_local_var, runq_lock),\n\t.cpu_runq_irqstate_offset = offsetof(struct cpu_local_var, runq_irqstate),\n\t.cpu_current_offset = offsetof(struct cpu_local_var, current),"
+      ]
+    },
+    {
+      "name": "process_free_thread_pages_source_line",
+      "bytes": 4,
+      "purpose": "Original allocator/tracing source-line provenance; remains live C data.",
+      "canonical_source_lines": [
+        5055
+      ],
+      "declaration_context": [
+        "#ifdef MCKERNEL_RUST_PROCESS_HELPERS\nconst int process_free_thread_pages_source_line = 3501;\nvoid process_free_thread_pages_bridge(void *thread);\n#else\n#line 3499"
+      ]
+    },
+    {
+      "name": "process_extend_region_entry_config",
+      "bytes": 136,
+      "purpose": "Genuine C configuration/layout and callback binding record consumed by Rust; remains live C data.",
+      "canonical_source_lines": [
+        4846,
+        4866
+      ],
+      "declaration_context": [
+        "    struct ddebug *,struct ddebug *,struct ddebug *);\nstruct process_extend_region_entry_config {\n    size_t page_size;\n    int page_shift;\n    unsigned long page_mask;",
+        "};\nconst struct process_extend_region_entry_config process_extend_region_entry_config = {\n    .page_size = PAGE_SIZE,\n    .page_shift = PAGE_SHIFT,\n    .page_mask = PAGE_MASK,"
+      ]
+    },
+    {
+      "name": "process_init_stack_entry_config",
+      "bytes": 168,
+      "purpose": "Genuine C configuration/layout and callback binding record consumed by Rust; remains live C data.",
+      "canonical_source_lines": [
+        4737,
+        4760
+      ],
+      "declaration_context": [
+        "#ifdef MCKERNEL_RUST_PROCESS_HELPERS\nstruct process_init_stack_entry_config {\n    unsigned long page_size;\n    int page_shift;\n    unsigned long user_stack_page_mask;",
+        "};\nconst struct process_init_stack_entry_config process_init_stack_entry_config = {\n    .page_size = PAGE_SIZE,\n    .page_shift = PAGE_SHIFT,\n    .user_stack_page_mask = USER_STACK_PAGE_MASK,"
+      ]
+    },
+    {
+      "name": "process_init_stack_user_category",
+      "bytes": 4,
+      "purpose": "Original user-page allocator category; remains live C data.",
+      "canonical_source_lines": [
+        4713
+      ],
+      "declaration_context": [
+        "const int process_init_stack_free_line = __LINE__ - 119;\nconst int process_init_stack_user_category = IHK_MC_PG_USER;\nstruct ddebug __aligned(8) __attribute__((section(\"__verbose\")))\nprocess_init_stack_log_size_debug = {\n    .file = __FILE__, .func = \"process_init_stack_log_bridge\","
+      ]
+    },
+    {
+      "name": "process_init_stack_free_line",
+      "bytes": 4,
+      "purpose": "Original allocator/tracing source-line provenance; remains live C data.",
+      "canonical_source_lines": [
+        4712
+      ],
+      "declaration_context": [
+        "const char *const process_init_stack_free_file = __FILE__;\nconst int process_init_stack_free_line = __LINE__ - 119;\nconst int process_init_stack_user_category = IHK_MC_PG_USER;\nstruct ddebug __aligned(8) __attribute__((section(\"__verbose\")))\nprocess_init_stack_log_size_debug = {"
+      ]
+    },
+    {
+      "name": "process_init_stack_free_file",
+      "bytes": 8,
+      "purpose": "Original allocator/tracing source-file string pointer; remains live C data.",
+      "canonical_source_lines": [
+        4711
+      ],
+      "declaration_context": [
+        "const int process_init_stack_alloc_line = __LINE__ - 122;\nconst char *const process_init_stack_free_file = __FILE__;\nconst int process_init_stack_free_line = __LINE__ - 119;\nconst int process_init_stack_user_category = IHK_MC_PG_USER;\nstruct ddebug __aligned(8) __attribute__((section(\"__verbose\")))"
+      ]
+    },
+    {
+      "name": "process_init_stack_alloc_line",
+      "bytes": 4,
+      "purpose": "Original allocator/tracing source-line provenance; remains live C data.",
+      "canonical_source_lines": [
+        4710
+      ],
+      "declaration_context": [
+        "const char *const process_init_stack_alloc_file = __FILE__;\nconst int process_init_stack_alloc_line = __LINE__ - 122;\nconst char *const process_init_stack_free_file = __FILE__;\nconst int process_init_stack_free_line = __LINE__ - 119;\nconst int process_init_stack_user_category = IHK_MC_PG_USER;"
+      ]
+    },
+    {
+      "name": "process_init_stack_alloc_file",
+      "bytes": 8,
+      "purpose": "Original allocator/tracing source-file string pointer; remains live C data.",
+      "canonical_source_lines": [
+        4709
+      ],
+      "declaration_context": [
+        " * This preserves their actual logical __LINE__ without guessing a numeric line. */\nconst char *const process_init_stack_alloc_file = __FILE__;\nconst int process_init_stack_alloc_line = __LINE__ - 122;\nconst char *const process_init_stack_free_file = __FILE__;\nconst int process_init_stack_free_line = __LINE__ - 119;"
+      ]
+    },
+    {
+      "name": "process_page_fault_anon_clear_profile_event",
+      "bytes": 4,
+      "purpose": "Original page-fault anonymous-clear profiling event ID; remains live C data.",
+      "canonical_source_lines": [
+        4045,
+        4047
+      ],
+      "declaration_context": [
+        "#ifdef PROFILE_ENABLE\nconst int process_page_fault_anon_clear_profile_event = PROFILE_page_fault_anon_clr;\n#else\nconst int process_page_fault_anon_clear_profile_event = 0;\n#endif",
+        "#else\nconst int process_page_fault_anon_clear_profile_event = 0;\n#endif\n#endif\n#ifndef MCKERNEL_RUST_PROCESS_HELPERS"
+      ]
+    },
+    {
+      "name": "process_page_fault_anon_alloc_line",
+      "bytes": 4,
+      "purpose": "Original allocator/tracing source-line provenance; remains live C data.",
+      "canonical_source_lines": [
+        3876
+      ],
+      "declaration_context": [
+        "const char *const process_page_fault_anon_alloc_file = __FILE__;\nconst int process_page_fault_anon_alloc_line = 3058;\nint process_page_fault_anon_allocate_body_result(struct process_vm *, struct vm_range *,\n        uintptr_t, uint64_t, pte_t **, void **, size_t *, int *, void **, int *);\n#endif"
+      ]
+    },
+    {
+      "name": "process_page_fault_anon_alloc_file",
+      "bytes": 8,
+      "purpose": "Original allocator/tracing source-file string pointer; remains live C data.",
+      "canonical_source_lines": [
+        3875
+      ],
+      "declaration_context": [
+        "/* Original allocation tracking identities retain static storage lifetime. */\nconst char *const process_page_fault_anon_alloc_file = __FILE__;\nconst int process_page_fault_anon_alloc_line = 3058;\nint process_page_fault_anon_allocate_body_result(struct process_vm *, struct vm_range *,\n        uintptr_t, uint64_t, pte_t **, void **, size_t *, int *, void **, int *);"
+      ]
+    },
+    {
+      "name": "process_page_fault_cow_alloc_line",
+      "bytes": 4,
+      "purpose": "Original allocator/tracing source-line provenance; remains live C data.",
+      "canonical_source_lines": [
+        3868
+      ],
+      "declaration_context": [
+        "const char *const process_page_fault_cow_alloc_file = __FILE__;\nconst int process_page_fault_cow_alloc_line = 3145;\nint process_page_fault_cow_allocate_body_result(struct process_vm *, struct vm_range *,\n        struct page *, size_t, int, uintptr_t, uint64_t, void **, int *);\n#endif"
+      ]
+    },
+    {
+      "name": "process_page_fault_cow_alloc_file",
+      "bytes": 8,
+      "purpose": "Original allocator/tracing source-file string pointer; remains live C data.",
+      "canonical_source_lines": [
+        3867
+      ],
+      "declaration_context": [
+        "#ifdef MCKERNEL_RUST_PROCESS_HELPERS\nconst char *const process_page_fault_cow_alloc_file = __FILE__;\nconst int process_page_fault_cow_alloc_line = 3145;\nint process_page_fault_cow_allocate_body_result(struct process_vm *, struct vm_range *,\n        struct page *, size_t, int, uintptr_t, uint64_t, void **, int *);"
+      ]
+    },
+    {
+      "name": "process_remap_free_line",
+      "bytes": 4,
+      "purpose": "Original allocator/tracing source-line provenance; remains live C data.",
+      "canonical_source_lines": [
+        3337
+      ],
+      "declaration_context": [
+        "const char *const process_remap_free_file = __FILE__;\nconst int process_remap_free_line = 2469;\nstruct ddebug __aligned(8) __attribute__((section(\"__verbose\")))\nprocess_remap_one_page_entry_debug = {\n    .file = __FILE__, .func = \"remap_one_page\","
+      ]
+    },
+    {
+      "name": "process_remap_free_file",
+      "bytes": 8,
+      "purpose": "Original allocator/tracing source-file string pointer; remains live C data.",
+      "canonical_source_lines": [
+        3336
+      ],
+      "declaration_context": [
+        " * static C ABI data only. Rust owns the complete callback computation. */\nconst char *const process_remap_free_file = __FILE__;\nconst int process_remap_free_line = 2469;\nstruct ddebug __aligned(8) __attribute__((section(\"__verbose\")))\nprocess_remap_one_page_entry_debug = {"
+      ]
+    },
+    {
+      "name": "process_add_range_arch_memclear_callback",
+      "bytes": 8,
+      "purpose": "Live callback address table/slot; callback targets retain their actual implementation language and are not retired by this candidate.",
+      "canonical_source_lines": [
+        3117,
+        3119
+      ],
+      "declaration_context": [
+        "#ifdef ARCH_MEMCLEAR\nvoid (* const process_add_range_arch_memclear_callback)(void *, unsigned long) = memclear;\n#else\nvoid (* const process_add_range_arch_memclear_callback)(void *, unsigned long) = NULL;\n#endif",
+        "#else\nvoid (* const process_add_range_arch_memclear_callback)(void *, unsigned long) = NULL;\n#endif\nvoid process_add_range_memclear_bridge(unsigned long phys,\n\t\t\t\t       unsigned long bytes);"
+      ]
+    },
+    {
+      "name": "process_add_range_free_bridge_source_line",
+      "bytes": 4,
+      "purpose": "Original allocator/tracing source-line provenance; remains live C data.",
+      "canonical_source_lines": [
+        3036
+      ],
+      "declaration_context": [
+        "#ifdef MCKERNEL_RUST_PROCESS_HELPERS\nconst int process_add_range_free_bridge_source_line = 2261;\nvoid process_add_range_free_bridge(struct vm_range *range);\n#else\n#line 2259"
+      ]
+    },
+    {
+      "name": "process_add_range_alloc_bridge_source_line",
+      "bytes": 4,
+      "purpose": "Original allocator/tracing source-line provenance; remains live C data.",
+      "canonical_source_lines": [
+        3024
+      ],
+      "declaration_context": [
+        "#ifdef MCKERNEL_RUST_PROCESS_HELPERS\nconst int process_add_range_alloc_bridge_source_line = 2256;\nstruct vm_range *process_add_range_alloc_bridge(unsigned long size);\n#else\n#line 2254"
+      ]
+    },
+    {
+      "name": "process_memset_smp_fast_word_pattern",
+      "bytes": 4,
+      "purpose": "Architecture/configuration word pattern used by Rust memset SMP fast path; remains live C data.",
+      "canonical_source_lines": [
+        2919,
+        2921
+      ],
+      "declaration_context": [
+        "#ifdef ARCH_FAST_MEMSET\nconst int process_memset_smp_fast_word_pattern = 1;\n#else\nconst int process_memset_smp_fast_word_pattern = 0;\n#endif",
+        "#else\nconst int process_memset_smp_fast_word_pattern = 0;\n#endif\nvoid process_memset_smp_memset_bridge(void *addr, int value, size_t len);\n#else"
+      ]
+    },
+    {
+      "name": "process_free_range_pages_source_line",
+      "bytes": 4,
+      "purpose": "Original allocator/tracing source-line provenance; remains live C data.",
+      "canonical_source_lines": [
+        2402
+      ],
+      "declaration_context": [
+        "#ifdef MCKERNEL_RUST_PROCESS_HELPERS\nconst int process_free_range_pages_source_line = 1873;\nstruct ddebug __aligned(8) __attribute__((section(\"__verbose\")))\nprocess_free_range_body_debug[3] = {\n { .file=__FILE__, .func=\"process_free_range_log_bridge\", .line=1947, .flags=DDEBUG_DEFAULT },"
+      ]
+    },
+    {
+      "name": "process_range_kfree_bridge_source_line",
+      "bytes": 4,
+      "purpose": "Original allocator/tracing source-line provenance; remains live C data.",
+      "canonical_source_lines": [
+        2316
+      ],
+      "declaration_context": [
+        "#ifdef MCKERNEL_RUST_PROCESS_HELPERS\nconst int process_range_kfree_bridge_source_line = 1817;\nvoid process_range_kfree_bridge(struct vm_range *range);\n#else\n#line 1815"
+      ]
+    },
+    {
+      "name": "process_split_range_alloc_source_line",
+      "bytes": 4,
+      "purpose": "Original allocator/tracing source-line provenance; remains live C data.",
+      "canonical_source_lines": [
+        2021
+      ],
+      "declaration_context": [
+        "#ifdef MCKERNEL_RUST_PROCESS_HELPERS\nconst int process_split_range_alloc_source_line = 1628;\nstruct vm_range *process_split_range_alloc_bridge(unsigned long size,\n\t\tunsigned long flags);\n#else"
+      ]
+    },
+    {
+      "name": "process_copy_entry_config",
+      "bytes": 112,
+      "purpose": "Genuine C configuration/layout and callback binding record consumed by Rust; remains live C data.",
+      "canonical_source_lines": [
+        1697,
+        1715
+      ],
+      "declaration_context": [
+        "};\nstruct process_copy_entry_config {\n    size_t page_size;\n    int page_shift;\n    unsigned long nowait;",
+        "};\nconst struct process_copy_entry_config process_copy_entry_config = {\n    .page_size = PAGE_SIZE, .page_shift = PAGE_SHIFT,\n    .nowait = IHK_MC_AP_NOWAIT, .user_category = IHK_MC_PG_USER,\n    .kernel_category = IHK_MC_PG_KERNEL, .wipe_on_fork = VR_WIPEONFORK,"
+      ]
+    },
+    {
+      "name": "process_clone_config",
+      "bytes": 136,
+      "purpose": "Genuine C configuration/layout and callback binding record consumed by Rust; remains live C data.",
+      "canonical_source_lines": [
+        1186,
+        1223,
+        1236
+      ],
+      "declaration_context": [
+        "#ifdef MCKERNEL_RUST_PROCESS_HELPERS\nstruct process_clone_config {\n    int stack_pages;\n    size_t page_size;\n    int page_align;",
+        "};\nconst struct process_clone_config process_clone_config = {\n    .stack_pages=KERNEL_STACK_NR_PAGES, .page_size=PAGE_SIZE,\n    .page_align=PAGE_P2ALIGN, .nowait=IHK_MC_AP_NOWAIT,\n    .kernel=IHK_MC_PG_KERNEL, .ss_disable=SS_DISABLE,"
+      ]
+    },
+    {
+      "name": "process_create_thread_alloc_pages_source_line",
+      "bytes": 4,
+      "purpose": "Original allocator/tracing source-line provenance; remains live C data.",
+      "canonical_source_lines": [
+        967
+      ],
+      "declaration_context": [
+        "#ifdef MCKERNEL_RUST_PROCESS_HELPERS\nconst int process_create_thread_alloc_pages_source_line = 788;\nvoid *process_create_thread_alloc_pages_bridge(int npages, unsigned long flags);\n#line 790\n"
+      ]
+    },
+    {
+      "name": "process_free_vm_bridge_source_line",
+      "bytes": 4,
+      "purpose": "Original allocator/tracing source-line provenance; remains live C data.",
+      "canonical_source_lines": [
+        696
+      ],
+      "declaration_context": [
+        "#ifdef MCKERNEL_RUST_PROCESS_HELPERS\nconst int process_free_vm_bridge_source_line = 561;\nvoid process_free_vm_bridge(void *vm);\n#else\n#line 559"
+      ]
+    },
+    {
+      "name": "process_alloc_bridge_source_line",
+      "bytes": 4,
+      "purpose": "Original allocator/tracing source-line provenance; remains live C data.",
+      "canonical_source_lines": [
+        444
+      ],
+      "declaration_context": [
+        "#ifdef MCKERNEL_RUST_PROCESS_HELPERS\nconst int process_alloc_bridge_source_line = 340;\nvoid *process_alloc_bridge(unsigned long size, unsigned long flags);\n#else\n#line 338"
+      ]
+    },
+    {
+      "name": "process_optional_free_bridge_source_line",
+      "bytes": 4,
+      "purpose": "Original allocator/tracing source-line provenance; remains live C data.",
+      "canonical_source_lines": [
+        329
+      ],
+      "declaration_context": [
+        "#ifdef MCKERNEL_RUST_PROCESS_HELPERS\nconst int process_optional_free_bridge_source_line = 258;\nvoid process_optional_free_bridge(void *ptr);\n#else\n#line 256"
+      ]
+    },
+    {
+      "name": "process_policy_free_bridge_source_line",
+      "bytes": 4,
+      "purpose": "Original allocator/tracing source-line provenance; remains live C data.",
+      "canonical_source_lines": [
+        317
+      ],
+      "declaration_context": [
+        "#ifdef MCKERNEL_RUST_PROCESS_HELPERS\nconst int process_policy_free_bridge_source_line = 253;\nvoid process_policy_free_bridge(void *policy);\n#else\n#line 251"
+      ]
+    },
+    {
+      "name": "process_mckfd_free_bridge_source_line",
+      "bytes": 4,
+      "purpose": "Original allocator/tracing source-line provenance; remains live C data.",
+      "canonical_source_lines": [
+        219
+      ],
+      "declaration_context": [
+        "#ifdef MCKERNEL_RUST_PROCESS_HELPERS\nconst int process_mckfd_free_bridge_source_line = 171;\nvoid process_mckfd_free_bridge(struct mckfd *fdp);\n#else\n#line 169"
+      ]
+    },
+    {
+      "name": "process_tracked_allocator_source_file",
+      "bytes": 8,
+      "purpose": "Original allocator/tracing source-file string pointer; remains live C data.",
+      "canonical_source_lines": [
+        216
+      ],
+      "declaration_context": [
+        "#ifdef MCKERNEL_RUST_PROCESS_HELPERS\nconst char *const process_tracked_allocator_source_file = __FILE__;\n#endif\n#ifdef MCKERNEL_RUST_PROCESS_HELPERS\nconst int process_mckfd_free_bridge_source_line = 171;"
+      ]
+    },
+    {
+      "name": "process_timer_runtime_offsets",
+      "bytes": 120,
+      "purpose": "Genuine C offsetof/sizeof ABI layout witness consumed by Rust; remains live C data.",
+      "canonical_source_lines": [
+        109,
+        6155
+      ],
+      "declaration_context": [
+        "\nPROCESS_SCHED_PUBLIC_BRIDGE const struct timer_runtime_offsets process_timer_runtime_offsets = {\n\t.thread_status_offset = __builtin_offsetof(struct thread, status),\n\t.thread_sched_list_offset = __builtin_offsetof(struct thread, sched_list),\n\t.thread_spin_sleep_lock_offset =",
+        "\ttimer_set_timer_body_result((unsigned long)v, time_sharing, runq_locked,\n\t\t\t&process_timer_runtime_offsets,\n\t\t\tprocess_timer_spin_lock_bridge,\n\t\t\tprocess_timer_spin_unlock_bridge,\n\t\t\tprocess_timer_lapic_enable_bridge,"
+      ]
+    },
+    {
+      "name": "process_dump_tree_enabled",
+      "bytes": 4,
+      "purpose": "Compile-configuration constant controlling process tree diagnostics; remains live C data.",
+      "canonical_source_lines": [
+        59,
+        79
+      ],
+      "declaration_context": [
+        "/* Existing compile-time dump gate, exposed as readonly ABI data only. */\nconst int process_dump_tree_enabled = 1;\n#else\nstatic void dtree(struct rb_node *node, int l) {\n\tstruct vm_range *range;",
+        "#ifdef MCKERNEL_RUST_PROCESS_HELPERS\nconst int process_dump_tree_enabled = 0;\n#else\nstatic void dump_tree(struct process_vm *vm) {}\n#endif"
+      ]
+    }
+  ],
+  "retirement_claim": false,
+  "other_allocated_data": "46 __verbose section object symbols remain live diagnostic descriptors, including descriptor arrays; three mutable controls are this candidate target. Zero allocated FUNC in selected process.c.o. Counts are not missing function bodies."
+}

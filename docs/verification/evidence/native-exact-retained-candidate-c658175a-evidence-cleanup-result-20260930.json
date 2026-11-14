@@ -1,0 +1,59 @@
+{
+  "schema": "mckernel.exact-evidence-cleanup-result.v1",
+  "status": "APPLY_PASS",
+  "scope": "retained failed-candidate Git-evidence deduplication only; no build or runtime credit",
+  "release_commit": "4af0f32820210be74557e7825182635637544e1f",
+  "candidate_commit": "c658175ae1831e2caef6ecf59730a272f1324645",
+  "candidate_root": "/home/holden/mckernel-work/retained-exact-candidates/mckernel-exact-candidate-c658175a-scratch-7",
+  "candidate_identity": "66306:47753167",
+  "candidate_allocated_bytes_before": 9244356608,
+  "candidate_allocated_bytes_after": 143015936,
+  "packet": {
+    "path": "docs/verification/evidence/native-exact-retained-candidate-c658175a-evidence-cleanup-20260930.py",
+    "sha256": "2bb8bc9481b693129fbb9759e9ae8c1578779482f720332cbfa84e1b239a6622"
+  },
+  "test": {
+    "path": "scripts/tests/test_native_exact_retained_candidate_c658175a_evidence_cleanup_20260930.py",
+    "sha256": "6a92b599ad9616f08a3e46b035ecf54fd2545050cd9ec781bf7d388b32b2fd9c",
+    "result": "20 passed"
+  },
+  "plan": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-retained-candidate-c658175a-evidence-cleanup-plan-20260930.json",
+    "identity": "1831:57636",
+    "size": 1597062,
+    "sha256": "300fa3d261b0816257561623c4a070f9fa3128bcc50afc5a32edfb2e965e0aee",
+    "target_count": 2452,
+    "preserved_count": 0,
+    "removed_allocated_bytes": 9101340672
+  },
+  "verification": {
+    "all_planned_targets_absent_after": true,
+    "candidate_identity_unchanged": true,
+    "candidate_head_unchanged": true,
+    "differing_untracked_symlink_hardlink_preserved": true,
+    "live_f021_candidate_and_build_disjoint": true,
+    "restoration": "restore each plan restore_git_path from its exact blob at candidate_commit"
+  },
+  "preserved_harness_failures": [
+    {
+      "family": "lsof-unrelated-fuse-warning-routing",
+      "message": "FAIL_CLOSED: lsof reported open reference",
+      "plan_present_after": false,
+      "deletion_started": false,
+      "correction": "use lsof -w with separate strict stdout/stderr handling"
+    },
+    {
+      "family": "dynamic-census-full-record-equality",
+      "message": "FAIL_CLOSED: audit plan differs from fresh audit",
+      "plan_identity": "1831:57636",
+      "all_target_count_still_present_after": 2452,
+      "deletion_started": false,
+      "correction": "fresh strict census plus exact comparison of stable plan fields only"
+    }
+  ],
+  "resources_after": {
+    "host_available_bytes": 27423297536,
+    "scratch_available_bytes": 14199377920
+  },
+  "next": "deduplicate only Git-identical evidence copies inside stopped f021 source while preserving its build outputs/failure evidence, then prepare a fresh corrected candidate"
+}

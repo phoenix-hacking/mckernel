@@ -1,0 +1,216 @@
+{
+  "schema": "mckernel.x86-callback-publication-lookahead.v1",
+  "request": "2026-11-09T23:42Z exact accepted-F04 callback publication source contract",
+  "decision": "GO_EXISTING_COUPLED_SIX_SLOT_PUBLISHER_FINITE_SOURCE_CUT; NO_RUNTIME_PUBLICATION_OR_BOOT_READINESS_CLAIM",
+  "owner": "Saved Root sole review/admission/composition owner; original countedcredit0",
+  "identity_and_overlap": {
+    "actual_function": "kernel/rust/x86_cpu_helpers.rs:5326\u20135348 dispatch_and_msr_entries::x86_lapic_bsp_select_bridge",
+    "source_selection": "kernel/rust/lib.rs actualx86_cpu_helpers; kernel/CMakeLists.txt MCKERNEL_RUST_X86_CPU_HELPERS paired CPU Cownership; sourcefunctionhasno localoptionalcfg.",
+    "C_match": "arch/x86_64/kernel/cpu.c:1409 prototype and1413\u20131438 reference init_lapic_bsp branch, originalmode+fivecallbackslot assignments.",
+    "current_packets": "ExactcurrentRoot unit/request symbol search found no x86_lapic_bsp_select_bridge/x2apic_wait_icr_idle definition or mode/ICR/waitslot preparation. Race-limited: Root must reuse any newly prepared matching owner, not duplicate it.",
+    "known_reuse": "User/currentRoot input establishes real lapic_write/lapic_read/x86_issue_ipi owners alreadycompiled/currentpartial as initialNone. Existing97owner savedtext also confirms originalx86_issue_ipiB8. Do not recompile/redefine any ofthese3slot owners.",
+    "actual_IPI_targets": "Root scheduler-ipi-concrete-provider-metadata-1/ACTUAL-CAPTURE-BEFORE-GATE.json object1f4a6b97 contains actual apic_icr_write/apic_wait_icr_idle/apic_x86_issue_ipi/x2apic_icr_write/x2apic_x86_issue_ipi. Reuse after Root's real ownershipgate passes; capture-only status is not upgraded here."
+  },
+  "eligibility": {
+    "positive_boundary": "Actual original accepted-F04 general local-APIC mode/dispatch publication and declarative primitive storage. The finitebody only writes actual mode and function-pointer slots; it performs no CPUID/MSR/MMIO/IRQ or packet/generic/exec/ACK/TID/XPMEM call.",
+    "independent_source": "Eligibility follows this exact scalar-input/memory-publication behavior and actualF04Rust/Cmapping, not blanket permission for wholeCPU/bootmodule or original heldnotification endpoints.",
+    "coupled_contract": "There are six coupled original writes, not a free-standing subsetof3. Preserve completepublisher; do not manufacture a timer/IPI-only publication protocol or new readiness flag.",
+    "held_and_runtime": "Original generic/notification/source/SDK/native/currentfree/UNKNOWN ownership staysunchanged. Sourcecodegen never authorizes executing boot/controller selection or callbacks.",
+    "excluded": "Whole dispatch_and_msr_entries, realtarget implementations, actualmodequery/caller/MSRbridge, APICmapping/setup, otherCPUstorage/logging/boot machinery. No constructor or hardwaretarget executes."
+  },
+  "original_input_chain": {
+    "caller": "Actual init_lapic_bsp in kernel/rust/x86_cpu_helpers.rs:4528\u20134537 calls x86_init_lapic_bsp_body_result(super::x2apic_is_enabled(),Some(x86_lapic_bsp_select_bridge)).",
+    "bool_helper": "Existing x86_init_lapic_bsp_body_result:1969\u20131981 computes mode=(enabled!=0)asCInt, calls actualselector, returnsmode; missingcallback remains original-EINVAL. Notneeded in the minimalpublisherunit.",
+    "hardware_input": "Existing x2apic_is_enabled:1963 reads actualMSR_IA32_APIC_BASE through realx86_read_msr_bridge then masksactualX2APIC_ENABLE through actualhelper. Names/inputcontract only; no modequery/readMSR/sourcebody is prepared here.",
+    "source_parameter": "x86_lapic_bsp_select_bridge(use_x2apic:CInt) keeps actual nonzero-versuszero branch, writing1or0respectively. Do not invent vector/controller/registerpolicy or selectarbitrarytarget.",
+    "runtime_precondition": "Original bootowner serializes allsixslots for the entirepublication and owns actualsupported controller mode/mappings/targetlifetimes; concurrentconsumers/updates excluded by originalcontract. No new atomicity, publicationbarrier, targetretention or ACK owner is introduced.",
+    "state_distinction": "InitialNone/0 storage, compiledpublisher and linkedrealfunction-addressrelocations are source prerequisites only. Runtimepublishedstate requires actual legitimate hardwaremodequery/excludedbootsequence/admission; no such claim made."
+  },
+  "minimal_function": {
+    "export": "x86_lapic_bsp_select_bridge",
+    "ABI": "#[no_mangle] unsafe extern \"C\" fn(use_x2apic:actual abi::CInt)",
+    "source_body": "Copy exactcurrent function only. Bothbranches use actualaddr_of_mut!(slot).write(value) in original sourceorder.",
+    "branch_x2apic": [
+      [
+        "x86_cpu_x2apic_mode",
+        "1"
+      ],
+      [
+        "lapic_write",
+        "Some(actual x2apic_write)"
+      ],
+      [
+        "lapic_read",
+        "Some(actual x2apic_read)"
+      ],
+      [
+        "lapic_icr_write",
+        "Some(actual x2apic_icr_write)"
+      ],
+      [
+        "lapic_wait_icr_idle",
+        "Some(actual x2apic_wait_icr_idle)"
+      ],
+      [
+        "x86_issue_ipi",
+        "Some(actual x2apic_x86_issue_ipi)"
+      ]
+    ],
+    "branch_APIC": [
+      [
+        "x86_cpu_x2apic_mode",
+        "0"
+      ],
+      [
+        "lapic_write",
+        "Some(actual apic_write)"
+      ],
+      [
+        "lapic_read",
+        "Some(actual apic_read)"
+      ],
+      [
+        "lapic_icr_write",
+        "Some(actual apic_icr_write)"
+      ],
+      [
+        "lapic_wait_icr_idle",
+        "Some(actual apic_wait_icr_idle)"
+      ],
+      [
+        "x86_issue_ipi",
+        "Some(actual apic_x86_issue_ipi)"
+      ]
+    ],
+    "types": "Actual CInt=i32 and original aliases WriteRegister=unsafeexternCfn(CInt,u32),ReadRegister=unsafeexternCfn(CInt)->u32,WriteIcr=unsafeexternCfn(u32,u32),WaitIcr=unsafeexternCfn(),IssueIpi=unsafeexternCfn(u32,u32). Retain actualOption<alias>size8/align8assertions.",
+    "Rust_namespace": "Preserve actual functionpath references by genuine existing typedextern declarations at matching original module paths if implementations aren'tincluded. No fakefunction/callback or API/layout is introduced.",
+    "minimum_import_only_variant": "OnepublicT with actualsixstorageexterns and10realfunctiontargetdeclarations is a validnonexecutedpartial. Cannotrunwithout allgenuineowners/runtimeinputs."
+  },
+  "finite_batched_variant": {
+    "why": "Avoid leaving a triviallygenuine originalemptywait dependency and avoid duplicate futurecodegen, while retaining onlyactualsource.",
+    "additional_function": {
+      "name": "x2apic_wait_icr_idle",
+      "source": "kernel/rust/x86_cpu_helpers.rs:5317",
+      "ABI": "#[no_mangle] unsafe extern \"C\" fn()",
+      "body": "Original intentionallyemptyx2APIC wait callback {}; this actualsource is NOT an invented no-op substitute. No barrier/poll/timeout/hardwarecall is added."
+    },
+    "new_original_data_if_absent": [
+      {
+        "ELF": "x86_cpu_x2apic_mode",
+        "Rust_name": "selected_mode",
+        "source": "kernel/rust/x86_cpu_helpers.rs:5285\u20135286",
+        "definition": "#[export_name=\"x86_cpu_x2apic_mode\"] static mut selected_mode:CInt=0",
+        "bytes": 4,
+        "alignment": 4,
+        "C_pair": "cpu.c:350 externintx2apic __asm__(\"x86_cpu_x2apic_mode\") / reference staticintx2apic.",
+        "condition": "Includeonlyif actuallatestcurrentcohort doesn'talreadyownit; otherwise usegenuineoriginalexternalias."
+      },
+      {
+        "ELF": "lapic_icr_write",
+        "source": "kernel/rust/x86_cpu_helpers.rs:5291\u20135292",
+        "definition": "#[no_mangle] pub(crate) static mut lapic_icr_write:Option<WriteIcr>=None",
+        "bytes": 8,
+        "alignment": 8,
+        "C_pair": "cpu.c:372\u2013375 originalunsignedint,unsignedintfunctionpointer."
+      },
+      {
+        "ELF": "lapic_wait_icr_idle",
+        "source": "kernel/rust/x86_cpu_helpers.rs:5293\u20135294",
+        "definition": "#[no_mangle] pub(crate) static mut lapic_wait_icr_idle:Option<WaitIcr>=None",
+        "bytes": 8,
+        "alignment": 8,
+        "C_pair": "cpu.c:377\u2013381 originalvoid(void)functionpointer."
+      }
+    ],
+    "reuse_data_unchanged": [
+      "lapic_write",
+      "lapic_read",
+      "x86_issue_ipi"
+    ],
+    "expected_new_owner_limit": "Ifallthreeadditionaldataowners areactuallyabsent:2newTnames+3genuineBSSobjects(total20data bytes beforealignment),3externalexistingdataimports and9realfunctiontargetimports. Recomputefrom actualcurrentowners rather than forcecounts.",
+    "selected_mode_alias": "Useactualsource export_name mapping or source-bound externlink_name to existing ELFsymbol; do not rename/override/rewrite objectdefinitions."
+  },
+  "true_target_declarations": [
+    {
+      "name": "x2apic_write",
+      "source": "kernel/rust/x86_cpu_helpers.rs:3977",
+      "ABI": "unsafeexternCfn(CInt,u32)",
+      "treatment": "ActualexistingRustdefinitionname/signature; leaveU, no MMIO/MSRbodyimport."
+    },
+    {
+      "name": "x2apic_read",
+      "source": "kernel/rust/x86_cpu_helpers.rs:3994",
+      "ABI": "unsafeexternCfn(CInt)->u32",
+      "treatment": "ActualexistingRustdefinition; leaveU."
+    },
+    {
+      "name": "apic_write",
+      "source": "kernel/rust/x86_cpu_helpers.rs:3945",
+      "ABI": "unsafeexternCfn(CInt,u32)",
+      "treatment": "ActualexistingRustdefinition; leaveU."
+    },
+    {
+      "name": "apic_read",
+      "source": "kernel/rust/x86_cpu_helpers.rs:3962",
+      "ABI": "unsafeexternCfn(CInt)->u32",
+      "treatment": "ActualexistingRustdefinition; leaveU."
+    },
+    {
+      "name": "x2apic_icr_write",
+      "source": "kernel/rust/x86_cpu_helpers.rs:4088",
+      "ABI": "unsafeexternCfn(u32,u32)",
+      "treatment": "Reuseactualsource-backedIPIproducer exportedtarget afterqualifiedownership; no duplicatebody."
+    },
+    {
+      "name": "apic_icr_write",
+      "source": "kernel/rust/x86_cpu_helpers.rs:4105",
+      "ABI": "unsafeexternCfn(u32,u32)",
+      "treatment": "ReuseactualIPIproducer."
+    },
+    {
+      "name": "apic_wait_icr_idle",
+      "source": "kernel/rust/x86_cpu_helpers.rs:4122",
+      "ABI": "unsafeexternCfn()",
+      "treatment": "ReuseactualIPIproducer."
+    },
+    {
+      "name": "x2apic_x86_issue_ipi",
+      "source": "kernel/rust/x86_cpu_helpers.rs:4025",
+      "ABI": "unsafeexternCfn(u32,u32)",
+      "treatment": "ReuseactualIPIproducer."
+    },
+    {
+      "name": "apic_x86_issue_ipi",
+      "source": "kernel/rust/x86_cpu_helpers.rs:4048",
+      "ABI": "unsafeexternCfn(u32,u32)",
+      "treatment": "ReuseactualIPIproducer."
+    },
+    {
+      "name": "x2apic_wait_icr_idle",
+      "source": "kernel/rust/x86_cpu_helpers.rs:5317",
+      "ABI": "unsafeexternCfn()",
+      "treatment": "Exactgenuineemptywait mayincludeas above orleaveU; neverreplacewithnewnoop."
+    }
+  ],
+  "profile_and_real_conditions": {
+    "source_profile": "Same retainednative x86_64 LP64freestanding Rust1.95 flags/ABI/warningpolicy; no DEBUG/SSE/modeprofile guessed, mckernel_equivalence unset, no wholemoduleimport.",
+    "ready_source_contract": "Publisher, optionalemptywait and exactoriginaldata/targettypes are completeexistingRustsource. No missingnewimplementation/externalapprovalblocks thisfinite privatepreparation.",
+    "actual_before_compile": "Root binds concretecut/actualcurrentuniqueowners/aliases/types/profile and independentGO; freshactualHOSTadmission separately. If anyneededtarget isunqualified, keepits actualtypedU instead ofsubstitution.",
+    "actual_before_runtime": "Actualsupportedhardwaremode/sourceSDK/kernel/nativeadmission, bootexclusion, targetlifetimes and realcontrollerMSR/MMIObinding are separate originalinputs; no sourcecontractalone satisfiesthem.",
+    "no_new_policy": "No truncating6slottransaction, inventedSome targets, dummyinitialization/constructor, populatedslotclaim, lock/atomic/readinessflag or timeout/protocol."
+  },
+  "smallest_next_proof": {
+    "owner": "Root/private sourcepreparer+independentreviewer+actualadmittedproducer/compositor",
+    "done_when": "Concretefiniteunit preserveswholeoriginal6writefunction, genuineoptionalemptywait andonlymissingoriginaldata; importedtargetaddresses/ABI andexistingownerreuse are reviewable. Then oneadmittedcodegen+actualmetadata gate and currentonlypartialjoin maysupply thestaticinitializationprovider.",
+    "verification_method": "Exactfunction/type/initializer/sourcecfg comparison; actualcalledobjectprejoingates verifyuniqueoldowners/new6storageaddressandgenuinetargetrelocations/branchcode without executingpublication. Recordactualcompilerprivate/readonly/eh_frame owners andpreservealloldbytes/relocs/aliases; no fixedinstructioncount or concurrentatomicityclaim.",
+    "score": "Supportingpartialprerequisite only; originalcountedchecklist0, no native/default/fullimage/bootacceptance."
+  },
+  "operations": "Read currentplan, exactactualpublisher/sourceidentity/pairedCassignments/types/initialstorage and actualcaller/inputchain; names/signaturesonly for realtargetbodies, boundedcurrentRootunit/request overlap and existing97savedtext. WroteonlythisauthorizedprivateJSON. No unitgeneration/extraction/edit, compiler/GNU/predicate/link/test, constructor/function/CPUlocal/controller/MSR/APIC/IRQ/nativeexecution, bootmachineryimport, inventory, canonical/index/ledger/launcher mutation, goalcontrol/spawn.",
+  "potential_separately_reviewed_HOST_scenario": {
+    "status": "POTENTIAL_ONLY_NOT_A_NEW_REQUIRED_TEST_OR_EXECUTION_AUTHORIZATION",
+    "basis": "The actual publisher only stores actual target addresses and mode into its six coupled original slots; it invokes no target or hardware/query function.",
+    "prerequisites": "Every actual hardware-target definition and all six genuine source slot owners must link under reviewed matching ABI/profile and exact unique ownership. No fake/stub callback, replacement target, invented storage/layout or boot initializer may be used. Root must reuse existing passing matching coverage and establish a concrete need before any new check.",
+    "possible_observation": "A private isolated HOST check could save actual original slot/mode state, call only the real publisher for its original zero/nonzero branches, observe the six exact genuine target-address/mode stores, and restore original state. Targets are never invoked; no boot/MSR/APIC/IRQ/mapping/controller operation occurs.",
+    "limits": "Requires separate concrete fixture/source/profile review and Root fresh exact admission; no fixture/unit generated here. No assertion of current readiness, need, native initialization/target publication for a real kernel, acceptance or counted credit."
+  }
+}

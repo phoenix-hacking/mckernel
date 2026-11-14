@@ -1,0 +1,282 @@
+{
+  "actual_preparation": {
+    "bytes": 8844,
+    "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/typed-native-preparation-result.json",
+    "sha256": "fcdb702ff89b26c361d42e975374e1c57e9d727be41add59b9c6c37b13b6005f"
+  },
+  "actual_status": {
+    "bytes": 2642,
+    "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/typed-native-preparation.status.json",
+    "sha256": "e719b39dbc753803af10f134a2adc633c3f3808459bd4bdcf6a3a46412306520"
+  },
+  "actual_stderr": {
+    "bytes": 0,
+    "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/typed-native-preparation.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "application_acceptance": false,
+  "attempt": "/home/holden/mckernel-work/scratch/fpl-p-261019-1/a/attempt-83a71c159d6d4a4bb9d9e8731569be63",
+  "container_create_argv": [
+    "create",
+    "--pull=never",
+    "--attach=stdout",
+    "--attach=stderr",
+    "--init",
+    "--name",
+    "mckernel-native-diagnostic-83a71c159d6d4a4bb9d9e8731569be63",
+    "--label",
+    "mckernel.native-diagnostic.owner=83a71c159d6d4a4bb9d9e8731569be63",
+    "--cpus=4",
+    "--cpuset-cpus=2-5",
+    "--cgroup-parent=/mckernel-dev",
+    "--memory=12g",
+    "--memory-swap=12g",
+    "--pids-limit=512",
+    "--cap-drop=ALL",
+    "--security-opt=no-new-privileges",
+    "--read-only",
+    "--network=none",
+    "--user=1000:1000",
+    "--ulimit",
+    "core=0",
+    "--ulimit",
+    "nofile=4096:4096",
+    "--tmpfs",
+    "/tmp:rw,nodev,nosuid,size=256m",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel,dst=/home/holden/mckernel,readonly",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/scratch,dst=/home/holden/mckernel-work/scratch,readonly",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/scratch/fpl-p-261019-1/a,dst=/home/holden/mckernel-work/scratch/fpl-p-261019-1/a",
+    "--env",
+    "HOME=/tmp",
+    "--env",
+    "TMPDIR=/tmp",
+    "--env",
+    "PYTHONDONTWRITEBYTECODE=1",
+    "--workdir=/home/holden/mckernel-work/scratch/fpl-p-261019-1/a",
+    "--entrypoint=/usr/bin/python3",
+    "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+    "-B",
+    "/home/holden/mckernel-work/scratch/fplg-host-261019-1/owner.py",
+    "--inside",
+    "--owner-sha256",
+    "b7b21c5f8673ba232242c7531143b49c7dfabf0df3f708743c5ca55e816928cc",
+    "--manifest",
+    "/home/holden/mckernel-work/scratch/fplg-serial-261019-1/native-manifest.json",
+    "--manifest-sha256",
+    "a8157ec2f8d99aa4e2e497f5953d8fdb4a6e8024ab7a1534b73a55f212fb599e",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/fpl-p-261019-1/a",
+    "--nonce",
+    "83a71c159d6d4a4bb9d9e8731569be63"
+  ],
+  "decision": "PASS_IMPORTED_OWNER_RUNNER_TYPED_PLAN_SOURCE_GEOMETRY_AND_RESOURCES_ONLY",
+  "genuine_latest_exclusive_predecessor": {
+    "bytes": 26659,
+    "path": "/home/holden/mckernel-work/host-preparation/failed-invalidation-sdk-independent-review-20261019-1/SDK-ACTUAL-PHYSICAL-RETIREMENT-REVIEW.json",
+    "sha256": "950b862ab18cc8def686f694f8052caf3448572deb9098fb20500868f3f8c6bc"
+  },
+  "guest_profile": {
+    "append": "console=ttyS0,115200n8 rdinit=/init nokaslr panic=-1 memmap=4K%0x80000-1",
+    "memory_mib": 8192,
+    "name": "native-diagnostic-4vcpu-8192mib",
+    "numa_nodes": 2,
+    "vcpus": 4
+  },
+  "host_profile": {
+    "cpus": 4,
+    "cpuset": "2-5",
+    "memory": 12884901888,
+    "memory_swap": 12884901888,
+    "network": "none",
+    "pids": 512
+  },
+  "image_specific_module_authority": {
+    "bytes": 6739,
+    "path": "/home/holden/mckernel-work/host-preparation/current-ihk-module-result-review-20261019-1/IHK-ACTUAL-PHYSICAL-RETIREMENT-REVIEW.json",
+    "sha256": "75a15c7dcf86d10f2da9613125cc50eb32604e3e00a784c535a5b4144f28e080"
+  },
+  "inside_argv": [
+    "-B",
+    "/home/holden/mckernel-work/scratch/fplg-host-261019-1/owner.py",
+    "--inside",
+    "--owner-sha256",
+    "b7b21c5f8673ba232242c7531143b49c7dfabf0df3f708743c5ca55e816928cc",
+    "--manifest",
+    "/home/holden/mckernel-work/scratch/fplg-serial-261019-1/native-manifest.json",
+    "--manifest-sha256",
+    "a8157ec2f8d99aa4e2e497f5953d8fdb4a6e8024ab7a1534b73a55f212fb599e",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/fpl-p-261019-1/a",
+    "--nonce",
+    "83a71c159d6d4a4bb9d9e8731569be63"
+  ],
+  "ioctl_diagnostic_scope": {
+    "complete_export_if_at_most": 262144,
+    "full_history_proof": false,
+    "nonnull_FP_acceptance": false,
+    "overflow_or_error": "Explicit host status/control/fault; never successful fullraw credit",
+    "pointer_only_buffer_bytes": 4190208,
+    "serial_cap": 4194304
+  },
+  "late_only": "Current-case snapshot adapter must bind genuine latestSDK950 physical separately from IHK75 moduleauthority; LASTroot snapshot <=60s, exact whole finalmachine hash/one-shot decision and immediate exact allowed launch. Finalcapture perstepDATA/guard interface must be frozen preclock.",
+  "launch_argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/scratch/fplg-host-261019-1/owner.py",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/fpl-p-261019-1/a",
+    "--nonce",
+    "83a71c159d6d4a4bb9d9e8731569be63",
+    "--owner-sha256",
+    "b7b21c5f8673ba232242c7531143b49c7dfabf0df3f708743c5ca55e816928cc",
+    "--manifest",
+    "/home/holden/mckernel-work/scratch/fplg-serial-261019-1/native-manifest.json",
+    "--manifest-sha256",
+    "a8157ec2f8d99aa4e2e497f5953d8fdb4a6e8024ab7a1534b73a55f212fb599e"
+  ],
+  "manifest": {
+    "bytes": 5266,
+    "path": "/home/holden/mckernel-work/scratch/fplg-serial-261019-1/native-manifest.json",
+    "sha256": "a8157ec2f8d99aa4e2e497f5953d8fdb4a6e8024ab7a1534b73a55f212fb599e"
+  },
+  "materializer": {
+    "bytes": 5329,
+    "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/materialize_typed_runtime_cpu7.py",
+    "sha256": "2a9dc545e1da443e9956069572fb5946703b08a489a60cd826c2ff6ad7618ddb"
+  },
+  "native_release": false,
+  "native_runs": 0,
+  "new_global_HEAD_or_percase_Git_gate": false,
+  "nonce": "83a71c159d6d4a4bb9d9e8731569be63",
+  "nonnull_FP_acceptance": false,
+  "owner_evidence": "/home/holden/mckernel-work/scratch/fpl-p-261019-1/a.owner-83a71c159d6d4a4bb9d9e8731569be63",
+  "parent_identity": {
+    "ctime_ns": 1792443350795453617,
+    "device": 1828,
+    "gid": 1000,
+    "inode": 758340,
+    "mode": "0o40700",
+    "mtime_ns": 1792443350795453617,
+    "nlink": 2,
+    "path": "/home/holden/mckernel-work/scratch/fpl-p-261019-1/a",
+    "size": 4096,
+    "uid": 1000
+  },
+  "qemu_argv": [
+    "/usr/libexec/qemu-kvm",
+    "-machine",
+    "q35",
+    "-accel",
+    "tcg,thread=multi",
+    "-cpu",
+    "max,la57=off",
+    "-smp",
+    "4,sockets=2,cores=2,threads=1",
+    "-m",
+    "8192",
+    "-object",
+    "memory-backend-ram,size=4G,id=ram-node0",
+    "-object",
+    "memory-backend-ram,size=4G,id=ram-node1",
+    "-numa",
+    "node,nodeid=0,cpus=0-1,memdev=ram-node0",
+    "-numa",
+    "node,nodeid=1,cpus=2-3,memdev=ram-node1",
+    "-nic",
+    "none",
+    "-display",
+    "none",
+    "-no-reboot",
+    "-no-shutdown",
+    "-S",
+    "-monitor",
+    "none",
+    "-qmp",
+    "unix:/home/holden/mckernel-work/scratch/fpl-p-261019-1/a/attempt-83a71c159d6d4a4bb9d9e8731569be63/qmp.sock,server=on,wait=off",
+    "-serial",
+    "file:/home/holden/mckernel-work/scratch/fpl-p-261019-1/a/attempt-83a71c159d6d4a4bb9d9e8731569be63/serial.log",
+    "-debugcon",
+    "file:/home/holden/mckernel-work/scratch/fpl-p-261019-1/a/attempt-83a71c159d6d4a4bb9d9e8731569be63/debugcon.log",
+    "-global",
+    "isa-debugcon.iobase=0xe9",
+    "-kernel",
+    "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/bzImage",
+    "-initrd",
+    "/home/holden/mckernel-work/scratch/fplg-serial-261019-1/lifecycle.cpio.gz",
+    "-append",
+    "console=ttyS0,115200n8 rdinit=/init nokaslr panic=-1 memmap=4K%0x80000-1"
+  ],
+  "reviewer": "two_cpu_end_to_end_review",
+  "runtime_sources": {
+    "case-data.json": {
+      "bytes": 216,
+      "path": "/home/holden/mckernel-work/scratch/fplg-host-261019-1/case-data.json",
+      "sha256": "e2b18f89988456034b980760995563c787a9229611ad2f80270ab6953d6182cf"
+    },
+    "owner.py": {
+      "bytes": 2042,
+      "path": "/home/holden/mckernel-work/scratch/fplg-host-261019-1/owner.py",
+      "sha256": "b7b21c5f8673ba232242c7531143b49c7dfabf0df3f708743c5ca55e816928cc"
+    },
+    "runner.py": {
+      "bytes": 1432,
+      "path": "/home/holden/mckernel-work/scratch/fplg-host-261019-1/runner.py",
+      "sha256": "8b217b9e56fc02b324a240668916563819065a27731f6b00bf187e4a12d096a7"
+    },
+    "typed_avx.py": {
+      "bytes": 2477,
+      "path": "/home/holden/mckernel-work/scratch/fplg-host-261019-1/typed_avx.py",
+      "sha256": "7354f7ba3b773f25e0ce780c32eadcde6a0e4c731a19bc6bb96c7af9e7bfdb7e"
+    }
+  },
+  "schema": "mckernel.independent-current-ihk-actual-typed-native-composition-review.v1",
+  "source_findings": {
+    "all_declared_source_hashes_exact": true,
+    "allruntime_sources_under_existing_RO_roots": true,
+    "attempt_and_owner_evidence_absent": true,
+    "current_parent_whole_stable_metadata_and_empty": true,
+    "original_typed_functions_unchanged_MANIFEST_identity_specialized": true,
+    "owner_profile_insideexec_lifetime_cleanup_methods_imported_unchanged": true,
+    "runner_original_private_ND_provenance_and_wholeplan_checked": true,
+    "strict_shared_manifest_loader_plus_typed_wholeplan": true,
+    "three_templates_rendered_by_hash_literals_only": true
+  },
+  "source_hashes": {
+    "/home/holden/mckernel-work/scratch/fplg-host-261019-1/case-data.json": "e2b18f89988456034b980760995563c787a9229611ad2f80270ab6953d6182cf",
+    "/home/holden/mckernel-work/scratch/fplg-host-261019-1/runner.py": "8b217b9e56fc02b324a240668916563819065a27731f6b00bf187e4a12d096a7",
+    "/home/holden/mckernel-work/scratch/fplg-host-261019-1/typed_avx.py": "7354f7ba3b773f25e0ce780c32eadcde6a0e4c731a19bc6bb96c7af9e7bfdb7e",
+    "/home/holden/mckernel-work/scratch/rust-three-port-native-case-preparation-20261018-1/host-actual1/case_evaluator.py": "24fd9f0b9d28559732a0326c64fd4881d51962bb3c291c74a80509d406e44146",
+    "/home/holden/mckernel-work/scratch/rust-three-port-native-case-preparation-20261018-1/host-actual1/native_diagnostic.py": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e",
+    "/home/holden/mckernel-work/scratch/rust-three-port-native-case-preparation-20261018-1/host-actual1/native_diagnostic_backend.py": "cd0759c926876483665065cb320b9daf7d7c6b32f56e561805b4b0343f60d614",
+    "/home/holden/mckernel-work/scratch/rust-three-port-native-case-preparation-20261018-1/host-actual1/native_diagnostic_runner.py": "1013bb846a13dea4f756aa5780381abf25569d2572553545f3f50bc1f099f573",
+    "/home/holden/mckernel-work/scratch/rust-three-port-native-case-preparation-20261018-1/host-actual1/qmp_capture.py": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741",
+    "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/native-proposal/enabled_stdout.py": "4bb20b4866ce43eb9c20f9ab0e9a7a0928f2473b36727cdd7136a5d57c5ca4e7",
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic.py": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e",
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_backend.py": "cd0759c926876483665065cb320b9daf7d7c6b32f56e561805b4b0343f60d614",
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_runner.py": "25ea29f9b07232094e9df1db6094ad0a85ec678281749a1d6998abb7c700d499",
+    "/home/holden/mckernel/scripts/application-tests/qmp_capture.py": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741"
+  },
+  "stage_acceptance": {
+    "bytes": 10148,
+    "path": "/home/holden/mckernel-work/host-preparation/current-ihk-module-result-review-20261019-1/FP1E7-ACTUAL-SERIAL-LOGGING-STAGE-REVIEW.json",
+    "sha256": "6d4217502f2adeb19af7ee6940005680f341f9ee39d29c73135efcbd72cb423c"
+  },
+  "status": "PASS_ACTUAL_TYPED_AVX_CURRENT_IHK_LOGGING_BOUNDARY_PENDING_FINAL_TEMPORAL_RELEASE",
+  "typed_serial_composition_acceptance": {
+    "bytes": 4007,
+    "path": "/home/holden/mckernel-work/host-preparation/current-ihk-logging-native-independent-review-20261019-1/ACTUAL-TRANSPORT-TYPED-COMPOSITION-REVIEW.json",
+    "sha256": "c2da1ca8bd39e23bdf84d7fea5a5a729148030311dca4b60f14d06ea54431617"
+  },
+  "unix_paths": [
+    {
+      "encoded_bytes": 101,
+      "path": "/home/holden/mckernel-work/scratch/fpl-p-261019-1/a/attempt-83a71c159d6d4a4bb9d9e8731569be63/qmp.sock"
+    }
+  ]
+}

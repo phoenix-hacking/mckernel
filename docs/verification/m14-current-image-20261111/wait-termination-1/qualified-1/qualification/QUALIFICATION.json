@@ -1,0 +1,2044 @@
+{
+  "schema": "m14-wait-termination-actual-source-table-caller-ABI-provider-qualification-v1",
+  "status": "PASS_ACTUAL_COMPLETE_WAIT_TERMINATION_COMPONENTS_READY_FOR_INDEPENDENT_WHOLE03_04_REVIEW",
+  "at": "2026-11-11T08:47:14.598957+00:00",
+  "source_commit": "6aae8273960583ec7fb194926292bd10ab1bc585",
+  "source_bindings": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-image-operation-sdk-max-1/SOURCE-BINDINGS.json",
+    "bytes": 7356,
+    "sha256": "40f9439938ab1aad415296d19fc088707f00a3d64a9347a8e8d45d51896101b6"
+  },
+  "Root_source_integration": {
+    "bytes": 1154,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-composition-root-1/correction-1/CANONICAL-INTEGRATION.json",
+    "sha256": "68525dfa6d76eae074762f50e06139c6b77918c23e73ce2996af014a92c2f83b"
+  },
+  "producer": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-image-operation-sdk-max-1/execution-1/RESULT.json",
+    "bytes": 15748,
+    "sha256": "ce8d2f9009eb514446d48496bd7a1b948a2b08c4c759679e131c44163124bb45"
+  },
+  "reader": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-image-operation-sdk-max-1/reader-1/execution-1/RESULT.json",
+    "bytes": 16347,
+    "sha256": "12e6fb78f2d61cb4176965958866ef0b56b555c8ea51e9baea03c265e4368da3"
+  },
+  "adopted_exact_reader": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-reader-p03-max-1/READER-ADOPTION.json",
+    "bytes": 3129,
+    "sha256": "11eb0a75a62dac10cd12d21397acfe31a2f0a6328f1fc6dfa6b4443315f0abb1"
+  },
+  "new_preserved25_cohort": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/stable-baseline6aae-1/BASELINE.json",
+    "bytes": 28162,
+    "sha256": "a4374c24bda14f1418959c5c062844c7fc70d0a39c4ce53a6c33f1aa8a115a6f"
+  },
+  "retained_artifact_path_binding": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-reader-p03-max-1/qualification-1/PRESERVED-COHORT-BINDING.json",
+    "bytes": 6252,
+    "sha256": "25e2020279a2894420631b10db660535681ec698eaa469d349e681943e0999c9"
+  },
+  "actual_image": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/stable-baseline6aae-1/build/kernel/mckernel.img",
+    "bytes": 10666456,
+    "sha256": "4b711cd9a361068d8c5b4e7e7fb6852e3124a0f7f97dc0401a77086c1897fc60",
+    "mode": "755"
+  },
+  "actual_map": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/stable-baseline6aae-1/build/kernel/mckernel.img.map",
+    "bytes": 994137,
+    "sha256": "8f0fca37b46f93de182f4269e887eadf6436d893907c42ca395b3c4a3556ec48",
+    "mode": "644"
+  },
+  "actual_Rust": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/stable-baseline6aae-1/build/kernel/rust/mckernel_rust.o",
+    "bytes": 19307840,
+    "sha256": "fc09140c3c75f0e39973f456546ee0a316a955eea43d5ff7156e8f3463f89458",
+    "mode": "644"
+  },
+  "new2_actual_global_Rust_unique_Cexcluded": [
+    {
+      "name": "wait_host_wait4_bridge",
+      "physical_owner": {
+        "name": "wait_host_wait4_bridge",
+        "final": {
+          "index": 2710,
+          "name": "wait_host_wait4_bridge",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1,
+          "value": 18446744073685308992,
+          "bytes": 172
+        },
+        "owner": {
+          "object": "rust/mckernel_rust.o",
+          "input": {
+            "index": 7467,
+            "name": "wait_host_wait4_bridge",
+            "binding": "GLOBAL",
+            "type": "FUNC",
+            "visibility": 0,
+            "section_index": 4854,
+            "value": 0,
+            "bytes": 172
+          },
+          "section": ".ltext.wait_host_wait4_bridge",
+          "placement": {
+            "address": 18446744073685308992,
+            "bytes": 172
+          }
+        }
+      },
+      "actual_code_bytes_and_link_patches": {
+        "input_file_offset": 920960,
+        "input_section": {
+          "index": 4854,
+          "name": ".ltext.wait_host_wait4_bridge",
+          "type": 1,
+          "flags": 268435462,
+          "address": 0,
+          "offset": 920960,
+          "bytes": 172,
+          "link": 0,
+          "info": 0,
+          "align": 16,
+          "entry_bytes": 0
+        },
+        "input_bytes_sha256": "46f06a01500cde2307be540e452fa92fb183a96465260b6fae2a6331351b0df3",
+        "final_file_offset": 923200,
+        "final_section": {
+          "index": 1,
+          "name": ".text",
+          "type": 1,
+          "flags": 6,
+          "address": 18446744073684389888,
+          "offset": 4096,
+          "bytes": 1025371,
+          "link": 0,
+          "info": 0,
+          "align": 16,
+          "entry_bytes": 0
+        },
+        "final_bytes_sha256": "77ae6edf5ce8169c57b9e085a9fa36396a8bc8f58c21aadf72d5e47d842bbd0e",
+        "bytes": 172,
+        "all_nonrelocated_bytes_equal": true,
+        "all_current_relocations_exact": [
+          {
+            "function_or_data_offset": 96,
+            "width": 8,
+            "relocation": {
+              "input_offset": 96,
+              "type": 1,
+              "addend": 0,
+              "target": {
+                "index": 4221,
+                "name": "locals",
+                "binding": "GLOBAL",
+                "type": "OBJECT",
+                "visibility": 0,
+                "section_index": 5881,
+                "value": 0,
+                "bytes": 8
+              }
+            },
+            "actual_final_value": 18446744073685858592,
+            "expected_final_value": 18446744073685858592,
+            "actual_target_provider": {
+              "name": "locals",
+              "final": {
+                "index": 1655,
+                "name": "locals",
+                "binding": "GLOBAL",
+                "type": "OBJECT",
+                "visibility": 0,
+                "section_index": 271,
+                "value": 18446744073685858592,
+                "bytes": 8
+              },
+              "owner": {
+                "object": "rust/mckernel_rust.o",
+                "input": {
+                  "index": 4221,
+                  "name": "locals",
+                  "binding": "GLOBAL",
+                  "type": "OBJECT",
+                  "visibility": 0,
+                  "section_index": 5881,
+                  "value": 0,
+                  "bytes": 8
+                },
+                "section": ".lbss.locals",
+                "placement": {
+                  "address": 18446744073685858592,
+                  "bytes": 8
+                }
+              }
+            },
+            "merged_literal_identity_proof": null
+          },
+          {
+            "function_or_data_offset": 119,
+            "width": 8,
+            "relocation": {
+              "input_offset": 119,
+              "type": 1,
+              "addend": 0,
+              "target": {
+                "index": 4222,
+                "name": "num_processors",
+                "binding": "GLOBAL",
+                "type": "OBJECT",
+                "visibility": 0,
+                "section_index": 6007,
+                "value": 0,
+                "bytes": 4
+              }
+            },
+            "actual_final_value": 18446744073685465536,
+            "expected_final_value": 18446744073685465536,
+            "actual_target_provider": {
+              "name": "num_processors",
+              "final": {
+                "index": 4013,
+                "name": "num_processors",
+                "binding": "GLOBAL",
+                "type": "OBJECT",
+                "visibility": 0,
+                "section_index": 30,
+                "value": 18446744073685465536,
+                "bytes": 4
+              },
+              "owner": {
+                "object": "rust/mckernel_rust.o",
+                "input": {
+                  "index": 4222,
+                  "name": "num_processors",
+                  "binding": "GLOBAL",
+                  "type": "OBJECT",
+                  "visibility": 0,
+                  "section_index": 6007,
+                  "value": 0,
+                  "bytes": 4
+                },
+                "section": ".ldata.num_processors",
+                "placement": {
+                  "address": 18446744073685465536,
+                  "bytes": 4
+                }
+              }
+            },
+            "merged_literal_identity_proof": null
+          },
+          {
+            "function_or_data_offset": 152,
+            "width": 8,
+            "relocation": {
+              "input_offset": 152,
+              "type": 1,
+              "addend": 0,
+              "target": {
+                "index": 4230,
+                "name": "do_syscall",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 1224,
+                "value": 0,
+                "bytes": 1421
+              }
+            },
+            "actual_final_value": 18446744073684702128,
+            "expected_final_value": 18446744073684702128,
+            "actual_target_provider": {
+              "name": "do_syscall",
+              "final": {
+                "index": 3520,
+                "name": "do_syscall",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 1,
+                "value": 18446744073684702128,
+                "bytes": 1421
+              },
+              "owner": {
+                "object": "rust/mckernel_rust.o",
+                "input": {
+                  "index": 4230,
+                  "name": "do_syscall",
+                  "binding": "GLOBAL",
+                  "type": "FUNC",
+                  "visibility": 0,
+                  "section_index": 1224,
+                  "value": 0,
+                  "bytes": 1421
+                },
+                "section": ".ltext.do_syscall",
+                "placement": {
+                  "address": 18446744073684702128,
+                  "bytes": 1421
+                }
+              }
+            },
+            "merged_literal_identity_proof": null
+          }
+        ]
+      }
+    },
+    {
+      "name": "terminate_mcexec",
+      "physical_owner": {
+        "name": "terminate_mcexec",
+        "final": {
+          "index": 1484,
+          "name": "terminate_mcexec",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1,
+          "value": 18446744073685277472,
+          "bytes": 330
+        },
+        "owner": {
+          "object": "rust/mckernel_rust.o",
+          "input": {
+            "index": 7334,
+            "name": "terminate_mcexec",
+            "binding": "GLOBAL",
+            "type": "FUNC",
+            "visibility": 0,
+            "section_index": 4687,
+            "value": 0,
+            "bytes": 330
+          },
+          "section": ".ltext.terminate_mcexec",
+          "placement": {
+            "address": 18446744073685277472,
+            "bytes": 330
+          }
+        }
+      },
+      "actual_code_bytes_and_link_patches": {
+        "input_file_offset": 888256,
+        "input_section": {
+          "index": 4687,
+          "name": ".ltext.terminate_mcexec",
+          "type": 1,
+          "flags": 268435462,
+          "address": 0,
+          "offset": 888256,
+          "bytes": 330,
+          "link": 0,
+          "info": 0,
+          "align": 16,
+          "entry_bytes": 0
+        },
+        "input_bytes_sha256": "faf5c8b3fcd398a91e550f12f691ffab2d627ac45ec9df80d3153ebfc1bccb87",
+        "final_file_offset": 891680,
+        "final_section": {
+          "index": 1,
+          "name": ".text",
+          "type": 1,
+          "flags": 6,
+          "address": 18446744073684389888,
+          "offset": 4096,
+          "bytes": 1025371,
+          "link": 0,
+          "info": 0,
+          "align": 16,
+          "entry_bytes": 0
+        },
+        "final_bytes_sha256": "f53e202d58f770a65404804dd5430d256567682b65330ccb6df845727cf101b7",
+        "bytes": 330,
+        "all_nonrelocated_bytes_equal": true,
+        "all_current_relocations_exact": [
+          {
+            "function_or_data_offset": 18,
+            "width": 8,
+            "relocation": {
+              "input_offset": 18,
+              "type": 1,
+              "addend": 0,
+              "target": {
+                "index": 4221,
+                "name": "locals",
+                "binding": "GLOBAL",
+                "type": "OBJECT",
+                "visibility": 0,
+                "section_index": 5881,
+                "value": 0,
+                "bytes": 8
+              }
+            },
+            "actual_final_value": 18446744073685858592,
+            "expected_final_value": 18446744073685858592,
+            "actual_target_provider": {
+              "name": "locals",
+              "final": {
+                "index": 1655,
+                "name": "locals",
+                "binding": "GLOBAL",
+                "type": "OBJECT",
+                "visibility": 0,
+                "section_index": 271,
+                "value": 18446744073685858592,
+                "bytes": 8
+              },
+              "owner": {
+                "object": "rust/mckernel_rust.o",
+                "input": {
+                  "index": 4221,
+                  "name": "locals",
+                  "binding": "GLOBAL",
+                  "type": "OBJECT",
+                  "visibility": 0,
+                  "section_index": 5881,
+                  "value": 0,
+                  "bytes": 8
+                },
+                "section": ".lbss.locals",
+                "placement": {
+                  "address": 18446744073685858592,
+                  "bytes": 8
+                }
+              }
+            },
+            "merged_literal_identity_proof": null
+          },
+          {
+            "function_or_data_offset": 31,
+            "width": 8,
+            "relocation": {
+              "input_offset": 31,
+              "type": 1,
+              "addend": 0,
+              "target": {
+                "index": 4222,
+                "name": "num_processors",
+                "binding": "GLOBAL",
+                "type": "OBJECT",
+                "visibility": 0,
+                "section_index": 6007,
+                "value": 0,
+                "bytes": 4
+              }
+            },
+            "actual_final_value": 18446744073685465536,
+            "expected_final_value": 18446744073685465536,
+            "actual_target_provider": {
+              "name": "num_processors",
+              "final": {
+                "index": 4013,
+                "name": "num_processors",
+                "binding": "GLOBAL",
+                "type": "OBJECT",
+                "visibility": 0,
+                "section_index": 30,
+                "value": 18446744073685465536,
+                "bytes": 4
+              },
+              "owner": {
+                "object": "rust/mckernel_rust.o",
+                "input": {
+                  "index": 4222,
+                  "name": "num_processors",
+                  "binding": "GLOBAL",
+                  "type": "OBJECT",
+                  "visibility": 0,
+                  "section_index": 6007,
+                  "value": 0,
+                  "bytes": 4
+                },
+                "section": ".ldata.num_processors",
+                "placement": {
+                  "address": 18446744073685465536,
+                  "bytes": 4
+                }
+              }
+            },
+            "merged_literal_identity_proof": null
+          },
+          {
+            "function_or_data_offset": 84,
+            "width": 8,
+            "relocation": {
+              "input_offset": 84,
+              "type": 1,
+              "addend": 0,
+              "target": {
+                "index": 4223,
+                "name": "clv",
+                "binding": "GLOBAL",
+                "type": "OBJECT",
+                "visibility": 0,
+                "section_index": 5839,
+                "value": 0,
+                "bytes": 8
+              }
+            },
+            "actual_final_value": 18446744073685836024,
+            "expected_final_value": 18446744073685836024,
+            "actual_target_provider": {
+              "name": "clv",
+              "final": {
+                "index": 4268,
+                "name": "clv",
+                "binding": "GLOBAL",
+                "type": "OBJECT",
+                "visibility": 0,
+                "section_index": 271,
+                "value": 18446744073685836024,
+                "bytes": 8
+              },
+              "owner": {
+                "object": "rust/mckernel_rust.o",
+                "input": {
+                  "index": 4223,
+                  "name": "clv",
+                  "binding": "GLOBAL",
+                  "type": "OBJECT",
+                  "visibility": 0,
+                  "section_index": 5839,
+                  "value": 0,
+                  "bytes": 8
+                },
+                "section": ".lbss.clv",
+                "placement": {
+                  "address": 18446744073685836024,
+                  "bytes": 8
+                }
+              }
+            },
+            "merged_literal_identity_proof": null
+          },
+          {
+            "function_or_data_offset": 308,
+            "width": 8,
+            "relocation": {
+              "input_offset": 308,
+              "type": 1,
+              "addend": 0,
+              "target": {
+                "index": 4230,
+                "name": "do_syscall",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 1224,
+                "value": 0,
+                "bytes": 1421
+              }
+            },
+            "actual_final_value": 18446744073684702128,
+            "expected_final_value": 18446744073684702128,
+            "actual_target_provider": {
+              "name": "do_syscall",
+              "final": {
+                "index": 3520,
+                "name": "do_syscall",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 1,
+                "value": 18446744073684702128,
+                "bytes": 1421
+              },
+              "owner": {
+                "object": "rust/mckernel_rust.o",
+                "input": {
+                  "index": 4230,
+                  "name": "do_syscall",
+                  "binding": "GLOBAL",
+                  "type": "FUNC",
+                  "visibility": 0,
+                  "section_index": 1224,
+                  "value": 0,
+                  "bytes": 1421
+                },
+                "section": ".ltext.do_syscall",
+                "placement": {
+                  "address": 18446744073684702128,
+                  "bytes": 1421
+                }
+              }
+            },
+            "merged_literal_identity_proof": null
+          }
+        ]
+      }
+    }
+  ],
+  "actual_typed_wait48_sixslots_new0": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-reader-p03-max-1/qualification-1/preserved-cohort-bindings-1/ACTUAL-WAIT-TABLE.json",
+    "bytes": 23781,
+    "sha256": "a913b1c172a4a31dacfbe9a0f9f6bd4fbcdeda554304fd366d9b4938e2654bc7"
+  },
+  "actual_complete_pending_signal_inlining": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-reader-p03-max-1/qualification-1/preserved-cohort-bindings-1/ACTUAL-PENDING-TERMINATION-INLINING.json",
+    "bytes": 32697,
+    "sha256": "0f11d926d7885dc4d0591333f4000a1287a6b9a9d172d639e845fc9d640b62c7"
+  },
+  "actual_caller_bytes_all_current_relocations": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-reader-p03-max-1/qualification-1/preserved-cohort-bindings-1/ACTUAL-CALLER-BYTES-AND-REFERENCES.json",
+    "bytes": 596815,
+    "sha256": "bf60ad97c07c6986371c93c666519cb031034bd53e4986c8d4d2fe47d3e6ce4a"
+  },
+  "four104_actual_arrays_and_real72B_public_types": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-reader-p03-max-1/qualification-1/preserved-cohort-bindings-1/ACTUAL-ABI104-AND-PUBLIC-TYPES.json",
+    "bytes": 10149,
+    "sha256": "780af27199c80328d5116bf169dc4ce5f601d16cc6a63d2126ee7b2aed944a87"
+  },
+  "physical_provider_data": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-reader-p03-max-1/qualification-1/preserved-cohort-bindings-1/OWNER-PROVIDER-JOINS.json",
+    "bytes": 5773404,
+    "sha256": "8c4062071b310c03aeeea2668ddff51aaf8f77706250bb4e1c85dd88e60d4006"
+  },
+  "changed_path": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-reader-p03-max-1/qualification-1/preserved-cohort-bindings-1/WAIT-TERMINATION-CHANGED-PATH-JOINS.json",
+    "bytes": 71808,
+    "sha256": "ce3d65fb15ddb02ffe1df0cb5f016e3022b07813400dcfbc1f10fa65dfef49d2"
+  },
+  "actual_commands": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-reader-p03-max-1/qualification-1/preserved-cohort-bindings-1/ACTUAL-RUST-AND-C-COMMANDS.json",
+    "bytes": 21358,
+    "sha256": "ce8137721a0f1ed5a6d21527ea5d58a3c340d6a0862bce41437198126fe07d9a"
+  },
+  "input_global_provider_joins": 4572,
+  "linker_defined_global_joins": 5,
+  "strong_import_occurrences": 257,
+  "unique_import_names": 257,
+  "named_undefined": [],
+  "prior34_current_Rust_retained": [
+    {
+      "name": "do_syscall",
+      "final": {
+        "index": 3520,
+        "name": "do_syscall",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684702128,
+        "bytes": 1421
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4230,
+          "name": "do_syscall",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1224,
+          "value": 0,
+          "bytes": 1421
+        },
+        "section": ".ltext.do_syscall",
+        "placement": {
+          "address": 18446744073684702128,
+          "bytes": 1421
+        }
+      }
+    },
+    {
+      "name": "interrupt_syscall",
+      "final": {
+        "index": 1255,
+        "name": "interrupt_syscall",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684863360,
+        "bytes": 204
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4849,
+          "name": "interrupt_syscall",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 2312,
+          "value": 0,
+          "bytes": 204
+        },
+        "section": ".ltext.interrupt_syscall",
+        "placement": {
+          "address": 18446744073684863360,
+          "bytes": 204
+        }
+      }
+    },
+    {
+      "name": "terminate_host",
+      "final": {
+        "index": 3132,
+        "name": "terminate_host",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073685276160,
+        "bytes": 957
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4292,
+          "name": "terminate_host",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 4683,
+          "value": 0,
+          "bytes": 957
+        },
+        "section": ".ltext.terminate_host",
+        "placement": {
+          "address": 18446744073685276160,
+          "bytes": 957
+        }
+      }
+    },
+    {
+      "name": "arch_rt_sigreturn_context_bridge",
+      "final": {
+        "index": 4287,
+        "name": "arch_rt_sigreturn_context_bridge",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684616176,
+        "bytes": 165
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4755,
+          "name": "arch_rt_sigreturn_context_bridge",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 937,
+          "value": 0,
+          "bytes": 165
+        },
+        "section": ".ltext.arch_rt_sigreturn_context_bridge",
+        "placement": {
+          "address": 18446744073684616176,
+          "bytes": 165
+        }
+      }
+    },
+    {
+      "name": "do_setresuid",
+      "final": {
+        "index": 4379,
+        "name": "do_setresuid",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684695232,
+        "bytes": 262
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 5008,
+          "name": "do_setresuid",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1212,
+          "value": 0,
+          "bytes": 262
+        },
+        "section": ".ltext.do_setresuid",
+        "placement": {
+          "address": 18446744073684695232,
+          "bytes": 262
+        }
+      }
+    },
+    {
+      "name": "do_setresgid",
+      "final": {
+        "index": 4275,
+        "name": "do_setresgid",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684694960,
+        "bytes": 263
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 5006,
+          "name": "do_setresgid",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1210,
+          "value": 0,
+          "bytes": 263
+        },
+        "section": ".ltext.do_setresgid",
+        "placement": {
+          "address": 18446744073684694960,
+          "bytes": 263
+        }
+      }
+    },
+    {
+      "name": "do_signal",
+      "final": {
+        "index": 4636,
+        "name": "do_signal",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684699408,
+        "bytes": 2707
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4341,
+          "name": "do_signal",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1220,
+          "value": 0,
+          "bytes": 2707
+        },
+        "section": ".ltext.do_signal",
+        "placement": {
+          "address": 18446744073684699408,
+          "bytes": 2707
+        }
+      }
+    },
+    {
+      "name": "arch_ptrace_regset_log_bridge",
+      "final": {
+        "index": 3913,
+        "name": "arch_ptrace_regset_log_bridge",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684613152,
+        "bytes": 53
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4736,
+          "name": "arch_ptrace_regset_log_bridge",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 907,
+          "value": 0,
+          "bytes": 53
+        },
+        "section": ".ltext.arch_ptrace_regset_log_bridge",
+        "placement": {
+          "address": 18446744073684613152,
+          "bytes": 53
+        }
+      }
+    },
+    {
+      "name": "arch_native_signal_bad_frame_bridge",
+      "final": {
+        "index": 2000,
+        "name": "arch_native_signal_bad_frame_bridge",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684606304,
+        "bytes": 59
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4704,
+          "name": "arch_native_signal_bad_frame_bridge",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 864,
+          "value": 0,
+          "bytes": 59
+        },
+        "section": ".ltext.arch_native_signal_bad_frame_bridge",
+        "placement": {
+          "address": 18446744073684606304,
+          "bytes": 59
+        }
+      }
+    },
+    {
+      "name": "arch_rt_sigreturn_xrstor_bridge",
+      "final": {
+        "index": 4000,
+        "name": "arch_rt_sigreturn_xrstor_bridge",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684616448,
+        "bytes": 29
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4760,
+          "name": "arch_rt_sigreturn_xrstor_bridge",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 945,
+          "value": 0,
+          "bytes": 29
+        },
+        "section": ".ltext.arch_rt_sigreturn_xrstor_bridge",
+        "placement": {
+          "address": 18446744073684616448,
+          "bytes": 29
+        }
+      }
+    },
+    {
+      "name": "terminate",
+      "final": {
+        "index": 4387,
+        "name": "terminate",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073685270416,
+        "bytes": 5669
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4429,
+          "name": "terminate",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 4679,
+          "value": 0,
+          "bytes": 5669
+        },
+        "section": ".ltext.terminate",
+        "placement": {
+          "address": 18446744073685270416,
+          "bytes": 5669
+        }
+      }
+    },
+    {
+      "name": "exit_group_log_bridge",
+      "final": {
+        "index": 818,
+        "name": "exit_group_log_bridge",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684706368,
+        "bytes": 52
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 5045,
+          "name": "exit_group_log_bridge",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1254,
+          "value": 0,
+          "bytes": 52
+        },
+        "section": ".ltext.exit_group_log_bridge",
+        "placement": {
+          "address": 18446744073684706368,
+          "bytes": 52
+        }
+      }
+    },
+    {
+      "name": "exit_group_terminate_bridge",
+      "final": {
+        "index": 2025,
+        "name": "exit_group_terminate_bridge",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684706480,
+        "bytes": 17
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 5049,
+          "name": "exit_group_terminate_bridge",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1258,
+          "value": 0,
+          "bytes": 17
+        },
+        "section": ".ltext.exit_group_terminate_bridge",
+        "placement": {
+          "address": 18446744073684706480,
+          "bytes": 17
+        }
+      }
+    },
+    {
+      "name": "exit_group_current_pid_bridge",
+      "final": {
+        "index": 2923,
+        "name": "exit_group_current_pid_bridge",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684706240,
+        "bytes": 123
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 5044,
+          "name": "exit_group_current_pid_bridge",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1252,
+          "value": 0,
+          "bytes": 123
+        },
+        "section": ".ltext.exit_group_current_pid_bridge",
+        "placement": {
+          "address": 18446744073684706240,
+          "bytes": 123
+        }
+      }
+    },
+    {
+      "name": "do_mmap",
+      "final": {
+        "index": 3872,
+        "name": "do_mmap",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684677744,
+        "bytes": 8387
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4319,
+          "name": "do_mmap",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1191,
+          "value": 0,
+          "bytes": 8387
+        },
+        "section": ".ltext.do_mmap",
+        "placement": {
+          "address": 18446744073684677744,
+          "bytes": 8387
+        }
+      }
+    },
+    {
+      "name": "do_fork",
+      "final": {
+        "index": 2126,
+        "name": "do_fork",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684668720,
+        "bytes": 6323
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4955,
+          "name": "do_fork",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1183,
+          "value": 0,
+          "bytes": 6323
+        },
+        "section": ".ltext.do_fork",
+        "placement": {
+          "address": 18446744073684668720,
+          "bytes": 6323
+        }
+      }
+    },
+    {
+      "name": "syscall_policy_do_syscall2_bridge",
+      "final": {
+        "index": 4051,
+        "name": "syscall_policy_do_syscall2_bridge",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073685252432,
+        "bytes": 170
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 7160,
+          "name": "syscall_policy_do_syscall2_bridge",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 4563,
+          "value": 0,
+          "bytes": 170
+        },
+        "section": ".ltext.syscall_policy_do_syscall2_bridge",
+        "placement": {
+          "address": 18446744073685252432,
+          "bytes": 170
+        }
+      }
+    },
+    {
+      "name": "syscall_do_syscall3_bridge",
+      "final": {
+        "index": 3377,
+        "name": "syscall_do_syscall3_bridge",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073685238912,
+        "bytes": 169
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 7226,
+          "name": "syscall_do_syscall3_bridge",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 4488,
+          "value": 0,
+          "bytes": 169
+        },
+        "section": ".ltext.syscall_do_syscall3_bridge",
+        "placement": {
+          "address": 18446744073685238912,
+          "bytes": 169
+        }
+      }
+    },
+    {
+      "name": "syscall_policy_do_syscall3_bridge",
+      "final": {
+        "index": 1473,
+        "name": "syscall_policy_do_syscall3_bridge",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073685238912,
+        "bytes": 169
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 8255,
+          "name": "syscall_policy_do_syscall3_bridge",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 4488,
+          "value": 0,
+          "bytes": 169
+        },
+        "section": ".ltext.syscall_do_syscall3_bridge",
+        "placement": {
+          "address": 18446744073685238912,
+          "bytes": 169
+        }
+      }
+    },
+    {
+      "name": "clear_host_pte_log_bridge",
+      "final": {
+        "index": 3422,
+        "name": "clear_host_pte_log_bridge",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684641088,
+        "bytes": 32
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4859,
+          "name": "clear_host_pte_log_bridge",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1080,
+          "value": 0,
+          "bytes": 32
+        },
+        "section": ".ltext.clear_host_pte_log_bridge",
+        "placement": {
+          "address": 18446744073684641088,
+          "bytes": 32
+        }
+      }
+    },
+    {
+      "name": "do_munmap_clear_host_bridge",
+      "final": {
+        "index": 2202,
+        "name": "do_munmap_clear_host_bridge",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684687360,
+        "bytes": 17
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4989,
+          "name": "do_munmap_clear_host_bridge",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1198,
+          "value": 0,
+          "bytes": 17
+        },
+        "section": ".ltext.do_munmap_clear_host_bridge",
+        "placement": {
+          "address": 18446744073684687360,
+          "bytes": 17
+        }
+      }
+    },
+    {
+      "name": "do_munmap_set_host_bridge",
+      "final": {
+        "index": 4293,
+        "name": "do_munmap_set_host_bridge",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684687392,
+        "bytes": 116
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4990,
+          "name": "do_munmap_set_host_bridge",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1200,
+          "value": 0,
+          "bytes": 116
+        },
+        "section": ".ltext.do_munmap_set_host_bridge",
+        "placement": {
+          "address": 18446744073684687392,
+          "bytes": 116
+        }
+      }
+    },
+    {
+      "name": "ptrace_wakeup_sig",
+      "final": {
+        "index": 2409,
+        "name": "ptrace_wakeup_sig",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073685095744,
+        "bytes": 1594
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 6798,
+          "name": "ptrace_wakeup_sig",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 3807,
+          "value": 0,
+          "bytes": 1594
+        },
+        "section": ".ltext.ptrace_wakeup_sig",
+        "placement": {
+          "address": 18446744073685095744,
+          "bytes": 1594
+        }
+      }
+    },
+    {
+      "name": "ptrace_wakeup_update_lock_bridge",
+      "final": {
+        "index": 1610,
+        "name": "ptrace_wakeup_update_lock_bridge",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073685031840,
+        "bytes": 171
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 8519,
+          "name": "ptrace_wakeup_update_lock_bridge",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 3323,
+          "value": 0,
+          "bytes": 171
+        },
+        "section": ".ltext.process_mcs_reader_lock_bridge",
+        "placement": {
+          "address": 18446744073685031840,
+          "bytes": 171
+        }
+      }
+    },
+    {
+      "name": "ptrace_wakeup_update_unlock_bridge",
+      "final": {
+        "index": 4802,
+        "name": "ptrace_wakeup_update_unlock_bridge",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073685032016,
+        "bytes": 135
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 8589,
+          "name": "ptrace_wakeup_update_unlock_bridge",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 3325,
+          "value": 0,
+          "bytes": 135
+        },
+        "section": ".ltext.process_mcs_reader_unlock_bridge",
+        "placement": {
+          "address": 18446744073685032016,
+          "bytes": 135
+        }
+      }
+    },
+    {
+      "name": "ptrace_detach_kfree_bridge",
+      "final": {
+        "index": 1488,
+        "name": "ptrace_detach_kfree_bridge",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073685083408,
+        "bytes": 32
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 6741,
+          "name": "ptrace_detach_kfree_bridge",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 3727,
+          "value": 0,
+          "bytes": 32
+        },
+        "section": ".ltext.ptrace_detach_kfree_bridge",
+        "placement": {
+          "address": 18446744073685083408,
+          "bytes": 32
+        }
+      }
+    },
+    {
+      "name": "ptrace_detach_do_kill_bridge",
+      "final": {
+        "index": 655,
+        "name": "ptrace_detach_do_kill_bridge",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073685083344,
+        "bytes": 17
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 6739,
+          "name": "ptrace_detach_do_kill_bridge",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 3724,
+          "value": 0,
+          "bytes": 17
+        },
+        "section": ".ltext.ptrace_detach_do_kill_bridge",
+        "placement": {
+          "address": 18446744073685083344,
+          "bytes": 17
+        }
+      }
+    },
+    {
+      "name": "ptrace_detach_wakeup_bridge",
+      "final": {
+        "index": 1887,
+        "name": "ptrace_detach_wakeup_bridge",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073685084768,
+        "bytes": 19
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 6745,
+          "name": "ptrace_detach_wakeup_bridge",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 3732,
+          "value": 0,
+          "bytes": 19
+        },
+        "section": ".ltext.ptrace_detach_wakeup_bridge",
+        "placement": {
+          "address": 18446744073685084768,
+          "bytes": 19
+        }
+      }
+    },
+    {
+      "name": "ptrace_wakeup_log_bridge",
+      "final": {
+        "index": 1183,
+        "name": "ptrace_wakeup_log_bridge",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073685095536,
+        "bytes": 55
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 6793,
+          "name": "ptrace_wakeup_log_bridge",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 3799,
+          "value": 0,
+          "bytes": 55
+        },
+        "section": ".ltext.ptrace_wakeup_log_bridge",
+        "placement": {
+          "address": 18446744073685095536,
+          "bytes": 55
+        }
+      }
+    },
+    {
+      "name": "syscall_policy_forward_context_bridge",
+      "final": {
+        "index": 4021,
+        "name": "syscall_policy_forward_context_bridge",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684626080,
+        "bytes": 17
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 8277,
+          "name": "syscall_policy_forward_context_bridge",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 971,
+          "value": 0,
+          "bytes": 17
+        },
+        "section": ".ltext.arch_syscall_forward_context_bridge",
+        "placement": {
+          "address": 18446744073684626080,
+          "bytes": 17
+        }
+      }
+    },
+    {
+      "name": "mprotect_set_host_vma_bridge",
+      "final": {
+        "index": 4817,
+        "name": "mprotect_set_host_vma_bridge",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684687392,
+        "bytes": 116
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 8317,
+          "name": "mprotect_set_host_vma_bridge",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1200,
+          "value": 0,
+          "bytes": 116
+        },
+        "section": ".ltext.do_munmap_set_host_bridge",
+        "placement": {
+          "address": 18446744073684687392,
+          "bytes": 116
+        }
+      }
+    },
+    {
+      "name": "syscall_forward_context_bridge",
+      "final": {
+        "index": 1416,
+        "name": "syscall_forward_context_bridge",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684626080,
+        "bytes": 17
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 8276,
+          "name": "syscall_forward_context_bridge",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 971,
+          "value": 0,
+          "bytes": 17
+        },
+        "section": ".ltext.arch_syscall_forward_context_bridge",
+        "placement": {
+          "address": 18446744073684626080,
+          "bytes": 17
+        }
+      }
+    },
+    {
+      "name": "syscall_forward_rt_sigprocmask_bridge",
+      "final": {
+        "index": 1895,
+        "name": "syscall_forward_rt_sigprocmask_bridge",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073685239824,
+        "bytes": 82
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 7232,
+          "name": "syscall_forward_rt_sigprocmask_bridge",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 4498,
+          "value": 0,
+          "bytes": 82
+        },
+        "section": ".ltext.syscall_forward_rt_sigprocmask_bridge",
+        "placement": {
+          "address": 18446744073685239824,
+          "bytes": 82
+        }
+      }
+    },
+    {
+      "name": "syscall_forward_sigaction_update_bridge",
+      "final": {
+        "index": 443,
+        "name": "syscall_forward_sigaction_update_bridge",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073685239920,
+        "bytes": 107
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 5016,
+          "name": "syscall_forward_sigaction_update_bridge",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 4500,
+          "value": 0,
+          "bytes": 107
+        },
+        "section": ".ltext.syscall_forward_sigaction_update_bridge",
+        "placement": {
+          "address": 18446744073685239920,
+          "bytes": 107
+        }
+      }
+    }
+  ],
+  "actual_C_ledger": [
+    {
+      "object": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+      "previous_count": 9,
+      "actual_count": 6,
+      "removed": [
+        "terminate_mcexec",
+        "terminate_mcexec_do_syscall_bridge",
+        "wait_host_wait4_bridge"
+      ],
+      "added": [],
+      "actual_names": [
+        "perf_event_open_do_syscall_bridge",
+        "do_execveat",
+        "syscall_execveat_bridge",
+        "sys_perf_event_open",
+        "util_thread",
+        "syscall_util_indicate_clone_disabled_bridge"
+      ]
+    }
+  ],
+  "entry": 18446744073684624288,
+  "arch_start": {
+    "name": "arch_start",
+    "final": {
+      "index": 2853,
+      "name": "arch_start",
+      "binding": "GLOBAL",
+      "type": "FUNC",
+      "visibility": 0,
+      "section_index": 1,
+      "value": 18446744073684624288,
+      "bytes": 207
+    },
+    "owner": {
+      "object": "rust/mckernel_rust.o",
+      "input": {
+        "index": 4780,
+        "name": "arch_start",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 965,
+        "value": 0,
+        "bytes": 207
+      },
+      "section": ".ltext.arch_start",
+      "placement": {
+        "address": 18446744073684624288,
+        "bytes": 207
+      }
+    }
+  },
+  "LOADS": [
+    {
+      "type": 1,
+      "flags": 5,
+      "offset": 4096,
+      "vaddr": 18446744073684389888,
+      "paddr": 18446744073684389888,
+      "file_bytes": 1025491,
+      "memory_bytes": 1025491,
+      "align": 4096
+    },
+    {
+      "type": 1,
+      "flags": 7,
+      "offset": 1032192,
+      "vaddr": 18446744073685417984,
+      "paddr": 18446744073685417984,
+      "file_bytes": 339968,
+      "memory_bytes": 640068,
+      "align": 4096
+    }
+  ],
+  "notes": [
+    {
+      "section": ".note.mckernel.boot",
+      "owner": "MCKERNEL",
+      "kind": 1296255745,
+      "descriptor_hex": "04000000000c0600c01d000001000000",
+      "descriptor_u32": [
+        4,
+        396288,
+        7616,
+        1
+      ]
+    },
+    {
+      "section": ".note.gnu.build-id",
+      "owner": "GNU",
+      "kind": 3,
+      "descriptor_hex": "10dbef1bfbcf6499b0ef79d29396a7addcb4c09b",
+      "descriptor_u32": null
+    }
+  ],
+  "all_allocated_LOAD_covered": true,
+  "no_INTERP_DYNAMIC_runtime_relocations": true,
+  "archC0FUNC_0allocatedexec_0globals": true,
+  "exact_actual_metadata_records": 23,
+  "literal_passive_commands": 26,
+  "actual_metadata": [
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-image-operation-sdk-max-1/metadata-1/image-elf.stdout",
+      "bytes": 47026,
+      "sha256": "0072e573280692c32a48f773ad72c069356c0ff9886adc89dab308d91b122fd9"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-image-operation-sdk-max-1/metadata-1/image-symbols-relocations.stdout",
+      "bytes": 438088,
+      "sha256": "cf9c5b5af98ee51665452eb9dca69f6bbf120aa580c0426e99e56f4da6f8e960"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-image-operation-sdk-max-1/metadata-1/affected-constituent-symbols-relocations.stdout",
+      "bytes": 38588774,
+      "sha256": "aea291657581ea6791591ec85e8e78f4367dfc1b35d347a1b441e8c5297da3d2"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-image-operation-sdk-max-1/metadata-1/image-nm.stdout",
+      "bytes": 240355,
+      "sha256": "0fbf3879bbcc72d9d8f1624d76a3f6b12968642f523b6c0012d9a751aeb7497b"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-image-operation-sdk-max-1/metadata-1/image-map.stdout",
+      "bytes": 994137,
+      "sha256": "8f0fca37b46f93de182f4269e887eadf6436d893907c42ca395b3c4a3556ec48"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-image-operation-sdk-max-1/metadata-1/artifact-identities.sha256",
+      "bytes": 2205,
+      "sha256": "4f1e20784782bb7383d573f221f93c158b60cd2581b4741b46067b4b6b95838a"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-image-operation-sdk-max-1/metadata-1/artifact-modes.stdout",
+      "bytes": 1249,
+      "sha256": "693e41b2b6273af9b88a9dfe6d62c233ec25f56797885bf3cba5ee0553e762e0"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-image-operation-sdk-max-1/metadata-1/regenerated-CMakeCache.txt",
+      "bytes": 30235,
+      "sha256": "4370c59a693599c441178bf55018a0146096fbee28a4978e2feed3787b0c1533"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-image-operation-sdk-max-1/metadata-1/regenerated-compile_commands.json",
+      "bytes": 74270,
+      "sha256": "8af18c2b9e08c56b80b88e3fe0ff94b18bbf267f8f1e414224307dfec7e1fca3"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-image-operation-sdk-max-1/metadata-1/regenerated-flags.make",
+      "bytes": 7310,
+      "sha256": "a9a283da0377bea42c8ce3be1a94e1fe63f1b5609bff5bc9f42468632f4dfa28"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-image-operation-sdk-max-1/metadata-1/regenerated-build.make",
+      "bytes": 51252,
+      "sha256": "f12b6e02c0525cc79111ccf050584978d555421ed6f9dfb91d4684663eba1136"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-image-operation-sdk-max-1/metadata-1/regenerated-link.txt",
+      "bytes": 759,
+      "sha256": "d9d50ed84770a8bff5af2371e19245200d99d61fe3cda28e880bd88e6669e428"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-image-operation-sdk-max-1/metadata-1/regenerated-link.d",
+      "bytes": 1290,
+      "sha256": "a10ae257f2d0672f5ce8048b889fd83ee656e715aa87561d769d848f79f53a28"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-image-operation-sdk-max-1/metadata-1/regenerated-mckernel_rust.d",
+      "bytes": 11635,
+      "sha256": "53ae3203d2fa7abc7663e46a8225f31085a3eaf01b33f34874162dde4f96c71c"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-image-operation-sdk-max-1/metadata-1/regenerated-mckernel_rust.raw.d",
+      "bytes": 12423,
+      "sha256": "aba69dfcb24a52c4a90dfbfc4ea7df9c9c57065d39dbdd84c1eb2caf8487da9f"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-image-operation-sdk-max-1/metadata-1/regenerated-Rust-build.make",
+      "bytes": 20188,
+      "sha256": "4036d608c934cc586f6b275025adb97d3dda9f99ed1b8c22cf3f170a9f5f98b7"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-image-operation-sdk-max-1/metadata-1/C-tables-and-ABI-rodata.stdout",
+      "bytes": 12403,
+      "sha256": "cd24f9989c4e9abb9a5f43867ee2f0a90f7b49056537d3d5ac129f20f5d90c2c"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-image-operation-sdk-max-1/metadata-1/Rust-ABI104-rodata.stdout",
+      "bytes": 3493,
+      "sha256": "5cf0ff94aa51ca969326fd7a596457e0eeb90fb86e8aac156de3c39aef6344db"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-image-operation-sdk-max-1/metadata-1/image-tables-and-ABI-rodata.stdout",
+      "bytes": 58567,
+      "sha256": "6cdeadd08355799596f54396213afd482e1521e967ce7d422f2e8f3bca84d51a"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-image-operation-sdk-max-1/metadata-1/new-wait_host_wait4_bridge-Rust-disassembly.stdout",
+      "bytes": 223788,
+      "sha256": "468d34256804a54154de350061f4e64b82319bc79b297567deea76af86670d0e"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-image-operation-sdk-max-1/metadata-1/new-wait_host_wait4_bridge-final-disassembly.stdout",
+      "bytes": 2548,
+      "sha256": "0fefd9a1d3ebb9a3c5b1550f32d5e64f9a87fcb398d16af8eb5309f48f4500df"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-image-operation-sdk-max-1/metadata-1/new-terminate_mcexec-Rust-disassembly.stdout",
+      "bytes": 225539,
+      "sha256": "b1ad2fc6a297e5945472a233daa20f8d18fb0f4f7ae675cf7928a85b2f4cdd52"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-image-operation-sdk-max-1/metadata-1/new-terminate_mcexec-final-disassembly.stdout",
+      "bytes": 4781,
+      "sha256": "d211a69ebf1b73108f913f6b46eea54da01ff44e42c0a9b12bffe32d9634820a"
+    }
+  ],
+  "actual_positive_clients": 25,
+  "actual_producer_clients": 13,
+  "actual_reader_clients": 12,
+  "actual_lifecycle": [
+    {
+      "phase": "build",
+      "actual_positive_clients": 13,
+      "actual_labels": [
+        "source-commit.before",
+        "IHK-commit.before",
+        "running-preflight",
+        "names-preflight",
+        "build-create",
+        "build-profile",
+        "build-running-inspect",
+        "build-payload",
+        "build-terminal",
+        "build-container-wait",
+        "build-owned-remove",
+        "source-commit.after",
+        "IHK-commit.after"
+      ],
+      "result": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-image-operation-sdk-max-1/execution-1/RESULT.json",
+        "bytes": 15748,
+        "sha256": "ce8d2f9009eb514446d48496bd7a1b948a2b08c4c759679e131c44163124bb45"
+      },
+      "profile": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-image-operation-sdk-max-1/execution-1/build-PROFILE.json",
+        "bytes": 19338,
+        "sha256": "1a0ec35b13b26011f54dbebdd006674f32eb7836d46e44c5a72d0d2f2c485454"
+      },
+      "terminal": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-image-operation-sdk-max-1/execution-1/build-TERMINAL.json",
+        "bytes": 19998,
+        "sha256": "6debcae909ac5a62289dfab47e2769935b8bf048a5a553709e8a81d3cb7d14ae"
+      },
+      "full_Root_completion": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-image-operation-sdk-max-1/ROOT-EXEC-COMPLETION.json",
+        "bytes": 632,
+        "sha256": "e39c0115fda5fbf32f675fac305440b14ac4f2abd93cca4b2862aba8e8c98c5c"
+      },
+      "positive_release": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-image-operation-sdk-max-1/execution-1/RESOURCE-RELEASE.json",
+        "bytes": 163,
+        "sha256": "109f89adb2d5cf7f892563035a3a7121884ba5465dcf5b296dbb1c1076ec2b95"
+      }
+    },
+    {
+      "phase": "metadata",
+      "actual_positive_clients": 12,
+      "actual_labels": [
+        "source-commit.before",
+        "IHK-commit.before",
+        "running-preflight",
+        "names-preflight",
+        "metadata-create",
+        "metadata-profile",
+        "metadata-running-inspect",
+        "metadata-payload",
+        "metadata-terminal",
+        "metadata-container-wait",
+        "metadata-owned-remove",
+        "source-commit.after"
+      ],
+      "result": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-image-operation-sdk-max-1/reader-1/execution-1/RESULT.json",
+        "bytes": 16347,
+        "sha256": "12e6fb78f2d61cb4176965958866ef0b56b555c8ea51e9baea03c265e4368da3"
+      },
+      "profile": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-image-operation-sdk-max-1/reader-1/execution-1/metadata-PROFILE.json",
+        "bytes": 9116,
+        "sha256": "f210e4660363ac6675bee31376a439af276e263405a512946e177ef7a3a588ca"
+      },
+      "terminal": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-image-operation-sdk-max-1/reader-1/execution-1/metadata-TERMINAL.json",
+        "bytes": 9776,
+        "sha256": "1d95b6967317c658a8f7f1ee0d3032e82caa55e2a94099e7c8cae58d97353a96"
+      },
+      "full_Root_completion": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-image-operation-sdk-max-1/reader-1/ROOT-EXEC-COMPLETION.json",
+        "bytes": 619,
+        "sha256": "10ee36287e1e1c5d5994859ecd70ea4396dd9d68648e73f01d6634090fd5466d"
+      },
+      "positive_release": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-image-operation-sdk-max-1/reader-1/execution-1/RESOURCE-RELEASE.json",
+        "bytes": 163,
+        "sha256": "098ea2483cd5addcee02559b66ffbcc4ef834bfc0952667016a72bdc9e54cb5e"
+      }
+    }
+  ],
+  "actual_source_and_HOST_tests_reused": {
+    "new_wait_actual_qualification": {
+      "bytes": 16397,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/qualification-1/QUALIFICATION.json",
+      "sha256": "d61a355e24c7060efcf795b12717f7162ac8bf04051a5b12e230404eaef06997"
+    },
+    "new_wait_actual_result": {
+      "bytes": 843,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/qualification-1/RESULT.json",
+      "sha256": "f5435e392258f0ffe9db8439ae68fb752db6082f38b05b49bce8ac9b17c80b04"
+    },
+    "new_wait_operation": {
+      "bytes": 22261,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-review-p03-max-1/REVIEW.json",
+      "sha256": "9122741eafeefdad3e36c9b8d692e5f1cdbabedfac8fd0d3e988927990a0ccd1"
+    },
+    "termination_source": {
+      "bytes": 22934,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/signal-termination-host-provider-review-p04tests-max-1/REVIEW.json",
+      "sha256": "e9a6ab39e77462ce042e7908d96f36b76f4b7c92852ad975e2911c5dd485ba53"
+    },
+    "wait_source": {
+      "bytes": 20015,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-review-sourceacq-max-1/candidate-1/REVIEW.json",
+      "sha256": "4a6cfc793f878a6836bd4952b0090ac5796937258e5a81bae7fc4fc8f645204e"
+    }
+  },
+  "source_semantic_contracts": [
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-1/CONSUMER-CONTRACT.json",
+      "bytes": 27521,
+      "sha256": "a9f7d2f7981246f6cf7bf078f41adcaa3eb717ead4bf4ff229d838edb180c32f"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/signal-termination-host-provider-1/CONTRACT.json",
+      "bytes": 9609,
+      "sha256": "56b6b244b4a684a9aa69ada6cfe3bf6eb638960eae8455693e4a84a53d4ba52e"
+    }
+  ],
+  "whole_original_condition_map": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-reader-p03-max-1/qualification-1/ORIGINAL-03-04-CONDITION-MAP.json",
+    "bytes": 14154,
+    "sha256": "3c98df1488a0cf000b3f764c9128e75ccca7a5a4f4cbfa2dcba73b96f42284d5"
+  },
+  "component_method": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-reader-p03-max-1/qualify_saved_wait_termination.py",
+    "bytes": 30462,
+    "sha256": "7f13e659b2c9ffd8fbd3cd69180b92cc528b4dcc8b01abc570ccf1079d908a29"
+  },
+  "component_method_actual_attempt": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-reader-p03-max-1/QUALIFIER-ATTEMPT-1.json",
+    "bytes": 893,
+    "sha256": "1a9ce51bf4dc1313e9d03d63c69ddbb801eb60585d4fddd62ece32eca2570b77"
+  },
+  "component_method_first_attempt_exit": 0,
+  "raw_component_facts_retained": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-reader-p03-max-1/qualification-1/COMPONENT-FACTS.json",
+    "bytes": 60653,
+    "sha256": "26b6634dd8ec277ac31670351fd30b49a59899a2524b598584c7a51e4eebdf69"
+  },
+  "actual_inline_checks": "22 exact instruction/pointer/branch checks on saved currentcaller bytes; fullinput/final bytes and every relocation already physically joined, no extra readelf/disassembly/tool or ELF parser rerun.",
+  "raw_build_warning_lines": [],
+  "whole_region_or_native_or_parent_acceptance_claimed": false,
+  "canonical_index_or_score_mutated": false,
+  "all_original_source_native_replay_ownership_UNKNOWN_holds_preserved": true,
+  "actions": "Pure saved JSON/text/ELF byte analysis after both fullpositiveRootreceipts, then metadata-only immutablepath binding and savedbyte annotation. No compiler/helper/test/reader/SUT/native replay, no canonical/cache/control edits."
+}

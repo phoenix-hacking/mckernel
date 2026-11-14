@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-010",
+  "packet_version": 1,
+  "context_sha256": "ae784f033e5ddbcb2367a41d372568d821566bae4f11248cdf1e1a40483826a1",
+  "started_utc": "2026-09-09T10:12:00Z",
+  "finished_utc": "2026-09-09T10:12:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "startup.exit-status",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/startup/startup.exit-status.c",
+      "oracle": "scripts/application-tests/oracles/startup.exit-status.json",
+      "changed_files": [
+        "scripts/application-tests/cases/startup/startup.exit-status.c",
+        "scripts/application-tests/oracles/startup.exit-status.json"
+      ],
+      "unresolved_oracle_notes": [
+        "Canonical empty-stream record and reviewed input/oracle bindings require confirmation before execution."
+      ],
+      "max_reviewer_question": "Confirm raw WIFEXITED/WEXITSTATUS 37 with empty stdout and stderr."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/startup/startup.exit-status.c", "sha256": "f37ed904f0fae48d762f8f8166ea4755d1dd0f2643fa793d36cc55264005ff40"},
+    {"path": "scripts/application-tests/oracles/startup.exit-status.json", "sha256": "506acd81345112b4435a48e38bb6d9cd6fd95f5fe443f5f23a616e9ac41bca8d"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-010.json --emit-context /tmp/application-packet-010-context.json", "outcome": "PASS; metadata only"},
+    {"command": "python3 -m json.tool < report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": [
+    "startup.exit-status: canonical empty-stream record and exact input binding"
+  ],
+  "blocked_execution_capabilities": ["current-inputs", "runtime-transport-fault-injection", "runner-contract"],
+  "first_failure_event": null,
+  "max_escalation": ["Confirm raw wait-status evidence requirements before runtime execution."],
+  "next_packet_id": "packet-011"
+}

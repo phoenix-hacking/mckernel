@@ -1,0 +1,22 @@
+{
+  "schema": "mckernel.daemon-final-suffix.source-checks.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": "2026-10-27T17:38:51.705466+00:00",
+  "status": "PASS_SOURCE_CHECKS_ONLY",
+  "retained_validated_cases": 26,
+  "current_files_verified": 217,
+  "syntax_files": 2,
+  "accepted_literal_helper_roles": [
+    "prefix",
+    "audit",
+    "rustio"
+  ],
+  "capture_adapter_unchanged": true,
+  "capture_helper_unchanged": true,
+  "capture_adapter_caveat": "Existing accepted owned_process adapter extracts the pinned h990 function closure and monitored_wait wrapper; not represented as direct whole-file import. Root independent execution review must retain the existing accepted contract.",
+  "distinct_helper_and_capture_names": true,
+  "isolated_python_fixture_import_explicit": true,
+  "workload_invocations": 0,
+  "compilers": 0,
+  "native_acceptance": false
+}

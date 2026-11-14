@@ -1,0 +1,91 @@
+--- a/main.rs
++++ b/main.rs
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ //! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+-//! Fixed original process-exec-wait235 PID1 collector; no runtime profile modes.
++//! Fixed paired valid idle mcinspect diagnostic successor; no process235 payload.
+ #![allow(unsafe_op_in_unsafe_fn)]
+ #[cfg(not(all(
+     target_os = "linux",
+@@ -9,16 +9,13 @@
+     target_pointer_width = "64"
+ )))]
+ compile_error!("this collector's reviewed FFI profile is Linux x86_64 little-endian only");
+-#[cfg(test)]
+-mod host_tests;
+ mod profile;
+ mod report;
+-mod startup_retirement;
++mod idle_probe;
++#[allow(dead_code)] // Reused generic APIs include application-only helpers.
+ mod supervisor;
+-#[cfg(test)]
+-mod tests;
+ 
+-use profile::{BOOT_ARGV, PAYLOAD_ARGV, PAYLOAD_CWD};
++use profile::BOOT_ARGV;
+ const RAW_LIMIT: usize = 262_144;
+ use std::ffi::{c_char, c_int, c_void, CString};
+ use std::fs::{File, OpenOptions};
+@@ -215,7 +212,7 @@
+     let mut loaded = 0;
+     let mut empty = false;
+     let mut saved_level = None;
+-    let mut final_kernel_log: Option<Vec<u8>> = None;
++    let final_kernel_log: Option<Vec<u8>> = None;
+     let operation = (|| -> Check<()> {
+         for (kind, path) in [
+             ("proc", "/proc"),
+@@ -305,47 +302,10 @@
+             &mut safe,
+             console.as_ref(),
+         )?;
+-        payload = supervise(
+-            "/bin/mcexec",
+-            PAYLOAD_ARGV,
+-            PAYLOAD_ENV,
+-            Some(PAYLOAD_CWD),
+-            10_000,
+-            outer,
+-        );
+-        if !payload.clean {
+-            safe = false;
+-        }
+-        save("/case/evidence/payload.stdout", &payload.out.data, outer)?;
+-        save("/case/evidence/payload.stderr", &payload.err.data, outer)?;
+-        let begin_retirement = now_ns();
+-        let end = bounded_deadline(begin_retirement + 5000 * MS, outer, 0);
+-        if begin_retirement == 0 {
+-            return Err("retirement clock unavailable".into());
+-        }
+-        let mut retirement = startup_retirement::StartupRetirement::new(payload.leader_pid)?;
+-        let mut capture = vec![0u8; RAW_LIMIT];
+-        loop {
+-            let current = now_ns();
+-            if current == 0 || current >= end {
+-                return Err("original post-reap retirement deadline".into());
+-            }
+-            // READ_ALL is non-destructive. Intermediate snapshots remain private;
+-            // only one genuine final snapshot is eventually saved/published.
+-            let count = unsafe { klogctl(3, capture.as_mut_ptr().cast(), capture.len() as i32) };
+-            if count < 0 || count == capture.len() as i32 {
+-                return Err("retirement raw kernel snapshot read/overflow".into());
+-            }
+-            let raw = &capture[..count as usize];
+-            // Preserve even the actual offending raw snapshot on parser failure.
+-            final_kernel_log = Some(raw.to_vec());
+-            let namespace = procfs_empty();
+-            let observed_at = now_ns();
+-            if retirement.observe(raw, observed_at, end, namespace)? {
+-                empty = true;
+-                break;
+-            }
+-            sleep_ms(10);
++        payload = idle_probe::capture_pair(outer, &mut safe, console.as_ref())?;
++        empty = procfs_empty()?;
++        if !empty {
++            return Err("idle diagnostic has unexpected user process nodes".into());
+         }
+         Ok(())
+     })();

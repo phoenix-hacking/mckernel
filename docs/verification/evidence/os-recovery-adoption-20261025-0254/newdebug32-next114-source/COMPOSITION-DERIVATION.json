@@ -1,0 +1,1023 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "runtime_authority": null,
+  "planned_corrected113_base": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/final-scope-source-1/SOURCE-READY.json",
+    "bytes": 6516,
+    "sha256": "7340d457ebb4735240452c6c009fd9b0a0da98539f69b30629437430fca2526b"
+  },
+  "foreground_ready": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/READY.SOURCE-ONLY.json",
+    "bytes": 4100,
+    "sha256": "e7d77b16826fb96189c35a07f444157eadbc75e3290b618bbd4c24451c0cbd9c"
+  },
+  "actual_HOST": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1/independent-actual-review-1/REVIEW.json",
+    "bytes": 33511,
+    "sha256": "11d85a1b1060b8a10d98f4fda3428872d6132dae390bcc660cc77fa19c19c4a5"
+  },
+  "C_base": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/candidate/kernel/process.c",
+    "bytes": 221203,
+    "sha256": "dd7fd305dd648a8f9d81e3503dab133ab3083fc8b50597ebc0e1577504c14457"
+  },
+  "C_post": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/newdebug32-next114-source/candidate/kernel/process.c",
+    "bytes": 226577,
+    "sha256": "110e3e820fed06adbbf647e2f52bc06a157b7001653157863e7e6733b878d172"
+  },
+  "CMake_base": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/candidate/kernel/CMakeLists.txt",
+    "bytes": 36627,
+    "sha256": "4b8cb0c5b61991618a6effbd34d1a64315bdc2a4676d6c899e7227023cbb29fe"
+  },
+  "CMake_insertions": [
+    {
+      "anchor": "endif()\n\noption(ENABLE_RUST_KERNEL \"Enable Rust code in the McKernel image\" ON)\n",
+      "addition": "# Functional OS migration: paired typed Rust storage for 32 public debug objects.\n# The 14 C-local descriptors retain their existing C config owners.\noption(ENABLE_RUST_PROCESS_VERBOSE_DATA \"Use typed Rust process debug globals\" ON)\noption(ENABLE_PROCESS_DEBUG_PRINT \"Initialize process dynamic debug as enabled\" OFF)\nset(MCKERNEL_PROCESS_DDEBUG_FLAGS 0)\nif (ENABLE_PROCESS_DEBUG_PRINT)\n    set(MCKERNEL_PROCESS_DDEBUG_FLAGS 1)\nendif()\nset(MCKERNEL_PROCESS_C_FILE \"${CMAKE_CURRENT_SOURCE_DIR}/process.c\")\n# Restrict unsupported C literal spellings; C also asserts the actual __FILE__.\nif (NOT MCKERNEL_PROCESS_C_FILE MATCHES \"^/[A-Za-z0-9_./+-]+$\")\n    message(FATAL_ERROR \"Unsupported process.c path for exact C/Rust debug identity\")\nendif()\n"
+    },
+    {
+      "anchor": "\t\t\"${CMAKE_CURRENT_SOURCE_DIR}/rust/native_xstate.rs\"\n\t)\n\t\tset(RUST_KERNEL_CFG)\n",
+      "addition": "        file(GENERATE OUTPUT \"${CMAKE_CURRENT_BINARY_DIR}/rust/process_verbose_build_inputs.txt\"\n            CONTENT \"selected=${ENABLE_RUST_PROCESS_VERBOSE_DATA}\\nfile=${MCKERNEL_PROCESS_C_FILE}\\nflags=${MCKERNEL_PROCESS_DDEBUG_FLAGS}\\n\")\n        list(APPEND RUST_KERNEL_SRCS\n            \"${CMAKE_CURRENT_BINARY_DIR}/rust/process_verbose_build_inputs.txt\")\n        if (ENABLE_RUST_PROCESS_VERBOSE_DATA)\n            list(APPEND RUST_KERNEL_CFG \"--cfg\" \"process_verbose_data\")\n            list(APPEND RUST_KERNEL_SRCS\n                \"${CMAKE_CURRENT_SOURCE_DIR}/rust/process_verbose_data.rs\"\n                \"${MCKERNEL_PROCESS_C_FILE}\"\n                \"${PROJECT_SOURCE_DIR}/lib/include/ihk/debug.h\")\n        endif()\n"
+    },
+    {
+      "anchor": "\t\t\tMCKERNEL_RUST_BUILDID=${BUILDID}\n\t\t\tMCKERNEL_X86_ENABLE_SSE=${MCKERNEL_X86_ENABLE_SSE}\n\t\t\tMCKERNEL_CPU_C_FILE=${MCKERNEL_CPU_C_FILE}\n",
+      "addition": "            \"MCKERNEL_PROCESS_C_FILE=${MCKERNEL_PROCESS_C_FILE}\"\n            \"MCKERNEL_PROCESS_DDEBUG_FLAGS=${MCKERNEL_PROCESS_DDEBUG_FLAGS}\"\n"
+    },
+    {
+      "anchor": "  @ONLY\n  )\n\n",
+      "addition": "# Apply after existing source properties, which otherwise overwrite definitions.\nif (ENABLE_PROCESS_DEBUG_PRINT)\n    set_property(SOURCE \"${MCKERNEL_PROCESS_C_FILE}\" APPEND PROPERTY\n        COMPILE_DEFINITIONS DEBUG_PRINT_PROCESS)\nendif()\nif (RUST_KERNEL_ENABLED AND ENABLE_RUST_PROCESS_VERBOSE_DATA)\n    set_property(SOURCE \"${MCKERNEL_PROCESS_C_FILE}\" APPEND PROPERTY\n        COMPILE_DEFINITIONS MCKERNEL_RUST_PROCESS_VERBOSE_DATA\n        \"MCKERNEL_PROCESS_DDEBUG_FLAGS=${MCKERNEL_PROCESS_DDEBUG_FLAGS}\"\n        \"MCKERNEL_PROCESS_DDEBUG_FILE=\\\"${MCKERNEL_PROCESS_C_FILE}\\\"\")\nendif()\n\n"
+    }
+  ],
+  "source_controls": [
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": false,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": false,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": false,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": false,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": false,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": false,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": false,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": false,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": false,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": false,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": false,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": false,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": false,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": false,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": false,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": false,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": false,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": false,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": false,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": false,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": false,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": false,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": false,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": false,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": false,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": false,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": false,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": false,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": false,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": false,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": false,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": false,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": true
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": true
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": true
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": true
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": true
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": true
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": true
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": true
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": true
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": true
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": true
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": true
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": true
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": true
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": true
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": false,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": true
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": true
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": true
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": true
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": true
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": true
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": true
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": true
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": false,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": true
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": true
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": true
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": true
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": false,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": true
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": true
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": false,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": true
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": false,
+      "verbose": true
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": false
+    },
+    {
+      "MCKERNEL_RUST_PROCESS_HELPERS": true,
+      "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE": true,
+      "ENABLE_TOFU": true,
+      "PROFILE_ENABLE": true,
+      "ARCH_FAST_MEMSET": true,
+      "DEBUG_PRINT_PROCESS": true,
+      "verbose": true
+    }
+  ],
+  "active_original_identity_checks": 247440,
+  "outer_guard_restores": [
+    {
+      "original_physical": 347,
+      "reset": "#ifdef MCKERNEL_RUST_PROCESS_HELPERS\n#line 247\n#else\n#line 228\n#endif\n"
+    },
+    {
+      "original_physical": 586,
+      "reset": "#line 442\n"
+    },
+    {
+      "original_physical": 594,
+      "reset": "#line 450\n"
+    },
+    {
+      "original_physical": 2239,
+      "reset": "#ifdef MCKERNEL_RUST_PROCESS_HELPERS\n#line 1719\n#else\n#line 1704\n#endif\n"
+    },
+    {
+      "original_physical": 2450,
+      "reset": "#line 1880\n"
+    },
+    {
+      "original_physical": 2815,
+      "reset": "#line 2098\n"
+    },
+    {
+      "original_physical": 2831,
+      "reset": "#line 2114\n"
+    },
+    {
+      "original_physical": 2928,
+      "reset": "#ifdef MCKERNEL_RUST_PROCESS_HELPERS\n#line 2208\n#else\n#line 2182\n#endif\n"
+    },
+    {
+      "original_physical": 3240,
+      "reset": "#ifdef MCKERNEL_RUST_PROCESS_HELPERS\n#line 2341\n#else\n#line 2329\n#endif\n"
+    },
+    {
+      "original_physical": 3409,
+      "reset": "#line 2458\n"
+    },
+    {
+      "original_physical": 3453,
+      "reset": "#line 2502\n"
+    },
+    {
+      "original_physical": 3549,
+      "reset": "#line 2573\n"
+    },
+    {
+      "original_physical": 3590,
+      "reset": "#line 2614\n"
+    },
+    {
+      "original_physical": 3955,
+      "reset": "#line 2873\n"
+    },
+    {
+      "original_physical": 3968,
+      "reset": "#line 2886\n"
+    },
+    {
+      "original_physical": 3977,
+      "reset": "#line 2895\n"
+    },
+    {
+      "original_physical": 3989,
+      "reset": "#line 2841\n"
+    },
+    {
+      "original_physical": 4014,
+      "reset": "#line 2866\n"
+    },
+    {
+      "original_physical": 4036,
+      "reset": "#line 2888\n"
+    },
+    {
+      "original_physical": 4065,
+      "reset": "#line 2917\n"
+    },
+    {
+      "original_physical": 4080,
+      "reset": "#line 2932\n"
+    },
+    {
+      "original_physical": 4813,
+      "reset": "#ifdef MCKERNEL_RUST_PROCESS_HELPERS\n#line 3504\n#else\n#line 3494\n#endif\n"
+    },
+    {
+      "original_physical": 6700,
+      "reset": "#ifdef MCKERNEL_RUST_PROCESS_HELPERS\n#line 4933\n#else\n#line 4921\n#endif\n"
+    }
+  ],
+  "Rust_previous_files": 118,
+  "Rust_current_files": 119,
+  "Rust_existing_storage_unmodified": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/newdebug32-next114-source/rust-subtree/process_verbose_data.rs",
+    "bytes": 11499,
+    "sha256": "8eaa8f0bff3d10a433fa88b899e56b9bd4aefd719c49f15c1487ffe335d65b27"
+  },
+  "LOCAL14_C_retained": true,
+  "all_config_source_unchanged": true,
+  "actual_build_release": false
+}

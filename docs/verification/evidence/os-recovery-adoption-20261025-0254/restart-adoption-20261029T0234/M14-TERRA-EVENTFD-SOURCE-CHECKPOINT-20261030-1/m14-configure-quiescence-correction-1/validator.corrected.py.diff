@@ -1,0 +1,57 @@
+--- /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-configure-source-closure-1/validator.closure.py
++++ validator.corrected.py
+@@ -134,13 +134,47 @@
+     _require(all(c.get('cwd')=='/work' and isinstance(c.get('argv'),list) and c['argv'] and
+                  all(isinstance(x,str) and x and '\0' not in x for x in c['argv']) for c in commands), 'bad command schema')
+     a=commands[0]['argv']
+-    _require(a[:7]==['/usr/bin/cmake','-S','/src','-B','/work/output/build','-G','Unix Makefiles'], 'configure argv differs')
+-    _require([x for x in a if x.startswith('-DMCKERNEL_M14_NONHELD13_DATA32_EXPERIMENTAL=')]==['-DMCKERNEL_M14_NONHELD13_DATA32_EXPERIMENTAL=ON'] and
+-             [x for x in a if x.startswith('-DKERNEL_DIR=')]==['-DKERNEL_DIR=/out/build'], 'ON or kernel selector differs')
+-    for flag in ('UNAME_R','MCKERNEL_M14_EXPECTED_UNAME_R','MCKERNEL_M14_EXPECTED_MAP_KERNEL_START',
+-                 'MCKERNEL_M14_EXPECTED_MAKE_SHA256','KBUILD_MAKE_FLAGS','MCKERNEL_M14_EXPECTED_KBUILD_MAKE_FLAGS'):
+-        values=[x for x in a if x.startswith('-D'+flag+'=')]
+-        _require(len(values)==1 and len(values[0])>len('-D'+flag+'='), 'missing or duplicate '+flag)
++    # Full argv comparison rejects typed definitions, -U, -C and all extra options.
++    fixed = ['/usr/bin/cmake',
++ '-S',
++ '/src',
++ '-B',
++ '/work/output/build',
++ '-G',
++ 'Unix Makefiles',
++ '-DCMAKE_BUILD_TYPE=Debug',
++ '-DCMAKE_EXPORT_COMPILE_COMMANDS=ON',
++ '-DCMAKE_C_COMPILER=/usr/bin/cc',
++ '-DCMAKE_ASM_COMPILER=/usr/bin/cc',
++ '-DCMAKE_LINKER=/usr/bin/ld',
++ '-DCMAKE_MAKE_PROGRAM=/usr/bin/make',
++ '-DRUSTC=/nightly/bin/rustc',
++ '-DBUILD_TARGET=smp-x86',
++ '-DKERNEL_DIR=/out/build',
++ '-DENABLE_RUST_KERNEL=ON',
++ '-DMCKERNEL_M14_NONHELD13_DATA32_EXPERIMENTAL=ON',
++ '-DMCKERNEL_HOST_IRQ_ABI=linux-6.12',
++ '-DENABLE_PERF=ON',
++ '-DPROFILE_ENABLE=ON',
++ '-DENABLE_RUSAGE=ON',
++ '-DENABLE_UBSAN=OFF',
++ '-DENABLE_TOFU=OFF',
++ '-DENABLE_PER_CPU_ALLOC_CACHE=OFF',
++ '-DENABLE_FUGAKU_HACKS=OFF',
++ '-DENABLE_NATIVE_SYSFS_VERIFY=OFF',
++ '-DENABLE_NATIVE_FORK_OWNED_TRANSACTION=ON',
++ '-DENABLE_RUST_PROCESS_VERBOSE_DATA=ON',
++ '-DENABLE_RUST_PROCESS_VERBOSE_LOCAL_COMPANIONS=ON',
++ '-DENABLE_PROCESS_DEBUG_PRINT=OFF']
++    names = ['UNAME_R', 'MCKERNEL_M14_EXPECTED_UNAME_R', 'MCKERNEL_M14_EXPECTED_MAP_KERNEL_START', 'MCKERNEL_M14_EXPECTED_MAKE_SHA256', 'KBUILD_MAKE_FLAGS', 'MCKERNEL_M14_EXPECTED_KBUILD_MAKE_FLAGS']
++    values=profile.get('required_actual_values')
++    _require(isinstance(values,dict), 'required values missing')
++    _require(all(isinstance(values.get(n),str) and '\0' not in values[n] for n in names), 'unbound configure values')
++    _require(all(values[n] for n in names[:4]), 'empty required identity')
++    _require(re.fullmatch(r'[0-9a-f]{64}',values['MCKERNEL_M14_EXPECTED_MAKE_SHA256']) is not None, 'make hash malformed')
++    _require(values['UNAME_R']==values['MCKERNEL_M14_EXPECTED_UNAME_R'], 'uname mismatch')
++    _require(values['KBUILD_MAKE_FLAGS']==values['MCKERNEL_M14_EXPECTED_KBUILD_MAKE_FLAGS'], 'flags mismatch')
++    _require(a==fixed+['-D'+n+'='+values[n] for n in names], 'exact configure argv differs')
+     v=commands[1]['argv']
+     _require(v[:4]==['/usr/bin/python3','-I','-B','/src/scripts/verify_m14_elf.py'], 'separate verifier differs')
+     def cvalue(flag): return next(x.split('=',1)[1] for x in a if x.startswith('-D'+flag+'='))

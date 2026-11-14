@@ -1,0 +1,79 @@
+{
+  "schema": "mckernel.native-exact.scratch18-retry2-prepared.v1",
+  "result": "PASS_PREPARED",
+  "acceptance_credit": false,
+  "preparation_release_commit": "d97fd046f76ffff10b2d98eb1130969d77bbba5b",
+  "preparation_packet_sha256": "abda895b2869a2e5d2df931adac42a77948816a6442c20138d40683f491ce30f",
+  "preparation_tests_sha256": "fbc19450f4d460011d9f62e97722e1db52548585186f6472faf19c78f633a35d",
+  "focused_tests": "22/22 PASS under /usr/bin/python3 3.8.10",
+  "independent_review": "PASS for publication and production --prepare only",
+  "validation": {
+    "status": "PASS_PREPARATION_READY",
+    "execution_released": false,
+    "request_exists_before_prepare": false,
+    "canonical_request_sha256": "42cbf1b2b76ca445bbbf39ca69739032ca5b972da7da01ea5f1bcaea9ec026d9"
+  },
+  "preparation": {
+    "terminal_journal_event": "complete",
+    "execution_released": false,
+    "build_started": false,
+    "guest_started": false
+  },
+  "artifacts": {
+    "request": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-build-request-scratch-18-retry2-20261001.json",
+      "device": 1831,
+      "inode": 57643,
+      "mode": "0600",
+      "uid": 1000,
+      "gid": 1000,
+      "nlink": 1,
+      "size": 3134,
+      "sha256": "eed75f5db927bd3eb0f1af7c16bc71952581578843eead2630ecf37d7162f106"
+    },
+    "plan": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-scratch18-retry2-preparation.plan.json",
+      "device": 1831,
+      "inode": 57641,
+      "mode": "0600",
+      "uid": 1000,
+      "gid": 1000,
+      "nlink": 1,
+      "size": 706,
+      "sha256": "3b22b670f7815cc36ac1bd2e6a5dd4562943f0b95e0a48094dd4088195affcd6"
+    },
+    "journal": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-scratch18-retry2-preparation.journal.jsonl",
+      "device": 1831,
+      "inode": 57642,
+      "mode": "0600",
+      "uid": 1000,
+      "gid": 1000,
+      "nlink": 1,
+      "size": 1037,
+      "sha256": "41fc8f0b52d47302252de700aacce0bedaf857ca988a29c89416a821e2a6f133"
+    },
+    "mutex": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-scratch18-retry2-preparation.mutex",
+      "device": 1831,
+      "inode": 57640,
+      "mode": "0600",
+      "uid": 1000,
+      "gid": 1000,
+      "nlink": 1,
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "fresh_directories": {
+    "output": {"device": 1831, "inode": 5374028, "mode": "0700", "uid": 1000, "gid": 1000, "nlink": 2, "empty": true},
+    "evidence": {"device": 1831, "inode": 5374032, "mode": "0700", "uid": 1000, "gid": 1000, "nlink": 2, "empty": true},
+    "owner_evidence": {"device": 1831, "inode": 5767173, "mode": "0700", "uid": 1000, "gid": 1000, "nlink": 2, "empty": true}
+  },
+  "capacity_after_prepare": {
+    "host_free_bytes": 46884990976,
+    "scratch_free_bytes": 40590561280,
+    "mem_available_kib": 23002804
+  },
+  "next": "Publish and independently review a separate execution release that binds these exact identities and a fresh privileged census, then run one serialized heavy build."
+}

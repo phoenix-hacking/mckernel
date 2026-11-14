@@ -1,0 +1,37 @@
+{
+  "C_reference_unchanged": true,
+  "argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=30:30",
+    "--fsize=33554432",
+    "--core=0:0",
+    "--nofile=256:256",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/numa-allowed-empty-producer-repair-20261021-1/propose_actual_body_comparison.py",
+    "--rustc",
+    "/home/holden/.cargo/bin/rustc",
+    "--out",
+    "/home/holden/mckernel-work/host-preparation/numa-allowed-empty-producer-repair-20261021-1/actual-body-comparison-1"
+  ],
+  "expected_status": "PASS_BASELINE_BUG_REPRODUCED_AND_CANDIDATE_TOPOLOGY_ALLOWED_MASK",
+  "kernel_module_app_guest_build": false,
+  "prerequisites": [
+    "root focused patch/source ABI review",
+    "genuine existing ordinary CPU7 grant and fresh capacity",
+    "fresh output name; preserve any first compile/body failure, no unchanged replay"
+  ],
+  "root_Docker_lease_cleanup": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PROPOSED_ORDINARY_ACTUAL_BODY_COMPARISON_NOT_RUN"
+}

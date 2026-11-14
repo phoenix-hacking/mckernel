@@ -1,0 +1,9 @@
+# Dedicated-host scheduling override: supersedes older 3-child/workstation limits only.
+# Project ceiling 8; launcher profile/overrides take precedence with a measured effective cap.
+# Primary model remains user-selected; no recursive dispatch.
+[agents]
+enabled = true
+max_concurrent_threads_per_session = 8
+max_depth = 1
+default_subagent_model = "gpt-6.1-sol"
+default_subagent_reasoning_effort = "high"

@@ -1,0 +1,16 @@
+--- a/kernel/rust/f06_clone_reader_lock.rs
++++ b/kernel/rust/f06_clone_reader_lock.rs
+@@ -0,0 +1,13 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Exact existing private adapter, with original provider ownership retained.
++use core::ffi::c_void;
++
++/// # Safety
++/// Exact live MCS lock/node alignment, IRQ-save storage and pairing contract.
++/// This is not the noirq variant: node irqsave must survive until unlock.
++#[no_mangle]
++pub unsafe extern "C" fn arch_clone_reader_lock_bridge(lock: *mut c_void, node: *mut c_void) {
++    // SAFETY: original void-pointer casts target the actual selected Rust
++    // lock/node types, whose geometry requires real-header ABI qualification.
++    unsafe { crate::lock_helpers::__mcs_rwlock_reader_lock(lock.cast(), node.cast()) };
++}

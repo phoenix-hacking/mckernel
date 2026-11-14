@@ -1,0 +1,81 @@
+{
+  "actual_Root65_adoption": {
+    "bytes": 1794,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT65-CURRENT119-ADOPTION-1/ROOT65-ADOPTION.ACTUAL.json",
+    "sha256": "d7fde3de9d836b39e5e57dda969dc3ebf66787957d7de0b0554f50c8cfafa26d"
+  },
+  "actual_operation_review_required": true,
+  "artifact_acceptance": false,
+  "author_checks": {
+    "bytes": 1313,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/CURRENT119-PRODUCER-GUARD-1/confirmed-period-correction-source-1/tightening-minimum-correction-source-1/SOURCE-CHECKS.json",
+    "sha256": "0e9dd01fa86251ef4e7136363eab87e53d7b22ea8e337a40767c206c576c48ac"
+  },
+  "checks": {
+    "all_clock_equalities_refuse": true,
+    "all_fixed_subject_bytes_authenticated": true,
+    "all_source_ready_refs_authenticated": true,
+    "changed_functions_from_original": [
+      "confirmed_weekly_ceiling",
+      "validate_operation",
+      "guard"
+    ],
+    "earlier_all_three_effective_ceilings_accept_before_minimum": true,
+    "fixed_subjects_exact_count": 187,
+    "fixture_limitations": "Root context/review/ledger in-memory fixture refs only; genuine fixed subjects and Q parser. No actual operation/review/binding or live guard is fabricated.",
+    "formatter_and_fixed_input_bytes_unchanged": true,
+    "full_in_memory_binding_metadata_confirmed_period_operation_fixture": true,
+    "functional_negative_cases": 23,
+    "guard_owner_proc_query_build_calls": 0,
+    "independent_focused_test_exit_status": 0,
+    "later_period_reporting_cannot_extend": true
+  },
+  "decision": "PASS_SOURCE",
+  "execution_release_required": true,
+  "findings": [
+    "The producer operation is distinctly current119-build. It refuses readonly aliases, paid/credit/API spending authority, reused/abandoned nonces, non-Root binding/context, inexact subjects or non-independent/source-owner operation reviews. Missing Root actual binding refuses before any guardian call. Source preparation is an exclusive-create metadata formatter and grants no execution.",
+    "All187 fixed byte subjects authenticate: unchanged canonical18/actual133-file122Rust export, four-command recipe0c01, profile0691, eight retained objects, config/external sources, accepted helper/sealer/runner/holder and current-free8104. No SDK21 or frozen kernel/recipe changes, compiler result or source-only artifact acceptance is introduced.",
+    "Confirmed-period ceiling now calls exact Q guardian validate_confirmed_row; same Root, matching weekly_usage, no pending confirmation/error and known usage below100 remain mandatory. Canonical weekly maximum1793774133/10080/codex and included-only/null-credit/no paid fallback remain fixed. The final genuine guardian owns fresh worker/usage/lease/identity/hold checks.",
+    "Immutable operation limits remain exactly the unchanged sealer armed/bootstrap minima. Dynamic effective UTC/MONO/BOOT ceilings can tighten independently: each entry and later guardian-return clock must remain strictly below min(operation cap,effective cap). Later reporting cannot extend maxima; current guardian also rechecks its latest effective state. No premature fixed-cap<=new-effective-cap comparison remains.",
+    "The guard authenticates actual source/context, full pure accepted Root65 chain/current-free ledger and exact static sealer cutoff equality before calling genuine Q guardian. It performs no no-heavy census, owner claim, mutex mutation, process spawn or cleanup, so existing runner may call it before and after its already reviewed holder is acquired. Existing runner/holder resource/birth/flock/once/claim and final guard immediately before Docker spawn remain unchanged.",
+    "The formatter is byte-identical022b and validates real accepted Root65 history and fresh explicit nonce before producing an operation pending independent review. Root must author a fresh source-specific current119 operation and binding for exact14de; older57/a3fb receipts cannot substitute."
+  ],
+  "fixed_inputs": {
+    "bytes": 4727,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/CURRENT119-PRODUCER-GUARD-1/confirmed-period-correction-source-1/tightening-minimum-correction-source-1/FIXED-INPUTS.SOURCE-ONLY.json",
+    "sha256": "e5d02301d120a59e2cc50ecebb7094d8177e85ed3c036fbb61f42e936955d185"
+  },
+  "formatter": {
+    "bytes": 2801,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/CURRENT119-PRODUCER-GUARD-1/confirmed-period-correction-source-1/tightening-minimum-correction-source-1/prepare_operation.py",
+    "sha256": "022bbdcd3fb271aa28a616acffb66049453546dd637387863ed04a310d165496"
+  },
+  "implementation_ownership": false,
+  "independent": true,
+  "native_acceptance": false,
+  "preserved_original_source_failure": {
+    "bytes": 2478,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/CURRENT119-PRODUCER-GUARD-1/independent-source-review-1/FIRST-SOURCE-BLOCKER.ACTUAL.json",
+    "sha256": "caa2fd1281c25cced513b813c67a11765a2e955c4e8bf333019da6b129150d04"
+  },
+  "reviewer": "/root/recovery_review",
+  "runtime_authority": null,
+  "schema": "mckernel.independent-focused-source-review.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source": {
+    "bytes": 9804,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/CURRENT119-PRODUCER-GUARD-1/confirmed-period-correction-source-1/tightening-minimum-correction-source-1/runtime_guard.py",
+    "sha256": "14debb632383f15bcadcf6cbd0f5e3edbdddc68b4705ba3a0add311569265158"
+  },
+  "source_ready": {
+    "bytes": 4881,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/CURRENT119-PRODUCER-GUARD-1/confirmed-period-correction-source-1/tightening-minimum-correction-source-1/SOURCE-READY.json",
+    "sha256": "2ec5edf21c24ca1b248335070c33ca1798f03891698d31fc85db8a8093ea1166"
+  },
+  "test": {
+    "bytes": 9378,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/CURRENT119-PRODUCER-GUARD-1/confirmed-period-correction-source-1/tightening-minimum-correction-source-1/test_producer_guard.py",
+    "sha256": "007e4c6688ad960a255e1ac791277b9f8755f77f08c09094729e68a8b13bc9f5"
+  },
+  "unbound_at_review": true
+}

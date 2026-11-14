@@ -77,7 +77,7 @@ unsafe extern "C" {
     fn ioctl(fd: c_int, request: c_ulong, ...) -> c_int;
     fn exit(status: c_int) -> !;
     fn bfd_openr(filename: *const u8, target: *const u8) -> *mut c_void;
-    fn bfd_check_format(abfd: *mut c_void, format: c_int) -> c_int;
+    fn bfd_check_format(abfd: *mut c_void, format: c_int) -> bool;
     fn bfd_perror(message: *const u8);
     fn mcinspect_bfd_get_symtab_upper_bound_bridge(abfd: *mut c_void) -> isize;
     fn mcinspect_bfd_canonicalize_symtab_bridge(
@@ -139,7 +139,7 @@ unsafe extern "C" {
     #[cfg(mcinspect_full_body)]
     fn dwarf_diename(die: *mut c_void, name: *mut *mut u8, error: *mut *mut c_void) -> c_int;
     #[cfg(mcinspect_full_body)]
-    fn dwarf_get_TAG_name(value: c_int, out: *mut *const u8) -> c_int;
+    fn dwarf_get_TAG_name(value: core::ffi::c_uint, out: *mut *const u8) -> c_int;
     #[cfg(mcinspect_full_body)]
     fn dwarf_attr(
         die: *mut c_void,
@@ -220,12 +220,9 @@ struct IhkOsReadKaddrDesc {
 
 #[repr(C)]
 pub struct BfdSection {
-    name: *const u8,
-    id: u32,
-    index: u32,
-    next: *mut BfdSection,
-    prev: *mut BfdSection,
-    flags: u32,
+    // Opaque selected BFD 2.41 prefix, including its packed section flags.
+    // The production typed witness binds the consumed VMA field at byte 48.
+    before_vma: [u8; 48],
     vma: usize,
 }
 
@@ -237,6 +234,21 @@ pub struct BfdSymbol {
     flags: u32,
     section: *mut BfdSection,
 }
+
+// Only these symbol/section fields are read. Bind each repr(C) offset and
+// alignment to the same pinned layout checked by bfd_layout_witness.c.
+const _: [(); 8] = [(); core::mem::align_of::<BfdSymbol>()];
+const _: [(); 8] = [(); core::mem::offset_of!(BfdSymbol, name)];
+const _: [(); 16] = [(); core::mem::offset_of!(BfdSymbol, value)];
+const _: [(); 32] = [(); core::mem::offset_of!(BfdSymbol, section)];
+const _: [(); 8] = [(); core::mem::align_of::<BfdSection>()];
+const _: [(); 48] = [(); core::mem::offset_of!(BfdSection, vma)];
+const _: [(); 8] = [(); core::mem::size_of::<usize>()];
+const _: [(); 8] = [(); core::mem::size_of::<*const u8>()];
+const _: [(); 8] = [(); core::mem::size_of::<*mut BfdSection>()];
+const _: [(); 8] = [(); core::mem::align_of::<usize>()];
+const _: [(); 8] = [(); core::mem::align_of::<*const u8>()];
+const _: [(); 8] = [(); core::mem::align_of::<*mut BfdSection>()];
 
 #[cfg(mcinspect_full_body)]
 #[repr(C)]
@@ -725,7 +737,7 @@ pub unsafe extern "C" fn init_bfd_symbols(fname: *mut u8) -> c_int {
         return -1;
     }
 
-    if unsafe { bfd_check_format(abfd, BFD_OBJECT) } == 0 {
+    if !unsafe { bfd_check_format(abfd, BFD_OBJECT) } {
         unsafe {
             bfd_perror(b"bfd_check_format\0".as_ptr());
         }
@@ -1105,7 +1117,28 @@ unsafe fn dwarf_walk_tree_internal(dbg: *mut c_void, func: DwarfWalkFn, arg: *mu
 
                 rc = unsafe { func(dbg, die, arg) };
                 if rc == DW_DLV_OK {
-                    return 0;
+                    unsafe {
+                        dwarf_dealloc(dbg, die, DW_DLA_DIE);
+                        dwarf_dealloc(dbg, unit, DW_DLA_DIE);
+                    }
+                    // NO_ENTRY resets this libdwarf CU iterator. Complete the
+                    // current stream so the next independent lookup starts at
+                    // its first CU instead of skipping the matched unit.
+                    loop {
+                        rc = unsafe {
+                            dwarf_next_cu_header_c(
+                                dbg, is_info, &mut cu_length, &mut cu_version,
+                                &mut cu_abbrev_offset, &mut cu_pointer_size,
+                                &mut cu_offset_size, &mut cu_extension_size,
+                                &mut type_signature, &mut type_offset,
+                                &mut cu_next_offset, &mut err,
+                            )
+                        };
+                        if rc != DW_DLV_OK {
+                            break;
+                        }
+                    }
+                    return if rc == DW_DLV_NO_ENTRY { 0 } else { -1 };
                 }
 
                 let mut next: *mut c_void = core::ptr::null_mut();
@@ -1171,7 +1204,7 @@ unsafe fn dwarf_debug_print_die(dbg: *mut c_void, die: *mut c_void, indent: c_in
         }
         return;
     }
-    if unsafe { dwarf_get_TAG_name(tag as c_int, &mut tag_name) } != DW_DLV_OK {
+    if unsafe { dwarf_get_TAG_name(tag as core::ffi::c_uint, &mut tag_name) } != DW_DLV_OK {
         tag_name = b"<unknown>\0".as_ptr();
     }
 

@@ -1,0 +1,86 @@
+{
+  "status": "SOURCE_ONLY_EXACT_FIVE_LITERAL_COMMANDS",
+  "commands": [
+    {
+      "name": "stat-before",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/stat",
+        "-c",
+        "%d:%i:%u:%g:%f:%h:%s:%y:%z",
+        "--",
+        "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation9-20261019-1/actual-observation-9.stdout",
+        "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation9-20261019-1/actual-observation-9.stderr",
+        "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation9-20261019-1/actual-observation-9.supervisor.jsonl"
+      ],
+      "stdout_capture": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation9-20261019-1/observation9-raw-readback-1/stat-before.stdout",
+      "stderr_capture": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation9-20261019-1/observation9-raw-readback-1/stat-before.stderr",
+      "status_capture": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation9-20261019-1/observation9-raw-readback-1/stat-before.status.json"
+    },
+    {
+      "name": "raw-0",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/cat",
+        "--",
+        "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation9-20261019-1/actual-observation-9.stdout"
+      ],
+      "stdout_capture": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation9-20261019-1/observation9-raw-readback-1/raw-0.stdout",
+      "stderr_capture": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation9-20261019-1/observation9-raw-readback-1/raw-0.stderr",
+      "status_capture": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation9-20261019-1/observation9-raw-readback-1/raw-0.status.json"
+    },
+    {
+      "name": "raw-1",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/cat",
+        "--",
+        "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation9-20261019-1/actual-observation-9.stderr"
+      ],
+      "stdout_capture": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation9-20261019-1/observation9-raw-readback-1/raw-1.stdout",
+      "stderr_capture": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation9-20261019-1/observation9-raw-readback-1/raw-1.stderr",
+      "status_capture": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation9-20261019-1/observation9-raw-readback-1/raw-1.status.json"
+    },
+    {
+      "name": "raw-2",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/cat",
+        "--",
+        "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation9-20261019-1/actual-observation-9.supervisor.jsonl"
+      ],
+      "stdout_capture": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation9-20261019-1/observation9-raw-readback-1/raw-2.stdout",
+      "stderr_capture": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation9-20261019-1/observation9-raw-readback-1/raw-2.stderr",
+      "status_capture": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation9-20261019-1/observation9-raw-readback-1/raw-2.status.json"
+    },
+    {
+      "name": "stat-after",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/stat",
+        "-c",
+        "%d:%i:%u:%g:%f:%h:%s:%y:%z",
+        "--",
+        "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation9-20261019-1/actual-observation-9.stdout",
+        "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation9-20261019-1/actual-observation-9.stderr",
+        "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation9-20261019-1/actual-observation-9.supervisor.jsonl"
+      ],
+      "stdout_capture": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation9-20261019-1/observation9-raw-readback-1/stat-after.stdout",
+      "stderr_capture": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation9-20261019-1/observation9-raw-readback-1/stat-after.stderr",
+      "status_capture": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation9-20261019-1/observation9-raw-readback-1/stat-after.status.json"
+    }
+  ],
+  "contract": "Accepted observation8 stat3/cat3/stat3 with only counter9 paths. After positive group retirement regardlessrc, ordinary heldFD metadata/hash, exact before/after source stat equality, directjoin0; no broad fallback/no automatic replay.",
+  "caps": {
+    "serial_jobs": 1,
+    "CPU": "6",
+    "wall_each": 30,
+    "TERM_KILL_grace": 5,
+    "filecap": 33554432
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "task_id": "sdk-reference-shape-correction-1-independent-source-review",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_SOURCE_COMPATIBILITY_CORRECTION_NOT_EXECUTION_RELEASE",
+  "reviewer": "/root/default_witness_gate",
+  "implementation_ownership": false,
+  "execution_authority": false,
+  "SDK_execution_released": false,
+  "actual_execution_or_postjoin_acceptance": false,
+  "sole_actual_execution_postjoin_reviewer": "/root/custody_release_review",
+  "candidate": {
+    "bytes": 25105,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sdk7-postgrowth-final-static-1/sdk-reference-shape-correction-1/sdk7_authority_adapter.OWNER-REFERENCE-SHAPE.SOURCE-ONLY.py",
+    "sha256": "0c35884f73d32401ae48e139a2bb150e85c975b73425b29c5cd24a6b25f8263b"
+  },
+  "baseline": {
+    "bytes": 25062,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sdk7-postgrowth-final-static-1/sdk7_authority_adapter.POSTGROWTH-CHAIN.SOURCE-ONLY.py",
+    "sha256": "7cf2f884f2c4eaa5f509bad259e364d72a79d72b9bcdb340e42487c02b6832df"
+  },
+  "unchanged_owner": {
+    "bytes": 74224,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sdk7-142g-consumer-successor-source-1/daemon_sdk_owner.142G-SOURCE-ONLY.py",
+    "sha256": "999713a7b4dafa034232d997872132642358aa80029244ad27e571efbf1664ee"
+  },
+  "unchanged_chain": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sdk7-postgrowth-final-static-1/growth_chain_validator.py",
+    "bytes": 17846,
+    "sha256": "9ccf43436ac5e2aefe6fc03f748a5aee26b6625c91d278c01cdab6bde1fb49a2"
+  },
+  "result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sdk7-postgrowth-final-static-1/sdk-reference-shape-correction-1/RESULT.SOURCE-ONLY.json",
+    "bytes": 5827,
+    "sha256": "f0e3514bc534f4e39dabf27904e1cc664bb31eb84dc06eef86fb42069a6dce80"
+  },
+  "reviewed_tests": {
+    "bytes": 7509,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sdk7-postgrowth-final-static-1/sdk-reference-shape-correction-1/test_actual_owner_authentication.py",
+    "sha256": "b5fe912ab04abfad343c1e67db88afaef6d1d2e7720c6ea5822f6fceced3e239"
+  },
+  "retained_test_log": {
+    "bytes": 645,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sdk7-postgrowth-final-static-1/sdk-reference-shape-correction-1/actual-api-pure.stderr",
+    "sha256": "6dd91a1b3b3ee18f602725d95468824ed9bdfdd740e0421a391136f008afec5a"
+  },
+  "findings": [
+    "Actual owner999 bound requires exactly path/sha256; authenticate calls bound on release.source_review and release.execution_review. Original A2 release.source_review contains bytes and is rejected before admission directory creation, claim or container work.",
+    "Exact adapter text comparison confirms only two changes: release payload source_review projects path/sha256; private import search moves to parent to select unchanged sibling chain9cc. Three-key bundle/current-source validation remains unchanged.",
+    "Read retained six actual-owner API regression methods and hash-bound passing stderr. Tests import and invoke unchanged owner.authenticate, evaluate the actual patched AST expression, preserve original release bytes, and assert genuine request/source-map results.",
+    "Candidate positive fixture explicitly re-signs the changed payload for authenticate only, declares source-only/runtime-authority false, and deletes ephemeral files. It is neither an actual independent execution review nor authority to execute.",
+    "Negative assertions retain wrong source hash, missing source review, three-key source/execution reviews, wrong execution payload hash and historical mismatching source review refusals. Owner bound/authenticate logic, full11/runtime owner999, parent696, actual driver/seven argv and all adapter gates remain unchanged."
+  ],
+  "checks": [
+    {
+      "scope": "read-only exact candidate two-change text comparison and selected input evidence hashes",
+      "status": "PASS"
+    },
+    {
+      "scope": "retained owner-produced actual authenticate regressions; assertions and real API inspected independently, not rerun",
+      "test_methods": 6,
+      "negative_controls": 6,
+      "original_actual_failure_preserved": true,
+      "retained_returncode": 0,
+      "retained_elapsed_seconds": 0.174,
+      "status": "PASS_RETAINED_EVIDENCE_REVIEWED"
+    }
+  ],
+  "tests_rerun": false,
+  "runtime_actions": 0,
+  "changed_paths": [
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sdk7-postgrowth-final-static-1/sdk-reference-shape-correction-1/INDEPENDENT-SOURCE-REVIEW.json"
+  ],
+  "blocker": null,
+  "next_task": "Dispatcher binds/publishes corrected adapter source and regenerates actual release payload; obtain actual exact-payload execution review and current admission separately. Custody_release_review retains sole actual execution/postjoin review.",
+  "discovery_note": "Initial directory lookup resolved D as evidence root and returned ENOENT; resolved supplied D=sdk7-postgrowth-final-static-1 immediately. No candidate check failure."
+}

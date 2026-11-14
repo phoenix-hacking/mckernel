@@ -1,0 +1,37 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/finite-review-handoff-correction-source-1/finite_review.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/finite-review-handoff-correction-source-1/strict-json-final-publication-correction-source-1/finite_review.py
+@@ -20,6 +20,9 @@
+  need(p['actual_nonce']==q['nonce']==a['nonce']==b['nonce'],'cold exact nonce')
+  need(p['request_sha256']==refs['request_payload']['sha256']==x['request_sha256']==a['request_sha256'],'cold exact request closure')
+  need(a['profile']==refs['profile'] and a['input_export']==refs['input_export'] and a['request']==refs['request_payload'],'cold actual request adoption')
++ need(q['source_adoption']==a['source_adoption']==p['actual_root_adoption']==refs['source_adoption'],'cold exact source adoption')
++ context=p['source_preparation_current_context']
++ need(context['nonce_ledger']==refs['nonce_ledger'] and context['accepted_current_free']==refs['native_custody_clearance'] and context['current_boundary']==refs['current_boundary'],'cold exact source current-boundary context')
+  need(p['native_custody_clearance']==boundary['native_custody_clearance']==refs['native_custody_clearance'] and boundary['nonce_ledger']==refs['nonce_ledger'],'cold current boundary')
+  need(ledger['complete_within_declared_current_boundary'] is True and ledger['root_attests_no_unlisted_post_boundary_execution_or_custody_operation'] is True and b['nonce'] not in ledger['consumed_nonces'],'fresh complete nonce ledger')
+  need(pub['runtime_authority'] is None and pub['status'].startswith('PASS_FETCHED_CURRENT115_') and re.fullmatch('[a-f0-9]{40}',pub['commit']) and pub['unchanged_accepted_SDK'] is True and pub['passed_compiler_prefix_replayed'] is False,'actual source publication')
+@@ -72,7 +75,7 @@
+  exactcold=dict(nonce=b['nonce'],runner=refs['runner'],worker=refs['worker'],profile=refs['profile'],input_export_authority=refs['input_export'],native_custody_clearance=refs['native_custody_clearance'],fresh_output_root=str(A/'OUTPUT'),docker_client_prefix=p['docker_client_prefix'],nonce_ledger=refs['nonce_ledger'],current_boundary=refs['current_boundary'],source_publication=refs['source_publication'],request_sha256=p['request_sha256'],other_reserved_memory_bytes=2<<30,other_reserved_pids=64,aggregate_pid_budget=576,ledger_data=c['ledger'],publication_data=c['pub'],profile_data=p,export_data=c['x'],authorized_clamps=limits)
+  c['predicates'].hot_predicates(exactcold,pending,resource,ready,bootstrap,inputs,physical,p,c['a'],c['x'],read_json_ref(refs['nonce_ledger']),read_json_ref(refs['source_publication']),final)
+  no_launch(A)
+- return dict(scope=SCOPE,decision='PASS_EXACT_BUILD_ONLY_EXECUTION',independent=True,reviewer=REVIEWER,nonce=b['nonce'],approved_input_sha256=marker['pending_input']['sha256'],pending_input=marker['pending_input'],resource_authority=marker['resource'],prewarm_ready=c['ready_ref'],complete_root_capture=reference(H/'ROOT-HELD-CAPTURE.COMPLETE.json'),final_clocks=final,earliest_clamps=limits,resource_age_seconds=final[0]-resource['observed_at_epoch'],resource_observed_at_epoch=resource['observed_at_epoch'],verifier=reference(__file__),runtime_authority=None)
++ return dict(scope=SCOPE,decision='PASS_EXACT_BUILD_ONLY_EXECUTION',independent=True,implementation_ownership=False,maximum_invocations=1,reviewer=REVIEWER,nonce=b['nonce'],payload_sha256=marker['pending_input']['sha256'],approved_input_sha256=marker['pending_input']['sha256'],pending_input=marker['pending_input'],resource_authority=marker['resource'],prewarm_ready=c['ready_ref'],complete_root_capture=reference(H/'ROOT-HELD-CAPTURE.COMPLETE.json'),final_clocks=final,earliest_clamps=limits,resource_age_seconds=final[0]-resource['observed_at_epoch'],resource_observed_at_epoch=resource['observed_at_epoch'],verifier=reference(__file__),runtime_authority=None)
+ def main():
+  p=argparse.ArgumentParser(description=__doc__);p.add_argument('--independent-reviewer',required=True);p.add_argument('--bindings',required=True);p.add_argument('--handoff',required=True);a=p.parse_args();need(a.independent_reviewer==REVIEWER,'assigned independent reviewer only; Root must not invoke')
+  b=read_json(a.bindings);b['_bindings']=a.bindings;H=Path(a.handoff);c=cold(b,H);end=time.monotonic()+600
+@@ -81,5 +84,14 @@
+  result=hot(c,read_json(H/'ROOT-HELD-CAPTURE.COMPLETE.json'))
+  final=c['runner'].current_operation_guard();in_window(final,result['earliest_clamps']);need(0<=final[0]-result['resource_observed_at_epoch']<=120,'FINAL atomicPASS original120s')
+  result.update(final_clocks=final,resource_age_seconds=final[0]-result['resource_observed_at_epoch'])
+- out=atomic_json(H/'INDEPENDENT-FINITE-REVIEW.PASS.json',result);print(json.dumps(dict(decision=result['decision'],reference=out)))
++ def final_before_publish():
++  # Authenticate the exact subjects again after receipt bytes are fsynced.
++  verify_ref(result['pending_input']);verify_ref(result['resource_authority'])
++  exact_resource=read_json_ref(result['resource_authority'])
++  no_launch(c['A'])
++  c['runner'].current_operation_guard()
++  final=clocks();in_window(final,result['earliest_clamps'])
++  need(0<=final[0]-exact_resource['observed_at_epoch']<=120,'FINAL postfsync atomicPASS original120s')
++ result.update(publication_freshness_enforced_by_postfsync_callback=True,receipt_clocks_are_pre_serialization=True)
++ out=atomic_json(H/'INDEPENDENT-FINITE-REVIEW.PASS.json',result,before_publish=final_before_publish);print(json.dumps(dict(decision=result['decision'],reference=out)))
+ if __name__=='__main__':main()

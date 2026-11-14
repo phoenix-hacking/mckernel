@@ -1,0 +1,28 @@
+--- a/kernel/process.c
++++ b/kernel/process.c
+@@ -2710,16 +2710,24 @@
+ 	return ((struct page *)page)->offset;
+ }
+ 
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++void process_pte_make_fileoff_bridge(long, size_t, void *);
++#else
+ void process_pte_make_fileoff_bridge(long off, size_t pgsize,
+ 					    void *ptep)
+ {
+ 	pte_make_fileoff(off, 0, pgsize, (pte_t *)ptep);
+ }
+-
++#endif
++
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++void process_pte_xchg_bridge(void *, void *);
++#else
+ void process_pte_xchg_bridge(void *ptep, void *valp)
+ {
+ 	pte_xchg((pte_t *)ptep, (pte_t *)valp);
+ }
++#endif
+ 
+ void process_flush_tlb_single_bridge(unsigned long addr)
+ {

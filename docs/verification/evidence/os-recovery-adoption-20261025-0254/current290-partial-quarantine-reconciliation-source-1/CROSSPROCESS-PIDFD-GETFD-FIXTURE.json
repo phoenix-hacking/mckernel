@@ -1,0 +1,47 @@
+{
+  "child_ready": {
+    "fd": 3,
+    "pid": 1077926,
+    "prctl_errno": 0,
+    "prctl_return": 0
+  },
+  "custody_continues_after_child_exit": true,
+  "duplicate_cloexec": true,
+  "elapsed_seconds": 0.002267078962177038,
+  "fallback": false,
+  "fixture_normal_exit": true,
+  "free_only_after_custodian_close": true,
+  "genuine_custody_before_child_exit": true,
+  "independent_acquire_before_exit_blocked": true,
+  "normal_child_wait_status": 0,
+  "operation": "owned-private-file-crossprocess-pidfd_getfd-fixture",
+  "pidfd_getfd": {
+    "errno": 0,
+    "errno_name": null,
+    "flags": 0,
+    "return_value": 5,
+    "syscall": 438
+  },
+  "pidfd_open_succeeded": true,
+  "positive_pidfd_exit": true,
+  "post_exit_fdinfo_lock_rows": [
+    [
+      "FLOCK",
+      "ADVISORY",
+      "WRITE",
+      "1077926",
+      "103:02:59657857",
+      "0",
+      "EOF"
+    ]
+  ],
+  "private_inode": [
+    66306,
+    59657857
+  ],
+  "production_paths_touched": false,
+  "root_probe": false,
+  "runtime_authority": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_REAL_PRIVATE_CROSSPROCESS_CUSTODY"
+}

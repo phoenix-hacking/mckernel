@@ -1,0 +1,49 @@
+{
+  "canonical_repo_harness": "No current kernel/rust/fork_final_ack.rs actual-body harness exists under scripts/tests; old test_native_fork_final_destructor_20261017.py tests underlying destructor bodies, not this Carrier consumer.",
+  "existing_accepted_actual_consumer_harness": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-20261020-1/phase4-revoke-ack-correction-1/guest-fixture-1/actual-phase4.rs",
+    "sha256": "4e6791e72f323a388e167d8a557522d5f78c7d5018e75ca95e44d5ae573f6f0e"
+  },
+  "existing_accepted_harness_evidence": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-20261020-1/phase4-revoke-ack-correction-1",
+  "dependency_harness": "/home/holden/mckernel-work/host-preparation/phase5-runnable-child-parent-wait-20261020-1/runtime-fixture-1",
+  "minimal_regression_delta": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/existing-harness-regression.patch",
+    "sha256": "33d5cfa72f2febd92f0a7995fe2c2627b6068565ed37f0f8102153e661ae80a8"
+  },
+  "cases": [
+    "finalack_uncertainty_transport_error_retains_exact_owners",
+    "finalack_uncertainty_missing_publication_retains_exact_owners",
+    "finalack_uncertainty_success_retires_once_and_retry_cannot_free"
+  ],
+  "production_files": [
+    "kernel/rust/fork_final_ack.rs:destroy_and_ack_current",
+    "kernel/rust/fork_control_guest.rs:observe_one / submit_control_current",
+    "kernel/rust/fork_control_registry.rs:visit / detach_terminal",
+    "kernel/rust/fork_child_credits.rs:ChildCredits terminal release",
+    "kernel/rust/fork_constructed_credits.rs:ConstructedFork destruction graph"
+  ],
+  "source_binding": "ACTUAL-BODY-REGRESSION-HANDOFF.json production_sources has exact current full-module hashes and appended-test-only readout distinction",
+  "reconstruction_recipe": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/prepare_corrected.py",
+    "sha256": "22634e839ccea9fe630691c79d8425110ed13fa856bf614fc07fad9c1a296818"
+  },
+  "reconstruction_limit": "Additive corrected recipe reconstructs in an empty private packet directory only; not executed now and does not mutate successful/frozen fixture. Parent can checkpoint patch + recipe + exact body/result bindings coherently.",
+  "executed_bounded_runner": [
+    "python3",
+    "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/run_checks_correction.py"
+  ],
+  "exact_rust_test_command": [
+    "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/check-2/actual",
+    "finalack_uncertainty_",
+    "--test-threads=1",
+    "--nocapture"
+  ],
+  "command_limit": "Existing check-2 path is immutable and nonreplayable; any later execution requires fresh output and dispatcher admission.",
+  "adapter_limits": [
+    "Existing explicit C-constructor and VM callback adapters; physical identity and faulting host transport; source semantics only.",
+    "Single-thread user preempt and interrupt-context adapters; runtime-final VM/write/runqueue adapters panic if executed.",
+    "No missing provider represented as successful extern; no runtime/native/final ABI acceptance."
+  ],
+  "new_framework": false,
+  "no_new_execution": true
+}

@@ -1,0 +1,26 @@
+--- actual619collector
++++ supported4312challengeconsumer
+@@ -408,6 +408,8 @@
+     if (close(fd)) bad = -1;
+     return bad;
+ }
++
++#include "pair_boot_contract.inc"
+ 
+ static struct result first_failed_helper;
+ static const char *first_failed_helper_tag;
+@@ -516,11 +518,14 @@
+     loaded = 2;
+     if (helper("load-mcctrl", "/sbin/insmod", (char *const[]){"insmod","/modules/mcctrl.ko",NULL}, &safe)) { good = 0; goto finish; }
+     loaded = 3;
++    if (pair_prepare_challenge()) { good = 0; goto finish; }
+ #if defined(ND_FUTEX) || defined(ND_CORE_THREADS)
+     if (helper("boot", "/bin/native-boot", futex_boot_argv, &safe)) { good = 0; goto finish; }
+ #else
+     if (helper("boot", "/bin/native-boot", (char *const[]){"/bin/native-boot",NULL}, &safe)) { good = 0; goto finish; }
+ #endif
++    int boot_logical_cpus[2];
++    if (pair_discover(boot_logical_cpus)) { good = 0; goto finish; }
+     supervise("/bin/mcexec", payload_argv, payload_env, "/case/work", 10000, &payload);
+     if (!payload.clean) safe = 0;
+     if (save_file("/case/evidence/payload.stdout", payload.out.data, payload.out.kept) ||

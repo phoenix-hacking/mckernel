@@ -1,0 +1,240 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_CLI_AND_RUST_PTY_STUB_CONTRACT_ONLY",
+  "cases": 22,
+  "expected_cases": 22,
+  "ownership_records": 30,
+  "partial": false,
+  "active": {
+    "phase": "final-ownership",
+    "label": null,
+    "argv": null,
+    "case": null
+  },
+  "failed": [],
+  "results": [
+    {
+      "name": "no-arguments",
+      "passed_intended_contract": true,
+      "rust_status": 1,
+      "reference": {
+        "classification": "original CLI parity before Expect",
+        "status": 1
+      },
+      "payload_format": "synthetic bytes only",
+      "retained_staging": []
+    },
+    {
+      "name": "one-argument",
+      "passed_intended_contract": true,
+      "rust_status": 1,
+      "reference": {
+        "classification": "original CLI parity before Expect",
+        "status": 1
+      },
+      "payload_format": "synthetic bytes only",
+      "retained_staging": []
+    },
+    {
+      "name": "empty-input",
+      "passed_intended_contract": true,
+      "rust_status": 1,
+      "reference": {
+        "classification": "original CLI parity before Expect",
+        "status": 1
+      },
+      "payload_format": "synthetic bytes only",
+      "retained_staging": []
+    },
+    {
+      "name": "empty-output",
+      "passed_intended_contract": true,
+      "rust_status": 1,
+      "reference": {
+        "classification": "original CLI parity before Expect",
+        "status": 1
+      },
+      "payload_format": "synthetic bytes only",
+      "retained_staging": []
+    },
+    {
+      "name": "third-nonempty",
+      "passed_intended_contract": true,
+      "rust_status": 1,
+      "reference": {
+        "classification": "original CLI parity before Expect",
+        "status": 1
+      },
+      "payload_format": "synthetic bytes only",
+      "retained_staging": []
+    },
+    {
+      "name": "missing-input",
+      "passed_intended_contract": true,
+      "rust_status": 1,
+      "reference": {
+        "classification": "original CLI parity before Expect",
+        "status": 1
+      },
+      "payload_format": "synthetic bytes only",
+      "retained_staging": []
+    },
+    {
+      "name": "directory-input",
+      "passed_intended_contract": true,
+      "rust_status": 1,
+      "reference": {
+        "classification": "original CLI parity before Expect",
+        "status": 1
+      },
+      "payload_format": "synthetic bytes only",
+      "retained_staging": []
+    },
+    {
+      "name": "success-fresh",
+      "passed_intended_contract": true,
+      "rust_status": 0,
+      "reference": null,
+      "payload_format": "synthetic bytes only",
+      "retained_staging": []
+    },
+    {
+      "name": "success-replace-old",
+      "passed_intended_contract": true,
+      "rust_status": 0,
+      "reference": null,
+      "payload_format": "synthetic bytes only",
+      "retained_staging": []
+    },
+    {
+      "name": "empty-third-ignores-fourth",
+      "passed_intended_contract": true,
+      "rust_status": 0,
+      "reference": null,
+      "payload_format": "synthetic bytes only",
+      "retained_staging": []
+    },
+    {
+      "name": "fragmented-prompt",
+      "passed_intended_contract": true,
+      "rust_status": 0,
+      "reference": null,
+      "payload_format": "synthetic bytes only",
+      "retained_staging": []
+    },
+    {
+      "name": "missing-ack-preserves-old",
+      "passed_intended_contract": true,
+      "rust_status": 1,
+      "reference": null,
+      "payload_format": "synthetic bytes only",
+      "retained_staging": [
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-tests-max-1/qualification/fixture-output/11-missing-ack-preserves-old/.vmcore2mckdump-813951-0.tmp"
+      ]
+    },
+    {
+      "name": "no-output-preserves-old",
+      "passed_intended_contract": true,
+      "rust_status": 1,
+      "reference": null,
+      "payload_format": "synthetic bytes only",
+      "retained_staging": [
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-tests-max-1/qualification/fixture-output/12-no-output-preserves-old/.vmcore2mckdump-813954-0.tmp"
+      ]
+    },
+    {
+      "name": "empty-output-preserves-old",
+      "passed_intended_contract": true,
+      "rust_status": 1,
+      "reference": null,
+      "payload_format": "synthetic bytes only",
+      "retained_staging": [
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-tests-max-1/qualification/fixture-output/13-empty-output-preserves-old/.vmcore2mckdump-813957-0.tmp"
+      ]
+    },
+    {
+      "name": "wrong-ack-preserves-old",
+      "passed_intended_contract": true,
+      "rust_status": 1,
+      "reference": null,
+      "payload_format": "synthetic bytes only",
+      "retained_staging": [
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-tests-max-1/qualification/fixture-output/14-wrong-ack-preserves-old/.vmcore2mckdump-813960-0.tmp"
+      ]
+    },
+    {
+      "name": "crash-nonzero-preserves-old",
+      "passed_intended_contract": true,
+      "rust_status": 1,
+      "reference": null,
+      "payload_format": "synthetic bytes only",
+      "retained_staging": [
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-tests-max-1/qualification/fixture-output/15-crash-nonzero-preserves-old/.vmcore2mckdump-813963-0.tmp"
+      ]
+    },
+    {
+      "name": "read-error-preserves-old",
+      "passed_intended_contract": true,
+      "rust_status": 1,
+      "reference": null,
+      "payload_format": "synthetic bytes only",
+      "retained_staging": [
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-tests-max-1/qualification/fixture-output/16-read-error-preserves-old/.vmcore2mckdump-813966-0.tmp"
+      ]
+    },
+    {
+      "name": "crash-signal-preserves-old",
+      "passed_intended_contract": true,
+      "rust_status": 1,
+      "reference": null,
+      "payload_format": "synthetic bytes only",
+      "retained_staging": [
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-tests-max-1/qualification/fixture-output/17-crash-signal-preserves-old/.vmcore2mckdump-813969-0.tmp"
+      ]
+    },
+    {
+      "name": "early-exit-preserves-old",
+      "passed_intended_contract": true,
+      "rust_status": 1,
+      "reference": null,
+      "payload_format": "synthetic bytes only",
+      "retained_staging": [
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-tests-max-1/qualification/fixture-output/18-early-exit-preserves-old/.vmcore2mckdump-813972-0.tmp"
+      ]
+    },
+    {
+      "name": "prompt-timeout-preserves-old",
+      "passed_intended_contract": true,
+      "rust_status": 1,
+      "reference": null,
+      "payload_format": "synthetic bytes only",
+      "retained_staging": [
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-tests-max-1/qualification/fixture-output/19-prompt-timeout-preserves-old/.vmcore2mckdump-813975-0.tmp"
+      ]
+    },
+    {
+      "name": "missing-output-parent",
+      "passed_intended_contract": true,
+      "rust_status": 1,
+      "reference": null,
+      "payload_format": "synthetic bytes only",
+      "retained_staging": []
+    },
+    {
+      "name": "uname-nonzero-is-ignored",
+      "passed_intended_contract": true,
+      "rust_status": 0,
+      "reference": null,
+      "payload_format": "synthetic bytes only",
+      "retained_staging": []
+    }
+  ],
+  "legacy_observation": {
+    "classification": "real Expect prerequisite absent; no protocol parity claimed"
+  },
+  "reference_protocol_executed": false,
+  "converter_patch_executed": false,
+  "real_dump_format_validated": false,
+  "production_acceptance": false,
+  "elapsed_seconds": 2.599
+}

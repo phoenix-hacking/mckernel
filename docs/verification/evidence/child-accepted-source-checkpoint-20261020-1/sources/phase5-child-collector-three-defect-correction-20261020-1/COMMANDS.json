@@ -1,0 +1,115 @@
+[
+  {
+    "name": "pair_startup-compile",
+    "argv": [
+      "/usr/bin/gcc",
+      "-std=gnu11",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/test_pair_startup.c",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/test_pair_startup"
+    ],
+    "expected_exit": 0
+  },
+  {
+    "name": "pair_startup-test",
+    "argv": [
+      "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/test_pair_startup"
+    ],
+    "expected_exit": 0
+  },
+  {
+    "name": "startup_order-compile",
+    "argv": [
+      "/usr/bin/gcc",
+      "-std=gnu11",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-DND_PROCESS_EXEC_WAIT",
+      "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/test_startup_order.c",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/test_startup_order"
+    ],
+    "expected_exit": 0
+  },
+  {
+    "name": "startup_order-test",
+    "argv": [
+      "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/test_startup_order"
+    ],
+    "expected_exit": 0
+  },
+  {
+    "name": "helper_export-compile",
+    "argv": [
+      "/usr/bin/gcc",
+      "-std=gnu11",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-DND_PROCESS_EXEC_WAIT",
+      "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/test_helper_export.c",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/test_helper_export"
+    ],
+    "expected_exit": 0
+  },
+  {
+    "name": "helper_export-test",
+    "argv": [
+      "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/test_helper_export",
+      "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/vectors"
+    ],
+    "expected_exit": 0
+  },
+  {
+    "name": "retirement_window-compile",
+    "argv": [
+      "/usr/bin/gcc",
+      "-std=gnu11",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/test_retirement_window.c",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/test_retirement_window"
+    ],
+    "expected_exit": 0
+  },
+  {
+    "name": "retirement_window-test",
+    "argv": [
+      "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/test_retirement_window"
+    ],
+    "expected_exit": 0
+  },
+  {
+    "name": "child-collector-static-compile",
+    "argv": [
+      "/usr/bin/gcc",
+      "-I",
+      "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/candidate",
+      "-std=gnu11",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-fno-pie",
+      "-no-pie",
+      "-Wl,-z,noexecstack",
+      "-DND_PROCESS_EXEC_WAIT",
+      "-static",
+      "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/native_diagnostic_guest_collector.c",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/process-exec-wait-collector"
+    ],
+    "expected_exit": 0
+  }
+]

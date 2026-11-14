@@ -1,0 +1,51 @@
+{
+  "independent": true,
+  "implementation_ownership": false,
+  "decision": "PASS_EXACT_ROOT59_CONFIGURED_NEW_WINDOW_OBSERVER_DEPENDENCIES",
+  "required_decision": "PASS_EXACT_ROOT59_CONFIGURED_NEW_WINDOW_OBSERVER_DEPENDENCIES",
+  "reviewed_observer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/entry/observe_bfd_root59_history.py",
+    "bytes": 23317,
+    "sha256": "5877ec1acbc121c99dd564e3c5f0801995417ae08e66887e34afd3b4c8a30515"
+  },
+  "reviewed_account_window_guard": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/entry/bfd_guard_facade.py",
+    "bytes": 1709,
+    "sha256": "d8609bef10dc39d54f1fa64c7ab81da22d297674054969e4728f7225bfc91931"
+  },
+  "reviewed_account_window_guard_configuration": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/BFD-FINAL-INTEGRATION-1/GUARD-FACADE-CONFIG.ACTUAL.json",
+    "bytes": 805,
+    "sha256": "0a1550ca5de876e7bc57db54350ffc046dc0e31c615b7b52c20b525bf80b1dc5"
+  },
+  "reviewed_physical_history_observer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-physical-history-successor-source-20261028-1/physical_history_successor.py",
+    "bytes": 9521,
+    "sha256": "af7cfd5a37a56672205ef0bc133d0c679aa5a7103450cf73ff1ba4f50479ca87"
+  },
+  "reviewed_physical_history_configuration": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/BFD-FINAL-INTEGRATION-1/PHYSICAL-HISTORY-CONFIG.ACTUAL.json",
+    "bytes": 6241,
+    "sha256": "1ad82f2b127e52867b65f3ed60f742878e3aba47b37e40168ae4e45a9dc13f02"
+  },
+  "runtime_authority": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/bfd_review",
+  "at": "2026-10-28T19:32:10.421435+00:00",
+  "checks": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-restart-independent-review-20261028-1/BFD-ACTUAL-CONFIG-REVIEW-1/RECURSIVE-CHECK.json",
+    "bytes": 635,
+    "sha256": "226ae594fe674c25ecc2773f05dd3aa4557c6a30419c74293041ac2c7724df05"
+  },
+  "prior_actual_config_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-restart-independent-review-20261028-1/BFD-ACTUAL-CONFIG-REVIEW-1/FACADE-CONFIG-REVIEW.json",
+    "bytes": 5385,
+    "sha256": "7d45e4f651b307bb8dfc242083f428ec6a06f388085898f1a349e60bb96bf3d0"
+  },
+  "findings": [
+    "Actual physical config1ad82f2b binds unchangedaf7c/eight historical sources, exact BFDfacade d860/private entry path, actual config0a1550ca and independentphysicalreview d5f6c442.",
+    "Actual common.configured_dependencies consumes the exact source/config fields and independent review shape; actual physical.configure and physical.guard_module configure the same BFD operation facade/config without guard invocation.",
+    "No retired guardian is selected by the configured common/physical live routes; old historical file identities remain provenance only. Root59 accepted native and Root60/61 ordinary history retain their exact typed scope.",
+    "No live guard, account, physical observation, fresh clearance, nonce, workload or runtime authority was created."
+  ]
+}

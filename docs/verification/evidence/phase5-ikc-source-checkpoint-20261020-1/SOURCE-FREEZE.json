@@ -1,0 +1,93 @@
+{
+  "status": "EXACT_TWO_RUST_SOURCES_AND_BODY_FIXTURE_READY_UNRUN",
+  "functional_scope": "Functional McKernel OS/apps + actual Rust/reviewed assembly compute-C cutover; existing Rust IKC producer correction",
+  "sources": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/source/kernel/rust/ikc_queue.rs",
+      "sha256": "99d7dbb864955fc43b698a74ae3acaa654ba82daf6e8ff638f5d73371cf59af3",
+      "size": 27590,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/source/kernel/rust/ikc_manycore.rs",
+      "sha256": "e3f3f3ffee3bc8ac892748123ad7fe40b85c5705969d4204dab15ba37c6de137",
+      "size": 10469,
+      "mode": 33152
+    }
+  ],
+  "base_pins": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/ORIGINAL-TWO-SOURCE-PINS.json",
+    "sha256": "dc28e29aa3e6f19bffbca8521c4322556b074a02707025280c4c366e2f9f3c1c",
+    "size": 653,
+    "mode": 33152
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/IKC-PRODUCER-GEOMETRY-AND-FATAL-RETURN.patch",
+    "sha256": "d2338a5d7b47d1fd35e01e0b839b4e6e142ba1e583644d1ba36e2c7b72ca0514",
+    "size": 3878,
+    "mode": 33152
+  },
+  "production_authorities": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/BOUNDED-PRODUCTION-AUTHORITIES.json",
+    "sha256": "9a61369af761ce10abb33ed5dbac67fe7b9bf7e01aff9a89313d403641f19c1d",
+    "size": 4906,
+    "mode": 33152
+  },
+  "actual_fixture": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/fixture-1/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "size": 76151,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/fixture-1/list_helpers.rs",
+      "sha256": "dac9c2f37c64967eebd8c466426fcdf1bf8d201b5c5ee5f1f466893517feb66a",
+      "size": 5770,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/fixture-1/actual-ikc.rs",
+      "sha256": "43b6fa0332b1247e828baf70f768cff2c94f01f90bdbff25c06277f8349d4dbe",
+      "size": 11262,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/fixture-1/actual-write-body.inc",
+      "sha256": "7bb10850251c7f001dff32db26102f9333719bda47014e51ef2cbf80ef214e00",
+      "size": 3313,
+      "mode": 33152
+    }
+  ],
+  "contract": [
+    "Public legacy initializer accepts packet_size9. The actual shared copy helper now copies exactlylen bytes through u8, including trailing partialword and unalignedslot; no newlegacyalignment restriction. Existing nonoverlap/liveextent caller contract remains.",
+    "NativeABI2 retains its pre-existing >=2slots/nonzero wholeu64words/exactqueue_size=count*packet_size contract (actual consume_native and host SharedQueue.snapshot); real SyscallIKCpacket128B. Producer validates matchingnativegeometry before anyreservation/copy. Legacycount1 remainsfull(-16), notnewEINVAL.",
+    "Geometry is immutable through the borrowedmapping. Capturecount/packetsize/extent once; on x86_64 boundedu32count*u16size gives <2^48offset; exactproduct and checkedbase+header+payload ensure everycandidate fits. Recompute candidate from newwritecounter after eachfailedCAS. No fallible geometry return afterreservation. Caller stillowns actualmappingextent; header arithmetic is notownership proof.",
+    "Full is exactly-16 before anyreservation; send retries onlythat errno. Fatalerror returns with oneoriginalIRQrestore, nevernotify. Success completebytecopy then existingmax_read_offpublicationCAS order unchanged."
+  ],
+  "diagnosis_correction": "No claim of an immutable staticqueue_packet_offset post-CAS Err: that helper rejects onlycount0 alreadychecked. Actual defect is producer acceptance/publication of geometry its consumer cannot read, plus unconditionalfatalretry.",
+  "scope_limits": [
+    "WholeactualABI/list and actualcompleteproductionqueue/manycorefunctions compile in std fixture; IRQ/log/notify/address translation are explicit platform adapters. No Linux ABI/link/native IRQ proof.",
+    "Actualpostexit delegatedexecutor remainsOPEN: ordinarydo_syscall stampsrtid;send_syscall stampspacketpid;waitloop usesactualcurrentwaitq/nestedrequests. No scalar snapshot orArcpin grantsdelegation.",
+    "Whole-module concurrentnative256packettest usesrealatomicCAS. Additionalexact-production-functionbody testadapts onlycounterobservationprimitive toforceonelawfulstalereadandoneactualfailedCAS; scheduling/modeladapter isexplicit, notrealhardwareIRQ/nativeproof."
+  ],
+  "source_or_test_jobs": 0,
+  "default_or_runtime_activation": false,
+  "draft_history": {
+    "unaligned_legacy_refusal_draft": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/word-alignment-draft-1",
+    "executed": false,
+    "reason_superseded": "RootAPIreview correctly requires preserving publiclegacyarbitrarybytepackets; repairedbytecopy ratherthaninventingrestriction."
+  },
+  "body_binding": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/ACTUAL-BODY-BINDING.json",
+    "sha256": "d76c446c79f0630119560cbc3f199379ede741ea48e0530b50f0b90d7783b2d0",
+    "size": 2471,
+    "mode": 33152
+  },
+  "bounded_stale_counter_correction": {
+    "preserved_unrun_predecessor": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/pre-stale-full-correction-1",
+    "predicate": "write.wrapping_sub(read)>=count.wrapping_sub(1)",
+    "proof": "Independentloadcanobservestale read0 afteractualread1/write8 withcount8/cap7. Equalityfalselyreserves8thslot; >=rejectsconservatively untilfreshloads. Legacycount1cap0 alwaysfull; ordinarywrappingcountermathpreserved.",
+    "execution_history": "8f3/source/fixture/proposal preservedUNRUN; nocompiler/testcandidateexecutedyet."
+  }
+}

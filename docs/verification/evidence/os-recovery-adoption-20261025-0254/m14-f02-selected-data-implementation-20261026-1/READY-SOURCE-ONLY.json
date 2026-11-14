@@ -1,0 +1,56 @@
+{
+  "task": "m14-f02-selected-data-implementation-20261026-1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_SOURCE_READY_FOR_REVIEW_NOT_COMPILED_NOT_INTEGRATED",
+  "at": "2026-10-26T23:59:29.380469+00:00",
+  "data_change": {
+    "idle_halt": {
+      "type": "CInt/plain mutable C int",
+      "initial": 0
+    },
+    "allow_oversubscribe": {
+      "type": "CInt/plain mutable C int",
+      "initial": 0
+    },
+    "time_sharing": {
+      "type": "CInt/plain mutable C int",
+      "initial": 1
+    }
+  },
+  "reuse": "Extend existing process_global_storage_candidate module; reuse qualified resource_set_list/resource_set_lock/runq_reservation_lock definitions and existing paired Linux6.12 default selectors. Prior data5 accepted postimages match both current canonical inputs exactly.",
+  "selection": "Existing MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE selects extern-only C declarations for these flags; OFF retains original C initializers. Existing HELPERS prerequisite remains. No CMake, shared import or syscall_policy edit required.",
+  "semantics": "Same exported symbol names, mutable four-byte CInt/int objects, align4 compile-time Rust assertions, initial0/0/1. Existing C/Rust boot parser writes and scheduler/futex/syscall reads unchanged. No new atomic/volatile/reference operation; synchronization and lifecycle remain with existing callers. Original line provenance preserved.",
+  "private_changes": {
+    "candidate/kernel/process.c": {
+      "sha256": "bed07d72244ae23956da124d479de1d4ad676a93787a1581bd5c20482b48ed39",
+      "bytes": 217503
+    },
+    "candidate/kernel/rust/process_helpers.rs": {
+      "sha256": "b9453b69752187043a1e99e8bac141bfd5549d54c1a40b81c05425527306bb66",
+      "bytes": 600604
+    },
+    "patch/kernel/process.c.patch": {
+      "sha256": "48f23fbc345384bed7d7593001f2d41f79862546c3192edccb92006064953524",
+      "bytes": 445
+    },
+    "patch/kernel/rust/process_helpers.rs.patch": {
+      "sha256": "6eaa2d6ea59ce7a7442ef27aba836f35200df7c63cf84b49411f8f10685a549b",
+      "bytes": 1168
+    }
+  },
+  "checks": {
+    "source_consistency": "PASS source only; SOURCE-CONSISTENCY.json",
+    "selected_object_metadata": "readelf exit0; 76072-byte actual retained object,0FUNC/88allocated OBJECT (46verbose,39readonly,3mutable)",
+    "readonly_classification": "39 exact names/declaration contexts/purposes in READONLY-RECORD-PURPOSES.json; remain live C data including callback targets, not retirement credit",
+    "compiler": "NOT RUN",
+    "fixture": "NOT RUN"
+  },
+  "blocker": "Separate root compiler/integration grant required before executable checks; no implementation blocker. Original discovery failures preserved.",
+  "next_task": "Independent source review, then exact root-bound selected/fallback producer/object ownership and proposed genuine C/Rust signed-int/default/readwrite ABI fixture. Root retains production/default/native acceptance.",
+  "acceptance": {
+    "production": false,
+    "default": false,
+    "native": false,
+    "whole_file_retirement": false
+  }
+}

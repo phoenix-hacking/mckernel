@@ -1,0 +1,59 @@
+{
+  "schema": "scratch22-authority2.build-wrapper-readiness-wiring.v1",
+  "status": "SOURCE_WIRED_NOT_RELEASED",
+  "author": "/root/scratch22_build_wrapper",
+  "model": "gpt-6.1-sol",
+  "source": {
+    "path": "scripts/native_exact_scratch22_authority2_build_wrapper.py",
+    "sha256": "564f52cc3f75562646a2cc2185d2e7325f423904ddef098ba8265b1ff542ed01"
+  },
+  "tests": {
+    "path": "scripts/tests/test_native_exact_scratch22_authority2_build_wrapper.py",
+    "sha256": "38f7d797523306892c4cdffc9146e2e85bdd2b7c8c90a10e76afab12ab502400",
+    "selected_cases": [
+      "test_real_preparation_terminal_fields_and_canonical_validator_are_consumed",
+      "test_absent_or_unaccepted_authority1_retirement_stops_prepared_use",
+      "test_preparation_review_must_bind_actual_minimal_repair_digest",
+      "test_preparation_review_must_bind_all_actual_retirement_receipts",
+      "test_preparation_review_must_bind_new_authority_review_digest",
+      "test_unreleased_adapter_refuses_before_release_read_or_lock"
+    ],
+    "command_profile": "timeout120s taskset CPU4 prlimit AS2147483648 python3 -B -m unittest -v, each selected case under scripts.tests.test_native_exact_scratch22_authority2_build_wrapper.WrapperTests",
+    "cases_run": 6,
+    "exit_code": 0,
+    "reported_seconds": 0.032,
+    "scope": "Touched readiness checks only; temporary files and mocks, one CPU/job and 2-GiB share. No child process, Git, compiler, root, Docker, guest, network, live lock or preparation. The accepted unchanged 38-case capture/signal baseline was reused, not rerun or recounted as new behavior."
+  },
+  "prior_candidate": {
+    "source_sha256": "3b2ddb3794de5941cdbe0743a6555c7ed0edd3319a7e953b12de3aec196576ce",
+    "tests_sha256": "f541d2f60759f6f53c4ab4774407c459202f2921700ab465905994533681878a",
+    "evidence": "docs/verification/evidence/scratch22-authority2-build-wrapper-preparation-20261017.json",
+    "evidence_sha256": "3b04a38e8411f9bc1a80e8a3782f17653b8ec69eafbefd537ab2e90a20a3e6c6",
+    "original_evidence_unchanged": true
+  },
+  "actual_wiring": {
+    "adapter": "scripts/prepare_native_exact_scratch22_authority2.py",
+    "adapter_sha256": "dbdc8c6711f4502328b37cec4b200d999c102af53f87aa183debbe160379dc0f",
+    "retirement_call": "adapter.validate_authority1_retirement(preparation) immediately after unchanged scratch21 cleanup validation, before source/candidate use.",
+    "repair_call": "Reuse adapter.validate_source_authority(REPO, preparation), which already invokes validate_repair_review and preserves immutable RS011 baseline plus exact two-file repair review. No duplicate repair/source validation call is added.",
+    "preparation_review_additions": [
+      "repair_review_sha256",
+      "authority1_recovery_sha256",
+      "authority1_recovery_review_sha256",
+      "authority1_cleanup_sha256",
+      "authority1_cleanup_review_sha256"
+    ],
+    "producer_contract": "Adapter consumes actual COMPLETE_PROCESS_RECOVERY and independent PASS_PROCESS_RECOVERY_POSTFLIGHT, with exact release/profile/prepared/process-exit joins, then actual terminal cleanup-result plus independent PASS_TERMINAL_CLEANUP_POSTFLIGHT and its complete plan/journal/capture/archive joins. Raw large cleanup release/capture hashes are streamed in that adapter; no alternate success schema is introduced in this wrapper.",
+    "candidate_selected_by_dispatcher": "d37d2216a60c6db10442ba8bc238d64fbd59c5ea",
+    "candidate_policy": "Exact candidate/tree remains externally bound by real preparation and build releases and checked against immutable prepared source metadata; no artifact, compiler or runtime acceptance is claimed for the selected source."
+  },
+  "execution_state": {
+    "ADAPTER_RELEASED": false,
+    "ADAPTER_SHA256": "dbdc8c6711f4502328b37cec4b200d999c102af53f87aa183debbe160379dc0f",
+    "status": "NOT_RELEASED",
+    "reason": "Actual future accepted retirement receipts, exact independent source review and dispatcher execution release remain prerequisites. The helper now has concrete validators, but this wrapper still refuses before release reads or lock acquisition. External JSON/CLI cannot enable it."
+  },
+  "untouched": "Original authority1 source, guard, container, root/shared locks, exclusions, leases, candidate/output and large failed captures were not read, written, signalled or otherwise mutated. Existing 128-MiB stdout/terminal bound, 16-MiB authority/source defaults, four-signal setup, quarantine, ownership, positive-retirement and resource behavior are unchanged.",
+  "failure_history": "S22-LOCK-1, S22-HISTORICAL-LEASE-BOOT-1 and S22-OBSERVER-CAPTURE-BOUND-1 remain the same retained families. This readiness wiring does not reset bounded correction history or authorize another heavy attempt.",
+  "acceptance_delta": {"current_candidate_builds": 0, "real_guest_apps": 0, "formal_applications": 0, "production_gates": 0}
+}

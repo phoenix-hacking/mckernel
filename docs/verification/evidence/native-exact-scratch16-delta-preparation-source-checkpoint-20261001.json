@@ -1,0 +1,56 @@
+{
+  "schema": "mckernel.native-exact-scratch16-delta-preparation-source-checkpoint.v1",
+  "recorded_at_utc": "2026-10-01T11:07:00Z",
+  "status": "PASS_SOURCE_PREPARATION_ONLY",
+  "source_head_before_checkpoint": "180c35952279e731261a8d5ec718806837098407",
+  "candidate_sha": "ddb8d7d58a9de7063663a27397b9fb9613a6325c",
+  "scratch15_sha": "1e95abdc2b124c19f16b88cdb21600c768a10c2d",
+  "ihk_sha": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+  "packet": {
+    "path": "docs/verification/evidence/native-exact-candidate-delta-preparation-scratch16-20261001.py",
+    "sha256": "740024b817f0529999f507e5c07f5b9f55414fe0a9bc61102089e7ba920729ff"
+  },
+  "tests": {
+    "path": "scripts/tests/test_native_exact_candidate_delta_preparation_scratch16_20261001.py",
+    "sha256": "906a74ffbcffa42bd44ecaa0e17a5d774a18c555f3519329ecd9890c6d5f76a0",
+    "command": "python3 -B -m unittest -v scripts.tests.test_native_exact_candidate_delta_preparation_scratch16_20261001",
+    "result": "PASS 7 tests",
+    "independent_profile": "two CPUs, 4-GiB address-space cap",
+    "independent_elapsed_seconds": 2.276
+  },
+  "verified_behavior": [
+    "Copies scratch15 private Git metadata, imports the exact target commit/all tree objects/target symlink blobs, and does not duplicate ordinary target blobs.",
+    "Shares only unchanged authenticated evidence files larger than 1 MiB and rechecks bytes, mode, device, inode and link count before and after admission.",
+    "Preserves the exact scratch15 IHK HEAD and reviewed overlay patch/base/result identities.",
+    "Executes the candidate canonical manifest main entry point, provenance verify_inputs, publishes the complete nonreleased request, then executes the real BuildOwner.validate without Docker.",
+    "Injected input and owner failures retain partial artifacts plus durable phase log and PID/starttime terminal evidence.",
+    "Capacity admission preserves the 16-GiB host and 12-GiB scratch floors plus calculated private allocation and a 512-MiB emergency margin."
+  ],
+  "independent_review": {
+    "decision": "PASS_SOURCE_PREPARATION_ONLY",
+    "packet_sha256": "740024b817f0529999f507e5c07f5b9f55414fe0a9bc61102089e7ba920729ff",
+    "test_sha256": "906a74ffbcffa42bd44ecaa0e17a5d774a18c555f3519329ecd9890c6d5f76a0",
+    "historical_blocks_preserved": ["80b", "c769", "b6c"]
+  },
+  "capacity_reconciliation": {
+    "temporary_audit_export": "/tmp/mckernel-head-EwRDX9",
+    "temporary_audit_export_allocated_bytes": 9253031936,
+    "open_references_before_removal": 0,
+    "removed_after_completed_audit": true,
+    "recoverable_from": "git archive of source_head_before_checkpoint",
+    "host_free_bytes_after_removal": 24633139200,
+    "scratch_free_bytes": 16009342976
+  },
+  "separate_release_gates": [
+    "Commit, push, fetch and verify these exact packet/test blobs.",
+    "Run validate-only from the fetched release and remeasure process, lease, container, host and scratch state.",
+    "Execute this preparation exactly once; independently inspect terminal, manifest, request, sharing inventory and private metadata before a build release."
+  ],
+  "acceptance": {
+    "production_preparation_executed": false,
+    "build_executed": false,
+    "guest_executed": false,
+    "formal_application_acceptance": false,
+    "os_complete": false
+  }
+}

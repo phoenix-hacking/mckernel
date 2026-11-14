@@ -1,0 +1,203 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PROPOSED_NOT_EXECUTED",
+  "compiler": {
+    "path": "/home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
+    "sha256": "f8d033fd72e878ec60493788c8bffec2e6c154dcab6f0cb4c145af8ada26a7ed",
+    "version_authority": "dispatcher verified 1.85.1; actualbody only; SDK 1.92 full module compile remains required"
+  },
+  "supervisor": {
+    "path": "/home/holden/mckernel/scripts/application-tests/supervisor.py",
+    "sha256": "8b8700175e6673c3a6b652d4a93bd18b56def83dfa3ac4ec821d4ae6c554e873",
+    "api": "run_supervised; unchanged accepted source8b870; no replacement harness"
+  },
+  "profile": {
+    "affinity": [
+      6
+    ],
+    "jobs": 1,
+    "rlimit_as": 2147483648,
+    "rlimit_cpu": 30,
+    "rlimit_fsize": 8388608,
+    "rlimit_nofile": 4096,
+    "rlimit_nproc": "inherited unchanged",
+    "timeout_seconds": 24,
+    "cleanup_timeout_seconds": 6,
+    "whole_seconds": 30,
+    "output_growth_limit_bytes": 67108864,
+    "stdout_limit_bytes": 1048576,
+    "stderr_limit_bytes": 1048576,
+    "root": false,
+    "docker": false,
+    "network": false,
+    "heavy": false
+  },
+  "cwd": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1",
+  "env": {
+    "HOME": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/home",
+    "TMPDIR": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/tmp",
+    "PATH": "/usr/bin:/bin",
+    "LC_ALL": "C"
+  },
+  "operations": [
+    {
+      "name": "compile-start",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=30:30",
+        "--fsize=8388608:8388608",
+        "--nofile=4096:4096",
+        "--",
+        "/home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--test",
+        "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-start.rs",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-start"
+      ],
+      "source_sha256": "9bedc1538ee87a8b875bec5a267e9f65f5c545c64445edee5b62fde2c379011e",
+      "expected_exit": 0
+    },
+    {
+      "name": "run-start",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=30:30",
+        "--fsize=8388608:8388608",
+        "--nofile=4096:4096",
+        "--",
+        "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-start",
+        "--test-threads=1"
+      ],
+      "expected_exit": 0,
+      "executable_pin": "Require fresh compiled binary hash recorded after preceding compile and before run"
+    },
+    {
+      "name": "compile-pool",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=30:30",
+        "--fsize=8388608:8388608",
+        "--nofile=4096:4096",
+        "--",
+        "/home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--test",
+        "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-pool.rs",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-pool"
+      ],
+      "source_sha256": "d795572a52285282e9c6f79069a724e48955d48ac9f6fd3c2f409b749a381f5a",
+      "expected_exit": 0
+    },
+    {
+      "name": "run-pool",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=30:30",
+        "--fsize=8388608:8388608",
+        "--nofile=4096:4096",
+        "--",
+        "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-pool",
+        "--test-threads=1"
+      ],
+      "expected_exit": 0,
+      "executable_pin": "Require fresh compiled binary hash recorded after preceding compile and before run"
+    },
+    {
+      "name": "compile-dispatch",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=30:30",
+        "--fsize=8388608:8388608",
+        "--nofile=4096:4096",
+        "--",
+        "/home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--test",
+        "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-dispatch.rs",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-dispatch"
+      ],
+      "source_sha256": "108d3aa20b11049d0aee4f82b04afe0cca1b9dc73f57a2a0271fd6f369d6e387",
+      "expected_exit": 0
+    },
+    {
+      "name": "run-dispatch",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=30:30",
+        "--fsize=8388608:8388608",
+        "--nofile=4096:4096",
+        "--",
+        "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-dispatch",
+        "--test-threads=1"
+      ],
+      "expected_exit": 0,
+      "executable_pin": "Require fresh compiled binary hash recorded after preceding compile and before run"
+    },
+    {
+      "name": "compile-launcher",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=30:30",
+        "--fsize=8388608:8388608",
+        "--nofile=4096:4096",
+        "--",
+        "/home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-launcher.rs",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-launcher"
+      ],
+      "source_sha256": "cc2d5aa0ac429bdcb552e164edfffe057a204669a6873a6527cdba5fcfa90610",
+      "expected_exit": 0
+    },
+    {
+      "name": "run-launcher",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=30:30",
+        "--fsize=8388608:8388608",
+        "--nofile=4096:4096",
+        "--",
+        "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-launcher"
+      ],
+      "expected_exit": 1,
+      "executable_pin": "Require fresh compiled binary hash recorded after preceding compile and before run"
+    }
+  ],
+  "gating": "Dispatcher concrete grant required before first compiler. Source pins rechecked before compile; compiled binary pinned before run. Original failed candidate and one bounded correction maximum. No native235/227 oracle changes or native acceptance."
+}

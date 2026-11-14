@@ -1,0 +1,31 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-current26eb-next-default-source-1/validator-templates/qualify_next_providers.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/resource-and-qualifier-preparation-1/validator-templates/qualify_next_providers.py
+@@ -4,7 +4,7 @@
+ from pathlib import Path
+ import collections,hashlib,importlib.util,json,struct,traceback
+ D=Path(__file__).resolve().parent;E=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254')
+-EXPECTED=json.loads(Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-current26eb-next-default-source-1/ACCEPTANCE-INPUTS.SOURCE-ONLY.json').read_text())
++EXPECTED=json.loads(Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/resource-and-qualifier-preparation-1/ACCEPTANCE-INPUTS.SOURCE-ONLY.json').read_text())
+ s=(D/'qualify_clone_pointer_and_warning_suffix.py').read_text();ns={'__file__':str(D/'qualify_next_providers.py')};exec(compile(s[:s.index("\nclone=ns['_reuse_elf_function']")],'accepted strict REL/EXEC readers for actual next cohort','exec'),ns)
+ P=ns['P'];B=ns['B'];Elf=ns['Elf'];rust=ns['rust'];final=ns['final'];ref=ns['ref'];sections=ns['sections']
+ expected=EXPECTED['all_Rust_exports']
+@@ -34,7 +34,7 @@
+   assert not [(key,s) for key,elf in C.items() for s in definitions(elf,name)],(name,'duplicate C provider')
+   b=final(name);assert (b['bind'],b['type'],b['other'],b['size'])==(1,2,0,a['size']) and sections[b['shndx']]['flags']&6==6
+   providers.append(dict(name=name,Rust_symbol=a,final_symbol=b,unique_actual_Rust_provider=True))
+- report['phases']['actual_thirty_nine_Rust_exports']=providers
++ report['phases']['actual_forty_five_Rust_exports']=providers
+  changes={}
+  for token,wanted in [('CMakeFiles/mckernel.img.dir/syscall.c.o',removed_kernel),('CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o',removed_arch)]:
+   row=next(r for r in P['inputs']['objects'] if r['link_token']==token)
+@@ -78,8 +78,8 @@
+  report['phases']['timer120']=dict(Rust_symbol=a,final_symbol=b,exact15_current_words=witness['expected_words'],unique_Rust_provider=True,set_timer_symbol=set_timer[0],set_timer_table_relocations=consumer_rels,real_consumer_binding='DIRECT_RELOCATION' if consumer_rels else 'OPEN_EXACT_FOLDED_TABLE_ARGUMENT_REVIEW',actual_HOST=witness['actual_HOST'])
+  # Current producer selected only the frozen cfgs, preserving genuine undefined NOCACHE.
+  argv=P['exact_commands'][0]['argv'];assert 'f06_use_nocache_mmap' not in argv and not any('USE_NOCACHE_MMAP' in a for c in P['exact_commands'] for a in c['argv'])
+- assert P['unchanged_completed_process_prefix']['Root_decision']==EXPECTED['process_compile_disposition']
+- report['status']='PASS_ACTUAL_SYNC_PROCESSVM_39_RUST_EXPORTS_SELECTED_C_PROVIDER_SOURCE_AND_IMPORT_CLOSURE'
++ assert P['producer_contract']['process_delta']==EXPECTED['process_compile_disposition']
++ report['status']='PASS_ACTUAL_SYNC_PROCESSVM_45_RUST_EXPORTS_SELECTED_C_PROVIDER_SOURCE_AND_IMPORT_CLOSURE'
+ except BaseException as error:
+  report['status']='FAIL_FIRST_NEXT_PROVIDER_VALIDATOR_PRESERVED';report['first_failure']=repr(error);report['traceback']=traceback.format_exc()
+ (D/'NEXT-PROVIDERS-RESULT.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(dict(status=report['status'],first_failure=report.get('first_failure'),phases=list(report['phases']))))

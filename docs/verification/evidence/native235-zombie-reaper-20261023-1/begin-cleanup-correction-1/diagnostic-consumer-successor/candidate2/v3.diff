@@ -1,0 +1,125 @@
+--- /home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/diagnostic-consumer-successor/v3_native_diagnostic.py
++++ /home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/diagnostic-consumer-successor/candidate2/v3/native_diagnostic.py
+@@ -581,13 +581,13 @@
+                     *[r"application procfs " + op + " " + prefix + " tid=" + schedules[0] + r"\b"
+                       for op in ("published", "deleted")]):
+         _need(len(re.findall(pattern, serial)) == 1, "retirement/release evidence")
+-    _check_syscall_trace(serial, prefix, _begin_cleanup_enabled(manifest))
++    _check_syscall_trace(serial, prefix, _begin_cleanup_enabled(manifest), _begin_process_case(manifest))
+     return {"schema_version": 1, "kind": "native-diagnostic-result", "case_id": manifest["case_id"],
+             "status": "PROTOCOL_PASS", "application_acceptance": False, "mckernel_application_executed": False,
+             "guest_report": report, "observation": observation, "runtime_blocker": DIAGNOSTIC_LIMITATION}
+ 
+ 
+-def _check_syscall_trace(serial, prefix, begin_cleanup=False):
++def _check_syscall_trace(serial, prefix, begin_cleanup=False, child_domain=False):
+     """Join every sampled delivery; exit_group deliberately has no RET.
+ 
+     mcctrl_process.rs::return_syscall prints return_route only when the Linux
+@@ -597,6 +597,8 @@
+     The exit/exit_group branch (and Rust act_exit) retires without RET. This
+     single-thread startup fixture requires one final exit_group (231).
+     """
++    if child_domain:
++        serial, _ = _audit_begin_children(serial, prefix)
+     suffixes = {
+         "delivered": r"worker=(\d+) delivery=(\d+) cpu=(\d+) number=(\d+)",
+         "returned": r"worker=(\d+) delivery=(\d+) cpu=(\d+) value=(-?\d+)",
+@@ -1010,16 +1012,17 @@
+ 
+ 
+ # Explicit source-bound BEGIN_CLEANUP schema; absent field preserves legacy.
+-BEGIN_CLEANUP_PROFILE_ID = "begin-cleanup-intent-real-ack-retirement-v1"
++BEGIN_CLEANUP_PROFILE_ID = "begin-cleanup-real-ack-parent-clone-v2"
+ BEGIN_CLEANUP_SOURCE_REFS = {'consumer': {'path': '/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/consumer/mcctrl_process.rs', 'size': 54077, 'sha256': '2e88cc1777a635eb3599e0ac4c66129f3c2c77a19e421c95373f044d823a87be', 'mode': 33152}, 'provider': {'path': '/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/provider/smp_application.rs', 'size': 72000, 'sha256': '3dcfeb5fb00b1aeffcef784d600566c3553f74cf7bc1ccb4109ab3ececcee73f', 'mode': 33152}}
+ 
+ def _begin_cleanup_enabled(manifest):
+     return "cleanup_profile" in manifest
+ 
+ def _validate_cleanup_profile(profile, modules):
+-    _keys(profile, ("schema_version", "id", "consumer", "provider", "modules"))
++    _keys(profile, ("schema_version", "id", "consumer", "provider", "modules", "child_trace_cases"))
+     _need(type(profile["schema_version"]) is int and profile["schema_version"] == 1 and
+           profile["id"] == BEGIN_CLEANUP_PROFILE_ID, "BEGIN cleanup schema")
++    _need(profile["child_trace_cases"] == list(BEGIN_PROCESS_CASES), "BEGIN child trace case scope")
+     for name in ("consumer", "provider"):
+         _need(profile[name] == BEGIN_CLEANUP_SOURCE_REFS[name], "BEGIN source identity")
+         _ref(profile[name], "BEGIN " + name)
+@@ -1068,3 +1071,77 @@
+     validated=_legacy_cleanup_validate_manifest(base)
+     validated["cleanup_profile"]=_validate_cleanup_profile(profile,validated["modules"])
+     return validated
++
++
++BEGIN_PROCESS_CASES = ('P-M06-01-process-exec-wait-235B', 'P-M01-02-child-SIGTERM-and-exec-recovery-227B')
++
++def _begin_process_case(manifest):
++    return _begin_cleanup_enabled(manifest) and manifest["case_id"] in BEGIN_PROCESS_CASES
++
++def _audit_begin_children(serial, prefix):
++    """Return a parent projection only after auditing every observed child row.
++
++    Child authority is a positive RET to a matched parent clone(56), plus real
++    same-generation procfs publication. A child can run before the parent RET
++    log. A SIGTERM-cancelled child need not emit exit_group; every sampled
++    ordinary delivery still needs its actual return and valid optional route.
++    """
++    owner=re.fullmatch(r"os=(\d+) generation=(\d+) pid=(\d+)",prefix)
++    _need(owner is not None,"process trace parent identity")
++    os_id,generation,parent=map(int,owner.groups())
++    suffixes={"delivered":r"worker=(\d+) delivery=(\d+) cpu=(\d+) number=(\d+)",
++              "returned":r"worker=(\d+) delivery=(\d+) cpu=(\d+) value=(-?\d+)",
++              "return_route":r"worker=(\d+) delivery=(\d+) launcher_cpu=(-?\d+) guest_cpu=(\d+)"}
++    groups={};row_pids={}
++    for position,line in enumerate(serial.splitlines()):
++        for name,suffix in suffixes.items():
++            marker="application_syscall="+name+" "
++            if marker not in line:continue
++            m=re.search(re.escape(marker)+r"os=(\d+) generation=(\d+) pid=(\d+) "+suffix+r"\s*$",line)
++            _need(m is not None,"malformed process syscall row")
++            os_seen,gen_seen,pid,worker,delivery,a,b=map(int,m.groups())
++            _need((os_seen,gen_seen)==(os_id,generation) and pid>0 and 0<worker<2**64 and 0<delivery<2**64,"foreign process syscall identity")
++            records=groups.setdefault(pid,{k:{} for k in suffixes});key=(worker,delivery)
++            _need(key not in records[name],"duplicate process syscall row")
++            records[name][key]=((a,b),position);row_pids[position]=pid
++    _need(parent in groups,"missing process parent trace")
++    pd,pr=groups[parent]["delivered"],groups[parent]["returned"]
++    children={}
++    for key,((cpu,number),position) in pd.items():
++        if number!=56 or key not in pr:continue
++        (retcpu,value),retpos=pr[key]
++        _need(retcpu==cpu==0 and position<retpos,"parent clone correspondence")
++        if value<=0:continue
++        _need(value!=parent and value not in children,"duplicate/parent clone child")
++        children[value]=position
++    _need(set(groups)<={parent,*children},"unlinked child syscall PID")
++    for child,clone_position in children.items():
++        # A child may be cancelled before its first sampled syscall; its
++        # provider publication must still identify the clone return exactly.
++        publication=[]
++        for position,line in enumerate(serial.splitlines()):
++            if "application procfs published " not in line or not re.search(r"pid="+str(child)+r"\b",line):continue
++            m=re.search(r"application procfs published os="+str(os_id)+r" generation="+str(generation)+r" pid="+str(child)+r" tid="+str(child)+r"\s*$",line)
++            _need(m is not None,"child procfs identity")
++            publication.append(position)
++        _need(len(publication)==1 and publication[0]>clone_position,"missing/duplicate child publication")
++        if child not in groups:continue
++        delivered,returned,routes=(groups[child][k] for k in suffixes)
++        _need(delivered and set(routes)<=set(returned)<=set(delivered),"child syscall correspondence")
++        terminals={k for k,(row,_) in delivered.items() if row[1] in (60,231)}
++        _need(len(terminals)<=1 and set(returned)==set(delivered)-terminals,"child ordinary RET coverage")
++        terminal=delivered[next(iter(terminals))][1] if terminals else None
++        workers={}
++        for key,((cpu,number),begin) in delivered.items():
++            _need(cpu==0 and begin>publication[0],"child CPU/publication order")
++            if key in terminals:continue
++            (retcpu,_),end=returned[key]
++            _need(retcpu==0 and begin<end and (terminal is None or end<terminal),"child syscall/terminal order")
++            slot=0
++            if key in routes:
++                (launcher,guest),where=routes[key]
++                _need(launcher==1 and guest==0 and begin<where<end,"child route identity/order")
++                slot=launcher
++            _need(workers.setdefault(key[0],slot)==slot,"child worker route changed")
++    parent_view=[line for position,line in enumerate(serial.splitlines()) if position not in row_pids or row_pids[position]==parent]
++    return "\n".join(parent_view), sorted(children)

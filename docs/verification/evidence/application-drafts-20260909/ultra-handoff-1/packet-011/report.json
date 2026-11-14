@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-011",
+  "packet_version": 1,
+  "context_sha256": "c9cc686a645e86cdd745825564523a444fa80b39a52d4844e156ca8a6131b011",
+  "started_utc": "2026-09-09T10:20:00Z",
+  "finished_utc": "2026-09-09T10:20:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "memory.realloc-null",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/memory/memory.realloc-null.c",
+      "oracle": "scripts/application-tests/oracles/memory.realloc-null.json",
+      "changed_files": ["scripts/application-tests/cases/memory/memory.realloc-null.c", "scripts/application-tests/oracles/memory.realloc-null.json"],
+      "parameter_vectors": {"bytes": [1, 4095, 4096, 4097, 65553, 1048576]},
+      "unresolved_oracle_notes": ["Canonical output and reviewed input/oracle bindings require confirmation before execution."],
+      "max_reviewer_question": "Confirm all six allocation sizes and byte-pattern readback contract."
+    },
+    {
+      "case_id": "memory.aligned-allocation",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/memory/memory.aligned-allocation.c",
+      "oracle": "scripts/application-tests/oracles/memory.aligned-allocation.json",
+      "changed_files": ["scripts/application-tests/cases/memory/memory.aligned-allocation.c", "scripts/application-tests/oracles/memory.aligned-allocation.json"],
+      "parameter_vectors": {"alignment": [16, 64, 4096], "bytes": [4096, 65536]},
+      "unresolved_oracle_notes": ["Canonical output and reviewed input/oracle bindings require confirmation before execution."],
+      "max_reviewer_question": "Confirm the six alignment/size Cartesian vectors and zero-modulo requirement."
+    },
+    {
+      "case_id": "memory.alignment-invalid",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/memory/memory.alignment-invalid.c",
+      "oracle": "scripts/application-tests/oracles/memory.alignment-invalid.json",
+      "changed_files": ["scripts/application-tests/cases/memory/memory.alignment-invalid.c", "scripts/application-tests/oracles/memory.alignment-invalid.json"],
+      "parameter_vectors": {"alignment": [3], "bytes": [64]},
+      "unresolved_oracle_notes": ["EINVAL numeric binding and reviewed input/oracle hashes require confirmation before execution."],
+      "max_reviewer_question": "Confirm direct EINVAL return, unchanged pointer, and unchanged errno on the pinned ABI."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/memory/memory.realloc-null.c", "sha256": "69be53ef56a0e9b9a324bcef24fa2e521573d53c8e0f6ff2d4eae1ea00d4f889"},
+    {"path": "scripts/application-tests/oracles/memory.realloc-null.json", "sha256": "82f5e327a5a99aa38ccd6b4dfd2dfd42747dbf6985c3dc6acee914d7befc932e"},
+    {"path": "scripts/application-tests/cases/memory/memory.aligned-allocation.c", "sha256": "2fa46fbbb311a417bb91203ee880fd7d78796cb0b5f6b12f8e8fc01bdd6da49c"},
+    {"path": "scripts/application-tests/oracles/memory.aligned-allocation.json", "sha256": "20a955dd767f2471e6a9d1b780eb1baf6e0c20616403219211d3f367ecc653b5"},
+    {"path": "scripts/application-tests/cases/memory/memory.alignment-invalid.c", "sha256": "a54dd98585eee089bbe42b54877f9fa63aaef7cf728a836f29055443e4de2be4"},
+    {"path": "scripts/application-tests/oracles/memory.alignment-invalid.json", "sha256": "4f376b9ad6e7058b63a1a1ec50b8bffadc05e01194799b77aeafc802828256c7"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-011.json --emit-context /tmp/application-packet-011-context.json", "outcome": "PASS; metadata only"},
+    {"command": "python3 -m json.tool report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Three memory cases require final canonical schema/input and ABI review."],
+  "blocked_execution_capabilities": ["current-inputs", "runtime-transport-fault-injection", "runner-contract"],
+  "first_failure_event": null,
+  "max_escalation": ["Review memory vector bindings, direct errno semantics, and canonical records before execution."],
+  "next_packet_id": "packet-012"
+}

@@ -1,0 +1,11 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/compiler-proof-readonly-correction-source-1/native-entry-outer-cdc-source-preparation-1/root39-current-boundary-successor-source-1/prepare_f05_v3_bindings.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-outer-cdc-root39-1/prepare_f05_v3_bindings.py
+@@ -23,7 +23,7 @@
+  manifest=read(Path(b['offline_manifest']['path']));need(manifest['case_id']=='M14-05-05-owned-processvm-v3-causal-204B' and manifest['payload']['oracle']==b['expected_oracle'] and len(bytes.fromhex(b['expected_oracle']['stdout_hex']))==204 and b['expected_oracle']['exit_code']==0 and b['expected_oracle']['stderr_hex']=='','F05 v3 causal oracle differs')
+  # Real first API imports and full immutable manifest validation, no backend/guest.
+  import importlib.util
+- owner=checked(b['owner_source']);validator=owner.with_name('native_diagnostic.py');need(hashlib.sha256(validator.read_bytes()).hexdigest()=='e55ad576c45a5eaee742b47081612924a0fca12fc803d30fb359cc9ea6bc57e2','exact existing manifest validator')
++ owner=checked(b['owner_source']);validator=checked(b['evaluator_source']);need(hashlib.sha256(validator.read_bytes()).hexdigest()=='e55ad576c45a5eaee742b47081612924a0fca12fc803d30fb359cc9ea6bc57e2','exact existing manifest validator')
+  spec=importlib.util.spec_from_file_location('bound_f05v2_pure_native_owner',owner);pure_owner=importlib.util.module_from_spec(spec);spec.loader.exec_module(pure_owner)
+  spec=importlib.util.spec_from_file_location('bound_f05v2_real_manifest_validator',validator);v=importlib.util.module_from_spec(spec);spec.loader.exec_module(v);validated=v.load_manifest(b['offline_manifest']['path'])
+  need([r['sha256'] for r in validated['modules'][1:]]==['887dc3567e6035c921588e61b45b41a8ef32a972d142fe2ba82ec48442353b12','57546af5110c0674b307e5ac5a328228abbe784f890f69521db5f594f21f6ae8'],'actual RustMM module tuple')

@@ -1,0 +1,112 @@
+{
+  "schema": "mckernel.practical-thread-state-literal-two-check-review.v1",
+  "decision": "SUFFICIENT_ACCEPTED_EVIDENCE_FOR_BOTH_LITERAL_SELECTED_PROFILE_CHECKS",
+  "reviewer": "/root/condvar_timeout_source_review",
+  "scope": "Functional OS/apps and actual Rust/reviewed assembly; bounded literal review of P-M06-02 and P-M07-02 only. No tests/builds/guest/globalaudit, sharedledger edit or newimplementation/behaviorcredit.",
+  "literal_source": "/home/holden/mckernel/docs/verification/os-milestones-20260914/practical-milestones.json",
+  "checks": {
+    "P-M06-02": {
+      "literal_description": "Exercise genuinely overlapping threads/futex contention and required syscall error behavior.",
+      "recorded_status_at_review": "open",
+      "assessment_note_at_review": "New current-candidate Rust mixed app has six worker lifetimes across3overlap windows (observed reused TIDs258/259), joined Condvar work and balanced publication/deletion. Dynamic C TLS/barrier/mutex2000/joins also pass. Required syscall error/profile closure remains open; process create/exec/wait still separate.",
+      "literal_evidence_result": "SUFFICIENT",
+      "reason": "The literal conjunction is met: genuine worker overlap and Condvar/futexcontention are observed, including source-bound queuedwait0/wake1; requiredselectedapplication error behavior has real EINVAL/ENOENT/EBADF and typedtimeout results. Matching205 strict2CPU execution additionally confirms overlap/startup/route assertions withoutweakeningoracles. No processcreation/exec/wait condition is stated in thischeck; those remain separatechecks.",
+      "evidence_keys": [
+        "fixed_fp_batch",
+        "batch_error_oracle",
+        "closed_write",
+        "condvar_timeout",
+        "enabled_avx_boundaries",
+        "matching205"
+      ],
+      "missing_concrete_literal_condition": null,
+      "next_code_or_test": null
+    },
+    "P-M07-02": {
+      "literal_description": "Run relevant state-preservation checks on the supported CPU/profile.",
+      "recorded_status_at_review": "open",
+      "assessment_note_at_review": "Native SSE2 and original a0f50854 AVX evidence preserved. The rebuilt image08210bb2 includes allocation fail-stop plus copy_fp_regs extent repair5d939231; linked-body provenance and actual AVX/YMM0-15, selected x87/MXCSR syscall/blocking-futex/signal preservation now independently pass on one McKernel CPU. Actual XCR0=0x21f; stdout380 bytes/empty stderr/exit0 and full30client/QEMU/container/lease retirement. Final compiler/libc IFUNC/used-state, AVX512, multicore and final-profile closure remain open; no whole-M07 acceptance. Current Rust-default image686215 also independently passes unchanged AVX with positive retirement f47adf0d; copy/admission ports have scoped native proof. Other used-state/final-profile obligations remain open. Current five-selected-body Rust-default image da0f1bf7 independently passes unchanged AVX33d03860: actual exposure/XCR0 and vector syscall/block/signal stages, exit0/stdout380/empty stderr and all30clients/container/lease positively retired. This is scoped executed behavior, not exhaustive per-body path instrumentation or final-profile closure; threads independently accepted2a634dfb: exit37/exact25B/empty stderr, actual TLS/barrier/mutex2000/joins, process/thread/pager release and full30client/container/lease retirement. Broader live compute C retirement remains active and unfinished.",
+      "literal_evidence_result": "SUFFICIENT_FOR_ACTUALLY_USED_DECLARED_SUPPORTED_PROFILE",
+      "reason": "Relevant real state-preservation checks have run on the supportedselectedCPU/profile: fullYMM0-15 plus selectedx87/MXCSR across syscall/realqueuedfutex/signal, and distinctFPworkerstate/control/peerprogress over64rounds each. Fixed1e7nativeFPthread and matching205strictreplay establish selectedappthreadstate under actualscheduling. OlderwholeISA/IFUNC/finalprofile and per-helperlanguage-retirement disclaimers limit theirclaims; they do not negate that these relevantchecks ran or add a finaldelivery/full-C prerequisite to thisliteralrow.",
+      "evidence_keys": [
+        "fixed_fp_thread",
+        "enabled_avx_boundaries",
+        "paired_avx",
+        "matching205"
+      ],
+      "missing_concrete_literal_condition": null,
+      "next_code_or_test": null
+    }
+  },
+  "evidence": {
+    "fixed_fp_thread": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/practical-fp-thread-state-native-result-review-20261018-1.json",
+      "decision": "PASS_EXACT_FP_THREAD_NATIVE_ORACLE_AND_POSITIVE_PHYSICAL_RETIREMENT",
+      "image": "1e7a1f689f565e3ba35def32d4f8c9ae729f0e5945c4fbeadee4eb523738a4a2",
+      "facts": "Exact254B/emptyerr/exit0; two actualoverlappingworkersTIDs256/257;64rounds each;16YMMregisters/64lanes; source-bound control restoration and peerprogress; balancedretirement/QEMU/container/30client teardown."
+    },
+    "fixed_fp_batch": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/practical-rust-functional-batch-native-result-review-20261019-1.json",
+      "decision": "PASS_ACTUAL_SUPPORTED_FP_PROFILE_BATCH_AND_RETIREMENT",
+      "image": "fixedFP1e7 supportedcandidate",
+      "facts": "Actual387Bfrozen Rustfile/threadbatch, threeoverlappingworkerpairs/768alternatingturns, fulljoin/lifecycle/retirement. Frozen file assertions include negative_seekerrno22(EINVAL) with cursorunchanged14 and removed-fileerrno2(ENOENT)."
+    },
+    "batch_error_oracle": {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-rust-functional-batch-20261018-1/frozen-oracle.json",
+      "facts": "Selected source-bound errno22/errno2 file assertions and3rounds/6joinedthreads/768turns; assertions accepted in fixedFPbatch and unchanged387Bmatching205 replay."
+    },
+    "closed_write": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/practical-file-closed-write-native-result-review-20261018-1.json",
+      "decision": "PASS_ACTUAL_NATIVE_CLOSED_WRITE_AND_RETIREMENT",
+      "image": "e85a1e356e6d09a119d01bbfa2a5175b084dfda1158e9caff508c6434c9a216e",
+      "facts": "Actual close0 then closed-descriptorwrite-9/EBADF, exact24B/emptyerr/exit0 and completephysicalretirement. Historicalsupported-image evidence; not relabeled as205 or1e7 execution."
+    },
+    "condvar_timeout": {
+      "path": "/home/holden/mckernel-work/host-preparation/condvar-timeout-source-review-20261019-1/native-actual-application-acceptance.json",
+      "decision": "PASS_ACTUAL_SUPPORTED_FP1E7_RUST_STD_CONDVAR_TIMEOUT_AND_MUTEX_OWNERSHIP",
+      "image": "1e7a1f689f565e3ba35def32d4f8c9ae729f0e5945c4fbeadee4eb523738a4a2",
+      "facts": "Actual75B/emptyerr/exit0 verifies singlewait_timeout timed_outtrue/predicatefalse/guardWouldBlock/drop-and-reacquirestate. Supporting same-sourceLinuxtrace actualnonnulltimedfutexETIMEDOUT; native rawfutexerrno not independentlysampled."
+    },
+    "matching205": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/repaired205-native-acceptance-20261019-1/ACTUAL-REPAIRED205-TWOCPU-APPLICATION-REVIEW.json",
+      "decision": "PASS_ONE_MATCHING_NEW205_GUEST_TWO_DISJOINT_CPU_APPLICATIONS_EXACT_ORACLES_AND_RETIREMENT",
+      "image": "ff4fca457e9ffe50dc4eca930c5f91faf317eeee15bf0c2907067cffa77b23bb",
+      "facts": "Matching source205/image, accepted strictstartupCPU check; actual387B/254Bbatch+FPthread outputs/exit0 on2McKernelCPUs with1.353171143soverlap, exactdelivery/returnCPUbindings and fullretirement. Adds currentmatching replay, not newlogicalcases or an invented AVXsignal replay on205."
+    },
+    "enabled_avx_boundaries": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/rust-three-port-image-avx-result-review-20261018-1.json",
+      "status": "PASS",
+      "image": "da0f1bf760d5472693ed1d24f0bee717d8bf4c0880d4eb92d98203cd737e814f",
+      "facts": "TypedMcKernelCPUID/XCR0=0x21f, requiredmask0x7. All256bitsYMM0-15 plus selectedx87data/control/TOP/MXCSR across rawsyscall, actualqueuedfutexwait0/wake1 with distinctlivehelperpatterns, and delivered signal beforecomparison;380B/emptyerr/exit0/positivephysicalretirement."
+    },
+    "paired_avx": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/rust-debugreg-pair-avx-native-result-review-20261018-1.json",
+      "decision": "PASS_ACTUAL_CURRENT_PAIR_IMAGE_AVX_AND_POSITIVE_PHYSICAL_RETIREMENT",
+      "image": "accepted5f7pairedSAVE/RESTOREimage",
+      "facts": "RepeatedunchangedAVXboundaryoracle on supportedCPU/profile with selectedproductionRustSAVE/RESTORE/schedulerintegration and positivephysicalretirement. No nonzerohardwareDR/full-helperpathclaim."
+    }
+  },
+  "identity_and_credit_limits": [
+    "Preserve exacttestedimages above. PriorAVXsyscall/futex/signal runs are not relabeled as a fresh205AVXsignalrun. Matching205replays the unchangedsource-bound387Bbatch and254BFPthread cases; fixed1e7 has its own acceptedFPthread/Condvar/batch evidence.",
+    "Stateclaim is the explicitlyexercisedx87/MXCSR/XMM/YMMsubset and actualselectedapplications on declaredQEMUmax,la57off/XSAVEprofile. XCR0exposure alone proves no unusedMPX/PKRU/AVX512state correctness. Completecompiler/libcused-feature declaration belongsP-M07-01 and overallM07scope; no unsupportedstateclaim is added.",
+    "No proxycredit for nonnullFP-release, clearFP/full-SSEreset, nonzerohardwareDR, UTIrefill or computeCretirement. Control63diagnosticappreview remains pending and is not used.",
+    "The selectedsyscallerror evidence is the supportedapplication error contract above, not allsyscalls/allerrno/catalogqualification. Processfork/exec/wait and excludedcampaigncases remain separate.",
+    "Rawpriorreportlimitations/noclosureflags and everyfailure remainunchanged. This additiveaggregate literaldecision does not auto-close ledgerrows, milestones or thewholeOSgoal. No newguest/application/build count is created."
+  ],
+  "witnesses": [
+    "Fixed1e7FPthread:2realworkers,64rounds each,16YMM/64lanes,exact254B/exit0/controlandpeerprogress.",
+    "EnabledAVXnative:actualXCR0=0x21f;YMM0-15/x87/MXCSR survive syscall/queuedfutexwait0wake1/deliveredsignal.",
+    "Matching205strictN3:exact387B/254B,2CPUs,1.353171143soverlap,startup/delivery/returnCPUassertionsaccepted.",
+    "Selectederrors:negativeSeekEINVAL22+removedENOENT2,actualclosedWriteEBADF9,andactualtypedCondvarTimeout/guardreacquisition.",
+    "Literalrowsrequirethread/futex/errors and relevantstatechecksrunning; globalfinaldelivery/full-C/unusedISA/helperbranchclosure not stated."
+  ],
+  "counts": {
+    "literal_checks_reviewed": 2,
+    "literal_checks_with_sufficient_existing_evidence": 2,
+    "literal_checks_with_new_code_or_test_required": 0,
+    "shared_ledger_writes": 0,
+    "newtests_builds_guests": 0,
+    "newnativebehaviorcredit": 0
+  },
+  "dispatcher_action": "Dispatcher may adopt this independent literalassessment when updating the two rows, retaining exactsupportedprofile/image/evidence scope. No unchangedreplay is necessary for these two literalconditions; otherchecks and activekernel/appimplementation continue independently."
+}

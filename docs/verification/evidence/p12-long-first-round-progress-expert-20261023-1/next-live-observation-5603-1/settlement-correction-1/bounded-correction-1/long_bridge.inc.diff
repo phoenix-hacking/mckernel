@@ -1,0 +1,11 @@
+--- accepted/long_bridge.inc
++++ settlement/long_bridge.inc
+@@ -92,7 +92,7 @@
+     }
+     /* Joined owners alone cannot prove procfs/workspace release. */
+     if(long_phase(ctx,round,"callback-postflight") || !long_empty(ctx,round,deadline)){out->ownership_complete=0;return -1;}
+-    if(long_phase(ctx,round,"callback-gate") || pair_round_gate())return -1;
++    if(long_phase(ctx,round,"callback-gate") || pair_round_gate(deadline))return -1;
+     if(long_phase(ctx,round,"callback-report"))return -1;
+     int fd=open(PAIR_ROOT "/evidence/current-report",O_CREAT|O_EXCL|O_RDWR|O_NOFOLLOW|O_CLOEXEC,0600);
+     if(fd<0)return -1;

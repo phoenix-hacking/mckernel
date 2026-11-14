@@ -1,0 +1,11 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "family": "postcompile artifact path parser",
+  "compiler_status": "PASS and already wholejoined/groupabsent/closed",
+  "wrapper_exit": 1,
+  "error_type": "FileNotFoundError",
+  "invalid_path": "obj=/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/fullcrate-preparation-1/mckernel_rust.o",
+  "failing_expression": "Path(argv[-2].split('=',1)[1])",
+  "bounded_correction": "strip exact --emit=obj= prefix; inspect existing object; never repeat unchanged compiler",
+  "source_or_compiler_change": false
+}

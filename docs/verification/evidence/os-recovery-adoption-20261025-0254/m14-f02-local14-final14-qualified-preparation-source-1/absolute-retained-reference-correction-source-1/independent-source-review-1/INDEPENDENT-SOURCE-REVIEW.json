@@ -1,0 +1,79 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_SOURCE_EXACT17_C_FALLBACK_READBACK_ABSOLUTE_REFERENCE_CORRECTION",
+  "independent": true,
+  "reviewer": "/root/current110_execution_review",
+  "at": "2026-10-28T01:36:35.314106+00:00",
+  "ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/absolute-retained-reference-correction-source-1/SOURCE-READY.json",
+    "bytes": 3676,
+    "sha256": "c70b5cd45e79188a800b3bdbbb40742767ea79ee594e75f690ce7be445f43d9b"
+  },
+  "profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/absolute-retained-reference-correction-source-1/PROFILE.NOT-GRANTED.json",
+    "bytes": 172442,
+    "sha256": "f047bb8aaaa0a6017e54779870056cb43b22b9fdfb0d7792dd58323a3b6ae730"
+  },
+  "reader": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/absolute-retained-reference-correction-source-1/qualify_changed_objects.py",
+    "bytes": 17266,
+    "sha256": "4cbf76f67d757d66f078c223f414e54f8cbf84ab21da7ab6bf1de8a9c410768b"
+  },
+  "prior_blocked_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/fallback-storage-class-readback-correction-source-1/independent-source-review-1/INDEPENDENT-SOURCE-REVIEW.json",
+    "bytes": 6821,
+    "sha256": "b8c6aa085f744207bdf28f7816987c1714497d0c809a828926bb2522bfa96101"
+  },
+  "same41_retained_bytes_and_inode_metadata": true,
+  "one_absolute_reference_change": [
+    {
+      "before": "docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/HOST-output-proposed-1/selected0.o",
+      "after": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/HOST-output-proposed-1/selected0.o",
+      "bytes": 66752,
+      "sha256": "c59915d84836a42270463e932e3a657002f00abc89f9b5e2dbe48622fed6bf45",
+      "device": 66306,
+      "inode": 59796962
+    }
+  ],
+  "exact17_storage_class_manifest": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/absolute-retained-reference-correction-source-1/EXACT17-ORIGINAL-HOST-C-STORAGE.json",
+    "bytes": 9794,
+    "sha256": "2885319e49e50748242b84005b9d2d74e1723f2402ed0ac10a2d2713a24748b2"
+  },
+  "retained_identity_manifest": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/absolute-retained-reference-correction-source-1/RETAINED-SIX-PREFIX-INPUT-IDENTITIES.json",
+    "bytes": 25296,
+    "sha256": "abaa6388ec5099fc510c2604872d47eb7b42202d82972a72aba05db33206cfb7"
+  },
+  "raw_diagnostic_absolute_path_fields": [
+    "/artifacts/1/path",
+    "/artifacts/2/path",
+    "/artifacts/3/path",
+    "/artifacts/4/path",
+    "/artifacts/5/path"
+  ],
+  "findings": [
+    "Exactly one of41 identity reference paths changes from repository-relative to its exact absolute path. All bytes/digests/device/inode/uid/gid/mode/nlink/mtime/ctime entries remain equal to b8c6 independently verified values; changed selected0 file retains actual digest/device/inode.",
+    "Storage manifest has no class/type/bind/size/alignment/semantic change: original HOST reference path becomes absolute and raw diagnostic is rebound after five artifact path strings are absolutized, with all other raw leaves identical. Every original helper function is AST-identical except verify_retained_identities adds exactly one explicit path.is_absolute assertion. New manifest hashes/paths bind exact corrected files.",
+    "Exact17 per-name original HOST C .data.rel.ro[.local]/WA or .rodata/A classes remain finite. Strict selectedRust/production readonly, actual ABI/scalar/padding/callback/LOCAL pointer/registry46+102/148 checks and folded-consumer OPEN/exit2 remain unchanged; no generic writable or physical C-RELRO acceptance.",
+    "All profile input paths are absolute/existing, and unchanged6e98 pure validate_profile passes. One Python qualifier only consumes the six successful compiled/CPP/link outputs and writes a fresh report/capture; no producer/CPP/link command or failed/passed-prefix replay is authorized. Original4099/e82e/b8c6 and both actual failed attempts remain preserved.",
+    "All original CPU6/resource/account/fixedclock/defaultON nondefault limitations remain in force. Fresh Root CPU6 exclusion/account/resources/nonce/grant is still required; source PASS supplies no execution authority."
+  ],
+  "reused_positive_prefix": [
+    "Correction is finite17 names/sizes/bindings/type/alignment/section/flags taken from original GLOBAL32 HOST C; allowed .data.rel.ro[.local] flagsWA3 or .rodata flagsA2 are exact per-name, not generic writable acceptance. Production114 remains .rodata/A2 and selectedRust stays .lrodata.<name>/ALLOC|LARGE with no WRITE; no physical C partial-link readonly/RELRO claim.",
+    "All original helper functions except main are AST-identical, including strict default readonly one(), config scalar/padding/file/callback/local-target comparisons, registry46/102/148 and folded consumer OPEN/exit2. Two fallback callsite groups alone use exact_original_C_fallback_storage; no Rust/C source body, ABI, cfg, default/nondefault selection or oracle changes.",
+    "Actual retained six producer/CPP/link results all0 with positive waits/groups absent/streams closed; original seventh qualifier return1 and11.717353s failure remain retained.41 artifact/CPP/stream references verify exact byte digest and device/inode/uid/gid/mode/nlink/mtime/ctime when resolved at their actual repository location. All are reused inputs, not compiler replays.",
+    "Profile has exactly one Python qualifier command with old artifacts as input and a fresh report/capture as output. Existing6e98 metadata validator passes; CPU6/job1/AS2GiB/CPU60/FSIZE64MiB/CORE0/90s, original4GiB reserve, fixedclocks and currentgrant obligations unchanged."
+  ],
+  "retained_open": [
+    "Actual qualifier result and any current folded instruction/dataflow supplement are pending.",
+    "DefaultON rejects RUSAGE_DEBUG/TIMER_CPU_ID/ARCH_MEMCLEAR without optionOFF; Fugaku excluded; all-profile object/link/native and whole-file credit remain OPEN."
+  ],
+  "blocking_findings": [],
+  "runtime_authority": null,
+  "qualifier_main_actions": 0,
+  "compiler_CPP_link_replays": 0,
+  "guard_or_resource_queries": 0,
+  "workloads": 0,
+  "canonical_mutations": 0
+}

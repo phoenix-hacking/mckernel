@@ -1,0 +1,107 @@
+{
+  "bindings": {
+    "image-request.json": {
+      "bytes": 35945392,
+      "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/image-request.json",
+      "sha256": "aecf1e46390f1d3784b768692751d524ba958acf7079a3b90f8a4d8597eea07e"
+    },
+    "image-toolchain.json": {
+      "bytes": 72685013,
+      "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/image-toolchain.json",
+      "sha256": "a68e02b3b66b8bfbae96bf742dc8702b6e81dd97b92189b87437c3d08fccdf72"
+    },
+    "materialization-receipt.json": {
+      "bytes": 480,
+      "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/materialization-receipt.json",
+      "sha256": "695d18888fac636ee29b9c92070b7d30735e30583366e1c8ce225d472925befd"
+    }
+  },
+  "builds": 0,
+  "guests": 0,
+  "new_heavy_owner": false,
+  "next": "Separate exact heavy execution review and fresh admission; full GCC14 syscall/native+legacy Rust/default-link production checks remain OPEN.",
+  "original_materializer_direct_child_status": "UNKNOWN_OBSERVER_FAILURE_PRESERVED",
+  "postflight": {
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "capacities": {
+      "/home/holden": {
+        "free_bytes": 54613352448,
+        "margin_bytes": 36896612352,
+        "required_bytes": 17716740096
+      },
+      "/home/holden/mckernel-work/scratch": {
+        "free_bytes": 13773017088,
+        "margin_bytes": 351244288,
+        "required_bytes": 13421772800
+      }
+    },
+    "launcher_phase": "running",
+    "mem_available_bytes": 29228572672,
+    "mount": {
+      "fstype": "ext4",
+      "source": "/dev/loop36",
+      "target": "/home/holden/mckernel-work/scratch",
+      "uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52"
+    },
+    "ordinary_admission_scope": {
+      "CPU7_share": "requires fresh parent ordinary admission;1job1GiB",
+      "fresh_observations_only": true,
+      "heavy_ownership_acquired": false,
+      "root_heavy_availability": "NOT_OBSERVED_OR_CLAIMED"
+    },
+    "scratch_device": 1828,
+    "scratch_inode": 2,
+    "source_publication_unchanged": true,
+    "stop_reason": null,
+    "usage_percent": 29
+  },
+  "receipt": {
+    "builds": 0,
+    "guests": 0,
+    "materialization_sha256": "b61fae14a2d72a7be880a4c5d164980e6f25d18b42282537d33976d54bb9687b",
+    "regular_files": 6899,
+    "source": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/materialized-source",
+    "source_derivative_sha256": "c4aa2d6025ee407f08ab6a31da01685fa908b02cc614606bd9dfb52ea36eca59",
+    "source_entries": 6948,
+    "status": "PASS_SOURCE_MATERIALIZATION_ONLY",
+    "tracked_symlinks": 49
+  },
+  "root_or_container": false,
+  "source_identity": {
+    "device": 66306,
+    "inode": 47863589
+  },
+  "stages": [
+    {
+      "direct_child_joined": true,
+      "elapsed_seconds": 0.001582,
+      "exit_code": 0,
+      "observer_error": null,
+      "process_identity_captured": true,
+      "stage": "mkdir",
+      "stderr_bytes": 0,
+      "stdout_bytes": 0
+    },
+    {
+      "direct_child_joined": true,
+      "elapsed_seconds": 73.859613,
+      "exit_code": 0,
+      "observer_error": null,
+      "process_identity_captured": true,
+      "stage": "prepare",
+      "stderr_bytes": 0,
+      "stdout_bytes": 0
+    },
+    {
+      "direct_child_joined": true,
+      "elapsed_seconds": 27.956053,
+      "exit_code": 0,
+      "observer_error": null,
+      "process_identity_captured": true,
+      "stage": "consume",
+      "stderr_bytes": 0,
+      "stdout_bytes": 848
+    }
+  ],
+  "status": "PASS_REMAINING_ORDINARY_CONTINUATION_ORIGINAL_CHILD_STATUS_UNKNOWN"
+}

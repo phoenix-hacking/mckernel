@@ -1,0 +1,165 @@
+{
+  "application_acceptance": false,
+  "artifact_acceptance": {
+    "bytes": 2866,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT115-INDEPENDENT-DEFAULT-ARTIFACT-ACCEPTANCE.json",
+    "sha256": "aae76fa20b438828b55662a196fc9266a4c0098262b7effb766f5063ad38b6f9"
+  },
+  "attempt_parent": "/home/holden/mckernel-work/scratch/f02p115n1",
+  "author": "/root",
+  "capture_directory": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-2/root-adopted-matching115-process235-entry-2/CAPTURE",
+  "capture_sources": {
+    "bind_startup_resource.py": {
+      "bytes": 4857,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-2/root-adopted-matching115-process235-entry-2/bind_startup_resource.py",
+      "sha256": "8ba9856c6793e15cfc850c0b1542fb9ff244be8d79816f0cb786ccc417d9de59"
+    },
+    "capture_fresh_startup_resource.py": {
+      "bytes": 4935,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-2/root-adopted-matching115-process235-entry-2/capture_fresh_startup_resource.py",
+      "sha256": "f327e190da24107b7b7775777759a761a69aedce184e4776a09b63aff2bf6f2b"
+    },
+    "prepare_startup_bindings.py": {
+      "bytes": 7517,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-2/root-adopted-matching115-process235-entry-2/prepare_startup_bindings.py",
+      "sha256": "aa815fbe6cd73728f467e9dea8c2cda8d483b1ad55f746ad9087eaa1617a320f"
+    },
+    "run_native_startup_capture.py": {
+      "bytes": 5072,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-2/root-adopted-matching115-process235-entry-2/run_native_startup_capture.py",
+      "sha256": "232844c7cdb6caf253056b7d6ee6c1c9345b9eaabbcfc397f6769574962e3722"
+    },
+    "run_startup_resource_once.py": {
+      "bytes": 2835,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-2/root-adopted-matching115-process235-entry-2/run_startup_resource_once.py",
+      "sha256": "7425ffe5c6f79249528ebad192c12e3f2b19994ceac44191d36cd4f5801d25f1"
+    }
+  },
+  "case_capability": {
+    "bytes": 11727,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-2/CASE-CAPABILITY.ACTUAL.json",
+    "sha256": "ad3a19393befff3e07d68f782fc8184a9ec89a22143ebfa2021b0eb3f399d34f"
+  },
+  "current_physical": {
+    "bytes": 5561,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/independent-postbuild-current-free-review-1/CURRENT-FREE.json",
+    "sha256": "270a93392db9d5c64c7546d43ac36cb604b85da4668884736b4920b623c3111d"
+  },
+  "decision": "PENDING_ONE_EXACT_NATIVE_M15_STARTUP_RELEASE",
+  "evaluator_sha256": "529830adcd6fafa13979bf6036b2812c88630c5e0112ce4d80f9fc28cc30d4da",
+  "exact_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--fsize=33554432",
+    "--as=2147483648:2147483648",
+    "--core=0:0",
+    "--",
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/bound-native-runtime-1/native_diagnostic_container_owner.py",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/f02p115n1",
+    "--nonce",
+    "4d1c28c2d9caa913e4ab1e8a504ac5ea",
+    "--owner-sha256",
+    "af2b1f57a19949e9867de2496b16063859c47298e9cf03b401e95de5bded5a10",
+    "--manifest",
+    "/home/holden/mckernel-work/scratch/f02p115n1-inputs/manifest.json",
+    "--manifest-sha256",
+    "b362c873552a9d3e4344dc311cc5fc69b7fa28b2f7ffe8a05cdd815d57b6b6ec"
+  ],
+  "expected_case": "P-M06-01-process-exec-wait-235B",
+  "expected_new_image_sha256": "de9fdd13b55a5a17158fa8247cc9351c1d9b1944a72c45bac9e4774473dca024",
+  "expected_oracle": {
+    "exit_code": 0,
+    "stderr_hex": "",
+    "stdout_hex": "706172656e742073746172740a6368696c642065786563207375636365737320746f6b656e3d66697865642d76310a706172656e742077616974207375636365737320657869743d333720656f663d31207265617065643d3120656368696c643d310a6368696c642065786563206572726f72206572726e6f3d454e4f454e542073746174653d333720756e6368616e6765643d310a706172656e742077616974206572726f7220657869743d343220656f663d31207265617065643d3120656368696c643d310a706172656e7420636f6d706c657465206368696c6472656e3d32206f776e65643d300a"
+  },
+  "fixed_cutoffs": [
+    1793165769.0,
+    947874.5689514667,
+    963213.695968197
+  ],
+  "fresh_resource_physical": {
+    "bytes": 3216986,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-2/root-adopted-matching115-process235-entry-2/ROOT-FRESH-NATIVE-RESOURCE-PHYSICAL-1.json",
+    "sha256": "aa751e83bd384f084faf428280ad11d0a18b5cb49832053a02b75c9a565078a0"
+  },
+  "independent_review": null,
+  "manifest": {
+    "bytes": 8986,
+    "path": "/home/holden/mckernel-work/scratch/f02p115n1-inputs/manifest.json",
+    "sha256": "b362c873552a9d3e4344dc311cc5fc69b7fa28b2f7ffe8a05cdd815d57b6b6ec"
+  },
+  "maximum_invocations": 1,
+  "nonce": "4d1c28c2d9caa913e4ab1e8a504ac5ea",
+  "owner_sha256": "af2b1f57a19949e9867de2496b16063859c47298e9cf03b401e95de5bded5a10",
+  "profile": {
+    "cap_drop": "ALL",
+    "container_CPU_affinity": "2-5",
+    "container_CPU_count": 4,
+    "container_memory_bytes": 12884901888,
+    "container_network": "none",
+    "container_swap_bytes": 0,
+    "container_tasks": 512,
+    "container_uid": "1000:1000",
+    "guest": {
+      "memory_mib": 8192,
+      "name": "native-diagnostic-4vcpu-8192mib",
+      "numa_nodes": 2,
+      "vcpus": 4
+    },
+    "no_new_privileges": true,
+    "outer_grace_kill": null,
+    "outer_wall_kill": null,
+    "owner_as_bytes": [
+      2147483648,
+      2147483648
+    ],
+    "payload_timeout_ms": 10000,
+    "runner_timeout_seconds": 300,
+    "stream_cap_bytes": 33554432
+  },
+  "resource_output_retention": {
+    "bytes": 1873,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-2/root-adopted-matching115-process235-entry-2/RESOURCE-1-CAPTURE-JOIN.json",
+    "sha256": "6ccb802c01ac83279417c9820aa395f32b377c709710f188fb8833640ed9ccd4"
+  },
+  "root_ledger35": {
+    "bytes": 18845,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER57.json",
+    "sha256": "0140dcb85e685cce3c23d7f76b50b05c092f0db4fa8b5f3e651c8467bfdf2f55"
+  },
+  "runtime_authority": null,
+  "scratch_manifest_stage": {
+    "bytes": 856,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-2/root-adopted-matching115-process235-entry-2/ACTUAL-SCRATCH-MANIFEST-STAGE.json",
+    "sha256": "2bcd50653bbada0474742ca19919bf960d20ea6e5d565c4cc683ccc5a9aaf25c"
+  },
+  "source_authority": {
+    "bytes": 10833,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-2/ROOT-SOURCE-AUTHORITY.ACTUAL.json",
+    "sha256": "6b6a7ab70336621a6b3c22d23f76229c1048a3250104da852cd63e1670d5ba63"
+  },
+  "source_publication": {
+    "bytes": 27257,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-2/root-adopted-matching115-process235-entry-2/ACTUAL-STATIC-SOURCE-PUBLICATION.json",
+    "sha256": "7e2d79b263be4e9b280b648c4120541fe3cfd8589bb37dbcf3ede7369b028965"
+  },
+  "source_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "stage_map_acceptance": {
+    "bytes": 35169,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/independent-actual-stage-map-review-1/STAGE-AND-MAP-ACCEPTANCE.json",
+    "sha256": "82d6056550a3d5fcf58fba245cff6d55dd05e66de09a5b26f0f1255264731b60"
+  },
+  "static_bindings": {
+    "bytes": 16713,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-2/root-adopted-matching115-process235-entry-2/STATIC-NATIVE-BINDINGS.NOT-RELEASED.json",
+    "sha256": "a86fe2dabb5b9fb01dff179b78356a0552fd56e3e216fbc6c6feca91dfe43bd9"
+  }
+}

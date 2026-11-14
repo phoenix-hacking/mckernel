@@ -1,0 +1,37 @@
+{
+  "schema": "mckernel-retirement-release-generation-failure-v1",
+  "recorded_at": "2026-09-29T06:06:00-07:00",
+  "status": "FAIL_PRECOMMIT_MECHANICAL_VALIDATION",
+  "template_commit": "4f47de0bc0718e7a41bb134dffdd546ca0bbfad2",
+  "release_candidate": {
+    "retained_path": "/home/holden/mckernel-work/scratch/native-exact-retirement-release-generation-67589154-2/release-candidate-2.json",
+    "sha256": "5a28247b133f897e10dd703f03f8f79f62d137694e9c9b03a996c4f36289bb34",
+    "size": 2369338,
+    "device": 1831,
+    "inode": 2907354,
+    "uid": 1000,
+    "gid": 1000,
+    "mode": "0600",
+    "candidate_members": 10509,
+    "metadata_backup_members": 86
+  },
+  "checks_before_failure": {
+    "release_schema": "PASS",
+    "helper_root_and_archive_validation": "PASS for both roots and all 10595 members",
+    "live_docker_census": "3/3 PASS across 13 containers",
+    "release_sha256": "PASS"
+  },
+  "failed_check": "packet.final_bytes(template, RELEASE_SHA256)",
+  "failure": "release sentinel not unique",
+  "cause": "The DRAFT template contained the complete sentinel byte sequence once in its declaration and once as the literal used by final_bytes itself, so the intended exact-one guard deterministically counted two.",
+  "side_effects": {
+    "candidate_or_backup_mutated": false,
+    "retirement_executed": false,
+    "privilege_mutation": false,
+    "docker_mutation": false,
+    "build_or_guest": false,
+    "release_committed": false,
+    "draft_sentinel_restored": true
+  },
+  "correction_boundary": "Construct the sentinel search bytes from pieces so the source template contains exactly one complete token; retain the exact-one guard and add a regression over the actual packet bytes. One bounded correction is allowed before expert escalation."
+}

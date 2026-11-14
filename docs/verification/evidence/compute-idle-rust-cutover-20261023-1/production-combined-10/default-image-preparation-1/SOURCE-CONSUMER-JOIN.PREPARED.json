@@ -1,0 +1,77 @@
+{
+  "CpuLocalVar_current_expected": 7848,
+  "accepted_TU_consumer_operation": {
+    "bytes": 13918,
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-process-next-body-cutover-20261023-1/next-slice-1/production-process-tu-1/EXACT-NEXT-PRODUCTION-PROCESS-TU.OPERATION.NOT-RELEASED.json",
+    "sha256": "c6e12e8c60266bb9e1b3fd978ba137c71999ccf108363f4197a49197e45ad150"
+  },
+  "accepted_driver": {
+    "bytes": 181096,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/production-process-tu-1/native_rust_exact_mckernel_image_offline.py.PREPARED",
+    "sha256": "0915f5266361faae378467324f233340193df78f1831d51bd9fcda76e22e15b0"
+  },
+  "actual_layout_evidence": {
+    "bytes": 13354,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/production-abi-layout-1/ACTUAL-LAYOUT-RECEIPT.json",
+    "sha256": "d6ac77fe557bf78c49ee916d84055dfa1af62cf479c37f0f4fc1c46bdbdfd27f"
+  },
+  "actual_materialization": null,
+  "actual_pure": null,
+  "actual_whole_C_TU_defaultlink_native": null,
+  "all_accepted_driver_function_AST_unchanged": true,
+  "callback_type_assertions": 18,
+  "canonical_integration": {
+    "bytes": 2602,
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-process-next-body-cutover-20261023-1/next-slice-1/CANONICAL-INTEGRATION.json",
+    "sha256": "e8290a189f27384e3ceed24a2d8f9385df56bc9640813f00d432e57b2f03a7c9"
+  },
+  "changed_source_files": [
+    {
+      "after_sha256": "9e3cdea2027618ce954b80f2436ed44ef16e2df448c83a5b3734d77ffb161798",
+      "before_sha256": "55872d7235a06364565ec7732b7a67c918ed7c006b1e55ababa88dbe42e2a93a",
+      "path": "kernel/process.c"
+    },
+    {
+      "after_sha256": "5a09c8420d33027483d302ce9f94c350ed2dfdad450a3834214cd224023ab4f8",
+      "before_sha256": "700a9e20349df5ae18ceea8c9195e38078a6bb05b81c79f7368fbdf6fc14abcc",
+      "path": "kernel/rust/sched_helpers.rs"
+    },
+    {
+      "after_sha256": "b6e5926d39edcdc9b65f00877e74564af4b363ad20034ab5ccccbb9c919ab737",
+      "before_sha256": "5df92eff793c7ff0358567340a35b3d9e36188b142186c4fe962a40370490822",
+      "path": "kernel/rust/tests/run_equivalence.sh"
+    }
+  ],
+  "driver": {
+    "bytes": 181096,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-10/default-image-preparation-1/native_rust_exact_mckernel_image_offline.py",
+    "sha256": "f7a65ff9e83a16523c2c1097531e779d9b1dcc2d31813aba59754a2db06fd539"
+  },
+  "layout_assertions": 130,
+  "materialization_sha256": "9b5ce6276d7d2dde9f09606906eabc4dcda8d51389da88ce8e5db63cd463df27",
+  "original19GiB_guard_required": true,
+  "predicted_manifest_bytes": 10195463,
+  "predicted_manifest_sha256": "9692f871af1200e00d2627510fb8d2e48b159e330d5438f28998bd03149b6fa3",
+  "preserved_hash_count_failure": "candidate9initialsinglepinassertion correctedonce to exactprocess2/sched3/harness1; original retained; no repeatedfailure",
+  "preserved_source_entries": 6959,
+  "preserved_symlinks": 49,
+  "producer": {
+    "bytes": 10377,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-10/default-image-preparation-1/materialize_source.py",
+    "sha256": "29e2ca5399ca706eb5615e4320fea74af2314dd86758a3c050d9dbad8970b141"
+  },
+  "provenance": {
+    "bytes": 41116,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-10/default-image-preparation-1/native_rust_exact_build_offline.py",
+    "sha256": "32b7b3889e106a89037f70abfcf6a84faeb73483b289205088342f32ed790f5f"
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\nCandidate10 exactsource/consumer metadata from frozen9 and accepted0915derivative.\n",
+  "source_ABI_review": {
+    "bytes": 783,
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-process-next-body-cutover-20261023-1/next-slice-1/INDEPENDENT-PRODUCTION-SPIN-SLEEP-CONSUMER-ACCEPTANCE.ROOT-RECORD.json",
+    "sha256": "aedadb96da3395ced78cd27dc3f6a2afaa9df545c63703e7c3d69738ab2dd9fe"
+  },
+  "source_derivative_sha256": "34beb3cd9d8fa3cc32dbc30192b59368f3615f1caa0a321adee2882055a19372",
+  "status": "SOURCE_METADATA_ONLY_PENDING_ACTUAL",
+  "total_assertions": 148
+}

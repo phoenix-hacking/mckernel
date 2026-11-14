@@ -1,0 +1,110 @@
+{
+  "schema": "mckernel.stability-diagnostic-runtime-success.v1",
+  "recorded_at": "2026-09-28T11:45:27-07:00",
+  "decision": "PASS_DIAGNOSTIC_PROTOCOL_EVIDENCE",
+  "case_id": "baseline.core.threads",
+  "checkpoint": {
+    "commit": "0754ceff9ebc9b440ea5e3b090e3092197b52bf1",
+    "branch": "codex/local-native-staging-repair",
+    "push_fetch_verified": true
+  },
+  "release": {
+    "packet_path": "docs/verification/stability-native-diagnostic-threads-execution-packet-20260928-1.md",
+    "packet_sha256": "1e39b5811d3e42c62278515dbef97acb04328a979eb59a40ab1a2cd1e8d2fc46",
+    "release_path": "docs/verification/stability-native-diagnostic-threads-execution-release-20260928-1.json",
+    "release_sha256": "891d22913788e1aff5ec8d24e8fe630a984529f5148285dfc05d39377a2f94b3",
+    "preflight_protocol_lines": [138029, 138037],
+    "result": "Capacity, launcher identities, exclusive lease, process and container absence, development lock, every source and artifact, QEMU argv and all fresh paths passed immediately before launch."
+  },
+  "attempt": {
+    "parent": "/home/holden/mckernel-work/scratch/ndct-20260928-1",
+    "nonce": "9561a169a33ebd6ecbd9ae567abbe869",
+    "inner": "/home/holden/mckernel-work/scratch/ndct-20260928-1/attempt-9561a169a33ebd6ecbd9ae567abbe869",
+    "outer": "/home/holden/mckernel-work/scratch/ndct-20260928-1.owner-9561a169a33ebd6ecbd9ae567abbe869",
+    "command_protocol_lines": [138145, 138209],
+    "started_at": "2026-09-28T18:41:00.047450+00:00",
+    "completed_at": "2026-09-28T18:41:36.776948+00:00",
+    "duration_ms": 36727,
+    "owner_exit_code": 0,
+    "container_id": "5d16ec942807cd083eea97e4f8e412beab2908bdd95dbacecc57ff6d591521f7"
+  },
+  "application": {
+    "argv": ["/bin/mcexec", "-t", "1", "0", "app", "threads"],
+    "cwd": "/case/work",
+    "env": {"COKERNEL_PATH": "/apps", "PATH": "/usr/bin:/bin"},
+    "stdout_hex": "4e41544956455f434f5245205041535320746872656164730a",
+    "stdout_size": 25,
+    "stderr_hex": "",
+    "stderr_size": 0,
+    "raw_wait_status": 9472,
+    "exit_code": 37,
+    "stdout_eof": true,
+    "stderr_eof": true,
+    "truncated": false,
+    "procfs_empty": true
+  },
+  "kernel_observation": {
+    "published_tids": [256, 258, 257],
+    "transferred_tid_bytes": 512,
+    "pthread_behavior": "Two workers complete; the barrier, mutex-protected counter at 2000, TLS isolation and joins satisfy the bound fixture oracle.",
+    "sampled_deliveries": 28,
+    "sampled_returns": 27,
+    "sampled_routes": 13,
+    "unreturned_delivery": "exit_group",
+    "cleanup_ack_errno": 0,
+    "retirement_sequence": [-11, 0],
+    "pager_handle": 20,
+    "pager_released_references": 4,
+    "pager_remaining_references": 0,
+    "deleted_tids": [257, 258, 256],
+    "process_release_cleanup_errno": 0,
+    "trace_limit": "The capture does not separately trace clone3 or futex syscall entries or counts."
+  },
+  "qemu_qmp": {
+    "pid": 10,
+    "pgid": 10,
+    "sid": 10,
+    "starttime_ticks": 83068581,
+    "returncode": -9,
+    "transcript_records": 1396,
+    "requests": 696,
+    "successful_replies": 696,
+    "errors": 0,
+    "events": ["RESUME", "SHUTDOWN", "STOP", "SHUTDOWN"],
+    "ordering": "Guest shutdown precedes STOP and host QMP quit; the reviewed cleanup path reaps QEMU.",
+    "limitation": "Controlled teardown is not natural QEMU-exit or independent McKernel shutdown acceptance."
+  },
+  "retained_hashes": {
+    "inner_result": "671c837dbe3eac3ad53be1a0917f66bf4b2b12e7ea06b4418d0b2f66e6165230",
+    "outer_result": "a9cbc7a4fdf9108b2a3a91bbcfc6102e2f8567a85d98bcc72ab8733129262e82",
+    "serial": "5d4f1a57185e9f2bc3538a4d2bb0f064a91c8d1ef3881995b44c2195ab4d0438",
+    "debugcon": "bd87db779e6878802fa64fdee99f2eb08dee1529bbea800a65356f051e186685",
+    "qmp_transcript": "4ec0fe34e43148d8ef68184d090263829b48d7268efdb6d66fb4f946fc1f9ef7",
+    "capture_bindings": "8b0229e9a49510f5ded9971ff50048e1bdba303e0fb96b4b288b1d62d0fe2342",
+    "qemu_stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "qemu_stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "ownership_cleanup": {
+    "outer_status": "PROTOCOL_PASS",
+    "container_exit_code": 0,
+    "container_oom_killed": false,
+    "docker_clients": 30,
+    "all_clients_exact_reaped": true,
+    "authenticated_removal": true,
+    "final_empty_lookups": 3,
+    "current_lookup_empty": true,
+    "development_lock_free": true,
+    "six_capture_copies_join": true,
+    "kill_error_interpretation": "The retained Docker kill error states that the already-exited container was not running; it is not a cleanup failure."
+  },
+  "metadata_interpretation": {
+    "mckernel_application_executed_false": "Preserved unconditional conservative evaluator field pending independent review; the independent decision establishes one observed diagnostic guest application execution only.",
+    "application_acceptance_false": "Correct and preserved: this diagnostic does not satisfy formal catalog or M04 acceptance."
+  },
+  "limitations": [
+    "This is one diagnostic execution on the exact bound artifacts, not formal application acceptance.",
+    "No M04, production-gate, language-gate, multicore, independent-shutdown or whole-OS counter is promoted.",
+    "The retained current signal tuple is not a newly built current-candidate kernel in this invocation.",
+    "Threads packet 1 is consumed and nonreusable."
+  ]
+}

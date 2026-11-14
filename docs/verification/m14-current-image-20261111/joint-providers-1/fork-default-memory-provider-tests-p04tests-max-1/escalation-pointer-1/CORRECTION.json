@@ -1,0 +1,172 @@
+{
+  "status": "FOCUSED_ESCALATION_FIXTURE_POINTER_REPAIR_NOT_EXECUTED",
+  "owner": "/root/p04_source_max Sol/MAX; Root sole executor",
+  "actual_previous_request": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/correction-1/REQUEST.json",
+    "bytes": 14706,
+    "sha256": "407fca38a286ce83f7fd593a8d3ec6b367b03c58a21efcbad85709c8e2d8f846"
+  },
+  "previous_independent_review": "GO02459 reused except this genuinely failed assignment",
+  "actual_failed_compiler_stderr": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/correction-1/execution-1/phase-1.stderr",
+    "bytes": 1466,
+    "sha256": "fb97bfcef5025c93f457348f04b15afafe219a35e94012cafb1057e10359291f"
+  },
+  "actual_failure": "twoE0308 at memory_host_regression.rs235, expected *mutc_void but truebranch ADDR:u64 and falsebranch integer0",
+  "runtime9_cases_previous": "NOT_RUN; compiler only positive joined/released per Rootbf09d7",
+  "failed_candidate_fixture": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/correction-1/memory_host_regression.rs",
+    "bytes": 13988,
+    "sha256": "400b6458c38143e644344469b41d453f4853bf15ecef942cf76716351ca1c036"
+  },
+  "corrected_fixture": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/escalation-pointer-1/memory_host_regression.rs",
+    "bytes": 14023,
+    "sha256": "de36b5df2bde3432ff3feb0fa947212570ef6b6e625b4deeb00b3d9b14f87758"
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/escalation-pointer-1/STRAIGHT-POINTER-ASSIGNMENT.patch",
+    "bytes": 555,
+    "sha256": "6edde67dea3d3565287e21667381c9afe2d74f4c02bc6badc8b7b85611d43847"
+  },
+  "exact_single_statement_before": "addr_of_mut!((*process.0).straight_va).write(if case.straight { ADDR } else { 0 });",
+  "exact_single_statement_after": "addr_of_mut!((*process.0).straight_va).write(if case.straight { ADDR as *mut c_void } else { core::ptr::null_mut() });",
+  "typed_ABI": {
+    "source": {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    "actual_field": "Process.straight_va:*mutcore::ffi::c_void; straight_len:SizeT=usize; CULong=u64",
+    "supported_profile": "actual x86_64 nightly1.95; pointer and CULong8, full accepted ABIff48 unchanged",
+    "raw_address": "ADDR0x7fff_2345_6000 cast only to raw *mutc_void, no reference or dereference; falsebranch is typed null_mut. No memory is mapped/read through this field."
+  },
+  "real_straight_suppression_body": {
+    "source": {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "bytes": 1240596,
+      "sha256": "3c91a22fdae204240201969957036a175fa207cb1d076ff5723650ce5a9adb8f"
+    },
+    "function": "do_munmap_body_result4263",
+    "reads": "Loads straight_va representation as CULong from actualProcess offset and straight_len asSizeT; only zero/bounds comparisons use this address.",
+    "true_case": "straight_va=ADDR and straight_len=LEN; test request addr=ADDR,len=LEN is covered, so host callbacks suppressed. No address dereference.",
+    "false_case": "typed null equals zero address representation; normal host path remains."
+  },
+  "unchanged_payload_facts": {
+    "production_memory_provider": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/escalation-pointer-1/production_memory_provider.rs",
+      "bytes": 5930,
+      "sha256": "f181d7308fcc3ecc81343f38788c9a9f1a1f7b024b3a24586a057f3ff2c17d33"
+    },
+    "production_slices": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/escalation-pointer-1/production_slices.rs",
+      "bytes": 10713,
+      "sha256": "1fe4f725ef1fb6200523619c2f02c0e2c7c4b1d898feac071d401a6da190159e"
+    },
+    "production_setters": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/escalation-pointer-1/production_setters.rs",
+      "bytes": 1293,
+      "sha256": "83d5ea5d797ea31d23312b4d925fd546ab8da8956bd42212ac13425546803f65"
+    },
+    "production_slices_manifest": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/escalation-pointer-1/PRODUCTION-SLICES.json",
+      "bytes": 25615,
+      "sha256": "f1ccc810731ad40e5ea7e74298a9186b5b6fab55865603b175b355f35e1e0b58"
+    },
+    "manifest_provenance": "Manifest bytes including original immutable source/destination references retained; all three new compiled source copies byte-identical to that qualified old namespace, so all25 bodies remain exact.",
+    "all9_goldens": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/EXPECTED.json",
+      "bytes": 4645,
+      "sha256": "02fd39665f703293cd1dd325b616c2fd076614eaf2c9ac572350dd6e61327859"
+    },
+    "all9_literal_cases": "No source changes outside this one assignment; cases array/events/results/flags/requests unchanged.",
+    "copied_inputs": [
+      {
+        "original": {
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/correction-1/memory_host_regression.rs",
+          "bytes": 13988,
+          "sha256": "400b6458c38143e644344469b41d453f4853bf15ecef942cf76716351ca1c036"
+        },
+        "new_copy_before_fixture_delta": {
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/escalation-pointer-1/memory_host_regression.rs",
+          "bytes": 13988,
+          "sha256": "400b6458c38143e644344469b41d453f4853bf15ecef942cf76716351ca1c036"
+        }
+      },
+      {
+        "original": {
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/correction-1/production_memory_provider.rs",
+          "bytes": 5930,
+          "sha256": "f181d7308fcc3ecc81343f38788c9a9f1a1f7b024b3a24586a057f3ff2c17d33"
+        },
+        "new_copy_before_fixture_delta": {
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/escalation-pointer-1/production_memory_provider.rs",
+          "bytes": 5930,
+          "sha256": "f181d7308fcc3ecc81343f38788c9a9f1a1f7b024b3a24586a057f3ff2c17d33"
+        }
+      },
+      {
+        "original": {
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/correction-1/production_slices.rs",
+          "bytes": 10713,
+          "sha256": "1fe4f725ef1fb6200523619c2f02c0e2c7c4b1d898feac071d401a6da190159e"
+        },
+        "new_copy_before_fixture_delta": {
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/escalation-pointer-1/production_slices.rs",
+          "bytes": 10713,
+          "sha256": "1fe4f725ef1fb6200523619c2f02c0e2c7c4b1d898feac071d401a6da190159e"
+        }
+      },
+      {
+        "original": {
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/correction-1/production_setters.rs",
+          "bytes": 1293,
+          "sha256": "83d5ea5d797ea31d23312b4d925fd546ab8da8956bd42212ac13425546803f65"
+        },
+        "new_copy_before_fixture_delta": {
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/escalation-pointer-1/production_setters.rs",
+          "bytes": 1293,
+          "sha256": "83d5ea5d797ea31d23312b4d925fd546ab8da8956bd42212ac13425546803f65"
+        }
+      },
+      {
+        "original": {
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/correction-1/PRODUCTION-SLICES.json",
+          "bytes": 25615,
+          "sha256": "f1ccc810731ad40e5ea7e74298a9186b5b6fab55865603b175b355f35e1e0b58"
+        },
+        "new_copy_before_fixture_delta": {
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/escalation-pointer-1/PRODUCTION-SLICES.json",
+          "bytes": 25615,
+          "sha256": "f1ccc810731ad40e5ea7e74298a9186b5b6fab55865603b175b355f35e1e0b58"
+        }
+      },
+      {
+        "original": {
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/correction-1/TEST-CONTRACT.json",
+          "bytes": 5121,
+          "sha256": "7d37e0c9429863114e4cec95126c3846def5976d536229351c466a0d09c620eb"
+        },
+        "new_copy_before_fixture_delta": {
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/escalation-pointer-1/TEST-CONTRACT.json",
+          "bytes": 5121,
+          "sha256": "7d37e0c9429863114e4cec95126c3846def5976d536229351c466a0d09c620eb"
+        }
+      }
+    ]
+  },
+  "unchanged_originals": {
+    "6c3bd": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/REQUEST.json",
+      "bytes": 14274,
+      "sha256": "6c3bd2adae5c07c7f6fbfb7eded9784971f426221cee35fe0494fc3facafa9f8"
+    },
+    "407f": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/correction-1/REQUEST.json",
+      "bytes": 14706,
+      "sha256": "407fca38a286ce83f7fd593a8d3ec6b367b03c58a21efcbad85709c8e2d8f846"
+    },
+    "prior_context_source_f181_and_sourceGO": "Production source correction and all helpers/ABIs/selectors remain unchanged; no rejected d7ae execution."
+  },
+  "no_code_compiler_test_helper_or_native_execution": true
+}

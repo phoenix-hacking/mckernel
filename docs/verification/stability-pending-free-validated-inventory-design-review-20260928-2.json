@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "record_kind": "pending_free_validated_inventory_design_review",
+  "recorded_utc": "2026-09-28T09:22:00Z",
+  "status": "PASS_BOUNDED_IMPLEMENTATION_DESIGN",
+  "production_sources": {
+    "kernel/mem.c": "167ad2b976bcdec048a625dedf68a9b7c1ef6db7c57f3ceddf3582d54887101a",
+    "kernel/rust/mem_helpers.rs": "647825d8c51a9f584d1229a2389fbb81105e4bbf94bfcf95a12d172c5dde112b"
+  },
+  "confirmed_defect": "Rust mem_finish_free_pages_pending_result, C mem_finish_free_pages_pending_result and the separate C fallback finish_free_pages_pending can release an earlier valid node before a later invalid node rejects or panics.",
+  "trust_gap": "Existing PendingFreeBatch validates by following raw links. Without an independently retained descriptor inventory and mutation lease it cannot prove pointer liveness, cardinality, generation, extent ownership or bounded traversal.",
+  "released_private_design": [
+    "Add private PendingInventoryLease and ValidatedPendingInventory types over preallocated exclusively retained descriptor entries supplied independently of suspect list links.",
+    "Validate exact membership/cardinality/uniqueness, sentinel and reciprocal links, pending mode, positive representable page count, checked aligned physical extents and nonoverlap using separately supplied physical ownership bounds.",
+    "Consume the validation token in an infallible reanchor into pinned PendingFreeBatch, preserving order and metadata and resetting the source NULL/NULL before any allocator callback.",
+    "Drain only under the retained exclusive lease, preflight all fallible conditions, capture callback arguments before release, and never reread a released descriptor.",
+    "Keep all existing exported C/layout/wire ABIs unchanged; do not wire production callers until a real producer supplies the lease."
+  ],
+  "required_source_evidence": [
+    "Actual-layout empty, one, three, source reuse and independent-head positives.",
+    "Later-invalid partial-release controls against Rust finish, the C result helper and the separate C fallback body; the corrected private adapter must make zero callbacks.",
+    "Missing, extra, duplicate, foreign or malformed membership/link cases; wrong mode/count/alignment/range/overlap; invalid destination/callback/repeated drain; exclusivity and negative trait checks.",
+    "Exact begin, enqueue and free-dispatch controls, including immediate allocator fallback when no active capture exists."
+  ],
+  "implementation_now": "An unwired private Rust helper plus source-bound actual-layout/extracted-body fixtures may be authored and statically admitted. Compiler or fixture execution still requires Layer-B release.",
+  "later_required": "A production inventory producer/sidecar and transaction owner covering nonreused identities, quarantine, backing references, VA exclusion, Mirror::clear and authenticated TLB/alias acknowledgement.",
+  "source_edit_released": true,
+  "production_integration_released": false,
+  "compilation_or_execution_released": false,
+  "acceptance_credit": false
+}

@@ -1,0 +1,47 @@
+{
+  "schema": "mckernel.settid.production-source-scope-and-link-recipe-review.v1",
+  "reviewer": "/root/sdk66_source_review",
+  "functional_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_EXPLICIT_RETAINED_PRODUCTION_CMAKE_SCOPE_EXCEPTION_AND_FOUR_OVERLAY_RECIPE_ONLY",
+  "proposal_sha256": "bcf621686c8237d604654660dc0f042afae631856eb2567f4e63f57883a67789",
+  "four_overlay_recipe_sha256": "a07f01294d4eb39cd7d4869981509da7e6087244887590eb34c4c760301b11fb",
+  "projection_sha256": "906e14b001c7b850b7a6679b321e567b3fefcee94953c2895a80b7bf0b988b09",
+  "CMake_exception_diff_sha256": "023e2a4d8ba81621379095f5f8e86bd1e9ecf30fe5acb0a11dd2ad13a602b7f9",
+  "accepted_full_image_basis_sha256": "b4f2eb58866cbab8faf35b78eaecb8a8348511514c505074af267fc87e207fe1",
+  "accepted_six_current_objects_sha256": "63b0dc9f386e7f6fded9820603a81645c5dcd94d96434b228c799ab27f4da2f9",
+  "latest_physical_sha256": "d7f3557dc6500ccf10cfbd1687570bc2b2bbae2c7ec2cc442ed54f2f0eba968a",
+  "source_scope": {
+    "retained_production_entries": 6959,
+    "unchanged_entries": 6955,
+    "retained_regular_files": 6910,
+    "retained_symlinks": 49,
+    "overlays": [
+      {"relative": "kernel/rust/ikc_manycore.rs", "bytes": 10469, "sha256": "e3f3f3ffee3bc8ac892748123ad7fe40b85c5705969d4204dab15ba37c6de137"},
+      {"relative": "kernel/rust/ikc_queue.rs", "bytes": 27590, "sha256": "99d7dbb864955fc43b698a74ae3acaa654ba82daf6e8ff638f5d73371cf59af3"},
+      {"relative": "kernel/rust/syscall_policy.rs", "bytes": 698330, "sha256": "54f3103ee88d34f91f29c3c81b647bb9b24cef576bfb02a8c777742547ce97b1"},
+      {"relative": "kernel/syscall.c", "bytes": 838685, "sha256": "81404ef35d90cf965c1f46ba200d6d83106576373c0ddd84128c638dffe3b6fb"}
+    ],
+    "raw_lib_retained": {"bytes": 2012, "sha256": "4e8d34dc3173aa1c9402ffd437738c6074fcec8a354dc91b6aa8f79d5348ba9c"},
+    "retained_CMake_sha256": "af2758e8cad6fd4baa3c067d23cc81ab483aa71d666ca6249d54e8ccfd2701e5",
+    "scope_claim": "Retained accepted production closure plus exact four overlays; not whole live-tree current. Current160 projection has154 identical raw production inputs,four overlays,one compiler-only config and one explicit production CMake exception."
+  },
+  "affected_boundary_findings": [
+    "Accept the retained production kernel/CMakeLists.txt exception explicitly. Its default-OFF owned-fork option,architecture/Rust/Linux6.12/work-IRQ/user-tool gates,real mcexec_rust_helpers target check,genuine SDK version-header hash and mcexec include/dependency wiring preserve the accepted production contract. Replacing it with current160 CMake would silently omit those gates/dependencies; shared-tree CMake integration is not required to materialize this explicitly scoped private source bundle.",
+    "Retain raw production lib.rs,not the compile-only appended FAM assertion view,and omit .compiler-generated/config.h from overlays. Production configure remains generated-config authority; genuine .kernel-sdk version header and retained gitlink/IHK BUILDID metadata remain exact accepted inputs.",
+    "The four changed sources are already represented by accepted current whole-crate/C-object evidence and earlier source/ABI decisions. No request layout,callback ABI or settid ownership change is introduced by this source recipe. The accepted CMake opt-in must remain selected for the real current caller and matching real mcexec producer to enter the same-workspace image build.",
+    "Reuse accepted18-stage producer and its15 existing pre-object ABI/C/native/legacy/layout checks. Preserve production Rust-object creation,actual panic-family undefined-symbol refusal and same-workspace mckernel.img LD. No old object/cache adoption or deletion of prior failed panic/LD/authentication evidence is allowed. This review does not repeat those accepted command/profile audits.",
+    "Actual new linked evidence must independently show unique syscall_settid_body_result in production Rust object and final image,one selected C undefined import before final link,no unresolved helper after link,and actual CMake compile/link/config/dependency evidence of selected consumer and mcexec. Six standalone ET_REL objects are not this production link proof."
+  ],
+  "next_finite_source_grant_review": [
+    "Packager freezes the exact-successor manifest with only four repository_files/materialized_repository_files SHA substitutions and unchanged kinds,modes,symlinks,omissions,gitlinks and SDK/header authority. Recompute derivative/materialization/canonical pins using the existing accepted recipe; do not guess them from object hashes.",
+    "Mechanically bind the same canonical manifest identity in thin_source_contract.py and embedded runtime contract; update only exact paths/hashes/namespace/OVERLAYS in materializer,binder,driver/request/guard references. Review those changed pin boundaries and the concrete ordinary source command/profile once frozen,without repeating the6959 inventory or18 accepted commands.",
+    "Bind actual63b0 six-object acceptance where the proposal presently leaves it null,and retain its48/51 Rust warnings and explicit no-link/no-native scope. Bind genuine latest d7f3557d physical disposition with fresh actual admission; no future M06 success or global mutable HEAD equality gate.",
+    "Ordinary materialization/source-identity evidence and its new hashes remain unbound until a real admitted run. Full-image resource/work/capture/emergency requirements must use the existing full-image profile and fresh headroom,not the prior compiler640MiB budget. Root retains heavy/lease/execution/publication authority."
+  ],
+  "current_source_execution_grant": false,
+  "heavy_build_root_guest_or_lease_authority": false,
+  "new_source_derivative_or_materialization_identity": null,
+  "HOST66_or_default_or_native_acceptance": false,
+  "production_compute_C_retirement": false,
+  "reviewer_source_edits_builds_tests_imports_Git_or_leases": 0
+}

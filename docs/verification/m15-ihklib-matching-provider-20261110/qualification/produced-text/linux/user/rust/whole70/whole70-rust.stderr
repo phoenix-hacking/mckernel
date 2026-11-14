@@ -1,0 +1,50 @@
+warning: function `abort` is never used
+  --> /source/linux/user/rust/whole70/accepted_host_root.assigned_memory_dependency_join.rs:22:8
+   |
+22 |     fn abort() -> !;
+   |        ^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `EINVAL` is never used
+ --> /source/linux/user/rust/whole70/ihklib_mcstat_memory_shared_parser.rs:5:7
+  |
+5 | const EINVAL:c_int=22;
+  |       ^^^^^^
+
+warning: function `is` is never used
+  --> /source/linux/user/rust/whole70/ihklib_mcstat_memory_shared_parser.rs:39:11
+   |
+39 | unsafe fn is(a:*const c_char,b:*const c_char)->bool {unsafe {strcmp(a,b)==0}}
+   |           ^^
+
+warning: function `strcmp` is never used
+  --> /source/linux/user/rust/whole70/ihklib_mcstat_memory_shared_parser.rs:26:5
+   |
+26 |  fn strcmp(a:*const c_char,b:*const c_char)->c_int;
+   |     ^^^^^^
+
+warning: function `strdup` is never used
+  --> /source/linux/user/rust/whole70/ihklib_mcstat_memory_shared_parser.rs:27:5
+   |
+27 |  fn strdup(s:*const c_char)->*mut c_char;
+   |     ^^^^^^
+
+warning: function `strsep` is never used
+  --> /source/linux/user/rust/whole70/ihklib_mcstat_memory_shared_parser.rs:28:5
+   |
+28 |  fn strsep(s:*mut *mut c_char,delimiters:*const c_char)->*mut c_char;
+   |     ^^^^^^
+
+warning: function `strtol` is never used
+  --> /source/linux/user/rust/whole70/ihklib_mcstat_memory_shared_parser.rs:29:5
+   |
+29 |  fn strtol(s:*const c_char,end:*mut *mut c_char,base:c_int)->c_long;
+   |     ^^^^^^
+
+note: link against the following native artifacts when linking against this static library. The order and any duplication can be significant on some platforms
+
+note: native-static-libs: -lgcc_s -lutil -lrt -lpthread -lm -ldl -lc
+
+warning: 7 warnings emitted
+

@@ -1,0 +1,17 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/absolute-retained-reference-correction-source-1/qualify_changed_objects.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/typed-timer-array-alignment-reader-correction-source-1/qualify_changed_objects.py
+@@ -27,7 +27,13 @@
+  found=elf.definitions(name);assert len(found)==1,(elf.path,name,found)
+  symbol=found[0];z=elf.sections[symbol['ndx']]
+  assert symbol['kind']==1 and symbol['bind']==bind and symbol['size']==size
+- assert z['flags']&2 and not z['flags']&4 and z['align']>=min(size,8) and symbol['value']%min(size,8)==0
++ alignment=min(size,8)
++ # Genuine immutable [CInt;2] is size8/align4, not an eight-byte scalar.
++ # CInt=i32; defining/consuming type and existing CInt ABI witness are retained.
++ if readonly and name=='process_sched_timer_configuration':
++  assert size==8
++  alignment=4
++ assert z['flags']&2 and not z['flags']&4 and z['align']>=alignment and symbol['value']%alignment==0
+  if readonly:assert not z['flags']&1
+  begin=z['off']+symbol['value']-z['addr'];raw=elf.data[begin:begin+size]
+  reloc={off-symbol['value']:value for off,value in m.relocs(elf,symbol['ndx']).items() if symbol['value']<=off<symbol['value']+size}

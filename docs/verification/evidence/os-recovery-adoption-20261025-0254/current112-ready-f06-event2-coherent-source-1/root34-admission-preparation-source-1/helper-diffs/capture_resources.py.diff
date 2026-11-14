@@ -1,0 +1,11 @@
+--- Root34-CURRENT113/capture_resources.py
++++ Root34-CURRENT112/capture_resources.py
+@@ -86,7 +86,7 @@
+  assert inputs['runner']==ref(root/'run_build_only.py') and inputs['worker']==ref(root/'build_only_worker.py')
+  runner.commands_for_plan(profile)
+  source_rows=[r['source'] for r in profile['inputs']['configuration']]+[r['source'] for r in profile['inputs']['objects'] if not r['replace']]+[r['postimage'] for r in profile['inputs']['postimages']]+[r['postimage'] for r in runner.source_directory_postimages(profile)]
+- assert len(runner.source_directory_postimages(profile))==118
++ assert len(runner.source_directory_postimages(profile))==113
+  for row in source_rows:auth(row)
+  export=read(auth(inputs['input_export_authority']));assert export['qualified_readonly_files']==source_rows and export['request_sha256']==profile['request_sha256']
+  assert not (root/'OUTPUT').exists()

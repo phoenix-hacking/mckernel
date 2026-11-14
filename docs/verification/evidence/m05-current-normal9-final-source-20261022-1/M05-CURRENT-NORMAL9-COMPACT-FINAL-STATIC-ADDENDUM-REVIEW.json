@@ -1,0 +1,59 @@
+{
+  "reviewer": "/root/m05_current_normal9_actual_source_review",
+  "implementation_ownership": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_COMPACT_DESCRIPTOR_ADDENDUM_AND_ACTUAL_FINAL_STATIC_DATA_ONLY",
+  "decision": "ACCEPT_CURRENT_COMPACT_PROJECTION_AND_MATERIALIZED_FINAL_STATIC_CLOSURE",
+  "blockers_within_reviewed_scope": [],
+  "packet_directory": "/home/holden/mckernel-work/host-preparation/native-second-stop-case-preparation-20261021-1/current053d-normalization-runtime-preparation-1/current-runtime-construction-preparation-1/runtime4-construction-preparation-1/actual-current4-construction-preparation-1/current-normal9-final-binding-1/final-compact-descriptor-materialization-1",
+  "exact_refs_relative_to_packet": [
+    {
+      "path": "COMPLETED-ACTUAL-COMPACT-FINAL-MATERIALIZATION-1.json",
+      "sha256": "49e4f394b01d83d83210f011266ff33e66a7095ac6c345ca40cb3ae6a2b62bfc",
+      "bytes": 6639
+    },
+    {
+      "path": "PRESERVED-TYPED-SOURCE-REFS-AND-COMPACT-PROJECTION.json",
+      "sha256": "aae48ce869c93fe915868e9a62fccb442f7eb62db03b5838380760848b5e60e1",
+      "bytes": 17650
+    },
+    {
+      "path": "ACTUAL-FINAL-STATIC-CHECK-RESULT.json",
+      "sha256": "231654c583f8c4b89f96e73cef42dbf8baf67af44450da801d80c6c05525faf0",
+      "bytes": 11724
+    },
+    {
+      "path": "RUNTIME-SOURCE-FD-IDENTITIES.json",
+      "sha256": "970f66352779ef9e1194ad6959edbfe46e03b5f0bd97c5cf368d15e646e3c762",
+      "bytes": 8139
+    }
+  ],
+  "resolved_finding": {
+    "symbol": "native-packet-1/review_final_threads_release.py:read_source/check_runtime_sources",
+    "scenario": "Original sixteen typed size/mode descriptors lacked bytes and could not equal the guard's compact three-field return descriptor. The earlier whole caller did not exercise this function.",
+    "correction": "DATA now supplies exact path/sha256/bytes projections. Original typed rows and modes remain preserved; all sixteen modes are enforced by the complete runtime FD identities."
+  },
+  "accepted_facts": [
+    "Verified exact sixteen-row projection, unchanged paths/hashes, bytes equal typed size, preserved typed modes and matching complete nine-field identities.",
+    "Raw commands/start/wait/join/stream evidence supports three exit0 successes: constructor2971693/start43997892, finalbinder2971695/start43997900, staticcheck2971697/start43997962. All directly joined, groups absent, streams closed and stderr empty.",
+    "Actual qualified guard.check_runtime_sources consumed twenty-one ordered references over eighteen unique source FD paths. The check also invoked the existing path/hash validator over nineteen actual final outputs and checked the generated executor's exact seven-step index hash.",
+    "Verified eight source/DATA descriptors, nineteen final descriptors and matching eight/eighteen identity sets. No snapshot-dependent guard main or executor workload ran.",
+    "Native87f identity and current C9 released-record roles remain separate and unchanged. Original provenance, false native common/shared absence observation and NATIVE_TERMINAL_ANCESTRY_ONLY qualification remain preserved."
+  ],
+  "static_contract": {
+    "original_basis_sha256": "cc04a632b2306b16effe57f7901a88339249b995aa091b841521c5c31db1b38c",
+    "original_basis_bytes": 4026,
+    "interpretation": "cc04 remains the genuine prior source/DATA and pending-whole basis; it does not claim acceptance of this new descriptor shape. This addendum supplies current correction and materialized-final-data acceptance.",
+    "separate_addendum_permitted": true,
+    "reason": "Binder lines77-78 authenticate the supplied existing review. Snapshot static_joins and final-guard snapshot equality require consistent existing static descriptors; no reviewed predicate requires replacing them with the newest addendum.",
+    "condition": "Root must bind this genuine addendum and its exact final artifacts separately in publication and the future execution-review payload. No rematerialization solely to insert this addendum hash is required."
+  },
+  "projection_permission": "Root may record this independent addendum and accept the exact corrected final static source/DATA closure, preserving cc04's original scope and separate reviewer attribution.",
+  "source_publication": null,
+  "fresh_root_snapshot": null,
+  "final_exclusive_grant": null,
+  "runtime_execution_review": null,
+  "runtime_authority": false,
+  "native_acceptance": false,
+  "limitations": "Focused read-only addendum; prior source/body eligibility reused. No tests, writes, builds, root operations, census, Docker, guest or native execution performed by this reviewer. No runtime, restoration, cycle or Rust retirement credit."
+}

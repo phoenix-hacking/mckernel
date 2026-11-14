@@ -1,0 +1,77 @@
+
+/home/holden/mckernel-work/host-preparation/m07-current-final-used-state-join-20261023-1/private-state-app-successor-1/state-app:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+000000000023eea1 <component_handler>:
+  23eea1:	53                   	push   %rbx
+  23eea2:	41 57                	push   %r15
+  23eea4:	48 8b 1d c5 14 11 00 	mov    0x1114c5(%rip),%rbx        # 350370 <COMPONENT_HANDLER_CONTEXT>
+  23eeab:	48 85 db             	test   %rbx,%rbx
+  23eeae:	0f 84 c6 00 00 00    	je     23ef7a <component_handler+0xd9>
+  23eeb4:	48 8b 7b 10          	mov    0x10(%rbx),%rdi
+  23eeb8:	48 8b 03             	mov    (%rbx),%rax
+  23eebb:	48 89 c2             	mov    %rax,%rdx
+  23eebe:	48 c1 ea 20          	shr    $0x20,%rdx
+  23eec2:	48 0f ae 27          	xsave64 (%rdi)
+  23eec6:	48 f7 03 00 02 00 00 	testq  $0x200,(%rbx)
+  23eecd:	74 31                	je     23ef00 <component_handler+0x5f>
+  23eecf:	48 8b 4b 30          	mov    0x30(%rbx),%rcx
+  23eed3:	48 8b 73 10          	mov    0x10(%rbx),%rsi
+  23eed7:	48 8b 7b 08          	mov    0x8(%rbx),%rdi
+  23eedb:	31 c0                	xor    %eax,%eax
+  23eedd:	48 f7 86 00 02 00 00 	testq  $0x200,0x200(%rsi)
+  23eee4:	00 02 00 00 
+  23eee8:	74 03                	je     23eeed <component_handler+0x4c>
+  23eeea:	8b 04 0e             	mov    (%rsi,%rcx,1),%eax
+  23eeed:	25 ff ff ff 3f       	and    $0x3fffffff,%eax
+  23eef2:	8b 14 0f             	mov    (%rdi,%rcx,1),%edx
+  23eef5:	81 e2 00 00 00 c0    	and    $0xc0000000,%edx
+  23eefb:	09 c2                	or     %eax,%edx
+  23eefd:	89 14 0f             	mov    %edx,(%rdi,%rcx,1)
+  23ef00:	48 8b 7b 08          	mov    0x8(%rbx),%rdi
+  23ef04:	48 8b 03             	mov    (%rbx),%rax
+  23ef07:	48 89 c2             	mov    %rax,%rdx
+  23ef0a:	48 c1 ea 20          	shr    $0x20,%rdx
+  23ef0e:	48 0f ae 2f          	xrstor64 (%rdi)
+  23ef12:	4c 8b 7b 08          	mov    0x8(%rbx),%r15
+  23ef16:	48 8b 7b 18          	mov    0x18(%rbx),%rdi
+  23ef1a:	48 8b 03             	mov    (%rbx),%rax
+  23ef1d:	48 89 c2             	mov    %rax,%rdx
+  23ef20:	48 c1 ea 20          	shr    $0x20,%rdx
+  23ef24:	48 0f ae 27          	xsave64 (%rdi)
+  23ef28:	48 8b 87 00 02 00 00 	mov    0x200(%rdi),%rax
+  23ef2f:	49 33 87 00 02 00 00 	xor    0x200(%r15),%rax
+  23ef36:	48 23 03             	and    (%rbx),%rax
+  23ef39:	75 3f                	jne    23ef7a <component_handler+0xd9>
+  23ef3b:	4c 8b 53 20          	mov    0x20(%rbx),%r10
+  23ef3f:	49 8b 4a 08          	mov    0x8(%r10),%rcx
+  23ef43:	48 85 c9             	test   %rcx,%rcx
+  23ef46:	74 26                	je     23ef6e <component_handler+0xcd>
+  23ef48:	49 8b 42 10          	mov    0x10(%r10),%rax
+  23ef4c:	49 85 87 00 02 00 00 	test   %rax,0x200(%r15)
+  23ef53:	74 13                	je     23ef68 <component_handler+0xc7>
+  23ef55:	49 8b 02             	mov    (%r10),%rax
+  23ef58:	49 8d 34 07          	lea    (%r15,%rax,1),%rsi
+  23ef5c:	48 8b 7b 18          	mov    0x18(%rbx),%rdi
+  23ef60:	48 01 c7             	add    %rax,%rdi
+  23ef63:	fc                   	cld    
+  23ef64:	f3 a6                	repz cmpsb %es:(%rdi),%ds:(%rsi)
+  23ef66:	75 12                	jne    23ef7a <component_handler+0xd9>
+  23ef68:	49 83 c2 18          	add    $0x18,%r10
+  23ef6c:	eb d1                	jmp    23ef3f <component_handler+0x9e>
+  23ef6e:	c7 05 00 14 11 00 01 	movl   $0x1,0x111400(%rip)        # 350378 <COMPONENT_SIGNAL_SEEN>
+  23ef75:	00 00 00 
+  23ef78:	eb 0a                	jmp    23ef84 <component_handler+0xe3>
+  23ef7a:	c7 05 f4 13 11 00 ff 	movl   $0xffffffff,0x1113f4(%rip)        # 350378 <COMPONENT_SIGNAL_SEEN>
+  23ef81:	ff ff ff 
+  23ef84:	41 5f                	pop    %r15
+  23ef86:	5b                   	pop    %rbx
+  23ef87:	c3                   	retq   
+
+Disassembly of section .init:
+
+Disassembly of section .fini:
+
+Disassembly of section .iplt:

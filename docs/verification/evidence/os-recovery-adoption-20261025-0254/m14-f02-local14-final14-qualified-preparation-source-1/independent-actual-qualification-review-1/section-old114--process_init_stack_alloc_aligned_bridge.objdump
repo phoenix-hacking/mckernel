@@ -1,0 +1,22 @@
+
+/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o:     file format elf64-x86-64
+
+
+Disassembly of section .ltext.process_init_stack_alloc_aligned_bridge:
+
+0000000000000000 <process_init_stack_alloc_aligned_bridge>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	49 89 c9             	mov    %rcx,%r9
+   7:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	9: R_X86_64_64	process_init_stack_alloc_file
+  11:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	13: R_X86_64_64	process_init_stack_alloc_line
+  1b:	44 8b 11             	mov    (%rcx),%r10d
+  1e:	49 bb 00 00 00 00 00 00 00 00 	movabs $0x0,%r11	20: R_X86_64_64	_ihk_mc_alloc_aligned_pages_node
+  28:	b9 ff ff ff ff       	mov    $0xffffffff,%ecx
+  2d:	41 b8 01 00 00 00    	mov    $0x1,%r8d
+  33:	41 52                	push   %r10
+  35:	ff 30                	push   (%rax)
+  37:	41 ff d3             	call   *%r11
+  3a:	48 83 c4 10          	add    $0x10,%rsp
+  3e:	5d                   	pop    %rbp
+  3f:	c3                   	ret    

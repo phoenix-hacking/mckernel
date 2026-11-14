@@ -1,0 +1,56 @@
+{
+  "schema": "mckernel.native-exact-candidate-relocation-result.v1",
+  "status": "PASS_AFTER_PRESERVED_CORRECTION",
+  "acceptance_credit": false,
+  "scope": "Relocation of one consumed build source candidate only; no build, boot, runtime, or application acceptance",
+  "original_failure": {
+    "record": "docs/verification/evidence/native-exact-candidate-relocation-dce800af-copy-verification-failure-20260930.json",
+    "record_sha256": "0a98a1ea5c62bd80999fb73bdc1ab8b7a107f629d387933535b84dd2a39480a1",
+    "family": "cross-filesystem-directory-size-inventory-normalization",
+    "source_was_deleted": false,
+    "temporary_copy_was_preserved": true
+  },
+  "resume_release": {
+    "commit": "decb0f20baeab4c5caa51fce69b3bdf65b5727a6",
+    "packet": "docs/verification/evidence/native-exact-candidate-relocation-resume-dce800af-20260930.sh",
+    "packet_sha256": "99bc2e5f43aeb0aa25eec8a5ed42f817f0bdf660cf2e50597741f547b6e05387",
+    "test": "scripts/tests/test_native_exact_candidate_relocation_resume_dce800af_20260930.py",
+    "test_sha256": "88f656239757192d9b55a856a1bee17fa3fc94d3cbf42247dc376bde0bc14753",
+    "focused_tests": "6 passed",
+    "independent_source_review": "PASS_SOURCE",
+    "independent_execution_review": "PASS_EXECUTION"
+  },
+  "result": {
+    "entry_count": 10725,
+    "regular_file_count": 9749,
+    "symlink_count": 49,
+    "source": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-dce800af-scratch-5",
+    "source_absent_after": true,
+    "temporary_copy_absent_after": true,
+    "destination": "/home/holden/mckernel-work/retained-exact-candidates/mckernel-exact-candidate-dce800af-scratch-5",
+    "destination_identity": "66306:47736554",
+    "candidate_commit": "dce800af8c19d014ef509e102ca4f4b1c473e2ab",
+    "terminal_status": "PASS",
+    "observed_at_utc": "2026-09-30T08:38:45.426369Z"
+  },
+  "records": {
+    "intent": {"identity": "1831:57590", "sha256": "5708b29c9ebd3509ef098a15011b0525c4fff29fdabf37c6f9a7c5eb675c2b7c"},
+    "exclusion": {"identity": "1831:57589", "sha256": "16d77d999f4d969744f46d89a49acf3a5638d5197533c7e1f59e57312e29f845"},
+    "deletion_intent": {"identity": "1831:57591", "sha256": "7854f824e5950be97d0c1d6563310ae8897416391cf070b18801647f224d0d12"},
+    "terminal": {"identity": "1831:57592", "sha256": "b66a36b2faef45849674e9a5db89105628564399f43ad6bde7da9c5ea52d8f52"},
+    "log": {"identity": "1831:57588", "sha256": "b66a36b2faef45849674e9a5db89105628564399f43ad6bde7da9c5ea52d8f52"}
+  },
+  "preserved_build_evidence": {
+    "output_identity": "1831:5373997",
+    "evidence_identity": "1831:5373998",
+    "archive_sha256": "f8522be9649def629b04a93d065f3ab79a5c7acdd7a2f2f221b7d759384c5952",
+    "historical_exclusion_identity": "1831:57580",
+    "stopped_container": "6efd149e8b8c4333ff62080ea7031f1dc1c47c718e1222bed3b6c4dbdeb85870",
+    "container_state": "exited exit=1 pid=0 oom=false"
+  },
+  "capacity_after": {
+    "scratch_free_bytes": 29113753600,
+    "host_free_bytes_after_trim": 27564584960,
+    "fstrim_bytes": 12436381696
+  }
+}

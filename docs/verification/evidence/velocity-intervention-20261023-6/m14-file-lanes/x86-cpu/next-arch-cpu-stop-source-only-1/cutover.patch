@@ -1,0 +1,36 @@
+--- a/arch/x86_64/kernel/cpu.c
++++ b/arch/x86_64/kernel/cpu.c
+@@ -3043,12 +3043,16 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
++void arch_cpu_stop(void);
++#else
+ void arch_cpu_stop(void)
+ {
+ 	while (1) {
+ 		cpu_halt();
+ 	}
+ }
++#endif
+ 
+ /*@
+   @ behavior fs_base:
+--- a/kernel/rust/x86_cpu_helpers.rs
++++ b/kernel/rust/x86_cpu_helpers.rs
+@@ -3144,3 +3144,14 @@
+         _ => {},
+     }
+ }
++
++/// Complete nonreturning stop loop, using the existing architecture halt body.
++/// Each wakeup returns to the next halt; no IRQ state, return policy or counter
++/// is introduced. The C ABI remains void(void), as in the actual panic caller.
++#[cfg(not(mckernel_equivalence))]
++#[no_mangle]
++pub unsafe extern "C" fn arch_cpu_stop() {
++    loop {
++        unsafe { cpu_halt(); }
++    }
++}

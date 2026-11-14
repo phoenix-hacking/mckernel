@@ -1,0 +1,59 @@
+{
+  "CPU7_tests": 0,
+  "baseline_tuple_members": 5,
+  "batch_release": null,
+  "changed_artifact_members_vs_previous_accepted_stage": [
+    "modules/mcctrl.ko"
+  ],
+  "cheap_test_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=536870912:536870912",
+    "--cpu=20:20",
+    "--core=0:0",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/native235-zombie-sdk-successor-20261023-1/restoration-batch-preparation/stage-binding/check_authority_only.py"
+  ],
+  "first_restoration": null,
+  "new_binding": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-sdk-successor-20261023-1/restoration-batch-preparation/stage-binding/BINDING.json",
+    "sha256": "cd417a65ed6dc110796478e8e31a0511f4b8388c6686e1c57209b728b470e085",
+    "size": 10047
+  },
+  "new_stager": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-sdk-successor-20261023-1/restoration-batch-preparation/stage-binding/stage_m05_two_generation.py",
+    "sha256": "2b4bbfdf23e6ad58f9693fd0fc5c2ea7e8472f829ee9a347d1de00044acf635d",
+    "size": 17365
+  },
+  "ordinary_stage_argv": [
+    "/usr/bin/taskset",
+    "--cpu-list",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=536870912",
+    "--cpu=30",
+    "--core=0",
+    "--fsize=134217728",
+    "--nofile=256",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/native235-zombie-sdk-successor-20261023-1/restoration-batch-preparation/stage-binding/stage_m05_two_generation.py",
+    "--stage"
+  ],
+  "original_baseline_namespace": 62,
+  "root_Docker_compiler_guest_operations": 0,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "stage_requires_fresh_ordinary_dispatch_grant": true,
+  "status": "MINIMAL_EXPLICIT_SDK_AUTHORITY_SUCCESSOR_SOURCE_READY_TEST_AND_STAGE_NOT_RUN",
+  "unchanged_original_baseline_members": 57,
+  "unchanged_previous_stage_members": 61
+}

@@ -1,0 +1,162 @@
+{
+  "RO_after": {
+    "device": 1836,
+    "gid": 1000,
+    "inode": 2,
+    "mode": 448,
+    "uid": 1000
+  },
+  "RO_before": {
+    "device": 1836,
+    "gid": 1000,
+    "inode": 2,
+    "mode": 448,
+    "uid": 1000
+  },
+  "actual_UID1000_ancestor_search_and_parent_RWX": true,
+  "after_capacity": {
+    "host_available_bytes": 121250385920,
+    "host_floor_bytes": 17179869184,
+    "reserved_output_bytes": 1073741824,
+    "scratch_available_bytes": 121250385920,
+    "scratch_floor_bytes": 12884901888
+  },
+  "after_mounts": {
+    "ancestor_mount": "29 1 259:2 / / rw,relatime shared:1 - ext4 /dev/nvme0n1p2 rw,errors=remount-ro",
+    "namespace": "mnt:[4026531841]",
+    "protected_RO_mount": "974 29 7:44 / /home/holden/mckernel-work/scratch-readonly-20261105 ro,nosuid,nodev,relatime shared:623 - ext4 /dev/loop44 ro,norecovery"
+  },
+  "all_opened_directory_FDs_closed": true,
+  "ancestor_after": {
+    "device": 66306,
+    "gid": 0,
+    "inode": 49551073,
+    "mode": 493,
+    "uid": 0
+  },
+  "ancestor_before": {
+    "device": 66306,
+    "gid": 0,
+    "inode": 49551073,
+    "mode": 493,
+    "uid": 0
+  },
+  "authorization": "SourcePR6805178926",
+  "before_capacity": {
+    "host_available_bytes": 121250390016,
+    "host_floor_bytes": 17179869184,
+    "reserved_output_bytes": 1073741824,
+    "scratch_available_bytes": 121250390016,
+    "scratch_floor_bytes": 12884901888
+  },
+  "before_mounts": {
+    "ancestor_mount": "29 1 259:2 / / rw,relatime shared:1 - ext4 /dev/nvme0n1p2 rw,errors=remount-ro",
+    "namespace": "mnt:[4026531841]",
+    "protected_RO_mount": "974 29 7:44 / /home/holden/mckernel-work/scratch-readonly-20261105 ro,nosuid,nodev,relatime shared:623 - ext4 /dev/loop44 ro,norecovery"
+  },
+  "birth": "51304054",
+  "created": true,
+  "durable_ancestor_root_readback": {
+    "device": 66306,
+    "gid": 0,
+    "inode": 49551073,
+    "mode": 493,
+    "uid": 0
+  },
+  "durable_parent_entry_matches_held_target": true,
+  "durable_target_root_readback": {
+    "device": 66306,
+    "gid": 1000,
+    "inode": 49551867,
+    "mode": 448,
+    "uid": 1000
+  },
+  "final_output": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1",
+  "final_output_absent": true,
+  "finished_at": "2026-11-11T19:52:54.502126+00:00",
+  "initial_actor": {
+    "affinity": [
+      7
+    ],
+    "euid": 0,
+    "gid": 0,
+    "uid": 0
+  },
+  "new_inode_before": {
+    "device": 66306,
+    "gid": 0,
+    "inode": 49551867,
+    "mode": 448,
+    "uid": 0
+  },
+  "no_target_files_allocated": true,
+  "other_parent_old_objects_mounts_native_or_hold_mutations": false,
+  "pid": 1525076,
+  "postcheck_actor": {
+    "CapEff": "0000000000000000",
+    "CapPrm": "0000000000000000",
+    "real_effective_saved_GID": [
+      1000,
+      1000,
+      1000
+    ],
+    "real_effective_saved_UID": [
+      1000,
+      1000,
+      1000
+    ],
+    "supplementary_groups": [
+      1000
+    ]
+  },
+  "ppid": 1525073,
+  "preexisting": false,
+  "remaining_direct_children": [],
+  "schema": "mckernel.exact-one-scoped-parent-provision.v1",
+  "secondary_close_errors": [],
+  "source_sha256": "0218d5a616f6a65c6104562bbbb7ee3a6573044a4b4f1eff8402cafaf1197233",
+  "started_at": "2026-11-11T19:52:54.498350+00:00",
+  "status": "PASS_FRESH_SCOPED_PARENT_PROVISIONED_AND_REAL_UID1000_VERIFIED",
+  "target": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent",
+  "target_UID1000_readback": {
+    "device": 66306,
+    "gid": 1000,
+    "inode": 49551867,
+    "mode": 448,
+    "uid": 1000
+  },
+  "target_before_fsync": {
+    "device": 66306,
+    "gid": 1000,
+    "inode": 49551867,
+    "mode": 448,
+    "uid": 1000
+  },
+  "writes_attempted": [
+    {
+      "action": "mkdirat",
+      "basename": "m14-native-c964-a2f00a61-staging-parent",
+      "beneath_exact_ancestor": {
+        "device": 66306,
+        "gid": 0,
+        "inode": 49551073,
+        "mode": 493,
+        "uid": 0
+      },
+      "mode": 448
+    },
+    {
+      "action": "fchown",
+      "device": 66306,
+      "gid": 1000,
+      "inode": 49551867,
+      "uid": 1000
+    },
+    {
+      "action": "fchmod",
+      "device": 66306,
+      "inode": 49551867,
+      "mode": 448
+    }
+  ]
+}

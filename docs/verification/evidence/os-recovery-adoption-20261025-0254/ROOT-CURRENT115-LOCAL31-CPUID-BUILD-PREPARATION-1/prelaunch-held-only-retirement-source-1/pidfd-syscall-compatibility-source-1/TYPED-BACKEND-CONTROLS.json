@@ -1,0 +1,59 @@
+{
+  "scope": "Functional OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_TYPED_MOCK_AND_NEGATIVE_CONTROLS_ONLY",
+  "checks": [
+    "mock typed syscall434 returnsFD23",
+    "mock typed syscall424 uses sameFD23+SIGINT2+NULLinfo+uint0",
+    "wrongPID rejected beforemock",
+    "negativeFD rejected beforemock",
+    "mock open errno preserved once nofallback",
+    "mock send errno preserved once nofallback",
+    "unexpectedsendreturn failsclosed",
+    "wronggenuineheaderhash rejected beforelibcload",
+    "onebackendopen/send AST no nativeAPI/numeric/groupfallback"
+  ],
+  "controls": 9,
+  "mock_function_calls": 4,
+  "actual_pidfd_syscalls": 0,
+  "signals": 0,
+  "holder_queries": 0,
+  "precheck_stdout": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/pidfd-syscall-compatibility-source-1/ACTUAL-PRECHECK.stdout",
+    "bytes": 824,
+    "sha256": "a0548202f7bd3ba90257de02262cd55f39709c8a4921878b3f1ab88df8f29df5"
+  },
+  "actual_interpreter_header_API_precheck": {
+    "backend_sha256": "da4427225d0660fef7139f7af33e4175c464caff4dd265175eed9dda5d909994",
+    "decision": "PASS_INTERPRETER_HEADER_LIBC_TYPED_API_PRECHECK_ONLY",
+    "holder_queries": 0,
+    "interpreter": "/usr/bin/python3",
+    "pidfd_syscalls": 0,
+    "proof": {
+      "Linux_x86_64_LP64": true,
+      "header": {
+        "bytes": 9286,
+        "path": "/usr/include/x86_64-linux-gnu/asm/unistd_64.h",
+        "sha256": "698d4666c969b0b4d0bed328b4a4f3cab765ec1a9948e0f14751f0ce56d91535"
+      },
+      "int_bytes": 4,
+      "libc": {
+        "bytes": 2029592,
+        "path": "/usr/lib/x86_64-linux-gnu/libc-2.31.so",
+        "sha256": "53b909551f8e581120ddc2d24cfb5df76c52e3c2e2a5dac0d202b25638b3e902"
+      },
+      "long_bytes": 8,
+      "pidfd_open": 434,
+      "pidfd_send_signal": 424,
+      "pointer_bytes": 8,
+      "unsigned_int_bytes": 4
+    },
+    "signals": 0,
+    "syscall_symbol_loaded": true,
+    "version": "3.8.10 (default, Mar 18 2025, 20:04:55) \n[GCC 9.4.0]"
+  },
+  "backend": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/pidfd-syscall-compatibility-source-1/pidfd_syscall_backend.py",
+    "bytes": 3017,
+    "sha256": "da4427225d0660fef7139f7af33e4175c464caff4dd265175eed9dda5d909994"
+  }
+}

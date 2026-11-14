@@ -1,0 +1,2770 @@
+{
+  "C_retirements": 0,
+  "Root": "01a18bc3-e072-7810-9426-75101b0856c0",
+  "accepted_file_delta": {
+    "M14": 0,
+    "M15": 0
+  },
+  "at_utc_ns": 1793948630654239826,
+  "ihk_source_commit": "0a1061a334dfaf1d0182aaddcc511113fde4f897",
+  "included_only": true,
+  "native_reservations_unchanged": true,
+  "new_compiles": 0,
+  "new_links": 0,
+  "new_native_qualified_cohorts": 0,
+  "new_passing_main_cases": 15,
+  "new_production_images": 0,
+  "new_program_main_executions": 15,
+  "schema_version": 1,
+  "scope": "15 real matched HOST program main executions, all source-bound returns before device/backend/daemon dispatch. SDK mapping NO-GO consumed separately.",
+  "shared_slot": "released_all_direct_waits_joined",
+  "source_checkpoint": "9f70668c6985dbf0085f5511f0eb87df075b0dbe",
+  "source_holds_unchanged": true,
+  "source_receipts": {
+    "cli": {
+      "REQUEST.json": {
+        "content": {
+          "admission_capacity_bytes": {
+            "host_free": 17179869184,
+            "memory_available": 25769803776,
+            "scratch_free": 12884901888
+          },
+          "bindings": {
+            "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/full-cli-host-1/config.h": "19b2023f83028fc91b78d58f49a08e4176f99ebcd40e2d3bfffddaca630c6953",
+            "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/METADATA-CORRECTION-1/RESULT.json": "281a9e5ce95fddc531fe861cf956135a1e0cd02d07fbc28f9f2480ec01201a0e",
+            "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkconfig": "cdecabeb5bfbd280c69c034604a121101cf190045b73b56d7d4e17342dd0b789",
+            "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkosctl": "75782e4d1a9a107e728b2118c969ebacfc71b2272e4896ff5b84bee66c5d0458",
+            "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/private-and-source-export-4/soname-link-review-1/output/libihk.so": "314beee5c7b59aab41f5aa6686e5a515e4c7a425067012276d871c36d596b027",
+            "/home/holden/mckernel/ihk/linux/user/rust/ihkconfig.rs": "7588b80db49d5304aea0e7644f46434745756cdf3c68e72ee0d8120fb1ed5201",
+            "/home/holden/mckernel/ihk/linux/user/rust/ihkosctl.rs": "7a3744d0cf35c53e3868d3c10704322787b5eb193b6f1f499b40f8b42fa90854",
+            "/lib64/ld-linux-x86-64.so.2": "cfd44e4341767033532d1483c8250d200ad4cdf535d0abc19064ae34cdc51ca0"
+          },
+          "canonical_or_index_edits": false,
+          "case_count": 12,
+          "commands": [
+            {
+              "IHK_API_or_device_dispatch_admitted": false,
+              "argv": [
+                "/usr/bin/taskset",
+                "-c",
+                "6",
+                "/usr/bin/timeout",
+                "--foreground",
+                "--signal=TERM",
+                "--kill-after=5s",
+                "60s",
+                "/usr/bin/prlimit",
+                "--as=1073741824:1073741824",
+                "--cpu=45:45",
+                "--fsize=67108864:67108864",
+                "--core=0:0",
+                "--",
+                "/usr/bin/time",
+                "-v",
+                "-o",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/actual-cli-main-preflight-1/ihkconfig-argc-usage.metrics",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkconfig"
+              ],
+              "environment_overrides": {
+                "LC_ALL": "C"
+              },
+              "environment_unset": [
+                "LD_PRELOAD",
+                "LD_AUDIT",
+                "LD_LIBRARY_PATH"
+              ],
+              "expected": {
+                "returncode": 1,
+                "stderr": "Usage: ihkconfig (dev #) (action)\naction:\n    create\n    destroy\n    scratch\n    sbox\n    read\n    mmap\n    ioctl\n    clear_kmsg\n    clear_kmsg_write\n    reserve cpu|mem [resources]\n    release cpu|mem [resources]\n    query cpu|mem\n    get os_instances\n    get buildid\n",
+                "stdout": ""
+              },
+              "label": "ihkconfig-argc-usage",
+              "source_exit": "argcusage",
+              "source_path": "/home/holden/mckernel/ihk/linux/user/rust/ihkconfig.rs"
+            },
+            {
+              "IHK_API_or_device_dispatch_admitted": false,
+              "argv": [
+                "/usr/bin/taskset",
+                "-c",
+                "6",
+                "/usr/bin/timeout",
+                "--foreground",
+                "--signal=TERM",
+                "--kill-after=5s",
+                "60s",
+                "/usr/bin/prlimit",
+                "--as=1073741824:1073741824",
+                "--cpu=45:45",
+                "--fsize=67108864:67108864",
+                "--core=0:0",
+                "--",
+                "/usr/bin/time",
+                "-v",
+                "-o",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/actual-cli-main-preflight-1/ihkconfig-index-no-conversion.metrics",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkconfig",
+                "foo",
+                "get"
+              ],
+              "environment_overrides": {
+                "LC_ALL": "C"
+              },
+              "environment_unset": [
+                "LD_PRELOAD",
+                "LD_AUDIT",
+                "LD_LIBRARY_PATH"
+              ],
+              "expected": {
+                "returncode": 1,
+                "stderr": "Invalid device index: foo\n",
+                "stdout": ""
+              },
+              "label": "ihkconfig-index-no-conversion",
+              "source_exit": "invalidindexpre-dispatch",
+              "source_path": "/home/holden/mckernel/ihk/linux/user/rust/ihkconfig.rs"
+            },
+            {
+              "IHK_API_or_device_dispatch_admitted": false,
+              "argv": [
+                "/usr/bin/taskset",
+                "-c",
+                "6",
+                "/usr/bin/timeout",
+                "--foreground",
+                "--signal=TERM",
+                "--kill-after=5s",
+                "60s",
+                "/usr/bin/prlimit",
+                "--as=1073741824:1073741824",
+                "--cpu=45:45",
+                "--fsize=67108864:67108864",
+                "--core=0:0",
+                "--",
+                "/usr/bin/time",
+                "-v",
+                "-o",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/actual-cli-main-preflight-1/ihkconfig-index-trailing-junk.metrics",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkconfig",
+                "0junk",
+                "get"
+              ],
+              "environment_overrides": {
+                "LC_ALL": "C"
+              },
+              "environment_unset": [
+                "LD_PRELOAD",
+                "LD_AUDIT",
+                "LD_LIBRARY_PATH"
+              ],
+              "expected": {
+                "returncode": 1,
+                "stderr": "Invalid device index: 0junk\n",
+                "stdout": ""
+              },
+              "label": "ihkconfig-index-trailing-junk",
+              "source_exit": "invalidindexpre-dispatch",
+              "source_path": "/home/holden/mckernel/ihk/linux/user/rust/ihkconfig.rs"
+            },
+            {
+              "IHK_API_or_device_dispatch_admitted": false,
+              "argv": [
+                "/usr/bin/taskset",
+                "-c",
+                "6",
+                "/usr/bin/timeout",
+                "--foreground",
+                "--signal=TERM",
+                "--kill-after=5s",
+                "60s",
+                "/usr/bin/prlimit",
+                "--as=1073741824:1073741824",
+                "--cpu=45:45",
+                "--fsize=67108864:67108864",
+                "--core=0:0",
+                "--",
+                "/usr/bin/time",
+                "-v",
+                "-o",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/actual-cli-main-preflight-1/ihkconfig-index-negative.metrics",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkconfig",
+                "-1",
+                "get"
+              ],
+              "environment_overrides": {
+                "LC_ALL": "C"
+              },
+              "environment_unset": [
+                "LD_PRELOAD",
+                "LD_AUDIT",
+                "LD_LIBRARY_PATH"
+              ],
+              "expected": {
+                "returncode": 1,
+                "stderr": "Invalid device index: -1\n",
+                "stdout": ""
+              },
+              "label": "ihkconfig-index-negative",
+              "source_exit": "invalidindexpre-dispatch",
+              "source_path": "/home/holden/mckernel/ihk/linux/user/rust/ihkconfig.rs"
+            },
+            {
+              "IHK_API_or_device_dispatch_admitted": false,
+              "argv": [
+                "/usr/bin/taskset",
+                "-c",
+                "6",
+                "/usr/bin/timeout",
+                "--foreground",
+                "--signal=TERM",
+                "--kill-after=5s",
+                "60s",
+                "/usr/bin/prlimit",
+                "--as=1073741824:1073741824",
+                "--cpu=45:45",
+                "--fsize=67108864:67108864",
+                "--core=0:0",
+                "--",
+                "/usr/bin/time",
+                "-v",
+                "-o",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/actual-cli-main-preflight-1/ihkconfig-index-int-overflow.metrics",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkconfig",
+                "2147483648",
+                "get"
+              ],
+              "environment_overrides": {
+                "LC_ALL": "C"
+              },
+              "environment_unset": [
+                "LD_PRELOAD",
+                "LD_AUDIT",
+                "LD_LIBRARY_PATH"
+              ],
+              "expected": {
+                "returncode": 1,
+                "stderr": "Invalid device index: 2147483648\n",
+                "stdout": ""
+              },
+              "label": "ihkconfig-index-int-overflow",
+              "source_exit": "invalidindexpre-dispatch",
+              "source_path": "/home/holden/mckernel/ihk/linux/user/rust/ihkconfig.rs"
+            },
+            {
+              "IHK_API_or_device_dispatch_admitted": false,
+              "argv": [
+                "/usr/bin/taskset",
+                "-c",
+                "6",
+                "/usr/bin/timeout",
+                "--foreground",
+                "--signal=TERM",
+                "--kill-after=5s",
+                "60s",
+                "/usr/bin/prlimit",
+                "--as=1073741824:1073741824",
+                "--cpu=45:45",
+                "--fsize=67108864:67108864",
+                "--core=0:0",
+                "--",
+                "/usr/bin/time",
+                "-v",
+                "-o",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/actual-cli-main-preflight-1/ihkconfig-index-strtol-overflow.metrics",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkconfig",
+                "18446744073709551616",
+                "get"
+              ],
+              "environment_overrides": {
+                "LC_ALL": "C"
+              },
+              "environment_unset": [
+                "LD_PRELOAD",
+                "LD_AUDIT",
+                "LD_LIBRARY_PATH"
+              ],
+              "expected": {
+                "returncode": 1,
+                "stderr": "Invalid device index: 18446744073709551616\n",
+                "stdout": ""
+              },
+              "label": "ihkconfig-index-strtol-overflow",
+              "source_exit": "invalidindexpre-dispatch",
+              "source_path": "/home/holden/mckernel/ihk/linux/user/rust/ihkconfig.rs"
+            },
+            {
+              "IHK_API_or_device_dispatch_admitted": false,
+              "argv": [
+                "/usr/bin/taskset",
+                "-c",
+                "6",
+                "/usr/bin/timeout",
+                "--foreground",
+                "--signal=TERM",
+                "--kill-after=5s",
+                "60s",
+                "/usr/bin/prlimit",
+                "--as=1073741824:1073741824",
+                "--cpu=45:45",
+                "--fsize=67108864:67108864",
+                "--core=0:0",
+                "--",
+                "/usr/bin/time",
+                "-v",
+                "-o",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/actual-cli-main-preflight-1/ihkosctl-argc-usage.metrics",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkosctl"
+              ],
+              "environment_overrides": {
+                "LC_ALL": "C"
+              },
+              "environment_unset": [
+                "LD_PRELOAD",
+                "LD_AUDIT",
+                "LD_LIBRARY_PATH"
+              ],
+              "expected": {
+                "returncode": 1,
+                "stderr": "Usage: ihkosctl (dev #) (action)\naction:\n    load (kernel.img)\n    boot\n    shutdown\n    assign cpu|mem \n           cpu (cpu_list) \n           mem (size@NUMA) \n    release cpu|mem \n            cpu (cpu_list) \n            mem (size@NUMA) \n    set ikc_map (cpu_list:cpu+cpu_list:cpu+..) \n    get ikc_map\n    query [cpu|mem]\n    query_free_mem\n    kargs (kernel arg)\n    get status\n    kmsg\n    clear_kmsg\n    intr cpu irq_vector\n    ioctl (req) (arg)\n    dump [-d level] [file]\n",
+                "stdout": ""
+              },
+              "label": "ihkosctl-argc-usage",
+              "source_exit": "argcusage",
+              "source_path": "/home/holden/mckernel/ihk/linux/user/rust/ihkosctl.rs"
+            },
+            {
+              "IHK_API_or_device_dispatch_admitted": false,
+              "argv": [
+                "/usr/bin/taskset",
+                "-c",
+                "6",
+                "/usr/bin/timeout",
+                "--foreground",
+                "--signal=TERM",
+                "--kill-after=5s",
+                "60s",
+                "/usr/bin/prlimit",
+                "--as=1073741824:1073741824",
+                "--cpu=45:45",
+                "--fsize=67108864:67108864",
+                "--core=0:0",
+                "--",
+                "/usr/bin/time",
+                "-v",
+                "-o",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/actual-cli-main-preflight-1/ihkosctl-index-no-conversion.metrics",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkosctl",
+                "foo",
+                "get"
+              ],
+              "environment_overrides": {
+                "LC_ALL": "C"
+              },
+              "environment_unset": [
+                "LD_PRELOAD",
+                "LD_AUDIT",
+                "LD_LIBRARY_PATH"
+              ],
+              "expected": {
+                "returncode": 1,
+                "stderr": "Invalid OS index: foo\n",
+                "stdout": ""
+              },
+              "label": "ihkosctl-index-no-conversion",
+              "source_exit": "invalidindexpre-dispatch",
+              "source_path": "/home/holden/mckernel/ihk/linux/user/rust/ihkosctl.rs"
+            },
+            {
+              "IHK_API_or_device_dispatch_admitted": false,
+              "argv": [
+                "/usr/bin/taskset",
+                "-c",
+                "6",
+                "/usr/bin/timeout",
+                "--foreground",
+                "--signal=TERM",
+                "--kill-after=5s",
+                "60s",
+                "/usr/bin/prlimit",
+                "--as=1073741824:1073741824",
+                "--cpu=45:45",
+                "--fsize=67108864:67108864",
+                "--core=0:0",
+                "--",
+                "/usr/bin/time",
+                "-v",
+                "-o",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/actual-cli-main-preflight-1/ihkosctl-index-trailing-junk.metrics",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkosctl",
+                "0junk",
+                "get"
+              ],
+              "environment_overrides": {
+                "LC_ALL": "C"
+              },
+              "environment_unset": [
+                "LD_PRELOAD",
+                "LD_AUDIT",
+                "LD_LIBRARY_PATH"
+              ],
+              "expected": {
+                "returncode": 1,
+                "stderr": "Invalid OS index: 0junk\n",
+                "stdout": ""
+              },
+              "label": "ihkosctl-index-trailing-junk",
+              "source_exit": "invalidindexpre-dispatch",
+              "source_path": "/home/holden/mckernel/ihk/linux/user/rust/ihkosctl.rs"
+            },
+            {
+              "IHK_API_or_device_dispatch_admitted": false,
+              "argv": [
+                "/usr/bin/taskset",
+                "-c",
+                "6",
+                "/usr/bin/timeout",
+                "--foreground",
+                "--signal=TERM",
+                "--kill-after=5s",
+                "60s",
+                "/usr/bin/prlimit",
+                "--as=1073741824:1073741824",
+                "--cpu=45:45",
+                "--fsize=67108864:67108864",
+                "--core=0:0",
+                "--",
+                "/usr/bin/time",
+                "-v",
+                "-o",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/actual-cli-main-preflight-1/ihkosctl-index-negative.metrics",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkosctl",
+                "-1",
+                "get"
+              ],
+              "environment_overrides": {
+                "LC_ALL": "C"
+              },
+              "environment_unset": [
+                "LD_PRELOAD",
+                "LD_AUDIT",
+                "LD_LIBRARY_PATH"
+              ],
+              "expected": {
+                "returncode": 1,
+                "stderr": "Invalid OS index: -1\n",
+                "stdout": ""
+              },
+              "label": "ihkosctl-index-negative",
+              "source_exit": "invalidindexpre-dispatch",
+              "source_path": "/home/holden/mckernel/ihk/linux/user/rust/ihkosctl.rs"
+            },
+            {
+              "IHK_API_or_device_dispatch_admitted": false,
+              "argv": [
+                "/usr/bin/taskset",
+                "-c",
+                "6",
+                "/usr/bin/timeout",
+                "--foreground",
+                "--signal=TERM",
+                "--kill-after=5s",
+                "60s",
+                "/usr/bin/prlimit",
+                "--as=1073741824:1073741824",
+                "--cpu=45:45",
+                "--fsize=67108864:67108864",
+                "--core=0:0",
+                "--",
+                "/usr/bin/time",
+                "-v",
+                "-o",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/actual-cli-main-preflight-1/ihkosctl-index-int-overflow.metrics",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkosctl",
+                "2147483648",
+                "get"
+              ],
+              "environment_overrides": {
+                "LC_ALL": "C"
+              },
+              "environment_unset": [
+                "LD_PRELOAD",
+                "LD_AUDIT",
+                "LD_LIBRARY_PATH"
+              ],
+              "expected": {
+                "returncode": 1,
+                "stderr": "Invalid OS index: 2147483648\n",
+                "stdout": ""
+              },
+              "label": "ihkosctl-index-int-overflow",
+              "source_exit": "invalidindexpre-dispatch",
+              "source_path": "/home/holden/mckernel/ihk/linux/user/rust/ihkosctl.rs"
+            },
+            {
+              "IHK_API_or_device_dispatch_admitted": false,
+              "argv": [
+                "/usr/bin/taskset",
+                "-c",
+                "6",
+                "/usr/bin/timeout",
+                "--foreground",
+                "--signal=TERM",
+                "--kill-after=5s",
+                "60s",
+                "/usr/bin/prlimit",
+                "--as=1073741824:1073741824",
+                "--cpu=45:45",
+                "--fsize=67108864:67108864",
+                "--core=0:0",
+                "--",
+                "/usr/bin/time",
+                "-v",
+                "-o",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/actual-cli-main-preflight-1/ihkosctl-index-strtol-overflow.metrics",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkosctl",
+                "18446744073709551616",
+                "get"
+              ],
+              "environment_overrides": {
+                "LC_ALL": "C"
+              },
+              "environment_unset": [
+                "LD_PRELOAD",
+                "LD_AUDIT",
+                "LD_LIBRARY_PATH"
+              ],
+              "expected": {
+                "returncode": 1,
+                "stderr": "Invalid OS index: 18446744073709551616\n",
+                "stdout": ""
+              },
+              "label": "ihkosctl-index-strtol-overflow",
+              "source_exit": "invalidindexpre-dispatch",
+              "source_path": "/home/holden/mckernel/ihk/linux/user/rust/ihkosctl.rs"
+            }
+          ],
+          "executed": false,
+          "expected": "All12actualprocessesexit1,emptystdout,exactsource-derivedstderr; no validindex/commanddispatch case.",
+          "owner": "/root/m15_cli_high",
+          "profile": {
+            "AS_bytes": 1073741824,
+            "CORE_bytes": 0,
+            "CPU_seconds": 45,
+            "FSIZE_bytes": 67108864,
+            "cpu": [
+              6
+            ],
+            "host_floor_bytes": 4294967296,
+            "jobs": 1,
+            "kill_after_seconds": 5,
+            "prior_reserved_bytes": 19327352832,
+            "sharedHOST_bytes": 2147483648,
+            "wall_seconds_per_command": 60
+          },
+          "provider_scope": "ELFstartup maps alreadyqualifiedgenuineHOSTlibrary/loader; selectedproductionmainbranches invoke onlylibcusage/strtol/errno functions and no IHKAPI/device/open/ioctl/commanddispatch.",
+          "receipt_requirements": "Reverifyallbindings/freshcapacity; serializeactualcommands,retainexactargv/env/status/rawstdout/stderr/time-vanddirectwaits; firstunexpectedstatus/outputstopsforRootreview. No compiler/providerrewrites/backend/native operations.",
+          "routing": {
+            "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/actual-cli-main-preflight-1/ROUTING.json",
+            "sha256": "df205d8f5fe92dae23a92803eac08cb126031b2ffc7d0b78806bae2d12b54020"
+          },
+          "scope": "ActualmatchedproductionCLI mainpreflight only:argcusage andinvalidindex before IHK/device/dispatch; no extractedreplacement/stub/providerinterposition/compile",
+          "source_ordering": {
+            "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/actual-cli-main-preflight-1/SOURCE-ORDERING.json",
+            "sha256": "91aea6fcda2d70e900e7e9565fe41b879e265da40aeca5eab32f7928638924fc"
+          },
+          "status": "READY_AWAITING_ROOT_SERIAL_ADMISSION"
+        },
+        "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/actual-cli-main-preflight-1/REQUEST.json",
+        "sha256": "310d1b0c4cdd2cdfd967d110ceb9fccf981a64e40800f59c9dd6bdc13e7160c3"
+      },
+      "ROOT-ADMISSION-1.json": {
+        "content": {
+          "Root_review": "Canonicalhelper/main+usageprefixesexactmatch boundsource; argc/invalidindexreturnsbeforeIHKdispatch; onlyfiveinvalidselectors/getargc3 plusargc1 admitted. Loader/librarycohortbound, LDinterpositionunset.",
+          "at_utc_ns": 1793948113167282926,
+          "bindings": {
+            "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/full-cli-host-1/config.h": "19b2023f83028fc91b78d58f49a08e4176f99ebcd40e2d3bfffddaca630c6953",
+            "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/METADATA-CORRECTION-1/RESULT.json": "281a9e5ce95fddc531fe861cf956135a1e0cd02d07fbc28f9f2480ec01201a0e",
+            "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkconfig": "cdecabeb5bfbd280c69c034604a121101cf190045b73b56d7d4e17342dd0b789",
+            "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkosctl": "75782e4d1a9a107e728b2118c969ebacfc71b2272e4896ff5b84bee66c5d0458",
+            "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/private-and-source-export-4/soname-link-review-1/output/libihk.so": "314beee5c7b59aab41f5aa6686e5a515e4c7a425067012276d871c36d596b027",
+            "/home/holden/mckernel/ihk/linux/user/rust/ihkconfig.rs": "7588b80db49d5304aea0e7644f46434745756cdf3c68e72ee0d8120fb1ed5201",
+            "/home/holden/mckernel/ihk/linux/user/rust/ihkosctl.rs": "7a3744d0cf35c53e3868d3c10704322787b5eb193b6f1f499b40f8b42fa90854",
+            "/lib64/ld-linux-x86-64.so.2": "cfd44e4341767033532d1483c8250d200ad4cdf535d0abc19064ae34cdc51ca0"
+          },
+          "canonical_source_writes_held_until_release": true,
+          "commands": [
+            {
+              "IHK_API_or_device_dispatch_admitted": false,
+              "argv": [
+                "/usr/bin/taskset",
+                "-c",
+                "6",
+                "/usr/bin/timeout",
+                "--foreground",
+                "--signal=TERM",
+                "--kill-after=5s",
+                "60s",
+                "/usr/bin/prlimit",
+                "--as=1073741824:1073741824",
+                "--cpu=45:45",
+                "--fsize=67108864:67108864",
+                "--core=0:0",
+                "--",
+                "/usr/bin/time",
+                "-v",
+                "-o",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/actual-cli-main-preflight-1/ihkconfig-argc-usage.metrics",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkconfig"
+              ],
+              "environment_overrides": {
+                "LC_ALL": "C"
+              },
+              "environment_unset": [
+                "LD_PRELOAD",
+                "LD_AUDIT",
+                "LD_LIBRARY_PATH"
+              ],
+              "expected": {
+                "returncode": 1,
+                "stderr": "Usage: ihkconfig (dev #) (action)\naction:\n    create\n    destroy\n    scratch\n    sbox\n    read\n    mmap\n    ioctl\n    clear_kmsg\n    clear_kmsg_write\n    reserve cpu|mem [resources]\n    release cpu|mem [resources]\n    query cpu|mem\n    get os_instances\n    get buildid\n",
+                "stdout": ""
+              },
+              "label": "ihkconfig-argc-usage",
+              "source_exit": "argcusage",
+              "source_path": "/home/holden/mckernel/ihk/linux/user/rust/ihkconfig.rs"
+            },
+            {
+              "IHK_API_or_device_dispatch_admitted": false,
+              "argv": [
+                "/usr/bin/taskset",
+                "-c",
+                "6",
+                "/usr/bin/timeout",
+                "--foreground",
+                "--signal=TERM",
+                "--kill-after=5s",
+                "60s",
+                "/usr/bin/prlimit",
+                "--as=1073741824:1073741824",
+                "--cpu=45:45",
+                "--fsize=67108864:67108864",
+                "--core=0:0",
+                "--",
+                "/usr/bin/time",
+                "-v",
+                "-o",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/actual-cli-main-preflight-1/ihkconfig-index-no-conversion.metrics",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkconfig",
+                "foo",
+                "get"
+              ],
+              "environment_overrides": {
+                "LC_ALL": "C"
+              },
+              "environment_unset": [
+                "LD_PRELOAD",
+                "LD_AUDIT",
+                "LD_LIBRARY_PATH"
+              ],
+              "expected": {
+                "returncode": 1,
+                "stderr": "Invalid device index: foo\n",
+                "stdout": ""
+              },
+              "label": "ihkconfig-index-no-conversion",
+              "source_exit": "invalidindexpre-dispatch",
+              "source_path": "/home/holden/mckernel/ihk/linux/user/rust/ihkconfig.rs"
+            },
+            {
+              "IHK_API_or_device_dispatch_admitted": false,
+              "argv": [
+                "/usr/bin/taskset",
+                "-c",
+                "6",
+                "/usr/bin/timeout",
+                "--foreground",
+                "--signal=TERM",
+                "--kill-after=5s",
+                "60s",
+                "/usr/bin/prlimit",
+                "--as=1073741824:1073741824",
+                "--cpu=45:45",
+                "--fsize=67108864:67108864",
+                "--core=0:0",
+                "--",
+                "/usr/bin/time",
+                "-v",
+                "-o",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/actual-cli-main-preflight-1/ihkconfig-index-trailing-junk.metrics",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkconfig",
+                "0junk",
+                "get"
+              ],
+              "environment_overrides": {
+                "LC_ALL": "C"
+              },
+              "environment_unset": [
+                "LD_PRELOAD",
+                "LD_AUDIT",
+                "LD_LIBRARY_PATH"
+              ],
+              "expected": {
+                "returncode": 1,
+                "stderr": "Invalid device index: 0junk\n",
+                "stdout": ""
+              },
+              "label": "ihkconfig-index-trailing-junk",
+              "source_exit": "invalidindexpre-dispatch",
+              "source_path": "/home/holden/mckernel/ihk/linux/user/rust/ihkconfig.rs"
+            },
+            {
+              "IHK_API_or_device_dispatch_admitted": false,
+              "argv": [
+                "/usr/bin/taskset",
+                "-c",
+                "6",
+                "/usr/bin/timeout",
+                "--foreground",
+                "--signal=TERM",
+                "--kill-after=5s",
+                "60s",
+                "/usr/bin/prlimit",
+                "--as=1073741824:1073741824",
+                "--cpu=45:45",
+                "--fsize=67108864:67108864",
+                "--core=0:0",
+                "--",
+                "/usr/bin/time",
+                "-v",
+                "-o",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/actual-cli-main-preflight-1/ihkconfig-index-negative.metrics",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkconfig",
+                "-1",
+                "get"
+              ],
+              "environment_overrides": {
+                "LC_ALL": "C"
+              },
+              "environment_unset": [
+                "LD_PRELOAD",
+                "LD_AUDIT",
+                "LD_LIBRARY_PATH"
+              ],
+              "expected": {
+                "returncode": 1,
+                "stderr": "Invalid device index: -1\n",
+                "stdout": ""
+              },
+              "label": "ihkconfig-index-negative",
+              "source_exit": "invalidindexpre-dispatch",
+              "source_path": "/home/holden/mckernel/ihk/linux/user/rust/ihkconfig.rs"
+            },
+            {
+              "IHK_API_or_device_dispatch_admitted": false,
+              "argv": [
+                "/usr/bin/taskset",
+                "-c",
+                "6",
+                "/usr/bin/timeout",
+                "--foreground",
+                "--signal=TERM",
+                "--kill-after=5s",
+                "60s",
+                "/usr/bin/prlimit",
+                "--as=1073741824:1073741824",
+                "--cpu=45:45",
+                "--fsize=67108864:67108864",
+                "--core=0:0",
+                "--",
+                "/usr/bin/time",
+                "-v",
+                "-o",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/actual-cli-main-preflight-1/ihkconfig-index-int-overflow.metrics",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkconfig",
+                "2147483648",
+                "get"
+              ],
+              "environment_overrides": {
+                "LC_ALL": "C"
+              },
+              "environment_unset": [
+                "LD_PRELOAD",
+                "LD_AUDIT",
+                "LD_LIBRARY_PATH"
+              ],
+              "expected": {
+                "returncode": 1,
+                "stderr": "Invalid device index: 2147483648\n",
+                "stdout": ""
+              },
+              "label": "ihkconfig-index-int-overflow",
+              "source_exit": "invalidindexpre-dispatch",
+              "source_path": "/home/holden/mckernel/ihk/linux/user/rust/ihkconfig.rs"
+            },
+            {
+              "IHK_API_or_device_dispatch_admitted": false,
+              "argv": [
+                "/usr/bin/taskset",
+                "-c",
+                "6",
+                "/usr/bin/timeout",
+                "--foreground",
+                "--signal=TERM",
+                "--kill-after=5s",
+                "60s",
+                "/usr/bin/prlimit",
+                "--as=1073741824:1073741824",
+                "--cpu=45:45",
+                "--fsize=67108864:67108864",
+                "--core=0:0",
+                "--",
+                "/usr/bin/time",
+                "-v",
+                "-o",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/actual-cli-main-preflight-1/ihkconfig-index-strtol-overflow.metrics",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkconfig",
+                "18446744073709551616",
+                "get"
+              ],
+              "environment_overrides": {
+                "LC_ALL": "C"
+              },
+              "environment_unset": [
+                "LD_PRELOAD",
+                "LD_AUDIT",
+                "LD_LIBRARY_PATH"
+              ],
+              "expected": {
+                "returncode": 1,
+                "stderr": "Invalid device index: 18446744073709551616\n",
+                "stdout": ""
+              },
+              "label": "ihkconfig-index-strtol-overflow",
+              "source_exit": "invalidindexpre-dispatch",
+              "source_path": "/home/holden/mckernel/ihk/linux/user/rust/ihkconfig.rs"
+            },
+            {
+              "IHK_API_or_device_dispatch_admitted": false,
+              "argv": [
+                "/usr/bin/taskset",
+                "-c",
+                "6",
+                "/usr/bin/timeout",
+                "--foreground",
+                "--signal=TERM",
+                "--kill-after=5s",
+                "60s",
+                "/usr/bin/prlimit",
+                "--as=1073741824:1073741824",
+                "--cpu=45:45",
+                "--fsize=67108864:67108864",
+                "--core=0:0",
+                "--",
+                "/usr/bin/time",
+                "-v",
+                "-o",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/actual-cli-main-preflight-1/ihkosctl-argc-usage.metrics",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkosctl"
+              ],
+              "environment_overrides": {
+                "LC_ALL": "C"
+              },
+              "environment_unset": [
+                "LD_PRELOAD",
+                "LD_AUDIT",
+                "LD_LIBRARY_PATH"
+              ],
+              "expected": {
+                "returncode": 1,
+                "stderr": "Usage: ihkosctl (dev #) (action)\naction:\n    load (kernel.img)\n    boot\n    shutdown\n    assign cpu|mem \n           cpu (cpu_list) \n           mem (size@NUMA) \n    release cpu|mem \n            cpu (cpu_list) \n            mem (size@NUMA) \n    set ikc_map (cpu_list:cpu+cpu_list:cpu+..) \n    get ikc_map\n    query [cpu|mem]\n    query_free_mem\n    kargs (kernel arg)\n    get status\n    kmsg\n    clear_kmsg\n    intr cpu irq_vector\n    ioctl (req) (arg)\n    dump [-d level] [file]\n",
+                "stdout": ""
+              },
+              "label": "ihkosctl-argc-usage",
+              "source_exit": "argcusage",
+              "source_path": "/home/holden/mckernel/ihk/linux/user/rust/ihkosctl.rs"
+            },
+            {
+              "IHK_API_or_device_dispatch_admitted": false,
+              "argv": [
+                "/usr/bin/taskset",
+                "-c",
+                "6",
+                "/usr/bin/timeout",
+                "--foreground",
+                "--signal=TERM",
+                "--kill-after=5s",
+                "60s",
+                "/usr/bin/prlimit",
+                "--as=1073741824:1073741824",
+                "--cpu=45:45",
+                "--fsize=67108864:67108864",
+                "--core=0:0",
+                "--",
+                "/usr/bin/time",
+                "-v",
+                "-o",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/actual-cli-main-preflight-1/ihkosctl-index-no-conversion.metrics",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkosctl",
+                "foo",
+                "get"
+              ],
+              "environment_overrides": {
+                "LC_ALL": "C"
+              },
+              "environment_unset": [
+                "LD_PRELOAD",
+                "LD_AUDIT",
+                "LD_LIBRARY_PATH"
+              ],
+              "expected": {
+                "returncode": 1,
+                "stderr": "Invalid OS index: foo\n",
+                "stdout": ""
+              },
+              "label": "ihkosctl-index-no-conversion",
+              "source_exit": "invalidindexpre-dispatch",
+              "source_path": "/home/holden/mckernel/ihk/linux/user/rust/ihkosctl.rs"
+            },
+            {
+              "IHK_API_or_device_dispatch_admitted": false,
+              "argv": [
+                "/usr/bin/taskset",
+                "-c",
+                "6",
+                "/usr/bin/timeout",
+                "--foreground",
+                "--signal=TERM",
+                "--kill-after=5s",
+                "60s",
+                "/usr/bin/prlimit",
+                "--as=1073741824:1073741824",
+                "--cpu=45:45",
+                "--fsize=67108864:67108864",
+                "--core=0:0",
+                "--",
+                "/usr/bin/time",
+                "-v",
+                "-o",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/actual-cli-main-preflight-1/ihkosctl-index-trailing-junk.metrics",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkosctl",
+                "0junk",
+                "get"
+              ],
+              "environment_overrides": {
+                "LC_ALL": "C"
+              },
+              "environment_unset": [
+                "LD_PRELOAD",
+                "LD_AUDIT",
+                "LD_LIBRARY_PATH"
+              ],
+              "expected": {
+                "returncode": 1,
+                "stderr": "Invalid OS index: 0junk\n",
+                "stdout": ""
+              },
+              "label": "ihkosctl-index-trailing-junk",
+              "source_exit": "invalidindexpre-dispatch",
+              "source_path": "/home/holden/mckernel/ihk/linux/user/rust/ihkosctl.rs"
+            },
+            {
+              "IHK_API_or_device_dispatch_admitted": false,
+              "argv": [
+                "/usr/bin/taskset",
+                "-c",
+                "6",
+                "/usr/bin/timeout",
+                "--foreground",
+                "--signal=TERM",
+                "--kill-after=5s",
+                "60s",
+                "/usr/bin/prlimit",
+                "--as=1073741824:1073741824",
+                "--cpu=45:45",
+                "--fsize=67108864:67108864",
+                "--core=0:0",
+                "--",
+                "/usr/bin/time",
+                "-v",
+                "-o",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/actual-cli-main-preflight-1/ihkosctl-index-negative.metrics",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkosctl",
+                "-1",
+                "get"
+              ],
+              "environment_overrides": {
+                "LC_ALL": "C"
+              },
+              "environment_unset": [
+                "LD_PRELOAD",
+                "LD_AUDIT",
+                "LD_LIBRARY_PATH"
+              ],
+              "expected": {
+                "returncode": 1,
+                "stderr": "Invalid OS index: -1\n",
+                "stdout": ""
+              },
+              "label": "ihkosctl-index-negative",
+              "source_exit": "invalidindexpre-dispatch",
+              "source_path": "/home/holden/mckernel/ihk/linux/user/rust/ihkosctl.rs"
+            },
+            {
+              "IHK_API_or_device_dispatch_admitted": false,
+              "argv": [
+                "/usr/bin/taskset",
+                "-c",
+                "6",
+                "/usr/bin/timeout",
+                "--foreground",
+                "--signal=TERM",
+                "--kill-after=5s",
+                "60s",
+                "/usr/bin/prlimit",
+                "--as=1073741824:1073741824",
+                "--cpu=45:45",
+                "--fsize=67108864:67108864",
+                "--core=0:0",
+                "--",
+                "/usr/bin/time",
+                "-v",
+                "-o",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/actual-cli-main-preflight-1/ihkosctl-index-int-overflow.metrics",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkosctl",
+                "2147483648",
+                "get"
+              ],
+              "environment_overrides": {
+                "LC_ALL": "C"
+              },
+              "environment_unset": [
+                "LD_PRELOAD",
+                "LD_AUDIT",
+                "LD_LIBRARY_PATH"
+              ],
+              "expected": {
+                "returncode": 1,
+                "stderr": "Invalid OS index: 2147483648\n",
+                "stdout": ""
+              },
+              "label": "ihkosctl-index-int-overflow",
+              "source_exit": "invalidindexpre-dispatch",
+              "source_path": "/home/holden/mckernel/ihk/linux/user/rust/ihkosctl.rs"
+            },
+            {
+              "IHK_API_or_device_dispatch_admitted": false,
+              "argv": [
+                "/usr/bin/taskset",
+                "-c",
+                "6",
+                "/usr/bin/timeout",
+                "--foreground",
+                "--signal=TERM",
+                "--kill-after=5s",
+                "60s",
+                "/usr/bin/prlimit",
+                "--as=1073741824:1073741824",
+                "--cpu=45:45",
+                "--fsize=67108864:67108864",
+                "--core=0:0",
+                "--",
+                "/usr/bin/time",
+                "-v",
+                "-o",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/actual-cli-main-preflight-1/ihkosctl-index-strtol-overflow.metrics",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkosctl",
+                "18446744073709551616",
+                "get"
+              ],
+              "environment_overrides": {
+                "LC_ALL": "C"
+              },
+              "environment_unset": [
+                "LD_PRELOAD",
+                "LD_AUDIT",
+                "LD_LIBRARY_PATH"
+              ],
+              "expected": {
+                "returncode": 1,
+                "stderr": "Invalid OS index: 18446744073709551616\n",
+                "stdout": ""
+              },
+              "label": "ihkosctl-index-strtol-overflow",
+              "source_exit": "invalidindexpre-dispatch",
+              "source_path": "/home/holden/mckernel/ihk/linux/user/rust/ihkosctl.rs"
+            }
+          ],
+          "compiler_admitted": false,
+          "disk_free_bytes": {
+            "/home/holden/mckernel": 135153188864,
+            "/home/holden/mckernel-work/scratch-readonly-20261105": 47613485056
+          },
+          "included_weekly_used_percent": 9,
+          "memory_available_bytes": 29163352064,
+          "native_device_IO_or_dispatch_admitted": false,
+          "no_other_workload_granted": true,
+          "owner": "/root/m15_cli_high",
+          "profile": {
+            "AS_bytes": 1073741824,
+            "CORE_bytes": 0,
+            "CPU_seconds": 45,
+            "FSIZE_bytes": 67108864,
+            "cpu": [
+              6
+            ],
+            "host_floor_bytes": 4294967296,
+            "jobs": 1,
+            "kill_after_seconds": 5,
+            "prior_reserved_bytes": 19327352832,
+            "sharedHOST_bytes": 2147483648,
+            "wall_seconds_per_command": 60
+          },
+          "request_path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/actual-cli-main-preflight-1/REQUEST.json",
+          "request_sha256": "310d1b0c4cdd2cdfd967d110ceb9fccf981a64e40800f59c9dd6bdc13e7160c3",
+          "source_ordering_sha256": "91aea6fcda2d70e900e7e9565fe41b879e265da40aeca5eab32f7928638924fc",
+          "status": "ADMITTED_ONCE_TWELVE_SERIAL_ACTUAL_CLI_MAIN_PREFLIGHTS"
+        },
+        "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/actual-cli-main-preflight-1/ROOT-ADMISSION-1.json",
+        "sha256": "6364d3384c496e1c159ecb1ddba87e40051ceb76b970a7766a8bfe69551a0d88"
+      },
+      "RUNS.json": {
+        "content": [
+          {
+            "argv": [
+              "/usr/bin/taskset",
+              "-c",
+              "6",
+              "/usr/bin/timeout",
+              "--foreground",
+              "--signal=TERM",
+              "--kill-after=5s",
+              "60s",
+              "/usr/bin/prlimit",
+              "--as=1073741824:1073741824",
+              "--cpu=45:45",
+              "--fsize=67108864:67108864",
+              "--core=0:0",
+              "--",
+              "/usr/bin/time",
+              "-v",
+              "-o",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/actual-cli-main-preflight-1/ihkconfig-argc-usage.metrics",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkconfig"
+            ],
+            "direct_wait_complete": true,
+            "environment_overrides": {
+              "LC_ALL": "C"
+            },
+            "environment_unset": [
+              "LD_PRELOAD",
+              "LD_AUDIT",
+              "LD_LIBRARY_PATH"
+            ],
+            "expected": {
+              "returncode": 1,
+              "stderr": "Usage: ihkconfig (dev #) (action)\naction:\n    create\n    destroy\n    scratch\n    sbox\n    read\n    mmap\n    ioctl\n    clear_kmsg\n    clear_kmsg_write\n    reserve cpu|mem [resources]\n    release cpu|mem [resources]\n    query cpu|mem\n    get os_instances\n    get buildid\n",
+              "stdout": ""
+            },
+            "host_free_bytes": 135153008640,
+            "joined_utc_ns": 1793948144904155002,
+            "label": "ihkconfig-argc-usage",
+            "mem_available_bytes": 29176348672,
+            "passed": true,
+            "returncode": 1,
+            "scratch_free_bytes": 47613485056,
+            "started_utc_ns": 1793948144899503141
+          },
+          {
+            "argv": [
+              "/usr/bin/taskset",
+              "-c",
+              "6",
+              "/usr/bin/timeout",
+              "--foreground",
+              "--signal=TERM",
+              "--kill-after=5s",
+              "60s",
+              "/usr/bin/prlimit",
+              "--as=1073741824:1073741824",
+              "--cpu=45:45",
+              "--fsize=67108864:67108864",
+              "--core=0:0",
+              "--",
+              "/usr/bin/time",
+              "-v",
+              "-o",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/actual-cli-main-preflight-1/ihkconfig-index-no-conversion.metrics",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkconfig",
+              "foo",
+              "get"
+            ],
+            "direct_wait_complete": true,
+            "environment_overrides": {
+              "LC_ALL": "C"
+            },
+            "environment_unset": [
+              "LD_PRELOAD",
+              "LD_AUDIT",
+              "LD_LIBRARY_PATH"
+            ],
+            "expected": {
+              "returncode": 1,
+              "stderr": "Invalid device index: foo\n",
+              "stdout": ""
+            },
+            "host_free_bytes": 135152996352,
+            "joined_utc_ns": 1793948144908491902,
+            "label": "ihkconfig-index-no-conversion",
+            "mem_available_bytes": 29175140352,
+            "passed": true,
+            "returncode": 1,
+            "scratch_free_bytes": 47613485056,
+            "started_utc_ns": 1793948144904548036
+          },
+          {
+            "argv": [
+              "/usr/bin/taskset",
+              "-c",
+              "6",
+              "/usr/bin/timeout",
+              "--foreground",
+              "--signal=TERM",
+              "--kill-after=5s",
+              "60s",
+              "/usr/bin/prlimit",
+              "--as=1073741824:1073741824",
+              "--cpu=45:45",
+              "--fsize=67108864:67108864",
+              "--core=0:0",
+              "--",
+              "/usr/bin/time",
+              "-v",
+              "-o",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/actual-cli-main-preflight-1/ihkconfig-index-trailing-junk.metrics",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkconfig",
+              "0junk",
+              "get"
+            ],
+            "direct_wait_complete": true,
+            "environment_overrides": {
+              "LC_ALL": "C"
+            },
+            "environment_unset": [
+              "LD_PRELOAD",
+              "LD_AUDIT",
+              "LD_LIBRARY_PATH"
+            ],
+            "expected": {
+              "returncode": 1,
+              "stderr": "Invalid device index: 0junk\n",
+              "stdout": ""
+            },
+            "host_free_bytes": 135152988160,
+            "joined_utc_ns": 1793948144912419022,
+            "label": "ihkconfig-index-trailing-junk",
+            "mem_available_bytes": 29175140352,
+            "passed": true,
+            "returncode": 1,
+            "scratch_free_bytes": 47613485056,
+            "started_utc_ns": 1793948144909019363
+          },
+          {
+            "argv": [
+              "/usr/bin/taskset",
+              "-c",
+              "6",
+              "/usr/bin/timeout",
+              "--foreground",
+              "--signal=TERM",
+              "--kill-after=5s",
+              "60s",
+              "/usr/bin/prlimit",
+              "--as=1073741824:1073741824",
+              "--cpu=45:45",
+              "--fsize=67108864:67108864",
+              "--core=0:0",
+              "--",
+              "/usr/bin/time",
+              "-v",
+              "-o",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/actual-cli-main-preflight-1/ihkconfig-index-negative.metrics",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkconfig",
+              "-1",
+              "get"
+            ],
+            "direct_wait_complete": true,
+            "environment_overrides": {
+              "LC_ALL": "C"
+            },
+            "environment_unset": [
+              "LD_PRELOAD",
+              "LD_AUDIT",
+              "LD_LIBRARY_PATH"
+            ],
+            "expected": {
+              "returncode": 1,
+              "stderr": "Invalid device index: -1\n",
+              "stdout": ""
+            },
+            "host_free_bytes": 135152975872,
+            "joined_utc_ns": 1793948144917720041,
+            "label": "ihkconfig-index-negative",
+            "mem_available_bytes": 29179412480,
+            "passed": true,
+            "returncode": 1,
+            "scratch_free_bytes": 47613485056,
+            "started_utc_ns": 1793948144913959167
+          },
+          {
+            "argv": [
+              "/usr/bin/taskset",
+              "-c",
+              "6",
+              "/usr/bin/timeout",
+              "--foreground",
+              "--signal=TERM",
+              "--kill-after=5s",
+              "60s",
+              "/usr/bin/prlimit",
+              "--as=1073741824:1073741824",
+              "--cpu=45:45",
+              "--fsize=67108864:67108864",
+              "--core=0:0",
+              "--",
+              "/usr/bin/time",
+              "-v",
+              "-o",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/actual-cli-main-preflight-1/ihkconfig-index-int-overflow.metrics",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkconfig",
+              "2147483648",
+              "get"
+            ],
+            "direct_wait_complete": true,
+            "environment_overrides": {
+              "LC_ALL": "C"
+            },
+            "environment_unset": [
+              "LD_PRELOAD",
+              "LD_AUDIT",
+              "LD_LIBRARY_PATH"
+            ],
+            "expected": {
+              "returncode": 1,
+              "stderr": "Invalid device index: 2147483648\n",
+              "stdout": ""
+            },
+            "host_free_bytes": 135152967680,
+            "joined_utc_ns": 1793948144921665943,
+            "label": "ihkconfig-index-int-overflow",
+            "mem_available_bytes": 29179412480,
+            "passed": true,
+            "returncode": 1,
+            "scratch_free_bytes": 47613485056,
+            "started_utc_ns": 1793948144918327249
+          },
+          {
+            "argv": [
+              "/usr/bin/taskset",
+              "-c",
+              "6",
+              "/usr/bin/timeout",
+              "--foreground",
+              "--signal=TERM",
+              "--kill-after=5s",
+              "60s",
+              "/usr/bin/prlimit",
+              "--as=1073741824:1073741824",
+              "--cpu=45:45",
+              "--fsize=67108864:67108864",
+              "--core=0:0",
+              "--",
+              "/usr/bin/time",
+              "-v",
+              "-o",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/actual-cli-main-preflight-1/ihkconfig-index-strtol-overflow.metrics",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkconfig",
+              "18446744073709551616",
+              "get"
+            ],
+            "direct_wait_complete": true,
+            "environment_overrides": {
+              "LC_ALL": "C"
+            },
+            "environment_unset": [
+              "LD_PRELOAD",
+              "LD_AUDIT",
+              "LD_LIBRARY_PATH"
+            ],
+            "expected": {
+              "returncode": 1,
+              "stderr": "Invalid device index: 18446744073709551616\n",
+              "stdout": ""
+            },
+            "host_free_bytes": 135152959488,
+            "joined_utc_ns": 1793948144925101273,
+            "label": "ihkconfig-index-strtol-overflow",
+            "mem_available_bytes": 29179412480,
+            "passed": true,
+            "returncode": 1,
+            "scratch_free_bytes": 47613485056,
+            "started_utc_ns": 1793948144922172417
+          },
+          {
+            "argv": [
+              "/usr/bin/taskset",
+              "-c",
+              "6",
+              "/usr/bin/timeout",
+              "--foreground",
+              "--signal=TERM",
+              "--kill-after=5s",
+              "60s",
+              "/usr/bin/prlimit",
+              "--as=1073741824:1073741824",
+              "--cpu=45:45",
+              "--fsize=67108864:67108864",
+              "--core=0:0",
+              "--",
+              "/usr/bin/time",
+              "-v",
+              "-o",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/actual-cli-main-preflight-1/ihkosctl-argc-usage.metrics",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkosctl"
+            ],
+            "direct_wait_complete": true,
+            "environment_overrides": {
+              "LC_ALL": "C"
+            },
+            "environment_unset": [
+              "LD_PRELOAD",
+              "LD_AUDIT",
+              "LD_LIBRARY_PATH"
+            ],
+            "expected": {
+              "returncode": 1,
+              "stderr": "Usage: ihkosctl (dev #) (action)\naction:\n    load (kernel.img)\n    boot\n    shutdown\n    assign cpu|mem \n           cpu (cpu_list) \n           mem (size@NUMA) \n    release cpu|mem \n            cpu (cpu_list) \n            mem (size@NUMA) \n    set ikc_map (cpu_list:cpu+cpu_list:cpu+..) \n    get ikc_map\n    query [cpu|mem]\n    query_free_mem\n    kargs (kernel arg)\n    get status\n    kmsg\n    clear_kmsg\n    intr cpu irq_vector\n    ioctl (req) (arg)\n    dump [-d level] [file]\n",
+              "stdout": ""
+            },
+            "host_free_bytes": 135152951296,
+            "joined_utc_ns": 1793948144928495018,
+            "label": "ihkosctl-argc-usage",
+            "mem_available_bytes": 29179412480,
+            "passed": true,
+            "returncode": 1,
+            "scratch_free_bytes": 47613485056,
+            "started_utc_ns": 1793948144925617923
+          },
+          {
+            "argv": [
+              "/usr/bin/taskset",
+              "-c",
+              "6",
+              "/usr/bin/timeout",
+              "--foreground",
+              "--signal=TERM",
+              "--kill-after=5s",
+              "60s",
+              "/usr/bin/prlimit",
+              "--as=1073741824:1073741824",
+              "--cpu=45:45",
+              "--fsize=67108864:67108864",
+              "--core=0:0",
+              "--",
+              "/usr/bin/time",
+              "-v",
+              "-o",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/actual-cli-main-preflight-1/ihkosctl-index-no-conversion.metrics",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkosctl",
+              "foo",
+              "get"
+            ],
+            "direct_wait_complete": true,
+            "environment_overrides": {
+              "LC_ALL": "C"
+            },
+            "environment_unset": [
+              "LD_PRELOAD",
+              "LD_AUDIT",
+              "LD_LIBRARY_PATH"
+            ],
+            "expected": {
+              "returncode": 1,
+              "stderr": "Invalid OS index: foo\n",
+              "stdout": ""
+            },
+            "host_free_bytes": 135152939008,
+            "joined_utc_ns": 1793948144932917050,
+            "label": "ihkosctl-index-no-conversion",
+            "mem_available_bytes": 29179412480,
+            "passed": true,
+            "returncode": 1,
+            "scratch_free_bytes": 47613485056,
+            "started_utc_ns": 1793948144929067636
+          },
+          {
+            "argv": [
+              "/usr/bin/taskset",
+              "-c",
+              "6",
+              "/usr/bin/timeout",
+              "--foreground",
+              "--signal=TERM",
+              "--kill-after=5s",
+              "60s",
+              "/usr/bin/prlimit",
+              "--as=1073741824:1073741824",
+              "--cpu=45:45",
+              "--fsize=67108864:67108864",
+              "--core=0:0",
+              "--",
+              "/usr/bin/time",
+              "-v",
+              "-o",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/actual-cli-main-preflight-1/ihkosctl-index-trailing-junk.metrics",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkosctl",
+              "0junk",
+              "get"
+            ],
+            "direct_wait_complete": true,
+            "environment_overrides": {
+              "LC_ALL": "C"
+            },
+            "environment_unset": [
+              "LD_PRELOAD",
+              "LD_AUDIT",
+              "LD_LIBRARY_PATH"
+            ],
+            "expected": {
+              "returncode": 1,
+              "stderr": "Invalid OS index: 0junk\n",
+              "stdout": ""
+            },
+            "host_free_bytes": 135152930816,
+            "joined_utc_ns": 1793948144937147672,
+            "label": "ihkosctl-index-trailing-junk",
+            "mem_available_bytes": 29179412480,
+            "passed": true,
+            "returncode": 1,
+            "scratch_free_bytes": 47613485056,
+            "started_utc_ns": 1793948144933637647
+          },
+          {
+            "argv": [
+              "/usr/bin/taskset",
+              "-c",
+              "6",
+              "/usr/bin/timeout",
+              "--foreground",
+              "--signal=TERM",
+              "--kill-after=5s",
+              "60s",
+              "/usr/bin/prlimit",
+              "--as=1073741824:1073741824",
+              "--cpu=45:45",
+              "--fsize=67108864:67108864",
+              "--core=0:0",
+              "--",
+              "/usr/bin/time",
+              "-v",
+              "-o",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/actual-cli-main-preflight-1/ihkosctl-index-negative.metrics",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkosctl",
+              "-1",
+              "get"
+            ],
+            "direct_wait_complete": true,
+            "environment_overrides": {
+              "LC_ALL": "C"
+            },
+            "environment_unset": [
+              "LD_PRELOAD",
+              "LD_AUDIT",
+              "LD_LIBRARY_PATH"
+            ],
+            "expected": {
+              "returncode": 1,
+              "stderr": "Invalid OS index: -1\n",
+              "stdout": ""
+            },
+            "host_free_bytes": 135152918528,
+            "joined_utc_ns": 1793948144940920155,
+            "label": "ihkosctl-index-negative",
+            "mem_available_bytes": 29178941440,
+            "passed": true,
+            "returncode": 1,
+            "scratch_free_bytes": 47613485056,
+            "started_utc_ns": 1793948144937765247
+          },
+          {
+            "argv": [
+              "/usr/bin/taskset",
+              "-c",
+              "6",
+              "/usr/bin/timeout",
+              "--foreground",
+              "--signal=TERM",
+              "--kill-after=5s",
+              "60s",
+              "/usr/bin/prlimit",
+              "--as=1073741824:1073741824",
+              "--cpu=45:45",
+              "--fsize=67108864:67108864",
+              "--core=0:0",
+              "--",
+              "/usr/bin/time",
+              "-v",
+              "-o",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/actual-cli-main-preflight-1/ihkosctl-index-int-overflow.metrics",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkosctl",
+              "2147483648",
+              "get"
+            ],
+            "direct_wait_complete": true,
+            "environment_overrides": {
+              "LC_ALL": "C"
+            },
+            "environment_unset": [
+              "LD_PRELOAD",
+              "LD_AUDIT",
+              "LD_LIBRARY_PATH"
+            ],
+            "expected": {
+              "returncode": 1,
+              "stderr": "Invalid OS index: 2147483648\n",
+              "stdout": ""
+            },
+            "host_free_bytes": 135152910336,
+            "joined_utc_ns": 1793948144944832473,
+            "label": "ihkosctl-index-int-overflow",
+            "mem_available_bytes": 29178941440,
+            "passed": true,
+            "returncode": 1,
+            "scratch_free_bytes": 47613485056,
+            "started_utc_ns": 1793948144941538163
+          },
+          {
+            "argv": [
+              "/usr/bin/taskset",
+              "-c",
+              "6",
+              "/usr/bin/timeout",
+              "--foreground",
+              "--signal=TERM",
+              "--kill-after=5s",
+              "60s",
+              "/usr/bin/prlimit",
+              "--as=1073741824:1073741824",
+              "--cpu=45:45",
+              "--fsize=67108864:67108864",
+              "--core=0:0",
+              "--",
+              "/usr/bin/time",
+              "-v",
+              "-o",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/actual-cli-main-preflight-1/ihkosctl-index-strtol-overflow.metrics",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkosctl",
+              "18446744073709551616",
+              "get"
+            ],
+            "direct_wait_complete": true,
+            "environment_overrides": {
+              "LC_ALL": "C"
+            },
+            "environment_unset": [
+              "LD_PRELOAD",
+              "LD_AUDIT",
+              "LD_LIBRARY_PATH"
+            ],
+            "expected": {
+              "returncode": 1,
+              "stderr": "Invalid OS index: 18446744073709551616\n",
+              "stdout": ""
+            },
+            "host_free_bytes": 135152902144,
+            "joined_utc_ns": 1793948144949465633,
+            "label": "ihkosctl-index-strtol-overflow",
+            "mem_available_bytes": 29178941440,
+            "passed": true,
+            "returncode": 1,
+            "scratch_free_bytes": 47613485056,
+            "started_utc_ns": 1793948144945453366
+          }
+        ],
+        "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/actual-cli-main-preflight-1/RUNS.json",
+        "sha256": "d7f7525319413a7be036acd9d7f934430276b6705d594ab0f18c1c4220bd2a19"
+      },
+      "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/actual-cli-main-preflight-1/RESULT.json",
+      "result": {
+        "admission_sha256": "6364d3384c496e1c159ecb1ddba87e40051ceb76b970a7766a8bfe69551a0d88",
+        "all_direct_waits_joined": true,
+        "all_stderr_exact_source_derived": true,
+        "all_stdout_empty": true,
+        "builds": 0,
+        "canonical_source_hold_released": true,
+        "cases": 12,
+        "device_backend_native_cases": 0,
+        "dispatch_exclusion_basis": "Exactcanonicalmain/helper/usageprefixmembership and matchingcompiledartifact/source/cohortbindings reverified. No dynamic syscalltrace/native/deviceclaim.",
+        "expected_exit_status": 1,
+        "files": {
+          "REQUEST.json": "310d1b0c4cdd2cdfd967d110ceb9fccf981a64e40800f59c9dd6bdc13e7160c3",
+          "ROOT-ADMISSION-1.json": "6364d3384c496e1c159ecb1ddba87e40051ceb76b970a7766a8bfe69551a0d88",
+          "ROUTING.json": "df205d8f5fe92dae23a92803eac08cb126031b2ffc7d0b78806bae2d12b54020",
+          "RUNS.json": "d7f7525319413a7be036acd9d7f934430276b6705d594ab0f18c1c4220bd2a19",
+          "SOURCE-ORDERING.json": "91aea6fcda2d70e900e7e9565fe41b879e265da40aeca5eab32f7928638924fc",
+          "VERIFIED-INPUTS.json": "8e10ca51d6475543f10ff0db00fcf297478600043a8778def630f8a1d876f808",
+          "ihkconfig-argc-usage.metrics": "b60098385934ec5e75629bf34ffdb0bafda267b3dbf68ce745ce0af727fbe9d0",
+          "ihkconfig-argc-usage.stderr": "aa7750e4f7b59ffb4594257cbe502c566c029bf5e1e8e26ee39015fe39cf23e9",
+          "ihkconfig-argc-usage.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "ihkconfig-index-int-overflow.metrics": "9214f5c95230730077d9d5cb7bcf04c22a1ca7408bdfd40cc51f9f4494d436dc",
+          "ihkconfig-index-int-overflow.stderr": "7512ad66ce9f784d46b8940f5978c9d11aa0266d70f527052ef5851205288e1c",
+          "ihkconfig-index-int-overflow.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "ihkconfig-index-negative.metrics": "e6080b9b4ad45ff78741df250d3ff79c04309e1779b9c137395bf0b74a49770e",
+          "ihkconfig-index-negative.stderr": "4cf12a717de8e8dfdba022a67b7b5d22a86b0f997cc1ff3830c6b101975fa282",
+          "ihkconfig-index-negative.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "ihkconfig-index-no-conversion.metrics": "e4944ee107dcae6134d049c65d5357dbacfc2e2a6b38ff48998c95e10fef5817",
+          "ihkconfig-index-no-conversion.stderr": "840cfdf1434a95d26b8aeae3801969b20a45033246ebad04a3aac07ded937878",
+          "ihkconfig-index-no-conversion.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "ihkconfig-index-strtol-overflow.metrics": "a1ed72ac4539ae64a2cbd879abd94a4d2df4463dddad4f35a492e416205023c4",
+          "ihkconfig-index-strtol-overflow.stderr": "9780ca4a918639bb30ebc87cf9266cf867bb3676a2bb1945036e33e6b97b8d71",
+          "ihkconfig-index-strtol-overflow.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "ihkconfig-index-trailing-junk.metrics": "de0d5f7f9178fba32a5aa8ad3bbb712f0cc7a239a9e32a6cb05a3265fc1ebb88",
+          "ihkconfig-index-trailing-junk.stderr": "6af11c3d2d5baa183ccf25039c84635433e0fe7feff0b101f6dff78a86fc6c97",
+          "ihkconfig-index-trailing-junk.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "ihkosctl-argc-usage.metrics": "5763ea6bdabb2157ded59eabb58619119ba7bb793f8519926f31adbd24326fff",
+          "ihkosctl-argc-usage.stderr": "b4fd74ec4572dceffdb35c1764be7b2f1faf8ea5ae464bd7cba5a04c2bf898fb",
+          "ihkosctl-argc-usage.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "ihkosctl-index-int-overflow.metrics": "fc1337f1d3a34cf8928f16f813330cf739beeb74b396cedfcd823677f70a9029",
+          "ihkosctl-index-int-overflow.stderr": "6b80e832cbffbf398ab42081720a24c689daf378f3d2011be207554243de003d",
+          "ihkosctl-index-int-overflow.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "ihkosctl-index-negative.metrics": "e15b57cd8611119964476014499d099d39f980789e27454aab45305db47cf29d",
+          "ihkosctl-index-negative.stderr": "e2e461c88256b156608e0bcd435d4a4621b4183d7beace929294fef510a0ce15",
+          "ihkosctl-index-negative.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "ihkosctl-index-no-conversion.metrics": "e22f254af6cdf1dc5409d6238a1ba7fb51caaf2259e65361c52b5423a570849c",
+          "ihkosctl-index-no-conversion.stderr": "31c3221aaa17bb983c25f5ff182d13a69d77776dd6ff6f02d60a5663f1eb7205",
+          "ihkosctl-index-no-conversion.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "ihkosctl-index-strtol-overflow.metrics": "d7ed646f7c240da8365b47b47464bcc610a26ffe0f3e9a7fce4a0675bbf8fb91",
+          "ihkosctl-index-strtol-overflow.stderr": "b4193897276f9798be724ae2f1a75fb770ff21c4d9cf61dcc5f3ace929e67a6f",
+          "ihkosctl-index-strtol-overflow.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "ihkosctl-index-trailing-junk.metrics": "a66f60d13adf3b916f17e52e96af9dc49d45b59c4a3c95451e8c4bd3465f7ed5",
+          "ihkosctl-index-trailing-junk.stderr": "db37e66e2e5c9b13e3c9728c135a3979073740d63694f30247b863d638ea302f",
+          "ihkosctl-index-trailing-junk.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "maximum_peak_RSS_KiB": 2848,
+        "metadata_slot_released": true,
+        "metrics": {
+          "ihkconfig-argc-usage": [
+            "User time (seconds): 0.00",
+            "System time (seconds): 0.00",
+            "Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.00",
+            "Maximum resident set size (kbytes): 2668",
+            "Exit status: 1"
+          ],
+          "ihkconfig-index-int-overflow": [
+            "User time (seconds): 0.00",
+            "System time (seconds): 0.00",
+            "Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.00",
+            "Maximum resident set size (kbytes): 2840",
+            "Exit status: 1"
+          ],
+          "ihkconfig-index-negative": [
+            "User time (seconds): 0.00",
+            "System time (seconds): 0.00",
+            "Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.00",
+            "Maximum resident set size (kbytes): 2832",
+            "Exit status: 1"
+          ],
+          "ihkconfig-index-no-conversion": [
+            "User time (seconds): 0.00",
+            "System time (seconds): 0.00",
+            "Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.00",
+            "Maximum resident set size (kbytes): 2832",
+            "Exit status: 1"
+          ],
+          "ihkconfig-index-strtol-overflow": [
+            "User time (seconds): 0.00",
+            "System time (seconds): 0.00",
+            "Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.00",
+            "Maximum resident set size (kbytes): 2820",
+            "Exit status: 1"
+          ],
+          "ihkconfig-index-trailing-junk": [
+            "User time (seconds): 0.00",
+            "System time (seconds): 0.00",
+            "Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.00",
+            "Maximum resident set size (kbytes): 2740",
+            "Exit status: 1"
+          ],
+          "ihkosctl-argc-usage": [
+            "User time (seconds): 0.00",
+            "System time (seconds): 0.00",
+            "Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.00",
+            "Maximum resident set size (kbytes): 2716",
+            "Exit status: 1"
+          ],
+          "ihkosctl-index-int-overflow": [
+            "User time (seconds): 0.00",
+            "System time (seconds): 0.00",
+            "Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.00",
+            "Maximum resident set size (kbytes): 2848",
+            "Exit status: 1"
+          ],
+          "ihkosctl-index-negative": [
+            "User time (seconds): 0.00",
+            "System time (seconds): 0.00",
+            "Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.00",
+            "Maximum resident set size (kbytes): 2756",
+            "Exit status: 1"
+          ],
+          "ihkosctl-index-no-conversion": [
+            "User time (seconds): 0.00",
+            "System time (seconds): 0.00",
+            "Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.00",
+            "Maximum resident set size (kbytes): 2752",
+            "Exit status: 1"
+          ],
+          "ihkosctl-index-strtol-overflow": [
+            "User time (seconds): 0.00",
+            "System time (seconds): 0.00",
+            "Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.00",
+            "Maximum resident set size (kbytes): 2776",
+            "Exit status: 1"
+          ],
+          "ihkosctl-index-trailing-junk": [
+            "User time (seconds): 0.00",
+            "System time (seconds): 0.00",
+            "Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.00",
+            "Maximum resident set size (kbytes): 2776",
+            "Exit status: 1"
+          ]
+        },
+        "new_milestone_file_acceptance": false,
+        "no_fake_provider_or_extracted_fixture": true,
+        "passed": 12,
+        "per_tool_cases": [
+          "argcusage",
+          "noconversion",
+          "trailingjunk",
+          "negative",
+          "c_intoverflow",
+          "strtoloverflow"
+        ],
+        "scope": "Genuineproductionihkconfig/ihkosctl executables,source-bound argc/indexvalidation return before IHK/device/commanddispatch.",
+        "status": "PASS12_ACTUAL_MATCHED_CLI_MAIN_PREFLIGHTS",
+        "valid_index_dispatch_cases": 0
+      },
+      "sha256": "1c651ee8a44fdbe737cdb8d818f6b9e6de3c313deec441c77968f23e7153a9aa"
+    },
+    "sdk_mapping": {
+      "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/sdk-next-qualification-1/returned-metadata-binding-1/RESULT.json",
+      "result": {
+        "corroborated_original_outer_bindings": [
+          {
+            "Destination": "/out",
+            "ImageID": "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5",
+            "RW": false,
+            "Source": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output",
+            "Type": "bind",
+            "container_created": 1793168644,
+            "container_id": "57a5fb1f62bc707ee90412fe9585718cdaa39e4110854f91bf4cb6df4380fda3",
+            "container_state_metadata_only": "exited"
+          },
+          {
+            "Destination": "/nightly",
+            "ImageID": "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5",
+            "RW": false,
+            "Source": "/home/holden/mckernel-work/scratch/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu",
+            "Type": "bind",
+            "container_created": 1793168644,
+            "container_id": "57a5fb1f62bc707ee90412fe9585718cdaa39e4110854f91bf4cb6df4380fda3",
+            "container_state_metadata_only": "exited"
+          },
+          {
+            "Destination": "/nightly",
+            "ImageID": "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5",
+            "RW": false,
+            "Source": "/home/holden/mckernel-work/scratch/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu",
+            "Type": "bind",
+            "container_created": 1793043019,
+            "container_id": "5487cf9508267dd943b917980bffdfd6adcf3c4ca721112a84beaa3d892614b2",
+            "container_state_metadata_only": "exited"
+          },
+          {
+            "Destination": "/out",
+            "ImageID": "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5",
+            "RW": false,
+            "Source": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output",
+            "Type": "bind",
+            "container_created": 1793043019,
+            "container_id": "5487cf9508267dd943b917980bffdfd6adcf3c4ca721112a84beaa3d892614b2",
+            "container_state_metadata_only": "exited"
+          },
+          {
+            "Destination": "/nightly",
+            "ImageID": "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5",
+            "RW": false,
+            "Source": "/home/holden/mckernel-work/scratch/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu",
+            "Type": "bind",
+            "container_created": 1793042160,
+            "container_id": "ef25c02fc111c3174aaab67d9fc3eac8a5be7743adaf05e83a309d8336b14d68",
+            "container_state_metadata_only": "created"
+          },
+          {
+            "Destination": "/out",
+            "ImageID": "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5",
+            "RW": false,
+            "Source": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output",
+            "Type": "bind",
+            "container_created": 1793042160,
+            "container_id": "ef25c02fc111c3174aaab67d9fc3eac8a5be7743adaf05e83a309d8336b14d68",
+            "container_state_metadata_only": "created"
+          }
+        ],
+        "decision": "NO_GO_EXACT_ORIGINAL_DIAGNOSTIC_NAMESPACE_TO_HOST_MAPPING_UNBOUND",
+        "declared_original_inner_namespace": {
+          "actual_declared_argv": [
+            "/usr/bin/bwrap",
+            "--unshare-user",
+            "--unshare-net",
+            "--ro-bind",
+            "/",
+            "/",
+            "--ro-bind",
+            "/usr",
+            "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/host-usr",
+            "--ro-bind",
+            "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/usr",
+            "/usr",
+            "--dev",
+            "/dev",
+            "--bind",
+            "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work",
+            "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work",
+            "--setenv",
+            "PATH",
+            "/usr/bin:/bin",
+            "--setenv",
+            "LD_LIBRARY_PATH",
+            "/usr/lib64:/usr/lib/x86_64-linux-gnu",
+            "--setenv",
+            "TMPDIR",
+            "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work",
+            "--setenv",
+            "LC_ALL",
+            "C",
+            "--chdir",
+            "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work",
+            "--"
+          ],
+          "original_full_SDK_identity": false,
+          "pin_record_path": "/home/holden/mckernel/docs/verification/evidence/m15-focused-host-links-20261101/sdk-recovery.json",
+          "pin_record_sha256": "8c2bbbabd434492b3fd9e497f8ccfdaf3544f3ad3fa5a94bce5a65be8291fde7",
+          "profile_path": "/home/holden/mckernel/docs/verification/evidence/m15-focused-host-links-20261101/namespace-selected-inputs.json",
+          "profile_sha256": "7c384edb9ddf44816c2fc3dac3de6e28c009f36eac4d8e9ca583db50cda6bf41",
+          "scope": "Actual unchanged production BFD pin/layout/accessor module with exact compiler/binutils and explicit supplemental HOST ABI inputs. No original complete SDK identity or native acceptance claimed.",
+          "stage": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1"
+        },
+        "four_pins": [
+          {
+            "current_hash_checked": false,
+            "current_host_path": null,
+            "expected_sha256": "de900a9fe4ac94543ee1382cebc3063c3d7e20d16bc934fc816133dd55fe2432",
+            "pin": "header",
+            "reason": "No returned originalouter mount covers /workspace/scratch/a8bff332f582; no source or filesystempath substitution admitted.",
+            "recorded_original_outer_source_path": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/binutils-devel/usr/include/bfd.h"
+          },
+          {
+            "current_hash_checked": false,
+            "current_host_path": null,
+            "expected_sha256": "6cfd31804974c248c9512879e7b77a94862f92150c2171d901140464ea936ab3",
+            "pin": "linker_script",
+            "reason": "No returned originalouter mount covers /workspace/scratch/a8bff332f582; no source or filesystempath substitution admitted.",
+            "recorded_original_outer_source_path": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/binutils-devel/usr/lib64/libbfd.so"
+          },
+          {
+            "current_hash_checked": false,
+            "current_host_path": null,
+            "expected_sha256": "2324c3f9557b3387126123659badf4cccdbbd272104aec42a21c709c31bf6d4e",
+            "pin": "archive",
+            "reason": "No returned originalouter mount covers /workspace/scratch/a8bff332f582; no source or filesystempath substitution admitted.",
+            "recorded_original_outer_source_path": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/binutils-devel/usr/lib64/libbfd.a"
+          },
+          {
+            "current_hash_checked": false,
+            "current_host_path": null,
+            "expected_sha256": "2092e32fa9abee9ccbf777a5f893b9cc608582b660c93e742a17c3eb7da109c2",
+            "pin": "compiler",
+            "reason": "No returned originalouter mount covers /workspace/scratch/a8bff332f582; no source or filesystempath substitution admitted.",
+            "recorded_original_outer_source_path": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/gcc/usr/bin/gcc"
+          }
+        ],
+        "fresh_turn": {
+          "actual_thread_updated_at": 1793947850,
+          "agent_path": "/root/m15_public_abi_high",
+          "approval_mode": "never",
+          "model": "gpt-6.1-sol",
+          "observed_utc_ns": 1793947850959488918,
+          "reasoning_effort": "high",
+          "sandbox_policy": "disabled",
+          "source": "Read-only localstate_5.sqlite threads row observed at startofthisturn",
+          "thread_id": "01a1aefa-52af-7e70-bf6e-4fcc59f43aae"
+        },
+        "not_run": "No queryrepeat/containerstart/exec/compiler/test/recovery/Config/Env/credential access/native/sudo/resource or source/index operation. No pinfile readbecauseactualmappingunbound.",
+        "observed_utc_ns": 1793948020548323962,
+        "preserved": "18GiB UNKNOWN/nativecharges,4GiBfloor,scratch21,mutex27:4, UNKNOWNbirth/waits,currentfree/source/serviceholds and allnonce/deadline constraints unchanged. Exited/created containerstate is descriptiveonly; no absence-based release.",
+        "scope": "Only originaltwo-tool diagnosticSDKshareddependency binding, no broaderinventory/globalSDKabsenceclaim/newframework.",
+        "separate_authority_gate": "Original SDK/source-view one-shot operation gate remains unimplemented/refuses as previously pinned; this metadata doesnot resolve it.",
+        "single_remaining_mapping": {
+          "WorkingDir": "Notrequested/notavailable; do notguess it.",
+          "actual_outer_container_or_host_binding": null,
+          "owner": "Root/originalnamespace binding authority must supply a corroborated mapping for originalstage prefix before pinfile reads or reusing namespace command.",
+          "reason": "None of the3returned fullcontainerID rows has a /workspace bind. Returned /out and/nightly bindings cover different containerpath prefixes and cannot translate the recorded originalstage. The originalstageusesa12hex pathcomponent; no fullidentity relation or pathtranslation follows from that spelling.",
+          "required_namespace_input": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/usr",
+          "required_outer_prefix": "/workspace/scratch/a8bff332f582",
+          "unmatched_hint": "No row in this exactfilteredresult matchesa8bff332f582; this is NOT a globalSDK/containerabsence finding, norresource/owner release."
+        },
+        "smallest_eligible_existing_command": null,
+        "successful_query_consumed_once": {
+          "canonical_metadata_reproduces_captured_stdout_sha256": "acbd776e1a312a26ec280d9c9108ee95f1a4e2fd41cf103e8b94485519e45027",
+          "exit_code": 0,
+          "metadata_file_sha256": "635e0c0c8a85e5bc503fc205befb27dae1f1f04318aaf3ab5aba10c83ebcb75b",
+          "metadata_path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/readonly-root-docker-metadata-review-1/summary-query-correction-1/operation-1/FILTERED-METADATA.json",
+          "nonce_consumed": "7f3c26ccd5a501f621882ad209a5580b",
+          "query_repeated": false,
+          "result_path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/readonly-root-docker-metadata-review-1/summary-query-correction-1/operation-1/RESULT.json",
+          "result_sha256": "c48d90d77a907ee548dea8b6a106bb6370a6c24e4d2c195dd33a613ff2a90b9f",
+          "sudo_direct_wait_complete": true
+        }
+      },
+      "sha256": "e7e1f773bb4179952626f15cc94adbcc3bf5b3d77a202376fb49bb14b3db8e75"
+    },
+    "supervisor": {
+      "REQUEST.json": {
+        "content": {
+          "actual_program_mains_run": 0,
+          "bindings": {
+            "actual_loader_cohort_proof": {
+              "bytes": 15553,
+              "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/METADATA-CORRECTION-1/RESULT.json",
+              "resolved_path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/METADATA-CORRECTION-1/RESULT.json",
+              "sha256": "281a9e5ce95fddc531fe861cf956135a1e0cd02d07fbc28f9f2480ec01201a0e"
+            },
+            "matching_library": {
+              "76root_result": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/private-and-source-export-4/soname-link-review-1/RESULT.json",
+              "SONAME": "libihk.so",
+              "bytes": 5403760,
+              "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/private-and-source-export-4/soname-link-review-1/output/libihk.so",
+              "sha256": "314beee5c7b59aab41f5aa6686e5a515e4c7a425067012276d871c36d596b027"
+            },
+            "old_build_and_loader_admission_historical_only": {
+              "bytes": 11420,
+              "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ROOT-ADMISSION-1.json",
+              "resolved_path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ROOT-ADMISSION-1.json",
+              "sha256": "fc178f546613d857c73a96e7e807ee0c35ded7700d57ff8f552a5f50d508d00a"
+            },
+            "source": {
+              "bytes": 24060,
+              "path": "/home/holden/mckernel/ihk/linux/user/rust/ihkmond.rs",
+              "resolved_path": "/home/holden/mckernel/ihk/linux/user/rust/ihkmond.rs",
+              "sha256": "988945b11275c57951c5ada75439c4f1d48ca91d3f0113056c626180eadf88df"
+            },
+            "tool": {
+              "bytes": 5436368,
+              "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkmond",
+              "resolved_path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkmond",
+              "sha256": "46eb814cc511b8d88d0596ee7f8c420f472fe0ca45d2b1fe5dc4e47110533f36"
+            }
+          },
+          "canonical_or_index_write": false,
+          "cases": [
+            {
+              "argv": [
+                "/usr/bin/taskset",
+                "-c",
+                "6",
+                "/usr/bin/timeout",
+                "--foreground",
+                "--signal=TERM",
+                "--kill-after=2s",
+                "58s",
+                "/usr/bin/prlimit",
+                "--as=1073741824:1073741824",
+                "--cpu=45:45",
+                "--fsize=67108864:67108864",
+                "--core=0:0",
+                "--",
+                "/usr/bin/time",
+                "-v",
+                "-o",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-supervisor-1/environment-consumer-ownership-1/actual-ihkmond-main-preflight-1/help.metrics",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkmond",
+                "--help"
+              ],
+              "environment_reason": "Minimal exact HOST environment keeps LD_PRELOAD/LD_AUDIT/LD_LIBRARY_PATH/LD_TRACE_LOADED_OBJECTS/IHKMOND_HELPER absent and reuses trusted RUNPATH resolution; no runtime provider replacement.",
+              "environment_replace": {
+                "LANG": "C",
+                "LC_ALL": "C",
+                "PATH": "/usr/bin:/bin"
+              },
+              "expected_status": 0,
+              "expected_stderr": "",
+              "expected_stdout": "ihkmond [--help|-?] [-f <facility_name>] [-k <redirect_kmsg>] [-n <detect_hungup>]\n--help            \tShow usage\n-f <facility_name>\tUse <facility_name> when redirecting kmsg by using syslog()\n-k <redirect_kmsg>\t1: Redirect kmsg\n                  \t0: Otherwise\n-i <monitor_interval>\t!=-1: Polling interval (in second) for detecting hungup\n                  \t-1: Don't detect hungup\n",
+              "label": "help",
+              "program_argv": [
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkmond",
+                "--help"
+              ],
+              "source_exit": "getopt_long --help returns63; default match arm usage+return0 before daemon"
+            },
+            {
+              "argv": [
+                "/usr/bin/taskset",
+                "-c",
+                "6",
+                "/usr/bin/timeout",
+                "--foreground",
+                "--signal=TERM",
+                "--kill-after=2s",
+                "58s",
+                "/usr/bin/prlimit",
+                "--as=1073741824:1073741824",
+                "--cpu=45:45",
+                "--fsize=67108864:67108864",
+                "--core=0:0",
+                "--",
+                "/usr/bin/time",
+                "-v",
+                "-o",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-supervisor-1/environment-consumer-ownership-1/actual-ihkmond-main-preflight-1/invalid-interval.metrics",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkmond",
+                "-i",
+                "-1tail"
+              ],
+              "environment_reason": "Minimal exact HOST environment keeps LD_PRELOAD/LD_AUDIT/LD_LIBRARY_PATH/LD_TRACE_LOADED_OBJECTS/IHKMOND_HELPER absent and reuses trusted RUNPATH resolution; no runtime provider replacement.",
+              "environment_replace": {
+                "LANG": "C",
+                "LC_ALL": "C",
+                "PATH": "/usr/bin:/bin"
+              },
+              "expected_status": 255,
+              "expected_stderr": "",
+              "expected_stdout": "",
+              "label": "invalid-interval",
+              "program_argv": [
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkmond",
+                "-i",
+                "-1tail"
+              ],
+              "source_exit": "getopt required-i consumes -1tail; strtol yields-1 with non-NUL remainder; parse_interval None; fail255; kprint gets euid1000 and returns before /dev/kmsg open; run returns before daemon"
+            },
+            {
+              "argv": [
+                "/usr/bin/taskset",
+                "-c",
+                "6",
+                "/usr/bin/timeout",
+                "--foreground",
+                "--signal=TERM",
+                "--kill-after=2s",
+                "58s",
+                "/usr/bin/prlimit",
+                "--as=1073741824:1073741824",
+                "--cpu=45:45",
+                "--fsize=67108864:67108864",
+                "--core=0:0",
+                "--",
+                "/usr/bin/time",
+                "-v",
+                "-o",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-supervisor-1/environment-consumer-ownership-1/actual-ihkmond-main-preflight-1/missing-interval-option.metrics",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkmond",
+                "-i"
+              ],
+              "environment_reason": "Minimal exact HOST environment keeps LD_PRELOAD/LD_AUDIT/LD_LIBRARY_PATH/LD_TRACE_LOADED_OBJECTS/IHKMOND_HELPER absent and reuses trusted RUNPATH resolution; no runtime provider replacement.",
+              "environment_replace": {
+                "LANG": "C",
+                "LC_ALL": "C",
+                "PATH": "/usr/bin:/bin"
+              },
+              "expected_status": 0,
+              "expected_stderr": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkmond: option requires an argument -- 'i'\n",
+              "expected_stdout": "ihkmond [--help|-?] [-f <facility_name>] [-k <redirect_kmsg>] [-n <detect_hungup>]\n--help            \tShow usage\n-f <facility_name>\tUse <facility_name> when redirecting kmsg by using syslog()\n-k <redirect_kmsg>\t1: Redirect kmsg\n                  \t0: Otherwise\n-i <monitor_interval>\t!=-1: Polling interval (in second) for detecting hungup\n                  \t-1: Don't detect hungup\n",
+              "label": "missing-interval-option",
+              "program_argv": [
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkmond",
+                "-i"
+              ],
+              "source_exit": "genuine selected glibc getopt missing required i argument emits C-locale stderr and returns?; default arm usage+return0 before daemon"
+            }
+          ],
+          "compiled_source_binding": {
+            "compile_environment": {
+              "IHKMOND_TMP": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/full-cli-host-1/kmsg-output"
+            },
+            "fixture_cfg_selected": false,
+            "old_build_argv": [
+              "/usr/bin/taskset",
+              "-c",
+              "6",
+              "/usr/bin/timeout",
+              "--foreground",
+              "--kill-after=5s",
+              "60s",
+              "/usr/bin/prlimit",
+              "--as=1073741824:1073741824",
+              "--cpu=45:45",
+              "--fsize=67108864:67108864",
+              "--core=0:0",
+              "--",
+              "/usr/bin/time",
+              "-v",
+              "-o",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkmond-unchanged-codegen-link.metrics",
+              "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+              "--edition=2021",
+              "-C",
+              "opt-level=2",
+              "-C",
+              "codegen-units=1",
+              "-C",
+              "linker=/usr/bin/cc",
+              "/home/holden/mckernel/ihk/linux/user/rust/ihkmond.rs",
+              "-C",
+              "link-arg=/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/private-and-source-export-4/soname-link-review-1/output/libihk.so",
+              "-C",
+              "link-arg=/usr/lib/x86_64-linux-gnu/libudev.so.1",
+              "-C",
+              "link-arg=-Wl,-rpath,/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/private-and-source-export-4/soname-link-review-1/output",
+              "-o",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkmond"
+            ],
+            "old_proof_is_immutable_and_not_new_execution_authority": true,
+            "program_main_previously_executed": false
+          },
+          "excluded": "No no-argument/validinterval/normaldaemon run, no workers/idle/rollback replay, no compiler/fakeprovider, sysfs/device/event/ioctl/backend/service/install/native or permission/account operation.",
+          "owner": {
+            "canonical_agent": "/root/m15_supervisor_high",
+            "current_turn_id_Root_actual_guard": "01a1afa0-03a6-7363-ba76-fc929dfd3dfa",
+            "model_effort": "gpt-6.1-sol/HIGH per same verified routing; fresh SQL observation is Root-owned/pending",
+            "permissions": "Existing verified danger-full-access/approval-never; no permission expansion",
+            "thread_id_observed_CODEX_THREAD_ID": "01a1aefa-b384-7602-bdfd-8e2ee023c9e5",
+            "uid_observed": 1000
+          },
+          "providers_from_trusted_ihkmond_loader_proof_rehashed_now": [
+            {
+              "bytes": 146000,
+              "path": "/lib/x86_64-linux-gnu/libgcc_s.so.1",
+              "resolved_path": "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+              "sha256": "1785fc8cd9a2ba72f773b0b60b20e58ff79bf30ce2fd8e241c8b31303dcea17e",
+              "trusted_loader_path": "/lib/x86_64-linux-gnu/libgcc_s.so.1"
+            },
+            {
+              "bytes": 157224,
+              "path": "/lib/x86_64-linux-gnu/libpthread.so.0",
+              "resolved_path": "/usr/lib/x86_64-linux-gnu/libpthread-2.31.so",
+              "sha256": "af27ed906f6185e0143b9c0d0da287788efa7eb6b2639e44d48fb2939415fdc5",
+              "trusted_loader_path": "/lib/x86_64-linux-gnu/libpthread.so.0"
+            },
+            {
+              "bytes": 18848,
+              "path": "/lib/x86_64-linux-gnu/libdl.so.2",
+              "resolved_path": "/usr/lib/x86_64-linux-gnu/libdl-2.31.so",
+              "sha256": "e0d0cace80b627e50ca3f7b621b64917677c27c74077080854d57cf4e548edc6",
+              "trusted_loader_path": "/lib/x86_64-linux-gnu/libdl.so.2"
+            },
+            {
+              "bytes": 2029592,
+              "path": "/lib/x86_64-linux-gnu/libc.so.6",
+              "resolved_path": "/usr/lib/x86_64-linux-gnu/libc-2.31.so",
+              "sha256": "53b909551f8e581120ddc2d24cfb5df76c52e3c2e2a5dac0d202b25638b3e902",
+              "trusted_loader_path": "/lib/x86_64-linux-gnu/libc.so.6"
+            },
+            {
+              "bytes": 191504,
+              "path": "/lib64/ld-linux-x86-64.so.2",
+              "resolved_path": "/usr/lib/x86_64-linux-gnu/ld-2.31.so",
+              "sha256": "cfd44e4341767033532d1483c8250d200ad4cdf535d0abc19064ae34cdc51ca0",
+              "trusted_loader_path": "/lib64/ld-linux-x86-64.so.2"
+            },
+            {
+              "bytes": 5403760,
+              "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/private-and-source-export-4/soname-link-review-1/output/libihk.so",
+              "resolved_path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/private-and-source-export-4/soname-link-review-1/output/libihk.so",
+              "sha256": "314beee5c7b59aab41f5aa6686e5a515e4c7a425067012276d871c36d596b027",
+              "trusted_loader_path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/private-and-source-export-4/soname-link-review-1/output/libihk.so"
+            },
+            {
+              "bytes": 178528,
+              "path": "/lib/x86_64-linux-gnu/libudev.so.1",
+              "resolved_path": "/usr/lib/x86_64-linux-gnu/libudev.so.1.6.17",
+              "sha256": "e8fd959b49c39585845c036bca033ae90bdedc173758c0a60bd521bfe29744cd",
+              "trusted_loader_path": "/lib/x86_64-linux-gnu/libudev.so.1"
+            },
+            {
+              "bytes": 1319320,
+              "path": "/lib/x86_64-linux-gnu/libbfd-2.34-system.so",
+              "resolved_path": "/usr/lib/x86_64-linux-gnu/libbfd-2.34-system.so",
+              "sha256": "48918a2b081f45a4f8d66364e3127c5f702dc748d075820e23d9314e9b8e043a",
+              "trusted_loader_path": "/lib/x86_64-linux-gnu/libbfd-2.34-system.so"
+            },
+            {
+              "bytes": 108936,
+              "path": "/lib/x86_64-linux-gnu/libz.so.1",
+              "resolved_path": "/usr/lib/x86_64-linux-gnu/libz.so.1.2.11",
+              "sha256": "ccfda8d7e0d2f77c8a4feb2febbae057edab668d7d7ee6410e2c517724c056c8",
+              "trusted_loader_path": "/lib/x86_64-linux-gnu/libz.so.1"
+            }
+          ],
+          "requested_profile_not_granted": {
+            "AS_bytes": 1073741824,
+            "CORE_bytes": 0,
+            "CPU_seconds": 45,
+            "FSIZE_bytes": 67108864,
+            "KILL_after_TERM_seconds": 2,
+            "TERM_seconds": 58,
+            "cpu": [
+              6
+            ],
+            "host_floor_bytes": 4294967296,
+            "identity": "Actual matchedRust ihkmond + SONAME libihk314beee5 and rehashed trusted HOST libc2.31/BFD2.34/libudev1.6.17 providers; no original SDK/native acceptance",
+            "maximum_wall_seconds": 60,
+            "one_job": true,
+            "prior_reserved_bytes": 19327352832,
+            "shared_HOST_bytes": 2147483648,
+            "uid_required": 1000
+          },
+          "required_results": "Three actual program main invocations only after Root admission, exact statuses/stdio; preserve raw argv/env/stdout/stderr/waits/metrics/hashes, stop first mismatch. No main execution yet.",
+          "source_order": {
+            "checked_interval_line": 252,
+            "daemon_line": 278,
+            "explanation": "Actual main exits via run; production build has no fixture cfg. All3 whitelisted argv branches return inside option loop before daemon. supervise/workers/udev/devices/events/sysfs/ioctls appear only after daemon or in later uncalled functions; invalid fail logging returns at actual euid1000 before device open.",
+            "kprint_uid_guard_line": 83,
+            "main_line": 284,
+            "run_line": 272,
+            "usage_line": 251
+          },
+          "status": "READY_SOURCE_BOUND_THREE_ACTUAL_MAIN_PREFLIGHTS_NOT_ADMITTED_NOT_RUN",
+          "workload_run": false
+        },
+        "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-supervisor-1/environment-consumer-ownership-1/actual-ihkmond-main-preflight-1/REQUEST.json",
+        "sha256": "30ad129d06b41d184c70ee7baa960781e9163313f461a4a81d4de02996b15fb2"
+      },
+      "ROOT-ADMISSION-1.json": {
+        "content": {
+          "Root_review": "Actual main/run option branches return before daemon and supervise; invalid interval fail logging returns on actual UID1000 before device open. Compiled without fixture cfg. Reuse unchanged exact loader/library proof. No SUID/SGID. All supplied bindings freshly match.",
+          "at_utc_ns": 1793948475675415098,
+          "bindings": {
+            "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/METADATA-CORRECTION-1/RESULT.json": "281a9e5ce95fddc531fe861cf956135a1e0cd02d07fbc28f9f2480ec01201a0e",
+            "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ROOT-ADMISSION-1.json": "fc178f546613d857c73a96e7e807ee0c35ded7700d57ff8f552a5f50d508d00a",
+            "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkmond": "46eb814cc511b8d88d0596ee7f8c420f472fe0ca45d2b1fe5dc4e47110533f36",
+            "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/private-and-source-export-4/soname-link-review-1/output/libihk.so": "314beee5c7b59aab41f5aa6686e5a515e4c7a425067012276d871c36d596b027",
+            "/home/holden/mckernel/ihk/linux/user/rust/ihkmond.rs": "988945b11275c57951c5ada75439c4f1d48ca91d3f0113056c626180eadf88df",
+            "/lib/x86_64-linux-gnu/libbfd-2.34-system.so": "48918a2b081f45a4f8d66364e3127c5f702dc748d075820e23d9314e9b8e043a",
+            "/lib/x86_64-linux-gnu/libc.so.6": "53b909551f8e581120ddc2d24cfb5df76c52e3c2e2a5dac0d202b25638b3e902",
+            "/lib/x86_64-linux-gnu/libdl.so.2": "e0d0cace80b627e50ca3f7b621b64917677c27c74077080854d57cf4e548edc6",
+            "/lib/x86_64-linux-gnu/libgcc_s.so.1": "1785fc8cd9a2ba72f773b0b60b20e58ff79bf30ce2fd8e241c8b31303dcea17e",
+            "/lib/x86_64-linux-gnu/libpthread.so.0": "af27ed906f6185e0143b9c0d0da287788efa7eb6b2639e44d48fb2939415fdc5",
+            "/lib/x86_64-linux-gnu/libudev.so.1": "e8fd959b49c39585845c036bca033ae90bdedc173758c0a60bd521bfe29744cd",
+            "/lib/x86_64-linux-gnu/libz.so.1": "ccfda8d7e0d2f77c8a4feb2febbae057edab668d7d7ee6410e2c517724c056c8",
+            "/lib64/ld-linux-x86-64.so.2": "cfd44e4341767033532d1483c8250d200ad4cdf535d0abc19064ae34cdc51ca0"
+          },
+          "canonical_source_writes_held_until_release": true,
+          "commands": [
+            {
+              "argv": [
+                "/usr/bin/taskset",
+                "-c",
+                "6",
+                "/usr/bin/timeout",
+                "--foreground",
+                "--signal=TERM",
+                "--kill-after=2s",
+                "58s",
+                "/usr/bin/prlimit",
+                "--as=1073741824:1073741824",
+                "--cpu=45:45",
+                "--fsize=67108864:67108864",
+                "--core=0:0",
+                "--",
+                "/usr/bin/time",
+                "-v",
+                "-o",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-supervisor-1/environment-consumer-ownership-1/actual-ihkmond-main-preflight-1/help.metrics",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkmond",
+                "--help"
+              ],
+              "environment_reason": "Minimal exact HOST environment keeps LD_PRELOAD/LD_AUDIT/LD_LIBRARY_PATH/LD_TRACE_LOADED_OBJECTS/IHKMOND_HELPER absent and reuses trusted RUNPATH resolution; no runtime provider replacement.",
+              "environment_replace": {
+                "LANG": "C",
+                "LC_ALL": "C",
+                "PATH": "/usr/bin:/bin"
+              },
+              "expected_status": 0,
+              "expected_stderr": "",
+              "expected_stdout": "ihkmond [--help|-?] [-f <facility_name>] [-k <redirect_kmsg>] [-n <detect_hungup>]\n--help            \tShow usage\n-f <facility_name>\tUse <facility_name> when redirecting kmsg by using syslog()\n-k <redirect_kmsg>\t1: Redirect kmsg\n                  \t0: Otherwise\n-i <monitor_interval>\t!=-1: Polling interval (in second) for detecting hungup\n                  \t-1: Don't detect hungup\n",
+              "label": "help",
+              "program_argv": [
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkmond",
+                "--help"
+              ],
+              "source_exit": "getopt_long --help returns63; default match arm usage+return0 before daemon"
+            },
+            {
+              "argv": [
+                "/usr/bin/taskset",
+                "-c",
+                "6",
+                "/usr/bin/timeout",
+                "--foreground",
+                "--signal=TERM",
+                "--kill-after=2s",
+                "58s",
+                "/usr/bin/prlimit",
+                "--as=1073741824:1073741824",
+                "--cpu=45:45",
+                "--fsize=67108864:67108864",
+                "--core=0:0",
+                "--",
+                "/usr/bin/time",
+                "-v",
+                "-o",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-supervisor-1/environment-consumer-ownership-1/actual-ihkmond-main-preflight-1/invalid-interval.metrics",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkmond",
+                "-i",
+                "-1tail"
+              ],
+              "environment_reason": "Minimal exact HOST environment keeps LD_PRELOAD/LD_AUDIT/LD_LIBRARY_PATH/LD_TRACE_LOADED_OBJECTS/IHKMOND_HELPER absent and reuses trusted RUNPATH resolution; no runtime provider replacement.",
+              "environment_replace": {
+                "LANG": "C",
+                "LC_ALL": "C",
+                "PATH": "/usr/bin:/bin"
+              },
+              "expected_status": 255,
+              "expected_stderr": "",
+              "expected_stdout": "",
+              "label": "invalid-interval",
+              "program_argv": [
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkmond",
+                "-i",
+                "-1tail"
+              ],
+              "source_exit": "getopt required-i consumes -1tail; strtol yields-1 with non-NUL remainder; parse_interval None; fail255; kprint gets euid1000 and returns before /dev/kmsg open; run returns before daemon"
+            },
+            {
+              "argv": [
+                "/usr/bin/taskset",
+                "-c",
+                "6",
+                "/usr/bin/timeout",
+                "--foreground",
+                "--signal=TERM",
+                "--kill-after=2s",
+                "58s",
+                "/usr/bin/prlimit",
+                "--as=1073741824:1073741824",
+                "--cpu=45:45",
+                "--fsize=67108864:67108864",
+                "--core=0:0",
+                "--",
+                "/usr/bin/time",
+                "-v",
+                "-o",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-supervisor-1/environment-consumer-ownership-1/actual-ihkmond-main-preflight-1/missing-interval-option.metrics",
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkmond",
+                "-i"
+              ],
+              "environment_reason": "Minimal exact HOST environment keeps LD_PRELOAD/LD_AUDIT/LD_LIBRARY_PATH/LD_TRACE_LOADED_OBJECTS/IHKMOND_HELPER absent and reuses trusted RUNPATH resolution; no runtime provider replacement.",
+              "environment_replace": {
+                "LANG": "C",
+                "LC_ALL": "C",
+                "PATH": "/usr/bin:/bin"
+              },
+              "expected_status": 0,
+              "expected_stderr": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkmond: option requires an argument -- 'i'\n",
+              "expected_stdout": "ihkmond [--help|-?] [-f <facility_name>] [-k <redirect_kmsg>] [-n <detect_hungup>]\n--help            \tShow usage\n-f <facility_name>\tUse <facility_name> when redirecting kmsg by using syslog()\n-k <redirect_kmsg>\t1: Redirect kmsg\n                  \t0: Otherwise\n-i <monitor_interval>\t!=-1: Polling interval (in second) for detecting hungup\n                  \t-1: Don't detect hungup\n",
+              "label": "missing-interval-option",
+              "program_argv": [
+                "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkmond",
+                "-i"
+              ],
+              "source_exit": "genuine selected glibc getopt missing required i argument emits C-locale stderr and returns?; default arm usage+return0 before daemon"
+            }
+          ],
+          "compiler_admitted": false,
+          "disk_free_bytes": {
+            "/home/holden/mckernel": 135150014464,
+            "/home/holden/mckernel-work/scratch-readonly-20261105": 47613485056
+          },
+          "included_weekly_observation": {
+            "historical_weekly_ledger_unchanged": true,
+            "phase": "running",
+            "resets_at": 1794518606,
+            "source": ".git/os-autopilot/state.json:last_rate_limits",
+            "state_updated_at": "2026-11-06T07:01:01.488971+00:00",
+            "stop_reason": null,
+            "used_percent": 9,
+            "weekly_usage_error": null
+          },
+          "memory_available_bytes": 29168504832,
+          "native_device_IO_or_daemon_workers_admitted": false,
+          "no_other_workload_granted": true,
+          "owner": "/root/m15_supervisor_high",
+          "profile": {
+            "AS_bytes": 1073741824,
+            "CORE_bytes": 0,
+            "CPU_seconds": 45,
+            "FSIZE_bytes": 67108864,
+            "KILL_after_TERM_seconds": 2,
+            "TERM_seconds": 58,
+            "cpu": [
+              6
+            ],
+            "host_floor_bytes": 4294967296,
+            "identity": "Actual matchedRust ihkmond + SONAME libihk314beee5 and rehashed trusted HOST libc2.31/BFD2.34/libudev1.6.17 providers; no original SDK/native acceptance",
+            "maximum_wall_seconds": 60,
+            "one_job": true,
+            "prior_reserved_bytes": 19327352832,
+            "shared_HOST_bytes": 2147483648,
+            "uid_required": 1000
+          },
+          "request_path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-supervisor-1/environment-consumer-ownership-1/actual-ihkmond-main-preflight-1/REQUEST.json",
+          "request_sha256": "30ad129d06b41d184c70ee7baa960781e9163313f461a4a81d4de02996b15fb2",
+          "status": "ADMITTED_ONCE_THREE_SERIAL_ACTUAL_IHKMOND_PREFLIGHTS"
+        },
+        "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-supervisor-1/environment-consumer-ownership-1/actual-ihkmond-main-preflight-1/ROOT-ADMISSION-1.json",
+        "sha256": "15a8ea9632406724119837542cc3675594dcb41963f2d43c5157e7d0a49a74ef"
+      },
+      "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-supervisor-1/environment-consumer-ownership-1/actual-ihkmond-main-preflight-1/RESULT.json",
+      "result": {
+        "actual_program_mains_executed": 3,
+        "admission_sha256": "15a8ea9632406724119837542cc3675594dcb41963f2d43c5157e7d0a49a74ef",
+        "all_direct_waits_joined": true,
+        "bindings": [
+          {
+            "actual": "281a9e5ce95fddc531fe861cf956135a1e0cd02d07fbc28f9f2480ec01201a0e",
+            "expected": "281a9e5ce95fddc531fe861cf956135a1e0cd02d07fbc28f9f2480ec01201a0e",
+            "match": true,
+            "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/METADATA-CORRECTION-1/RESULT.json"
+          },
+          {
+            "actual": "fc178f546613d857c73a96e7e807ee0c35ded7700d57ff8f552a5f50d508d00a",
+            "expected": "fc178f546613d857c73a96e7e807ee0c35ded7700d57ff8f552a5f50d508d00a",
+            "match": true,
+            "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ROOT-ADMISSION-1.json"
+          },
+          {
+            "actual": "46eb814cc511b8d88d0596ee7f8c420f472fe0ca45d2b1fe5dc4e47110533f36",
+            "expected": "46eb814cc511b8d88d0596ee7f8c420f472fe0ca45d2b1fe5dc4e47110533f36",
+            "match": true,
+            "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkmond"
+          },
+          {
+            "actual": "314beee5c7b59aab41f5aa6686e5a515e4c7a425067012276d871c36d596b027",
+            "expected": "314beee5c7b59aab41f5aa6686e5a515e4c7a425067012276d871c36d596b027",
+            "match": true,
+            "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/private-and-source-export-4/soname-link-review-1/output/libihk.so"
+          },
+          {
+            "actual": "988945b11275c57951c5ada75439c4f1d48ca91d3f0113056c626180eadf88df",
+            "expected": "988945b11275c57951c5ada75439c4f1d48ca91d3f0113056c626180eadf88df",
+            "match": true,
+            "path": "/home/holden/mckernel/ihk/linux/user/rust/ihkmond.rs"
+          },
+          {
+            "actual": "48918a2b081f45a4f8d66364e3127c5f702dc748d075820e23d9314e9b8e043a",
+            "expected": "48918a2b081f45a4f8d66364e3127c5f702dc748d075820e23d9314e9b8e043a",
+            "match": true,
+            "path": "/lib/x86_64-linux-gnu/libbfd-2.34-system.so"
+          },
+          {
+            "actual": "53b909551f8e581120ddc2d24cfb5df76c52e3c2e2a5dac0d202b25638b3e902",
+            "expected": "53b909551f8e581120ddc2d24cfb5df76c52e3c2e2a5dac0d202b25638b3e902",
+            "match": true,
+            "path": "/lib/x86_64-linux-gnu/libc.so.6"
+          },
+          {
+            "actual": "e0d0cace80b627e50ca3f7b621b64917677c27c74077080854d57cf4e548edc6",
+            "expected": "e0d0cace80b627e50ca3f7b621b64917677c27c74077080854d57cf4e548edc6",
+            "match": true,
+            "path": "/lib/x86_64-linux-gnu/libdl.so.2"
+          },
+          {
+            "actual": "1785fc8cd9a2ba72f773b0b60b20e58ff79bf30ce2fd8e241c8b31303dcea17e",
+            "expected": "1785fc8cd9a2ba72f773b0b60b20e58ff79bf30ce2fd8e241c8b31303dcea17e",
+            "match": true,
+            "path": "/lib/x86_64-linux-gnu/libgcc_s.so.1"
+          },
+          {
+            "actual": "af27ed906f6185e0143b9c0d0da287788efa7eb6b2639e44d48fb2939415fdc5",
+            "expected": "af27ed906f6185e0143b9c0d0da287788efa7eb6b2639e44d48fb2939415fdc5",
+            "match": true,
+            "path": "/lib/x86_64-linux-gnu/libpthread.so.0"
+          },
+          {
+            "actual": "e8fd959b49c39585845c036bca033ae90bdedc173758c0a60bd521bfe29744cd",
+            "expected": "e8fd959b49c39585845c036bca033ae90bdedc173758c0a60bd521bfe29744cd",
+            "match": true,
+            "path": "/lib/x86_64-linux-gnu/libudev.so.1"
+          },
+          {
+            "actual": "ccfda8d7e0d2f77c8a4feb2febbae057edab668d7d7ee6410e2c517724c056c8",
+            "expected": "ccfda8d7e0d2f77c8a4feb2febbae057edab668d7d7ee6410e2c517724c056c8",
+            "match": true,
+            "path": "/lib/x86_64-linux-gnu/libz.so.1"
+          },
+          {
+            "actual": "cfd44e4341767033532d1483c8250d200ad4cdf535d0abc19064ae34cdc51ca0",
+            "expected": "cfd44e4341767033532d1483c8250d200ad4cdf535d0abc19064ae34cdc51ca0",
+            "match": true,
+            "path": "/lib64/ld-linux-x86-64.so.2"
+          }
+        ],
+        "daemon_or_supervisor_or_native_operation": false,
+        "euid": 1000,
+        "request_sha256": "30ad129d06b41d184c70ee7baa960781e9163313f461a4a81d4de02996b15fb2",
+        "runs": [
+          {
+            "argv": [
+              "/usr/bin/taskset",
+              "-c",
+              "6",
+              "/usr/bin/timeout",
+              "--foreground",
+              "--signal=TERM",
+              "--kill-after=2s",
+              "58s",
+              "/usr/bin/prlimit",
+              "--as=1073741824:1073741824",
+              "--cpu=45:45",
+              "--fsize=67108864:67108864",
+              "--core=0:0",
+              "--",
+              "/usr/bin/time",
+              "-v",
+              "-o",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-supervisor-1/environment-consumer-ownership-1/actual-ihkmond-main-preflight-1/help.metrics",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkmond",
+              "--help"
+            ],
+            "direct_wait_joined": true,
+            "environment_replace": {
+              "LANG": "C",
+              "LC_ALL": "C",
+              "PATH": "/usr/bin:/bin"
+            },
+            "exact_status_and_stdio_pass": true,
+            "expected_status": 0,
+            "label": "help",
+            "metrics_raw": "\tCommand being timed: \"/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkmond --help\"\n\tUser time (seconds): 0.00\n\tSystem time (seconds): 0.00\n\tPercent of CPU this job got: 100%\n\tElapsed (wall clock) time (h:mm:ss or m:ss): 0:00.00\n\tAverage shared text size (kbytes): 0\n\tAverage unshared data size (kbytes): 0\n\tAverage stack size (kbytes): 0\n\tAverage total size (kbytes): 0\n\tMaximum resident set size (kbytes): 3788\n\tAverage resident set size (kbytes): 0\n\tMajor (requiring I/O) page faults: 0\n\tMinor (reclaiming a frame) page faults: 170\n\tVoluntary context switches: 1\n\tInvoluntary context switches: 0\n\tSwaps: 0\n\tFile system inputs: 0\n\tFile system outputs: 8\n\tSocket messages sent: 0\n\tSocket messages received: 0\n\tSignals delivered: 0\n\tPage size (bytes): 4096\n\tExit status: 0\n",
+            "metrics_sha256": "3a6052ac55d35ffe39dd75c4fd320922013bd60cdf47e7ba582dc94644cc85cd",
+            "observed_wall_seconds": 0.0034523700014688075,
+            "program_argv": [
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkmond",
+              "--help"
+            ],
+            "returncode": 0,
+            "stderr": "",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stdout": "ihkmond [--help|-?] [-f <facility_name>] [-k <redirect_kmsg>] [-n <detect_hungup>]\n--help            \tShow usage\n-f <facility_name>\tUse <facility_name> when redirecting kmsg by using syslog()\n-k <redirect_kmsg>\t1: Redirect kmsg\n                  \t0: Otherwise\n-i <monitor_interval>\t!=-1: Polling interval (in second) for detecting hungup\n                  \t-1: Don't detect hungup\n",
+            "stdout_sha256": "10b3a4901c595807a308b0ee6cabeaf06bbec670deee7115e8660015d78bea84"
+          },
+          {
+            "argv": [
+              "/usr/bin/taskset",
+              "-c",
+              "6",
+              "/usr/bin/timeout",
+              "--foreground",
+              "--signal=TERM",
+              "--kill-after=2s",
+              "58s",
+              "/usr/bin/prlimit",
+              "--as=1073741824:1073741824",
+              "--cpu=45:45",
+              "--fsize=67108864:67108864",
+              "--core=0:0",
+              "--",
+              "/usr/bin/time",
+              "-v",
+              "-o",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-supervisor-1/environment-consumer-ownership-1/actual-ihkmond-main-preflight-1/invalid-interval.metrics",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkmond",
+              "-i",
+              "-1tail"
+            ],
+            "direct_wait_joined": true,
+            "environment_replace": {
+              "LANG": "C",
+              "LC_ALL": "C",
+              "PATH": "/usr/bin:/bin"
+            },
+            "exact_status_and_stdio_pass": true,
+            "expected_status": 255,
+            "label": "invalid-interval",
+            "metrics_raw": "Command exited with non-zero status 255\n\tCommand being timed: \"/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkmond -i -1tail\"\n\tUser time (seconds): 0.00\n\tSystem time (seconds): 0.00\n\tPercent of CPU this job got: 100%\n\tElapsed (wall clock) time (h:mm:ss or m:ss): 0:00.00\n\tAverage shared text size (kbytes): 0\n\tAverage unshared data size (kbytes): 0\n\tAverage stack size (kbytes): 0\n\tAverage total size (kbytes): 0\n\tMaximum resident set size (kbytes): 3664\n\tAverage resident set size (kbytes): 0\n\tMajor (requiring I/O) page faults: 0\n\tMinor (reclaiming a frame) page faults: 168\n\tVoluntary context switches: 1\n\tInvoluntary context switches: 0\n\tSwaps: 0\n\tFile system inputs: 0\n\tFile system outputs: 0\n\tSocket messages sent: 0\n\tSocket messages received: 0\n\tSignals delivered: 0\n\tPage size (bytes): 4096\n\tExit status: 255\n",
+            "metrics_sha256": "973f2eee4698f4ad05ac45e6ce26c2765e786d81afdfdaeb0b3aacdcafd638dc",
+            "observed_wall_seconds": 0.003275811002822593,
+            "program_argv": [
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkmond",
+              "-i",
+              "-1tail"
+            ],
+            "returncode": 255,
+            "stderr": "",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stdout": "",
+            "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "argv": [
+              "/usr/bin/taskset",
+              "-c",
+              "6",
+              "/usr/bin/timeout",
+              "--foreground",
+              "--signal=TERM",
+              "--kill-after=2s",
+              "58s",
+              "/usr/bin/prlimit",
+              "--as=1073741824:1073741824",
+              "--cpu=45:45",
+              "--fsize=67108864:67108864",
+              "--core=0:0",
+              "--",
+              "/usr/bin/time",
+              "-v",
+              "-o",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-supervisor-1/environment-consumer-ownership-1/actual-ihkmond-main-preflight-1/missing-interval-option.metrics",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkmond",
+              "-i"
+            ],
+            "direct_wait_joined": true,
+            "environment_replace": {
+              "LANG": "C",
+              "LC_ALL": "C",
+              "PATH": "/usr/bin:/bin"
+            },
+            "exact_status_and_stdio_pass": true,
+            "expected_status": 0,
+            "label": "missing-interval-option",
+            "metrics_raw": "\tCommand being timed: \"/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkmond -i\"\n\tUser time (seconds): 0.00\n\tSystem time (seconds): 0.00\n\tPercent of CPU this job got: 100%\n\tElapsed (wall clock) time (h:mm:ss or m:ss): 0:00.00\n\tAverage shared text size (kbytes): 0\n\tAverage unshared data size (kbytes): 0\n\tAverage stack size (kbytes): 0\n\tAverage total size (kbytes): 0\n\tMaximum resident set size (kbytes): 3964\n\tAverage resident set size (kbytes): 0\n\tMajor (requiring I/O) page faults: 0\n\tMinor (reclaiming a frame) page faults: 176\n\tVoluntary context switches: 1\n\tInvoluntary context switches: 0\n\tSwaps: 0\n\tFile system inputs: 0\n\tFile system outputs: 16\n\tSocket messages sent: 0\n\tSocket messages received: 0\n\tSignals delivered: 0\n\tPage size (bytes): 4096\n\tExit status: 0\n",
+            "metrics_sha256": "dd6506502fb43371ed7797387b4834ae1cb87bebd18ec82c6f21a67cbae5a2e4",
+            "observed_wall_seconds": 0.003647393998107873,
+            "program_argv": [
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkmond",
+              "-i"
+            ],
+            "returncode": 0,
+            "stderr": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/final-three-tool-host-1/ihkmond: option requires an argument -- 'i'\n",
+            "stderr_sha256": "b67faa63ac3c1e420731cc4c292562479ec5f4a5a037c777bb49a9ae88210c95",
+            "stdout": "ihkmond [--help|-?] [-f <facility_name>] [-k <redirect_kmsg>] [-n <detect_hungup>]\n--help            \tShow usage\n-f <facility_name>\tUse <facility_name> when redirecting kmsg by using syslog()\n-k <redirect_kmsg>\t1: Redirect kmsg\n                  \t0: Otherwise\n-i <monitor_interval>\t!=-1: Polling interval (in second) for detecting hungup\n                  \t-1: Don't detect hungup\n",
+            "stdout_sha256": "10b3a4901c595807a308b0ee6cabeaf06bbec670deee7115e8660015d78bea84"
+          }
+        ],
+        "scope": "Actual matched ihkmond main option exits before daemon; no workers/device/backend/native/provider operation.",
+        "status": "PASS_THREE_ACTUAL_MATCHED_IHKMOND_PREDAEMON_MAIN_PREFLIGHTS",
+        "uid": 1000
+      },
+      "sha256": "a9807a27e92a414c90c4f32b0b9b45471f053dd9f6b76a7ff2b84a42cfaf229e"
+    }
+  }
+}

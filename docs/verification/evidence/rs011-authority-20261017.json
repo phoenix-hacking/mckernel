@@ -1,0 +1,490 @@
+{
+  "schema_version": 1,
+  "status": "PASS_SOURCE_CHECKS_ONLY",
+  "scope": "RS-011 and native staging/lifecycle source-authority repair only",
+  "base_commit": "2fd71645bfae65d9e82feb1f0c7347c7961f0edd",
+  "timestamp_utc": "2026-10-17 02:54:17 UTC",
+  "failure_family": {
+    "name": "RS-011/native source authority",
+    "history": "Original failure and one bounded correction preceded this expert escalation; no family reset.",
+    "preserved_inputs": [
+      "docs/verification/evidence/os-preparation-20261016/source-authority-review.json",
+      "docs/verification/evidence/os-preparation-20261016/source-authority-review.patch",
+      "docs/verification/os-milestones-20260914/PREPARATION-20261016.md"
+    ],
+    "additional_observations": [
+      {
+        "command": "python3 -B scripts/native_rust_unsafe_ffi_ledger.py inventory",
+        "exit_code": 2,
+        "stderr": "RS-011 unsafe/FFI ledger error: host-kernel/native-rust/smp_memory.rs:189 foreign_block lacks a unique nearby SAFETY comment\n"
+      },
+      {
+        "command": "python3 -B scripts/rocky_rust_staging.py --check",
+        "exit_code": 1,
+        "stderr": "Rocky Rust staging validation failed: inputs[12] differs from the hard-locked staging input\n"
+      },
+      {
+        "command": [
+          "python3",
+          "-B",
+          "scripts/rocky_rust_staging.py",
+          "--check"
+        ],
+        "exit_code": 1,
+        "stdout": "",
+        "stderr": "Rocky Rust staging validation failed: native Linux adapter boundary differs: native Rust host audit failed: reviewed Rust escape block prefix differs in host-kernel/native-rust/os_runtime.rs: OS backend shutdown v6 callback type\n",
+        "seconds": 0.534
+      }
+    ]
+  },
+  "repair": {
+    "production_behavior_changed": false,
+    "production_rust_token_streams_unchanged": true,
+    "comments_added": {
+      "host-kernel/native-rust/os_runtime.rs": 13,
+      "host-kernel/native-rust/smp_memory.rs": 5
+    },
+    "safety_analysis": [
+      "IHK v6 calls retain the exact generation lease and provider module pin, hold the per-OS operation mutex, and close admission/registry state before shutdown callbacks. Resident callbacks cannot unwind or reenter OS operations.",
+      "The v6 callback distinguishes rollback-safe errno from post-effect tagged errors. The latter keep Shutdown, closed admission and affected owners for same-generation reconciliation.",
+      "The irq_work_sync import uses Linux's opaque-pointer C ABI; the caller validates generation, descriptor and retained allocation, closes guest senders, and retains nodes/code during synchronization. The hard-IRQ callback uses atomic notification only and does not require the held controller mutex."
+    ],
+    "discovery_changed": false,
+    "policy_weakened": false,
+    "hardcoded_consumers": "Only exact source SHA/size constants and the two exact reviewed v6 SAFETY prefixes were rebound."
+  },
+  "inventory": {
+    "added": [
+      {
+        "id": "RS011-SMP-0389",
+        "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
+        "kind": "extern_function",
+        "line_start": 181,
+        "safety_comment": "SAFETY: IHK invokes this under the exact operation lock and generation lease. The tagged scalar result distinguishes rollback-safe failure from an effect which must remain closed for later reconciliation."
+      },
+      {
+        "id": "RS011-SMP-0390",
+        "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
+        "kind": "extern_function",
+        "line_start": 409,
+        "safety_comment": "SAFETY: IHK supplies the exact generation lease and serializes this call with every OS operation. Sender closure completes before any CPU reset; all owners remain retained on either failure class."
+      },
+      {
+        "id": "RS011-SMP-0391",
+        "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
+        "kind": "unsafe_block",
+        "line_start": 410,
+        "safety_comment": "SAFETY: IHK supplies the exact generation lease and serializes this call with every OS operation. Sender closure completes before any CPU reset; all owners remain retained on either failure class."
+      },
+      {
+        "id": "RS011-IHK-0168",
+        "path": "host-kernel/native-rust/os_runtime.rs",
+        "kind": "extern_function",
+        "line_start": 205,
+        "safety_comment": "SAFETY: IHK invokes this resident, non-unwinding scalar-ABI callback with the exact live generation lease and provider module pin, while holding the per-OS operation mutex after closing admission and entering Shutdown. The provider must report every possibly irreversible effect with the v6 post-effect tag, retain affected owners on failure, and never reenter OS operations or destruction while that mutex is held."
+      },
+      {
+        "id": "RS011-IHK-0169",
+        "path": "host-kernel/native-rust/os_runtime.rs",
+        "kind": "ffi_export",
+        "line_start": 829,
+        "safety_comment": "SAFETY: Only trusted provider module code may supply the live module owner and ABI-correct, resident, non-unwinding callbacks. create_os acquires the provider module pin before publication and retains it through teardown; shutdown must obey the exact-generation, serialized v6 effect contract above."
+      },
+      {
+        "id": "RS011-IHK-0170",
+        "path": "host-kernel/native-rust/os_runtime.rs",
+        "kind": "extern_function",
+        "line_start": 830,
+        "safety_comment": "SAFETY: Only trusted provider module code may supply the live module owner and ABI-correct, resident, non-unwinding callbacks. create_os acquires the provider module pin before publication and retains it through teardown; shutdown must obey the exact-generation, serialized v6 effect contract above."
+      },
+      {
+        "id": "RS011-IHK-0171",
+        "path": "host-kernel/native-rust/os_runtime.rs",
+        "kind": "unsafe_block",
+        "line_start": 881,
+        "safety_comment": "SAFETY: The validated trusted owner is retained through create_os's initial reference, and every v6 callback remains resident for the complete OS lifetime exactly as with v5."
+      },
+      {
+        "id": "RS011-IHK-0172",
+        "path": "host-kernel/native-rust/os_runtime.rs",
+        "kind": "unsafe_block",
+        "line_start": 1289,
+        "safety_comment": "SAFETY: The live lease, operation mutex and module pin retain this exact generation and callback; admission and registry are closed, and the v6 tag preserves post-effect ownership."
+      },
+      {
+        "id": "RS011-IHK-0173",
+        "path": "host-kernel/native-rust/os_runtime.rs",
+        "kind": "ffi_export",
+        "line_start": 1714,
+        "safety_comment": "SAFETY: Linux modpost reads this immutable relocation for the module lifetime."
+      },
+      {
+        "id": "RS011-SMP-0392",
+        "path": "host-kernel/native-rust/smp_cpu.rs",
+        "kind": "unsafe_block",
+        "line_start": 290,
+        "safety_comment": "SAFETY: close is only called from sleepable process context."
+      },
+      {
+        "id": "RS011-SMP-0393",
+        "path": "host-kernel/native-rust/smp_cpu.rs",
+        "kind": "unsafe_block",
+        "line_start": 1464,
+        "safety_comment": "SAFETY: The exact OS lease and operation lock retain this controller and its journals across the complete reset/re-online transaction."
+      },
+      {
+        "id": "RS011-SMP-0394",
+        "path": "host-kernel/native-rust/smp_cpu.rs",
+        "kind": "unsafe_block",
+        "line_start": 1484,
+        "safety_comment": "SAFETY: The synchronous callback retains the generation and module."
+      },
+      {
+        "id": "RS011-SMP-0395",
+        "path": "host-kernel/native-rust/smp_memory.rs",
+        "kind": "foreign_block",
+        "line_start": 194,
+        "safety_comment": "SAFETY: Linux 6.12 exports irq_work_sync with this opaque pointer ABI. Callers pass an aligned, validated node from the exact retained generation's allocation after closing and draining guest senders. That allocation and callback code remain live through synchronization in sleepable process context, with no callback dependency on a lock held by the caller."
+      },
+      {
+        "id": "RS011-SMP-0396",
+        "path": "host-kernel/native-rust/smp_memory.rs",
+        "kind": "unsafe_block",
+        "line_start": 224,
+        "safety_comment": "SAFETY: descriptor validation proves the retained allocation covers exactly slots_count nodes at this 64-byte stride."
+      },
+      {
+        "id": "RS011-SMP-0397",
+        "path": "host-kernel/native-rust/smp_memory.rs",
+        "kind": "unsafe_block",
+        "line_start": 233,
+        "safety_comment": "SAFETY: The opaque pointer is the exact retained node address and Linux's GPL irq_work_sync drains any final callback before release."
+      },
+      {
+        "id": "RS011-SMP-0398",
+        "path": "host-kernel/native-rust/smp_memory.rs",
+        "kind": "unsafe_block",
+        "line_start": 2716,
+        "safety_comment": "SAFETY: IHK's exact-generation shutdown lease and operation lock retain this controller while the route is closed and any failure is journaled."
+      },
+      {
+        "id": "RS011-SMP-0399",
+        "path": "host-kernel/native-rust/smp_memory.rs",
+        "kind": "unsafe_block",
+        "line_start": 2726,
+        "safety_comment": "SAFETY: The synchronous exact-generation backend lease pins this owner."
+      }
+    ],
+    "changed_expressions": [
+      {
+        "id": "RS011-SMP-0014",
+        "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
+        "kind": "unsafe_block",
+        "old_expression_sha256": "97d63649007f5bd7b7061433b2b74f0e0d63057ee82d66a1c7eb0ff7ae56ace3",
+        "new_expression_sha256": "63d30714e43e2c3db65c15ff389976e77802e3478dd6ff062b8568645bf94822",
+        "line_start": 125
+      },
+      {
+        "id": "RS011-SMP-0001",
+        "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
+        "kind": "foreign_block",
+        "old_expression_sha256": "5b08c56914046e11365537062ca6731bfadfc292e874a4adcfdce73693f1b6bc",
+        "new_expression_sha256": "9b35435a8a65f22934c52221b41e6f3dc131bb0df0dbb9fc9e0902c22cef00bb",
+        "line_start": 187
+      },
+      {
+        "id": "RS011-IHK-0110",
+        "path": "host-kernel/native-rust/os_runtime.rs",
+        "kind": "ffi_export",
+        "old_expression_sha256": "45d065dfa59b4a68cceccd1d60a1647eb36b015b4cfec108e30174caa063af98",
+        "new_expression_sha256": "94ea20049060b6a2c8a4611d32623d66f5aec9d63694c7630e234fc1c87a8d26",
+        "line_start": 762
+      },
+      {
+        "id": "RS011-IHK-0111",
+        "path": "host-kernel/native-rust/os_runtime.rs",
+        "kind": "extern_function",
+        "old_expression_sha256": "527ed294b2ebac6296d5aa23d37346adf5141864da6ac0f48517bf7f8c932236",
+        "new_expression_sha256": "42f9a9d4814094d98f76de1c4080b7a9018be85488420e252825488f45749cc2",
+        "line_start": 763
+      },
+      {
+        "id": "RS011-IHK-0078",
+        "path": "host-kernel/native-rust/os_runtime.rs",
+        "kind": "unsafe_function",
+        "old_expression_sha256": "e2b4af566263fcc0f24d0f62c7be6a08428f2658e378e7e51b1903b6ab09185d",
+        "new_expression_sha256": "631ec557d49f9b42c85c1c87dbdfdab08ec44a45c6a0312449dfaf5d5e6bb702",
+        "line_start": 1184
+      },
+      {
+        "id": "RS011-IHK-0123",
+        "path": "host-kernel/native-rust/os_runtime.rs",
+        "kind": "unsafe_block",
+        "old_expression_sha256": "f07233045657e8bda44801b6a1057cc4599f6470f2d11238bbafcea6dbb01cf8",
+        "new_expression_sha256": "7b9afcee1876e94085ff0e25a3924ba41ec60dff98db2fd772cb08198e31e669",
+        "line_start": 1282
+      },
+      {
+        "id": "RS011-SMP-0188",
+        "path": "host-kernel/native-rust/smp_cpu.rs",
+        "kind": "extern_function",
+        "old_expression_sha256": "748d23344041c4a7a408b85bc40373f5b54088bd328d6669cc9357ce6fa0a636",
+        "new_expression_sha256": "acab15fc8ea4a4f99b8c71f840b353eb1e61339aa5ee1cebb6e61c9d0441b063",
+        "line_start": 81
+      },
+      {
+        "id": "RS011-SMP-0192",
+        "path": "host-kernel/native-rust/smp_cpu.rs",
+        "kind": "unsafe_function",
+        "old_expression_sha256": "4b664172c17ed25db6c0836e5007b2977fe795105694f09cd0d16c7a432b3e19",
+        "new_expression_sha256": "bad96fe3101c6e0befcb4e66d76f2b2bd070925d28e9d5c2abee6abd1707334f",
+        "line_start": 209
+      }
+    ],
+    "changed_safety_bindings": [
+      "RS011-IHK-0123",
+      "RS011-SMP-0188",
+      "RS011-SMP-0190",
+      "RS011-SMP-0191"
+    ],
+    "coverage": {
+      "source_input_count": 55,
+      "site_count": 654,
+      "site_ids_sha256": "e5b3118a5e5c5120c6785371df7680c45adaa1feac97b1df24e9fdb30bde9356",
+      "by_kind": {
+        "extern_function": 93,
+        "ffi_export": 42,
+        "foreign_block": 14,
+        "global_asm": 2,
+        "inline_asm": 2,
+        "mutable_static": 2,
+        "unsafe_block": 425,
+        "unsafe_function": 34,
+        "unsafe_impl": 39,
+        "unsafe_trait": 1
+      },
+      "by_crate": {
+        "ihk": 173,
+        "ihk_smp_x86_64": 422,
+        "mcctrl": 89
+      },
+      "source_inventory_status": "complete_for_locked_source_bytes"
+    },
+    "ledger_sha256": "f2b440c5e5ca97ec5b15373786f53820298e00b1c40d7a2d45040cd2e6528221",
+    "old_ledger_sha256": "9a10b1f070345d7697c7595f43f870d50343f3167c6e556fc32afc34d3fc24eb",
+    "old_site_count": 637,
+    "source_closure_sha256": "eb0bee49d946712bffe4a9abd644f5cf3972235be9b036748d5b0b1c57e1900b",
+    "source_input_count": 55,
+    "old_ids_preserved": 637,
+    "new_id_count": 17,
+    "id_matching": "Exact path/kind/expression/SAFETY matches, ordered duplicate occurrences, unique surviving expression matches, and explicit semantic continuity for the eight changed expressions. No historical ID was deleted or renumbered.",
+    "existing_compiler_review_statuses_preserved": true
+  },
+  "readiness": {
+    "gate_status": "NOT_READY",
+    "technical_complete": false,
+    "credit_eligible": false,
+    "compiler_capture_status": "missing",
+    "independent_review_status": "pending",
+    "runtime_acceptance_changed": false,
+    "staging_blockers_remaining": 4
+  },
+  "command_profile": {
+    "cpu_affinity": [
+      2
+    ],
+    "address_space_bytes": 2147483648,
+    "timeout_seconds_per_process": 180,
+    "sequential": true,
+    "native_compilation": false,
+    "docker": false,
+    "root": false,
+    "guest": false,
+    "network": false
+  },
+  "files": [
+    {
+      "path": "host-kernel/contracts/ihk-os-runtime-v1.json",
+      "sha256": "0c808a75ed83820ce8180e2dc985e91541723a687bbd5e31d16f2876ad91dbf0",
+      "size": 6458
+    },
+    {
+      "path": "host-kernel/kbuild/stage-manifest.json",
+      "sha256": "f5c7efabb35366142600b4c58df8aa77718ad982f282e00cdcf55c99cb965d46",
+      "size": 17114
+    },
+    {
+      "path": "host-kernel/native-rust/ihk-lifecycle-contract-v1.json",
+      "sha256": "de6a8f4121ed992abba680026c5c23c4324ef5c7cdd5ddb92ed1d31889826fd5",
+      "size": 7024
+    },
+    {
+      "path": "host-kernel/native-rust/ihk-smp-lifecycle-contract-v1.json",
+      "sha256": "a5b9818be9ccfb36516bb62d1f0114196651a83c41befee4f0fffd39770b4185",
+      "size": 14966
+    },
+    {
+      "path": "host-kernel/native-rust/ihk-mapping-foundation-contract-v1.json",
+      "sha256": "9843b938d283e792c678032d697de46a966f071a634195d86163a8caddd50abc",
+      "size": 11473
+    },
+    {
+      "path": "host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json",
+      "sha256": "12e67cb24105d53021da12aa3ad563dcd99baee6444d0ff21842cd36776971fa",
+      "size": 1362548
+    },
+    {
+      "path": "host-kernel/native-rust/os_runtime.rs",
+      "sha256": "9519b7f35f5d28c88cdf366fe5c67a244ea005db713690a3686afe8c2a60fcab",
+      "size": 70776
+    },
+    {
+      "path": "host-kernel/native-rust/smp_memory.rs",
+      "sha256": "db0c5f94b5ea41610c501002ff359b7f23a38841715a0307e8b8f7872ac65522",
+      "size": 116888
+    },
+    {
+      "path": "scripts/rocky_rust_staging.py",
+      "sha256": "adf9d798856859ce7391f0cd7b8ba5a8c425cda71e73365db2923f0ab1abe981",
+      "size": 97233
+    },
+    {
+      "path": "scripts/ihk_smp_native_lifecycle_check.py",
+      "sha256": "9133a587e9a11fec6c2dbab48268ed6dd245fe69d3b4f37c66119a890e74d084",
+      "size": 111339
+    },
+    {
+      "path": "scripts/native_rust_host_audit.py",
+      "sha256": "37946ab30ff6c74cc94bda8e0ca28df52b61474454b9561ea2f6631d851fe3cb",
+      "size": 76729
+    },
+    {
+      "path": "scripts/tests/test_native_rust_unsafe_ffi_ledger.py",
+      "sha256": "cc7fec55765f7a2f1587333b7450cecd0a490b1847c0680a970698e21cdcdffe",
+      "size": 30915
+    }
+  ],
+  "files_sha256": {
+    "host-kernel/contracts/ihk-os-runtime-v1.json": "0c808a75ed83820ce8180e2dc985e91541723a687bbd5e31d16f2876ad91dbf0",
+    "host-kernel/kbuild/stage-manifest.json": "f5c7efabb35366142600b4c58df8aa77718ad982f282e00cdcf55c99cb965d46",
+    "host-kernel/native-rust/ihk-lifecycle-contract-v1.json": "de6a8f4121ed992abba680026c5c23c4324ef5c7cdd5ddb92ed1d31889826fd5",
+    "host-kernel/native-rust/ihk-smp-lifecycle-contract-v1.json": "a5b9818be9ccfb36516bb62d1f0114196651a83c41befee4f0fffd39770b4185",
+    "host-kernel/native-rust/ihk-mapping-foundation-contract-v1.json": "9843b938d283e792c678032d697de46a966f071a634195d86163a8caddd50abc",
+    "host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json": "12e67cb24105d53021da12aa3ad563dcd99baee6444d0ff21842cd36776971fa",
+    "host-kernel/native-rust/os_runtime.rs": "9519b7f35f5d28c88cdf366fe5c67a244ea005db713690a3686afe8c2a60fcab",
+    "host-kernel/native-rust/smp_memory.rs": "db0c5f94b5ea41610c501002ff359b7f23a38841715a0307e8b8f7872ac65522",
+    "scripts/rocky_rust_staging.py": "adf9d798856859ce7391f0cd7b8ba5a8c425cda71e73365db2923f0ab1abe981",
+    "scripts/ihk_smp_native_lifecycle_check.py": "9133a587e9a11fec6c2dbab48268ed6dd245fe69d3b4f37c66119a890e74d084",
+    "scripts/native_rust_host_audit.py": "37946ab30ff6c74cc94bda8e0ca28df52b61474454b9561ea2f6631d851fe3cb",
+    "scripts/tests/test_native_rust_unsafe_ffi_ledger.py": "cc7fec55765f7a2f1587333b7450cecd0a490b1847c0680a970698e21cdcdffe"
+  },
+  "source_checks": [
+    {
+      "command": [
+        "python3",
+        "-B",
+        "scripts/native_rust_build_surface_audit.py"
+      ],
+      "exit_code": 0,
+      "stdout": "native-rust-build-surface-audit: PASS modules=3 authorities=Kconfig,Kbuild\n",
+      "stderr": "",
+      "seconds": 0.883
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "scripts/rocky_rust_staging.py",
+        "--check"
+      ],
+      "exit_code": 0,
+      "stdout": "Rocky Rust staging manifest integrity: PASS\nRocky Rust staging gate: NOT READY (4 blockers)\nBLOCKED: selected Rocky kernel source, toolchain, and config evidence is not gate-ready\nBLOCKED: upstream Rust-for-Linux sample has not built through this staging path\nBLOCKED: production namespace and import metadata has not been proven from built modules\nBLOCKED: zero-project-C final link manifests have not been captured\n",
+      "stderr": "",
+      "seconds": 1.596
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "scripts/ihk_native_lifecycle_check.py"
+      ],
+      "exit_code": 0,
+      "stdout": "ihk-native-lifecycle-check: PASS module=ihk version=1.7.0rc4 parameters=0 dependencies=0 artifact=not-supplied\n",
+      "stderr": "",
+      "seconds": 0.126
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "scripts/native_rust_unsafe_ffi_ledger.py",
+        "check"
+      ],
+      "exit_code": 0,
+      "stdout": "RS-011 source ledger verified: 55 inputs, 654 unsafe/FFI sites; gate_status=NOT_READY\n",
+      "stderr": "",
+      "seconds": 1.35
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "-f",
+        "scripts.tests.test_rocky_rust_staging",
+        "scripts.tests.test_ihk_native_lifecycle_check",
+        "scripts.tests.test_native_rust_unsafe_ffi_ledger"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "...............................................................................................................................................\n----------------------------------------------------------------------\nRan 143 tests in 53.594s\n\nOK\n",
+      "seconds": 54.962
+    }
+  ],
+  "additional_checks": [
+    {
+      "command": [
+        "python3",
+        "-B",
+        "scripts/ihk_smp_native_lifecycle_check.py"
+      ],
+      "exit_code": 0,
+      "stdout": "ihk-smp-native-lifecycle-check: SOURCE-CONTRACT-VERIFIED module=ihk_smp_x86_64 parameters=6 provider_lease=TODO provider_lease_runtime=NOT_PROVEN control_device=mcd0 control_device_gate=TODO control_device_runtime=NOT_PROVEN tracker_credit=FORBIDDEN rocky_build_load=NOT_EVALUATED runtime_symbol_reference=NOT_PROVEN\n",
+      "stderr": "",
+      "seconds": 0.299
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "-c",
+        "import sys; sys.path.insert(0, 'scripts'); from pathlib import Path; import ihk_mapping_check as m; m.validate_contract(Path('.').resolve()); print('mapping source contract PASS; no compiler invoked')"
+      ],
+      "exit_code": 0,
+      "stdout": "mapping source contract PASS; no compiler invoked\n",
+      "stderr": "",
+      "seconds": 0.098
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "-f",
+        "scripts.tests.test_native_rust_host_audit"
+      ],
+      "exit_code": 0,
+      "stdout": "native-rust-host-audit: PASS modules=3 project_c_link_objects=0\nnative-rust-host-audit: PASS modules=3 project_c_link_objects=0\n",
+      "stderr": ".......................\n----------------------------------------------------------------------\nRan 23 tests in 33.088s\n\nOK\n",
+      "seconds": 33.154
+    }
+  ],
+  "next_executable_observation": "After separate independent source review and accepted scratch21 cleanup, dispatcher commits/pushes/fetches these exact source bytes before preparing fresh scratch22; compiler, build, guest and formal acceptance require their own authority.",
+  "test_summary": {
+    "required_focused_tests": 143,
+    "additional_host_audit_tests": 23,
+    "total_passed": 166
+  }
+}

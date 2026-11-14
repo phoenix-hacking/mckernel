@@ -1,0 +1,135 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_FIRST_CANDIDATE_ORDINARY_SELECTED_CONSUMER_PROVIDER_ONLY",
+  "source_bindings": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/phys-to-virt-callback-1/SOURCE-BINDINGS.json",
+    "sha256": "f419dc0b1d5cb59d07e7050b5d89aac8cf924c9caad13369e0bc71a07f22dee0",
+    "bytes": 2105
+  },
+  "patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/phys-to-virt-callback-1/cutover.patch",
+    "sha256": "46bfdbbaa1576461389d374b0d0833455d96147811539a3f1212f1b1a31ce34a",
+    "bytes": 802
+  },
+  "prepared_commands": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/phys-to-virt-callback-1/PREPARED-COMMANDS.NOT-EXECUTED.json",
+    "sha256": "1541ff504756c340186905b5324cb8996b564da104420bd449995ae5fbf32d1e",
+    "bytes": 10646
+  },
+  "actual_result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/phys-to-virt-callback-1/ordinary-check-1/RESULT.json",
+    "sha256": "921f47541b1b6f578fed84ad8b2c16f1a01cab33a100399a2138090a7e1eaa00",
+    "bytes": 1282
+  },
+  "capture": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/phys-to-virt-callback-1/ordinary-capture-1/CAPTURE-RESULT.json",
+    "sha256": "594230dd41a7e820d24f3317bc33a38b66d420d0efbfebe0e49c31ddee9343e5",
+    "bytes": 1110
+  },
+  "stdout": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/phys-to-virt-callback-1/ordinary-capture-1/stdout",
+    "sha256": "06fa03d3a158216b1031a2f0a210d9d18083b31acaeabb70dc78fc691ef56080",
+    "bytes": 1000
+  },
+  "stderr": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/phys-to-virt-callback-1/ordinary-capture-1/stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "symbol_observations": {
+    "nm_imports": [
+      "                 U x86_clear_phys_to_virt_bridge"
+    ],
+    "nm_C": [
+      "                 U x86_clear_phys_to_virt_bridge"
+    ],
+    "nm_Rust": [
+      "0000000000000000 T x86_clear_phys_to_virt_bridge"
+    ],
+    "nm_partial": [
+      "0000000000000000 T x86_clear_phys_to_virt_bridge"
+    ],
+    "relocations": [
+      "0000000000000ce6  000000ff0000001b R_X86_64_GOT64         0000000000000000 x86_clear_phys_to_virt_bridge + 0",
+      "0000000000000eab  000000ff0000001b R_X86_64_GOT64         0000000000000000 x86_clear_phys_to_virt_bridge + 0",
+      "000000000000101b  000000ff0000001b R_X86_64_GOT64         0000000000000000 x86_clear_phys_to_virt_bridge + 0",
+      "0000000000001388  000000ff0000001b R_X86_64_GOT64         0000000000000000 x86_clear_phys_to_virt_bridge + 0"
+    ]
+  },
+  "artifacts": {
+    "memory.c.o": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/phys-to-virt-callback-1/ordinary-check-1/memory.c.o",
+      "sha256": "69e23fa2c1b84e992f54e3c6e96c1b7817ca8c0ec690235f0c298f2c0517dea2",
+      "bytes": 162704
+    },
+    "actual-rust-provider.o": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/phys-to-virt-callback-1/ordinary-check-1/actual-rust-provider.o",
+      "sha256": "76a6db6fdb51a7f45190e70d77ac609c9fafade8cb0404845d2f59c498eb2fc8",
+      "bytes": 114008
+    },
+    "selected-consumer-provider.o": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/phys-to-virt-callback-1/ordinary-check-1/selected-consumer-provider.o",
+      "sha256": "d6a84c29fa013880fcd9b6b33b5c52898148dfb28d7cb20f1d02bf0bcd837c84",
+      "bytes": 349248
+    }
+  },
+  "raw_symbol_outputs": {
+    "nm_imports": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/phys-to-virt-callback-1/ordinary-check-1/nm_imports.stdout",
+      "sha256": "c9876b64773b38fcc4b5f9158e28ee430d3db32b08a9910f52e11310c2c778f1",
+      "bytes": 3111
+    },
+    "nm_C": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/phys-to-virt-callback-1/ordinary-check-1/nm_C.stdout",
+      "sha256": "4587e46034a5bba81b92518f09a9c1cb25f6d487be159585c06b788daf3465de",
+      "bytes": 14875
+    },
+    "nm_Rust": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/phys-to-virt-callback-1/ordinary-check-1/nm_Rust.stdout",
+      "sha256": "83a19213d50bdf2bdc9c0aff70d02010bc4f17d37071ccd984108b180d47fc70",
+      "bytes": 14905
+    },
+    "nm_partial": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/phys-to-virt-callback-1/ordinary-check-1/nm_partial.stdout",
+      "sha256": "dc9253912329908655c007ae05884d48226cf52b5252d03fcd51e0dad79c2863",
+      "bytes": 16718
+    },
+    "relocations": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/phys-to-virt-callback-1/ordinary-check-1/relocations.stdout",
+      "sha256": "67a77283a8dc76829f8f0ca11affc17da02b47d716dc92fd7d77dd3aaa1676b5",
+      "bytes": 330870
+    }
+  },
+  "profile": {
+    "cpu": [
+      0
+    ],
+    "AS_bytes": 2147483648,
+    "CPU_seconds": 60,
+    "wall_seconds": 90,
+    "cleanup_grace_seconds": 6,
+    "FSIZE_bytes": 33554432,
+    "nofile": 256,
+    "core": 0,
+    "jobs": 1,
+    "rust": "1.92.0",
+    "codegen_units": 1,
+    "RUST_MIN_STACK": 2097152
+  },
+  "positive_join": {
+    "direct_child_joined": true,
+    "group_absent": true,
+    "closed_streams": true,
+    "remaining_group_members": [],
+    "unexpected_group_members": [],
+    "pid": 3537528,
+    "start": 53352344,
+    "seconds": 1.2644935959833674
+  },
+  "failed_candidates": 0,
+  "compiler_limits": "OrdinaryGCC9 wholeC-TU/actualcompleteRustmodule; ld-r permits unrelated undefineds and proves only selected callback resolution/uniqueowner. Not productionGCC14/fullcrate/defaultimage/native/fileclosure.",
+  "canonical_edits": 0,
+  "root": 0,
+  "Docker": 0,
+  "guest": 0
+}

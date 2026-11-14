@@ -1,0 +1,20 @@
+--- frozen-bc6583/query
++++ bounded-correction/query
+@@ -5,7 +5,7 @@
+ import ast,fcntl,hashlib,importlib.util,json,os,resource,stat,subprocess,sys,time
+ from pathlib import Path
+ D=Path(__file__).resolve().parent
+-CONFIG_SHA = 'd823d1a161eabccb9789d3d2fc4167eeb88bc0dbbdd38a1b0e447973d1bf9939'
++CONFIG_SHA = '5fe8bfb085a5f8737aa45a61a068072d3a83aab38c26a5243a3b4af3e92f48ef'
+ ENGINE=Path('/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/bound-matched-image-terminal-source-2/cleanup_pass_image.py')
+ ENGINE_SHA='59efab0bc29fa5784dc855743cec397237552821bc150b60ea1d6c2e5f7ac00d'
+ def need(v,m):
+@@ -81,7 +81,7 @@
+  g_parent=growth.output_parent(str(parent),fresh=True)
+  parent_info=parent_fact(parent)
+  outputs={str(p):os.path.lexists(p) for p in [Path(c['operation']['capture_directory']),parent.with_name(parent.name+'.owner-'+c['operation']['nonce']),parent/('attempt-'+c['operation']['nonce']),Path(c['operation']['future_release_path']),Path(c['operation']['future_request_path'])]}
+- outputs.update({p:os.path.lexists(p) for p in c['prior_failed_owner_paths']})
++ # Retained prior-owner evidence is pinned by physical591c; only prospective outputs require absence.
+  # Exact lease/exclusion list inherited unchanged from accepted M05 query.
+  leases=['/home/holden/mckernel-work/scratch/native-running-external-modules.lease.json', '/home/holden/mckernel-work/scratch/native-running-external-modules-operational-exclusion.json', '/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch18-image-1.json', '/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock', '/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/common-exclusion.json', '/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/lease.json', '/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/driver-hash-correction-1/pinned-launcher-attempt-1/common-exclusion.json', '/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/driver-hash-correction-1/pinned-launcher-attempt-1/image-lease.json']
+  lock=Path('/run/lock/mckernel-development.lock').stat();key='%02x:%02x:%d'%(os.major(lock.st_dev),os.minor(lock.st_dev),lock.st_ino)

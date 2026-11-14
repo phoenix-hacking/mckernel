@@ -1,0 +1,13 @@
+# P205 delivered handoff cycle clarification
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+Use [the corrected identity manifest](tested-artifact-identities.json) for the delivered P205 tuple. This additive record supersedes **only** `/accepted_observations/native_lifecycle_cycles: 1` in the [original frozen manifest](../p-m13-01-delivered-handoff-20261022-1/tested-artifact-identities.json). The corrected value is **0 proven complete native lifecycle/restoration cycles**; restoration remains unproved. The original manifest, reports and source pins remain preserved.
+
+The accepted observations remain one guest boot, two real concurrent Rust application launches, exact 387/254-byte outputs and exit0, CPU0/1 routing, 1.620779456-second overlap, empty procfs and independently accepted host owner/client/QEMU/container retirement. The [native decision](/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-independent-review-20261019-1/ACTUAL-205-TWO-CPU-AND-RUST-PAIR-NATIVE-DIAGNOSTIC-REVIEW.json) accepts that diagnostic configuration only, records `whole_native_acceptance=false` and QEMU returncode `-9`. The [physical decision](/home/holden/mckernel-work/host-preparation/current-host-pair-205-physical-review-20261019-1/decision.json) establishes host process/container retirement. Neither establishes complete native CPU/memory/mapping/callback/reference restoration.
+
+The [older one-public-cycle result](../native-resource-reboot-cycle-result-review-20261017-2.json) remains accepted within its distinct d99edf2f/SMP82c9021f profile and original limits. Its boot/workload/stop/destroy/public-release/reboot sequence contributes zero cycles to P205; it also does not establish complete mapping/callback/reference/frame restoration.
+
+Continue using the original [build/run instructions](../p-m13-01-delivered-handoff-20261022-1/BUILD-RUN-HANDOFF.md) and [exact command reference](../p-m13-01-delivered-handoff-20261022-1/exact-command-reference.json), with this corrected manifest taking precedence for the unsupported cycle claim. All artifact/module/app/source/toolchain/runtime pins and all other manifest values are identical. No rebuild, guest, replay, fresh execution authority or practical-check completion is introduced.
+
+[Claim-to-source mapping](claim-source-mapping.json) and [bounded JSON-consumer check](metadata-checks.json) record the exact correction and retained decision pins. The existing foreground P-M13-03 conditional decision is separate; dispatcher adoption must reconcile its stated conditions. Complete native restoration and whole-practical-goal acceptance remain open.

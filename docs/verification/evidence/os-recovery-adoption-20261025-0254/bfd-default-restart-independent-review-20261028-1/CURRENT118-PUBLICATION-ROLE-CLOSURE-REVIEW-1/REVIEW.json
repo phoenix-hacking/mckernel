@@ -1,0 +1,247 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_EXACT_CURRENT118_PUBLICATION_ONLY_LOADER_ROLE_CLOSURE_SOURCE",
+  "independent": true,
+  "implementation_ownership": false,
+  "reviewer": "/root/bfd_review",
+  "runtime_authority": null,
+  "source_correctness_blockers": [],
+  "implementation_seal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/publication-runtime-closure-correction-source-1/IMPLEMENTATION-SEAL.json",
+    "bytes": 9784,
+    "sha256": "9fc8ce54abfdac5fd7175a15ddea3ed98259b3ce9da7741506f49986508c77b0"
+  },
+  "helper": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/publication-runtime-closure-correction-source-1/publication_runtime_closure.py",
+    "bytes": 15921,
+    "sha256": "2b4c4be8e7dd2c1a0ff0c3b5853d09d5b21b5564d9a6d0ffb2fabf1feae58a1c"
+  },
+  "standalone_producer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/publication-runtime-closure-correction-source-1/prepare_publication_rows.py",
+    "bytes": 4936,
+    "sha256": "adf572da0ce54ed436e56f88ee07c7c96f7d45410b6fae2a58b925a94ca9aff1"
+  },
+  "producer_diff": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/publication-runtime-closure-correction-source-1/EXACT-PRODUCER-DELTA.patch",
+    "bytes": 2881,
+    "sha256": "c159e2fdeadd3d2f42a883d98edcd9c1538d120349eb04aba59d28ee4690f0ba"
+  },
+  "independent_checks": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-restart-independent-review-20261028-1/CURRENT118-PUBLICATION-ROLE-CLOSURE-REVIEW-1/INDEPENDENT-CHECKS.json",
+    "bytes": 2035,
+    "sha256": "0d91ef61f1619e27e640d430d838035a0338490fceb753f775ed58f8a34e12c0"
+  },
+  "actual_graph": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/publication-runtime-closure-correction-source-1/PURE-ROLE-CLOSURE-2/RUNTIME-DATA-ROWS.json",
+    "bytes": 574504,
+    "sha256": "62ffeefc4b3639d0c8a408a6abc5aae9852ed500b5936f2a3114945e6da39185"
+  },
+  "external_requirements": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/publication-runtime-closure-correction-source-1/PURE-ROLE-CLOSURE-2/EXTERNAL-ALIAS-REQUIREMENTS.json",
+    "bytes": 7802,
+    "sha256": "a75862f60399c2d6ae86bbf6eb952d644f8308faf4c449de4ee73616cb8468df"
+  },
+  "external_alias_template": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/publication-runtime-closure-correction-source-1/PURE-ROLE-CLOSURE-2/EXTERNAL-ALIASES.TEMPLATE.NOT-AUTHORITY.json",
+    "bytes": 1867,
+    "sha256": "7648f90827dd4424af919673e6ee4594602081c2c07235d3aae59a62640c1225"
+  },
+  "exact_external_rows": [
+    {
+      "actual": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/new-run-until-20261028-2300-pacific-1/ACTUAL-WINDOW.json",
+        "bytes": 861,
+        "sha256": "0bfb54bff698f53c744d797e2f57db94db08cd20120da70566d555fa6c1e320e"
+      },
+      "fetched_equivalent_path": null,
+      "requires_explicit_fetched_alias": true,
+      "declared_by": [
+        "actual_immutable_window"
+      ],
+      "kind": "JSON",
+      "payload_references_recursively_followed": false
+    },
+    {
+      "actual": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/new-run-until-20261028-2300-pacific-1/restart-20261028-1200-pacific-1/ACTUAL-CONTROLS-ARMED.json",
+        "bytes": 3171,
+        "sha256": "fe3c2193600ce06c98f769d4659faaf52d3035437a98c5fa8d33ab43a7ed8202"
+      },
+      "fetched_equivalent_path": null,
+      "requires_explicit_fetched_alias": true,
+      "declared_by": [
+        "guardian_immutable_parent_arm_receipt"
+      ],
+      "kind": "JSON",
+      "payload_references_recursively_followed": false
+    },
+    {
+      "actual": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/new-run-until-20261028-2300-pacific-1/restart-20261028-1200-pacific-1/armed-controller/CONFIG.json",
+        "bytes": 2457,
+        "sha256": "b8a15af2a6272bf67c73d0c7f097c4a737eea62c1716c1e9a254a48746156b5a"
+      },
+      "fetched_equivalent_path": null,
+      "requires_explicit_fetched_alias": true,
+      "declared_by": [
+        "guardian_immutable_config"
+      ],
+      "kind": "JSON",
+      "payload_references_recursively_followed": false
+    },
+    {
+      "actual": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/new-run-until-20261028-2300-pacific-1/restart-20261028-1200-pacific-1/armed-controller/CURRENT-INVOCATION.txt",
+        "bytes": 5626,
+        "sha256": "19336f322aa2391bf064676e5b3a8668608a1a35bf5e979d5bc3558fa4425fb4"
+      },
+      "fetched_equivalent_path": null,
+      "requires_explicit_fetched_alias": true,
+      "declared_by": [
+        "guardian_immutable_private_BYTE"
+      ],
+      "kind": "BYTE",
+      "payload_references_recursively_followed": false
+    },
+    {
+      "actual": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/new-run-until-20261028-2300-pacific-1/restart-20261028-1200-pacific-1/armed-controller/FROZEN-PACKET.json",
+        "bytes": 1462,
+        "sha256": "5bc656cc12b97c2ec5f53312a26e8ef800e45d5451c1f0b5d084576d95ff1b22"
+      },
+      "fetched_equivalent_path": null,
+      "requires_explicit_fetched_alias": true,
+      "declared_by": [
+        "guardian_immutable_frozen_packet"
+      ],
+      "kind": "JSON",
+      "payload_references_recursively_followed": false
+    },
+    {
+      "actual": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/new-run-until-20261028-2300-pacific-1/restart-20261028-1200-pacific-1/armed-controller/bridge.py",
+        "bytes": 25394,
+        "sha256": "d65c415847e4bf9d39894216819c32b05e45c292c3151bb467ec0cf7087c5062"
+      },
+      "fetched_equivalent_path": null,
+      "requires_explicit_fetched_alias": true,
+      "declared_by": [
+        "guardian_immutable_private_BYTE"
+      ],
+      "kind": "BYTE",
+      "payload_references_recursively_followed": false
+    },
+    {
+      "actual": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/new-run-until-20261028-2300-pacific-1/restart-20261028-1200-pacific-1/armed-controller/finite_launcher.py",
+        "bytes": 3894,
+        "sha256": "f1a788f0fc349f0486598a8c859d939216aedb2bdee7c0c19c59194ccaa7fa9e"
+      },
+      "fetched_equivalent_path": null,
+      "requires_explicit_fetched_alias": true,
+      "declared_by": [
+        "guardian_immutable_private_BYTE"
+      ],
+      "kind": "BYTE",
+      "payload_references_recursively_followed": false
+    },
+    {
+      "actual": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/new-run-until-20261028-2300-pacific-1/restart-20261028-1200-pacific-1/armed-controller/test_bridge.py",
+        "bytes": 26584,
+        "sha256": "7b2d75be61a4b647a7c453955ec6c1bca47742d91362d35869fd7af7398b0916"
+      },
+      "fetched_equivalent_path": null,
+      "requires_explicit_fetched_alias": true,
+      "declared_by": [
+        "guardian_immutable_private_BYTE"
+      ],
+      "kind": "BYTE",
+      "payload_references_recursively_followed": false
+    },
+    {
+      "actual": {
+        "bytes": 3374,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/f06-second-family-qualification-source-1/ROOT-ACTUAL-HOST-GRANT-1.json",
+        "sha256": "61758047397770fc7b0ea0be434e0db8774a7131f471127d510ef6b3c28c7d82"
+      },
+      "fetched_equivalent_path": null,
+      "requires_explicit_fetched_alias": true,
+      "declared_by": [
+        "current63_pending_ledger/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/ordinary/grant",
+        "current63_pending_ledger/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/ordinary/grant",
+        "current63_pending_ledger/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/ordinary/grant",
+        "current63_pending_ledger/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/ordinary/grant",
+        "current63_pending_ledger/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/ordinary/grant",
+        "current63_pending_ledger/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/prior_ledger_retained/ordinary/grant"
+      ],
+      "kind": "JSON",
+      "payload_references_recursively_followed": false
+    },
+    {
+      "actual": {
+        "path": "/home/holden/mckernel-work/scratch/m14-current290-owner213-rolejoin-pathfix-retirement-20261026-1.plan.json",
+        "bytes": 15316,
+        "sha256": "b5df1a15e071ce09cc4ba44d316baee32b9217917f307dde388efb69196ca88c"
+      },
+      "fetched_equivalent_path": null,
+      "requires_explicit_fetched_alias": true,
+      "declared_by": [
+        "implicit_physical_record_absence_plan"
+      ],
+      "kind": "JSON",
+      "payload_references_recursively_followed": false
+    }
+  ],
+  "frozen_runtime_core": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/typed_current_boundary.py",
+    "bytes": 12354,
+    "sha256": "00483f2b97dbd03d76ee397ab9c80c050821ba1f705168d3606822b796e87514"
+  },
+  "frozen_candidate_seal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/IMPLEMENTATION-SEAL.json",
+    "bytes": 23680,
+    "sha256": "b7dd561500a6f74747c53448951fa3c12c8f615f9f6ceeb4d6d4a1649b7f2f22"
+  },
+  "original_frozen_producer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/prepare_publication_rows.py",
+    "bytes": 4256,
+    "sha256": "17d10ee3903d4666f02d129edd2899bd68715af820e404af90923b4efd11082a"
+  },
+  "original_Root_preflight_failure": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-TYPED-INTEGRATION-1/ACTUAL-RUNTIME-DATA-CLOSURE.PREFLIGHT-FAILURE.json",
+    "bytes": 1215,
+    "sha256": "7393cc4db94eedf52f690b6c7e2e9db78d7799b1cc6ce68c91a1a234f9ca2b74"
+  },
+  "assessment": [
+    "The corrected collector is publication-only and does not import/execute the runtime consumer, guard, materializer, Docker/query or compiler. It replaces generic JSON recursion with finite loader roles in this new standalone row producer. Frozen55 runtime/core00483f2b/observere6b734f0/guard operation subject/config bytes are untouched.",
+    "Required current typed binding/accepted-current binding/ledger/free/descriptor/schema/source review/typed independent review/read-only delegation and operation118 binding/successor/independent review remain explicit BYTE rows. The three implicit history sibling DATA reads are seeded, and current common/root61/physical guard configurations must equal the exact selected actual upstream guard configuration.",
+    "Selected retained reader sources are authenticated and literal loader BYTE edges followed without execution. Finite implicit bare Path reads, baseline owner export/raw members/join, physical helper/record-absence plan, and account semantics predecessor are explicitly added. Receipt and raw-command inputs are selected by their actual validator roles, including retirement14commands/proofs and current accepted-capture receipts and separate joins.",
+    "Historical/provenance/protected source/artifact/profile/plan/capture payloads remain exact opaque evidence. Their embedded references do not declare current filesystem versions. The original conflicting canonical executer/user/CMakeLists.txt source versions remain within authenticated retained metadata and are absent as current rows. Actual loader reference conflicts still fail.",
+    "Immutable original window, parent armed receipt, guardian frozen packet/config/private inputs and canonical script BYTE refs are included with exact guardian hardpins. Dynamic journal/bridge-start/launcher state/watcher remain live-only reads and are excluded from frozen publication authority.",
+    "The new standalone producer preserves existing cached123 source rows and static/profile equality checks, authenticates helper2b4c4be8 before import and publishes both new helper and producer refs. Non-JSON or opaque byte subjects are still verified by the existing eventual fetched publication comparison; no source export/artifact/archive hashing replay is performed here.",
+    "Independent six-group pure rerun PASS: exact real Root graph565 rows, required current config mutation/removal refused, historical provenance remains opaque, true current loader conflicts refused, immutable/live split maintained. Generated rows exactly equal owner graph62ffeefc. All10 external actual files matched their declared byte count/hash. Tests ran CPU0 with2GiB AS; no runtime calls.",
+    "Owner initial six-group run had one test-only provenance locator assertion failure, preserved in PURE-ROLE-CLOSURE-1. The bounded correction changed only that locator; helper semantics stayed byte-identical. Original Root preflight failure7393cc4d remains preserved."
+  ],
+  "next_concrete_root_operations": [
+    "Use all10 exact external rows in the referenced alias requirements. Root copies exact bytes to explicit repository aliases, verifies each byte count/hash, then authors the full aliases mapping and binds it in actual static DATA. Author-null template is not authority.",
+    "After existing materializer/profile/facts prerequisites and applicable Root authorization, execute exact_next_publication_producer_argv. This new standalone producer replaces the frozen cohort producer only for publication row assembly; do not call the original indiscriminate recursive collector.",
+    "Publish/fetch the complete actual prepared row product, including cached source123/external3, current runtime DATA/opaque evidence and both new additive source files; verify every actual/fetched row before using existing fresh operation/admission/capture/build path."
+  ],
+  "limitations": [
+    "The565-row graph and10 external requirements are the exact current pure graph, not a fetched publication PASS; future final static metadata rows remain the standalone producer\u2019s job.",
+    "This review does not authorize or perform alias copies, static materialization, live reobservation, guards/queries, compiler/build/native work, cleanup or a new execution grant.",
+    "Current accepted history/71 consumed nonces/faac once/both failed custody attempts/native branch/window/caps/budget/exclusions and file closure counts remain unchanged."
+  ],
+  "credit": {
+    "actual_runtime_guard_query_capture_materializer_export_compiler_native_calls": 0,
+    "new_current_builds": 0,
+    "new_native_cases": 0,
+    "new_M14_M15_file_closures": 0
+  },
+  "exact_next_publication_producer_argv": [
+    "/usr/bin/python3",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/publication-runtime-closure-correction-source-1/prepare_publication_rows.py"
+  ]
+}

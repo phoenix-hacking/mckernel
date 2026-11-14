@@ -1,0 +1,92 @@
+--- a/arch/x86_64/kernel/cpu.c
++++ b/arch/x86_64/kernel/cpu.c
+@@ -2222,6 +2222,9 @@
+ 	}
+ }
+ 
++#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
++void gpe_handler(struct x86_user_context *regs);
++#else
+ void gpe_handler(struct x86_user_context *regs)
+ {
+ 	set_cputime(interrupt_from_user(regs) ?
+@@ -2238,6 +2241,7 @@
+ 		CPUTIME_MODE_K2U : CPUTIME_MODE_K2K_OUT);
+ 	panic("GPF");
+ }
++#endif
+ 
+ void debug_handler(struct x86_user_context *regs)
+ {
+--- a/kernel/rust/x86_cpu_helpers.rs
++++ b/kernel/rust/x86_cpu_helpers.rs
+@@ -103,6 +103,19 @@
+     fn x86_running_on_kvm_bridge() -> CInt;
+     fn x86_cpuid6_bridge(eaxp: *mut CULong, ecxp: *mut CULong);
+     fn kprintf(format: *const i8, ...) -> CInt;
++    // Existing selected providers; aliases introduce no new exported helper.
++    #[link_name = "interrupt_from_user"]
++    fn x86_gpe_from_user(regs: *mut c_void) -> CInt;
++    #[link_name = "set_cputime"]
++    fn x86_gpe_set_cputime(mode: CUInt);
++    #[link_name = "arch_show_interrupt_context"]
++    fn x86_gpe_show_context(regs: *const c_void);
++    #[link_name = "set_signal"]
++    fn x86_gpe_set_signal(sig: CInt, regs: *mut c_void, info: *mut crate::abi::SigInfo);
++    #[link_name = "interrupt_exit"]
++    fn x86_gpe_interrupt_exit(regs: *mut X86UserContext);
++    #[link_name = "panic"]
++    fn x86_gpe_panic(message: *const i8) -> !;
+     fn __kprintf(format: *const i8, ...) -> CInt;
+     fn arch_delay(us: CInt);
+     fn do_arch_prctl(code: CULong, address: CULong) -> CLong;
+@@ -3144,3 +3157,49 @@
+         _ => {},
+     }
+ }
++
++// Exact kernel/include/syscall.h enum values and x86 signal.h SIGSEGV.
++// The supported GCC enum transport is checked by the real-header witness.
++const X86_GPE_CPUTIME_K2U: CUInt = 0;
++const X86_GPE_CPUTIME_U2K: CUInt = 1;
++const X86_GPE_CPUTIME_K2K_IN: CUInt = 2;
++const X86_GPE_CPUTIME_K2K_OUT: CUInt = 3;
++const X86_GPE_SIGSEGV: CInt = 11;
++
++/// Complete selected general-protection-fault orchestration.
++///
++/// The interrupt producer owns the same live context for this call. No Rust
++/// reference crosses a provider call: CS is reloaded after context display,
++/// and the existing classifier is called again after interrupt_exit. The
++/// actual selected Rust panic provider does not return; no new recovery path,
++/// pointer retention, lock, IRQ operation or signal ownership is introduced.
++#[no_mangle]
++pub unsafe extern "C" fn gpe_handler(regs: *mut X86UserContext) {
++    unsafe {
++        x86_gpe_set_cputime(if x86_gpe_from_user(regs.cast::<c_void>()) != 0 {
++            X86_GPE_CPUTIME_U2K
++        } else {
++            X86_GPE_CPUTIME_K2K_IN
++        });
++        kprintf(
++            b"General protection fault (err: %lx, %lx:%lx)\n\0".as_ptr().cast(),
++            core::ptr::addr_of!((*regs).gpr.error).read(),
++            core::ptr::addr_of!((*regs).gpr.cs).read(),
++            core::ptr::addr_of!((*regs).gpr.rip).read(),
++        );
++        x86_gpe_show_context(regs.cast::<c_void>());
++        if (core::ptr::addr_of!((*regs).gpr.cs).read() & 3) == 0 {
++            x86_gpe_panic(b"gpe_handler\0".as_ptr().cast());
++        }
++        x86_gpe_set_signal(
++            X86_GPE_SIGSEGV, regs.cast::<c_void>(), core::ptr::null_mut(),
++        );
++        x86_gpe_interrupt_exit(regs);
++        x86_gpe_set_cputime(if x86_gpe_from_user(regs.cast::<c_void>()) != 0 {
++            X86_GPE_CPUTIME_K2U
++        } else {
++            X86_GPE_CPUTIME_K2K_OUT
++        });
++        x86_gpe_panic(b"GPF\0".as_ptr().cast());
++    }
++}

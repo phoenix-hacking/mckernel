@@ -1,0 +1,54 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_AND_DATA_ONLY_PENDING_INDEPENDENT_STAGE_CONTRACT_REVIEW",
+  "purpose": "Expose actual first bootstrap helper failure; no asserted 66/67 mismatch or application success.",
+  "current_manifest": {
+    "path": "/home/holden/mckernel-work/scratch/m07n-261021-2/manifest.json",
+    "sha256": "d7b7b535cd150318c105bbf4645d259189bc5536f51d0eb16ee51d028341a5fa",
+    "bytes": 5189
+  },
+  "current_failed_physical": {
+    "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/failed-owner-successor-runtime-preparation-1/expert-failed-terminal-status-correction-1/bound-runtime-source-1/native-packet-1/failed-owner-minimum-diagnosis-2/observed-failure-join-2/ROOT-MECHANICAL-COMPLETE-CURRENT-FAILED-M07-PHYSICAL-REPORT-2.json",
+    "sha256": "f17ae9950db446acd88e4ec5efd35208a452d44d481a2deaef5ec89d0ea0a073",
+    "bytes": 31692
+  },
+  "corrected_collector": {
+    "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/boot-collector-profile-correction-1/bounded-compile-correction-1/init",
+    "sha256": "9508643afbbd962cf24822896505b134d3d9ae7da4dc1163be861a2a3f65c0b4",
+    "bytes": 1022088
+  },
+  "collector_source": {
+    "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/boot-collector-profile-correction-1/bounded-compile-correction-1/collector-helper-failure-context.c",
+    "sha256": "619a5e97d067f87b26b085f628d074e2945c5da853ded38daf71a5d311768094",
+    "bytes": 24476
+  },
+  "source_and_actual_body_packet": {
+    "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/boot-collector-profile-correction-1/bounded-compile-correction-1/FROZEN-HELPER-FAILURE-CONTEXT-CORRECTION-PACKET-1.json",
+    "sha256": "754362f51ee8dd91cf0091e9c9c3f76484f1660971f7f807f3787d4accd4973d",
+    "bytes": 1879
+  },
+  "required_changed_final_members": [
+    "init"
+  ],
+  "required_final_member_count": 60,
+  "required_unchanged_member_count": 59,
+  "unchanged_member_roles": [
+    "apps/app",
+    "bin/native-boot",
+    "bin/mcexec",
+    "images/mckernel.img",
+    "modules"
+  ],
+  "preserve": "Exact metadata keys/order/duplicate physical records/base-prefix proof through existing qualified stage machinery; init descriptor and coupled manifest consumer references only change.",
+  "strict_oracles_unchanged": true,
+  "helper_failure_schema": [
+    "ND_HELPER_FAILURE",
+    "ND_HELPER_FAILURE_STDOUT",
+    "ND_HELPER_FAILURE_STDERR"
+  ],
+  "future_stage": null,
+  "future_normalization": null,
+  "future_native_release": null,
+  "execution_permission": false,
+  "next_required_review": "Current stager frozen for two-member app/native-boot replacement cannot be executed unchanged: independent review must approve finite init-only member selection and collector descriptor coupling. Existing archive assembly/parser/metadata helpers reused, no new harness."
+}

@@ -1,0 +1,33 @@
+{
+  "status": "PASS",
+  "decision": "PASS_CURRENT_TERMINAL_SOURCE_DATA_AND_RETAINED_BODY_EVIDENCE_ELIGIBILITY_ONLY",
+  "reviewer": "/root/m07_outer_control_closure_expert",
+  "implementation_ownership": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewed_freeze_sha256": "dd8ca6b231ef770881b46563de4dd4a98d29472111a26942ba8ce1f8ea372ee5",
+  "accepted": {
+    "static_FD_objects": 29,
+    "FD_scope": "All declared objects matched hash, length and nine stat fields during bounded reads. No retained FD lease or runtime guarantee.",
+    "cleanup_PROC_CODE_sha256": "24e27a493a84a1ab6c3d22a5248ae456288fa590fc93e31b3fb5a0a29d8659af",
+    "body_preservation": "Cleanup functions/classes match the qualified base except configure's two current guard-directory literals. Constructor changes are context/output literals.",
+    "actual_body_evidence": "Constructor and body captures exited zero, directly joined, streams closed, groups absent, stderr empty. Body evidence records 49 refusals, three completed-child controls and both actual log channels.",
+    "log_correction": "Container log now binds actual attempt/container.log: 33562 bytes, ba429596f48a28b75cfd95c8f7987038a0b6c5ab3ba51df88af20d6cd42a90ac; bindings, case and saved Docker-log channels agree. Original failure remains preserved.",
+    "consumer_joins": "Nine-field retained-record serialization, string owner birth, exact CID/nonce, actual wrapper provenance, original-five hashes and finite readback/export chain are compatible. Compatibility projections preserve original review scopes and tool-owned outer OS fields remain NULL."
+  },
+  "publication_requirement": {
+    "path": "cleanup_pass_image.py: configure/PUBLISHED_SCRIPT",
+    "scenario": "The declared publication map's 17-cleanup_pass_image.py path alone cannot satisfy configure's git-show lookup.",
+    "required_action": "Also publish and fetch byte-identical cleanup bytes at docs/verification/evidence/m07-sigill-successor-native-data-preparation-20261022-1/actual-terminal-preparation-1/bound-terminal-source-correction-1/cleanup_pass_image.py in the bound commit/tree. No production source edit is required."
+  },
+  "remaining_release_predicates": [
+    "Publish/fetch exact source bindings, including the required cleanup alias, and obtain separate canonical first-four execution review.",
+    "Preserve observer/summary direct joins, actual original-five hash authority and separately authenticated raw-five release.",
+    "Cleanup/postjoin require separate current authority, positive fresh preflight predicates, exact serialized release, current resource accounting and unchanged identity/lease/recovery conditions. Preflight exit zero alone is insufficient.",
+    "Retain declared profiles and no outer kills; obtain actual cleanup/postjoin evidence and independent physical review before claiming release."
+  ],
+  "execution_authorized": false,
+  "cleanup_authorized": false,
+  "physical_clearance": false,
+  "native_acceptance": false,
+  "progress_credit": 0
+}

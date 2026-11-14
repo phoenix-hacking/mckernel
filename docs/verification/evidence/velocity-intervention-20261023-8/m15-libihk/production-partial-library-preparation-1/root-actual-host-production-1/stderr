@@ -1,0 +1,280 @@
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c: In function ‘ihk_os_makedumpfile’:
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:2900:29: warning: passing argument 1 of ‘bfd_set_section_size’ from incompatible pointer type [-Wincompatible-pointer-types]
+ 2900 |   ok = bfd_set_section_size(abfd, scn, cpsize);
+      |                             ^~~~
+      |                             |
+      |                             bfd * {aka struct bfd *}
+In file included from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:15:
+/usr/include/bfd.h:1426:45: note: expected ‘asection *’ {aka ‘struct bfd_section *’} but argument is of type ‘bfd *’ {aka ‘struct bfd *’}
+ 1426 | bfd_boolean bfd_set_section_size (asection *sec, bfd_size_type val);
+      |                                   ~~~~~~~~~~^~~
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:2900:35: warning: passing argument 2 of ‘bfd_set_section_size’ makes integer from pointer without a cast [-Wint-conversion]
+ 2900 |   ok = bfd_set_section_size(abfd, scn, cpsize);
+      |                                   ^~~
+      |                                   |
+      |                                   asection * {aka struct bfd_section *}
+In file included from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:15:
+/usr/include/bfd.h:1426:64: note: expected ‘bfd_size_type’ {aka ‘long unsigned int’} but argument is of type ‘asection *’ {aka ‘struct bfd_section *’}
+ 1426 | bfd_boolean bfd_set_section_size (asection *sec, bfd_size_type val);
+      |                                                  ~~~~~~~~~~~~~~^~~
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:2900:8: error: too many arguments to function ‘bfd_set_section_size’
+ 2900 |   ok = bfd_set_section_size(abfd, scn, cpsize);
+      |        ^~~~~~~~~~~~~~~~~~~~
+In file included from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:15:
+/usr/include/bfd.h:1426:13: note: declared here
+ 1426 | bfd_boolean bfd_set_section_size (asection *sec, bfd_size_type val);
+      |             ^~~~~~~~~~~~~~~~~~~~
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:2909:30: warning: passing argument 1 of ‘bfd_set_section_flags’ from incompatible pointer type [-Wincompatible-pointer-types]
+ 2909 |   ok = bfd_set_section_flags(abfd, scn, SEC_HAS_CONTENTS);
+      |                              ^~~~
+      |                              |
+      |                              bfd * {aka struct bfd *}
+In file included from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:15:
+/usr/include/bfd.h:1411:46: note: expected ‘asection *’ {aka ‘struct bfd_section *’} but argument is of type ‘bfd *’ {aka ‘struct bfd *’}
+ 1411 | bfd_boolean bfd_set_section_flags (asection *sec, flagword flags);
+      |                                    ~~~~~~~~~~^~~
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:2909:36: warning: passing argument 2 of ‘bfd_set_section_flags’ makes integer from pointer without a cast [-Wint-conversion]
+ 2909 |   ok = bfd_set_section_flags(abfd, scn, SEC_HAS_CONTENTS);
+      |                                    ^~~
+      |                                    |
+      |                                    asection * {aka struct bfd_section *}
+In file included from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:15:
+/usr/include/bfd.h:1411:60: note: expected ‘flagword’ {aka ‘unsigned int’} but argument is of type ‘asection *’ {aka ‘struct bfd_section *’}
+ 1411 | bfd_boolean bfd_set_section_flags (asection *sec, flagword flags);
+      |                                                   ~~~~~~~~~^~~~~
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:2909:8: error: too many arguments to function ‘bfd_set_section_flags’
+ 2909 |   ok = bfd_set_section_flags(abfd, scn, SEC_HAS_CONTENTS);
+      |        ^~~~~~~~~~~~~~~~~~~~~
+In file included from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:15:
+/usr/include/bfd.h:1411:13: note: declared here
+ 1411 | bfd_boolean bfd_set_section_flags (asection *sec, flagword flags);
+      |             ^~~~~~~~~~~~~~~~~~~~~
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:2930:29: warning: passing argument 1 of ‘bfd_set_section_size’ from incompatible pointer type [-Wincompatible-pointer-types]
+ 2930 |   ok = bfd_set_section_size(abfd, scn, cpsize);
+      |                             ^~~~
+      |                             |
+      |                             bfd * {aka struct bfd *}
+In file included from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:15:
+/usr/include/bfd.h:1426:45: note: expected ‘asection *’ {aka ‘struct bfd_section *’} but argument is of type ‘bfd *’ {aka ‘struct bfd *’}
+ 1426 | bfd_boolean bfd_set_section_size (asection *sec, bfd_size_type val);
+      |                                   ~~~~~~~~~~^~~
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:2930:35: warning: passing argument 2 of ‘bfd_set_section_size’ makes integer from pointer without a cast [-Wint-conversion]
+ 2930 |   ok = bfd_set_section_size(abfd, scn, cpsize);
+      |                                   ^~~
+      |                                   |
+      |                                   asection * {aka struct bfd_section *}
+In file included from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:15:
+/usr/include/bfd.h:1426:64: note: expected ‘bfd_size_type’ {aka ‘long unsigned int’} but argument is of type ‘asection *’ {aka ‘struct bfd_section *’}
+ 1426 | bfd_boolean bfd_set_section_size (asection *sec, bfd_size_type val);
+      |                                                  ~~~~~~~~~~~~~~^~~
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:2930:8: error: too many arguments to function ‘bfd_set_section_size’
+ 2930 |   ok = bfd_set_section_size(abfd, scn, cpsize);
+      |        ^~~~~~~~~~~~~~~~~~~~
+In file included from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:15:
+/usr/include/bfd.h:1426:13: note: declared here
+ 1426 | bfd_boolean bfd_set_section_size (asection *sec, bfd_size_type val);
+      |             ^~~~~~~~~~~~~~~~~~~~
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:2939:30: warning: passing argument 1 of ‘bfd_set_section_flags’ from incompatible pointer type [-Wincompatible-pointer-types]
+ 2939 |   ok = bfd_set_section_flags(abfd, scn, SEC_HAS_CONTENTS);
+      |                              ^~~~
+      |                              |
+      |                              bfd * {aka struct bfd *}
+In file included from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:15:
+/usr/include/bfd.h:1411:46: note: expected ‘asection *’ {aka ‘struct bfd_section *’} but argument is of type ‘bfd *’ {aka ‘struct bfd *’}
+ 1411 | bfd_boolean bfd_set_section_flags (asection *sec, flagword flags);
+      |                                    ~~~~~~~~~~^~~
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:2939:36: warning: passing argument 2 of ‘bfd_set_section_flags’ makes integer from pointer without a cast [-Wint-conversion]
+ 2939 |   ok = bfd_set_section_flags(abfd, scn, SEC_HAS_CONTENTS);
+      |                                    ^~~
+      |                                    |
+      |                                    asection * {aka struct bfd_section *}
+In file included from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:15:
+/usr/include/bfd.h:1411:60: note: expected ‘flagword’ {aka ‘unsigned int’} but argument is of type ‘asection *’ {aka ‘struct bfd_section *’}
+ 1411 | bfd_boolean bfd_set_section_flags (asection *sec, flagword flags);
+      |                                                   ~~~~~~~~~^~~~~
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:2939:8: error: too many arguments to function ‘bfd_set_section_flags’
+ 2939 |   ok = bfd_set_section_flags(abfd, scn, SEC_HAS_CONTENTS);
+      |        ^~~~~~~~~~~~~~~~~~~~~
+In file included from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:15:
+/usr/include/bfd.h:1411:13: note: declared here
+ 1411 | bfd_boolean bfd_set_section_flags (asection *sec, flagword flags);
+      |             ^~~~~~~~~~~~~~~~~~~~~
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:2960:29: warning: passing argument 1 of ‘bfd_set_section_size’ from incompatible pointer type [-Wincompatible-pointer-types]
+ 2960 |   ok = bfd_set_section_size(abfd, scn, cpsize);
+      |                             ^~~~
+      |                             |
+      |                             bfd * {aka struct bfd *}
+In file included from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:15:
+/usr/include/bfd.h:1426:45: note: expected ‘asection *’ {aka ‘struct bfd_section *’} but argument is of type ‘bfd *’ {aka ‘struct bfd *’}
+ 1426 | bfd_boolean bfd_set_section_size (asection *sec, bfd_size_type val);
+      |                                   ~~~~~~~~~~^~~
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:2960:35: warning: passing argument 2 of ‘bfd_set_section_size’ makes integer from pointer without a cast [-Wint-conversion]
+ 2960 |   ok = bfd_set_section_size(abfd, scn, cpsize);
+      |                                   ^~~
+      |                                   |
+      |                                   asection * {aka struct bfd_section *}
+In file included from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:15:
+/usr/include/bfd.h:1426:64: note: expected ‘bfd_size_type’ {aka ‘long unsigned int’} but argument is of type ‘asection *’ {aka ‘struct bfd_section *’}
+ 1426 | bfd_boolean bfd_set_section_size (asection *sec, bfd_size_type val);
+      |                                                  ~~~~~~~~~~~~~~^~~
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:2960:8: error: too many arguments to function ‘bfd_set_section_size’
+ 2960 |   ok = bfd_set_section_size(abfd, scn, cpsize);
+      |        ^~~~~~~~~~~~~~~~~~~~
+In file included from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:15:
+/usr/include/bfd.h:1426:13: note: declared here
+ 1426 | bfd_boolean bfd_set_section_size (asection *sec, bfd_size_type val);
+      |             ^~~~~~~~~~~~~~~~~~~~
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:2969:30: warning: passing argument 1 of ‘bfd_set_section_flags’ from incompatible pointer type [-Wincompatible-pointer-types]
+ 2969 |   ok = bfd_set_section_flags(abfd, scn, SEC_HAS_CONTENTS);
+      |                              ^~~~
+      |                              |
+      |                              bfd * {aka struct bfd *}
+In file included from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:15:
+/usr/include/bfd.h:1411:46: note: expected ‘asection *’ {aka ‘struct bfd_section *’} but argument is of type ‘bfd *’ {aka ‘struct bfd *’}
+ 1411 | bfd_boolean bfd_set_section_flags (asection *sec, flagword flags);
+      |                                    ~~~~~~~~~~^~~
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:2969:36: warning: passing argument 2 of ‘bfd_set_section_flags’ makes integer from pointer without a cast [-Wint-conversion]
+ 2969 |   ok = bfd_set_section_flags(abfd, scn, SEC_HAS_CONTENTS);
+      |                                    ^~~
+      |                                    |
+      |                                    asection * {aka struct bfd_section *}
+In file included from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:15:
+/usr/include/bfd.h:1411:60: note: expected ‘flagword’ {aka ‘unsigned int’} but argument is of type ‘asection *’ {aka ‘struct bfd_section *’}
+ 1411 | bfd_boolean bfd_set_section_flags (asection *sec, flagword flags);
+      |                                                   ~~~~~~~~~^~~~~
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:2969:8: error: too many arguments to function ‘bfd_set_section_flags’
+ 2969 |   ok = bfd_set_section_flags(abfd, scn, SEC_HAS_CONTENTS);
+      |        ^~~~~~~~~~~~~~~~~~~~~
+In file included from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:15:
+/usr/include/bfd.h:1411:13: note: declared here
+ 1411 | bfd_boolean bfd_set_section_flags (asection *sec, flagword flags);
+      |             ^~~~~~~~~~~~~~~~~~~~~
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:2989:28: warning: passing argument 1 of ‘bfd_set_section_size’ from incompatible pointer type [-Wincompatible-pointer-types]
+ 2989 |  ok = bfd_set_section_size(abfd, scn, mem_size);
+      |                            ^~~~
+      |                            |
+      |                            bfd * {aka struct bfd *}
+In file included from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:15:
+/usr/include/bfd.h:1426:45: note: expected ‘asection *’ {aka ‘struct bfd_section *’} but argument is of type ‘bfd *’ {aka ‘struct bfd *’}
+ 1426 | bfd_boolean bfd_set_section_size (asection *sec, bfd_size_type val);
+      |                                   ~~~~~~~~~~^~~
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:2989:34: warning: passing argument 2 of ‘bfd_set_section_size’ makes integer from pointer without a cast [-Wint-conversion]
+ 2989 |  ok = bfd_set_section_size(abfd, scn, mem_size);
+      |                                  ^~~
+      |                                  |
+      |                                  asection * {aka struct bfd_section *}
+In file included from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:15:
+/usr/include/bfd.h:1426:64: note: expected ‘bfd_size_type’ {aka ‘long unsigned int’} but argument is of type ‘asection *’ {aka ‘struct bfd_section *’}
+ 1426 | bfd_boolean bfd_set_section_size (asection *sec, bfd_size_type val);
+      |                                                  ~~~~~~~~~~~~~~^~~
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:2989:7: error: too many arguments to function ‘bfd_set_section_size’
+ 2989 |  ok = bfd_set_section_size(abfd, scn, mem_size);
+      |       ^~~~~~~~~~~~~~~~~~~~
+In file included from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:15:
+/usr/include/bfd.h:1426:13: note: declared here
+ 1426 | bfd_boolean bfd_set_section_size (asection *sec, bfd_size_type val);
+      |             ^~~~~~~~~~~~~~~~~~~~
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:2998:29: warning: passing argument 1 of ‘bfd_set_section_flags’ from incompatible pointer type [-Wincompatible-pointer-types]
+ 2998 |  ok = bfd_set_section_flags(abfd, scn, SEC_ALLOC|SEC_HAS_CONTENTS);
+      |                             ^~~~
+      |                             |
+      |                             bfd * {aka struct bfd *}
+In file included from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:15:
+/usr/include/bfd.h:1411:46: note: expected ‘asection *’ {aka ‘struct bfd_section *’} but argument is of type ‘bfd *’ {aka ‘struct bfd *’}
+ 1411 | bfd_boolean bfd_set_section_flags (asection *sec, flagword flags);
+      |                                    ~~~~~~~~~~^~~
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:2998:35: warning: passing argument 2 of ‘bfd_set_section_flags’ makes integer from pointer without a cast [-Wint-conversion]
+ 2998 |  ok = bfd_set_section_flags(abfd, scn, SEC_ALLOC|SEC_HAS_CONTENTS);
+      |                                   ^~~
+      |                                   |
+      |                                   asection * {aka struct bfd_section *}
+In file included from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:15:
+/usr/include/bfd.h:1411:60: note: expected ‘flagword’ {aka ‘unsigned int’} but argument is of type ‘asection *’ {aka ‘struct bfd_section *’}
+ 1411 | bfd_boolean bfd_set_section_flags (asection *sec, flagword flags);
+      |                                                   ~~~~~~~~~^~~~~
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:2998:7: error: too many arguments to function ‘bfd_set_section_flags’
+ 2998 |  ok = bfd_set_section_flags(abfd, scn, SEC_ALLOC|SEC_HAS_CONTENTS);
+      |       ^~~~~~~~~~~~~~~~~~~~~
+In file included from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:15:
+/usr/include/bfd.h:1411:13: note: declared here
+ 1411 | bfd_boolean bfd_set_section_flags (asection *sec, flagword flags);
+      |             ^~~~~~~~~~~~~~~~~~~~~
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:3024:30: warning: passing argument 1 of ‘bfd_set_section_size’ from incompatible pointer type [-Wincompatible-pointer-types]
+ 3024 |    ok = bfd_set_section_size(abfd, scn, PAGE_SIZE);
+      |                              ^~~~
+      |                              |
+      |                              bfd * {aka struct bfd *}
+In file included from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:15:
+/usr/include/bfd.h:1426:45: note: expected ‘asection *’ {aka ‘struct bfd_section *’} but argument is of type ‘bfd *’ {aka ‘struct bfd *’}
+ 1426 | bfd_boolean bfd_set_section_size (asection *sec, bfd_size_type val);
+      |                                   ~~~~~~~~~~^~~
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:3024:36: warning: passing argument 2 of ‘bfd_set_section_size’ makes integer from pointer without a cast [-Wint-conversion]
+ 3024 |    ok = bfd_set_section_size(abfd, scn, PAGE_SIZE);
+      |                                    ^~~
+      |                                    |
+      |                                    asection * {aka struct bfd_section *}
+In file included from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:15:
+/usr/include/bfd.h:1426:64: note: expected ‘bfd_size_type’ {aka ‘long unsigned int’} but argument is of type ‘asection *’ {aka ‘struct bfd_section *’}
+ 1426 | bfd_boolean bfd_set_section_size (asection *sec, bfd_size_type val);
+      |                                                  ~~~~~~~~~~~~~~^~~
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:3024:9: error: too many arguments to function ‘bfd_set_section_size’
+ 3024 |    ok = bfd_set_section_size(abfd, scn, PAGE_SIZE);
+      |         ^~~~~~~~~~~~~~~~~~~~
+In file included from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:15:
+/usr/include/bfd.h:1426:13: note: declared here
+ 1426 | bfd_boolean bfd_set_section_size (asection *sec, bfd_size_type val);
+      |             ^~~~~~~~~~~~~~~~~~~~
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:3027:30: warning: passing argument 1 of ‘bfd_set_section_size’ from incompatible pointer type [-Wincompatible-pointer-types]
+ 3027 |    ok = bfd_set_section_size(abfd, scn, mem_chunks->chunks[i].size);
+      |                              ^~~~
+      |                              |
+      |                              bfd * {aka struct bfd *}
+In file included from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:15:
+/usr/include/bfd.h:1426:45: note: expected ‘asection *’ {aka ‘struct bfd_section *’} but argument is of type ‘bfd *’ {aka ‘struct bfd *’}
+ 1426 | bfd_boolean bfd_set_section_size (asection *sec, bfd_size_type val);
+      |                                   ~~~~~~~~~~^~~
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:3027:36: warning: passing argument 2 of ‘bfd_set_section_size’ makes integer from pointer without a cast [-Wint-conversion]
+ 3027 |    ok = bfd_set_section_size(abfd, scn, mem_chunks->chunks[i].size);
+      |                                    ^~~
+      |                                    |
+      |                                    asection * {aka struct bfd_section *}
+In file included from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:15:
+/usr/include/bfd.h:1426:64: note: expected ‘bfd_size_type’ {aka ‘long unsigned int’} but argument is of type ‘asection *’ {aka ‘struct bfd_section *’}
+ 1426 | bfd_boolean bfd_set_section_size (asection *sec, bfd_size_type val);
+      |                                                  ~~~~~~~~~~~~~~^~~
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:3027:9: error: too many arguments to function ‘bfd_set_section_size’
+ 3027 |    ok = bfd_set_section_size(abfd, scn, mem_chunks->chunks[i].size);
+      |         ^~~~~~~~~~~~~~~~~~~~
+In file included from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:15:
+/usr/include/bfd.h:1426:13: note: declared here
+ 1426 | bfd_boolean bfd_set_section_size (asection *sec, bfd_size_type val);
+      |             ^~~~~~~~~~~~~~~~~~~~
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:3037:30: warning: passing argument 1 of ‘bfd_set_section_flags’ from incompatible pointer type [-Wincompatible-pointer-types]
+ 3037 |   ok = bfd_set_section_flags(abfd, scn, SEC_ALLOC|SEC_HAS_CONTENTS);
+      |                              ^~~~
+      |                              |
+      |                              bfd * {aka struct bfd *}
+In file included from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:15:
+/usr/include/bfd.h:1411:46: note: expected ‘asection *’ {aka ‘struct bfd_section *’} but argument is of type ‘bfd *’ {aka ‘struct bfd *’}
+ 1411 | bfd_boolean bfd_set_section_flags (asection *sec, flagword flags);
+      |                                    ~~~~~~~~~~^~~
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:3037:36: warning: passing argument 2 of ‘bfd_set_section_flags’ makes integer from pointer without a cast [-Wint-conversion]
+ 3037 |   ok = bfd_set_section_flags(abfd, scn, SEC_ALLOC|SEC_HAS_CONTENTS);
+      |                                    ^~~
+      |                                    |
+      |                                    asection * {aka struct bfd_section *}
+In file included from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:15:
+/usr/include/bfd.h:1411:60: note: expected ‘flagword’ {aka ‘unsigned int’} but argument is of type ‘asection *’ {aka ‘struct bfd_section *’}
+ 1411 | bfd_boolean bfd_set_section_flags (asection *sec, flagword flags);
+      |                                                   ~~~~~~~~~^~~~~
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:3037:8: error: too many arguments to function ‘bfd_set_section_flags’
+ 3037 |   ok = bfd_set_section_flags(abfd, scn, SEC_ALLOC|SEC_HAS_CONTENTS);
+      |        ^~~~~~~~~~~~~~~~~~~~~
+In file included from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:15:
+/usr/include/bfd.h:1411:13: note: declared here
+ 1411 | bfd_boolean bfd_set_section_flags (asection *sec, flagword flags);
+      |             ^~~~~~~~~~~~~~~~~~~~~
+At top level:
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c:104:45: warning: ‘reserve_mem_conf_default’ defined but not used [-Wunused-const-variable=]
+  104 | static const struct ihklib_reserve_mem_conf reserve_mem_conf_default = {
+      |                                             ^~~~~~~~~~~~~~~~~~~~~~~~

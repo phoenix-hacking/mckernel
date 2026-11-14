@@ -1,0 +1,81 @@
+{
+  "schema": "mckernel.current-parent-slot-pin-source-handoff.v1",
+  "status": "PASS_CURRENT_ACTUAL_BODY_PENDING_INDEPENDENT_FINAL_REVIEW",
+  "functional_scope": "Functional OS/apps and Rust migration: minimal current-source parent Entry storage lifetime primitive; no compute C.",
+  "base": {
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/current-source-integration-1/base-smp_application.rs",
+    "sha256": "127829f3dd35b3d44c2b098279b7439dccb31a53508055e3cdd1fd9e450682e2",
+    "bytes": 46152
+  },
+  "source": {
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/current-source-integration-1/smp_application.rs",
+    "sha256": "fd375f11a43dbd205c08decdff10d94c2bb82935ae2ddfeaf1ea7142a5c70146",
+    "bytes": 48311
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/current-source-integration-1/current-parent-slot-pin.patch",
+    "sha256": "aac4a2487618a1d1dae6394e81feb0cec47e56e2b79699c0c8759d6bdcd282cf",
+    "bytes": 3534
+  },
+  "profile_runner": {
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/current-source-integration-1/run_current_check.py",
+    "sha256": "979a314eaab5d7a9d9948bd87eea1b3e63df2611fecf403ef3cef5bed31b809d",
+    "bytes": 3800
+  },
+  "fixture_inputs": {
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/current-source-integration-1/fixture-inputs.json",
+    "sha256": "fc5641517222e82601f7ff1a474337daaab826ab52ef43ada95c02f89bdf2276",
+    "bytes": 1964
+  },
+  "result": {
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/current-source-integration-1/check-1/result.json",
+    "sha256": "67c52c2c8b49b63984030e823534b254f9f6df1c801e8c8e4cd719768740d4b0",
+    "bytes": 344
+  },
+  "api": "Remote::pin_parent_slot(self:&Arc<Self>, expected_owner:OsToken, parent:Token)->Result<ParentSlotPin>",
+  "ownership": "Non-Copy ParentSlotPin contains ManuallyDrop<Arc<Remote>>, actual owner OsToken and exact parent Token. Constructor discovers the current Entry under the same slots mutex as reserve/shutdown/removal, validates transport/shutdown/owner/admission, and increments the checked count. Discard never reacquires slots and deliberately retains Remote storage and counted Entry. No unauthenticated decrement/release API exists.",
+  "scope_limit": "Storage only. No parent guest task/MM, response bytes, service admission, root or fork phase authority is retained by this primitive. Existing request_cleanup/cancellation/drain behavior is unchanged. matches() is storage identity only.",
+  "changed_consumers": [
+    "Entry::release_ready requires parent_slot_pins==0, covering ordinary reply removals and final cleanup.",
+    "Remote::close_inner requires parent_slot_pins==0 outside its complete reserved/unprepared OR path.",
+    "Remote::reserve initializes the count to zero; all current production callers retain existing behavior."
+  ],
+  "actual_check": {
+    "commands": 2,
+    "new_tests": 3,
+    "all_returncodes_zero": true,
+    "all_direct_joined": true,
+    "all_groups_absent": true,
+    "stderr_bytes": 0,
+    "cpu6_released": true,
+    "executed_current_methods": [
+      "Entry::release_ready",
+      "Entry::request_cleanup",
+      "Remote::reserve",
+      "Remote::pin_parent_slot",
+      "Remote::reply",
+      "Remote::close_inner",
+      "Remote::close",
+      "Remote::cleanup",
+      "Remote::transport_health"
+    ],
+    "observations": [
+      "Unpinned reserved slot is removed by actual close; pinned reserved slot is retained, marked closed and cleanup begins.",
+      "Actual reply retains a completed pinned slot; actual final cleanup loops500 then times out without removal, while unpinned completed cleanup removes the slot.",
+      "Wrong OS slot/generation, stale token, wrong Entry owner slot, transport/shutdown/closed/cleanup/quarantine admission and overflow fail without changing counts or Arc ownership.",
+      "Discard while slots mutex is held does not lock; dropping last external Arc still leaves retained Remote/slot storage."
+    ]
+  },
+  "fixture_limits": [
+    "Current application_rpc Exchange is compiled from its exact source.",
+    "Syscall mailbox/procfs/prepared-image service behavior, clock/msleep, std Arc/mutex/allocation/error representation are explicit ordinary actual-body adapters. The 500 loop iterations execute without real sleeps.",
+    "No production full-crate/GCC14/SDK/module/image/native check or real task/MM/response lifetime proof.",
+    "No fork backend, ChildFork, ingress, ACK, callback, caller, C implementation or runtime activation is added."
+  ],
+  "preserved": [
+    "Old held-provider70dc/08f remains separate and unchanged; no held backend copy into current source.",
+    "Current mcctrl->create_process nonnull usercopy24/12 then-95 remains unchanged; weak prepare remains NULL.",
+    "All shared production sources and existing WIP remain unchanged by author; root alone integrates/Git/runtime."
+  ],
+  "next_action": "Independent reviewer accepts exact minimal current-source patch and actual-body evidence. Root may apply only this matching one-file diff preserving WIP, then execute the next eligible full-crate/SDK check. Future real provider must separately acquire this lifetime pin and supply authentic postpositive revoke/control/terminal owner APIs before activation."
+}

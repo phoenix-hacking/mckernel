@@ -1,0 +1,245 @@
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -19402,13 +19402 @@
+-static void
+-syscall_sigcommon_writer_lock_bridge(void *lock, void *node)
+-{
+-	mcs_rwlock_writer_lock(lock, node);
+-}
+-
+-static void
+-syscall_sigcommon_writer_unlock_bridge(void *lock, void *node)
+-{
+-	mcs_rwlock_writer_unlock(lock, node);
+-}
+-
+-static long
++long
+@@ -19426,2 +19414,3 @@
+-#endif
+-
++
++int do_sigaction(int sig, struct k_sigaction *act, struct k_sigaction *oact);
++#else
+@@ -19432,11 +19420,0 @@
+-#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+-	struct mcs_rwlock_node_irqsave mcs_rw_node;
+-
+-	return do_sigaction_body_result(sig, act, oact, thread->sigcommon,
+-			__builtin_offsetof(struct sig_common, action),
+-			sizeof(struct k_sigaction),
+-			__builtin_offsetof(struct sig_common, lock),
+-			&mcs_rw_node, syscall_sigcommon_writer_lock_bridge,
+-			syscall_sigcommon_writer_unlock_bridge,
+-			syscall_forward_sigaction_update_bridge);
+-#else
+@@ -19467,0 +19446 @@
++}
+@@ -19469 +19447,0 @@
+-}
+@@ -19827,0 +19806,3 @@
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++unsigned long syscall_pending_mask_bridge(void *threadp);
++#else
+@@ -19855,0 +19837,2 @@
++#endif /* !MCKERNEL_RUST_SYSCALL_POLICY_HELPERS: retained C fallback */
++
+@@ -20947,0 +20931 @@
++#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+@@ -21040,0 +21025 @@
++#endif /* !MCKERNEL_RUST_SYSCALL_POLICY_HELPERS: retained C fallback */
+@@ -21070,0 +21056,3 @@
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++int syscall_do_sigaction_bridge(int sig, void *act, void *oact);
++#else
+@@ -21075,0 +21064 @@
++#endif
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -360 +359,0 @@
+-    fn syscall_pending_mask_bridge(thread: *mut c_void) -> CULong;
+@@ -371 +369,0 @@
+-    fn syscall_do_sigaction_bridge(sig: CInt, act: *mut KSigAction, oact: *mut KSigAction) -> CInt;
+@@ -401 +398,0 @@
+-    fn syscall_sigsuspend_bridge(thread: *mut c_void, set: *mut c_void) -> CLong;
+@@ -1954,0 +1952,37 @@
++// M14-F03 next source slice: exact pending-mask aggregation under the two
++// existing writer locks. The caller retains current Thread/SigCommon/list nodes;
++// this body does not remove, consume, free or retain any pending signal node.
++#[inline]
++unsafe fn syscall_pending_mask_list_locked_f03(head: *mut AbiListHead) -> CULong {
++    let mut mask: CULong = 0;
++    let mut entry = (*head).next;
++    while entry != head {
++        let pending = entry
++            .cast::<u8>()
++            .wrapping_sub(offset_of!(crate::abi::SigPending, list))
++            .cast::<crate::abi::SigPending>();
++        mask |= (*pending).sigmask.val[0];
++        entry = (*pending).list.next;
++    }
++    mask
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn syscall_pending_mask_bridge(threadp: *mut c_void) -> CULong {
++    let thread = threadp.cast::<Thread>();
++    let common = (*thread).sigcommon.cast::<SigCommon>();
++    let mut node = MaybeUninit::<McsRwlockNodeIrqsave>::uninit();
++    let common_lock = addr_of_mut!((*common).lock).cast();
++    let common_head = addr_of_mut!((*common).sigpending);
++    crate::lock_helpers::__mcs_rwlock_writer_lock(common_lock, node.as_mut_ptr());
++    let mut mask = syscall_pending_mask_list_locked_f03(common_head);
++    crate::lock_helpers::__mcs_rwlock_writer_unlock(common_lock, node.as_mut_ptr());
++
++    let thread_lock = addr_of_mut!((*thread).sigpendinglock).cast();
++    let thread_head = addr_of_mut!((*thread).sigpending);
++    crate::lock_helpers::__mcs_rwlock_writer_lock(thread_lock, node.as_mut_ptr());
++    mask |= syscall_pending_mask_list_locked_f03(thread_head);
++    crate::lock_helpers::__mcs_rwlock_writer_unlock(thread_lock, node.as_mut_ptr());
++    mask
++}
++
+@@ -9972,0 +10007,103 @@
++// M14-F03 source slice: synchronous sigsuspend wait/selection/ownership body.
++// Current Thread/SigCommon/CPU/monitor remain live as required by the old C body.
++// Selected pending ownership transfers only after detach and unlock to do_signal.
++#[inline]
++unsafe fn syscall_sigsuspend_find_pending_locked_f03(
++    head: *mut AbiListHead,
++    wset: CULong,
++) -> *mut crate::abi::SigPending {
++    let mut entry = (*head).next;
++    while entry != head {
++        let pending = entry
++            .cast::<u8>()
++            .wrapping_sub(offset_of!(crate::abi::SigPending, list))
++            .cast::<crate::abi::SigPending>();
++        if sigsuspend_pending_matches((*pending).sigmask.val[0], wset) != 0 {
++            return pending;
++        }
++        entry = (*pending).list.next;
++    }
++    null_mut()
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn syscall_sigsuspend_bridge(
++    threadp: *mut c_void,
++    setp: *mut c_void,
++) -> CLong {
++    unsafe extern "C" {
++        #[link_name = "do_signal"]
++        fn syscall_sigsuspend_do_signal_f03(
++            rc: CULong,
++            regs: *mut c_void,
++            thread: *mut Thread,
++            pending: *mut crate::abi::SigPending,
++            num: CInt,
++        ) -> CInt;
++    }
++    let thread = threadp.cast::<Thread>();
++    let set = setp.cast::<SigSet>();
++    let mut node = MaybeUninit::<McsRwlockNodeIrqsave>::uninit();
++    let monitor = (*get_this_cpu_local_var()).monitor;
++    (*monitor).status = IHK_OS_MONITOR_KERNEL_HEAVY;
++    let wset = sigsuspend_prepare_mask((*set).val[0]);
++    let bset = (*thread).sigmask.val[0];
++    (*thread).sigmask.val[0] = wset;
++    write_volatile(addr_of_mut!((*thread).sigevent), 1);
++    loop {
++        while read_volatile(addr_of!((*thread).sigevent)) == 0 {
++            (*thread).status = PS_INTERRUPTIBLE;
++            let runq_irqstate = cpu_disable_interrupt_save();
++            let lock_cpu = get_this_cpu_local_var();
++            crate::spinlock_helpers::__ihk_mc_spinlock_lock_noirq(
++                addr_of_mut!((*lock_cpu).runq_lock).cast(),
++            );
++            let cpu = get_this_cpu_local_var();
++            let do_schedule = ((*cpu).flags & CPU_FLAG_NEED_RESCHED) != 0;
++            if do_schedule {
++                (*cpu).flags &= !CPU_FLAG_NEED_RESCHED;
++            }
++            crate::spinlock_helpers::__ihk_mc_spinlock_unlock_noirq(
++                addr_of_mut!((*cpu).runq_lock).cast(),
++            );
++            cpu_restore_interrupt(runq_irqstate);
++            if do_schedule {
++                schedule();
++            } else {
++                cpu_pause();
++            }
++        }
++        // Match the volatile C write before either protected pending-list scan.
++        write_volatile(addr_of_mut!((*thread).sigevent), 0);
++        (*thread).status = PS_RUNNING;
++        let common = (*thread).sigcommon.cast::<SigCommon>();
++        let mut lock = addr_of_mut!((*common).lock).cast();
++        let common_head = addr_of_mut!((*common).sigpending);
++        crate::lock_helpers::__mcs_rwlock_writer_lock(lock, node.as_mut_ptr());
++        let mut pending = syscall_sigsuspend_find_pending_locked_f03(common_head, wset);
++        if pending.is_null() {
++            crate::lock_helpers::__mcs_rwlock_writer_unlock(lock, node.as_mut_ptr());
++            lock = addr_of_mut!((*thread).sigpendinglock).cast();
++            let thread_head = addr_of_mut!((*thread).sigpending);
++            crate::lock_helpers::__mcs_rwlock_writer_lock(lock, node.as_mut_ptr());
++            pending = syscall_sigsuspend_find_pending_locked_f03(thread_head, wset);
++        }
++        if pending.is_null() {
++            crate::lock_helpers::__mcs_rwlock_writer_unlock(lock, node.as_mut_ptr());
++            continue;
++        }
++        crate::process_helpers::process_list_detach_result(addr_of_mut!((*pending).list));
++        crate::lock_helpers::__mcs_rwlock_writer_unlock(lock, node.as_mut_ptr());
++        (*thread).sigmask.val[0] = bset;
++        let _ = syscall_sigsuspend_do_signal_f03(
++            (-(EINTR as CLong)) as CULong,
++            null_mut(),
++            thread,
++            pending,
++            -1,
++        );
++        // do_signal may consume/free the detached node: never access it again.
++        return -(EINTR as CLong);
++    }
++}
++
+@@ -10027,0 +10165,38 @@
++}
++
++// M14-F03 source-only: remaining selected do_sigaction orchestration and
++// public rt_sigaction callback. Existing Rust helper preserves validation,
++// action copies, lock/unlock and forwarding order. C forwarding remains debt.
++extern "C" {
++    #[link_name = "syscall_forward_sigaction_update_bridge"]
++    fn syscall_forward_sigaction_update_f03(sig: CInt, act: *const c_void) -> CLong;
++}
++
++unsafe extern "C" fn syscall_sigaction_writer_lock_f03(lock: *mut c_void, node: *mut c_void) {
++    crate::lock_helpers::__mcs_rwlock_writer_lock(lock.cast(), node.cast());
++}
++
++unsafe extern "C" fn syscall_sigaction_writer_unlock_f03(lock: *mut c_void, node: *mut c_void) {
++    crate::lock_helpers::__mcs_rwlock_writer_unlock(lock.cast(), node.cast());
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn do_sigaction(sig: CInt, act: *mut KSigAction, oact: *mut KSigAction) -> CInt {
++    let thread = current_thread_ptr();
++    let common = (*thread).sigcommon;
++    let mut node = MaybeUninit::<McsRwlockNodeIrqsave>::uninit();
++    do_sigaction_body_result(
++        sig, act, oact, common.cast::<c_void>(),
++        offset_of!(SigCommon, action), size_of::<KSigAction>(),
++        offset_of!(SigCommon, lock), node.as_mut_ptr().cast::<c_void>(),
++        Some(syscall_sigaction_writer_lock_f03),
++        Some(syscall_sigaction_writer_unlock_f03),
++        Some(syscall_forward_sigaction_update_f03),
++    )
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn syscall_do_sigaction_bridge(
++    sig: CInt, act: *mut KSigAction, oact: *mut KSigAction,
++) -> CInt {
++    do_sigaction(sig, act, oact)

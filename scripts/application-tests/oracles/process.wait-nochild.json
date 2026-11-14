@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "process.wait-nochild",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/process.wait-nochild"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["first_reaped=1 second=-1 errno=10 echild=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["After the only child is reaped, a second exact waitpid returns ECHILD", "No stale child PID or second wait status is produced"],
+  "unresolved_expectations": ["Freeze child-reap ownership and ECHILD ABI evidence before execution."],
+  "max_question_for_reviewer": "Confirm reaped child identity cannot be waited again and returns ECHILD directly."
+}

@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "process.exec-missing",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/process.exec-missing"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["rc=-1 errno=2 enoent=1 state=37 unchanged=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["A frozen nonexistent executable returns ENOENT", "The original image continues and its private state remains unchanged"],
+  "unresolved_expectations": ["Path-resolution namespace and exact ENOENT binding require Max review."],
+  "max_question_for_reviewer": "Confirm missing-executable failure leaves the original image and private state intact."
+}

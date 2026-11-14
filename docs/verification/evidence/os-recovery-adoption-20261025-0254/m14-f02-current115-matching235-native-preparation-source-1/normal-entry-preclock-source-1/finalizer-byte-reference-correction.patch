@@ -1,0 +1,11 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-1/finalize_matching235_context.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-1/finalize_matching235_context.byte_refs.py
+@@ -68,7 +68,7 @@
+  st=json.loads(HOST_STATIC.read_bytes());assert st['expected_oracle']==manifest['payload']['oracle'] and len(bytes.fromhex(st['expected_oracle']['stdout_hex']))==235
+  for key in ['offline_manifest','manifest','composed_case_binding','scratch_manifest_stage','source_authority','case_capability','stage_map_acceptance','nonce_reservation']:st[key]=q[key]
+  st['nonce']=nonce;st['root_ledger35']=q['current_ledger'];st['latest_serial_operation_physical_acceptance']=q['latest_free'];st['attempt_parent']=stage['planned_attempt_parent'];st['planned_attempt_parent']=stage['planned_attempt_parent'];st['stage_result']=q['scratch_manifest_stage'];st['source_only_QMPproof']=q['stage_map_acceptance']
+- st['overlay']=manifest['staging']['derived_initramfs'];st['overlay_manifest']=manifest['staging']['overlay_manifest'];st['current_observer_source']=observer;st['current_observer_source_review']=q['current_observer_source_review'];st['current_observer_schema']=q['current_observer_schema'];st['Root_actual_final_fill_inputs']=ref(path)
++ st['overlay']=ref(Path(manifest['staging']['derived_initramfs']['path']));st['overlay_manifest']=ref(Path(manifest['staging']['overlay_manifest']['path']));st['current_observer_source']=observer;st['current_observer_source_review']=q['current_observer_source_review'];st['current_observer_schema']=q['current_observer_schema'];st['Root_actual_final_fill_inputs']=ref(path)
+  for flag,value in [('--attempt-parent',st['attempt_parent']),('--manifest',q['manifest']['path']),('--manifest-sha256',q['manifest']['sha256']),('--nonce',nonce)]:st['exact_argv'][st['exact_argv'].index(flag)+1]=value
+  F.mkdir(mode=0o700)  # Original prepare --nonce exclusively creates CAPTURE; never precreate it here.
+  for name in NAMES:

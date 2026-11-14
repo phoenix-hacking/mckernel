@@ -1,0 +1,601 @@
+{
+  "QEMU_positive_owned_reap": {
+    "argv": [
+      "/usr/libexec/qemu-kvm",
+      "-machine",
+      "q35",
+      "-accel",
+      "tcg,thread=multi",
+      "-cpu",
+      "max,la57=off",
+      "-smp",
+      "4,sockets=2,cores=2,threads=1",
+      "-m",
+      "8192",
+      "-object",
+      "memory-backend-ram,size=4G,id=ram-node0",
+      "-object",
+      "memory-backend-ram,size=4G,id=ram-node1",
+      "-numa",
+      "node,nodeid=0,cpus=0-1,memdev=ram-node0",
+      "-numa",
+      "node,nodeid=1,cpus=2-3,memdev=ram-node1",
+      "-nic",
+      "none",
+      "-display",
+      "none",
+      "-no-reboot",
+      "-no-shutdown",
+      "-S",
+      "-monitor",
+      "none",
+      "-qmp",
+      "unix:/home/holden/mckernel-work/scratch/m15p235/attempt-d21f4e17faf1b0b806419b1860bd0598/qmp.sock,server=on,wait=off",
+      "-serial",
+      "file:/home/holden/mckernel-work/scratch/m15p235/attempt-d21f4e17faf1b0b806419b1860bd0598/serial.log",
+      "-debugcon",
+      "file:/home/holden/mckernel-work/scratch/m15p235/attempt-d21f4e17faf1b0b806419b1860bd0598/debugcon.log",
+      "-global",
+      "isa-debugcon.iobase=0xe9",
+      "-kernel",
+      "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/bzImage",
+      "-initrd",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-stage-preparation-source-1/root-actual-qualified-input-plan-source-1/root-actual-compose-1/process235-overlay.cpio.gz",
+      "-append",
+      "console=ttyS0,115200n8 rdinit=/init nokaslr panic=-1 memmap=4K%0x80000-1"
+    ],
+    "pgid": 10,
+    "pid": 10,
+    "returncode": -9,
+    "sid": 10,
+    "starttime_ticks": 95052642
+  },
+  "actual_debugcon": {
+    "bytes": 152,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/root-adopted-process235-entry-1/independent-actual-native-review-1/RAW-ATTEMPT/debugcon.log",
+    "sha256": "bd87db779e6878802fa64fdee99f2eb08dee1529bbea800a65356f051e186685"
+  },
+  "actual_lifecycle_rows": [
+    {
+      "line": 904,
+      "text": "<6>[   32.348257] ihk_smp_x86_64: IHK-SMP: application SCHEDULE os=0 generation=1 pid=255 cpu=0"
+    },
+    {
+      "line": 905,
+      "text": "<6>[   32.360710] ihk_smp_x86_64: IHK-SMP: application procfs published os=0 generation=1 pid=255 tid=255"
+    },
+    {
+      "line": 967,
+      "text": "<6>[   32.702978] ihk_smp_x86_64: IHK-SMP: application procfs published os=0 generation=1 pid=258 tid=258"
+    },
+    {
+      "line": 1093,
+      "text": "<6>[   33.088221] mcctrl: application_process=cleanup_requested os=0 generation=1 pid=258 intent_errno=0"
+    },
+    {
+      "line": 1096,
+      "text": "<6>[   33.125782] ihk_smp_x86_64: IHK-SMP: application cleanup ACK os=0 generation=1 pid=258 token=32 errno=0 abandoned=0"
+    },
+    {
+      "line": 1098,
+      "text": "<6>[   33.129832] ihk_smp_x86_64: IHK-SMP: application retirement os=0 generation=1 pid=258 token=99 errno=-11"
+    },
+    {
+      "line": 1105,
+      "text": "<6>[   33.154659] ihk_smp_x86_64: IHK-SMP: application procfs deleted os=0 generation=1 pid=258 tid=258"
+    },
+    {
+      "line": 1130,
+      "text": "<6>[   33.387119] ihk_smp_x86_64: IHK-SMP: application procfs published os=0 generation=1 pid=261 tid=261"
+    },
+    {
+      "line": 1164,
+      "text": "<6>[   33.425665] mcctrl: application_process=cleanup_requested os=0 generation=1 pid=261 intent_errno=0"
+    },
+    {
+      "line": 1174,
+      "text": "<6>[   33.436445] ihk_smp_x86_64: IHK-SMP: application cleanup ACK os=0 generation=1 pid=261 token=113 errno=0 abandoned=0"
+    },
+    {
+      "line": 1175,
+      "text": "<6>[   33.440494] ihk_smp_x86_64: IHK-SMP: application retirement os=0 generation=1 pid=261 token=135 errno=-11"
+    },
+    {
+      "line": 1177,
+      "text": "<6>[   33.446688] ihk_smp_x86_64: IHK-SMP: application procfs deleted os=0 generation=1 pid=261 tid=261"
+    },
+    {
+      "line": 1182,
+      "text": "<6>[   33.472170] mcctrl: application_process=cleanup_requested os=0 generation=1 pid=255 intent_errno=0"
+    },
+    {
+      "line": 1183,
+      "text": "<6>[   33.478644] ihk_smp_x86_64: IHK-SMP: application cleanup ACK os=0 generation=1 pid=255 token=3 errno=0 abandoned=1"
+    },
+    {
+      "line": 1184,
+      "text": "<6>[   33.480573] ihk_smp_x86_64: IHK-SMP: application procfs deleted os=0 generation=1 pid=255 tid=255"
+    },
+    {
+      "line": 1185,
+      "text": "<6>[   33.507507] ihk_smp_x86_64: IHK-SMP: application retirement os=0 generation=1 pid=255 token=147 errno=0"
+    }
+  ],
+  "actual_original_child_authority": {
+    "children": [
+      258,
+      261
+    ],
+    "function": "_audit_begin_children",
+    "positive_parent_clone_pairs": [
+      {
+        "delivered": {
+          "a": 0,
+          "b": 56,
+          "delivery": 31,
+          "line": 961,
+          "pid": 255,
+          "text": "<6>[   32.656791] mcctrl: application_syscall=delivered os=0 generation=1 pid=255 worker=6 delivery=31 cpu=0 number=56",
+          "worker": 6
+        },
+        "return_route": null,
+        "returned": {
+          "a": 0,
+          "b": 258,
+          "delivery": 31,
+          "line": 963,
+          "pid": 255,
+          "text": "<6>[   32.687095] mcctrl: application_syscall=returned os=0 generation=1 pid=255 worker=6 delivery=31 cpu=0 value=258",
+          "worker": 6
+        }
+      },
+      {
+        "delivered": {
+          "a": 0,
+          "b": 56,
+          "delivery": 112,
+          "line": 1124,
+          "pid": 255,
+          "text": "<6>[   33.358944] mcctrl: application_syscall=delivered os=0 generation=1 pid=255 worker=7 delivery=112 cpu=0 number=56",
+          "worker": 7
+        },
+        "return_route": {
+          "a": 1,
+          "b": 0,
+          "delivery": 112,
+          "line": 1126,
+          "pid": 255,
+          "text": "<6>[   33.377179] mcctrl: application_syscall=return_route os=0 generation=1 pid=255 worker=7 delivery=112 launcher_cpu=1 guest_cpu=0",
+          "worker": 7
+        },
+        "returned": {
+          "a": 0,
+          "b": 261,
+          "delivery": 112,
+          "line": 1127,
+          "pid": 255,
+          "text": "<6>[   33.379963] mcctrl: application_syscall=returned os=0 generation=1 pid=255 worker=7 delivery=112 cpu=0 value=261",
+          "worker": 7
+        }
+      }
+    ],
+    "source_rule": "Only real positive RET to matched deliveredclone56, samegeneration realpublication afterclonedelivery. Earlychildrows beforeparentRET remain permitted; complete raw retained, no heuristicPID guessing or filtered oracle."
+  },
+  "actual_parent_BEGIN": {
+    "entry_token": 3,
+    "query_tokens": [
+      147
+    ]
+  },
+  "actual_parent_pid": 255,
+  "actual_qmp": {
+    "bytes": 242710,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/root-adopted-process235-entry-1/independent-actual-native-review-1/RAW-ATTEMPT/qmp.transcript.json",
+    "sha256": "af93df8dc2749e9d2e6bc2e407ab51cdef1bf593f12aeae6fcf0cdc5dc706a10"
+  },
+  "actual_result": {
+    "bytes": 111476,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/root-adopted-process235-entry-1/independent-actual-native-review-1/RAW-ATTEMPT/result.json",
+    "sha256": "65f5cba29b424a62b715af70a1e2da7e16c47bc70471d6b2ea333a013254e15c"
+  },
+  "actual_serial": {
+    "bytes": 102848,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/root-adopted-process235-entry-1/independent-actual-native-review-1/RAW-ATTEMPT/serial.log",
+    "sha256": "1a5b0f81a0990b55cbc2cbe1754484fcaee0cf0a567868dd75c638374a1fbf89"
+  },
+  "actual_stdout_utf8": "parent start\nchild exec success token=fixed-v1\nparent wait success exit=37 eof=1 reaped=1 echild=1\nchild exec error errno=ENOENT state=37 unchanged=1\nparent wait error exit=42 eof=1 reaped=1 echild=1\nparent complete children=2 owned=0\n",
+  "all_actual_retirement_results": [
+    {
+      "errno": -11,
+      "line": 1098,
+      "pid": 258,
+      "token": 99
+    },
+    {
+      "errno": -11,
+      "line": 1175,
+      "pid": 261,
+      "token": 135
+    },
+    {
+      "errno": 0,
+      "line": 1185,
+      "pid": 255,
+      "token": 147
+    }
+  ],
+  "child_final0_limitation": "Both genuine children have procfsDELETE and pending-11 retirement rows; no childfinal0 is captured. Original5298 requires full childordinarycorrespondence+authority and parentfinal0, not extra childfinal0/F05gate. No stronger per-childclaim inferred.",
+  "complete_raw_capture_manifest": {
+    "bytes": 66743,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/root-adopted-process235-entry-1/independent-actual-native-review-1/RAW-CAPTURE-MANIFEST.json",
+    "sha256": "ba400da6a4e70eb6430e1b5c93104035ba2d23bc2cb8a1e7e0bf6a36e8b4342c"
+  },
+  "decision": "PASS_EXACT_ORIGINAL235_NATIVE_CASE_FINAL_UNCHANGED5298_EVALUATOR_AND_ACTUAL_CHILD_LIFECYCLE",
+  "full_final_public_evaluate_replay": {
+    "bytes": 109363,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/root-adopted-process235-entry-1/independent-actual-native-review-1/EXACT-5298-FULL-EVALUATOR-REPLAY.json",
+    "sha256": "c9d298a9b5980c3be5f16b9ce91895ebf29c7c0a625f83447d27391c222a4428"
+  },
+  "genuine_host_observation_clocks": {
+    "deadline": 935488.298251608,
+    "finished_at": 935224.299540329,
+    "started_at": 935188.298251608
+  },
+  "guest_report": {
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "/apps/app"
+    ],
+    "cwd": "/case/work",
+    "env": {
+      "COKERNEL_PATH": "/apps",
+      "PATH": "/usr/bin:/bin"
+    },
+    "finished_ns": 33921298450,
+    "procfs_empty": true,
+    "raw_wait_status": 0,
+    "reaped_ns": 33504860328,
+    "started_ns": 32053320817,
+    "streams": {
+      "stderr": {
+        "discarded": 0,
+        "eof": true,
+        "eof_ns": 33403954766,
+        "hex": "",
+        "limit": 1024,
+        "observed": 0,
+        "retained": 0,
+        "truncated": false
+      },
+      "stdout": {
+        "discarded": 0,
+        "eof": true,
+        "eof_ns": 33403992201,
+        "hex": "706172656e742073746172740a6368696c642065786563207375636365737320746f6b656e3d66697865642d76310a706172656e742077616974207375636365737320657869743d333720656f663d31207265617065643d3120656368696c643d310a6368696c642065786563206572726f72206572726e6f3d454e4f454e542073746174653d333720756e6368616e6765643d310a706172656e742077616974206572726f7220657869743d343220656f663d31207265617065643d3120656368696c643d310a706172656e7420636f6d706c657465206368696c6472656e3d32206f776e65643d300a",
+        "limit": 1024,
+        "observed": 235,
+        "retained": 235,
+        "truncated": false
+      }
+    }
+  },
+  "independent": true,
+  "new_runtime_authority": null,
+  "nonce": "d21f4e17faf1b0b806419b1860bd0598",
+  "normal_cleanup": {
+    "errors": [],
+    "reaped": true
+  },
+  "original_full_evaluator": {
+    "bytes": 100261,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/bound-native-runtime-1/native_diagnostic.py",
+    "sha256": "529830adcd6fafa13979bf6036b2812c88630c5e0112ce4d80f9fc28cc30d4da"
+  },
+  "original_manifest": {
+    "bytes": 9106,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-stage-preparation-source-1/root-actual-qualified-input-plan-source-1/process235.NEW-COLLECTOR.HOST-BOUND.json",
+    "sha256": "cf49bed61322fa0f1ccb6536bdd14753903c3ec3ac2b105e22ec64c809f0a86a"
+  },
+  "original_predicates": {
+    "QMP_shutdown_positive_teardown_originalhostdeadline": true,
+    "both1024Bstreams_EOF_no_truncation_or_discard": true,
+    "children258261_boundonlyrealparentclones": true,
+    "every_sampled_childordinaryRET_and_route_worker_slot_order": true,
+    "exact235B_stdout_stderr0_rawwait0": true,
+    "fiveargv_twoenv_cwd": true,
+    "full_original_parenttrace_syscall_pager_correspondence": true,
+    "noBAD_MARKERS_in_serial_or_debugcon": true,
+    "one_parent_SCHEDULE_and_parentpublicationDELETE": true,
+    "one_parent_terminal231_before_realACK_retirement": true,
+    "parent_intent0_ACK3_errno0_abandoned1_permitted": true,
+    "parent_unique_positive_query147_final0": true,
+    "readable_empty_procfs": true
+  },
+  "positive_current_free": {
+    "bytes": 5497,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/root-adopted-process235-entry-1/independent-actual-native-review-1/CURRENT-FREE.json",
+    "sha256": "563d0ce4db6695fb78adfaae2d2d91ca02afa6fa9c1621704d071b883718b89e"
+  },
+  "preserved": [
+    "b277/00bc sourcefailure and162f/de4 correction",
+    "be6e/6d2e/5fe0 failures",
+    "Originalstrict235/227 historical failures",
+    "WholeFP4096/1024FAIL",
+    "Acceptedstartup33c/22a1 and F05 separate908f native tuples"
+  ],
+  "reviewer": "/root/custody_release_review",
+  "reviewer_new_guest_compiler_cleanup_or_signals": 0,
+  "sampled_row_scope": "Only actual recorded deliveries/returns/routes listed. Payload235B source/artifact/oracle checks prove its full exec/wait assertions; missing sampled raw rows are not invented.",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. One original strict235 process/exec/wait native case at exact selected Rust executor/collector tuple.",
+  "scope_limit": "Selected original235 native process/exec/wait functional case only, distinct from startup22a1/F05 and oldC020 packets. No all349/all51/354/wholeexecutor/allocation/file/latestcomputeimage/lifetime acceptance. Generic diagnostic retains application_acceptance:false and mckernel_application_executed:false; independent source/artifact/nativecase proof adds scoped acceptance without editing originals.",
+  "selected_actual_sampled_clone_exec_wait_terminal_rows": [
+    {
+      "delivered": {
+        "a": 0,
+        "b": 56,
+        "delivery": 31,
+        "line": 961,
+        "pid": 255,
+        "text": "<6>[   32.656791] mcctrl: application_syscall=delivered os=0 generation=1 pid=255 worker=6 delivery=31 cpu=0 number=56",
+        "worker": 6
+      },
+      "return_route": null,
+      "returned": {
+        "a": 0,
+        "b": 258,
+        "delivery": 31,
+        "line": 963,
+        "pid": 255,
+        "text": "<6>[   32.687095] mcctrl: application_syscall=returned os=0 generation=1 pid=255 worker=6 delivery=31 cpu=0 value=258",
+        "worker": 6
+      }
+    },
+    {
+      "delivered": {
+        "a": 0,
+        "b": 56,
+        "delivery": 35,
+        "line": 964,
+        "pid": 255,
+        "text": "<6>[   32.691534] mcctrl: application_syscall=delivered os=0 generation=1 pid=255 worker=7 delivery=35 cpu=0 number=56",
+        "worker": 7
+      },
+      "return_route": {
+        "a": 1,
+        "b": 0,
+        "delivery": 35,
+        "line": 965,
+        "pid": 255,
+        "text": "<6>[   32.695001] mcctrl: application_syscall=return_route os=0 generation=1 pid=255 worker=7 delivery=35 launcher_cpu=1 guest_cpu=0",
+        "worker": 7
+      },
+      "returned": {
+        "a": 0,
+        "b": 0,
+        "delivery": 35,
+        "line": 966,
+        "pid": 255,
+        "text": "<6>[   32.697096] mcctrl: application_syscall=returned os=0 generation=1 pid=255 worker=7 delivery=35 cpu=0 value=0",
+        "worker": 7
+      }
+    },
+    {
+      "delivered": {
+        "a": 0,
+        "b": 59,
+        "delivery": 43,
+        "line": 984,
+        "pid": 258,
+        "text": "<6>[   32.726904] mcctrl: application_syscall=delivered os=0 generation=1 pid=258 worker=34 delivery=43 cpu=0 number=59",
+        "worker": 34
+      },
+      "return_route": null,
+      "returned": {
+        "a": 0,
+        "b": 0,
+        "delivery": 43,
+        "line": 985,
+        "pid": 258,
+        "text": "<6>[   32.734007] mcctrl: application_syscall=returned os=0 generation=1 pid=258 worker=34 delivery=43 cpu=0 value=0",
+        "worker": 34
+      }
+    },
+    {
+      "delivered": {
+        "a": 0,
+        "b": 59,
+        "delivery": 57,
+        "line": 1002,
+        "pid": 258,
+        "text": "<6>[   32.868891] mcctrl: application_syscall=delivered os=0 generation=1 pid=258 worker=34 delivery=57 cpu=0 number=59",
+        "worker": 34
+      },
+      "return_route": null,
+      "returned": {
+        "a": 0,
+        "b": 0,
+        "delivery": 57,
+        "line": 1003,
+        "pid": 258,
+        "text": "<6>[   32.956418] mcctrl: application_syscall=returned os=0 generation=1 pid=258 worker=34 delivery=57 cpu=0 value=0",
+        "worker": 34
+      }
+    },
+    {
+      "delivered": {
+        "a": 0,
+        "b": 231,
+        "delivery": 96,
+        "line": 1088,
+        "pid": 258,
+        "text": "<6>[   33.078928] mcctrl: application_syscall=delivered os=0 generation=1 pid=258 worker=33 delivery=96 cpu=0 number=231",
+        "worker": 33
+      },
+      "return_route": null,
+      "returned": null
+    },
+    {
+      "delivered": {
+        "a": 0,
+        "b": 61,
+        "delivery": 102,
+        "line": 1103,
+        "pid": 255,
+        "text": "<6>[   33.135756] mcctrl: application_syscall=delivered os=0 generation=1 pid=255 worker=6 delivery=102 cpu=0 number=61",
+        "worker": 6
+      },
+      "return_route": null,
+      "returned": {
+        "a": 0,
+        "b": 258,
+        "delivery": 102,
+        "line": 1104,
+        "pid": 255,
+        "text": "<6>[   33.138624] mcctrl: application_syscall=returned os=0 generation=1 pid=255 worker=6 delivery=102 cpu=0 value=258",
+        "worker": 6
+      }
+    },
+    {
+      "delivered": {
+        "a": 0,
+        "b": 56,
+        "delivery": 112,
+        "line": 1124,
+        "pid": 255,
+        "text": "<6>[   33.358944] mcctrl: application_syscall=delivered os=0 generation=1 pid=255 worker=7 delivery=112 cpu=0 number=56",
+        "worker": 7
+      },
+      "return_route": {
+        "a": 1,
+        "b": 0,
+        "delivery": 112,
+        "line": 1126,
+        "pid": 255,
+        "text": "<6>[   33.377179] mcctrl: application_syscall=return_route os=0 generation=1 pid=255 worker=7 delivery=112 launcher_cpu=1 guest_cpu=0",
+        "worker": 7
+      },
+      "returned": {
+        "a": 0,
+        "b": 261,
+        "delivery": 112,
+        "line": 1127,
+        "pid": 255,
+        "text": "<6>[   33.379963] mcctrl: application_syscall=returned os=0 generation=1 pid=255 worker=7 delivery=112 cpu=0 value=261",
+        "worker": 7
+      }
+    },
+    {
+      "delivered": {
+        "a": 0,
+        "b": 56,
+        "delivery": 116,
+        "line": 1128,
+        "pid": 255,
+        "text": "<6>[   33.382039] mcctrl: application_syscall=delivered os=0 generation=1 pid=255 worker=6 delivery=116 cpu=0 number=56",
+        "worker": 6
+      },
+      "return_route": null,
+      "returned": {
+        "a": 0,
+        "b": 0,
+        "delivery": 116,
+        "line": 1129,
+        "pid": 255,
+        "text": "<6>[   33.383879] mcctrl: application_syscall=returned os=0 generation=1 pid=255 worker=6 delivery=116 cpu=0 value=0",
+        "worker": 6
+      }
+    },
+    {
+      "delivered": {
+        "a": 0,
+        "b": 59,
+        "delivery": 124,
+        "line": 1147,
+        "pid": 261,
+        "text": "<6>[   33.407777] mcctrl: application_syscall=delivered os=0 generation=1 pid=261 worker=115 delivery=124 cpu=0 number=59",
+        "worker": 115
+      },
+      "return_route": null,
+      "returned": {
+        "a": 0,
+        "b": 2,
+        "delivery": 124,
+        "line": 1148,
+        "pid": 261,
+        "text": "<6>[   33.409979] mcctrl: application_syscall=returned os=0 generation=1 pid=261 worker=115 delivery=124 cpu=0 value=2",
+        "worker": 115
+      }
+    },
+    {
+      "delivered": {
+        "a": 0,
+        "b": 231,
+        "delivery": 129,
+        "line": 1160,
+        "pid": 261,
+        "text": "<6>[   33.422657] mcctrl: application_syscall=delivered os=0 generation=1 pid=261 worker=114 delivery=129 cpu=0 number=231",
+        "worker": 114
+      },
+      "return_route": null,
+      "returned": null
+    },
+    {
+      "delivered": {
+        "a": 0,
+        "b": 231,
+        "delivery": 146,
+        "line": 1180,
+        "pid": 255,
+        "text": "<6>[   33.466357] mcctrl: application_syscall=delivered os=0 generation=1 pid=255 worker=6 delivery=146 cpu=0 number=231",
+        "worker": 6
+      },
+      "return_route": null,
+      "returned": null
+    }
+  ],
+  "source_artifact_runtime_join": {
+    "HOST26_acceptance": {
+      "bytes": 14818,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-host-preparation-source-1/independent-actual-review-1/REVIEW.json",
+      "sha256": "c532759d41e3809d4e17d5e080a5f675750d21a69915579d4032c0ccf5b99d7b"
+    },
+    "actual_archive": {
+      "bytes": 17069384,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-stage-preparation-source-1/root-actual-qualified-input-plan-source-1/root-actual-compose-1/process235-overlay.cpio.gz",
+      "sha256": "701cd7d8cecb8e6d733066e73539b31a70949f9b3d22ee7c93ffda2ecc206f33"
+    },
+    "binding_facts": {
+      "bytes": 8958,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-host-preparation-source-1/independent-actual-review-1/COLLECTOR-BINDING-FACTS.json",
+      "sha256": "c900ad58f3b360163b75c8110e45c6b8d56ccb8734e0c9498018fc166b7b0ace"
+    },
+    "bootargs_binding": "Qualifiedab3e collector/b498 sourceprofile statically selects native-boot,hidos,allow_oversubscribe. No synthetic nativeboot argv log is asserted.",
+    "collector": {
+      "bytes": 5750848,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-host-preparation-source-1/future-output-1/process235-supervisor",
+      "sha256": "ab3e775e6a9df8d36bbbb974ddafbb26493c24f1aaf49487f5fc27c5583bed6c"
+    },
+    "executor_sha256": "e5d18169ee50581274b374bba17fcefebe39e828885f367bfee182beaa3df756",
+    "image_sha256": "60e62f97ef48ecaf14174af1c5b75d7181969f439c1b45c618d6c16d4bc40d57",
+    "observer_scope": "Source/HOSTqualified parent/child authority and nonclearing exactprefix observer executes in selectedcompiledcollector; one finalnative RAW contains complete originalcase predicates. Private intermediate snapshot buffers were not exported or fabricated.",
+    "payload": {
+      "bytes": 5628568,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/following-process-recovery-cases-1/abi2-helper-c020-successor-1/case-235/payload.snapshot",
+      "sha256": "537cb22b2af1f7fca1202afaf45b017364823c185c2ec47474093e51647ba5b8"
+    },
+    "stage_fullmap_acceptance": {
+      "bytes": 18013,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-stage-preparation-source-1/root-actual-qualified-input-plan-source-1/independent-actual-stage-review-1/REVIEW.json",
+      "sha256": "29ecca8a373669b44fcb081e3834cf2733112a09816b3b313ab40f8bea7c0f8c"
+    }
+  },
+  "timing": {
+    "payload_limit_ns": 10000000000,
+    "payload_ns": 1451539511,
+    "postreap_limit_ns": 5000000000,
+    "postreap_to_finished_ns": 416438122
+  }
+}

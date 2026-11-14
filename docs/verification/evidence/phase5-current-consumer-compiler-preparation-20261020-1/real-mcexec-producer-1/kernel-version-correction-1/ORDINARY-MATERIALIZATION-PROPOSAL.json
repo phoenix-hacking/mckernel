@@ -1,0 +1,46 @@
+{
+  "argv": [
+    "/usr/bin/timeout",
+    "-k",
+    "2",
+    "35",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--fsize=33554432",
+    "--core=0",
+    "--nofile=256",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/run_materialization_once.py"
+  ],
+  "materializer": {
+    "bytes": 2363,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/materialize_sources.py",
+    "sha256": "29f26418aa11a89a4247fa69b84fdd4c8d0ed5d649c8ae8f3300f5703d21fc25"
+  },
+  "outputs": [
+    "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/materialized-source",
+    "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/materialization-result.json",
+    "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/source-materialization-capture-1"
+  ],
+  "profile": "sameCPU6/1job/1GiBAS/30CPU/35+2wall/32MiB/core0/nofile256",
+  "runner": {
+    "bytes": 1737,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/run_materialization_once.py",
+    "sha256": "271ed463efaf6bcd2500d8c622aefcb73824e57a6403d56c2c9f9a7ef0efb279"
+  },
+  "schema": "mckernel.real-mcexec-kernel-version-correction-ordinary-proposal.v1",
+  "source": {
+    "bytes": 9404,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/source-manifest.json",
+    "sha256": "86121174c2a9c6e153dd8db4e4e6bc6ec02d2cdd7271518401efd294497a4381"
+  },
+  "status": "UNEXECUTED_PENDING_ROOT_CPU6_GRANT",
+  "unchanged_helpers_or_fixture_vectors_rerun": false
+}

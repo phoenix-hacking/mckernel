@@ -1,0 +1,86 @@
+{
+  "Docker_commands": 0,
+  "actual_channel_count": 3,
+  "actual_existing_capture_positive": true,
+  "actual_log_client_pid": 3273905,
+  "actual_production_capture_logs_positive": true,
+  "actual_production_preflight_fresh_positive": true,
+  "actual_stdout_bytes": 6219,
+  "binding": {
+    "bytes": 1869,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current-build-terminal-preparation-20261022-1/log-channel-tuple-correction-1/ACTUAL-LOG-CHANNEL-BINDING.json",
+    "sha256": "476924ab2b81a7a764a3d83b442e90f32f3e7d2545ac602682c7781c12fce6d0"
+  },
+  "cleanup": false,
+  "engine": {
+    "bytes": 115885,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current-build-terminal-preparation-20261022-1/bound-current-controller-source-6/cleanup_launcher.py",
+    "sha256": "f9bfd93a01390a5d9cbf29400789d1d9e0464a972c91f42e718f0cc4d94573aa"
+  },
+  "immutable_function_class_bodies": [
+    "cleanup_launcher.py",
+    "observe_current_launcher_retirement.py",
+    "check_launcher_fresh_preflight.py",
+    "postjoin_launcher.py",
+    "readback_observer.py",
+    "read_original_five_metadata.py",
+    "export_raw_five.py"
+  ],
+  "mutations": 0,
+  "new_observation": null,
+  "ordinary_protected_files_and_preserved_records_checks_real": true,
+  "physical_clearance": false,
+  "recorded_stderr_bytes": 0,
+  "refusals": [
+    {
+      "case": "changed-recorded-stdout-hash",
+      "reason": "current-pass-log-channel-drift:stdout",
+      "status": "REFUSED"
+    },
+    {
+      "case": "changed-recorded-Docker-status-hash",
+      "reason": "current-pass-log-channel-drift:status.json",
+      "status": "REFUSED"
+    },
+    {
+      "case": "nonempty-recorded-log-stderr",
+      "reason": "current-pass-recorded-log-stderr-not-empty",
+      "status": "REFUSED"
+    },
+    {
+      "case": "live-Docker-log-body-mismatch",
+      "reason": "docker-log-mismatch",
+      "status": "REFUSED"
+    },
+    {
+      "case": "missing-live-container-and-capture",
+      "reason": "docker-log-capture-missing",
+      "status": "REFUSED"
+    },
+    {
+      "case": "changed-retained-capture",
+      "reason": "retained-capture-bytes",
+      "status": "REFUSED"
+    },
+    {
+      "case": "preflight-propagates-recorded-channel-drift",
+      "reason": "current-pass-log-channel-drift:stdout",
+      "status": "REFUSED"
+    }
+  ],
+  "root_live_edges_mocked": [
+    "permanent root-lock/live namespace pin observations",
+    "root process/container census",
+    "privileged Docker logs command only; actual saved log bytes returned",
+    "exact root-owned observer metadata identity row inaccessible to ordinary UID; genuine observation descriptor used"
+  ],
+  "root_operations": 0,
+  "runtime_release": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source5_preserved": {
+    "bytes": 114957,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current-build-terminal-preparation-20261022-1/bound-current-controller-source-5/cleanup_launcher.py",
+    "sha256": "8e4516fa1ce725fc8e016d7dc6a3d06ec31e6e89455b213217ded7ee1df9c3c5"
+  },
+  "status": "PASS_ACTUAL_SOURCE6_LOG_CHANNELS_CAPTURE_AND_PREFLIGHT_COMPOSITION_ONLY"
+}

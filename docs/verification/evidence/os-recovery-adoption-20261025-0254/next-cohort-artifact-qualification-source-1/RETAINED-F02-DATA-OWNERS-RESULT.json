@@ -1,0 +1,456 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_RETAINED_F02_FOUR_OWNER_ABI_FINAL_POINTER_84_PROCESS_METADATA_WITH_NARROW_ALIAS_IDENTITIES",
+  "phases": {
+    "source_and_provider_context": {
+      "selected_source_refs": [
+        {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-cohort-next-static-source-1/candidate/kernel/CMakeLists.txt",
+          "bytes": 29064,
+          "sha256": "a2636a16d089ee4f93158d8bea30e6a43e40bed967a35a8d859d63f4a19afa32"
+        },
+        {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-cohort-next-static-source-1/candidate/kernel/process.c",
+          "bytes": 217647,
+          "sha256": "9692036c3aa2d580a2a134c2d4a8fc32ab5ff4215b44128668858d6fac131b12"
+        },
+        {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-cohort-next-static-source-1/candidate/kernel/syscall.c",
+          "bytes": 913009,
+          "sha256": "2e1c3d5537551bb6a330ea37371ceed20718692d82e0522e004769bf1dcb7f89"
+        },
+        {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-cohort-next-static-source-1/candidate/arch/x86_64/kernel/syscall.c",
+          "bytes": 114150,
+          "sha256": "affa9b6d2fdc2514c6d7414f4f7854410ae18ebea02db738665065a5179db893"
+        }
+      ],
+      "nine_RO_objects_exact": true,
+      "selected_C_allocated_functions": 0,
+      "new_Rust_functions": "SEPARATE_PASSED_NEXT_PROVIDER_GATE"
+    },
+    "three_CInt_flags": {
+      "idle_halt": {
+        "Rust_symbol": {
+          "index": 4197,
+          "name": "idle_halt",
+          "bind": 1,
+          "type": 1,
+          "shndx": 5570,
+          "value": 0,
+          "size": 4
+        },
+        "section": {
+          "name_off": 72243,
+          "type": 8,
+          "flags": 268435459,
+          "addr": 0,
+          "offset": 1048896,
+          "size": 4,
+          "link": 0,
+          "info": 0,
+          "align": 4,
+          "entsize": 0,
+          "index": 5570,
+          "name": ".lbss.idle_halt"
+        },
+        "initial_signed_CInt": 0,
+        "final_symbol": {
+          "index": 1457,
+          "name": "idle_halt",
+          "bind": 1,
+          "type": 1,
+          "other": 0,
+          "shndx": 218,
+          "value": 18446744073685811232,
+          "size": 4
+        },
+        "initial_hex": "00000000",
+        "unique_provider": [
+          "new Rust"
+        ]
+      },
+      "allow_oversubscribe": {
+        "Rust_symbol": {
+          "index": 5569,
+          "name": "allow_oversubscribe",
+          "bind": 1,
+          "type": 1,
+          "shndx": 5536,
+          "value": 0,
+          "size": 4
+        },
+        "section": {
+          "name_off": 151088,
+          "type": 8,
+          "flags": 268435459,
+          "addr": 0,
+          "offset": 1016008,
+          "size": 4,
+          "link": 0,
+          "info": 0,
+          "align": 4,
+          "entsize": 0,
+          "index": 5536,
+          "name": ".lbss.allow_oversubscribe"
+        },
+        "initial_signed_CInt": 0,
+        "final_symbol": {
+          "index": 2712,
+          "name": "allow_oversubscribe",
+          "bind": 1,
+          "type": 1,
+          "other": 0,
+          "shndx": 218,
+          "value": 18446744073685798976,
+          "size": 4
+        },
+        "initial_hex": "00000000",
+        "unique_provider": [
+          "new Rust"
+        ]
+      },
+      "time_sharing": {
+        "Rust_symbol": {
+          "index": 5570,
+          "name": "time_sharing",
+          "bind": 1,
+          "type": 1,
+          "shndx": 5765,
+          "value": 0,
+          "size": 4
+        },
+        "section": {
+          "name_off": 103607,
+          "type": 1,
+          "flags": 268435459,
+          "addr": 0,
+          "offset": 1051996,
+          "size": 4,
+          "link": 0,
+          "info": 0,
+          "align": 4,
+          "entsize": 0,
+          "index": 5765,
+          "name": ".ldata.time_sharing"
+        },
+        "initial_signed_CInt": 1,
+        "final_symbol": {
+          "index": 1782,
+          "name": "time_sharing",
+          "bind": 1,
+          "type": 1,
+          "other": 0,
+          "shndx": 34,
+          "value": 18446744073685433084,
+          "size": 4
+        },
+        "initial_hex": "01000000",
+        "unique_provider": [
+          "new Rust"
+        ]
+      }
+    },
+    "immutable_80B_callback_table": {
+      "Rust_symbol": {
+        "index": 6171,
+        "name": "process_idle_callbacks",
+        "bind": 1,
+        "type": 1,
+        "shndx": 5734,
+        "value": 0,
+        "size": 80
+      },
+      "Rust_section": {
+        "name_off": 78135,
+        "type": 1,
+        "flags": 2,
+        "addr": 0,
+        "offset": 1051424,
+        "size": 80,
+        "link": 0,
+        "info": 0,
+        "align": 8,
+        "entsize": 0,
+        "index": 5734,
+        "name": ".rodata.process_idle_callbacks"
+      },
+      "ten_original_target_slots": [
+        {
+          "offset": 0,
+          "type": 1,
+          "addend": 0,
+          "target": "sched_idle_current_cpu_bridge"
+        },
+        {
+          "offset": 8,
+          "type": 1,
+          "addend": 0,
+          "target": "process_spin_lock_bridge"
+        },
+        {
+          "offset": 16,
+          "type": 1,
+          "addend": 0,
+          "target": "process_spin_unlock_bridge"
+        },
+        {
+          "offset": 24,
+          "type": 1,
+          "addend": 0,
+          "target": "cpu_enable_interrupt"
+        },
+        {
+          "offset": 32,
+          "type": 1,
+          "addend": 0,
+          "target": "cpu_disable_interrupt"
+        },
+        {
+          "offset": 40,
+          "type": 1,
+          "addend": 0,
+          "target": "schedule"
+        },
+        {
+          "offset": 48,
+          "type": 1,
+          "addend": 0,
+          "target": "sched_do_migrate_public"
+        },
+        {
+          "offset": 56,
+          "type": 1,
+          "addend": 0,
+          "target": "kmalloc_consolidate_free_list"
+        },
+        {
+          "offset": 64,
+          "type": 1,
+          "addend": 0,
+          "target": "process_sched_zero_free_bridge"
+        },
+        {
+          "offset": 72,
+          "type": 1,
+          "addend": 0,
+          "target": "cpu_safe_halt"
+        }
+      ],
+      "actual_R64_zero_addend_relocations": [
+        {
+          "offset": 0,
+          "type": 1,
+          "addend": 0,
+          "target": "sched_idle_current_cpu_bridge"
+        },
+        {
+          "offset": 8,
+          "type": 1,
+          "addend": 0,
+          "target": "mem_kmalloc_remote_lock_bridge"
+        },
+        {
+          "offset": 16,
+          "type": 1,
+          "addend": 0,
+          "target": "mem_kmalloc_remote_unlock_bridge"
+        },
+        {
+          "offset": 24,
+          "type": 1,
+          "addend": 0,
+          "target": "cpu_enable_interrupt"
+        },
+        {
+          "offset": 32,
+          "type": 1,
+          "addend": 0,
+          "target": "cpu_disable_interrupt"
+        },
+        {
+          "offset": 40,
+          "type": 1,
+          "addend": 0,
+          "target": "schedule"
+        },
+        {
+          "offset": 48,
+          "type": 1,
+          "addend": 0,
+          "target": "sched_do_migrate_public"
+        },
+        {
+          "offset": 56,
+          "type": 1,
+          "addend": 0,
+          "target": "kmalloc_consolidate_free_list"
+        },
+        {
+          "offset": 64,
+          "type": 1,
+          "addend": 0,
+          "target": "process_sched_zero_free_bridge"
+        },
+        {
+          "offset": 72,
+          "type": 1,
+          "addend": 0,
+          "target": "cpu_safe_halt"
+        }
+      ],
+      "final_symbol": {
+        "index": 2721,
+        "name": "process_idle_callbacks",
+        "bind": 1,
+        "type": 1,
+        "other": 0,
+        "shndx": 37,
+        "value": 18446744073685453480,
+        "size": 80
+      },
+      "final_section": {
+        "name_off": 1527,
+        "type": 1,
+        "flags": 2,
+        "addr": 18446744073685433120,
+        "offset": 1047328,
+        "size": 20440,
+        "link": 0,
+        "info": 0,
+        "align": 32,
+        "entsize": 0,
+        "index": 37,
+        "name": ".rodata"
+      },
+      "final_target_pointer_values": [
+        {
+          "target": "sched_idle_current_cpu_bridge",
+          "final_value": 18446744073685109232,
+          "unique_object_provider": "new Rust"
+        },
+        {
+          "target": "process_spin_lock_bridge",
+          "final_value": 18446744073684879472,
+          "unique_object_provider": "new Rust"
+        },
+        {
+          "target": "process_spin_unlock_bridge",
+          "final_value": 18446744073684879648,
+          "unique_object_provider": "new Rust"
+        },
+        {
+          "target": "cpu_enable_interrupt",
+          "final_value": 18446744073684666480,
+          "unique_object_provider": "new Rust"
+        },
+        {
+          "target": "cpu_disable_interrupt",
+          "final_value": 18446744073684666448,
+          "unique_object_provider": "new Rust"
+        },
+        {
+          "target": "schedule",
+          "final_value": 18446744073685122032,
+          "unique_object_provider": "new Rust"
+        },
+        {
+          "target": "sched_do_migrate_public",
+          "final_value": 18446744073685107520,
+          "unique_object_provider": "new Rust"
+        },
+        {
+          "target": "kmalloc_consolidate_free_list",
+          "final_value": 18446744073684855056,
+          "unique_object_provider": "new Rust"
+        },
+        {
+          "target": "process_sched_zero_free_bridge",
+          "final_value": 18446744073685041472,
+          "unique_object_provider": "new Rust"
+        },
+        {
+          "target": "cpu_safe_halt",
+          "final_value": 18446744073684667568,
+          "unique_object_provider": "new Rust"
+        }
+      ],
+      "unique_provider": [
+        "new Rust"
+      ],
+      "predecessor_mapping": {
+        "value": 18446744073685442080,
+        "size": 80,
+        "section_flags": 2,
+        "containing_segment": {
+          "type": "PT_LOAD",
+          "flags": 7,
+          "readonly": false,
+          "executable": true
+        }
+      },
+      "successor_mapping": {
+        "value": 18446744073685453480,
+        "size": 80,
+        "section_flags": 2,
+        "containing_segment": {
+          "type": "PT_LOAD",
+          "flags": 7,
+          "readonly": false,
+          "executable": true
+        }
+      },
+      "mapping_semantics_unchanged": true,
+      "runtime_page_protection_claim": false
+    },
+    "remaining_selected_C_metadata": {
+      "original_allocated_OBJECTs": 88,
+      "new_allocated_OBJECTs": 84,
+      "only_removed_objects": [
+        "idle_halt",
+        "allow_oversubscribe",
+        "time_sharing",
+        "process_idle_callbacks"
+      ],
+      "all_84_binding_type_size_initial_bytes_and_relocations_preserved": true,
+      "no_new_C_functions": true
+    },
+    "actual_source_ABI_bindings": {
+      "process_helpers": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-cohort-next-static-source-1/rust-subtree/process_helpers.rs",
+        "bytes": 603471,
+        "sha256": "851acd51fab945456edd87c001a63b867634f51207fbf1900451edaa368b09ea"
+      },
+      "process_source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-cohort-next-static-source-1/candidate/kernel/process.c",
+        "bytes": 217647,
+        "sha256": "9692036c3aa2d580a2a134c2d4a8fc32ab5ff4215b44128668858d6fac131b12"
+      },
+      "callback_fields": 10,
+      "field_stride": 8,
+      "CInt_bytes": 4,
+      "callback_alignment": 8,
+      "pointer_and_CULong_bytes": 8,
+      "new_declaration_warning_debt": "Two new usize/u64 signature spellings; ABI-equivalent under the fixed x86_64 LP64 producer, retained without suppressions/casts/wrappers."
+    }
+  },
+  "native_acceptance": false,
+  "physical_postjoin": "SEPARATE_ROOT_READER",
+  "compiler_container_grant_actions": 0,
+  "strict_original_target_name_gate": "FAIL_PRESERVED_TWO_PROVEN_COMPILER_ALIAS_NAMES_PENDING_INDEPENDENT_DISPOSITION",
+  "compiler_alias_observations": [
+    {
+      "original_name": "process_spin_lock_bridge",
+      "actual_RELA_name": "mem_kmalloc_remote_lock_bridge",
+      "exact_same_object_section_value_size_and_code": true,
+      "exact_same_final_address": true
+    },
+    {
+      "original_name": "process_spin_unlock_bridge",
+      "actual_RELA_name": "mem_kmalloc_remote_unlock_bridge",
+      "exact_same_object_section_value_size_and_code": true,
+      "exact_same_final_address": true
+    }
+  ],
+  "compiled_actual_C_and_Rust_assertions": "PASS_FIXED_LP64_POINTER_AND_ULONG8_TABLE80_ALIGN8_TEN_FIELD_OFFSETS_C_EXTERN_CONST_AND_TYPED_INITIALIZERS"
+}

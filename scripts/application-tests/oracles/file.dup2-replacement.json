@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "file.dup2-replacement",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/file.dup2-replacement"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["read=2 source_slice=1 target_unchanged=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["dup2 replaces target fd with source open-file description", "Read at inherited source offset 2 yields UR", "The target pathname's original file remains TARGET"],
+  "unresolved_expectations": ["Freeze canonical output and reviewed input/oracle SHA256 before execution."],
+  "max_question_for_reviewer": "Confirm dup2 replacement closes the old target description and preserves source offset/file identity."
+}

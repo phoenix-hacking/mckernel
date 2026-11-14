@@ -1,0 +1,11 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-current26eb-next-default-source-1/validator-templates/qualify_actual_f02_profile.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/resource-and-qualifier-preparation-1/validator-templates/qualify_actual_f02_profile.py
+@@ -4,7 +4,7 @@
+ import ast,hashlib,json,os,re,shlex,stat,struct,subprocess,traceback
+ from pathlib import Path as HostPath, PurePosixPath
+ D=HostPath(__file__).resolve().parent;E=HostPath('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254')
+-EXPECTED=json.loads(HostPath('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-current26eb-next-default-source-1/ACCEPTANCE-INPUTS.SOURCE-ONLY.json').read_text())
++EXPECTED=json.loads(HostPath('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/resource-and-qualifier-preparation-1/ACCEPTANCE-INPUTS.SOURCE-ONLY.json').read_text())
+ B=E/'__ACTUAL_ADMISSION_BASENAME__/OUTPUT/work/output/build'
+ A=E/'__ACTUAL_ADMISSION_BASENAME__/OUTPUT/work/evidence'
+ DRIVER=E/'current290-driver-identity-repair-source-1/native_rust_exact_mckernel_image_offline.CURRENT290.VIEW-AND-FRESH-OBJECT-GATE.py'

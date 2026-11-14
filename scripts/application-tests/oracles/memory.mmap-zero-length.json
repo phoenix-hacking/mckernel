@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "memory.mmap-zero-length",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/memory.mmap-zero-length"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["failed=1 errno=22"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["mmap returns MAP_FAILED", "errno is EINVAL (22) immediately", "No mapping is published or leaked"],
+  "unresolved_expectations": ["Bind pinned guest EINVAL numeric value and canonical output/input hashes before execution."],
+  "max_question_for_reviewer": "Confirm zero-length anonymous mmap is rejected without a resource publication."
+}

@@ -1,0 +1,13 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "command": [
+    "git",
+    "diff",
+    "--check",
+    "--",
+    "host-kernel/native-rust"
+  ],
+  "returncode": 2,
+  "stdout": "host-kernel/native-rust/sysfs_memory.rs:519: trailing whitespace.\n+        \n",
+  "disposition": "Retain exact independently accepted frozen seven postimages; cosmetic whitespace is not a functional source or fixture failure. No rewrite, new source variant or false diff PASS claim."
+}

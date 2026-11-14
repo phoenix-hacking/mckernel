@@ -1,0 +1,74 @@
+{
+  "name": "stat-before",
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/stat",
+    "-c",
+    "%d:%i:%u:%g:%f:%h:%s:%y:%z",
+    "--",
+    "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation-20261019-1/actual-observation-6.stdout",
+    "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation-20261019-1/actual-observation-6.stderr",
+    "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation-20261019-1/actual-observation-6.supervisor.jsonl"
+  ],
+  "pid": 1355011,
+  "returncode": 0,
+  "direct_child_joined": true,
+  "elapsed_seconds": 0.08151850901776925,
+  "captures": {
+    "stdout": {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation-20261019-1/observation6-raw-readback-1/stat-before.stdout",
+      "before": {
+        "st_dev": 66306,
+        "st_ino": 47992421,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_mode": 33152,
+        "st_nlink": 1,
+        "st_size": 0,
+        "st_mtime_ns": 1792386196021509806,
+        "st_ctime_ns": 1792386196021509806
+      },
+      "after": {
+        "st_dev": 66306,
+        "st_ino": 47992421,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_mode": 33152,
+        "st_nlink": 1,
+        "st_size": 308,
+        "st_mtime_ns": 1792386196097510369,
+        "st_ctime_ns": 1792386196097510369
+      },
+      "bytes": 308,
+      "sha256": "48d0ae3025548c8f50467f97427719bb67a00fd6f8cc31625752991ca6b7247c"
+    },
+    "stderr": {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation-20261019-1/observation6-raw-readback-1/stat-before.stderr",
+      "before": {
+        "st_dev": 66306,
+        "st_ino": 47992422,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_mode": 33152,
+        "st_nlink": 1,
+        "st_size": 0,
+        "st_mtime_ns": 1792386196021509806,
+        "st_ctime_ns": 1792386196021509806
+      },
+      "after": {
+        "st_dev": 66306,
+        "st_ino": 47992422,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_mode": 33152,
+        "st_nlink": 1,
+        "st_size": 0,
+        "st_mtime_ns": 1792386196021509806,
+        "st_ctime_ns": 1792386196021509806
+      },
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  }
+}

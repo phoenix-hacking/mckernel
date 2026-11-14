@@ -1,0 +1,307 @@
+[
+  {
+    "key": "int.size",
+    "C": "sizeof(int)",
+    "Rust": "size_of::<CInt>()"
+  },
+  {
+    "key": "int.align",
+    "C": "__alignof__(int)",
+    "Rust": "align_of::<CInt>()"
+  },
+  {
+    "key": "long.size",
+    "C": "sizeof(long)",
+    "Rust": "size_of::<CLong>()"
+  },
+  {
+    "key": "long.align",
+    "C": "__alignof__(long)",
+    "Rust": "align_of::<CLong>()"
+  },
+  {
+    "key": "ulong.size",
+    "C": "sizeof(unsigned long)",
+    "Rust": "size_of::<CULong>()"
+  },
+  {
+    "key": "ulong.align",
+    "C": "__alignof__(unsigned long)",
+    "Rust": "align_of::<CULong>()"
+  },
+  {
+    "key": "pointer.size",
+    "C": "sizeof(void *)",
+    "Rust": "size_of::<*mut core::ffi::c_void>()"
+  },
+  {
+    "key": "pointer.align",
+    "C": "__alignof__(void *)",
+    "Rust": "align_of::<*mut core::ffi::c_void>()"
+  },
+  {
+    "key": "siginfo.size",
+    "C": "sizeof(siginfo_t)",
+    "Rust": "size_of::<SigInfo>()"
+  },
+  {
+    "key": "siginfo.align",
+    "C": "__alignof__(siginfo_t)",
+    "Rust": "align_of::<SigInfo>()"
+  },
+  {
+    "key": "thread.size",
+    "C": "sizeof(struct thread)",
+    "Rust": "size_of::<Thread>()"
+  },
+  {
+    "key": "thread.align",
+    "C": "__alignof__(struct thread)",
+    "Rust": "align_of::<Thread>()"
+  },
+  {
+    "key": "pending.size",
+    "C": "sizeof(struct sig_pending)",
+    "Rust": "size_of::<SigPending>()"
+  },
+  {
+    "key": "pending.align",
+    "C": "__alignof__(struct sig_pending)",
+    "Rust": "align_of::<SigPending>()"
+  },
+  {
+    "key": "process.size",
+    "C": "sizeof(struct process)",
+    "Rust": "size_of::<Process>()"
+  },
+  {
+    "key": "process.align",
+    "C": "__alignof__(struct process)",
+    "Rust": "align_of::<Process>()"
+  },
+  {
+    "key": "sigcommon.size",
+    "C": "sizeof(struct sig_common)",
+    "Rust": "size_of::<SigCommon>()"
+  },
+  {
+    "key": "sigcommon.align",
+    "C": "__alignof__(struct sig_common)",
+    "Rust": "align_of::<SigCommon>()"
+  },
+  {
+    "key": "context.size",
+    "C": "sizeof(struct x86_user_context)",
+    "Rust": "size_of::<X86UserContext>()"
+  },
+  {
+    "key": "context.align",
+    "C": "__alignof__(struct x86_user_context)",
+    "Rust": "align_of::<X86UserContext>()"
+  },
+  {
+    "key": "xsave.size",
+    "C": "sizeof(struct xsave_struct)",
+    "Rust": "size_of::<XsaveStruct>()"
+  },
+  {
+    "key": "xsave.align",
+    "C": "__alignof__(struct xsave_struct)",
+    "Rust": "align_of::<XsaveStruct>()"
+  },
+  {
+    "key": "frame.size",
+    "C": "sizeof(struct sigsp)",
+    "Rust": "size_of::<crate::native_signal::Frame>()"
+  },
+  {
+    "key": "frame.align",
+    "C": "__alignof__(struct sigsp)",
+    "Rust": "align_of::<crate::native_signal::Frame>()"
+  },
+  {
+    "key": "thread.tid",
+    "C": "__builtin_offsetof(struct thread,tid)",
+    "Rust": "offset_of!(Thread,tid)"
+  },
+  {
+    "key": "thread.exit_status",
+    "C": "__builtin_offsetof(struct thread,exit_status)",
+    "Rust": "offset_of!(Thread,exit_status)"
+  },
+  {
+    "key": "thread.status",
+    "C": "__builtin_offsetof(struct thread,status)",
+    "Rust": "offset_of!(Thread,status)"
+  },
+  {
+    "key": "thread.proc",
+    "C": "__builtin_offsetof(struct thread,proc)",
+    "Rust": "offset_of!(Thread,proc)"
+  },
+  {
+    "key": "thread.report_proc",
+    "C": "__builtin_offsetof(struct thread,report_proc)",
+    "Rust": "offset_of!(Thread,report_proc)"
+  },
+  {
+    "key": "thread.sigcommon",
+    "C": "__builtin_offsetof(struct thread,sigcommon)",
+    "Rust": "offset_of!(Thread,sigcommon)"
+  },
+  {
+    "key": "thread.sigmask",
+    "C": "__builtin_offsetof(struct thread,sigmask)",
+    "Rust": "offset_of!(Thread,sigmask)"
+  },
+  {
+    "key": "thread.sigstack",
+    "C": "__builtin_offsetof(struct thread,sigstack)",
+    "Rust": "offset_of!(Thread,sigstack)"
+  },
+  {
+    "key": "thread.ptrace",
+    "C": "__builtin_offsetof(struct thread,ptrace)",
+    "Rust": "offset_of!(Thread,ptrace)"
+  },
+  {
+    "key": "thread.coredump_regs",
+    "C": "__builtin_offsetof(struct thread,coredump_regs)",
+    "Rust": "offset_of!(Thread,coredump_regs)"
+  },
+  {
+    "key": "pending.info",
+    "C": "__builtin_offsetof(struct sig_pending,info)",
+    "Rust": "offset_of!(SigPending,info)"
+  },
+  {
+    "key": "pending.ptracecont",
+    "C": "__builtin_offsetof(struct sig_pending,ptracecont)",
+    "Rust": "offset_of!(SigPending,ptracecont)"
+  },
+  {
+    "key": "process.parent",
+    "C": "__builtin_offsetof(struct process,parent)",
+    "Rust": "offset_of!(Process,parent)"
+  },
+  {
+    "key": "process.main_thread",
+    "C": "__builtin_offsetof(struct process,main_thread)",
+    "Rust": "offset_of!(Process,main_thread)"
+  },
+  {
+    "key": "process.update_lock",
+    "C": "__builtin_offsetof(struct process,update_lock)",
+    "Rust": "offset_of!(Process,update_lock)"
+  },
+  {
+    "key": "process.pid",
+    "C": "__builtin_offsetof(struct process,pid)",
+    "Rust": "offset_of!(Process,pid)"
+  },
+  {
+    "key": "process.status",
+    "C": "__builtin_offsetof(struct process,status)",
+    "Rust": "offset_of!(Process,status)"
+  },
+  {
+    "key": "process.group_exit_status",
+    "C": "__builtin_offsetof(struct process,group_exit_status)",
+    "Rust": "offset_of!(Process,group_exit_status)"
+  },
+  {
+    "key": "sigcommon.lock",
+    "C": "__builtin_offsetof(struct sig_common,lock)",
+    "Rust": "offset_of!(SigCommon,lock)"
+  },
+  {
+    "key": "sigcommon.action",
+    "C": "__builtin_offsetof(struct sig_common,action)",
+    "Rust": "offset_of!(SigCommon,action)"
+  },
+  {
+    "key": "frame.info",
+    "C": "__builtin_offsetof(struct sigsp,info)",
+    "Rust": "offset_of!(crate::native_signal::Frame,info)"
+  },
+  {
+    "key": "frame.fpregs",
+    "C": "__builtin_offsetof(struct sigsp,fpregs)",
+    "Rust": "offset_of!(crate::native_signal::Frame,fpregs)"
+  },
+  {
+    "key": "frame.sigstack",
+    "C": "__builtin_offsetof(struct sigsp,sigstack)",
+    "Rust": "offset_of!(crate::native_signal::Frame,sigstack)"
+  },
+  {
+    "key": "siginfo.si_signo",
+    "C": "__builtin_offsetof(siginfo_t,si_signo)",
+    "Rust": "offset_of!(SigInfo,si_signo)"
+  },
+  {
+    "key": "siginfo.si_code",
+    "C": "__builtin_offsetof(siginfo_t,si_code)",
+    "Rust": "offset_of!(SigInfo,si_code)"
+  },
+  {
+    "key": "siginfo._sifields",
+    "C": "__builtin_offsetof(siginfo_t,_sifields)",
+    "Rust": "offset_of!(SigInfo,sifields)"
+  },
+  {
+    "key": "siginfo.child.si_pid",
+    "C": "__builtin_offsetof(siginfo_t,_sifields._sigchld.si_pid)",
+    "Rust": "offset_of!(SigInfo,sifields)+offset_of!(SigInfoChild,si_pid)"
+  },
+  {
+    "key": "siginfo.child.si_status",
+    "C": "__builtin_offsetof(siginfo_t,_sifields._sigchld.si_status)",
+    "Rust": "offset_of!(SigInfo,sifields)+offset_of!(SigInfoChild,si_status)"
+  },
+  {
+    "key": "siginfo.child.si_uid",
+    "C": "__builtin_offsetof(siginfo_t,_sifields._sigchld.si_uid)",
+    "Rust": "offset_of!(SigInfo,sifields)+offset_of!(SigInfoChild,si_uid)"
+  },
+  {
+    "key": "siginfo.child.si_utime",
+    "C": "__builtin_offsetof(siginfo_t,_sifields._sigchld.si_utime)",
+    "Rust": "offset_of!(SigInfo,sifields)+offset_of!(SigInfoChild,si_utime)"
+  },
+  {
+    "key": "siginfo.child.si_stime",
+    "C": "__builtin_offsetof(siginfo_t,_sifields._sigchld.si_stime)",
+    "Rust": "offset_of!(SigInfo,sifields)+offset_of!(SigInfoChild,si_stime)"
+  },
+  {
+    "key": "GS.rsp0",
+    "C": "__builtin_offsetof(struct x86_cpu_local_variables,tss.rsp0)",
+    "Rust": "offset_of!(X86CpuLocalVariables,tss)+offset_of!(Tss64,rsp0)"
+  },
+  {
+    "key": "SIGCHLD",
+    "C": "SIGCHLD",
+    "Rust": "17"
+  },
+  {
+    "key": "CLD_TRAPPED",
+    "C": "CLD_TRAPPED",
+    "Rust": "4"
+  },
+  {
+    "key": "SIGTRAP",
+    "C": "SIGTRAP",
+    "Rust": "5"
+  },
+  {
+    "key": "SIGSEGV",
+    "C": "SIGSEGV",
+    "Rust": "11"
+  },
+  {
+    "key": "EFAULT",
+    "C": "EFAULT",
+    "Rust": "14"
+  }
+]

@@ -1,0 +1,40 @@
+--- kernel/syscall.c
++++ kernel/syscall.c
+@@ -20550,6 +20550,10 @@
+ 	return ihk_mc_perfctr_init_raw(counter_id, hw_config, mode);
+ }
+ 
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PERF_ATTR_CALLBACKS)
++extern int f03_perf_counter_attr_flags_v1(const void *, int *, int *);
++#define perf_counter_attr_flags_bridge f03_perf_counter_attr_flags_v1
++#else
+ static int
+ perf_counter_attr_flags_bridge(const void *attr, int *exclude_kernel,
+ 			       int *exclude_user)
+@@ -20564,6 +20568,7 @@
+ 	*exclude_user = perf_attr->exclude_user;
+ 	return 0;
+ }
++#endif
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ extern int perf_counter_set(struct mc_perf_event *);
+@@ -20605,6 +20610,10 @@
+ 	return ihk_atomic64_read((ihk_atomic64_t *)value);
+ }
+ 
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PERF_ATTR_CALLBACKS)
++extern int f03_perf_read_attr_flags_v1(const void *, int *, int *, int *);
++#define perf_read_attr_flags_bridge f03_perf_read_attr_flags_v1
++#else
+ static int
+ perf_read_attr_flags_bridge(const void *attr, int *exclude_user,
+ 			    int *exclude_kernel, int *inherit)
+@@ -20620,6 +20629,7 @@
+ 	*inherit = perf_attr->inherit;
+ 	return 0;
+ }
++#endif
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ extern unsigned long perf_event_read_value(struct mc_perf_event *);

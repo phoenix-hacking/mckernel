@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_failure",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "attempt": 1,
+  "status": "FAIL_SOURCE_TEST_EXPECTATION",
+  "recorded_utc": "2026-09-15T17:56:00Z",
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-failure-20260915-1.tar.gz",
+    "sha256": "4b7634bd58744c08072987ac53e83ce0824c2ce351d94fde815b124244792b70",
+    "size": 26499,
+    "members": 13
+  },
+  "command": "/home/holden/anaconda3/bin/python3 -m unittest -v scripts.tests.test_collector_storage_fault_packet.StorageFaultV2SourceTests",
+  "command_status": 1,
+  "tests_run": 6,
+  "tests_passed": 5,
+  "failure": "duplicate packet mutation is rejected first as receipt order, while the test expected witness packet count",
+  "original_test_stream_retained": true,
+  "immediate_retry_released": true,
+  "correction_scope": "validate exact packet schedule before receipt-order monotonicity",
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

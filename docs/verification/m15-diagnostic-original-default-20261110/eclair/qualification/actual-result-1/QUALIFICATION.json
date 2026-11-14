@@ -1,0 +1,1315 @@
+{
+  "C_retirement_or_whole_milestone_acceptance": false,
+  "F03_handoff": {
+    "F03_existing_assessment": {
+      "bytes": 5234,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcinspect-original-default-assessment-p04tests-max-1/RESULT.json",
+      "sha256": "c6f453f9d88fd1d035a0a8b471dae65294fe7185a356fd31ce3fb00b8a7e1f02"
+    },
+    "F03_obligation_and_libelf_DT_NEEDED_review": "P04Tests owns independent F03 whole-condition assessment; no F04 credit or new audit from its libelf branch.",
+    "libelf_raw": {
+      "bytes": 26700,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/original-default-qualification-sdk-max-1/shared-provider-read-1/output-1/libelf-ELF.stdout",
+      "sha256": "a3e62c9790e2a24cbac48f9dd5d4efdbf6ff6db178126024e7d413c1400c9bde"
+    },
+    "libelf_rows_JSON_pointer": "/providers/1/ELF_join/selected_definitions",
+    "no_duplicate_libelf_assessment": true,
+    "shared_actual_report": {
+      "bytes": 50591,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/original-default-qualification-sdk-max-1/shared-provider-read-1/output-1/REPORT.json",
+      "sha256": "f208e7b74559ec4f9aaede6b8420d05ff2832939e77b257e1ae53b0aaca20f6d"
+    },
+    "zlib_rows_JSON_pointer": "/providers/0/ELF_join/selected_definitions"
+  },
+  "M14_before_M15_order_preserved": true,
+  "all_six_actual_F04_zlib_joins": [
+    {
+      "actual_provider_definition": {
+        "definition": {
+          "base_name": "compress",
+          "binding": "GLOBAL",
+          "bytes": 15,
+          "index": 105,
+          "kind": "FUNC",
+          "name": "compress",
+          "raw": "   105: 000000000000b020    15 FUNC    GLOBAL DEFAULT   16 compress",
+          "section": "16",
+          "value": "000000000000b020",
+          "visibility": "DEFAULT"
+        },
+        "required": {
+          "name": "compress",
+          "required_version": null
+        },
+        "verdef": "libz.so.1",
+        "versym": {
+          "hidden": false,
+          "index": 1,
+          "name": "*global*"
+        }
+      },
+      "caller": {
+        "actual_caller": {
+          "annotated_version_index": null,
+          "base_name": "compress",
+          "binding": "GLOBAL",
+          "bytes": 0,
+          "index": 11,
+          "kind": "FUNC",
+          "name": "compress",
+          "section": "UND",
+          "value": 0,
+          "version": null,
+          "visibility": "DEFAULT"
+        },
+        "actual_current_map_PLT": "                0x00000000000320c0                compress",
+        "caller_version_index": {
+          "hidden": false,
+          "index": 1,
+          "name": "*global*"
+        },
+        "consumer": "eclair",
+        "name": "compress",
+        "original_check": "M15-F04-original-default",
+        "proof": {
+          "bytes": 370034,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/qualification-1/PROVIDER-JOINS.json",
+          "sha256": "80afe2d17e6a9c4e56a7a54a7322a9c0e6ecf12cfcdd95eeac20e8df40cbd60d"
+        },
+        "provider": "zlib",
+        "required_version": null
+      },
+      "package_headers": [
+        {
+          "argv_path": "/usr/lib64/libz.so.1",
+          "fields": [
+            "zlib-ng-compat",
+            "0",
+            "2.2.3",
+            "3.el10_1",
+            "x86_64",
+            "zlib-ng-2.2.3-3.el10_1.src.rpm"
+          ],
+          "raw": "zlib-ng-compat|0|2.2.3|3.el10_1|x86_64|zlib-ng-2.2.3-3.el10_1.src.rpm\n",
+          "role": "runtime"
+        },
+        {
+          "argv_path": "/usr/lib64/libz.so",
+          "fields": [
+            "zlib-ng-compat-devel",
+            "0",
+            "2.2.3",
+            "3.el10_1",
+            "x86_64",
+            "zlib-ng-2.2.3-3.el10_1.src.rpm"
+          ],
+          "raw": "zlib-ng-compat-devel|0|2.2.3|3.el10_1|x86_64|zlib-ng-2.2.3-3.el10_1.src.rpm\n",
+          "role": "devel"
+        }
+      ],
+      "runtime": {
+        "ELF": {
+          "class": 64,
+          "little_endian": true,
+          "machine": 62,
+          "type": 3
+        },
+        "bytes": 140824,
+        "gid": 0,
+        "mode": "0o755",
+        "path": "/usr/lib64/libz.so.1",
+        "resolved_path": "/usr/lib64/libz.so.1.3.1.zlib-ng",
+        "sha256": "2fd5dcd6bc0953f3db71958b10c0cdf55ce49e1ceb4ab9d1f869398e39e994eb",
+        "symlinks": [
+          {
+            "path": "/usr/lib64/libz.so.1",
+            "text": "libz.so.1.3.1.zlib-ng"
+          }
+        ],
+        "uid": 0
+      }
+    },
+    {
+      "actual_provider_definition": {
+        "definition": {
+          "base_name": "inflate",
+          "binding": "GLOBAL",
+          "bytes": 7639,
+          "index": 68,
+          "kind": "FUNC",
+          "name": "inflate",
+          "raw": "    68: 000000000000cbf0  7639 FUNC    GLOBAL DEFAULT   16 inflate",
+          "section": "16",
+          "value": "000000000000cbf0",
+          "visibility": "DEFAULT"
+        },
+        "required": {
+          "name": "inflate",
+          "required_version": null
+        },
+        "verdef": "libz.so.1",
+        "versym": {
+          "hidden": false,
+          "index": 1,
+          "name": "*global*"
+        }
+      },
+      "caller": {
+        "actual_caller": {
+          "annotated_version_index": null,
+          "base_name": "inflate",
+          "binding": "GLOBAL",
+          "bytes": 0,
+          "index": 20,
+          "kind": "FUNC",
+          "name": "inflate",
+          "section": "UND",
+          "value": 0,
+          "version": null,
+          "visibility": "DEFAULT"
+        },
+        "actual_current_map_PLT": "                0x0000000000032130                inflate",
+        "caller_version_index": {
+          "hidden": false,
+          "index": 1,
+          "name": "*global*"
+        },
+        "consumer": "eclair",
+        "name": "inflate",
+        "original_check": "M15-F04-original-default",
+        "proof": {
+          "bytes": 370034,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/qualification-1/PROVIDER-JOINS.json",
+          "sha256": "80afe2d17e6a9c4e56a7a54a7322a9c0e6ecf12cfcdd95eeac20e8df40cbd60d"
+        },
+        "provider": "zlib",
+        "required_version": null
+      },
+      "package_headers": [
+        {
+          "argv_path": "/usr/lib64/libz.so.1",
+          "fields": [
+            "zlib-ng-compat",
+            "0",
+            "2.2.3",
+            "3.el10_1",
+            "x86_64",
+            "zlib-ng-2.2.3-3.el10_1.src.rpm"
+          ],
+          "raw": "zlib-ng-compat|0|2.2.3|3.el10_1|x86_64|zlib-ng-2.2.3-3.el10_1.src.rpm\n",
+          "role": "runtime"
+        },
+        {
+          "argv_path": "/usr/lib64/libz.so",
+          "fields": [
+            "zlib-ng-compat-devel",
+            "0",
+            "2.2.3",
+            "3.el10_1",
+            "x86_64",
+            "zlib-ng-2.2.3-3.el10_1.src.rpm"
+          ],
+          "raw": "zlib-ng-compat-devel|0|2.2.3|3.el10_1|x86_64|zlib-ng-2.2.3-3.el10_1.src.rpm\n",
+          "role": "devel"
+        }
+      ],
+      "runtime": {
+        "ELF": {
+          "class": 64,
+          "little_endian": true,
+          "machine": 62,
+          "type": 3
+        },
+        "bytes": 140824,
+        "gid": 0,
+        "mode": "0o755",
+        "path": "/usr/lib64/libz.so.1",
+        "resolved_path": "/usr/lib64/libz.so.1.3.1.zlib-ng",
+        "sha256": "2fd5dcd6bc0953f3db71958b10c0cdf55ce49e1ceb4ab9d1f869398e39e994eb",
+        "symlinks": [
+          {
+            "path": "/usr/lib64/libz.so.1",
+            "text": "libz.so.1.3.1.zlib-ng"
+          }
+        ],
+        "uid": 0
+      }
+    },
+    {
+      "actual_provider_definition": {
+        "definition": {
+          "base_name": "inflateEnd",
+          "binding": "GLOBAL",
+          "bytes": 126,
+          "index": 26,
+          "kind": "FUNC",
+          "name": "inflateEnd",
+          "raw": "    26: 000000000000e9d0   126 FUNC    GLOBAL DEFAULT   16 inflateEnd",
+          "section": "16",
+          "value": "000000000000e9d0",
+          "visibility": "DEFAULT"
+        },
+        "required": {
+          "name": "inflateEnd",
+          "required_version": null
+        },
+        "verdef": "libz.so.1",
+        "versym": {
+          "hidden": false,
+          "index": 1,
+          "name": "*global*"
+        }
+      },
+      "caller": {
+        "actual_caller": {
+          "annotated_version_index": null,
+          "base_name": "inflateEnd",
+          "binding": "GLOBAL",
+          "bytes": 0,
+          "index": 74,
+          "kind": "FUNC",
+          "name": "inflateEnd",
+          "section": "UND",
+          "value": 0,
+          "version": null,
+          "visibility": "DEFAULT"
+        },
+        "actual_current_map_PLT": "                0x00000000000323e0                inflateEnd",
+        "caller_version_index": {
+          "hidden": false,
+          "index": 1,
+          "name": "*global*"
+        },
+        "consumer": "eclair",
+        "name": "inflateEnd",
+        "original_check": "M15-F04-original-default",
+        "proof": {
+          "bytes": 370034,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/qualification-1/PROVIDER-JOINS.json",
+          "sha256": "80afe2d17e6a9c4e56a7a54a7322a9c0e6ecf12cfcdd95eeac20e8df40cbd60d"
+        },
+        "provider": "zlib",
+        "required_version": null
+      },
+      "package_headers": [
+        {
+          "argv_path": "/usr/lib64/libz.so.1",
+          "fields": [
+            "zlib-ng-compat",
+            "0",
+            "2.2.3",
+            "3.el10_1",
+            "x86_64",
+            "zlib-ng-2.2.3-3.el10_1.src.rpm"
+          ],
+          "raw": "zlib-ng-compat|0|2.2.3|3.el10_1|x86_64|zlib-ng-2.2.3-3.el10_1.src.rpm\n",
+          "role": "runtime"
+        },
+        {
+          "argv_path": "/usr/lib64/libz.so",
+          "fields": [
+            "zlib-ng-compat-devel",
+            "0",
+            "2.2.3",
+            "3.el10_1",
+            "x86_64",
+            "zlib-ng-2.2.3-3.el10_1.src.rpm"
+          ],
+          "raw": "zlib-ng-compat-devel|0|2.2.3|3.el10_1|x86_64|zlib-ng-2.2.3-3.el10_1.src.rpm\n",
+          "role": "devel"
+        }
+      ],
+      "runtime": {
+        "ELF": {
+          "class": 64,
+          "little_endian": true,
+          "machine": 62,
+          "type": 3
+        },
+        "bytes": 140824,
+        "gid": 0,
+        "mode": "0o755",
+        "path": "/usr/lib64/libz.so.1",
+        "resolved_path": "/usr/lib64/libz.so.1.3.1.zlib-ng",
+        "sha256": "2fd5dcd6bc0953f3db71958b10c0cdf55ce49e1ceb4ab9d1f869398e39e994eb",
+        "symlinks": [
+          {
+            "path": "/usr/lib64/libz.so.1",
+            "text": "libz.so.1.3.1.zlib-ng"
+          }
+        ],
+        "uid": 0
+      }
+    },
+    {
+      "actual_provider_definition": {
+        "definition": {
+          "base_name": "compressBound",
+          "binding": "GLOBAL",
+          "bytes": 17,
+          "index": 85,
+          "kind": "FUNC",
+          "name": "compressBound@@ZLIB_1.2.0",
+          "raw": "    85: 0000000000008d50    17 FUNC    GLOBAL DEFAULT   16 compressBound@@ZLIB_1.2.0",
+          "section": "16",
+          "value": "0000000000008d50",
+          "visibility": "DEFAULT"
+        },
+        "required": {
+          "name": "compressBound",
+          "required_version": "ZLIB_1.2.0"
+        },
+        "verdef": "ZLIB_1.2.0",
+        "versym": {
+          "hidden": false,
+          "index": 2,
+          "name": "ZLIB_1.2.0"
+        }
+      },
+      "caller": {
+        "actual_caller": {
+          "annotated_version_index": 9,
+          "base_name": "compressBound",
+          "binding": "GLOBAL",
+          "bytes": 0,
+          "index": 84,
+          "kind": "FUNC",
+          "name": "compressBound@ZLIB_1.2.0",
+          "section": "UND",
+          "value": 0,
+          "version": "ZLIB_1.2.0",
+          "visibility": "DEFAULT"
+        },
+        "actual_current_map_PLT": "                0x0000000000032470                compressBound@@ZLIB_1.2.0",
+        "caller_version_index": {
+          "hidden": false,
+          "index": 9,
+          "name": "ZLIB_1.2.0"
+        },
+        "consumer": "eclair",
+        "name": "compressBound",
+        "original_check": "M15-F04-original-default",
+        "proof": {
+          "bytes": 370034,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/qualification-1/PROVIDER-JOINS.json",
+          "sha256": "80afe2d17e6a9c4e56a7a54a7322a9c0e6ecf12cfcdd95eeac20e8df40cbd60d"
+        },
+        "provider": "zlib",
+        "required_version": "ZLIB_1.2.0"
+      },
+      "package_headers": [
+        {
+          "argv_path": "/usr/lib64/libz.so.1",
+          "fields": [
+            "zlib-ng-compat",
+            "0",
+            "2.2.3",
+            "3.el10_1",
+            "x86_64",
+            "zlib-ng-2.2.3-3.el10_1.src.rpm"
+          ],
+          "raw": "zlib-ng-compat|0|2.2.3|3.el10_1|x86_64|zlib-ng-2.2.3-3.el10_1.src.rpm\n",
+          "role": "runtime"
+        },
+        {
+          "argv_path": "/usr/lib64/libz.so",
+          "fields": [
+            "zlib-ng-compat-devel",
+            "0",
+            "2.2.3",
+            "3.el10_1",
+            "x86_64",
+            "zlib-ng-2.2.3-3.el10_1.src.rpm"
+          ],
+          "raw": "zlib-ng-compat-devel|0|2.2.3|3.el10_1|x86_64|zlib-ng-2.2.3-3.el10_1.src.rpm\n",
+          "role": "devel"
+        }
+      ],
+      "runtime": {
+        "ELF": {
+          "class": 64,
+          "little_endian": true,
+          "machine": 62,
+          "type": 3
+        },
+        "bytes": 140824,
+        "gid": 0,
+        "mode": "0o755",
+        "path": "/usr/lib64/libz.so.1",
+        "resolved_path": "/usr/lib64/libz.so.1.3.1.zlib-ng",
+        "sha256": "2fd5dcd6bc0953f3db71958b10c0cdf55ce49e1ceb4ab9d1f869398e39e994eb",
+        "symlinks": [
+          {
+            "path": "/usr/lib64/libz.so.1",
+            "text": "libz.so.1.3.1.zlib-ng"
+          }
+        ],
+        "uid": 0
+      }
+    },
+    {
+      "actual_provider_definition": {
+        "definition": {
+          "base_name": "inflateInit_",
+          "binding": "GLOBAL",
+          "bytes": 38,
+          "index": 45,
+          "kind": "FUNC",
+          "name": "inflateInit_",
+          "raw": "    45: 000000000000cae0    38 FUNC    GLOBAL DEFAULT   16 inflateInit_",
+          "section": "16",
+          "value": "000000000000cae0",
+          "visibility": "DEFAULT"
+        },
+        "required": {
+          "name": "inflateInit_",
+          "required_version": null
+        },
+        "verdef": "libz.so.1",
+        "versym": {
+          "hidden": false,
+          "index": 1,
+          "name": "*global*"
+        }
+      },
+      "caller": {
+        "actual_caller": {
+          "annotated_version_index": null,
+          "base_name": "inflateInit_",
+          "binding": "GLOBAL",
+          "bytes": 0,
+          "index": 96,
+          "kind": "FUNC",
+          "name": "inflateInit_",
+          "section": "UND",
+          "value": 0,
+          "version": null,
+          "visibility": "DEFAULT"
+        },
+        "actual_current_map_PLT": "                0x0000000000032510                inflateInit_",
+        "caller_version_index": {
+          "hidden": false,
+          "index": 1,
+          "name": "*global*"
+        },
+        "consumer": "eclair",
+        "name": "inflateInit_",
+        "original_check": "M15-F04-original-default",
+        "proof": {
+          "bytes": 370034,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/qualification-1/PROVIDER-JOINS.json",
+          "sha256": "80afe2d17e6a9c4e56a7a54a7322a9c0e6ecf12cfcdd95eeac20e8df40cbd60d"
+        },
+        "provider": "zlib",
+        "required_version": null
+      },
+      "package_headers": [
+        {
+          "argv_path": "/usr/lib64/libz.so.1",
+          "fields": [
+            "zlib-ng-compat",
+            "0",
+            "2.2.3",
+            "3.el10_1",
+            "x86_64",
+            "zlib-ng-2.2.3-3.el10_1.src.rpm"
+          ],
+          "raw": "zlib-ng-compat|0|2.2.3|3.el10_1|x86_64|zlib-ng-2.2.3-3.el10_1.src.rpm\n",
+          "role": "runtime"
+        },
+        {
+          "argv_path": "/usr/lib64/libz.so",
+          "fields": [
+            "zlib-ng-compat-devel",
+            "0",
+            "2.2.3",
+            "3.el10_1",
+            "x86_64",
+            "zlib-ng-2.2.3-3.el10_1.src.rpm"
+          ],
+          "raw": "zlib-ng-compat-devel|0|2.2.3|3.el10_1|x86_64|zlib-ng-2.2.3-3.el10_1.src.rpm\n",
+          "role": "devel"
+        }
+      ],
+      "runtime": {
+        "ELF": {
+          "class": 64,
+          "little_endian": true,
+          "machine": 62,
+          "type": 3
+        },
+        "bytes": 140824,
+        "gid": 0,
+        "mode": "0o755",
+        "path": "/usr/lib64/libz.so.1",
+        "resolved_path": "/usr/lib64/libz.so.1.3.1.zlib-ng",
+        "sha256": "2fd5dcd6bc0953f3db71958b10c0cdf55ce49e1ceb4ab9d1f869398e39e994eb",
+        "symlinks": [
+          {
+            "path": "/usr/lib64/libz.so.1",
+            "text": "libz.so.1.3.1.zlib-ng"
+          }
+        ],
+        "uid": 0
+      }
+    },
+    {
+      "actual_provider_definition": {
+        "definition": {
+          "base_name": "inflateReset",
+          "binding": "GLOBAL",
+          "bytes": 90,
+          "index": 34,
+          "kind": "FUNC",
+          "name": "inflateReset",
+          "raw": "    34: 000000000000c8f0    90 FUNC    GLOBAL DEFAULT   16 inflateReset",
+          "section": "16",
+          "value": "000000000000c8f0",
+          "visibility": "DEFAULT"
+        },
+        "required": {
+          "name": "inflateReset",
+          "required_version": null
+        },
+        "verdef": "libz.so.1",
+        "versym": {
+          "hidden": false,
+          "index": 1,
+          "name": "*global*"
+        }
+      },
+      "caller": {
+        "actual_caller": {
+          "annotated_version_index": null,
+          "base_name": "inflateReset",
+          "binding": "GLOBAL",
+          "bytes": 0,
+          "index": 109,
+          "kind": "FUNC",
+          "name": "inflateReset",
+          "section": "UND",
+          "value": 0,
+          "version": null,
+          "visibility": "DEFAULT"
+        },
+        "actual_current_map_PLT": "                0x00000000000325a0                inflateReset",
+        "caller_version_index": {
+          "hidden": false,
+          "index": 1,
+          "name": "*global*"
+        },
+        "consumer": "eclair",
+        "name": "inflateReset",
+        "original_check": "M15-F04-original-default",
+        "proof": {
+          "bytes": 370034,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/qualification-1/PROVIDER-JOINS.json",
+          "sha256": "80afe2d17e6a9c4e56a7a54a7322a9c0e6ecf12cfcdd95eeac20e8df40cbd60d"
+        },
+        "provider": "zlib",
+        "required_version": null
+      },
+      "package_headers": [
+        {
+          "argv_path": "/usr/lib64/libz.so.1",
+          "fields": [
+            "zlib-ng-compat",
+            "0",
+            "2.2.3",
+            "3.el10_1",
+            "x86_64",
+            "zlib-ng-2.2.3-3.el10_1.src.rpm"
+          ],
+          "raw": "zlib-ng-compat|0|2.2.3|3.el10_1|x86_64|zlib-ng-2.2.3-3.el10_1.src.rpm\n",
+          "role": "runtime"
+        },
+        {
+          "argv_path": "/usr/lib64/libz.so",
+          "fields": [
+            "zlib-ng-compat-devel",
+            "0",
+            "2.2.3",
+            "3.el10_1",
+            "x86_64",
+            "zlib-ng-2.2.3-3.el10_1.src.rpm"
+          ],
+          "raw": "zlib-ng-compat-devel|0|2.2.3|3.el10_1|x86_64|zlib-ng-2.2.3-3.el10_1.src.rpm\n",
+          "role": "devel"
+        }
+      ],
+      "runtime": {
+        "ELF": {
+          "class": 64,
+          "little_endian": true,
+          "machine": 62,
+          "type": 3
+        },
+        "bytes": 140824,
+        "gid": 0,
+        "mode": "0o755",
+        "path": "/usr/lib64/libz.so.1",
+        "resolved_path": "/usr/lib64/libz.so.1.3.1.zlib-ng",
+        "sha256": "2fd5dcd6bc0953f3db71958b10c0cdf55ce49e1ceb4ab9d1f869398e39e994eb",
+        "symlinks": [
+          {
+            "path": "/usr/lib64/libz.so.1",
+            "text": "libz.so.1.3.1.zlib-ng"
+          }
+        ],
+        "uid": 0
+      }
+    }
+  ],
+  "at_utc": "2026-11-10T22:31:33.390858+00:00",
+  "canonical_or_M14_cache_changes": false,
+  "complete_source_profile_tool_install_evidence": {
+    "actual_provider_joins": {
+      "bytes": 370034,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/qualification-1/PROVIDER-JOINS.json",
+      "sha256": "80afe2d17e6a9c4e56a7a54a7322a9c0e6ecf12cfcdd95eeac20e8df40cbd60d"
+    },
+    "bool_type_source_result": {
+      "actual_bool_type_result": {
+        "bytes": 8029,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/diagnostic-bfd-bool-correction-1/tests-1/correction-1/execution-1/RESULT.json",
+        "sha256": "241b0b917cdcff07523cf3a522ddb55e768dffdb05bb30481235a5f433bcc8b0"
+      },
+      "independent_bool_result_GO": {
+        "bytes": 12759,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/diagnostic-bfd-bool-correction-1/review-sdk-max-1/result-1/REVIEW.json",
+        "sha256": "ffaf6796a280bcf6dd2f90db3938aeb0931f217c52faabcdf20339d483f5d439"
+      },
+      "scope": "C11/Werror genuine header and baseline E0308/corrected fullcallers; reused unchanged, no runtime BFD call or old72/41 replay."
+    },
+    "complete_current_tool": {
+      "bytes": 33775,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/qualification-1/QUALIFICATION.json",
+      "sha256": "75e750e7c74fb34b66bf599c9b00100ee5bd91f7aa5e8ebcc76abc333c5c23ce"
+    },
+    "existing_original_behavior": {
+      "bytes": 7120,
+      "path": "/home/holden/mckernel/docs/verification/m14-m15-focused-results-20261101.json",
+      "sha256": "ef6392ad8d9530b4f1e2b0b42f518cfc9ce003c674e60c3f7592cffaaaa4d240"
+    },
+    "independent_result_GO": {
+      "bytes": 20403,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/qualification-1/independent-review-sdk-max-1/REVIEW.json",
+      "sha256": "2797fa284081d70d359d6a7a557c5251836609fb898414bd691d4762ebf9dfa2"
+    },
+    "source_bindings": {
+      "bytes": 10937,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/SOURCE-BINDINGS.json",
+      "sha256": "faf9ebc0bf046e136bb524acfd8edfe58515bf2dd2655f396ba0ccc25e3261e3"
+    }
+  },
+  "ledger_credit_or_original_F04_ACCEPT_changed": false,
+  "native_or_deployed_acceptance": false,
+  "new_actual_capture_result": {
+    "bytes": 9972,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/original-default-qualification-sdk-max-1/shared-provider-read-1/ownership-correction-1/execution-1/RESULT.json",
+    "sha256": "d32830db5df5adb6cf4276b0ccca0f5a2182cd520cdbecf51524427a831b9881"
+  },
+  "new_actual_inputs": {
+    "bytes": 33480,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/original-default-qualification-sdk-max-1/shared-provider-read-1/ownership-correction-1/INPUTS.json",
+    "sha256": "8a74adb1b517006cd2305c1e154a0db04ff51af4f49d4ab4cb1fbb64df5fad49"
+  },
+  "new_actual_probe": {
+    "bytes": 11407,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/original-default-qualification-sdk-max-1/shared-provider-read-1/ownership-correction-1/PROBE.py",
+    "sha256": "9f27edc3c1101feb4d718d78526a01ada03b97294aae53022695a15f57cf2214"
+  },
+  "new_actual_provider_report": {
+    "bytes": 50591,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/original-default-qualification-sdk-max-1/shared-provider-read-1/output-1/REPORT.json",
+    "sha256": "f208e7b74559ec4f9aaede6b8420d05ff2832939e77b257e1ae53b0aaca20f6d"
+  },
+  "new_actual_request": {
+    "bytes": 11497,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/original-default-qualification-sdk-max-1/shared-provider-read-1/ownership-correction-1/REQUEST.json",
+    "sha256": "9e84cf780c16b64f3c891f79b0e7d4541a60e33c7c519f8b7c17dccf2f8a3e12"
+  },
+  "new_independent_operation_GO": {
+    "bytes": 8654,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/diagnostic-shared-provider-review-source-acquisition-max-1/ownership-correction-1/REVIEW.json",
+    "sha256": "758f722695af58dbc10311bf4fb587577492903340c49d8353174ae57f465a5f"
+  },
+  "new_zlib_DT_NEEDED": [
+    "libc.so.6"
+  ],
+  "new_zlib_RPM_headers": [
+    {
+      "argv_path": "/usr/lib64/libz.so.1",
+      "fields": [
+        "zlib-ng-compat",
+        "0",
+        "2.2.3",
+        "3.el10_1",
+        "x86_64",
+        "zlib-ng-2.2.3-3.el10_1.src.rpm"
+      ],
+      "raw": "zlib-ng-compat|0|2.2.3|3.el10_1|x86_64|zlib-ng-2.2.3-3.el10_1.src.rpm\n",
+      "role": "runtime"
+    },
+    {
+      "argv_path": "/usr/lib64/libz.so",
+      "fields": [
+        "zlib-ng-compat-devel",
+        "0",
+        "2.2.3",
+        "3.el10_1",
+        "x86_64",
+        "zlib-ng-2.2.3-3.el10_1.src.rpm"
+      ],
+      "raw": "zlib-ng-compat-devel|0|2.2.3|3.el10_1|x86_64|zlib-ng-2.2.3-3.el10_1.src.rpm\n",
+      "role": "devel"
+    }
+  ],
+  "new_zlib_SONAME": "libz.so.1",
+  "new_zlib_dependency_closure": "Only libc.so.6 is needed, reusing actual same immutable46d/b058/glibc2.39 source/profile/definition proofs already in75e/80af; no new unmatched F04 dependency or library inventory.",
+  "new_zlib_link_input": {
+    "ELF": {
+      "class": 64,
+      "little_endian": true,
+      "machine": 62,
+      "type": 3
+    },
+    "bytes": 140824,
+    "gid": 0,
+    "mode": "0o755",
+    "path": "/usr/lib64/libz.so",
+    "resolved_path": "/usr/lib64/libz.so.1.3.1.zlib-ng",
+    "sha256": "2fd5dcd6bc0953f3db71958b10c0cdf55ce49e1ceb4ab9d1f869398e39e994eb",
+    "symlinks": [
+      {
+        "path": "/usr/lib64/libz.so",
+        "text": "libz.so.1"
+      },
+      {
+        "path": "/usr/lib64/libz.so.1",
+        "text": "libz.so.1.3.1.zlib-ng"
+      }
+    ],
+    "uid": 0
+  },
+  "new_zlib_raw_metadata": [
+    {
+      "bytes": 70,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/original-default-qualification-sdk-max-1/shared-provider-read-1/output-1/zlib-runtime-rpm.stdout",
+      "sha256": "3c57b231f5fcdfb4c3c0991c6b64c00045a5d5a7784f743ef6a6cdd909ab099b"
+    },
+    {
+      "bytes": 76,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/original-default-qualification-sdk-max-1/shared-provider-read-1/output-1/zlib-devel-rpm.stdout",
+      "sha256": "2efc9d35076a0c1c53a7eeeafa8cb8c9277eefabeb3f134a2b0a27849f076373"
+    },
+    {
+      "bytes": 20762,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/original-default-qualification-sdk-max-1/shared-provider-read-1/output-1/zlib-ELF.stdout",
+      "sha256": "2184ae5ed2f5a87738a48293e6f1bab136ad884cbf9d9cd03cebb450560064e7"
+    }
+  ],
+  "new_zlib_runtime_file": {
+    "ELF": {
+      "class": 64,
+      "little_endian": true,
+      "machine": 62,
+      "type": 3
+    },
+    "bytes": 140824,
+    "gid": 0,
+    "mode": "0o755",
+    "path": "/usr/lib64/libz.so.1",
+    "resolved_path": "/usr/lib64/libz.so.1.3.1.zlib-ng",
+    "sha256": "2fd5dcd6bc0953f3db71958b10c0cdf55ce49e1ceb4ab9d1f869398e39e994eb",
+    "symlinks": [
+      {
+        "path": "/usr/lib64/libz.so.1",
+        "text": "libz.so.1.3.1.zlib-ng"
+      }
+    ],
+    "uid": 0
+  },
+  "next": "Independent SourceAcq WHOLE original F04-original-default result review, then Root alone may credit this technical child at stated scope. No producer/provider/case replay.",
+  "original_check": "M15-F04-original-default",
+  "original_done_when": "Bind eclair to its complete supported/default source/profile/toolchain/transitive-provider identities from the actual build recipes and demonstrate matching complete-tool qualification.",
+  "original_ledger_binding": {
+    "done_when": "Bind eclair to its complete supported/default source/profile/toolchain/transitive-provider identities from the actual build recipes and demonstrate matching complete-tool qualification.",
+    "normalized_row_sha256": "b45c524acabcf7a0ff7a639454f9a8f851810e7a9b383bf43954db641b1a1e87",
+    "path": "/home/holden/mckernel/docs/verification/m14-m15-closure-progress.json",
+    "row_id": "M15-F04-original-default",
+    "scope_limit": "HOST/focused proof is credited only at stated scope, not as complete original SDK/deployed/native qualification.",
+    "verification_method": "Derive the required obligations and source/profile/provider identities from the actual supported source, headers, build recipes and retained matching evidence. Reuse proven checks; qualify only genuinely unmatched changed contracts. Actual native/device operations still require their real ownership/current-free/admission bindings; no source review or HOST fixture substitutes for matching final acceptance.",
+    "whole_file_sha256_at_read": "cb8282412957100871c78ae8318f4420055e552778e22986a8922383e75307f0"
+  },
+  "original_obligation_join": [
+    {
+      "decision": "DEMONSTRATED_AT_SUPPORTED_LINUX_X86_64_HOST_ARTIFACT_SCOPE",
+      "evidence": "75e source4adf/faf9; exact core2988+arch48e1, default Rust USER selection, genuine qualified nightly1.95/fullroot70eb, native46d/GCC14 Release normal flags, original selected target/install rules; no bootstrap or C fallback. Complete two new Rust objects plus retained native1.92 typed CABI-only8a5b.",
+      "obligation": "Actual complete supported/default source selection and compiler profile"
+    },
+    {
+      "decision": "DEMONSTRATED_AT_SUPPORTED_LINUX_X86_64_HOST_ARTIFACT_SCOPE",
+      "evidence": "75e/2797: all64+5+4 roots have source-kind-width/map ownership,55 new U edges join,119 libc actual version/definition/role joins and three optional unversioned weak. Genuine static BFD source/header/layout/archive proof and corrected bool full callers reused. Six current zlib PLT/verneed edges remain link-only, not actual provider definition/versym/file identity.",
+      "new_actual_six_provider_join": {
+        "bytes": 50591,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/original-default-qualification-sdk-max-1/shared-provider-read-1/output-1/REPORT.json",
+        "sha256": "f208e7b74559ec4f9aaede6b8420d05ff2832939e77b257e1ae53b0aaca20f6d"
+      },
+      "obligation": "Complete actual emitted tool/object/provider ownership and typed ABI"
+    },
+    {
+      "decision": "DEMONSTRATED_AT_PRIVATE_ARTIFACT_SCOPE",
+      "evidence": {
+        "DT_RPATH_after": "/usr/local/lib64",
+        "DT_RPATH_before": "::::::::::::::::",
+        "actual_install_manifest": {
+          "bytes": 24,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/build-output/install_manifest.txt",
+          "sha256": "2dd95fe56a8c62b6aa262fb027d0a4e1ed996993e7ccea0f99e353a6cd64f82c"
+        },
+        "all_code_symbols_imports_versions_other_bytes_and_readelf_fields_identical": true,
+        "built": {
+          "bytes": 6808104,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/build-output/user/eclair",
+          "sha256": "f89f1db9131c0acc6e5db2e2f448706abab24bcf293d791e1b27904d661050da"
+        },
+        "built_and_staged_bytes": 6808104,
+        "destination": "/output/stage/bin/eclair",
+        "mode": "0755",
+        "normal_CMake_INSTALL_RPATH_preserved": true,
+        "private_only_no_HOST_install": true,
+        "sole_binary_mutation": {
+          "after": "/usr/local/lib64",
+          "before": "::::::::::::::::",
+          "byte_offset": 5281,
+          "bytes_changed": 16,
+          "sole_binary_change": true
+        },
+        "staged": {
+          "bytes": 6808104,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/build-output/stage/bin/eclair",
+          "sha256": "f7633f4fdce59435e61d24568db2cb66976bbdbaad167273efb526f3229221db"
+        }
+      },
+      "obligation": "Matching selected default production executable and private install"
+    },
+    {
+      "decision": "RETAIN_EXISTING_EXACT_SCOPES_NO_REPLAY_OR_NEW_SCENARIO_QUOTA",
+      "evidence": "Original selection/HOST-link/ABI/behavior/preflight children remain demonstrated. Actual BFD symbols/two generated chunks/boundary+unmapped rejection, prior type/callback and supported help/preflight proofs retain scopes. Bool fix has exact real-header function types/condition polarity and complete caller/source compile plus new whole target. No new real main/GDB/live-memory/error-path execution is inferred.",
+      "obligation": "Reuse supported behavior/error contracts without fixture or source inflation"
+    }
+  ],
+  "original_parent": "M15-F04",
+  "original_whole_preassessment": {
+    "bytes": 16187,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/original-default-qualification-sdk-max-1/ASSESSMENT.json",
+    "sha256": "f3179f7529e923d48d347661bc2a565730e9b4248c03110d5f071519a61b5c36"
+  },
+  "positive_execution_join": {
+    "Root_session": "69845 fully joined/closed per actual Root receipt",
+    "actual_capture_source_sha256": "4ca162e1a0e68d236a1f22abbeb7b88849e04e6ffac62049ce28604646acc01b",
+    "actual_finish": "2026-11-10T22:26:58.681307+00:00",
+    "actual_inner_positive_direct_wholefamily_stream_records": [
+      {
+        "adopted_kills": [],
+        "adopted_reaps": [],
+        "error": null,
+        "label": "zlib-runtime-rpm",
+        "leader": 8,
+        "leader_birth": "43588389",
+        "leader_group_signalled": false,
+        "leader_parent_joined": true,
+        "remaining_direct_children": [],
+        "status": 0,
+        "streams_closed": true,
+        "timed_out": false,
+        "whole_descendants_joined": true
+      },
+      {
+        "adopted_kills": [],
+        "adopted_reaps": [],
+        "error": null,
+        "label": "zlib-devel-rpm",
+        "leader": 9,
+        "leader_birth": "43588391",
+        "leader_group_signalled": false,
+        "leader_parent_joined": true,
+        "remaining_direct_children": [],
+        "status": 0,
+        "streams_closed": true,
+        "timed_out": false,
+        "whole_descendants_joined": true
+      },
+      {
+        "adopted_kills": [],
+        "adopted_reaps": [],
+        "error": null,
+        "label": "zlib-ELF",
+        "leader": 10,
+        "leader_birth": "43588391",
+        "leader_group_signalled": false,
+        "leader_parent_joined": true,
+        "remaining_direct_children": [],
+        "status": 0,
+        "streams_closed": true,
+        "timed_out": false,
+        "whole_descendants_joined": true
+      },
+      {
+        "adopted_kills": [],
+        "adopted_reaps": [],
+        "error": null,
+        "label": "libelf-runtime-rpm",
+        "leader": 11,
+        "leader_birth": "43588392",
+        "leader_group_signalled": false,
+        "leader_parent_joined": true,
+        "remaining_direct_children": [],
+        "status": 0,
+        "streams_closed": true,
+        "timed_out": false,
+        "whole_descendants_joined": true
+      },
+      {
+        "adopted_kills": [],
+        "adopted_reaps": [],
+        "error": null,
+        "label": "libelf-devel-rpm",
+        "leader": 12,
+        "leader_birth": "43588393",
+        "leader_group_signalled": false,
+        "leader_parent_joined": true,
+        "remaining_direct_children": [],
+        "status": 0,
+        "streams_closed": true,
+        "timed_out": false,
+        "whole_descendants_joined": true
+      },
+      {
+        "adopted_kills": [],
+        "adopted_reaps": [],
+        "error": null,
+        "label": "libelf-ELF",
+        "leader": 13,
+        "leader_birth": "43588394",
+        "leader_group_signalled": false,
+        "leader_parent_joined": true,
+        "remaining_direct_children": [],
+        "status": 0,
+        "streams_closed": true,
+        "timed_out": false,
+        "whole_descendants_joined": true
+      }
+    ],
+    "actual_memory_samples": {
+      "bytes": 439,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/original-default-qualification-sdk-max-1/shared-provider-read-1/ownership-correction-1/execution-1/providers-MEMORY.json",
+      "sha256": "00d0b592e6ab16c408c6e5002114d7a3c5c601b9c2705383c69de84d0ed5975f"
+    },
+    "actual_outer_positive_pid_birth_direct_wait_closed_stream_records": [
+      {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "--host=unix:///var/run/docker.sock",
+          "ps",
+          "--no-trunc",
+          "--format",
+          "{{.ID}}"
+        ],
+        "birth": "43588316",
+        "direct_wait_joined": true,
+        "exit": 0,
+        "label": "running-preflight",
+        "pid": 1125441,
+        "streams_closed": true
+      },
+      {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "--host=unix:///var/run/docker.sock",
+          "ps",
+          "-a",
+          "--format",
+          "{{.Names}}"
+        ],
+        "birth": "43588328",
+        "direct_wait_joined": true,
+        "exit": 0,
+        "label": "names-preflight",
+        "pid": 1125449,
+        "streams_closed": true
+      },
+      {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "--host=unix:///var/run/docker.sock",
+          "create",
+          "--name",
+          "mck-m15-diagnostic-provider-read-20261110-1",
+          "--label",
+          "mckernel.preparation-owner=diagnostic-shared-provider-read-sdk-max-1",
+          "--init",
+          "--pull=never",
+          "--network=none",
+          "--ipc=private",
+          "--cpus=1",
+          "--cpuset-cpus=7",
+          "--memory=256m",
+          "--memory-swap=256m",
+          "--pids-limit=32",
+          "--user",
+          "1000:1000",
+          "--cap-drop=ALL",
+          "--security-opt=no-new-privileges",
+          "--read-only",
+          "--tmpfs",
+          "/tmp:rw,nodev,nosuid,noexec,size=64m,mode=1777",
+          "--ulimit",
+          "core=0:0",
+          "--ulimit",
+          "fsize=8388608:8388608",
+          "--ulimit",
+          "nofile=64:64",
+          "--ulimit",
+          "cpu=45:45",
+          "--env",
+          "PATH=/usr/bin:/bin",
+          "--env",
+          "LANG=C",
+          "--env",
+          "LC_ALL=C",
+          "--env",
+          "TZ=UTC",
+          "--env",
+          "PYTHONDONTWRITEBYTECODE=1",
+          "--env",
+          "MAKEFLAGS=",
+          "--env",
+          "CARGO_MAKEFLAGS=",
+          "--env",
+          "CMAKE_BUILD_PARALLEL_LEVEL=1",
+          "--env",
+          "OMP_NUM_THREADS=1",
+          "--env",
+          "TMPDIR=/output/tmp",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/original-default-qualification-sdk-max-1/shared-provider-read-1/ownership-correction-1/PROBE.py,dst=/input/PROBE.py,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/original-default-qualification-sdk-max-1/shared-provider-read-1/ownership-correction-1/INPUTS.json,dst=/input/INPUTS.json,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/owned_process.py,dst=/input/owned_process.py,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/original-default-qualification-sdk-max-1/shared-provider-read-1/output-1,dst=/output",
+          "--workdir",
+          "/output",
+          "--entrypoint",
+          "/usr/bin/bash",
+          "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+          "--noprofile",
+          "--norc",
+          "-e",
+          "-c",
+          "ulimit -v 262144; exec \"$@\"",
+          "m15-diagnostic-provider-passive-as-limit",
+          "/usr/bin/python3",
+          "-B",
+          "/input/PROBE.py"
+        ],
+        "birth": "43588340",
+        "direct_wait_joined": true,
+        "exit": 0,
+        "label": "providers-create",
+        "pid": 1125457,
+        "streams_closed": true
+      },
+      {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "--host=unix:///var/run/docker.sock",
+          "inspect",
+          "46453006061d4b2aed54ec6135781c6bbd8ba9b8e6b55f2fa508cdf945c9892b"
+        ],
+        "birth": "43588352",
+        "direct_wait_joined": true,
+        "exit": 0,
+        "label": "providers-profile",
+        "pid": 1125465,
+        "streams_closed": true
+      },
+      {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "--host=unix:///var/run/docker.sock",
+          "inspect",
+          "46453006061d4b2aed54ec6135781c6bbd8ba9b8e6b55f2fa508cdf945c9892b"
+        ],
+        "birth": "43588364",
+        "direct_wait_joined": true,
+        "exit": 0,
+        "label": "providers-running-inspect",
+        "pid": 1125474,
+        "streams_closed": true
+      },
+      {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "--host=unix:///var/run/docker.sock",
+          "start",
+          "-a",
+          "46453006061d4b2aed54ec6135781c6bbd8ba9b8e6b55f2fa508cdf945c9892b"
+        ],
+        "birth": "43588364",
+        "direct_wait_joined": true,
+        "exit": 0,
+        "label": "providers-payload",
+        "pid": 1125473,
+        "primary_error": null,
+        "secondary_errors": [],
+        "streams_closed": true
+      },
+      {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "--host=unix:///var/run/docker.sock",
+          "inspect",
+          "46453006061d4b2aed54ec6135781c6bbd8ba9b8e6b55f2fa508cdf945c9892b"
+        ],
+        "birth": "43588438",
+        "direct_wait_joined": true,
+        "exit": 0,
+        "label": "providers-terminal",
+        "pid": 1125566,
+        "streams_closed": true
+      },
+      {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "--host=unix:///var/run/docker.sock",
+          "wait",
+          "46453006061d4b2aed54ec6135781c6bbd8ba9b8e6b55f2fa508cdf945c9892b"
+        ],
+        "birth": "43588450",
+        "direct_wait_joined": true,
+        "exit": 0,
+        "label": "providers-container-wait",
+        "pid": 1125574,
+        "streams_closed": true
+      },
+      {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "--host=unix:///var/run/docker.sock",
+          "rm",
+          "46453006061d4b2aed54ec6135781c6bbd8ba9b8e6b55f2fa508cdf945c9892b"
+        ],
+        "birth": "43588462",
+        "direct_wait_joined": true,
+        "exit": 0,
+        "label": "providers-owned-remove",
+        "pid": 1125582,
+        "streams_closed": true
+      }
+    ],
+    "actual_shared_admission": {
+      "bytes": 541,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/original-default-qualification-sdk-max-1/shared-provider-read-1/ownership-correction-1/execution-1/ADMISSION.json",
+      "sha256": "1a17b7c040d4a9626594b5c0ac3b504a018cdca069de315153623892ffd7da05"
+    },
+    "actual_start": "2026-11-10T22:26:57.086399+00:00",
+    "all_waits_streams_joined": true,
+    "both_UNKNOWN_jobs": 2,
+    "both_UNKNOWN_released": false,
+    "both_UNKNOWN_reserved_bytes": 536870912,
+    "capture_review_sha256": "a0341e69f0123791b983151b9fa4dbaec3d34029439d3d4c0ccae8ddade1c7fd",
+    "exact_create_argv_equal_frozen9e84": true,
+    "exact_four_mounts_and_profile": {
+      "bytes": 10189,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/original-default-qualification-sdk-max-1/shared-provider-read-1/ownership-correction-1/execution-1/providers-PROFILE.json",
+      "sha256": "9df91612420766d96fc087d6d36324d8cd38e2fca15ecb7699a38bf3ba2dc371"
+    },
+    "exact_terminal_peak": "UNKNOWN; sample is not exact terminal peak or zero.",
+    "owned_removed": true,
+    "owned_terminal": {
+      "bytes": 10849,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/original-default-qualification-sdk-max-1/shared-provider-read-1/ownership-correction-1/execution-1/providers-TERMINAL.json",
+      "sha256": "dc51ff03698b35b6f25ae4641423043bef60a74ff46d0a674281092551a096b0"
+    },
+    "remaining_child_pids": [],
+    "sampled_highwater_bytes": 6934528,
+    "terminal_state": {
+      "Dead": false,
+      "Error": "",
+      "ExitCode": 0,
+      "FinishedAt": "2026-11-10T22:26:57.898686233Z",
+      "OOMKilled": false,
+      "Paused": false,
+      "Pid": 0,
+      "Restarting": false,
+      "Running": false,
+      "StartedAt": "2026-11-10T22:26:57.795977442Z",
+      "Status": "exited"
+    }
+  },
+  "preserved_separate_conditions": {
+    "changed_bool_path": "setup_symbols714..770 uses genuine bool bfd_check_format false branch; actual source/type/caller proof reused, no runtime error path invention.",
+    "main_lines": "3195..3310; help before setup_symbols returns2; setup_symbols failure returns1 before dump; dump/live/constants/threads/GDB and packet-loop follow only afterward.",
+    "no_new_runtime_operation_requested": true,
+    "separate_original_children": [
+      "M15-F04-deployed requires installed artifact/providers matching admitted image/runtime and actual required source-derived consumers.",
+      "M15-F04-ACCEPT requires every applicable child/matching cohort and explicit gate; M14 acceptance order, native/device/currentfree/admission/UNKNOWN remain separate."
+    ],
+    "source": {
+      "bytes": 91128,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/source/user/rust/eclair_helpers.rs",
+      "sha256": "2988d0402d1637b8b0e375590e45949da7add2c8d429447c145c08f0245179fb"
+    }
+  },
+  "qualifier_operation": "Exactly prepared44fa ran once against saved genuine actual9e84 PASS/metadata and wrote retained-contract join f476. No SUT, provider metadata tool, source, compiler, consumer or old test executed.",
+  "qualifier_used": {
+    "bytes": 8331,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/original-default-qualification-sdk-max-1/provider-result-qualification-1/join_saved_f04.py",
+    "sha256": "44fa1db0e8fdb8c8867011bf4210be0e47c136653ad36ff0a5aa4bd81db9a1e5"
+  },
+  "raw_false_claims_retained": {
+    "actual_Root_receipt_original_leaf_credit": false,
+    "new_provider_report_original_leaves_accepted": false,
+    "new_provider_report_runtime_or_API_executed": false
+  },
+  "retained_contract_vs_actual_execution": "Prepared44fa retains unexecuted915 as semantic provider contract and reads original8a74 identical inputs. Its request field is that retained contract, not a claim915 ran. THIS final qualification binds actual executed9e84/9f27/new8a74 path and reviewed758f, verified equal to Root create argv/profile. Original915/786/e4b and preflight zero-Popen failure remain intact.",
+  "saved_join": {
+    "bytes": 32362,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/original-default-qualification-sdk-max-1/provider-result-qualification-1/actual-result-1/RETAINED-CONTRACT-JOIN.json",
+    "sha256": "f476be939bc77d664c73ba7b94a945fea1fc92b00324a8b01f2c58cedf79c210"
+  },
+  "schema": "mckernel.M15-F04-original-default-whole-condition-qualified.v1",
+  "scope": "Complete supported/default Linux/x86_64 Eclair source/profile/toolchain/transitive-provider and normal delivered-artifact/private-install qualification at the recorded HOST artifact scope. Original deployed/runtime/native consumer and ACCEPT children remain separate.",
+  "status": "WHOLE_ORIGINAL_TECHNICAL_CONDITION_DEMONSTRATED_READY_FOR_INDEPENDENT_ORIGINAL_LEAF_REVIEW",
+  "whole_condition_satisfied_at_stated_scope": true,
+  "whole_tool_import_partition": {
+    "actual_libc_definition_version_role_joins_reused": 119,
+    "actual_total": 128,
+    "all_strong_current_provider_edges_bound": true,
+    "new_actual_zlib_caller_definition_version_file_joins": 6,
+    "not_count_only": "Every root/edge/type/width/provider/version is the named actual row in75e/80af/2797 and the six detailed rows below; totals only reconcile those rows.",
+    "optional_unversioned_weak_reused": 3
+  }
+}

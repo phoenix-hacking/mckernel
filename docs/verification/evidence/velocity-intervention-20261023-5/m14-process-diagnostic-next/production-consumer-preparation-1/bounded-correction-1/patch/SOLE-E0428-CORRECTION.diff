@@ -1,0 +1,10 @@
+--- failed17c927/process_helpers.rs
++++ corrected/process_helpers.rs
+@@ -17,7 +17,6 @@
+ };
+ 
+ unsafe extern "C" {
+-    fn kprintf(format: *const i8, ...) -> CInt;
+     static mut process_vm_range_insert_debug: crate::debug::Ddebug;
+     fn vm_range_insert_dump_bridge(vm: *mut c_void);
+     fn __ihk_mc_spinlock_lock(lock: *mut IhkSpinlock) -> CULong;

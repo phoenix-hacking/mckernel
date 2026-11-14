@@ -1,0 +1,84 @@
+{
+  "schema": "mckernel.native-exact-cleanup-source-readiness.v1",
+  "recorded_at": "2026-09-29T05:00:00Z",
+  "status": "PASS_SOURCE_READY_EXECUTION_NOT_RELEASED",
+  "base_checkpoint": "add984adddd988417ddac1175d4ecee5789309ed",
+  "failure_family": {
+    "name": "superseded exact candidate preservation and two-root cleanup",
+    "history": [
+      "initial design blocked on incomplete process/mount coverage, stale snapshots, incomplete inventory, pathname races and missing partial journal",
+      "first expert repair blocked on an impossible 0755-to-0700 inventory transition and unsynchronized self-referencing observer",
+      "quarantine-first expert repair blocked on mapping, ownership, self-FD, stale-authority, evidence and descriptor-race defects",
+      "larger coherent lease-owned descriptor boundary passed after exact independent corrections"
+    ],
+    "strategy_change": "replace path-recursive deletion with root-owned quarantine, helper-controlled converged observation and descriptor-relative verified deletion"
+  },
+  "sources": {
+    "observer": {
+      "path": "docs/verification/evidence/native-exact-candidate-live-reference-observer-68cf089a-1.py",
+      "sha256": "4a15271df7e14f1a95136579f157f0fc719048143547be6a54a242b99c3f8e05"
+    },
+    "deleter_inventory_pinned_release_unset": {
+      "path": "docs/verification/evidence/native-exact-candidate-delete-68cf089a-1.py",
+      "sha256": "3803cf64023f06a030a795a7c035177f0dd32563efd660ba3dde4e36f4fe1eb0"
+    },
+    "inventory_generator": {
+      "path": "scripts/native_rust_exact_candidate_inventory.py",
+      "sha256": "ed2c2eaf1200da67625ed3438d4790c55f6dbf60f9ba105505c7df8807bf1678"
+    },
+    "inventory_tests": {
+      "path": "scripts/tests/test_native_rust_exact_candidate_inventory.py",
+      "sha256": "6e00d418c5b9bb6286af161315886415b7bcb1bb1fa5bfe8b531169fdab7f639"
+    }
+  },
+  "inventory": {
+    "live_path": "/home/holden/mckernel-work/scratch/native-exact-complete-worktree-inventory-68cf089a-1.json",
+    "sha256": "743c05648112cee5af2eda235fba11a2f32d50a9d3074423c0c064d52a1682c0",
+    "bytes": 2211210,
+    "rows": 10549,
+    "candidate_rows": 10462,
+    "backup_rows": 87,
+    "archive_path": "docs/verification/evidence/stability-native-exact-complete-inventory-68cf089a-20260929-1.tar.gz",
+    "archive_sha256": "6be734da7ee54eec0523fa961a0264b5242637c26d56952f524b84c907f0b044",
+    "scope": "observational read-only manifest; destructive authority still requires sealed descriptor revalidation"
+  },
+  "checks": [
+    {
+      "command": "python3 -B -m unittest scripts.tests.test_native_rust_exact_candidate_inventory",
+      "result": "PASS 4 tests"
+    },
+    {
+      "command": "python3 -B <observer> --self-test && python3 -B <deleter> --self-test",
+      "result": "PASS both pure self-tests"
+    },
+    {
+      "command": "python3 -B -m py_compile <four exact Python sources> && git diff --check -- <four exact sources>",
+      "result": "PASS"
+    },
+    {
+      "command": "inventory generator generate then verify against the two exact live roots",
+      "result": "PASS in 7.9s generation and 8.2s independent replay"
+    }
+  ],
+  "independent_review": {
+    "result": "PASS_SOURCE_READINESS",
+    "scope": "pin inventory and construct an exact independent execution release",
+    "execution_release": false,
+    "accepted_observer_sha256": "4a15271df7e14f1a95136579f157f0fc719048143547be6a54a242b99c3f8e05",
+    "accepted_deleter_template_sha256": "b4e964a59b087c9fc269b527296321329045ee2d77d3386e5f1a3ec09d5d2e3b",
+    "accepted_inventory_sha256": "743c05648112cee5af2eda235fba11a2f32d50a9d3074423c0c064d52a1682c0"
+  },
+  "remaining_release_gates": [
+    "create and independently review the exact one-shot preflight/root execution packet",
+    "bind the independent release record SHA in the deleter and recheck the final mechanical diff",
+    "capture a fresh boot/time/root/Docker/source-clean preflight v2 receipt",
+    "execute at most once; retain the lease, journal, captures and quarantines on every failure"
+  ],
+  "runtime": {
+    "candidate_mutated": false,
+    "root_helper_executed": false,
+    "docker_executed": false,
+    "build_or_guest_executed": false
+  },
+  "acceptance_credit": false
+}

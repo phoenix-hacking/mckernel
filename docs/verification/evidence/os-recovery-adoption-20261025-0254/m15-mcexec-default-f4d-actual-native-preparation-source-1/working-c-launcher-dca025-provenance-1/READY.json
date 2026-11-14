@@ -1,0 +1,398 @@
+{
+  "C_Rust_dispatch_excerpts": [
+    {
+      "context": "};\n\nstruct thread_data_s;\nint main_loop(struct thread_data_s *);\n\n#ifndef MCEXEC_RUST_HELPERS\nint get_syscall_args(int pid, syscall_args *args)\n{\n\treturn ptrace(PTRACE_GETREGS, pid, NULL, args);",
+      "line": 179
+    },
+    {
+      "context": "int act_main_loop_iteration(struct syscall_wait_desc *w, int fd,\n\t\tstruct thread_data_s *my_thread, char *pathbuf, char *tmpbuf,\n\t\tlong *main_loop_ret, int is_child);\nint act_main_loop_body(struct thread_data_s *my_thread, int fd, int is_child);\nvoid *mcexec_main_loop_thread_func_body(void *arg);\nint mcexec_create_worker_thread_body(struct thread_data_s **tp_out,\n\t\tvoid *init_ready);\nvoid mcexec_join_all_threads_body(void);\nvoid mcexec_kill_thread_body(unsigned long tid, unsigned long sig,",
+      "line": 564
+    },
+    {
+      "context": "pthread_barrier_t uti_init_ready;\n\n#ifdef MCEXEC_RUST_HELPERS\n#define main_loop_thread_func mcexec_main_loop_thread_func_body\n#else\nstatic void *main_loop_thread_func(void *arg)\n{\n\tstruct thread_data_s *td = (struct thread_data_s *)arg;\n",
+      "line": 2436
+    },
+    {
+      "context": "#endif\n\n#ifndef MCEXEC_RUST_HELPERS\nint main_loop(struct thread_data_s *my_thread)\n{\n\tstruct syscall_wait_desc w;\n\tlong ret;\n#ifndef MCEXEC_RUST_HELPERS\n\tconst char *fn;",
+      "line": 7859
+    }
+  ],
+  "LWK_debug_trace": {
+    "excerpts": [
+      {
+        "context": "    compile_error!(\"syscall entry budget requires lock-free 64-bit target atomics\");\n\n    const INITIAL_LOG_BUDGET: u64 = (u32::MAX as u64) << 32;\n    const LOG_BUDGET_LIMIT: u32 = 128;\n    static ENTRY_LOG_BUDGET: AtomicU64 = AtomicU64::new(INITIAL_LOG_BUDGET);\n    static RETURN_LOG_BUDGET: AtomicU64 = AtomicU64::new(INITIAL_LOG_BUDGET);\n\n    /// One successful coupled PID/count reservation. No formatter or provider is\n    /// called in the CAS loop. Relaxed suffices: this word publishes no other data.",
+        "line": 34565
+      },
+      {
+        "context": "    /// PID resets the count and reserves its first record in the same transaction.\n    /// The returned predecessor/successor are the actual successful CAS operands,\n    /// allowing the exact production helper to be checked without instrumentation.\n    fn reserve_log_budget(state: &AtomicU64, pid: CInt) -> Option<(u64, u64)> {\n        let pid_bits = (pid as u32 as u64) << 32;\n        let mut previous = state.load(Ordering::Relaxed);\n        loop {\n            let count = previous as u32;\n            let next = if previous & 0xffff_ffff_0000_0000 != pid_bits {",
+        "line": 34575
+      },
+      {
+        "context": "            if (*config).disable_yield == 0 || num != (*config).sched_yield_nr {\n                set_cputime((*config).mode_u2k);\n            }\n            if reserve_log_budget(&ENTRY_LOG_BUDGET, pid).is_some() {\n                super::kprintf(\n                    b\"mcexec_v10: syscall entry cpu=%d pid=%d tid=%d nr=%d rip=0x%lx sp=0x%lx status=%d\\n\\0\".as_ptr().cast(),\n                    super::ihk_mc_get_processor_id(), pid,\n                    if thread.is_null() { -1 } else { (*thread).tid }, num,\n                    if ctx.is_null() { 0 } else { cpu::ihk_mc_syscall_pc(ctx) },",
+        "line": 34642
+      },
+      {
+        "context": "                }\n                result = super::syscall_generic_forwarding(num, ctx);\n            }\n            if reserve_log_budget(&RETURN_LOG_BUDGET, pid).is_some() {\n                super::kprintf(\n                    b\"mcexec_v10: syscall return cpu=%d pid=%d tid=%d nr=%d ret=0x%lx ret_signed=%ld rip=0x%lx sp=0x%lx\\n\\0\".as_ptr().cast(),\n                    super::ihk_mc_get_processor_id(), pid,\n                    if thread.is_null() { -1 } else { (*thread).tid }, num, result, result,\n                    if ctx.is_null() { 0 } else { cpu::ihk_mc_syscall_pc(ctx) },",
+        "line": 34729
+      }
+    ],
+    "limit": 128,
+    "scope": "Separate ENTRY_LOG_BUDGET and RETURN_LOG_BUDGET packed atomic PID/count words. A changed current PID resets count and reserves record1. Diagnostic mcexec_v10 rows, not host delivery trace quota."
+  },
+  "actual_build_commands": [
+    {
+      "argv": [
+        "/usr/bin/cmake",
+        "--build",
+        "/work/output/build",
+        "--target",
+        "mcexec",
+        "-j1"
+      ],
+      "cwd": "/src",
+      "exit_code": 0,
+      "phase": "production-mcexec-only"
+    }
+  ],
+  "actual_build_stdout": "[  0%] Building Rust mcexec helpers\n[  0%] Built target mcexec_rust_helpers\n[ 40%] Built target libmcexec\n[ 60%] Linking C executable mcexec\n[100%] Built target mcexec\n",
+  "classification": "Existing working C-consumer launcher with default Rust helpers; not the newly installed all-Rust executor e5d18169 and not an all-C binary.",
+  "compiler": {
+    "C": {
+      "executable_version": "cc (GCC) 14.3.1 20251022 (Red Hat 14.3.1-4)\nCopyright (C) 2024 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+      "owner": "gcc",
+      "path": "/usr/bin/cc",
+      "rpm_nevra": "gcc-0:14.3.1-4.4.el10.x86_64",
+      "sha256": "2092e32fa9abee9ccbf777a5f893b9cc608582b660c93e742a17c3eb7da109c2",
+      "target": "/usr/bin/gcc",
+      "version": "cc (GCC) 14.3.1 20251022 (Red Hat 14.3.1-4)\nCopyright (C) 2024 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
+    },
+    "Rust": "/nightly/bin/rustc; rustc1.95.0-nightly(c04308580,2026-02-18)",
+    "linker": {
+      "executable_version": "GNU ld version 2.41-63.el10\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis program is free software; you may redistribute it under the terms of\nthe GNU General Public License version 3 or (at your option) a later version.\nThis program has absolutely no warranty.",
+      "owner": "binutils",
+      "path": "/usr/bin/ld",
+      "rpm_nevra": "binutils-0:2.41-63.el10.x86_64",
+      "sha256": "825f11b6b672735ab4c3a2c95cc9711294b159b1d0e1c191b5d1d1f8917e0586",
+      "target": "/usr/bin/ld.bfd",
+      "version": "GNU ld version 2.41-63.el10\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis program is free software; you may redistribute it under the terms of\nthe GNU General Public License version 3 or (at your option) a later version.\nThis program has absolutely no warranty."
+    }
+  },
+  "configuration": {
+    "C_compiler": "set(CMAKE_C_COMPILER \"/usr/bin/cc\")\nset(CMAKE_C_COMPILER_ARG1 \"\")\nset(CMAKE_C_COMPILER_ID \"GNU\")\nset(CMAKE_C_COMPILER_VERSION \"14.3.1\")\nset(CMAKE_C_COMPILER_VERSION_INTERNAL \"\")\nset(CMAKE_C_COMPILER_WRAPPER \"\")\nset(CMAKE_C_STANDARD_COMPUTED_DEFAULT \"17\")\nset(CMAKE_C_EXTENSIONS_COMPUTED_DEFAULT \"ON\")\nset(CMAKE_C_STANDARD_LATEST \"23\")\nset(CMAKE_C_COMPILE_FEATURES \"c_std_90;c_function_prototypes;c_std_99;c_restrict;c_variadic_macros;c_std_11;c_static_assert;c_std_17;c_std_23\")\nset(CMAKE_C90_COMPILE_FEATURES \"c_std_90;c_function_prototypes\")\nset(CMAKE_C99_COMPILE_FEATURES \"c_std_99;c_restrict;c_variadic_macros\")\nset(CMAKE_C11_COMPILE_FEATURES \"c_std_11;c_static_assert\")\nset(CMAKE_C17_COMPILE_FEATURES \"c_std_17\")\nset(CMAKE_C23_COMPILE_FEATURES \"c_std_23\")\n\nset(CMAKE_C_PLATFORM_ID \"Linux\")\nset(CMAKE_C_SIMULATE_ID \"\")\nset(CMAKE_C_COMPILER_FRONTEND_VARIANT \"GNU\")\nset(CMAKE_C_SIMULATE_VERSION \"\")\n\n\n\n\nset(CMAKE_AR \"/usr/bin/ar\")\nset(CMAKE_C_COMPILER_AR \"/usr/bin/gcc-ar\")\nset(CMAKE_RANLIB \"/usr/bin/ranlib\")\nset(CMAKE_C_COMPILER_RANLIB \"/usr/bin/gcc-ranlib\")\nset(CMAKE_LINKER \"/usr/bin/ld\")\nset(CMAKE_LINKER_LINK \"\")\nset(CMAKE_LINKER_LLD \"\")\nset(CMAKE_C_COMPILER_LINKER \"/usr/bin/ld\")\nset(CMAKE_C_COMPILER_LINKER_ID \"GNU\")\nset(CMAKE_C_COMPILER_LINKER_VERSION 2.41)\nset(CMAKE_C_COMPILER_LINKER_FRONTEND_VARIANT GNU)\nset(CMAKE_MT \"\")\nset(CMAKE_TAPI \"CMAKE_TAPI-NOTFOUND\")\nset(CMAKE_COMPILER_IS_GNUCC 1)\nset(CMAKE_C_COMPILER_LOADED 1)\nset(CMAKE_C_COMPILER_WORKS TRUE)\nset(CMAKE_C_ABI_COMPILED TRUE)\n\nset(CMAKE_C_COMPILER_ENV_VAR \"CC\")\n\nset(CMAKE_C_COMPILER_ID_RUN 1)\nset(CMAKE_C_SOURCE_FILE_EXTENSIONS c;m)\nset(CMAKE_C_IGNORE_EXTENSIONS h;H;o;O;obj;OBJ;def;DEF;rc;RC)\nset(CMAKE_C_LINKER_PREFERENCE 10)\nset(CMAKE_C_LINKER_DEPFILE_SUPPORTED TRUE)\nset(CMAKE_LINKER_PUSHPOP_STATE_SUPPORTED TRUE)\nset(CMAKE_C_LINKER_PUSHPOP_STATE_SUPPORTED TRUE)\n\n# Save compiler ABI information.\nset(CMAKE_C_SIZEOF_DATA_PTR \"8\")\nset(CMAKE_C_COMPILER_ABI \"ELF\")\nset(CMAKE_C_BYTE_ORDER \"LITTLE_ENDIAN\")\nset(CMAKE_C_LIBRARY_ARCHITECTURE \"\")\n\nif(CMAKE_C_SIZEOF_DATA_PTR)\n  set(CMAKE_SIZEOF_VOID_P \"${CMAKE_C_SIZEOF_DATA_PTR}\")\nendif()\n\nif(CMAKE_C_COMPILER_ABI)\n  set(CMAKE_INTERNAL_PLATFORM_ABI \"${CMAKE_C_COMPILER_ABI}\")\nendif()\n\nif(CMAKE_C_LIBRARY_ARCHITECTURE)\n  set(CMAKE_LIBRARY_ARCHITECTURE \"\")\nendif()\n\nset(CMAKE_C_CL_SHOWINCLUDES_PREFIX \"\")\nif(CMAKE_C_CL_SHOWINCLUDES_PREFIX)\n  set(CMAKE_CL_SHOWINCLUDES_PREFIX \"${CMAKE_C_CL_SHOWINCLUDES_PREFIX}\")\nendif()\n\n\n\n\n\nset(CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES \"/usr/lib/gcc/x86_64-redhat-linux/14/include;/usr/local/include;/usr/include\")\nset(CMAKE_C_IMPLICIT_LINK_LIBRARIES \"gcc;gcc_s;c;gcc;gcc_s\")\nset(CMAKE_C_IMPLICIT_LINK_DIRECTORIES \"/usr/lib/gcc/x86_64-redhat-linux/14;/usr/lib64;/lib64;/usr/lib\")\nset(CMAKE_C_IMPLICIT_LINK_FRAMEWORK_DIRECTORIES \"\")\n",
+    "C_flags": "# CMAKE generated file: DO NOT EDIT!\n# Generated by \"Unix Makefiles\" Generator, CMake Version 3.31\n\n# compile C with /usr/bin/cc\nC_DEFINES = -DIHK_IKC_USE_LINUX_WORK_IRQ -DMCEXEC_RUST_HELPERS -DPROFILE_ENABLE\n\nC_INCLUDES = -I/src/.kernel-sdk -I/work/output/build/executer/user -I/work/output/build -I/src/ihk/linux/include -I/src/executer/user/arch/x86_64/include -I/src/executer/user -I/src/executer/user/arch/x86_64 -I/work/output/build/ihk/linux/include -I/out/build\n\nC_FLAGS = -g -fPIE -Wall -Wextra -Wno-unused-parameter -Wno-sign-compare -Wno-unused-function -Wno-implicit-fallthrough -Wno-stringop-truncation\n\n",
+    "C_rule": "# CMAKE generated file: DO NOT EDIT!\n# Generated by \"Unix Makefiles\" Generator, CMake Version 3.31\n\n# Delete rule output on recipe failure.\n.DELETE_ON_ERROR:\n\n#=============================================================================\n# Special targets provided by cmake.\n\n# Disable implicit rules so canonical targets will work.\n.SUFFIXES:\n\n# Disable VCS-based implicit rules.\n% : %,v\n\n# Disable VCS-based implicit rules.\n% : RCS/%\n\n# Disable VCS-based implicit rules.\n% : RCS/%,v\n\n# Disable VCS-based implicit rules.\n% : SCCS/s.%\n\n# Disable VCS-based implicit rules.\n% : s.%\n\n.SUFFIXES: .hpux_make_needs_suffix_list\n\n# Command-line flag to silence nested $(MAKE).\n$(VERBOSE)MAKESILENT = -s\n\n#Suppress display of executed commands.\n$(VERBOSE).SILENT:\n\n# A target that is always out of date.\ncmake_force:\n.PHONY : cmake_force\n\n#=============================================================================\n# Set environment variables for the build.\n\n# The shell in which to execute make rules.\nSHELL = /bin/sh\n\n# The CMake executable.\nCMAKE_COMMAND = /usr/bin/cmake\n\n# The command to remove a file.\nRM = /usr/bin/cmake -E rm -f\n\n# Escaping for special characters.\nEQUALS = =\n\n# The top-level source directory on which CMake was run.\nCMAKE_SOURCE_DIR = /src\n\n# The top-level build directory on which CMake was run.\nCMAKE_BINARY_DIR = /work/output/build\n\n# Include any dependencies generated for this target.\ninclude executer/user/CMakeFiles/mcexec.dir/depend.make\n# Include any dependencies generated by the compiler for this target.\ninclude executer/user/CMakeFiles/mcexec.dir/compiler_depend.make\n\n# Include the progress variables for this target.\ninclude executer/user/CMakeFiles/mcexec.dir/progress.make\n\n# Include the compile flags for this target's objects.\ninclude executer/user/CMakeFiles/mcexec.dir/flags.make\n\nexecuter/user/rust/mcexec_helpers.o: /src/executer/user/rust/mcexec_helpers.rs\n\t@$(CMAKE_COMMAND) -E cmake_echo_color \"--switch=$(COLOR)\" --blue --bold --progress-dir=/work/output/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) \"Building Rust mcexec helpers\"\n\tcd /work/output/build/executer/user && /usr/bin/cmake -E make_directory /work/output/build/executer/user/rust\n\tcd /work/output/build/executer/user && /usr/bin/cmake -E env MAKEFLAGS= /nightly/bin/rustc --crate-name mcexec_helpers --crate-type lib --edition=2021 -C panic=abort -C opt-level=2 -C debuginfo=1 -C force-unwind-tables=no --emit=obj=/work/output/build/executer/user/rust/mcexec_helpers.o /src/executer/user/rust/mcexec_helpers.rs\n\nexecuter/user/CMakeFiles/mcexec.dir/codegen:\n.PHONY : executer/user/CMakeFiles/mcexec.dir/codegen\n\nexecuter/user/CMakeFiles/mcexec.dir/mcexec.c.o: executer/user/CMakeFiles/mcexec.dir/flags.make\nexecuter/user/CMakeFiles/mcexec.dir/mcexec.c.o: /src/executer/user/mcexec.c\nexecuter/user/CMakeFiles/mcexec.dir/mcexec.c.o: executer/user/CMakeFiles/mcexec.dir/compiler_depend.ts\n\t@$(CMAKE_COMMAND) -E cmake_echo_color \"--switch=$(COLOR)\" --green --progress-dir=/work/output/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) \"Building C object executer/user/CMakeFiles/mcexec.dir/mcexec.c.o\"\n\tcd /work/output/build/executer/user && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT executer/user/CMakeFiles/mcexec.dir/mcexec.c.o -MF CMakeFiles/mcexec.dir/mcexec.c.o.d -o CMakeFiles/mcexec.dir/mcexec.c.o -c /src/executer/user/mcexec.c\n\nexecuter/user/CMakeFiles/mcexec.dir/mcexec.c.i: cmake_force\n\t@$(CMAKE_COMMAND) -E cmake_echo_color \"--switch=$(COLOR)\" --green \"Preprocessing C source to CMakeFiles/mcexec.dir/mcexec.c.i\"\n\tcd /work/output/build/executer/user && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /src/executer/user/mcexec.c > CMakeFiles/mcexec.dir/mcexec.c.i\n\nexecuter/user/CMakeFiles/mcexec.dir/mcexec.c.s: cmake_force\n\t@$(CMAKE_COMMAND) -E cmake_echo_color \"--switch=$(COLOR)\" --green \"Compiling C source to assembly CMakeFiles/mcexec.dir/mcexec.c.s\"\n\tcd /work/output/build/executer/user && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /src/executer/user/mcexec.c -o CMakeFiles/mcexec.dir/mcexec.c.s\n\n# Object files for target mcexec\nmcexec_OBJECTS = \\\n\"CMakeFiles/mcexec.dir/mcexec.c.o\"\n\n# External object files for target mcexec\nmcexec_EXTERNAL_OBJECTS = \\\n\"/work/output/build/executer/user/rust/mcexec_helpers.o\"\n\nexecuter/user/mcexec: executer/user/CMakeFiles/mcexec.dir/mcexec.c.o\nexecuter/user/mcexec: executer/user/rust/mcexec_helpers.o\nexecuter/user/mcexec: executer/user/CMakeFiles/mcexec.dir/build.make\nexecuter/user/mcexec: executer/user/CMakeFiles/mcexec.dir/compiler_depend.ts\nexecuter/user/mcexec: executer/user/libmcexec.a\nexecuter/user/mcexec: /usr/lib64/librt.a\nexecuter/user/mcexec: /usr/lib64/libnuma.so\nexecuter/user/mcexec: executer/user/CMakeFiles/mcexec.dir/link.txt\n\t@$(CMAKE_COMMAND) -E cmake_echo_color \"--switch=$(COLOR)\" --green --bold --progress-dir=/work/output/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) \"Linking C executable mcexec\"\n\tcd /work/output/build/executer/user && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/mcexec.dir/link.txt --verbose=$(VERBOSE)\n\n# Rule to build all files generated by this target.\nexecuter/user/CMakeFiles/mcexec.dir/build: executer/user/mcexec\n.PHONY : executer/user/CMakeFiles/mcexec.dir/build\n\nexecuter/user/CMakeFiles/mcexec.dir/clean:\n\tcd /work/output/build/executer/user && $(CMAKE_COMMAND) -P CMakeFiles/mcexec.dir/cmake_clean.cmake\n.PHONY : executer/user/CMakeFiles/mcexec.dir/clean\n\nexecuter/user/CMakeFiles/mcexec.dir/depend: executer/user/rust/mcexec_helpers.o\n\tcd /work/output/build && $(CMAKE_COMMAND) -E cmake_depends \"Unix Makefiles\" /src /src/executer/user /work/output/build /work/output/build/executer/user /work/output/build/executer/user/CMakeFiles/mcexec.dir/DependInfo.cmake \"--color=$(COLOR)\"\n.PHONY : executer/user/CMakeFiles/mcexec.dir/depend\n\n",
+    "Rust_rule": "# CMAKE generated file: DO NOT EDIT!\n# Generated by \"Unix Makefiles\" Generator, CMake Version 3.31\n\n# Delete rule output on recipe failure.\n.DELETE_ON_ERROR:\n\n#=============================================================================\n# Special targets provided by cmake.\n\n# Disable implicit rules so canonical targets will work.\n.SUFFIXES:\n\n# Disable VCS-based implicit rules.\n% : %,v\n\n# Disable VCS-based implicit rules.\n% : RCS/%\n\n# Disable VCS-based implicit rules.\n% : RCS/%,v\n\n# Disable VCS-based implicit rules.\n% : SCCS/s.%\n\n# Disable VCS-based implicit rules.\n% : s.%\n\n.SUFFIXES: .hpux_make_needs_suffix_list\n\n# Command-line flag to silence nested $(MAKE).\n$(VERBOSE)MAKESILENT = -s\n\n#Suppress display of executed commands.\n$(VERBOSE).SILENT:\n\n# A target that is always out of date.\ncmake_force:\n.PHONY : cmake_force\n\n#=============================================================================\n# Set environment variables for the build.\n\n# The shell in which to execute make rules.\nSHELL = /bin/sh\n\n# The CMake executable.\nCMAKE_COMMAND = /usr/bin/cmake\n\n# The command to remove a file.\nRM = /usr/bin/cmake -E rm -f\n\n# Escaping for special characters.\nEQUALS = =\n\n# The top-level source directory on which CMake was run.\nCMAKE_SOURCE_DIR = /src\n\n# The top-level build directory on which CMake was run.\nCMAKE_BINARY_DIR = /work/output/build\n\n# Utility rule file for mcexec_rust_helpers.\n\n# Include any custom commands dependencies for this target.\ninclude executer/user/CMakeFiles/mcexec_rust_helpers.dir/compiler_depend.make\n\n# Include the progress variables for this target.\ninclude executer/user/CMakeFiles/mcexec_rust_helpers.dir/progress.make\n\nexecuter/user/CMakeFiles/mcexec_rust_helpers: executer/user/rust/mcexec_helpers.o\n\nexecuter/user/rust/mcexec_helpers.o: /src/executer/user/rust/mcexec_helpers.rs\n\t@$(CMAKE_COMMAND) -E cmake_echo_color \"--switch=$(COLOR)\" --blue --bold --progress-dir=/work/output/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) \"Building Rust mcexec helpers\"\n\tcd /work/output/build/executer/user && /usr/bin/cmake -E make_directory /work/output/build/executer/user/rust\n\tcd /work/output/build/executer/user && /usr/bin/cmake -E env MAKEFLAGS= /nightly/bin/rustc --crate-name mcexec_helpers --crate-type lib --edition=2021 -C panic=abort -C opt-level=2 -C debuginfo=1 -C force-unwind-tables=no --emit=obj=/work/output/build/executer/user/rust/mcexec_helpers.o /src/executer/user/rust/mcexec_helpers.rs\n\nexecuter/user/CMakeFiles/mcexec_rust_helpers.dir/codegen:\n.PHONY : executer/user/CMakeFiles/mcexec_rust_helpers.dir/codegen\n\nmcexec_rust_helpers: executer/user/CMakeFiles/mcexec_rust_helpers\nmcexec_rust_helpers: executer/user/rust/mcexec_helpers.o\nmcexec_rust_helpers: executer/user/CMakeFiles/mcexec_rust_helpers.dir/build.make\n.PHONY : mcexec_rust_helpers\n\n# Rule to build all files generated by this target.\nexecuter/user/CMakeFiles/mcexec_rust_helpers.dir/build: mcexec_rust_helpers\n.PHONY : executer/user/CMakeFiles/mcexec_rust_helpers.dir/build\n\nexecuter/user/CMakeFiles/mcexec_rust_helpers.dir/clean:\n\tcd /work/output/build/executer/user && $(CMAKE_COMMAND) -P CMakeFiles/mcexec_rust_helpers.dir/cmake_clean.cmake\n.PHONY : executer/user/CMakeFiles/mcexec_rust_helpers.dir/clean\n\nexecuter/user/CMakeFiles/mcexec_rust_helpers.dir/depend:\n\tcd /work/output/build && $(CMAKE_COMMAND) -E cmake_depends \"Unix Makefiles\" /src /src/executer/user /work/output/build /work/output/build/executer/user /work/output/build/executer/user/CMakeFiles/mcexec_rust_helpers.dir/DependInfo.cmake \"--color=$(COLOR)\"\n.PHONY : executer/user/CMakeFiles/mcexec_rust_helpers.dir/depend\n\n",
+    "cache": "# This is the CMakeCache file.\n# For build in directory: /work/output/build\n# It was generated by CMake: /usr/bin/cmake\n# You can edit this file to change values found and used by cmake.\n# If you do not want to change any of the values, simply exit the editor.\n# If you do want to change a value, simply edit, save, and exit the editor.\n# The syntax for the file is as follows:\n# KEY:TYPE=VALUE\n# KEY is the name of a variable in the cache.\n# TYPE is a hint to GUIs for the type of VALUE, DO NOT EDIT TYPE!.\n# VALUE is the current value for the KEY.\n\n########################\n# EXTERNAL cache entries\n########################\n\n//Build target: smp-x86 | smp-arm64\nBUILD_TARGET:STRING=smp-x86\n\n//Warning flags\nCFLAGS_WARNING:STRING=-Wall;-Wextra;-Wno-unused-parameter;-Wno-sign-compare;-Wno-unused-function;-Wno-implicit-fallthrough;-Wno-stringop-truncation\n\n//Path to a program.\nCMAKE_ADDR2LINE:FILEPATH=/usr/bin/addr2line\n\n//Path to a program.\nCMAKE_AR:FILEPATH=/usr/bin/ar\n\n//ASM compiler\nCMAKE_ASM_COMPILER:FILEPATH=/usr/bin/cc\n\n//A wrapper around 'ar' adding the appropriate '--plugin' option\n// for the GCC compiler\nCMAKE_ASM_COMPILER_AR:FILEPATH=/usr/bin/gcc-ar\n\n//A wrapper around 'ranlib' adding the appropriate '--plugin' option\n// for the GCC compiler\nCMAKE_ASM_COMPILER_RANLIB:FILEPATH=/usr/bin/gcc-ranlib\n\n//Flags used by the ASM compiler during all build types.\nCMAKE_ASM_FLAGS:STRING=\n\n//Flags used by the ASM compiler during DEBUG builds.\nCMAKE_ASM_FLAGS_DEBUG:STRING=-g\n\n//Flags used by the ASM compiler during MINSIZEREL builds.\nCMAKE_ASM_FLAGS_MINSIZEREL:STRING=-Os -DNDEBUG\n\n//Flags used by the ASM compiler during RELEASE builds.\nCMAKE_ASM_FLAGS_RELEASE:STRING=-O3 -DNDEBUG\n\n//Flags used by the ASM compiler during RELWITHDEBINFO builds.\nCMAKE_ASM_FLAGS_RELWITHDEBINFO:STRING=-O2 -g -DNDEBUG\n\n//Choose the type of build, options are: None Debug Release RelWithDebInfo\n// MinSizeRel ...\nCMAKE_BUILD_TYPE:STRING=Debug\n\n//Enable/Disable color output during build.\nCMAKE_COLOR_MAKEFILE:BOOL=ON\n\n//CXX compiler\nCMAKE_CXX_COMPILER:FILEPATH=/usr/bin/c++\n\n//A wrapper around 'ar' adding the appropriate '--plugin' option\n// for the GCC compiler\nCMAKE_CXX_COMPILER_AR:FILEPATH=/usr/bin/gcc-ar\n\n//A wrapper around 'ranlib' adding the appropriate '--plugin' option\n// for the GCC compiler\nCMAKE_CXX_COMPILER_RANLIB:FILEPATH=/usr/bin/gcc-ranlib\n\n//Flags used by the CXX compiler during all build types.\nCMAKE_CXX_FLAGS:STRING=\n\n//Flags used by the CXX compiler during DEBUG builds.\nCMAKE_CXX_FLAGS_DEBUG:STRING=-g\n\n//Flags used by the CXX compiler during MINSIZEREL builds.\nCMAKE_CXX_FLAGS_MINSIZEREL:STRING=-Os -DNDEBUG\n\n//Flags used by the CXX compiler during RELEASE builds.\nCMAKE_CXX_FLAGS_RELEASE:STRING=-O3 -DNDEBUG\n\n//Flags used by the CXX compiler during RELWITHDEBINFO builds.\nCMAKE_CXX_FLAGS_RELWITHDEBINFO:STRING=-O2 -g -DNDEBUG\n\n//C compiler\nCMAKE_C_COMPILER:STRING=/usr/bin/cc\n\n//A wrapper around 'ar' adding the appropriate '--plugin' option\n// for the GCC compiler\nCMAKE_C_COMPILER_AR:FILEPATH=/usr/bin/gcc-ar\n\n//A wrapper around 'ranlib' adding the appropriate '--plugin' option\n// for the GCC compiler\nCMAKE_C_COMPILER_RANLIB:FILEPATH=/usr/bin/gcc-ranlib\n\n//Flags used by the C compiler during all build types.\nCMAKE_C_FLAGS:STRING=\n\n//Flags used by the C compiler during DEBUG builds.\nCMAKE_C_FLAGS_DEBUG:STRING=-g\n\n//Flags used by the C compiler during MINSIZEREL builds.\nCMAKE_C_FLAGS_MINSIZEREL:STRING=-Os -DNDEBUG\n\n//Flags used by the C compiler during RELEASE builds.\nCMAKE_C_FLAGS_RELEASE:STRING=-O3 -DNDEBUG\n\n//Flags used by the C compiler during RELWITHDEBINFO builds.\nCMAKE_C_FLAGS_RELWITHDEBINFO:STRING=-O2 -g -DNDEBUG\n\n//Path to a program.\nCMAKE_DLLTOOL:FILEPATH=CMAKE_DLLTOOL-NOTFOUND\n\n//Flags used by the linker during all build types.\nCMAKE_EXE_LINKER_FLAGS:STRING=\n\n//Flags used by the linker during DEBUG builds.\nCMAKE_EXE_LINKER_FLAGS_DEBUG:STRING=\n\n//Flags used by the linker during MINSIZEREL builds.\nCMAKE_EXE_LINKER_FLAGS_MINSIZEREL:STRING=\n\n//Flags used by the linker during RELEASE builds.\nCMAKE_EXE_LINKER_FLAGS_RELEASE:STRING=\n\n//Flags used by the linker during RELWITHDEBINFO builds.\nCMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO:STRING=\n\n//No help, variable specified on the command line.\nCMAKE_EXPORT_COMPILE_COMMANDS:UNINITIALIZED=ON\n\n//Value Computed by CMake.\nCMAKE_FIND_PACKAGE_REDIRECTS_DIR:STATIC=/work/output/build/CMakeFiles/pkgRedirects\n\n//User executables (bin)\nCMAKE_INSTALL_BINDIR:PATH=bin\n\n//Read-only architecture-independent data (DATAROOTDIR)\nCMAKE_INSTALL_DATADIR:PATH=\n\n//Read-only architecture-independent data root (share)\nCMAKE_INSTALL_DATAROOTDIR:PATH=share\n\n//Documentation root (DATAROOTDIR/doc/PROJECT_NAME)\nCMAKE_INSTALL_DOCDIR:PATH=\n\n//C header files (include)\nCMAKE_INSTALL_INCLUDEDIR:PATH=include\n\n//Info documentation (DATAROOTDIR/info)\nCMAKE_INSTALL_INFODIR:PATH=\n\n//Object code libraries (lib64)\nCMAKE_INSTALL_LIBDIR:PATH=lib64\n\n//Program executables (libexec)\nCMAKE_INSTALL_LIBEXECDIR:PATH=libexec\n\n//Locale-dependent data (DATAROOTDIR/locale)\nCMAKE_INSTALL_LOCALEDIR:PATH=\n\n//Modifiable single-machine data (var)\nCMAKE_INSTALL_LOCALSTATEDIR:PATH=var\n\n//Man documentation (DATAROOTDIR/man)\nCMAKE_INSTALL_MANDIR:PATH=\n\n//C header files for non-gcc (/usr/include)\nCMAKE_INSTALL_OLDINCLUDEDIR:PATH=/usr/include\n\n//Install path prefix, prepended onto install directories.\nCMAKE_INSTALL_PREFIX:PATH=/usr/local\n\n//Run-time variable data (LOCALSTATEDIR/run)\nCMAKE_INSTALL_RUNSTATEDIR:PATH=\n\n//System admin executables (sbin)\nCMAKE_INSTALL_SBINDIR:PATH=sbin\n\n//Modifiable architecture-independent data (com)\nCMAKE_INSTALL_SHAREDSTATEDIR:PATH=com\n\n//Read-only single-machine data (etc)\nCMAKE_INSTALL_SYSCONFDIR:PATH=etc\n\n//Path to a program.\nCMAKE_LINKER:FILEPATH=/usr/bin/ld\n\n//No help, variable specified on the command line.\nCMAKE_MAKE_PROGRAM:UNINITIALIZED=/usr/bin/make\n\n//Flags used by the linker during the creation of modules during\n// all build types.\nCMAKE_MODULE_LINKER_FLAGS:STRING=\n\n//Flags used by the linker during the creation of modules during\n// DEBUG builds.\nCMAKE_MODULE_LINKER_FLAGS_DEBUG:STRING=\n\n//Flags used by the linker during the creation of modules during\n// MINSIZEREL builds.\nCMAKE_MODULE_LINKER_FLAGS_MINSIZEREL:STRING=\n\n//Flags used by the linker during the creation of modules during\n// RELEASE builds.\nCMAKE_MODULE_LINKER_FLAGS_RELEASE:STRING=\n\n//Flags used by the linker during the creation of modules during\n// RELWITHDEBINFO builds.\nCMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO:STRING=\n\n//Path to a program.\nCMAKE_NM:FILEPATH=/usr/bin/nm\n\n//Path to a program.\nCMAKE_OBJCOPY:FILEPATH=/usr/bin/objcopy\n\n//Path to a program.\nCMAKE_OBJDUMP:FILEPATH=/usr/bin/objdump\n\n//Value Computed by CMake\nCMAKE_PROJECT_DESCRIPTION:STATIC=\n\n//Value Computed by CMake\nCMAKE_PROJECT_HOMEPAGE_URL:STATIC=\n\n//Value Computed by CMake\nCMAKE_PROJECT_NAME:STATIC=mckernel\n\n//Path to a program.\nCMAKE_RANLIB:FILEPATH=/usr/bin/ranlib\n\n//Path to a program.\nCMAKE_READELF:FILEPATH=/usr/bin/readelf\n\n//Flags used by the linker during the creation of shared libraries\n// during all build types.\nCMAKE_SHARED_LINKER_FLAGS:STRING=\n\n//Flags used by the linker during the creation of shared libraries\n// during DEBUG builds.\nCMAKE_SHARED_LINKER_FLAGS_DEBUG:STRING=\n\n//Flags used by the linker during the creation of shared libraries\n// during MINSIZEREL builds.\nCMAKE_SHARED_LINKER_FLAGS_MINSIZEREL:STRING=\n\n//Flags used by the linker during the creation of shared libraries\n// during RELEASE builds.\nCMAKE_SHARED_LINKER_FLAGS_RELEASE:STRING=\n\n//Flags used by the linker during the creation of shared libraries\n// during RELWITHDEBINFO builds.\nCMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO:STRING=\n\n//If set, runtime paths are not added when installing shared libraries,\n// but are added when building.\nCMAKE_SKIP_INSTALL_RPATH:BOOL=NO\n\n//If set, runtime paths are not added when using shared libraries.\nCMAKE_SKIP_RPATH:BOOL=NO\n\n//Flags used by the linker during the creation of static libraries\n// during all build types.\nCMAKE_STATIC_LINKER_FLAGS:STRING=\n\n//Flags used by the linker during the creation of static libraries\n// during DEBUG builds.\nCMAKE_STATIC_LINKER_FLAGS_DEBUG:STRING=\n\n//Flags used by the linker during the creation of static libraries\n// during MINSIZEREL builds.\nCMAKE_STATIC_LINKER_FLAGS_MINSIZEREL:STRING=\n\n//Flags used by the linker during the creation of static libraries\n// during RELEASE builds.\nCMAKE_STATIC_LINKER_FLAGS_RELEASE:STRING=\n\n//Flags used by the linker during the creation of static libraries\n// during RELWITHDEBINFO builds.\nCMAKE_STATIC_LINKER_FLAGS_RELWITHDEBINFO:STRING=\n\n//Path to a program.\nCMAKE_STRIP:FILEPATH=/usr/bin/strip\n\n//Suppress CMake developer warnings from dependency probe projects\nCMAKE_SUPPRESS_DEVELOPER_WARNINGS:BOOL=TRUE\n\n//Path to a program.\nCMAKE_TAPI:FILEPATH=CMAKE_TAPI-NOTFOUND\n\n//If this value is on, makefiles will be generated without the\n// .SILENT directive, and all commands will be echoed to the console\n// during the make.  This is useful for debugging only. With Visual\n// Studio IDE projects all commands are done without /nologo.\nCMAKE_VERBOSE_MAKEFILE:BOOL=FALSE\n\n//Enable to build Debian packages\nCPACK_BINARY_DEB:BOOL=OFF\n\n//Enable to build FreeBSD packages\nCPACK_BINARY_FREEBSD:BOOL=OFF\n\n//Enable to build IFW packages\nCPACK_BINARY_IFW:BOOL=OFF\n\n//Enable to build NSIS packages\nCPACK_BINARY_NSIS:BOOL=OFF\n\n//Enable to build RPM packages\nCPACK_BINARY_RPM:BOOL=OFF\n\n//Enable to build STGZ packages\nCPACK_BINARY_STGZ:BOOL=ON\n\n//Enable to build TBZ2 packages\nCPACK_BINARY_TBZ2:BOOL=OFF\n\n//Enable to build TGZ packages\nCPACK_BINARY_TGZ:BOOL=ON\n\n//Enable to build TXZ packages\nCPACK_BINARY_TXZ:BOOL=OFF\n\n//Enable to build TZ packages\nCPACK_BINARY_TZ:BOOL=ON\n\n//Fujitsu MPI workaround\nENABLE_FJMPI_WORKAROUND:BOOL=OFF\n\n//Fugaku debug instrumentation\nENABLE_FUGAKU_DEBUG:BOOL=OFF\n\n//Fugaku hacks\nENABLE_FUGAKU_HACKS:BOOL=OFF\n\n//Enable GCOV\nENABLE_GCOV:BOOL=OFF\n\n//Redirect kernel message to Linux's /dev/kmsg\nENABLE_KMSG_REDIRECT:BOOL=OFF\n\n//krm workaround\nENABLE_KRM_WORKAROUND:BOOL=OFF\n\n//Use Linux work IRQ for IKC IPI\nENABLE_LINUX_WORK_IRQ_FOR_IKC:BOOL=ON\n\n//Enable memory dump support\nENABLE_MEMDUMP:STRING=AUTO\n\n//Opt in to the owned native fork caller (requires matching host/mcexec\n// artifacts)\nENABLE_NATIVE_FORK_OWNED_TRANSACTION:BOOL=ON\n\n//Enable guest sysfs verification with a Linux test controller\nENABLE_NATIVE_SYSFS_VERIFY:BOOL=OFF\n\n//Exclude McKernel memory from Linux dump\nENABLE_PANIC_NOTIFIER_WORKAROUND:BOOL=ON\n\n//Enable perf support\nENABLE_PERF:BOOL=ON\n\n//Enable per-CPU allocator cache (ThunderX2 workaround)\nENABLE_PER_CPU_ALLOC_CACHE:BOOL=OFF\n\n//Enable qlmpi programs\nENABLE_QLMPI:BOOL=OFF\n\n//Enable rusage support\nENABLE_RUSAGE:BOOL=ON\n\n//Enable Rust helpers in IHK Linux modules\nENABLE_RUST_IHK_MODULE_HELPERS:BOOL=ON\n\n//Enable Rust code in the McKernel image\nENABLE_RUST_KERNEL:BOOL=ON\n\n//Enable Rust helpers in McKernel user tools\nENABLE_RUST_USER_TOOLS:BOOL=ON\n\n//Built-in tofu driver support\nENABLE_TOFU:BOOL=OFF\n\n//Enable undefined behaviour sanitizer on mckernel size\nENABLE_UBSAN:BOOL=OFF\n\n//Enable uti support\nENABLE_UTI:BOOL=OFF\n\n//Enable -Werror\nENABLE_WERROR:BOOL=OFF\n\n//No help, variable specified on the command line.\nGIT_EXECUTABLE:UNINITIALIZED=/usr/bin/git\n\n//path to ihk source directory from mckernel sources\nIHK_SOURCE_DIR:STRING=ihk\n\n//Compiler flags to give to Kbuild.\nKBUILD_C_FLAGS:STRING=\n\n//Extra make arguments for Kbuild.\nKBUILD_MAKE_FLAGS:STRING=CC=/usr/bin/clang;LD=/usr/bin/ld.lld\n\n//kernel build directory\nKERNEL_DIR:STRING=/out/build\n\n//Path to a library.\nLIBBFD:FILEPATH=/usr/lib64/libbfd.so\n\n//Path to a library.\nLIBDWARF:FILEPATH=LIBDWARF-NOTFOUND\n\n//Path to a file.\nLIBELF_INCLUDE_DIRS:PATH=/usr/include\n\n//Path to a library.\nLIBELF_LIBRARIES:FILEPATH=/usr/lib64/libelf.so\n\n//Path to a library.\nLIBIBERTY:FILEPATH=/usr/lib64/libiberty.a\n\n//Path to a library.\nLIBNUMA:FILEPATH=/usr/lib64/libnuma.so\n\n//Path to a library.\nLIBRT:FILEPATH=/usr/lib64/librt.a\n\n//Path to a library.\nLIBUDEV:FILEPATH=/usr/lib64/libudev.so\n\n//mcexec path for binfmt\nMCEXEC_PATH:STRING=/usr/local/bin/mcexec\n\n//Linux control-kernel IRQ-work ABI\nMCKERNEL_HOST_IRQ_ABI:STRING=linux-6.12\n\n//Arguments to supply to pkg-config\nPKG_CONFIG_ARGN:STRING=\n\n//pkg-config executable\nPKG_CONFIG_EXECUTABLE:FILEPATH=/usr/bin/pkg-config\n\n//System call profile\nPROFILE_ENABLE:BOOL=ON\n\n//Path to a program.\nRUSTC:FILEPATH=/nightly/bin/rustc\n\n//Kernel version to build against\nUNAME_R:STRING=5.15.0-139-generic\n\n//krm is used\nWITH_KRM:BOOL=OFF\n\n//Value Computed by CMake\nihk_BINARY_DIR:STATIC=/work/output/build/ihk\n\n//Value Computed by CMake\nihk_IS_TOP_LEVEL:STATIC=OFF\n\n//Value Computed by CMake\nihk_SOURCE_DIR:STATIC=/src/ihk\n\n//Dependencies for the target\nihklib_LIB_DEPENDS:STATIC=general;/usr/lib64/libbfd.so;\n\n//Value Computed by CMake\nmckernel_BINARY_DIR:STATIC=/work/output/build\n\n//Value Computed by CMake\nmckernel_IS_TOP_LEVEL:STATIC=ON\n\n//Value Computed by CMake\nmckernel_SOURCE_DIR:STATIC=/src\n\n//Dependencies for the target\nsched_yield_LIB_DEPENDS:STATIC=general;dl;\n\n\n########################\n# INTERNAL cache entries\n########################\n\n//STRINGS property for variable: BUILD_TARGET\nBUILD_TARGET-STRINGS:INTERNAL=smp-x86;smp-arm64\n//ADVANCED property for variable: CMAKE_ADDR2LINE\nCMAKE_ADDR2LINE-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_AR\nCMAKE_AR-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_ASM_COMPILER\nCMAKE_ASM_COMPILER-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_ASM_COMPILER_AR\nCMAKE_ASM_COMPILER_AR-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_ASM_COMPILER_RANLIB\nCMAKE_ASM_COMPILER_RANLIB-ADVANCED:INTERNAL=1\nCMAKE_ASM_COMPILER_WORKS:INTERNAL=1\n//ADVANCED property for variable: CMAKE_ASM_FLAGS\nCMAKE_ASM_FLAGS-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_ASM_FLAGS_DEBUG\nCMAKE_ASM_FLAGS_DEBUG-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_ASM_FLAGS_MINSIZEREL\nCMAKE_ASM_FLAGS_MINSIZEREL-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_ASM_FLAGS_RELEASE\nCMAKE_ASM_FLAGS_RELEASE-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_ASM_FLAGS_RELWITHDEBINFO\nCMAKE_ASM_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1\n//This is the directory where this CMakeCache.txt was created\nCMAKE_CACHEFILE_DIR:INTERNAL=/work/output/build\n//Major version of cmake used to create the current loaded cache\nCMAKE_CACHE_MAJOR_VERSION:INTERNAL=3\n//Minor version of cmake used to create the current loaded cache\nCMAKE_CACHE_MINOR_VERSION:INTERNAL=31\n//Patch version of cmake used to create the current loaded cache\nCMAKE_CACHE_PATCH_VERSION:INTERNAL=8\n//ADVANCED property for variable: CMAKE_COLOR_MAKEFILE\nCMAKE_COLOR_MAKEFILE-ADVANCED:INTERNAL=1\n//Path to CMake executable.\nCMAKE_COMMAND:INTERNAL=/usr/bin/cmake\n//Path to cpack program executable.\nCMAKE_CPACK_COMMAND:INTERNAL=/usr/bin/cpack\n//Path to ctest program executable.\nCMAKE_CTEST_COMMAND:INTERNAL=/usr/bin/ctest\n//ADVANCED property for variable: CMAKE_CXX_COMPILER\nCMAKE_CXX_COMPILER-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_CXX_COMPILER_AR\nCMAKE_CXX_COMPILER_AR-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_CXX_COMPILER_RANLIB\nCMAKE_CXX_COMPILER_RANLIB-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_CXX_FLAGS\nCMAKE_CXX_FLAGS-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_CXX_FLAGS_DEBUG\nCMAKE_CXX_FLAGS_DEBUG-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_CXX_FLAGS_MINSIZEREL\nCMAKE_CXX_FLAGS_MINSIZEREL-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_CXX_FLAGS_RELEASE\nCMAKE_CXX_FLAGS_RELEASE-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_CXX_FLAGS_RELWITHDEBINFO\nCMAKE_CXX_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_C_COMPILER\nCMAKE_C_COMPILER-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_C_COMPILER_AR\nCMAKE_C_COMPILER_AR-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_C_COMPILER_RANLIB\nCMAKE_C_COMPILER_RANLIB-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_C_FLAGS\nCMAKE_C_FLAGS-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_C_FLAGS_DEBUG\nCMAKE_C_FLAGS_DEBUG-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_C_FLAGS_MINSIZEREL\nCMAKE_C_FLAGS_MINSIZEREL-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_C_FLAGS_RELEASE\nCMAKE_C_FLAGS_RELEASE-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_C_FLAGS_RELWITHDEBINFO\nCMAKE_C_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_DLLTOOL\nCMAKE_DLLTOOL-ADVANCED:INTERNAL=1\n//Path to cache edit program executable.\nCMAKE_EDIT_COMMAND:INTERNAL=/usr/bin/ccmake\n//Executable file format\nCMAKE_EXECUTABLE_FORMAT:INTERNAL=ELF\n//ADVANCED property for variable: CMAKE_EXE_LINKER_FLAGS\nCMAKE_EXE_LINKER_FLAGS-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_EXE_LINKER_FLAGS_DEBUG\nCMAKE_EXE_LINKER_FLAGS_DEBUG-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_EXE_LINKER_FLAGS_MINSIZEREL\nCMAKE_EXE_LINKER_FLAGS_MINSIZEREL-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_EXE_LINKER_FLAGS_RELEASE\nCMAKE_EXE_LINKER_FLAGS_RELEASE-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO\nCMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1\n//Name of external makefile project generator.\nCMAKE_EXTRA_GENERATOR:INTERNAL=\n//Name of generator.\nCMAKE_GENERATOR:INTERNAL=Unix Makefiles\n//Generator instance identifier.\nCMAKE_GENERATOR_INSTANCE:INTERNAL=\n//Name of generator platform.\nCMAKE_GENERATOR_PLATFORM:INTERNAL=\n//Name of generator toolset.\nCMAKE_GENERATOR_TOOLSET:INTERNAL=\n//Source directory with the top level CMakeLists.txt file for this\n// project\nCMAKE_HOME_DIRECTORY:INTERNAL=/src\n//ADVANCED property for variable: CMAKE_INSTALL_BINDIR\nCMAKE_INSTALL_BINDIR-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_INSTALL_DATADIR\nCMAKE_INSTALL_DATADIR-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_INSTALL_DATAROOTDIR\nCMAKE_INSTALL_DATAROOTDIR-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_INSTALL_DOCDIR\nCMAKE_INSTALL_DOCDIR-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_INSTALL_INCLUDEDIR\nCMAKE_INSTALL_INCLUDEDIR-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_INSTALL_INFODIR\nCMAKE_INSTALL_INFODIR-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_INSTALL_LIBDIR\nCMAKE_INSTALL_LIBDIR-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_INSTALL_LIBEXECDIR\nCMAKE_INSTALL_LIBEXECDIR-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_INSTALL_LOCALEDIR\nCMAKE_INSTALL_LOCALEDIR-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_INSTALL_LOCALSTATEDIR\nCMAKE_INSTALL_LOCALSTATEDIR-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_INSTALL_MANDIR\nCMAKE_INSTALL_MANDIR-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_INSTALL_OLDINCLUDEDIR\nCMAKE_INSTALL_OLDINCLUDEDIR-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_INSTALL_RUNSTATEDIR\nCMAKE_INSTALL_RUNSTATEDIR-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_INSTALL_SBINDIR\nCMAKE_INSTALL_SBINDIR-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_INSTALL_SHAREDSTATEDIR\nCMAKE_INSTALL_SHAREDSTATEDIR-ADVANCED:INTERNAL=1\n//Install .so files without execute permission.\nCMAKE_INSTALL_SO_NO_EXE:INTERNAL=0\n//ADVANCED property for variable: CMAKE_INSTALL_SYSCONFDIR\nCMAKE_INSTALL_SYSCONFDIR-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_LINKER\nCMAKE_LINKER-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_MODULE_LINKER_FLAGS\nCMAKE_MODULE_LINKER_FLAGS-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_MODULE_LINKER_FLAGS_DEBUG\nCMAKE_MODULE_LINKER_FLAGS_DEBUG-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_MODULE_LINKER_FLAGS_MINSIZEREL\nCMAKE_MODULE_LINKER_FLAGS_MINSIZEREL-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_MODULE_LINKER_FLAGS_RELEASE\nCMAKE_MODULE_LINKER_FLAGS_RELEASE-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO\nCMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_NM\nCMAKE_NM-ADVANCED:INTERNAL=1\n//number of local generators\nCMAKE_NUMBER_OF_MAKEFILES:INTERNAL=12\n//ADVANCED property for variable: CMAKE_OBJCOPY\nCMAKE_OBJCOPY-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_OBJDUMP\nCMAKE_OBJDUMP-ADVANCED:INTERNAL=1\n//Platform information initialized\nCMAKE_PLATFORM_INFO_INITIALIZED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_RANLIB\nCMAKE_RANLIB-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_READELF\nCMAKE_READELF-ADVANCED:INTERNAL=1\n//Path to CMake installation.\nCMAKE_ROOT:INTERNAL=/usr/share/cmake\n//ADVANCED property for variable: CMAKE_SHARED_LINKER_FLAGS\nCMAKE_SHARED_LINKER_FLAGS-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_SHARED_LINKER_FLAGS_DEBUG\nCMAKE_SHARED_LINKER_FLAGS_DEBUG-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL\nCMAKE_SHARED_LINKER_FLAGS_MINSIZEREL-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_SHARED_LINKER_FLAGS_RELEASE\nCMAKE_SHARED_LINKER_FLAGS_RELEASE-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO\nCMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_SKIP_INSTALL_RPATH\nCMAKE_SKIP_INSTALL_RPATH-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_SKIP_RPATH\nCMAKE_SKIP_RPATH-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_STATIC_LINKER_FLAGS\nCMAKE_STATIC_LINKER_FLAGS-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_STATIC_LINKER_FLAGS_DEBUG\nCMAKE_STATIC_LINKER_FLAGS_DEBUG-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_STATIC_LINKER_FLAGS_MINSIZEREL\nCMAKE_STATIC_LINKER_FLAGS_MINSIZEREL-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_STATIC_LINKER_FLAGS_RELEASE\nCMAKE_STATIC_LINKER_FLAGS_RELEASE-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_STATIC_LINKER_FLAGS_RELWITHDEBINFO\nCMAKE_STATIC_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_STRIP\nCMAKE_STRIP-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CMAKE_TAPI\nCMAKE_TAPI-ADVANCED:INTERNAL=1\n//uname command\nCMAKE_UNAME:INTERNAL=/usr/bin/uname\n//ADVANCED property for variable: CMAKE_VERBOSE_MAKEFILE\nCMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CPACK_BINARY_DEB\nCPACK_BINARY_DEB-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CPACK_BINARY_FREEBSD\nCPACK_BINARY_FREEBSD-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CPACK_BINARY_IFW\nCPACK_BINARY_IFW-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CPACK_BINARY_NSIS\nCPACK_BINARY_NSIS-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CPACK_BINARY_RPM\nCPACK_BINARY_RPM-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CPACK_BINARY_STGZ\nCPACK_BINARY_STGZ-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CPACK_BINARY_TBZ2\nCPACK_BINARY_TBZ2-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CPACK_BINARY_TGZ\nCPACK_BINARY_TGZ-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CPACK_BINARY_TXZ\nCPACK_BINARY_TXZ-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: CPACK_BINARY_TZ\nCPACK_BINARY_TZ-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: ELF_GETSHDRSTRNDX\nELF_GETSHDRSTRNDX-ADVANCED:INTERNAL=1\n//Test ELF_GETSHDRSTRNDX\nELF_GETSHDRSTRNDX:INTERNAL=1\n//STRINGS property for variable: ENABLE_MEMDUMP\nENABLE_MEMDUMP-STRINGS:INTERNAL=AUTO;ON;OFF\n//Test EXECUTER_BFD_SET_SECTION_NEEDS_BFD\nEXECUTER_BFD_SET_SECTION_NEEDS_BFD:INTERNAL=\n//Details about finding LibElf\nFIND_PACKAGE_MESSAGE_DETAILS_LibElf:INTERNAL=[/usr/lib64/libelf.so][/usr/include][v()]\n//Details about finding PkgConfig\nFIND_PACKAGE_MESSAGE_DETAILS_PkgConfig:INTERNAL=[/usr/bin/pkg-config][v2.1.0()]\n//Have include alloca.h\nHAVE_ALLOCA_H:INTERNAL=1\n//Have function elf64_getehdr\nHAVE_ELF64_GETEHDR:INTERNAL=1\n//Have function elf64_getshdr\nHAVE_ELF64_GETSHDR:INTERNAL=1\n//Have include elfaccess.h\nHAVE_ELFACCESS_H:INTERNAL=\n//Have include elf.h\nHAVE_ELF_H:INTERNAL=1\n//Have include inttypes.h\nHAVE_INTTYPES_H:INTERNAL=1\n//Have include libelf.h\nHAVE_LIBELF_H:INTERNAL=1\n//Have include libelf/libelf.h\nHAVE_LIBELF_LIBELF_H:INTERNAL=\n//Have include memory.h\nHAVE_MEMORY_H:INTERNAL=1\n//Have include stdint.h\nHAVE_STDINT_H:INTERNAL=1\n//Have include stdlib.h\nHAVE_STDLIB_H:INTERNAL=1\n//Have include strings.h\nHAVE_STRINGS_H:INTERNAL=1\n//Have include string.h\nHAVE_STRING_H:INTERNAL=1\n//Have include sys/elf_386.h\nHAVE_SYS_ELF_386_H:INTERNAL=\n//Have include sys/elf_amd64.h\nHAVE_SYS_ELF_AMD64_H:INTERNAL=\n//Have include sys/elf_sparc.h\nHAVE_SYS_ELF_SPARC_H:INTERNAL=\n//Have include sys/ia64/elf.h\nHAVE_SYS_IA64_ELF_H:INTERNAL=\n//Have include sys/stat.h\nHAVE_SYS_STAT_H:INTERNAL=1\n//Have include sys/types.h\nHAVE_SYS_TYPES_H:INTERNAL=1\n//Have include unistd.h\nHAVE_UNISTD_H:INTERNAL=1\n//Test HAVE_UNUSED_ATTRIBUTE\nHAVE_UNUSED_ATTRIBUTE:INTERNAL=1\n//Result of TRY_COMPILE\nHAVE_UNUSED_ATTRIBUTE_COMPILED:INTERNAL=TRUE\n//Result of try_run()\nHAVE_UNUSED_ATTRIBUTE_EXITCODE:INTERNAL=0\n//Test HAVE_ZLIB\nHAVE_ZLIB:INTERNAL=1\n//Test HAVE___UINT32_T\nHAVE___UINT32_T:INTERNAL=\n//Test HAVE___UINT32_T_IN_SYS_TYPES_H\nHAVE___UINT32_T_IN_SYS_TYPES_H:INTERNAL=1\n//Test HAVE___UINT64_T\nHAVE___UINT64_T:INTERNAL=\n//Test HAVE___UINT64_T_IN_SYS_TYPES_H\nHAVE___UINT64_T_IN_SYS_TYPES_H:INTERNAL=1\n//Test IMPLICIT_FALLTHROUGH\nIMPLICIT_FALLTHROUGH:INTERNAL=1\n//ADVANCED property for variable: KBUILD_C_FLAGS\nKBUILD_C_FLAGS-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: KBUILD_MAKE_FLAGS\nKBUILD_MAKE_FLAGS-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: LIBELF_INCLUDE_DIRS\nLIBELF_INCLUDE_DIRS-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: LIBELF_LIBRARIES\nLIBELF_LIBRARIES-ADVANCED:INTERNAL=1\n//STRINGS property for variable: MCKERNEL_HOST_IRQ_ABI\nMCKERNEL_HOST_IRQ_ABI-STRINGS:INTERNAL=legacy;linux-6.12\n//ADVANCED property for variable: PKG_CONFIG_ARGN\nPKG_CONFIG_ARGN-ADVANCED:INTERNAL=1\n//ADVANCED property for variable: PKG_CONFIG_EXECUTABLE\nPKG_CONFIG_EXECUTABLE-ADVANCED:INTERNAL=1\n//Test STRINGOP_TRUNCATION\nSTRINGOP_TRUNCATION:INTERNAL=1\n//CMAKE_INSTALL_PREFIX during last run\n_GNUInstallDirs_LAST_CMAKE_INSTALL_PREFIX:INTERNAL=/usr/local\n\n",
+    "link": "/usr/bin/cc -g -fPIE -pie -Wl,--dependency-file=CMakeFiles/mcexec.dir/link.d CMakeFiles/mcexec.dir/mcexec.c.o rust/mcexec_helpers.o -o mcexec  -Wl,-rpath,:::::::::::::::: libmcexec.a /usr/lib64/librt.a /usr/lib64/libnuma.so -lpthread\n"
+  },
+  "constraints": {
+    "BOOT_hard_cutoff": 963213.6960030915,
+    "MONO_hard_cutoff": 947874.5689514667,
+    "UTC_hard_cutoff": "2026-10-28T05:36:09Z",
+    "all_holds_and_parent_exclusive_controls_preserved": true,
+    "credit_ceiling": 57774.852125,
+    "credit_run": "7f4af94a83b14cc08f97401f5891d965",
+    "prior_spent_floor": 22812.3311
+  },
+  "extractor": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-actual-native-preparation-source-1/working-c-launcher-dca025-provenance-1/extract_provenance.py",
+    "sha256": "32f18838773dcc84240b1eb5a69bdaf26b5059e45b03302126c98f3c020e79e6"
+  },
+  "host_forward_trace": {
+    "admission": "After COPIED_SYSCALL invoke and user-copy success, number231 short-circuits sampling and is always traced. Other deliveries reserve self.trace(); delivery_trace is retained per HostWorker and controls matching route/return rows.",
+    "consumer_sha256": "8bf30cd8ae79cc778bd91816f30aaf7a37ccc2aab59822ca2a03587426a212b8",
+    "excerpts": [
+      {
+        "context": "                armed: AtomicBool::new(false),\n                cleanup_requested: AtomicBool::new(false),\n                reap_error: AtomicI32::new(0),\n                trace_budget: AtomicI32::new(64),\n                operation,\n                mapping,\n                workers,\n                control_children,\n                fork_parent,",
+        "line": 162
+      },
+      {
+        "context": "        kernel::error::to_result(status as i32).map(|_| ())\n    }\n\n    fn trace(&self) -> bool {\n        self.trace_budget\n            .fetch_update(Ordering::Relaxed, Ordering::Relaxed, |count| {\n                (count > 0).then(|| count - 1)\n            })\n            .is_ok()",
+        "line": 191
+      },
+      {
+        "context": "            // Ordinary samples remain grouped with their route and return;\n            // committed non-returning exit_group delivery is always visible\n            // even after the ordinary trace budget is exhausted.\n            let traced = number == 231 || self.trace();\n            worker.delivery_trace.store(traced, Ordering::Relaxed);\n            worker.delivery_number.store(number, Ordering::Relaxed);\n            worker.delivery.store(serial, Ordering::Release);\n            if traced {\n                pr_info!(\"application_syscall=delivered os={} generation={} pid={} worker={} delivery={} cpu={} number={}\\n\",",
+        "line": 368
+      },
+      {
+        "context": "            worker.delivery_number.store(number, Ordering::Relaxed);\n            worker.delivery.store(serial, Ordering::Release);\n            if traced {\n                pr_info!(\"application_syscall=delivered os={} generation={} pid={} worker={} delivery={} cpu={} number={}\\n\",\n                self.slot, self.generation, self.pid, worker.handle, serial,\n                image::word(&bytes, 16).map_err(errno)?, number);\n            }\n            return Ok(0);\n        }",
+        "line": 373
+      },
+      {
+        "context": "        }\n        let launcher_cpu = image::word(&descriptor, 0).map_err(errno)? as i64;\n        if launcher_cpu != cpu && traced {\n            pr_info!(\"application_syscall=return_route os={} generation={} pid={} worker={} delivery={} launcher_cpu={} guest_cpu={}\\n\",\n                self.slot, self.generation, self.pid, worker.handle, serial, launcher_cpu, cpu);\n        }\n        let result = self.invoke(super::application_abi::RETURN_SYSCALL, &mut bytes);\n        if image::word(&bytes, 48).map_err(errno)? == 1 {\n            // This includes interrupted waits after acceptance. The independent",
+        "line": 415
+      },
+      {
+        "context": "        }\n        result?;\n        if traced {\n            pr_info!(\"application_syscall=returned os={} generation={} pid={} worker={} delivery={} cpu={} value={}\\n\",\n                self.slot, self.generation, self.pid, worker.handle, serial,\n                image::word(&bytes, 16).map_err(errno)?, image::word(&bytes, 24).map_err(errno)? as i64);\n        }\n        Ok(0)\n    }",
+        "line": 427
+      }
+    ],
+    "initial_ordinary_budget": 64,
+    "module_sha256": "57546af5110c0674b307e5ac5a328228abbe784f890f69521db5f594f21f6ae8",
+    "not_a_workload_quota": true,
+    "provider": "Rust mcctrl Registration, separate from launcher and LWK syscall debug",
+    "scope": "Per Registration::acquire connection, atomic positive-count decrement per committed ordinary delivery. No PID-reset logic in this host counter."
+  },
+  "inherited_base_configure": {
+    "argv": [
+      "/usr/bin/cmake",
+      "-S",
+      "/src",
+      "-B",
+      "/work/output/build",
+      "-G",
+      "Unix Makefiles",
+      "-DCMAKE_BUILD_TYPE=Debug",
+      "-DBUILD_TARGET=smp-x86",
+      "-DKERNEL_DIR=/out/build",
+      "-DENABLE_PERF=ON",
+      "-DENABLE_RUSAGE=ON",
+      "-DENABLE_LINUX_WORK_IRQ_FOR_IKC=ON",
+      "-DRUSTC=/nightly/bin/rustc",
+      "-DCMAKE_C_COMPILER=/usr/bin/cc",
+      "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+      "-DENABLE_RUST_KERNEL=ON",
+      "-DENABLE_RUST_IHK_MODULE_HELPERS=ON",
+      "-DENABLE_RUST_USER_TOOLS=ON",
+      "-DMCKERNEL_HOST_IRQ_ABI=linux-6.12",
+      "-DENABLE_NATIVE_FORK_OWNED_TRANSACTION=ON",
+      "-DKBUILD_MAKE_FLAGS=CC=/usr/bin/clang;LD=/usr/bin/ld.lld",
+      "-DCMAKE_MAKE_PROGRAM=/usr/bin/make",
+      "-DCMAKE_LINKER=/usr/bin/ld",
+      "-DCMAKE_AR=/usr/bin/ar",
+      "-DCMAKE_RANLIB=/usr/bin/ranlib",
+      "-DCMAKE_NM=/usr/bin/nm",
+      "-DCMAKE_OBJCOPY=/usr/bin/objcopy",
+      "-DCMAKE_READELF=/usr/bin/readelf",
+      "-DGIT_EXECUTABLE=/usr/bin/git"
+    ],
+    "cwd": "/src",
+    "env_sha256": "32b2734ac7207c8317d8e807903d112334910a72acacd31d684b2d4cbcdb46e9",
+    "exit_code": 0,
+    "phase": "configure"
+  },
+  "next_check": "Independent reader verifies referenced hashes and exact declared source/object/config chain; causal supervisor must preserve ordinary64 sampling and number231 exception without depending on complete gate syscall traces.",
+  "operations": {
+    "Docker": 0,
+    "Git": 0,
+    "canonical_writes": 0,
+    "compile": 0,
+    "guard": 0,
+    "native": 0,
+    "resources": 0
+  },
+  "publication_count_correction": "Initial READY retained byteexact as READY.INITIAL-PUBLICATION-COUNT.json; corrected143 retained publication rows+12 new rows, distinct from139 owner predicates.",
+  "references": {
+    "C_compiler": {
+      "bytes": 2782,
+      "path": "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/driver-hash-correction-1/pinned-launcher-attempt-1/owner-work/output/build/CMakeFiles/3.31.8/CMakeCCompiler.cmake",
+      "sha256": "c5e40cc3b5e0ad2f2662d450c15ea1c2489ba846871bdb2e321cc66c31040284"
+    },
+    "C_consumer_source": {
+      "bytes": 221546,
+      "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/source-materialization-1/materialized-source/executer/user/mcexec.c",
+      "sha256": "310301305e41bab4eda63026849ee6f166bb6e5d4d6f2c789aa8003e94745056"
+    },
+    "C_flags": {
+      "bytes": 617,
+      "path": "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/driver-hash-correction-1/pinned-launcher-attempt-1/owner-work/output/build/executer/user/CMakeFiles/mcexec.dir/flags.make",
+      "sha256": "57c89ba1b9c03dd9197acc84a331d9aea8b970065027a81d158f55e0c5f26fbe"
+    },
+    "C_rule": {
+      "bytes": 5807,
+      "path": "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/driver-hash-correction-1/pinned-launcher-attempt-1/owner-work/output/build/executer/user/CMakeFiles/mcexec.dir/build.make",
+      "sha256": "4c6ae6044a77bc3e6996779f866740e7d04bd9cd896d4ecf44c63c8521401d7c"
+    },
+    "Rust_rule": {
+      "bytes": 3618,
+      "path": "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/driver-hash-correction-1/pinned-launcher-attempt-1/owner-work/output/build/executer/user/CMakeFiles/mcexec_rust_helpers.dir/build.make",
+      "sha256": "974f1814427e41cbb9b0cb25a31fcd66804474fab8d1fecc191d36387c72828c"
+    },
+    "actual_Rust_helper_source": {
+      "bytes": 254806,
+      "path": "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/authority/mcexec_helpers.8f9f.rs",
+      "sha256": "8f9fbe474220433118e6662c9f2517f73a547730575b83ffb73255d06e9b40d7"
+    },
+    "actual_build_C_object": {
+      "bytes": 236424,
+      "path": "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/driver-hash-correction-1/pinned-launcher-attempt-1/owner-work/output/build/executer/user/CMakeFiles/mcexec.dir/mcexec.c.o",
+      "sha256": "cf1a50ec342fd17cbe21f6c65da8911ece77cc296f39c1582348d1c516109659"
+    },
+    "actual_build_archive": {
+      "bytes": 2970,
+      "path": "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/driver-hash-correction-1/pinned-launcher-attempt-1/owner-work/output/build/executer/user/libmcexec.a",
+      "sha256": "c8574b6098e864af73be8f8b5ab89f1edc217167ce96472471c10e88231ba38e"
+    },
+    "actual_build_driver": {
+      "bytes": 11830,
+      "path": "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/driver-hash-correction-1/bound-source-1/launcher_only_offline.py",
+      "sha256": "af2b090105083607c2e986a1f936be7459f8221da01bc5617ede6731dd0aa883"
+    },
+    "actual_build_plan": {
+      "bytes": 4470,
+      "path": "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/driver-hash-correction-1/bound-source-1/launcher-plan.json",
+      "sha256": "3f86f9b3db382536f7ccce7cdccf596f65a2c68e67611e08cb6f7f7a92733162"
+    },
+    "actual_build_receipt": {
+      "bytes": 7412,
+      "path": "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/driver-hash-correction-1/pinned-launcher-attempt-1/owner-work/evidence/receipt.json",
+      "sha256": "721406623ff74aaebecf656d3287b8fc9dcf1f60b24a6aabbc7ee32fd65df7cd"
+    },
+    "actual_build_stderr": {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/driver-hash-correction-1/pinned-launcher-attempt-1/owner-work/evidence/build.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual_build_stdout": {
+      "bytes": 168,
+      "path": "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/driver-hash-correction-1/pinned-launcher-attempt-1/owner-work/evidence/build.stdout.log",
+      "sha256": "123f19954621f84e1be67ddfca87b83863e16f6ab7b9ce69ecebfa3713ab2559"
+    },
+    "actual_source_review": {
+      "bytes": 2966,
+      "path": "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/INDEPENDENT-CUMULATIVE-LAUNCHER-SOURCE-REVIEW-1.json",
+      "sha256": "745309b5f27701322145475b503314019a50b6fa3a84b92243bc19a5f4a6b8c6"
+    },
+    "artifact_libmcexec.a": {
+      "bytes": 2970,
+      "path": "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/driver-hash-correction-1/pinned-launcher-attempt-1/owner-work/evidence/artifacts/libmcexec.a",
+      "sha256": "c8574b6098e864af73be8f8b5ab89f1edc217167ce96472471c10e88231ba38e"
+    },
+    "artifact_mcexec": {
+      "bytes": 394648,
+      "path": "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/driver-hash-correction-1/pinned-launcher-attempt-1/owner-work/evidence/artifacts/mcexec",
+      "sha256": "dca0250159ce04a272a72dd1217213a4b6e0f21ec8c21da211eede250c451954"
+    },
+    "artifact_mcexec-link.txt": {
+      "bytes": 234,
+      "path": "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/driver-hash-correction-1/pinned-launcher-attempt-1/owner-work/evidence/artifacts/mcexec-link.txt",
+      "sha256": "e3b2918e6fe7b4950aa8eddf173861f296219e0d4ea2c9cd62e367adfc4a939d"
+    },
+    "artifact_mcexec-rust-build.make": {
+      "bytes": 3618,
+      "path": "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/driver-hash-correction-1/pinned-launcher-attempt-1/owner-work/evidence/artifacts/mcexec-rust-build.make",
+      "sha256": "974f1814427e41cbb9b0cb25a31fcd66804474fab8d1fecc191d36387c72828c"
+    },
+    "artifact_mcexec.c.o": {
+      "bytes": 236424,
+      "path": "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/driver-hash-correction-1/pinned-launcher-attempt-1/owner-work/evidence/artifacts/mcexec.c.o",
+      "sha256": "cf1a50ec342fd17cbe21f6c65da8911ece77cc296f39c1582348d1c516109659"
+    },
+    "artifact_mcexec_helpers.o": {
+      "bytes": 437264,
+      "path": "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/driver-hash-correction-1/pinned-launcher-attempt-1/owner-work/evidence/artifacts/mcexec_helpers.o",
+      "sha256": "afa3d82b09fe3805ee525db8c2b054cad0c1e7653eac570baa377061776f36e5"
+    },
+    "cache": {
+      "bytes": 26414,
+      "path": "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/driver-hash-correction-1/pinned-launcher-attempt-1/owner-work/output/build/CMakeCache.txt",
+      "sha256": "50e1523f485648386b9037630ce7306d8315c4dc08f8b9ca56f3a401f0ed0110"
+    },
+    "frozen_manifest": {
+      "bytes": 9810,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/root-adopted-stage-source-1/offline-materialization-1/manifest.HOST-STATIC.json",
+      "sha256": "a035f93e5193e92183ac47b3c4271a40e4184563489f7cb7aa59bc7bebff573a"
+    },
+    "independent_artifact_acceptance": {
+      "bytes": 2651,
+      "path": "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/driver-hash-correction-1/INDEPENDENT-ACTUAL-LAUNCHER-PRODUCTION-ARTIFACT-ACCEPTANCE-1.json",
+      "sha256": "5eeb7f2ea4aba4421d7d79ed935946506a12720d0c7711e01d30065cb14dda54"
+    },
+    "inherited_base_C_object": {
+      "bytes": 236424,
+      "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1/owner-work/output/build/executer/user/CMakeFiles/mcexec.dir/mcexec.c.o",
+      "sha256": "cf1a50ec342fd17cbe21f6c65da8911ece77cc296f39c1582348d1c516109659"
+    },
+    "inherited_base_archive": {
+      "bytes": 2970,
+      "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1/owner-work/output/build/executer/user/libmcexec.a",
+      "sha256": "c8574b6098e864af73be8f8b5ab89f1edc217167ce96472471c10e88231ba38e"
+    },
+    "inherited_base_build_receipt": {
+      "bytes": 41900,
+      "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1/owner-work/evidence/receipt.json",
+      "sha256": "21e543405e6611313d704340cfccc522da82ca991429b7f16e784cfab5318150"
+    },
+    "link_rule": {
+      "bytes": 234,
+      "path": "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/driver-hash-correction-1/pinned-launcher-attempt-1/owner-work/output/build/executer/user/CMakeFiles/mcexec.dir/link.txt",
+      "sha256": "e3b2918e6fe7b4950aa8eddf173861f296219e0d4ea2c9cd62e367adfc4a939d"
+    },
+    "selected_LWK_debug_source": {
+      "bytes": 1263273,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/rust-subtree/syscall_policy.rs",
+      "sha256": "2ddde21dfcf32402d281d7ba70e62d765cb60e60bf225d7303b17221959a5477"
+    },
+    "selected_launcher": {
+      "bytes": 394648,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/launcher-runtime-snapshot-1/mcexec",
+      "sha256": "dca0250159ce04a272a72dd1217213a4b6e0f21ec8c21da211eede250c451954"
+    },
+    "selected_mcctrl_consumer": {
+      "bytes": 54854,
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/wait-error-observation-1/mcctrl_process.rs",
+      "sha256": "8bf30cd8ae79cc778bd91816f30aaf7a37ccc2aab59822ca2a03587426a212b8"
+    },
+    "selected_mcctrl_module": {
+      "bytes": 2578512,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-final-native-preparation-new12h-1/offline-materialization-1/runtime-inputs/mcctrl.ko",
+      "sha256": "57546af5110c0674b307e5ac5a328228abbe784f890f69521db5f594f21f6ae8"
+    },
+    "snapshot_receipt": {
+      "bytes": 2475,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/launcher-runtime-snapshot-1/ACTUAL-LAUNCHER-SNAPSHOT-RECEIPT.json",
+      "sha256": "652afc64ea5346e1e0e36959d2e9801e022c06f2fa501bbd53b24dbb243044ed"
+    },
+    "source_manifest": {
+      "bytes": 6382081,
+      "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/thin-inputs.json",
+      "sha256": "40944a65b9714777d0af0e4626e65888bf627d648395d5cc3a2e646ff19c1520"
+    },
+    "source_publication_rows": {
+      "bytes": 84931,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/source-publication-preparation-1/EXACT-SOURCE-PUBLICATION-ROWS.json",
+      "sha256": "bba614e0bdbd7669c38186054a8852486637e27a04b8c68224720034437cd67c"
+    },
+    "toolchain_manifest": {
+      "bytes": 72685013,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/image-toolchain.json",
+      "sha256": "a68e02b3b66b8bfbae96bf742dc8702b6e81dd97b92189b87437c3d08fccdf72"
+    }
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "selected_binary": {
+    "build_id": "bb2874732ffa009613fec0254a5c87acef11b758",
+    "mode": 33261,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/launcher-runtime-snapshot-1/mcexec",
+    "sha256": "dca0250159ce04a272a72dd1217213a4b6e0f21ec8c21da211eede250c451954",
+    "size": 394648
+  },
+  "source139_context": {
+    "actual_new_source_or_static_binding_rows": 12,
+    "original_139_owner_predicates": "Retained unchanged; distinct from155 exported publication rows",
+    "publication_rows": 155,
+    "qualification": "Existing publication referenced unchanged; bounded extraction does not reread or requalify all139 owner predicates.",
+    "retained_owner_source_rows": 143
+  },
+  "source_object_chain": {
+    "C_object_rebuilt_in_successor": false,
+    "C_object_sha256": "cf1a50ec342fd17cbe21f6c65da8911ece77cc296f39c1582348d1c516109659",
+    "C_source_sha256": "310301305e41bab4eda63026849ee6f166bb6e5d4d6f2c789aa8003e94745056",
+    "Rust_object_sha256": "afa3d82b09fe3805ee525db8c2b054cad0c1e7653eac570baa377061776f36e5",
+    "Rust_source_sha256": "8f9fbe474220433118e6662c9f2517f73a547730575b83ffb73255d06e9b40d7",
+    "archive_sha256": "c8574b6098e864af73be8f8b5ab89f1edc217167ce96472471c10e88231ba38e",
+    "base_source_manifest_matches_actual_successor": true,
+    "inherited_C_object_equality_verified": true,
+    "link_sha256": "e3b2918e6fe7b4950aa8eddf173861f296219e0d4ea2c9cd62e367adfc4a939d",
+    "new_Rust_object_and_relink_in_actual_stdout": true
+  },
+  "status": "EXACT_RETAINED_MIXED_C_CONSUMER_RUST_HELPER_LAUNCHER_JOIN_PASS_WITH_EXPLICIT_SCOPE_LIMITS",
+  "unknowns_and_limits": [
+    "No fresh compilation or compiler execution performed. C object is genuinely inherited and byte-equal to retained configured-base object; successor stdout rebuilds only Rust helper and relinks.",
+    "No claim that current canonical Rust SDK source generated dca025; exact old C31030130 and Rust8f9fbe47 sources are named separately.",
+    "No new native/runtime acceptance or live holder observation performed.",
+    "The frozen manifest declares mcctrl consumer8bf30/module57546. This extraction verifies both files and exact existing declaration, not a new independent module compiler-source proof. Retained module acceptance remains authoritative.",
+    "LWK128 diagnostic counter does not prove128 host forward samples. Host ordinary budget64 can exhaust; lifecycle records and number231 exception are separate.",
+    "Observer claim that prerequisite child/write/wait rows occur within the budget is a separate actual native evidence predicate; this source extraction does not assert future sequence counts or gate success."
+  ]
+}

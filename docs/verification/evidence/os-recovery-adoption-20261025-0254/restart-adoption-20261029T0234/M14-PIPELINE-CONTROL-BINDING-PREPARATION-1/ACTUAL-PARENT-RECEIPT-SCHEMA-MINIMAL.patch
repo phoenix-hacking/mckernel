@@ -1,0 +1,23 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CURRENT118-COMPATIBILITY-CLEANUP-PREPARATION/rebind_guardian_source.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/rebind_actual_M14_guardian_source.py
+@@ -26,9 +26,9 @@
+  """Pure value validation. TEST_ONLY fixtures carry no execution authority."""
+  need(bundle.get('scope')=='Functional McKernel OS/apps and Rust/assembly migration only; no security testing.','scope')
+  for key,rel in [('armed','ACTUAL-CONTROLS-ARMED.json'),('config','armed-controller/CONFIG.json'),('packet','armed-controller/FROZEN-PACKET.json'),('bridge','armed-controller/bridge-start.json')]:valid_ref(bundle[key],NEWSC/rel)
+- need(armed['status']=='LIVE_CONTINUED_CAMPAIGN_GUARDIAN_20MIN_STEERING_AND_RETAINED_PHONE' and armed['phase']=='running' and armed['goal_status']=='active' and armed['native_release'] is False,'actual arm state')
++ need(armed['status']=='LIVE_SAME_WINDOW_M14_EXCLUSIVE_CONTROLS' and armed['phase']=='running' and armed['goal_status']=='active' and armed['native_release'] is False,'actual arm state')
+  thread=armed['thread_id'];need(type(thread)is str and re.fullmatch('[a-f0-9-]{36}',thread) is not None and thread=='01a18582-1fc6-77b1-bfb6-15c86483f579','current thread')
+- need(armed['guardian_packet_sha256']==bundle['packet']['sha256'] and armed['original_window_unchanged_sha256']==WINDOW_SHA and armed['steering_interval_seconds']==1200,'packet/window/steering')
++ need(armed['guardian_packet_sha256']==bundle['packet']['sha256'] and armed['original_window_sha256']==WINDOW_SHA and armed['steering_interval_seconds']==1200,'packet/window/steering')
+  need(armed['auxiliary_leases_held']==dict(guardian=True,monitor=True,phone=True),'auxiliary leases')
+  caps=armed['earliest_control_caps'];need(caps['deadline_epoch']==UTC,'same UTC')
+  for k,maximum in [('monotonic_deadline',MONO),('boot_deadline',BCAP)]:need(type(caps[k]) in (int,float) and math.isfinite(caps[k]) and 0<caps[k]<=maximum,'no cap extension '+k)
+@@ -53,6 +53,8 @@
+  replacements={
+   "CONTROL = BASE / 'restart-20261028-1200-pacific-1'":"CONTROL = BASE / 'restart-20261028-1930-pacific-1'",
+  }
++ replacements["'LIVE_CONTINUED_CAMPAIGN_GUARDIAN_20MIN_STEERING_AND_RETAINED_PHONE'"] = "'LIVE_SAME_WINDOW_M14_EXCLUSIVE_CONTROLS'"
++ replacements["'original_window_unchanged_sha256'"] = "'original_window_sha256'"
+  tree=ast.parse(original)
+  constants=dict(ARM_RECEIPT_REF=bundle['armed'],CONFIG_SHA=bundle['config']['sha256'],PACKET_SHA=bundle['packet']['sha256'],THREAD=armed['thread_id'],INITIAL={k:(actors[k]['pid'],actors[k]['start']) for k in ('watcher','worker','server')},BOOT_CAP=caps['boot_deadline'],MONO_CAP=caps['monotonic_deadline'])
+  for n in tree.body:

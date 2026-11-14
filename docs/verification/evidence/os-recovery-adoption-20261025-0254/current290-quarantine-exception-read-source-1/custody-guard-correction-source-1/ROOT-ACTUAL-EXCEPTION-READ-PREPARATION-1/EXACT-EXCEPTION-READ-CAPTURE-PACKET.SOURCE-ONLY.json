@@ -1,0 +1,62 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/custody-guard-correction-source-1/exact_root_guard_runner.py",
+    "bytes": 8774,
+    "sha256": "7754e68bcdb2796a61a7b7444453442eec46e4e5057305cb9f98e28445856b7f"
+  },
+  "profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/custody-guard-correction-source-1/EXACT-ACTOR-ROOT-READ-PROFILE.NOT-RELEASED.json",
+    "bytes": 6578,
+    "sha256": "5accbdaa97e4a9e9e8b970c477b89baac0e3313ece2f3ecac54e3969a31bddc1"
+  },
+  "cleanup_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/bounded-observer-correction-source-1/native_rust_cutover_image_terminal_cleanup.CURRENT290.EXACT-DEAD-CALLER.py",
+    "bytes": 128910,
+    "sha256": "e49eaf2a7bacc6a64523f9f6c91516b9a3abefc875cdc1d8941c4e6b55473de3"
+  },
+  "helper": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/read_exact_recover_error.gdb.py",
+    "bytes": 4178,
+    "sha256": "8c445cb73209ec8b08bcd5c63bf73cd67ffc6a4b748ac85da8d0a9157c41f795"
+  },
+  "gdb": {
+    "path": "/usr/bin/gdb",
+    "bytes": 8824736,
+    "sha256": "ee638c585936025f85a5f0f967e3929c9b36cb286d37ef662b23705682e31e2a"
+  },
+  "python": {
+    "path": "/home/holden/anaconda3/bin/python3.9",
+    "bytes": 15880080,
+    "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb"
+  },
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "--",
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/custody-guard-correction-source-1/exact_root_guard_runner.py",
+    "--execute-exact-root-read"
+  ],
+  "proposal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/custody-guard-correction-source-1/EXACT-ROOT-READ-EXECUTION-PREPARATION.NOT-RELEASED.json",
+    "bytes": 5920,
+    "sha256": "82ae3ec1dd2bb764f5ba2e61d7b4a7f3b45e4f551b8a9a779c0b34ce064f67ce"
+  },
+  "capture_wrapper": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/custody-guard-correction-source-1/ROOT-ACTUAL-EXCEPTION-READ-PREPARATION-1/ROOT-CAPTURE-EXACT-EXCEPTION-READ-ONCE.py",
+    "bytes": 3074,
+    "sha256": "8906dca6858d2cc05b28e23524eda04bb04e6d35672d0524be3415e5d605edc5"
+  },
+  "role": "read retained recover.error of exact ownedquarantine; no cleanup/reconciliation/unlock"
+}

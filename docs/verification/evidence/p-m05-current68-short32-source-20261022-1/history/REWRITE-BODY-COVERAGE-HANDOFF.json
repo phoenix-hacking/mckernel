@@ -1,0 +1,138 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_TINY_ACTUAL_BYTE_REWRITE_BODY_AND_PRODUCTION_DUPLICATE_PRECONDITION",
+  "unchanged_consumer": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/stage_m05_two_generation.py",
+    "bytes": 12180,
+    "sha256": "01645826b5b33b131ab6af08ce6097dc18c90d3bad7dd92a9c53ea006bf7ac53"
+  },
+  "new_test": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/check_actual_rewrite_body.py",
+    "bytes": 6481,
+    "sha256": "69ed99f0acdfbf08d84159c596d612061d5c4cc7b299d692d015bf0467f0f41e"
+  },
+  "capture": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/ACTUAL-REWRITE-BODY-CHECK-1.json",
+    "bytes": 3485,
+    "sha256": "c332b1bf40b3bafc19e84b27823dda7619c9d010e5ab479a3bba56a1b2d2b728"
+  },
+  "accepted_prior_three_guard_checks_reused": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/ACTUAL-SELECTION-CHECK-1.json",
+    "bytes": 3489,
+    "sha256": "880a0ab2eb5c8312eb4f6b252afd8e98f87d5b1e8dc23599e0a260e28af5b497"
+  },
+  "prior_complete_implementation_handoff": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/HANDOFF.json",
+    "bytes": 7664,
+    "sha256": "f2105d20278e82b8798a13bc93f90ed38bcda7ef4d36fce0cadc259b4fb2daa9"
+  },
+  "ready_actual_stage_proposal_unchanged": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/NEXT-EXACT-STAGE-PROPOSAL-NOT-AUTHORIZED.json",
+    "bytes": 1928,
+    "sha256": "c03b2787bcbb9940fc8c09df0743914734bf3aa2126e6ec5bf8755434ee037b7"
+  },
+  "typed_independent_epoch_producer_unchanged": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/INDEPENDENT-EPOCH-PRODUCER-SOURCE-SUCCESSOR.json",
+    "bytes": 6391,
+    "sha256": "f19ab0c617a03a8e631584ca588e36b0665d9cb803f563e9ce159bc705fb36e3"
+  },
+  "actual_result": {
+    "wait_status": {
+      "code": 0,
+      "kind": "exited"
+    },
+    "cleanup_complete": true,
+    "elapsed_seconds": 0.08567174302879721,
+    "process": {
+      "pgid": 3361919,
+      "pid": 3361919,
+      "ppid": 3361918,
+      "session": 3361919,
+      "starttime_ticks": 50662850,
+      "state": "R"
+    },
+    "stdout": {
+      "artifact": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/actual-rewrite-body-capture-1/stdout.bin",
+        "sha256": "7a4175723bad9559efcf07685b6efa1c1bd4fa4fa57fc6cc68b02605338348dc",
+        "size": 857
+      },
+      "bytes_observed": 857,
+      "bytes_retained": 857,
+      "discarded_observed_bytes": 0,
+      "eof": true,
+      "limit_bytes": 8388608,
+      "truncated": false
+    },
+    "stderr": {
+      "artifact": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/actual-rewrite-body-capture-1/stderr.bin",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "bytes_observed": 0,
+      "bytes_retained": 0,
+      "discarded_observed_bytes": 0,
+      "eof": true,
+      "limit_bytes": 8388608,
+      "truncated": false
+    }
+  },
+  "six_cases": [
+    {
+      "case": "ordinary070701",
+      "checks": "Actual production rewrite_last_records on independently serialized <4KiB fixture with all5targets growing/shrinking including empty replacement; unchanged accepted parser/replay validates exact names/content/full member map; full parsed record metadata/ino/device IDs/owner/mode/archive index retained; non-target serialized bytes and shadowed earlier mcexec exact; final allowed duplicate mcexec only rewritten."
+    },
+    {
+      "case": "CRC070702",
+      "checks": "Same independent fixture/oracles exercises actual checksum recalculation, changed payload lengths/CRC parsing and final-record selection."
+    },
+    {
+      "case": "missingdestination",
+      "checks": "Actual rewrite body refuses absent modules/mcctrl.ko destination with exact ValueError; no dummy destination accepted."
+    },
+    {
+      "case": "forbiddenduplicate",
+      "checks": "Unchanged actual production input precondition _replay_records(parse_newc(...)) refuses duplicate keep outside allowlist before rewrite; this is the existing stage precondition, not a claim bare rewrite function independently rejects this duplicate."
+    },
+    {
+      "case": "truncatedheader",
+      "checks": "Actual rewrite body strict parser refuses incomplete header."
+    },
+    {
+      "case": "truncatedfinaltrailer",
+      "checks": "Actual rewrite body strict parser refuses incomplete final trailer."
+    }
+  ],
+  "fixture_boundary": "Independent tiny newc encoder creates byte inputs in memory. No actual ELF/artifact/source descriptor authorities substituted, no currenttuple/native acceptance synthesized. Actual function called directly; accepted parser independently consumes result. No stage/extraction/gzip/compression performed.",
+  "mutations": "Only new check_actual_rewrite_body.py and new capture/evidence files. Production consumer/binding/epoch/readyproposal and owner4d7/current199 runtime unchanged.",
+  "profile": {
+    "cpu": 0,
+    "jobs": 1,
+    "AS_bytes": 536870912,
+    "CPU_seconds": 30,
+    "wall_seconds": 30,
+    "stream_limit_bytes_each": 8388608,
+    "inherited_UID_NPROC": "unchanged"
+  },
+  "failure_family": {
+    "failed_candidates": 0,
+    "bounded_corrections": 0,
+    "old_failures_preserved": true
+  },
+  "counts": {
+    "tiny_synthetic_successful_rewrite_calls": 2,
+    "tiny_rewrite_missing_or_malformed_refusals": 3,
+    "actual_duplicate_precondition_refusals": 1,
+    "real_M05_archives_read": 0,
+    "actual_M05_stages": 0,
+    "compiler": 0,
+    "root": 0,
+    "Docker": 0,
+    "VM": 0,
+    "native_apps": 0
+  },
+  "next": "Focused independent review of source/pins/finalrecord rewrite + accepted3 selection/map guards + these6 tiny cases, then fresh ordinary admission for first real exactstage. Actual matched native fullrestoration/reboots/ten cycles remain unproved.",
+  "runtime_release": false,
+  "native_or_goal_credit": false
+}

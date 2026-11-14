@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "record_kind": "pending_free_batch_focused_build_checkpoint",
+  "task_id": "M03-A/M03-B-candidate-14-focused-build",
+  "attempt": 2,
+  "status": "PASS_PENDING_FREE_BATCH_FOCUSED_EQUIVALENCE_ONLY",
+  "recorded_utc": "2026-09-15T08:00:00Z",
+  "source_checkpoint_commit": "2ee7f5f265de50140756c62a2308a5fad42e8f00",
+  "source_sha256": "3bdb98c725f56795d8aa05273db9bd68a15aae3efb5b205836c6c995f73b02ca",
+  "owner_result_sha256": "8d143732c742343317b8dc421ff521d67ba1e8efeb3e3e8ea47fd994c3c6da06",
+  "harness_manifest_sha256": "17b777396cc12956f600d67a7760c47cbd56a03eeeb5f11a0db17db55de07465",
+  "artifact_manifest_sha256": "e1db96d75c60684be013e11948ffef6f21682c7837d9cd634ab53c02b30f940f",
+  "archive": {
+    "path": "docs/verification/evidence/stability-pending-free-batch-build-owner-success-20260915-2.tar.gz",
+    "sha256": "a8d274e4c87ad2ca76de3bd8982b488ce5853ce441169a52771a900152ff0710",
+    "size": 5678821,
+    "members": 288
+  },
+  "accepted_scope": {
+    "rust_rows": 37,
+    "c_rows": 37,
+    "rows_equal": true,
+    "extraction_bindings": 20,
+    "artifacts": 51,
+    "trait_negative_controls": 5,
+    "partial_release_mutant_raw_status": 101,
+    "container_absence_verified": true,
+    "watchdog_disarmed_after_verified_absence": true
+  },
+  "independent_reviews": [
+    "PASS bounded build/evidence audit",
+    "PASS_PENDING_FREE_BATCH_FOCUSED_EQUIVALENCE_ONLY"
+  ],
+  "integration_blocker": "safety text forbids enqueue for the entire detached lifetime while tested source reuse permits a subsequent independently owned capture on the reset source",
+  "remaining_gaps": [
+    "bounded inventory and explicit incomplete outcomes",
+    "durable pinned registration and owner-loss recovery",
+    "nonreused transaction identity and capture/reentrancy ownership",
+    "complete backing/VM references, invalidation acknowledgement and failed-clear release policy",
+    "fatal panic/public entrypoint, full-module compilation and guest execution"
+  ],
+  "candidate_disposition": "private unused prerequisite only",
+  "source_integration_released": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

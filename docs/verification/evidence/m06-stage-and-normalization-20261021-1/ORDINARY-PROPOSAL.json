@@ -1,0 +1,187 @@
+{
+  "artifact_tuple": {
+    "matched_artifacts": {
+      "bzImage": {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/bzImage",
+        "sha256": "032653ee0661b059c325e2a0911a9d492805f1a889c4df515473d69a8be105bc",
+        "size": 16130048
+      },
+      "libc": {
+        "mode": 33261,
+        "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/native-proposal/stage-correction-1/stage/root/lib64/libc.so.6",
+        "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+        "size": 2339896
+      },
+      "loader": {
+        "mode": 33261,
+        "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/native-proposal/stage-correction-1/stage/root/lib64/ld-linux-x86-64.so.2",
+        "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b",
+        "size": 930600
+      },
+      "mcexec": {
+        "mode": 33261,
+        "path": "/home/holden/mckernel-work/scratch/mcexec-preload-fastpath-build-20260928-1/rust/executer/user/mcexec",
+        "sha256": "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b",
+        "size": 453352
+      },
+      "mckernel_image": {
+        "mode": 33261,
+        "path": "/home/holden/mckernel-work/host-preparation/repaired-affinity-n3-variant-20261019-1/repaired-image-fresh8b-runtime-0755",
+        "sha256": "ff4fca457e9ffe50dc4eca930c5f91faf317eeee15bf0c2907067cffa77b23bb",
+        "size": 7988768
+      },
+      "native_boot": {
+        "mode": 33261,
+        "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/two-cpu-running-query-correction-1/native-boot-two-0755",
+        "sha256": "4312f9a8f53d8db7b2b6be4c7d5e409f5c0f82cf8215728209be0f6ff4a5d5c5",
+        "size": 35784
+      }
+    },
+    "modules": [
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/ihk.ko",
+        "sha256": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c",
+        "size": 1527808
+      },
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/ihk-smp-x86_64.ko",
+        "sha256": "c6a9db8eaa2ec5f7898b021b6835d20e4359a5f4a1209b5b28fd9559cd03387f",
+        "size": 12210104
+      },
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/mcctrl.ko",
+        "sha256": "4e2f1e5b11cad8a9fbfaca4ae6671a2f3fa16ef3c8c651357506d93c7edf4fa9",
+        "size": 2368472
+      }
+    ],
+    "profile": {
+      "append": "console=ttyS0,115200n8 rdinit=/init nokaslr panic=-1 memmap=4K%0x80000-1",
+      "memory_mib": 8192,
+      "name": "native-diagnostic-4vcpu-8192mib",
+      "numa_nodes": 2,
+      "vcpus": 4
+    }
+  },
+  "capture": "Reuse accepted owned_capture; individual bounded stdout/stderr/command/status/direct-wait/direct-join plus whole-result and positive group absence. Dispatcher must materialize compile output directory exclusively before compiler, retain stderr including warnings/failures; do not execute app on Linux.",
+  "check_id": "P-M06-03",
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/gcc",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fno-pie",
+        "-no-pie",
+        "-Wl,-z,noexecstack",
+        "-static",
+        "/home/holden/mckernel/scripts/application-tests/cases/process/process.clone3-io-unsupported.c",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/ordinary-compile-1/app"
+      ]
+    },
+    {
+      "argv": [
+        "/usr/bin/readelf",
+        "-h",
+        "-l",
+        "-s",
+        "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/ordinary-compile-1/app"
+      ]
+    },
+    {
+      "argv": [
+        "/usr/bin/objdump",
+        "-dr",
+        "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/ordinary-compile-1/app"
+      ]
+    },
+    {
+      "argv": [
+        "/usr/bin/chmod",
+        "0755",
+        "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/ordinary-compile-1/app"
+      ]
+    },
+    {
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/stage_clone3_app_only.py"
+      ]
+    }
+  ],
+  "elf_checks": [
+    "ELF64 little-endian x86-64 ET_EXEC; static with no PT_INTERP or NEEDED; main syscall callsite passes syscall number435, sizeof(clone_args) from actual target UAPI header (88 on this retained layout) and CLONE_IO0x80000000/SIGCHLD17 from unchanged source. A libc syscall symbol alone is insufficient.",
+    "Stop before stage on any compiler/ELF discrepancy. Inspect actual ELF report under same bounded grant."
+  ],
+  "failure_family_history": [
+    "No clone3-IO native candidate attempted here. Prior M03 false refusal EINVAL and corrected grace/known-client-kind histories remain retained through accepted source refs. Do not replay older40s intentional M02 deadline or old9faf collector.",
+    "Existing decision rejects counting required realfork CREATE_PPD -22/errno71 as optional refusal. Genuine syscall435 and absence of child publication still require native observation."
+  ],
+  "future": {
+    "ELF_acceptance": null,
+    "binary": null,
+    "native": null,
+    "normalization": null,
+    "output": null,
+    "physical": null,
+    "stage": null
+  },
+  "interpreter": {
+    "mode": 33277,
+    "path": "/home/holden/anaconda3/bin/python3.9",
+    "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb",
+    "size": 15880080
+  },
+  "normalization": {
+    "method": "Use accepted strict loader/owner verifier and exact-byte manifest copy. Adapt only case/actual acceptance binding and fresh paths/source pins after compile+stage; preserve accepted known-client-kind correction. No new validator or schema. No attempt-root allocation before root fresh ordinary admission.",
+    "normal_deadline": "Preserve source normal timeout; M02 intentional40s owner is forbidden.",
+    "normal_owner": "/home/holden/mckernel-work/host-preparation/phase5-exit7-grace-retry-binding-20261020-1/runtime-source-1/native_diagnostic_container_owner.py",
+    "reuse": "/home/holden/mckernel-work/host-preparation/phase5-exit7-grace-retry-binding-20261020-1/known-client-kind-correction-1/normalization-source-1/prepare_native.py",
+    "status": "WAIT_ACTUAL_STAGE_AND_INDEPENDENT_ACCEPTANCE"
+  },
+  "oracle": {
+    "exit_code": 0,
+    "stderr": "",
+    "stdout": "rc=-1 errno=95 eopnotsupp=1 child_created=0\n"
+  },
+  "physical_predecessor": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-valid-protection-closure-independent-review-20261020-1/ACTUAL-M02-FAILED-NATIVE-PHYSICAL-RETIREMENT-REVIEW.json",
+    "sha256": "a5a44c1d43ff74f2a777583b243a3c20a4102f855f4ffefa31ccccbf5e31eeb8",
+    "size": 64657
+  },
+  "profile": {
+    "address_space_bytes": 1073741824,
+    "aggregate_cpu_seconds": 55,
+    "child_wall_seconds": 52,
+    "core_bytes": 0,
+    "cpu": 6,
+    "file_size_bytes": 33554432,
+    "host_floor_bytes": 17179869184,
+    "host_growth_bytes": 268435456,
+    "jobs": 1,
+    "kill_after_seconds": 2,
+    "nofile": 256,
+    "outer_wall_seconds": 60,
+    "scratch_floor_bytes": 12884901888,
+    "scratch_growth_bytes": 0
+  },
+  "scope": "Functional supported-profile OS/apps plus compute-C retirement into Rust/reviewed assembly",
+  "source": {
+    "mode": 33204,
+    "path": "/home/holden/mckernel/scripts/application-tests/cases/process/process.clone3-io-unsupported.c",
+    "sha256": "7399dc07a754f5fd7b57619e3134cd7bd1e2345c4ab50573ba41e89da5479d25",
+    "size": 699
+  },
+  "status": "SOURCE_ONLY_UNEXECUTED_REQUIRES_DISPATCHER_GRANT",
+  "stop": "Freeze here. Any command failure stops chain; one failed candidate plus one bounded correction per family before expert escalation. No root/module/guest/lease/Git; service/auth/billing rejections terminal."
+}

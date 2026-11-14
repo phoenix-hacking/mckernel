@@ -1,0 +1,5 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+This additive Source38 successor preserves both original unexecuted packets. All six accepted6e54 Rust caller bodies and function-relative RELAs remain bound to the Source37 accepted machine proof. The only resolver extension is the closed set of four existing selected-process GLOBAL OBJECTs: source-file pointer8B, optional-source-line4B, free-thread-source-line4B and diagnostic array576B. The exact15 caller references, actual C source and baseline typed initializers are pinned. Actual new C and partial definitions must retain type/size/whole bytes, sections, aliases and complete0/0/1/36 owning pointer RELAs with exact NUL-terminated selected source/function strings. There is no generic unresolved-provider allowance, new C body, stub or Rust recompilation.
+
+The parent-assigned reviewer reported no remaining blocker in this bounded observer/spec/map draft before final freeze. This is a source-only review fact, not a runtime grant or actual C/link acceptance. ROOT owns final review records and any ordinary execution grant.

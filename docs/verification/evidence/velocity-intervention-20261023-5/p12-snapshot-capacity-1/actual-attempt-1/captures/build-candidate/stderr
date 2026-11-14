@@ -1,0 +1,18 @@
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/fixture_capacity.c: In function ‘expected_console’:
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/fixture_capacity.c:76:132: warning: implicit declaration of function ‘malloc’ [-Wimplicit-function-declaration]
+   76 |  FILE *f=fopen(path,"rb");assert(f);assert(!fseek(f,0,SEEK_END));long n=ftell(f);assert(n>0&&n<(long)LIMIT+4096);rewind(f);char *b=malloc((size_t)n+1);assert(b);assert(fread(b,1,(size_t)n,f)==(size_t)n&&!fclose(f));b[n]=0;
+      |                                                                                                                                    ^~~~~~
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/fixture_capacity.c:76:132: warning: incompatible implicit declaration of built-in function ‘malloc’
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/fixture_capacity.c:23:1: note: include ‘<stdlib.h>’ or provide a declaration of ‘malloc’
+   22 | #include "candidate/pair_collector.c"
+  +++ |+#include <stdlib.h>
+   23 | #else
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/fixture_capacity.c:77:166: warning: implicit declaration of function ‘free’ [-Wimplicit-function-declaration]
+   77 |  int okay=strstr(b,"ND_PAIR_LONG_ABORT\n")&&strstr(b,"P12_LONG_FAILURE_TRACE_BEGIN bytes=1048576 saved=1\n")&&strstr(b,"P12_LONG_FAILURE_TRACE_END bytes=1048576\n");free(b);return okay;
+      |                                                                                                                                                                      ^~~~
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/fixture_capacity.c:77:166: warning: incompatible implicit declaration of built-in function ‘free’
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/fixture_capacity.c:77:166: note: include ‘<stdlib.h>’ or provide a declaration of ‘free’
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/fixture_capacity.c: In function ‘main’:
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/fixture_capacity.c:81:23: warning: implicit declaration of function ‘atoi’ [-Wimplicit-function-declaration]
+   81 |  assert(argc==3);mode=atoi(argv[1]);assert((mode>=0&&mode<=16)||(mode>=20&&mode<=23));
+      |                       ^~~~

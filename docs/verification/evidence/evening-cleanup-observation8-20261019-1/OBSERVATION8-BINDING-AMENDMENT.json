@@ -1,0 +1,111 @@
+{
+  "status": "PASS_CONDITIONAL_EXACT_COUNTER8_OBSERVATION_AND_APPLY1_RELEASE_PATH_AMENDMENT",
+  "basis_observation7_decision_sha256": "ea3cd9a1ea4d8cf3df5119bf337e4e7d43a4a8629a9b56629634c19750c70739",
+  "basis_apply1_conditional_decision_sha256": "b6cfea61a7c55080459bab39ae407090014ed707b3f5928527dc5263d1b96b20",
+  "full_module_AST_equivalent_after_only_literal_counter7_to8_reversal": true,
+  "source_engine_sha256": "0c134ee778b273610ead1ecc507caa038642459c0a065c956b4431c35c755917",
+  "wrapper_sha256": "bd9dc6f53affb3de361476720b56e0b87160ec4c079856ffd7c801072cecad2b",
+  "wrapper_path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation8-20261019-1/observe-root-eight.py",
+  "source_actor_packet_sha256": "9a65cba00cf268ca1caf6d8098d4a0aa750e3a6b816d1014a5df61a3cf5576b1",
+  "fixed_observer_argv": [
+    "sudo",
+    "-A",
+    "/usr/bin/python3",
+    "-I",
+    "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation8-20261019-1/observe-root-eight.py",
+    "--release",
+    "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation8-20261019-1/actual-observation-release-8.json",
+    "--release-sha256",
+    "PENDING_GENUINE_RELEASE_SHA256"
+  ],
+  "genuine_observer_release_path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation8-20261019-1/actual-observation-release-8.json",
+  "observer_release_required": "OBSERVATION_RELEASE +source0c134/manifest8255/observation_wrapper_sha256bd9d +thisreviewPASS/hash +all5realattestations/currentPIDstart/boot/<=600s expiry/samecapacity reserves; no oldrelease replay",
+  "upfront_readback": {
+    "commands": [
+      {
+        "name": "stat-before",
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/stat",
+          "-c",
+          "%d:%i:%u:%g:%f:%h:%s:%y:%z",
+          "--",
+          "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation8-20261019-1/actual-observation-8.stdout",
+          "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation8-20261019-1/actual-observation-8.stderr",
+          "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation8-20261019-1/actual-observation-8.supervisor.jsonl"
+        ],
+        "capture_stem": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation8-20261019-1/observation8-raw-readback-1/stat-before"
+      },
+      {
+        "name": "raw-0",
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/cat",
+          "--",
+          "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation8-20261019-1/actual-observation-8.stdout"
+        ],
+        "capture_stem": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation8-20261019-1/observation8-raw-readback-1/raw-0"
+      },
+      {
+        "name": "raw-1",
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/cat",
+          "--",
+          "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation8-20261019-1/actual-observation-8.stderr"
+        ],
+        "capture_stem": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation8-20261019-1/observation8-raw-readback-1/raw-1"
+      },
+      {
+        "name": "raw-2",
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/cat",
+          "--",
+          "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation8-20261019-1/actual-observation-8.supervisor.jsonl"
+        ],
+        "capture_stem": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation8-20261019-1/observation8-raw-readback-1/raw-2"
+      },
+      {
+        "name": "stat-after",
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/stat",
+          "-c",
+          "%d:%i:%u:%g:%f:%h:%s:%y:%z",
+          "--",
+          "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation8-20261019-1/actual-observation-8.stdout",
+          "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation8-20261019-1/actual-observation-8.stderr",
+          "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation8-20261019-1/actual-observation-8.supervisor.jsonl"
+        ],
+        "capture_stem": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation8-20261019-1/observation8-raw-readback-1/stat-after"
+      }
+    ],
+    "capture_root": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation8-20261019-1/observation8-raw-readback-1",
+    "scope": "Only exact3 knownrootcaptures; inherited stat3/cat3/stat3afterpositiveouterandwholegroupjoin independentworkloadrc. OrdinaryFD/nsstat/hash bounded32MiB/1CPU6/1GiB/30seconds percommand unchanged."
+  },
+  "new_apply_release_path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-apply-20261019-1/actual-cleanup-release-1-observation8.json",
+  "apply_wrapper_sha256": "f88d6f1b27828b6063f7e28fb01f9617e41da4478ef42c7b0b97a936e04b039b",
+  "apply_journal": "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/actual-cleanup-apply-1.jsonl",
+  "old_stale_release_preserved": "A/actual-cleanup-release-1.json SHA36f982612f2322caed77e99f330ed5d5323cb6cb2b6d98348e031126beb89b6d staysunchanged, no applyattempted",
+  "all_other_role_gates_inherited": "Same7observer andb6applyresources/source/registry/manifest/120secondpost-newsnapshot/all5attestations/precisemetadata120/retainedsources/scratch21/exclusions/journal32MiBrelease4MiB/upfrontapplyknown3+conditionaljournal readback/noautomaticretry controls. No additionalmode or path authority.",
+  "fresh_required_before_observe8": "Mini commit/push/fetch exactbd9d wrapper+9a65bindingamendment/checker source+precheck; rootexclusive liveadmission after currentunprivilegedbinder retired. No fulloldsource/testcycle.",
+  "final_live_review_required": "Frozen ordinaryreviewer checker must bind actualcompleted8+entirenewreleaseSHA whileoriginalepochfresh. Holdifanypredicatefails; sourceengine original120seconds AFTERfreshapplysnapshot staysmandatory.",
+  "prevalidated_checker": {
+    "path": "/home/holden/mckernel-work/host-preparation/evening-git-owner-review-20261019-1/final_actual_review_check.py",
+    "sha256": "30e1e7306f5a3a9765b0f3181f2a52c728a5df69753625dc18e6b8d2c8b47294",
+    "precheck_report": "/home/holden/mckernel-work/host-preparation/evening-git-owner-review-20261019-1/FINAL-CHECKER-PRECHECK-OBSERVATION7.json",
+    "precheck_sha256": "1c334fb5f7457eba30afcc524b601f72a06722950b066c4567a75295af2cce7e",
+    "status": "PASS_PRECHECK_COMPLETED_OBSERVATION7_AND_EXACT_STALE_RELEASE",
+    "elapsed_tool_seconds": 0.1,
+    "final_apply_authority": false
+  },
+  "frozen_live_checker_binding": "Reviewer finalizes exact8 paths, thisreviewhash and genuine minibpublicationproofhash BEFOREobserve8clock; CLI dynamicreleaseSHA only once assembled. No livecodegeneration necessary.",
+  "reviewer_root_or_observer_execution": false,
+  "actual_apply_authority": false
+}

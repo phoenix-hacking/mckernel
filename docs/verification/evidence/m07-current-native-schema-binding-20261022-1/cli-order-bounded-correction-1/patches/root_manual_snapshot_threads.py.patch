@@ -1,0 +1,49 @@
+--- original/root_manual_snapshot_threads.py
++++ cli-corrected/root_manual_snapshot_threads.py
+@@ -23,11 +23,12 @@
+     meta=checked(b['conditional_metadata']);proposal=checked(meta['proposal']);pending=checked(b['machine_pending'])
+     need(meta['parent_identity']==proposal['parent']['identity']==b['parent_identity']==pending['parent_identity'],'parent static join')
+     need(pending['independent_static_execution_decision']==b['static_review'],'static review join');checked(b['static_review'])
+-    c=checked(b['mandatory_consumer_review']);need(b['mandatory_consumer_review']['sha256']=='5362bc7a70cfcf62a9fed0ee4e0860ab86b7c5c13f6e70934e133dedba62a10f' and c['decision']=='PASS_ACTUAL_PAIRED_ALIAS_COHERENT_SOURCE_AND_ORDINARY_NORMALIZATION_ONLY' and c['implementation_ownership'] is False and c['findings']==[] and c['reviewer'],'actual remaining normalization review')
+-    stage=checked(b['stage_review']);need(stage['decision']=='PASS_ACTUAL_DIAGNOSTIC_PAYLOAD_OFFLINE_STAGE_AND_MANIFEST_ONLY' and stage['implementation_ownership'] is False and stage['reviewer'] and stage['accepted_changed_boundary']['members']==60 and stage['accepted_changed_boundary']['unchanged_members']==59 and stage['accepted_changed_boundary']['sole_changed_member']=='apps/app','actual app-only stage')
++    checked(b['mandatory_consumer_review']);checked(b['stage_review'])
++    c=accepted_current_normalization(b['mandatory_consumer_review']['path'],Path(b['actual_original_preflight']['path']).parent)
++    stage=accepted_current_stage(b['stage_review']['path'],checked_manifest(b['manifest']))
+     pre=checked(b['actual_original_preflight']);projection=checked(b['actual_full_preflight']);binding=checked(b['actual_binding_result'])
+     for key,name in [('actual_original_preflight','ACTUAL-NATIVE-PREFLIGHT.json'),('actual_binding_result','ACTUAL-BINDING.json')]:
+-        need(b[key]['sha256']==c['references_relative_to_root'][name]['sha256'] and b[key]['bytes']==c['references_relative_to_root'][name]['bytes'],'actual accepted descriptor')
++        need(c['accepted_refs']['preflight' if key=='actual_original_preflight' else 'binding']==b[key]['sha256']+'/'+str(b[key]['bytes']),'actual accepted descriptor')
+     need(projection['original_preflight']==b['actual_original_preflight'] and all(projection[k]==v for k,v in pre.items()),'finite actual preflight projection')
+     need(binding['manifest']==b['manifest']==pre['binding']['manifest'] and binding['nonce']==proposal['nonce'] and binding['attempt_parent']==proposal['parent']['path'],'manifest nonce parent joins')
+     need(pre['parent_nine_field_identity']==b['parent_review_identity'] and projection['parent_identity']==b['parent_identity'],'full nine-field parent')
+@@ -211,4 +212,30 @@
+       guest_profile={'memory_mib':8192,'vcpus':4,'numa_nodes':2},released_paths_absent=list(o['released_paths_absent']),
+       current_predecessor_container_absent=True,image_id=o['image_id'],cgroup=o['cgroup'])
+     record=publish(result);print(json.dumps({'status':result['status'],**record}),flush=True);return 0
++
++def accepted_current_normalization(acceptance, root):
++    root=Path(root);a=json.loads(Path(acceptance).read_bytes())
++    need(ref(acceptance)['sha256']=='675277e49541894244498e34eae7d93aab87d3e3215b53d98e565969a449becb','genuine current normalization authority')
++    need(a['decision']=='PASS_ACTUAL_PAIRED_ALIAS_NORMALIZATION_BINDINGS_ONLY' and a['implementation_ownership'] is False and a['reviewer'] and a['source_review_projection_permission'] is True and a['native_permission'] is False and a['native_credit']==0 and a['runtime_release'] is None,'current bounded normalization review')
++    paths={'preflight':root/'ACTUAL-NATIVE-PREFLIGHT.json','binding':root/'ACTUAL-BINDING.json','provenance':root/'ACTUAL-PAIRED-ALIAS-PROVENANCE.json','source_closure':root/'BOUND-RUNTIME-SOURCE-ONLY.json'}
++    binding=json.loads(paths['binding'].read_bytes());paths['manifest']=Path(binding['manifest']['path'])
++    need(set(a['accepted_refs'])==set(paths),'complete current accepted reference set')
++    for key,path in paths.items():
++        observed=ref(path);need(a['accepted_refs'][key]==observed['sha256']+'/'+str(observed['bytes']),'current accepted whole descriptor '+key)
++    need(isinstance(a['verified'],list) and len(a['verified'])==4 and all(isinstance(x,str) and x for x in a['verified']),'current review verified facts')
++    return a
++
++def accepted_current_stage(acceptance, manifest):
++    need(ref(acceptance)['sha256']=='f0243ce2e3bbbd2c09de0b0b4296895aea15ff815a80db4d04f654dca2762aa5','genuine current image-only stage authority')
++    a=json.loads(Path(acceptance).read_bytes());v=a['accepted_boundary']
++    need(a['decision']=='PASS_ACTUAL_CBB_IMAGE_ONLY_OFFLINE_STAGE_AND_MANIFEST_ONLY' and a['implementation_ownership'] is False and a['reviewer'] and a['findings']==[],'current image-only stage review')
++    need(v['members']==60 and v['unchanged_members']==59 and v['sole_changed_member']=='images/mckernel.img' and v['changed_fields']==['size','sha256'] and v['all_other_metadata_preserved'] is True and v['producer_overlay_manifest_maps_equal'] is True and v['manifest_image_base_overlay_joins_match'] is True,'exact image-only stage boundary')
++    need(ref(a['manifest']['path'])==a['manifest'],'complete actual stage manifest descriptor')
++    image=manifest['artifacts']['mckernel_image'];need(image['sha256']==v['image_sha256'] and image['size']==v['image_bytes'],'normalization accepted staged image joins')
++    need(a['physical_acceptance'] is None and a['execution_release'] is None and a['native_credit_delta']==0,'stage grants no physical or execution authority')
++    return a
++
++def checked_manifest(row):
++    raw=Path(row["path"]).read_bytes();need(hashlib.sha256(raw).hexdigest()==row["sha256"] and len(raw)==row.get("size",row.get("bytes")),"exact native manifest descriptor");return json.loads(raw)
++
+ if __name__=='__main__':raise SystemExit(main())

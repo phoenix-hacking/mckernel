@@ -1,0 +1,39 @@
+{
+  "schema": "mckernel.m15-mm-fixture-next-command.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PROPOSED_NOT_RELEASED_NOT_EXECUTED",
+  "purpose": "Compile unchanged original project C wrappers against byte-extracted original Linux inline bodies and mocked lower primitives; no module, link or executable run.",
+  "argv": [
+    "/usr/bin/cc",
+    "-std=c11",
+    "-O2",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-7/ihk-rust-module-closure/mm-rust-candidate/generated/include",
+    "-c",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-7/ihk-rust-module-closure/mm-rust-candidate/generated/original/mcctrl_vm_write_compat.c",
+    "-o",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-7/ihk-rust-module-closure/mm-rust-candidate/original-reference.o"
+  ],
+  "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-7/ihk-rust-module-closure/mm-rust-candidate",
+  "profile": {
+    "ordinary_compiler_slots": 1,
+    "cpus": 1,
+    "memory_limit_bytes": 1073741824,
+    "timeout_seconds": 30,
+    "maximum_output_bytes": 16777216,
+    "network": "none",
+    "root": false,
+    "modules_or_guest": false
+  },
+  "release_prerequisites": [
+    "Dispatcher owns execution release; this artifact authorizes no command.",
+    "Resolve and record /usr/bin/cc executable/version/target identity before release; failure to match approved compiler stops.",
+    "Verify ORIGINAL-REFERENCE.json body/original digests and copied wrapper/header byte identity; preserve canonical preimages.",
+    "No overlapping owner of this private output; original-reference.o must not preexist.",
+    "Apply ordinary compiler-slot/resource capture controls, then preserve actual argv/stdout/stderr/return code and positive retirement."
+  ],
+  "expected_if_successful": "original-reference.o exists with three original wrappers and unresolved fixture callbacks; no Rust equivalence or production credit.",
+  "later_commands_not_yet_frozen": "Actual Rust successor and fixture callback/driver sources do not exist yet. Freeze them and the pinned Rust1.92 command before executable equivalence. Exact-SDK layout/module commands must derive from retained saved commands, not this host fixture command."
+}

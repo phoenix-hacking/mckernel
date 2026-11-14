@@ -1,0 +1,310 @@
+{
+  "Id": "5312f61218236fe8aa34d55504ed35bf7730229d6868fd537a201c1f33f69187",
+  "Created": "2026-11-10T20:26:32.814489514Z",
+  "Path": "/usr/bin/env",
+  "Args": [
+    "-i",
+    "BASH_ENV=",
+    "ENV=",
+    "LANG=C",
+    "LC_ALL=C",
+    "PATH=/usr/bin:/bin",
+    "TZ=UTC",
+    "LD_LIBRARY_PATH=",
+    "LD_PRELOAD=",
+    "/usr/bin/bash",
+    "--noprofile",
+    "--norc",
+    "/producer/read_image_metadata.sh"
+  ],
+  "State": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-11-10T20:26:33.172444564Z",
+    "FinishedAt": "2026-11-10T20:26:40.780343814Z"
+  },
+  "Image": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+  "ResolvConfPath": "/var/lib/docker/containers/5312f61218236fe8aa34d55504ed35bf7730229d6868fd537a201c1f33f69187/resolv.conf",
+  "HostnamePath": "/var/lib/docker/containers/5312f61218236fe8aa34d55504ed35bf7730229d6868fd537a201c1f33f69187/hostname",
+  "HostsPath": "/var/lib/docker/containers/5312f61218236fe8aa34d55504ed35bf7730229d6868fd537a201c1f33f69187/hosts",
+  "LogPath": "/var/lib/docker/containers/5312f61218236fe8aa34d55504ed35bf7730229d6868fd537a201c1f33f69187/5312f61218236fe8aa34d55504ed35bf7730229d6868fd537a201c1f33f69187-json.log",
+  "Name": "/mck-m14-f06-successor-whole-elf-20261110-1",
+  "RestartCount": 0,
+  "Driver": "overlay2",
+  "Platform": "linux",
+  "MountLabel": "",
+  "ProcessLabel": "",
+  "AppArmorProfile": "docker-default",
+  "ExecIDs": null,
+  "HostConfig": {
+    "Binds": null,
+    "ContainerIDFile": "",
+    "LogConfig": {
+      "Type": "json-file",
+      "Config": {}
+    },
+    "NetworkMode": "none",
+    "PortBindings": {},
+    "RestartPolicy": {
+      "Name": "no",
+      "MaximumRetryCount": 0
+    },
+    "AutoRemove": false,
+    "VolumeDriver": "",
+    "VolumesFrom": null,
+    "ConsoleSize": [
+      0,
+      0
+    ],
+    "CapAdd": null,
+    "CapDrop": [
+      "ALL"
+    ],
+    "CgroupnsMode": "host",
+    "Dns": [],
+    "DnsOptions": [],
+    "DnsSearch": [],
+    "ExtraHosts": null,
+    "GroupAdd": null,
+    "IpcMode": "private",
+    "Cgroup": "",
+    "Links": null,
+    "OomScoreAdj": 0,
+    "PidMode": "",
+    "Privileged": false,
+    "PublishAllPorts": false,
+    "ReadonlyRootfs": true,
+    "SecurityOpt": [
+      "no-new-privileges"
+    ],
+    "Tmpfs": {
+      "/tmp": "rw,nodev,nosuid,noexec,size=16m,mode=1777"
+    },
+    "UTSMode": "",
+    "UsernsMode": "",
+    "ShmSize": 67108864,
+    "Runtime": "runc",
+    "Isolation": "",
+    "CpuShares": 0,
+    "Memory": 536870912,
+    "NanoCpus": 1000000000,
+    "CgroupParent": "",
+    "BlkioWeight": 0,
+    "BlkioWeightDevice": [],
+    "BlkioDeviceReadBps": [],
+    "BlkioDeviceWriteBps": [],
+    "BlkioDeviceReadIOps": [],
+    "BlkioDeviceWriteIOps": [],
+    "CpuPeriod": 0,
+    "CpuQuota": 0,
+    "CpuRealtimePeriod": 0,
+    "CpuRealtimeRuntime": 0,
+    "CpusetCpus": "6",
+    "CpusetMems": "",
+    "Devices": [],
+    "DeviceCgroupRules": null,
+    "DeviceRequests": null,
+    "MemoryReservation": 0,
+    "MemorySwap": 536870912,
+    "MemorySwappiness": null,
+    "OomKillDisable": false,
+    "PidsLimit": 64,
+    "Ulimits": [
+      {
+        "Name": "core",
+        "Hard": 0,
+        "Soft": 0
+      },
+      {
+        "Name": "cpu",
+        "Hard": 120,
+        "Soft": 120
+      },
+      {
+        "Name": "fsize",
+        "Hard": 1073741824,
+        "Soft": 1073741824
+      }
+    ],
+    "CpuCount": 0,
+    "CpuPercent": 0,
+    "IOMaximumIOps": 0,
+    "IOMaximumBandwidth": 0,
+    "Mounts": [
+      {
+        "Type": "bind",
+        "Source": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output",
+        "Target": "/work/output",
+        "ReadOnly": true
+      },
+      {
+        "Type": "bind",
+        "Source": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/next-credential-f06-1/f06-successor-1/read_image_metadata.sh",
+        "Target": "/producer/read_image_metadata.sh",
+        "ReadOnly": true
+      },
+      {
+        "Type": "bind",
+        "Source": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/next-credential-f06-1/f06-successor-1/metadata",
+        "Target": "/evidence"
+      }
+    ],
+    "MaskedPaths": [
+      "/proc/asound",
+      "/proc/acpi",
+      "/proc/kcore",
+      "/proc/keys",
+      "/proc/latency_stats",
+      "/proc/timer_list",
+      "/proc/timer_stats",
+      "/proc/sched_debug",
+      "/proc/scsi",
+      "/sys/firmware",
+      "/sys/devices/virtual/powercap"
+    ],
+    "ReadonlyPaths": [
+      "/proc/bus",
+      "/proc/fs",
+      "/proc/irq",
+      "/proc/sys",
+      "/proc/sysrq-trigger"
+    ],
+    "Init": true
+  },
+  "GraphDriver": {
+    "Data": {
+      "LowerDir": "/var/lib/docker/overlay2/755fb5d8a5e70e425ff7c11907fb3413147fcf180e0d09703b68af5dc24b8224-init/diff:/var/lib/docker/overlay2/b9950a67e47d32e93d7c43c6a1145e4c5cf89717b127f4a7a42a98785b6c5d5a/diff:/var/lib/docker/overlay2/fff00856c276031a055641a39e0919e79db7904afb0ce80a3d4f4db638a0269c/diff:/var/lib/docker/overlay2/d199f563791647ba171c6a6b30772ca85312af33440b39d08e6bb730f6e6013a/diff:/var/lib/docker/overlay2/f0749d426bb01c0f3b1cf8801b25513f92ffa67570954f3f881636dbf54f2b04/diff:/var/lib/docker/overlay2/b108a9aa871c34f689ca9dad26ceac43de807cd903f00a7ba1d77804cd2d8f1e/diff:/var/lib/docker/overlay2/fb2f4457a35c8482edb2928b3b235f4050018750bf17cdff8b8b1bb174b2c5d6/diff:/var/lib/docker/overlay2/6b8acc345c6edc4a5dfd53ec0ef55b3b54be94cb1082c09d8fba86f9fd66d001/diff:/var/lib/docker/overlay2/8fe2188ddb7c5e6ab9ab5a67a024ba8f7896b7a9cbe1f9cdae2a953e5ef7651d/diff:/var/lib/docker/overlay2/2a23ddce6067a5847fc046c77f050a037a224c752e9e6ff2d7d56ac9162e8982/diff",
+      "MergedDir": "/var/lib/docker/overlay2/755fb5d8a5e70e425ff7c11907fb3413147fcf180e0d09703b68af5dc24b8224/merged",
+      "UpperDir": "/var/lib/docker/overlay2/755fb5d8a5e70e425ff7c11907fb3413147fcf180e0d09703b68af5dc24b8224/diff",
+      "WorkDir": "/var/lib/docker/overlay2/755fb5d8a5e70e425ff7c11907fb3413147fcf180e0d09703b68af5dc24b8224/work"
+    },
+    "Name": "overlay2"
+  },
+  "Mounts": [
+    {
+      "Type": "bind",
+      "Source": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output",
+      "Destination": "/work/output",
+      "Mode": "",
+      "RW": false,
+      "Propagation": "rprivate"
+    },
+    {
+      "Type": "bind",
+      "Source": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/next-credential-f06-1/f06-successor-1/read_image_metadata.sh",
+      "Destination": "/producer/read_image_metadata.sh",
+      "Mode": "",
+      "RW": false,
+      "Propagation": "rprivate"
+    },
+    {
+      "Type": "bind",
+      "Source": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/next-credential-f06-1/f06-successor-1/metadata",
+      "Destination": "/evidence",
+      "Mode": "",
+      "RW": true,
+      "Propagation": "rprivate"
+    }
+  ],
+  "Config": {
+    "Hostname": "5312f6121823",
+    "Domainname": "",
+    "User": "1000:1000",
+    "AttachStdin": false,
+    "AttachStdout": true,
+    "AttachStderr": true,
+    "Tty": false,
+    "OpenStdin": false,
+    "StdinOnce": false,
+    "Env": [
+      "container=oci",
+      "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+      "CARGO_BUILD_JOBS=4",
+      "CMAKE_BUILD_PARALLEL_LEVEL=4",
+      "MAKEFLAGS=-j4",
+      "PYTHONDONTWRITEBYTECODE=1"
+    ],
+    "Cmd": [
+      "-i",
+      "BASH_ENV=",
+      "ENV=",
+      "LANG=C",
+      "LC_ALL=C",
+      "PATH=/usr/bin:/bin",
+      "TZ=UTC",
+      "LD_LIBRARY_PATH=",
+      "LD_PRELOAD=",
+      "/usr/bin/bash",
+      "--noprofile",
+      "--norc",
+      "/producer/read_image_metadata.sh"
+    ],
+    "Image": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+    "Volumes": null,
+    "WorkingDir": "/work/output",
+    "Entrypoint": [
+      "/usr/bin/env"
+    ],
+    "OnBuild": null,
+    "Labels": {
+      "io.buildah.version": "1.43.1",
+      "license": "BSD-3-Clause",
+      "mckernel.preparation-owner": "m14-f06-successor-whole-elf-1",
+      "name": "rockylinux",
+      "org.mckernel.scope": "local development; no production evidence credit",
+      "org.opencontainers.image.authors": "Lukas Magauer, Neil Hanlon, Louis Abel",
+      "org.opencontainers.image.licenses": "BSD-3-Clause",
+      "org.opencontainers.image.source": "https://git.resf.org/sig_core/rocky-kiwi-descriptions/src/branch/r10",
+      "org.opencontainers.image.title": "rockylinux",
+      "org.opencontainers.image.vendor": "Rocky Enterprise Software Foundation",
+      "org.opencontainers.image.version": "10",
+      "summary": "Rocky Linux Base image",
+      "vendor": "Rocky Enterprise Software Foundation",
+      "version": "10"
+    }
+  },
+  "NetworkSettings": {
+    "Bridge": "",
+    "SandboxID": "8b1d3f9bc113cb957d95e030d40f290c39636fc36f9a9fcabfdb685a6f152f4e",
+    "SandboxKey": "/var/run/docker/netns/8b1d3f9bc113",
+    "Ports": {},
+    "HairpinMode": false,
+    "LinkLocalIPv6Address": "",
+    "LinkLocalIPv6PrefixLen": 0,
+    "SecondaryIPAddresses": null,
+    "SecondaryIPv6Addresses": null,
+    "EndpointID": "",
+    "Gateway": "",
+    "GlobalIPv6Address": "",
+    "GlobalIPv6PrefixLen": 0,
+    "IPAddress": "",
+    "IPPrefixLen": 0,
+    "IPv6Gateway": "",
+    "MacAddress": "",
+    "Networks": {
+      "none": {
+        "IPAMConfig": null,
+        "Links": null,
+        "Aliases": null,
+        "MacAddress": "",
+        "NetworkID": "8c4a9a65ad813cb3f458da3761bdeba25d43fc777fb9fb0b91756f4e1553fa11",
+        "EndpointID": "",
+        "Gateway": "",
+        "IPAddress": "",
+        "IPPrefixLen": 0,
+        "IPv6Gateway": "",
+        "GlobalIPv6Address": "",
+        "GlobalIPv6PrefixLen": 0,
+        "DriverOpts": null,
+        "DNSNames": null
+      }
+    }
+  }
+}

@@ -1,0 +1,9 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+Private next slice: live PUBLIC spin_sleep_or_schedule wrapper in kernel/process.c. Its existing Rust body already implements spinning/wakeup/reschedule/signal behavior. The patch moves only the selected wrapper export to sched_helpers.rs and preserves the complete reference C fallback. No C data/provider/behavior or new production layout is added. Existing shared-ABI offset constructor and lock adapters are reused; LWK ihk_ikc CPUid macro is bound to existing ihk_mc_get_processor_id. The stack-local immutable descriptor is consumed synchronously and is not retained.
+
+Actual Rust1.92/GCC9 focused leaf PASS129750 pairs, including64875 calls through the extracted actual Rust futex_wait_schedule_direct_bridge. Exact ordered callback trace/state parity and independent branch expectations cover immediate/late wakeups, rescheduling, lostwake logging, pending signal/no signal, idle_halt, arbitrary signed CPUids/ignored returns and NULL thread. Modeled state layouts are fixture-only; actual sched_helpers.h ABI size/type compile also passed. Valid getter calls remain pure; the fixture does not invent an ordering for Cargument evaluation. All other process.c bytes including accepted correctness fixes are unchanged.
+
+One candidate, no failures/corrections. Accepted990 capture confirms directjoin/groupabsence/closedstreams/errorsnull; CPU6 released. Canonical/candidate9/worklist untouched. Exact private broad-harness delta removes only obsolete weak spin_sleep stub/Uledger and expects T/597->596; broad harness is not executed.
+
+Next: independent source/ABI review, separately granted exact production Rust object, then coherent selected C/full default kernel consumer and native futex/wakeup proof. All remain OPEN. No wholefile/area retirement credit.

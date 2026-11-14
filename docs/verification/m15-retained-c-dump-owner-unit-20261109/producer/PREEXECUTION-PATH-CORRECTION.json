@@ -1,0 +1,83 @@
+{
+  "status": "ONE_SOURCE_PREEXECUTION_PATH_BINDING_CORRECTION_READY_NO_WORKLOAD",
+  "original_request": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/retained-c-dump-owner-source-1/genuine-producer-1/REQUEST.json",
+  "original_request_sha256": "1b40a0ea28f75f5486cabec52f21f2c15fe6b1aed464652660e297f0a831af98",
+  "corrected_request": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/retained-c-dump-owner-source-1/genuine-producer-1/REQUEST-CORRECTED-1.json",
+  "corrected_request_sha256": "6bc3dd0117a3e834f4f332752fd86e9b84ba39bd0ad76bdca51a201524d225f5",
+  "original_plan_sha256": "846fc7c64166df09a1c87c1e203036c531e76c63aec0e7a0189f8ee468805103",
+  "path_bindings": [
+    {
+      "producer_label": "origin-raw",
+      "previous_unexecuted_stdout_path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/retained-c-dump-owner-source-1/genuine-producer-1/diagnostic_origins.rs",
+      "literal_actual_stdout_path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/retained-c-dump-owner-source-1/genuine-producer-1/output/diagnostic_origins.rs",
+      "consumer_Rust_environment_name": "MCKERNEL_IHKLIB_DIAGNOSTIC_ORIGINS_RS",
+      "literal_Rust_environment_input": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/retained-c-dump-owner-source-1/genuine-producer-1/output/diagnostic_origins.rs",
+      "actual_paths_are_identical": true,
+      "before_first_Rust_Popen": "CompareactualgeneratedFILE/LINES/OPERATIONS toexistingexpected_origin_metadata[raw]; recordSHAandcheckconsumedenvpath==thisliteralstdoutfile. No bytecopy/staging/remap or additionalcommand.",
+      "expected_values_from_existing_reviewed19join": {
+        "FILE": "/src/ihk/linux/user/ihklib.c",
+        "LINES": [
+          4358,
+          4404,
+          4443,
+          4502
+        ],
+        "OPERATIONS": [
+          "ihk_reserve_cpu",
+          "ihk_reserve_mem",
+          "ihk_os_assign_cpu",
+          "ihk_os_set_ikc_map"
+        ]
+      }
+    },
+    {
+      "producer_label": "origin-create",
+      "previous_unexecuted_stdout_path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/retained-c-dump-owner-source-1/genuine-producer-1/create_diagnostic_origins.rs",
+      "literal_actual_stdout_path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/retained-c-dump-owner-source-1/genuine-producer-1/output/create_diagnostic_origins.rs",
+      "consumer_Rust_environment_name": "MCKERNEL_IHKLIB_CREATE_DIAGNOSTIC_ORIGINS_RS",
+      "literal_Rust_environment_input": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/retained-c-dump-owner-source-1/genuine-producer-1/output/create_diagnostic_origins.rs",
+      "actual_paths_are_identical": true,
+      "before_first_Rust_Popen": "CompareactualgeneratedFILE/LINES/OPERATIONS toexistingexpected_origin_metadata[create]; recordSHAandcheckconsumedenvpath==thisliteralstdoutfile. No bytecopy/staging/remap or additionalcommand.",
+      "expected_values_from_existing_reviewed19join": {
+        "FILE": "/src/ihk/linux/user/ihklib.c",
+        "LINES": [
+          4526,
+          4549,
+          4559,
+          4580,
+          4601,
+          4666,
+          4683,
+          4693,
+          4611,
+          5098,
+          5116,
+          5125,
+          5274,
+          5313,
+          5323
+        ],
+        "OPERATIONS": [
+          "ihk_get_num_reserved_cpus",
+          "ihk_query_cpu",
+          "ihk_os_assign_cpu",
+          "ihk_get_num_reserved_cpus",
+          "ihk_query_mem",
+          "ihk_get_num_reserved_cpus",
+          "ihk_query_cpu",
+          "ihk_release_cpu",
+          "ihk_os_assign_mem",
+          "ihk_get_num_reserved_cpus",
+          "ihk_get_num_reserved_mem_chunks",
+          "ihk_release_mem",
+          "ihk_create_os",
+          "ihk_os_load",
+          "ihk_os_kargs"
+        ]
+      }
+    }
+  ],
+  "all6argv_envarrays_profiles_sourcepins_19values_unchanged": true,
+  "actual_metadata_copy_staging_or_19_derivation_performed": false,
+  "canonical_index_compiler_test_runtime_operations": false
+}

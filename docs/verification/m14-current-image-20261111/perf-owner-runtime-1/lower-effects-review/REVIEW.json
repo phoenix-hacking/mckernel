@@ -1,0 +1,155 @@
+{
+  "ABI_joins": {
+    "compile_scope": "Source/type/signature comparison only. Final coherent caller metadata/build and runtime packet remain separate; no compiler/type probe was run by reviewer.",
+    "lock": "Actual ABI IhkSpinlock is reprC u32 head_tail, size4/align4/offset0. Production spinlock_helpers uses same representation with AtomicU32 and same ptr/flag signatures. The HOST adapter models exclusion instead of executing ticket/IRQ instructions, never substitutes a64B node or claims production lock behavior.",
+    "request": "Actual reprC SyscallRequest fields int rtid@0,int ttid@4,u64 valid@8,u64 number@16,args[6]@24; size72/align8. Adapter const matches and copies precisely72 bytes with no synthetic request serialization or hidden padding layout. Actual source must initialize the request before the lower call.",
+    "scalars": "Actual ff48 CInt=i32, CLong=i64, CULong=u64, SizeT=usize on the supported64-bit HOST. No guessed integer, unsigned result or copied synthetic struct.",
+    "static_signature_rows": [
+      {
+        "actual": "kernel/rust/cls.rs:173",
+        "adapter": "cls::get_this_cpu_local_var",
+        "signature": "unsafe extern C fn()->*mut CpuLocalVar"
+      },
+      {
+        "actual": "kernel/rust/x86_local.rs:141/147; controlled HOST value0 only",
+        "adapter": "x86_local::ihk_mc_get_processor_id",
+        "signature": "unsafe extern C fn()->CInt"
+      },
+      {
+        "actual": "kernel/rust/mem_helpers.rs:4173",
+        "adapter": "mem_helpers::kmalloc_tracked",
+        "signature": "unsafe extern C fn(CInt,CULong,*mut i8,CInt)->*mut c_void"
+      },
+      {
+        "actual": "kernel/rust/mem_helpers.rs:4194",
+        "adapter": "mem_helpers::kfree_tracked",
+        "signature": "unsafe extern C fn(*mut c_void,*mut i8,CInt)->()"
+      },
+      {
+        "actual": "kernel/rust/spinlock_helpers.rs:108",
+        "adapter": "spinlock_helpers::__ihk_mc_spinlock_lock",
+        "signature": "unsafe extern C fn(*mut IhkSpinlock)->CULong"
+      },
+      {
+        "actual": "kernel/rust/spinlock_helpers.rs:122",
+        "adapter": "spinlock_helpers::__ihk_mc_spinlock_unlock",
+        "signature": "unsafe extern C fn(*mut IhkSpinlock,CULong)->()"
+      },
+      {
+        "actual": "kernel/rust/spinlock_helpers.rs:90/116",
+        "adapter": "spinlock_helpers::__ihk_mc_spinlock_lock_noirq / unlock_noirq",
+        "signature": "unsafe extern C fn(*mut IhkSpinlock)->()"
+      },
+      {
+        "actual": "actual PerfOpenSyscallFn / SyscallRequestCallFn aliases;72B request",
+        "adapter": "host_reply",
+        "signature": "unsafe extern C fn(*mut SyscallRequest,CInt)->CLong"
+      },
+      {
+        "actual": "actual SyscallForwardContextFn; calls actual ihk_mc_syscall_arg0(*const X86UserContext)->CULong",
+        "adapter": "forward_close",
+        "signature": "unsafe extern C fn(CInt,*mut c_void)->CLong"
+      },
+      {
+        "actual": "actual SyscallFindProcessFn / SyscallProcessUnlockFn aliases",
+        "adapter": "find_process / unlock_process",
+        "signature": "unsafe extern C fn(CInt,*mut c_void)->*mut c_void / unsafe extern C fn(*mut c_void,*mut c_void)->()"
+      }
+    ],
+    "typed_objects": "Imports actual whole CpuLocalVar/Thread/Process/SyscallRequest/X86UserContext/Mckfd. CPU TLS uses real MaybeUninit<CpuLocalVar> with reprC/align64; current is written/read through addr_of_mut/addr_of and Thread.proc is read through the actual typed field. Fixture supplies live Thread/Process storage; adapter creates no project reference/lifetime."
+  },
+  "IRQ_and_exclusion_effect_boundary": {
+    "guards": "Take refuses recursive ownership; modeled P/S cannot nest, modeled R permits only outerP; release requires same LIFO address, same saved flag option/value and same HOST owner. irqsave restores its saved modeled IF; noirq does not change it. Alloc/free/hostreply/forward/raw lookup refuse tracked P/R/S or hash-borrow context.",
+    "modeled_only": "HOST Mutex+Condvar and per-HOST-thread LOCAL implement blocking mutual exclusion, held-address stack, tracked IRQ-enable bit and saved0/0x200 IF values. No CLI/STI/GS/MSR/PMC/native hardware instruction is executed by adapter source.",
+    "scope_limits": "This is an effect model, not execution of genuine spinlock/preemption providers or proof of native RFLAGS/hardware behavior. CPU id is controlled0. An unregistered lock defaults to modeled Registry; final fixture must explicitly classify P/S addresses wherever it claims those order checks. No claim all real project locks were independently classified by this adapter."
+  },
+  "actual_abi": {
+    "bytes": 76151,
+    "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+    "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+  },
+  "allocation_effect_boundary": {
+    "borrow_contract": "Origin strings and typed pointers must be valid for each unsafe call; actual production static origins are retained. This review does not authorize arbitrary malformed-pointer tests.",
+    "failure": "One explicit fail_next_allocation or genuine HOST allocator null logs AllocFailed and returns null. There is no forced project allocation/refcount success.",
+    "real_HOST_storage": "std::alloc alloc/dealloc with recorded Layout; max alignment of actual Thread/Process/CpuLocalVar/X86UserContext/Mckfd/usize is at least64 through CpuLocalVar. Nonzero0xa5 contents deliberately do not repair missing production initialization.",
+    "reset": "reset_trace clears observation/reply scripts/failure flag only. It does not free a live allocation, reset ID, clear a production registry or change a project owner. Fixture must call trace reset only at its declared quiescent scenario boundaries; reset itself is not cleanup evidence.",
+    "tracking": "Every successful allocation gets monotonically checked u64 ID starting1, actual address/size/flags and copied original file bytes/line. Live map retains its true Layout. Free removes exactly the existing map record, retains original allocation ID/origin alongside free origin and deallocates exact address/Layout; foreign/double free fails. Null free is separately logged, not treated as a prior allocation."
+  },
+  "bounded_contract_sources": {
+    "actual_72B_request_C_header": {
+      "bytes": 20836,
+      "path": "/home/holden/mckernel/kernel/include/syscall.h",
+      "sha256": "459e6d0faec3f1b8366a0d329571ef5ea813042706be11f9423b0399bbba6ffa"
+    },
+    "actual_Cpu_getter_signature_source": {
+      "bytes": 7877,
+      "path": "/home/holden/mckernel/kernel/rust/cls.rs",
+      "sha256": "c0260e7634d53fcc0873746af8bd16b6691ee0a4b7f394ca18896aef070f6bba"
+    },
+    "actual_Process_Thread_C_header": {
+      "bytes": 26602,
+      "path": "/home/holden/mckernel/kernel/include/process.h",
+      "sha256": "8848d536f2fa847a59af72d573ec9c55838c27cea664d46438ab4e038bf83649"
+    },
+    "actual_callback_alias_source_only": {
+      "bytes": 1247778,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/ownership-proposal-1/implementation-1/candidate/kernel/rust/syscall_policy.rs",
+      "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+    },
+    "actual_processor_id_signature_source": {
+      "bytes": 4525,
+      "path": "/home/holden/mckernel/kernel/rust/x86_local.rs",
+      "sha256": "9f102654a22895615da854b08ea8e043a6c17b9157e4b77e5b58783e70abeb3f"
+    },
+    "actual_pure_context_arg_getter_signature_source": {
+      "bytes": 256003,
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde"
+    },
+    "actual_spinlock_signature_and_4B_atomic_source": {
+      "bytes": 3105,
+      "path": "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs",
+      "sha256": "7b6c1e87f521eaf4674128afd7bff71785bead4ff7c9eb3c9a668d6a0cb0cbe7"
+    },
+    "actual_tracked_allocator_signature_source": {
+      "bytes": 444772,
+      "path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+      "sha256": "f544c5177156ad5de8544bb95c46bbc8e2ac870a25c4895ca4cefb7c8cc79680"
+    }
+  },
+  "decision": "GO_AT_EXPLICIT_CONTROLLED_HOST_LOWER_EFFECT_BOUNDARY_ONLY",
+  "hash_pointer_and_project_ownership_boundary": {
+    "borrow_effects": "Success records exact process/node plus modeled saved IRQ and disables modeled IRQ. Miss returnsnull without an owned borrow or flag change. Unlock requires original same process/node and no P/R/S lock, then restores the saved modeled IF. This tests net controlled lookup/borrow effects, not genuine process-hash/MCS provider code or native IRQ node memory.",
+    "no_positive_provider_claim": "Allocation IDs, lock traces, scripted replies and raw lookup are explicitly lower effects; they cannot alone close a project provider/owner/runtime/native contract.",
+    "raw_lookup_only": "register_process stores an explicitly supplied raw Process pointer. find_process returns that exact pointer unchanged, including a real refcount0 Process; it never reads/writes/refills/increments/decrements refcount, allocates a Process, pins an event or fabricates a valid group/target.",
+    "real_code_stays_required": "Real target_process/events/groups/monitors/descriptors/thread counters/forward ownership, ref/group/list/lifetime/deferred retirement, actual waitq/schedule and the real pure argument getter must stay in the coherent fixture source. This adapter implements none of those project owner decisions. Final fixture must retain the actual typed Process/Thread storage while raw pointers/borrows can be used."
+  },
+  "host_reply_and_forward_close_boundary": {
+    "forward_close": "Requires literal __NR_close3 and nonnull context; reads arg0 through the genuine actual pure source getter supplied by common fixture, records exact number/arg0/context/current thread/process/result. It does not perform close, invoke backend/native, initialize a dummy request or bypass ownership bodies.",
+    "host_reply": "Requires actual current Thread and nonnull Thread.proc, no tracked kernel/hash exclusion; records full actual72B request, supplied CIntcpu and real typed thread/process addresses before returning the scripted signed result.",
+    "not_scenarios": "Scripts/effects are controlled lower inputs; trace markers contain no golden/scenario or ownership acceptance decision.",
+    "scripts_are_required": "host_replies and forward_replies are VecDeque<CLong>; pop_front.expect rejects exhaustion rather than returning success. Exact signed negative/zero/positive result is returned unchanged, not cast to unsigned or converted to a success code."
+  },
+  "material_findings": [],
+  "not_accepted": [
+    "actual runtime cases or their golden outcomes",
+    "complete production ownership/lifetime/provider correctness",
+    "selected native/kernel/hardware behavior",
+    "M14-03-05 DEFAULT/FUNCTIONAL or milestone acceptance",
+    "controller/native/source/resource or UNKNOWN release"
+  ],
+  "ready_for_next_packet": "P04Tests may bind this exact a215 lower-effect adapter into the independently reviewed genuine-source runtime packet. No adapter source correction is required by this finite review. Runtime goldens/common fixture/coherent caller source/operation/resource admission remain with their actual owners; reuse completed ABI/source proofs.",
+  "reviewer": "/root/public_abi_join_max",
+  "reviewer_actions": "Read only the delivered adapter and named actual type/signature/shared-contract source; exclusive private REVIEW write. No source/helper/compiler/test/controller/adapter import or execution, no edits to adapter/common fixture/production/canonical, no runtime scenarios authored, no recursive agents.",
+  "schema": "mckernel.perf-owner.host-lower-effects-abi-review.v1",
+  "selected_adapter": {
+    "bytes": 15813,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/host_lower_effects.rs",
+    "sha256": "a2151e8f310350f8249904cb28cbddf79659c12968412a7cc1e0d7657380ad79"
+  },
+  "shared_contract_interface": {
+    "bytes": 9601,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/ownership-proposal-1/implementation-1/MODULE-OWNERSHIP-INTERFACE.json",
+    "sha256": "38a6af3184991b9d545a3a6710d6531c206c4901080df5d3040176d4ec7b4e05"
+  }
+}

@@ -1,0 +1,79 @@
+--- a/owner_case_driver.rs
++++ b/owner_case_driver.rs
+@@ -16,7 +16,7 @@
+    thread:Box::new(unsafe{MaybeUninit::<Thread>::zeroed().assume_init()}),
+    vm:Box::new(unsafe{MaybeUninit::<ProcessVm>::zeroed().assume_init()})};
+   value.process.pid=pid;value.process.refcount.counter=1;value.thread.refcount.counter=1;value.vm.refcount.counter=1;
+-  value.thread.proc=&mut *value.process;value.thread.vm=&mut *value.vm;value.process.vm=&mut *value.vm;value.vm.proc=&mut *value.process;
++  value.thread.proc=&mut *value.process;value.thread.vm=&mut *value.vm;value.process.vm=&mut *value.vm;value.vm.proc=(&mut *value.process as *mut Process).cast::<c_void>();
+   crate::host_effects::register_p_lock(addr_of_mut!(value.process.mckfd_lock));
+   unsafe{crate::host_effects::register_process(pid,&mut *value.process)};
+   value
+--- a/production/syscall_policy.rs
++++ b/production/syscall_policy.rs
+@@ -5,6 +5,10 @@
+ use core::ptr::{self,addr_of,addr_of_mut,null_mut,read_volatile,write_volatile};
+ use core::mem::{align_of,size_of,offset_of,MaybeUninit};
+ use crate::abi::*;
++type SyscallFindProcessFn = unsafe extern "C" fn(CInt, *mut c_void) -> *mut c_void;
++type SyscallProcessUnlockFn = unsafe extern "C" fn(*mut c_void, *mut c_void);
++const ENOENT: CInt = 2;
++
+ unsafe extern "C" {
+  static f03_mckfd_alloc_origin_file_v1:i8; static f03_mckfd_alloc_origin_line_v1:CInt;
+  static f03_mckfd_free_origin_file_v1:i8; static f03_mckfd_free_origin_line_v1:CInt;
+--- a/production/f03_perf_owner/vm_drain_family.rs
++++ b/production/f03_perf_owner/vm_drain_family.rs
+@@ -144,7 +144,7 @@
+     let process = unsafe { (*actor).proc };
+     assert!(!process.is_null() && configuration.thread == actor.cast() && configuration.proc == process.cast());
+     let vm = unsafe { (*process).vm };
+-    assert!(!vm.is_null() && unsafe { (*actor).vm == vm && (*vm).proc == process });
++    assert!(!vm.is_null() && unsafe { (*actor).vm == vm && (*vm).proc == process.cast::<c_void>() });
+     assert!(unsafe { (*process).refcount.counter > 0 && (*vm).refcount.counter > 0 });
+     assert!(unsafe { (*process).mckfd.is_null() && bitmap(actor) == 0 });
+     assert_eq!(configuration.group_fd, -1);
+@@ -256,7 +256,7 @@
+             && unsafe { super::descriptors::unresolved_host_closes() } == initial_debt + 2,
+         actual_schedule_calls: if schedule_before == 0 { schedule_after } else { usize::MAX },
+         positive_actor_vm_links_preserved: unsafe { (*actor).vm == vm && (*process).vm == vm
+-            && (*vm).proc == process && (*process).refcount.counter > 0 && (*vm).refcount.counter > 0 },
++            && (*vm).proc == process.cast::<c_void>() && (*process).refcount.counter > 0 && (*vm).refcount.counter > 0 },
+         blocked_wait_or_native_behavior_proven: false,
+     }
+ }
+--- a/production/f03_perf_owner/counter_epoch_family.rs
++++ b/production/f03_perf_owner/counter_epoch_family.rs
+@@ -15,6 +15,8 @@
+ use super::super::f03_sync_child_layout_v2::FullMcPerfEvent as Event;
+ 
+ const NOWAIT: abi::CULong = 2;
++// Exact selected kernel/include/process.h:575 `#define PP_RESET 1`.
++const HOST_PP_RESET: abi::CInt = 1;
+ const CHILD_FOREIGN_BIT: abi::CULong = 1;
+ const CHILD_RETIRED_SENTINEL: abi::CULong = (1u64 << 63) | CHILD_FOREIGN_BIT;
+ const OPEN_FDS: [abi::CLong; 4] = [710, 711, 712, 713];
+@@ -355,11 +357,11 @@
+     effects::set_start_results(&[0]);
+     // Remote enable set the real PP_RESET input; do not manufacture a state or
+     // invoke a different helper. Original order is reset, reset, start.
+-    let control = unsafe { &super::super::f03_perf_counter_control_v1::f03_perf_event_layout_v1 };
+-    assert_eq!(unsafe { (*actor_process).perf_status }, control.pp_reset);
++    let control_layout = unsafe { &super::super::f03_perf_counter_control_v1::f03_perf_event_layout_v1 };
++    assert_eq!(unsafe { (*actor_process).perf_status }, HOST_PP_RESET);
+     unsafe { crate::host_effects::set_current(actor) };
+     effects::arm_after_state_unlock(clear_then_append_after_state_unlock);
+-    unsafe { super::lifecycle::switch_monitor(actor, control.pp_reset, control.pp_count) };
++    unsafe { super::lifecycle::switch_monitor(actor, HOST_PP_RESET, control_layout.pp_count) };
+     assert_eq!(HOOK_STATE.swap(null_mut(), Ordering::SeqCst), &mut hook as *mut HookState);
+     assert!(!effects::hook_pending());
+     // Bound this trace to the completed original switch call. All later real
+@@ -426,7 +428,7 @@
+         && starts == vec![(actor_mask, 0)];
+     let actor_not_resurrected = unsafe { monitoring(actor_process).is_null() };
+     let actor_bits_released = unsafe { bitmap(actor) == 0 };
+-    let original_count_state = unsafe { (*actor_process).perf_status == control.pp_count };
++    let original_count_state = unsafe { (*actor_process).perf_status == control_layout.pp_count };
+ 
+     // Keep actual Operation tokens across genuine owner/Thread retirement. The
+     // three events themselves remain pinned until those tokens are released.

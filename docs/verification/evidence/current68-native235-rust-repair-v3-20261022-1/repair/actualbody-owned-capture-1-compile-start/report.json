@@ -1,0 +1,127 @@
+{
+  "application_acceptance": false,
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=30:30",
+    "--fsize=8388608:8388608",
+    "--nofile=4096:4096",
+    "--",
+    "/home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
+    "--edition=2021",
+    "--test",
+    "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-start.rs",
+    "-o",
+    "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-start"
+  ],
+  "cleanup_complete": true,
+  "cleanup_error": "[Errno 10] No child processes",
+  "cleanup_timeout_seconds": 6.0,
+  "cwd": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1",
+  "descendant_records_omitted": 0,
+  "descendants": [],
+  "elapsed_seconds": 0.5663993619964458,
+  "env": {
+    "HOME": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/home",
+    "LC_ALL": "C",
+    "PATH": "/usr/bin:/bin",
+    "TMPDIR": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/tmp"
+  },
+  "error": "AttributeError: module 'os' has no attribute 'waitstatus_to_exitcode'",
+  "events": [
+    {
+      "kind": "cleanup_started",
+      "monotonic": 494496.907611543,
+      "reason": "leader_exited"
+    }
+  ],
+  "executable": {
+    "path": "/usr/bin/taskset",
+    "sha256": "28f2dd426247d7d1d794c0fb8a723efc6a1ae3c56393a238b180fe9a0dc32f1c",
+    "size": 35048
+  },
+  "executable_path": "/usr/bin/taskset",
+  "fd_setup": {
+    "close_fds": true,
+    "pass_fds": [],
+    "stderr": "separate owned pipe",
+    "stdin": "regular file or /dev/null",
+    "stdout": "owned pipe"
+  },
+  "gid": 1000,
+  "groups": [
+    4,
+    20,
+    24,
+    27,
+    30,
+    46,
+    120,
+    131,
+    132,
+    133,
+    1000
+  ],
+  "monotonic_finished": 494496.90917866,
+  "monotonic_started": 494496.342779298,
+  "payload_completion_observed_monotonic": 494496.907603259,
+  "payload_monotonic_deadline": 494520.343196982,
+  "payload_monotonic_started": 494496.343234896,
+  "process": {
+    "pgid": 3382315,
+    "pid": 3382315,
+    "ppid": 3382314,
+    "session": 3382315,
+    "starttime_ticks": 50983447,
+    "state": "R"
+  },
+  "provenance": "Linux process collection only; no McKernel evidence",
+  "raw_wait_status": 0,
+  "schema_version": 1,
+  "status": "SUPERVISOR_ERROR",
+  "stderr_limit_bytes": 1048576,
+  "stdin": {
+    "kind": "devnull"
+  },
+  "stdin_path": null,
+  "stdout_limit_bytes": 1048576,
+  "streams": {
+    "stderr": {
+      "artifact": {
+        "path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-1-compile-start/stderr.bin",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "bytes_observed": 0,
+      "bytes_retained": 0,
+      "discarded_observed_bytes": 0,
+      "eof": true,
+      "limit_bytes": 1048576,
+      "truncated": false
+    },
+    "stdout": {
+      "artifact": {
+        "path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-1-compile-start/stdout.bin",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "bytes_observed": 0,
+      "bytes_retained": 0,
+      "discarded_observed_bytes": 0,
+      "eof": true,
+      "limit_bytes": 1048576,
+      "truncated": false
+    }
+  },
+  "supervisor_pid": 3382314,
+  "timeout_seconds": 23.999962085974403,
+  "uid": 1000,
+  "umask": "0077",
+  "wait_status": {
+    "code": 0,
+    "kind": "exited"
+  }
+}

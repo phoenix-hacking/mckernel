@@ -1,0 +1,471 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_READY_PRIVATE_SUCCESSOR_NOT_CANONICAL_NO_GRANT_NOT_EXECUTED",
+  "accepted_private_base": {
+    "C": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-cpu-log-next/candidate/arch/x86_64/kernel/cpu.c",
+      "sha256": "2d29bca555936a213f0a7296a302ec57b55c575536c33a58285b07b203390eca",
+      "bytes": 95484
+    },
+    "Rust": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-cpu-log-next/candidate/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "26180e00c1d6673aa600f0ec9afed5d100ca6e0c39af803c3328e58f8cc88fb9",
+      "bytes": 91270
+    },
+    "actual_CPUlog_consumer": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-cpu-log-next/production-consumer-preparation-1/bounded-header-transport-correction-1/FINAL-ACTUAL-PRODUCTION-HANDOFF.json",
+      "sha256": "6ae4c5c6db9db6a75708a55d9a729288a10cec11e32272d58d37b5d7a1f6b77e",
+      "bytes": 9307
+    }
+  },
+  "observed_canonical": {
+    "C": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+      "sha256": "8c71fe79e003f7aa7ef0f7faf2b31ebf11e65e747abdb0969dc77dbafbd839e9",
+      "bytes": 95267
+    },
+    "Rust": {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "a6e7465d7924755c97e5d72919a97c2985aacd35cf9db417c4ee981b4d5d071a",
+      "bytes": 90445
+    }
+  },
+  "root_CPUlog_integration_notice_received": false,
+  "postimages": {
+    "arch/x86_64/kernel/cpu.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/candidate/arch/x86_64/kernel/cpu.c",
+      "sha256": "c779079fb6de66991c861c823dca06b2a9ceec16ac4c984995200b668d7e78ce",
+      "bytes": 95605
+    },
+    "kernel/rust/x86_cpu_helpers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/candidate/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "98914e1ff4d50c2f42ccbdeb1f4f338024b7a9a2143fbad2f59ebd6f6b50dd0b",
+      "bytes": 93305
+    }
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/PRIVATE-COMPLETE-CONTEXT-LOGGER.patch",
+    "sha256": "2ca29fb6e086e0545fb2a896a02322259f55c34b890923cffc81e311e4dec19b",
+    "bytes": 3423
+  },
+  "actual_original_C_body": "void x86_context_line_log_bridge(int event, unsigned long a,\n\t\tunsigned long b, unsigned long c, unsigned long d)\n{\n\tswitch (event) {\n\tcase 1:\n\t\t__kprintf(\"CS:RIP = %4lx:%16lx\\n\", a, b);\n\t\tbreak;\n\tcase 2:\n\t\t__kprintf(\"             RAX              RBX              RCX              RDX\\n\");\n\t\t__kprintf(\"%16lx %16lx %16lx %16lx\\n\", a, b, c, d);\n\t\tbreak;\n\tcase 3:\n\t\t__kprintf(\"             RSI              RDI              RSP              RBP\\n\");\n\t\t__kprintf(\"%16lx %16lx %16lx %16lx\\n\", a, b, c, d);\n\t\tbreak;\n\tcase 4:\n\t\t__kprintf(\"              R8               R9              R10              R11\\n\");\n\t\t__kprintf(\"%16lx %16lx %16lx %16lx\\n\", a, b, c, d);\n\t\tbreak;\n\tcase 5:\n\t\t__kprintf(\"             R12              R13              R14              R15\\n\");\n\t\t__kprintf(\"%16lx %16lx %16lx %16lx\\n\", a, b, c, d);\n\t\tbreak;\n\tcase 6:\n\t\t__kprintf(\"              CS               SS           RFLAGS            ERROR\\n\");\n\t\t__kprintf(\"%16lx %16lx %16lx %16lx\\n\", a, b, c, d);\n\t\tbreak;\n\tcase 20:\n\t\tkprintf(\"CS:RIP = %04lx:%16lx\\n\", a, b);\n\t\tbreak;\n\tcase 21:\n\t\tkprintf(\"%16lx %16lx %16lx %16lx\\n\", a, b, c, d);\n\t\tbreak;\n\tcase 22:\n\t\tkprintf(\"%16lx %16lx %16lx\\n\", a, b, c);\n\t\tbreak;\n\t}\n}",
+  "actual_Rust_body": "/// Preserve complete context diagnostics using the existing Rust print providers.\n/// The caller owns any outer print lock. Events 1..6 use __kprintf without\n/// acquiring that lock again; 20..22 retain the original kprintf calls. All\n/// arguments are integer values, no context pointer or callback is retained.\n#[no_mangle]\npub unsafe extern \"C\" fn x86_context_line_log_bridge(\n    event: CInt, a: CULong, b: CULong, c: CULong, d: CULong,\n) {\n    match event {\n        1 => unsafe {\n            __kprintf(b\"CS:RIP = %4lx:%16lx\\n\\0\".as_ptr().cast(), a, b);\n        },\n        2 => unsafe {\n            __kprintf(b\"             RAX              RBX              RCX              RDX\\n\\0\".as_ptr().cast());\n            __kprintf(b\"%16lx %16lx %16lx %16lx\\n\\0\".as_ptr().cast(), a, b, c, d);\n        },\n        3 => unsafe {\n            __kprintf(b\"             RSI              RDI              RSP              RBP\\n\\0\".as_ptr().cast());\n            __kprintf(b\"%16lx %16lx %16lx %16lx\\n\\0\".as_ptr().cast(), a, b, c, d);\n        },\n        4 => unsafe {\n            __kprintf(b\"              R8               R9              R10              R11\\n\\0\".as_ptr().cast());\n            __kprintf(b\"%16lx %16lx %16lx %16lx\\n\\0\".as_ptr().cast(), a, b, c, d);\n        },\n        5 => unsafe {\n            __kprintf(b\"             R12              R13              R14              R15\\n\\0\".as_ptr().cast());\n            __kprintf(b\"%16lx %16lx %16lx %16lx\\n\\0\".as_ptr().cast(), a, b, c, d);\n        },\n        6 => unsafe {\n            __kprintf(b\"              CS               SS           RFLAGS            ERROR\\n\\0\".as_ptr().cast());\n            __kprintf(b\"%16lx %16lx %16lx %16lx\\n\\0\".as_ptr().cast(), a, b, c, d);\n        },\n        20 => unsafe {\n            kprintf(b\"CS:RIP = %04lx:%16lx\\n\\0\".as_ptr().cast(), a, b);\n        },\n        21 => unsafe {\n            kprintf(b\"%16lx %16lx %16lx %16lx\\n\\0\".as_ptr().cast(), a, b, c, d);\n        },\n        22 => unsafe {\n            kprintf(b\"%16lx %16lx %16lx\\n\\0\".as_ptr().cast(), a, b, c);\n        },\n        _ => {},\n    }\n}\n",
+  "unchanged_actual_Rust_context_bodies": [
+    "pub unsafe extern \"C\" fn x86_print_user_context_body_result(\n    uctx: *const X86UserContext,\n    log_fn: Option<X86ContextLogFn>,\n) -> CInt {\n    if uctx.is_null() {\n        return -EINVAL;\n    }\n    let Some(log) = log_fn else {\n        return -EINVAL;\n    };\n\n    unsafe {\n        let regs = &(*uctx).gpr;\n        log(20, regs.cs, regs.rip, 0, 0);\n        log(21, regs.rax, regs.rbx, regs.rcx, regs.rdx);\n        log(22, regs.rsi, regs.rdi, regs.rsp, 0);\n    }\n    0\n}",
+    "pub unsafe extern \"C\" fn x86_arch_show_interrupt_context_body_result(\n    uctx: *const X86UserContext,\n    lock_fn: Option<X86KprintfLockFn>,\n    unlock_fn: Option<X86KprintfUnlockFn>,\n    log_fn: Option<X86ContextLogFn>,\n) -> CInt {\n    if uctx.is_null() {\n        return -EINVAL;\n    }\n    let (Some(lock), Some(unlock), Some(log)) = (lock_fn, unlock_fn, log_fn) else {\n        return -EINVAL;\n    };\n\n    unsafe {\n        let flags = lock();\n        let regs = &(*uctx).gpr;\n        log(1, regs.cs, regs.rip, 0, 0);\n        log(2, regs.rax, regs.rbx, regs.rcx, regs.rdx);\n        log(3, regs.rsi, regs.rdi, regs.rsp, regs.rbp);\n        log(4, regs.r8, regs.r9, regs.r10, regs.r11);\n        log(5, regs.r12, regs.r13, regs.r14, regs.r15);\n        log(6, regs.cs, regs.ss, regs.rflags, regs.orig_rax);\n        unlock(flags);\n    }\n    0\n}"
+  ],
+  "fixture_sources": {
+    "actual_abi.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/fixture/actual_abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "bytes": 76151
+    },
+    "actual_context_logger.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/fixture/actual_context_logger.rs",
+      "sha256": "e2772a9abab9174c1a2bb302e7a89ccfd4b0035b1d02ffc426b0f263c45b1563",
+      "bytes": 4628
+    },
+    "compare_context_tapes.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/fixture/compare_context_tapes.c",
+      "sha256": "a54d128b4ae8e1623b4762d9d4e77d2db6a17783fc1899fcf791aeb1d809084b",
+      "bytes": 5015
+    },
+    "selected-body.inc": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/fixture/selected-body.inc",
+      "sha256": "0a5fa22b6975676041c369073b59abe7dd76a519247a4b98456b5fba20f8470d",
+      "bytes": 1351
+    },
+    "original-body.inc": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/fixture/original-body.inc",
+      "sha256": "f8d074a7f58392f0dc5ce1e95dc148d0805e49a47d9bad8a54d30a03fd8030dc",
+      "bytes": 1178
+    },
+    "observe_artifacts.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/fixture/observe_artifacts.py",
+      "sha256": "863a81a5612d3c243fb147e674c6b178bc3d2bf3ee76948ca84fb56b704acde1",
+      "bytes": 1301
+    },
+    "actual_header_selection.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/fixture/actual_header_selection.c",
+      "sha256": "5db5b6f315942211f1e8ee85856e245f1d5cd01960254cce2582dc4c86b47d42",
+      "bytes": 849
+    }
+  },
+  "profile_derivation": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-cpu-log-next/EXECUTABLE-READY.NOT-EXECUTED.json",
+    "sha256": "a24b187be9ffffa580197a41a792b8ccff33e26e37bd0535044d7707c403ffe4",
+    "bytes": 33830
+  },
+  "profile": {
+    "CPU": "ROOT_ASSIGN",
+    "jobs": 1,
+    "AS_bytes": 2147483648,
+    "CPU_seconds": 60,
+    "wall_seconds": 90,
+    "retirement_seconds": 6,
+    "FSIZE_bytes": 33554432,
+    "NOFILE": 256,
+    "core": 0,
+    "CGU": 1,
+    "RUST_MIN_STACK": 2097152,
+    "owned_capture_sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8"
+  },
+  "tools": {
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc": {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "sha256": "028fd60b0e0add5505c661cd3ccde91393d615c8729bd95d94ab1e91409b36a1",
+      "bytes": 654904
+    },
+    "/usr/bin/gcc-9": {
+      "path": "/usr/bin/gcc-9",
+      "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f",
+      "bytes": 1158288
+    },
+    "/usr/bin/nm": {
+      "path": "/usr/bin/nm",
+      "sha256": "5fb0dd8acc18e3f348ed0acbcada0580dbdddd1eb5de3c8323613af13580032b",
+      "bytes": 52664
+    },
+    "/usr/bin/readelf": {
+      "path": "/usr/bin/readelf",
+      "sha256": "41a813335a74480f145fba9400aa7fb5c0ec7ffcaa7af7f33e832dc75eb90ffb",
+      "bytes": 658360
+    },
+    "/usr/bin/ld": {
+      "path": "/usr/bin/ld",
+      "sha256": "476b24d5cc1fef54f80412d06e7430b2dcf4e2b6f1525ee17e6eaaf16b28a00f",
+      "bytes": 1732192
+    },
+    "/home/holden/anaconda3/bin/python3": {
+      "path": "/home/holden/anaconda3/bin/python3",
+      "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb",
+      "bytes": 15880080
+    }
+  },
+  "actual_witness_header_closure": {
+    "/home/holden/mckernel/lib/include/types.h": {
+      "path": "/home/holden/mckernel/lib/include/types.h",
+      "sha256": "72179c1e931fdfdfa700d2ecfe745e344027ac0b4af299e8a9ec17957fc9a399",
+      "bytes": 515
+    },
+    "/home/holden/mckernel/arch/x86_64/kernel/include/ihk/types.h": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/ihk/types.h",
+      "sha256": "c37a7c748f2439ddfd847725a4d559c008f2aca09c45114fb07e73337013f449",
+      "bytes": 1074
+    },
+    "/home/holden/mckernel/lib/include/ihk/debug.h": {
+      "path": "/home/holden/mckernel/lib/include/ihk/debug.h",
+      "sha256": "7315ef758c56c4888242295ed9340b44f649d772b1315502acc49eb6105048dc",
+      "bytes": 1294
+    },
+    "/home/holden/mckernel/kernel/include/lwk/compiler.h": {
+      "path": "/home/holden/mckernel/kernel/include/lwk/compiler.h",
+      "sha256": "eeb3c5b9d47dc32d73908c9048002a34ef77e5d6bdc03346b27b494ded5b49dd",
+      "bytes": 17894
+    },
+    "/home/holden/mckernel/kernel/include/lwk/compiler-gcc.h": {
+      "path": "/home/holden/mckernel/kernel/include/lwk/compiler-gcc.h",
+      "sha256": "1a2693ab50b3768ca2ca362bb0e6773bdabc12425ad4061802b3aca20dbe47a2",
+      "bytes": 11651
+    }
+  },
+  "actual_witness_include_graph": {
+    "fixture": [
+      "types.h",
+      "ihk/debug.h",
+      "selected-body.inc"
+    ],
+    "types.h": [
+      "ihk/types.h"
+    ],
+    "ihk/debug.h": [
+      "lwk/compiler.h"
+    ],
+    "lwk/compiler.h": [
+      "types.h",
+      "lwk/compiler-gcc.h under __KERNEL__+GCC9"
+    ],
+    "lwk/compiler-gcc.h": []
+  },
+  "excluded_compiler_headers": "compiler-intel.h/clang.h inactive under exactGCC9 profile; no fakeheaders. Prior kmsg.h failure aa036 retained separately; witness uses actual production ihk/debug.h and explicit5header closure.",
+  "commands": [
+    {
+      "name": "00-actual-Rust-context-log-and-caller-compile",
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--crate-type=lib",
+        "--emit=obj=/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/output-1/context-logger.o",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "panic=abort",
+        "-C",
+        "codegen-units=1",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/fixture/actual_context_logger.rs"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual originalC/Rust context logger plus actual Rust context caller and controlled print/lock tape; no target register/IRQ instructions or native execution."
+    },
+    {
+      "name": "01-original-C-context-tape-compile",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-c",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/fixture/compare_context_tapes.c",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/output-1/context-tape.o"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual originalC/Rust context logger plus actual Rust context caller and controlled print/lock tape; no target register/IRQ instructions or native execution."
+    },
+    {
+      "name": "02-original-C-Rust-context-tape-link",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-no-pie",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/output-1/context-tape.o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/output-1/context-logger.o",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/output-1/fixture"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual originalC/Rust context logger plus actual Rust context caller and controlled print/lock tape; no target register/IRQ instructions or native execution."
+    },
+    {
+      "name": "03-actual-C-Rust-context-pairs",
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/output-1/fixture"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual originalC/Rust context logger plus actual Rust context caller and controlled print/lock tape; no target register/IRQ instructions or native execution."
+    },
+    {
+      "name": "04-real-header-selected-C-compile",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+        "-DIHK_OS_MANYCORE",
+        "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+        "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+        "-DMCKERNEL_NATIVE_CLONE3",
+        "-DMCKERNEL_NATIVE_CLONE_TID",
+        "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+        "-DMCKERNEL_NATIVE_FUTEX",
+        "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+        "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+        "-DMCKERNEL_RUST_BITOPS",
+        "-DMCKERNEL_RUST_LIST_HELPERS",
+        "-DMCKERNEL_RUST_LOCK_HELPERS",
+        "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_PTE_HELPERS",
+        "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+        "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+        "-DPROFILE_ENABLE",
+        "-D__KERNEL__",
+        "-DMCKERNEL_RUST_X86_CPU_HELPERS",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/include",
+        "-I/home/holden/mckernel/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64/include",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64",
+        "-I/home/holden/mckernel/ihk/ikc/include",
+        "-I/home/holden/mckernel/ihk/linux/include",
+        "-I/home/holden/mckernel/lib/include",
+        "-I/home/holden/mckernel/arch/x86_64/kernel/include",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Wno-unused-parameter",
+        "-Wno-sign-compare",
+        "-Wno-unused-function",
+        "-Wno-implicit-fallthrough",
+        "-Wno-stringop-truncation",
+        "-ffreestanding",
+        "-O2",
+        "-nostdinc",
+        "-isystem",
+        "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+        "-fno-omit-frame-pointer",
+        "-mcmodel=large",
+        "-mno-red-zone",
+        "-mno-sse",
+        "-Werror=incompatible-pointer-types",
+        "-c",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/fixture/actual_header_selection.c",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/output-1/selected.o"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual originalC/Rust context logger plus actual Rust context caller and controlled print/lock tape; no target register/IRQ instructions or native execution."
+    },
+    {
+      "name": "05-real-header-fallback-C-compile",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+        "-DIHK_OS_MANYCORE",
+        "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+        "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+        "-DMCKERNEL_NATIVE_CLONE3",
+        "-DMCKERNEL_NATIVE_CLONE_TID",
+        "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+        "-DMCKERNEL_NATIVE_FUTEX",
+        "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+        "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+        "-DMCKERNEL_RUST_BITOPS",
+        "-DMCKERNEL_RUST_LIST_HELPERS",
+        "-DMCKERNEL_RUST_LOCK_HELPERS",
+        "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_PTE_HELPERS",
+        "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+        "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+        "-DPROFILE_ENABLE",
+        "-D__KERNEL__",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/include",
+        "-I/home/holden/mckernel/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64/include",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64",
+        "-I/home/holden/mckernel/ihk/ikc/include",
+        "-I/home/holden/mckernel/ihk/linux/include",
+        "-I/home/holden/mckernel/lib/include",
+        "-I/home/holden/mckernel/arch/x86_64/kernel/include",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Wno-unused-parameter",
+        "-Wno-sign-compare",
+        "-Wno-unused-function",
+        "-Wno-implicit-fallthrough",
+        "-Wno-stringop-truncation",
+        "-ffreestanding",
+        "-O2",
+        "-nostdinc",
+        "-isystem",
+        "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+        "-fno-omit-frame-pointer",
+        "-mcmodel=large",
+        "-mno-red-zone",
+        "-mno-sse",
+        "-Werror=incompatible-pointer-types",
+        "-c",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/fixture/actual_header_selection.c",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/output-1/fallback.o"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual originalC/Rust context logger plus actual Rust context caller and controlled print/lock tape; no target register/IRQ instructions or native execution."
+    },
+    {
+      "name": "06-Rust-symbols",
+      "argv": [
+        "/usr/bin/nm",
+        "-a",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/output-1/context-logger.o"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual originalC/Rust context logger plus actual Rust context caller and controlled print/lock tape; no target register/IRQ instructions or native execution."
+    },
+    {
+      "name": "07-selected-C-symbols",
+      "argv": [
+        "/usr/bin/nm",
+        "-a",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/output-1/selected.o"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual originalC/Rust context logger plus actual Rust context caller and controlled print/lock tape; no target register/IRQ instructions or native execution."
+    },
+    {
+      "name": "08-fallback-C-symbols",
+      "argv": [
+        "/usr/bin/nm",
+        "-a",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/output-1/fallback.o"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual originalC/Rust context logger plus actual Rust context caller and controlled print/lock tape; no target register/IRQ instructions or native execution."
+    },
+    {
+      "name": "09-selected-C-relocations",
+      "argv": [
+        "/usr/bin/readelf",
+        "-rW",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/output-1/selected.o"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual originalC/Rust context logger plus actual Rust context caller and controlled print/lock tape; no target register/IRQ instructions or native execution."
+    },
+    {
+      "name": "10-selected-C-Rust-partial-link",
+      "argv": [
+        "/usr/bin/ld",
+        "-r",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/output-1/selected.o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/output-1/context-logger.o",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/output-1/partial.o"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual originalC/Rust context logger plus actual Rust context caller and controlled print/lock tape; no target register/IRQ instructions or native execution."
+    },
+    {
+      "name": "11-partial-symbols",
+      "argv": [
+        "/usr/bin/nm",
+        "-a",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/output-1/partial.o"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual originalC/Rust context logger plus actual Rust context caller and controlled print/lock tape; no target register/IRQ instructions or native execution."
+    },
+    {
+      "name": "12-artifact-observer",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/fixture/observe_artifacts.py"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual originalC/Rust context logger plus actual Rust context caller and controlled print/lock tape; no target register/IRQ instructions or native execution."
+    }
+  ],
+  "planned_direct_pairs_NOT_ACTUAL": 10880,
+  "planned_actual_Rust_context_caller_pairs_NOT_ACTUAL": 1360,
+  "planned_total_pairs_NOT_ACTUAL": 12240,
+  "planned_known_events": 9,
+  "planned_provider_channels": 2,
+  "planned_values": 136,
+  "planned_kprintf_returns": 5,
+  "known_event_ids": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    20,
+    21,
+    22
+  ],
+  "unknown_events_noop": true,
+  "lock_span": "Actual unchanged Rustinterruptcontext body takes one controlled lock, executes11__kprintf taps, unlocks exactflags once; actual usercontext body retains3kprintf taps. New logger does not add locks or retain contextpointers.",
+  "Rust_declaration_change": "Remove existing extern x86_context_line_log_bridge to avoid E0428; add existing-provider __kprintf variadic declaration; reuse existing kprintf declaration/debug.rs exports.",
+  "debug_provider": {
+    "path": "/home/holden/mckernel/kernel/rust/debug.rs",
+    "sha256": "fed7537d21f5d5fe0fc3ffdb1fe44783f5f9ac13937b3bdbbcc452cc2fa5eb16",
+    "bytes": 13020
+  },
+  "canonical_mutations": 0,
+  "compiler_jobs": 0,
+  "test_jobs": 0,
+  "CPU_slots_held": 0,
+  "production_full78_wholeCPU_TU_defaultlink_native": "OPEN",
+  "no_stack_logger_change": true,
+  "failure_family": "Newboundedcompletecontextlogger slice, firstcandidate notexecuted; rootmanagedoneboundedcorrection thenexpert. All priorCPUlogkmsg failure histories remain preserved separately.",
+  "qualifications": [
+    "Actual complete C logger vs actual Rust logger typed variadic tape; no Rustformatter execution.",
+    "Actual existing Rust context caller bodies use actual abi.rs X86UserContext types; C lock/unlock are controlled synchronous endpoints, no model structs/layout.",
+    "Leaf symbol/selected/fallback/ABI/partial consumer only; not wholeCPU TU/fullcrate/defaultELF/native retirement.",
+    "Private successor currently based acceptedCPUlogger2d29/26180; wait rootactualcanonical integration notice before finalproductionrecipe/canonicalpreimage refresh."
+  ],
+  "pre_execution_source_formatting": "C fixture loop uses braces to avoid misleading-indentation diagnostics under existing -Wall -Wextra -Werror; no product/fixture semantics/profile change and no execution attempted."
+}

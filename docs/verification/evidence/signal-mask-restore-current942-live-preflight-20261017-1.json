@@ -1,0 +1,71 @@
+{
+  "schema": "mckernel.signal-mask-restore-live-preflight.v1",
+  "observed_at_epoch": 1792243208.6192198,
+  "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+  "mount": {
+    "target": "/home/holden/mckernel-work/scratch",
+    "source": "/dev/loop36",
+    "fstype": "ext4",
+    "options": "rw,nosuid,nodev,relatime",
+    "uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52",
+    "maj:min": "7:36"
+  },
+  "scratch_device": 1828,
+  "root_lock": [
+    27,
+    4
+  ],
+  "root_lock_released": true,
+  "host_available_bytes": 20214575104,
+  "scratch_available_bytes": 19006959616,
+  "mem_available_bytes": 30416330752,
+  "affinity": [
+    0,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "cgroups": {
+    "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_period_us": "100000",
+    "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_quota_us": "400000",
+    "/sys/fs/cgroup/memory/mckernel-dev/memory.limit_in_bytes": "12884901888",
+    "/sys/fs/cgroup/memory/mckernel-dev/memory.use_hierarchy": "1",
+    "/sys/fs/cgroup/pids/mckernel-dev/pids.max": "512"
+  },
+  "sources": {
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_runner.py": "25ea29f9b07232094e9df1db6094ad0a85ec678281749a1d6998abb7c700d499",
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic.py": "8af67bcf5015cbf1915a65fdb3ce50d09ed68ea39f3b08fa95fa29625fd7afbc",
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_backend.py": "cd0759c926876483665065cb320b9daf7d7c6b32f56e561805b4b0343f60d614",
+    "/home/holden/mckernel/scripts/application-tests/qmp_capture.py": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741"
+  },
+  "image_record": {
+    "path": "/home/holden/mckernel-work/logs/image-native.json",
+    "sha256": "c881faf78539b1698aa9cfe24e0b82562442a58de18666bf59a447b72607e95a",
+    "size": 4785
+  },
+  "manifest": {
+    "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-manifest-20261017-1.json",
+    "size": 5455,
+    "sha256": "47eb95897b0a4f2d8b2cb2673c2ed3b3feff11895654ac160c854710cc7582da"
+  },
+  "parent": {
+    "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-guest-20261017-1",
+    "device": 1828,
+    "inode": 107782,
+    "mode": "0o700",
+    "uid": 1000,
+    "gid": 1000
+  },
+  "parent_empty": true,
+  "evidence_sibling_absent": true,
+  "active_shared_common_image_lease_absent": true,
+  "cleanup_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/scratch22-authority3-image-cleanup-result-review-20261017-1.json",
+    "sha256": "47cc7673788cb9b8c15443eec7f24c07d749b1bfe05875673d2c2b9af72bc15d",
+    "size": 1892
+  },
+  "scope": "Fresh ordinary-UID source/resource/mount/ownership/cgroup admission. Existing owner must perform exact root lock,manifest,image,isolation/container/retirement checks during sole invocation."
+}

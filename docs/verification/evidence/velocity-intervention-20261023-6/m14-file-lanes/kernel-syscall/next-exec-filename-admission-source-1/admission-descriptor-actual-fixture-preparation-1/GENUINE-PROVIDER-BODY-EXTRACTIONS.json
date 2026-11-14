@@ -1,0 +1,468 @@
+{
+  "actual_ABI": {
+    "bytes": 76151,
+    "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+    "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+  },
+  "frozen_entry_fragments": [
+    {
+      "bytes": 1120,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-filename-admission-source-1/filename_admission.RUST-FRAGMENT.rs.inc",
+      "sha256": "a35ad98961f13a20bfc6a96120064a55d9859496bfd855ae0e5776dd6ed8dbbe"
+    },
+    {
+      "bytes": 1066,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-descriptor-init-source-1/descriptor_init.RUST-FRAGMENT.rs.inc",
+      "sha256": "ed9f70addaa67f6f068b63d1a0665c44cc5cf27081313dd0dc91a3ce494ab072"
+    }
+  ],
+  "no_modified_provider_bodies": true,
+  "private_ABI": {
+    "bytes": 76151,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-filename-admission-source-1/admission-descriptor-actual-fixture-preparation-1/fixture/abi.rs",
+    "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+  },
+  "records": [
+    {
+      "bytes": 173,
+      "exact_text": "#[repr(C)]\n#[derive(Clone, Copy)]\npub struct RbNode {\n    pub(crate) __rb_parent_color: CULong,\n    pub(crate) rb_right: *mut RbNode,\n    pub(crate) rb_left: *mut RbNode,\n}\n",
+      "name": "RbNode",
+      "sha256": "0573373542a99442fd5413abe72fd5d74cfa7aca2ee0c80062acd0504438f475",
+      "source": {
+        "bytes": 22536,
+        "path": "/home/holden/mckernel/kernel/rust/rbtree.rs",
+        "sha256": "114e8dbd0b48abc156879bfd2f019071c30174019e97904c028ccee911840256"
+      }
+    },
+    {
+      "bytes": 64,
+      "exact_text": "#[repr(C)]\npub struct IhkRwSpinlock {\n    counter: AtomicI32,\n}\n",
+      "name": "IhkRwSpinlock",
+      "sha256": "7d2c5050b1d2b0286bada542c4c3bf4247db086635ec2d59013d025f9062beb7",
+      "source": {
+        "bytes": 12202,
+        "path": "/home/holden/mckernel/kernel/rust/lock_helpers.rs",
+        "sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3"
+      }
+    },
+    {
+      "bytes": 526,
+      "exact_text": "#[no_mangle]\npub unsafe extern \"C\" fn __ihk_rwspinlock_read_lock(lock: *mut IhkRwSpinlock) {\n    loop {\n        let desired = (*lock).counter.load(Ordering::SeqCst) & !IHK_RWSPINLOCK_WRITELOCKED;\n        let new_val = desired + 1;\n\n        if (new_val as u32) < IHK_RWSPINLOCK_WRITELOCKED as u32\n            && (*lock)\n                .counter\n                .compare_exchange(desired, new_val, Ordering::SeqCst, Ordering::SeqCst)\n                .is_ok()\n        {\n            return;\n        }\n        cpu_pause();\n    }\n}\n",
+      "name": "__ihk_rwspinlock_read_lock",
+      "sha256": "32556b2cf35bebaa8b67dae56bed5f497ebc637345a283fbe511d60863a79539",
+      "source": {
+        "bytes": 12202,
+        "path": "/home/holden/mckernel/kernel/rust/lock_helpers.rs",
+        "sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3"
+      }
+    },
+    {
+      "bytes": 157,
+      "exact_text": "#[no_mangle]\npub unsafe extern \"C\" fn __ihk_rwspinlock_read_unlock(lock: *mut IhkRwSpinlock) {\n    let _ = (*lock).counter.fetch_sub(1, Ordering::SeqCst);\n}\n",
+      "name": "__ihk_rwspinlock_read_unlock",
+      "sha256": "a5fdf567e36e29e40c6a09a55b73614162d3877387126aad587e33378fc46eff",
+      "source": {
+        "bytes": 12202,
+        "path": "/home/holden/mckernel/kernel/rust/lock_helpers.rs",
+        "sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3"
+      }
+    },
+    {
+      "bytes": 160,
+      "exact_text": "#[no_mangle]\npub unsafe extern \"C\" fn ihk_rwspinlock_read_lock_noirq(lock: *mut IhkRwSpinlock) {\n    preempt_disable();\n    __ihk_rwspinlock_read_lock(lock);\n}\n",
+      "name": "ihk_rwspinlock_read_lock_noirq",
+      "sha256": "a8ee261fbeb0a8fc5658ed49b28c6f2593394b468368ee2460567ef7abf9087f",
+      "source": {
+        "bytes": 12202,
+        "path": "/home/holden/mckernel/kernel/rust/lock_helpers.rs",
+        "sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3"
+      }
+    },
+    {
+      "bytes": 163,
+      "exact_text": "#[no_mangle]\npub unsafe extern \"C\" fn ihk_rwspinlock_read_unlock_noirq(lock: *mut IhkRwSpinlock) {\n    __ihk_rwspinlock_read_unlock(lock);\n    preempt_enable();\n}\n",
+      "name": "ihk_rwspinlock_read_unlock_noirq",
+      "sha256": "560563e14f21a5f4b9c407b101bdb8c23c79323c469d3a085ecea63dcb8f6ba9",
+      "source": {
+        "bytes": 12202,
+        "path": "/home/holden/mckernel/kernel/rust/lock_helpers.rs",
+        "sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3"
+      }
+    },
+    {
+      "bytes": 116,
+      "exact_text": "#[inline(always)]\nunsafe fn vm_range_from_rb_node(node: *mut RbNode) -> *mut VmRange {\n    node.cast::<VmRange>()\n}\n",
+      "name": "vm_range_from_rb_node",
+      "sha256": "f09eef6116789b3758d8e8f59444b3d52cd3c8b2c9cbed0efeccb08a17407181",
+      "source": {
+        "bytes": 361675,
+        "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+        "sha256": "5bf085bfa3f60217abacbda380e80d35d2fd56922c0e82f82dbab1d5fe09d4d1"
+      }
+    },
+    {
+      "bytes": 216,
+      "exact_text": "#[no_mangle]\npub extern \"C\" fn process_range_cache_hit_result(\n    cache_start: CULong,\n    cache_end: CULong,\n    start: CULong,\n    end: CULong,\n) -> CInt {\n    (cache_start <= start && cache_end >= end) as CInt\n}\n",
+      "name": "process_range_cache_hit_result",
+      "sha256": "5b9e8c281d1d3cb73eb23238f28a217cba75d1141f24cdb7eeb750bb102c2589",
+      "source": {
+        "bytes": 361675,
+        "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+        "sha256": "5bf085bfa3f60217abacbda380e80d35d2fd56922c0e82f82dbab1d5fe09d4d1"
+      }
+    },
+    {
+      "bytes": 327,
+      "exact_text": "#[no_mangle]\npub extern \"C\" fn process_lookup_range_relation_result(\n    start: CULong,\n    end: CULong,\n    range_start: CULong,\n    range_end: CULong,\n) -> CInt {\n    if end <= range_start {\n        -1\n    } else if start >= range_end {\n        1\n    } else if start < range_start {\n        -2\n    } else {\n        0\n    }\n}\n",
+      "name": "process_lookup_range_relation_result",
+      "sha256": "be41d1a3b137b6be966beecbf1a79801807436a537a1b00f9e4ea30477c6f1e6",
+      "source": {
+        "bytes": 361675,
+        "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+        "sha256": "5bf085bfa3f60217abacbda380e80d35d2fd56922c0e82f82dbab1d5fe09d4d1"
+      }
+    },
+    {
+      "bytes": 478,
+      "exact_text": "#[no_mangle]\npub unsafe extern \"C\" fn process_range_cache_store_result(\n    cache: *mut *mut c_void,\n    count: CInt,\n    indexp: *mut CInt,\n    match_range: *mut c_void,\n) -> CInt {\n    if cache.is_null() || count <= 0 || indexp.is_null() || match_range.is_null() {\n        return -EINVAL;\n    }\n\n    let new_index = unsafe { (*indexp - 1 + count) % count };\n    unsafe {\n        *indexp = new_index;\n        *cache.add(new_index as usize) = match_range;\n    }\n    new_index\n}\n",
+      "name": "process_range_cache_store_result",
+      "sha256": "2a6b04f9b6c156104e94263275678cfd16cd81c0621beea3200bf952555a1af9",
+      "source": {
+        "bytes": 361675,
+        "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+        "sha256": "5bf085bfa3f60217abacbda380e80d35d2fd56922c0e82f82dbab1d5fe09d4d1"
+      }
+    },
+    {
+      "bytes": 1677,
+      "exact_text": "#[no_mangle]\npub unsafe extern \"C\" fn process_lookup_memory_range_body_result(\n    vm: *mut ProcessVm,\n    start: CULong,\n    end: CULong,\n) -> *mut VmRange {\n    if vm.is_null() || end <= start {\n        return null_mut();\n    }\n\n    let mut i = 0;\n    let cache_base = (&raw mut (*vm).range_cache).cast::<*mut VmRange>();\n    while i < crate::abi::VM_RANGE_CACHE_SIZE as CInt {\n        let c_i = (i + (*vm).range_cache_ind) % crate::abi::VM_RANGE_CACHE_SIZE as CInt;\n        let cached = *cache_base.add(c_i as usize);\n        if !cached.is_null()\n            && process_range_cache_hit_result((*cached).start, (*cached).end, start, end) != 0\n        {\n            return cached;\n        }\n        i += 1;\n    }\n\n    let mut node = (*vm).vm_range_tree.rb_node.cast::<RbNode>();\n    let mut matched: *mut VmRange = null_mut();\n    while !node.is_null() {\n        let range = vm_range_from_rb_node(node);\n        let relation =\n            process_lookup_range_relation_result(start, end, (*range).start, (*range).end);\n        if relation < -1 {\n            matched = range;\n            node = (*node).rb_left;\n        } else if relation < 0 {\n            node = (*node).rb_left;\n        } else if relation > 0 {\n            node = (*node).rb_right;\n        } else {\n            matched = range;\n            break;\n        }\n    }\n\n    if !matched.is_null() && end > (*matched).start {\n        let cache = (&raw mut (*vm).range_cache).cast::<*mut c_void>();\n        process_range_cache_store_result(\n            cache,\n            crate::abi::VM_RANGE_CACHE_SIZE as CInt,\n            &raw mut (*vm).range_cache_ind,\n            matched.cast(),\n        );\n    }\n\n    matched\n}\n",
+      "name": "process_lookup_memory_range_body_result",
+      "sha256": "f012f960eb580415d0a8548436ce3759d24471ed54a825d4d202143183d38ac2",
+      "source": {
+        "bytes": 361675,
+        "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+        "sha256": "5bf085bfa3f60217abacbda380e80d35d2fd56922c0e82f82dbab1d5fe09d4d1"
+      }
+    },
+    {
+      "bytes": 356,
+      "exact_text": "#[no_mangle]\npub unsafe extern \"C\" fn process_range_public_log_result(\n    event: CInt,\n    vm: *mut ProcessVm,\n    range: *mut VmRange,\n    start: CULong,\n    end: CULong,\n    error: CInt,\n    log_fn: Option<ProcessRangePublicLogFn>,\n) -> CInt {\n    if let Some(log_fn) = log_fn {\n        log_fn(event, vm.cast(), range, start, end, error);\n    }\n    0\n}\n",
+      "name": "process_range_public_log_result",
+      "sha256": "7f0adb7658c80c23834a65d19cd33125688b3817fe3b72520e63f5ca1f130369",
+      "source": {
+        "bytes": 361675,
+        "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+        "sha256": "5bf085bfa3f60217abacbda380e80d35d2fd56922c0e82f82dbab1d5fe09d4d1"
+      }
+    },
+    {
+      "bytes": 663,
+      "exact_text": "#[no_mangle]\npub unsafe extern \"C\" fn process_lookup_memory_range_public_result(\n    vm: *mut ProcessVm,\n    start: CULong,\n    end: CULong,\n    log_fn: Option<ProcessRangePublicLogFn>,\n) -> *mut VmRange {\n    let _ = process_range_public_log_result(\n        PROCESS_RANGE_PUBLIC_LOG_LOOKUP_ENTER,\n        vm,\n        null_mut(),\n        start,\n        end,\n        0,\n        log_fn,\n    );\n    let matched = process_lookup_memory_range_body_result(vm, start, end);\n    let _ = process_range_public_log_result(\n        PROCESS_RANGE_PUBLIC_LOG_LOOKUP_EXIT,\n        vm,\n        matched,\n        start,\n        end,\n        0,\n        log_fn,\n    );\n    matched\n}\n",
+      "name": "process_lookup_memory_range_public_result",
+      "sha256": "de66feb96e01013f022718e6e428a98a90f8e2c7b8eef2347d4b06a5079233a5",
+      "source": {
+        "bytes": 361675,
+        "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+        "sha256": "5bf085bfa3f60217abacbda380e80d35d2fd56922c0e82f82dbab1d5fe09d4d1"
+      }
+    },
+    {
+      "bytes": 250,
+      "exact_text": "#[no_mangle]\npub unsafe extern \"C\" fn lookup_process_memory_range(\n    vm: *mut ProcessVm,\n    start: CULong,\n    end: CULong,\n) -> *mut VmRange {\n    process_lookup_memory_range_public_result(vm, start, end, Some(process_range_public_log_bridge))\n}\n",
+      "name": "lookup_process_memory_range",
+      "sha256": "61a1260e25ad5dc804f8c173534508ce6ceb50bc13181fd3890c7d00e06ab75e",
+      "source": {
+        "bytes": 361675,
+        "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+        "sha256": "5bf085bfa3f60217abacbda380e80d35d2fd56922c0e82f82dbab1d5fe09d4d1"
+      }
+    },
+    {
+      "bytes": 87,
+      "exact_text": "#[inline(always)]\nunsafe fn read_char(ptr: *const i8) -> i8 {\n    read_volatile(ptr)\n}\n",
+      "name": "read_char",
+      "sha256": "c32989333ff93951b0032df89d8ce2f249292daae3fa061772bf055044247587",
+      "source": {
+        "bytes": 13172,
+        "path": "/home/holden/mckernel/kernel/rust/string.rs",
+        "sha256": "579d8c06bb766a270548399a8820733516a167bb8af5d1fea46d8a51f7e8fbf3"
+      }
+    },
+    {
+      "bytes": 100,
+      "exact_text": "#[inline(always)]\nunsafe fn write_char(ptr: *mut i8, value: i8) {\n    write_volatile(ptr, value);\n}\n",
+      "name": "write_char",
+      "sha256": "cb77d77050ce783b6d46561d2d73481f5854bfdbd00aabe78d03087f742059cb",
+      "source": {
+        "bytes": 13172,
+        "path": "/home/holden/mckernel/kernel/rust/string.rs",
+        "sha256": "579d8c06bb766a270548399a8820733516a167bb8af5d1fea46d8a51f7e8fbf3"
+      }
+    },
+    {
+      "bytes": 97,
+      "exact_text": "#[inline(always)]\nfn char_diff(left: i8, right: i8) -> CInt {\n    left as CInt - right as CInt\n}\n",
+      "name": "char_diff",
+      "sha256": "557677bb1307221b4491259d39948c5110953a17f995870bdbe38d2bfc542859",
+      "source": {
+        "bytes": 13172,
+        "path": "/home/holden/mckernel/kernel/rust/string.rs",
+        "sha256": "579d8c06bb766a270548399a8820733516a167bb8af5d1fea46d8a51f7e8fbf3"
+      }
+    },
+    {
+      "bytes": 199,
+      "exact_text": "#[no_mangle]\npub unsafe extern \"C\" fn strlen(mut ptr: *const i8) -> SizeT {\n    let head = ptr;\n\n    while read_char(ptr) != 0 {\n        ptr = ptr.add(1);\n    }\n\n    ptr.offset_from(head) as SizeT\n}\n",
+      "name": "strlen",
+      "sha256": "9cbd7009aa31b5af644abe7bde18a46e8902a3e3b7b322ea915c55745d6e8210",
+      "source": {
+        "bytes": 13172,
+        "path": "/home/holden/mckernel/kernel/rust/string.rs",
+        "sha256": "579d8c06bb766a270548399a8820733516a167bb8af5d1fea46d8a51f7e8fbf3"
+      }
+    },
+    {
+      "bytes": 315,
+      "exact_text": "#[no_mangle]\npub unsafe extern \"C\" fn strcpy(mut dest: *mut i8, mut src: *const i8) -> *mut i8 {\n    let head = dest;\n\n    loop {\n        let ch = read_char(src);\n        write_char(dest, ch);\n        dest = dest.add(1);\n        src = src.add(1);\n        if ch == 0 {\n            break;\n        }\n    }\n\n    head\n}\n",
+      "name": "strcpy",
+      "sha256": "c79093416ba8434657ecfe8eca00df35a01559db75bd7d104b3a8d3638ac01bd",
+      "source": {
+        "bytes": 13172,
+        "path": "/home/holden/mckernel/kernel/rust/string.rs",
+        "sha256": "579d8c06bb766a270548399a8820733516a167bb8af5d1fea46d8a51f7e8fbf3"
+      }
+    },
+    {
+      "bytes": 259,
+      "exact_text": "#[no_mangle]\npub unsafe extern \"C\" fn strcmp(mut s1: *const i8, mut s2: *const i8) -> CInt {\n    while read_char(s1) != 0 && read_char(s1) == read_char(s2) {\n        s1 = s1.add(1);\n        s2 = s2.add(1);\n    }\n\n    char_diff(read_char(s1), read_char(s2))\n}\n",
+      "name": "strcmp",
+      "sha256": "10a284896d0e9049f8ec88b661cd354aa77a2c382699a99f479a80c28b4acf35",
+      "source": {
+        "bytes": 13172,
+        "path": "/home/holden/mckernel/kernel/rust/string.rs",
+        "sha256": "579d8c06bb766a270548399a8820733516a167bb8af5d1fea46d8a51f7e8fbf3"
+      }
+    },
+    {
+      "bytes": 270,
+      "exact_text": "#[no_mangle]\npub unsafe extern \"C\" fn memset(s: *mut c_void, c: CInt, mut n: SizeT) -> *mut c_void {\n    let mut ptr = s.cast::<u8>();\n    let byte = c as u8;\n\n    while n > 0 {\n        write_volatile(ptr, byte);\n        ptr = ptr.add(1);\n        n -= 1;\n    }\n\n    s\n}\n",
+      "name": "memset",
+      "sha256": "69cd20f99c4a3a9be7775bce28fbd4889cea61a4a981fd412a202f974f679e8e",
+      "source": {
+        "bytes": 13172,
+        "path": "/home/holden/mckernel/kernel/rust/string.rs",
+        "sha256": "579d8c06bb766a270548399a8820733516a167bb8af5d1fea46d8a51f7e8fbf3"
+      }
+    },
+    {
+      "bytes": 194,
+      "exact_text": "#[repr(C)]\npub struct PageallocTrackAddrEntry {\n    addr: *mut c_void,\n    runcount: CInt,\n    list: AbiListHead,\n    entry: *mut PageallocTrackEntry,\n    hash: AbiListHead,\n    npages: CInt,\n}\n",
+      "name": "PageallocTrackAddrEntry",
+      "sha256": "f3112c4b83d579ec6088f39af2bbe122496a6807909f4ada15d9d689ab636d20",
+      "source": {
+        "bytes": 209297,
+        "path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+        "sha256": "be693dec5e53b20f06f7963b7418a7c0dff68cbecaaa2360e291d8542784e045"
+      }
+    },
+    {
+      "bytes": 193,
+      "exact_text": "#[repr(C)]\npub struct PageallocTrackEntry {\n    file: *mut i8,\n    line: CInt,\n    alloc_count: IhkAtomic,\n    hash: AbiListHead,\n    addr_list: AbiListHead,\n    addr_list_lock: IhkSpinlock,\n}\n",
+      "name": "PageallocTrackEntry",
+      "sha256": "697d0e48f146e124a05decb2f5a0f74e0e5bb62473a1081841678c0408e6a2c9",
+      "source": {
+        "bytes": 209297,
+        "path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+        "sha256": "be693dec5e53b20f06f7963b7418a7c0dff68cbecaaa2360e291d8542784e045"
+      }
+    },
+    {
+      "bytes": 208,
+      "exact_text": "#[inline(always)]\nunsafe fn list_add(new: *mut AbiListHead, prev: *mut AbiListHead, next: *mut AbiListHead) {\n    (*next).prev = new;\n    (*new).next = next;\n    (*new).prev = prev;\n    (*prev).next = new;\n}\n",
+      "name": "list_add",
+      "sha256": "33cde14d3dc93cfec61c1c5c810cf4bc3b1252ffe0af0b0cc9893e9ba5efea85",
+      "source": {
+        "bytes": 209297,
+        "path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+        "sha256": "be693dec5e53b20f06f7963b7418a7c0dff68cbecaaa2360e291d8542784e045"
+      }
+    },
+    {
+      "bytes": 133,
+      "exact_text": "#[inline(always)]\nunsafe fn list_add_after(new: *mut AbiListHead, head: *mut AbiListHead) {\n    list_add(new, head, (*head).next);\n}\n",
+      "name": "list_add_after",
+      "sha256": "15077554e0df2f7936c524de72dd31b2fba8220a7c964709712f31f1de727b8c",
+      "source": {
+        "bytes": 209297,
+        "path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+        "sha256": "be693dec5e53b20f06f7963b7418a7c0dff68cbecaaa2360e291d8542784e045"
+      }
+    },
+    {
+      "bytes": 121,
+      "exact_text": "#[inline(always)]\nunsafe fn init_list_head(head: *mut AbiListHead) {\n    (*head).next = head;\n    (*head).prev = head;\n}\n",
+      "name": "init_list_head",
+      "sha256": "ad71c1bc02e07596769b5d92098e97f7e6d1df27b92e4e6c8420599eabcc9421",
+      "source": {
+        "bytes": 209297,
+        "path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+        "sha256": "be693dec5e53b20f06f7963b7418a7c0dff68cbecaaa2360e291d8542784e045"
+      }
+    },
+    {
+      "bytes": 249,
+      "exact_text": "#[inline(always)]\nunsafe fn pagealloc_track_hash(file: *mut i8, line: CInt) -> CInt {\n    let len = if file.is_null() {\n        0\n    } else {\n        strlen(file.cast_const()) as CInt\n    };\n    len.wrapping_add(line) & PAGEALLOC_TRACK_HASH_MASK\n}\n",
+      "name": "pagealloc_track_hash",
+      "sha256": "219510e74c5f52736586996afd7dab5348dff5eeb85a5b739a1e3d73ef9c5982",
+      "source": {
+        "bytes": 209297,
+        "path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+        "sha256": "be693dec5e53b20f06f7963b7418a7c0dff68cbecaaa2360e291d8542784e045"
+      }
+    },
+    {
+      "bytes": 151,
+      "exact_text": "#[inline(always)]\nunsafe fn pagealloc_addr_hash(ptr: *mut c_void) -> CInt {\n    ((ptr as CULong) >> 5 & PAGEALLOC_TRACK_HASH_MASK as CULong) as CInt\n}\n",
+      "name": "pagealloc_addr_hash",
+      "sha256": "4ce32a52d4cda99a1c15e83cf63115a3ea66cf22e2236fbedcea6a2141b3f5c0",
+      "source": {
+        "bytes": 209297,
+        "path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+        "sha256": "be693dec5e53b20f06f7963b7418a7c0dff68cbecaaa2360e291d8542784e045"
+      }
+    },
+    {
+      "bytes": 184,
+      "exact_text": "#[inline(always)]\nunsafe fn pagealloc_track_entry_alloc_count(entry: *mut PageallocTrackEntry) -> &'static AtomicI32 {\n    AtomicI32::from_ptr(&raw mut (*entry).alloc_count.counter)\n}\n",
+      "name": "pagealloc_track_entry_alloc_count",
+      "sha256": "e03eb8da5284819722190c0831662ff0da31cc7c418943c32963f19b332adb75",
+      "source": {
+        "bytes": 209297,
+        "path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+        "sha256": "be693dec5e53b20f06f7963b7418a7c0dff68cbecaaa2360e291d8542784e045"
+      }
+    },
+    {
+      "bytes": 229,
+      "exact_text": "#[inline(always)]\nunsafe fn pagealloc_track_entry_from_hash(node: *mut AbiListHead) -> *mut PageallocTrackEntry {\n    node.cast::<u8>()\n        .sub(offset_of!(PageallocTrackEntry, hash))\n        .cast::<PageallocTrackEntry>()\n}\n",
+      "name": "pagealloc_track_entry_from_hash",
+      "sha256": "eb910277fc9b7185a58a77672104952dab51032a488b8d4df205436fbddc7532",
+      "source": {
+        "bytes": 209297,
+        "path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+        "sha256": "be693dec5e53b20f06f7963b7418a7c0dff68cbecaaa2360e291d8542784e045"
+      }
+    },
+    {
+      "bytes": 274,
+      "exact_text": "#[inline(always)]\nunsafe fn pagealloc_track_log(\n    log_fn: Option<MemPageallocTrackLogFn>,\n    event: CInt,\n    ptr: *mut c_void,\n    file: *mut i8,\n    line: CInt,\n    npages: CInt,\n) {\n    if let Some(log) = log_fn {\n        log(event, ptr, file, line, npages);\n    }\n}\n",
+      "name": "pagealloc_track_log",
+      "sha256": "bf998a07ebdc0a035626a4733bac4bfb155b008913090c56a25b32e057adb62a",
+      "source": {
+        "bytes": 209297,
+        "path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+        "sha256": "be693dec5e53b20f06f7963b7418a7c0dff68cbecaaa2360e291d8542784e045"
+      }
+    },
+    {
+      "bytes": 155,
+      "exact_text": "#[inline(always)]\nunsafe fn pagealloc_entry_addr_list_lock(entry: *mut PageallocTrackEntry) -> CULong {\n    (&raw mut (*entry).addr_list_lock) as CULong\n}\n",
+      "name": "pagealloc_entry_addr_list_lock",
+      "sha256": "cbe7da30c6490f92694167dcc4a0cab8333e0255d3df01f4f132d495f843cbb7",
+      "source": {
+        "bytes": 209297,
+        "path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+        "sha256": "be693dec5e53b20f06f7963b7418a7c0dff68cbecaaa2360e291d8542784e045"
+      }
+    },
+    {
+      "bytes": 577,
+      "exact_text": "#[inline(always)]\nunsafe fn pagealloc_rehash_addr_entry(\n    addr_entry: *mut PageallocTrackAddrEntry,\n    addr_hash: *mut AbiListHead,\n    addr_locks: *mut IhkSpinlock,\n    lock: MemKmallocSpinLockFn,\n    unlock: MemKmallocSpinUnlockFn,\n) {\n    let addr_hash_index = pagealloc_addr_hash((*addr_entry).addr);\n    let addr_lock = addr_locks.add(addr_hash_index as usize);\n    let irq_flags = lock(addr_lock as CULong);\n    list_add_after(\n        &raw mut (*addr_entry).hash,\n        addr_hash.add(addr_hash_index as usize),\n    );\n    unlock(addr_lock as CULong, irq_flags);\n}\n",
+      "name": "pagealloc_rehash_addr_entry",
+      "sha256": "8b1eacf0dda64a82fd96fd86eea92ccbe921bfa6be9e2dad8f7fbbf885908cee",
+      "source": {
+        "bytes": 209297,
+        "path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+        "sha256": "be693dec5e53b20f06f7963b7418a7c0dff68cbecaaa2360e291d8542784e045"
+      }
+    },
+    {
+      "bytes": 629,
+      "exact_text": "#[no_mangle]\npub unsafe extern \"C\" fn pagealloc_track_find_entry_result(\n    file: *mut i8,\n    line: CInt,\n    track_hash: *mut AbiListHead,\n) -> *mut PageallocTrackEntry {\n    if file.is_null() || track_hash.is_null() {\n        return null_mut();\n    }\n\n    let hash = pagealloc_track_hash(file, line);\n    let head = track_hash.add(hash as usize);\n    let mut node = (*head).next;\n\n    while node != head {\n        let entry = pagealloc_track_entry_from_hash(node);\n        if (*entry).line == line && strcmp((*entry).file, file) == 0 {\n            return entry;\n        }\n        node = (*node).next;\n    }\n\n    null_mut()\n}\n",
+      "name": "pagealloc_track_find_entry_result",
+      "sha256": "eb544b277a05e74ae25cf557e1bc585dc8c5ae784b8990eb18f1f41fd0a73ef7",
+      "source": {
+        "bytes": 209297,
+        "path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+        "sha256": "be693dec5e53b20f06f7963b7418a7c0dff68cbecaaa2360e291d8542784e045"
+      }
+    },
+    {
+      "bytes": 4559,
+      "exact_text": "#[no_mangle]\npub unsafe extern \"C\" fn pagealloc_track_alloc_result(\n    npages: CInt,\n    p2align: CInt,\n    flag: CULong,\n    node: CInt,\n    is_user: CInt,\n    virt_addr: CULong,\n    file: *mut i8,\n    line: CInt,\n    memdebug: *mut i8,\n    track_initialized: CInt,\n    track_hash: *mut AbiListHead,\n    track_locks: *mut IhkSpinlock,\n    addr_hash: *mut AbiListHead,\n    addr_locks: *mut IhkSpinlock,\n    runcount: CInt,\n    base_alloc_fn: Option<MemPageallocBaseAllocFn>,\n    meta_alloc_fn: Option<MemPageallocMetaAllocFn>,\n    meta_free_fn: Option<MemPageallocMetaFreeFn>,\n    lock_fn: Option<MemKmallocSpinLockFn>,\n    unlock_fn: Option<MemKmallocSpinUnlockFn>,\n    spin_init_fn: Option<MemPageallocSpinInitFn>,\n    log_fn: Option<MemPageallocTrackLogFn>,\n) -> *mut c_void {\n    let Some(base_alloc) = base_alloc_fn else {\n        return null_mut();\n    };\n\n    let result = base_alloc(npages, p2align, flag, node, is_user, virt_addr);\n    if memdebug.is_null() || track_initialized == 0 || result.is_null() {\n        return result;\n    }\n    if file.is_null()\n        || track_hash.is_null()\n        || track_locks.is_null()\n        || addr_hash.is_null()\n        || addr_locks.is_null()\n    {\n        return result;\n    }\n    let (Some(meta_alloc), Some(meta_free), Some(lock), Some(unlock), Some(spin_init)) = (\n        meta_alloc_fn,\n        meta_free_fn,\n        lock_fn,\n        unlock_fn,\n        spin_init_fn,\n    ) else {\n        return result;\n    };\n\n    let hash = pagealloc_track_hash(file, line);\n    let track_lock = track_locks.add(hash as usize);\n    let irq_flags = lock(track_lock as CULong);\n    let mut entry = pagealloc_track_find_entry_result(file, line, track_hash);\n\n    if entry.is_null() {\n        entry = meta_alloc(size_of::<PageallocTrackEntry>() as CInt, IHK_MC_AP_NOWAIT)\n            .cast::<PageallocTrackEntry>();\n        if entry.is_null() {\n            unlock(track_lock as CULong, irq_flags);\n            pagealloc_track_log(\n                log_fn,\n                PAGEALLOC_TRACK_LOG_ENTRY_ALLOC_FAILED,\n                result,\n                file,\n                line,\n                npages,\n            );\n            return result;\n        }\n\n        (*entry).line = line;\n        pagealloc_track_entry_alloc_count(entry).store(1, Ordering::Relaxed);\n        spin_init(pagealloc_entry_addr_list_lock(entry));\n        init_list_head(&raw mut (*entry).addr_list);\n\n        let file_len = strlen(file.cast_const()) as CInt;\n        (*entry).file = meta_alloc(file_len.wrapping_add(1), IHK_MC_AP_NOWAIT).cast::<i8>();\n        if (*entry).file.is_null() {\n            pagealloc_track_log(\n                log_fn,\n                PAGEALLOC_TRACK_LOG_FILE_ALLOC_FAILED,\n                result,\n                file,\n                line,\n                npages,\n            );\n            meta_free(entry.cast::<c_void>());\n            unlock(track_lock as CULong, irq_flags);\n            return result;\n        }\n\n        strcpy((*entry).file, file.cast_const());\n        init_list_head(&raw mut (*entry).hash);\n        list_add_after(&raw mut (*entry).hash, track_hash.add(hash as usize));\n        pagealloc_track_log(\n            log_fn,\n            PAGEALLOC_TRACK_LOG_ENTRY_ADDED,\n            result,\n            file,\n            line,\n            npages,\n        );\n    } else {\n        pagealloc_track_entry_alloc_count(entry).fetch_add(1, Ordering::Relaxed);\n    }\n    unlock(track_lock as CULong, irq_flags);\n\n    let addr_entry = meta_alloc(\n        size_of::<PageallocTrackAddrEntry>() as CInt,\n        IHK_MC_AP_NOWAIT,\n    )\n    .cast::<PageallocTrackAddrEntry>();\n    if addr_entry.is_null() {\n        pagealloc_track_log(\n            log_fn,\n            PAGEALLOC_TRACK_LOG_ADDR_ALLOC_FAILED,\n            result,\n            file,\n            line,\n            npages,\n        );\n        return result;\n    }\n\n    (*addr_entry).addr = result;\n    (*addr_entry).runcount = runcount;\n    (*addr_entry).entry = entry;\n    (*addr_entry).npages = npages;\n    init_list_head(&raw mut (*addr_entry).list);\n    init_list_head(&raw mut (*addr_entry).hash);\n\n    let irq_flags = lock(pagealloc_entry_addr_list_lock(entry));\n    list_add_after(&raw mut (*addr_entry).list, &raw mut (*entry).addr_list);\n    unlock(pagealloc_entry_addr_list_lock(entry), irq_flags);\n\n    pagealloc_rehash_addr_entry(addr_entry, addr_hash, addr_locks, lock, unlock);\n    pagealloc_track_log(\n        log_fn,\n        PAGEALLOC_TRACK_LOG_ADDR_ADDED,\n        result,\n        file,\n        line,\n        npages,\n    );\n\n    result\n}\n",
+      "name": "pagealloc_track_alloc_result",
+      "sha256": "f01203d7ab67c5dad1e7dc93404bd03e909e5cea27575ebef6606554ccedb550",
+      "source": {
+        "bytes": 209297,
+        "path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+        "sha256": "be693dec5e53b20f06f7963b7418a7c0dff68cbecaaa2360e291d8542784e045"
+      }
+    },
+    {
+      "bytes": 137,
+      "exact_text": "#[inline(always)]\nunsafe fn pagealloc_track_hash_ptr() -> *mut AbiListHead {\n    (&raw mut PAGEALLOC_TRACK_HASH).cast::<AbiListHead>()\n}\n",
+      "name": "pagealloc_track_hash_ptr",
+      "sha256": "323688a6070b21bf40ed29835eaadda143bc3e17d7c1b892e5bd5206441b7ba7",
+      "source": {
+        "bytes": 209297,
+        "path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+        "sha256": "be693dec5e53b20f06f7963b7418a7c0dff68cbecaaa2360e291d8542784e045"
+      }
+    },
+    {
+      "bytes": 144,
+      "exact_text": "#[inline(always)]\nunsafe fn pagealloc_track_locks_ptr() -> *mut IhkSpinlock {\n    (&raw mut PAGEALLOC_TRACK_HASH_LOCKS).cast::<IhkSpinlock>()\n}\n",
+      "name": "pagealloc_track_locks_ptr",
+      "sha256": "9b6bae16f6aa343a329faab413602fbc538963bb34f2f5e3e3785d11dbd32c32",
+      "source": {
+        "bytes": 209297,
+        "path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+        "sha256": "be693dec5e53b20f06f7963b7418a7c0dff68cbecaaa2360e291d8542784e045"
+      }
+    },
+    {
+      "bytes": 135,
+      "exact_text": "#[inline(always)]\nunsafe fn pagealloc_addr_hash_ptr() -> *mut AbiListHead {\n    (&raw mut PAGEALLOC_ADDR_HASH).cast::<AbiListHead>()\n}\n",
+      "name": "pagealloc_addr_hash_ptr",
+      "sha256": "bff67ada528b16e4c6b4b888a0c5f1a8f34747f358aa24ad5f7605d6b777fb59",
+      "source": {
+        "bytes": 209297,
+        "path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+        "sha256": "be693dec5e53b20f06f7963b7418a7c0dff68cbecaaa2360e291d8542784e045"
+      }
+    },
+    {
+      "bytes": 142,
+      "exact_text": "#[inline(always)]\nunsafe fn pagealloc_addr_locks_ptr() -> *mut IhkSpinlock {\n    (&raw mut PAGEALLOC_ADDR_HASH_LOCKS).cast::<IhkSpinlock>()\n}\n",
+      "name": "pagealloc_addr_locks_ptr",
+      "sha256": "7bd3b2215933365d96f4fb4f6930bcbf8ea9c57041f200f4a0eec63c79679eb7",
+      "source": {
+        "bytes": 209297,
+        "path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+        "sha256": "be693dec5e53b20f06f7963b7418a7c0dff68cbecaaa2360e291d8542784e045"
+      }
+    },
+    {
+      "bytes": 985,
+      "exact_text": "#[no_mangle]\npub unsafe extern \"C\" fn _ihk_mc_alloc_aligned_pages_node(\n    npages: CInt,\n    p2align: CInt,\n    flag: CULong,\n    node: CInt,\n    is_user: CInt,\n    virt_addr: CULong,\n    file: *mut i8,\n    line: CInt,\n) -> *mut c_void {\n    pagealloc_track_alloc_result(\n        npages,\n        p2align,\n        flag,\n        node,\n        is_user,\n        virt_addr,\n        file,\n        line,\n        MEMDEBUG,\n        PAGEALLOC_TRACK_INITIALIZED,\n        pagealloc_track_hash_ptr(),\n        pagealloc_track_locks_ptr(),\n        pagealloc_addr_hash_ptr(),\n        pagealloc_addr_locks_ptr(),\n        PAGEALLOC_RUNCOUNT,\n        Some(mem_pagealloc_track_base_alloc_bridge),\n        Some(mem_pagealloc_track_meta_alloc_bridge),\n        Some(mem_pagealloc_track_meta_free_bridge),\n        Some(mem_pagealloc_track_lock_bridge),\n        Some(mem_pagealloc_track_unlock_bridge),\n        Some(mem_pagealloc_track_spin_init_bridge),\n        Some(mem_pagealloc_track_log_bridge),\n    )\n}\n",
+      "name": "_ihk_mc_alloc_aligned_pages_node",
+      "sha256": "6c2c0397f7ca0d548b69d2bd1b13442fe059b10d984d1d73eab844b934a2999c",
+      "source": {
+        "bytes": 209297,
+        "path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+        "sha256": "be693dec5e53b20f06f7963b7418a7c0dff68cbecaaa2360e291d8542784e045"
+      }
+    }
+  ],
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\nPure source materialization; no compiler, tests or subprocess. Freeze genuine provider bodies.\n"
+}

@@ -1,0 +1,56 @@
+{
+  "schema": "mckernel.ihk-rust-module-closure.scoping.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "review": "SCOPING-REVIEW.md",
+  "execution": "source-only; no compiler/root/guest/workload calls",
+  "pointers": [
+    {
+      "role": "canonical_link_selection",
+      "path": "/home/holden/mckernel/host-kernel/kbuild/Kbuild.in"
+    },
+    {
+      "role": "only_selected_project_C",
+      "path": "/home/holden/mckernel/host-kernel/native-rust/mcctrl_vm_write_compat.c"
+    },
+    {
+      "role": "Rust_MM_consumer",
+      "path": "/home/holden/mckernel/host-kernel/native-rust/mcctrl_vm.rs"
+    },
+    {
+      "role": "older_actual_artifact_review",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-independent-review-20261019-1/CURRENT-HOST-PAIR-ACTUAL-THREE-MODULE-ARTIFACT-REVIEW.json"
+    },
+    {
+      "role": "older_matching_native_recipe",
+      "path": "/home/holden/mckernel/docs/verification/evidence/current-host-pair-205-native-20261019-1/usable-profile-1/USABLE-TESTED-PROFILE-RECIPE.json"
+    },
+    {
+      "role": "later_shim_Kbuild_source",
+      "path": "/home/holden/mckernel/docs/verification/evidence/current68-native235-sdk-v3-source-binding-20261022-1/accepted-Kbuild-MODULE-cfg/Kbuild"
+    },
+    {
+      "role": "later_source_only_review",
+      "path": "/home/holden/mckernel/docs/verification/evidence/current68-native235-sdk-v3-source-binding-20261022-1/INDEPENDENT-SDK68-V3-SOURCE-INTEGRATION-REVIEW-1.json"
+    },
+    {
+      "role": "pinned_mmap_inline",
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/include/linux/mmap_lock.h"
+    },
+    {
+      "role": "pinned_VMA_inline",
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/include/linux/mm.h"
+    },
+    {
+      "role": "pinned_Rust_bindings",
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/rust/bindings/bindings_generated.rs"
+    },
+    {
+      "role": "pinned_exports",
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/Module.symvers"
+    },
+    {
+      "role": "pinned_config",
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/.config"
+    }
+  ]
+}

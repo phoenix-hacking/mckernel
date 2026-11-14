@@ -1,0 +1,103 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_SOURCE_EXACT_NAMED_CINT2_ARRAY_ALIGNMENT_READBACK_CORRECTION",
+  "independent": true,
+  "reviewer": "/root/current110_execution_review",
+  "at": "2026-10-28T01:43:09.349438+00:00",
+  "ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/typed-timer-array-alignment-reader-correction-source-1/SOURCE-READY.json",
+    "bytes": 2779,
+    "sha256": "959f1129e310b5a0ff9e7efbd9558a97caa068334b353ea54b888912f9ea53c2"
+  },
+  "profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/typed-timer-array-alignment-reader-correction-source-1/PROFILE.NOT-GRANTED.json",
+    "bytes": 173556,
+    "sha256": "18975dc422fbbbd6e207d8d9340f68250d61c0cefa02627144df7bd82613cf1b"
+  },
+  "reader": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/typed-timer-array-alignment-reader-correction-source-1/qualify_changed_objects.py",
+    "bytes": 17530,
+    "sha256": "c8246498d7ccb11236779f1703e5b56c9a31ee0e08567152902d4f189fcbbcd9"
+  },
+  "prior_source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/absolute-retained-reference-correction-source-1/independent-source-review-1/INDEPENDENT-SOURCE-REVIEW.json",
+    "bytes": 6868,
+    "sha256": "dcff4991ec4067219e6f13367c4e1e10a4bd760a6d70a4f48be26b0f08f0fab8"
+  },
+  "diagnosis": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/typed-timer-array-alignment-reader-correction-source-1/EXACT-TYPED-ALIGNMENT-DIAGNOSIS.json",
+    "bytes": 6472,
+    "sha256": "31684f598eedd4595453635129ab85d884d022d761092dae3294746e1c8d1c42"
+  },
+  "retained_identity_manifest": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/absolute-retained-reference-correction-source-1/RETAINED-SIX-PREFIX-INPUT-IDENTITIES.json",
+    "bytes": 25296,
+    "sha256": "abaa6388ec5099fc510c2604872d47eb7b42202d82972a72aba05db33206cfb7"
+  },
+  "typed_sources": {
+    "defining_and_consuming_source": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/relative-module-context-correction-source-1/context-root/kernel/rust/process_helpers.rs",
+      "bytes": 618027,
+      "sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1"
+    },
+    "CInt_source": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/relative-module-context-correction-source-1/context-root/kernel/rust/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    "original_C_source": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/preimages/kernel/process.c",
+      "bytes": 226577,
+      "sha256": "110e3e820fed06adbbf647e2f52bc06a157b7001653157863e7e6733b878d172"
+    },
+    "actual168_C_ABI_witness": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/fixture/genuine_candidate_abi.c",
+      "bytes": 10647,
+      "sha256": "3859b5f1f288ad9b78ba87d00fd1caefe7fb1645444d5ef3c1871840e1a79d93"
+    }
+  },
+  "exact_timer_diagnostic": {
+    "artifact": "Rust",
+    "name": "process_sched_timer_configuration",
+    "symbol_size": 8,
+    "symbol_value": 0,
+    "kind": 1,
+    "binding": 1,
+    "section": ".lrodata.process_sched_timer_configuration",
+    "flags": 268435458,
+    "section_alignment": 4,
+    "timer_raw_bytes": "0000000000000000"
+  },
+  "exact_initstack168_diagnostic": {
+    "artifact": "Rust",
+    "name": "process_init_stack_entry_config",
+    "symbol_size": 168,
+    "symbol_value": 0,
+    "kind": 1,
+    "binding": 1,
+    "section": ".lrodata.process_init_stack_entry_config",
+    "flags": 268435458,
+    "section_alignment": 8,
+    "timer_raw_bytes": null
+  },
+  "findings": [
+    "The sole reader source delta replaces the generic min(size,8) alignment check for exactly readonly process_sched_timer_configuration, asserting size8 then requiring alignment4. Reversing this exact seven-line source change reproduces prior reviewed helper bytes; every other source statement/function is identical.",
+    "Existing defining and consuming type is [CInt;2], with CInt=i32 and existing compiled const size4/align4 witnesses; original C is const int[2]. Size8 does not imply alignment8 for an array. Actual retained diagnostic is size8/value0/section alignment4/ALLOC|LARGE noWRITE and two zero CInt values. The exact-name exception matches this ABI without introducing a mirror or Rust body change.",
+    "ALLOC, nonEXEC, strict readonly, unique owner, symbol kind/bind/size, raw initializer bytes and relocation rules remain unchanged. readonly=False C fallback path still uses the unchanged original generic rule plus exact17 recorded C storage class. All other names retain original alignment rule, including actual168B initstack size168/align8 and14 Ddebug records with writable flags storage.",
+    "Actual previous one-qualifier failure1/11.703411s has positive wait/group absence/closed streams and remains preserved; the six producer/CPP/link outputs and41-byte/inode identity manifest remain reused, with no producer or old GLOBAL32 test replay.",
+    "Exactly one Python qualifier consumes existing artifacts and writes a fresh report/capture. Existing6e98 pure validate_profile passes; resource/fixedclock/account controls are unchanged. Fresh Root CPU6 exclusion/current account/resources/nonce/grant remain required; this source receipt grants no execution."
+  ],
+  "retained_open": [
+    "Actual qualifier result and any folded-consumer instruction/dataflow supplement remain pending.",
+    "DefaultON unsupported RUSAGE_DEBUG/TIMER_CPU_ID/ARCH_MEMCLEAR variants, Fugaku exclusion, all-profile object/link/native and whole-file credit remain OPEN."
+  ],
+  "blocking_findings": [],
+  "source_body_changes": 0,
+  "reader_alignment_names_changed": 1,
+  "producer_CPP_link_replays": 0,
+  "runtime_authority": null,
+  "qualifier_main_actions": 0,
+  "guard_or_resource_queries": 0,
+  "workloads": 0,
+  "canonical_mutations": 0
+}

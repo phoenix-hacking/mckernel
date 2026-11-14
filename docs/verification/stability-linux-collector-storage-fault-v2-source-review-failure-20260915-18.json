@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_review_failure",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "review_attempt": 22,
+  "status": "FAIL_SOURCE",
+  "recorded_utc": "2026-09-16T03:28:38Z",
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260915-25.tar.gz",
+    "sha256": "a01a07378c27e8584ed027b5a8f25acf706951ec2e1e7e43a1f4f2bcae007970",
+    "size": 8817380,
+    "members": 28,
+    "safe_unique_members": true,
+    "recursive_archive_occurrences": 80,
+    "unique_archives": 15,
+    "verified_source_hash_occurrences": 629
+  },
+  "reviewed_source_sha256": {
+    "prepare.py": "1d09a2f4f143af79de7eb98e7cc6d5c6a01efa89e15fa925d2c7869c78ab2df4",
+    "witness_owner.py": "4554efcda371a395681ff7f7353e05d98adf6ab4aae656b40d524f128fdf4670",
+    "supervise.py": "306a4982bd4d04721bc0478a5cfec553ac751dd0b5e9379cb9ba519bf4c92ce1",
+    "oracle.py": "99b4b72c2bf7ae3d0703ec6fd309d9914137ce3f0091452bc4f053f73729b2c4",
+    "test_collector_storage_fault_packet.py": "77c9473da7f675b09560aa33ba1661017617c0e88cf101fd12280ab0a6cf90c7"
+  },
+  "findings": [
+    "Direct timeout validation compares only historical established birth and discards retired authority. A NOT_SPAWNED sentinel record accepts a timeout after the same PID and birth were reaped, with no later direct wait.",
+    "Adopted signal-error expiration accepts an equal-time adopted reap because its retirement filters consider only strictly earlier events and its expiration join does not otherwise revoke authority.",
+    "The review archive ran Python 3.8.19 rather than packet 19's required Python 3.8.10 and omitted interpreter version output."
+  ],
+  "reproduction_canonical_json_sha256": {
+    "retired_sentinel_direct_timeout": "1d63a6ccf565392a6f7af5bee7680c7d43beab7a0f51b7fd3a52ce5905223671",
+    "equal_time_adopted_reap_signal_error": "d68126e2674521cf4a11ed795486d7e7d20884a293d3d7aba1c7de69db008064"
+  },
+  "required_next": [
+    "Add exact full-record controls for both reproduced retirement gaps and preserve their failure against these rejected bytes.",
+    "Make direct timeout validation reject retired authority while preserving legitimate never-established null timeout diagnostics.",
+    "Make equal-time adopted reap or ECHILD revoke adopted signal-error expiration authority while retaining strictly earlier positive proof.",
+    "Rerun the full suite and pycompile under Python 3.9.12 and /usr/bin/python3.8 version 3.8.10 with version probes, then obtain a fresh complete review."
+  ],
+  "compiler_packet_released": false,
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

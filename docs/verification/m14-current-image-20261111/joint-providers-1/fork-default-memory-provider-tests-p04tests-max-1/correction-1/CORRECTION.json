@@ -1,0 +1,72 @@
+{
+  "acceptance_delta": 0,
+  "at": "2026-11-11T03:11:38.243679+00:00",
+  "binding_delta": "Private successor copies preserve relative module includes; only corresponding namespace prefix/file hashes/manifest references and fresh correction-1 output/capture/cwd paths change. Original evidence remains in place.",
+  "complete_finite_NO_GO": {
+    "bytes": 11893,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-review-source-acquisition-max-1/REVIEW.json",
+    "sha256": "b038c47b1115f7fc583aac68a869cb85a7cb302320ac2a9418d80469a32eb698"
+  },
+  "corrected_slices": {
+    "bytes": 10713,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/correction-1/production_slices.rs",
+    "sha256": "1fe4f725ef1fb6200523619c2f02c0e2c7c4b1d898feac071d401a6da190159e"
+  },
+  "finding": "TEST_NAMESPACE_NULL_MUT_MISSING",
+  "not_performed": [
+    "compiler",
+    "test runtime",
+    "helper import or execution",
+    "Docker",
+    "native",
+    "canonical source writes"
+  ],
+  "original_unexecuted_request": {
+    "bytes": 14274,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/REQUEST.json",
+    "sha256": "6c3bd2adae5c07c7f6fbfb7eded9784971f426221cee35fe0494fc3facafa9f8"
+  },
+  "original_unexecuted_slices": {
+    "bytes": 10703,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/production_slices.rs",
+    "sha256": "f33829979abd1ce9b8872f0a990154237e6f2519709ba61c7423025359bb1090"
+  },
+  "patch": {
+    "bytes": 487,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/correction-1/NAMESPACE-IMPORT-ONLY.patch",
+    "sha256": "56c84af4d7a4a524aacbb167d03db9811e39da31836075dbab6993ecfd9113e6"
+  },
+  "preserved": {
+    "all25_production_source_items_equal": true,
+    "compiler_flags_profile_Owner": true,
+    "corrected_production_module_byte_identical": {
+      "bytes": 5930,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/correction-1/production_memory_provider.rs",
+      "sha256": "f181d7308fcc3ecc81343f38788c9a9f1a1f7b024b3a24586a057f3ff2c17d33"
+    },
+    "external_nine_row_oracle": {
+      "bytes": 4645,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/EXPECTED.json",
+      "sha256": "02fd39665f703293cd1dd325b616c2fd076614eaf2c9ac572350dd6e61327859"
+    },
+    "fixture_byte_identical": {
+      "bytes": 13988,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/correction-1/memory_host_regression.rs",
+      "sha256": "400b6458c38143e644344469b41d453f4853bf15ecef942cf76716351ca1c036"
+    },
+    "original_request_and_slices_unchanged": true,
+    "pure_setters_byte_identical": {
+      "bytes": 1293,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/correction-1/production_setters.rs",
+      "sha256": "83d5ea5d797ea31d23312b4d925fd546ab8da8956bd42212ac13425546803f65"
+    }
+  },
+  "schema": "memory-five-test-namespace-import-only-correction-v1",
+  "sole_source_edit": "Add null_mut to the test-only core::ptr namespace import; no production function definition or test case/oracle is changed.",
+  "source_manifest": {
+    "bytes": 25615,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/correction-1/PRODUCTION-SLICES.json",
+    "sha256": "f1ccc810731ad40e5ea7e74298a9186b5b6fab55865603b175b355f35e1e0b58"
+  },
+  "status": "FROZEN_NOT_EXECUTED_PENDING_DELTA_REVIEW_AND_ROOT_ADMISSION"
+}

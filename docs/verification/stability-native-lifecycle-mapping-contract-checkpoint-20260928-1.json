@@ -1,0 +1,53 @@
+{
+  "schema": "mckernel.lifecycle-mapping-contract-checkpoint.v1",
+  "recorded_at_utc": "2026-09-29T00:40:26Z",
+  "status": "SOURCE_AND_EXACT_RUST_FIXTURE_PASS",
+  "source_checkpoint_parent": "13e75c955a3873fc7556f5937d56a9607d9af97d",
+  "review": {
+    "lifecycle_runtime_contract": "PASS",
+    "mapping_contract": "PASS",
+    "scope": "exact reviewed sources and diagnostic fixtures only"
+  },
+  "exact_rust_1_92": {
+    "image": "sha256:0f8ad280e47d76b23554de4aec411752e1f779f9b2fc7fece6b0b3375dc9775d",
+    "profile": "uid1000, cap-drop-all, no-new-privileges, network none, IPC private, CPUs 2-5, 12 GiB/no swap, 512 tasks, read-only root/source",
+    "attempt_1": {
+      "result": "FAIL_HARNESS_TMP_NOEXEC",
+      "raw_sha256": "42cca0382d54caeb45a1163b13c469f940f6fcf68d39da6065bbfc13c206ad91",
+      "evidence": "docs/verification/evidence/stability-native-rust192-contract-tests-attempt1-tmp-exec-failure-20260928-1.log.gz",
+      "evidence_sha256": "ec425fcd4d60fd1d151b2411fbbd9302cb181ca29366dcb90efc5edfae1ee813"
+    },
+    "bounded_correction": "Use the existing evidence filesystem for TMPDIR without widening the reviewed container profile.",
+    "attempt_2": {
+      "result": "PASS",
+      "python_tests": 78,
+      "python_skips": 1,
+      "python_failures": 0,
+      "mapping_result": "SOURCE-CONTRACT-VERIFIED fixture=EXACT_ROCKY_RUSTC_FIXTURE_VERIFIED",
+      "raw_sha256": "70ebca33a3aba54b6e626b4044cc25dc186a84994567d572a4a58de001df4406",
+      "evidence": "docs/verification/evidence/stability-native-rust192-contract-tests-attempt2-20260928-1.log.gz",
+      "evidence_sha256": "0cd0bdfc26f324c4323f26bd063307a160587e62cb0a1547a13da3b41a144660",
+      "container": "mckernel-rust-contracts-20260928-2",
+      "container_retired": true
+    }
+  },
+  "source_logs": [
+    "docs/verification/evidence/stability-native-lifecycle-contract-invalid-host-failure-20260928-1.log.gz",
+    "docs/verification/evidence/stability-native-lifecycle-contract-source-tests-20260928-1.log.gz",
+    "docs/verification/evidence/stability-native-lifecycle-contract-final-source-tests-20260928-1.log.gz",
+    "docs/verification/evidence/stability-native-lifecycle-runtime-contract-expert-tests-20260928-1.log.gz",
+    "docs/verification/evidence/stability-native-mapping-additions-final-source-tests-20260928-1.log.gz"
+  ],
+  "key_source_sha256": {
+    "host-kernel/contracts/ihk-os-runtime-v1.json": "5daaf05c4acdcc8a7e4749577d1a7e947c477a269cb42c5eee7eb8e5df540c08",
+    "host-kernel/native-rust/ihk-mapping-foundation-contract-v1.json": "ad9e5ddab756d28cfb8ae2ea5f9b6cf41a6c6ca7b1b2e041ac5f684a7ba78964",
+    "scripts/ihk_mapping_check.py": "71b6973062ba692dede1a9e81c1df9e699ca817d5747534d1e4626790a63df31",
+    "scripts/tests/fixtures/ihk_mapping_compile.rs": "6375fb25658cd685ece1d1e797f0c1d6c621175733c8d6fee9592c2503289220"
+  },
+  "limitations": [
+    "No current-candidate kernel build succeeded.",
+    "No module load, guest, cleanup, application, IHK-007, language, or production acceptance follows.",
+    "The d094 candidate remains build-blocked; corrected sources require a fresh candidate and full manifest."
+  ],
+  "acceptance_credit": false
+}

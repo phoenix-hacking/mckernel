@@ -1,0 +1,10 @@
+--- fixture.c.before-attempt3
++++ fixture.c.alias-only
+@@ -53,6 +53,7 @@
+ typedef void (*free_fn_t)(void *, int);
+ typedef int (*walk_fn_t)(void *, unsigned long, unsigned long, unsigned long, void *);
+ typedef void (*flush_fn_t)(void *, unsigned long *, int, int);
++typedef flush_fn_t x86_clear_remote_flush_fn_t;
+ typedef void (*log_fn_t)(int, void *, unsigned long, unsigned long, int);
+ extern int x86_clear_range_top_result(void *, void *, unsigned long, unsigned long,
+         unsigned long, unsigned long, int, int, int, int, void *, unsigned long **,

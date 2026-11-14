@@ -1,0 +1,30 @@
+// Actual creation rollback tail only; preceding publication/message code is
+// independently source-bound unchanged, not simulated as a new creation proof.
+use core::ffi::{c_char,c_int,c_ulong,c_void};
+use core::ptr::null_mut;
+#[repr(C)]pub struct IhkMemChunk{pub size:c_ulong,pub numa_node_number:c_int}
+unsafe extern "C"{
+ #[link_name="observation_calloc"]fn calloc(n:usize,size:usize)->*mut c_void;
+ #[link_name="observation_free"]fn free(pointer:*mut c_void);
+ fn __errno_location()->*mut c_int;
+ #[link_name="observation_count"]fn ihk_get_num_os_instances(device:c_int)->c_int;
+ #[link_name="observation_list"]fn ihk_get_os_instances(device:c_int,list:*mut c_int,count:c_int)->c_int;
+ #[link_name="observation_destroy"]fn ihk_destroy_os(device:c_int,index:c_int)->c_int;
+ fn observation_os_cpu(index:c_int)->c_int;
+ fn observation_os_mem(index:c_int,chunks:*mut IhkMemChunk,count:c_int)->c_int;
+ fn observation_device_cpu(device:c_int,error:*mut c_char)->c_int;
+ fn observation_device_mem(device:c_int,chunks:*mut IhkMemChunk,count:c_int)->c_int;
+ fn observation_run(baseline:c_int,rollback:unsafe extern "C" fn(c_int,c_int,*mut c_int,*mut c_char)->c_int)->c_int;
+}
+unsafe fn release_assigned_cpu(index:c_int)->c_int{unsafe{observation_os_cpu(index)}}
+unsafe fn cpu_all(device:c_int,error:*mut c_char,assign_to:Option<c_int>)->c_int{assert!(assign_to.is_none());unsafe{observation_device_cpu(device,error)}}
+unsafe fn ihk_release_mem(device:c_int,chunks:*mut IhkMemChunk,count:c_int)->c_int{unsafe{observation_device_mem(device,chunks,count)}}
+mod accepted_cpu_memory{pub mod ihklib_memory_os{use super::super::*;pub unsafe fn ihk_os_release_mem(index:c_int,chunks:*mut IhkMemChunk,count:c_int)->c_int{unsafe{observation_os_mem(index,chunks,count)}}}}
+mod actual{
+ use super::*;
+ pub unsafe extern "C" fn rollback(device:c_int,result:c_int,output_index:*mut c_int,error_output:*mut c_char)->c_int{
+  let index=unsafe{output_index.read()};let _=(index,error_output);
+  let mut all_memory=IhkMemChunk{size:c_ulong::MAX,numa_node_number:0};
+__ROLLBACK__
+}
+fn main(){std::process::exit(unsafe{observation_run(0,actual::rollback)});}

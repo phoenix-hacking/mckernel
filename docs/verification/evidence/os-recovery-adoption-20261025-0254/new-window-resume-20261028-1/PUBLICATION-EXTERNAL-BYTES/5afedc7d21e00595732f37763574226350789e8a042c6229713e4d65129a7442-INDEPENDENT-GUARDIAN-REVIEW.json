@@ -1,0 +1,113 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/fore_restart_plan",
+  "decision": "PASS_ONE_ACTUAL_THREAD_ABSOLUTE_WINDOW_GUARDIAN_ARM",
+  "reviewed_at": "2026-10-28T05:57:48.969238+00:00",
+  "source": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/new-run-until-20261028-2300-pacific-1/armed-controller/bridge.py",
+    "bytes": 25394,
+    "sha256": "1b7f13762325be28a4f5b2a6a84eb6d610e7443a69853252f25cd9575079af7c"
+  },
+  "config": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/new-run-until-20261028-2300-pacific-1/armed-controller/CONFIG.json",
+    "bytes": 2136,
+    "sha256": "e337bcc39ee6bd979748669409e9feec0578f27f0e34377b58e2408838f8fbca"
+  },
+  "packet": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/new-run-until-20261028-2300-pacific-1/armed-controller/FROZEN-PACKET.json",
+    "bytes": 1307,
+    "sha256": "369da48abf196bbe68abc6eb4579deddd8f80fc8522560c9ee983e2ca9ae4203"
+  },
+  "window": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/new-run-until-20261028-2300-pacific-1/ACTUAL-WINDOW.json",
+    "bytes": 861,
+    "sha256": "0bfb54bff698f53c744d797e2f57db94db08cd20120da70566d555fa6c1e320e"
+  },
+  "initial_watch_clock": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/new-run-until-20261028-2300-pacific-1/bootstrap/initial-watch-clock.json",
+    "bytes": 369,
+    "sha256": "96110dcbe640d63fba7969b3337c6cef042bdd1593d7d0a0485fd26d788ce91a"
+  },
+  "exact_two_production_constant_changes": [
+    {
+      "before": "01a17e6f-112f-7660-8771-85d15e07a26c",
+      "after": "01a18111-26a7-7ef2-bbd6-e33d1c8dc803"
+    },
+    {
+      "before": "1793165769",
+      "after": "1793253600"
+    }
+  ],
+  "production_AST_equal_ignoring_constant_values": true,
+  "all_canonical_and_private_packet_hashes_match": true,
+  "actual_thread": "01a18111-26a7-7ef2-bbd6-e33d1c8dc803",
+  "actual_chain": {
+    "watcher": {
+      "pid": 1887110,
+      "start": "96419041",
+      "ppid": 1311,
+      "state": "S"
+    },
+    "worker": {
+      "pid": 1887113,
+      "start": "96419049",
+      "ppid": 1887110,
+      "state": "S"
+    },
+    "server": {
+      "pid": 1887115,
+      "start": "96419058",
+      "ppid": 1887113,
+      "state": "S"
+    }
+  },
+  "actual_goal_status": "active",
+  "actual_phase": "running",
+  "actual_credit_run_id": "7f4af94a83b14cc08f97401f5891d965",
+  "actual_credit_budget": "57774.852125",
+  "actual_cumulative_spent": "22812.3311000000",
+  "initial_finite_watcher_cutoff_lower": 1035705.5689454618,
+  "window_monotonic_deadline": 1035706.5689547858,
+  "window_boot_deadline": 1051044.6960026678,
+  "watcher_early_margin_seconds": 1.000009324052371,
+  "same_boot_binding": true,
+  "unchanged_cutoff_tightening_and_finite_watcher_drain_logic": true,
+  "test_source_literal_changes_only": [
+    {
+      "before": "2026-10-27T11:24:50+00:00",
+      "after": "2026-10-29T06:00:00+00:00"
+    },
+    {
+      "before": "2026-10-27T11:24:50+00:00",
+      "after": "2026-10-29T06:00:00+00:00"
+    },
+    {
+      "before": "2026-10-27T11:24:50+00:00",
+      "after": "2026-10-29T06:00:00+00:00"
+    },
+    {
+      "before": "2026-10-27T11:24:50+00:00",
+      "after": "2026-10-29T06:00:00+00:00"
+    },
+    {
+      "before": "2026-10-27T11:24:50+00:00",
+      "after": "2026-10-29T06:00:00+00:00"
+    }
+  ],
+  "parent_reported_mocked_tests_pass": 30,
+  "reviewer_tests_replayed": 0,
+  "source_drift_found": false,
+  "mandatory_parent_actions": [
+    "Arm only this newguardian with packetSHA369da48abf196bbe68abc6eb4579deddd8f80fc8522560c9ee983e2ca9ae4203 while actualthread/chain healthy.",
+    "Observe guardian birth/journal/exclusivelease after arm; use tightenedactualBOOTcap and earliestfiniteMONO for auxiliaries/operationguardevidence.",
+    "Keep realholds/creditledger/recoveryclasses/permanentlocks untouched. This guardian review grants no compiler/guest/native operation release."
+  ],
+  "review_actions": {
+    "readonly_source_packet_config_state_initialclock_and_proc_births": true,
+    "no_guard_or_observer_run": true,
+    "no_leases_signals_RPC_account_queries": true,
+    "no_model_workload_or_canonical_edits": true,
+    "only_this_review_written": true
+  },
+  "runtime_authority": null
+}

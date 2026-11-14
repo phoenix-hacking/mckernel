@@ -1,0 +1,9 @@
+# Actual ordinary pipe-proof export acceptance
+
+PASS_ACTUAL_PINNED_MAKE_PROOF_EXPORT. No missing data join or output defect found. Exact CPU7 ordinary invocation joined child1263544, return0, process group absent,0.051173s; stderr empty. Actual wrapper argv equals the separately reviewed bounded command. Status/capture byte counts and hashes match; stdout references exactly the generated proof path/hash.
+
+Proof SHA256 `462e6fd3dc0db4de7b03370d12b1c50db31156737f072b8859352a9c2ce97cf5` is4,863 bytes. Its full object equals the expected accepted GNU Make4.4.1 pipe observation, source rows and exact twelve actual input references, with genuine independent actual decision `5467aeca1abd71e04215a251b46608493d6ac5b0206630438483f047deb79234`. Final binding `2157487c6470fc52ce579a2dfdade71b8b26ab6818c348bfa7b082da12bf7026` and exact wrapper `0533a9127e3722f5593e5b755b437c2eb7be5a4f1527ef8a8b7d825a483713d2` match ordinary decision `45265bc3249aa3e3aad1f3af37ef7d92ec795a76cb692892fc5c9e1c167b3ef5`. The original bound inner observation is unchanged, image_identity_authenticated:false and observation_only:true. The separate actual outer image/profile/retirement decision supplies authentication; this export did not rewrite the inner record.
+
+Output status is PASS_PINNED_MAKE_PIPE_RECIPE and driver_build_authority:false. The genuine proof may be consumed as the reviewed pinned-make prerequisite in a separately reviewed IHK preparation/source/owner rebind. It does not authorize module compilation or supply native kmsg, FP, practical OS or port-retirement acceptance. The frozen existing preparation's null probe is not changed by this review.
+
+No exporter/test/make/root/container/guest/compiler operation, source audit or raw retirement review was repeated. Only the new ordinary invocation/status/captures/proof and their accepted data joins were read; source ownership remains independent. One proof export accepted, with zero additional OS behavior credit.

@@ -1,0 +1,69 @@
+{
+  "decision": "GO_EXACT_NONEXECUTED_CODEGEN_DATA_AND_UNIQUE_PARTIAL_LINK_PENDING_FRESH_ROOT_ADMISSION",
+  "request": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-1/REQUEST.json",
+    "sha256": "5e8254f5f79ba9102867c44a25e0d5cd88c0ad80e2d9ff84f6876ab36db2ac49"
+  },
+  "source": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-1/provider_storage_unit.rs",
+    "sha256": "64116d567d5823556b0e1411683b65271940ffe207d983cb2c5bbe0b807a8c17"
+  },
+  "proof": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-1/SOURCE-PROOF.json",
+    "sha256": "e9113cf55a16964f88b10a4dc7dd61adeb25f9e1c27354f5fbd7695a4d197470"
+  },
+  "predicate": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-1/storage_predicate.py",
+    "sha256": "eec0af7e0a251d27309b995966ec9c7a05f67dce3c309f97303b4eafafa993ce"
+  },
+  "controller": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-1/run_packet.py",
+    "sha256": "e0552f3bd79be99d062e5eef262a9055afce6a5408a71e8603b8cc812c45aeff"
+  },
+  "contract": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/lower-provider-data-contract-1/SOURCE-CONTRACT.json",
+    "sha256": "5901b5274210207830a691d83c33b53e8e7569b30c16c2d1d0d27448766680a0"
+  },
+  "preserved_first_finding": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/lower-provider-data-contract-1/concrete-1/PREEXECUTION-REVIEW-1.json",
+    "sha256": "a70f5c37d27c4c96915e7e0511cd2af13484e1b6d62690bd0ecc68e92174bb6a"
+  },
+  "source_review": {
+    "correction": "Exactly two truncated TRACE fragments replaced with full actual const319-byte array initializer and full static declaration; no other source item changed.",
+    "actual_source_checks": "All13 SOURCE-PROOF exact_items match declared canonical line spans and appear byte-exact in corrected unit. All26 frozen request inputs matched during review.",
+    "data_ABI": "Actual CpuLocalVar/X86CpuLocalVariables pointer types imported from qualified abi.rs. CInt/CULong widths remain actual ABI. Six exact original storage definitions preserve no_mangle/cfg_attr, pointer null initializers, num_processors1, actual setup zero initializers, immutable geometry0xfffffffffe800000.",
+    "logger_ABI": "Exact extern C(CInt,CULong)->void logger and actual debug_enabled helper; actual repr(C)Ddebug with original size32/align8/line_flags24 assertions; two exact used/no_mangle mutable __verbose descriptors with original3276/3272 flags, shared original319-byte TRACE_FILE, exact static function string and null fmt. Genuine variadic kprintf declaration remains only U; no logging substitution.",
+    "unique_owners": "Only new storage object plus actual98bd88f4 lower partial21T19U. No full original module/oldcohort/c205/generic/exec/XPMEM/logger object or allowmultipledefinition option. Expected union30strong=22T+8data; exactly seven predecessor imports resolve, genuine kprintf added and total13U remain."
+  },
+  "predicate_controller_review": {
+    "prejoin_actual_call": "run_packet.main calls storage_predicate.prejoin after commandindex3/storage-bytes, persists PREJOIN-CHECK, then sets prejoin_passed. unique-partial-join command has assert prejoin_passed before Popen.",
+    "actual_data_checks": "Bounded Image parser requires ELF64LE x86_64 ET_REL/RELA; exact global strong9 names/no weak owners, exact types/sizes/nm agreement and sole genuine kprintfU. Actual NOBITS8-byte zero storage semantics, actual initialized num_processors and immutable geometry bytes, descriptor __verbose32B align8/NULLfmt/flags/exact two64-bit file/function relocations, exact319 source bytes/shared file address; logger references both descriptors and genuine unresolved kprintf.",
+    "predecessor_checks": "Actual lower SHA pinned; exact21T names/sizes and19U; no overlapping strong definitions.",
+    "postjoin_actual_call": "After all7 commands, calls storage_predicate.postjoin; requires exact30strong/13U, prior21T and new logger sizes+bytes unchanged, same data/descriptor/string/relocation checks.",
+    "failure_behavior": "Any command nonzero/unexpected diagnostics/predicate exception stops through FIRST-FAILURE without automatic retry. Each started direct child is waited in finally; PID/birth recorded beforewait. First unexpected workload failure must be escalated for focused review; this GO grants no correction/retry authority.",
+    "readers": "Actual qualified nm/readelf and pinned objdump remain seven literal payloads; no general SDK query/loader/runtime program invocation."
+  },
+  "profile_review": {
+    "commands": 7,
+    "serial_CPU": 7,
+    "local_jobs": 1,
+    "per_process_AS_bytes": 1073741824,
+    "payload_CPU_seconds": 45,
+    "payload_wall_seconds": 60,
+    "driver_wall_seconds": 430,
+    "aggregate_jobs_max": 3,
+    "aggregate_TOTAL_bytes_including_overhead": 4294967296,
+    "fresh_MemAvailable_required_bytes": 27917287424,
+    "fresh_admission_required": true,
+    "no_source_hardware_function_execution": true
+  },
+  "limits": "Only source/codegeneration/ELF-data/unique partial composition eligible. No native initialized state, usable HOST current CPU, actual boot geometry, genuine kprintf chain, final ABI/native acceptance/image/C retirement is established. All13 genuine remaining U and prior holds stay open.",
+  "operations_by_reviewer": {
+    "read_only_source_and_binding_checks": true,
+    "compiler": false,
+    "linker": false,
+    "runtime": false,
+    "canonical_index_writes": false,
+    "recursive_agents": false
+  }
+}

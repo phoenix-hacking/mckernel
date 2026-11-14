@@ -1,0 +1,50 @@
+{
+  "actual_controller_source": {
+    "bytes": 139343,
+    "path": "/home/holden/mckernel/scripts/run_os_goal.py",
+    "sha256": "6fe65a95407c54cf01a220a333453fa76146653df926b97627f6a79d9f8e2e0b"
+  },
+  "controller_lines": [
+    1140,
+    1141,
+    1142,
+    1143,
+    1144,
+    1145
+  ],
+  "finding": "ACCOUNT-SNAPSHOT-PRIMARY-01",
+  "genuine_controller_semantics": "Primary must be dict; usedPercent must satisfy isinstance(int,float), not bool, math.isfinite, and0<=used<=100. Preserve existing supported10080-minute window.",
+  "guard_calls": [
+    "checked_state on BOTH controller bookends before any consistency comparison",
+    "selected latest event immediately after rate extraction before constructing usage"
+  ],
+  "nested_guard": "current_account_snapshot.checked_primary(rate)",
+  "rejected_D_ready": {
+    "bytes": 5240,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/a2f-fixed30-normal-operation-proposal-1/correction-1/account-snapshot-correction-1/SOURCE-READY.NOT-EXECUTED.json",
+    "sha256": "2ac97d658481483b283325cd0b2da25d31deca5a44bce078e2e789375cacc98d"
+  },
+  "rejected_D_wrapper": {
+    "bytes": 19625,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/a2f-fixed30-normal-operation-proposal-1/correction-1/account-snapshot-correction-1/ROOT-ISSUE-AND-EXECUTE-ONCE.py",
+    "sha256": "dece20d578bf7a71e4b369ce221ab7d23904da210f76f6757a30e7bea51700ab"
+  },
+  "rejected_source_review": {
+    "bytes": 11700,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-fixed30-adoption-review-sourceacq-max-1/normal-operation-1/correction-1/account-snapshot-correction-1/implementation-1/REVIEW.json",
+    "sha256": "00d1408aad0091a3c1b0848f931ccd1ef63626ec1be968dcc068e7b0d211b9ef"
+  },
+  "schema": 1,
+  "source_only_no_execution": true,
+  "unchanged": [
+    "full primary equality",
+    "latest-only and both25s checks",
+    "event/controller/original-ledger credit crossbinding",
+    "max3 consistency bound and all sameRoot/hold/credit guards",
+    "all wrapper functions other than current_account_snapshot, including main",
+    "all11 other complete function/class ASTs",
+    "fixed30/WAITc06f/installerab752/catalogd42/payload1d08",
+    "same original run/budget/account and all native/Scratch/UNKNOWN scopes"
+  ],
+  "unknown_outcome": "Invalid/missing/nonfinite/bool primary raises immediately, never becomes retryable mismatch or selects an older event."
+}

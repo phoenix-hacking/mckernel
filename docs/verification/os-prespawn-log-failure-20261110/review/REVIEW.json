@@ -1,0 +1,109 @@
+{
+  "schema": "mckernel.prespawn-log.independent-source-mock-test-review.v1",
+  "decision": "GO_EXACT_SEQUENTIAL_SEVEN_SELECTOR_EXPECTED_BASELINE_FAILURE_THEN_ONE_CORRECTED_RUN_AFTER_ROOT_FRESH_ADMISSION",
+  "reviewer": "/root/memory_error_cleanup_witness_high",
+  "routing": "Existing actual Sol/HIGH task; never/danger-full-access; no recursion/private disjoint writer",
+  "reviewed_identities": {
+    "baseline_helper": {
+      "path": "/home/holden/mckernel-work/resume-20261110T032750Z-14c19ec7/prespawn-log-source-1/baseline/scripts/start_os_overnight.py",
+      "sha256": "bcca5560b364e8608f93f4f2410b4f2b2452616680304d6cb636bc7d5b8908cc",
+      "incoming_commit": "d84ee20ae834626ac62eaaae9233f4a12500a3d7"
+    },
+    "candidate_helper": {
+      "path": "/home/holden/mckernel-work/resume-20261110T032750Z-14c19ec7/prespawn-log-source-1/candidate/scripts/start_os_overnight.py",
+      "sha256": "5937e05070f9c539dee33ed0ae0fc1f79a96e803e8f716151af808beb564a390"
+    },
+    "source_patch": {
+      "path": "/home/holden/mckernel-work/resume-20261110T032750Z-14c19ec7/prespawn-log-source-1/PRESPAWN-LOG.PRIVATE.patch",
+      "sha256": "75981b0dfc60f7b3d15b0c66df0ed1c29444a33e32c853a3397937f9161954b3"
+    },
+    "source_proof": {
+      "path": "/home/holden/mckernel-work/resume-20261110T032750Z-14c19ec7/prespawn-log-source-1/SOURCE-PROOF.json",
+      "sha256": "944b494826cf4bdf4096d8e344f97f6051cc8511ca392131ed11a793b8cb70ff"
+    },
+    "test_request": {
+      "path": "/home/holden/mckernel-work/resume-20261110T032750Z-14c19ec7/prespawn-log-tests-1/REQUEST.json",
+      "sha256": "9e4a9380b93199b7363690fe900403cfe75352bc07ecfd0b126eedce7da5d845"
+    },
+    "test_patch": {
+      "path": "/home/holden/mckernel-work/resume-20261110T032750Z-14c19ec7/prespawn-log-tests-1/TESTS.PRIVATE.patch",
+      "sha256": "f8dd1b9646cf8990c077ae380a5a9373c1295c8e34ad14ab6bb77b2d9c335d09"
+    },
+    "candidate_test": {
+      "path": "/home/holden/mckernel-work/resume-20261110T032750Z-14c19ec7/prespawn-log-tests-1/candidate/scripts/tests/test_os_goal_overnight.py",
+      "sha256": "d781b59d54aed1f0408009b56ede4f0844654843ac0c5528127558ff52b81c80"
+    },
+    "current_CAMPAIGN": {
+      "path": "/home/holden/mckernel/CAMPAIGN.md",
+      "sha256": "810f968210391e24eabd719c70922275e199b6cc746947ffaf2e565dba733300"
+    },
+    "composition": {
+      "path": "/home/holden/mckernel-work/resume-20261110T032750Z-14c19ec7/root-composition-1/COMPOSITION.json",
+      "sha256": "3947c6a8c88895dfc69b11ee54c75aef185dba0bc3981311fa639ed38c6311f4"
+    }
+  },
+  "source_findings": [
+    "Only start interior changes by AST; all other functions and receipt/schema/status/build_command/identity/lease/duplicate-refusal/pidfdstop/recipe definitions unchanged. Sole existing Popen callsite retained; no added spawn/realprocess path.",
+    "Initial durable STARTING receipt precedes logwork as before. Common handler now covers genuine log os.open,fdopen and build_command; only proven no Popen entry permits FAILED, or an actually returned child later observed exited. Before syscall entry, spawn_attempted becomesTrue immediately adjacent to sole existing Popen.",
+    "If Popen was entered and no child handle returned, status is UNKNOWN regardless childNone; no FAILED retirement inferred from failed receipt acknowledgement. A live returned child remains UNKNOWN on verification/error, exact PID/start/session ownership unchanged.",
+    "Raw acquired log_fd remains owned until os.fdopen successfully returns its logobject; then rawslot cleared and fileobject owns descriptor. finally closes fileobject or stillowned rawFD including fdopen failure; OSError/ValueError diagnosticclose best effort.",
+    "Failure receipt persists before optional logwrite. Log open/write/close cannot be prerequisite for durable knownfailure. Logwrite/close best effort cannot mask successful JSON state; old rawerror/history retained.",
+    "If failure persistence itself raises, it propagates and finally still releases owned FD/startlock. Initial durable STARTING/nullPID receipt/pointer remains unresolved on disk; no deletion/reset/retirement. statusUNKNOWN and existingowner refusal remain conservative, including partial-save reasoning where latest still references STARTING.",
+    "No live helper/start/stop/inhibitor/instruction/controller/goal/allowance/leases or sourceholds are authorized by this source patch; no runtime authority derived from inert recipe."
+  ],
+  "focused_tests": {
+    "selectors": [
+      "scripts.tests.test_os_goal_overnight.OvernightTests.test_log_open_failure_is_failed_and_explicit_retry_spawns_once",
+      "scripts.tests.test_os_goal_overnight.OvernightTests.test_log_fdopen_failure_closes_acquired_fd_and_persists_failure",
+      "scripts.tests.test_os_goal_overnight.OvernightTests.test_failure_log_write_is_best_effort_after_durable_receipt",
+      "scripts.tests.test_os_goal_overnight.OvernightTests.test_attempted_popen_exception_is_unknown_and_prevents_second_spawn",
+      "scripts.tests.test_os_goal_overnight.OvernightTests.test_failure_receipt_storage_unavailable_keeps_unknown_and_blocks_spawn",
+      "scripts.tests.test_os_goal_overnight.OvernightTests.test_unresolved_crash_around_popen_prevents_blind_second_start",
+      "scripts.tests.test_os_goal_overnight.OvernightTests.test_live_receipt_prevents_second_detached_start_before_watcher_lease"
+    ],
+    "five_new_cases": [
+      "Log-only open failure: actual temp receipt persistsFAILED before any mockedspawn; one later explicit mockretry, oldattemptbytesunchanged.",
+      "fdopen failure: actual owned tempfileFD tracked by fd/dev/inode, expectedEBADF after return, FAILED persisted; baselinecleanup only reclaims matching fixtureowner, never arbitrary FD.",
+      "Secondary logwrite fails after its callback verifies bothFAILED receipts already durable; originalcommandfailure retained,0mockspawns.",
+      "Entered Popen raises: only mockcall, UNKNOWN persisted, second explicitstart EXISTING_OWNER, no secondPopen/receiptmutation.",
+      "Storage unavailable after genuineinitialSTARTING: injectedfailurepersist EIO propagates; both originalreceipt/pointer bytes retained, actualstatusUNKNOWN, secondstart refuses,zeroPopen/no reset/deletion."
+    ],
+    "two_necessary_existing_controls": "Existing unresolved crash/noPID and live detachedidentity beforewatcherlease preventblindsecondspawn; selected unchanged controls apply to changed retirement/duplicate semantics.",
+    "isolation": "Actual helper module import as codefixture only; every selected method explicitly patches subprocess.Popen; process_identity,leases and os.kill also fixture-mocked, fake child Mock PID100/no realproc observation. Only tempfilefiles/startlock/ordinaryFD operations occur. No real helper CLI/inhibitor/payload/server/account/model/native calls; no syntheticrealprocess smoke.",
+    "expectations": "Incomingbaseline once should fail/error5new methods and pass2existingcontrols; corrected same7once expectedPASS. These remain source-derived expectations, not observed test results.",
+    "scope": "Revised9e4a/d781/f8dd finalpacket only. Earlier4case proposal preserved unexecuted. No91greens/terminal12/provider/campaign workload rerun or wider fixture edit."
+  },
+  "plan_and_preservation": {
+    "current_plan": "CAMPAIGN810f9682 manual032750 active, sixSolHIGH/depth1/onecompositor,3HOSTjobs/4GiB TOTAL/CPUs0,6,7/fresh26GiB/floors/reservations/nativeheld/UNKNOWN/sourceholds unchanged; current livehours0/watchdog180/stall1200/restarts3.",
+    "inert_recipe": "Helper recipe2agents/unlimitedrestart/optinflags remains byteunchanged and unexecuted; current live authorization supersedes it. No helperstart/stop/instructionapplication/healthyreload/optionalflag activation admitted.",
+    "reconciliation": "Root supplied exactd84 fourpathFF/parentbca+33unrelateddirty-preservation facts. Stagedtests d781 and CAMPAIGN810f match; canonicalhelper remains incomingbcca for plannedbaseline. No new gitcensus/restore/index/state/action byreviewer.",
+    "no_credit": "No original OS/native/security/acceptance/checklist credit; included allowance only, actual laterstops/usage/service holds retained."
+  },
+  "smallest_execution_profile": {
+    "order": [
+      "Run exactlyselected7once with stagedd781tests and incomingbcca helper expecting5newfail/errors+2controlsPASS",
+      "Apply only reviewed7598patch/verify5937helper, run EXACTsame7selectors once expectingPASS"
+    ],
+    "payload": [
+      "/usr/bin/python3",
+      "-B",
+      "-m",
+      "unittest",
+      "-v",
+      "scripts.tests.test_os_goal_overnight.OvernightTests.test_log_open_failure_is_failed_and_explicit_retry_spawns_once",
+      "scripts.tests.test_os_goal_overnight.OvernightTests.test_log_fdopen_failure_closes_acquired_fd_and_persists_failure",
+      "scripts.tests.test_os_goal_overnight.OvernightTests.test_failure_log_write_is_best_effort_after_durable_receipt",
+      "scripts.tests.test_os_goal_overnight.OvernightTests.test_attempted_popen_exception_is_unknown_and_prevents_second_spawn",
+      "scripts.tests.test_os_goal_overnight.OvernightTests.test_failure_receipt_storage_unavailable_keeps_unknown_and_blocks_spawn",
+      "scripts.tests.test_os_goal_overnight.OvernightTests.test_unresolved_crash_around_popen_prevents_blind_second_start",
+      "scripts.tests.test_os_goal_overnight.OvernightTests.test_live_receipt_prevents_second_detached_start_before_watcher_lease"
+    ],
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "limits": "One local serial CPU7mocktestjob/outerCPU7,AS1GiB/CPU45s/wall60s/KILL5s/core0/boundedcapturefiles within shared3jobs/4GiBTOTAL incl overhead. Fresh Root actual usage/capacity/admission and26GiB/floors required; no real helper or controller launch.",
+    "evidence": "Separate immutable baseline/candidate stdios/status/PIDbirth/directwait/CPUwallRSS receipts. Planned baselinefailure is diagnostic evidence only; any unexpected profile/source/failure STOP/exactreview/noautomaticretry or broadgreenrun."
+  },
+  "reviewer_operations": "CPU0 read-only source/hash/AST/fixture comparisons and sole privateREVIEW write only; no test/helpermoduleimport/subprocess/parsergate/compiler/link/controller/process/lease/live-state/canonical/index action.",
+  "defects": []
+}

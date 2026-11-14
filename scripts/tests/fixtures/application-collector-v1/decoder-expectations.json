@@ -1,0 +1,627 @@
+{
+  "schema_version": 1,
+  "kind": "independent-application-request-decoder-expectations",
+  "status": "SOURCE_ONLY_NOT_RUN",
+  "scope": "actual-memory-decoder-infrastructure-only",
+  "execution_backend_enabled": false,
+  "application_acceptance": false,
+  "transport_acceptance": false,
+  "catalog_credit": 0,
+  "oracle_basis": "Hand-specified allowed header/string values and first invalid field in request-v1.md; no decoder logic imports or outputs used. Literal baseline independently encoded in literal-vector.json.",
+  "case_count": 84,
+  "expected_process": {
+    "raw_wait_status": 0,
+    "stdout_utf8": "ACRQ_DECODER_CASE literal-argv-empty PASS\nACRQ_DECODER_CASE owned-copy-after-input-change PASS\nACRQ_DECODER_CASE output-struct-copy PASS\nACRQ_DECODER_CASE unaligned-wire PASS\nACRQ_DECODER_CASE guard-page-exact-wire PASS\nACRQ_DECODER_CASE guard-page-truncated-string PASS\nACRQ_DECODER_CASE null-input PASS\nACRQ_DECODER_CASE null-output PASS\nACRQ_DECODER_CASE header-one-byte-short PASS\nACRQ_DECODER_CASE zero-length PASS\nACRQ_DECODER_CASE wire-one-byte-over PASS\nACRQ_DECODER_CASE magic PASS\nACRQ_DECODER_CASE version-zero PASS\nACRQ_DECODER_CASE version-future PASS\nACRQ_DECODER_CASE header-length PASS\nACRQ_DECODER_CASE declared-length-short PASS\nACRQ_DECODER_CASE declared-length-wrap PASS\nACRQ_DECODER_CASE flags PASS\nACRQ_DECODER_CASE reserved-first PASS\nACRQ_DECODER_CASE reserved-last PASS\nACRQ_DECODER_CASE unknown-role PASS\nACRQ_DECODER_CASE unknown-profile PASS\nACRQ_DECODER_CASE uid PASS\nACRQ_DECODER_CASE gid PASS\nACRQ_DECODER_CASE group-count PASS\nACRQ_DECODER_CASE group-value PASS\nACRQ_DECODER_CASE umask PASS\nACRQ_DECODER_CASE argc-zero PASS\nACRQ_DECODER_CASE argc-over PASS\nACRQ_DECODER_CASE envc-over PASS\nACRQ_DECODER_CASE stdin-mode PASS\nACRQ_DECODER_CASE stdout-inherit PASS\nACRQ_DECODER_CASE stderr-merge PASS\nACRQ_DECODER_CASE timeout-zero PASS\nACRQ_DECODER_CASE timeout-increased PASS\nACRQ_DECODER_CASE cleanup-increased PASS\nACRQ_DECODER_CASE stdout-limit-decreased PASS\nACRQ_DECODER_CASE stderr-limit-increased PASS\nACRQ_DECODER_CASE executable-empty PASS\nACRQ_DECODER_CASE executable-size-over PASS\nACRQ_DECODER_CASE executable-size-high-word PASS\nACRQ_DECODER_CASE stdin-size-over PASS\nACRQ_DECODER_CASE devnull-size PASS\nACRQ_DECODER_CASE devnull-hash PASS\nACRQ_DECODER_CASE missing-selected-hash PASS\nACRQ_DECODER_CASE missing-executable-hash PASS\nACRQ_DECODER_CASE missing-attempt-id PASS\nACRQ_DECODER_CASE file-missing-hash PASS\nACRQ_DECODER_CASE prefix-truncated PASS\nACRQ_DECODER_CASE string-truncated PASS\nACRQ_DECODER_CASE string-length-over PASS\nACRQ_DECODER_CASE string-length-wrap PASS\nACRQ_DECODER_CASE argv-embedded-nul PASS\nACRQ_DECODER_CASE case-empty PASS\nACRQ_DECODER_CASE case-leading-dot PASS\nACRQ_DECODER_CASE case-slash PASS\nACRQ_DECODER_CASE exec-relative PASS\nACRQ_DECODER_CASE exec-root PASS\nACRQ_DECODER_CASE exec-double-slash PASS\nACRQ_DECODER_CASE cwd-dot PASS\nACRQ_DECODER_CASE cwd-parent PASS\nACRQ_DECODER_CASE cwd-trailing-slash PASS\nACRQ_DECODER_CASE devnull-path-mismatch PASS\nACRQ_DECODER_CASE argv0-empty PASS\nACRQ_DECODER_CASE env-no-equals PASS\nACRQ_DECODER_CASE env-empty-name PASS\nACRQ_DECODER_CASE env-invalid-name PASS\nACRQ_DECODER_CASE env-leading-digit PASS\nACRQ_DECODER_CASE env-duplicate-different-value PASS\nACRQ_DECODER_CASE env-duplicate-same-value PASS\nACRQ_DECODER_CASE trailing-byte PASS\nACRQ_DECODER_CASE launcher-role-is-metadata PASS\nACRQ_DECODER_CASE regular-stdin PASS\nACRQ_DECODER_CASE empty-regular-stdin PASS\nACRQ_DECODER_CASE empty-complete-environment PASS\nACRQ_DECODER_CASE maximum-argc PASS\nACRQ_DECODER_CASE maximum-envc PASS\nACRQ_DECODER_CASE maximum-string PASS\nACRQ_DECODER_CASE maximum-wire PASS\nACRQ_DECODER_CASE literal-high-bytes PASS\nACRQ_DECODER_CASE maximum-executable-size PASS\nACRQ_DECODER_CASE cwd-root PASS\nACRQ_DECODER_CASE env-value-equals PASS\nACRQ_DECODER_CASE env-prefix-distinct PASS\nACRQ_DECODER_SUITE 84 PASS\n",
+    "stderr_hex": ""
+  },
+  "common_result": {
+    "schema_version": 1,
+    "kind": "application-request-decoder-fixture",
+    "status": "PASS",
+    "failures": 0,
+    "application_execution": "NOT_RUN",
+    "application_acceptance": false
+  },
+  "cases": [
+    {
+      "name": "literal-argv-empty",
+      "expected_error": "OK",
+      "output_cleared": false,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "owned-copy-after-input-change",
+      "expected_error": "OK",
+      "output_cleared": false,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "output-struct-copy",
+      "expected_error": "OK",
+      "output_cleared": false,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "unaligned-wire",
+      "expected_error": "OK",
+      "output_cleared": false,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "guard-page-exact-wire",
+      "expected_error": "OK",
+      "output_cleared": false,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "guard-page-truncated-string",
+      "expected_error": "TRUNCATED",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "null-input",
+      "expected_error": "ARGUMENT",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "null-output",
+      "expected_error": "ARGUMENT",
+      "output_cleared": false,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "header-one-byte-short",
+      "expected_error": "SIZE",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "zero-length",
+      "expected_error": "SIZE",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "wire-one-byte-over",
+      "expected_error": "SIZE",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "magic",
+      "expected_error": "MAGIC",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "version-zero",
+      "expected_error": "VERSION",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "version-future",
+      "expected_error": "VERSION",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "header-length",
+      "expected_error": "HEADER",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "declared-length-short",
+      "expected_error": "LENGTH",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "declared-length-wrap",
+      "expected_error": "LENGTH",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "flags",
+      "expected_error": "RESERVED",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "reserved-first",
+      "expected_error": "RESERVED",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "reserved-last",
+      "expected_error": "RESERVED",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "unknown-role",
+      "expected_error": "ROLE",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "unknown-profile",
+      "expected_error": "PROFILE",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "uid",
+      "expected_error": "PROFILE",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "gid",
+      "expected_error": "PROFILE",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "group-count",
+      "expected_error": "PROFILE",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "group-value",
+      "expected_error": "PROFILE",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "umask",
+      "expected_error": "PROFILE",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "argc-zero",
+      "expected_error": "COUNTS",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "argc-over",
+      "expected_error": "COUNTS",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "envc-over",
+      "expected_error": "COUNTS",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "stdin-mode",
+      "expected_error": "STREAM",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "stdout-inherit",
+      "expected_error": "STREAM",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "stderr-merge",
+      "expected_error": "STREAM",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "timeout-zero",
+      "expected_error": "LIMIT",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "timeout-increased",
+      "expected_error": "LIMIT",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "cleanup-increased",
+      "expected_error": "LIMIT",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "stdout-limit-decreased",
+      "expected_error": "LIMIT",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "stderr-limit-increased",
+      "expected_error": "LIMIT",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "executable-empty",
+      "expected_error": "IDENTITY",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "executable-size-over",
+      "expected_error": "IDENTITY",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "executable-size-high-word",
+      "expected_error": "IDENTITY",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "stdin-size-over",
+      "expected_error": "IDENTITY",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "devnull-size",
+      "expected_error": "IDENTITY",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "devnull-hash",
+      "expected_error": "IDENTITY",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "missing-selected-hash",
+      "expected_error": "IDENTITY",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "missing-executable-hash",
+      "expected_error": "IDENTITY",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "missing-attempt-id",
+      "expected_error": "IDENTITY",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "file-missing-hash",
+      "expected_error": "IDENTITY",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "prefix-truncated",
+      "expected_error": "TRUNCATED",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "string-truncated",
+      "expected_error": "TRUNCATED",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "string-length-over",
+      "expected_error": "STRING",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "string-length-wrap",
+      "expected_error": "STRING",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "argv-embedded-nul",
+      "expected_error": "STRING",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "case-empty",
+      "expected_error": "CASE_ID",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "case-leading-dot",
+      "expected_error": "CASE_ID",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "case-slash",
+      "expected_error": "CASE_ID",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "exec-relative",
+      "expected_error": "PATH",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "exec-root",
+      "expected_error": "PATH",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "exec-double-slash",
+      "expected_error": "PATH",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "cwd-dot",
+      "expected_error": "PATH",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "cwd-parent",
+      "expected_error": "PATH",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "cwd-trailing-slash",
+      "expected_error": "PATH",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "devnull-path-mismatch",
+      "expected_error": "PATH",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "argv0-empty",
+      "expected_error": "ARGV",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "env-no-equals",
+      "expected_error": "ENV",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "env-empty-name",
+      "expected_error": "ENV",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "env-invalid-name",
+      "expected_error": "ENV",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "env-leading-digit",
+      "expected_error": "ENV",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "env-duplicate-different-value",
+      "expected_error": "DUPLICATE_ENV",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "env-duplicate-same-value",
+      "expected_error": "DUPLICATE_ENV",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "trailing-byte",
+      "expected_error": "TRAILING",
+      "output_cleared": true,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "launcher-role-is-metadata",
+      "expected_error": "OK",
+      "output_cleared": false,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "regular-stdin",
+      "expected_error": "OK",
+      "output_cleared": false,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "empty-regular-stdin",
+      "expected_error": "OK",
+      "output_cleared": false,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "empty-complete-environment",
+      "expected_error": "OK",
+      "output_cleared": false,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "maximum-argc",
+      "expected_error": "OK",
+      "output_cleared": false,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "maximum-envc",
+      "expected_error": "OK",
+      "output_cleared": false,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "maximum-string",
+      "expected_error": "OK",
+      "output_cleared": false,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "maximum-wire",
+      "expected_error": "OK",
+      "output_cleared": false,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "literal-high-bytes",
+      "expected_error": "OK",
+      "output_cleared": false,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "maximum-executable-size",
+      "expected_error": "OK",
+      "output_cleared": false,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "cwd-root",
+      "expected_error": "OK",
+      "output_cleared": false,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "env-value-equals",
+      "expected_error": "OK",
+      "output_cleared": false,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    },
+    {
+      "name": "env-prefix-distinct",
+      "expected_error": "OK",
+      "output_cleared": false,
+      "application_execution": "NOT_RUN",
+      "application_acceptance": false
+    }
+  ],
+  "retention": "Each attempted case retains original request.bin and result.json under its exclusive directory; stop on first failure; no deletion. An outer supervisor raw wait and retained stdout/stderr are mandatory even if result.json says PASS.",
+  "bounds": {
+    "wire_max_bytes": 65536,
+    "largest_negative_wire_bytes": 65537,
+    "max_argv": 64,
+    "max_env": 64,
+    "max_string_bytes": 4095,
+    "process_timeout_seconds": 10,
+    "cleanup_timeout_seconds": 15,
+    "stdout_limit_bytes": 65536,
+    "stderr_limit_bytes": 65536
+  }
+}

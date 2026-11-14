@@ -1,0 +1,75 @@
+{
+  "status": "EXACT_TWO_RUST_SOURCES_AND_BODY_FIXTURE_READY_UNRUN",
+  "functional_scope": "Functional McKernel OS/apps + actual Rust/reviewed assembly compute-C cutover; existing Rust IKC producer correction",
+  "sources": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/source/kernel/rust/ikc_queue.rs",
+      "sha256": "2de3975ee916ed24d122aa99ccacb0d2b4989e874c2fe69c8945562ab5d8a967",
+      "size": 27356,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/source/kernel/rust/ikc_manycore.rs",
+      "sha256": "e3f3f3ffee3bc8ac892748123ad7fe40b85c5705969d4204dab15ba37c6de137",
+      "size": 10469,
+      "mode": 33152
+    }
+  ],
+  "base_pins": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/ORIGINAL-TWO-SOURCE-PINS.json",
+    "sha256": "dc28e29aa3e6f19bffbca8521c4322556b074a02707025280c4c366e2f9f3c1c",
+    "size": 653,
+    "mode": 33152
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/IKC-PRODUCER-GEOMETRY-AND-FATAL-RETURN.patch",
+    "sha256": "5d65151e698d391cc85cc8893b06e5036c6cf0fd173060611a5c0d83e91202ed",
+    "size": 3640,
+    "mode": 33152
+  },
+  "production_authorities": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/BOUNDED-PRODUCTION-AUTHORITIES.json",
+    "sha256": "9a61369af761ce10abb33ed5dbac67fe7b9bf7e01aff9a89313d403641f19c1d",
+    "size": 4906,
+    "mode": 33152
+  },
+  "actual_fixture": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/fixture-1/actual-ikc.rs",
+      "sha256": "0cb6ffe45b7ec415b685beb5f568cc44c0a05fc0d5bafb120e5458d4ff37ece7",
+      "size": 7830,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/fixture-1/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "size": 76151,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/fixture-1/list_helpers.rs",
+      "sha256": "dac9c2f37c64967eebd8c466426fcdf1bf8d201b5c5ee5f1f466893517feb66a",
+      "size": 5770,
+      "mode": 33152
+    }
+  ],
+  "contract": [
+    "Public legacy initializer accepts packet_size9. The actual shared copy helper now copies exactlylen bytes through u8, including trailing partialword and unalignedslot; no newlegacyalignment restriction. Existing nonoverlap/liveextent caller contract remains.",
+    "NativeABI2 retains its pre-existing >=2slots/nonzero wholeu64words/exactqueue_size=count*packet_size contract (actual consume_native and host SharedQueue.snapshot); real SyscallIKCpacket128B. Producer validates matchingnativegeometry before anyreservation/copy. Legacycount1 remainsfull(-16), notnewEINVAL.",
+    "Geometry is immutable through the borrowedmapping. Capturecount/packetsize/extent once; on x86_64 boundedu32count*u16size gives <2^48offset; exactproduct and checkedbase+header+payload ensure everycandidate fits. Recompute candidate from newwritecounter after eachfailedCAS. No fallible geometry return afterreservation. Caller stillowns actualmappingextent; header arithmetic is notownership proof.",
+    "Full is exactly-16 before anyreservation; send retries onlythat errno. Fatalerror returns with oneoriginalIRQrestore, nevernotify. Success completebytecopy then existingmax_read_offpublicationCAS order unchanged."
+  ],
+  "diagnosis_correction": "No claim of an immutable staticqueue_packet_offset post-CAS Err: that helper rejects onlycount0 alreadychecked. Actual defect is producer acceptance/publication of geometry its consumer cannot read, plus unconditionalfatalretry.",
+  "scope_limits": [
+    "WholeactualABI/list and actualcompleteproductionqueue/manycorefunctions compile in std fixture; IRQ/log/notify/address translation are explicit platform adapters. No Linux ABI/link/native IRQ proof.",
+    "Concurrent native writers use real atomicCAS and checkedpacket delivery; exactnumberoffailedCAS is notinstrumented/claimed. Legacyfixture omitsconcurrency because its historicalreader usesplaincounters.",
+    "Actualpostexit delegatedexecutor remainsOPEN: ordinarydo_syscall stampsrtid;send_syscall stampspacketpid;waitloop usesactualcurrentwaitq/nestedrequests. No scalar snapshot orArcpin grantsdelegation."
+  ],
+  "source_or_test_jobs": 0,
+  "default_or_runtime_activation": false,
+  "draft_history": {
+    "unaligned_legacy_refusal_draft": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/word-alignment-draft-1",
+    "executed": false,
+    "reason_superseded": "RootAPIreview correctly requires preserving publiclegacyarbitrarybytepackets; repairedbytecopy ratherthaninventingrestriction."
+  }
+}

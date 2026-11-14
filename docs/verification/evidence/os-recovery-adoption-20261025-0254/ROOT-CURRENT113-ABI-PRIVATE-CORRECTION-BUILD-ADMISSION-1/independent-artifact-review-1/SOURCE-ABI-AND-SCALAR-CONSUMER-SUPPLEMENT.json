@@ -1,0 +1,1148 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "independent": true,
+  "decision": "PASS_EXACT_CURRENT113_SOURCE_ABI_AND_SCALAR_CONSUMER_SUPPLEMENT",
+  "current_tuple": {
+    "Rust": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT113-ABI-PRIVATE-CORRECTION-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o",
+      "bytes": 18293600,
+      "sha256": "896eb7e96455ad3a858357c172445b2906ba10306f1601052eb137434bb0a5dd"
+    },
+    "image": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT113-ABI-PRIVATE-CORRECTION-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/mckernel.img",
+      "bytes": 10262984,
+      "sha256": "5a5944c047f686b4522c829ab0305b0cd3459f067c01889e75cc1f96d3acdd03"
+    }
+  },
+  "profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT113-ABI-PRIVATE-CORRECTION-BUILD-ADMISSION-1/PROFILE.SOURCE-ONLY.json",
+    "bytes": 116660,
+    "sha256": "88f219b06d15b9ef651624efe05cefdf24bf400c232f47a43daaac1267fe949d"
+  },
+  "Root_adoption": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/abi-private-field-correction-source-1/root-source-adoption-1/ROOT-SOURCE-ADOPTION.json",
+    "bytes": 12718,
+    "sha256": "b09e93956f599c6c942717ae93abc63fa7b830255abb35d5df34252d4c15e685"
+  },
+  "qualified_HOST_new_slices": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-clone-ptrace-provider-next4-source-1/ordinary-host-composition-profile-1/independent-review-1/INDEPENDENT-ACTUAL-HOST-COMPOSITION-ACCEPTANCE.json",
+      "bytes": 30647,
+      "sha256": "a8a98914228d43438d2bf52efb602a35391aaf10a94346cb986052aff314b6e3"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/independent-source-profile-review-1/INDEPENDENT-ACTUAL-HOST-ACCEPTANCE.json",
+      "bytes": 30544,
+      "sha256": "735c748a9894056a71231128677cab10990edbc0fbeb13f9ce5c62c70372bcf2"
+    }
+  ],
+  "corrected_scalar_source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/conditional-line-correction-source-1/independent-source-review-1/INDEPENDENT-SOURCE-REVIEW.json",
+    "bytes": 12624,
+    "sha256": "d9a1ce2d77322d669b3e0f6bceb5ce9d5b77bfe8615ab6481325f2b6db495b29"
+  },
+  "ABI_private_duplicate_correction": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/abi-private-field-correction-source-1/independent-source-review-1/REVIEW.json",
+    "bytes": 19177,
+    "sha256": "d18c880e3e4bcf419ca112c4fc60910b03e4a039879d787d957c53dd112db7a5"
+  },
+  "selected_source_refs": {
+    "kernel/rust/f06_clone_reader_lock.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/abi-private-field-correction-source-1/rust-subtree/f06_clone_reader_lock.rs",
+      "bytes": 707,
+      "sha256": "9689ea37321108ce6d8fd7ce186bfc1aa027e412132885e2cc7eaa1ef10f2027"
+    },
+    "kernel/rust/f06_clone_reader_unlock.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/abi-private-field-correction-source-1/rust-subtree/f06_clone_reader_unlock.rs",
+      "bytes": 647,
+      "sha256": "b70c27ddecbdce81fa0d95264be5ae50277b83f905a1fae1790c33be3cbe3aba"
+    },
+    "kernel/rust/f06_ptrace_find_thread.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/abi-private-field-correction-source-1/rust-subtree/f06_ptrace_find_thread.rs",
+      "bytes": 623,
+      "sha256": "aa31e203fd50cab109860b532e52b3e6087f20e2d9dcc6544d81d7d0c1c7a37b"
+    },
+    "kernel/rust/f06_ptrace_thread_unlock.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/abi-private-field-correction-source-1/rust-subtree/f06_ptrace_thread_unlock.rs",
+      "bytes": 637,
+      "sha256": "0f70edd6f7fd6328d3dc16cb58bddd6739e97ad94432cc75a152707c4d4a4192"
+    },
+    "kernel/rust/f06_clone_ptrace_provider_abi.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/abi-private-field-correction-source-1/rust-subtree/f06_clone_ptrace_provider_abi.rs",
+      "bytes": 1788,
+      "sha256": "cac59960063f7d66b66808a30d6b8fbbbfb61a0da49393167e97920fbadf8f07"
+    },
+    "kernel/rust/lock_helpers.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/abi-private-field-correction-source-1/rust-subtree/lock_helpers.rs",
+      "bytes": 12202,
+      "sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3"
+    },
+    "kernel/rust/process_helpers.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/abi-private-field-correction-source-1/rust-subtree/process_helpers.rs",
+      "bytes": 609614,
+      "sha256": "a4b36b21133954bb3b0ac9f535642c0419b4425485de4291fa5df178293ce596"
+    },
+    "kernel/rust/syscall_policy.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/abi-private-field-correction-source-1/rust-subtree/syscall_policy.rs",
+      "bytes": 1267117,
+      "sha256": "c5dd22944c164dde6580ee9825742dcd3de023617736c712ab693b26321d5d56"
+    },
+    "kernel/process.c": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/candidate/kernel/process.c",
+      "bytes": 221203,
+      "sha256": "dd7fd305dd648a8f9d81e3503dab133ab3083fc8b50597ebc0e1577504c14457"
+    },
+    "arch/x86_64/kernel/syscall.c": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/candidate/arch/x86_64/kernel/syscall.c",
+      "bytes": 117560,
+      "sha256": "c1cdce29e5e7582f1934370bef27f552a4c9480c0849c93a2d602300ef4cf099"
+    }
+  },
+  "actual_cfgs": [
+    "enable_perf",
+    "enable_profile",
+    "enable_rusage",
+    "f03_dispatch_context_candidate",
+    "f03_do_exit_supported_candidate",
+    "f03_exit_waitq_wake_selected_candidate",
+    "f03_futex_atomic_candidate",
+    "f03_futex_no_uaccess_candidate",
+    "f03_io_diagnostic_callbacks_candidate",
+    "f03_leaf_callbacks_candidate",
+    "f03_mincore_candidate",
+    "f03_mmap_page_callback_candidate",
+    "f03_move_pages_candidate",
+    "f03_perf_alloc_bridges_selected_candidate",
+    "f03_perf_counter_control_bridges_selected_candidate",
+    "f03_perf_event_provider_bridges_selected_candidate",
+    "f03_prlimit_body_candidate",
+    "f03_ptrace_entry_candidate",
+    "f03_ptrace_io_find_selected_candidate",
+    "f03_ptrace_io_unlock_selected_candidate",
+    "f03_sched_bridges_candidate",
+    "f03_signal_process_bridges_candidate",
+    "f03_sync_child_event_candidate",
+    "f03_syscall_entry_candidate",
+    "f03_syscall_table_candidate",
+    "f03_syscall_table_clone3",
+    "f03_terminate_refcount_selected_candidate",
+    "f03_unmap_begin_selected_candidate",
+    "f03_unmap_finish_selected_candidate",
+    "f03_unmap_remove_selected_candidate",
+    "f03_wait_process_release_selected_candidate",
+    "f03_wait_release_selected_candidate",
+    "f06_clone_reader_lock_candidate",
+    "f06_clone_reader_unlock_candidate",
+    "f06_copy_from_user_candidate",
+    "f06_copy_to_user_candidate",
+    "f06_forward_context_candidate",
+    "f06_mmap_dispatch_bridge_candidate",
+    "f06_mmap_flag_providers",
+    "f06_prctl_get_register_candidate",
+    "f06_prctl_set_register_candidate",
+    "f06_process_vm_entry_candidate",
+    "f06_ptrace_alloc_candidate",
+    "f06_ptrace_context_candidate",
+    "f06_ptrace_find_thread_candidate",
+    "f06_ptrace_thread_unlock_candidate",
+    "f06_rt_sigreturn_alloc_candidate",
+    "f06_rt_sigreturn_check_signal_candidate",
+    "f06_rt_sigreturn_free_candidate",
+    "f06_rt_sigreturn_set_signal_candidate",
+    "f06_rt_sigreturn_syscall_candidate",
+    "f06_vdso_add_range_candidate",
+    "f06_vdso_set_range_candidate",
+    "native_linux_irq_work_v6_12",
+    "process_global_storage_candidate"
+  ],
+  "same_unconditional_defining_module_offset_witness": true,
+  "original_panic_imports_absent": [
+    "_RNvNtNtCskWZGD7wR08e_4core9panicking11panic_const23panic_const_div_by_zero",
+    "_RNvNtNtCskWZGD7wR08e_4core9panicking11panic_const24panic_const_div_overflow"
+  ],
+  "scalar_source_identical_existing_body_prefix": true,
+  "old112_scalar_RELA_edges": [
+    {
+      "consumer": "vm_range_insert",
+      "scalar": "process_dump_tree_enabled",
+      "offset": 229,
+      "type": 1,
+      "addend": 0
+    },
+    {
+      "consumer": "process_add_range_memclear_bridge",
+      "scalar": "process_memset_smp_fast_word_pattern",
+      "offset": 74,
+      "type": 1,
+      "addend": 0
+    },
+    {
+      "consumer": "memset_smp_handler",
+      "scalar": "process_memset_smp_fast_word_pattern",
+      "offset": 216,
+      "type": 1,
+      "addend": 0
+    },
+    {
+      "consumer": "memset_smp_handler",
+      "scalar": "process_memset_smp_fast_word_pattern",
+      "offset": 470,
+      "type": 1,
+      "addend": 0
+    },
+    {
+      "consumer": "page_fault_process_memory_range",
+      "scalar": "process_page_fault_anon_clear_profile_event",
+      "offset": 756,
+      "type": 1,
+      "addend": 0
+    },
+    {
+      "consumer": "process_init_stack_alloc_aligned_bridge",
+      "scalar": "process_init_stack_user_category",
+      "offset": 9,
+      "type": 1,
+      "addend": 0
+    },
+    {
+      "consumer": "process_init_stack_free_pages_bridge",
+      "scalar": "process_init_stack_user_category",
+      "offset": 16,
+      "type": 1,
+      "addend": 0
+    },
+    {
+      "consumer": "process_memset_smp_memset_bridge",
+      "scalar": "process_memset_smp_fast_word_pattern",
+      "offset": 2,
+      "type": 1,
+      "addend": 0
+    },
+    {
+      "consumer": "vm_range_insert_dump_bridge",
+      "scalar": "process_dump_tree_enabled",
+      "offset": 2,
+      "type": 1,
+      "addend": 0
+    }
+  ],
+  "current113_scalar_RELA_edges": [
+    {
+      "consumer": "vm_range_insert",
+      "scalar": "process_dump_tree_enabled",
+      "offset": 229,
+      "type": 1,
+      "addend": 0,
+      "positive_final_address": "0xfffffffffe91a790",
+      "signed_value": 0
+    },
+    {
+      "consumer": "vm_range_insert_dump_bridge",
+      "scalar": "process_dump_tree_enabled",
+      "offset": 2,
+      "type": 1,
+      "addend": 0,
+      "positive_final_address": "0xfffffffffe91a790",
+      "signed_value": 0
+    }
+  ],
+  "folded_current_scalar_effects": "usercategory1 passed inr8d/edx; profile4002 immediate; selectedfastword1 existing loops; volatile dump0 still two actual named raw reads",
+  "two_positive_LOCAL_scalar_callee_bodies": [
+    {
+      "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust15process_helpers22process_dump_tree_node",
+      "current_final": {
+        "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust15process_helpers22process_dump_tree_node",
+        "bind": 0,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684485072,
+        "size": 122
+      },
+      "current_positive_targets": [
+        {
+          "offset": 27,
+          "type": 1,
+          "addend": 4104,
+          "kind": "EXACT_SECTION_STRING",
+          "target": null,
+          "actual_final_address": "0xfffffffffe909198",
+          "literal_hex": "64747265653a2025302a642c2025703a20256c782d256c780a00"
+        },
+        {
+          "offset": 37,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "kprintf",
+          "actual_final_address": "0xfffffffffe8745d0"
+        },
+        {
+          "offset": 61,
+          "type": 1,
+          "addend": 0,
+          "kind": "EXACT_NAMED_LOCAL_SECTION_OWNER",
+          "target": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust15process_helpers22process_dump_tree_node",
+          "actual_final_address": "0xfffffffffe8183d0",
+          "input_owner": {
+            "index": 281,
+            "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust15process_helpers22process_dump_tree_node",
+            "bind": 0,
+            "type": 2,
+            "shndx": 270,
+            "value": 0,
+            "size": 122
+          },
+          "final_owner": {
+            "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust15process_helpers22process_dump_tree_node",
+            "bind": 0,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684485072,
+            "size": 122
+          }
+        }
+      ],
+      "nonrelocated_bytes_equal": true
+    },
+    {
+      "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust15process_helpers30process_fault_set_range_target",
+      "current_final": {
+        "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust15process_helpers30process_fault_set_range_target",
+        "bind": 0,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684486464,
+        "size": 34
+      },
+      "current_positive_targets": [
+        {
+          "offset": 13,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "ihk_mc_pt_set_range",
+          "actual_final_address": "0xfffffffffe86c800"
+        }
+      ],
+      "nonrelocated_bytes_equal": true
+    }
+  ],
+  "current_C_metadata_contract": {
+    "kernelC_retained_allocated_OBJECTs": 158,
+    "new_arch_and_process_allocated_OBJECTs": 87,
+    "total": 245,
+    "all_new87_raw_initializers_types_bindings_and_RELA_shapes_equal112": true,
+    "retained_kernelC_whole_object_authenticated": true,
+    "prior_limited_complement": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT112-EVENT2-ALLOC2-BUILD-ADMISSION-1/independent-postbuild-review-1/C-DATA-ORIGIN-COMPLEMENT.json",
+      "bytes": 28593,
+      "sha256": "af4c33a9a4688c322f4cd2156b856ea7fe2d2d30c15f923ea71258c344bc1534"
+    },
+    "prior_seven_C_section_relative_RELA_deltas_preserved": [
+      {
+        "object": "kernelC",
+        "name": "f03_ptrace_entry_ops_v1",
+        "old_relocations": [
+          [
+            0,
+            1,
+            0,
+            "ptrace_traceme"
+          ],
+          [
+            8,
+            1,
+            1232,
+            ""
+          ],
+          [
+            16,
+            1,
+            0,
+            "f03_ptrace_getregs_v1"
+          ],
+          [
+            24,
+            1,
+            0,
+            "f03_ptrace_setregs_v1"
+          ],
+          [
+            32,
+            1,
+            0,
+            "f03_ptrace_getfpregs_v1"
+          ],
+          [
+            40,
+            1,
+            0,
+            "f03_ptrace_setfpregs_v1"
+          ],
+          [
+            48,
+            1,
+            0,
+            "f03_ptrace_peekuser_v1"
+          ],
+          [
+            56,
+            1,
+            0,
+            "f03_ptrace_pokeuser_v1"
+          ],
+          [
+            64,
+            1,
+            0,
+            "f03_ptrace_peektext_v1"
+          ],
+          [
+            72,
+            1,
+            0,
+            "f03_ptrace_poketext_v1"
+          ],
+          [
+            80,
+            1,
+            0,
+            "f03_ptrace_setoptions_v1"
+          ],
+          [
+            88,
+            1,
+            0,
+            "f03_ptrace_attach_v1"
+          ],
+          [
+            96,
+            1,
+            0,
+            "ptrace_detach"
+          ],
+          [
+            104,
+            1,
+            0,
+            "f03_ptrace_getsiginfo_v1"
+          ],
+          [
+            112,
+            1,
+            1120,
+            ""
+          ],
+          [
+            120,
+            1,
+            0,
+            "f03_ptrace_getregset_v1"
+          ],
+          [
+            128,
+            1,
+            0,
+            "f03_ptrace_setregset_v1"
+          ],
+          [
+            136,
+            1,
+            0,
+            "f03_ptrace_geteventmsg_v1"
+          ],
+          [
+            144,
+            1,
+            0,
+            "arch_ptrace"
+          ]
+        ],
+        "new_relocations": [
+          [
+            0,
+            1,
+            0,
+            "ptrace_traceme"
+          ],
+          [
+            8,
+            1,
+            1200,
+            ""
+          ],
+          [
+            16,
+            1,
+            0,
+            "f03_ptrace_getregs_v1"
+          ],
+          [
+            24,
+            1,
+            0,
+            "f03_ptrace_setregs_v1"
+          ],
+          [
+            32,
+            1,
+            0,
+            "f03_ptrace_getfpregs_v1"
+          ],
+          [
+            40,
+            1,
+            0,
+            "f03_ptrace_setfpregs_v1"
+          ],
+          [
+            48,
+            1,
+            0,
+            "f03_ptrace_peekuser_v1"
+          ],
+          [
+            56,
+            1,
+            0,
+            "f03_ptrace_pokeuser_v1"
+          ],
+          [
+            64,
+            1,
+            0,
+            "f03_ptrace_peektext_v1"
+          ],
+          [
+            72,
+            1,
+            0,
+            "f03_ptrace_poketext_v1"
+          ],
+          [
+            80,
+            1,
+            0,
+            "f03_ptrace_setoptions_v1"
+          ],
+          [
+            88,
+            1,
+            0,
+            "f03_ptrace_attach_v1"
+          ],
+          [
+            96,
+            1,
+            0,
+            "ptrace_detach"
+          ],
+          [
+            104,
+            1,
+            0,
+            "f03_ptrace_getsiginfo_v1"
+          ],
+          [
+            112,
+            1,
+            1088,
+            ""
+          ],
+          [
+            120,
+            1,
+            0,
+            "f03_ptrace_getregset_v1"
+          ],
+          [
+            128,
+            1,
+            0,
+            "f03_ptrace_setregset_v1"
+          ],
+          [
+            136,
+            1,
+            0,
+            "f03_ptrace_geteventmsg_v1"
+          ],
+          [
+            144,
+            1,
+            0,
+            "arch_ptrace"
+          ]
+        ]
+      },
+      {
+        "object": "kernelC",
+        "name": "f03_shmat_data_v1",
+        "old_relocations": [
+          [
+            64,
+            1,
+            0,
+            "f03_shmat_list_lock_v1"
+          ],
+          [
+            72,
+            1,
+            0,
+            "f03_shmat_list_unlock_v1"
+          ],
+          [
+            80,
+            1,
+            0,
+            "f03_shmat_lookup_obj_v1"
+          ],
+          [
+            88,
+            1,
+            0,
+            "f03_shmat_memobj_unref_v1"
+          ],
+          [
+            96,
+            1,
+            0,
+            "munmap_write_lock_bridge"
+          ],
+          [
+            104,
+            1,
+            0,
+            "munmap_write_unlock_bridge"
+          ],
+          [
+            112,
+            1,
+            0,
+            "f03_mprotect_lookup_bridge_v1"
+          ],
+          [
+            120,
+            1,
+            0,
+            "f03_shmat_search_free_v1"
+          ],
+          [
+            128,
+            1,
+            2352,
+            ""
+          ],
+          [
+            136,
+            1,
+            0,
+            "f03_shmat_add_range_v1"
+          ],
+          [
+            144,
+            1,
+            0,
+            "f03_shmat_log_bridge_v1"
+          ]
+        ],
+        "new_relocations": [
+          [
+            64,
+            1,
+            0,
+            "f03_shmat_list_lock_v1"
+          ],
+          [
+            72,
+            1,
+            0,
+            "f03_shmat_list_unlock_v1"
+          ],
+          [
+            80,
+            1,
+            0,
+            "f03_shmat_lookup_obj_v1"
+          ],
+          [
+            88,
+            1,
+            0,
+            "f03_shmat_memobj_unref_v1"
+          ],
+          [
+            96,
+            1,
+            0,
+            "munmap_write_lock_bridge"
+          ],
+          [
+            104,
+            1,
+            0,
+            "munmap_write_unlock_bridge"
+          ],
+          [
+            112,
+            1,
+            0,
+            "f03_mprotect_lookup_bridge_v1"
+          ],
+          [
+            120,
+            1,
+            0,
+            "f03_shmat_search_free_v1"
+          ],
+          [
+            128,
+            1,
+            2320,
+            ""
+          ],
+          [
+            136,
+            1,
+            0,
+            "f03_shmat_add_range_v1"
+          ],
+          [
+            144,
+            1,
+            0,
+            "f03_shmat_log_bridge_v1"
+          ]
+        ]
+      },
+      {
+        "object": "kernelC",
+        "name": "f03_vm_policy_insert_log_provider_v1",
+        "old_relocations": [
+          [
+            0,
+            1,
+            1952,
+            ""
+          ]
+        ],
+        "new_relocations": [
+          [
+            0,
+            1,
+            1920,
+            ""
+          ]
+        ]
+      },
+      {
+        "object": "kernelC",
+        "name": "f03_perf_counter_providers_v1",
+        "old_relocations": [
+          [
+            0,
+            1,
+            0,
+            "f03_perf_counter_attr_flags_v1"
+          ],
+          [
+            8,
+            1,
+            560,
+            ""
+          ],
+          [
+            16,
+            1,
+            544,
+            ""
+          ],
+          [
+            24,
+            1,
+            0,
+            "perf_counter_mask_check_bridge"
+          ],
+          [
+            32,
+            1,
+            528,
+            ""
+          ],
+          [
+            40,
+            1,
+            0,
+            "perf_counter_start_bridge"
+          ],
+          [
+            48,
+            1,
+            0,
+            "perf_counter_stop_bridge"
+          ],
+          [
+            56,
+            1,
+            512,
+            ""
+          ],
+          [
+            64,
+            1,
+            0,
+            "f03_perf_read_value_bridge_v1"
+          ],
+          [
+            72,
+            1,
+            0,
+            "f03_sync_child_count_set_v2"
+          ]
+        ],
+        "new_relocations": [
+          [
+            0,
+            1,
+            0,
+            "f03_perf_counter_attr_flags_v1"
+          ],
+          [
+            8,
+            1,
+            528,
+            ""
+          ],
+          [
+            16,
+            1,
+            512,
+            ""
+          ],
+          [
+            24,
+            1,
+            0,
+            "perf_counter_mask_check_bridge"
+          ],
+          [
+            32,
+            1,
+            0,
+            "perf_event_set_period_bridge"
+          ],
+          [
+            40,
+            1,
+            0,
+            "perf_counter_start_bridge"
+          ],
+          [
+            48,
+            1,
+            0,
+            "perf_counter_stop_bridge"
+          ],
+          [
+            56,
+            1,
+            0,
+            "perf_event_update_bridge"
+          ],
+          [
+            64,
+            1,
+            0,
+            "f03_perf_read_value_bridge_v1"
+          ],
+          [
+            72,
+            1,
+            0,
+            "f03_sync_child_count_set_v2"
+          ]
+        ]
+      },
+      {
+        "object": "kernelC",
+        "name": "f03_perf_read_providers_v1",
+        "old_relocations": [
+          [
+            0,
+            1,
+            0,
+            "f03_perf_read_attr_flags_v1"
+          ],
+          [
+            8,
+            1,
+            512,
+            ""
+          ],
+          [
+            16,
+            1,
+            496,
+            ""
+          ]
+        ],
+        "new_relocations": [
+          [
+            0,
+            1,
+            0,
+            "f03_perf_read_attr_flags_v1"
+          ],
+          [
+            8,
+            1,
+            0,
+            "perf_event_update_bridge"
+          ],
+          [
+            16,
+            1,
+            496,
+            ""
+          ]
+        ]
+      },
+      {
+        "object": "kernelC",
+        "name": "f03_mprotect_providers_v1",
+        "old_relocations": [
+          [
+            0,
+            1,
+            0,
+            "munmap_write_lock_bridge"
+          ],
+          [
+            8,
+            1,
+            0,
+            "munmap_write_unlock_bridge"
+          ],
+          [
+            16,
+            1,
+            0,
+            "f03_mprotect_lookup_bridge_v1"
+          ],
+          [
+            24,
+            1,
+            0,
+            "f03_mprotect_next_bridge_v1"
+          ],
+          [
+            32,
+            1,
+            0,
+            "f03_mprotect_split_bridge_v1"
+          ],
+          [
+            40,
+            1,
+            0,
+            "f03_mprotect_join_bridge_v1"
+          ],
+          [
+            48,
+            1,
+            0,
+            "f03_mprotect_change_bridge_v1"
+          ],
+          [
+            56,
+            1,
+            2352,
+            ""
+          ],
+          [
+            64,
+            1,
+            0,
+            "mprotect_flush_nfo_bridge"
+          ],
+          [
+            72,
+            1,
+            0,
+            "f03_mprotect_flush_tlb_bridge_v1"
+          ],
+          [
+            80,
+            1,
+            0,
+            "f03_mprotect_log_bridge_v1"
+          ]
+        ],
+        "new_relocations": [
+          [
+            0,
+            1,
+            0,
+            "munmap_write_lock_bridge"
+          ],
+          [
+            8,
+            1,
+            0,
+            "munmap_write_unlock_bridge"
+          ],
+          [
+            16,
+            1,
+            0,
+            "f03_mprotect_lookup_bridge_v1"
+          ],
+          [
+            24,
+            1,
+            0,
+            "f03_mprotect_next_bridge_v1"
+          ],
+          [
+            32,
+            1,
+            0,
+            "f03_mprotect_split_bridge_v1"
+          ],
+          [
+            40,
+            1,
+            0,
+            "f03_mprotect_join_bridge_v1"
+          ],
+          [
+            48,
+            1,
+            0,
+            "f03_mprotect_change_bridge_v1"
+          ],
+          [
+            56,
+            1,
+            2320,
+            ""
+          ],
+          [
+            64,
+            1,
+            0,
+            "mprotect_flush_nfo_bridge"
+          ],
+          [
+            72,
+            1,
+            0,
+            "f03_mprotect_flush_tlb_bridge_v1"
+          ],
+          [
+            80,
+            1,
+            0,
+            "f03_mprotect_log_bridge_v1"
+          ]
+        ]
+      },
+      {
+        "object": "kernelC",
+        "name": "f03_wait_c_dependencies",
+        "old_relocations": [
+          [
+            0,
+            1,
+            3856,
+            ""
+          ],
+          [
+            8,
+            1,
+            0,
+            "f03_wait_stopped_v1"
+          ],
+          [
+            16,
+            1,
+            0,
+            "f03_wait_continued_v1"
+          ],
+          [
+            24,
+            1,
+            0,
+            "f03_ptrace_detach_wait_callback_v1"
+          ],
+          [
+            32,
+            1,
+            1568,
+            ""
+          ],
+          [
+            40,
+            1,
+            16,
+            ""
+          ]
+        ],
+        "new_relocations": [
+          [
+            0,
+            1,
+            3824,
+            ""
+          ],
+          [
+            8,
+            1,
+            0,
+            "f03_wait_stopped_v1"
+          ],
+          [
+            16,
+            1,
+            0,
+            "f03_wait_continued_v1"
+          ],
+          [
+            24,
+            1,
+            0,
+            "f03_ptrace_detach_wait_callback_v1"
+          ],
+          [
+            32,
+            1,
+            1536,
+            ""
+          ],
+          [
+            40,
+            1,
+            16,
+            ""
+          ]
+        ]
+      }
+    ],
+    "whole_file_metadata_acceptance": false
+  },
+  "scope_limits": [
+    "Seven inherited C section-relative metadata RELA provenance deltas remain at the existing limited contract scope; no anonymous unknown target accepted or whole-file metadata claim.",
+    "Four bridge source/header type contracts and native IRQ/reference effects retain HOST qualification scope; actual native/file/lifetime/Source38 holds remain OPEN."
+  ],
+  "reader_observations": [
+    "Initial new thread-unlock address-alias assumption rejected: actual separate143B body copy proved raw+full-final byte-identical realthread_unlock; readerlock/unlock are exact address aliases.",
+    "Seven scheduler consumers retain identical nonrelocated code; exactly10 oldf03_ptrace_io_unlock targets become newarch_ptrace_thread_unlock_bridge. Exact complete current body equality of both providers proves this finite named retarget, no generic alias normalization.",
+    "Retained global-only function reader rejected two named LOCAL scalar callees; exact122B process_dump_tree_node and34B process_fault_set_range_target now use finite LOCAL-only wrapper, full current bytes and112 comparison, no unknown-section waiver.",
+    "Receipt writer duplicate-key error fixed before publication; original source/build artifacts unchanged."
+  ],
+  "compiler_workload_actions": 0,
+  "native_acceptance": false
+}

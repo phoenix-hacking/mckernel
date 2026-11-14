@@ -1,0 +1,66 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": 1793404082.494205,
+  "status": "ROOT_ADMITS_CHANGED_RESTORE_GATING_MOCKS",
+  "thread_id": "01a18bc3-e072-7810-9426-75101b0856c0",
+  "source_pins": {
+    "root-install-deferred-child-restore-check-1/correction-2/SOURCE-BOUND.json": "0514167ca9adcbab25b5ea6ab9a5e60fcff20d870fb3eaba86f05eca9e374c25",
+    "root-install-deferred-child-restore-check-1/correction-2/restore_probe.py": "3b927a1b7773762ef6ec40e5b3dddfb219c310530b5e418d3b8a704ab8d6b872",
+    "root-install-deferred-child-restore-check-1/correction-2/test_gates.py": "310d0e153d9e375fef508cf50ece4ce0745e775f2c65a2458c464d0503695b0f",
+    "root-install-deferred-child-restore-check-1/correction-2/PROFILE.SOURCE-ONLY.json": "dfab3052f0493587ae2a1465bd2b067c2ad7756a366969e9bc752354f28b38ed"
+  },
+  "runner_sha256": "5d373ca0a4f78b788093ee19012c1b458cd570495c91661580f76af4b4e146ef",
+  "cpu": [
+    6
+  ],
+  "jobs": 1,
+  "address_space_bytes": 536870912,
+  "cpu_seconds": 30,
+  "wall_seconds": 45,
+  "kill_after_seconds": 5,
+  "native_root_fork_pidfd_signal_immutable": false,
+  "actual_effects": "pinned source reads; all root/fork/pidfd/signals/write/close faults mocked; no physical operation",
+  "unchanged5_protocolcases_not_replayed": true,
+  "weekly_used_percent": 96,
+  "weekly_observed_at": 1793404082.113263,
+  "controllers": {
+    "guardian": {
+      "pid": 2996157,
+      "ppid": 2995936,
+      "start": "118034389",
+      "state": "R"
+    },
+    "monitor": {
+      "pid": 2996160,
+      "ppid": 2995936,
+      "start": "118034501",
+      "state": "R"
+    },
+    "server": {
+      "pid": 2996005,
+      "ppid": 2996003,
+      "start": "118034116",
+      "state": "S"
+    },
+    "watcher": {
+      "pid": 2996001,
+      "ppid": 2995936,
+      "start": "118034086",
+      "state": "S"
+    },
+    "worker": {
+      "pid": 2996003,
+      "ppid": 2996001,
+      "start": "118034102",
+      "state": "S"
+    }
+  },
+  "capacity": {
+    "MemAvailable_bytes": 27383226368,
+    "free_bytes": {
+      "/home/holden/mckernel": 142317518848,
+      "/home/holden/mckernel-work/scratch": 47613485056
+    }
+  },
+  "nonce": "97092cd77cb0037500167a7938f186d739dc0d1ee88e5560287241accc7149b0"
+}

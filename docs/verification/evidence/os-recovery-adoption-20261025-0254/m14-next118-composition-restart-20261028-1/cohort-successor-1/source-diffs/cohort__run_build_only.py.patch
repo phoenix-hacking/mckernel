@@ -1,0 +1,81 @@
+--- a/cohort/run_build_only.py
++++ b/cohort/run_build_only.py
+@@ -6,8 +6,9 @@
+ from pathlib import Path
+ D=Path(__file__).resolve().parent
+ DEADLINE=1793253600
+-RUNTIME_GUARD_REF={'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current117-next-default-cohort-source-20261028-1/cohort/runtime_guard.py', 'bytes': 2621, 'sha256': 'c65408703a6358153dde2a81588365c3ce74d5f3007464466aeb3c178c6ba294'}
++RUNTIME_GUARD_REF={'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/cohort/runtime_guard.py', 'bytes': 4041, 'sha256': '0a88b83a544b33b0974ebb0f273f86946d056bfb70e415e133ef9c03a6e2bd74'}
+ MEMORY=12884901888
++COMMAND_RECIPE_REF={'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/MINIMAL-FOUR-COMMAND-CONTINUATION.NOT-GRANTED.json', 'bytes': 30006, 'sha256': '89ade2c2bdf88300b9d5adc24300531edb65d14d6ee106df885a9c785dc16808'}
+ BUDGET=23259332608  # current aggregate21.661941528320312GiB ceiling
+ PROTECTED_SUFFIX='actual-current290-default-image-attempt-5'
+ SUDO_DOCKER_PREFIX=['/usr/bin/sudo','-A','/usr/bin/docker','--host=unix:///var/run/docker.sock']
+@@ -59,6 +60,8 @@
+     base=[dict(host=export['readable_source_export'],target='/src',readonly=True),dict(host=export['readable_seed_export'],target='/seed-build',readonly=True)]
+     base += [dict(host=r['host_path'],target=r['container_path'],readonly=True) for r in profile['inputs']['toolchain_mounts']]
+     source_directory_postimages(profile)
++    for row in profile['inputs']['external_relative_modules']:
++        require(reference(Path(export['readable_source_export'])/row['relative'])['sha256']==row['source']['sha256'],'actual readonly /src supplies identical inherited external modules')
+     base += [dict(host=r['host_path'],target=r['container_destination'],readonly=True) for r in profile['inputs'].get('source_directory_exports',[])]
+     base += [dict(host=r['postimage']['path'],target=r['container_destination'],readonly=True) for r in profile['inputs']['postimages']]
+     # Exports cover generated includes/SDK aliases/gitlinks needed by this exact command.
+@@ -99,10 +102,17 @@
+         require(set(export)=={'host_path','container_destination','readonly','manifest'} and export['readonly'] is True and export['container_destination']=='/src/kernel/rust','exact readonly Rust subtree source export')
+         root=strict_parent(export['host_path']);require(root.is_dir() and not root.is_symlink(),'ordinary closed source directory')
+         manifest=read(auth(export['manifest']))
+-        if export['manifest'] == {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT117-PERFMMAP-VDSO-BUILD-PREPARATION-1/RUST-SUBTREE-CLOSED-SOURCE-MAP.json', 'bytes': 96573, 'sha256': '45d375d10fb8c10221fc80967581ed77f151b310926279c665f2c3316729e10f'}:
++        if export['manifest'] == {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-PREPARATION-1/RUST-SUBTREE-CLOSED-SOURCE-MAP.json', 'bytes': 96573, 'sha256': '45d375d10fb8c10221fc80967581ed77f151b310926279c665f2c3316729e10f'}:
+             require(manifest['schema']=='ExactclosedRustsource-directoryreuse-v1' and manifest['base_source_root']=='Retained115 qualified inputs with8path116selectiveoverlay' and manifest['runtime_authority'] is None and manifest['export_root']==str(root) and manifest['container_destination']=='/src/kernel/rust' and len(manifest['files'])==121 and manifest['new_leaf_files']==['f06_shmget_dispatch.rs'] and manifest['no_symlinks'] is True and manifest['no_hardlinks'] is True, 'exact authenticated116 selective-overlay source manifest')
+         else:
+             require(manifest['schema']=='mckernel.exact-kernel-rust-subtree-readonly.v1' and manifest['runtime_authority'] is None and manifest['export_root']==str(root) and manifest['container_destination']=='/src/kernel/rust' and manifest['base_source_root']==profile['inputs']['source6153']+'/kernel/rust','exact source-directory manifest binding')
++        require(len(manifest['files'])==123 and sum(row['relative'].endswith('.rs') for row in manifest['files'])==112,'exact118 source closure123/112')
++        external=profile['inputs']['external_relative_modules']
++        require(len(external)==3 and manifest['external_inputs']==external,'exact118 external3 module manifest')
++        require([row['relative'] for row in external]==['scripts/tests/fixtures/mckernel_guest_sysfs.rs','host-kernel/native-rust/abi/vdso.rs','host-kernel/native-rust/zero_pages.rs'],'exact inherited relative modules')
++        for row in external:
++            require(row['source']['path']==str(Path(profile['inputs']['source6153'])/row['relative']) and row['container_path']=='/src/'+row['relative'],'original immutable source mount supplies external module')
++            auth(row['source'])
+         expected=set()
+         for row in manifest['files']:
+             relative=Path(row['relative']);require(not relative.is_absolute() and '..' not in relative.parts and str(relative)==row['relative'],'exact normalized source-relative file')
+@@ -125,6 +135,9 @@
+     require(isinstance(profile['producer_contract']['process_delta'],str) and profile['producer_contract']['process_delta'],'Root must state exact new process delta')
+     if 'unchanged_completed_process_prefix' in profile:require(profile['unchanged_completed_process_prefix']['Root_decision'] is not None,'Root must disposition already completed unchanged F02 process prefix before grant')
+     commands=profile['exact_commands']
++    recipe=read(auth(COMMAND_RECIPE_REF))
++    require(commands==recipe['ordered_commands'],'exact sealed118 fourargv recipe')
++    require(sorted((r['link_token'],r['source']['sha256']) for r in profile['inputs']['objects'] if not r['replace'])==sorted((r['link_token'],r['source']['sha256']) for r in recipe['retained_inputs']),'exact inherited8object provider hashes')
+     outputs=['rust/mckernel_rust.o','CMakeFiles/mckernel.img.dir/syscall.c.o','CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o','mckernel.img']
+     sources=['/src/kernel/rust/lib.rs','/src/kernel/syscall.c','/src/arch/x86_64/kernel/syscall.c']
+     require(len(commands)==4,'exact four selected successor commands')
+@@ -143,9 +156,9 @@
+ 
+ def current_operation_guard():
+     import importlib.util
+-    path = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current117-next-default-cohort-source-20261028-1/cohort/runtime_guard.py')
++    path = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/cohort/runtime_guard.py')
+     require(reference(path) == RUNTIME_GUARD_REF, 'exact new-window operation consumer')
+-    spec = importlib.util.spec_from_file_location('current117-build_explicit_operation_binding', path)
++    spec = importlib.util.spec_from_file_location('current118-build_explicit_operation_binding', path)
+     module = importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
+     return module.guard()
+ 
+@@ -187,7 +200,7 @@
+     scratch=Path('/home/holden/mckernel-work/scratch');sv=os.statvfs(scratch)
+     require(sv.f_bavail*sv.f_frsize>=max(12<<30,resources['scratch_required_free_bytes']),'fresh actual scratch reserve guard')
+     # Check only qualified file identities, not broad source inventories.
+-    expected=[r['source'] for r in profile['inputs']['configuration']]+[r['source'] for r in profile['inputs']['objects'] if not r['replace']]+[r['postimage'] for r in profile['inputs']['postimages']]+[r['postimage'] for r in source_directory_postimages(profile)]
++    expected=[r['source'] for r in profile['inputs']['configuration']]+[r['source'] for r in profile['inputs']['objects'] if not r['replace']]+[r['postimage'] for r in profile['inputs']['postimages']]+[r['postimage'] for r in source_directory_postimages(profile)]+[r['source'] for r in profile['inputs']['external_relative_modules']]
+     require(export['qualified_readonly_files']==expected,'exact retained configuration/nine objects/new cohort postimage export closure')
+     for row in expected:auth(row)
+     require(all(os.access(x,os.R_OK|os.X_OK) for x in (export['readable_source_export'],export['readable_seed_export'])),'actual UID1000 readable/traversable root exports')
+@@ -208,7 +221,7 @@
+     rows=mounts(profile,export,output)
+     require(len({r['target'] for r in rows})==len(rows),'no duplicate RO mount targets')
+     for row in rows:require(os.access(row['host'],os.R_OK),'actual UID1000 input bind read access')
+-    name='current117-build-build-only-'+grant['nonce'];require(name.replace('-','').isalnum() and len(name)<=120,'bounded container identity')
++    name='current118-build-build-only-'+grant['nonce'];require(name.replace('-','').isalnum() and len(name)<=120,'bounded container identity')
+     current_operation_guard()
+     argv=docker_argv(profile,name,rows,output)
+     (output/'claim.json').write_text(json.dumps(dict(grant=reference(grant_path),argv=argv,pid=os.getpid(),scope=profile['scope'],native_authority=False),indent=2)+'\n')

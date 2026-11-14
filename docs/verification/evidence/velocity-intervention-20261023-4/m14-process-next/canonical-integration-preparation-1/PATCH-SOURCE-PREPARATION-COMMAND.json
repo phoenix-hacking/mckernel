@@ -1,0 +1,21 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "purpose": "Apply exact process two-file patch to PRIVATE staging only; no canonical edits/compiler/runtime.",
+  "argv": [
+    "/usr/bin/patch",
+    "--batch",
+    "--fuzz=0",
+    "--forward",
+    "--no-backup-if-mismatch",
+    "--strip=1",
+    "--directory",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-process-next/canonical-integration-preparation-1/staged",
+    "--input",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-process-next/canonical-integration-preparation-1/EXACT-TWO-FILE.patch"
+  ],
+  "patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-process-next/canonical-integration-preparation-1/EXACT-TWO-FILE.patch",
+    "sha256": "9583704021a2b30680b3b71c7a2374721fdc007feab1278b67ccfead4b6b615f",
+    "bytes": 2690
+  }
+}

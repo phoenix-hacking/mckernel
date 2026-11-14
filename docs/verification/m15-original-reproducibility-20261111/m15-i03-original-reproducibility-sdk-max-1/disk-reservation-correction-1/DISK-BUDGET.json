@@ -1,0 +1,57 @@
+{
+  "schema": 1,
+  "status": "PLANNING_RESERVATION_CORRECTION_NO_EXECUTION",
+  "original_NO_GO": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/m15-i03-original-reproducibility-review-p03-max-1/REVIEW.json",
+    "bytes": 7592,
+    "sha256": "be61572e5bb172f84ac7341cefc8a251ea5f321e2fccf6eecfa94f45e6530f65"
+  },
+  "asset_buckets": [
+    {
+      "asset": "16 raw stdout/stderr stream files for8commands",
+      "count": 16,
+      "per_file_bytes": 67108864,
+      "reserved_bytes": 1073741824,
+      "basis": "Existing per-file RLIMIT_FSIZE64MiB; this category can alone reach original1GiB reservation.",
+      "kind": "known bounded file category"
+    },
+    {
+      "asset": "3 built plus3 separately staged ELF program files",
+      "count": 6,
+      "per_file_bytes": 67108864,
+      "reserved_bytes": 402653184,
+      "basis": "Existing commands produce3files and install3copies; every output write inherits same64MiB per-file limit.",
+      "kind": "known bounded file category"
+    },
+    {
+      "asset": "2 generated Rust configuration files",
+      "count": 2,
+      "per_file_bytes": 67108864,
+      "reserved_bytes": 134217728,
+      "basis": "Existing payload CONFIGS lists exactly2 files, each under same64MiB per-file limit; expected content hashes unchanged.",
+      "kind": "known bounded file category"
+    },
+    {
+      "asset": "Combined remaining CMake state/install manifests, compiler/linker temporary files, receipt/Root capture files and emergency slack",
+      "count": null,
+      "per_file_bytes": null,
+      "reserved_bytes": 536870912,
+      "basis": "Conservative planning allowance for the finite two-project/three-Rust-program graph; large SDK/sysroot/source/provider inputs are read-only mounts, not output copies. Actual aggregate temporary/auxiliary highwater is unmeasured.",
+      "kind": "unmeasured shared auxiliary planning reserve; not an enforced aggregate file/output cap"
+    }
+  ],
+  "known_file_categories_bytes": 1610612736,
+  "auxiliary_planning_bytes": 536870912,
+  "total_reservation_bytes": 2147483648,
+  "total_MiB": 2048,
+  "hard_payload_aggregate_limit_established": false,
+  "actual_batch_disk_peak_measured": false,
+  "interpretation": "2GiB is a conservative planning reservation:1536MiB known file-category capacity plus512MiB shared CMake/temp/receipt/emergency reserve. It is not a claim that existing RLIMIT_FSIZE enforces a2GiB aggregate or that unmeasured temporary files cannot exceed the allowance. No helper/profile/cap changes are made.",
+  "actual_Root_admission": [
+    "M14 producer/reader retains priority. Run this M15 operation only after its positive owner/resource retirement and separate current Root admission.",
+    "Verify destination filesystem free space covers this2GiB reservation ABOVE unchanged host16GiB/scratch12GiB floors and all already retained data/jobs; never count read-only SDK/source mounts as new output.",
+    "Retain actual per-file64MiB/file,2GiBRAM/CPU6-j1/profile/timeouts. Existing normal disk-floor/headroom monitoring must remain effective; if actual growth invalidates this planning allowance or a floor, stop/preserve exact evidence and obtain a meaningful revised admission rather than claiming a measured bound or silently widening.",
+    "No tool/disk probe or payload was executed by correction author. Actual headroom/identity/owner checks remain Root responsibilities at admission."
+  ],
+  "unchanged_generated_config_hashes": "b04cd168bf10fc62e2303f2d2b127c89a50689a8248f920c586af08aaf2bc912 and b8a03e2d5dae88c21e5a8504cd73a6677ecf9832b5e4aef82208368d2259989c; no regeneration done by author."
+}

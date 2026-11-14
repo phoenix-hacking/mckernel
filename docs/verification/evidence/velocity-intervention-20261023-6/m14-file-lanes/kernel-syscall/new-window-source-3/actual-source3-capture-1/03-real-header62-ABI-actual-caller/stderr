@@ -1,0 +1,21 @@
+In file included from /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-3/source/complete62-real-ABI.c:2:
+/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-3/source/kernel/syscall.c: In function ‘do_execveat’:
+/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-3/source/kernel/syscall.c:7478:19: warning: unused variable ‘range’ [-Wunused-variable]
+ 7478 |  struct vm_range *range;
+      |                   ^~~~~
+/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-3/source/kernel/syscall.c: In function ‘do_fork’:
+/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-3/source/kernel/syscall.c:7865:5: warning: this ‘else’ clause does not guard... [-Wmisleading-indentation]
+ 7865 |     else
+      |     ^~~~
+/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-3/source/kernel/syscall.c:7870:2: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘else’
+ 7870 |  if (!new) {
+      |  ^~
+In file included from /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-3/source/complete62-real-ABI.c:51:
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-user-copy-provider-closures-source-1/fixture-fragments-only/REAL-HEADER-ABI-WITNESS.c.inc: At top level:
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-user-copy-provider-closures-source-1/fixture-fragments-only/REAL-HEADER-ABI-WITNESS.c.inc:2:57: error: ‘syscall_copy_int_to_user_bridge’ undeclared here (not in a function); did you mean ‘syscall_copy_to_user_bridge’?
+    2 | _Static_assert(__builtin_types_compatible_p(__typeof__(&syscall_copy_int_to_user_bridge),
+      |                                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                                                         syscall_copy_to_user_bridge
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-user-copy-provider-closures-source-1/fixture-fragments-only/REAL-HEADER-ABI-WITNESS.c.inc:2:16: error: expression in static assertion is not an integer
+    2 | _Static_assert(__builtin_types_compatible_p(__typeof__(&syscall_copy_int_to_user_bridge),
+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~

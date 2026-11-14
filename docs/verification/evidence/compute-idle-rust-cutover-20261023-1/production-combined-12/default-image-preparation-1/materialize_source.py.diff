@@ -1,0 +1,36 @@
+--- frozen11/materialize_source.py
++++ candidate12/materialize_source.py
+@@ -13,13 +13,13 @@
+ import time
+ 
+ REPO = Path('/home/holden/mckernel')
+-OUT = Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-11/default-image-preparation-1/source-materialization-attempt-1')
+-BASE = Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-10/default-image-preparation-1/source-materialization-attempt-1')
++OUT = Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-12/default-image-preparation-1/source-materialization-attempt-1')
++BASE = Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-11/default-image-preparation-1/source-materialization-attempt-1')
+ SOURCE = BASE / 'materialized-source'
+ DEST = OUT / 'materialized-source'
+-AUTHORITY = Path('/home/holden/mckernel/docs/verification/evidence/compute-process-next-body-cutover-20261023-1/next-slice-2/CANONICAL-INTEGRATION.json')
+-BASE_CANONICAL_SHA = '9692f871af1200e00d2627510fb8d2e48b159e330d5438f28998bd03149b6fa3'
+-POST = {'kernel/process.c': '89222734622ac054510b2c2cf6fbce1c83d3aa5dc764a3268e78be5e4c5949fa', 'kernel/rust/sched_helpers.rs': '75cdf5430eb6ecec8d0cd0c7c10192d678e656427589fda79dd68990fa3d09bd'}
++AUTHORITY = Path('/home/holden/mckernel/docs/verification/evidence/compute-process-next-body-cutover-20261023-1/next-slice-3/CANONICAL-INTEGRATION.json')
++BASE_CANONICAL_SHA = 'a96e1e20e2a79b38027c4f7ccef661b0a7cecb67f3c3968f59ccabef2925ee5a'
++POST = {'kernel/process.c': 'e2f2562b32ec462d9ee78c74dee4222485a69c4a3e2a81a332663fcef7e2b52d', 'kernel/rust/sched_helpers.rs': 'd16200db3054d88a83752fda1383d6c101d24de4b787bd78cd42edb46ab251fc'}
+ MAX_GROWTH = 256 << 20
+ EXTRA = 16 << 20
+ SCOPE = 'Functional McKernel OS/apps and Rust/assembly migration only; no security testing.'
+@@ -45,12 +45,12 @@
+ 
+ def main():
+     begin = time.monotonic()
+-    need(os.getuid() == os.geteuid() == 1000 and os.sched_getaffinity(0) == {6}, 'ordinary CPU6 grant required')
++    need(os.getuid() == os.geteuid() == 1000 and os.sched_getaffinity(0) == {0}, 'ordinary CPU0 grant required')
+     need(not os.path.lexists(DEST), 'fresh coherent destination required')
+     baseline = json.loads((BASE / 'source-inputs.json').read_text())
+     need(sha(canonical(baseline)) == BASE_CANONICAL_SHA, 'accepted exact base source manifest')
+     authority_raw = AUTHORITY.read_bytes();authority = json.loads(authority_raw)
+-    need(authority['status'] == 'ROOT_CANONICAL_EXACT_TWO_REVIEWED_POSTIMAGES_INTEGRATED' and {p:row['after'] for p,row in authority['changes'].items()} == POST,
++    need(authority['status'] == 'PASS_EXACT_TWO_CANONICAL_POSTIMAGES' and {p:row['after']['sha256'] for p,row in authority['changes'].items()} == POST,
+          'actual reviewed latest two-file canonical integration')
+     document = copy.deepcopy(baseline)
+     changed = []

@@ -1,0 +1,19 @@
+--- arch/x86_64/kernel/syscall.c
++++ arch/x86_64/kernel/syscall.c
+@@ -699,6 +699,7 @@
+ }
+ 
+ 
++#ifndef MCKERNEL_RUST_F06_MMAP_FLAG_PROVIDERS
+ int
+ arch_mmap_supported_flags_bridge(void)
+ {
+@@ -736,6 +737,8 @@
+ 		| MAP_EXECUTABLE
+ 		| MAP_NONBLOCK;
+ }
++#endif
++
+ #endif
+ 
+ #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS

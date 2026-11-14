@@ -1,0 +1,51 @@
+--- /home/holden/mckernel-work/resume-20261112T094452Z-native-binding-1/nsfs-normal-fixed30-1/candidate/package/supervisor_entry.py
++++ /home/holden/mckernel-work/resume-20261112T094452Z-native-first-repeat-1f5f-binding-1/current81012-diagnostic-successor-1/supervisor_entry.PROPOSED.py
+@@ -6,6 +6,7 @@
+ import json
+ import os
+ import signal
++import sys
+ import stat
+ import struct
+ import time
+@@ -47,6 +48,24 @@
+     finally:os.close(parent)
+ 
+ 
++
++_NATIVE_DIAGNOSTIC_PRIMARY=[]
++_NATIVE_DIAGNOSTIC_SECONDARY=[]
++
++
++def _report_native_failure(root_fd,phase,request,error):
++    try:
++        tb=BaseException.__dict__['__traceback__'].__get__(error,type(error))
++        _NATIVE_DIAGNOSTIC_PRIMARY.append((phase,error,tb))
++        # The registered native loader already loaded this exact module.
++        # Never import an unverified filesystem fallback to produce a report.
++        reporting=sys.modules['operation_watchdog']
++        return reporting.report_native_context(root_fd,phase,request.cfg['nonce'],request.sha256,error)
++    except BaseException as reporting_error:
++        _NATIVE_DIAGNOSTIC_SECONDARY.append((reporting_error,BaseException.__dict__['__traceback__'].__get__(reporting_error,type(reporting_error))))
++        return False
++
++
+ def verify_actual_operation_gates(request=None,root_fd=None,lease=None,owner_module=None):
+     if request is not None:
+         import native_resource_admission as native
+@@ -59,6 +78,7 @@
+         except BaseException as error:
+             # The constructor may already own a compat pidfd, native FLOCK or
+             # journal. Keep the preallocated object/process under its watchdog.
++            _report_native_failure(root_fd,'NATIVE_ADMISSION_CONSTRUCTOR_FAILED',request,error)
+             admission.retain_unknown(error)
+             while True:signal.pause()
+         return admission
+@@ -123,6 +143,7 @@
+         # uncertain acquisitions, source states or descendants stay reachable
+         # and under the original watchdog; no broad native release is inferred.
+         if admission is not None and getattr(admission,'state',None)!='RELEASED':
++            _report_native_failure(root_fd,'NATIVE_SUPERVISOR_POST_ACQUISITION_FAILED',request,error)
+             admission.retain_unknown(error)
+             while True:signal.pause()
+         raise

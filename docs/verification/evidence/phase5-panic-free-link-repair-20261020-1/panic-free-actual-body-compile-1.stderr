@@ -1,0 +1,15 @@
+error[E0425]: cannot find function `insert` in module `registry`
+  --> /home/holden/mckernel-work/host-preparation/phase5-kernel-panic-free-link-repair-20261020-1/fixture-1/panic-free-cases.inc:40:23
+   |
+40 |  let handle=registry::insert(private).unwrap();
+   |                       ^^^^^^ not found in `registry`
+
+error[E0425]: cannot find function `insert` in module `registry`
+  --> /home/holden/mckernel-work/host-preparation/phase5-kernel-panic-free-link-repair-20261020-1/fixture-1/panic-free-cases.inc:47:19
+   |
+47 |   match registry::insert(pointer){
+   |                   ^^^^^^ not found in `registry`
+
+error: aborting due to 2 previous errors
+
+For more information about this error, try `rustc --explain E0425`.

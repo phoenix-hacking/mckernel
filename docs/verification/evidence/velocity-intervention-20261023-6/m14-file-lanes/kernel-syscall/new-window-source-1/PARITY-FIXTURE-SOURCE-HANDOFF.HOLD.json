@@ -1,0 +1,52 @@
+{
+  "actual_wrapper_sources": [
+    "sys_swapout",
+    "sys_linux_mlock"
+  ],
+  "controlled_providers": [
+    "kprintf captures exact format/scalar ABI and host rendered bytes",
+    "ihk_mc_get_processor_id returns19 and records conditional invocation",
+    "body_result providers record args/order and return-73; no pageout/offload"
+  ],
+  "files": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-1/prepare_parity_source_only.py",
+      "sha256": "3ce947b3e865d263635f426de01379401ca46e529264ea52853e48f23e1800af"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-1/parity.rs",
+      "sha256": "3fc12133eb2a5b42887c3bcf2e8ab000c809e838ab73c6a4c08c19ea100a42c6"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-1/parity.c",
+      "sha256": "929e37f8d3c49079aa57741a9fbf8a7f25471c0512f28fa871bea067ffee6fa6"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-1/ACTUAL-SELECTED-RUST-WRAPPERS.rs.inc",
+      "sha256": "360b1263b0104b8db8d29d502b6cdaaf5e73953c0480534ba19d13f2c24b2bea"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-1/ACTUAL-CONTEXT-ABI.rs.inc",
+      "sha256": "9c263c9dbbcf45c3f89285026e5f046bf9a2513eefe5fe219ffab1b76fb9dd3c"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-1/io_diagnostics.RUST-FRAGMENT.rs.inc",
+      "sha256": "fa1899e7849915f9f0b2f7dd698632338d0eeada447e69275a047753e44d4743"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-1/RUN-PROPOSED-AFTER-GRANT.sh",
+      "sha256": "b5df673ff9cfb5627713ff3716dc712d007ccba51dcbea8e58c2dadec3612af4"
+    }
+  ],
+  "limits": "One ordinary unprivileged CPU, AS2GiB, no core, FD256, file32MiB, stack2MiB; compiler CPU60/wall90; executable CPU10/wall15.",
+  "native_default_or_fullfile_credit": false,
+  "null_context_cases_expected": 2,
+  "proposed_command": "bash /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-1/RUN-PROPOSED-AFTER-GRANT.sh /ABS/PINNED/RUSTC GRANTED_SINGLE_CPU /ABS/FRESH/DISJOINT/OUTPUT",
+  "real_header": "lib/include/ihk/debug.h included; compiler dependency shim only",
+  "remaining": "Full actual selected/fallback syscall TU and real-header ABI witness remain separate checks.",
+  "required_grant": "Coordinator actual physical clearance and ordinary compiler/execution grant; not supplied.",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_review": "Observation comparison uses fields, never struct padding; actual original callback bodies retained with symbol-only renames.",
+  "status": "CONTROLLED_PARITY_FIXTURE_SOURCE_ONLY_NOT_COMPILED_NOT_RUN",
+  "vectors_expected": 375
+}

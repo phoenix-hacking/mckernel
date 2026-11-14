@@ -54,6 +54,18 @@
 #ifdef DEBUG_PRINT_PROCESS
 #undef DDEBUG_DEFAULT
 #define DDEBUG_DEFAULT DDEBUG_PRINT
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+/* Existing compile-time dump gate, exposed as readonly ABI data only. */
+#ifdef MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE
+extern const int process_dump_tree_enabled;
+_Static_assert((1) == 0, "process_dump_tree_enabled selected supported configuration");
+#else
+#line 59
+const int process_dump_tree_enabled = 1;
+#endif
+#line 60
+#else
+#line 61
 static void dtree(struct rb_node *node, int l) {
 	struct vm_range *range;
 	if (!node)
@@ -69,9 +81,24 @@ static void dump_tree(struct process_vm *vm) {
 	kprintf("dump_tree %p\n", vm);
 	dtree(vm->vm_range_tree.rb_node, 1);
 }
+#endif
 #else
+#line 78
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#ifdef MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE
+extern const int process_dump_tree_enabled;
+_Static_assert((0) == 0, "process_dump_tree_enabled selected supported configuration");
+#else
+#line 79
+const int process_dump_tree_enabled = 0;
+#endif
+#line 80
+#else
+#line 81
 static void dump_tree(struct process_vm *vm) {}
 #endif
+#endif
+#line 84
 
 extern struct thread *arch_switch_context(struct thread *prev, struct thread *next);
 extern long alloc_debugreg(struct thread *proc);
@@ -79,16 +106,38 @@ extern void save_debugreg(unsigned long *debugreg);
 extern void restore_debugreg(unsigned long *debugreg);
 extern void clear_debugreg(void);
 extern void clear_single_step(struct thread *proc);
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int vm_range_insert(struct process_vm *vm, struct vm_range *newrange);
+#else
 static int vm_range_insert(struct process_vm *vm,
 		struct vm_range *newrange);
+#endif
 static struct vm_range *vm_range_find(struct process_vm *vm,
 		unsigned long addr);
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int copy_user_ranges(struct process_vm *vm, struct process_vm *orgvm);
+#else
 static int copy_user_ranges(struct process_vm *vm, struct process_vm *orgvm);
+#endif
+/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+ * Preserve the original tracked callsite numbers; do not use Rust line!/file!.
+ * This selector is before the existing #line reset, so all later diagnostic
+ * metadata keeps its unchanged original logical line and __FILE__ identity. */
+#ifdef MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE
+#define PROCESS_TRACKED_LINE_STORAGE(name, value) extern const int name
+#else
+#define PROCESS_TRACKED_LINE_STORAGE(name, value) const int name = value
+#endif
+#line 100
 extern void __runq_add_proc(struct thread *proc, int cpu_id);
 extern void lapic_timer_enable(unsigned int clocks);
 extern void lapic_timer_disable();
 
-static const struct timer_runtime_offsets process_timer_runtime_offsets = {
+#ifdef MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE
+extern const struct timer_runtime_offsets process_timer_runtime_offsets;
+#else
+#line 104
+PROCESS_SCHED_PUBLIC_BRIDGE const struct timer_runtime_offsets process_timer_runtime_offsets = {
 	.thread_status_offset = __builtin_offsetof(struct thread, status),
 	.thread_sched_list_offset = __builtin_offsetof(struct thread, sched_list),
 	.thread_spin_sleep_lock_offset =
@@ -109,27 +158,70 @@ static const struct timer_runtime_offsets process_timer_runtime_offsets = {
 	.timer_list_offset = __builtin_offsetof(struct timer, list),
 	.timer_thread_offset = __builtin_offsetof(struct timer, thread),
 };
+#endif
+#line 125
 
-static unsigned long process_timer_spin_lock_bridge(unsigned long lock_addr)
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+unsigned long process_timer_spin_lock_bridge(unsigned long lock_addr);
+#else
+#line 126
+PROCESS_SCHED_PUBLIC_BRIDGE unsigned long process_timer_spin_lock_bridge(unsigned long lock_addr)
 {
 	return ihk_mc_spinlock_lock((ihk_spinlock_t *)lock_addr);
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 127
+#else
+#line 129
+#endif
 
-static void process_timer_spin_unlock_bridge(unsigned long lock_addr,
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_timer_spin_unlock_bridge(unsigned long lock_addr,
+					     unsigned long irqstate);
+#else
+#line 131
+PROCESS_SCHED_PUBLIC_BRIDGE void process_timer_spin_unlock_bridge(unsigned long lock_addr,
 					     unsigned long irqstate)
 {
 	ihk_mc_spinlock_unlock((ihk_spinlock_t *)lock_addr, irqstate);
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 133
+#else
+#line 135
+#endif
 
-static void process_timer_lapic_enable_bridge(unsigned int clocks)
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_timer_lapic_enable_bridge(unsigned int clocks);
+#else
+#line 137
+PROCESS_SCHED_PUBLIC_BRIDGE void process_timer_lapic_enable_bridge(unsigned int clocks)
 {
 	lapic_timer_enable(clocks);
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 138
+#else
+#line 140
+#endif
 
-static void process_timer_lapic_disable_bridge(void)
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_timer_lapic_disable_bridge(void);
+#else
+#line 142
+PROCESS_SCHED_PUBLIC_BRIDGE void process_timer_lapic_disable_bridge(void)
 {
 	lapic_timer_disable();
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 143
+#else
+#line 145
+#endif
 extern int num_processors;
 extern ihk_spinlock_t cpuid_head_lock;
 int ptrace_detach(int pid, int data);
@@ -153,105 +245,193 @@ int update_process_page_table(struct process_vm *vm,
 int split_process_memory_range(struct process_vm *vm, struct vm_range *range,
 			       uintptr_t addr, struct vm_range **splitp);
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_LOCAL_COMPANIONS
+/* These C-only feature axes have no paired Rust configuration input. */
+#if defined(RUSAGE_DEBUG) || defined(TIMER_CPU_ID) || \
+    defined(ARCH_MEMCLEAR) || defined(ENABLE_FUGAKU_HACKS)
+#error "Unqualified final process metadata profile; disable local companions for C fallback"
+#endif
+extern const char *const process_tracked_allocator_source_file;
+#else
+#line 170
+const char *const process_tracked_allocator_source_file = __FILE__;
+#endif
+#line 171
+#endif
+#line 172
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+PROCESS_TRACKED_LINE_STORAGE(process_mckfd_free_bridge_source_line, 171);
+void process_mckfd_free_bridge(struct mckfd *fdp);
+#else
+#line 169
 void process_mckfd_free_bridge(struct mckfd *fdp)
 {
 	kfree_tracked(fdp, __FILE__, __LINE__);
 }
+#endif
+#line 173
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_mcs_writer_lock_bridge(unsigned long lock_addr, void *node);
+#else
+#line 174
 void process_mcs_writer_lock_bridge(unsigned long lock_addr, void *node)
 {
 	mcs_rwlock_writer_lock((struct mcs_rwlock_lock *)lock_addr,
 			       (struct mcs_rwlock_node_irqsave *)node);
 }
+#endif
+#line 179
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_mcs_writer_unlock_bridge(unsigned long lock_addr, void *node);
+#else
+#line 180
 void process_mcs_writer_unlock_bridge(unsigned long lock_addr, void *node)
 {
 	mcs_rwlock_writer_unlock((struct mcs_rwlock_lock *)lock_addr,
 				 (struct mcs_rwlock_node_irqsave *)node);
 }
+#endif
+#line 185
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_mcs_reader_lock_bridge(unsigned long lock_addr, void *node);
+#else
+#line 186
 void process_mcs_reader_lock_bridge(unsigned long lock_addr, void *node)
 {
 	mcs_rwlock_reader_lock((struct mcs_rwlock_lock *)lock_addr,
 			       (struct mcs_rwlock_node_irqsave *)node);
 }
+#endif
+#line 191
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_mcs_reader_unlock_bridge(unsigned long lock_addr, void *node);
+#else
+#line 192
 void process_mcs_reader_unlock_bridge(unsigned long lock_addr, void *node)
 {
 	mcs_rwlock_reader_unlock((struct mcs_rwlock_lock *)lock_addr,
 				 (struct mcs_rwlock_node_irqsave *)node);
 }
+#endif
+#line 197
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_hold_thread_bridge(void *thread);
+#else
+#line 198
 void process_hold_thread_bridge(void *thread)
 {
 	hold_thread((struct thread *)thread);
 }
+#endif
+#line 202
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
-void process_ptrace_mcs_lock_noirq_bridge(unsigned long lock_addr, void *node)
-{
-	mcs_rwlock_writer_lock_noirq((struct mcs_rwlock_lock *)lock_addr,
-				     (struct mcs_rwlock_node *)node);
-}
+void process_ptrace_mcs_lock_noirq_bridge(unsigned long lock_addr, void *node);
+#line 209
 
-void process_ptrace_mcs_unlock_noirq_bridge(unsigned long lock_addr, void *node)
-{
-	mcs_rwlock_writer_unlock_noirq((struct mcs_rwlock_lock *)lock_addr,
-				       (struct mcs_rwlock_node *)node);
-}
+void process_ptrace_mcs_unlock_noirq_bridge(unsigned long lock_addr, void *node);
+#line 215
 
-int process_ptrace_alloc_debugreg_bridge(void *thread)
-{
-	return alloc_debugreg((struct thread *)thread);
-}
+int process_ptrace_alloc_debugreg_bridge(void *thread);
+#line 220
 
-void process_ptrace_clear_single_step_bridge(void *thread)
-{
-	clear_single_step((struct thread *)thread);
-}
+void process_ptrace_clear_single_step_bridge(void *thread);
+#line 225
 
-void process_ptrace_hold_thread_bridge(void *thread)
-{
-	hold_thread((struct thread *)thread);
-}
+void process_ptrace_hold_thread_bridge(void *thread);
+#line 230
 
-void process_ptrace_traceme_log_bridge(int event, int pid,
-				       unsigned long value, int error)
-{
-	switch (event) {
-	case PROCESS_PTRACE_TRACEME_LOG_ENTER:
-		dkprintf("ptrace_traceme,pid=%d,proc->parent=%p\n",
-			 pid, (void *)value);
-		break;
-	case PROCESS_PTRACE_TRACEME_LOG_PARENT:
-		dkprintf("ptrace_traceme,parent->pid=%d\n", pid);
-		break;
-	case PROCESS_PTRACE_TRACEME_LOG_RETURN:
-		dkprintf("ptrace_traceme,returning,error=%d\n", error);
-		break;
-	default:
-		break;
-	}
-}
+/* Original diagnostic identities retained as declarative data only. */
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+#if !defined(MCKERNEL_RUST_PROCESS_HELPERS) || \
+    !defined(MCKERNEL_PROCESS_DDEBUG_FLAGS) || !defined(MCKERNEL_PROCESS_DDEBUG_FILE)
+#error "process verbose storage requires paired Rust/build inputs"
+#endif
+_Static_assert(DDEBUG_DEFAULT == MCKERNEL_PROCESS_DDEBUG_FLAGS,
+    "Rust process debug flags must match C DDEBUG_DEFAULT");
+_Static_assert(__builtin_strcmp(__FILE__, MCKERNEL_PROCESS_DDEBUG_FILE) == 0,
+    "Rust process debug filename must match actual C __FILE__");
+extern struct ddebug process_ptrace_traceme_debug[3];
+#else
+#line 232
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_ptrace_traceme_debug[3] = {
+    { .file=__FILE__, .func="process_ptrace_traceme_log_bridge", .line=236, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="process_ptrace_traceme_log_bridge", .line=240, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="process_ptrace_traceme_log_bridge", .line=243, .flags=DDEBUG_DEFAULT },
+};
+#endif
+#line 238
+void process_ptrace_traceme_log_bridge(int event, int pid, unsigned long value, int error);
+#line 249
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 247
+#else
+#line 228
 #endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+PROCESS_TRACKED_LINE_STORAGE(process_policy_free_bridge_source_line, 253);
+void process_policy_free_bridge(void *policy);
+#else
+#line 251
 void process_policy_free_bridge(void *policy)
 {
 	kfree_tracked(policy, __FILE__, __LINE__);
 }
+#endif
+#line 255
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+PROCESS_TRACKED_LINE_STORAGE(process_optional_free_bridge_source_line, 258);
+void process_optional_free_bridge(void *ptr);
+#else
+#line 256
 void process_optional_free_bridge(void *ptr)
 {
 	kfree_tracked(ptr, __FILE__, __LINE__);
 }
+#endif
+#line 260
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int process_default_ncpus_bridge(void);
+#else
+#line 261
 int process_default_ncpus_bridge(void)
 {
 	struct ihk_mc_cpu_info *infop = ihk_mc_get_cpu_info();
 
 	return infop ? infop->ncpus : -EINVAL;
 }
+#endif
+#line 267
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+/* Retained source selector data, no C computation. */
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_create_cpu_debug;
+#else
+#line 270
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_create_cpu_debug = {
+    .file = __FILE__,
+    .func = "process_create_cpu_log_bridge",
+    .line = 276,
+    .flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 277
+void process_create_cpu_log_bridge(int event, int pid, int cpu);
+#else
+#line 268
 void process_create_cpu_log_bridge(int event, int pid, int cpu)
 {
 	switch (event) {
@@ -267,6 +447,8 @@ void process_create_cpu_log_bridge(int event, int pid, int cpu)
 		break;
 	}
 }
+#endif
+#line 283
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 void process_spin_init_bridge(unsigned long lock_addr);
@@ -288,13 +470,13 @@ void process_waitq_init_bridge(unsigned long waitq_addr)
 	waitq_init((waitq_t *)waitq_addr);
 }
 #endif
-
-static void process_user_context_modify_bridge(void *uctx, int reg,
-					       unsigned long value)
-{
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_user_context_modify_bridge(void *, int, unsigned long);
+#else
+static void process_user_context_modify_bridge(void *uctx, int reg, unsigned long value) {
 	ihk_mc_modify_user_context(uctx, reg, value);
 }
-
+#endif
 #ifdef PROFILE_ENABLE
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 void process_mcs_lock_init_bridge(unsigned long lock_addr);
@@ -315,17 +497,30 @@ void process_vm_rwspin_init_bridge(unsigned long lock_addr)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_vm_init_numa_log_bridge(int numa_id);
+#else
+#line 331
 void process_vm_init_numa_log_bridge(int numa_id)
 {
 	kprintf("%s: error: NUMA id is larger than mask size!\n",
 		"init_process_vm");
 	(void)numa_id;
 }
+#endif
+#line 337
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+PROCESS_TRACKED_LINE_STORAGE(process_alloc_bridge_source_line, 340);
+void *process_alloc_bridge(unsigned long size, unsigned long flags);
+#else
+#line 338
 void *process_alloc_bridge(unsigned long size, unsigned long flags)
 {
 	return kmalloc_tracked(size, flags, __FILE__, __LINE__);
 }
+#endif
+#line 342
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 void *process_pt_create_bridge(unsigned long flags);
@@ -415,13 +610,33 @@ static void process_sched_waitq_finish_bridge(unsigned long waitq_addr,
 }
 #endif
 
-static void process_sched_migrate_log_bridge(unsigned long thread_addr,
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+/* Existing diagnostic selector identity from the displaced C callsite.
+ * This is declarative __verbose data consumed by the existing Rust registry. */
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_sched_migrate_debug;
+#else
+#line 434
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_sched_migrate_debug = {
+    .file = __FILE__,
+    .func = "process_sched_migrate_log_bridge",
+    .line = 422, /* source-bound original dkprintf line; keep control selectors */
+    .flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 441
+#else
+#line 442
+PROCESS_SCHED_PUBLIC_BRIDGE void process_sched_migrate_log_bridge(unsigned long thread_addr,
 					     int tid, int cpu_id)
 {
 	(void)thread_addr;
 	dkprintf("%s: tid: %d -> cpu: %d\n",
 		 "sched_request_migrate", tid, cpu_id);
 }
+#endif
+#line 450
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 int process_sched_vector_bridge(int vector_key);
@@ -456,6 +671,12 @@ static void process_sched_waitq_wakeup_bridge(unsigned long waitq_addr)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_sched_do_migrate_log_bridge(unsigned long thread_addr,
+						int tid, int old_cpu_id,
+						int new_cpu_id);
+#else
+#line 484
 PROCESS_SCHED_PUBLIC_BRIDGE void process_sched_do_migrate_log_bridge(unsigned long thread_addr,
 						int tid, int old_cpu_id,
 						int new_cpu_id)
@@ -464,20 +685,34 @@ PROCESS_SCHED_PUBLIC_BRIDGE void process_sched_do_migrate_log_bridge(unsigned lo
 	dkprintf("%s: migrated TID %d from CPU %d to CPU %d\n",
 		 "do_migrate", tid, old_cpu_id, new_cpu_id);
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 489
+#else
+#line 491
+#endif
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 static void process_release_tid_log_bridge(int tid, void *thread, int new_tid)
 {
 	(void)new_tid;
 	dkprintf("%s: tid %d has been released by %p\n",
 		"__release_tid", tid, thread);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 static void process_replace_tid_log_bridge(int tid, void *thread, int new_tid)
 {
 	dkprintf("%s: tid %d (thread %p) has been relaced with tid %d\n",
 		"__find_and_replace_tid", tid, thread, new_tid);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_release_thread_profile_bridge(void *thread, void *proc);
+#else
+#line 510
 void process_release_thread_profile_bridge(void *thread, void *proc)
 {
 #ifdef PROFILE_ENABLE
@@ -488,11 +723,14 @@ void process_release_thread_profile_bridge(void *thread, void *proc)
 	(void)proc;
 #endif
 }
+#endif
+#line 520
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 void process_procfs_delete_thread_bridge(void *thread);
 void process_destroy_thread_bridge(void *thread);
 void process_release_vm_bridge(void *vm);
+int process_release_vm_checked_bridge(void *vm);
 void process_flush_vm_bridge(void *vm);
 #else
 void process_procfs_delete_thread_bridge(void *thread)
@@ -510,29 +748,70 @@ void process_release_vm_bridge(void *vm)
 	release_process_vm(vm);
 }
 
+int process_release_vm_checked_bridge(void *vm)
+{
+	return release_process_vm_checked((struct process_vm *)vm);
+}
+
 void process_flush_vm_bridge(void *vm)
 {
 	flush_nfo_tlb_mm(vm);
 }
 #endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_free_all_ranges_bridge(void *vm);
+#else
+#line 554
 void process_free_all_ranges_bridge(void *vm)
 {
 	free_all_process_memory_range(vm);
 }
+#endif
+#line 558
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+PROCESS_TRACKED_LINE_STORAGE(process_free_vm_bridge_source_line, 561);
+void process_free_vm_bridge(void *vm);
+#else
+#line 559
 void process_free_vm_bridge(void *vm)
 {
 	kfree_tracked(vm, __FILE__, __LINE__);
 }
+#endif
+#line 563
 
+#ifdef MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
+#error MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE requires MCKERNEL_RUST_PROCESS_HELPERS
+#endif
+extern struct list_head resource_set_list;
+extern mcs_rwlock_lock_t resource_set_lock;
+extern ihk_spinlock_t runq_reservation_lock;
+#else
+#line 564
 struct list_head resource_set_list;
 mcs_rwlock_lock_t    resource_set_lock;
 ihk_spinlock_t runq_reservation_lock;
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 564
+#else
+#line 566
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE
+extern int idle_halt;
+extern int allow_oversubscribe;
+extern int time_sharing;
+#else
+#line 568
 int idle_halt = 0;
 int allow_oversubscribe = 0;
 int time_sharing = 1;
+#endif
+#line 571
 
 #ifndef MCKERNEL_RUST_PROCESS_HELPERS
 static const struct process_init_state_offsets process_init_state_offsets = {
@@ -689,10 +968,16 @@ hold_address_space(struct address_space *asp)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_pt_destroy_bridge(void *page_table);
+#else
+#line 727
 void process_pt_destroy_bridge(void *page_table)
 {
 	ihk_mc_pt_destroy(page_table);
 }
+#endif
+#line 731
 
 #ifndef MCKERNEL_RUST_PROCESS_HELPERS
 void
@@ -709,10 +994,16 @@ release_address_space(struct address_space *asp)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_release_address_space_action_bridge(void *asp);
+#else
+#line 747
 void process_release_address_space_action_bridge(void *asp)
 {
 	release_address_space(asp);
 }
+#endif
+#line 751
 
 #ifndef MCKERNEL_RUST_PROCESS_HELPERS
 void
@@ -725,16 +1016,28 @@ detach_address_space(struct address_space *asp, int pid)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int process_init_process_public_bridge(void *proc, void *parent);
+#else
+#line 763
 int process_init_process_public_bridge(void *proc, void *parent)
 {
 	init_process(proc, parent);
 	return 0;
 }
+#endif
+#line 768
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_proc_init_panic_bridge(void);
+#else
+#line 769
 void process_proc_init_panic_bridge(void)
 {
 	panic("no mem for resource_set");
 }
+#endif
+#line 773
 
 #ifndef MCKERNEL_RUST_PROCESS_HELPERS
 int
@@ -747,12 +1050,22 @@ init_process_vm(struct process *owner, struct address_space *asp, struct process
 #endif
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
-void *process_create_thread_alloc_pages_bridge(int npages,
-					      unsigned long flags)
-{
-	return _ihk_mc_alloc_aligned_pages_node(npages, PAGE_P2ALIGN, flags, -1, IHK_MC_PG_KERNEL, -1, __FILE__, __LINE__);
-}
+PROCESS_TRACKED_LINE_STORAGE(process_create_thread_alloc_pages_source_line, 788);
+void *process_create_thread_alloc_pages_bridge(int npages, unsigned long flags);
+#line 790
 
+#endif /* retain original selected-only page allocator gate */
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void *process_create_thread_address_space_bridge(int nslots);
+void process_create_thread_release_address_space_bridge(void *asp);
+int process_create_thread_init_process_bridge(void *proc, void *parent);
+int process_create_thread_init_vm_bridge(void *owner, void *asp,
+					void *vm);
+void process_create_thread_init_user_bridge(void *thread,
+	unsigned long stack_top, unsigned long user_pc,
+	unsigned long user_sp);
+#else
+#line 791
 void *process_create_thread_address_space_bridge(int nslots)
 {
 	return create_address_space(get_this_cpu_local_var()->resource_set, nslots);
@@ -785,6 +1098,7 @@ void process_create_thread_init_user_bridge(void *thread,
 				 user_pc, user_sp);
 }
 #endif
+#line 823
 
 #ifndef MCKERNEL_RUST_PROCESS_HELPERS
 struct thread *create_thread(unsigned long user_pc,
@@ -954,6 +1268,76 @@ err:
 }
 #endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+struct process_clone_config {
+    int stack_pages;
+    size_t page_size;
+    int page_align;
+    unsigned long nowait;
+    int kernel,ss_disable,sp_reg,pc_reg;
+    const char *file;
+    int lines[5];
+    struct ddebug *debug[5];
+    void (*modify_context)(void *,int,unsigned long);
+    int (*copy_ranges)(struct process_vm *,struct process_vm *);
+};
+#ifndef MCKERNEL_RUST_PROCESS_VERBOSE_LOCAL_COMPANIONS
+#line 1005
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_clone_vm_debug = {
+    .file = __FILE__, .func = "clone_thread",
+    .line = 1098, .flags = DDEBUG_DEFAULT,
+};
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_clone_ranges_debug = {
+    .file = __FILE__, .func = "clone_thread",
+    .line = 1118, .flags = DDEBUG_DEFAULT,
+};
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_clone_ranges_ok_debug = {
+    .file = __FILE__, .func = "clone_thread",
+    .line = 1176, .flags = DDEBUG_DEFAULT,
+};
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_clone_sigcommon_debug = {
+    .file = __FILE__, .func = "clone_thread",
+    .line = 1193, .flags = DDEBUG_DEFAULT,
+};
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_clone_sigshared_debug = {
+    .file = __FILE__, .func = "clone_thread",
+    .line = 1208, .flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 1030
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_LOCAL_COMPANIONS
+#ifndef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+#error local config companions require process verbose data
+#endif
+extern const struct process_clone_config process_clone_config;
+#else
+#line 1030
+const struct process_clone_config process_clone_config = {
+    .stack_pages=KERNEL_STACK_NR_PAGES, .page_size=PAGE_SIZE,
+    .page_align=PAGE_P2ALIGN, .nowait=IHK_MC_AP_NOWAIT,
+    .kernel=IHK_MC_PG_KERNEL, .ss_disable=SS_DISABLE,
+    .sp_reg=IHK_UCR_STACK_POINTER, .pc_reg=IHK_UCR_PROGRAM_COUNTER,
+    .file=__FILE__, .lines={1002,1063,1083,1144,1153},
+    .debug={&process_clone_vm_debug,&process_clone_ranges_debug,
+        &process_clone_ranges_ok_debug,&process_clone_sigcommon_debug,
+        &process_clone_sigshared_debug},
+    .modify_context=process_user_context_modify_bridge,
+    .copy_ranges=copy_user_ranges,
+};
+#endif
+#line 1042
+struct thread *process_clone_thread_body_result(struct thread *,unsigned long,
+        unsigned long,int,const struct process_clone_config *);
+struct thread *clone_thread(struct thread *org,unsigned long pc,unsigned long sp,
+        int clone_flags);
+#else
+#line 1047
+#line 992
 struct thread *
 clone_thread(struct thread *org, unsigned long pc, unsigned long sp,
               int clone_flags)
@@ -1267,6 +1651,13 @@ free_thread:
 	process_thread_action_result(thread, process_free_thread_pages_bridge);
 	return NULL;
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 1359
+#else
+#line 1305
+#endif
+#line 1306
 
 #ifndef MCKERNEL_RUST_PROCESS_HELPERS
 int
@@ -1377,6 +1768,91 @@ struct copy_args {
 	intptr_t fault_addr;
 };
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#ifndef MCKERNEL_RUST_PROCESS_VERBOSE_LOCAL_COMPANIONS
+#line 1417
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_copy_pte_found_debug = {
+    .file = __FILE__, .func = "copy_user_pte",
+    .line = 1460, .flags = DDEBUG_DEFAULT,
+};
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_copy_pte_size_debug = {
+    .file = __FILE__, .func = "copy_user_pte",
+    .line = 1461, .flags = DDEBUG_DEFAULT,
+};
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_copy_pte_allocated_debug = {
+    .file = __FILE__, .func = "copy_user_pte",
+    .line = 1471, .flags = DDEBUG_DEFAULT,
+};
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_copy_pte_zeroed_debug = {
+    .file = __FILE__, .func = "copy_user_pte",
+    .line = 1494, .flags = DDEBUG_DEFAULT,
+};
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_copy_pte_copied_debug = {
+    .file = __FILE__, .func = "copy_user_pte",
+    .line = 1496, .flags = DDEBUG_DEFAULT,
+};
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_copy_pte_installed_debug = {
+    .file = __FILE__, .func = "copy_user_pte",
+    .line = 1514, .flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 1447
+struct process_copy_entry_config {
+    size_t page_size;
+    int page_shift;
+    unsigned long nowait;
+    int user_category;
+    int kernel_category;
+    unsigned long wipe_on_fork;
+    const char *file;
+    int alloc_line;
+    int free_line;
+    int visit_flags;
+    struct ddebug *found_debug;
+    struct ddebug *size_debug;
+    struct ddebug *allocated_debug;
+    struct ddebug *zeroed_debug;
+    struct ddebug *copied_debug;
+    struct ddebug *installed_debug;
+};
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_LOCAL_COMPANIONS
+#ifndef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+#error local config companions require process verbose data
+#endif
+extern const struct process_copy_entry_config process_copy_entry_config;
+#else
+#line 1465
+const struct process_copy_entry_config process_copy_entry_config = {
+    .page_size = PAGE_SIZE, .page_shift = PAGE_SHIFT,
+    .nowait = IHK_MC_AP_NOWAIT, .user_category = IHK_MC_PG_USER,
+    .kernel_category = IHK_MC_PG_KERNEL, .wipe_on_fork = VR_WIPEONFORK,
+    .file = __FILE__, .alloc_line = 1464, .free_line = 1520,
+    .visit_flags = VPTEF_SKIP_NULL,
+    .found_debug = &process_copy_pte_found_debug,
+    .size_debug = &process_copy_pte_size_debug,
+    .allocated_debug = &process_copy_pte_allocated_debug,
+    .zeroed_debug = &process_copy_pte_zeroed_debug,
+    .copied_debug = &process_copy_pte_copied_debug,
+    .installed_debug = &process_copy_pte_installed_debug,
+};
+#endif
+#line 1478
+
+int process_copy_user_pte_body_result(void *,void *,pte_t *,void *,int,
+        size_t,int,unsigned long,int,int,unsigned long,const char *,int,int,
+        struct ddebug *,struct ddebug *,struct ddebug *,
+        struct ddebug *,struct ddebug *,struct ddebug *);
+int copy_user_pte(void *arg0,page_table_t src_pt,pte_t *src_ptep,
+        void *pgaddr,int pgshift);
+#else
+#line 1486
+#line 1415
 static int copy_user_pte(void *arg0, page_table_t src_pt, pte_t *src_ptep, void *pgaddr, int pgshift)
 {
 	struct copy_args * const args = arg0;
@@ -1486,6 +1962,13 @@ out:
 	}
 	return error;
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 1594
+#else
+#line 1524
+#endif
+#line 1525
 
 struct vm_range *process_add_range_alloc_bridge(unsigned long size);
 void process_add_range_free_bridge(struct vm_range *range);
@@ -1497,6 +1980,10 @@ int process_visit_pte_range_bridge(void *page_table, unsigned long start,
 int process_memory_range_free_bridge(struct process_vm *vm,
 				     struct vm_range *range);
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int copy_user_ranges(struct process_vm *,struct process_vm *);
+#else
+#line 1535
 static struct vm_range *process_copy_range_lookup_bridge(struct process_vm *vm,
 		unsigned long start, unsigned long end)
 {
@@ -1534,13 +2021,33 @@ static int copy_user_ranges(struct process_vm *vm, struct process_vm *orgvm)
 			process_memory_range_free_bridge,
 			process_copy_user_ranges_log_bridge);
 }
+#endif
+#line 1573
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+unsigned long process_update_page_table_attr_bridge(unsigned long flag,
+		unsigned long fault, void *ptep);
+#else
+#line 1574
 unsigned long process_update_page_table_attr_bridge(unsigned long flag,
 		unsigned long fault, void *ptep)
 {
 	return arch_vrflag_to_ptattr(flag, fault, ptep);
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 1576
+#else
+#line 1578
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int process_update_page_table_set_range_bridge(void *page_table,
+		struct process_vm *vm, unsigned long start, unsigned long end,
+		unsigned long phys, unsigned long attr, int pgshift,
+		struct vm_range *range, int flags);
+#else
+#line 1580
 int process_update_page_table_set_range_bridge(void *page_table,
 		struct process_vm *vm, unsigned long start, unsigned long end,
 		unsigned long phys, unsigned long attr, int pgshift,
@@ -1549,12 +2056,28 @@ int process_update_page_table_set_range_bridge(void *page_table,
 	return ihk_mc_pt_set_range(page_table, vm, (void *)start, (void *)end,
 			phys, attr, pgshift, range, flags);
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 1585
+#else
+#line 1587
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_update_page_table_log_bridge(int error);
+#else
+#line 1589
 void process_update_page_table_log_bridge(int error)
 {
 	kprintf("update_process_page_table:ihk_mc_pt_set_range failed. %d\n",
 		error);
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 1591
+#else
+#line 1593
+#endif
 
 #ifndef MCKERNEL_RUST_PROCESS_HELPERS
 int update_process_page_table(struct process_vm *vm,
@@ -1569,29 +2092,78 @@ int update_process_page_table(struct process_vm *vm,
 }
 #endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int process_split_shm_lookup_page_bridge(struct memobj *obj, long off,
+		int p2align, uintptr_t *physp, unsigned long *pflag);
+#else
+#line 1608
 int process_split_shm_lookup_page_bridge(struct memobj *obj, long off,
 		int p2align, uintptr_t *physp, unsigned long *pflag)
 {
 	return memobj_lookup_page(obj, off, p2align, physp, pflag);
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 1610
+#else
+#line 1612
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void *process_split_shm_phys_to_page_bridge(unsigned long phys);
+#else
+#line 1614
 void *process_split_shm_phys_to_page_bridge(unsigned long phys)
 {
 	return phys_to_page(phys);
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 1615
+#else
+#line 1617
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int process_split_shm_update_page_bridge(struct memobj *obj,
+		void *page_table, void *page, void *vaddr);
+#else
+#line 1619
 int process_split_shm_update_page_bridge(struct memobj *obj,
 		void *page_table, void *page, void *vaddr)
 {
 	return memobj_update_page(obj, page_table, page, vaddr);
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 1621
+#else
+#line 1623
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+PROCESS_TRACKED_LINE_STORAGE(process_split_range_alloc_source_line, 1628);
+struct vm_range *process_split_range_alloc_bridge(unsigned long size,
+		unsigned long flags);
+#else
+#line 1625
 struct vm_range *process_split_range_alloc_bridge(unsigned long size,
 		unsigned long flags)
 {
 	return kmalloc_tracked(size, flags, __FILE__, __LINE__);
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 1627
+#else
+#line 1629
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_split_range_alloc_log_bridge(struct process_vm *vm,
+		struct vm_range *range, unsigned long addr, void *splitp);
+#else
+#line 1631
 void process_split_range_alloc_log_bridge(struct process_vm *vm,
 		struct vm_range *range, unsigned long addr, void *splitp)
 {
@@ -1599,25 +2171,66 @@ void process_split_range_alloc_log_bridge(struct process_vm *vm,
 			"kmalloc failed\n",
 			vm, range->start, range->end, addr, splitp);
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 1635
+#else
+#line 1637
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_split_range_publish_log_bridge(int error);
+#else
+#line 1639
 void process_split_range_publish_log_bridge(int error)
 {
 	kprintf("%s: ERROR: could not insert range: %d\n",
 		"split_process_memory_range", error);
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 1641
+#else
+#line 1643
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int process_split_range_pt_split_bridge(void *page_table,
+		struct process_vm *vm, struct vm_range *range, void *addr);
+#else
+#line 1645
 int process_split_range_pt_split_bridge(void *page_table,
 		struct process_vm *vm, struct vm_range *range, void *addr)
 {
 	return ihk_mc_pt_split(page_table, vm, range, addr);
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 1647
+#else
+#line 1649
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_split_range_pt_log_bridge(int error);
+#else
+#line 1651
 void process_split_range_pt_log_bridge(int error)
 {
 	ekprintf("split_process_memory_range:"
 			"ihk_mc_pt_split failed. %d\n", error);
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 1653
+#else
+#line 1655
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_split_shm_log_bridge(int event, int error);
+#else
+#line 1657
 void process_split_shm_log_bridge(int event, int error)
 {
 	switch (event) {
@@ -1633,18 +2246,64 @@ void process_split_shm_log_bridge(int event, int error)
 		break;
 	}
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 1669
+#else
+#line 1671
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+unsigned long process_split_page_pgshift_offset_bridge(void);
+#else
+#line 1672
 unsigned long process_split_page_pgshift_offset_bridge(void)
 {
 	return __builtin_offsetof(struct page, pgshift);
 }
+#endif
+#line 1676
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int process_split_range_insert_bridge(struct process_vm *vm,
+		struct vm_range *range);
+#else
+#line 1677
 int process_split_range_insert_bridge(struct process_vm *vm,
 		struct vm_range *range)
 {
 	return vm_range_insert(vm, range);
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 1679
+#else
+#line 1681
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_remaining_range_debug[8];
+#else
+#line 1684
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_remaining_range_debug[8] = {
+ { .file=__FILE__, .func="process_split_range_public_log_bridge", .line=1689, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_split_range_public_log_bridge", .line=1693, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_join_range_log_bridge", .line=1825, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_join_range_log_bridge", .line=1830, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_flush_memory_debug_bridge", .line=2018, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_flush_memory_debug_bridge", .line=2020, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_remove_range_log_bridge", .line=2050, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_remove_range_log_bridge", .line=2064, .flags=DDEBUG_DEFAULT },
+};
+#endif
+#line 1695
+void process_split_range_public_log_bridge(int event, struct process_vm *vm,
+		struct vm_range *range, unsigned long addr,
+		struct vm_range **splitp, struct vm_range *newrange, int error);
+#else
+#line 1683
 void process_split_range_public_log_bridge(int event, struct process_vm *vm,
 		struct vm_range *range, unsigned long addr,
 		struct vm_range **splitp, struct vm_range *newrange, int error)
@@ -1666,6 +2325,17 @@ void process_split_range_public_log_bridge(int event, struct process_vm *vm,
 		break;
 	}
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 1719
+#else
+#line 1704
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 1701
+#else
+#line 1703
+#endif
 
 #ifdef ENABLE_TOFU
 void process_split_range_tofu_init_bridge(struct vm_range *range)
@@ -1777,11 +2447,23 @@ int process_join_range_tofu_bridge(struct process_vm *vm,
 }
 #endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+PROCESS_TRACKED_LINE_STORAGE(process_range_kfree_bridge_source_line, 1817);
+void process_range_kfree_bridge(struct vm_range *range);
+#else
+#line 1815
 void process_range_kfree_bridge(struct vm_range *range)
 {
 	kfree_tracked(range, __FILE__, __LINE__);
 }
+#endif
+#line 1819
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_join_range_log_bridge(int event, struct process_vm *vm,
+		struct vm_range *surviving, struct vm_range *merging, int error);
+#else
+#line 1820
 void process_join_range_log_bridge(int event, struct process_vm *vm,
 		struct vm_range *surviving, struct vm_range *merging, int error)
 {
@@ -1799,6 +2481,12 @@ void process_join_range_log_bridge(int event, struct process_vm *vm,
 		break;
 	}
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 1834
+#else
+#line 1836
+#endif
 
 #ifndef MCKERNEL_RUST_PROCESS_HELPERS
 int join_process_memory_range(struct process_vm *vm,
@@ -1823,21 +2511,62 @@ int join_process_memory_range(struct process_vm *vm,
 }
 #endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int process_free_range_page_size_bridge(size_t current, size_t *nextp);
+#else
+#line 1861
 static int process_free_range_page_size_bridge(size_t current, size_t *nextp)
 {
 	return arch_get_smaller_page_size(NULL, current, nextp, NULL);
 }
+#endif
+#line 1865
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void *process_free_range_phys_to_virt_bridge(unsigned long phys);
+#else
+#line 1866
 static void *process_free_range_phys_to_virt_bridge(unsigned long phys)
 {
 	return phys_to_virt(phys);
 }
+#endif
+#line 1870
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+PROCESS_TRACKED_LINE_STORAGE(process_free_range_pages_source_line, 1873);
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_free_range_body_debug[3];
+#else
+#line 1873
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_free_range_body_debug[3] = {
+ { .file=__FILE__, .func="process_free_range_log_bridge", .line=1947, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_free_range_log_bridge", .line=1955, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="free_process_memory_range", .line=1964, .flags=DDEBUG_DEFAULT },
+};
+#endif
+#line 1879
+#endif
+#line 1880
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
+#line 1871
 static void process_free_range_pages_bridge(void *addr, unsigned long pages)
 {
 	_ihk_mc_free_pages(addr, pages, IHK_MC_PG_KERNEL, __FILE__, __LINE__);
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 1872
+#else
+#line 1874
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int process_free_range_clear_main_bridge(struct process_vm *vm,
+		unsigned long start, unsigned long end);
+#else
+#line 1876
 static int process_free_range_clear_main_bridge(struct process_vm *vm,
 		unsigned long start, unsigned long end)
 {
@@ -1850,17 +2579,37 @@ static int process_free_range_clear_main_bridge(struct process_vm *vm,
 
 	return error;
 }
+#endif
+#line 1888
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_free_range_noirq_lock_bridge(unsigned long lock_addr);
+#else
+#line 1889
 void process_free_range_noirq_lock_bridge(unsigned long lock_addr)
 {
 	ihk_mc_spinlock_lock_noirq((ihk_spinlock_t *)lock_addr);
 }
+#endif
+#line 1893
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_free_range_noirq_unlock_bridge(unsigned long lock_addr);
+#else
+#line 1894
 void process_free_range_noirq_unlock_bridge(unsigned long lock_addr)
 {
 	ihk_mc_spinlock_unlock_noirq((ihk_spinlock_t *)lock_addr);
 }
+#endif
+#line 1898
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int process_free_range_pt_free_bridge(void *page_table,
+		struct process_vm *vm, unsigned long start, unsigned long end,
+		void *memobj);
+#else
+#line 1899
 int process_free_range_pt_free_bridge(void *page_table,
 		struct process_vm *vm, unsigned long start, unsigned long end,
 		void *memobj)
@@ -1868,15 +2617,26 @@ int process_free_range_pt_free_bridge(void *page_table,
 	return ihk_mc_pt_free_range(page_table, vm, (void *)start, (void *)end,
 			memobj);
 }
+#endif
+#line 1906
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int process_free_range_pt_clear_bridge(void *page_table,
+		struct process_vm *vm, unsigned long start, unsigned long end);
+#else
+#line 1907
 static int process_free_range_pt_clear_bridge(void *page_table,
 		struct process_vm *vm, unsigned long start, unsigned long end)
 {
 	return ihk_mc_pt_clear_range(page_table, vm, (void *)start,
 			(void *)end);
 }
+#endif
+#line 1913
 
 #ifdef ENABLE_TOFU
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
+#line 1915
 static int process_free_range_tofu_remove_bridge(struct process_vm *vm,
 		struct vm_range *range)
 {
@@ -1886,7 +2646,15 @@ static int process_free_range_tofu_remove_bridge(struct process_vm *vm,
 	return tofu_stag_range_remove_overlapping(vm, range);
 }
 #endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 1920
+#else
+#line 1922
+#endif
+#endif
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
+#line 1925
 static void process_free_range_log_bridge(int event, struct process_vm *vm,
 		struct vm_range *range, unsigned long start, unsigned long end,
 		int error)
@@ -1922,7 +2690,15 @@ static void process_free_range_log_bridge(int event, struct process_vm *vm,
 		break;
 	}
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 1957
+#else
+#line 1959
+#endif
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
+#line 1961
 static int free_process_memory_range(struct process_vm *vm,
 					struct vm_range *range)
 {
@@ -1952,13 +2728,33 @@ static int free_process_memory_range(struct process_vm *vm,
 			process_free_range_clear_main_bridge,
 			process_range_kfree_bridge, process_free_range_log_bridge);
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 1987
+#else
+#line 1989
+#endif
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
+#line 1991
 int process_memory_range_free_bridge(struct process_vm *vm,
 				     struct vm_range *range)
 {
 	return free_process_memory_range(vm, range);
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 1993
+#else
+#line 1995
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_memory_range_free_log_bridge(struct process_vm *vm,
+					  struct vm_range *range,
+					  int error);
+#else
+#line 1997
 void process_memory_range_free_log_bridge(struct process_vm *vm,
 					  struct vm_range *range,
 					  int error)
@@ -1967,7 +2763,15 @@ void process_memory_range_free_log_bridge(struct process_vm *vm,
 			"free range failed. %lx-%lx %d\n",
 			vm, range->start, range->end, error);
 }
+#endif
+#line 2005
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_flush_memory_log_bridge(struct process_vm *vm,
+				     struct vm_range *range,
+				     int error);
+#else
+#line 2006
 void process_flush_memory_log_bridge(struct process_vm *vm,
 				     struct vm_range *range,
 				     int error)
@@ -1976,7 +2780,13 @@ void process_flush_memory_log_bridge(struct process_vm *vm,
 			"free range failed. %lx-%lx %d\n",
 			vm, range->start, range->end, error);
 }
+#endif
+#line 2014
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_flush_memory_debug_bridge(struct process_vm *vm, int event);
+#else
+#line 2015
 void process_flush_memory_debug_bridge(struct process_vm *vm, int event)
 {
 	if (event == 0) {
@@ -1985,7 +2795,20 @@ void process_flush_memory_debug_bridge(struct process_vm *vm, int event)
 		dkprintf("flush_process_memory(%p):\n", vm);
 	}
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 2020
+#else
+#line 2022
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int process_remove_range_split_bridge(struct process_vm *vm,
+				      struct vm_range *range,
+				      unsigned long addr,
+				      struct vm_range **splitp);
+#else
+#line 2024
 int process_remove_range_split_bridge(struct process_vm *vm,
 				      struct vm_range *range,
 				      unsigned long addr,
@@ -1993,13 +2816,38 @@ int process_remove_range_split_bridge(struct process_vm *vm,
 {
 	return split_process_memory_range(vm, range, addr, splitp);
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 2028
+#else
+#line 2030
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_remove_range_xpmem_bridge(struct process_vm *vm,
+				       struct vm_range *range);
+#else
+#line 2032
 void process_remove_range_xpmem_bridge(struct process_vm *vm,
 				       struct vm_range *range)
 {
 	xpmem_remove_process_memory_range(vm, range);
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 2034
+#else
+#line 2036
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_remove_range_log_bridge(int event, struct process_vm *vm,
+				     unsigned long start,
+				     unsigned long end,
+				     struct vm_range *range,
+				     int error);
+#else
+#line 2038
 void process_remove_range_log_bridge(int event, struct process_vm *vm,
 				     unsigned long start,
 				     unsigned long end,
@@ -2031,6 +2879,12 @@ void process_remove_range_log_bridge(int event, struct process_vm *vm,
 		break;
 	}
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 2066
+#else
+#line 2068
+#endif
 
 #ifndef MCKERNEL_RUST_PROCESS_HELPERS
 int remove_process_memory_range(struct process_vm *vm,
@@ -2047,7 +2901,27 @@ int remove_process_memory_range(struct process_vm *vm,
 }
 #endif
 
-static void vm_range_insert_log_bridge(int event, struct process_vm *vm,
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+/* Keep the displaced dynamic-debug selector as declarative C ABI data.
+ * Rust owns both event branches, field reads and the existing variadic logger.
+ * The source-bound original success callsite remains selectable at line 2086.
+ */
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_vm_range_insert_debug;
+#else
+#line 2090
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_vm_range_insert_debug = {
+    .file = __FILE__,
+    .func = "vm_range_insert_log_bridge",
+    .line = 2086,
+    .flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 2097
+#else
+#line 2098
+PROCESS_SCHED_PUBLIC_BRIDGE void vm_range_insert_log_bridge(int event, struct process_vm *vm,
 				       struct vm_range *newrange,
 				       struct vm_range *range)
 {
@@ -2062,18 +2936,58 @@ static void vm_range_insert_log_bridge(int event, struct process_vm *vm,
 				newrange->flag);
 	}
 }
+#endif
+#line 2114
 
-static void vm_range_insert_dump_bridge(struct process_vm *vm)
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
+PROCESS_SCHED_PUBLIC_BRIDGE void vm_range_insert_dump_bridge(struct process_vm *vm)
 {
 	dump_tree(vm);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 static int vm_range_insert(struct process_vm *vm, struct vm_range *newrange)
 {
 	return process_vm_range_insert_result(&vm->vm_range_tree, newrange, vm,
 			vm_range_insert_log_bridge, vm_range_insert_dump_bridge);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_remaining_range_scheduler_debug[18];
+#else
+#line 2131
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_remaining_range_scheduler_debug[18] = {
+ { .file=__FILE__, .func="process_range_public_log_bridge", .line=2137, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_range_public_log_bridge", .line=2141, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_range_public_log_bridge", .line=2147, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_range_public_log_bridge", .line=2151, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_range_public_log_bridge", .line=2157, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_range_public_log_bridge", .line=2161, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_range_public_log_bridge", .line=2167, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_range_public_log_bridge", .line=2173, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_sched_runq_log_bridge", .line=4348, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_sched_runq_log_bridge", .line=4357, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_sched_runq_log_bridge", .line=4361, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_sched_runq_log_bridge", .line=4368, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_sched_runq_log_bridge", .line=4374, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_sched_runq_log_bridge", .line=4382, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_sched_runq_log_bridge", .line=4390, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_sched_runq_log_bridge", .line=4398, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_sched_runq_log_bridge", .line=4413, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_sched_do_migrate_log_bridge", .line=489, .flags=DDEBUG_DEFAULT },
+};
+#endif
+#line 2152
+void process_range_public_log_bridge(int event, struct process_vm *vm,
+				     struct vm_range *range,
+				     unsigned long start,
+				     unsigned long end, int error);
+#else
+#line 2130
 void process_range_public_log_bridge(int event, struct process_vm *vm,
 				     struct vm_range *range,
 				     unsigned long start,
@@ -2126,6 +3040,17 @@ void process_range_public_log_bridge(int event, struct process_vm *vm,
 		break;
 	}
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 2208
+#else
+#line 2182
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 2179
+#else
+#line 2181
+#endif
 
 /* Parallel memset implementation on top of general
  * SMP funcution call facility */
@@ -2135,16 +3060,62 @@ struct memset_smp_req {
 	int val;
 };
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void *process_memset_smp_phys_to_virt_bridge(unsigned long phys);
+#else
+#line 2191
 void *process_memset_smp_phys_to_virt_bridge(unsigned long phys)
 {
 	return phys_to_virt(phys);
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 2192
+#else
+#line 2194
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#ifdef ARCH_FAST_MEMSET
+#ifdef MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE
+extern const int process_memset_smp_fast_word_pattern;
+_Static_assert((1) == 1, "process_memset_smp_fast_word_pattern selected supported configuration");
+#else
+#line 2198
+const int process_memset_smp_fast_word_pattern = 1;
+#endif
+#line 2199
+#else
+#ifdef MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE
+extern const int process_memset_smp_fast_word_pattern;
+_Static_assert((0) == 1, "process_memset_smp_fast_word_pattern selected supported configuration");
+#else
+#line 2200
+const int process_memset_smp_fast_word_pattern = 0;
+#endif
+#line 2201
+#endif
+#line 2202
+void process_memset_smp_memset_bridge(void *addr, int value, size_t len);
+#else
+#line 2196
 void process_memset_smp_memset_bridge(void *addr, int value, size_t len)
 {
 	memset(addr, value, len);
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 2197
+#else
+#line 2199
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_memset_smp_log_bridge(int event, int cpu_index,
+		int nr_cpus, unsigned long phys, size_t len,
+		unsigned long start, unsigned long end);
+#else
+#line 2201
 void process_memset_smp_log_bridge(int event, int cpu_index,
 		int nr_cpus, unsigned long phys, size_t len,
 		unsigned long start, unsigned long end)
@@ -2158,6 +3129,12 @@ void process_memset_smp_log_bridge(int event, int cpu_index,
 		break;
 	}
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 2211
+#else
+#line 2213
+#endif
 
 #ifndef MCKERNEL_RUST_PROCESS_HELPERS
 int memset_smp_handler(int cpu_index, int nr_cpus, void *arg)
@@ -2173,16 +3150,37 @@ int memset_smp_handler(int cpu_index, int nr_cpus, void *arg)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+unsigned long process_memset_smp_virt_to_phys_bridge(void *addr);
+#else
+#line 2229
 unsigned long process_memset_smp_virt_to_phys_bridge(void *addr)
 {
 	return virt_to_phys(addr);
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 2230
+#else
+#line 2232
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int process_memset_smp_call_bridge(void *cpu_set, void *handler,
+		void *arg);
+#else
+#line 2234
 int process_memset_smp_call_bridge(void *cpu_set, void *handler,
 		void *arg)
 {
 	return smp_call_func((cpu_set_t *)cpu_set, (smp_func_t)handler, arg);
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 2236
+#else
+#line 2238
+#endif
 
 #ifndef MCKERNEL_RUST_PROCESS_HELPERS
 void *memset_smp(cpu_set_t *cpu_set, void *s, int c, size_t n)
@@ -2198,22 +3196,54 @@ void *memset_smp(cpu_set_t *cpu_set, void *s, int c, size_t n)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+PROCESS_TRACKED_LINE_STORAGE(process_add_range_alloc_bridge_source_line, 2256);
+struct vm_range *process_add_range_alloc_bridge(unsigned long size);
+#else
+#line 2254
 struct vm_range *process_add_range_alloc_bridge(unsigned long size)
 {
 	return kmalloc_tracked(size, IHK_MC_AP_NOWAIT, __FILE__, __LINE__);
 }
+#endif
+#line 2258
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+PROCESS_TRACKED_LINE_STORAGE(process_add_range_free_bridge_source_line, 2261);
+void process_add_range_free_bridge(struct vm_range *range);
+#else
+#line 2259
 void process_add_range_free_bridge(struct vm_range *range)
 {
 	kfree_tracked(range, __FILE__, __LINE__);
 }
+#endif
+#line 2263
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int process_add_range_insert_bridge(struct process_vm *vm,
+				    struct vm_range *range);
+#else
+#line 2264
 int process_add_range_insert_bridge(struct process_vm *vm,
 				    struct vm_range *range)
 {
 	return vm_range_insert(vm, range);
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 2266
+#else
+#line 2268
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int process_add_range_update_bridge(struct process_vm *vm,
+				    struct vm_range *range,
+				    unsigned long phys,
+				    unsigned long attr);
+#else
+#line 2270
 int process_add_range_update_bridge(struct process_vm *vm,
 				    struct vm_range *range,
 				    unsigned long phys,
@@ -2221,19 +3251,60 @@ int process_add_range_update_bridge(struct process_vm *vm,
 {
 	return update_process_page_table(vm, range, phys, attr);
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 2274
+#else
+#line 2276
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_add_range_remove_bridge(struct process_vm *vm,
+				     unsigned long start,
+				     unsigned long end);
+#else
+#line 2278
 void process_add_range_remove_bridge(struct process_vm *vm,
 				     unsigned long start,
 				     unsigned long end)
 {
 	remove_process_memory_range(vm, start, end, NULL);
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 2281
+#else
+#line 2283
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_add_range_mark_xpmem_bridge(struct vm_range *range);
+#else
+#line 2285
 void process_add_range_mark_xpmem_bridge(struct vm_range *range)
 {
 	range->memobj->flags |= MF_XPMEM;
 }
+#endif
+#line 2289
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_LOCAL_COMPANIONS
+extern void (* const process_add_range_arch_memclear_callback)(void *, unsigned long);
+#else
+#line 2291
+#ifdef ARCH_MEMCLEAR
+void (* const process_add_range_arch_memclear_callback)(void *, unsigned long) = memclear;
+#else
+void (* const process_add_range_arch_memclear_callback)(void *, unsigned long) = NULL;
+#endif
+#endif
+#line 2296
+void process_add_range_memclear_bridge(unsigned long phys,
+				       unsigned long bytes);
+#else
+#line 2299
+#line 2290
 void process_add_range_memclear_bridge(unsigned long phys,
 				       unsigned long bytes)
 {
@@ -2243,7 +3314,38 @@ void process_add_range_memclear_bridge(unsigned long phys,
 	memset((void *)phys_to_virt(phys), 0, bytes);
 #endif
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 2307
+#else
+#line 2299
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 2296
+#else
+#line 2298
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_remaining_memory_log_debug[5];
+#else
+#line 2301
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_remaining_memory_log_debug[5] = {
+ { .file=__FILE__, .func="process_add_range_log_bridge", .line=2318, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_change_prot_public_log_bridge", .line=2400, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_change_prot_public_log_bridge", .line=2411, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_memset_smp_log_bridge", .line=2207, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_remove_region_log_bridge", .line=3471, .flags=DDEBUG_DEFAULT },
+};
+#endif
+#line 2309
+void process_add_range_log_bridge(int event, int rc,
+				  unsigned long start,
+				  unsigned long end);
+#else
+#line 2300
 void process_add_range_log_bridge(int event, int rc,
 				  unsigned long start,
 				  unsigned long end)
@@ -2273,6 +3375,17 @@ void process_add_range_log_bridge(int event, int rc,
 		break;
 	}
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 2341
+#else
+#line 2329
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 2326
+#else
+#line 2328
+#endif
 
 #ifndef MCKERNEL_RUST_PROCESS_HELPERS
 int add_process_memory_range(struct process_vm *vm,
@@ -2324,12 +3437,29 @@ int extend_up_process_memory_range(struct process_vm *vm,
 }
 #endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+unsigned long process_change_prot_attr_bridge(unsigned long flag,
+		unsigned long fault, void *ptep);
+#else
+#line 2380
 unsigned long process_change_prot_attr_bridge(unsigned long flag,
 		unsigned long fault, void *ptep)
 {
 	return arch_vrflag_to_ptattr(flag, fault, ptep);
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 2382
+#else
+#line 2384
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int process_change_prot_pt_change_bridge(void *page_table,
+		unsigned long start, unsigned long end,
+		unsigned long clrattr, unsigned long setattr);
+#else
+#line 2386
 int process_change_prot_pt_change_bridge(void *page_table,
 		unsigned long start, unsigned long end,
 		unsigned long clrattr, unsigned long setattr)
@@ -2337,7 +3467,19 @@ int process_change_prot_pt_change_bridge(void *page_table,
 	return ihk_mc_pt_change_attr_range(page_table, (void *)start,
 			(void *)end, clrattr, setattr);
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 2390
+#else
+#line 2392
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_change_prot_public_log_bridge(int event,
+		struct process_vm *vm, struct vm_range *range,
+		unsigned long protflag, int error);
+#else
+#line 2394
 void process_change_prot_public_log_bridge(int event,
 		struct process_vm *vm, struct vm_range *range,
 		unsigned long protflag, int error)
@@ -2361,6 +3503,12 @@ void process_change_prot_public_log_bridge(int event,
 		break;
 	}
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 2414
+#else
+#line 2416
+#endif
 
 #ifndef MCKERNEL_RUST_PROCESS_HELPERS
 int change_prot_process_memory_range(struct process_vm *vm,
@@ -2381,6 +3529,58 @@ struct rfp_args {
 	struct memobj *memobj;
 };
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+/* Preserve displaced remap diagnostics and tracked-free source identity as
+ * static C ABI data only. Rust owns the complete callback computation. */
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_LOCAL_COMPANIONS
+extern const char *const process_remap_free_file;
+extern const int process_remap_free_line;
+#else
+#line 2440
+const char *const process_remap_free_file = __FILE__;
+const int process_remap_free_line = 2469;
+#endif
+#line 2442
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_remap_one_page_entry_debug;
+#else
+#line 2442
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_remap_one_page_entry_debug = {
+    .file = __FILE__, .func = "remap_one_page",
+    .line = 2448, .flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 2447
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_remap_one_page_rss_debug;
+#else
+#line 2447
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_remap_one_page_rss_debug = {
+    .file = __FILE__, .func = "remap_one_page",
+    .line = 2470, .flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 2452
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_remap_one_page_exit_debug;
+#else
+#line 2452
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_remap_one_page_exit_debug = {
+    .file = __FILE__, .func = "remap_one_page",
+    .line = 2476, .flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 2457
+#else
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 2455
+#else
+#line 2475
+#endif
+#line 2458
 int remap_one_page(void *arg0, page_table_t pt, pte_t *ptep,
 		   void *pgaddr, int pgshift)
 {
@@ -2424,7 +3624,20 @@ out:
 			arg0, pt, ptep, *ptep, pgaddr, pgshift, error);
 	return error;
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 2500
+#else
+#line 2501
+#endif
+#line 2502
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int process_visit_pte_range_bridge(void *page_table, unsigned long start,
+				   unsigned long end, int pgshift, int flags,
+				   void *visit_fn, void *arg);
+#else
+#line 2503
 int process_visit_pte_range_bridge(void *page_table, unsigned long start,
 				   unsigned long end, int pgshift, int flags,
 				   void *visit_fn, void *arg)
@@ -2434,7 +3647,20 @@ int process_visit_pte_range_bridge(void *page_table, unsigned long start,
 			(int (*)(void *, page_table_t, pte_t *, void *, int))
 			visit_fn, arg);
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 2509
+#else
+#line 2511
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_remap_range_log_bridge(int event, struct process_vm *vm,
+				    struct vm_range *range, unsigned long start,
+				    unsigned long end, long off,
+				    int old_pgshift, int error);
+#else
+#line 2513
 void process_remap_range_log_bridge(int event, struct process_vm *vm,
 				    struct vm_range *range, unsigned long start,
 				    unsigned long end, long off,
@@ -2452,6 +3678,12 @@ void process_remap_range_log_bridge(int event, struct process_vm *vm,
 		break;
 	}
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 2527
+#else
+#line 2529
+#endif
 
 #ifndef MCKERNEL_RUST_PROCESS_HELPERS
 int remap_process_memory_range(struct process_vm *vm, struct vm_range *range,
@@ -2482,6 +3714,32 @@ struct sync_args {
 	struct memobj *memobj;
 };
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+/* Displaced sync callback dynamic-debug selectors: declarative data only. */
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_sync_one_page_entry_debug;
+#else
+#line 2562
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_sync_one_page_entry_debug = {
+    .file = __FILE__, .func = "sync_one_page",
+    .line = 2546, .flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 2567
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_sync_one_page_exit_debug;
+#else
+#line 2567
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_sync_one_page_exit_debug = {
+    .file = __FILE__, .func = "sync_one_page",
+    .line = 2574, .flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 2572
+#else
+#line 2573
 int sync_one_page(void *arg0, page_table_t pt, pte_t *ptep,
 		  void *pgaddr, int pgshift)
 {
@@ -2522,7 +3780,10 @@ out:
 			arg0, pt, ptep, *ptep, pgaddr, pgshift, error);
 	return error;
 }
+#endif
+#line 2614
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 void process_sync_range_log_bridge(struct process_vm *vm,
 				   struct vm_range *range, unsigned long start,
 				   unsigned long end, int error)
@@ -2530,7 +3791,9 @@ void process_sync_range_log_bridge(struct process_vm *vm,
 	ekprintf("sync_process_memory_range(%p,%p,%#lx,%#lx):"
 			"visit failed%d\n", vm, range, start, end, error);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 void *process_lookup_pte_bridge(void *page_table, unsigned long addr,
 		int pgshift, size_t *pgsizep)
 {
@@ -2538,26 +3801,36 @@ void *process_lookup_pte_bridge(void *page_table, unsigned long addr,
 			pgsizep, NULL);
 }
 
+#endif
+
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 int process_pte_is_contiguous_bridge(void *ptep)
 {
 	return pte_is_contiguous((pte_t *)ptep);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 int process_page_is_contiguous_head_bridge(void *ptep, size_t pgsize)
 {
 	return page_is_contiguous_head((pte_t *)ptep, pgsize);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 int process_page_is_contiguous_tail_bridge(void *ptep, size_t pgsize)
 {
 	return page_is_contiguous_tail((pte_t *)ptep, pgsize);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 int process_split_contiguous_pages_bridge(void *ptep, size_t pgsize,
 		unsigned int memobj_flags)
 {
 	return split_contiguous_pages((pte_t *)ptep, pgsize, memobj_flags);
 }
+#endif
 
 #ifndef MCKERNEL_RUST_PROCESS_HELPERS
 int sync_process_memory_range(struct process_vm *vm, struct vm_range *range,
@@ -2582,6 +3855,12 @@ int sync_process_memory_range(struct process_vm *vm, struct vm_range *range,
 }
 #endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_invalidate_range_log_bridge(struct process_vm *vm,
+		struct vm_range *range, unsigned long start, unsigned long end,
+		int error);
+#else
+#line 2676
 void process_invalidate_range_log_bridge(struct process_vm *vm,
 		struct vm_range *range, unsigned long start, unsigned long end,
 		int error)
@@ -2589,79 +3868,170 @@ void process_invalidate_range_log_bridge(struct process_vm *vm,
 	ekprintf("invalidate_process_memory_range(%p,%p,%#lx,%#lx):"
 			"visit failed%d\n", vm, range, start, end, error);
 }
+#endif
+#line 2683
 
 struct invalidate_args {
 	struct vm_range *range;
 };
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int process_pte_is_null_bridge(void *ptep);
+#else
+#line 2688
 int process_pte_is_null_bridge(void *ptep)
 {
 	return pte_is_null((pte_t *)ptep);
 }
+#endif
+#line 2692
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int process_pte_is_fileoff_bridge(void *ptep, size_t pgsize);
+#else
+#line 2693
 int process_pte_is_fileoff_bridge(void *ptep, size_t pgsize)
 {
 	return pte_is_fileoff((pte_t *)ptep, pgsize);
 }
+#endif
+#line 2697
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+uintptr_t process_pte_get_phys_bridge(void *ptep);
+#else
 uintptr_t process_pte_get_phys_bridge(void *ptep)
 {
 	return pte_get_phys((pte_t *)ptep);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void *process_phys_to_page_bridge(uintptr_t phys);
+#else
+#line 2707
 void *process_phys_to_page_bridge(uintptr_t phys)
 {
 	return phys_to_page(phys);
 }
+#endif
+#line 2711
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+long process_page_offset_bridge(void *page);
+#else
+#line 2712
 long process_page_offset_bridge(void *page)
 {
 	return ((struct page *)page)->offset;
 }
+#endif
+#line 2716
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_pte_make_fileoff_bridge(long off, size_t pgsize,
+					    void *ptep);
+#else
+#line 2717
 void process_pte_make_fileoff_bridge(long off, size_t pgsize,
 					    void *ptep)
 {
 	pte_make_fileoff(off, 0, pgsize, (pte_t *)ptep);
 }
+#endif
+#line 2722
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_pte_xchg_bridge(void *ptep, void *valp);
+#else
+#line 2723
 void process_pte_xchg_bridge(void *ptep, void *valp)
 {
 	pte_xchg((pte_t *)ptep, (pte_t *)valp);
 }
+#endif
+#line 2727
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_flush_tlb_single_bridge(unsigned long addr);
+#else
+#line 2728
 void process_flush_tlb_single_bridge(unsigned long addr)
 {
 	flush_tlb_single(addr);
 }
+#endif
+#line 2732
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int process_pgsize_to_tbllv_bridge(size_t pgsize);
+#else
+#line 2733
 int process_pgsize_to_tbllv_bridge(size_t pgsize)
 {
 	return pgsize_to_tbllv(pgsize);
 }
+#endif
+#line 2737
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+size_t process_tbllv_to_contpgsize_bridge(int level);
+#else
+#line 2738
 size_t process_tbllv_to_contpgsize_bridge(int level)
 {
 	return tbllv_to_contpgsize(level);
 }
+#endif
+#line 2742
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int process_page_unmap_bridge(void *page);
+#else
+#line 2743
 int process_page_unmap_bridge(void *page)
 {
 	return page_unmap(page);
 }
+#endif
+#line 2747
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_panic_bridge(const char *message);
+#else
+#line 2748
 void process_panic_bridge(const char *message)
 {
 	panic(message);
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 2749
+#else
+#line 2751
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int process_memobj_invalidate_page_bridge(struct memobj *memobj,
+						 uintptr_t phys,
+						 size_t pgsize);
+#else
+#line 2753
 int process_memobj_invalidate_page_bridge(struct memobj *memobj,
 						 uintptr_t phys,
 						 size_t pgsize)
 {
 	return memobj_invalidate_page(memobj, phys, pgsize);
 }
+#endif
+#line 2759
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_invalidate_one_page_log_bridge(void *arg0,
+		void *page_table, void *ptep, unsigned long pte_value,
+		void *pgaddr, int pgshift, int error);
+#else
+#line 2760
 void process_invalidate_one_page_log_bridge(void *arg0,
 		void *page_table, void *ptep, unsigned long pte_value,
 		void *pgaddr, int pgshift, int error)
@@ -2671,6 +4041,8 @@ void process_invalidate_one_page_log_bridge(void *arg0,
 			arg0, page_table, ptep, pte_value, pgaddr, pgshift,
 			error);
 }
+#endif
+#line 2769
 
 #ifndef MCKERNEL_RUST_PROCESS_HELPERS
 int invalidate_one_page(void *arg0, page_table_t pt, pte_t *ptep,
@@ -2733,6 +4105,334 @@ int invalidate_process_memory_range(struct process_vm *vm,
 }
 #endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int process_page_fault_cow_dirty_permission_body_result(enum ihk_mc_pt_attribute *);
+#endif
+
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_page_fault_cow_copy_body_result(void *, uintptr_t, size_t);
+#endif
+
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_LOCAL_COMPANIONS
+extern const char *const process_page_fault_cow_alloc_file;
+extern const int process_page_fault_cow_alloc_line;
+#else
+#line 2840
+const char *const process_page_fault_cow_alloc_file = __FILE__;
+const int process_page_fault_cow_alloc_line = 3145;
+#endif
+#line 2842
+int process_page_fault_cow_allocate_body_result(struct process_vm *, struct vm_range *,
+        struct page *, size_t, int, uintptr_t, uint64_t, void **, int *);
+#endif
+#line 2845
+
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+/* Original allocation tracking identities retain static storage lifetime. */
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_LOCAL_COMPANIONS
+extern const char *const process_page_fault_anon_alloc_file;
+#else
+#line 2848
+const char *const process_page_fault_anon_alloc_file = __FILE__;
+#endif
+#line 2849
+PROCESS_TRACKED_LINE_STORAGE(process_page_fault_anon_alloc_line, 3058);
+int process_page_fault_anon_allocate_body_result(struct process_vm *, struct vm_range *,
+        uintptr_t, uint64_t, pte_t **, void **, size_t *, int *, void **, int *);
+#endif
+#line 2853
+
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+unsigned long process_page_fault_mapping_state_body_result(struct vm_range *, uintptr_t,
+        unsigned long, uint64_t, pte_t *, struct page **);
+#endif
+
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_page_fault_profile_path_debug;
+#else
+#line 2860
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_page_fault_profile_path_debug = {
+    .file = __FILE__, .func = "page_fault_process_memory_range",
+    .line = 2952, .flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 2865
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_page_fault_entry_debug;
+#else
+#line 2865
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_page_fault_entry_debug = {
+    .file = __FILE__, .func = "page_fault_process_memory_range",
+    .line = 2959, .flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 2870
+void process_page_fault_entry_log_body_result(struct process_vm *, struct vm_range *,
+        uintptr_t, uint64_t);
+#endif
+#line 2873
+
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+unsigned long process_page_fault_shared_permission_body_result(struct vm_range *, unsigned long);
+#endif
+
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_page_fault_pte_state_debug;
+#else
+#line 2879
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_page_fault_pte_state_debug = {
+    .file = __FILE__, .func = "page_fault_process_memory_range",
+    .line = 3006, .flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 2884
+void process_page_fault_pte_state_log_bridge(pte_t *, size_t);
+#endif
+#line 2886
+
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_page_fault_page_state_debug;
+#else
+#line 2888
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_page_fault_page_state_debug = {
+    .file = __FILE__, .func = "page_fault_process_memory_range",
+    .line = 3219, .flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 2893
+void process_page_fault_page_state_log_bridge(struct page *);
+#endif
+#line 2895
+
+#line 2831
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+/* Original page-fault bounds diagnostic: static ABI data, Rust computation. */
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_page_fault_prepare_bounds_debug;
+#else
+#line 2833
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_page_fault_prepare_bounds_debug = {
+    .file = __FILE__, .func = "page_fault_process_memory_range",
+    .line = 2873, .flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 2838
+int process_page_fault_prepare_body_result(struct process_vm *, struct vm_range *,
+        uintptr_t, uint64_t, pte_t **, void **, size_t *, int *, int *);
+#endif
+#line 2841
+
+
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int process_page_fault_memobj_get_body_result(struct vm_range *, void *, uintptr_t,
+        pte_t *, size_t, int, uintptr_t *, unsigned long *, int *);
+#endif
+
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int process_page_fault_cow_classify_body_result(struct vm_range *, uint64_t, struct page *);
+#endif
+
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_page_fault_cow_rss_add_debug;
+#else
+#line 2853
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_page_fault_cow_rss_add_debug = {
+    .file = __FILE__, .func = "page_fault_process_memory_range",
+    .line = 3071, .flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 2858
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_page_fault_cow_rss_sub_debug;
+#else
+#line 2858
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_page_fault_cow_rss_sub_debug = {
+    .file = __FILE__, .func = "page_fault_process_memory_range",
+    .line = 3076, .flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 2863
+void process_page_fault_cow_commit_body_result(struct vm_range *,uintptr_t *,
+        size_t,void *,struct page **,struct ddebug *,struct ddebug *);
+#endif
+#line 2866
+
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_page_fault_set_pte_rss_add_debug;
+#else
+#line 2868
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_page_fault_set_pte_rss_add_debug = {
+    .file = __FILE__, .func = "page_fault_process_memory_range",
+    .line = 3118, .flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 2873
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_page_fault_set_pte_rss_skip_debug;
+#else
+#line 2873
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_page_fault_set_pte_rss_skip_debug = {
+    .file = __FILE__, .func = "page_fault_process_memory_range",
+    .line = 3121, .flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 2878
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_page_fault_set_pte_attr_debug;
+#else
+#line 2878
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_page_fault_set_pte_attr_debug = {
+    .file = __FILE__, .func = "page_fault_process_memory_range",
+    .line = 3125, .flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 2883
+int process_page_fault_set_pte_body_result(struct process_vm *,struct vm_range *,
+    uintptr_t,uint64_t,pte_t *,size_t,uintptr_t,enum ihk_mc_pt_attribute,int *,
+    int (*)(page_table_t,pte_t *,size_t,uintptr_t,enum ihk_mc_pt_attribute),
+    struct ddebug *,struct ddebug *,struct ddebug *);
+#endif
+#line 2888
+
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int process_page_fault_set_range_body_result(struct process_vm *,struct vm_range *,
+    uintptr_t,uint64_t,void *,size_t,uintptr_t,enum ihk_mc_pt_attribute,int *,
+    int (*)(page_table_t,struct process_vm *,void *,void *,uintptr_t,
+            enum ihk_mc_pt_attribute,int,struct vm_range *,int));
+void process_page_fault_finish_body_result(uintptr_t,int *,struct page **);
+#endif
+
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_page_fault_out_stray_debug;
+#else
+#line 2898
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_page_fault_out_stray_debug = {
+    .file = __FILE__, .func = "page_fault_process_memory_range",
+    .line = 3202, .flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 2903
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_page_fault_out_rss_sub_debug;
+#else
+#line 2903
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_page_fault_out_rss_sub_debug = {
+    .file = __FILE__, .func = "page_fault_process_memory_range",
+    .line = 3206, .flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 2908
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_page_fault_out_return_debug;
+#else
+#line 2908
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_page_fault_out_return_debug = {
+    .file = __FILE__, .func = "page_fault_process_memory_range",
+    .line = 3210, .flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 2913
+int process_page_fault_out_body_result(struct process_vm *,struct vm_range *,
+    uintptr_t,uint64_t,const size_t *,struct page *,int,
+    struct ddebug *,struct ddebug *,struct ddebug *);
+#endif
+#line 2917
+
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_page_fault_anon_clear_debug;
+#else
+#line 2919
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_page_fault_anon_clear_debug = {
+    .file = __FILE__, .func = "page_fault_process_memory_range",
+    .line = 3059, .flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 2924
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_page_fault_anon_map_debug;
+#else
+#line 2924
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_page_fault_anon_map_debug = {
+    .file = __FILE__, .func = "page_fault_process_memory_range",
+    .line = 3067, .flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 2929
+void process_page_fault_anon_clear_body_result(struct vm_range *,void *,size_t,void *,
+    struct page *,uintptr_t,uint64_t,uintptr_t *,int,int,struct ddebug *,struct ddebug *);
+#endif
+#line 2932
+
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int process_page_fault_install_finish_body_result(struct process_vm *,
+    struct vm_range *, uintptr_t, uint64_t, pte_t *, void *, size_t,
+    uintptr_t, enum ihk_mc_pt_attribute, struct page *,
+    int (*)(page_table_t,pte_t *,size_t,uintptr_t,enum ihk_mc_pt_attribute),
+    int (*)(page_table_t,struct process_vm *,void *,void *,uintptr_t,
+            enum ihk_mc_pt_attribute,int,struct vm_range *,int),
+    struct ddebug *,struct ddebug *,struct ddebug *,
+    struct ddebug *,struct ddebug *,struct ddebug *);
+#endif
+
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+/* Retained metadata for the original COW copy log and profile event. */
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_page_fault_cow_copy_debug;
+#else
+#line 2946
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_page_fault_cow_copy_debug = {
+ .file = __FILE__, .func = "page_fault_process_memory_range",
+ .line = 3151, .flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 2951
+#ifdef PROFILE_ENABLE
+#ifdef MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE
+extern const int process_page_fault_anon_clear_profile_event;
+_Static_assert((PROFILE_page_fault_anon_clr) == 4002, "process_page_fault_anon_clear_profile_event selected supported configuration");
+#else
+#line 2952
+const int process_page_fault_anon_clear_profile_event = PROFILE_page_fault_anon_clr;
+#endif
+#line 2953
+#else
+#ifdef MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE
+extern const int process_page_fault_anon_clear_profile_event;
+_Static_assert((0) == 0, "process_page_fault_anon_clear_profile_event selected supported configuration");
+#else
+#line 2954
+const int process_page_fault_anon_clear_profile_event = 0;
+#endif
+#line 2955
+#endif
+#endif
+#line 2957
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
+#line 2944
 int page_fault_process_memory_range(struct process_vm *vm,
 				    struct vm_range *range,
 				    uintptr_t fault_addr, uint64_t reason)
@@ -2746,9 +4446,15 @@ int page_fault_process_memory_range(struct process_vm *vm,
 	uintptr_t phys;
 	struct page *page = NULL;
 	unsigned long memobj_flag = 0;
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 	int private_range, patching_to_rdonly;
 	int devfile_or_hugetlbfs_or_premap, regfile_or_shm;
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+    process_page_fault_entry_log_body_result(vm, range, fault_addr, reason);
+#else
+#line 2951
 	if (get_this_cpu_local_var()->current->profile) {
 		dkprintf("%s: 0x%lx @ %s\n",
 				__func__, fault_addr,
@@ -2758,6 +4464,15 @@ int page_fault_process_memory_range(struct process_vm *vm,
 	}
 
 	dkprintf("page_fault_process_memory_range(%p,%lx-%lx %lx,%lx,%lx)\n", vm, range->start, range->end, range->flag, fault_addr, reason);
+#endif
+#line 2960
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+    /* Both Rust outcomes retain this same lock for the unchanged out: path.
+     * CONTINUE0 supplies original locals; GOTO_OUT1 also supplies error. */
+    if (process_page_fault_prepare_body_result(vm, range, fault_addr, reason,
+            &ptep, &pgaddr, &pgsize, &p2align, &error))
+        goto out;
+#else
 	ihk_mc_spinlock_lock_noirq(&vm->page_table_lock);
 	/*****/
 	ptep = ihk_mc_pt_lookup_pte(vm->address_space->page_table,
@@ -2794,9 +4509,34 @@ int page_fault_process_memory_range(struct process_vm *vm,
 	arch_adjust_allocate_page_size(vm->address_space->page_table,
 				       fault_addr, ptep, &pgaddr, &pgsize);
 
+#endif
+
 	/*****/
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+    process_page_fault_pte_state_log_bridge(ptep, pgsize);
+#else
+#line 3006
 	dkprintf("%s: ptep=%lx,pte_is_null=%d,pte_is_fileoff=%d\n", __FUNCTION__, ptep, ptep ? pte_is_null(ptep) : -1, ptep ? pte_is_fileoff(ptep, pgsize) : -1);
+#endif
+#line 3007
 	if (!ptep || pte_is_null(ptep) || pte_is_fileoff(ptep, pgsize)) {
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+        /* Rust returns the existing signed-error predicate, not a new release
+         * policy. Preserve the owning zeroobj error branch here verbatim. */
+        if (process_page_fault_memobj_get_body_result(range, pgaddr,
+                fault_addr, ptep, pgsize, p2align, &phys, &memobj_flag, &error)) {
+				struct memobj *obj;
+
+				if (zeroobj_create(&obj)) {
+					panic("PFPMR: zeroobj_crate");
+				}
+
+				if (range->memobj != obj) {
+					goto out;
+				}
+			
+        }
+#else
 		phys = NOPHYS;
 		if (range->memobj) {
 			off_t off;
@@ -2822,8 +4562,16 @@ int page_fault_process_memory_range(struct process_vm *vm,
 			}
 			// memory_stat_rss_add() is called downstream, i.e. memobj_get_page() to check page->count
 		}
+#endif
 		if (phys == NOPHYS) {
 			void *virt = NULL;
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+            if (process_page_fault_anon_allocate_body_result(vm, range,
+                    fault_addr, reason, &ptep, &pgaddr, &pgsize, &p2align,
+                    &virt, &error))
+                goto out;
+#else
+#line 3053
 			size_t npages;
 
 retry:
@@ -2845,6 +4593,19 @@ retry:
 				kprintf("page_fault_process_memory_range(%p,%lx-%lx %lx,%lx,%lx):cannot allocate new page. %d\n", vm, range->start, range->end, range->flag, fault_addr, reason, error);
 				goto out;
 			}
+#endif
+#line 3074
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+            process_page_fault_anon_clear_body_result(range, pgaddr, pgsize,
+                virt, page, fault_addr, reason, &phys,
+#ifdef PROFILE_ENABLE
+                1, PROFILE_page_fault_anon_clr,
+#else
+                0, 0,
+#endif
+                &process_page_fault_anon_clear_debug,
+                &process_page_fault_anon_map_debug);
+#else
 			dkprintf("%s: clearing 0x%lx:%lu\n",
 					__FUNCTION__, pgaddr, pgsize);
 #ifdef PROFILE_ENABLE
@@ -2859,18 +4620,36 @@ retry:
 				
 				page_map(phys_to_page(phys));
 			}
+#endif
 		}
 	}
+#line 3102
 	else {
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+        phys = process_pte_get_phys_bridge(ptep);
+#else
+#line 3103
 		phys = pte_get_phys(ptep);
+#endif
+#line 3104
 	}
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+    attr = process_page_fault_mapping_state_body_result(range, phys, memobj_flag,
+            reason, ptep, &page);
+#else
+#line 3106
 	page = phys_to_page(phys);
 
 	attr = arch_vrflag_to_ptattr(range->flag | memobj_flag, reason, ptep);
+#endif
+#line 3109
 
 	/* Copy on write */
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+    if (process_page_fault_cow_classify_body_result(range, reason, page)) {
+#else
 	private_range = (range->flag & VR_PRIVATE);
 	patching_to_rdonly =
 		((reason & PF_PATCH) && !(range->flag & VR_PROT_WRITE));
@@ -2887,12 +4666,27 @@ retry:
 
 	if ((private_range || patching_to_rdonly) &&
 	    (devfile_or_hugetlbfs_or_premap || regfile_or_shm)) {
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+        if (!process_page_fault_cow_dirty_permission_body_result(&attr)) {
+            /* Rust performed the complete original clean-COW attr update. */
+        }
+#else
+#line 3133
 		if (!(attr & PTATTR_DIRTY)) {
 			attr &= ~PTATTR_WRITABLE;
 		}
+#endif
+#line 3136
 		else {
 			void *virt;
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+            if (process_page_fault_cow_allocate_body_result(vm, range, page,
+                    pgsize, p2align, fault_addr, reason, &virt, &error))
+                goto out;
+#else
+#line 3138
 			size_t npages;
 
 			if (!page) {
@@ -2906,10 +4700,23 @@ retry:
 				kprintf("page_fault_process_memory_range(%p,%lx-%lx %lx,%lx,%lx):cannot allocate copy page. %d\n", vm, range->start, range->end, range->flag, fault_addr, reason, error);
 				goto out;
 			}
+#endif
+#line 3151
 			dkprintf("%s: cow,copying virt:%lx<-%lx,phys:%lx<-%lx,pgsize=%lu\n",
 					 __FUNCTION__, virt, phys_to_virt(phys), virt_to_phys(virt), phys, pgsize);
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+            process_page_fault_cow_copy_body_result(virt, phys, pgsize);
+#else
+#line 3153
 			memcpy(virt, phys_to_virt(phys), pgsize);
+#endif
+#line 3154
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+            process_page_fault_cow_commit_body_result(range, &phys, pgsize,
+                virt, &page, &process_page_fault_cow_rss_add_debug,
+                &process_page_fault_cow_rss_sub_debug);
+#else
 			/* Count COW-source pointed-to by only fileobj
 			 *  The steps in test/rusage/005:
 			 *  (1) Private-map regular file
@@ -2930,8 +4737,15 @@ retry:
 			}
 			phys = virt_to_phys(virt);
 			page = phys_to_page(phys);
+#endif
 		}
 	}
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+    else {
+        attr = process_page_fault_shared_permission_body_result(range, attr);
+    }
+#else
+#line 3183
 	else if (!(range->flag & VR_PRIVATE)) { /*VR_SHARED*/
 		if (!(attr & PTATTR_DIRTY)) {
 			if (!(range->flag & VR_STACK)) {
@@ -2939,9 +4753,32 @@ retry:
 			}
 		}
 	}
+#endif
+#line 3190
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+    /* This complete initialized tail owns the same final out/unlock path.
+     * Earlier prepare/allocation/zeroobj exits retain the original out label. */
+    return process_page_fault_install_finish_body_result(vm, range, fault_addr,
+        reason, ptep, pgaddr, pgsize, phys, attr, page,
+        ihk_mc_pt_set_pte, ihk_mc_pt_set_range,
+        &process_page_fault_set_pte_rss_add_debug,
+        &process_page_fault_set_pte_rss_skip_debug,
+        &process_page_fault_set_pte_attr_debug,
+        &process_page_fault_out_stray_debug,
+        &process_page_fault_out_rss_sub_debug,
+        &process_page_fault_out_return_debug);
+#else
 	/*****/
 	if (ptep && !pgsize_is_contiguous(pgsize)) {
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+        if (process_page_fault_set_pte_body_result(vm, range, fault_addr, reason,
+                ptep, pgsize, phys, attr, &error, ihk_mc_pt_set_pte,
+                &process_page_fault_set_pte_rss_add_debug,
+                &process_page_fault_set_pte_rss_skip_debug,
+                &process_page_fault_set_pte_attr_debug))
+            goto out;
+#else
 		if (!(reason & PF_PATCH) &&
 		    rusage_memory_stat_add(range, phys, pgsize, pgsize)) {
 			/* on-demand paging, phys pages are obtained by ihk_mc_alloc_aligned_pages_user() or get_page() */
@@ -2959,9 +4796,21 @@ retry:
 			kprintf("page_fault_process_memory_range(%p,%lx-%lx %lx,%lx,%lx):set_pte failed. %d\n", vm, range->start, range->end, range->flag, fault_addr, reason, error);
 			goto out;
 		}
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+        process_page_fault_page_state_log_bridge(page);
+#else
+#line 3219
 		dkprintf("%s: non-NULL pte,page=%lx,page_is_in_memobj=%d,page->count=%d\n", __FUNCTION__, page, page ? page_is_in_memobj(page) : 0, page ? ihk_atomic_read(&page->count) : 0);
+#endif
+#line 3220
 	}
 	else {
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+        if (process_page_fault_set_range_body_result(vm, range, fault_addr,
+                reason, pgaddr, pgsize, phys, attr, &error, ihk_mc_pt_set_range))
+            goto out;
+#else
 		error = ihk_mc_pt_set_range(vm->address_space->page_table, vm,
 		                            pgaddr, pgaddr + pgsize, phys,
 					    attr, range->pgshift, range, 1);
@@ -2969,14 +4818,25 @@ retry:
 			kprintf("page_fault_process_memory_range(%p,%lx-%lx %lx,%lx,%lx):set_range failed. %d\n", vm, range->start, range->end, range->flag, fault_addr, reason, error);
 			goto out;
 		}
+#endif
 		// memory_stat_rss_add() is called in downstream with !memobj check
 	}
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+    process_page_fault_finish_body_result(fault_addr, &error, &page);
+#else
 	flush_tlb_single(fault_addr);
 
 	error = 0;
 	page = NULL;
+#endif
+#endif
 
 out:
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+    return process_page_fault_out_body_result(vm, range, fault_addr, reason,
+        &pgsize, page, error, &process_page_fault_out_stray_debug,
+        &process_page_fault_out_rss_sub_debug, &process_page_fault_out_return_debug);
+#else
 	ihk_mc_spinlock_unlock_noirq(&vm->page_table_lock);
 	if (page) {
 		/* Unmap stray struct page */
@@ -2990,8 +4850,19 @@ out:
 	}
 	dkprintf("page_fault_process_memory_range(%p,%lx-%lx %lx,%lx,%lx): %d\n", vm, range->start, range->end, range->flag, fault_addr, reason, error);
 	return error;
+#endif
 }
 
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 3285
+#else
+#line 3268
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int process_zeroobj_match_bridge(void *memobj);
+#else
+#line 3269
 int process_zeroobj_match_bridge(void *memobj)
 {
 	struct memobj *obj;
@@ -3002,6 +4873,19 @@ int process_zeroobj_match_bridge(void *memobj)
 	return memobj == obj;
 }
 
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 3295
+#else
+#line 3278
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int process_normal_fault_range_bridge(struct process_vm *vm,
+				      struct vm_range *range,
+				      unsigned long fault_addr,
+				      unsigned long reason);
+#else
+#line 3279
 int process_normal_fault_range_bridge(struct process_vm *vm,
 				      struct vm_range *range,
 				      unsigned long fault_addr,
@@ -3009,15 +4893,23 @@ int process_normal_fault_range_bridge(struct process_vm *vm,
 {
 	return page_fault_process_memory_range(vm, range, fault_addr, reason);
 }
-
-int process_xpmem_fault_range_bridge(struct process_vm *vm,
-				     struct vm_range *range,
-				     unsigned long fault_addr,
-				     unsigned long reason)
-{
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 3302
+#else
+#line 3285
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int process_xpmem_fault_range_bridge(struct process_vm *, struct vm_range *,
+        unsigned long, unsigned long);
+#else
+int process_xpmem_fault_range_bridge(struct process_vm *vm, struct vm_range *range,
+        unsigned long fault_addr, unsigned long reason) {
 	return xpmem_fault_process_memory_range(vm, range, fault_addr, reason);
 }
-
+#endif
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
+#line 3295
 static int do_page_fault_process_vm(struct process_vm *vm, void *fault_addr0, uint64_t reason)
 {
 	struct thread *thread = get_this_cpu_local_var()->current;
@@ -3032,18 +4924,32 @@ static int do_page_fault_process_vm(struct process_vm *vm, void *fault_addr0, ui
 			process_normal_fault_range_bridge,
 			process_xpmem_fault_range_bridge);
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 3325
+#else
+#line 3308
+#endif
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
+#line 3310
 static int process_do_page_fault_process_vm_bridge(struct process_vm *vm,
 						   unsigned long fault_addr,
 						   unsigned long reason)
 {
 	return do_page_fault_process_vm(vm, (void *)fault_addr, reason);
 }
-
-void process_pgio_dispatch_bridge(void *fp, void *arg)
-{
-	((pgio_func_t *)fp)(arg);
-}
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 3332
+#else
+#line 3315
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_pgio_dispatch_bridge(void *, void *);
+#else
+void process_pgio_dispatch_bridge(void *fp, void *arg) { ((pgio_func_t *)fp)(arg); }
+#endif
 
 #ifndef MCKERNEL_RUST_PROCESS_HELPERS
 int page_fault_process_vm(struct process_vm *fault_vm, void *fault_addr, uint64_t reason)
@@ -3059,7 +4965,7 @@ int page_fault_process_vm(struct process_vm *fault_vm, void *fault_addr, uint64_
 			process_pgio_dispatch_bridge);
 }
 #endif
-
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 static void *process_init_stack_alloc_aligned_bridge(int npages, int p2align,
 		unsigned long flags, unsigned long virt_addr)
 {
@@ -3179,7 +5085,154 @@ static void process_init_stack_log_bridge(int event,
 		break;
 	}
 }
-
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+/* Declarative source metadata only. The subtraction distances refer to the
+ * retained callback call-sites above; no #line occurs between them and here.
+ * This preserves their actual logical __LINE__ without guessing a numeric line. */
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_LOCAL_COMPANIONS
+#line 3481
+_Static_assert(__LINE__ - 122 == 3359, "process stack alloc source line mismatch");
+#line 3483
+_Static_assert(__LINE__ - 119 == 3364, "process stack free source line mismatch");
+extern const char *const process_init_stack_alloc_file;
+extern const int process_init_stack_alloc_line;
+extern const char *const process_init_stack_free_file;
+extern const int process_init_stack_free_line;
+#else
+#line 3480
+const char *const process_init_stack_alloc_file = __FILE__;
+const int process_init_stack_alloc_line = __LINE__ - 122;
+const char *const process_init_stack_free_file = __FILE__;
+const int process_init_stack_free_line = __LINE__ - 119;
+#endif
+#line 3484
+#ifdef MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE
+extern const int process_init_stack_user_category;
+_Static_assert((IHK_MC_PG_USER) == 1, "process_init_stack_user_category selected supported configuration");
+#else
+#line 3484
+const int process_init_stack_user_category = IHK_MC_PG_USER;
+#endif
+#line 3485
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_init_stack_log_size_debug;
+#else
+#line 3485
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_init_stack_log_size_debug = {
+    .file = __FILE__, .func = "process_init_stack_log_bridge",
+    .line = __LINE__ - 58, .flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 3490
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_init_stack_log_ap_user_debug;
+#else
+#line 3490
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_init_stack_log_ap_user_debug = {
+    .file = __FILE__, .func = "process_init_stack_log_bridge",
+    .line = __LINE__ - 58, .flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 3495
+void *process_init_stack_alloc_aligned_bridge(int, int, unsigned long, unsigned long);
+void process_init_stack_free_pages_bridge(void *, int);
+int process_init_stack_add_range_bridge(struct process_vm *, unsigned long, unsigned long,
+        unsigned long, unsigned long, int, struct vm_range **);
+unsigned long process_init_stack_virt_to_phys_bridge(void *);
+unsigned long process_init_stack_attr_bridge(unsigned long, unsigned long, void *);
+int process_init_stack_pt_set_range_bridge(void *, struct process_vm *, unsigned long,
+        unsigned long, unsigned long, unsigned long, int, struct vm_range *, int);
+unsigned long process_init_stack_hwcap_bridge(void);
+void process_init_stack_modify_context_bridge(void *, int, unsigned long);
+void process_init_stack_log_bridge(int, const unsigned long *);
+#endif
+#line 3507
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 3504
+#else
+#line 3494
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 3504
+#else
+#line 3487
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+struct process_init_stack_entry_config {
+    unsigned long page_size;
+    int page_shift;
+    unsigned long user_stack_page_mask;
+    int user_stack_page_shift;
+    unsigned long user_stack_prepage_size;
+    unsigned long stack_alloc_size_override;
+    int user_stack_page_p2align;
+    unsigned long alloc_nowait;
+    unsigned long alloc_user;
+    unsigned long mpol_no_stack;
+    int user_context_sp_reg;
+    unsigned long pf_populate;
+    void *(*alloc_aligned)(int npages, int p2align, unsigned long flags, unsigned long virt_addr);
+    void (*free_pages)(void *addr, int npages);
+    int (*add_range)(struct process_vm *vm, unsigned long start, unsigned long end, unsigned long phys, unsigned long flag, int pgshift, struct vm_range **rangep);
+    unsigned long (*virt_to_phys)(void *addr);
+    unsigned long (*attr)(unsigned long flag, unsigned long fault, void *ptep);
+    int (*pt_set_range)(void *page_table, struct process_vm *vm, unsigned long start, unsigned long end, unsigned long phys, unsigned long attr, int pgshift, struct vm_range *range, int flags);
+    unsigned long (*hwcap)(void);
+    void (*modify_context)(void *uctx, int reg, unsigned long value);
+    void (*log)(int event, const unsigned long *args);
+};
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_LOCAL_COMPANIONS
+_Static_assert(PAGE_SIZE == 4096UL && PAGE_SHIFT == 12 &&
+    USER_STACK_PAGE_MASK == 0xffffffffffe00000UL &&
+    USER_STACK_PAGE_SHIFT == 21 && USER_STACK_PREPAGE_SIZE == 2097152UL &&
+    USER_STACK_PAGE_P2ALIGN == 9 && IHK_MC_AP_NOWAIT == 2UL &&
+    IHK_MC_AP_USER == 4096UL && MPOL_NO_STACK == 2 &&
+    IHK_UCR_STACK_POINTER == 1 && PF_POPULATE == (1UL << 30),
+    "Unqualified process initial-stack metadata constants");
+extern const struct process_init_stack_entry_config process_init_stack_entry_config;
+#else
+#line 3531
+const struct process_init_stack_entry_config process_init_stack_entry_config = {
+    .page_size = PAGE_SIZE,
+    .page_shift = PAGE_SHIFT,
+    .user_stack_page_mask = USER_STACK_PAGE_MASK,
+    .user_stack_page_shift = USER_STACK_PAGE_SHIFT,
+    .user_stack_prepage_size = USER_STACK_PREPAGE_SIZE,
+#ifdef ENABLE_FUGAKU_HACKS
+    .stack_alloc_size_override = 8 * 1024 * 1024,
+#else
+    .stack_alloc_size_override = 0,
+#endif
+    .user_stack_page_p2align = USER_STACK_PAGE_P2ALIGN,
+    .alloc_nowait = IHK_MC_AP_NOWAIT,
+    .alloc_user = IHK_MC_AP_USER,
+    .mpol_no_stack = MPOL_NO_STACK,
+    .user_context_sp_reg = IHK_UCR_STACK_POINTER,
+    .pf_populate = PF_POPULATE,
+    .alloc_aligned = process_init_stack_alloc_aligned_bridge,
+    .free_pages = process_init_stack_free_pages_bridge,
+    .add_range = process_init_stack_add_range_bridge,
+    .virt_to_phys = process_init_stack_virt_to_phys_bridge,
+    .attr = process_init_stack_attr_bridge,
+    .pt_set_range = process_init_stack_pt_set_range_bridge,
+    .hwcap = process_init_stack_hwcap_bridge,
+    .modify_context = process_init_stack_modify_context_bridge,
+    .log = process_init_stack_log_bridge,
+};
+#endif
+#line 3558
+int init_process_stack(struct thread *, struct program_load_desc *, unsigned long,
+        int, char **, int, char **);
+#else
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 3558
+#else
+#line 3541
+#endif
+#line 3473
 int init_process_stack(struct thread *thread, struct program_load_desc *pn,
                         unsigned long at_base, int argc, char **argv,
                         int envc, char **env)
@@ -3210,8 +5263,99 @@ int init_process_stack(struct thread *thread, struct program_load_desc *pn,
 			process_init_stack_modify_context_bridge,
 			process_init_stack_log_bridge);
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 3590
+#else
+#line 3503
+#endif
+#line 3503
 
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#ifndef MCKERNEL_RUST_PROCESS_VERBOSE_LOCAL_COMPANIONS
+#line 3506
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_extend_region_exists_debug = {
+    .file = __FILE__, .func = "extend_process_region",
+    .line = 3394, .flags = DDEBUG_DEFAULT,
+};
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_extend_region_alloc_debug = {
+    .file = __FILE__, .func = "extend_process_region",
+    .line = 3411, .flags = DDEBUG_DEFAULT,
+};
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_extend_region_success_debug = {
+    .file = __FILE__, .func = "extend_process_region",
+    .line = 3428, .flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 3521
+unsigned long process_extend_region_body_result(
+    struct process_vm *,unsigned long,unsigned long,unsigned long,
+    size_t,int,unsigned long,size_t,unsigned long,unsigned long,unsigned long,
+    int,unsigned long,unsigned long,unsigned long,int,const char *,int,int,
+    struct ddebug *,struct ddebug *,struct ddebug *);
+struct process_extend_region_entry_config {
+    size_t page_size;
+    int page_shift;
+    unsigned long page_mask;
+    size_t large_page_size;
+    unsigned long large_page_mask;
+    unsigned long large_page_p2align;
+    unsigned long page_p2align;
+    int large_page_shift;
+    unsigned long mpol_no_heap;
+    unsigned long ap_nowait;
+    unsigned long ap_user;
+    int pg_user;
+    const char * file;
+    int alloc_line;
+    int free_line;
+    struct ddebug * exists_debug;
+    struct ddebug * alloc_debug;
+    struct ddebug * success_debug;
+};
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_LOCAL_COMPANIONS
+#ifndef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+#error local config companions require process verbose data
+#endif
+extern const struct process_extend_region_entry_config process_extend_region_entry_config;
+#else
+#line 3546
+const struct process_extend_region_entry_config process_extend_region_entry_config = {
+    .page_size = PAGE_SIZE,
+    .page_shift = PAGE_SHIFT,
+    .page_mask = PAGE_MASK,
+    .large_page_size = LARGE_PAGE_SIZE,
+    .large_page_mask = LARGE_PAGE_MASK,
+    .large_page_p2align = LARGE_PAGE_P2ALIGN,
+    .page_p2align = PAGE_P2ALIGN,
+    .large_page_shift = LARGE_PAGE_SHIFT,
+    .mpol_no_heap = MPOL_NO_HEAP,
+    .ap_nowait = IHK_MC_AP_NOWAIT,
+    .ap_user = IHK_MC_AP_USER,
+    .pg_user = IHK_MC_PG_USER,
+    .file = __FILE__,
+    .alloc_line = 3408,
+    .free_line = 3423,
+    .exists_debug = &process_extend_region_exists_debug,
+    .alloc_debug = &process_extend_region_alloc_debug,
+    .success_debug = &process_extend_region_success_debug,
+};
+#endif
+#line 3566
+unsigned long extend_process_region(struct process_vm *, unsigned long, unsigned long,
+        unsigned long);
+#line 3536
+#else
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 3534
+#else
+#line 3569
+#endif
+#line 3364
 unsigned long extend_process_region(struct process_vm *vm,
 		unsigned long end_allocated,
 		unsigned long address, unsigned long flag)
@@ -3281,6 +5425,14 @@ unsigned long extend_process_region(struct process_vm *vm,
 
 	return new_end_allocated;
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 3605
+#else
+#line 3433
+#endif
+#line 3432
+
 
 // Original version retained because dcfa (src/mccmd/client/ibmic/main.c) calls this
 int process_remove_region_clear_bridge(void *page_table,
@@ -3303,6 +5455,13 @@ int remove_process_region(struct process_vm *vm,
 }
 #endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int process_remove_region_clear_bridge(void *page_table,
+				       struct process_vm *vm,
+				       unsigned long start,
+				       unsigned long end);
+#else
+#line 3455
 int process_remove_region_clear_bridge(void *page_table,
 				       struct process_vm *vm,
 				       unsigned long start,
@@ -3313,7 +5472,19 @@ int process_remove_region_clear_bridge(void *page_table,
 	return ihk_mc_pt_clear_range(page_table, vm, (void *)start,
 				     (void *)end);
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 3462
+#else
+#line 3464
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_remove_region_log_bridge(struct process_vm *vm,
+				      unsigned long start,
+				      unsigned long end);
+#else
+#line 3466
 void process_remove_region_log_bridge(struct process_vm *vm,
 				      unsigned long start,
 				      unsigned long end)
@@ -3321,6 +5492,12 @@ void process_remove_region_log_bridge(struct process_vm *vm,
 	// memory_stat_rss_sub() isn't called because this execution path is no loger reached
 	dkprintf("%s: memory_stat_rss_sub() isn't called,start=%lx,end=%lx\n", __FUNCTION__, start, end);
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 3470
+#else
+#line 3472
+#endif
 
 #ifndef MCKERNEL_RUST_PROCESS_HELPERS
 void flush_process_memory(struct process_vm *vm)
@@ -3347,6 +5524,11 @@ void free_process_memory_ranges(struct process_vm *vm)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+PROCESS_TRACKED_LINE_STORAGE(process_free_thread_pages_source_line, 3501);
+void process_free_thread_pages_bridge(void *thread);
+#else
+#line 3499
 static void free_thread_pages(struct thread *thread)
 {
 	_ihk_mc_free_pages(thread, KERNEL_STACK_NR_PAGES, IHK_MC_PG_KERNEL, __FILE__, __LINE__);
@@ -3356,6 +5538,8 @@ void process_free_thread_pages_bridge(void *thread)
 {
 	free_thread_pages(thread);
 }
+#endif
+#line 3508
 
 #ifndef MCKERNEL_RUST_PROCESS_HELPERS
 void
@@ -3367,11 +5551,19 @@ hold_process(struct process *proc)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void *process_current_resource_set_bridge(void);
+#else
 void *process_current_resource_set_bridge(void)
 {
 	return get_this_cpu_local_var()->resource_set;
 }
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_release_hash_detach_bridge(void *resource_set_arg,
+					void *proc_arg);
+#else
 void process_release_hash_detach_bridge(void *resource_set_arg,
 					void *proc_arg)
 {
@@ -3388,7 +5580,11 @@ void process_release_hash_detach_bridge(void *resource_set_arg,
 		mcs_rwlock_writer_unlock(&phash->lock[hash], &lock);
 	}
 }
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_release_sibling_detach_bridge(void *proc_arg);
+#else
 void process_release_sibling_detach_bridge(void *proc_arg)
 {
 	struct process *proc = proc_arg;
@@ -3399,7 +5595,12 @@ void process_release_sibling_detach_bridge(void *proc_arg)
 	process_list_detach_result(&proc->siblings_list);
 	mcs_rwlock_writer_unlock(&parent->children_lock, &lock);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_release_profile_bridge(void *proc_arg);
+#else
+#line 3565
 void process_release_profile_bridge(void *proc_arg)
 {
 #ifdef PROFILE_ENABLE
@@ -3418,7 +5619,12 @@ void process_release_profile_bridge(void *proc_arg)
 	(void)proc_arg;
 #endif
 }
+#endif
+#line 3583
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_release_final_cleanup_bridge(void *resource_set_arg);
+#else
 void process_release_final_cleanup_bridge(void *resource_set_arg)
 {
 	struct resource_set *rset = resource_set_arg;
@@ -3435,6 +5641,7 @@ void process_release_final_cleanup_bridge(void *resource_set_arg)
 	}
 	mcs_rwlock_reader_unlock(&rset->pid1->children_lock, &lock);
 }
+#endif
 
 #ifndef MCKERNEL_RUST_PROCESS_HELPERS
 void
@@ -3486,6 +5693,14 @@ void process_release_process_bridge(void *proc)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_populate_warn_bridge(struct process_vm *vm,
+				  unsigned long addr,
+				  unsigned long reason,
+				  unsigned long off,
+				  size_t len, int error);
+#else
+#line 3655
 void process_populate_warn_bridge(struct process_vm *vm,
 				  unsigned long addr,
 				  unsigned long reason,
@@ -3497,6 +5712,8 @@ void process_populate_warn_bridge(struct process_vm *vm,
 			"populate_process_memory", vm, addr, reason, off, len,
 			error);
 }
+#endif
+#line 3666
 
 #ifndef MCKERNEL_RUST_PROCESS_HELPERS
 void
@@ -3513,6 +5730,37 @@ free_all_process_memory_range(struct process_vm *vm)
 void release_process_vm(struct process_vm *vm)
 {
 	process_release_vm_body_result(vm,
+		__builtin_offsetof(struct process_vm, refcount),
+		__builtin_offsetof(struct process_vm, proc),
+		__builtin_offsetof(struct process, mckfd),
+		__builtin_offsetof(struct process, mckfd_lock),
+		__builtin_offsetof(struct mckfd, next),
+		__builtin_offsetof(struct mckfd, close_cb),
+		__builtin_offsetof(struct process_vm, free_cb),
+		__builtin_offsetof(struct process_vm, opt),
+		__builtin_offsetof(struct process_vm, address_space),
+		__builtin_offsetof(struct process, pid),
+		__builtin_offsetof(struct process, vm),
+		__builtin_offsetof(struct process_vm,
+				   vm_range_numa_policy_tree),
+		__builtin_offsetof(struct vm_range_numa_policy,
+				   policy_rb_node),
+		NULL,
+		process_spin_lock_bridge,
+		process_spin_unlock_bridge,
+		process_flush_vm_bridge,
+		process_free_all_ranges_bridge,
+		process_detach_address_space_bridge,
+		process_release_process_bridge,
+		process_policy_free_bridge,
+		process_free_vm_bridge);
+}
+#endif
+
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
+int release_process_vm_checked(struct process_vm *vm)
+{
+	return process_release_vm_checked_body_result(vm,
 		__builtin_offsetof(struct process_vm, refcount),
 		__builtin_offsetof(struct process_vm, proc),
 		__builtin_offsetof(struct process, mckfd),
@@ -3559,6 +5807,10 @@ int populate_process_memory(struct process_vm *vm, void *start, size_t len)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_hold_thread_warn_bridge(void *thread_arg);
+#else
+#line 3759
 void process_hold_thread_warn_bridge(void *thread_arg)
 {
 	struct thread *thread = thread_arg;
@@ -3566,6 +5818,8 @@ void process_hold_thread_warn_bridge(void *thread_arg)
 	kprintf("hold_thread: WARNING: already exited process,tid=%d\n",
 		thread->tid);
 }
+#endif
+#line 3766
 
 #ifndef MCKERNEL_RUST_PROCESS_HELPERS
 int hold_thread(struct thread *thread)
@@ -3607,14 +5861,21 @@ release_sigcommon(struct sig_common *sigcommon)
  * Release the TID from the process' TID set corresponding to this thread.
  * NOTE: threads_lock must be held.
  */
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void __release_tid(struct process *proc, struct thread *thread);
+#else
 void __release_tid(struct process *proc, struct thread *thread) {
 	process_release_tid_body_result(proc->tids, proc->nr_tids,
 		sizeof(proc->tids[0]),
 		__builtin_offsetof(struct mcexec_tid, thread),
 		thread, thread->tid, process_release_tid_log_bridge);
 }
+#endif
 
 /* Replace tid specified by thread with tid specified by new_tid */
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void __find_and_replace_tid(struct process *proc, struct thread *thread, int new_tid);
+#else
 void __find_and_replace_tid(struct process *proc, struct thread *thread, int new_tid) {
 	process_replace_tid_body_result(proc->tids, proc->nr_tids,
 		sizeof(proc->tids[0]),
@@ -3622,7 +5883,11 @@ void __find_and_replace_tid(struct process *proc, struct thread *thread, int new
 		__builtin_offsetof(struct mcexec_tid, thread),
 		thread, thread->tid, new_tid, process_replace_tid_log_bridge);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_destroy_thread_hash_detach_bridge(void *thread_arg);
+#else
 void process_destroy_thread_hash_detach_bridge(void *thread_arg)
 {
 	struct thread *thread = thread_arg;
@@ -3639,7 +5904,11 @@ void process_destroy_thread_hash_detach_bridge(void *thread_arg)
 					&lock);
 	}
 }
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_destroy_thread_time_account_bridge(void *thread_arg);
+#else
 void process_destroy_thread_time_account_bridge(void *thread_arg)
 {
 	struct thread *thread = thread_arg;
@@ -3654,19 +5923,35 @@ void process_destroy_thread_time_account_bridge(void *thread_arg)
 	ts_add(&thread->proc->utime, &ats);
 	mcs_rwlock_writer_unlock(&proc->update_lock, &updatelock);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_destroy_thread_release_tid_bridge(void *proc_arg,
+					       void *thread_arg);
+#else
+#line 3871
 void process_destroy_thread_release_tid_bridge(void *proc_arg,
 					       void *thread_arg)
 {
 	__release_tid(proc_arg, thread_arg);
 }
+#endif
+#line 3876
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_destroy_thread_replace_tid_bridge(void *proc_arg,
+					       void *thread_arg,
+					       int new_tid);
+#else
+#line 3877
 void process_destroy_thread_replace_tid_bridge(void *proc_arg,
 					       void *thread_arg,
 					       int new_tid)
 {
 	__find_and_replace_tid(proc_arg, thread_arg, new_tid);
 }
+#endif
+#line 3883
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 void process_release_sigcommon_bridge(void *sigcommon);
@@ -3735,6 +6020,21 @@ void release_thread(struct thread *thread)
 #endif
 
 #ifndef MCKERNEL_RUST_PROCESS_HELPERS
+int release_thread_checked(struct thread *thread)
+{
+	return process_release_thread_checked_body_result(thread,
+		__builtin_offsetof(struct thread, refcount),
+		__builtin_offsetof(struct thread, vm),
+		__builtin_offsetof(struct thread, proc),
+		NULL,
+		process_release_thread_profile_bridge,
+		process_procfs_delete_thread_bridge,
+		process_destroy_thread_bridge,
+		process_release_vm_checked_bridge);
+}
+#endif
+
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 void cpu_set(int cpu, cpu_set_t *cpu_set, ihk_spinlock_t *lock)
 {
 	process_cpu_set_public_result(cpu, (unsigned long)cpu_set,
@@ -3765,6 +6065,74 @@ void sched_do_migrate_public(void);
 static void do_migrate(void);
 #endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#ifdef MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE
+extern const struct sched_idle_offsets process_idle_offsets;
+extern const struct sched_idle_values process_idle_values;
+_Static_assert(CPU_STATUS_RUNNING == 2 && CPU_STATUS_IDLE == 1 && CPU_STATUS_RESERVED == 3,
+    "Rust idle CPU status constants match the original pinned C producer");
+_Static_assert(PS_RUNNING == 1 && PS_STOPPED == 0x20 && PS_INTERRUPTIBLE == 2,
+    "Rust idle thread status constants match the original pinned C producer");
+_Static_assert(CPU_FLAG_NEED_MIGRATE == 2U && IHK_OS_MONITOR_IDLE == 1 && IHK_OS_MONITOR_KERNEL == 3,
+    "Rust idle flag and monitor constants match the original pinned C producer");
+#else
+#line 3997
+const struct sched_idle_offsets process_idle_offsets = {
+	.cpu_runq_lock_offset = offsetof(struct cpu_local_var, runq_lock),
+	.cpu_runq_irqstate_offset = offsetof(struct cpu_local_var, runq_irqstate),
+	.cpu_current_offset = offsetof(struct cpu_local_var, current),
+	.cpu_flags_offset = offsetof(struct cpu_local_var, flags),
+	.cpu_status_offset = offsetof(struct cpu_local_var, status),
+	.cpu_runq_offset = offsetof(struct cpu_local_var, runq),
+	.thread_sched_list_offset = offsetof(struct thread, sched_list),
+	.thread_status_offset = offsetof(struct thread, status),
+	.monitor_status_offset = offsetof(struct ihk_os_cpu_monitor, status),
+	.monitor_counter_offset = offsetof(struct ihk_os_cpu_monitor, counter),
+};
+const struct sched_idle_values process_idle_values = {
+	.cpu_running = CPU_STATUS_RUNNING, .cpu_idle = CPU_STATUS_IDLE,
+	.cpu_reserved = CPU_STATUS_RESERVED, .thread_running = PS_RUNNING,
+	.thread_stopped = PS_STOPPED, .thread_interruptible = PS_INTERRUPTIBLE,
+	.need_migrate = CPU_FLAG_NEED_MIGRATE,
+	.monitor_idle = IHK_OS_MONITOR_IDLE, .monitor_kernel = IHK_OS_MONITOR_KERNEL,
+};
+#endif
+#line 4016
+#ifdef MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE
+extern const struct sched_idle_callbacks process_idle_callbacks;
+#else
+#line 4016
+const struct sched_idle_callbacks process_idle_callbacks = {
+	.current_cpu = sched_idle_current_cpu_bridge,
+	.lock = process_spin_lock_bridge, .unlock = process_spin_unlock_bridge,
+	.enable_interrupt = cpu_enable_interrupt, .disable_interrupt = cpu_disable_interrupt,
+	.schedule = schedule, .migrate = sched_do_migrate_public,
+	.consolidate = kmalloc_consolidate_free_list,
+	.zero_free = process_sched_zero_free_bridge, .safe_halt = cpu_safe_halt,
+};
+#endif
+#line 4024
+_Static_assert(sizeof(unsigned long) == 8 && sizeof(void *) == 8,
+	"idle callback ABI requires supported LP64");
+_Static_assert(__builtin_types_compatible_p(__typeof__(((struct thread *)0)->status), int)
+	&& sizeof(((struct thread *)0)->status) == 4, "idle thread status is C int/i32");
+_Static_assert(__builtin_types_compatible_p(__typeof__(((struct cpu_local_var *)0)->status), int)
+	&& sizeof(((struct cpu_local_var *)0)->status) == 4, "idle CPU status is C int/i32");
+_Static_assert(__builtin_types_compatible_p(__typeof__(((struct cpu_local_var *)0)->flags), unsigned int)
+	&& sizeof(((struct cpu_local_var *)0)->flags) == 4, "idle CPU flags are u32");
+_Static_assert(__builtin_types_compatible_p(__typeof__(((struct ihk_os_cpu_monitor *)0)->status), int)
+	&& sizeof(((struct ihk_os_cpu_monitor *)0)->status) == 4, "idle monitor status is C int/i32");
+_Static_assert(__builtin_types_compatible_p(__typeof__(((struct ihk_os_cpu_monitor *)0)->counter), unsigned long),
+	"idle monitor counter is unsigned long");
+_Static_assert(offsetof(struct list_head, next) == 0, "idle scan requires leading next");
+_Static_assert(sizeof(struct sched_idle_offsets) == 80, "idle offsets ABI size");
+_Static_assert(sizeof(struct sched_idle_values) == 36, "idle constants ABI size");
+_Static_assert(sizeof(struct sched_idle_callbacks) == 80, "idle callback ABI size");
+
+void process_idle_entry(void);
+#line 4049
+#else
+#line 4050
 static void idle(void)
 {
 	struct cpu_local_var *v = get_this_cpu_local_var();
@@ -3818,15 +6186,32 @@ static void idle(void)
 		if (v->status == CPU_STATUS_IDLE ||
 		    v->status == CPU_STATUS_RESERVED) {
 			long s;
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 			struct thread *t;
+#endif
 
 			s = ihk_mc_spinlock_lock(&v->runq_lock);
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+			_Static_assert(__builtin_types_compatible_p(
+				__typeof__(((struct thread *)0)->status), int),
+				"idle runqueue status must be a C int");
+			_Static_assert(sizeof(((struct thread *)0)->status) == 4,
+				"idle runqueue status must match Rust i32");
+			_Static_assert(offsetof(struct list_head, next) == 0,
+				"idle runqueue next must be the first list field");
+			if (sched_idle_runqueue_has_running_result(
+				(unsigned long)&v->runq,
+				offsetof(struct thread, sched_list),
+				offsetof(struct thread, status), PS_RUNNING))
+				v->status = CPU_STATUS_RUNNING;
+#else
 			for (t = ((typeof(*t) *)((char *)((&v->runq)->next) - offsetof(typeof(*t), sched_list))); &t->sched_list != (&v->runq); t = ((typeof(*t) *)((char *)(t->sched_list.next) - offsetof(typeof(*t), sched_list)))) {
 				if (t->status == PS_RUNNING) {
 					v->status = CPU_STATUS_RUNNING;
 					break;
 				}
 			}
+#endif
 			ihk_mc_spinlock_unlock(&v->runq_lock, s);
 		}
 		if (v->status == CPU_STATUS_IDLE ||
@@ -3846,7 +6231,17 @@ static void idle(void)
 		}
 	}
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 4146
+#else
+#line 4148
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_sched_init_context_bridge(void *thread_arg);
+#else
+#line 4150
 void process_sched_init_context_bridge(void *thread_arg)
 {
 	struct thread *thread = thread_arg;
@@ -3854,6 +6249,12 @@ void process_sched_init_context_bridge(void *thread_arg)
 	ihk_mc_init_context(&thread->ctx, NULL, idle);
 }
 
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 4154
+#else
+#line 4156
+#endif
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 int process_sched_save_fp_bridge(void *thread);
 #else
@@ -3863,6 +6264,22 @@ int process_sched_save_fp_bridge(void *thread)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_LOCAL_COMPANIONS
+extern const int process_sched_timer_configuration[2];
+#else
+#line 4167
+#ifdef TIMER_CPU_ID
+const int process_sched_timer_configuration[2] = { 1, TIMER_CPU_ID };
+#else
+const int process_sched_timer_configuration[2] = { 0, 0 };
+#endif
+#endif
+#line 4172
+void process_sched_timer_init_bridge(int cpu);
+#else
+#line 4174
+#line 4166
 void process_sched_timer_init_bridge(int cpu)
 {
 #ifdef TIMER_CPU_ID
@@ -3874,6 +6291,17 @@ void process_sched_timer_init_bridge(int cpu)
 	(void)cpu;
 #endif
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 4184
+#else
+#line 4177
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 4174
+#else
+#line 4176
+#endif
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 void process_sched_init_panic_bridge(void);
@@ -3926,6 +6354,7 @@ void sched_init(void)
 }
 #endif
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 struct migrate_request {
 	struct list_head list;
 	struct thread *thread;
@@ -3946,6 +6375,7 @@ static const struct sched_migrate_offsets process_sched_migrate_offsets = {
 	.cpu_flags_offset = __builtin_offsetof(struct cpu_local_var, flags),
 	.cpu_status_offset = __builtin_offsetof(struct cpu_local_var, status),
 };
+#endif
 
 #ifndef MCKERNEL_RUST_PROCESS_HELPERS
 static const struct sched_do_migrate_offsets process_sched_do_migrate_offsets = {
@@ -3977,7 +6407,11 @@ static const struct sched_do_migrate_offsets process_sched_do_migrate_offsets = 
 #endif
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
-static const struct sched_runqueue_offsets process_sched_runqueue_offsets = {
+#ifdef MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE
+extern const struct sched_runqueue_offsets process_sched_runqueue_offsets;
+#else
+#line 4282
+const struct sched_runqueue_offsets process_sched_runqueue_offsets = {
 	.thread_cpu_id_offset = __builtin_offsetof(struct thread, cpu_id),
 	.thread_tid_offset = __builtin_offsetof(struct thread, tid),
 	.thread_status_offset = __builtin_offsetof(struct thread, status),
@@ -4012,6 +6446,8 @@ static const struct sched_runqueue_offsets process_sched_runqueue_offsets = {
 	.cpu_nr_ctx_switches_offset =
 		__builtin_offsetof(struct cpu_local_var, nr_ctx_switches),
 };
+#endif
+#line 4317
 
 void process_sched_rwlock_bridge(unsigned long lock_addr,
 				 unsigned long node_addr);
@@ -4033,6 +6469,13 @@ void process_sched_set_timer_bridge(int runq_locked)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_sched_runq_log_bridge(int event,
+					  unsigned long arg0,
+					  unsigned long arg1, int arg2,
+					  int arg3);
+#else
+#line 4338
 PROCESS_SCHED_PUBLIC_BRIDGE void process_sched_runq_log_bridge(int event,
 					  unsigned long arg0,
 					  unsigned long arg1, int arg2,
@@ -4117,6 +6560,12 @@ PROCESS_SCHED_PUBLIC_BRIDGE void process_sched_runq_log_bridge(int event,
 		break;
 	}
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 4419
+#else
+#line 4421
+#endif
 
 unsigned long process_sched_irq_save_bridge(void);
 void process_sched_irq_restore_bridge(unsigned long irqstate);
@@ -4148,6 +6597,10 @@ void process_sched_counter_dec_bridge(unsigned long counter_addr)
 
 void process_sched_rusage_threads_inc_bridge(void);
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_sched_rusage_debug_bridge(void);
+#else
+#line 4466
 void process_sched_rusage_debug_bridge(void)
 {
 #ifdef RUSAGE_DEBUG
@@ -4166,6 +6619,22 @@ void process_sched_rusage_debug_bridge(void)
 	}
 #endif
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 4468
+#else
+#line 4483
+#endif
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 4469
+#else
+#line 4484
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 4469
+#else
+#line 4471
 #endif
 
 #ifndef MCKERNEL_RUST_PROCESS_HELPERS
@@ -4187,6 +6656,7 @@ static void do_migrate(void)
 }
 #endif
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 void set_timer(int runq_locked)
 {
 	struct cpu_local_var *v = get_this_cpu_local_var();
@@ -4198,6 +6668,7 @@ void set_timer(int runq_locked)
 			process_timer_lapic_enable_bridge,
 			process_timer_lapic_disable_bridge);
 }
+#endif
 
 /*
  * NOTE: it is assumed that a wait-queue (or futex queue) is
@@ -4205,27 +6676,9 @@ void set_timer(int runq_locked)
  * NOTE: one must set thread->spin_sleep to 1 before evaluating
  * the wait condition to avoid lost wake-ups.
  */
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 void spin_sleep_or_schedule(void)
 {
-#ifdef MCKERNEL_RUST_PROCESS_HELPERS
-	sched_spin_sleep_or_schedule_body_result(
-			(unsigned long)get_this_cpu_local_var()->current,
-			(unsigned long)get_this_cpu_local_var(),
-			ihk_ikc_get_processor_id(), idle_halt,
-			CPU_FLAG_NEED_RESCHED,
-			&process_sched_runqueue_offsets,
-			process_sched_irq_save_bridge,
-			process_sched_irq_restore_bridge,
-			process_spin_lock_bridge,
-			process_spin_unlock_bridge,
-			process_sched_noirq_lock_bridge,
-			process_sched_noirq_unlock_bridge,
-			process_sched_schedule_bridge,
-			process_sched_zero_free_bridge,
-			process_sched_pause_bridge,
-			process_sched_has_signal_bridge,
-			process_sched_runq_log_bridge);
-#else
 	struct thread *thread = get_this_cpu_local_var()->current;
 	struct cpu_local_var *v;
 	int do_schedule = 0;
@@ -4301,9 +6754,65 @@ out_schedule:
 	schedule();
 	dkprintf("%s: woken while sleeping, cpu: %d\n",
 		 __func__, ihk_ikc_get_processor_id());
-#endif
 }
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+extern unsigned long sched_schedule_fp_admit(int exited_status);
+extern void sched_schedule_debug_handoff(struct thread *prev, struct thread *next);
+/* RUSAGE_DEBUG controls only ABI data forwarding; Rust owns the decision
+ * and output. Addresses preserve the C build's exact rusage layout. */
+struct sched_exit_debug {
+	const unsigned long *num_threads;
+	const unsigned long *total_memory_usage;
+	const long *memory_stat_rss;
+	const long *memory_stat_mapped_file;
+	int page_sizes;
+};
+extern void sched_schedule_exit_cleanup(struct cpu_local_var *old_cpu,
+		struct thread *last, int exited_status,
+		const struct sched_exit_debug *debug);
+#ifdef RUSAGE_DEBUG
+static const struct sched_exit_debug process_sched_exit_debug = {
+	&rusage.num_threads, &rusage.total_memory_usage,
+	rusage.memory_stat_rss, rusage.memory_stat_mapped_file,
+	IHK_MAX_NUM_PGSIZES
+};
+#endif
+
+#endif
+
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_schedule_switch_debug;
+#else
+#line 4619
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_schedule_switch_debug = {
+ .file=__FILE__, .func="schedule", .line=4684, .flags=DDEBUG_DEFAULT,
+};
+#endif
+#line 4623
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_LOCAL_COMPANIONS
+extern const struct sched_exit_debug *const process_schedule_exit_debug_input;
+#else
+#line 4623
+#ifdef RUSAGE_DEBUG
+const struct sched_exit_debug *const process_schedule_exit_debug_input =
+ &process_sched_exit_debug;
+#else
+const struct sched_exit_debug *const process_schedule_exit_debug_input = NULL;
+#endif
+#endif
+#line 4629
+void schedule(void);
+#else
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 4628
+#else
+#line 4636
+#endif
+#line 4618
 void schedule(void)
 {
 	struct cpu_local_var *v;
@@ -4315,13 +6824,32 @@ void schedule(void)
 	static int mcexec_v10_scheduler_logs;
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
+	irqstate = sched_schedule_fp_admit(PS_EXITED);
+#else
+	/* Admission precedes runqueue mutation.  IRQ exclusion pins current and
+	 * its live FPU state until preparation commits a context switch.  A
+	 * failed save cannot return to a sleeping/exiting scheduler caller or
+	 * proceed with an unsaved owner; panic is deliberately fail-stop here.
+	 * no_preempt retains its existing reschedule-only path without a save.
+	 */
+	irqstate = cpu_disable_interrupt_save();
+	if (!ihk_atomic_read(&get_this_cpu_local_var()->no_preempt)) {
+		prev = get_this_cpu_local_var()->current;
+		if (prev && prev != &get_this_cpu_local_var()->idle &&
+		    prev->status != PS_EXITED && save_fp_regs(prev)) {
+			panic("schedule: failed to save floating point state");
+			__builtin_unreachable();
+		}
+	}
+#endif
+
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
 	struct sched_schedule_result schedule_result;
 	int action;
 
 	(void)thread;
 	(void)tmp;
 	(void)switch_ctx;
-	(void)irqstate;
 
 	action = sched_schedule_prepare_body_result(
 			(unsigned long)get_this_cpu_local_var(),
@@ -4340,10 +6868,13 @@ void schedule(void)
 			process_sched_has_signal_bridge,
 			process_sched_runq_log_bridge);
 	if (action != SCHED_SCHEDULE_ACTION_SWITCH) {
+		cpu_restore_interrupt(irqstate);
 		return;
 	}
 
 	v = (struct cpu_local_var *)schedule_result.cpu_addr;
+	/* Preparation observed IRQs already disabled; retain the entry state. */
+	v->runq_irqstate = irqstate;
 	prev = (struct thread *)schedule_result.prev_thread_addr;
 	next = (struct thread *)schedule_result.next_thread_addr;
 	prevpid = schedule_result.prevpid;
@@ -4364,22 +6895,9 @@ void schedule(void)
 		mcexec_v10_scheduler_logs++;
 	}
 
-	if (prev && prev->ptrace_debugreg) {
-		save_debugreg(prev->ptrace_debugreg);
-		if (next->ptrace_debugreg == NULL) {
-			clear_debugreg();
-		}
-	}
-	if (next->ptrace_debugreg) {
-		restore_debugreg(next->ptrace_debugreg);
-	}
+	sched_schedule_debug_handoff(prev, next);
 
-	/* Take care of floating point registers except for idle process */
-	/* Not to save fp_regs when the process ends */
-	if (prev && (prev != &get_this_cpu_local_var()->idle
-			&& prev->status != PS_EXITED)) {
-		save_fp_regs(prev);
-	}
+	/* The previous live FPU state passed admission before preparation. */
 
 	if (next != &get_this_cpu_local_var()->idle) {
 		restore_fp_regs(next);
@@ -4413,30 +6931,13 @@ void schedule(void)
 	ihk_mc_spinlock_unlock_noirq(&(get_this_cpu_local_var()->runq_lock));
 	cpu_restore_interrupt(get_this_cpu_local_var()->runq_irqstate);
 
-	if ((last != NULL) && (last->status == PS_EXITED)) {
-		v->prevpid = 0;
-		arch_flush_icache_all();
-		release_thread(last);
-		rusage_num_threads_dec();
+	/* old v is intentionally distinct from the current CPU after migration.
+	 * The runqueue lock and entry IRQ state have already been restored. */
 #ifdef RUSAGE_DEBUG
-		if (rusage.num_threads == 0) {
-			int i;
-
-			kprintf("total_memory_usage=%ld\n",
-				rusage.total_memory_usage);
-			for (i = 0; i < IHK_MAX_NUM_PGSIZES; i++) {
-				kprintf("memory_stat_rss[%d]=%ld\n", i,
-					rusage.memory_stat_rss[i]);
-			}
-			for (i = 0; i < IHK_MAX_NUM_PGSIZES; i++) {
-				kprintf(
-				   "memory_stat_mapped_file[%d]=%ld\n",
-				    i,
-				    rusage.memory_stat_mapped_file[i]);
-			}
-		}
+	sched_schedule_exit_cleanup(v, last, PS_EXITED, &process_sched_exit_debug);
+#else
+	sched_schedule_exit_cleanup(v, last, PS_EXITED, NULL);
 #endif
-	}
 
 	/* Have we migrated to another core meanwhile? */
 	if (v != get_this_cpu_local_var()) {
@@ -4448,7 +6949,6 @@ void schedule(void)
 		kprintf("%s: WARNING can't schedule() while no preemption, cnt: %d\n",
 			__func__, ihk_atomic_read(&get_this_cpu_local_var()->no_preempt));
 
-		irqstate = cpu_disable_interrupt_save();
 		ihk_mc_spinlock_lock_noirq(
 			&(get_this_cpu_local_var()->runq_lock));
 		v = get_this_cpu_local_var();
@@ -4460,7 +6960,6 @@ void schedule(void)
 		return;
 	}
 
-	irqstate = cpu_disable_interrupt_save();
 	ihk_mc_spinlock_lock_noirq(&(get_this_cpu_local_var()->runq_lock));
 	get_this_cpu_local_var()->runq_irqstate = irqstate;
 	v = get_this_cpu_local_var();
@@ -4547,12 +7046,7 @@ void schedule(void)
 			restore_debugreg(next->ptrace_debugreg);
 		}
 
-		/* Take care of floating point registers except for idle process */
-		/* Not to save fp_regs when the process ends */
-		if (prev && (prev != &get_this_cpu_local_var()->idle
-				&& prev->status != PS_EXITED)) {
-			save_fp_regs(prev);
-		}
+		/* The previous live FPU state passed admission before preparation. */
 
 		if (next != &get_this_cpu_local_var()->idle) {
 			restore_fp_regs(next);
@@ -4622,6 +7116,22 @@ void schedule(void)
 	}
 #endif
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 4933
+#else
+#line 4921
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 4933
+#else
+#line 4921
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 4918
+#else
+#line 4920
+#endif
 
 #ifndef MCKERNEL_RUST_PROCESS_HELPERS
 void
@@ -4760,6 +7270,7 @@ int sched_wakeup_thread(struct thread *thread, int valid_states)
  * 3. Do migration
  * 4. Wake up this thread
  */
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 void sched_request_migrate(int cpu_id, struct thread *thread)
 {
 	struct cpu_local_var *v = get_cpu_local_var(cpu_id);
@@ -4792,6 +7303,7 @@ void sched_request_migrate(int cpu_id, struct thread *thread)
 			process_sched_schedule_bridge,
 			process_sched_migrate_log_bridge);
 }
+#endif
 
 /* Runq lock must be held here */
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
@@ -4924,6 +7436,9 @@ process_unlock(struct process *proc, struct mcs_rwlock_node_irqsave *lock)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void debug_log(unsigned long arg);
+#else
 void
 debug_log(unsigned long arg)
 {
@@ -4993,7 +7508,13 @@ debug_log(unsigned long arg)
 		break;
 	}
 }
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_access_ok_log_bridge(struct process_vm *vm, int type,
+		unsigned long addr, size_t len, int rc);
+#else
+#line 5299
 void process_access_ok_log_bridge(struct process_vm *vm, int type,
 		unsigned long addr, size_t len, int rc)
 {
@@ -5001,6 +7522,8 @@ void process_access_ok_log_bridge(struct process_vm *vm, int type,
 		"access_ok", (unsigned long long)addr,
 		(unsigned long long)(addr + len), len, type, rc);
 }
+#endif
+#line 5306
 
 #ifndef MCKERNEL_RUST_PROCESS_HELPERS
 int access_ok(struct process_vm *vm, int type, uintptr_t addr, size_t len)

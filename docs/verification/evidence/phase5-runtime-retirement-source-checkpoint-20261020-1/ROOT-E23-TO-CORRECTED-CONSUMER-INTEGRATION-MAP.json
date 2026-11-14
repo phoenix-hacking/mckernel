@@ -1,0 +1,195 @@
+{
+  "consumer_review": {
+    "bytes": 16181,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-runtime-retirement-consumer-independent-review-20261020-1/PHASE5-CORRECTED-RUNTIME-RETIREMENT-CONSUMER-SOURCE-AND-ACTUAL-BODY-REVIEW.json",
+    "sha256": "3fd9d1991e21fafa098624cd3fe685ea56796b52aa2691bd37796cfd2d13f12c"
+  },
+  "corrected_ABA_dependency_review": {
+    "bytes": 7477,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-runtime-exit-quiescence-independent-review-20261020-1/PHASE5-FROZEN-EXIT-IDENTITY-ABA-CORRECTION-REVIEW.json",
+    "sha256": "63c950cf11a1df761d3b53458ac9b59d7247c7d5bfe41920615e434e7650c735"
+  },
+  "final_caller_modified": false,
+  "parent_declared_checkpoint": "root e23/eleven-source checkpoint; no HEAD/Git read performed",
+  "preserved_invariants": [
+    "Existing runnable_current_v2 constructor/childTID C ABI and childVM/TID semantics remain in exact reviewed replacement; no new C calculation or compute functionality added by mapping.",
+    "Actual C consumer delta is only existing Rust retirement drain declaration/call after exit rejection+IRQenable.",
+    "Old exported VM-release void callback ABI remains; new FinalChecked route privateRust.",
+    "Root may integrate ONLY after actual fivecompiler chain accepted; immediate preimage recheck must match rows.",
+    "CMake/defaultmacro OFF unchanged; separate future opt-in CMake delta not included. Parent exited/no reentry retains; native/default/finalACK holds remain."
+  ],
+  "protected_unchanged": {
+    "kernel/CMakeLists.txt": {
+      "bytes": 23076,
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "sha256": "b141d09ad4d717171d9fca51b8ffefec65573f266652bc0d93129bd2a03ec40e"
+    },
+    "kernel/include/process.h": {
+      "bytes": 26602,
+      "path": "/home/holden/mckernel/kernel/include/process.h",
+      "sha256": "8848d536f2fa847a59af72d573ec9c55838c27cea664d46438ab4e038bf83649"
+    },
+    "kernel/rust/abi.rs": {
+      "bytes": 76151,
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    }
+  },
+  "registry_join_note": "Shared registry74e28 is accepted160 original, not producer-only d00f predecessor. Exact replacement99f04 is frozen reviewed composition of corrected ABA token capture/complete plus consumer drain guard. Never apply old address-lookup369/ec10.",
+  "rows": [
+    {
+      "destination": "/home/holden/mckernel/kernel/syscall.c",
+      "integration": "exact whole-file replacement after root immediate preimage check; no shared edits by author",
+      "preimage_authority": "accepted160 shared original",
+      "relative": "kernel/syscall.c",
+      "replace_with": {
+        "bytes": 837964,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-runtime-exit-wait-retirement-consumer-20261020-1/source/kernel/syscall.c",
+        "sha256": "2183284fa35f6b25fbf8feb121c298f70aac13cea6840030f536775ee880d5bb"
+      },
+      "required_preimage": {
+        "bytes": 837676,
+        "path": "/home/holden/mckernel/kernel/syscall.c",
+        "sha256": "98a879c59118bf9ec5c58b13514c1cc4b9e98d0862e45e2756ad0cd760bde796"
+      }
+    },
+    {
+      "destination": "/home/holden/mckernel/kernel/rust/fork_control_guest.rs",
+      "integration": "exact whole-file replacement after root immediate preimage check; no shared edits by author",
+      "preimage_authority": "accepted160 shared original",
+      "relative": "kernel/rust/fork_control_guest.rs",
+      "replace_with": {
+        "bytes": 18671,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-runtime-exit-wait-retirement-consumer-20261020-1/source/kernel/rust/fork_control_guest.rs",
+        "sha256": "26797f574fa1ba7006eb27ff3a1a7750ec04b83f71a2e90b8c35c4c536b33acd"
+      },
+      "required_preimage": {
+        "bytes": 18116,
+        "path": "/home/holden/mckernel/kernel/rust/fork_control_guest.rs",
+        "sha256": "dcaf9427ea60fcf3b3affee4be67d7239720315e35721497c391cd6f0b000f00"
+      }
+    },
+    {
+      "destination": "/home/holden/mckernel/kernel/rust/fork_child_credits.rs",
+      "integration": "exact whole-file replacement after root immediate preimage check; no shared edits by author",
+      "preimage_authority": "accepted160 shared original",
+      "relative": "kernel/rust/fork_child_credits.rs",
+      "replace_with": {
+        "bytes": 28275,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-runtime-exit-wait-retirement-consumer-20261020-1/source/kernel/rust/fork_child_credits.rs",
+        "sha256": "c31914d5914961ca4620484d657518cb0e6f40f36240da53e2f85b1174c2669a"
+      },
+      "required_preimage": {
+        "bytes": 27379,
+        "path": "/home/holden/mckernel/kernel/rust/fork_child_credits.rs",
+        "sha256": "af821338218c6848504a2e066369180f2b9ca2568a9fa847a10166b8d6ee3eb1"
+      }
+    },
+    {
+      "destination": "/home/holden/mckernel/kernel/rust/fork_constructed_credits.rs",
+      "integration": "exact whole-file replacement after root immediate preimage check; no shared edits by author",
+      "preimage_authority": "accepted160 shared original",
+      "relative": "kernel/rust/fork_constructed_credits.rs",
+      "replace_with": {
+        "bytes": 10534,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-runtime-exit-wait-retirement-consumer-20261020-1/source/kernel/rust/fork_constructed_credits.rs",
+        "sha256": "4c1e96ef4fbf5cb66acc54d900d37fcd68fb4d50dd1337c4428b3f5e2ecd1972"
+      },
+      "required_preimage": {
+        "bytes": 9220,
+        "path": "/home/holden/mckernel/kernel/rust/fork_constructed_credits.rs",
+        "sha256": "3a50857d2003d83b8aa67aba02df8e14332be0e30c52cfbfd44b8ae933e9a58d"
+      }
+    },
+    {
+      "destination": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "integration": "exact whole-file replacement after root immediate preimage check; no shared edits by author",
+      "preimage_authority": "accepted160 shared original",
+      "relative": "kernel/rust/process_helpers.rs",
+      "replace_with": {
+        "bytes": 351847,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-runtime-exit-wait-retirement-consumer-20261020-1/source/kernel/rust/process_helpers.rs",
+        "sha256": "526baf9363a0845ad50aade7e9b2296d27c8840527f3510d95a1105fc626d8d3"
+      },
+      "required_preimage": {
+        "bytes": 346362,
+        "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+        "sha256": "dfba4ecf09402f96e615282f7f06a6220368a285c68af96ee2efd9d7ed42d08e"
+      }
+    },
+    {
+      "destination": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "integration": "exact whole-file replacement after root immediate preimage check; no shared edits by author",
+      "preimage_authority": "accepted160 shared original",
+      "relative": "kernel/rust/sched_helpers.rs",
+      "replace_with": {
+        "bytes": 168552,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-runtime-exit-wait-retirement-consumer-20261020-1/source/kernel/rust/sched_helpers.rs",
+        "sha256": "8c5f69629882e7bdcca88fdc7a7fe58d762cf9906e065a0da932f0dfb260628e"
+      },
+      "required_preimage": {
+        "bytes": 168119,
+        "path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+        "sha256": "74a0b3aeb5a972bbb7b63d365aa9371a9375a21b77876bdcb232b8a534493299"
+      }
+    },
+    {
+      "destination": "/home/holden/mckernel/kernel/rust/fork_runnable_child.rs",
+      "integration": "exact whole-file replacement after root immediate preimage check; no shared edits by author",
+      "preimage_authority": "accepted160 shared original",
+      "relative": "kernel/rust/fork_runnable_child.rs",
+      "replace_with": {
+        "bytes": 12616,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-runtime-exit-wait-retirement-consumer-20261020-1/source/kernel/rust/fork_runnable_child.rs",
+        "sha256": "3cc895ffa6e02a04af5b15ad6d2a94ac370adc9662b295f027ad5e5eee38940b"
+      },
+      "required_preimage": {
+        "bytes": 9575,
+        "path": "/home/holden/mckernel/kernel/rust/fork_runnable_child.rs",
+        "sha256": "d05b0e3288012590701a4edce88860a36b781cc21745e14a156de47927306ae2"
+      }
+    },
+    {
+      "destination": "/home/holden/mckernel/kernel/rust/fork_final_ack.rs",
+      "integration": "exact whole-file replacement after root immediate preimage check; no shared edits by author",
+      "preimage_authority": "accepted160 shared original",
+      "relative": "kernel/rust/fork_final_ack.rs",
+      "replace_with": {
+        "bytes": 4829,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-runtime-exit-wait-retirement-consumer-20261020-1/source/kernel/rust/fork_final_ack.rs",
+        "sha256": "9701e5ab00bd083c398f364c17b222bc59461be40a804bea7cb9b2817e47a2dc"
+      },
+      "required_preimage": {
+        "bytes": 4136,
+        "path": "/home/holden/mckernel/kernel/rust/fork_final_ack.rs",
+        "sha256": "9b8beb08284bd42ca1be31757208021ca2a5ad4f3f6f71aae337b0d7a985290f"
+      }
+    },
+    {
+      "destination": "/home/holden/mckernel/kernel/rust/fork_control_registry.rs",
+      "integration": "exact whole-file replacement after root immediate preimage check; no shared edits by author",
+      "preimage_authority": "accepted160 shared original",
+      "relative": "kernel/rust/fork_control_registry.rs",
+      "replace_with": {
+        "bytes": 14529,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-runtime-exit-wait-retirement-consumer-20261020-1/source/kernel/rust/fork_control_registry.rs",
+        "sha256": "99f04dc22882afcda60fe4af6ac3fba90f2d93fed9afdcaecac458613b417e9d"
+      },
+      "required_preimage": {
+        "bytes": 8909,
+        "path": "/home/holden/mckernel/kernel/rust/fork_control_registry.rs",
+        "sha256": "74e28b0a32aec74ee94898f2a6ff13cb16f5a17125cd932219d9c82959dd1601"
+      }
+    }
+  ],
+  "scope": "Functional OS/apps plus Rust compute cutover",
+  "source_count": 9,
+  "source_files_written": 0,
+  "status": "NINE_EXACT_SHARED_PREIMAGES_MATCH_ACCEPTED_BASE_MAPPING_ONLY",
+  "tests_compilers_jobs": 0,
+  "whole_consumer_conditional_review": {
+    "bytes": 21063,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-retirement-whole-consumer-compiler-independent-review-20261020-1/ACTUAL-SOURCE160-AND-FIVE-STAGE-CONDITIONAL-COMPILER-REVIEW.json",
+    "sha256": "b042919394e2f75edecbb153117a10974cd4e630656f31d8a38327be00d27ff6"
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "schema": "mckernel.stability.exact-build-failure.v1",
+  "recorded_at_utc": "2026-09-29T01:58:28Z",
+  "status": "FAIL",
+  "scope": "one independently released local exact-build attempt; no guest or application execution",
+  "source": {
+    "checkpoint": "5a93bf9300e850f63e0a279012786e1b6bc53037",
+    "candidate_commit": "80b8c492be5fdaf227c5559f637a4473de6b7d0a",
+    "candidate": "/dev/shm/mckernel-exact-candidate-80b8c492-1",
+    "metadata_backup": "/dev/shm/mckernel-exact-metadata-backup-80b8c492-1",
+    "input_manifest": "/home/holden/mckernel-work/scratch/native-exact-inputs-80b8c492-1.json",
+    "input_manifest_sha256": "a95019f3fb160ec99f48bc6ff20d7474a73de1f73ffd29a261ef9aea1173826a",
+    "request": "/home/holden/mckernel-work/scratch/native-exact-build-request-80b8c492-1.json",
+    "request_sha256": "5733dfbebc354392135e7dac479c4a6e602e21bd5100798f84e5a90109195759"
+  },
+  "operation": {
+    "owner_pid": 3570990,
+    "owner_starttime": "85681355",
+    "owner_nonce": "a1484c370a994626aa2c60f3f3822271",
+    "docker_wait_pids": [3571094, 3571097],
+    "owner_process_retired": true,
+    "docker_wait_processes_retired": true,
+    "lease": "/home/holden/mckernel-work/scratch/native-exact-build-lease-80b8c492-1.json",
+    "lease_absent_after_retirement": true,
+    "container": {
+      "id": "c6917efd594a3ec0311371a4e9e5c8d5f9a598b25687a3820e8f56138f9f0772",
+      "name": "mckernel-exact-917e1468d2664989aa026baf667b2b7b",
+      "running": false,
+      "pid": 0,
+      "exit_code": 1,
+      "oom_killed": false,
+      "retention": "preserve terminal container for failure evidence"
+    }
+  },
+  "result": {
+    "exit_code": 1,
+    "failed_phase": "Verify source-only contracts without claiming readiness",
+    "compile_started": false,
+    "output_root_empty": true,
+    "failure_family": "native Rust build-surface stage-manifest authority mismatch",
+    "diagnostic": "native Rust build-surface audit failed: stage manifest must name exactly the build authorities and locked supplemental inputs",
+    "unchanged_retry_forbidden": true,
+    "successful_current_candidate_builds": 0,
+    "real_guest_apps": 4
+  },
+  "evidence": {
+    "scratch_root": "/home/holden/mckernel-work/scratch/native-exact-build-evidence-80b8c492-1",
+    "owner_receipt_sha256": "f398fa17bc54cf8bf473c86ce143fede1601d8759c196a64d371f2e543b8f6d3",
+    "build_receipt_sha256": "81cf86234c89f34abb136902e11405e8aa5995c77ac5360f50d5c0e8e91ba783",
+    "driver_log_sha256": "1f39da19e1676a6fe19784c75069041f4ad07d32c43761771607d95439162a0b",
+    "phase_script_sha256": "a1042bc7639515f0bdd38fd89e0335f043f86fc47fd753fe8b720df67fb41b7c",
+    "archive": "docs/verification/evidence/stability-native-exact-build-phase0-failure-80b8c492-20260928-1.tar.gz",
+    "archive_sha256": "5f9f9ab17d3dcb576ba9a472c529a1d999e4e1523ab3e63fe954ac34a6a8dec6",
+    "archive_size": 11434
+  },
+  "retained_prior_failure": {
+    "container_id": "110dfe01e3fb5dea16c30911f3589dc49137dcaaff905a66dd4c0a6f731799b0",
+    "container_name": "mckernel-exact-272a777b73aa4a5185f607bfa8fad490",
+    "running": false,
+    "pid": 0,
+    "exit_code": 1,
+    "oom_killed": false
+  },
+  "shutdown": {
+    "launcher_wrapper_pid": 3399308,
+    "launcher_wrapper_starttime": "83682487",
+    "launcher_worker_pid": 3399313,
+    "launcher_worker_starttime": "83682494",
+    "active_child_agents": 0,
+    "heavy_build_or_guest_active": false,
+    "goal_complete": false,
+    "goal_resumed_during_shutdown": false
+  },
+  "next_tasks": [
+    "Reproduce the stage-manifest authority mismatch locally without Docker and identify the exact expected-versus-observed authority set.",
+    "Apply at most one bounded correction for this new failure family and run its focused local regressions.",
+    "Obtain independent source review, then create a fresh commit-derived candidate, manifest, request, output, evidence and lease namespace; preserve this failed candidate and both failed containers.",
+    "Seek a new one-shot execution release only after the corrected source checkpoint is pushed and fetched; never rerun the unchanged request."
+  ],
+  "formal_counters": {
+    "application_cases": "0/273",
+    "fault_modes": "2/4",
+    "gates": "6/130",
+    "stress_iterations": "350/10000",
+    "language_gates": "0/7"
+  }
+}

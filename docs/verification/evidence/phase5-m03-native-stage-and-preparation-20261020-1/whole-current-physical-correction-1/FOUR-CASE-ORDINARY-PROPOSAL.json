@@ -1,0 +1,65 @@
+{
+  "status": "FROZEN_CONDITIONAL_ROOT_CPU6_GRANT_AFTER_PEER_DELTA_AGREEMENT_AND_FRESH_GUARDS",
+  "functional_scope": "Functional OS/apps plus Rust/reviewed assembly compute cutover",
+  "outer_argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--fsize=33554432",
+    "--core=0",
+    "--nofile=256",
+    "--",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-preparation-1/native-packet-1/whole-current-physical-correction-1/run_checks_once.py"
+  ],
+  "fixture": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-preparation-1/native-packet-1/whole-current-physical-correction-1/check_whole_current.py",
+    "sha256": "2a7dc447a9c1c5aa76374458321807ffd3f46c3df33801fc7a76e6335d35b232",
+    "bytes": 2386
+  },
+  "runner": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-preparation-1/native-packet-1/whole-current-physical-correction-1/run_checks_once.py",
+    "sha256": "89363c3852e35bc7b03aebbd1415338da28a59f74c754a39633807bc92ecbf75",
+    "bytes": 2586
+  },
+  "inputs": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-preparation-1/native-packet-1/whole-current-physical-correction-1/INPUTS.json",
+    "sha256": "ec2ad9b3edf9d5089bade223f04a46fcd757a38cbe2ce893a1f9fe45d3cd9373",
+    "bytes": 1295
+  },
+  "case_count": 4,
+  "profile": {
+    "cpu": 6,
+    "jobs": 1,
+    "AS_bytes": 1073741824,
+    "CPU_seconds": 30,
+    "wall_seconds": 35,
+    "kill_grace_seconds": 2,
+    "perstream_bytes": 33554432,
+    "core_bytes": 0,
+    "nofile": 256,
+    "minimum_MemAvailable_bytes": 5368709120,
+    "minimum_host_available_bytes": 18887655424,
+    "minimum_scratch_available_bytes": 14026801152
+  },
+  "no_approval_fixture_or_protected_raw": true,
+  "report": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-production-link-image-independent-review-20261020-1/ACTUAL-FAILED-IMAGE-SUCCESSOR-CLEANUP-PHYSICAL-RELEASE-REVIEW.json",
+    "sha256": "d55efb73f89ab110386dedbfc176081a32a4b0b4b28cb6f3176b0d94b23aa9ef",
+    "bytes": 12528
+  },
+  "source_delta": "All five current d55 boundaries: exact closed root capture status/fullFDbytes, normal wrapper/root mutex14PIDs4names, UID0, canonical noLF internal release SHA separate from fileSHA, correctedpostjoin fullauthority; unchanged accepted7aacf helper and journal/archive/identity ownership checks",
+  "prior_helper_only_result_preserved": true,
+  "no_old59_28_or_fixtures_replay": true,
+  "root_operations": 0,
+  "guest_runs": 0
+}

@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_packet_review",
+  "task_id": "M02-B-storage-fault-v2-source-packet",
+  "attempt": 4,
+  "status": "FAIL_PACKET_ONLY",
+  "recorded_utc": "2026-09-15T18:36:00Z",
+  "reviewed_packet_sha256": "a65d1d57091f4564cdc80a6bf18fabeb98c2e3533237a6835336b84aaeb0221b",
+  "accepted": ["ordered schedules", "selector phases", "packet counts", "imported request-acquisition concept"],
+  "blockers": [
+    "create-BEFORE and failed-create values plus CLEANUP_READY values are not fully pinned",
+    "request fstat stable identity and size transitions are not distinguished",
+    "owner-result and terminal journal schemas are not exact and the complete effective environment is not retained"
+  ],
+  "source_edit_released": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

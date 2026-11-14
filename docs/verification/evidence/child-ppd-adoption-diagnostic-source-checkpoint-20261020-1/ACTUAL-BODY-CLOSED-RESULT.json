@@ -1,0 +1,178 @@
+{
+  "status": "PASS_EXACT_ADOPTION_METHOD_DIFFERENTIAL_ADAPTER_ONLY",
+  "functional_scope": "Supported functional OS/apps plus actual compute-C retirement into Rust/reviewed assembly; diagnostic body feedback only.",
+  "root_execution_authority": "Root reported actual bounded correction owner1165d1exit0; first compile ownerdd23aaexit1 retained. No thirdrun.",
+  "profile": {
+    "cpu": 6,
+    "jobs": 1,
+    "aggregate_plan_bytes": 1073741824,
+    "child_as_bytes": 1006632960,
+    "swap_expansion": false,
+    "native_execution": false,
+    "rustc_sha256": "028fd60b0e0add5505c661cd3ccde91393d615c8729bd95d94ab1e91409b36a1"
+  },
+  "compile": {
+    "pid": 2254446,
+    "returncode": 0,
+    "timed_out": false,
+    "positive_wait": true,
+    "owned_group_absent": true,
+    "elapsed_seconds": 0.21541868895292282
+  },
+  "test": {
+    "pid": 2254457,
+    "returncode": 0,
+    "timed_out": false,
+    "positive_wait": true,
+    "owned_group_absent": true,
+    "elapsed_seconds": 0.0045751649886369705
+  },
+  "streams_closed": "Root returned ownerexit0 after runner context-managers closed all four compiler/test streams; compile stdout/stderr empty; teststdout339B, stderr empty. Ownedchildren positively waited and ownedgroups absent in both raw wait receipts.",
+  "cpu6_release": "Both serial ownedchildren completed, positivewait/groupabsent true; root reports ownerexit0. No further workload dispatched by thislane, CPU6 grant no longer consumed. Aggregate admission remains root-owned.",
+  "tests": 3,
+  "scenarios": 25,
+  "negative_scenarios": 23,
+  "success_scenarios": 2,
+  "oracles": "Exact pre/post method errno,dependencycallorder,reservation RAII drop count,pending bit,IHKcalls/callbacks equal; diagnostic failure log exact stage/decodeddescriptor/knownchildPID. LP64/compat success/error included.",
+  "preserved_failure": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/body-regression-1/capture-1/compile.stderr",
+    "bytes": 2855,
+    "sha256": "e80d34888aee09220b07a6dc8c3246157c7df672497e0cd48cd97139d6f0d430",
+    "uid": 1000,
+    "gid": 1000
+  },
+  "bounded_correction_receipt": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/body-regression-1/fixture-packaging-correction-1/BOUNDED-CORRECTION-RECEIPT.json",
+    "bytes": 1649,
+    "sha256": "840dbeac62d27f416e23bfc4bd028b98429a27b6e48e272cbaea91478ca994b6",
+    "uid": 1000,
+    "gid": 1000
+  },
+  "source_freeze": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/body-regression-1/fixture-packaging-correction-1/SOURCE-FREEZE.json",
+    "bytes": 1058,
+    "sha256": "f4a24fddca431e9ea533e52be89ac51be3ec83d438fc124be784cd7dbae7e828",
+    "uid": 1000,
+    "gid": 1000
+  },
+  "runner": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/body-regression-1/fixture-packaging-correction-1/run-check-1.py",
+    "bytes": 3822,
+    "sha256": "664023e918f9c0aee1cd210f80fb9674001dd2f9948fdc6d9278aba5d1a37f77",
+    "uid": 1000,
+    "gid": 1000
+  },
+  "private_original_diagnostic_post": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/mcctrl_process.diagnostic.rs",
+    "bytes": 49070,
+    "sha256": "26c9013eaaf3fabb71816aa6295a143a09bd84217178ece8acb4e832a5bf9372",
+    "uid": 1000,
+    "gid": 1000
+  },
+  "private_original_diagnostic_patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/PPD-ADOPTION-FAILURE-OBSERVATION.patch",
+    "bytes": 4190,
+    "sha256": "0b3307bc7708e04b031ecfa20c4b2efa33a65aae3dd95040df0b2e5ef6d11164",
+    "uid": 1000,
+    "gid": 1000
+  },
+  "captured_files": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/body-regression-1/fixture-packaging-correction-1/capture-2/PROFILE.json",
+      "bytes": 224,
+      "sha256": "3106bb4d4a54be4c0a789fe77fd2f16fc659d0bc1bcc21abfe2657d9a1a389f5",
+      "uid": 1000,
+      "gid": 1000
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/body-regression-1/fixture-packaging-correction-1/capture-2/RESULT.json",
+      "bytes": 176,
+      "sha256": "02117dfebfd9df6b50c45f5a9149571296d85ee579e09dc727dd03fabfe17b1e",
+      "uid": 1000,
+      "gid": 1000
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/body-regression-1/fixture-packaging-correction-1/capture-2/adoption-method-tests",
+      "bytes": 6263520,
+      "sha256": "2abdd0b575a531e5d1e890af558bf2537e9f49eb3e410c62e166064fd55e1ced",
+      "uid": 1000,
+      "gid": 1000
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/body-regression-1/fixture-packaging-correction-1/capture-2/compile.command.json",
+      "bytes": 515,
+      "sha256": "f268c39a2a9f4ce414712ea4a711019d3f100309cece182074bc5240e7e2e1d8",
+      "uid": 1000,
+      "gid": 1000
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/body-regression-1/fixture-packaging-correction-1/capture-2/compile.pid",
+      "bytes": 8,
+      "sha256": "33bb930db4f0b891873c2f316c39c213ff564a98ede737c49b10f3da4273f438",
+      "uid": 1000,
+      "gid": 1000
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/body-regression-1/fixture-packaging-correction-1/capture-2/compile.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "uid": 1000,
+      "gid": 1000
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/body-regression-1/fixture-packaging-correction-1/capture-2/compile.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "uid": 1000,
+      "gid": 1000
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/body-regression-1/fixture-packaging-correction-1/capture-2/compile.wait.json",
+      "bytes": 145,
+      "sha256": "79234db8ea15805240dd3b09a0a243d771268d7e3ec4acce48dd6878b212d646",
+      "uid": 1000,
+      "gid": 1000
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/body-regression-1/fixture-packaging-correction-1/capture-2/test.command.json",
+      "bytes": 211,
+      "sha256": "ef109345f5e54145ccae0b451390611b5652e4056778111f4186070ec324637f",
+      "uid": 1000,
+      "gid": 1000
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/body-regression-1/fixture-packaging-correction-1/capture-2/test.pid",
+      "bytes": 8,
+      "sha256": "eb5b5cecd971f537d846a608e9bc22a6951f0c16cb67156a020aa2a64d4cb7c9",
+      "uid": 1000,
+      "gid": 1000
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/body-regression-1/fixture-packaging-correction-1/capture-2/test.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "uid": 1000,
+      "gid": 1000
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/body-regression-1/fixture-packaging-correction-1/capture-2/test.stdout",
+      "bytes": 339,
+      "sha256": "2e583d1ed7ed94f749c7c7b11e4ccb670ed10d66a8877ab0cba2a1407921458f",
+      "uid": 1000,
+      "gid": 1000
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/body-regression-1/fixture-packaging-correction-1/capture-2/test.wait.json",
+      "bytes": 147,
+      "sha256": "73cf575e722d1689c41ac182e2aaf806ec88dc0365a9536749966c3a15735abd",
+      "uid": 1000,
+      "gid": 1000
+    }
+  ],
+  "limits": [
+    "Explicit std/Linux/provider/callback adapters; actualproduction callback, MM, IHK, Linux ABI and SDK module environment unexecuted.",
+    "No production source integration, fullmodule/currentSDK/native/defaultactivation/application acceptance.",
+    "No semantic PPD repair supported yet; actualdescriptor and firstfailedRuststage still require separately released native observation.",
+    "Independent high ownership/error-preservation review remains prerequisite before integration."
+  ]
+}

@@ -1,0 +1,160 @@
+kernel/rust/abi.rs:1112:    pub refcount: IhkAtomic,
+kernel/rust/abi.rs:1269:pub struct XpmemThreadGroupPrefix {
+kernel/rust/abi.rs:1283:    pub group_leader: *mut Thread,
+kernel/rust/abi.rs:1299:    pub tg: *mut XpmemThreadGroupPrefix,
+kernel/rust/abi.rs:1314:    pub tg: *mut XpmemThreadGroupPrefix,
+kernel/rust/abi.rs:1353:    pub thread_hash: *mut ThreadHash,
+kernel/rust/abi.rs:1368:pub struct ThreadHash {
+kernel/rust/abi.rs:1378:    pub refcount: IhkAtomic,
+kernel/rust/abi.rs:1442:    pub refcount: IhkAtomic,
+kernel/rust/abi.rs:1465:    pub main_thread: *mut Thread,
+kernel/rust/abi.rs:1476:    pub refcount: IhkAtomic,
+kernel/rust/abi.rs:1543:pub struct Thread {
+kernel/rust/abi.rs:1568:    pub refcount: IhkAtomic,
+kernel/rust/abi.rs:1656:    pub thread: *mut Thread,
+kernel/rust/abi.rs:1790:    pub idle: Thread,
+kernel/rust/abi.rs:1796:    pub current: *mut Thread,
+kernel/rust/abi.rs:2260:    assert_eq_usize(offset_of!(AddressSpace, refcount), 24);
+kernel/rust/abi.rs:2312:    assert_eq_usize(offset_of!(ProcessVm, refcount), 188);
+kernel/rust/abi.rs:2333:    assert_eq_usize(offset_of!(Process, refcount), 416);
+kernel/rust/abi.rs:2375:    assert_eq_usize(offset_of!(Thread, refcount), 4628);
+kernel/rust/fork_control_guest.rs:51:/// caller owns the private child/CPU credits; no numeric refcount mints them.
+kernel/rust/fork_control_guest.rs:54:pub(crate) struct Carrier {
+kernel/rust/fork_control_guest.rs:87:pub(crate) unsafe extern "C" fn process_fork_guest_carrier_create_current_v1(
+kernel/rust/fork_control_guest.rs:130:pub(crate) unsafe extern "C" fn process_fork_guest_carrier_cancel_current_v1(handle:Handle)->CInt{
+kernel/rust/fork_control_guest.rs:134:pub(crate) unsafe extern "C" fn process_fork_guest_carrier_retain_current_v1(handle:Handle)->CInt{
+kernel/rust/fork_control_guest.rs:195:pub(crate) unsafe fn observe_fork_control_reply(request:*mut SyscallRequest,response:*mut SyscallResponse,cpu:CInt,thread:*mut Thread){
+kernel/syscall.c:556:typedef void (*terminate_host_ref_set_fn_t)(void *refcount, int value);
+kernel/syscall.c:2487:		size_t thread_proc_offset, size_t thread_refcount_offset,
+kernel/syscall.c:2491:		wait_thread_side_effect_fn_t release_thread_fn,
+kernel/syscall.c:3877:		size_t thread_refcount_offset,
+kernel/syscall.c:3881:		wait_thread_side_effect_fn_t release_thread_fn,
+kernel/syscall.c:4579:ptrace_detach_release_thread_bridge(void *thread)
+kernel/syscall.c:4581:	release_thread((struct thread *)thread);
+kernel/syscall.c:4648:			ptrace_detach_release_thread_bridge,
+kernel/syscall.c:4823:	release_thread((struct thread *)thread);
+kernel/syscall.c:4965:terminate_host_refcount_set_bridge(void *refcount, int value)
+kernel/syscall.c:4967:	ihk_atomic_set((ihk_atomic_t *)refcount, value);
+kernel/syscall.c:5083:		release_thread(mythread);
+kernel/syscall.c:5221:				release_thread(thr);
+kernel/syscall.c:5230:			release_thread(thr);
+kernel/syscall.c:5322:	release_thread(mythread);
+kernel/syscall.c:5397:			__builtin_offsetof(struct thread, refcount),
+kernel/syscall.c:5399:			terminate_host_refcount_set_bridge,
+kernel/syscall.c:6814:process_ptrace_attach_hold_thread_bridge(void *thread)
+kernel/syscall.c:6816:	hold_thread((struct thread *)thread);
+kernel/syscall.c:6905:			process_ptrace_attach_hold_thread_bridge,
+kernel/syscall.c:6951:	hold_thread(thread);
+kernel/syscall.c:7435:		goto release_cpuid;
+kernel/syscall.c:7702:		hold_thread(new);
+kernel/syscall.c:7717:	ihk_atomic_dec(&new->vm->refcount);
+kernel/syscall.c:7735:		ihk_atomic_set(&new->proc->refcount, 1);
+kernel/syscall.c:7739:	ihk_atomic_set(&new->refcount, 1);
+kernel/syscall.c:7740:	release_thread(new);
+kernel/syscall.c:7742:release_cpuid:
+kernel/syscall.c:7743:	release_cpuid(cpuid);
+kernel/syscall.c:18010:		size_t thread_proc_offset, size_t thread_refcount_offset,
+kernel/syscall.c:18014:		wait_thread_side_effect_fn_t release_thread_fn,
+kernel/syscall.c:18033:			if (!ref_set_fn || !release_thread_fn ||
+kernel/syscall.c:18039:			ref_set_fn(thread_base + thread_refcount_offset, 1);
+kernel/syscall.c:18040:			release_thread_fn(detached_thread);
+kernel/syscall.c:22705:	release_thread(thread);
+kernel/syscall.c:24107:typedef int (*sched_hold_thread_fn_t)(unsigned long thread_addr);
+kernel/syscall.c:24108:typedef void (*sched_release_thread_fn_t)(unsigned long thread_addr);
+kernel/syscall.c:24164:		sched_hold_thread_fn_t hold_fn,
+kernel/syscall.c:24165:		sched_release_thread_fn_t release_fn,
+kernel/syscall.c:24174:		sched_hold_thread_fn_t hold_fn,
+kernel/syscall.c:24175:		sched_release_thread_fn_t release_fn,
+kernel/syscall.c:24281:		sched_hold_thread_fn_t hold_fn, unsigned long *thread_out)
+kernel/syscall.c:24548:		sched_hold_thread_fn_t hold_fn,
+kernel/syscall.c:24549:		sched_release_thread_fn_t release_fn,
+kernel/syscall.c:24616:		sched_hold_thread_fn_t hold_fn,
+kernel/syscall.c:24617:		sched_release_thread_fn_t release_fn,
+kernel/syscall.c:24698:sched_hold_thread_bridge(unsigned long thread_addr)
+kernel/syscall.c:24700:	return hold_thread((struct thread *)thread_addr);
+kernel/syscall.c:24704:sched_release_thread_bridge(unsigned long thread_addr)
+kernel/syscall.c:24706:	release_thread((struct thread *)thread_addr);
+kernel/syscall.c:24924:			sched_thread_unlock_bridge, sched_hold_thread_bridge,
+kernel/syscall.c:24925:			sched_release_thread_bridge, syscall_copy_from_user_bridge,
+kernel/syscall.c:24941:			sched_thread_unlock_bridge, sched_hold_thread_bridge,
+kernel/syscall.c:24942:			sched_release_thread_bridge, syscall_copy_to_user_bridge);
+kernel/rust/process_helpers.rs:72:    fn process_hold_thread_warn_bridge(thread: *mut c_void);
+kernel/rust/process_helpers.rs:89:    fn process_ptrace_hold_thread_bridge(thread: *mut c_void);
+kernel/rust/process_helpers.rs:91:    fn process_hold_thread_bridge(thread: *mut c_void);
+kernel/rust/process_helpers.rs:133:    fn process_release_thread_profile_bridge(thread: *mut c_void, proc: *mut c_void);
+kernel/rust/process_helpers.rs:636:pub struct ProcessFindThreadOffsets {
+kernel/rust/process_helpers.rs:954:pub unsafe extern "C" fn has_cap_ipc_lock(th: *mut Thread) -> CInt {
+kernel/rust/process_helpers.rs:959:pub unsafe extern "C" fn has_cap_sys_admin(th: *mut Thread) -> CInt {
+kernel/rust/process_helpers.rs:5987:    refcount_offset: CULong,
+kernel/rust/process_helpers.rs:6007:        refcount_offset,
+kernel/rust/process_helpers.rs:6039:    refcount_offset: CULong,
+kernel/rust/process_helpers.rs:6042:    process_ref_hold_body_result(asp, refcount_offset, inc_fn)
+kernel/rust/process_helpers.rs:6048:    refcount_offset: CULong,
+kernel/rust/process_helpers.rs:6058:        refcount_offset,
+kernel/rust/process_helpers.rs:6113:        offset_of!(AddressSpace, refcount) as CULong,
+kernel/rust/process_helpers.rs:6131:        offset_of!(AddressSpace, refcount) as CULong,
+kernel/rust/process_helpers.rs:6140:        offset_of!(AddressSpace, refcount) as CULong,
+kernel/rust/process_helpers.rs:6168:    refcount_offset: CULong,
+kernel/rust/process_helpers.rs:6218:    let _ = process_ref_set_result(asp, refcount_offset, 1, ref_set_fn);
+kernel/rust/process_helpers.rs:6378:    (*vm).refcount.counter = 1;
+kernel/rust/process_helpers.rs:6948:    refcount_offset: CULong,
+kernel/rust/process_helpers.rs:6999:    if process_ref_set_result(process, refcount_offset, 2, ref_set_fn) != 0 {
+kernel/rust/process_helpers.rs:7086:        offset_of!(Process, refcount) as CULong,
+kernel/rust/process_helpers.rs:7838:    refcount_offset: CULong,
+kernel/rust/process_helpers.rs:7851:    if process_ref_set_result(thread, refcount_offset, 2, ref_set_fn) != 0 {
+kernel/rust/process_helpers.rs:7945:    thread_refcount_offset: CULong,
+kernel/rust/process_helpers.rs:8028:        thread_refcount_offset,
+kernel/rust/process_helpers.rs:8258:        offset_of!(Thread, refcount) as CULong,
+kernel/rust/process_helpers.rs:8886:    hold_thread_fn: Option<ProcessThreadActionFn>,
+kernel/rust/process_helpers.rs:9002:    let Some(hold_thread) = hold_thread_fn else {
+kernel/rust/process_helpers.rs:9006:    unsafe { hold_thread(thread) };
+kernel/rust/process_helpers.rs:9057:        Some(process_ptrace_hold_thread_bridge),
+kernel/rust/process_helpers.rs:9072:    hold_thread_fn: Option<ProcessThreadActionFn>,
+kernel/rust/process_helpers.rs:9204:    let Some(hold_thread) = hold_thread_fn else {
+kernel/rust/process_helpers.rs:9210:    unsafe { hold_thread(thread) };
+kernel/rust/process_helpers.rs:9262:pub extern "C" fn process_hold_thread_warn_exited_result(status: CInt) -> CInt {
+kernel/rust/process_helpers.rs:9742:pub unsafe extern "C" fn process_hold_thread_warn_result(
+kernel/rust/process_helpers.rs:9773:        process_ref_hold_body_result(proc.cast(), offset_of!(Process, refcount) as CULong, None);
+kernel/rust/process_helpers.rs:9779:        process_ref_hold_body_result(vm.cast(), offset_of!(ProcessVm, refcount) as CULong, None);
+kernel/rust/process_helpers.rs:9792:pub unsafe extern "C" fn hold_thread(thread: *mut Thread) -> CInt {
+kernel/rust/process_helpers.rs:9793:    let _ = process_hold_thread_body_result(
+kernel/rust/process_helpers.rs:9796:        offset_of!(Thread, refcount) as CULong,
+kernel/rust/process_helpers.rs:9798:        Some(process_hold_thread_warn_bridge),
+kernel/rust/process_helpers.rs:9838:pub unsafe extern "C" fn chain_thread(thread: *mut Thread) {
+kernel/rust/process_helpers.rs:9867:        offset_of!(ProcessVm, refcount) as CULong,
+kernel/rust/process_helpers.rs:9876:pub unsafe extern "C" fn destroy_thread(thread: *mut Thread) {
+kernel/rust/process_helpers.rs:9930:pub unsafe extern "C" fn release_thread(thread: *mut Thread) {
+kernel/rust/process_helpers.rs:9931:    let _ = process_release_thread_body_result(
+kernel/rust/process_helpers.rs:9933:        offset_of!(Thread, refcount) as CULong,
+kernel/rust/process_helpers.rs:9937:        Some(process_release_thread_profile_bridge),
+kernel/rust/process_helpers.rs:9945:pub unsafe extern "C" fn release_thread_checked(thread: *mut Thread) -> CInt {
+kernel/rust/process_helpers.rs:9946:    process_release_thread_checked_body_result(
+kernel/rust/process_helpers.rs:9948:        offset_of!(Thread, refcount) as CULong,
+kernel/rust/process_helpers.rs:9952:        Some(process_release_thread_profile_bridge),
+kernel/rust/process_helpers.rs:9998:        offset_of!(Process, refcount) as CULong,
+kernel/rust/process_helpers.rs:10022:        offset_of!(ProcessVm, refcount) as CULong,
+kernel/rust/process_helpers.rs:10051:        offset_of!(ProcessVm, refcount) as CULong,
+kernel/rust/process_helpers.rs:10077:pub unsafe extern "C" fn thread_unlock(thread: *mut Thread) {
+kernel/rust/process_helpers.rs:10079:        release_thread(thread);
+kernel/rust/process_helpers.rs:10084:pub unsafe extern "C" fn find_thread(pid: CInt, tid: CInt) -> *mut Thread {
+kernel/rust/process_helpers.rs:10118:        Some(process_hold_thread_bridge),
+kernel/rust/process_helpers.rs:10186:pub unsafe extern "C" fn process_hold_thread_body_result(
+kernel/rust/process_helpers.rs:10189:    refcount_offset: CULong,
+kernel/rust/process_helpers.rs:10201:    if process_hold_thread_warn_exited_result(status) != 0 {
+kernel/rust/process_helpers.rs:10202:        let _ = process_hold_thread_warn_result(thread, warn_fn);
+kernel/rust/process_helpers.rs:10205:    process_ref_hold_body_result(thread, refcount_offset, inc_fn)
+kernel/rust/process_helpers.rs:10355:    refcount_offset: CULong,
+kernel/rust/process_helpers.rs:10406:        refcount_offset,
+kernel/rust/process_helpers.rs:10800:    vm_refcount_offset: CULong,
+kernel/rust/process_helpers.rs:10820:    process_ref_inc_result(vm, vm_refcount_offset, ref_inc_fn)
+kernel/rust/process_helpers.rs:11109:pub unsafe extern "C" fn process_release_thread_body_result(
+kernel/rust/process_helpers.rs:11111:    refcount_offset: CULong,
+kernel/rust/process_helpers.rs:11135:        refcount_offset,
+kernel/rust/process_helpers.rs:11154:    refcount_offset: CULong,
+kernel/rust/process_helpers.rs:11198:        refcount_offset,
+kernel/rust/process_helpers.rs:11254:pub unsafe extern "C" fn process_release_thread_checked_body_result(
+kernel/rust/process_helpers.rs:11256:    refcount_offset: CULong,
+kernel/rust/process_helpers.rs:11279:    match process_ref_dec_and_test_result(thread, refcount_offset, dec_fn) {
+kernel/rust/process_helpers.rs:11301:    refcount_offset: CULong,
+kernel/rust/process_helpers.rs:11339:    match process_ref_dec_and_test_result(vm, refcount_offset, dec_fn) {
+kernel/rust/process_helpers.rs:11416:pub unsafe extern "C" fn __release_tid(proc: *mut Process, thread: *mut Thread) {

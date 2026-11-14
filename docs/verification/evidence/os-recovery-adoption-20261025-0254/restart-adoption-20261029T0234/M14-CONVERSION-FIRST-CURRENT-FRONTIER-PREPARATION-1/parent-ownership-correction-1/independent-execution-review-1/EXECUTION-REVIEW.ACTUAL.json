@@ -1,0 +1,116 @@
+{
+  "decision": "PASS_EXACT_CONVERSION_FRONTIER_READONLY_CAPTURE",
+  "independent": true,
+  "implementation_ownership": false,
+  "reviewer": "/root/recovery_receipts",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "release_payload": {
+    "author": "/root",
+    "decision": "AUTHORIZE_ONE_CONVERSION_FRONTIER_READONLY_CAPTURE",
+    "maximum_invocations": 1,
+    "source": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-CURRENT-FRONTIER-PREPARATION-1/parent-ownership-correction-1/observe_conversion_frontier.py",
+      "bytes": 33515,
+      "sha256": "c97d9fb8b217dfb36196a24be8ba1e30bce3e76085d474186693e9528fb0ee2f"
+    },
+    "bindings": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-CURRENT-FRONTIER-PREPARATION-1/parent-ownership-correction-1/ROOT-ACTUAL-FRONTIER-OBSERVER-BINDING.json",
+      "bytes": 3244,
+      "sha256": "669e33f8d650d9b2491c940f48c424e996797ae79f0b24c887320d80648828a1"
+    },
+    "output": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-CURRENT-FRONTIER-PREPARATION-1/parent-ownership-correction-1/actual-frontier-1/OBSERVATION.json",
+    "native_authority": null,
+    "runtime_authority": null
+  },
+  "payload_byte_ref": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-CURRENT-FRONTIER-PREPARATION-1/parent-ownership-correction-1/RELEASE-PAYLOAD.ACTUAL.json",
+    "bytes": 1163,
+    "sha256": "6f7503716511a539d32e32c1940da7a856115f51cd41650ce02f10e7996ff573"
+  },
+  "source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-CURRENT-FRONTIER-PREPARATION-1/parent-ownership-correction-1/independent-source-review-1/REVIEW.ACTUAL.json",
+    "bytes": 6275,
+    "sha256": "3e36ca22271514e14d3a8e0b4c17a6bc816d8ff5050e640f84e98c68d3b03e4c"
+  },
+  "operation_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-CURRENT-FRONTIER-PREPARATION-1/parent-ownership-correction-1/independent-operation-review-1/OPERATION-REVIEW.ACTUAL.json",
+    "bytes": 11871,
+    "sha256": "fa31ef4f931053b558237d35ba124b0abbc56e7117cf88f8ebbf3a284e0ebd39"
+  },
+  "observer_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-CURRENT-FRONTIER-PREPARATION-1/parent-ownership-correction-1/independent-observer-review-1/OBSERVER-REVIEW.ACTUAL.json",
+    "bytes": 6514,
+    "sha256": "5347d18d5230a14af7e5e5636e99b00b39aee46137dde93bb725666692a8da90"
+  },
+  "parent_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-CURRENT-FRONTIER-PREPARATION-1/parent-ownership-correction-1/root_capture_parent.py",
+    "bytes": 4953,
+    "sha256": "7652d8259b6f456926cbecac9f004e763bdd2744d13416a82337079849457820"
+  },
+  "exact_parent_argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-CURRENT-FRONTIER-PREPARATION-1/parent-ownership-correction-1/root_capture_parent.py"
+  ],
+  "exact_child_argv_with_final_release_hash_placeholder": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=60:60",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-CURRENT-FRONTIER-PREPARATION-1/parent-ownership-correction-1/observe_conversion_frontier.py",
+    "--bindings",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-CURRENT-FRONTIER-PREPARATION-1/parent-ownership-correction-1/ROOT-ACTUAL-FRONTIER-OBSERVER-BINDING.json",
+    "--release",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-CURRENT-FRONTIER-PREPARATION-1/parent-ownership-correction-1/RELEASE.ACTUAL.json",
+    "--release-sha256",
+    "EXACT_FINAL_RELEASE_SHA256_FROM_AUTHENTICATED_BYTES",
+    "--output",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-CURRENT-FRONTIER-PREPARATION-1/parent-ownership-correction-1/actual-frontier-1/OBSERVATION.json"
+  ],
+  "profile": {
+    "parent_owner": "/root",
+    "child_uid": 1000,
+    "cpus": [
+      0
+    ],
+    "jobs": 1,
+    "address_space_bytes": 2147483648,
+    "CPU_seconds": 60,
+    "core_bytes": 0,
+    "query_timeout_seconds": 30,
+    "observation_age_seconds_max": 120,
+    "one_shot": true,
+    "retries": 0,
+    "signals": 0
+  },
+  "checks": {
+    "entire_release_payload_exact": true,
+    "exact_observer_payload_plus_independent_review": true,
+    "corrected_parent_subject_in_exact_operation": true,
+    "parent_output_namespace_absent_at_review": true,
+    "observation_output_absent_at_review": true,
+    "no_native_or_build_grant": true
+  },
+  "conditions": [
+    "Root seals RELEASE.ACTUAL.json by adding exactref to this review only; publish/fetch/authenticate all exact sources/data/reviews before invocation.",
+    "Root rechecks fresh dedicated parent/output/query namespace; parent invoked once with exactsource7652. Child literal argv includes final sealed release SHA256; no historical source/nonce or output reuse.",
+    "Existing live readonlyQ guardian must confirm included-only sameperiod/<100percent and strict original/armed/bootstrap/effective threeclock minima immediately before queries; unknown/changedperiod/pending/exhausted refuses. No allowance extension.",
+    "Preserve original fullphysical/cgroup/locks/mountcapacity/16GiBhost12GiBscratch floors, raw2Dockerabsence+fullprocesscensus and all207retainedactors/202identities/UNKNOWN. No native/cleanup/lease/producer operation.",
+    "Aftercapture Root must actually join outer caller; independent review must require evidence_error None, real childidentity, exactparent_source7652,wait4child/status0,closedstreams,groupabsence/noerrors,rawstreams/refexact and no new unknown operation. Parentcurrent_freefalse/observercandidate alone clear nothing.",
+    "Newcapture actor frontier must add actual parent/observer/threequeryclients and all genuine lateractors while preservingUNKNOWN. Genuine independent newfree/callerclosure/adoption remains required before separate build admission."
+  ],
+  "runtime_authority": null,
+  "native_authority": null,
+  "native_acceptance": false,
+  "build_authority": false,
+  "actual_guard_calls": 0,
+  "actual_capture_calls": 0
+}

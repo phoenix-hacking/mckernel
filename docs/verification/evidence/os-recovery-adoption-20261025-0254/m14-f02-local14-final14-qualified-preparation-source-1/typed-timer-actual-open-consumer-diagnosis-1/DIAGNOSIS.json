@@ -1,0 +1,180 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "OBJECT_ABI_CHECKS_COMPLETED_CONSUMER_SUPPLEMENT_OPEN_NO_READER_CORRECTION_JUSTIFIED",
+  "actual_results": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/typed-timer-array-alignment-reader-correction-source-1/future-capture-1/RESULTS.json",
+    "bytes": 1851,
+    "sha256": "f28a628a1ea859024be5f4bd7b7628a157ea08b87b2558e8648e8fe8af791e8b"
+  },
+  "actual_stdout": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/typed-timer-array-alignment-reader-correction-source-1/future-capture-1/step0/stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "actual_stderr": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/typed-timer-array-alignment-reader-correction-source-1/future-capture-1/step0/stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "actual_report": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/typed-timer-array-alignment-reader-correction-source-1/QUALIFIER-output-proposed-1/LOCAL14-FINAL14-HOST-QUALIFICATION.json",
+    "bytes": 497565,
+    "sha256": "243210c98b2b63fdf765a09ed97c6e99d7f75e6a44afe48c34af5789bd5f41a1"
+  },
+  "actual_profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/typed-timer-array-alignment-reader-correction-source-1/PROFILE.NOT-GRANTED.json",
+    "bytes": 173556,
+    "sha256": "18975dc422fbbbd6e207d8d9340f68250d61c0cefa02627144df7bd82613cf1b"
+  },
+  "actual_reader": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/typed-timer-array-alignment-reader-correction-source-1/qualify_changed_objects.py",
+    "bytes": 17530,
+    "sha256": "c8246498d7ccb11236779f1703e5b56c9a31ee0e08567152902d4f189fcbbcd9"
+  },
+  "actual_child_returncode": 2,
+  "actual_child_wall_seconds": 11.979278794955462,
+  "positive_join": true,
+  "group_absent": true,
+  "closed_streams": true,
+  "diagnosis": "No new assertion/type/storage failure. Reader completed object comparisons then deliberately returned2 because16 consumer names lack surviving named relocation. Missing relocations alone cannot distinguish folding from absent or incorrect consumer; exact compiled instruction/dataflow supplement remains required.",
+  "completed_readbacks": {
+    "local14_internal_objects": 14,
+    "local14_slots": 14,
+    "config_objects": 3,
+    "config_bytes": 384,
+    "final_readonly_objects": 14,
+    "final_bytes": 256,
+    "whole_Rust_objects": 148,
+    "whole_Rust_slots": 205,
+    "whole_Rust_bytes": 6560,
+    "retained_unrelated_records": 102,
+    "retained_views": 3
+  },
+  "positive_named_consumer": {
+    "name": "process_clone_config",
+    "actual_references": {
+      "Rust": [
+        {
+          "section": ".ltext.clone_thread",
+          "offset": 6,
+          "relocation_type": 1,
+          "addend": 0
+        },
+        {
+          "section": ".ltext.process_fork_construct_current_v1",
+          "offset": 255,
+          "relocation_type": 1,
+          "addend": 0
+        }
+      ],
+      "C": [],
+      "joint": [
+        {
+          "section": ".ltext.clone_thread",
+          "offset": 6,
+          "relocation_type": 1,
+          "addend": 0
+        },
+        {
+          "section": ".ltext.process_fork_construct_current_v1",
+          "offset": 255,
+          "relocation_type": 1,
+          "addend": 0
+        }
+      ]
+    },
+    "positive_current_reference": true
+  },
+  "open_predicates": [
+    {
+      "name": "process_copy_entry_config",
+      "predicate": "Exact current folded consumer instruction/dataflow and original value/pointer ABI",
+      "reason": "No surviving named relocation; do not infer consumer acceptance. Preserve these actual objects for independent focused readback, no compiler replay."
+    },
+    {
+      "name": "process_extend_region_entry_config",
+      "predicate": "Exact current folded consumer instruction/dataflow and original value/pointer ABI",
+      "reason": "No surviving named relocation; do not infer consumer acceptance. Preserve these actual objects for independent focused readback, no compiler replay."
+    },
+    {
+      "name": "process_schedule_exit_debug_input",
+      "predicate": "Exact current folded consumer instruction/dataflow and original value/pointer ABI",
+      "reason": "No surviving named relocation; do not infer consumer acceptance. Preserve these actual objects for independent focused readback, no compiler replay."
+    },
+    {
+      "name": "process_sched_timer_configuration",
+      "predicate": "Exact current folded consumer instruction/dataflow and original value/pointer ABI",
+      "reason": "No surviving named relocation; do not infer consumer acceptance. Preserve these actual objects for independent focused readback, no compiler replay."
+    },
+    {
+      "name": "process_init_stack_entry_config",
+      "predicate": "Exact current folded consumer instruction/dataflow and original value/pointer ABI",
+      "reason": "No surviving named relocation; do not infer consumer acceptance. Preserve these actual objects for independent focused readback, no compiler replay."
+    },
+    {
+      "name": "process_init_stack_free_line",
+      "predicate": "Exact current folded consumer instruction/dataflow and original value/pointer ABI",
+      "reason": "No surviving named relocation; do not infer consumer acceptance. Preserve these actual objects for independent focused readback, no compiler replay."
+    },
+    {
+      "name": "process_init_stack_free_file",
+      "predicate": "Exact current folded consumer instruction/dataflow and original value/pointer ABI",
+      "reason": "No surviving named relocation; do not infer consumer acceptance. Preserve these actual objects for independent focused readback, no compiler replay."
+    },
+    {
+      "name": "process_init_stack_alloc_line",
+      "predicate": "Exact current folded consumer instruction/dataflow and original value/pointer ABI",
+      "reason": "No surviving named relocation; do not infer consumer acceptance. Preserve these actual objects for independent focused readback, no compiler replay."
+    },
+    {
+      "name": "process_init_stack_alloc_file",
+      "predicate": "Exact current folded consumer instruction/dataflow and original value/pointer ABI",
+      "reason": "No surviving named relocation; do not infer consumer acceptance. Preserve these actual objects for independent focused readback, no compiler replay."
+    },
+    {
+      "name": "process_page_fault_anon_alloc_file",
+      "predicate": "Exact current folded consumer instruction/dataflow and original value/pointer ABI",
+      "reason": "No surviving named relocation; do not infer consumer acceptance. Preserve these actual objects for independent focused readback, no compiler replay."
+    },
+    {
+      "name": "process_page_fault_cow_alloc_line",
+      "predicate": "Exact current folded consumer instruction/dataflow and original value/pointer ABI",
+      "reason": "No surviving named relocation; do not infer consumer acceptance. Preserve these actual objects for independent focused readback, no compiler replay."
+    },
+    {
+      "name": "process_page_fault_cow_alloc_file",
+      "predicate": "Exact current folded consumer instruction/dataflow and original value/pointer ABI",
+      "reason": "No surviving named relocation; do not infer consumer acceptance. Preserve these actual objects for independent focused readback, no compiler replay."
+    },
+    {
+      "name": "process_remap_free_line",
+      "predicate": "Exact current folded consumer instruction/dataflow and original value/pointer ABI",
+      "reason": "No surviving named relocation; do not infer consumer acceptance. Preserve these actual objects for independent focused readback, no compiler replay."
+    },
+    {
+      "name": "process_remap_free_file",
+      "predicate": "Exact current folded consumer instruction/dataflow and original value/pointer ABI",
+      "reason": "No surviving named relocation; do not infer consumer acceptance. Preserve these actual objects for independent focused readback, no compiler replay."
+    },
+    {
+      "name": "process_add_range_arch_memclear_callback",
+      "predicate": "Exact current folded consumer instruction/dataflow and original value/pointer ABI",
+      "reason": "No surviving named relocation; do not infer consumer acceptance. Preserve these actual objects for independent focused readback, no compiler replay."
+    },
+    {
+      "name": "process_tracked_allocator_source_file",
+      "predicate": "Exact current folded consumer instruction/dataflow and original value/pointer ABI",
+      "reason": "No surviving named relocation; do not infer consumer acceptance. Preserve these actual objects for independent focused readback, no compiler replay."
+    }
+  ],
+  "new_source_reader_correction": null,
+  "original_readonly_WRITE_ABI_contracts_unchanged": true,
+  "defaultON_nondefault_limits_remain_OPEN": true,
+  "source_body_changes": 0,
+  "producer_CPP_link_replay": 0,
+  "qualifier_replays": 0,
+  "next_executable_action": "Focused offline exact retained compiled-consumer instruction/dataflow supplement for16 names; no compiler/CPP/link replay and no inference from absent relocation.",
+  "actual_next_authority": null,
+  "whole_file_retirement": false,
+  "native_acceptance": false
+}

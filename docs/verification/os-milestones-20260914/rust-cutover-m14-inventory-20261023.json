@@ -1,0 +1,794 @@
+{
+  "schema": "mckernel.m14-current-compute-c-source-inventory.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "milestone_proposal": "M14 full supported x86_64 LWK Rust plus reviewed assembly cutover; private inventory only, canonical milestone owned by root",
+  "image_identity": {
+    "sha256": "10972f87277e8429e2badd238d3ac53e451b8a2351a8ebf013941e1dfb95e1e2",
+    "bytes": 8439816,
+    "identity_basis": "existing accepted producer receipt; no rehash"
+  },
+  "source_identity": {
+    "root": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/source-materialization-1/materialized-source",
+    "source_manifest_sha256": "28a6c1dededda19d2da07279f9a59d542996ae77bd96d176567cc86f0c5a8459",
+    "source_derivative_sha256": "5cffcc1b23dc5ca377baa055aab0417b0daac7ddcac0e2281903260f0ebd79e3",
+    "materialization_sha256": "d7e24b4c0d3174b3479e33796d712d439444bae82902482448890b9d8142d43d"
+  },
+  "evidence": {
+    "compile_commands": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/compile_commands.json",
+    "compile_commands_recorded_sha256": "cbf12ca93c9946c7020b428e5dbc9f08df22659651d94c40704e7c8fa41f006b",
+    "image_link_contract": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/evidence/image-link-contract.txt",
+    "link_contract_recorded_sha256": "d9d50ed84770a8bff5af2371e19245200d99d61fe3cda28e880bd88e6669e428",
+    "selected_cmake": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/source-materialization-1/materialized-source/kernel/CMakeLists.txt",
+    "cache": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/CMakeCache.txt"
+  },
+  "supported_current_profile": {
+    "BUILD_TARGET": "smp-x86",
+    "ENABLE_RUST_KERNEL": "ON",
+    "MCKERNEL_HOST_IRQ_ABI": "linux-6.12",
+    "ENABLE_NATIVE_FORK_OWNED_TRANSACTION": "ON",
+    "ENABLE_PERF": "ON",
+    "ENABLE_RUSAGE": "ON",
+    "ENABLE_TOFU": "OFF",
+    "ENABLE_FUGAKU_HACKS": "OFF",
+    "ENABLE_UBSAN": "OFF",
+    "ENABLE_PER_CPU_ALLOC_CACHE": "OFF",
+    "ENABLE_NATIVE_SYSFS_VERIFY": "OFF"
+  },
+  "counts": {
+    "compute_c_translation_units": 7,
+    "runtime_c_translation_units_in_conversion_scope": 6,
+    "abi_witness_translation_units": 1,
+    "additional_c_sources_in_existing_dependency_closure": 0
+  },
+  "translation_units": [
+    {
+      "id": "M14.C01",
+      "repo_path": "kernel/mem.c",
+      "exact_source_path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/source-materialization-1/materialized-source/kernel/mem.c",
+      "container_source_path": "/src/kernel/mem.c",
+      "object_output": "kernel/CMakeFiles/mckernel.img.dir/mem.c.o",
+      "classification": "runtime_translation_unit_conversion_scope",
+      "subsystem": "Generic VM, allocation and memory ownership",
+      "selected_defines": [
+        "IHK_IKC_USE_LINUX_WORK_IRQ",
+        "IHK_OS_MANYCORE",
+        "KERNEL_RAM_VADDR=0xfffffffffe800000",
+        "MAP_KERNEL_START=0xfffffffffe800000UL",
+        "MCKERNEL_NATIVE_CLONE3",
+        "MCKERNEL_NATIVE_CLONE_TID",
+        "MCKERNEL_NATIVE_FAULT_FIXUP",
+        "MCKERNEL_NATIVE_FUTEX",
+        "MCKERNEL_NATIVE_SIGNAL_STACK",
+        "MCKERNEL_RUST_ATOMIC_HELPERS",
+        "MCKERNEL_RUST_BITOPS",
+        "MCKERNEL_RUST_LIST_HELPERS",
+        "MCKERNEL_RUST_LOCK_HELPERS",
+        "MCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+        "MCKERNEL_RUST_MC_RWLOCK_HELPERS",
+        "MCKERNEL_RUST_PTE_HELPERS",
+        "MCKERNEL_RUST_REFCOUNT_HELPERS",
+        "MCKERNEL_RUST_SPINLOCK_HELPERS",
+        "PROFILE_ENABLE",
+        "__KERNEL__",
+        "MCKERNEL_RUST_HASH_HELPERS",
+        "MCKERNEL_RUST_MEM_HELPERS",
+        "MCKERNEL_RUST_MMAN_HELPERS",
+        "MCKERNEL_RUST_PAGE_HELPERS",
+        "MCKERNEL_RUST_RUSAGE_PRIVATE_HELPERS"
+      ],
+      "evidence_basis": [
+        "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/compile_commands.json",
+        "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/evidence/image-link-contract.txt",
+        "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/source-materialization-1/materialized-source/kernel/CMakeLists.txt",
+        "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/mem.c.o.d"
+      ],
+      "certainty": {
+        "compiled_and_link_input": "proven_by_existing_compile_and_link_records",
+        "surviving_runtime_c_bodies": "UNKNOWN_NOT_PROCESSED",
+        "subgoal_partition": "source_and_selected_feature_guided_planning_not_function_exhaustiveness"
+      },
+      "direct_c_includes": [],
+      "dependency_c_files": [
+        "/src/kernel/mem.c"
+      ],
+      "additional_included_c_files": [],
+      "source_dependency_file": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/mem.c.o.d",
+      "subgoals": [
+        {
+          "id": "M14.C01.1",
+          "goal": "Partition surviving VM/range/page-fault/memory-object orchestration from already selected Rust memory/page/hash helpers.",
+          "status": "not_claimed_complete"
+        },
+        {
+          "id": "M14.C01.2",
+          "goal": "Move remaining allocation, mapping and resource/lifetime decisions into Rust; preserve existing page-table and locking ABI until their coordinated cutover.",
+          "status": "not_claimed_complete"
+        },
+        {
+          "id": "M14.C01.3",
+          "goal": "Retire residual reference/ownership and resource-accounting C bridges, including executable inline dependencies.",
+          "status": "not_claimed_complete"
+        }
+      ],
+      "acceptance_requirements": [
+        "Identify actual surviving C bodies under the exact selected defines, including executable headers and mixed Rust/C wrappers; raw file length is not remaining debt.",
+        "Select the Rust or reviewed assembly implementation by default and remove the runtime C translation unit from the supported image build graph.",
+        "Record unique production provider definitions and exact final ELF/map attribution; prove zero surviving owned compute C for the retired path.",
+        "Run the path-relevant functional checks and required native lifecycle/resource-restoration coverage on the exact successor; update evidence only after acceptance."
+      ]
+    },
+    {
+      "id": "M14.C02",
+      "repo_path": "kernel/syscall.c",
+      "exact_source_path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/source-materialization-1/materialized-source/kernel/syscall.c",
+      "container_source_path": "/src/kernel/syscall.c",
+      "object_output": "kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+      "classification": "runtime_translation_unit_conversion_scope",
+      "subsystem": "Generic syscall, process lifecycle and memory syscall orchestration",
+      "selected_defines": [
+        "IHK_IKC_USE_LINUX_WORK_IRQ",
+        "IHK_OS_MANYCORE",
+        "KERNEL_RAM_VADDR=0xfffffffffe800000",
+        "MAP_KERNEL_START=0xfffffffffe800000UL",
+        "MCKERNEL_NATIVE_CLONE3",
+        "MCKERNEL_NATIVE_CLONE_TID",
+        "MCKERNEL_NATIVE_FAULT_FIXUP",
+        "MCKERNEL_NATIVE_FUTEX",
+        "MCKERNEL_NATIVE_SIGNAL_STACK",
+        "MCKERNEL_RUST_ATOMIC_HELPERS",
+        "MCKERNEL_RUST_BITOPS",
+        "MCKERNEL_RUST_LIST_HELPERS",
+        "MCKERNEL_RUST_LOCK_HELPERS",
+        "MCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+        "MCKERNEL_RUST_MC_RWLOCK_HELPERS",
+        "MCKERNEL_RUST_PTE_HELPERS",
+        "MCKERNEL_RUST_REFCOUNT_HELPERS",
+        "MCKERNEL_RUST_SPINLOCK_HELPERS",
+        "PROFILE_ENABLE",
+        "__KERNEL__",
+        "MCKERNEL_NATIVE_FORK_OWNED_TRANSACTION",
+        "MCKERNEL_RUST_RLIMIT_HELPERS",
+        "MCKERNEL_RUST_SCHED_POLICY_HELPERS",
+        "MCKERNEL_RUST_SCHED_PRIO_HELPERS",
+        "MCKERNEL_RUST_SHMID_HELPERS",
+        "MCKERNEL_RUST_SHM_PERM_HELPERS",
+        "MCKERNEL_RUST_SIGNAL_HELPERS",
+        "MCKERNEL_RUST_SYSCALL_OFFLOAD",
+        "MCKERNEL_RUST_SYSCALL_POLICY_HELPERS"
+      ],
+      "evidence_basis": [
+        "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/compile_commands.json",
+        "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/evidence/image-link-contract.txt",
+        "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/source-materialization-1/materialized-source/kernel/CMakeLists.txt",
+        "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o.d"
+      ],
+      "certainty": {
+        "compiled_and_link_input": "proven_by_existing_compile_and_link_records",
+        "surviving_runtime_c_bodies": "UNKNOWN_NOT_PROCESSED",
+        "subgoal_partition": "source_and_selected_feature_guided_planning_not_function_exhaustiveness"
+      },
+      "direct_c_includes": [],
+      "dependency_c_files": [
+        "/src/kernel/syscall.c"
+      ],
+      "additional_included_c_files": [],
+      "source_dependency_file": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o.d",
+      "subgoals": [
+        {
+          "id": "M14.C02.1",
+          "goal": "Finish process exit, wait/reap, fork/exec, signal and host-offload control paths; preserve accepted lifecycle fixes.",
+          "status": "not_claimed_complete"
+        },
+        {
+          "id": "M14.C02.2",
+          "goal": "Move remaining mmap/munmap/shared-memory/file and process-control syscall bodies and callback bridges into Rust.",
+          "status": "not_claimed_complete"
+        },
+        {
+          "id": "M14.C02.3",
+          "goal": "Retire dispatch/registration and residual scheduler, affinity, resource-limit, tracing and compatibility-policy C without duplicating already selected Rust providers.",
+          "status": "not_claimed_complete"
+        }
+      ],
+      "acceptance_requirements": [
+        "Identify actual surviving C bodies under the exact selected defines, including executable headers and mixed Rust/C wrappers; raw file length is not remaining debt.",
+        "Select the Rust or reviewed assembly implementation by default and remove the runtime C translation unit from the supported image build graph.",
+        "Record unique production provider definitions and exact final ELF/map attribution; prove zero surviving owned compute C for the retired path.",
+        "Run the path-relevant functional checks and required native lifecycle/resource-restoration coverage on the exact successor; update evidence only after acceptance."
+      ]
+    },
+    {
+      "id": "M14.C03",
+      "repo_path": "kernel/process.c",
+      "exact_source_path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/source-materialization-1/materialized-source/kernel/process.c",
+      "container_source_path": "/src/kernel/process.c",
+      "object_output": "kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+      "classification": "runtime_translation_unit_conversion_scope",
+      "subsystem": "Process, thread, address-space and scheduling lifecycle",
+      "selected_defines": [
+        "IHK_IKC_USE_LINUX_WORK_IRQ",
+        "IHK_OS_MANYCORE",
+        "KERNEL_RAM_VADDR=0xfffffffffe800000",
+        "MAP_KERNEL_START=0xfffffffffe800000UL",
+        "MCKERNEL_NATIVE_CLONE3",
+        "MCKERNEL_NATIVE_CLONE_TID",
+        "MCKERNEL_NATIVE_FAULT_FIXUP",
+        "MCKERNEL_NATIVE_FUTEX",
+        "MCKERNEL_NATIVE_SIGNAL_STACK",
+        "MCKERNEL_RUST_ATOMIC_HELPERS",
+        "MCKERNEL_RUST_BITOPS",
+        "MCKERNEL_RUST_LIST_HELPERS",
+        "MCKERNEL_RUST_LOCK_HELPERS",
+        "MCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+        "MCKERNEL_RUST_MC_RWLOCK_HELPERS",
+        "MCKERNEL_RUST_PTE_HELPERS",
+        "MCKERNEL_RUST_REFCOUNT_HELPERS",
+        "MCKERNEL_RUST_SPINLOCK_HELPERS",
+        "PROFILE_ENABLE",
+        "__KERNEL__",
+        "MCKERNEL_RUST_PROCESS_HELPERS"
+      ],
+      "evidence_basis": [
+        "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/compile_commands.json",
+        "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/evidence/image-link-contract.txt",
+        "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/source-materialization-1/materialized-source/kernel/CMakeLists.txt",
+        "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o.d"
+      ],
+      "certainty": {
+        "compiled_and_link_input": "proven_by_existing_compile_and_link_records",
+        "surviving_runtime_c_bodies": "UNKNOWN_NOT_PROCESSED",
+        "subgoal_partition": "source_and_selected_feature_guided_planning_not_function_exhaustiveness"
+      },
+      "direct_c_includes": [],
+      "dependency_c_files": [
+        "/src/kernel/process.c"
+      ],
+      "additional_included_c_files": [],
+      "source_dependency_file": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o.d",
+      "subgoals": [
+        {
+          "id": "M14.C03.1",
+          "goal": "Retire process/thread/address-space initialization, clone and publication C while preserving owned-child construction and scheduling.",
+          "status": "not_claimed_complete"
+        },
+        {
+          "id": "M14.C03.2",
+          "goal": "Retire remaining process/VM/signal resource references, release, teardown and lookup C.",
+          "status": "not_claimed_complete"
+        },
+        {
+          "id": "M14.C03.3",
+          "goal": "Move residual scheduler/runqueue/CPU assignment and synchronization glue into Rust; reconcile MCKERNEL_RUST_PROCESS_HELPERS branches before counting debt.",
+          "status": "not_claimed_complete"
+        }
+      ],
+      "acceptance_requirements": [
+        "Identify actual surviving C bodies under the exact selected defines, including executable headers and mixed Rust/C wrappers; raw file length is not remaining debt.",
+        "Select the Rust or reviewed assembly implementation by default and remove the runtime C translation unit from the supported image build graph.",
+        "Record unique production provider definitions and exact final ELF/map attribution; prove zero surviving owned compute C for the retired path.",
+        "Run the path-relevant functional checks and required native lifecycle/resource-restoration coverage on the exact successor; update evidence only after acceptance."
+      ]
+    },
+    {
+      "id": "M14.ABI",
+      "repo_path": "kernel/rust/abi_checks.c",
+      "exact_source_path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/source-materialization-1/materialized-source/kernel/rust/abi_checks.c",
+      "container_source_path": "/src/kernel/rust/abi_checks.c",
+      "object_output": "kernel/CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o",
+      "classification": "declarative_abi_witness_not_runtime_port",
+      "subsystem": "Declarative Rust/C ABI layout witness",
+      "selected_defines": [
+        "IHK_IKC_USE_LINUX_WORK_IRQ",
+        "IHK_OS_MANYCORE",
+        "KERNEL_RAM_VADDR=0xfffffffffe800000",
+        "MAP_KERNEL_START=0xfffffffffe800000UL",
+        "MCKERNEL_NATIVE_CLONE3",
+        "MCKERNEL_NATIVE_CLONE_TID",
+        "MCKERNEL_NATIVE_FAULT_FIXUP",
+        "MCKERNEL_NATIVE_FUTEX",
+        "MCKERNEL_NATIVE_SIGNAL_STACK",
+        "MCKERNEL_RUST_ATOMIC_HELPERS",
+        "MCKERNEL_RUST_BITOPS",
+        "MCKERNEL_RUST_LIST_HELPERS",
+        "MCKERNEL_RUST_LOCK_HELPERS",
+        "MCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+        "MCKERNEL_RUST_MC_RWLOCK_HELPERS",
+        "MCKERNEL_RUST_PTE_HELPERS",
+        "MCKERNEL_RUST_REFCOUNT_HELPERS",
+        "MCKERNEL_RUST_SPINLOCK_HELPERS",
+        "PROFILE_ENABLE",
+        "__KERNEL__"
+      ],
+      "evidence_basis": [
+        "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/compile_commands.json",
+        "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/evidence/image-link-contract.txt",
+        "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/source-materialization-1/materialized-source/kernel/CMakeLists.txt",
+        "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o.d"
+      ],
+      "certainty": {
+        "compiled_and_link_input": "proven_by_existing_compile_and_link_records",
+        "surviving_runtime_c_bodies": "SOURCE_INTENT_DECLARATIVE_ONLY_FINAL_EXECUTABLE_CONTRIBUTION_NOT_MEASURED",
+        "subgoal_partition": "source_and_selected_feature_guided_planning_not_function_exhaustiveness"
+      },
+      "direct_c_includes": [],
+      "dependency_c_files": [
+        "/src/kernel/rust/abi_checks.c"
+      ],
+      "additional_included_c_files": [],
+      "source_dependency_file": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o.d",
+      "subgoals": [
+        {
+          "id": "M14.ABI.1",
+          "goal": "Retain layout assertions as a build-time compatibility witness, or replace with equivalent Rust/generated compile-time checks without losing ABI coverage.",
+          "status": "not_claimed_complete"
+        },
+        {
+          "id": "M14.ABI.2",
+          "goal": "Verify no executable contribution before treating this file as a no-runtime exception; if strict no-C-compiler completion is required, retire the checker separately.",
+          "status": "not_claimed_complete"
+        }
+      ],
+      "acceptance_requirements": [
+        "Preserve ABI assertion coverage.",
+        "Distinguish compile-time C witness from runtime language debt and from whole no-C-compiler policy."
+      ],
+      "source_caveat": "abi_checks.c lines34-67 describe five unused file-local inert xpmem stub definitions for included header type checking. It is not literally declarations only; no exported runtime implementation is intended. No symbol/section processing was performed to prove emitted code size."
+    },
+    {
+      "id": "M14.C04",
+      "repo_path": "arch/x86_64/kernel/cpu.c",
+      "exact_source_path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/source-materialization-1/materialized-source/arch/x86_64/kernel/cpu.c",
+      "container_source_path": "/src/arch/x86_64/kernel/cpu.c",
+      "object_output": "kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+      "classification": "runtime_translation_unit_conversion_scope",
+      "subsystem": "x86 CPU, interrupt, processor state and context support",
+      "selected_defines": [
+        "IHK_IKC_USE_LINUX_WORK_IRQ",
+        "IHK_OS_MANYCORE",
+        "KERNEL_RAM_VADDR=0xfffffffffe800000",
+        "MAP_KERNEL_START=0xfffffffffe800000UL",
+        "MCKERNEL_NATIVE_CLONE3",
+        "MCKERNEL_NATIVE_CLONE_TID",
+        "MCKERNEL_NATIVE_FAULT_FIXUP",
+        "MCKERNEL_NATIVE_FUTEX",
+        "MCKERNEL_NATIVE_SIGNAL_STACK",
+        "MCKERNEL_RUST_ATOMIC_HELPERS",
+        "MCKERNEL_RUST_BITOPS",
+        "MCKERNEL_RUST_LIST_HELPERS",
+        "MCKERNEL_RUST_LOCK_HELPERS",
+        "MCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+        "MCKERNEL_RUST_MC_RWLOCK_HELPERS",
+        "MCKERNEL_RUST_PTE_HELPERS",
+        "MCKERNEL_RUST_REFCOUNT_HELPERS",
+        "MCKERNEL_RUST_SPINLOCK_HELPERS",
+        "PROFILE_ENABLE",
+        "__KERNEL__",
+        "MCKERNEL_RUST_X86_CPU_HELPERS"
+      ],
+      "evidence_basis": [
+        "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/compile_commands.json",
+        "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/evidence/image-link-contract.txt",
+        "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/source-materialization-1/materialized-source/kernel/CMakeLists.txt",
+        "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o.d"
+      ],
+      "certainty": {
+        "compiled_and_link_input": "proven_by_existing_compile_and_link_records",
+        "surviving_runtime_c_bodies": "UNKNOWN_NOT_PROCESSED",
+        "subgoal_partition": "source_and_selected_feature_guided_planning_not_function_exhaustiveness"
+      },
+      "direct_c_includes": [],
+      "dependency_c_files": [
+        "/src/arch/x86_64/kernel/cpu.c"
+      ],
+      "additional_included_c_files": [],
+      "source_dependency_file": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o.d",
+      "subgoals": [
+        {
+          "id": "M14.C04.1",
+          "goal": "Retire remaining CPU discovery, APIC/IPI/timer/MSR and initialization C around the selected Rust CPU provider.",
+          "status": "not_claimed_complete"
+        },
+        {
+          "id": "M14.C04.2",
+          "goal": "Move remaining FP/XSAVE, TLS, debug register, context and interrupt-state lifecycle into Rust plus explicitly reviewed assembly primitives.",
+          "status": "not_claimed_complete"
+        },
+        {
+          "id": "M14.C04.3",
+          "goal": "Replace surviving callback/logging/allocation bridges; preserve accepted FP-state and other ownership fixes.",
+          "status": "not_claimed_complete"
+        }
+      ],
+      "acceptance_requirements": [
+        "Identify actual surviving C bodies under the exact selected defines, including executable headers and mixed Rust/C wrappers; raw file length is not remaining debt.",
+        "Select the Rust or reviewed assembly implementation by default and remove the runtime C translation unit from the supported image build graph.",
+        "Record unique production provider definitions and exact final ELF/map attribution; prove zero surviving owned compute C for the retired path.",
+        "Run the path-relevant functional checks and required native lifecycle/resource-restoration coverage on the exact successor; update evidence only after acceptance."
+      ]
+    },
+    {
+      "id": "M14.C05",
+      "repo_path": "arch/x86_64/kernel/memory.c",
+      "exact_source_path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/source-materialization-1/materialized-source/arch/x86_64/kernel/memory.c",
+      "container_source_path": "/src/arch/x86_64/kernel/memory.c",
+      "object_output": "kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o",
+      "classification": "runtime_translation_unit_conversion_scope",
+      "subsystem": "x86 page-table, address translation and user-copy support",
+      "selected_defines": [
+        "IHK_IKC_USE_LINUX_WORK_IRQ",
+        "IHK_OS_MANYCORE",
+        "KERNEL_RAM_VADDR=0xfffffffffe800000",
+        "MAP_KERNEL_START=0xfffffffffe800000UL",
+        "MCKERNEL_NATIVE_CLONE3",
+        "MCKERNEL_NATIVE_CLONE_TID",
+        "MCKERNEL_NATIVE_FAULT_FIXUP",
+        "MCKERNEL_NATIVE_FUTEX",
+        "MCKERNEL_NATIVE_SIGNAL_STACK",
+        "MCKERNEL_RUST_ATOMIC_HELPERS",
+        "MCKERNEL_RUST_BITOPS",
+        "MCKERNEL_RUST_LIST_HELPERS",
+        "MCKERNEL_RUST_LOCK_HELPERS",
+        "MCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+        "MCKERNEL_RUST_MC_RWLOCK_HELPERS",
+        "MCKERNEL_RUST_PTE_HELPERS",
+        "MCKERNEL_RUST_REFCOUNT_HELPERS",
+        "MCKERNEL_RUST_SPINLOCK_HELPERS",
+        "PROFILE_ENABLE",
+        "__KERNEL__",
+        "MCKERNEL_RUST_X86_MEMORY_PUBLIC",
+        "MCKERNEL_RUST_X86_USER_COPY_PUBLIC"
+      ],
+      "evidence_basis": [
+        "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/compile_commands.json",
+        "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/evidence/image-link-contract.txt",
+        "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/source-materialization-1/materialized-source/kernel/CMakeLists.txt",
+        "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o.d"
+      ],
+      "certainty": {
+        "compiled_and_link_input": "proven_by_existing_compile_and_link_records",
+        "surviving_runtime_c_bodies": "UNKNOWN_NOT_PROCESSED",
+        "subgoal_partition": "source_and_selected_feature_guided_planning_not_function_exhaustiveness"
+      },
+      "direct_c_includes": [],
+      "dependency_c_files": [
+        "/src/arch/x86_64/kernel/memory.c"
+      ],
+      "additional_included_c_files": [],
+      "source_dependency_file": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o.d",
+      "subgoals": [
+        {
+          "id": "M14.C05.1",
+          "goal": "Partition residual page-table walk/update, translation, map/unmap and TLB logic from already selected Rust public memory/PTE providers.",
+          "status": "not_claimed_complete"
+        },
+        {
+          "id": "M14.C05.2",
+          "goal": "Move remaining allocation/locking/architecture callbacks and executable header helpers into Rust or reviewed assembly primitives.",
+          "status": "not_claimed_complete"
+        },
+        {
+          "id": "M14.C05.3",
+          "goal": "Close user-copy/fault-fixup boundaries while retaining the selected Rust user-copy public path; remove fallback C from the supported image graph.",
+          "status": "not_claimed_complete"
+        }
+      ],
+      "acceptance_requirements": [
+        "Identify actual surviving C bodies under the exact selected defines, including executable headers and mixed Rust/C wrappers; raw file length is not remaining debt.",
+        "Select the Rust or reviewed assembly implementation by default and remove the runtime C translation unit from the supported image build graph.",
+        "Record unique production provider definitions and exact final ELF/map attribution; prove zero surviving owned compute C for the retired path.",
+        "Run the path-relevant functional checks and required native lifecycle/resource-restoration coverage on the exact successor; update evidence only after acceptance."
+      ]
+    },
+    {
+      "id": "M14.C06",
+      "repo_path": "arch/x86_64/kernel/syscall.c",
+      "exact_source_path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/source-materialization-1/materialized-source/arch/x86_64/kernel/syscall.c",
+      "container_source_path": "/src/arch/x86_64/kernel/syscall.c",
+      "object_output": "kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+      "classification": "runtime_translation_unit_conversion_scope",
+      "subsystem": "x86 syscall ABI, signal frame, ptrace and architecture memory operations",
+      "selected_defines": [
+        "IHK_IKC_USE_LINUX_WORK_IRQ",
+        "IHK_OS_MANYCORE",
+        "KERNEL_RAM_VADDR=0xfffffffffe800000",
+        "MAP_KERNEL_START=0xfffffffffe800000UL",
+        "MCKERNEL_NATIVE_CLONE3",
+        "MCKERNEL_NATIVE_CLONE_TID",
+        "MCKERNEL_NATIVE_FAULT_FIXUP",
+        "MCKERNEL_NATIVE_FUTEX",
+        "MCKERNEL_NATIVE_SIGNAL_STACK",
+        "MCKERNEL_RUST_ATOMIC_HELPERS",
+        "MCKERNEL_RUST_BITOPS",
+        "MCKERNEL_RUST_LIST_HELPERS",
+        "MCKERNEL_RUST_LOCK_HELPERS",
+        "MCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+        "MCKERNEL_RUST_MC_RWLOCK_HELPERS",
+        "MCKERNEL_RUST_PTE_HELPERS",
+        "MCKERNEL_RUST_REFCOUNT_HELPERS",
+        "MCKERNEL_RUST_SPINLOCK_HELPERS",
+        "PROFILE_ENABLE",
+        "__KERNEL__",
+        "MCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+        "MCKERNEL_RUST_X86_CPU_HELPERS"
+      ],
+      "evidence_basis": [
+        "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/compile_commands.json",
+        "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/evidence/image-link-contract.txt",
+        "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/source-materialization-1/materialized-source/kernel/CMakeLists.txt",
+        "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o.d"
+      ],
+      "certainty": {
+        "compiled_and_link_input": "proven_by_existing_compile_and_link_records",
+        "surviving_runtime_c_bodies": "UNKNOWN_NOT_PROCESSED",
+        "subgoal_partition": "source_and_selected_feature_guided_planning_not_function_exhaustiveness"
+      },
+      "direct_c_includes": [],
+      "dependency_c_files": [
+        "/src/arch/x86_64/kernel/syscall.c"
+      ],
+      "additional_included_c_files": [],
+      "source_dependency_file": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o.d",
+      "subgoals": [
+        {
+          "id": "M14.C06.1",
+          "goal": "Retire remaining syscall/context forwarding, rt_sigreturn and signal-state C around the selected Rust syscall policy provider.",
+          "status": "not_claimed_complete"
+        },
+        {
+          "id": "M14.C06.2",
+          "goal": "Retire ptrace/regset/XSAVE/debug-register, arch_prctl and process_vm read/write bridges.",
+          "status": "not_claimed_complete"
+        },
+        {
+          "id": "M14.C06.3",
+          "goal": "Move residual architecture mmap/shared-memory/clone and other supported ABI wrapper bodies into Rust; preserve reviewed assembly entry/exit boundaries.",
+          "status": "not_claimed_complete"
+        }
+      ],
+      "acceptance_requirements": [
+        "Identify actual surviving C bodies under the exact selected defines, including executable headers and mixed Rust/C wrappers; raw file length is not remaining debt.",
+        "Select the Rust or reviewed assembly implementation by default and remove the runtime C translation unit from the supported image build graph.",
+        "Record unique production provider definitions and exact final ELF/map attribution; prove zero surviving owned compute C for the retired path.",
+        "Run the path-relevant functional checks and required native lifecycle/resource-restoration coverage on the exact successor; update evidence only after acceptance."
+      ]
+    }
+  ],
+  "selected_out_legacy_c_translation_units": [
+    {
+      "repo_path": "kernel/ap.c",
+      "reason": "RUST_KERNEL_ENABLED removes this translation unit from current image source list; not active C debt"
+    },
+    {
+      "repo_path": "kernel/cls.c",
+      "reason": "RUST_KERNEL_ENABLED removes this translation unit from current image source list; not active C debt"
+    },
+    {
+      "repo_path": "kernel/copy.c",
+      "reason": "RUST_KERNEL_ENABLED removes this translation unit from current image source list; not active C debt"
+    },
+    {
+      "repo_path": "kernel/debug.c",
+      "reason": "RUST_KERNEL_ENABLED removes this translation unit from current image source list; not active C debt"
+    },
+    {
+      "repo_path": "kernel/init.c",
+      "reason": "RUST_KERNEL_ENABLED removes this translation unit from current image source list; not active C debt"
+    },
+    {
+      "repo_path": "kernel/fileobj.c",
+      "reason": "RUST_KERNEL_ENABLED removes this translation unit from current image source list; not active C debt"
+    },
+    {
+      "repo_path": "kernel/freeze.c",
+      "reason": "RUST_KERNEL_ENABLED removes this translation unit from current image source list; not active C debt"
+    },
+    {
+      "repo_path": "kernel/futex.c",
+      "reason": "RUST_KERNEL_ENABLED removes this translation unit from current image source list; not active C debt"
+    },
+    {
+      "repo_path": "kernel/gencore.c",
+      "reason": "RUST_KERNEL_ENABLED removes this translation unit from current image source list; not active C debt"
+    },
+    {
+      "repo_path": "kernel/host.c",
+      "reason": "RUST_KERNEL_ENABLED removes this translation unit from current image source list; not active C debt"
+    },
+    {
+      "repo_path": "kernel/host_helpers.c",
+      "reason": "RUST_KERNEL_ENABLED removes this translation unit from current image source list; not active C debt"
+    },
+    {
+      "repo_path": "kernel/lock_helpers.c",
+      "reason": "RUST_KERNEL_ENABLED removes this translation unit from current image source list; not active C debt"
+    },
+    {
+      "repo_path": "kernel/listeners.c",
+      "reason": "RUST_KERNEL_ENABLED removes this translation unit from current image source list; not active C debt"
+    },
+    {
+      "repo_path": "kernel/mikc.c",
+      "reason": "RUST_KERNEL_ENABLED removes this translation unit from current image source list; not active C debt"
+    },
+    {
+      "repo_path": "kernel/object_helpers.c",
+      "reason": "RUST_KERNEL_ENABLED removes this translation unit from current image source list; not active C debt"
+    },
+    {
+      "repo_path": "kernel/pager.c",
+      "reason": "RUST_KERNEL_ENABLED removes this translation unit from current image source list; not active C debt"
+    },
+    {
+      "repo_path": "kernel/plist.c",
+      "reason": "RUST_KERNEL_ENABLED removes this translation unit from current image source list; not active C debt"
+    },
+    {
+      "repo_path": "kernel/profile.c",
+      "reason": "RUST_KERNEL_ENABLED removes this translation unit from current image source list; not active C debt"
+    },
+    {
+      "repo_path": "kernel/procfs.c",
+      "reason": "RUST_KERNEL_ENABLED removes this translation unit from current image source list; not active C debt"
+    },
+    {
+      "repo_path": "kernel/process_helpers.c",
+      "reason": "RUST_KERNEL_ENABLED removes this translation unit from current image source list; not active C debt"
+    },
+    {
+      "repo_path": "kernel/sched_helpers.c",
+      "reason": "RUST_KERNEL_ENABLED removes this translation unit from current image source list; not active C debt"
+    },
+    {
+      "repo_path": "kernel/shmobj.c",
+      "reason": "RUST_KERNEL_ENABLED removes this translation unit from current image source list; not active C debt"
+    },
+    {
+      "repo_path": "kernel/sysfs.c",
+      "reason": "RUST_KERNEL_ENABLED removes this translation unit from current image source list; not active C debt"
+    },
+    {
+      "repo_path": "kernel/timer.c",
+      "reason": "RUST_KERNEL_ENABLED removes this translation unit from current image source list; not active C debt"
+    },
+    {
+      "repo_path": "kernel/zeroobj.c",
+      "reason": "RUST_KERNEL_ENABLED removes this translation unit from current image source list; not active C debt"
+    },
+    {
+      "repo_path": "kernel/waitq.c",
+      "reason": "RUST_KERNEL_ENABLED removes this translation unit from current image source list; not active C debt"
+    },
+    {
+      "repo_path": "kernel/xpmem.c",
+      "reason": "RUST_KERNEL_ENABLED removes this translation unit from current image source list; not active C debt"
+    },
+    {
+      "repo_path": "lib/abort.c",
+      "reason": "RUST_KERNEL_ENABLED removes this translation unit from current image source list; not active C debt"
+    },
+    {
+      "repo_path": "lib/bitmap.c",
+      "reason": "RUST_KERNEL_ENABLED removes this translation unit from current image source list; not active C debt"
+    },
+    {
+      "repo_path": "lib/bitops.c",
+      "reason": "RUST_KERNEL_ENABLED removes this translation unit from current image source list; not active C debt"
+    },
+    {
+      "repo_path": "lib/page_alloc.c",
+      "reason": "RUST_KERNEL_ENABLED removes this translation unit from current image source list; not active C debt"
+    },
+    {
+      "repo_path": "lib/string.c",
+      "reason": "RUST_KERNEL_ENABLED removes this translation unit from current image source list; not active C debt"
+    },
+    {
+      "repo_path": "lib/vsprintf.c",
+      "reason": "RUST_KERNEL_ENABLED removes this translation unit from current image source list; not active C debt"
+    },
+    {
+      "repo_path": "ihk/ikc/manycore.c",
+      "reason": "RUST_KERNEL_ENABLED removes this translation unit from current image source list; not active C debt"
+    },
+    {
+      "repo_path": "ihk/ikc/master.c",
+      "reason": "RUST_KERNEL_ENABLED removes this translation unit from current image source list; not active C debt"
+    },
+    {
+      "repo_path": "ihk/ikc/queue.c",
+      "reason": "RUST_KERNEL_ENABLED removes this translation unit from current image source list; not active C debt"
+    },
+    {
+      "repo_path": "ihk/cokernel/smp/x86_64/setup.c",
+      "reason": "RUST_KERNEL_ENABLED removes this translation unit from current image source list; not active C debt"
+    },
+    {
+      "repo_path": "arch/x86_64/kernel/coredump.c",
+      "reason": "smp-x86 RUST_KERNEL_ENABLED removes this translation unit"
+    },
+    {
+      "repo_path": "arch/x86_64/kernel/lock.c",
+      "reason": "smp-x86 RUST_KERNEL_ENABLED removes this translation unit"
+    },
+    {
+      "repo_path": "arch/x86_64/kernel/local.c",
+      "reason": "smp-x86 RUST_KERNEL_ENABLED removes this translation unit"
+    },
+    {
+      "repo_path": "arch/x86_64/kernel/memory_helpers.c",
+      "reason": "smp-x86 RUST_KERNEL_ENABLED removes this translation unit"
+    },
+    {
+      "repo_path": "arch/x86_64/kernel/mikc.c",
+      "reason": "smp-x86 RUST_KERNEL_ENABLED removes this translation unit"
+    },
+    {
+      "repo_path": "arch/x86_64/kernel/perfctr.c",
+      "reason": "smp-x86 RUST_KERNEL_ENABLED removes this translation unit"
+    },
+    {
+      "repo_path": "arch/x86_64/kernel/vsyscall.c",
+      "reason": "smp-x86 RUST_KERNEL_ENABLED removes this translation unit"
+    },
+    {
+      "repo_path": "ihk/cokernel/smp/ikc.c",
+      "reason": "smp-x86 RUST_KERNEL_ENABLED removes this translation unit"
+    },
+    {
+      "repo_path": "ihk/cokernel/smp/x86_64/dma.c",
+      "reason": "smp-x86 RUST_KERNEL_ENABLED removes this translation unit"
+    }
+  ],
+  "optional_or_fallback_c_exclusions": [
+    {
+      "repo_path": "kernel/devobj.c",
+      "reason": "Removed when Rust enabled and ENABLE_FUGAKU_HACKS=OFF"
+    },
+    {
+      "repo_path": "kernel/hugefileobj.c",
+      "reason": "Removed when Rust enabled and ENABLE_FUGAKU_HACKS=OFF"
+    },
+    {
+      "repo_path": "kernel/tofu/tof_utofu_main.c",
+      "reason": "Appended only for ENABLE_TOFU; current OFF"
+    },
+    {
+      "repo_path": "kernel/ubsan.c",
+      "reason": "Current ENABLE_UBSAN=OFF; even when enabled Rust selection removes C implementation"
+    },
+    {
+      "repo_path": "kernel/rbtree.c",
+      "reason": "Appended only in non-Rust fallback source branch"
+    },
+    {
+      "repo_path": "kernel/llist.c",
+      "reason": "Appended only in non-Rust fallback source branch"
+    },
+    {
+      "repo_path": "lib/list.c",
+      "reason": "Appended only in non-Rust fallback source branch"
+    }
+  ],
+  "assembly_retained": [
+    "arch/x86_64/kernel/context.S",
+    "arch/x86_64/kernel/interrupt.S",
+    "arch/x86_64/kernel/trampoline.S"
+  ],
+  "excluded_domains": [
+    "Linux host modules and compatibility C",
+    "host launcher and user tools",
+    "tests and diagnostic fixtures",
+    "external libraries",
+    "unsupported architectures and disabled optional configurations"
+  ],
+  "limits": [
+    "Compile/link input enumeration is complete for this exact supported image; it is not a surviving C function or byte inventory.",
+    "Existing Rust branches in retained C files must not be counted as unported C.",
+    "Existing .o.d files show no extra .c includes, including transitive includes, for all seven C compilation units.",
+    "Executable logic in included headers/macros remains a closure requirement; no full header-language census was performed.",
+    "Optional configurations require separate inventory/admission before being claimed supported and fully retired.",
+    "Runtime-zero-C and no-C-compiler-at-all are different completion criteria; the ABI witness needs explicit policy.",
+    "This task changed only the two named private inventory outputs."
+  ],
+  "canonical_purpose": "M14 initial supported-profile C translation-unit inventory; source enumeration, not surviving-body or runtime acceptance."
+}

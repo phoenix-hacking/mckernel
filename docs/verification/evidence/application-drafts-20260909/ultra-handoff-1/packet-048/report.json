@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-048",
+  "packet_version": 1,
+  "context_sha256": "a76b99d7f2499e2450d99bb4b30211e43831eb9141b7018cea46ed7438fbc424",
+  "started_utc": "2026-09-09T11:39:00Z",
+  "finished_utc": "2026-09-09T11:40:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "process.fork-exit",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/process/process.fork-exit.c",
+      "oracle": "scripts/application-tests/oracles/process.fork-exit.json",
+      "changed_files": ["scripts/application-tests/cases/process/process.fork-exit.c", "scripts/application-tests/oracles/process.fork-exit.json"],
+      "parameter_vectors": {"child_exit_code": [23], "wait_operation": ["waitpid exact child"]},
+      "implemented_operations": ["fork child", "_exit(23)", "exact PID wait and WIFEXITED checks"],
+      "unresolved_oracle_notes": ["Dual guest schedule and PID retirement evidence require Max review."],
+      "max_reviewer_question": "Confirm raw wait status and both guest process retirement records are required."
+    },
+    {
+      "case_id": "process.fork-cow",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/process/process.fork-cow.c",
+      "oracle": "scripts/application-tests/oracles/process.fork-cow.json",
+      "changed_files": ["scripts/application-tests/cases/process/process.fork-cow.c", "scripts/application-tests/oracles/process.fork-cow.json"],
+      "parameter_vectors": {"storage": ["MAP_PRIVATE anonymous page"], "parent_pattern": ["0xa5"], "child_pattern": ["0xc3"], "child_exit_code": [23]},
+      "implemented_operations": ["inherited private mapping", "independent parent/child writes", "child status and parent retention"],
+      "unresolved_oracle_notes": ["COW page-fault and physical-page evidence require runtime review."],
+      "max_reviewer_question": "Confirm no cross-process overwrite and preserve page-level COW evidence."
+    },
+    {
+      "case_id": "process.fork-shared-offset",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/process/process.fork-shared-offset.c",
+      "oracle": "scripts/application-tests/oracles/process.fork-shared-offset.json",
+      "changed_files": ["scripts/application-tests/cases/process/process.fork-shared-offset.c", "scripts/application-tests/oracles/process.fork-shared-offset.json"],
+      "parameter_vectors": {"file_bytes": ["ABCD"], "parent_read": ["AB"], "child_read": ["CD"], "handshake": ["pipe ordered"]},
+      "implemented_operations": ["inherited regular-file descriptor", "parent/child ordered reads", "shared-offset status validation"],
+      "unresolved_oracle_notes": ["Open-file-description identity and cross-process offset trace require runtime review."],
+      "max_reviewer_question": "Confirm child begins at offset two on the same open-file description."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/process/process.fork-exit.c", "sha256": "860b0b61c901958070d844894da7250118a4dc1508d785615d824876f5ea42c3"},
+    {"path": "scripts/application-tests/oracles/process.fork-exit.json", "sha256": "fd756e4767cf26dfa6eb6ee9b78188a3d1ebd3d0dc902c433a86aeff68fb4122"},
+    {"path": "scripts/application-tests/cases/process/process.fork-cow.c", "sha256": "db54d21ebcf827c1fa1d185b5cc09be9ce8b3d8750e4a02b94e000e04946f59a"},
+    {"path": "scripts/application-tests/oracles/process.fork-cow.json", "sha256": "27a2089d01d587ddf029d2d90a737adc6b13c9dbf8245207532b2bfa2863e237"},
+    {"path": "scripts/application-tests/cases/process/process.fork-shared-offset.c", "sha256": "b6100b6a7a1abe4610c4226f1dc661877b917e9a1ddc6fe11e04e7d3df752209"},
+    {"path": "scripts/application-tests/oracles/process.fork-shared-offset.json", "sha256": "91d62ffc3b2daf86fe9e51d70f65d9f2125bb11c74bf159eb5569f01751da734"},
+    {"path": "docs/verification/evidence/application-drafts-20260909/ultra-handoff-1/packet-048/context.json", "sha256": "a76b99d7f2499e2450d99bb4b30211e43831eb9141b7018cea46ed7438fbc424"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-048.json --emit-context /tmp/application-packet-048-context-20260909-1.json", "outcome": "PASS; planning metadata only; runtime_authorized=false"},
+    {"command": "python3 -m json.tool packet-048/report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Fork exit, copy-on-write, and shared-offset cases need final process ABI, memory, descriptor, PID, and canonical record review."],
+  "blocked_execution_capabilities": ["current-inputs", "runtime-transport-fault-injection", "runner-contract"],
+  "first_failure_event": null,
+  "max_escalation": ["Review child wait status and retirement", "Require COW page evidence", "Review shared open-file offset identity"],
+  "next_packet_id": "packet-049"
+}

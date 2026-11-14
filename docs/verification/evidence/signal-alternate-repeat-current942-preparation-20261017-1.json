@@ -1,0 +1,473 @@
+{
+  "task_id": "signal-alternate-repeat-current942-preparation-20261017-1",
+  "status": "STOPPED_FIRST_UNEXPECTED_ASSERTION",
+  "scope": "Static diagnostic preparation and ordinary-user Linux reference only; no guest/root/production changes.",
+  "bridge": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/signal-alternate-repeat-exact-byte-diagnostic-bridge-20261017-1.json",
+    "sha256": "ff6c107aebc2c7ae4df62fa83f9c2a82a049422f43781f53485d92c233ebf93f"
+  },
+  "original_inputs": [
+    {
+      "source": "/home/holden/mckernel/scripts/application-tests/cases/signal/signal.alternate-repeat.c",
+      "retained": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/payload-original.c",
+      "sha256": "aa6644c7a72f90e49c5eff3115bdd2c2c5aa1fa68dfa138a86335acbe16a08eb",
+      "size": 1368
+    },
+    {
+      "source": "/home/holden/mckernel/scripts/application-tests/oracles/signal.alternate-repeat.json",
+      "retained": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/oracle-original.json",
+      "sha256": "462077668cf49ff07565ff3fe42e4c2b1dbc6cb3bfaeda9608820cd229065f53",
+      "size": 1015
+    },
+    {
+      "source": "/home/holden/mckernel/scripts/application-tests/packets/packet-005.json",
+      "retained": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/released-draft-packet-005.json",
+      "sha256": "981014e863cb11e1f0c0afa69428dc13ec11f20289c597d1c063c61a8325c81c",
+      "size": 5901
+    },
+    {
+      "source": "/home/holden/mckernel/docs/verification/evidence/signal-mask-restore-compile-profile-review-20261017.json",
+      "retained": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/reusable-compile-profile.json",
+      "sha256": "320d19452c638e0853d21798628d59387d551ff2b212806e1061d9d0b644ff31",
+      "size": 11266
+    },
+    {
+      "source": "/home/holden/mckernel/scripts/application-tests/cases.json#signal.alternate-repeat",
+      "catalog_sha256": "e8402f71283634f53923b57a1a920d9bc5e4a0670c6c6aba03eb967f893bf316",
+      "retained": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/selected-case.json",
+      "sha256": "b1c26413db2802db7bed27827ea2a61cdbda1933f9f3bd996fe2b0e0d76bda3f"
+    }
+  ],
+  "checks_completed": {
+    "payload_compile": "PASS strict reviewed gcc static flags; warnings-as-errors; retained depfile/header hashes",
+    "payload_ELF": {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/app",
+      "elf_type": 2,
+      "machine": 62,
+      "no_interpreter": true,
+      "no_dynamic_segment": true,
+      "no_wx_load": true,
+      "nonexec_stack": true
+    },
+    "linux_reference": {
+      "status": "PASS_DIAGNOSTIC_REFERENCE",
+      "exit_code": 0,
+      "stdout_bytes": 415,
+      "stdout_sha256": "461b8c2cbeadf7deb6c34b99269d7c9317d8afd7de9f8ee13ee237963077b3db",
+      "stderr_bytes": 0,
+      "formal_case_credit": false
+    },
+    "collector_ELF": {
+      "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-compile-20261017-nX2kCR/init",
+      "elf_type": 2,
+      "machine": 62,
+      "no_interpreter": true,
+      "no_dynamic_segment": true,
+      "no_wx_load": true,
+      "nonexec_stack": true
+    },
+    "actual_default_vs_futex_profiles": "PASS 2 focused existing helper tests; actual default1024/futex4096 serializers",
+    "selected_profile_admission": {
+      "positive": "PASS default1024",
+      "negative": "REJECT manifest4096",
+      "actual_default_producer": {
+        "argv": [
+          "/bin/mcexec",
+          "-t",
+          "1",
+          "0",
+          "app",
+          "A",
+          "",
+          "B"
+        ],
+        "cwd": "/case/work",
+        "env": {
+          "PATH": "/usr/bin:/bin",
+          "COKERNEL_PATH": "/apps"
+        },
+        "raw_wait_status": 0,
+        "started_ns": 1,
+        "reaped_ns": 2,
+        "finished_ns": 3,
+        "streams": {
+          "stdout": {
+            "hex": "",
+            "eof": true,
+            "truncated": false,
+            "observed": 0,
+            "retained": 0,
+            "discarded": 0,
+            "limit": 1024,
+            "eof_ns": 0
+          },
+          "stderr": {
+            "hex": "",
+            "eof": true,
+            "truncated": false,
+            "observed": 0,
+            "retained": 0,
+            "discarded": 0,
+            "limit": 1024,
+            "eof_ns": 0
+          }
+        },
+        "procfs_empty": true
+      }
+    },
+    "overlay_build": "PASS real returncode0; existing8089 default collector and current942 stage reused; exact source joins enforced by unchanged transformer",
+    "strict_load_manifest": "Returned successfully before failing extra archive assertion; manifest retained.",
+    "final_member_names": "59 names equal retained stage inventory before failure"
+  },
+  "failure": {
+    "command": {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=150",
+        "--nofile=256",
+        "--fsize=268435456",
+        "--core=0",
+        "/usr/bin/timeout",
+        "-k",
+        "5s",
+        "180s",
+        "/home/holden/anaconda3/bin/python3.9",
+        "-B",
+        "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/prepare.py"
+      ],
+      "cwd": "/home/holden/mckernel",
+      "environment": {
+        "PATH": "/usr/bin:/bin",
+        "LANG": "C",
+        "LC_ALL": "C",
+        "TZ": "UTC",
+        "HOME": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/home",
+        "TMPDIR": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/tmp",
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "interpreter": {
+        "path": "/home/holden/anaconda3/bin/python3.9",
+        "resolved": "/home/holden/anaconda3/bin/python3.9",
+        "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb",
+        "version": "Python 3.9.12"
+      },
+      "driver_sha256": "697ace77ced7e818caa07c11de7eeddc5fef5d2af0295e78c6fba620c71d519a"
+    },
+    "result": {
+      "returncode": 1,
+      "elapsed_seconds": 9.452129495002737,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "85a939f8c44a1e77fa2b98c5fef9b9ed23b4e9adb5f40a4ac69b1b0973e31ac7"
+    },
+    "original_failure": {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/first-unexpected-failure.json",
+      "size": 5930,
+      "sha256": "8615ec7ca64594a494ed3fd0cc06ee8cd9a85bea8ff67e9948c6c3f7c059f448"
+    },
+    "stderr": {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/stderr",
+      "size": 369,
+      "sha256": "85a939f8c44a1e77fa2b98c5fef9b9ed23b4e9adb5f40a4ac69b1b0973e31ac7"
+    },
+    "location": "prepare.py:166",
+    "assertion": "assert row['uid'] == row['gid'] == row['mtime'] == 0",
+    "diagnosis": "Task-local driver incorrectly assumed unchanged retained archive files all have epoch0 mtime. Authenticated base preserves1792242015 on40 unchanged files; all59 entries still uid0/gid0. No sources, archives or oracles were modified to remove this mismatch.",
+    "affected_members_count": 40,
+    "first_affected_member": {
+      "member": "bin/bash",
+      "uid": 0,
+      "gid": 0,
+      "mtime": 1792242015
+    }
+  },
+  "not_run": [
+    "Complete59-member metadata/content comparison after failing check",
+    "Actual default collector payload415-byte serializer wrapper",
+    "Selected strict manifest evaluator positive and mutated limit/bytes negative checks"
+  ],
+  "artifacts": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/alternate-repeat-overlay.cpio.gz",
+      "size": 13277878,
+      "sha256": "0674ea3dfc556f807973ebc23d49a3fc03dbf2a769d6b989cba49aab674e7815"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/app",
+      "size": 876936,
+      "sha256": "1e4cf561417c0f0e75ad3ea4addd9d4f19dc4102d08c89eafcd622cd0520aff3"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/app.d",
+      "size": 4653,
+      "sha256": "63176a3c7e6a811e154d311f71fa2f052e981427827ee6d430177e2598244213"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/bridge-evidence-ref.json",
+      "size": 214,
+      "sha256": "596cd1fe8ad2988c4da4ec2f380a4a209e384bd3a5956db2240a21f587a78925"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/collector-elf.json",
+      "size": 237,
+      "sha256": "4912bd500bc95f30a946462e1a573128085c21f45079e83aa6aec3e9d0a86770"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/collector-profiles.stderr",
+      "size": 395,
+      "sha256": "c57d8191ead1978cd14cd6e7c9ac2b9b6a8d30b748aafdfa6306f4b20e0e9e17"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/collector-profiles.stdout",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/command.json",
+      "size": 1109,
+      "sha256": "aa1b2eec6bb4930b394073388be2ae02155012e11581cb80dd6eaf1c20374712"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/commands.json",
+      "size": 5258,
+      "sha256": "1c7f5c863438136845155628c010cb199b036f216cdd2790c3cf3a1d6c5e992d"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/consumed-headers.json",
+      "size": 11033,
+      "sha256": "e9520b6a3342337dab2bfec5d388ae626570e3c7ec371260663dc017b554f081"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/expected-stdout-before-reference",
+      "size": 415,
+      "sha256": "461b8c2cbeadf7deb6c34b99269d7c9317d8afd7de9f8ee13ee237963077b3db"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/first-unexpected-failure.json",
+      "size": 5930,
+      "sha256": "8615ec7ca64594a494ed3fd0cc06ee8cd9a85bea8ff67e9948c6c3f7c059f448"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/inherited-signal-mask.json",
+      "size": 20,
+      "sha256": "d34a34aa408f9430da2abd48124bf2118e9d87ae3864c3f954beaa4586e6863e"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/linux-reference-check.json",
+      "size": 224,
+      "sha256": "1658df1e2d7844512b3ca6fd30916149ea024e1280caf4c3d156a05b70efea50"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/linux-reference.stderr",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/linux-reference.stdout",
+      "size": 415,
+      "sha256": "461b8c2cbeadf7deb6c34b99269d7c9317d8afd7de9f8ee13ee237963077b3db"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/manifest.json",
+      "size": 6239,
+      "sha256": "d9a9f6b70ca19bc90110d737123d49cfa5458fd90d9f3cac22b50b4e1468a90b"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/oracle-original.json",
+      "size": 1015,
+      "sha256": "462077668cf49ff07565ff3fe42e4c2b1dbc6cb3bfaeda9608820cd229065f53"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/overlay.json",
+      "size": 14826,
+      "sha256": "8d2e0a2e28c93e9e1738950e44d10ef96b3ccac8bb3a185f20afca536b6e7792"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/overlay.stderr",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/overlay.stdout",
+      "size": 14826,
+      "sha256": "8d2e0a2e28c93e9e1738950e44d10ef96b3ccac8bb3a185f20afca536b6e7792"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/payload-compile.stderr",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/payload-compile.stdout",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/payload-elf.json",
+      "size": 239,
+      "sha256": "09ddc8f79d1409e5717058e35628e8897a4ebb00a199e2be80744b711b826476"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/payload-original.c",
+      "size": 1368,
+      "sha256": "aa6644c7a72f90e49c5eff3115bdd2c2c5aa1fa68dfa138a86335acbe16a08eb"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/prepare.py",
+      "size": 14443,
+      "sha256": "697ace77ced7e818caa07c11de7eeddc5fef5d2af0295e78c6fba620c71d519a"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/profile-checks/default-compile.json",
+      "size": 746,
+      "sha256": "9ffc0127fd8801584d7663a7bd9a01cbc1a2ac0514bb56f0d871424034622203"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/profile-checks/default-compile.stderr",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/profile-checks/default-compile.stdout",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/profile-checks/default-constants.json",
+      "size": 525,
+      "sha256": "d7b8b9e90ba2afe82c3db2078845ffd4739711409345dd9464de478ccd4941d8"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/profile-checks/default-constants.stderr",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/profile-checks/default-constants.stdout",
+      "size": 557,
+      "sha256": "3418a90f69f5a504ff193ffa121bad59b8c2393df28419f482d318a1d505fbcf"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/profile-checks/default-wrapper",
+      "size": 31512,
+      "sha256": "79e12f1525e60ec860cf67deaa7872e78afaa6c40e02ebe645a723b490c992bf"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/profile-checks/default-wrapper.c",
+      "size": 683,
+      "sha256": "f7a413e021f0c3d580e0c7dbfcc6004e69a9c3f47433021896e7694cc2b45ed6"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/profile-checks/futex-compile.json",
+      "size": 760,
+      "sha256": "27050cb4dfe3f5f30b3f4171ba0d1b7d74f308ba4ca27cf17309e475e3dd5f69"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/profile-checks/futex-compile.stderr",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/profile-checks/futex-compile.stdout",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/profile-checks/futex-constants.json",
+      "size": 523,
+      "sha256": "532f1da5edf03dd0187b0cf15effd722259fd0165db81b03b3240ce72de0c13f"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/profile-checks/futex-constants.stderr",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/profile-checks/futex-constants.stdout",
+      "size": 553,
+      "sha256": "7e5634d365fae6def145cb307820c1f18c01bc5ec6ec01a7be19a50cf2b7ea3b"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/profile-checks/futex-wrapper",
+      "size": 31592,
+      "sha256": "435979ca7247f0ea09c111c4edfc8491b2d0271faee3352e6ee6dc832029c60d"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/profile-checks/futex-wrapper.c",
+      "size": 683,
+      "sha256": "f7a413e021f0c3d580e0c7dbfcc6004e69a9c3f47433021896e7694cc2b45ed6"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/python-version.stderr",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/python-version.stdout",
+      "size": 14,
+      "sha256": "7750f5e8f71f71a6eebaaffed28eb4d06c659e7de830931b4ac9d320086b2a73"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/read-only-inputs.json",
+      "size": 1759,
+      "sha256": "69ce44b5a6fcecb6cc4e3e1c051583536a644ef026440d062c91d1fa0906df7c"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/released-draft-packet-005.json",
+      "size": 5901,
+      "sha256": "981014e863cb11e1f0c0afa69428dc13ec11f20289c597d1c063c61a8325c81c"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/result.json",
+      "size": 236,
+      "sha256": "f0284acd5d5d187b8d97dc2334ca78fe5eaabab2bf0ae3074aabfbd2c3116db0"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/retained-nonzero-mtime-findings.json",
+      "size": 3874,
+      "sha256": "a6759715912e2ceea3fceb3a84bf20fc20fe8ad6e6393026e47e70388e2d662d"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/reusable-compile-profile.json",
+      "size": 11266,
+      "sha256": "320d19452c638e0853d21798628d59387d551ff2b212806e1061d9d0b644ff31"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/selected-case.json",
+      "size": 3763,
+      "sha256": "b1c26413db2802db7bed27827ea2a61cdbda1933f9f3bd996fe2b0e0d76bda3f"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/selected-profile-check.json",
+      "size": 890,
+      "sha256": "cf50ac2afbcd99c685e07d97f7b4900c4ada0bb039069c03d19c427043237445"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/stderr",
+      "size": 369,
+      "sha256": "85a939f8c44a1e77fa2b98c5fef9b9ed23b4e9adb5f40a4ac69b1b0973e31ac7"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/stdout",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/template-manifest.json",
+      "size": 5455,
+      "sha256": "47eb95897b0a4f2d8b2cb2673c2ed3b3feff11895654ac160c854710cc7582da"
+    }
+  ],
+  "blocker": "Dispatcher must authorize one bounded fresh continuation matching full metadata to authenticated retained base map and overlay-member contract; no repeated compiler/reference/overlay execution is needed.",
+  "next_task": "Retain this failed driver/report, perform corrected source-bound59-member comparison in fresh scratch attempt and finish actual producer->consumer positive/negative checks.",
+  "formal_case_credit": false,
+  "application_acceptance": false,
+  "runtime_release": false,
+  "preserved_limitations": [
+    "Original released source/oracle/catalog unchanged; additive exact-byte diagnostic bridge does not resolve formal oracle questions.",
+    "Normal execution stack restoration is unmeasured; no async-signal-safety claim; static host reference does not fulfill ordinary-dynamic-etexec or pinned-Linux-guest formal obligations."
+  ]
+}

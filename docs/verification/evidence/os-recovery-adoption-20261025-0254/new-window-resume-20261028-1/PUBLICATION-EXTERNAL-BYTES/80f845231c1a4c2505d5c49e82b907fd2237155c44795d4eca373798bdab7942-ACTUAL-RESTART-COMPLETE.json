@@ -1,0 +1,111 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_NEW_RUN_CORE_GUARDIAN_30MIN_MONITOR_PHONE_LIVE",
+  "at": "2026-10-28T06:08:17.263696+00:00",
+  "thread_id": "01a18111-26a7-7ef2-bbd6-e33d1c8dc803",
+  "phase": "running",
+  "goal_status": "active",
+  "actual_active_agents": [
+    "dispatcher",
+    "/root/postnative"
+  ],
+  "actors": {
+    "watcher": {
+      "pid": 1887110,
+      "start": "96419041",
+      "ppid": 1311,
+      "state": "S"
+    },
+    "worker": {
+      "pid": 1887113,
+      "start": "96419049",
+      "ppid": 1887110,
+      "state": "S"
+    },
+    "server": {
+      "pid": 1887115,
+      "start": "96419058",
+      "ppid": 1887113,
+      "state": "S"
+    },
+    "guardian": {
+      "pid": 1890834,
+      "start": "96454663",
+      "ppid": 1311,
+      "state": "S"
+    },
+    "monitor": {
+      "pid": 1893554,
+      "start": "96494955",
+      "ppid": 1311,
+      "state": "S"
+    },
+    "phone": {
+      "pid": 1894242,
+      "start": "96505809",
+      "ppid": 1311,
+      "state": "S"
+    }
+  },
+  "all_auxiliary_leases_held": {
+    "guardian": true,
+    "monitor": true,
+    "phone": true
+  },
+  "window": {
+    "status": "ACTUAL_AUTHORIZED_LAUNCH_WINDOW",
+    "window_id": "until-20261028-2300-pacific-1793166745",
+    "duration_seconds": 86854.29890489578,
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "start_epoch": 1793166745.701095,
+    "start_boot": 964190.397097772,
+    "start_monotonic": 948852.27004989,
+    "deadline_epoch": 1793253600,
+    "boot_deadline": 1051044.6960026678,
+    "monotonic_deadline": 1035706.5689547858,
+    "deadline_utc": "2026-10-29T06:00:00+00:00",
+    "authorization_file": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/new-run-until-20261028-2300-pacific-1/USER-AUTHORIZATION.json",
+    "authorization_sha256": "376d9968f7451478373085dea68998ca2924a63ff242c0a90bbcee53e70b8292",
+    "credit_run_id": "7f4af94a83b14cc08f97401f5891d965",
+    "credit_ceiling": "57774.852125",
+    "max_agents": 10,
+    "build_jobs": 7
+  },
+  "actual_guardian_packet_sha256": "369da48abf196bbe68abc6eb4579deddd8f80fc8522560c9ee983e2ca9ae4203",
+  "actual_earliest_watcher_MONO": 1035705.5689454618,
+  "phone_status": {
+    "boot_deadline": 1051043.6959931096,
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "deadline_epoch": 1793253600,
+    "interval": 60,
+    "last_error": null,
+    "last_result": {
+      "campaign_phase": "running",
+      "commit": "add05893a3ad40dfa8fc653354108abdb031de74",
+      "delivery": "existing launcher controls delivery; intake never resumes",
+      "request_id": "phone-001",
+      "status": "disabled"
+    },
+    "monotonic_deadline": 1035706.5689547858,
+    "owner": {
+      "pid": 1894242,
+      "starttime": 96505809
+    },
+    "phase": "running",
+    "window_path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/new-run-until-20261028-2300-pacific-1/ACTUAL-WINDOW.json",
+    "window_sha256": "0bfb54bff698f53c744d797e2f57db94db08cd20120da70566d555fa6c1e320e"
+  },
+  "credit_budget": {
+    "schema_version": 2,
+    "id": "7f4af94a83b14cc08f97401f5891d965",
+    "budget": "57774.852125",
+    "initial_balance": "57774.8521250000",
+    "minimum_balance": "52079.8011050000",
+    "last_balance": "52079.8011050000",
+    "spent": "22812.3311000000",
+    "remaining": "34962.5210250000",
+    "scope": "Cumulative account-wide observed balance decreases; increases never restore allowance; stale snapshots may count conservatively; in-flight charges can settle later"
+  },
+  "native_release": false,
+  "core_five_unchanged": true
+}

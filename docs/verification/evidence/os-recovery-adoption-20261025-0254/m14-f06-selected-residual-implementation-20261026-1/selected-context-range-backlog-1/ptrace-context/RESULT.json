@@ -1,0 +1,97 @@
+{
+  "task_id": "M14-F06-PTRACE-CONTEXT-SELECTOR",
+  "status": "SOURCE_READY_FOR_INDEPENDENT_REVIEW",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "selected_provider": "arch_ptrace_lookup_user_context_bridge",
+  "selected_bytes": 12,
+  "ownership": "Returned context remains borrowed under original live-thread/current-CPU/current-stack and GS/TSS exclusion. No new read, copy, ref, retained context or substitute current-stack provider.",
+  "source_check": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-context/SOURCE-CHECK.json",
+    "bytes": 212,
+    "sha256": "c70760fe036a42e10c16e732b73401ea4adde68911154ac3ebb29c5143c6b248"
+  },
+  "evidence": {
+    "syscall.c": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-context/syscall.c",
+      "bytes": 114199,
+      "sha256": "1fa7dad8184de832f203eb3135c5ec446acb5d22f263216ecf3500013494410f"
+    },
+    "syscall_policy.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-context/syscall_policy.rs",
+      "bytes": 1249561,
+      "sha256": "d7fcb9782408a6b15cd72aff61ee35b3987d1082b9b4dc9c43614487c580ed8a"
+    },
+    "f06_ptrace_context.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-context/f06_ptrace_context.rs",
+      "bytes": 828,
+      "sha256": "5c24cfbe6519b8e2a449c1240fb9015baf401fd40814a02cca9237a5adae4dc8"
+    },
+    "original_bridge.inc": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-context/original_bridge.inc",
+      "bytes": 119,
+      "sha256": "bd998ca9c0e5959ef9776da90c5b2bbeefbc5a8badb72dd31ed48fae65c04dba"
+    },
+    "genuine_prologue.inc": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-context/genuine_prologue.inc",
+      "bytes": 982,
+      "sha256": "e69cb389f69cf92a6e81e114a0bb03391a137fa3ba0c7b15d49a51606c1359de"
+    },
+    "syscall.c.diff": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-context/syscall.c.diff",
+      "bytes": 397,
+      "sha256": "c2c42c19361f5ec5826352c27265542e2ef6baa1c0df19918e20c89193630407"
+    },
+    "syscall_policy.rs.diff": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-context/syscall_policy.rs.diff",
+      "bytes": 395,
+      "sha256": "b3aeb978bac1d8cb5b82a07b6c72bef8c6ad07e42f51305c4ee78c6f3c301a93"
+    },
+    "SELECTED-SYMBOL.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-context/SELECTED-SYMBOL.json",
+      "bytes": 1166,
+      "sha256": "98ee8d3a12ee85dd93ab9b544d7c892051c1b31e46ac81fc36efa85b3c83d7d9"
+    },
+    "SOURCE-BINDINGS.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-context/SOURCE-BINDINGS.json",
+      "bytes": 5489,
+      "sha256": "5fc65a02a9a299fa2c4e61a4ae295f00955dd7955fee27fe068b82c50a6263f6"
+    },
+    "fixture.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-context/fixture.rs",
+      "bytes": 776,
+      "sha256": "8e260c5e5c0acc3588232b9addf952f726263030fae9b1565be44305e3075b3d"
+    },
+    "fixture.c": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-context/fixture.c",
+      "bytes": 1712,
+      "sha256": "870509a117979a2f028ef21362ca7f4ddc727b28c6398d453b11428b49ee1ce8"
+    },
+    "ABI-CONTEXT.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-context/ABI-CONTEXT.json",
+      "bytes": 812,
+      "sha256": "a883d6e001330bd9a4c9bea3a0a9aee3b9975924fcad466d82b6bb502e2e85a0"
+    },
+    "FUTURE-HOST-COMMAND-PLAN.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-context/FUTURE-HOST-COMMAND-PLAN.json",
+      "bytes": 12601,
+      "sha256": "36330a8ef7106bbb59026292637f8e6a05c246613cb397c8817fc4f680b6d6e2"
+    },
+    "SOURCE-CHECK.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-context/SOURCE-CHECK.json",
+      "bytes": 212,
+      "sha256": "c70760fe036a42e10c16e732b73401ea4adde68911154ac3ebb29c5143c6b248"
+    },
+    "HANDOFF.md": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-context/HANDOFF.md",
+      "bytes": 1788,
+      "sha256": "d5a4f7dc89fd2328194fc44a6eb774fd6744b724bb3b15cf88b7c7380f085bb9"
+    }
+  },
+  "compiler": null,
+  "parity_execution": null,
+  "production_link": null,
+  "native": null,
+  "canonical_writes": false,
+  "blocker": "Specific Root ordinary HOST grant not yet supplied",
+  "next_task": "Root may admit frozen three-argv inert-effect HOST recipe when ordinary slot/current controls permit; retain real provider/native holds"
+}

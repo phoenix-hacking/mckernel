@@ -1,0 +1,15 @@
+# Independent source rereview: signal fallback metadata correction
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+Decision: **CONDITIONAL SOURCE PASS** for the bounded successor. The prior source review remains applicable except that its two compressed-signal-fallback finding is addressed in this successor. No concrete source compile blocker was found. This is not an actual preprocessor/object metadata result, ABI or native acceptance, and no test, compiler or physical workload was run for this review.
+
+The corrected patch is SHA-256 `537257eff33ea8cbdb759d7ef53ae890a2abbef73fd6eccfb3eded11697deb4a`. The initially supplied profile hash `9e43dba8cd8303c5b95e5a7518e482584cf06d3dd0f448bece085812be73ff98` did not match the observed file. The compositor and dispatcher identified the frozen current target as `b3ebd2e2f303e5247aa96dd3d13609b02a3e3ea27b2465cbe935b35a1ddcfae4`, which matches the observed profile and binds the host-mock result below. The earlier profile bytes were not available here for an independent full-byte comparison; the compositor's statement that the update only binds that result is retained as provenance rather than independently established byte-diff evidence.
+
+Comparing all seven actual postimages with the previous composition showed only `kernel/syscall.c` changed. The two corrected signal-forward fallback function bodies equal their original qualified multiline C bytes. The Rust, C and link argv, selectors and rebuild descriptions match the predecessor. The changed guards retain the selected external forwarders and the original fallback operations in the applicable scopes.
+
+The source directives restore the baseline logical start and successor positions for the mask body (`19742` / `19750`) and action body (`19853` / `19865`). The containing policy-helper OFF `do_sigaction` arm has its own `19868` reset because that arm skips the nested directive, and the unconditional post-parent reset is `19899` before the shared following source. These positions match the bound baseline source trace. This is a source-level branch/line analysis; actual on/off preprocessing, emitted locations and original 389 metadata remain to be checked on the applicable selected objects.
+
+The current profile binds `request-constructor-microtest-profile-1/RESULT.ACTUAL.json` SHA-256 `dbf6c66cef43409a4e093cb8d2940ba3f2a1350b218cd3617a6aa717bbfc8e08`. That retained result records a passing host-mock test covering five exports and aligned request addresses. It does not establish real-header ABI, selected linked-provider uniqueness, transport lifetime or native behavior.
+
+The earlier review's C/Rust paired-selector, generated-config, exact caller graph, held-work exclusions, nine-object provenance, witness exclusion and ownership conditions remain unchanged. Root70/resource reconciliation and operation-specific release are still necessary before physical work. The absence of later ABI/native acceptance is not a source compile blocker.

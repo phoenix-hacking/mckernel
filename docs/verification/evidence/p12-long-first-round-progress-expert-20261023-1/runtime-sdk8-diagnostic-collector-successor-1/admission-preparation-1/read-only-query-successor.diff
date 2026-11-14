@@ -1,0 +1,20 @@
+--- /home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/admission-preparation-1/read_only_LONG_HOST_admission.py
++++ /home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-diagnostic-collector-successor-1/admission-preparation-1/read_only_LONG_HOST_admission.py
+@@ -5,7 +5,7 @@
+ import ast,fcntl,hashlib,importlib.util,json,os,resource,stat,subprocess,sys,time
+ from pathlib import Path
+ D=Path(__file__).resolve().parent
+-CONFIG_SHA = 'bc4d9a765c87405909e20a869fffd8db996d480677426abded6240080fca8a2a'
++CONFIG_SHA = '3154b16f0746e1ae21099162b3b5ed39f991d60579b43075d5976b7f353792d9'
+ ENGINE=Path('/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/bound-matched-image-terminal-source-2/cleanup_pass_image.py')
+ ENGINE_SHA='59efab0bc29fa5784dc855743cec397237552821bc150b60ea1d6c2e5f7ac00d'
+ def need(v,m):
+@@ -47,7 +47,7 @@
+ def validate(f,c,growth):
+  need(f['uid']==f['euid']==0 and f['affinity']==[7],'root query CPU7')
+  need(f['proc']['status']=='COMPLETE' and f['proc']['failure'] is None and f['proc']['publishers']==[] and len(f['proc']['snapshots'])==2,'complete publisher-free census')
+- need(f['physical']['verdict']=='PASS_ACTUAL_SDK8_PHYSICAL_RETIREMENT_ONLY' and f['physical']['state']=='SDK8_BUILD_POSITIVELY_RETIRED' and f['physical']['physical_clearance'] is True and f['physical']['current_live_postjoin']['sha256']=='0575e4e15408627b22ab42d2b9cc1260c4795d84347705e88ff2f09b73d5658f' and f['physical']['proc_sha256']=='c8c258a2b15e03d3c05b20757d28e7143e3ac66eba4511cd87a1cf542a10cd9c' and f['physical']['mutex_sha256']=='8fdd42efcf374210fc9eb4c6295874ef3067cb7a0475c5b2f9bbfd52b55e80ba' and f['physical']['native_acceptance'] is False,'actual SDK8 positive physical/current postjoin')
++ need(f['physical']['verdict']=='PASS_ACTUAL_FAILED_SDK8_LONG_599BD7_PHYSICAL_RETIREMENT_AND_CURRENT_POSTJOIN' and f['physical']['state']=='FAILED_SDK8_LONG_599BD7_POSITIVELY_RETIRED' and f['physical']['physical_clearance'] is True and f['physical']['current_live_postjoin']['sha256']=='4c10fe4b09f8a99f51a0f87f49c298da26ddc1cfe11453f2929cacddb0602920' and f['physical']['proc_sha256']=='9710013285f045ed411339ff127affdf490b80c480d4bcb22b8748ec679b0281' and f['physical']['mutex_sha256']=='5e8d2c1942ea3edf7ee6a623d19e2aea16bba50f1639c63fc1aff209b5641c20' and f['physical']['complete_publisher_free_snapshots']==2 and f['physical']['bound_client_identities']==23 and f['physical']['all_clients_outer_owner_absent'] is True and f['physical']['container_init']=={'pid':3925813,'start':None,'numerically_absent_both':True} and f['physical']['permanent_mutex']=='27:4' and f['physical']['eight_exclusion_paths_absent'] is True and f['physical']['normal_CID_removed_three_empty_queries_verified'] is True and f['physical']['native_acceptance'] is False,'actual failed SDK8 LONG599bd7 positivephysical/currentpostjoin')
+  p=f['parent'];need(p['directory'] and p['uid']==p['gid']==1000 and p['mode']==0o700 and p['children']==[] and p['dev']==c['operation']['HOST_identity']['dev'] and p['ino']==c['operation']['HOST_identity']['inode'],'fresh exact private HOST LONG parent exists empty UID1000 mode700')
+  need(not any(f['output_paths_exist'].values()),'fresh LONG capture owner attempt and unpublished release/request paths absent')
+  need(not any(f['ownership_paths_exist'].values()),'exact SDK image launcher ownership paths absent')

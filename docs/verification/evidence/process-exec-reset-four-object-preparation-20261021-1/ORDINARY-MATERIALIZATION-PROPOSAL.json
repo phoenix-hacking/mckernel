@@ -1,0 +1,80 @@
+{
+  "actual_materialization_result": null,
+  "capture_directory": "/home/holden/mckernel-work/host-preparation/process-owned-fork-rust-next-preparation-20261021-1/locking-correction-1/compiler-owner-preparation-1/actual-materialization-capture-1",
+  "command": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "60s",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=55:55",
+    "--fsize=67108864:67108864",
+    "--core=0:0",
+    "--nofile=256:256",
+    "--",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/process-owned-fork-rust-next-preparation-20261021-1/locking-correction-1/compiler-owner-preparation-1/materialize_thin_lf.py"
+  ],
+  "fresh_grant": null,
+  "grant_namespace": "/home/holden/mckernel-work/host-preparation/process-owned-fork-rust-next-preparation-20261021-1/locking-correction-1/compiler-owner-preparation-1/ROOT-FRESH-ORDINARY-EXEC-RESET-MATERIALIZATION-GRANT-1.json",
+  "independent_source_eligibility": null,
+  "materializer": {
+    "bytes": 6646,
+    "path": "/home/holden/mckernel-work/host-preparation/process-owned-fork-rust-next-preparation-20261021-1/locking-correction-1/compiler-owner-preparation-1/materialize_thin_lf.py",
+    "sha256": "52adf3a988ec7f5141b198e92df7d4766238517f6e1db3364cf8f37e0e08dba9"
+  },
+  "outputs": [
+    "/home/holden/mckernel-work/host-preparation/process-owned-fork-rust-next-preparation-20261021-1/locking-correction-1/compiler-owner-preparation-1/materialized-source",
+    "/home/holden/mckernel-work/host-preparation/process-owned-fork-rust-next-preparation-20261021-1/locking-correction-1/compiler-owner-preparation-1/materialization-journal.jsonl",
+    "/home/holden/mckernel-work/host-preparation/process-owned-fork-rust-next-preparation-20261021-1/locking-correction-1/compiler-owner-preparation-1/materialization-receipt.json",
+    "/home/holden/mckernel-work/host-preparation/process-owned-fork-rust-next-preparation-20261021-1/locking-correction-1/compiler-owner-preparation-1/source-manifest.json",
+    "/home/holden/mckernel-work/host-preparation/process-owned-fork-rust-next-preparation-20261021-1/locking-correction-1/compiler-owner-preparation-1/work"
+  ],
+  "qualification_basis": {
+    "bytes": 7927,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1/FINAL-MATERIALIZATION-COMMAND-AND-CONSUMER-CONTRACT.json",
+    "sha256": "251e040dd0054ae0ce74f58178187648739c6ca14d2b446e49f97cadaeae11c9"
+  },
+  "resources": {
+    "AS_bytes": 1073741824,
+    "CPU": 6,
+    "CPU_seconds": 55,
+    "FSIZE_bytes": 67108864,
+    "NOFILE": 256,
+    "full_growth_reserve_bytes": 536870912,
+    "host_floor_bytes": 17179869184,
+    "jobs": 1,
+    "no_exclusive_census_overlap": true,
+    "scratch_floor_bytes": 12884901888,
+    "wall_seconds": 60
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_geometry": {
+    "changed_compute_files": [
+      "kernel/syscall.c",
+      "kernel/rust/syscall_policy.rs"
+    ],
+    "entries": 6960,
+    "generated_config_preserved": true,
+    "private_regular_copies_no_hardlinks": true,
+    "regular_files": 6911,
+    "tracked_symlinks": 49
+  },
+  "status": "NOT_RELEASED_SOURCE_DATA_ONLY",
+  "thin_document": {
+    "bytes": 6384971,
+    "path": "/home/holden/mckernel-work/host-preparation/process-owned-fork-rust-next-preparation-20261021-1/locking-correction-1/compiler-owner-preparation-1/thin-inputs.canonical-lf.json",
+    "sha256": "676147e2d11cedbf08c1836ed2b42a8308ba3cdae71e5ee7b7f89dba885bc9b1"
+  },
+  "validator": {
+    "bytes": 13304,
+    "path": "/home/holden/mckernel-work/host-preparation/process-owned-fork-rust-next-preparation-20261021-1/locking-correction-1/compiler-owner-preparation-1/thin_source_contract_lf.py",
+    "sha256": "55f15677d3e7a27298e3eee2fb1c6b606b4d848e8646842232a25f9f47aa5aa8"
+  }
+}

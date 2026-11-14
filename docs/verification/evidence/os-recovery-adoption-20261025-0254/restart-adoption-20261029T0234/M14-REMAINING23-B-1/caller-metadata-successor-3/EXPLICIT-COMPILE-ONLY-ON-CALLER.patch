@@ -1,0 +1,13 @@
+--- a/kernel/CMakeLists.txt
++++ b/kernel/CMakeLists.txt
+@@ -237,8 +237,8 @@
+ 				endif()
+ 				# Queue B is opt-in and remains subject to the documented source contracts.
+ 				if (MCKERNEL_F03_DO_SYSCALL_SUPPORTED_EXPERIMENTAL)
+-					if (NOT MCKERNEL_F03_DEFINED_ALL_REQUEST_CALLERS_REVIEWED)
+-						message(FATAL_ERROR "F03 do_syscall requires reviewed initialization of all selected callers")
++					if (NOT MCKERNEL_F03_EXPERIMENTAL_COMPILE_ONLY)
++						message(FATAL_ERROR "F03 do_syscall experimental selection requires compile-only profile")
+ 					endif()
+ 					list(APPEND RUST_KERNEL_CFG "--cfg" "f03_do_syscall_supported_candidate")
+ 				endif()

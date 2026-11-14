@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "case_id": "vector.avx-f32-arithmetic",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["lanes=8 halves=2 add=1 subtract=1 multiply=1 dyadic=1 valid=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["All eight finite exactly representable binary32 lanes match independent scalar add/subtract/multiply", "Both 128-bit halves contribute distinct lane patterns"],
+  "unresolved_expectations": ["AVX CPUID/XCR0 evidence, target disassembly, and no-spill instruction window require Max review."],
+  "max_question_for_reviewer": "Confirm AVX requires CPUID leaf1 AVX plus XCR0 bits1/2 in both engines before enabling this target."
+}

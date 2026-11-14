@@ -1,0 +1,23 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "argv": [
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "-c",
+    "from pathlib import Path;import os,stat,json;paths=['/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/pinned-full-image-attempt-1', '/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/pinned-full-image-attempt-1/owner-work', '/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/pinned-full-image-attempt-1/owner-evidence', '/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/pinned-full-image-attempt-1/owner-evidence/attempt', '/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/pinned-full-image-attempt-1/common-exclusion.json', '/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/pinned-full-image-attempt-1/lease.json', '/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/pinned-full-image-attempt-1/owner-work/output', '/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/pinned-full-image-attempt-1/owner-work/evidence', '/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock'];rows=[]\nfor p in paths:\n try:\n  s=os.lstat(p);r={'path':p,'exists':True,'dev':s.st_dev,'inode':s.st_ino,'uid':s.st_uid,'gid':s.st_gid,'mode':stat.S_IMODE(s.st_mode),'file_type':stat.S_IFMT(s.st_mode),'entries':os.listdir(p) if stat.S_ISDIR(s.st_mode) else None}\n except FileNotFoundError:r={'path':p,'exists':False}\n rows.append(r)\nprint(json.dumps({'scope':'Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\\nReuse the accepted finite materializer and controller/static-request derivation.\\n','rows':rows},sort_keys=True))"
+  ],
+  "pid": 3669679,
+  "returncode": 0,
+  "elapsed_seconds": 0.02160344400908798,
+  "direct_child_joined": true,
+  "streams_closed": true,
+  "stdout": {
+    "bytes": 2249,
+    "sha256": "c6e2184a11ec5633c45d389d8854883fab91d66846c07b1436ddaa337d8e570e"
+  },
+  "stderr": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

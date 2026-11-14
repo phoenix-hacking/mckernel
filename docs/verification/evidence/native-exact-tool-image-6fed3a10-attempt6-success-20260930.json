@@ -1,0 +1,81 @@
+{
+  "schema": "mckernel.native-exact-tool-image-success.v1",
+  "recorded_at": "2026-09-30T19:05:00-07:00",
+  "status": "PASS_RESULT_ATTEMPT6",
+  "candidate_sha": "6fed3a1022db0b4f9828dd42a8bd8f88fc052053",
+  "release": {
+    "proposal": "docs/verification/evidence/native-exact-tool-image-6fed3a10-attempt6-execution-proposal-20260930.json",
+    "proposal_commit": "94d4ef77baf4c6fbefc9eaa7b04a57bbfc1e331c",
+    "proposal_sha256": "e7327ee8f8c25326b25ec3c8de1b10efe965c9f6e0baa6ecabd4bc71040967f5",
+    "independent_decision": "PASS_EXECUTION_ATTEMPT6",
+    "invocations": 1,
+    "exit_code": 0
+  },
+  "receipt": {
+    "path": "/home/holden/mckernel-exact-image-evidence-6fed3a10-6/image-receipt.json",
+    "sha256": "a030708f913b8c359a0b7c7c62fe7f6b8e465a4979afd06c8e144ebe96942f08",
+    "mode": "0444",
+    "status": "PASS",
+    "source_free": true,
+    "runtime_network": "none",
+    "retired": true,
+    "evidence_members": 92
+  },
+  "image": {
+    "id": "sha256:5688f9c8cb83e2aafb43c6aba8e8ff85fe17ddbc83a5935b6b804c1478bdcb98",
+    "size": 1726886736,
+    "architecture": "amd64",
+    "os": "linux",
+    "inspect_sha256": "35cc5bc3214352fa2ac1c6ab88b6f59457fd014e7b33c7b196f28c0519d7208a"
+  },
+  "observations": {
+    "online_sha256": "f3b88a584cb18c2087a74270b6d3fe0fa0a265c8aed92ae72d581d0e6ab9cbc0",
+    "offline_sha256": "f3b88a584cb18c2087a74270b6d3fe0fa0a265c8aed92ae72d581d0e6ab9cbc0",
+    "exactly_equal": true,
+    "packages": 46,
+    "tools": 22,
+    "libraries": 4,
+    "rpm_inventory_entries": 479,
+    "command_captures": 28,
+    "command_failures": 0
+  },
+  "terminal": {
+    "preparation_inspect_sha256": "6a20975610260ea6abdcf3a5fb8dcbf8e0d05148fefa7dc4b050bbc8bc220e7d",
+    "offline_inspect_sha256": "902b1812bebb205dbc39ff33154c86863e6c2bbef3e1fcc4df7771d02997950e",
+    "both": "exited, PID 0, exit 143, OOM false",
+    "owned_containers_removed": true,
+    "lease_absent": true,
+    "owner_and_client_pids_absent": true
+  },
+  "resources": {
+    "preflight_host_free_bytes": 30458814464,
+    "preflight_scratch_free_bytes": 16948912128,
+    "preflight_mem_available_kib": 28137488,
+    "postflight_host_free_bytes": 28919656448,
+    "postflight_scratch_free_bytes": 16948912128,
+    "postflight_mem_available_kib": 28074128,
+    "host_floor_bytes": 17179869184,
+    "scratch_floor_bytes": 12884901888,
+    "note": "The producer receipt's scratch_free field measures its host output filesystem; coordinator and independent review separately measured actual scratch device 1831 before and after execution."
+  },
+  "source_regression": {
+    "first_command": "taskset -c 6 prlimit --as=1610612736 --cpu=180 --nproc=96 -- python3 -B -m unittest scripts.tests.test_native_rust_exact_build_image_prepare scripts.tests.test_native_rust_exact_build_container_owner",
+    "first_result": "FAIL_HARNESS_RESOURCE: 19 fork EAGAIN errors caused by the artificial per-user nproc limit; retained and not a source failure",
+    "bounded_correction": "taskset -c 6 prlimit --as=1610612736 --cpu=240 -- python3 -B -m unittest scripts.tests.test_native_rust_exact_build_image_prepare scripts.tests.test_native_rust_exact_build_container_owner",
+    "bounded_correction_result": "86 PASS"
+  },
+  "host_output_reuse": {
+    "independent_decision": "PASS_REUSE",
+    "root": "/home/holden/mckernel-work/scratch/native-exact-build-output-4e99a82c-scratch-12",
+    "closure_entries": 140053,
+    "regular_files": 132191,
+    "regular_bytes": 4799270420,
+    "mismatches": 0,
+    "owner_receipt_sha256": "ceb5ee602b2c08a7eb9ef5ee3a4daf468e14dfc94a1a8183f4f0b41e5472572b",
+    "driver_receipt_sha256": "9f0c902197c166b0bc4f79f8c622672a4d3d24972f56acfdd514bc768e3cdeae",
+    "scope": "Reusable only as the authenticated read-only /out host-kernel closure for the current McKernel image build; it is not a new host build."
+  },
+  "review": "PASS_RESULT_ATTEMPT6; all 92 evidence members, profiles, closure observations, terminal states, live image and cleanup verified independently",
+  "acceptance": "This accepts only source-free tool-image preparation, offline identity verification and scoped retained host-output reuse. It proves no linked McKernel image, guest, application, platform or OS acceptance.",
+  "next": "Complete the escalated fresh current-candidate libdwarf binding, prepare and independently release exportset-25, then run one serialized image build and validate the real linked artifact."
+}

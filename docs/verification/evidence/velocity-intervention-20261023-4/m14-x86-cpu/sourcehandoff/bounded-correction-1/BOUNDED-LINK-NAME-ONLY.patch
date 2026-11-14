@@ -1,0 +1,42 @@
+--- first-failed/candidate/kernel/rust/x86_cpu_helpers.rs
++++ bounded-correction/candidate/kernel/rust/x86_cpu_helpers.rs
+@@ -98,7 +98,8 @@
+ type X86PrintStackFn = unsafe extern "C" fn(*mut c_void, CULong);
+ 
+ extern "C" {
+-    static mut no_turbo: CInt;
++    #[link_name = "no_turbo"]
++    static mut X86_NO_TURBO: CInt;
+     fn x86_running_on_kvm_bridge() -> CInt;
+     fn x86_cpuid6_bridge(eaxp: *mut CULong, ecxp: *mut CULong);
+     fn kprintf(format: *const i8, ...) -> CInt;
+@@ -2053,7 +2054,7 @@
+ pub unsafe extern "C" fn init_pstate_and_turbo() {
+     let _ = unsafe {
+         x86_init_pstate_turbo_body_result(
+-            read_volatile(core::ptr::addr_of!(no_turbo)),
++            read_volatile(core::ptr::addr_of!(X86_NO_TURBO)),
+             MSR_PLATFORM_INFO,
+             MSR_NHM_TURBO_RATIO_LIMIT,
+             MSR_IA32_PERF_CTL,
+--- first-failed/fixture/actual_entry.rs
++++ bounded-correction/fixture/actual_entry.rs
+@@ -13,7 +13,8 @@
+ const MSR_IA32_PERF_CTL: CInt = 0x199;
+ const MSR_IA32_ENERGY_PERF_BIAS: CInt = 0x1b0;
+ extern "C" {
+-    static mut no_turbo: CInt;
++    #[link_name = "no_turbo"]
++    static mut X86_NO_TURBO: CInt;
+     fn x86_running_on_kvm_bridge() -> CInt;
+     fn x86_cpuid6_bridge(eaxp: *mut CULong, ecxp: *mut CULong);
+     fn x86_read_msr_bridge(reg:CInt)->CULong;
+@@ -70,7 +71,7 @@
+ pub unsafe extern "C" fn init_pstate_and_turbo() {
+     let _ = unsafe {
+         x86_init_pstate_turbo_body_result(
+-            read_volatile(core::ptr::addr_of!(no_turbo)),
++            read_volatile(core::ptr::addr_of!(X86_NO_TURBO)),
+             MSR_PLATFORM_INFO,
+             MSR_NHM_TURBO_RATIO_LIMIT,
+             MSR_IA32_PERF_CTL,

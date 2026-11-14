@@ -1,0 +1,184 @@
+test_admission_rejection_never_constructs_docker (scripts.tests.test_native_running_external_modules_owner.OwnerTests) ... ok
+test_all_four_root_guard_signals_use_existing_latch (scripts.tests.test_native_running_external_modules_owner.OwnerTests) ... ok
+test_cleanup_client_survivor_prevents_record_release_and_quarantines (scripts.tests.test_native_running_external_modules_owner.OwnerTests) ... ok
+test_compile_failure_has_honest_successful_cleanup (scripts.tests.test_native_running_external_modules_owner.OwnerTests) ... ok
+test_create_reply_uncertainty_can_only_retire_exact_created_container (scripts.tests.test_native_running_external_modules_owner.OwnerTests) ... ok
+test_exact_independent_release_source_and_execution_bindings (scripts.tests.test_native_running_external_modules_owner.OwnerTests) ... ERROR
+test_exact_profile_accepts_mount_reordering (scripts.tests.test_native_running_external_modules_owner.OwnerTests) ... ok
+test_exact_seven_historical_observer_report_and_metadata (scripts.tests.test_native_running_external_modules_owner.OwnerTests) ... ok
+test_final_recheck_catches_earlier_normal_client_descendant (scripts.tests.test_native_running_external_modules_owner.OwnerTests) ... ok
+test_fixed_observer_transport_and_normal_group_census (scripts.tests.test_native_running_external_modules_owner.OwnerTests) ... ok
+test_foreign_container_never_receives_retirement_mutation (scripts.tests.test_native_running_external_modules_owner.OwnerTests) ... ok
+test_foreign_or_changed_record_blocks_archive (scripts.tests.test_native_running_external_modules_owner.OwnerTests) ... ok
+test_full_fresh_request_admission_and_exact_negative_inputs (scripts.tests.test_native_running_external_modules_owner.OwnerTests) ... ERROR
+test_historical_source_digest_mismatch_rejected (scripts.tests.test_native_running_external_modules_owner.OwnerTests) ... ok
+test_historical_unknown_changed_live_and_unreadable_rejected (scripts.tests.test_native_running_external_modules_owner.OwnerTests) ... ok
+test_missing_guard_release_never_enters_owner (scripts.tests.test_native_running_external_modules_owner.OwnerTests) ... ok
+test_normal_exit_survivor_prevents_remove_and_quarantines_records (scripts.tests.test_native_running_external_modules_owner.OwnerTests) ... ok
+test_normal_exit_unreadable_census_prevents_remove_and_quarantines_records (scripts.tests.test_native_running_external_modules_owner.OwnerTests) ... ok
+test_normal_joined_empty_groups_preserve_positive_guarded_path (scripts.tests.test_native_running_external_modules_owner.OwnerTests) ... ok
+test_normal_observer_survivor_and_unreadable_census_latch (scripts.tests.test_native_running_external_modules_owner.OwnerTests) ... ok
+test_observer_final_group_recheck_prevents_owned_removal (scripts.tests.test_native_running_external_modules_owner.OwnerTests) ... ok
+test_partial_archive_failure_releases_no_record (scripts.tests.test_native_running_external_modules_owner.OwnerTests) ... ok
+test_poll_measure_failure_and_cleanup_signal_latch (scripts.tests.test_native_running_external_modules_owner.OwnerTests) ... ok
+test_positive_build_and_owned_cleanup_archive_records_then_release (scripts.tests.test_native_running_external_modules_owner.OwnerTests) ... ok
+test_removal_uncertainty_retains_all_records (scripts.tests.test_native_running_external_modules_owner.OwnerTests) ... ok
+test_root_quarantine_on_postflight_uncertainty (scripts.tests.test_native_running_external_modules_owner.OwnerTests) ... ok
+test_stale_common_rejected_before_any_client (scripts.tests.test_native_running_external_modules_owner.OwnerTests) ... ok
+test_terminal_exit_mismatch_cannot_be_cleanup_success (scripts.tests.test_native_running_external_modules_owner.OwnerTests) ... ok
+test_timeout_client_uncertainty_retains_all_records (scripts.tests.test_native_running_external_modules_owner.OwnerTests) ... ok
+test_uncertain_observer_before_build_quarantines_root (scripts.tests.test_native_running_external_modules_owner.OwnerTests) ... ok
+test_actual_linux_612_object_order_and_invalid_sets (scripts.tests.test_native_running_external_modules_offline.ExternalModulesDriverTests) ... ok
+test_changed_basis_tool_rejected_before_process (scripts.tests.test_native_running_external_modules_offline.ExternalModulesDriverTests) ... FAIL
+test_changed_reference_rejected_before_process (scripts.tests.test_native_running_external_modules_offline.ExternalModulesDriverTests) ... FAIL
+test_frozen_preparation_and_exact_all_three_plan (scripts.tests.test_native_running_external_modules_offline.ExternalModulesDriverTests) ... ERROR
+test_injected_process_checks_arguments_environment_and_all_outputs (scripts.tests.test_native_running_external_modules_offline.ExternalModulesDriverTests) ... FAIL
+test_make_mutating_source_cannot_pass_output_checks (scripts.tests.test_native_running_external_modules_offline.ExternalModulesDriverTests) ... FAIL
+test_missing_module_fails_after_one_process_and_preserves_generated_files (scripts.tests.test_native_running_external_modules_offline.ExternalModulesDriverTests) ... FAIL
+test_nonzero_status_streams_and_partial_output_survive_without_retry (scripts.tests.test_native_running_external_modules_offline.ExternalModulesDriverTests) ... FAIL
+test_old_dependency_source_path_is_rejected (scripts.tests.test_native_running_external_modules_offline.ExternalModulesDriverTests) ... FAIL
+test_old_or_changed_source_never_invokes_make (scripts.tests.test_native_running_external_modules_offline.ExternalModulesDriverTests) ... FAIL
+test_plan_never_launches_a_process (scripts.tests.test_native_running_external_modules_offline.ExternalModulesDriverTests) ... FAIL
+test_symlink_source_and_overlapping_roots_are_rejected (scripts.tests.test_native_running_external_modules_offline.ExternalModulesDriverTests) ... ok
+test_timeout_has_distinct_receipt_and_retains_streams (scripts.tests.test_native_running_external_modules_offline.ExternalModulesDriverTests) ... FAIL
+test_zero_exit_with_wrong_vermagic_is_rejected (scripts.tests.test_native_running_external_modules_offline.ExternalModulesDriverTests) ... FAIL
+
+======================================================================
+ERROR: test_exact_independent_release_source_and_execution_bindings (scripts.tests.test_native_running_external_modules_owner.OwnerTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/scripts/tests/test_native_running_external_modules_owner.py", line 358, in test_exact_independent_release_source_and_execution_bindings
+    self.assertEqual(m.authenticate(Path('/request'),'a'*64,Path('/release'),'b'*64),(request,release))
+  File "/home/holden/mckernel/scripts/native_running_external_modules_owner.py", line 676, in authenticate
+    validate_runtime_source_bindings(release.get('source_sha256', {}))
+  File "/home/holden/mckernel/scripts/native_running_external_modules_owner.py", line 661, in validate_runtime_source_bindings
+    need(observed[name] == source_sha256[name], 'reviewed source drift')
+  File "/home/holden/mckernel/scripts/native_running_external_modules_owner.py", line 67, in need
+    raise Refusal(message)
+native_running_external_modules_owner.Refusal: reviewed source drift
+
+======================================================================
+ERROR: test_full_fresh_request_admission_and_exact_negative_inputs (scripts.tests.test_native_running_external_modules_owner.OwnerTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/scripts/tests/test_native_running_external_modules_owner.py", line 325, in test_full_fresh_request_admission_and_exact_negative_inputs
+    self.assertEqual(m.validate_request(request,request_path,historical_observe=lambda:{})['resources'],{'floors':'pass'})
+  File "/home/holden/mckernel/scripts/native_running_external_modules_owner.py", line 270, in validate_request
+    validate_preparation(prep)
+  File "/home/holden/mckernel/scripts/native_running_external_modules_owner.py", line 233, in validate_preparation
+    prep['status'] == 'INPUTS_PREPARED_EXECUTION_NOT_RELEASED' and
+KeyError: 'status'
+
+======================================================================
+ERROR: test_frozen_preparation_and_exact_all_three_plan (scripts.tests.test_native_running_external_modules_offline.ExternalModulesDriverTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/scripts/tests/test_native_running_external_modules_offline.py", line 94, in test_frozen_preparation_and_exact_all_three_plan
+    manifest = driver.load_preparation(PREPARATION)
+  File "/home/holden/mckernel/scripts/native_running_external_modules_offline.py", line 72, in load_preparation
+    require(digest(plain(path)) == PREPARATION_SHA256, "frozen preparation digest mismatch")
+  File "/home/holden/mckernel/scripts/native_running_external_modules_offline.py", line 49, in require
+    raise ValueError(message)
+ValueError: frozen preparation digest mismatch
+
+======================================================================
+FAIL: test_changed_basis_tool_rejected_before_process (scripts.tests.test_native_running_external_modules_offline.ExternalModulesDriverTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/scripts/tests/test_native_running_external_modules_offline.py", line 209, in test_changed_basis_tool_rejected_before_process
+    self.assertIn("basis tool/header changed", receipt["error"])
+AssertionError: 'basis tool/header changed' not found in 'ValueError: duplicate or missing closure entries'
+
+======================================================================
+FAIL: test_changed_reference_rejected_before_process (scripts.tests.test_native_running_external_modules_offline.ExternalModulesDriverTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/scripts/tests/test_native_running_external_modules_offline.py", line 191, in test_changed_reference_rejected_before_process
+    self.assertIn("reference changed", receipt["error"])
+AssertionError: 'reference changed' not found in 'ValueError: duplicate or missing closure entries'
+
+======================================================================
+FAIL: test_injected_process_checks_arguments_environment_and_all_outputs (scripts.tests.test_native_running_external_modules_offline.ExternalModulesDriverTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/scripts/tests/test_native_running_external_modules_offline.py", line 121, in test_injected_process_checks_arguments_environment_and_all_outputs
+    self.assertEqual(receipt["status"], "BUILD_ARTIFACT_CHECKS_PASS", receipt)
+AssertionError: 'FAIL' != 'BUILD_ARTIFACT_CHECKS_PASS'
+- FAIL
++ BUILD_ARTIFACT_CHECKS_PASS
+ : {'status': 'FAIL', 'application_acceptance': False, 'production_acceptance': False, 'make_returncode': None, 'preparation_sha256': '62c869a85f8ad05e08279df9d4f03a4aae4bb8b0cc10c84e8d9837a2745eb445', 'baseline_source_sha': '942c927b1ec93cc31284ff498455909d9bb2d0fc', 'source_candidate_sha': '52fd08d7495bd1e622d02cbb186cbbd0696829c192fb9afdedb83fecaa56b53a', 'error': 'ValueError: duplicate or missing closure entries', 'retained_files': {'Kbuild': {'sha256': '17312565ba12e137a1f95b934a8664f25de81dd5121f492736969bd60cf992d8', 'bytes': 31}, 'Kconfig': {'sha256': '017de5b6b6ce72be09df65b64d451620b1b126acec06d7b0e79d09cd490d80d1', 'bytes': 32}, 'abi/application.rs': {'sha256': '0a81625fa38435f2a5cd5dd119309fa1a808099dabc6999a9183a2026b35b0ae', 'bytes': 43}, 'abi/os_service.rs': {'sha256': '74b6826c30d2618856218a652374fd2ee5b4f6238f7561486bca526c8de2bff3', 'bytes': 42}, 'abi/sysfs.rs': {'sha256': '73341cd15a9dbf2cb1d1973ae38388c8738bfed6c3d8b0f979eb6292a7623a58', 'bytes': 37}, 'abi/sysfs_request.rs': {'sha256': '1978f094084a3e529f830aeeb218270138506bb98c7d9058f0e61d85622b0cfd', 'bytes': 45}, 'abi/vdso.rs': {'sha256': 'e2f683cc5ca4c9f5043fe393f614b2957ad4919dba047cddc83bd8cd8671c024', 'bytes': 36}, 'abi/x86_64.rs': {'sha256': 'b6ac83117d6c1d6c6464266ada15486cbe6e0ff68f937adeb98faa210ac6ade0', 'bytes': 38}, 'application_image.rs': {'sha256': 'b67d954a5fe2d1af212057b4ad107345296848e8147ce4ac457fa6e2b784bb9a', 'bytes': 45}, 'application_pager.rs': {'sha256': '69b16c66fa52201955f4bd94b0cc3d93d00591fa5f26b2c67d85b3b176e6bd20', 'bytes': 45}, 'application_rpc.rs': {'sha256': 'f634e82e8cbd1119452a42a87cb1abcaca7012a8cd041a6aa39c31bcd9778122', 'bytes': 43}, 'application_syscall.rs': {'sha256': 'e42bd32d0dc41ad9be1c34153d354bfdfbf9ba37e91b4316b9fe364694663d99', 'bytes': 47}, 'device_registry.rs': {'sha256': 'ff0d79613407b6a7801c9ea822b39dfa5610b228624ab58b6ace2dc3a7c27ee6', 'bytes': 43}, 'ihk-compat-build-id.bin': {'sha256': 'b42e07be223750ed9c6b55fa88b5315c24b28f6288fa99b4424c5bdecd05f6d8', 'bytes': 48}, 'ihk.rs': {'sha256': '6ea01580a9b5003505a94ba4e89d2e8e337a06408a99c9996543b54451f3f5f1', 'bytes': 31}, 'ihk_ioctl.rs': {'sha256': '57c69d556188a4b138283680afbb1681d260a9cb2c0f1cb82838f57a7cda615e', 'bytes': 37}, 'ihk_mapping.rs': {'sha256': 'c81697f160bb7725d2f52a0dc0c6acbfc604c3eaf72069200383452999b2335c', 'bytes': 39}, 'ihk_smp_x86_64.rs': {'sha256': '18cbc4067f18049a19a85d4343ca7fbc689666622d74960f2001508ae1cdf8b4', 'bytes': 42}, 'ikc_master.rs': {'sha256': 'd98b82b9641aac20baafc53c377427dba0c236298410824fb8c8aff2898b6f6c', 'bytes': 38}, 'ikc_queue.rs': {'sha256': 'b3cfee4c67265d990310dcc9455700cbd06cda3a010ed7cca2a852cc6793ad60', 'bytes': 37}, 'mcctrl.rs': {'sha256': '526b2e9941c43e432bbe49e16d8dcbd0988c1e1f74cf27bedadb43761dfa58c9', 'bytes': 34}, 'mcctrl_exec.rs': {'sha256': 'bb3ac2732fc8fdc5debc38d1b8c1d3be955bf909da9aa5bdcc4e54d21990ba58', 'bytes': 39}, 'mcctrl_process.rs': {'sha256': '824c2579c41840c6bb86781bb5f025bd52865aee42a037fed5c044781d3d4589', 'bytes': 42}, 'mcctrl_vm.rs': {'sha256': '040ecb5c4578518f08f948f7a533a66bc39370f8c67769a020541b42b1819c28', 'bytes': 37}, 'os_registry.rs': {'sha256': '9038fa1b7562ceb6e8cd4a0f827853c38ceefef5026b100f0607dc80a48bad78', 'bytes': 39}, 'os_runtime.rs': {'sha256': '3f843b1a6d722f73f27ec6c9c3d4f468c7eb6eb31c92ee099709d786611228ee', 'bytes': 38}, 'os_service.rs': {'sha256': '38811cfa407324935f3e5463364b87378489e3553fcb8a80c2215c65cb9a3caf', 'bytes': 38}, 'page_allocator.rs': {'sha256': '300241afadd248f92b0e42dfac631ac68aa4857ea4d568bab2ec44fff1f7f1c6', 'bytes': 42}, 'page_owner_registry.rs': {'sha256': 'da74c7e2e48f7cf893428a673a3f97a91e32461ac5b1baba2f5d7eec7efd1f0c', 'bytes': 47}, 'procfs_objects.rs': {'sha256': '0cbb555ceb7d9a6c9f5a0d4bfcef2265fcf90e4583a92c969e69cec21c863a94', 'bytes': 42}, 'smp_application.rs': {'sha256': 'c5aebf81b6fec8fa4e859882c0dc8e717ba18ab7690abbef08a7961d8e116ac6', 'bytes': 43}, 'smp_application_image.rs': {'sha256': '56479faf7402c0b35cc8697425db14ae27b910b48d6974adf091fc0f17af7953', 'bytes': 49}, 'smp_application_syscall.rs': {'sha256': '1c124593847455a0c79de77ab90edfa326353072b0fa72d07c1925add63658e9', 'bytes': 51}, 'smp_boot_code.rs': {'sha256': '38d77e1e36d9f0b5b0b4e60ebd7a6aa5a971072f6a073bc948aeea77066e8f5a', 'bytes': 41}, 'smp_cpu.rs': {'sha256': 'ab6e5730a2ffe8bc4425612f4fdc9e8747492b3cc8e5b8f61ec547a84b9305d5', 'bytes': 35}, 'smp_file_pager.rs': {'sha256': '6a4cb38b9c8c3a53ef40e836fedf2234afd4fb8770ba49cf0d6bca363fb4d1d2', 'bytes': 42}, 'smp_ikc.rs': {'sha256': '1cf308e605fa35504f9eba205e922687899d93f87160c7742e179dd7e051a545', 'bytes': 35}, 'smp_image.rs': {'sha256': '04cefd5efa2ebf52a5e8e7c32391c1431fa6de7144afd7f81ec25e8e5b558858', 'bytes': 37}, 'smp_loader.rs': {'sha256': '0ea9f8443981f3ec0bee74f7a6008e72413e7d8d73f74e59e81955d54b9ec583', 'bytes': 38}, 'smp_memory.rs': {'sha256': 'adcdc186b4c46a8b538ff074da43c27fa8ab8c4ab6b8726d0ba8001a3febd872', 'bytes': 38}, 'smp_procfs.rs': {'sha256': 'c724e37055c4c6ec1fde39d2234b62f0959bc477df022c50ee61b0f764542a96', 'bytes': 38}, 'smp_resource.rs': {'sha256': '12578d7a210a795ba988ee947bbd604d7b6d49b883617560b0a083c505ce87ed', 'bytes': 40}, 'smp_service.rs': {'sha256': '31886196725d6a95bd7bf9b1172e33f62c4b00a9d6687d73dd4e1571b5f0d361', 'bytes': 39}, 'smp_startup.rs': {'sha256': 'f3eef67a599ad545dd3526867a4020352813b8b6d618f3592fb833591fa3fdc3', 'bytes': 39}, 'smp_startup_entry.S': {'sha256': '7b57b6aa70b7be026c843a87fbb01d2c098aa182757f1d08de268bb9836ec426', 'bytes': 44}, 'smp_topology.rs': {'sha256': '2af98e474c85ceecb9b49f16e66535523da126da3575524b47cb44f6deba856d', 'bytes': 40}, 'smp_trampoline.S': {'sha256': '71b0340764dcf8a511460c16cf1451776689abf7a5b914b432231886bf11e9fc', 'bytes': 41}, 'smp_trampoline.rs': {'sha256': 'ca16e4fe969838da95a93c538e9a5e0277fc01d90323da315c81e61af48eb913', 'bytes': 42}, 'smp_vdso.rs': {'sha256': 'bb340061bee79387ab18f962d192c6cbb3bf6abc8f946aeb5932bf73ffa7f98f', 'bytes': 36}, 'sysfs_memory.rs': {'sha256': 'c521bd4a71a6897b56979e0316bb96c3d0da51adb76e6990ae5923fb1544c03c', 'bytes': 40}, 'sysfs_objects.rs': {'sha256': '41ae2bb24019cdb4b0e819c8082b4257c784acd05b37b742b8ed0fe29ddd60d2', 'bytes': 41}, 'sysfs_os.rs': {'sha256': '38462384d9247d18a737ba231d9da4dba183d597a53b3e5e5305e5e6270a908d', 'bytes': 36}, 'sysfs_remote.rs': {'sha256': 'ff674ac5fc79794cb99d9287d4dc68b2e961856319333652526a9fc565bf16bf', 'bytes': 40}, 'sysfs_rpc.rs': {'sha256': '066067d576456978b370212db4410304f05f9dd1a4f701199b91d0523cac99ad', 'bytes': 37}, 'sysfs_setup.rs': {'sha256': '3861f0354619dfb7c1e80fa400a6058a46cc780848469f67b1e02ef07f89e966', 'bytes': 39}, 'sysfs_snoop.rs': {'sha256': '871c16f8ba4df854ee6f458df165453f154dfd641f6c1e513f18b8591424fab5', 'bytes': 39}, 'sysfs_tree.rs': {'sha256': '0a900e188f64f00ddfeed4d4701618b63dfa86ce72f6cb8e321ddb8bab3b9973', 'bytes': 38}, 'sysfs_zeroing.rs': {'sha256': '953859292a6154342effc6a679fe75d76a0b8481433c19d18032d488ee90c277', 'bytes': 41}, 'user_string.rs': {'sha256': '8bdc373fd4bbe507be86051819fe038306455beb6f2a4db23367aaa6b75a8207', 'bytes': 39}, 'zero_pages.rs': {'sha256': '550a93904d2a2b838358b6c734ec4718035ebef92ed5684eccdc059ebe1c24a9', 'bytes': 38}}}
+
+======================================================================
+FAIL: test_make_mutating_source_cannot_pass_output_checks (scripts.tests.test_native_running_external_modules_offline.ExternalModulesDriverTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/scripts/tests/test_native_running_external_modules_offline.py", line 228, in test_make_mutating_source_cannot_pass_output_checks
+    self.assertIn("source changed: sysfs_remote.rs", receipt["error"])
+AssertionError: 'source changed: sysfs_remote.rs' not found in 'ValueError: duplicate or missing closure entries'
+
+======================================================================
+FAIL: test_missing_module_fails_after_one_process_and_preserves_generated_files (scripts.tests.test_native_running_external_modules_offline.ExternalModulesDriverTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/scripts/tests/test_native_running_external_modules_offline.py", line 143, in test_missing_module_fails_after_one_process_and_preserves_generated_files
+    self.assertIn("missing or unexpected native module", receipt["error"])
+AssertionError: 'missing or unexpected native module' not found in 'ValueError: duplicate or missing closure entries'
+
+======================================================================
+FAIL: test_nonzero_status_streams_and_partial_output_survive_without_retry (scripts.tests.test_native_running_external_modules_offline.ExternalModulesDriverTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/scripts/tests/test_native_running_external_modules_offline.py", line 156, in test_nonzero_status_streams_and_partial_output_survive_without_retry
+    self.assertEqual(receipt["make_returncode"], 23)
+AssertionError: None != 23
+
+======================================================================
+FAIL: test_old_dependency_source_path_is_rejected (scripts.tests.test_native_running_external_modules_offline.ExternalModulesDriverTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/scripts/tests/test_native_running_external_modules_offline.py", line 184, in test_old_dependency_source_path_is_rejected
+    self.assertIn("wrong compiler source", receipt["error"])
+AssertionError: 'wrong compiler source' not found in 'ValueError: duplicate or missing closure entries'
+
+======================================================================
+FAIL: test_old_or_changed_source_never_invokes_make (scripts.tests.test_native_running_external_modules_offline.ExternalModulesDriverTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/scripts/tests/test_native_running_external_modules_offline.py", line 134, in test_old_or_changed_source_never_invokes_make
+    self.assertIn("source changed: os_runtime.rs", receipt["error"])
+AssertionError: 'source changed: os_runtime.rs' not found in 'ValueError: duplicate or missing closure entries'
+
+======================================================================
+FAIL: test_plan_never_launches_a_process (scripts.tests.test_native_running_external_modules_offline.ExternalModulesDriverTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/scripts/tests/test_native_running_external_modules_offline.py", line 116, in test_plan_never_launches_a_process
+    self.assertEqual(receipt["status"], "PLAN_VALIDATED_NO_BUILD")
+AssertionError: 'FAIL' != 'PLAN_VALIDATED_NO_BUILD'
+- FAIL
++ PLAN_VALIDATED_NO_BUILD
+
+
+======================================================================
+FAIL: test_timeout_has_distinct_receipt_and_retains_streams (scripts.tests.test_native_running_external_modules_offline.ExternalModulesDriverTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/scripts/tests/test_native_running_external_modules_offline.py", line 171, in test_timeout_has_distinct_receipt_and_retains_streams
+    self.assertEqual(receipt["error"], "external make timeout")
+AssertionError: 'ValueError: duplicate or missing closure entries' != 'external make timeout'
+- ValueError: duplicate or missing closure entries
++ external make timeout
+
+
+======================================================================
+FAIL: test_zero_exit_with_wrong_vermagic_is_rejected (scripts.tests.test_native_running_external_modules_offline.ExternalModulesDriverTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/scripts/tests/test_native_running_external_modules_offline.py", line 218, in test_zero_exit_with_wrong_vermagic_is_rejected
+    self.assertIn("wrong vermagic", receipt["error"])
+AssertionError: 'wrong vermagic' not found in 'ValueError: duplicate or missing closure entries'
+
+----------------------------------------------------------------------
+Ran 44 tests in 0.454s
+
+FAILED (failures=11, errors=3)

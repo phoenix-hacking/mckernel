@@ -1,0 +1,41 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root",
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--fsize=268435456:268435456",
+    "--nofile=256:256",
+    "--core=0:0",
+    "--",
+    "/usr/bin/python3",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CURRENT119-MATCHING-NATIVE-PREPARATION-1/compose_matching235_current119.py",
+    "--plan-sha256",
+    "4ccae9fca4abce8f4a2f83105fbb0a6e8130977d7e290687cd07539c66b7e78a"
+  ],
+  "pid": 2565429,
+  "birth": "110593859",
+  "returncode": 0,
+  "positive_wait4_join": true,
+  "streams_closed": true,
+  "started_epoch": 1793308493.8969996,
+  "finished_epoch": 1793308515.233515,
+  "wall_seconds": 21.336517120013013,
+  "CPU_seconds": 21.278253,
+  "peak_RSS_KiB": 427196,
+  "stdout": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CURRENT119-MATCHING-NATIVE-PREPARATION-1/ROOT-COMPOSE.stdout",
+    "bytes": 2687,
+    "sha256": "aefdecdedf3dec6cc6b31c3496381ad71f574637d6f01ccfbb3b3befde7c97f9"
+  },
+  "stderr": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CURRENT119-MATCHING-NATIVE-PREPARATION-1/ROOT-COMPOSE.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "guest_or_native_started": false
+}

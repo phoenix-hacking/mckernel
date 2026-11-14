@@ -1,0 +1,50 @@
+{
+  "schema": "mckernel.native-diagnostic-collector-build-success.v1",
+  "recorded_at": "2026-09-28T05:27:00-07:00",
+  "status": "PASS_COLLECTOR_HOST_STATIC_BUILD_READY_FOR_OVERLAY",
+  "source": {
+    "scripts/application-tests/native_diagnostic_guest_collector.c": "82eb5fd0393b73b3f4ff593558ff40989fe056ad911e01ea90de33871f353ea3",
+    "scripts/tests/test_native_diagnostic_guest_collector.py": "9cec08edf7510f07f4f6e64dadfa0d3586acb9862ba75403d4a3501495997d2e",
+    "source_review": "PASS_COLLECTOR_SOURCE_READY_FOR_PINNED_STATIC_BUILD",
+    "tests": "15 host-only tests PASS; strict GCC 9.4 syntax PASS"
+  },
+  "original_failure": {
+    "attempt": "/home/holden/mckernel-work/scratch/native-diagnostic-collector-build-20260928-1",
+    "container_id": "4cbb993ff750a2069cf8ff5ad18f40ebcc2dadef9de612ab4125de73b899bb09",
+    "image": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+    "result": "FAIL: /usr/bin/ld cannot find -lc",
+    "container_exit": 1,
+    "oom_killed": false,
+    "container_removed": true,
+    "stderr_sha256": "9154fcfb7a7febabb0cabbaf8a67f748b338127ddeb6b6c7377e9c7ab8300a8f"
+  },
+  "successful_build": {
+    "attempt": "/home/holden/mckernel-work/scratch/native-diagnostic-collector-build-20260928-3",
+    "command_sha256": "f532ed99c635570d5509041c8d92c74043693f148719664756ddbae46b06ab0d",
+    "command": "/usr/bin/gcc -std=gnu11 -O2 -Wall -Wextra -Werror -static -fno-pie -no-pie -Wl,-z,noexecstack /home/holden/mckernel/scripts/application-tests/native_diagnostic_guest_collector.c -o /home/holden/mckernel-work/scratch/native-diagnostic-collector-build-20260928-3/init",
+    "time_record_sha256": "077c0a75df98cbc6b548477911e52c90bccb55b2baad4925719186627ed5a307",
+    "result": "exit=0 elapsed_seconds=0.23 max_rss_kib=32624 user_seconds=0.19 system_seconds=0.04",
+    "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "tools": {
+      "/usr/bin/gcc": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f",
+      "/usr/bin/ld": "476b24d5cc1fef54f80412d06e7430b2dcf4e2b6f1525ee17e6eaaf16b28a00f",
+      "/usr/lib/x86_64-linux-gnu/libc.a": "f9831edeccd3a87eb3fbba795f92bfa83409b3951f05ec40ca5df432b8699127"
+    }
+  },
+  "artifact": {
+    "path": "/home/holden/mckernel-work/scratch/native-diagnostic-collector-build-20260928-3/init",
+    "sha256": "78426897fed245e0a8c81996a369896fb264acb9ceb5aab1e5990505d1db4ecb",
+    "size": 1021256,
+    "mode": "0700",
+    "format": "ELF64 little-endian x86-64 ET_EXEC, static, four valid PT_LOAD segments, executable entry 0x4024c0, no PT_INTERP or dynamic section, non-executable GNU_STACK"
+  },
+  "limits": [
+    "The collector binary was not executed as PID1.",
+    "Mounts, printk, dmesg, sync, McKernel launch/retirement, serial publication, poweroff and QMP shutdown remain unverified.",
+    "This is a diagnostic artifact build, not application or production acceptance."
+  ],
+  "mckernel_application_executed": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

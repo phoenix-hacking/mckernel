@@ -1,0 +1,86 @@
+{
+  "accepted_stage_manifest": {
+    "bytes": 10485,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/stage-launches-1/manifest.json",
+    "sha256": "69e8bc3a08c304a9c98f4243adb2a2889fb30237f6ec532b5c132ad343b29416"
+  },
+  "actual_metadata_review": {
+    "bytes": 12370,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-independent-review-20261020-1/ACTUAL-HOST66-THREE-MODULE-DRAIN-COLLECTOR-STAGE-AND-CONSUMER-ACCEPTANCE.json",
+    "sha256": "43d17911f3a5bc167bda2c0507a57ad09d835a92c4e8f0d4128128827053c38e"
+  },
+  "effective_current_controller_stop_percent": 100,
+  "execution_route": "DIRECT_OWNER_AND_THREE_BOUNDED_SUCCESS_ONLY_READERS",
+  "independent_static_execution_decision": {
+    "bytes": 23848,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-independent-review-20261020-1/HOST66-DRAIN-NATIVE-SOURCE-AND-NONTEMPORAL-RELEASE.json",
+    "sha256": "8adfbd584be9c3027ca82b4bda123ba55672c5c4c9ea062bd7a67c8f10765e77"
+  },
+  "normalized_manifest": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/scratch/h66rm-261020-1/manifest.json",
+    "sha256": "69e8bc3a08c304a9c98f4243adb2a2889fb30237f6ec532b5c132ad343b29416",
+    "size": 10485
+  },
+  "parent_full_ninefield_identity": {
+    "ctime_ns": 1792479596837923161,
+    "device": 1828,
+    "gid": 1000,
+    "inode": 880974,
+    "mode": "0o700",
+    "mtime_ns": 1792479596837923161,
+    "nlink": 2,
+    "path": "/home/holden/mckernel-work/scratch/h66rx-261020-1/p",
+    "size": 4096,
+    "uid": 1000
+  },
+  "parent_identity": {
+    "device": 1828,
+    "gid": 1000,
+    "inode": 880974,
+    "mode": "0o700",
+    "uid": 1000
+  },
+  "postjoin_readback": {
+    "approved": "CONDITIONAL_ON_EXACT_INDEPENDENT_EXECUTION_RELEASE",
+    "argv": [
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/h66rx-261020-1/p.owner-e699ae7d0feb4133987bb5b4a4eb03ec",
+        "."
+      ],
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/cat",
+        "/home/holden/mckernel-work/scratch/h66rx-261020-1/p/attempt-e699ae7d0feb4133987bb5b4a4eb03ec/result.json"
+      ],
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/h66rx-261020-1/p/attempt-e699ae7d0feb4133987bb5b4a4eb03ec",
+        "--exclude=./qmp.sock",
+        "."
+      ]
+    ],
+    "capture_limit_bytes_per_command": 33554432,
+    "requested": true,
+    "timeout_seconds_per_command": 30
+  },
+  "proposal": {
+    "bytes": 5323,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/proposal.json",
+    "sha256": "211be2988298b549bf6614956d20791dc4ff1627907967e9cc00e6dfdd1631b1"
+  },
+  "runtime_release": false,
+  "runtime_wrapper": null,
+  "schema": "mckernel.native-diagnostic.nontemporal-metadata.v1",
+  "status": "PASS_NONTEMPORAL_DATA_ONLY"
+}

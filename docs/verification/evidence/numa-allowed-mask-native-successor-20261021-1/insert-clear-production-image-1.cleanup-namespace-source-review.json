@@ -1,0 +1,72 @@
+{
+  "status": "PASS",
+  "decision": "PASS_FOCUSED_CLEANUP_NAMESPACE_SOURCE_TRANSFER_ONLY",
+  "reviewer": "/root/insert_c_correction_review",
+  "implementation_ownership": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "evidence_sha256": "86ce0808b50c69fae6f8892851333545a10600e8fb290cc6828f01df5c1f8a0c",
+  "evidence_path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/cleanup-namespace-successor-preparation-1/FRESH-CLEANUP-NAMESPACE-SOURCE-DELTA-AND-CONSUMER-JOIN-PACKET-1.json",
+  "accepted_sources": {
+    "cleanup_pass_image.py": {
+      "sha256": "86654275eced623bb15ce289ca6555264b2820b56336e629fe084cb9aed96ce0",
+      "bytes": 90010,
+      "exact_changes": ["PREFIX", "PUBLISHED_SCRIPT"],
+      "unchanged_function_class_AST_count": 47
+    },
+    "check_actual_fresh_preflight.py": {
+      "sha256": "ece147bd889c14c38119892a4ed079dfda403031de599ce8363eb65131906230",
+      "bytes": 3287,
+      "exact_changes": ["SOURCE", "SOURCE_SHA"],
+      "unchanged_function_class_AST_count": 2
+    },
+    "postjoin_readback.py": {
+      "sha256": "a4e6be320dc75ab931b7a44aebd3b142835e51b122a6f01c978dbc55d6ce1373",
+      "bytes": 9456,
+      "exact_changes": ["ENGINE", "ENGINE_SHA"],
+      "unchanged_function_class_AST_count": 8
+    }
+  },
+  "accepted_data_transfer": {
+    "draft_sha256": "e9ac91a5d274f8c1c38c67541a3d1f99a14f36d5a8d511cbc2711c9d6113ef9f",
+    "original_observation_object_identical": true,
+    "selected_file_rows_unchanged": 92,
+    "changed_top_level_fields": [
+      "author",
+      "script_sha256",
+      "transaction_paths",
+      "git_commit",
+      "git_tree"
+    ],
+    "original_selected_engine_preserved": true,
+    "new_prefix": "numa-insert-clear-image-terminal-20261021-1"
+  },
+  "consumer_contract": [
+    "configure lines433 and453-457 separately authenticate the executing engine and its published blob.",
+    "configure lines553-578 preserve original selected-file authorities; replacing their old engine descriptor is unnecessary and would change genuine observation evidence.",
+    "configure line606 and transaction_paths lines636-638 bind the separate release transaction namespace to current engine globals.",
+    "preflight_fresh lines1208-1228 checks fresh transaction/archive absence before mutation and repeats absence after protected-file, census and log checks.",
+    "Postjoin retains original observer371b/case/output authorities while independently pinning the new engine; its unchanged journal9/archive5 and finite-object predicates still apply."
+  ],
+  "observer_or_export_replay_required_for_this_delta": false,
+  "namespace_absence_evidence": "The frozen author packet records all seven new paths absent at its stated observation time. This is not a guarantee of later absence; existing fresh preflight must establish that again under its lock.",
+  "remaining_authorities": {
+    "new_source_publication": null,
+    "fresh_exclusive_grant": null,
+    "exact_final_cleanup_release_review": null,
+    "actual_fresh_preflight_result": null,
+    "actual_cleanup_result": null,
+    "actual_postjoin_acceptance": null
+  },
+  "required_execution_contract": [
+    "Preserve all historical transaction paths, original source files and genuine observation/export evidence.",
+    "Use one identical final cleanup release path and byte SHA for readonly preflight, conditional cleanup and postjoin.",
+    "Require actual positive fresh preflight predicates, a fresh exclusive grant and genuine exact release/argv/profile review before mutation.",
+    "Preserve failures and stop on refusal; no automatic retry, historical unlock, unlink or cleanup is authorized."
+  ],
+  "findings": [],
+  "cleanup_authorized": false,
+  "physical_clearance": false,
+  "runtime_acceptance_of_derivative": false,
+  "decision_file_written": false,
+  "reviewer_quiescent_after_review": true
+}

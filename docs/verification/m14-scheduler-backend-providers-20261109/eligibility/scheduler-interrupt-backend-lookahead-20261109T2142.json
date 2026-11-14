@@ -1,0 +1,151 @@
+{
+  "schema": "mckernel.scheduler-interrupt-backend-lookahead.v1",
+  "at_request": "2026-11-09T21:42Z scheduled supervision",
+  "invocation": "20261109T211917Z-488788ba",
+  "scope": "Only exact general accepted-F04 ihk_mc_interrupt_cpu implementation and finite required current source helper/type closure; source-only, hardware backends remain declarations.",
+  "decision": "ELIGIBLE_EXACT_EXISTING_F04_CPU_IPI_SOURCE_PARTITION_FOR_PRIVATE_PREPARATION_AND_CONCRETE_REVIEW",
+  "owner": "Saved Root sole canonical source/provider compositor; no new execution admission",
+  "active_plan": {
+    "path": "/home/holden/mckernel/CAMPAIGN.md",
+    "updated": "2026-11-09T21:37Z",
+    "accepted_scope": "M14-F04 CPU primitives/startup/interrupts/context/TLS/FPU/xstate/diagnostics remains closed"
+  },
+  "eligibility_first": {
+    "positive_basis": "Actual accepted-F04 general logical CPU→APIC routing implementation, independently distinguished from notification packet source/endpoint dispatch. Exact source performs original CPU-range/CPU-local/APIC lookup and dispatches existing general IPI/logger symbols; it does not construct notification packets or process syscall/exec/ACK/TID/XPMEM requests.",
+    "scope_boundary": "Only current three public functions and one private pointer adapter listed below. Genuine IPI issue/hardware implementation is not imported; no MSR/APIC/IRQ instruction body is included. Current CPU-local accessor implementation and logger body/data are not included.",
+    "hold_policy": "Current plan and existing notification NO_GO explicitly are not a blanket ban on other independent accepted sources. This eligibility does not determine or release the held notification/generic payload scope or any downstream endpoint membership.",
+    "execution_policy": "Accepted source is not IRQ/native/hardware execution permission. No function, invalid/valid CPU test, CPU-local access, IPI, logger, MSR/APIC, timer, device or native operation runs.",
+    "stop_condition": "If private preparation includes whole x86_cpu_helpers/x86_local/ap/debug module or an actual hardware/held endpoint body, stop for separate exact eligibility; no equivalent reassignment inferred."
+  },
+  "finite_actual_source": {
+    "public_functions": [
+      {
+        "symbol": "ihk_mc_interrupt_cpu",
+        "source": "kernel/rust/x86_cpu_helpers.rs:908–921",
+        "signature": "unsafe extern \"C\" fn(cpu:CInt,vector:CInt)->CInt",
+        "body": "Exact current entry calls x86_interrupt_cpu_result with actual crate::ap::num_processors, Some(x86_cpu_local_native), size_of::<CULong>() as CULong, Some(x86_issue_ipi_bridge), Some(x86_interrupt_log_bridge)."
+      },
+      {
+        "symbol": "x86_interrupt_cpu_result",
+        "source": "kernel/rust/x86_cpu_helpers.rs:1822–1858",
+        "signature": "Exact existing extern C signature (CInt,CInt,CInt,Option<X86CpuLocalFn>,CULong,Option<X86IssueIpiFn>,Option<X86InterruptLogFn>)->CInt",
+        "body": "Preserve current CPU-range check, optional callback validation, real APIC lookup, log events and issue/return ordering without policy change."
+      },
+      {
+        "symbol": "x86_get_interrupt_id_result",
+        "source": "kernel/rust/x86_cpu_helpers.rs:1800–1819",
+        "signature": "Exact existing extern C signature (CInt,Option<X86CpuLocalFn>,CULong)->CInt",
+        "body": "Preserve optional callback/null result checks and actual volatile CULong APIC-ID field load with wrapping pointer offset, then existing CInt conversion."
+      }
+    ],
+    "private_helpers": [
+      {
+        "symbol": "x86_cpu_local_native",
+        "source": "kernel/rust/x86_cpu_helpers.rs:903–905",
+        "signature": "unsafe extern \"C\" fn(CInt)->*mut core::ffi::c_void",
+        "body": "Only exact current actual typed get_x86_cpu_local_variable(cpu).cast::<c_void>(); no accessor body or replacement callback."
+      }
+    ],
+    "actual_C_match": {
+      "path": "arch/x86_64/kernel/cpu.c",
+      "lines": "3384–3404",
+      "original_signature": "int ihk_mc_interrupt_cpu(int cpu,int vector)",
+      "original_calls": "Actual num_processors, get_x86_cpu_local_variable(cpu)->apic_id, x86_issue_ipi and existing invalidCPU/debug diagnostics.",
+      "selection": "MCKERNEL_RUST_X86_CPU_HELPERS selects Rust extern ownership; kernel/CMakeLists.txt:729–730 pairs cpu.c; kernel/rust/lib.rs:94 selects x86_cpu_helpers."
+    },
+    "types": [
+      {
+        "source": "kernel/rust/abi.rs",
+        "names": [
+          "CInt=i32",
+          "CULong=u64",
+          "X86CpuLocalVariables"
+        ],
+        "treatment": "Use exact actual ABI module/types; no handwritten CPU-local/register structure."
+      },
+      {
+        "name": "X86CpuLocalVariables",
+        "source": "kernel/rust/abi.rs:519–531",
+        "layout": "Actual repr(C,packed), processor_id:CULong then apic_id:CULong and original remaining fields. Original source apic_id_offset=size_of<CULong>()=8 on selected LP64 target; bind this to actual type field, never guess a fake register layout."
+      },
+      {
+        "name": "X86CpuLocalFn",
+        "source": "kernel/rust/x86_cpu_helpers.rs:63",
+        "alias": "unsafe extern \"C\" fn(CInt)->*mut c_void"
+      },
+      {
+        "name": "X86IssueIpiFn",
+        "source": "kernel/rust/x86_cpu_helpers.rs:64",
+        "alias": "unsafe extern \"C\" fn(CULong,CInt)"
+      },
+      {
+        "name": "X86InterruptLogFn",
+        "source": "kernel/rust/x86_cpu_helpers.rs:65",
+        "alias": "unsafe extern \"C\" fn(CInt,CInt,CInt)"
+      }
+    ],
+    "constants": "No APIC/MSR/vector register constants are needed. Preserve actual source literal eventIDs1/2, return-1/0 and size_of<CULong> expression. Do not introduce vector normalization, CPU/APIC argument restrictions or new error codes.",
+    "core_imports": [
+      "core::ffi::c_void",
+      "core::mem::size_of",
+      "core::ptr::read_volatile"
+    ],
+    "configuration": "These exact four definitions have no local mckernel_equivalence branches; use same qualified native x86_64 LP64 nonexecuted freestanding partial-unit profile with equivalence cfg unset. Whole source module contains many hardware/cfg paths, all excluded."
+  },
+  "genuine_imports": [
+    {
+      "symbol": "get_x86_cpu_local_variable",
+      "kind": "function",
+      "ABI": "extern \"C\" fn(CInt)->*mut actual abi::X86CpuLocalVariables",
+      "existing_definition": "kernel/rust/x86_local.rs:99–101",
+      "declaration_boundary": "Preserve crate::x86_local namespace using actual matching extern declaration only; do not compile local_addr, locals mapping/storage or boot initialization."
+    },
+    {
+      "symbol": "x86_issue_ipi_bridge",
+      "kind": "function",
+      "ABI": "extern \"C\" fn(CULong,CInt)",
+      "existing_source": "Actual extern declaration kernel/rust/x86_cpu_helpers.rs:119; existing Rust definition at6107 (name identified only; hardware body excluded). Matching C declaration cpu.c:3366.",
+      "declaration_boundary": "Unresolved genuine IPI issue provider, not fake register callback or actual hardware body."
+    },
+    {
+      "symbol": "x86_interrupt_log_bridge",
+      "kind": "function",
+      "ABI": "extern \"C\" fn(CInt,CInt,CInt)",
+      "existing_definition": "kernel/rust/x86_cpu_helpers.rs:4393–4418",
+      "declaration_boundary": "Actual existing full logger signature; leave implementation and x86_interrupt_log_debug storage outside this unit. No suppressed logging/default metadata."
+    },
+    {
+      "symbol": "num_processors",
+      "kind": "mutable data",
+      "ABI": "extern static mut CInt",
+      "existing_definition": "kernel/rust/ap.rs:40–41 #[no_mangle] pub static mut num_processors:CInt=1",
+      "declaration_boundary": "Only actual live global read via crate::ap extern declaration; do not define a fixed1 replica or alter load/atomic policy."
+    }
+  ],
+  "semantics_and_borrows": {
+    "result": "Preserve current source CPU negative/out-of-range→logevent1 then-1; missing required issue/getter/nullCPUlocal/negative converted APIC result→-1; original event2 occurs before actual issue callback; successful issue returns0.",
+    "argument_policy": "Use existing signed conversions and vector unchanged; no new validation, range reinterpretation, forced valid vector or altered APIC-width policy.",
+    "data_lifetime": "Original caller/CPU boot mapping retains num_processors and CPU-local storage through synchronous getter and APIC load. No new ownership, locks, aliases or lifetime guarantees are introduced.",
+    "raw_pointer": "Actual original volatile CULong load and pointer wrapping are preserved under original caller/alignment/domain assumptions; no invalid/OOB/undefined HOST vectors are proposed.",
+    "scope": "Source metadata/codegen plan only; no actual call can be admitted from this contract."
+  },
+  "duplicate_provider_check": {
+    "reference": "docs/verification/m14-delay-provider-results-20261109.json and its named exact aaaf joined-symbols.stdout, read narrowly for these names only.",
+    "observed": "Retained current aaaf foundation already has num_processors D,size4. None of proposed three public function owners, get_x86_cpu_local_variable or IPI/logger bridge appears defined in that named record.",
+    "later_inputs": "Current42f177e4 scheduler3function partial and next tenbridge/debugdata results must be bound by Root actual prejoin metadata; do not rerun old producer/metadata merely to make a new inventory. Three scheduler functions/ten bridges/data owner are disjoint from these three CPU helpers.",
+    "expected_new_provider": "3globalT, original private x86_cpu_local_native (may optimize),0source-owned writabledata,3genuinefunctionU+1genuinedataU. Record actual private/readonly/eh_frame compiler owners; no invented fixed function size.",
+    "partial_effect": "Supply genuine missing ihk_mc_interrupt_cpu backend to matching process_sched_interrupt_bridge; current num_processors binds existing original data owner. GetCPUlocal/IPI/logger genuine imports remain exposed unless already uniquely bound by current admitted inputs. No global closure percentage or fixed newU count inferred before actual metadata.",
+    "exclude": "Oldc205/old8/wholecrate, symbol rename/override, duplicate strong definitions, hostlibc, fake locals/registers/processor-count storage."
+  },
+  "next_exact_preparation": {
+    "owner": "Root/private source preparer and concrete independent source/ABI/profile reviewer",
+    "required_input": "Actual current four functions/three aliases/actual ABI, exact four genuine external declarations, fresh current consumer partial identity and unchanged retained compiler profile.",
+    "done_when": "Private source unit consists only this exact finite accepted-F04 cut; original pointer/APIC/num_processors/log/issue semantics and native source attributes survive; no hardware backend/body is pulled in.",
+    "verification_method": "Function-level source/include/signature/type/offset comparison plus current cohort symbol-ownership review; stop if any external provider is replaced or scope expands.",
+    "smallest_future_batch": "After concrete source/profile GO and Root fresh exact HOST admission: one compile+necessary actual symbol/ELF readbacks, actual CALLED provider predicate before anyld-r, then separately reviewed only-newobject+currentmatchingpartial link/readbacks. Preserve all existing code/data/private/alias/relocations and actual warnings. No green replay, hardware instruction/function/runtime or native acceptance.",
+    "selected_profile": "Reuse reviewed scheduler/tenbridge nonexecuted x86_64 freestanding Rust1.95 flags/compiler/warning policy; no mckernel_equivalence, HOST libc or optional CPU feature expansion.",
+    "resource_owner": "Root alone admits exact current HOST0/6/7,max3aggregate lightjobs/4GiB total including overhead, fresh26GiB/disk floors; native/source/current-free/UNKNOWN controls unchanged."
+  },
+  "missing_source_contract": "No missing Rust implementation, fake register/layout or new callback contract is needed for this exact finite partition. Final genuine CPU-local/IPI/logger/data runtime providers and original source/SDK/native admission remain independent open obligations.",
+  "operations": "Read AGENTS/current CAMPAIGN, exact accepted CPU function/helper/private adapter and corresponding C/signatures/actual ABI/source-selection; narrow named existing metadata comparison only. Wrote this one authorized JSON; no source-unit generation/edit, compiler/preprocessor/link/test/metadata execution, IRQ/APIC/MSR/device/hardware/native runtime, wholemodule or held-body preparation, inventory, spawn or goal control."
+}

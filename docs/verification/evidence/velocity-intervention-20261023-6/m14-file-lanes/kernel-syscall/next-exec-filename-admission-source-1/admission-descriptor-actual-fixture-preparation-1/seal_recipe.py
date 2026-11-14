@@ -1,0 +1,42 @@
+"""Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Data/source-only derivative of accepted exec-entry eight-command fixture; no execution.
+"""
+from pathlib import Path
+import json,hashlib
+P=Path(__file__).resolve().parent;B=P.parent.parent;E=B/'next-exec-entries-source-1/actual-fixture-preparation-1';scope='Functional McKernel OS/apps and Rust/assembly migration only; no security testing.'
+def pin(p):
+ b=p.read_bytes();return dict(path=str(p),bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def put(p,s):
+ with p.open('x') as f:f.write(s)
+old=json.loads((E/'EXACT-EXEC-ENTRY-FIXTURE.NOT-GRANTED.json').read_text());plan=json.loads(json.dumps(old));plan['scope']=scope
+inputs=[p for p in (P/'fixture').iterdir() if p.is_file()]+[P/'GENUINE-PROVIDER-BODY-EXTRACTIONS.json',B/'next-exec-filename-admission-source-1/SOURCE-HANDOFF.json',B/'next-exec-descriptor-init-source-1/SOURCE-HANDOFF.json',B/'next-exec-filename-admission-source-1/filename_admission.ORIGINAL-C.inc',B/'next-exec-descriptor-init-source-1/descriptor_init.ORIGINAL-C.inc']
+plan['inputs']={str(p):pin(p) for p in inputs};plan['private_ABI']=pin(P/'fixture/abi.rs');plan['source_handoff']=pin(B/'next-exec-filename-admission-source-1/SOURCE-HANDOFF.json');plan['actual_ABI']=pin(Path('/home/holden/mckernel/kernel/rust/abi.rs'));plan['prior_accepted_exec_fixture']=pin(E/'actual-fixture-1/ACTUAL-WHOLE-JOIN.json')
+records=json.loads((P/'GENUINE-PROVIDER-BODY-EXTRACTIONS.json').read_text())['records'];plan['source_relations']=[]
+for r in records:
+ p=P/'fixture'/('genuine-'+r['name']+'.inc');put(p,r['exact_text']);plan['inputs'][str(p)]=pin(p);plan['source_relations'].append(dict(current_source=r['source']['path'],exact_fragment=pin(p)))
+plan['inputs'][str(P/'prepare_sources.py')]=pin(P/'prepare_sources.py');plan['inputs'][str(P/'seal_recipe.py')]=pin(P/'seal_recipe.py')
+plan['controlled_effects']=['preemption endpoint calls; actual atomic reader lock executes','base page allocator storage/failure only; actual Rust tracked allocation engine executes','metadata backing arena/failures only; real tracker list/count/string bookkeeping executes','tracker spin backing and log capture; no actual IRQ effect','process-range debug logger capture; actual cache and tree lookup executes']
+plan['C_provider_debt']='Full do_execveat lifecycle remains C; actual allocation effects are controlled. No current kernel/image/default/native/file credit.'
+plan['Rust_exports']=['f03_execveat_filename_admission_v1','f03_execveat_allocate_descriptor_v1','f03_admission_descriptor_layout','lookup_process_memory_range','process_lookup_memory_range_body_result','process_lookup_memory_range_public_result','process_range_public_log_result','process_range_cache_hit_result','process_lookup_range_relation_result','process_range_cache_store_result','__ihk_rwspinlock_read_lock','__ihk_rwspinlock_read_unlock','ihk_rwspinlock_read_lock_noirq','ihk_rwspinlock_read_unlock_noirq','_ihk_mc_alloc_aligned_pages_node','pagealloc_track_alloc_result','pagealloc_track_find_entry_result','strlen','strcpy','strcmp','memset']
+plan['allowed_Rust_undefined']=['kprintf','preempt_disable','preempt_enable','cpu_pause','process_range_public_log_bridge','mem_pagealloc_track_base_alloc_bridge','mem_pagealloc_track_meta_alloc_bridge','mem_pagealloc_track_meta_free_bridge','mem_pagealloc_track_lock_bridge','mem_pagealloc_track_unlock_bridge','mem_pagealloc_track_spin_init_bridge','mem_pagealloc_track_log_bridge','memdebug','pagealloc_track_hash','pagealloc_track_hash_locks','pagealloc_addr_hash','pagealloc_addr_hash_locks','pagealloc_track_initialized','pagealloc_runcount','memcpy','memmove']
+plan['expected_stdout']='PASS_F03_ADMISSION_DESCRIPTOR admission=1296 descriptor=64 total=1360 real_layout_fields=16 controlled_OS_endpoints=1\n';plan['pair_count']=1360;plan['real_layout_fields']=16
+mapping={str(E):str(P),'exec_entries_actual.rs':'admission_descriptor_actual.rs','exec_entries_actual.c':'admission_descriptor_actual.c','exec_entries_Rust.o':'admission_descriptor_Rust.o','exec_entries_C.o':'admission_descriptor_C.o','exec_entries_partial.o':'admission_descriptor_partial.o','exec_entries_actual':'admission_descriptor_actual','f03_exec_entries_actual':'f03_admission_descriptor_actual'}
+# Longest source-token substitutions first preserve filenames and crate names.
+for command in plan['commands']:
+ for field in ['argv']:
+  command[field]=[next((x.replace(str(E),str(P)).replace('exec_entries','admission_descriptor') for _ in [0]),x) for x in command[field]]
+ command['cwd']=str(P);command['purpose']=scope+' Actual C/Rust admission+descriptor equivalence with real lock/tree/tracker/string cores; controlled OS endpoints. '+command['label']
+plan['commands'][0]['argv'][plan['commands'][0]['argv'].index('--crate-name')+1]='f03_admission_descriptor_actual'
+plan['actual_result']=None;plan['compiler_jobs']=0;plan['canonical_mutations']=0;plan['native']=False;plan['default_link']=False;plan['file_retired']=False
+RF=P/'EXACT-ADMISSION-DESCRIPTOR-FIXTURE.NOT-GRANTED.json';put(RF,json.dumps(plan,indent=2,sort_keys=True)+'\n')
+s=(E/'run_exec_entries_fixture_once.NOT-GRANTED.py').read_text().replace('EXACT-EXEC-ENTRY-FIXTURE.NOT-GRANTED.json',RF.name).replace('f083fb60c132da2dcc3a10d902f8da3dc48786448f323027bf2667ac3fb30173',pin(RF)['sha256']).replace('f03_exec_entries_actual','f03_admission_descriptor_actual').replace('exec_entries_actual.c','admission_descriptor_actual.c').replace('exec_entries_Rust.o','admission_descriptor_Rust.o').replace('exec_entries_C.o','admission_descriptor_C.o').replace('exec_entries_partial.o','admission_descriptor_partial.o').replace("'exec_entries_actual'","'admission_descriptor_actual'")
+s=s.replace("for name in ['sys_execve','sys_execveat']:symbol(rs,name,'U')\n   symbol(rs,'syscall_execveat_bridge','T')\n   for name in ['f03_original_sys_execve','f03_original_sys_execveat']:symbol(rs,name,'T')","for name in ['f03_execveat_filename_admission_v1','f03_execveat_allocate_descriptor_v1']:symbol(rs,name,'U')\n   for name in ['preempt_disable','preempt_enable','mem_pagealloc_track_base_alloc_bridge']:symbol(rs,name,'T')")
+s=s.replace("for name in ['sys_execve','sys_execveat','syscall_execveat_bridge']:symbol(rs,name,'T')","for name in plan['Rust_exports']:symbol(rs,name,'T')")
+s=s.replace("'Full do_execveat lifecycle only; actual complete Rust helpers/getters and literal C fallback remain real'","plan['controlled_effects']")
+s=s.replace("status='PASS_ACTUAL_LITERAL_C_RUST_EXEC_ENTRIES_4788_PAIRS_14_REAL_LAYOUT_AND_PARTIAL_ONLY'","status='PASS_ACTUAL_LITERAL_C_RUST_ADMISSION_DESCRIPTOR_1360_PAIRS_16_REAL_LAYOUT_AND_PARTIAL_ONLY'")
+s=s.replace('execve_pairs=84,execveat_pairs=4704,total_pairs=4788,real_layout_fields=14','admission_pairs=1296,descriptor_pairs=64,total_pairs=1360,real_layout_fields=16')
+s=s.replace('firstbyte_prepolicy_read_preserved_valid_buffer_only=True','firstbyte_prepolicy_read_outside_this_slice=True')
+s=s.replace('One actual exec-entry original-C/Rust equivalence and real ABI fixture; existing C lifecycle effect controlled.','One actual admission+descriptor literal-C/Rust equivalence fixture; genuine Rust lock/tree/tracker/string bodies and controlled OS endpoints.')
+D=P/'run_admission_descriptor_fixture_once.NOT-GRANTED.py';put(D,s)
+ready=dict(scope=scope,status='SOURCE_EXECUTABLE_READY_NOT_EXECUTED_NOT_GRANTED',recipe=pin(RF),driver=pin(D),argv=['/home/holden/anaconda3/bin/python3','-I','-B',str(D)],input_count=len(plan['inputs']),genuine_functions_extracted=len(records),expected_pairs=1360,actual_result=None,CPU_reservation=False,canonical_mutations=0,default_link=False,native=False,file_retired=False,forwarding_HOLD=plan['forwarding_HOLD'],controlled_effects=plan['controlled_effects'],lexical_contract='Literal admission C remains function do_execveat. Neither slice uses __FUNCTION__/__func__. Descriptor original __FILE__/__LINE__ uses explicit #line7142 with actual fixture source filename; candidate receives byte-identical file string and line. This tests preserved caller-origin data, not new production line identity.',next_step='ROOT may separately grant one CPU6 ordinary job under unchanged profile. First unexpected failure STOP; no automatic retry.')
+put(P/'EXECUTABLE-READY.NOT-GRANTED.json',json.dumps(ready,indent=2,sort_keys=True)+'\n');print(json.dumps(dict(ready=pin(P/'EXECUTABLE-READY.NOT-GRANTED.json'),driver=pin(D),recipe=pin(RF),compiler_jobs=0)))

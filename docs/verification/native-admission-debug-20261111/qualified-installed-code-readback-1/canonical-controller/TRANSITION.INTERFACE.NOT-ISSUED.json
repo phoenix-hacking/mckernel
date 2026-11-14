@@ -1,0 +1,159 @@
+{
+  "status": "SOURCE_INTERFACE_BOUND_RUNTIME_TRANSITION_NOT_ISSUED_PENDING_AUTHORITY_ORDERING_AND_POSITIVE_CHECKPOINT",
+  "at": "2026-11-11T09:58:50.283524+00:00",
+  "current_readonly_snapshot": {
+    "path": "/home/holden/mckernel/.git/os-autopilot/state.json",
+    "bytes": 23390,
+    "sha256": "3a25992f17f031e020895d5fc91001cf327f99cce527d8bfe0e8b9a09def944d",
+    "phase": "running",
+    "stop_reason": null,
+    "goal_status": "active",
+    "root": "01a18bc3-e072-7810-9426-75101b0856c0",
+    "invocation": "20261110T060029Z-3fe88dab",
+    "guardian_run_id": "88169fc42ce44bba925917703eae8c20",
+    "worker": {
+      "pid": 762048,
+      "birth": "37669559"
+    },
+    "server": {
+      "pid": 762050,
+      "birth": "37669567"
+    },
+    "active_turn_count": 4,
+    "last_instruction": {
+      "id": "source-71d9862caad2fbd13e21d4f5be77c90b9edfe39c5e0a11ccd7ded1ea257d00be",
+      "status": "accepted_by_server",
+      "turn_id": "01a1c449-1acc-7da3-91f7-484cd1bfd5c9",
+      "submitted_at": "2026-11-11T09:56:28.511777+00:00",
+      "delivered_at": "2026-11-11T09:56:29.047038+00:00"
+    },
+    "resume_instruction_status": "accepted_by_server",
+    "transport_uncertain": null,
+    "pending_request": null,
+    "not_a_fresh_source_account_resource_or_retirement_grant": true
+  },
+  "normal_frontdoor_sources": [
+    {
+      "path": "/home/holden/mckernel/scripts/run_os_goal.py",
+      "bytes": 134144,
+      "sha256": "6f5ae87f0844db5718530f2198c2206a0d8900f951482ce5588243b832dc17a0"
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/start_os_overnight.py",
+      "bytes": 13251,
+      "sha256": "af2e58934f98d93238e0569279375919488d02456fa89f730e0ccc5daa4f2b6d"
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/os_goal_service.py",
+      "bytes": 23105,
+      "sha256": "fdcb7f1ef499da397c7a1f152b87cbbe673fc50a99f2cb2874770c76ac00292e"
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/os_goal_guardian.py",
+      "bytes": 20116,
+      "sha256": "a8f3b7e7ff7426d6015c18573838563fec13b62f2eff66167d6701f86f861883"
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/os_goal_guard_protocol.py",
+      "bytes": 9802,
+      "sha256": "597d61bbedf7e1ff8b5d7c8d5b167b1e635ee2a9cee577074c4a4b0f4b861d3f"
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/watch_os_goal.py",
+      "bytes": 39730,
+      "sha256": "9a105b4f37f61bed7ffbffd848ed0f02d2e792e4797a38609761e98480e7a1bb"
+    }
+  ],
+  "existing_source_interfaces": [
+    {
+      "interface": "scripts/start_os_overnight.py stop -> os_goal_service.main stop -> request_stop",
+      "semantics": "Actual user stop is persisted before exact owner signal; pauses engine and retains guardian. Not a transparent code reload and not invoked here."
+    },
+    {
+      "interface": "scripts/run_os_goal.py <EXACT_SAVED_ARGV> -> start_os_overnight.launch_legacy -> service_main([start], engine_arguments=arguments) -> service.start",
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "/home/holden/mckernel/scripts/run_os_goal.py",
+        "--model",
+        "gpt-6.1-sol",
+        "--effort",
+        "max",
+        "--profile",
+        "aggressive",
+        "--max-agents",
+        "6",
+        "--build-jobs",
+        "3",
+        "--memory-gib",
+        "12",
+        "--agent-windows",
+        "off",
+        "--hours",
+        "0",
+        "--max-restarts",
+        "3",
+        "--watchdog-seconds",
+        "180",
+        "--stall-seconds",
+        "1200",
+        "--repair-agent-failures",
+        "--stop-after-m14-m15",
+        "--credit-budget",
+        "PRIVATE_FINITE_CREDIT_BUDGET_REDACTED",
+        "--credit-run-id",
+        "7c6ef3604bfb4008a917bba8cfb6cfaa",
+        "--startup-instruction-file",
+        "/home/holden/mckernel-work/m14-m15-new-launch-20261110T0555Z/startup-instruction.txt",
+        "--startup-instruction-sha256",
+        "6ecc102bd2d6280e3009f940413438ec35a25b80a5789aef72360caf214eb30e"
+      ],
+      "semantics": "Existing normal same-Root fresh launch interface preserves the supplied cumulative credit-run ID and options; no internal recovery flags or direct state writes. This argv is source-derived and UNISSUED."
+    },
+    {
+      "interface": "Guardian._request/_recover",
+      "semantics": "Existing recovery only for actual supervisor_unavailable and its exact authenticated checkpoint/retirement proof; do not fabricate that failure for healthy source rollout."
+    }
+  ],
+  "saved_configuration": {
+    "path": "/home/holden/mckernel/.git/os-autopilot/guardian-engine-config.json",
+    "bytes": 879,
+    "sha256": "77a995044f44400a926b02a736920f6b25d8e04e2d0e3127399e0a8c39b7aebf"
+  },
+  "exact_current_blocking_predicates": [
+    {
+      "source": "scripts/os_goal_service.py:start:241-243",
+      "predicate": "not lease_free(watch.lock) or not lease_free(run.lock) -> EXISTING_OWNER",
+      "meaning": "Healthy current engine remains sole owner; no competing start or forced restart."
+    },
+    {
+      "source": "scripts/os_goal_guardian.py:_intent",
+      "predicate": "intent authored_at <= user_stop.created_at -> cancelled_by_user_stop",
+      "meaning": "An earlier manual invocation cannot be relabeled as a new post-stop start. No fabricated authored timestamp or source=explicit_user event."
+    },
+    {
+      "source": "scripts/os_goal_guard_protocol.py:recovery_blocker",
+      "predicate": "pending_request/transport_uncertain or nonaccepted resume/last_instruction -> binding_hold_or_uncertain_delivery / instruction_delivery_unreconciled",
+      "meaning": "Actual queued/sending/uncertain items and active worker/child outcomes require authenticated current delivery/checkpoint disposition; one latest accepted receipt is not whole-queue closure."
+    },
+    {
+      "source": "scripts/os_goal_guardian.py:_recover",
+      "predicate": "actual supervisor_unavailable request plus stopped guardian_recovery/paused/empty active_turns/clean stop+server closure and exact old owner retirement/free model leases",
+      "meaning": "Current healthy source-update preparation supplies none of this recovery authority."
+    }
+  ],
+  "smallest_missing_runtime_input": "After actual fixed30 code-install completion and Root integration/publication of these exact tested canonical bytes: a separately reviewed genuine normal transition authority/order and bounded exact-current owner/delivery checkpoint+positive watcher/worker/server/direct-family-stream/model-lease closure. The source-only task does not supply a new later authored resume or an actual supervisor failure. Root/guardian/current owner are the suppliers; this is not an external inventory prerequisite.",
+  "planning_limit": "Saved memory-gib12 is the six-owner planner setting only; loaded actual HOST remains CPUs0,6,7/max3/shared4GiB/all overhead/fresh26GiB/floors. Native2-5/12GiB and all prior source/native/UNKNOWN holds remain separate.",
+  "not_executed": [
+    "stop",
+    "start",
+    "guardian or launcher main",
+    "controller import",
+    "account/model RPC",
+    "credit/goal/state/nonce/lease mutation",
+    "signals",
+    "code installation",
+    "native action"
+  ],
+  "no_new_handoff_api_or_framework": true
+}

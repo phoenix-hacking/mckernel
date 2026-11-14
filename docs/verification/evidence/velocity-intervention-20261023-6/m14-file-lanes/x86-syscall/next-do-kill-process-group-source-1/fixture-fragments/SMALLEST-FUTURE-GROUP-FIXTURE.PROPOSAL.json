@@ -1,0 +1,26 @@
+{
+  "actual_results": null,
+  "argv": null,
+  "baseline_domains": "The original -pid signed INTMIN case and impossible int-count overflow are C undefined domains, not newly claimed defined behavior. No added PID/liveness filtering or permission policy. PID reuse between enumeration and recursive delivery retains original behavior; no new process holds.",
+  "driver": null,
+  "effects": "Use actual73-bucket ProcessHash/Process/Thread/SigInfo ABI, recorded reader IRQ-lock endpoints and real node storage; owned heap token/extent. Recursive do_kill endpoint controlled after ALL locks released. No raw IRQ/IPI/signal process mutation.",
+  "grant": null,
+  "ordering": "Each lock/unlock uses same live64-byte aligned stack node; no allocation/recursive call under bucket locks; numeric PIDs only retained after unlock; original request/info/caller borrowed throughout; free exact original heap once, self-only freeNULL unchanged.",
+  "scenarios": [
+    "pid0/null caller\u2192ESRCH no lock/alloc/recursive/free",
+    "pid0/caller pid<=0\u2192ESRCH",
+    "no matching group\u2192ESRCH after exactly73 balanced first-pass locks",
+    "self-only group\u2192one self-last recursive call and free(NULL), no allocation/second scan",
+    "peer-only group\u2192count/allocate/collect/last-result/free",
+    "matching group peers+self\u2192self always delivered last",
+    "pid-1 selects every bucket regardless process pgid",
+    "different pgid omitted",
+    "allocation failure\u2192ENOMEM, no collection/recursive/free",
+    "table shrink between passes\u2192only n collected PIDs delivered",
+    "table growth between passes\u2192cap first nr_pids, no overflow",
+    "caller newly visible in second pass\u2192sendself remembered",
+    "recursive return low32 conversion including highbits/INTMIN/-1 and mixed successes/errors; last result wins"
+  ],
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "FIXTURE_FRAGMENTS_ONLY_NO_SECOND_QUEUE"
+}

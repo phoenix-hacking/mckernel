@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_review_failure",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "review_attempt": 29,
+  "status": "FAIL_SOURCE",
+  "recorded_utc": "2026-09-16T05:42:32Z",
+  "review_input": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260915-32.tar.gz",
+    "sha256": "9638a45a70ead1d310ba1653ef6ad7868b0cdf65ae7aa47b6d181be74b18114c",
+    "size": 37033713,
+    "members": 30,
+    "safe_unique_members": true
+  },
+  "reviewed_source_sha256": {
+    "prepare.py": "1d09a2f4f143af79de7eb98e7cc6d5c6a01efa89e15fa925d2c7869c78ab2df4",
+    "witness_owner.py": "4554efcda371a395681ff7f7353e05d98adf6ab4aae656b40d524f128fdf4670",
+    "supervise.py": "306a4982bd4d04721bc0478a5cfec553ac751dd0b5e9379cb9ba519bf4c92ce1",
+    "oracle.py": "dc7dd7d2a33b694e607fa3e70c7767649f9da353c48f5af21d3bdbb4241d0874",
+    "test_collector_storage_fault_packet.py": "42a159c2e4fd08c7b005d9eac4775753ad5b06de4797e5d7c87f5123a2bf1ad2"
+  },
+  "retained_checks": {
+    "python_3_9_12": "117/117 PASS",
+    "python_3_8_10": "117/117 PASS",
+    "pycompile_both": "PASS",
+    "review_24_through_27_replay": "PASS",
+    "positive_selectors": "7/7 PASS",
+    "raw_wait_decode_parity": "65536/65536 PASS",
+    "recursive_envelopes_verified": 9,
+    "recursive_bindings_verified": 104
+  },
+  "findings": [
+    "Pre-fork selectors accept executable or stdin source state that the collector cannot emit because they finish before opening either source.",
+    "Source validation does not enforce the producer's fixed memfd flag value or the exact unsealed stdin state.",
+    "Post-fork reports accept non-root collector credentials despite the execution profile requiring UID and EUID zero.",
+    "Artifact validation accepts impossible selector-specific request sink creation, truncation and I/O-error states.",
+    "The review-28 regression test declares canonical hashes without comparing them, never uses the old oracle, tests proc-exe samples on a selector that already forbids samples, leaves the zero-start deadline inconsistent and omits the pre-fork canonical mutation."
+  ],
+  "representative_accepted_canonical_sha256": {
+    "selector_2_executable_opened": "ff80486088a29e87da8b1d5588d45302b43de3616aeb1d498c8a91b5703369de",
+    "selector_0_memfd_flags_zero": "be8057c00ba8aaa0425a20b446ffadd7458c88bc32e4bb240013ca714c7050ca",
+    "selector_0_collector_uid_1000": "94c053933d90282eb5e39a5e730c56a21191c4b4424b0aa27c3af7dba4e67576",
+    "selector_0_request_creation_errno_28": "02394e397cca3848a744faf3fa2ae45fe8220f56cd2ccf2896233ebe3c65f775"
+  },
+  "required_next": [
+    "Enforce exact absent pre-fork source state, fixed source flags, unsealed stdin state, post-fork root credentials and selector-specific sink semantics from collector.c.",
+    "Add consistently rebound complete-fixture old-accept/current-reject controls for all review-29 findings.",
+    "Repair the review-28 test to replay all five exact archive-31 canonical records against the old and current oracle, retaining valid empty and 254-byte samples.",
+    "Rerun both pinned full suites and pycompile, freeze a new exact archive and obtain fresh independent review."
+  ],
+  "source_accepted": false,
+  "compiler_packet_released": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

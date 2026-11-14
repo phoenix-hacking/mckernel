@@ -1,0 +1,14 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": "2026-10-29T00:11:36.270980+00:00",
+  "status": "CORRECTED_REVIEWER_POSTTEST_METADATA_ASSERTION_NO_CANDIDATE_OR_TEST_FAILURE",
+  "first_expectation": "Reviewer posttest checker incorrectly expected capture_resources.py BYTE identity. It stopped after all6 tests passed, before CHECKS output.",
+  "actual_delta": "capture_resources.py changes only GUARD path/hash and typed_boundary core BYTE reference; resource/capture functions are ASTexact. Corrected reviewer comparison checks unchanged functions plus explicit source-pin routing.",
+  "preserved_test_stdout": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/A3-SOURCE-CORRECTION-REVIEW-1/PURE-FOCUSED.stdout",
+    "bytes": 704,
+    "sha256": "246aaf3e71862186a9a37fdd28aa793ba4fb2876d7243a76b28d4ef52d7b005e"
+  },
+  "tests_replayed": false,
+  "actual_runtime_calls": 0
+}

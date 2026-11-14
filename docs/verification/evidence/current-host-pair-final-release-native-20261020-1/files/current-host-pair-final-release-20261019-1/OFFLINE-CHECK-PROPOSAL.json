@@ -1,0 +1,84 @@
+{
+  "schema": "mckernel.final-public-release-offline-check-proposal.v1",
+  "status": "UNRUN_EXACT_CPU7_ALLOCATION_REQUIRED",
+  "functional_scope": "FunctionalOS/apps+actualRust/reviewedassembly; LinuxcontrolC only; not computeC expansion.",
+  "source_proposal": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/SOURCE-AND-ORDINARY-PROPOSAL.json",
+    "sha256": "f19464778c99a13e3b1ccf08ca315248a729817fcdada61bce636d7befc113d4",
+    "bytes": 4805
+  },
+  "pins": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/OFFLINE-INPUT-PINS.json",
+    "sha256": "224c05bd646c2c90dab60eb50212bd376255b18d816332c1dbaba8b74be8ec3e",
+    "bytes": 4686
+  },
+  "argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=3",
+    "35",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--fsize=33554432",
+    "--nofile=256",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/test_final_release.py"
+  ],
+  "profile": {
+    "ordinary_cpu": 7,
+    "jobs": 1,
+    "as_bytes": 1073741824,
+    "cpu_seconds": 30,
+    "outer_wall_seconds": 35,
+    "global_work_seconds": 28,
+    "cleanup_seconds": 3,
+    "stream_fsize": 33554432,
+    "host_floor_bytes": 17179869184,
+    "scratch_floor_bytes": 12884901888,
+    "extra_reserve_bytes": 671088640,
+    "host_growth_bytes": 8388608,
+    "scratch_growth_bytes": 0
+  },
+  "fresh_outputs": [
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/collector-final-release",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/final-phase-body-harness",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/fixture-lifecycle.stdout",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/fixture-pool.stdout",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/MODELED-final-release.serial",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/offline-result.json",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/compile-collector.stdout",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/compile-collector.stderr",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/compile-collector.status.json",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/compile-body.stdout",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/compile-body.stderr",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/compile-body.status.json",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/actual-body.stdout",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/actual-body.stderr",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/actual-body.status.json"
+  ],
+  "outer_capture_outputs": [
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/offline-check.stdout",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/offline-check.stderr",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/offline-check.status.json",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/ordinary-admission.json"
+  ],
+  "production_main_is_never_run": true,
+  "actual_C_gate_scenarios": 9,
+  "planned_serializer_positives": 2,
+  "planned_parser_refusals": 9,
+  "synthetic_scope": "Actual C publishers generate final records; modeled extension of copied first capture finish timestamp only; authentic original must refuse missing final phases. No native, module-load, helper ioctl or fixture-driven oracle adaptation.",
+  "frozen_oracle": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/final_release_capture.py",
+    "sha256": "112d41f52587f342659f94905edc1fc20c94aeb76d035e2d3bb75ddbb625bd32",
+    "bytes": 5059
+  },
+  "stage_authority": false,
+  "native_authority": false
+}

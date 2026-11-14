@@ -1,0 +1,152 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": "2026-10-29T01:19:35.213905+00:00",
+  "decision": "EXACT_READONLY_FAILED_HELPER_RECONCILIATION_UNKNOWN_CHILD_STATUS_RETAINED",
+  "executor": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/retire_exact_current118_stopped_container.py",
+    "bytes": 41515,
+    "sha256": "4179233c5a604b2a5924b98469e0dba5fe782eb76e3ff54286767b69288e4488"
+  },
+  "bindings": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/BINDINGS.json",
+    "bytes": 24950,
+    "sha256": "e402b73ca6b21763228fe14e37a0e7a85c86468280ca6e3693a3c227071e4d1c"
+  },
+  "primitive": {
+    "path": "/home/holden/mckernel/scripts/native_exact_scratch22_authority1_quarantine_recovery.py",
+    "bytes": 28680,
+    "sha256": "3fdb4dde4dbbd5d07d85d68c02e68d4aee3acca45dce12be3479f3252765abd6"
+  },
+  "started": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/actual-retirement-root1-e984/STARTED.json",
+    "bytes": 669,
+    "sha256": "33d75c7a7bc4b50240d9b6d9e289bb8dc87df9fc70722c80b0033077c623a546"
+  },
+  "uncertain": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/actual-retirement-root1-e984/UNCERTAIN.json",
+    "bytes": 5329,
+    "sha256": "b55d0dacff804048650c98b98470b3b995ccf7f6500f7f0121179c147886571c"
+  },
+  "quarantine": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/actual-retirement-root1-e984/QUARANTINE.json",
+    "bytes": 86,
+    "sha256": "3801e526d399f1d76a7d26ff6e5f39ada4018f5c1d5608d66a83912585914c1b"
+  },
+  "client_receipt": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/actual-retirement-root1-e984/command-084afc5797304dd8ae8f8771d955f771/JOIN-WAIT4.json",
+    "bytes": 5869,
+    "sha256": "310195b5c10b577db9bc638dbfdd08433b824606b2abe87fc75903efe007ea6e"
+  },
+  "client_status": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/actual-retirement-root1-e984/command-084afc5797304dd8ae8f8771d955f771/status.json",
+    "bytes": 4681,
+    "sha256": "7ad2ebed05bc7afbc49beb0d9d0666ab4b13b26b85786e51eb836750948ecf1f"
+  },
+  "client_stdout": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/actual-retirement-root1-e984/command-084afc5797304dd8ae8f8771d955f771/stdout",
+    "bytes": 35087,
+    "sha256": "337c464eabe5084367e2bbac8948433a09ef1ad6cf3025b61ca17d8fc47de5aa"
+  },
+  "client_stderr": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/actual-retirement-root1-e984/command-084afc5797304dd8ae8f8771d955f771/stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "saved_client_status_unknown": true,
+  "saved_positive_wait4": false,
+  "saved_group_absent": true,
+  "saved_streams_closed": true,
+  "readonly_proc_report_complete_JSON": true,
+  "commit_attempted": false,
+  "rm_claim_present": false,
+  "retirement_RESULT_present": false,
+  "actual_owner": {
+    "pid": 2232651,
+    "birth": 103343097,
+    "ppid": 2232650,
+    "state": "S",
+    "pgrp": 2232651,
+    "session": 2232651,
+    "exe": "/usr/bin/python3.8",
+    "uids": [
+      "1000",
+      "1000",
+      "1000",
+      "1000"
+    ],
+    "gids": [
+      "1000",
+      "1000",
+      "1000",
+      "1000"
+    ],
+    "threads": 1,
+    "children": [],
+    "source": "bounded actual /proc stat/status/exe/children reads"
+  },
+  "actual_parent": {
+    "pid": 2232650,
+    "birth": 103343093,
+    "ppid": 2232649,
+    "state": "S",
+    "pgrp": 2232649,
+    "session": 2232649,
+    "exe": "/home/holden/anaconda3/bin/python3.9",
+    "uids": [
+      "1000",
+      "1000",
+      "1000",
+      "1000"
+    ],
+    "gids": [
+      "1000",
+      "1000",
+      "1000",
+      "1000"
+    ],
+    "threads": 1,
+    "children": [
+      "2232651"
+    ],
+    "source": "bounded actual /proc stat/status/exe/children reads"
+  },
+  "actual_client": {
+    "pid": 2232653,
+    "observed_absent": true,
+    "positive_parent_join_proven": false
+  },
+  "actual_lock_rows": [
+    "1: FLOCK  ADVISORY  WRITE 2232651 00:1b:4 0 EOF"
+  ],
+  "actual_owner_lock_FD": [
+    {
+      "fd": 4,
+      "target": "/run/lock/mckernel-development.lock",
+      "device": 27,
+      "inode": 4,
+      "fdinfo": "pos:\t0\nflags:\t02504000\nmnt_id:\t32\nino:\t4\nlock:\t1: FLOCK  ADVISORY  WRITE 2232651 00:1b:4 0 EOF\n"
+    }
+  ],
+  "source_control_flow": {
+    "quarantine_hold": {
+      "path": "/home/holden/mckernel/scripts/native_exact_scratch22_authority1_quarantine_recovery.py",
+      "line": 501,
+      "end_line": 519
+    },
+    "uncertain": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/retire_exact_current118_stopped_container.py",
+      "line": 406
+    },
+    "must_retain_custody": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/retire_exact_current118_stopped_container.py",
+      "line": 416
+    },
+    "main": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/retire_exact_current118_stopped_container.py",
+      "line": 424
+    }
+  },
+  "signals_kills_unlocks_releases_holdclear_by_reviewer": 0,
+  "live_guard_queries_workloads_or_controllers_by_reviewer": 0,
+  "runtime_authority": null
+}

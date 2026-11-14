@@ -1,0 +1,64 @@
+{
+  "schema": "mckernel.m15-mm-private-candidate-inputs.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_NOT_COMPILED",
+  "private_source_sha256": {
+    "mcctrl_mm_write_candidate.rs": "d9d5ee1a5205023bd634953dc5d5e7809533b3d38b248c3ebf3c01d561f12ed1",
+    "m15_mmap_trace_gates.S": "365305ba7f9d7a22615d5fdf0a600715f63a9fc56c4f4ac9f0e126d19a812161",
+    "fixture_root.rs": "af49c159d70edd0a8802e4084b16860e13b7c73f77217665bac6345bf3dc1ca7",
+    "fixture_bindings.rs": "3db255a8e26be5863d520f7505afe9a36e80205f5ac835fbb72caae4d7e6f82a",
+    "fixture_runtime.h": "d26e052a1eafe7e8ee057efa9b9f7727ad79d570c0b7daec9fe5523d1e23bd93",
+    "fixture_driver.c": "f5c596487dac550a44bb7290daaea915250cbbabb4574def72b8a3509627946d",
+    "gate_probe.c": "c882ac186d42bf4b2292ebf6ddc203c6521a09f88a57b3f1637bf49f41c4d27f",
+    "run_candidate_fixture.py": "4489b6e208130b7fb09ffb3fc7b2a4abefe4cce8a52a17752eb9cd7dda64438e",
+    "FIXTURE-VECTORS.json": "5278107c6d02c4ad330a80d7fa5b6858a762cf2794fff2ed845456c1df34bdaf",
+    "generated/original/mcctrl_vm_write_compat.c": "dcbe065ede329b51b41abcaf0563015532920fe6a34391c7bf77ed1c2f0abdf0",
+    "generated/original/mcctrl_vm_write_compat.h": "ff25bb43907149fc9303b0dd0a7db1c84b9fc2c6f49f1922f18ca9c32b57c527",
+    "generated/original_linux_mm_bodies.h": "362885c6bb6c5ae75424db581ce3f2e31e9d28e1984a2e87605905820953be8f",
+    "generated/include/linux/mm.h": "111cf809a1ea8a80836082ad6d04e4d63bc551d024059a89622ece21a6bbb8c8",
+    "generated/include/linux/mmap_lock.h": "8fbc730d32dc1e5b433e79c4c81cf702743257f22337171768cd68f449dfaa2a",
+    "generated/ORIGINAL-REFERENCE.json": "0baa440f40c2fb11ca9bd68d214a2f5a313e4ff7c46645fb02dabac654c67f2e",
+    "layout_witness.c": "8425784f837905f0e445ede1d53e5b736de4c40954df04443376fc291dc081d1",
+    "layout_witness.rs": "fa669a049494714b752ccafff31aa6a1d6c9b5fe2fec798fb7a87a443e471aaf",
+    "layout_witness_v2.c": "0e195ac30609d85758fe34de6ffe6dc224109680d44ea9f4b86194d9cff3b86a",
+    "sdk_leaf_probe.rs": "dc994ea630711c2c1a82ff9f8b4d0a2696d80d8415576d2eaa6f86f21c209727"
+  },
+  "tools": [
+    {
+      "role": "host_fixture_C_compiler",
+      "invocation": "/usr/bin/cc",
+      "resolved": "/usr/bin/x86_64-linux-gnu-gcc-9",
+      "bytes": 1158288,
+      "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f",
+      "executable": true,
+      "invoked": false
+    },
+    {
+      "role": "host_fixture_Rust_1_92",
+      "invocation": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "resolved": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "bytes": 654904,
+      "sha256": "028fd60b0e0add5505c661cd3ccde91393d615c8729bd95d94ab1e91409b36a1",
+      "executable": true,
+      "invoked": false
+    },
+    {
+      "role": "retained_pinned_objtool",
+      "invocation": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/tools/objtool/objtool",
+      "resolved": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/tools/objtool/objtool",
+      "bytes": 654688,
+      "sha256": "b6a5cf759c86391d24463722d597d4d4e40b5094540b9d5f656c8146ea118e28",
+      "executable": true,
+      "invoked": false
+    },
+    {
+      "role": "assembly_readback",
+      "invocation": "/usr/bin/objdump",
+      "resolved": "/usr/bin/x86_64-linux-gnu-objdump",
+      "bytes": 402256,
+      "sha256": "afd9c7433c96cb0f37df99cab98fc860bbbe2bed17f37df66254a8778adfc61d",
+      "executable": true,
+      "invoked": false
+    }
+  ]
+}

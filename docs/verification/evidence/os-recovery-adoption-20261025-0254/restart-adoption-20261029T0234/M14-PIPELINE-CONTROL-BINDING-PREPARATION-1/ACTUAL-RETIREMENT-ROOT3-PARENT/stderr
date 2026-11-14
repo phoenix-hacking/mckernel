@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/current-guardian-source-1/retire_exact_current118_stopped_container.py", line 447, in <module>
+    if __name__=='__main__':raise SystemExit(main())
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/current-guardian-source-1/retire_exact_current118_stopped_container.py", line 439, in main
+    result=transaction(ops);complete=True;print(json.dumps(dict(status='RETIREMENT_COMPLETE_PENDING_PARENT_JOIN_AND_FRESH_CURRENT',result=result)));return 0
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/current-guardian-source-1/retire_exact_current118_stopped_container.py", line 416, in transaction
+    ops.acquire();ops.safe();ops.census('PREINSPECT-1',True);ops.logs();proof,_=ops.census('PREINSPECT-2',True)
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/current-guardian-source-1/retire_exact_current118_stopped_container.py", line 379, in census
+    process=self.call(['-c',process_source(self.normal,self.p),challenge,str(caller[0]),caller[1]],root_process=True)
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/current-guardian-source-1/retire_exact_current118_stopped_container.py", line 375, in call
+    result=self.commands.exact(argv,30,check=check);need(not self.commands.client_retirement_unproven,'all new command clients positively retired without signals');return result
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/current-guardian-source-1/retire_exact_current118_stopped_container.py", line 246, in exact
+    try:return self.call(argv,timeout=timeout,check=check)
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/materialized-coherent-tuple-1/runtime/native_rust_exact_build_container_owner.py", line 801, in call
+    raise RuntimeError('docker command failed: ' + args[0])
+RuntimeError: docker command failed: /usr/bin/sudo

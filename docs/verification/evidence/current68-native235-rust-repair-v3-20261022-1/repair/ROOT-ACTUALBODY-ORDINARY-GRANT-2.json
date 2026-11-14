@@ -1,0 +1,35 @@
+{
+  "status": "GRANTED_REVISED_ACTUALBODY_BATCH_ONCE",
+  "at": "2026-10-22T23:42:59.003599+00:00",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "proposal_sha256": "8189702e60b04ed1c7fa803f78eb62b4900138806184694d7afc8204ed6e6562",
+  "supersedes_unexecuted_remaining_bf07_operations": true,
+  "first_compile_and_capture_failure_preserved": true,
+  "first_capture_correction": "Use accepted anaconda3 Python caller supporting os.waitstatus_to_exitcode; do not patchsupervisor.",
+  "fifth_source_coherent_fix": "Read-only exact handle+serial mailbox selection replaces ambiguous unique match, with concurrent request negatives; sourceonly acceptancepending.",
+  "profile": {
+    "affinity": [
+      6
+    ],
+    "jobs": 1,
+    "rlimit_as": 2147483648,
+    "rlimit_cpu": 30,
+    "rlimit_fsize": 8388608,
+    "rlimit_nofile": 4096,
+    "rlimit_nproc": "inherited unchanged",
+    "timeout_seconds": 24,
+    "cleanup_timeout_seconds": 6,
+    "whole_seconds": 30,
+    "output_growth_limit_bytes": 67108864,
+    "stdout_limit_bytes": 1048576,
+    "stderr_limit_bytes": 1048576,
+    "root": false,
+    "docker": false,
+    "network": false,
+    "heavy": false
+  },
+  "host_available_bytes": 176730365952,
+  "temporary_host_reservation_bytes": 1073741824,
+  "aggregate": "CPU6one2GiB compiler/test; CPU0one512MiB sourcechecks; noheavy, allwithin7jobs/22.6952GiB.",
+  "conditions": "Exactly8sequentialoperations with24work+6cleanup total30whole, sourcepins and compiled executableSHAchecked; freshv2binaries/captures; expected launcherexit1. No further capture-family retry. Preservefirstcandidatefailure and stop pending concrete cause/correction. No root/Docker/kernel/module/native or canonical edits."
+}

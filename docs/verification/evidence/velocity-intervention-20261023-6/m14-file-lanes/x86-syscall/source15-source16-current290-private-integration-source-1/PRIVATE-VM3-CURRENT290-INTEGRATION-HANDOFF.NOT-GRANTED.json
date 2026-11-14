@@ -1,0 +1,105 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_COHERENT_CANONICAL290_PLUS_ACCEPTED_VM3_SOURCE_ONLY",
+  "canonical_writes": 0,
+  "compiler_runtime_commands": 0,
+  "production_providers": [
+    "arch_process_vm_rw_read_lock_bridge",
+    "arch_process_vm_rw_read_unlock_bridge",
+    "arch_process_vm_rw_lookup_range_bridge"
+  ],
+  "private_delegate_reused": "f06_process_vm_rw_lookup",
+  "original_C_fallbacks": [
+    {
+      "provider": "arch_process_vm_rw_lookup_range_bridge",
+      "original": "static struct vm_range *\narch_process_vm_rw_lookup_range_bridge(void *vm, unsigned long start,\n\t\tunsigned long end)\n{\n\treturn lookup_process_memory_range((struct process_vm *)vm, start, end);\n}\n",
+      "logical_line": 494,
+      "resume_line": 500
+    },
+    {
+      "provider": "arch_process_vm_rw_read_unlock_bridge",
+      "original": "static void\narch_process_vm_rw_read_unlock_bridge(void *vm)\n{\n\tihk_rwspinlock_read_unlock_noirq(\n\t\t\t&((struct process_vm *)vm)->memory_range_lock);\n}\n",
+      "logical_line": 487,
+      "resume_line": 493
+    },
+    {
+      "provider": "arch_process_vm_rw_read_lock_bridge",
+      "original": "static void\narch_process_vm_rw_read_lock_bridge(void *vm)\n{\n\tihk_rwspinlock_read_lock_noirq(\n\t\t\t&((struct process_vm *)vm)->memory_range_lock);\n}\n",
+      "logical_line": 480,
+      "resume_line": 486
+    }
+  ],
+  "base_runtime": [
+    {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "bytes": 1227766,
+      "sha256": "e7d533e6d27d216edfb091f51cbd7705ccde1410ed5d0b2f7efbc8fef4526308"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+      "bytes": 113935,
+      "sha256": "d6bf00d0a46755f37f511bff0c098487f04a155842f11a4ac64f2a1795faa8c1"
+    }
+  ],
+  "accepted_fragments": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-15-process-vm-lock-callbacks/candidate/process-vm-lock-callbacks.FRAGMENT.rs",
+      "bytes": 1367,
+      "sha256": "47ae59d04482efcc59f95973aec66f3c2eeb64bf38bee95b3d83c91fa188fa92"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup/candidate/process-vm-lookup.FRAGMENT.rs",
+      "bytes": 755,
+      "sha256": "0a02ef4f2af2244df6f6936d3b3fa188669c453bd9226caf46aef4f530d933cc"
+    }
+  ],
+  "Rust_cfg_delta": [],
+  "C_definitions_delta": [],
+  "existing_C_gate": "MCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+  "ABI_delta": "No layout/struct/API/flag change;3 typed Rust fn-pointer const assignments and3 C signature static assertions; reuse actual lockABI6/lookupABI12.",
+  "production_data_delta_bytes": 0,
+  "first_step": "Root/current290_finish assesses this private3function delta for a later coherent batch; no frozen default290 packet/source/authority changes.",
+  "reused_module_rule": "Wholecrate lib retains accepted current290 dependency module refs; only syscall_policy module points to private unchanged-prefix+accepted3 successor with exact existing witness appendix.",
+  "sources": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/source15-source16-current290-private-integration-source-1/runtime/arch/x86_64/kernel/syscall.c",
+      "bytes": 114534,
+      "sha256": "45d8bd3d688ff824df8e4f72b81642fa86bf059450c3d7394839bafa9a68acf4"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/source15-source16-current290-private-integration-source-1/runtime/kernel/rust/syscall_policy.rs",
+      "bytes": 1229890,
+      "sha256": "e02f19908512224a2846e24533c4d8432457373ccb6eacdeaf69a5bef27e9679"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/source15-source16-current290-private-integration-source-1/source/arch/x86_64/kernel/syscall.c",
+      "bytes": 119767,
+      "sha256": "234f5c328f24228d92dfe9d9bba5f8dbbab97326af6cc44bf017c4afdaf544aa"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/source15-source16-current290-private-integration-source-1/source/kernel/rust/syscall_policy.rs",
+      "bytes": 1235210,
+      "sha256": "07bcf7d95c562b797964ed8e0b67b65e3eee8ade97718bd624eb40c65f7bfe8e"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/source15-source16-current290-private-integration-source-1/patches/syscall.c.diff",
+      "bytes": 1524,
+      "sha256": "871c4dd12527c1203d242f5c8283314ed130755b7a1e33a6dd767a43f4c74774"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/source15-source16-current290-private-integration-source-1/patches/syscall_policy.rs.diff",
+      "bytes": 2482,
+      "sha256": "abf38086b3b41622180cb0594e75292473d8684c2c4b7c8ea7eaba54c072f6bd"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/source15-source16-current290-private-integration-source-1/lib.future-vm-callbacks.ABI.object.rs",
+      "bytes": 50341,
+      "sha256": "d9604e42a5dd653acebd3b77d748469287aa328e9c2965166818103c1770bad2"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/source15-source16-current290-private-integration-source-1/FUTURE-THREE-COMMAND-WHOLECRATE-CORE.SOURCE-ONLY.NOT-GRANTED.json",
+      "bytes": 12291,
+      "sha256": "962b247a503cb38de9cf8f54ba6293e5fb988e893226ccddf10325404d77cc1c"
+    }
+  ]
+}

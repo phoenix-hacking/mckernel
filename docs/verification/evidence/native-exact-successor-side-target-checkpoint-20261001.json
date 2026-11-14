@@ -1,0 +1,46 @@
+{
+  "schema": "mckernel.native-exact-successor-side-target-checkpoint.v1",
+  "recorded_at_utc": "2026-10-01T12:52:00Z",
+  "status": "PASS_FETCHED_SOURCE_TARGET_NOT_EXECUTABLE",
+  "target": {
+    "commit": "227d1fe393c592ed4e81f9db2eefc889e234c5ad",
+    "parent": "50b084322610a9326b1b7b528edd4cd73b635632",
+    "tree": "33b7ea46ee6e0c0948bba1bbe44870afe80463e7",
+    "changed_files": 6,
+    "reachable_from_fetched_commit": "caaae799315fda4ae33c989735f6fccad0bf6852"
+  },
+  "changed_paths": [
+    "scripts/native_exact_historical_lease_observer.py",
+    "scripts/native_rust_exact_build_container_owner.py",
+    "scripts/native_rust_exact_disk_build_wrapper.py",
+    "scripts/tests/test_native_exact_historical_lease_observer.py",
+    "scripts/tests/test_native_rust_exact_build_container_owner.py",
+    "scripts/tests/test_native_rust_exact_disk_build_wrapper.py"
+  ],
+  "excluded_work": [
+    "shutdown provider WIP",
+    "launcher changes",
+    "rejected shutdown v5 blocker test",
+    "blocked tool-image release draft",
+    "scratch17 evidence rewrites"
+  ],
+  "remote_verification": {
+    "branch": "origin/codex/local-native-staging-repair",
+    "fetched_head": "caaae799315fda4ae33c989735f6fccad0bf6852",
+    "target_is_ancestor": true,
+    "six_target_blob_hashes_exact": true
+  },
+  "execution_gate": {
+    "heavy_entry_contract_released": false,
+    "image_entry_wired": false,
+    "guest_entry_wired": false,
+    "scratch18_preparation_started": false,
+    "reason": "preparing scratch18 now would bind a wrapper that intentionally rejects every heavy entry"
+  },
+  "next": "wire and independently review image and guest shared-lock entrypoints, then create a new side target with the explicitly released common contract before scratch18 preparation",
+  "acceptance": {
+    "build_executed": false,
+    "guest_executed": false,
+    "os_complete": false
+  }
+}

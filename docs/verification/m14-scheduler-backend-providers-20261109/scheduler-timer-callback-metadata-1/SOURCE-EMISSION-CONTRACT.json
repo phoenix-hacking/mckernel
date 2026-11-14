@@ -1,0 +1,20 @@
+{
+  "schema": "mckernel.scheduler-timer4.source-emission-contract.v1",
+  "wrapper_genuine_imports": {
+    "process_timer_spin_lock_bridge": "process_spin_lock_bridge",
+    "process_timer_spin_unlock_bridge": "process_spin_unlock_bridge",
+    "process_timer_lapic_enable_bridge": "lapic_timer_enable",
+    "process_timer_lapic_disable_bridge": "lapic_timer_disable"
+  },
+  "wrapper_ABI": {
+    "process_timer_spin_lock_bridge": "unsafe extern C fn(CULong=u64)->CULong=u64",
+    "process_timer_spin_unlock_bridge": "unsafe extern C fn(CULong=u64,CULong=u64)",
+    "process_timer_lapic_enable_bridge": "unsafe extern C fn(u32); original CUInt=u32 provider interface",
+    "process_timer_lapic_disable_bridge": "unsafe extern C fn()"
+  },
+  "actual_source": "Exact original remaining_process_timer_adapters module and real no_mangle unsafeexternC bodies preserved; genuineexterninterfaces only at originalsuper/crate paths.",
+  "source_mutable_state_or_private_helpers": [],
+  "source_forwarding_relocation_policy": "Each actual publicfunction has one R_X86_64_64 addressrelocation withaddend0 to its exactgenuineexternalprovider, no otherfunctionreference or private/intrinsic data. Actualfunctionbytes/sizes retained rather than presuming size or executing instructions.",
+  "readonly_policy": "Only retained-profile .eh_frame, with PC64 localreferences owned by the fouractual selected functions, may be allocatedreadonly emission. No source literals/data are selected.",
+  "no_runtime_proof": "Source+codegen+reloc metadata only; no register-flow disassembly test, lock/LAPIC/hardware/IRQ/timer/scheduling/native function executes."
+}

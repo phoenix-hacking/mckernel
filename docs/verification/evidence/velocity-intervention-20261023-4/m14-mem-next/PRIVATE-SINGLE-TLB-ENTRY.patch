@@ -1,0 +1,46 @@
+--- a/kernel/mem.c
++++ b/kernel/mem.c
+@@ -4377,12 +4377,14 @@
+ 
+ #undef MEM_TLB_PUBLIC_BRIDGE
+ 
++#ifndef MCKERNEL_RUST_MEM_HELPERS
+ void remote_flush_tlb_cpumask(struct process_vm *vm,
+ 		unsigned long addr, int cpu_id)
+ {
+ 	unsigned long __addr = addr;
+ 	return remote_flush_tlb_array_cpumask(vm, &__addr, 1, cpu_id);
+ }
++#endif /* C fallback; default Rust single-address entry. */
+ 
+ #ifndef MCKERNEL_RUST_MEM_HELPERS
+ void remote_flush_tlb_array_cpumask(struct process_vm *vm,
+--- a/kernel/rust/mem_helpers.rs
++++ b/kernel/rust/mem_helpers.rs
+@@ -5509,6 +5509,26 @@
+     phys_to_nid_cb(*ptep & PT_PHYSMASK)
+ }
+ 
++/// Preserve the original single-address stack-local handoff to the array entry.
++///
++/// # Safety
++/// The caller retains vm under the original TLB contract. The initialized local
++/// lives through the synchronous array call, just as the C unsigned-long local
++/// did. The existing array/body completion and lock protocol must finish every
++/// use before this local expires. This entry does not dereference vm or retain
++/// an additional pointer; neither callback nor shared-vector ownership changes.
++#[no_mangle]
++pub unsafe extern "C" fn remote_flush_tlb_cpumask(
++    vm: *mut ProcessVm, addr: CULong, cpu_id: CInt,
++) {
++    let mut local_addr = addr;
++    unsafe {
++        remote_flush_tlb_array_cpumask(
++            vm, core::ptr::addr_of_mut!(local_addr), 1, cpu_id,
++        )
++    }
++}
++
+ /// Keep the original synchronous TLB request and callback ownership boundary.
+ ///
+ /// # Safety

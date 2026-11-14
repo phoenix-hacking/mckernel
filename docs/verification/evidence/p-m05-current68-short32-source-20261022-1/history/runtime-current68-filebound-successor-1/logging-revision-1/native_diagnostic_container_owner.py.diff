@@ -1,0 +1,28 @@
+--- /home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/runtime-current68-filebound-successor-1/native_diagnostic_container_owner.py
++++ /home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/runtime-current68-filebound-successor-1/logging-revision-1/native_diagnostic_container_owner.py
+@@ -28,7 +28,7 @@
+ IMAGE_RECORD = "/home/holden/mckernel-work/logs/image-native.json"
+ IMAGE_RECORD_SHA256 = "c881faf78539b1698aa9cfe24e0b82562442a58de18666bf59a447b72607e95a"
+ RUNNER = '/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/runtime-current68-filebound-successor-1/native_diagnostic_runner.py'
+-SELF = '/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/runtime-current68-filebound-successor-1/native_diagnostic_container_owner.py'
++SELF = '/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/runtime-current68-filebound-successor-1/logging-revision-1/native_diagnostic_container_owner.py'
+ LOCK = "/run/lock/mckernel-development.lock"
+ QEMU = "/usr/libexec/qemu-kvm"
+ QEMU_SHA256 = "5c1985041a27c64829d9ca18dd54c6ede039eafdef00c3abcd70479b03aca7d0"
+@@ -795,6 +795,7 @@
+                 "--cpus=4", "--cpuset-cpus=2-5", "--cgroup-parent=/mckernel-dev",
+                 "--memory=12g", "--memory-swap=12g", "--pids-limit=512", "--cap-drop=ALL",
+                 "--security-opt=no-new-privileges", "--read-only", "--network=none",
++                "--log-driver=json-file", "--log-opt=max-size=16m", "--log-opt=max-file=2",
+                 "--user=1000:1000", "--ulimit", "core=0", "--ulimit", "nofile=4096:4096", "--ulimit", "fsize=33554432:33554432",
+                 "--tmpfs", "/tmp:rw,nodev,nosuid,size=256m",
+                 "--mount", "type=bind,src=" + REPO + ",dst=" + REPO + ",readonly",
+@@ -859,7 +860,7 @@
+         need(h.get("CgroupnsMode") in ("host", "private", "") and
+              any(same(h.get("OomKillDisable"), x) for x in (None, False)) and
+              any(same(h.get("MemorySwappiness"), x) for x in (None, -1)), "namespace/OOM defaults")
+-        need(h.get("LogConfig") in ({"Type": "json-file", "Config": {}}, {"Type": "local", "Config": {}}), "local log sink")
++        need(same(h.get("LogConfig"), {"Type": "json-file", "Config": {"max-size": "16m", "max-file": "2"}}), "exact bounded container log sink")
+         need(same(sorted(h.get("Ulimits", []), key=lambda x: x["Name"]),
+              [{"Hard": 0, "Name": "core", "Soft": 0}, {"Hard": 33554432, "Name": "fsize", "Soft": 33554432}, {"Hard": 4096, "Name": "nofile", "Soft": 4096}]), "ulimits")
+         for key, minimum in (("MaskedPaths", {"/proc/kcore", "/proc/keys", "/proc/latency_stats", "/proc/timer_list", "/proc/scsi", "/sys/firmware"}),

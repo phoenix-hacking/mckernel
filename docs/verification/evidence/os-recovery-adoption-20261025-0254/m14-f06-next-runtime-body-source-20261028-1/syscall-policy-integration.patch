@@ -1,0 +1,24 @@
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -13793,7 +13793,7 @@
+         container_size: *mut *mut SizeT,
+         vdso_offset: *mut *mut isize,
+     );
+-    #[cfg(not(native_linux_irq_work_v6_12))]
++    #[cfg(all(not(native_linux_irq_work_v6_12), not(f06_vdso_info_candidate)))]
+     fn vdso_get_vdso_info() -> CInt;
+     fn arch_vdso_setup_log_bridge(event: CInt, error: CInt);
+     fn arch_vdso_add_range_bridge(
+@@ -13977,6 +13977,12 @@
+     write_volatile(addr_of_mut!((*ts).tv_sec), sec);
+     write_volatile(addr_of_mut!((*ts).tv_nsec), nsec as CLong);
+ }
++
++#[cfg(f06_vdso_info_candidate)]
++#[path = "f06_vdso_info.rs"]
++mod f06_vdso_info;
++#[cfg(all(f06_vdso_info_candidate, not(native_linux_irq_work_v6_12)))]
++use self::f06_vdso_info::vdso_get_vdso_info;
+ 
+ #[cfg(native_linux_irq_work_v6_12)]
+ unsafe extern "C" fn vdso_get_vdso_info() -> CInt {

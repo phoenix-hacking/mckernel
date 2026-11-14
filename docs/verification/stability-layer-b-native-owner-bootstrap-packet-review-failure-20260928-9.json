@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "record_kind": "layer_b_native_owner_bootstrap_packet_review",
+  "recorded_utc": "2026-09-28T08:54:00Z",
+  "status": "FAIL_BOOTSTRAP_PACKET",
+  "packet_path": "docs/verification/stability-layer-b-native-owner-bootstrap-packet-20260928-8.md",
+  "packet_sha256": "3f8f363fe5e7086b027e7814ce98c7b715f3978981ff1e71b2234f0108bf0ec9",
+  "correction_path": "docs/verification/stability-layer-b-native-owner-bootstrap-packet-correction-20260928-9.md",
+  "correction_sha256": "923f1e45d9b5e9d3242c891b16c21af6e094ff7a78a677b08fbb37aee1434fb4",
+  "findings": [
+    "Both exact GCC commands omit the promised -v consumed-input trace.",
+    "Normal active/exited completion lacks an explicit immediate stop; reset-failed does not deactivate the retained transient unit.",
+    "Timeout cleanup needs its own bounded budget after the overall deadline and an explicit SIGKILL fallback when client operations time out.",
+    "The dependency-map contract does not distinguish persistent consumed inputs from GCC driver temporary object paths that disappear before hashing."
+  ],
+  "confirmed_repairs": [
+    "The redundant -D_GNU_SOURCE definition is removed.",
+    "The service-side sanitized environment and working directory are coherent.",
+    "Static ELF inspection replaces ldd.",
+    "The corrected systemctl kill syntax is coherent."
+  ],
+  "commands_executed": false,
+  "compilation_released": false,
+  "owner_execution_released": false,
+  "acceptance_credit": false,
+  "next": "The candidate and its one bounded correction both failed this bootstrap family. Change repair strategy and obtain fresh independent review before any compiler or systemd command."
+}

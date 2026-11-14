@@ -1,0 +1,31 @@
+{
+  "schema": "mckernel.candidate12-renameback-recovery-source-failures.v1",
+  "scope": "source and disposable recovery tests only",
+  "live_mutation": false,
+  "attempt2_preserved": {"staged": 2507, "deleted": 0, "receipt_sha256": "83d22b06d9d143b3acc0508d738f6b1039184a5d2d473d314f5a1e3a65cd3c52", "journal_sha256": "4749ea4d1b97bc99959c1ec75c0f329682f834d075738264a44efde33ce90d02"},
+  "candidate_1": {
+    "tool_sha256": "76864323d366e262a2bbc4771c1e4d36c08713c7982e3c483874b2d53b88bb2b",
+    "tests_sha256": "8718bb52f2856865a199ef7d32ef591bcb1e70cd90877a6f30d2351ec5acee39",
+    "supplied_tests": {"passed": 5},
+    "independent_result": "BLOCK",
+    "reproduced_failures": ["uncommitted self-supplied PASS release accepted", "intermediate symlink restored outside candidate", "alternate receipt bypassed immutable identity", "mtime and unplanned-file drift accepted", "no operational exclusion", "aliased output paths moved files before publication failure", "short writes and parent durability not covered"]
+  },
+  "bounded_correction_1": {
+    "tool_sha256": "5f0677f0f442c95ef328a06df7acfa9f8373a22dd2edb24f5f9cb71844d30129",
+    "tests_sha256": "cef4feb38f563b4cbf2056c544422468576ffceadf9b738cdd61e9f24bd09448",
+    "supplied_tests": {"passed": 7},
+    "independent_result": "BLOCK",
+    "reproduced_failures": ["intermediate symlink still moved quarantine file outside candidate", "release contract became self-referential and lacked fetched bindings", "self-asserted admission did not enforce exclusion", "already-restored row mutation still returned PASS", "empty directory, dangling symlink and FIFO escaped namespace census", "output-parent substitution wrote outside admitted directory", "half-length writes returned PASS with malformed evidence", "SIGTERM after first rename left no receipt/status", "test negatives failed on an unrelated journal gate"]
+  },
+  "expert_candidate_3": {
+    "tool_sha256": "83b1e671f0cad5c91df0290ef6a0258b72d9ad6c7f1fc478076006ac135b6bd4",
+    "tests_sha256": "40f8c2d02965570508de05c5e32b4295d1a1803977a6d528d06a1ae2e8e03d2f",
+    "supplied_tests": {"passed": 11},
+    "independent_result": "BLOCK",
+    "preserved_source": "docs/verification/evidence/native-exact-candidate12-planbound-renameback-recovery-20260930.py",
+    "preserved_tests": "scripts/tests/test_native_exact_candidate12_planbound_renameback_recovery_20260930.py",
+    "reproduced_failures": ["immutable live receipt lacks required invented namespace fields", "release commit remained an impossible self-reference", "invented empty admission lists and invalid mount identity passed", "candidate-root substitution restored outside admitted path", "output-parent substitution lost declared receipt", "journal ENOSPC aborted reconciliation and left empty result files", "signal during final scan still returned PASS"]
+  },
+  "convergence_action": "Three standalone designs did not yield a safely executable recovery. Change strategy: add a staged-recovery mode to the already reviewed cleanup transaction and reuse its authenticated plan/release, shared mutex, live census, retained directory descriptors, rollback reconciliation and publication primitives.",
+  "acceptance_effect": "none"
+}

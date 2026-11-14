@@ -1,0 +1,48 @@
+{
+  "limitations": [
+    "These post-failure observations are not the missing exact state snapshot loaded by the failed wrapper.",
+    "No compared account values were printed or stored; field names, timestamps and booleans only.",
+    "This record grants no operation authority, fresh admission, hold release or historical cause classification."
+  ],
+  "no_credit_cap_balance_or_account_secret_values_retained": true,
+  "no_runtime_account_query": true,
+  "observed_tool_at_utc": "2026-11-11T19:20:52.412709+00:00",
+  "protocol_observation": {
+    "bounded_tail_bytes": 4194304,
+    "earlier_observed_primary_transition_field_names_only": [
+      "resetsAt"
+    ],
+    "earlier_transition_event_times": [
+      "2026-11-11T19:12:16.122132+00:00",
+      "2026-11-11T19:12:22.180475+00:00"
+    ],
+    "event_times": [
+      "2026-11-11T19:15:53.787896+00:00",
+      "2026-11-11T19:15:58.295469+00:00",
+      "2026-11-11T19:16:19.905174+00:00",
+      "2026-11-11T19:16:28.247189+00:00"
+    ],
+    "first_account_event_in_tail_at": "2026-11-11T18:40:35.171815+00:00",
+    "latest_four_event_primary_objects_equal_current_state": true,
+    "latest_four_event_rate_and_spend_holds_absent": true,
+    "notification_scope_classes_observed": 1,
+    "source": "/home/holden/mckernel/.git/os-autopilot/runs/20261110T060029Z-3fe88dab/protocol.jsonl"
+  },
+  "schema": 1,
+  "scope": "READONLY_LOCAL_RECORD_DIAGNOSIS_NOT_ADMISSION",
+  "state_observation": {
+    "account_relevant_fields_stable_across_two_reads": true,
+    "auth_chatgpt": true,
+    "credit_budget_error_absent": true,
+    "credit_file_equals_state_credit_record": true,
+    "no_explicit_service_auth_billing_policy_hold_set": true,
+    "observed_updated_at": "2026-11-11T19:16:30.001216+00:00",
+    "positive_remaining_and_spent_less_than_budget": true,
+    "running": true,
+    "same_original_credit_id_and_budget": true,
+    "source": "/home/holden/mckernel/.git/os-autopilot/state.json",
+    "stop_reason_absent": true,
+    "weekly_confirmation_pending_false": true,
+    "weekly_usage_error_absent": true
+  }
+}

@@ -1,0 +1,38 @@
+--- failed_validation_recovery.py
++++ failed_validation_recovery.proc-eof-correction1.py
+@@ -210,6 +210,26 @@
+         ops.finish()
+ 
+ 
++def proc_bytes_complete(path, maximum=65536):
++    """Preserve the reviewed flags/byte bound while consuming short reads to EOF."""
++    fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_CLOEXEC | os.O_NONBLOCK)
++    try:
++        chunks, count = [], 0
++        while True:
++            # Reading one extra byte retains the original max+1 overflow oracle.
++            # A nonempty short read is not EOF. Each iteration consumes at least
++            # one byte or exits, so the original byte bound also bounds iterations.
++            raw = os.read(fd, maximum + 1 - count)
++            if not raw:
++                return b''.join(chunks)
++            count += len(raw)
++            if count > maximum:
++                raise Refusal('proc observation exceeds bound')
++            chunks.append(raw)
++    finally:
++        os.close(fd)
++
++
+ def reviewed_algorithms():
+     """Load definitions only; historical main/release/PID80259 never executes."""
+     raw = REFERENCE.read_bytes()
+@@ -225,6 +245,8 @@
+                      PID=PID, START=START, PARENT=PARENT, BOOT=BOOT,
+                      SMALL_LIMIT=1 << 20, FILE_LIMIT=32 << 20)
+     exec(compile(ast.Module(body=nodes, type_ignores=[]), str(REFERENCE), 'exec'), namespace)
++    # Only observer transport changes; exact identity/soleholder/action algorithms stay unchanged.
++    namespace['proc_bytes'] = proc_bytes_complete
+     return namespace
+ 
+ 

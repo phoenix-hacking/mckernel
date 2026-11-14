@@ -1,0 +1,34 @@
+{
+  "status": "PASS_CURRENT_SOURCE_TYPES_AND_RETAINED_E1A_BINDINGS",
+  "actual_retained_object_sha256": "e1a2469706723545483f74be15ad0bcc8ef01c9171159991b7a367adf87d2fd9",
+  "retained_global_owners": 129,
+  "retained_genuine_U": [
+    "do_kill",
+    "do_syscall",
+    "eventfd",
+    "f03_terminate_host_refcount_set_v1",
+    "f03_wait_release_process",
+    "f03_wait_release_thread",
+    "syscall_do_kill_thread_bridge",
+    "syscall_do_syscall_request_bridge",
+    "syscall_find_process_bridge",
+    "syscall_generic_forwarding_body_result",
+    "syscall_process_unlock_bridge",
+    "terminate_host_body_result"
+  ],
+  "new_source_members_only": [
+    "syscall_find_process_bridge",
+    "syscall_process_unlock_bridge",
+    "find_process",
+    "process_unlock",
+    "process_hash",
+    "process_find_process_body_result",
+    "process_unlock_found_process_result",
+    "process_mcs_reader_lock_bridge",
+    "process_mcs_reader_unlock_bridge",
+    "__mcs_rwlock_reader_lock",
+    "__mcs_rwlock_reader_unlock"
+  ],
+  "actual_source_slice_count": 29,
+  "runtime_or_native_or_source_hold_release": false
+}

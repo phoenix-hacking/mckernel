@@ -1,0 +1,23 @@
+--- docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/current118-operation-source-1/operation_window_guard118.py
++++ docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/current62-postjoin-operation-source-1/operation_window_guard62.py
+@@ -23,7 +23,7 @@
+ OPERATION_CUTOFFS = (1793253600.0, 1035704.5689393478, 1051042.6959879305)
+ GUARDIAN_SOURCE = {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/guardian_guard.py', 'bytes': 13388, 'sha256': '48893862bb3262a2c81d282215e4b9771b8f659e635a21856096c41233774f18'}
+ PREDECESSOR_CUTOFFS = {
+-    'current118-build': None,
++    'bfd-postjoin-current62': None,
+ }
+ 
+ 
+@@ -100,9 +100,9 @@
+          and successor['window_sha256'] == WINDOW_SHA256
+          and successor['credit_run_id'] == RUN and successor['credit_ceiling'] == CEILING,
+          'explicit Root operation successor required')
+-    need(operation == 'current118-build' and successor['predecessor_cutoffs'] is None
++    need(operation == 'bfd-postjoin-current62' and successor['predecessor_cutoffs'] is None
+          and successor['first_prepared_window_sha256'] == WINDOW_SHA256,
+-         'new118 operation has no fictitious expired predecessor grant')
++         'new postjoin62 operation has no fictitious expired predecessor grant')
+     limits = triplet(successor['operation_cutoffs'])
+     need(all(0 < limit <= maximum for limit, maximum in zip(limits, OPERATION_CUTOFFS)), 'operation only within NEW window')
+     need(all(now < limit for now, limit in zip(clocks, limits)), 'strict earliest operation cutoff')

@@ -1,0 +1,171 @@
+{
+  "status": "ONE_INVENTED_PREDICATE_REMOVED_CPU6_READY_NOT_RUN",
+  "argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2",
+    "35",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=30:30",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--core=0:0",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/run_control_check_after_erratum.py"
+  ],
+  "capture_stdout": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/whole-check-after-erratum.stdout",
+  "capture_stderr": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/whole-check-after-erratum.stderr",
+  "output": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5",
+  "commands": 9,
+  "new_tests": 8,
+  "old_tests_filtered": 51,
+  "profile_reference": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/run_focused_check.py",
+  "global_inner_wall": 28,
+  "outer_wall": 35,
+  "cleanup_grace": 2,
+  "jobs": 1,
+  "cpu": 6,
+  "as": 1073741824,
+  "cpu_seconds": 30,
+  "filecap": 33554432,
+  "growth_cap": 33554432,
+  "host_floor": 17179869184,
+  "scratch_floor": 12884901888,
+  "headroom": 671088640,
+  "native": false,
+  "current_default_consumer": false,
+  "inputs": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/positive-control-park.patch",
+      "sha256": "aab9404923e7f1db13df3deb6b74b252d87ac97f3d783459085fc5917a27f04b",
+      "bytes": 41054
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/source-pins.json",
+      "sha256": "a0090b102c2ecc271ae69992929f9ef3345106b6b09d6e8ae7604065c9962dda",
+      "bytes": 3156
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/fixture-inputs-after-erratum.json",
+      "sha256": "baffc749660f95dc88a0bc4ed6b8cdabaab35728ec757e9d3c2feeb45fef420e",
+      "bytes": 7079
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/actual-control-park-isolated.rs",
+      "sha256": "57bfc75367d8c6f98d1b7651c18b533d73c656928c5141ccda663df870f366ed",
+      "bytes": 331473
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/run_control_check_after_erratum.py",
+      "sha256": "98edb946c8937b8250d51294b41e182b6c9144f4ac3927f34bfa6a5b04b041d9",
+      "bytes": 5979
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/fourth-failed-inputs/archive-map.json",
+      "sha256": "7b2e740580eb0deb20d16d47a1a6157e74ac5e7123d9c334194432a47dd6a55e",
+      "bytes": 3315
+    }
+  ],
+  "prior_failures": [
+    "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/whole-check.status.json",
+    "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/whole-check-correction.status.json",
+    "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/whole-check-expert.status.json",
+    "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/whole-check-isolated.status.json"
+  ],
+  "expert_diagnosis": {
+    "path": "/home/holden/mckernel-work/host-preparation/provider-ownership-review-20261019-1/POSITIVE-CONTROL-MAILBOX-IDENTITY-AND-PROCESS-ISOLATION-EXPERT-DIAGNOSIS.json",
+    "sha256": "a2e58ffad4ef9a565e531eb8d5dde7f8528b45362d975d4d16340afd6b61b2fb"
+  },
+  "exact_scenario_names": [
+    "actual_control_fresh_response_parked_once_and_blocks_link_return_removal",
+    "actual_control_wrong_identity_epoch_phase_and_overflow_have_no_transfer_geometry",
+    "actual_control_wrong_identity_epoch_phase_and_overflow_have_no_transfer_epoch",
+    "actual_control_wrong_identity_epoch_phase_and_overflow_have_no_transfer_pending_phase",
+    "actual_control_wrong_identity_epoch_phase_and_overflow_have_no_transfer_overflow",
+    "actual_control_restore_conflict_retains_exact_claim_and_response_after_close_phase",
+    "actual_control_restore_conflict_retains_exact_claim_and_response_after_close_epoch",
+    "actual_control_ordinary_first_return_passes_without_pin_or_payload_effect"
+  ],
+  "inner_argv": [
+    [
+      "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2021",
+      "--test",
+      "-Wrust_2018_idioms",
+      "-Dwarnings",
+      "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/actual-control-park-isolated.rs",
+      "-C",
+      "link-arg=/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/guest.o",
+      "-C",
+      "link-arg=/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/codec.o",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/actual"
+    ],
+    [
+      "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/actual",
+      "--exact",
+      "consumer_fixture::actual::actual_control_fresh_response_parked_once_and_blocks_link_return_removal",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    [
+      "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/actual",
+      "--exact",
+      "consumer_fixture::actual::actual_control_wrong_identity_epoch_phase_and_overflow_have_no_transfer_geometry",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    [
+      "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/actual",
+      "--exact",
+      "consumer_fixture::actual::actual_control_wrong_identity_epoch_phase_and_overflow_have_no_transfer_epoch",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    [
+      "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/actual",
+      "--exact",
+      "consumer_fixture::actual::actual_control_wrong_identity_epoch_phase_and_overflow_have_no_transfer_pending_phase",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    [
+      "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/actual",
+      "--exact",
+      "consumer_fixture::actual::actual_control_wrong_identity_epoch_phase_and_overflow_have_no_transfer_overflow",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    [
+      "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/actual",
+      "--exact",
+      "consumer_fixture::actual::actual_control_restore_conflict_retains_exact_claim_and_response_after_close_phase",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    [
+      "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/actual",
+      "--exact",
+      "consumer_fixture::actual::actual_control_restore_conflict_retains_exact_claim_and_response_after_close_epoch",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    [
+      "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/actual",
+      "--exact",
+      "consumer_fixture::actual::actual_control_ordinary_first_return_passes_without_pin_or_payload_effect",
+      "--test-threads=1",
+      "--nocapture"
+    ]
+  ],
+  "reviewer_erratum": {
+    "path": "/home/holden/mckernel-work/host-preparation/provider-ownership-review-20261019-1/POSITIVE-CONTROL-PUBLISHED-RESPONSE-REVIEWER-ERRATUM.json",
+    "sha256": "96f9686b506b6400a3fcaf7e592781b2b0a08afb41c1c43c9ee847480cac75e6"
+  }
+}

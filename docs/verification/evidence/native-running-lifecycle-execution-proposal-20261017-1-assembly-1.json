@@ -1,0 +1,128 @@
+{
+  "schema": "mckernel.native-running-lifecycle-execution-assembly.v1",
+  "task_id": "native-running-lifecycle-execution-proposal-20261017-1",
+  "status": "ASSEMBLED_PENDING_INDEPENDENT_STAGE_AND_EXECUTION_REVIEW",
+  "author": "/root/native_lifecycle_probe",
+  "proposal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-running-lifecycle-execution-proposal-20261017-1.json",
+    "sha256": "50fb0123c081a7a3b357aba1e2c61c0a61c219efc06567ce608ae5eea184466c",
+    "size": 13807
+  },
+  "selected_inputs": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-lifecycle-current942-execution-proposal-20261017-1.json",
+      "sha256": "e61e96689ea929229f8d07347cc8a97ae5890497c8f902dc05347f8d7b896b22",
+      "size": 6414
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-running-lifecycle-postbuild-preparation-20261017-1.json",
+      "sha256": "6fc505f24f2f52a6240e9cbbd91375b1c7ac741b9164215d3790110ed9a0b1f8",
+      "size": 18486
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-running-lifecycle-postbuild-preparation-20261017-1/manifest.json",
+      "sha256": "dec492d23f14781d2870789db321c669c491ef9483b809d3b7c90b83a060909c",
+      "size": 5587
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-running-external-modules-artifact-review-20261017-1.json",
+      "sha256": "273f9897fc2aa8fee7ad094c53e240006d7700b8da6e96a752e6715b1046c064",
+      "size": 959
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-lifecycle-current942-failure-review-20261017-1.json",
+      "sha256": "7c53515fc55152f419172e81bb6f0abb72c81a0e64c2cc35f0cd4c9f3e49d4da",
+      "size": 17317
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-running-external-modules-attempt-review-20261017-1.json",
+      "sha256": "e60296b79d55224bf90c74ef3acaf8ef7556f3a7b52932d4ecef6ac59b428e9d",
+      "size": 10287
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+      "sha256": "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+      "size": 58828
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_lifecycle_capture.py",
+      "sha256": "0585f78b80e603c010316418ce307794d59e1d92581b845ec6b2e74e22c8954b",
+      "size": 7025
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-running-lifecycle-postbuild-preparation-20261017-1/overlay-manifest.json",
+      "sha256": "9a1304a9ce7a2ecdabcfe7348d3cecf8a18912f32e3e2bd0cdd7d3e163ff9003",
+      "size": 19434
+    }
+  ],
+  "parent": {
+    "path": "/home/holden/mckernel-work/scratch/ndnlife-1",
+    "device": 1828,
+    "inode": 109741,
+    "mode": "0o700",
+    "uid": 1000,
+    "gid": 1000
+  },
+  "nonce": "015461121dc34cb4b7658b0602749823",
+  "socket": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/ndnlife-1/attempt-015461121dc34cb4b7658b0602749823/qmp.sock",
+      "encoded_bytes": 94,
+      "max_bytes": 107
+    }
+  ],
+  "matched_modules": [
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/scratch/native-running-modules-candidate-2a392fdcffaf426894bed7ed67a33c66/modules/ihk.ko",
+      "sha256": "51b48a9e42eaa2411cab2a28edf9bb5db8b2d648675d083473e926f91dd0e038",
+      "size": 1440392
+    },
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/scratch/native-running-modules-candidate-2a392fdcffaf426894bed7ed67a33c66/modules/ihk-smp-x86_64.ko",
+      "sha256": "fc7f3d38a32e806b3f905f283ba0bb4902e14455ad8efd14688f728f2af7e1ab",
+      "size": 11424624
+    },
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/scratch/native-running-modules-candidate-2a392fdcffaf426894bed7ed67a33c66/modules/mcctrl.ko",
+      "sha256": "6571ac7eca13559d8bab65125d54facbbc65e84f815d4ff3fc77ec6aa1104972",
+      "size": 1913904
+    }
+  ],
+  "state_oracle": {
+    "argv": [
+      "/bin/native-lifecycle-probe",
+      "0"
+    ],
+    "status_before": 5,
+    "shutdown_return": 0,
+    "status_after": 0,
+    "transition_observed": true,
+    "resource_restoration_verified": false,
+    "os_destroyed": false,
+    "require_independent_payload_evaluation": true
+  },
+  "remaining": [
+    "Independent exact stage and one-shot execution proposal review.",
+    "Accepted preceding Cmemory actual review/readback ref.",
+    "Immediate dispatcher preflight, actualHEAD/runtime freeze and separate release."
+  ],
+  "runtime_limit": "New matched modules source176 accepted artifacts only; Running/shutdown runtime unproven and shutdown may still fail. Existing strict success oracle and original failure remain unchanged.",
+  "environment": {
+    "cpu_affinity": [
+      0
+    ],
+    "address_space_bytes": 1073741824,
+    "python_executable": "/home/holden/anaconda3/bin/python3",
+    "private_HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/home",
+    "private_TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/tmp"
+  },
+  "execution_approved": false,
+  "runtime_called": false,
+  "root_called": false,
+  "docker_called": false,
+  "git_called": false,
+  "preparation_replayed": false
+}

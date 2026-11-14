@@ -1,0 +1,54 @@
+{
+  "schema": "mckernel.native-exact-candidate-disk-validation-success.v1",
+  "status": "PASS_VALIDATION",
+  "scope": "disk preparation and validation only; not a build, boot, guest, application, or acceptance",
+  "fetched_commit": "080e31a708618d67510dd819d385c306673ec7c0",
+  "packet_sha256": "1f8308074739dec9e66f7c3bd62050be657b5f2e0def948fcf95fd1ac8b02144",
+  "test_sha256": "9e4055efa5fd9fe57b1625f2d6d1548efe8afbad7130fab8dee726fb14c95976",
+  "execution": {
+    "exit_code": 0,
+    "duration_ms": 33301,
+    "outer_output": "LOG_FINAL_FSYNC=PASS\n",
+    "outer_event_id": "exec-59f19fec-566b-4552-8228-82e0e8368e4b",
+    "outer_event_line": 37408,
+    "outer_event_sha256": "7da910f909a225dd5aadb8c4fa0f620d0ceee8ee3cacfec8e21310108fea53b2"
+  },
+  "disk": {
+    "candidate_identity": "1831:4194306",
+    "candidate_allocated_bytes": 9173139456,
+    "backup_identity": "1831:4204970",
+    "backup_allocated_bytes": 1519616,
+    "inventory_rows": 10751,
+    "regular_files": 9736,
+    "pre_sha256": "842f4522c0ff318aee68cb3387eca604e435f06aef334e125c7d2c6897d526ae",
+    "post_sha256": "842f4522c0ff318aee68cb3387eca604e435f06aef334e125c7d2c6897d526ae"
+  },
+  "validation": {
+    "log_sha256": "b488d00aaef1aff808a5a89d4c1bec7621c5576b63e3c7e092e240044ca1a273",
+    "request_sha256": "8ae6e498358ae07a256157bcf785be5ed8745fcbd3da8a4f2756d6047753daa3",
+    "build_owner": "PASS_VALIDATE_ONLY with GIT_OPTIONAL_LOCKS=0",
+    "output_and_build_evidence": "empty",
+    "lease": "absent",
+    "live_children": "none"
+  },
+  "corruption_evidence": {
+    "sealed_path": "/home/holden/mckernel-work/scratch/native-exact-candidate-disk-validation-76ae20b5-2-evidence/corrupt-tmpfs-archive.bin",
+    "sealed_identity": "1831:4849667",
+    "sealed_size": 40004941,
+    "sealed_sha256": "192f8fe161ee0e486b0c0532f64bc34bb0684da2b113d01d13dc4f4ba7bb1c2c",
+    "metadata_sha256": "d0efe52b27a5451a24a140d65d37b6bd22f3fa2182e5303c988976e61798eb7f",
+    "authenticated_sha256": "dbe24f5b7cdd94f9ba2f9846073b6b2cd6e5f00ffca55f4ce99d4343261b5100",
+    "zero_based_offset": 37352801,
+    "tmpfs_byte_hex": "bb",
+    "authenticated_byte_hex": "3b",
+    "cause": "not established"
+  },
+  "retention": {
+    "raw_archive": "docs/verification/evidence/stability-native-exact-candidate-disk-validation-success-raw-76ae20b5-20260929-1.tar.gz",
+    "raw_archive_sha256": "ea1cdf883cfe30ca6d3eebd5baaaf6d1766e96d242b9d51037ca369fa589ea35",
+    "raw_archive_members": 27,
+    "note": "The 40,004,941-byte corruption seal remains protected on scratch and is exactly reconstructible from the pinned authenticated Git file plus the recorded one-byte delta; it is intentionally not duplicated in the compressed archive."
+  },
+  "prior_failures": "docs/verification/evidence/stability-native-exact-candidate-disk-copy-failures-76ae20b5-20260929-1.json",
+  "next": "Use a separately reviewed retirement packet for both corrupt tmpfs roots, then release the disk request through the exact launcher-budget wrapper."
+}

@@ -1,0 +1,37 @@
+test_all_fourteen_collector_fixtures_with_genuine_bridged_consumer (__main__.Checks) ... FAIL
+test_exact_three_slots_and_context_preserved (__main__.Checks) ... ok
+test_modified_baseline_missing_dependency_or_wrong_file_refuse (__main__.Checks) ... ERROR
+test_strict_new_report_pass_old_schema_rejected (__main__.Checks) ... ok
+test_wrong_authority_unapproved_slots_reinstall_refuse (__main__.Checks) ... ok
+test_wrong_source_bytes_fail_before_install (__main__.Checks) ... ok
+
+======================================================================
+ERROR: test_modified_baseline_missing_dependency_or_wrong_file_refuse (__main__.Checks)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-process-census-lifecycle-correction-source-1/census-runtime-bridge-source-1/test_census_bridge.py", line 41, in test_modified_baseline_missing_dependency_or_wrong_file_refuse
+    with self.assertRaises(b.BridgeRefusal):b.install_census_delta(m,b.expected_authorization())
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-process-census-lifecycle-correction-source-1/census-runtime-bridge-source-1/census_runtime_bridge.py", line 46, in install_census_delta
+    need(module.RELEASE==release and hashlib.sha256(module.canonical(module.RELEASE)).hexdigest()==OLD_RELEASE_CANONICAL_SHA,'unchanged-original-release')
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/bounded-observer-correction-source-1/native_rust_cutover_image_terminal_cleanup.CURRENT290.EXACT-DEAD-CALLER.py", line 521, in canonical
+    return json.dumps(value, sort_keys=True, separators=(',', ':')).encode()
+NameError: name 'json' is not defined
+
+======================================================================
+FAIL: test_all_fourteen_collector_fixtures_with_genuine_bridged_consumer (__main__.Checks)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-process-census-lifecycle-correction-source-1/census-runtime-bridge-source-1/test_census_bridge.py", line 61, in test_all_fourteen_collector_fixtures_with_genuine_bridged_consumer
+    self.assertEqual(result.testsRun,14);self.assertEqual(result.errors,[]);self.assertEqual(result.failures,[])
+AssertionError: Lists differ: [(<bridge_compatibility_fixture.Checks tes[2307 chars]\n')] != []
+
+First list contains 2 additional elements.
+First extra element 0:
+(<bridge_compatibility_fixture.Checks testMethod=test_stable_native_publisher_and_related_owner_still_refused>, 'Traceback (most recent call last):\n  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-process-census-lifecycle-correction-source-1/test_lifecycle.py", line 95, in test_stable_native_publisher_and_related_owner_still_refused\n    with self.assertRaisesRegex(RuntimeError,\'concurrent-build\'):validate(report)\n  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-process-census-lifecycle-correction-source-1/census-runtime-bridge-source-1/test_census_bridge.py", line 58, in validate\n    def validate(report):m.validate_process_report(report,ns[\'CHALLENGE\'],ns[\'CALLER\']);return True\n  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-process-census-lifecycle-correction-source-1/native_rust_cutover_image_terminal_cleanup.PROCESS-LIFECYCLE.v2.SOURCE-ONLY.py", line 1140, in validate_process_report\n    raise Refusal(\'concurrent-build-or-cleanup-publisher\')\nvirtual_original_e49.Refusal: concurrent-build-or-cleanup-publisher\n')
+
+Diff is 2576 characters long. Set self.maxDiff to None to see it.
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.749s
+
+FAILED (failures=1, errors=1)

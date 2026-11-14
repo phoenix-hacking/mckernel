@@ -1,0 +1,45 @@
+struct ForkPendingEntry {
+    identity: Option<super::application_abi::ForkIdentityV1>,
+    epoch: u64,
+    phase: u32,
+    host_revoked: bool,
+    guest_released: bool,
+    attempted: bool,
+    receipt_index: Option<usize>,
+    capsule: Option<Arc<ForkConsumerCapsule>>,
+    payload: Option<Arc<ForkPayloadCapsule>>,
+    child_context: usize,
+    // Any entry teardown, including conservative reconciliation, destroys the
+    // consumer capsule/module before releasing independent provider ownership.
+    owner: Arc<ForkProviderOwner>,
+}
+
+unsafe extern "C" fn application_prepare_fork_link(
+    parent: *mut core::ffi::c_void, worker: u64, serial: u64, cpu: i64, value: i64,
+    resolver: Option<application_abi::ForkLinkResolveV1>, context: *mut core::ffi::c_void,
+) -> i32 {
+    if parent.is_null() { return EINVAL.to_errno(); }
+    let Some(resolver) = resolver else { return EINVAL.to_errno(); };
+    let parent = unsafe { &*parent.cast::<smp_memory::Application>() };
+    unsafe { parent.prepare_fork_link(worker, serial, cpu, value, resolver, context) }
+        .map_or_else(|e| e.to_errno(), |()| 0)
+}
+
+fn prepare_fork_link(
+        &self, worker: u64, serial: u64, cpu: i64, value: i64,
+        resolver: super::super::application_abi::ForkLinkResolveV1,
+        context: *mut core::ffi::c_void,
+    ) -> Result {
+        let Some(mut ticket) = self.started.runtime.application.begin_fork_link(
+            self.token, worker, serial, cpu, value,
+        )? else { return Ok(()); };
+        let mut descriptor = ticket.descriptor();
+        let status = unsafe { resolver(context, &mut descriptor,
+            Some(Self::finish_fork_link_scope), core::ptr::from_mut(&mut ticket).cast()) };
+        if status > 0 || status < -4095 { return Err(errno(-71)); }
+        kernel::error::to_result(status)
+    }
+
+fn fork_progress_payload( NOT_PRESENT
+
+impl ForkAckRecord { NOT_PRESENT

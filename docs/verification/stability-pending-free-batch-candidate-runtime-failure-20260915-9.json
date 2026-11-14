@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "record_kind": "pending_free_batch_candidate_runtime_failure",
+  "task_id": "M03-A/M03-B",
+  "attempt": 9,
+  "status": "FAIL_FIRST_FOCUSED_EXECUTION",
+  "base_commit": "2f60fdd286fa30cc04d3be36fde8126b3db6e9c5",
+  "checks": [
+    {"command": "bash -n kernel/rust/tests/run_equivalence.sh", "status": "PASS"},
+    {"command": "focused pending-free harness with retained output", "status": "FAIL", "compiled": false, "first_failure": "extraction end marker unsafe fn kmalloc_track_hash also matches kmalloc_track_hash_ptr"}
+  ],
+  "candidate_files": [
+    {"path": "kernel/rust/tests/run_equivalence.sh", "sha256": "14cbdf9421c5d284ded0a607324c60a72f5d628fe55e99139d135986e9cbb145"},
+    {"path": "kernel/rust/tests/pending_free_batch_actual_harness.py", "sha256": "be2a95770b65d9ad149ffbfbe7125752d6bd9289f488c8a8fdfa9edeb4d862f3"},
+    {"path": "kernel/rust/tests/pending_free_batch_vectors.rs", "sha256": "6d54dde3e2d73ac8b6b2ec4a105b2293900e410e27a7a0decdcced85a6288ea9"},
+    {"path": "kernel/rust/tests/pending_free_batch_vectors.c", "sha256": "e1c4646f712c06779ce9c65a4d9ed1dd2b422f84f73f5fe7b5550777474f6fc5"}
+  ],
+  "retained_failure": {
+    "path": "pending-free-candidate9-20260915T064533Z/failure.json",
+    "sha256": "a5aeb1e0b978585b3e73360e2e00777873ae51645a5036c3545cc438f809f885",
+    "pre_run_sources_frozen": true,
+    "command_environment_and_status_retained": true
+  },
+  "archive": {
+    "path": "docs/verification/evidence/stability-pending-free-batch-candidate-runtime-failure-20260915-9.tar.gz",
+    "size": 1470125,
+    "sha256": "7ba178e398aba75786a88ea80a15aac5a27cb1607d4e7b91992030a48c748be5",
+    "members": 21
+  },
+  "claimed_unexecuted_improvements": [
+    "thirty computed Rust/C operation rows and named snapshots",
+    "same-batch recovery and two populated independent heads",
+    "source-extracted begin/enqueue/finish reuse",
+    "callback failure controls and diagnostic-specific trait probes",
+    "partial-release mutant targeting a releasable prefix"
+  ],
+  "independent_review": {
+    "role": "Astra/high ownership and unsafe-code reviewer",
+    "status": "FAIL_RERUN_PACKET",
+    "findings": [
+      "The extraction end marker needs an opening parenthesis to uniquely select kmalloc_track_hash.",
+      "Both Rust and C drain the destination before source begin/enqueue/finish, so they do not prove source reuse while the destination remains Retained."
+    ],
+    "accepted_static_observations": "The remaining candidate-8 structural corrections appear present, but none compiled or executed."
+  },
+  "rerun_performed": false,
+  "focused_equivalence_accepted": false,
+  "runtime_acceptance": false,
+  "production_gate_credit": false
+}

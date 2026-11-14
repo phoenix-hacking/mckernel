@@ -1,0 +1,348 @@
+{
+  "status": "PASS_SIGNAL_LIGHT_PACKET_PENDING_SAVED_OUTPUT_QUALIFICATION",
+  "started_at": "2026-11-10T23:37:03.593754+00:00",
+  "finished_at": "2026-11-10T23:37:06.302048+00:00",
+  "request_sha256": "524126181a0ae6783fd5aed1fad22d5aa83c2f82957d0608b34dd158c27a50a3",
+  "review_sha256": "30ffc1b87954960a68e5c1e717fb8b3168c301ac03600f61b881c7e31e8217af",
+  "capture_sha256": "4ca162e1a0e68d236a1f22abbeb7b88849e04e6ffac62049ce28604646acc01b",
+  "current_disposition_sha256": "54065796b198ef95d2258e3dd1a290ea5a48335ca1c03857095a04b0a6422257",
+  "phases": [
+    {
+      "phase": "payload",
+      "CID": "ce4c2f099e2b9074c9d8ffdba0e02ffbce59236ead67869a6798e5ce3132a152",
+      "exit": 0,
+      "OOMKilled": false,
+      "owned_container_removed": true,
+      "client_wait_joined": true,
+      "cgroup_samples": 2
+    }
+  ],
+  "clients": [
+    {
+      "label": "running-preflight",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "ps",
+        "--no-trunc",
+        "--format",
+        "{{.ID}} {{.Names}}"
+      ],
+      "pid": 1149086,
+      "birth": "44008968",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true
+    },
+    {
+      "label": "names-preflight",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "ps",
+        "-a",
+        "--format",
+        "{{.Names}}"
+      ],
+      "pid": 1149101,
+      "birth": "44008984",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true
+    },
+    {
+      "label": "payload-create",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "create",
+        "--name",
+        "mck-m14-f06-corrected-existing-inputs-20261110-cpu7-1",
+        "--label",
+        "mckernel.preparation-owner=m14-f06-corrected-existing-inputs-1",
+        "--init",
+        "--pull=never",
+        "--network=none",
+        "--ipc=private",
+        "--cpus=1",
+        "--cpuset-cpus=7",
+        "--memory=256m",
+        "--memory-swap=256m",
+        "--pids-limit=64",
+        "--ulimit",
+        "core=0:0",
+        "--ulimit",
+        "fsize=67108864:67108864",
+        "--ulimit",
+        "cpu=60:60",
+        "--user",
+        "1000:1000",
+        "--read-only",
+        "--cap-drop=ALL",
+        "--security-opt=no-new-privileges",
+        "--tmpfs",
+        "/tmp:rw,nodev,nosuid,noexec,size=16m,mode=1777",
+        "--workdir",
+        "/output",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/input,dst=/source,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/compile_and_read.sh,dst=/producer/compile_and_read.sh,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/output-1,dst=/output",
+        "--entrypoint",
+        "/usr/bin/env",
+        "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+        "-i",
+        "BASH_ENV=",
+        "ENV=",
+        "LANG=C",
+        "LC_ALL=C",
+        "PATH=/usr/bin:/bin",
+        "TZ=UTC",
+        "LD_PRELOAD=",
+        "LD_LIBRARY_PATH=",
+        "TMPDIR=/tmp",
+        "TMP=/tmp",
+        "TEMP=/tmp",
+        "/usr/bin/bash",
+        "--noprofile",
+        "--norc",
+        "-e",
+        "-c",
+        "ulimit -v 262144; umask 022; exec \"$@\"",
+        "corrected-existing-signal-inputs-as-limit",
+        "/usr/bin/bash",
+        "--noprofile",
+        "--norc",
+        "/producer/compile_and_read.sh"
+      ],
+      "pid": 1149117,
+      "birth": "44009006",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true
+    },
+    {
+      "label": "payload-profile",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "inspect",
+        "ce4c2f099e2b9074c9d8ffdba0e02ffbce59236ead67869a6798e5ce3132a152"
+      ],
+      "pid": 1149132,
+      "birth": "44009028",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true
+    },
+    {
+      "label": "payload-running-inspect",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "inspect",
+        "ce4c2f099e2b9074c9d8ffdba0e02ffbce59236ead67869a6798e5ce3132a152"
+      ],
+      "pid": 1149149,
+      "birth": "44009051",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true
+    },
+    {
+      "label": "payload-payload",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "start",
+        "-a",
+        "ce4c2f099e2b9074c9d8ffdba0e02ffbce59236ead67869a6798e5ce3132a152"
+      ],
+      "pid": 1149147,
+      "birth": "44009050",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true,
+      "primary_error": null,
+      "secondary_errors": []
+    },
+    {
+      "label": "payload-terminal",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "inspect",
+        "ce4c2f099e2b9074c9d8ffdba0e02ffbce59236ead67869a6798e5ce3132a152"
+      ],
+      "pid": 1149375,
+      "birth": "44009200",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true
+    },
+    {
+      "label": "payload-container-wait",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "wait",
+        "ce4c2f099e2b9074c9d8ffdba0e02ffbce59236ead67869a6798e5ce3132a152"
+      ],
+      "pid": 1149383,
+      "birth": "44009212",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true
+    },
+    {
+      "label": "payload-owned-remove",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "rm",
+        "ce4c2f099e2b9074c9d8ffdba0e02ffbce59236ead67869a6798e5ce3132a152"
+      ],
+      "pid": 1149391,
+      "birth": "44009224",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true
+    }
+  ],
+  "all_waits_streams_joined": true,
+  "remaining_child_pids": [],
+  "output_root": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/output-1",
+  "output_files": [
+    {
+      "relative": "vector.mxcsr-nested-signal.nm.stdout",
+      "bytes": 1924
+    },
+    {
+      "relative": "signal.altstack-small.ELF.stdout",
+      "bytes": 5759
+    },
+    {
+      "relative": "signal.mask-restore.ELF.stdout",
+      "bytes": 5966
+    },
+    {
+      "relative": "vector.mxcsr-nested-signal.d",
+      "bytes": 10067
+    },
+    {
+      "relative": "vector.mxcsr-nested-signal.link.stdout",
+      "bytes": 807
+    },
+    {
+      "relative": "vector.mxcsr-nested-signal.map",
+      "bytes": 22232
+    },
+    {
+      "relative": "signal.altstack-small.map",
+      "bytes": 21237
+    },
+    {
+      "relative": "vector.mxcsr-nested-signal.compile.stderr",
+      "bytes": 0
+    },
+    {
+      "relative": "signal.altstack-small",
+      "bytes": 18248
+    },
+    {
+      "relative": "signal.altstack-small.ELF.stderr",
+      "bytes": 0
+    },
+    {
+      "relative": "vector.mxcsr-nested-signal.ELF.stdout",
+      "bytes": 5644
+    },
+    {
+      "relative": "signal.mask-restore.d",
+      "bytes": 3060
+    },
+    {
+      "relative": "signal.altstack-small.d",
+      "bytes": 3325
+    },
+    {
+      "relative": "signal.mask-restore.disassembly.stdout",
+      "bytes": 12850
+    },
+    {
+      "relative": "signal.mask-restore.map",
+      "bytes": 22460
+    },
+    {
+      "relative": "signal.mask-restore.link.stdout",
+      "bytes": 807
+    },
+    {
+      "relative": "signal.altstack-small.nm.stdout",
+      "bytes": 1469
+    },
+    {
+      "relative": "vector.mxcsr-nested-signal.disassembly.stdout",
+      "bytes": 15274
+    },
+    {
+      "relative": "signal.altstack-small.disassembly.stdout",
+      "bytes": 9723
+    },
+    {
+      "relative": "signal.mask-restore.ELF.stderr",
+      "bytes": 0
+    },
+    {
+      "relative": "signal.mask-restore",
+      "bytes": 18656
+    },
+    {
+      "relative": "signal.altstack-small.link.stdout",
+      "bytes": 807
+    },
+    {
+      "relative": "vector.mxcsr-nested-signal.ELF.stderr",
+      "bytes": 0
+    },
+    {
+      "relative": "signal.mask-restore.compile.stderr",
+      "bytes": 0
+    },
+    {
+      "relative": "vector.mxcsr-nested-signal",
+      "bytes": 19352
+    },
+    {
+      "relative": "signal.altstack-small.compile.stderr",
+      "bytes": 0
+    },
+    {
+      "relative": "signal.mask-restore.nm.stdout",
+      "bytes": 1691
+    }
+  ],
+  "actual_native_or_selected_program_main_executed": false,
+  "partial_guest_input_absence_is_not_readiness": true,
+  "original_acceptance": false
+}

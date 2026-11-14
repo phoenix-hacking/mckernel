@@ -1,0 +1,128 @@
+{
+  "schema": "mckernel.native-lifecycle-current942-preparation.v1",
+  "task_id": "M05-native-lifecycle-current942-preparation-20261017-1",
+  "status": "BLOCKED_FIRST_PREFLIGHT_LOADER_SOURCE_DRIFT",
+  "failure": {
+    "exception_type": "RuntimeError",
+    "message": "tool source drift: loader",
+    "traceback": "Traceback (most recent call last):\n  File \"/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/prepare.py\", line 119, in <module>\n    try:main()\n  File \"/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/prepare.py\", line 64, in main\n    for name,p in tools.items():need(digest(p)==frozen[name],'tool source drift: '+name)\n  File \"/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/prepare.py\", line 16, in need\n    if not ok:raise RuntimeError(message)\nRuntimeError: tool source drift: loader\n",
+    "scope": "All partial outputs retained; no tool/source changes or retry."
+  },
+  "execution": {
+    "command": {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=150",
+        "--nofile=256",
+        "--fsize=268435456",
+        "--core=0",
+        "/usr/bin/timeout",
+        "-k",
+        "5s",
+        "180s",
+        "/home/holden/anaconda3/bin/python3",
+        "-B",
+        "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/prepare.py"
+      ],
+      "environment": {
+        "PATH": "/usr/bin:/bin",
+        "LANG": "C",
+        "LC_ALL": "C",
+        "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/home",
+        "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/tmp",
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "cwd": "/home/holden/mckernel",
+      "driver_sha256": "ade36144f7de1b104e4fbb59c8ee6f1f1bf8f25b5da83e43a8a27dfa8c671db3",
+      "scope": "Dispatcher admitted fresh clone/exact frozen probe addition + unchanged stager/overlay and load_manifest only. Offline; no runtime/root/network/compiler/Git mutation."
+    },
+    "result": {
+      "returncode": 1,
+      "elapsed_seconds": 0.03661848599585937,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "ad61109636e6fee968651cb0b0ca1457cda1d1f027c8170da8521dd59a72972c"
+    }
+  },
+  "loader": {
+    "expected_sha256": "8af67bcf5015cbf1915a65fdb3ce50d09ed68ea39f3b08fa95fa29625fd7afbc",
+    "actual": {
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic.py",
+      "sha256": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e",
+      "size": 53440
+    }
+  },
+  "captured_tools": [
+    {
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_stager.py",
+      "sha256": "d4d29757e34cdc4c8e208b420709d2b4a7c10eb2f8f40c29bfeca3d08f568952",
+      "size": 21899
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_overlay.py",
+      "sha256": "46d41bc0727fa77e4126e739f25352c53eadf2e1fa8e23ef06a6e46c9b3ba27d",
+      "size": 26579
+    }
+  ],
+  "captured_artifacts": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-static-20261017-1/native-lifecycle-probe",
+      "sha256": "d8132525b6126ee93fc5de4f59ac06eb83ffeb90f85225da585d89060dfb1248",
+      "size": 872616
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-static-20261017-1/native-lifecycle-collector",
+      "sha256": "8330e259adcd34136379f0deef2f77ecd5a8a8aba9161c5ba6329e8a0e70f89b",
+      "size": 1021992
+    }
+  ],
+  "evidence": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/failure.json",
+      "sha256": "b1c89c3f81582d817734bdfeb9e5834ab841ffab9be9682d442b14e1a1145ab0",
+      "size": 789
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/outer-command.json",
+      "sha256": "810bd0b6683b4e0d087c2b65c5adc287b8a8cba4f2c2de85dcb284ab22ea832b",
+      "size": 1038
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/outer-result.json",
+      "sha256": "62664e3a9d827130e144678d071174c4cbb024a4eb5d3324cdaa84b2195b678c",
+      "size": 238
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/outer.stderr",
+      "sha256": "ad61109636e6fee968651cb0b0ca1457cda1d1f027c8170da8521dd59a72972c",
+      "size": 598
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/outer.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/prepare.py",
+      "sha256": "ade36144f7de1b104e4fbb59c8ee6f1f1bf8f25b5da83e43a8a27dfa8c671db3",
+      "size": 12237
+    }
+  ],
+  "operations_not_reached": [
+    "original-base inventory",
+    "base clone",
+    "probe addition",
+    "stager",
+    "overlay",
+    "load_manifest"
+  ],
+  "preservation": "No retries, source edits, shared manifest changes or partial staging cleanup. Scratch failure retained.",
+  "runtime_release": false,
+  "guest_executed": false,
+  "application_acceptance": false,
+  "blocker": "Current manifest-loader source differs hash recorded in supplied signal staging authority. Dispatcher review/rebind decision required.",
+  "next_task": "Dispatcher identify and review current loader source, then issue bounded continuation/new-attempt authority if appropriate; no local pin substitution."
+}

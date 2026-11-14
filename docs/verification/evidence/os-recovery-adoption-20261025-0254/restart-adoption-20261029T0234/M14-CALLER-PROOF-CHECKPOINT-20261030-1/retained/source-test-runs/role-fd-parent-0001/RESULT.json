@@ -1,0 +1,24 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": 1793400514.0483713,
+  "status": "FAILED_PARTIAL_PARENT_FD_EXERCISE_RETAINED",
+  "exit_status": 1,
+  "positive_tool_terminal": true,
+  "owner": {
+    "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+    "pid": 3099521,
+    "ppid": 2996005,
+    "pgid": 3099521,
+    "start": "119795853",
+    "at": 1793400513.8818145
+  },
+  "group_members": [],
+  "census_errors": [],
+  "grant_released": true,
+  "ordinary_reservation_released_bytes": 536870912,
+  "stdout": "",
+  "stderr": "{\"close_unknown\":[],\"error\":\"code ancestry not traversable\",\"error_type\":\"ValueError\",\"fixture\":\"/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fd-parent-0001/fixtures/m14-fd-budget-vrbfa941\",\"full_operation_fd_peak\":\"UNKNOWN\",\"native_currentfree\":null,\"native_release\":false,\"nofile_hard\":256,\"nofile_soft\":256,\"observer_temporary_fds\":1,\"peak_live_fds_before_failure\":52,\"pending_open_fds\":[],\"preoccupied_fds\":16,\"role\":\"parent\",\"scope\":\"MOCKED_ROLE_FD_EXERCISE_NOT_PRODUCTION_PEAK\",\"status\":\"FAILED_UNKNOWN\"}\nTraceback (most recent call last):\n  File \"/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-role-fd-budget-1/role_fd_budget.py\", line 236, in <module>\n    try:main()\n  File \"/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-role-fd-budget-1/role_fd_budget.py\", line 173, in main\n    walk_three(install,root,code,source,2)\n  File \"/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-role-fd-budget-1/role_fd_budget.py\", line 145, in walk_three\n    install.open_exact(str(code),ancestors(code),True,True)\n  File \"/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-child-successor-4/install_source_closure.py\", line 119, in open_exact\n    if other_traverse and not stat.S_IMODE(os.fstat(current).st_mode)&0o001:fail('code ancestry not traversable')\n  File \"/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-child-successor-4/install_source_closure.py\", line 28, in fail\n    def fail(message):raise ValueError(message)\nValueError: code ancestry not traversable\n",
+  "metrics_raw": "Command exited with non-zero status 1\n\tCommand being timed: \"/usr/bin/python3 -s -E -S -B /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-role-fd-budget-1/role_fd_budget.py --role parent --fixture-parent /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fd-parent-0001/fixtures\"\n\tUser time (seconds): 0.10\n\tSystem time (seconds): 0.00\n\tPercent of CPU this job got: 99%\n\tElapsed (wall clock) time (h:mm:ss or m:ss): 0:00.11\n\tAverage shared text size (kbytes): 0\n\tAverage unshared data size (kbytes): 0\n\tAverage stack size (kbytes): 0\n\tAverage total size (kbytes): 0\n\tMaximum resident set size (kbytes): 23096\n\tAverage resident set size (kbytes): 0\n\tMajor (requiring I/O) page faults: 0\n\tMinor (reclaiming a frame) page faults: 5137\n\tVoluntary context switches: 1\n\tInvoluntary context switches: 3\n\tSwaps: 0\n\tFile system inputs: 0\n\tFile system outputs: 576\n\tSocket messages sent: 0\n\tSocket messages received: 0\n\tSignals delivered: 0\n\tPage size (bytes): 4096\n\tExit status: 1\n",
+  "production_peak_claim": false,
+  "root_native_C_retirement_delta": 0
+}

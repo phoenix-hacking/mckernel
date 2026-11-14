@@ -1,0 +1,60 @@
+{
+  "schema": "mckernel.scratch22-authority2.precompiler-failure.v1",
+  "status": "FAIL_PRESERVED",
+  "candidate": "d37d2216a60c6db10442ba8bc238d64fbd59c5ea",
+  "execution_release_sha256": "d63b01b231c9e1b72da3050a4e81bae17275fe339310697cd62e99a7809f8091",
+  "fetched_controller": "60115275f1408a7742120ee537f17eecf1470f59",
+  "failure_family": "S22-DIGEST-COMPANION-1",
+  "actual_driver_error": "native Rust build-surface audit failed: module root digest drift: ihk_smp_x86_64.rs",
+  "driver_log_sha256": "ff754c19fcc4a5a773912b84986e1fd263e5a439b481d8d4b8af5f5b559de5dd",
+  "complete_capture_archive": {
+    "path": "docs/verification/evidence/scratch22-authority2-precompiler-failure-artifacts-20261017.tar.gz",
+    "sha256": "a8a6105d3ba63d01beda1784e15781584c0240d84d220529079f734b56b7d233",
+    "tar_compare_exit": 0,
+    "originals_retained": true
+  },
+  "compiler_reached": false,
+  "compiled_outputs": {},
+  "processes": {
+    "tool_session": 5712,
+    "joined_exit": 1,
+    "root_guard_pid_retired": 243497,
+    "canonical_owner_pid_retired": 244086,
+    "canonical_owner_starttime": "1324045",
+    "owner_nonce": "51e1e7d8a9c14b2eb0ea63e4f15dd77b",
+    "all_seven_docker_clients_retired": true,
+    "request_lease_absent": true,
+    "root_guard_quarantine_absent": true,
+    "deferred_signals": []
+  },
+  "terminal": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-scratch-22-authority2-heavy-build.terminal.json",
+    "sha256": "de969cce6bf74105c28a9c4e093e3f842a3d5217b7b057170f3744bc934a2843"
+  },
+  "receipt": {
+    "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority2-evidence/receipt.json",
+    "sha256": "972e89a24c4fa52e3ebc16882a48929951e0949ba3b404f36f86188aa419fc0d"
+  },
+  "fresh_read_only_cleanup_observation": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-scratch22-authority2-cleanup-observation-20261017.json",
+    "sha256": "dcddf2b0f093be46fc176bbc4a9b07f3f7e7a0f8f3a1951be375c705975c8c04",
+    "root_lock_acquired_nonblocking_and_released": true,
+    "output_inventory_entries": 1,
+    "evidence_inventory_entries": 41
+  },
+  "retained_container": "63c2d2570315c693bc06befaa37d1408ded53896b35d13d80bc4d7b9ecdba9cb",
+  "retained_exclusions": [
+    {"path": "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock", "device": 1828, "inode": 57829, "sha256": "0fcea609a53d2fb1a7469cee69442c4ce3a8f3b9c6303932aa71bcc7e84cd1ce"},
+    {"path": "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch18.json", "device": 1828, "inode": 57830, "sha256": "2174a5325e84494fcf47933a86cb21b72e4fde3e95458923a3e78f74b684ac90"}
+  ],
+  "cleanup": "Separate independently reviewed authority2 transaction required; no raw removal/unlink, no recovery signal required.",
+  "bounded_correction": {
+    "author_record": "docs/verification/evidence/s22-digest-companion-20261017.json",
+    "author_sha256": "090a13048362c740e4d134bc7091c99f65e6aba4c4fa1badc570e932a97e6e09",
+    "minimal_next_target": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+    "minimal_next_tree": "07d05c1bb2ea5f4b6a3817ba55cd32afe56c8d59",
+    "scope": "Two existing type-path repair files plus exactly four digest/position companion metadata files; no other kernel behavior changes.",
+    "next": "Independent source review and accepted authority2 cleanup, exact push/fetch, fresh authority3 preparation/release/build. Never replay authority2."
+  },
+  "acceptance_delta": {"compiled_candidates": 0, "diagnostic_passes": 0, "formal_apps": 0, "production": 0, "language": 0}
+}

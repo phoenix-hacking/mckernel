@@ -1,0 +1,121 @@
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -29842,6 +29842,15 @@
+ mod f06_signal_context_candidate {
+     use core::mem::offset_of;
+ 
++    // Supported-profile source witness: same historical real C GS180 geometry.
++    // The actual C/Rust layout/compiler proof remains independently required.
++    const _: () = {
++        assert!(offset_of!(crate::abi::X86CpuLocalVariables, tss)
++            + offset_of!(crate::abi::Tss64, rsp0) == 180);
++        assert!(core::mem::size_of::<crate::abi::CInt>() == 4);
++        assert!(core::mem::size_of::<crate::abi::CULong>() == 8);
++    };
++
+     use crate::abi::{CInt, CULong, Thread, X86UserContext};
+ 
+ /// Existing null-regs architecture boundary: current TSS stack context minus one.
+@@ -29850,7 +29859,7 @@
+ /// Native kernel GS base and current TSS/rsp0 must be installed, with the complete
+ /// saved X86UserContext immediately below rsp0. Never call this HOST-side. The
+ /// original C used this same GS load and context subtraction, without recovery.
+-unsafe extern "C" fn f06_signal_syscall_context() -> *mut X86UserContext {
++pub(super) unsafe extern "C" fn f06_signal_syscall_context() -> *mut X86UserContext {
+     let top: CULong;
+     let offset = offset_of!(crate::abi::X86CpuLocalVariables, tss)
+         + offset_of!(crate::abi::Tss64, rsp0);
+@@ -30327,28 +30336,28 @@
+ #[used]
+ #[link_section = "__verbose"]
+ static mut F06_SIGNAL_TRAP_ENTER_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
+-    file: concat!(file!(), "\0").as_ptr().cast(),
++    file: b"/src/arch/x86_64/kernel/syscall.c\0".as_ptr().cast(),
+     func: b"do_signal\0".as_ptr().cast(),
+     fmt: core::ptr::null(),
+-    line_flags: line!() & 0x00ff_ffff,
++    line_flags: 2081,
+ };
+ 
+ #[used]
+ #[link_section = "__verbose"]
+ static mut F06_SIGNAL_TRAP_SLEEP_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
+-    file: concat!(file!(), "\0").as_ptr().cast(),
++    file: b"/src/arch/x86_64/kernel/syscall.c\0".as_ptr().cast(),
+     func: b"do_signal\0".as_ptr().cast(),
+     fmt: core::ptr::null(),
+-    line_flags: line!() & 0x00ff_ffff,
++    line_flags: 2106,
+ };
+ 
+ #[used]
+ #[link_section = "__verbose"]
+ static mut F06_SIGNAL_TRAP_WAKE_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
+-    file: concat!(file!(), "\0").as_ptr().cast(),
++    file: b"/src/arch/x86_64/kernel/syscall.c\0".as_ptr().cast(),
+     func: b"do_signal\0".as_ptr().cast(),
+     fmt: core::ptr::null(),
+-    line_flags: line!() & 0x00ff_ffff,
++    line_flags: 2109,
+ };
+ 
+ /// Return zero for the original untraced `goto core`, one after traced sleep.
+@@ -30449,9 +30458,9 @@
+ #[used]
+ #[link_section = "__verbose"]
+ static mut F06_SIGNAL_STOP_WAKE_DEBUG: crate::debug::Ddebug=crate::debug::Ddebug {
+-    file:concat!(file!(),"\0").as_ptr().cast(),
++    file: b"/src/arch/x86_64/kernel/syscall.c\0".as_ptr().cast(),
+     func:b"do_signal\0".as_ptr().cast(),fmt:core::ptr::null(),
+-    line_flags:line!()&0x00ff_ffff,
++    line_flags: 2077,
+ };
+ 
+ /// Called only for the four original default stop-action switch labels, AFTER
+@@ -30964,18 +30973,18 @@
+ #[used]
+ #[link_section = "__verbose"]
+ static mut F06_SIGNAL_ENTRY_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
+-    file: concat!(file!(), "\0").as_ptr().cast(),
++    file: b"/src/arch/x86_64/kernel/syscall.c\0".as_ptr().cast(),
+     func: b"do_signal\0".as_ptr().cast(),
+     fmt: core::ptr::null(),
+-    line_flags: line!() & 0x00ff_ffff,
++    line_flags: 1778,
+ };
+ #[used]
+ #[link_section = "__verbose"]
+ static mut F06_SIGNAL_TERMINATE_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
+-    file: concat!(file!(), "\0").as_ptr().cast(),
++    file: b"/src/arch/x86_64/kernel/syscall.c\0".as_ptr().cast(),
+     func: b"do_signal\0".as_ptr().cast(),
+     fmt: core::ptr::null(),
+-    line_flags: line!() & 0x00ff_ffff,
++    line_flags: 2162,
+ };
+ unsafe extern "C" {
+     #[link_name = "terminate"]
+@@ -30988,22 +30997,7 @@
+ /// Native kernel GS base and current TSS/rsp0 must be installed, with the complete
+ /// saved X86UserContext immediately below rsp0. Never call this HOST-side. The
+ /// original C used this same GS load and context subtraction, without recovery.
+-unsafe extern "C" fn f06_signal_syscall_context() -> *mut X86UserContext {
+-    let top: CULong;
+-    let offset = offset_of!(crate::abi::X86CpuLocalVariables, tss)
+-        + offset_of!(crate::abi::Tss64, rsp0);
+-    // SAFETY: exact original GS memory load; MOV preserves flags and does not
+-    // touch stack. No privileged instruction is executed during preparation.
+-    unsafe {
+-        core::arch::asm!(
+-            "mov {top}, gs:[{offset}]",
+-            top = out(reg) top,
+-            offset = in(reg) offset,
+-            options(nostack, readonly, preserves_flags),
+-        );
+-        (top as *mut X86UserContext).sub(1)
+-    }
+-}
++use super::f06_signal_context_candidate::f06_signal_syscall_context;
+ 
+ /// Deliver one detached pending node with the original complete C entry rules.
+ ///

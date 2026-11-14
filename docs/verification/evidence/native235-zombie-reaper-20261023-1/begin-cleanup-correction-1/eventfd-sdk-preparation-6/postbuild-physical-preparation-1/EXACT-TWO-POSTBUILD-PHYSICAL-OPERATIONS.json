@@ -1,0 +1,145 @@
+{
+  "actual_new_PROC_ref": null,
+  "actual_new_mutex_ref": null,
+  "closed_build_record": {
+    "bytes": 725,
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/ACTUAL-BUILD-CLOSED.ROOT-RECORD.json",
+    "sha256": "f352de4b7e829f93fb0c12e75b0719884368379b97a6caef8973d798b549c9b6"
+  },
+  "current_live_postjoin_before_ops": "CLOSED_SDK6_PENDING_PHYSICAL",
+  "existing_positive_owner_clients_proof": {
+    "admission_client_count": 1,
+    "all_recorded_groups_empty": true,
+    "cleanup_status": "PASS_OWNED_REMOVAL_AND_RECORD_RELEASE",
+    "client_count": 14,
+    "closed_streams": true,
+    "container_id": "667106ac032edd70a11b052c4f26e3daa2132790e8265135106eaa0d3fe7776a",
+    "direct_child_joined": true,
+    "group_absent": true,
+    "owner_pid": 3838054,
+    "owner_start": 57597269,
+    "qualification": "Existing actualbuild/owner/client/removal/recordrelease proof; not newPROC/mutex. Independentphysical decision remainsroot/reviewer owned.",
+    "retired": true,
+    "returncode": 0,
+    "seconds": 22.047686900943518,
+    "tool_session": 84225
+  },
+  "independent_physical_acceptance": null,
+  "native_acceptance": null,
+  "operation_count": 2,
+  "operations": [
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=30:30",
+        "--fsize=33554432:33554432",
+        "--core=0:0",
+        "--nofile=256",
+        "--",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/native235-resume-20261023-1/retirement-preparation/readonly_current_proc.py"
+      ],
+      "capture_namespace": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/postbuild-physical-preparation-1/actual-post-physical-1/proc",
+      "name": "proc",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Read-only proc observation after terminal capture.",
+      "source": {
+        "bytes": 1724,
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-resume-20261023-1/retirement-preparation/readonly_current_proc.py",
+        "sha256": "a24a82383e83e7363b2a1833f9bdee942e8590ca1a369f44a5af59baf3cce097"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=30:30",
+        "--fsize=33554432:33554432",
+        "--core=0:0",
+        "--nofile=256",
+        "--",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/native235-resume-20261023-1/retirement-preparation/readonly_current_mutex_paths_positive.py"
+      ],
+      "capture_namespace": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/postbuild-physical-preparation-1/actual-post-physical-1/mutex",
+      "name": "mutex",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Read-only mutex observation after terminal capture.",
+      "source": {
+        "bytes": 2288,
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-resume-20261023-1/retirement-preparation/readonly_current_mutex_paths_positive.py",
+        "sha256": "ca4226a4b7afe068db63b086177333d5662331d0c6ab0d9ef2ad322015a36418"
+      }
+    }
+  ],
+  "original_reachable_V3_packet": {
+    "bytes": 8077,
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/v3-restoration-preparation-1/runtime-cohort-1/next-native-preparation-1/POST-NATIVE-PHYSICAL-OPERATIONS.PENDING.json",
+    "sha256": "c24af5037544e1a8a144129bc245f04b5a67e0bb9b686f7f21992f6d6df73a99"
+  },
+  "private_capture_refs": {
+    "direct-join.json": {
+      "bytes": 146,
+      "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/execution-preparation-1/owner-capture-1/direct-join.json",
+      "sha256": "b220db6699bb039798a623aecedc024583c1e995984ae36ba8dca258ded34d66"
+    },
+    "status.json": {
+      "bytes": 2376,
+      "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/execution-preparation-1/owner-capture-1/status.json",
+      "sha256": "4a6744230bc23c4f2fefb6838a8090b0b035882f03ad82a61bc613efa37db8e6"
+    },
+    "stderr": {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/execution-preparation-1/owner-capture-1/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout": {
+      "bytes": 76694,
+      "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/execution-preparation-1/owner-capture-1/stdout",
+      "sha256": "bbabd63117ea377235594ac5ebecd23d614f355dd58c2ff2f6e7ec320b6490f2"
+    },
+    "stream-and-group-close.json": {
+      "bytes": 79,
+      "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/execution-preparation-1/owner-capture-1/stream-and-group-close.json",
+      "sha256": "23ce2ea9c2dd6bc6d28a5faf471fea06779c508c24977b5361b30b22d51db8c0"
+    }
+  },
+  "private_owner_receipt": {
+    "bytes": 76694,
+    "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/execution-preparation-1/owner-capture-1/stdout",
+    "sha256": "bbabd63117ea377235594ac5ebecd23d614f355dd58c2ff2f6e7ec320b6490f2"
+  },
+  "profile": {
+    "AS_bytes": 2147483648,
+    "CPU": [
+      7
+    ],
+    "CPU_seconds": 30,
+    "FSIZE_bytes": 33554432,
+    "NOFILE": 256,
+    "capture": "Rootexistingdirect O_EXCL/directjoin/groupgone/closed/noouterkill; no newwrapper",
+    "core": 0,
+    "interpreter": "/home/holden/anaconda3/bin/python3",
+    "preserved_original_option": "--nofile=256"
+  },
+  "reachable_packet_hash_note": "Reachable c24af503 packet exactops[1],[2] copied; roota114 release supplied separately. No source/argv changes ornewwrapper.",
+  "root_already_released_original_packet_sha256": "a114fee2737f6ca9d021aba5539dcbf43527392ad27b9f049d038cf8f3782d23",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "sources_argv_unmodified": true,
+  "status": "EXACT_TWO_ORIGINAL_SDK6_POSTBUILD_PHYSICAL_OPERATIONS",
+  "worker_executed_Docker_cleanup_probe": false,
+  "worker_executed_root_query": false
+}

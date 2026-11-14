@@ -1,0 +1,20 @@
+{
+  "argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "-c",
+    "from pathlib import Path; import hashlib,os,sys; src=Path(sys.argv[1]); root=Path(sys.argv[2]); digest=sys.argv[3]; raw=src.read_bytes(); assert hashlib.sha256(raw).hexdigest()==digest; assert os.getuid()==os.geteuid()==os.getgid()==os.getegid()==1000; root.mkdir(mode=0o700); (root/'p').mkdir(mode=0o700); f=(root/'m.json').open('xb'); f.write(raw); f.flush(); os.fsync(f.fileno()); f.close(); os.chmod(root/'m.json',0o600); assert hashlib.sha256((root/'m.json').read_bytes()).hexdigest()==digest",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/begin-cleanup-native-successor-2/case-235/ACTUAL-V3-NATIVE235-MANIFEST.json",
+    "/home/holden/mckernel-work/scratch/n235b2",
+    "bd558564d378e58c0ea569bac219fb706f93640e625d83aa92a8c951c80f823f"
+  ],
+  "direct_child_joined": true,
+  "elapsed_seconds": 0.03504413500195369,
+  "pid": 3528746,
+  "returncode": 0,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "stderr_bytes": 0,
+  "stdout_bytes": 0,
+  "streams_closed": true
+}

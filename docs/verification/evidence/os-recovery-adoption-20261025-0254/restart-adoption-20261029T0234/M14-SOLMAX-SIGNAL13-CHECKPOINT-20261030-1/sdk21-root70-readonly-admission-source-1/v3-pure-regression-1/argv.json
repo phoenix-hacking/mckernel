@@ -1,0 +1,1 @@
+["/usr/bin/taskset","-c","0","/usr/bin/timeout","--signal=TERM","--kill-after=5s","30s","/usr/bin/prlimit","--as=536870912:536870912","--cpu=20:20","--nofile=128:128","--fsize=8388608:8388608","--core=0:0","--","/usr/bin/time","-o","v3-pure-regression-1/time","-v","/home/holden/anaconda3/bin/python3","-I","-B","release_schema_v3_regression.py"]

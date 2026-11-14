@@ -1,0 +1,6 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "failure": "AssertionError in exact raw trace header/body extraction before result writing",
+  "cause": "Serial console CRLF translation must be accounted for explicitly; producer declared raw byte count is not serialized byte count",
+  "no_runtime_effect": true
+}

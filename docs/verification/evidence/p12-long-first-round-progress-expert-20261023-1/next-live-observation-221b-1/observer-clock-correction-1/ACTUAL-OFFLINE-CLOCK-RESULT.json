@@ -1,0 +1,22 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root",
+  "status": "PASS_OFFLINE_CLOCK_DOMAIN_CORRECTION",
+  "original_helper_session": 12633,
+  "original_failure": "Used time.monotonic against /proc PID birth(CLOCK_BOOTTIME). Bounded30s sleep thenprelaunchassert failed; NO readerchild started. Originalhelperunchanged/retained.",
+  "root_initial_hypothesis_corrected": "Existingcommand O_EXCL would block replay; it was NOT the actual firstexecution failure.",
+  "actual_first_reader_once": "Root990capture stdoutaf8de682 PASS; originalclockfailure didnot query/retry.",
+  "cases": [
+    "remaining20seconds",
+    "alreadydue",
+    "futurebirthrefuse",
+    "actualselfCLOCK_BOOTTIMEbirth"
+  ],
+  "actual_clock_hz": 100,
+  "actual_boot_minus_monotonic_seconds": 15338.127047354938,
+  "actual_self_boot_age_seconds": 0.0384204339934513,
+  "profile_change": false,
+  "runtime_mutation": false,
+  "live_queries": 0,
+  "qualification": "Additive timing helper for futureordinaryobservations only, no frozencontroller/sourcechanges or sessionacceptance. Rootinitialbrief wrongclockdomain acknowledged."
+}

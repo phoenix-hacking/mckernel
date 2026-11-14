@@ -1,0 +1,156 @@
+--- a/arch/x86_64/kernel/memory.c
++++ b/arch/x86_64/kernel/memory.c
+@@ -1381,6 +1381,31 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
++extern void x86_clear_effect_log_bridge(int event, unsigned long base,
++		unsigned long phys, size_t pgsize);
++struct ddebug __aligned(8) __attribute__((section("__verbose")))
++x86_clear_effect_free_anon_debug = {
++    .file = __FILE__, .func = "x86_clear_effect_log_bridge", .fmt = NULL,
++    .line = 1380, .flags = DDEBUG_DEFAULT,
++};
++struct ddebug __aligned(8) __attribute__((section("__verbose")))
++x86_clear_effect_xpmem_keep_debug = {
++    .file = __FILE__, .func = "x86_clear_effect_log_bridge", .fmt = NULL,
++    .line = 1384, .flags = DDEBUG_DEFAULT,
++};
++struct ddebug __aligned(8) __attribute__((section("__verbose")))
++x86_clear_effect_free_unmapped_debug = {
++    .file = __FILE__, .func = "x86_clear_effect_log_bridge", .fmt = NULL,
++    .line = 1387, .flags = DDEBUG_DEFAULT,
++};
++struct ddebug __aligned(8) __attribute__((section("__verbose")))
++x86_clear_effect_child_free_debug = {
++    .file = __FILE__, .func = "x86_clear_effect_log_bridge", .fmt = NULL,
++    .line = 1391, .flags = DDEBUG_DEFAULT,
++};
++#else
++#line 1375
+ static void x86_clear_effect_log_bridge(int event, unsigned long base,
+ 		unsigned long phys, size_t pgsize)
+ {
+@@ -1404,6 +1429,8 @@
+ 		break;
+ 	}
+ }
++#endif
++#line 1434
+ 
+ #ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+ extern void x86_clear_range_top_log_bridge(int event, void *pt,
+@@ -1427,6 +1454,17 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
++extern void x86_clear_range_log_bridge(int event, void *args,
++		unsigned long *ptep, unsigned long base, unsigned long start,
++		unsigned long end, int error, int level_shift, unsigned long phys);
++struct ddebug __aligned(8) __attribute__((section("__verbose")))
++x86_clear_range_large_phys_debug = {
++    .file = __FILE__, .func = "x86_clear_range_log_bridge", .fmt = NULL,
++    .line = 1446, .flags = DDEBUG_DEFAULT,
++};
++#else
++#line 1421
+ static void x86_clear_range_log_bridge(int event, void *args,
+ 		unsigned long *ptep, unsigned long base, unsigned long start,
+ 		unsigned long end, int error, int level_shift, unsigned long phys)
+@@ -1459,6 +1497,8 @@
+ 		break;
+ 	}
+ }
++#endif
++#line 1502
+ 
+ #ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+ /* Private clear-range layout consumed by the Rust old-entry callback. */
+--- a/kernel/rust/x86_memory_helpers.rs
++++ b/kernel/rust/x86_memory_helpers.rs
+@@ -186,6 +186,11 @@
+     static x86_clear_l3_effect_log: X86ClearEffectLogFn;
+     static x86_clear_l3_use_1gb_page: *const CInt;
+     fn kprintf(format: *const i8, ...) -> CInt;
++    static mut x86_clear_effect_free_anon_debug: crate::debug::Ddebug;
++    static mut x86_clear_effect_xpmem_keep_debug: crate::debug::Ddebug;
++    static mut x86_clear_effect_free_unmapped_debug: crate::debug::Ddebug;
++    static mut x86_clear_effect_child_free_debug: crate::debug::Ddebug;
++    static mut x86_clear_range_large_phys_debug: crate::debug::Ddebug;
+     fn _ihk_mc_free_pages(ptr: *mut c_void, npages: CInt, is_user: CInt, file: *mut i8, line: CInt);
+     static x86_clear_free_pages_user_file: [i8; 1];
+     static x86_clear_free_pages_user_line: CInt;
+@@ -7503,3 +7508,71 @@
+         );
+     }
+ }
++
++// Declarative C debug selectors keep the original file/function/line ABI. The
++// flag byte may be changed through the existing debug control path; any nonzero
++// byte enables its own original callsite, matching dkprintf (not just bit 0).
++#[no_mangle]
++pub unsafe extern "C" fn x86_clear_effect_log_bridge(
++    event: CInt, base: CULong, phys: CULong, pgsize: SizeT,
++) {
++    unsafe {
++        match event {
++            X86_CLEAR_EFFECT_FREE_ANON => {
++                if core::ptr::read_volatile(core::ptr::addr_of!(x86_clear_effect_free_anon_debug.line_flags)) >> 24 != 0 {
++                    let _ = kprintf(
++                        b"%lx-,%s: freed anonymous page,base=%lx,size=%ld,pgsize=%ld\n\0".as_ptr().cast(),
++                        phys, b"x86_clear_effect_log_bridge\0".as_ptr().cast::<i8>(), base, pgsize, pgsize,
++                    );
++                }
++            }
++            X86_CLEAR_EFFECT_XPMEM_KEEP => {
++                if core::ptr::read_volatile(core::ptr::addr_of!(x86_clear_effect_xpmem_keep_debug.line_flags)) >> 24 != 0 {
++                    let _ = kprintf(b"%s: XPMEM attach,phys=%lx\n\0".as_ptr().cast(),
++                        b"x86_clear_effect_log_bridge\0".as_ptr().cast::<i8>(), phys);
++                }
++            }
++            X86_CLEAR_EFFECT_FREE_UNMAPPED => {
++                if core::ptr::read_volatile(core::ptr::addr_of!(x86_clear_effect_free_unmapped_debug.line_flags)) >> 24 != 0 {
++                    let _ = kprintf(
++                        b"%lx-,%s: freed unmapped memobj page,base=%lx,size=%ld,pgsize=%ld\n\0".as_ptr().cast(),
++                        phys, b"x86_clear_effect_log_bridge\0".as_ptr().cast::<i8>(), base, pgsize, pgsize,
++                    );
++                }
++            }
++            X86_CLEAR_EFFECT_CHILD_FREE => {
++                if core::ptr::read_volatile(core::ptr::addr_of!(x86_clear_effect_child_free_debug.line_flags)) >> 24 != 0 {
++                    let _ = kprintf(b"%s: freed child page table at base=%lx,size=%ld\n\0".as_ptr().cast(),
++                        b"x86_clear_effect_log_bridge\0".as_ptr().cast::<i8>(), base, pgsize);
++                }
++            }
++            _ => {}
++        }
++    }
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn x86_clear_range_log_bridge(
++    event: CInt, args: *mut c_void, ptep: *mut CULong, base: CULong,
++    start: CULong, end: CULong, error: CInt, level_shift: CInt, phys: CULong,
++) {
++    let name = match level_shift {
++        PTL2_SHIFT => b"clear_range_l2\0".as_ptr().cast::<i8>(),
++        PTL3_SHIFT => b"clear_range_l3\0".as_ptr().cast::<i8>(),
++        _ => b"clear_range_l4\0".as_ptr().cast::<i8>(),
++    };
++    unsafe {
++        match event {
++            X86_CLEAR_RANGE_LOG_SPLIT => {
++                let _ = kprintf(b"%s(%p,%p,%lx,%lx,%lx):split page. %d\n\0".as_ptr().cast(),
++                    name, args, ptep, base, start, end, error);
++            }
++            X86_CLEAR_RANGE_LOG_LARGE_PHYS => {
++                if core::ptr::read_volatile(core::ptr::addr_of!(x86_clear_range_large_phys_debug.line_flags)) >> 24 != 0 {
++                    let _ = kprintf(b"%s: phys=%ld, pte_get_phys(&old),PTL3_SIZE\n\0".as_ptr().cast(), name, phys);
++                }
++            }
++            _ => {}
++        }
++    }
++}

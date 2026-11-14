@@ -1,0 +1,7 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "actual_error": "AssertionError before any candidate file written",
+  "cause": "Function extractor appended a second newline to adjacent canonical Rust callback definitions; exact body count became0.",
+  "bounded_correction": "Retain the exact one existing closing newline; no function/body/oracle semantic change.",
+  "compiler_execution": false
+}

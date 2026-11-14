@@ -1,0 +1,104 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_ACTUAL_CURRENT111_DEFAULT_SELECTED_ARTIFACT",
+  "reviewer": "/root/custody_release_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "recorded_at": "2026-10-27T19:40:24.157980+00:00",
+  "tuple": {
+    "Rust": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT111-COUNTER3-RUNQUEUE208-BUILD-ADMISSION-2/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o",
+      "bytes": 18275816,
+      "sha256": "1836ac74294186335742d17b4d53cd2217b2b17f6f471d317e55faf1fa7f346b"
+    },
+    "image": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT111-COUNTER3-RUNQUEUE208-BUILD-ADMISSION-2/OUTPUT/work/output/build/kernel/mckernel.img",
+      "bytes": 10255280,
+      "sha256": "0bbe8259f4c2dd1d0b54616b3b84842bcf2991e2417346371449cfd66ed9fb69"
+    },
+    "process": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT111-COUNTER3-RUNQUEUE208-BUILD-ADMISSION-2/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+      "bytes": 66600,
+      "sha256": "a4309e34ffe1a1c7c99eee1a2f2fb665cab907a33341956a96078b095edb63bf"
+    },
+    "kernel_C": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT111-COUNTER3-RUNQUEUE208-BUILD-ADMISSION-2/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+      "bytes": 362056,
+      "sha256": "efef2c7acab09496cfa8fd8e739c41e4bfddb93cd51d3cc2fa9c6dc9df42e93e"
+    }
+  },
+  "main_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT111-COUNTER3-RUNQUEUE208-BUILD-ADMISSION-2/independent-final-consumer-review-1/DEFAULT-ARTIFACT-REVIEW.json",
+    "bytes": 253155,
+    "sha256": "ffa9df9dbbde40440bc7b07b50876ea22fea2829d8987f26e2a11e04febcd545"
+  },
+  "inherited_core_postcheck": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT111-COUNTER3-RUNQUEUE208-BUILD-ADMISSION-2/independent-final-consumer-review-1/INHERITED-CORE-POSTCHECK.json",
+    "bytes": 25288,
+    "sha256": "32db9081758fd79ddcf625590e0a5af16ef0058cc7d4ba916c998ef26ce89c26"
+  },
+  "readers": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT111-COUNTER3-RUNQUEUE208-BUILD-ADMISSION-2/independent-final-consumer-review-1/review_current111.py",
+      "bytes": 19865,
+      "sha256": "4e878118cf9984b5997cf96f6fc98881ecb70b90f9433c0f922b416a590dd4b6"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT111-COUNTER3-RUNQUEUE208-BUILD-ADMISSION-2/independent-final-consumer-review-1/check_inherited_core.py",
+      "bytes": 9621,
+      "sha256": "2944735c24c8daf6a16a95aec961bf801388f2f403937db9d598b73a4534121c"
+    }
+  ],
+  "actual_commands": 4,
+  "exit_codes": [
+    0,
+    0,
+    0,
+    0
+  ],
+  "Rust_function_exports": 48,
+  "selected_C_functions": {
+    "F03": 66,
+    "F06": 25,
+    "total": 91
+  },
+  "process_OBJECTs": 67,
+  "new_C_callbacks_replaced": 3,
+  "new_Rust_readonly_table_bytes": 208,
+  "runqueue_fields": 26,
+  "runqueue_schedule_folded_fields": 17,
+  "runqueue_other_fields_data_only": 9,
+  "inherited13_current_ABI_arguments": true,
+  "inherited_timer15words_consumed9_data6": true,
+  "idle116_current_final_bindings": true,
+  "four_LOCAL_loggers_current337B_callback_and_exact_jump_table": true,
+  "all67_other_process_metadata_unchanged": true,
+  "Rust_warnings_byte_identical_143": true,
+  "kernel_C_warning_presentation_scoped_by_exact_declarations": true,
+  "build_elapsed_seconds": 21.70072889328003,
+  "build_CPU_seconds": 21.713679,
+  "worker_cumulative_child_RSS_ceiling_KiB": 589584,
+  "original_FAILURES_and_scripted_OPEN_preserved": true,
+  "offline_reader_failures_preserved": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT111-COUNTER3-RUNQUEUE208-BUILD-ADMISSION-2/independent-final-consumer-review-1/FIRST-C-WARNING-PRESENTATION-POSTCHECK-FAILURE.json",
+      "bytes": 539,
+      "sha256": "b4b560cb91e50c960dc5e2437350fc53e13c745984fdd708a01b25ad9a322cf3"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT111-COUNTER3-RUNQUEUE208-BUILD-ADMISSION-2/independent-final-consumer-review-1/FIRST-FOLDED-OFFSET-READER-FAILURE.json",
+      "bytes": 500,
+      "sha256": "53eb0ae1e4c3f243dd732baaf6e3ad47b0ffe5dd3b31c288f627f42f87c20d17"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT111-COUNTER3-RUNQUEUE208-BUILD-ADMISSION-2/independent-final-consumer-review-1/FIRST-READER-FAILURE.json",
+      "bytes": 524,
+      "sha256": "3a627e375dfe2ddc9864cd494b148dd73fe17b27c06fb1a3f33f41d23e14bd83"
+    }
+  ],
+  "native_acceptance": false,
+  "whole_file_retirement": false,
+  "M14_M15": "OPEN",
+  "native_apps_delta": 0,
+  "compiler_or_workload_actions_by_reviewer": 0
+}

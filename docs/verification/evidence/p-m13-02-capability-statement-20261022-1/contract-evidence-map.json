@@ -1,0 +1,180 @@
+{
+  "task_id": "P-M13-02-capability-statement-20261022-1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "READY_FOR_INDEPENDENT_LITERAL_CONTRACT_REVIEW",
+  "contract": {
+    "scope_id": "practical-kernel-apps-v1-20261017",
+    "id": "P-M13-02",
+    "description": "List supported/unsupported capabilities, known limitations and actual results.",
+    "source_row_status": "open",
+    "whole_M13_exit_condition": "Runnable artifacts, exact commands, capability limits and focused final review are delivered."
+  },
+  "closure_mapping": [
+    {
+      "clause": "supported capabilities",
+      "statement_section": "Supported capabilities and actual results",
+      "evidence": [
+        "freeze",
+        "recipe",
+        "manifest",
+        "six",
+        "vector",
+        "m05"
+      ],
+      "assessment": "Listed bounded actual accepted behavior on distinct declared tuples."
+    },
+    {
+      "clause": "unsupported capabilities",
+      "statement_section": "Unsupported operations, unknowns and known limitations",
+      "evidence": [
+        "unsupported",
+        "recipe",
+        "goal"
+      ],
+      "assessment": "Explicit unsupported CLONE_IO and unadvertised/disabled capabilities; untested behavior labeled unknown rather than observed failure."
+    },
+    {
+      "clause": "known limitations",
+      "statement_section": "Unsupported operations, unknowns and known limitations; Rust/assembly status and remaining live compute C",
+      "evidence": [
+        "contract",
+        "current",
+        "vectorwhole",
+        "sdk",
+        "numapaths"
+      ],
+      "assessment": "Full restoration, M07 remaining components, SDK68/M08 ABI, M06 process routes, final quotas and active live C clearly open."
+    },
+    {
+      "clause": "actual results",
+      "statement_section": "Supported capabilities and actual results",
+      "evidence": [
+        "recipe",
+        "six",
+        "sixphysical",
+        "vector",
+        "m05",
+        "m05physical",
+        "unsupported"
+      ],
+      "assessment": "Exact stdout/exit/stream/retirement facts; separate app and physical decisions; original failed generic report preserved."
+    }
+  ],
+  "acceptance_owner": "dispatcher after focused independent literal review",
+  "proposed_literal_row_credit_only": true,
+  "automatic_acceptance": false,
+  "whole_milestone_credit": false,
+  "new_execution_grant": false,
+  "new_test_or_workload_runs": 0,
+  "counter_deltas": {
+    "sources": 0,
+    "compiler": 0,
+    "native": 0,
+    "behaviors": 0,
+    "Rust_paths": 0,
+    "checks": 0,
+    "whole": 0
+  },
+  "historical_oracle_or_failure_changes": false,
+  "evidence": {
+    "contract": {
+      "path": "/home/holden/mckernel/docs/verification/os-milestones-20260914/practical-milestones.json",
+      "sha256": "34f3e6b4e04e5122255d5c954a6f9cf4dd68c864012e88a30b53b018f41eba68",
+      "bytes": 177249
+    },
+    "goal": {
+      "path": "/home/holden/mckernel/docs/verification/os-milestones-20260914/PRACTICAL-GOAL.md",
+      "sha256": "ade2e732fd5afaa31c582784964eefa53f203393f1e0c1d1c5ce306d1cadf143",
+      "bytes": 11046
+    },
+    "current": {
+      "path": "/home/holden/mckernel/docs/verification/os-milestones-20260914/CURRENT.md",
+      "sha256": "c44dc018b9df9db1ee7a62d13cecc04eda7bd6fe8189338c94e30249ec7dabc2",
+      "bytes": 1522762
+    },
+    "freeze": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/current-host-pair-205-native-20261019-1/P-M00-01-SUPPORTED-PROFILE-FREEZE-REVIEW.json",
+      "sha256": "4d28cbe56d8ed6716c6e45183b6c841fae88578611d577c6a26e751817eae1ff",
+      "bytes": 10037
+    },
+    "recipe": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/current-host-pair-205-native-20261019-1/usable-profile-1/USABLE-TESTED-PROFILE-RECIPE.json",
+      "sha256": "8fbd21f08080fc450391462c7e60dbbfaa2c5c24b5df16a2b615513cd8c4e4b5",
+      "bytes": 9460
+    },
+    "manifest": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/current-host-pair-205-native-20261019-1/usable-profile-1/MATCHED-IMAGE-MODULE-AND-APP-MANIFEST.json",
+      "sha256": "0f80ec37d15488b3365573222ad6ff811d795fb54b95d375b192f10049cb97c5",
+      "bytes": 13868
+    },
+    "six": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/current053d-six-launch-accepted-and-M11-closed-20261021-1/INDEPENDENT-ACTUAL-CURRENT-SIX-LAUNCH-APPLICATION-ACCEPTANCE-1.json",
+      "sha256": "a04292eb8f7a82df9f59b2e240a141048fc06d3e46302337c792c24ee9e88261",
+      "bytes": 3764
+    },
+    "sixphysical": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/current053d-six-launch-accepted-and-M11-closed-20261021-1/INDEPENDENT-ACTUAL-CURRENT-SIX-LAUNCH-PHYSICAL-ACCEPTANCE-1.json",
+      "sha256": "4b518560ad0cc39b266b3977559889e9d9f474f01c0839da423bdfc236bc999f",
+      "bytes": 1832
+    },
+    "vector": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/current053d-m07-vector-native12-20261022-1/INDEPENDENT-CURRENT-M07-FUNCTIONAL-APPLICATION-ACCEPTANCE-1.json",
+      "sha256": "af412abf4ec347f1e0331ef3b1cded5e4cf2298448e0ee3a2663959d0b2f3bf0",
+      "bytes": 3704
+    },
+    "vectorwhole": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/current053d-m07-vector-native12-20261022-1/INDEPENDENT-CURRENT-WHOLE-M07-LITERAL-ASSESSMENT-1.json",
+      "sha256": "0d97ef507ede3bee63e903f9eedd0cc26389eb0dd7d87f9e5467ebb3de1e6d3a",
+      "bytes": 3808
+    },
+    "vectoradoption": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/current053d-m07-vector-native12-20261022-1/ROOT-NATIVE12-M07-CURRENT-OBSERVATION-ADOPTION-1.json",
+      "sha256": "53c83784379fa8b6142e58a95cc15a29aa0f69d2759208ba8aa0693d73158cd1",
+      "bytes": 6624
+    },
+    "m05": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/current053d-m05-second-public-stop-20261022-1/reviews/M05-CURRENT-SECOND-STOP-APPLICATION-AND-PUBLIC-BEHAVIOR-ACCEPTANCE.json",
+      "sha256": "c70a5b6f78eab7693e051dfb86d0e2e93182d8deef2ac69c7a06e0d6e54c618f",
+      "bytes": 4362
+    },
+    "m05physical": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/current053d-m05-second-public-stop-20261022-1/reviews/M05-CURRENT-SECOND-STOP-ACTUAL-PHYSICAL-RETIREMENT-ACCEPTANCE.json",
+      "sha256": "3140f538fea792c4ac43935a66803f482af44c218ab1ab5e1106d2b06edc32cc",
+      "bytes": 1373
+    },
+    "unsupported": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/m06-literal-unsupported-delta-adjudication-20261021-1.json",
+      "sha256": "e837922fdf371288abe559efe9bd95e67cf2b150f676a47f4fb086be6a1d6a70",
+      "bytes": 28530
+    },
+    "numapaths": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/numa-insert-clear-native-acceptance-20261021-1/INDEPENDENT-INSERT-CLEAR-NAMED-DEFAULT-NATIVE-DEDUP-REVIEW-1.json",
+      "sha256": "2ab7b5e4cc0a4b0be4255c27b27afce840565f3497648d148f854b8c157b57ed",
+      "bytes": 4241
+    },
+    "sdk": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/m05-sdk68-expert-fixture-accepted-20261022-1/ROOT-ACTUAL-SDK68-SOURCE-INTEGRATION-1.json",
+      "sha256": "805a54596461fb141bf1c7ca9171bfc990f291bd5cb4e8b532d84fa2d329f7b3",
+      "bytes": 3296
+    },
+    "cbbstatus": {
+      "path": "/home/holden/mckernel/docs/verification/os-milestones-20260914/STOP-HANDOFF-20261022-070354.md",
+      "sha256": "758c0e838cf3044e1262bc53ee5692a60cfb0dec568a827b8b15a90cbb545531",
+      "bytes": 7221
+    },
+    "compiler35": {
+      "path": "/home/holden/mckernel-work/host-preparation/manual-reset-resume-20261020T033358Z/OBSERVED-SOURCE98-99-COMPILER35-ROOT-RECONCILIATION-20261022.json",
+      "sha256": "df9c5908489c451cb9f76a997ec8bde4d9c024a536c717975685309280ada999",
+      "bytes": 1136
+    },
+    "sixmanifest": {
+      "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/source-correction-1/stage-current-six-launch-1/manifest.json",
+      "sha256": "e04f64a44ea0bd929521bd4c34eefd205cc1983ae50219b6ba66396ebb013cf2",
+      "bytes": 10949
+    }
+  },
+  "source_handling": "Bounded read-only selected contract/profile/result reads; no broad evidence/hash audit, build, guest, root, container, Git or shared-file write. Hashes bind only cited small records and this private output. No released packet altered.",
+  "resource_controls": "Ordinary metadata only; CPU6/256MiB maximum assigned; no host workload/test. Same10000 ledger/resources/service gates; reserve576 unapproved; Scratch21 and permanent27:4 retained.",
+  "blocker": null,
+  "next_task": "Independent focused P-M13-02 literal-contract review; dispatcher alone decides one-row integration. Other milestone blockers remain listed; this is not application/production acceptance."
+}

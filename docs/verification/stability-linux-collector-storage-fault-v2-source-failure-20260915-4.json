@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_failure_and_partial_review",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "attempt": 4,
+  "status": "FAIL_SOURCE_TEST_AND_PARTIAL_REVIEW",
+  "recorded_utc": "2026-09-15T19:38:00Z",
+  "archive": {"path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-failure-20260915-4.tar.gz", "sha256": "c94fe70be82e13e8c174c75f07585ba53baab7b2dd21e954b28f61a06444a97e", "size": 21962, "members": 12},
+  "test_failure": "misplaced preexisting negative references undefined packet in new retained-input test",
+  "partial_review": "FAIL_PARTIAL_SOURCE_ONLY",
+  "review_blockers": ["malformed C serializer", "incomplete absolute transport deadlines", "symlink/FIFO input validation", "one-pass descendant cleanup", "failure unwinding", "permissive pre-ACK validation"],
+  "original_test_stream_retained": true,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

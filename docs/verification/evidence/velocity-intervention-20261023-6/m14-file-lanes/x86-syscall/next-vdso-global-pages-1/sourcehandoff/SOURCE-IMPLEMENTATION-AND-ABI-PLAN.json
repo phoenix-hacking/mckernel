@@ -1,0 +1,53 @@
+{
+  "ABI_plan": {
+    "C": "Actual structvdso declaration +PTattribute enum +pvti pointer/count prototypes and original fullfunction extraction",
+    "Rust": "Actual ArchVdso definition/layout; originalC versus genericRustbody with controlled fullsignature setup/virt/map/log callbacktrace; publicwrapper providerargs/defaultselection separately",
+    "fixture_not_queued": true,
+    "vectors": "vvar/hpet/pvti pointerpresence x globalflags, pre/postsetup pagecounts negative0/1/3, setup errors, every mapfailureindex, callback state mutation betweenstages, 64bit physical/virtual extremes, partialmapretention, debugflags off/on, uniquepublicRustT +exactproviderreferences"
+  },
+  "C_selection_patch": {
+    "bytes": 610,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-vdso-global-pages-1/patch/syscall.c.diff",
+    "sha256": "0c5f7cd6543d0d080f0f9a9ae3d653eccc45ba1b42c6559b64133e09ad5d8cc9"
+  },
+  "actual_result": null,
+  "canonical_writes": false,
+  "compiler_test_jobs": 0,
+  "default_fullfile_consumer": null,
+  "fullcrate_link": null,
+  "mandatory_merge": "Delete only old fn vdso_map_global_pages extern declaration, add private fragment. Preserve F03signalfd and prior F06ptrace fragments. No full syscall_policy.rs overwrite.",
+  "native": null,
+  "prior_ready_slice": "609-case ptrace event remains sole executable-ready fixture; no second compilerreadyqueue.",
+  "reused_existing_owners": [
+    "ArchVdso/reprC88byte state +arch_vdso_state_bridge",
+    "Rust x86_cpu_helpers::arch_setup_pvclock",
+    "Rust x86_memory_helpers::{virt_to_phys,ihk_mc_pt_set_page}",
+    "crate::debug::Ddebug existing32B/align8 descriptor ABI and __verbose selectors"
+  ],
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "selected_C_candidate": {
+    "bytes": 113697,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-vdso-global-pages-1/candidate/syscall.c",
+    "sha256": "1b7a8502ac7b80f182027cca220e188bb8c65ad86d3b405015207f79552f9a04"
+  },
+  "selected_live_C_body": "vdso_map_global_pages(void), called from selected Rust arch_setup_vdso",
+  "semantic_invariants": [
+    "vvar before hpet; hpet includes UNCACHABLE; allmaps include ACTIVE|USER|NOEXECUTE andNULLpage-table",
+    "first setup/maperror propagates immediately, prior successful mappings retained/no invented rollback/free",
+    "pvclock setup executes only when pvti targetnonNULL/global; read updated pointer/pagecount after setup and after mapping callbacks",
+    "pvti destination subtracts page displacement; source adds; physical translation before map; signedint pagecount<=0 skipsloop",
+    "exact4unconditionalerror messages and two optional dynamic-debugentry/exit events preserved via existingRustdebugdescriptor ABI",
+    "original Cwholebody retained untouched under fallback; no Cnewbehavior/getters; publicRuststate contract reuses existing guard"
+  ],
+  "shared_Rust_fragment_only": {
+    "bytes": 7023,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-vdso-global-pages-1/candidate/syscall_policy.vdso_map_global_pages.FRAGMENT.rs",
+    "sha256": "23e605075458d7519e6ce351d1b6384c97722a05eed3384426356be4c28760af"
+  },
+  "shared_fragment_merge_patch": {
+    "bytes": 7595,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-vdso-global-pages-1/patch/syscall_policy.vdso_map_global_pages.diff",
+    "sha256": "2b6817474d135764dcf8eb007198256a2faa08e1676ffa46639621cc6970b283"
+  },
+  "status": "NEXT_SUBSTANTIVE_BODY_SOURCE_IMPLEMENTED_ONLY_NOT_EXECUTABLE_READY_OR_GRANTED"
+}

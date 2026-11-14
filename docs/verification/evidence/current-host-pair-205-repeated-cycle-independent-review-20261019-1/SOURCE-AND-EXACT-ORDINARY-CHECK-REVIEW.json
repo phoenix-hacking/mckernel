@@ -1,0 +1,149 @@
+{
+  "schema": "mckernel.independent-selected205-two-complete-cycle-source-and-ordinary-profile-review.v1",
+  "status": "PASS",
+  "decision": "PASS_AFFECTED_TWO_COMPLETE_205_CYCLE_SOURCE_AND_EXACT_ORDINARY_CHECK_ONLY",
+  "reviewer": "resume_git_owner_review",
+  "implementation_ownership": false,
+  "functional_scope": "Functional OS/apps plus Rust and reviewed assembly; Linux control-plane/user collector C only, no new compute C.",
+  "reviewed_at_utc": "2026-10-20T01:00:00.514955+00:00",
+  "source_packet": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/SOURCE-PACKET-INDEX.json",
+    "sha256": "8b402d5712bf5535a2e0d087ee3a7080ade2fd0b34d6df4828a49dc334ca5c27",
+    "bytes": 1327
+  },
+  "ordinary_proposal": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/ORDINARY-CHECK-PROPOSAL.json",
+    "sha256": "c19c392b74697b464370f2ba0552ed06e65a4eee691dceb04281d2983f856d1d",
+    "bytes": 2785
+  },
+  "implementation": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/IMPLEMENTATION-PROPOSAL.json",
+    "sha256": "c0359dcd1834cbd2872d1c48bbc5bf7e754f46d9cd73b48a015e279300655553",
+    "bytes": 6824
+  },
+  "source_pins": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/ORDINARY-INPUT-PINS.json",
+    "sha256": "40511786a3898b204f464a9dd1a0980c5be741564de45dee75d24f2be214f6b9",
+    "bytes": 8122
+  },
+  "frozen_oracle": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/cycle_oracle.py",
+    "sha256": "05bba58841990cf01907a2b9dbc38cc95822dfb18cef1ee0e53906b4165c112e",
+    "bytes": 10190
+  },
+  "input_count": 35,
+  "input_mismatches": [],
+  "allowed_argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=3",
+    "35",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--fsize=33554432",
+    "--nofile=256",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/test_cycle_sources.py"
+  ],
+  "profile": {
+    "cpu": 7,
+    "jobs": 1,
+    "as_bytes": 1073741824,
+    "cpu_seconds": 30,
+    "outer_wall_seconds": 35,
+    "global_work_seconds": 28,
+    "cleanup_seconds": 3,
+    "stream_fsize": 33554432,
+    "host_growth_bytes": 8388608,
+    "scratch_growth_bytes": 0,
+    "host_floor_bytes": 17179869184,
+    "scratch_floor_bytes": 12884901888,
+    "reserve_bytes": 671088640
+  },
+  "fresh_outputs": [
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/ordinary-check-1",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/ordinary-admission.json",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/ordinary.stdout",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/ordinary.stderr",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/ordinary.status.json"
+  ],
+  "execution_conditions": [
+    "Root must allocate CPU7 exclusively for this ordinary one-job chain and perform genuine fresh capacity/usage/admission before execution. CPU6 and the disjoint native lane are not borrowed.",
+    "Use the exact frozen 35 input references, fresh output names and command; no source replacement or command expansion. All five compilers, body checks and parser checks share the stated 28s work, 3s cleanup and 35s outer wall profile.",
+    "Only the prospective compiler/mock/parser chain is permitted by this decision. Stop and retain completed status, streams and outputs on any failure; no automatic unreviewed retry."
+  ],
+  "boundary_findings": {
+    "source_body_fixture": {
+      "production_function": "run_complete_cycle",
+      "fixture_function": "fixture_run_complete_cycle",
+      "exact_after_entrypoint_rename": true,
+      "bytes": 2953,
+      "sha256": "ad4ffd47349f083937ae8d2090db74770041a34e07dbd9da20f74ea82bbbc7c7",
+      "effects_substituted": [
+        "filesystem/cwd",
+        "boot/stop/release helper capture",
+        "discovery and process lifecycle",
+        "klog/evidence transport"
+      ],
+      "actual_boot_helper_or_native_main_executed": false
+    },
+    "identity": "Exact LP64 48B assignment copies the validated original struct. Nonzero fresh challenge joins magic, OS0, count2, physical CPUs1/2 and source-produced observed registry generation to fresh post-baseline 501 records. Neither expected generation nor observed trace is changed to a cycle ordinal. Second cycle rejects repeated generation and nonce.",
+    "ordering": "Separate fresh cycle directories and evidence; boot before strict real pair; safe/EOF/exact387B+254B pair checks and procfs retirement before strict5-to0 stop; successful public release before the next cycle. Existing startup CPU0/1, full pair route/body requirements and first-failure behavior preserved.",
+    "public_inventory": "CPU2-online checks supplement unchanged CPU1, stopped-OS, destroy and MEM128MiB node0 to0 public inventory semantics; this does not establish physical identity or full generation restoration.",
+    "deadline": "Existing120s PID1 logger/global deadline retained. Two60s worst-case boot bounds plus other phases do not imply both cycles fit; all helpers use the remaining global budget and actual timeout remains an honest failure.",
+    "marker_correction": "Original frozen ND.BAD_MARKERS is now applied to original whole serial and each decoded fresh kernel trace. Three raw and six encoded marker vectors assert marker-specific refusals; observed bytes and inherited CPU/generation/body predicates remain unchanged."
+  },
+  "planned_checks_not_results": {
+    "compiler_children": 5,
+    "actual_effect_stub_cycle_positive": 1,
+    "actual_effect_stub_cycle_refusals": 8,
+    "prefix_vectors": 3,
+    "actual_C_pair_serializer": true,
+    "CPU2_helper_positive": 1,
+    "CPU2_helper_refusals": 2,
+    "generation1_original_body_equivalence": true,
+    "synthetic_generation_positive": 1,
+    "wrong_generation_refusal": true,
+    "fully_modeled_two_cycle_positive": 1,
+    "fully_modeled_refusals": 13,
+    "inherited_marker_refusals": 9
+  },
+  "preserved_history": {
+    "initial_unexecuted_source_draft": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/source-draft-1",
+    "pre_marker_source_packet": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/pre-marker-correction-source/SOURCE-PACKET-INDEX.json",
+      "sha256": "d07a54a681e05c6a895807481714a64f7fa8d91e3930e82912f7d7b1a92e4f87",
+      "bytes": 1165
+    },
+    "pre_marker_proposal": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/pre-marker-correction-source/ORDINARY-CHECK-PROPOSAL.json",
+      "sha256": "26352df8402c3eec86053e42d99c5b1ebd6895bb5bd8fcec06c9d7620d44cffc",
+      "bytes": 2589
+    },
+    "source_only_gap": "Inherited host kernel-error scan was absent when only _pair_body was delegated. Corrected before any target check or native execution."
+  },
+  "claims": {
+    "actual_checks_passed": false,
+    "stage_authority": false,
+    "root_authority": false,
+    "native_execution_authority": false,
+    "native_cycles_accepted": 0,
+    "payload_launches_accepted": 0,
+    "full_generation_restoration_verified": false,
+    "quota_credit": false,
+    "nonnull_FP_credit": false,
+    "kernel_language_retirement_credit": false
+  },
+  "blockers_for_this_exact_ordinary_source_profile": [],
+  "remaining_downstream": [
+    "Actual completed compiler/body/parser results require independent acceptance.",
+    "Artifact/stage/parent/short AF_UNIX geometry and current physical predecessor, fresh snapshot/admission and final native release remain separate genuine runtime prerequisites."
+  ]
+}

@@ -1,0 +1,99 @@
+{
+  "scope": "Functional supported-profile McKernel OS/apps plus live compute-C retirement into Rust/reviewed assembly; bounded closed saved-copy source diagnosis only.",
+  "status": "FIRST_DIVERGENCE_IDENTIFIED_INTERNAL_EINVAL_STAGE_UNOBSERVED",
+  "failure_family": "First actual235B child fork/exec/wait native attempt; no semantic candidate/correction attempted by this task.",
+  "read_authority": "Only closed readback1/2/3 saved copies for runtime evidence. No protected raw capture, root, workload, test, cleanup, build or physical review performed.",
+  "observations": {
+    "expected_exit": 0,
+    "expected_stdout_bytes": 235,
+    "expected_stderr_bytes": 0,
+    "observed_raw_wait_status": 256,
+    "observed_exit": 1,
+    "observed_stdout_bytes": 13,
+    "observed_stderr_bytes": 121,
+    "first_application_divergence": "After parent start newline, first fork fails before child exec or parent wait.",
+    "host_delivery": {
+      "pid": 256,
+      "worker": 7,
+      "delivery": 31,
+      "syscall": 56,
+      "returned_value": -22,
+      "serial_lines": [
+        970,
+        973
+      ]
+    },
+    "app_stderr": "ERROR: creating PPD /dev/mcos0\nfork(): error with child process after fork\nprocess-exec-wait failure stage=fork errno=71\n",
+    "mckernel_application_executed_result_field": false,
+    "result_flag_limit": "Result field is not evidence that startup never occurred; retained serial shows actual parent startup and syscall activity."
+  },
+  "exact_source_graph": [
+    {
+      "source": "mcexec_helpers.rs",
+      "sha256": "80e59ae27fe87bdced4e08bd3bdb580185b439311a4fba1daaade7308630afc8",
+      "lines": "2844-2849,2054-2152",
+      "fact": "Active Rust SYS_CLONE dispatch: non-selector1 calls act_clone_start; selectors2/3 reserved controls explicitly refuse; ordinary path calls actual C Linux fork child bridge."
+    },
+    {
+      "source": "mcexec.c",
+      "sha256": "310301305e41bab4eda63026849ee6f166bb6e5d4d6f2c789aa8003e94745056",
+      "lines": "5917-5940,6011-6013",
+      "fact": "Actual child sets rpt=(args1,args2,args3), invokes MCEXEC_UP_CREATE_PPD(&rpt); error saves -errno and emits exact first stderr. Active location5939, not excluded legacy8195."
+    },
+    {
+      "source": "mcctrl.rs",
+      "lines": "103",
+      "fact": "MCEXEC_UP_CREATE_PPD routes context.create_process(argument,compat==1)."
+    },
+    {
+      "source": "mcctrl_process.rs",
+      "sha256": "b1b3a7f5fe0e70ff614edc51e5aa22559c0efd827aa5353a7da3c00d0a3c53a5",
+      "lines": "1077-1111",
+      "fact": "Tested enabledSDK already has non-null descriptor decoding and current-child adoption producer. cfgON at1110 calls adopt_current_fork_v4; no evidence producer is absent."
+    },
+    {
+      "source": "mcctrl_process.rs",
+      "lines": "1081-1096",
+      "fact": "Geometry checked1082; process/current/pending reservation1083-1087; inherited registration1088; child acquisition1090; IHK current adoption1093; callback proof1096. Multiple stages may returnEINVAL."
+    },
+    {
+      "source": "os_runtime.rs",
+      "lines": "1691-1731",
+      "fact": "IHK v4 producer validates geometry/currentconnection, makes typed ForkAdoptCallV4(version4), invokes command16, preserves real lease transfer."
+    },
+    {
+      "source": "smp_application.rs",
+      "lines": "394-427",
+      "fact": "Actual provider exists; matches exact live nr56 delivery/geometry/carrier marker then prepares authenticated inherited backend and callback/MM seal."
+    }
+  ],
+  "binding": {
+    "image_sha256": "1f4dde2fb4f458fe2586e2fa8ec6d481d9d586577377ad8e50a2c307ad2d0b93",
+    "image_acceptance": "b4f2eb58",
+    "host_acceptance": "3d2651e6",
+    "mcexec_acceptance": "648c56e8",
+    "mcexec_sha256": "689dcad27b2ce3a30f49df1bfe9452f2169a14e9c350c24c9677c88b1f152876",
+    "host_source_verified_against_consumed_pin": true
+  },
+  "precise_missing_facts": [
+    "actual non-null PPD descriptor start,length,root",
+    "current child PID",
+    "first failed Rust adoption/registration/provider stage"
+  ],
+  "correction_proposal": "No semantic correction justified by saved evidence. Preserve every invariant. If exact unbuilt overlays do not already expose/resolve this stage, instrument existing Rust create_process/adopt_current_fork_v4 error path with stable stage plus descriptor and current childPID, retaining the exact errno and all ownership/lease behavior. Provider stage may additionally be required if IHK returnsEINVAL.",
+  "next_cheapest_check_proposal": "One bounded actual-body error-path regression for the diagnostic wrapper: each injected stage error must remain identical and owner/callback effects unchanged, descriptor/currentPID logged only on failure; then existing reviewed current-module build/link path before any independently released native attempt. No unchanged runtime replay.",
+  "acceptance": "No app/child/exec/wait/wholeOS success; no ACK, release, default activation or retirement fabricated. Physical review intentionally delegated elsewhere.",
+  "c75_overlay_comparison": {
+    "receipt_sha256": "acd92d4bdaab3e1009f0cf7a11b4a73eddce7217c138c1b38a322435799c42a5",
+    "patch_sha256": "8b64dc9035fda44655f741e8007958e59f026cb38d68e9ebfe20d4f11da96095",
+    "result": "Four changes are selector2/3 carrier and request negative-return rollback after successful adoption. Initial CREATE_PPD/create_process/adopt_current_fork_v4 are not changed. They do not directly repair observed first PPD EINVAL. No evidence this failure is a regression from unbuilt c75."
+  },
+  "private_delta": {
+    "kind": "Uncompiled/unexecuted diagnostic Rust draft only; no semantic correction",
+    "source_preimage": "/home/holden/mckernel-work/host-preparation/phase5-host-fork-adoption-opt-in-20261020-1/source-modules/mcctrl_process.rs",
+    "preimage_sha256": "b1b3a7f5fe0e70ff614edc51e5aa22559c0efd827aa5353a7da3c00d0a3c53a5",
+    "postimage_sha256": "26c9013eaaf3fabb71816aa6295a143a09bd84217178ece8acb4e832a5bf9372",
+    "patch_sha256": "0b3307bc7708e04b031ecfa20c4b2efa33a65aae3dd95040df0b2e5ef6d11164",
+    "invariant": "Identical descriptor decode, order/number of original fallible operations, returned errno, registration reservation and IHK/callback ownership. Only failure metadata; zero child_pid explicitly means not yet acquired. No synthetic ACK/publication/registration."
+  }
+}

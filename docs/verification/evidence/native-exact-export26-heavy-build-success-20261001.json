@@ -1,0 +1,79 @@
+{
+  "schema": "mckernel.native-exact-export26-heavy-build-success.v1",
+  "recorded_at": "2026-09-30T22:36:56-07:00",
+  "status": "PASS_RESULT_EXPORT26_BUILD",
+  "candidate_sha": "c81aeaca5cedd893981a058444fa11a03a49a744",
+  "ihk_sha": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+  "release": {
+    "commit": "84e97eda93fd9e4a99f1988fdea7fb41fa42215d",
+    "proposal": "docs/verification/evidence/native-exact-export26-heavy-build-attempt1-execution-proposal-20261001.json",
+    "independent_decision": "PASS_EXECUTION_EXPORT26_BUILD",
+    "request_path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-request-c81aeaca-exportset-26.json",
+    "request_sha256": "bfe96ee458677468e29c5f5efbde0c369a05363348ed666c2624d894be9c1e98",
+    "invocations": 1
+  },
+  "command": [
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/scripts/native_rust_exact_mckernel_image_container_owner.py",
+    "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-request-c81aeaca-exportset-26.json"
+  ],
+  "results": {
+    "configure_exit_code": 0,
+    "build_exit_code": 0,
+    "build_terminal": "Built target mckernel.img",
+    "undefined_symbols": 0,
+    "prior_bcmp_failure_recurred": false,
+    "driver_receipt_path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-work-c81aeaca-exportset-26/evidence/receipt.json",
+    "driver_receipt_sha256": "9ead2e935ad1e0bb791d8ab0da8221a68eb7a5f3b64a1c571c3a2e4ad6c632c6",
+    "owner_receipt_path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-owner-evidence-c81aeaca-exportset-26/owner-receipt.json",
+    "owner_receipt_sha256": "462d3f7c3d8426c7b6a08085481fa470b9bd9b05a3d659390b313074291ef301"
+  },
+  "artifacts": {
+    "mckernel.img": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-work-c81aeaca-exportset-26/output/build/kernel/mckernel.img",
+      "size": 7908256,
+      "sha256": "fa6685543160fcaa5000b535ec8bd6fc70230465109564c3fb2beecb95bf39ed"
+    },
+    "mckernel.img.map": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-work-c81aeaca-exportset-26/output/build/kernel/mckernel.img.map",
+      "size": 738606,
+      "sha256": "9a27435ca9faf2be359ae8a23f6f9e5d71a8701ccdcb2349e0d420f7b22bb7b3"
+    },
+    "mckernel_rust.o": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-work-c81aeaca-exportset-26/output/build/kernel/rust/mckernel_rust.o",
+      "size": 12591904,
+      "sha256": "532af6482181b68dfa4f6176fd50de34a999b53bbae9167f9c7cde0b3af70f92"
+    }
+  },
+  "retirement": {
+    "owner_pid": 2420278,
+    "recorded_client_pids_absent": true,
+    "lease_absent": true,
+    "common_exclusion_path": "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-26.json",
+    "common_exclusion_sha256": "8099da3fbac5e6cfc3722af036614d7e5434c8988a7d2e172581bac64a606c86",
+    "common_exclusion_device_inode": "1831:90699",
+    "container_id": "f37e71e0731fb6cd4068746225d65eb1b372d6ba88c929def94ae889caa4c68e",
+    "container_name": "mckernel-image-b4bbcea94b854c40a6da36b1c80469d0",
+    "container_status": "exited",
+    "container_exit_code": 0,
+    "container_pid": 0,
+    "container_oom_killed": false,
+    "container_retained": true,
+    "cleanup_separately_required": true
+  },
+  "resource_profile": {
+    "cpuset": "2-5",
+    "jobs": 4,
+    "memory_bytes": 12884901888,
+    "memory_swap_bytes": 12884901888,
+    "pids_limit": 512,
+    "network": "none",
+    "readonly_rootfs": true,
+    "writable_bind": "/work"
+  },
+  "review": "PASS_RESULT_EXPORT26_BUILD; all 17 driver evidence members, all six recorded artifacts, candidate provenance, libdwarf closure, Rust compiler and corrected bcmp linkage were independently checked. The complete host-kernel/toolchain closure was authenticated by admission but was not independently rehashed member-by-member during result review.",
+  "acceptance": "This accepts compilation and retained artifact evidence only. Postlink and linked-text ownership, cleanup authorization, guest execution, application diagnostics and OS acceptance remain outstanding; no acceptance counter advances.",
+  "next": "After continuation, run the read-only current-image postlink and linked-text ownership validators on these exact artifacts, independently review their results, then obtain a separate reviewed cleanup before preparing the current-candidate diagnostic memory guest."
+}

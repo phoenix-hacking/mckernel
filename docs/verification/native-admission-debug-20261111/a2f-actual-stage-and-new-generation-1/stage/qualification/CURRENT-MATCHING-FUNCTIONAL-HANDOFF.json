@@ -1,0 +1,773 @@
+{
+  "status": "ACTUAL_A2F_HOST_STAGING_QUALIFIED_MATCHING_NEXT_NATIVE_FIELDS_UNISSUED",
+  "qualification": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-stage-qualification-p03-max-1/qualification-1/QUALIFICATION.json",
+    "bytes": 8047,
+    "sha256": "4cc2e385d54cc7e291262e579150be8d6506b4155cc3d701079913c40eb738c0",
+    "identity": {
+      "device": 66306,
+      "inode": 2248181,
+      "uid": 1000,
+      "gid": 1000,
+      "mode": 384,
+      "nlink": 1
+    }
+  },
+  "original_functional_condition": {
+    "id": "M14-06-02-FUNCTIONAL",
+    "parent": "M14-06-02",
+    "title": "Qualify signal/rt_sigreturn frames, alternate stack, context and xstate restoration on the matching admissible coherent image",
+    "percent_complete": 0,
+    "progress_metric": "binary verified completion at stated scope",
+    "status": "open_or_unverified",
+    "owner": "Root integration/compositor; applicable original hold and native/source authorities retain release ownership",
+    "done_when": "Signal/rt_sigreturn paths restore the selected signal frame, alternate stack, register context and configured xstate with the required normal/error behavior and genuine providers on the matching image.",
+    "verification_method": "Join source/config/toolchain/provider identities to the admitted final cohort; inspect actual selected/emitted/link ownership and execute only the original applicable defined functional scenarios after Root admission. Record exact command, result, cleanup and matching artifact identity; skipped/UNKNOWN results do not satisfy this step.",
+    "required_inputs": {
+      "original_requirement": "M14-06-02",
+      "target": "arch/x86_64/kernel/syscall.c",
+      "source_profile": "Original supported x86_64/Rocky profile; exact source/config/toolchain/artifact identities must match the proof scope.",
+      "missing_before_execution": [
+        "Bind correct signal-frame, alternate-stack, context and configured xstate restoration to actual final sources/providers.",
+        "Run matching signal/rt_sigreturn behavior and error-path validation with actual native admission."
+      ]
+    },
+    "dependencies": [
+      "HOLD-GENERIC",
+      "PROVIDER-CLOSURE",
+      "SOURCE-SDK-NATIVE"
+    ],
+    "evidence": [
+      "CAMPAIGN.md"
+    ],
+    "scope_limit": "Requires actual applicable native/source-view/resource ownership admission; not an authorization to execute held work.",
+    "definition_status": "completion_condition_defined; runnable packet waits for named original contract/admission inputs",
+    "execution_profile": "native",
+    "counted_in_requirement_rollup": true
+  },
+  "source_image_modules_tuple": {
+    "compute_source_commit": "c964be3917c8f4c5031108aa927c84894584b667",
+    "image": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/preserved-c964-a2f00a61-1/build/kernel/mckernel.img",
+      "size": 13349576,
+      "sha256": "a2f00a6105f20642db8ef95fe12ade0873120594531f325ef363a4bb59f0ff8a",
+      "mode": 292
+    },
+    "image_qualification": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/qualification-1/dispatch-owner-correction-1/QUALIFICATION.json",
+      "bytes": 139468,
+      "sha256": "6f67cd0637b3127c8724e78ad259d3b86c536c66868a92dafa0a106f33f68623"
+    },
+    "image_preservation": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/preserved-c964-a2f00a61-1/PRESERVED-COHORT.json",
+      "bytes": 17139,
+      "sha256": "6024f36ad02385f07f3988566c45d712e48e5f4d69395652f7e9c89d14e42b45"
+    },
+    "source30": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/SOURCE-BINDINGS.json",
+      "bytes": 20069,
+      "sha256": "2e1c5b8dc4ae06da90bd4b38c0a76d5556c23717c21bb6c2746b291021e066ce"
+    },
+    "actual_signal_Rust_owners": [
+      {
+        "name": "arch_rt_sigreturn_context_bridge",
+        "final": {
+          "index": 4890,
+          "name": "arch_rt_sigreturn_context_bridge",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1,
+          "value": 18446744073684722352,
+          "bytes": 165
+        },
+        "owner": {
+          "object": "rust/mckernel_rust.o",
+          "input": {
+            "index": 5240,
+            "name": "arch_rt_sigreturn_context_bridge",
+            "binding": "GLOBAL",
+            "type": "FUNC",
+            "visibility": 0,
+            "section_index": 1206,
+            "value": 0,
+            "bytes": 165
+          },
+          "section": ".ltext.arch_rt_sigreturn_context_bridge",
+          "placement": {
+            "address": 18446744073684722352,
+            "bytes": 165
+          }
+        }
+      },
+      {
+        "name": "do_signal",
+        "final": {
+          "index": 5279,
+          "name": "do_signal",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1,
+          "value": 18446744073684808752,
+          "bytes": 2707
+        },
+        "owner": {
+          "object": "rust/mckernel_rust.o",
+          "input": {
+            "index": 4796,
+            "name": "do_signal",
+            "binding": "GLOBAL",
+            "type": "FUNC",
+            "visibility": 0,
+            "section_index": 1490,
+            "value": 0,
+            "bytes": 2707
+          },
+          "section": ".ltext.do_signal",
+          "placement": {
+            "address": 18446744073684808752,
+            "bytes": 2707
+          }
+        }
+      },
+      {
+        "name": "arch_native_signal_bad_frame_bridge",
+        "final": {
+          "index": 2356,
+          "name": "arch_native_signal_bad_frame_bridge",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1,
+          "value": 18446744073684712480,
+          "bytes": 59
+        },
+        "owner": {
+          "object": "rust/mckernel_rust.o",
+          "input": {
+            "index": 5189,
+            "name": "arch_native_signal_bad_frame_bridge",
+            "binding": "GLOBAL",
+            "type": "FUNC",
+            "visibility": 0,
+            "section_index": 1133,
+            "value": 0,
+            "bytes": 59
+          },
+          "section": ".ltext.arch_native_signal_bad_frame_bridge",
+          "placement": {
+            "address": 18446744073684712480,
+            "bytes": 59
+          }
+        }
+      },
+      {
+        "name": "arch_rt_sigreturn_xrstor_bridge",
+        "final": {
+          "index": 4561,
+          "name": "arch_rt_sigreturn_xrstor_bridge",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1,
+          "value": 18446744073684722624,
+          "bytes": 29
+        },
+        "owner": {
+          "object": "rust/mckernel_rust.o",
+          "input": {
+            "index": 5245,
+            "name": "arch_rt_sigreturn_xrstor_bridge",
+            "binding": "GLOBAL",
+            "type": "FUNC",
+            "visibility": 0,
+            "section_index": 1214,
+            "value": 0,
+            "bytes": 29
+          },
+          "section": ".ltext.arch_rt_sigreturn_xrstor_bridge",
+          "placement": {
+            "address": 18446744073684722624,
+            "bytes": 29
+          }
+        }
+      }
+    ],
+    "actual_four104_and_current_debug_constants": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/qualification-1/dispatch-owner-correction-1/ACTUAL-ABI104-AND-PERF-TYPES.json",
+      "bytes": 10547,
+      "sha256": "894014e5e9a78752919c94b6fff526e0cf1c6c1bfc44b81666c99a9faad149b8"
+    },
+    "module_source_commit": "099cb5b874e34a72848e12838d367da62b097db6",
+    "IHK_commit": "8d288b8bd81b50cc3a3f814d949b89bf416a6ec7",
+    "Linux_release": "6.12.0-211.44.1.el10_2",
+    "Linux_config_SHA256": "106055ad26cfc19373b1bc52e1dcc24b3eaa7c48125c451be029898b8f696474",
+    "module_binding": {
+      "path": "/home/holden/mckernel/docs/verification/m14-m15-matching-kbuild-20261110/bindings-qualified/BINDINGS.json",
+      "bytes": 30444,
+      "sha256": "0781087478376977da68666ee6ae257846d53dc5501cfa6b9b3ca170597f26be"
+    },
+    "three_modules": [
+      {
+        "bytes": 1521480,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/modules/ihk.ko",
+        "sha256": "04f5d3e0dbf0c70b7ff5aeb281fabda310751bc45c4916cb582575cf3f81155e"
+      },
+      {
+        "bytes": 13092960,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/modules/ihk-smp-x86_64.ko",
+        "sha256": "ae67f463920ae6267710624139c56ef5dcfa8d1c60f4fc1a42f0e52604066696"
+      },
+      {
+        "bytes": 2374656,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/modules/mcctrl.ko",
+        "sha256": "dc46a4f552776d6f9200cbdc8127882ea3f5d69d119f3e5b00672dce234eabcc"
+      }
+    ],
+    "module_reuse_scope": "Only exact099/IHK8d/Linux6.12/config106055 module/host/kernel ABI provenance is reused. Older100d/c664 compute image prose is not used as this newimage identity.",
+    "old_native_cohort_reused_as_actual_new_operation": false
+  },
+  "actual_stage_output": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1",
+  "actual_native_manifest": {
+    "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/native-diagnostic-manifest.json",
+    "bytes": 5994,
+    "sha256": "f13363e5eb31efee749e6fc2c9f9ca83f8d2304318e1b31c63318c20411f49d7",
+    "identity": {
+      "device": 66306,
+      "inode": 49552038,
+      "uid": 1000,
+      "gid": 1000,
+      "mode": 384,
+      "nlink": 1
+    }
+  },
+  "actual_staged_regular_source_rows": [
+    {
+      "content_sha256": "415b951d9d83f62ec9253eee43ffbd0c6daf3fa02b25618d995d89dc3de928c4",
+      "host": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/assets/bzImage",
+      "target": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/assets/bzImage"
+    },
+    {
+      "content_sha256": "9a553f4a33d4ed99b106bc4795bb34e75071dbbf08469115a0765f4f7f364914",
+      "host": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/assets/collector",
+      "target": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/assets/collector"
+    },
+    {
+      "content_sha256": "df65517e79c5f0923cd7c1547469f645dd2857648a596349781d5e62c79682b4",
+      "host": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/assets/mcexec",
+      "target": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/assets/mcexec"
+    },
+    {
+      "content_sha256": "77e8dfe6f8089f18b22524ad474e057cb061d67501f9e9fdb4f391dd4790f45d",
+      "host": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/assets/signal.alternate-repeat",
+      "target": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/assets/signal.alternate-repeat"
+    },
+    {
+      "content_sha256": "b2250121357ffa70c8e781d062c5f6e0720ec978f3cf352765b5cbdc6ee0d0a4",
+      "host": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/base.cpio.gz",
+      "target": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/base.cpio.gz"
+    },
+    {
+      "content_sha256": "1fee3a938c6af1797ea49d56dc87d61967e1f9fcddc9d74abd3f4101d97009c1",
+      "host": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/derived.cpio.gz",
+      "target": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/derived.cpio.gz"
+    },
+    {
+      "content_sha256": "f13363e5eb31efee749e6fc2c9f9ca83f8d2304318e1b31c63318c20411f49d7",
+      "host": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/native-diagnostic-manifest.json",
+      "target": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/native-diagnostic-manifest.json"
+    },
+    {
+      "content_sha256": "5f72b018fa30fd3d140890c3d77e9362d8582ef632c9b7c1279a6a46ab41b0cf",
+      "host": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/overlay-manifest.json",
+      "target": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/overlay-manifest.json"
+    },
+    {
+      "content_sha256": "9c80d1382c90e1b3778273db87153ddeea619178dd317391ba5639dfd898a1ba",
+      "host": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root-base.json",
+      "target": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root-base.json"
+    },
+    {
+      "content_sha256": "cd50d3da3f8707a3bb1735da4873f9ac09e8ac6990abfbb423a7a518f4cd7818",
+      "host": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/bin/native-boot",
+      "target": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/bin/native-boot"
+    },
+    {
+      "content_sha256": "a2f00a6105f20642db8ef95fe12ade0873120594531f325ef363a4bb59f0ff8a",
+      "host": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/images/mckernel.img",
+      "target": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/images/mckernel.img"
+    },
+    {
+      "content_sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b",
+      "host": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/ld-linux-x86-64.so.2",
+      "target": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/ld-linux-x86-64.so.2"
+    },
+    {
+      "content_sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+      "host": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libc.so.6",
+      "target": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libc.so.6"
+    },
+    {
+      "content_sha256": "ae67f463920ae6267710624139c56ef5dcfa8d1c60f4fc1a42f0e52604066696",
+      "host": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/modules/ihk-smp-x86_64.ko",
+      "target": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/modules/ihk-smp-x86_64.ko"
+    },
+    {
+      "content_sha256": "04f5d3e0dbf0c70b7ff5aeb281fabda310751bc45c4916cb582575cf3f81155e",
+      "host": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/modules/ihk.ko",
+      "target": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/modules/ihk.ko"
+    },
+    {
+      "content_sha256": "dc46a4f552776d6f9200cbdc8127882ea3f5d69d119f3e5b00672dce234eabcc",
+      "host": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/modules/mcctrl.ko",
+      "target": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/modules/mcctrl.ko"
+    },
+    {
+      "content_sha256": "0891bc13a8750d09f7758d31031828f8270bc480fe5dc0c25d545528ab454640",
+      "host": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/source/native_diagnostic_overlay.py",
+      "target": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/source/native_diagnostic_overlay.py"
+    }
+  ],
+  "actual_staged_regular_file_identities": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/assets/bzImage",
+      "bytes": 16134144,
+      "sha256": "415b951d9d83f62ec9253eee43ffbd0c6daf3fa02b25618d995d89dc3de928c4",
+      "identity": {
+        "device": 66306,
+        "inode": 49552022,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 420,
+        "nlink": 1
+      }
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/base.cpio.gz",
+      "bytes": 25589058,
+      "sha256": "b2250121357ffa70c8e781d062c5f6e0720ec978f3cf352765b5cbdc6ee0d0a4",
+      "identity": {
+        "device": 66306,
+        "inode": 49552016,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 384,
+        "nlink": 1
+      }
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libc.so.6",
+      "bytes": 2339896,
+      "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+      "identity": {
+        "device": 66306,
+        "inode": 49551940,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 493,
+        "nlink": 1
+      }
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/ld-linux-x86-64.so.2",
+      "bytes": 930600,
+      "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b",
+      "identity": {
+        "device": 66306,
+        "inode": 49551920,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 493,
+        "nlink": 1
+      }
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/assets/mcexec",
+      "bytes": 398096,
+      "sha256": "df65517e79c5f0923cd7c1547469f645dd2857648a596349781d5e62c79682b4",
+      "identity": {
+        "device": 66306,
+        "inode": 49552024,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 493,
+        "nlink": 1
+      }
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/images/mckernel.img",
+      "bytes": 13349576,
+      "sha256": "a2f00a6105f20642db8ef95fe12ade0873120594531f325ef363a4bb59f0ff8a",
+      "identity": {
+        "device": 66306,
+        "inode": 49551918,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 292,
+        "nlink": 1
+      }
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/bin/native-boot",
+      "bytes": 4493400,
+      "sha256": "cd50d3da3f8707a3bb1735da4873f9ac09e8ac6990abfbb423a7a518f4cd7818",
+      "identity": {
+        "device": 66306,
+        "inode": 49551916,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 493,
+        "nlink": 1
+      }
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/assets/signal.alternate-repeat",
+      "bytes": 18736,
+      "sha256": "77e8dfe6f8089f18b22524ad474e057cb061d67501f9e9fdb4f391dd4790f45d",
+      "identity": {
+        "device": 66306,
+        "inode": 49552026,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 493,
+        "nlink": 1
+      }
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root-base.json",
+      "bytes": 11768,
+      "sha256": "9c80d1382c90e1b3778273db87153ddeea619178dd317391ba5639dfd898a1ba",
+      "identity": {
+        "device": 66306,
+        "inode": 49552018,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 384,
+        "nlink": 1
+      }
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/assets/collector",
+      "bytes": 1029880,
+      "sha256": "9a553f4a33d4ed99b106bc4795bb34e75071dbbf08469115a0765f4f7f364914",
+      "identity": {
+        "device": 66306,
+        "inode": 49552028,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 493,
+        "nlink": 1
+      }
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/derived.cpio.gz",
+      "bytes": 26152936,
+      "sha256": "1fee3a938c6af1797ea49d56dc87d61967e1f9fcddc9d74abd3f4101d97009c1",
+      "identity": {
+        "device": 66306,
+        "inode": 49552034,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 384,
+        "nlink": 1
+      }
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/overlay-manifest.json",
+      "bytes": 15535,
+      "sha256": "5f72b018fa30fd3d140890c3d77e9362d8582ef632c9b7c1279a6a46ab41b0cf",
+      "identity": {
+        "device": 66306,
+        "inode": 49552036,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 384,
+        "nlink": 1
+      }
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/source/native_diagnostic_overlay.py",
+      "bytes": 27356,
+      "sha256": "0891bc13a8750d09f7758d31031828f8270bc480fe5dc0c25d545528ab454640",
+      "identity": {
+        "device": 66306,
+        "inode": 49552032,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 384,
+        "nlink": 1
+      }
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/modules/ihk.ko",
+      "bytes": 1521480,
+      "sha256": "04f5d3e0dbf0c70b7ff5aeb281fabda310751bc45c4916cb582575cf3f81155e",
+      "identity": {
+        "device": 66306,
+        "inode": 49551982,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 420,
+        "nlink": 1
+      }
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/modules/ihk-smp-x86_64.ko",
+      "bytes": 13092960,
+      "sha256": "ae67f463920ae6267710624139c56ef5dcfa8d1c60f4fc1a42f0e52604066696",
+      "identity": {
+        "device": 66306,
+        "inode": 49551980,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 420,
+        "nlink": 1
+      }
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/modules/mcctrl.ko",
+      "bytes": 2374656,
+      "sha256": "dc46a4f552776d6f9200cbdc8127882ea3f5d69d119f3e5b00672dce234eabcc",
+      "identity": {
+        "device": 66306,
+        "inode": 49551984,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 420,
+        "nlink": 1
+      }
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/native-diagnostic-manifest.json",
+      "bytes": 5994,
+      "sha256": "f13363e5eb31efee749e6fc2c9f9ca83f8d2304318e1b31c63318c20411f49d7",
+      "identity": {
+        "device": 66306,
+        "inode": 49552038,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 384,
+        "nlink": 1
+      }
+    }
+  ],
+  "literal_payload": {
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "/apps/signal.alternate-repeat"
+    ],
+    "cwd": "/case/work",
+    "env": {
+      "COKERNEL_PATH": "/apps",
+      "LANG": "C",
+      "LC_ALL": "C",
+      "PATH": "/usr/bin:/bin",
+      "TZ": "UTC"
+    },
+    "oracle": {
+      "exit_code": 0,
+      "stderr_hex": "",
+      "stdout_hex": "68616e646c65723d3120696e5f616c743d696e736964650a68616e646c65723d3220696e5f616c743d696e736964650a68616e646c65723d3320696e5f616c743d696e736964650a68616e646c65723d3420696e5f616c743d696e736964650a68616e646c65723d3520696e5f616c743d696e736964650a68616e646c65723d3620696e5f616c743d696e736964650a68616e646c65723d3720696e5f616c743d696e736964650a68616e646c65723d3820696e5f616c743d696e736964650a68616e646c65723d3920696e5f616c743d696e736964650a68616e646c65723d313020696e5f616c743d696e736964650a68616e646c65723d313120696e5f616c743d696e736964650a68616e646c65723d313220696e5f616c743d696e736964650a68616e646c65723d313320696e5f616c743d696e736964650a68616e646c65723d313420696e5f616c743d696e736964650a68616e646c65723d313520696e5f616c743d696e736964650a68616e646c65723d313620696e5f616c743d696e736964650a64656c69766572793d313620616c745f686974733d31360a"
+    },
+    "stderr_limit_bytes": 1024,
+    "stdout_limit_bytes": 1024
+  },
+  "literal_boot_supplier_argv": [
+    "/bin/native-boot",
+    "-R",
+    "-c1",
+    "-m128M@0",
+    "-o0",
+    "-T0"
+  ],
+  "profile": {
+    "append": "console=ttyS0,115200n8 rdinit=/init nokaslr panic=-1 memmap=4K%0x80000-1",
+    "memory_mib": 8192,
+    "name": "native-diagnostic-4vcpu-8192mib",
+    "numa_nodes": 2,
+    "vcpus": 4
+  },
+  "available_extra_signal_ELF_facts": [
+    {
+      "case": "vector.mxcsr-nested-signal",
+      "artifact": {
+        "bytes": 19352,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/output-1/vector.mxcsr-nested-signal",
+        "sha256": "db18e3d6e9497f86d10605e0e7b52e15f2952cb49076c954931d5e338ca81706"
+      },
+      "mode": "0755",
+      "ELF": {
+        "DT_NEEDED": [
+          "libc.so.6"
+        ],
+        "RPATH_RUNPATH": [],
+        "class": "ELF64",
+        "comment": [
+          "GCC: (GNU) 14.3.1 20251022 (Red Hat 14.3.1-4)"
+        ],
+        "endian": "little",
+        "entry": "0x401230",
+        "interpreter": "/lib64/ld-linux-x86-64.so.2",
+        "machine": "EM_X86_64",
+        "main_address": "0x0000000000401070",
+        "main_bytes": 442,
+        "raw_header_dynamic_dynsym_versym_match_saved_metadata": true,
+        "type": "ET_EXEC"
+      },
+      "literal_future_guest_argv": [
+        "/bin/mcexec",
+        "-t",
+        "1",
+        "0",
+        "/apps/vector.mxcsr-nested-signal"
+      ],
+      "oracle": {
+        "exit_code": 0,
+        "stdout": {
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/mxcsr-oracle-correction-1/source/expected.stdout",
+          "bytes": 141,
+          "sha256": "2ad8848ffacb1c561e88bdc46649394a51cb289630855e984bdb44b48e5c8093"
+        },
+        "stdout_utf8": "nested=2 inner_mxcsr=00005f80 outer_mxcsr=00003f80 main_mxcsr=00001f80 outer_restored=1 main_restored=1 exceptions_masked=1 tid_ok=1 valid=1\n",
+        "stderr_hex": ""
+      },
+      "stage_and_frontdoor_selection_for_this_additional_case_bound": false,
+      "native_result": null,
+      "scope": "Already compiled/read/qualified ELF/provider and oracle facts; not part of the one named alternate-repeat request and not a new scenario quota."
+    },
+    {
+      "case": "signal.mask-restore",
+      "artifact": {
+        "bytes": 18656,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/output-1/signal.mask-restore",
+        "sha256": "49c21ce0098cddf0778797bca50d4bfa7be4e4513fe7dd34474b614dab871827"
+      },
+      "mode": "0755",
+      "ELF": {
+        "DT_NEEDED": [
+          "libc.so.6"
+        ],
+        "RPATH_RUNPATH": [],
+        "class": "ELF64",
+        "comment": [
+          "GCC: (GNU) 14.3.1 20251022 (Red Hat 14.3.1-4)"
+        ],
+        "endian": "little",
+        "entry": "0x401220",
+        "interpreter": "/lib64/ld-linux-x86-64.so.2",
+        "machine": "EM_X86_64",
+        "main_address": "0x00000000004010a0",
+        "main_bytes": 378,
+        "raw_header_dynamic_dynsym_versym_match_saved_metadata": true,
+        "type": "ET_EXEC"
+      },
+      "literal_future_guest_argv": [
+        "/bin/mcexec",
+        "-t",
+        "1",
+        "0",
+        "/apps/signal.mask-restore"
+      ],
+      "oracle": {
+        "exit_code": 0,
+        "stdout": {
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/existing-signal-oracles-1/source/signal.mask-restore.expected.stdout",
+          "bytes": 40,
+          "sha256": "dcaa9f1bb23dd9194743e50b308030dbb3bae80ade2729e0605663edd28d1033"
+        },
+        "stdout_utf8": "handled=1 observed_blocked=1 restored=1\n",
+        "stderr_hex": ""
+      },
+      "stage_and_frontdoor_selection_for_this_additional_case_bound": false,
+      "native_result": null,
+      "scope": "Already compiled/read/qualified ELF/provider and oracle facts; not part of the one named alternate-repeat request and not a new scenario quota."
+    },
+    {
+      "case": "signal.altstack-small",
+      "artifact": {
+        "bytes": 18248,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/output-1/signal.altstack-small",
+        "sha256": "9554beb200a168f648ea919dbe2e75b0a63add208d0bee32bebba3b175e425e1"
+      },
+      "mode": "0755",
+      "ELF": {
+        "DT_NEEDED": [
+          "libc.so.6"
+        ],
+        "RPATH_RUNPATH": [],
+        "class": "ELF64",
+        "comment": [
+          "GCC: (GNU) 14.3.1 20251022 (Red Hat 14.3.1-4)"
+        ],
+        "endian": "little",
+        "entry": "0x401170",
+        "interpreter": "/lib64/ld-linux-x86-64.so.2",
+        "machine": "EM_X86_64",
+        "main_address": "0x0000000000401080",
+        "main_bytes": 233,
+        "raw_header_dynamic_dynsym_versym_match_saved_metadata": true,
+        "type": "ET_EXEC"
+      },
+      "literal_future_guest_argv": [
+        "/bin/mcexec",
+        "-t",
+        "1",
+        "0",
+        "/apps/signal.altstack-small"
+      ],
+      "oracle": {
+        "exit_code": 0,
+        "stdout": {
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/existing-signal-oracles-1/source/signal.altstack-small.expected.stdout",
+          "bytes": 36,
+          "sha256": "8cff46eccdbec3bec7c8d86ee0fe556e54db13904634ed72544e6114de4a8a7b"
+        },
+        "stdout_utf8": "rc=-1 errno=12 enomem=1 unchanged=1\n",
+        "stderr_hex": ""
+      },
+      "stage_and_frontdoor_selection_for_this_additional_case_bound": false,
+      "native_result": null,
+      "scope": "Already compiled/read/qualified ELF/provider and oracle facts; not part of the one named alternate-repeat request and not a new scenario quota."
+    }
+  ],
+  "actual_scope": "HOST-only bytes/archive/manifest qualification. No code-package adoption/controller/nativeclaim/currentfree/source-epoch/actualsignal/restoration inference.",
+  "next_matching_fields": {
+    "resolved_inputs": [
+      "SourcePR6805178926 exact parent34759, actual successful currenta2f stageab0bc/fullRootbeb03/current1GiBretiree469",
+      "Actual43 files/21dirs/currenta2fBOTHpaths/099KOs/program-libraries-collector and real base/derived archives/native-manifest f133 plus actual17 regular source rows now qualified"
+    ],
+    "still_unissued_or_unproved_here": [
+      {
+        "input": "Actual selected immutable code-package generation/catalogue/readback for currenta2f native admission",
+        "supplier": "Root normal code-publication/adoption owner via existing publisher/registered immutable loader",
+        "value": null,
+        "scope": "Independent lane may provide actual current receipt; old2c4c/c664 package is not silently substituted and this HOSTstage Q does not prove adoption."
+      },
+      {
+        "input": "Actual healthy same-Root owning-controller current native session",
+        "supplier": "Root/guardian/current Campaign via supported normal authority-ordered transition and native_current_owner CurrentOwnerServer/CurrentOwnerSession",
+        "value": null,
+        "scope": "Same savedRoot/goal/thread/invocation/7c6 cumulative budget; no forced healthy restart, synthetic recovery, stop/start or control action here."
+      },
+      {
+        "input": "Fresh admitted native operation Root-pinned config, nonce/boot/caps/watchdog/rootFD/leaseFD and source/profile custody",
+        "supplier": "Actual Root native/source owner using VerifiedNativeRequest/RootLease/NativeAdmission/NativeSourceCustody through registered supervisor_entry.run",
+        "value": null,
+        "scope": "Existing nativeCPU2-5/12GiB retained reservation is not claim/currentfree; actual controller/account/stop/hold/ownership/native cgroup/FLOCK and effective source-view evidence remain required."
+      },
+      {
+        "input": "Actual matching signal command result and positive source/native restoration",
+        "supplier": "Same admitted native owner/watchdog through DiagnosticOwner, NativeCompletion and NativeSourceCustody.restore/NativeParentRetirement",
+        "value": null,
+        "scope": "Only exact actual command/oracle/selectedimage/result/wholefamily/VM/client/FD/stream/sourceflag/restoration proofs can qualify actual behavior. UNKNOWN remains held, no absence-based success."
+      }
+    ]
+  },
+  "actual_outer_native_argv": null,
+  "no_new_nonce_or_actual_operation_config_or_capability_issued": true,
+  "other_native_source_resource_holds_unchanged": true
+}

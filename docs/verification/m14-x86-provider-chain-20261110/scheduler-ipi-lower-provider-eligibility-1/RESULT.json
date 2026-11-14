@@ -1,0 +1,247 @@
+{
+  "schema": "mckernel.ipi-lower-provider.accepted-F04-source-eligibility.v1",
+  "decision": "GO_FINITE_THREE_EXACT_BRIDGES_BARRIER_AND_ONE_REAL_READ_SLOT_PLUS_SEPARATE_DIRECT_WRMSR_CALLEE_SOURCE_ONLY",
+  "clarified_counts": "The direct missing endpoints are3functions ihk_mc_mb/x86_cpu_pause_bridge/x86_write_msr_bridge +1data lapic_read. Exact direct wrmsr callee adds1function, yielding compatible4T+1B source cut; only actual existing cpu_pause remains genuine external. These are source expectations, not emitted-object/final-import proof.",
+  "reviewer": "/root/memory_error_cleanup_witness_high",
+  "routing": "Actual Sol/HIGH; never/danger-full-access; no recursion/private read-only eligibility task",
+  "actual_consumer": {
+    "capture": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-concrete-provider-metadata-1/ACTUAL-CAPTURE-BEFORE-GATE.json",
+    "capture_sha256": "d7c5046d4393d21a0ef8080fdcca7d1d318749117191342b47d61508e898adc3",
+    "object_sha256": "1f4a6b978f6b81737c4bf2bf62c94fbdd71a4003c59161db7abec761209be2e0",
+    "object_bytes": 4256,
+    "actual7U": [
+      "cpu_disable_interrupt_save",
+      "cpu_restore_interrupt",
+      "ihk_mc_mb",
+      "lapic_read",
+      "x86_cpu_pause_bridge",
+      "x86_lapic_write_bridge",
+      "x86_write_msr_bridge"
+    ]
+  },
+  "authority_and_reuse": {
+    "human_plan": "Current CAMPAIGN.md accepted M14-F04 CPU primitives/startup/interrupts scope and current genuine LAPIC/IPI lower-provider readiness; generic/exec/notification/SDK/native/currentfree/UNKNOWN holds remain.",
+    "direct_source": "Actual kernel/rust/lib.rs94,CMake187+729/730 select this existing Rust CPU implementation paired with MCKERNEL_RUST_X86_CPU_HELPERS in accepted arch/x86_64/kernel/cpu.c.",
+    "prior_IPI_contract": "Affirmative x86-ipi-concrete-provider-lookahead-20261109T2302 supplies genuine consumer/declaration boundary; this NEW finite lower-definition membership review does not infer all CPU neighbors eligible.",
+    "already_resolved_imports": "Root-provided matching saved current35b nm identifies actual cpu_disable_interrupt_save/restore; new qualified2f LAPIC unit owns x86_lapic_write_bridge. No reads/requalification/replay of those objects.",
+    "LAPIC_overlap_check": {
+      "request": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-unit-1/REQUEST.json",
+      "sha256": "a5709399aad576c53fba3054150f8f4b1251fbdd7061d01bdef315842173ac69",
+      "defined_T": [
+        "lapic_timer_enable",
+        "lapic_timer_disable",
+        "x86_lapic_timer_enable_body_result",
+        "x86_lapic_timer_disable_body_result",
+        "x86_lapic_write_bridge"
+      ],
+      "defined_B": [
+        {
+          "name": "lapic_write",
+          "source": "x86_cpu_helpers.rs5287-5288",
+          "type": "Option<WriteRegister>",
+          "initializer": "None",
+          "bytes": 8,
+          "alignment": 8,
+          "expected_section": "BSS/NOBITS",
+          "target_relocations": 0
+        }
+      ],
+      "finding": "None of four new functions/read-slot data overlaps listed LAPIC5T+lapic_write slot owners. No LAPIC source implementation copied/prepared."
+    },
+    "cpu_pause": "Existing qualified current owner is reused as named genuine cpu_pause import. Actual native cfg(not(mckernel_equivalence)) definition is a separate existing provider; x86_cpu_pause_bridge must remain a real forwarder, never alias/relabel cpu_pause.",
+    "wrmsr_reuse_limit": "No independently qualified current wrmsr artifact is established by the named consumer/LAPIC source packets. Exact source-only primitive cut below is eligible; raw symbol absence/universal object absence is not claimed."
+  },
+  "exact_source_bindings": [
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 810,
+      "last_line": 813,
+      "sha256": "ea1809f1ae26ef50b5a7239152c0ed9cadad0881bec3b988cf0cd0939ba77248",
+      "role": "Exact unconditional no_mangle ihk_mc_mb definition"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 6034,
+      "last_line": 6041,
+      "sha256": "025fd1534a684c12dd5c8939a96cb98a8df568b8e4c649f0de2c19af6d3eb1d7",
+      "role": "Exact no_mangle x86_cpu_pause_bridge forwarder"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 5788,
+      "last_line": 5795,
+      "sha256": "2a64e1ca97cf95e8b6994a31eac85d5aac31fbfde374a4987edd6ae91ec29d15",
+      "role": "Exact no_mangle x86_write_msr_bridge forwarder"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 764,
+      "last_line": 776,
+      "sha256": "20ca08201ddd0b7a757d3922af054fa5fe9fdedccaff4d39de3093729f3def4e",
+      "role": "Exact no_mangle wrmsr actual finite direct callee"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 5278,
+      "last_line": 5278,
+      "sha256": "6970a4600ad541ae9e78983ee819999b579f4f9837f5b24953e663983541edd8",
+      "role": "Actual ReadRegister C ABI alias"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 5289,
+      "last_line": 5290,
+      "sha256": "43f65a6f03f8c9c525f365302caf5198760c311fcc84ebecb6b732d766d79bc5",
+      "role": "Original no_mangle lapic_read None storage declaration"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 5301,
+      "last_line": 5302,
+      "sha256": "785d0162d24c6e5c4f45e2b736b7b09ef35d778e71c65405e812dd3c69badd49",
+      "role": "Original Option ReadRegister size8/align8 assertions"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 845,
+      "last_line": 849,
+      "sha256": "fe9a327ea2ee18df3f63a18a2273cb09bdc36f5c183bc5c4daac117be4c38fc1",
+      "role": "Existing native cpu_pause provider reference only; exclude definition from new cut"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "first_line": 5,
+      "last_line": 7,
+      "sha256": "24d812dee2beebc060993d304fc5e4ef04d3b0a0cc6eaf042adb89bea48c15cc",
+      "role": "Qualified actual C scalar aliases"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/lib.rs",
+      "first_line": 94,
+      "last_line": 94,
+      "sha256": "4fefcc69e0dc6f48051ca4ae83e2a725ccefc386861463a2e76508354c5bdbbc",
+      "role": "Actual Rust CPU module selected"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "first_line": 187,
+      "last_line": 187,
+      "sha256": "cce0758db812ec01f3ec037f576e8e612ca1ebc38bbd17bcf64ebc10284766cd",
+      "role": "Actual source build input"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "first_line": 729,
+      "last_line": 730,
+      "sha256": "4256c5202df3cad22f53ced67131586dced0f7179e081c1740b6d95039cf352e",
+      "role": "Actual C RustCPUhelpers selector pairing"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+      "first_line": 37,
+      "last_line": 37,
+      "sha256": "7e578b25b1bffea6ad9b7b85cfe617659d846b0fa95b45b523c5bdcb90f7fbca",
+      "role": "Original native-C primitive exclusion selector"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+      "first_line": 167,
+      "last_line": 175,
+      "sha256": "9f376e0cb9f2237b106b420dfb370db8ffa8b23ab2e83f969477d4fcc252d336",
+      "role": "Original C wrmsr reference ABI/effects"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+      "first_line": 195,
+      "last_line": 198,
+      "sha256": "72250cad7f4acf11051c54b64138ad6d3609b32ef6e6476de29e249bda22f27e",
+      "role": "Original C memory-barrier primitive"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+      "first_line": 359,
+      "last_line": 360,
+      "sha256": "fcdd88d402017b78a5a68242ca7c8c3868bfe57b2607e8ef1f73277d178d2e4f",
+      "role": "Selected C lapic_read extern alternative"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+      "first_line": 368,
+      "last_line": 370,
+      "sha256": "c6c0fa74ef793db39e5e59d64b516209fbca7081eb38d368b420a76f69140996",
+      "role": "Unselected original C lapic_read static alternative"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+      "first_line": 1183,
+      "last_line": 1184,
+      "sha256": "fd38d8a61288b84a2c97e69f41ef68f216b6cb7b953222dca3189b0d81613694",
+      "role": "Selected actual C MSR bridge ABI declaration"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+      "first_line": 2805,
+      "last_line": 2806,
+      "sha256": "a044d55142ab39635045ffdbb363c1a647062d681bdc34d1ee5d07efe88daa2a",
+      "role": "Selected actual C pause bridge ABI declaration"
+    }
+  ],
+  "endpoint_contracts": {
+    "ihk_mc_mb": {
+      "source": "x86_cpu_helpers.rs810-813",
+      "ABI": "#[no_mangle] pub unsafe extern C fn()",
+      "body_contract": "Original mfence inline asm options(nostack,preserves_flags), retaining compiler memory effects (no nomem). No software callee/data/constant. Original C mfence memory clobber/reference and CPUselector preserved.",
+      "eligibility": "GO accepted-F04 memory barrier primitive, unconditional exact source; no notification/generic/exec closure."
+    },
+    "x86_cpu_pause_bridge": {
+      "source": "x86_cpu_helpers.rs6034-6041 within original remaining_cpu_callbacks namespace",
+      "ABI": "#[no_mangle] pub unsafe extern C fn()",
+      "body_contract": "Exact unsafe super::cpu_pause() forwarding. Retain actual namespace with original fn declaration to genuine existing no_mangle cpu_pause; no name alias, inlined replacement, copied second cpu_pause definition or callback.",
+      "eligibility": "GO accepted-F04 polling instruction bridge; no timeout/progress claim or downstream initialization."
+    },
+    "x86_write_msr_bridge": {
+      "source": "x86_cpu_helpers.rs5788-5795 within original remaining_cpu_callbacks namespace",
+      "ABI": "#[no_mangle] pub unsafe extern C fn(register:actualCInt,value:actualCULong)",
+      "body_contract": "Exact unsafe super::wrmsr(register as u32,value). Actual CInt narrowing preserves original unsigned-index bits; actual unsignedlong value remainsCULong64. No register mapping/validity/default guessed.",
+      "eligibility": "GO accepted-F04 primitive forwarder. Direct real wrmsr callee contract below; any actual hardware write remains unadmitted."
+    },
+    "lapic_read": {
+      "source": "dispatch_and_msr_entries actual ReadRegister alias5278/static5289-5290/assertions5301-5302",
+      "ABI": "#[no_mangle] pub(crate) static mut lapic_read:Option<unsafe extern C fn(actualCInt)->u32>=None; source size8/align8",
+      "storage_contract": "Original mutable static-lifetime nullable C function-pointer storage only, initial None/preboot declaration. ExpectedB8/no target relocation; actual large/static NOBITS name/flags must be captured/qualified rather than guessed. No fake read function, no alias to lapic_write, no target/setter/selection body.",
+      "C_binding": "Selected MCKERNEL_RUST_X86_CPU_HELPERS branch owns Rust slot with actual unsigned int(*)(int) extern; unselected Cbranch owns its original static. Future actual C/Rust duplicate ownership binding required.",
+      "eligibility": "GO accepted-F04 declarative dispatch slot. Source type/owner/lifetime clear independently of missing live boot target."
+    }
+  },
+  "direct_callee_cut": {
+    "name": "wrmsr",
+    "source": "x86_cpu_helpers.rs764-776",
+    "ABI": "#[no_mangle] pub unsafe extern C fn(index:actualCUInt=u32,value:actualCULong=u64)",
+    "body_contract": "Original low=value asu32,high=value>>32 asu32; actual wrmsr asm with ecx index/eax low/edx high and original options(nostack,preserves_flags). No nomem added, no software helper/import/data/private owner.",
+    "eligibility": "GO accepted-F04 exact CPU MSR primitive and direct callee only. Compatible source closure includes it without wholemodule/context/FPU/boot/helper code. If kept separate, bridge must retain real wrmsr U until independently qualified exact owner exists."
+  },
+  "compatible_minimum_preparation": {
+    "definitions": [
+      "ihk_mc_mb",
+      "x86_cpu_pause_bridge",
+      "x86_write_msr_bridge",
+      "wrmsr",
+      "lapic_read"
+    ],
+    "required_context": "Actual abi.rsff48 CInt/CULong plus exact CUInt=u32 alias, original ReadRegister alias and source size/align assertions, original namespaces/attrs; core asm available in no_std. No additional cfg/env/features/no_builtins/guard changes.",
+    "only_expected_standalone_U": [
+      "cpu_pause"
+    ],
+    "profile": "Same retained actual native(not equivalence) no_std/edition2021/nightly1.95/large/static/no-redzone/no-vector/no-SSE flags and exact single warning. Source/profile/object predicates and fresh Root HOST admission required before any codegen/readbacks/link.",
+    "actual_emission_obligation": "Qualify exact4T+1B/onlyrealcpu_pauseU, actual bytes/attrs/slotNone declaration/section flags/size/alignment/relocs/private/intrinsic effects before join; no wildcard compiler surprise or stale cohort/duplicate storage.",
+    "not_prepared": "This result defines eligible finite source contracts only. No unit, codegen/metadata/controller/predicate/link command or output artifact created."
+  },
+  "runtime_and_full_acceptance_NO_GO": {
+    "missing_original_inputs": "Actual selected C/header/cohort/duplicate-storage/source/SDK/native/currentfree constraints remain; slot target/backend mapping/APICmode/boot initialization/publication/live lifetime and hardware ownership are not supplied.",
+    "excluded": "No boot selector/init_lapic_bsp/dispatch publication/target setter/read or hardware call, no notification/generic/exec/perf/mmap/wholemodule/held or unclear downstream bodies. Never execute mfence/pause/MSR/slot provider as campaign native qualification under this source contract.",
+    "distinction": "Missing live slot/privileged context blocks execution/final closure; it does not forbid exact nonexecuted genuine source/data qualification within this affirmative finite accepted-F04 cut.",
+    "final_image_acceptance_or_score_credit": false
+  },
+  "operations": "CPU0 source-only name/selector and exact small definition/callee reads, retained JSON and source/hash evidence, sole private RESULT write. No unit/compiler/GNU/ELFparser/gate/link/runtime/canonical/index/state operation; no broad object inventory or c205/held-source lookup.",
+  "unresolved_source_membership_for_selected_cut": []
+}

@@ -1,0 +1,126 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": "2026-10-30T04:21:14.476557+00:00",
+  "status": "PASS_ACTUAL_HOST_MOCK_ONLY",
+  "owner": "/root",
+  "output_root": "/home/holden/mckernel-work/scratch/native-cheap-20261017-5nwobsph",
+  "compiler_exit": 0,
+  "fixture_exit": 0,
+  "rust_tests_passed": 1,
+  "actual_exports_exercised": 5,
+  "request_geometry": "mock SyscallRequest size72 align8; actual private storage address divisible by64 in all5 calls",
+  "runner": {
+    "pid": 2730585,
+    "birth": "113149646",
+    "pgid": 2730584,
+    "identity": [
+      "2730585",
+      "2730584",
+      "2730584",
+      "2730584",
+      "S"
+    ]
+  },
+  "postterminal_owned_group": {
+    "observed_at_epoch": 1793334074.4765751,
+    "pgid": 2730584,
+    "members": [],
+    "read_errors": [],
+    "absent": true
+  },
+  "resources_released": {
+    "cpu": [
+      6
+    ],
+    "planning_bytes": 2147483648,
+    "reason": "tool terminal0, identity consistent, exact processgroup sampled empty"
+  },
+  "files": {
+    "RUNNER.pid": {
+      "sha256": "d93d2c7ef4bd0c8af42367367522a96e91d0deebd8e64d96cc6cf3dfd0cfb1fe",
+      "bytes": 8,
+      "mtime_ns": 1793334051770233338
+    },
+    "RUNNER.proc-stat": {
+      "sha256": "cca6566293bb5fe9dd073b6240808cb8d3b77ff6d2ea4f02c7ab1fa7491b8319",
+      "bytes": 322,
+      "mtime_ns": 1793334051770233338
+    },
+    "RUNNER.identity": {
+      "sha256": "ec904093a5a97c225498be56ddc6a763db72a93bc7506f8c87b59044d7ef5c05",
+      "bytes": 34,
+      "mtime_ns": 1793334051778233620
+    },
+    "run.sh": {
+      "sha256": "626b09456a312670a883182a4e0a23e955c0ab913b9116fe2697dc68cd8b1e3d",
+      "bytes": 850,
+      "mtime_ns": 1793333907957122885
+    },
+    "constructor_alignment_fixture.rs": {
+      "sha256": "65052b04c27f597611b67b0b737c5c6e784376e47fd9bb9bc16f1ccbdb2d588a",
+      "bytes": 3073,
+      "mtime_ns": 1793333907957122885
+    },
+    "f03_request_constructors.rs": {
+      "sha256": "759818c4bbf907f988b0e6a349221ec8356e8b2b6863ce36071d2fa8ca9b35a1",
+      "bytes": 3917,
+      "mtime_ns": 1793333907957122885
+    },
+    "constructors.test": {
+      "sha256": "0345e2014ab302c41d9f94e72048a63311600e8dcf8875d889e9b0b4df69bf3f",
+      "bytes": 6157104,
+      "mtime_ns": 1793334052114245439
+    },
+    "compiler.stdout": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mtime_ns": 1793334051778233620
+    },
+    "compiler.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mtime_ns": 1793334051778233620
+    },
+    "compiler.exit": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2,
+      "mtime_ns": 1793334052122245721
+    },
+    "compiler.time": {
+      "sha256": "8b7af423ff897c763f8d04268c6e228d59194bb7781a8b3ad153144fa21a4b2a",
+      "bytes": 916,
+      "mtime_ns": 1793334052122245721
+    },
+    "fixture.stdout": {
+      "sha256": "84d09a88f2fc9a9b4a1847e76729073d0156c5d5ef7cba02a097756c38be0024",
+      "bytes": 194,
+      "mtime_ns": 1793334052126245861
+    },
+    "fixture.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mtime_ns": 1793334052122245721
+    },
+    "fixture.exit": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2,
+      "mtime_ns": 1793334052126245861
+    },
+    "fixture.time": {
+      "sha256": "79934a3edb2e9105715051b6df4c314219d2f165567cb5dceb0f489280f8c0f4",
+      "bytes": 748,
+      "mtime_ns": 1793334052126245861
+    }
+  },
+  "compiler_time": "\tCommand being timed: \"/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc --edition=2021 --test -Dwarnings constructor_alignment_fixture.rs -o constructors.test\"\n\tUser time (seconds): 0.06\n\tSystem time (seconds): 0.05\n\tPercent of CPU this job got: 33%\n\tElapsed (wall clock) time (h:mm:ss or m:ss): 0:00.34\n\tAverage shared text size (kbytes): 0\n\tAverage unshared data size (kbytes): 0\n\tAverage stack size (kbytes): 0\n\tAverage total size (kbytes): 0\n\tMaximum resident set size (kbytes): 120348\n\tAverage resident set size (kbytes): 0\n\tMajor (requiring I/O) page faults: 2343\n\tMinor (reclaiming a frame) page faults: 10744\n\tVoluntary context switches: 720\n\tInvoluntary context switches: 59\n\tSwaps: 0\n\tFile system inputs: 149112\n\tFile system outputs: 12192\n\tSocket messages sent: 0\n\tSocket messages received: 0\n\tSignals delivered: 0\n\tPage size (bytes): 4096\n\tExit status: 0\n",
+  "fixture_time": "\tCommand being timed: \"./constructors.test --test-threads=1\"\n\tUser time (seconds): 0.00\n\tSystem time (seconds): 0.00\n\tPercent of CPU this job got: ?%\n\tElapsed (wall clock) time (h:mm:ss or m:ss): 0:00.00\n\tAverage shared text size (kbytes): 0\n\tAverage unshared data size (kbytes): 0\n\tAverage stack size (kbytes): 0\n\tAverage total size (kbytes): 0\n\tMaximum resident set size (kbytes): 2740\n\tAverage resident set size (kbytes): 0\n\tMajor (requiring I/O) page faults: 0\n\tMinor (reclaiming a frame) page faults: 120\n\tVoluntary context switches: 3\n\tInvoluntary context switches: 2\n\tSwaps: 0\n\tFile system inputs: 0\n\tFile system outputs: 8\n\tSocket messages sent: 0\n\tSocket messages received: 0\n\tSignals delivered: 0\n\tPage size (bytes): 4096\n\tExit status: 0\n",
+  "fixture_stdout": "\nrunning 1 test\ntest five_actual_exports_use_aligned_defined_requests_and_preserve_returns ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+  "production_builds": 0,
+  "production_links": 0,
+  "native_qualifications": 0,
+  "guest_apps": 0,
+  "accepted_C_retirements": 0,
+  "actual_first_compiler_timestamp": null,
+  "compiler_stream_creation_epoch": 1793334051.7782335,
+  "limitations": "Mock ABI/providers, one exported-test covers5calls; no C header ABI, production selection/provider uniqueness, host transport lifetime, native or file-retirement proof. stdout creation is a timestamp proxy, not Popen time. Root70 UNKNOWN retained."
+}

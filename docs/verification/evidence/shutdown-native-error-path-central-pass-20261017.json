@@ -1,0 +1,51 @@
+{
+  "schema": "mckernel.shutdown-native-error-path-central-pass.v1",
+  "status": "PASS_TARGET_EXPORT_AND_TOUCHED_SHUTDOWN_FAMILIES",
+  "additive_to": "docs/verification/evidence/shutdown-native-error-path-repair-20261017.json",
+  "author_record_preserved": true,
+  "failure_family": "S22-NATIVE-SHUTDOWN-ERROR-PATH-1",
+  "execution_owner": "dispatcher",
+  "source_hashes": {
+    "host-kernel/native-rust/ihk_smp_x86_64.rs": "a353b2915a4038e7739d01cc440376daf091367f976cf6de297bceb1dd59fce8",
+    "scripts/tests/test_shutdown_native_error_path_20261017.py": "48899df693514106d4c125d0fa204b9ae1c79325396b8de04913499effd8fc83",
+    "scripts/tests/fixtures/shutdown_v6_provider.rs": "86a50132f331fdac00ae155d8970d6644b0e7c0f4e82c5bdd4ddcc950890c94c"
+  },
+  "command": "/home/holden/anaconda3/bin/python3 -B -m unittest scripts.tests.test_shutdown_native_error_path_20261017 scripts.tests.test_native_shutdown_v6_provider_integration_20261001 scripts.tests.test_native_shutdown_v6_actual_order_20261017",
+  "resources": {"affinity_cpu": 6, "memory_limit_bytes": 2147483648, "elapsed_seconds": 2.04, "max_rss_kib": 135136, "swaps": 0},
+  "captures": {
+    "stdout": "/home/holden/mckernel-work/scratch/shutdown-native-error-path-central-python-corrected-20261017.stdout",
+    "stdout_sha256": "a3dbd01b2f47d6ef1113180df5bd33a507b57ac939982cc350cb8d6ebc88b019",
+    "stderr": "/home/holden/mckernel-work/scratch/shutdown-native-error-path-central-python-corrected-20261017.stderr",
+    "stderr_sha256": "f8805a40104092e6781c7cd8f59745783ac0e563762faa61705c5561c14e9c65",
+    "exit_status": 0
+  },
+  "results": {
+    "python_tests": "8 passed",
+    "target_export_fixture": "1 Rust test passed; all4095 negative Linux errno vectors retain exact positive post-effect tag and signed low32 errno payload",
+    "old_root_export_negative": "Compiler exit1 with required E0412 missing kernel::Error diagnostic",
+    "provider_fixture": "9 Rust tests passed plus all4 existing compiled mutation oracles rejected",
+    "actual_order_fixture": "13 Rust tests passed plus all3 existing precise negative mutation statuses/diagnostics rejected"
+  },
+  "target_export_artifacts": {
+    "root": "/home/holden/mckernel-work/scratch/shutdown-native-error-path-37kfnwoy",
+    "repaired_source_sha256": "29ca0b48bea406e1a6039ebcb3dce2dd1d355f93eaaeef694ff726c12cc9767b",
+    "old_root_export_source_sha256": "f8bacc182165d7ebc38d5893507c03e8db99187cccc3df6cc76f0abeddd41500",
+    "retained": "Generated source/binary and compile/run stdout/stderr/status for repaired helper; generated old-spelling source and precise compile-failure streams/status"
+  },
+  "actual_order_artifacts": {
+    "root": "/home/holden/mckernel-work/scratch/shutdown-actual-order-jq1veob2",
+    "actual_source_sha256": "01773f5ae68abc9a16d5d2a8df9a0d28fb592c44cdcc5ef33cac421182d1886e",
+    "retained": "All generated variants, binaries, compile/run streams/statuses"
+  },
+  "preceding_command_failure_preserved": {
+    "stdout": "/home/holden/mckernel-work/scratch/shutdown-native-error-path-central-20261017.stdout",
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "/home/holden/mckernel-work/scratch/shutdown-native-error-path-central-20261017.stderr",
+    "stderr_sha256": "33e39d5d70fed5e12cd6d824715db4396db9d66f029457b7f68277ebc8d02c26",
+    "classification": "Python3.8 import TypeError on inherited tuple[str,str] annotation before any Rust invocation",
+    "bounded_command_correction": "Dispatcher selected the already-known Python3.9.12 interpreter; no legacy source or oracle change"
+  },
+  "scope": "Host extraction/target-export fixture and existing behavior oracles only. Actual Linux crate lib.rs/error.rs supply the export evidence and Error/to_errno bytes; this is not yet a kernel.rmeta typecheck, native module build or guest result.",
+  "next_dependency": "Dispatcher actual kernel.rmeta boundary check if metadata/compiler compatible, independently accepted failed-build retirement, then fresh source-bound candidate/build release and signal.mask-restore guest. Preserve original failed scratch22 materialization.",
+  "acceptance_delta": {"current_candidate_builds": 0, "real_guest_apps": 0, "formal_application_cases": 0, "production_gates": 0}
+}

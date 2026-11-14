@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "case_id": "vector.capability-snapshot",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "wait_status": {
+    "kind": "exited",
+    "code": 0
+  },
+  "stdout": {
+    "kind": "exact-line-prefixes",
+    "lines": [
+      "case=vector.capability-snapshot",
+      "cpuid-leaf0-max=",
+      "leaf1-eax=",
+      "leaf1-ecx=",
+      "leaf1-edx=",
+      "leaf1-xsave-bit=1",
+      "leaf1-osxsave-bit=1",
+      "leaf7-sub",
+      "leafD-sub",
+      "xgetbv0=",
+      "qemu-cpu-model="
+    ]
+  },
+  "stderr": {
+    "kind": "exact-bytes",
+    "hex": ""
+  },
+  "input_fixture": {
+    "environment": {
+      "LANG": "C",
+      "LC_ALL": "C",
+      "TZ": "UTC"
+    },
+    "operations": [
+      "leaf0_max",
+      "leaf1",
+      "leaf7_supported_subleaves",
+      "leafD_supported_subleaves",
+      "guarded_xgetbv0",
+      "/proc/cpuinfo_probe"
+    ],
+    "xgetbv_guard": {
+      "required_leaf1_bits": {
+        "XSAVE": "bit26",
+        "OSXSAVE": "bit27"
+      }
+    }
+  },
+  "relational_assertions": [
+    "leaf1 guard must be checked before issuing XGETBV",
+    "leaf7 and leafD enumeration must include all non-zero subleaves",
+    "the snapshot payload must emit one report line per supported feature component",
+    "runtime result must keep raw bytes and identity as fixture output, never normalize feature bits"
+  ],
+  "unresolved_expectations": [
+    "Exact canonical seed/input array layout for leafD component discovery (including zero-value boundary handling) is not yet frozen in this packet.",
+    "Exact CPU identity mapping for both engines and expected leaf0D component ordering is pending review against the runtime identity manifest."
+  ],
+  "max_question_for_reviewer": "Should this case treat missing XSAVE/OSXSAVE as a separate BLOCKED outcome in the oracle while still preserving the exact raw snapshot payload output?"
+}

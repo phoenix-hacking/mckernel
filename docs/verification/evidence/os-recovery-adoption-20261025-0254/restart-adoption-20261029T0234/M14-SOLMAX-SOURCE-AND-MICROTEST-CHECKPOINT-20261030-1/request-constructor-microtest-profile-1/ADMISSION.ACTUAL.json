@@ -1,0 +1,317 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ADMITTED_EXACT_LAYER_B_ONCE",
+  "at": "2026-10-30T04:20:38.786053+00:00",
+  "epoch": 1793334038.786073,
+  "monotonic": 1116145.355029302,
+  "owner": "/root",
+  "proposal_sha256": "28c3bc240a8dc89948b1dcc3319936ad701672511be8b6f7079b988adfe4cfa5",
+  "review_sha256": "96ed0f00465be6867707f5a8247155a412c300489941600e9cb7cfe2d297841f",
+  "output_root": "/home/holden/mckernel-work/scratch/native-cheap-20261017-5nwobsph",
+  "argv": [
+    "/usr/bin/env",
+    "-i",
+    "PATH=/usr/bin:/bin",
+    "LANG=C",
+    "LC_ALL=C",
+    "PYTHONDONTWRITEBYTECODE=1",
+    "HOME=/home/holden/mckernel-work/scratch/native-cheap-20261017-5nwobsph/home",
+    "TMPDIR=/home/holden/mckernel-work/scratch/native-cheap-20261017-5nwobsph/tmp",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=2147483648",
+    "--cpu=150",
+    "--nofile=256",
+    "--fsize=67108864",
+    "--core=0",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "180s",
+    "/bin/bash",
+    "--noprofile",
+    "--norc",
+    "/home/holden/mckernel-work/scratch/native-cheap-20261017-5nwobsph/run.sh",
+    "/home/holden/mckernel-work/scratch/native-cheap-20261017-5nwobsph"
+  ],
+  "controls": {
+    "at": 1793333638.9797063,
+    "binding": {
+      "guardian": {
+        "pid": 2727507,
+        "ppid": 2727313,
+        "start": "113108156",
+        "state": "R"
+      },
+      "monitor": {
+        "pid": 2727509,
+        "ppid": 2727313,
+        "start": "113108266",
+        "state": "R"
+      },
+      "server": {
+        "pid": 2727360,
+        "ppid": 2727358,
+        "start": "113107784",
+        "state": "S"
+      },
+      "watcher": {
+        "pid": 2727356,
+        "ppid": 2727313,
+        "start": "113107752",
+        "state": "S"
+      },
+      "worker": {
+        "pid": 2727358,
+        "ppid": 2727356,
+        "start": "113107768",
+        "state": "S"
+      }
+    },
+    "caps": {
+      "boot_deadline": 1571569.6959267766,
+      "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+      "deadline": 1793774133,
+      "monotonic_deadline": 1556231.5688797957
+    },
+    "deadline_utc": "2026-11-04T06:35:33+00:00",
+    "guardian_packet_sha256": "0fc3b6cf53fcee437b3967e201347e7fa0ecaf94eff20375fda4b57f7ba99568",
+    "monitor_arm_sha256": "e9efa95502a9028a5734c300b4d9dedc0e62282768a6fe1c84ccf5059adc6aae",
+    "native_release": false,
+    "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+    "thread_id": "01a18a76-4f1e-7900-8ed6-127394e93689"
+  },
+  "weekly": {
+    "at": "2026-10-30T04:20:30.345425+00:00",
+    "primary": {
+      "resetsAt": 1793774133,
+      "usedPercent": 60,
+      "windowDurationMins": 10080
+    }
+  },
+  "tool_identities": [
+    {
+      "path": "/usr/bin/env",
+      "resolved": "/usr/bin/env",
+      "sha256": "5f7c7882898e9e280e93579b459e22b339c4f38cfd54a05b46b81dfb60c557cc",
+      "bytes": 43352,
+      "uid": 0,
+      "mode": "0o755",
+      "ldd_status": 0,
+      "ldd": "\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f2de9633000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007f2de985d000)\n"
+    },
+    {
+      "path": "/usr/bin/taskset",
+      "resolved": "/usr/bin/taskset",
+      "sha256": "28f2dd426247d7d1d794c0fb8a723efc6a1ae3c56393a238b180fe9a0dc32f1c",
+      "bytes": 35048,
+      "uid": 0,
+      "mode": "0o755",
+      "ldd_status": 0,
+      "ldd": "\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fed75402000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007fed7562a000)\n"
+    },
+    {
+      "path": "/usr/bin/prlimit",
+      "resolved": "/usr/bin/prlimit",
+      "sha256": "06a57e4767f1bdfcc8c5a39b4b58decb9366447b007a8bdd9d6b12d1e6698d8c",
+      "bytes": 39672,
+      "uid": 0,
+      "mode": "0o755",
+      "ldd_status": 0,
+      "ldd": "\tlibsmartcols.so.1 => /lib/x86_64-linux-gnu/libsmartcols.so.1 (0x00007f7a3bf5a000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f7a3bd66000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007f7a3bfce000)\n"
+    },
+    {
+      "path": "/usr/bin/timeout",
+      "resolved": "/usr/bin/timeout",
+      "sha256": "91db1e64064f0bf5ee99abda3a054cc6f05748dad2af5a145f890c9172d28d73",
+      "bytes": 43800,
+      "uid": 0,
+      "mode": "0o755",
+      "ldd_status": 0,
+      "ldd": "\tlibrt.so.1 => /lib/x86_64-linux-gnu/librt.so.1 (0x00007f55b0746000)\n\tlibpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007f55b0721000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f55b052f000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007f55b0788000)\n"
+    },
+    {
+      "path": "/bin/bash",
+      "resolved": "/usr/bin/bash",
+      "sha256": "025cf78cd9d276019e916b97b0decd10cacb14902db8eb9f28233019babfb331",
+      "bytes": 1183448,
+      "uid": 0,
+      "mode": "0o755",
+      "ldd_status": 0,
+      "ldd": "\tlibtinfo.so.6 => /lib/x86_64-linux-gnu/libtinfo.so.6 (0x00007f6d3ff5f000)\n\tlibdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x00007f6d3ff57000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f6d3fd65000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007f6d400e7000)\n"
+    },
+    {
+      "path": "/usr/bin/time",
+      "resolved": "/usr/bin/time",
+      "sha256": "f3c4104d963b00e1b3a3dcf80722fea57f15f67b57a512cc30adc434b60e6e03",
+      "bytes": 14720,
+      "uid": 0,
+      "mode": "0o755",
+      "ldd_status": 0,
+      "ldd": "\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f3e1ecd4000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007f3e1f0f6000)\n"
+    },
+    {
+      "path": "/usr/bin/cat",
+      "resolved": "/usr/bin/cat",
+      "sha256": "87e5bd81850e11eeec2d3bb696b626b2a7f45673241cbbd64769c83580432869",
+      "bytes": 43416,
+      "uid": 0,
+      "mode": "0o755",
+      "ldd_status": 0,
+      "ldd": "\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fa89c74a000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007fa89c974000)\n"
+    },
+    {
+      "path": "/usr/bin/ps",
+      "resolved": "/usr/bin/ps",
+      "sha256": "a8cf81f3a1137c999c3cf336507ce120b3065e633ade01db6280d427b7d986ca",
+      "bytes": 137688,
+      "uid": 0,
+      "mode": "0o755",
+      "ldd_status": 0,
+      "ldd": "\tlibprocps.so.8 => /lib/x86_64-linux-gnu/libprocps.so.8 (0x00007ff883440000)\n\tlibdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x00007ff883438000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007ff883246000)\n\tlibsystemd.so.0 => /lib/x86_64-linux-gnu/libsystemd.so.0 (0x00007ff883197000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007ff8834d8000)\n\tlibrt.so.1 => /lib/x86_64-linux-gnu/librt.so.1 (0x00007ff88318d000)\n\tliblzma.so.5 => /lib/x86_64-linux-gnu/liblzma.so.5 (0x00007ff883164000)\n\tliblz4.so.1 => /lib/x86_64-linux-gnu/liblz4.so.1 (0x00007ff883143000)\n\tlibgcrypt.so.20 => /lib/x86_64-linux-gnu/libgcrypt.so.20 (0x00007ff883023000)\n\tlibpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007ff883000000)\n\tlibgpg-error.so.0 => /lib/x86_64-linux-gnu/libgpg-error.so.0 (0x00007ff882fdd000)\n"
+    },
+    {
+      "path": "/usr/bin/cc",
+      "resolved": "/usr/bin/x86_64-linux-gnu-gcc-9",
+      "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f",
+      "bytes": 1158288,
+      "uid": 0,
+      "mode": "0o755",
+      "ldd_status": 0,
+      "ldd": "\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f4a70f70000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007f4a7118e000)\n"
+    },
+    {
+      "path": "/usr/bin/ld",
+      "resolved": "/usr/bin/x86_64-linux-gnu-ld.bfd",
+      "sha256": "476b24d5cc1fef54f80412d06e7430b2dcf4e2b6f1525ee17e6eaaf16b28a00f",
+      "bytes": 1732192,
+      "uid": 0,
+      "mode": "0o755",
+      "ldd_status": 0,
+      "ldd": "\tlibbfd-2.34-system.so => /lib/x86_64-linux-gnu/libbfd-2.34-system.so (0x00007fd6a9f53000)\n\tlibctf.so.0 => /lib/x86_64-linux-gnu/libctf.so.0 (0x00007fd6a9f35000)\n\tlibdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x00007fd6a9f2f000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fd6a9d3d000)\n\tlibz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x00007fd6a9d21000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007fd6aa272000)\n"
+    },
+    {
+      "path": "/usr/bin/ldd",
+      "resolved": "/usr/bin/ldd",
+      "sha256": "d089c1054925b1f1dc9b574c2e7fabf3a495a1ce2ef946cd66d507daf09b7b8f",
+      "bytes": 5428,
+      "uid": 0,
+      "mode": "0o755",
+      "ldd_status": 1,
+      "ldd": "\tnot a dynamic executable\n"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "resolved": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "sha256": "028fd60b0e0add5505c661cd3ccde91393d615c8729bd95d94ab1e91409b36a1",
+      "bytes": 654904,
+      "uid": 1000,
+      "mode": "0o755",
+      "ldd_status": 0,
+      "ldd": "\tlibrustc_driver-d31eb41759495bb2.so => /home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/../lib/librustc_driver-d31eb41759495bb2.so (0x00007f0659e15000)\n\tlibdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x00007f0659de3000)\n\tlibrt.so.1 => /lib/x86_64-linux-gnu/librt.so.1 (0x00007f0659dd9000)\n\tlibpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007f0659db6000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f0659bc4000)\n\tlibLLVM.so.21.1-rust-1.92.0-stable => /home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/../lib/../lib/libLLVM.so.21.1-rust-1.92.0-stable (0x00007f064ffcd000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007f064ffa8000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f064fe59000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007f0661da9000)\n\tlibz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x00007f064fe3d000)\n"
+    }
+  ],
+  "library_identities": {
+    "/usr/lib/x86_64-linux-gnu/libc-2.31.so": {
+      "sha256": "53b909551f8e581120ddc2d24cfb5df76c52e3c2e2a5dac0d202b25638b3e902",
+      "bytes": 2029592
+    },
+    "/usr/lib/x86_64-linux-gnu/ld-2.31.so": {
+      "sha256": "cfd44e4341767033532d1483c8250d200ad4cdf535d0abc19064ae34cdc51ca0",
+      "bytes": 191504
+    },
+    "/usr/lib/x86_64-linux-gnu/libsmartcols.so.1.1.0": {
+      "sha256": "97aa9f48b2534234256eaca902c632796846b4ad1fc519ed108bc9d4ef020e00",
+      "bytes": 243992
+    },
+    "/usr/lib/x86_64-linux-gnu/librt-2.31.so": {
+      "sha256": "fd90f6cc09dda34e0fefeaba5bc60533773c4240f9e7ef672c508b1d610c425e",
+      "bytes": 35960
+    },
+    "/usr/lib/x86_64-linux-gnu/libpthread-2.31.so": {
+      "sha256": "af27ed906f6185e0143b9c0d0da287788efa7eb6b2639e44d48fb2939415fdc5",
+      "bytes": 157224
+    },
+    "/usr/lib/x86_64-linux-gnu/libtinfo.so.6.2": {
+      "sha256": "3d79a61fb19fd7597c1ba90e85e4e25310f885c82f8b91f04fb62658de126f58",
+      "bytes": 192032
+    },
+    "/usr/lib/x86_64-linux-gnu/libdl-2.31.so": {
+      "sha256": "e0d0cace80b627e50ca3f7b621b64917677c27c74077080854d57cf4e548edc6",
+      "bytes": 18848
+    },
+    "/usr/lib/x86_64-linux-gnu/libprocps.so.8.0.2": {
+      "sha256": "4dce97caab0adf5d1e57c43d3a13430f0a1aa1c0b4bdb077a6427ad1f57fa729",
+      "bytes": 80072
+    },
+    "/usr/lib/x86_64-linux-gnu/libsystemd.so.0.28.0": {
+      "sha256": "4d12bf8dfcd3a7ab3cc414981ecb1dbd9a4eb51b4e1fd5b8a61a136626a2b9f9",
+      "bytes": 709496
+    },
+    "/usr/lib/x86_64-linux-gnu/liblzma.so.5.2.4": {
+      "sha256": "79a1dbc7cc49eaa96d0326c7d979fc41d8db1f748e517858a5cc024a6554b073",
+      "bytes": 162264
+    },
+    "/usr/lib/x86_64-linux-gnu/liblz4.so.1.9.2": {
+      "sha256": "d6574e34006e27cfb5d00dc75018cc06832d0bbc9e1b35316b9c03148355f0a0",
+      "bytes": 129248
+    },
+    "/usr/lib/x86_64-linux-gnu/libgcrypt.so.20.2.5": {
+      "sha256": "f648d4ed0fe1fe7645992d10a5cbc84679d298ce8561a1aeafa780fee67b3036",
+      "bytes": 1168056
+    },
+    "/usr/lib/x86_64-linux-gnu/libgpg-error.so.0.28.0": {
+      "sha256": "df95914ef7aeaadcafa4acdd614068836a0014ed3001ddb8390f7ef44d3c5248",
+      "bytes": 137584
+    },
+    "/usr/lib/x86_64-linux-gnu/libbfd-2.34-system.so": {
+      "sha256": "48918a2b081f45a4f8d66364e3127c5f702dc748d075820e23d9314e9b8e043a",
+      "bytes": 1319320
+    },
+    "/usr/lib/x86_64-linux-gnu/libctf.so.0.0.0": {
+      "sha256": "2a3137017e730dac313cd39932c595779c9fbec4bd26066745b196ccec427b8a",
+      "bytes": 117856
+    },
+    "/usr/lib/x86_64-linux-gnu/libz.so.1.2.11": {
+      "sha256": "ccfda8d7e0d2f77c8a4feb2febbae057edab668d7d7ee6410e2c517724c056c8",
+      "bytes": 108936
+    },
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/lib/librustc_driver-d31eb41759495bb2.so": {
+      "sha256": "779fd86c3420b56500d6421abe6511ef939b78ed2fca4103a57ce145507bd1e7",
+      "bytes": 153636080
+    },
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/lib/libLLVM.so.21.1-rust-1.92.0-stable": {
+      "sha256": "6fe074f0e285cca6e6a00767d32fc0cd1b3141d40daedf5d8fc4e6fd7efce624",
+      "bytes": 186540512
+    },
+    "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1": {
+      "sha256": "1785fc8cd9a2ba72f773b0b60b20e58ff79bf30ce2fd8e241c8b31303dcea17e",
+      "bytes": 146000
+    },
+    "/usr/lib/x86_64-linux-gnu/libm-2.31.so": {
+      "sha256": "a0e70f48f02a399e8dd37f861a99e226c285a9daf50a25d19fff7ccf18b97f9c",
+      "bytes": 1369384
+    }
+  },
+  "rustc_version": "rustc 1.92.0 (ded5c06cf 2025-12-08)",
+  "resources": {
+    "cpu": [
+      6
+    ],
+    "reserved_planning_bytes": 2147483648,
+    "aggregate_ceiling_bytes": 24498171904,
+    "conflicting_compiler_cpu6_sample": [],
+    "free_bytes": {
+      "/home/holden/mckernel": 144528842752,
+      "/home/holden/mckernel-work/scratch": 47849558016
+    },
+    "mem_available_bytes": 28562755584,
+    "aggregate_cpu_job_cap": 7,
+    "one_heavy_native_claimed": false
+  },
+  "same_root": "01a18a76-4f1e-7900-8ed6-127394e93689",
+  "native_currentfree": null,
+  "native_unknowns_preserved": true
+}

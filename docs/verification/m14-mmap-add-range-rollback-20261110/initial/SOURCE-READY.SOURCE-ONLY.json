@@ -1,0 +1,62 @@
+{
+  "at": "2026-11-10T21:15:03.816436+00:00",
+  "candidates": [
+    {
+      "bytes": 619886,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/candidate/kernel/rust/process_helpers.rs",
+      "sha256": "d3be0ac4bfc9a103db7709fb8ba1d40b3e3e4eb144cc5c96fe3d54cbfefbcafe"
+    },
+    {
+      "bytes": 322920,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/candidate/kernel/rust/x86_memory_helpers.rs",
+      "sha256": "8f50cb899009038bd5814134ba455c9c23b69d484cce83a40e018971df964352"
+    }
+  ],
+  "changed_paths": [
+    "kernel/rust/process_helpers.rs",
+    "kernel/rust/x86_memory_helpers.rs"
+  ],
+  "frozen_original_mmap": "../SOURCE-READY.json9fdef/patchbb682/module5961/lock21bbb unchanged",
+  "invariants": "Writer/IRQsavePTlocks original. Newly mapped prefix journal excludes conflicting oldPTE. Real RSS commit uses actual visit_pte_range_safe (large-size bit required, no allocation/split), real rusage function and exact page-size class. Actual inherited descriptorfree stays with existing orchestrator; caller p/object cleanup remains original on error.",
+  "no_execution_or_canonical": true,
+  "no_source_only_acceptance": true,
+  "ordinary_error": "Original mapping errno returns after partialnewPTEs cleared and remoteTLBacknowledged. Invalid internalrollback/commit invariants panic before caller-owned backing can be freed unsafely; not an ordinary supported errno waiver.",
+  "owner": "p04_tests_max private source author; Root sole compositor/executor",
+  "patch": {
+    "bytes": 15996,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/SHARED-ADD-RANGE-ROLLBACK.patch",
+    "sha256": "5b878adeb79e90ac0a383703979244794bf36d52dbe29ce0626a27eca87dfdc4"
+  },
+  "preimages": [
+    {
+      "bytes": 618027,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/preimage/kernel/rust/process_helpers.rs",
+      "sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1"
+    },
+    {
+      "bytes": 311375,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/preimage/kernel/rust/x86_memory_helpers.rs",
+      "sha256": "5c60055053656751ea490be95c09d7343b0391797c21d5e6c97de97cb8d34c68"
+    }
+  ],
+  "scope": "Add-range-only genuine mapping transaction defers RSS until whole success, uses allocation-free clear-only prefix rollback with acknowledged stack TLB batch and no PTmetadata/user backing free, then exact tree/cache detach and existing single descriptor free. Standard public set/free/clear routines and all other oldx86 function bodies are byte-identical. ABI of existing bridge pair and publicadd unchanged.",
+  "source_fragments": [
+    {
+      "bytes": 11544,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/ADD-RANGE-TRANSACTION.rs",
+      "sha256": "a7f612f7ce5626ae163bc16051731a516cd89f7e7db2961f423f02ad5f50bd68"
+    },
+    {
+      "bytes": 2936,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/PROVIDER-BRIDGES.NEW.rs",
+      "sha256": "cb3602105500eb9bf1de913e8fce2e7eff07c65ade72d092e8c36f1d780cf945"
+    },
+    {
+      "bytes": 1077,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/PROVIDER-BRIDGES.OLD.rs",
+      "sha256": "a7e3f5e433302fa80089f7de376ab21714ca95dd0214ea8a40f937d2e279d140"
+    }
+  ],
+  "status": "SOURCE_ONLY_FROZEN_TEST_PACKET_IN_PREPARATION_NOT_EXECUTED",
+  "test_packet": "In preparation: actual old/new orchestrator+bridge/transaction source with actual ABI/tree code and explicit test-only lower-effect doubles, safe baseline ownership counters (no actualdoublefree), candidatepartialfailure plus required success RSScommit control. No oldfixture or payload."
+}

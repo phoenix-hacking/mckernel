@@ -1,0 +1,42 @@
+{
+  "status": "READ_ONLY_NAMESPACE_GAP_COMMAND_JOINED",
+  "proposal_sha256": "0aa9f3beaa26acbe48925e8088c66bf86dddd8c3615ee969b4e98f786f0c9928",
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "30s",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=30:30",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--",
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/python3",
+    "-I",
+    "-c",
+    "import json,os\nfrom pathlib import Path\nEXPECTED=[[511059, 4081605], [511066, 4081606], [511562, 4081758], [511563, 4081758], [511649, 4081828], [1281494, 16828124]]\ndef ident(pid):\n f=Path('/proc',str(pid),'stat').read_bytes().rpartition(b') ')[2].split()\n if len(f)<20:raise RuntimeError('proc stat shape')\n return int(f[19])\nrows=[]\nfor pid,start in EXPECTED:\n if ident(pid)!=start:raise RuntimeError('PID identity drift')\n ns=os.readlink('/proc/%s/ns/mnt'%pid)\n raw=Path('/proc',str(pid),'mountinfo').read_text()\n selected=[line for line in raw.splitlines() if len(line.split())>=10 and line.split()[2]=='7:36']\n if ident(pid)!=start:raise RuntimeError('PID identity drift after read')\n rows.append(dict(pid=pid,starttime=start,mount_namespace=ns,matching_rows=selected))\nprint(json.dumps(dict(status='EXACT_NAMESPACE_LINK_GAP_READONLY',rows=rows)))\n"
+  ],
+  "pid": 1288159,
+  "starttime": 16922934,
+  "returncode": 0,
+  "direct_child_joined": true,
+  "remaining_process_group_or_session": [],
+  "seconds": 0.13089522998780012,
+  "streams": {
+    "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/namespace-bind-diagnosis-1/root-gap-readback-1.stdout": {
+      "bytes": 2118,
+      "sha256": "b54abe4bb171050e4e720e55e8ce579f6b17c2132ae3f8a8f661673f235db667"
+    },
+    "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/namespace-bind-diagnosis-1/root-gap-readback-1.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "scope": "Current identity snapshot only, not historical trigger or namespace stability proof; no observer/deletion run."
+}

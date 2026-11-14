@@ -1,0 +1,9 @@
+{
+  "status": "SOURCE_ONLY_IMPORT_SETUP_CORRECTED_BEFORE_ANY19_DERIVATION_OR_WORKLOAD",
+  "tool_capture_chunk_id": "7b07d0",
+  "error": "ModuleNotFoundError: No module named rust_diagnostics",
+  "cause": "Standaloneimportlibmissingexistingbuilderdirectoryonsys.path",
+  "bounded_correction": "Useexistingqualifiedcommandpattern sys.path.insert(0,str(source));importbuild_whole70_qualified",
+  "actual19_derivations_before_correction": 0,
+  "compiler_test_runtime_or_Cbody_execution": 0
+}

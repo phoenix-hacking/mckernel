@@ -1,0 +1,85 @@
+{
+  "CPU6_released": true,
+  "candidate_postimages_unchanged": [
+    {
+      "bytes": 87978,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-memory-l3-next/candidate/arch/x86_64/kernel/memory.c",
+      "sha256": "28a435d862d1a52263c3bf7b08bd401b4a28be914c2f7f9bdd6fedc68283ec46"
+    },
+    {
+      "bytes": 199290,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-memory-l3-next/candidate/kernel/rust/x86_memory_helpers.rs",
+      "sha256": "d643cbf13e09aad6705cad4b36dfa988a494314f851e15313aa4f1833c1e9528"
+    }
+  ],
+  "cause": "Rust L3 callback uses PFL3_SIZE but module only declares PFL2_SIZE. No linker/fixture/header run. No correction applied.",
+  "compiler_runs": 1,
+  "corrections": 0,
+  "failure_family": "FirstactualcompleteL3candidatefailure preserved; atmostone boundedcorrection byroot, thenexpert; no reset.",
+  "join": {
+    "captures": {
+      "stderr": {
+        "ctime_ns": 1792798213549884867,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 56118530,
+        "mode": "0o600",
+        "mtime_ns": 1792798213549884867,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-memory-l3-next/actual-fixture-cohort-1/1/stderr",
+        "sha256": "1f21700a61dad537f6a8a29e169a04bb679395b83f9a66e8df08007e50efc361",
+        "size": 560,
+        "uid": 1000
+      },
+      "stdout": {
+        "ctime_ns": 1792798213365878959,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 56118529,
+        "mode": "0o600",
+        "mtime_ns": 1792798213365878959,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-memory-l3-next/actual-fixture-cohort-1/1/stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0,
+        "uid": 1000
+      }
+    },
+    "closed_streams": true,
+    "direct_child_joined": true,
+    "error": null,
+    "group_absent": true,
+    "pid": 3976534,
+    "remaining_group_members": [],
+    "retirement_error": null,
+    "returncode": 1,
+    "seconds": 0.22710632905364037,
+    "start": 59565806,
+    "timed_out": false,
+    "unexpected_group_members": []
+  },
+  "original_driver": {
+    "bytes": 6409,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-memory-l3-next/actual-fixture-cohort-1/original-sources/sourcehandoff/run_actual_once.py",
+    "sha256": "e7747de2aad1c366a32e9e3392e01981ab820b0918fe93fe0f038bdf2645fa78"
+  },
+  "original_ready": {
+    "bytes": 18547,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-memory-l3-next/actual-fixture-cohort-1/original-sources/sourcehandoff/EXECUTABLE-READY.NOT-EXECUTED.json",
+    "sha256": "7518bbcfa00fe34b64feb561782dcc55f484f0b369985065c794e7aa30f61f50"
+  },
+  "proposed_correction_NOT_APPLIED": "Declare exact missing PFL3_SIZE CULong=0x80 from actual C header, paired header witness. No helper/callback/fixture behavior change.",
+  "raw_failure": {
+    "bytes": 1397,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-memory-l3-next/actual-fixture-cohort-1/FAILURE.json",
+    "sha256": "82cefd01a4dad7b53966fb1b12e5b4a22919ab7ee4377ad27205454279eae18e"
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "FIRST_L3_CANDIDATE_RUST_E0425_MISSING_PFL3_SIZE_STOP",
+  "stderr": {
+    "bytes": 560,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-memory-l3-next/actual-fixture-cohort-1/1/stderr",
+    "sha256": "1f21700a61dad537f6a8a29e169a04bb679395b83f9a66e8df08007e50efc361"
+  },
+  "test_runs": 0
+}

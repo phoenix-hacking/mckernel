@@ -1,0 +1,25 @@
+{
+  "argv": [
+    "/usr/bin/env",
+    "-i",
+    "PATH=/usr/bin:/bin",
+    "LC_ALL=C",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "150s",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=120",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/adapters/native_rust_exact_mckernel_image_request_prepare.py",
+    "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/future-prepare-inputs.json",
+    "--request",
+    "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/image-request.json"
+  ]
+}

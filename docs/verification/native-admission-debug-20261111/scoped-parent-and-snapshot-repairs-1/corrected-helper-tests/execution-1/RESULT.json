@@ -1,0 +1,56 @@
+{
+  "actual_kernel_CPU_offload_hostwait_native_executed": false,
+  "all_waits_streams_joined": true,
+  "finished_at": "2026-11-11T19:55:32.079326+00:00",
+  "original_acceptance": false,
+  "remaining_direct_children": [],
+  "request_sha256": "2a61d65233a3ca834e6d6c02a768ed58b6a37fe44ec6aaaf60da2c96fcb0f488",
+  "results": [
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "0",
+        "/usr/bin/prlimit",
+        "--as=268435456",
+        "--cpu=10",
+        "--fsize=4194304",
+        "--nofile=64",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TZ=UTC",
+        "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-snapshot-helper-tests-p04tests-max-1/primary-guard-correction-1/output-1/tmp",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-snapshot-helper-tests-p04tests-max-1/primary-guard-correction-1/account_snapshot_cases.py"
+      ],
+      "cwd": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-snapshot-helper-tests-p04tests-max-1/primary-guard-correction-1",
+      "exit": 0,
+      "id": "actual-account-snapshot-four-families-primary01",
+      "ownership": {
+        "adopted_kills": [],
+        "adopted_reaps": [],
+        "error": null,
+        "label": "actual-account-snapshot-four-families-primary01",
+        "leader": 1526096,
+        "leader_birth": "51319796",
+        "leader_group_signalled": false,
+        "leader_parent_joined": true,
+        "remaining_direct_children": [],
+        "status": 0,
+        "streams_closed": true,
+        "timed_out": false,
+        "whole_descendants_joined": true
+      }
+    }
+  ],
+  "review_sha256": "0c1a3886f1691166a4e00b2159948c73a17838325b492ea044c8fd6f8efbb3ca",
+  "started_at": "2026-11-11T19:55:31.872310+00:00",
+  "status": "PASS_FOUR_ACTUAL_ACCOUNT_SNAPSHOT_HELPER_FAMILIES_PENDING_SAVED_QUALIFICATION"
+}

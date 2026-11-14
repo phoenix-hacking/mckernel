@@ -1,0 +1,160 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "CONCRETE_STACK_PROFILE_MISMATCH_SOURCE_DIAGNOSIS",
+  "at": "2026-10-27T17:58:05.150184+00:00",
+  "failure_family": "first actual retained-C-ring helper invocation exceeds inherited main-thread stack limit",
+  "failed_nonce": "d27509b612927d235adf7f07748f3f82",
+  "workload_capture": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/workspace/native-running-modules-candidate-d27509b612927d235adf7f07748f3f82/fixture-output/ring-C/whole-join.json",
+    "bytes": 1136,
+    "sha256": "0976565d5a2a4d74caf85dda69447cca448bcf5be9f4ada979f8ffd513238afc"
+  },
+  "first_failure": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/workspace/native-running-modules-candidate-d27509b612927d235adf7f07748f3f82/fixture-output/first-failure.json",
+    "bytes": 128,
+    "sha256": "10d3b65ee1455132f0dbd43e83caf40d6159dde8b32b746b46f3c6763a908e98"
+  },
+  "trace": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/workspace/native-running-modules-candidate-d27509b612927d235adf7f07748f3f82/fixture-output/ring-C.trace",
+    "bytes": 94,
+    "sha256": "63ce590d1391c5cf1268a612d4957d67214b1307b71cc6338aa9876f9d8938d4"
+  },
+  "actual_trace_lines": [
+    "alloc fd=1000 kind=7",
+    "ihklib_device_open index=0",
+    "ioctl fd=1000 req=112908",
+    "close fd=1000 kind=7"
+  ],
+  "resource_receipt_absent": true,
+  "actual_binary": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/workspace/native-running-modules-candidate-d27509b612927d235adf7f07748f3f82/fixture-output/ring-C-helper",
+    "bytes": 43328,
+    "sha256": "8e4b86498b1659246e21fc01ec36e3a47b10397b0444ee1d3372d75cdbe08c05"
+  },
+  "binary_identical_to_retained_source30_and_prefix": true,
+  "retained_helper_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/workspace/native-running-modules-candidate-1fff493f114662040e1147fdcbf5fa32/fixture-output/reference_helpers.c",
+    "bytes": 869,
+    "sha256": "6350fc609604b10df2ba53ce966ea44c45d0894bc59c0a39620cb8c194ea880f"
+  },
+  "retained_C_reference": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/workspace/native-running-modules-candidate-1fff493f114662040e1147fdcbf5fa32/fixture-output/ihkmond.fixture.c",
+    "bytes": 22818,
+    "sha256": "8076e6e3c39a22bfb357ac9663688a40eb3314e1d441687cc1746cc6d36fb2dd"
+  },
+  "original_C_reference": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-daemon-validation/read-errors-successor-1/reference/ihkmond.c",
+    "bytes": 22682,
+    "sha256": "b12258297bf0704815db9d119ef5725f6c24fe6c63d0d0d7a1afd0c06c89e4d3"
+  },
+  "original_header": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-daemon-validation/read-errors-successor-1/fixture/include/ihk/ihk_host_user.h",
+    "bytes": 552,
+    "sha256": "73144a9736b2c9cf5969a9d4c7f2aa8ad4117755f5c070ccc72d8dc58cfcb78e"
+  },
+  "mock_provider": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-daemon-validation/read-errors-successor-1/fixture/mock.c",
+    "bytes": 13295,
+    "sha256": "0240f2df256c23e2b1f7f1d397e62e63bd0ceae207466a58dc036211f43067ef"
+  },
+  "retained_C_compile_command": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/workspace/native-running-modules-candidate-1fff493f114662040e1147fdcbf5fa32/fixture-output/C-helper-build.command.json",
+    "bytes": 1530,
+    "sha256": "2df6bf5d77662d698d0e30792cbbcd25aa049f989f121dec77f40a21d694ff6c"
+  },
+  "mechanism": {
+    "C_buffer_macro": "IHK_KMSG_SIZE ((4<<20)-4096)",
+    "C_buffer_bytes": 4190208,
+    "actual_symbol": "fwrite_kmsg.constprop.0",
+    "main_call_address": "0x402486",
+    "stack_subtraction_address": "0x402806",
+    "actual_frame_hex": "0x3ff148",
+    "actual_frame_bytes": 4190536,
+    "first_low_stack_write_address": "0x402815",
+    "first_low_stack_write": "mov %edx,0x18(%rsp)",
+    "next_provider_call_address": "0x40282b",
+    "old_inherited_soft_and_hard_stack": 2097152,
+    "frame_exceeds_entire_old_stack_by": 2093384,
+    "observed_trace_stops": "main GET-handle/close before first fwrite helper device-open or READ",
+    "conclusion": "Reference C helper reserves more than the inherited hard main-stack limit before its first provider call. Stack-profile mismatch explains the joined -SIGSEGV and missing atexit terminal receipt; not a ring algorithm parity result."
+  },
+  "limitations": [
+    "No core or fault-register capture was enabled; exact runtime instruction pointer is not observed",
+    "Resource-only correction is a proposal; actual corrected C-ring parity remains unproved",
+    "Source31 original failure and all its bytes retained; no retroactive acceptance"
+  ],
+  "disassembly": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/c-ring-segv-diagnosis-source-1/main.disassembly.txt",
+      "bytes": 4522,
+      "sha256": "0d6954769cbc06e97f4321e8a571b5175030d692b1455b1a93899d3e922c4a3d"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/c-ring-segv-diagnosis-source-1/fwrite_kmsg.constprop.0.disassembly.txt",
+      "bytes": 11017,
+      "sha256": "6ae9d8331becd53f32ab039527d88c13116f2685436cd33736800e8bdc73bd5a"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/c-ring-segv-diagnosis-source-1/elf-headers.txt",
+      "bytes": 3608,
+      "sha256": "850310e610413455ba7cc5dde36c4404c38ede9565e3f390218a90d11ff0a69d"
+    }
+  ],
+  "correction": {
+    "kind": "bounded resource correction without recompilation",
+    "reference_C_source_or_binary_changes": false,
+    "fixture_outer_stack": 8388608,
+    "C_ring_child_stack": 8388608,
+    "Rust_ring_child_stack": 2097152,
+    "Rust_oversize_child_stack": 2097152,
+    "RUST_MIN_STACK": "2097152",
+    "inheritance": "Docker driver h990 preexec gives the fixture controller hard/soft8MiB; fixture prlimit names8MiB; private Owner checks8MiB; h990 child preexec keeps C8MiB and lowers each Rust child hard/soft2MiB before exec. Parent controller remains8MiB.",
+    "other_limits_and_oracles_unchanged": true,
+    "pids64_unchanged": true,
+    "container_CPU4_memory12GiB_unchanged": true,
+    "requires_new_profile_review_and_new_nonce": true,
+    "requires_current_free_Root26_ledger": true
+  },
+  "minimal_next_executable_test": "After independent resource/source review, current-free Root26 admission, fresh namespace/nonce/release: execute retained C ring helper once at soft/hard8MiB under unchanged8s/AS2GiB/CPU60/etc; require status0, positive join, full terminal resources closed and exact C ring bytes/logs. Then only still-unrun Rust ring and oversize at original2MiB, with unchanged parity oracle.",
+  "proposal_files": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/c-ring-segv-diagnosis-source-1/owned_process_stack8.py",
+      "bytes": 6465,
+      "sha256": "a3d4c2cc044e3d7187d2c5b038777e567d088d41a166a18d574cac8d3a445796"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/c-ring-segv-diagnosis-source-1/owned_process_stack8.py.diff",
+      "bytes": 2542,
+      "sha256": "fb429b9dcf71ce3a1712b0e970e455e0d6987751633dfde0a5361128a2643127"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/c-ring-segv-diagnosis-source-1/final_driver_stack8.py",
+      "bytes": 6072,
+      "sha256": "892332b2ef5e10e104148e86c11a8dc9d6de7020fd56db7e15a7ba8111d97915"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/c-ring-segv-diagnosis-source-1/final_driver_stack8.py.diff",
+      "bytes": 1214,
+      "sha256": "53a162da0e45559ee08000d4be131c5e97b681310ddb6922ae93df8f9b8bd051"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/c-ring-segv-diagnosis-source-1/FIXTURE-COMMAND.RESOURCE-PROPOSAL.json",
+      "bytes": 2564,
+      "sha256": "7639c9cfacc2265713e9579203eaab8f4af03c9b0252e9ee444331701429671d"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/c-ring-segv-diagnosis-source-1/test_stack_resource_proposal.py",
+      "bytes": 3186,
+      "sha256": "f41acf4f12e4a37508415e4ee1fdaf2b927ba3be4fb4aa09ed266add67ad3f2b"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/c-ring-segv-diagnosis-source-1/PURE-TEST-RESULT.json",
+      "bytes": 694,
+      "sha256": "1b12239ffc552642e1fb2ebd8b80ce9460df1c0fead58d250ca6ea1f701b78e4"
+    }
+  ],
+  "actual_compiler_calls": 0,
+  "actual_helper_executions": 0,
+  "actual_resource_mutations": 0,
+  "runtime_release": false
+}

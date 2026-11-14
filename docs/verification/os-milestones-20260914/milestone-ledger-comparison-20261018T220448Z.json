@@ -1,0 +1,375 @@
+{
+  "schema": "mckernel.supervisor-milestone-ledger-comparison.v1",
+  "status": "completed",
+  "created_at": "2026-10-18T22:05:44Z",
+  "factual_evidence_cutoff": "2026-10-18T22:04:48Z",
+  "comparison_due_at": "2026-10-18T22:04:29Z",
+  "baseline_created_at": "2026-10-18T18:04:29Z",
+  "baseline_factual_evidence_cutoff": "2026-10-18T18:03:51Z",
+  "baseline_path": "docs/verification/os-milestones-20260914/milestone-ledger-20261018T180429Z.json",
+  "baseline_sha256_verified_once": "fa25e5f9a394c46006aa44a4fa11113a68d3a2e41cccd08a642d117ffb40a5f2",
+  "baseline_preserved": true,
+  "scope_id": "practical-kernel-apps-v1-20261017",
+  "scope_changed": false,
+  "estimate_policy": "Low-confidence supervisor engineering guesses, not measured completion, reliability, pass rates or whole-kernel Rust conversion. Only M03 changes; other bands are held. Midpoint deltas are percentage points. No overall OS score is computed.",
+  "milestones": [
+    {
+      "id": "M00",
+      "title": "Preservation and practical workflow",
+      "scope": "practical engineering",
+      "baseline_estimated_completion_percent_range": [
+        85,
+        95
+      ],
+      "current_estimated_completion_percent_range": [
+        85,
+        95
+      ],
+      "baseline_estimated_midpoint_percent": 90.0,
+      "current_estimated_midpoint_percent": 90.0,
+      "estimated_delta_percentage_points": 0.0,
+      "confidence": "low",
+      "assessment": "Range held; new work does not justify moving this coarse estimate outside its existing uncertainty band.",
+      "completed_practical_checks": 0,
+      "total_practical_checks": 2,
+      "milestone_status": "open"
+    },
+    {
+      "id": "M01",
+      "title": "Requests, responses and recovery",
+      "scope": "practical engineering",
+      "baseline_estimated_completion_percent_range": [
+        55,
+        75
+      ],
+      "current_estimated_completion_percent_range": [
+        55,
+        75
+      ],
+      "baseline_estimated_midpoint_percent": 65.0,
+      "current_estimated_midpoint_percent": 65.0,
+      "estimated_delta_percentage_points": 0.0,
+      "confidence": "low",
+      "assessment": "Range held; new work does not justify moving this coarse estimate outside its existing uncertainty band.",
+      "completed_practical_checks": 0,
+      "total_practical_checks": 2,
+      "milestone_status": "open"
+    },
+    {
+      "id": "M02",
+      "title": "Execution and comparison runner",
+      "scope": "practical engineering",
+      "baseline_estimated_completion_percent_range": [
+        80,
+        90
+      ],
+      "current_estimated_completion_percent_range": [
+        80,
+        90
+      ],
+      "baseline_estimated_midpoint_percent": 85.0,
+      "current_estimated_midpoint_percent": 85.0,
+      "estimated_delta_percentage_points": 0.0,
+      "confidence": "low",
+      "assessment": "Range held; new work does not justify moving this coarse estimate outside its existing uncertainty band.",
+      "completed_practical_checks": 1,
+      "total_practical_checks": 3,
+      "milestone_status": "open"
+    },
+    {
+      "id": "M03",
+      "title": "Memory and mapping correctness",
+      "scope": "practical engineering",
+      "baseline_estimated_completion_percent_range": [
+        55,
+        75
+      ],
+      "current_estimated_completion_percent_range": [
+        60,
+        80
+      ],
+      "baseline_estimated_midpoint_percent": 65.0,
+      "current_estimated_midpoint_percent": 70.0,
+      "estimated_delta_percentage_points": 5.0,
+      "confidence": "low",
+      "assessment": "New independently accepted two-page protection/partial-unmap case adds exact MAPERR/ACCERR addresses, adjacent/surviving-page data and restored access. This is a heuristic engineering uplift, not closure of failed-invalidation or broad memory requirements.",
+      "completed_practical_checks": 0,
+      "total_practical_checks": 3,
+      "milestone_status": "open"
+    },
+    {
+      "id": "M04",
+      "title": "Useful C and Rust applications",
+      "scope": "practical engineering",
+      "baseline_estimated_completion_percent_range": [
+        80,
+        90
+      ],
+      "current_estimated_completion_percent_range": [
+        80,
+        90
+      ],
+      "baseline_estimated_midpoint_percent": 85.0,
+      "current_estimated_midpoint_percent": 85.0,
+      "estimated_delta_percentage_points": 0.0,
+      "confidence": "low",
+      "assessment": "Range held; new work does not justify moving this coarse estimate outside its existing uncertainty band.",
+      "completed_practical_checks": 2,
+      "total_practical_checks": 3,
+      "milestone_status": "open"
+    },
+    {
+      "id": "M05",
+      "title": "Native lifecycle and restoration",
+      "scope": "practical engineering",
+      "baseline_estimated_completion_percent_range": [
+        55,
+        75
+      ],
+      "current_estimated_completion_percent_range": [
+        55,
+        75
+      ],
+      "baseline_estimated_midpoint_percent": 65.0,
+      "current_estimated_midpoint_percent": 65.0,
+      "estimated_delta_percentage_points": 0.0,
+      "confidence": "low",
+      "assessment": "Range held; new work does not justify moving this coarse estimate outside its existing uncertainty band.",
+      "completed_practical_checks": 1,
+      "total_practical_checks": 3,
+      "milestone_status": "open"
+    },
+    {
+      "id": "M06",
+      "title": "Processes, threads and used syscalls",
+      "scope": "practical engineering",
+      "baseline_estimated_completion_percent_range": [
+        45,
+        65
+      ],
+      "current_estimated_completion_percent_range": [
+        45,
+        65
+      ],
+      "baseline_estimated_midpoint_percent": 55.0,
+      "current_estimated_midpoint_percent": 55.0,
+      "estimated_delta_percentage_points": 0.0,
+      "confidence": "low",
+      "assessment": "Range held; new work does not justify moving this coarse estimate outside its existing uncertainty band.",
+      "completed_practical_checks": 0,
+      "total_practical_checks": 3,
+      "milestone_status": "open"
+    },
+    {
+      "id": "M07",
+      "title": "Used FPU/vector state",
+      "scope": "practical engineering",
+      "baseline_estimated_completion_percent_range": [
+        65,
+        80
+      ],
+      "current_estimated_completion_percent_range": [
+        65,
+        80
+      ],
+      "baseline_estimated_midpoint_percent": 72.5,
+      "current_estimated_midpoint_percent": 72.5,
+      "estimated_delta_percentage_points": 0.0,
+      "confidence": "low",
+      "assessment": "Range held; new work does not justify moving this coarse estimate outside its existing uncertainty band.",
+      "completed_practical_checks": 0,
+      "total_practical_checks": 2,
+      "milestone_status": "open"
+    },
+    {
+      "id": "M08",
+      "title": "Native modules and interfaces",
+      "scope": "practical engineering",
+      "baseline_estimated_completion_percent_range": [
+        85,
+        95
+      ],
+      "current_estimated_completion_percent_range": [
+        85,
+        95
+      ],
+      "baseline_estimated_midpoint_percent": 90.0,
+      "current_estimated_midpoint_percent": 90.0,
+      "estimated_delta_percentage_points": 0.0,
+      "confidence": "low",
+      "assessment": "Range held; new work does not justify moving this coarse estimate outside its existing uncertainty band.",
+      "completed_practical_checks": 1,
+      "total_practical_checks": 2,
+      "milestone_status": "open"
+    },
+    {
+      "id": "M09",
+      "title": "Rust and assembly integration",
+      "scope": "integration only",
+      "baseline_estimated_completion_percent_range": [
+        85,
+        95
+      ],
+      "current_estimated_completion_percent_range": [
+        85,
+        95
+      ],
+      "baseline_estimated_midpoint_percent": 90.0,
+      "current_estimated_midpoint_percent": 90.0,
+      "estimated_delta_percentage_points": 0.0,
+      "confidence": "low",
+      "assessment": "Range held; new work does not justify moving this coarse estimate outside its existing uncertainty band.",
+      "completed_practical_checks": 1,
+      "total_practical_checks": 2,
+      "milestone_status": "open"
+    },
+    {
+      "id": "M10",
+      "title": "Repeatable runnable build",
+      "scope": "practical engineering",
+      "baseline_estimated_completion_percent_range": [
+        70,
+        85
+      ],
+      "current_estimated_completion_percent_range": [
+        70,
+        85
+      ],
+      "baseline_estimated_midpoint_percent": 77.5,
+      "current_estimated_midpoint_percent": 77.5,
+      "estimated_delta_percentage_points": 0.0,
+      "confidence": "low",
+      "assessment": "Range held; new work does not justify moving this coarse estimate outside its existing uncertainty band.",
+      "completed_practical_checks": 0,
+      "total_practical_checks": 2,
+      "milestone_status": "open"
+    },
+    {
+      "id": "M11",
+      "title": "Integrated functional regression",
+      "scope": "practical engineering",
+      "baseline_estimated_completion_percent_range": [
+        65,
+        80
+      ],
+      "current_estimated_completion_percent_range": [
+        65,
+        80
+      ],
+      "baseline_estimated_midpoint_percent": 72.5,
+      "current_estimated_midpoint_percent": 72.5,
+      "estimated_delta_percentage_points": 0.0,
+      "confidence": "low",
+      "assessment": "Range held; new work does not justify moving this coarse estimate outside its existing uncertainty band.",
+      "completed_practical_checks": 0,
+      "total_practical_checks": 3,
+      "milestone_status": "open"
+    },
+    {
+      "id": "M12",
+      "title": "Bounded repeatability and stress",
+      "scope": "practical engineering",
+      "baseline_estimated_completion_percent_range": [
+        15,
+        30
+      ],
+      "current_estimated_completion_percent_range": [
+        15,
+        30
+      ],
+      "baseline_estimated_midpoint_percent": 22.5,
+      "current_estimated_midpoint_percent": 22.5,
+      "estimated_delta_percentage_points": 0.0,
+      "confidence": "low",
+      "assessment": "Range held; new work does not justify moving this coarse estimate outside its existing uncertainty band.",
+      "completed_practical_checks": 0,
+      "total_practical_checks": 2,
+      "milestone_status": "open"
+    },
+    {
+      "id": "M13",
+      "title": "Practical delivery",
+      "scope": "practical engineering",
+      "baseline_estimated_completion_percent_range": [
+        30,
+        50
+      ],
+      "current_estimated_completion_percent_range": [
+        30,
+        50
+      ],
+      "baseline_estimated_midpoint_percent": 40.0,
+      "current_estimated_midpoint_percent": 40.0,
+      "estimated_delta_percentage_points": 0.0,
+      "confidence": "low",
+      "assessment": "Range held; new work does not justify moving this coarse estimate outside its existing uncertainty band.",
+      "completed_practical_checks": 0,
+      "total_practical_checks": 3,
+      "milestone_status": "open"
+    }
+  ],
+  "baseline_accepted_facts": {
+    "distinct_native_behaviors": 20,
+    "selected_production_default_rust_paths": 9,
+    "paths_with_applicable_native_integration_evidence": 8,
+    "practical_checks_complete": 6,
+    "practical_checks_open": 29,
+    "practical_checks_total": 35,
+    "whole_milestones_open": 14,
+    "whole_kernel_rust_conversion_percent": null,
+    "source_checkpoint": "cf035407404dc17a89c8347c4d5a01f48627d385"
+  },
+  "current_accepted_facts": {
+    "distinct_native_behaviors": 22,
+    "selected_production_default_rust_paths": 12,
+    "paths_with_applicable_native_integration_evidence": 11,
+    "practical_checks_complete": 6,
+    "practical_checks_open": 29,
+    "practical_checks_total": 35,
+    "whole_milestones_open": 14,
+    "whole_kernel_rust_conversion_percent": null,
+    "latest_source_checkpoint": "d238a58332f871b3fa886fd66e0ea0cf9ae77055",
+    "latest_tool_checkpoint": "d115adc5e9f718d529d86666c6ab69422ca01f18",
+    "accepted_production_image_sha256": "5f7f43ad8cfe09d8da594b5740061f342c6031d040bc1b6ec3d6deafc9caeeb5",
+    "accepted_production_source_checkpoint": "3c5434ef57ce82ebbe6a270133fd449718954d8c"
+  },
+  "accepted_fact_deltas": {
+    "distinct_native_behaviors": 2,
+    "selected_production_default_rust_paths": 3,
+    "paths_with_applicable_native_integration_evidence": 3,
+    "practical_checks_complete": 0
+  },
+  "new_accepted_native_behaviors": [
+    "closed descriptor write -> EBADF",
+    "two-page protection/fault recovery and partial-unmap survivor"
+  ],
+  "new_selected_production_rust_paths": [
+    "clear_debugreg",
+    "save_debugreg",
+    "restore_debugreg"
+  ],
+  "new_paths_with_applicable_native_evidence": [
+    "clear_debugreg (scoped AVX/thread integration)",
+    "save_debugreg (scoped AVX/thread integration)",
+    "restore_debugreg (scoped AVX/thread integration)"
+  ],
+  "evidence": [
+    "docs/verification/evidence/practical-file-closed-write-native-result-review-20261018-1.json",
+    "docs/verification/evidence/practical-mapping-isolation-native-result-review-20261018-1.json",
+    "docs/verification/evidence/rust-clear-debugreg-image-actual-result-review-20261018-1.json",
+    "docs/verification/evidence/rust-debugreg-pair-image-actual-result-review-20261018-1.json",
+    "docs/verification/evidence/rust-debugreg-pair-avx-native-result-review-20261018-1.json",
+    "docs/verification/evidence/rust-debugreg-pair-threads-native-chain-result-review-20261018-1.json"
+  ],
+  "pending_not_credited": [
+    "release_fp_regs source integrated, actual four compilation/export phases and image build accepted; production link/body/descriptor acceptance pending",
+    "non-null FP release native proof pending kmsg collection backend support and its separately reviewed profile",
+    "Rust std file-roundtrip133B Linux/stage/parent accepted; native unrun",
+    "original syscall-DWARF13/full validity gap and all14passed=false preserved"
+  ],
+  "monitoring": {
+    "mode": "existing active supervisor chat",
+    "full_review_next_at": "2026-10-18T22:17:50Z",
+    "background_scheduler_installed": false
+  }
+}

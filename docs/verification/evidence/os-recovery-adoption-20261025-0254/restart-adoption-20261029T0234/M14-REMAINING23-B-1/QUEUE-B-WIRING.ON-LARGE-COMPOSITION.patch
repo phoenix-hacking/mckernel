@@ -1,0 +1,32 @@
+--- a/kernel/CMakeLists.txt
++++ b/kernel/CMakeLists.txt
+@@ -232,6 +232,16 @@
+ 			list(APPEND RUST_KERNEL_CFG "--cfg" "f03_syscall_table_clone3")
+ 			# Qualified next cohort: current native x86_64 Linux6.12, no UBSAN.
+ 			if (ARCH STREQUAL "x86_64" AND NOT ENABLE_UBSAN)
++				# Queue B is opt-in and remains subject to the documented source contracts.
++				if (MCKERNEL_F03_DO_SYSCALL_SUPPORTED_EXPERIMENTAL)
++					if (NOT MCKERNEL_F03_DEFINED_ALL_REQUEST_CALLERS_REVIEWED)
++						message(FATAL_ERROR "F03 do_syscall requires reviewed initialization of all selected callers")
++					endif()
++					list(APPEND RUST_KERNEL_CFG "--cfg" "f03_do_syscall_supported_candidate")
++				endif()
++				if (MCKERNEL_F03_UTIL_THREAD_WHOLE_EXPERIMENTAL)
++					list(APPEND RUST_KERNEL_CFG "--cfg" "f03_util_thread_whole_candidate" "--cfg" "f03_util_thread_arg5_zero_candidate")
++				endif()
+ 				if (MCKERNEL_F03_REQUEST_CONSTRUCTORS_EXPERIMENTAL)
+ 					list(APPEND RUST_KERNEL_CFG "--cfg" "f03_request_constructors_candidate")
+ 				endif()
+@@ -620,6 +630,12 @@
+ 		set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/process.c" APPEND PROPERTY
+ 			COMPILE_DEFINITIONS MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE)
+ 		if (ARCH STREQUAL "x86_64" AND NOT ENABLE_UBSAN)
++			if (MCKERNEL_F03_DO_SYSCALL_SUPPORTED_EXPERIMENTAL)
++				set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY COMPILE_DEFINITIONS MCKERNEL_RUST_F03_DO_SYSCALL_SUPPORTED)
++			endif()
++			if (MCKERNEL_F03_UTIL_THREAD_WHOLE_EXPERIMENTAL)
++				set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY COMPILE_DEFINITIONS "MCKERNEL_RUST_F03_UTIL_THREAD_WHOLE;MCKERNEL_RUST_F03_UTIL_REQUEST_ARG5_ZERO")
++			endif()
+ 			if (MCKERNEL_F03_REQUEST_CONSTRUCTORS_EXPERIMENTAL)
+ 				set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY COMPILE_DEFINITIONS MCKERNEL_RUST_F03_REQUEST_CONSTRUCTORS)
+ 			endif()

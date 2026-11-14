@@ -1,0 +1,787 @@
+{
+  "actual_profile": {
+    "container_image": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+    "cpus": 4,
+    "cpuset": "2-5",
+    "guest_memory_mib": 8192,
+    "guest_numa_nodes": 2,
+    "guest_vcpus": 4,
+    "mckernel_cpus": 1,
+    "mckernel_memory_mib": 128,
+    "memory": 12884901888,
+    "memory_swap": 12884901888,
+    "network": "none",
+    "pids": 512,
+    "unprivileged": true
+  },
+  "application_acceptance": true,
+  "classified_nonfailure_evidence": {
+    "container_kill_classification": "Exact already-stopped daemon response; accepted cleanup code always performs stop,kill,wait,inspect,rm and treats successful authenticated rm plus name,label,fullCID absence as authority.",
+    "container_kill_returncode": 1,
+    "kernel_warning_lines": [
+      "<5>[    6.525761] ihk: module verification failed: signature and/or required key missing - tainting kernel",
+      "<4>[   30.510264] process '/bin/mcexec' started with executable stack"
+    ],
+    "native_retirement_errno_minus11": "Expected transient retry followed by actual errno0 and process cleanup_errno0.",
+    "qemu_classification": "Guest SHUTDOWN/S5 and QMP quit precede source-required TERM plus process-group SIGKILL before exact direct-child wait. This is host retirement, not payload failure.",
+    "qemu_returncode": -9,
+    "tar_socket_warning": "Exact default non-dereference qmp.sock omission only; tar0 and all regular evidence captured."
+  },
+  "client_count": 30,
+  "container_final_state": {
+    "Dead": false,
+    "Error": "",
+    "ExitCode": 0,
+    "FinishedAt": "2026-10-18T04:12:22.557862426Z",
+    "OOMKilled": false,
+    "Paused": false,
+    "Pid": 0,
+    "Restarting": false,
+    "Running": false,
+    "StartedAt": "2026-10-18T04:11:48.314243197Z",
+    "Status": "exited"
+  },
+  "current_head_binding": "e7ca5e5bfdad2ac7726223459bfb7a1a64fcefe5",
+  "distinct_native_behaviors_remain": 16,
+  "execution_release": {
+    "path": "/home/holden/mckernel-work/scratch/m07-avx-cpu-copy-image-preparation-20261018-1/execution-finalization-1/execution-release.json",
+    "sha256": "16d92bb9091f773aa42014e3b953e579147a6d674df370f88c4fc09743b8afff",
+    "size": 6063
+  },
+  "fresh_selected_live_identities": [
+    {
+      "current_starttime": null,
+      "name": "021-inspect.json",
+      "pid": 827400,
+      "recorded_starttime": 9418884,
+      "status": "ABSENT_AFTER_POSITIVE_JOIN"
+    },
+    {
+      "current_starttime": null,
+      "name": "026-inspect.json",
+      "pid": 827449,
+      "recorded_starttime": 9418892,
+      "status": "ABSENT_AFTER_POSITIVE_JOIN"
+    },
+    {
+      "current_starttime": null,
+      "name": "005-ps.json",
+      "pid": 826967,
+      "recorded_starttime": 9415419,
+      "status": "ABSENT_AFTER_POSITIVE_JOIN"
+    },
+    {
+      "current_starttime": null,
+      "name": "014-inspect.json",
+      "pid": 827327,
+      "recorded_starttime": 9418874,
+      "status": "ABSENT_AFTER_POSITIVE_JOIN"
+    },
+    {
+      "current_starttime": null,
+      "name": "004-create.json",
+      "pid": 826957,
+      "recorded_starttime": 9415415,
+      "status": "ABSENT_AFTER_POSITIVE_JOIN"
+    },
+    {
+      "current_starttime": null,
+      "name": "029-ps.json",
+      "pid": 827480,
+      "recorded_starttime": 9418897,
+      "status": "ABSENT_AFTER_POSITIVE_JOIN"
+    },
+    {
+      "current_starttime": null,
+      "name": "001-ps.json",
+      "pid": 826929,
+      "recorded_starttime": 9415409,
+      "status": "ABSENT_AFTER_POSITIVE_JOIN"
+    },
+    {
+      "current_starttime": null,
+      "name": "018-ps.json",
+      "pid": 827367,
+      "recorded_starttime": 9418879,
+      "status": "ABSENT_AFTER_POSITIVE_JOIN"
+    },
+    {
+      "current_starttime": null,
+      "name": "016-logs.json",
+      "pid": 827345,
+      "recorded_starttime": 9418877,
+      "status": "ABSENT_AFTER_POSITIVE_JOIN"
+    },
+    {
+      "current_starttime": null,
+      "name": "003-image.json",
+      "pid": 826948,
+      "recorded_starttime": 9415413,
+      "status": "ABSENT_AFTER_POSITIVE_JOIN"
+    },
+    {
+      "current_starttime": null,
+      "name": "015-wait.json",
+      "pid": 827337,
+      "recorded_starttime": 9418875,
+      "status": "ABSENT_AFTER_POSITIVE_JOIN"
+    },
+    {
+      "current_starttime": null,
+      "name": "013-ps.json",
+      "pid": 827317,
+      "recorded_starttime": 9418872,
+      "status": "ABSENT_AFTER_POSITIVE_JOIN"
+    },
+    {
+      "current_starttime": null,
+      "name": "011-ps.json",
+      "pid": 827296,
+      "recorded_starttime": 9418869,
+      "status": "ABSENT_AFTER_POSITIVE_JOIN"
+    },
+    {
+      "current_starttime": null,
+      "name": "017-inspect.json",
+      "pid": 827357,
+      "recorded_starttime": 9418878,
+      "status": "ABSENT_AFTER_POSITIVE_JOIN"
+    },
+    {
+      "current_starttime": null,
+      "name": "007-ps.json",
+      "pid": 826985,
+      "recorded_starttime": 9415422,
+      "status": "ABSENT_AFTER_POSITIVE_JOIN"
+    },
+    {
+      "current_starttime": null,
+      "name": "019-ps.json",
+      "pid": 827379,
+      "recorded_starttime": 9418881,
+      "status": "ABSENT_AFTER_POSITIVE_JOIN"
+    },
+    {
+      "current_starttime": null,
+      "name": "009-start.json",
+      "pid": 827006,
+      "recorded_starttime": 9415426,
+      "status": "ABSENT_AFTER_POSITIVE_JOIN"
+    },
+    {
+      "current_starttime": null,
+      "name": "002-ps.json",
+      "pid": 826939,
+      "recorded_starttime": 9415411,
+      "status": "ABSENT_AFTER_POSITIVE_JOIN"
+    },
+    {
+      "current_starttime": null,
+      "name": "008-inspect.json",
+      "pid": 826996,
+      "recorded_starttime": 9415424,
+      "status": "ABSENT_AFTER_POSITIVE_JOIN"
+    },
+    {
+      "current_starttime": null,
+      "name": "025-logs.json",
+      "pid": 827439,
+      "recorded_starttime": 9418890,
+      "status": "ABSENT_AFTER_POSITIVE_JOIN"
+    },
+    {
+      "current_starttime": null,
+      "name": "027-rm.json",
+      "pid": 827459,
+      "recorded_starttime": 9418893,
+      "status": "ABSENT_AFTER_POSITIVE_JOIN"
+    },
+    {
+      "current_starttime": null,
+      "name": "028-ps.json",
+      "pid": 827469,
+      "recorded_starttime": 9418895,
+      "status": "ABSENT_AFTER_POSITIVE_JOIN"
+    },
+    {
+      "current_starttime": null,
+      "name": "010-wait.json",
+      "pid": 827286,
+      "recorded_starttime": 9418867,
+      "status": "ABSENT_AFTER_POSITIVE_JOIN"
+    },
+    {
+      "current_starttime": null,
+      "name": "020-ps.json",
+      "pid": 827389,
+      "recorded_starttime": 9418883,
+      "status": "ABSENT_AFTER_POSITIVE_JOIN"
+    },
+    {
+      "current_starttime": null,
+      "name": "022-stop.json",
+      "pid": 827410,
+      "recorded_starttime": 9418886,
+      "status": "ABSENT_AFTER_POSITIVE_JOIN"
+    },
+    {
+      "current_starttime": null,
+      "name": "006-ps.json",
+      "pid": 826977,
+      "recorded_starttime": 9415421,
+      "status": "ABSENT_AFTER_POSITIVE_JOIN"
+    },
+    {
+      "current_starttime": null,
+      "name": "024-wait.json",
+      "pid": 827427,
+      "recorded_starttime": 9418889,
+      "status": "ABSENT_AFTER_POSITIVE_JOIN"
+    },
+    {
+      "current_starttime": null,
+      "name": "030-ps.json",
+      "pid": 827490,
+      "recorded_starttime": 9418898,
+      "status": "ABSENT_AFTER_POSITIVE_JOIN"
+    },
+    {
+      "current_starttime": null,
+      "name": "012-ps.json",
+      "pid": 827306,
+      "recorded_starttime": 9418870,
+      "status": "ABSENT_AFTER_POSITIVE_JOIN"
+    },
+    {
+      "current_starttime": null,
+      "name": "023-kill.json",
+      "pid": 827417,
+      "recorded_starttime": 9418887,
+      "status": "ABSENT_AFTER_POSITIVE_JOIN"
+    },
+    {
+      "current_starttime": null,
+      "name": "outer-owner",
+      "pid": 826604,
+      "recorded_starttime": 9415371,
+      "status": "ABSENT_AFTER_POSITIVE_JOIN"
+    }
+  ],
+  "functional_scope": "PRACTICAL-GOAL supported-profile working kernel and useful apps; original comprehensive qualification deferred.",
+  "guest_app_launches": 1,
+  "image": {
+    "mode": 33261,
+    "path": "/home/holden/mckernel-work/scratch/native-fp-copy-image-preparation-20261018-1/preparation-commands-1/image-owner-work-084cffb0413a4275bfdd66e3fd6c3368/evidence/artifacts/mckernel.img",
+    "sha256": "08210bb23f137f845fdb94fc0e66ac97a0cbc2d68081d856cdfc92da2d6d3dbf",
+    "size": 7908600
+  },
+  "image_sources": {
+    "arch/x86_64/kernel/cpu.c": "5d93923119ac07f898849977463dc6e13349aa68831ae20e7aa1a6add92736be",
+    "kernel/process.c": "15cbf76ac6a1466b7a0825e8f2a495887238e9815f587a9babadddb958ede823"
+  },
+  "implementation_ownership": false,
+  "independent_reviewer": "/root/avx_cpu_copy_actual_result",
+  "limits": [
+    "Scoped unchanged AVX case replay on newCPUcopy image; adds zero distinct behaviors and no practical check closure.",
+    "Whole M07, final profile reconciliation, native stop/destroy/reboot restoration, multicore and broader qualification remain open.",
+    "Service-held later transport/ACK work preserved and excluded; no retry or change authorized."
+  ],
+  "mckernel_application_executed": true,
+  "new_distinct_behavior_increment": 0,
+  "owner_identity": {
+    "application_acceptance": false,
+    "attempt": "/home/holden/mckernel-work/scratch/ndfx-74a2d981/run/attempt-abb0db309e61f2a001205b6f7fb40975",
+    "cgroup_profile": {
+      "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_period_us": "100000",
+      "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_quota_us": "400000",
+      "/sys/fs/cgroup/memory/mckernel-dev/memory.limit_in_bytes": "12884901888",
+      "/sys/fs/cgroup/memory/mckernel-dev/memory.use_hierarchy": "1",
+      "/sys/fs/cgroup/pids/mckernel-dev/pids.max": "512"
+    },
+    "lock": {
+      "dev": 27,
+      "gid": 0,
+      "ino": 4,
+      "mode": 420,
+      "nlink": 1,
+      "uid": 0
+    },
+    "name": "mckernel-native-diagnostic-abb0db309e61f2a001205b6f7fb40975",
+    "nonce": "abb0db309e61f2a001205b6f7fb40975",
+    "outer": {
+      "pgid": 826600,
+      "pid": 826604,
+      "proc_starttime": 9415371,
+      "sid": 826600
+    },
+    "owner_sha256": "beb35e8e311e90c092ad94a042c622b5ac470b6c1c8ed5db7ff368b4be7b304c"
+  },
+  "owner_result": {
+    "absence_verified": true,
+    "application_acceptance": false,
+    "container": "bbccefb8a29443ed7124777e96e15ef6b6bdc02a61ffb1f40c3d5f80410a72ea",
+    "failure": null,
+    "lease_retained": false,
+    "secondary": [],
+    "secondary_omitted": 0,
+    "signal_number": null,
+    "status": "PROTOCOL_PASS"
+  },
+  "payload": {
+    "exit_status": 0,
+    "exposure": {
+      "ENABLED_AUXV": {
+        "hwcap": 2,
+        "hwcap2": 0
+      },
+      "ENABLED_CPUID1": {
+        "ecx": 4277678603,
+        "edx": 533462013
+      },
+      "ENABLED_CPUID7": {
+        "ebx": 563889065,
+        "ecx": 2151678476,
+        "edx": 16
+      },
+      "ENABLED_CPUIDD0": {
+        "eax": 543,
+        "ebx": 2696,
+        "ecx": 2696,
+        "edx": 0
+      },
+      "ENABLED_XCR0": {
+        "hi": 0,
+        "lo": 543
+      },
+      "observed_xcr0": 543,
+      "required_xcr0": 7,
+      "scope": "Observed process exposure plus explicit x87/SSE/YMM boundary checks; no whole ISA/IFUNC closure",
+      "supported_xcr0": 543
+    },
+    "stderr_bytes": 0,
+    "stdout": "ENABLED_CPUID1 ecx=fef8320b edx=1fcbfbfd\nENABLED_XCR0 hi=00000000 lo=0000021f\nENABLED_CPUIDD0 eax=0000021f ebx=00000a88 ecx=00000a88 edx=00000000\nENABLED_CPUID7 ebx=219c43a9 ecx=8040020c edx=00000010\nENABLED_AUXV hwcap=0000000000000002 hwcap2=0000000000000000\nENABLED_REQUIRED_XCR0=0000000000000007\nENABLED_SYSCALL_PASS\nENABLED_FUTEX_PASS\nENABLED_SIGNAL_PASS\nENABLED_PROFILE_PASS\n",
+    "stdout_bytes": 380,
+    "stdout_sha256": "9a82eb916caf96e85af3d35adb6cea0eb6757533b865c97381fd931c710660f7",
+    "streams": {
+      "stderr": {
+        "discarded": 0,
+        "eof": true,
+        "eof_ns": 30748321280,
+        "hex": "",
+        "limit": 1024,
+        "observed": 0,
+        "retained": 0,
+        "truncated": false
+      },
+      "stdout": {
+        "discarded": 0,
+        "eof": true,
+        "eof_ns": 30748346143,
+        "hex": "454e41424c45445f435055494431206563783d6665663833323062206564783d31666362666266640a454e41424c45445f584352302068693d3030303030303030206c6f3d30303030303231660a454e41424c45445f43505549444430206561783d3030303030323166206562783d3030303030613838206563783d3030303030613838206564783d30303030303030300a454e41424c45445f435055494437206562783d3231396334336139206563783d3830343030323063206564783d30303030303031300a454e41424c45445f415558562068776361703d30303030303030303030303030303032206877636170323d303030303030303030303030303030300a454e41424c45445f52455155495245445f584352303d303030303030303030303030303030370a454e41424c45445f53595343414c4c5f504153530a454e41424c45445f46555445585f504153530a454e41424c45445f5349474e414c5f504153530a454e41424c45445f50524f46494c455f504153530a",
+        "limit": 1024,
+        "observed": 380,
+        "retained": 380,
+        "truncated": false
+      }
+    }
+  },
+  "physical_client_records": [
+    {
+      "name": "021-inspect.json",
+      "pgid": 827400,
+      "pid": 827400,
+      "proc_starttime": 9418884,
+      "reaped": true,
+      "returncode": 0,
+      "sid": 826600
+    },
+    {
+      "name": "026-inspect.json",
+      "pgid": 827449,
+      "pid": 827449,
+      "proc_starttime": 9418892,
+      "reaped": true,
+      "returncode": 0,
+      "sid": 826600
+    },
+    {
+      "name": "005-ps.json",
+      "pgid": 826967,
+      "pid": 826967,
+      "proc_starttime": 9415419,
+      "reaped": true,
+      "returncode": 0,
+      "sid": 826600
+    },
+    {
+      "name": "014-inspect.json",
+      "pgid": 827327,
+      "pid": 827327,
+      "proc_starttime": 9418874,
+      "reaped": true,
+      "returncode": 0,
+      "sid": 826600
+    },
+    {
+      "name": "004-create.json",
+      "pgid": 826957,
+      "pid": 826957,
+      "proc_starttime": 9415415,
+      "reaped": true,
+      "returncode": 0,
+      "sid": 826600
+    },
+    {
+      "name": "029-ps.json",
+      "pgid": 827480,
+      "pid": 827480,
+      "proc_starttime": 9418897,
+      "reaped": true,
+      "returncode": 0,
+      "sid": 826600
+    },
+    {
+      "name": "001-ps.json",
+      "pgid": 826929,
+      "pid": 826929,
+      "proc_starttime": 9415409,
+      "reaped": true,
+      "returncode": 0,
+      "sid": 826600
+    },
+    {
+      "name": "018-ps.json",
+      "pgid": 827367,
+      "pid": 827367,
+      "proc_starttime": 9418879,
+      "reaped": true,
+      "returncode": 0,
+      "sid": 826600
+    },
+    {
+      "name": "016-logs.json",
+      "pgid": 827345,
+      "pid": 827345,
+      "proc_starttime": 9418877,
+      "reaped": true,
+      "returncode": 0,
+      "sid": 826600
+    },
+    {
+      "name": "003-image.json",
+      "pgid": 826948,
+      "pid": 826948,
+      "proc_starttime": 9415413,
+      "reaped": true,
+      "returncode": 0,
+      "sid": 826600
+    },
+    {
+      "name": "015-wait.json",
+      "pgid": 827337,
+      "pid": 827337,
+      "proc_starttime": 9418875,
+      "reaped": true,
+      "returncode": 0,
+      "sid": 826600
+    },
+    {
+      "name": "013-ps.json",
+      "pgid": 827317,
+      "pid": 827317,
+      "proc_starttime": 9418872,
+      "reaped": true,
+      "returncode": 0,
+      "sid": 826600
+    },
+    {
+      "name": "011-ps.json",
+      "pgid": 827296,
+      "pid": 827296,
+      "proc_starttime": 9418869,
+      "reaped": true,
+      "returncode": 0,
+      "sid": 826600
+    },
+    {
+      "name": "017-inspect.json",
+      "pgid": 827357,
+      "pid": 827357,
+      "proc_starttime": 9418878,
+      "reaped": true,
+      "returncode": 0,
+      "sid": 826600
+    },
+    {
+      "name": "007-ps.json",
+      "pgid": 826985,
+      "pid": 826985,
+      "proc_starttime": 9415422,
+      "reaped": true,
+      "returncode": 0,
+      "sid": 826600
+    },
+    {
+      "name": "019-ps.json",
+      "pgid": 827379,
+      "pid": 827379,
+      "proc_starttime": 9418881,
+      "reaped": true,
+      "returncode": 0,
+      "sid": 826600
+    },
+    {
+      "name": "009-start.json",
+      "pgid": 827006,
+      "pid": 827006,
+      "proc_starttime": 9415426,
+      "reaped": true,
+      "returncode": 0,
+      "sid": 826600
+    },
+    {
+      "name": "002-ps.json",
+      "pgid": 826939,
+      "pid": 826939,
+      "proc_starttime": 9415411,
+      "reaped": true,
+      "returncode": 0,
+      "sid": 826600
+    },
+    {
+      "name": "008-inspect.json",
+      "pgid": 826996,
+      "pid": 826996,
+      "proc_starttime": 9415424,
+      "reaped": true,
+      "returncode": 0,
+      "sid": 826600
+    },
+    {
+      "name": "025-logs.json",
+      "pgid": 827439,
+      "pid": 827439,
+      "proc_starttime": 9418890,
+      "reaped": true,
+      "returncode": 0,
+      "sid": 826600
+    },
+    {
+      "name": "027-rm.json",
+      "pgid": 827459,
+      "pid": 827459,
+      "proc_starttime": 9418893,
+      "reaped": true,
+      "returncode": 0,
+      "sid": 826600
+    },
+    {
+      "name": "028-ps.json",
+      "pgid": 827469,
+      "pid": 827469,
+      "proc_starttime": 9418895,
+      "reaped": true,
+      "returncode": 0,
+      "sid": 826600
+    },
+    {
+      "name": "010-wait.json",
+      "pgid": 827286,
+      "pid": 827286,
+      "proc_starttime": 9418867,
+      "reaped": true,
+      "returncode": 0,
+      "sid": 826600
+    },
+    {
+      "name": "020-ps.json",
+      "pgid": 827389,
+      "pid": 827389,
+      "proc_starttime": 9418883,
+      "reaped": true,
+      "returncode": 0,
+      "sid": 826600
+    },
+    {
+      "name": "022-stop.json",
+      "pgid": 827410,
+      "pid": 827410,
+      "proc_starttime": 9418886,
+      "reaped": true,
+      "returncode": 0,
+      "sid": 826600
+    },
+    {
+      "name": "006-ps.json",
+      "pgid": 826977,
+      "pid": 826977,
+      "proc_starttime": 9415421,
+      "reaped": true,
+      "returncode": 0,
+      "sid": 826600
+    },
+    {
+      "name": "024-wait.json",
+      "pgid": 827427,
+      "pid": 827427,
+      "proc_starttime": 9418889,
+      "reaped": true,
+      "returncode": 0,
+      "sid": 826600
+    },
+    {
+      "name": "030-ps.json",
+      "pgid": 827490,
+      "pid": 827490,
+      "proc_starttime": 9418898,
+      "reaped": true,
+      "returncode": 0,
+      "sid": 826600
+    },
+    {
+      "name": "012-ps.json",
+      "pgid": 827306,
+      "pid": 827306,
+      "proc_starttime": 9418870,
+      "reaped": true,
+      "returncode": 0,
+      "sid": 826600
+    },
+    {
+      "name": "023-kill.json",
+      "pgid": 827417,
+      "pid": 827417,
+      "proc_starttime": 9418887,
+      "reaped": true,
+      "returncode": 1,
+      "sid": 826600
+    }
+  ],
+  "physical_join": {
+    "argv": [
+      "/usr/bin/sudo",
+      "-A",
+      "/home/holden/anaconda3/bin/python3",
+      "-B",
+      "/home/holden/mckernel-work/scratch/m07-avx-cpu-copy-image-preparation-20261018-1/host-cpu-copy1/native_diagnostic_container_owner.py",
+      "--attempt-parent",
+      "/home/holden/mckernel-work/scratch/ndfx-74a2d981/run",
+      "--nonce",
+      "abb0db309e61f2a001205b6f7fb40975",
+      "--owner-sha256",
+      "beb35e8e311e90c092ad94a042c622b5ac470b6c1c8ed5db7ff368b4be7b304c",
+      "--manifest",
+      "/home/holden/mckernel-work/scratch/m07-avx-cpu-copy-image-preparation-20261018-1/manifest.json",
+      "--manifest-sha256",
+      "3d58e91a5810413a78f2ad7e30ef87e228821f0d574e69288bbd74f1e0351a69"
+    ],
+    "elapsed_seconds": 35.64876119699329,
+    "joined": true,
+    "returncode": 0,
+    "scope": "Direct client physically joined; accepted exact owner zero-exit path includes checked retirement, lease release and evidence flush",
+    "source_known_positive_retirement": true
+  },
+  "practical_exit_check_changes": [],
+  "prior_common_shared_release": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-fpu-copy-image-terminal-result-review-20261018-1.json",
+    "sha256": "36461074ce3898a7711bd1f6801d80d98983423fa4e11fe90ab31a7844fab90a",
+    "size": 11112
+  },
+  "raw_capture_pins": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/m07-avx-cpu-copy-image-preparation-20261018-1/execution-finalization-1/owner-join.json",
+      "sha256": "b0c45a9a217e09bd6cc65d8259b538df96638db27bcbfc5aa7041bc5e69ec927",
+      "size": 958
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/m07-avx-cpu-copy-image-preparation-20261018-1/execution-finalization-1/owner.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/m07-avx-cpu-copy-image-preparation-20261018-1/execution-finalization-1/owner.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/m07-avx-cpu-copy-image-preparation-20261018-1/execution-finalization-1/readback-1.command.json",
+      "sha256": "d60997a3614e20fab149904dfa60c80f858d61246f0ffbbfad2aef2b3d85dde2",
+      "size": 336
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/m07-avx-cpu-copy-image-preparation-20261018-1/execution-finalization-1/readback-1.stdout",
+      "sha256": "f6f3c3d735197a4775fb773ce21ed4b921ff95e7bda1eccc879d19703a3ad6bb",
+      "size": 542720
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/m07-avx-cpu-copy-image-preparation-20261018-1/execution-finalization-1/readback-1.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/m07-avx-cpu-copy-image-preparation-20261018-1/execution-finalization-1/readback-2.command.json",
+      "sha256": "a471dc46f0b05cb6b86cbe4ddd5f8aab9d37cc9e8221d1f2249c9e633096ff40",
+      "size": 297
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/m07-avx-cpu-copy-image-preparation-20261018-1/execution-finalization-1/readback-2.stdout",
+      "sha256": "7554e6c2c596603bfe699b946db75972890759e9dee4e976ed1fbc4599a50e5c",
+      "size": 83730
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/m07-avx-cpu-copy-image-preparation-20261018-1/execution-finalization-1/readback-2.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/m07-avx-cpu-copy-image-preparation-20261018-1/execution-finalization-1/readback-3.command.json",
+      "sha256": "9b1642dda2945604877b5fd28755cca16d62ddad607c1a0566c1a850cd1b72b1",
+      "size": 338
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/m07-avx-cpu-copy-image-preparation-20261018-1/execution-finalization-1/readback-3.stdout",
+      "sha256": "e9339c94e4680a509c2d3fbd16cedabe2e09e4ac9ac6881624835c81db541082",
+      "size": 389120
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/m07-avx-cpu-copy-image-preparation-20261018-1/execution-finalization-1/readback-3.stderr",
+      "sha256": "a27b3689ab11da6ff162668a3d1b14ccaa2d78cb34307a70c88d78c7bd93e0bd",
+      "size": 41
+    }
+  ],
+  "retirement": {
+    "accepted": true,
+    "all30clients_physically_reaped": true,
+    "common_shared": "Prior terminal release364610 remains accepted; this ordinary guest uses and releases root diagnostic mutex, no retained common/shared blocker.",
+    "exact_container_removed_and_name_label_id_absent": true,
+    "lease_released": true,
+    "owner_directly_joined": true,
+    "pending_and_final_reap_ledgers_drained": "Source-required predicate for _release; accepted zero-exit/flush plus raw30 reaped records",
+    "qemu_identity_bound_group_killed_and_reaped": true
+  },
+  "runtime_findings": [
+    "Actual loaded new image08210 is bound through frozen manifest, source-bound owner artifact validation, exact staged initramfs and accepted linked-image provenance; serial reports loaded checksum02d96632aca0b9b1 and full guest ready.",
+    "Frozen assembly compares all32 bytes of each YMM0..15, x87 stack/control and MXCSR control semantics across raw syscall, blocking futex with distinct helper state and completed clobbering signal handler. Actual marker successes and raw exited0 establish this scoped execution.",
+    "Actual helper thread259 is published/deleted; main257 terminal exit_group is delivered, scheduled cleanupACK0, retry retirementEAGAIN resolves retirement0 and process release cleanup_errno0. Both streams EOF, no discard/truncation, procfs empty.",
+    "Frozen typed exposure reports XCR0=0x21f, supportedXCR0=0x21f and required x87/SSE/YMM bits7. This does not claim whole ISA/IFUNC closure.",
+    "Frozen independent consumer re-evaluation of exact raw observation passes original stream, route, lifecycle and error contracts. No unclassified kernel error remains."
+  ],
+  "schema": "mckernel.practical-m07-avx-cpu-copy-image-independent-result-review.v1",
+  "source_bindings": {
+    "/home/holden/mckernel-work/scratch/m07-avx-cpu-copy-image-preparation-20261018-1/host-cpu-copy1/case_evaluator.py": "90e82573d5d567726a1ea909f7aaa1c4733bd81001b4b93dc943a64fee2e545d",
+    "/home/holden/mckernel-work/scratch/m07-avx-cpu-copy-image-preparation-20261018-1/host-cpu-copy1/native_diagnostic.py": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e",
+    "/home/holden/mckernel-work/scratch/m07-avx-cpu-copy-image-preparation-20261018-1/host-cpu-copy1/native_diagnostic_backend.py": "cd0759c926876483665065cb320b9daf7d7c6b32f56e561805b4b0343f60d614",
+    "/home/holden/mckernel-work/scratch/m07-avx-cpu-copy-image-preparation-20261018-1/host-cpu-copy1/native_diagnostic_container_owner.py": "beb35e8e311e90c092ad94a042c622b5ac470b6c1c8ed5db7ff368b4be7b304c",
+    "/home/holden/mckernel-work/scratch/m07-avx-cpu-copy-image-preparation-20261018-1/host-cpu-copy1/native_diagnostic_runner.py": "c64e5738d76c15b16973b63627ba359d251d8a2f7dedcc1bfee12347c58d9ce4",
+    "/home/holden/mckernel-work/scratch/m07-avx-cpu-copy-image-preparation-20261018-1/host-cpu-copy1/qmp_capture.py": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741"
+  },
+  "static_decision": {
+    "path": "/home/holden/mckernel-work/scratch/m07-avx-cpu-copy-final-execution-review-20261018-1/decision.json",
+    "sha256": "0b9f0ebbe1d87ed5192592da17ada38624d4a075414b4bc63ee695a8c630b0f1",
+    "size": 13931
+  },
+  "status": "PASS_SCOPED_NEW_IMAGE_AVX_AND_POSITIVE_RETIREMENT",
+  "time_epoch": 1792296853.3446512,
+  "whole_M07_acceptance": false,
+  "whole_practical_goal_acceptance": false
+}

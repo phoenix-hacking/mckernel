@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "case_id": "app.bash-pipeline",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_files": {"/case/input": {"size": 224, "generator": {"kind": "repeat-utf8", "text": "pipeline-data\\n", "count": 16}}},
+  "stdin": {"hex": ""},
+  "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"},
+  "pipeline_contract": {"producer": "coreutils cat", "consumer": "coreutils wc -c", "pipefail": true},
+  "relational_assertions": ["Input is exactly 16 repetitions of pipeline-data newline and both pipeline children use the bound executable inventory."]
+}

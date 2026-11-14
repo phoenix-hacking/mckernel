@@ -1,0 +1,10 @@
+{"current_free": "UNKNOWN", "event": "ALL_THREE_CHILDREN_ABSENT_PARENTS_VERIFIED", "native_admission": false}
+{"event": "BEFORE_MKDIR", "path": "/sys/fs/cgroup/cpu/mckernel-dev"}
+{"event": "BEFORE_NEW_SCALAR_WRITE", "expected": "100000", "path": "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_period_us"}
+{"event": "BEFORE_NEW_SCALAR_WRITE", "expected": "400000", "path": "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_quota_us"}
+{"event": "BEFORE_MKDIR", "path": "/sys/fs/cgroup/memory/mckernel-dev"}
+{"event": "BEFORE_NEW_SCALAR_WRITE", "expected": "1", "path": "/sys/fs/cgroup/memory/mckernel-dev/memory.use_hierarchy"}
+{"event": "BEFORE_NEW_SCALAR_WRITE", "expected": "12884901888", "path": "/sys/fs/cgroup/memory/mckernel-dev/memory.limit_in_bytes"}
+{"event": "BEFORE_MKDIR", "path": "/sys/fs/cgroup/pids/mckernel-dev"}
+{"event": "BEFORE_NEW_SCALAR_WRITE", "expected": "512", "path": "/sys/fs/cgroup/pids/mckernel-dev/pids.max"}
+{"actions": [{"directory": "/sys/fs/cgroup/cpu/mckernel-dev", "scalars": [{"actual": "100000", "path": "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_period_us"}, {"actual": "400000", "path": "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_quota_us"}]}, {"directory": "/sys/fs/cgroup/memory/mckernel-dev", "scalars": [{"actual": "1", "path": "/sys/fs/cgroup/memory/mckernel-dev/memory.use_hierarchy"}, {"actual": "12884901888", "path": "/sys/fs/cgroup/memory/mckernel-dev/memory.limit_in_bytes"}]}, {"directory": "/sys/fs/cgroup/pids/mckernel-dev", "scalars": [{"actual": "512", "path": "/sys/fs/cgroup/pids/mckernel-dev/pids.max"}]}], "affinity": [6], "current_free": "UNKNOWN", "euid": 0, "finished_ns": 1794438988923962631, "historical_unknowns": "PRESERVED_UNCHANGED", "native_admission": false, "pid": 1589385, "reservation_released": false, "schema": "m14-f06-real-v1-kernel-parent-configuration-v1", "signal_application_executed": false, "source_custody_admitted": false, "started_ns": 1794438988923082101, "status": "REAL_KERNEL_PARENT_CONFIGURED_NATIVE_GATES_STILL_UNQUALIFIED", "uid": 0}

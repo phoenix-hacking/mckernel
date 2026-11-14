@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "record_kind": "native_collector_lifecycle_semantic_negative_literal_review",
+  "task_id": "M02-C-lifecycle-semantic-negative-literal-review",
+  "attempt": 1,
+  "status": "PASS_SEMANTIC_NEGATIVE_LITERAL_SLICE_ONLY",
+  "recorded_utc": "2026-09-15T10:24:00Z",
+  "reviewed_base_commit": "2ad0ac1a5cf3a44220191f5ecf71629654d0a2b5",
+  "archive": {
+    "path": "docs/verification/evidence/stability-native-collector-lifecycle-semantic-negative-literal-slice-20260915-1.tar.gz",
+    "sha256": "7d8c8944f83002daaebb3fe1a84421e66d08d145def093f8d67fdbd51b54829d",
+    "size": 8426,
+    "members": 5
+  },
+  "source_sha256": {
+    "README.md": "b14fc0707fcf5afd3ded06df0c4cd5037fc298a4ade76020d33365d04683c853",
+    "harness.py": "c86edf0f37f66f6959650ad3f9aa279f10b2839980769d03d73af4c9bb00294e",
+    "vectors.json": "f22916490e3265ebfc3b180bad9d429bd3a6eaf05b47a96dfcaf6769a6cdaa3b",
+    "expected.json": "954198137e12ee2192d5e667fbef184bc5c56bcf1eb587fb3e9d1306bab93c6d",
+    "test_native_lifecycle_model.py": "a58c926ff4514f01fd7b5be9d11c779acd324c19d7d2434df66cdb56881b7b4d"
+  },
+  "accepted_scope": {
+    "vectors": [
+      "birth-after-runnable",
+      "duplicate-terminal",
+      "missing-birth",
+      "ref-resurrection",
+      "active-tid-alias"
+    ],
+    "failed_operation_events": 0,
+    "unchanged_state_on_failure": true,
+    "sticky_incomplete": true,
+    "active_tid_alias_created_rows": 0,
+    "mutant_bindings_inspected": [
+      "birth-after-runnable",
+      "tid-aliasing"
+    ]
+  },
+  "corpus_complete": false,
+  "models_replaced": false,
+  "source_checks_run": false,
+  "compiler_execution": false,
+  "model_execution": false,
+  "native_execution": false,
+  "whole_source_packet_accepted": false,
+  "abi_freeze_released": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

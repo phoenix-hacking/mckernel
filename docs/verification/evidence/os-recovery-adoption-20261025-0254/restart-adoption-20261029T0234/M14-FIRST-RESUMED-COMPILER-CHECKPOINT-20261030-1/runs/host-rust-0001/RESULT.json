@@ -1,0 +1,103 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_HOST_DIAGNOSTIC_RUST_OBJECT_DEPINFO_ONLY",
+  "at": 1793389087.469803,
+  "exit_status": 0,
+  "positive_tool_terminal": true,
+  "owner": {
+    "pid": 3037105,
+    "ppid": 2996005,
+    "start": "118643240",
+    "state": "R",
+    "pgid": 3037105,
+    "uid": 1000,
+    "at": 1793388987.760517,
+    "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+    "role": "tool-owned same-PID outer constrained HOST staging and rustc chain"
+  },
+  "inner_owner": {
+    "pid": 3037107,
+    "ppid": 3037106,
+    "start": "118643245",
+    "state": "R"
+  },
+  "censused_groups": [
+    3037105,
+    3037107
+  ],
+  "timeout_group_members": [],
+  "observed_births_remaining": [],
+  "grant_released": true,
+  "ordinary_reservation_released_bytes": 4294967296,
+  "nonce": "920dffef6d27e831e67d155d463f2be4b50220c7e1d349e8c683dead12aef24c",
+  "inner_metrics": {
+    "user_cpu_seconds": 18.56,
+    "system_cpu_seconds": 0.3,
+    "peak_rss_kib": 602472.0,
+    "exit_status": 0.0,
+    "wall_text": "0:18.87"
+  },
+  "outer_metrics": {
+    "user_cpu_seconds": 18.72,
+    "system_cpu_seconds": 0.35,
+    "peak_rss_kib": 602472.0,
+    "exit_status": 0.0,
+    "wall_text": "0:19.24"
+  },
+  "artifacts": {
+    "mckernel_rust.o": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-host-compile-preparation-1/work-1/out/mckernel_rust.o",
+      "bytes": 18799600,
+      "sha256": "23d7163716aac9b56f6a503c2811d1196df19509438fe5c292eb61b15592528d"
+    },
+    "mckernel.d": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-host-compile-preparation-1/work-1/out/mckernel.d",
+      "bytes": 92572,
+      "sha256": "fb685733767f6765be9a8447de9e79772d0bc08104a92edc7548a68dd21a29a6"
+    },
+    "staged-readback.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-host-compile-preparation-1/work-1/out/staged-readback.json",
+      "bytes": 67643,
+      "sha256": "4712c14e74c1f075d6feaf1fbe9516d8a2f903901e64e2868411f82334b0d9ea"
+    },
+    "exec-intent.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-host-compile-preparation-1/work-1/out/exec-intent.json",
+      "bytes": 8251,
+      "sha256": "c7fabc47b03a6b5c669abfdfb59e23d1889162fbb2990abf9492dc2e2e1cf411"
+    },
+    "time.txt": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-host-compile-preparation-1/work-1/out/time.txt",
+      "bytes": 5000,
+      "sha256": "6660dd4f5649a7fd212ad21f087bc3ef1a4eb12d888ae6dc309c2ea873708a0c"
+    }
+  },
+  "unique_depinfo_sources": 144,
+  "allowed_source_files": 163,
+  "literal_dotdot_spellings": [
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-host-compile-preparation-1/work-1/src/kernel/rust/../../host-kernel/native-rust/abi/vdso.rs",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-host-compile-preparation-1/work-1/src/kernel/rust/../../host-kernel/native-rust/zero_pages.rs"
+  ],
+  "unexpected_normalized_sources": [],
+  "compiled_Rust_crate_delta": 1,
+  "compiled_C_delta": 0,
+  "linked_image_delta": 0,
+  "production_linked_delta": 0,
+  "behavior_tested_OS_delta": 0,
+  "native_qualified_delta": 0,
+  "C_retirement_delta": 0,
+  "M14_file_acceptance_delta": 0,
+  "first_compiler_observed_at": 1793388997.4101264,
+  "resume_to_observed_compiler_seconds": 6101.410126447678,
+  "grant_to_observed_compiler_upper_bound_seconds": 9.6521155834198,
+  "owner_birth_to_compiler_birth_proxy_seconds": 0.43,
+  "clock_ticks_per_second": 100,
+  "timing_limits": "Observed rustc argv confirms running compiler; process-birth proxy is not exact exec or queue latency. Original thirty-minute baseline unchanged.",
+  "diagnostic_platform_limits": [
+    "Trusted root-owned installed Linux Python/stdlib/extensions and system loader/cache; not a claim of full measured platform runtime closure",
+    "Toolchain tree/static dependency manifest held by cooperating coordinator; current canonical dependency identity revalidation only, no full rehash",
+    "Actual loader/dlopen/helper choices not fully observed; unexpected depinfo or uncertain process retirement is UNKNOWN"
+  ],
+  "warnings_retained": true,
+  "first_compiler_error": null,
+  "native_ownership_changed": false
+}

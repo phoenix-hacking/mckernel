@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_adverse_source_review_failure",
+  "task_id": "M02-B-adverse-v1-source",
+  "attempt": 5,
+  "status": "FAIL_SOURCE_PACKET_AND_BUILD_PACKET",
+  "base_commit": "78faa2d3d8cf5e431e11efcd47c2d5fabfc63e27",
+  "source_tests": {
+    "status": "PASS_UNIT_SOURCE_ONLY",
+    "interpreter": "Python 3.8.10",
+    "tests": 12,
+    "returncode": 0,
+    "source_snapshot_sha256": "41401680ea7251848fcf92477104335a9e2d67a3916a7f53bcaa4332cbc2555c",
+    "diff_check": "PASS",
+    "pre_post_sources_equal": true
+  },
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-adverse-source-success-20260915-5.tar.gz",
+    "size": 55770,
+    "sha256": "d60eb453032a022a069cc71b86f67d4338ea64fb06c361f501b1f268a0ce7aaf",
+    "members": 26
+  },
+  "independent_review": {
+    "role": "Astra/high collector ownership reviewer",
+    "status": "FAIL_SOURCE_PACKET_AND_BUILD_PACKET",
+    "finding": "The producer canonicalizes /lib64 loader paths to /usr/lib64 while the verifier requires the logical /lib64 path, so every real successful build is rejected. Synthetic tests hide the pinned image's /lib64 -> usr/lib64 mapping.",
+    "verified_improvements": [
+      "Exact modes are applied and both profile modes are tested under umask 077.",
+      "Complete command/context/tool/source membership and negative mutations are implemented.",
+      "Generated diff retention and byte validation are present."
+    ]
+  },
+  "collector_compiled": false,
+  "root_execution": false,
+  "runtime_acceptance": false,
+  "production_gate_credit": false
+}

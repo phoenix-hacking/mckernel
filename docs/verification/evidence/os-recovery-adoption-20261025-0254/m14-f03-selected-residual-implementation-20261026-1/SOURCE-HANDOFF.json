@@ -1,0 +1,116 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_CURRENT290_CPUTIME_TWO_PROVIDER_SELECTOR_IMPLEMENTED_SOURCE_PROOF_PASS",
+  "sources": {
+    "kernel/syscall.c": {
+      "preimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/preimage/kernel/syscall.c",
+        "bytes": 909462,
+        "sha256": "54a9b0a8c6b9e1077fa7830bbaecdc699e7f3414767f50a77d4e5def63bdc582"
+      },
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/candidate/kernel/syscall.c",
+        "bytes": 909591,
+        "sha256": "68dace9cd9b076e4f8e8f61b3c5d03be7735af74f9160638777573c261d4bfe7"
+      }
+    },
+    "kernel/rust/syscall_policy.rs": {
+      "preimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/preimage/kernel/rust/syscall_policy.rs",
+        "bytes": 1228858,
+        "sha256": "fefec3eb05be2f714dfeca34310901a566557f82ee08de9b9ad0ef0344f74d62"
+      },
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/candidate/kernel/rust/syscall_policy.rs",
+        "bytes": 1234585,
+        "sha256": "f53cbd881bd2ba385336464759cbb858b20e2e1690993b47bdbaafb4427c4328"
+      }
+    }
+  },
+  "fragment": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/reused-cputime.FRAGMENT.rs",
+    "bytes": 5726,
+    "sha256": "9b9c8906da22585e0f94ea995e74a603a0b8f96ef985cced7cb12ead9c6da962"
+  },
+  "source_checks": {
+    "argv": [
+      "python3",
+      "-B",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/check_source_integration.py"
+    ],
+    "test_methods": 5,
+    "returncode": 0,
+    "stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/source-check.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/source-check.stderr",
+      "bytes": 442,
+      "sha256": "d651e1c021d2a853fd1c11d538e684235baa35d50fb3097e8bbf23de0143a4a8"
+    }
+  },
+  "retained_unchanged_behavior_proof": {
+    "ref": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/bounded-quoted-header-correction-1/actual-remaining7-1/ACTUAL-WHOLE-JOIN.json",
+      "bytes": 18306,
+      "sha256": "2044c7600d5fa1659fe7593b85ec3c691caf51adaddb65d9cedff076926fb2b5"
+    },
+    "status": "PASS_ACTUAL_CPUTIME_RETAINED3255_48LAYOUT_AND_CORRECTED_REAL_HEADERS_GCC9_TU_PARTIAL_ONLY",
+    "total_pairs": 3255,
+    "real_layout_fields": 48,
+    "old_failure_preserved": {
+      "bytes": 13059,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/actual-fixture-1/FAILURE-1.json",
+      "sha256": "9445b5ba4a5ff39fed8701c4d035ae61019c590ef694bf50f5aa19f642582240"
+    },
+    "scope": "exact original body/Rust fragment and old actual layout/selected-TU partial only; no new current-candidate compiler claim"
+  },
+  "parent_frontier": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/chat-thirty-minute-oversight-1/M14-SELECTED-OBJECT-FRONTIER.json",
+    "bytes": 5819,
+    "sha256": "350d5ce90e73ed4cc5b742fe582fe587e19aa3aafb7de66613c0a60d250bf72f"
+  },
+  "actual_current_object": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/ACTUAL-RETAINED-TWO-PROVIDER-BINDING.json",
+    "bytes": 1730,
+    "sha256": "59b071b03d88f1aa39cb653c2c2a918a69abe97412d6a5dcc8320a446ecb08e6"
+  },
+  "actual_matching_image": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/ACTUAL-LINKED-TWO-PROVIDER-BINDING.json",
+    "bytes": 1075,
+    "sha256": "6a149826fd17bbc17dede4560eb76f1782b1cf14f3cc93ef394f319df259bf96"
+  },
+  "selected_C_provider_frontier": {
+    "before_FUNCTIONS": 96,
+    "targeted_functions": [
+      "reset_cputime",
+      "set_cputime"
+    ],
+    "actual_targeted_C_bytes": 1090,
+    "remaining_after_selection_expected": 94,
+    "remaining_after_selection_actual": null,
+    "OBJECTS_unchanged_161": true
+  },
+  "canonical_write_proposal": [
+    {
+      "path": "kernel/syscall.c",
+      "change": "select existing completeRust providers under alreadydefault MCKERNEL_RUST_SYSCALL_POLICY_HELPERS; exact Cfallback retained"
+    },
+    {
+      "path": "kernel/rust/syscall_policy.rs",
+      "change": "append byteexact retained cputime fragment; preserve entire currentpolicy prefix including checkedpartition/internaldebugattrs"
+    }
+  ],
+  "shared_ABI_or_CMake_change": false,
+  "compiler_grant": false,
+  "compiler_execution": false,
+  "current_candidate_default_link": false,
+  "native": false,
+  "whole_file_retired": false,
+  "engineering_percentage": null,
+  "fixed_deadline": "2026-10-27T11:24:50Z",
+  "next_actual_check": "After Rootordinaryspecificgrant and currentSDKjob join: compile affected current Rust crate and selected syscall TU with currentABI witnesses, strict partial link and exacttwo-provider/unchangedownership checks. Defaultimage/native remains separatelyadmitted; do not rerun retained3255fixture prefix.",
+  "next_ready_body": "selected perf_counter_attr_flags_bridge/perf_read_attr_flags_bridge; private successor using existing complete source15 PerfEventAttr ABI; no entry/allocator/ownership HOLD automaticallyenabled."
+}

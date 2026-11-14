@@ -1,0 +1,146 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": "2026-10-29T00:24:30.959078+00:00",
+  "decision": "PASS_EXACT_F06_BODY12_SOURCE_ABI_AND_RETAINED_HOST_QUALIFICATION",
+  "independent": true,
+  "implementation_ownership": false,
+  "reviewer": "/root/m14_review",
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/SOURCE-READY.json",
+    "bytes": 12187,
+    "sha256": "2709519537398bffcbc1d72828ae266b2a3774a25ef72828d0b91910186ac883"
+  },
+  "Rust_body_and_descriptor": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/f06_vdso_map_log.rs",
+    "bytes": 3879,
+    "sha256": "72ba6caf872579d865ea6ad271b032532de68cae51d0f8c01915f5e7f4bcd659"
+  },
+  "actual_qualification": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/HOST-QUALIFICATION.json",
+    "bytes": 4570,
+    "sha256": "200295b70fa366ac9b520a934255cae9969acb97d4e44a3048a95cf7c44cb4bd"
+  },
+  "actual_raw_results": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/future-host-output-1/RESULTS.json",
+    "bytes": 10773,
+    "sha256": "1a2f4f8b5c66c80508d6dc07165b07772652066208fcf3999f0fc3da643fa8a1"
+  },
+  "independent_checks": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/F06-BODY12-REVIEW-1/CHECKS.json",
+    "bytes": 22263,
+    "sha256": "56189dc37552dde36a6b72716b6f340893c2b674276c5a0847150712199b8db4"
+  },
+  "findings": [
+    {
+      "boundary": "Original event/lifetime behavior",
+      "result": "PASS",
+      "details": "Exact original five C event cases/unknown silence; debug-gated NOT_AVAILABLE only, all four printing events retain format/error/page arguments and ignored printer result. Only MAPPED traverses null-checked borrowed ProcessVm.proc then Process.pid; no VM access for other events, including inaccessible sentinel cases. No refcount/hold/release/allocation/free/mapping/lock/new error or object lifetime/exclusion changes. Existing state bridge publishes the same stable offset address and is reused without duplicate implementation."
+    },
+    {
+      "boundary": "Concrete ABI and signedness",
+      "result": "PASS",
+      "details": "Genuine-header C consumer compiles exact extern callback type int,int,process_vm*,4unsignedlong,int with int32/LP64/signedptrdiff_t. Real C and Rust layouts agree VM304/align8/proc136, Process1728/align64/pid456/int32. Rust reads only raw original fields with no fabricated references. kprintf is exact externC variadic, PID/pages/error remain int32 for%d; address/size/offset values are unsignedlong64 for%lx. Signedoffset casts modulo2^64 preserve original C cast. No pointer dereference outside original valid mapped-event domains."
+    },
+    {
+      "boundary": "Genuine independent C and output oracles",
+      "result": "PASS",
+      "details": "Original C body is byte-identical in retainedBASE/candidate/oracle; asm label aliases only oracle linkage, preserving original functionidentifier/__func__ and genuine dkprintf bitfield macro. HOST-only filename/#line mapping retains original registryidentity. C trace consumes original vararg types and renders withvsnprintf, and separate Rust expected-format/typedarg/render oracle checks56250cases across events/flags/errors/PIDs/offsets/nullVM/nullproc/pages/printerreturns and unsigned boundaries.7ignoredVMcases additionally pass. Both complete object byte images, offset states and metadata/flags/padding are checked unchanged."
+    },
+    {
+      "boundary": "32B Rust descriptor and providers",
+      "result": "PASS",
+      "details": "Independent pure ELF readback of actual Rust/C/partial/final artifacts verifies one GLOBAL selectedlogger/descriptor, writablealloc __verbose32B/align8, nullfmt/line3084/zero padding and no Rustconstructor; C consumer imports only. Final linked target file/function strings independently read from actual ELF equal original /src/arch/x86_64/kernel/syscall.c and arch_vdso_map_log_bridge. Original Coracle owns a distinct LOCAL descriptor intentionally. Banked BODY6state/BODY7storage providers byte-identical; completeRust/partial own unique88/8/8storage and statebridge. Optimized final fixture retains usedoffset8B; unused sections/standalonebridge may be GC/inlined."
+    },
+    {
+      "boundary": "Selection/default metadata scope",
+      "result": "PASS_SOURCE_ONLY",
+      "details": "Private C fallback retains originalbody; exact newflag plus originalhelpers selects extern logger with matching Rustcfg/module in existing supportedprofile. CMake retains origin/profile restrictions. Source-derived canonical1183086 versus originalCURRENT116registry3084 is explicitly unobserved default; BODY12 source/HOSTdescriptor restores3084 plus targetfallback #line3077 and unrelatedsource position restores3104/3107. Original389recordreference is authenticated and targetrow exact; no CURRENT118default preprocessing/metadata checker/link result is inferred."
+    },
+    {
+      "boundary": "Actual HOST and postprocessing history",
+      "result": "PASS",
+      "details": "Four exact frozen HOST argv/cwd match rawSTARTED/JOINED/RESULTS; each positive directwait4rc0, exactPID/birth, dedicatedgroup absent/noerrors and streamsclosed. Rawstderr all empty; realfixturestdout confirms56250pairs+7cases/1testpass. No compiler/fixture retries. One pureELFpostprocessor originally overrequired unusedfinalproviders; retainedfailure/script and bounded assertion-scope correction are genuine and do not alter source/oracle/fixture/commands or replay. HOSTqualification failure0 is limited to actual4commands, not erased postprocessing history."
+    }
+  ],
+  "actual_HOST_commands": 4,
+  "actual_compiler_link_commands": 3,
+  "actual_fixture_runs": 1,
+  "actual_pairs": 56250,
+  "actual_ignored_VM_cases": 7,
+  "actual_command_UTC_range": [
+    "2026-10-29T00:06:05.073829+00:00",
+    "2026-10-29T00:06:05.752763+00:00"
+  ],
+  "command_actor_pairs": [
+    {
+      "pid": 2211191,
+      "birth": "102980976"
+    },
+    {
+      "pid": 2211198,
+      "birth": "102980990"
+    },
+    {
+      "pid": 2211207,
+      "birth": "102981009"
+    },
+    {
+      "pid": 2211220,
+      "birth": "102981044"
+    }
+  ],
+  "sum_actual_command_wall_seconds": 0.588161866995506,
+  "sum_actual_CPU_seconds": 0.5267029999999999,
+  "peak_actual_RSS_KiB": 142032,
+  "actual_reviewed_profile": {
+    "cpu": 7,
+    "jobs": 1,
+    "AS_bytes": 2147483648,
+    "CPU_seconds": 60,
+    "wall_seconds": 90
+  },
+  "postprocessing_correction": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/POSTPROCESSING-CORRECTION.json",
+    "bytes": 2213,
+    "sha256": "04a8bad43682942916f9a9cffa6232fc50225e768a6b8b7e00a65f3eef0212ef"
+  },
+  "metadata_accounting_clarification": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/METADATA-SOURCE-ACCOUNTING-CLARIFICATION.json",
+    "bytes": 1853,
+    "sha256": "2d4d960f991ea1ca74c083bec1c97148f5a94b4547f1ed73191ef063de483321"
+  },
+  "existing_provider_bindings": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/EXACT-REUSED-PROVIDERS.json",
+    "bytes": 3275,
+    "sha256": "ddbe31cd5a0a3e277f3ba4d41bdcf572cc4bd4afdbcc90b357e066f8d3cbbe34"
+  },
+  "source_blockers": [],
+  "ready_for": "Root source composition with cumulative banked bodies, retaining exact original behaviors and unique providers.",
+  "next_artifact_requirements": [
+    "Compose privately against actual canonical118 preimages; ensure only one logger/descriptor/state/storage provider and match cfg/C selection. Rebind real origin producer/profile and genuine exact command/source exports.",
+    "Compile genuine selected and fallback C translation units, full current Rustcrate/defaultlink, then run exact original389metadata multiset checker against actual new artifact; preserve any result/failure. BODY12 currently has no such default credit.",
+    "After actual matching candidate/defaultartifact acceptance, separately released matching-current native vdso map diagnostics and configuration are required.",
+    "Preserve all source/failures, unknown/originalcontracts, original389records and finalM14/M15wholefile obligations."
+  ],
+  "remaining_selected_C_functions_after_all_queued_source": 5,
+  "remaining_function_names": [
+    "arch_ptrace_regset_log_bridge",
+    "arch_rt_sigreturn_xrstor_bridge",
+    "arch_native_signal_bad_frame_bridge",
+    "arch_rt_sigreturn_context_bridge",
+    "do_signal"
+  ],
+  "actual_accepted_counts_unchanged": {
+    "CURRENT116_arch_selected_C": 17,
+    "selected_C_total": 71,
+    "focused_Rust": 68,
+    "M14_files_closed": 4,
+    "M14_files_total": 6
+  },
+  "reviewer_compiler_fixture_native_runtime_runs": 0,
+  "runtime_authority": null,
+  "default_artifact_acceptance": false,
+  "native_acceptance": false,
+  "C_data_retirement_acceptance": false,
+  "wholefile_acceptance": false
+}

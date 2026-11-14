@@ -1,0 +1,362 @@
+{
+  "OBSERVATIONS": {
+    "bytes": 7461,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/provider-entry-tests-p04tests-max-1/qualification-1/OBSERVATIONS.json",
+    "sha256": "d84f7be45ab43db9ee0ca39219d45e906928f67a4ce510e3d5244c10d15004c0"
+  },
+  "Root_admission_saved_refs": [
+    {
+      "bytes": 25613,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/provider-entry-tests-current-root-admission-correction-1/CURRENT-OWNER-VALIDATION.PRIVATE.json",
+      "sha256": "665872fa03a79dfaadbbb3042a81b6f62c137720ddd8aa694310d3b670bdedaa"
+    },
+    {
+      "bytes": 2835,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/provider-entry-tests-current-root-admission-correction-1/SCOPED-RESOURCE-CENSUS.json",
+      "sha256": "5222c1e22afb8b2716ba2a5d386f3de41ab80da67b6439a78319f468cddebfd7"
+    }
+  ],
+  "Root_chunk_id": "5ac27c",
+  "Root_current_admission": {
+    "bytes": 1486,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/provider-entry-tests-p04tests-max-1/ROOT-CURRENT-ADMISSION.ACTUAL.json",
+    "sha256": "3c61d676b08c0a9d7e963626eaf301439069c151cc4af9bc96818a4ca1cd530d"
+  },
+  "Root_exit_code": 0,
+  "Root_session_remaining": false,
+  "actual_RESULT": {
+    "bytes": 1926,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/provider-entry-tests-p04tests-max-1/execution-1/RESULT.json",
+    "sha256": "802f43453b2d4e9dfa374973a5b5612084130ef11e49294043376f0326f817ac"
+  },
+  "actual_cwd": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/provider-entry-tests-p04tests-max-1",
+  "actual_entry_If_text_SHA256": "3324cb26f24a1bcf071bd0144ddca4586de87ce03a4d3d6b097d9a8ffe49e96b",
+  "actual_literal_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=268435456",
+    "--cpu=10",
+    "--fsize=4194304",
+    "--nofile=64",
+    "--",
+    "/usr/bin/env",
+    "-i",
+    "PATH=/usr/bin:/bin",
+    "LANG=C",
+    "LC_ALL=C",
+    "TZ=UTC",
+    "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/provider-entry-tests-p04tests-max-1/output-1/tmp",
+    "PYTHONDONTWRITEBYTECODE=1",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/provider-entry-tests-p04tests-max-1/provider_entry_cases.py"
+  ],
+  "actual_native_execution": false,
+  "actual_positive_owner": {
+    "adopted_kills": [],
+    "adopted_reaps": [],
+    "error": null,
+    "label": "actual-provider-entry-and-journal-units",
+    "leader": 1605177,
+    "leader_birth": "52833450",
+    "leader_group_signalled": false,
+    "leader_parent_joined": true,
+    "remaining_direct_children": [],
+    "status": 0,
+    "streams_closed": true,
+    "timed_out": false,
+    "whole_descendants_joined": true
+  },
+  "actual_restore_CAS_statement": "need(source.flags(runtime['fd'])==(owned_prior['old_flags']|source.IMMUTABLE),'runtime restoration CAS failed')",
+  "actual_unit_selection": {
+    "bytes": 1404,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/provider-entry-tests-p04tests-max-1/ACTUAL-UNIT-SELECTION.json",
+    "sha256": "38d70bd20a815c3e71e951782cec869ac84f3d64f3e310799898219192996a32"
+  },
+  "all_input_and_interpreter_pins_match": true,
+  "at": "2026-11-12T00:10:40.817605+00:00",
+  "cases": [
+    {
+      "close_calls": [],
+      "custody_boundary_calls": 1,
+      "decision": "PASS_EXACT_EXTERNAL_OBSERVATION",
+      "family": "PROPAGATED_SYSTEMEXIT_ENTRY",
+      "id": "systemexit_after_mutation",
+      "raw_primary_same": true,
+      "reports": [
+        [
+          "RUNTIME_PROVIDER_UNKNOWN_RETAINED",
+          true
+        ]
+      ],
+      "state": "UNKNOWN_RETAINED",
+      "terminal_code": null,
+      "terminal_type": "CustodyBoundary",
+      "traceback_reachable": true
+    },
+    {
+      "close_calls": [
+        55
+      ],
+      "custody_boundary_calls": 0,
+      "decision": "PASS_EXACT_EXTERNAL_OBSERVATION",
+      "family": "PROPAGATED_SYSTEMEXIT_ENTRY",
+      "id": "systemexit_before_mutation",
+      "raw_primary_same": true,
+      "reports": [
+        [
+          "RUNTIME_PROVIDER_PREMUTATION_FAILURE",
+          true
+        ]
+      ],
+      "state": "PREPARED",
+      "terminal_code": 19,
+      "terminal_type": "SystemExit",
+      "traceback_reachable": true
+    },
+    {
+      "close_calls": [],
+      "custody_boundary_calls": 0,
+      "decision": "PASS_EXACT_EXTERNAL_OBSERVATION",
+      "family": "PROPAGATED_SYSTEMEXIT_ENTRY",
+      "id": "normal_return_2",
+      "raw_primary_same": false,
+      "reports": [],
+      "state": "UNSTARTED",
+      "terminal_code": 2,
+      "terminal_type": "SystemExit",
+      "traceback_reachable": false
+    },
+    {
+      "cas_accepted": true,
+      "cas_attempted": true,
+      "decision": "PASS_EXACT_EXTERNAL_OBSERVATION",
+      "error_message": null,
+      "error_type": null,
+      "family": "ACTUAL_FIRST_JOURNAL_AND_RESTORE_COMPARE",
+      "flags_reads": [
+        71
+      ],
+      "fstat_calls": [
+        61,
+        61
+      ],
+      "id": "exact_owned_row",
+      "pread_calls": [
+        [
+          61,
+          81,
+          0
+        ]
+      ],
+      "verified_prior_returned": true
+    },
+    {
+      "cas_accepted": false,
+      "cas_attempted": false,
+      "decision": "PASS_EXACT_EXTERNAL_OBSERVATION",
+      "error_message": "actual first prior-flags row differs; I ownership unproved",
+      "error_type": "ValueError",
+      "family": "ACTUAL_FIRST_JOURNAL_AND_RESTORE_COMPARE",
+      "flags_reads": [],
+      "fstat_calls": [
+        61,
+        61
+      ],
+      "id": "wrong_first_old_flags",
+      "pread_calls": [
+        [
+          61,
+          81,
+          0
+        ]
+      ],
+      "verified_prior_returned": false
+    },
+    {
+      "cas_accepted": false,
+      "cas_attempted": false,
+      "decision": "PASS_EXACT_EXTERNAL_OBSERVATION",
+      "error_message": "actual prior-flags journal identity/type/bound",
+      "error_type": "ValueError",
+      "family": "ACTUAL_FIRST_JOURNAL_AND_RESTORE_COMPARE",
+      "flags_reads": [],
+      "fstat_calls": [
+        61
+      ],
+      "id": "journal_not_Root_owned",
+      "pread_calls": [],
+      "verified_prior_returned": false
+    },
+    {
+      "cas_accepted": false,
+      "cas_attempted": false,
+      "decision": "PASS_EXACT_EXTERNAL_OBSERVATION",
+      "error_message": "actual prior-flags journal changed during read",
+      "error_type": "ValueError",
+      "family": "ACTUAL_FIRST_JOURNAL_AND_RESTORE_COMPARE",
+      "flags_reads": [],
+      "fstat_calls": [
+        61,
+        61
+      ],
+      "id": "journal_changes_during_read",
+      "pread_calls": [
+        [
+          61,
+          81,
+          0
+        ]
+      ],
+      "verified_prior_returned": false
+    },
+    {
+      "cas_accepted": false,
+      "cas_attempted": true,
+      "decision": "PASS_EXACT_EXTERNAL_OBSERVATION",
+      "error_message": "runtime restoration CAS failed",
+      "error_type": "ValueError",
+      "family": "ACTUAL_FIRST_JOURNAL_AND_RESTORE_COMPARE",
+      "flags_reads": [
+        71
+      ],
+      "fstat_calls": [
+        61,
+        61
+      ],
+      "id": "held_flags_CAS_mismatch",
+      "pread_calls": [
+        [
+          61,
+          81,
+          0
+        ]
+      ],
+      "verified_prior_returned": true
+    }
+  ],
+  "copied_diagnostic_reuse": {
+    "bytes": 2047,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/provider-entry-tests-p04tests-max-1/DIAGNOSTIC-REUSE.json",
+    "sha256": "09c8b905b397411568e4d3349b359df34374cf823ad5c137637254572929f9ff"
+  },
+  "copied_whole_11_source_function_spans_equal_original0ca": true,
+  "decision": "QUALIFIED_GO_ACTUAL_HOST_PROVIDER_ENTRY_JOURNAL_TWO_FAMILIES_EIGHT_CONTROLS_ONLY",
+  "external_oracles": {
+    "bytes": 7461,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/provider-entry-tests-p04tests-max-1/EXPECTED.json",
+    "sha256": "d84f7be45ab43db9ee0ca39219d45e906928f67a4ce510e3d5244c10d15004c0"
+  },
+  "external_resource_precision": {
+    "conservative_prior_complete_tree_RSS_retained": 864333824,
+    "current_measured_tree_RSS": 484503552,
+    "prior_auditor_failure_not_overwritten_or_replayed": true,
+    "prior_obsolete_custodian_or_unreadable_rows_not_retired": true,
+    "qualification_did_not_reaudit_live_owners_or_assert_peak_memory": true,
+    "saved_current_role_roots": 5,
+    "used_planning_overhead_upper_bound": 864333824
+  },
+  "fixture": {
+    "bytes": 8005,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/provider-entry-tests-p04tests-max-1/provider_entry_cases.py",
+    "sha256": "13c7c804bb85729b6a452e676afd49834b8761b99c98a017f554384243a399ee"
+  },
+  "full_Root_final": {
+    "bytes": 266,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/provider-entry-tests-p04tests-max-1/execution-1/ROOT-TOOL-FINAL.json",
+    "sha256": "a6bd18d60d9c10abbb02abf016d12d20ed2b5010a07235e80458fd5781c42240"
+  },
+  "full_Root_initial": {
+    "bytes": 266,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/provider-entry-tests-p04tests-max-1/execution-1/ROOT-TOOL-INITIAL.json",
+    "sha256": "a6bd18d60d9c10abbb02abf016d12d20ed2b5010a07235e80458fd5781c42240"
+  },
+  "full_actual_JSON_equals_external_oracles_and_literal_request": true,
+  "inner_admission": {
+    "bytes": 666,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/provider-entry-tests-p04tests-max-1/execution-1/ADMISSION.json",
+    "sha256": "c554bfcae539339096d3273a29f7f7e505a07f69ccfb75d55f13b0f0820c67a7"
+  },
+  "inner_closure": {
+    "bytes": 249,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/provider-entry-tests-p04tests-max-1/execution-1/INNER-CLOSURE.json",
+    "sha256": "d8026786a144fa6a0e5add19cd6fec5c71c434d7ea354ad7941858d9490cf0ff"
+  },
+  "input_pin_count_including_interpreter": 21,
+  "method": "Read saved actual stdout/oracles/source/AST/input identities and actual Owner/fullRoot records. No target/helper/parser/native/account replay or live process/flag probe.",
+  "no_replay": true,
+  "operation_GO": {
+    "bytes": 6063,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/provider-entry-tests-review-sdk-max-1/REVIEW.json",
+    "sha256": "5aacada60be5cbae95c4d8211c6000ce7577355dd193703fdbf4624db4b66a5b"
+  },
+  "original_acceptance": false,
+  "ownership": {
+    "bytes": 406,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/provider-entry-tests-p04tests-max-1/execution-1/ownership.json",
+    "sha256": "5329a9c60a40da91b0d3f3020740ec2fee8c310e675efb372f451b2cae9c8e82"
+  },
+  "qualified0ca_body_result_reused": {
+    "bytes": 14079,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-frontdoor-callsite-review-p04tests-max-1/tests-1/request-binding-correction-1/qualification-1/QUALIFICATION.json",
+    "sha256": "4cbbacfbd7132457bbde5deeb70ec2adde9ebb982418f6be222b285cb2ea55ee"
+  },
+  "qualifier": "/root/p04_tests_max",
+  "request": {
+    "bytes": 16181,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/provider-entry-tests-p04tests-max-1/REQUEST.json",
+    "sha256": "76316546744905103c4625495ba74f7efbc968e0554611b439f0d7611bfcd38f"
+  },
+  "resource_disposition": {
+    "Root_may_now_record_only_this_job_retirement": true,
+    "all_actual_positive_Owner_and_full_Root_closure_proven": true,
+    "eligible_current_HOST_CPU": [
+      0
+    ],
+    "eligible_current_HOST_bytes": 268435456,
+    "eligible_current_HOST_jobs": 1,
+    "native_and_all_historical_UNKNOWN_claims_unchanged": true,
+    "original_admission_charge_record_was_retired_false": true,
+    "reviewer_changed_or_released_no_resource": true
+  },
+  "saved_empty_stderr": {
+    "bytes": 0,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/provider-entry-tests-p04tests-max-1/execution-1/actual-provider-entry-and-journal-units.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "saved_stdout": {
+    "bytes": 4971,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/provider-entry-tests-p04tests-max-1/execution-1/actual-provider-entry-and-journal-units.stdout",
+    "sha256": "50647893c833ff6af795fbe2b93ebd0e3e4c0c08b1b026e1b4055b2659ea896d"
+  },
+  "schema": "mckernel.actual-provider-entry-journal-units-qualification.v1",
+  "scope_limits": [
+    "Only source-backed units with lower modeled storage/stat/flags and controlled stage return/error/report/wait boundaries. Actual provider.main, Root/native/account, GETFLAGS/SETFLAGS/FLOCK and real pause were not executed.",
+    "After-mutation SystemExit routed through actual retain_unknown and retained modelFDs/rawprimary; before-mutation SystemExit drained modeled own input and preserved the same exception/TB; normal return2 left its final SystemExit outside the protected block. No actual native functional exit or retirement is claimed.",
+    "The journal verifier accepted exact Root-owned stable modeled row and refused wrong oldflags/owner/bookend; actual source compare guard accepted held524304 and refused524336. This is not proof of actual journal custody or a kernel-atomic flags CAS.",
+    "All11 copied diagnostic source bodies/global namespace were statically bound and prior actual4cbb reused; no unchanged body suite or full53-admission/controller suite was replayed.",
+    "Actual runtime-flag mutation/restoration, concrete outer-capture/native operation admission and original application/restoration/functional acceptance remain separately gated.",
+    "No originalDEFAULT/FUNCTIONAL/file/milestone/whole-goal or C-retirement credit, and no native pool/historical/service/source/unknown resource release follows."
+  ],
+  "source": {
+    "bytes": 42746,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-runtime-eligibility-p04source-max-1/correction-1/same_runtime_provider.PROPOSED.py",
+    "sha256": "e81bc546a23ef9455efc10c3a82c3142143e60a612842b5c7dbf1fdf079e2e8b"
+  },
+  "source_GO": {
+    "bytes": 11271,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-runtime-provider-review-sourceacq-max-1/correction-1/REVIEW.json",
+    "sha256": "efa8e5350ce1d2fcd706319e1393234ce44dede5cc61c45e35c995670085c40c"
+  },
+  "source_ready": {
+    "bytes": 1943,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-runtime-eligibility-p04source-max-1/correction-1/SOURCE-READY.FINAL.NOT-EXECUTED.json",
+    "sha256": "8d0636745f796705fda9bac403ead0edfd31a24af546352df5380bf62aa321f6"
+  },
+  "synchronous_initial_final_equal": true,
+  "unchanged11_body_suite_not_replayed": true,
+  "whole_actual_first_journal_verifier_and_pure_parser_bound": true
+}

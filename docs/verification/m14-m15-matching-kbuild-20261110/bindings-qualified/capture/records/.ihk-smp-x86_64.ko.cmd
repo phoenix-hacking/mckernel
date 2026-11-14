@@ -1,0 +1,1 @@
+savedcmd_drivers/misc/mckernel/ihk-smp-x86_64.ko := ld.lld -r -m elf_x86_64 -z noexecstack --build-id=sha1  -T scripts/module.lds -o drivers/misc/mckernel/ihk-smp-x86_64.ko drivers/misc/mckernel/ihk-smp-x86_64.o drivers/misc/mckernel/ihk-smp-x86_64.mod.o .module-common.o

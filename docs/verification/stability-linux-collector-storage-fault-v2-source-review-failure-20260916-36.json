@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_review_failure",
+  "task_id": "M02-B-storage-fault-v2-source-review",
+  "review_attempt": 40,
+  "recorded_utc": "2026-09-16T09:18:00Z",
+  "status": "FAIL_SOURCE",
+  "review_input": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260916-43.tar.gz",
+    "sha256": "5251a83bb4d2b2446c39156a7de1cbb6197e20c79e9cf23777b80f851a38da28",
+    "size": 38388429,
+    "safe_unique_members": 35,
+    "files": 25,
+    "manifest_bindings": 24
+  },
+  "reviewed_source": {
+    "path": "scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/storage-fault-v1/oracle.py",
+    "sha256": "8769f9bee3f58bade679018b970242180a3862ce9a9ee3af15ccb9410cbd1d93"
+  },
+  "authenticated_replay": {
+    "review_lineage": "reviews 24 through 39 authenticated",
+    "historical_regression_groups": "15/15 PASS",
+    "positive_fixtures": "7/7 PASS",
+    "review39_actual_launch_distinct_sizes": "PASS: collector 24, payload 27448, selectors 0/3/4/5",
+    "python3_9_bound_log": "126/126 PASS",
+    "python3_8_bound_log": "126/126 PASS",
+    "pycompile_and_diff_bound_logs": "PASS"
+  },
+  "blocking_finding": {
+    "source_anchor": "oracle.py:2542 validate report executable joins",
+    "producer_anchor": "collector.c:327 seal_source source-size-or-sha256 rejection",
+    "affected_selectors": [0, 3, 5],
+    "mutation": "Set report.executable.source_before.size and source_after.size to zero while preserving the authenticated 27448-byte payload, retained executable bytes, executable artifact, sealed backing and SETUP; then rebind the report artifact, owner terminal, report I/O sizes and supervisor hashes.",
+    "expected": "oracle rejection because both successful source-stat sizes must equal the authenticated payload and retained executable byte count",
+    "observed": "oracle.validate(root, selector, 0) returned true for selectors 0, 3 and 5",
+    "canonical_mutated_report_sha256": {
+      "selectors_0_and_5": "c1f9493082eb76725dfa4b19357d5eeb88175437d5b18cc83178d44a3e950167",
+      "selector_3": "bf146c2a6d3e5ad7f839e61d77f052d1ffa54da685ba89484927d6ea4fd6ec43"
+    },
+    "owner_pre_ack": "unaffected because source_before/source_after are report-only fields"
+  },
+  "required_correction": "Join both successful executable source-stat sizes to the authenticated fixture size and retained executable byte count; add complete positive and independently rebound negative controls for selectors 0, 3 and 5.",
+  "source_accepted": false,
+  "compiler_packet_released": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}

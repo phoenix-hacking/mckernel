@@ -1,0 +1,13 @@
+--- a/native_diagnostic.py
++++ b/native_diagnostic.py
+@@ -610,7 +610,9 @@
+             records[name][key] = (row[2:], position)
+     delivered, returned, routes = (records[name] for name in suffixes)
+     exits = {key for key, (row, _) in delivered.items() if row[1] == 231}
+-    _need(delivered and returned and routes and len(exits) == 1, "missing actual route/exit evidence")
++    # A same-slot worker legitimately emits no return_route records. The
++    # per-worker checks below still require every cross-slot call to route.
++    _need(delivered and returned and len(exits) == 1, "missing actual route/exit evidence")
+     _need(all(row[1] != 60 for row, _ in delivered.values()), "unexpected non-group exit")
+     ordinary = set(delivered) - exits
+     _need(set(returned) == ordinary and set(routes) <= ordinary, "incomplete syscall correspondence")

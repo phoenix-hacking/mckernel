@@ -1,0 +1,431 @@
+{
+  "status": "PASS_ACTUAL_LOCK_INIT_NATIVE_IRQ_PREEMPT_EMISSION_SOURCE_AND_UNIQUE_OWNERSHIP",
+  "reviewer": "/root/create_empty_entry_parity_high",
+  "created_utc": "2026-11-09T18:11:52.219784+00:00",
+  "source_GO_reused_without_repeating": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-provider-review-1/REVIEW.json",
+    "sha256": "f804a8ef92deba5829b6dce136e433925aa1d1262218dc0be99205139b7cde35"
+  },
+  "actual_result": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-provider-unit-1/expanded-1/RESULT.json",
+    "sha256": "0bbc41619e848bef167d874d947c3e09ef8fa7e3a0c9ea379abf4c8ffb6750a8"
+  },
+  "actual_object": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-provider-unit-1/expanded-1/output/kmsg_lock_provider.o",
+    "sha256": "82579b770c4b857bf695b4ae8ca4f52e3ddfe6e64f7322eb222a478b4dd742b8",
+    "bytes": 6128
+  },
+  "actual_metadata_bindings": {
+    "provider-symbols.stdout": {
+      "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-provider-unit-1/expanded-1/provider-symbols.stdout",
+      "sha256": "bb6735ba2019dac0f0e7ff353ff5c8bcee81626d66d18a4b63a0b426518e9250"
+    },
+    "provider-elf.stdout": {
+      "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-provider-unit-1/expanded-1/provider-elf.stdout",
+      "sha256": "895820f36adef93e38a2f4a88581d688658c7a23ded958fbd42816bc234df6ba"
+    },
+    "ACTUAL-ELF-METADATA.json": {
+      "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-provider-unit-1/expanded-1/ACTUAL-ELF-METADATA.json",
+      "sha256": "c64a47b9fe69e04360d610bc9d1e107e41c10f3c28a911aff9f959876723032f"
+    },
+    "ACTUAL-OBJECT-CHECK.json": {
+      "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-provider-unit-1/expanded-1/ACTUAL-OBJECT-CHECK.json",
+      "sha256": "fa7c84099c8af416c1a550efa4d4e9a1ab51cafd6dd8e24dcdebaf6588ec4aeb"
+    }
+  },
+  "producer_evidence": "Result/evidence/objecthashes independently match retained files; all3actualwaitsjoined/birthsrecorded, calledrecord_and_check PASS, CPU6released. ExactretainedsingleSSEwarning/noextraU. No compiler/nm/readelf/predicate/runtime repeated byreviewer.",
+  "actual_global_owners": {
+    "__ihk_mc_spinlock_lock": {
+      "kind": "T",
+      "size": 108
+    },
+    "cpu_local_var_initialized": {
+      "kind": "B",
+      "size": 4
+    },
+    "__ihk_mc_spinlock_lock_noirq": {
+      "kind": "T",
+      "size": 91
+    },
+    "__ihk_mc_spinlock_unlock": {
+      "kind": "T",
+      "size": 61
+    },
+    "__ihk_mc_spinlock_unlock_noirq": {
+      "kind": "T",
+      "size": 59
+    },
+    "cpu_disable_interrupt_save": {
+      "kind": "T",
+      "size": 6
+    },
+    "cpu_interrupt_disabled": {
+      "kind": "T",
+      "size": 16
+    },
+    "cpu_pause": {
+      "kind": "T",
+      "size": 3
+    },
+    "cpu_restore_interrupt": {
+      "kind": "T",
+      "size": 5
+    },
+    "ihk_mc_spinlock_init": {
+      "kind": "T",
+      "size": 5
+    },
+    "kmsg_init": {
+      "kind": "T",
+      "size": 15
+    },
+    "kprintf_lock": {
+      "kind": "T",
+      "size": 107
+    },
+    "kprintf_unlock": {
+      "kind": "T",
+      "size": 71
+    },
+    "preempt_disable": {
+      "kind": "T",
+      "size": 54
+    },
+    "preempt_enable": {
+      "kind": "T",
+      "size": 54
+    },
+    "kmsg_buf": {
+      "kind": "B",
+      "size": 8
+    }
+  },
+  "actual_global_count": 16,
+  "actual_global_T": 14,
+  "actual_global_B": 2,
+  "actual_original_data": {
+    "private_KMSG_LOCK": {
+      "actual_symbol": {
+        "name": "_RNvNtCs3AfSQJNpqeM_31kmsg_lock_preempt_provider_unit5debug9KMSG_LOCK",
+        "bind": 0,
+        "type": 1,
+        "other": 0,
+        "section": 26,
+        "value": 0,
+        "size": 4
+      },
+      "section": ".lbss._RNvNtCs3AfSQJNpqeM_31kmsg_lock_preempt_provider_unit5debug9KMSG_LOCK",
+      "section_alignment": 4,
+      "value": 0,
+      "bytes": 4,
+      "type": "LOCAL OBJECT/NOBITS",
+      "source": "Originaldebug.rs47 staticmut KMSG_LOCK abi::IhkSpinlock{head_tail:0}, originalprivatevisibility retained. ExactlyONEactualprivateinstance, no sourcehelper/staticname rewrite."
+    },
+    "kmsg_buf": {
+      "actual_symbol": {
+        "name": "kmsg_buf",
+        "bind": 1,
+        "type": 1,
+        "other": 0,
+        "section": 28,
+        "value": 0,
+        "size": 8
+      },
+      "section": ".lbss.kmsg_buf",
+      "section_alignment": 8,
+      "value": 0,
+      "bytes": 8,
+      "source": "OriginalNoMangleglobalNULLpointer only; not initializedownedmessagebuffer."
+    },
+    "cpu_local_var_initialized": {
+      "actual_symbol": {
+        "name": "cpu_local_var_initialized",
+        "bind": 1,
+        "type": 1,
+        "other": 0,
+        "section": 27,
+        "value": 0,
+        "size": 4
+      },
+      "section": ".lbss.cpu_local_var_initialized",
+      "section_alignment": 4,
+      "value": 0,
+      "bytes": 4,
+      "source": "OriginalNoMangleCInt0flag; prebootguardstorage only, no readyCPU/preemptstate or counter fabricated."
+    },
+    "bounds_and_alignment": "All3actualobjects exactlyfitseparateNOBITSsections atvalue0 and require4/4/8alignment. NOBITS remainsdeclaration, no filebyteinitialization/runtimeaccepted."
+  },
+  "actual_private_function_emission": "0LOCALt; five reviewedinlinehelpers and calledpreempt/CPU/spinlockpaths incorporatedin14source-ownedglobalroots. No privateRustABIimport, weak/hiddenfunctionalias or newpanic/core/support import.",
+  "actual_imports": [
+    "get_cpu_local_var",
+    "ihk_mc_get_processor_id"
+  ],
+  "actual_source_owner_relocations": {
+    "kprintf_lock": [
+      {
+        "offset": 6,
+        "type": 1,
+        "target_name": "cpu_local_var_initialized",
+        "target_section": ".lbss.cpu_local_var_initialized",
+        "addend": 0
+      },
+      {
+        "offset": 21,
+        "type": 1,
+        "target_name": "ihk_mc_get_processor_id",
+        "target_section": "U",
+        "addend": 0
+      },
+      {
+        "offset": 33,
+        "type": 1,
+        "target_name": "get_cpu_local_var",
+        "target_section": "U",
+        "addend": 0
+      },
+      {
+        "offset": 54,
+        "type": 1,
+        "target_name": "",
+        "target_section": ".lbss._RNvNtCs3AfSQJNpqeM_31kmsg_lock_preempt_provider_unit5debug9KMSG_LOCK",
+        "addend": 0
+      }
+    ],
+    "kprintf_unlock": [
+      {
+        "offset": 3,
+        "type": 1,
+        "target_name": "",
+        "target_section": ".lbss._RNvNtCs3AfSQJNpqeM_31kmsg_lock_preempt_provider_unit5debug9KMSG_LOCK",
+        "addend": 0
+      },
+      {
+        "offset": 21,
+        "type": 1,
+        "target_name": "cpu_local_var_initialized",
+        "target_section": ".lbss.cpu_local_var_initialized",
+        "addend": 0
+      },
+      {
+        "offset": 36,
+        "type": 1,
+        "target_name": "ihk_mc_get_processor_id",
+        "target_section": "U",
+        "addend": 0
+      },
+      {
+        "offset": 48,
+        "type": 1,
+        "target_name": "get_cpu_local_var",
+        "target_section": "U",
+        "addend": 0
+      }
+    ],
+    "kmsg_init": [
+      {
+        "offset": 2,
+        "type": 1,
+        "target_name": "",
+        "target_section": ".lbss._RNvNtCs3AfSQJNpqeM_31kmsg_lock_preempt_provider_unit5debug9KMSG_LOCK",
+        "addend": 0
+      }
+    ],
+    "ihk_mc_spinlock_init": [],
+    "__ihk_mc_spinlock_lock_noirq": [
+      {
+        "offset": 6,
+        "type": 1,
+        "target_name": "cpu_local_var_initialized",
+        "target_section": ".lbss.cpu_local_var_initialized",
+        "addend": 0
+      },
+      {
+        "offset": 21,
+        "type": 1,
+        "target_name": "ihk_mc_get_processor_id",
+        "target_section": "U",
+        "addend": 0
+      },
+      {
+        "offset": 33,
+        "type": 1,
+        "target_name": "get_cpu_local_var",
+        "target_section": "U",
+        "addend": 0
+      }
+    ],
+    "__ihk_mc_spinlock_lock": [
+      {
+        "offset": 12,
+        "type": 1,
+        "target_name": "cpu_local_var_initialized",
+        "target_section": ".lbss.cpu_local_var_initialized",
+        "addend": 0
+      },
+      {
+        "offset": 27,
+        "type": 1,
+        "target_name": "ihk_mc_get_processor_id",
+        "target_section": "U",
+        "addend": 0
+      },
+      {
+        "offset": 39,
+        "type": 1,
+        "target_name": "get_cpu_local_var",
+        "target_section": "U",
+        "addend": 0
+      }
+    ],
+    "__ihk_mc_spinlock_unlock_noirq": [
+      {
+        "offset": 7,
+        "type": 1,
+        "target_name": "cpu_local_var_initialized",
+        "target_section": ".lbss.cpu_local_var_initialized",
+        "addend": 0
+      },
+      {
+        "offset": 23,
+        "type": 1,
+        "target_name": "ihk_mc_get_processor_id",
+        "target_section": "U",
+        "addend": 0
+      },
+      {
+        "offset": 35,
+        "type": 1,
+        "target_name": "get_cpu_local_var",
+        "target_section": "U",
+        "addend": 0
+      }
+    ],
+    "__ihk_mc_spinlock_unlock": [
+      {
+        "offset": 11,
+        "type": 1,
+        "target_name": "cpu_local_var_initialized",
+        "target_section": ".lbss.cpu_local_var_initialized",
+        "addend": 0
+      },
+      {
+        "offset": 26,
+        "type": 1,
+        "target_name": "ihk_mc_get_processor_id",
+        "target_section": "U",
+        "addend": 0
+      },
+      {
+        "offset": 38,
+        "type": 1,
+        "target_name": "get_cpu_local_var",
+        "target_section": "U",
+        "addend": 0
+      }
+    ],
+    "cpu_restore_interrupt": [],
+    "cpu_pause": [],
+    "cpu_disable_interrupt_save": [],
+    "cpu_interrupt_disabled": [],
+    "preempt_enable": [
+      {
+        "offset": 2,
+        "type": 1,
+        "target_name": "cpu_local_var_initialized",
+        "target_section": ".lbss.cpu_local_var_initialized",
+        "addend": 0
+      },
+      {
+        "offset": 18,
+        "type": 1,
+        "target_name": "ihk_mc_get_processor_id",
+        "target_section": "U",
+        "addend": 0
+      },
+      {
+        "offset": 30,
+        "type": 1,
+        "target_name": "get_cpu_local_var",
+        "target_section": "U",
+        "addend": 0
+      }
+    ],
+    "preempt_disable": [
+      {
+        "offset": 2,
+        "type": 1,
+        "target_name": "cpu_local_var_initialized",
+        "target_section": ".lbss.cpu_local_var_initialized",
+        "addend": 0
+      },
+      {
+        "offset": 18,
+        "type": 1,
+        "target_name": "ihk_mc_get_processor_id",
+        "target_section": "U",
+        "addend": 0
+      },
+      {
+        "offset": 30,
+        "type": 1,
+        "target_name": "get_cpu_local_var",
+        "target_section": "U",
+        "addend": 0
+      }
+    ]
+  },
+  "relocation_reconciliation": "41total =27code+14eh_frame. All3debugwrappers haveexactone R_X86_64_64 tosameLOCALsingleton section+0. Inlinedpreemptpaths preserveglobalflag andbothrealCPUgetteredgerelocations; actualpreemptenable/disable bytes containlockdec/lockinc32 atactualno_preemptoffset0x1f28(7976). NativeIRQ/pause asmbytes source-owned andexported, nevercalled. No newreadonlyliteralstate. eh_frame targets14actualfunctions only.",
+  "actual_native_function_bytes": {
+    "cpu_disable_interrupt_save": "509c58fa59c3",
+    "cpu_interrupt_disabled": "509c5931c0f7c1000200000f94c059c3",
+    "cpu_pause": "f390c3",
+    "cpu_restore_interrupt": "50579d58c3"
+  },
+  "qualified_actual_string_predecessor": {
+    "result_path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kernel-string-provider-unit-1/join-1/RESULT.json",
+    "result_sha256": "c093aeec777293e07055bc02fba309b33504fce8782bb57f86f5bea7a986ef98",
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kernel-string-provider-unit-1/join-1/output/kernel_string_kprintf_partial.o",
+    "sha256": "f6db3c4f06bd4a7733dfb7638a3f756cf0d3211076c726a1df3c08cf174a0e21",
+    "bytes": 32640,
+    "raw_nm_path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kernel-string-provider-unit-1/join-1/joined-symbols.stdout",
+    "raw_nm_sha256": "949bf4da6043888a6c74420d7f8a5814835257a9d641a6b139a1e219ad8611fb",
+    "actual_global_strong": 44,
+    "actual_global_T": 35,
+    "actual_global_data": 9,
+    "actual_genuine_U": 21,
+    "scope": "Only qualifiedidentity andactualowner/importnames/sizes reused; B/Estring source/predicate/runtime not rereviewed or rerun."
+  },
+  "future_two_input_join_eligibility": {
+    "status": "SOURCE_AND_ACTUAL_OWNER_GO_PENDING_EXACT_JOIN_REQUEST_REVIEW_AND_ROOT_ADMISSION",
+    "new16_global_owner_intersection": [],
+    "computed_owner_union": 60,
+    "computed_global_T": 49,
+    "computed_global_data": 11,
+    "original_private_LOCAL_KMSG_LOCK_instances": 1,
+    "computed_remaining_U_count": 14,
+    "computed_remaining_U": [
+      "do_kill",
+      "do_syscall",
+      "eventfd",
+      "f03_terminate_host_refcount_set_v1",
+      "f03_wait_release_process",
+      "f03_wait_release_thread",
+      "ihk_mc_delay_us",
+      "sched_wakeup_thread",
+      "syscall_do_kill_thread_bridge",
+      "syscall_do_syscall_request_bridge",
+      "syscall_find_process_bridge",
+      "syscall_generic_forwarding_body_result",
+      "syscall_process_unlock_bridge",
+      "terminate_host_body_result"
+    ],
+    "resolved_edges": "Oldactualkprintf7IRQ/lock/bufferimports resolvefromnewunit; new2actualCPUgetters resolvealreadyqualifiedpredecessor. Allfunctions/data/privatehelpers remainuniquelysourceowned; privateKMSG_LOCK remainsLOCALandoneinstance.",
+    "required_future_proof": "Exact2inputpaths/hashes, actuallycalledprejoinbeforeld-r, all44prior+new16globalownerbytes/kinds/visibility andsource-relocs preserved, private4BNOBITSsingletonLOCAL/type/alignment/location/wrapperreferences preserved throughlocalNOBITSreference-normalization, actual60/14U readback. Newexactprofile/predicateGO andRootfreshadmission required.",
+    "not_an_actual_join_result": "Countsabove deriveactualtwoinputmetadata, notguessedcompileremission; futureobjectidentity/operationsremainUNSETuntilnewadmission."
+  },
+  "unchanged_open_contracts": "RealIHKmappedbuffer/headerownership/bootwriter/preemptflag1publication/liveCLV/CPUidentity/IRQcontext/timing/channel/send/native/defaultABI/providerclosure/offload/generic/SDK/sourcecustody remainopen. No flag0-onlybehavior/initacceptance, no actualIRQ/native/functionexecution.",
+  "reviewer_new_tool_nm_compiler_link_predicate_or_runtime_execution": false,
+  "canonical_or_index_writes": false,
+  "fresh_execution_admission": false,
+  "new_gate_score_C_retirement_or_acceptance": false
+}

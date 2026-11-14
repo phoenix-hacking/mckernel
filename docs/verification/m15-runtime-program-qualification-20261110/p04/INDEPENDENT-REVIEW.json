@@ -1,0 +1,186 @@
+{
+  "schema": "mckernel.p04.wrapper22.independent-delta-review.v1",
+  "at": "2026-11-10T08:41:25.330318+00:00",
+  "decision": "GO_EXACT_CORRECTED_SINGLE_HOST_OPERATION_PENDING_ROOT_FRESH_ADMISSION",
+  "reviewer": "/root/source_acquisition_review_max direct same-Root reviewer; no recursion",
+  "scope": "Delta-only independent source/execution review of the bounded P04 driver correction. Original22case/source/peer/reference/helper/compilerflags and resource profile review are reused unchanged; no extra cases, tests, imports of driver/helper, compiler, native, Docker or process-control execution performed.",
+  "permissions": "Active thread danger-full-access/approval never, ordinary source reads plus only this private review write. No sudo, credentials, service, launcher or canonical/index/source edit.",
+  "input_bindings": {
+    "original_review": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-tests-review-max-1/REVIEW.json",
+      "sha256": "52614fbf222e3c698ca0e0ffb608084a2929c2ade923f1fca40045fe70e02c7f"
+    },
+    "corrected_request": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-tests-max-1/REQUEST.json",
+      "sha256": "1f041c1c41fc805cbf5fc06c7e9de5627fe1bc19cbddac1afb3277d6bc30ceeb"
+    },
+    "corrected_driver": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-tests-max-1/qualification/fixture/run_fixture.py",
+      "sha256": "ae502976128c8608e0f65ecfa4b34babdc990a57eb73e216a5b5e7200751ff86",
+      "bytes": 13092
+    },
+    "delta_patch": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-tests-max-1/correction-1/DRIVER-ONLY.patch",
+      "sha256": "5deedcd9578c97c25fbaa16cbd9574dffe498629408595fd29c3fac0cbc97fca"
+    },
+    "correction_receipt": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-tests-max-1/correction-1/CORRECTION.json",
+      "sha256": "929cfe663b1559b639105ab56984e36882d82aa6371ee447b3e16185bd103c41"
+    },
+    "preserved_rejected_driver": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-tests-max-1/correction-1/original/run_fixture.py",
+      "sha256": "534302fb796d9f995f75d03767f2bd62d28877e1cb02c9ec2e26f5a3c7143873"
+    },
+    "preserved_rejected_request": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-tests-max-1/correction-1/original/REQUEST.json",
+      "sha256": "b3e23a57c8943d4466022c6a00c1e6d4128e7bb4de271f1b0e699d205cbadfdc"
+    },
+    "unchanged_inputs_manifest": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-tests-max-1/INPUTS.json",
+      "sha256": "f711aedf09a9f981cd717c03189e2685d52b931753bb01b271e4653f9b35bda4"
+    },
+    "unchanged_owner_helper": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-tests-max-1/qualification/fixture/owned_process.py",
+      "sha256": "afe7403ead1bf8b2c527dfa34a0c0c19010cde5f27a646ccf1545fb8f3b9bc1d"
+    }
+  },
+  "delta_findings": [
+    {
+      "original_id": "P04-RUNNER-OWNERSHIP-01",
+      "disposition": "RESOLVED_BY_REVIEWED_SOURCE_DELTA",
+      "source_lines": [
+        24,
+        43,
+        65,
+        86,
+        107,
+        117,
+        122,
+        124
+      ],
+      "evidence": "All Owner.run dispatch is through checked_run; the sole underlying call is line27. Before returning it requires exactly one newly appended record; matchinglabel/status and returned argv; positive integer leader, numeric positive birth, integer returned/record status; leader_parent_joined/whole_descendants_joined/streams_closed true; errorNone; timed_out/group_signalled false; adopted_reaps/adopted_kills/remaining_direct_children empty. Any mismatch raises before another child dispatch. Owner.run exceptions propagate to the outer failure path and also prevent continuation. The final successful22case path requires exactly30 records before PASS:1compiler+22Rust+7CLI references."
+    },
+    {
+      "original_id": "P04-RUNNER-PARTIAL-RECEIPT-02",
+      "disposition": "RESOLVED_BY_REVIEWED_SOURCE_DELTA",
+      "source_lines": [
+        21,
+        23,
+        44,
+        128,
+        150
+      ],
+      "evidence": "After fresh output creation, setup/compiler/case/trace/deadline/ownership work runs inside the driver try. State records current phase,label,argv and case before dispatch; completed rows survive. BaseException handling best-effort writes summary.json statusFAIL/partialTrue with primary type/message, active context, wrapper source identity, case input, ownership path/count and expected raw capture paths. Nested receipt-write failures are reported best-effort and swallowed; bare raise preserves the primary exception. There are no Owner.run calls, signals, cleanup changes, retries or deletions in the exception path. The unchanged Owner helper completes or records its existing retirement/UNKNOWN behavior before returning or raising."
+    }
+  ],
+  "unchanged_scope_verification": {
+    "request_structural_equality_with_rejected_request": [
+      "source_identity",
+      "source_owner_identity",
+      "source_owner_ready",
+      "contract",
+      "case_count",
+      "case_data_unchanged",
+      "meaningful_scope",
+      "one_serial_operation",
+      "profile",
+      "ownership.helper"
+    ],
+    "all_equal": true,
+    "driver_syntax": "AST parse of source text only; successful; no SUT import or execution.",
+    "reused_qualification_scope": "The original reviewer already verified the22 exact cases,44329596wrapper, both controlled peers, exact original shell reference and qualified ownership helper, compilerdebuginfo1 and complete literal argv/profile. This review does not replay or enlarge any of that evidence.",
+    "case_count": 22,
+    "expected_owner_records": 30,
+    "optional_reference_protocol": "Not selected by the exact operation; never add--with-reference-protocol."
+  },
+  "exact_operation_go": {
+    "argv": [
+      "/usr/bin/taskset",
+      "-c",
+      "0",
+      "/usr/bin/prlimit",
+      "--as=2147483648:2147483648",
+      "--core=0:0",
+      "--fsize=67108864:67108864",
+      "--",
+      "/usr/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-tests-max-1/qualification/fixture/run_fixture.py",
+      "--execute",
+      "--rustc",
+      "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc"
+    ],
+    "cwd": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-tests-max-1/qualification",
+    "exact_clean_parent_environment": {
+      "PATH": "/usr/bin:/bin",
+      "LC_ALL": "C",
+      "LANG": "C",
+      "CMAKE_BUILD_PARALLEL_LEVEL": "1",
+      "MAKEFLAGS": "-j1",
+      "OMP_NUM_THREADS": "1"
+    },
+    "internal_compile": [
+      "--edition=2021",
+      "-C",
+      "opt-level=2",
+      "-C",
+      "debuginfo=1",
+      "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-tests-max-1/qualification/vmcore2mckdump.rs",
+      "-o",
+      "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-tests-max-1/qualification/fixture-output/vmcore2mckdump-rust"
+    ],
+    "internal_compile_environment": {
+      "VMCORE_INSTALLDIR": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-tests-max-1/qualification/fixture-output/prefix",
+      "VMCORE_ARCH": "x86_64",
+      "VMCORE_CRASH": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-tests-max-1/qualification/fixture-output/tools/crash",
+      "VMCORE_PROMPT_TIMEOUT_MS": "1000"
+    },
+    "execution_owner": "Root sole executor and compositor",
+    "admission_owner": "Root must perform actual fresh aggregate resources, exact source/operation/capture and absence-of-output admission; this source review is not a live admission.",
+    "profile": {
+      "cpu_affinity": [
+        0
+      ],
+      "jobs": 1,
+      "process_AS_bytes": 2147483648,
+      "CORE_bytes": 0,
+      "FSIZE_bytes": 67108864,
+      "driver_work_wall_seconds": 150,
+      "compiler_wall_seconds": 60,
+      "each_Rust_case_wall_seconds": 8,
+      "each_invalid_CLI_reference_wall_seconds": 5,
+      "on_any_command_failure_retirement_seconds": 6,
+      "complete_outer_wall_seconds": 160,
+      "fresh_MemAvailable_minimum_bytes": 27917287424,
+      "shared_HOST_total_bytes_including_controllers_and_workers": 4294967296,
+      "aggregate_HOST_jobs_ceiling": 3,
+      "HOST_cpus": [
+        0,
+        6,
+        7
+      ],
+      "host_disk_free_minimum_bytes": 17179869184,
+      "scratch_disk_free_minimum_bytes": 12884901888,
+      "fixture_output_allowance_bytes": 268435456,
+      "one_shared_Root_admission_required": true,
+      "private_fresh_output": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-tests-max-1/qualification/fixture-output",
+      "toolchain_binding_reused": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-source-1/HOST-TOOLCHAIN-BINDING.json",
+      "python_binding_reused": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/PYTHON-BINDING.json"
+    },
+    "outer_lifetime": "Root records direct driverPID/birth/argv/env/stdio/wait/metrics and enforces the existing complete160second bound while allowing150second work plus6second retirement. If necessary use only existing exact-owned-birth/session retirement and retain UNKNOWN if any join is unproved. No unreviewed timeout or process-selector substitution.",
+    "shared_resources": "CPU0/one serial operation/AS2GiB within HOST CPUs0,6,7/max3aggregate light jobs/4GiB TOTAL including controllers/workers. Fresh MemAvailable>=26GiB, host>=16GiB and scratch>=12GiB floors plus256MiBoutput allowance. CPU1 excluded; native CPUs2-5/12GiB and UNKNOWN reservations remain held. No heavy lease supplied.",
+    "output_ownership": "Root sole writer to fresh qualification/fixture-output; retain raw compiler/wrapper/reference captures, all traces/staging,ownership.json and summary.json. Existing output guard prevents replacement.",
+    "success_readback_required": "Joined direct driverexit0; summaryPASS_CLI_AND_RUST_PTY_STUB_CONTRACT_ONLY/cases22/expected22/failed[]; exact30ownershiprecords with every required fact; no residual/UNKNOWN. Source review alone supplies no execution result.",
+    "failure_behavior": "First ownership/exception failure stops dispatch and retains partial/raw evidence. Completed contractfalse breaks at the existing case boundary. Retain actual command/check, diagnostic,source,input and owner; no unchanged retry, evidence deletion or ownership/resource release inference."
+  },
+  "preserved_limits": [
+    "This22case operation qualifies only controlled CLI and RustPTYstub behavior. It supplies no real Expect protocol, real crash tool, converter execution, valid dump or complete supported filesystem semantics.",
+    "Original production-source descendant leak/lifecycle obligations remain open; exact30compiler/wrapper/reference leader records do not create missing crash-peer birth or native lifetime evidence.",
+    "P04production selector/ACK sourcepin and default/install qualification remain separate; no P03 review or duplicate compilation is added.",
+    "No whole-file C retirement, originalM14/M15acceptance, score gain, source/native/currentfree/UNKNOWN/resource hold release, generic/exec/equivalent/replay hold bypass or service/account/budget change."
+  ],
+  "next_action": "Root performs fresh actual admission and runs only this exact corrected singleHOST operation, then joins and assesses its retained result at the original bounded scope.",
+  "executed": false,
+  "acceptance_claimed": false
+}

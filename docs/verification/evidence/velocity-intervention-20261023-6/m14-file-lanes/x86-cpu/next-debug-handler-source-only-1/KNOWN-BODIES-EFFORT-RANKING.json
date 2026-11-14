@@ -1,0 +1,47 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "KNOWN_IMPORTANT_BODIES_AND_ROUGH_EFFORT_ONLY_NO_NEW_CENSUS",
+  "engineering_percentage": null,
+  "rough_relative_source_effort_easier_to_harder": [
+    {
+      "body": "arch_cpu_stop",
+      "existing_Rust": "cpu_halt + actualabort::panic caller",
+      "source_status": "KnownCbody, unported",
+      "rough_effort": "Small implementation; defaultABI/stop-control/nativequalification uncertainty remains."
+    },
+    {
+      "body": "gpe_handler",
+      "existing_Rust": "classifier/formatter/context/panic",
+      "source_status": "Completeprivatec2cf, UNTESTED",
+      "rough_effort": "Moderate; enumABI, terminalpanicfixture andactualproductionconsumer needed."
+    },
+    {
+      "body": "int3_handler / debug_handler",
+      "existing_Rust": "realSigInfo/classifier/context/formatter; debugreusesHardwareDebugRegisterReader",
+      "source_status": "Completeprivateint3 andthisdebugcandidate, UNTESTED",
+      "rough_effort": "Moderate withuncertainty; optionaldebugdata/ABI/pointerlifetime andcontrolledDR6effects; privilegedISR/nativeproof harder."
+    },
+    {
+      "body": "__print_stack / mod_nmi_ctx / interrupt_exit",
+      "existing_Rust": "Existingformatter/reader/IRQ/sched/ABIproviders",
+      "source_status": "Actual8000+ABI19passed; current78productionqueue88deawaitsgrant",
+      "rough_effort": "Productioncompile/link isbounded; NMIcallerNULL/frame/IRET andkernelhighstacktraversal arehard unresolvednativework, notcoveredbycontrolledtests."
+    },
+    {
+      "body": "remainingpstate/outerlock/stackframe/print-stack Cproviders",
+      "existing_Rust": "ActualRustconsumersalreadylinked",
+      "source_status": "ExplicitknownCdebt",
+      "rough_effort": "Varies byactualboundary, likelymoderate; no blanketglueexemption oraggregateconversionclaim."
+    },
+    {
+      "body": "handle_interrupt",
+      "existing_Rust": "ExistingselectedIRQ/tick/scheduler/contexthelpers",
+      "source_status": "KnownsubstantivecentralCbody, no newport",
+      "rough_effort": "Larger ownership/CPUlocal/handler-list/IRQ transaction; prepareoneexactboundedcontractbeforeport, no speculativebroadrewrite."
+    }
+  ],
+  "canonical_vs_private": "CanonicalCPUc779/Rust9891 hasacceptedcontext/ulong; newthree-body8000/GPE/int3/debugremainprivate untilrootactualproduction+independentreview/integration.",
+  "default_kernel_link": "No newGCC14defaultimagecredit",
+  "native": "No newnative/wholefileretirementcredit; NULLNMI/kernelstack gapsremain.",
+  "next_concrete_consumer": "RunONLYrootgrantedcurrent78production7queue88de, reusingmatchingactualCPU2d776 andrealABI. AfterwardschooseGPE/int3/debugcontrolledfixture asonecoherentapprovedbatch, notnewparallelqueue."
+}

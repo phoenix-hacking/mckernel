@@ -1,0 +1,204 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewed_UTC": "2026-10-27T17:40:22.146665+00:00",
+  "decision": "CONDITIONAL_SELECTIVE_SOURCE_INTEGRATION_F06_LINE_CORRECTION_REQUIRED",
+  "authority": "Independent source/ABI/ownership review only; no compiler, fixture, Docker, guest, root, cleanup or canonical write; Root must independently inspect retained postimages and own adoption.",
+  "window": {
+    "fixed_cutoff_UTC": "2026-10-28T05:36:09Z",
+    "creditrun": "7f4af94a83b14cc08f97401f5891d965",
+    "ceiling": 57774.852125,
+    "minimum_cumulative_spent": 22812.3311,
+    "no_new_admission_or_execution_release": true
+  },
+  "evidence": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-ready-host-batch-20261027-1/ACTUAL-HOST-RESULT.json",
+      "bytes": 10327,
+      "sha256": "da28810eca38096263ffba9b0955f92a6f5f845ace02095089cf4a1762d5f1d3"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-ready-host-batch-20261027-1/RESULTS.json",
+      "bytes": 30497,
+      "sha256": "75d89cee5f0daabd5869fd1a297d86e20bd26781a50da3af57427df57aa14bb6"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-ready-host-batch-20261027-1/PROFILE.NOT-GRANTED.json",
+      "bytes": 86365,
+      "sha256": "df60349e349e7beacbb028ac87a1067e48ed03ab2cb27fe216c23844d99dade4"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/reconciliation/HOST19-RECONCILED-NO-REPLAY.json",
+      "bytes": 8354,
+      "sha256": "4eb1abce604f4099ba9cd549c878bce84afce3e07742f4b3f04e0e1eea19a012"
+    }
+  ],
+  "retained_integrity": {
+    "profile_inputs_hash_and_size_matched": 152,
+    "artifact_hashes_matched": 14,
+    "capture_stream_hashes_matched": 38,
+    "commands": 19,
+    "all_returncode_zero_direct_joined_group_absent_streams_closed": true,
+    "child_elapsed_seconds": 1.360364091116935,
+    "reexecution": false
+  },
+  "canonical_preimages_observed": [
+    {
+      "path": "/home/holden/mckernel/kernel/syscall.c",
+      "bytes": 915683,
+      "sha256": "eb3ec7202a3f6b6a0a13ae14d008ddfb6ff717f413e5b2e287c3eabba40243d1"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+      "bytes": 115374,
+      "sha256": "cae4bbc9be8f8ed8bf3e7ff82a9848ea11aaf50f740ecc23ee389fd73f70297b"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "bytes": 1260070,
+      "sha256": "f795e2581826e7cec92348a2a809be21ef9e26d03689d4cf8a07403bbdc40300"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/process.c",
+      "bytes": 218569,
+      "sha256": "1dc76b89466859d49b85377f9bfa0f809890ee12ec9392ff4768104ba0f32567"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "bytes": 606868,
+      "sha256": "439ffb1e00f405c5d470468facb07ebe86d41a9ab291553d573cf98bbf232613"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "bytes": 31502,
+      "sha256": "c60b391f5f2f7f5156d3f381ab5563afcdb9ccca334dc2bf3ff9b0383a5fbd77"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+      "bytes": 444772,
+      "sha256": "f544c5177156ad5de8544bb95c46bbc8e2ac870a25c4895ca4cefb7c8cc79680"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_perfctr.rs",
+      "bytes": 16091,
+      "sha256": "9cabce0fb4295d421a3f5194b7ebb854bdfa93c4126573a643ab2a08e9d11af7"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "bytes": 185669,
+      "sha256": "d16200db3054d88a83752fda1383d6c101d24de4b787bd78cd42edb46ab251fc"
+    }
+  ],
+  "retained_postimages": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-perf-alloc-three-bridges-1/candidate/kernel/syscall.c",
+      "bytes": 915440,
+      "sha256": "91bfe1f1e6461d7dcf2e1e754fccd6382adf3f72ac348b877e389017e4e7ac59"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-perf-alloc-three-bridges-1/candidate/kernel/rust/syscall_policy.rs",
+      "bytes": 1261928,
+      "sha256": "af1c5f28e342c745a8313cc4f4a945a2787d3bab78045ccb3adf733494516594"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-idle-layout-values-next-current-source-1/candidate/kernel/process.c",
+      "bytes": 219128,
+      "sha256": "d3953f537736270938623238e82a11ddc17373efcc0f5b0130c206b8a15fb6c6"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-idle-layout-values-next-current-source-1/candidate/kernel/rust/process_helpers.rs",
+      "bytes": 606979,
+      "sha256": "66bbf67ea81ecd363ba49eb3ad42b93131e4ff6b63534389b664e2393b05d645"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-rt-sigreturn-three-source-1/syscall/syscall.c",
+      "bytes": 114940,
+      "sha256": "405c9b9958b641124c584be274439822892bb833a1852a97ad0771202ee1c4e9"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-rt-sigreturn-three-source-1/syscall/syscall_policy.rs",
+      "bytes": 1259621,
+      "sha256": "3373c26c4b2bb01e0d747f2c6423bf3e07a0c4d73ebdca36213dfa55423ef5ab"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-rt-sigreturn-three-source-1/set-signal/syscall.c",
+      "bytes": 114964,
+      "sha256": "aa7cecedf02f89c82b61247028eaf3cf42b5c706209b5c270977efbaadc8165d"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-rt-sigreturn-three-source-1/set-signal/syscall_policy.rs",
+      "bytes": 1259630,
+      "sha256": "028d8477eb8ae0495f24e07186bb839dbc674aecb6384e878fa04d037639facb"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-rt-sigreturn-three-source-1/check-signal/syscall.c",
+      "bytes": 114962,
+      "sha256": "1ac924e264d07456393c2ea4accb975aa9ac37c3c7b03b7609bbbe5d2ec2ff6c"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-rt-sigreturn-three-source-1/check-signal/syscall_policy.rs",
+      "bytes": 1259636,
+      "sha256": "40ee1620f9b2c0a38536059faab34bf7a44c42bf33f977092ba3fed6480e0186"
+    }
+  ],
+  "F03": {
+    "decision": "PASS_SOURCE_AND_RETAINED_HOST_FORWARDING",
+    "delta": "Replace exactly the three original.C.inc occurrences with matching paired-selector.C.inc; append exact selected-bridges.Rust.inc. No whole-file replacement. Add paired C/Rust selection and Rust build dependencies centrally under existing supported Linux6.12/x86_64/runtime/noUBSAN gates, preserving ENABLE_PERF/enable_perf and SCP outer selection.",
+    "Rust_fragment": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-perf-alloc-three-bridges-1/selected-bridges.Rust.inc",
+      "bytes": 2525,
+      "sha256": "b97fcd1936d9044f364f6e195011de05990aa228bff669a45120cd4fb0812b94"
+    },
+    "C_define": "MCKERNEL_RUST_F03_PERF_ALLOC_BRIDGES",
+    "Rust_cfg": "f03_perf_alloc_bridges_selected_candidate",
+    "semantics": "C size_t-to-int truncation is reproduced by SizeT as CInt; all flags and pointer bits forwarded once. Free adds no dereference/release/reference; init only casts pointer into unchanged x86 Rust provider and preserves CInt status. Same static f03_mckfd_alloc_origin_file_v1 bytes are valid because tracker keys strlen/strcmp rather than pointer identity; logical21404/21410 preserved.",
+    "tested_scope": "162 allocation,3 free,21 init pairs and18 ABI/origin words against inert provider mocks, not allocator/PMU qualification.",
+    "stale_whole_file_content": "Candidate precedes accepted wakeup-find, wakeup-unlock and exit-waitq selectors and f03_exit_notify_wake export; replacing candidate whole files would undo those accepted changes.",
+    "reverse_delta": "Replacing selectors with original snippets and removing Rust fragment exactly reproduces SOURCE-SLICES recorded old preimage hashes."
+  },
+  "F06": {
+    "decision": "PASS_FORWARDING_BODY_AND_HOST320_CONDITIONAL_SELECTOR_FIX",
+    "defect": "Each supplied C wrapper inserts7 source lines without #line restoration; all three together move retained downstream allocator origin385->406 and free391->412. Original C/Rust allocator tracking invariance is therefore false for uncorrected integration.",
+    "repair": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-ready-host-batch-20261027-1/independent-source-review-new12h-1/F06-LINE-PRESERVING-SELECTOR-RECOMMENDATION.json",
+      "bytes": 5298,
+      "sha256": "087216f59b31cf40fb27f0673c9b1ecee1e79f4cd2f7cac2ba8be299f29c1247"
+    },
+    "delta": "Copy exact three arch_rt_sigreturn_*_bridge.rs module files into kernel/rust; append corresponding cfg/path/mod fragments, add each file to Rust source dependencies, and insert corrected wrappers only in arch/x86_64/kernel/syscall.c. Pair each C define with its Rust cfg inside the same supported current F06 Linux6.12/x86_64/runtime/noUBSAN gates. Preserve every existing F06 and F03 selection.",
+    "semantics": "syscall int/context/long forwarding remains exact; set_signal casts the same const pointer to mutable raw SigInfo without creating a reference; check_signal converts negative CInt through signed CLong then CULong, matching the C conversion. No provider side effects or ownership changed.",
+    "tested_scope": "140 syscall +100 set-signal +80 check-signal pairs, typed linker-wrapped inert endpoints; no real dispatch/signal delivery.",
+    "static_correction_observation": "Read-only in-memory composition with the recommended wrappers preserves every observed kmalloc_tracked/kfree_tracked logical line (385,391,629). Root should run focused line-preservation regression on its actual coherent successor before adoption; this report does not claim such compiler evidence.",
+    "stale_whole_file_content": "All three C candidates precede accepted forward-context/copy-to-user/copy-from-user selectors. Rust candidates precede accepted F03 export and these F06 module additions. Never replace whole files; combine disjoint wrappers and module additions."
+  },
+  "F02": {
+    "decision": "PASS_SOURCE_AND_RETAINED_HOST_IDLE_DATA",
+    "delta": "Apply process.c.diff localized two-table extern/fallback hunk and insert exact idle_layout_values.FRAGMENT.rs immediately before existing process_idle_callbacks definition inside process_idle_callback_storage. Existing C MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE and Rust process_global_storage_candidate already pair; add no new selector. Preserve accepted timer owner and all prior owners.",
+    "fragment": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-idle-layout-values-next-current-source-1/idle_layout_values.FRAGMENT.rs",
+      "bytes": 1827,
+      "sha256": "5dd48b8c4dd011fe1af910cd1ede2a29f26aeefe9f47069496ce45010a3617e2"
+    },
+    "semantics": "Immutable repr(C)80-byte/8-aligned ten-offset table and36-byte/4-aligned mixed six CInt/u32/two CInt values agree with original genuine C layouts/constants; no pointer/reference construction or algorithm/lifetime change. C fallback3997 and following4016 are restored.",
+    "tested_scope": "Full80/36-byte equality, selected C absence, Rust/fallback/current/final bytes and readonly flags, final Rust origin, plus unchanged108-case state/callback oracle; finite controlled callbacks do not execute real locks/IRQ/halt.",
+    "stale_whole_file_content": "Private process candidates precede accepted120-byte timer layout storage migration. Replacing whole files would undo that accepted timer.",
+    "fragment_exact_in_fixture_and_candidate": true
+  },
+  "open_predicates": [
+    "Coherent current successor compiler/link/default image adoption and selector pairing",
+    "Production default origin and complete native runtime ownership/callchain proof",
+    "Real allocator/OOM/tracker locks and PMU/event lifetime",
+    "Real syscall/signal context/current/queue/IRQ and user-copy/fault behavior",
+    "Real idle lock/migration/halt and final default consumer relocations",
+    "Whole-file F02/F03/F06 and M14/M15 retirement remain OPEN; no native or whole-file credit inferred; Current109 remains accepted without replay"
+  ],
+  "technical_acceptance_delta": {
+    "new_production_builds": 0,
+    "new_native_apps": 0,
+    "new_whole_file_retirement": 0,
+    "source_recommendation": "six forwarding body replacements and two immutable data-owner replacements only after coherent successor validation"
+  }
+}

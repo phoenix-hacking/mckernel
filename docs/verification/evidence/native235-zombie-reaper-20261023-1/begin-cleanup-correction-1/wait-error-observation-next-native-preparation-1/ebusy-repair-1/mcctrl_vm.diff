@@ -1,0 +1,30 @@
+--- 
++++ 
+@@ -397,12 +397,24 @@
+             ||identity.parent==identity.child||identity.worker==0||identity.delivery==0
+             ||identity.nonce==0||identity.child_pid<=0||claim.carrier==0||claim.carrier%8!=0{return Err(EACCES);}
+         // Monotonic closure. No PID disappearance or scalar return proves MM
+-        // retirement. The structural pin only permits this guarded mmget.
++        // retirement. The structural pin permits guarded mmget or the terminal proof below.
+         self.admission.store(false,Ordering::Release);
+         let users=unsafe {AtomicI32::from_ptr(ptr::addr_of_mut!(
+             (*self.mm.0.as_ptr()).__bindgen_anon_1.mm_users.counter))};
+-        users.fetch_update(Ordering::Acquire,Ordering::Relaxed,|n|
+-            if n>0{n.checked_add(1)}else{None}).map_err(|_|EBUSY)?;
++        if let Err(previous)=users.fetch_update(Ordering::Acquire,Ordering::Relaxed,|n|
++            if n>0{n.checked_add(1)}else{None}) {
++            if previous!=0{return Err(EBUSY);}
++            // The Arc's structural MM pin spans this distinct terminal proof.
++            // Zero users alone is insufficient: Linux must have removed every
++            // VMA under this exact MM's write lock. Never acquire CurrentMm,
++            // call mmput, dereference a VMA, or zap on this zero-users path.
++            unsafe {mckernel_inherited_mmap_write_lock(self.mm.0.as_ptr().cast())};
++            let empty=users.load(Ordering::Acquire)==0
++                &&!self.foreign_alias_seen.load(Ordering::Acquire)
++                &&unsafe {bindings::find_vma(self.mm.0.as_ptr(),0).is_null()};
++            unsafe {mckernel_inherited_mmap_write_unlock(self.mm.0.as_ptr().cast())};
++            return if empty{Ok(())}else{Err(EBUSY)};
++        }
+         let mm=CurrentMm(self.mm.0);
+         unsafe {mckernel_inherited_mmap_write_lock(mm.0.as_ptr().cast())};
+         let guard=InheritedWrite(&mm);

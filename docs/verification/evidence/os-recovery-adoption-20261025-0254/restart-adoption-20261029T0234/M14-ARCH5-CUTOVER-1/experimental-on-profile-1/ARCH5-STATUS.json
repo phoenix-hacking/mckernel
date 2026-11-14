@@ -1,0 +1,68 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "profile": "Explicit experimentalON contribution to one combined generic23+arch5 candidate; source selection is not runtime qualification.",
+  "rows": [
+    {
+      "symbol": "arch_rt_sigreturn_xrstor_bridge",
+      "implemented": true,
+      "selected_in_candidate": true,
+      "compiled": false,
+      "validated": false,
+      "C_macro": "MCKERNEL_RUST_F06_XRSTOR_LEAF",
+      "Rust_cfg": "f06_signal_leaf_adapters_candidate",
+      "constraints": "Raw unchecked XRSTOR consumes original complete EDX:EAX get_xsave_mask. Buffer must cover real configured standard state and be 64-byte aligned with valid state bits; intended current CPU/exclusion and boot-stable XCR0/extent. No checked fault recovery substituted; no generated FP/SIMD across call. Provider visibility-only change proposed to Root.",
+      "open_proof": "Actual raw instruction/codegen/provider binding and applicable live-state behavior OPEN; not source implementation blocker.",
+      "service_account": "UNKNOWN receipt provenance, no restriction cleared."
+    },
+    {
+      "symbol": "arch_native_signal_bad_frame_bridge",
+      "implemented": true,
+      "selected_in_candidate": true,
+      "compiled": false,
+      "validated": false,
+      "C_macro": "MCKERNEL_RUST_F06_BAD_FRAME_LEAF",
+      "Rust_cfg": "f06_signal_leaf_adapters_candidate + native_linux_irq_work_v6_12",
+      "constraints": "Same signed64 error diagnostic then void terminate(0,SIGSEGV=11), then -EFAULT if terminate returns. Genuine current thread/process termination ownership and synchronous logger context required.",
+      "open_proof": "Actual long/void signature, constants, native lifetime and returning-provider distinction OPEN; next real header witness supplied.",
+      "service_account": "UNKNOWN receipt provenance, no restriction cleared."
+    },
+    {
+      "symbol": "arch_rt_sigreturn_context_bridge",
+      "implemented": true,
+      "selected_in_candidate": true,
+      "compiled": false,
+      "validated": false,
+      "C_macro": "MCKERNEL_RUST_F06_SIGNAL_CONTEXT",
+      "Rust_cfg": "f06_signal_context_candidate",
+      "constraints": "Optional thread output store first, XSAVE-size output second, regs output last; NULL outputs do not call providers. Actual current GS CPU-local has packed tss.rsp0 at actual C/Rust offset180. It points just above one live complete X86UserContext; get_this_cpu_local current/GS/TSS must refer same intended CPU with stack ownership through consumers. No guessed fallback stack/null policy.",
+      "open_proof": "Source asserts and61slot actual witness supplied; missing historical ABI20 receipt replaced by proposed new matched compiler/layout witness work, not indefinite source hold. Lifetime/GS instruction proof OPEN.",
+      "service_account": "UNKNOWN receipt provenance, no restriction cleared."
+    },
+    {
+      "symbol": "do_signal",
+      "implemented": true,
+      "selected_in_candidate": true,
+      "compiled": false,
+      "validated": false,
+      "C_macro": "MCKERNEL_RUST_F06_DO_SIGNAL_WHOLE",
+      "Rust_cfg": "f06_do_signal_whole_candidate + f06_signal_context_candidate + f06_do_signal_reuse_qualified_context",
+      "constraints": "Approved complete zero+SIGCHLD/CLD_TRAPPED/tid/exit_status constructor runs after SIGTRAP stores before original targets/lock/notify/wake/schedule; no pending reuse after free/transfer. Whole source retains original pending/process/sigcommon lifecycle, legacy cleanup differences, counter races and old core-slot debt. XSAVE temporary aligned64 buffer spans positive stable boot size (no signed size+64 overflow), lives through real capture+copy then original base freed; preserve currentCPU/IRQ/FP exclusion. Native and C signal-stack profiles must match.",
+      "open_proof": "Explicit old uninitialized-info domain addressed by Root-approved correction, not undefined parity. Actual object providers, complete ABI/codegen/lifetime and native behavior OPEN. Six descriptors use originalC tuples and unchanged af46 oracle.",
+      "service_account": "Any genuine originating restriction remains; technical source correction is not service clearance."
+    },
+    {
+      "symbol": "arch_ptrace_regset_log_bridge",
+      "implemented": true,
+      "selected_in_candidate": true,
+      "compiled": false,
+      "validated": false,
+      "C_macro": "MCKERNEL_RUST_F06_REGSET_DEFINED_DIAGNOSTIC",
+      "Rust_cfg": "f06_regset_defined_diagnostic_candidate",
+      "constraints": "Unchanged void(int,long) callback; event1read/event2write existing prefix, CLong modulo2^64 CULong argument to %lx lowercase, unknown event no output. No claimed parity with old long/%x undefined call. Actual existing formatter parses x/base16/SMALL and l/ULONG and reads CULong.",
+      "open_proof": "Actual LP64/compiler/formatter/object/provider proof OPEN; no source contract gap after explicit Root approval.",
+      "service_account": "Approval expressly leaves real service/account restrictions unchanged."
+    }
+  ],
+  "generic23": "Owned by generic owners/compositor; no counts or source acceptance inferred here.",
+  "next": "Compositor merges into one exact source/config closure; Root obtains real compiler feedback and separate ABI/codegen/link/lifetime/state/fault/native proof. No runtime use of unqualified experimental code."
+}

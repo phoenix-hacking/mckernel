@@ -1,0 +1,13 @@
+--- a/kernel/rust/x86_cpu_helpers.rs
++++ b/kernel/rust/x86_cpu_helpers.rs
+@@ -3211,8 +3211,8 @@
+     let words = nmi_ctx.cast::<CULong>();
+     let mut i = 0usize;
+     while i < 22 {
+-        let value = unsafe { words.add(i + 5).read() };
+-        unsafe { words.add(i).write(value); }
++        let value = unsafe { core::ptr::read_volatile(words.add(i + 5)) };
++        unsafe { core::ptr::write_volatile(words.add(i), value); }
+         i += 1;
+     }
+     let return_address = func.map_or(0, |entry| entry as CULong);

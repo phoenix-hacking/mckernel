@@ -1,0 +1,523 @@
+{
+  "actual_replacement_targets": [
+    "bin/mcexec",
+    "images/mckernel.img",
+    "modules/ihk-smp-x86_64.ko",
+    "modules/ihk.ko",
+    "modules/mcctrl.ko"
+  ],
+  "base_root": "/home/holden/mckernel-work/scratch/native-ultra-futex-guest-20260909-2026091302/root",
+  "bounded_correction": "Readonly caller decodes replacement JSON before actual _replacement_map; prior Path-argument failure retained unchanged.",
+  "case": "p-m06-exec-reset-selfexec-199B",
+  "elapsed_seconds": 0.15888861700659618,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_inventory": [
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "bin",
+      "sha256": null,
+      "size": 4096,
+      "type": "dir",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "bin/bash",
+      "sha256": "a59fc4da19d169c175b247bfaf4a21c2ee7c16c3ed2820daa807ab12affe98fc",
+      "size": 1410688,
+      "type": "file",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "bin/dmesg",
+      "sha256": "8d98381f576d147789c950da4377464d2dfbb590bd4d7ef8ff9dbc81d74cdbd1",
+      "size": 72088,
+      "type": "file",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "bin/mcd0-ioctl-i386",
+      "sha256": "9cae94a48462fe1fd409d572acd2c0dff04decb0c7eacae703aa5876389c24f2",
+      "size": 8416,
+      "type": "file",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "bin/mcd0-ioctl-x86_64",
+      "sha256": "dac5c47b17cec8b063329dff21c7318506e1d7a3e05a1f905be53c6483f6fed9",
+      "size": 8512,
+      "type": "file",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "bin/mcexec",
+      "sha256": "b786e9c98ecc3d429c5ce4d683f1ef4ebca7b3ea132b8435ed6026fc9e984639",
+      "size": 453288,
+      "type": "file",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "bin/mount",
+      "sha256": "3ab3ac4707f4d02f4d46c916e537c38cdaee3b9daa64f91f850decf47bc889d9",
+      "size": 48864,
+      "type": "file",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "bin/native-application-core",
+      "sha256": "558d1607e4648321c9537215084e759496937d9591c319a21443f443193fda9a",
+      "size": 39488,
+      "type": "file",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "bin/native-application-hello",
+      "sha256": "fd08a46261fa79fdd16ddb2dce6e7f99c77178b290815c06445277db454851e7",
+      "size": 1264,
+      "type": "file",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "bin/native-boot",
+      "sha256": "4558995ea1ae70c8d5a115542e333ad695a54b4b8f450ea717df37fd1e631af3",
+      "size": 30984,
+      "type": "file",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "bin/native-os-buildid-i386",
+      "sha256": "04b7ad7993ce87fce24108491959374303bd74ea38e85e591dcdce096396e2ce",
+      "size": 29716,
+      "type": "file",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "bin/native-os-buildid-x86_64",
+      "sha256": "65f51b8d3324641b6fcd72d79448e15b1cc0fe054f3116d6ceb8ea1b5c56d18b",
+      "size": 30376,
+      "type": "file",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "bin/native-string-i386",
+      "sha256": "b2884ecbe15f3dbb763d1192332bfeb0bd78d864984d7b31a6f96a4ca99ea111",
+      "size": 38740,
+      "type": "file",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "bin/native-string-x86_64",
+      "sha256": "ba40b85c8620454276f631096b6f807cc4384c5354880e1af43de6e45532495c",
+      "size": 39352,
+      "type": "file",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "bin/native-ultra-futex",
+      "sha256": "f0adf6c1b7c5381c8d790d577286f66686c291a7bd03a4b07126b78e90db1085",
+      "size": 45440,
+      "type": "file",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "bin/stat",
+      "sha256": "9f6ffbf89d8463633790130b1d79999e1f5ef72fa63ac128eefc19101116b4d3",
+      "size": 51,
+      "type": "file",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "bin/uname",
+      "sha256": "050964cc46affadcf00d817106c47a6bde087fc483fa0643e168a816b76de608",
+      "size": 52,
+      "type": "file",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "dev",
+      "sha256": null,
+      "size": 4096,
+      "type": "dir",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "images",
+      "sha256": null,
+      "size": 4096,
+      "type": "dir",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 420,
+      "path": "images/mckernel.img",
+      "sha256": "eb58a8b064212d7fa3ca6949778fd811f985433a54aaf26e7f3e2a0f373a4fd8",
+      "size": 8048432,
+      "type": "file",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "init",
+      "sha256": "b2cad6791bd4b7b66fdf23a945f44679f4bb38a134bca8b2310045b3a9cf41ba",
+      "size": 3968,
+      "type": "file",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "lib",
+      "sha256": null,
+      "size": 4096,
+      "type": "dir",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "lib64",
+      "sha256": null,
+      "size": 4096,
+      "type": "dir",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "lib64/ld-linux-x86-64.so.2",
+      "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b",
+      "size": 930600,
+      "type": "file",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "lib64/libacl.so.1",
+      "sha256": "342a0213a17809ee41816a95c939f11ba25ff92da53ae849bc88cf3da81649aa",
+      "size": 40896,
+      "type": "file",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "lib64/libattr.so.1",
+      "sha256": "1369a9dd4a7bcd8d4bf71293b369f6d222a1ea12132d988ed529d796522076a0",
+      "size": 28296,
+      "type": "file",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "lib64/libblkid.so.1",
+      "sha256": "6149c97e401f088ee8e4d9681e0498486e41a90b90618b0dafca0b8545230143",
+      "size": 242128,
+      "type": "file",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "lib64/libc.so.6",
+      "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+      "size": 2339896,
+      "type": "file",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "lib64/libcap.so.2",
+      "sha256": "70e8dbe271e2ea63127fbc20270ce60541d1244f0b170888d258b86b2573bcbf",
+      "size": 53168,
+      "type": "file",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "lib64/libcrypto.so.3",
+      "sha256": "3da8e54521ce53e2a09d9ca0d1d5c3368b8abba252492cee21affd6146f72d82",
+      "size": 5631152,
+      "type": "file",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "lib64/libgcc_s.so.1",
+      "sha256": "cc9c9d070f290bd0b39a7208f8850f6f6cb85491cf6aee80ef4502c3f040c2cb",
+      "size": 186528,
+      "type": "file",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "lib64/liblzma.so.5",
+      "sha256": "a1ccc4236761114ffa9efa797501b9f34398a20de75ca0ca22df9410cbe41bde",
+      "size": 215496,
+      "type": "file",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "lib64/libmount.so.1",
+      "sha256": "5199b49c7ad1565700fd649e9b13024919192128908536203fe95fff4adadb2c",
+      "size": 333512,
+      "type": "file",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 420,
+      "path": "lib64/libnuma.so.1",
+      "sha256": "be20c2b16781eea6c69d47816bf15869f90f2a009628c310049da1d2f3c31e4e",
+      "size": 62328,
+      "type": "file",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "lib64/libpcre2-8.so.0",
+      "sha256": "ac0dcbb0620261d144a5255ce79c30c583593e7a29822df7a529c06922852e94",
+      "size": 665664,
+      "type": "file",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 420,
+      "path": "lib64/libpthread.so.0",
+      "sha256": "f2791d4558ccad3fd23808f206e1b8e861b448b04d1e5cc75ae405e3e028fa1a",
+      "size": 15496,
+      "type": "file",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 420,
+      "path": "lib64/librt.so.1",
+      "sha256": "3edee3d7a74e29d28e4831c37e9ef8330c1702f391302a30d241f6aa579b9afa",
+      "size": 15632,
+      "type": "file",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "lib64/libselinux.so.1",
+      "sha256": "79e73dd27d4a90f25969c43c298ad32aa21c718c8508ef86c5a8e6ee083723a9",
+      "size": 200664,
+      "type": "file",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "lib64/libtinfo.so.6",
+      "sha256": "3a4bdb43bc49568cec111b5486e6daa6fbca08dc205357b3d737044eb0ab315a",
+      "size": 187296,
+      "type": "file",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "lib64/libz.so.1",
+      "sha256": "2fd5dcd6bc0953f3db71958b10c0cdf55ce49e1ceb4ab9d1f869398e39e994eb",
+      "size": 140824,
+      "type": "file",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "lib64/libzstd.so.1",
+      "sha256": "250dc1e1302e3eedd9f483c7cb3d52ab15882bf9d12072539cc4f06660b384e1",
+      "size": 729608,
+      "type": "file",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "modules",
+      "sha256": null,
+      "size": 4096,
+      "type": "dir",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 420,
+      "path": "modules/ihk-smp-x86_64.ko",
+      "sha256": "dffec444f0f4e1b90baf018cbcec99b28f300e8d2a3c033bf1a792a6e9450199",
+      "size": 11030936,
+      "type": "file",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 420,
+      "path": "modules/ihk.ko",
+      "sha256": "2443a0b50b2aa1ad8f003558cd30bb0628ae35544925ca67e998a7cbc01545df",
+      "size": 1357704,
+      "type": "file",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 420,
+      "path": "modules/mcctrl.ko",
+      "sha256": "332d7560e02f64844a4d01b837c2d64e65d0f792f3d186bdb8e3e19553efce46",
+      "size": 1916160,
+      "type": "file",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "poweroff",
+      "sha256": "384607e6e1544a549c793f34a21d8d555879abaa1d532b5e2b9dc5e020dcc569",
+      "size": 4456,
+      "type": "file",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "proc",
+      "sha256": null,
+      "size": 4096,
+      "type": "dir",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "sbin",
+      "sha256": null,
+      "size": 4096,
+      "type": "dir",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "sbin/insmod",
+      "sha256": "7e91f52ed2cd5e2c4f82de4bb07bbaa7179cd5c053b7afcf2fd231056681ed55",
+      "size": 182088,
+      "type": "file",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "sbin/rmmod",
+      "sha256": "7e91f52ed2cd5e2c4f82de4bb07bbaa7179cd5c053b7afcf2fd231056681ed55",
+      "size": 182088,
+      "type": "file",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "sys",
+      "sha256": null,
+      "size": 4096,
+      "type": "dir",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 1023,
+      "path": "tmp",
+      "sha256": null,
+      "size": 4096,
+      "type": "dir",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "usr",
+      "sha256": null,
+      "size": 4096,
+      "type": "dir",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "usr/bin",
+      "sha256": null,
+      "size": 4096,
+      "type": "dir",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "usr/bin/coreutils",
+      "sha256": "8e7928bf899599dbe98a4baaf2b5cba78a0b003213ab83104182e31475c068ff",
+      "size": 1347728,
+      "type": "file",
+      "uid": 1000
+    },
+    {
+      "gid": 1000,
+      "mode": 493,
+      "path": "usr/sbin",
+      "sha256": null,
+      "size": 4096,
+      "type": "dir",
+      "uid": 1000
+    }
+  ],
+  "source_stager_sha256": "1b891f42873b1352ae4087b966d2767d4054666790eade553dd79c933b02efd2",
+  "stage_effects": 0,
+  "status": "PASS_ACTUAL_BASE_INVENTORY_DYNAMIC_CLOSURE_AND_REPLACEMENTS"
+}

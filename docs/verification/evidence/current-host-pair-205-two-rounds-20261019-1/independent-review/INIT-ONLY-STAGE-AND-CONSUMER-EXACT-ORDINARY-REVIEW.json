@@ -1,0 +1,174 @@
+{
+  "actual_guests": 0,
+  "application_launches": 0,
+  "command_set": {
+    "bytes": 2689,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/stage-preparation-1/COMMAND-SET.json",
+    "sha256": "f1fdb3ce9ef6835e1f326a1c816231005916a8a16511ef4bd69e65fa7697b5dc"
+  },
+  "decision": "APPROVE_EXACT_TWO_COMMAND_ORDINARY_CHAIN_AFTER_ROOT_FRESH_CPU7_ADMISSION_ONLY",
+  "exact_authorized_argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=3",
+    "60",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=55:55",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/stage-preparation-1/run_two_commands_source_bound.py"
+  ],
+  "executor": {
+    "bytes": 14698,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/stage-preparation-1/run_two_commands_source_bound.py",
+    "sha256": "3f588c9306ad83308d2984914ad1d9d3ead794581f7db2a2db85473d4bf05cac"
+  },
+  "fixed_commands": [
+    {
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/stage-preparation-1/stage_two_round_init.py"
+      ],
+      "cpu_seconds": 45,
+      "role": "metadata-preserving-init-only-stage",
+      "wall_seconds": 45
+    },
+    {
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/stage-preparation-1/prepare_current_pair_consumer.py"
+      ],
+      "cpu_seconds": 10,
+      "role": "actual-owner-runner-full-parent",
+      "wall_seconds": 10
+    }
+  ],
+  "implementation_ownership": false,
+  "native_runtime_release": false,
+  "no_ordinary_dependency_on_unrelated_physical_cleanup": true,
+  "packet": {
+    "bytes": 6979,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/stage-preparation-1/REVIEW-PACKET.json",
+    "sha256": "9fb7dbd2fcb8582ccd2339a40ed91bd3f0ba44cb38627780ae597bed81c43fe5"
+  },
+  "pending_actual_fields": [
+    "stage manifest/archive and output FD identities",
+    "actual owner/runner CLI and real parent identity/full argv receipts",
+    "actual fresh native physical predecessor",
+    "genuine <=60s snapshot and exact final runtime release"
+  ],
+  "profile": {
+    "bytes": 2816,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/stage-preparation-1/EXECUTION-PROFILE-SOURCE-BOUND.json",
+    "sha256": "2e71c2e29f6d9010b2ae9a53e496870d6c6e44cbc1148ac14f6e10b8d4b2bf1c"
+  },
+  "profile_projection": {
+    "AS_bytes": 1073741824,
+    "CPU": 7,
+    "cleanup_reserve_seconds": 6,
+    "emergency_reserve_each_filesystem_bytes": 671088640,
+    "host_floor_bytes": 17179869184,
+    "host_total_growth_bytes": 207618048,
+    "jobs": 1,
+    "per_command": [
+      {
+        "argv": [
+          "/home/holden/anaconda3/bin/python3",
+          "-I",
+          "-B",
+          "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/stage-preparation-1/stage_two_round_init.py"
+        ],
+        "cpu_seconds": 45,
+        "role": "metadata-preserving-init-only-stage",
+        "wall_seconds": 45
+      },
+      {
+        "argv": [
+          "/home/holden/anaconda3/bin/python3",
+          "-I",
+          "-B",
+          "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/stage-preparation-1/prepare_current_pair_consumer.py"
+        ],
+        "cpu_seconds": 10,
+        "role": "actual-owner-runner-full-parent",
+        "wall_seconds": 10
+      }
+    ],
+    "retirement": "accepted WNOWAIT anchored creator/owned-group helper unchanged; first failure stops, direct join persisted before stable closed FD hashing",
+    "scratch_floor_bytes": 12884901888,
+    "scratch_growth_bytes": 69206016,
+    "source_inputs_hardlink_rule": "exact declared source descriptor including genuine nlink; output captures remain single-link",
+    "stage_total_bytes": 67108864,
+    "stream_bytes": 33554432,
+    "whole_CPU_accounted_seconds": 55,
+    "whole_wall_seconds": 60,
+    "work_wall_seconds": 54
+  },
+  "quota_credit": false,
+  "reused_offline_acceptance": {
+    "bytes": 14135,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-independent-review-20261019-1/ACTUAL-FIXED-TWO-ROUND-OFFLINE-ACCEPTANCE.json",
+    "sha256": "94c7158043efe7aac83cc44e0a70220431035e898dfe42ec59e996bc91dcc10b"
+  },
+  "reviewer": "two_cpu_end_to_end_review",
+  "root_fresh_admission_and_CPU7_grant_required": true,
+  "schema": "mckernel.independent-fixed-two-round-init-stage-consumer-ordinary-source-review.v1",
+  "scope": "functional OS/apps and Rust plus reviewed assembly; Linux control collector only",
+  "source_authorities": {
+    "bytes": 13421,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/stage-preparation-1/pinned-source-authorities.json",
+    "sha256": "bb317bb522e639566533e4fe0ba7b0ea394be256e9dbb8fc72b51001ef8b4d43"
+  },
+  "source_findings": {
+    "consumer": "actual local owner and runner CLI use explicit accepted fake backend classes plus closed actual C positive serial; real Popen/execve/socket forbidden and counting guards restored after preflight, empty counter asserted; no synthetic native acceptance",
+    "diagnostic": "byte-identical to actual tested fixed2 evaluator cceda258",
+    "executor_changed_functions": [
+      "source_authorities exact23 frozen-source count",
+      "main two exact commands/profile/output namespace/resource-accounting literals"
+    ],
+    "executor_unchanged_functions": 11,
+    "owner_changed_globals": [
+      "SELF",
+      "RUNNER",
+      "SOURCE_HASHES",
+      "EXTRA_READONLY"
+    ],
+    "owner_function_class_AST_unchanged_count": 28,
+    "owner_only_changed_function": "bound_manifest: diagnostic source pathname literal rebound; loader/body unchanged",
+    "parent_preflight": "actual bound_manifest\u2192owner constructor\u2192inside args\u2192complete expected QEMU argv and every AF_UNIX path; monitor none; all source/artifact/authority paths visible; parent/attempt/evidence empty checks retained",
+    "pin_and_full11_source_identity_mismatches": 0,
+    "pin_count": 23,
+    "runtime_bytecopies": [
+      "runner",
+      "backend",
+      "QMP",
+      "strict205 image authority"
+    ]
+  },
+  "source_pins": {
+    "bytes": 5948,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/stage-preparation-1/source-pins.json",
+    "sha256": "405e1e3e6f1f900329679beb1c25f2deea18a977616e9ee58a4230a86fd00f29"
+  },
+  "stage_acceptance": false,
+  "stage_projection": [
+    "Exact accepted4aa parent and ff4 image/current3module tuple retained.",
+    "Compiled fixed2 binary ea0fd remains0700; O_EXCL byte-identical0755 copy becomes collector.",
+    "Verified parent BASE prefix remains byte-identical; accepted80ac derive_base_payloads acts only on inherited overlay tail.",
+    "Exactly one existing init payload changes; raw archive record count, order, retained headers and metadata remain; init header size/checksum may change as required.",
+    "All other final members/metadata remain exact; one full gzip, full decompression readback, strict actual diagnostic manifest validation.",
+    "New manifest uses exact pair_rounds typeint2; Rust payload/oracles/image/modules/boot remain unchanged."
+  ],
+  "status": "PASS_INIT_ONLY_PRESERVATION_AND_FIXED_TWO_ROUND_CONSUMER_SOURCE_PROFILE"
+}

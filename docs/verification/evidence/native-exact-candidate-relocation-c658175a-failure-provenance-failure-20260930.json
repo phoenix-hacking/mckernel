@@ -1,0 +1,38 @@
+{
+  "schema": "mckernel.native-exact-candidate-relocation-failure.v1",
+  "status": "FAIL_CLOSED",
+  "failure_family": "failure-record-provenance-routing",
+  "candidate_commit": "c658175ae1831e2caef6ecf59730a272f1324645",
+  "candidate_identity": "1831:6684719",
+  "release_commit": "3b0bdded54001c6d50124d6f5583bcd8ed3c8485",
+  "packet_sha256": "e497035113b8587ac7d62ef9fdd444ea2b60e6f564988ca5ee39a06bcd6e8228",
+  "test_sha256": "be669af967b2705b9d94b6f5091c0bb907d87edd67ba2c22f13902458fdab38f",
+  "observed_error": "RuntimeError: failure-record-provenance",
+  "root_cause": "The embedded Python received only the archive-path relocation failure record but applied the build-failure candidate_sha/phase assertions to it. The shell had separately hash-bound both records correctly.",
+  "temporary_copy": {
+    "path": "/home/holden/mckernel-work/retained-exact-candidates/.mckernel-exact-candidate-c658175a-scratch-7.tmp-relocation-15-retry1",
+    "identity": "66306:47753167",
+    "preserved": true,
+    "verification_pending": true
+  },
+  "attempt_log": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-candidate-relocation-c658175a-scratch7-retry1-20260930.log",
+    "identity": "1831:57622",
+    "size": 0
+  },
+  "attempt_lock": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-candidate-relocation-c658175a-scratch7-retry1-20260930.lock",
+    "identity": "1831:57621",
+    "size": 0
+  },
+  "postflight": {
+    "source_preserved": true,
+    "destination_absent": true,
+    "temporary_copy_preserved": true,
+    "exclusion_absent": true,
+    "intent_absent": true,
+    "source_deletion_started": false
+  },
+  "bounded_correction": "Use a verification-only resume with fresh retry2/relocation16 identities, separately route and validate the build-failure and both relocation-failure schemas, and reuse the preserved temporary copy without recopying.",
+  "acceptance": "No relocation completion, build, image, boot, diagnostic application or production acceptance."
+}

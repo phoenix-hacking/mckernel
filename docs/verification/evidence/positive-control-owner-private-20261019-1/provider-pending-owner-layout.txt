@@ -1,0 +1,96 @@
+struct ForkProviderCapacity;
+impl ForkProviderCapacity {
+    fn reserve() -> Result<Self> {
+        FORK_PROVIDER_OWNER_COUNT.fetch_update(Ordering::AcqRel, Ordering::Acquire,
+            |count| (count < FORK_PROVIDER_CAPACITY as u32).then(|| count + 1))
+            .map_err(|_| EBUSY)?;
+        Ok(Self)
+    }
+}
+impl Drop for ForkProviderCapacity {
+    fn drop(&mut self) {
+        let old = FORK_PROVIDER_OWNER_COUNT.fetch_sub(1, Ordering::Release);
+        assert!(old > 0);
+    }
+}
+
+struct ForkProviderOwner {
+    _admission: AdmissionOwner,
+    _lease: OsLease<'static>,
+    // Release aggregate capacity only AFTER admission and OS/module ownership.
+    _capacity: ForkProviderCapacity,
+}
+// SAFETY: The exact lease pins Admission's address. All owner operations are
+// immutable or atomic; final field destruction follows the last Arc borrow.
+unsafe impl Send for ForkProviderOwner {}
+// SAFETY: The pinned registry and admission support concurrent atomic borrows.
+unsafe impl Sync for ForkProviderOwner {}
+
+struct ForkConsumerCapsule {
+    context: AtomicPtr<c_void>,
+    destroy: super::application_abi::ForkCapsuleDestroyV1,
+    verify: super::application_abi::ForkVerifyV1,
+    accept: super::application_abi::ForkCapsuleAcceptV1,
+    _link: Option<super::application_abi::ForkCapsuleLinkV1>,
+    // Drop invokes the consumer first; this field releases its pin afterwards
+    // from IHK code, with the independent provider owner still live.
+    _module: ProviderModule,
+}
+// SAFETY: The trusted constructor supplies one owned concurrency-safe context;
+// exact pending claims serialize verify/accept, and Arc pins final destruction.
+unsafe impl Send for ForkConsumerCapsule {}
+// SAFETY: Context access is confined to the exclusive epoch claim callbacks.
+unsafe impl Sync for ForkConsumerCapsule {}
+impl Drop for ForkConsumerCapsule {
+    fn drop(&mut self) {
+        // SAFETY: IHK uniquely owns the successful constructor output. Every
+        // callback borrow has ended, no table/MM/slots guard is live, and the
+        // later-dropping module field still pins this exact consumer code.
+        let context = self.context.load(Ordering::Acquire);
+        if !context.is_null() { unsafe { (self.destroy)(context) }; }
+    }
+}
+#[derive(Clone, Copy, Eq, PartialEq)]
+enum ForkReceiptPhase { Reserved, Acknowledged, Published, Finished }
+
+// Storage is allocated and installed BEFORE Construct transfers any context.
+// Only scoped Abort/future authenticated Complete may consume that context.
+// No ordinary Drop invokes foreign code or treats a failed cleanup as success.
+struct ForkPayloadCapsule {
+    context: AtomicPtr<c_void>,
+    abort: super::application_abi::ForkPayloadDropV1,
+    _complete: super::application_abi::ForkPayloadDropV1,
+}
+// SAFETY: Context is opaque; the exclusive initializing scope or exact BUSY
+// claim serializes callbacks, and its owner pins the provider module.
+unsafe impl Send for ForkPayloadCapsule {}
+// SAFETY: Scalar context publication is atomic; no unsynchronized dereference.
+unsafe impl Sync for ForkPayloadCapsule {}
+
+struct ForkPendingEntry {
+    identity: Option<super::application_abi::ForkIdentityV1>,
+    epoch: u64,
+    phase: u32,
+    host_revoked: bool,
+    guest_released: bool,
+    final_published: bool,
+    consumer_accepted: bool,
+    payload_completed: bool,
+    backend_released: bool,
+    attempted: bool,
+    receipt_index: Option<usize>,
+    capsule: Option<Arc<ForkConsumerCapsule>>,
+    payload: Option<Arc<ForkPayloadCapsule>>,
+    child_context: usize,
+    // Any entry teardown, including conservative reconciliation, destroys the
+    // consumer capsule/module before releasing independent provider ownership.
+    owner: Arc<ForkProviderOwner>,
+}
+#[derive(Clone, Copy)]
+struct ForkCompletedReceipt {
+    identity: super::application_abi::ForkIdentityV1,
+    child_context: usize,
+    epoch: u64,
+    phase: ForkReceiptPhase,
+}
+struct ForkPendingTable {

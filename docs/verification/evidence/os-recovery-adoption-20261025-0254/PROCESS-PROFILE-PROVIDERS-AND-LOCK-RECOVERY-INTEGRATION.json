@@ -1,0 +1,37 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": "2026-10-25T03:31:55Z",
+  "status": "PASS_SOURCE_INTEGRATION_AFTER_INDEPENDENT_REVIEW",
+  "reviewer": "/root/recovery_review",
+  "M15_freeze_ended_after_physical": "b7f8c5ea96ec323c9000f2aed8e214ab16d7702e66cb95b1b53dd948947f028b",
+  "M15_current_postjoin": "1fec1959a2b9ec8fcd119e20b8e5c5196fd9d3e5b92e0e16d3b179f94c7adf63",
+  "providers_result": "9038729bdbcf01d8a03610ee6ae4c52a17ba4e7c446827876cbb4e44f401b2b8",
+  "profile_failure_regression_result": "34d2498b48b1b7af2547e1970537d25333d20c1e4939a1fc7640589dbc3f639b",
+  "new_source_Rust_providers": 3,
+  "profile_fix": "Release exact acquired job profile lock and restore saved IRQ state on allocation failure before unchanged ENOMEM return.",
+  "limits": [
+    "Controlled lock/IRQ/allocator endpoints; no native concurrency proof",
+    "Job counters preserve original decrement-on-allocation-failure behavior; no accounting recovery claim",
+    "Production selected-object/default/link/native proof and combined B7layout7976 remain OPEN"
+  ],
+  "paths": [
+    {
+      "path": "kernel/process.c",
+      "source": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-2/candidate/kernel/process.c",
+      "preimage_sha256": "5eed915e655b124b0a5f682e4e7ba6c713eff21b3bbdf6930717328367ab5114",
+      "postimage_sha256": "92507b0549a92e4697dc28ed2354cf6263cfed06ecef97809bf0370eb961cd35"
+    },
+    {
+      "path": "kernel/rust/process_helpers.rs",
+      "source": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-2/candidate/kernel/rust/process_helpers.rs",
+      "preimage_sha256": "1049cc79c9cbb2579ed5cded8e1c6dd320e69025dd2768a632e9e95b62bfc901",
+      "postimage_sha256": "f2e69c7eadb843300861fa7deb2f95b1611d234ffe2de30d2accd1d0bc3da8e6"
+    },
+    {
+      "path": "kernel/rust/profile.rs",
+      "source": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-3/source/kernel/rust/profile.rs",
+      "preimage_sha256": "f7a614cee0c4f301bc8bc21be0782e6912b944992cf06a87673e68694c3c1389",
+      "postimage_sha256": "2eacbb02e1988ac524e94b1c7824629cfa97bf5a18ddef5c046f0c60106ce543"
+    }
+  ]
+}

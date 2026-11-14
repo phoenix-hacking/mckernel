@@ -1,0 +1,43 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PROPOSED_NOT_COMPILED_NOT_EXECUTED_NOT_GRANTED",
+  "reuse": {
+    "acceptance_path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ACTUAL-CURRENT285-FIVE-DATA-OWNERS-INDEPENDENT-ACCEPTANCE-AND-CANONICAL-INTEGRATION.json",
+    "sha256": "15159fbd12b74b70aff06da8ea5d202879bd516b723f27ecf18eff4e0be7eef5",
+    "actual_previous_scope": "PASS_HOST_MANUAL_PROFILE_AND_FIVE_CANONICAL_POSTIMAGES",
+    "unchanged_prior_owners": [
+      "resource_set_list",
+      "resource_set_lock",
+      "runq_reservation_lock"
+    ],
+    "same_canonical_postimages": true,
+    "prior_scope_does_not_qualify_new_flags": true
+  },
+  "root_next_checks": [
+    {
+      "name": "Actual selected C object and Rust producer compilation",
+      "requirement": "Root binds candidate full files to a coherent source successor and grants ordinary profile; reuse exact accepted data5 producer and owned ABI definitions. Existing paired Linux6.12 selectors enable both candidate changes; no new CMake/import selector required. Do not compile a handwritten equivalent provider.",
+      "oracle": "Selected process.c.o has no defining symbols for idle_halt/allow_oversubscribe/time_sharing; actual Rust producer defines each GLOBAL OBJECT once, size4, at least alignment4. time_sharing initial bytes 01000000; other two zero-fill. Prior three list/lock owners retain sizes/alignments/initial bytes. Unchanged 39 readonly records and 46 verbose object records remain C-owned."
+    },
+    {
+      "name": "Genuine C/Rust int ABI and read/write behavior",
+      "sources": [
+        "fixture/control-flags-abi.c",
+        "fixture/control-flags-abi.rs.fragment"
+      ],
+      "oracle": "One fresh host fixture process proves defaults0/0/1 before writes, pointer identity/alignment, C-to-Rust and Rust-to-C signed extrema and ordinary values, then restores defaults. Single-threaded functional ABI only; no concurrency proof. Genuine process.h and existing owned Rust CInt required."
+    },
+    {
+      "name": "Off-profile fallback",
+      "requirement": "Separately qualify selected and fallback C preprocessing under original genuine include/config profile.",
+      "oracle": "With GLOBAL_STORAGE selector OFF, original C definitions0/0/1 remain; Rust process_global_storage_candidate OFF emits no replacements. With selector ON/HELPERS OFF original #error still rejects. Never enable only one producer side."
+    },
+    {
+      "name": "Production/default/native follow-up",
+      "requirement": "Root owns full coherent build/link and functional native boot-option/scheduler/oversubscribe consumers.",
+      "oracle": "Exactly one final owner per flag, original defaults and enabled option semantics remain. Existing read/write operations and synchronization unchanged. No native/default/whole-file acceptance from source or HOST fixture."
+    }
+  ],
+  "shared_files_changed": false,
+  "compiler_commands_executed": 0
+}

@@ -1,0 +1,132 @@
+{
+  "CPU_reservation": null,
+  "C_recipe": {
+    "bytes": 55840,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/passed48-and167-production-preparation-1/EXACT-COMPLETE-GCC9-PASSED48-167-CONSUMER.NOT-EXECUTED.json",
+    "sha256": "0be87d4db563627ddd427690af269d75ccd4506293e8b8d7cee959fed2dfb25b"
+  },
+  "Rust_recipe": {
+    "bytes": 76929,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/passed48-and167-production-preparation-1/EXACT-CURRENT78-PASSED48-167-RUST-RECIPE.NOT-EXECUTED.json",
+    "sha256": "e9a09493cb84f2b09d893624812de97308c251f85cd597f541914a318070d934"
+  },
+  "actual": null,
+  "canonical_mem_helpers_preimage": {
+    "path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+    "sha256": "6a527f7a55930d72d6d72c775ee0261c3550e2bd0094fe01031f3aa3238aefd6"
+  },
+  "canonical_mem_preimage": {
+    "path": "/home/holden/mckernel/kernel/mem.c",
+    "sha256": "9d53106e7228b5a7654f4250bab58e20e7bc47a28f8ad9675b1c9ac92599b976"
+  },
+  "canonical_page_preimage": {
+    "path": "/home/holden/mckernel/kernel/rust/page_helpers.rs",
+    "sha256": "cfc64f72bf9b94c65417bc8f4e29d65b81f98239fe52ab2a7dd0352ebdfc3f70"
+  },
+  "default_image_native": null,
+  "engineering_percentage": null,
+  "execution_grant": null,
+  "expected_symbols": {
+    "bytes": 122675,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/passed48-and167-production-preparation-1/EXPECTED-SYMBOLS.FROM-ACTUAL-VM-PLUS-PASSED-SOURCES.json",
+    "sha256": "f4e76615486289343ac3abf98094b2d3340eed8691a10ec7336a40ca962542d0"
+  },
+  "failure_history": [
+    "48originalpassedb6fb,no replay",
+    "167firstCextraction98319a61preserved; unchangedRust5131reused; bounded6commands actualPASS retained",
+    "Earlierproviderpin/de3d9 andmissingc_void/59d29,VMuint64stub,all13GOT64observerFAILandcorrection retained"
+  ],
+  "full_selected_consumer_commands": 10,
+  "immutable_retained_syscall_object": {
+    "ctime_ns": 1792802299167074968,
+    "device": 66306,
+    "gid": 1000,
+    "inode": 56125006,
+    "mode": "0o600",
+    "mtime_ns": 1792802299167074968,
+    "nlink": 1,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/fixture/selected-syscall.o",
+    "sha256": "8a0180c810c25bfd63eca925b9537bb95f796c14971ab79f3ca465c348ffa6e5",
+    "size": 827584,
+    "uid": 1000
+  },
+  "next_original_Rust_argv": [
+    "/usr/bin/cmake",
+    "-E",
+    "env",
+    "MAKEFLAGS=",
+    "MCKERNEL_RUST_VERSION=1.8.0",
+    "MCKERNEL_RUST_BUILDID=3114d9e",
+    "/home/holden/mckernel-work/scratch/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+    "--crate-name",
+    "mckernel_rust",
+    "--crate-type",
+    "lib",
+    "--edition=2021",
+    "-C",
+    "panic=abort",
+    "-C",
+    "opt-level=2",
+    "-C",
+    "debuginfo=2",
+    "-C",
+    "code-model=large",
+    "-C",
+    "relocation-model=static",
+    "-C",
+    "no-redzone=yes",
+    "-C",
+    "force-frame-pointers=yes",
+    "-C",
+    "overflow-checks=off",
+    "-C",
+    "force-unwind-tables=no",
+    "-C",
+    "no-vectorize-loops",
+    "-C",
+    "no-vectorize-slp",
+    "-C",
+    "target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma",
+    "--cfg",
+    "native_linux_irq_work_v6_12",
+    "--cfg",
+    "enable_profile",
+    "--cfg",
+    "enable_perf",
+    "--cfg",
+    "enable_rusage",
+    "-C",
+    "codegen-units=1",
+    "--emit=obj=/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/passed48-and167-production-preparation-1/output-1/mckernel_rust.o",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/passed48-and167-production-preparation-1/source/kernel/rust/lib.rs"
+  ],
+  "other76_canonical_match_checked": true,
+  "overrides": [
+    {
+      "bytes": 213805,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/pagehash-alloc-init-count-batch-preparation-1/candidate/kernel/rust/mem_helpers.rs",
+      "sha256": "5a2c5ef403514f84e6bd1f50cad36b976e12cc139ef1b04b5001133a56245ad7"
+    },
+    {
+      "bytes": 17782,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/pagehash-alloc-init-count-batch-preparation-1/candidate/kernel/rust/page_helpers.rs",
+      "sha256": "0d31598c6253ac662c5bb16c3c0b5e346e098dbefc8f56eb21c70c43c637e489"
+    }
+  ],
+  "profile": {
+    "AS": 2147483648,
+    "CPU": 6,
+    "CPU_seconds": 60,
+    "FSIZE": 33554432,
+    "NOFILE": 256,
+    "RUST_MIN_STACK": 2097152,
+    "core": 0,
+    "jobs": 1,
+    "retirement_seconds": 6,
+    "wall_seconds": 90
+  },
+  "qualification": "Rootunion2 not yet assumed/currentbaseline explicit. Every input recheckedbeforefuturechild; unexpectednewcanonicalrequiresadditivecoherentrefresh, neverblindmerge. Onlypassed48+167 included; nextphys_to_page554bUNTESTEDexcluded. Productiondriver/allocatedmetadataobserver adaptation remainsbeforejobgrant, nosecondfixturecohort.",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Exact current78 VM source preparation only.",
+  "source_count": 78,
+  "status": "COHERENT78_TWO_OVERRIDES_AND_COMPLETE_GCC9_RECIPE_SOURCE_READY_NOT_EXECUTED"
+}

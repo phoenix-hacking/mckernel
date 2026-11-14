@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "record_kind": "pending_free_batch_source_checkpoint",
+  "task_id": "M03-A/M03-B-candidate-14-source",
+  "attempt": 14,
+  "status": "PASS_SOURCE",
+  "recorded_utc": "2026-09-15T07:45:00Z",
+  "base_commit": "b7168981951f1b1de2789e5d9457f4354298f39b",
+  "source_sha256": {
+    "production_mem_helpers": "3bdb98c725f56795d8aa05273db9bd68a15aae3efb5b205836c6c995f73b02ca",
+    "rust_fixture": "fcff515ffa3e15e07fdd4a725a751c9a80488a7f8cc7b642b3b5a04f89098fe4",
+    "c_oracle": "23b847fc11e75d153716e13fc442cb7da0c923c70f93158d1d99f80405ba6441",
+    "harness": "b962606a862739a3a3ec0b8ff5231a1bc3c439c1af2c1c26c1f19f83b52ea45a"
+  },
+  "archive": {
+    "path": "docs/verification/evidence/stability-pending-free-batch-source-checkpoint-20260915-14.tar.gz",
+    "sha256": "483787bbd2ec6b165a3b4f4a7d02fe647dc7c11679a0a1d794be030577c9909e",
+    "size": 9955,
+    "members": 8
+  },
+  "cheap_source_checks": {
+    "python_syntax": "PASS",
+    "source_generation": "PASS_CANDIDATE14_SOURCE_GENERATION bindings=20 bytes=10117 rows=37",
+    "source_generation_stdout_sha256": "a330964238386b46e8d5a0298648e7b780444bef7e8a1b5f03b21c0f935fcfc9",
+    "diff_check": "PASS"
+  },
+  "independent_reviews": ["PASS_SOURCE", "PASS_SOURCE_EVIDENCE"],
+  "accepted_scope": [
+    "production begin helper conflict and nested-begin rows",
+    "production body helper callback-selection row with a returning recording callback",
+    "malformed active-empty and valid-ring first.prev and last.next rejection inputs",
+    "37-row Rust/C computed contract prepared for compilation"
+  ],
+  "limitations": [
+    "real fatal panic bridge and public entrypoint are outside scope",
+    "candidate14 bytes have not been compiled or executed",
+    "build-owner pins and stream/result contract require a separately reviewed packet",
+    "bounded incomplete-inventory behavior remains absent"
+  ],
+  "container_execution": false,
+  "runtime_acceptance": false,
+  "production_gate_credit": false
+}

@@ -1,0 +1,5 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+No new implementation body was fabricated. Canonical sources already include all three requested packet slices and VM effect callbacks. SOURCE-SELECTION.json projects both RB-tree choices from the M14 worklist macros without expanding headers. With RB-tree selected it finds only the unused static CPU-local getter at kernel/mem.c:7321; its sole reference is in an unreachable nested fallback. This is source evidence, not compiler or final-image closure.
+
+NEXT-DEFAULT-TU-CLOSURE.NOT-EXECUTED.json binds current mem/Rust sources and the existing compiler/config inputs, preserves the compiler options and prepares four exact in-container commands for preprocessing, whole-TU compile/tree output, symbol enumeration and relocation enumeration in a fresh output root. No build, test, Docker, root or guest ran. The concrete dependency is COPY7 physical clearance plus an ordinary compiler grant and current transitive-header binding. Whole-file/native retirement remains open.

@@ -1,0 +1,59 @@
+{
+  "F05nonce31770_not_consumed": true,
+  "Root_actual_source_adoption": {
+    "bytes": 6093,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-startup-native-entry-source-1/root-adopted-entry-1/ROOT-ACTUAL-SOURCE-ADOPTION.json",
+    "sha256": "b8100af249c30b7130fc6178130f3005361967b5007f3ae12327983cfbbc2e8f"
+  },
+  "Root_conditional_authorized_at": null,
+  "Root_conditionally_authorized_at": "2026-10-27T22:22:33.846273+00:00",
+  "authorized": true,
+  "authorized_by": "/root",
+  "bridge_sha256": "35f93c83416f240acda1e8457219937b448679088179bb5b7704df9e93d833b8",
+  "case": "startup.argv-empty",
+  "decision": "CONDITIONALLY_AUTHORIZE_ONE_EXACT_ORIGINAL_STARTUP_ENTRY_AFTER_PASS",
+  "exact_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--fsize=33554432",
+    "--as=2147483648:2147483648",
+    "--core=0:0",
+    "--",
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/bound-native-runtime-1/native_diagnostic_container_owner.py",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/m15st1",
+    "--nonce",
+    "be6ef5d386ef68c2562799dd22cdcc86",
+    "--owner-sha256",
+    "af2b1f57a19949e9867de2496b16063859c47298e9cf03b401e95de5bded5a10",
+    "--manifest",
+    "/home/holden/mckernel-work/scratch/m15st1-inputs/manifest.json",
+    "--manifest-sha256",
+    "fe20c08172be4cf36f4d62d22bb61525a9edfce018ab28411680b66a205b9f53"
+  ],
+  "independent_bridge_source_review": {
+    "bytes": 25783,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-startup-native-entry-source-1/independent-source-review-1/INDEPENDENT-SOURCE-ACTUAL-MAP-CASE-REVIEW.json",
+    "sha256": "1019a27f32856b10fa09371b3f5d14ab5be786de07417bb6f91bdec953db047f"
+  },
+  "independent_source_review": null,
+  "maximum_invocations": 1,
+  "nonce": "be6ef5d386ef68c2562799dd22cdcc86",
+  "original_C_startup_baseline_and_unknownrows_untouched": true,
+  "profile_sha256": "e5584b2c6fecbec0660dfeda3193468cf78af6a9dee0f4cc849e64abbdca1081",
+  "reviewer": "/root/daemon_execution_review",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "static_bindings": {
+    "bytes": 12705,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-startup-native-entry-source-1/root-adopted-entry-1/STATIC-NATIVE-BINDINGS.NOT-RELEASED.json",
+    "sha256": "21a54c6af7dc67cce6e1a8cb8fbc7f1f076ca488e09cebf2dbe9b959f896a4a5"
+  },
+  "waiting_semantics": "Source/auth/static/pub beforecapture; invoke onlyPOST-BINDER actualresource+pending exist, waitexactindependentPASS, no Ready-gate. Normal startup helper/Rootone-shot O_EXCLalgorithm unchanged."
+}

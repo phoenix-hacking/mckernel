@@ -1,0 +1,180 @@
+{
+  "Kbuild": {
+    "bytes": 1043,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-host-fork-adoption-opt-in-20261020-1/check-cfg-module-correction-1/source/host-kernel/kbuild/Kbuild.in",
+    "sha256": "02cd61f90aaa6125b31bbcb3aa147d7813b14f0cee63ff5b5317ee358b850d82"
+  },
+  "capture": {
+    "bytes": 8370,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-host-fork-adoption-opt-in-20261020-1/owned_capture_helpers.py",
+    "sha256": "789ece578303153fe08b378b437638dc2a393793e8bebb225e31cdf2e97c9175"
+  },
+  "census": {
+    "bytes": 51420,
+    "path": "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-preparation-20261020-1/capsule/scripts/native_rust_exact_build_container_owner.py",
+    "sha256": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1"
+  },
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--core=0",
+        "--",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/phase5-host-fork-adoption-opt-in-20261020-1/check-cfg-module-correction-1/check_module_cfg_v2.py"
+      ],
+      "label": "affected-guard"
+    },
+    {
+      "argv": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--core=0",
+        "--",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/phase5-host-fork-adoption-opt-in-20261020-1/check-cfg-module-correction-1/prepare_fullmodule_inputs.py"
+      ],
+      "label": "generate"
+    },
+    {
+      "argv": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--core=0",
+        "--",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/phase5-host-fork-adoption-opt-in-20261020-1/check-cfg-module-correction-1/materialize_request.py",
+        "--materialize"
+      ],
+      "label": "materialize"
+    }
+  ],
+  "driver": {
+    "bytes": 27203,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-host-fork-adoption-opt-in-20261020-1/check-cfg-module-correction-1/native_running_external_modules_offline.opt-in.template.py",
+    "sha256": "10892e71a3533f54994b7a225ba445640df5a03810e1547ca3c70ee0dfb18f7c"
+  },
+  "estimated_write_upper_bound_bytes": 8388608,
+  "gate_source": {
+    "bytes": 48100,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-host-fork-adoption-opt-in-20261020-1/source/host-kernel/native-rust/mcctrl_process.rs",
+    "sha256": "b1b3a7f5fe0e70ff614edc51e5aa22559c0efd827aa5353a7da3c00d0a3c53a5"
+  },
+  "growth_reserved_bytes": 134217728,
+  "harness_only_correction": "Exact Makefile string escaping correction; failedsyntaxharness/proposal/captures retained. Python AST parse passed, no job or backend/compiler claim.",
+  "inputs": [
+    {
+      "bytes": 4524,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-host-fork-adoption-opt-in-20261020-1/check-cfg-module-correction-1/check_module_cfg_v2.py",
+      "sha256": "224c980423725e4e03873fac22365f4be006cb1513ab0aefac8e0ebd76175e51"
+    },
+    {
+      "bytes": 28999,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-host-fork-adoption-opt-in-20261020-1/check-cfg-module-correction-1/SOURCE-PLAN.json",
+      "sha256": "6012409d676a0c254fc758e5c2e0e1521a2517179e5f355c5e37c3a38cf6c793"
+    },
+    {
+      "bytes": 7250,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-host-fork-adoption-opt-in-20261020-1/check-cfg-module-correction-1/prepare_fullmodule_inputs.py",
+      "sha256": "ec9f0b83f99727cc2efbbd060d0db430e1ec18ffffe57fb0087fd9d16dad8e39"
+    },
+    {
+      "bytes": 3120,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-host-fork-adoption-opt-in-20261020-1/check-cfg-module-correction-1/materialize_request.py",
+      "sha256": "a52253c2e1f3546fa9e52055ee4459b66ad3f82f06c041c04cb2563fddc004c6"
+    },
+    {
+      "bytes": 27203,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-host-fork-adoption-opt-in-20261020-1/check-cfg-module-correction-1/native_running_external_modules_offline.opt-in.template.py",
+      "sha256": "10892e71a3533f54994b7a225ba445640df5a03810e1547ca3c70ee0dfb18f7c"
+    },
+    {
+      "bytes": 8370,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-host-fork-adoption-opt-in-20261020-1/owned_capture_helpers.py",
+      "sha256": "789ece578303153fe08b378b437638dc2a393793e8bebb225e31cdf2e97c9175"
+    },
+    {
+      "bytes": 51420,
+      "path": "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-preparation-20261020-1/capsule/scripts/native_rust_exact_build_container_owner.py",
+      "sha256": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1"
+    },
+    {
+      "bytes": 48100,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-host-fork-adoption-opt-in-20261020-1/source/host-kernel/native-rust/mcctrl_process.rs",
+      "sha256": "b1b3a7f5fe0e70ff614edc51e5aa22559c0efd827aa5353a7da3c00d0a3c53a5"
+    },
+    {
+      "bytes": 8992,
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-3e1cf8539a774a9389e19f471828676b/modules/mcctrl_rust.rs",
+      "sha256": "b3898d1a4d08ba5512ee9b12e66224409f6aed4db3adc293b47631aa16fa8030"
+    },
+    {
+      "bytes": 1043,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-host-fork-adoption-opt-in-20261020-1/check-cfg-module-correction-1/source/host-kernel/kbuild/Kbuild.in",
+      "sha256": "02cd61f90aaa6125b31bbcb3aa147d7813b14f0cee63ff5b5317ee358b850d82"
+    }
+  ],
+  "module_source": {
+    "bytes": 8992,
+    "path": "/home/holden/mckernel-work/scratch/nsd-c-3e1cf8539a774a9389e19f471828676b/modules/mcctrl_rust.rs",
+    "sha256": "b3898d1a4d08ba5512ee9b12e66224409f6aed4db3adc293b47631aa16fa8030"
+  },
+  "profile": {
+    "address_space_bytes": 1073741824,
+    "core_bytes": 0,
+    "cpu": 6,
+    "cpu_seconds": 30,
+    "grace_seconds": 2,
+    "jobs": 1,
+    "stream_bytes": 33554432,
+    "wall_seconds": 35
+  },
+  "schema": "mckernel.one-module-checkcfg-affected-ordinary-chain.v1",
+  "scope": "FunctionalOS/apps+Rustcutover; one cfg(MODULE) correction family, no old10/22 replay",
+  "tools": {
+    "make": {
+      "bytes": 230968,
+      "path": "/usr/bin/make",
+      "sha256": "0d4e89c3b814ce99c4900b2a4c758ab780303ae98dddd71ab0dd82ec0ca07fa6"
+    },
+    "rustc": {
+      "bytes": 645792,
+      "path": "/home/holden/mckernel-work/scratch/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+      "sha256": "70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09"
+    }
+  }
+}

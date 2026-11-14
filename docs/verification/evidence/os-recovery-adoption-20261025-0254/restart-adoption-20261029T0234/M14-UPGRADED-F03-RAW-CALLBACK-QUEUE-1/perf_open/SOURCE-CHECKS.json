@@ -1,0 +1,67 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_SOURCE_ONLY",
+  "symbol": "perf_event_open_do_syscall_bridge",
+  "checks": [
+    "byte-identical C prefix/suffix and OFF fallback",
+    "both dispatch variants modeled, including original and following logical lines",
+    "Rust/C selector pairing and original callback users",
+    "matching raw C/Rust pointer/integer/return signature",
+    "one original provider call, argument order, no guard",
+    "no target C debug/metadata producer",
+    "ENABLE_PERF enclosing C boundary preserved and matching Rust cfg"
+  ],
+  "line_model": {
+    "dispatch=False,selected=False": {
+      "fallback_start": 21115,
+      "fallback_call": 21118,
+      "next_line": 21120
+    },
+    "dispatch=False,selected=True": {
+      "selected_decl": 21116,
+      "next_line": 21120
+    },
+    "dispatch=True,selected=False": {
+      "fallback_start": 21115,
+      "fallback_call": 21118,
+      "next_line": 21120
+    },
+    "dispatch=True,selected=True": {
+      "selected_decl": 21116,
+      "next_line": 21120
+    }
+  },
+  "preimage": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-NINE-LEAF-BATCH-1/postimage/kernel/syscall.c",
+    "bytes": 928942,
+    "sha256": "dd34b8057a9ed19d3b86e204013747da40da86fd12a46bce98f53e15e596d048"
+  },
+  "patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-RAW-CALLBACK-QUEUE-1/perf_open/PRIVATE-NOT-APPLIED.patch",
+    "bytes": 2291,
+    "sha256": "1b737bdcf1bf9e643dc161e707550607679c0c16cf40e92750bd84f2161373aa"
+  },
+  "postimage": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-RAW-CALLBACK-QUEUE-1/perf_open/postimage/kernel/syscall.c",
+      "bytes": 929137,
+      "sha256": "28e73c72df084d776c72c94f41bf798099942949ed57b535a8cfa7aca3336f58"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-RAW-CALLBACK-QUEUE-1/perf_open/postimage/kernel/rust/syscall_perf_open_forward.rs",
+      "bytes": 705,
+      "sha256": "173f53168ce6e746b7251499ee99177852908b2a4f58edc226d51b332d0c7606"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-RAW-CALLBACK-QUEUE-1/perf_open/postimage/kernel/rust/syscall_policy.rs",
+      "bytes": 1303597,
+      "sha256": "17a5638244743d681054f2a7094b57cf32e3656acadf3c6802995890632e0c58"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-RAW-CALLBACK-QUEUE-1/perf_open/postimage/kernel/CMakeLists.txt",
+      "bytes": 44254,
+      "sha256": "f7aa21fe106d36f852583d5f22e991cba24cefd123f0ba9c18622e38bdaec2ad"
+    }
+  ],
+  "limitations": "Source/model only; no real preprocessor, compiler, link, native, metadata readback, or retirement acceptance. Existing callee and all its behavior remain open."
+}

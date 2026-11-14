@@ -1,0 +1,274 @@
+{
+  "application_acceptance": false,
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-B",
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/ndcth-1",
+    "--nonce",
+    "70f0757dac5d474c8bb6f6a495c6e5a4",
+    "--owner-sha256",
+    "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+    "--manifest",
+    "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/manifest.json",
+    "--manifest-sha256",
+    "923664a0ae87c477d028ad7be5ea8c01a65964846e0010bbd03123f034262951"
+  ],
+  "assembly": {
+    "address_space_limit_bytes": 1073741824,
+    "command_capture": "/home/holden/mckernel-work/scratch/native-core-threads-current942-proposal-assembly-20261017-1/command.json",
+    "cpu_affinity": [
+      7
+    ],
+    "execution_approved": false,
+    "fresh_parent_bound": true,
+    "parent_created": false,
+    "pattern": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-core-memory-current942-execution-proposal-20261017-1.json",
+      "sha256": "8ea0a473e0fa9f71237c1a09fa3a72f7af1de2295c033c4257bc247d03043c2f",
+      "size": 9202
+    },
+    "runtime_called": false,
+    "scope": "Selected small preparation/manifest/currentowner records only; no preparation/protocol replay, compile, artifact corpus rehash, root/Docker/guest/Git or live preflight.",
+    "tests_run": false
+  },
+  "author": "/root/native_running_publication",
+  "boot_profile": {
+    "actual_compiled_array": {
+      "argv": [
+        "/bin/native-boot",
+        "hidos",
+        "allow_oversubscribe"
+      ],
+      "preprocessed_main_uses_same_actual_array": true
+    },
+    "interpretation": "Compiled harmless wrapper reads actual futex_boot_argv array. Preprocessed actual PID1 main uses that same array in boot helper. No boot/helper/PID1 function executed.",
+    "proof": {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/boot-profile-proof.json",
+      "sha256": "26b5733d3496cfbd35313a9ad6f53d06bc32be4755e28ad89c954f64d778fe1a",
+      "size": 4956
+    }
+  },
+  "candidate_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+  "collector": {
+    "mode": 33216,
+    "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/init",
+    "sha256": "268b967064e44a61340e43a23940ef2bba16ad22e3615a6f5d0e7108428890b6",
+    "size": 1021992
+  },
+  "collector_variant": {
+    "actual_change": "Only ND_FUTEX guards at boot argv definition and boot helper call extend to ND_FUTEX||ND_CORE_THREADS. All existing supervisor/serializer/helper/default behavior bodies byte-identical; ND_CORE_THREADS only, no ND_FUTEX flag, so1024-byte streams unchanged.",
+    "compile_macro": "ND_CORE_THREADS",
+    "contract": {
+      "changed_guards": [
+        "#if defined(ND_FUTEX)\nstatic char *const futex_boot_argv[] = {",
+        "#if defined(ND_FUTEX)\n    if (helper(\"boot\", \"/bin/native-boot\", futex_boot_argv, &safe))"
+      ],
+      "expected_boot_argv": [
+        "/bin/native-boot",
+        "hidos",
+        "allow_oversubscribe"
+      ],
+      "original_path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_guest_collector.c",
+      "original_sha256": "82825cf128689ba8f8a74d9528c1acffb724a9356a2c6192c67c8abe4a74965e",
+      "retained_macro": "ND_CORE_THREADS",
+      "stream_limit": 1024,
+      "supervisor_serializer_helper_bodies": "unchanged",
+      "variant_path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/collector-threads.c",
+      "variant_sha256": "60921bc30463be3fa7bbf49e7589cb23ba31cff0fb56c767075a06927e7d4b70"
+    },
+    "exact_diff": {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/collector-two-guard.diff",
+      "sha256": "70cfe7bfecb64b410b33c3470c8b9f9289fb364283647a6bbd324d592a8d83e4",
+      "size": 922
+    },
+    "independent_review_required": true,
+    "original_snapshot": {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/collector-original.c",
+      "sha256": "82825cf128689ba8f8a74d9528c1acffb724a9356a2c6192c67c8abe4a74965e",
+      "size": 22952
+    },
+    "source": {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/collector-threads.c",
+      "sha256": "60921bc30463be3fa7bbf49e7589cb23ba31cff0fb56c767075a06927e7d4b70",
+      "size": 23008
+    }
+  },
+  "execution_count": 1,
+  "formal_case_credit": false,
+  "interpreter_binding": {
+    "path": "/home/holden/anaconda3/bin/python3",
+    "resolved_path": "/home/holden/anaconda3/bin/python3.9",
+    "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb",
+    "version": "3.9.12 (main, Apr  5 2022, 06:56:58) \n[GCC 7.5.0]"
+  },
+  "manifest": {
+    "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/manifest.json",
+    "sha256": "923664a0ae87c477d028ad7be5ea8c01a65964846e0010bbd03123f034262951",
+    "size": 5467
+  },
+  "nonce": "70f0757dac5d474c8bb6f6a495c6e5a4",
+  "oracle": {
+    "exit_code": 37,
+    "stderr_hex": "",
+    "stdout_hex": "4e41544956455f434f5245205041535320746872656164730a"
+  },
+  "original_threads_assertions": "Two pthread workers use barrier3 with main, each checks initially-zero TLS, unique TLS value,1000 mutex-protected increments, unchanged TLS and returned thread value; main joins both, requires counter2000 and its own TLS0, destroys barrier/mutex. Original default pthread stack behavior and all CHECKs unchanged.",
+  "other_monitor_endpoints": [],
+  "owner": {
+    "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+    "sha256": "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+    "size": 58828
+  },
+  "parent": {
+    "device": 1828,
+    "gid": 1000,
+    "inode": 109549,
+    "mode": "0o700",
+    "path": "/home/holden/mckernel-work/scratch/ndcth-1",
+    "uid": 1000
+  },
+  "payload": {
+    "mode": 33261,
+    "path": "/home/holden/mckernel-work/scratch/native-application-core-build-20260908-1/native-application-core",
+    "sha256": "558d1607e4648321c9537215084e759496937d9591c319a21443f443193fda9a",
+    "size": 39488
+  },
+  "payload_contract": {
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "app",
+      "threads"
+    ],
+    "cwd": "/case/work",
+    "env": {
+      "COKERNEL_PATH": "/apps",
+      "PATH": "/usr/bin:/bin"
+    },
+    "oracle": {
+      "exit_code": 37,
+      "stderr_hex": "",
+      "stdout_hex": "4e41544956455f434f5245205041535320746872656164730a"
+    },
+    "stderr_limit_bytes": 1024,
+    "stdout_limit_bytes": 1024
+  },
+  "postjoin_readback": {
+    "argv": [
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/ndcth-1.owner-70f0757dac5d474c8bb6f6a495c6e5a4",
+        "."
+      ],
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/cat",
+        "/home/holden/mckernel-work/scratch/ndcth-1/attempt-70f0757dac5d474c8bb6f6a495c6e5a4/result.json"
+      ],
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/ndcth-1/attempt-70f0757dac5d474c8bb6f6a495c6e5a4",
+        "."
+      ]
+    ],
+    "capture_limit_bytes_per_command": 33554432,
+    "conditions": "Only after joined positive owner/client retirement; verify unchanged canonical exact nonce-bound directories and regular result. Fresh ordinary-UID captures; default tar without dereference.",
+    "requested": true,
+    "timeout_seconds_per_command": 30
+  },
+  "prerequisites": {
+    "image_archival_cleanup": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/scratch22-authority3-image-cleanup-result-review-20261017-1.json",
+      "sha256": "47cc7673788cb9b8c15443eec7f24c07d749b1bfe05875673d2c2b9af72bc15d",
+      "size": 1892
+    },
+    "image_retirement_proof": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/scratch22-image-fresh-retirement-observation-20261017-1.json",
+      "sha256": "1cdf3af9fa657d160a801bf909f9e5c0e77dd132d3c38b3f1a38482bd1691da8",
+      "size": 1439
+    },
+    "independent_two_guard_variant_preparation_review": {
+      "reviewer": "/root/lifecycle_collector_review",
+      "scope": "Exact60921 variant against unchanged82825 original: only two boot-array/helper guards add ND_CORE_THREADS, retain1024 limits and all supervisor/serializer/helper bodies.",
+      "status": "PENDING"
+    },
+    "live_preflight": {
+      "scope": "Bind separate fresh prelaunch record before release without changing argv/runtime bindings; no preflight executed in assembly.",
+      "status": "PENDING_DISPATCHER_LIVE_PREFLIGHT"
+    },
+    "preceding_memory_and_build_retirement": {
+      "scope": "Memory is prepared/approved but not observed by this assembly. Module build is prioritized separately; dispatcher may join the exact accepted preceding operation reference later without changing runtime bindings. No predecessor pass inferred.",
+      "status": "PENDING_DISPATCHER_JOIN_OF_EXACT_INDEPENDENT_RETIREMENT_AND_PRESERVATION"
+    }
+  },
+  "production_acceptance": false,
+  "profile": {
+    "cleanup_timeout_seconds": 15,
+    "cpus": 4,
+    "cpuset": "2-5",
+    "guest_memory_mib": 8192,
+    "guest_numa_nodes": 2,
+    "guest_timeout_seconds": 300,
+    "guest_vcpus": 4,
+    "heavy_operations": 1,
+    "mckernel_cpus": 1,
+    "mckernel_memory_mib": 128,
+    "memory": 12884901888,
+    "memory_swap": 12884901888,
+    "network": "none",
+    "payload_timeout_seconds": 10,
+    "pids": 512
+  },
+  "retained_reference": {
+    "build_record_sha256": "fdad31da77cdea1115a2db6d486d55cca650dcf4b899e36089bd59f12ca2e765",
+    "not_rerun": true,
+    "result": {
+      "case": "threads",
+      "exit_code": 37,
+      "mckernel": false,
+      "stdout": "NATIVE_CORE PASS threads\n"
+    },
+    "same_binary_sha256": "558d1607e4648321c9537215084e759496937d9591c319a21443f443193fda9a",
+    "same_source_sha256": "525bb7416c579da09c5f780b3ff6962287f07143488b6669bbee5ae744412743",
+    "stdout": {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/scratch/native-application-core-build-20260908-1/linux-reference-threads.log",
+      "sha256": "cfe15383daf9fc40bcdaf5433bf9bc9b8f3f7001f84ada6131306eb07bcff700",
+      "size": 25
+    }
+  },
+  "runtime_release": false,
+  "scheduling": "Preparation ahead only. Dispatcher prioritizes the genuinely admitted external-module packet before this queued threads diagnostic; no runtime reservation or automatic launch.",
+  "schema": "mckernel.native-core-threads-execution-proposal.v1",
+  "scope": "Exactly one original ordinary dynamic-libc native core threads-mode diagnostic on immutable942 kernel/image/matched modules: two real workers, barrier3, independent TLS,1000 mutex increments each and exactcounter2000, original joins/return values and main TLS0 checks unchanged. Only new scratch collector two-guard ND_CORE_THREADS oversubscribe boot-array variant; default source unchanged. Strict25-byte stdout/exit37/empty stderr and both1024 stream limits. Existing 10s diagnostic payload timeout remains stricter than broader stress goals. Exact native_diagnostic.evaluate/fullerror scan and independent positive retirement required. No formal case/wholeOS credit; new176 module candidate excluded.",
+  "staging_evidence": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-core-threads-current942-preparation-20261017-1.json",
+    "sha256": "a2b2bf97e65b5e687cfb99532d7e857f3b1f919ad5399937b059f9a33a15189f",
+    "size": 35946
+  },
+  "status": "PENDING_INDEPENDENT_VARIANT_PREPARATION_EXECUTION_REVIEW_AND_PRECEDING_RETIREMENT",
+  "stdout_bytes": 25,
+  "task_id": "native-core-threads-current942-execution-proposal-20261017-1",
+  "unix_monitor_endpoints": [
+    {
+      "encoded_bytes": 92,
+      "max_bytes": 107,
+      "path": "/home/holden/mckernel-work/scratch/ndcth-1/attempt-70f0757dac5d474c8bb6f6a495c6e5a4/qmp.sock"
+    }
+  ]
+}

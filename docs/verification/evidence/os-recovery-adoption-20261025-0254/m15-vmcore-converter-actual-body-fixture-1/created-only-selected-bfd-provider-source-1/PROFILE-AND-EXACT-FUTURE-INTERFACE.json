@@ -1,0 +1,134 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "entrypoint": "execute_created_only(q, commands=exact_reviewed_portable_wait4_Commands, admit=actual_existing_Root_owner_admission, publish=existing_durable_exclusive_writer, retain_uncertainty=actual_owner_keep_custody)",
+  "adapter": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/created-only-selected-bfd-provider-source-1/created_only_selected_bfd_adapter.py",
+    "bytes": 9886,
+    "sha256": "f112746727c20c8e6df23e569af08bcd95f32845cc232089443eaa7bf5da904f"
+  },
+  "bindings": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/created-only-selected-bfd-provider-source-1/BINDINGS.json",
+    "bytes": 4984,
+    "sha256": "3d7e1fcfcd9e3705ade0ffd9bf80e0a995713438dbdbbfe1b0cf765a78aae834"
+  },
+  "providers": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/created-only-selected-bfd-provider-source-1/PROVIDERS.json",
+    "bytes": 2480,
+    "sha256": "67acb52d47b8bae32d28625e4543a047b58f1e57cf464ece46ccb22679dc646a"
+  },
+  "exact_prefix": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/docker",
+    "--host=unix:///var/run/docker.sock"
+  ],
+  "ordered_future_argv_suffixes": [
+    [
+      "image",
+      "inspect",
+      "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5"
+    ],
+    [
+      "create",
+      "EXACT_UNCHANGED_REVIEWED_CREATE_ARGS_WITH_FRESH_NAME_AND_NONCE"
+    ],
+    [
+      "inspect",
+      "--type",
+      "container",
+      "ACTUAL_FRESH_CREATED_CID"
+    ],
+    [
+      "cp",
+      "-L",
+      "ACTUAL_FRESH_CREATED_CID:/usr/lib64/libbfd.a",
+      "ACTUAL_FRESH_OUTPUT/libbfd.a"
+    ],
+    [
+      "cp",
+      "-L",
+      "ACTUAL_FRESH_CREATED_CID:/usr/lib64/libbfd.so",
+      "ACTUAL_FRESH_OUTPUT/libbfd.so"
+    ],
+    [
+      "cp",
+      "-L",
+      "ACTUAL_FRESH_CREATED_CID:/usr/include/bfd.h",
+      "ACTUAL_FRESH_OUTPUT/bfd.h"
+    ],
+    [
+      "inspect",
+      "--type",
+      "container",
+      "ACTUAL_FRESH_CREATED_CID"
+    ],
+    [
+      "rm",
+      "--",
+      "ACTUAL_FRESH_CREATED_CID"
+    ],
+    [
+      "ps",
+      "--all",
+      "--quiet",
+      "--no-trunc",
+      "--filter",
+      "id=ACTUAL_FRESH_CREATED_CID"
+    ],
+    [
+      "ps",
+      "--all",
+      "--quiet",
+      "--no-trunc",
+      "--filter",
+      "name=^/ACTUAL_FRESH_NAME$"
+    ]
+  ],
+  "commands": 10,
+  "automatic_retries": 0,
+  "signals": 0,
+  "container_starts": 0,
+  "builds": 0,
+  "actual_container_calls": 0,
+  "profile_reuse": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-valid-matched-diagnostic-preparation-20261028-1/newlibelf-collector-root63-preparation-1/libelf-extraction-prep-1/PROFILE-REUSE-AND-DELTA.json",
+    "bytes": 2488,
+    "sha256": "42f97d3d79ec3b9f3bc39e5115a3ec3cb784032608d36359f0b84fd9c4f55cc3"
+  },
+  "original_pure8_tests_reused_provenance_not_rerun": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-valid-matched-diagnostic-preparation-20261028-1/newlibelf-collector-root63-preparation-1/libelf-extraction-prep-1/PURE-CHECK-RESULT.json",
+    "bytes": 1099,
+    "sha256": "68345ca2605756b61bbc9a46611a19ea92e9de5312fe2f443e0f0246d0b421be"
+  },
+  "original_source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-valid-matched-diagnostic-preparation-20261028-1/newlibelf-collector-root63-preparation-1/libelf-extraction-prep-1/SOURCE-READY.json",
+    "bytes": 8932,
+    "sha256": "ed980a278fa78e24c7fb1978ea282c0e97673fc6e08d1e0bdacfdbc6ca8dab7c"
+  },
+  "current_portable_compatibility": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-installed-consumer-restart-20261028-1/Root-adoption-command-prep-1/immediate-runtime-compatibility-1/EXACT-COMPATIBILITY-BINDING.json",
+    "bytes": 7231,
+    "sha256": "93c041bc7a41b9971664e0bc1ea1f2c4cfb2e663a1e20015ea330665dc8e2986"
+  },
+  "preserved_AST_profile_units": [
+    "create_args",
+    "validate_image_inspect",
+    "validate_container",
+    "ordinary_backend.check_profile",
+    "ordinary_backend.LIMITS",
+    "ordinary_backend.RESOURCE_ARGS"
+  ],
+  "preserved_parent_requirements": [
+    "New actual armed current controls and coherent operation/account/window/identity/admission; historical guardian4889 is lineage only",
+    "Actual CURRENT118 container cleanup, parent joins and independent fresh current-free before any entry",
+    "Existing sole ordinary owner resource reservation/exclusions/exclusive27:4; same4CPU2-5/12GiB/swap/pids512/noNet/noMounts/readonly created profile",
+    "Host/scratch16GiB/12GiB floors and measured greater needs before dispatch",
+    "Fresh nonce/name and confined output ancestry/inode/owner; all3destinations absent; no chown/permissions rewrite",
+    "New actual source/fetched/execution review; per-command admission plus final immediate-before-Popen hook",
+    "All10exact clients PID/birth/positivewait4/group/streams/clock/CPU/RSS/raw status receipts; c895 portable converter, no signal recovery",
+    "Uncertainty keeps all outputs/container/lease/global custody with no automatic removal/retry; no oldCID2460 command",
+    "After success parent positively joins owner then independent current-free before nextheavy/native; this source does not release custody"
+  ],
+  "priority": "Dependency-ready queued119 or installed-M15 firstheavy keeps priority. This extraction gets only its later actual Root operation and no second heavy slot.",
+  "runtime_authority": null
+}

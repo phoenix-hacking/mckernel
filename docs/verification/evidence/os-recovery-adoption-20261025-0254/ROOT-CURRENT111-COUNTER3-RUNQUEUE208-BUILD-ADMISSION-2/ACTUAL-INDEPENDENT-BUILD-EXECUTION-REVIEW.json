@@ -1,0 +1,95 @@
+{
+  "nonce": "799adcb935b7640bdc2389c91abc00dd",
+  "runner": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT111-COUNTER3-RUNQUEUE208-BUILD-ADMISSION-2/run_build_only.py",
+    "bytes": 23880,
+    "sha256": "c4e99b2c39978b0071e651dc448b6c9d7431175682342e043446ffc99f2168c7"
+  },
+  "profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT111-COUNTER3-RUNQUEUE208-BUILD-ADMISSION-2/PROFILE.SOURCE-ONLY.json",
+    "bytes": 93795,
+    "sha256": "82b1159fc5e39220a370f5024b9df4069d2f764748015f017203e824288313fa"
+  },
+  "worker": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT111-COUNTER3-RUNQUEUE208-BUILD-ADMISSION-2/build_only_worker.py",
+    "bytes": 4113,
+    "sha256": "0bdd40596f7d5a9fb056b9ff24c7033336af1305ce143391debd225a71d2b105"
+  },
+  "resource_authority": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT111-COUNTER3-RUNQUEUE208-BUILD-ADMISSION-2/ROOT-ACTUAL-BUILD-RESOURCE-AUTHORITY.json",
+    "bytes": 11519,
+    "sha256": "06c8bdc890ac70c2f9440e07e37dada3f63ffe9c8ba1909e835a390bc6a3aaa2"
+  },
+  "input_export_authority": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT111-COUNTER3-RUNQUEUE208-BUILD-ADMISSION-2/ROOT-ACTUAL-READONLY-INPUT-EXPORT-AUTHORITY.json",
+    "bytes": 58821,
+    "sha256": "bb797904f07f50ea2c6facceb6869a0cba89f1da77fa9ba35a5ded3048c9c965"
+  },
+  "fresh_output_root": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT111-COUNTER3-RUNQUEUE208-BUILD-ADMISSION-2/OUTPUT",
+  "native_custody_clearance": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/container-input-closure-expert-1/INDEPENDENT-SIX-PHASE-CURRENT-FREE.json",
+    "bytes": 9806,
+    "sha256": "29c02920da44bf659dafd84ea2045706eb462c0c993ad392701588139a2fd941"
+  },
+  "docker_client_prefix": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/docker",
+    "--host=unix:///var/run/docker.sock"
+  ],
+  "root_docker_client_only": true,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_EXACT_BUILD_ONLY_EXECUTION",
+  "independent": true,
+  "implementation_ownership": false,
+  "reviewer": "/root/guardian_execution_review",
+  "at": "2026-10-27T19:26:04.185050+00:00",
+  "coexistence_decision": "REVIEWED_POSTCLEANUP_ONE_HEAVY",
+  "actual_cohort": "CURRENT111_ONLY",
+  "reviewed_execution_input": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT111-COUNTER3-RUNQUEUE208-BUILD-ADMISSION-2/ROOT-EXECUTION-INPUT.GRANT-PENDING-REVIEW.json",
+    "bytes": 2468,
+    "sha256": "ee695b6a3b1ca1c6da7dfe2a68178e0df8a0b6cc76ac94dead92649d04c8b4f9"
+  },
+  "reviewed_execution_input_sha256": "ee695b6a3b1ca1c6da7dfe2a68178e0df8a0b6cc76ac94dead92649d04c8b4f9",
+  "source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current111-counter3-runqueue208-production-preparation-source-1/independent-source-review-1/REVIEW.json",
+    "bytes": 9117,
+    "sha256": "cdeebb42941bf2afdfd6d1ab5de621be21673363e9fd009ce077f67623c3f1b9"
+  },
+  "source_publication": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT111-COUNTER3-RUNQUEUE208-BUILD-ADMISSION-2/ROOT-ACTUAL-STATIC-SOURCE-PUBLICATION.json",
+    "bytes": 66526,
+    "sha256": "cb7dd1a35f61e5c1f48f8f63cbbde1e4c1e2a0620a12263fa6daa2f73569ef11"
+  },
+  "nonce_ledger": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER31.json",
+    "bytes": 3249,
+    "sha256": "0fbc20778062ddb603f904a17093837ec2d8f709930c9a8ade597011b21ce9eb"
+  },
+  "observed_review_clock_ages_seconds": [
+    95.46820187568665,
+    95.46820115891751,
+    95.46820051106624
+  ],
+  "entry_expiry_epoch": 1793129188.7168384,
+  "checks": [
+    "Exact pending inputee695b6a binds CURRENT111nonce799adcb9/request60050bae, actual profile82b1159f and byte-identical fetched source tools. Only three explicit Root data fields differ from source-reviewed566e profile; exact4 commands/3fresh/8retained/11rawlink remain cdeebb reviewed.",
+    "Publicationcb7dd1a3 at fetched6440 binds120 source/tool rows and honest new-request-not-fetched/data-only disposition. Source6153/SDK21/config/toolchain reuse unchanged; exact134 input export refs and20 prior additional readonly aliases/4 compiler-tool refs remain reviewed CURRENT110-equivalent.",
+    "Root complete31ledger0fbc2077 contains finished executor7d and excludes fresh799 and abandoned old111 nonce. Independent29c02920 proves prior executor normal retirement/current-free; no other heavy operation intervened except actual holder preparation.",
+    "Actual holder1659765/start92650542/FD3 holds permanent device27:inode4 fullEOF flock. Ready record and fresh resource06c8bdc8 match. CPU2-5/12GiB/no swap/512tasks/jobsserial, zero other reserved memory/PIDs/heavy slots, empty workload cgroup/no running Docker, current host/scratch/memory/PID headroom meet exact controls.",
+    "Reviewed capture schema labels mention CURRENT110/current290 only as retained accepted tags. All actual paths/profile/holder/request/nonce/output/commands are CURRENT111 four-command cohort, with explicit schema_label_disposition; no earlier build replay.",
+    "Actual holder/runner revalidate guardv2/fixed clocks/account/realholds, source hashes, current resource age<=120s and physical lock before child. Full Rust/processC/kernelC/raw11inputlink only, no arch compile/SDK replay/native execution.",
+    "Current111default/postbuild consumers/native/file acceptance remain open pending actual producer and independent artifact evidence. Preserve first failure/prefix and positive holder/container/client terminal joins; uncertainty retains ownership."
+  ],
+  "mandatory_conditions": [
+    "Root must publish only final grant and holder READY referencing this actual independent file, using O_EXCL; unchanged publish_approved_ready.py must not overwrite or synthesize this file.",
+    "Actual entry/GO must occur before resource observed_at+120; any expiration stops and requires new immutable resource/grant/review.",
+    "Same fixedUTC2026-10-28T05:36:09Z/parent earlier BOOT/MONO/boot, creditrun7f/57774.852125/cumulative>=22812.3311/allholds/exclusions/floors/aggregate7jobs remain effective."
+  ],
+  "review_actions": {
+    "evidence_and_local_clock_reads_only": true,
+    "no_actual_guard_holder_workload_Docker_root_cleanup": true,
+    "only_this_review_file_written": true
+  }
+}

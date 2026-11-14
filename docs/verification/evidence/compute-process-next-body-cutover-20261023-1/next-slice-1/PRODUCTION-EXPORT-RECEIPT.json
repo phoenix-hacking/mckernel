@@ -1,0 +1,43 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_COMPILE_AND_POSTPROCESSOR_EXPORT",
+  "actual_receipt": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/ACTUAL-PRODUCTION-FULLCRATE-RECEIPT.json",
+    "sha256": "a19c4303bdbe94285a41fc0822b7528afc3468ff9f83ebccafc7e73c540f28df",
+    "bytes": 7319
+  },
+  "exact_recipe": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/EXACT-PRODUCTION-RUST-RECIPE.GRANTED.json",
+    "sha256": "d34cfadf3107672c46687ca8db898ca7f806beea69bcc3507e5bc9d230324373",
+    "bytes": 58560
+  },
+  "runner": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/run_production_once.py",
+    "sha256": "4030bc1a890bb5169e98cd0d11d4ddd610f05a03373a1b39082d5039f1d8ce05",
+    "bytes": 10112
+  },
+  "stage_source": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/stage_production_recipe.py",
+    "sha256": "37274acb85d641604de387e803bd27f8b6e7943f0ced9968143e9f2c0f7f8e9a",
+    "bytes": 3169
+  },
+  "compiler_diagnostics": {
+    "prior": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/actual-fullcrate-compiler-capture-1/stderr",
+      "sha256": "2b1a2d2e0177fffb97b3888777b8ac2594a5e058394f80d58ccebce49e0db924",
+      "bytes": 29151
+    },
+    "actual": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/actual-fullcrate-compiler-capture-1/stderr",
+      "sha256": "5bf9d58d33fb1f0a77a10f6d62b14725a0f246162a9140d9bd684e3ed4d3508d",
+      "bytes": 29983
+    },
+    "same_51_warning_heads": true,
+    "new_warning_heads": []
+  },
+  "actual_existing_futex_consumer_SYMBOL_ROWS": [],
+  "consumer_qualification": "Exact78sourceclosure contains unchanged actual futex.rs consumer; leaf already executed its extracted callback64875times. Optimizer may inline privatecallback, so no invented externalrelocation/privateSymbol gate.",
+  "large_object": "Retained private object hashed once in durable receipt before all observers; not recopied/rehashed by export.",
+  "CPU6_released": true,
+  "whole_C_TU_default_link_native": "OPEN"
+}

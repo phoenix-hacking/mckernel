@@ -1,0 +1,124 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "runtime_authority": null,
+  "execution_count": 0,
+  "ordered_steps": [
+    {
+      "owner": "/root",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Fresh existing full normal process/custody/cgroup census and profile admission, protected-original readback; Root source/release required.",
+      "argv": null
+    },
+    {
+      "owner": "/root",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Fresh exact full stopped-container inspect; preserve raw result and positive client join.",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "inspect",
+        "--type",
+        "container",
+        "2460c49fbbbf8be6ee5ae931e7e769eec2f26e352937e7f4a4dcf5d2ebec8008"
+      ]
+    },
+    {
+      "owner": "/root",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Retain current stopped-container logs before exact removal; compare original captured streams.",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "logs",
+        "--",
+        "2460c49fbbbf8be6ee5ae931e7e769eec2f26e352937e7f4a4dcf5d2ebec8008"
+      ]
+    },
+    {
+      "owner": "/root",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Repeat exact profile/custody check immediately before sole reviewed mutation while holding permanent27:4.",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "inspect",
+        "--type",
+        "container",
+        "2460c49fbbbf8be6ee5ae931e7e769eec2f26e352937e7f4a4dcf5d2ebec8008"
+      ]
+    },
+    {
+      "owner": "/root",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Sole mutation: remove exact stopped owned container; no force, volumes, prune, image or record removal.",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "rm",
+        "--",
+        "2460c49fbbbf8be6ee5ae931e7e769eec2f26e352937e7f4a4dcf5d2ebec8008"
+      ],
+      "required_prior": "actual exact Root release, independent source/execution review, fresh accepted readonly/profile/custody proof and one owned cleanup lease"
+    },
+    {
+      "owner": "/root",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Exact ID absence after positive joined removal.",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "ps",
+        "--all",
+        "--quiet",
+        "--no-trunc",
+        "--filter",
+        "id=2460c49fbbbf8be6ee5ae931e7e769eec2f26e352937e7f4a4dcf5d2ebec8008"
+      ]
+    },
+    {
+      "owner": "/root",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Exact name absence after positive joined removal; no fabricated owner label.",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "ps",
+        "--all",
+        "--quiet",
+        "--no-trunc",
+        "--filter",
+        "name=^/bfd-current-two-target-faac1b4804174de5800c58d61ba98004$"
+      ]
+    },
+    {
+      "owner": "/root",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Existing full postcleanup process/cgroup/custody census, original inventory comparisons and positive cleanup direct join.",
+      "argv": null
+    },
+    {
+      "owner": "/root independent physical reviewer",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Fresh separate postjoin actual observation and exact typed current-free acceptance before next heavy.",
+      "argv": null
+    }
+  ],
+  "capture_contract": {
+    "reuse": "Existing backend Docker.call / positive_clients lifecycle and normal PROC_CODE/validate_process_report + group/cgroup/current observer predicates; parameterize actual BFD profile instead of SDK records/label assumptions",
+    "mutation_wall_seconds": 30,
+    "address_space_bytes": 2147483648,
+    "cpu_affinity": [
+      0
+    ],
+    "jobs": 1,
+    "core_bytes": 0,
+    "nofile": 256,
+    "closed_streams_and_positive_wait": true,
+    "no_outer_killer_during_mutation": true,
+    "uncertainty_keeps_ownership": true
+  },
+  "source_integration_still_required": "Bind reviewed bounded existing command executor and exact BFD profile/census adaptation. Unchanged SDK normal main and pidfd recovery main cannot consume this custom runner directly. No actual executable source is emitted by this data-only task."
+}

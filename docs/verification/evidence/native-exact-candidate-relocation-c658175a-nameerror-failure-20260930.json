@@ -1,0 +1,38 @@
+{
+  "schema": "mckernel.native-exact-candidate-relocation-failure.v1",
+  "status": "FAIL_CLOSED",
+  "failure_family": "resume-harness-unbound-build-failure",
+  "candidate_commit": "c658175ae1831e2caef6ecf59730a272f1324645",
+  "candidate_identity": "1831:6684719",
+  "release_commit": "ae07411782de143d8acaabb6d4523ddf446f362c",
+  "packet_sha256": "23736a929cd899c3310f98d019b75c3d84e33734407b077a4da5fabdb9687d53",
+  "test_sha256": "d92b547cd31481a6b1044ee3b50629963d4219ad474f95ec8efcff5c7719e932",
+  "observed_error": "NameError: name 'FAILURE' is not defined",
+  "root_cause": "The verification-only embedded program referenced the build failure path but neither passed it as an argv item nor defined it in the embedded scope.",
+  "temporary_copy": {
+    "path": "/home/holden/mckernel-work/retained-exact-candidates/.mckernel-exact-candidate-c658175a-scratch-7.tmp-relocation-15-retry1",
+    "identity": "66306:47753167",
+    "preserved": true,
+    "verification_pending": true
+  },
+  "attempt_log": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-candidate-relocation-c658175a-scratch7-retry2-20260930.log",
+    "identity": "1831:57624",
+    "size": 0
+  },
+  "attempt_lock": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-candidate-relocation-c658175a-scratch7-retry2-20260930.lock",
+    "identity": "1831:57623",
+    "size": 0
+  },
+  "postflight": {
+    "source_preserved": true,
+    "temporary_copy_preserved": true,
+    "destination_absent": true,
+    "exclusion_absent": true,
+    "intent_absent": true,
+    "source_deletion_started": false
+  },
+  "strategy_change": "Retire this custom packet family. Adapt the already executed dce800af verification-only resume and require an end-to-end disposable record-routing fixture before another live run.",
+  "acceptance": "No relocation completion, build, image, boot, diagnostic application or production acceptance."
+}

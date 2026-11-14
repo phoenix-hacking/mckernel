@@ -1,0 +1,88 @@
+{
+  "actual_result_sha256": "173f3a5ca84d8a2810a86c19fec5a9e63e7df3574afd71a9d001e82e1c739ed5",
+  "exit": 0,
+  "finished_at": "2026-11-10T13:34:03.067810+00:00",
+  "observed_result": {
+    "C_retirement": false,
+    "module_loadability_or_runtime": false,
+    "original_acceptance_delta": 0,
+    "results": [
+      {
+        "exact_current_exports": [
+          "ihk_os_application_adopt_current_v4",
+          "ihk_os_application_close_v1",
+          "ihk_os_application_fork_control_current_v1",
+          "ihk_os_application_invoke_v1",
+          "ihk_os_application_open_v1",
+          "ihk_os_create_unbooted_v1",
+          "ihk_os_create_unbooted_v2",
+          "ihk_os_create_unbooted_v3",
+          "ihk_os_create_unbooted_v4",
+          "ihk_os_create_unbooted_v5",
+          "ihk_os_create_unbooted_v6",
+          "ihk_os_destroy_unbooted_v1",
+          "ihk_os_service_register_v1",
+          "ihk_os_service_unregister_v1",
+          "ihk_os_topology_query_v1",
+          "ihk_os_with_kobject_v1",
+          "ihk_provider_lifecycle_v1",
+          "ihk_smp_provider_attach_v1",
+          "ihk_smp_provider_attach_v2",
+          "ihk_smp_provider_close_v1",
+          "ihk_smp_provider_detach_v1",
+          "ihk_smp_provider_detach_v2",
+          "ihk_smp_provider_open_v1"
+        ],
+        "name": "actual-saved-IHK-symbols",
+        "prior21_retained": true,
+        "status": "PASS_ACTUAL_SAVED_SYMBOLS"
+      },
+      {
+        "diagnostic": "built ihk.ko contains unreviewed export metadata: __kstrtab_ihk_os_unreviewed_export_probe_v1, __kstrtabns_ihk_os_unreviewed_export_probe_v1, __ksymtab_ihk_os_unreviewed_export_probe_v1",
+        "name": "unknown-export",
+        "status": "REJECTED_EXPECTED",
+        "symbol": "ihk_os_unreviewed_export_probe_v1"
+      },
+      {
+        "diagnostic": "built ihk.ko contains unreviewed export metadata: __kstrtab_ihk_os_create_unbooted_v12, __kstrtabns_ihk_os_create_unbooted_v12, __ksymtab_ihk_os_create_unbooted_v12",
+        "name": "held-create-v12",
+        "status": "REJECTED_EXPECTED",
+        "symbol": "ihk_os_create_unbooted_v12"
+      },
+      {
+        "diagnostic": "built ihk.ko contains unreviewed export metadata: __kstrtab_ihk_os_application_prepare_fork_control_v1, __kstrtabns_ihk_os_application_prepare_fork_control_v1, __ksymtab_ihk_os_application_prepare_fork_control_v1",
+        "name": "held-prepare-control",
+        "status": "REJECTED_EXPECTED",
+        "symbol": "ihk_os_application_prepare_fork_control_v1"
+      },
+      {
+        "diagnostic": "built ihk.ko contains unreviewed export metadata: __kstrtab_ihk_os_application_prepare_fork_control_receipt_v1, __kstrtabns_ihk_os_application_prepare_fork_control_receipt_v1, __ksymtab_ihk_os_application_prepare_fork_control_receipt_v1",
+        "name": "held-prepare-receipt",
+        "status": "REJECTED_EXPECTED",
+        "symbol": "ihk_os_application_prepare_fork_control_receipt_v1"
+      }
+    ],
+    "source_or_held_scope_activation": false,
+    "status": "PASS_ACTUAL_EXPORT_GUARD_AND_FOUR_STRICT_REJECTIONS"
+  },
+  "original_acceptance": false,
+  "ownership": [
+    {
+      "adopted_kills": [],
+      "adopted_reaps": [],
+      "error": null,
+      "label": "export-guard",
+      "leader": 948420,
+      "leader_birth": "40390909",
+      "leader_group_signalled": false,
+      "leader_parent_joined": true,
+      "remaining_direct_children": [],
+      "status": 0,
+      "streams_closed": true,
+      "timed_out": false,
+      "whole_descendants_joined": true
+    }
+  ],
+  "started_at": "2026-11-10T13:34:03.009668+00:00",
+  "status": "PASS_ACTUAL_EXPORT_GUARD_AND_FOUR_STRICT_REJECTIONS"
+}

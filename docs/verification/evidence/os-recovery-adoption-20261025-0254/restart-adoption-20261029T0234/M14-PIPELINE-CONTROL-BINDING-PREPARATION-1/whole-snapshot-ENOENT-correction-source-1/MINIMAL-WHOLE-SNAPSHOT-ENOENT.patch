@@ -1,0 +1,24 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/current-guardian-source-1/retire_exact_current118_stopped_container.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/whole-snapshot-ENOENT-correction-source-1/retire_exact_current118_stopped_container.py
+@@ -5,7 +5,7 @@
+ from pathlib import Path
+ import argparse,ast,copy,hashlib,importlib.util,json,math,os,re,resource,signal,stat,subprocess,time,types,uuid
+ D=Path(__file__).resolve().parent
+-BINDINGS_SHA='501f8a8661005ce656cf1741c0e1437ee875983839fee44f57c576ef1fe85bdc'
++BINDINGS_SHA='3e906c746b1fb816ba069042b408ca8b175787c84b8c09bca8f5ab63f2569f45'
+ SELF=D/'retire_exact_current118_stopped_container.py'
+ SCOPE='Functional McKernel OS/apps and Rust/assembly migration only; no security testing.'
+ PREFIX=['/usr/bin/sudo','-A','/usr/bin/docker','--host=unix:///var/run/docker.sock']
+@@ -116,6 +116,12 @@
+  paths=[p['cohort']+'/run_build_only.py',p['cohort']+'/hold_and_run_build_only.py',str(SELF)]
+  # Self is excluded by unchanged caller predicate; another cleanup at same source is a publisher.
+  code=code.replace(anchor,'    if any(path in argv for path in '+repr(paths)+'): return True\n'+anchor)
++ need(code.count('import json,os,sys')==1 and code.count('def snapshot():')==1,'exact frozen snapshot anchors')
++ code=code.replace('import json,os,sys','import errno,json,os,re,sys').replace('def snapshot():','def _snapshot_once():')
++ anchor='if os.geteuid()!=0:';need(code.count(anchor)==1,'unchanged root predicate anchor')
++ code=code.replace(anchor,"def snapshot(phase):\n    for attempt in range(1,4):\n        try:\n            return _snapshot_once()\n        except FileNotFoundError as error:\n            if (error.errno!=errno.ENOENT or not isinstance(error.filename,str) or\n                re.fullmatch(r'/proc/[1-9][0-9]*/(?:stat|cmdline|exe)',error.filename) is None or\n                error.filename2 is not None):\n                raise\n            print(json.dumps({'schema':'mckernel.proc.whole-snapshot-abandoned.v1',\n                              'phase':phase,'attempt':attempt,'maximum_attempts':3,\n                              'errno':error.errno,'filename':error.filename}),\n                  file=sys.stderr,flush=True)\n            if attempt==3:\n                raise\n\n"+anchor)
++ anchor='first,pubs1,groups1=snapshot(); second,pubs2,groups2=snapshot()';need(code.count(anchor)==1,'two required whole snapshots')
++ code=code.replace(anchor,"first,pubs1,groups1=snapshot('first'); second,pubs2,groups2=snapshot('second')")
+  return code
+ 
+ def validate_process(report,normal,b,challenge,caller,command_pids):

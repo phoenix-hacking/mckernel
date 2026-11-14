@@ -1,0 +1,123 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-sdk7-current-authority-composition-source-1/sdk7_authority_adapter.CURRENT-WINDOW.SOURCE-ONLY.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sdk7-142g-consumer-successor-source-1/sdk7_authority_adapter.142G-SOURCE-ONLY.py
+@@ -13,9 +13,12 @@
+ import re
+ import time
+ 
++import sys
++sys.path.insert(0, '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-sdk7-current-authority-composition-source-1')
+ from prepare_current_window_bindings import ORIGIN, ORIGIN_SHA
+ from sdk7_current_window import load_window, validate_window
+ from retained_sdk21_authority import validate_current
++from growth_successor import current_sources, growth_chain
+ 
+ PROFILE = dict(cpus='2-5', jobs=1, memory_bytes=12 * 2**30,
+                memory_swap_bytes=12 * 2**30, network='none', pids=512)
+@@ -112,6 +115,10 @@
+     need(bundle['schema'] == SCHEMA and bundle['parent_window'] == bundle['query_window']
+          and load(bundle['parent_window']) == window, 'consumed window binding differs')
+     mapping, source_review = check_history(origin, load)
++    adapter_raw = Path(__file__).read_bytes()
++    adapter_ref = dict(path=str(Path(__file__).resolve()), bytes=len(adapter_raw),
++                       sha256=hashlib.sha256(adapter_raw).hexdigest())
++    mapping, source_review, _ = current_sources(bundle, origin, mapping, load, adapter_ref)
+     original = load(origin['request'])
+     request = load(bundle['request'])
+     need(set(request) == set(original)
+@@ -131,11 +138,7 @@
+          'fresh owner-compatible output namespace required')
+     head, latest, live = [load(bundle[k]) for k in
+                           ('operation_head', 'latest_operation', 'live_observation')]
+-    need(head['schema'] == 'mckernel.serial-operation-head.v1'
+-         and head['latest_operation'] == bundle['latest_operation']
+-         and head['no_intervening_operation'] is True
+-         and nonce not in head['consumed_nonces']
+-         and latest['nonce'] in head['consumed_nonces'], 'latest operation/nonce head differs')
++    growth_chain(bundle, head, latest, request, live, window, load)
+     need(latest['schema'] == 'mckernel.owned-operation-closure.v1'
+          and latest['status'] == 'PASS_OWNED_OPERATION_CLOSED'
+          and latest['nonce'] != nonce and latest['boot_id'] == window['boot_id']
+@@ -184,6 +187,10 @@
+              ('request', 'parent_window', 'operation_head', 'latest_operation',
+               'live_observation', 'query', 'query_join', 'reservation')}
+          and review['historical_source_approval'] == origin['source_approval']
++         and review['current_source_map'] == bundle['current_source_map']
++         and review['current_source_review'] == bundle['current_source_review']
++         and review['current_source_publication'] == bundle['current_source_publication']
++         and review['growth_closure'] == bundle['growth_closure']
+          and review['seven_commands'] == origin['seven_commands']
+          and review['profile'] == origin['profile'] == PROFILE,
+          'independent exact metadata/environment admission review required')
+@@ -193,6 +200,10 @@
+          and query['operation_head'] == bundle['operation_head']
+          and query['window'] == bundle['parent_window']
+          and query['profile'] == PROFILE and query['image_id'] == request['image_id']
++         and query['current_owner'] == source_review['bindings']['current_owner']
++         and query['current_source_map'] == bundle['current_source_map']
++         and query['current_source_review'] == bundle['current_source_review']
++         and query['current_source_publication'] == bundle['current_source_publication']
+          and query['target_calls'] == query['container_create_calls'] == 0
+          and query['live_identity_and_resource_gates'] is True
+          and query['conflict_paths_absent'] is True,
+@@ -227,10 +238,16 @@
+     fresh(reservation['clock'], now, window)
+     base = load(origin['pending_release_base'])
+     need(base['execution_release'] is False and base['execution_review'] is None
+-         and base['source_sha256'] == mapping['source_sha256'], 'pending base source differs')
++         and base['source_sha256'] == load(origin['full11_map'])['source_sha256'],
++         'historical pending base source differs')
+     payload = copy.deepcopy(base)
+     payload.update(nonce=nonce, request={k: bundle['request'][k] for k in ('path', 'sha256')},
+-                   boot_id=window['boot_id'], source_review=origin['source_approval'],
++                   boot_id=window['boot_id'], source_review=bundle['current_source_review'],
++                   source_sha256=mapping['source_sha256'],
++                   current_consumer_source_map=bundle['current_source_map'],
++                   current_consumer_source_publication=bundle['current_source_publication'],
++                   historical_source_review=origin['source_approval'],
++                   physical_prerequisites=[bundle['growth_closure']],
+                    fetched_source_verified=True, fetched_source_proof=origin['fetched_source'],
+                    historical_sdk21_artifact=origin['SDK21_artifact_behavior'],
+                    historical_sdk21_physical=origin['current_physical'],
+@@ -275,6 +292,10 @@
+          and release['window_id'] == window['window_id']
+          and release['profile'] == origin['profile'] == PROFILE
+          and release['capture_helper'] == origin['capture_helper']
++         and release['current_source_map'] == bound(bundle_ref)['current_source_map']
++         and release['current_source_review'] == bound(bundle_ref)['current_source_review']
++         and release['current_source_publication'] == bound(bundle_ref)['current_source_publication']
++         and release['growth_closure'] == bound(bundle_ref)['growth_closure']
+          and release['aggregate_memory_GiB'] == os.environ.get('MCKERNEL_OS_MEMORY_GIB'),
+          'external exact read-only query release required')
+ 
+@@ -297,12 +318,17 @@
+          'actual owned query holder changed')
+     # The exact prior query's owner APIs and image-only operation are retained.
+     import importlib.util
+-    bound(origin['owner'], False)
+-    spec = importlib.util.spec_from_file_location('daemon7_retained_owner', origin['owner']['path'])
++    historical_mapping, _ = historical(origin)
++    adapter_raw = Path(__file__).read_bytes()
++    adapter_ref = dict(path=str(Path(__file__).resolve()), bytes=len(adapter_raw),
++                       sha256=hashlib.sha256(adapter_raw).hexdigest())
++    mapping, _, current_owner = current_sources(bundle, origin, historical_mapping, bound, adapter_ref)
++    need(release['current_owner'] == current_owner, 'query release current owner differs')
++    bound(current_owner, False)
++    spec = importlib.util.spec_from_file_location('daemon7_current_142g_owner', current_owner['path'])
+     owner = importlib.util.module_from_spec(spec)
+     spec.loader.exec_module(owner)
+-    approval = bound(origin['source_approval'])
+-    owner.validate_runtime_source_bindings(approval['source_sha256'])
++    owner.validate_runtime_source_bindings(mapping['source_sha256'])
+     owner.output_namespace(request)
+     mount = owner.live_admission(request)
+     capacity = owner.measure(request)
+@@ -329,6 +355,9 @@
+                 request=bundle['request'], live_observation=bundle['live_observation'],
+                 operation_head=bundle['operation_head'], window=bundle['parent_window'],
+                 profile=PROFILE, image_id=rows[0]['Id'], target_calls=0, container_create_calls=0,
++                current_owner=current_owner, current_source_map=bundle['current_source_map'],
++                current_source_review=bundle['current_source_review'],
++                current_source_publication=bundle['current_source_publication'],
+                 live_identity_and_resource_gates=True, conflict_paths_absent=True,
+                 resources=capacity, mount=mount, clock=clock, owned_holder=holder,
+                 group_checks=client.group_checks, SDK_execution_released=False)

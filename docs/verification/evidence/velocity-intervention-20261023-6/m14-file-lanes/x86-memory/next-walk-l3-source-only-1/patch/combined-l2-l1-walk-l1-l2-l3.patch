@@ -1,0 +1,194 @@
+--- a/arch/x86_64/kernel/memory.c
++++ b/arch/x86_64/kernel/memory.c
+@@ -1504,6 +1504,10 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
++extern int clear_range_l1(void *args0, pte_t *ptep, uint64_t base,
++        uint64_t start, uint64_t end);
++#else
+ static int clear_range_l1(void *args0, pte_t *ptep, uint64_t base,
+ 		uint64_t start, uint64_t end)
+ {
+@@ -1524,13 +1528,25 @@
+ 			x86_clear_memobj_rss_sub_bridge,
+ 			x86_clear_effect_log_bridge);
+ }
+-
++#endif
++
++#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
++extern int x86_clear_range_walk_l1_bridge(void *pt, unsigned long base,
++        unsigned long start, unsigned long end, void *args);
++#else
+ static int x86_clear_range_walk_l1_bridge(void *pt, unsigned long base,
+ 		unsigned long start, unsigned long end, void *args)
+ {
+ 	return walk_pte_l1(pt, base, start, end, &clear_range_l1, args);
+ }
+-
++#endif
++
++#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
++/* Synchronous existing L1 C walker identity; its lower chain remains C debt. */
++x86_clear_child_walk_fn_t const x86_clear_l2_child_walk = &x86_clear_range_walk_l1_bridge;
++extern int clear_range_l2(void *args0, pte_t *ptep, uint64_t base,
++        uint64_t start, uint64_t end);
++#else
+ static int clear_range_l2(void *args0, pte_t *ptep, uint64_t base,
+ 		uint64_t start, uint64_t end)
+ {
+@@ -1555,12 +1571,18 @@
+ 			x86_clear_range_log_bridge,
+ 			x86_clear_effect_log_bridge);
+ }
+-
++#endif
++
++#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
++extern int x86_clear_range_walk_l2_bridge(void *pt, unsigned long base,
++        unsigned long start, unsigned long end, void *args);
++#else
+ static int x86_clear_range_walk_l2_bridge(void *pt, unsigned long base,
+ 		unsigned long start, unsigned long end, void *args)
+ {
+ 	return walk_pte_l2(pt, base, start, end, &clear_range_l2, args);
+ }
++#endif
+ 
+ #ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+ /* Typed immutable identities; these existing lower C callbacks remain debt. */
+@@ -1600,14 +1622,19 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
++extern int x86_clear_range_walk_l3_bridge(void *pt, unsigned long base,
++        unsigned long start, unsigned long end, void *args);
++#else
+ static int x86_clear_range_walk_l3_bridge(void *pt, unsigned long base,
+ 		unsigned long start, unsigned long end, void *args)
+ {
+ 	return walk_pte_l3(pt, base, start, end, &clear_range_l3, args);
+ }
++#endif
+ 
+ #ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+-/* Borrow the existing L3 callback synchronously; its C body remains debt. */
++/* Same synchronous L3 walker identity; the default body is supplied by Rust. */
+ int (*const x86_clear_range_l3_callback)(void *, unsigned long,
+         unsigned long, unsigned long, void *) = &x86_clear_range_walk_l3_bridge;
+ extern int x86_clear_range_l4_body(void *args0, pte_t *ptep, uint64_t base,
+--- a/kernel/rust/x86_memory_helpers.rs
++++ b/kernel/rust/x86_memory_helpers.rs
+@@ -177,6 +177,7 @@
+     fn remote_flush_tlb_array_cpumask(vm: *mut c_void, addr: *mut CULong, nr_addr: CInt, cpu_id: CInt);
+     static x86_clear_range_l4_callback: X86WalkPteCallback;
+     static x86_clear_range_l3_callback: X86ClearChildWalkFn;
++    static x86_clear_l2_child_walk: X86ClearChildWalkFn;
+     static x86_clear_l3_child_walk: X86ClearChildWalkFn;
+     static x86_clear_l3_memobj_flush: X86ClearFlushMemobjFn;
+     static x86_clear_l3_rss_sub: X86ClearRssSubFn;
+@@ -3276,6 +3277,101 @@
+ 
+ // Error logging preserves the original unconditional ekprintf -> kprintf
+ // call, format bytes and C varargs payload. Unknown events remain silent.
++/// Exact former C L3 walker dispatcher. Existing walk_pte_l3 retains all
++/// range bounds/error aggregation and borrows args only for synchronous calls.
++#[no_mangle]
++pub unsafe extern "C" fn x86_clear_range_walk_l3_bridge(
++    pt: *mut c_void,
++    base: CULong,
++    start: CULong,
++    end: CULong,
++    args: *mut c_void,
++) -> CInt {
++    unsafe { walk_pte_l3(pt, base, start, end, Some(clear_range_l3), args) }
++}
++
++/// Exact former C L2 walker dispatcher. The existing Rust walker retains
++/// bounds/error aggregation and synchronously borrows the same callback args.
++#[no_mangle]
++pub unsafe extern "C" fn x86_clear_range_walk_l2_bridge(
++    pt: *mut c_void,
++    base: CULong,
++    start: CULong,
++    end: CULong,
++    args: *mut c_void,
++) -> CInt {
++    unsafe { walk_pte_l2(pt, base, start, end, Some(clear_range_l2), args) }
++}
++
++/// Exact former C L1 walker dispatcher. The existing Rust walker owns bounds
++/// and short-circuit order; callback args remain synchronously borrowed.
++#[no_mangle]
++pub unsafe extern "C" fn x86_clear_range_walk_l1_bridge(
++    pt: *mut c_void,
++    base: CULong,
++    start: CULong,
++    end: CULong,
++    args: *mut c_void,
++) -> CInt {
++    unsafe { walk_pte_l1(pt, base, start, end, Some(clear_range_l1), args) }
++}
++
++/// Complete former C L1 callback. The existing leaf helper owns old-entry,
++/// flush/free/page-unmap/RSS effects; raw args and count pointers remain borrowed.
++#[no_mangle]
++pub unsafe extern "C" fn clear_range_l1(
++    args0: *mut c_void,
++    ptep: *mut CULong,
++    base: CULong,
++    start: CULong,
++    end: CULong,
++) -> CInt {
++    let args = args0.cast::<X86ClearRangeArgs>();
++    unsafe {
++        x86_clear_range_leaf_body_result(
++            args0, ptep, base, start, end,
++            (*args).vm, (*args).addr, core::ptr::addr_of_mut!((*args).nr_addr),
++            (*args).max_nr_addr, ihk_mc_get_processor_id(),
++            (*args).free_physical, (*args).memobj.cast(),
++            Some(x86_clear_old_action_bridge), Some(remote_flush_tlb_array_cpumask),
++            Some(x86_clear_l3_memobj_flush), Some(x86_clear_phys_to_virt_bridge),
++            Some(x86_clear_free_pages_user_bridge), Some(x86_clear_page_unmap_bridge),
++            Some(x86_clear_l3_rss_sub), Some(x86_clear_l3_memobj_rss_sub),
++            Some(x86_clear_l3_effect_log),
++        )
++    }
++}
++
++/// Complete former C L2 callback. Raw borrowed args/PTE/count storage is
++/// reread only as in the original call; no Rust reference spans C callbacks.
++/// L2 large pages are always enabled, independent of the live L3 1GB flag.
++#[no_mangle]
++pub unsafe extern "C" fn clear_range_l2(
++    args0: *mut c_void,
++    ptep: *mut CULong,
++    base: CULong,
++    start: CULong,
++    end: CULong,
++) -> CInt {
++    let args = args0.cast::<X86ClearRangeArgs>();
++    // Caller-valid args0 is evaluated even if the shared helper rejects ptep.
++    unsafe {
++        x86_clear_range_level_body_result(
++            args0, ptep, base, start, end,
++            PTL2_SHIFT, PTL2_SIZE, PFL2_SIZE, 1,
++            (*args).vm, (*args).addr, core::ptr::addr_of_mut!((*args).nr_addr),
++            (*args).max_nr_addr, ihk_mc_get_processor_id(),
++            (*args).free_physical, (*args).memobj.cast(),
++            Some(x86_clear_old_action_bridge), Some(x86_clear_phys_to_virt_bridge),
++            Some(x86_clear_l2_child_walk), Some(remote_flush_tlb_array_cpumask),
++            Some(x86_pt_free_pages_bridge), Some(x86_clear_l3_memobj_flush),
++            Some(x86_clear_free_pages_user_bridge), Some(x86_clear_page_unmap_bridge),
++            Some(x86_clear_l3_rss_sub), Some(x86_clear_l3_memobj_rss_sub),
++            Some(x86_clear_l3_range_log), Some(x86_clear_l3_effect_log),
++        )
++    }
++}
++
+ /// Complete former C L3 callback. Args remain raw borrowed storage: callbacks
+ /// may synchronously update nr_addr/PTEs, so no exclusive Rust reference survives.
+ #[no_mangle]

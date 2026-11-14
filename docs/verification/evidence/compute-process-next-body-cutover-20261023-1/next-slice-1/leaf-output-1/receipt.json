@@ -1,0 +1,169 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS",
+  "commands": [
+    {
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--crate-type=lib",
+        "--emit=obj",
+        "-Dwarnings",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "codegen-units=1",
+        "-C",
+        "relocation-model=static",
+        "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/fixture/actual.rs",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/leaf-output-1/actual.o"
+      ],
+      "returncode": 0,
+      "stdout": {
+        "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/leaf-output-1/00.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/leaf-output-1/00.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-std=gnu11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-O2",
+        "-fno-pie",
+        "-no-pie",
+        "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/fixture/main.c",
+        "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/leaf-output-1/actual.o",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/leaf-output-1/equivalence"
+      ],
+      "returncode": 0,
+      "stdout": {
+        "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/leaf-output-1/01.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/leaf-output-1/01.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      }
+    },
+    {
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/leaf-output-1/equivalence"
+      ],
+      "returncode": 0,
+      "stdout": {
+        "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/leaf-output-1/02.stdout",
+        "sha256": "b69a32b9f436a000c8933cda9d4e2c1b7e53606e5af76be7c6bb83a7c12f00d5",
+        "bytes": 184
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/leaf-output-1/02.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/nm",
+        "-g",
+        "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/leaf-output-1/actual.o"
+      ],
+      "returncode": 0,
+      "stdout": {
+        "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/leaf-output-1/03.stdout",
+        "sha256": "56c9c3574067c525a85ddf65abbce7198951eb846ef05d2fd806437df7718cc9",
+        "bytes": 868
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/leaf-output-1/03.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-std=gnu11",
+        "-Werror",
+        "-I/home/holden/mckernel/kernel/include",
+        "-I/home/holden/mckernel/lib/include",
+        "-I/home/holden/mckernel/arch/x86_64/kernel/include",
+        "-c",
+        "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/fixture/abi.c",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/leaf-output-1/abi.o"
+      ],
+      "returncode": 0,
+      "stdout": {
+        "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/leaf-output-1/04.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/leaf-output-1/04.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      }
+    }
+  ],
+  "source_files": {
+    "original.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/fixture/original.c",
+      "sha256": "9517d8807bb9ca322b5c9ebb345d30df9d05829a9cc97d428e10ffc4b053a50b",
+      "bytes": 667
+    },
+    "actual.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/fixture/actual.rs",
+      "sha256": "8290258f7c869dd22f79f5c4908aafd3ca043e86d9d859247c69ae837d1b38d9",
+      "bytes": 14732
+    },
+    "main.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/fixture/main.c",
+      "sha256": "07f77f68accc4370722407b8bf061162d31b3e684e5947049f49be472b6765e2",
+      "bytes": 9900
+    },
+    "run_fixture.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/fixture/run_fixture.py",
+      "sha256": "7d924308f3b2c12cea9d871826962599732b7a408aa7067da347d7c42bfec85d",
+      "bytes": 3050
+    },
+    "abi.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/fixture/abi.c",
+      "sha256": "36009488998f8059438d64c59cfeeb692adeb2289ca59563ecb3b421891c2ccc",
+      "bytes": 461
+    },
+    "runqueue-offsets.h": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/fixture/runqueue-offsets.h",
+      "sha256": "ef43899f6794c096c9b9cf19a6fce823dd1b6f2aa06cd7cab511d65e84dfbb0e",
+      "bytes": 1025
+    }
+  },
+  "tools": {
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc": {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "sha256": "028fd60b0e0add5505c661cd3ccde91393d615c8729bd95d94ab1e91409b36a1",
+      "bytes": 654904
+    },
+    "/usr/bin/gcc-9": {
+      "path": "/usr/bin/gcc-9",
+      "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f",
+      "bytes": 1158288
+    }
+  },
+  "test_scope": "129750 original-selected-C vs actualRust wrapper cases using existing actualbody/offsetbuilder/4adapters; alternating actual existing futex directcallback consumer; mocked primitive callbacks only; no IRQ/ASM/hostregister/root/guest",
+  "whole_C_TU_default_link_native": "OPEN"
+}

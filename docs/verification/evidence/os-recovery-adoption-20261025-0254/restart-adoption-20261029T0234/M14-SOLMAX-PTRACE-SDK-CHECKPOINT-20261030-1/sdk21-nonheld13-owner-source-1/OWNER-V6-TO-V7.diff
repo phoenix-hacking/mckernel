@@ -1,0 +1,41 @@
+--- v6/sdk13_compile_image_owner.v6.py
++++ v7/sdk13_compile_image_owner.v7.py
+@@ -34,7 +34,7 @@
+ OWNER_RECEIPT_NAME = "owner-receipt.json"
+ EXPECTED_DRIVER_SHA256 = '7d30085edda4d1272f923b19e8632e9ab8b259874623974c2da53dbe4c3c5be0'
+ EXPECTED_PROVENANCE_SHA256 = '453dd998e4ef1e2ed21b0818771d97197d77f98c90ca8c6c67cc8ab019063044'
+-EXPECTED_HOST_OWNER_SHA256 = '443dda3467a667cf742058f0b3ed7b8944315e32fb7c995ee3e66c40fb0644ce'
++EXPECTED_HOST_OWNER_SHA256 = '8aeb5f85d0fe3d8722cf88b5dccb47ba22c2c97283f8812a77f9e29cf895146c'
+ EXPECTED_HEAVY_ENTRY_CONTRACT_SHA256 = "c252ee341eb61752704f8b818503c0a5dc97400845494707ca3110f5f23df6d1"
+ # The image owner advances with the image-candidate namespace.  Keep consumed
+ # exclusions explicit: accepting one of these would allow a request to race a
+@@ -184,7 +184,7 @@
+         sys.modules.pop(package_name, None)
+ 
+ 
+-_HOST_OWNER_PATH = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-nonheld13-owner-source-1/sdk13_compile_host_helper.v6.py')
++_HOST_OWNER_PATH = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-nonheld13-owner-source-1/sdk13_compile_host_helper.v7.py')
+ _HOST_OWNER = _load_reviewed_host_owner(
+     _HOST_OWNER_PATH, EXPECTED_HOST_OWNER_SHA256,
+     Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-14/default-image-preparation-1/native_rust_exact_build_offline.py'),
+@@ -2454,13 +2454,15 @@
+         _fail(self.calls<policy['max_calls'] and now<policy['until_utc'] and boot<policy['until_boot'] and
+               mono<policy['until_mono'] and mono-self.started<policy['max_wall_seconds'],
+               'SDK13 containment authority expired')
+-        remaining=min(30.0,policy['until_utc']-now,policy['until_boot']-boot,
+-                      policy['until_mono']-mono,policy['max_wall_seconds']-(mono-self.started))
+-        _fail(remaining>0,'SDK13 containment time unavailable')
++        # One absolute client deadline includes the 5-second retirement reserve;
++        # neither spawn/setup nor a later wait may reset it.
++        deadline=min(mono+30.0,self.started+policy['max_wall_seconds'],policy['until_mono'],
++                     mono+(policy['until_utc']-now),mono+(policy['until_boot']-boot))
++        _fail(deadline-mono>5.0,'SDK13 containment lacks client retirement window')
+         self.calls+=1
+         return {'phase':'containment-'+action,'cid':self.cid,'call':self.calls,'utc':now,'boot':boot,'mono':mono,
+-                'max_call_seconds':remaining,'lease_sha256':hashlib.sha256(raw).hexdigest(),
+-                'limited_retirement_only':True}
++                'absolute_deadline_mono':deadline,'retirement_reserve_seconds':5.0,
++                'lease_sha256':hashlib.sha256(raw).hexdigest(),'limited_retirement_only':True}
+     def confirm(self,info):
+         _assert_owned_container(info,self.cid);self.attested=True
+ 

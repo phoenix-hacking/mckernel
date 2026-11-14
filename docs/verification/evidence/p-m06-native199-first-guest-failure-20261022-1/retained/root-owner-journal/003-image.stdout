@@ -1,0 +1,92 @@
+[
+    {
+        "Id": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+        "RepoTags": [
+            "mckernel-dev:native"
+        ],
+        "RepoDigests": [],
+        "Parent": "sha256:4680b3a72ec616f201e0df7140e7d844c48aadcd8e058c4c1803573c2c123814",
+        "Comment": "",
+        "Created": "2026-09-07T03:31:12.928224274Z",
+        "DockerVersion": "26.1.3",
+        "Author": "",
+        "Config": {
+            "Hostname": "",
+            "Domainname": "",
+            "User": "builder",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "container=oci",
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "CARGO_BUILD_JOBS=4",
+                "CMAKE_BUILD_PARALLEL_LEVEL=4",
+                "MAKEFLAGS=-j4",
+                "PYTHONDONTWRITEBYTECODE=1"
+            ],
+            "Cmd": [
+                "/bin/bash"
+            ],
+            "Image": "sha256:4680b3a72ec616f201e0df7140e7d844c48aadcd8e058c4c1803573c2c123814",
+            "Volumes": null,
+            "WorkingDir": "/workspace",
+            "Entrypoint": null,
+            "OnBuild": null,
+            "Labels": {
+                "io.buildah.version": "1.43.1",
+                "license": "BSD-3-Clause",
+                "name": "rockylinux",
+                "org.mckernel.scope": "local development; no production evidence credit",
+                "org.opencontainers.image.authors": "Lukas Magauer, Neil Hanlon, Louis Abel",
+                "org.opencontainers.image.licenses": "BSD-3-Clause",
+                "org.opencontainers.image.source": "https://git.resf.org/sig_core/rocky-kiwi-descriptions/src/branch/r10",
+                "org.opencontainers.image.title": "rockylinux",
+                "org.opencontainers.image.vendor": "Rocky Enterprise Software Foundation",
+                "org.opencontainers.image.version": "10",
+                "summary": "Rocky Linux Base image",
+                "vendor": "Rocky Enterprise Software Foundation",
+                "version": "10"
+            },
+            "Shell": [
+                "/bin/bash",
+                "-e",
+                "-o",
+                "pipefail",
+                "-c"
+            ]
+        },
+        "Architecture": "amd64",
+        "Os": "linux",
+        "Size": 2229783492,
+        "GraphDriver": {
+            "Data": {
+                "LowerDir": "/var/lib/docker/overlay2/fff00856c276031a055641a39e0919e79db7904afb0ce80a3d4f4db638a0269c/diff:/var/lib/docker/overlay2/d199f563791647ba171c6a6b30772ca85312af33440b39d08e6bb730f6e6013a/diff:/var/lib/docker/overlay2/f0749d426bb01c0f3b1cf8801b25513f92ffa67570954f3f881636dbf54f2b04/diff:/var/lib/docker/overlay2/b108a9aa871c34f689ca9dad26ceac43de807cd903f00a7ba1d77804cd2d8f1e/diff:/var/lib/docker/overlay2/fb2f4457a35c8482edb2928b3b235f4050018750bf17cdff8b8b1bb174b2c5d6/diff:/var/lib/docker/overlay2/6b8acc345c6edc4a5dfd53ec0ef55b3b54be94cb1082c09d8fba86f9fd66d001/diff:/var/lib/docker/overlay2/8fe2188ddb7c5e6ab9ab5a67a024ba8f7896b7a9cbe1f9cdae2a953e5ef7651d/diff:/var/lib/docker/overlay2/2a23ddce6067a5847fc046c77f050a037a224c752e9e6ff2d7d56ac9162e8982/diff",
+                "MergedDir": "/var/lib/docker/overlay2/b9950a67e47d32e93d7c43c6a1145e4c5cf89717b127f4a7a42a98785b6c5d5a/merged",
+                "UpperDir": "/var/lib/docker/overlay2/b9950a67e47d32e93d7c43c6a1145e4c5cf89717b127f4a7a42a98785b6c5d5a/diff",
+                "WorkDir": "/var/lib/docker/overlay2/b9950a67e47d32e93d7c43c6a1145e4c5cf89717b127f4a7a42a98785b6c5d5a/work"
+            },
+            "Name": "overlay2"
+        },
+        "RootFS": {
+            "Type": "layers",
+            "Layers": [
+                "sha256:f0c7ff1acfc99a513a834c43874f79b8584ae074e5e56fa6aafc3dcf4f5ab428",
+                "sha256:36020da9eddb83cef6c3bf0fd104d3bc6aaa6824a2601f8e903b0c5bc4e0124c",
+                "sha256:ffb5a0b40d550145f94e4d32db2b3283d1ea20e2125166b5d3129c9e195f0ec7",
+                "sha256:be7923d197949d0a1bb0423f971c6acd85d741e33bbb87c5ec243df2b5ee861f",
+                "sha256:38dfa2aabc491525ce664a8d816103539a79193bb1e1fdd58c2a063313fd9a72",
+                "sha256:f205f8e4793ab7b5c8e5d7b898cd0337b76eb09b01c7070e0c32368b3f0b8ac0",
+                "sha256:8b2c9448c9549931ec8a0d81ad328d675eac830ad2d7a8391208467f23bc036c",
+                "sha256:bf1e2bde05b3d1ed011b5c36c2c5b32e50136c42d1712fcdc6dad081a4961ce0",
+                "sha256:62b94e8b8df08ef0250cbbe90503553380e216467a1a01431c87598f8450a9eb"
+            ]
+        },
+        "Metadata": {
+            "LastTagTime": "2026-09-06T20:31:12.946143936-07:00"
+        }
+    }
+]

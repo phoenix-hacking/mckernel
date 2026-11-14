@@ -1,0 +1,100 @@
+--- a/pair_long_producer.rs
++++ b/pair_long_producer.rs
+@@ -9,9 +9,9 @@
+ use core::ffi::c_void;
+ use core::fmt::{self, Write};
+ 
+-pub const WORK_NS: u64 = 3_600_000_000_000;
+-pub const WALL_NS: u64 = 7_200_000_000_000;
+-pub const MIN_LAUNCHES: u64 = 100;
++pub const WORK_NS: u64 = 90_000_000_000;
++pub const WALL_NS: u64 = 600_000_000_000;
++pub const MIN_LAUNCHES: u64 = 2;
+ pub const ROUND_CAP: u32 = 2048;
+ pub const TRACE_CAP: u64 = 268_435_456;
+ pub const APP_NS: u64 = 10_000_000_000;
+@@ -127,8 +127,8 @@
+     Ok(now)
+ }
+ 
+-/// Exact profile and actual mixed application work accounting. No configurable
+-/// quota/timeout mode can turn a short run into a LONG completion.
++/// Distinct version2 continuation segment under the user-authorized cumulative goal.
++/// This short segment never satisfies the original version1 single-session goal.
+ unsafe fn run(ctx: *mut c_void, ops: &Operations, summary: &mut Summary) -> Result<(), Failure> {
+     let mut previous = 0;
+     let entered = clock(ctx, ops, &mut previous)?;
+@@ -137,7 +137,7 @@
+     let mut last_reaped = 0;
+     let mut seen = [0_u64; ROUND_CAP as usize * 2];
+     summary.ownership_complete = 1; // No pair has been launched yet.
+-    line!(ctx, ops, "ND_PAIR_LONG_PROFILE {{\"version\":1,\"work_ns\":{},\"wall_ns\":{},\"min_launches\":{},\"round_cap\":{},\"trace_cap\":{}}}\n", WORK_NS, WALL_NS, MIN_LAUNCHES, ROUND_CAP, TRACE_CAP)?;
++    line!(ctx, ops, "ND_PAIR_LONG_PROFILE {{\"version\":2,\"work_ns\":{},\"wall_ns\":{},\"min_launches\":{},\"round_cap\":{},\"trace_cap\":{}}}\n", WORK_NS, WALL_NS, MIN_LAUNCHES, ROUND_CAP, TRACE_CAP)?;
+     for round in 0..ROUND_CAP {
+         let before = clock(ctx, ops, &mut previous)?;
+         if before >= absolute { return Err(Failure::Deadline); }
+--- a/pair_long_static.rs
++++ b/pair_long_static.rs
+@@ -9,9 +9,9 @@
+ use core::ffi::c_void;
+ use core::fmt::{self, Write};
+ 
+-pub const WORK_NS: u64 = 3_600_000_000_000;
+-pub const WALL_NS: u64 = 7_200_000_000_000;
+-pub const MIN_LAUNCHES: u64 = 100;
++pub const WORK_NS: u64 = 90_000_000_000;
++pub const WALL_NS: u64 = 600_000_000_000;
++pub const MIN_LAUNCHES: u64 = 2;
+ pub const ROUND_CAP: u32 = 2048;
+ pub const TRACE_CAP: u64 = 268_435_456;
+ pub const APP_NS: u64 = 10_000_000_000;
+@@ -127,8 +127,8 @@
+     Ok(now)
+ }
+ 
+-/// Exact profile and actual mixed application work accounting. No configurable
+-/// quota/timeout mode can turn a short run into a LONG completion.
++/// Distinct version2 continuation segment under the user-authorized cumulative goal.
++/// This short segment never satisfies the original version1 single-session goal.
+ unsafe fn run(ctx: *mut c_void, ops: &Operations, summary: &mut Summary) -> Result<(), Failure> {
+     let mut previous = 0;
+     let entered = clock(ctx, ops, &mut previous)?;
+@@ -137,7 +137,7 @@
+     let mut last_reaped = 0;
+     let mut seen = [0_u64; ROUND_CAP as usize * 2];
+     summary.ownership_complete = 1; // No pair has been launched yet.
+-    line!(ctx, ops, "ND_PAIR_LONG_PROFILE {{\"version\":1,\"work_ns\":{},\"wall_ns\":{},\"min_launches\":{},\"round_cap\":{},\"trace_cap\":{}}}\n", WORK_NS, WALL_NS, MIN_LAUNCHES, ROUND_CAP, TRACE_CAP)?;
++    line!(ctx, ops, "ND_PAIR_LONG_PROFILE {{\"version\":2,\"work_ns\":{},\"wall_ns\":{},\"min_launches\":{},\"round_cap\":{},\"trace_cap\":{}}}\n", WORK_NS, WALL_NS, MIN_LAUNCHES, ROUND_CAP, TRACE_CAP)?;
+     for round in 0..ROUND_CAP {
+         let before = clock(ctx, ops, &mut previous)?;
+         if before >= absolute { return Err(Failure::Deadline); }
+--- a/long_bridge.inc
++++ b/long_bridge.inc
+@@ -114,6 +114,7 @@
+     /* Joined owners alone cannot prove procfs/workspace release. */
+     if(long_phase(ctx,round,"callback-postflight") || !long_empty(ctx,round,deadline)){out->ownership_complete=0;return -1;}
+     if(long_phase(ctx,round,"callback-gate") || pair_round_gate(deadline))return -1;
++    pair_fail_phase="round_report";
+     if(long_phase(ctx,round,"callback-report"))return -1;
+     int fd=open(PAIR_ROOT "/evidence/current-report",O_CREAT|O_EXCL|O_RDWR|O_NOFOLLOW|O_CLOEXEC,0600);
+     if(fd<0)return -1;
+@@ -173,7 +174,7 @@
+ static int long_dispatch(int console,int *safe,int *empty)
+ {
+     (void)pair_run; /* unchanged short consumer retained, excluded from LONG dispatch */
+-    struct long_context ctx={.console=console,.spool=-1,.deadline=now_ns()+7200000000000ull};
++    struct long_context ctx={.console=console,.spool=-1,.deadline=now_ns()+600000000000ull};
+     struct pair_long_summary summary={0};*safe=1;*empty=0;long_final_pending=0;
+     pair_seen_pid_count=0;pair_seen_token_count=0;pair_trace_total=0;pair_rounds_initialized=1;
+     memset(&long_observed_summary,0,sizeof long_observed_summary);long_observed_result=-1;
+--- a/long_trace_retention.inc
++++ b/long_trace_retention.inc
+@@ -36,6 +36,8 @@
+         if(pid>0 && pid!=r->pids[0] && pid!=r->pids[1])continue;
+         if(!r->bytes || long_trace_stat(r,&current) || !pair_trace_same(&r->identity,&current))return -1;
+         size_t off=r->offset,end=r->offset+r->bytes;
++        /* Exact-match cursor is a newline boundary; preserve identity check above. */
++        if(off<*cursor)off=*cursor;
+         while(off<end) {
+             const char *lf=memchr(pair_trace_authenticated+off,'\n',end-off);if(!lf)return -1;
+             size_t count=(size_t)(lf-(pair_trace_authenticated+off))+1;

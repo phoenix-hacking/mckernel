@@ -1,0 +1,172 @@
+{
+  "schema": "mckernel.m15.f08.independent-saved-FAILED-scope-disposition-qualification.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "invocation": "invocation20261112T094452Z-12a4bea0",
+  "Root_thread_id": "01a18bc3-e072-7810-9426-75101b0856c0",
+  "reviewer": "/root/functional_delta_review; explicit gpt-6.1-sol/MAX; independent saved-result qualification only; no recursion",
+  "decision": "GO_FAILED_SCOPE_CLOSURE_AND_EXACT_SCOPED_RETIREMENT_ELIGIBILITY",
+  "original_case_status": "FAILED_READINESS_PRECONDITION_PRESERVED",
+  "disposition_status": "QUALIFIED_EXACT_FAILED_FAMILY_CLOSED_AND_REMOVED",
+  "retirement_performed_by_reviewer": false,
+  "Root_explicit_scoped_retirement_receipt_still_required": true,
+  "evidence_join": {
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/ROOT-ACTUAL-DISPOSITION-2/ROOT-FAILED-FAMILY-ALL-TERMINAL-JOINS.json",
+    "bytes": 3291,
+    "sha256": "46a37eb5318f2fa642db5fc1ec09c65796cbeee70317cc891ac95f3c8b037814",
+    "all_eight_file_ref_sizes_and_SHA256_bound": true
+  },
+  "approved_operation": {
+    "review_path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-implementation-review-1/DISPOSITION-OPERATION-REVIEW.json",
+    "review_sha256": "ea424c86d1a53ca6ab6e8fa8d4b3ab1d6af1502040c714a860d0a6eca68b4563",
+    "request_sha256": "2800a1f9bccf78c62a04f760511a05db7ab6d5ac5a09d8bbe0e644ee8e333a8a",
+    "failed_request_sha256": "38083843445d78df554d1e3036c7602f097135cfa141b39683b56318400306f5",
+    "actual_inside_source_argument_sha256": "f07afd805187bd1e90968d03533e06770936cfd717cc8b6ab7058dcfe9c7aaf7",
+    "scope": "Exact bounded failed-family recovery only; no normalef1 replay or acceptance. Actual issued source is reported unchanged by Root."
+  },
+  "qualified_new_disposition": {
+    "result_path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/recovery-execution-1/RESULT.json",
+    "result_sha256": "20c13f80abc66954b9614b6ab165695ce3c6dba5db13e832326f0e76806a68cc",
+    "own_clients": 8,
+    "all_own_direct_waits_exit0": true,
+    "all_own_streams_closed_and_receipts_persisted": true,
+    "all_own_births_positive_and_no_remaining_pending_client_outcomes": true,
+    "all_own_lifecycle_UNKNOWN_and_charge_flags_false": true,
+    "all_own_primary_errors_none_and_secondary_errors_empty": true,
+    "own_client_labels_in_order": ["current-running","exact-live-container","one-daemon-cleanup","before-container-stop","container-stop-without-kill-fallback","exact-terminal","container-wait","one-empty-protected-parent-term"],
+    "actual_full_Root_tool": {
+      "initial_chunk": "ec6f87",
+      "original_session": 45639,
+      "terminal_chunk": "2b46a2",
+      "terminal_exit_code": 0,
+      "terminal_session_id_absent": true,
+      "terminal_output": "",
+      "final_ref_sha256": "62dccdce1a7ee16a78a4d639823f5ebd4d99a88e920f10bbbdebaaa86f337c5f"
+    }
+  },
+  "qualified_exact_stages": {
+    "daemon_cleanup": {
+      "result_sha256": "46cf3bbb433a389214f6ac5e2621f230c63e01f08910f82a74b7daf2a2cede8e",
+      "daemon_pid": 9,
+      "birth": "57829697",
+      "signal_attempts": 1,
+      "signal": 15,
+      "original_owner_pid": 7,
+      "owner_birth": "57829688",
+      "original_owner_genuine_late_wait_pid": 9,
+      "original_owner_genuine_late_wait_raw_status": 0,
+      "original_owner_wait_joined": true,
+      "original_late_wait_file_sha256": "70f40c76a75bad8fdd8f34a42010ba50bd17b66fde1094e826cd73cc1777206d",
+      "original_UNKNOWN_and_no_readiness_or_normal_stop_preserved": true,
+      "new_actor_pidfd_close_scope": "Actual actor returned0 after the pinned source's one new pidfd close; its Dockerexec client positively joined0. Original Owner pidfd3 was retained in the unchanged historical record until its process/container ended."
+    },
+    "container_terminal": {
+      "CID": "94db26876ae5c049816c4e5e8efbd5967b94f4dab5d0a4f100110d7af25509ae",
+      "Name": "/mck-m15-f08-owned-main-20261112-1",
+      "Created": "2026-11-12T14:00:30.463398221Z",
+      "terminal_profile_sha256": "1948197952b3aff94bb81bcabd97052fd660a659ad000cfc83c1d4f0eac1389f",
+      "saved_original_created_profile_sha256": "5093fa3e3b6b9e8715649edd3d61cfbb77d8902fac2761248c0ec981d7769cda",
+      "full_original_Id_Image_Name_Created_Config_HostConfig_and_all_Mounts_match": true,
+      "AppArmorProfile": "docker-default",
+      "Status": "exited",
+      "Running": false,
+      "Pid": 0,
+      "ExitCode": 143,
+      "OOMKilled": false,
+      "Error": "",
+      "explicit_Docker_wait": 143,
+      "only_stop_argv": "docker --host=unix:///var/run/docker.sock stop --time=-1 exactCID94db",
+      "kernel_FD_table_retirement_scope": "Actual container termination and positive owned process/client waits retire the original inside process/FD tables. The old pidfd_closedfalse record is preserved; no normal-method close return or enabled-service success is fabricated."
+    },
+    "original_attached_client": {
+      "pid": 1907246,
+      "birth": "57829671",
+      "attempt": 3,
+      "genuine_same_original_Popen_late_wait": 143,
+      "late_record_sha256": "9aee29c35a21f60ec368101cc3f7fd3909c22d6b205b75c604eb40a24f909c62",
+      "captured_late_join_sha256": "7503000826894ab44473eefde35bc27231135b3588617185804ac7a903a319ba",
+      "original_failure_preserved": true
+    },
+    "exact_protected_HOST_parent": {
+      "pid": 1907220,
+      "birth": "57829625",
+      "signal_attempts": 1,
+      "signal": 15,
+      "actor_result_sha256": "2e5144e2edd8be57a6bdd2c4f66c5c989d653b90ed233095427f9f4df98b8d61",
+      "genuine_original_outer_Popen_late_wait": -15,
+      "late_record_sha256": "4077c2801ad58c17678c71a260e456d51822ea951107b5447df539f3a137a923",
+      "new_actor_pidfd_closed_before_actual_actor0": true,
+      "nonchild_wait_substitution": false
+    }
+  },
+  "original_failed_context_full_closure": {
+    "original_Root_session": 47250,
+    "actual_terminal_chunk": "068bce",
+    "actual_exit_code": 1,
+    "actual_terminal_session_id_absent": true,
+    "actual_terminal_output": "",
+    "actual_original_tool_ref_sha256": "30e44cfb6d1d814f4c22f9bbd354c43653933417231f8b6bca668c3d131034ff",
+    "original_streams_closed": true,
+    "outer_CLIENTS_sha256": "80572bca0be77c250ac061a8fae8d452c43d2b446fdbabf117154adfed543cd4",
+    "parent_CLIENTS_sha256": "3138a1cd966450e0271759d25357cfa351b7c4328dff4dc0b7d795e0c0e270cd",
+    "raw_initial_direct_wait_joined_false_exit_UNKNOWN_lifecycle_UNKNOWN_true_charge_retained_true_preserved": true,
+    "separate_authoritative_late_waits_join_current_failed_family_only": true,
+    "known_HOST_roles": "Root saved both exact old pid/birth roles ABSENT_AFTER_POSITIVE_ORIGINAL_WAIT. This is supplemental saved observation; actual same-Popen waits and full tools, not absence guesses, establish closure. No live role probe was performed by reviewer."
+  },
+  "owned_terminal_removal_and_absence": {
+    "CID": "94db26876ae5c049816c4e5e8efbd5967b94f4dab5d0a4f100110d7af25509ae",
+    "Root_reported_approved_nonforce_exact_removal": true,
+    "remove_actual_chunk": "af1a8d",
+    "remove_exit_code": 0,
+    "remove_terminal_session_id_absent": true,
+    "remove_output": "94db26876ae5c049816c4e5e8efbd5967b94f4dab5d0a4f100110d7af25509ae\n",
+    "remove_saved_tool_sha256": "76ac5d109b88d97eeba770f6043ce51f76cf26e93b6a6f936a383e9e19f9928f",
+    "absence_actual_chunk": "a93b5a",
+    "absence_exit_code": 0,
+    "absence_terminal_session_id_absent": true,
+    "absence_output": "",
+    "absence_saved_tool_sha256": "974a43adffc31f1b51fda05fb299144491a01f19025b16e4a97bbf3d68df06dd"
+  },
+  "supported_scoped_retirement": {
+    "eligibility_only_Root_receipt_not_yet_issued_by_review": true,
+    "old_failed_F08_family": {
+      "planning_bytes_eligible": 805306368,
+      "MiB_eligible": 768,
+      "jobs_eligible": 1,
+      "original_session": 47250,
+      "failed_case_remains_failed": true
+    },
+    "new_disposition_family": {
+      "planning_bytes_eligible": 134217728,
+      "MiB_eligible": 128,
+      "jobs_eligible": 1,
+      "actual_session": 45639,
+      "qualification_scope": "Successful exact disposition and positive complete current family closure only"
+    },
+    "total_bytes_eligible": 939524096,
+    "total_MiB_eligible": 896,
+    "total_jobs_eligible": 2,
+    "actual_bytes_retired_by_reviewer": 0,
+    "actual_jobs_retired_by_reviewer": 0,
+    "native12_source_historical_global_UNKNOWN_and_every_other_scope_unchanged": true,
+    "next_action": "Root may now issue one explicit receipt retiring ONLY old805306368B/job1 and new134217728B/job1 against this qualification and exact raw evidence; remeasure and freshly admit queued work. No generic free/resource assertion or global UNKNOWN clearing."
+  },
+  "original_acceptance_and_inference_limits": {
+    "inside_INITIAL_UNKNOWN_sha256_still": "9e6d45ff388d207ebe6d89c4af6f2f98fe2358a27312ecd4d947e663fc3bebbb",
+    "original_readiness_rows_sha256_still": "7b3956dcb7162f7e8989b8d73635360d69ae7bddbf59c14a2db3253c3dc4f057",
+    "readiness_scope_reused_from_ca777": "All388 readyfalse;387 stable protocol15/group0 observations. No enabled-service readiness or normal stop occurred; original primary TimeoutError/traceback and raw UNKNOWN records remain unchanged.",
+    "daemon_provider_mapping_join": "NOT_COLLECTED; prehashed four file identities do not replace it",
+    "cleanup_signal_evidence": "Actual cleanupTERM and original parent wait0 now qualify the recovery stage only. They do not turn the failed normal case into PASS, add provider-map evidence, or resolve the exact Rocky source/provider-precondition inference.",
+    "original_F08_or_M14_M15_acceptance_credit": 0,
+    "larger_goal_completed": false
+  },
+  "preissue_metadata_failure_scope": "Root reports the earlier a6ba95 wrong-q-field preparer was NO_OPERATION before actual issue, preserved separately. It is not used as an execution/closure receipt and this qualification does not rewrite or retry it. The actual45639/47250 records above are authoritative for the two scoped families.",
+  "review_actions_only": {
+    "saved_records_and_metadata_ref_hashes_and_join_predicates_checked": true,
+    "existing_normal_source_approved_review_and_ca777_reused": true,
+    "namespace_live_proc_Docker_probe_signal_remove_replay_or_new_source_audit": false,
+    "protected_account_private_DATA_or_new_admission_read_issued": false,
+    "raw_evidence_or_author_source_modified": false,
+    "resource_retirement_or_acceptance_performed": false
+  },
+  "preservation": "Root sole compositor/executor/retirement owner; finite7c6, native12 and every genuine source/service/account/resource/historical globalUNKNOWN hold remain. HOST0,6,7/max3/4GiB TOTAL/fresh26GiB/floors govern every fresh batch. M14 before M15. Rejected worker01a1c48d-4d96-7cc3-b733-73a97973152f/turn01a1ce01-20cf-7e03-9442-f6d521fb8b02 signal/frame/xstate collector remains excluded from replay/rephrasing/reassignment; no recursive agents."
+}

@@ -1,0 +1,20 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/native_diagnostic_container_owner.py", line 1203, in <module>
+    raise SystemExit(main())
+  File "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/native_diagnostic_container_owner.py", line 1197, in main
+    execute_owner(DiagnosticOwner(args.attempt_parent, manifest=args.manifest,
+  File "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/native_diagnostic_container_owner.py", line 1179, in execute_owner
+    raise owner.failure
+  File "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/native_diagnostic_container_owner.py", line 1147, in execute_owner
+    owner.run()
+  File "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/native_diagnostic_container_owner.py", line 1028, in run
+    retained = self._preflight()
+  File "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/native_diagnostic_container_owner.py", line 893, in _preflight
+    admitted = self.diagnostic.expected_qemu_argv(self.manifest, self.attempt)
+  File "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/native_diagnostic.py", line 466, in expected_qemu_argv
+    qmp = _qmp_socket_path(attempt)
+  File "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/native_diagnostic.py", line 425, in _qmp_socket_path
+    _need(len(os.fsencode(path)) <= 107, "QMP socket pathname exceeds Linux AF_UNIX 107-byte limit")
+  File "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/native_diagnostic.py", line 72, in _need
+    raise DiagnosticError(message)
+owner_bound_diagnostic.DiagnosticError: QMP socket pathname exceeds Linux AF_UNIX 107-byte limit

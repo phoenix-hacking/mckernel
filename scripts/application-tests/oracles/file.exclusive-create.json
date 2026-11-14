@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "file.exclusive-create",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/file.exclusive-create"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["failed=1 errno=17 unchanged=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["O_CREAT|O_EXCL returns -1 with EEXIST", "Existing eight-byte content and size remain unchanged", "No replacement or truncation occurs"],
+  "unresolved_expectations": ["Bind pinned guest EEXIST numeric value and canonical output/input hashes before execution."],
+  "max_question_for_reviewer": "Confirm exclusive create rejects an existing path atomically and preserves metadata/content."
+}

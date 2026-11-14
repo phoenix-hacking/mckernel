@@ -1,0 +1,153 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_REVIEW_READY_1COMPILE_3ACTUAL_BODY_PASS",
+  "files": {
+    "act_execve.actual-body.rs": {
+      "bytes": 1309,
+      "sha256": "2d287ac353b772c619491e315b99789bb33ed51755e76a4aebd02ecb9972f3ea"
+    },
+    "cloexec.expected.stdout": {
+      "bytes": 188,
+      "sha256": "e1966fede16cddd5d13cd916b8b0130882521eb8133ff974038992bb498d5bab"
+    },
+    "transfer_image.actual-body.rs": {
+      "bytes": 3093,
+      "sha256": "9f5b4367ab969b779de2a4aceaca53d441fe79f33fd12f6dae326f8ad07eee52"
+    },
+    "descriptor.expected.stdout": {
+      "bytes": 74,
+      "sha256": "768e57d6fec6eb50cc477024315527856572a4ef36b5957d243b0e85b0e60e2c"
+    },
+    "alloc.expected.stdout": {
+      "bytes": 46,
+      "sha256": "18210837fbbdb8d1f200ddc6d20cce70a9d003d6cf4a6170d589f33a41f01a4e"
+    },
+    "REVIEWER-NOTES.md": {
+      "bytes": 5273,
+      "sha256": "683bd3f2b06217fcba90014227ea725f22a1f95fb342771fcef2ef94ea038379"
+    },
+    "launcher-error-handoff.patch": {
+      "bytes": 2102,
+      "sha256": "ac5d873e9c8d8da3a4c96c6663fa5b06a7ba8b3c7279afcbd5a2910067efd22d"
+    },
+    "run-checks.py": {
+      "bytes": 1847,
+      "sha256": "ee6cb455f0ccfc20de8f751a15664a6d12e6c7c15a94c47dac5e1454d2b53351"
+    },
+    "act_execve_phase2.actual-body.rs": {
+      "bytes": 1646,
+      "sha256": "731c2671126d30213237577636ae8ea64a7ec6dcd96eba48c79fe2ce1a5d7228"
+    },
+    "SOURCE-BINDING.json": {
+      "bytes": 773,
+      "sha256": "406f3b4b73ef04b033b411379537b0de3f0681193f43692f363789e8a4fbedc5"
+    },
+    "actual-body": {
+      "bytes": 3899576,
+      "sha256": "bb069ed3aea2ef887bae96036b68e654a3ce5de0099b5e239de8fd4a163db6c7"
+    },
+    "actual-body-harness.rs": {
+      "bytes": 5395,
+      "sha256": "93c0e0e42574bb8fbc67a363ac50545d087229a3d38efbf6cf88441dcef14967"
+    },
+    "before/mcexec_helpers.rs": {
+      "bytes": 253930,
+      "sha256": "da71f31656ccfc58a79c4dcca01f9c6742135c292b213b7d86113ebddc4cae0a"
+    },
+    "results/result.json": {
+      "bytes": 16361,
+      "sha256": "e869879939f04aca1fde083f2f6d67ecec7b56ea8aed264af41c260562bc82af"
+    },
+    "results/partial.json": {
+      "bytes": 15152,
+      "sha256": "ecf92e2a86095b7b8018c681f0428ae83152d48a30d78679d0882b4444a6c9d3"
+    },
+    "results/cloexec/report.json": {
+      "bytes": 3224,
+      "sha256": "377b6f5553649f712ddcffc4c02a364a068bff7cc9aefc2b70360b9bb519370a"
+    },
+    "results/cloexec/stdout.bin": {
+      "bytes": 188,
+      "sha256": "e1966fede16cddd5d13cd916b8b0130882521eb8133ff974038992bb498d5bab"
+    },
+    "results/cloexec/request.json": {
+      "bytes": 792,
+      "sha256": "97e8f8e2f0e08beae4b4af04a01657b433713dd3ab80d16db240e6fa2535408e"
+    },
+    "results/cloexec/stderr.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "results/cloexec/worker.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "results/alloc/report.json": {
+      "bytes": 3215,
+      "sha256": "87c728a15c214ed5cfbec9d60fc6203d1a61421263875b64a1a89352420d144f"
+    },
+    "results/alloc/stdout.bin": {
+      "bytes": 46,
+      "sha256": "18210837fbbdb8d1f200ddc6d20cce70a9d003d6cf4a6170d589f33a41f01a4e"
+    },
+    "results/alloc/request.json": {
+      "bytes": 790,
+      "sha256": "1ab94dca1cb9090070a8156a667c07cfa6b72792a06cf62fb9f37559929aa64e"
+    },
+    "results/alloc/stderr.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "results/alloc/worker.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "results/descriptor/report.json": {
+      "bytes": 3233,
+      "sha256": "35ee00ab64d716b0916988592ddaf257228d8e85ef0c5b584440546569737627"
+    },
+    "results/descriptor/stdout.bin": {
+      "bytes": 74,
+      "sha256": "768e57d6fec6eb50cc477024315527856572a4ef36b5957d243b0e85b0e60e2c"
+    },
+    "results/descriptor/request.json": {
+      "bytes": 795,
+      "sha256": "5742f1c69756f4adb0cac0c2ab0431eb04135f815bc4d856686b1fbe7495e1e2"
+    },
+    "results/descriptor/stderr.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "results/descriptor/worker.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "results/compile/report.json": {
+      "bytes": 3496,
+      "sha256": "3c6e174ead489014b5fa0d85641cf5d872dcdf122436c50df7fa7e1fceea9bf6"
+    },
+    "results/compile/stdout.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "results/compile/request.json": {
+      "bytes": 1059,
+      "sha256": "b89b25fff7474becf89601af6b45ec6251f1fc305e2c5fe4ee8da7100655ab24"
+    },
+    "results/compile/stderr.bin": {
+      "bytes": 1674,
+      "sha256": "6e9e8b89c879e402dd656015f2c67b6701271d3ea1f99eb2dea6373ed483689b"
+    },
+    "results/compile/worker.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "source/executer/user/rust/mcexec_helpers.rs": {
+      "bytes": 254479,
+      "sha256": "9901615acc98ec710d23afa57423d59eee802cde1981752805436b1bf535c463"
+    }
+  },
+  "shared_edits": false,
+  "native_acceptance": false,
+  "no_active_host_child": true
+}

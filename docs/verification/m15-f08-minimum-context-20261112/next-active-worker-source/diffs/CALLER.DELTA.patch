@@ -1,0 +1,151 @@
+--- /home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/actual-downstream-monitor-context-1/current-service-context-read-1/actual-context-binding-1/actual-provenance-context-binding-1/minimum-context-integration-1/f08_owned_main.py
++++ /home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/actual-downstream-monitor-context-1/current-service-context-read-1/actual-context-binding-1/actual-provenance-context-binding-1/minimum-context-integration-1/next-original-event-observation-1/active-worker-observer-source-1/owner-binding-correction-1/f08_owned_active_kmsg.py
+@@ -19,20 +19,23 @@
+ from pathlib import Path
+ 
+ OUT = Path('/output')
+-OWNER_SHA = 'c87fb96d7c6df9dc1e301f74b3115536a5c4ffec1897f185e94a15bb3bafe4dc'
++OWNER_SHA = '3515d8907dabe319568945f224a553134a33373d5652bf7ded8656a9fd707994'
+ PIDFD_SHA = '068e8316ef03a03d1977d05ce755dfa8133c13bd4dfa56254c27b0066be2575c'
+ PAYLOAD_SHA = 'b9cf237dbd3d6156f050418945d6fd60fd9738d6604f399013761865f6830447'
+ IHK_SHA = 'b7bcafd0923de851cd04b3934207e7217065e28434e95e505d4ed5fd4bfc96c2'
+ UDEV_SHA = '034fd62bb884d5ee2244966e96db2a40970de1a423f75057380fae67ea9d0cce'
+ CAP_SHA = '70e8dbe271e2ea63127fbc20270ce60541d1244f0b170888d258b86b2573bcbf'
+-ARGV = ['/usr/local/sbin/ihkmond', '-k', '0', '-i', '-1']
++ARGV = ['/usr/local/sbin/ihkmond', '-k', '1', '-i', '-1']
+ ENV = {'LANG': 'C', 'LC_ALL': 'C', 'PATH': '/usr/bin:/bin', 'TZ': 'UTC',
+        'PYTHONDONTWRITEBYTECODE': '1', 'TMPDIR': '/tmp'}
+ 
+ 
+-EXPECTED_CONTEXT = {'expected_consumer_netns': {'device': 4, 'inode': 4026531840, 'link': 'net:[4026531840]'}, 'expected_consumer_userns': {'device': 4, 'inode': 4026531837, 'link': 'user:[4026531837]'}, 'monitor': {'channel': 'udev', 'group_mask': 2, 'protocol': 15}, 'observed_tuple': {'boot_id': '3ba4f2ca-4323-433d-bfb8-7859268121b6', 'control_node': {'bytes': 0, 'ctime_ns': '1793913730791999991', 'device': 25, 'gid': 0, 'inode': 361, 'kind': 'SOCKET', 'mode': '0o600', 'mtime_ns': '1793913730791999991', 'nlink': 1, 'path': '/run/udev/control', 'status': 'OBSERVED', 'uid': 0}, 'publisher_exe_path': '/usr/lib/systemd/systemd-udevd', 'publisher_executable': {'bytes': 760392, 'ctime_ns': '1743629919571215524', 'device': 66306, 'gid': 0, 'inode': 1051524, 'mode': '0o755', 'mtime_ns': '1718656179000000000', 'nlink': 1, 'sha256': 'bdf695b3e26cb10bb767b32dae1a5eb8c0c0e4395c0a7850417ca603085a7286', 'status': 'OBSERVED', 'uid': 0}, 'publisher_namespaces': {'mnt': {'device': 4, 'inode': 4026532322, 'link': 'mnt:[4026532322]'}, 'net': {'device': 4, 'inode': 4026531840, 'link': 'net:[4026531840]'}, 'pid': {'device': 4, 'inode': 4026531836, 'link': 'pid:[4026531836]'}, 'user': {'device': 4, 'inode': 4026531837, 'link': 'user:[4026531837]'}}, 'publisher_process': {'PPid': 1, 'birth': '281', 'pid': 420}, 'publisher_root': {'device': 66306, 'inode': 2}, 'publisher_uid_gid': {'Uid': [0, 0, 0, 0], 'Gid': [0, 0, 0, 0]}}, 'publisher_package_DB_metadata': {'architecture': 'amd64', 'binary_package': 'udev', 'binary_package_archive_or_signature_or_protocol_authentication': False, 'db_status': 'install ok installed', 'db_status_abbrev': 'ii ', 'installed_state': 'INSTALLED', 'owner': 'udev', 'registered_path': '/lib/systemd/systemd-udevd', 'source_package': 'systemd', 'source_version': '245.4-4ubuntu3.24', 'status': 'OBSERVED_REGISTERED_INSTALLED_DATABASE_RECORD_ONLY', 'version': '245.4-4ubuntu3.24'}, 'publisher_package_scope': 'INSTALLED_DATABASE_ONLY_NO_ARCHIVE_SIGNATURE_SOURCE_OR_PROTOCOL_AUTHENTICATION', 'saved_package_DATA_sha256': '4e9ab36060491a7041979802a8195e5fdaecd59103dc81d467909d521942321b', 'saved_service_DATA_sha256': '73db43897f9e8781ef7fbdd877690739cc4a9d0a10c48c2b8fec0afcbd8a561c', 'schema': 'mckernel.m15.f08.closed-static-genuine-context.v1', 'source_contract_sha256': '519defcd6719e1e55e44fb0de4f607061c59dd2cdf6d45024e3ad470c414a4ea'}
+-PROFILE_SHA = '05e3e2d5d0123fc131d553a755d1701f1860310e3d442d1123a184255272d208'
+-EXPECTED_CONTEXT_SHA = 'd6a2709ad85338997d7fb48f3d5d33b8f2e4b3e436979740521ce0778a92f9fa'
++# Actual same-kernel backend/profile DATA is unissued at source preparation.
++# The future reviewed normal Root parent pins real authority files and seals
++# these inline context values into one root-owned, readonly operation input.
++EXPECTED_CONTEXT = None
++PROFILE_SHA = None
++EXPECTED_CONTEXT_SHA = None
+ HOST_GUARD_SHA = '5c2f456402992f233b6a13d9aaf7fe2549391a029fcd3cd138d6664d794e3756'
+ ROOT_THREAD = '01a18bc3-e072-7810-9426-75101b0856c0'
+ 
+@@ -231,6 +234,38 @@
+     return observed
+ 
+ 
++
++def bind_active_backend(operation):
++    global EXPECTED_CONTEXT, PROFILE_SHA, EXPECTED_CONTEXT_SHA
++    value = os.lstat('/input/F08-OPERATION.json')
++    require(stat.S_ISREG(value.st_mode) and value.st_uid == value.st_gid == 0 and
++            stat.S_IMODE(value.st_mode) == 0o444 and value.st_nlink == 1,
++            'actual immutable Root-sealed active operation DATA required')
++    module, source = load_pinned('/input/owned_process.py', OWNER_SHA, 'f08_active_inside_owner')
++    actual_caller_sha = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
++    pins = {'inside_owner_sha256': OWNER_SHA, 'inside_caller_sha256': actual_caller_sha,
++            'pidfd_sha256': PIDFD_SHA, 'payload_sha256': PAYLOAD_SHA,
++            'ihklib_sha256': IHK_SHA, 'libudev_sha256': UDEV_SHA, 'libcap_sha256': CAP_SHA,
++            'source_contract_sha256': '519defcd6719e1e55e44fb0de4f607061c59dd2cdf6d45024e3ad470c414a4ea'}
++    # This consumes the normal Root parent's pinned admission projection.
++    # It does not mint a grant, resolve a hold or substitute for that parent.
++    observer = module.ActiveKmsgObserver(operation, pins)
++    static = operation['provider_context']['static']
++    require(type(static) is dict and set(static) == {
++        'schema', 'source_contract_sha256', 'monitor', 'expected_consumer_netns',
++        'expected_consumer_userns', 'observed_tuple', 'publisher_package_DB_metadata',
++        'publisher_package_scope', 'saved_package_DATA_sha256', 'saved_service_DATA_sha256'},
++        'closed source-derived genuine static publisher context')
++    require(static['schema'] == 'mckernel.m15.f08.closed-static-genuine-context.v1' and
++            static['publisher_package_scope'] ==
++            'INSTALLED_DATABASE_ONLY_NO_ARCHIVE_SIGNATURE_SOURCE_OR_PROTOCOL_AUTHENTICATION',
++            'existing honest provider-context provenance scope')
++    EXPECTED_CONTEXT = static
++    PROFILE_SHA = observer.backend['profile_ref']['sha256']
++    EXPECTED_CONTEXT_SHA = observer.backend['expected_context_ref']['sha256']
++    return module, source, observer
++
++
+ def main():
+     os.umask(0o077)
+     require(len(sys.argv) == 5 and sys.argv[1] == '--operation' and
+@@ -250,9 +285,10 @@
+     require(hashlib.sha256(operation_raw).hexdigest() == sys.argv[4], 'consumed operation DATA digest differs')
+     operation = json.loads(operation_raw)
+     require(set(operation) == {'schema', 'invocation', 'nonce', 'ready_timeout_seconds',
+-                               'stop_timeout_seconds', 'payload_argv', 'payload_env', 'payload_cwd', 'provider_context'},
++                               'stop_timeout_seconds', 'payload_argv', 'payload_env', 'payload_cwd', 'provider_context',
++                               'backend_binding'},
+             'exact operation DATA schema required')
+-    require(operation['schema'] == 'mckernel.m15.f08.inside-genuine-context-operation-inputs.v2' and
++    require(operation['schema'] == 'mckernel.m15.f08.inside-active-kmsg-operation-inputs.v1' and
+             operation['invocation'] == '20261112T094452Z-12a4bea0' and
+             type(operation['nonce']) is str and re.fullmatch('[0-9a-f]{64}', operation['nonce']) is not None,
+             'same invocation and fresh Root-issued nonce required')
+@@ -262,7 +298,10 @@
+         value = operation[key]
+         require(type(value) in (int, float) and math.isfinite(value) and value > 0,
+                 'Root-issued positive finite deadline required')
++    require(operation['ready_timeout_seconds'] <= 30 and operation['stop_timeout_seconds'] <= 15,
++            'bounded active case ready/stop deadlines')
+     try:
++        owner_module, owner_source, active_observer = bind_active_backend(operation)
+         context_before = consumer_context_bookend(operation)
+         write_json('CONTEXT-BEFORE.json', context_before)
+     except BaseException as context_error:
+@@ -281,7 +320,6 @@
+         ('/usr/local/lib64/libihk.so', IHK_SHA),
+         ('/usr/lib64/libudev.so.1.7.10', UDEV_SHA),
+         ('/usr/lib64/libcap.so.2.69', CAP_SHA))]
+-    owner_module, owner_source = load_pinned('/input/owned_process.py', OWNER_SHA, 'f08_inside_owner')
+     pidfd_module, pidfd_source = load_pinned('/input/pidfd_compat.py', PIDFD_SHA, 'f08_inside_pidfd')
+     # Native or selected Linux x86_64 UAPI support is evaluated only HERE.
+     pidfd_module.require_implementation()
+@@ -295,20 +333,28 @@
+                                    'raw_mountinfo': Path('/proc/self/mountinfo').read_text(),
+                                    'runtime': {'python': sys.version, 'uname': list(os.uname())}})
+     # Register this exact object before the existing constructor sets subreaper.
+-    owner = owner_module.Owner.__new__(owner_module.Owner)
++    owner = owner_module.ActiveKmsgOwner.__new__(owner_module.ActiveKmsgOwner)
+     try:
+         owner_module.Owner.__init__(owner, OUT)
+         owner._f08_preconstructor_baseline = pre
+         owner._f08_operation = {'inputs': operation, 'identity': operation_identity}
+         owner._f08_artifacts = artifacts
+-        result = owner.run_ihkmond_main(ARGV, ENV, '/output', operation['ready_timeout_seconds'],
+-                                       operation['stop_timeout_seconds'], 'ihkmond-main-k0-i-1',
++        owner._f08_active_observer = active_observer
++        result = owner.run_ihkmond_active_kmsg(ARGV, ENV, '/output', operation['ready_timeout_seconds'],
++                                       operation['stop_timeout_seconds'], 'ihkmond-main-k1-i-1-real-add-remove',
+                                        pidfd_api=pidfd_module)
+         require(result['status'] == 'PASS' and result['launcher_parent_joined'] and
+                 result['daemon_parent_joined'] and result['readiness_observed'] and
+                 result['stop_attempted'] and result['stop_successful'] and result['pidfd_closed'] and
+                 result['launcher_streams_closed'] and not result['children_after_waits'],
+                 'actual inside Owner closure is incomplete')
++        observation = result['active_kmsg_observation']
++        require(observation['ring']['source_literal_present'] is True and
++                observation['ring']['before_TERM'] is True and
++                observation['notification101_delivery'] == observation['syslog_receiver_delivery'] ==
++                observation['hungup_or_status2_delivery'] == 'UNPROVED' and
++                observation['full_F08_acceptance'] is False,
++                'actual add/remove/ring evidence cannot become notification/syslog/hungup acceptance')
+         context_after = consumer_context_bookend(operation)
+         require(context_after == context_before, 'selected consumer context changed across real daemon case')
+         monitor = result['readiness_raw']['monitor_netlink']
+@@ -317,12 +363,14 @@
+         require(file_identity('/input/F08-OPERATION.json', sys.argv[4]) == operation_identity,
+                 'closed operation input changed across case')
+         write_json('CONTEXT-AFTER.json', context_after)
+-        write_json('RESULT.json', {'status': 'PASS', 'case': 'ihkmond-main-k0-i-1',
++        write_json('RESULT.json', {'status': 'PASS', 'case': 'ihkmond-main-k1-i-1-real-add-remove',
+                                   'owner_pid': os.getpid(), 'owner_birth': pre['birth'],
+                                   'operation_input': operation_identity, 'case_result': result,
+                                   'genuine_context_before': context_before, 'genuine_context_after': context_after,
+                                   'actual_monitor_protocol15_group2': True,
+-                                  'scope': 'One real normal daemon/udev startup and orderly disabled-worker stop only',
++                                  'active_kmsg_observation': observation,
++                                  'notification101_syslog_hungup_or_fullF08_acceptance': False,
++                                  'scope': 'One real mcos0 add/ordinary-boot/remove retained-kmsg observation only',
+                                   'HOST_cli_container_Root_join_and_retirement': 'EXTERNAL_UNPROVED',
+                                   'F08_or_milestone_acceptance': False})
+     except BaseException as exc:

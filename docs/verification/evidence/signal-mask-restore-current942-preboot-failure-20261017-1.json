@@ -1,0 +1,596 @@
+{
+  "application_acceptance": false,
+  "archive": {
+    "path": "docs/verification/evidence/signal-mask-restore-current942-preboot-failure-20261017-1.tar.gz",
+    "sha256": "bc60cf9de91c3107412f7f54af771580a17d39cdfdb9699b8fb11896aa1564a4",
+    "size": 9220,
+    "source_file_count": 8,
+    "source_total_bytes": 126105,
+    "verification": "Every archived regular member streamed and matched original size/SHA256; exact file-name set matched; every original source file rehashed unchanged after archival. Nested owner-evidence.tar retained as exact original bytes.",
+    "verified_members_sha256": {
+      "command.json": "570a3a39084af47cef4c0d4d2377cf79b2007bf32215309d76f45a3b2d9a693c",
+      "owner-evidence.tar": "d4fa1439c4451d45ff064d44f8d6e53ade30db066a90d9a3ca4bbfe1bcadd778",
+      "owner-result.json": "51af23c9f75254535dce13b3acecad46642454554386bbbc0514d8de2e4eee1f",
+      "readback-argv.json": "09f87c6b179c2a6d933000dbd543443253e9ec311298158338ed2557c1fa0a30",
+      "readback.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "result.json": "9362df208b18bb8f001bf75bf1bf5e9bc4a8d59da07c307248b6bae6fc5c7eb0",
+      "stderr": "4ab681b0cf0e6244c177c338f2f13733ed6e6f7ff7a746a4f8cadab44dd19fc6",
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "blocker": "A fresh execution packet must use an admitted QMP socket path and satisfy dispatcher review before another attempt.",
+  "checks": {
+    "new_guest_executions": 0,
+    "profile": "CPU7, 1 GiB address-space limit, 120-second outer timeout; file reads/archive writes only.",
+    "runtime_or_build_commands": 0
+  },
+  "dispatch_command": {
+    "argv": [
+      "/usr/bin/sudo",
+      "-A",
+      "/home/holden/anaconda3/bin/python3",
+      "-B",
+      "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+      "--attempt-parent",
+      "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-guest-20261017-1",
+      "--nonce",
+      "6fb44f2a0cd64994af43c47bfc7476ab",
+      "--owner-sha256",
+      "740f507631e9076ef2fd8961206ff69a87abed4c686167348b2dc5ded3ce4034",
+      "--manifest",
+      "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-manifest-20261017-1.json",
+      "--manifest-sha256",
+      "47eb95897b0a4f2d8b2cb2673c2ed3b3feff11895654ac160c854710cc7582da"
+    ],
+    "fetched_checkpoint": "89eabf36611f5623fa0bb62436e25dda4904e936",
+    "head_stable_during_operation": true,
+    "host_available_bytes": 20189003776,
+    "release_sha256": "fed0f2f4b99c6dcc12f657e9f82f3a400edf2f20952ce66e7c46c872110fa5ce",
+    "scratch_available_bytes": 18992738304
+  },
+  "dispatch_result": {
+    "elapsed_seconds": 301.85647327300103,
+    "exit_code": 1,
+    "head_after": "89eabf36611f5623fa0bb62436e25dda4904e936",
+    "head_before": "89eabf36611f5623fa0bb62436e25dda4904e936",
+    "release_sha256": "fed0f2f4b99c6dcc12f657e9f82f3a400edf2f20952ce66e7c46c872110fa5ce",
+    "stderr_sha256": "4ab681b0cf0e6244c177c338f2f13733ed6e6f7ff7a746a4f8cadab44dd19fc6",
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "failure_summary": {
+    "captured_failure": "OwnerError: docker command failed: start; inner attached command reported native diagnostic failed: absolute deadline expired.",
+    "elapsed_seconds": 301.85647327300103,
+    "exit_code": 1,
+    "preboot_cause": {
+      "authority": "Dispatcher-supplied independent /root/signal_guest_execution_review accepted RETIRED_FAILED_PREBOOT. Captures retain timeout/start failure; length is independently recomputed from owner attempt path.",
+      "disposition": "Overlong QMP UNIX socket path before boot; no payload launched.",
+      "permitted_path_bytes": 107,
+      "qmp_socket_path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-guest-20261017-1/attempt-6fb44f2a0cd64994af43c47bfc7476ab/qmp.sock",
+      "utf8_path_bytes": 132
+    },
+    "retirement": {
+      "absence_verified": true,
+      "container_id": "4c8cd73e3505a2aaee78d48e40ee43b197c43d0e82d81e0e61a6fe1f1582d11f",
+      "container_removed": true,
+      "independent_review": "/root/signal_guest_execution_review accepted RETIRED_FAILED_PREBOOT, as supplied by dispatcher.",
+      "lease_retained": false
+    }
+  },
+  "findings": [
+    "Original failed dispatch preserved without overwrite, retry or deletion.",
+    "Infrastructure preboot failure supplies no signal-mask behavior or kernel-defect evidence."
+  ],
+  "formal_case_credit": false,
+  "guest_pass_count": 0,
+  "head_stability": {
+    "after": "89eabf36611f5623fa0bb62436e25dda4904e936",
+    "before": "89eabf36611f5623fa0bb62436e25dda4904e936",
+    "observed_via": "retained dispatch result; no Git command run by this task",
+    "stable": true
+  },
+  "kernel_defect_established": false,
+  "nested_owner_evidence": {
+    "members": {
+      "./001-ps.json": {
+        "sha256": "1a125feadc8d115d92564db091eae517af2a90aea2950570478f8e7d40c0ebdd",
+        "size": 304
+      },
+      "./001-ps.stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "./001-ps.stdout": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "./002-ps.json": {
+        "sha256": "d909feab7d9eeb2bf6443e160c3c568bb6d1be5b22a834eb428c248dbe02897e",
+        "size": 308
+      },
+      "./002-ps.stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "./002-ps.stdout": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "./003-image.json": {
+        "sha256": "ae1a2ec20d581f2adb7a0640617e5b92f61cc87c96219c97db8f590a6d861489",
+        "size": 291
+      },
+      "./003-image.stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "./003-image.stdout": {
+        "sha256": "c881faf78539b1698aa9cfe24e0b82562442a58de18666bf59a447b72607e95a",
+        "size": 4785
+      },
+      "./004-create.json": {
+        "sha256": "fa80234502d88723a4c0004bd8f65c0fd80b34da668868f5d076b3b06da97809",
+        "size": 1925
+      },
+      "./004-create.stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "./004-create.stdout": {
+        "sha256": "e1c66da58543c3239f101abc3c7b54cfd2f7174fbeea3b1a20f060cafa680bc6",
+        "size": 65
+      },
+      "./005-ps.json": {
+        "sha256": "89e3c24290f0cf298fdcbb6753342b47d83ac48028bdeac80ebafddf041382d2",
+        "size": 304
+      },
+      "./005-ps.stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "./005-ps.stdout": {
+        "sha256": "e1c66da58543c3239f101abc3c7b54cfd2f7174fbeea3b1a20f060cafa680bc6",
+        "size": 65
+      },
+      "./006-ps.json": {
+        "sha256": "e80a3c80a85301b57e432d76bd2cbda1ab9eb5cbb8d25f78eb3d7b002a9bb4ac",
+        "size": 308
+      },
+      "./006-ps.stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "./006-ps.stdout": {
+        "sha256": "e1c66da58543c3239f101abc3c7b54cfd2f7174fbeea3b1a20f060cafa680bc6",
+        "size": 65
+      },
+      "./007-ps.json": {
+        "sha256": "bd2d10d8e763ec03e32ca42b376d324614e2f0eb80511577aa5ba0399847463e",
+        "size": 304
+      },
+      "./007-ps.stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "./007-ps.stdout": {
+        "sha256": "e1c66da58543c3239f101abc3c7b54cfd2f7174fbeea3b1a20f060cafa680bc6",
+        "size": 65
+      },
+      "./008-inspect.json": {
+        "sha256": "30d2bea7dc81b9448302b856ed17840f2dab06ed3737f7089fe2602a95e207e6",
+        "size": 276
+      },
+      "./008-inspect.stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "./008-inspect.stdout": {
+        "sha256": "bc74d0e236dcbd40769eec2712aaa9c5d04753af9f31fa730a11e071923b11ea",
+        "size": 12421
+      },
+      "./009-start.json": {
+        "sha256": "abd8e0b49dc56ea7f598e524618d20a6e2e5aa17898ced5bf1736f73f7487ea4",
+        "size": 294
+      },
+      "./009-start.stderr": {
+        "sha256": "7d1322f3489769514eb3929556581b80ad19f10e144fa8c2127693cf31e56e20",
+        "size": 52
+      },
+      "./009-start.stdout": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "./010-wait.json": {
+        "sha256": "e5f3740d92e3965eeb4273410112f3d99a9d2dbb7f3cad50bb883c60d43b333c",
+        "size": 272
+      },
+      "./010-wait.stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "./010-wait.stdout": {
+        "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+        "size": 2
+      },
+      "./011-logs.json": {
+        "sha256": "93e4835677b472d3003cec090211e9b3c991264d6db731e6154a0f7328152fb8",
+        "size": 287
+      },
+      "./011-logs.stderr": {
+        "sha256": "b24a1e9418695ba40f5bb49c443e9c3bac62e41adda107d2200b84610adc9481",
+        "size": 83
+      },
+      "./011-logs.stdout": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "./012-inspect.json": {
+        "sha256": "44c2a9663f6ff84148a959bd766b8e5105104980a15c296ae47f30aca0ff06ca",
+        "size": 275
+      },
+      "./012-inspect.stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "./012-inspect.stdout": {
+        "sha256": "e284af5c8008c04a01f55c5ee584f04bb0867a6dfa164e5fb3ffda0eadc30183",
+        "size": 13081
+      },
+      "./013-ps.json": {
+        "sha256": "f9dd8883551f6cb06cc40410ddabefa0168812d4f25425c6ec7939acd53409b3",
+        "size": 304
+      },
+      "./013-ps.stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "./013-ps.stdout": {
+        "sha256": "e1c66da58543c3239f101abc3c7b54cfd2f7174fbeea3b1a20f060cafa680bc6",
+        "size": 65
+      },
+      "./014-ps.json": {
+        "sha256": "58e5c578a339654b7260d65b8c4df09199de8c322fb990a5c1047e2b43ec3cb9",
+        "size": 308
+      },
+      "./014-ps.stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "./014-ps.stdout": {
+        "sha256": "e1c66da58543c3239f101abc3c7b54cfd2f7174fbeea3b1a20f060cafa680bc6",
+        "size": 65
+      },
+      "./015-ps.json": {
+        "sha256": "a7a24bb3328be434781fa21869a287c9748dec4c4c27332502b8ede4e149cc56",
+        "size": 304
+      },
+      "./015-ps.stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "./015-ps.stdout": {
+        "sha256": "e1c66da58543c3239f101abc3c7b54cfd2f7174fbeea3b1a20f060cafa680bc6",
+        "size": 65
+      },
+      "./016-inspect.json": {
+        "sha256": "b3d0d097e33113704d0ae1fc844426e511d9443cd4c5bfb99f2405fcd1e158a8",
+        "size": 276
+      },
+      "./016-inspect.stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "./016-inspect.stdout": {
+        "sha256": "e284af5c8008c04a01f55c5ee584f04bb0867a6dfa164e5fb3ffda0eadc30183",
+        "size": 13081
+      },
+      "./017-stop.json": {
+        "sha256": "54ed07f8c26a990e407d3e1656d85b5e2a7412bfe4ed6edea31bff122c2b1dd7",
+        "size": 283
+      },
+      "./017-stop.stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "./017-stop.stdout": {
+        "sha256": "e1c66da58543c3239f101abc3c7b54cfd2f7174fbeea3b1a20f060cafa680bc6",
+        "size": 65
+      },
+      "./018-kill.json": {
+        "sha256": "765eef7035cc22c5a0941027200b1a2bc3934449ab0b9c54a23579db30752601",
+        "size": 272
+      },
+      "./018-kill.stderr": {
+        "sha256": "88088fbd614bc0a1215ffb26f9c836c522d1605f0b032d5f6c205a399988c163",
+        "size": 207
+      },
+      "./018-kill.stdout": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "./019-wait.json": {
+        "sha256": "3ecd614482fae9800c155ec67bc01bef29c38bbe569a680ddcb7d719ade88b9f",
+        "size": 272
+      },
+      "./019-wait.stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "./019-wait.stdout": {
+        "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+        "size": 2
+      },
+      "./020-logs.json": {
+        "sha256": "996bcac5298a235e0e24c7b4d140d83cb775a6d7f54996941afe364deed4f6bd",
+        "size": 287
+      },
+      "./020-logs.stderr": {
+        "sha256": "b24a1e9418695ba40f5bb49c443e9c3bac62e41adda107d2200b84610adc9481",
+        "size": 83
+      },
+      "./020-logs.stdout": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "./021-inspect.json": {
+        "sha256": "611ac119e8341c03720b8b0d818efd9cdaff5a73e3c10840f57da5c673323b2c",
+        "size": 275
+      },
+      "./021-inspect.stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "./021-inspect.stdout": {
+        "sha256": "e284af5c8008c04a01f55c5ee584f04bb0867a6dfa164e5fb3ffda0eadc30183",
+        "size": 13081
+      },
+      "./022-rm.json": {
+        "sha256": "24607eef3d73edc7b5c59b725b1fe599159d3f2f854536c2c4a333a6f0a08602",
+        "size": 280
+      },
+      "./022-rm.stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "./022-rm.stdout": {
+        "sha256": "e1c66da58543c3239f101abc3c7b54cfd2f7174fbeea3b1a20f060cafa680bc6",
+        "size": 65
+      },
+      "./023-ps.json": {
+        "sha256": "e46771bc47b5eb2ca00055ac45e2c69cf274e6ca71905c62cd6e6e8dcda872e7",
+        "size": 304
+      },
+      "./023-ps.stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "./023-ps.stdout": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "./024-ps.json": {
+        "sha256": "e3b7e5e7cbafbca2bb9b16ce2cf98535f85f822f4ad6ad18b9f6cfb9021cd129",
+        "size": 308
+      },
+      "./024-ps.stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "./024-ps.stdout": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "./025-ps.json": {
+        "sha256": "d93e777b67eb8aef8e9c503b77ebd2e1ea02c77754506b0afe4bab4566a30b57",
+        "size": 304
+      },
+      "./025-ps.stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "./025-ps.stdout": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "./owner.json": {
+        "sha256": "30e05ad5afdec7bbf634b00d15e99aacd2f88437b6d6c2e6bff0cd339bebcf11",
+        "size": 826
+      },
+      "./result.json": {
+        "sha256": "145ae8d514830c0995eae18f94f0a746bd19478d1e5983700e6c404b48568b5b",
+        "size": 256
+      }
+    },
+    "path_in_archive": "signal-mask-restore-current942-dispatch-20261017-1/owner-evidence.tar",
+    "regular_member_count": 77,
+    "sha256": "d4fa1439c4451d45ff064d44f8d6e53ade30db066a90d9a3ca4bbfe1bcadd778"
+  },
+  "next_task": "Dispatcher owns socket-path preparation and separately reviewed fresh attempt; no runtime release provided by this archive.",
+  "owner_result": {
+    "absence_verified": true,
+    "application_acceptance": false,
+    "container": "4c8cd73e3505a2aaee78d48e40ee43b197c43d0e82d81e0e61a6fe1f1582d11f",
+    "failure": "OwnerError",
+    "lease_retained": false,
+    "secondary": [],
+    "secondary_omitted": 0,
+    "signal_number": null,
+    "status": "FAIL"
+  },
+  "payload_runs": 0,
+  "production_acceptance": false,
+  "ready_for_review": true,
+  "schema": "mckernel.signal-mask-restore-current942-preboot-failure-preservation.v1",
+  "selected_inner_observations": {
+    "./009-start.json": {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "start",
+        "--attach",
+        "4c8cd73e3505a2aaee78d48e40ee43b197c43d0e82d81e0e61a6fe1f1582d11f"
+      ],
+      "command": {
+        "pgid": 510545,
+        "pid": 510545,
+        "proc_starttime": 4080691,
+        "reaped": true,
+        "returncode": 1,
+        "sid": 510445
+      },
+      "failure": "OwnerError",
+      "returncode": 1,
+      "timeout": 360
+    },
+    "./009-start.stderr": "native diagnostic failed: absolute deadline expired\n",
+    "./022-rm.json": {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "rm",
+        "--force",
+        "4c8cd73e3505a2aaee78d48e40ee43b197c43d0e82d81e0e61a6fe1f1582d11f"
+      ],
+      "command": {
+        "pgid": 514519,
+        "pid": 514519,
+        "proc_starttime": 4110813,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 510445
+      },
+      "failure": null,
+      "returncode": 0,
+      "timeout": 4
+    },
+    "./023-ps.stdout_hex": "",
+    "./024-ps.stdout_hex": "",
+    "./025-ps.stdout_hex": "",
+    "./owner.json": {
+      "application_acceptance": false,
+      "attempt": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-guest-20261017-1/attempt-6fb44f2a0cd64994af43c47bfc7476ab",
+      "cgroup_profile": {
+        "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_period_us": "100000",
+        "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_quota_us": "400000",
+        "/sys/fs/cgroup/memory/mckernel-dev/memory.limit_in_bytes": "12884901888",
+        "/sys/fs/cgroup/memory/mckernel-dev/memory.use_hierarchy": "1",
+        "/sys/fs/cgroup/pids/mckernel-dev/pids.max": "512"
+      },
+      "lock": {
+        "dev": 27,
+        "gid": 0,
+        "ino": 4,
+        "mode": 420,
+        "nlink": 1,
+        "uid": 0
+      },
+      "name": "mckernel-native-diagnostic-6fb44f2a0cd64994af43c47bfc7476ab",
+      "nonce": "6fb44f2a0cd64994af43c47bfc7476ab",
+      "outer": {
+        "pgid": 510445,
+        "pid": 510460,
+        "proc_starttime": 4080653,
+        "sid": 510445
+      },
+      "owner_sha256": "740f507631e9076ef2fd8961206ff69a87abed4c686167348b2dc5ded3ce4034"
+    },
+    "./result.json": {
+      "absence_verified": true,
+      "application_acceptance": false,
+      "container": "4c8cd73e3505a2aaee78d48e40ee43b197c43d0e82d81e0e61a6fe1f1582d11f",
+      "failure": "OwnerError",
+      "lease_retained": false,
+      "secondary": [],
+      "secondary_omitted": 0,
+      "signal_number": null,
+      "status": "FAIL"
+    }
+  },
+  "source_files": {
+    "command.json": {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 107886,
+      "mode": 33152,
+      "mtime_ns": 1792243360385463747,
+      "sha256": "570a3a39084af47cef4c0d4d2377cf79b2007bf32215309d76f45a3b2d9a693c",
+      "size": 947,
+      "uid": 1000
+    },
+    "owner-evidence.tar": {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 107982,
+      "mode": 33152,
+      "mtime_ns": 1792243694515310628,
+      "sha256": "d4fa1439c4451d45ff064d44f8d6e53ade30db066a90d9a3ca4bbfe1bcadd778",
+      "size": 122880,
+      "uid": 1000
+    },
+    "owner-result.json": {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 107984,
+      "mode": 33152,
+      "mtime_ns": 1792243694567313502,
+      "sha256": "51af23c9f75254535dce13b3acecad46642454554386bbbc0514d8de2e4eee1f",
+      "size": 293,
+      "uid": 1000
+    },
+    "readback-argv.json": {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 107981,
+      "mode": 33152,
+      "mtime_ns": 1792243694447306869,
+      "sha256": "09f87c6b179c2a6d933000dbd543443253e9ec311298158338ed2557c1fa0a30",
+      "size": 194,
+      "uid": 1000
+    },
+    "readback.stderr": {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 107983,
+      "mode": 33152,
+      "mtime_ns": 1792243694447306869,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "uid": 1000
+    },
+    "result.json": {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 107976,
+      "mode": 33152,
+      "mtime_ns": 1792243662245531833,
+      "sha256": "9362df208b18bb8f001bf75bf1bf5e9bc4a8d59da07c307248b6bae6fc5c7eb0",
+      "size": 445,
+      "uid": 1000
+    },
+    "stderr": {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 107888,
+      "mode": 33152,
+      "mtime_ns": 1792243662237531393,
+      "sha256": "4ab681b0cf0e6244c177c338f2f13733ed6e6f7ff7a746a4f8cadab44dd19fc6",
+      "size": 1346,
+      "uid": 1000
+    },
+    "stdout": {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 107887,
+      "mode": 33152,
+      "mtime_ns": 1792243360385463747,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "uid": 1000
+    }
+  },
+  "source_preserved_in_place": true,
+  "source_root": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-dispatch-20261017-1",
+  "status": "RETIRED_FAILED_PREBOOT",
+  "task_id": "signal-mask-restore-current942-preboot-failure-20261017-1"
+}

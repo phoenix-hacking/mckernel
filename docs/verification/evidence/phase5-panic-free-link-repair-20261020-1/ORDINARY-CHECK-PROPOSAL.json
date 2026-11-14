@@ -1,0 +1,59 @@
+{
+  "status": "PROPOSED_UNRUN_SIX_SERIAL_CHEAP_COMMANDS",
+  "source_freeze": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-kernel-panic-free-link-repair-20261020-1/SOURCE-FREEZE.json",
+    "sha256": "869acddedb4aaa8af3cca892a49e9a97f4d6f1621174acb129bc2737781abae5",
+    "size": 2848,
+    "mode": 33152
+  },
+  "commands": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-kernel-panic-free-link-repair-20261020-1/COMMANDS.json",
+    "sha256": "9022a4c4d939ffe6b91a8390e7fc2c2282167306d868551175e36a884fed103b",
+    "size": 2440,
+    "mode": 33152
+  },
+  "input_pins": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-kernel-panic-free-link-repair-20261020-1/CHECK-PINS.json",
+    "sha256": "e8c10b5becdd279b57780caf9f9dae2befe78b959d6ab73d6ef765762cbcc524",
+    "size": 6678,
+    "mode": 33152
+  },
+  "runner": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-kernel-panic-free-link-repair-20261020-1/run-panic-free-checks-1.py",
+    "sha256": "c35c2ed0196f586201e62c3e462773b250f2bcc00bb3f2c16c216abd78bf514e",
+    "size": 3661,
+    "mode": 33152
+  },
+  "outer_argv": [
+    "taskset",
+    "-c",
+    "6",
+    "prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--fsize=33554432",
+    "--core=0",
+    "--nofile=256",
+    "--",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase5-kernel-panic-free-link-repair-20261020-1/run-panic-free-checks-1.py"
+  ],
+  "expected_exits": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "profile": "CPU6/1job1GiBAS30CPU35+2wall32MiBperfile/core0nofile256/statusFIRST/directjoin/groupabsence/fresh2GiBMemAvail+host16GiB/scratch12GiB+512MiB",
+  "affected_tests": 4,
+  "old_tests_filtered": 17,
+  "actual_platform_and_host_adapters": true,
+  "actual_std_fixture_not_production_linkproof": true,
+  "production_followup": "Pinned genuine wholecrate --emit=obj plus nm must omit both unsupported core helper families; actual kernel LD remains separate heavyrelease",
+  "failure_history": "ActualimageLD failed after15 producers at two unsupported core helper families; original retained. This is the one bounded structured Rust correction candidate; no tests yet.",
+  "no_root_Docker_module_guest_native_activation": true
+}

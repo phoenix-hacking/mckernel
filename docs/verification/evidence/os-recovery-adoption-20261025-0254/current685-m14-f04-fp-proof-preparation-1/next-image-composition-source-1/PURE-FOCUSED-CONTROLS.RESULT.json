@@ -1,0 +1,271 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_PURE_FP_COMPOSITION_AND_UNCHANGED_TRACE_BEGIN_CONTROLS_ONLY",
+  "cases": 42,
+  "rows": [
+    {
+      "case": "unbound_NEXT10_source_packet",
+      "accepted": true,
+      "expected": true,
+      "error": null
+    },
+    {
+      "case": "unbound_NEXT10_cannot_stage",
+      "accepted": false,
+      "expected": false,
+      "error": "NEXT10 image and actual review bindings are still NULL"
+    },
+    {
+      "case": "final_model_data_shape_only",
+      "accepted": true,
+      "expected": true,
+      "error": null
+    },
+    {
+      "case": "image_NULL",
+      "accepted": false,
+      "expected": false,
+      "error": "NEXT10 image and actual review bindings are still NULL"
+    },
+    {
+      "case": "image_relative_path",
+      "accepted": false,
+      "expected": false,
+      "error": "canonical absolute artifact path"
+    },
+    {
+      "case": "image_parent_path",
+      "accepted": false,
+      "expected": false,
+      "error": "canonical absolute artifact path"
+    },
+    {
+      "case": "image_nonregular",
+      "accepted": false,
+      "expected": false,
+      "error": "regular nonempty artifact"
+    },
+    {
+      "case": "current685_not_NEXT10",
+      "accepted": false,
+      "expected": false,
+      "error": "historical/current685 image is not NEXT10"
+    },
+    {
+      "case": "old_FP_image_not_NEXT10",
+      "accepted": false,
+      "expected": false,
+      "error": "historical/current685 image is not NEXT10"
+    },
+    {
+      "case": "qualification_wrong_image",
+      "accepted": false,
+      "expected": false,
+      "error": "qualification names exact NEXT10 image"
+    },
+    {
+      "case": "missing_image_qualification",
+      "accepted": false,
+      "expected": false,
+      "error": "actual NEXT10 image qualification reference"
+    },
+    {
+      "case": "missing_stage_review",
+      "accepted": false,
+      "expected": false,
+      "error": "exact artifact reference"
+    },
+    {
+      "case": "wrong_output_path",
+      "accepted": false,
+      "expected": false,
+      "error": "exact fresh private output path"
+    },
+    {
+      "case": "module_pair_change",
+      "accepted": false,
+      "expected": false,
+      "error": "frozen payload/module/path/oracle/profile/bootstrap/AVX/trace/cleanup contract"
+    },
+    {
+      "case": "module_path_change",
+      "accepted": false,
+      "expected": false,
+      "error": "frozen payload/module/path/oracle/profile/bootstrap/AVX/trace/cleanup contract"
+    },
+    {
+      "case": "payload_binary_change",
+      "accepted": false,
+      "expected": false,
+      "error": "frozen payload/module/path/oracle/profile/bootstrap/AVX/trace/cleanup contract"
+    },
+    {
+      "case": "launcher_change",
+      "accepted": false,
+      "expected": false,
+      "error": "frozen payload/module/path/oracle/profile/bootstrap/AVX/trace/cleanup contract"
+    },
+    {
+      "case": "collector_change",
+      "accepted": false,
+      "expected": false,
+      "error": "frozen payload/module/path/oracle/profile/bootstrap/AVX/trace/cleanup contract"
+    },
+    {
+      "case": "oracle_stdout_changed",
+      "accepted": false,
+      "expected": false,
+      "error": "frozen payload/module/path/oracle/profile/bootstrap/AVX/trace/cleanup contract"
+    },
+    {
+      "case": "oracle_exit77_as_success",
+      "accepted": false,
+      "expected": false,
+      "error": "frozen payload/module/path/oracle/profile/bootstrap/AVX/trace/cleanup contract"
+    },
+    {
+      "case": "argv_threads_expanded",
+      "accepted": false,
+      "expected": false,
+      "error": "frozen payload/module/path/oracle/profile/bootstrap/AVX/trace/cleanup contract"
+    },
+    {
+      "case": "profile_resource_expansion",
+      "accepted": false,
+      "expected": false,
+      "error": "frozen payload/module/path/oracle/profile/bootstrap/AVX/trace/cleanup contract"
+    },
+    {
+      "case": "bootstrap_no_oversubscribe",
+      "accepted": false,
+      "expected": false,
+      "error": "frozen payload/module/path/oracle/profile/bootstrap/AVX/trace/cleanup contract"
+    },
+    {
+      "case": "AVX_requirement_weakened",
+      "accepted": false,
+      "expected": false,
+      "error": "frozen payload/module/path/oracle/profile/bootstrap/AVX/trace/cleanup contract"
+    },
+    {
+      "case": "bootstrap_provenance_overclaimed",
+      "accepted": false,
+      "expected": false,
+      "error": "frozen payload/module/path/oracle/profile/bootstrap/AVX/trace/cleanup contract"
+    },
+    {
+      "case": "AVX_runtime_capability_invented",
+      "accepted": false,
+      "expected": false,
+      "error": "frozen payload/module/path/oracle/profile/bootstrap/AVX/trace/cleanup contract"
+    },
+    {
+      "case": "rounds_reduced",
+      "accepted": false,
+      "expected": false,
+      "error": "frozen payload/module/path/oracle/profile/bootstrap/AVX/trace/cleanup contract"
+    },
+    {
+      "case": "real_thread_count_reduced",
+      "accepted": false,
+      "expected": false,
+      "error": "frozen payload/module/path/oracle/profile/bootstrap/AVX/trace/cleanup contract"
+    },
+    {
+      "case": "BEGIN_not_required",
+      "accepted": false,
+      "expected": false,
+      "error": "frozen payload/module/path/oracle/profile/bootstrap/AVX/trace/cleanup contract"
+    },
+    {
+      "case": "normal_cleanup_not_required",
+      "accepted": false,
+      "expected": false,
+      "error": "frozen payload/module/path/oracle/profile/bootstrap/AVX/trace/cleanup contract"
+    },
+    {
+      "case": "FP_threads_as_fork_projection",
+      "accepted": false,
+      "expected": false,
+      "error": "frozen payload/module/path/oracle/profile/bootstrap/AVX/trace/cleanup contract"
+    },
+    {
+      "case": "daemon_repair_bypassed",
+      "accepted": false,
+      "expected": false,
+      "error": "frozen payload/module/path/oracle/profile/bootstrap/AVX/trace/cleanup contract"
+    },
+    {
+      "case": "nonce_staged",
+      "accepted": false,
+      "expected": false,
+      "error": "offline data only; no nonce/admission/runtime authority"
+    },
+    {
+      "case": "runtime_authority_staged",
+      "accepted": false,
+      "expected": false,
+      "error": "offline data only; no nonce/admission/runtime authority"
+    },
+    {
+      "case": "existing_trace_positive_BEGIN_control",
+      "accepted": true,
+      "expected": true,
+      "error": null
+    },
+    {
+      "case": "existing_trace_missing_ACK_rejected",
+      "accepted": false,
+      "expected": false,
+      "error": "missing/duplicate real cleanup ACK"
+    },
+    {
+      "case": "existing_trace_ACK_zero_token_rejected",
+      "accepted": false,
+      "expected": false,
+      "error": "real cleanup ACK failure/token"
+    },
+    {
+      "case": "existing_trace_ACK_errno_rejected",
+      "accepted": false,
+      "expected": false,
+      "error": "real cleanup ACK failure/token"
+    },
+    {
+      "case": "existing_trace_retirement_errno_rejected",
+      "accepted": false,
+      "expected": false,
+      "error": "BEGIN retirement result"
+    },
+    {
+      "case": "existing_trace_foreign_pid_rejected",
+      "accepted": false,
+      "expected": false,
+      "error": "malformed or foreign syscall trace"
+    },
+    {
+      "case": "existing_trace_non_group_exit_rejected",
+      "accepted": false,
+      "expected": false,
+      "error": "missing actual route/exit evidence"
+    },
+    {
+      "case": "existing_trace_incomplete_RET_rejected",
+      "accepted": false,
+      "expected": false,
+      "error": "missing actual route/exit evidence"
+    }
+  ],
+  "exact_existing_trace_source": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/runtime-provider-rebind-1/native/native_diagnostic.py",
+    "sha256": "f368324242bfdfb0ad1f3f524a906dcf51730ef0beb311315e6b66f5d585748c",
+    "size": 85837
+  },
+  "adapter_sha256": "abf729d458d79fe2b7901746dfd19c3448cad355022298b2cc702f67eac1a0d5",
+  "NEXT10_image": null,
+  "materialization_actions": 0,
+  "guest_compiler_clock_nonce_grant_actions": 0,
+  "normal_cleanup_limit": "Only the mandatory unchanged owner-normal-retirement contract is guarded here; actual daemon/owner/cgroup/physical proof remains Root runtime prerequisite, not simulated or claimed.",
+  "AVX_limit": "Purecontract/sourceguard only; actualCPUID/XCR0 probe occurs only in unchangedpayload on eventualnative run. No runtime capability asserted."
+}

@@ -1,0 +1,13 @@
+3:Kernel allocation, Linux VMA/MM and guest physical direct-map services are explicit
+4:adapters. No production activation, real guest execution or final ACK is claimed.
+12:FROZEN=Path('/home/holden/mckernel-work/scratch/native-fork-initial-consumer-source-20261017-1/test-fixture-correction/actual.rs')
+40: repl={'CHECKED_BYTES':mapping[mapping.index('trait GuestExtents {'):mapping.index('\nfn checked_guest_queue(')],
+98: c+=old[a:end]+'\n'+(ROOT/'scripts/tests/fixtures/native_fork_carrier_link_consumer_20261017.rs').read_text()+'\n}\n}\n'
+102: def test_actual_memory_ingress_link_and_guest(self):
+104:  guest=load(WIP/'scripts/tests/native_fork_carrier_link_guest_source_20261017.py').generate(WIP,out/'guest')
+105:  source=generated()+'\nmod guest_record_init{use core::{ffi::c_void,sync::atomic::{AtomicI32,Ordering}};type CInt=i32;type CULong=u64;const EINVAL:i32=22;\n'+guest['record_init'].read_text()+'\n}\n'
+106:  snapshots=out/'sources';snapshots.mkdir();pins=[]
+110:  source=source.replace(str(NATIVE),str(snapshots));(out/'inputs.json').write_text(json.dumps(pins,indent=2)+'\n');(out/'actual.rs').write_text(source)
+117:  capture('compile-c',['/usr/bin/cc','-std=c11','-Wall','-Wextra','-Werror','-c',str(guest['source']),'-o',str(out/'guest.o')])
+118:  capture('compile-codec',['/usr/bin/cc','-std=c11','-Wall','-Wextra','-Werror','-c',str(guest['request_codec']),'-o',str(out/'codec.o')])
+119:  capture('compile',[RUSTC,'--edition=2021','--test','-Wrust_2018_idioms','-Dwarnings',str(out/'actual.rs'),'-C','link-arg='+str(out/'guest.o'),'-C','link-arg='+str(out/'codec.o'),'-o',str(out/'actual')])

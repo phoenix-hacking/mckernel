@@ -1,0 +1,17 @@
+--- firstfixture
++++ bounded-correctedfixture
+@@ -84,7 +84,7 @@
+ 
+ }
+ }
+-impl Runtime {fn original_unserviced(&self,message:i32)->Result {
++impl Runtime {fn original_unserviced(&self,port:i32,message:i32)->Result {
+         let Some(kind) = wire::Kind::from_message(message) else {
+             pr_info!(
+                 "IHK-SMP: unserviced continuing request os={} generation={} port={} message={:x}\n",
+@@ -96,4 +96,4 @@
+             return Err(errno(-38));
+         };
+ let _=kind;Ok(())}}
+-#[test]fn original_actual_sysfs_fallthrough_fails_eventfd(){let r=Runtime::new();assert_eq!(r.original_unserviced(0x46),Err(-38));assert_eq!(r.dispatch(503,&packet(0x46,101)),Ok(()));}
++#[test]fn original_actual_sysfs_fallthrough_fails_eventfd(){let r=Runtime::new();assert_eq!(r.original_unserviced(503,0x46),Err(-38));assert_eq!(r.dispatch(503,&packet(0x46,101)),Ok(()));}

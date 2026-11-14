@@ -1,0 +1,64 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": 1793397449.5045161,
+  "status": "ROOT_ADMITS_ONE_UNPRIVILEGED_SELF_PIDFD_DEPENDENCY_CHECK",
+  "thread_id": "01a18bc3-e072-7810-9426-75101b0856c0",
+  "source_helper_sha256": "068e8316ef03a03d1977d05ce755dfa8133c13bd4dfa56254c27b0066be2575c",
+  "probe_sha256": "46aa83b4ffe75ba6f1eef99a6cb089721e96258a91c5e4621f38dbc9000d5aea",
+  "cpu": [
+    6
+  ],
+  "jobs": 1,
+  "address_space_bytes": 536870912,
+  "cpu_seconds": 30,
+  "wall_seconds": 45,
+  "kill_after_seconds": 5,
+  "native_access": false,
+  "root_access": false,
+  "target": "disposable self PID only",
+  "signal": 0,
+  "other_process_signal": false,
+  "prerequisite": "actual Linux pidfd support behind Python3.8 compatibility shim before installer one-shot",
+  "weekly_used_percent": 93,
+  "weekly_observed_at": 1793397442.750918,
+  "controllers": {
+    "guardian": {
+      "pid": 2996157,
+      "ppid": 2995936,
+      "start": "118034389",
+      "state": "R"
+    },
+    "monitor": {
+      "pid": 2996160,
+      "ppid": 2995936,
+      "start": "118034501",
+      "state": "R"
+    },
+    "server": {
+      "pid": 2996005,
+      "ppid": 2996003,
+      "start": "118034116",
+      "state": "S"
+    },
+    "watcher": {
+      "pid": 2996001,
+      "ppid": 2995936,
+      "start": "118034086",
+      "state": "S"
+    },
+    "worker": {
+      "pid": 2996003,
+      "ppid": 2996001,
+      "start": "118034102",
+      "state": "S"
+    }
+  },
+  "capacity": {
+    "MemAvailable_bytes": 27438268416,
+    "free_bytes": {
+      "/home/holden/mckernel": 142278299648,
+      "/home/holden/mckernel-work/scratch": 47613485056
+    }
+  },
+  "nonce": "b7386526ecba1842db1286572b22c67a6b7c8f52beeb68aa8e130d5c006110c5"
+}

@@ -1,0 +1,147 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_SOURCE",
+  "decision": "PASS_SOURCE_COMMON_EXACT_ROOT57_CURRENT_OBSERVER",
+  "independent": true,
+  "reviewer": "/root/guardian_execution_review",
+  "implementation_ownership": false,
+  "runtime_authority": null,
+  "reviewed_source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/next-entry-current-boundary-source-1/CURRENT-OBSERVER.SOURCE-READY.json",
+    "bytes": 1658,
+    "sha256": "b6a05148f48828bf3e9d6fe04f3fe5586fe77b161f81a680158b77a5c7280c4f"
+  },
+  "reviewed_observer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/next-entry-current-boundary-source-1/BOUND-CURRENT-OBSERVER.SOURCE-ONLY.py",
+    "bytes": 12545,
+    "sha256": "838f7883701f4b1946b219b99b4cf317004443d4ab857f54cac7ce4f77941f01"
+  },
+  "reviewed_schema": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/next-entry-current-boundary-source-1/BOUND-OBSERVER-SCHEMA.SOURCE-ONLY.json",
+    "bytes": 653,
+    "sha256": "9e59b8b3b5d0e10a960bc788faa752a017a7ed74e9447f01c7797cfdcb2856c5"
+  },
+  "retained_source_controls": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/next-entry-current-boundary-source-1/ACTUAL-ROOT57-SOURCE-CONTROLS.json",
+    "bytes": 3101,
+    "sha256": "d88bec8e87ea94beb225d3c8e806ccbd159854b45f3c0262e18dfab79d9f6778"
+  },
+  "actual_Root57": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER57.json",
+    "bytes": 18845,
+    "sha256": "0140dcb85e685cce3c23d7f76b50b05c092f0db4fa8b5f3e651c8467bfdf2f55"
+  },
+  "latest_free": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/independent-postbuild-current-free-review-1/CURRENT-FREE.json",
+    "bytes": 5561,
+    "sha256": "270a93392db9d5c64c7546d43ac36cb604b85da4668884736b4920b623c3111d"
+  },
+  "checked_delta": {
+    "consumed_nonces": 68,
+    "known_new_actors": [
+      {
+        "pid": 1849845,
+        "start": 95775567,
+        "role": "CURRENT115_holder"
+      },
+      {
+        "pid": 1849881,
+        "start": 95777018,
+        "role": "CURRENT115_runner"
+      },
+      {
+        "pid": 1852550,
+        "start": 95805822,
+        "role": "WAKE_suffix_child"
+      },
+      {
+        "pid": 1852557,
+        "start": 95805981,
+        "role": "WAKE_suffix_child"
+      },
+      {
+        "pid": 1852561,
+        "start": 95806132,
+        "role": "WAKE_suffix_child"
+      },
+      {
+        "pid": 1852564,
+        "start": 95806230,
+        "role": "WAKE_suffix_child"
+      },
+      {
+        "pid": 1852566,
+        "start": 95806329,
+        "role": "WAKE_suffix_child"
+      },
+      {
+        "pid": 1855999,
+        "start": 95862659,
+        "role": "postRoot53_ordinary_child"
+      },
+      {
+        "pid": 1859367,
+        "start": 95922821,
+        "role": "postRoot53_ordinary_child"
+      },
+      {
+        "pid": 1860054,
+        "start": 95938666,
+        "role": "postRoot53_ordinary_child"
+      },
+      {
+        "pid": 1860888,
+        "start": 95954406,
+        "role": "postRoot53_ordinary_child"
+      }
+    ],
+    "postRoot53_nonces": [
+      "90e3910522f10450771d6c8e30413511",
+      "df8a9f75482d7eebc805ed36710e5782",
+      "3d902fd0c173b46809f1da1e9fa8811d",
+      "ff15aa757788e68798a13ec9acd37849"
+    ],
+    "all_actual_results_or_whole_join_positive": true,
+    "all_new_actor_refs_verified": true,
+    "actual115_stopped_CID": "52ae1a85fda1adfaa0a0a3c72306a60a6df0144359f0cd6b9ed1d83c2fc2385c",
+    "exact_unchanged_CID_query_count": 4,
+    "base_observe_call_count": 1
+  },
+  "findings": [
+    "Exact unchangedb3ab observer/base-boundary refs authenticate; its complete historical ownership, actor/cgroup/container/capacity/memory/probes are retained through one base.observe call. No old history audit replay.",
+    "Current115 holder1849845/95775567 and runner1849881/95777018 plus WAKE5 and fourpostRoot53ordinary child identities are genuine retained joins. Unknown outer WAKEPID/birth remains NULL; no invented actor. Every post53 consumed nonce is matched to exact ordered actual_results or actual_whole_join.",
+    "Newactors must be absent from /proc and base census PID/PGRP; holderFD3 absent. Exact four retained Docker argv/stdout/stderr/returncode expectations rechecked, including stopped52ae/Pid0/exit0/noOOM and emptyrunning list. Historical stopped CID is retained, not removed.",
+    "Original2closed27:4 probes, pids_current0, no_existing_heavy, shared-recordabsence, system/group/cgroup/Docker facts and memory/capacity forwarded; v2guard1f152 before and after. No aggregate policy is invented as observed field.",
+    "Literal Root57/status/schema fields accurately bind68consumed/latestfree270a. Output current_boundary deliberately equals exact Root57 ledger ref CURRENT.root_inputs; it is not a build-specific boundaryJSON alias.",
+    "The common observer covers physical/resource ownership history only. Native22760e and matching235115 remain different source/case/oracle/image subjects; no cross-case acceptance or native/file authority."
+  ],
+  "consumer_interface": {
+    "observe": "noargs; returns dictionary",
+    "literal_Root57": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER57.json",
+      "bytes": 18845,
+      "sha256": "0140dcb85e685cce3c23d7f76b50b05c092f0db4fa8b5f3e651c8467bfdf2f55"
+    },
+    "current_boundary_semantics": "Root57 declared-boundary ledger exactref",
+    "latest_free": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/independent-postbuild-current-free-review-1/CURRENT-FREE.json",
+      "bytes": 5561,
+      "sha256": "270a93392db9d5c64c7546d43ac36cb604b85da4668884736b4920b623c3111d"
+    },
+    "build116_note": "Unchanged HOT expects its actual D116 boundary JSON ref. Use separately independently source-reviewed explicit wrapper/schema that joins commonRoot57 and D116metadata; direct838f substitution cannot satisfy that field comparison.",
+    "native_note": "Native adapters may explicitly map literalRoot57 to retained legacy labels only while authenticating current57/currentfree/source refs; this source review grants no runtime release."
+  },
+  "actual_effects_by_reviewer": {
+    "observe": 0,
+    "guard": 0,
+    "proc_or_resource_query": 0,
+    "Docker": 0,
+    "approval_or_grant": 0,
+    "native": 0
+  },
+  "open": [
+    "Rootactual fresh observation and separate consumer authority",
+    "Independent build116 adapter/schema review if common observer is reused there"
+  ],
+  "blockers": []
+}

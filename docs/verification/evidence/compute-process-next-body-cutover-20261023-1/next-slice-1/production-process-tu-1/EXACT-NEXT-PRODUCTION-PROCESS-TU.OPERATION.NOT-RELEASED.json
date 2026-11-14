@@ -1,0 +1,270 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_BOUND_EXISTING_GCC14_WHOLE_TU_PHASE_PREPARED_NO_EXECUTION",
+  "execution_authority": false,
+  "one_next_operation": "Existing production-abi-process frontend phase after existing configure stage; full current process source + unchanged existing ABI suffix +130actual Rust layout assertions.",
+  "inner_argv": [
+    "/usr/bin/cc",
+    "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+    "-DIHK_OS_MANYCORE",
+    "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+    "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+    "-DMCKERNEL_NATIVE_CLONE3",
+    "-DMCKERNEL_NATIVE_CLONE_TID",
+    "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+    "-DMCKERNEL_NATIVE_FUTEX",
+    "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+    "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+    "-DMCKERNEL_RUST_BITOPS",
+    "-DMCKERNEL_RUST_LIST_HELPERS",
+    "-DMCKERNEL_RUST_LOCK_HELPERS",
+    "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+    "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+    "-DMCKERNEL_RUST_PTE_HELPERS",
+    "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+    "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+    "-DPROFILE_ENABLE",
+    "-D__KERNEL__",
+    "-DMCKERNEL_RUST_PROCESS_HELPERS",
+    "-I/work/output/build/kernel/include",
+    "-I/src/kernel/include",
+    "-I/work/output/build/kernel",
+    "-I/work/output/build",
+    "-I/src/ihk/cokernel/smp/x86_64/include",
+    "-I/src/ihk/cokernel/smp/x86_64",
+    "-I/src/ihk/ikc/include",
+    "-I/src/ihk/linux/include",
+    "-I/src/lib/include",
+    "-I/src/arch/x86_64/kernel/include",
+    "-g",
+    "-Wall",
+    "-Wextra",
+    "-Wno-unused-parameter",
+    "-Wno-sign-compare",
+    "-Wno-unused-function",
+    "-Wno-implicit-fallthrough",
+    "-Wno-stringop-truncation",
+    "-ffreestanding",
+    "-O2",
+    "-nostdinc",
+    "-isystem",
+    "/usr/lib/gcc/x86_64-redhat-linux/14/include",
+    "-fno-omit-frame-pointer",
+    "-mcmodel=large",
+    "-mno-red-zone",
+    "-mno-sse",
+    "-fsyntax-only",
+    "/work/output/build/production-abi-process.c"
+  ],
+  "inner_cwd": "/work/output/build/kernel",
+  "compiler": {
+    "path": "/usr/bin/cc",
+    "expected_sha256": "2092e32fa9abee9ccbf777a5f893b9cc608582b660c93e742a17c3eb7da109c2",
+    "version": "GCC14.3.1-4.4.el10",
+    "builtin_headers": "/usr/lib/gcc/x86_64-redhat-linux/14/include",
+    "availability": "accepted immutable image only; HOSTGCC9 is not a substitute"
+  },
+  "compile_db": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/pinned-full-image-attempt-2/owner-work/evidence/artifacts/compile_commands.json",
+    "sha256": "cbf12ca93c9946c7020b428e5dbc9f08df22659651d94c40704e7c8fa41f006b",
+    "bytes": 74392
+  },
+  "actual_selected_full_C_object_row": {
+    "directory": "/work/output/build/kernel",
+    "command": "/usr/bin/cc -DIHK_IKC_USE_LINUX_WORK_IRQ -DIHK_OS_MANYCORE -DKERNEL_RAM_VADDR=0xfffffffffe800000 -DMAP_KERNEL_START=0xfffffffffe800000UL -DMCKERNEL_NATIVE_CLONE3 -DMCKERNEL_NATIVE_CLONE_TID -DMCKERNEL_NATIVE_FAULT_FIXUP -DMCKERNEL_NATIVE_FUTEX -DMCKERNEL_NATIVE_SIGNAL_STACK -DMCKERNEL_RUST_ATOMIC_HELPERS -DMCKERNEL_RUST_BITOPS -DMCKERNEL_RUST_LIST_HELPERS -DMCKERNEL_RUST_LOCK_HELPERS -DMCKERNEL_RUST_MCS_RWLOCK_HELPERS -DMCKERNEL_RUST_MC_RWLOCK_HELPERS -DMCKERNEL_RUST_PTE_HELPERS -DMCKERNEL_RUST_REFCOUNT_HELPERS -DMCKERNEL_RUST_SPINLOCK_HELPERS -DPROFILE_ENABLE -D__KERNEL__ -DMCKERNEL_RUST_PROCESS_HELPERS -I/work/output/build/kernel/include -I/src/kernel/include -I/work/output/build/kernel -I/work/output/build -I/src/ihk/cokernel/smp/x86_64/include -I/src/ihk/cokernel/smp/x86_64 -I/src/ihk/ikc/include -I/src/ihk/linux/include -I/src/lib/include -I/src/arch/x86_64/kernel/include -g -Wall -Wextra -Wno-unused-parameter -Wno-sign-compare -Wno-unused-function -Wno-implicit-fallthrough -Wno-stringop-truncation -ffreestanding -O2 -nostdinc -isystem /usr/lib/gcc/x86_64-redhat-linux/14/include -fno-omit-frame-pointer -mcmodel=large -mno-red-zone -mno-sse -o CMakeFiles/mckernel.img.dir/process.c.o -c /src/kernel/process.c",
+    "file": "/src/kernel/process.c",
+    "output": "kernel/CMakeFiles/mckernel.img.dir/process.c.o"
+  },
+  "prior_same_phase_PASS": {
+    "argv": [
+      "/usr/bin/cc",
+      "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+      "-DIHK_OS_MANYCORE",
+      "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+      "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+      "-DMCKERNEL_NATIVE_CLONE3",
+      "-DMCKERNEL_NATIVE_CLONE_TID",
+      "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+      "-DMCKERNEL_NATIVE_FUTEX",
+      "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+      "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+      "-DMCKERNEL_RUST_BITOPS",
+      "-DMCKERNEL_RUST_LIST_HELPERS",
+      "-DMCKERNEL_RUST_LOCK_HELPERS",
+      "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+      "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+      "-DMCKERNEL_RUST_PTE_HELPERS",
+      "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+      "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+      "-DPROFILE_ENABLE",
+      "-D__KERNEL__",
+      "-DMCKERNEL_RUST_PROCESS_HELPERS",
+      "-I/work/output/build/kernel/include",
+      "-I/src/kernel/include",
+      "-I/work/output/build/kernel",
+      "-I/work/output/build",
+      "-I/src/ihk/cokernel/smp/x86_64/include",
+      "-I/src/ihk/cokernel/smp/x86_64",
+      "-I/src/ihk/ikc/include",
+      "-I/src/ihk/linux/include",
+      "-I/src/lib/include",
+      "-I/src/arch/x86_64/kernel/include",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-Wno-unused-parameter",
+      "-Wno-sign-compare",
+      "-Wno-unused-function",
+      "-Wno-implicit-fallthrough",
+      "-Wno-stringop-truncation",
+      "-ffreestanding",
+      "-O2",
+      "-nostdinc",
+      "-isystem",
+      "/usr/lib/gcc/x86_64-redhat-linux/14/include",
+      "-fno-omit-frame-pointer",
+      "-mcmodel=large",
+      "-mno-red-zone",
+      "-mno-sse",
+      "-fsyntax-only",
+      "/work/output/build/production-abi-process.c"
+    ],
+    "cwd": "/work/output/build/kernel",
+    "exit_code": 0,
+    "fixture_sha256": "0a9aed9d4fce777a0c135c3c201ab400df1a9b39e532521833adb400768c1d8a",
+    "phase": "production-abi-process",
+    "source_sha256": "7203019d2ba8143f9240a03d11bc8c5cfcd495d89183aa7ab643c6159a6bd02d"
+  },
+  "prior_phase_receipt": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/pinned-full-image-attempt-2/owner-work/evidence/production-abi-checks.json",
+    "sha256": "ce346cd424366475a73681f5a863d6bec22107f7f23174e31df2c2e0dc67bc13",
+    "bytes": 4245
+  },
+  "fixture": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/production-process-tu-1/production-abi-process.c",
+    "sha256": "a4e786ad86c41c08bfd60b7f995982a2218d8203687e62e0af9af8c9dbfdd636",
+    "bytes": 183389
+  },
+  "fixture_container_path": "/work/output/build/production-abi-process.c",
+  "fixture_producer": "Existing _validate_reset_production_abi; raw full currentprocess.c + existing proofs[kernel/process.c] + sourcebound130assertions. No TU-only rootlauncher/mode.",
+  "private_existing_consumer": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/production-process-tu-1/native_rust_exact_mckernel_image_offline.py.PREPARED",
+    "sha256": "0915f5266361faae378467324f233340193df78f1831d51bd9fcda76e22e15b0",
+    "bytes": 181096
+  },
+  "consumer_delta": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/production-process-tu-1/EXISTING-CONSUMER-DELTA.patch",
+    "sha256": "2100be09c799fae8319f216f7b76eba5c6d566fa15786b93bdfc42d150b5a51c",
+    "bytes": 35666
+  },
+  "expected_current_CpuLocalVar_current": 7848,
+  "actual_layout_evidence": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/production-abi-layout-1/ACTUAL-LAYOUT-RECEIPT.json",
+    "sha256": "d6ac77fe557bf78c49ee916d84055dfa1af62cf479c37f0f4fc1c46bdbdfd27f",
+    "bytes": 13354
+  },
+  "source_candidate": {
+    "frozen_candidate9_manifest": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-9/default-image-preparation-1/source-materialization-attempt-1/source-inputs.json",
+      "sha256": "fbd125807193835f88905d0c89d985dd9a0a066265598b09accd69d6fe25f3ea",
+      "bytes": 10195463
+    },
+    "frozen_candidate9_source_derivative": "4642c195557a3bec904abd4b8851a57d93f2083d235b6ded3827926e8f11fdd7",
+    "frozen_candidate9_materialization": "7a5e89108006158e488ac810dafef09c19417bf5e68c35b3676a74b82eda5c46",
+    "preserve_other_entries": 6956,
+    "preserve_symlinks": 49,
+    "only_three_source_overlays": {
+      "kernel/process.c": {
+        "frozen_candidate9_sha256": "55872d7235a06364565ec7732b7a67c918ed7c006b1e55ababa88dbe42e2a93a",
+        "canonical": {
+          "path": "/home/holden/mckernel/kernel/process.c",
+          "sha256": "9e3cdea2027618ce954b80f2436ed44ef16e2df448c83a5b3734d77ffb161798",
+          "bytes": 161155
+        },
+        "private": {
+          "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/production-process-tu-1/source-overlay/kernel/process.c",
+          "sha256": "9e3cdea2027618ce954b80f2436ed44ef16e2df448c83a5b3734d77ffb161798",
+          "bytes": 161155
+        },
+        "preserve_kind": "file",
+        "preserve_materialized_mode": 420
+      },
+      "kernel/rust/sched_helpers.rs": {
+        "frozen_candidate9_sha256": "700a9e20349df5ae18ceea8c9195e38078a6bb05b81c79f7368fbdf6fc14abcc",
+        "canonical": {
+          "path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+          "sha256": "5a09c8420d33027483d302ce9f94c350ed2dfdad450a3834214cd224023ab4f8",
+          "bytes": 181991
+        },
+        "private": {
+          "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/production-process-tu-1/source-overlay/kernel/rust/sched_helpers.rs",
+          "sha256": "5a09c8420d33027483d302ce9f94c350ed2dfdad450a3834214cd224023ab4f8",
+          "bytes": 181991
+        },
+        "preserve_kind": "file",
+        "preserve_materialized_mode": 420
+      },
+      "kernel/rust/tests/run_equivalence.sh": {
+        "frozen_candidate9_sha256": "5df92eff793c7ff0358567340a35b3d9e36188b142186c4fe962a40370490822",
+        "canonical": {
+          "path": "/home/holden/mckernel/kernel/rust/tests/run_equivalence.sh",
+          "sha256": "b6e5926d39edcdc9b65f00877e74564af4b363ad20034ab5ccccbb9c919ab737",
+          "bytes": 5010284
+        },
+        "private": {
+          "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/production-process-tu-1/source-overlay/kernel/rust/tests/run_equivalence.sh",
+          "sha256": "b6e5926d39edcdc9b65f00877e74564af4b363ad20034ab5ccccbb9c919ab737",
+          "bytes": 5010284
+        },
+        "preserve_kind": "file",
+        "preserve_materialized_mode": 493
+      }
+    },
+    "new_materialized_source_root": null,
+    "new_source_manifest": null,
+    "new_source_manifest_sha256": null,
+    "new_source_derivative_sha256": null,
+    "new_materialization_sha256": null
+  },
+  "existing_container_profile": {
+    "build_jobs": 4,
+    "container_CPU_count": 4,
+    "container_CPUs": "2-5",
+    "container_memory_bytes": 12884901888,
+    "container_network": "none",
+    "container_swap_extra_bytes": 0,
+    "container_tasks": 512,
+    "controller_AS_bytes": 2147483648,
+    "controller_CPU_limits": "inherited unlimited; no outer CPU/wall kill introduced",
+    "controller_core": 0,
+    "cpu": 7,
+    "jobs": 1,
+    "no_outer_kill": true,
+    "no_outer_timeout": true,
+    "sole_heavy": true,
+    "stream_cap_bytes": 33554432
+  },
+  "existing_full_operation_lineage": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-9/default-image-preparation-1/next-build-preparation-1/NEXT-BUILD-OPERATION.READY-FOR-REVIEW.json",
+    "sha256": "4760ad4e0a1962a06230f656127ccf16cce934c8d19a9e9e3bd7203032b4c837",
+    "bytes": 5906
+  },
+  "existing_owner": {
+    "bytes": 91645,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-9/default-image-preparation-1/next-build-preparation-1/native_rust_exact_mckernel_image_container_owner.py",
+    "sha256": "c997bef93d09dfead91fa8023fd1c92739c1a7888b9ad828e422cfab3f488b74"
+  },
+  "new_full_owner_request": null,
+  "new_outer_argv": null,
+  "source_producer_successor": null,
+  "root_aggregate_reservation": null,
+  "fresh_admission": null,
+  "independent_source_profile_review": null,
+  "independent_execution_release": null,
+  "precise_execution_dependency": "GCC14 tool/header closure is image-only. Existing admitted owner/driver runs the full normal configure->ABI->Rustobject->kernel pipeline; it has no separately admitted TU-only selector. Root must first bind a coherent new source/producer/provenance/owner/request successor over the frozen candidate9+three overlays, publish/review it, and release the existing container profile at an eligible heavy boundary. This packet adds no standalone launcher.",
+  "C_frontend_qualifier": "Successful -fsyntax-only wholeTU proves actual GCC14 selected source/layout/C callback declarations, not object ownership/final link/native.",
+  "later_object_link_obligations": "Keep existing selectedprocess object compile, all timer/idle/memory/pageunmap guards; add spin Cbody exclusion, unique Rust/final spin/body T, no RustUspin/Cdescriptor. Do not require fictional Cspin import.",
+  "canonical_candidate9_P12_mutation": false,
+  "actual_compiler_runs": 0,
+  "whole_TU_default_link_native": "OPEN"
+}

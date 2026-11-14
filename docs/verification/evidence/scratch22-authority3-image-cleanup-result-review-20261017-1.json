@@ -1,0 +1,35 @@
+{
+  "schema": "mckernel.scratch22-image-archival-cleanup-result.v1",
+  "decision": "PASS_ARCHIVAL_CLEANUP",
+  "reviewer": "/root/image_retirement_review",
+  "implementation_ownership": false,
+  "recorded_by": "dispatcher from independent final reply",
+  "execution": {
+    "path": "/home/holden/mckernel-work/scratch/scratch22-authority3-image-cleanup-dispatch-20261017-1/result.json",
+    "sha256": "27cbb49cb62186196b146ed627e9d47818d07d99ad632013e56f5a61d23d8519",
+    "size": 323
+  },
+  "terminal_stdout": {
+    "path": "/home/holden/mckernel-work/scratch/scratch22-authority3-image-cleanup-dispatch-20261017-1/stdout",
+    "sha256": "8092c53246f98b8a404e7285fae6b366ac263ef591def024d2a2c54e0afca2f7",
+    "size": 2421
+  },
+  "transaction_archive": {
+    "path": "/home/holden/mckernel-work/scratch/scratch22-authority3-image-cleanup-dispatch-20261017-1/transaction.tar",
+    "sha256": "cd85d39643624fdedcafb6c37c077c6c74a7f03d859f6c08137fc57df1395cbe",
+    "size": 20480
+  },
+  "root_retirement_observation": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/scratch22-image-fresh-retirement-observation-20261017-1.json",
+    "sha256": "1cdf3af9fa657d160a801bf909f9e5c0e77dd132d3c38b3f1a38482bd1691da8",
+    "size": 1439
+  },
+  "checks": [
+    "All9journal records/hashchain/plan identity and release exact.",
+    "Bothoriginalexclusions preserve originalinode/device/bytes in archives.",
+    "All6transactionmembers match reported identities and currentbytes.",
+    "Exact7680byte original Dockerlog retained.",
+    "Activeexclusions/requestlease/cleanupquarantine absent and27:4unheld."
+  ],
+  "scope": "Accepted executedtrustedhelper terminal container/process/preservation checks plus independent transactionevidence. Repeatedrawcensuses discarded; no independentrawverification ofeachintermediatecensus. Historicalfailedguard unchanged. No guest/acceptance credit."
+}

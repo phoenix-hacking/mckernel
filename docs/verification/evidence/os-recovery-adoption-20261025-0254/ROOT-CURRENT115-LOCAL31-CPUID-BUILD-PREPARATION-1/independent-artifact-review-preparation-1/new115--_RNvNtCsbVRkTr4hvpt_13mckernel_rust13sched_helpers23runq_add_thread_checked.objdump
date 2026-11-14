@@ -1,0 +1,296 @@
+
+/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o:     file format elf64-x86-64
+
+
+Disassembly of section .ltext._RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers23runq_add_thread_checked:
+
+0000000000000000 <_RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers23runq_add_thread_checked>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	41 57                	push   %r15
+   6:	41 56                	push   %r14
+   8:	41 55                	push   %r13
+   a:	41 54                	push   %r12
+   c:	53                   	push   %rbx
+   d:	50                   	push   %rax
+   e:	41 bf ea ff ff ff    	mov    $0xffffffea,%r15d
+  14:	48 85 ff             	test   %rdi,%rdi
+  17:	0f 84 aa 04 00 00    	je     4c7 <_RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers23runq_add_thread_checked+0x4c7>
+  1d:	89 f3                	mov    %esi,%ebx
+  1f:	49 89 fe             	mov    %rdi,%r14
+  22:	49 bb 00 00 00 00 00 00 00 00 	movabs $0x0,%r11	24: R_X86_64_64	clv
+  2c:	4d 8b 23             	mov    (%r11),%r12
+  2f:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+  34:	0f 32                	rdmsr  
+  36:	48 c1 e2 20          	shl    $0x20,%rdx
+  3a:	89 c0                	mov    %eax,%eax
+  3c:	48 09 d0             	or     %rdx,%rax
+  3f:	49 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%r8	41: R_X86_64_64	locals
+  49:	49 8b 08             	mov    (%r8),%rcx
+  4c:	49 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%r9	4e: R_X86_64_64	num_processors
+  56:	41 ba ff ff ff ff    	mov    $0xffffffff,%r10d
+  5c:	48 39 c1             	cmp    %rax,%rcx
+  5f:	77 18                	ja     79 <_RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers23runq_add_thread_checked+0x79>
+  61:	49 63 11             	movslq (%r9),%rdx
+  64:	48 c1 e2 0e          	shl    $0xe,%rdx
+  68:	48 01 d1             	add    %rdx,%rcx
+  6b:	48 39 c1             	cmp    %rax,%rcx
+  6e:	72 09                	jb     79 <_RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers23runq_add_thread_checked+0x79>
+  70:	65 44 8b 14 25 00 00 00 00 	mov    %gs:0x0,%r10d
+  79:	4d 85 e4             	test   %r12,%r12
+  7c:	0f 84 45 04 00 00    	je     4c7 <_RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers23runq_add_thread_checked+0x4c7>
+  82:	48 63 f3             	movslq %ebx,%rsi
+  85:	9c                   	pushf  
+  86:	5f                   	pop    %rdi
+  87:	fa                   	cli    
+  88:	49 bd 00 00 00 00 00 00 00 00 	movabs $0x0,%r13	8a: R_X86_64_64	cpu_local_var_initialized
+  92:	41 83 7d 00 00       	cmpl   $0x0,0x0(%r13)
+  97:	74 50                	je     e9 <_RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers23runq_add_thread_checked+0xe9>
+  99:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+  9e:	0f 32                	rdmsr  
+  a0:	48 c1 e2 20          	shl    $0x20,%rdx
+  a4:	89 c1                	mov    %eax,%ecx
+  a6:	48 09 d1             	or     %rdx,%rcx
+  a9:	49 8b 10             	mov    (%r8),%rdx
+  ac:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+  b3:	48 39 ca             	cmp    %rcx,%rdx
+  b6:	77 1f                	ja     d7 <_RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers23runq_add_thread_checked+0xd7>
+  b8:	49 89 ff             	mov    %rdi,%r15
+  bb:	49 63 39             	movslq (%r9),%rdi
+  be:	48 c1 e7 0e          	shl    $0xe,%rdi
+  c2:	48 01 fa             	add    %rdi,%rdx
+  c5:	4c 89 ff             	mov    %r15,%rdi
+  c8:	48 39 ca             	cmp    %rcx,%rdx
+  cb:	72 0a                	jb     d7 <_RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers23runq_add_thread_checked+0xd7>
+  cd:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+  d5:	48 98                	cltq   
+  d7:	49 8b 0b             	mov    (%r11),%rcx
+  da:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+  e1:	f0 ff 84 01 28 1f 00 00 	lock incl 0x1f28(%rcx,%rax,1)
+  e9:	44 89 55 d4          	mov    %r10d,-0x2c(%rbp)
+  ed:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	ef: R_X86_64_64	runq_reservation_lock
+  f7:	ba 00 00 02 00       	mov    $0x20000,%edx
+  fc:	f0 41 0f c1 12       	lock xadd %edx,(%r10)
+ 101:	48 69 c6 c0 1f 00 00 	imul   $0x1fc0,%rsi,%rax
+ 108:	89 d1                	mov    %edx,%ecx
+ 10a:	c1 e9 10             	shr    $0x10,%ecx
+ 10d:	66 39 ca             	cmp    %cx,%dx
+ 110:	0f 85 3a 02 00 00    	jne    350 <_RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers23runq_add_thread_checked+0x350>
+ 116:	49 01 c4             	add    %rax,%r12
+ 119:	41 83 7d 00 00       	cmpl   $0x0,0x0(%r13)
+ 11e:	74 4a                	je     16a <_RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers23runq_add_thread_checked+0x16a>
+ 120:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+ 125:	0f 32                	rdmsr  
+ 127:	48 c1 e2 20          	shl    $0x20,%rdx
+ 12b:	89 c1                	mov    %eax,%ecx
+ 12d:	48 09 d1             	or     %rdx,%rcx
+ 130:	49 8b 10             	mov    (%r8),%rdx
+ 133:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+ 13a:	48 39 ca             	cmp    %rcx,%rdx
+ 13d:	77 19                	ja     158 <_RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers23runq_add_thread_checked+0x158>
+ 13f:	49 63 31             	movslq (%r9),%rsi
+ 142:	48 c1 e6 0e          	shl    $0xe,%rsi
+ 146:	48 01 f2             	add    %rsi,%rdx
+ 149:	48 39 ca             	cmp    %rcx,%rdx
+ 14c:	72 0a                	jb     158 <_RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers23runq_add_thread_checked+0x158>
+ 14e:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+ 156:	48 98                	cltq   
+ 158:	49 8b 0b             	mov    (%r11),%rcx
+ 15b:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+ 162:	f0 ff 84 01 28 1f 00 00 	lock incl 0x1f28(%rcx,%rax,1)
+ 16a:	b9 00 00 02 00       	mov    $0x20000,%ecx
+ 16f:	f0 41 0f c1 8c 24 98 1e 00 00 	lock xadd %ecx,0x1e98(%r12)
+ 179:	89 c8                	mov    %ecx,%eax
+ 17b:	c1 e8 10             	shr    $0x10,%eax
+ 17e:	66 39 c1             	cmp    %ax,%cx
+ 181:	0f 85 d9 01 00 00    	jne    360 <_RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers23runq_add_thread_checked+0x360>
+ 187:	49 81 fc 30 e1 ff ff 	cmp    $0xffffffffffffe130,%r12
+ 18e:	74 40                	je     1d0 <_RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers23runq_add_thread_checked+0x1d0>
+ 190:	4c 89 f0             	mov    %r14,%rax
+ 193:	48 05 e8 10 00 00    	add    $0x10e8,%rax
+ 199:	74 35                	je     1d0 <_RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers23runq_add_thread_checked+0x1d0>
+ 19b:	4c 89 e1             	mov    %r12,%rcx
+ 19e:	48 81 c1 c0 1e 00 00 	add    $0x1ec0,%rcx
+ 1a5:	74 29                	je     1d0 <_RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers23runq_add_thread_checked+0x1d0>
+ 1a7:	49 8b 94 24 c8 1e 00 00 	mov    0x1ec8(%r12),%rdx
+ 1af:	49 89 8e e8 10 00 00 	mov    %rcx,0x10e8(%r14)
+ 1b6:	49 89 96 f0 10 00 00 	mov    %rdx,0x10f0(%r14)
+ 1bd:	48 89 02             	mov    %rax,(%rdx)
+ 1c0:	49 89 84 24 c8 1e 00 00 	mov    %rax,0x1ec8(%r12)
+ 1c8:	49 ff 84 24 d0 1e 00 00 	incq   0x1ed0(%r12)
+ 1d0:	41 83 8c 24 08 1f 00 00 01 	orl    $0x1,0x1f08(%r12)
+ 1d9:	41 89 5e 10          	mov    %ebx,0x10(%r14)
+ 1dd:	41 c7 84 24 f0 1e 00 00 02 00 00 00 	movl   $0x2,0x1ef0(%r12)
+ 1e9:	41 8b 76 14          	mov    0x14(%r14),%esi
+ 1ed:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	1ef: R_X86_64_64	process_remaining_range_scheduler_debug+0x178
+ 1f7:	8b 00                	mov    (%rax),%eax
+ 1f9:	3d 00 00 00 01       	cmp    $0x1000000,%eax
+ 1fe:	72 48                	jb     248 <_RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers23runq_add_thread_checked+0x248>
+ 200:	49 89 ff             	mov    %rdi,%r15
+ 203:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	205: R_X86_64_64	.lrodata.str1.1+0x7763
+ 20d:	89 da                	mov    %ebx,%edx
+ 20f:	31 c0                	xor    %eax,%eax
+ 211:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	213: R_X86_64_64	kprintf
+ 21b:	ff d1                	call   *%rcx
+ 21d:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	21f: R_X86_64_64	runq_reservation_lock
+ 227:	4c 89 ff             	mov    %r15,%rdi
+ 22a:	49 bb 00 00 00 00 00 00 00 00 	movabs $0x0,%r11	22c: R_X86_64_64	clv
+ 234:	49 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%r9	236: R_X86_64_64	num_processors
+ 23e:	49 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%r8	240: R_X86_64_64	locals
+ 248:	f0 49 ff 8c 24 d8 1e 00 00 	lock decq 0x1ed8(%r12)
+ 251:	66 f0 41 83 84 24 98 1e 00 00 02 	lock addw $0x2,0x1e98(%r12)
+ 25c:	41 83 7d 00 00       	cmpl   $0x0,0x0(%r13)
+ 261:	74 4a                	je     2ad <_RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers23runq_add_thread_checked+0x2ad>
+ 263:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+ 268:	0f 32                	rdmsr  
+ 26a:	48 c1 e2 20          	shl    $0x20,%rdx
+ 26e:	89 c1                	mov    %eax,%ecx
+ 270:	48 09 d1             	or     %rdx,%rcx
+ 273:	49 8b 10             	mov    (%r8),%rdx
+ 276:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+ 27d:	48 39 ca             	cmp    %rcx,%rdx
+ 280:	77 19                	ja     29b <_RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers23runq_add_thread_checked+0x29b>
+ 282:	49 63 31             	movslq (%r9),%rsi
+ 285:	48 c1 e6 0e          	shl    $0xe,%rsi
+ 289:	48 01 f2             	add    %rsi,%rdx
+ 28c:	48 39 ca             	cmp    %rcx,%rdx
+ 28f:	72 0a                	jb     29b <_RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers23runq_add_thread_checked+0x29b>
+ 291:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+ 299:	48 98                	cltq   
+ 29b:	49 8b 0b             	mov    (%r11),%rcx
+ 29e:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+ 2a5:	f0 ff 8c 01 28 1f 00 00 	lock decl 0x1f28(%rcx,%rax,1)
+ 2ad:	66 f0 41 83 02 02    	lock addw $0x2,(%r10)
+ 2b3:	41 83 7d 00 00       	cmpl   $0x0,0x0(%r13)
+ 2b8:	44 8b 6d d4          	mov    -0x2c(%rbp),%r13d
+ 2bc:	74 4a                	je     308 <_RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers23runq_add_thread_checked+0x308>
+ 2be:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+ 2c3:	0f 32                	rdmsr  
+ 2c5:	48 c1 e2 20          	shl    $0x20,%rdx
+ 2c9:	89 c1                	mov    %eax,%ecx
+ 2cb:	48 09 d1             	or     %rdx,%rcx
+ 2ce:	49 8b 10             	mov    (%r8),%rdx
+ 2d1:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+ 2d8:	48 39 ca             	cmp    %rcx,%rdx
+ 2db:	77 19                	ja     2f6 <_RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers23runq_add_thread_checked+0x2f6>
+ 2dd:	49 63 31             	movslq (%r9),%rsi
+ 2e0:	48 c1 e6 0e          	shl    $0xe,%rsi
+ 2e4:	48 01 f2             	add    %rsi,%rdx
+ 2e7:	48 39 ca             	cmp    %rcx,%rdx
+ 2ea:	72 0a                	jb     2f6 <_RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers23runq_add_thread_checked+0x2f6>
+ 2ec:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+ 2f4:	48 98                	cltq   
+ 2f6:	49 8b 0b             	mov    (%r11),%rcx
+ 2f9:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+ 300:	f0 ff 8c 01 28 1f 00 00 	lock decl 0x1f28(%rcx,%rax,1)
+ 308:	4d 89 cc             	mov    %r9,%r12
+ 30b:	4d 89 c7             	mov    %r8,%r15
+ 30e:	57                   	push   %rdi
+ 30f:	9d                   	popf   
+ 310:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	312: R_X86_64_64	.ltext._RNvNtCsbVRkTr4hvpt_13mckernel_rust6procfs17procfs_thread_ctl
+ 31a:	4c 89 f7             	mov    %r14,%rdi
+ 31d:	be 44 00 00 00       	mov    $0x44,%esi
+ 322:	ff d0                	call   *%rax
+ 324:	49 8b 86 d0 10 00 00 	mov    0x10d0(%r14),%rax
+ 32b:	48 85 c0             	test   %rax,%rax
+ 32e:	74 45                	je     375 <_RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers23runq_add_thread_checked+0x375>
+ 330:	ba 01 00 00 00       	mov    $0x1,%edx
+ 335:	f0 0f c1 90 90 05 00 00 	lock xadd %edx,0x590(%rax)
+ 33d:	ff c2                	inc    %edx
+ 33f:	eb 36                	jmp    377 <_RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers23runq_add_thread_checked+0x377>
+ 341:	66 66 66 66 66 66 2e 0f 1f 84 00 00 00 00 00 	data16 data16 data16 data16 data16 cs nopw 0x0(%rax,%rax,1)
+ 350:	41 8b 12             	mov    (%r10),%edx
+ 353:	66 39 ca             	cmp    %cx,%dx
+ 356:	0f 84 ba fd ff ff    	je     116 <_RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers23runq_add_thread_checked+0x116>
+ 35c:	f3 90                	pause  
+ 35e:	eb f0                	jmp    350 <_RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers23runq_add_thread_checked+0x350>
+ 360:	41 8b 8c 24 98 1e 00 00 	mov    0x1e98(%r12),%ecx
+ 368:	66 39 c1             	cmp    %ax,%cx
+ 36b:	0f 84 16 fe ff ff    	je     187 <_RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers23runq_add_thread_checked+0x187>
+ 371:	f3 90                	pause  
+ 373:	eb eb                	jmp    360 <_RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers23runq_add_thread_checked+0x360>
+ 375:	31 d2                	xor    %edx,%edx
+ 377:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	379: R_X86_64_64	process_remaining_range_scheduler_debug+0x218
+ 381:	8b 00                	mov    (%rax),%eax
+ 383:	3d 00 00 00 01       	cmp    $0x1000000,%eax
+ 388:	72 22                	jb     3ac <_RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers23runq_add_thread_checked+0x3ac>
+ 38a:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	38c: R_X86_64_64	.lrodata.str1.1+0x787f
+ 394:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	396: R_X86_64_64	.lrodata.str1.1+0x7896
+ 39e:	31 c0                	xor    %eax,%eax
+ 3a0:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	3a2: R_X86_64_64	kprintf
+ 3aa:	ff d1                	call   *%rcx
+ 3ac:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	3ae: R_X86_64_64	rusage+0x98
+ 3b6:	b9 01 00 00 00       	mov    $0x1,%ecx
+ 3bb:	f0 48 0f c1 08       	lock xadd %rcx,(%rax)
+ 3c0:	48 ff c1             	inc    %rcx
+ 3c3:	48 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%rdx	3c5: R_X86_64_64	rusage+0x90
+ 3cd:	48 8b 02             	mov    (%rdx),%rax
+ 3d0:	4c 89 ff             	mov    %r15,%rdi
+ 3d3:	66 66 66 66 2e 0f 1f 84 00 00 00 00 00 	data16 data16 data16 cs nopw 0x0(%rax,%rax,1)
+ 3e0:	48 39 c1             	cmp    %rax,%rcx
+ 3e3:	76 07                	jbe    3ec <_RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers23runq_add_thread_checked+0x3ec>
+ 3e5:	f0 48 0f b1 0a       	lock cmpxchg %rcx,(%rdx)
+ 3ea:	75 f4                	jne    3e0 <_RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers23runq_add_thread_checked+0x3e0>
+ 3ec:	45 31 ff             	xor    %r15d,%r15d
+ 3ef:	44 39 eb             	cmp    %r13d,%ebx
+ 3f2:	0f 84 cf 00 00 00    	je     4c7 <_RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers23runq_add_thread_checked+0x4c7>
+ 3f8:	49 63 34 24          	movslq (%r12),%rsi
+ 3fc:	85 db                	test   %ebx,%ebx
+ 3fe:	0f 99 c0             	setns  %al
+ 401:	39 f3                	cmp    %esi,%ebx
+ 403:	0f 9c c1             	setl   %cl
+ 406:	84 c8                	test   %cl,%al
+ 408:	75 2c                	jne    436 <_RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers23runq_add_thread_checked+0x436>
+ 40a:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	40c: R_X86_64_64	.lrodata.str1.1+0x98b6
+ 414:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	416: R_X86_64_64	.lrodata.str1.1+0x98ce
+ 41e:	45 31 ff             	xor    %r15d,%r15d
+ 421:	89 da                	mov    %ebx,%edx
+ 423:	31 c0                	xor    %eax,%eax
+ 425:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	427: R_X86_64_64	kprintf
+ 42f:	ff d1                	call   *%rcx
+ 431:	e9 91 00 00 00       	jmp    4c7 <_RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers23runq_add_thread_checked+0x4c7>
+ 436:	48 8b 3f             	mov    (%rdi),%rdi
+ 439:	48 85 ff             	test   %rdi,%rdi
+ 43c:	0f 84 85 00 00 00    	je     4c7 <_RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers23runq_add_thread_checked+0x4c7>
+ 442:	89 d8                	mov    %ebx,%eax
+ 444:	48 c1 e0 0e          	shl    $0xe,%rax
+ 448:	4c 8b 74 07 08       	mov    0x8(%rdi,%rax,1),%r14
+ 44d:	45 85 f6             	test   %r14d,%r14d
+ 450:	78 75                	js     4c7 <_RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers23runq_add_thread_checked+0x4c7>
+ 452:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	454: R_X86_64_64	x86_interrupt_log_debug+0x18
+ 45c:	8b 00                	mov    (%rax),%eax
+ 45e:	3d 00 00 00 01       	cmp    $0x1000000,%eax
+ 463:	72 4e                	jb     4b3 <_RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers23runq_add_thread_checked+0x4b3>
+ 465:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+ 46a:	0f 32                	rdmsr  
+ 46c:	48 c1 e2 20          	shl    $0x20,%rdx
+ 470:	89 c0                	mov    %eax,%eax
+ 472:	48 09 d0             	or     %rdx,%rax
+ 475:	48 c1 e6 0e          	shl    $0xe,%rsi
+ 479:	48 01 fe             	add    %rdi,%rsi
+ 47c:	48 39 c7             	cmp    %rax,%rdi
+ 47f:	0f 97 c1             	seta   %cl
+ 482:	48 39 c6             	cmp    %rax,%rsi
+ 485:	0f 92 c0             	setb   %al
+ 488:	08 c8                	or     %cl,%al
+ 48a:	be ff ff ff ff       	mov    $0xffffffff,%esi
+ 48f:	75 08                	jne    499 <_RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers23runq_add_thread_checked+0x499>
+ 491:	65 8b 34 25 00 00 00 00 	mov    %gs:0x0,%esi
+ 499:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	49b: R_X86_64_64	.lrodata.str1.1+0x98e3
+ 4a3:	89 da                	mov    %ebx,%edx
+ 4a5:	31 c0                	xor    %eax,%eax
+ 4a7:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	4a9: R_X86_64_64	kprintf
+ 4b1:	ff d1                	call   *%rcx
+ 4b3:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	4b5: R_X86_64_64	x86_issue_ipi
+ 4bd:	44 89 f7             	mov    %r14d,%edi
+ 4c0:	be d1 00 00 00       	mov    $0xd1,%esi
+ 4c5:	ff 10                	call   *(%rax)
+ 4c7:	44 89 f8             	mov    %r15d,%eax
+ 4ca:	48 83 c4 08          	add    $0x8,%rsp
+ 4ce:	5b                   	pop    %rbx
+ 4cf:	41 5c                	pop    %r12
+ 4d1:	41 5d                	pop    %r13
+ 4d3:	41 5e                	pop    %r14
+ 4d5:	41 5f                	pop    %r15
+ 4d7:	5d                   	pop    %rbp
+ 4d8:	c3                   	ret    

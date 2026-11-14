@@ -1,0 +1,29 @@
+{
+  "actual_result": null,
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=60:60",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-10/default-image-preparation-1/run_materialization_and_pure.py"
+  ],
+  "compiler_build_native": null,
+  "helper_sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8",
+  "original_full19GiB_actualguard": true,
+  "owner_sha256": "d6e4a263505a174cebab3cf6febbf84fad1d9d9c16e507df925f77a553d8849f",
+  "retirement_seconds": 6,
+  "root_declared_aggregate_GiB": 19,
+  "runner_sha256": "01c903c87f8fd725ce77f7e16bb3cc6a1cb7aaaa6c47b214a896ce677de3888c",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "shared_wall_seconds": 120,
+  "validator_sha256": "6936a0da7d6c922c0d7ac1f349b1fb8e62d26b67888c55727969044f8d8377a0"
+}

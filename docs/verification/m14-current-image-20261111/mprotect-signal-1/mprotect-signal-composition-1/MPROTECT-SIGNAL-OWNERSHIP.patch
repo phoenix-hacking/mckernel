@@ -1,0 +1,295 @@
+--- a/kernel/CMakeLists.txt
++++ b/kernel/CMakeLists.txt
+@@ -106,6 +106,7 @@
+ set(MCKERNEL_DO_SYSCALL2_BRIDGE_SELECTED OFF)
+ set(MCKERNEL_MEMORY_HOST_OFFLOAD_SELECTED OFF)
+ set(MCKERNEL_POLICY_FORWARD_CONTEXT_SELECTED OFF)
++set(MCKERNEL_SIGNAL_FORWARD_PROVIDER_SELECTED OFF)
+ set(MCKERNEL_DO_SYSCALL_C_FILE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c")
+ set(MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS 0)
+ set(RUST_KERNEL_ENABLED OFF)
+@@ -636,6 +637,25 @@
+                 "${CMAKE_CURRENT_SOURCE_DIR}/include/process.h"
+                 "${IHK_FULL_SOURCE_DIR}/cokernel/smp/x86_64/include/ihk/memconst.h")
+         endif()
++        # The mprotect/shmat endpoint has the same complete host-VMA contract.
++        if (MCKERNEL_MEMORY_HOST_OFFLOAD_SELECTED)
++            list(APPEND RUST_KERNEL_CFG "--cfg" "f03_mprotect_host_provider_candidate")
++            list(APPEND RUST_KERNEL_SRCS
++                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_mprotect_host_provider.rs")
++        endif()
++        # Only the three current signal/context providers, with the paired C ABI.
++        # Keep the experimental/broad forwarding candidates and owned fork off.
++        if (MCKERNEL_RUST_F06_WHOLE_DEFAULT AND ENABLE_RUST_F06_SYSCALL_WHOLE AND
++            NOT ENABLE_NATIVE_FORK_OWNED_TRANSACTION AND NOT DCFA_KMOD)
++            set(MCKERNEL_SIGNAL_FORWARD_PROVIDER_SELECTED ON)
++            list(APPEND RUST_KERNEL_CFG "--cfg" "f03_signal_forward_provider_candidate")
++            list(APPEND RUST_KERNEL_SRCS
++                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_signal_forward_provider.rs"
++                "${CMAKE_CURRENT_SOURCE_DIR}/include/syscall.h"
++                "${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/include/ihk/context.h"
++                "${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/include/registers.h"
++                "${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/include/signal.h")
++        endif()
+         # Narrow genuine context adapter; retain every existing generic/exec gate.
+         if (MCKERNEL_RUST_F06_WHOLE_DEFAULT AND NOT ENABLE_NATIVE_FORK_OWNED_TRANSACTION)
+             set(MCKERNEL_POLICY_FORWARD_CONTEXT_SELECTED ON)
+@@ -1075,7 +1095,8 @@
+ endif()
+ if (MCKERNEL_MEMORY_HOST_OFFLOAD_SELECTED)
+     set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+-        COMPILE_DEFINITIONS MCKERNEL_RUST_F03_MEMORY_HOST_OFFLOAD)
++        COMPILE_DEFINITIONS MCKERNEL_RUST_F03_MEMORY_HOST_OFFLOAD
++        MCKERNEL_RUST_F03_MPROTECT_HOST_PROVIDER)
+ endif()
+ if (MCKERNEL_DO_MMAP_SELECTED)
+     set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+@@ -1093,6 +1114,11 @@
+         COMPILE_DEFINITIONS MCKERNEL_RUST_F03_DO_SYSCALL2_BRIDGE)
+ endif()
+ 
++if (MCKERNEL_SIGNAL_FORWARD_PROVIDER_SELECTED)
++    set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
++        COMPILE_DEFINITIONS MCKERNEL_RUST_F03_SIGNAL_FORWARD_PROVIDER)
++endif()
++
+ if (MCKERNEL_POLICY_FORWARD_CONTEXT_SELECTED)
+     set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+         COMPILE_DEFINITIONS MCKERNEL_RUST_F03_POLICY_FORWARD_CONTEXT_BRIDGE)
+--- /dev/null
++++ b/kernel/rust/f03_mprotect_host_provider.rs
+@@ -0,0 +1,40 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Genuine shared mprotect/shmat host-VMA callback; reuse the qualified Rust body.
++use core::mem::{align_of, size_of};
++use crate::abi::{CInt, CULong, SizeT};
++
++#[cfg(any(not(target_arch = "x86_64"), not(native_linux_irq_work_v6_12),
++    not(enable_profile), not(enable_perf), not(enable_rusage), enable_tofu,
++    enable_fugaku_hacks, f03_forward_adapters_candidate,
++    not(f03_memory_host_offload_candidate)))]
++compile_error!("mprotect host provider requires its paired qualified memory-host profile");
++
++/// Preserve the original synchronous host-VMA callback used by mprotect and shmat.
++///
++/// # Safety
++/// The original current thread and VM must remain live. The complete caller owns
++/// the original VM/list/range locks and references, including the range lock when
++/// holding_lock is nonzero. The qualified provider retains the current-thread
++/// lookup, initialized private context and three real argument-setter calls,
++/// native PFN invalidation, borrowed flag restoration and exact signed-int result.
++/// This endpoint adds no argument conversion, lock, reference, log or stored borrow.
++#[no_mangle]
++pub unsafe extern "C" fn mprotect_set_host_vma_bridge(
++    start: CULong, len: SizeT, prot: CInt, holding_lock: CInt,
++) -> CInt {
++    unsafe {
++        crate::f03_memory_host_offload::do_munmap_set_host_bridge(
++            start, len, prot, holding_lock,
++        )
++    }
++}
++
++const _: unsafe extern "C" fn(CULong, SizeT, CInt, CInt) -> CInt =
++    mprotect_set_host_vma_bridge;
++const _: unsafe extern "C" fn(CULong, SizeT, CInt, CInt) -> CInt =
++    crate::f03_memory_host_offload::do_munmap_set_host_bridge;
++const _: () = {
++    assert!(size_of::<CInt>() == 4 && align_of::<CInt>() == 4);
++    assert!(size_of::<CULong>() == 8 && align_of::<CULong>() == 8);
++    assert!(size_of::<SizeT>() == 8 && align_of::<SizeT>() == 8);
++};
+--- /dev/null
++++ b/kernel/rust/f03_signal_forward_provider.rs
+@@ -0,0 +1,84 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Genuine narrow signal-payload and opaque-context providers for the ordinary profile.
++use core::{ffi::c_void, mem::{align_of, offset_of, size_of, MaybeUninit}, ptr::addr_of};
++use crate::abi::{CInt, CLong, CULong, KSigAction, SigAction, X86UserContext};
++
++#[cfg(any(not(target_arch = "x86_64"), not(native_linux_irq_work_v6_12),
++    not(enable_profile), not(enable_perf), not(enable_rusage), enable_tofu,
++    enable_fugaku_hacks, f03_forward_adapters_candidate,
++    f03_signal_forward_defined_candidate))]
++compile_error!("signal forwarding providers require the paired ordinary profile");
++
++/// Forward the original opaque context once, without changing or retaining it.
++///
++/// # Safety
++/// The caller retains ownership of the original live x86 context for the full
++/// synchronous offload. No reference is formed here. The selected genuine Rust
++/// forwarder keeps its existing null handling, argument reads, request, CPU,
++/// diagnostics and offload/lifetime behavior, including its signed long result.
++#[no_mangle]
++pub unsafe extern "C" fn syscall_forward_context_bridge(
++    number: CInt, context: *mut c_void,
++) -> CLong {
++    unsafe {
++        crate::syscall_policy::syscall_generic_forwarding(
++            number, context.cast::<X86UserContext>(),
++        )
++    }
++}
++
++/// Forward the original signal-mask payload from a fully zeroed stack context.
++///
++/// # Safety
++/// The original current-thread/CPU and synchronous endpoint contract applies.
++/// All context fields are zero-valid integer fields, matching C `{ 0 }` before
++/// the genuine volatile setter. Storage remains live through forwarding; no
++/// reference, allocation, lock, signal operation or pointer is retained here.
++#[no_mangle]
++pub unsafe extern "C" fn syscall_forward_rt_sigprocmask_bridge(mask: CULong) -> CLong {
++    let mut storage = MaybeUninit::<X86UserContext>::zeroed();
++    let context = storage.as_mut_ptr();
++    unsafe {
++        crate::x86_cpu_helpers::ihk_mc_syscall_set_arg0(context, mask);
++        crate::syscall_policy::syscall_generic_forwarding(14, context)
++    }
++}
++
++/// Forward the original action's signal, handler bits and flags in C order.
++///
++/// # Safety
++/// `action` is the original aligned initialized kernel action borrowed by the
++/// caller. The caller finishes its original locked action copies and IRQ restore
++/// before invoking this provider, and keeps the action live through return.
++/// Handler and flags are read separately after their preceding setter, exactly
++/// as in C; handler is an address value and is never called or dereferenced.
++/// No pointer is stored, action mutated, lock taken or ownership transferred.
++#[no_mangle]
++pub unsafe extern "C" fn syscall_forward_sigaction_update_bridge(
++    signal: CInt, action: *const c_void,
++) -> CLong {
++    let mut storage = MaybeUninit::<X86UserContext>::zeroed();
++    let context = storage.as_mut_ptr();
++    let action = action.cast::<KSigAction>();
++    unsafe {
++        crate::x86_cpu_helpers::ihk_mc_syscall_set_arg0(context, signal as CULong);
++        let handler = addr_of!((*action).sa.sa_handler).read() as CULong;
++        crate::x86_cpu_helpers::ihk_mc_syscall_set_arg1(context, handler);
++        let flags = addr_of!((*action).sa.sa_flags).read();
++        crate::x86_cpu_helpers::ihk_mc_syscall_set_arg2(context, flags);
++        crate::syscall_policy::syscall_generic_forwarding(13, context)
++    }
++}
++
++// Paired with the actual C declarations and selected architecture headers.
++const _: unsafe extern "C" fn(CInt, *mut c_void) -> CLong = syscall_forward_context_bridge;
++const _: unsafe extern "C" fn(CULong) -> CLong = syscall_forward_rt_sigprocmask_bridge;
++const _: unsafe extern "C" fn(CInt, *const c_void) -> CLong = syscall_forward_sigaction_update_bridge;
++const _: () = assert!(size_of::<CInt>() == 4 && align_of::<CInt>() == 4
++    && size_of::<CLong>() == 8 && size_of::<CULong>() == 8
++    && size_of::<*const c_void>() == 8);
++const _: () = assert!(size_of::<X86UserContext>() == 224 && align_of::<X86UserContext>() == 8
++    && offset_of!(X86UserContext, gpr) == 56);
++const _: () = assert!(size_of::<KSigAction>() == 32 && align_of::<KSigAction>() == 8
++    && offset_of!(KSigAction, sa) == 0 && offset_of!(SigAction, sa_handler) == 0
++    && offset_of!(SigAction, sa_flags) == 8);
+--- a/kernel/rust/lib.rs
++++ b/kernel/rust/lib.rs
+@@ -66,12 +66,16 @@
+ mod f03_do_fork;
+ #[cfg(f03_memory_host_offload_candidate)]
+ mod f03_memory_host_offload;
++#[cfg(f03_mprotect_host_provider_candidate)]
++mod f03_mprotect_host_provider;
+ #[cfg(f03_do_syscall_outer_candidate)]
+ mod syscall_offload_entry;
+ #[cfg(f03_do_syscall2_bridge_candidate)]
+ mod f03_do_syscall2_bridge;
+ #[cfg(f03_policy_forward_context_bridge_candidate)]
+ mod f03_policy_forward_context_bridge;
++#[cfg(f03_signal_forward_provider_candidate)]
++mod f03_signal_forward_provider;
+ #[cfg(any(f06_rt_sigreturn_xrstor_candidate, f06_debug_constants_candidate))]
+ mod f06_rt_sigreturn_xrstor;
+ #[cfg(all(f03_forward_adapters_candidate, target_arch = "x86_64"))]
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -1102,7 +1102,31 @@
+ #else
+ static unsigned long syscall_virt_to_phys_bridge(void *addr);
+ #endif
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_SIGNAL_FORWARD_PROVIDER)
++extern long syscall_forward_context_bridge(int syscall_nr, void *ctx);
++extern long syscall_forward_rt_sigprocmask_bridge(unsigned long sigmask);
++extern long syscall_forward_sigaction_update_bridge(int sig, const void *actp);
++_Static_assert(__builtin_types_compatible_p(__typeof__(&syscall_forward_context_bridge),
++    syscall_forward_context_fn_t), "signal context forwarding ABI");
++_Static_assert(__builtin_types_compatible_p(__typeof__(&syscall_forward_rt_sigprocmask_bridge),
++    syscall_forward_sigmask_fn_t), "signal mask forwarding ABI");
++_Static_assert(__builtin_types_compatible_p(__typeof__(&syscall_forward_sigaction_update_bridge),
++    syscall_sigaction_forward_fn_t), "signal action forwarding ABI");
++_Static_assert(sizeof(int) == 4 && _Alignof(int) == 4 && sizeof(long) == 8
++    && sizeof(unsigned long) == 8 && sizeof(void *) == 8, "signal scalar ABI");
++_Static_assert(sizeof(ihk_mc_user_context_t) == 224 && _Alignof(ihk_mc_user_context_t) == 8
++    && __builtin_offsetof(ihk_mc_user_context_t, gpr) == 56, "signal context ABI");
++_Static_assert(sizeof(struct k_sigaction) == 32 && _Alignof(struct k_sigaction) == 8
++    && __builtin_offsetof(struct k_sigaction, sa) == 0
++    && __builtin_offsetof(struct sigaction, sa_handler) == 0
++    && __builtin_offsetof(struct sigaction, sa_flags) == 8, "signal action ABI");
++_Static_assert(__NR_rt_sigaction == 13 && __NR_rt_sigprocmask == 14,
++    "signal forwarding syscall numbers");
++#else
++#line 1082
+ static long syscall_forward_context_bridge(int syscall_nr, void *ctx);
++#endif
++#line 1083
+ void syscall_tsc_to_ts_bridge(unsigned long tsc, void *ts);
+ unsigned long syscall_timespec_to_jiffy_bridge(const void *ts);
+ void syscall_ts_add_bridge(void *dst, const void *src);
+@@ -7190,12 +7214,12 @@
+ 	return change_prot_process_memory_range(vm, range, protflags);
+ }
+ #endif
+-
+-static int mprotect_set_host_vma_bridge(unsigned long start, size_t len,
+-		int prot, int holding_lock)
+-{
+-	return set_host_vma(start, len, prot, holding_lock);
+-}
++#ifdef MCKERNEL_RUST_F03_MPROTECT_HOST_PROVIDER
++extern int mprotect_set_host_vma_bridge(unsigned long, size_t, int, int); _Static_assert(__builtin_types_compatible_p(__typeof__(&mprotect_set_host_vma_bridge), mprotect_set_host_vma_fn_t), "mprotect host callback ABI"); _Static_assert(sizeof(unsigned long)==8 && sizeof(size_t)==8 && sizeof(int)==4, "mprotect host scalar ABI");
++#else
++static int mprotect_set_host_vma_bridge(unsigned long start, size_t len, int prot, int holding_lock)
++{ return set_host_vma(start, len, prot, holding_lock); }
++#endif
+ 
+ #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ void mprotect_flush_nfo_bridge(void)
+@@ -20424,7 +20448,7 @@
+ }
+ #endif
+ 
+-#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_SIGNAL_FORWARD)
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && (defined(MCKERNEL_RUST_F03_SIGNAL_FORWARD) || defined(MCKERNEL_RUST_F03_SIGNAL_FORWARD_PROVIDER))
+ extern long syscall_forward_rt_sigprocmask_bridge(unsigned long sigmask);
+ #else
+ long
+@@ -20539,7 +20563,7 @@
+ #endif
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+-#ifdef MCKERNEL_RUST_F03_SIGNAL_FORWARD
++#if defined(MCKERNEL_RUST_F03_SIGNAL_FORWARD) || defined(MCKERNEL_RUST_F03_SIGNAL_FORWARD_PROVIDER)
+ extern long syscall_forward_sigaction_update_bridge(int sig, const void *actp);
+ #else
+ long
+@@ -20863,12 +20887,16 @@
+ }
+ #endif
+ 
++#if !defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) || !defined(MCKERNEL_RUST_F03_SIGNAL_FORWARD_PROVIDER)
++#line 20167
+ static long
+ syscall_forward_context_bridge(int syscall_nr, void *ctx)
+ {
+ 	return syscall_generic_forwarding(syscall_nr,
+ 			(ihk_mc_user_context_t *)ctx);
+ }
++#endif
++#line 20173
+ 
+ #if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && !defined(MCKERNEL_RUST_F03_POLICY_FORWARD_CONTEXT_BRIDGE)
+ long

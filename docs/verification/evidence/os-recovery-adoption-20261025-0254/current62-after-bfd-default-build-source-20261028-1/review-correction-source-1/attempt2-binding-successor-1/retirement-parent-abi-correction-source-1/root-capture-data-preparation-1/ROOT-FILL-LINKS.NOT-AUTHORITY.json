@@ -1,0 +1,161 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "exact_node_links": {
+    "01": {
+      "Root_fields": {
+        "author": "/root",
+        "decision": "EXPLICIT_OPERATION_WINDOW_SUCCESSOR"
+      },
+      "note": "minimum_cumulative_spent22812.3311 alreadyfilled; Rootmaytightenfromactualaccount, neverlower/reset."
+    },
+    "02": {
+      "independent_fields": {
+        "decision": "PASS_EXPLICIT_OPERATION_WINDOW_SUCCESSOR",
+        "independent": true,
+        "reviewer": "actual independent reviewer id"
+      },
+      "copies": {
+        "successor": "entire actual01 object"
+      }
+    },
+    "03": {
+      "BYTE_refs": {
+        "successor": "01",
+        "review": "02"
+      }
+    },
+    "04": {
+      "independent_fields": {
+        "decision": "PASS_EXACT_NEW_WINDOW_PHYSICAL_HISTORY_SUCCESSOR",
+        "independent": true
+      },
+      "BYTE_refs": {
+        "guard_config": "03"
+      }
+    },
+    "05": {
+      "Root_fields": {
+        "author": "/root"
+      },
+      "BYTE_refs": {
+        "guard_config": "03",
+        "independent_review": "04"
+      }
+    },
+    "06": {
+      "independent_fields": {
+        "decision": "PASS_EXACT_ROOT59_CONFIGURED_NEW_WINDOW_OBSERVER_DEPENDENCIES",
+        "independent": true
+      },
+      "BYTE_refs": {
+        "reviewed_account_window_guard_configuration": "03",
+        "reviewed_physical_history_configuration": "05"
+      }
+    },
+    "07": {
+      "independent_fields": {
+        "decision": "PASS_EXACT_ROOT61_BFD_OBSERVER_DEPENDENCIES",
+        "independent": true
+      },
+      "BYTE_refs": {
+        "guard_configuration": "03"
+      }
+    },
+    "08": {
+      "Root_fields": {
+        "author": "/root",
+        "decision": "BIND_REVIEWED_ROOT62_HISTORY_DEPENDENCIES_SOURCE_ONLY"
+      },
+      "BYTE_refs": {
+        "guard_configuration": "03",
+        "physical_configuration": "05",
+        "common_dependency_review": "06",
+        "Root61_dependency_review": "07"
+      }
+    },
+    "10": {
+      "independent_fields": {
+        "decision": "PASS_EXACT_ROOT62_BFD_POSTJOIN_OBSERVER_DEPENDENCIES",
+        "independent": true
+      },
+      "BYTE_refs": {
+        "guard_configuration": "03"
+      },
+      "note": "exactobserver/phase/ledger/result/parentjoin/adapter/fullcapture_scope/acceptance953 alreadyfilled; pending/latestfree/currentboundaryremainnullincandidatephase"
+    },
+    "09": {
+      "Root_fields": {
+        "author": "/root",
+        "decision": "BIND_EXACT_ROOT62_BFD_POSTJOIN_OBSERVER"
+      },
+      "BYTE_refs": {
+        "guard_configuration": "03",
+        "independent_review": "10"
+      }
+    },
+    "11": {
+      "Root_fields": {
+        "author": "/root",
+        "decision": "AUTHORIZE_ONE_ROOT62_BFD_POSTJOIN_READONLY_CAPTURE"
+      },
+      "BYTE_refs": {
+        "bindings": "09",
+        "independent_execution_review": "12"
+      }
+    },
+    "12": {
+      "independent_fields": {
+        "decision": "PASS_EXACT_ROOT62_READONLY_CAPTURE",
+        "independent": true
+      },
+      "copies": {
+        "release_payload": "entire actual11 object EXCEPT independent_execution_review key"
+      },
+      "note": "Write actual12 after reviewing final11 payload; then write11 with exact12ref. This removes the review hash cycle."
+    },
+    "13": {
+      "actual_observed_fields": [
+        "pid",
+        "starttime",
+        "returncode",
+        "positive_direct_wait_join",
+        "streams_closed",
+        "process_group_absent",
+        "remaining_group_members",
+        "group_observation_errors",
+        "actual_process_group",
+        "stdout",
+        "stderr",
+        "child_started"
+      ],
+      "note": "AFTER actualonecapture only. Root Popen start_new_session=True required; actual_process_group must equal capturedchildpid, freshcompletepostwaitgroupcensus mustempty/noerrors. Do not transform retirement52fa into capture13."
+    }
+  },
+  "BYTE_ref_shape": [
+    "path",
+    "bytes",
+    "sha256"
+  ],
+  "Root_only_actual_authorship": true,
+  "independent_authority_from_existing_review_owner": true,
+  "no_new_audit_lane_or_quota": true,
+  "fill_order": [
+    "01",
+    "02",
+    "03",
+    "04",
+    "05",
+    "06",
+    "07",
+    "08",
+    "bind_history DATAonly",
+    "10",
+    "09",
+    "11payload",
+    "12",
+    "11final",
+    "Root onecapture",
+    "13actualobservations"
+  ],
+  "actual_guard_query_capture_calls": 0
+}

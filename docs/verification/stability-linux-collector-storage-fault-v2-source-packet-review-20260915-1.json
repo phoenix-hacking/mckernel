@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_packet_review",
+  "task_id": "M02-B-storage-fault-v2-source-packet-review",
+  "attempt": 3,
+  "status": "PASS_STORAGE_FAULT_V2_SOURCE_PACKET_ONLY",
+  "recorded_utc": "2026-09-15T17:37:00Z",
+  "base_commit": "5e70fd4f87bda422b4522cd189df8dec1a999a7a",
+  "packet": "docs/verification/stability-linux-collector-storage-fault-v2-source-packet-20260915-1.md",
+  "packet_sha256": "c51fcdb93702bea514b0a70d49c7db75ef236502429e7c0292a5e0e47e9c065c",
+  "inputs": {
+    "collector_sha256": "09a63a343fa8cc9f511a26693371f5ba4f55ac5ca56fcb47abdc44759830cf1f",
+    "design_sha256": "e39f5ca1ea62251cb1a8a8d56c0d1a48702e35d66c6210d6f4cb76a129b183fa",
+    "context_review_sha256": "01863d1962438a3d9b6c93ce725e42bc1cdd6f71fae29fddde68827f82e29080"
+  },
+  "checks": {
+    "selectors": 7,
+    "exact_hook_sites": true,
+    "target_only_adapter_schedules": true,
+    "selector4_internal_observation_transport": true,
+    "distinct_before_after_schemas": true,
+    "ready_release_sequence_exact": true,
+    "descriptor_acquisition_reuse_exact": true,
+    "hard_packet_limit": 32,
+    "identity_safe_outer_cleanup": true,
+    "original_failures_preserved": 2
+  },
+  "source_materialized": false,
+  "build_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

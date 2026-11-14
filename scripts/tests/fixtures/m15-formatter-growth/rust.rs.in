@@ -1,0 +1,38 @@
+// Actual selected safe Rust public formatters and shared append/query/log bodies.
+use core::ffi::{c_char,c_int,c_ulong,c_void};
+use core::ptr::null_mut;
+macro_rules! c {($s:literal)=>{concat!($s,"\0").as_ptr().cast::<c_char>()};}
+unsafe extern "C"{
+ static mut loglevel:c_int;
+ fn __errno_location()->*mut c_int;
+ #[link_name="observation_malloc"]fn malloc(size:usize)->*mut c_void;
+ #[link_name="observation_calloc"]fn calloc(n:usize,size:usize)->*mut c_void;
+ #[link_name="observation_realloc"]fn realloc(pointer:*mut c_void,size:usize)->*mut c_void;
+ #[link_name="observation_free"]fn free(pointer:*mut c_void);
+ fn memset(pointer:*mut c_void,byte:c_int,size:usize)->*mut c_void;
+ #[link_name="observation_snprintf"]fn snprintf(out:*mut c_char,size:usize,format:*const c_char,...)->c_int;
+ fn geteuid()->u32;
+ fn open(path:*const c_char,flags:c_int,...)->c_int;
+ fn close(fd:c_int)->c_int;
+ fn strnlen(text:*const c_char,maximum:usize)->usize;
+ fn write(fd:c_int,text:*const c_void,size:usize)->isize;
+ fn observation_run(cpu:unsafe extern "C" fn(*mut shared::CpuReq)->*mut c_char,memory:unsafe extern "C" fn(*mut shared::MemReq)->*mut c_char,ikc:unsafe extern "C" fn(*mut ikc::IhkIkcReq)->*mut c_char)->c_int;
+}
+mod shared{
+ use super::*;
+__CPU_MEMORY_TYPES__
+__APPEND__
+__ZERO_MEM__
+__QUERY_STRING__
+__LOG__
+__CPU_PUBLIC__
+__MEMORY_PUBLIC__
+}
+mod ikc{
+ use super::*;
+ use super::shared::{append,log};
+__IKC_TYPE__
+__ALLOCATION_ERROR__
+__IKC_PUBLIC__
+}
+fn main(){std::process::exit(unsafe{observation_run(shared::cpu_req2str,shared::mem_req2str,ikc::ikc_req2str)});}

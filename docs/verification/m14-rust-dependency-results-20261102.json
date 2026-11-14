@@ -1,0 +1,93 @@
+{
+  "schema": "m14-rust-dependency-progress-v1",
+  "date_utc": "2026-11-02",
+  "source_base_commit": "07c3605371a8eb9918bf8f54cd6dcc049c372689",
+  "scope": "M14 Rust incremental-build correctness and unchanged M15 HOST regressions; no complete kernel or native deployment qualification.",
+  "changes": [
+    "Track compiler-discovered Rust modules, binary includes and consumed sysroot metadata through dep-info while retaining explicit source prerequisites.",
+    "Keep raw Rust dep-info and remove Cargo environment-comment records only from the CMake-consumed copy; pinned CMake 3.28.3 otherwise misparses those colons.",
+    "Omit the depfile target from rustc output so Ninja recognizes the object target and unchanged builds remain no-ops.",
+    "Recheck the selected compiler after replacement and reject a failing --version process even if its stdout contains nightly.",
+    "Update the existing focused workflow to check out and watch cmake inputs and provide pinned Ninja 1.13.0."
+  ],
+  "source_files_sha256": {
+    "kernel/CMakeLists.txt": "b67ede3209c411716bd906cc9189e7a1b199ebabe8b204dbaf18bea5304c2fd9",
+    "cmake/NormalizeRustDepfile.cmake": "b464b4a5d389ad20c0a9c5639d6e55fe259d28b16d735c225aacabe973bf7298",
+    "scripts/tests/test_m14_rust_rebuild.py": "899ad30e59874004c645022fafdef385bb8521d22f8b710280a3e18f580c66bd",
+    "scripts/run_m14_focused_checks.py": "1e521c1c317511b2eae1a8c2800fdb1eafbf5b180fda432b2df6562bd15f37b7",
+    ".github/workflows/m14-focused.yml": "7e5179c351a918b12098521407c4b644d01b384dc20065cc47d81032225208e3"
+  },
+  "M14": {
+    "result": "PASS",
+    "checks": 36,
+    "modules": 16,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "seconds": 5.159,
+    "command": [
+      "python3",
+      "-B",
+      "scripts/run_m14_focused_checks.py"
+    ],
+    "toolchain": {
+      "rustc": "rustc 1.95.0-nightly (c04308580 2026-02-18)",
+      "cc": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0",
+      "cmake": "cmake version 3.28.3",
+      "python": "3.12.14"
+    },
+    "behavior": "Actual unchanged kernel Rust recipe compiled an unrelated tiny crate with the pinned real compiler. Make and Ninja tracked unlisted modules and include_bytes payloads, left unchanged builds alone, and reproduced identical object bytes on a fresh same-input rebuild. Existing compiler-replacement, absolute-file, and historical stale-compiler controls passed; the failed-version probe was rejected.",
+    "profile_change": "Rust kernel builds explicitly require CMake >=3.20 for Make depfile support; tested SDK CMake is 3.28.3. C kernel minimum and existing runtime selections remain unchanged."
+  },
+  "M15": {
+    "result": "PASS",
+    "checks": 38,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "seconds": 8.407,
+    "modules": [
+      "scripts.tests.test_m15_executor_libdir",
+      "scripts.tests.test_m15_executor_libdir_real",
+      "scripts.tests.test_m15_bfd_accessors",
+      "scripts.tests.test_m15_user_tool_selection",
+      "scripts.tests.test_m15_bfd_profile",
+      "scripts.tests.test_m15_ihklib_cpu_format",
+      "scripts.tests.test_m15_ihk_cli",
+      "scripts.tests.test_restore_ihk_source",
+      "scripts.tests.test_m15_ihklib_kargs",
+      "scripts.tests.test_m15_ihk_cli_query_errors",
+      "scripts.tests.test_m15_ihkmond_help",
+      "scripts.tests.test_m15_ihklib_boot_poll"
+    ],
+    "not_rerun": {
+      "modules": [
+        "scripts.tests.test_m15_diagnostic_bfd",
+        "scripts.tests.test_m15_diagnostic_dwarf"
+      ],
+      "checks": 4,
+      "reason": "The genuine qualified BFD/libdwarf/libelf provider namespace is unavailable here. These tests were excluded, not counted as passes. Their source and prior evidence were preserved."
+    }
+  },
+  "IHK_recovery": {
+    "result": "PASS",
+    "base": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+    "gitlink": "c032c975fdbe17be846bd61cc48cb541e7ab5830",
+    "tree": "fac3185fb76c9170452af25b8268fb3729699441",
+    "method": "Fresh canonical network-base fetch and the three committed bundles through restore_ihk_source.py; final checkout clean."
+  },
+  "CI": "The existing additive focused M14 workflow is updated; remote results must be checked on the published commit. Local success is not a hosted or native pass.",
+  "acceptance": {
+    "M14": "4/6 accepted",
+    "M15": "1/8 accepted",
+    "new_file_acceptances": 0,
+    "new_qualified_C_retirements": 0,
+    "native_qualified": false
+  },
+  "remaining": [
+    "M14 generic and x86 syscall ownership/ABI/provider closure and the final coherent Rust/assembly image remain open.",
+    "The original native SDK/control host, device interfaces and recorded R3 owner disposition are required before native build/install qualification; existing holds and reservations are preserved.",
+    "Qualify one matched kernel/module/installed-tool cohort with real applications and stop/release/reboot resource restoration.",
+    "M15 becomes primary after M14 acceptance; bounded unchanged-source HOST regressions do not close its seven open file goals."
+  ]
+}

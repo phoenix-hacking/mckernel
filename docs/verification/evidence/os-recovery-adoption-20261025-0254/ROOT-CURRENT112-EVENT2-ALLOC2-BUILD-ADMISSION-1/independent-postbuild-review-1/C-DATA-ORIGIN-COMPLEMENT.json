@@ -1,0 +1,1539 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_NO_NEW_C_DATA_OBJECT_OR_RAW_METADATA_INITIALIZER",
+  "independent": true,
+  "checks": [
+    {
+      "object": "kernelC",
+      "allocated_OBJECTs": 158,
+      "all_same_raw_input_bytes_types_sizes_bindings": [
+        {
+          "name": "ddebug.67",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.71",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.70",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.69",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.68",
+          "bytes": 32
+        },
+        {
+          "name": "ptrace_io_kernel_offsets",
+          "bytes": 88
+        },
+        {
+          "name": "ptrace_wakeup_io_offsets",
+          "bytes": 88
+        },
+        {
+          "name": "ddebug.73",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.72",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.61",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.45",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.46",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.44",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.30",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.29",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.79",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.78",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.77",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.76",
+          "bytes": 32
+        },
+        {
+          "name": "mcexec_v10_offload_return_logs.21",
+          "bytes": 4
+        },
+        {
+          "name": "mcexec_v10_offload_return_pid.22",
+          "bytes": 4
+        },
+        {
+          "name": "ddebug.75",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.74",
+          "bytes": 32
+        },
+        {
+          "name": "__FUNCTION__.23",
+          "bytes": 11
+        },
+        {
+          "name": "ddebug.42",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.41",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.43",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.65",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.64",
+          "bytes": 32
+        },
+        {
+          "name": "__FUNCTION__.17",
+          "bytes": 10
+        },
+        {
+          "name": "ddebug.66",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.63",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.62",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.60",
+          "bytes": 32
+        },
+        {
+          "name": "mmap_mckfd_offsets.12",
+          "bytes": 72
+        },
+        {
+          "name": "ddebug.58",
+          "bytes": 32
+        },
+        {
+          "name": "__func__.10",
+          "bytes": 8
+        },
+        {
+          "name": "ddebug.53",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.47",
+          "bytes": 32
+        },
+        {
+          "name": "__FUNCTION__.11",
+          "bytes": 8
+        },
+        {
+          "name": "ddebug.59",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.51",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.50",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.49",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.52",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.57",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.56",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.48",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.54",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.55",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.40",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.39",
+          "bytes": 32
+        },
+        {
+          "name": "__FUNCTION__.7",
+          "bytes": 8
+        },
+        {
+          "name": "ddebug.38",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.35",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.34",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.33",
+          "bytes": 32
+        },
+        {
+          "name": "tls_debug.32",
+          "bytes": 32
+        },
+        {
+          "name": "__func__.8",
+          "bytes": 8
+        },
+        {
+          "name": "ddebug.37",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.36",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.31",
+          "bytes": 32
+        },
+        {
+          "name": "offsets.6",
+          "bytes": 88
+        },
+        {
+          "name": "ddebug.28",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.27",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.25",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.26",
+          "bytes": 32
+        },
+        {
+          "name": "__FUNCTION__.2",
+          "bytes": 12
+        },
+        {
+          "name": "ddebug.24",
+          "bytes": 32
+        },
+        {
+          "name": "__func__.0",
+          "bytes": 38
+        },
+        {
+          "name": "__func__.1",
+          "bytes": 12
+        },
+        {
+          "name": "__func__.3",
+          "bytes": 25
+        },
+        {
+          "name": "__func__.4",
+          "bytes": 36
+        },
+        {
+          "name": "__func__.5",
+          "bytes": 31
+        },
+        {
+          "name": "__func__.9",
+          "bytes": 12
+        },
+        {
+          "name": "__func__.13",
+          "bytes": 21
+        },
+        {
+          "name": "__func__.14",
+          "bytes": 22
+        },
+        {
+          "name": "__func__.15",
+          "bytes": 18
+        },
+        {
+          "name": "__func__.16",
+          "bytes": 10
+        },
+        {
+          "name": "__func__.18",
+          "bytes": 23
+        },
+        {
+          "name": "__func__.19",
+          "bytes": 19
+        },
+        {
+          "name": "__func__.20",
+          "bytes": 11
+        },
+        {
+          "name": "uti_desc",
+          "bytes": 8
+        },
+        {
+          "name": "f03_check_signal_empty_debug",
+          "bytes": 32
+        },
+        {
+          "name": "f03_syscall_entry_config_v1",
+          "bytes": 80
+        },
+        {
+          "name": "syscall_name",
+          "bytes": 32200
+        },
+        {
+          "name": "f03_syscall_entry_debug_v1",
+          "bytes": 192
+        },
+        {
+          "name": "f03_swapout_callback_debug_v1",
+          "bytes": 32
+        },
+        {
+          "name": "f03_syscall_migrate_pages_log_bridge_debug_v1",
+          "bytes": 32
+        },
+        {
+          "name": "f03_syscall_get_mempolicy_log_bridge_debug_v1",
+          "bytes": 96
+        },
+        {
+          "name": "f03_syscall_set_mempolicy_log_bridge_debug_v1",
+          "bytes": 256
+        },
+        {
+          "name": "f03_syscall_mbind_entry_log_bridge_debug_v1",
+          "bytes": 32
+        },
+        {
+          "name": "f03_syscall_mbind_log_bridge_debug_v1",
+          "bytes": 320
+        },
+        {
+          "name": "f03_mbind_alloc_source_line_v1",
+          "bytes": 4
+        },
+        {
+          "name": "f03_mbind_alloc_source_file_v1",
+          "bytes": 22
+        },
+        {
+          "name": "f03_msync_debug_v1",
+          "bytes": 96
+        },
+        {
+          "name": "f03_mremap_debug_v1",
+          "bytes": 64
+        },
+        {
+          "name": "f03_remap_file_debug_v1",
+          "bytes": 64
+        },
+        {
+          "name": "f03_memlock_debug_v1",
+          "bytes": 128
+        },
+        {
+          "name": "f03_settimeofday_debug_v1",
+          "bytes": 96
+        },
+        {
+          "name": "f03_sched_setparam_debug_v1",
+          "bytes": 32
+        },
+        {
+          "name": "f03_ptrace_entry_debug_v1",
+          "bytes": 32
+        },
+        {
+          "name": "f03_ptrace_entry_ops_v1",
+          "bytes": 152
+        },
+        {
+          "name": "f03_ptrace_text_debug",
+          "bytes": 64
+        },
+        {
+          "name": "f03_ptrace_control_debug",
+          "bytes": 64
+        },
+        {
+          "name": "f03_do_exit_debug_v2",
+          "bytes": 64
+        },
+        {
+          "name": "f03_futex_retained_providers_v1",
+          "bytes": 24
+        },
+        {
+          "name": "f03_futex_log_debug_v2",
+          "bytes": 128
+        },
+        {
+          "name": "f03_shmdt_log_bridge_debug_v1",
+          "bytes": 96
+        },
+        {
+          "name": "f03_shmdt_debug_v1",
+          "bytes": 96
+        },
+        {
+          "name": "f03_shmdt_data_v1",
+          "bytes": 16
+        },
+        {
+          "name": "f03_shmctl_providers_v1",
+          "bytes": 112
+        },
+        {
+          "name": "f03_shmctl_log_bridge_debug_v1",
+          "bytes": 320
+        },
+        {
+          "name": "f03_shmctl_offsets_v1",
+          "bytes": 128
+        },
+        {
+          "name": "f03_shmat_data_v1",
+          "bytes": 152
+        },
+        {
+          "name": "f03_shmat_log_bridge_debug_v1",
+          "bytes": 288
+        },
+        {
+          "name": "f03_shmget_debug_v1",
+          "bytes": 352
+        },
+        {
+          "name": "f03_shmget_constants_v1",
+          "bytes": 20
+        },
+        {
+          "name": "f03_shmobj_lookup_data_v1",
+          "bytes": 56
+        },
+        {
+          "name": "the_shm_info",
+          "bytes": 48
+        },
+        {
+          "name": "the_shminfo",
+          "bytes": 72
+        },
+        {
+          "name": "kds_list",
+          "bytes": 16
+        },
+        {
+          "name": "shmid_index",
+          "bytes": 4096
+        },
+        {
+          "name": "f03_syscall_madvise_log_bridge_debug_v1",
+          "bytes": 32
+        },
+        {
+          "name": "f03_mincore_debug_v1",
+          "bytes": 128
+        },
+        {
+          "name": "f03_rt_sigtimedwait_source_file",
+          "bytes": 22
+        },
+        {
+          "name": "f03_vm_policy_clear_alloc_debug_v1",
+          "bytes": 32
+        },
+        {
+          "name": "f03_vm_policy_clear_free_line_v1",
+          "bytes": 4
+        },
+        {
+          "name": "f03_vm_policy_clear_alloc_line_v1",
+          "bytes": 4
+        },
+        {
+          "name": "f03_vm_policy_clear_source_file_v1",
+          "bytes": 22
+        },
+        {
+          "name": "f03_vm_policy_insert_log_provider_v1",
+          "bytes": 8
+        },
+        {
+          "name": "f03_perf_descriptor_layout_v1",
+          "bytes": 40
+        },
+        {
+          "name": "f03_perf_ioctl_data_v1",
+          "bytes": 64
+        },
+        {
+          "name": "f03_perf_counter_providers_v1",
+          "bytes": 80
+        },
+        {
+          "name": "f03_perf_event_layout_v1",
+          "bytes": 152
+        },
+        {
+          "name": "f03_perf_read_providers_v1",
+          "bytes": 24
+        },
+        {
+          "name": "f03_perf_read_layout_v1",
+          "bytes": 136
+        },
+        {
+          "name": "f03_mckfd_free_origin_line_v1",
+          "bytes": 4
+        },
+        {
+          "name": "f03_mckfd_free_origin_file_v1",
+          "bytes": 22
+        },
+        {
+          "name": "f03_mckfd_alloc_origin_line_v1",
+          "bytes": 4
+        },
+        {
+          "name": "f03_mckfd_alloc_origin_file_v1",
+          "bytes": 22
+        },
+        {
+          "name": "f03_kill_log_debug_v1",
+          "bytes": 64
+        },
+        {
+          "name": "f03_ptrace_attach_parent_debug",
+          "bytes": 32
+        },
+        {
+          "name": "f03_brk_debug_v1",
+          "bytes": 64
+        },
+        {
+          "name": "f03_mprotect_providers_v1",
+          "bytes": 88
+        },
+        {
+          "name": "f03_mprotect_debug_v1",
+          "bytes": 64
+        },
+        {
+          "name": "f03_munmap_public_debug_v1",
+          "bytes": 64
+        },
+        {
+          "name": "f03_search_debug_v1",
+          "bytes": 64
+        },
+        {
+          "name": "f03_process_cleanup_missing_debug_v1",
+          "bytes": 32
+        },
+        {
+          "name": "f03_wait_c_dependencies",
+          "bytes": 48
+        },
+        {
+          "name": "f03_ptrace_detach_source_file",
+          "bytes": 22
+        },
+        {
+          "name": "f03_exit_notify_debug",
+          "bytes": 64
+        },
+        {
+          "name": "f03_wait_state_debug",
+          "bytes": 96
+        },
+        {
+          "name": "linux_clock_gettime",
+          "bytes": 8
+        },
+        {
+          "name": "linux_printk",
+          "bytes": 8
+        },
+        {
+          "name": "linux_wait_event",
+          "bytes": 8
+        },
+        {
+          "name": "tod_data_lock",
+          "bytes": 4
+        },
+        {
+          "name": "f03_syscall_dispatch_binding_v1",
+          "bytes": 16
+        }
+      ]
+    },
+    {
+      "object": "archC",
+      "allocated_OBJECTs": 24,
+      "all_same_raw_input_bytes_types_sizes_bindings": [
+        {
+          "name": "ddebug.19",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.17",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.18",
+          "bytes": 32
+        },
+        {
+          "name": "__FUNCTION__.6",
+          "bytes": 19
+        },
+        {
+          "name": "ddebug.16",
+          "bytes": 32
+        },
+        {
+          "name": "mcexec_v10_signal_pid.4",
+          "bytes": 4
+        },
+        {
+          "name": "mcexec_v10_signal_logs.3",
+          "bytes": 4
+        },
+        {
+          "name": "ddebug.11",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.14",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.13",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.12",
+          "bytes": 32
+        },
+        {
+          "name": "ddebug.15",
+          "bytes": 32
+        },
+        {
+          "name": "__func__.2",
+          "bytes": 10
+        },
+        {
+          "name": "ddebug.10",
+          "bytes": 32
+        },
+        {
+          "name": "vdso",
+          "bytes": 88
+        },
+        {
+          "name": "ddebug.9",
+          "bytes": 32
+        },
+        {
+          "name": "container_size",
+          "bytes": 8
+        },
+        {
+          "name": "vdso_offset",
+          "bytes": 8
+        },
+        {
+          "name": "ddebug.8",
+          "bytes": 32
+        },
+        {
+          "name": "__func__.0",
+          "bytes": 25
+        },
+        {
+          "name": "__func__.1",
+          "bytes": 19
+        },
+        {
+          "name": "__func__.5",
+          "bytes": 19
+        },
+        {
+          "name": "__func__.7",
+          "bytes": 22
+        },
+        {
+          "name": "debug_constants",
+          "bytes": 96
+        }
+      ]
+    }
+  ],
+  "relocation_deltas_preserved": [
+    {
+      "object": "kernelC",
+      "name": "f03_ptrace_entry_ops_v1",
+      "old_relocations": [
+        [
+          0,
+          1,
+          0,
+          "ptrace_traceme"
+        ],
+        [
+          8,
+          1,
+          1232,
+          ""
+        ],
+        [
+          16,
+          1,
+          0,
+          "f03_ptrace_getregs_v1"
+        ],
+        [
+          24,
+          1,
+          0,
+          "f03_ptrace_setregs_v1"
+        ],
+        [
+          32,
+          1,
+          0,
+          "f03_ptrace_getfpregs_v1"
+        ],
+        [
+          40,
+          1,
+          0,
+          "f03_ptrace_setfpregs_v1"
+        ],
+        [
+          48,
+          1,
+          0,
+          "f03_ptrace_peekuser_v1"
+        ],
+        [
+          56,
+          1,
+          0,
+          "f03_ptrace_pokeuser_v1"
+        ],
+        [
+          64,
+          1,
+          0,
+          "f03_ptrace_peektext_v1"
+        ],
+        [
+          72,
+          1,
+          0,
+          "f03_ptrace_poketext_v1"
+        ],
+        [
+          80,
+          1,
+          0,
+          "f03_ptrace_setoptions_v1"
+        ],
+        [
+          88,
+          1,
+          0,
+          "f03_ptrace_attach_v1"
+        ],
+        [
+          96,
+          1,
+          0,
+          "ptrace_detach"
+        ],
+        [
+          104,
+          1,
+          0,
+          "f03_ptrace_getsiginfo_v1"
+        ],
+        [
+          112,
+          1,
+          1120,
+          ""
+        ],
+        [
+          120,
+          1,
+          0,
+          "f03_ptrace_getregset_v1"
+        ],
+        [
+          128,
+          1,
+          0,
+          "f03_ptrace_setregset_v1"
+        ],
+        [
+          136,
+          1,
+          0,
+          "f03_ptrace_geteventmsg_v1"
+        ],
+        [
+          144,
+          1,
+          0,
+          "arch_ptrace"
+        ]
+      ],
+      "new_relocations": [
+        [
+          0,
+          1,
+          0,
+          "ptrace_traceme"
+        ],
+        [
+          8,
+          1,
+          1200,
+          ""
+        ],
+        [
+          16,
+          1,
+          0,
+          "f03_ptrace_getregs_v1"
+        ],
+        [
+          24,
+          1,
+          0,
+          "f03_ptrace_setregs_v1"
+        ],
+        [
+          32,
+          1,
+          0,
+          "f03_ptrace_getfpregs_v1"
+        ],
+        [
+          40,
+          1,
+          0,
+          "f03_ptrace_setfpregs_v1"
+        ],
+        [
+          48,
+          1,
+          0,
+          "f03_ptrace_peekuser_v1"
+        ],
+        [
+          56,
+          1,
+          0,
+          "f03_ptrace_pokeuser_v1"
+        ],
+        [
+          64,
+          1,
+          0,
+          "f03_ptrace_peektext_v1"
+        ],
+        [
+          72,
+          1,
+          0,
+          "f03_ptrace_poketext_v1"
+        ],
+        [
+          80,
+          1,
+          0,
+          "f03_ptrace_setoptions_v1"
+        ],
+        [
+          88,
+          1,
+          0,
+          "f03_ptrace_attach_v1"
+        ],
+        [
+          96,
+          1,
+          0,
+          "ptrace_detach"
+        ],
+        [
+          104,
+          1,
+          0,
+          "f03_ptrace_getsiginfo_v1"
+        ],
+        [
+          112,
+          1,
+          1088,
+          ""
+        ],
+        [
+          120,
+          1,
+          0,
+          "f03_ptrace_getregset_v1"
+        ],
+        [
+          128,
+          1,
+          0,
+          "f03_ptrace_setregset_v1"
+        ],
+        [
+          136,
+          1,
+          0,
+          "f03_ptrace_geteventmsg_v1"
+        ],
+        [
+          144,
+          1,
+          0,
+          "arch_ptrace"
+        ]
+      ]
+    },
+    {
+      "object": "kernelC",
+      "name": "f03_shmat_data_v1",
+      "old_relocations": [
+        [
+          64,
+          1,
+          0,
+          "f03_shmat_list_lock_v1"
+        ],
+        [
+          72,
+          1,
+          0,
+          "f03_shmat_list_unlock_v1"
+        ],
+        [
+          80,
+          1,
+          0,
+          "f03_shmat_lookup_obj_v1"
+        ],
+        [
+          88,
+          1,
+          0,
+          "f03_shmat_memobj_unref_v1"
+        ],
+        [
+          96,
+          1,
+          0,
+          "munmap_write_lock_bridge"
+        ],
+        [
+          104,
+          1,
+          0,
+          "munmap_write_unlock_bridge"
+        ],
+        [
+          112,
+          1,
+          0,
+          "f03_mprotect_lookup_bridge_v1"
+        ],
+        [
+          120,
+          1,
+          0,
+          "f03_shmat_search_free_v1"
+        ],
+        [
+          128,
+          1,
+          2352,
+          ""
+        ],
+        [
+          136,
+          1,
+          0,
+          "f03_shmat_add_range_v1"
+        ],
+        [
+          144,
+          1,
+          0,
+          "f03_shmat_log_bridge_v1"
+        ]
+      ],
+      "new_relocations": [
+        [
+          64,
+          1,
+          0,
+          "f03_shmat_list_lock_v1"
+        ],
+        [
+          72,
+          1,
+          0,
+          "f03_shmat_list_unlock_v1"
+        ],
+        [
+          80,
+          1,
+          0,
+          "f03_shmat_lookup_obj_v1"
+        ],
+        [
+          88,
+          1,
+          0,
+          "f03_shmat_memobj_unref_v1"
+        ],
+        [
+          96,
+          1,
+          0,
+          "munmap_write_lock_bridge"
+        ],
+        [
+          104,
+          1,
+          0,
+          "munmap_write_unlock_bridge"
+        ],
+        [
+          112,
+          1,
+          0,
+          "f03_mprotect_lookup_bridge_v1"
+        ],
+        [
+          120,
+          1,
+          0,
+          "f03_shmat_search_free_v1"
+        ],
+        [
+          128,
+          1,
+          2320,
+          ""
+        ],
+        [
+          136,
+          1,
+          0,
+          "f03_shmat_add_range_v1"
+        ],
+        [
+          144,
+          1,
+          0,
+          "f03_shmat_log_bridge_v1"
+        ]
+      ]
+    },
+    {
+      "object": "kernelC",
+      "name": "f03_vm_policy_insert_log_provider_v1",
+      "old_relocations": [
+        [
+          0,
+          1,
+          1952,
+          ""
+        ]
+      ],
+      "new_relocations": [
+        [
+          0,
+          1,
+          1920,
+          ""
+        ]
+      ]
+    },
+    {
+      "object": "kernelC",
+      "name": "f03_perf_counter_providers_v1",
+      "old_relocations": [
+        [
+          0,
+          1,
+          0,
+          "f03_perf_counter_attr_flags_v1"
+        ],
+        [
+          8,
+          1,
+          560,
+          ""
+        ],
+        [
+          16,
+          1,
+          544,
+          ""
+        ],
+        [
+          24,
+          1,
+          0,
+          "perf_counter_mask_check_bridge"
+        ],
+        [
+          32,
+          1,
+          528,
+          ""
+        ],
+        [
+          40,
+          1,
+          0,
+          "perf_counter_start_bridge"
+        ],
+        [
+          48,
+          1,
+          0,
+          "perf_counter_stop_bridge"
+        ],
+        [
+          56,
+          1,
+          512,
+          ""
+        ],
+        [
+          64,
+          1,
+          0,
+          "f03_perf_read_value_bridge_v1"
+        ],
+        [
+          72,
+          1,
+          0,
+          "f03_sync_child_count_set_v2"
+        ]
+      ],
+      "new_relocations": [
+        [
+          0,
+          1,
+          0,
+          "f03_perf_counter_attr_flags_v1"
+        ],
+        [
+          8,
+          1,
+          528,
+          ""
+        ],
+        [
+          16,
+          1,
+          512,
+          ""
+        ],
+        [
+          24,
+          1,
+          0,
+          "perf_counter_mask_check_bridge"
+        ],
+        [
+          32,
+          1,
+          0,
+          "perf_event_set_period_bridge"
+        ],
+        [
+          40,
+          1,
+          0,
+          "perf_counter_start_bridge"
+        ],
+        [
+          48,
+          1,
+          0,
+          "perf_counter_stop_bridge"
+        ],
+        [
+          56,
+          1,
+          0,
+          "perf_event_update_bridge"
+        ],
+        [
+          64,
+          1,
+          0,
+          "f03_perf_read_value_bridge_v1"
+        ],
+        [
+          72,
+          1,
+          0,
+          "f03_sync_child_count_set_v2"
+        ]
+      ]
+    },
+    {
+      "object": "kernelC",
+      "name": "f03_perf_read_providers_v1",
+      "old_relocations": [
+        [
+          0,
+          1,
+          0,
+          "f03_perf_read_attr_flags_v1"
+        ],
+        [
+          8,
+          1,
+          512,
+          ""
+        ],
+        [
+          16,
+          1,
+          496,
+          ""
+        ]
+      ],
+      "new_relocations": [
+        [
+          0,
+          1,
+          0,
+          "f03_perf_read_attr_flags_v1"
+        ],
+        [
+          8,
+          1,
+          0,
+          "perf_event_update_bridge"
+        ],
+        [
+          16,
+          1,
+          496,
+          ""
+        ]
+      ]
+    },
+    {
+      "object": "kernelC",
+      "name": "f03_mprotect_providers_v1",
+      "old_relocations": [
+        [
+          0,
+          1,
+          0,
+          "munmap_write_lock_bridge"
+        ],
+        [
+          8,
+          1,
+          0,
+          "munmap_write_unlock_bridge"
+        ],
+        [
+          16,
+          1,
+          0,
+          "f03_mprotect_lookup_bridge_v1"
+        ],
+        [
+          24,
+          1,
+          0,
+          "f03_mprotect_next_bridge_v1"
+        ],
+        [
+          32,
+          1,
+          0,
+          "f03_mprotect_split_bridge_v1"
+        ],
+        [
+          40,
+          1,
+          0,
+          "f03_mprotect_join_bridge_v1"
+        ],
+        [
+          48,
+          1,
+          0,
+          "f03_mprotect_change_bridge_v1"
+        ],
+        [
+          56,
+          1,
+          2352,
+          ""
+        ],
+        [
+          64,
+          1,
+          0,
+          "mprotect_flush_nfo_bridge"
+        ],
+        [
+          72,
+          1,
+          0,
+          "f03_mprotect_flush_tlb_bridge_v1"
+        ],
+        [
+          80,
+          1,
+          0,
+          "f03_mprotect_log_bridge_v1"
+        ]
+      ],
+      "new_relocations": [
+        [
+          0,
+          1,
+          0,
+          "munmap_write_lock_bridge"
+        ],
+        [
+          8,
+          1,
+          0,
+          "munmap_write_unlock_bridge"
+        ],
+        [
+          16,
+          1,
+          0,
+          "f03_mprotect_lookup_bridge_v1"
+        ],
+        [
+          24,
+          1,
+          0,
+          "f03_mprotect_next_bridge_v1"
+        ],
+        [
+          32,
+          1,
+          0,
+          "f03_mprotect_split_bridge_v1"
+        ],
+        [
+          40,
+          1,
+          0,
+          "f03_mprotect_join_bridge_v1"
+        ],
+        [
+          48,
+          1,
+          0,
+          "f03_mprotect_change_bridge_v1"
+        ],
+        [
+          56,
+          1,
+          2320,
+          ""
+        ],
+        [
+          64,
+          1,
+          0,
+          "mprotect_flush_nfo_bridge"
+        ],
+        [
+          72,
+          1,
+          0,
+          "f03_mprotect_flush_tlb_bridge_v1"
+        ],
+        [
+          80,
+          1,
+          0,
+          "f03_mprotect_log_bridge_v1"
+        ]
+      ]
+    },
+    {
+      "object": "kernelC",
+      "name": "f03_wait_c_dependencies",
+      "old_relocations": [
+        [
+          0,
+          1,
+          3856,
+          ""
+        ],
+        [
+          8,
+          1,
+          0,
+          "f03_wait_stopped_v1"
+        ],
+        [
+          16,
+          1,
+          0,
+          "f03_wait_continued_v1"
+        ],
+        [
+          24,
+          1,
+          0,
+          "f03_ptrace_detach_wait_callback_v1"
+        ],
+        [
+          32,
+          1,
+          1568,
+          ""
+        ],
+        [
+          40,
+          1,
+          16,
+          ""
+        ]
+      ],
+      "new_relocations": [
+        [
+          0,
+          1,
+          3824,
+          ""
+        ],
+        [
+          8,
+          1,
+          0,
+          "f03_wait_stopped_v1"
+        ],
+        [
+          16,
+          1,
+          0,
+          "f03_wait_continued_v1"
+        ],
+        [
+          24,
+          1,
+          0,
+          "f03_ptrace_detach_wait_callback_v1"
+        ],
+        [
+          32,
+          1,
+          1536,
+          ""
+        ],
+        [
+          40,
+          1,
+          16,
+          ""
+        ]
+      ]
+    }
+  ],
+  "limited_claim": "No allocated C OBJECT was added and all182 raw initializers/types/sizes/bindings are unchanged. This does not assert all final C metadata relocations are unchanged; code-section-relative addends move with removed C functions. Actual new event pointers are separately positive-bound in selected consumer receipt. Full-file metadata acceptance remains OPEN.",
+  "preserved_failed_prediction": "Initial offline comparison assumed every raw relocation addend stayed equal. It stopped on section-relative function offsets changed by actual C callback removal; no report was emitted and no runtime action occurred. No relocation normalization used to claim all metadata passed."
+}

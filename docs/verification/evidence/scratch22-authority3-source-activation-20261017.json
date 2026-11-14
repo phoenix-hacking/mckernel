@@ -1,0 +1,33 @@
+{
+  "schema": "mckernel.scratch22-authority3.source-activation.v1",
+  "status": "PASS_SOURCE_ACTIVATION_ONLY",
+  "author": "/root",
+  "source_review": {"path": "docs/verification/evidence/scratch22-authority3-readiness-source-independent-review-20261017.json", "sha256": "254bb987fe43b345b934d65a2c393d68287e22cc4cfe9272c4fabcd6caa42854"},
+  "disabled_source_fetched_commit": "f0b794c7041bc8da8ca52623e355275fff71216c",
+  "disabled_source_fetched_tree": "4f786bf2a8431ecf6eae24596c9a5c246715aa6d",
+  "fetched_remote_ref": "refs/remotes/origin/codex/local-native-staging-repair",
+  "exact_disabled_adapter_tests_wrapper_tests_review_blobs_verified": 5,
+  "disabled_wrapper_sha256": "2efda8b8bb44fa40c71edaed02a9d69d08b14035f2d2468b20444226cde67f42",
+  "enabled_wrapper_sha256": "2923abe41a6f573d8b41028fd85d3ae1dc802c2c2df556e23cdbe17045a4288f",
+  "production_delta": "Only EXECUTION_ENABLED = False -> True, as conditionally reviewed; no function, namespace, bound, profile, signal, ownership or release-check change.",
+  "actual_source_admission": {
+    "path": "/home/holden/mckernel-work/scratch/scratch22-authority3-source-admission-20261017.json",
+    "sha256": "ac1ab5206e70d02f242ced79b602d99294efce52df6ed41433bc07ea1f15a68f",
+    "validator": "prepare_native_exact_scratch22_authority3.validate_release(materialize=False)",
+    "exit_code": 0,
+    "result": "PASS_ACTUAL_AUTHORITY3_SOURCE_ADMISSION"
+  },
+  "actual_cleanup_result": {"path": "/home/holden/mckernel-work/scratch/native-exact-scratch22-authority2-cleanup-20261017.execute.stdout", "sha256": "5d71f4e1f94c923eeb2402d4a4e58bd0ffcd13672aa01b5dec92b8ce2adecaf9"},
+  "actual_cleanup_postflight": {"path": "docs/verification/evidence/scratch22-authority2-cleanup-postflight-review-20261017.json", "sha256": "8034ca4a109247d93b740687edcdf04e50c955b1b6db5524f7ea28d9d130c216"},
+  "actual_cleanup_artifact_archive": {"path": "docs/verification/evidence/scratch22-authority2-terminal-cleanup-artifacts-20261017.tar.gz", "sha256": "43556db321ed60352f07f0fcf1560c6c547f3f5131a824d2f72406b3415c2f2f", "tar_compare_exit": 0, "originals_retained": true},
+  "activation_tests": {
+    "command": "taskset -c 0 timeout 120 python3 -B -m unittest scripts.tests.test_native_exact_scratch22_authority3_build_wrapper.WrapperTests.test_unreleased_adapter_refuses_before_release_read_or_lock scripts.tests.test_native_exact_scratch22_authority3_build_wrapper.WrapperTests.test_accepted_adapter_still_requires_release_before_lock",
+    "passed": 2,
+    "seconds": 0.002,
+    "exit_code": 0,
+    "tests_unchanged": true,
+    "scope": "Explicit disabled negative still rejects before read/lock; enabled source still requires exact external release before lock."
+  },
+  "next": "Commit/push/fetch enabled source and all prerequisites; fresh reviewed authority3 preparation, actual prepared-artifact review and new one-shot heavy release remain required.",
+  "build_runtime_acceptance_credit": false
+}

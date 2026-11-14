@@ -1,0 +1,72 @@
+{
+  "status": "ONE_FAILED_SAVED_DATA_METHOD_AND_ONE_BOUNDED_CARRIER_OWNER_CORRECTION_PRESERVED_NO_SUT_REPLAY",
+  "at": "2026-11-11T17:51:51.563108+00:00",
+  "owner": "/root/p03_cutover_source_max",
+  "original_failed_method": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/qualify_saved_perf_core_integer.py",
+    "bytes": 34576,
+    "sha256": "c363927dfea3077f9959eaca3a186b91b2dddbc99359fb01c82ae42c6d0987d5"
+  },
+  "attempt1": {
+    "command": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/saved-qualification-attempt-1/COMMAND.json",
+      "bytes": 971,
+      "sha256": "f08fac660201fe207786fbf78d9aec8bbea14547288a980f3966d55e4f4b3c6b"
+    },
+    "stdout": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/saved-qualification-attempt-1/stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/saved-qualification-attempt-1/stderr",
+      "bytes": 1069,
+      "sha256": "e7a7958a248e9e104bc23dd8899a248717065784fa4a44dcd34b8ff3b85ecc39"
+    },
+    "actual_tool_chunk": "612d9f",
+    "exit": 1,
+    "actual_diagnostic": "AssertionError: f03_syscall_dispatch_binding_v1 at required_rust(...OBJECT), method line260; frozen source/map makes this carrier C-owned data. No C behavior function was erroneously accepted as Rust."
+  },
+  "correction": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/saved-qualification-attempt-2/CORRECTION.json",
+    "bytes": 2095,
+    "sha256": "4adecc04b77a98da42aa9a06811b1c543317f0b33f694aa3f2b8fbf53d126ef8"
+  },
+  "attempt2": {
+    "command": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/saved-qualification-attempt-2/COMMAND.json",
+      "bytes": 990,
+      "sha256": "a63ab6c1fd6fed66fae925bb3cdc1b2e5b1c95391fcf7abb3004fd944c7dff17"
+    },
+    "stdout": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/saved-qualification-attempt-2/stdout",
+      "bytes": 1673,
+      "sha256": "98acfb12f081c5bdc9634ecdc067cab182bcdbc8a5863f678d4311530697f7e4"
+    },
+    "stderr": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/saved-qualification-attempt-2/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual_tool_chunk": "c1a388",
+    "exit": 0,
+    "method": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/qualify_saved_perf_core_integer.dispatch-corrected.py",
+      "bytes": 34815,
+      "sha256": "0c667ef3fa075d5bb57bc534e8a97114cefdda6d707e64c3999f9891c78f118a"
+    }
+  },
+  "frozen_pass_qualification": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/qualification-1/dispatch-owner-correction-1/QUALIFICATION.json",
+    "bytes": 139468,
+    "sha256": "6f67cd0637b3127c8724e78ad259d3b86c536c66868a92dafa0a106f33f68623"
+  },
+  "frozen_pass_result": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/qualification-1/dispatch-owner-correction-1/RESULT.json",
+    "bytes": 1168,
+    "sha256": "fb3670e5916516e781d7db6da83a3cf91f93c795af4a74b01c6d9c3111de9187"
+  },
+  "no_source_build_reader_compiler_native_or_controller_replay": true,
+  "blocker_resolved": "Correct exact C carrier object and its actual relocation bytes; genuine Rust implementation, handler table and all original source/provider obligations retained.",
+  "next_action": "Independent P04Tests complete literal original03-05 DEFAULT decision; Root alone original credit/checkpoint/publish. All FUNCTIONAL/native/remainingC and historical UNKNOWN holds remain."
+}

@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "record_kind": "m01b_capable_owner_reassignment_review",
+  "recorded_utc": "2026-09-28T09:38:00Z",
+  "status": "FAIL_REASSIGNMENT_PACKET",
+  "packet_path": "docs/verification/stability-selected-retention-generic-row03-row12-capable-owner-reassignment-packet-20260928-54.md",
+  "packet_sha256": "3f83ae8f4f7d200c9f6f0ed1a8df335c244af84106db9ef9ad3f654ecd9556f0",
+  "review53_sha256": "0cc9d44de53411044a11a6d3f4f688377faa4cbcd01fff450a4e136c5cd0098c",
+  "finding": "Packet54 requires packet52's exact stager commands, whose output arguments target retained root52 and therefore fail before creating fresh root54.",
+  "required_correction": "Additively substitute only the two output destinations with root54/mode2 and root54/mode3; preserve every other packet52/54 byte and requirement.",
+  "strategy_valid": true,
+  "source_staging_released": false,
+  "phase_ii_released": false,
+  "acceptance_credit": false
+}

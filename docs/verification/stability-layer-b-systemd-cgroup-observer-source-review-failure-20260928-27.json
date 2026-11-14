@@ -1,0 +1,28 @@
+{
+  "base_commit": "b944260183065c6b6d676e61d1be9249702e2d2b",
+  "candidate": {
+    "path": "scripts/tests/layer_b_systemd_cgroup_observer.py",
+    "sha256": "0b8f7a8dbf0966859c30423528679ab0d4baadac7c3653c4944d51eed2e02ea0"
+  },
+  "tests": {
+    "path": "scripts/tests/test_layer_b_systemd_cgroup_observer.py",
+    "sha256": "1f2c4aa7c20663ae723a2b480861693205dbd91f1cf4407fa1d0c1212c0b1f2c",
+    "supplied_result": "6 passed"
+  },
+  "status": "FAIL_SOURCE",
+  "execution_released": false,
+  "findings": [
+    "parse_mountinfo rejects valid non-cgroup mount roots such as nsfs mnt:[...] before selecting the systemd mount",
+    "the observer is incorrectly required to be inside the target unit cgroup, rejecting the real sibling observer topology",
+    "non-root mount coordinates are joined incorrectly and can reconcile the wrong directory",
+    "cgroup path whitespace is normalized and colon-containing paths are parsed incorrectly, allowing false membership or rejection",
+    "a covering mount hiding the selected systemd mount is not rejected"
+  ],
+  "reproducer_evidence": {
+    "root12_archive": "docs/verification/evidence/stability-layer-b-native-owner-bootstrap-failure-20260928-12.tar.gz",
+    "root12_archive_sha256": "82574a70f22300c92fc01b1a5caaab39c3540b85e780d4b6974d8007fa312056",
+    "mountinfo_member": "logs/cgroup-preack-001.json",
+    "mountinfo_member_sha256": "bf20da8219cca33130dea2c4f1b41981c562c4a06160c02765c1374c7c202247"
+  },
+  "next": "Make one bounded source correction covering real mountinfo filtering, external-observer topology, exact mount-root coordinates, byte-preserving cgroup parsing and covering-mount rejection; independently review exact new bytes before drafting root13 execution."
+}

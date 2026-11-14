@@ -1,0 +1,31 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "thread": "01a18bc3-e072-7810-9426-75101b0856c0",
+  "bucket": {
+    "start_utc": "2026-10-30T08:26:29.892132+00:00",
+    "end_exclusive_utc": "2026-10-30T08:46:29.892132+00:00",
+    "seconds": 1200,
+    "previous": "M14-TERRA-ENGINEERING-REVIEW-20261030T0826-1/REVIEW.json"
+  },
+  "actual_delta": {
+    "current_candidate_kernel_builds": 0,
+    "production_links": 0,
+    "native_qualified": 0,
+    "guest_apps": 0,
+    "retired_c_boundaries": 0,
+    "file_closures": 0,
+    "source_implementation": "Private root CMake patch 01f3d94d captures make status, requires explicit matching kernel release, binds GNU make outer/inner and verifier sources, guards MAP_KERNEL_START; default-off original fragment preserved.",
+    "behavior_test": "36 synthetic ELF/cache/flag verifier tests and 11+2 fake-make/CMake fragment checks pass; no actual Kbuild/configure or native behavior."
+  },
+  "review_limits": "Independent source review confirms narrow mock behavior. Fresh exclusive output before CMake recursive removal; exact safe paths, kernel tree and source quiescence; tool/env/Kbuild writes and released resources; independently bound real process status and post-generation emitted flags/outputs remain open. Historical UNAME_R=5.15 is not 6.12 evidence.",
+  "other_findings": "Thread.status guest atomic/volatile and available host UTI/futex writers share physical field; exact strict235 artifact rejects three legacy UTI ioctls but combined selected module and overlap unknown. No race observed. Corrected public release_thread uses legacy helper, not separately checked helper. Pending slot ownership and status synchronization remain open.",
+  "root_reconciliation": "Root70 bc2df accepted exact scope. Current-free/no-unlisted/v2birth and physical clearance unknown; historical BUILD3/CID5487 and consumed nonces not replayed. Native attempt3 expired before claim. External supervisor owns global controls; no fresh authenticated post-decision health receipt or SDK/configure release.",
+  "active_owners": "Root sole integration/admission; m14_arch configure profile; m14_generic nonheld13 composition.",
+  "critical_next": "Independent source review of coherent F06 overlay, bind true fresh isolated Kbuild/source/tool/identity profile and current controls, then one independently reviewed operation-specific configure release. Actual argv is proposed only; no physical command released.",
+  "scheduling_adjustment": "Compose already-prepared nonheld13/data32 with guarded source route while independent probe/source review runs; exclude held pending/credential/logger/direct-TID and reuse nine retained objects where bindings permit.",
+  "measurement": "Current-candidate time to first compiler/queue, active blocked time, overlap, host job CPU/peak, failure-to-kernel-fix not measured. Prior 418.7782335s first-stream proxy and 491.317312s avoidable handoff remain prior observations; original 30-minute baseline unchanged, no 95 percent claim.",
+  "capacity": "At 08:47:23Z host available 143467724800 bytes, scratch 47613485056 bytes; snapshot MemAvailable 27792056 KiB, load 7.21/3.68/1.82. Not admission.",
+  "weekly": "78 percent used at snapshot; weekly only, no purchased credit fallback.",
+  "baseline": "M14 4/6, practical 35/35, M15 queued; selected 1cd7 retains 23 generic + 5 arch C names.",
+  "later_observation": "After 08:46:29.892, source-only profile dda5... and nonheld overlay 604f... prepared, still unreviewed/unreleased."
+}

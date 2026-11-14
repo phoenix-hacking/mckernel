@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "record_kind": "stability_linux_collector_storage_fault_v2_source_review_failure",
+  "review_attempt": 34,
+  "created_utc": "2026-09-16T07:08:30Z",
+  "status": "FAIL_SOURCE",
+  "reviewed_archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260915-37.tar.gz",
+    "sha256": "8864684d5698e30bd0620af915e039b0598b047b1266ad21c1ec46078d637b15",
+    "safe_unique_members": 29,
+    "files": 19
+  },
+  "findings": [
+    {
+      "id": "argv_env_request_disconnect",
+      "oracle_anchor": "scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/storage-fault-v1/oracle.py artifact checks",
+      "fixture_anchor": "scripts/tests/test_collector_storage_fault_packet.py:438",
+      "producer_anchor": "scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/collector.c:936-938",
+      "positive_fixture_defect": "The fixture writes fixture\\0--mode\\0 while the retained request decodes to literal-app\\0stdin-devnull\\0.",
+      "accepted_mutations": [
+        {"mutation": "selector 0 empty argv.nul", "canonical_report_sha256": "64720adabcc189ee6dd85d6bf75307f3aa883ac2736f72ce4f89a26dffc5b6be"},
+        {"mutation": "selector 0 env.nul is X=1\\0", "canonical_report_sha256": "406a0c845e11867d7d338335d755857570592a32e1149a1d462f1873b2dd612f"}
+      ],
+      "required_correction": "Correct the positive fixture and independently bind argv.nul and env.nul to the exact request-decoded bytes."
+    },
+    {
+      "id": "setup_stream_identity_gap",
+      "oracle_anchor": "scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/storage-fault-v1/oracle.py:2374",
+      "producer_anchor": "scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/collector.c child_run and validate_setup",
+      "accepted_mutation": "Set setup word 21 to zero in both raw setup bytes and report.setup_words.",
+      "canonical_report_sha256": "25a641e73be2736abd9a52c3d46d1d7d7b56be0687c14877c968f76425e1430a",
+      "required_correction": "Validate every observable setup word, including FIFO stdout/stderr pipe identities in words 21 through 26, against independently retained evidence."
+    },
+    {
+      "id": "event_lifecycle_join_gap",
+      "oracle_anchor": "scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/storage-fault-v1/oracle.py validate_events",
+      "accepted_mutations": [
+        {"mutation": "selector 0 observed-executable PID 71", "canonical_report_sha256": "c2b5eb5e553aae3211b557d3d2dd83a8358654f39358366fe249bafd714488be"},
+        {"mutation": "selector 0 remove observed-executable", "canonical_report_sha256": "cf932e5ec2b63cbceff2aa9127b383b4314debbcaa73dab467221984f6a53472"},
+        {"mutation": "selector 2 insert child-created PID 70/startticks 80 at time 2250", "canonical_report_sha256": "702d1a9f12eb4bc778b0460cd28387f0351779b60b4c06eafcec48ee67ef1925"}
+      ],
+      "required_correction": "Enforce selector-specific event kinds, cardinalities, identities and lifecycle order."
+    },
+    {
+      "id": "selector4_report_absence_bypass",
+      "oracle_anchor": "scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/storage-fault-v1/oracle.py:2155-2162",
+      "accepted_mutations": [
+        {"mutation": "selector 4 replace setup with 384 zero bytes", "artifact_sha256": "a1a4f5721c1c4610af7f71078f3a68c330536d679803b0e0507ee8dc10c5dfca"},
+        {"mutation": "selector 4 child-created PID 71", "events_sha256": "7e5bb8d3b648538da23674dcdc15c62ce036ee48df65be7291718c9ffd8263c6"},
+        {"mutation": "selector 4 selected-input bytes are {}", "artifact_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"}
+      ],
+      "required_correction": "Validate every reached artifact and lifecycle join independently of report availability."
+    }
+  ],
+  "review_coverage": {
+    "targeted_checks": "14/14 PASS",
+    "positive_selectors": "7/7 PASS but producer-invalid argv fixture identified",
+    "review33_counterexamples": "5/5 now reject",
+    "nested_archives_checked": 35,
+    "source_manifest_references_checked": 332,
+    "additional_checksum_bindings_checked": 22,
+    "known_preserved_limitation": "The historical failure30 self-manifest mismatch remains unchanged."
+  },
+  "source_ready": false,
+  "compiler_packet_released": false,
+  "compiled": false,
+  "root_execution": false,
+  "native_execution": false,
+  "guest_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}

@@ -1,0 +1,27 @@
+{
+  "acceptance_credit": false,
+  "basis_sha256": "a6983f74939b577f826a3b4079cfd933a85edbd3864b214b9c464c02744f593a",
+  "execution_authority": false,
+  "helper_sha256": "0324772c7b07f0b087cca07c7424423d12cc3c0fed1bd1ea9554c8c716a19c80",
+  "packet_sha256": "c9303cfb984f73d78b3dda5e7ec65395815b892e509b5babe16e53488a81562c",
+  "permitted_next_changes": [
+    "set basis source_checkpoint to this immutable template checkpoint",
+    "set basis status to PASS_ONE_SHOT_CLEANUP",
+    "set helper RELEASE_SHA to the resulting basis SHA-256",
+    "set packet FINAL_DELETER_SHA and RELEASE_SHA to the resulting exact hashes"
+  ],
+  "record_kind": "native_exact_candidate_cleanup_template_readiness",
+  "review": {
+    "independent": true,
+    "result": "PASS_SOURCE_DESIGN_AND_RELEASE_PREPARATION_ONLY",
+    "runtime_executed": false
+  },
+  "schema_version": 1,
+  "status": "PASS",
+  "tests": {
+    "command": "python3 -B -m unittest -v scripts.tests.test_native_exact_candidate_cleanup_packet",
+    "passed": 10,
+    "result": "PASS",
+    "test_sha256": "b65a45d5b48686982bd6925afed14ce6e1a2e188d005f7a5b497652ba56b3aaf"
+  }
+}

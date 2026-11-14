@@ -1,0 +1,236 @@
+{
+  "accepted_SDK7": {
+    "bytes": 3290,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ACTUAL-DAEMON7-INDEPENDENT-SDK-ARTIFACT-ACCEPTANCE.json",
+    "sha256": "66937f821957d0e7c2f49933706c5b895480a9c9ff11e761f108cff44f7cbb5c"
+  },
+  "accepted_library_tuple": {
+    "bytes": 22219,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-default-libihk-integration-source-1/REUSED-LIBRARY-SOURCE-ABI-TUPLE.json",
+    "sha256": "6aceec8e04ca590a17f0c3808fbb652b86b7d7ce5bb14290350509f4845fd015"
+  },
+  "actual_admission": null,
+  "actual_execution_release": null,
+  "actual_library_semantic_source_or_compiler_changed_edges": null,
+  "daemon_source": {
+    "bytes": 23095,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/default-graph-cmake-successor-1/ihk/linux/user/rust/ihkmond.rs",
+    "sha256": "0c0b4b6d286e9f0fdbdacf1d32c3cd33ec96d4d2420550771a0dc732dd84d86e"
+  },
+  "exact_existing_Make_rebuild_edges": [
+    "/src/ihk/linux/user/CMakeLists.txt",
+    "CMakeCache.txt"
+  ],
+  "fixed_campaign": {
+    "credit_run": "7f4af94a83b14cc08f97401f5891d965",
+    "deadline": "2026-10-27T11:24:50Z",
+    "original_budget": "57774.852125",
+    "thread_id": "01a170fb-57c3-7ab3-862d-8005bef92a63"
+  },
+  "known_static_library_semantic_changes": 0,
+  "not_authorized": [
+    "full Make all/build claim",
+    "whole70 prefix replay",
+    "production daemon main",
+    "native",
+    "wholeM15/file retirement"
+  ],
+  "profile": {
+    "cpus": "2-5",
+    "gid": 1000,
+    "jobs": 1,
+    "memory_bytes": 12884901888,
+    "memory_swap_bytes": 12884901888,
+    "network": "none",
+    "pids": 512,
+    "uid": 1000
+  },
+  "reuse_gate": {
+    "bytes": 4359,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-default-libihk-integration-source-1/dependency-reuse-eligibility-source-1/READY.REUSE-ELIGIBILITY.SOURCE-ONLY.json",
+    "sha256": "d0c7e595d4698b71e6ec7a595a6581fac6f30d7a986aedb596a5ae29f1ab80e0"
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_addition_patch": {
+    "bytes": 23431,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/default-graph-cmake-successor-1/daemon-source-addition.patch",
+    "sha256": "466def17e0483bb0a74b983e0514598984d92bcf6773e7cf36a2f677005b4547"
+  },
+  "source_candidate": {
+    "bytes": 13474,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-default-libihk-integration-source-1/coherent-default-candidate-source-1/ihk/linux/user/CMakeLists.txt",
+    "sha256": "a21e1cfbb064a03458201bfbea520d2f04e87ea287f58451d65031e74d728369"
+  },
+  "status": "STATIC_COHERENT_DEFAULT_SOURCE_AND_SELECTED_SUFFIX_RECIPE_NOT_RELEASED",
+  "steps": [
+    {
+      "actual_command_ref": null,
+      "actual_join_ref": null,
+      "argv": [
+        "/usr/bin/cmake",
+        "--graphviz=/work/output/whole70-default-libihk.dot",
+        "-C",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-libihk-next/default-selector-coherent-successor-1/target-toolchain-cache-qualified-source-1/selected-target.EXACT-EXTERNAL-CACHE-SEED.cmake",
+        "-S",
+        "/src",
+        "-B",
+        "/work/output/whole70-tool-default",
+        "-DENABLE_RUST_USER_TOOLS=ON",
+        "-DIHK_ENABLE_RUST_WHOLE_LIBRARY=ON",
+        "-DIHK_ALLOW_CLI_C_FALLBACK=OFF",
+        "-DMCKERNEL_ALLOW_RUNTIME_SCRIPT_FALLBACK=OFF",
+        "-DIHK_USER_RUSTC=/nightly/bin/rustc",
+        "-DMCKERNEL_RUNTIME_TOOL_RUSTC=/nightly/bin/rustc",
+        "-DIHKLIB_USE_QUALIFIED_EXTERNAL_ARCHIVE=OFF"
+      ],
+      "label": "01-actual-configure-selected-full-graph",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Configure coherent private default source; emit actual selected graph. Preserve library outputs and bind all actual joins."
+    },
+    {
+      "actual_after_snapshot_ref": null,
+      "actual_eligibility_ref": null,
+      "capture_argv": [
+        "/usr/bin/python3",
+        "-B",
+        "/proposal/reuse/capture_libihk_graph.py",
+        "--source",
+        "/src",
+        "--build",
+        "/work/output/whole70-tool-default",
+        "--configure-ref",
+        "<ACTUAL_CONFIGURE_COMMAND_REF.json>",
+        "--join-ref",
+        "<ACTUAL_CONFIGURE_JOIN_REF.json>"
+      ],
+      "gate_argv": [
+        "/usr/bin/python3",
+        "-B",
+        "/proposal/reuse/libihk_reuse_eligibility.py",
+        "--before-ref",
+        "<EXACT_B39F_BEFORE_REF.json>",
+        "--after-ref",
+        "<ACTUAL_NEW_AFTER_SNAPSHOT_REF.json>",
+        "--variants-ref",
+        "<EXACT_KNOWN_VARIANTS_REF.json>",
+        "--configure-ref",
+        "<ACTUAL_CONFIGURE_COMMAND_REF.json>",
+        "--join-ref",
+        "<ACTUAL_CONFIGURE_JOIN_REF.json>"
+      ],
+      "label": "02-current-library-reuse-eligibility",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Capture actual after-configure graph/tools/source/ABI/output tuple, compare to exact accepted before snapshot and retain both provenances."
+    },
+    {
+      "actual_command_ref": null,
+      "actual_generated_dependencies_ref": null,
+      "actual_generated_rule_ref": null,
+      "actual_join_ref": null,
+      "expected_argv": [
+        "/usr/bin/cmake",
+        "-E",
+        "env",
+        "IHKMOND_TMP=/tmp/ihkmond",
+        "/nightly/bin/rustc",
+        "--edition=2021",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "debuginfo=1",
+        "-C",
+        "relocation-model=pic",
+        "-C",
+        "linker=/usr/bin/cc",
+        "/src/ihk/linux/user/rust/ihkmond.rs",
+        "-C",
+        "link-arg=/work/output/whole70-tool-default/ihk/linux/user/libihk.so",
+        "-C",
+        "link-arg=/usr/lib64/libudev.so",
+        "-C",
+        "link-arg=-Wl,-rpath,/usr/local/lib64",
+        "-o",
+        "/work/output/whole70-tool-default/ihk/linux/user/ihkmond"
+      ],
+      "expected_cwd": "/work/output/whole70-tool-default/ihk/linux/user",
+      "independent_current_dependency_and_rule_review": null,
+      "label": "03-selected-generated-downstream-daemon-rule",
+      "mandatory_conditions": [
+        "Actual selected ihkmond.dir/build.make command must byte/argv-match the current coherent source/configuration, including ENABLE_KMSG_REDIRECT=OFF and output/link paths. Unexpected flags fail; do not infer command from this plan as actual proof.",
+        "All declared daemon dependencies must match accepted SDK7 source/header/platform/compiler/libudev tuple; ihklib.so must match current passed89639 reuse eligibility. Record actual current dependencies before first compiler.",
+        "Invoke generated command under existing owned-capture lifecycle and actual resource admission. Do not use Make -o/-W, alter dependency edges/timestamps, suppress failed guards or replay any old command release.",
+        "Ordinary cmake --build/Make all is not authorized by graph-only eligibility because the original broad producer edges remain."
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Execute only the exact observed generated Rust ihkmond command after library reuse and daemon declared-dependency checks, under a new Root execution release. This is selected-rule acceptance, not a full Make build."
+    },
+    {
+      "actual_command_ref": null,
+      "actual_join_ref": null,
+      "argv": [
+        "/usr/bin/cmake",
+        "-E",
+        "env",
+        "DESTDIR=/work/output/coherent-default-stage-1",
+        "/usr/bin/cmake",
+        "-DCMAKE_INSTALL_COMPONENT=ihklib_runtime",
+        "-DCMAKE_INSTALL_DO_STRIP=OFF",
+        "-P",
+        "/work/output/whole70-tool-default/ihk/linux/user/cmake_install.cmake"
+      ],
+      "label": "04-library-runtime-component-install",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Stage the unchanged accepted library via actual generated CMake install rule; no build command."
+    },
+    {
+      "actual_command_ref": null,
+      "actual_join_ref": null,
+      "argv": [
+        "/usr/bin/cmake",
+        "-E",
+        "env",
+        "DESTDIR=/work/output/coherent-default-stage-1",
+        "/usr/bin/cmake",
+        "-DCMAKE_INSTALL_COMPONENT=Unspecified",
+        "-DCMAKE_INSTALL_DO_STRIP=OFF",
+        "-P",
+        "/work/output/whole70-tool-default/ihk/linux/user/cmake_install.cmake"
+      ],
+      "label": "05-selected-user-program-install",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Run actual generated Unspecified user install for daemon and retained CLI/header/man artifacts. Full OS installation is not accepted by this nested suffix.",
+      "required_retained_user_artifacts": [
+        "ihkconfig",
+        "ihkosctl",
+        "ihkconfig.1",
+        "ihkosctl.1"
+      ]
+    },
+    {
+      "actual_library_result_ref": null,
+      "actual_loader_result_ref": null,
+      "label": "06-installed-library-and-daemon-loader",
+      "library_argv": [
+        "/usr/bin/python3",
+        "-B",
+        "/proposal/verify_installed_libihk.py",
+        "--source",
+        "/src",
+        "--source-tuple",
+        "/proposal/REUSED-LIBRARY-SOURCE-ABI-TUPLE.json",
+        "--build",
+        "/work/output/whole70-tool-default",
+        "--stage",
+        "/work/output/coherent-default-stage-1",
+        "--roots",
+        "/proposal/PUBLIC-PROVIDER-ROOTS.json"
+      ],
+      "loader_argv": [
+        "/usr/bin/cmake",
+        "-E",
+        "env",
+        "LD_LIBRARY_PATH=/work/output/coherent-default-stage-1/usr/local/lib64",
+        "/lib64/ld-linux-x86-64.so.2",
+        "--list",
+        "/work/output/coherent-default-stage-1/usr/local/sbin/ihkmond"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Validate exact library byte/RPATH/76-provider installation and observe loader resolution of the installed daemon against the staged library, without invoking daemon main."
+    }
+  ],
+  "unknown_actual_after_changes_require_rebuild": true
+}

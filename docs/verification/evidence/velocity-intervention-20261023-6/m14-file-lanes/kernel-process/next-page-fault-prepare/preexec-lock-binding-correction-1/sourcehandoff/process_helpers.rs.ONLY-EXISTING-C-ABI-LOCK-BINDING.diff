@@ -1,0 +1,11 @@
+--- unrun-module-qualified-source/candidate/kernel/rust/process_helpers.rs
++++ existing-C-ABI-symbol/candidate/kernel/rust/process_helpers.rs
+@@ -12170,7 +12170,7 @@
+     error_out: *mut CInt,
+ ) -> CInt {
+     // Match the original valid borrowed inputs; add no NULL/error policy.
+-    crate::spinlock_helpers::__ihk_mc_spinlock_lock_noirq(
++    __ihk_mc_spinlock_lock_noirq(
+         &raw mut (*vm).page_table_lock,
+     );
+     *ptep_out = ihk_mc_pt_lookup_pte(

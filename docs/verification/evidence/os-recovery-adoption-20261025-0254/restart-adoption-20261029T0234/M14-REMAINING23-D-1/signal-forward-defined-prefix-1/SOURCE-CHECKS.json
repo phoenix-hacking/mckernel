@@ -1,0 +1,39 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_INITIALIZED_CONTEXT_PREFIX_ONLY_NO_ORIGINAL_CALLBACK_SELECTION",
+  "patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-D-1/signal-forward-defined-prefix-1/SIGNAL-DEFINED-PREFIX.PRIVATE-NOT-APPLIED.patch",
+    "bytes": 2447,
+    "sha256": "30524d6e37fca020c598e991b6fc803137ad979ef5b1a71f4aa6627a97beed76"
+  },
+  "leaf": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-D-1/signal-forward-defined-prefix-1/postimage/kernel/rust/f03_signal_forward_initialized_contract_candidate.rs",
+    "bytes": 1765,
+    "sha256": "d228bd15b4b20d9b3a37dba1489c41d47935943c0548374089ad7e4adf2e1145"
+  },
+  "source_C": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-COMPOSITION-1/postimage/kernel/syscall.c",
+    "bytes": 930548,
+    "sha256": "3388adb79adff66eb85ae65a443af2c18e7b2057dd76d0ec99b531d62a36cab3"
+  },
+  "x86_setters_getters": {
+    "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+    "bytes": 255992,
+    "sha256": "8db479fbea9493ee498bf5d78aef71589b49d9f065e13a8617b5765cd681c194"
+  },
+  "number_header": {
+    "path": "/home/holden/mckernel/kernel/include/syscall.h",
+    "bytes": 20836,
+    "sha256": "459e6d0faec3f1b8366a0d329571ef5ea813042706be11f9423b0399bbba6ffa"
+  },
+  "checks": [
+    "original mask arg0 then forward14; action arg0 then handler arg1 then flags arg2 then forward13",
+    "signed CInt to CULong preserves modulo conversion",
+    "no original callback export/selector and no uninitialized context reads or zero-initialization policy",
+    "new Rust module is gated and no config enables it"
+  ],
+  "open_contract": "Original C creates uninitialized context, sets only one or three registers, but existing generic forwarder reads all six argument registers. Root must explicitly specify valid values and whether extra slots may be read/marshalled; no accepted parity or guessed zero semantics. Signal request/endpoint lifetime and action ordering still require independent review.",
+  "runtime_authority": null,
+  "actual_compile_link_native": false,
+  "callback_implementation_complete": false
+}

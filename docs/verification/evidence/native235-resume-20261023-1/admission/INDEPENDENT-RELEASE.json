@@ -1,0 +1,30 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_ONE_FRESH_READ_ONLY_NATIVE235_OBSERVATION",
+  "reviewer": "/root/p12_identity_review",
+  "source_sha256": "3dd230d35c41011e84b13cecef9ab303586c02ada9b0259fa50487d16d79b05b",
+  "operation_sha256": "38f7e3899128bff7c9b37bf7cca025034469b3156a36987330d74e89c16532ce",
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=30:30",
+    "--core=0:0",
+    "--fsize=8388608:8388608",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-235/final-runtime-ready-1/root-live-admission-1/read_only_native235_admission.py"
+  ],
+  "limitations": [
+    "sequential samples only, no workload reservation",
+    "no independent noSwap observation",
+    "no auth/whole-operation wall deadline",
+    "no workload execution authorized"
+  ]
+}

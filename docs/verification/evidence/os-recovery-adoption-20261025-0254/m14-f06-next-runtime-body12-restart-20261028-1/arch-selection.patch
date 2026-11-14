@@ -1,0 +1,31 @@
+--- a/arch/x86_64/kernel/syscall.c
++++ b/arch/x86_64/kernel/syscall.c
+@@ -3190,6 +3190,12 @@
+ 
+ #endif
+ 
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_VDSO_MAP_LOG)
++extern void arch_vdso_map_log_bridge(int event, int error, struct process_vm *vm,
++		unsigned long a, unsigned long b, unsigned long c,
++		unsigned long d, int pages);
++#else
++#line 3077
+ void
+ arch_vdso_map_log_bridge(int event, int error, struct process_vm *vm,
+ 		unsigned long a, unsigned long b, unsigned long c,
+@@ -3215,9 +3221,12 @@
+ 		break;
+ 	}
+ }
+-
+-
+-#endif
++#endif
++#line 3104
++
++
++#endif
++#line 3107
+ 
+ #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ void

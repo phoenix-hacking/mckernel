@@ -1,0 +1,44 @@
+{
+  "schema": "mckernel.stability.source-evidence.v1",
+  "date": "2026-09-28",
+  "status": "WIP_SOURCE_ONLY",
+  "base_commit": "5af634ce1e71248d7bbe144a49d689443993f449",
+  "scope": "native shutdown CPU reset/re-online journal and its preemption-protected pinned-Linux reset wrapper",
+  "artifacts": {
+    "host-kernel/native-rust/smp_cpu.rs": "07302b7e4f17268c39ed8029e4066c1e99560c3cff6934f67562048b1e0c601c",
+    "scripts/tests/fixtures/shutdown_cpu_reclaim.rs": "27404b306b73567619a26650da8fe65c6184a9f2e08f9b8c142eaa9f76ee8b37",
+    "scripts/tests/test_shutdown_cpu_reclaim.py": "56f92496a110d75214929a040d03f1c3a446966ce7eceb41c560126f70071132",
+    "host-kernel/kbuild/patches/0010-v2-x86-export-preempt-protected-secondary-reset.patch": "a3d7dcac45abbd712d79fbbebba7e7df08eae06037fc347d09415b48fb1db2c6",
+    "scripts/tests/test_x86_export_preempt_protected_secondary_reset.py": "0325815b6fdd814bd06358fb549bad1c9f10568a1b973a8a7a32311c0b12e2c3"
+  },
+  "preserved_failures": [
+    "independent review blocked the first journal draft because its raw device pointer broke Module Send/Sync, successful records lacked an ordinary-operation barrier, device_online status was collapsed, partial recording could escape without poison, the unwired entry risked dead-code diagnostics, and the fixture did not cover production error paths",
+    "wrapper candidate af629008 failed exact post-0006 patch application with fuzz=0 offsets",
+    "wrapper candidate 2e4ca3 failed as a malformed unified-diff hunk",
+    "wrapper candidate 5fecde failed because literal backslash-t content did not match the pinned smpboot source"
+  ],
+  "bounded_corrections": [
+    "the journal now uses a narrow retained-device Send/Sync wrapper, immutable stage/raw-status records, negative errno preservation, complete preflight, poison-on-uncertainty, and a fail-closed ordinary-operation barrier while records exist",
+    "the replacement Linux patch keeps send_init_sequence static and byte-identical and exports only native_reset_secondary_cpu_via_init, whose exact body is preempt_disable, one INIT helper call, and preempt_enable"
+  ],
+  "tests": [
+    {
+      "command": "MCKERNEL_RUSTC_1_92=/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc python3 -m unittest -v scripts.tests.test_shutdown_cpu_reclaim",
+      "result": "PASS: 6 tests (worker execution)"
+    },
+    {
+      "command": "python3 -B scripts/tests/test_x86_export_preempt_protected_secondary_reset.py",
+      "result": "PASS: 1 test (coordinator execution)"
+    },
+    {
+      "command": "git diff --check",
+      "result": "PASS at checkpoint"
+    }
+  ],
+  "remaining": [
+    "independent review of the repaired exact journal hashes",
+    "configured pinned-kernel build and module link closure",
+    "v5 wiring, privileged reset/re-online, IRQ drain, guest shutdown and resource reclamation"
+  ],
+  "acceptance": "No build, module, reset, re-online, guest, lifecycle gate or whole-OS acceptance is claimed."
+}

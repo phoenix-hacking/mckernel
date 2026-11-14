@@ -1,0 +1,454 @@
+{
+  "status": "SOURCE_ONLY_UNEXECUTED_REQUIRES_INDEPENDENT_REVIEW_AND_ROOT_ORDINARY_GRANT",
+  "scope": "Functional supported-profile OS/apps plus compute-C retirement into Rust/reviewed assembly",
+  "owner": "exit7_retirement_defect",
+  "current_binding": {
+    "case_id": "startup.nonzero-dualstream.rust.exit7",
+    "payload_artifact": {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/ordinary-stage-1/app-0755",
+      "sha256": "28adfaff668facb3ca1f27b4800d56ed6bc3669b9fcac35279ab198819d7ca1f",
+      "size": 5610856,
+      "mode": 33261
+    },
+    "payload": {
+      "argv": [
+        "/bin/mcexec",
+        "-t",
+        "1",
+        "0",
+        "/apps/app"
+      ],
+      "cwd": "/case/work",
+      "env": {
+        "COKERNEL_PATH": "/apps",
+        "PATH": "/usr/bin:/bin"
+      },
+      "oracle": {
+        "exit_code": 7,
+        "stdout_hex": "6e6f6e7a65726f207374646f75742066697865642d76310a",
+        "stderr_hex": "6e6f6e7a65726f207374646572722066697865642d76310a"
+      },
+      "stderr_limit_bytes": 1024,
+      "stdout_limit_bytes": 1024
+    },
+    "matched_artifacts": {
+      "bzImage": {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/bzImage",
+        "sha256": "032653ee0661b059c325e2a0911a9d492805f1a889c4df515473d69a8be105bc",
+        "size": 16130048
+      },
+      "mcexec": {
+        "mode": 33261,
+        "path": "/home/holden/mckernel-work/scratch/mcexec-preload-fastpath-build-20260928-1/rust/executer/user/mcexec",
+        "sha256": "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b",
+        "size": 453352
+      },
+      "mckernel_image": {
+        "mode": 33261,
+        "path": "/home/holden/mckernel-work/host-preparation/repaired-affinity-n3-variant-20261019-1/repaired-image-fresh8b-runtime-0755",
+        "sha256": "ff4fca457e9ffe50dc4eca930c5f91faf317eeee15bf0c2907067cffa77b23bb",
+        "size": 7988768
+      },
+      "native_boot": {
+        "mode": 33261,
+        "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/two-cpu-running-query-correction-1/native-boot-two-0755",
+        "sha256": "4312f9a8f53d8db7b2b6be4c7d5e409f5c0f82cf8215728209be0f6ff4a5d5c5",
+        "size": 35784
+      },
+      "loader": {
+        "mode": 33261,
+        "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/native-proposal/stage-correction-1/stage/root/lib64/ld-linux-x86-64.so.2",
+        "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b",
+        "size": 930600
+      },
+      "libc": {
+        "mode": 33261,
+        "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/native-proposal/stage-correction-1/stage/root/lib64/libc.so.6",
+        "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+        "size": 2339896
+      }
+    },
+    "matched_modules": [
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/ihk.ko",
+        "sha256": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c",
+        "size": 1527808
+      },
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/ihk-smp-x86_64.ko",
+        "sha256": "c6a9db8eaa2ec5f7898b021b6835d20e4359a5f4a1209b5b28fd9559cd03387f",
+        "size": 12210104
+      },
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/mcctrl.ko",
+        "sha256": "4e2f1e5b11cad8a9fbfaca4ae6671a2f3fa16ef3c8c651357506d93c7edf4fa9",
+        "size": 2368472
+      }
+    ],
+    "matched_profile": {
+      "append": "console=ttyS0,115200n8 rdinit=/init nokaslr panic=-1 memmap=4K%0x80000-1",
+      "memory_mib": 8192,
+      "name": "native-diagnostic-4vcpu-8192mib",
+      "numa_nodes": 2,
+      "vcpus": 4
+    },
+    "accepted_stage_base": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-handshake-init-stage-20261020-1/native-stage-1/m03.cpio.gz",
+      "sha256": "4a18d63bbb1d1287f4a3694e16f59c502ec92fb4494a003746f218706cceecf5",
+      "size": 23684692
+    },
+    "normal_native_boot_argv": [
+      "/bin/native-boot"
+    ]
+  },
+  "typed_frame": {
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "/apps/app"
+    ],
+    "cwd": "/case/work",
+    "env": {
+      "PATH": "/usr/bin:/bin",
+      "COKERNEL_PATH": "/apps"
+    },
+    "raw_wait_status": 1792,
+    "started_ns": 33182529126,
+    "reaped_ns": 33680337088,
+    "finished_ns": 33881794815,
+    "streams": {
+      "stdout": {
+        "hex": "6e6f6e7a65726f207374646f75742066697865642d76310a",
+        "eof": true,
+        "truncated": false,
+        "observed": 24,
+        "retained": 24,
+        "discarded": 0,
+        "limit": 1024,
+        "eof_ns": 33578852402
+      },
+      "stderr": {
+        "hex": "6e6f6e7a65726f207374646572722066697865642d76310a",
+        "eof": true,
+        "truncated": false,
+        "observed": 24,
+        "retained": 24,
+        "discarded": 0,
+        "limit": 1024,
+        "eof_ns": 33578860504
+      }
+    },
+    "procfs_empty": true
+  },
+  "typed_result": {
+    "admitted_qemu_argv": [
+      "/usr/libexec/qemu-kvm",
+      "-machine",
+      "q35",
+      "-accel",
+      "tcg,thread=multi",
+      "-cpu",
+      "max,la57=off",
+      "-smp",
+      "4,sockets=2,cores=2,threads=1",
+      "-m",
+      "8192",
+      "-object",
+      "memory-backend-ram,size=4G,id=ram-node0",
+      "-object",
+      "memory-backend-ram,size=4G,id=ram-node1",
+      "-numa",
+      "node,nodeid=0,cpus=0-1,memdev=ram-node0",
+      "-numa",
+      "node,nodeid=1,cpus=2-3,memdev=ram-node1",
+      "-nic",
+      "none",
+      "-display",
+      "none",
+      "-no-reboot",
+      "-no-shutdown",
+      "-S",
+      "-monitor",
+      "none",
+      "-qmp",
+      "unix:/home/holden/mckernel-work/scratch/e7s-261020-1/p/attempt-7d7dc8220e24aa11d9eb5df926873ffe/qmp.sock,server=on,wait=off",
+      "-serial",
+      "file:/home/holden/mckernel-work/scratch/e7s-261020-1/p/attempt-7d7dc8220e24aa11d9eb5df926873ffe/serial.log",
+      "-debugcon",
+      "file:/home/holden/mckernel-work/scratch/e7s-261020-1/p/attempt-7d7dc8220e24aa11d9eb5df926873ffe/debugcon.log",
+      "-global",
+      "isa-debugcon.iobase=0xe9",
+      "-kernel",
+      "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/bzImage",
+      "-initrd",
+      "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/ordinary-stage-1/exit7.cpio.gz",
+      "-append",
+      "console=ttyS0,115200n8 rdinit=/init nokaslr panic=-1 memmap=4K%0x80000-1"
+    ],
+    "application_acceptance": false,
+    "capture_errors": [],
+    "cleanup": {
+      "errors": [],
+      "reaped": true
+    },
+    "failure": {
+      "error": "retirement/release evidence",
+      "phase": "evaluation",
+      "type": "DiagnosticError"
+    },
+    "mckernel_application_executed": false,
+    "qemu_evidence": {
+      "argv": [
+        "/usr/libexec/qemu-kvm",
+        "-machine",
+        "q35",
+        "-accel",
+        "tcg,thread=multi",
+        "-cpu",
+        "max,la57=off",
+        "-smp",
+        "4,sockets=2,cores=2,threads=1",
+        "-m",
+        "8192",
+        "-object",
+        "memory-backend-ram,size=4G,id=ram-node0",
+        "-object",
+        "memory-backend-ram,size=4G,id=ram-node1",
+        "-numa",
+        "node,nodeid=0,cpus=0-1,memdev=ram-node0",
+        "-numa",
+        "node,nodeid=1,cpus=2-3,memdev=ram-node1",
+        "-nic",
+        "none",
+        "-display",
+        "none",
+        "-no-reboot",
+        "-no-shutdown",
+        "-S",
+        "-monitor",
+        "none",
+        "-qmp",
+        "unix:/home/holden/mckernel-work/scratch/e7s-261020-1/p/attempt-7d7dc8220e24aa11d9eb5df926873ffe/qmp.sock,server=on,wait=off",
+        "-serial",
+        "file:/home/holden/mckernel-work/scratch/e7s-261020-1/p/attempt-7d7dc8220e24aa11d9eb5df926873ffe/serial.log",
+        "-debugcon",
+        "file:/home/holden/mckernel-work/scratch/e7s-261020-1/p/attempt-7d7dc8220e24aa11d9eb5df926873ffe/debugcon.log",
+        "-global",
+        "isa-debugcon.iobase=0xe9",
+        "-kernel",
+        "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/bzImage",
+        "-initrd",
+        "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/ordinary-stage-1/exit7.cpio.gz",
+        "-append",
+        "console=ttyS0,115200n8 rdinit=/init nokaslr panic=-1 memmap=4K%0x80000-1"
+      ],
+      "pgid": 11,
+      "pid": 11,
+      "returncode": -9,
+      "sid": 11,
+      "starttime_ticks": 31436339
+    },
+    "status": "FAIL"
+  },
+  "archive_refs": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-native-data-20261020-1/native-control-packet-2/failure-readback-preparation-1/archive-1-capture-1/stdout",
+      "sha256": "d7e90f6db4420a94a6e57dfd04b120d13b340c5bd5fded1f9bece41e2789c8e7",
+      "bytes": 327680,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-native-data-20261020-1/native-control-packet-2/failure-readback-preparation-1/archive-2-capture-1/stdout",
+      "sha256": "815e2da4e0fc5f368477595aeff76d09e9427fadd5e944210bb645e8de8c1c06",
+      "bytes": 2882,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-native-data-20261020-1/native-control-packet-2/failure-readback-preparation-1/archive-3-capture-1/stdout",
+      "sha256": "ebbef194c088c3fb87d9a5ff8ac5212b99da6b88a01d996e9afc02b73bea3f6a",
+      "bytes": 327680,
+      "mode": 33152
+    }
+  ],
+  "manifest": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/ordinary-stage-1/manifest.json",
+    "sha256": "dc8c04d13e216e3044aafad9e592eabbd31bfb3e8033404d108f4e48c578a886",
+    "bytes": 5708,
+    "mode": 33152
+  },
+  "collector_build_authority": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-authenticated-boot-handshake-correction-20261020-1/CLOSED-FIVE-COMMAND-RESULT.json",
+    "sha256": "8865d826f2eb0995f814fcd897cfb33c264420eb031b3d9d1265bdae8e30e364",
+    "bytes": 3065,
+    "mode": 33152
+  },
+  "consumed_collector": {
+    "mode": 33216,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-authenticated-boot-handshake-correction-20261020-1/check-1/collector",
+    "sha256": "9fafdd45c0934d95555fd85ee542bbd417e2b3e6e126d2a27d565f48be2fec57",
+    "size": 1025768
+  },
+  "consumed_source": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-authenticated-boot-handshake-correction-20261020-1/candidate/native_diagnostic_guest_collector.c",
+    "sha256": "f66a7ae5bb65fdfd169ffed60a38282583cec5c896c372716a3988282075d010",
+    "bytes": 28163,
+    "mode": 33152
+  },
+  "candidate": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-retirement-defect-20261020-1/native_diagnostic_guest_collector.c",
+    "sha256": "b338983b34abfd349be683d86a4f32b79bb81f1f521377c3813cb86d84d024e2",
+    "bytes": 28376,
+    "mode": 33152
+  },
+  "source_authority_rows": [
+    {
+      "baseline_sha256": "148134730b5fed7f14770eb070529b5227bb6ab790b7199f8800968219dffc70",
+      "bytes": 48054,
+      "compile_target_source_origin": "EXACT_CORRECTED_PHASE4_REVOKE_FINAL_ACK_HOST_SOURCE",
+      "incremental_reviewed_shutdown_replacement": false,
+      "origin": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/mcctrl_process.rs",
+      "parent_source_sha256": "148134730b5fed7f14770eb070529b5227bb6ab790b7199f8800968219dffc70",
+      "path": "mcctrl_process.rs",
+      "reviewed_replacement": true,
+      "sha256": "e93c487a9fbe978275991954a50039aabd82f71da7bcc91df0300cfa97a08a35"
+    },
+    {
+      "baseline_sha256": "6b37a71ba79bf5746fd72123b82ebe5afc71c809310a2a942cea08a3d66cf5e8",
+      "bytes": 65940,
+      "compile_target_source_origin": "EXACT_CORRECTED_PHASE4_REVOKE_FINAL_ACK_HOST_SOURCE",
+      "incremental_reviewed_shutdown_replacement": true,
+      "origin": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/smp_application.rs",
+      "parent_source_sha256": "fd375f11a43dbd205c08decdff10d94c2bb82935ae2ddfeaf1ea7142a5c70146",
+      "path": "smp_application.rs",
+      "reviewed_replacement": true,
+      "sha256": "babfb6d60f1393637fd08f9549e9a77c06f3c308f1b40d4b74a9a995f70f745a"
+    }
+  ],
+  "host_compiler_authority": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-independent-review-20261020-1/HOST66-ACTUAL-THREE-MODULE-FFI-CONTROL-ARTIFACT-REVIEW.json",
+    "sha256": "b11c68ea444b1afcd36e7cfd46db433029e815ba42b3bc0aca5c16ca8d97c974",
+    "bytes": 25023,
+    "mode": 33152
+  },
+  "host_compiler_bindings": {
+    "ihk-smp-x86_64": {
+      "command_sha256": "4caacb292d4fe9298875c75ab360b8e5fd9af4a58066bf602dccd988f12bf912",
+      "source_count": 47,
+      "sources": [
+        "abi/application.rs",
+        "abi/sysfs.rs",
+        "abi/sysfs_request.rs",
+        "abi/vdso.rs",
+        "abi/x86_64.rs",
+        "application_image.rs",
+        "application_pager.rs",
+        "application_rpc.rs",
+        "application_syscall.rs",
+        "current_fork_control.rs",
+        "current_fork_task_mm.rs",
+        "ihk-compat-build-id.bin",
+        "ihk_mapping.rs",
+        "ihk_smp_x86_64.rs",
+        "ikc_master.rs",
+        "ikc_queue.rs",
+        "procfs_objects.rs",
+        "smp_application.rs",
+        "smp_application_image.rs",
+        "smp_application_syscall.rs",
+        "smp_boot_code.rs",
+        "smp_cpu.rs",
+        "smp_file_pager.rs",
+        "smp_ikc.rs",
+        "smp_image.rs",
+        "smp_loader.rs",
+        "smp_memory.rs",
+        "smp_procfs.rs",
+        "smp_resource.rs",
+        "smp_service.rs",
+        "smp_startup.rs",
+        "smp_startup_entry.S",
+        "smp_topology.rs",
+        "smp_trampoline.S",
+        "smp_trampoline.rs",
+        "smp_vdso.rs",
+        "sysfs_memory.rs",
+        "sysfs_objects.rs",
+        "sysfs_os.rs",
+        "sysfs_remote.rs",
+        "sysfs_rpc.rs",
+        "sysfs_setup.rs",
+        "sysfs_snoop.rs",
+        "sysfs_tree.rs",
+        "sysfs_zeroing.rs",
+        "user_string.rs",
+        "zero_pages.rs"
+      ]
+    },
+    "mcctrl": {
+      "command_sha256": "f62f80c96f4afcec4f00f16f35ac13760eeb0df48b6d35bf91239536dc047ed7",
+      "source_count": 10,
+      "sources": [
+        "abi/application.rs",
+        "abi/os_service.rs",
+        "abi/x86_64.rs",
+        "application_image.rs",
+        "current_fork_host.rs",
+        "mcctrl_exec.rs",
+        "mcctrl_process.rs",
+        "mcctrl_rust.rs",
+        "mcctrl_vm.rs",
+        "user_string.rs"
+      ]
+    }
+  },
+  "host_compiler_receipt": {
+    "bytes": 38789,
+    "path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/evidence/receipt.json",
+    "sha256": "cb9accc99e0f75d1d23922835ba101397f2279b21f400899836c876d4d7072f1"
+  },
+  "first_divergence": {
+    "evaluator_path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/runtime-source-1/native_diagnostic.py",
+    "evaluator_lines": [
+      572,
+      576
+    ],
+    "expected": "same scheduled tuple final retirement errno=0 and process release cleanup_errno=0",
+    "observed": "serial962 retirement os0 gen1 pid257 token30 errno=-11; release absent",
+    "collector_lines": [
+      623,
+      632
+    ],
+    "producer_lines": [
+      149,
+      162,
+      643,
+      649
+    ],
+    "timing": {
+      "retirement_eagain": 33.648111,
+      "procfs_deleted": 33.649248,
+      "frame_finished": 33.881794815,
+      "powerdown": 33.959039
+    },
+    "inference": "Collector procfs-only early break powers down before host retry deadline; final retirement remains unproven."
+  },
+  "invariants": [
+    "5s local retirement bound, bounded_deadline/global cap unchanged",
+    "App/raw1792/exact24B+24B/CPU/profile/evaluator/owner unchanged",
+    "Current procfs state recorded on every poll; later nonempty/error clears earlier empty",
+    "No ACK/release manufactured; strict evaluator rejects missing final evidence",
+    "No compute-kernel code change; private Linux collector only"
+  ],
+  "failure_history": "One closed exit7 native attempt; source-only bounded correction1; metadata assembly failure1 preserved separately; no unchanged replay",
+  "stop_condition": "Any source/binding mismatch, test failure, missing independent review or root grant; preserve failure without retry",
+  "executions": 0,
+  "guest_runs": 0,
+  "runtime_acceptance": false
+}

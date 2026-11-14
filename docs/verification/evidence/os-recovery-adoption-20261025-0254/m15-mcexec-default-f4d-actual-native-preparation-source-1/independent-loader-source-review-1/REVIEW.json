@@ -1,0 +1,74 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/guardian_execution_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "at": "2026-10-27T19:40:53.291496+00:00",
+  "decision": "BLOCKED_SOURCE_CURRENT_AGGREGATE_MEMORY_CEILING_MISMATCH",
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-actual-native-preparation-source-1/READY.SOURCE-ONLY.json",
+    "bytes": 4866,
+    "sha256": "cdd53eb8f5165c8ec42387c18618cb13f486b20d5b8ad0a36794741b9b23975f"
+  },
+  "packet": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-actual-native-preparation-source-1/LOADER-THREE-COMMANDS.NOT-RELEASED.json",
+    "bytes": 20870,
+    "sha256": "c10d3e71f66fb9d97e91319ada8a4951b55b48740c440ca270b7d6b79cec9d3c"
+  },
+  "wrapper": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-actual-native-preparation-source-1/run_installed_loader_h990_once.py",
+    "bytes": 8473,
+    "sha256": "2a6f7405d20c175d4963b742dd0e7518fc8f5e57fc70ea08b2bf68780c0a90ae"
+  },
+  "grant_template": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-actual-native-preparation-source-1/ROOT-LOADER-GRANT.TEMPLATE.NOT-AUTHORITY.json",
+    "bytes": 1594,
+    "sha256": "19bb73208f45a9a47b3e22061f9ce4cbcaf19bad7a3e6b262774cc41b5dee145"
+  },
+  "blocking_findings": [
+    {
+      "id": "LOADER_AGGREGATE_CURRENT_CAP",
+      "packet_and_template_ceiling_bytes": 23941543572,
+      "current_invocation_ceiling_bytes": 23259332608,
+      "finding": "Packet/profile and required exact grant profile retain older23941543572 aggregate ceiling, above current21.661941528320312GiB/23259332608 ceiling. Wrapper enforces local AS512MiB and fresh capacity but has no current aggregate-profile clamp; Root must not adopt the wider historical metadata as current authority.",
+      "bounded_correction": "Preserve original packet/template and derive an explicit exact current-cap successor with profile ceiling23259332608 and coherent packet/wrapper/grant pins. Actual Root shared reservation must also obey current cumulative CPU/RAM/jobs budget. CPU6/AS512MiB/other local limits and three argv remain unchanged; no loader/control replay is needed for source correction."
+    }
+  ],
+  "completed_focused_checks": [
+    "READYcdd53eb8 and all declared source artifacts match their hashes. All14 actual loader inputs match exact bytes/modes/resolved paths; installedELFe5d18169/396200B and guest loader0853c866/libcb058f87d/libnumabe20c2b1 are actual retained files.",
+    "Actual six-phase7908 acceptance binds buildELFcae240a8 and installe5d18169 with only exact16B RPATH replacement at5355 to /usr/local/lib64. BUILDID3114d9e/DT_NEEDED libnuma.so.1+libc.so.6/PT_INTERP/lib64/ld-linux-x86-64.so.2 and124 named dynamic-import expectations remain retained scope; changed installed bytes require genuine new loader checks.",
+    "All3 literal argv match original accepted loader diagnostic argv except selected installed executable path. readelf metadata, pinned guest loader--verify and --inhibit-cache/--library-path exact guestlibdir--list never invoke executor main. Existing RPATH is not rewritten or inhibited; unexpected actual RPATH-selected provider must reject rather than be waived.",
+    "Wrapper stable-FD inputs() and capacity() ASTs equal retained granted h990 predecessor exactly. Pinned h990 source990807ab and selected capture/retirement nodes remain unchanged. Explicit cwd creation/chdir and empty cwd checks prevent ambient directory lookup; environment is cleared and loader argv uses env-i without LD variables.",
+    "Real Root grant is mandatory: exact status/author/execution_count1/packet/source/profile, observed3clocks age[0,120)s, CPU6 reservationtrue, UID1000/affinity6 and exact RLIMIT_AS512MiB/CPU30/FSIZE128MiB/NOFILE256/CORE0. Exact guardv2 runs at entry/between commands/after captures. Fresh exclusive output/capture directories and failure-stop/no-retry remain intact.",
+    "Acceptance contract preserves exact input hashes before/after, ELF/needed/interpreter/version-symbol rows, --verify0 with empty streams and --list0 exact guest provider paths/empty stderr. All3 direct child/group joins/closed streams/untruncated captures are independently required; raw address-only rows must remain unclassified. rc0 alone is not acceptance.",
+    "Final-map no-cache/RPATH-provider context is a separately required native/staging predicate. Existing data-only staged validator rejects changed provider/cache context; loader/source review does not claim actual staged final-map or native capability acceptance.",
+    "Read14 pure fixture/source controls and14 loader input checks without replay. No loader/helpermain/account/guard/admission/workload/stage/canonical action occurred. F05 currently frozen C selection remains untouched and separate."
+  ],
+  "literal_command_after_corrected_source_and_actual_Root_grant": "taskset -c 6 /usr/bin/prlimit --as=536870912:536870912 --cpu=30:30 --fsize=134217728:134217728 --nofile=256:256 --core=0:0 -- python3 -B CORRECTED_WRAPPER_PATH --grant ACTUAL_ROOT_LOADER_GRANT --grant-sha256 ACTUAL_GRANT_SHA256",
+  "required_grant_schema": {
+    "author": "/root",
+    "status": "PASS_ROOT_ORDINARY_INSTALLED_LOADER_THREE_COMMANDS",
+    "execution_count": 1,
+    "packet": "exact corrected packet path/SHA256",
+    "source": "exact corrected wrapper path/SHA256",
+    "profile": "exact corrected profile including current23259332608 ceiling",
+    "observed_clocks": "fresh actual3clocks<120s",
+    "ordinary_CPU6_reserved": true,
+    "current_account_admission": "actual Root account/current shared-budget/holds evidence",
+    "independent_source_review": "exact corrected independent source review"
+  },
+  "limits": [
+    "This original packet has no execution release; bounded current-cap successor is required.",
+    "Fresh actual Root CPU6/shared-headroom/current-account/ownership/nonce/window admission remains mandatory. Existing source/SDK/old-loader acceptance is not authority.",
+    "Independent actual3-loader output interpretation must precede installed loader compatibility acceptance; lazy binding/all349/all51/allocation/main/native/wholefile remain OPEN.",
+    "Fixed cutoff05:36Z/v2 earlier MONO/BOOT, same creditrun7f/57774.852125/cumulative>=22812.3311/allholds/resourcecontrols and parent-exclusive outercontrols persist."
+  ],
+  "review_actions": {
+    "only14declared_input_pins_and_bounded_source_AST_diff_reads": true,
+    "no_inventory_review_or_test_replay": true,
+    "no_loader_helpermain_guard_account_admission_stage_workload": true,
+    "no_canonical_or_source_edit": true,
+    "only_this_review_directory_written": true
+  },
+  "execution_release": false
+}

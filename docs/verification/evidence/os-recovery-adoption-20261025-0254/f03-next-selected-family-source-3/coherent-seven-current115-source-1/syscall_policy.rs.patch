@@ -1,0 +1,200 @@
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -35445,6 +35445,7 @@
+     #[link_name="preempt_enable"] fn f03_exec_report_preempt_enable_v1();
+     #[link_name="preempt_disable"] fn f03_exec_report_preempt_disable_v1();
+ }
++#[cfg_attr(f03_ptrace_entry_candidate, no_mangle)]
+ unsafe extern "C" fn f03_exec_report_signal_v1(thread:*mut c_void,sig:CInt) {
+     ptrace_report_signal(thread.cast(),sig);
+ }
+@@ -36123,7 +36124,189 @@
+ // Its already-exported exact body calls atomic_helpers::ihk_atomic64_read.
+ // No duplicate Rust atomic forwarding body or new atomic algorithm is added.
+ 
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(f03_ptrace_entry_candidate)]
++mod ptrace_setsiginfo_entry {
++    use core::mem::{offset_of, size_of, MaybeUninit};
++    use core::ptr::addr_of;
++
++    use crate::abi::{CInt, CLong, CULong, SigInfo, SigPending};
++
++    use super::{
++        f03_ptrace_io_find, f03_ptrace_io_unlock, ptrace_setsiginfo_body_result,
++        syscall_alloc_bridge, syscall_copy_from_user_bridge, F03_PTRACE_IO_OFFSETS,
++        IHK_MC_AP_NOWAIT,
++    };
++
++    /// Set tracee signal information through the existing complete Rust helper.
++    ///
++    /// # Safety
++    /// The original ptrace syscall contract applies. Data is an opaque user address
++    /// consumed only by the genuine usercopy provider. The helper owns tracee
++    /// find/unlock, pending-slot mutation and allocation/error ordering. This entry
++    /// supplies live, aligned scratch storage for its synchronous invocation only.
++    #[no_mangle]
++    pub unsafe extern "C" fn f03_ptrace_setsiginfo_v1(
++        pid: CInt,
++        data: *mut SigInfo,
++    ) -> CLong {
++        let mut info = MaybeUninit::<SigInfo>::uninit();
++        // SAFETY: Use the actual ABI types and existing offsets/providers. Scratch
++        // is never read here or assumed initialized; the helper retains its exact
++        // full-usercopy checks before consuming it. No user reference is formed.
++        unsafe {
++            ptrace_setsiginfo_body_result(
++                pid,
++                data as CULong,
++                info.as_mut_ptr().cast(),
++                size_of::<SigInfo>(),
++                size_of::<SigPending>(),
++                IHK_MC_AP_NOWAIT,
++                offset_of!(SigPending, info) as CULong,
++                addr_of!(F03_PTRACE_IO_OFFSETS),
++                Some(f03_ptrace_io_find),
++                Some(f03_ptrace_io_unlock),
++                Some(syscall_alloc_bridge),
++                Some(syscall_copy_from_user_bridge),
++            )
++        }
++    }
++}
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(f03_ptrace_entry_candidate)]
++mod ptrace_syscall_event_entry {
++    use core::mem::offset_of;
++
++    use crate::abi::Thread;
++
++    use super::{
++        f03_exec_report_signal_v1, ptrace_syscall_event_body_result, PtraceReportSignalFn,
++    };
++
++    /// Preserve the public syscall-event notification used by architecture callers.
++    ///
++    /// # Safety
++    /// The caller supplies the same live thread and synchronous ptrace notification
++    /// context as the original public C entry. The existing helper/provider retain
++    /// the original state read, signal decision, locking and scheduling contract.
++    #[no_mangle]
++    pub unsafe extern "C" fn ptrace_syscall_event(thread: *mut Thread) {
++        // SAFETY: Use the actual defining-module field offset and unchanged signal
++        // adapter. The original void entry deliberately discards the helper status.
++        let _ = unsafe {
++            ptrace_syscall_event_body_result(
++                thread.cast(),
++                offset_of!(Thread, ptrace),
++                Some(f03_exec_report_signal_v1),
++            )
++        };
++    }
++
++    const _: PtraceReportSignalFn = f03_exec_report_signal_v1;
++}
++
+ // Functional OS only; no security testing. Root-reviewed supported-profile candidate; native/whole-file proof separate.
+ #[cfg(f06_obtain_clone_cpuid_candidate)]
+ #[path = "f06_obtain_clone_cpuid.rs"]
+ mod f06_obtain_clone_cpuid;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(f03_ptrace_entry_candidate)]
++mod ptrace_wakeup_state_callbacks {
++    use core::ffi::c_void;
++
++    use crate::abi::{CInt, CULong};
++    use crate::process_helpers;
++
++    use super::{
++        PtracePendingSignalTakeFn, PtraceSavedContextClearFn, PtraceTraceSyscallUpdateFn,
++    };
++
++    /// Forward the original saved-context clear through its integer-address ABI.
++    ///
++    /// # Safety
++    /// A nonzero thread address names live storage with an aligned writable C int
++    /// at offset. The ptrace caller retains the original exclusion and lifetime.
++    #[no_mangle]
++    pub unsafe extern "C" fn ptrace_wakeup_clear_saved_bridge(
++        thread_addr: CULong,
++        offset: CULong,
++    ) -> CInt {
++        // SAFETY: Preserve the C address cast and pass through null to the provider.
++        unsafe {
++            process_helpers::process_thread_ptrace_saved_context_clear_result(
++                thread_addr as *mut c_void,
++                offset,
++            )
++        }
++    }
++
++    /// Forward the trace-syscall update under the caller's existing update lock.
++    ///
++    /// # Safety
++    /// A nonzero thread address names live storage with an aligned writable C int
++    /// at ptrace_offset. The caller holds the original update-lock exclusion.
++    #[no_mangle]
++    pub unsafe extern "C" fn ptrace_wakeup_trace_syscall_bridge(
++        thread_addr: CULong,
++        ptrace_offset: CULong,
++        trace_syscall: CInt,
++    ) -> CInt {
++        // SAFETY: Forward the unchanged address, offset and signed flag once.
++        unsafe {
++            process_helpers::process_thread_ptrace_trace_syscall_update_result(
++                thread_addr as *mut c_void,
++                ptrace_offset,
++                trace_syscall,
++            )
++        }
++    }
++
++    /// Return the existing provider's taken node through the unsigned-long ABI.
++    ///
++    /// # Safety
++    /// A nonzero thread address remains live under the original ptrace exclusion.
++    /// The selected offset names an aligned writable pointer slot. The caller
++    /// retains the original delivery/free responsibility for the returned node.
++    #[no_mangle]
++    pub unsafe extern "C" fn ptrace_wakeup_pending_take_bridge(
++        thread_addr: CULong,
++        sendsig_offset: CULong,
++        recvsig_offset: CULong,
++        source: CInt,
++    ) -> CULong {
++        // SAFETY: Preserve source/offset routing and the original pointer-to-long cast.
++        unsafe {
++            process_helpers::process_thread_ptrace_pending_signal_take_result(
++                thread_addr as *mut c_void,
++                sendsig_offset,
++                recvsig_offset,
++                source,
++            ) as CULong
++        }
++    }
++
++    const _: PtraceSavedContextClearFn = ptrace_wakeup_clear_saved_bridge;
++    const _: PtraceTraceSyscallUpdateFn = ptrace_wakeup_trace_syscall_bridge;
++    const _: PtracePendingSignalTakeFn = ptrace_wakeup_pending_take_bridge;
++}
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(f03_ptrace_entry_candidate)]
++mod ptrace_wakeup_step_callback {
++    use crate::abi::{CULong, Thread};
++    use super::{set_single_step, PtraceSetSingleStepFn};
++
++    /// Forward the existing integer-address callback to the selected Rust provider.
++    ///
++    /// # Safety
++    /// The original ptrace caller owns thread/context lifetime and exclusion.
++    /// Null is passed through to the existing provider, which retains its checks.
++    #[no_mangle]
++    pub unsafe extern "C" fn ptrace_wakeup_set_single_step_bridge(thread_addr: CULong) {
++        // SAFETY: Preserve the original address cast; no direct context access here.
++        unsafe { set_single_step(thread_addr as *mut Thread) };
++    }
++    const _: PtraceSetSingleStepFn = ptrace_wakeup_set_single_step_bridge;
++}

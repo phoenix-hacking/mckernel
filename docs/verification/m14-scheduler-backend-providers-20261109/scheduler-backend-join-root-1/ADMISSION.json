@@ -1,0 +1,45 @@
+{
+  "at": "2026-11-09T22:59:33.155226+00:00",
+  "request_sha256": "26806f5e882b46e7f9f7c20acd72bb6e57f50c3b79997f4f37ab9233dfc9cc92",
+  "review_sha256": "48d53ea86eed0268e6f6ea08d7fe3882b62f3074ad9cb4a7775b12f5e9af055d",
+  "controller": {
+    "pid": 643425,
+    "birth": "35143918"
+  },
+  "actual_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "200s",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=45:45",
+    "--fsize=67108864:67108864",
+    "--core=0:0",
+    "--",
+    "/usr/bin/python3",
+    "-B",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-backend-join-1/run_join.py",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-backend-join-1/JOIN-REQUEST.json"
+  ],
+  "MemAvailable": 29772341248,
+  "disk_free": {
+    "/home/holden/mckernel": 132117209088,
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba": 132117209088
+  },
+  "usage": {
+    "at": "2026-11-09T22:47:44.083014+00:00",
+    "used_percent": 38,
+    "remaining_percent": 62,
+    "normal_guard_passed": true,
+    "rateLimitReachedType": null,
+    "spendControlReached": false,
+    "included_only": true
+  },
+  "HOST": "CPUs0/6/7,max3LIGHTjobs,4GiBTOTALalloverhead; single serialCPU6 controller+3payloads,RootCPU0",
+  "only_actual_3inputs": "currentb18+qualifiedtimer7003+CPU602d",
+  "source_native_hold_release": false
+}

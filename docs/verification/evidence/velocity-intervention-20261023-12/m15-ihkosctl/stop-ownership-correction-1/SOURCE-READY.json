@@ -1,0 +1,76 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_READY_REGRESSION_UNRUN",
+  "reuse_authority": "accepted h990 stop/masking/WNOWAIT/TERM-then-KILL-before-reap/finally; original subreaper and adopted-direct-child loop retained",
+  "original_source": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/m15-ihkosctl/fixture/owned_process.py",
+    "sha256": "5b9d08025672eb3323483f3d767c6e5afdcea5b324eddcdd444f380f782e1028"
+  },
+  "frozen_unchanged_inputs": {
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/m15-ihkosctl/ihkosctl.rs": {
+      "sha256": "3db0d77c0a984efdc61408292ba3700696a24032a7fb637e7fdfb0f781419199",
+      "bytes": 17124
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/m15-ihkosctl/reference/ihkosctl.c": {
+      "sha256": "6dc0bbf535c144a69137adb3829d5a65f726368f8178866ade16227836bdc634",
+      "bytes": 18312
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/m15-ihkosctl/reference/ihklib_helpers.c": {
+      "sha256": "240de6d5e46f5f9dab7d2e795fa3c7bcbb1ff55a4b08597b2d3e1b40fb6be5c8",
+      "bytes": 11078
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/m15-ihkosctl/fixture/cases.json": {
+      "sha256": "5e8b98576b5694f1c3b898a2508f53ff9ac8c5cbd4c52b0d1b7682a703c268b1",
+      "bytes": 23938
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/m15-ihkosctl/fixture/defined-contracts.json": {
+      "sha256": "2d4eb0b8d1d59c13dee9b3300a83e294c3d8034cfd4b04bb6edf7028c8e331d3",
+      "bytes": 1222
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/m15-ihkosctl/fixture/abi_stub.c": {
+      "sha256": "82869d1ceca6263cf0f014b17af968a5ce0520ad510ff68a47ceae2afa039ab4",
+      "bytes": 5978
+    }
+  },
+  "files": {
+    "RUNNER-DATA.diff": {
+      "sha256": "24f1900f50b80964ef911cb5743251891a13cdf4ff56eaae0696ceda60582a84",
+      "bytes": 1375
+    },
+    "test_termination.py": {
+      "sha256": "adfa0e30345cd2cf0e05835b3e700f2e07f38998be487e972607c622c3ee9d24",
+      "bytes": 2176
+    },
+    "owned_process.py": {
+      "sha256": "4e31319cb3345eaf63e28aa052d56983f33eb65f9c51848f291158823fe3f029",
+      "bytes": 6703
+    },
+    "run_equivalence.py": {
+      "sha256": "efb8e19799e02ccb0229dc6e0da2f2d43c97bc2a5285b06d7dabe57473ef962f",
+      "bytes": 7181
+    },
+    "OWNERSHIP.diff": {
+      "sha256": "66918a6974a1658722a13ad13faab7ce5fc0e1dbfc4cf97410dec255bafd0616",
+      "bytes": 9125
+    }
+  },
+  "proposed_regression_argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/m15-ihkosctl/stop-ownership-correction-1/test_termination.py"
+  ],
+  "regression_actual_result": null,
+  "fixture_argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/m15-ihkosctl/stop-ownership-correction-1/run_equivalence.py",
+    "--execute",
+    "--profile",
+    "both",
+    "--cc",
+    "/usr/bin/gcc-9",
+    "--rustc",
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc"
+  ],
+  "capture_bounds": "disk streams; reviewed outerRLIMIT_FSIZE32MiB; live32MiB each/64MiB aggregate; all buffer reads after stream close and budget verification",
+  "uncertainty": "retirement_error reports unknown and fails; no invented child joins. Normal source/cases/oracles unchanged.",
+  "grant": null
+}

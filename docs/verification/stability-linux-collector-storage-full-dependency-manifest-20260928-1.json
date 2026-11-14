@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_full_dependency_manifest",
+  "recorded_utc": "2026-09-28T09:31:00Z",
+  "status": "PASS_READ_ONLY_DEPENDENCY_AUDIT",
+  "test_count": 137,
+  "test_source": {"path": "scripts/tests/test_collector_storage_fault_packet.py", "size": 325492, "sha256": "b259ad30e1704580d14ff898dfdf9d70d7307f6c0eae51e1b95d157c72a58644"},
+  "direct_inputs": [
+    ["scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/storage-fault-v1/packet.json", 3017, "b4acc91e6c92677f41eeaed31646cbbe4b556feee4b05a2920f78a195e60abdb"],
+    ["scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/storage-fault-v1/prepare.py", 14602, "2c85d284548a8a9f426943c6c61019bbae8e13b4eabe3e662bc068b94037ab74"],
+    ["scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/storage-fault-v1/inject.h", 19250, "0711a9f5bdd60326ed919a8b39d9ac081044dd054431f049aeb8c32e8803b962"],
+    ["scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/storage-fault-v1/collector.patch", 8394, "e58c48dea6455cf0172dd5295db149cb29b5996b03dda3631513da86e68fb7b2"],
+    ["scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/storage-fault-v1/oracle.py", 158576, "7363f5a5401f32c1eb8efcd33acef8f1edc60a8d9a53d16e251fed0ba443f135"],
+    ["scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/storage-fault-v1/witness_owner.py", 78219, "cd415301375a214e7f450b787c4832037e0fa046bbe17e4e6da8b7bc8f892232"],
+    ["scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/storage-fault-v1/supervise.py", 58979, "521a4d51225447424503446abdf8b4f11bb29380b618b8c3ff7a83c4e6c32e56"],
+    ["scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/storage-fault-v1/tests.md", 2366, "eb0ad1868c021ce3091caa7095e427a3fd6a2b832dde51378842d9794deb4eb8"],
+    ["scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/collector.c", 53193, "09a63a343fa8cc9f511a26693371f5ba4f55ac5ca56fcb47abdc44759830cf1f"]
+  ],
+  "root_archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-root-success-20260915-2.tar.gz",
+    "size": 718152,
+    "sha256": "ad7c670311f6756cf64610e1d3e0dbdcdb026f86857c8461c3295cc34c17a721",
+    "consumed_members": [
+      ["stability-linux-sealed-root-tests-20260913-2/inputs/linux-collector", 151168, "e0e8e30e89b003ba51092f571d622e007ca2d9067561bfc06a2854cb8d29cc9d"],
+      ["stability-linux-sealed-root-tests-20260913-2/inputs/inputs.json", 3813, "1a6f4fcf138c1f8dff8ac9d164ce299534efa9feee8300c72ba30a4b9550e2d6"],
+      ["stability-linux-sealed-root-tests-20260913-2/inputs/sha256-harness", 29320, "68e68f86993d4d3f398fe940f5c2bf3615866ae129d6ee6d5339ebc24627f136"],
+      ["stability-linux-sealed-root-tests-20260913-2/inputs/supervisor.py", 24564, "8b8700175e6673c3a6b652d4a93bd18b56def83dfa3ac4ec821d4ae6c554e873"],
+      ["stability-linux-sealed-root-tests-20260913-2/inputs/root_inside.py", 7889, "1eab68ce627271bb97febfd51c3455e5267280009ad0f1b6249ae92f5d568e19"],
+      ["stability-linux-sealed-root-tests-20260913-2/inputs/run_collector_tests.py", 20783, "691aee973f9ea5e79cdf7766b87c69e0d5d5a01ff334b8674cd099c776125bb5"],
+      ["stability-linux-sealed-root-tests-20260913-2/work/cases/stdin-devnull/inputs/fixture", 27448, "9ad70dd23d699e72ad805f59446aec371c4e80b955056b845af921b4ce51f725"],
+      ["stability-linux-sealed-root-tests-20260913-2/work/cases/stdin-devnull/inputs/request.bin", 406, "e81b38bbe6116bf1df2807fa968e12dccfd28fe8c3ad225c45f282b36cab6716"],
+      ["stability-linux-sealed-root-tests-20260913-2/work/cases/stdin-devnull/inputs/selected-inputs.json", 76, "6b8761a9d2094147f02b9fe2a4c709246905a04c5122d68f6b9951162e01317d"],
+      ["stability-linux-sealed-root-tests-20260913-2/work/cases/stdin-devnull/inputs/stdin.bin", 6, "5d2f4b0bbce7ec4eb2e64afa399b10f52477a85d127a04a9afe6106b8e84bcb3"]
+    ]
+  },
+  "historical_source_archives": [
+    [40, 38007901, "5f43d6af69298a84c980b04aa65f66a18c7e621043767a12f69039ed444e0a30", 151622, "cfdbd7336241ce271d95fe3f82fce88f306a88ea5076e9df865dd03300c5a5d9", 71439, "be1e3878ad6e7818d42f062ef66496b6af98f71277fcf62c55009a293ff2f94c"],
+    [41, 38136275, "b96f2107b6a2857b3995b65e626c9d8b5a47d0a9d5fd8f697489baab6779a5e0", 152324, "84c8d23fbdf740e89d437bc0ad81fff3bcdcc1ff4ea2900c258e1c0ee61e6134", 71842, "fc863e02ea8a312796b5c0cac7cc9253bc390920cc36dd38b3833b0f3a889912"],
+    [42, 38261570, "c6e56b1332ec8b457cd3c031a0f1833e72d5edf6ce0d9b17d5417545603181e1", 153084, "8769f9bee3f58bade679018b970242180a3862ce9a9ee3af15ccb9410cbd1d93", 72267, "ddf0e8427a58feb82c830502eafe453eb26953d926c21238ba95345378a608d4"],
+    [43, 38388429, "5251a83bb4d2b2446c39156a7de1cbb6197e20c79e9cf23777b80f851a38da28", 153084, "8769f9bee3f58bade679018b970242180a3862ce9a9ee3af15ccb9410cbd1d93", 72456, "fc0e5ee9451aa2e9b23a6a7aab4460706453d9eea46a9b96e0f9802369230a2b"],
+    [44, 38514524, "5ddf13abf15505cc8ebbf71abfac7175603293b2dac46ee01aa3ddf952486153", 153554, "2f1cc151e0dba39d96af8ac992968951272a2c5d537e9c6af78be5b89b05141a", 72456, "fc0e5ee9451aa2e9b23a6a7aab4460706453d9eea46a9b96e0f9802369230a2b"],
+    [45, 38640721, "ced17e4703ca50a1797ac5531d95653f0f4ad408215d0d0da4d63e2cb0ee57fb", 153870, "f14211e3f7bf1fc42367c58f0617de66d93ff130dd238eb953ce6fc705cd5a11", 72456, "fc0e5ee9451aa2e9b23a6a7aab4460706453d9eea46a9b96e0f9802369230a2b"],
+    [46, 38768062, "15ac775cf137503ae69c10220db13467f9fb3c49a5df650d6514573e5ce94187", 154416, "554b41c6228e14a74743f9e168ac4cc5c48e5b95af47a47f9324c20e6061fe47", 72456, "fc0e5ee9451aa2e9b23a6a7aab4460706453d9eea46a9b96e0f9802369230a2b"]
+  ],
+  "historical_archive_schema": "Each row is [attempt, archive_size, archive_sha256, oracle_member_size, oracle_member_sha256, witness_owner_member_size, witness_owner_member_sha256]. Archive path is docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260916-<attempt>.tar.gz and members are the storage-fault-v1 oracle.py and witness_owner.py paths.",
+  "failure_records": [
+    ["docs/verification/stability-linux-collector-storage-fault-v2-source-review-failure-20260916-37.json", 2703, "4495ae0738b08cd45b54639528dcc64bb78c2ff1dd3d2cdfaeef6166fee031ca"],
+    ["docs/verification/stability-linux-collector-storage-fault-v2-source-review-failure-20260916-38.json", 2669, "9488b12ca9cfd21a18d607b0b407b624c6e7f60eb782b9b47811a66963bd1fd8"],
+    ["docs/verification/stability-linux-collector-storage-fault-v2-source-review-failure-20260916-39.json", 2759, "a9abaa2d3f0c9b9c13503f85a10aebf72aa9bf0f465e68d63a0bfa636ba9be96"]
+  ],
+  "focused_selectors": [
+    "test_real_child_descriptor_remaps_preserve_abi_and_close_leaks",
+    "test_acquisition_sequence_and_live_identity_ownership"
+  ],
+  "future_full_commands": [
+    "/home/holden/anaconda3/bin/python3 -B -m unittest scripts.tests.test_collector_storage_fault_packet.CollectorStorageFaultPacketTests",
+    "/usr/bin/python3 -B -m unittest scripts.tests.test_collector_storage_fault_packet.CollectorStorageFaultPacketTests"
+  ],
+  "transient_scope": "The class creates TemporaryDirectory case trees and generated collector/fixture/report streams; a future reviewed owner must bind constructors and retain command/input/status evidence even though normal context cleanup removes those transient trees.",
+  "execution_released": false,
+  "source_acceptance": false,
+  "acceptance_credit": false
+}

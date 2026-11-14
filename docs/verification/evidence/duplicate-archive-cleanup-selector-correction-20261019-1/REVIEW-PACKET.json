@@ -1,0 +1,278 @@
+{
+  "status": "CONSOLIDATED_CONSUMER_ROLE_SELECTOR_AND_COMPLETE31_FIXTURE_READY_HIGH_EXPERT_REVIEW",
+  "scope": "functional OS/apps Rust plus reviewed assembly; exact120 duplicate archives only",
+  "source_pins": {
+    "exact120.py": "de9c7fe4b2b061207c371f6d0669b14fdb72f0c89531a88c160e61d05726469a",
+    "caller-fixture.py": "56c091e17d86fde8f2e9a1de12ce7bf66c2ff928db2f4b7c16dab32976a6a6c3",
+    "exact-allowlist.json": "be5ac5b19930ce20e2001672419665f82268df5f3ef3b80d26fed0cc7272a4f9",
+    "metadata-observation.json": "6f18ff0615d96e9b129d74c6f08c9823673ce03fd64fe5e4409bf81d74d5d9c6",
+    "CALLER.md": "58ec7f14a52b260513632700ee2d3ffde2264af85ead24d4da8b0cecb343b73a",
+    "census-delta-fixture.py": "cd4b1593c85a1e6a7085806e34f8ebf77c1e295c4e9adf9cf98bef0691b7afac",
+    "observe-root.py": "79aac612496c7e62ae2a34450ca59d76c93e9a306a3ecfaae59ea92196010971",
+    "root-observation-command-profile.json": "02c8d8a5ee3ce0adb8406fcceda2e0c6134810806443b3b916cab9f9d4687a82",
+    "observe-root-records-correction.py": "0d00ed23079070053bf0a95208ebf81907c016342cafea6a4fff5f8d377ea42a",
+    "records-role-fixture.py": "3d8b2f4e082101509b6a545c7e1af9b48902c5a7168eed9964f3d6fc10fe5d3b",
+    "records-correction-root-observation-profile.json": "b10f209664b594a59bbcb85ad7dca575df8fcc311fe27895dd8ab2039f75ea84",
+    "actual-records-failure-classification.json": "69fa860c96d74c5b5ae8c8536e303eef265f3e2efaac5c33806f291761bf8d77",
+    "control-record-registry.json": "361e2b5d55a72a737d744fc304911eee498f6832317f36a53706f79c35249db9",
+    "control-selector-fixture.py": "c3725a4b272c51255be21c0c3a44055e1b0eb972a74f7995a558a7269eaf5f32",
+    "selector-correction-root-observation-profile.json": "d289f922b4a9bf08679370e42bff113a4ceec90ad42f91f2957aeff30b9c0543",
+    "current-records-predicate-nonregular-ordinary-1.json": "26581ef76f3e092c693317501d6805a9a3f365a9168499c653039c56496fc6f2",
+    "authority-selector-pathshape-ordinary.json": "59eb4c95a97f32e7f6a899b2a814434432153c8c4250710bc2e7be784fa74de4"
+  },
+  "frozen_manifest_sha256": "8255bbf869d9904b8ff0a4d6e2ce6dc5264493db1b2c3f6574ad98c04982956d",
+  "frozen_advisory_sha256": "be259235b8657dde76f4ee77c8963328318876ebc48d5d5732e727f92098ddd3",
+  "old_source_preserved": "source2345v1",
+  "review_entrypoint": "exact120.py:main",
+  "effect_entrypoint": "--mode execute only; default SOURCE_ONLY; observe root read-only",
+  "ordinary_fixture": {
+    "command": [
+      "taskset",
+      "-c",
+      "7",
+      "nice",
+      "-n",
+      "19",
+      "/usr/bin/python3",
+      "-I",
+      "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/caller-fixture.py",
+      "--output",
+      "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/caller-fixture-attempt-1"
+    ],
+    "allocation": "ROOT EXPLICIT CPU7 grant; directjoined0/.452459563s; CPU7 explicitly released to root/2022 after join",
+    "profile": "single Python process, CPU7, tiny120-file synthetic scenarios only, no root/Docker/archive reads; expected below128MiB; output owned private namespace",
+    "checks": [
+      "last-row drift rejects all120 before first unlink/journal",
+      "injected second unlink error preserves one removed/119 remaining and STOP_PARTIAL",
+      "all120 synthetic completion preserves retained files/root mutex",
+      "no-follow symlinked ancestor refusal",
+      "ancestor versus descendant exposure semantics",
+      "missing coordinator identity refuses before root mutex/journal/unlink"
+    ],
+    "result": {
+      "path": "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/caller-fixture-attempt-1/result.json",
+      "sha256": "79f978a4d78af49f528c1bca247ce6b21c30c1cfb7143d8243637a514a42eeee",
+      "status": "PASS_SYNTHETIC_ONLY",
+      "exit_code": 0,
+      "wall_seconds": 0.452459563,
+      "first_attempt": true,
+      "bounded_correction_used": false,
+      "real_privileged_checks_tested": false
+    },
+    "actual_limits": {
+      "rlimit_as_kib": 1048576,
+      "rlimit_cpu_seconds": 30,
+      "cpus": "7",
+      "jobs": 1,
+      "nice": 19
+    },
+    "pre_capacity": {
+      "host_available_bytes": 52895633408,
+      "scratch_available_bytes": 13760360448,
+      "MemAvailable_kB": 28600652
+    }
+  },
+  "root_commands_not_released": [
+    [
+      "sudo",
+      "-A",
+      "/usr/bin/python3",
+      "-I",
+      "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/observe-root-records-correction.py",
+      "--release",
+      "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/actual-observation-release-2-PENDING.json",
+      "--release-sha256",
+      "PENDING_GENUINE_RELEASE_SHA256"
+    ],
+    [
+      "sudo",
+      "-A",
+      "/usr/bin/python3",
+      "-I",
+      "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/exact120.py",
+      "--mode",
+      "execute",
+      "--release",
+      "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/actual-execution-release-PENDING.json"
+    ]
+  ],
+  "missing_real_bindings": [
+    "independent concrete source+actual synthetic fixture decision",
+    "coordinator live pid/start",
+    "exact current ownership records (observe output)",
+    "fresh complete root observation after exact observation release",
+    "real observation/execution release hashes/expiry/reserves/journal identity",
+    "root execution decision on actual live root process/container/mount census"
+  ],
+  "no_new_retention_audit": true,
+  "archive_hash_reuse": true,
+  "prior_source_preserved": "source97576d-before-review-correction",
+  "delta_review": {
+    "findings": [
+      "Python3.8 removesuffix incompatibility",
+      "self FD blanket skip hides inherited candidate descriptors"
+    ],
+    "correction": [
+      "3.8-compatible strip_deleted helper",
+      "stream live scandir; inspect all self FDs; exempt only known held FDnumbers>2 and exactly one kernel fd-directory enumeration FD; reject extras"
+    ],
+    "affected_fixture_command": [
+      "taskset",
+      "-c",
+      "7",
+      "nice",
+      "-n",
+      "19",
+      "/usr/bin/python3",
+      "-I",
+      "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/census-delta-fixture.py",
+      "--output",
+      "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/census-delta-fixture-attempt-1"
+    ],
+    "allocation": "2022actualwholejoin0/.06698s and explicit CPU7 release received under root grant; fixture directjoined0/.140422657s; CPU7 explicitly released to root",
+    "real_boundary": "real process_census called with single-self proc view symlink to actual /proc/PID; per-task FD/maps/cwd/mountinfo and process stat unmocked",
+    "declared_interpreter": "/usr/bin/python3 -I; observed version3.8.10; fixture must report actual version",
+    "unaffected_prior_four_checks": "reuse caller-fixture-attempt-1 unchanged; no replay; changed census had been mocked there",
+    "actual_result": {
+      "path": "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/census-delta-fixture-attempt-1/result.json",
+      "sha256": "88281cac98c54b00119e1f7d68d16bc9400796f40be70b4442b380d4bb0eb2fd",
+      "status": "PASS_AFFECTED_BOUNDARIES_ONLY",
+      "cases": 7,
+      "interpreter": "/usr/bin/python3",
+      "version": "3.8.10",
+      "exit_code": 0,
+      "wall_seconds": 0.140422657,
+      "attempt": 1,
+      "bounded_correction_used": false,
+      "real_host_root_census_tested": false,
+      "original4cases_replayed": false
+    },
+    "actual_captures": {
+      "census-delta-fixture-command-1.stdout": {
+        "path": "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/census-delta-fixture-command-1.stdout",
+        "sha256": "e5d67a5da91ae690c7237202d0073d84e4d23d43f7cf8a31c871e77ff7b140fc",
+        "size": 77
+      },
+      "census-delta-fixture-command-1.stderr": {
+        "path": "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/census-delta-fixture-command-1.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      }
+    },
+    "pre_capacity": {
+      "host_available_bytes": 52875862016,
+      "scratch_available_bytes": 13760360448
+    },
+    "limits": {
+      "affinity": "7",
+      "jobs": 1,
+      "rlimit_as_bytes": 1073741824,
+      "rlimit_cpu_seconds": 30,
+      "rlimit_fsize_shell_blocks": 32768
+    }
+  },
+  "historical_packets_preserved": [
+    "source2345v1",
+    "source97576d-before-review-correction",
+    "source-c172-actual-records-failure",
+    "source-1bb-superseded-before-root"
+  ],
+  "records_family": {
+    "status": "EXPERT_CONSOLIDATED_SELECTOR_CORRECTION_ACTUAL_BODY_SAMPLE_FIXTURE_PASS_PENDING_EXPERT_REVIEW",
+    "family": "actual-records-role-type-inventory",
+    "failed_actual_attempt": 1,
+    "bounded_correction": 1,
+    "corrected_actual_attempts": 0,
+    "failed_release_sha256": "d161e4d3014bce59edf51ed4c9ee3520be63ab57158134b83b1616cfb320563d",
+    "failed_source_sha256": "c172e050a620a5716a2e43bc590489b29848752c183a9652fbcb297457adc2bd",
+    "failed_wrapper_sha256": "79aac612496c7e62ae2a34450ca59d76c93e9a306a3ecfaae59ea92196010971",
+    "observed_boundary": "records() rejects exact retained historical directory; container_census/process_census not reached",
+    "inner_stderr_copy": {
+      "path": "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/failed-observation-readback-1/raw-1.stdout",
+      "sha256": "233c9284e4fe163869ec18ecccb585c64c01dc56ac181f84b142eb2e1356482f",
+      "size": 1155
+    },
+    "retirement": "copied actual supervisor shows directjoinedtrue/wholegroupretiredtrue/mutex27:4available; outerrc1 and0stderr preserved",
+    "historical_binding": {
+      "path": "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/historical-quarantine-binding.json",
+      "sha256": "d20b83182e79126f1b0dafd89b2eed2f28bfdf9906c35077508323c4eda66c60"
+    },
+    "correction": "one exact historical role with pinned directory metadata, exact singlechild metadata/hash, nofollowheldFD stability; all unknown nonregular entries stillrefuse; no deletion/rename/blanketignore",
+    "cheap_fixture": {
+      "path": "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/records-role-fixture-attempt-1/result.json",
+      "sha256": "43d8d30ec42e1b23e7d30f7bb2a7123c9fcc33891d97dc1581c1c9f58fe5cf06",
+      "status": "PASS_RECORDS_ROLE_BOUNDARY_SYNTHETIC_ONLY",
+      "direct_join_exit_code": 0,
+      "cases": 5,
+      "actual_production_body": "records() without body/IO mocks; synthetic ROOT+retainedbinding only",
+      "interpreter": "/usr/bin/python3 -I (3.8.10)",
+      "affinity": "7",
+      "jobs": 1,
+      "as_bytes": 1073741824,
+      "cpu_seconds": 30,
+      "fsize_shell_blocks": 32768,
+      "pre_capacity": {
+        "host_bytes": 52855779328,
+        "scratch_bytes": 13759164416
+      },
+      "cpu7_released": true
+    },
+    "escalation": "Independent2312 boundary review before any corrected root observation. Another same-family failure requires expert escalation, not a blind third actual attempt. Prior Python/selfFD source findings remain separately preserved; prior unaffected fixtures not replayed.",
+    "withdrawn_unexecuted_candidate": {
+      "source_sha256": "1bb9e4285862aefad4b914ae0681d4563ddce957c69aa40beee128e349931be5",
+      "reason": "dispatcher lstat-only exact oldpredicate found31 nonregular historical evidence names, proving onepath correction would next fail signal-block/releases; expert withdrew before any corrected root run",
+      "preserved": "source-1bb-superseded-before-root",
+      "actual_root_attempts": 0
+    },
+    "consolidated_selector": {
+      "source_sha256": "de9c7fe4b2b061207c371f6d0669b14fdb72f0c89531a88c160e61d05726469a",
+      "registry_sha256": "361e2b5d55a72a737d744fc304911eee498f6832317f36a53706f79c35249db9",
+      "consumer_role_sources": [
+        "scripts/native_exact_historical_lease_observer.py",
+        "scripts/native_running_external_modules_owner.py",
+        "scripts/native_rust_exact_build_container_owner.py",
+        "scripts/native_rust_exact_mckernel_image_container_owner.py",
+        "scripts/native_rust_exact_disk_build_wrapper.py",
+        "scripts/native_fp_save_image_terminal_cleanup.py"
+      ],
+      "historical_leases_required": 7,
+      "preserved_existing_operational_exclusion_records": 28,
+      "current_exact_absent_guards": 8,
+      "outside_current_FP_guards": 2,
+      "incidental_metadata_directories": 31,
+      "authority_from_substrings": false,
+      "dir_by_dir_selector_exemptions": false,
+      "historical_retirement_inferred_from_name_or_PID": false,
+      "FP_request_sha256": "ed91bb7c81144f97a92dbf40e1e8c962e084ce563dcd9aa57ecdd0af2eb4bee0",
+      "FP_request_runtime": "full frozen metadata compares; independently accepted35945324Brequest/hash/guardfield joins reused without repeated body read"
+    },
+    "consolidated_fixture": {
+      "path": "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/control-selector-fixture-attempt-1/result.json",
+      "sha256": "7a12328af9dfd05e35064e9fede03eaadb22813064f4984d1b03569c317d6aac",
+      "status": "PASS_ACTUAL_RECORDS_SELECTOR_COMPLETE31_SYNTHETIC_ONLY",
+      "direct_join_exit_code": 0,
+      "tool_wall_seconds": 0.007100004,
+      "cases": 6,
+      "sample_per_case": 31,
+      "first_attempt": true,
+      "bounded_fixture_correction_used": false,
+      "interpreter": "/usr/bin/python3 -I3.8.10",
+      "affinity": "7",
+      "jobs": 1,
+      "as_bytes": 1073741824,
+      "cpu_seconds": 30,
+      "fsize_shell_blocks": 32768,
+      "pre_capacity": {
+        "host_available_bytes": 52838453248,
+        "scratch_available_bytes": 13758107648
+      },
+      "cpu7_release": "explicit after wholejoin to root2022, no live fixture children",
+      "unaffected_fixture_replays": false,
+      "root_observer_replays": false
+    }
+  },
+  "active_observation_profile": "selector-correction-root-observation-profile.json",
+  "new_privileged_invocation_authority": false,
+  "no_actual_cleanup_run": true,
+  "active_release_template": "selector-correction-release-template-SOURCE_ONLY.json"
+}

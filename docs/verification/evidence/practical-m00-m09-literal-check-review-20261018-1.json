@@ -1,0 +1,64 @@
+{
+  "automatic_closure": false,
+  "checks": {
+    "P-M00-02": {
+      "decision": "OPEN_CURRENT_COMMAND_GAP",
+      "literal": "Keep a recoverable checkpoint and exact next commands.",
+      "missing_condition": "Current top HANDOFF/CURRENT identify partial archive exchanges0/1, held controller/ROOT/guards and NONRUNNABLE finishing source. They do not supply exact independently reviewed runnable commands and release binding for the current postflight/partial-transaction continuation. The lower Next executable step describes observation/recovery already completed according to the newer hold update.",
+      "next_normal_checkpoint_condition": "Once safe reconciliation permits publication, bind and fetched-verify the current recoverable handoff plus exact next eligible command/release (or explicitly preserve the exact held blocker if no command is releasable). Preserve original failure evidence and the intentionally pending four-file debug source/test work. Final-delivery rebuild is not a prerequisite for this literal check.",
+      "supported": "Existing fetched checkpoint 3b3cadab5daff5bcd1ad2a0f75588b8c8fbe0cc6 is recoverable for its exact nine verified files; prior fetched checkpoint3734f020 and retained baseline are reused as supplied context."
+    },
+    "P-M09-01": {
+      "decision": "LITERAL_SUPPORTED_FOR_ACCEPTED_BASELINE",
+      "ledger_action": "None. Dispatcher may record the narrow literal decision at the next safe checkpoint; no automatic check/milestone closure.",
+      "literal": "Keep existing Rust consumers active.",
+      "not_required_for_this_literal": [
+        "final matched artifact delivery",
+        "full live compute C retirement",
+        "new debug-port acceptance"
+      ],
+      "pending_WIP": "New scheduler debug handoff has accepted source review only; production C ABI, linked image and native proof remain open. The four intentionally dirty files earn no production retirement credit and do not deactivate existing baseline consumers.",
+      "supported": "Current HANDOFF/CURRENT retain production492 with eight selected production Rust bodies and seven applicable native paths, including retained NULL x87 native e0d2fd97. Existing accepted cpu.c/process.c fixes and Rust default consumers remain the baseline."
+    }
+  },
+  "decision": "P_M00_02_OPEN_CURRENT_COMMAND_GAP__P_M09_01_LITERAL_SUPPORTED_ACCEPTED_BASELINE",
+  "execution_authority": false,
+  "limitations": [
+    "Reused existing fetched proof and recorded accepted baseline; no new raw runtime audit or runtime acceptance.",
+    "Current partial recovery cause/release was not independently reviewed by this literal-check pass.",
+    "No implementation, root, guest, compiler, Git, ledger edits, corpus audit, blanket hashing or new tests.",
+    "Excluded refused execve GO/NO-GO and fork/ACK work remains excluded."
+  ],
+  "reviewed_inputs": [
+    {
+      "path": "docs/verification/os-milestones-20260914/practical-milestones.json",
+      "selection": [
+        "P-M00-02",
+        "P-M09-01"
+      ]
+    },
+    {
+      "path": "docs/verification/os-milestones-20260914/PRACTICAL-GOAL.md",
+      "selection": "active priority, deliverable/profile and practical definition of done"
+    },
+    {
+      "path": "docs/verification/os-milestones-20260914/HANDOFF.md",
+      "selection": "current top hold update, selected Rust paths and active resume through current checkpoint statement"
+    },
+    {
+      "path": "docs/verification/os-milestones-20260914/CURRENT.md",
+      "selection": "current top hold update, selected Rust paths and active resume through debug preparation"
+    },
+    {
+      "commit": "3b3cadab5daff5bcd1ad2a0f75588b8c8fbe0cc6",
+      "fetched_commit": "3b3cadab5daff5bcd1ad2a0f75588b8c8fbe0cc6",
+      "path": "/home/holden/mckernel-work/host-preparation/manual-resume-stop-checkpoint-20261018-1/verification.json",
+      "sha256": "8d629a574fd4ae559b560bf3822fd28bcf67928bb4326467f810e44f3204e17c",
+      "status": "PASS",
+      "verified_rows": 9
+    }
+  ],
+  "reviewer": "/root/sched_image_abi_prep_review_1355",
+  "schema": "mckernel.bounded-practical-literal-check-review.v1",
+  "scope": "Functional PRACTICAL-GOAL OS/apps and live compute Rust/reviewed-assembly retirement. Only P-M00-02 and P-M09-01 literal checks; no ledger change."
+}

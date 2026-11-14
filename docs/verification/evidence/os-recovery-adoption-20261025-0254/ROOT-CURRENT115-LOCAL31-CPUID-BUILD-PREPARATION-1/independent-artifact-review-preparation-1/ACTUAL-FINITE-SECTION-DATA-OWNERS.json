@@ -1,0 +1,412 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_EXACT_FINITE_CURRENT115_SECTION_TARGET_DATA_OWNERS",
+  "actual_Rust": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o",
+    "bytes": 18335928,
+    "sha256": "91aa747b114e3b1990ef2ce057a12f8efc52247657516d610f83edb011f4bd9c"
+  },
+  "actual_image": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/OUTPUT/work/output/build/kernel/mckernel.img",
+    "bytes": 10257496,
+    "sha256": "de9fdd13b55a5a17158fa8247cc9351c1d9b1944a72c45bac9e4774473dca024"
+  },
+  "owners": [
+    {
+      "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust21fork_control_registry8REGISTRY",
+      "input": {
+        "index": 82,
+        "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust21fork_control_registry8REGISTRY",
+        "bind": 0,
+        "type": 1,
+        "shndx": 5537,
+        "value": 0,
+        "size": 2576
+      },
+      "final": {
+        "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust21fork_control_registry8REGISTRY",
+        "bind": 0,
+        "type": 1,
+        "other": 0,
+        "shndx": 258,
+        "value": 18446744073685730288,
+        "size": 2576
+      },
+      "positive_owner_initialization": "exact inherited NOBITS owner/type/size/binding/section shape and zero-initial final bytes",
+      "full_table": null
+    },
+    {
+      "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust5debug9KMSG_LOCK",
+      "input": {
+        "index": 336,
+        "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust5debug9KMSG_LOCK",
+        "bind": 0,
+        "type": 1,
+        "shndx": 5545,
+        "value": 0,
+        "size": 4
+      },
+      "final": {
+        "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust5debug9KMSG_LOCK",
+        "bind": 0,
+        "type": 1,
+        "other": 0,
+        "shndx": 258,
+        "value": 18446744073685732880,
+        "size": 4
+      },
+      "positive_owner_initialization": "exact inherited NOBITS owner/type/size/binding/section shape and zero-initial final bytes",
+      "full_table": null
+    },
+    {
+      "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust9x86_setup12IHK_CPU_INFO.0",
+      "input": {
+        "index": 328,
+        "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust9x86_setup12IHK_CPU_INFO.0",
+        "bind": 0,
+        "type": 1,
+        "shndx": 5567,
+        "value": 0,
+        "size": 8
+      },
+      "final": {
+        "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust9x86_setup12IHK_CPU_INFO.0",
+        "bind": 0,
+        "type": 1,
+        "other": 0,
+        "shndx": 258,
+        "value": 18446744073685733224,
+        "size": 8
+      },
+      "positive_owner_initialization": "exact inherited NOBITS owner/type/size/binding/section shape and zero-initial final bytes",
+      "full_table": null
+    },
+    {
+      "name": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust11f03_prlimit10production9PROVIDERS",
+      "input": {
+        "index": 3013,
+        "name": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust11f03_prlimit10production9PROVIDERS",
+        "bind": 0,
+        "type": 1,
+        "shndx": 5571,
+        "value": 0,
+        "size": 88
+      },
+      "final": {
+        "name": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust11f03_prlimit10production9PROVIDERS",
+        "bind": 0,
+        "type": 1,
+        "other": 0,
+        "shndx": 144,
+        "value": 18446744073685509296,
+        "size": 88
+      },
+      "positive_owner_initialization": "accepted112 exact_target_table rerun on115 named88B provider table",
+      "full_table": {
+        "section": ".lrodata._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust11f03_prlimit10production9PROVIDERS",
+        "bytes": 88,
+        "full_final_bytes_reproduced": true,
+        "targets": [
+          {
+            "offset": 0,
+            "target": "arch_copy_from_user_bridge",
+            "addend": 0,
+            "positive_final_address": "0xfffffffffe835c20"
+          },
+          {
+            "offset": 8,
+            "target": "arch_copy_to_user_bridge",
+            "addend": 0,
+            "positive_final_address": "0xfffffffffe835c40"
+          },
+          {
+            "offset": 16,
+            "target": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust11f03_prlimit10production8forward4",
+            "addend": 0,
+            "positive_final_address": "0xfffffffffe827a50"
+          },
+          {
+            "offset": 24,
+            "target": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust11f03_prlimit10production11current_pid",
+            "addend": 0,
+            "positive_final_address": "0xfffffffffe8279d0"
+          },
+          {
+            "offset": 32,
+            "target": "cpu_disable_interrupt_save",
+            "addend": 0,
+            "positive_final_address": "0xfffffffffe8446b0"
+          },
+          {
+            "offset": 40,
+            "target": "cpu_restore_interrupt",
+            "addend": 0,
+            "positive_final_address": "0xfffffffffe844af0"
+          },
+          {
+            "offset": 48,
+            "target": "process_hash",
+            "addend": 0,
+            "positive_final_address": "0xfffffffffe8978c0"
+          },
+          {
+            "offset": 56,
+            "target": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy20f03_wait_writer_lock",
+            "addend": 0,
+            "positive_final_address": "0xfffffffffe8168a0"
+          },
+          {
+            "offset": 64,
+            "target": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy22f03_wait_writer_unlock",
+            "addend": 0,
+            "positive_final_address": "0xfffffffffe816af0"
+          },
+          {
+            "offset": 72,
+            "target": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy20f03_wait_writer_lock",
+            "addend": 0,
+            "positive_final_address": "0xfffffffffe8168a0"
+          },
+          {
+            "offset": 80,
+            "target": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy22f03_wait_writer_unlock",
+            "addend": 0,
+            "positive_final_address": "0xfffffffffe816af0"
+          }
+        ],
+        "raw_hex": "205c83feffffffff405c83feffffffff507a82feffffffffd07982feffffffffb04684fefffffffff04a84feffffffffc07889feffffffffa06881fefffffffff06a81feffffffffa06881fefffffffff06a81feffffffff"
+      }
+    },
+    {
+      "name": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust15process_helpers32remaining_process_schedule_entry25MCEXEC_V10_SCHEDULER_LOGS",
+      "input": {
+        "index": 2855,
+        "name": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust15process_helpers32remaining_process_schedule_entry25MCEXEC_V10_SCHEDULER_LOGS",
+        "bind": 0,
+        "type": 1,
+        "shndx": 5583,
+        "value": 0,
+        "size": 4
+      },
+      "final": {
+        "name": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust15process_helpers32remaining_process_schedule_entry25MCEXEC_V10_SCHEDULER_LOGS",
+        "bind": 0,
+        "type": 1,
+        "other": 0,
+        "shndx": 258,
+        "value": 18446744073685798912,
+        "size": 4
+      },
+      "positive_owner_initialization": "exact inherited NOBITS owner/type/size/binding/section shape and zero-initial final bytes",
+      "full_table": null
+    },
+    {
+      "name": "process_copy_pte_allocated_debug",
+      "input": {
+        "index": 876,
+        "name": "process_copy_pte_allocated_debug",
+        "bind": 0,
+        "type": 1,
+        "shndx": 5812,
+        "value": 0,
+        "size": 32
+      },
+      "final": {
+        "name": "process_copy_pte_allocated_debug",
+        "bind": 0,
+        "type": 1,
+        "other": 0,
+        "shndx": 3,
+        "value": 18446744073685427840,
+        "size": 32
+      },
+      "positive_owner_initialization": "exact LOCAL14 storage/final bytes/registry proof",
+      "full_table": null
+    },
+    {
+      "name": "process_copy_pte_copied_debug",
+      "input": {
+        "index": 874,
+        "name": "process_copy_pte_copied_debug",
+        "bind": 0,
+        "type": 1,
+        "shndx": 5814,
+        "value": 0,
+        "size": 32
+      },
+      "final": {
+        "name": "process_copy_pte_copied_debug",
+        "bind": 0,
+        "type": 1,
+        "other": 0,
+        "shndx": 3,
+        "value": 18446744073685427872,
+        "size": 32
+      },
+      "positive_owner_initialization": "exact LOCAL14 storage/final bytes/registry proof",
+      "full_table": null
+    },
+    {
+      "name": "process_copy_pte_found_debug",
+      "input": {
+        "index": 878,
+        "name": "process_copy_pte_found_debug",
+        "bind": 0,
+        "type": 1,
+        "shndx": 5816,
+        "value": 0,
+        "size": 32
+      },
+      "final": {
+        "name": "process_copy_pte_found_debug",
+        "bind": 0,
+        "type": 1,
+        "other": 0,
+        "shndx": 3,
+        "value": 18446744073685427904,
+        "size": 32
+      },
+      "positive_owner_initialization": "exact LOCAL14 storage/final bytes/registry proof",
+      "full_table": null
+    },
+    {
+      "name": "process_copy_pte_installed_debug",
+      "input": {
+        "index": 873,
+        "name": "process_copy_pte_installed_debug",
+        "bind": 0,
+        "type": 1,
+        "shndx": 5818,
+        "value": 0,
+        "size": 32
+      },
+      "final": {
+        "name": "process_copy_pte_installed_debug",
+        "bind": 0,
+        "type": 1,
+        "other": 0,
+        "shndx": 3,
+        "value": 18446744073685427936,
+        "size": 32
+      },
+      "positive_owner_initialization": "exact LOCAL14 storage/final bytes/registry proof",
+      "full_table": null
+    },
+    {
+      "name": "process_copy_pte_size_debug",
+      "input": {
+        "index": 877,
+        "name": "process_copy_pte_size_debug",
+        "bind": 0,
+        "type": 1,
+        "shndx": 5820,
+        "value": 0,
+        "size": 32
+      },
+      "final": {
+        "name": "process_copy_pte_size_debug",
+        "bind": 0,
+        "type": 1,
+        "other": 0,
+        "shndx": 3,
+        "value": 18446744073685427968,
+        "size": 32
+      },
+      "positive_owner_initialization": "exact LOCAL14 storage/final bytes/registry proof",
+      "full_table": null
+    },
+    {
+      "name": "process_copy_pte_zeroed_debug",
+      "input": {
+        "index": 875,
+        "name": "process_copy_pte_zeroed_debug",
+        "bind": 0,
+        "type": 1,
+        "shndx": 5822,
+        "value": 0,
+        "size": 32
+      },
+      "final": {
+        "name": "process_copy_pte_zeroed_debug",
+        "bind": 0,
+        "type": 1,
+        "other": 0,
+        "shndx": 3,
+        "value": 18446744073685428000,
+        "size": 32
+      },
+      "positive_owner_initialization": "exact LOCAL14 storage/final bytes/registry proof",
+      "full_table": null
+    },
+    {
+      "name": "process_extend_region_alloc_debug",
+      "input": {
+        "index": 824,
+        "name": "process_extend_region_alloc_debug",
+        "bind": 0,
+        "type": 1,
+        "shndx": 5828,
+        "value": 0,
+        "size": 32
+      },
+      "final": {
+        "name": "process_extend_region_alloc_debug",
+        "bind": 0,
+        "type": 1,
+        "other": 0,
+        "shndx": 3,
+        "value": 18446744073685428064,
+        "size": 32
+      },
+      "positive_owner_initialization": "exact LOCAL14 storage/final bytes/registry proof",
+      "full_table": null
+    },
+    {
+      "name": "process_extend_region_exists_debug",
+      "input": {
+        "index": 825,
+        "name": "process_extend_region_exists_debug",
+        "bind": 0,
+        "type": 1,
+        "shndx": 5832,
+        "value": 0,
+        "size": 32
+      },
+      "final": {
+        "name": "process_extend_region_exists_debug",
+        "bind": 0,
+        "type": 1,
+        "other": 0,
+        "shndx": 3,
+        "value": 18446744073685428096,
+        "size": 32
+      },
+      "positive_owner_initialization": "exact LOCAL14 storage/final bytes/registry proof",
+      "full_table": null
+    },
+    {
+      "name": "process_extend_region_success_debug",
+      "input": {
+        "index": 823,
+        "name": "process_extend_region_success_debug",
+        "bind": 0,
+        "type": 1,
+        "shndx": 5834,
+        "value": 0,
+        "size": 32
+      },
+      "final": {
+        "name": "process_extend_region_success_debug",
+        "bind": 0,
+        "type": 1,
+        "other": 0,
+        "shndx": 3,
+        "value": 18446744073685428128,
+        "size": 32
+      },
+      "positive_owner_initialization": "exact LOCAL14 storage/final bytes/registry proof",
+      "full_table": null
+    }
+  ],
+  "no_anonymous_target_skipped": true
+}

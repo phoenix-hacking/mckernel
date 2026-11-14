@@ -1,0 +1,101 @@
+{
+  "schema": "mckernel.stability-diagnostic-result.v1",
+  "recorded_at": "2026-09-28T10:49:03-07:00",
+  "decision": "PASS_DIAGNOSTIC_PROTOCOL_EVIDENCE",
+  "checkpoint_commit": "9408640ad7a8fd942ee633552224e07a0f1b5a57",
+  "case_id": "baseline.core.memory",
+  "packet": {
+    "path": "docs/verification/stability-native-diagnostic-memory-execution-packet-20260928-1.md",
+    "sha256": "057872d9f2bceb26d3fddaabe73c1f0b5afa17527d93d894b419fd100d6fcece"
+  },
+  "release": {
+    "path": "docs/verification/stability-native-diagnostic-memory-execution-release-20260928-1.json",
+    "sha256": "58d66fa08ed26dd9121425515afe4d893f5faacc19e7799d0b428a5daf6e4894"
+  },
+  "release_metadata_correction": {
+    "incorrect_field": "recorded_at=2026-09-28T10:51:00-07:00",
+    "disposition": "Preserve the immutable released blob; do not use its hand-entered timestamp as ordering evidence.",
+    "authoritative_order": [
+      "Release file mtime/ctime is 2026-09-28T10:42:24.701324128-07:00.",
+      "Pushed/fetched commit 9408640ad7a8fd942ee633552224e07a0f1b5a57 has commit time 2026-09-28T10:42:45-07:00; fetched equality is retained at protocol.jsonl line 125330 at 17:42:53Z.",
+      "Complete live preflight passed at protocol.jsonl lines 125432-125438, ending 2026-09-28T17:43:40.441Z.",
+      "Container StartedAt is 2026-09-28T17:43:55.935642413Z."
+    ]
+  },
+  "raw_evidence": {
+    "inner_root": "/home/holden/mckernel-work/scratch/ndcm-20260928-1/attempt-5759bc5f9ea85de4ae41c380c30f3c8a",
+    "outer_root": "/home/holden/mckernel-work/scratch/ndcm-20260928-1.owner-5759bc5f9ea85de4ae41c380c30f3c8a",
+    "inner_result_sha256": "06e00590c3021966bd30c7fbc1b7c94d0cbb042325b8ee8d1a5e0fd53486a58d",
+    "outer_result_sha256": "82a4e53a5af579172d1036b4ad6c79de86ed22dc559921c3577355fe93630a7e",
+    "serial": {"size": 137032, "sha256": "99d35839b5467013e4f59abc2d27ca6aabc0ea28ff2f5a94f8403f118f999b02"},
+    "debugcon": {"size": 152, "sha256": "bd87db779e6878802fa64fdee99f2eb08dee1529bbea800a65356f051e186685"},
+    "qmp": {"size": 236868, "sha256": "f32aca4bb39658ea4b3a0a2f25bfe0c1bc087072f025193d724f8da7211bf18d"},
+    "qemu_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "qemu_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "capture_bindings_sha256": "10e861a0c9f6d171bd99c35ebd5626afa392490af7dd95573cfa90a23b957013",
+    "owner_sha256": "035013e0206a7179af67732892ab87bb8ea231dc10fd1ad502aa0fc1b91e817e",
+    "container_state_sha256": "82f69bdf9ed760d18b4475bb4aeebd3729cdf9be4a385e9012009e4ff517bce5"
+  },
+  "observed_application": {
+    "argv": ["/bin/mcexec", "-t", "1", "0", "app", "memory"],
+    "cwd": "/case/work",
+    "env": {"COKERNEL_PATH": "/apps", "PATH": "/usr/bin:/bin"},
+    "raw_wait_status": 9472,
+    "exit_code": 37,
+    "stdout_hex": "4e41544956455f434f52452050415353206d656d6f72790a",
+    "stdout_bytes": 24,
+    "stderr_hex": "",
+    "stdout_eof": true,
+    "stderr_eof": true,
+    "truncated": false,
+    "procfs_empty": true
+  },
+  "guest_lifecycle": {
+    "prepared_pid": 256,
+    "schedule_records": 1,
+    "sampled_syscall_deliveries": 17,
+    "sampled_syscall_returns": 16,
+    "sampled_return_routes": 9,
+    "terminal_exit_group_records": 1,
+    "retirement": "Transient -11 retries are preserved, followed by successful retirement.",
+    "pager": "Handle 20 released all four references.",
+    "procfs": "One publication and one deletion; process release cleanup_errno=0."
+  },
+  "qmp_and_qemu": {
+    "transcript_records": 1393,
+    "requests": 695,
+    "successful_replies": 695,
+    "errors": 0,
+    "events": {"RESUME": 1, "STOP": 1, "SHUTDOWN": 2},
+    "ordering": "Guest shutdown precedes shutdown-status confirmation, host quit and its reply.",
+    "pid": 10,
+    "pgid": 10,
+    "sid": 10,
+    "starttime_ticks": 82726129,
+    "returncode": -9
+  },
+  "outer_ownership": {
+    "owner_pid": 3318976,
+    "owner_pgid": 3318973,
+    "owner_sid": 3318973,
+    "owner_starttime_ticks": 82726015,
+    "container_id": "e4c295f0964dab2a73b8e9f652e2d451bef90c61bcf9fb3b5c0096b508869418",
+    "container_exit_code": 0,
+    "oom_killed": false,
+    "docker_clients": 30,
+    "all_clients_reaped": true,
+    "authenticated_removal": true,
+    "final_empty_lookups": 3,
+    "development_lock_available_after": true,
+    "outer_status": "PROTOCOL_PASS",
+    "failure": null,
+    "secondary": []
+  },
+  "independent_review": "PASS_DIAGNOSTIC_PROTOCOL_EVIDENCE",
+  "limitations": [
+    "This is one real diagnostic McKernel guest application on the retained current signal tuple.",
+    "The result is not paired Linux/McKernel catalog execution and grants no M04 or formal application acceptance.",
+    "No production-gate, language-gate, point or whole-OS counter changes follow.",
+    "Broader memory concurrency, repetitions and final-candidate acceptance remain unproved."
+  ]
+}

@@ -1,0 +1,87 @@
+pub(crate) fn claims(memory:&Memory)->(usize,usize){let l=memory.ledger.lock();(l.responses.iter().flatten().count(),l.fork_payloads.iter().flatten().count())}
+
+fn set_mm_unlock_hook( NOTPRESENT
+
+fn run_mm_unlock_hook(){let hook=MM_UNLOCK_HOOK.with(|h|h.borrow_mut().take());if let Some(h)=hook{LOCK_DEPTH.with(|v|assert_eq!(v.get(),0));MM_ACTIVE.with(|m|assert!(!m.get()));h();}}
+
+unsafe extern "C" fn fork_verify_host(
+    context: *mut c_void, identity: *const super::application_abi::ForkIdentityV1,
+) -> i32 {
+    if context.is_null() || identity.is_null() { return EINVAL.to_errno(); }
+    let context = unsafe { &mut *context.cast::<PendingForkProof>() };
+    let identity = unsafe { *identity };
+    let result = (|| -> Result {
+        if identity != context.identity || context.accepted { return Err(EACCES); }
+        if context.registration.fork.lock().as_ref().map(ForkClaim::identity) != Some(identity) {
+            return Err(EACCES);
+        }
+        if let Some(receipt) = context.receipt.as_ref() {
+            return if receipt.matches(identity) { Ok(()) } else { Err(EACCES) };
+        }
+        // Actual MM revocation is inside this callback, never precomputed while
+        // a positive RET might still be publishable. Errors retain the capsule.
+        let receipt = context.registration.revoke_fork()?;
+        if !receipt.matches(identity) { return Err(EACCES); }
+        context.receipt = Some(receipt);
+        Ok(())
+    })();
+    result.map_or_else(|error| error.to_errno(), |()| 0)
+}
+
+fn revoke_fork_aliases(self: &Arc<Self>, claim: &super::mcctrl_process::ForkClaim) -> Result<ForkRevocation> {
+        let identity = claim.identity();
+        if identity.child_mm != self.mm.0.as_ptr() as u64 || identity.start != self.start
+            || identity.start.checked_add(identity.length) != Some(self.end)
+            || identity.generation == 0 || identity.root == 0 || identity.root % 4096 != 0
+            || identity.parent == 0 || identity.child == 0 || identity.parent == identity.child
+            || identity.worker == 0 || identity.delivery == 0 || identity.nonce == 0
+            || identity.child_pid <= 0 || identity.reserved0 != 0 || identity.reserved1 != 0
+        { return Err(EACCES); }
+        // Monotonic closure. Unknown mm/alias outcomes keep every owner and
+        // this gate closed; absence of a PID is never revocation evidence.
+        self.admission.store(false, Ordering::Release);
+        // Equivalent to Linux mmget_not_zero, with fail-closed overflow. The
+        // owned mm_count makes this atomic address valid; users==0 is EBUSY.
+        let users = unsafe { AtomicI32::from_ptr(ptr::addr_of_mut!(
+            (*self.mm.0.as_ptr()).__bindgen_anon_1.mm_users.counter)) };
+        users.fetch_update(Ordering::Acquire, Ordering::Relaxed, |n| {
+            if n > 0 { n.checked_add(1) } else { None }
+        }).map_err(|_| EBUSY)?;
+        let mm = CurrentMm(self.mm.0);
+        unsafe { mckernel_inherited_mmap_write_lock(mm.0.as_ptr()) };
+        let guard = InheritedMmWrite { mm: &mm };
+        let result = (|| -> Result {
+            if self.foreign_alias_seen.load(Ordering::Acquire) { return Err(EBUSY); }
+            // Full MM scan includes moved/split aliases outside start..end.
+            // Pass0 validates every matching VMA before any write/PFN effect;
+            // then exclude all readers, then zap all matching mappings. Linux
+            // zap_vma_ptes calls zap_page_range_single -> tlb_finish_mmu.
+            for pass in 0..3 {
+                let mut address = 0;
+                loop {
+                    let vma = unsafe { bindings::find_vma(mm.0.as_ptr(), address) };
+                    if vma.is_null() { break; }
+                    let (first, last) = unsafe { ((*vma).__bindgen_anon_1.__bindgen_anon_1.vm_start,
+                        (*vma).__bindgen_anon_1.__bindgen_anon_1.vm_end) };
+                    if first < address || last <= first || last % 4096 != 0
+                        || unsafe { (*vma).vm_mm } != mm.0.as_ptr() { return Err(EBUSY); }
+                    if unsafe { (*vma).vm_ops } == &VM_OPERATIONS.0 {
+                        let owner = unsafe { vma_owner(vma) }.map_err(|_| EBUSY)?;
+                        if ptr::eq(&*owner.mirror, &**self) {
+                            if first % 4096 != 0 || unsafe { (*vma).vm_file.is_null() }
+                                || unsafe { (*vma).__bindgen_anon_2.__vm_flags } & bindings::VM_PFNMAP as u64 == 0
+                            { return Err(EBUSY); }
+                            if pass == 1 { unsafe { mckernel_inherited_vma_start_write(vma) }; }
+                            if pass == 2 { unsafe { bindings::zap_vma_ptes(vma, first, last - first) }; }
+                        }
+                    }
+                    address = last;
+                }
+            }
+            Ok(())
+        })();
+        drop(guard);
+        drop(mm); // transient users reference, after write/per-VMA unlock
+        result?;
+        Ok(ForkRevocation { mirror: self.clone(), identity })
+    }

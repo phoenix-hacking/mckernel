@@ -1,0 +1,103 @@
+{
+  "SDK": false,
+  "accepted_at": 1792917419.624477,
+  "actual_commands": 13,
+  "cpu_seconds": 27.59012,
+  "default": false,
+  "first_compiler_at": null,
+  "handoff": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-15-current285-union-source-1/ACTUAL-CURRENT285-CONTROLLED-HOST-HANDOFF.json",
+    "sha256": "559d3ef4b7a7a48aee2250c462c60f4135c4351534ad024354ebb60d3eaadb7a"
+  },
+  "independent_reviewer": "/root/f02_review",
+  "integrated": [
+    {
+      "compiler_only_appendices_excluded": true,
+      "postimage": {
+        "bytes": 216950,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-15-current285-union-source-1/runtime/kernel/process.c",
+        "sha256": "d40ae1a829dd3f70644122c3e23d54096a3073d60a4f6d8a9b818c05d8abbcf7"
+      },
+      "preimage": {
+        "bytes": 212628,
+        "path": "/home/holden/mckernel/kernel/process.c",
+        "sha256": "9f53c07e1d6f57264a5ff11ff68458cf7719e83076412c5a6c01805d74a2a1e1"
+      },
+      "relative": "kernel/process.c",
+      "target": "/home/holden/mckernel/kernel/process.c"
+    },
+    {
+      "compiler_only_appendices_excluded": true,
+      "postimage": {
+        "bytes": 597337,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-15-current285-union-source-1/runtime/kernel/rust/process_helpers.rs",
+        "sha256": "f375b927edc20c677021a3ec4b767048bea9abb2b48d941945cb77b77c14e816"
+      },
+      "preimage": {
+        "bytes": 583244,
+        "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+        "sha256": "1f703b630c38982b698eb645f3741b3930c9721754910715420e54a7442ef654"
+      },
+      "relative": "kernel/rust/process_helpers.rs",
+      "target": "/home/holden/mckernel/kernel/rust/process_helpers.rs"
+    },
+    {
+      "compiler_only_appendices_excluded": true,
+      "postimage": {
+        "bytes": 1201764,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-15-current285-union-source-1/runtime/kernel/rust/syscall_policy.rs",
+        "sha256": "29e3c49c24b4171c24862c7ad405e4c76089ed74ff31c86ff3016a1a85fb0edb"
+      },
+      "preimage": {
+        "bytes": 1189008,
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "sha256": "8bd042897a846a105797178d910ddce7cbb62b087e1d18fed267562d290db3a6"
+      },
+      "relative": "kernel/rust/syscall_policy.rs",
+      "target": "/home/holden/mckernel/kernel/rust/syscall_policy.rs"
+    },
+    {
+      "compiler_only_appendices_excluded": true,
+      "postimage": {
+        "bytes": 906905,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-15-current285-union-source-1/runtime/kernel/syscall.c",
+        "sha256": "ac7ebca6fcc7974ec40eeea5943bc849e0dabdcbb3085a92126800c2061b9247"
+      },
+      "preimage": {
+        "bytes": 904799,
+        "path": "/home/holden/mckernel/kernel/syscall.c",
+        "sha256": "426e07bf3063608910f6d84336a2a333923eae4af1bdeeb9a7d3fa46855396e1"
+      },
+      "relative": "kernel/syscall.c",
+      "target": "/home/holden/mckernel/kernel/syscall.c"
+    }
+  ],
+  "integration_actions": {
+    "bytes": 3792,
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-15-current285-union-source-1/FOUR-CLEAN-RUNTIME-INTEGRATION-ACTIONS.NOT-GRANTED.json",
+    "sha256": "db112df6822c9f78e6cc64e80def82d70405e7204d71653b1c135af91bb7ac8e"
+  },
+  "largest_child_rss_linux_KiB": 582452,
+  "limitations": [
+    "independent final ACTUAL oracle/link review",
+    "ROOT-only four clean runtime integrations",
+    "entry/futex production-default selector gap",
+    "physicalRO of relocation-bearing Cconst metadata",
+    "legacy architecture fallback is not same-native fallback equivalence",
+    "Cmetadata ownership and fullunsafe/native/ARM/currentOFF profiles",
+    "futurestorage3/arch104B/tableSource12 excluded"
+  ],
+  "native": false,
+  "new_rust_codegen": 1,
+  "new_strict_partial_link": 1,
+  "provider_delta": 8,
+  "providers": 285,
+  "retired_C_boundaries": 0,
+  "review_decision": "ACTUAL_HOST_ARTIFACT_PASS",
+  "review_evidence": "Live independent reviewer verified 13 raw joins/26 streams/287 refs/85 runtime rows and exact four clean postimages; full message retained in campaign log.",
+  "schema": "mckernel.current285.independent-acceptance-and-integration.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_HOST_MANUAL_PROFILE_AND_FOUR_CANONICAL_POSTIMAGES",
+  "wall_seconds": 27.743736833,
+  "whole_file_retirement": false
+}

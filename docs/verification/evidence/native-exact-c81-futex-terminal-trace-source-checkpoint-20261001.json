@@ -1,0 +1,53 @@
+{
+  "schema": "mckernel.native-exact-c81-futex-terminal-trace-source.v1",
+  "recorded_at": "2026-10-01T08:52:02Z",
+  "base_commit": "f068de0eded17e6e4e10e9a13464001fa3ccc015",
+  "status": "PASS_TERMINAL_TRACE_SOURCE",
+  "scope": "source and controlled adapter behavior only; no module build, guest execution, runtime acceptance, or counter promotion",
+  "observed_failure": {
+    "evidence": "docs/verification/evidence/native-exact-c81-futex-diagnostic-correction-failure-20261001.json",
+    "serial_sha256": "c8ed1cd5def238a256cf746e1689bbf987f36218be318e28bf01d6f4b3349d6c",
+    "delivered": 64,
+    "returned": 64,
+    "routes": 31,
+    "sampled_futex_202": 7,
+    "sampled_exit_group_231": 0,
+    "diagnosis": "the bounded ordinary delivery trace budget was exhausted before the final non-returning exit_group delivery"
+  },
+  "implementation": {
+    "production_path": "host-kernel/native-rust/mcctrl_process.rs",
+    "production_sha256": "148134730b5fed7f14770eb070529b5227bb6ab790b7199f8800968219dffc70",
+    "fixture_path": "scripts/tests/fixtures/native-application-return-adapter.rs",
+    "fixture_sha256": "d8b340c6305f1b4ce65f57b3b7e9e573f5b43f1a9e8b2760cb31176e0ce2158b",
+    "contract": [
+      "decode the committed syscall number once after successful user copy and COPIED_SYSCALL",
+      "trace number 231 without consuming or resetting the ordinary budget",
+      "preserve the worker-local trace decision and Release/Acquire publication ordering",
+      "do not manufacture a RETURN_SYSCALL or returned record for non-returning exit_group",
+      "publish and log nothing when user copy or COPIED_SYSCALL commit fails"
+    ]
+  },
+  "tests": {
+    "actual_method_adapter": {
+      "compiler": "rustc 1.85.1, edition 2021, -D warnings",
+      "result": "12 passed; 0 failed",
+      "existing_regressions_preserved": 9,
+      "executable_sha256": "655ff1f9056402f847ac39015853864d5560ab1288bead5eb13059c98452ac79",
+      "abi_sha256": "d2b3770a111777d4f28a7a81814a03414d318a90d3ec7082d5c89149b1704a0f"
+    },
+    "diagnostic_oracles": {
+      "command": "python3 -m unittest scripts.tests.test_application_native_diagnostic scripts.tests.test_native_diagnostic_guest_collector scripts.tests.test_application_native_diagnostic_container_owner",
+      "result": "174 tests; OK"
+    },
+    "diff_check": "PASS"
+  },
+  "independent_review": {
+    "decision": "PASS_TERMINAL_TRACE_SOURCE",
+    "limitations": [
+      "controlled fixture concurrency is not kernel concurrency validation",
+      "kernel Error typing and real PID/MM/backend behavior remain unproved",
+      "matching host modules must be rebuilt and bound before another guest"
+    ]
+  },
+  "next": "commit and fetched-blob verify these exact sources, prepare a fresh exact candidate and reviewed three-module build, then create a new manifest and one-shot diagnostic packet"
+}

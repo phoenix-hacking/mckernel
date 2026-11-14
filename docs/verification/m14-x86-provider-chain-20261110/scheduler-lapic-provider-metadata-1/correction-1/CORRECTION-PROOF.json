@@ -1,0 +1,18 @@
+{
+  "schema": "mckernel.lapic.metadata.exact-preexecution-correction.v1",
+  "original_request_sha256": "3a064c4debcd8a9d0990510f61c73f4e156f28ec81f4072dc056871fcffe5775",
+  "corrected_request_sha256": "0016d23072f91e793edcb7e2af4e811b222424888a2dcd51f1ac47db8ae84da6",
+  "original_gate_sha256": "ca5a3461366cea0c6bf4f8a26c4b80d61330af243269f76a0c13dc9b56182efb",
+  "corrected_gate_sha256": "3219d2f1f7ba0a88249bdefe223e81632bbfac887869b5069ef54413b204fc1e",
+  "only_predicate_bytes_changed": {
+    "old": "== ('.eh_frame', 1, 2, 8, 208),",
+    "new": "== ('.eh_frame', 1879048193, 2, 8, 208),"
+  },
+  "old_gate_reconstructs_from_new": true,
+  "controller_byte_identical": true,
+  "controller_import_routing": "correction-1/run_metadata.py imports same-directory correction-1/lapic_checks.py; corrected request pointer and module import agree",
+  "literal_two_GNU_commands_unchanged": true,
+  "source_object_raw_capture_contract_unchanged": true,
+  "original_request_predicate_controller_untouched": true,
+  "operations": "Read/bytecompare/privatewrite only; no AST/ELFparser/predicate/import/controller/GNU/compiler/link/function/runtime execution."
+}

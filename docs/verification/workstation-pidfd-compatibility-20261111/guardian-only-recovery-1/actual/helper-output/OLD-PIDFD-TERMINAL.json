@@ -1,0 +1,42 @@
+{
+  "direct_wait_claim": false,
+  "events": {
+    "guardian": [
+      [
+        3,
+        1
+      ]
+    ],
+    "inhibitor_parent": [
+      [
+        4,
+        1
+      ]
+    ]
+  },
+  "original_parent": "inhibitor waits guardian; systemd user manager owns/reaps inhibitor",
+  "roles": [
+    {
+      "birth": "37669071",
+      "cgroup_sha256": "bafadd3a1b825f05603b16d2a69601fde8f459031bfe0b017c23c40e4fe1b776",
+      "cmdline_sha256": "9f0276ef1900eec034c58f695fed9dba9f4c75f4cdc0380ede4cd5321bcb0d79",
+      "pid": 761845,
+      "ppid": 761844,
+      "role": "guardian",
+      "stat_sha256": "0253e0d5d028967c555592e241be6d17cfc52c584852b1d571482311eb06cd06",
+      "systemd_cgroup": "/user.slice/user-1000.slice/user@1000.service/mckernel-guardian-4757c1121e29.service",
+      "uid": 1000
+    },
+    {
+      "birth": "37669070",
+      "cgroup_sha256": "bafadd3a1b825f05603b16d2a69601fde8f459031bfe0b017c23c40e4fe1b776",
+      "cmdline_sha256": "c0e01b359b8155c319fd60abce152b3884ad67b41994e5ae93a77a2ab430a067",
+      "pid": 761844,
+      "ppid": 1392,
+      "role": "inhibitor_parent",
+      "stat_sha256": "847285af3d00e07d271bd3253be702f0a05c8a38fe28b43f32cad23ab4391cc4",
+      "systemd_cgroup": "/user.slice/user-1000.slice/user@1000.service/mckernel-guardian-4757c1121e29.service",
+      "uid": 1000
+    }
+  ]
+}

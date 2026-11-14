@@ -1,0 +1,123 @@
+{
+  "schema": "mckernel.current-typed-sdk-snapshot-output-static-projection.v1",
+  "adapter": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-snapshot-20261019-1/finalrelease-case-1/snapshot_case_adapter-prior-argv-correction-1.py",
+    "sha256": "6095feb3eabd02395046d117af487de4a8ddda789aa4c74b67211c2ac0495943"
+  },
+  "config": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-snapshot-20261019-1/finalrelease-case-1/adapter-config.json",
+    "sha256": "b8c2bd87e4c4d54519a6b90b242e753c3fe9dbd2230426d4c16a3c2d5310ea0f"
+  },
+  "bindings": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-snapshot-20261019-1/finalrelease-case-1/fresh-snapshot-bindings.json",
+    "sha256": "55d3a15db81d6fd281c3ca205a0284bdef686c87213c19097676b748c86276c9"
+  },
+  "root_snapshot_argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--core=0",
+    "--nofile=256",
+    "--fsize=33554432",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-snapshot-20261019-1/finalrelease-case-1/snapshot_case_adapter-prior-argv-correction-1.py",
+    "--config-sha256",
+    "b8c2bd87e4c4d54519a6b90b242e753c3fe9dbd2230426d4c16a3c2d5310ea0f"
+  ],
+  "root_snapshot_output": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-snapshot-20261019-1/finalrelease-case-1/root-live-preflight-1.json",
+  "root_capture_outputs": {
+    "stdout": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-snapshot-20261019-1/finalrelease-case-1/captures/snapshot-1.stdout",
+    "stderr": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-snapshot-20261019-1/finalrelease-case-1/captures/snapshot-1.stderr",
+    "status.json": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-snapshot-20261019-1/finalrelease-case-1/captures/snapshot-1.status.json"
+  },
+  "snapshot_equal": {
+    "status": "PASS_LIVE_PREEXECUTION_SNAPSHOT",
+    "parent_identity": {
+      "device": 1828,
+      "inode": 759275,
+      "uid": 1000,
+      "gid": 1000,
+      "mode": "0o700"
+    },
+    "exclusive_heavy_accepted": true,
+    "root_mutex_snapshot_free": true,
+    "terminal_acceptance": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-physical-review-20261019-1/decision.json",
+      "sha256": "7d869a4f69a7d840a14bd18b4638f0a5043354ac246a1d5c57adf9e23f75001c"
+    },
+    "independent_static_execution_decision": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-independent-review-20261019-1/ACTUAL-FINAL-RELEASE-STAGE-REVIEW.json",
+      "sha256": "7f4ca1eaf7b488ec3a622cc41f383da20a2c0952997820cad4a3f3a5a70408f6",
+      "bytes": 25343
+    },
+    "accepted_actual_stage_fixture_parent_review": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-independent-review-20261019-1/ACTUAL-FINAL-RELEASE-STAGE-REVIEW.json",
+      "sha256": "7f4ca1eaf7b488ec3a622cc41f383da20a2c0952997820cad4a3f3a5a70408f6",
+      "bytes": 25343
+    },
+    "non_temporal_join_result": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/NATIVE-NONTEMPORAL-PROPOSAL.json",
+      "sha256": "04b35f6b7b2616a57789d051759f0af37242ad2b3d58d92ab97034aec563cc96"
+    },
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "heavy_profile": {
+      "cpuset": "2-5",
+      "cpus": 4,
+      "memory": 12884901888,
+      "memory_swap": 12884901888,
+      "pids": 512,
+      "network": "none"
+    },
+    "guest_profile": {
+      "memory_mib": 8192,
+      "vcpus": 4,
+      "numa_nodes": 2
+    },
+    "released_paths_absent": [
+      "/home/holden/mckernel-work/scratch/native-current-parent-pin-sdk-external-modules-operational-exclusion.json",
+      "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock"
+    ],
+    "current_predecessor_container_absent": true,
+    "image_id": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+    "cgroup": {
+      "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_period_us": "100000",
+      "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_quota_us": "400000",
+      "/sys/fs/cgroup/memory/mckernel-dev/memory.limit_in_bytes": "12884901888",
+      "/sys/fs/cgroup/memory/mckernel-dev/memory.use_hierarchy": "1",
+      "/sys/fs/cgroup/pids/mckernel-dev/pids.max": "512"
+    }
+  },
+  "dynamic_fields_not_preminted": [
+    "time_epoch",
+    "capacity.*.available_bytes",
+    "mem_available_bytes",
+    "included_usage_percent"
+  ],
+  "dynamic_validation": "Unchanged pinnedvalidate_live proves currentboot/scratchUUID,parentempty/attemptabsence,rootmutexfree,currentSDKCID/common/sharedabsence,image/cgroups,host16GiB/scratch12GiB+384MiB,memory16GiB,usage<97; externalfinalguard requires originaltime_epoch age0..60 seconds.",
+  "scope": "Final-stop/public-release FP1e7 expected snapshot DATA; SDK69 components, latest205 native7d869, priorqueueSDK2ad distinct. No livefacts observed.",
+  "source_unchanged": false,
+  "root_or_guest_invoked": false,
+  "snapshot_minted": false,
+  "snapshot_summary_contract": {
+    "format": "single parsed JSON object",
+    "required_status": "PASS_LIVE_PREEXECUTION_SNAPSHOT",
+    "path_must_equal": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-snapshot-20261019-1/finalrelease-case-1/root-live-preflight-1.json",
+    "sha256_field": "sha256",
+    "controller_must_crosscheck_actual_OUTPUT_whole_file_sha256": true,
+    "actual_root_FD_uid": 0,
+    "actual_root_FD_mode": "0o644"
+  },
+  "source_correction": "One false prior-source standalone argv predicate replaced by exact whole prior argv canonical SHA256; other binding/currentphysical guards retained."
+}

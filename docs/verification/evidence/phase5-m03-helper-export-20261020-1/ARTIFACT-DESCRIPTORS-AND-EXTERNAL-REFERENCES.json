@@ -1,0 +1,102 @@
+{
+  "scope": "descriptor-only; payloads not read or copied by this exporter",
+  "artifact_descriptors": {
+    "collector": {
+      "mode": 33216,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/check-1/collector",
+      "sha256": "d4d81860d5753ed729c784eac4e861d6f7a4aebb35b16cb43bfe588ff494ed5d",
+      "size": 1021376
+    },
+    "archive": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/stage-preparation-1/native-stage-1/m03.cpio.gz",
+      "sha256": "845cd2eea604f83160cb175cdea6a949b94d95d9156f4d389f0d9d72b0251bff",
+      "size": 23682792
+    }
+  },
+  "external_immutable_references": {
+    "base_archive": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-stage-1/m03.cpio.gz",
+      "sha256": "c5646f37031bc9b2ba5472064d9e267d797fe8ec6f9a3978c750a63707e7bfbe",
+      "size": 21330345
+    },
+    "base_overlay_manifest": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-stage-1/overlay-manifest.json",
+      "sha256": "e502c2dfc1c4af2c8a0853b4e80f8210bf6bd7960ba21cf7ae492d7250f7badf",
+      "size": 20044
+    },
+    "canonical_overlay": {
+      "bytes": 26579,
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_overlay.py",
+      "sha256": "46d41bc0727fa77e4126e739f25352c53eadf2e1fa8e23ef06a6e46c9b3ba27d"
+    },
+    "original_accepted_engine": {
+      "bytes": 6339,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/stage_m03.py",
+      "sha256": "192382b11461d5e2641b62ad00e14801331059c27f43d132a35aefcd45f0140b"
+    },
+    "parent_manifest": {
+      "bytes": 5861,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/manifest.json",
+      "sha256": "e414ac0854bf705da2603bde1c630904f8877f14ca3645c1d1c146627e4f333e"
+    },
+    "accepted_whole_M03_stage_review": {
+      "bytes": 13472,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/M03-ACTUAL-CANONICAL-MANIFEST-AND-EXISTING-ARCHIVE-OFFLINE-STAGE-ACCEPTANCE.json",
+      "sha256": "729c4dabd2d94223736fec87a96571f1fd865bb0f92937e94509d74a223372bd"
+    }
+  },
+  "helper_base_source": {
+    "bytes": 23723,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/source/scripts/application-tests/native_diagnostic_guest_collector.c",
+    "sha256": "db6c439396ac4d6918d30c89c3423ca0fe99830c6b1943708dc8ce19cd2f50e7"
+  },
+  "actual_helper_five_cases": {
+    "CPU_seconds": 0.500683,
+    "cases": [
+      "missing-main",
+      "empty-main",
+      "success-no-spurious-frame",
+      "invalid-cap-and-full-frame-budget",
+      "unsafe-handoff"
+    ],
+    "closed_streams": 3,
+    "commands": 3,
+    "elapsed_seconds": 0.48471863800659776,
+    "exact_production_function_bodies_verified": [
+      "helper_timeout_ms",
+      "append",
+      "stream_json",
+      "frame",
+      "publish",
+      "helper_failure_tag",
+      "remember_helper_failure",
+      "helper_failure_frame",
+      "publish_helper_failure",
+      "publish_diagnostic",
+      "helper"
+    ],
+    "frame_bytes": {
+      "empty-main.frame": 499,
+      "frame-cap-omission.frame": 509,
+      "missing-main.frame": 529,
+      "success.frame": 461,
+      "unsafe.frame": 0
+    },
+    "groups_absent": 3,
+    "guest_runs": 0,
+    "historical_failed_helper_identity": null,
+    "modeled_helper_bytes": true,
+    "positive_direct_joins": 3,
+    "returncodes": [
+      0,
+      0,
+      0
+    ]
+  },
+  "fixture_ELF": "retained locally through exact closed compiler argv; no descriptor fabricated",
+  "publication_scope": "modified Linux harness collector compile + five modeled actual-body cases + offline init-only archive stage; no native/app/milestone/default/revoke/finalACK authority",
+  "runtime_source_1": "active pending preparation excluded in full; no claim from current files"
+}

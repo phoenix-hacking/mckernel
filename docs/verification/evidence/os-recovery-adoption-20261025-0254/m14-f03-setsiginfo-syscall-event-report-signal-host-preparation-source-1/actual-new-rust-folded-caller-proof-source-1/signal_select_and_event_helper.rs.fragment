@@ -1,0 +1,35 @@
+#[no_mangle]
+pub extern "C" fn ptrace_syscall_event_signal_result(ptrace: CInt) -> CInt {
+    if (ptrace & PT_TRACE_SYSCALL) != 0 {
+        SIGTRAP
+            | if (ptrace & PTRACE_O_TRACESYSGOOD) != 0 {
+                0x80
+            } else {
+                0
+            }
+    } else {
+        0
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ptrace_syscall_event_body_result(
+    thread: *mut c_void,
+    ptrace_offset: SizeT,
+    report_signal_fn: Option<PtraceReportSignalFn>,
+) -> CInt {
+    if thread.is_null() {
+        return -EINVAL;
+    }
+    let thread_base = thread.cast::<u8>();
+    let ptrace = read_volatile(field_ptr::<CInt>(thread_base, ptrace_offset));
+    let sig = ptrace_syscall_event_signal_result(ptrace);
+    if sig != 0 {
+        let Some(report_signal) = report_signal_fn else {
+            return -EINVAL;
+        };
+        report_signal(thread, sig);
+    }
+    0
+}
+

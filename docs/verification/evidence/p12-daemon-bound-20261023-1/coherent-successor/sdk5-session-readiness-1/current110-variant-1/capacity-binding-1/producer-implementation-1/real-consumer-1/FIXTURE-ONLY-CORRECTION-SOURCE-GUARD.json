@@ -1,0 +1,42 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "production_and_old_new_gate_and_rust_test_guards": [
+    {
+      "name": "pair_long_producer.rs",
+      "sha256": "4aa18ec12638183f6fab19ef0e2e45b02569abd17c7f496d3ca4be2ac55303c3",
+      "byte_identical_to_first_candidate2": true
+    },
+    {
+      "name": "long_bridge.inc",
+      "sha256": "8b5c0358a8406bc8de4def3da3b899e930e25cc7fd369bc3df4d41b6bd7fa476",
+      "byte_identical_to_first_candidate2": true
+    },
+    {
+      "name": "long_support.inc",
+      "sha256": "b0e4dffda81f23a015b5fcc3e3baf5c6a44f747e2fc2d7c8f18aa71d4f6108ad",
+      "byte_identical_to_first_candidate2": true
+    },
+    {
+      "name": "long_trace_retention.inc",
+      "sha256": "66ad73a4b7da9ccb775247c2d32a803f445e93a1e5b8762cabc5a4968adf099f",
+      "byte_identical_to_first_candidate2": true
+    },
+    {
+      "name": "pair_collector.c",
+      "sha256": "02b07c6442bb36d22e3d1fe0f3c28d084580cdcb8c559e4644abccda83079289",
+      "byte_identical_to_first_candidate2": true
+    },
+    {
+      "name": "old_trace_witness.c",
+      "sha256": "5a05c23309c5821821494f72c31cc048b968b777c11d70a1655cbfbf5a673fb2",
+      "byte_identical_to_first_candidate2": true
+    },
+    {
+      "name": "tests.rs",
+      "sha256": "1a5ef633b7e7761979d9106144b790a7b6db317d283f7296e425619f3be56fa5",
+      "byte_identical_to_first_candidate2": true
+    }
+  ],
+  "change": "Only controlled legacy release moves after actual successful retirement. Driver/check-consumer receive fresh attempt output path.",
+  "first_failure_sha256": "e1f8ae19d0f756533fb5358b01496fcc23944ad057b920430069f742138b6fb9"
+}

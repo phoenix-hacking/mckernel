@@ -1,0 +1,71 @@
+--- F4D-qualified/executer/user/CMakeLists.txt
++++ default-candidate/executer/user/CMakeLists.txt
+@@ -30,10 +30,26 @@
+ 
+ option(ENABLE_RUST_USER_TOOLS "Enable Rust helpers in McKernel user tools" ON)
+ 
++# Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++# F4D's existing Rust main/349-provider composition, with an independent user compiler.
++set(MCEXEC_USER_RUSTC "" CACHE FILEPATH "Pinned mcexec user Rust compiler; independent of compute RUSTC")
++option(MCEXEC_ALLOW_C_REFERENCE "Select retained mcexec C comparison explicitly" OFF)
+ set(MCEXEC_SRCS mcexec.c)
+-if (ENABLE_RUST_USER_TOOLS AND "${ARCH}" STREQUAL "x86_64")
+-	find_program(RUSTC rustc)
+-	if (RUSTC)
++if (ENABLE_RUST_USER_TOOLS AND "${ARCH}" STREQUAL "x86_64" AND NOT MCEXEC_ALLOW_C_REFERENCE)
++	# Preserve the compute RUSTC binding. Resolve the same qualified user compiler
++	# through its own cache entry, or the already-pinned IHK user compiler.
++	if (NOT MCEXEC_USER_RUSTC AND IHK_USER_RUSTC)
++		set(MCEXEC_USER_RUSTC "${IHK_USER_RUSTC}")
++	endif()
++	if (NOT MCEXEC_USER_RUSTC OR NOT IS_ABSOLUTE "${MCEXEC_USER_RUSTC}"
++		OR NOT EXISTS "${MCEXEC_USER_RUSTC}")
++		message(FATAL_ERROR "mcexec: bind the qualified absolute user Rust compiler; no silent C fallback")
++	endif()
++	if (ENABLE_TOFU OR ENABLE_UTI OR ENABLE_QLMPI OR ENABLE_KMSG_REDIRECT
++		OR DEBUG OR USE_SYSCALL_MOD_CALL OR CMD_DCFA OR CMD_DCFAMPI OR MCEXEC_BIND_MOUNT)
++		message(FATAL_ERROR "mcexec: qualify this optional profile before selecting the Rust default")
++	endif()
++	if (MCEXEC_USER_RUSTC)
+ 		set(MCEXEC_RUST_OBJ "${CMAKE_CURRENT_BINARY_DIR}/rust/mcexec_helpers.o")
+ 		set(_mcexec_rust_cfg_flags)
+ 		set(_mcexec_rust_variant_defs)
+@@ -96,7 +112,7 @@
+ 			OUTPUT "${MCEXEC_RUST_OBJ}"
+ 			COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/rust"
+ 			COMMAND ${CMAKE_COMMAND} -E env MAKEFLAGS=
+-				"MCEXEC_BUILDID_RS=${CMAKE_CURRENT_BINARY_DIR}/rust/mcexec_buildid_generated.rs" ${RUSTC}
++				"MCEXEC_BUILDID_RS=${CMAKE_CURRENT_BINARY_DIR}/rust/mcexec_buildid_generated.rs" ${MCEXEC_USER_RUSTC}
+ 				--crate-name mcexec_helpers
+ 				${_mcexec_rust_cfg_flags}
+ 				--crate-type lib
+@@ -122,6 +138,7 @@
+ 				"${CMAKE_CURRENT_SOURCE_DIR}/rust/mcexec_entry_metadata_options.rs"
+ 				"${CMAKE_CURRENT_SOURCE_DIR}/rust/mcexec_buildid.rs.in"
+ 				"${CMAKE_CURRENT_BINARY_DIR}/rust/mcexec_buildid_generated.rs"
++				"${MCEXEC_USER_RUSTC}"
+ 			COMMENT "Building Rust mcexec helpers"
+ 			VERBATIM
+ 		)
+@@ -133,6 +150,9 @@
+ 	endif()
+ endif()
+ 
++if (NOT TARGET mcexec_rust_helpers AND NOT MCEXEC_ALLOW_C_REFERENCE)
++	message(FATAL_ERROR "mcexec: supported default requires Rust; retained C must be explicitly selected")
++endif()
+ add_executable(mcexec ${MCEXEC_SRCS})
+ if (TARGET mcexec_rust_helpers)
+ 	add_dependencies(mcexec mcexec_rust_helpers)
+@@ -622,7 +642,10 @@
+   message(FATAL_ERROR "Supported mcps profile requires Rust/x86_64; shell reference selection must be explicit")
+ endif()
+ 
+-install(TARGETS mcexec eclair mcinspect
++# Preserve full install paths; allow the qualified launcher to be staged alone.
++install(TARGETS mcexec
++	RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" COMPONENT mcexec_runtime)
++install(TARGETS eclair mcinspect
+ 	DESTINATION "${CMAKE_INSTALL_BINDIR}")
+ install(PROGRAMS
+ 	"${CMAKE_CURRENT_BINARY_DIR}/vmcore2mckdump"

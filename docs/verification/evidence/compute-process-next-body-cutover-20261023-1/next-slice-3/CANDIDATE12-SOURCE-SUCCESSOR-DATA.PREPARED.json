@@ -1,0 +1,112 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "CANDIDATE12_COHERENT_SUCCESSOR_DATA_ONLY_NOT_MATERIALIZED_NOT_RELEASED",
+  "base_candidate11_handoff": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-11/default-image-preparation-1/next-build-preparation-1/WHOLE-CANDIDATE11-HANDOFF.json",
+    "sha256": "014ba3eb2f4c70f6389670c8791858fee8efc4da9d131ecc3bb65a3c8ac6e4d3",
+    "bytes": 4494
+  },
+  "base_candidate11_independent_acceptance": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-11/default-image-preparation-1/next-build-preparation-1/INDEPENDENT-ACTUAL-PREPARATION.ROOT-RECORD.json",
+    "sha256": "a359ebcb28f381eaa22ec163dcd241cafb492ff67bcc91415e5cdb56cbacae45",
+    "bytes": 883
+  },
+  "base_source_identity": {
+    "dev": 66306,
+    "file_type": 16384,
+    "gid": 1000,
+    "inode": 55726094,
+    "mode": 448,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-11/default-image-preparation-1/source-materialization-attempt-1/materialized-source",
+    "uid": 1000
+  },
+  "base_source_manifest_sha256": "a96e1e20e2a79b38027c4f7ccef661b0a7cecb67f3c3968f59ccabef2925ee5a",
+  "base_source_derivative_sha256": "aba4f0b20d50160c43b2c7cc2b028a611b39b5a76f2fae34fd99f56013dfa727",
+  "base_materialization_sha256": "281d9b351bacb70fcc8cbf5b6bb4769ea3e5ce066c8e5d44a5c2e5b459ac6a35",
+  "base_request": {
+    "bytes": 26526057,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-11/default-image-preparation-1/next-build-preparation-1/image-request.PREPARED.json",
+    "sha256": "2447170917f7ef8d5b3c87d7167bbc4de70504bb096fdd3d02546ab68b7b3553"
+  },
+  "base_driver": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-11/default-image-preparation-1/native_rust_exact_mckernel_image_offline.py",
+    "sha256": "21c5a72ff7e84f1312fef932449d05b7b51786d14c075e6ba7c46f1dec68a47b",
+    "bytes": 184253
+  },
+  "exact_source_delta": [
+    {
+      "relative": "kernel/process.c",
+      "candidate11_exact_before": {
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-11/default-image-preparation-1/source-materialization-attempt-1/materialized-source/kernel/process.c",
+        "sha256": "89222734622ac054510b2c2cf6fbce1c83d3aa5dc764a3268e78be5e4c5949fa",
+        "bytes": 161266
+      },
+      "accepted_candidate12_postimage": {
+        "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-3/source/kernel/process.c",
+        "sha256": "e2f2562b32ec462d9ee78c74dee4222485a69c4a3e2a81a332663fcef7e2b52d",
+        "bytes": 161751
+      }
+    },
+    {
+      "relative": "kernel/rust/sched_helpers.rs",
+      "candidate11_exact_before": {
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-11/default-image-preparation-1/source-materialization-attempt-1/materialized-source/kernel/rust/sched_helpers.rs",
+        "sha256": "75cdf5430eb6ecec8d0cd0c7c10192d678e656427589fda79dd68990fa3d09bd",
+        "bytes": 184886
+      },
+      "accepted_candidate12_postimage": {
+        "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-3/source/kernel/rust/sched_helpers.rs",
+        "sha256": "d16200db3054d88a83752fda1383d6c101d24de4b787bd78cd42edb46ab251fc",
+        "bytes": 185669
+      }
+    }
+  ],
+  "all_other_candidate11_source_entries_and_modes": "Preserve unchanged; no source materialization/copy performed by this data preparation",
+  "accepted_product_patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-3/PRIVATE-PRODUCTION.patch",
+    "sha256": "3c7ec7c4845e1cbe09020f794c7461d52adcf638040e46ebd05aff4c5997955b",
+    "bytes": 2719
+  },
+  "integration_handoff": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-3/CANONICAL-INTEGRATION-READY.json",
+    "sha256": "e5294d7f88c18340a90267dd73ac5544b598a8f8ee22e5d8236beb68d213ffba",
+    "bytes": 5674
+  },
+  "actual_Rust_object_acceptance": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-process-next-body-cutover-20261023-1/next-slice-3/production-fullcrate-1/INDEPENDENT-ACTUAL-RUST-ACCEPTANCE.ROOT-RECORD.json",
+    "sha256": "afc6da24dbc863f54d8a2697992422a74ee269ac74e6584256cf8c210c501fe6",
+    "bytes": 908
+  },
+  "required_consumer_contract_delta": [
+    {
+      "boundary": "selected PUBLIC process.c",
+      "before": "T process_sched_migrate_log_bridge, no declarative imported descriptor",
+      "after": "No C function body/Tlog; one32byte __verbose D process_sched_migrate_debug with originalfile/function/line422/default0/fmtNULL"
+    },
+    {
+      "boundary": "actual production Rust object",
+      "before": "U process_sched_migrate_log_bridge",
+      "after": "oneTlog, noUlog, oneUprocess_sched_migrate_debug; undefined560->560 exactswap; preservemigration/timer/spin/memoryexports"
+    },
+    {
+      "boundary": "GCC14 full process ABI appendix",
+      "before": "M14_MIGRATION_HEADER_ABI_ASSERTIONS takes &process_sched_migrate_log_bridge from current C function",
+      "after": "Retain actual process.h getter assertion. Replace old Cfunction-body assertion with actual descriptor declaration/type/size/alignment/pointerfield assertions; no fake C prototype or bitfield offsetof. ActualGCC14bitfield/wholeTU proof remainsOPEN."
+    },
+    {
+      "boundary": "final kernel defaultlink",
+      "before": "unique Clog T and RustUlog, uniqueRustgetter/body",
+      "after": "uniqueRustlog T and Cdescriptor D; no unresolved log/descriptor; unchanged all-existing defaultlink/wholeundefinedempty gates"
+    }
+  ],
+  "next_operation": "After root canonicalintegration, existing productionstage owner derive fresh candidate12 source/controller/materializer/request pins coherently from accepted11 plus these2postimages and exact changed consumer/data contract. Separate ordinary preparation grant/actualpurevalidation/independent sourceprofile/heavy release required. Do not reuse old11 logging provider assertion.",
+  "actual_candidate12_source_manifest": null,
+  "actual_candidate12_materialization": null,
+  "actual_candidate12_request": null,
+  "actual_candidate12_pure_consumer": null,
+  "heavy_or_root_release": null,
+  "reservation": null,
+  "canonical_or_candidate11_mutations": 0,
+  "compiler_build_guest_jobs": 0,
+  "wholeTU_defaultlink_native": "OPEN"
+}

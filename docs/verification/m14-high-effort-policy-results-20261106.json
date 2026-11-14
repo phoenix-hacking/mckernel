@@ -1,0 +1,53 @@
+{
+  "at": "2026-11-06T03:05:40.479399+00:00",
+  "base_commit": "59741f7e73fbf6bde102c649a4f95e7c94e58e0e",
+  "patch_sha256": "95f56039adf2938862ef0adad257edf15eaebe9eb2acc397a98714f29bcfe722",
+  "paths": [
+    ".codex/config.toml",
+    "AGENTS.md",
+    "scripts/run_os_goal.py",
+    "scripts/tests/test_os_goal_launcher.py"
+  ],
+  "excluded_preexisting_test_hunks": [
+    "@@ -1013,12 +1022,22 @@ class CampaignTests(unittest.TestCase):",
+    "@@ -1751,6 +1771,7 @@ from pathlib import Path",
+    "@@ -1788,6 +1809,7 @@ from pathlib import Path",
+    "@@ -1810,9 +1832,11 @@ while True:",
+    "@@ -1820,12 +1844,12 @@ while True:",
+    "@@ -1847,12 +1871,15 @@ path=Path(__file__).resolve().parents[1]/'.git/os-autopilot/state.json'",
+    "@@ -1879,8 +1906,14 @@ path=Path(__file__).resolve().parents[1]/'.git/os-autopilot/state.json'",
+    "@@ -1900,13 +1933,13 @@ sys.exit(0 if '--recovered' in sys.argv else 1)",
+    "@@ -1915,6 +1948,7 @@ from pathlib import Path"
+  ],
+  "index_or_worktree_mutated_by_preparation": false,
+  "launcher_tests": {
+    "tests": 110,
+    "passed": true
+  },
+  "steering_tests": {
+    "tests": 11,
+    "passed": true
+  },
+  "readonly_preflight": {
+    "dispatcher": {
+      "model": "gpt-6.1-sol",
+      "effort": "max"
+    },
+    "default_worker": {
+      "model": "gpt-6.1-sol",
+      "effort": "high"
+    },
+    "complex_worker": {
+      "model": "gpt-6.1-sol",
+      "effort": "high"
+    },
+    "auditor": {
+      "model": "gpt-6.1-sol",
+      "effort": "high"
+    },
+    "reviewer": {
+      "model": "gpt-6.1-sol",
+      "effort": "high"
+    }
+  }
+}

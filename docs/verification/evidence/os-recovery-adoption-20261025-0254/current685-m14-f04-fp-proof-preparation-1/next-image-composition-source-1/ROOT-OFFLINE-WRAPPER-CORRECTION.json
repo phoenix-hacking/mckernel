@@ -1,0 +1,65 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "family": "outer h990 callback argument",
+  "original_failure": "limits=None was invoked by owned_capture preexec callback; no target exec/target PID recorded",
+  "original_failure_record": "ROOT-ACTUAL-OFFLINE-MATERIALIZATION-JOIN.json",
+  "corrected_callback": "callable no_additional_limits; exact per-command taskset/prlimit argv still enforce all approved limits",
+  "regression_command": [
+    "/usr/bin/taskset",
+    "--cpu-list",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=536870912",
+    "--cpu=30",
+    "--core=0",
+    "--fsize=134217728",
+    "--nofile=256",
+    "--",
+    "/usr/bin/true"
+  ],
+  "regression": {
+    "pid": 1403491,
+    "start": 87308493,
+    "returncode": 0,
+    "direct_child_joined": true,
+    "group_absent": true,
+    "remaining_group_members": [],
+    "unexpected_group_members": [],
+    "timed_out": false,
+    "error": null,
+    "retirement_error": null,
+    "seconds": 0.04498123493976891,
+    "closed_streams": true,
+    "captures": {
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current685-m14-f04-fp-proof-preparation-1/next-image-composition-source-1/HARNESS-CALLBACK-REGRESSION-1/stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "device": 66306,
+        "inode": 59664005,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": "0o600",
+        "nlink": 1,
+        "size": 0,
+        "mtime_ns": 1793075640236604066,
+        "ctime_ns": 1793075640236604066
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current685-m14-f04-fp-proof-preparation-1/next-image-composition-source-1/HARNESS-CALLBACK-REGRESSION-1/stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "device": 66306,
+        "inode": 59664006,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": "0o600",
+        "nlink": 1,
+        "size": 0,
+        "mtime_ns": 1793075640236604066,
+        "ctime_ns": 1793075640236604066
+      }
+    }
+  },
+  "original_adapter_and_final_packet_unchanged": true,
+  "actual_stage_output_absent": true,
+  "at": 1793075640.2868137
+}

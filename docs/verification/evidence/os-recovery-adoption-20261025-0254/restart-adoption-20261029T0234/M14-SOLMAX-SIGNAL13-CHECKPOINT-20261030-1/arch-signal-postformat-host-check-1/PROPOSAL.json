@@ -1,0 +1,82 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PROPOSED_EXACT_ORDINARY_HOST_CHECK",
+  "owner": "/root",
+  "output_root": "/home/holden/mckernel-work/scratch/native-cheap-postformat-20261030-0twkqp6a",
+  "files": [
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch-signal-postformat-budget-1/postformat_cases.rs",
+      "path": "/home/holden/mckernel-work/scratch/native-cheap-postformat-20261030-0twkqp6a/postformat_cases.rs",
+      "sha256": "9a30385ab267090b15872cca74b245d08452d646619fb16ba1a15174b65a6d42",
+      "bytes": 5773
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch-signal-postformat-budget-1/old_budget_fixture.rs",
+      "path": "/home/holden/mckernel-work/scratch/native-cheap-postformat-20261030-0twkqp6a/old_budget_fixture.rs",
+      "sha256": "41c1cf171e3e13b5147ef0886374044bf71c52aed8cd38e5b674f79849209749",
+      "bytes": 1558
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch-signal-postformat-budget-1/postimage/kernel/rust/f06_signal_log_budget.rs",
+      "path": "/home/holden/mckernel-work/scratch/native-cheap-postformat-20261030-0twkqp6a/postimage/kernel/rust/f06_signal_log_budget.rs",
+      "sha256": "60198f70116faa339ff90a4a3ec818c59d162198b5f27b6b8c755a0b32da062e",
+      "bytes": 1813
+    }
+  ],
+  "run_script": {
+    "path": "/home/holden/mckernel-work/scratch/native-cheap-postformat-20261030-0twkqp6a/run.sh",
+    "sha256": "910463d11384cd9065d8d3b1ab4355a6a7d0382cefd055d3b8785484986c17a8",
+    "bytes": 822
+  },
+  "argv": [
+    "/usr/bin/env",
+    "-i",
+    "PATH=/usr/bin:/bin",
+    "LANG=C",
+    "LC_ALL=C",
+    "PYTHONDONTWRITEBYTECODE=1",
+    "HOME=/home/holden/mckernel-work/scratch/native-cheap-postformat-20261030-0twkqp6a/home",
+    "TMPDIR=/home/holden/mckernel-work/scratch/native-cheap-postformat-20261030-0twkqp6a/tmp",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=2147483648",
+    "--cpu=150",
+    "--nofile=256",
+    "--fsize=67108864",
+    "--core=0",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "180s",
+    "/bin/bash",
+    "--noprofile",
+    "--norc",
+    "/home/holden/mckernel-work/scratch/native-cheap-postformat-20261030-0twkqp6a/run.sh",
+    "/home/holden/mckernel-work/scratch/native-cheap-postformat-20261030-0twkqp6a"
+  ],
+  "cwd": "/home/holden/mckernel",
+  "base_profile": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/request-constructor-microtest-profile-1/INDEPENDENT-PROFILE-REVIEW.md",
+  "source_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch-signal-postformat-budget-1/INDEPENDENT-SOURCE-REVIEW.md",
+    "sha256": "521c1c2c17e0200b6f65cfb699a02ed133310ff23f3beabcd0c6e2d695384776"
+  },
+  "resources": {
+    "cpu": [
+      6
+    ],
+    "planning_share_bytes": 2147483648,
+    "cpu_shares": 1,
+    "wall_seconds": 180,
+    "kill_after_seconds": 5,
+    "max_processes": 8,
+    "serial_compiler_then_fixture": true,
+    "host_free_floor_bytes": 17179869184,
+    "scratch_free_floor_bytes": 12884901888
+  },
+  "delta": "Same inspected serial compile/test shell and finite ordinary share; exact three new source inputs and names. Compiler warnings retained, no -Dwarnings because fixture deliberately includes unused historical/module bodies; no changed failed oracle.",
+  "expected": "Five deterministic tests of actual postformat helper against retained preclaim and original C-order model. No real formatter/whole signal/native execution.",
+  "held_exclusions": "generic_c/direct-TID/terminate_host and execve transfer/ACK; whole signal selector stays OFF",
+  "admission": null
+}

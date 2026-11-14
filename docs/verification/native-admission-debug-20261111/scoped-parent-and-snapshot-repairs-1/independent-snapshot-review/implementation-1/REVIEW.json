@@ -1,0 +1,162 @@
+{
+  "at": "2026-11-11T19:42:29.329694+00:00",
+  "completed_unaffected_checks": {
+    "actual_latest_event_controller_credit_and_original_ledger_balance_join": true,
+    "all11_other_full_function_class_and_complete_nonassignment_module_ASTs_equal_oldS": true,
+    "all12_manifest_source_hashes_and_oldS_origins_verified": true,
+    "all15_operative_resource_refs_and8_child_refs_match_actual_selected_files": true,
+    "all4_prior_wrapper_helpers_exact_AST_unchanged": true,
+    "all_future_authority_nonce_account_runtime_capture_and_reservation_outputs_absent": true,
+    "catalogue_d42_30member_total401674bytes_unchanged": true,
+    "credit_helpers_amount_available_balance_whole_AST_equal_actual_existing_source": true,
+    "exact_newHERE_selected_by_caller_and_wrapper": true,
+    "fresh_same_run_logdir_resume_worker_server_bindings_present": true,
+    "freshness_25seconds_and_acceptance_recheck_present": true,
+    "main_delta_only_replaces_old_protocol_acquisition_and_credit_read": true,
+    "main_uses_fresh_returned_state_usage_credit_and_retains_old_final_guards_before_firstwrite": true,
+    "max3_immediate_consistency_only_attempts_no_sleep_query_write_or_fallback": true,
+    "observed_explicit_auth_service_stop_credit_hold_and_invalid_credit_refuse_before_retry": true,
+    "profile_reverses_exactly_to_S_after_only_newHERE_and_derived_hash_literals": true,
+    "same_full_event_primary_scope_credit_and_exact_ledger_record_required": true,
+    "wait_c06_EXPECTED_matches_unchanged_actual_installer_ab752": true
+  },
+  "contract": {
+    "bytes": 3428,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/a2f-fixed30-normal-operation-proposal-1/correction-1/account-snapshot-correction-1/ACCOUNT-SNAPSHOT-CONTRACT.json",
+    "sha256": "fade7d7ef6afab0bf468d8b3b2deef464bd9b5d6f958101ffa2fe407b4faa994"
+  },
+  "credit_provenance": {
+    "bytes": 1024,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/a2f-fixed30-normal-operation-proposal-1/correction-1/account-snapshot-correction-1/GENUINE-CREDIT-HELPER-PROVENANCE.json",
+    "sha256": "4a4183bbcebd2dcd7e1b57a9ca1787b20fdab170edbbf548c804baccb94d002a"
+  },
+  "decision": "NO_GO_ONE_PRIMARY_VALIDATION_GAP_IN_NEW_ACCOUNT_SNAPSHOT_FUNCTION__DERIVED_SOURCE_COHORT_OTHERWISE_VERIFIED",
+  "manifest": {
+    "bytes": 16605,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/a2f-fixed30-normal-operation-proposal-1/correction-1/account-snapshot-correction-1/SOURCE-INPUT-MANIFEST.json",
+    "sha256": "45efcdb9383add16993525299c2bd18c767dbb7fe1fca38c7b74263023c526d0"
+  },
+  "material_findings": [
+    {
+      "actual_existing_semantics": {
+        "lines": [
+          1140,
+          1141,
+          1142,
+          1143,
+          1144,
+          1145
+        ],
+        "rule": "record_rate_limits rejects nonnumeric, bool, nonfinite and out-of-range usedPercent as included_usage_unknown.",
+        "source": {
+          "bytes": 139343,
+          "path": "/home/holden/mckernel/scripts/run_os_goal.py",
+          "sha256": "6fe65a95407c54cf01a220a333453fa76146653df926b97627f6a79d9f8e2e0b"
+        }
+      },
+      "affected_functions": [
+        "current_account_snapshot.checked_state",
+        "current_account_snapshot"
+      ],
+      "concrete_source_counterexamples": [
+        "If event and both bookends carry equal weekly primary with usedPercent=true and every other genuine fixture credit/identity/freshness/coherence input is valid, 0<=true<=100 passes, available_balance ignores primary, and all coherence predicates can be true. The helper may return despite the controller explicitly classifying that value unknown. This is a static language/source deduction; no helper or runtime record executed.",
+        "If only the first bookend has missing/invalid primary while it retains otherwise-valid rate-credit data, checked_state can return it; a subsequent good event/bookend can convert the observed invalid record into a retryable same_snapshot mismatch, violating immediate unknown veto."
+      ],
+      "defect": "Neither fresh controller bookend validates last_rate_limits.primary. The selected-event primary predicate is only weekly-window equality and 0<=usedPercent<=100, which accepts a Boolean usage percentage. This diverges from actual existing controller classification and the new immediate unknown-veto contract.",
+      "id": "ACCOUNT-SNAPSHOT-PRIMARY-01",
+      "lines": [
+        94,
+        104,
+        105,
+        110,
+        115,
+        138,
+        144,
+        152,
+        154
+      ],
+      "minimum_changed_function_oracle": "Within the existing hold_unknown_stale_veto family only, require coherent Boolean-primary rejection and invalid/missing first-bookend primary immediate rejection without later reads/attempt. Reuse other cases; source/helper changes require actual changed-function checks before final source/operation acceptance.",
+      "smallest_correction": "Validate the primary record and existing genuine controller numeric/nonbool/finite/range semantics, plus the supported weekly-window contract, for BOTH checked_state bookends and the selected latest event before retryable coherence comparison. Keep full-primary equality and all credit/ledger/source/hold checks intact. A shared small guard is sufficient; no account API, normalization waiver, state write or new allowance.",
+      "source": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/a2f-fixed30-normal-operation-proposal-1/correction-1/account-snapshot-correction-1/ROOT-ISSUE-AND-EXECUTE-ONCE.py",
+      "status": "OPEN_SOURCE_OWNER_SDK_REPAIR_REQUIRED"
+    }
+  ],
+  "next_steps": [
+    "Root assigns SDK the one bounded primary-validation source correction, preserving D2ac97/dece20/09672 failed candidate and all prior S failure evidence.",
+    "P04Tests rebinds its existing four-family actual-function fixture to meaningful corrected bytes and the finite primary-veto oracles; no old suite replay, no actual wrapper/account/issuer run. Current a673/dece20 packet remains unexecuted.",
+    "Independently review only changed primary guard/callsite and necessary source/hash-chain pins, then focused fixture/oracle/operation; actual PASS and full HOST closure precede fresh nine-field normal publisher review.",
+    "PublicABI preserves strict reader algorithm/all24 bodies and rebinds only final actual successor source/request/issuer/profile/HERE pins; real future nonce/capsuleSHA/inodes remain unissued."
+  ],
+  "operation_authority": {
+    "actual_service_or_account_hold_classified_as_software": false,
+    "new_nine_field_review_issued": false,
+    "producer_or_helper_test_execution_GO": false,
+    "unchanged_229c_or_dece20_retry": false
+  },
+  "patch": {
+    "bytes": 53454,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/a2f-fixed30-normal-operation-proposal-1/correction-1/account-snapshot-correction-1/ACCOUNT-SNAPSHOT-AND-COHORT.patch",
+    "sha256": "21a55cd178a428498b557a7744b9da65e337d520dc7bc25cfc3c7f598b612400"
+  },
+  "preserved": "Current-only failed preissue2GiB retirement8cf/ec7 does not release original account/source/native/Scratch/globalOFD/historical normallease/model UNKNOWNs, retained18/native12 or any original criteria. No source-only FUNCTIONAL/M15I04/currentfree acceptance.",
+  "ready": {
+    "bytes": 5240,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/a2f-fixed30-normal-operation-proposal-1/correction-1/account-snapshot-correction-1/SOURCE-READY.NOT-EXECUTED.json",
+    "sha256": "2ac97d658481483b283325cd0b2da25d31deca5a44bce078e2e789375cacc98d"
+  },
+  "request": {
+    "bytes": 7004,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/a2f-fixed30-normal-operation-proposal-1/correction-1/account-snapshot-correction-1/REQUEST.PROPOSED.json",
+    "sha256": "09672dd81705c5a666b93fdbf74c6830dfc2a7452dd260d826d37011028f8cf3"
+  },
+  "reviewer": "/root/source_acquisition_review_max",
+  "reviewer_actions": {
+    "AST_bytes_source_and_private_review_only": true,
+    "actual_account_state_protocol_credit_amounts_or_secrets_read_or_printed": false,
+    "helper_fixture_module_wrapper_issuer_sudo_install_native_or_canonical_state_execution": false
+  },
+  "schema": 1,
+  "scope": "Complete finite implementation/callsite/derived-cohort review of D2ac97/dece20/09672 only. Diagnosis52638 and all unchanged publisher/controller/fixed30 proofs reused; no repeated source bodies or actual account/protocol/credit reads.",
+  "selected_derived_tuple": {
+    "catalog": {
+      "bytes": 4856,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/a2f-fixed30-normal-operation-proposal-1/correction-1/account-snapshot-correction-1/SOURCE-CLOSURE.json",
+      "sha256": "d42de826a9ef526a654fd756494ae0bae2c29ebebd6934df436fed1d46ed8fae"
+    },
+    "child_manifest": {
+      "bytes": 3129,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/a2f-fixed30-normal-operation-proposal-1/correction-1/account-snapshot-correction-1/SOURCE-BOUND.json",
+      "sha256": "40c3bd971f0096f7dc43a1d8e39cbec2db52aae690d8381b4477e02d43af7b8f"
+    },
+    "normal_caller_source": {
+      "bytes": 39558,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/a2f-fixed30-normal-operation-proposal-1/correction-1/account-snapshot-correction-1/prepare_current.py",
+      "sha256": "d019b23b2f5cbcb4d57ca03dae360aee5c7da4761ffa1fe6fd0977a41eb747fa"
+    },
+    "normal_issuer_source": {
+      "bytes": 19625,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/a2f-fixed30-normal-operation-proposal-1/correction-1/account-snapshot-correction-1/ROOT-ISSUE-AND-EXECUTE-ONCE.py",
+      "sha256": "dece20d578bf7a71e4b369ce221ab7d23904da210f76f6757a30e7bea51700ab"
+    },
+    "parent_manifest": {
+      "bytes": 1297,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/a2f-fixed30-normal-operation-proposal-1/correction-1/account-snapshot-correction-1/FROZEN-SOURCE.json",
+      "sha256": "e3660101fc7b72246c7f5de021e874cfa68f8e63ff40d0036dcb61e139b9f345"
+    },
+    "profile": {
+      "bytes": 9404,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/a2f-fixed30-normal-operation-proposal-1/correction-1/account-snapshot-correction-1/PROFILE.SOURCE-ONLY.json",
+      "sha256": "73e9ab6373b60d8a2be80c220fdbf9f74a1f893ff244b3dbf21c7f0b85e885f9"
+    },
+    "resource_proposal": {
+      "bytes": 6251,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/a2f-fixed30-normal-operation-proposal-1/correction-1/account-snapshot-correction-1/RESOURCE-PROPOSAL-CURRENT.json",
+      "sha256": "9523f69d89dd93899787826e33e822d2b2cb4c900bcd6bbba679fac4e9c8bc2e"
+    }
+  },
+  "wrapper": {
+    "bytes": 19625,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/a2f-fixed30-normal-operation-proposal-1/correction-1/account-snapshot-correction-1/ROOT-ISSUE-AND-EXECUTE-ONCE.py",
+    "sha256": "dece20d578bf7a71e4b369ce221ab7d23904da210f76f6757a30e7bea51700ab"
+  }
+}

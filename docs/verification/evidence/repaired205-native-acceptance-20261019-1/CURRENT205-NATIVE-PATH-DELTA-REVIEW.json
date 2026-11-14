@@ -1,0 +1,190 @@
+{
+  "actual_native": {
+    "completed_apps": 2,
+    "image_bytes": 7988768,
+    "image_sha256": "ff4fca457e9ffe50dc4eca930c5f91faf317eeee15bf0c2907067cffa77b23bb",
+    "overlap_ns": 1353171143,
+    "raw_wait_statuses": [
+      0,
+      0
+    ],
+    "stdout_bytes": [
+      387,
+      254
+    ],
+    "strict_startup_cpu1": true
+  },
+  "after": {
+    "applicable_native_paths": 14,
+    "distinct_native_behaviors": 25,
+    "selected_production_paths": 17
+  },
+  "baseline": {
+    "applicable_native_paths": 11,
+    "distinct_native_behaviors": 25,
+    "selected_production_paths": 17
+  },
+  "counter_policy": "Only the three previously pending entries already included in the existing 17-unit table increment native-path coverage. Callback/affinity subpath evidence is recorded without inventing additional counter units.",
+  "decision": "PASS_THREE_EXISTING_SELECTED_FOURLEAF_PATHS_APPLICABLE_NATIVE_SCOPE",
+  "delta": {
+    "applicable_native_paths": 3,
+    "new_logical_behavior_cases": 0,
+    "selected_production_paths": 0
+  },
+  "evidence": {
+    "actual_matching_image_native_applications": {
+      "bytes": 8583,
+      "path": "/home/holden/mckernel-work/host-preparation/repaired-affinity-n3-fresh8b-independent-review-20261019-1/ACTUAL-REPAIRED205-TWOCPU-APPLICATION-REVIEW.json",
+      "sha256": "f55c5600e4da70f0e36df234e8cf0ca1ce7e77fcc928a1f4dcd3c13ba3635467"
+    },
+    "actual_native_physical_retirement": {
+      "bytes": 6276,
+      "path": "/home/holden/mckernel-work/host-preparation/repaired-affinity-n3-fresh8b-independent-review-20261019-1/ACTUAL-REPAIRED205-TWOCPU-PHYSICAL-RETIREMENT-REVIEW.json",
+      "sha256": "5f83f3ca420f6ca8e2aa97917ca71521aea6e420d81502781a46107cc56125db"
+    },
+    "baseline_table_excerpt": {
+      "bytes": 703,
+      "path": "/home/holden/mckernel-work/host-preparation/current205-native-path-delta-review-20261019-1/BASELINE-FOURLEAF-TABLE-EXCERPT.txt",
+      "sha256": "3311c4c258e355983d3da43d6717e3a342d9400478845c53e0edbcca05ac5318"
+    },
+    "canonical_actual_artifact": {
+      "bytes": 189111,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-ACTUAL-PRODUCTION-ARTIFACT-REVIEW.json",
+      "sha256": "fa39824773f75a0e44303afcdcaf52a26fa8249bd7d0fe1d066c3dd2b6dd9813"
+    }
+  },
+  "excluded_credit": [
+    "nonnull release_fp_regs remains unproved: app FP use does not establish non-null cleanup input",
+    "clear_fp_regs native remains outside this delta",
+    "UTI-refill __find_and_replace_tid remains native pending",
+    "No hardware DR/FPU qualification or whole compute-C retirement",
+    "No new logical behavior count; existing application cases rerun matching repaired image"
+  ],
+  "implementation_ownership": false,
+  "path_decisions": [
+    {
+      "after": "PASS_APPLICABLE_NATIVE_NORMAL_NONMAIN_THREAD_RELEASE",
+      "applicable_native_counter_delta": 1,
+      "basis": "Both accepted exact applications create and join ordinary non-main CLONE_THREAD workers (six and two). Frozen syscall.c do_fork lines7465-7516 allocates/claims proc.tids before such clone succeeds. The default destroy_thread source always reaches the TID action under threads_lock: non-null tids, non-main and normal non-UTI selects RELEASE; its actual C bridge uniquely targets Rust __release_tid in this exact image. Source/machine authority is fa398, actual app/lifecycle authority f55c.",
+      "before": "SELECTED_PRODUCTION_NATIVE_PENDING",
+      "limits": "Scoped normal release path; no UTI-refill replacement, table-empty/error/duplicate branches, debug-enable branch or hit instrumentation claim.",
+      "path": "__release_tid"
+    },
+    {
+      "after": "PASS_APPLICABLE_NATIVE_NORMAL_DESTROY_THREAD",
+      "applicable_native_counter_delta": 1,
+      "basis": "Default destroy_thread_body_result invokes time_account_fn unconditionally before the proc/tid action; successful joined native worker teardown and accepted process retirement use the production-selected Rust callback in the matching image.",
+      "before": "SELECTED_PRODUCTION_NATIVE_PENDING",
+      "limits": "Applicable normal teardown integration; no exhaustive CPU/TOFU/accounting branch or per-callback hit-count claim.",
+      "path": "process_destroy_thread_time_account_bridge"
+    },
+    {
+      "after": "PASS_APPLICABLE_NATIVE_NORMAL_DESTROY_THREAD",
+      "applicable_native_counter_delta": 1,
+      "basis": "Default destroy_thread_body_result invokes hash_detach_fn unconditionally before time accounting; current selected callback ownership/default-link proof plus actual normal worker teardown provides the same native integration standard as the existing table.",
+      "before": "SELECTED_PRODUCTION_NATIVE_PENDING",
+      "limits": "No standalone per-bucket/native hit instrumentation, invalid/duplicate list membership, race stress or exhaustive branch claim.",
+      "path": "process_destroy_thread_hash_detach_bridge"
+    },
+    {
+      "after": "UNCHANGED_NATIVE_UTI_REFILL_PENDING",
+      "applicable_native_counter_delta": 0,
+      "basis": "The TID-action source selects replacement only for UTI_STATE_EPILOGUE. Accepted normal Rust batch/FPthread cases do not establish this state or a refill replacement.",
+      "before": "SELECTED_PRODUCTION_NATIVE_UTI_REFILL_PENDING",
+      "limits": "Exact missing proof: actual UTI epilogue/refill consumer with a replacement result; ordinary join/AVX is insufficient. No new execution gate is requested here.",
+      "path": "__find_and_replace_tid"
+    },
+    {
+      "after": "PASS_MATCHING_NATIVE_IMAGE_LIFECYCLE_INTEGRATION_ONLY",
+      "applicable_native_counter_delta": 0,
+      "basis": "fa398 proves actual default release_process phases, complete relocated body and current C110 ABI; f55c proves two matching-image processes complete, publish/delete procfs once, exit/reap/release without failure. These are native-image lifecycle integration evidence for the selected callbacks.",
+      "before": "PRODUCTION_SELECTED_CURRENT_IMAGE_SCOPE_NOT_SEPARATE_BASELINE_COUNTER_UNIT",
+      "limits": "Do not create four additional counter units or assert measured callback hits/refcount-zero branch, hash bucket/last-child cleanup/TOFU execution from high-level lifecycle records. Standalone path-specific branch credit is not added.",
+      "path": "process_current_resource_set_bridge"
+    },
+    {
+      "after": "PASS_MATCHING_NATIVE_IMAGE_LIFECYCLE_INTEGRATION_ONLY",
+      "applicable_native_counter_delta": 0,
+      "basis": "fa398 proves actual default release_process phases, complete relocated body and current C110 ABI; f55c proves two matching-image processes complete, publish/delete procfs once, exit/reap/release without failure. These are native-image lifecycle integration evidence for the selected callbacks.",
+      "before": "PRODUCTION_SELECTED_CURRENT_IMAGE_SCOPE_NOT_SEPARATE_BASELINE_COUNTER_UNIT",
+      "limits": "Do not create four additional counter units or assert measured callback hits/refcount-zero branch, hash bucket/last-child cleanup/TOFU execution from high-level lifecycle records. Standalone path-specific branch credit is not added.",
+      "path": "process_release_hash_detach_bridge"
+    },
+    {
+      "after": "PASS_MATCHING_NATIVE_IMAGE_LIFECYCLE_INTEGRATION_ONLY",
+      "applicable_native_counter_delta": 0,
+      "basis": "fa398 proves actual default release_process phases, complete relocated body and current C110 ABI; f55c proves two matching-image processes complete, publish/delete procfs once, exit/reap/release without failure. These are native-image lifecycle integration evidence for the selected callbacks.",
+      "before": "PRODUCTION_SELECTED_CURRENT_IMAGE_SCOPE_NOT_SEPARATE_BASELINE_COUNTER_UNIT",
+      "limits": "Do not create four additional counter units or assert measured callback hits/refcount-zero branch, hash bucket/last-child cleanup/TOFU execution from high-level lifecycle records. Standalone path-specific branch credit is not added.",
+      "path": "process_release_sibling_detach_bridge"
+    },
+    {
+      "after": "PASS_MATCHING_NATIVE_IMAGE_LIFECYCLE_INTEGRATION_ONLY",
+      "applicable_native_counter_delta": 0,
+      "basis": "fa398 proves actual default release_process phases, complete relocated body and current C110 ABI; f55c proves two matching-image processes complete, publish/delete procfs once, exit/reap/release without failure. These are native-image lifecycle integration evidence for the selected callbacks.",
+      "before": "PRODUCTION_SELECTED_CURRENT_IMAGE_SCOPE_NOT_SEPARATE_BASELINE_COUNTER_UNIT",
+      "limits": "Do not create four additional counter units or assert measured callback hits/refcount-zero branch, hash bucket/last-child cleanup/TOFU execution from high-level lifecycle records. Standalone path-specific branch credit is not added.",
+      "path": "process_release_final_cleanup_bridge"
+    },
+    {
+      "after": "PASS_APPLICABLE_NATIVE_CLONE_AND_AFFINITY_CONSUMER_SCOPE",
+      "applicable_native_counter_delta": 0,
+      "basis": "Current C syscall/Rust source and exact linked source-association witnesses in fa398 establish the default routes; successful ordinary std thread creation/join, worker affinity-mask confirmation and strict repaired startupCPU1 on the matching image exercise the actual clone/affinity consumers.",
+      "before": "PRODUCTION_SELECTED_CURRENT_IMAGE_SCOPE_NOT_SEPARATE_BASELINE_COUNTER_UNIT",
+      "limits": "Scoped normal supported clone/mask integration; no additional count unit, unobserved migration branch, invalid mask/permission branch, hardware qualification or per-export hit count. Export-only evidence is not used.",
+      "path": "sched_clone_affinity_snapshot_result"
+    },
+    {
+      "after": "PASS_APPLICABLE_NATIVE_CLONE_AND_AFFINITY_CONSUMER_SCOPE",
+      "applicable_native_counter_delta": 0,
+      "basis": "Current C syscall/Rust source and exact linked source-association witnesses in fa398 establish the default routes; successful ordinary std thread creation/join, worker affinity-mask confirmation and strict repaired startupCPU1 on the matching image exercise the actual clone/affinity consumers.",
+      "before": "PRODUCTION_SELECTED_CURRENT_IMAGE_SCOPE_NOT_SEPARATE_BASELINE_COUNTER_UNIT",
+      "limits": "Scoped normal supported clone/mask integration; no additional count unit, unobserved migration branch, invalid mask/permission branch, hardware qualification or per-export hit count. Export-only evidence is not used.",
+      "path": "sched_clone_affinity_inherit_result"
+    },
+    {
+      "after": "PASS_APPLICABLE_NATIVE_CLONE_AND_AFFINITY_CONSUMER_SCOPE",
+      "applicable_native_counter_delta": 0,
+      "basis": "Current C syscall/Rust source and exact linked source-association witnesses in fa398 establish the default routes; successful ordinary std thread creation/join, worker affinity-mask confirmation and strict repaired startupCPU1 on the matching image exercise the actual clone/affinity consumers.",
+      "before": "PRODUCTION_SELECTED_CURRENT_IMAGE_SCOPE_NOT_SEPARATE_BASELINE_COUNTER_UNIT",
+      "limits": "Scoped normal supported clone/mask integration; no additional count unit, unobserved migration branch, invalid mask/permission branch, hardware qualification or per-export hit count. Export-only evidence is not used.",
+      "path": "process_clone_thread_base_state_body_result"
+    },
+    {
+      "after": "PASS_APPLICABLE_NATIVE_CLONE_AND_AFFINITY_CONSUMER_SCOPE",
+      "applicable_native_counter_delta": 0,
+      "basis": "Current C syscall/Rust source and exact linked source-association witnesses in fa398 establish the default routes; successful ordinary std thread creation/join, worker affinity-mask confirmation and strict repaired startupCPU1 on the matching image exercise the actual clone/affinity consumers.",
+      "before": "PRODUCTION_SELECTED_CURRENT_IMAGE_SCOPE_NOT_SEPARATE_BASELINE_COUNTER_UNIT",
+      "limits": "Scoped normal supported clone/mask integration; no additional count unit, unobserved migration branch, invalid mask/permission branch, hardware qualification or per-export hit count. Export-only evidence is not used.",
+      "path": "sched_setaffinity_body_result"
+    }
+  ],
+  "reviewed_at": "2026-10-19T20:10:35.279808+00:00",
+  "reviewer": "/root/next_replace_tid_review",
+  "reviewer_target_or_test_execution": 0,
+  "schema": "mckernel.independent-current205-native-path-delta-review.v1",
+  "scope": "Functional OS/apps plus actual Rust/reviewed assembly cutover; bounded native-path accounting for existing selected table, not new logical behavior or whole-kernel retirement",
+  "selected_source_windows": [
+    {
+      "lines": [
+        9272,
+        9284,
+        9876,
+        9914,
+        10893,
+        10926,
+        11143,
+        11147
+      ],
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/materialized-source/kernel/rust/process_helpers.rs"
+    },
+    {
+      "lines": [
+        7465,
+        7516
+      ],
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/materialized-source/kernel/syscall.c"
+    }
+  ],
+  "status": "PASS"
+}

@@ -1,0 +1,107 @@
+{
+  "schema": "mckernel.p04.lifecycle.actual-ABI-enum-compare.delta-review.v1",
+  "at": "2026-11-10T10:32:40.806900+00:00",
+  "decision": "GO_EXACT_CORRECTED_ABI_FIRST_SINGLE_CASE_AFTER_ROOT_FRESH_ADMISSION",
+  "review_owner": "/root/source_acquisition_review_max; direct same-Root; no recursion",
+  "scope": "Delta-only actualCABIcompilerrepair andfreshpath binding. Reuse full source/ownership/controller/profile5767cd50 review. Source/data/private review write only; no compiler,witness,test,controller,pidfd,signal,process,Docker,native orcanonical action byreviewer.",
+  "bindings": {
+    "request": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-2/successor/REQUEST.json",
+      "sha256": "59b3acc9e627e8647e2a3ac539fc1b50c68f9f78fc1248985a8cec4806543e80"
+    },
+    "witness_sha256": "909285905c8d0da3fae545a7fb24bb6854f36ad88efd0d50dcb0d4fd1dbbf964",
+    "driver_sha256": "780e69fc628f79a2b78bd0e8719f39beb536c8d5be89983b8405e32990c61de4",
+    "INPUTS_sha256": "5a91523f574813cf84e8f641d5a22936eaaa35fb0a3891a67eb447d3492ac974",
+    "witness_delta_sha256": "5c472a8515a11dae5c0777188c54f3f90327abac880187fbdad53ae7909bde8f",
+    "source_path_binding_delta_sha256": "97d36e4a252de19593ea830c2baa39398a876a8a67ace4a7655ef4237879ad57",
+    "correction_receipt_sha256": "92b6de8a0363249773543789e8c5486d073f2c5eca6aa4eaf9bfee8857376738",
+    "prior_full_GO": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-review-max-1/correction-1/REVIEW.json",
+      "sha256": "5767cd50bbd9538a7686a25130ef77088a08851f2cabe13366636fa5c4e2ee0c"
+    },
+    "unchanged_controller_sha256": "62cf1004be817f29e38f8701fc4352675f0dda511afb541796b868507443a7cd",
+    "unchanged_CASE_sha256": "e065fd10896a90c095936ca7024f3839df802b3c20ae8c502a89bb4b06f58782",
+    "unchanged_Owner_sha256": "afe7403ead1bf8b2c527dfa34a0c0c19010cde5f27a646ccf1545fb8f3b9bc1d",
+    "unchanged_peer_sha256": "0f5fd17ff2b3a5a14041c919be08364b45945d6ee8cce98f6819257cf813b6c6",
+    "unchanged_Rust_candidate_sha256": "ee647c17bd7337d881fe6ecdb3805ccf5e25eb60a1879da95a8ccbbbb1702a4b"
+  },
+  "actual_failed_check": {
+    "command": "cc-std=c11-Wall-Wextra-Werror originaltypedABIwitness",
+    "diagnostic": "line42 comparison between distinct anonymousenumtypes KERNEL_P_ALL andP_ALL; -Werror=enum-compare, exit1",
+    "compiler_PID_birth": "844682/39208926",
+    "ownership": "Exactly1compiler receipt: positiveparent/familyjoin,streamsclosed,noadoptedreap/kill/residual/timeout/error. DriverpartialFAIL retained; completedvariants empty. NoRust/runtimecase/signalling ran.",
+    "retained_paths": "Originaloutput/abi-compile.stderr,ownership.json,RESULT.json andcorrection-2/original witness/request/INPUTS/driver remainunchanged."
+  },
+  "bounded_delta": {
+    "witness": "Only KERNEL_P_ALL == P_ALL becomes (int)KERNEL_P_ALL == (int)P_ALL. Both actualconstantvalues are0 andrepresentable inint; this preserves the value comparison while avoiding comparingdistinctenumtypes.",
+    "no_waiver": "All_Static_asserts,actualtype/prototype/size/alignment/selector/syscall/signal/errno checks and-Wall/-Wextra/-Werror remain. No guessednumericvalue or siginfofield,warningexception orABIrelaxation.",
+    "driver": "Only SOURCE constant changes fromBASE.parent-relative to the SAMEoriginalsourceowner absolute path because the fresh successor root is nested. Reversingthatone substitution reproduces old780314 driver exactly. Reversingthecast reproducesold6b61 witness exactly.",
+    "fresh_paths": "SuccessorBASE provides exclusivelynewoutput; fixtures/controller/CASE/Owner arebyteidentical. Inputmanifest andrequest path hashes updated. The sixoperation semantics andallproductionRust/compileflags/profile areunchanged.",
+    "family_policy": "One actualfailedABIcompiler candidate plusone boundedchangedwitness correction; not a repeat of anypassingcase. Preserve originalfailure; nextfailure needsmeaningfulnewinput/focusedescalation beforeanotherattempt."
+  },
+  "exact_operation_GO": {
+    "outer_argv": [
+      "/usr/bin/taskset",
+      "-c",
+      "0",
+      "/usr/bin/prlimit",
+      "--as=2147483648:2147483648",
+      "--core=0:0",
+      "--fsize=67108864:67108864",
+      "--",
+      "/usr/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-2/successor/run_lifecycle.py",
+      "--execute"
+    ],
+    "cwd": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-2/successor",
+    "clean_environment": {
+      "PATH": "/usr/bin:/bin",
+      "LANG": "C",
+      "LC_ALL": "C",
+      "CMAKE_BUILD_PARALLEL_LEVEL": "1",
+      "MAKEFLAGS": "-j1",
+      "OMP_NUM_THREADS": "1"
+    },
+    "fresh_output": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-2/successor/output",
+    "profile": {
+      "CPU": [
+        0
+      ],
+      "jobs": 1,
+      "process_AS_bytes": 2147483648,
+      "FSIZE_bytes": 67108864,
+      "CORE_bytes": 0,
+      "whole_outer_wall_seconds": 160,
+      "driver_work_seconds": 150,
+      "each_Rust_compile_wall_seconds": 60,
+      "each_wrapper_wall_seconds": 8,
+      "inner_retirement_seconds": 6,
+      "each_controller_outer_seconds": 16,
+      "outer_owner_retirement_seconds": 6,
+      "planning_RSS_slice_bytes_from_same_HOST_pool": 1073741824,
+      "new_actual_peak_not_claimed": "Reuse prior matching compiler peak planning; record actual RUSAGE_CHILDREN maxrss and fresh Root aggregate actualRSS. No per-owner multiplied grant.",
+      "private_output_disk_allowance_bytes": 268435456,
+      "HOST_total_bytes_including_all_controllers_workers": 4294967296,
+      "aggregate_HOST_jobs_max": 3,
+      "HOST_CPUs": [
+        0,
+        6,
+        7
+      ],
+      "fresh_MemAvailable_minimum_bytes": 27917287424,
+      "host_disk_floor_bytes": 17179869184,
+      "scratch_disk_floor_bytes": 12884901888,
+      "native_CPUs2_5_12GiB_and_retained18_UNKNOWN_unchanged": true
+    },
+    "required_gate": "TypedCwitness compile/run andexactJSON mustpass beforeanyRust/runtime. Then originalsinglecondition baselinepositiveownedleak/rescue/wait followedbycandidate0outerrescue/ECHILD/noresidual. Exactly6fullyjoinedOwnerreceipts required; priorcontrollerauthenticationfix staysenforced.",
+    "Root_admission": "Freshservice/account/spend/stop andactualqualifiedHOSTtool/Python/header/sourcebindings; CPU0/onejob/AS2GiB/planning1GiBRSS insideHOST4GiB/max3jobs/fresh26GiB; host16GiB/scratch12GiB+256MiBoutput. Newoutputmustbeunowned/exclusive. Native2-5/12GiB/prior18GiB/allUNKNOWNheld.",
+    "lifetime": "Same150swork/160souterbound with6sOwnerretirement; directPID/birth/argv/env/stdio/waits/streams/resourcecapture. Onlyauthenticatedpidfds orqualifiedstill-unreapedownchildcleanup; no globalPIDselectors orunrelatedsignals.",
+    "no_other_execution": "No22/56/source-stage/SDK/native/realconverter/validdump replay oracceptedimage/module/default/runtime/Cretirement. M14beforeM15 andallgenuineheldscopes persist."
+  },
+  "next_action": "Root fresh-admits and runs only this correctedABI-firstcase before heavykernelreservation. Preserve all old failedoutputs; returnactualmatchingresult atitscontrolledscope.",
+  "executed": false,
+  "acceptance_delta": 0,
+  "resource_releases": 0
+}

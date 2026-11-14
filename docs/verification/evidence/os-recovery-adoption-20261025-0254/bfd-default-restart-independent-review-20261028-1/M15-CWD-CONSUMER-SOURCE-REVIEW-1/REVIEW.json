@@ -1,0 +1,187 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_EXACT_M15_OPTIONAL_CWD_CAPTURE_AND_ACTUAL_SOURCE_BOUND_SERIAL_CONSUMER_SOURCE_ONLY",
+  "independent": true,
+  "implementation_ownership": false,
+  "reviewer": "/root/bfd_review",
+  "runtime_authority": null,
+  "internal_source_correctness_blockers": [],
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-installed-consumer-restart-20261028-1/Root-adoption-command-prep-1/SOURCE-READY.json",
+    "bytes": 5953,
+    "sha256": "9c222c1aaff33a76a5b83e180606c00660ae5e4282f61a7db8d8c0515976e637"
+  },
+  "original_capture": {
+    "bytes": 14753,
+    "path": "/home/holden/mckernel/docs/verification/evidence/phase5-m03-handshake-runtime-checkpoint-20261020-1/sdk-physical-source/run_two_commands_source_bound_corrected.py",
+    "sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8"
+  },
+  "capture_adapter": {
+    "bytes": 4716,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-installed-consumer-restart-20261028-1/Root-adoption-command-prep-1/owned_capture_optional_cwd.py",
+    "sha256": "601fb1013a30193cd70d9046f3785f1087691d1b91233d143f18687c3b7333ba"
+  },
+  "driver": {
+    "bytes": 7817,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-installed-consumer-restart-20261028-1/Root-adoption-command-prep-1/current_consumer_driver.py",
+    "sha256": "b63acc1ae247224dbd8db2d53b0b7a1fb87ff49760fc3ad6774eef660a05d5e0"
+  },
+  "phase_contract": {
+    "bytes": 19852,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-installed-consumer-restart-20261028-1/Root-adoption-command-prep-1/CONSUMER-PHASE-CONTRACT.SOURCE-ONLY.json",
+    "sha256": "06558c8e2b802ddf5d6b6b6f707fae114d2527618f1a90929627d8a0b48d7611"
+  },
+  "entry_and_role_delta": {
+    "bytes": 6212,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-installed-consumer-restart-20261028-1/Root-adoption-command-prep-1/EXACT-GENERIC-ENTRY-AND-DELTA.json",
+    "sha256": "56cb25ff87d855f63e3108c051b5507b33841c2ed9c3b89f65a1e47ea3c2afa3"
+  },
+  "actual_source_adoption": {
+    "bytes": 27676,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-M15-INSTALLED-CONSUMER-SOURCE-ADOPTION-1/ACTUAL-SOURCE-ADOPTION.json",
+    "sha256": "f24b9dbe11483db23b16ab896521d183385ad8e64dc64b03c8f969dc55101b39"
+  },
+  "independent_checks": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-restart-independent-review-20261028-1/M15-CWD-CONSUMER-SOURCE-REVIEW-1/INDEPENDENT-CHECKS.json",
+    "bytes": 2429,
+    "sha256": "e6ed8931a5c1c4996238c5a7a9e8540160b40a5a7d411ffa5fa670dd074ed74d"
+  },
+  "prior_genuine_git_source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-restart-independent-review-20261028-1/INSTALLED-CONSUMER-GIT-REVIEW-1/REVIEW.json",
+    "bytes": 11898,
+    "sha256": "ca6f3ae51bf15fda06dfa743ec0ab0db5102109b0639f8070617723f4110be47"
+  },
+  "assessment": [
+    "The exact h990 owned_capture source remains unchanged. Its private AST override differs solely by cwd=command.get(cwd) on the original Popen call. Explicit link cwd reaches Popen; omitted cwd suppliesNone and preserves inheritance. Removing that one keyword reproduces the full original function AST, including all ownership/join/error code.",
+    "Original stop-signal masking across spawn/ownership, child mask restoration, PID/start anchors, unreaped creator/group ownership, bounded TERM/KILL/direct wait retirement, no signals after direct reap, unexpected-member rejection and group census failures remain exact. Direct join is persisted before stream closure/hash reads. No timeout/retirement error or nonzero exit is converted into success.",
+    "Driver extracts only existing h990 imports/selected helper units and applies the exact one-function override; it never invokes the legacy main. Serial phases require positive returncode0/direct-child-join/group-absence/closed-streams/no-error/no-timeout/no-unexpected-member before any output enters the next phase. First failure stops the suffix and retains a FAIL receipt/prefix.",
+    "Whole captures are retained and hashed with existing32MiB limit; oversized data raises rather than returning a successful truncated record. Six Git stdout/stderr files are read only after positive joined h990 results, must equal exact expected full bytes and blank stderr, and then form the actual captures input to existing Git/BUILDID helper. Reported truncatedFalse is backed by complete successful capture, not slicing.",
+    "Exact15 phases preserve original8 producer argv: configure, prelink reuse guard, directory creation, accepted object staging, both library/CLI links and component installs. Both link cwd values stay the original user-build directory. Previously unspecified producer cwd uses explicit/work generic entry contract; six genuine before/after Git readbacks use/source.",
+    "Phase contract binds actual source adoptionf24b9dbe, whose receipt this review authenticated, and the actual copied authentic ihk/.git28-byte pointer, genuine readonly /source/.git/modules/ihk mount, accepted SDK11 archive/object inputs, pinned helpers and cache seed. Runtime Git reads verify a7ddca26 full/defaultshorta7ddca2/unique prefix before and after configure; BUILDID capacity and metadata binding use the previously reviewed helper. Fallback-off/whole-Rust-library/external-qualified-archive configure switches are unchanged.",
+    "New artifact hashes are measured from actual non-symlink positive-size outputs, with accepted staged Rust object hash checked exactly; fresh-file and directory-producing phases remain distinct. No previous installed artifact hash is relabeled current. Receipt remains actual configure/link/component-install only, with no CLI execution/defaultcompiler/native/file acceptance.",
+    "Source quiescence is explicitly not attested byf24 copy receipt or this review. Current actual readonly mount/profile, source/metadata writer quiescence, current owner/operation boundary and workload release remain Root facts. No source export, SDK producer,10-command driver,4-phase installed-only driver or consumed BFD cohort is invoked.",
+    "Independent4-group pure rerun PASS onCPU0/2GiB with only two mocked constructor expressions. Source/phase/adoption refs remained exact. No SDK/Git/probe/driver/workload/Docker/guard/compiler/native execution or original archive hashing occurred."
+  ],
+  "exact_remaining_outer_role_binding": {
+    "basis": {
+      "census_source": {
+        "bytes": 51420,
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-20261019-1/capsule/scripts/native_rust_exact_build_container_owner.py",
+        "sha256": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1"
+      },
+      "h990": {
+        "bytes": 14753,
+        "path": "/home/holden/mckernel/docs/verification/evidence/phase5-m03-handshake-runtime-checkpoint-20261020-1/sdk-physical-source/run_two_commands_source_bound_corrected.py",
+        "sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8"
+      },
+      "outer_holder_lifetime_basis": {
+        "bytes": 7010,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/cohort/hold_and_run_build_only.py",
+        "sha256": "d17bd70e3e3e6ef7febe48b6f0f892ab6f1a94c74e89d43808bbea8b5dc21551"
+      },
+      "outer_owner_predicate_basis": {
+        "bytes": 17973,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/cohort/run_build_only.py",
+        "sha256": "4035f7774cafbfb7e2c76ae123481db8eef5c637417eb9cec5170a61acf31276"
+      },
+      "outer_worker_basis": {
+        "bytes": 4555,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/cohort/build_only_worker.py",
+        "sha256": "77143a055d35b490962d7a4672dd5b3edd5c6033cdaa3e78f45b280f150db1ff"
+      }
+    },
+    "replace_source_predicates": "Replace only BFD-specific source/adoption/export role predicates with exactf24 private source/adoption plus genuinely current typed ledger/free/current descriptor; preserve existing generic resource guards/Docker prefix/profile/holder lifecycle.",
+    "read_only_mount_roles": [
+      {
+        "host": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-M15-INSTALLED-CONSUMER-SOURCE-ADOPTION-1/source",
+        "readonly": true,
+        "target": "/source"
+      },
+      {
+        "host": "/home/holden/mckernel/.git/modules/ihk",
+        "readonly": true,
+        "target": "/source/.git/modules/ihk"
+      },
+      {
+        "host": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-libihk-next/canonical-source-producer-SDK-target-operation-1/bounded-top-level-cache-dependency-correction-1/selected-source-1/workspace/native-running-modules-candidate-1315033c6e40480ea1b61cf8159c0c19/output/whole70-tool-default",
+        "readonly": true,
+        "target": "/accepted-sdk11"
+      },
+      {
+        "host": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-installed-consumer-restart-20261028-1/Root-adoption-command-prep-1/current_consumer_driver.py",
+        "readonly": true,
+        "target": "/operation/current_consumer_driver.py"
+      },
+      {
+        "host": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-installed-consumer-restart-20261028-1/Root-adoption-command-prep-1/owned_capture_optional_cwd.py",
+        "readonly": true,
+        "target": "/operation/owned_capture_optional_cwd.py"
+      },
+      {
+        "host": "/home/holden/mckernel/docs/verification/evidence/phase5-m03-handshake-runtime-checkpoint-20261020-1/sdk-physical-source/run_two_commands_source_bound_corrected.py",
+        "readonly": true,
+        "target": "/home/holden/mckernel/docs/verification/evidence/phase5-m03-handshake-runtime-checkpoint-20261020-1/sdk-physical-source/run_two_commands_source_bound_corrected.py"
+      },
+      {
+        "host": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-20261019-1/capsule/scripts/native_rust_exact_build_container_owner.py",
+        "readonly": true,
+        "target": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-20261019-1/capsule/scripts/native_rust_exact_build_container_owner.py"
+      },
+      {
+        "host": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-installed-consumer-restart-20261028-1/prelink_reuse_guard.py",
+        "readonly": true,
+        "target": "/operation/prelink_reuse_guard.py"
+      },
+      {
+        "host": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-installed-consumer-restart-20261028-1/PRELINK-CONTRACT.json",
+        "readonly": true,
+        "target": "/operation/PRELINK-CONTRACT.json"
+      },
+      {
+        "host": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-installed-consumer-restart-20261028-1/next-consumer-ready-1/validate_git_buildid_binding.py",
+        "readonly": true,
+        "target": "/operation/validate_git_buildid_binding.py"
+      },
+      {
+        "host": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-installed-consumer-restart-20261028-1/next-consumer-ready-1/ACTUAL-SOURCE-GIT-IDENTITY.json",
+        "readonly": true,
+        "target": "/operation/ACTUAL-SOURCE-GIT-IDENTITY.json"
+      },
+      {
+        "host": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-libihk-next/default-selector-coherent-successor-1/target-toolchain-cache-qualified-source-1/selected-target.EXACT-EXTERNAL-CACHE-SEED.cmake",
+        "readonly": true,
+        "target": "/operation/accepted-cache-seed.cmake"
+      }
+    ],
+    "other_existing_mount_roles": "Reuse exact /nightly pinned SDK/toolchain and existing /out supporting SDK roles from reviewed parent owner; only /work is fresh writable. Root binds plan at/operation/CONSUMER-PHASE-CONTRACT.json readonly.",
+    "driver_entry_argv": [
+      "/usr/bin/python3",
+      "-I",
+      "-B",
+      "/operation/current_consumer_driver.py",
+      "--plan",
+      "/operation/CONSUMER-PHASE-CONTRACT.json",
+      "--sha256",
+      "06558c8e2b802ddf5d6b6b6f707fae114d2527618f1a90929627d8a0b48d7611"
+    ],
+    "exact_outer_command_count": 1,
+    "outer_command_cwd": "/work",
+    "outer_new_output": "/work/evidence/current-consumer-producer.json",
+    "outer_output_role": "One serial leaf receipt; BFD second-artifact branch is outside this role. Inner15 phases use typed outputs;8producerargv unchanged.",
+    "current_boundary": "Root63 is accepted starting history only; any intervening heavy operation requires its genuine adopted successor at entry.",
+    "Root_only_facts": "Bind actual writer quiescence, exact readonly profile/source/helper/SDK mounts, current operation/account/window/identity/exclusions, owner/holder/27:4/resource reservation, fresh output/captures/nonce and fetched independent source/execution release using existing gates."
+  },
+  "next_concrete_Root_operation": "Create the narrow existing outer consumer role/data successor with the fields above and submit its actual profile/current dependency/execution binding for independent review. Use one pinned serial leaf argv; preserve the generic ownership/resource implementation. No additional internal helper change is required by this source review.",
+  "limitations": [
+    "Source-only readiness does not authorize any producer/SDK/configure/link/install/probe/Docker or native command.",
+    "Actual artifact/configure/install success and subsequent staged consumer proofs remain unrun; no default compiler/native/file closure credit is created.",
+    "All source/failure evidence, accepted SDK11 and BFD work, prior235/227 contracts, immutable window/caps/credit run/exclusions remain preserved; no new controller/framework/slot/nonce quota is introduced."
+  ],
+  "new_execution_credit": {
+    "actual_capture_Popen": 0,
+    "producer_SDK_Git_Docker_guard_compiler_native": 0,
+    "default_artifacts": 0,
+    "file_closures": 0,
+    "original_archive_hash_replays": 0
+  }
+}

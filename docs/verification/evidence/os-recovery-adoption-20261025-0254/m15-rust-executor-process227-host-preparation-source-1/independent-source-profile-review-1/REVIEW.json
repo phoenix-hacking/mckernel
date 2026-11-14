@@ -1,0 +1,172 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_SOURCE_FINITE_THREE_COMMAND_ORIGINAL227_HOST_PROFILE_GENERIC_ELF_REUSE",
+  "independent": true,
+  "reviewer": "/root/current110_execution_review",
+  "at": "2026-10-28T02:58:54.090892+00:00",
+  "ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-host-preparation-source-1/READY.json",
+    "bytes": 6890,
+    "sha256": "702ef46727fe7a56b791d71c35979966a63504a087dad1e381ba3e13fac9252d"
+  },
+  "bound_recipe": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-host-preparation-source-1/BOUND-RECIPE.NOT-GRANTED.json",
+    "bytes": 40935,
+    "sha256": "e56a1e915c2bb696d6c5bf4e4c8887fa95be3c589a0646be14b185e5f206e8d4"
+  },
+  "source_review": {
+    "bytes": 15961,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-collector-source-1/independent-source-profile-review-1/REVIEW.json",
+    "sha256": "b3de6a53d71ba865284da266aa263441bb6dfec328be655a98f50a77c6b7d183"
+  },
+  "source_inputs": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-host-preparation-source-1/SOURCE-INPUTS.NOT-GRANTED.json",
+    "bytes": 11755,
+    "sha256": "02da73dc21ba44bc27cdd9015b5646f7541bd85887db8008a60138a4ea40c058"
+  },
+  "finite_API": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-host-preparation-source-1/EXISTING-FINITE-API-RECIPE.json",
+    "bytes": 10068,
+    "sha256": "99ecad9bc5072205dd32abc954ec3b45d5263100523a4c30d3e90763bab9552c"
+  },
+  "source_checker": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-host-preparation-source-1/check_source_profile.py",
+    "bytes": 4614,
+    "sha256": "1b480fe09f4babcd9478b64a7e8b50cd6528295f3299db0ad80e6fe8855686b3"
+  },
+  "actual_output_checker": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-host-preparation-source-1/check_actual_outputs.py",
+    "bytes": 5643,
+    "sha256": "a303800df13129a8a3442e03e7e04483b40c6204f1ed1458eea9c19b304ceb8c"
+  },
+  "retained_runtime_primitives": {
+    "runner": {
+      "bytes": 7521,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ordinary-host-new12h-runner-source-1/run_new12h_host.py",
+      "sha256": "6e98a1fbcbce2e822a815a05516287e7122cbd8e06d43277134b27b70cf3ad34"
+    },
+    "admission": {
+      "bytes": 2782,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ordinary-host-new12h-runner-source-1/admission_new12h.py",
+      "sha256": "7df167b39842976391b6461f831c1a1349e1f3880892c37268579378e8f15a76"
+    },
+    "capture": {
+      "bytes": 14753,
+      "path": "/home/holden/mckernel/docs/verification/evidence/phase5-m03-handshake-runtime-checkpoint-20261020-1/sdk-physical-source/run_two_commands_source_bound_corrected.py",
+      "sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8"
+    }
+  },
+  "reused_generic_collector": {
+    "bytes": 5750848,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-host-preparation-source-1/future-output-1/process235-supervisor",
+    "sha256": "ab3e775e6a9df8d36bbbb974ddafbb26493c24f1aaf49487f5fc27c5583bed6c"
+  },
+  "reused_generic_HOST_review": {
+    "bytes": 14818,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-host-preparation-source-1/independent-actual-review-1/REVIEW.json",
+    "sha256": "c532759d41e3809d4e17d5e080a5f675750d21a69915579d4032c0ccf5b99d7b"
+  },
+  "reused_static_ELF_raw": {
+    "bytes": 2620,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-host-preparation-source-1/future-capture-1/step4/stdout",
+    "sha256": "230785327fe45e2eb43a7618295d1a8b839c491e76d6447b06c4095cca2d4290"
+  },
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/env",
+        "TMPDIR=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-host-preparation-source-1/future-output-1",
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "-D",
+        "warnings",
+        "-C",
+        "codegen-units=1",
+        "-C",
+        "opt-level=1",
+        "-C",
+        "panic=abort",
+        "-C",
+        "target-feature=+crt-static",
+        "-C",
+        "relocation-model=static",
+        "-C",
+        "link-arg=-no-pie",
+        "-C",
+        "link-arg=-Wl,-z,noexecstack",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-collector-source-1/fakeexec.rs",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-host-preparation-source-1/future-output-1/process227-fakeexec"
+      ],
+      "argv_compact_json_LF_sha256": "5ecc2173b70dc075fc212d14e494b14812cec4b48bc4dc214026f4602d82c3af",
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-collector-source-1",
+      "leaf": "original-process227-interface",
+      "purpose": "Functional OS only; no security testing. Compile HOST-only fakeexec with genuine original227 oracle input."
+    },
+    {
+      "argv": [
+        "/usr/bin/env",
+        "TMPDIR=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-host-preparation-source-1/future-output-1",
+        "STARTUP_FAKEEXEC_PATH=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-host-preparation-source-1/future-output-1/process227-fakeexec",
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "-D",
+        "warnings",
+        "-C",
+        "codegen-units=1",
+        "--test",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-collector-source-1/main.rs",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-host-preparation-source-1/future-output-1/process227-tests"
+      ],
+      "argv_compact_json_LF_sha256": "350b4d12599b41d177b4959f66716b67cab7aca9d61b7bf4555ee582db5a2669",
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-collector-source-1",
+      "leaf": "original-process227-interface",
+      "purpose": "Functional OS only; no security testing. Compile all26 retained controls with genuine227 HOST fakeexec path."
+    },
+    {
+      "argv": [
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-host-preparation-source-1/future-output-1/process227-tests",
+        "--test-threads=1"
+      ],
+      "argv_compact_json_LF_sha256": "d9d2db34eae177f3db9c4cc5cd25ecb055c6167f53f2e4d3139aa37e2d28e745",
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-collector-source-1",
+      "leaf": "original-process227-interface",
+      "purpose": "Functional OS only; no security testing. Execute all26 unfiltered227 HOST interface and retained generic observer controls."
+    }
+  ],
+  "pinned_inputs": 85,
+  "existing_pure_profile_and85input_validator": "PASS; no admission/main",
+  "result_parser_controls": {
+    "positive": 2,
+    "negative_rejected": 8,
+    "actual_HOST_tests_executed": 0
+  },
+  "findings": [
+    "Only three genuine new227 commands are bound: compile HOST-only fakeexec with original227 input, compile the same26 controls with exact STARTUP_FAKEEXEC_PATH, run all26 without filtering using test-threads1. No payload, generic production collector or readelf is recompiled/replayed.",
+    "All command argv/cwd/leaf/compact-LF hashes, fresh output/capture paths, current thread/task/fixedclocks, source/oracle8-file byteexact closure and85 finite toolchain/runtime/source/helper inputs authenticate. /usr/bin/env explicitly sets TMPDIR and testcompile fakeexec path; actual payload environment remains its original two entries.",
+    "Qualifiedab3e/c532/static2307 are reused only as generic production source/runtime/argv/env/limits/staticELF evidence. New227 expected.stdout is a HOST test/fakeexec input, not embedded production oracle. Old generic26 actual controls remain separate from new22726 UNRUN; new receipts/grant/boundary stayNULL.",
+    "Existing6e98/7df/h990 finite API is reused. Root must invoke its reviewed finite methods rather than CLI leafstdout equality; raw test elapsed/readelf evidence is retained. Source pipeline supplies no new runner, quota, execution authority or resource overlap permission.",
+    "Actual checker requires all3 captured exact command rows, positive0 waits/groups absent/streams closed/no transport errors, empty compiler/test stderr and compiler stdout, exactly26 named ok lines and single summary with zero failures/ignored/measured/filtered. It tolerates only genuine elapsed numeric variation; parser-only controls verify rejection of count changes, omitted/duplicate names, ignored/filtered/measured and extra output.",
+    "Actual checker also reauthenticates original227 oracle and eight generic source pairs, genuine prior qualified artifact and rawstatic evidence, and calls retained read-only staticELF validation. Only after genuine3command proof does it emit actualnew22726 count; no source plan promotes that count.",
+    "CPU6/job1/AS2GiB/CPU60/FSIZE64MiB/CORE0/90s, original aggregate7/21.6619,8GiB conservative growth reserve and HOST/scratch/account/boot/clamped deadlines remain unchanged. Fresh Root exclusion/reservations/host headroom and nonce/grant are required even during an unlaunched heavy holder."
+  ],
+  "required_before_execution": [
+    "Root exact source/adoption/current-boundary bindings and fresh CPU6 exclusion/account/resources/aggregate planning; no historical235 grant reuse.",
+    "Fresh actual Root grant bound to recipee56a/runner6e98 and original fixed lifetime; original stop-signal/capture ownership and per-commandguard/input verification in finite API."
+  ],
+  "required_after_execution": [
+    "Retain all raw0..2 captures, positive joins, strict26 checker receipt and independent actual case/compiled-input review.",
+    "Original227 cancellation/exec/resource-restoration and native/map/source release remain separate; HOSTfakeexec is never staged as mcexec and productionmain is not run on HOST."
+  ],
+  "blocking_findings": [],
+  "runtime_authority": null,
+  "compiler_actions": 0,
+  "test_payload_workloads": 0,
+  "guard_or_resource_queries": 0,
+  "canonical_mutations": 0,
+  "production_recompiled": false,
+  "readelf_replayed": false,
+  "new227_actual_control_count": 0,
+  "native_acceptance": false
+}

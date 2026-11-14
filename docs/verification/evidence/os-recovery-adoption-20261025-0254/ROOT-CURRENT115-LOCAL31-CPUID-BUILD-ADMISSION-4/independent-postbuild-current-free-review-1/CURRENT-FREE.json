@@ -1,0 +1,103 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_POSITIVE_CURRENT115_FOUR_COMMAND_TERMINATION_AND_CURRENT_FREE_PERMANENT_MUTEX",
+  "independent": true,
+  "implementation_ownership": false,
+  "reviewer": "/root/custody_release_review",
+  "recorded_at": "2026-10-28T04:09:11.958788+00:00",
+  "runtime_authority": null,
+  "current_free": true,
+  "normal_owned_retirement": true,
+  "nonce": "fab3682999f95f72fcfbdfd625f09d13",
+  "nonce_consumed": true,
+  "prior_nonce_ledger": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER51.json",
+    "bytes": 47673,
+    "sha256": "80bf0d2a7111fd983755c6dfaafc215c32a6f8a56406ab3a9c414a61ce66621a"
+  },
+  "prior_consumed_count": 62,
+  "declared_boundary_consumed_count": 63,
+  "prior_ledger_unchanged": true,
+  "Root_actual_tool": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/ROOT-ACTUAL-TOOL-RESULT.json",
+    "bytes": 2325,
+    "sha256": "d871dbbb42e7e4866d8b433da58538162d1dfef224925147920bae21cfa5af81"
+  },
+  "holder": {
+    "path": "/run/lock/mckernel-development.lock",
+    "pid": 1849845,
+    "starttime": 95775567,
+    "device": 27,
+    "inode": 4,
+    "fd": 3
+  },
+  "runner": {
+    "pid": 1849881,
+    "starttime": 95777018,
+    "returncode": 0,
+    "joined": true
+  },
+  "container": "52ae1a85fda1adfaa0a0a3c72306a60a6df0144359f0cd6b9ed1d83c2fc2385c",
+  "retained_stopped_container": "52ae1a85fda1adfaa0a0a3c72306a60a6df0144359f0cd6b9ed1d83c2fc2385c",
+  "container_terminal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/OUTPUT/terminal.json",
+    "bytes": 459,
+    "sha256": "c0faec2639050ccf2d0de1a2351a667526212ab151520543ae9d148363d443e1"
+  },
+  "actual_worker_results": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/OUTPUT/work/evidence/worker-result.json",
+    "bytes": 13204,
+    "sha256": "fb175052afa463314dc1726dc7e05da3195f2bbfe8b329ea8152576fe81ff159"
+  },
+  "actual_four_commands_returncodes": [
+    0,
+    0,
+    0,
+    0
+  ],
+  "actual_four_argv_match_profile": true,
+  "measured": {
+    "command_wall_span_seconds": 21.411762475967407,
+    "command_CPU_seconds": 21.426008,
+    "maximum_child_RSS_KiB": 592908,
+    "RSS_semantics": "wait4 cumulative maximum child high-water mark, not independent per-command peaks"
+  },
+  "current_observer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/finite-review-handoff-correction-source-1/attempt4-root51-boundary-contract-correction-source-1/observe_root51_current115_attempt4.py",
+    "bytes": 15134,
+    "sha256": "b3abfdada1909b9b3a945f522cb0f6b7abe0dc87b7bba5e844ee4d1703b127ad"
+  },
+  "current_observation": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/independent-postbuild-current-free-review-1/CURRENT-READONLY-OBSERVATION.json",
+    "bytes": 2755961,
+    "sha256": "ce28016d794e05bfdcd773ca075df3174c29992d657aa56bea887e05e132c97c"
+  },
+  "fresh_current_extension": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/independent-postbuild-current-free-review-1/FRESH-CURRENT-EXTENSION.json",
+    "bytes": 84881,
+    "sha256": "4a82814c6c269fcf52ba6308953fb7e4059ef933e6ed14fa0e1eee742ad3d130"
+  },
+  "permanent_mutex": "27:4",
+  "closed_exclusive_probes": [
+    "95: FLOCK  ADVISORY  WRITE 1851386 00:1b:4 0 EOF",
+    "95: FLOCK  ADVISORY  WRITE 1851386 00:1b:4 0 EOF"
+  ],
+  "cgroup_pids_current": 0,
+  "root_current_boundary": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/finite-review-handoff-correction-source-1/attempt4-root51-boundary-contract-correction-source-1/ROOT-ACTUAL-CURRENT-BOUNDARY.json",
+    "bytes": 2488,
+    "sha256": "3a80b9315b9d2baf8eae9e693f8ce17476116b0d9df5e63c2b1d1e6c2af75b82"
+  },
+  "known_Root51_ordinary_operations_preserved": true,
+  "actual_native_or_file_credit": 0,
+  "artifact_acceptance": false,
+  "execution_release": false,
+  "new_workloads_or_compilers_by_reviewer": 0,
+  "cleanup_signals_remove_restart": 0,
+  "canonical_Git_mutations": 0,
+  "preserved_failure": "A1 expiry, A2 hot schema failure, A3 pre-observer boundary failure and every historical native failure remain immutable.",
+  "review_local_correction": "Initial metadata-only extraction requested a nonexistent worker command stage field; it stopped before observation. Corrected extraction uses actual worker commands schema with no source, evidence or oracle change.",
+  "limitations": "Exact postbuild ownership/current-free acceptance only. All old and new stopped CIDs remain retained. Separate default artifact/ABI/final-consumer/native/file qualification remains open; this grants no next workload.",
+  "next_action": "Root may append consumed fab368 once to the 62-nonce Root51 declared boundary and reference this current-free receipt for count63. A future operation requires its actual original-contract admission.",
+  "blocking_findings": []
+}

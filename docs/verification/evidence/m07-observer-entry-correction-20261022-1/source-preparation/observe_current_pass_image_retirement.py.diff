@@ -1,0 +1,38 @@
+--- /home/holden/mckernel-work/host-preparation/m07-sigill-successor-native-data-preparation-20261022-1/actual-terminal-preparation-1/bound-terminal-source-correction-1/observe_current_pass_image_retirement.py
++++ /home/holden/mckernel-work/host-preparation/m07-observer-current-postjoin-correction-20261022-1/observe_current_pass_image_retirement.py
+@@ -16,11 +16,11 @@
+ 
+ 
+ 
+-FAILURE_CASE = Path('/home/holden/mckernel-work/host-preparation/m07-sigill-successor-native-data-preparation-20261022-1/actual-terminal-preparation-1/bound-terminal-source-correction-1/PASS-CASE-STATIC.json')
+-FAILURE_CASE_SHA = '90c5cf472ca3a255723c76e2bc71622a5b7b0576e52850f0c6b051cbb3e11039'
++FAILURE_CASE = Path('/home/holden/mckernel-work/host-preparation/m07-observer-current-postjoin-correction-20261022-1/PASS-CASE-STATIC.json')
++FAILURE_CASE_SHA = '742bc4a0f829e773a3170355b8341e938494d322bc4797fd2565f8809ac69110'
+ REPO = Path('/home/holden/mckernel')
+ ROOT = Path('/home/holden/mckernel-work/scratch')
+-PREP = Path('/home/holden/mckernel-work/host-preparation/m07-sigill-successor-native-data-preparation-20261022-1/actual-terminal-preparation-1/bound-terminal-source-correction-1')
++PREP = Path('/home/holden/mckernel-work/host-preparation/m07-observer-current-postjoin-correction-20261022-1')
+ CASE = Path('/home/holden/mckernel-work/host-preparation/m07-sigill-current-image-successor-preparation-20261022-1/full-image-attempt-1')
+ CAPTURE = Path('/home/holden/mckernel-work/scratch/native-rust-phase5-current-optin-image-guard-edb0baa5c4924f018ad3e5089c77f4bf')
+ SOURCE = Path('/home/holden/mckernel-work/host-preparation/m07-sigill-successor-native-data-preparation-20261022-1/actual-terminal-preparation-1/bound-terminal-source-correction-1/cleanup_pass_image.py')
+@@ -29,7 +29,7 @@
+ TEST_SHA = '2fba315ad96f271124cf78f7441faa306f58ea03ae35cdbe78bba5be6488d630'
+ RETIREMENT = Path('/home/holden/mckernel-work/host-preparation/m07-sigill-successor-native-data-preparation-20261022-1/actual-terminal-preparation-1/ROOT-QUALIFIED-RETAINED-CONSUMER-PROJECTION-1.json')
+ RETIREMENT_SHA = 'dafb7794e00d9fb08d73ecae8e4a87345afa2c52947f4db0992b224e9e495454'
+-NONCE = 'm07-sigill-pass-image-observation-1'
++NONCE = 'm07-sigill-pass-image-observation-postjoin-correction-1'
+ OUTPUT = PREP / ('root-observation-' + NONCE)
+ BOOT = '7bfc5687-6c04-4d15-84eb-b92ab9a55dcb'
+ PIDS = (3016393, 3019613, 3016385, 3016404, 3020231, 3016377, 3016462, 3019699)
+@@ -242,7 +242,10 @@
+     stable_bytes(TEST,TEST_SHA)
+     retirement=m.parse(stable_bytes(RETIREMENT,RETIREMENT_SHA))
+     case=m.parse(stable_bytes(FAILURE_CASE,FAILURE_CASE_SHA,4<<20))
+-    root_join=json.loads(stable_bytes(Path(case['current_live_postjoin']['path']),case['current_live_postjoin']['sha256']))
++    postjoin_ref=case.get('current_live_postjoin')
++    need(isinstance(postjoin_ref,dict) and postjoin_ref==case['finite_roles']['guard_postjoin'],
++         'exact genuine predecessor guard postjoin reference required; future cleanup is separate')
++    root_join=json.loads(stable_bytes(Path(postjoin_ref['path']),postjoin_ref['sha256']))
+     artifact_ref=case['artifact_acceptance']
+     artifact=json.loads(stable_bytes(Path(artifact_ref['path']),artifact_ref['sha256']))
+     current_pass_prerequisites(retirement,case,root_join,artifact)

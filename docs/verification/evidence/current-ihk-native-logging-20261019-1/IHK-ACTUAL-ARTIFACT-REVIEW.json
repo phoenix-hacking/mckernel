@@ -1,0 +1,61 @@
+{
+  "application_acceptance": false,
+  "artifact_checks": {
+    "bytes": 11491,
+    "path": "/home/holden/mckernel-work/host-preparation/current-ihk-module-result-review-20261019-1/ACTUAL-IHK-ARTIFACT-FACTS-VERIFIED.json",
+    "sha256": "5d3b109b9b58cf91390ecf09527a59482ef0d96ab644bc8108a026a06ee96775"
+  },
+  "build_receipt": {
+    "bytes": 10838,
+    "path": "/home/holden/mckernel-work/scratch/nsd-c-895d6e84dc4c47b3a75b6b12f7bcdb0f/evidence/receipt.json",
+    "sha256": "769f841ad24fcebedbacda1024c6518bec7a1defd605e90cffef3aa62e2fbd5b"
+  },
+  "build_receipt_sha256": "769f841ad24fcebedbacda1024c6518bec7a1defd605e90cffef3aa62e2fbd5b",
+  "compiler_inputs": 13,
+  "conditional_module_reuse_review": {
+    "bytes": 5301,
+    "path": "/home/holden/mckernel-work/host-preparation/current-ihk-module-result-review-20261019-1/IHK-CONDITIONAL-SMP-MCCTRL-ABI-REUSE-REVIEW.json",
+    "sha256": "52876874d294d8dcd38a7674bb416e720d9d16dd4c8ac1ddf361f72d94e86a5f"
+  },
+  "decision": "PASS_ACTUAL_FOCUSED_IHK_ARTIFACT",
+  "default_consumer": {
+    "native_and_compat_ioctl_actual_tailcalls": true,
+    "production_registration_source": "ihk.rs -> OsDeviceFamily::register -> OS_FOPS",
+    "read_calls_actual_kernel_usercopy_writer": true,
+    "read_command": "0x112a20",
+    "request_calls_kmsg_read": true
+  },
+  "exports": 21,
+  "implementation_ownership": false,
+  "kernel_imports": 36,
+  "module": {
+    "bytes": 1475952,
+    "path": "/home/holden/mckernel-work/scratch/nsd-c-895d6e84dc4c47b3a75b6b12f7bcdb0f/modules/ihk.ko",
+    "sha256": "c396958bfdb0f22036b469ea2a64e0a6b188b9619ee4105c7879483bb3b9790d"
+  },
+  "module_load_acceptance": false,
+  "module_sha256": "c396958bfdb0f22036b469ea2a64e0a6b188b9619ee4105c7879483bb3b9790d",
+  "native_acceptance": false,
+  "physical_retirement": {
+    "bytes": 6739,
+    "path": "/home/holden/mckernel-work/host-preparation/current-ihk-module-result-review-20261019-1/IHK-ACTUAL-PHYSICAL-RETIREMENT-REVIEW.json",
+    "sha256": "75a15c7dcf86d10f2da9613125cc50eb32604e3e00a784c535a5b4144f28e080"
+  },
+  "private_checker_erratum": "Initial local checker required standalone receipt.status PASS, but actual driver contract is BUILD_ARTIFACT_CHECKS_PASS; exact status corrected only in private checker. Owner status PASS distinct. No runtime/source/output replay.",
+  "remaining": [
+    "Separate archive stage authority and runtime module/native ioctl observation.",
+    "Source/build evidence does not establish guest writer coherence, concurrent ring safety or retired Rust port runtime credit."
+  ],
+  "review_time_unix": 1792441285.9362133,
+  "reviewer": "/root/resume_git_owner_review",
+  "schema": "mckernel.independent-focused-ihk-actual-artifact-review.v1",
+  "source_closure_sha256": "565d3283f60ab2d516aa4d7c0157e88d9314df81b552dab3a0123ef0817fc743",
+  "source_review": {
+    "bytes": 6271,
+    "path": "/home/holden/mckernel-work/host-preparation/current-ihk-module-result-review-20261019-1/IHK-ACTUAL-SOURCE-CLOSURE-REVIEW.json",
+    "sha256": "095e8b10a619d4eafbd6a5418e6e2c65f3b1d439262c4c9543e118141d1a0377"
+  },
+  "source_review_sha256": "095e8b10a619d4eafbd6a5418e6e2c65f3b1d439262c4c9543e118141d1a0377",
+  "source_sdk_scope": "Accepted exact14 source/SDK tuple; successful actual Rust/objtool/modpost/link target. No full SDK rescan.",
+  "status": "PASS_ACTUAL_FOCUSED_IHK_ARTIFACT"
+}

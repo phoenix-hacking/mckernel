@@ -1,0 +1,128 @@
+--- qualified-c87f/run_ihkmond_main
++++ private-active/run_ihkmond_active_kmsg
+@@ -1,5 +1,5 @@
+-    def run_ihkmond_main(self, argv, env, cwd, ready_timeout, stop_timeout, label, *, pidfd_api):
+-        """One real, disabled-IHK-worker daemon case, inside its own namespace.
++    def run_ihkmond_active_kmsg(self, argv, env, cwd, ready_timeout, stop_timeout, label, *, pidfd_api):
++        """One real, separately admitted active-kmsg-worker case in its owned namespace.
+ 
+         A failure never escapes this dedicated owner. Original handles, raw
+         exceptions and tracebacks remain reachable until a reviewed disposition.
+@@ -23,11 +23,11 @@
+                 except BaseException:
+                     pass
+ 
+-        expected_argv = ['/usr/local/sbin/ihkmond', '-k', '0', '-i', '-1']
++        expected_argv = ['/usr/local/sbin/ihkmond', '-k', '1', '-i', '-1']
+         expected_env = {'LANG': 'C', 'LC_ALL': 'C', 'PATH': '/usr/bin:/bin',
+                         'TZ': 'UTC', 'PYTHONDONTWRITEBYTECODE': '1', 'TMPDIR': '/tmp'}
+         expected_exe = 'b9cf237dbd3d6156f050418945d6fd60fd9738d6604f399013761865f6830447'
+-        state = {'schema': 'mckernel.m15.f08.inside-custody.v1', 'status': 'UNKNOWN',
++        state = {'schema': 'mckernel.m15.f08.inside-active-kmsg-custody.v1', 'status': 'UNKNOWN',
+                  'launcher': None, 'pidfd': None, 'daemon_pid': None,
+                  'raw_primary': None, 'raw_secondaries': [], 'stdout': b'', 'stderr': b'',
+                  'record': {'label': label, 'argv': argv, 'env': env, 'cwd': cwd,
+@@ -309,77 +309,16 @@
+                     'complete_remaining_provider_graph': 'Reuse selected46d graph; raw maps retained, no new graph acceptance.'}
+ 
+         def readiness():
+-            pid = state['daemon_pid']
+-            proc = Path('/proc') / str(pid)
+-            sample = {'at_monotonic': time.monotonic(), 'fds': {}, 'tasks': sorted(os.listdir(str(proc / 'task')), key=int)}
+-            names = sorted(os.listdir(str(proc / 'fd')), key=int)
+-            try:
+-                for name in names:
+-                    sample['fds'][name] = {'target': os.readlink(str(proc / 'fd' / name)),
+-                                           'fdinfo': (proc / 'fdinfo' / name).read_text()}
+-            except FileNotFoundError:
+-                sample['incomplete'] = 'FD table changed during startup observation'
+-                return sample, False
+-            sample['raw_syscall'] = (proc / 'syscall').read_text()
+-            sample['raw_netlink'] = (proc / 'net/netlink').read_text()
+-            sample['raw_status'] = (proc / 'status').read_text()
+-            sample['fd_names_after'] = sorted(os.listdir(str(proc / 'fd')), key=int)
+-            if names != sample['fd_names_after'] or sample['tasks'] != [str(pid)]:
+-                return sample, False
+-            by_target = lambda target: [int(n) for n, row in sample['fds'].items() if row['target'] == target]
+-            epolls = by_target('anon_inode:[eventpoll]')
+-            signals = by_target('anon_inode:[signalfd]')
+-            done = by_target('anon_inode:[eventfd]')
+-            if not (len(epolls) == len(signals) == len(done) == 1):
+-                return sample, False
+-            ep, sig, event = epolls[0], signals[0], done[0]
+-            mask = re.search(r'^sigmask:\s*([0-9a-fA-F]+)\s*$', sample['fds'][str(sig)]['fdinfo'], re.M)
+-            count = re.search(r'^eventfd-count:\s*([0-9a-fA-F]+)\s*$', sample['fds'][str(event)]['fdinfo'], re.M)
+-            if mask is None or int(mask.group(1), 16) != 0x4002 or count is None or int(count.group(1), 16) != 0:
+-                return sample, False
+-            watches = []
+-            for line in sample['fds'][str(ep)]['fdinfo'].splitlines():
+-                if line.startswith('tfd:'):
+-                    match = re.match(r'^tfd:\s*(\d+)\s+events:\s*([0-9a-fA-F]+)\s+data:\s*([0-9a-fA-F]+)\b', line)
+-                    require(match is not None, 'unrecognized actual epoll watch record')
+-                    fd, events, data = int(match.group(1)), int(match.group(2), 16), int(match.group(3), 16)
+-                    watches.append({'fd': fd, 'events': events, 'data': data, 'raw': line})
+-            sample['epoll_watches'] = watches
+-            if len(watches) != 3 or len({row['fd'] for row in watches}) != 3:
+-                return sample, False
+-            watched = {row['fd'] for row in watches}
+-            if not ({sig, event} < watched) or any(not row['events'] & 1 or row['data'] != row['fd'] for row in watches):
+-                return sample, False
+-            monfd = next(iter(watched - {sig, event}))
+-            socket = re.fullmatch(r'socket:\[(\d+)\]', sample['fds'].get(str(monfd), {}).get('target', ''))
+-            if socket is None:
+-                return sample, False
+-            inode = int(socket.group(1))
+-            matching = []
+-            for line in sample['raw_netlink'].splitlines()[1:]:
+-                fields = line.split()
+-                if len(fields) == 10 and int(fields[-1]) == inode:
+-                    matching.append({'protocol': int(fields[1]), 'port_id': int(fields[2]),
+-                                     'groups': int(fields[3], 16), 'inode': inode, 'raw': line})
+-            sample['monitor_netlink'] = matching
+-            if len(matching) != 1 or matching[0]['protocol'] != 15 or matching[0]['groups'] == 0:
+-                return sample, False
+-            fields = dict(line.split(':', 1) for line in sample['raw_status'].splitlines() if ':' in line)
+-            expected_mask = int(record['owner_after_constructor']['signals']['SigBlk'], 16) | 0x4002
+-            if int(fields['SigBlk'].strip(), 16) != expected_mask:
+-                return sample, False
+-            call = sample['raw_syscall'].split()
+-            # Selected Linux x86_64 epoll_wait UAPI: epfd, events, maxevents, ms.
+-            if len(call) < 5 or call[0] != '232':
+-                return sample, False
+-            if int(call[1], 0) != ep or int(call[3], 0) != 3 or int(call[4], 0) != 250:
+-                return sample, False
+-            sample['bound_fds'] = {'epoll': ep, 'signalfd': sig, 'doneeventfd': event, 'monitor': monfd}
+-            return sample, True
++            return self._f08_active_observer.initial_readiness(state['daemon_pid'], record)
++
++        def active_live_guard():
++            live_daemon()
++            same_daemon(identity(state['daemon_pid']))
++            pidfd_live()
+ 
+         try:
+             require(argv == expected_argv and env == expected_env and cwd == '/output', 'F08 exact payload binding differs')
+-            require(label == 'ihkmond-main-k0-i-1' and self.output == Path('/output'), 'F08 output/label binding differs')
++            require(label == 'ihkmond-main-k1-i-1-real-add-remove' and self.output == Path('/output'), 'F08 output/label binding differs')
+             for value in (ready_timeout, stop_timeout):
+                 require(type(value) in (int, float) and math.isfinite(value) and value > 0, 'issued positive finite F08 deadlines required')
+             record['owner_before_constructor'] = self._f08_preconstructor_baseline
+@@ -391,6 +330,9 @@
+             record['provider_namespace_inputs'] = self._f08_artifacts
+             record['readiness_timeout_seconds'] = ready_timeout
+             record['stop_timeout_seconds'] = stop_timeout
++            require(isinstance(self._f08_active_observer, ActiveKmsgObserver),
++                    'actual Root backend/input observer binding required')
++            self._f08_active_observer.preflight()
+             pidfd_api.require_implementation()
+             ready_deadline = time.monotonic() + ready_timeout
+             # Register the actual Popen object before its constructor can launch.
+@@ -453,6 +395,8 @@
+                     record['daemon_provider_mappings'] = provider_mappings()
+                     break
+                 time.sleep(min(0.02, remaining(ready_deadline)))
++            ready_deadline = self._f08_active_observer.observe(
++                state['daemon_pid'], record, active_live_guard, remaining)
+             remaining(ready_deadline)
+             live_daemon()
+             record['daemon_before_stop'] = identity(state['daemon_pid'], with_hash=True)

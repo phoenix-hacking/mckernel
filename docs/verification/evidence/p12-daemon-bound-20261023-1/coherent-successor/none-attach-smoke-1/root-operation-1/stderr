@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/capture_owned_smoke.NOT-RELEASED.py", line 71, in main
+    os.killpg(p.pid,signal.SIGTERM);term_sent=True
+PermissionError: [Errno 1] Operation not permitted
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/capture_owned_smoke.NOT-RELEASED.py", line 93, in <module>
+    if __name__=='__main__':main()
+  File "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/capture_owned_smoke.NOT-RELEASED.py", line 81, in main
+    try:os.killpg(p.pid,signal.SIGTERM)
+PermissionError: [Errno 1] Operation not permitted

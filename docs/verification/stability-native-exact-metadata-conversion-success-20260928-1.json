@@ -1,0 +1,77 @@
+{
+  "schema": "mckernel.native-exact-metadata-conversion.v1",
+  "recorded_at_utc": "2026-09-29T00:40:26Z",
+  "status": "PASS_WITH_BUILD_BLOCKED",
+  "source_checkpoint": "13e75c955a3873fc7556f5937d56a9607d9af97d",
+  "candidate": "/home/holden/mckernel-exact-candidate-d0947e0c",
+  "backup": "/home/holden/mckernel-exact-metadata-backup-d0947e0c-1",
+  "evidence_root": "/home/holden/mckernel-exact-metadata-evidence-d0947e0c-1",
+  "receipt": "/home/holden/mckernel-exact-metadata-evidence-d0947e0c-1/receipt.json",
+  "result": {
+    "transaction": "PASS",
+    "rollback": "not-needed",
+    "main_head": "d0947e0c",
+    "ihk_head": "3114d9e",
+    "main_tracked_paths": 7607,
+    "main_gitlinks": 4,
+    "main_symlink_blobs": 49,
+    "historical_main_commit": "f2eb735212e6ab0494e638497e80d9ae78b2848e",
+    "historical_trees": 7,
+    "historical_locked_blobs": 4,
+    "installed_main_receipt_inventory_sha256": "0e4b7000...2bf110",
+    "installed_ihk_receipt_inventory_sha256": "40b7b7a6...2ff638"
+  },
+  "retained_logs": [
+    {
+      "path": "docs/verification/evidence/stability-native-exact-metadata-conversion-d0947e0c-20260928-1.log.gz",
+      "gzip_sha256": "ffab600ee8aa10bc83edf62db41021f09d157789740a09b55e4d6aef86333ca0",
+      "raw_sha256": "820a2dec28f6df6c442fc02dfee4b82f868ea7200bf6f248817c936ba2a274c5"
+    },
+    {
+      "path": "docs/verification/evidence/stability-native-exact-metadata-final-manifest-d0947e0c-20260928-1.log.gz",
+      "gzip_sha256": "13390c5ce94707abb4f71bc9f0f1f859c16062f7f119c05f2d4f7da155fbf144",
+      "raw_sha256": "a631843ca8b3321458b6c6433803ef73c096e29fd88580319717d7c68b3c9926"
+    },
+    {
+      "path": "docs/verification/evidence/stability-native-exact-metadata-installed-verification-d0947e0c-20260928-1.log.gz",
+      "gzip_sha256": "c53a0cef16cea4d172aa96be95fb7c10e5708fd06bfe3f13ab78ea27a0b42720",
+      "raw_sha256": "251c39b94f61be7dc8218134f8e2ab40c115690b3ac0faafb1e8db1877298134",
+      "classification": "observer_failure_missing_pipefail; contains real source-check failures"
+    },
+    {
+      "path": "docs/verification/evidence/stability-native-exact-metadata-git-consumers-d0947e0c-20260928-1.log.gz",
+      "gzip_sha256": "e9e16d29cd53da2a598d07518dbfc200eec6a31b785dff309ccb3a8a25d698a6",
+      "raw_sha256": "41c609c4dccf814f0cbc9263652aeac987377a23323340e0e9d806a8bbdbb4e7",
+      "classification": "observer_failure_nonexistent_load_contract"
+    },
+    {
+      "path": "docs/verification/evidence/stability-native-exact-metadata-git-consumers-corrected-d0947e0c-20260928-1.log.gz",
+      "gzip_sha256": "6b139da48666a9cc3da1ea3cc8b832e6bd2d62255261babe1f476c50f88f1c78",
+      "raw_sha256": "dbb5f53f8a4b6b85d66e9e7d3260858347091952a32ec2c6b43557368ee15344"
+    }
+  ],
+  "post_conversion_review": {
+    "metadata_relocation": "ACCEPT",
+    "attempt_2_build": "BLOCK",
+    "deterministic_source_failures": [
+      "stale ioctl contract registry digest",
+      "stale device checker import order",
+      "stale mapping contract semantic/source bindings"
+    ],
+    "index_cache_observation": "A later stat refresh changed the installed main index-cache inventory to 0dbba72d856fe2fb68204e37d8405e02019ac3f5b4525610698eec9abff075e0; installed and backup ls-files -s -z remained byte-identical. The original receipt is preserved unchanged."
+  },
+  "shutdown_observation": {
+    "candidate_status": "DIRTY_FROM_SHARED_HARDLINK_EDITS",
+    "dirty_paths": [
+      "host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json",
+      "host-kernel/native-rust/ihk-mapping-foundation-contract-v1.json",
+      "scripts/ihk_mapping_check.py",
+      "scripts/tests/fixtures/ihk_mapping_compile.rs",
+      "scripts/tests/test_ihk_mapping_check.py",
+      "scripts/tests/test_rocky_rust_staging.py"
+    ],
+    "build_or_guest_started": false,
+    "instruction": "Do not build d094. Preserve the conversion receipt, backup, restore roots and dirty-path observation; create a fresh candidate from the corrected checkpoint."
+  },
+  "acceptance_credit": false
+}

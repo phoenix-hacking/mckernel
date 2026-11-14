@@ -1,0 +1,1015 @@
+{
+  "all_members_verified": true,
+  "application_acceptance": false,
+  "archive": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/stability-permanent-stack-review-20260913-1.tar.gz",
+    "sha256": "a5f6bfdb9f298267996920ceae95de46df2c9f8e20887622e7e2addeee218109",
+    "size": 190571
+  },
+  "archive_members": [
+    {
+      "kind": "directory",
+      "mode": 448,
+      "path": "stability-permanent-stack-review-20260913-l620qr1w"
+    },
+    {
+      "kind": "file",
+      "mode": 436,
+      "path": "stability-permanent-stack-review-20260913-l620qr1w/analysis.json",
+      "sha256": "6ba3f2598ea1f338a1661652d1b40385c49934fbfab4475c8a5a68ef5f9c704e",
+      "size": 3528559
+    },
+    {
+      "kind": "file",
+      "mode": 436,
+      "path": "stability-permanent-stack-review-20260913-l620qr1w/audit.py",
+      "sha256": "09f9d72f9475ad7b2563a39733b5dd41ca386561139f960d42cedb17bab7003a",
+      "size": 8196
+    },
+    {
+      "kind": "file",
+      "mode": 436,
+      "path": "stability-permanent-stack-review-20260913-l620qr1w/compare.py",
+      "sha256": "ab467d5c8cd7776f29a9f920cfedeae6978f798f59927b6e40b7230c5a83a289",
+      "size": 2233
+    },
+    {
+      "kind": "file",
+      "mode": 436,
+      "path": "stability-permanent-stack-review-20260913-l620qr1w/comparison.json",
+      "sha256": "307a00709b840b90fabe1fccfe8342493b769e21a9414cb87e6b375981863314",
+      "size": 30973
+    },
+    {
+      "kind": "file",
+      "mode": 436,
+      "path": "stability-permanent-stack-review-20260913-l620qr1w/invocation.json",
+      "sha256": "e8280fabc641799d0d90472c2d3d766fa136d30ffaa3b5d08269c73d5d9fef58",
+      "size": 412
+    },
+    {
+      "kind": "file",
+      "mode": 436,
+      "path": "stability-permanent-stack-review-20260913-l620qr1w/status.json",
+      "sha256": "df4d721d233a2334088d2d2e0110346ae9e509ff46bf0b379fbcfa85c715af4d",
+      "size": 18
+    },
+    {
+      "kind": "file",
+      "mode": 436,
+      "path": "stability-permanent-stack-review-20260913-l620qr1w/stderr.bin",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "kind": "file",
+      "mode": 436,
+      "path": "stability-permanent-stack-review-20260913-l620qr1w/stdout.bin",
+      "sha256": "ef89a5d80dbdd9f6313c0aea9096c9dea206ff22e1add2d74061d517f56c76f1",
+      "size": 281
+    }
+  ],
+  "build_record": {
+    "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-permanent-backpressure-1/record.json",
+    "sha256": "7483584353e881946f3d6e5635f3fd6b5d2b6d0a52d2351b99d8c5bf8106ed21",
+    "size": 190902
+  },
+  "chains": {
+    "packet_worker_to_apps": {
+      "bytes": 2992,
+      "prior_bytes": 2992,
+      "rows": [
+        {
+          "address": 297968,
+          "callsites": [
+            {
+              "address": "0x48c10",
+              "depth_before": 24,
+              "kind": "call",
+              "line": 77982,
+              "op": "call   35e40 <<ihk_smp_x86_64::smp_memory::service::Runtime>::pump>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                220736
+              ]
+            }
+          ],
+          "entry_return_bytes": 8,
+          "function": "ihk_smp_x86_64::smp_memory::service::run",
+          "local_bytes": 24,
+          "maximum_local_bytes": 24
+        },
+        {
+          "address": 220736,
+          "callsites": [
+            {
+              "address": "0x3608a",
+              "depth_before": 168,
+              "kind": "call",
+              "line": 59128,
+              "op": "call   11020 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_accepted_phase::{closure",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                69664
+              ]
+            }
+          ],
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::pump",
+          "local_bytes": 168,
+          "maximum_local_bytes": 168
+        },
+        {
+          "address": 69664,
+          "callsites": [
+            {
+              "address": "0x1113a",
+              "depth_before": 136,
+              "kind": "call",
+              "line": 20645,
+              "op": "call   309c0 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_phase_snapshot>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                199104
+              ]
+            }
+          ],
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_accepted_phase::{closure#0}",
+          "local_bytes": 136,
+          "maximum_local_bytes": 136
+        },
+        {
+          "address": 199104,
+          "callsites": [
+            {
+              "address": "0x30b02",
+              "depth_before": 296,
+              "kind": "call",
+              "line": 53520,
+              "op": "call   2f000 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_observe>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                192512
+              ]
+            }
+          ],
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_phase_snapshot",
+          "local_bytes": 296,
+          "maximum_local_bytes": 296
+        },
+        {
+          "address": 192512,
+          "callsites": [
+            {
+              "address": "0x2f459",
+              "depth_before": 568,
+              "kind": "call",
+              "line": 52041,
+              "op": "call   22ed0 <<ihk_smp_x86_64::smp_application::Remote>::verification_emit>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                143056
+              ]
+            }
+          ],
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_observe",
+          "local_bytes": 568,
+          "maximum_local_bytes": 568
+        },
+        {
+          "address": 143056,
+          "callsites": [
+            {
+              "address": "0x22ef6",
+              "depth_before": 216,
+              "kind": "call",
+              "line": 38740,
+              "op": "call   23020 <<ihk_smp_x86_64::smp_application::Remote>::verification_emit_apps>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                143392
+              ]
+            }
+          ],
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_application::Remote>::verification_emit",
+          "local_bytes": 216,
+          "maximum_local_bytes": 216
+        },
+        {
+          "address": 143392,
+          "callsites": [],
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_application::Remote>::verification_emit_apps",
+          "local_bytes": 1528,
+          "maximum_local_bytes": 1528
+        }
+      ]
+    },
+    "packet_worker_to_mailbox_copy": {
+      "bytes": 5512,
+      "prior_bytes": 5512,
+      "rows": [
+        {
+          "address": 297968,
+          "callsites": [
+            {
+              "address": "0x48c10",
+              "depth_before": 24,
+              "kind": "call",
+              "line": 77982,
+              "op": "call   35e40 <<ihk_smp_x86_64::smp_memory::service::Runtime>::pump>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                220736
+              ]
+            }
+          ],
+          "entry_return_bytes": 8,
+          "function": "ihk_smp_x86_64::smp_memory::service::run",
+          "local_bytes": 24,
+          "maximum_local_bytes": 24
+        },
+        {
+          "address": 220736,
+          "callsites": [
+            {
+              "address": "0x3608a",
+              "depth_before": 168,
+              "kind": "call",
+              "line": 59128,
+              "op": "call   11020 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_accepted_phase::{closure",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                69664
+              ]
+            }
+          ],
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::pump",
+          "local_bytes": 168,
+          "maximum_local_bytes": 168
+        },
+        {
+          "address": 69664,
+          "callsites": [
+            {
+              "address": "0x1113a",
+              "depth_before": 136,
+              "kind": "call",
+              "line": 20645,
+              "op": "call   309c0 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_phase_snapshot>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                199104
+              ]
+            }
+          ],
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_accepted_phase::{closure#0}",
+          "local_bytes": 136,
+          "maximum_local_bytes": 136
+        },
+        {
+          "address": 199104,
+          "callsites": [
+            {
+              "address": "0x30b02",
+              "depth_before": 296,
+              "kind": "call",
+              "line": 53520,
+              "op": "call   2f000 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_observe>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                192512
+              ]
+            }
+          ],
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_phase_snapshot",
+          "local_bytes": 296,
+          "maximum_local_bytes": 296
+        },
+        {
+          "address": 192512,
+          "callsites": [
+            {
+              "address": "0x2f459",
+              "depth_before": 568,
+              "kind": "call",
+              "line": 52041,
+              "op": "call   22ed0 <<ihk_smp_x86_64::smp_application::Remote>::verification_emit>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                143056
+              ]
+            }
+          ],
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_observe",
+          "local_bytes": 568,
+          "maximum_local_bytes": 568
+        },
+        {
+          "address": 143056,
+          "callsites": [
+            {
+              "address": "0x22fd8",
+              "depth_before": 216,
+              "kind": "call",
+              "line": 38796,
+              "op": "call   24440 <<ihk_smp_x86_64::smp_application::Remote>::verification_emit_mailbox>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                148544
+              ]
+            },
+            {
+              "address": "0x22fa7",
+              "depth_before": 216,
+              "kind": "call",
+              "line": 38782,
+              "op": "call   24440 <<ihk_smp_x86_64::smp_application::Remote>::verification_emit_mailbox>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                148544
+              ]
+            }
+          ],
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_application::Remote>::verification_emit",
+          "local_bytes": 216,
+          "maximum_local_bytes": 216
+        },
+        {
+          "address": 148544,
+          "callsites": [
+            {
+              "address": "0x24660",
+              "depth_before": 3752,
+              "kind": "call",
+              "line": 40086,
+              "op": "call   32500 <<ihk_smp_x86_64::smp_application_syscall::Mailbox<ihk_smp_x86_64::smp_memory::service::memory::SyscallResponse>>::verification_mailbox>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                206080
+              ]
+            },
+            {
+              "address": "0x24626",
+              "depth_before": 3752,
+              "kind": "call",
+              "line": 40073,
+              "op": "call   32500 <<ihk_smp_x86_64::smp_application_syscall::Mailbox<ihk_smp_x86_64::smp_memory::service::memory::SyscallResponse>>::verification_mailbox>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                206080
+              ]
+            }
+          ],
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_application::Remote>::verification_emit_mailbox",
+          "local_bytes": 3752,
+          "maximum_local_bytes": 3752
+        },
+        {
+          "address": 206080,
+          "callsites": [],
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_application_syscall::Mailbox<ihk_smp_x86_64::smp_memory::service::memory::SyscallResponse>>::verification_mailbox",
+          "local_bytes": 288,
+          "maximum_local_bytes": 288
+        }
+      ]
+    },
+    "phase_ioctl_to_apps": {
+      "bytes": 3312,
+      "prior_bytes": 3312,
+      "rows": [
+        {
+          "address": 8912,
+          "callsites": [
+            {
+              "address": "0x22e2",
+              "depth_before": 24,
+              "kind": "call",
+              "line": 2190,
+              "op": "call   22e7 <kernel::miscdevice::fops_ioctl::<ihk_smp_x86_64::IhkSmpControlDevice>+0x17>",
+              "relocation": {
+                "addend": -4,
+                "name": "<ihk_smp_x86_64::IhkSmpControlDevice as kernel::miscdevice::MiscDevice>::ioctl",
+                "relocation_type": 4,
+                "symbol": "_RNvXs5_Cs5Iw3aBAMJ7i_14ihk_smp_x86_64NtB5_19IhkSmpControlDeviceNtNtCs1DErgtJhccC_6kernel10miscdevice10MiscDevice5ioctl",
+                "target": [
+                  ".text",
+                  315744
+                ]
+              },
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                315744
+              ]
+            }
+          ],
+          "entry_return_bytes": 8,
+          "function": "kernel::miscdevice::fops_ioctl::<ihk_smp_x86_64::IhkSmpControlDevice>",
+          "local_bytes": 24,
+          "maximum_local_bytes": 24
+        },
+        {
+          "address": 315744,
+          "callsites": [
+            {
+              "address": "0x4d664",
+              "depth_before": 472,
+              "kind": "call",
+              "line": 83972,
+              "op": "call   3e200 <<ihk_smp_x86_64::smp_memory::service::Started>::verification_phase_command>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                254464
+              ]
+            }
+          ],
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::IhkSmpControlDevice as kernel::miscdevice::MiscDevice>::ioctl",
+          "local_bytes": 472,
+          "maximum_local_bytes": 472
+        },
+        {
+          "address": 254464,
+          "callsites": [
+            {
+              "address": "0x3e26b",
+              "depth_before": 152,
+              "kind": "call",
+              "line": 67205,
+              "op": "call   309c0 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_phase_snapshot>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                199104
+              ]
+            },
+            {
+              "address": "0x3e416",
+              "depth_before": 152,
+              "kind": "call",
+              "line": 67311,
+              "op": "call   309c0 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_phase_snapshot>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                199104
+              ]
+            }
+          ],
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Started>::verification_phase_command",
+          "local_bytes": 152,
+          "maximum_local_bytes": 152
+        },
+        {
+          "address": 199104,
+          "callsites": [
+            {
+              "address": "0x30b02",
+              "depth_before": 296,
+              "kind": "call",
+              "line": 53520,
+              "op": "call   2f000 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_observe>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                192512
+              ]
+            }
+          ],
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_phase_snapshot",
+          "local_bytes": 296,
+          "maximum_local_bytes": 296
+        },
+        {
+          "address": 192512,
+          "callsites": [
+            {
+              "address": "0x2f459",
+              "depth_before": 568,
+              "kind": "call",
+              "line": 52041,
+              "op": "call   22ed0 <<ihk_smp_x86_64::smp_application::Remote>::verification_emit>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                143056
+              ]
+            }
+          ],
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_observe",
+          "local_bytes": 568,
+          "maximum_local_bytes": 568
+        },
+        {
+          "address": 143056,
+          "callsites": [
+            {
+              "address": "0x22ef6",
+              "depth_before": 216,
+              "kind": "call",
+              "line": 38740,
+              "op": "call   23020 <<ihk_smp_x86_64::smp_application::Remote>::verification_emit_apps>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                143392
+              ]
+            }
+          ],
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_application::Remote>::verification_emit",
+          "local_bytes": 216,
+          "maximum_local_bytes": 216
+        },
+        {
+          "address": 143392,
+          "callsites": [],
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_application::Remote>::verification_emit_apps",
+          "local_bytes": 1528,
+          "maximum_local_bytes": 1528
+        }
+      ]
+    },
+    "phase_ioctl_to_mailbox_copy": {
+      "bytes": 5832,
+      "prior_bytes": 5832,
+      "rows": [
+        {
+          "address": 8912,
+          "callsites": [
+            {
+              "address": "0x22e2",
+              "depth_before": 24,
+              "kind": "call",
+              "line": 2190,
+              "op": "call   22e7 <kernel::miscdevice::fops_ioctl::<ihk_smp_x86_64::IhkSmpControlDevice>+0x17>",
+              "relocation": {
+                "addend": -4,
+                "name": "<ihk_smp_x86_64::IhkSmpControlDevice as kernel::miscdevice::MiscDevice>::ioctl",
+                "relocation_type": 4,
+                "symbol": "_RNvXs5_Cs5Iw3aBAMJ7i_14ihk_smp_x86_64NtB5_19IhkSmpControlDeviceNtNtCs1DErgtJhccC_6kernel10miscdevice10MiscDevice5ioctl",
+                "target": [
+                  ".text",
+                  315744
+                ]
+              },
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                315744
+              ]
+            }
+          ],
+          "entry_return_bytes": 8,
+          "function": "kernel::miscdevice::fops_ioctl::<ihk_smp_x86_64::IhkSmpControlDevice>",
+          "local_bytes": 24,
+          "maximum_local_bytes": 24
+        },
+        {
+          "address": 315744,
+          "callsites": [
+            {
+              "address": "0x4d664",
+              "depth_before": 472,
+              "kind": "call",
+              "line": 83972,
+              "op": "call   3e200 <<ihk_smp_x86_64::smp_memory::service::Started>::verification_phase_command>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                254464
+              ]
+            }
+          ],
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::IhkSmpControlDevice as kernel::miscdevice::MiscDevice>::ioctl",
+          "local_bytes": 472,
+          "maximum_local_bytes": 472
+        },
+        {
+          "address": 254464,
+          "callsites": [
+            {
+              "address": "0x3e26b",
+              "depth_before": 152,
+              "kind": "call",
+              "line": 67205,
+              "op": "call   309c0 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_phase_snapshot>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                199104
+              ]
+            },
+            {
+              "address": "0x3e416",
+              "depth_before": 152,
+              "kind": "call",
+              "line": 67311,
+              "op": "call   309c0 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_phase_snapshot>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                199104
+              ]
+            }
+          ],
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Started>::verification_phase_command",
+          "local_bytes": 152,
+          "maximum_local_bytes": 152
+        },
+        {
+          "address": 199104,
+          "callsites": [
+            {
+              "address": "0x30b02",
+              "depth_before": 296,
+              "kind": "call",
+              "line": 53520,
+              "op": "call   2f000 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_observe>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                192512
+              ]
+            }
+          ],
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_phase_snapshot",
+          "local_bytes": 296,
+          "maximum_local_bytes": 296
+        },
+        {
+          "address": 192512,
+          "callsites": [
+            {
+              "address": "0x2f459",
+              "depth_before": 568,
+              "kind": "call",
+              "line": 52041,
+              "op": "call   22ed0 <<ihk_smp_x86_64::smp_application::Remote>::verification_emit>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                143056
+              ]
+            }
+          ],
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_observe",
+          "local_bytes": 568,
+          "maximum_local_bytes": 568
+        },
+        {
+          "address": 143056,
+          "callsites": [
+            {
+              "address": "0x22fd8",
+              "depth_before": 216,
+              "kind": "call",
+              "line": 38796,
+              "op": "call   24440 <<ihk_smp_x86_64::smp_application::Remote>::verification_emit_mailbox>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                148544
+              ]
+            },
+            {
+              "address": "0x22fa7",
+              "depth_before": 216,
+              "kind": "call",
+              "line": 38782,
+              "op": "call   24440 <<ihk_smp_x86_64::smp_application::Remote>::verification_emit_mailbox>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                148544
+              ]
+            }
+          ],
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_application::Remote>::verification_emit",
+          "local_bytes": 216,
+          "maximum_local_bytes": 216
+        },
+        {
+          "address": 148544,
+          "callsites": [
+            {
+              "address": "0x24660",
+              "depth_before": 3752,
+              "kind": "call",
+              "line": 40086,
+              "op": "call   32500 <<ihk_smp_x86_64::smp_application_syscall::Mailbox<ihk_smp_x86_64::smp_memory::service::memory::SyscallResponse>>::verification_mailbox>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                206080
+              ]
+            },
+            {
+              "address": "0x24626",
+              "depth_before": 3752,
+              "kind": "call",
+              "line": 40073,
+              "op": "call   32500 <<ihk_smp_x86_64::smp_application_syscall::Mailbox<ihk_smp_x86_64::smp_memory::service::memory::SyscallResponse>>::verification_mailbox>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                206080
+              ]
+            }
+          ],
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_application::Remote>::verification_emit_mailbox",
+          "local_bytes": 3752,
+          "maximum_local_bytes": 3752
+        },
+        {
+          "address": 206080,
+          "callsites": [],
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_application_syscall::Mailbox<ihk_smp_x86_64::smp_memory::service::memory::SyscallResponse>>::verification_mailbox",
+          "local_bytes": 288,
+          "maximum_local_bytes": 288
+        }
+      ]
+    },
+    "ret_enter_hook": {
+      "bytes": 704,
+      "prior_bytes": 704,
+      "rows": [
+        {
+          "address": 3312,
+          "callsites": [
+            {
+              "address": "0xed8",
+              "depth_before": 24,
+              "kind": "call",
+              "line": 1288,
+              "op": "call   3d60 <<mcctrl::mcctrl_process::Context>::return_syscall>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                15712
+              ]
+            }
+          ],
+          "entry_return_bytes": 8,
+          "function": "mcctrl::ioctl",
+          "local_bytes": 24,
+          "maximum_local_bytes": 24
+        },
+        {
+          "address": 15712,
+          "callsites": [
+            {
+              "address": "0x41c6",
+              "depth_before": 488,
+              "kind": "call",
+              "line": 4823,
+              "op": "call   5b00 <mcctrl::mcctrl_process::stability_ret_enter>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                23296
+              ]
+            }
+          ],
+          "entry_return_bytes": 8,
+          "function": "<mcctrl::mcctrl_process::Context>::return_syscall",
+          "local_bytes": 488,
+          "maximum_local_bytes": 488
+        },
+        {
+          "address": 23296,
+          "callsites": [],
+          "entry_return_bytes": 8,
+          "function": "mcctrl::mcctrl_process::stability_ret_enter",
+          "local_bytes": 168,
+          "maximum_local_bytes": 168
+        }
+      ]
+    },
+    "ret_leave_hook": {
+      "bytes": 704,
+      "prior_bytes": 704,
+      "rows": [
+        {
+          "address": 3312,
+          "callsites": [
+            {
+              "address": "0xed8",
+              "depth_before": 24,
+              "kind": "call",
+              "line": 1288,
+              "op": "call   3d60 <<mcctrl::mcctrl_process::Context>::return_syscall>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                15712
+              ]
+            }
+          ],
+          "entry_return_bytes": 8,
+          "function": "mcctrl::ioctl",
+          "local_bytes": 24,
+          "maximum_local_bytes": 24
+        },
+        {
+          "address": 15712,
+          "callsites": [
+            {
+              "address": "0x4204",
+              "depth_before": 488,
+              "kind": "call",
+              "line": 4839,
+              "op": "call   5c90 <mcctrl::mcctrl_process::stability_ret_leave>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                23696
+              ]
+            }
+          ],
+          "entry_return_bytes": 8,
+          "function": "<mcctrl::mcctrl_process::Context>::return_syscall",
+          "local_bytes": 488,
+          "maximum_local_bytes": 488
+        },
+        {
+          "address": 23696,
+          "callsites": [],
+          "entry_return_bytes": 8,
+          "function": "mcctrl::mcctrl_process::stability_ret_leave",
+          "local_bytes": 168,
+          "maximum_local_bytes": 168
+        }
+      ]
+    },
+    "ret_select_hook": {
+      "bytes": 560,
+      "prior_bytes": 560,
+      "rows": [
+        {
+          "address": 3312,
+          "callsites": [
+            {
+              "address": "0xeb0",
+              "depth_before": 24,
+              "kind": "call",
+              "line": 1274,
+              "op": "call   2ac0 <<mcctrl::mcctrl_process::Context>::wait_syscall>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                10944
+              ]
+            }
+          ],
+          "entry_return_bytes": 8,
+          "function": "mcctrl::ioctl",
+          "local_bytes": 24,
+          "maximum_local_bytes": 24
+        },
+        {
+          "address": 10944,
+          "callsites": [
+            {
+              "address": "0x3115",
+              "depth_before": 392,
+              "kind": "call",
+              "line": 3774,
+              "op": "call   5e20 <mcctrl::mcctrl_process::stability_ret_select>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                24096
+              ]
+            }
+          ],
+          "entry_return_bytes": 8,
+          "function": "<mcctrl::mcctrl_process::Context>::wait_syscall",
+          "local_bytes": 392,
+          "maximum_local_bytes": 392
+        },
+        {
+          "address": 24096,
+          "callsites": [],
+          "entry_return_bytes": 8,
+          "function": "mcctrl::mcctrl_process::stability_ret_select",
+          "local_bytes": 120,
+          "maximum_local_bytes": 120
+        }
+      ]
+    }
+  },
+  "full_linux_stack_bound_verified": false,
+  "full_source_tree": "/tmp/stability-permanent-stack-review-20260913-l620qr1w",
+  "inputs": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/stability-observer-stack-review-20260913-3.json",
+      "sha256": "872a1c3a87541d55fb8b084416af2897d741cec9d0ec3e45631b4c2df0cc43db",
+      "size": 90957
+    },
+    {
+      "path": "/tmp/stability-permanent-stack-review-20260913-l620qr1w/analysis.json",
+      "sha256": "6ba3f2598ea1f338a1661652d1b40385c49934fbfab4475c8a5a68ef5f9c704e",
+      "size": 3528559
+    }
+  ],
+  "linux_formatting_context": {
+    "direct_initial_formatting_prefix_upper_bytes": 797,
+    "ioctl_mailbox_print_module_prefix_bytes": 5536,
+    "ioctl_with_selected_linux_prefix_bytes": 6333,
+    "reference": {
+      "path": "/home/holden/mckernel/docs/verification/stability-observer-stack-review-20260913-2.json",
+      "sha256": "9b179537f1e9874bb4070716492a424ef3ade62e7e0946aba604d6aaf3f2d67f",
+      "size": 104140
+    },
+    "scope": "Inherited exact pinned Linux analysis of only the direct initial vsnprintf path through core::fmt::write. These values stop before dynamic callbacks and do not form a whole-Linux upper bound.",
+    "thread_size_bytes": 16384,
+    "worker_mailbox_print_module_prefix_bytes": 5216,
+    "worker_with_selected_linux_prefix_bytes": 6013
+  },
+  "mcctrl_byte_identical": true,
+  "residuals": [
+    "Dynamic core::fmt/Debug callbacks and their nested formatting frames.",
+    "Alternate printk_sprint formatting path, console flush and console-driver descendants.",
+    "Linux syscall/kthread entry beyond selected module boundaries, lock slowpaths/scheduler, interrupts/NMI/mitigation behavior and deeper RETURN backend handling.",
+    "No stack runtime watermark or actual guest verification is supplied by this review. Parent controls isolated guest validation and must retain the residual claim."
+  ],
+  "scope": "Exact compiled known module frame paths; inherited Linux residuals remain unbounded",
+  "status": "KNOWN_MODULE_FRAME_PATHS_NOT_INCREASED_WITH_EXPLICIT_KERNEL_RESIDUALS",
+  "transport_acceptance": false
+}

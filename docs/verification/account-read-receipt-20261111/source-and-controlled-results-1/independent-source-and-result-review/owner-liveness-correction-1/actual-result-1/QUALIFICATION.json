@@ -1,0 +1,674 @@
+{
+  "SDK_source": {
+    "bytes": 155857,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-source-sdk-max-1/candidate/scripts/run_os_goal.py",
+    "sha256": "39a03dd8bb33ea943cad02897dee9b6b113187eee30d33ed22a89886b944d870"
+  },
+  "SDK_source_GO": {
+    "bytes": 6544,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-review-sourceacq-max-1/producer-validator-source-1/REVIEW.json",
+    "sha256": "5a06db0d0bbaaaf1fa44ba7319853183635ae6d663c14658ce950a58985f8e0f"
+  },
+  "actual_detail": {
+    "bytes": 10416,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/owner-liveness-correction-1/output-1/OBSERVATIONS.json",
+    "sha256": "a41245bd5ae3d0d0376a0b9f81f1983e4545db428b66b875ab25704d6424e032"
+  },
+  "actual_external_admission": {
+    "bytes": 1155,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/owner-liveness-correction-1/ROOT-EXTERNAL-ADMISSION.json",
+    "sha256": "63c90e4c07a52e8c1d6558d08389858eff814229c82fb3088669d46960a2194c"
+  },
+  "actual_owner": {
+    "bytes": 374,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/owner-liveness-correction-1/execution-1/ownership.json",
+    "sha256": "af183ffccfde6904c603d8b28456b7aec9f000cd62930386a80676e38d3c3a0f"
+  },
+  "actual_parent_admission": {
+    "bytes": 572,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/owner-liveness-correction-1/execution-1/ADMISSION.json",
+    "sha256": "d4627d57b1b7be7c75d5d43724c9f05c704629c84c7799c002cc11fce506e078"
+  },
+  "actual_result": {
+    "bytes": 2117,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/owner-liveness-correction-1/execution-1/RESULT.json",
+    "sha256": "bdd42ce933f2faa57e425a2d0ee18c1cd7a2797a1c991dc09e98179e01f193e4"
+  },
+  "actual_semantic_evidence": {
+    "actual_full_normal_importer_and_SDK_pure_validator_used": true,
+    "actual_rows": [
+      {
+        "accepted": true,
+        "forbidden_effects": [],
+        "id": "live-both-bookends",
+        "ledger_reads": 1,
+        "matching_births": true,
+        "proc_reads": 4,
+        "proc_trace": [
+          {
+            "birth": "11001",
+            "bookend": "before",
+            "kind": "worker",
+            "state": "R"
+          },
+          {
+            "birth": "11002",
+            "bookend": "before",
+            "kind": "server",
+            "state": "S"
+          },
+          {
+            "birth": "11001",
+            "bookend": "after",
+            "kind": "worker",
+            "state": "R"
+          },
+          {
+            "birth": "11002",
+            "bookend": "after",
+            "kind": "server",
+            "state": "S"
+          }
+        ],
+        "state_reads": 2,
+        "validator_calls": 1
+      },
+      {
+        "accepted": false,
+        "forbidden_effects": [],
+        "id": "worker-Z-before",
+        "ledger_reads": 0,
+        "matching_births": true,
+        "proc_reads": 1,
+        "proc_trace": [
+          {
+            "birth": "11001",
+            "bookend": "before",
+            "kind": "worker",
+            "state": "Z"
+          }
+        ],
+        "state_reads": 1,
+        "validator_calls": 0
+      },
+      {
+        "accepted": false,
+        "forbidden_effects": [],
+        "id": "worker-X-before",
+        "ledger_reads": 0,
+        "matching_births": true,
+        "proc_reads": 1,
+        "proc_trace": [
+          {
+            "birth": "11001",
+            "bookend": "before",
+            "kind": "worker",
+            "state": "X"
+          }
+        ],
+        "state_reads": 1,
+        "validator_calls": 0
+      },
+      {
+        "accepted": false,
+        "forbidden_effects": [],
+        "id": "worker-x-before",
+        "ledger_reads": 0,
+        "matching_births": true,
+        "proc_reads": 1,
+        "proc_trace": [
+          {
+            "birth": "11001",
+            "bookend": "before",
+            "kind": "worker",
+            "state": "x"
+          }
+        ],
+        "state_reads": 1,
+        "validator_calls": 0
+      },
+      {
+        "accepted": false,
+        "forbidden_effects": [],
+        "id": "worker-?-before",
+        "ledger_reads": 0,
+        "matching_births": true,
+        "proc_reads": 1,
+        "proc_trace": [
+          {
+            "birth": "11001",
+            "bookend": "before",
+            "kind": "worker",
+            "state": "?"
+          }
+        ],
+        "state_reads": 1,
+        "validator_calls": 0
+      },
+      {
+        "accepted": false,
+        "forbidden_effects": [],
+        "id": "server-Z-before",
+        "ledger_reads": 0,
+        "matching_births": true,
+        "proc_reads": 2,
+        "proc_trace": [
+          {
+            "birth": "11001",
+            "bookend": "before",
+            "kind": "worker",
+            "state": "R"
+          },
+          {
+            "birth": "11002",
+            "bookend": "before",
+            "kind": "server",
+            "state": "Z"
+          }
+        ],
+        "state_reads": 1,
+        "validator_calls": 0
+      },
+      {
+        "accepted": false,
+        "forbidden_effects": [],
+        "id": "server-X-before",
+        "ledger_reads": 0,
+        "matching_births": true,
+        "proc_reads": 2,
+        "proc_trace": [
+          {
+            "birth": "11001",
+            "bookend": "before",
+            "kind": "worker",
+            "state": "R"
+          },
+          {
+            "birth": "11002",
+            "bookend": "before",
+            "kind": "server",
+            "state": "X"
+          }
+        ],
+        "state_reads": 1,
+        "validator_calls": 0
+      },
+      {
+        "accepted": false,
+        "forbidden_effects": [],
+        "id": "server-x-before",
+        "ledger_reads": 0,
+        "matching_births": true,
+        "proc_reads": 2,
+        "proc_trace": [
+          {
+            "birth": "11001",
+            "bookend": "before",
+            "kind": "worker",
+            "state": "R"
+          },
+          {
+            "birth": "11002",
+            "bookend": "before",
+            "kind": "server",
+            "state": "x"
+          }
+        ],
+        "state_reads": 1,
+        "validator_calls": 0
+      },
+      {
+        "accepted": false,
+        "forbidden_effects": [],
+        "id": "server-?-before",
+        "ledger_reads": 0,
+        "matching_births": true,
+        "proc_reads": 2,
+        "proc_trace": [
+          {
+            "birth": "11001",
+            "bookend": "before",
+            "kind": "worker",
+            "state": "R"
+          },
+          {
+            "birth": "11002",
+            "bookend": "before",
+            "kind": "server",
+            "state": "?"
+          }
+        ],
+        "state_reads": 1,
+        "validator_calls": 0
+      },
+      {
+        "accepted": false,
+        "forbidden_effects": [],
+        "id": "worker-Z-after",
+        "ledger_reads": 1,
+        "matching_births": true,
+        "proc_reads": 3,
+        "proc_trace": [
+          {
+            "birth": "11001",
+            "bookend": "before",
+            "kind": "worker",
+            "state": "R"
+          },
+          {
+            "birth": "11002",
+            "bookend": "before",
+            "kind": "server",
+            "state": "S"
+          },
+          {
+            "birth": "11001",
+            "bookend": "after",
+            "kind": "worker",
+            "state": "Z"
+          }
+        ],
+        "state_reads": 2,
+        "validator_calls": 0
+      },
+      {
+        "accepted": false,
+        "forbidden_effects": [],
+        "id": "worker-X-after",
+        "ledger_reads": 1,
+        "matching_births": true,
+        "proc_reads": 3,
+        "proc_trace": [
+          {
+            "birth": "11001",
+            "bookend": "before",
+            "kind": "worker",
+            "state": "R"
+          },
+          {
+            "birth": "11002",
+            "bookend": "before",
+            "kind": "server",
+            "state": "S"
+          },
+          {
+            "birth": "11001",
+            "bookend": "after",
+            "kind": "worker",
+            "state": "X"
+          }
+        ],
+        "state_reads": 2,
+        "validator_calls": 0
+      },
+      {
+        "accepted": false,
+        "forbidden_effects": [],
+        "id": "worker-x-after",
+        "ledger_reads": 1,
+        "matching_births": true,
+        "proc_reads": 3,
+        "proc_trace": [
+          {
+            "birth": "11001",
+            "bookend": "before",
+            "kind": "worker",
+            "state": "R"
+          },
+          {
+            "birth": "11002",
+            "bookend": "before",
+            "kind": "server",
+            "state": "S"
+          },
+          {
+            "birth": "11001",
+            "bookend": "after",
+            "kind": "worker",
+            "state": "x"
+          }
+        ],
+        "state_reads": 2,
+        "validator_calls": 0
+      },
+      {
+        "accepted": false,
+        "forbidden_effects": [],
+        "id": "worker-?-after",
+        "ledger_reads": 1,
+        "matching_births": true,
+        "proc_reads": 3,
+        "proc_trace": [
+          {
+            "birth": "11001",
+            "bookend": "before",
+            "kind": "worker",
+            "state": "R"
+          },
+          {
+            "birth": "11002",
+            "bookend": "before",
+            "kind": "server",
+            "state": "S"
+          },
+          {
+            "birth": "11001",
+            "bookend": "after",
+            "kind": "worker",
+            "state": "?"
+          }
+        ],
+        "state_reads": 2,
+        "validator_calls": 0
+      },
+      {
+        "accepted": false,
+        "forbidden_effects": [],
+        "id": "server-Z-after",
+        "ledger_reads": 1,
+        "matching_births": true,
+        "proc_reads": 4,
+        "proc_trace": [
+          {
+            "birth": "11001",
+            "bookend": "before",
+            "kind": "worker",
+            "state": "R"
+          },
+          {
+            "birth": "11002",
+            "bookend": "before",
+            "kind": "server",
+            "state": "S"
+          },
+          {
+            "birth": "11001",
+            "bookend": "after",
+            "kind": "worker",
+            "state": "R"
+          },
+          {
+            "birth": "11002",
+            "bookend": "after",
+            "kind": "server",
+            "state": "Z"
+          }
+        ],
+        "state_reads": 2,
+        "validator_calls": 0
+      },
+      {
+        "accepted": false,
+        "forbidden_effects": [],
+        "id": "server-X-after",
+        "ledger_reads": 1,
+        "matching_births": true,
+        "proc_reads": 4,
+        "proc_trace": [
+          {
+            "birth": "11001",
+            "bookend": "before",
+            "kind": "worker",
+            "state": "R"
+          },
+          {
+            "birth": "11002",
+            "bookend": "before",
+            "kind": "server",
+            "state": "S"
+          },
+          {
+            "birth": "11001",
+            "bookend": "after",
+            "kind": "worker",
+            "state": "R"
+          },
+          {
+            "birth": "11002",
+            "bookend": "after",
+            "kind": "server",
+            "state": "X"
+          }
+        ],
+        "state_reads": 2,
+        "validator_calls": 0
+      },
+      {
+        "accepted": false,
+        "forbidden_effects": [],
+        "id": "server-x-after",
+        "ledger_reads": 1,
+        "matching_births": true,
+        "proc_reads": 4,
+        "proc_trace": [
+          {
+            "birth": "11001",
+            "bookend": "before",
+            "kind": "worker",
+            "state": "R"
+          },
+          {
+            "birth": "11002",
+            "bookend": "before",
+            "kind": "server",
+            "state": "S"
+          },
+          {
+            "birth": "11001",
+            "bookend": "after",
+            "kind": "worker",
+            "state": "R"
+          },
+          {
+            "birth": "11002",
+            "bookend": "after",
+            "kind": "server",
+            "state": "x"
+          }
+        ],
+        "state_reads": 2,
+        "validator_calls": 0
+      },
+      {
+        "accepted": false,
+        "forbidden_effects": [],
+        "id": "server-?-after",
+        "ledger_reads": 1,
+        "matching_births": true,
+        "proc_reads": 4,
+        "proc_trace": [
+          {
+            "birth": "11001",
+            "bookend": "before",
+            "kind": "worker",
+            "state": "R"
+          },
+          {
+            "birth": "11002",
+            "bookend": "before",
+            "kind": "server",
+            "state": "S"
+          },
+          {
+            "birth": "11001",
+            "bookend": "after",
+            "kind": "worker",
+            "state": "R"
+          },
+          {
+            "birth": "11002",
+            "bookend": "after",
+            "kind": "server",
+            "state": "?"
+          }
+        ],
+        "state_reads": 2,
+        "validator_calls": 0
+      }
+    ],
+    "before_and_after_worker_server_Z_X_x_unknown_each_refused_at_exact_kernel_readpoint": true,
+    "entire_stdout_equals_external_golden": true,
+    "errors": 0,
+    "every_refusal_before_validator": true,
+    "failures": 0,
+    "literal17_rows_and_all_counts_equal_external_oracle": true,
+    "live_pair_R_S_at_both_bookends": true,
+    "matching_births_in_every_terminal_or_unknown_row": true,
+    "no_actual_account_receipt_or_allowance_from_literal_model": true,
+    "old18_Campaign_RPC_observe_not_reexecuted": true,
+    "stderr_bytes": 0,
+    "totals": {
+      "RPC_Campaign_observe_or_writes": 0,
+      "ledger_reads": 9,
+      "live_rows": 1,
+      "old18_methods_executed": 0,
+      "proc_reads": 44,
+      "rejected_rows": 16,
+      "state_reads": 26,
+      "status": "PASS_CHANGED_OWNER_LIVENESS_BRANCH",
+      "validator_calls": 1
+    }
+  },
+  "actual_stderr": {
+    "bytes": 0,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/owner-liveness-correction-1/execution-1/phase-1.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "actual_stdout": {
+    "bytes": 230,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/owner-liveness-correction-1/execution-1/phase-1.stdout",
+    "sha256": "a0ed184eb32f5dc048ee337fb6f41b9d176283c0ec19cf2341388fd6afeb851d"
+  },
+  "all_bound_input_rows_rechecked_equal": true,
+  "at": "2026-11-11T21:53:13.729226+00:00",
+  "canonical_source_readback": {
+    "bytes": 155857,
+    "path": "/home/holden/mckernel/scripts/run_os_goal.py",
+    "sha256": "39a03dd8bb33ea943cad02897dee9b6b113187eee30d33ed22a89886b944d870"
+  },
+  "closure": {
+    "actual_owned_family": {
+      "adopted_kills": [],
+      "adopted_reaps": [],
+      "error": null,
+      "label": "phase-1",
+      "leader": 1562814,
+      "leader_birth": "52014437",
+      "leader_group_signalled": false,
+      "leader_parent_joined": true,
+      "remaining_direct_children": [],
+      "status": 0,
+      "streams_closed": true,
+      "timed_out": false,
+      "whole_descendants_joined": true
+    },
+    "all_waits_streams_positive": true,
+    "literal_argv_cwd_equal": true,
+    "outer_exit": 0,
+    "outer_noSession": true,
+    "outer_original_tool_chunk": "17d128",
+    "remaining_direct_children": []
+  },
+  "current_retirement": {
+    "bytes": 459,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/owner-liveness-correction-1/CURRENT-PROCESS-MEMORY-RETIREMENT.json",
+    "sha256": "8f8df0822430ab9ccf4b42972a9aa870c3c6137649df4e3cb91d83b85180db47"
+  },
+  "decision": "GO_SAVED17_CHANGED_LIVENESS_ROWS_AND_COMBINED_RECEIPT_SOURCE_AT_CONTROLLED_SCOPE",
+  "external_expected": {
+    "bytes": 250,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/owner-liveness-correction-1/EXPECTED.json",
+    "sha256": "513d62581e46ab22b0bd4390a6e661f5ab3ae980a5c61270a7707299f67149ce"
+  },
+  "external_rows": {
+    "bytes": 3739,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/owner-liveness-correction-1/EXPECTED-OWNER-STATES.json",
+    "sha256": "080d32f52dc3aa1a0a7edd6e16552420ac4802320818a5ff69595faedca9c807"
+  },
+  "finite_finding_disposition": {
+    "CONSUMER-LIVE-01": "CLOSED_AT_SOURCE_AND_CONTROLLED_MATCHING_BIRTH_PROCESS_STATE_CONTRACT_SCOPE",
+    "no_remaining_material_finding_in_this_finite_combined_review": true
+  },
+  "fixture": {
+    "bytes": 12237,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/owner-liveness-correction-1/owner_liveness_regression.py",
+    "sha256": "5494fd6bcf8d63e24bf343dcc467ebbe1f7f666e620a06b2dbaaef41a7d2d663"
+  },
+  "full_Root_completion": {
+    "bytes": 1155,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/owner-liveness-correction-1/ROOT-EXEC-COMPLETION.json",
+    "sha256": "5b24a5f3727ec120243e5c38f2637393d36e37e14007b15f9da6b2333b092558"
+  },
+  "inputs": {
+    "bytes": 5652,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/owner-liveness-correction-1/INPUTS.json",
+    "sha256": "79dc4522690ec5f308399a9e92de1fd9b01755cd4ef0b3a5afdf0ea0f4dca564"
+  },
+  "normal_adoption_boundary": {
+    "actual_new_owner_context_or_receipt_not_proved_here": true,
+    "canonical_on_disk_now_exact_reviewed39a": true,
+    "loaded_old_worker_not_replaced_by_disk_integration": true,
+    "required_next": "Reviewed normal same-Root transition/activation, exact loaded source/interpreter and genuine independently pinned worker/server births/boot/goal/original7c6 ledger/context, then actual successful receipt through real polling and actual operation-specific admission. No synthetic notification/new invocation/credit run/budget or hotpatch inferred."
+  },
+  "operation_GO": {
+    "bytes": 12537,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-review-sourceacq-max-1/owner-liveness-correction-1/REVIEW.json",
+    "sha256": "21d8f766c46d5e14daa07268766fd0b4102abbab38f5eeb258636e7f0c14b5cf"
+  },
+  "original_acceptance_delta": 0,
+  "original_consumer_NO_GO_preserved": {
+    "bytes": 4165,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-review-sourceacq-max-1/combined-source-1/REVIEW.json",
+    "sha256": "f90fb55b89c0f570db763889a69607b3c89f5482aa86a05b6aea6cc15812455b"
+  },
+  "parent": {
+    "bytes": 5455,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/owner-liveness-correction-1/run_root_once.py",
+    "sha256": "6718dd2a0ca5a8b3c86778a2ee39a107393415e298457de24e40caa8a8970471"
+  },
+  "production_controller_or_native_activation": false,
+  "request": {
+    "bytes": 6610,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/owner-liveness-correction-1/REQUEST.json",
+    "sha256": "189a29faa1e43d7dc84f4cc0200fbe7a8946c3ddcbbda1e715f7aa8c632073e7"
+  },
+  "resource_scope": {
+    "CPU": 0,
+    "aggregate4GiB_and_max3_positive": true,
+    "external_admission_accounts_new_guardian_RSS": [
+      {
+        "birth": "51981693",
+        "pid": 1561218,
+        "rss_bytes": 20602880
+      },
+      {
+        "birth": "51981691",
+        "pid": 1561217,
+        "rss_bytes": 5967872
+      }
+    ],
+    "external_pending_guardian_recovery_charge_bytes_preserved": 268435456,
+    "external_total_including_overhead_pending_and_new_bytes": 2043428864,
+    "fresh26GiB_and_diskfloors_plus64MiB_positive": true,
+    "no_new_retirement_gate": true,
+    "only_current256MiB_job_retired_by_Root": true,
+    "other_historical_native_Scratch_account_source_UNKNOWNs_unchanged": true
+  },
+  "reused_actual18_qualification": {
+    "bytes": 11612,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-review-sourceacq-max-1/actual-result-1/QUALIFICATION.json",
+    "sha256": "bbefe361728f7c0caa955e3791e9a4af4daf0279593134f24b86101a8a64c5a0"
+  },
+  "reviewer_actions": "Saved JSON/bytes, AST/source and private evidence only; no helper/fixture/source imports, test rerun, live account or process query, control, issuer, source-state or canonical write.",
+  "schema": "independent_saved_owner_liveness17_and_combined_account_receipt_qualification_v1",
+  "source": {
+    "bytes": 7994,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-consumer-root-1/owner-liveness-correction-1/current_account_snapshot.py",
+    "sha256": "9032c50ef25ba72e7c04a06727a5b917a3823b748c63e9cdaef7c663e0d9ad85"
+  },
+  "source_delta_GO": {
+    "bytes": 3619,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-review-sourceacq-max-1/owner-liveness-correction-1/REVIEW.json",
+    "sha256": "adef03bd20d0c2cbdfac7e9871f9c971120cdcdee363b97f52abff9bdd64d7dc"
+  }
+}

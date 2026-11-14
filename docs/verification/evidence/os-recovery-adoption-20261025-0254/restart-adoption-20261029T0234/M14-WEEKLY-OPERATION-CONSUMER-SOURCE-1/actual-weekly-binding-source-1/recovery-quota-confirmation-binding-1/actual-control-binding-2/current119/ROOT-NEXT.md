@@ -1,0 +1,5 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+Only accepted_chain's exact consumed observer path constant changes to the actual-control2 routing observer. Observer bytes/hash331dd596 and all other helper AST remain unchanged; sealer24a0 is copied byte-identically. No kernel119/producer/request/template source changed. The changed-pin pure mock regression accepts new/new and refuses old/new and new/old, without loading actual observer or native state.
+
+Root after genuine new current-free: use this accepted_chain path pin in the separate reviewed CURRENT119 binding successor; preserve original72/native/capture/joins/adoption predicates. This narrow packet does not make old sealer control data current. accepted_bindings GUARDIAN/WEEKLY_GUARDIAN_REF and old maxima, plus sealer NEWSC/INITIAL constants still name the original weekly control envelope. Root's separate live-control binding must explicitly resolve those before invoking the sealer. Do not treat an unchanged historical sealer as immediate execution authority. No canonical writes, compiler, guard, capture, native, or actual current119 result.

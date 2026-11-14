@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/original227-runtime-bindings-restart-20261028-1/recursive-successor-1/test_recursive_successor.py", line 195, in <module>
+    if __name__=='__main__':main()
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/original227-runtime-bindings-restart-20261028-1/recursive-successor-1/test_recursive_successor.py", line 191, in main
+    write(p.HERE/'PURE-RECURSIVE-REGRESSION.json',summary)
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/original227-runtime-bindings-restart-20261028-1/recursive-successor-1/test_recursive_successor.py", line 23, in write
+    p.create(path,value);return p.ref(path)
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/original227-runtime-bindings-restart-20261028-1/recursive-successor-1/prepare_recursive_successor.py", line 36, in create
+    with p.open('x') as out:
+  File "/home/holden/anaconda3/lib/python3.9/pathlib.py", line 1252, in open
+    return io.open(self, mode, buffering, encoding, errors, newline,
+  File "/home/holden/anaconda3/lib/python3.9/pathlib.py", line 1120, in _opener
+    return self._accessor.open(self, flags, mode)
+FileExistsError: [Errno 17] File exists: '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/original227-runtime-bindings-restart-20261028-1/recursive-successor-1/PURE-RECURSIVE-REGRESSION.json'

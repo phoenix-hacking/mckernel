@@ -1,0 +1,89 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "BOUNDED_REVIEW_BUNDLE_FROZEN_PENDING_ROOT_OFFLINE_JOB",
+  "at": "2026-10-24T03:50:54.785274+00:00",
+  "source": {
+    "bridge.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-controller-1/bridge.py",
+      "bytes": 19694,
+      "sha256": "15db9c955c83dc49e93e1a39512d60780801bf55a72dade36c6c0dfd4bfd6458"
+    },
+    "finite_launcher.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-controller-1/finite_launcher.py",
+      "bytes": 2147,
+      "sha256": "a74411302daab86d7845c771d34c4cdbb13e4ed4292656ecf26a6e9fba7f3b56"
+    },
+    "test_bridge.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-controller-1/test_bridge.py",
+      "bytes": 17534,
+      "sha256": "4b8ddb6fe96ac450b2aeeed870ff66c7bf31fe9e2a522b6a8b91635391250cc5"
+    },
+    "CONFIG.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-controller-1/CONFIG.json",
+      "bytes": 469,
+      "sha256": "5fc7872e5dc22144b039dddc927fe4e17b9fd3469e897c1b580bce194824f683"
+    },
+    "CURRENT-INVOCATION.txt": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-controller-1/CURRENT-INVOCATION.txt",
+      "bytes": 2433,
+      "sha256": "9f2c46d5bcebae0d987a294d28cf0918614781c835f30d40fcff9b37d6061c3e"
+    }
+  },
+  "existing_sources": {
+    "run_os_goal.py": "009d00f1aa2c07d0d4c50fd1eace64c1a04afe8d33a0b691968b877d4310b3f5",
+    "watch_os_goal.py": "182ffe05bbef52a01b7f7519052fa10cfd06cd642c4acbaea2be3fcbfd749947",
+    "os_goal_credits.py": "adf5187240ed8199746eef3b59b79d4d38c4ae8ac5821c8d8324833926b21ec3"
+  },
+  "test_command": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=6s",
+    "90s",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=60:60",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-controller-1/test_bridge.py"
+  ],
+  "test_semantics": "Offline suppliedstate/clock/process doubles only; no subprocess/signal/model/billing/native actions. Tests NOTRUN.",
+  "current_resident_action": "NOACTION; healthy originalLONG/watch/worker/server unchanged",
+  "production_arm_command": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-controller-1/bridge.py",
+    "--run",
+    "--packet-sha256",
+    "b3ab9463b6a38722d9b486338268a2e6819fe5aad78d6648ccde7019f1d9bca3"
+  ],
+  "production_note": "Detach root-reviewed command with inheritedoriginal launcher hardlimits; do NOT impose bridge-only hardAS/CPU/filelimits that its later launcher would inherit. Childtaskset restoresonlyapprovedCPU pool0,2-7. Bridge loop metadata small; no runtime arm performed.",
+  "cancel_command": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-controller-1/bridge.py",
+    "--cancel"
+  ],
+  "managed_handoff": "Root requests normalworker-only checkpoint only at safe naturalbetween-workloads boundary. Bridgepassivelywaits paused/stopped states; root supplies handoff.json afteractualoldtripletretirement, approving exactFINALstoppedstate SHA and explicitcurrentresume. Missingpermit NEVERresumes signal/userstop. Automaticfallback onlylocal included_usage_guard+10080minused100+positive modelretirement/freeleases; remotequota/auth/billing/credit_balance_decreased notautomatic.",
+  "deadline": "Legacyhours0: workeronlypidfdnormaldrain once. Finitewatcher ordinarilyownsrelativeexpiry; earlierUTC-step deadline getsoneworkerdrain onlybeforeitsquiescencewindow, suppressduplicate/currentdrains. UTC/BOOTTIME/previousobservedearliestcutofflatchedandpersisted; holdsneverdiscardlegacyguardian.",
+  "runtime": false,
+  "correction": "Oneboundedprearmreviewbundle: directchildpoll/reap; actualexternallypinned source/startup checks atarm/delayedlaunch/privateentry; latchedearliestUTC/BOOTTIME/lastclock cutoff acrossforward/back/rearm; earlierUTC-stepfiniteworkerdrain onlyoutsidescheduled31s drainwindow, once, skipalreadydraining; HOLDkeepsguardian; expiry/cancelwins transitionholds; rejectunknownnegativeexitstaledata.",
+  "mock_test_count": 22,
+  "frozen_packet": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-controller-1/FROZEN-PACKET.json",
+    "sha256": "b3ab9463b6a38722d9b486338268a2e6819fe5aad78d6648ccde7019f1d9bca3",
+    "bytes": 948
+  }
+}

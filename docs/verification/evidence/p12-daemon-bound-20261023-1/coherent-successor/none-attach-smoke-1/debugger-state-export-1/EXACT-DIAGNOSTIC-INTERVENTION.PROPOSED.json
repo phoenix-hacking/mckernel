@@ -1,0 +1,46 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PREPARED_DIAGNOSTIC_INTERVENTION_NOT_RELEASED",
+  "pid": 3502879,
+  "start": 52840595,
+  "parent_pid": 3502874,
+  "parent_start": 52840587,
+  "nonce": "7247e16d234147afa148cd0ef24206d4",
+  "python_sha256": "298a9e830ed52f36c299427565485d717d1ce0179c0597cc16560513eb780b06",
+  "gdb_sha256": "ee638c585936025f85a5f0f967e3929c9b36cb286d37ef662b23705682e31e2a",
+  "sources": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/debugger-state-export-1/export_target_state.py",
+      "sha256": "a0afee6806fe7ea4d287555d6aae5523eafbf37fb43e671c2e7730a2ad893932",
+      "bytes": 3369
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/debugger-state-export-1/export.gdb",
+      "sha256": "decedbc40fae8c6393e40c8c6f7a2035369a06e9f66053c154ce1831a4df2643",
+      "bytes": 4465
+    }
+  ],
+  "gdb_argv": [
+    "/usr/bin/gdb",
+    "--nx",
+    "--nh",
+    "--batch",
+    "-iex",
+    "set auto-load off",
+    "-p",
+    "3502879",
+    "-x",
+    "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/debugger-state-export-1/export.gdb"
+  ],
+  "root_profile": {
+    "cpu": 7,
+    "AS_bytes": 2147483648,
+    "CPU": "unlimited",
+    "FSIZE_bytes": 33554432,
+    "NOFILE": 256,
+    "core": 0,
+    "outer_signals": false,
+    "outer_timeout": null
+  },
+  "invariants": "Validate exactPID/start/singlethread/executable/source/nonce/lock beforetargetcall. No owner methods/flagchanges/cleanup/ACK/signals. PairGIL/detach. Capturerootdirectjoin/closedfiles; ifdebuggerdetachuncertain retainheavyhold. Exportonlyboundedownedfailure/commandledger; no credential/environment reads."
+}

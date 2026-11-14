@@ -1,0 +1,294 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "grant": "Root ordinary HOST CPU6 first3mmapflags grant 2026-10-27, after F02 release00:12:59; onejob AS2GiB/CPU60s/FSIZE64MiB/core0/wall90s percommand",
+  "resources": {
+    "CPU": [
+      6
+    ],
+    "jobs": 1,
+    "AS": 2147483648,
+    "CPU_seconds": 60,
+    "FSIZE": 67108864,
+    "CORE": 0,
+    "wall_per_command": 90
+  },
+  "configuration": {
+    "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/GENUINE-NOCACHE-CONFIGURATION.json",
+    "bytes": 91114,
+    "sha256": "a74a4a7b3edef59a5db47c41e1056768540439002331aaaf158dd95e21c7888c"
+  },
+  "inputs": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-host-mmap-flags-1/run_sealed.py",
+      "bytes": 5212,
+      "sha256": "cb24902c0dc09ed0fa284ebd91af9dd284bd705d2ccabc9dccc8a396c3d5c25a"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-host-mmap-flags-1/fixture.rs",
+      "bytes": 584,
+      "sha256": "3c18b81e2316e5c1f4d3b7f765dd6e0afae111cdd5dbe3b06e2c68bf73d082b9"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-host-mmap-flags-1/f06_mmap_flags.rs",
+      "bytes": 1411,
+      "sha256": "862a9af87abfeb269fac4196564475ebb3dcf5a04ea89937b367c45c333d63b9"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-host-mmap-flags-1/selection.c",
+      "bytes": 109,
+      "sha256": "b656942cf0bd617e81a628c0aa62dad5a3c3e02eeaa3af4fdb8abf00af20c167"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-host-mmap-flags-1/selected-flags.inc",
+      "bytes": 560,
+      "sha256": "4479d647279a35612af34066deba16b07ad3eda825d5950c77206f392811c1c7"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-host-mmap-flags-1/original-flags.inc",
+      "bytes": 505,
+      "sha256": "0c5b75b4b67f80f27ef6ca589dd4fae2beefd14a92686b56a1e84d0df3280469"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-host-mmap-flags-1/parity.c",
+      "bytes": 2184,
+      "sha256": "e164aaae4a8a734d6a682ed81074f82d7ae8e678daf736eae20205958c7844fa"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/mman.h",
+      "bytes": 1781,
+      "sha256": "99faf3bbb639ab4eca2c5444dcc95cff0e7046c91fc3fa1a97c88375ee6107e8"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch/mman.h",
+      "bytes": 839,
+      "sha256": "8e3844987296722aceac782975db7889b37889afdcab23d6c2d24bb3df33f9ec"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/GENUINE-NOCACHE-CONFIGURATION.json",
+      "bytes": 91114,
+      "sha256": "a74a4a7b3edef59a5db47c41e1056768540439002331aaaf158dd95e21c7888c"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/MMAP-FLAGS-SOURCE-BINDINGS.json",
+      "bytes": 5034,
+      "sha256": "99272199ea201a5406b799555e7748dc6db0af50336d7344672b204dc2efad59"
+    }
+  ],
+  "tools": [
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "bytes": 654904,
+      "sha256": "028fd60b0e0add5505c661cd3ccde91393d615c8729bd95d94ab1e91409b36a1"
+    },
+    {
+      "path": "/usr/bin/gcc-9",
+      "bytes": 1158288,
+      "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/cc1",
+      "bytes": 25675096,
+      "sha256": "c09275e2d3f811e23d255eac415bfedd9e68ba8b5cf4b261d2fce136b5e8fc99"
+    },
+    {
+      "path": "/usr/bin/as",
+      "bytes": 696624,
+      "sha256": "8d45684bbd6420e3e97907257c510f199bb6c5f9b02ea8ee0a590c1a8b662ead"
+    },
+    {
+      "path": "/usr/bin/ld",
+      "bytes": 1732192,
+      "sha256": "476b24d5cc1fef54f80412d06e7430b2dcf4e2b6f1525ee17e6eaaf16b28a00f"
+    },
+    {
+      "path": "/usr/bin/nm",
+      "bytes": 52664,
+      "sha256": "5fb0dd8acc18e3f348ed0acbcada0580dbdddd1eb5de3c8323613af13580032b"
+    },
+    {
+      "path": "/usr/bin/readelf",
+      "bytes": 658360,
+      "sha256": "41a813335a74480f145fba9400aa7fb5c0ec7ffcaa7af7f33e832dc75eb90ffb"
+    },
+    {
+      "path": "/home/holden/anaconda3/bin/python3",
+      "bytes": 15880080,
+      "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb"
+    }
+  ],
+  "commands": [
+    {
+      "purpose": "Functional OS only; compile exact3Rust mmapflags with genuine NOCACHE undefined; no security testing",
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--crate-type=lib",
+        "--emit=obj",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "--cfg",
+        "f06_mmap_flag_providers",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-host-mmap-flags-1/fixture.rs",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-host-mmap-flags-1/rust.o"
+      ]
+    },
+    {
+      "purpose": "Functional OS only; selected C provider exclusion; no security testing",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-I/home/holden/mckernel/kernel/include",
+        "-I/home/holden/mckernel/arch/x86_64/kernel/include",
+        "-DMCKERNEL_RUST_F06_MMAP_FLAG_PROVIDERS",
+        "-c",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-host-mmap-flags-1/selection.c",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-host-mmap-flags-1/selected.o"
+      ]
+    },
+    {
+      "purpose": "Functional OS only; unchanged fallback3C providers; no security testing",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-I/home/holden/mckernel/kernel/include",
+        "-I/home/holden/mckernel/arch/x86_64/kernel/include",
+        "-c",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-host-mmap-flags-1/selection.c",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-host-mmap-flags-1/fallback.o"
+      ]
+    },
+    {
+      "purpose": "Functional OS only; selected Rust+C link and realheader parity ABI; no security testing",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-I/home/holden/mckernel/kernel/include",
+        "-I/home/holden/mckernel/arch/x86_64/kernel/include",
+        "-no-pie",
+        "-Wl,--gc-sections",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-host-mmap-flags-1/parity.c",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-host-mmap-flags-1/selected.o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-host-mmap-flags-1/rust.o",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-host-mmap-flags-1/selected-parity"
+      ]
+    },
+    {
+      "purpose": "Functional OS only; fallback C link and realheader parity ABI; no security testing",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-I/home/holden/mckernel/kernel/include",
+        "-I/home/holden/mckernel/arch/x86_64/kernel/include",
+        "-no-pie",
+        "-Wl,--gc-sections",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-host-mmap-flags-1/parity.c",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-host-mmap-flags-1/fallback.o",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-host-mmap-flags-1/fallback-parity"
+      ]
+    },
+    {
+      "purpose": "Functional OS only; execute selected3flag pure arithmetic parity; no security testing",
+      "argv": [
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-host-mmap-flags-1/selected-parity"
+      ]
+    },
+    {
+      "purpose": "Functional OS only; execute fallback3flag pure arithmetic parity; no security testing",
+      "argv": [
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-host-mmap-flags-1/fallback-parity"
+      ]
+    },
+    {
+      "purpose": "Functional OS only; exact object provider symbol check; no security testing",
+      "argv": [
+        "/usr/bin/nm",
+        "-g",
+        "--defined-only",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-host-mmap-flags-1/rust.o"
+      ]
+    },
+    {
+      "purpose": "Functional OS only; exact object provider symbol check; no security testing",
+      "argv": [
+        "/usr/bin/nm",
+        "-g",
+        "--defined-only",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-host-mmap-flags-1/selected.o"
+      ]
+    },
+    {
+      "purpose": "Functional OS only; exact object provider symbol check; no security testing",
+      "argv": [
+        "/usr/bin/nm",
+        "-g",
+        "--defined-only",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-host-mmap-flags-1/fallback.o"
+      ]
+    },
+    {
+      "purpose": "Functional OS only; retained object ABI/symbol table evidence; no security testing",
+      "argv": [
+        "/usr/bin/readelf",
+        "-Ws",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-host-mmap-flags-1/rust.o"
+      ]
+    },
+    {
+      "purpose": "Functional OS only; retained object ABI/symbol table evidence; no security testing",
+      "argv": [
+        "/usr/bin/readelf",
+        "-Ws",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-host-mmap-flags-1/selected.o"
+      ]
+    },
+    {
+      "purpose": "Functional OS only; retained object ABI/symbol table evidence; no security testing",
+      "argv": [
+        "/usr/bin/readelf",
+        "-Ws",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-host-mmap-flags-1/fallback.o"
+      ]
+    },
+    {
+      "purpose": "Functional OS only; linked provider uniqueness evidence; no security testing",
+      "argv": [
+        "/usr/bin/nm",
+        "-g",
+        "--defined-only",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-host-mmap-flags-1/selected-parity"
+      ]
+    },
+    {
+      "purpose": "Functional OS only; linked provider uniqueness evidence; no security testing",
+      "argv": [
+        "/usr/bin/nm",
+        "-g",
+        "--defined-only",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-host-mmap-flags-1/fallback-parity"
+      ]
+    }
+  ]
+}

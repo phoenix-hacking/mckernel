@@ -1,0 +1,2 @@
+set(MCKERNEL_F06_RT_SIGRETURN_ORIGIN "/src/arch/x86_64/kernel/syscall.c")
+set(MCKERNEL_F06_CLONE_CPUID_METADATA_RS "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-f06-route-end-to-end-source-1/on_guarded/rust/f06-origin/f06_clone_cpuid_metadata.rs")

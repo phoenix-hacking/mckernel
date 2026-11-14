@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "record_kind": "layer_b_object_bootstrap_strategy_decision",
+  "recorded_utc": "2026-09-28T09:28:00Z",
+  "status": "CHANGE_TO_EXECUTABLE_CONTROLLER",
+  "failure_family": "Layer-B native-owner object bootstrap compile ownership and provenance",
+  "history": [
+    "packet8 failed review on command, environment, lifecycle, inspection and dependency provenance",
+    "correction9 fixed several findings but still failed command/lifecycle/temporary-input distinctions",
+    "object-only packet10 changed the compile strategy but its include baseline rejected installed unconsumed external symlink directories",
+    "bounded correction11 admitted those links but mistakenly required the separately pinned source to belong to the header baseline"
+  ],
+  "decision": "Stop prose-only corrections. Encode the object-only compile plan, source/header classification, lifecycle state machine, evidence records and execute gate in a small controller with side-effect-free parser/state tests. Obtain independent source review before any controller execution or compiler/systemd command.",
+  "required_separation": [
+    "The exact source has its own pinned pre/post identity and is never required to be a member of the header baseline.",
+    "Header prerequisites must be present unchanged in the non-following approved-root baseline and must not traverse excluded external-directory links.",
+    "Generated .i/.s/.o/.d artifacts and ephemeral private scratch entries are not persistent prerequisites.",
+    "The execute path is unreachable without explicit --execute and exact reviewed hashes; import and dry parsing have no subprocess or filesystem mutation side effects."
+  ],
+  "source_implementation_released": true,
+  "controller_execution_released": false,
+  "compilation_released": false,
+  "owner_execution_released": false,
+  "acceptance_credit": false
+}

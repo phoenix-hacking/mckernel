@@ -1,0 +1,268 @@
+{
+  "C_retirements": 0,
+  "Root": "01a18bc3-e072-7810-9426-75101b0856c0",
+  "at_utc_ns": 1793949748724910091,
+  "design": {
+    "content": {
+      "actions": {
+        "canonical_or_index_write": false,
+        "compiler_or_runtime_or_native": false,
+        "held_source_reimplementation": false,
+        "new_model_or_child": false,
+        "private_source_patch": false,
+        "selector_change": false
+      },
+      "current_source_bindings": [
+        {
+          "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+          "sha256": "11df0a7dbaeedcb009f5275e422f17eed444f4b513e7322e14f19e88566a2f1e"
+        },
+        {
+          "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+          "sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1"
+        },
+        {
+          "path": "/home/holden/mckernel/kernel/syscall.c",
+          "sha256": "f313b9f1dada0ed99b86951a1427ef24518d48a5c58faa3f45b6fe764c2f28f2"
+        },
+        {
+          "path": "/home/holden/mckernel/kernel/process.c",
+          "sha256": "12a8396d729e342d2d43130be73acf7960409cf4d2e432a415fb303a031fa055"
+        },
+        {
+          "path": "/home/holden/mckernel/kernel/include/process.h",
+          "sha256": "8848d536f2fa847a59af72d573ec9c55838c27cea664d46438ab4e038bf83649"
+        },
+        {
+          "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+          "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+        },
+        {
+          "path": "/home/holden/mckernel/lib/include/mc_perf_event.h",
+          "sha256": "8a9978dcab179a63b3aff3b66641a4814bacaf86cf4631ecdf39e32df45ea5dd"
+        }
+      ],
+      "exact_hold_fact": {
+        "current_full_image_exclusion": "CAMPAIGN immediate blocker excludes both retained generic C cohorts because they select MCKERNEL_RUST_F03_EXEC_DEFINED_TAIL. This current binding remains effective even though original classifier payload scope is absent.",
+        "no_blanket_file_hold_inference": "Original classifier payload/scope is UNKNOWN. This design does NOT infer that everyfunction in syscall_policy.rs/process_helpers.rs or everyline of syscall.c is independently held merely by filename. It also cannotinfer an eligible reimplementation/reassignment boundary for generaldescriptor code from thatunknownscope.",
+        "original_request_payload_and_scope": "UNKNOWN",
+        "path": "/home/holden/mckernel/docs/verification/m14-generic-source-hold-binding-20261106.json",
+        "sha256": "d537db6af6fe765bc93476354e66b4a19d7774193241b0099445ba0c8417e7d6"
+      },
+      "explicit_scope": "User06:59 allows independenteligible perf lifetime design/privatepreparation; no heldgeneric_c/exec/ACK/TID/XPMEM/fullsource replacement or build/native action.",
+      "next_changed_unit_check": {
+        "argv": null,
+        "reason": "Perfcallback-only code cannotrepair before-callback descriptorUAF/ABA or before-dup sourcecopy. Exacteligible sharedprovider writeclosure and genuineowner/generation/pin contract mustbe bound first; this task supplies no suchdisposition. No fake/narrowed/helper-only compilercheck offered.",
+        "status": "NO_GO_UNSET"
+      },
+      "observed_utc_ns": 1793949144912803416,
+      "prior_reviews": [
+        {
+          "path": "/home/holden/mckernel/docs/verification/m14-perf-group-ownership-decision-20261106.json",
+          "sha256": "3404ccd385dbc213da41d5ebc5f5088adf53881902651a2989c9115189b86aed"
+        },
+        {
+          "path": "/home/holden/mckernel-work/m14-resume-20261105-1/perf-entry-private-1/PERF-ENTRY-ELIGIBILITY.json",
+          "sha256": "49ab35e2e255cd2cc72f77ee734bfe0e683bf3373473f5f1325535c7b8f93613"
+        },
+        {
+          "path": "/home/holden/mckernel-work/m14-resume-20261105-1/perf-entry-private-1/PERF-GROUP-REPAIR-DECISION.json",
+          "sha256": "8bd6421e7c13feb34dc7bed504a334a7ab72ab134ab8256be82045a1cf0f6843"
+        }
+      ],
+      "proposed_contract": {
+        "ABI": "No C layout extension or existingfield/refcount reinterpretation proposed. A PRIVATE Rust typedowner/reservation is a NEW explicitlydefined contract requiring review; not claimed to exist today. No fabricatedprototype/offset/tag/callbackprovider is supplied.",
+        "VM_locked_close": "Actual VM calls closecallbacks while mckfd_lock held. Callbackmay take only laterperfownerlock; markclosed/decrement/retire withoutrecursive mckfd_lock or waits. Lastref finalization must notsleep/reenterparentlock whileVMholds it; collect deferreddestruction for a compatible actualowner path. VM genericdescriptor drain must honor samepins.",
+        "copy": "Publisher must explicitlyinitialize allowned callback/opt/dup semantics. Forkcopy must pin SOURCEdescriptor/owner underparentlookup exclusion BEFORE copying; dup callbackcalledaftercopy cannot retroactivelyprotect source. Copieddescriptor receives realreference or separatelycreated event accordingtooriginalsupportedcontract; no pointercopy-as-ref.",
+        "group_domain": "Preserve all originally valid group_fd values including group_fd=-1 and existingvalidperfdescriptors. Do not introduce newleader-only or group_fd=-1 restriction; currenthelper uses actualmatched event as chosenleader. Invalid/wrongkind must be defined using reviewed errorcontract beforederef, no wilddata cast.",
+        "kind": "Actual lookup under proc.mckfd_lock must classify a descriptor through an explicitlyreviewed publisher/copy invariant and bind an exactdescriptor+generation to a liveperfowner before any data\u2192event cast. fd equality/callbackequality alone isnot currentproof. count remains hardwaremeasurement; opt cannot silently becomeownerstorage.",
+        "locks": "One bounded IRQ-safe perfowner/group lock strictly AFTER mckfd_lock; never acquire mckfd_lock while holdingownerlock. Bothlocks released before blocking hostoffload. Neverwait for reservations/callbackpins while holdingmckfd_lock.",
+        "ordinary_close": "Genericunlink under mckfd_lock removes lookup eligibility and detachesdescriptorownership; callbackafterunlock consumes exactlyone close state. Descriptorstorage and event destruction are deferred until operationpins/groupedges retire; callbackalone cannot guarantee descriptorstorage survival.",
+        "references": "Distinct descriptorowner, in-flightcallback, pendinggroupopen and persistentmember\u2192leader edges. Every escapedraw event/group pointer must have a corresponding liveedge; finalevent destruction afterdescriptorclosed and allrealusers/edges retire. Preservecreator counterlease owner/lifetime separately from arbitraryclosingcurrentthread.",
+        "transaction": "Validate everyrequiredprovider/field beforeallocations. Allocateprivateevent/counterlease/descriptorstate; resolveandpin groupleader underlookup exclusion; keep membershippending acrosshostFD transaction. Commit membership+descriptor publication atomicallyatdefinedlinearization; cancel allpendingedges, allocations/counterleases and anyobtainedhostFD on failure. No siblingmutation or pmcbit orphan beforecommit."
+      },
+      "required_participation": [
+        {
+          "fields": [
+            "process.mckfd",
+            "mckfd.fd/data/next",
+            "event.group_leader/sibling_list/group_entry/nr_siblings/pmc_status"
+          ],
+          "function": "perf_event_open_group_body_result",
+          "line": 21128,
+          "path": "kernel/rust/syscall_policy.rs",
+          "required": "Typedlivegroupadmission+retainedreservation, serializedcommit/cancel."
+        },
+        {
+          "fields": [
+            "mckfd.data/opt/dup_cb/callbacks",
+            "proc.mckfd_lock"
+          ],
+          "function": "perf_event_open_body_result / perf_event_open_mckfd_publish_body_result",
+          "line": 21289,
+          "path": "kernel/rust/syscall_policy.rs",
+          "required": "Newownerconstructed beforepublication; fullrollback event/counter/hostFD/descriptor state, no uninitialized opt/dup_cb."
+        },
+        {
+          "fields": [
+            "mckfd.data",
+            "event.counter_id/extra_reg",
+            "Thread.pmc_alloc_map/extra_reg_alloc_map"
+          ],
+          "function": "perf_close_body_result / f03_perf_close_v1",
+          "line": 20654,
+          "path": "kernel/rust/syscall_policy.rs",
+          "required": "Release actualownership not unconditionaleventfree; maps mustbe actualretainedcounterlease owner, notassumedcurrentthread."
+        },
+        {
+          "fields": [
+            "descriptorcallbackfields afterunlock",
+            "descriptor generation/pin"
+          ],
+          "function": "syscall_mckfd_find_locked and syscall_read/ioctl/fcntl bodies + do_mmap_mckfd_dispatch_body_result",
+          "line": 3515,
+          "path": "kernel/rust/syscall_policy.rs",
+          "required": "Acquire descriptorstoragepin beforeunlock and retain through callbackselection/invocation; existingrawpointerreturn is insufficient."
+        },
+        {
+          "fields": [
+            "same descriptorstorage / callbacks"
+          ],
+          "function": "matching C syscall_mckfd_find_locked/read/ioctl/fcntl/close/mmap helpers",
+          "line": 9689,
+          "path": "kernel/syscall.c",
+          "required": "Actualselected descriptor-dispatch cohort must participate; if currentprofile selects Ccounterpart it cannotremainunpinned. Binding/compiling a replacement universal genericC cohort isexcluded by retainedhold; no broadselector or alternateartifact bypass."
+        },
+        {
+          "fields": [
+            "process.mckfd_lock",
+            "descriptor actualfree"
+          ],
+          "function": "syscall_close_body_result / process_mckfd_close_all_result / process_mckfd_drain_free_result",
+          "line": 3644,
+          "path": "kernel/rust/syscall_policy.rs + kernel/rust/process_helpers.rs",
+          "required": "Common closing/generation/ref protocol and deferred descriptorfree across unlockedordinary and parentlockedVM paths."
+        },
+        {
+          "fields": [
+            "parentdescriptor next/data/opt/dup_cb",
+            "child process.mckfd_lock"
+          ],
+          "function": "process_mckfd_copy_body_result + C/Rust forkdescriptorcopy loop",
+          "line": 7721,
+          "path": "kernel/rust/process_helpers.rs + kernel/process.c",
+          "required": "Protect parent source BEFORE bytecopy; currentloop locks childproc while traversingparentlist andcallsdup only aftercopy+push. Perfdup alone cannotfixit. Sharedfork/copy participation isoutside thisperf-provider-only patchset and mustbe exactscope-bound without touchingheldACK/exec or reopeningacceptedF02scope."
+        }
+      ],
+      "single_boundary": {
+        "decision": "NO_GO_PRIVATE_PERF_PROVIDER_PATCH_CANNOT_SATISFY_FULL_CONTRACT_WITH_CURRENT_SHARED_PATHS_UNCHANGED",
+        "first_exact_unprotected_edge": "syscall_mckfd_find_locked returnsrawdescriptor afterunlock; genericread/ioctl/fcntl/mmap read callbackfield before enteringanyperfcallback. Counterexample occursbefore anynewcallbackpin can execute.",
+        "mandatory_next_edges": "Actualgeneraldescriptorlookup/free/VMdrain and parentfork sourcecopy mustparticipate. Those sharedoperations extendbeyond theexplicit perf-provider-only implementation task; no proveneligible generaldescriptor/fork source-write closure or actualselectedcohort binding isavailable here. Retaineduniversal genericCcohorts areexcluded; originalrejectedpayloadscopeUNKNOWN preventsclaiming release orsafe equivalent reassignment.",
+        "owner": "Root mustbound the mandatorysharedlookup/free/copy participation against actualselectedsource and originalholds; childcannotinferrelease or implementheldshared/general/fullsource work. No claimthatallpossibleindependentperfsourceworkisgloballyimpossible.",
+        "why_no_partial_patch": "A newownerstruct/refcount/grouphelper without thoseedges stillallows descriptorUAF/ABA and copied-owner danglingreferences. An unselected standaloneprovider/model would notrepair actualruntime and would invent missingproviderinterfaces."
+      },
+      "status": "BOUNDED_DESIGN_ONLY_ACTIVATION_AND_CHANGED_UNIT_CHECK_NO_GO_SHARED_LIFETIME_BOUNDARY"
+    },
+    "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/perf-lifetime-design-1/DESIGN.json",
+    "sha256": "f3ef977616ac6ea492b26ad2601980b71c4c7d93c90ed07763300b8717b1ab57"
+  },
+  "interleavings": {
+    "content": [
+      {
+        "name": "wrongdescriptor kind",
+        "steps": [
+          "Aholdsproc.mckfd_lock; fd matches unrelateddescriptor with arbitrarydata.",
+          "Oldgrouphelpercastsdata asevent and mutatesit.",
+          "Proposedadmission mustreject beforecast viaactualkindownerinvariant; cannotinferkindfromfd."
+        ]
+      },
+      {
+        "name": "leader close during host offload",
+        "steps": [
+          "Aresolvesvalidgroupfd underlock andmustretainreservation, thenunlocks before hostoffload.",
+          "Bunlinksleaderfd, unlocks, runsclosecallback.",
+          "Oldcodefreesleader whileAholdsrawgroup_leader; proposedcloseddescriptor dropsonlydescriptorref and mustkeepowner forAreservation/memberedges.",
+          "Acommits originallyadmittedmembership orcancels allrefs/resources; no narrowedgroupfdprojection."
+        ]
+      },
+      {
+        "name": "VM locked close inversion",
+        "steps": [
+          "VMexit holdsmckfd_lock and callsperfclose.",
+          "Anewclosecallbacktriesmckfd_lock recursively, ordeferwaits forAopen thatneedsmckfd_lock tocomplete.",
+          "Both deadlock. Callbackmustonlytake laterownerlock and neverwait; deferreddestruction handledbycompatibleactualdrainowner."
+        ]
+      },
+      {
+        "name": "descriptor freed before callback pin",
+        "steps": [
+          "Aread usesfind_locked; obtainsdescriptorD; helperunlocks.",
+          "BcloseunlinksD, callsperfclose, thenfree_fn(D).",
+          "Abeginscallbackfieldload fromD beforeanyperfcallbackentry.",
+          "Addingpin insideperfcallback istoolate. Existingsharedlookup/free mustparticipate; this isexactfirstscopeboundary."
+        ]
+      },
+      {
+        "name": "descriptor pointer ABA",
+        "steps": [
+          "AretainsoldrawD afterlookupunlock.",
+          "BclosefreesD.",
+          "AllocatorreusesD fornewdescriptor/event; samefd mayrecycle.",
+          "SidecarregistrykeyedonlyD cannotdistinguishAoldoperation. Generation-bearing pinmustbe acquiredatlookup, not reconstructedaftercallbackentry."
+        ]
+      },
+      {
+        "name": "group mutation then failure",
+        "steps": [
+          "Oldopen insertsnew event into siblinglist/incrementsnr_siblings/pmc_status.",
+          "HostFD returnsnegative, orlaterdescriptorallocation fails.",
+          "Oldbody returns withoutownershiprollback; group maypointunpublished/leakedevent.",
+          "Newtransaction keepsreservationpending untilcommit andcancelmustreleaseevent/counter/group/hostFD(ifcreated) exactlyonce."
+        ]
+      },
+      {
+        "name": "copy before dup callback",
+        "steps": [
+          "Fork locksCHILDproc.mckfd_lock andtraversesPARENTmckfd list.",
+          "Parentotherthreadclose unlinks/frees sourceD whilecopy ispending.",
+          "Forkcopy_nonoverlapping readsdeadD beforeoptionaldup callbackcanrun.",
+          "Aperfdup callbackcannotretroactivelypin copiedsource; actualparentlookup/copy boundaryneedsprotection."
+        ]
+      },
+      {
+        "name": "cross-thread counter close",
+        "steps": [
+          "ThreadAopen reservesbit inA.pmc_alloc_map andperhaps A.extra_reg_alloc_map.",
+          "ThreadBcloses sharedprocessfd; actualf03_perf_close_v1 choosescurrentThreadB.",
+          "Oldclose clearsBmaps andfreesevent, leavingAresourcelease unreconciled.",
+          "Ownerprotocol mustretain/bind actualcounterlease owner/lifetime andretirethatlease once; cannotusemeasurementcount asrefcount."
+        ]
+      },
+      {
+        "name": "persistent group leader edge",
+        "steps": [
+          "PublishedmemberM storesleaderL rawpointer.",
+          "CloseL occurs whileMdescriptorremains.",
+          "Oldclosefree(L) leavesM.group_leader dangling andlists/countersunsafe.",
+          "PersistentM\u2192L referenceandserializedgroupunlink/finalref retirementrequired acrossallactualread/ioctl/groupwalk participants."
+        ]
+      }
+    ],
+    "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/perf-lifetime-design-1/INTERLEAVINGS.json",
+    "sha256": "1e698f5572f8dd0aa142b6de921bef68e739b2206e2c39558eae13b5a8a499cc"
+  },
+  "new_compiles": 0,
+  "new_native_qualified_cohorts": 0,
+  "next_check": {
+    "content": {
+      "argv": null,
+      "reason": "Perfcallback-only code cannotrepair before-callback descriptorUAF/ABA or before-dup sourcecopy. Exacteligible sharedprovider writeclosure and genuineowner/generation/pin contract mustbe bound first; this task supplies no suchdisposition. No fake/narrowed/helper-only compilercheck offered.",
+      "status": "NO_GO_UNSET"
+    },
+    "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/perf-lifetime-design-1/NEXT-CHECK-REQUEST.json",
+    "sha256": "e7e5c056218df2020228d6ed5cf467ac7e7fd8ce15d8dbbced49e412d3d49ab0"
+  },
+  "schema_version": 1,
+  "scope": "Bounded source-grounded perf lifetime design and nine interleavings. Shared participation eligible scope unbound; no activation/compile/patch/hold release.",
+  "source_changes": 0
+}

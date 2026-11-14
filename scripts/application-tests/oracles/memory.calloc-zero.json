@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "case_id": "memory.calloc-zero",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "wait_status": {
+    "kind": "exited",
+    "code": 0
+  },
+  "stdout": {
+    "kind": "exact-line-lines",
+    "lines": [
+      "calloc-zero size=1 status=PASS",
+      "calloc-zero size=4095 status=PASS",
+      "calloc-zero size=4096 status=PASS",
+      "calloc-zero size=4097 status=PASS",
+      "calloc-zero size=65553 status=PASS",
+      "calloc-zero size=1048576 status=PASS"
+    ]
+  },
+  "stderr": {
+    "kind": "exact-bytes",
+    "hex": ""
+  },
+  "input_fixture": {
+    "size_cases": [1, 4095, 4096, 4097, 65553, 1048576],
+    "environment": {
+      "LANG": "C",
+      "LC_ALL": "C",
+      "TZ": "UTC"
+    }
+  },
+  "relational_assertions": [
+    "every requested size must return status=PASS",
+    "every allocated block must be entirely zero at allocation time"
+  ],
+  "unresolved_expectations": [
+    "Exact stdout serialization is prepared as line list; execution capture may later switch to binary/structured record"
+  ],
+  "max_question_for_reviewer": "Should the payload run return all entries in this exact line order, or is any normalized structured output acceptable for this case?"
+}

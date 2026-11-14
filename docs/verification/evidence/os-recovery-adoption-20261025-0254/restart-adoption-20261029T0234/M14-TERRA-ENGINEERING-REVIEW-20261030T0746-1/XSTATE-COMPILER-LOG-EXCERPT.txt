@@ -1,0 +1,51 @@
+[07:45:32Z][/root/m14_arch]         *STATE.lock().unwrap() = (None, 0, 37);
+[07:45:32Z][/root/m14_arch]         assert_eq!(invoke(3), 37);
+[07:45:32Z][/root/m14_arch]         assert_eq!(STATE.lock().unwrap().0, Some(expected_call(3)));
+[07:45:32Z][/root/m14_arch]         thread.fp_regs = core::ptr::null_mut();
+[07:45:32Z][/root/m14_arch]         *STATE.lock().unwrap() = (None, 0, 37);
+[07:45:32Z][/root/m14_arch]         assert_eq!(invoke(3), -12);
+[07:45:32Z][/root/m14_arch]         assert!(STATE.lock().unwrap().0.is_none());
+[07:45:32Z][/root/m14_arch]     }
+[07:45:32Z][/root/m14_arch] }
+[07:45:32Z][/root/m14_arch] EOF
+[07:45:32Z][/root/m14_arch] /home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/bin/rustc --edition=2021 --test xstate_test.rs -o xstate_test && ./xstate_test --test-threads=1'
+[07:45:32Z][/root/m14_arch/output:c4ed883e] error[E0506]: cannot assign to `fp` because it is borrowed
+[07:45:32Z][/root/m14_arch/output:c4ed883e]   --> xstate_test.rs:59:9
+[07:45:32Z][/root/m14_arch/output:c4ed883e]    |
+[07:45:32Z][/root/m14_arch/output:c4ed883e] 48 |         let expected_call = |len| Call {
+[07:45:32Z][/root/m14_arch/output:c4ed883e]    |                             ----- `fp` is borrowed here
+[07:45:32Z][/root/m14_arch/output:c4ed883e] 49 |             dst: if direction == 1 { user_addr as usize } else { fp.as_ptr() as usize },
+[07:45:32Z][/root/m14_arch/output:c4ed883e]    |                                                                  -- borrow occurs due to use in closure
+[07:45:32Z][/root/m14_arch/output:c4ed883e] ...
+[07:45:32Z][/root/m14_arch/output:c4ed883e] 59 |         fp = [1, 2, 3, 4, 5, 6]; user = [7, 8, 9, 10, 11, 12];
+[07:45:32Z][/root/m14_arch/output:c4ed883e]    |         ^^^^^^^^^^^^^^^^^^^^^^^ `fp` is assigned to here but it was already borrowed
+[07:45:32Z][/root/m14_arch/output:c4ed883e] ...
+[07:45:32Z][/root/m14_arch/output:c4ed883e] 62 |         assert_eq!(STATE.lock().unwrap().0, Some(expected_call(5)));
+[07:45:32Z][/root/m14_arch/output:c4ed883e]    |                                                  ------------- borrow later used here
+[07:45:32Z][/root/m14_arch/output:c4ed883e] 
+[07:45:32Z][/root/m14_arch/output:c4ed883e] warning: value assigned to `thread` is never read
+[07:45:32Z][/root/m14_arch/output:c4ed883e]   --> xstate_test.rs:72:9
+[07:45:32Z][/root/m14_arch/output:c4ed883e]    |
+[07:45:32Z][/root/m14_arch/output:c4ed883e] 72 |         thread.fp_regs = core::ptr::null_mut();
+[07:45:32Z][/root/m14_arch/output:c4ed883e]    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[07:45:32Z][/root/m14_arch/output:c4ed883e]    |
+[07:45:32Z][/root/m14_arch/output:c4ed883e]    = help: maybe it is overwritten before being read?
+[07:45:32Z][/root/m14_arch/output:c4ed883e]    = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+[07:45:32Z][/root/m14_arch/output:c4ed883e] 
+[07:45:32Z][/root/m14_arch/output:c4ed883e] error: aborting due to 1 previous error; 1 warning emitted
+[07:45:32Z][/root/m14_arch/output:c4ed883e] 
+[07:45:32Z][/root/m14_arch/output:c4ed883e] For more information about this error, try `rustc --explain E0506`.
+[07:45:32Z][/root/m14_arch] Command failed; exit=1; duration=0ms
+[07:45:35Z][/root/m14_arch] Working
+[07:45:37Z][/root/m14_arch] Command session=58242: /bin/bash -lc "python3 - <<'PY'
+[07:45:37Z][/root/m14_arch] p='xstate_test.rs'
+[07:45:37Z][/root/m14_arch] s=open(p).read().replace('let user_addr = user.as_mut_ptr() as u64;', 'let user_addr = user.as_mut_ptr() as u64;\\n        let fp_addr = fp.as_ptr() as usize;').replace('fp.as_ptr() as usize', 'fp_addr')
+[07:45:37Z][/root/m14_arch] s=s.replace('let fp_addr = fp_addr;', 'let fp_addr = fp.as_ptr() as usize;').replace('thread.fp_regs = core::ptr::null_mut();\\n        *STATE', 'thread.fp_regs = core::ptr::null_mut();\\n        assert"'!(thread.fp_regs.is_null());'"\\n        *STATE')
+[07:45:37Z][/root/m14_arch] open(p,'w').write(s)
+[07:45:37Z][/root/m14_arch] PY
+[07:45:37Z][/root/m14_arch] /home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/bin/rustc --edition=2021 --test xstate_test.rs -o xstate_test && ./xstate_test --test-threads=1"
+[07:45:37Z][/root/m14_arch/output:ecc276fa] running 1 test
+[07:45:37Z][/root/m14_arch/output:ecc276fa] test candidate_bridges_transfer_and_preserve_provider_results ... ok
+[07:45:37Z][/root/m14_arch/output:ecc276fa] test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+[07:45:37Z][/root/m14_arch] Command completed; exit=0; duration=7ms
+[07:45:40Z][/root/m14_arch]  active; last event 2.7s ago; Command completed; exit=0; duration=7ms

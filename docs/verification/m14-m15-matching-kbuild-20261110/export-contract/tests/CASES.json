@@ -1,0 +1,149 @@
+{
+  "status": "FROZEN_AFTER_ACTUAL_MATERIAL_GO",
+  "material_GO": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/kernel-modules-review-source-acquisition-max-1/artifact-qualification-1/module-export-contract-reconciliation-1/REVIEW.json",
+    "bytes": 28821,
+    "sha256": "a6fbacaded22eb593e81ef60692f5026bf57affe5babd00866518fa92523f110"
+  },
+  "candidate": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/correction-1/candidate/scripts/ihk_native_lifecycle_check.py",
+    "bytes": 65866,
+    "sha256": "1fe24f5c1855c9ce97858f3541cf70e5311e49fb1b9ddb3ccf0535ca8e273748"
+  },
+  "actual_nm": {
+    "bytes": 46844,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/qualified-validator-reader-1/capture-2/modules/ihk.ko.nm",
+    "sha256": "7407d6a29497ac2b00f8195252f45a56e7fc4afad1542622cb35778677de240d"
+  },
+  "prior_export_set": [
+    "ihk_os_application_close_v1",
+    "ihk_os_application_invoke_v1",
+    "ihk_os_application_open_v1",
+    "ihk_os_create_unbooted_v1",
+    "ihk_os_create_unbooted_v2",
+    "ihk_os_create_unbooted_v3",
+    "ihk_os_create_unbooted_v4",
+    "ihk_os_create_unbooted_v5",
+    "ihk_os_create_unbooted_v6",
+    "ihk_os_destroy_unbooted_v1",
+    "ihk_os_service_register_v1",
+    "ihk_os_service_unregister_v1",
+    "ihk_os_topology_query_v1",
+    "ihk_os_with_kobject_v1",
+    "ihk_provider_lifecycle_v1",
+    "ihk_smp_provider_attach_v1",
+    "ihk_smp_provider_attach_v2",
+    "ihk_smp_provider_close_v1",
+    "ihk_smp_provider_detach_v1",
+    "ihk_smp_provider_detach_v2",
+    "ihk_smp_provider_open_v1"
+  ],
+  "prior_native_constant": [
+    "ihk_os_application_close_v1",
+    "ihk_os_application_invoke_v1",
+    "ihk_os_application_open_v1",
+    "ihk_os_create_unbooted_v2",
+    "ihk_os_create_unbooted_v3",
+    "ihk_os_create_unbooted_v4",
+    "ihk_os_create_unbooted_v5",
+    "ihk_os_create_unbooted_v6",
+    "ihk_os_service_register_v1",
+    "ihk_os_service_unregister_v1",
+    "ihk_os_topology_query_v1",
+    "ihk_os_with_kobject_v1"
+  ],
+  "base_summary_provider_symbols": [
+    "ihk_os_create_unbooted_v1",
+    "ihk_os_destroy_unbooted_v1",
+    "ihk_provider_lifecycle_v1",
+    "ihk_smp_provider_attach_v1",
+    "ihk_smp_provider_attach_v2",
+    "ihk_smp_provider_close_v1",
+    "ihk_smp_provider_detach_v1",
+    "ihk_smp_provider_detach_v2",
+    "ihk_smp_provider_open_v1"
+  ],
+  "proposed_delta": [
+    "ihk_os_application_adopt_current_v4",
+    "ihk_os_application_fork_control_current_v1"
+  ],
+  "actual_current_export_set": [
+    "ihk_os_application_adopt_current_v4",
+    "ihk_os_application_close_v1",
+    "ihk_os_application_fork_control_current_v1",
+    "ihk_os_application_invoke_v1",
+    "ihk_os_application_open_v1",
+    "ihk_os_create_unbooted_v1",
+    "ihk_os_create_unbooted_v2",
+    "ihk_os_create_unbooted_v3",
+    "ihk_os_create_unbooted_v4",
+    "ihk_os_create_unbooted_v5",
+    "ihk_os_create_unbooted_v6",
+    "ihk_os_destroy_unbooted_v1",
+    "ihk_os_service_register_v1",
+    "ihk_os_service_unregister_v1",
+    "ihk_os_topology_query_v1",
+    "ihk_os_with_kobject_v1",
+    "ihk_provider_lifecycle_v1",
+    "ihk_smp_provider_attach_v1",
+    "ihk_smp_provider_attach_v2",
+    "ihk_smp_provider_close_v1",
+    "ihk_smp_provider_detach_v1",
+    "ihk_smp_provider_detach_v2",
+    "ihk_smp_provider_open_v1"
+  ],
+  "actual_metadata_namespace": "MCKERNEL_IHK_V1",
+  "cases": [
+    {
+      "name": "actual-saved-IHK-symbols",
+      "addition": null,
+      "expected": "PASS complete actual23 exports; all prior21 retained and exact three-family GPL metadata/definitions accepted"
+    },
+    {
+      "name": "unknown-export",
+      "addition": "ihk_os_unreviewed_export_probe_v1",
+      "added_defined_symbol_tokens": [
+        "ihk_os_unreviewed_export_probe_v1",
+        "__ksymtab_ihk_os_unreviewed_export_probe_v1",
+        "__kstrtab_ihk_os_unreviewed_export_probe_v1",
+        "__kstrtabns_ihk_os_unreviewed_export_probe_v1"
+      ],
+      "expected": "REJECT unreviewed export metadata mentioning exact added symbol"
+    },
+    {
+      "name": "held-create-v12",
+      "addition": "ihk_os_create_unbooted_v12",
+      "added_defined_symbol_tokens": [
+        "ihk_os_create_unbooted_v12",
+        "__ksymtab_ihk_os_create_unbooted_v12",
+        "__kstrtab_ihk_os_create_unbooted_v12",
+        "__kstrtabns_ihk_os_create_unbooted_v12"
+      ],
+      "expected": "REJECT unreviewed export metadata mentioning exact added symbol"
+    },
+    {
+      "name": "held-prepare-control",
+      "addition": "ihk_os_application_prepare_fork_control_v1",
+      "added_defined_symbol_tokens": [
+        "ihk_os_application_prepare_fork_control_v1",
+        "__ksymtab_ihk_os_application_prepare_fork_control_v1",
+        "__kstrtab_ihk_os_application_prepare_fork_control_v1",
+        "__kstrtabns_ihk_os_application_prepare_fork_control_v1"
+      ],
+      "expected": "REJECT unreviewed export metadata mentioning exact added symbol"
+    },
+    {
+      "name": "held-prepare-receipt",
+      "addition": "ihk_os_application_prepare_fork_control_receipt_v1",
+      "added_defined_symbol_tokens": [
+        "ihk_os_application_prepare_fork_control_receipt_v1",
+        "__ksymtab_ihk_os_application_prepare_fork_control_receipt_v1",
+        "__kstrtab_ihk_os_application_prepare_fork_control_receipt_v1",
+        "__kstrtabns_ihk_os_application_prepare_fork_control_receipt_v1"
+      ],
+      "expected": "REJECT unreviewed export metadata mentioning exact added symbol"
+    }
+  ],
+  "strictness": "Each negative starts from the same real saved nm definitions and adds only one explicit export family; no positive fixture or candidate-derived expected universe. No held function body is read or executed.",
+  "scope": "Pure emitted-symbol guard only; full module/source/typed ABI/material review remains separately bound. No loadability, activation, held-family permission or original acceptance."
+}

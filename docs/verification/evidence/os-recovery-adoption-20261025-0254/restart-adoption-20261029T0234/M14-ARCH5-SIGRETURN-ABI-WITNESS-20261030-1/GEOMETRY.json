@@ -1,0 +1,202 @@
+[
+  {
+    "key": "frame.flags",
+    "c": "__builtin_offsetof(struct sigsp, flags)",
+    "rust": "offset_of!(Frame, flags)"
+  },
+  {
+    "key": "frame.link",
+    "c": "__builtin_offsetof(struct sigsp, link)",
+    "rust": "offset_of!(Frame, link)"
+  },
+  {
+    "key": "frame.sigstack",
+    "c": "__builtin_offsetof(struct sigsp, sigstack)",
+    "rust": "offset_of!(Frame, sigstack)"
+  },
+  {
+    "key": "frame.regs",
+    "c": "__builtin_offsetof(struct sigsp, regs)",
+    "rust": "offset_of!(Frame, regs)"
+  },
+  {
+    "key": "frame.fpregs",
+    "c": "__builtin_offsetof(struct sigsp, fpregs)",
+    "rust": "offset_of!(Frame, fpregs)"
+  },
+  {
+    "key": "frame.reserve",
+    "c": "__builtin_offsetof(struct sigsp, reserve)",
+    "rust": "offset_of!(Frame, reserve)"
+  },
+  {
+    "key": "frame.sigmask",
+    "c": "__builtin_offsetof(struct sigsp, sigmask)",
+    "rust": "offset_of!(Frame, sigmask)"
+  },
+  {
+    "key": "frame.info",
+    "c": "__builtin_offsetof(struct sigsp, info)",
+    "rust": "offset_of!(Frame, info)"
+  },
+  {
+    "key": "stack.ss_sp",
+    "c": "__builtin_offsetof(stack_t, ss_sp)",
+    "rust": "offset_of!(SigStack, ss_sp)"
+  },
+  {
+    "key": "stack.ss_flags",
+    "c": "__builtin_offsetof(stack_t, ss_flags)",
+    "rust": "offset_of!(SigStack, ss_flags)"
+  },
+  {
+    "key": "stack.ss_size",
+    "c": "__builtin_offsetof(stack_t, ss_size)",
+    "rust": "offset_of!(SigStack, ss_size)"
+  },
+  {
+    "key": "stack.size",
+    "c": "sizeof(stack_t)",
+    "rust": "size_of::<SigStack>()"
+  },
+  {
+    "key": "stack.align",
+    "c": "__alignof__(stack_t)",
+    "rust": "align_of::<SigStack>()"
+  },
+  {
+    "key": "thread.vm",
+    "c": "__builtin_offsetof(struct thread, vm)",
+    "rust": "offset_of!(Thread, vm)"
+  },
+  {
+    "key": "process_vm.region",
+    "c": "__builtin_offsetof(struct process_vm, region)",
+    "rust": "offset_of!(ProcessVm, region)"
+  },
+  {
+    "key": "vm_regions.user_start",
+    "c": "__builtin_offsetof(struct vm_regions, user_start)",
+    "rust": "offset_of!(VmRegions, user_start)"
+  },
+  {
+    "key": "vm_regions.user_end",
+    "c": "__builtin_offsetof(struct vm_regions, user_end)",
+    "rust": "offset_of!(VmRegions, user_end)"
+  },
+  {
+    "key": "context.gpr",
+    "c": "__builtin_offsetof(struct x86_user_context, gpr)",
+    "rust": "offset_of!(X86UserContext, gpr)"
+  },
+  {
+    "key": "context.gpr.r8",
+    "c": "__builtin_offsetof(struct x86_user_context, gpr.r8)",
+    "rust": "offset_of!(X86UserContext, gpr) + offset_of!(X86BasicRegs, r8)"
+  },
+  {
+    "key": "context.gpr.r9",
+    "c": "__builtin_offsetof(struct x86_user_context, gpr.r9)",
+    "rust": "offset_of!(X86UserContext, gpr) + offset_of!(X86BasicRegs, r9)"
+  },
+  {
+    "key": "context.gpr.r10",
+    "c": "__builtin_offsetof(struct x86_user_context, gpr.r10)",
+    "rust": "offset_of!(X86UserContext, gpr) + offset_of!(X86BasicRegs, r10)"
+  },
+  {
+    "key": "context.gpr.r11",
+    "c": "__builtin_offsetof(struct x86_user_context, gpr.r11)",
+    "rust": "offset_of!(X86UserContext, gpr) + offset_of!(X86BasicRegs, r11)"
+  },
+  {
+    "key": "context.gpr.r12",
+    "c": "__builtin_offsetof(struct x86_user_context, gpr.r12)",
+    "rust": "offset_of!(X86UserContext, gpr) + offset_of!(X86BasicRegs, r12)"
+  },
+  {
+    "key": "context.gpr.r13",
+    "c": "__builtin_offsetof(struct x86_user_context, gpr.r13)",
+    "rust": "offset_of!(X86UserContext, gpr) + offset_of!(X86BasicRegs, r13)"
+  },
+  {
+    "key": "context.gpr.r14",
+    "c": "__builtin_offsetof(struct x86_user_context, gpr.r14)",
+    "rust": "offset_of!(X86UserContext, gpr) + offset_of!(X86BasicRegs, r14)"
+  },
+  {
+    "key": "context.gpr.r15",
+    "c": "__builtin_offsetof(struct x86_user_context, gpr.r15)",
+    "rust": "offset_of!(X86UserContext, gpr) + offset_of!(X86BasicRegs, r15)"
+  },
+  {
+    "key": "context.gpr.rdi",
+    "c": "__builtin_offsetof(struct x86_user_context, gpr.rdi)",
+    "rust": "offset_of!(X86UserContext, gpr) + offset_of!(X86BasicRegs, rdi)"
+  },
+  {
+    "key": "context.gpr.rsi",
+    "c": "__builtin_offsetof(struct x86_user_context, gpr.rsi)",
+    "rust": "offset_of!(X86UserContext, gpr) + offset_of!(X86BasicRegs, rsi)"
+  },
+  {
+    "key": "context.gpr.rbp",
+    "c": "__builtin_offsetof(struct x86_user_context, gpr.rbp)",
+    "rust": "offset_of!(X86UserContext, gpr) + offset_of!(X86BasicRegs, rbp)"
+  },
+  {
+    "key": "context.gpr.rbx",
+    "c": "__builtin_offsetof(struct x86_user_context, gpr.rbx)",
+    "rust": "offset_of!(X86UserContext, gpr) + offset_of!(X86BasicRegs, rbx)"
+  },
+  {
+    "key": "context.gpr.rdx",
+    "c": "__builtin_offsetof(struct x86_user_context, gpr.rdx)",
+    "rust": "offset_of!(X86UserContext, gpr) + offset_of!(X86BasicRegs, rdx)"
+  },
+  {
+    "key": "context.gpr.rax",
+    "c": "__builtin_offsetof(struct x86_user_context, gpr.rax)",
+    "rust": "offset_of!(X86UserContext, gpr) + offset_of!(X86BasicRegs, rax)"
+  },
+  {
+    "key": "context.gpr.rcx",
+    "c": "__builtin_offsetof(struct x86_user_context, gpr.rcx)",
+    "rust": "offset_of!(X86UserContext, gpr) + offset_of!(X86BasicRegs, rcx)"
+  },
+  {
+    "key": "context.gpr.rsp",
+    "c": "__builtin_offsetof(struct x86_user_context, gpr.rsp)",
+    "rust": "offset_of!(X86UserContext, gpr) + offset_of!(X86BasicRegs, rsp)"
+  },
+  {
+    "key": "context.gpr.rip",
+    "c": "__builtin_offsetof(struct x86_user_context, gpr.rip)",
+    "rust": "offset_of!(X86UserContext, gpr) + offset_of!(X86BasicRegs, rip)"
+  },
+  {
+    "key": "context.gpr.rflags",
+    "c": "__builtin_offsetof(struct x86_user_context, gpr.rflags)",
+    "rust": "offset_of!(X86UserContext, gpr) + offset_of!(X86BasicRegs, rflags)"
+  },
+  {
+    "key": "context.gpr.orig_rax",
+    "c": "__builtin_offsetof(struct x86_user_context, gpr.orig_rax)",
+    "rust": "offset_of!(X86UserContext, gpr) + offset_of!(X86BasicRegs, orig_rax)"
+  },
+  {
+    "key": "frame.regs.rsp",
+    "c": "__builtin_offsetof(struct sigsp, regs[15])",
+    "rust": "offset_of!(Frame, regs) + 15 * size_of::<CULong>()"
+  },
+  {
+    "key": "frame.regs.rip",
+    "c": "__builtin_offsetof(struct sigsp, regs[16])",
+    "rust": "offset_of!(Frame, regs) + 16 * size_of::<CULong>()"
+  },
+  {
+    "key": "frame.regs.rflags",
+    "c": "__builtin_offsetof(struct sigsp, regs[17])",
+    "rust": "offset_of!(Frame, regs) + 17 * size_of::<CULong>()"
+  }
+]

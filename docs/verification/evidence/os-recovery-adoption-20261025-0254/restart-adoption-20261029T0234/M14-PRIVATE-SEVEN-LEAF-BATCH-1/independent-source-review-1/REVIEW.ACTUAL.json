@@ -1,0 +1,85 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/recovery_receipts",
+  "independent": true,
+  "implementation_ownership": false,
+  "recorded_epoch": 1793309264.628402,
+  "decision": "FAIL_SOURCE_COMPOSITION_REQUIRES_LINE_PRESERVING_MODULE_PLACEMENT",
+  "new_two_leaf_body_decision": "PASS_SOURCE_AT_ORIGINAL_DEFINED_CALLBACK_SCOPE_ONLY",
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SEVEN-LEAF-BATCH-1/SOURCE-READY.json",
+    "bytes": 2905,
+    "sha256": "d323a920ba6f851e0c298acef81ba785594d04b883316c605d5cd2066c5fc9ed"
+  },
+  "patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SEVEN-LEAF-BATCH-1/SEVEN-LEAF-BATCH.PRIVATE-NOT-APPLIED.patch",
+    "bytes": 20471,
+    "sha256": "9e51595ab639964eefaab827ce6267b16a49f44dcfbafcc30beeb49c85b2af05"
+  },
+  "checks": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SEVEN-LEAF-BATCH-1/independent-source-review-1/CHECKS.json",
+    "bytes": 26748,
+    "sha256": "7fa9ed35f594d8b7c7eee57af29cf0365ff13f9dc40817cb5966fc74dfe5d4f3"
+  },
+  "checker": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SEVEN-LEAF-BATCH-1/independent-source-review-1/check_bounded_source.py",
+    "bytes": 6026,
+    "sha256": "5e9486e92629e7f18472b4733612fbcd2383195d26767f39357ac525588ec882"
+  },
+  "reused_five_leaf_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-LOGGER-LOCK-BATCH-1/independent-source-review-1/REVIEW.ACTUAL.json",
+    "bytes": 9158,
+    "sha256": "33f25ba33420a30279276478ad5dc8641dd9411b8615f4f20d4b8beef0cfc664"
+  },
+  "reused_paired_lock_review": {
+    "bytes": 7276,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-PTRACE-CLONE-LOCK-BRIDGE-1/independent-source-review-1/REVIEW.ACTUAL.json",
+    "sha256": "5ed8b1934ab9fb5ac08910e300496808b700e601511606c2bbf995cd6326d253"
+  },
+  "bounded_findings": [
+    {
+      "id": "M14-SEVEN-LINE-1",
+      "severity": "BLOCKS_UNCHANGED389_ARTIFACT_PREDICATE",
+      "actual": "All53genuine line!() sites have identicalsource text but sourcepositionsshift+9 from reviewedfive (+4util,+5getter), total+25relativefrozen119preimage. Examples original23523\u219223548 and23531\u219223556.",
+      "cause": "Newchild-module declarations insertedbeforeexistingRustDdebugmacro sites. C#line/newline preservation and fourmovedCdescriptorCounterprojection do not preserve these inheritedRustrecordidentities.",
+      "minimum_correction": "Move all six introduced syscall_policy child-module declarations to EOF in samelexicalparent, exactexistingcfg/path/selection, preserving sevenleafbytes and frozen119prefix/macropositions. Root assigned cleanup_bindings this correction; this reviewer made no candidate change."
+    },
+    {
+      "id": "M14-SEVEN-PID-1",
+      "actual": "PASS_SOURCE",
+      "assessment": "Newgetter reuses current_thread_ptr()->*mutThread and reprC Thread.proc/Process.pid/CInt with existing4304/456/4sourceassertions. Normal current\u2192proc\u2192pid rawread/return and caller/preemption/lifetime invariant preserved; no Rustreference/lock/refcount/schedule/nullpolicy added. InvalidnullCPU/thread/proc remains outsideoriginaldefineddomain. Selectedx86pairedselector/Cextern and originalCfallback preserved; actualcompilerABI/selection/native proof not claimed."
+    },
+    {
+      "id": "M14-SEVEN-UTIL-1",
+      "actual": "PASS_SOURCE",
+      "assessment": "Selected original void(void) helper logs one exactconstant diagnostic via samekprintf. Cstringformat exactly one%s and Rustsolevararg consti8pointer to exactstatic sys_util_indicate_clone; bothNULterminated/image lifetime. No descriptor/output/cardinality/UTIbehavior changes. NonRustCfallback unchanged."
+    },
+    {
+      "id": "M14-SEVEN-COMPOSE-1",
+      "actual": "PASS_BOUNDED_REUSE_ONLY",
+      "assessment": "All5reviewedleafbyte streams and crate lib.rs exact; newtwoleafstreams exactsourcepackets; Cline/directivepositions unchanged. No duplicate reviewofunchangedlogger/lockbodyalgorithms, no privatepatch appliedcanonical. Sourcechecker parentreportslinked389onlyasprojection; full inheritedRustmetadata gap is concrete above."
+    }
+  ],
+  "undefined_variadic_domain_holds": "Preserved. No ptrace_wakeup logger cast, ABI/domain widening or guessedparity accepted.",
+  "test_result": {
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/usr/bin/python3",
+      "-B",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SEVEN-LEAF-BATCH-1/independent-source-review-1/check_bounded_source.py"
+    ],
+    "returncode": 0,
+    "meaning": "Negativeapplicability check succeeds by proving/sourcebinding metadata predicate FAIL; it is not compositionPASS or compiledtest.",
+    "macro_sites_checked": 53
+  },
+  "original389_oracle_unchanged": true,
+  "canonical_applied": false,
+  "actual_compiler_preprocessor_HOST_ELF_native_guard_cleanup_actions": 0,
+  "new_C_retirement_credit": 0,
+  "execution_authority": null,
+  "runtime_authority": null,
+  "next_review_scope": "Fresh line-preserving successor composition only; reuse this twoleafbody/source acceptance and acceptedfive/pairedlock reviews. Then actualcompiler/ABI/link/389/native gates under Rootowner remain separate.",
+  "owned_live_resources": []
+}

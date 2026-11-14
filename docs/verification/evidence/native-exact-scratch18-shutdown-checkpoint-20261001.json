@@ -1,0 +1,42 @@
+{
+  "schema": "native-exact-scratch18-shutdown-checkpoint-v1",
+  "recorded_at": "2026-10-01T07:44:30-07:00",
+  "status": "WIP_PAUSED_NOT_ACCEPTED",
+  "git": {"branch": "codex/local-native-staging-repair", "base_commit": "35601f148720e388dbea044c7970e5373de8cf57"},
+  "wrapper_correction": {
+    "source_sha256": "288acfa494e44f6b811e258e929b7ec526fc4c1b02f2c29daead508021ea14ed",
+    "tests_sha256": "e325698e0bdfabdb1ad81728bf8063498381ccd974c3b0f90d2b17cf675b6dcf",
+    "embedded_observer_sha256": "5f261e9ed481a8f7750e298f48c56293ee33d99df92e18595b562bc19b446612",
+    "reported_checks": "41 focused tests pass under CPUs 6-7 and 3-GiB address-space ceiling; AST validation and git diff --check pass",
+    "review_state": "INDEPENDENT_REVIEW_REQUIRED",
+    "privileged_probe_run": false
+  },
+  "recovery_wip": {
+    "source_sha256": "8960083dc6234575f2f40c6bdd42a2503868ef5847b11254e0d788d6888bd54a",
+    "tests_sha256": "3505cfb3e8a04456c8c22b2714b1b6d4ba882ccd0aa5fc119e7f267d01df8fcf",
+    "review_state": "BLOCKED_PRIOR_VERSION_EXPERT_INTERRUPTED_AT_SHUTDOWN",
+    "production_recovery_run": false
+  },
+  "retained_preowner_state": {
+    "derived_request": {"path": "/home/holden/mckernel-work/scratch/native-exact-build-request-scratch-18-execution.json", "device": 1831, "inode": 90729, "sha256": "80de5f1c02867bcbee69752e186f7fc11d201c2df3c78887ea08aa85f92e2bd7"},
+    "shared_lock": {"path": "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock", "device": 1831, "inode": 90730, "sha256": "3aa97b068d3e5246ff838417b32989b2760ca11680f8a65a978d949a9d85cdc5"},
+    "attempt_exclusion": {"path": "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch18.json", "device": 1831, "inode": 90731, "sha256": "e39dc0fe3faf917a0aa8adb61e9aa64334bf5d107bd35fe4ad7d441a6beeca1e"},
+    "failed_owner": {"pid": 3288332, "start_ticks": 107474009, "present": false},
+    "mutated_during_shutdown": false
+  },
+  "active_process_identities": {
+    "boot_id": "c733d83b-a5ae-4f91-9ce6-9f8ccf119afd",
+    "launcher": [{"pid": 1442141, "start_ticks": 100022769, "state": "S"}, {"pid": 1442142, "start_ticks": 100022770, "state": "S"}, {"pid": 1442145, "start_ticks": 100022779, "state": "S"}],
+    "campaign_heavy_processes": [],
+    "active_child_agents": []
+  },
+  "counters": {"compiled_current_candidates": 1, "bounded_diagnostic_guest_passes": 5, "formal_application_acceptances": 0, "production_gates": "6/130", "language_gates": "0/7"},
+  "next_actions": [
+    "Independently review the exact wrapper and embedded-observer hashes; do not run a privileged probe before PASS.",
+    "Resume the expert recovery correction from the retained blocked hashes and bind the accepted wrapper hash.",
+    "Independently review recovery crash-state transitions and issue a separate one-shot recovery release.",
+    "Archive the retained attempt lock first and shared lock last without deletion or reuse, then independently verify the terminal/archive identities.",
+    "Create and review a resume-only packet bound to the unchanged derived request; never rerun the original execution packet."
+  ],
+  "acceptance": {"build": false, "diagnostic_app": false, "formal_application": false, "whole_os": false}
+}

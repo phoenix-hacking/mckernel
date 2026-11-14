@@ -1,0 +1,4 @@
+/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-first-v3-failure-1/readiness-successor-1/bounded-correction-1/full-static-collector-1/collector.init: \
+ /home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-first-v3-failure-1/readiness-successor-1/bounded-correction-1/native-second-stop-collector.begin-ready.c \
+ /home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-first-v3-failure-1/readiness-successor-1/bounded-correction-1/pair_assignment.h \
+ /home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-first-v3-failure-1/readiness-successor-1/bounded-correction-1/pair_boot_contract.inc

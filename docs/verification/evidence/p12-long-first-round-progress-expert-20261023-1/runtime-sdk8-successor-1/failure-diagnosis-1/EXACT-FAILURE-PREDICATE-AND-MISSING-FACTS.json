@@ -1,0 +1,204 @@
+{
+  "actual_events": [
+    {
+      "line": 654,
+      "text": "ND_PAIR_LONG_PROGRESS {\"round\":20,\"work_ns\":6903230717,\"cumulative_work_ns\":112956787512,\"launches\":42}"
+    },
+    {
+      "line": 655,
+      "text": "ND_PAIR_ROUND_START {\"round\":21,\"time_ns\":196361094930,\"procfs_empty\":true}"
+    },
+    {
+      "line": 656,
+      "text": "P12_LONG_PHASE round=21 stage=round-evidence"
+    },
+    {
+      "line": 657,
+      "text": "P12_LONG_PHASE round=21 stage=callback-discover"
+    },
+    {
+      "line": 658,
+      "text": "P12_LONG_PHASE round=21 stage=callback-launch"
+    },
+    {
+      "line": 659,
+      "text": "P12_LONG_PHASE round=21 stage=callback-load"
+    },
+    {
+      "line": 660,
+      "text": "P12_LONG_PHASE round=21 stage=callback-postflight"
+    },
+    {
+      "line": 661,
+      "text": "P12_LONG_PHASE round=21 stage=callback-gate"
+    },
+    {
+      "line": 662,
+      "text": "P12_LONG_FAILURE round=21 stage=callback-gate pair_stage=kernel_retirement_wait result=-5 ownership_complete=1 rounds=21 launches=42 trace_bytes=4473600"
+    },
+    {
+      "line": 663,
+      "text": "ND_PAIR_LONG_ABORT"
+    },
+    {
+      "line": 664,
+      "text": "P12_LONG_PHASE round=21 stage=failure-trace-snapshot"
+    },
+    {
+      "line": 665,
+      "text": "P12_LONG_FAILURE_TRACE_ERROR stage=snapshot"
+    },
+    {
+      "line": 666,
+      "text": "[  202.986248] ihk_smp_x86_64: IHK-SMP: application retirement os=0 generation=1 pid=424 token=23115 errno=0"
+    }
+  ],
+  "actual_prefix_identity": {
+    "st_dev": 66306,
+    "st_gid": 1000,
+    "st_ino": 55998497,
+    "st_mode": 33152,
+    "st_nlink": 1,
+    "st_uid": 1000
+  },
+  "actual_read": {
+    "bytes": 129360,
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/actual-diagnostic-read-2/stdout",
+    "sha256": "c41e181a1d88637dafe5bb4c8741660f99cf8386ecba6deaa0efe335ae9f8a68"
+  },
+  "anchor_after": {
+    "expected_start": 58851263,
+    "observed_start": 58851263,
+    "pid": 3925729,
+    "same_identity": true,
+    "state": "S"
+  },
+  "anchor_before": {
+    "expected_start": 58851263,
+    "observed_start": 58851263,
+    "pid": 3925729,
+    "same_identity": true,
+    "state": "S"
+  },
+  "decoded_prefix": {
+    "bytes": 95573,
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/failure-diagnosis-1/RETAINED-READ2-SERIAL-PREFIX.log",
+    "sha256": "fac501c7d72cf9a3794c2153adf7e26415b8cf878280b67ef0105cb1cbff9626"
+  },
+  "exact_callchain": [
+    "Rustdispatch calls Operations.run_pair; callback sets ownership afterjoined/reaped appresults",
+    "long_pair passes callback-load and callback-postflight then invokes pair_round_gate(deadline)",
+    "pair_round_gate calls pair_round_retirement_snapshot before any strict stream/trace/membership oracle",
+    "pair_round_retirement_snapshot sets pair_fail_phase kernel_retirement_wait, performs bounded snapshot/readiness/time loop",
+    "long_kernel_snapshot selects real default klogctl(action3,buffer,len)",
+    "nonzero callback return maps RustFailure::Pair=-5; failureexport emits ABORT before its separate snapshot"
+  ],
+  "failure_export_exact_condition": "second klogctl action3 n<=0 OR n==1048576; errno and n not printed",
+  "guest_operations": 0,
+  "known_not_proven": [
+    "No EBUSY/serviceerror record in retained round21 prefix",
+    "No exact currentpair PIDs/results report: failure occursbeforecallback-report",
+    "Lastpid424 finalretirement0 doesnot prove both appfinalretirements werevisibleinside snapshot",
+    "Both snapshoterror and phase imply neither exactsyslogreturn nor readyresult",
+    "Same serial reread cannotrecover unlogged returnvalue; no unchanged replay authorized"
+  ],
+  "minimal_needed_facts": [
+    "actualfirstsettlement snapshot n and errno, exactbefore/after/deadline values, returned readiness result ifsnapshotvalid",
+    "actualsecond failure-export snapshot n and errno: distinguish full1048576 from0 ornegative",
+    "current round21 pair_results PIDs and unchanged app stdout/status/EOF results if retained independently",
+    "only if snapshotvalid: exact retained complete retirement rows forboth currentPIDs and theirtokens/domain/errors/order"
+  ],
+  "next_root_owned_action": "Normalfailedowner retirement and existing retainedevidence collection; exactmissingnumeric snapshot facts if alreadyretained. No additional identicalprefixread requested.",
+  "observed": {
+    "ABORT": true,
+    "callback_phase": "callback-gate",
+    "completed_launches": 42,
+    "completed_rounds": 21,
+    "cumulative_mixed_work_ns": 112956787512,
+    "failure_export_second_snapshot_error": true,
+    "formal_native_credit": 0,
+    "ownership_complete": 1,
+    "pair_phase": "kernel_retirement_wait",
+    "result_meaning": "Failure::Pair: run_pair callback returnednonzero; not Linux errno -5",
+    "retained_trace_bytes": 4473600,
+    "retirement_line_after_failure": {
+      "errno": 0,
+      "guest_printk_seconds": 202.986248,
+      "pid": 424,
+      "token": 23115
+    },
+    "round_failed": 21,
+    "rust_result": -5
+  },
+  "ready_predicate": {
+    "allowed_errno": [
+      -11,
+      0
+    ],
+    "attempts_perPID_max": 12,
+    "duplicate_or_after_final_or_foreign_domain_match": "reject",
+    "final_errno_perPID": 0,
+    "generation": 1,
+    "os": 0,
+    "required_pids": "actualpair_results[0,1], positive anddistinct",
+    "tokens": "nonzero, unique across bothPIDs, atmost24"
+  },
+  "reason_no_patch": "Observedmarker covers multiple concrete branches; sourcechange would choose an unprovedcause or addunsupportednewread. Preserve strictoracles/deadlines. No sourcepatch prepared.",
+  "root_operations": 0,
+  "same_anchor": true,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "selected_collector": {
+    "sha256": "142d55fb2ef5e5f1d7377a4731e3f65751984848de1e8543c5b31183e94ab5e7",
+    "source_binding": {
+      "bytes": 18387,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/ACTUAL-SDK8-CASE-STAGE-BINDING.json",
+      "sha256": "127589a3cbaa692acf47429374e15746080c11200fe3a860d7e1b7cea8fe9b70"
+    }
+  },
+  "settlement_bounds": {
+    "outer_deadline": "absolute LONG deadline passed fromRust; min with begin+5s",
+    "retry_pause_ns_max": 10000000,
+    "snapshot_capacity": 1048577,
+    "syslog_read_len": 1048576,
+    "window_ns": 5000000000
+  },
+  "settlement_failure_alternatives": [
+    "initialclock/overflow/outerdeadline/capacity validation",
+    "before snapshotclock invalid/backward/deadline",
+    "snapshotreturn n<=0 or n>=1048576",
+    "retirement_ready parse/domain/token/attempt guard returnsnegative",
+    "afterclock invalid/backward/deadline",
+    "nanosleep failure otherthanEINTR"
+  ],
+  "source_candidate": null,
+  "source_mutations": 0,
+  "source_refs": {
+    "long_bridge.inc": {
+      "bytes": 9511,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/production-source/long_bridge.inc",
+      "sha256": "56780e38e347e0f88c1b911525d56a2165e291387c260caf9ec3b031b1ddb4d8"
+    },
+    "long_support.inc": {
+      "bytes": 10893,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/production-source/long_support.inc",
+      "sha256": "1eb80bf416ec15d108c48ab3be1e4c5e3f8f159e01eb3e85ee0864e646d0db44"
+    },
+    "long_trace_retention.inc": {
+      "bytes": 6588,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/production-source/long_trace_retention.inc",
+      "sha256": "66ad73a4b7da9ccb775247c2d32a803f445e93a1e5b8762cabc5a4968adf099f"
+    },
+    "pair_long_producer.rs": {
+      "bytes": 13292,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/production-source/pair_long_producer.rs",
+      "sha256": "9f5c980fb616d07a4c9816ea2474c7c6a8d045099df1ae2db11c12a2ebc92917"
+    },
+    "retirement_settlement.inc": {
+      "bytes": 2780,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/production-source/retirement_settlement.inc",
+      "sha256": "efafd4127ee976c9ed0a24e1902a2d136600244a2b70113fc1fcd0db91dd5da6"
+    }
+  },
+  "status": "FINITE_EXACT_FAILURE_PREDICATE_CAUSE_UNRESOLVED_NO_PATCH_NO_REPLAY",
+  "tests": 0
+}

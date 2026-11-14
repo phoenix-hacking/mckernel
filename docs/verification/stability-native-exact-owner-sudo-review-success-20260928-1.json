@@ -1,0 +1,40 @@
+{
+  "schema": "mckernel.stability.execution-review.v1",
+  "date": "2026-09-28",
+  "scope": "unprivileged offline-build owner with elevated Docker client only",
+  "decision": "PASS",
+  "reviewed_source_sha256": "63ed1c4aaa4a293a9e3506d93585bc3dc53e189eef90a028fb413214b3825602",
+  "reviewed_test_sha256": "831c84a6e84baf33f6ae1d8b9a9020ba78b9522dbb591620bafc3cd733a51afd",
+  "verified_controls": [
+    "Negative sudo-wrapper exits are classified before check-mode exceptions on ordinary completion, already-exited retirement and post-TERM retirement paths.",
+    "Positive authentication failures and direct-client negative exits retain their distinct semantics.",
+    "Elevated-client uncertainty is sticky across cleanup, forces FAIL and retired false, and prevents lease removal after a misleading terminal-container observation.",
+    "The delayed-start regression preserves both the container and lease when a surviving client mutates the daemon after terminal observation.",
+    "Real/effective-root rejection, fixed absolute sudo/Docker/socket argv, allowlisted environment, askpass non-serialization, container UID/profile, first-byte evidence, single start-then-wait and exclusive ownership remain intact."
+  ],
+  "regression_evidence": {
+    "corrected_log": "docs/verification/evidence/stability-native-exact-owner-negative-exit-tests-20260928-1.log.gz",
+    "corrected_log_sha256": "7c2e2c556ca823f9623298359d9a005d4af816e1de7107c6e9634f83cf7c8229",
+    "corrected_raw_sha256": "be742eea78515bd09962716638702e54648a22bf8dda4847d9065120d3e53dc5",
+    "corrected_result": "39 tests PASS",
+    "original_failure_log": "docs/verification/evidence/stability-native-exact-owner-negative-exit-original-failure-20260928-1.log.gz",
+    "original_failure_log_sha256": "5264b23e9ee2048efde1c616eb891e0f71a916d298ac6aeb3a11258d4b613c03",
+    "original_failure_raw_sha256": "6fbde08920b8064af95d76f8ae48a02a3ec80765ccd000078c619ce4973aafef",
+    "original_failure_result": "three tests, seven failures"
+  },
+  "execution_release": {
+    "status": "ELIGIBLE_AFTER_CLEAN_PUSH_AND_EXACT_PREFLIGHT",
+    "required": [
+      "Bind these exact reviewed owner bytes to a pushed and fetched checkpoint.",
+      "Validate the exact candidate, input manifest, offline driver and prepared-image receipt identities.",
+      "Use fresh output, evidence and lease paths with exclusive ownership.",
+      "Remeasure host, scratch and memory floors immediately before execution."
+    ]
+  },
+  "execution": {
+    "sudo_invoked": false,
+    "docker_invoked": false,
+    "build_started": false
+  },
+  "limitations": "Regression evidence is simulated/model coverage, not a real privileged-client retirement result. This grants no build, module, guest, runtime, application or OS acceptance."
+}

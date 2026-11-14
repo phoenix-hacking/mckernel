@@ -1,0 +1,44 @@
+{
+  "schema": "mckernel.sdk.host-owner-retirement.independent-acceptance.v1",
+  "status": "PASS_HOST_PROCESS_RECOVERY_ONLY",
+  "reviewer": "/root/recovery_review",
+  "implementation_ownership": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "target": {
+    "pid": 635880,
+    "starttime": "71676755"
+  },
+  "sole_signal": {
+    "syscall": 424,
+    "signal": 9,
+    "returncode": 0
+  },
+  "pidfd_exit_positive": true,
+  "target_absent_in_both_after_process_sweeps": true,
+  "replacement_holder": {
+    "pid": 650468,
+    "starttime": "71895197",
+    "mutex_device": 27,
+    "mutex_inode": 4
+  },
+  "protected_input_count": 53,
+  "protected_inputs_unchanged_across_three_snapshots": true,
+  "failed_client_ledger_preserved": true,
+  "container_retained_stopped_exit_code": 1,
+  "direct_child_joined": true,
+  "direct_child_returncode": 0,
+  "evidence_sha256": {
+    "complete": "865c2e28aa804c06007ac7a11bf8074d396b532f8144f00938c55388c068d7e6",
+    "prepared": "9235390246dbf8d7d3a7bbb5fa55e1105ea3baa2680843c67e8c29bf7f5b4044",
+    "nine_raw_capture_copy_map": "945d5f789eded1f5905a062cfc81696142952923fdcbaf05783e7cf1b096d8f6",
+    "direct_join": "597cc5520137af719041cb0c6b28284b6d6ac2bf6ea4e024d5b24485419cbcaa",
+    "execution_stdout": "31ba38f3962bc33840ba2ae37b47691a0129727e249a38de643e90b457eaa92f"
+  },
+  "build_status": "FAIL",
+  "cleanup_required": true,
+  "container_cleanup_accepted": false,
+  "record_reconciliation_accepted": false,
+  "current_postjoin_accepted": false,
+  "heavy_execution_released": false,
+  "remaining_requirement": "Before further mutation, obtain bounded fresh postjoin evidence of recovery-helper/group/client absence and unchanged permanent mutex27:4 FREE, then separately review exact container/record reconciliation."
+}

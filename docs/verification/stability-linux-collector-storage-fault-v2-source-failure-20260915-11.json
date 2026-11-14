@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_failure",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "attempt": 11,
+  "status": "FAIL_SOURCE_TEST",
+  "recorded_utc": "2026-09-15T19:42:41Z",
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-failure-20260915-11.tar.gz",
+    "sha256": "10fd9881d5f6f5bb24d8361e8aaaa9e80f46a0d5b26f4963f16ca225ec273ab8",
+    "size": 56462,
+    "members": 9
+  },
+  "failure": "the terminal-publication negative changed the owner identity and was rejected by the new supervisor-owner join before reaching its intended assertion",
+  "correction": "mutate only the terminal witness identity while retaining a valid owner file and supervisor identity join",
+  "original_test_stream_retained": true,
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

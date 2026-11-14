@@ -1,0 +1,167 @@
+{
+  "schema": "mckernel.paired-lease-sdk-actual-source-runtime-review.v1",
+  "decision": "PASS_SOURCE",
+  "status": "PASS_ACTUAL_ORDINARY_SOURCE_PREPARATION_ONLY",
+  "reviewer": "/root/owned_fork_offload",
+  "implementation_ownership": false,
+  "functional_scope": "functional OS/apps plus active Rust/reviewed-assembly compute retirement",
+  "source_sha256": {
+    "scripts/native_exact_historical_lease_observer.py": "463ae558e141c2a6fe5a016fb19baddb26ed883c3bf6d39c114b27711ee78a51",
+    "scripts/native_running_external_modules_offline.py": "3760859f05a84950422a30fcd8555e3a9574186215a55e5db1aad6cada8e8ed5",
+    "scripts/native_running_external_modules_owner.py": "bbf2201694a31568c70dc87143848e30802471a675a816c63e428b8ca4508f27",
+    "scripts/native_rust_exact_build_container_owner.py": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1",
+    "scripts/native_rust_exact_build_image_prepare.py": "45cb12e0fd58d164468badfb99a3ed922e65e06046bf38b4a50e27e18595a27b",
+    "scripts/native_rust_exact_build_image_rebind.py": "f10ab116e55a24e8db7a8157d71efdd01198ba3453a8141bc8bbf596eda6b61e",
+    "scripts/native_rust_exact_build_image_rebind_probe.py": "412d46de7e078746a7ec979a13ccb25753d6fa34708610932e35be8f02a89635",
+    "scripts/native_rust_exact_build_offline.py": "cc243126ab8cc0754c62175c77e46d6ba0d98294f8168cc77893a2c12249cd1a",
+    "scripts/native_rust_exact_disk_build_wrapper.py": "c252ee341eb61752704f8b818503c0a5dc97400845494707ca3110f5f23df6d1",
+    "scripts/native_rust_exact_mckernel_image_container_owner.py": "e9861cf73b0328c9fe2eacb987ea179933146cbeddbc3951405d4e60e89560f4",
+    "scripts/tests/test_native_running_external_modules_owner.py": "22f30b785d02b0ff3b917b2f53f7d884e085aefff15336b8d0bebf09e2e66aba"
+  },
+  "actual_request": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-paired-lease-sdk-preparation-20261020-1/request.json",
+    "sha256": "3131bab285acc90421b5a433763a2c7874251bcb5bea5f9f873f20cf664dae45",
+    "bytes": 2311
+  },
+  "actual_final": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-paired-lease-sdk-preparation-20261020-1/actual-source-preparation-1/final-status.json",
+    "sha256": "d7030a82b19a3c3154d03eaa0691f95faba142d43e01940d18b98d8740078575",
+    "bytes": 3126
+  },
+  "actual_admission": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-paired-lease-sdk-preparation-20261020-1/actual-source-preparation-1/initial-admission.json",
+    "sha256": "be1c62bd47d66c3339342558d051800053724c7a78a730bb650bb744d44d6138",
+    "bytes": 1977
+  },
+  "prior_conditional_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-paired-lease-sdk-ordinary-review-20261020-1/ORDINARY-PAIRED-LEASE-TWO-OVERLAY-SOURCE-PROFILE-REVIEW.json",
+    "sha256": "6c876d383fa07ade05744f010e5af39578edcc2a36d0bbe7072eb3cd8646d2b5",
+    "bytes": 11444
+  },
+  "index": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-paired-lease-sdk-preparation-20261020-1/CAPSULE-AND-MATERIALIZATION-INDEX.json",
+    "sha256": "1a5a32713548f83b78973b555caf2801431c4e62e60249b2bb0fddc558c2aee9",
+    "bytes": 3312
+  },
+  "source_map": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-paired-lease-sdk-preparation-20261020-1/source-sha256.json",
+    "sha256": "38a83e97e600acd65d074629bbbcccce5cd1882e199fab23212d495ffe49e7f6",
+    "bytes": 1369
+  },
+  "materialization_map": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-paired-lease-sdk-preparation-20261020-1/materialization-files.json",
+    "sha256": "191fbd5b72e7fbedc45610bc4a46af61634a001cf468d627c43c39ec105dc6a8",
+    "bytes": 32104
+  },
+  "preparation": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-paired-lease-sdk-preparation-20261020-1/capsule/docs/verification/evidence/phase5-paired-lease-sdk-20261020-1.json",
+    "sha256": "7899574c9ceacc015a7e935997cd948015016bb0ec186625321807be525f4828",
+    "bytes": 65670
+  },
+  "source_identity": "50557b7836fd42a49ad3f356e75fa5aeb49dce71b27657dc19e721d4dc89e263",
+  "source_files": 66,
+  "source_bytes": 1311488,
+  "exact_two_postimages": [
+    {
+      "relative": "mcctrl_process.rs",
+      "sha256": "eb019c90f8935b68c2efbb418abb0d7905b2b9bd0e8dba2940aebbe2117c565c",
+      "bytes": 48806
+    },
+    {
+      "relative": "current_fork_host.rs",
+      "sha256": "10c8acac4006f7e1bdfdfb2a0c5fe1c90b46ac8d3c28ffe46d9a31c27fa4a473",
+      "bytes": 8512
+    }
+  ],
+  "unchanged64_metadata_reused": true,
+  "unchanged64_payloads_rehashed_by_reviewer": false,
+  "materialization_rows": 81,
+  "all81_destination_sizes_and_regular_ownership_checked": true,
+  "all81_payloads_rehashed_by_reviewer": false,
+  "capsule_runtime_files": 11,
+  "runtime9_retained_exact_map": true,
+  "owner_all_function_class_AST_equal": true,
+  "driver_sole_function_delta": "load_preparation closure_bytes1307661->1311488; exact AST after this numeric replacement",
+  "driver_replacements_match_all23_reviewed_closure_rows": true,
+  "actual_commands": [
+    {
+      "argv": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--core=0",
+        "--",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/phase5-paired-lease-sdk-preparation-20261020-1/prepare_fullmodule_inputs.py"
+      ],
+      "label": "generate"
+    },
+    {
+      "argv": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--core=0",
+        "--",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/phase5-paired-lease-sdk-preparation-20261020-1/materialize_request.py",
+        "--materialize"
+      ],
+      "label": "materialize"
+    }
+  ],
+  "wholejoin": {
+    "returncodes": [
+      0,
+      0
+    ],
+    "seconds": 0.165683455998078,
+    "directjoined": true,
+    "groups_absent": true,
+    "closed_streams": true,
+    "errors": null,
+    "stderr_bytes": 0
+  },
+  "current_request_identities_match": true,
+  "owner_evidence_root_absent": true,
+  "static_index_namespace_absent_field": "pre-materialization descriptor only; actual C/I exist and match request, E absent",
+  "evidence_limits": [
+    "64 unchanged source bytes and9 unchanged runtime payloads reused from accepted authority; no bulk rehash",
+    "no new unsafe ownership/ABI audit; db1/eight cases and6c876 source controls reused",
+    "source prep does not build modules or demonstrate runtime task/MM/ACK"
+  ],
+  "witnesses": [
+    "closed two commands match approved argv/fresh admission; both0 with stable closedcaptures",
+    "exact66metadata/1311488/50557 plus2postimage bytes and81 destinationstat checks match",
+    "request3131/prep7899/source-map38a8/index1a5 bindings join actualstdout",
+    "runtime11 exact map:9 unchanged, owner functions identical, driver sole closure bytecount guard correction",
+    "actual preparation holds remain INPUTS_PREPARED_EXECUTION_NOT_RELEASED; E absent"
+  ],
+  "compilation_root_guest_by_reviewer": false,
+  "future_heavy_module_execution_authorized": false,
+  "fetched_source_proof_pending": true,
+  "independent_heavy_exact_payload_review_pending": true,
+  "latest_physical_and_fresh_admission_pending": true,
+  "native_default_activation_revoke_finalACK_authority": false,
+  "CPU6_already_released_by_author": true
+}

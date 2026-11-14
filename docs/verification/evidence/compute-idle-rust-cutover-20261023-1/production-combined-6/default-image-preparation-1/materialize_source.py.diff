@@ -1,0 +1,30 @@
+--- /home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/materialize_source.py
++++ /home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-6/default-image-preparation-1/materialize_source.py
+@@ -13,13 +13,13 @@
+ import time
+ 
+ REPO = Path('/home/holden/mckernel')
+-OUT = Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/source-materialization-attempt-1')
+-BASE = Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-4/default-image-successor-1/source-materialization-attempt-1')
++OUT = Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-6/default-image-preparation-1/source-materialization-attempt-1')
++BASE = Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/source-materialization-attempt-1')
+ SOURCE = BASE / 'materialized-source'
+ DEST = OUT / 'materialized-source'
+-AUTHORITY = Path('/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-unmap-body-1/CANONICAL-INTEGRATION.json')
+-BASE_CANONICAL_SHA = '802f963e8f3ec1c47f98c5f3440b8a132f5b0fa617dd2e014976c63d78870073'
+-POST = {'kernel/mem.c': 'bac5d4fb766b5cb80e036457465e215743a1cb31622ff11c5b5b605749f3d7fe', 'kernel/rust/page_helpers.rs': 'cfc64f72bf9b94c65417bc8f4e29d65b81f98239fe52ab2a7dd0352ebdfc3f70'}
++AUTHORITY = Path('/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/init-large-page-bridge-rust-20261023-1/CANONICAL-BRIDGE-INTEGRATION.json')
++BASE_CANONICAL_SHA = 'b47cf0f2a65aa90f2e010d717bf381c85adf063b68951fd8e53682cb87f27be6'
++POST = {'arch/x86_64/kernel/memory.c': 'd17a62c07102a6f015c05dff88b5594805ae4b2b871bffeddd7b1286802f8503', 'kernel/rust/x86_memory_helpers.rs': '5a9b4effe230fb4a322441950fa7f6588f2165c7ee2a33f62c273089466e65d6', 'kernel/rust/tests/run_equivalence.sh': '7bebd850bc4f2262cbac2cf0eefcaad932a9b66aabd089dee7cbea7026b93224'}
+ MAX_GROWTH = 256 << 20
+ EXTRA = 16 << 20
+ SCOPE = 'Functional McKernel OS/apps and Rust/assembly migration only; no security testing.'
+@@ -50,7 +50,7 @@
+     baseline = json.loads((BASE / 'source-inputs.json').read_text())
+     need(sha(canonical(baseline)) == BASE_CANONICAL_SHA, 'accepted exact base source manifest')
+     authority_raw = AUTHORITY.read_bytes();authority = json.loads(authority_raw)
+-    need(authority['status'] == 'CANONICAL_TWO_FILE_SOURCE_INTEGRATION_ONLY' and {row['path']:row['postimage_sha256'] for row in authority['integrated']} == POST,
++    need(authority['status'] == 'PARTIAL_CANONICAL_SOURCE_INTEGRATED' and {row['path']:row['postimage_sha256'] for row in authority['changed_files']} == POST,
+          'actual reviewed latest two-file canonical integration')
+     document = copy.deepcopy(baseline)
+     changed = []

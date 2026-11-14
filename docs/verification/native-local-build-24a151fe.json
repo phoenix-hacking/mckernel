@@ -1,0 +1,390 @@
+{
+  "booted_mckernel_proven": false,
+  "execution": {
+    "acceleration": "TCG",
+    "booted_mckernel_proven": false,
+    "container_cpu_affinity": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "container_image": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+    "container_memory_mib": 12288,
+    "finished_utc": "2026-09-07T05:38:43.685275+00:00",
+    "guest_cpus": 4,
+    "guest_memory_mib": 8192,
+    "implementation_base_commit": "24a151fef5b9fcf303fdbb8cf9762340cd4100fd",
+    "initramfs_files": [
+      {
+        "path": "/work/native-runtime-local-base-24a151fe/root/bin/bash",
+        "sha256": "a59fc4da19d169c175b247bfaf4a21c2ee7c16c3ed2820daa807ab12affe98fc",
+        "size": 1410688
+      },
+      {
+        "path": "/work/native-runtime-local-base-24a151fe/root/bin/dmesg",
+        "sha256": "8d98381f576d147789c950da4377464d2dfbb590bd4d7ef8ff9dbc81d74cdbd1",
+        "size": 72088
+      },
+      {
+        "path": "/work/native-runtime-local-base-24a151fe/root/bin/mcd0-ioctl-i386",
+        "sha256": "9cae94a48462fe1fd409d572acd2c0dff04decb0c7eacae703aa5876389c24f2",
+        "size": 8416
+      },
+      {
+        "path": "/work/native-runtime-local-base-24a151fe/root/bin/mcd0-ioctl-x86_64",
+        "sha256": "dac5c47b17cec8b063329dff21c7318506e1d7a3e05a1f905be53c6483f6fed9",
+        "size": 8512
+      },
+      {
+        "path": "/work/native-runtime-local-base-24a151fe/root/bin/mount",
+        "sha256": "3ab3ac4707f4d02f4d46c916e537c38cdaee3b9daa64f91f850decf47bc889d9",
+        "size": 48864
+      },
+      {
+        "path": "/work/native-runtime-local-base-24a151fe/root/bin/stat",
+        "sha256": "9f6ffbf89d8463633790130b1d79999e1f5ef72fa63ac128eefc19101116b4d3",
+        "size": 51
+      },
+      {
+        "path": "/work/native-runtime-local-base-24a151fe/root/bin/uname",
+        "sha256": "050964cc46affadcf00d817106c47a6bde087fc483fa0643e168a816b76de608",
+        "size": 52
+      },
+      {
+        "path": "/work/native-runtime-local-base-24a151fe/root/init",
+        "sha256": "5288fa8a3b105d442dc210e564b4595def49277ae687ee407c06112ba13f5715",
+        "size": 12945
+      },
+      {
+        "path": "/work/native-runtime-local-base-24a151fe/root/lib64/ld-linux-x86-64.so.2",
+        "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b",
+        "size": 930600
+      },
+      {
+        "path": "/work/native-runtime-local-base-24a151fe/root/lib64/libacl.so.1",
+        "sha256": "342a0213a17809ee41816a95c939f11ba25ff92da53ae849bc88cf3da81649aa",
+        "size": 40896
+      },
+      {
+        "path": "/work/native-runtime-local-base-24a151fe/root/lib64/libattr.so.1",
+        "sha256": "1369a9dd4a7bcd8d4bf71293b369f6d222a1ea12132d988ed529d796522076a0",
+        "size": 28296
+      },
+      {
+        "path": "/work/native-runtime-local-base-24a151fe/root/lib64/libblkid.so.1",
+        "sha256": "6149c97e401f088ee8e4d9681e0498486e41a90b90618b0dafca0b8545230143",
+        "size": 242128
+      },
+      {
+        "path": "/work/native-runtime-local-base-24a151fe/root/lib64/libc.so.6",
+        "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+        "size": 2339896
+      },
+      {
+        "path": "/work/native-runtime-local-base-24a151fe/root/lib64/libcap.so.2",
+        "sha256": "70e8dbe271e2ea63127fbc20270ce60541d1244f0b170888d258b86b2573bcbf",
+        "size": 53168
+      },
+      {
+        "path": "/work/native-runtime-local-base-24a151fe/root/lib64/libcrypto.so.3",
+        "sha256": "3da8e54521ce53e2a09d9ca0d1d5c3368b8abba252492cee21affd6146f72d82",
+        "size": 5631152
+      },
+      {
+        "path": "/work/native-runtime-local-base-24a151fe/root/lib64/libgcc_s.so.1",
+        "sha256": "cc9c9d070f290bd0b39a7208f8850f6f6cb85491cf6aee80ef4502c3f040c2cb",
+        "size": 186528
+      },
+      {
+        "path": "/work/native-runtime-local-base-24a151fe/root/lib64/liblzma.so.5",
+        "sha256": "a1ccc4236761114ffa9efa797501b9f34398a20de75ca0ca22df9410cbe41bde",
+        "size": 215496
+      },
+      {
+        "path": "/work/native-runtime-local-base-24a151fe/root/lib64/libmount.so.1",
+        "sha256": "5199b49c7ad1565700fd649e9b13024919192128908536203fe95fff4adadb2c",
+        "size": 333512
+      },
+      {
+        "path": "/work/native-runtime-local-base-24a151fe/root/lib64/libpcre2-8.so.0",
+        "sha256": "ac0dcbb0620261d144a5255ce79c30c583593e7a29822df7a529c06922852e94",
+        "size": 665664
+      },
+      {
+        "path": "/work/native-runtime-local-base-24a151fe/root/lib64/libselinux.so.1",
+        "sha256": "79e73dd27d4a90f25969c43c298ad32aa21c718c8508ef86c5a8e6ee083723a9",
+        "size": 200664
+      },
+      {
+        "path": "/work/native-runtime-local-base-24a151fe/root/lib64/libtinfo.so.6",
+        "sha256": "3a4bdb43bc49568cec111b5486e6daa6fbca08dc205357b3d737044eb0ab315a",
+        "size": 187296
+      },
+      {
+        "path": "/work/native-runtime-local-base-24a151fe/root/lib64/libz.so.1",
+        "sha256": "2fd5dcd6bc0953f3db71958b10c0cdf55ce49e1ceb4ab9d1f869398e39e994eb",
+        "size": 140824
+      },
+      {
+        "path": "/work/native-runtime-local-base-24a151fe/root/lib64/libzstd.so.1",
+        "sha256": "250dc1e1302e3eedd9f483c7cb3d52ab15882bf9d12072539cc4f06660b384e1",
+        "size": 729608
+      },
+      {
+        "path": "/work/native-runtime-local-base-24a151fe/root/modules/ihk-smp-x86_64.ko",
+        "sha256": "e42a712d479f558df6c0e7518abd4340e66feb264ce0185c50eebc6f500a7b72",
+        "size": 736240
+      },
+      {
+        "path": "/work/native-runtime-local-base-24a151fe/root/modules/ihk.ko",
+        "sha256": "1806a1bdad3e7d423270478b23e731fc611769c901aa3312ad52dbc47d9a6fe8",
+        "size": 1066368
+      },
+      {
+        "path": "/work/native-runtime-local-base-24a151fe/root/modules/mcctrl.ko",
+        "sha256": "5be1f9b72b53235a515cfc60464da1ed85922a8a85fd3c05452dcf6e0180a344",
+        "size": 636776
+      },
+      {
+        "path": "/work/native-runtime-local-base-24a151fe/root/poweroff",
+        "sha256": "384607e6e1544a549c793f34a21d8d555879abaa1d532b5e2b9dc5e020dcc569",
+        "size": 4456
+      },
+      {
+        "path": "/work/native-runtime-local-base-24a151fe/root/sbin/insmod",
+        "sha256": "7e91f52ed2cd5e2c4f82de4bb07bbaa7179cd5c053b7afcf2fd231056681ed55",
+        "size": 182088
+      },
+      {
+        "path": "/work/native-runtime-local-base-24a151fe/root/sbin/rmmod",
+        "sha256": "7e91f52ed2cd5e2c4f82de4bb07bbaa7179cd5c053b7afcf2fd231056681ed55",
+        "size": 182088
+      },
+      {
+        "path": "/work/native-runtime-local-base-24a151fe/root/usr/bin/coreutils",
+        "sha256": "8e7928bf899599dbe98a4baaf2b5cba78a0b003213ab83104182e31475c068ff",
+        "size": 1347728
+      }
+    ],
+    "inputs": [
+      {
+        "path": "/work/native-build-base-evidence-24a151fe/bzImage",
+        "sha256": "372249efc7e95391bf3b271413acda32f3a3c1bd264b9dfd17cb50007cbf083a",
+        "size": 16130048
+      },
+      {
+        "path": "/work/native-build-base-evidence-24a151fe/ihk.ko",
+        "sha256": "1806a1bdad3e7d423270478b23e731fc611769c901aa3312ad52dbc47d9a6fe8",
+        "size": 1066368
+      },
+      {
+        "path": "/work/native-build-base-evidence-24a151fe/ihk-smp-x86_64.ko",
+        "sha256": "e42a712d479f558df6c0e7518abd4340e66feb264ce0185c50eebc6f500a7b72",
+        "size": 736240
+      },
+      {
+        "path": "/work/native-build-base-evidence-24a151fe/mcctrl.ko",
+        "sha256": "5be1f9b72b53235a515cfc60464da1ed85922a8a85fd3c05452dcf6e0180a344",
+        "size": 636776
+      },
+      {
+        "path": "/work/native-build-base-evidence-24a151fe/stage-lock.json",
+        "sha256": "4300ff32be79dd3049a39753ce56486f9d45b56fbaf94e8bae8f59a83bdadb6b",
+        "size": 3693
+      },
+      {
+        "path": "/work/native-build-base-evidence-24a151fe/resolved.config",
+        "sha256": "106055ad26cfc19373b1bc52e1dcc24b3eaa7c48125c451be029898b8f696474",
+        "size": 260490
+      },
+      {
+        "path": "/work/native-build-base-evidence-24a151fe/kernel.release",
+        "sha256": "42bb1d3c01816ca5d716e59ce1b50f1b96be1e5643d866486b0f6db098d2725a",
+        "size": 40
+      },
+      {
+        "path": "/work/native-build-base-evidence-24a151fe/build.commands",
+        "sha256": "bc1b05cd776b545646528300bc3e441d1d7e2d24ea9dda3e291a47819778a916",
+        "size": 2682
+      },
+      {
+        "path": "/work/native-runtime-local-base-24a151fe/initramfs.cpio.gz",
+        "sha256": "a5cbe298c77b3ca950d777cc45f1dfad416c34ac424c09c9c9560b5ffb6b6867",
+        "size": 7116007
+      },
+      {
+        "path": "/work/run-native-local-base.py",
+        "sha256": "71e46b4204228d809cca093b711cbe8fcf7d61ee501b4594c3a1dfaa6a25a5b5",
+        "size": 4464
+      },
+      {
+        "path": "/work/build-native-base.sh",
+        "sha256": "c67b7e4499247ddd5ad8f0aa67738e21bc2d4f30367f928d45a2f2ad2c16a98f",
+        "size": 5173
+      },
+      {
+        "path": "/work/write-native-cpio-spec.py",
+        "sha256": "21ba7209c34aa24349a633a8cfbde22254f66297c2c82c73fd7815b1846d96df",
+        "size": 1091
+      }
+    ],
+    "kind": "local-build-native-unbooted-lifecycle",
+    "locally_built": true,
+    "network": "none",
+    "outputs": [
+      {
+        "path": "/work/native-runtime-local-base-24a151fe/serial.log",
+        "sha256": "66d2ba5a69b1a4408dd3aaf15514712b214848cb03977a572a17f2dc55922945",
+        "size": 74073
+      },
+      {
+        "path": "/work/native-runtime-local-base-24a151fe/qemu.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      }
+    ],
+    "production_gate_credit": false,
+    "qemu_args": [
+      "/usr/libexec/qemu-kvm",
+      "-machine",
+      "q35",
+      "-accel",
+      "tcg,thread=multi",
+      "-cpu",
+      "max,la57=off",
+      "-smp",
+      "4",
+      "-m",
+      "8192",
+      "-kernel",
+      "/work/native-build-base-evidence-24a151fe/bzImage",
+      "-initrd",
+      "/work/native-runtime-local-base-24a151fe/initramfs.cpio.gz",
+      "-append",
+      "console=ttyS0,115200n8 rdinit=/init nokaslr panic=-1",
+      "-display",
+      "none",
+      "-monitor",
+      "none",
+      "-serial",
+      "file:/work/native-runtime-local-base-24a151fe/serial.log",
+      "-no-reboot",
+      "-nic",
+      "none"
+    ],
+    "qemu_exit_code": 0,
+    "qemu_version": "QEMU emulator version 10.1.0 (qemu-kvm-10.1.0-16.el10_2.5)\nCopyright (c) 2003-2025 Fabrice Bellard and the QEMU Project developers\n",
+    "review": {
+      "path": "/work/native-runtime-local-base-24a151fe/local-serial-review.json",
+      "sha256": "7922b24d4389f8c8dd8205ca94cf0db26a3724b85704107c7227161c6c9776d7",
+      "size": 2973
+    },
+    "schema_version": 1,
+    "started_utc": "2026-09-07T05:38:33.135665+00:00",
+    "status": "strict-serial-review-passed"
+  },
+  "kind": "local-native-build-and-unbooted-lifecycle",
+  "production_gate_credit": false,
+  "schema_version": 1,
+  "scope": "Locally built baseline only; CPU executor added after this build/run",
+  "serial_artifact": {
+    "path": "evidence/native-local-build-24a151fe-20260907.serial.txt.gz",
+    "sha256": "6dd3c404a92fb736cca575ce36135bb3999edc181b09c86f99a810beba66ab09",
+    "size": 21290,
+    "uncompressed_sha256": "66d2ba5a69b1a4408dd3aaf15514712b214848cb03977a572a17f2dc55922945",
+    "uncompressed_size": 74073
+  },
+  "strict_serial_review": {
+    "kernel_release": "6.12.0-211.44.1.el10_2.mckernel1.x86_64",
+    "mcd0": {
+      "capture_can_claim_pass": false,
+      "compat_abi": "i386",
+      "compat_unknown_ioctl_errno": -22,
+      "compatibility_build_id": "3114d9e",
+      "credit_eligible": false,
+      "device_node_identity_match_observed": true,
+      "diagnostic_segments": 2,
+      "first_cycle_open_count": 17,
+      "first_device_major": 10,
+      "first_device_minor": 123,
+      "gate_status": "TODO",
+      "get_buildid_command": "0x11290b",
+      "get_buildid_fault_errno": -14,
+      "get_buildid_nul_and_guards_observed": true,
+      "module_owner_unload_status": 1,
+      "native_abi": "x86_64",
+      "native_unknown_ioctl_errno": -22,
+      "node_present_observed": true,
+      "node_removed_observed": true,
+      "open_receipt_scope": {
+        "duplicate_close_detectable_while_other_references_exist": false,
+        "same_generation_token_may_repeat": true,
+        "trusted_noncopy_owner_balance_required": true
+      },
+      "operation_callbacks_reachable": false,
+      "os_operations_reachable": true,
+      "overlapping_open_count": 8,
+      "provider_open_acquire_count_per_trace": 22,
+      "provider_open_release_count_per_trace": 22,
+      "provider_registry_minor": 0,
+      "reload_cycles": 1,
+      "reload_device_major": 10,
+      "reload_device_minor": 123,
+      "reload_open_count": 5,
+      "resource_operations_reachable": false,
+      "rocky_runtime_validated": false,
+      "runtime_behavior_proven": false,
+      "sequential_open_count": 4,
+      "sysfs_identity_path": "/sys/class/misc/mcd0/dev",
+      "tracker_credit": false,
+      "unbooted_os": {
+        "abis": [
+          "x86_64",
+          "i386"
+        ],
+        "booted_teardown_proven": false,
+        "busy_destroy_errno": -16,
+        "creates_per_trace": 12,
+        "cycles": 2,
+        "destroys_per_trace": 12,
+        "kmsg_bytes_per_instance": 4194304,
+        "module_pin_checked_with_all_device_files_closed": true,
+        "module_pin_errno": -11,
+        "node_removed_and_minor_reused": true,
+        "resource_assignment_proven": false,
+        "scope": "unbooted create/status/destroy only",
+        "status": 0,
+        "tracker_credit": false
+      },
+      "unknown_ioctl_command": "0xdeadbeef",
+      "valid_ioctl_commands": [
+        "IHK_DEVICE_GET_BUILDID",
+        "IHK_DEVICE_CREATE_OS",
+        "IHK_DEVICE_DESTROY_OS"
+      ]
+    },
+    "negative_unload_status": 1,
+    "provider_lease": {
+      "attach_count_per_trace": 2,
+      "attach_observed": true,
+      "callback_abi": 1,
+      "complete_cycles_observed": 2,
+      "detach_count_per_trace": 2,
+      "detach_observed": true,
+      "exit_callback_count_per_trace": 2,
+      "exit_callback_observed": true,
+      "init_callback_count_per_trace": 2,
+      "init_callback_observed": true,
+      "raw_token_logged": false,
+      "registry_empty_count_per_trace": 2,
+      "registry_empty_observed": true
+    },
+    "provider_refcount": 2,
+    "provider_users": [
+      "ihk_smp_x86_64",
+      "mcctrl"
+    ],
+    "serial_sha256": "66d2ba5a69b1a4408dd3aaf15514712b214848cb03977a572a17f2dc55922945"
+  }
+}

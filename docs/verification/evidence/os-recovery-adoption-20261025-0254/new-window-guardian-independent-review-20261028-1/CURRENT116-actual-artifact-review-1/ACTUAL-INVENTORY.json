@@ -1,0 +1,238 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "actual_profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT116-F03SEVEN-SHM-BUILD-ADMISSION-1/PROFILE.SOURCE-ONLY.json",
+    "bytes": 116268,
+    "sha256": "c0bec142a55ddde56bc3311af06503dcb3ce55fa98070a573c49aace573e34c3"
+  },
+  "actual_worker": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT116-F03SEVEN-SHM-BUILD-ADMISSION-1/OUTPUT/work/evidence/worker-result.json",
+    "bytes": 15016,
+    "sha256": "9a747459f805d89a23b45993923cc11e539ce9f92a861d2478da656a4f680003"
+  },
+  "tuple": {
+    "Rust": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT116-F03SEVEN-SHM-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o",
+      "bytes": 18361160,
+      "sha256": "5072a9457b945e15356320379c3d614733ad8337a3451e27d913295472bc14ae"
+    },
+    "generic_C": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT116-F03SEVEN-SHM-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+      "bytes": 354296,
+      "sha256": "4e13b5424d08d4f5b23fc90507d0d8afac1ed505c7e841a63a11bc9eb6490da9"
+    },
+    "arch_C": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT116-F03SEVEN-SHM-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+      "bytes": 99992,
+      "sha256": "77db1a40cdf69e5d8689d8d93f5ab8710c554bbf73dd8dc4b585cae018cdb31d"
+    },
+    "process_C": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+      "bytes": 2864,
+      "sha256": "3717ed77bd1761c734e93a72d4e5a0b770698f17760470286019f6ec6a6973dd"
+    },
+    "image": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT116-F03SEVEN-SHM-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/mckernel.img",
+      "bytes": 10271792,
+      "sha256": "42473e03dae2310cb444008f4a46e84b3da87b00e4b2e2ab008f2637abbdc2c4"
+    }
+  },
+  "removed_C_functions": {
+    "generic": [
+      "ptrace_report_signal_bridge",
+      "ptrace_setsiginfo",
+      "ptrace_syscall_event",
+      "ptrace_wakeup_clear_saved_bridge",
+      "ptrace_wakeup_pending_take_bridge",
+      "ptrace_wakeup_set_single_step_bridge",
+      "ptrace_wakeup_trace_syscall_bridge"
+    ],
+    "arch": [
+      "arch_do_shmget_bridge"
+    ]
+  },
+  "added_C_functions": {
+    "generic": [],
+    "arch": []
+  },
+  "counts": {
+    "generic_C_functions": 54,
+    "arch_C_functions": 17,
+    "selected_C_functions": 71,
+    "process_FUNCTIONs": 0,
+    "process_OBJECTs": 0,
+    "new_Rust_selected_providers": 8
+  },
+  "new_providers": [
+    {
+      "name": "f03_exec_report_signal_v1",
+      "input": {
+        "index": 4856,
+        "name": "f03_exec_report_signal_v1",
+        "bind": 1,
+        "type": 2,
+        "shndx": 1158,
+        "value": 0,
+        "size": 17
+      },
+      "final": {
+        "name": "f03_exec_report_signal_v1",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684700784,
+        "size": 17
+      }
+    },
+    {
+      "name": "ptrace_syscall_event",
+      "input": {
+        "index": 6592,
+        "name": "ptrace_syscall_event",
+        "bind": 1,
+        "type": 2,
+        "shndx": 3647,
+        "value": 0,
+        "size": 47
+      },
+      "final": {
+        "name": "ptrace_syscall_event",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073685079328,
+        "size": 47
+      }
+    },
+    {
+      "name": "ptrace_wakeup_clear_saved_bridge",
+      "input": {
+        "index": 6597,
+        "name": "ptrace_wakeup_clear_saved_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 3654,
+        "value": 0,
+        "size": 26
+      },
+      "final": {
+        "name": "ptrace_wakeup_clear_saved_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073685080256,
+        "size": 26
+      }
+    },
+    {
+      "name": "ptrace_wakeup_set_single_step_bridge",
+      "input": {
+        "index": 6600,
+        "name": "ptrace_wakeup_set_single_step_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 3660,
+        "value": 0,
+        "size": 34
+      },
+      "final": {
+        "name": "ptrace_wakeup_set_single_step_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073685080384,
+        "size": 34
+      }
+    },
+    {
+      "name": "ptrace_wakeup_trace_syscall_bridge",
+      "input": {
+        "index": 6602,
+        "name": "ptrace_wakeup_trace_syscall_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 3665,
+        "value": 0,
+        "size": 37
+      },
+      "final": {
+        "name": "ptrace_wakeup_trace_syscall_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073685081536,
+        "size": 37
+      }
+    },
+    {
+      "name": "ptrace_wakeup_pending_take_bridge",
+      "input": {
+        "index": 6598,
+        "name": "ptrace_wakeup_pending_take_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 3655,
+        "value": 0,
+        "size": 39
+      },
+      "final": {
+        "name": "ptrace_wakeup_pending_take_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073685080288,
+        "size": 39
+      }
+    },
+    {
+      "name": "f03_ptrace_setsiginfo_v1",
+      "input": {
+        "index": 4933,
+        "name": "f03_ptrace_setsiginfo_v1",
+        "bind": 1,
+        "type": 2,
+        "shndx": 1270,
+        "value": 0,
+        "size": 676
+      },
+      "final": {
+        "name": "f03_ptrace_setsiginfo_v1",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684720640,
+        "size": 676
+      }
+    },
+    {
+      "name": "arch_do_shmget_bridge",
+      "input": {
+        "index": 4516,
+        "name": "arch_do_shmget_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 789,
+        "value": 0,
+        "size": 17
+      },
+      "final": {
+        "name": "arch_do_shmget_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684612576,
+        "size": 17
+      }
+    }
+  ],
+  "native_acceptance": false,
+  "wholefile_acceptance": false
+}

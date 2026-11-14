@@ -1,0 +1,45 @@
+{
+  "schema": "mckernel.native-shutdown-source-wip.v1",
+  "recorded_at": "2026-09-28T12:30:41-07:00",
+  "base_commit": "5a13409fa476ab468201a0bb345887e47db5fe0b",
+  "status": "WIP_SOURCE_ONLY",
+  "runtime_executed": false,
+  "application_acceptance": false,
+  "os_complete": false,
+  "files": {
+    "registry": {
+      "path": "host-kernel/native-rust/os_registry.rs",
+      "sha256": "f4b40177be36fdfdd269056b31e5393bda00f94dee09b23017146faf5078213c",
+      "result": "shutdown transaction candidate; independent review and Rust 1.92 execution pending"
+    },
+    "fixture": {
+      "path": "scripts/tests/fixtures/native-shutdown.c",
+      "sha256": "db4e80137b1fe5d3c04476f102a28859e981fe308b5bf639f48a5d0dacc9f08b"
+    },
+    "fixture_test": {
+      "path": "scripts/tests/test_application_native_shutdown_fixture.py",
+      "sha256": "0c36cacc035dec395e2ff56282d677c656e738dd2c01d1a3c5a7ef4c025c571a"
+    },
+    "observer": {
+      "path": "scripts/application-tests/native_shutdown_observer.py",
+      "sha256": "4ecc80eb221c55d3fbe66f02ea9a5052205b7741a921f35757712ef7ff7ffcf4"
+    },
+    "observer_test": {
+      "path": "scripts/tests/test_application_native_shutdown_observer.py",
+      "sha256": "d0578157af6cf4d2fd8dab1ff5dfa0903b56649d0dc87e7197e1199b568bc5d4"
+    }
+  },
+  "checks": [
+    "python3 -m unittest scripts/tests/test_application_native_shutdown_fixture.py scripts/tests/test_application_native_shutdown_observer.py: 12 passed",
+    "python3 -m py_compile: passed for observer and both test files",
+    "rustfmt --edition 2021 --check host-kernel/native-rust/os_registry.rs: passed",
+    "git diff --check: passed"
+  ],
+  "preserved_failure": "The existing frozen registry contract digest rejects the candidate change; host rustc 1.60 cannot compile the Rust 1.92 fixture. The frozen digest was not rewritten.",
+  "design_blocker": "The native backend has no callable stop acknowledgement, guest CPU stop, IRQ/callback drain, or safe started BootStorage retirement path. The fixture would currently receive EBUSY and was not run.",
+  "next": [
+    "independently review the shutdown registry transaction, including retry state and reference semantics",
+    "run the focused registry fixture with the configured Rust 1.92 toolchain and update the source contract deliberately only after review",
+    "implement versioned shutdown admission and backend stop/drain ownership before any privileged fixture execution"
+  ]
+}

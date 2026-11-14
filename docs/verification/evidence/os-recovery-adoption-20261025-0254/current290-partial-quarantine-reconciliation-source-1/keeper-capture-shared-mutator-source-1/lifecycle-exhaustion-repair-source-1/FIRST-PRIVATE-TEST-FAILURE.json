@@ -1,0 +1,12 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRESERVED_TEST_FIXTURE_MISMATCH",
+  "source_sha256": "d9537d202de4f8b69c013f0d99b2434fb8a0e5036cf62a59b05640d33deae518",
+  "test_sha256": "63f70998e71830c3b9cc575993c3829a06dadf0e5fc37166c51d29770b606e59",
+  "test_count": 33,
+  "failures": 1,
+  "tool_session_id": 95803,
+  "assertion": "observer-raced expected, exited-pid-reappeared observed",
+  "cause": "Inherited observer-drift fixture used first-stat loss followed by live stat; new required strict first-stat policy rejects reappearance before observer drift is consulted.",
+  "correction": "Trigger inherited observer-drift test with later-stage cmdline loss; retain exact observer-raced assertion and enumeration1 requirement."
+}

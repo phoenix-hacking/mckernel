@@ -1,0 +1,452 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "DIFFERENT_EXPERT_DIRECTED_RETAINED_RUST_PLUS_EXACT_REMAINING15_SOURCE_ONLY",
+  "original_recipe": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/PROPOSED-ORDINARY-BATCH-RECIPE.json",
+    "sha256": "4028d77c55bb65826f05ed60b82943b4d8198271d7d52cc8255f6604802d801b",
+    "bytes": 51608
+  },
+  "context_precheck": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/CURRENT-CONTEXT-PRECHECK-SUCCESSOR.json",
+    "sha256": "5e78c5e8b6e0e524b767422739b2d23207e70b64a1fcffaa34e5846b9c849f28",
+    "bytes": 3427
+  },
+  "original_source_handoff": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/SOURCE-BATCH-HANDOFF.json",
+    "sha256": "bb304481673e2f275756e5c91af89106f712ef0b3549f653452c8bcc3743a349",
+    "bytes": 27522
+  },
+  "retained_failure_ready": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/actual-correction-1/OBSERVER-FAILURE-READY.json",
+    "sha256": "0460f4d02bc23fe44239d8828ddb55a99947e37013b5da1a308b5f015bb34a59",
+    "bytes": 5907
+  },
+  "original_driver": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/actual-correction-1/run_actual_once.py",
+    "sha256": "4056e765004205d988d6f50ec966c2274d7329e22049d3a001eda717201f867f",
+    "bytes": 10361
+  },
+  "original_wholejoin": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/actual-correction-1/ACTUAL-WHOLE-JOIN.json",
+    "sha256": "e40ed5d71c87448b1e19b42e4fc02c992237823feba163715f81f9035749d983",
+    "bytes": 3253
+  },
+  "retained_actual_Rust_object_stat_NO_HISTORICAL_SHA": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/output-1/actual_bodies.o",
+    "device": 66306,
+    "inode": 56142457,
+    "uid": 1000,
+    "gid": 1000,
+    "mode": "0o600",
+    "nlink": 1,
+    "size": 4168,
+    "mtime_ns": 1792808443498290081,
+    "ctime_ns": 1792808443498290081,
+    "sha256": null,
+    "actual_object_hashed": false
+  },
+  "owned_existing_output_directory": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/output-1",
+    "device": 66306,
+    "inode": 56142447,
+    "uid": 1000,
+    "gid": 1000,
+    "mode": "0o700",
+    "nlink": 2,
+    "mtime_ns": 1792808443498290081,
+    "ctime_ns": 1792808443498290081
+  },
+  "allowed_existing_output_members": [
+    "actual_bodies.o"
+  ],
+  "fresh_capture_root": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/actual-retained-continuation-1",
+  "profile": {
+    "CPU": 6,
+    "jobs": 1,
+    "AS": 2147483648,
+    "CPU_seconds": 60,
+    "wall_seconds": 90,
+    "retirement_seconds": 6,
+    "FSIZE": 33554432,
+    "NOFILE": 256,
+    "core": 0,
+    "RLIMIT_STACK": 2097152,
+    "RUST_MIN_STACK": "2097152",
+    "CGU": 1,
+    "raw_asm_compilation_redzone": "Rust no-redzone=yes and GCC -mno-red-zone, already used by accepted production profile; rawNMI still NOTEXECUTED. Explicit in proposed argv, subject to root admission."
+  },
+  "reused_command_index": 0,
+  "new_command_indices": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "commands": [
+    {
+      "label": "01-original-C-bodies",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-mno-red-zone",
+        "-std=gnu11",
+        "-O2",
+        "-fno-builtin",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/source/arch/x86_64/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/source/lib/include",
+        "-c",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/fixture/original_bodies.c",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/output-1/original_bodies.o"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 01-original-C-bodies",
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1"
+    },
+    {
+      "label": "02-controlled-NMI-fixture",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-mno-red-zone",
+        "-std=gnu11",
+        "-O2",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/source/arch/x86_64/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/source/lib/include",
+        "-c",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/fixture/nmi_pure_fixture.c",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/output-1/nmi_pure_fixture.o"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 02-controlled-NMI-fixture",
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1"
+    },
+    {
+      "label": "03-real-header-ABI",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+        "-DIHK_OS_MANYCORE",
+        "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+        "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+        "-DMCKERNEL_NATIVE_CLONE3",
+        "-DMCKERNEL_NATIVE_CLONE_TID",
+        "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+        "-DMCKERNEL_NATIVE_FUTEX",
+        "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+        "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+        "-DMCKERNEL_RUST_BITOPS",
+        "-DMCKERNEL_RUST_LIST_HELPERS",
+        "-DMCKERNEL_RUST_LOCK_HELPERS",
+        "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_PTE_HELPERS",
+        "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+        "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+        "-DPROFILE_ENABLE",
+        "-D__KERNEL__",
+        "-DMCKERNEL_RUST_X86_CPU_HELPERS",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/source/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/source/ihk/cokernel/smp/x86_64/include",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/source/ihk/cokernel/smp/x86_64",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/source/ihk/ikc/include",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/source/ihk/linux/include",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/source/lib/include",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/source/arch/x86_64/kernel/include",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Wno-unused-parameter",
+        "-Wno-sign-compare",
+        "-Wno-unused-function",
+        "-Wno-implicit-fallthrough",
+        "-Wno-stringop-truncation",
+        "-ffreestanding",
+        "-O2",
+        "-nostdinc",
+        "-isystem",
+        "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+        "-fno-omit-frame-pointer",
+        "-mcmodel=large",
+        "-mno-red-zone",
+        "-mno-sse",
+        "-Werror=incompatible-pointer-types",
+        "-c",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/fixture/real-header-ABI.c",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/output-1/real-header-ABI.o"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 03-real-header-ABI",
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1"
+    },
+    {
+      "label": "04-body-recorder",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-mno-red-zone",
+        "-std=gnu11",
+        "-O2",
+        "-fno-builtin",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/source/arch/x86_64/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/source/lib/include",
+        "-c",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/fixture/batch_fixture.c",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/output-1/batch_fixture.o"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 04-body-recorder",
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1"
+    },
+    {
+      "label": "05-link-controlled-host-fixture",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/output-1/original_bodies.o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/output-1/nmi_pure_fixture.o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/output-1/real-header-ABI.o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/output-1/batch_fixture.o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/output-1/actual_bodies.o",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/output-1/fixture"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 05-link-controlled-host-fixture",
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1"
+    },
+    {
+      "label": "06-run-controlled-fixture-only",
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/output-1/fixture"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 06-run-controlled-fixture-only",
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1"
+    },
+    {
+      "label": "07-leaf-Rust-symbols",
+      "argv": [
+        "/usr/bin/nm",
+        "-g",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/output-1/actual_bodies.o"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 07-leaf-Rust-symbols",
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1"
+    },
+    {
+      "label": "08-leaf-Rust-ELF",
+      "argv": [
+        "/usr/bin/readelf",
+        "--wide",
+        "--syms",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/output-1/actual_bodies.o"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 08-leaf-Rust-ELF",
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1"
+    },
+    {
+      "label": "09-default-complete-CPU-C",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+        "-DIHK_OS_MANYCORE",
+        "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+        "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+        "-DMCKERNEL_NATIVE_CLONE3",
+        "-DMCKERNEL_NATIVE_CLONE_TID",
+        "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+        "-DMCKERNEL_NATIVE_FUTEX",
+        "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+        "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+        "-DMCKERNEL_RUST_BITOPS",
+        "-DMCKERNEL_RUST_LIST_HELPERS",
+        "-DMCKERNEL_RUST_LOCK_HELPERS",
+        "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_PTE_HELPERS",
+        "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+        "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+        "-DPROFILE_ENABLE",
+        "-D__KERNEL__",
+        "-DMCKERNEL_RUST_X86_CPU_HELPERS",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/source/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/source/ihk/cokernel/smp/x86_64/include",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/source/ihk/cokernel/smp/x86_64",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/source/ihk/ikc/include",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/source/ihk/linux/include",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/source/lib/include",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/source/arch/x86_64/kernel/include",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Wno-unused-parameter",
+        "-Wno-sign-compare",
+        "-Wno-unused-function",
+        "-Wno-implicit-fallthrough",
+        "-Wno-stringop-truncation",
+        "-ffreestanding",
+        "-O2",
+        "-nostdinc",
+        "-isystem",
+        "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+        "-fno-omit-frame-pointer",
+        "-mcmodel=large",
+        "-mno-red-zone",
+        "-mno-sse",
+        "-Werror=incompatible-pointer-types",
+        "-c",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/source/arch/x86_64/kernel/cpu.c",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/output-1/selected-cpu.o"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 09-default-complete-CPU-C",
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1"
+    },
+    {
+      "label": "10-default-C-symbols",
+      "argv": [
+        "/usr/bin/nm",
+        "-a",
+        "-S",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/output-1/selected-cpu.o"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 10-default-C-symbols",
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1"
+    },
+    {
+      "label": "11-default-C-relocations",
+      "argv": [
+        "/usr/bin/readelf",
+        "-rW",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/output-1/selected-cpu.o"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 11-default-C-relocations",
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1"
+    },
+    {
+      "label": "12-fallback-complete-CPU-C",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+        "-DIHK_OS_MANYCORE",
+        "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+        "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+        "-DMCKERNEL_NATIVE_CLONE3",
+        "-DMCKERNEL_NATIVE_CLONE_TID",
+        "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+        "-DMCKERNEL_NATIVE_FUTEX",
+        "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+        "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+        "-DMCKERNEL_RUST_BITOPS",
+        "-DMCKERNEL_RUST_LIST_HELPERS",
+        "-DMCKERNEL_RUST_LOCK_HELPERS",
+        "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_PTE_HELPERS",
+        "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+        "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+        "-DPROFILE_ENABLE",
+        "-D__KERNEL__",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/source/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/source/ihk/cokernel/smp/x86_64/include",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/source/ihk/cokernel/smp/x86_64",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/source/ihk/ikc/include",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/source/ihk/linux/include",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/source/lib/include",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/source/arch/x86_64/kernel/include",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Wno-unused-parameter",
+        "-Wno-sign-compare",
+        "-Wno-unused-function",
+        "-Wno-implicit-fallthrough",
+        "-Wno-stringop-truncation",
+        "-ffreestanding",
+        "-O2",
+        "-nostdinc",
+        "-isystem",
+        "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+        "-fno-omit-frame-pointer",
+        "-mcmodel=large",
+        "-mno-red-zone",
+        "-mno-sse",
+        "-Werror=incompatible-pointer-types",
+        "-c",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/source/arch/x86_64/kernel/cpu.c",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/output-1/fallback-cpu.o"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 12-fallback-complete-CPU-C",
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1"
+    },
+    {
+      "label": "13-fallback-C-symbols",
+      "argv": [
+        "/usr/bin/nm",
+        "-a",
+        "-S",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/output-1/fallback-cpu.o"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 13-fallback-C-symbols",
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1"
+    },
+    {
+      "label": "14-leaf-only-default-partial-link",
+      "argv": [
+        "/usr/bin/ld",
+        "-r",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/output-1/selected-cpu.o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/output-1/actual_bodies.o",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/output-1/selected-leaf-partial.o"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 14-leaf-only-default-partial-link",
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1"
+    },
+    {
+      "label": "15-leaf-only-partial-symbols",
+      "argv": [
+        "/usr/bin/nm",
+        "-a",
+        "-S",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/output-1/selected-leaf-partial.o"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 15-leaf-only-partial-symbols",
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1"
+    }
+  ],
+  "first_hash_operation": "Futuregranteddriver authenticates originalpositivecompilerjoin/argv and exactretainedmetadata, thenfirst990hashed() once; receiptFIRSTHASH_NOW qualifiedreusedprioractualcompile/nohistoricalSHA.",
+  "original_8000_oracles_preserved_indices": [
+    6,
+    7,
+    10,
+    13,
+    15
+  ],
+  "no_Rust_recompile_or_earlier_command_replay": true,
+  "failure_history_preserved": [
+    "actual-first-candidate-1/PREFLIGHT-FAILURE-READY89ea39bc",
+    "actual-correction-1/OBSERVER-FAILURE-READY0460f4d0"
+  ],
+  "next_unexpected_failure": "STOPexpert, no further selfcorrection.",
+  "actual_result": null,
+  "compiler_jobs": 0,
+  "test_jobs": 0,
+  "artifact_hash_jobs": 0,
+  "CPU_slots_held": 0
+}

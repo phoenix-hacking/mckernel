@@ -1,0 +1,18 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/observe_current64_current118_postjoin.py", line 355, in <module>
+    if __name__=='__main__':main()
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/observe_current64_current118_postjoin.py", line 351, in main
+    try:value=observe(checked(binding_ref),out)
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/observe_current64_current118_postjoin.py", line 306, in observe
+    historical=load(PINS['runtime_base_source'],'weekly_recursive_Root63_live_observer').observe(checked(bindings['recursive_current63_bindings']),out)
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recursive-current62/observe_current62_bfd_postjoin.py", line 245, in observe
+    history=load(PINS['history_runtime_source'],'configured_recursive_Root61_historical_observation').observe()
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recursive-current62/history/observe_bfd_current61.py", line 78, in observe
+    old=load(PINS['current60_source'],'genuine116_current60_reobservation');history=old.observe()
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recursive-current62/history/observe_bfd_current60_history.py", line 88, in observe
+    dependencies=json.loads((HERE/'ROOT-ACTUAL-RUNTIME-DEPENDENCIES.json').read_bytes());guard,_physical=common.configured_dependencies(dependencies)
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current62-after-bfd-default-build-source-20261028-1/review-correction-source-1/attempt2-binding-successor-1/retirement-parent-abi-correction-source-1/history/observe_bfd_root59_history.py", line 219, in configured_dependencies
+    require(bindings['schema'] == 'mckernel.configured-root59-observer-dependencies.v1' and
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current62-after-bfd-default-build-source-20261028-1/review-correction-source-1/attempt2-binding-successor-1/retirement-parent-abi-correction-source-1/history/observe_bfd_root59_history.py", line 26, in require
+    raise ValueError(message)
+ValueError: Root exact configured runtime dependencies

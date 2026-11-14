@@ -1,0 +1,76 @@
+{
+  "operations": [
+    {
+      "argv_template": [],
+      "profile": "snapshot",
+      "role": "UNUSED_INDEX_ZERO_DO_NOT_EXECUTE"
+    },
+    {
+      "argv_template": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--core=0",
+        "--nofile=256",
+        "--fsize=33554432",
+        "--",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/postbuild-numa-stage-runtime-data-preparation-1/runtime-current-image-preparation-1/postmutation-recovery-data-preparation-1/whole-consumer-contract-correction-1/bound-runtime-source-1/root_manual_snapshot_threads.py",
+        "--bindings-sha256",
+        "2f4ff238967faeed6c05d75589f734579ae118e958513d0e621a0acd36b4f015",
+        "--terminal",
+        "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/cleanup-quarantine-reconciliation-preparation-1/records/ROOT-MECHANICAL-CURRENT-EIGHT-EVENT-PHYSICAL-REPORT-1.json",
+        "--terminal-sha256",
+        "23057f0b48991ffac3428c8818310377ba2d49e8d77a088c348ea9a86d31cf68"
+      ],
+      "profile": "snapshot",
+      "role": "LAST-snapshot",
+      "status_path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/postbuild-numa-stage-runtime-data-preparation-1/runtime-current-image-preparation-1/postmutation-recovery-data-preparation-1/whole-consumer-contract-correction-1/bound-runtime-source-1/native-packet-1/snapshot.status.json",
+      "stderr_path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/postbuild-numa-stage-runtime-data-preparation-1/runtime-current-image-preparation-1/postmutation-recovery-data-preparation-1/whole-consumer-contract-correction-1/bound-runtime-source-1/native-packet-1/snapshot.stderr",
+      "stdout_path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/postbuild-numa-stage-runtime-data-preparation-1/runtime-current-image-preparation-1/postmutation-recovery-data-preparation-1/whole-consumer-contract-correction-1/bound-runtime-source-1/native-packet-1/snapshot.stdout"
+    }
+  ],
+  "profiles": {
+    "metadata": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 40,
+      "stream_fsize": 33554432
+    },
+    "native": {
+      "cpu": 7,
+      "parent_kill_grace_seconds": null,
+      "parent_wall_seconds": null,
+      "stream_fsize": 33554432
+    },
+    "reader": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 35,
+      "stream_fsize": 33554432
+    },
+    "snapshot": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 40,
+      "stream_fsize": 33554432
+    }
+  },
+  "release": {
+    "bytes": null,
+    "path": null,
+    "sha256": null
+  },
+  "root_installed_release_path": null
+}

@@ -1,0 +1,73 @@
+--- a/kernel/mem.c
++++ b/kernel/mem.c
+@@ -7573,15 +7573,11 @@
+ }
+ #endif /* MCKERNEL_RUST_MEM_HELPERS */
+ 
++#ifdef MCKERNEL_RUST_MEM_HELPERS
++extern int lookup_node(struct process_vm *vm, void *addr);
++#else
+ int lookup_node(struct process_vm *vm, void *addr)
+ {
+-#ifdef MCKERNEL_RUST_MEM_HELPERS
+-	return mem_lookup_node_body_result(vm, addr,
+-			__builtin_offsetof(struct process_vm, address_space),
+-			__builtin_offsetof(struct address_space, page_table),
+-			mem_lookup_fault_pte_bridge,
+-			mem_page_fault_process_vm_bridge, phys_to_nid);
+-#else
+ 	int node, err, reason = PF_POPULATE | PF_USER;
+ 	pte_t *ptep;
+ 
+@@ -7601,8 +7597,8 @@
+ 	node = phys_to_nid(pte_get_phys(ptep));
+ out:
+ 	return node;
+-#endif
+-}
++}
++#endif /* Exact C fallback; default Rust owns the public VM lookup. */
+ 
+ #ifdef MCKERNEL_RUST_PAGE_HELPERS
+ extern int is_splitable(struct page *page, uint32_t memobj_flags);
+--- a/kernel/rust/mem_helpers.rs
++++ b/kernel/rust/mem_helpers.rs
+@@ -16,6 +16,12 @@
+ use crate::string::{strcmp, strcpy, strlen, strstr};
+ 
+ unsafe extern "C" {
++    // Existing public providers; opaque VM/PT pointers preserve the C pointer ABI.
++    fn ihk_mc_pt_lookup_pte(
++        pt: *mut c_void, virt: *mut c_void, pgshift: CInt,
++        basep: *mut *mut c_void, sizep: *mut usize, p2alignp: *mut CInt,
++    ) -> *mut CULong;
++    fn page_fault_process_vm(vm: *mut c_void, virt: *mut c_void, reason: CULong) -> CInt;
+     // C owns the complete vector array; this names its first element only.
+     // No array extent is invented: the immutable header geometry supplies it.
+     #[link_name = "tlb_flush_vector"]
+@@ -5509,6 +5515,25 @@
+     phys_to_nid_cb(*ptep & PT_PHYSMASK)
+ }
+ 
++/// Preserve the complete default VM fault/PTE/NUMA lookup entry.
++///
++/// # Safety
++/// The caller retains the original VM/address-space/page-table lifetime and the
++/// original mapping synchronization. This entry adds no reference or lock. The
++/// same helper faults first, propagates the exact error, then resolves an active
++/// PTE and its physical NUMA node; the default helper's null behavior is unchanged.
++#[no_mangle]
++pub unsafe extern "C" fn lookup_node(vm: *mut ProcessVm, addr: *mut c_void) -> CInt {
++    unsafe {
++        mem_lookup_node_body_result(
++            vm.cast(), addr,
++            offset_of!(ProcessVm, address_space) as CULong,
++            offset_of!(AddressSpace, page_table) as CULong,
++            Some(ihk_mc_pt_lookup_pte), Some(page_fault_process_vm), Some(phys_to_nid),
++        )
++    }
++}
++
+ /// Preserve the original single-address stack-local handoff to the array entry.
+ ///
+ /// # Safety

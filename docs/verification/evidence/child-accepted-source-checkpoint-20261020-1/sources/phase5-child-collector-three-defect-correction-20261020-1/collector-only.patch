@@ -1,0 +1,60 @@
+--- accepted-b338/native_diagnostic_guest_collector.c
++++ private-child/native_diagnostic_guest_collector.c
+@@ -22,6 +22,12 @@
+ #include <sys/wait.h>
+ #include <time.h>
+ #include <unistd.h>
++
++/* These two existing native profiles consume the same authenticated two-CPU
++ * native-boot handshake. The app/argv/response oracle remains profile-local. */
++#if defined(ND_M03_MPROTECT_UNALIGNED) || defined(ND_PROCESS_EXEC_WAIT)
++#define ND_PAIR_STARTUP 1
++#endif
+ 
+ #if defined(ND_FUTEX)
+ #define STREAM_LIMIT 4096u
+@@ -454,7 +460,7 @@
+ #endif
+ }
+ 
+-#if defined(ND_M03_MPROTECT_UNALIGNED)
++#if defined(ND_PAIR_STARTUP)
+ static struct { const char *phase; int number; } startup_failure;
+ static int refuse_startup(const char *phase)
+ {
+@@ -471,7 +477,7 @@
+      * the unstarted-payload frame, using the same single-frame console budget. */
+     if (failed_helper.ready && (!payload || !payload->started))
+         return publish_helper_failure(fd);
+-#if defined(ND_M03_MPROTECT_UNALIGNED)
++#if defined(ND_PAIR_STARTUP)
+     if (startup_failure.phase && (!payload || !payload->started)) {
+         char b[256];
+         int n = snprintf(b, sizeof b,
+@@ -516,7 +522,7 @@
+     return bad;
+ }
+ 
+-#if defined(ND_M03_MPROTECT_UNALIGNED)
++#if defined(ND_PAIR_STARTUP)
+ #include "nd_pair_startup.h"
+ #endif
+ 
+@@ -599,7 +605,7 @@
+     loaded = 2;
+     if (helper("load-mcctrl", "/sbin/insmod", (char *const[]){"insmod","/modules/mcctrl.ko",NULL}, &safe)) { good = 0; goto finish; }
+     loaded = 3;
+-#if defined(ND_M03_MPROTECT_UNALIGNED)
++#if defined(ND_PAIR_STARTUP)
+     errno = 0;
+     if (pair_prepare_challenge()) {
+         refuse_startup("challenge-prepare"); good = 0; goto finish;
+@@ -610,7 +616,7 @@
+ #else
+     if (helper("boot", "/bin/native-boot", (char *const[]){"/bin/native-boot",NULL}, &safe)) { good = 0; goto finish; }
+ #endif
+-#if defined(ND_M03_MPROTECT_UNALIGNED)
++#if defined(ND_PAIR_STARTUP)
+     int cpus[2]; errno = 0;
+     if (pair_discover(cpus)) {
+         refuse_startup("assignment-readback"); good = 0; goto finish;

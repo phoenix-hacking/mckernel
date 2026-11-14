@@ -1,0 +1,318 @@
+{
+  "schema": "m14-genuine-core-consumer-source-oracle-review-v1",
+  "at_utc": "2026-11-11T16:32:24.073072+00:00",
+  "reviewer": "p03_cutover_source_max independent source/oracle review only",
+  "decision": "GO_SOURCE_AND_EXTERNAL_ORACLES_CONDITIONAL_ACTUAL_FOUR_PROVIDER_BINDINGS_AND_SEPARATE_EXECUTION_REVIEW",
+  "scope": "Only complete genuine-core consumer source, nine missing provider classes and five external normal/fatal oracles. No kernel panic-handler change, core/builtin producer/code/ISA acceptance, compiler/link/runtime result or operation admission.",
+  "reviewed_source_ready": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/SOURCE-READY.NOT-EXECUTED.json",
+    "bytes": 1503,
+    "sha256": "de8d7df98969d2f55c0eaee1490a08962f31f34be27e087f51b770cb7f2f0b8a"
+  },
+  "reviewed_source": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/core_boundary_consumer.rs",
+    "bytes": 5235,
+    "sha256": "1aa8c5e6a660b4d26d4c02f09fea3a2e872f2bf88fdb46fc3d6c4eb55297623d"
+  },
+  "reviewed_expected": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/EXPECTED.json",
+    "bytes": 1158,
+    "sha256": "3b9cf7876d19babb8a569b28efb971fdffe29aa8ad745d81cb3a4eb9b918df03"
+  },
+  "reviewed_command_proposal": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/COMMAND-PROPOSAL.json",
+    "bytes": 13265,
+    "sha256": "52d00e1f256de424da00575c077084dd26c9edd49fa55ec24f5734e2f9c3f9d4"
+  },
+  "actual_core_binding": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/ACTUAL-CORE-INPUTS.json",
+    "bytes": 2238,
+    "sha256": "39dba66b7cbc0d6f4d146e690f60fd6a51a67e001fc494f4e35f0fbcbc8773a2"
+  },
+  "source_inputs": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/INPUTS.SOURCE-ONLY.json",
+    "bytes": 5616,
+    "sha256": "2c0b04d7d7d87ae9fc77bd94bbe21be8c358ecccb62dea8f0d77c8b5f196f06b"
+  },
+  "all_declared_source_compiler_pins_checked": [
+    {
+      "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+      "bytes": 645792,
+      "sha256": "70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/core_boundary_consumer.rs",
+      "bytes": 5235,
+      "sha256": "1aa8c5e6a660b4d26d4c02f09fea3a2e872f2bf88fdb46fc3d6c4eb55297623d"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/EXPECTED.json",
+      "bytes": 1158,
+      "sha256": "3b9cf7876d19babb8a569b28efb971fdffe29aa8ad745d81cb3a4eb9b918df03"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/first-core-compile-1/REQUEST.json",
+      "bytes": 13856,
+      "sha256": "87afd55bad2355f4d626a215c0299e0fec921d6e25f901cabcde960cdda93824"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/first-core-compile-1/REPAIR-CONTRACT.json",
+      "bytes": 6256,
+      "sha256": "dfe8d833c2ea4a1e90c0d6fe460f680f7d32c5e7c975411172afd953e8ff34c5"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-p04source-max-1/builtin-build-unit/SOURCE-READY.NOT-EXECUTED.json",
+      "bytes": 1320,
+      "sha256": "cd695e9f58714c107a61f40490413a3ed85c6498ccb77a5152487c5bdb31f55d"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-p04source-max-1/builtin-build-unit/BUILD-RECIPE.json",
+      "bytes": 6124,
+      "sha256": "a99d9c7647db735455ca0e011934dc9ef824c034c30073a98f2f605792a7ee45"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-rust-core-link-diagnosis-p04source-max-1/DIAGNOSIS.json",
+      "bytes": 18818,
+      "sha256": "e267771294ce8888874d0203f193c9108fe8e78a76cf47b5e66e2e9a3b33e902"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-image-operation-sdk-max-1/fcntl-constant-correction-1/execution-1/LINK-MISSING-PROVIDERS.json",
+      "bytes": 638,
+      "sha256": "a7b207dce1107a0864caf417efe0bfab64c3e8229c7adb7b31392bec95c8ccff"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-source-1/HOST-TOOLCHAIN-BINDING.json",
+      "bytes": 43555,
+      "sha256": "e27a98348bd44a341a37db8528008303111f7753af6a8fb441cd14199ec243ac"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/lib.rs",
+      "bytes": 12484,
+      "sha256": "e274e9d5ccee70b26d254f9bf9f41df337c482bc7e5d0ff8b9115992b18fbe75"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs",
+      "bytes": 73702,
+      "sha256": "fc9cedba2ca1bb3d07b07d0f15160ed0277ed9a9cbc91fa5045125a73cdacb1d"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs",
+      "bytes": 99047,
+      "sha256": "9029212daf02c14124586536e64577e18b43c83d56403f643a031303e271f422"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/panicking.rs",
+      "bytes": 18998,
+      "sha256": "805a33d479ebcdf2c640f43fb01b7a6707038bc248b4830d15f30a8a60d40303"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/fmt/num.rs",
+      "bytes": 37800,
+      "sha256": "0beb56ce116b6dcee9c25677aca707ec28aa5ff0ec5fd7d5255f212c392022cb"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/panic/panic_info.rs",
+      "bytes": 6407,
+      "sha256": "259e5dc308f2333665440624f1d237717f41cac37b45a5555386eff8e0418e71"
+    }
+  ],
+  "actual_core_files_checked": [
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/first-core-compile-1/output-1/core.o",
+      "bytes": 2545640,
+      "sha256": "91548b340ced7612ce194f8f52bcbedbd56715255c488a3f0cd00054e1669061"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/first-core-compile-1/output-1/libcore.rmeta",
+      "bytes": 62088310,
+      "sha256": "7ec5faeecbe4c7bd2c865000bf4e4b66367269f3bd5bbb0fc1c46015ee014aa9"
+    }
+  ],
+  "actual_core_producer_result_bound": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/first-core-compile-1/execution-1/RESULT.json",
+    "bytes": 10455,
+    "sha256": "e01d1ba413305c086b3d44d1428b85b343e43d18710ea68ba9fbd5b3d75c39e6"
+  },
+  "same_core_builtin_source_root_checked": {
+    "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/compiler-builtins/compiler-builtins/src/lib.rs",
+    "bytes": 2449,
+    "sha256": "b116d9dcf7c67c9bba1f77ae283648e6530d60f3d56e9472b6892a4f83fde2b7"
+  },
+  "actual_nine_missing_classes": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-image-operation-sdk-max-1/fcntl-constant-correction-1/execution-1/LINK-MISSING-PROVIDERS.json",
+    "bytes": 638,
+    "sha256": "a7b207dce1107a0864caf417efe0bfab64c3e8229c7adb7b31392bec95c8ccff"
+  },
+  "genuine_source_and_provider_findings": [
+    "no_std consumer uses real core::Option/Result methods, compiler checked array indexing and real core::fmt traits/macros. No copied/reimplemented core algorithm, guessed mangled Rust symbol, exported provider stub, alias or HOST libstd import.",
+    "Explicit empty sysroot plus --extern core=actual new7ec5 rmeta and compiler_builtins=actual pending same-core rmeta, no HOST-core fallback. Link uses exact new consumer.o/core.o/compiler_builtins.o through HOSTcc; HOST CRT/libc only provide main/write/_Exit executable/output/terminal ABI.",
+    "Actual builtin crate root is genuine no_std compiler-builtins source, no compiler_builtins_lib unstable facade assumption. Its future real metadata/object and same-core dependency still require actual producer/profile/ownership qualification.",
+    "Non-inlined methods and black_box inputs retain real success/failure branches. Main selects only literal input modes0..4 via volatile argv reads; this review covers exactly supplied one-character NUL-terminated arguments, not an arbitrary-argv robustness interface.",
+    "panic=abort preserves real panic/expect/unwrap/bounds checks and original message formation. No panic=immediate-abort shortcut, unchecked array access, zero-fill replacement, forced compiler success or EXPECTED-file input exists."
+  ],
+  "nine_class_source_mapping": [
+    {
+      "class": "core::result::unwrap_failed",
+      "actual_consumer": "Result<i32,i32>::expect in non-inlined result_expect",
+      "cases": [
+        "normal Ok9",
+        "Err(-7) mode1"
+      ],
+      "genuine_source": "result.rs1866 panic!(\"{msg}: {error:?}\")"
+    },
+    {
+      "class": "core::option::unwrap_failed",
+      "actual_consumer": "Option<i32>::unwrap in non-inlined option_unwrap",
+      "cases": [
+        "Some7 normal",
+        "None mode2"
+      ],
+      "genuine_source": "option.rs2235 unwrap_failed calls panic literal; no local implementation"
+    },
+    {
+      "class": "core::option::expect_failed",
+      "actual_consumer": "Option<i32>::expect in non-inlined option_expect",
+      "cases": [
+        "Some11 normal",
+        "None mode3"
+      ],
+      "genuine_source": "option.rs2244 expect_failed calls panic_display(msg)"
+    },
+    {
+      "class": "core::panicking::panic",
+      "actual_consumer": "Actual None.unwrap failure route",
+      "genuine_source": "panicking.rs138 forms real fmt::Arguments then calls panic_fmt"
+    },
+    {
+      "class": "core::panicking::panic_fmt",
+      "actual_consumer": "Real panic path creates PanicInfo and invokes consumer language panic handler",
+      "genuine_source": "panicking.rs60/PanicInfo::message; no manual layout or Rust ABI export guessed"
+    },
+    {
+      "class": "core::panicking::panic_bounds_check",
+      "actual_consumer": "non-inlined checked_index([5,7,11], black_box index)",
+      "cases": [
+        "normal index1 value7",
+        "mode4 index3/len3"
+      ],
+      "genuine_source": "panicking.rs266 formats actual len/index"
+    },
+    {
+      "class": "i32 Display::fmt",
+      "actual_consumer": "write!(d={}, black_box(i32::MIN)) and genuine Result error Debug",
+      "external_expected": "-2147483648; error -7"
+    },
+    {
+      "class": "i32 LowerHex::fmt",
+      "actual_consumer": "write!(x={:x}, black_box(-42i32))",
+      "external_expected": "ffffffd6",
+      "source_basis": "fmt/num.rs signed radix casts to same-width unsigned two-complement"
+    },
+    {
+      "class": "i32 UpperHex::fmt",
+      "actual_consumer": "write!(X={:X}, black_box(i32::MAX))",
+      "external_expected": "7FFFFFFF"
+    }
+  ],
+  "complete_external_oracle": [
+    {
+      "id": "normal",
+      "argv_mode": "0",
+      "expected_exit": 0,
+      "stdout_json": {
+        "case": "normal",
+        "option": 7,
+        "option_expect": 11,
+        "result": 9,
+        "bound": 7,
+        "fmt": "d=-2147483648;x=ffffffd6;X=7FFFFFFF"
+      }
+    },
+    {
+      "id": "result-expect",
+      "argv_mode": "1",
+      "expected_exit": 101,
+      "stdout_json": {
+        "case": "result-expect",
+        "terminal": "host-exit-101",
+        "message": "core-result: -7"
+      }
+    },
+    {
+      "id": "option-unwrap",
+      "argv_mode": "2",
+      "expected_exit": 101,
+      "stdout_json": {
+        "case": "option-unwrap",
+        "terminal": "host-exit-101",
+        "message": "called `Option::unwrap()` on a `None` value"
+      }
+    },
+    {
+      "id": "option-expect",
+      "argv_mode": "3",
+      "expected_exit": 101,
+      "stdout_json": {
+        "case": "option-expect",
+        "terminal": "host-exit-101",
+        "message": "core-option"
+      }
+    },
+    {
+      "id": "bounds",
+      "argv_mode": "4",
+      "expected_exit": 101,
+      "stdout_json": {
+        "case": "bounds",
+        "terminal": "host-exit-101",
+        "message": "index out of bounds: the len is 3 but the index is 3"
+      }
+    }
+  ],
+  "oracle_assessment": [
+    "Normal JSON contains actual returned Option7/OptionExpect11/Result9/bound7 and actual signed Display/lowerhex/upperhex output, not expected-file values.",
+    "Each fatal case demands BOTH exact exit101 and exact complete case/message/terminal JSON with empty stderr. Real panic message comes from formatted PanicInfo::message, not a case-to-expected-message switch.",
+    "No expected failure may be accepted on status alone. Final executor must compare the complete captured stdout as one JSON record and require no extra stderr; wrong message/case/terminal or extra output fails.",
+    "If an expected panic returns, explicit109/110/111/112 cannot pass. Reentrant panic102, I/O103, invalid UTF8104, formatting105/106 and normal formatting107/108 are distinct nonpassing paths. Invalid CLI64 is outside these five supplied modes.",
+    "Fixed initialized512B buffers and checked append preserve complete outputs. JSON string escaping handles actual quotes/backslashes/newlines; declared finite messages are ASCII and fit the buffers."
+  ],
+  "HOST_panic_terminal_scope": {
+    "lower_effects": "Only libc write(stdout) and _Exit(code); same real core formats PanicInfo first. No unwind catcher/resume/retry or oracle-specific provider.",
+    "explicit_limit": "HOST terminal observation only. Does not qualify original kernel lib.rs panic handler/debugcon/IRQ/GS/native boot/scheduler behavior, image provider closure, original DEFAULT/FUNCTIONAL or any ownership/hold release.",
+    "kernel_handler_bytes_changed": false,
+    "old_18unit_families_or_metadata_or_probes_replayed": false
+  },
+  "command_boundary": {
+    "exact_commands": 7,
+    "order": "one real Rust compile; one HOSTcc link; modes0/1/2/3/4 serial",
+    "expected_statuses": [
+      0,
+      0,
+      0,
+      101,
+      101,
+      101,
+      101
+    ],
+    "CPU": [
+      7
+    ],
+    "compile_AS_bytes": 2147483648,
+    "runtime_AS_bytes": 268435456,
+    "status": "PROPOSAL ONLY, exact resource/Owner/capture/retirement/disk review remains separate before any child"
+  },
+  "mandatory_remaining_conditions": [
+    "SDK/Root actual builtin producer PASS, genuine nonempty compiler_builtins.o/libcompiler_builtins.rmeta identities, exact same new core dependency and qualified codegen/profile/ISA/exports. Bind all four real provider files in a frozen successor; never manufacture missing hashes or infer output from interface.",
+    "Independent actual core/builtin provider/source-profile qualification and positive exact direct+wholefamily clients/streams/containers/fullRoot retirement. Metadata/file existence/producer process absence is not release or kernel acceptance.",
+    "SourceAcq separate exact executable packet/profile review after actual provider binding, real owned immediate-after-each-child status/birth/family/stream captures, failure-primary retention and final retirement. This source GO is not operation authority.",
+    "Root fresh actual shared HOST4GiB/max3/all overhead/26GiB/floors/resource accounting and exclusive output namespace; actual provider producer charges retired only with genuine positive facts; native/Scratch/currentfree/other UNKNOWN holds unchanged.",
+    "Actual Rust type/codegen and HOST link must pass on these real providers before five cases run; all five independent outputs/status/stderr must then match. Preserve any meaningful actual failure for one bounded source correction/escalation, no unchanged retry."
+  ],
+  "source_defects_established": [],
+  "Root_may_execute_from_this_review_alone": false,
+  "type_link_runtime_and_image_success_claimed": false,
+  "reviewer_compiler_link_runtime_ELF_tool_SUT_or_native_execution": false,
+  "reviewer_candidate_or_canonical_edits": false,
+  "children_spawned": false,
+  "original_criteria_progress_or_holds_changed": false
+}

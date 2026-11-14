@@ -1,0 +1,41 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ADDITIVE_EXACT_ALL_FIVE_BINDING_SOURCE_ONLY",
+  "retained_descriptor": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/MANUAL-RESUME-M14-20261030-2/request-bridge-align64-source-1/SOURCE-BINDING.CORRECTED.json",
+    "sha256": "139f401b928e1bacee520ee14f0f1e1539b1ef66db8ff29e7965738a385ab65e",
+    "original_c_witness_sha256": "161b0b199d2f892e321646364720f6d0e54e41532b92deed44c43ded0d64c9de",
+    "note": "Retained unchanged as historical descriptor; its 161b0b witness covers only three C callback types and does not bind the all-five witness."
+  },
+  "result": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/MANUAL-RESUME-M14-20261030-2/request-bridge-align64-source-1/RESULT.json",
+    "sha256": "05cc72c39db3a4a7616b7ad8c0defea60172f9d25f0386208bf214943cc91c73"
+  },
+  "reviewed_inputs": {
+    "all_five_c_witness": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/MANUAL-RESUME-M14-20261030-2/request-bridge-align64-source-1/REQUEST-BRIDGE-REAL-C-ABI.ALL5.c.inc",
+      "sha256": "5c8f8550f97498b58d72bc12f05aafccdd80d749498bff7dc8a2eaf37b69b8fe"
+    },
+    "rust_constructor_successor": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/MANUAL-RESUME-M14-20261030-2/request-bridge-align64-source-1/f03_request_constructors.rs",
+      "sha256": "759818c4bbf907f988b0e6a349221ec8356e8b2b6863ce36071d2fa8ca9b35a1"
+    },
+    "alignment_fixture": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/MANUAL-RESUME-M14-20261030-2/request-bridge-align64-source-1/constructor_alignment_fixture.rs",
+      "sha256": "65052b04c27f597611b67b0b737c5c6e784376e47fd9bb9bc16f1ccbdb2d588a"
+    },
+    "abi_link_uniqueness_plan": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/MANUAL-RESUME-M14-20261030-2/request-bridge-align64-source-1/ALL5-ABI-AND-UNIQUENESS-CHECK.md",
+      "sha256": "79740956c643591d0da70f75e9294e96f149c37a4ffa5751233d7875db0c4320"
+    }
+  },
+  "selector_and_providers": "Existing paired constructor selector covers syscall_do_syscall2_bridge, syscall_policy_do_syscall2_bridge, syscall_do_syscall3_bridge, syscall_policy_do_syscall3_bridge and wait_host_wait4_bridge. The all-five witness checks C declarations/relocation roots; the policy-two locally declared extern alone does not prove an emitted provider, its type, or uniqueness.",
+  "remaining_conditions": [
+    "Constructors accept unrestricted numbers; final selected caller graph and actual profile must independently enforce retained held-work exclusions.",
+    "Actual paired C/Rust object ABI, provider uniqueness and production-link exclusion of witness data remain unproved.",
+    "Response and host lifetime, original C-retirement and functional/native proof remain open.",
+    "No FULL28 selection or held generic_c/direct-TID/terminate_host/execve-transfer work is authorized by this descriptor."
+  ],
+  "reviewed_rust_or_abi_bytes_changed": false,
+  "tests_compiler_native_executed": false
+}

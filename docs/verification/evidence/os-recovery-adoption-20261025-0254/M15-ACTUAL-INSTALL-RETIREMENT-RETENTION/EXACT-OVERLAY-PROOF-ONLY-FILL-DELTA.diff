@@ -1,0 +1,11 @@
+--- /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-libihk-next/new-window-installed-consumer-source-1/binder-successor-source-1/actual-copy7-late-bound-1/fill_install_current_review_payload.OVERLAY-FETCH-PENDING.py
++++ /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-libihk-next/new-window-installed-consumer-source-1/binder-successor-source-1/actual-copy7-late-bound-1/fill_install_current_review_payload.OVERLAY-FETCH-BOUND.NOT-RELEASED.py
+@@ -115,7 +115,7 @@
+ retained={x['path']:x for x in retention['members'].values()}
+ for path,expected in ((str(R/'REQUEST.ROOT.FINAL.json'),REQUEST_SHA),(str(R/'ACTUAL-FINAL-ELEVEN-SOURCE-MAP.json'),PINS[str(R/'ACTUAL-FINAL-ELEVEN-SOURCE-MAP.json')]),(source_map['owner']['path'],source_map['owner']['sha256']),(source_map['driver']['path'],source_map['driver']['sha256'])):
+     assert retained[path]['sha256']==expected
+-CURRENT_OVERLAY_FETCHED_PROOF=None
++CURRENT_OVERLAY_FETCHED_PROOF={'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-libihk-next/new-window-installed-consumer-source-1/binder-successor-source-1/actual-copy7-late-bound-1/ROOT-FETCHED-COPY7-INSTALL-CURRENT-AUTHORITY-OVERLAY.json', 'bytes': 16183, 'sha256': 'bb0b7c1a3b8ed75836ea25297341bdb7e08d262701bc0f8e74d4385782b5e40c'}
+ assert CURRENT_OVERLAY_FETCHED_PROOF is not None, 'genuine fetched currentauthority overlay required'
+ overlay,overlay_ref,_=read(CURRENT_OVERLAY_FETCHED_PROOF['path'],CURRENT_OVERLAY_FETCHED_PROOF['sha256'])
+ assert overlay['status']=='PASS_FETCHED_SELECTED_INSTALL_CURRENT_AUTHORITY_OVERLAY'

@@ -1,0 +1,150 @@
+{
+  "compiled_Rust_identity": null,
+  "decision": "PASS_EXACT_TWO_RETAINED_C_CLONE_CPUID_DEBUG_DESCRIPTOR_IDENTITIES_ONLY",
+  "existing_input_string_reader": {
+    "bytes": 17359,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/independent-artifact-review-1/review_current114.py",
+    "sha256": "81880d8f96ea566c1d0ee92028bc5207572129c08309ab513bf4eb7e65c7ad60"
+  },
+  "existing_reader": {
+    "bytes": 226480,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-driver-identity-repair-source-1/native_rust_exact_mckernel_image_offline.CURRENT290.VIEW-AND-FRESH-OBJECT-GATE.py",
+    "sha256": "9d2d39a0f4a28dc15638fe2c1a01052e64886078d39c3b1e7bf57eccf68bbdfd"
+  },
+  "extracted_names": [
+    "_ReuseElf",
+    "_reuse_elf_owning_relocations",
+    "_reuse_elf_object_bytes",
+    "input_string"
+  ],
+  "native_acceptance": false,
+  "object": {
+    "bytes": 106008,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT113-ABI-PRIVATE-CORRECTION-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+    "sha256": "da1e0f3a5c170e6ca8c6e2c55d4b5329987e7fc4f47f26f7aef74f5bca7454c0"
+  },
+  "records": [
+    {
+      "alignment": 8,
+      "bytes": 32,
+      "file_hex_with_nul": "2f7372632f617263682f7838365f36342f6b65726e656c2f73797363616c6c2e6300",
+      "file_utf8": "/src/arch/x86_64/kernel/syscall.c",
+      "flags": 0,
+      "fmt": null,
+      "function_hex_with_nul": "6f627461696e5f636c6f6e655f637075696400",
+      "function_utf8": "obtain_clone_cpuid",
+      "line": 898,
+      "line_flags": 898,
+      "relocations": [
+        {
+          "addend": 0,
+          "offset": 0,
+          "owning_section": 9,
+          "target": {
+            "bind": 0,
+            "index": 5,
+            "name": "",
+            "shndx": 5,
+            "size": 0,
+            "type": 3,
+            "value": 0
+          },
+          "type": 1
+        },
+        {
+          "addend": 128,
+          "offset": 8,
+          "owning_section": 9,
+          "target": {
+            "bind": 0,
+            "index": 25,
+            "name": "",
+            "shndx": 7,
+            "size": 0,
+            "type": 3,
+            "value": 0
+          },
+          "type": 1
+        }
+      ],
+      "section_flags": 3,
+      "symbol": {
+        "bind": 0,
+        "index": 8,
+        "name": "ddebug.18",
+        "shndx": 9,
+        "size": 32,
+        "type": 1,
+        "value": 320
+      },
+      "tail_padding_zero": true,
+      "three_pointer_fields": {
+        "file": "R_X86_64_64",
+        "fmt": "actualNULL/no relocation",
+        "function": "R_X86_64_64"
+      }
+    },
+    {
+      "alignment": 8,
+      "bytes": 32,
+      "file_hex_with_nul": "2f7372632f617263682f7838365f36342f6b65726e656c2f73797363616c6c2e6300",
+      "file_utf8": "/src/arch/x86_64/kernel/syscall.c",
+      "flags": 0,
+      "fmt": null,
+      "function_hex_with_nul": "6f627461696e5f636c6f6e655f637075696400",
+      "function_utf8": "obtain_clone_cpuid",
+      "line": 908,
+      "line_flags": 908,
+      "relocations": [
+        {
+          "addend": 0,
+          "offset": 0,
+          "owning_section": 9,
+          "target": {
+            "bind": 0,
+            "index": 5,
+            "name": "",
+            "shndx": 5,
+            "size": 0,
+            "type": 3,
+            "value": 0
+          },
+          "type": 1
+        },
+        {
+          "addend": 128,
+          "offset": 8,
+          "owning_section": 9,
+          "target": {
+            "bind": 0,
+            "index": 25,
+            "name": "",
+            "shndx": 7,
+            "size": 0,
+            "type": 3,
+            "value": 0
+          },
+          "type": 1
+        }
+      ],
+      "section_flags": 3,
+      "symbol": {
+        "bind": 0,
+        "index": 7,
+        "name": "ddebug.17",
+        "shndx": 9,
+        "size": 32,
+        "type": 1,
+        "value": 288
+      },
+      "tail_padding_zero": true,
+      "three_pointer_fields": {
+        "file": "R_X86_64_64",
+        "fmt": "actualNULL/no relocation",
+        "function": "R_X86_64_64"
+      }
+    }
+  ],
+  "runtime_authority": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing."
+}

@@ -1,0 +1,22 @@
+{
+  "base_commit": "b944260183065c6b6d676e61d1be9249702e2d2b",
+  "status": "FAIL_DESIGN_READY",
+  "execution_released": false,
+  "verified_defect": "mem_finish_free_pages_pending_result and both C/Rust finish paths can unlink, mutate and free a valid prefix before a later invalid descriptor returns EINVAL or panics",
+  "minimum_safe_boundary": "Close one capture into exclusive retained ownership, validate all descriptors and links against independently acquired inventory, snapshot callback arguments, then detach/reset and release only from the snapshot.",
+  "missing_authority": [
+    "capture owner and nonwrapping generation bound to actual target VM and CPU/context",
+    "defined IRQ, nesting, enqueue-during-freeze, callback-reentry, migration and scheduling behavior",
+    "descriptor leases and authoritative allocator extents acquired at enqueue with preallocated capacity",
+    "Rust production adapter plus matching C fallback with storage pinned through drain",
+    "explicit syscall and XPMEM owner context rather than an assumed current-thread VM"
+  ],
+  "full_m03_remainder": [
+    "VM lifetime and epoch",
+    "retained range, memobj and backing references",
+    "VA exclusion across failure",
+    "authenticated clear, TLB and alias acknowledgement",
+    "quarantine surviving caller exit and authenticated retry/discard"
+  ],
+  "next": "Freeze the capture-owner, generation, descriptor-lease and allocator-extent authority contract before source integration; then implement actual-body invalid-later-node admission with zero callbacks and identical snapshots."
+}

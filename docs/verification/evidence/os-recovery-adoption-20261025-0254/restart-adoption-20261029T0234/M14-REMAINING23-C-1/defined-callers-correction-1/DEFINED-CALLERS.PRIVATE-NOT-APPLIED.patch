@@ -1,0 +1,110 @@
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -24971,6 +24971,10 @@
+ #endif
+ #line 24424
+ 
++#if defined(MCKERNEL_RUST_F03_PTRACE_WAKEUP_LOG_DEFINED) && defined(MCKERNEL_RUST_F03_PTRACE_WAKEUP_LOG_PROFILE_119) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(__x86_64__)
++extern void ptrace_wakeup_log_bridge(int event, int value, int result);
++#else
++#line 24425
+ static void
+ ptrace_wakeup_log_bridge(int event, int value, int result)
+ {
+@@ -24979,6 +24983,8 @@
+ 				value, result);
+ 	}
+ }
++#endif
++#line 24433
+ 
+ #if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PTRACE_ENTRY)
+ extern int ptrace_wakeup_clear_saved_bridge(unsigned long, unsigned long);
+--- a/kernel/CMakeLists.txt
++++ b/kernel/CMakeLists.txt
+@@ -147,6 +147,7 @@
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_ptrace_detach_kfree.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_ptrace_detach_kill.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_interrupt_arity3.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_ptrace_wakeup_log.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_terminate_whole.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_terminate_mcexec_whole.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_terminate_host_whole.rs"
+@@ -214,6 +215,16 @@
+ 		list(APPEND RUST_KERNEL_CFG "--cfg" "f03_signal_process_bridges_candidate")
+ 		list(APPEND RUST_KERNEL_CFG "--cfg" "f03_dispatch_context_candidate")
+ 		list(APPEND RUST_KERNEL_CFG "--cfg" "f03_leaf_callbacks_candidate")
++		# Defined named-callers contract, only under the retained /src x86 profile.
++		if (MCKERNEL_HOST_IRQ_ABI STREQUAL "linux-6.12" AND NOT ENABLE_UBSAN AND
++		    CMAKE_CURRENT_SOURCE_DIR STREQUAL "/src/kernel")
++			list(APPEND RUST_KERNEL_CFG
++				"--cfg" "f03_interrupt_arity3_defined_candidate"
++				"--cfg" "f03_interrupt_origin_profile_119"
++				"--cfg" "f03_interrupt_origin_dispatch"
++				"--cfg" "f03_ptrace_wakeup_log_defined_u32_candidate"
++				"--cfg" "f03_ptrace_wakeup_log_origin_profile_119")
++		endif()
+ 		if (ENABLE_NATIVE_SYSFS_VERIFY)
+ 			list(APPEND RUST_KERNEL_CFG "--cfg" "native_sysfs_verify")
+ 			list(APPEND RUST_KERNEL_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../scripts/tests/fixtures/mckernel_guest_sysfs.rs")
+@@ -608,6 +619,11 @@
+ 	set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/syscall.c"
+ 		PROPERTIES COMPILE_DEFINITIONS
+ 		"MCKERNEL_RUST_SHMID_HELPERS;MCKERNEL_RUST_SHM_PERM_HELPERS;MCKERNEL_RUST_RLIMIT_HELPERS;MCKERNEL_RUST_SCHED_PRIO_HELPERS;MCKERNEL_RUST_SCHED_POLICY_HELPERS;MCKERNEL_RUST_SYSCALL_POLICY_HELPERS;MCKERNEL_RUST_SYSCALL_OFFLOAD;MCKERNEL_RUST_SIGNAL_HELPERS;MCKERNEL_RUST_F03_IO_DIAGNOSTICS;MCKERNEL_RUST_F03_MINCORE;MCKERNEL_RUST_F03_MOVE_PAGES;MCKERNEL_RUST_F03_SCHED_BRIDGES;MCKERNEL_RUST_F03_SIGNAL_PROCESS_BRIDGES;MCKERNEL_RUST_F03_DISPATCH_CONTEXT;MCKERNEL_RUST_F03_LEAF_CALLBACKS")
++	if (MCKERNEL_HOST_IRQ_ABI STREQUAL "linux-6.12" AND NOT ENABLE_UBSAN AND
++	    CMAKE_CURRENT_SOURCE_DIR STREQUAL "/src/kernel")
++		set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
++			COMPILE_DEFINITIONS "MCKERNEL_RUST_F03_INTERRUPT_ARITY3_DEFINED;MCKERNEL_RUST_F03_INTERRUPT_ORIGIN_PROFILE_119;MCKERNEL_RUST_F03_PTRACE_WAKEUP_LOG_DEFINED;MCKERNEL_RUST_F03_PTRACE_WAKEUP_LOG_PROFILE_119")
++	endif()
+ 	if (MCKERNEL_HOST_IRQ_ABI STREQUAL "linux-6.12")
+ 		# Pair the existing Rust process_global_storage_candidate provider above.
+ 		set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/process.c" APPEND PROPERTY
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -36896,3 +36896,8 @@
+ #[cfg(all(f03_interrupt_arity3_defined_candidate, f03_interrupt_origin_profile_119, target_arch = "x86_64"))]
+ #[path = "syscall_interrupt_arity3.rs"]
+ mod syscall_interrupt_arity3;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(all(f03_ptrace_wakeup_log_defined_u32_candidate, f03_ptrace_wakeup_log_origin_profile_119, target_arch = "x86_64"))]
++#[path = "syscall_ptrace_wakeup_log.rs"]
++mod syscall_ptrace_wakeup_log;
+--- /dev/null
++++ b/kernel/rust/syscall_ptrace_wakeup_log.rs
+@@ -0,0 +1,35 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Approved defined contract: event 4 logs the result's low 32 bits as unsigned hex.
++    use crate::abi::CInt;
++    use crate::debug::Ddebug;
++    use core::ptr::addr_of;
++
++    #[used]
++    #[no_mangle]
++    #[link_section = "__verbose"]
++    static mut f03_ptrace_wakeup_log_debug_v1: [Ddebug; 1] = [Ddebug {
++        file: b"/src/kernel/syscall.c\0".as_ptr().cast(),
++        func: b"ptrace_wakeup_log_bridge\0".as_ptr().cast(),
++        fmt: core::ptr::null(), line_flags: 24429,
++    }];
++
++    /// Emit the event-4 diagnostic under the proposed defined hexadecimal ABI.
++    ///
++    /// # Safety
++    /// The original C caller's logging/CPU context must remain valid. The review
++    /// must bind the static ddebug identity and the logger's callable ABI.
++    #[no_mangle]
++    pub unsafe extern "C" fn ptrace_wakeup_log_bridge(event: CInt, value: CInt, result: CInt) {
++        if event == 4 {
++            // SAFETY: The original writable ddebug flag is read before emission;
++            // passing u32 gives `%x` its defined unsigned-int variadic domain.
++            unsafe {
++                if core::ptr::read_volatile(addr_of!(f03_ptrace_wakeup_log_debug_v1[0].line_flags)) >> 24 != 0 {
++                    super::kprintf(c"ptrace_wakeup_sig,pid=%d,data=%08x\n".as_ptr(),
++                        value, result as u32);
++                }
++            }
++        }
++    }
++
++const _: unsafe extern "C" fn(CInt, CInt, CInt) = ptrace_wakeup_log_bridge;

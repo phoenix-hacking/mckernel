@@ -1,0 +1,13 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source": "fixture_crossprocess_pidfd_getfd.FIRST-FAILURE.py",
+  "exit_code": 1,
+  "errors": [
+    "AttributeError: module 'os' has no attribute 'pidfd_open'",
+    "AttributeError: module 'os' has no attribute 'waitstatus_to_exitcode'"
+  ],
+  "pidfd_getfd_attempted": false,
+  "root_probe": false,
+  "owned_child_normally_waited": true,
+  "source_of_result": "actual exec tool output; original stderr was not redirected"
+}

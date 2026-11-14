@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_correction_wip",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "attempt": 2,
+  "status": "CORRECTION_WIP_SOURCE_ONLY",
+  "recorded_utc": "2026-09-15T18:18:00Z",
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-correction-wip-20260915-1.tar.gz",
+    "sha256": "4f1aaad972b137071a5722b4528415f68f34d12052eefdc8cf9890c15d98f689",
+    "size": 18299,
+    "members": 10
+  },
+  "corrected": [
+    "ordinary ACK is bound to the emitted packet sequence",
+    "collector ACK wait uses an absolute monotonic deadline across EINTR",
+    "owner accepts packet 32 and rejects packet 33",
+    "extra-packet and report-sync negative tests select the intended semantic condition"
+  ],
+  "remaining_review_blockers": [
+    "strict per-kind producer schemas",
+    "durable owner artifacts and captured outputs",
+    "adopted-child cleanup and acquisition-safe unwind",
+    "phase-relative owner deadlines",
+    "independent oracle joins and exact fixtures"
+  ],
+  "cheap_checks": {"python3.9.12": "6/6 PASS", "python3.8.10": "6/6 PASS"},
+  "source_review_released": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

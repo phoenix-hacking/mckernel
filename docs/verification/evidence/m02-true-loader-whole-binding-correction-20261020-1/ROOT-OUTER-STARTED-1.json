@@ -1,0 +1,27 @@
+{
+  "argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "40s",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=35:35",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--nofile=256:256",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/m02-current-contract-whole-binding-correction-20261020-1/run_actual_generation_fixture_owned_once.py"
+  ],
+  "identity": {
+    "pgid": 2268049,
+    "pid": 2268049,
+    "sid": 2268049,
+    "start": 32960662
+  }
+}

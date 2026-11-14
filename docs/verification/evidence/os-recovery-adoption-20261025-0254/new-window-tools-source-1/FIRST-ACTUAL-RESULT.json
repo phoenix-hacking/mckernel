@@ -1,0 +1,72 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "FIRST_DRIVER_FAIL_PRESERVED_OBSERVER_DIAGNOSTIC_WHITESPACE",
+  "actual_argv": [
+    "/usr/bin/python3",
+    "-I",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-tools-source-1/check_daemon_selector.NOT-GRANTED.py",
+    "--execute",
+    "--output",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-tools-source-1/actual-cmake-generation-1"
+  ],
+  "actual_outer_result": {
+    "aggregate_output_bytes": 85092,
+    "captures": {
+      "stderr": {
+        "ctime_ns": 1792897457680372762,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 59396641,
+        "mode": "0o600",
+        "mtime_ns": 1792897457680372762,
+        "nlink": 1,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-tools-source-1/generation-h990-capture-1/stderr",
+        "sha256": "75c2797541e6ef094a0c07e651cc0bb27631de75de1b07e478c3d5280240fb54",
+        "size": 522,
+        "uid": 1000
+      },
+      "stdout": {
+        "ctime_ns": 1792897457132351907,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 59396640,
+        "mode": "0o600",
+        "mtime_ns": 1792897457132351907,
+        "nlink": 1,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-tools-source-1/generation-h990-capture-1/stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0,
+        "uid": 1000
+      }
+    },
+    "closed_streams": true,
+    "direct_child_joined": true,
+    "error": null,
+    "group_absent": true,
+    "pid": 476960,
+    "remaining_group_members": [],
+    "retirement_error": null,
+    "returncode": 1,
+    "seconds": 0.6037950080353767,
+    "start": 69490183,
+    "timed_out": false,
+    "total_cpu_seconds": 0.619699,
+    "unexpected_group_members": [],
+    "whole_seconds": 0.6050053540384397
+  },
+  "observations": [
+    "Default Rust CMake configure/generate returned0; cache dependency, compiler/linker, no C daemon object, and sbin install assertions passed.",
+    "Explicit C comparison configure/generate returned0; reference C object/no Rust command assertions passed.",
+    "Disabled Rust with no explicit C reference was rejected at expected production selection branch. CMake split expected diagnostic before fallback; strict contiguous-byte observer falsely rejected that diagnostic."
+  ],
+  "correction": {
+    "source": "docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-tools-source-1/check_daemon_selector.WHITESPACE-CORRECTED.NOT-GRANTED.py",
+    "sha256": "74366913f69887c0d236594f89701d3195c1aa290bc96c0c9163142f1cfccb52",
+    "change": "Compare identical expected diagnostic after joining CMake whitespace; do not alter required error, success/failure convention, default-source, dependency, linker or installation checks.",
+    "executed": false
+  },
+  "selector_source_changed_after_test": false,
+  "rerun": false,
+  "cpu0_released": true,
+  "native_or_retirement_credit": 0
+}

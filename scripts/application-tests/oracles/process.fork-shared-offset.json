@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "process.fork-shared-offset",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/process.fork-shared-offset"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["parent=AB parent_ok=1 child_offset_ok=1 child_code=23"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Inherited descriptors share one open-file offset", "Handshake orders parent bytes AB before child reads CD from the same open-file description"],
+  "unresolved_expectations": ["Open-file-description identity and cross-process offset trace evidence require runtime review."],
+  "max_question_for_reviewer": "Confirm the child read begins at offset two without a separate descriptor or duplicated offset."
+}

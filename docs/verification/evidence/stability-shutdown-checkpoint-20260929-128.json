@@ -1,0 +1,105 @@
+{
+  "schema": "mckernel-stability-shutdown-checkpoint-v1",
+  "checkpoint": 128,
+  "recorded_at": "2026-09-29T05:43:00-07:00",
+  "status": "PAUSED_INCOMPLETE",
+  "reason": "launcher stop request",
+  "verified_template_commit": "325e7c2e00995726c094649168a8e854dd5689a2",
+  "joined_children": {
+    "active": 0,
+    "retirement_raw_owner_review_125": "completed PASS",
+    "retirement_release_schema_127": "completed schema audit"
+  },
+  "bounded_result": {
+    "packet": {
+      "path": "docs/verification/evidence/native-exact-candidate-retirement-67589154-1.py",
+      "sha256": "f1cb3db715d836fa6f63409241dc6b08a8ddbe2de13c1d934be3b2af635ac363"
+    },
+    "packet_test": {
+      "path": "scripts/tests/test_native_exact_candidate_retirement_67589154.py",
+      "sha256": "41ad8074f5832a2e848ca0421ec5c7d331f889cbac038772ec751c288179c4b6"
+    },
+    "helper": {
+      "path": "scripts/native_exact_candidate_retire.py",
+      "sha256": "2218e7fef88d4cea176be351f1de75546e0a05449aadc01592c1a91306027010"
+    },
+    "helper_test": {
+      "path": "scripts/tests/test_native_exact_candidate_retire.py",
+      "sha256": "c350fc3e5eae5752fed76cddfe1102f253ddf758fab5c9c50acae5f5c40b95c1"
+    },
+    "source_success_record_sha256": "b892d3c36333491dede4966959abb74db5ffad54d78ce846ef690aba080d36d8",
+    "dispatcher_checks": [
+      "Python 3.8: combined 106/106 PASS",
+      "Python 3.9: combined 106/106 PASS",
+      "py_compile and scoped diff checks PASS",
+      "independent source-template review 125 PASS"
+    ],
+    "acceptance": "FETCH_VERIFIED_SOURCE_TEMPLATE_ONLY"
+  },
+  "release_schema_audit": {
+    "status": "COMPLETE_NO_RELEASE_CREATED",
+    "required_top_level_fields": 25,
+    "template_commit": "325e7c2e00995726c094649168a8e854dd5689a2",
+    "allowed_changed_paths": [
+      "docs/verification/evidence/native-exact-candidate-retirement-67589154-1.py",
+      "docs/verification/evidence/stability-native-exact-candidate-retirement-67589154-1.release.json"
+    ],
+    "release_path_present": false,
+    "draft_sentinel_present": true
+  },
+  "boot_id": "c733d83b-a5ae-4f91-9ce6-9f8ccf119afd",
+  "live_processes": [
+    {"pid": 3399308, "starttime": 83682487, "role": "launcher-wrapper"},
+    {"pid": 3399313, "starttime": 83682494, "role": "launcher-worker"},
+    {"pid": 3399317, "starttime": 83682500, "role": "codex-app-server"}
+  ],
+  "retained_roots": [
+    {"path": "/dev/shm/mckernel-exact-candidate-67589154-1", "device": 26, "inode": 25166, "uid": 1000, "gid": 1000, "mode": "0755"},
+    {"path": "/dev/shm/mckernel-exact-metadata-backup-67589154-1", "device": 26, "inode": 35798, "uid": 1000, "gid": 1000, "mode": "0755"},
+    {"path": "/home/holden/mckernel-work/scratch/native-exact-retention-preparation-evidence-67589154-1", "device": 1831, "inode": 2907338, "uid": 1000, "gid": 1000, "mode": "0700"},
+    {"path": "/home/holden/mckernel-work/scratch/native-exact-retention-preparation-evidence-67589154-2", "device": 1831, "inode": 2907339, "uid": 1000, "gid": 1000, "mode": "0700"}
+  ],
+  "retained_terminal_containers": [
+    {"id": "decd7cf92467e1214cc955d15a00b847587ada37016f206e9a82019cbb72c6b9", "status": "exited", "exit_code": 1, "pid": 0, "oom_killed": false, "restart": "no"},
+    {"id": "8943e49772f840ba5da6571c2e2c6fde60b61157f21f873d832669157ef9bc10", "status": "exited", "exit_code": 0, "pid": 0, "oom_killed": false, "restart": "no"}
+  ],
+  "object_store": {
+    "main_commit": "675891545c881b8d625256ade56fe66ac69fe794",
+    "main_present": true,
+    "ihk_commit": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+    "ihk_present": true
+  },
+  "capacity": {
+    "host_free_bytes": 24170889216,
+    "scratch_free_bytes": 21560459264,
+    "tmpfs_free_bytes": 7516635136,
+    "memory_available_bytes": 20251942912
+  },
+  "active_heavy_lease": false,
+  "active_candidate_claim_or_build_lease": false,
+  "operations_not_run": [
+    "release generation",
+    "candidate or backup traversal",
+    "retirement packet",
+    "privileged mutation",
+    "Docker mutation",
+    "rename or deletion",
+    "build",
+    "module",
+    "guest",
+    "application"
+  ],
+  "next_tasks": [
+    "reconcile the recorded boot, launcher, root, container, object-store and capacity identities",
+    "mechanically generate the acyclic release from fetched template commit 325e7c2e, including fresh complete root inventories and full terminal Docker inspection records",
+    "replace only the packet release sentinel and add the release JSON, then verify the exact two-path delta and push/fetch the release checkpoint",
+    "obtain a separate independent exact mechanical and execution review plus fresh immutable-filesystem support checks before at most one sudo retirement invocation",
+    "after independently accepted retirement and measured capacity recovery, independently review preparation 704f6654-1 before any heavy build",
+    "after one successful current-candidate build, run the smallest real memory application diagnostic before file, thread and shutdown smokes"
+  ],
+  "formal_counters_changed": false,
+  "successful_current_candidate_builds": 0,
+  "accepted_application_cases": "0/273",
+  "os_complete": false,
+  "pause_temporary": true
+}

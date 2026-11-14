@@ -1,0 +1,60 @@
+
+/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o:     file format elf64-x86-64
+
+
+Disassembly of section .ltext.copy_user_pte:
+
+0000000000000000 <copy_user_pte>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	41 57                	push   %r15
+   6:	41 56                	push   %r14
+   8:	41 55                	push   %r13
+   a:	41 54                	push   %r12
+   c:	53                   	push   %rbx
+   d:	50                   	push   %rax
+   e:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	10: R_X86_64_64	process_copy_entry_config
+  18:	4c 8b 08             	mov    (%rax),%r9
+  1b:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	1d: R_X86_64_64	process_copy_entry_config+0x8
+  25:	8b 30                	mov    (%rax),%esi
+  27:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	29: R_X86_64_64	process_copy_entry_config+0x18
+  31:	45 8b 12             	mov    (%r10),%r10d
+  34:	49 bb 00 00 00 00 00 00 00 00 	movabs $0x0,%r11	36: R_X86_64_64	process_copy_entry_config+0x1c
+  3e:	45 8b 1b             	mov    (%r11),%r11d
+  41:	49 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%r15	43: R_X86_64_64	process_copy_entry_config+0x30
+  4b:	45 8b 3f             	mov    (%r15),%r15d
+  4e:	49 bc 00 00 00 00 00 00 00 00 	movabs $0x0,%r12	50: R_X86_64_64	process_copy_entry_config+0x34
+  58:	45 8b 24 24          	mov    (%r12),%r12d
+  5c:	49 bd 00 00 00 00 00 00 00 00 	movabs $0x0,%r13	5e: R_X86_64_64	process_copy_entry_config+0x50
+  66:	49 be 00 00 00 00 00 00 00 00 	movabs $0x0,%r14	68: R_X86_64_64	process_copy_entry_config+0x58
+  70:	48 bb 00 00 00 00 00 00 00 00 	movabs $0x0,%rbx	72: R_X86_64_64	process_copy_entry_config+0x60
+  7a:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	7c: R_X86_64_64	process_copy_entry_config+0x68
+  84:	ff 30                	push   (%rax)
+  86:	ff 33                	push   (%rbx)
+  88:	41 ff 36             	push   (%r14)
+  8b:	41 ff 75 00          	push   0x0(%r13)
+  8f:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	91: R_X86_64_64	process_copy_entry_config+0x48
+  99:	ff 30                	push   (%rax)
+  9b:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	9d: R_X86_64_64	process_copy_entry_config+0x40
+  a5:	ff 30                	push   (%rax)
+  a7:	41 54                	push   %r12
+  a9:	41 57                	push   %r15
+  ab:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	ad: R_X86_64_64	process_copy_entry_config+0x28
+  b5:	ff 30                	push   (%rax)
+  b7:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	b9: R_X86_64_64	process_copy_entry_config+0x20
+  c1:	ff 30                	push   (%rax)
+  c3:	41 53                	push   %r11
+  c5:	41 52                	push   %r10
+  c7:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	c9: R_X86_64_64	process_copy_entry_config+0x10
+  d1:	ff 30                	push   (%rax)
+  d3:	56                   	push   %rsi
+  d4:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	d6: R_X86_64_64	process_copy_user_pte_body_result
+  de:	ff d0                	call   *%rax
+  e0:	48 83 c4 78          	add    $0x78,%rsp
+  e4:	5b                   	pop    %rbx
+  e5:	41 5c                	pop    %r12
+  e7:	41 5d                	pop    %r13
+  e9:	41 5e                	pop    %r14
+  eb:	41 5f                	pop    %r15
+  ed:	5d                   	pop    %rbp
+  ee:	c3                   	ret    

@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "kind": "stability-continuation-shutdown-checkpoint",
+  "checkpoint": 28,
+  "recorded_at": "2026-09-28T08:45:43-07:00",
+  "status": "WIP_CHECKPOINT_ONLY",
+  "goal_complete": false,
+  "goal_resumed_during_shutdown": false,
+  "head_before_checkpoint": "e188e73d32a454fa16f623163a274b80b3a206c3",
+  "launcher": {
+    "pid": 3125264,
+    "pgid": 3125264,
+    "sid": 3125264,
+    "worker_pid": 3170135,
+    "worker_pgid": 3170135,
+    "worker_sid": 3170135,
+    "server_pid": 3170137,
+    "server_pgid": 3170137,
+    "server_sid": 3170137,
+    "run_directory": ".git/os-autopilot/runs/20260928T120120Z-056cff0a",
+    "state_edited": false
+  },
+  "shutdown": {
+    "new_dispatch_after_request": false,
+    "all_children_terminal": true,
+    "heavy_lease_free": true,
+    "project_qemu_or_build_processes": [],
+    "host_free_bytes": 36488355840,
+    "scratch_free_bytes": 21959589888,
+    "memory_available_kib": 29706652
+  },
+  "rejected_execution_packet": {
+    "path": "docs/verification/stability-native-diagnostic-current-signal-execution-packet-20260928-3.md",
+    "sha256": "01be20700088ed85cb346ef2143b87e7b6e0bd7bfa0f00683a2622bb7f7ecec9",
+    "review": "FAIL_EXACT_ONE_SHOT_EXECUTION_RELEASE",
+    "failure_record": "docs/verification/stability-native-diagnostic-current-signal-execution-review-failure-20260928-3.json",
+    "failure_record_sha256": "0c27ac2c7d539d02363ca7f7a83c37a8c3b8ce9660ab2a0413160e8d551ab9e6",
+    "executed": false,
+    "reusable": false
+  },
+  "bounded_repairs": {
+    "qemu_evidence": {
+      "source_sha256": "64225d81982e672c2123cd1be2b7d35168cf7ba964b9fedcb3c831f600965e8e",
+      "backend_sha256": "709b7dd59683bbe089566070cd6037f51e5d83ee8904695e9046843ef9313a35",
+      "result": "immutable argv, retained identity and exact post-reap returncode are serialized"
+    },
+    "docker_client_evidence": {
+      "source_sha256": "c280bdb8d4e4d2272375475ea62aa9a1c36a8f99af9016980a5463f2da2a12d1",
+      "result": "each client command retains acquired identity and exact reap state"
+    },
+    "integration": "outer success validation joins QEMU evidence to the observation identity and requires normal QEMU returncode; runtime source pins were refreshed"
+  },
+  "tests": {
+    "initial_combined_run": "FAIL: 156 tests, four stale owner fixture failures",
+    "bounded_correction": "synthetic owner result gained matching primitive QEMU evidence",
+    "final_result": "PASS: 156 tests in 11.416 seconds",
+    "py_compile": "PASS",
+    "scoped_diff_check": "PASS"
+  },
+  "acceptance": {
+    "application_catalog": "0/273",
+    "narrow_fault_modes": "2/4",
+    "production_gates": "6/130",
+    "points": "350/10000",
+    "language_gates": "0/7",
+    "new_runtime_credit": false
+  },
+  "next": [
+    "Independently review the integrated outer-client and QEMU evidence boundaries.",
+    "Run the six-module suite and revalidate bound_manifest after any bounded correction.",
+    "Fetched-blob verify the final repair, then create packet 4 with a fresh parent and nonce.",
+    "Execute only after a separate one-shot release and fresh capacity/lease checks."
+  ],
+  "limitations": [
+    "Packet 3 is rejected and grants no execution authority.",
+    "The integrated repair has no independent final review yet.",
+    "Broad equivalence remains unaccepted because three IHK Rust helper inputs are absent.",
+    "No root, Docker, QEMU, guest, module or heavy build operation ran during shutdown."
+  ]
+}

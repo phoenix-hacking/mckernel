@@ -1,0 +1,45 @@
+{
+  "schema": "mckernel.native-exact-candidate12.integrated-recovery-correction-wip.v1",
+  "recorded_at": "2026-09-30T17:34:28-07:00",
+  "base_commit": "5a4ca9488328033d24bac73259e1d93582957dc6",
+  "status": "SOURCE_WIP_REQUIRES_INDEPENDENT_REVIEW",
+  "tool": {
+    "path": "docs/verification/evidence/native-exact-candidate12-planbound-cleanup-20260930.py",
+    "sha256": "0afa98cdf92b4d3906804908fcd62e986b38fc376e42b096874e02700180ae83"
+  },
+  "tests": {
+    "path": "scripts/tests/test_native_exact_candidate12_planbound_cleanup_20260930.py",
+    "sha256": "7dc098d94c54cd360f62e8fe983d31d9c731b36fb25123225c5183350d13a341",
+    "command": "python3 -m pytest -q scripts/tests/test_native_exact_candidate12_planbound_cleanup_20260930.py",
+    "result": "163 passed in 5.25s"
+  },
+  "checks": [
+    "python3 -m py_compile completed successfully for tool and test",
+    "git diff --check completed successfully"
+  ],
+  "bounded_changes": [
+    "descriptor-pinned destination hierarchy with held-fd rename, verification and reconciliation",
+    "read-only --validate-recovery mode",
+    "exact recovery release test-artifact bindings",
+    "publication failure and terminal-signal result demotion"
+  ],
+  "preserved_live_state": {
+    "candidate_root": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-4e99a82c-scratch-12",
+    "quarantine": ".planbound-cleanup-20260930-2",
+    "quarantined_files": 2507,
+    "original_files": 0,
+    "deleted_files": 0,
+    "attempt2_journal_sha256": "4749ea4d1b97bc99959c1ec75c0f329682f834d075738264a44efde33ce90d02",
+    "attempt2_receipt_sha256": "83d22b06d9d143b3acc0508d738f6b1039184a5d2d473d314f5a1e3a65cd3c52",
+    "attempt2_status_sha256": "b22762e6ef19ae31c4aad21fa2164ed9536e8d3b6b8c28e7aed886bc44d9484"
+  },
+  "execution": {
+    "live_recovery": false,
+    "privileged_census": false,
+    "docker": false,
+    "build": false,
+    "guest": false,
+    "acceptance_change": false
+  },
+  "next": "Obtain fresh independent source review of the exact committed tool and tests. If it passes, separately author, checkpoint, fetch-verify and review a one-shot staged-recovery release before any live mutation."
+}

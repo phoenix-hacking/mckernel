@@ -1,0 +1,2200 @@
+{
+  "application_acceptance": false,
+  "build_record": {
+    "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/record.json",
+    "sha256": "fb957e548fdd99026f5e31f02b2a7b0aeed95a13e90fe7a728898b6dd537410e",
+    "size": 190008
+  },
+  "comparison": {
+    "app_outer_module2_bytes": 1472,
+    "app_outer_module3_bytes": 224,
+    "app_row_helper_is_sibling_to_mailbox": true,
+    "app_row_helper_module3_bytes": 1536,
+    "ioctl_module2_bytes": 7080,
+    "ioctl_module3_bytes": 5832,
+    "mailbox_copier_bytes": 296,
+    "mailbox_emitter_bytes": 3760,
+    "mcctrl_byte_unchanged": true,
+    "reduction_each_bytes": 1248,
+    "worker_module1_bytes": 9416,
+    "worker_module2_bytes": 6760,
+    "worker_module3_bytes": 5512,
+    "worker_reduction_from_module1_bytes": 3904
+  },
+  "full_linux_stack_bound_verified": false,
+  "further_source_reduction_recommended": false,
+  "independent_helper_source_review": {
+    "path": "/home/holden/mckernel/docs/verification/stability-app-row-stack-helper-review-20260913.json",
+    "sha256": "26e1c5e39d7e605f00124f7ebd412f6370e7f35b2b86da90e9435e7f0a0a3984",
+    "size": 2920
+  },
+  "known_module_chains": {
+    "packet_worker_to_apps": {
+      "bytes": 2992,
+      "module": "ihk-smp-x86_64",
+      "rows": [
+        {
+          "address": "0x48d20",
+          "callsites": [
+            {
+              "address": "0x48d40",
+              "depth_before": 24,
+              "kind": "call",
+              "line": 78054,
+              "op": "call   35f70 <<ihk_smp_x86_64::smp_memory::service::Runtime>::pump>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                221040
+              ]
+            }
+          ],
+          "counted_bytes": 32,
+          "counted_local_bytes": 24,
+          "entry_disassembly_line": 78043,
+          "entry_return_bytes": 8,
+          "function": "ihk_smp_x86_64::smp_memory::service::run",
+          "maximum_local_bytes": 24
+        },
+        {
+          "address": "0x35f70",
+          "callsites": [
+            {
+              "address": "0x361ba",
+              "depth_before": 168,
+              "kind": "call",
+              "line": 59200,
+              "op": "call   11150 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_accepted_phase::{closure",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                69968
+              ]
+            }
+          ],
+          "counted_bytes": 176,
+          "counted_local_bytes": 168,
+          "entry_disassembly_line": 59050,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::pump",
+          "maximum_local_bytes": 168
+        },
+        {
+          "address": "0x11150",
+          "callsites": [
+            {
+              "address": "0x1126a",
+              "depth_before": 136,
+              "kind": "call",
+              "line": 20717,
+              "op": "call   30af0 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_phase_snapshot>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                199408
+              ]
+            }
+          ],
+          "counted_bytes": 144,
+          "counted_local_bytes": 136,
+          "entry_disassembly_line": 20650,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_accepted_phase::{closure#0}",
+          "maximum_local_bytes": 136
+        },
+        {
+          "address": "0x30af0",
+          "callsites": [
+            {
+              "address": "0x30c32",
+              "depth_before": 296,
+              "kind": "call",
+              "line": 53592,
+              "op": "call   2f130 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_observe>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                192816
+              ]
+            }
+          ],
+          "counted_bytes": 304,
+          "counted_local_bytes": 296,
+          "entry_disassembly_line": 53520,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_phase_snapshot",
+          "maximum_local_bytes": 296
+        },
+        {
+          "address": "0x2f130",
+          "callsites": [
+            {
+              "address": "0x2f589",
+              "depth_before": 568,
+              "kind": "call",
+              "line": 52113,
+              "op": "call   23000 <<ihk_smp_x86_64::smp_application::Remote>::verification_emit>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                143360
+              ]
+            }
+          ],
+          "counted_bytes": 576,
+          "counted_local_bytes": 568,
+          "entry_disassembly_line": 51873,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_observe",
+          "maximum_local_bytes": 568
+        },
+        {
+          "address": "0x23000",
+          "callsites": [
+            {
+              "address": "0x23026",
+              "depth_before": 216,
+              "kind": "call",
+              "line": 38812,
+              "op": "call   23150 <<ihk_smp_x86_64::smp_application::Remote>::verification_emit_apps>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                143696
+              ]
+            }
+          ],
+          "counted_bytes": 224,
+          "counted_local_bytes": 216,
+          "entry_disassembly_line": 38799,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_application::Remote>::verification_emit",
+          "maximum_local_bytes": 216
+        },
+        {
+          "address": "0x23150",
+          "counted_bytes": 1536,
+          "counted_local_bytes": 1528,
+          "entry_disassembly_line": 38904,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_application::Remote>::verification_emit_apps",
+          "maximum_local_bytes": 1528
+        }
+      ],
+      "scope": "Known nested module frames only; Linux/callback residuals remain separate."
+    },
+    "packet_worker_to_mailbox_copy": {
+      "bytes": 5512,
+      "module": "ihk-smp-x86_64",
+      "rows": [
+        {
+          "address": "0x48d20",
+          "callsites": [
+            {
+              "address": "0x48d40",
+              "depth_before": 24,
+              "kind": "call",
+              "line": 78054,
+              "op": "call   35f70 <<ihk_smp_x86_64::smp_memory::service::Runtime>::pump>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                221040
+              ]
+            }
+          ],
+          "counted_bytes": 32,
+          "counted_local_bytes": 24,
+          "entry_disassembly_line": 78043,
+          "entry_return_bytes": 8,
+          "function": "ihk_smp_x86_64::smp_memory::service::run",
+          "maximum_local_bytes": 24
+        },
+        {
+          "address": "0x35f70",
+          "callsites": [
+            {
+              "address": "0x361ba",
+              "depth_before": 168,
+              "kind": "call",
+              "line": 59200,
+              "op": "call   11150 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_accepted_phase::{closure",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                69968
+              ]
+            }
+          ],
+          "counted_bytes": 176,
+          "counted_local_bytes": 168,
+          "entry_disassembly_line": 59050,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::pump",
+          "maximum_local_bytes": 168
+        },
+        {
+          "address": "0x11150",
+          "callsites": [
+            {
+              "address": "0x1126a",
+              "depth_before": 136,
+              "kind": "call",
+              "line": 20717,
+              "op": "call   30af0 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_phase_snapshot>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                199408
+              ]
+            }
+          ],
+          "counted_bytes": 144,
+          "counted_local_bytes": 136,
+          "entry_disassembly_line": 20650,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_accepted_phase::{closure#0}",
+          "maximum_local_bytes": 136
+        },
+        {
+          "address": "0x30af0",
+          "callsites": [
+            {
+              "address": "0x30c32",
+              "depth_before": 296,
+              "kind": "call",
+              "line": 53592,
+              "op": "call   2f130 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_observe>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                192816
+              ]
+            }
+          ],
+          "counted_bytes": 304,
+          "counted_local_bytes": 296,
+          "entry_disassembly_line": 53520,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_phase_snapshot",
+          "maximum_local_bytes": 296
+        },
+        {
+          "address": "0x2f130",
+          "callsites": [
+            {
+              "address": "0x2f589",
+              "depth_before": 568,
+              "kind": "call",
+              "line": 52113,
+              "op": "call   23000 <<ihk_smp_x86_64::smp_application::Remote>::verification_emit>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                143360
+              ]
+            }
+          ],
+          "counted_bytes": 576,
+          "counted_local_bytes": 568,
+          "entry_disassembly_line": 51873,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_observe",
+          "maximum_local_bytes": 568
+        },
+        {
+          "address": "0x23000",
+          "callsites": [
+            {
+              "address": "0x23108",
+              "depth_before": 216,
+              "kind": "call",
+              "line": 38868,
+              "op": "call   24570 <<ihk_smp_x86_64::smp_application::Remote>::verification_emit_mailbox>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                148848
+              ]
+            },
+            {
+              "address": "0x230d7",
+              "depth_before": 216,
+              "kind": "call",
+              "line": 38854,
+              "op": "call   24570 <<ihk_smp_x86_64::smp_application::Remote>::verification_emit_mailbox>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                148848
+              ]
+            }
+          ],
+          "counted_bytes": 224,
+          "counted_local_bytes": 216,
+          "entry_disassembly_line": 38799,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_application::Remote>::verification_emit",
+          "maximum_local_bytes": 216
+        },
+        {
+          "address": "0x24570",
+          "callsites": [
+            {
+              "address": "0x24790",
+              "depth_before": 3752,
+              "kind": "call",
+              "line": 40158,
+              "op": "call   32630 <<ihk_smp_x86_64::smp_application_syscall::Mailbox<ihk_smp_x86_64::smp_memory::service::memory::SyscallResponse>>::verification_mailbox>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                206384
+              ]
+            },
+            {
+              "address": "0x24756",
+              "depth_before": 3752,
+              "kind": "call",
+              "line": 40145,
+              "op": "call   32630 <<ihk_smp_x86_64::smp_application_syscall::Mailbox<ihk_smp_x86_64::smp_memory::service::memory::SyscallResponse>>::verification_mailbox>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                206384
+              ]
+            }
+          ],
+          "counted_bytes": 3760,
+          "counted_local_bytes": 3752,
+          "entry_disassembly_line": 40049,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_application::Remote>::verification_emit_mailbox",
+          "maximum_local_bytes": 3752
+        },
+        {
+          "address": "0x32630",
+          "counted_bytes": 296,
+          "counted_local_bytes": 288,
+          "entry_disassembly_line": 55279,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_application_syscall::Mailbox<ihk_smp_x86_64::smp_memory::service::memory::SyscallResponse>>::verification_mailbox",
+          "maximum_local_bytes": 288
+        }
+      ],
+      "scope": "Known nested module frames only; Linux/callback residuals remain separate."
+    },
+    "phase_ioctl_to_apps": {
+      "bytes": 3312,
+      "module": "ihk-smp-x86_64",
+      "rows": [
+        {
+          "address": "0x22d0",
+          "callsites": [
+            {
+              "address": "0x22e2",
+              "depth_before": 24,
+              "kind": "call",
+              "line": 2190,
+              "op": "call   22e7 <kernel::miscdevice::fops_ioctl::<ihk_smp_x86_64::IhkSmpControlDevice>+0x17>",
+              "relocation": {
+                "addend": -4,
+                "name": "<ihk_smp_x86_64::IhkSmpControlDevice as kernel::miscdevice::MiscDevice>::ioctl",
+                "relocation_type": 4,
+                "symbol": "_RNvXs5_Cs5Iw3aBAMJ7i_14ihk_smp_x86_64NtB5_19IhkSmpControlDeviceNtNtCs1DErgtJhccC_6kernel10miscdevice10MiscDevice5ioctl",
+                "target": [
+                  ".text",
+                  316048
+                ]
+              },
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                316048
+              ]
+            }
+          ],
+          "counted_bytes": 32,
+          "counted_local_bytes": 24,
+          "entry_disassembly_line": 2184,
+          "entry_return_bytes": 8,
+          "function": "kernel::miscdevice::fops_ioctl::<ihk_smp_x86_64::IhkSmpControlDevice>",
+          "maximum_local_bytes": 24
+        },
+        {
+          "address": "0x4d290",
+          "callsites": [
+            {
+              "address": "0x4d794",
+              "depth_before": 472,
+              "kind": "call",
+              "line": 84044,
+              "op": "call   3e330 <<ihk_smp_x86_64::smp_memory::service::Started>::verification_phase_command>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                254768
+              ]
+            }
+          ],
+          "counted_bytes": 480,
+          "counted_local_bytes": 472,
+          "entry_disassembly_line": 83745,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::IhkSmpControlDevice as kernel::miscdevice::MiscDevice>::ioctl",
+          "maximum_local_bytes": 472
+        },
+        {
+          "address": "0x3e330",
+          "callsites": [
+            {
+              "address": "0x3e39b",
+              "depth_before": 152,
+              "kind": "call",
+              "line": 67277,
+              "op": "call   30af0 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_phase_snapshot>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                199408
+              ]
+            },
+            {
+              "address": "0x3e546",
+              "depth_before": 152,
+              "kind": "call",
+              "line": 67383,
+              "op": "call   30af0 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_phase_snapshot>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                199408
+              ]
+            }
+          ],
+          "counted_bytes": 160,
+          "counted_local_bytes": 152,
+          "entry_disassembly_line": 67244,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Started>::verification_phase_command",
+          "maximum_local_bytes": 152
+        },
+        {
+          "address": "0x30af0",
+          "callsites": [
+            {
+              "address": "0x30c32",
+              "depth_before": 296,
+              "kind": "call",
+              "line": 53592,
+              "op": "call   2f130 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_observe>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                192816
+              ]
+            }
+          ],
+          "counted_bytes": 304,
+          "counted_local_bytes": 296,
+          "entry_disassembly_line": 53520,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_phase_snapshot",
+          "maximum_local_bytes": 296
+        },
+        {
+          "address": "0x2f130",
+          "callsites": [
+            {
+              "address": "0x2f589",
+              "depth_before": 568,
+              "kind": "call",
+              "line": 52113,
+              "op": "call   23000 <<ihk_smp_x86_64::smp_application::Remote>::verification_emit>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                143360
+              ]
+            }
+          ],
+          "counted_bytes": 576,
+          "counted_local_bytes": 568,
+          "entry_disassembly_line": 51873,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_observe",
+          "maximum_local_bytes": 568
+        },
+        {
+          "address": "0x23000",
+          "callsites": [
+            {
+              "address": "0x23026",
+              "depth_before": 216,
+              "kind": "call",
+              "line": 38812,
+              "op": "call   23150 <<ihk_smp_x86_64::smp_application::Remote>::verification_emit_apps>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                143696
+              ]
+            }
+          ],
+          "counted_bytes": 224,
+          "counted_local_bytes": 216,
+          "entry_disassembly_line": 38799,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_application::Remote>::verification_emit",
+          "maximum_local_bytes": 216
+        },
+        {
+          "address": "0x23150",
+          "counted_bytes": 1536,
+          "counted_local_bytes": 1528,
+          "entry_disassembly_line": 38904,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_application::Remote>::verification_emit_apps",
+          "maximum_local_bytes": 1528
+        }
+      ],
+      "scope": "Known nested module frames only; Linux/callback residuals remain separate."
+    },
+    "phase_ioctl_to_mailbox_copy": {
+      "bytes": 5832,
+      "module": "ihk-smp-x86_64",
+      "rows": [
+        {
+          "address": "0x22d0",
+          "callsites": [
+            {
+              "address": "0x22e2",
+              "depth_before": 24,
+              "kind": "call",
+              "line": 2190,
+              "op": "call   22e7 <kernel::miscdevice::fops_ioctl::<ihk_smp_x86_64::IhkSmpControlDevice>+0x17>",
+              "relocation": {
+                "addend": -4,
+                "name": "<ihk_smp_x86_64::IhkSmpControlDevice as kernel::miscdevice::MiscDevice>::ioctl",
+                "relocation_type": 4,
+                "symbol": "_RNvXs5_Cs5Iw3aBAMJ7i_14ihk_smp_x86_64NtB5_19IhkSmpControlDeviceNtNtCs1DErgtJhccC_6kernel10miscdevice10MiscDevice5ioctl",
+                "target": [
+                  ".text",
+                  316048
+                ]
+              },
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                316048
+              ]
+            }
+          ],
+          "counted_bytes": 32,
+          "counted_local_bytes": 24,
+          "entry_disassembly_line": 2184,
+          "entry_return_bytes": 8,
+          "function": "kernel::miscdevice::fops_ioctl::<ihk_smp_x86_64::IhkSmpControlDevice>",
+          "maximum_local_bytes": 24
+        },
+        {
+          "address": "0x4d290",
+          "callsites": [
+            {
+              "address": "0x4d794",
+              "depth_before": 472,
+              "kind": "call",
+              "line": 84044,
+              "op": "call   3e330 <<ihk_smp_x86_64::smp_memory::service::Started>::verification_phase_command>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                254768
+              ]
+            }
+          ],
+          "counted_bytes": 480,
+          "counted_local_bytes": 472,
+          "entry_disassembly_line": 83745,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::IhkSmpControlDevice as kernel::miscdevice::MiscDevice>::ioctl",
+          "maximum_local_bytes": 472
+        },
+        {
+          "address": "0x3e330",
+          "callsites": [
+            {
+              "address": "0x3e39b",
+              "depth_before": 152,
+              "kind": "call",
+              "line": 67277,
+              "op": "call   30af0 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_phase_snapshot>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                199408
+              ]
+            },
+            {
+              "address": "0x3e546",
+              "depth_before": 152,
+              "kind": "call",
+              "line": 67383,
+              "op": "call   30af0 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_phase_snapshot>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                199408
+              ]
+            }
+          ],
+          "counted_bytes": 160,
+          "counted_local_bytes": 152,
+          "entry_disassembly_line": 67244,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Started>::verification_phase_command",
+          "maximum_local_bytes": 152
+        },
+        {
+          "address": "0x30af0",
+          "callsites": [
+            {
+              "address": "0x30c32",
+              "depth_before": 296,
+              "kind": "call",
+              "line": 53592,
+              "op": "call   2f130 <<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_observe>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                192816
+              ]
+            }
+          ],
+          "counted_bytes": 304,
+          "counted_local_bytes": 296,
+          "entry_disassembly_line": 53520,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_phase_snapshot",
+          "maximum_local_bytes": 296
+        },
+        {
+          "address": "0x2f130",
+          "callsites": [
+            {
+              "address": "0x2f589",
+              "depth_before": 568,
+              "kind": "call",
+              "line": 52113,
+              "op": "call   23000 <<ihk_smp_x86_64::smp_application::Remote>::verification_emit>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                143360
+              ]
+            }
+          ],
+          "counted_bytes": 576,
+          "counted_local_bytes": 568,
+          "entry_disassembly_line": 51873,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_memory::service::Runtime>::verification_observe",
+          "maximum_local_bytes": 568
+        },
+        {
+          "address": "0x23000",
+          "callsites": [
+            {
+              "address": "0x23108",
+              "depth_before": 216,
+              "kind": "call",
+              "line": 38868,
+              "op": "call   24570 <<ihk_smp_x86_64::smp_application::Remote>::verification_emit_mailbox>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                148848
+              ]
+            },
+            {
+              "address": "0x230d7",
+              "depth_before": 216,
+              "kind": "call",
+              "line": 38854,
+              "op": "call   24570 <<ihk_smp_x86_64::smp_application::Remote>::verification_emit_mailbox>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                148848
+              ]
+            }
+          ],
+          "counted_bytes": 224,
+          "counted_local_bytes": 216,
+          "entry_disassembly_line": 38799,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_application::Remote>::verification_emit",
+          "maximum_local_bytes": 216
+        },
+        {
+          "address": "0x24570",
+          "callsites": [
+            {
+              "address": "0x24790",
+              "depth_before": 3752,
+              "kind": "call",
+              "line": 40158,
+              "op": "call   32630 <<ihk_smp_x86_64::smp_application_syscall::Mailbox<ihk_smp_x86_64::smp_memory::service::memory::SyscallResponse>>::verification_mailbox>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                206384
+              ]
+            },
+            {
+              "address": "0x24756",
+              "depth_before": 3752,
+              "kind": "call",
+              "line": 40145,
+              "op": "call   32630 <<ihk_smp_x86_64::smp_application_syscall::Mailbox<ihk_smp_x86_64::smp_memory::service::memory::SyscallResponse>>::verification_mailbox>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                206384
+              ]
+            }
+          ],
+          "counted_bytes": 3760,
+          "counted_local_bytes": 3752,
+          "entry_disassembly_line": 40049,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_application::Remote>::verification_emit_mailbox",
+          "maximum_local_bytes": 3752
+        },
+        {
+          "address": "0x32630",
+          "counted_bytes": 296,
+          "counted_local_bytes": 288,
+          "entry_disassembly_line": 55279,
+          "entry_return_bytes": 8,
+          "function": "<ihk_smp_x86_64::smp_application_syscall::Mailbox<ihk_smp_x86_64::smp_memory::service::memory::SyscallResponse>>::verification_mailbox",
+          "maximum_local_bytes": 288
+        }
+      ],
+      "scope": "Known nested module frames only; Linux/callback residuals remain separate."
+    },
+    "ret_enter_hook": {
+      "bytes": 704,
+      "module": "mcctrl",
+      "rows": [
+        {
+          "address": "0xcf0",
+          "callsites": [
+            {
+              "address": "0xed8",
+              "depth_before": 24,
+              "kind": "call",
+              "line": 1288,
+              "op": "call   3d60 <<mcctrl::mcctrl_process::Context>::return_syscall>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                15712
+              ]
+            }
+          ],
+          "counted_bytes": 32,
+          "counted_local_bytes": 24,
+          "entry_disassembly_line": 1162,
+          "entry_return_bytes": 8,
+          "function": "mcctrl::ioctl",
+          "maximum_local_bytes": 24
+        },
+        {
+          "address": "0x3d60",
+          "callsites": [
+            {
+              "address": "0x41c6",
+              "depth_before": 488,
+              "kind": "call",
+              "line": 4823,
+              "op": "call   5b00 <mcctrl::mcctrl_process::stability_ret_enter>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                23296
+              ]
+            }
+          ],
+          "counted_bytes": 496,
+          "counted_local_bytes": 488,
+          "entry_disassembly_line": 4559,
+          "entry_return_bytes": 8,
+          "function": "<mcctrl::mcctrl_process::Context>::return_syscall",
+          "maximum_local_bytes": 488
+        },
+        {
+          "address": "0x5b00",
+          "counted_bytes": 176,
+          "counted_local_bytes": 168,
+          "entry_disassembly_line": 6578,
+          "entry_return_bytes": 8,
+          "function": "mcctrl::mcctrl_process::stability_ret_enter",
+          "maximum_local_bytes": 168
+        }
+      ],
+      "scope": "Known nested module frames only; Linux/callback residuals remain separate."
+    },
+    "ret_leave_hook": {
+      "bytes": 704,
+      "module": "mcctrl",
+      "rows": [
+        {
+          "address": "0xcf0",
+          "callsites": [
+            {
+              "address": "0xed8",
+              "depth_before": 24,
+              "kind": "call",
+              "line": 1288,
+              "op": "call   3d60 <<mcctrl::mcctrl_process::Context>::return_syscall>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                15712
+              ]
+            }
+          ],
+          "counted_bytes": 32,
+          "counted_local_bytes": 24,
+          "entry_disassembly_line": 1162,
+          "entry_return_bytes": 8,
+          "function": "mcctrl::ioctl",
+          "maximum_local_bytes": 24
+        },
+        {
+          "address": "0x3d60",
+          "callsites": [
+            {
+              "address": "0x4204",
+              "depth_before": 488,
+              "kind": "call",
+              "line": 4839,
+              "op": "call   5c90 <mcctrl::mcctrl_process::stability_ret_leave>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                23696
+              ]
+            }
+          ],
+          "counted_bytes": 496,
+          "counted_local_bytes": 488,
+          "entry_disassembly_line": 4559,
+          "entry_return_bytes": 8,
+          "function": "<mcctrl::mcctrl_process::Context>::return_syscall",
+          "maximum_local_bytes": 488
+        },
+        {
+          "address": "0x5c90",
+          "counted_bytes": 176,
+          "counted_local_bytes": 168,
+          "entry_disassembly_line": 6678,
+          "entry_return_bytes": 8,
+          "function": "mcctrl::mcctrl_process::stability_ret_leave",
+          "maximum_local_bytes": 168
+        }
+      ],
+      "scope": "Known nested module frames only; Linux/callback residuals remain separate."
+    },
+    "ret_select_hook": {
+      "bytes": 560,
+      "module": "mcctrl",
+      "rows": [
+        {
+          "address": "0xcf0",
+          "callsites": [
+            {
+              "address": "0xeb0",
+              "depth_before": 24,
+              "kind": "call",
+              "line": 1274,
+              "op": "call   2ac0 <<mcctrl::mcctrl_process::Context>::wait_syscall>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                10944
+              ]
+            }
+          ],
+          "counted_bytes": 32,
+          "counted_local_bytes": 24,
+          "entry_disassembly_line": 1162,
+          "entry_return_bytes": 8,
+          "function": "mcctrl::ioctl",
+          "maximum_local_bytes": 24
+        },
+        {
+          "address": "0x2ac0",
+          "callsites": [
+            {
+              "address": "0x3115",
+              "depth_before": 392,
+              "kind": "call",
+              "line": 3774,
+              "op": "call   5e20 <mcctrl::mcctrl_process::stability_ret_select>",
+              "relocation": null,
+              "return_address_bytes": 8,
+              "target": [
+                ".text",
+                24096
+              ]
+            }
+          ],
+          "counted_bytes": 400,
+          "counted_local_bytes": 392,
+          "entry_disassembly_line": 3390,
+          "entry_return_bytes": 8,
+          "function": "<mcctrl::mcctrl_process::Context>::wait_syscall",
+          "maximum_local_bytes": 392
+        },
+        {
+          "address": "0x5e20",
+          "counted_bytes": 128,
+          "counted_local_bytes": 120,
+          "entry_disassembly_line": 6778,
+          "entry_return_bytes": 8,
+          "function": "mcctrl::mcctrl_process::stability_ret_select",
+          "maximum_local_bytes": 120
+        }
+      ],
+      "scope": "Known nested module frames only; Linux/callback residuals remain separate."
+    }
+  },
+  "modules": {
+    "ihk-smp-x86_64": {
+      "disassembly": {
+        "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/ihk-smp-x86_64.ko-demangled-disassembly-collection/stdout.bin",
+        "sha256": "a2d62dd7d143f226253e90050bcc39b409c83c3e331367cefd5a63e84a3d9758",
+        "size": 5130484
+      },
+      "module": {
+        "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/ihk-smp-x86_64.ko",
+        "sha256": "a00658000bb588bfc3f84096504e4b636e82d934df52e69e402fb1f00079b115",
+        "size": 11709176
+      }
+    },
+    "mcctrl": {
+      "disassembly": {
+        "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/mcctrl.ko-demangled-disassembly-collection/stdout.bin",
+        "sha256": "b2c6a50c3867264bea0cb512111e9d4f7828f0bd878de929e3963e0ab1f09bae",
+        "size": 481096
+      },
+      "module": {
+        "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/mcctrl.ko",
+        "sha256": "8493363d1780a56dbda23f578bdaad8ef1d77a852d1ebd1e481094f827ff5b08",
+        "size": 1951376
+      }
+    }
+  },
+  "previous_review": {
+    "path": "/home/holden/mckernel/docs/verification/stability-observer-stack-review-20260913-2.json",
+    "sha256": "9b179537f1e9874bb4070716492a424ef3ade62e7e0946aba604d6aaf3f2d67f",
+    "size": 104140
+  },
+  "production_gate_credit": false,
+  "recommendation": "The measured minimal observer reductions are complete for this slice. Continue controlled guest verification under parent gating; no whole-Linux certification or application acceptance is inferred.",
+  "record_kind": "stability-compiled-observer-stack-review",
+  "residuals": [
+    "Dynamic core::fmt/Debug callbacks and their nested formatting frames.",
+    "Alternate printk_sprint formatting path, console flush and console-driver descendants.",
+    "Linux syscall/kthread entry beyond selected module boundaries, lock slowpaths/scheduler, interrupts/NMI/mitigation behavior and deeper RETURN backend handling.",
+    "No stack runtime watermark or actual guest verification is supplied by this review. Parent controls isolated guest validation and must retain the residual claim."
+  ],
+  "retained_input_count": 106,
+  "retained_inputs": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/Kbuild",
+      "sha256": "f33c826539ed0807617337ba64a1cb646daf510cc06a44b47243d14e366d67a3",
+      "size": 371
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/Kconfig",
+      "sha256": "48c6ba25186281a3a4fe4690c7520b02d8bbe43965e78d3301d2613477c3874f",
+      "size": 848
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/abi/application.rs",
+      "sha256": "d2b3770a111777d4f28a7a81814a03414d318a90d3ec7082d5c89149b1704a0f",
+      "size": 3171
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/abi/os_service.rs",
+      "sha256": "9dac670ec6567d379c346106d3b164ddb6d607be1dedc2be21283d4adffa5937",
+      "size": 2527
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/abi/sysfs.rs",
+      "sha256": "fb2fd0529998d1a7a4c6fd39f8d03e0f2c65e4d276d4d600779b7afa28ef319a",
+      "size": 2629
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/abi/sysfs_request.rs",
+      "sha256": "30d079fdd5ba21ca06ecd7ed6ab9a60de288d90303134be1f6a2ec428861f946",
+      "size": 6715
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/abi/vdso.rs",
+      "sha256": "d33c5aaf1ca422250819433f83a81a6be2a9dd3d81f9674c7f0530bc4fec6fb1",
+      "size": 14530
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/abi/x86_64.rs",
+      "sha256": "89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3",
+      "size": 19740
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/application_image.rs",
+      "sha256": "25b7810c273c9f4b5dbff073f54e67db52c69636e63760c7d5f62e471b7a61b2",
+      "size": 8356
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/application_pager.rs",
+      "sha256": "adb65c878f6e9817cfb0932c38ac2f87d2715659468051957a1b747b7974ad19",
+      "size": 3196
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/application_rpc.rs",
+      "sha256": "40c07fb646300fd8f1ffad5502d555cb228b3b7c8ba05d0da3776af4f790d915",
+      "size": 10925
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/application_syscall.rs",
+      "sha256": "83c76e277f759e920a91f4fd3bb601268aee39082acbe3f4cd732ec3c58feb92",
+      "size": 17343
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/device_registry.rs",
+      "sha256": "52a3292a3e51ca0a3db4392e7d624c96eadb9e918513785781fe22e0d1e83655",
+      "size": 60079
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/ihk-compat-build-id.bin",
+      "sha256": "6836dd3f0fd3d273816c58b067eeea1b53a2a7ab760c68e3d918eb14e80c38f0",
+      "size": 8
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/ihk.rs",
+      "sha256": "8ae67d7208229c22c503508d16d2c9718a7f19123542270cf5589569d21a51ec",
+      "size": 18754
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/ihk_ioctl.rs",
+      "sha256": "449a6cd7ac211534c82729e18122af888ac58c0dccfee8aaecefd2900c7b5f75",
+      "size": 10432
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/ihk_mapping.rs",
+      "sha256": "085f4f4e7935bd273d89ae4c7f7d600da557ce1da8873f57a142dc12bf9677dc",
+      "size": 21943
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/ihk_smp_x86_64.rs",
+      "sha256": "d7684b0e33eb5c59f2e32f17678d5c3a108e3f407d29d77fd52486fb96b47f3a",
+      "size": 33317
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/ikc_master.rs",
+      "sha256": "1e52c69093936291f309a0317fac707c47858c6d0151cb2d288ced12353853f3",
+      "size": 26480
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/ikc_queue.rs",
+      "sha256": "3163d9cc7541941e49059aed7f8824a62229cbe8a650e02f79a4eb7a3944e9c5",
+      "size": 23030
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/mcctrl.rs",
+      "sha256": "b3898d1a4d08ba5512ee9b12e66224409f6aed4db3adc293b47631aa16fa8030",
+      "size": 8992
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/mcctrl_exec.rs",
+      "sha256": "02da754f4f5afa6256a572ff4fc17f72627d92f55e9793e25760fa0dac100ced",
+      "size": 8508
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/mcctrl_process.rs",
+      "sha256": "3c0af7cfc2c217b58c7e11a48d0838fa15383f68f930447da2bfc3062a1e9705",
+      "size": 45316
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/mcctrl_vm.rs",
+      "sha256": "74facf8daac2d3843e2c7c862b7186c8d738d7a78573ac0f1e6ea81436da470d",
+      "size": 15927
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/os_registry.rs",
+      "sha256": "0d8597004f513f353abb2da8f16fcf5413c9959ebdf36805fe00b398460557bd",
+      "size": 17410
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/os_runtime.rs",
+      "sha256": "49be478bf84e8d17ee355c154f5b7252ed42276ccff1e6cadd9fd6bf89fbf7bf",
+      "size": 46941
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/os_service.rs",
+      "sha256": "f5fc0c7fa0f62e0c3d1cef366a280c74ce083030ee6569b8c52979d9b361a572",
+      "size": 6907
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/page_allocator.rs",
+      "sha256": "756d7bad41ff39774d439edcab404417bb54ea8d877c95adb6c9e7b5c51a2d8d",
+      "size": 21246
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/page_owner_registry.rs",
+      "sha256": "de70bbcab89f0defe1458af00ec3eab13e6486669537397a256dcbf2c6dd8f57",
+      "size": 13034
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/prior-stage-lock.json",
+      "sha256": "a0a6d84aacbf747f1bd709c2cee1f27e6288eeef3cb3d3c22f53b5ed3813fdc9",
+      "size": 4297
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/procfs_objects.rs",
+      "sha256": "d6c125166c6bf03094e8c452261544b88ffd60446c4960feb4c21ac6f990e641",
+      "size": 16161
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/smp_application.rs",
+      "sha256": "03d015ce73ecbb3c2fdc4e7cdb1940a3f5deac761ecadd211e21303adb8c6013",
+      "size": 55177
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/smp_application_image.rs",
+      "sha256": "cd3f6685eb8d735e1323c096c029fd53893fb8b0d9d483c3f18651a500318b63",
+      "size": 9982
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/smp_application_syscall.rs",
+      "sha256": "e5e9fcd01b73896a559700adde13fe206ea0facb451f4482b0aaea5ff2ae60ea",
+      "size": 36219
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/smp_boot_code.rs",
+      "sha256": "51fa12dad686621e1fd170b2017515deddd67227b5f8aaee84102d070a4a3db7",
+      "size": 1317
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/smp_cpu.rs",
+      "sha256": "9826d4f401a75485befa8728080794e95858b978c59af19d034254722e3346e2",
+      "size": 38178
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/smp_file_pager.rs",
+      "sha256": "513ed3332be17b983a14d5ab87fe82241ca9c5ce0517ed2fb5d171f542ec4016",
+      "size": 14721
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/smp_ikc.rs",
+      "sha256": "87af7bfa59df5ee3164e5afca5fe5ff5a8256ff27c7635b2a72f8f769e3963b2",
+      "size": 12665
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/smp_image.rs",
+      "sha256": "359fc2a35865c114c7f8fc82ec0452433948684fcd59b31fe879ab62fd6ced3d",
+      "size": 14208
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/smp_loader.rs",
+      "sha256": "fa86ebb489454cd95c2607bba3a3d564ca36d6e65c5eea6bd6aa319bb40100e6",
+      "size": 3194
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/smp_memory.rs",
+      "sha256": "75983706f45ab8c33fdb4059f7f0e354b041a82ee7940933b670d84220ecb126",
+      "size": 101582
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/smp_procfs.rs",
+      "sha256": "4d74a259be302b5f50e047516c8152168fe386059ed952db7d9872ac5ec77b4d",
+      "size": 28177
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/smp_resource.rs",
+      "sha256": "66bb835e4f957d3a25768d2258ec36cc79f8c532554914f8ae3234b28e51d100",
+      "size": 129249
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/smp_service.rs",
+      "sha256": "944afdc8646c6722e666913af514f800d052717f0fb31f7d93ffb8b26230509f",
+      "size": 47572
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/smp_startup.rs",
+      "sha256": "12c3a816af6ff20dcf916c946b780ff988e90650300ab7c00e07a83cda1474a2",
+      "size": 4963
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/smp_startup_entry.S",
+      "sha256": "b65dc8545456edc714fe2913e8bafe0c87bb287ab84e4769cf9575263a59d9b2",
+      "size": 1350
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/smp_topology.rs",
+      "sha256": "83c655570347e4eb0f70a1e9a1bf96401a775585e79bd845b20060b7c62873f7",
+      "size": 10615
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/smp_trampoline.S",
+      "sha256": "18c960336e3803f2b554481a2f6fc7c3927190bfeeee1516264c37de6c126bcf",
+      "size": 3650
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/smp_trampoline.rs",
+      "sha256": "acf14afe67aa9a0e758d45fe7525fc9d49bad7ef8aacf3b771f708431d73f9ca",
+      "size": 5477
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/smp_vdso.rs",
+      "sha256": "872525c91698bb308c7d111c86250a198983a4b1c94d426e076a709feca377e1",
+      "size": 5863
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/stability_observer.rs",
+      "sha256": "fb0a795209d73262b0415e91b55a9c4e7f9ac357cf255460c16dc84233ad6a31",
+      "size": 11309
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/stability_phase.rs",
+      "sha256": "5ce35193f9d88d7b990b92cc90287437ffe9c2e6b3f409ddfa2190b1ebfb9e54",
+      "size": 9176
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/sysfs_memory.rs",
+      "sha256": "a06db09b3e823636405888cd636e1a6fbf79ca7a0400bb0355899384638d629a",
+      "size": 29925
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/sysfs_objects.rs",
+      "sha256": "17369a7bd7d8d5b8079c3a2b30784de56b4db79a3b75c04ad42e613fab570980",
+      "size": 13753
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/sysfs_os.rs",
+      "sha256": "ce44efe98498383862bd2d897f3fe17201917aa141a144853459a0cac7ecffd2",
+      "size": 2451
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/sysfs_remote.rs",
+      "sha256": "8a33f152307d66f7c205fe7557da1a4e02e5d230335dd9b36f16797e11db53ee",
+      "size": 8287
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/sysfs_rpc.rs",
+      "sha256": "d1bb17868dd426b3c6635171f2f8cc53e498b54779973c1abc58968d1d96cc4e",
+      "size": 6833
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/sysfs_setup.rs",
+      "sha256": "aef0af92406948da3a4519c937dcfd32724b18d81ab00e394e66c89753863d62",
+      "size": 12683
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/sysfs_snoop.rs",
+      "sha256": "c795209a3d116142c6da2ab969d3cdb88ba69796287b20adbab2f59bdbe7249d",
+      "size": 5515
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/sysfs_tree.rs",
+      "sha256": "3ee25a02b17654b6f23776d13aaa62de5b597e23cb214ca9c519b5886c29b232",
+      "size": 12276
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/sysfs_zeroing.rs",
+      "sha256": "221b3427849c4c5d62254cf16445e2851631d3fed6f4f7875f4e59e2c0d6a290",
+      "size": 10243
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/user_string.rs",
+      "sha256": "fa83818bc26d52ffff1a763a34a92684dff47775ba389fa6ac831d0835bf62d2",
+      "size": 603
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/staged-source/zero_pages.rs",
+      "sha256": "47a4e27b63f50366229af4045d79dc5dee6ace179307cc19c08cc338c68b1def",
+      "size": 4354
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/ihk.ko",
+      "sha256": "062c254901a1d51eba60928432d959c01288355ead854f4ab754a09ebd775a78",
+      "size": 1357704
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/ihk-smp-x86_64.ko",
+      "sha256": "a00658000bb588bfc3f84096504e4b636e82d934df52e69e402fb1f00079b115",
+      "size": 11709176
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/mcctrl.ko",
+      "sha256": "8493363d1780a56dbda23f578bdaad8ef1d77a852d1ebd1e481094f827ff5b08",
+      "size": 1951376
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/source/scripts/application-tests/owner_observations.py",
+      "sha256": "97466f94dff53fc250509859d164a9858a4f361405ad62b82bb59ab621f77bcf",
+      "size": 33019
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/source/scripts/tests/fixtures/stability-owner-observer/application_rpc.append.rs",
+      "sha256": "dcc392d9ffc51490a394db1a36a5f82499b39c1ba697d9dd19d447ad2babf5cd",
+      "size": 845
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/source/scripts/tests/fixtures/stability-owner-observer/application_syscall.append.rs",
+      "sha256": "65c63429dbf58f803fda72965a51a2b2b98a1c4f5a952d59ff61ef4f4c9b39e7",
+      "size": 1768
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/source/scripts/tests/fixtures/stability-owner-observer/smp_application.append.rs",
+      "sha256": "f6f6ec5f859a977c3ebb22998eef891cf480f70dacb97d930bd5844ff9caf2fa",
+      "size": 9835
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/source/scripts/tests/fixtures/stability-owner-observer/smp_application_image.append.rs",
+      "sha256": "019f7bf5ccd56857e59c375144034005eca9b543cba3c824ee6c96eea323ffd4",
+      "size": 772
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/source/scripts/tests/fixtures/stability-owner-observer/smp_application_syscall.append.rs",
+      "sha256": "0ca1b708f4efb83494009740700e5ea26987c92aa09849e44eb534bf95e1ed18",
+      "size": 4788
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/source/scripts/tests/fixtures/stability-owner-observer/smp_file_pager.append.rs",
+      "sha256": "68442c8a1fc5bf05aa9a9f2df88660f2622c269b12dd01251e71995c9ed96118",
+      "size": 1794
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/source/scripts/tests/fixtures/stability-owner-observer/smp_procfs.append.rs",
+      "sha256": "1eb6179d539cadd695bc23d77fcb173371fda3ad5461aaa17169320b84e218b9",
+      "size": 603
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/source/scripts/tests/fixtures/stability-owner-observer/smp_service.append.rs",
+      "sha256": "e2ad699e5ec2325bbe76aef39fe43e13497a8e6529943fb24cff988273c41c89",
+      "size": 2340
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/source/scripts/tests/fixtures/stability-owner-observer/stability_observer.rs",
+      "sha256": "fb0a795209d73262b0415e91b55a9c4e7f9ac357cf255460c16dc84233ad6a31",
+      "size": 11309
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/source/scripts/tests/fixtures/stability-owner-observer/sysfs_memory.append.rs",
+      "sha256": "5bc492c9298fc669149eb475446462348ed2b233b6c1a84bdd6255fe80a7b55b",
+      "size": 4918
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/source/scripts/tests/fixtures/stability-owner-phase/smp_application.append.rs",
+      "sha256": "5120d4ad683702ffc80453643b6106635c5f6148861da7d247686a37039c5834",
+      "size": 1064
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/source/scripts/tests/fixtures/stability-owner-phase/smp_application_syscall.append.rs",
+      "sha256": "fc4fd377d10e5a9f6e63627fb0a062de9d0650367d7079e289e255c74cfb67ec",
+      "size": 1643
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/source/scripts/tests/fixtures/stability-owner-phase/smp_memory.append.rs",
+      "sha256": "3097600b3bf042cfd952162b2a0584faa1bc69c21c1f779f5010c5148a67989c",
+      "size": 2640
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/source/scripts/tests/fixtures/stability-owner-phase/smp_service.append.rs",
+      "sha256": "27ccee5815ccdd09c128803483fa488061d50721ff35f51e67363164379e5579",
+      "size": 4827
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/source/scripts/tests/fixtures/stability-owner-phase/stability_phase.rs",
+      "sha256": "5ce35193f9d88d7b990b92cc90287437ffe9c2e6b3f409ddfa2190b1ebfb9e54",
+      "size": 9176
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/source/scripts/tests/fixtures/stability-ret-observer.rs",
+      "sha256": "d0fdda0b7b77800a614ccfde18d42967be03f1c67117dd5c7abee7b64f2b93bc",
+      "size": 3939
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/source/scripts/tests/fixtures/stability-transport-fault/controller.c",
+      "sha256": "be5c32e9298d9d1d8711c0ebfd89d2d9f7bc7b0215f8e897da2db5089fdc99eb",
+      "size": 40734
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/source/scripts/tests/fixtures/stability-transport-fault/owner-phase-v1/README.md",
+      "sha256": "21b130b10b5726bd1a2290c00b18c079e6e91f0d930924e934dd5142b145fcf1",
+      "size": 7892
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/source/scripts/tests/fixtures/stability-transport-fault/owner-phase-v1/after_hello.c",
+      "sha256": "8d636faa0f72c685c9c74612a6b0a640fa4c39796759352deb54922827e54aeb",
+      "size": 1897
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/source/scripts/tests/fixtures/stability-transport-fault/owner-phase-v1/controller.c",
+      "sha256": "92307db9af4cdaa76e85f9c985575f4aec413789751a1e1f012f1d9962fbb06f",
+      "size": 45151
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/source/scripts/tests/fixtures/stability-transport-fault/owner-phase-v1/controller.forward.patch",
+      "sha256": "e04458f04cc49f2daf6d51fdeddb695049d381521b4f40a0555ec4447af548d5",
+      "size": 7380
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/source/scripts/tests/fixtures/stability-transport-fault/owner-phase-v1/controller.inverse.patch",
+      "sha256": "6a9a3b4f590ba7c31ff54082328d41a5eeded64c5b631e174c6ce235d619bb91",
+      "size": 7380
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/source/scripts/tests/fixtures/stability-transport-fault/owner-phase-v1/controller.original.c",
+      "sha256": "be5c32e9298d9d1d8711c0ebfd89d2d9f7bc7b0215f8e897da2db5089fdc99eb",
+      "size": 40734
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/source/scripts/tests/fixtures/stability-transport-fault/owner-phase-v1/phase-metadata-harness.md",
+      "sha256": "3f7a11b40c04fa58a4dec1987eab29e891040e68ba5dec08c3bcd44842d4520e",
+      "size": 2005
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/source/scripts/tests/fixtures/stability-transport-fault/owner-phase-v1/phase_client.h",
+      "sha256": "03f17078369078898dfafc97b064b29a349efd6f758d9e7895f5cdb91579d9c7",
+      "size": 16068
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/source/scripts/tests/fixtures/stability-transport-fault/owner-phase-v1/phase_metadata_harness.c",
+      "sha256": "09dc5da0403d29b776276f7bd67fff67f1e92d60655541271b17912578a8e4ff",
+      "size": 8689
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/source/scripts/tests/fixtures/stability-transport-fault/payload.c",
+      "sha256": "1cb799c6b994250dad9d367bd33b629a095b78d220df5a683f1da607bbfb971b",
+      "size": 870
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/source/scripts/tests/fixtures/stability-transport-fault/protocol-expectations.json",
+      "sha256": "6ab4fb9edaf5cf8f70eda23b95035d91ad834b4ab7bf61bd486e3e5293965e20",
+      "size": 3007
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/source/scripts/tests/fixtures/stability-transport-fault/protocol-harness.md",
+      "sha256": "306ba431b8ad84228c6fc6b3558a0f0621e2dd4f1b8dd3842e338f5c243d785e",
+      "size": 6228
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/source/scripts/tests/fixtures/stability-transport-fault/protocol_harness.c",
+      "sha256": "7aed190e6aed3bc0940e1e7c513a899abc4c5205076f4dfd8d3d81cf205924f1",
+      "size": 21374
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/source/scripts/tests/fixtures/stability-transport-fault/run_protocol_tests.py",
+      "sha256": "3898ee3155a09822bf637b021b9ab5534310ec1fa3b95b47c6dada4c99bcc28a",
+      "size": 9256
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/source/scripts/tests/fixtures/stability-transport-fault/send.append.rs",
+      "sha256": "01f781f9258e3a6564c8512c40721dc2a11e0621a5262756c6f8e85675f0543d",
+      "size": 7149
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/source/scripts/tests/prepare_stability_owner_observer.py",
+      "sha256": "e78fdd58d3f959798e94111c960110086376182a1aa659733e1d550d94979466",
+      "size": 7295
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/source/scripts/tests/prepare_stability_owner_phase.py",
+      "sha256": "cd58971d7a810728f9426dfa10d2b661c831ecfe1328e413554632764f2d1d0d",
+      "size": 9056
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/source/scripts/tests/prepare_stability_transport_fault.py",
+      "sha256": "860e7a941660b9453e89fefeb83948673377fc75146a08f263251390bf3bfbb6",
+      "size": 8269
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/source/scripts/tests/test_owner_observations.py",
+      "sha256": "fa30ea4f670b239c619f08b708ec099943b9832318a4ffc44bcc8150dc61c096",
+      "size": 23318
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/owner-overlay/record.json",
+      "sha256": "f25b41a12ceccfcab127c14913075d55a3410c43358eba8b988da1e63d8b47df",
+      "size": 9424
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/phase-overlay/record.json",
+      "sha256": "3846433612399905e2418e8de1959508f41e05b81d93687a003bcd791b71286f",
+      "size": 8487
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/transport-overlay/record.json",
+      "sha256": "dd4ee00aa04b5e6518bbfc6c6e4c3d38b543b3ba63558b781555f40700c7e8a8",
+      "size": 8666
+    }
+  ],
+  "retention": {
+    "archive": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/stability-observer-stack-review-20260913-3.tar.gz",
+      "sha256": "88b11540116469c26931968f2d8fe2b971ca7fe5351cc602216ac84577f3d7b4",
+      "size": 550491
+    },
+    "members": [
+      {
+        "name": "analysis/analysis.json",
+        "sha256": "719cfa3dcc3c7660a4891bcfef0cbf00ecaf5aa2295be19cbaae43d0c7e00ee1",
+        "size": 3525775
+      },
+      {
+        "name": "analysis/freeze.py",
+        "sha256": "9812542e4aa4b0ae77e94d7ef9fba0880d40f3e22f566feb431ea1ba6c5d7347",
+        "size": 8185
+      },
+      {
+        "name": "analysis/freeze.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "analysis/freeze.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "analysis/retained-analyzer.py",
+        "sha256": "09f9d72f9475ad7b2563a39733b5dd41ca386561139f960d42cedb17bab7003a",
+        "size": 8196
+      },
+      {
+        "name": "analysis/stderr.bin",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "analysis/stdout.bin",
+        "sha256": "59017a792f6b3862e6d5c59e08e872482f3ea79144871d9923cbdf72bd5a64a5",
+        "size": 273
+      },
+      {
+        "name": "compiled-capture/owner-parser-tests-collection/report.json",
+        "sha256": "188763812548fa3450a2714eeffe3ca575a59b16b292eb091187ff57bd0cfbea",
+        "size": 3136
+      },
+      {
+        "name": "compiled-capture/owner-parser-tests-collection/stderr.bin",
+        "sha256": "a8095c53c871b07c705df4325436f82019737d72cb016e25f66a509ce0b23375",
+        "size": 2984
+      },
+      {
+        "name": "compiled-capture/owner-parser-tests-collection/stdout.bin",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "name": "compiled-capture/record.json",
+        "sha256": "fb957e548fdd99026f5e31f02b2a7b0aeed95a13e90fe7a728898b6dd537410e",
+        "size": 190008
+      },
+      {
+        "name": "compiled-capture/source/scripts/application-tests/owner_observations.py",
+        "sha256": "97466f94dff53fc250509859d164a9858a4f361405ad62b82bb59ab621f77bcf",
+        "size": 33019
+      },
+      {
+        "name": "compiled-capture/source/scripts/tests/fixtures/stability-owner-observer/application_rpc.append.rs",
+        "sha256": "dcc392d9ffc51490a394db1a36a5f82499b39c1ba697d9dd19d447ad2babf5cd",
+        "size": 845
+      },
+      {
+        "name": "compiled-capture/source/scripts/tests/fixtures/stability-owner-observer/application_syscall.append.rs",
+        "sha256": "65c63429dbf58f803fda72965a51a2b2b98a1c4f5a952d59ff61ef4f4c9b39e7",
+        "size": 1768
+      },
+      {
+        "name": "compiled-capture/source/scripts/tests/fixtures/stability-owner-observer/smp_application.append.rs",
+        "sha256": "f6f6ec5f859a977c3ebb22998eef891cf480f70dacb97d930bd5844ff9caf2fa",
+        "size": 9835
+      },
+      {
+        "name": "compiled-capture/source/scripts/tests/fixtures/stability-owner-observer/smp_application_image.append.rs",
+        "sha256": "019f7bf5ccd56857e59c375144034005eca9b543cba3c824ee6c96eea323ffd4",
+        "size": 772
+      },
+      {
+        "name": "compiled-capture/source/scripts/tests/fixtures/stability-owner-observer/smp_application_syscall.append.rs",
+        "sha256": "0ca1b708f4efb83494009740700e5ea26987c92aa09849e44eb534bf95e1ed18",
+        "size": 4788
+      },
+      {
+        "name": "compiled-capture/source/scripts/tests/fixtures/stability-owner-observer/smp_file_pager.append.rs",
+        "sha256": "68442c8a1fc5bf05aa9a9f2df88660f2622c269b12dd01251e71995c9ed96118",
+        "size": 1794
+      },
+      {
+        "name": "compiled-capture/source/scripts/tests/fixtures/stability-owner-observer/smp_procfs.append.rs",
+        "sha256": "1eb6179d539cadd695bc23d77fcb173371fda3ad5461aaa17169320b84e218b9",
+        "size": 603
+      },
+      {
+        "name": "compiled-capture/source/scripts/tests/fixtures/stability-owner-observer/smp_service.append.rs",
+        "sha256": "e2ad699e5ec2325bbe76aef39fe43e13497a8e6529943fb24cff988273c41c89",
+        "size": 2340
+      },
+      {
+        "name": "compiled-capture/source/scripts/tests/fixtures/stability-owner-observer/stability_observer.rs",
+        "sha256": "fb0a795209d73262b0415e91b55a9c4e7f9ac357cf255460c16dc84233ad6a31",
+        "size": 11309
+      },
+      {
+        "name": "compiled-capture/source/scripts/tests/fixtures/stability-owner-observer/sysfs_memory.append.rs",
+        "sha256": "5bc492c9298fc669149eb475446462348ed2b233b6c1a84bdd6255fe80a7b55b",
+        "size": 4918
+      },
+      {
+        "name": "compiled-capture/source/scripts/tests/fixtures/stability-owner-phase/smp_application.append.rs",
+        "sha256": "5120d4ad683702ffc80453643b6106635c5f6148861da7d247686a37039c5834",
+        "size": 1064
+      },
+      {
+        "name": "compiled-capture/source/scripts/tests/fixtures/stability-owner-phase/smp_application_syscall.append.rs",
+        "sha256": "fc4fd377d10e5a9f6e63627fb0a062de9d0650367d7079e289e255c74cfb67ec",
+        "size": 1643
+      },
+      {
+        "name": "compiled-capture/source/scripts/tests/fixtures/stability-owner-phase/smp_memory.append.rs",
+        "sha256": "3097600b3bf042cfd952162b2a0584faa1bc69c21c1f779f5010c5148a67989c",
+        "size": 2640
+      },
+      {
+        "name": "compiled-capture/source/scripts/tests/fixtures/stability-owner-phase/smp_service.append.rs",
+        "sha256": "27ccee5815ccdd09c128803483fa488061d50721ff35f51e67363164379e5579",
+        "size": 4827
+      },
+      {
+        "name": "compiled-capture/source/scripts/tests/fixtures/stability-owner-phase/stability_phase.rs",
+        "sha256": "5ce35193f9d88d7b990b92cc90287437ffe9c2e6b3f409ddfa2190b1ebfb9e54",
+        "size": 9176
+      },
+      {
+        "name": "compiled-capture/source/scripts/tests/fixtures/stability-ret-observer.rs",
+        "sha256": "d0fdda0b7b77800a614ccfde18d42967be03f1c67117dd5c7abee7b64f2b93bc",
+        "size": 3939
+      },
+      {
+        "name": "compiled-capture/source/scripts/tests/fixtures/stability-transport-fault/controller.c",
+        "sha256": "be5c32e9298d9d1d8711c0ebfd89d2d9f7bc7b0215f8e897da2db5089fdc99eb",
+        "size": 40734
+      },
+      {
+        "name": "compiled-capture/source/scripts/tests/fixtures/stability-transport-fault/owner-phase-v1/README.md",
+        "sha256": "21b130b10b5726bd1a2290c00b18c079e6e91f0d930924e934dd5142b145fcf1",
+        "size": 7892
+      },
+      {
+        "name": "compiled-capture/source/scripts/tests/fixtures/stability-transport-fault/owner-phase-v1/after_hello.c",
+        "sha256": "8d636faa0f72c685c9c74612a6b0a640fa4c39796759352deb54922827e54aeb",
+        "size": 1897
+      },
+      {
+        "name": "compiled-capture/source/scripts/tests/fixtures/stability-transport-fault/owner-phase-v1/controller.c",
+        "sha256": "92307db9af4cdaa76e85f9c985575f4aec413789751a1e1f012f1d9962fbb06f",
+        "size": 45151
+      },
+      {
+        "name": "compiled-capture/source/scripts/tests/fixtures/stability-transport-fault/owner-phase-v1/controller.forward.patch",
+        "sha256": "e04458f04cc49f2daf6d51fdeddb695049d381521b4f40a0555ec4447af548d5",
+        "size": 7380
+      },
+      {
+        "name": "compiled-capture/source/scripts/tests/fixtures/stability-transport-fault/owner-phase-v1/controller.inverse.patch",
+        "sha256": "6a9a3b4f590ba7c31ff54082328d41a5eeded64c5b631e174c6ce235d619bb91",
+        "size": 7380
+      },
+      {
+        "name": "compiled-capture/source/scripts/tests/fixtures/stability-transport-fault/owner-phase-v1/controller.original.c",
+        "sha256": "be5c32e9298d9d1d8711c0ebfd89d2d9f7bc7b0215f8e897da2db5089fdc99eb",
+        "size": 40734
+      },
+      {
+        "name": "compiled-capture/source/scripts/tests/fixtures/stability-transport-fault/owner-phase-v1/phase-metadata-harness.md",
+        "sha256": "3f7a11b40c04fa58a4dec1987eab29e891040e68ba5dec08c3bcd44842d4520e",
+        "size": 2005
+      },
+      {
+        "name": "compiled-capture/source/scripts/tests/fixtures/stability-transport-fault/owner-phase-v1/phase_client.h",
+        "sha256": "03f17078369078898dfafc97b064b29a349efd6f758d9e7895f5cdb91579d9c7",
+        "size": 16068
+      },
+      {
+        "name": "compiled-capture/source/scripts/tests/fixtures/stability-transport-fault/owner-phase-v1/phase_metadata_harness.c",
+        "sha256": "09dc5da0403d29b776276f7bd67fff67f1e92d60655541271b17912578a8e4ff",
+        "size": 8689
+      },
+      {
+        "name": "compiled-capture/source/scripts/tests/fixtures/stability-transport-fault/payload.c",
+        "sha256": "1cb799c6b994250dad9d367bd33b629a095b78d220df5a683f1da607bbfb971b",
+        "size": 870
+      },
+      {
+        "name": "compiled-capture/source/scripts/tests/fixtures/stability-transport-fault/protocol-expectations.json",
+        "sha256": "6ab4fb9edaf5cf8f70eda23b95035d91ad834b4ab7bf61bd486e3e5293965e20",
+        "size": 3007
+      },
+      {
+        "name": "compiled-capture/source/scripts/tests/fixtures/stability-transport-fault/protocol-harness.md",
+        "sha256": "306ba431b8ad84228c6fc6b3558a0f0621e2dd4f1b8dd3842e338f5c243d785e",
+        "size": 6228
+      },
+      {
+        "name": "compiled-capture/source/scripts/tests/fixtures/stability-transport-fault/protocol_harness.c",
+        "sha256": "7aed190e6aed3bc0940e1e7c513a899abc4c5205076f4dfd8d3d81cf205924f1",
+        "size": 21374
+      },
+      {
+        "name": "compiled-capture/source/scripts/tests/fixtures/stability-transport-fault/run_protocol_tests.py",
+        "sha256": "3898ee3155a09822bf637b021b9ab5534310ec1fa3b95b47c6dada4c99bcc28a",
+        "size": 9256
+      },
+      {
+        "name": "compiled-capture/source/scripts/tests/fixtures/stability-transport-fault/send.append.rs",
+        "sha256": "01f781f9258e3a6564c8512c40721dc2a11e0621a5262756c6f8e85675f0543d",
+        "size": 7149
+      },
+      {
+        "name": "compiled-capture/source/scripts/tests/prepare_stability_owner_observer.py",
+        "sha256": "e78fdd58d3f959798e94111c960110086376182a1aa659733e1d550d94979466",
+        "size": 7295
+      },
+      {
+        "name": "compiled-capture/source/scripts/tests/prepare_stability_owner_phase.py",
+        "sha256": "cd58971d7a810728f9426dfa10d2b661c831ecfe1328e413554632764f2d1d0d",
+        "size": 9056
+      },
+      {
+        "name": "compiled-capture/source/scripts/tests/prepare_stability_transport_fault.py",
+        "sha256": "860e7a941660b9453e89fefeb83948673377fc75146a08f263251390bf3bfbb6",
+        "size": 8269
+      },
+      {
+        "name": "compiled-capture/source/scripts/tests/test_owner_observations.py",
+        "sha256": "fa30ea4f670b239c619f08b708ec099943b9832318a4ffc44bcc8150dc61c096",
+        "size": 23318
+      },
+      {
+        "name": "compiled-capture/staged-source/Kbuild",
+        "sha256": "f33c826539ed0807617337ba64a1cb646daf510cc06a44b47243d14e366d67a3",
+        "size": 371
+      },
+      {
+        "name": "compiled-capture/staged-source/Kconfig",
+        "sha256": "48c6ba25186281a3a4fe4690c7520b02d8bbe43965e78d3301d2613477c3874f",
+        "size": 848
+      },
+      {
+        "name": "compiled-capture/staged-source/abi/application.rs",
+        "sha256": "d2b3770a111777d4f28a7a81814a03414d318a90d3ec7082d5c89149b1704a0f",
+        "size": 3171
+      },
+      {
+        "name": "compiled-capture/staged-source/abi/os_service.rs",
+        "sha256": "9dac670ec6567d379c346106d3b164ddb6d607be1dedc2be21283d4adffa5937",
+        "size": 2527
+      },
+      {
+        "name": "compiled-capture/staged-source/abi/sysfs.rs",
+        "sha256": "fb2fd0529998d1a7a4c6fd39f8d03e0f2c65e4d276d4d600779b7afa28ef319a",
+        "size": 2629
+      },
+      {
+        "name": "compiled-capture/staged-source/abi/sysfs_request.rs",
+        "sha256": "30d079fdd5ba21ca06ecd7ed6ab9a60de288d90303134be1f6a2ec428861f946",
+        "size": 6715
+      },
+      {
+        "name": "compiled-capture/staged-source/abi/vdso.rs",
+        "sha256": "d33c5aaf1ca422250819433f83a81a6be2a9dd3d81f9674c7f0530bc4fec6fb1",
+        "size": 14530
+      },
+      {
+        "name": "compiled-capture/staged-source/abi/x86_64.rs",
+        "sha256": "89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3",
+        "size": 19740
+      },
+      {
+        "name": "compiled-capture/staged-source/application_image.rs",
+        "sha256": "25b7810c273c9f4b5dbff073f54e67db52c69636e63760c7d5f62e471b7a61b2",
+        "size": 8356
+      },
+      {
+        "name": "compiled-capture/staged-source/application_pager.rs",
+        "sha256": "adb65c878f6e9817cfb0932c38ac2f87d2715659468051957a1b747b7974ad19",
+        "size": 3196
+      },
+      {
+        "name": "compiled-capture/staged-source/application_rpc.rs",
+        "sha256": "40c07fb646300fd8f1ffad5502d555cb228b3b7c8ba05d0da3776af4f790d915",
+        "size": 10925
+      },
+      {
+        "name": "compiled-capture/staged-source/application_syscall.rs",
+        "sha256": "83c76e277f759e920a91f4fd3bb601268aee39082acbe3f4cd732ec3c58feb92",
+        "size": 17343
+      },
+      {
+        "name": "compiled-capture/staged-source/device_registry.rs",
+        "sha256": "52a3292a3e51ca0a3db4392e7d624c96eadb9e918513785781fe22e0d1e83655",
+        "size": 60079
+      },
+      {
+        "name": "compiled-capture/staged-source/ihk-compat-build-id.bin",
+        "sha256": "6836dd3f0fd3d273816c58b067eeea1b53a2a7ab760c68e3d918eb14e80c38f0",
+        "size": 8
+      },
+      {
+        "name": "compiled-capture/staged-source/ihk.rs",
+        "sha256": "8ae67d7208229c22c503508d16d2c9718a7f19123542270cf5589569d21a51ec",
+        "size": 18754
+      },
+      {
+        "name": "compiled-capture/staged-source/ihk_ioctl.rs",
+        "sha256": "449a6cd7ac211534c82729e18122af888ac58c0dccfee8aaecefd2900c7b5f75",
+        "size": 10432
+      },
+      {
+        "name": "compiled-capture/staged-source/ihk_mapping.rs",
+        "sha256": "085f4f4e7935bd273d89ae4c7f7d600da557ce1da8873f57a142dc12bf9677dc",
+        "size": 21943
+      },
+      {
+        "name": "compiled-capture/staged-source/ihk_smp_x86_64.rs",
+        "sha256": "d7684b0e33eb5c59f2e32f17678d5c3a108e3f407d29d77fd52486fb96b47f3a",
+        "size": 33317
+      },
+      {
+        "name": "compiled-capture/staged-source/ikc_master.rs",
+        "sha256": "1e52c69093936291f309a0317fac707c47858c6d0151cb2d288ced12353853f3",
+        "size": 26480
+      },
+      {
+        "name": "compiled-capture/staged-source/ikc_queue.rs",
+        "sha256": "3163d9cc7541941e49059aed7f8824a62229cbe8a650e02f79a4eb7a3944e9c5",
+        "size": 23030
+      },
+      {
+        "name": "compiled-capture/staged-source/mcctrl.rs",
+        "sha256": "b3898d1a4d08ba5512ee9b12e66224409f6aed4db3adc293b47631aa16fa8030",
+        "size": 8992
+      },
+      {
+        "name": "compiled-capture/staged-source/mcctrl_exec.rs",
+        "sha256": "02da754f4f5afa6256a572ff4fc17f72627d92f55e9793e25760fa0dac100ced",
+        "size": 8508
+      },
+      {
+        "name": "compiled-capture/staged-source/mcctrl_process.rs",
+        "sha256": "3c0af7cfc2c217b58c7e11a48d0838fa15383f68f930447da2bfc3062a1e9705",
+        "size": 45316
+      },
+      {
+        "name": "compiled-capture/staged-source/mcctrl_vm.rs",
+        "sha256": "74facf8daac2d3843e2c7c862b7186c8d738d7a78573ac0f1e6ea81436da470d",
+        "size": 15927
+      },
+      {
+        "name": "compiled-capture/staged-source/os_registry.rs",
+        "sha256": "0d8597004f513f353abb2da8f16fcf5413c9959ebdf36805fe00b398460557bd",
+        "size": 17410
+      },
+      {
+        "name": "compiled-capture/staged-source/os_runtime.rs",
+        "sha256": "49be478bf84e8d17ee355c154f5b7252ed42276ccff1e6cadd9fd6bf89fbf7bf",
+        "size": 46941
+      },
+      {
+        "name": "compiled-capture/staged-source/os_service.rs",
+        "sha256": "f5fc0c7fa0f62e0c3d1cef366a280c74ce083030ee6569b8c52979d9b361a572",
+        "size": 6907
+      },
+      {
+        "name": "compiled-capture/staged-source/page_allocator.rs",
+        "sha256": "756d7bad41ff39774d439edcab404417bb54ea8d877c95adb6c9e7b5c51a2d8d",
+        "size": 21246
+      },
+      {
+        "name": "compiled-capture/staged-source/page_owner_registry.rs",
+        "sha256": "de70bbcab89f0defe1458af00ec3eab13e6486669537397a256dcbf2c6dd8f57",
+        "size": 13034
+      },
+      {
+        "name": "compiled-capture/staged-source/prior-stage-lock.json",
+        "sha256": "a0a6d84aacbf747f1bd709c2cee1f27e6288eeef3cb3d3c22f53b5ed3813fdc9",
+        "size": 4297
+      },
+      {
+        "name": "compiled-capture/staged-source/procfs_objects.rs",
+        "sha256": "d6c125166c6bf03094e8c452261544b88ffd60446c4960feb4c21ac6f990e641",
+        "size": 16161
+      },
+      {
+        "name": "compiled-capture/staged-source/smp_application.rs",
+        "sha256": "03d015ce73ecbb3c2fdc4e7cdb1940a3f5deac761ecadd211e21303adb8c6013",
+        "size": 55177
+      },
+      {
+        "name": "compiled-capture/staged-source/smp_application_image.rs",
+        "sha256": "cd3f6685eb8d735e1323c096c029fd53893fb8b0d9d483c3f18651a500318b63",
+        "size": 9982
+      },
+      {
+        "name": "compiled-capture/staged-source/smp_application_syscall.rs",
+        "sha256": "e5e9fcd01b73896a559700adde13fe206ea0facb451f4482b0aaea5ff2ae60ea",
+        "size": 36219
+      },
+      {
+        "name": "compiled-capture/staged-source/smp_boot_code.rs",
+        "sha256": "51fa12dad686621e1fd170b2017515deddd67227b5f8aaee84102d070a4a3db7",
+        "size": 1317
+      },
+      {
+        "name": "compiled-capture/staged-source/smp_cpu.rs",
+        "sha256": "9826d4f401a75485befa8728080794e95858b978c59af19d034254722e3346e2",
+        "size": 38178
+      },
+      {
+        "name": "compiled-capture/staged-source/smp_file_pager.rs",
+        "sha256": "513ed3332be17b983a14d5ab87fe82241ca9c5ce0517ed2fb5d171f542ec4016",
+        "size": 14721
+      },
+      {
+        "name": "compiled-capture/staged-source/smp_ikc.rs",
+        "sha256": "87af7bfa59df5ee3164e5afca5fe5ff5a8256ff27c7635b2a72f8f769e3963b2",
+        "size": 12665
+      },
+      {
+        "name": "compiled-capture/staged-source/smp_image.rs",
+        "sha256": "359fc2a35865c114c7f8fc82ec0452433948684fcd59b31fe879ab62fd6ced3d",
+        "size": 14208
+      },
+      {
+        "name": "compiled-capture/staged-source/smp_loader.rs",
+        "sha256": "fa86ebb489454cd95c2607bba3a3d564ca36d6e65c5eea6bd6aa319bb40100e6",
+        "size": 3194
+      },
+      {
+        "name": "compiled-capture/staged-source/smp_memory.rs",
+        "sha256": "75983706f45ab8c33fdb4059f7f0e354b041a82ee7940933b670d84220ecb126",
+        "size": 101582
+      },
+      {
+        "name": "compiled-capture/staged-source/smp_procfs.rs",
+        "sha256": "4d74a259be302b5f50e047516c8152168fe386059ed952db7d9872ac5ec77b4d",
+        "size": 28177
+      },
+      {
+        "name": "compiled-capture/staged-source/smp_resource.rs",
+        "sha256": "66bb835e4f957d3a25768d2258ec36cc79f8c532554914f8ae3234b28e51d100",
+        "size": 129249
+      },
+      {
+        "name": "compiled-capture/staged-source/smp_service.rs",
+        "sha256": "944afdc8646c6722e666913af514f800d052717f0fb31f7d93ffb8b26230509f",
+        "size": 47572
+      },
+      {
+        "name": "compiled-capture/staged-source/smp_startup.rs",
+        "sha256": "12c3a816af6ff20dcf916c946b780ff988e90650300ab7c00e07a83cda1474a2",
+        "size": 4963
+      },
+      {
+        "name": "compiled-capture/staged-source/smp_startup_entry.S",
+        "sha256": "b65dc8545456edc714fe2913e8bafe0c87bb287ab84e4769cf9575263a59d9b2",
+        "size": 1350
+      },
+      {
+        "name": "compiled-capture/staged-source/smp_topology.rs",
+        "sha256": "83c655570347e4eb0f70a1e9a1bf96401a775585e79bd845b20060b7c62873f7",
+        "size": 10615
+      },
+      {
+        "name": "compiled-capture/staged-source/smp_trampoline.S",
+        "sha256": "18c960336e3803f2b554481a2f6fc7c3927190bfeeee1516264c37de6c126bcf",
+        "size": 3650
+      },
+      {
+        "name": "compiled-capture/staged-source/smp_trampoline.rs",
+        "sha256": "acf14afe67aa9a0e758d45fe7525fc9d49bad7ef8aacf3b771f708431d73f9ca",
+        "size": 5477
+      },
+      {
+        "name": "compiled-capture/staged-source/smp_vdso.rs",
+        "sha256": "872525c91698bb308c7d111c86250a198983a4b1c94d426e076a709feca377e1",
+        "size": 5863
+      },
+      {
+        "name": "compiled-capture/staged-source/stability_observer.rs",
+        "sha256": "fb0a795209d73262b0415e91b55a9c4e7f9ac357cf255460c16dc84233ad6a31",
+        "size": 11309
+      },
+      {
+        "name": "compiled-capture/staged-source/stability_phase.rs",
+        "sha256": "5ce35193f9d88d7b990b92cc90287437ffe9c2e6b3f409ddfa2190b1ebfb9e54",
+        "size": 9176
+      },
+      {
+        "name": "compiled-capture/staged-source/sysfs_memory.rs",
+        "sha256": "a06db09b3e823636405888cd636e1a6fbf79ca7a0400bb0355899384638d629a",
+        "size": 29925
+      },
+      {
+        "name": "compiled-capture/staged-source/sysfs_objects.rs",
+        "sha256": "17369a7bd7d8d5b8079c3a2b30784de56b4db79a3b75c04ad42e613fab570980",
+        "size": 13753
+      },
+      {
+        "name": "compiled-capture/staged-source/sysfs_os.rs",
+        "sha256": "ce44efe98498383862bd2d897f3fe17201917aa141a144853459a0cac7ecffd2",
+        "size": 2451
+      },
+      {
+        "name": "compiled-capture/staged-source/sysfs_remote.rs",
+        "sha256": "8a33f152307d66f7c205fe7557da1a4e02e5d230335dd9b36f16797e11db53ee",
+        "size": 8287
+      },
+      {
+        "name": "compiled-capture/staged-source/sysfs_rpc.rs",
+        "sha256": "d1bb17868dd426b3c6635171f2f8cc53e498b54779973c1abc58968d1d96cc4e",
+        "size": 6833
+      },
+      {
+        "name": "compiled-capture/staged-source/sysfs_setup.rs",
+        "sha256": "aef0af92406948da3a4519c937dcfd32724b18d81ab00e394e66c89753863d62",
+        "size": 12683
+      },
+      {
+        "name": "compiled-capture/staged-source/sysfs_snoop.rs",
+        "sha256": "c795209a3d116142c6da2ab969d3cdb88ba69796287b20adbab2f59bdbe7249d",
+        "size": 5515
+      },
+      {
+        "name": "compiled-capture/staged-source/sysfs_tree.rs",
+        "sha256": "3ee25a02b17654b6f23776d13aaa62de5b597e23cb214ca9c519b5886c29b232",
+        "size": 12276
+      },
+      {
+        "name": "compiled-capture/staged-source/sysfs_zeroing.rs",
+        "sha256": "221b3427849c4c5d62254cf16445e2851631d3fed6f4f7875f4e59e2c0d6a290",
+        "size": 10243
+      },
+      {
+        "name": "compiled-capture/staged-source/user_string.rs",
+        "sha256": "fa83818bc26d52ffff1a763a34a92684dff47775ba389fa6ac831d0835bf62d2",
+        "size": 603
+      },
+      {
+        "name": "compiled-capture/staged-source/zero_pages.rs",
+        "sha256": "47a4e27b63f50366229af4045d79dc5dee6ace179307cc19c08cc338c68b1def",
+        "size": 4354
+      }
+    ],
+    "roundtrip_bytes_verified": true
+  },
+  "review_date": "2026-09-13",
+  "runtime_authorized": false,
+  "schema_version": 1,
+  "selected_linux_formatting_context": {
+    "direct_initial_formatting_prefix_upper_bytes": 797,
+    "ioctl_mailbox_print_module_prefix_bytes": 5536,
+    "ioctl_with_selected_linux_prefix_bytes": 6333,
+    "reference": {
+      "path": "/home/holden/mckernel/docs/verification/stability-observer-stack-review-20260913-2.json",
+      "sha256": "9b179537f1e9874bb4070716492a424ef3ade62e7e0946aba604d6aaf3f2d67f",
+      "size": 104140
+    },
+    "scope": "Inherited exact pinned Linux analysis of only the direct initial vsnprintf path through core::fmt::write. These values stop before dynamic callbacks and do not form a whole-Linux upper bound.",
+    "thread_size_bytes": 16384,
+    "worker_mailbox_print_module_prefix_bytes": 5216,
+    "worker_with_selected_linux_prefix_bytes": 6013
+  },
+  "status": "MEASURED_APP_HELPER_REDUCTION_WITH_EXPLICIT_KERNEL_RESIDUALS",
+  "verified_parent_parser_tests": {
+    "compiled_fixture_binding": {
+      "path": "/home/holden/mckernel/scripts/tests/fixtures/stability-owner-observer/smp_application.append.rs",
+      "sha256": "f6f6ec5f859a977c3ebb22998eef891cf480f70dacb97d930bd5844ff9caf2fa",
+      "size": 9835
+    },
+    "complete_untruncated_streams": true,
+    "count": 19,
+    "raw_wait_status": 0,
+    "scope": "Parent pinned process/parser infrastructure tests, not guest or application acceptance.",
+    "stderr": {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/owner-parser-tests-collection/stderr.bin",
+      "sha256": "a8095c53c871b07c705df4325436f82019737d72cb016e25f66a509ce0b23375",
+      "size": 2984
+    },
+    "stdout": {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/owner-parser-tests-collection/stdout.bin",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "test_report": {
+      "path": "/home/holden/mckernel-work/scratch/stability-transport-fault-module-20260913-prepublish-hard-3/owner-parser-tests-collection/report.json",
+      "sha256": "188763812548fa3450a2714eeffe3ca575a59b16b292eb091187ff57bd0cfbea",
+      "size": 3136
+    },
+    "tested_source_binding": {
+      "path": "/home/holden/mckernel/scripts/tests/test_owner_observations.py",
+      "sha256": "fa30ea4f670b239c619f08b708ec099943b9832318a4ffc44bcc8150dc61c096",
+      "size": 23318
+    },
+    "wait_status": {
+      "code": 0,
+      "kind": "exited"
+    }
+  }
+}

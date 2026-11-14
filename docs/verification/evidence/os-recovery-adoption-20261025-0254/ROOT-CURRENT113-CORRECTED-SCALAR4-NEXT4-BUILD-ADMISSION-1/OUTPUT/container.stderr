@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/build-only-worker.py", line 62, in <module>
+    require(len(sys.argv)==2,'one exact plan argument');execute(sys.argv[1])
+                                                        ^^^^^^^^^^^^^^^^^^^^
+  File "/build-only-worker.py", line 48, in execute
+    require(returncode==0,'first failed compiler/link stops suffix')
+  File "/build-only-worker.py", line 8, in require
+    if not ok:raise RuntimeError(message)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: first failed compiler/link stops suffix

@@ -1,0 +1,193 @@
+{
+  "scope": "exact extracted CMake with fake make and synthetic ELF only",
+  "fake_make_sha256": "33de68cd69115c24f04de003e88a23adce72ac2d6377f3be1dde7701ae2084e2",
+  "cases": [
+    {
+      "case": "success",
+      "argv": [
+        "/usr/bin/cmake",
+        "-P",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-cmake-probe-bound-successor-1/checks-successor/success/run.cmake"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-cmake-probe-bound-successor-1/checks-successor/success",
+      "exit": 0,
+      "expected_match": true,
+      "script_sha256": "800e6ab0faae8626b673217d196d4ce3b31f34f9ae4da2e91e32108c11a7b5c1",
+      "stdout_sha256": "c4d9fb914f28bc0f9fc2e7c458ec5ff8232908d5cf760d5f4209d00691833aba",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "preentry_sentinel_preserved": false,
+      "version_called": true,
+      "probe_called": true
+    },
+    {
+      "case": "ninja",
+      "argv": [
+        "/usr/bin/cmake",
+        "-P",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-cmake-probe-bound-successor-1/checks-successor/ninja/run.cmake"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-cmake-probe-bound-successor-1/checks-successor/ninja",
+      "exit": 1,
+      "expected_match": true,
+      "script_sha256": "637a59834839bf4567af309758eb3cc6979be16dce5167fc24d02dc35dbf62b9",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "81194fc642bf56b09162dffae9d3a2745956f7fa6e7e5c031adcb8c37e7e1f43",
+      "preentry_sentinel_preserved": true,
+      "version_called": false,
+      "probe_called": false
+    },
+    {
+      "case": "wrong_make_hash",
+      "argv": [
+        "/usr/bin/cmake",
+        "-P",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-cmake-probe-bound-successor-1/checks-successor/wrong_make_hash/run.cmake"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-cmake-probe-bound-successor-1/checks-successor/wrong_make_hash",
+      "exit": 1,
+      "expected_match": true,
+      "script_sha256": "7d3535e6f36e5661f376d1db511047efd9b90a16f9d4077939baa1eb04ed1afc",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "3f145bac8d3fe71043f39286241674160d9f3f5d3f9bb16836e67f718a70c450",
+      "preentry_sentinel_preserved": true,
+      "version_called": false,
+      "probe_called": false
+    },
+    {
+      "case": "wrong_kbuild_flags",
+      "argv": [
+        "/usr/bin/cmake",
+        "-P",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-cmake-probe-bound-successor-1/checks-successor/wrong_kbuild_flags/run.cmake"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-cmake-probe-bound-successor-1/checks-successor/wrong_kbuild_flags",
+      "exit": 1,
+      "expected_match": true,
+      "script_sha256": "dddb03a4d7e1a52588e34d5d47b840078eaa5e63b9a67a7bdfb90e6cb68366f9",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "2c6c2349b46d86252d65366755415d52047a35b425d25de527195c1128d9bf6d",
+      "preentry_sentinel_preserved": true,
+      "version_called": false,
+      "probe_called": false
+    },
+    {
+      "case": "not_gnu",
+      "argv": [
+        "/usr/bin/cmake",
+        "-P",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-cmake-probe-bound-successor-1/checks-successor/not_gnu/run.cmake"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-cmake-probe-bound-successor-1/checks-successor/not_gnu",
+      "exit": 1,
+      "expected_match": true,
+      "script_sha256": "d6057e4d0a79c846fe39def7107ab0cb4c58a0117e0f49f0ac77173ab7f9976d",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "34c5feaa7de5074c4c49de3966c279a90791e32623df9973559bf98ea839f4a1",
+      "preentry_sentinel_preserved": true,
+      "version_called": true,
+      "probe_called": false
+    },
+    {
+      "case": "tamper_primary",
+      "argv": [
+        "/usr/bin/cmake",
+        "-P",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-cmake-probe-bound-successor-1/checks-successor/tamper_primary/run.cmake"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-cmake-probe-bound-successor-1/checks-successor/tamper_primary",
+      "exit": 1,
+      "expected_match": true,
+      "script_sha256": "383745b215c4ef9316239822199303167de7aef8900b4429094b89524c561922",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "7f69a2a265923db1b2041fa5dbc86c9de6e039f53c07605ffd8da2852d1f43aa",
+      "preentry_sentinel_preserved": true,
+      "version_called": false,
+      "probe_called": false
+    },
+    {
+      "case": "tamper_dependency",
+      "argv": [
+        "/usr/bin/cmake",
+        "-P",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-cmake-probe-bound-successor-1/checks-successor/tamper_dependency/run.cmake"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-cmake-probe-bound-successor-1/checks-successor/tamper_dependency",
+      "exit": 1,
+      "expected_match": true,
+      "script_sha256": "f4914a0490a21089fbf58bd66d4d1a94c5ae59f015e6de721c71cf556cc93466",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "7f69a2a265923db1b2041fa5dbc86c9de6e039f53c07605ffd8da2852d1f43aa",
+      "preentry_sentinel_preserved": true,
+      "version_called": false,
+      "probe_called": false
+    },
+    {
+      "case": "make_fails",
+      "argv": [
+        "/usr/bin/cmake",
+        "-P",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-cmake-probe-bound-successor-1/checks-successor/make_fails/run.cmake"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-cmake-probe-bound-successor-1/checks-successor/make_fails",
+      "exit": 1,
+      "expected_match": true,
+      "script_sha256": "f7b0f6f8195c6a69b85e7a520c27cfc6cf2af8987212139fee3209cc1f5b22af",
+      "stdout_sha256": "c4d9fb914f28bc0f9fc2e7c458ec5ff8232908d5cf760d5f4209d00691833aba",
+      "stderr_sha256": "22c537e4cec08fb5cbe393702c2e2d2ea6d8a39205268696fa95095a3350007e",
+      "preentry_sentinel_preserved": false,
+      "version_called": true,
+      "probe_called": true
+    },
+    {
+      "case": "missing_output",
+      "argv": [
+        "/usr/bin/cmake",
+        "-P",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-cmake-probe-bound-successor-1/checks-successor/missing_output/run.cmake"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-cmake-probe-bound-successor-1/checks-successor/missing_output",
+      "exit": 1,
+      "expected_match": true,
+      "script_sha256": "22fe43a5755e3d4764b2b5f55a263e1abfe7f88621eb3f0485677faaec2e6fec",
+      "stdout_sha256": "c4d9fb914f28bc0f9fc2e7c458ec5ff8232908d5cf760d5f4209d00691833aba",
+      "stderr_sha256": "7872ea49782918844f3334893d8cee8af1ca6cab4811765c05c3f977609c3f28",
+      "preentry_sentinel_preserved": false,
+      "version_called": true,
+      "probe_called": true
+    },
+    {
+      "case": "wrong_value",
+      "argv": [
+        "/usr/bin/cmake",
+        "-P",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-cmake-probe-bound-successor-1/checks-successor/wrong_value/run.cmake"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-cmake-probe-bound-successor-1/checks-successor/wrong_value",
+      "exit": 1,
+      "expected_match": true,
+      "script_sha256": "172672129b1f8cbb13f17f4bb102d491e52253716fb0e61d0bdbf56fc1733058",
+      "stdout_sha256": "c4d9fb914f28bc0f9fc2e7c458ec5ff8232908d5cf760d5f4209d00691833aba",
+      "stderr_sha256": "904d609197cc0627832c854c658a477252602a94e1c4448f70ba2fa3775f3527",
+      "preentry_sentinel_preserved": false,
+      "version_called": true,
+      "probe_called": true
+    },
+    {
+      "case": "wrong_release",
+      "argv": [
+        "/usr/bin/cmake",
+        "-P",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-cmake-probe-bound-successor-1/checks-successor/wrong_release/run.cmake"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-cmake-probe-bound-successor-1/checks-successor/wrong_release",
+      "exit": 1,
+      "expected_match": true,
+      "script_sha256": "921c13acecc0d467375340df0057f1ea7138612a6dbd9a7685f6f10c041dcfbb",
+      "stdout_sha256": "c4d9fb914f28bc0f9fc2e7c458ec5ff8232908d5cf760d5f4209d00691833aba",
+      "stderr_sha256": "97c1330ed8b6f9216be563325b9e8aa37a2ed914ac33417018e6fa978830baac",
+      "preentry_sentinel_preserved": false,
+      "version_called": true,
+      "probe_called": false
+    }
+  ]
+}

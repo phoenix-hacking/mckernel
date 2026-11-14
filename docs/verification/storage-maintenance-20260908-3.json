@@ -1,0 +1,115 @@
+{
+  "artifacts": [
+    {
+      "path": "docs/verification/evidence/cleanup-archived-captures-20260908-3.py.gz",
+      "sha256": "99a92791ab3bac7b252af69a7bd7ff4b3fe89ad3cd8549707856418e6184ca6d",
+      "size": 4192,
+      "source": "/home/holden/mckernel-work/scratch/cleanup-archived-captures-20260908-3.py"
+    },
+    {
+      "path": "docs/verification/evidence/cleanup-stale-caches-20260908-3.py.gz",
+      "sha256": "4df0de977925505bea91d381b9859f8cab5fe469c0b3e0522e1d6f95b2321cc6",
+      "size": 2473,
+      "source": "/home/holden/mckernel-work/scratch/cleanup-stale-caches-20260908-3.py"
+    },
+    {
+      "path": "docs/verification/evidence/trim-scratch-storage-20260908-3.py.gz",
+      "sha256": "17f1a1234d7127e36f708ebdd15269fff25c90920361c76e154ba6b931bf280d",
+      "size": 706,
+      "source": "/home/holden/mckernel-work/scratch/trim-scratch-storage-20260908-3.py"
+    },
+    {
+      "path": "docs/verification/evidence/check-storage-preserved-inputs-20260908-3.py.gz",
+      "sha256": "471adf20c5e77d8bb3f8ae2cf9a988d03a4df538f1bebfa1be37870a3660dfef",
+      "size": 1189,
+      "source": "/home/holden/mckernel-work/scratch/check-storage-preserved-inputs-20260908-3.py"
+    },
+    {
+      "path": "docs/verification/evidence/storage-cleanup-20260908-3-plan.json.gz",
+      "sha256": "dc7c040a4fb09808a3268a8579dfe70885b333063d58921dfad5559015ecfe53",
+      "size": 18271,
+      "source": "/home/holden/mckernel-work/scratch/storage-cleanup-20260908-3-plan.json"
+    },
+    {
+      "path": "docs/verification/evidence/storage-cleanup-20260908-3-report.json.gz",
+      "sha256": "4e50186f3e349872d3b54febce697a17bd6e5267a50852c8855e1f746ad1bd95",
+      "size": 3412,
+      "source": "/home/holden/mckernel-work/scratch/storage-cleanup-20260908-3-report.json"
+    },
+    {
+      "path": "docs/verification/evidence/storage-stale-caches-20260908-3-report.json.gz",
+      "sha256": "58f752192e6843fe9de58c58b22b6d95a8801734c7a3a42af8c59688a582c56e",
+      "size": 461,
+      "source": "/home/holden/mckernel-work/scratch/storage-stale-caches-20260908-3-report.json"
+    },
+    {
+      "path": "docs/verification/evidence/storage-preserved-inputs-20260908-3.json.gz",
+      "sha256": "386dd2cf23a4036294e6714eaceea6dc65dba873c471a7059c24205c839bf782",
+      "size": 61748,
+      "source": "/home/holden/mckernel-work/scratch/storage-preserved-inputs-20260908-3.json"
+    },
+    {
+      "path": "docs/verification/evidence/storage-preserved-inputs-after-20260908-3.json.gz",
+      "sha256": "efb0e977ea9aa67fb1e105dfa4caa974e70c2b7b1cab259d4f35be1944645194",
+      "size": 388,
+      "source": "/home/holden/mckernel-work/scratch/storage-preserved-inputs-after-20260908-3.json"
+    },
+    {
+      "path": "docs/verification/evidence/storage-scratch-trim-20260908-3.json.gz",
+      "sha256": "5123b751123502a572f754c5338de289d625876c7b57a46ed3d95c59b5f352f2",
+      "size": 376,
+      "source": "/home/holden/mckernel-work/scratch/storage-scratch-trim-20260908-3.json"
+    }
+  ],
+  "checks": [
+    "Verified all retained archives against exact objects at the pushed Git HEAD, manifest SHA-256 values and full gzip reads before deletion.",
+    "Compared every entry in all eight removed expanded captures against its committed archive, including contents, modes and symlinks; failed attempts remain restorable.",
+    "Checked visible process descriptors, working directories and mappings before deletion, including container /work aliases; applied a fixed allowlist and unchanged source snapshots.",
+    "All 1,777 checked current files remain byte-identical and all 23 protected dependency directories remain present, including native-sysfs-snoop-module-20260908-2 and native-sysfs-snoop-module-20260908-3.",
+    "Removed only Coursier and Poetry download/repository caches whose files were last modified and accessed before 2026-06-01; no symlinks, hardlinked files or visible open use were admitted.",
+    "Targeted scratch fstrim succeeded; the mounted sparse backing image retains its original 60-GiB logical size."
+  ],
+  "current_root_available_bytes": 153585471488,
+  "current_scratch_available_bytes": 33008750592,
+  "evidence_checked_at_pushed_head": "d5e5d20778e509dc600e43825c6b239a50003741",
+  "finished_utc": "2026-09-08T09:40:36.667249+00:00",
+  "kind": "Requested ongoing storage maintenance; verified archived captures and retired unused package download caches",
+  "limitations": [
+    "Current source/build/image inputs, installed environments, active compiler and browser caches, personal files and other project workspaces were outside the deletion allowlists.",
+    "Process checks cover visible descriptors and mappings; inaccessible process counts are retained in the audit reports.",
+    "Reclaimed host allocation is measured from the sparse backing file plus allocated blocks of removed host caches. Concurrent activity can change overall free space; fstrim advertised bytes are not treated as reclaimed allocation.",
+    "Cache contents and private cache filenames were not retained; only aggregate cleanup metadata was recorded. Package tools can download these caches again.",
+    "This maintenance checkpoint adds no kernel or application acceptance credit. The continuing verification and application integration goal remains active."
+  ],
+  "preserved_current_files": 1777,
+  "protected_directories": 23,
+  "reclaimed_host_allocated_bytes": 1080680448,
+  "reclaimed_scratch_backing_allocated_bytes": 653189120,
+  "removed_capture_directories": 8,
+  "removed_duplicate_archives": 35,
+  "removed_scratch_allocated_bytes": 605220864,
+  "removed_stale_cache_allocated_bytes": 427491328,
+  "removed_stale_cache_groups": {
+    "old_coursier_download_cache": {
+      "allocated_bytes": 313606144,
+      "files": 3918,
+      "targets": 1
+    },
+    "old_poetry_download_artifacts": {
+      "allocated_bytes": 56025088,
+      "files": 58,
+      "targets": 1
+    },
+    "old_poetry_repository_cache": {
+      "allocated_bytes": 57860096,
+      "files": 224,
+      "targets": 1
+    }
+  },
+  "restoration": [
+    "The compressed cleanup report maps every removed capture and duplicate archive to its retained committed path and SHA-256. Verify and restore the archive for historical replay; use fresh attempt names for new verification."
+  ],
+  "status": "PASS",
+  "total_reclaimed_across_six_cleanups_bytes": 62200410112,
+  "verified_retained_files": 37
+}

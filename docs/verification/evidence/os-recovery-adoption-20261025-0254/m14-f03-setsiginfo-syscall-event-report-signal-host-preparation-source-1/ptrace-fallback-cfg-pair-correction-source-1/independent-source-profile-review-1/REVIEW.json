@@ -1,0 +1,210 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_SOURCE",
+  "independent": true,
+  "reviewer": "/root/guardian_execution_review",
+  "implementation_ownership": false,
+  "execution_release": false,
+  "review_kind": "Bounded matching Rust cfg-off fallback counterpart and three-command ordinary suffix; no actual suffix execution.",
+  "reviewed_source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/SOURCE-READY.json",
+    "bytes": 2724,
+    "sha256": "be0fa9281c60d906f33bd0c9fd08113b388108f716a47d7b1358d8e9283f24f1"
+  },
+  "reviewed_profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/PROFILE.NOT-GRANTED.json",
+    "bytes": 137463,
+    "sha256": "673c18b6b103581f08731835de32cae27cc24d99369ab8ef763cb2864bce856e"
+  },
+  "reviewed_recipe": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/EXACT-THREE-COMMAND-SUFFIX.NOT-GRANTED.json",
+    "bytes": 9433,
+    "sha256": "041aec8df0772ee50ddae7551026131b17e0f16d510ddd9365099a56999c4ae0"
+  },
+  "reviewed_diagnosis": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/DIAGNOSIS-AND-EXACT-PAIR-DELTA.json",
+    "bytes": 6974,
+    "sha256": "0f672361c6b879dd456bb8b726f2591587f564636cb74502b3f0d009e2900f02"
+  },
+  "reviewed_reader": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/qualify_changed_objects.py",
+    "bytes": 6881,
+    "sha256": "0e4185eca90b0937e862e41ad06a542887c4e1aed7cc41ede1ff8ddb48197d4a"
+  },
+  "reviewed_reader_patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/qualifier.context.patch",
+    "bytes": 6720,
+    "sha256": "82633f788b4918c8e7cf3a2c3a6fa0faffeb61d8791a275a6aefc69cd89318c8"
+  },
+  "reused_source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/independent-source-profile-review-1/REVIEW.json",
+    "bytes": 9344,
+    "sha256": "c738b97bdb263d07d8ed0c60ad5abe1df52822429d6e72b56b9250eb5ccbb2aa"
+  },
+  "findings": [
+    {
+      "predicate": "Actual prefix and original failed fallback are preserved",
+      "result": "PASS_RETAINED_PREFIX_ONLY",
+      "evidence": "Read all four actual command.json and positive whole-join.json refs from the diagnosis, verified their exact hashes and equality to the accepted 787c six-command profile. Commands0..3 each returned0, direct child joined, process group absent, streams closed, no timeout/error. Exact four produced object hashes match diagnosis and new profile. Original step4 returned1 with normal join/group absence/closed streams; its retained stderr reports duplicate GLOBAL sys_ptrace definitions from CURRENT114 Rust and the cfg-off C fallback. Original qualifier step5 remains unrun and no full HOST acceptance is inferred."
+    },
+    {
+      "predicate": "Correction uses a genuine matching whole-crate Rust counterpart",
+      "result": "PASS_SOURCE",
+      "evidence": "New command0 argv is exactly the passed full119 Rust compiler argv with only the --cfg f03_ptrace_entry_candidate pair removed and --emit destination changed to fresh child rust-fallback.o. Actual Rust source, crate root, version/buildid, genuine ABI/module context, all other cfg axes, compiler and flags remain identical. Existing cfg(f03_ptrace_entry_candidate) gates the Rust sys_ptrace module and new setsiginfo/event entry modules; the signal adapter has existing cfg_attr(f03_ptrace_entry_candidate,no_mangle). No source body, arbitrary ELF rename/strip, linker waiver or production default selector is changed."
+    },
+    {
+      "predicate": "Exact finite three-command suffix and frozen retained inputs",
+      "result": "PASS_SOURCE",
+      "evidence": "Command1 uses the identical pinned rust-lld with -flavor gnu -r, fresh rust-fallback.o, retained byte-identical passed C fallback.o and fresh fallback-joint.o. Command2 uses the pinned Python and new reader with the fresh child output directory. No passed compiler, C object, selected joint or objcopy producer is replayed. All command/recipe argv and purposes agree, compact JSON LF argv hashes match, and time/stream limits remain exact."
+    },
+    {
+      "predicate": "All original selected checks retained in split context",
+      "result": "PASS_SOURCE",
+      "evidence": "Reader loads selected Rust/C/fallback C/selected joint from the explicit retained path; resolves original witness/provider JSON files from the original packet. Nine-word genuine ABI equality, three executable GLOBAL Rust and selected-joint exports, selected C nondefinition, actual setsiginfo allocated consumer, typed HOST signal STT_OBJECT/R_X86_64_64 witness, original fallback function checks, selected unresolved-export check and selected SHF_GNU_RETAIN assertions remain unchanged. The context patch adds no suppression of selected assertions."
+    },
+    {
+      "predicate": "Fallback ownership and GNU_RETAIN are strengthened",
+      "result": "PASS_SOURCE",
+      "evidence": "New reader requires no exact sys_ptrace or three new entry definitions in the matching cfg-off Rust object; requires a unique positive-size GLOBAL executable C sys_ptrace in both retained fallback C and fresh linked fallback. Existing three original fallback functions must remain defined in both. Every allocated GNU_RETAIN section from the genuine cfg-off Rust object must survive in the new fallback joint with its flag; the selected joint retain checks remain. Actual generated counterpart and link acceptance remains pending execution."
+    },
+    {
+      "predicate": "HOST witness and caller/folding scopes remain honest",
+      "result": "PASS_SOURCE",
+      "evidence": "HOST_ABI_WITNESS signal address relocation remains distinct from real production consumers; source-elided C sites are not credited as Rust replacements. Actual new Rust signal/publicevent relocation arrays are recorded with their call/folding proofs OPEN; retained CURRENT114 public-event references remain explicitly historical. Dynamic/native/default/whole-file credit remains zero/false."
+    },
+    {
+      "predicate": "Input closure, resource and authority delta",
+      "result": "PASS_SOURCE",
+      "evidence": "All504 original input rows are preserved exactly. Five additional exact rows pin new reader and four actual retained objects, giving509 total. READY pins actual diagnosis, recipe, profile, patch and reader. Fixed cutoff, CPU6/job1/AS2GiB/CPU60s/wall90s/FSIZE64MiB/core0, aggregate7jobs/21.6619GiB,4GiB growth reserve, bounded capture/storage plan and fresh Root ordinary-grant requirement match the original profile. Fresh child output/capture paths prevent overwriting the prefix/failure. No account, resource, guard or physical-current-free operation was performed by review."
+    }
+  ],
+  "retained_passed_producers": [
+    {
+      "index": 0,
+      "command": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/future-capture-1/step0/command.json",
+        "bytes": 4572,
+        "sha256": "970560b0869475ff9e13cfca135a16a8caf92b2927fbdf617590700fbc8e8a89"
+      },
+      "join": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/future-capture-1/step0/whole-join.json",
+        "bytes": 1298,
+        "sha256": "5771505a4a919b455093165082166dc52a6936f849a93024cc210ddea3dd7e02"
+      }
+    },
+    {
+      "index": 1,
+      "command": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/future-capture-1/step1/command.json",
+        "bytes": 4550,
+        "sha256": "6257fe5bac35bbd0a5febdb9ce3708645a5d83d2c1b6971f0c5e63dfb805236a"
+      },
+      "join": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/future-capture-1/step1/whole-join.json",
+        "bytes": 1297,
+        "sha256": "7fbdf3471e7ea0c16b2875361f710c8178420d7c6aac300a8e5af36b2f00ea55"
+      }
+    },
+    {
+      "index": 2,
+      "command": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/future-capture-1/step2/command.json",
+        "bytes": 4606,
+        "sha256": "05d90d59f453f759d04850573f27d097fedda89ce98e11b1199ed8f736c7eaec"
+      },
+      "join": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/future-capture-1/step2/whole-join.json",
+        "bytes": 1297,
+        "sha256": "8b96f61d1199ed09bf37cf7086fd78613b2e979863e4809f00b0303023674841"
+      }
+    },
+    {
+      "index": 3,
+      "command": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/future-capture-1/step3/command.json",
+        "bytes": 1559,
+        "sha256": "a8ace610480d83ab8a4e9180dd19954dfd7da88e9698af0e9ec9408834eb09f5"
+      },
+      "join": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/future-capture-1/step3/whole-join.json",
+        "bytes": 1296,
+        "sha256": "9c7c17d656c54bbe35c45d08649e425e8c7881d9cc25623a4161668340d1bd24"
+      }
+    }
+  ],
+  "retained_passed_artifacts": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/HOST-output-proposed-1/rust-selected.o",
+      "bytes": 18335360,
+      "sha256": "4d2265b8d178fd44fe3f57ea76c92d3ed372cdda1205518d4d4a6505d4bb37c4"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/HOST-output-proposed-1/selected.o",
+      "bytes": 375672,
+      "sha256": "e38590f82c505f4081faffb495b8826668cb97a6b5306aa06f6af72c257c7e39"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/HOST-output-proposed-1/fallback.o",
+      "bytes": 381128,
+      "sha256": "665a6b43e1cd4c0c692a57be763dd2f4f245e57870cf1ac278086e7897cf7272"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/HOST-output-proposed-1/selected-joint.o",
+      "bytes": 18838592,
+      "sha256": "8ddacc49ddf5afd2eb0a2d0dcac9daaaec28f43c2952669efef4d9a7d54d91f3"
+    }
+  ],
+  "preserved_first_failure_stderr": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/future-capture-1/step4/stderr",
+    "bytes": 829,
+    "sha256": "489a521648f2cb48921775f9203a20a11cd1e50ababf056b287fe5833db07ead"
+  },
+  "preserved_failed_step4_join": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/future-capture-1/step4/whole-join.json",
+    "bytes": 1298,
+    "sha256": "26abfe8124e839ed8a1858b0bcae5645185c157ba7ba0892f9fea93accaeda4d"
+  },
+  "new_commands": [
+    {
+      "id": "00-full119Rust-genuine-ptraceentry-off-fallback-counterpart",
+      "argv_compact_json_LF_sha256": "2aa61f428827dc83ed384722282580acb9256713aa2bafe9c581df0e470fa4b2"
+    },
+    {
+      "id": "01-matching-Rust-cfg-off-and-retained-C-fallback-partial-link",
+      "argv_compact_json_LF_sha256": "e228e651dfe71eb3c6f6cbcad74ae9e4b56bd17daf198464543343d4f30d5b2a"
+    },
+    {
+      "id": "02-retained-selected-and-matching-fallback-ABI-ELF-qualification",
+      "argv_compact_json_LF_sha256": "801346e6e5f0b62940a390bc8ea996903b92bb8da09211346c75942ec0e590c6"
+    }
+  ],
+  "actual_suffix_commands_run_by_reviewer": 0,
+  "compiler_linker_CPP_calls_by_reviewer": 0,
+  "original_input_rows_unchanged": 504,
+  "successor_input_rows": 509,
+  "pending": [
+    "Fresh Root ordinary CPU6 grant after current ownership/account/resource admission",
+    "Actual matching whole-crate Rust cfg-off compile, fallback partial link and unchanged selected plus new fallback qualifier results",
+    "Positive joins and closed streams for actual suffix",
+    "Separate actual new Rust signal/publicevent call or folding proof",
+    "Separate production default/native/whole-file obligations"
+  ],
+  "no_authority": [
+    "No runtime or compiler execution release",
+    "No native-current-free or grant",
+    "No retained114 replay",
+    "No whole HOST qualification before suffix completes",
+    "No all-file/native C retirement or waiver"
+  ],
+  "persistent_controls": {
+    "fixed_window_UTC": "2026-10-28T05:36:09Z",
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "credit_run": "7f4af94a83b14cc08f97401f5891d965",
+    "credit_ceiling": 57774.852125,
+    "cumulative_spent_floor": 22812.3311,
+    "real_holds_effective": true,
+    "new_allowance": false,
+    "Root_owns_canonical_and_grants": true
+  },
+  "review_method": "Read-only changed source/patch, cfg defining source, exact command structural comparison, small metadata/ref hashes and four selected retained object hashes, positive retained joins and original failure, Python AST parse. No helper import/execution, compiler/CPP/linker/workload, guard, query, native, cleanup, Git or canonical edits."
+}

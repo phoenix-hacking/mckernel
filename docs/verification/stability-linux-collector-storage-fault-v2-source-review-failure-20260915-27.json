@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_review_failure",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "review_attempt": 31,
+  "status": "FAIL_SOURCE",
+  "recorded_utc": "2026-09-16T06:17:47Z",
+  "review_input": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260915-34.tar.gz",
+    "sha256": "558fbca30a988b290122a816c38638f790fd2be1a6e124c2dcf9da398eeb3e15",
+    "size": 37273088,
+    "members": 29,
+    "safe_unique_members": true
+  },
+  "reviewed_source_sha256": {
+    "oracle.py": "fbd5ce88970578bad386d0a4aef2bfa7fe0dd79586d29a20fc9d59d9c933d038",
+    "test_collector_storage_fault_packet.py": "bbcbc1996409bc9e53db35c1cccf78dcdc65540638192e59de067e94b08bdc94"
+  },
+  "verified_inputs": {
+    "python_3_9_12": "119/119 PASS",
+    "python_3_8_10": "119/119 PASS",
+    "pycompile_both": "PASS",
+    "review_24_through_30_regressions": "PASS",
+    "review_28_archive31_and_sample_controls": "PASS"
+  },
+  "finding": "Only the request sink receives exact successful-new_sink validation. Other reached sinks can claim failed creation or fd relocation while retaining subsequent successful evidence and terminal status.",
+  "representative_accepted_canonical_sha256": {
+    "selector_0_selected_inputs_creation_failure": "dbb5161e9d683f24b1ae8a4f3066b0940bae7274efed51390efbc24c3078d9f1",
+    "selector_0_selected_inputs_fd_errno": "7ddab96a9feadad1b44e55a99401f2d85218e3a891aaa891bac4c849e61ae777",
+    "selector_2_6_request_fd_errno": "912c524dd5bf8174a439857043c6198d91ed8edd2d377c0754b77d58df0823e0",
+    "selector_2_6_events_creation_failure": "a35a30914d71bcbc6b32e0c74acdac48978be932f9489bf8a560b098022e5da8"
+  },
+  "required_next": [
+    "Require exact successful creation, descriptor availability, path/hash binding and zero creation/fd relocation errors for every reached successful sink.",
+    "Preserve selector 1's exact events-create failure and selectors 2/6's request-write failure.",
+    "Add complete-fixture regressions across every reached artifact position, rerun both pinned suites and obtain fresh independent review."
+  ],
+  "review_scope_complete": false,
+  "source_accepted": false,
+  "compiler_packet_released": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

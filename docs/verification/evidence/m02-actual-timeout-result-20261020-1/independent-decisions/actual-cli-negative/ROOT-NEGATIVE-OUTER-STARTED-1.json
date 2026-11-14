@@ -1,0 +1,25 @@
+{
+  "pid": 2282196,
+  "start": 33167490,
+  "pgid": 2282196,
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=10",
+    "--fsize=33554432",
+    "--core=0",
+    "--nofile=256",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "15s",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "-c",
+    "import importlib.util,json,hashlib,os,resource,signal\nfrom pathlib import Path\nD=Path('/home/holden/mckernel-work/host-preparation/m02-current-contract-whole-binding-correction-20261020-1/p02-negative-preparation-1');p=D/'ONE-REAL-OWNER-CLI-STale-PIN-NEGATIVE-PROPOSAL.json';d=json.loads(p.read_bytes())\nh=Path('/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1/stage-preparation-1/run_two_commands_source_bound_corrected.py')\nassert hashlib.sha256(h.read_bytes()).hexdigest()=='990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8'\ns=importlib.util.spec_from_file_location('pinned990807',h);m=importlib.util.module_from_spec(s);s.loader.exec_module(m)\nc=Path(d['prospective_capture']);c.mkdir(mode=0o700)\nfor n in (signal.SIGTERM,signal.SIGINT,signal.SIGALRM):signal.signal(n,m.stop)\ndef limits():\n os.sched_setaffinity(0,{6})\n for k,v in [(resource.RLIMIT_AS,1073741824),(resource.RLIMIT_CPU,10),(resource.RLIMIT_FSIZE,33554432),(resource.RLIMIT_CORE,0),(resource.RLIMIT_NOFILE,256)]:resource.setrlimit(k,(v,v))\nm.write(c/'command.json',dict(argv=d['exact_negative_argv']))\nx=m.owned_capture(dict(argv=d['exact_negative_argv']),c,15,limits);m.write(c/'whole.json',x)\nassert x['returncode']==1 and x['direct_child_joined'] and x['group_absent'] and x['closed_streams'] and not x['timed_out'] and not x['error'] and not x['retirement_error']\nassert (c/'stdout').stat().st_size==0\nerr=(c/'stderr').read_text();assert 'OwnerError: reviewed owner identity' in err and 'root outer owner required' not in err\nprint(json.dumps(dict(status='PASS_EXPECTED_REAL_PUBLIC_CLI_STALE_SOURCE_PIN_REFUSAL',capture=str(c))))\n"
+  ]
+}

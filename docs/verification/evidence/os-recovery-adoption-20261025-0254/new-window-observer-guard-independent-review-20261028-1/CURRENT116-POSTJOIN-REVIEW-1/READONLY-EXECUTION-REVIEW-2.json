@@ -1,0 +1,114 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_ONE_EXACT_ROOT60_CPU0_POSTJOIN_READONLY_CORRECTION_CAPTURE",
+  "independent": true,
+  "implementation_ownership": false,
+  "reviewer": "/root/observerreview",
+  "wrapper": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/profile-caller-correction-source-1/owned_capture.py",
+    "bytes": 4901,
+    "sha256": "8bdb6ed7f0a3d001116608fcfb1f20451a9d25fb987312e5708e9e3936b0341e"
+  },
+  "wrapper_source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/CURRENT116-POSTJOIN-REVIEW-1/CALLER-CORRECTION-SOURCE-REVIEW.json",
+    "bytes": 4284,
+    "sha256": "8fee38074ae5a59df72954bfb2bd6ed26454a1c5c72afbc05ab6a2d1ad85370f"
+  },
+  "observer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/observe_current60_postjoin.py",
+    "bytes": 13268,
+    "sha256": "de9f6a1b76faded7a31227d13fe30cab33867ba769eb0a0b7234ea564946f048"
+  },
+  "observer_source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/CURRENT116-POSTJOIN-REVIEW-1/SOURCE-REVIEW.json",
+    "bytes": 5107,
+    "sha256": "577a9b128eaf57faa5727c64518341a58963640db1cb3ee57341c31607cbaba8"
+  },
+  "schema_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/CURRENT116-POSTJOIN-REVIEW-1/SCHEMA-REVIEW.json",
+    "bytes": 1276,
+    "sha256": "2a30609bae65b1c7e8cadd8920e3944228d332e3df1360799bc2f68a607c1abb"
+  },
+  "Root_release_proposal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/profile-caller-correction-source-1/ROOT-READONLY-RELEASE-2.PROPOSED.json",
+    "bytes": 1558,
+    "sha256": "1ee8420fba1928b9661dca006e23b647b1487cbc62de88974ee8405f0ff5ee6f"
+  },
+  "required_exact_Root_release_path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/ROOT-ACTUAL-READONLY-RELEASE-2.json",
+  "required_exact_Root_release_bytes": 1558,
+  "required_exact_Root_release_sha256": "1ee8420fba1928b9661dca006e23b647b1487cbc62de88974ee8405f0ff5ee6f",
+  "required_Root_release_fields": {
+    "author": "/root",
+    "decision": "AUTHORIZE_ONE_EXACT_ROOT60_POSTJOIN_READONLY_OBSERVATION",
+    "maximum_invocations": 1,
+    "source": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/observe_current60_postjoin.py",
+      "bytes": 13268,
+      "sha256": "de9f6a1b76faded7a31227d13fe30cab33867ba769eb0a0b7234ea564946f048"
+    },
+    "pins": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/ACTUAL-PINS.json",
+      "bytes": 5798,
+      "sha256": "f57f5f0704c3b1833764abaed4e33cfcbd010c9d9452438ae4cb2ea92c635676"
+    },
+    "ledger": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER60.json",
+      "bytes": 24066,
+      "sha256": "bd4b75db9c1c7cdb2993aa957c0c9a690eed39210d751ba89319c29ef4fc28d4"
+    },
+    "output": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/ACTUAL-POSTJOIN-OBSERVATION-2-CPU0.json",
+    "independent_review": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/CURRENT116-POSTJOIN-REVIEW-1/SOURCE-REVIEW.json",
+      "bytes": 5107,
+      "sha256": "577a9b128eaf57faa5727c64518341a58963640db1cb3ee57341c31607cbaba8"
+    },
+    "runtime_authority": null
+  },
+  "command_manifest": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/profile-caller-correction-source-1/ROOT-COMMAND-MANIFEST.PROPOSED.json",
+    "bytes": 1146,
+    "sha256": "4de9b6dac87c1e514e507e5f1694ec7dae750186fa37a0026e229e4ca5245fbc"
+  },
+  "exact_Root_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/profile-caller-correction-source-1/owned_capture.py",
+    "--command-json",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/profile-caller-correction-source-1/ROOT-COMMAND-MANIFEST.PROPOSED.json",
+    "--command-sha256",
+    "4de9b6dac87c1e514e507e5f1694ec7dae750186fa37a0026e229e4ca5245fbc"
+  ],
+  "fresh_record_prefix": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/profile-caller-correction-source-1/ACTUAL-CPU0-POSTJOIN-2",
+  "fresh_exclusive_output": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/ACTUAL-POSTJOIN-OBSERVATION-2-CPU0.json",
+  "maximum_invocations": 1,
+  "profile": {
+    "CPU": [
+      0
+    ],
+    "AS_bytes": 2147483648,
+    "CPU_seconds": 60,
+    "wall_seconds": 120,
+    "jobs": 1
+  },
+  "operation_cutoffs_epoch_MONO_BOOT": [
+    1793253600,
+    1035705.5689454618,
+    1051043.6959931096
+  ],
+  "authority_scope": "Only this one corrected CPU0 readonly postjoin capture; no current-free/default/artifact/native/file acceptance, next heavy/workload release, cleanup/lock unlink/CID removal/signals/controller change.",
+  "conditions": [
+    "Root copy exact reviewed release2 bytes to specified fresh actualrelease2 path exclusively; verify expected1558B/1ee8420f and command4de9/source8bdb/helperde9/pinsf57f identities before invocation.",
+    "Run exact tasksetCPU0/rootargv with exact command manifest once. Retain wrapper toolhandle and stdout/stderr plus its .ONCE-CLAIM/.STARTED/.RESULT and childPID/birth/observedCPU0/positivewait4/groupabsence/streams evidence.",
+    "Any separate HOST fixture children must be positively retired and truthfully disclosed before physical capture. Root60/count70/native4d1c identity and current noheavy/shared custody obligations remain.",
+    "Honor current account/guardian/all-control minima and stops, immutable deadline and cumulative7f4 allowance. Guard must qualify actual runtime state; this review performs no live qualification.",
+    "On failure/timeout preserve all original and corrected evidence/ownership; no further unchanged rerun or second correction in this family. Escalate the concrete defect.",
+    "Fresh output requires independent actual postjoin acceptance and Root adoption before any nextheavy/native. Capture1 remains historical unqualified and cannot substitute."
+  ],
+  "reviewer_real_offline_fixture_children": 2,
+  "reviewer_actual_observer_guard_Docker_capture_calls": 0,
+  "runtime_acceptance": false
+}

@@ -1,0 +1,24 @@
+{
+  "schema": "mckernel.native-exact-fresh-exclusion-source-checkpoint.v1",
+  "status": "PASS_SOURCE_INTEGRATION",
+  "failure_family": "consumed-operational-exclusion",
+  "original_deterministic_failure": "The scratch15 preparation request names existing immutable exportset-16, so O_EXCL admission would fail before the build.",
+  "bounded_correction": {
+    "wrapper": {"path": "scripts/native_rust_exact_disk_build_wrapper.py", "sha256": "94a2abea359725515dae16d21f081f6bb1a1482cfae8055b1b08f22fc396ff0d"},
+    "wrapper_test": {"path": "scripts/tests/test_native_rust_exact_disk_build_wrapper.py", "sha256": "f216ffa6e195e61dd8aa69288a6fd6fe96adf23e789deb3720254accc32dd8ba"},
+    "preparation_test": {"path": "scripts/tests/test_native_exact_candidate_preparation_scratch15_20261001.py", "sha256": "811510f18b5925e4ffe6e5208600c5c42b94a4d24f19caa7f9e9688f7d9a7012"},
+    "consumed_path": "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-16.json",
+    "consumed_path_sha256": "ddc0596d772be2a0b957c53be860b5ebc84911a8071c6c132d3d6871b2698518",
+    "fresh_path": "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch15-exportset-27.json",
+    "fresh_path_state_at_review": "absent"
+  },
+  "tests": {
+    "command": "PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest scripts.tests.test_native_exact_candidate_preparation_scratch15_20261001 scripts.tests.test_native_rust_exact_disk_build_wrapper",
+    "result": "63 passed",
+    "independent_subset": "35 passed"
+  },
+  "preserved_semantics": ["consumed exportset-16 is explicitly rejected and immutable", "fresh path uses O_EXCL", "canonical complete-request hash includes the exclusion path", "pinned 4-CPU/12-GiB/no-network/512-task profile unchanged", "both resource measurement validations unchanged", "uncertain failure retains the exclusion", "release requires positively established retirement and identity match"],
+  "review": "PASS three-file source/test integration",
+  "execution": "NOT_RELEASED",
+  "acceptance": "Source/test correction only; no build, Docker, guest, diagnostic application, formal application, shutdown, or OS acceptance."
+}

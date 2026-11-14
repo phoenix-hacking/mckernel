@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "record_kind": "pending_free_batch_contract_comment_checkpoint",
+  "task_id": "M03-A/M03-B-candidate-16-contract-comment",
+  "attempt": 16,
+  "status": "PASS_CONTRACT",
+  "recorded_utc": "2026-09-15T08:05:00Z",
+  "prior_source_sha256": "3bdb98c725f56795d8aa05273db9bd68a15aae3efb5b205836c6c995f73b02ca",
+  "corrected_source_sha256": "647825d8c51a9f584d1229a2389fbb81105e4bbf94bfcf95a12d172c5dde112b",
+  "normalized_executable_sha256": {
+    "before": "3c75b5ff30b3d2e31a970af9833d4a09ee22c187f464cf79859f439a2f577c12",
+    "after": "3c75b5ff30b3d2e31a970af9833d4a09ee22c187f464cf79859f439a2f577c12"
+  },
+  "archive": {
+    "path": "docs/verification/evidence/stability-pending-free-batch-contract-checkpoint-20260915-16.tar.gz",
+    "sha256": "917d6b2615761cd21ac8d23a06e46147b8040dbbd060dff32d1c2a62cf9a157b",
+    "size": 30555,
+    "members": 3,
+    "evidence_txt_sha256": "79d53ba03d0dc69e597a725ea9dfb2e58e754cecb806c2f524bd76d25a37f5b8"
+  },
+  "independent_reviews": ["PASS_CONTRACT", "PASS_SOURCE_DELTA"],
+  "accepted_scope": "comment-only clarification of transfer exclusion and independently owned reset-source reuse",
+  "source_integration_released": false,
+  "remaining_blockers": [
+    "trusted bounded inventory and page-range ownership",
+    "durable owner-loss recovery and transaction identity",
+    "actual caller exclusion and invalidation/backing policy",
+    "full module and guest qualification"
+  ],
+  "runtime_acceptance": false,
+  "production_gate_credit": false
+}

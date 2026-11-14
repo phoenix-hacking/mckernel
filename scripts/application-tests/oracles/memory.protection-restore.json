@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "memory.protection-restore",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/memory.protection-restore"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["readonly_rc=0 restore_rc=0 bad_index=4096"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Both mprotect calls return 0", "The restored mapping accepts every write", "bad_index equals 4096 after complete pattern readback", "The mapping is unmapped exactly once"],
+  "unresolved_expectations": ["Freeze canonical output and reviewed input/oracle SHA256 before execution."],
+  "max_question_for_reviewer": "Confirm RW-to-RO-to-RW transitions and complete post-restore byte readback."
+}

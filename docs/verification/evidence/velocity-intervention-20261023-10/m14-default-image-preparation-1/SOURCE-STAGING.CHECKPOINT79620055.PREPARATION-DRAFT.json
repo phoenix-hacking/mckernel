@@ -1,0 +1,174 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "EXACT_CURRENT_CHECKPOINT_SOURCE_STAGING_EXECUTABLE_READY_NO_EXECUTION",
+  "checkpoint": "79620055e4933d3b6eef7b9db5b83e7f0c2dcde8",
+  "checkpoint_scope": "Current committedaccepted11compute-sourcepostimages over immutablecachedcandidate15thin-source lineage; candidate_sha942c/base_git_commit_only remains honest, not a claim6959files allcurrentHEAD.",
+  "wrapper": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-default-image-preparation-1/run_source_materialization_once.CHECKPOINT79620055.CPU7.py",
+    "sha256": "fef29805a36699f9fc1154308f2211cb3ae2c17aead72cdc5dc35e601b0444f2"
+  },
+  "stager": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-default-image-preparation-1/materialize_current_source.CHECKPOINT79620055.CPU7.py",
+    "sha256": "b3b70625c0f5ad81cef05de6bf5e9ee533ba6f102d6ce39265ba14ebb07d9b3a"
+  },
+  "stager_function_class_AST_unchanged": true,
+  "base_manifest": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/source-materialization-attempt-1/source-inputs.json",
+    "sha256": "77fd79cde7d48ceb65aaf9de2ff8be78005274f22031fe12c58d8309173c58a4",
+    "canonical_sha256": "77fd79cde7d48ceb65aaf9de2ff8be78005274f22031fe12c58d8309173c58a4"
+  },
+  "frozen_preflight_inputs": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-default-image-preparation-1/CANONICAL-SOURCE-SUCCESSOR-BASIS.CHECKPOINT79620055.json",
+      "sha256": "59d9ba3918949ff145d7165f4a65e731c8050fe4d5b5d004b0e967dc3231f0fd",
+      "bytes": 5441
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/root-union-preparation-1/CANONICAL-INTEGRATION.json",
+      "sha256": "fdc721a4d72df1b15cea2e1479e26de548af527772b11bb0b4524d6647456e4c",
+      "bytes": 3051
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/source-materialization-attempt-1/source-inputs.json",
+      "sha256": "77fd79cde7d48ceb65aaf9de2ff8be78005274f22031fe12c58d8309173c58a4",
+      "bytes": 10197070
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/source-materialization-attempt-1/materialization-journal.jsonl",
+      "sha256": "b5d9e8775d7c6a255262e1592a1724f27fb893b80b95d1cdf6073728b1111cf5",
+      "bytes": 1183550
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-default-image-preparation-1/native_rust_exact_mckernel_image_offline.py",
+      "sha256": "c5c35f04b3a86b1f3a3d0dc586e7165d1dba4968b4270fa51cb525907ebf0557",
+      "bytes": 224435
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-default-image-preparation-1/next-build-preparation-1/native_rust_exact_mckernel_image_container_owner.py",
+      "sha256": "1b819224eda96c9f516f699f6834b3353d4cea69c9b5c3ca1bdfb7a46363f12b",
+      "bytes": 93584
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-default-image-preparation-1/actual-pure-consumer-regressions-1/FINAL-ACTUAL-PURE-REGRESSION-RECEIPT.json",
+      "sha256": "89d41b44d23b6be5e29dd687367bac3bdc9000d71d4bc3d5f4bdf6b224b246b5",
+      "bytes": 1584
+    }
+  ],
+  "source_delta": [
+    {
+      "path": "arch/x86_64/kernel/cpu.c",
+      "before_sha256": "8c71fe79e003f7aa7ef0f7faf2b31ebf11e65e747abdb0969dc77dbafbd839e9",
+      "after_sha256": "c779079fb6de66991c861c823dca06b2a9ceec16ac4c984995200b668d7e78ce"
+    },
+    {
+      "path": "arch/x86_64/kernel/memory.c",
+      "before_sha256": "2b285359ee00dac9e6281d112743e4f39247b9d661d0b5d00993e74d17a0739e",
+      "after_sha256": "93df0ac24de8163cc5a7e2cce277d3a46c89a607b924c1937f2413e12edf0f66"
+    },
+    {
+      "path": "arch/x86_64/kernel/syscall.c",
+      "before_sha256": "57fb0080088276317e531982769cfe56c44a7467db220be0b0060a5ae5c6162f",
+      "after_sha256": "912fb97a58cc797407979ce835c422578949ff876ac519193d2ebc4855cce791"
+    },
+    {
+      "path": "kernel/mem.c",
+      "before_sha256": "7498e7c930a55bdcde5ecd12f4498c47c5573d690355c8f09a7b9f957ffe00a2",
+      "after_sha256": "9d53106e7228b5a7654f4250bab58e20e7bc47a28f8ad9675b1c9ac92599b976"
+    },
+    {
+      "path": "kernel/process.c",
+      "before_sha256": "64af918855ea361bd850d6ad7480d304634c28814e04127fe3dec8c013f21044",
+      "after_sha256": "1ecbc287f2e704e738cc4e9fbe18289226b5aadadc9da88d226dc0ad0bb57234"
+    },
+    {
+      "path": "kernel/rust/mem_helpers.rs",
+      "before_sha256": "c0e7f8bd0b117c9b4e0a4e3690ef5ed5cb01bdc6b16f7225de973eba039d72d5",
+      "after_sha256": "6a527f7a55930d72d6d72c775ee0261c3550e2bd0094fe01031f3aa3238aefd6"
+    },
+    {
+      "path": "kernel/rust/process_helpers.rs",
+      "before_sha256": "3f2c3dc03445147addee47d77e3ad2b31207fb3bfaa591ad99b6d0d9c897932e",
+      "after_sha256": "70015d712c29e416881e2fbaccd67026ee15ac7eb915cb80e828485d6f34d71f"
+    },
+    {
+      "path": "kernel/rust/syscall_policy.rs",
+      "before_sha256": "f1f7866c0f2ccc8e1b0024dfb632ec7359dd2a0a4bcd8e22deb957d48ef6d770",
+      "after_sha256": "3ef8288617db7bcc26c56039491295d3f48c53d4f76d111b68dfcc3186546f7d"
+    },
+    {
+      "path": "kernel/rust/x86_cpu_helpers.rs",
+      "before_sha256": "a6e7465d7924755c97e5d72919a97c2985aacd35cf9db417c4ee981b4d5d071a",
+      "after_sha256": "98914e1ff4d50c2f42ccbdeb1f4f338024b7a9a2143fbad2f59ebd6f6b50dd0b"
+    },
+    {
+      "path": "kernel/rust/x86_memory_helpers.rs",
+      "before_sha256": "2994b6fe46feb6d0f6dd1390cd4a4efc550f8dfee66c067e506eba16b00029d7",
+      "after_sha256": "800a18bb4db0e28bf76441fca783b3f8d47066260240fb5107967c23775aa494"
+    },
+    {
+      "path": "kernel/syscall.c",
+      "before_sha256": "1035622a96a5441a85d60a9db15d3ac452b60266d1f8123eb807ce3849c41081",
+      "after_sha256": "34ec8a08c5790aa7533e5a8e3905d1dd1d4989bf0f431b8517ae6d50bbaa54f4"
+    }
+  ],
+  "source_entries": 6959,
+  "regular_files": 6910,
+  "tracked_symlinks": 49,
+  "exact_source_growth_bytes_from_prior_journal": 120910351,
+  "max_source_growth": 268435456,
+  "predicted_only": {
+    "source_manifest_sha256": "549fbbe63b24fac1d6a4c33832831689c56bbf902f26fc4ed92e050d510ce1b9",
+    "source_derivative_sha256": "7d4ab7efa604b6919b3b09abea484fbefea7f2675acd66f21e3a06343b30bc40",
+    "materialization_sha256": "ede84b6cd6c891c357fa7fa428efc05bf536393e4b918faed8ca6e23fb343582"
+  },
+  "actual_source_manifest": null,
+  "fresh_output": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-default-image-preparation-1/source-materialization-current-checkpoint-1",
+  "fresh_capture": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-default-image-preparation-1/source-materialization-current-checkpoint-capture-1",
+  "exact_next_staging_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=60:60",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-default-image-preparation-1/run_source_materialization_once.CHECKPOINT79620055.CPU7.py"
+  ],
+  "profile": {
+    "CPU": 7,
+    "jobs": 1,
+    "AS": 2147483648,
+    "CPU_seconds": 60,
+    "wall_seconds": 90,
+    "retire_seconds": 6,
+    "FSIZE": 33554432,
+    "NOFILE": 256,
+    "core": 0,
+    "capture_helper": "990807ab exactexistingdictAPI/globals/registeredTERMINTALRM/directjoin/groupabsence/closedstreams",
+    "fresh_memory_required": 20401094656,
+    "HOST_floor": 17179869184,
+    "scratch_floor": 12884901888,
+    "full_sparse_gap_plus_existing_cachedgrowth_capture_emergency_reserves": true,
+    "scratch_writes": false
+  },
+  "current_driver": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-default-image-preparation-1/native_rust_exact_mckernel_image_offline.py",
+    "sha256": "c5c35f04b3a86b1f3a3d0dc586e7165d1dba4968b4270fa51cb525907ebf0557"
+  },
+  "actual13regressions_PASS": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-default-image-preparation-1/actual-pure-consumer-regressions-1/FINAL-ACTUAL-PURE-REGRESSION-RECEIPT.json",
+    "sha256": "89d41b44d23b6be5e29dd687367bac3bdc9000d71d4bc3d5f4bdf6b224b246b5"
+  },
+  "actual_copy_build_Docker_root_guest": null,
+  "execution_grant": null,
+  "CPU_reservation": null,
+  "independent_execution_release": null,
+  "P12_physical_acceptance": null,
+  "default_image_native_claim": false
+}

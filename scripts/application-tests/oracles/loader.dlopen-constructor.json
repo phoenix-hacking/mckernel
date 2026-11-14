@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "loader.dlopen-constructor",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/loader.dlopen-constructor"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["constructor=1 destructor_before=0 close=0 valid=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["The bound DSO constructor counter is one before any explicit call and destructor counter is zero before unload", "dlclose succeeds exactly once"],
+  "unresolved_expectations": ["Destructor-after-unload observation and lifecycle DSO symbol ABI require Max review."],
+  "max_question_for_reviewer": "Confirm the lifecycle DSO exports the counter symbols and provide an independent post-unload destructor observation mechanism."
+}

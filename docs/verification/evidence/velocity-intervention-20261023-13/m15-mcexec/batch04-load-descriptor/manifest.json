@@ -1,0 +1,64 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_UNCOMPILED",
+  "retired_symbols_proposed": [
+    "mcexec_load_alloc_desc_bridge",
+    "mcexec_load_publish_main_section_bridge",
+    "mcexec_desc_publish_interp_section_bridge",
+    "mcexec_load_cred_bridge",
+    "mcexec_load_clk_tck_bridge",
+    "mcexec_load_finalize_desc_bridge",
+    "mcexec_program_load_desc_size_bridge",
+    "mcexec_program_image_section_size_bridge",
+    "mcexec_desc_set_num_sections_bridge",
+    "mcexec_desc_set_entry_bridge",
+    "mcexec_desc_set_interp_align_bridge",
+    "mcexec_desc_set_args_len_bridge",
+    "mcexec_desc_num_sections_bridge",
+    "mcexec_desc_cpu_bridge",
+    "mcexec_desc_pid_bridge",
+    "mcexec_desc_entry_bridge",
+    "mcexec_desc_rprocess_bridge",
+    "mcexec_desc_section_vaddr_bridge",
+    "mcexec_desc_section_len_bridge",
+    "mcexec_desc_section_remote_pa_bridge",
+    "mcexec_desc_section_filesz_bridge",
+    "mcexec_desc_section_offset_bridge",
+    "mcexec_desc_section_fp_bridge",
+    "mcexec_partition_publish_cpu_rank_bridge",
+    "mcexec_partition_publish_rank_bridge",
+    "mcexec_desc_publish_mpol_base_bridge",
+    "mcexec_desc_apply_bind_nodes_bridge",
+    "mcexec_desc_apply_ompi_policy_bridge",
+    "mcexec_desc_publish_runtime_flags_bridge",
+    "mcexec_desc_set_execve1_runtime_bridge",
+    "mcexec_main_stack_publish_bridge",
+    "mcexec_desc_snapshot_rlimits_bridge",
+    "mcexec_desc_publish_env_bridge",
+    "mcexec_desc_publish_args_cpu_bridge",
+    "mcexec_desc_clear_flags_bridge"
+  ],
+  "providers": [
+    "existing Rust numa_local/numa_all orchestration",
+    "genuine libc malloc/sysconf/getrlimit/printf/fflush/stdout",
+    "genuine libnuma parse_nodestring_all/max_possible_node/bitmask_isbitset",
+    "C debug data only"
+  ],
+  "ABI": [
+    "every field offset plus header/section sizes+alignments compared against actual uprotocol.h",
+    "mcexec_enable_tofu cfg MUST match C ENABLE_TOFU; default plus optional fixture before wider selection",
+    "glibc x86_64 host resource IDs and _SC_CLK_TCK=2 require actual fixture binding"
+  ],
+  "reference_parity": [
+    "zeroed flexible-section allocation and magic/protection initialization",
+    "same cred/args/env/section/runtime publications",
+    "same flags override only on nonzero input",
+    "execve stack index3 and main McKernel stack index15 preserved explicitly",
+    "same getrlimit call order/ignored errors",
+    "same libnuma mask lifetime"
+  ],
+  "deliberate_defined_extension": [
+    "numa bind mask shifts with selected node>=64 use wrapping_shl, where original C is undefined; not C parity credit; supported fixture domain must remain selected nodes0..63 until separately reviewed"
+  ],
+  "compiler_or_native_execution": false
+}

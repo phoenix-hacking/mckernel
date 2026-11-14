@@ -1,0 +1,80 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_NEW12H_CORE_GUARDIAN_STEERING_PHONE_LIVE",
+  "at": "2026-10-27T17:47:57.647486+00:00",
+  "thread_id": "01a17e6f-112f-7660-8771-85d15e07a26c",
+  "goal_status": "active",
+  "active_actual_turns": 4,
+  "actors": {
+    "guardian": {
+      "pid": 1619833,
+      "start": "92037917"
+    },
+    "monitor": {
+      "pid": 1621307,
+      "start": "92054340"
+    },
+    "phone": {
+      "pid": 1621308,
+      "start": "92054340"
+    },
+    "watcher": {
+      "pid": 1616666,
+      "start": "92001383"
+    },
+    "worker": {
+      "pid": 1616668,
+      "start": "92001391"
+    },
+    "server": {
+      "pid": 1616670,
+      "start": "92001399"
+    }
+  },
+  "all_three_auxiliary_leases_held": true,
+  "phone_last_result": {
+    "campaign_phase": "running",
+    "commit": "add05893a3ad40dfa8fc653354108abdb031de74",
+    "delivery": "existing launcher controls delivery; intake never resumes",
+    "request_id": "phone-001",
+    "status": "disabled"
+  },
+  "window": {
+    "status": "ACTUAL_AUTHORIZED_LAUNCH_WINDOW",
+    "window_id": "new12h-20261027-1793122569",
+    "duration_seconds": 43200,
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "start_epoch": 1793122569,
+    "start_boot": 920013.804550928,
+    "start_monotonic": 904675.677502648,
+    "deadline_epoch": 1793165769,
+    "boot_deadline": 963213.804550928,
+    "monotonic_deadline": 947875.677502648,
+    "deadline_utc": "2026-10-28T05:36:09+00:00",
+    "authorization_file": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/USER-12H-AUTHORIZATION.json",
+    "authorization_sha256": "a8b8f04a8b27dc5a2f958cdb8b7ae74d5f297837e752742267581f9021c9d5ff",
+    "credit_run_id": "7f4af94a83b14cc08f97401f5891d965",
+    "credit_ceiling": "57774.852125",
+    "max_agents": 10,
+    "build_jobs": 7
+  },
+  "credit_budget": {
+    "schema_version": 2,
+    "id": "7f4af94a83b14cc08f97401f5891d965",
+    "budget": "57774.852125",
+    "initial_balance": "57774.8521250000",
+    "minimum_balance": "52079.8011050000",
+    "last_balance": "52079.8011050000",
+    "spent": "22812.3311000000",
+    "remaining": "34962.5210250000",
+    "scope": "Cumulative account-wide observed balance decreases; increases never restore allowance; stale snapshots may count conservatively; in-flight charges can settle later"
+  },
+  "old_session_archive": {
+    "state_path": "/home/holden/mckernel/.git/os-autopilot/session-archives/20261027T173609287218Z-b876226781ed4a75b67ddb5f9d83254f/state.json",
+    "thread_id": "01a170fb-57c3-7ab3-862d-8005bef92a63",
+    "goal_status": "blocked",
+    "stop_reason": "server_error"
+  },
+  "native_release": false,
+  "all_core5_source_unchanged": true
+}

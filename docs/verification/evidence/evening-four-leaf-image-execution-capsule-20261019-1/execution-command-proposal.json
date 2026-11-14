@@ -1,0 +1,46 @@
+{
+  "actual_request": {
+    "bytes": 35945239,
+    "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/image-request.json",
+    "sha256": "bc98516d19e79ac3cc4a0fd89ca4f9de7e60ee7b64c77ead65e808d44c61dba9"
+  },
+  "capacity": {
+    "bytes": 2088,
+    "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/capacity-proposal.json",
+    "sha256": "4ed823d514e22841e8825993c58bf445a63b5e11fe370589e2396d0a3db95589"
+  },
+  "dispatcher_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/dispatch-image-once-corrected.py",
+    "FINAL_EXECUTION_RELEASE_SHA256"
+  ],
+  "guard_argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/native_exact_scratch22_authority3_image_guard_corrected.py",
+    "--request",
+    "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/image-request.json",
+    "--request-sha256",
+    "bc98516d19e79ac3cc4a0fd89ca4f9de7e60ee7b64c77ead65e808d44c61dba9",
+    "--release",
+    "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/image-execution-release.json",
+    "--release-sha256",
+    "FINAL_EXECUTION_RELEASE_SHA256"
+  ],
+  "root_owns_execution": true,
+  "source_map": {
+    "bytes": 8066,
+    "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/source-sha256.json",
+    "sha256": "ee61adc210497066f49c6f9bd31310fe20409b14efea3bf28c85271d3b05cc60"
+  },
+  "status": "EXACT_COMMAND_PENDING_FINAL_RELEASE_AND_LIVE_BINDINGS"
+}

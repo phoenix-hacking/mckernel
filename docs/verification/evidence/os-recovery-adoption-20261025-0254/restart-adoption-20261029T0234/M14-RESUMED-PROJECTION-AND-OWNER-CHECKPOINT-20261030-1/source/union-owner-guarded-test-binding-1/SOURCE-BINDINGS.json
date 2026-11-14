@@ -1,0 +1,19 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_UNRUN_NOT_AN_ADMISSION",
+  "test_count": 16,
+  "sources": {
+    "test_source_owner.py": "dd7d82605c2b6eb0b6f7acbce6bbf8f433cf60f5b5b6a73fef2a97aaa9ffbee0",
+    "union_owner.py": "955d879ff8fc0da6b81457bcea53415254a96367b9e23825bf07e8efb89ae2bb",
+    "verified_owner_loader.py": "cec6e9506f29f07584ec5304c8deeb532a9d255be842b2faa55957c97a1f5c29",
+    "source_freeze.py": "2a3cea45022e2104b6faa1ed8561ef9db1000a8a3734d94a1f17efab50ec8228",
+    "split_inventory.py": "9bc54a33407c8abaed384a5d998fa3cea34d7f15179349e27e6122c09849de04",
+    "materializer.py": "c3115c13a29dde74f6d316b64d26a6266c5a5cfeed877ef19de088844e09ba37",
+    "verify_scripts_fd.py": "34bd9802c507b3408b685c6233f0a2f711edbdf7a6f31c5dcd3eaba70128ba8f",
+    "../authenticated-adapter-successor-1/custody_protocol_v2.py": "587cebf7b8359a1711f078882a012a701e290902dc4376d1bc6e4c03f7ce8cbb",
+    "../authenticated-adapter-successor-1/graph_observations.py": "c708c1bd87dd88a125644e02f8a1afcebdb568966b46d66a0de9f7e59df43da8",
+    "../adapter-readiness-expert-1/union_server_guarded.py": "3f96123f1a62ed427235c59f802452811522f62d5c5b4e5d84385c392a54a229"
+  },
+  "consumer_fixture": "Loads exact guarded-consumer bytes, extracts its real _receipt_meta AST and compares with actual owner receipt_identity on a synthetic file; only root UID is mocked.",
+  "remaining": "No test, compiler, materialization, freeze, privileged, native, guest, mount, container, controller or cleanup operation was performed. Actual execution requires Root's light-profile grant and independent source/tool/cwd binding; no physical admission is implied."
+}

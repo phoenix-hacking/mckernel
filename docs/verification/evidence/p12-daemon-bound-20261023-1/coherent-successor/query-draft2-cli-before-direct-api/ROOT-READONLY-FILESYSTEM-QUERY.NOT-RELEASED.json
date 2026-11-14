@@ -1,0 +1,105 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "WHOLE_BOUNDED_CORRECTION_PREPARED_NOT_EXECUTED_NOT_RELEASED",
+  "query_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/query_daemon_filesystem.NOT-EXECUTED.py",
+    "sha256": "a4ab692a918a93cc30dc7febd8e4ee29241672db66463d4915bcd0b1c83975ba",
+    "bytes": 8816
+  },
+  "capture_parent": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/capture_readonly_filesystem.NOT-EXECUTED.py",
+    "sha256": "1ee7d5198a2a20a3048d33d3e3875f9d6d9909da1c6fc90f6d019d6bf881158d",
+    "bytes": 4149
+  },
+  "accepted_capture_helper": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/phase5-m03-handshake-runtime-checkpoint-20261020-1/sdk-physical-source/run_two_commands_source_bound_corrected.py",
+    "sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8",
+    "bytes": 14753
+  },
+  "exact_request": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/ROOT-READONLY-CAPTURE-REQUEST.NOT-RELEASED.json",
+    "sha256": "8f87f38cd93379a43d430559b6c05941f81fd609b7c834197118d693abd411e3",
+    "bytes": 1211
+  },
+  "parent_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=30:30",
+    "--fsize=8388608:8388608",
+    "--core=0:0",
+    "--nofile=256:256",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/capture_readonly_filesystem.NOT-EXECUTED.py",
+    "8f87f38cd93379a43d430559b6c05941f81fd609b7c834197118d693abd411e3"
+  ],
+  "root_argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=30:30",
+    "--fsize=8388608:8388608",
+    "--core=0:0",
+    "--nofile=256:256",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/query_daemon_filesystem.NOT-EXECUTED.py",
+    "a4ab692a918a93cc30dc7febd8e4ee29241672db66463d4915bcd0b1c83975ba"
+  ],
+  "root_readonly_argv": [
+    "/usr/bin/docker",
+    "info",
+    "--format",
+    "{{json .DockerRootDir}}"
+  ],
+  "cli_binding": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/READONLY-CLI-BINARY-SOURCE-BINDING.json",
+    "sha256": "56c47297b84f94cfbbc724349bd738c2a28404048986ce88cdc860e3ae07d73a",
+    "bytes": 519
+  },
+  "profile": {
+    "cpu": 7,
+    "jobs": 1,
+    "as_bytes": 2147483648,
+    "cpu_seconds": 30,
+    "wall_seconds": 35,
+    "cleanup_seconds": 4,
+    "fsize_bytes": 8388608,
+    "core_bytes": 0,
+    "nofile": 256,
+    "NPROC": "inherited unchanged",
+    "group": "new anchored capture child session; accepted helper retains creator until whole group retirement"
+  },
+  "capture_directory": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/actual-readonly-filesystem-capture-2",
+  "capture_directory_fresh": true,
+  "retention_files": [
+    "command.json",
+    "stdout",
+    "stderr",
+    "started.json",
+    "direct-wait.json",
+    "direct-join.json",
+    "CAPTURE-RESULT.json",
+    "CLOSED-QUERY-RESULT.json"
+  ],
+  "capture": "Accepted owned_capture uses exclusively created regular stdout/stderr. Rootprlimit8MiB FSIZE enforces per-file limit. Stable postjoin hashing32MiB does not enlarge write cap. No pipe composition or FSIZE0.",
+  "query_reads": "Pinned daemonPID2036/start1513 and executable/root/status/mountinfo; exact installedCLI hash; readonly localDockerRootDir API; actualroot stat/statvfs; matchingext4 superblock1024B; fourallocationknobs. No daemon.json or configsecret reads.",
+  "socket_endpoint": "unix:///var/run/docker.sock; remove inherited DOCKER_* selectors for fixed localquery",
+  "limits_callback": "lambda:None; parent and rootprlimit explicitly enforce profile, no helper.main invocation",
+  "allocation_claim": false,
+  "review_requirement": "Distinct exactsource/argv/parent/request/capture independent review. Prior exactquery release is historical. Actual facts do not prove96MiB allocation.",
+  "failure_history": "Queryfamily1whole review finding(active-root inference+unbound capture),1bounded correction.0query execution attempts. Separate CLI artifact extraction helper Python3.8 compatibility failure retained and corrected once.",
+  "native_acceptance": false,
+  "execution_authorized": false
+}

@@ -1,0 +1,197 @@
+{
+  "actual_provider_binding": false,
+  "case_count": 9,
+  "cases": [
+    {
+      "cpu_lookups": 1,
+      "error_logs": [],
+      "events": [
+        "cpu",
+        "forward"
+      ],
+      "final_flag": 17,
+      "forward_flags": [
+        17
+      ],
+      "id": "direct3-setitimer-high-arg2",
+      "requests": [
+        "000000000000000000000000000000002600000000000000010000000000008000503412ff7f0000ccccddddeeeeffff000000000000000000000000000000000000000000000000"
+      ],
+      "return": -14
+    },
+    {
+      "cpu_lookups": 1,
+      "error_logs": [],
+      "events": [
+        "cpu",
+        "forward"
+      ],
+      "final_flag": 17,
+      "forward_flags": [
+        17
+      ],
+      "id": "policy3-signed-number-return",
+      "requests": [
+        "00000000000000000000000000000000ffffffffffffffffffffffffffffffff00000000000000801032547698badcfe000000000000000000000000000000000000000000000000"
+      ],
+      "return": -9223372036854775801
+    },
+    {
+      "cpu_lookups": 2,
+      "error_logs": [
+        {
+          "error": 4294967301,
+          "flag": 17
+        }
+      ],
+      "events": [
+        "cpu",
+        "cpu",
+        "forward",
+        "error-log"
+      ],
+      "final_flag": 17,
+      "forward_flags": [
+        17
+      ],
+      "id": "clear-unheld-wide-nonzero-log",
+      "requests": [
+        "000000000000000000000000000000000b0000000000000000604523ff7f000000200000000000000000000000000000000000000000000000000000000000000000000000000000"
+      ],
+      "return": 4294967301
+    },
+    {
+      "cpu_lookups": 2,
+      "error_logs": [],
+      "events": [
+        "cpu",
+        "cpu",
+        "forward"
+      ],
+      "final_flag": -1,
+      "forward_flags": [
+        6
+      ],
+      "id": "clear-held-success-quiet",
+      "requests": [
+        "000000000000000000000000000000000b0000000000000000604523ff7f000000200000000000000000000000000000000000000000000000000000000000000000000000000000"
+      ],
+      "return": 0
+    },
+    {
+      "cpu_lookups": 2,
+      "error_logs": [],
+      "events": [
+        "cpu",
+        "cpu",
+        "forward"
+      ],
+      "final_flag": 17,
+      "forward_flags": [
+        17
+      ],
+      "id": "set-unheld-error-quiet",
+      "requests": [
+        "000000000000000000000000000000000b0000000000000000604523ff7f000000200000000000000000000000000000000000000000000000000000000000000000000000000000"
+      ],
+      "return": -14
+    },
+    {
+      "cpu_lookups": 2,
+      "error_logs": [
+        {
+          "error": -14,
+          "flag": -1
+        }
+      ],
+      "events": [
+        "begin",
+        "remove",
+        "cpu",
+        "cpu",
+        "forward",
+        "error-log",
+        "finish",
+        "unmap-log"
+      ],
+      "final_flag": -1,
+      "forward_flags": [
+        6
+      ],
+      "id": "unmap-remove-error-precedence",
+      "requests": [
+        "000000000000000000000000000000000b0000000000000000604523ff7f000000200000000000000000000000000000000000000000000000000000000000000000000000000000"
+      ],
+      "return": -12
+    },
+    {
+      "cpu_lookups": 2,
+      "error_logs": [
+        {
+          "error": -14,
+          "flag": 17
+        }
+      ],
+      "events": [
+        "begin",
+        "remove",
+        "cpu",
+        "cpu",
+        "forward",
+        "error-log",
+        "finish",
+        "unmap-log"
+      ],
+      "final_flag": 17,
+      "forward_flags": [
+        17
+      ],
+      "id": "unmap-clear-error-result",
+      "requests": [
+        "000000000000000000000000000000000b0000000000000000604523ff7f000000200000000000000000000000000000000000000000000000000000000000000000000000000000"
+      ],
+      "return": -14
+    },
+    {
+      "cpu_lookups": 2,
+      "error_logs": [],
+      "events": [
+        "begin",
+        "remove",
+        "cpu",
+        "cpu",
+        "forward",
+        "finish",
+        "unmap-log"
+      ],
+      "final_flag": -1,
+      "forward_flags": [
+        6
+      ],
+      "id": "unmap-ro-set-wide-int-quiet",
+      "requests": [
+        "000000000000000000000000000000000b0000000000000000604523ff7f000000200000000000000000000000000000000000000000000000000000000000000000000000000000"
+      ],
+      "return": 5
+    },
+    {
+      "cpu_lookups": 0,
+      "error_logs": [],
+      "events": [
+        "begin",
+        "remove",
+        "finish",
+        "unmap-log"
+      ],
+      "final_flag": 17,
+      "forward_flags": [],
+      "id": "unmap-straight-suppresses-host",
+      "requests": [],
+      "return": 0
+    }
+  ],
+  "kernel_runtime": false,
+  "native_execution": false,
+  "scope": "corrected-memory-host-production-composition-with-explicit-test-only-effects",
+  "status": "PASS"
+}

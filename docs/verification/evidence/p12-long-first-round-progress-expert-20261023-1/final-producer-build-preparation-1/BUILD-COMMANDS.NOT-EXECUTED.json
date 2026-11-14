@@ -1,0 +1,98 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "profile": {
+    "cpu": 0,
+    "jobs": 1,
+    "AS_bytes": 2147483648,
+    "CPU_seconds": 60,
+    "wall_seconds": 90,
+    "grace_seconds": 6,
+    "FSIZE_bytes": 33554432,
+    "NOFILE": 256,
+    "core": 0,
+    "capture_source_sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8",
+    "interpreter": "/home/holden/anaconda3/bin/python3",
+    "reference_original_cpu": 7,
+    "cpu0_grant": null,
+    "execution_authorized": false
+  },
+  "commands": [
+    {
+      "label": "production-static-LONG-ELF",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-static",
+        "-fno-pie",
+        "-no-pie",
+        "-Wl,-z,noexecstack",
+        "-DND_CORE_THREADS",
+        "-DND_PAIR_LAUNCH_EXPANSION",
+        "-DND_PAIR_LONG",
+        "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_collector.c",
+        "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/final-gate-correction-1/attempt-1/libpair_long.a",
+        "-Wl,--gc-sections",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/pair-long-collector"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Production ND_PAIR_LONG Linux PID1 ELF link; no TEST modes or execution.",
+      "shell": false
+    },
+    {
+      "label": "ELF-symbols",
+      "argv": [
+        "/usr/bin/nm",
+        "--defined-only",
+        "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/pair-long-collector"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1",
+      "purpose": "Functional OS static ELF production Rust export readback only; no security testing.",
+      "shell": false
+    },
+    {
+      "label": "ELF-undefined",
+      "argv": [
+        "/usr/bin/nm",
+        "-u",
+        "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/pair-long-collector"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1",
+      "purpose": "Functional OS static ELF link completeness only; no security testing.",
+      "shell": false
+    },
+    {
+      "label": "ELF-headers",
+      "argv": [
+        "/usr/bin/readelf",
+        "-h",
+        "-l",
+        "-d",
+        "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/pair-long-collector"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1",
+      "purpose": "Functional OS ELF static EXEC/noINTERP readback only; no security testing.",
+      "shell": false
+    },
+    {
+      "label": "unchanged-strict-full-consumer",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/candidate-1/check_consumer.py",
+        "check"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/candidate-1",
+      "env_binding": {
+        "REAL_ATTEMPT": "attempt-1"
+      },
+      "purpose": "Functional OS unchanged strict pair/LONG consumers on retained controlled actual-Linux bridge derivatives; TESTONLY protocol evidence, no native credit; no security testing.",
+      "shell": false
+    }
+  ]
+}

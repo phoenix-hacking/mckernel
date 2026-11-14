@@ -1,0 +1,30 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_EXACT_OWNER_LABEL_ABSENCE_SUPPLEMENT",
+  "at": 1793075272.3621082,
+  "physical_reference": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/thread-exit-observation-repair-source-1/repro-admission-source-1/POSTREPRO-CURRENT.json",
+    "bytes": 129986,
+    "sha256": "e07a64b362268f736b60a269ea99a60872c0d1aac609219a1a5902b9e439124b"
+  },
+  "original_query_limit": "Original collector queried an irrelevant io.mckernel.owner-nonce label. Its correct exactID/name absence and globalrunning-empty/census/probes remain valid; no claim of actualownerlabel absence from that row.",
+  "actual_owner_label_source": "repro_owner.py lines561/604 exact mckernel.owner",
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/docker",
+    "--host=unix:///var/run/docker.sock",
+    "ps",
+    "--all",
+    "--quiet",
+    "--no-trunc",
+    "--filter",
+    "label=mckernel.owner=7cf529a05d0430c6651f07b63168e8e1"
+  ],
+  "returncode": 0,
+  "stdout": "",
+  "stderr": "",
+  "no_census_or_workload_replayed": true,
+  "daemon_acceptance": false,
+  "runtime_authority": null
+}

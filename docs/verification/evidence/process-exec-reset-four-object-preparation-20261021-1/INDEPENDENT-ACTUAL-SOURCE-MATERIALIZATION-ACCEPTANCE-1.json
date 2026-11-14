@@ -1,0 +1,27 @@
+{
+  "decision": "ACCEPT_ACTUAL_EXEC_RESET_SOURCE_MATERIALIZATION_ONLY",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "packet": "/home/holden/mckernel-work/host-preparation/process-owned-fork-rust-next-preparation-20261021-1/locking-correction-1/compiler-owner-preparation-1",
+  "source_derivative_sha256": "2bfb86c61383d34be2088b15f572c5f279242a5d4d00f7e4870a7ff3f83804d5",
+  "materialization_sha256": "960cbf72cbf97a4daa0f366d4c231821a4ea637cef28519fe783849f7dfc5475",
+  "evidence": {
+    "receipt": "materialization-receipt.json",
+    "receipt_sha256": "949b481df8d63603e2d16a73228da3292df9f81c25dfba9485306238c6ddc93f",
+    "manifest": "source-manifest.json",
+    "manifest_sha256": "ed554e36fdc1c7c527fd7c11070dd77b27ce5e53492e3598e85087ed734cd960",
+    "journal": "materialization-journal.jsonl",
+    "journal_sha256": "f76f24fede38caeede53bc86f40c0cb3e1796c0df1d71494d952f033788e4699",
+    "capture_status": "actual-materialization-capture-1/status.json",
+    "capture_status_sha256": "2c09f83017f44df72f3fbc05fbef4eb9ec3ba34bc47dbecde5278b207f7f7af4"
+  },
+  "observed": [
+    "The captured command matches the reviewed ordinary materialization command. Status records exit 0 after 9.583047387 seconds, PID 2820401/start 41645611, direct join, absent process group and closed streams. Stderr is empty.",
+    "Receipt and manifest bind the accepted thin document 676147e2, source derivative and materialization identities. Manifest contains 6911 unique regular-file rows; journal contains 6960 unique entries including 49 tracked symlinks.",
+    "Both changed materialized postimages match their accepted overlays, manifest and journal: syscall.c ebcafd68 and syscall_policy.rs 4edf51b9. Each is a private file with link count 1.",
+    "work and its output/home/tmp children are genuine nonsymlink directories with mode 0700. The three child directories are empty."
+  ],
+  "verification_basis": "Closes the prior conditional materialization review using actual outputs and focused two-postimage checks. Relies on the qualified materializer's completed per-file validation; no independent 6911-file rehash was performed.",
+  "blocking_findings": [],
+  "next_step": "Root may bind these actual references and genuine work identities into the pending request, recouple its pins, and run the necessary existing ordinary whole-request guard.",
+  "limitations": "No compiler permission, heavy release, compilation, linked/default-path, native exec or source-catalogue/retirement credit. Compiler admission remains separate. No execution, source edits or body replay by this reviewer."
+}

@@ -1,0 +1,475 @@
+{
+  "observations": [
+    {
+      "id": "live-both-bookends",
+      "accepted": true,
+      "state_reads": 2,
+      "ledger_reads": 1,
+      "proc_reads": 4,
+      "validator_calls": 1,
+      "matching_births": true,
+      "proc_trace": [
+        {
+          "kind": "worker",
+          "bookend": "before",
+          "state": "R",
+          "birth": "11001"
+        },
+        {
+          "kind": "server",
+          "bookend": "before",
+          "state": "S",
+          "birth": "11002"
+        },
+        {
+          "kind": "worker",
+          "bookend": "after",
+          "state": "R",
+          "birth": "11001"
+        },
+        {
+          "kind": "server",
+          "bookend": "after",
+          "state": "S",
+          "birth": "11002"
+        }
+      ],
+      "forbidden_effects": []
+    },
+    {
+      "id": "worker-Z-before",
+      "accepted": false,
+      "state_reads": 1,
+      "ledger_reads": 0,
+      "proc_reads": 1,
+      "validator_calls": 0,
+      "matching_births": true,
+      "proc_trace": [
+        {
+          "kind": "worker",
+          "bookend": "before",
+          "state": "Z",
+          "birth": "11001"
+        }
+      ],
+      "forbidden_effects": []
+    },
+    {
+      "id": "worker-X-before",
+      "accepted": false,
+      "state_reads": 1,
+      "ledger_reads": 0,
+      "proc_reads": 1,
+      "validator_calls": 0,
+      "matching_births": true,
+      "proc_trace": [
+        {
+          "kind": "worker",
+          "bookend": "before",
+          "state": "X",
+          "birth": "11001"
+        }
+      ],
+      "forbidden_effects": []
+    },
+    {
+      "id": "worker-x-before",
+      "accepted": false,
+      "state_reads": 1,
+      "ledger_reads": 0,
+      "proc_reads": 1,
+      "validator_calls": 0,
+      "matching_births": true,
+      "proc_trace": [
+        {
+          "kind": "worker",
+          "bookend": "before",
+          "state": "x",
+          "birth": "11001"
+        }
+      ],
+      "forbidden_effects": []
+    },
+    {
+      "id": "worker-?-before",
+      "accepted": false,
+      "state_reads": 1,
+      "ledger_reads": 0,
+      "proc_reads": 1,
+      "validator_calls": 0,
+      "matching_births": true,
+      "proc_trace": [
+        {
+          "kind": "worker",
+          "bookend": "before",
+          "state": "?",
+          "birth": "11001"
+        }
+      ],
+      "forbidden_effects": []
+    },
+    {
+      "id": "server-Z-before",
+      "accepted": false,
+      "state_reads": 1,
+      "ledger_reads": 0,
+      "proc_reads": 2,
+      "validator_calls": 0,
+      "matching_births": true,
+      "proc_trace": [
+        {
+          "kind": "worker",
+          "bookend": "before",
+          "state": "R",
+          "birth": "11001"
+        },
+        {
+          "kind": "server",
+          "bookend": "before",
+          "state": "Z",
+          "birth": "11002"
+        }
+      ],
+      "forbidden_effects": []
+    },
+    {
+      "id": "server-X-before",
+      "accepted": false,
+      "state_reads": 1,
+      "ledger_reads": 0,
+      "proc_reads": 2,
+      "validator_calls": 0,
+      "matching_births": true,
+      "proc_trace": [
+        {
+          "kind": "worker",
+          "bookend": "before",
+          "state": "R",
+          "birth": "11001"
+        },
+        {
+          "kind": "server",
+          "bookend": "before",
+          "state": "X",
+          "birth": "11002"
+        }
+      ],
+      "forbidden_effects": []
+    },
+    {
+      "id": "server-x-before",
+      "accepted": false,
+      "state_reads": 1,
+      "ledger_reads": 0,
+      "proc_reads": 2,
+      "validator_calls": 0,
+      "matching_births": true,
+      "proc_trace": [
+        {
+          "kind": "worker",
+          "bookend": "before",
+          "state": "R",
+          "birth": "11001"
+        },
+        {
+          "kind": "server",
+          "bookend": "before",
+          "state": "x",
+          "birth": "11002"
+        }
+      ],
+      "forbidden_effects": []
+    },
+    {
+      "id": "server-?-before",
+      "accepted": false,
+      "state_reads": 1,
+      "ledger_reads": 0,
+      "proc_reads": 2,
+      "validator_calls": 0,
+      "matching_births": true,
+      "proc_trace": [
+        {
+          "kind": "worker",
+          "bookend": "before",
+          "state": "R",
+          "birth": "11001"
+        },
+        {
+          "kind": "server",
+          "bookend": "before",
+          "state": "?",
+          "birth": "11002"
+        }
+      ],
+      "forbidden_effects": []
+    },
+    {
+      "id": "worker-Z-after",
+      "accepted": false,
+      "state_reads": 2,
+      "ledger_reads": 1,
+      "proc_reads": 3,
+      "validator_calls": 0,
+      "matching_births": true,
+      "proc_trace": [
+        {
+          "kind": "worker",
+          "bookend": "before",
+          "state": "R",
+          "birth": "11001"
+        },
+        {
+          "kind": "server",
+          "bookend": "before",
+          "state": "S",
+          "birth": "11002"
+        },
+        {
+          "kind": "worker",
+          "bookend": "after",
+          "state": "Z",
+          "birth": "11001"
+        }
+      ],
+      "forbidden_effects": []
+    },
+    {
+      "id": "worker-X-after",
+      "accepted": false,
+      "state_reads": 2,
+      "ledger_reads": 1,
+      "proc_reads": 3,
+      "validator_calls": 0,
+      "matching_births": true,
+      "proc_trace": [
+        {
+          "kind": "worker",
+          "bookend": "before",
+          "state": "R",
+          "birth": "11001"
+        },
+        {
+          "kind": "server",
+          "bookend": "before",
+          "state": "S",
+          "birth": "11002"
+        },
+        {
+          "kind": "worker",
+          "bookend": "after",
+          "state": "X",
+          "birth": "11001"
+        }
+      ],
+      "forbidden_effects": []
+    },
+    {
+      "id": "worker-x-after",
+      "accepted": false,
+      "state_reads": 2,
+      "ledger_reads": 1,
+      "proc_reads": 3,
+      "validator_calls": 0,
+      "matching_births": true,
+      "proc_trace": [
+        {
+          "kind": "worker",
+          "bookend": "before",
+          "state": "R",
+          "birth": "11001"
+        },
+        {
+          "kind": "server",
+          "bookend": "before",
+          "state": "S",
+          "birth": "11002"
+        },
+        {
+          "kind": "worker",
+          "bookend": "after",
+          "state": "x",
+          "birth": "11001"
+        }
+      ],
+      "forbidden_effects": []
+    },
+    {
+      "id": "worker-?-after",
+      "accepted": false,
+      "state_reads": 2,
+      "ledger_reads": 1,
+      "proc_reads": 3,
+      "validator_calls": 0,
+      "matching_births": true,
+      "proc_trace": [
+        {
+          "kind": "worker",
+          "bookend": "before",
+          "state": "R",
+          "birth": "11001"
+        },
+        {
+          "kind": "server",
+          "bookend": "before",
+          "state": "S",
+          "birth": "11002"
+        },
+        {
+          "kind": "worker",
+          "bookend": "after",
+          "state": "?",
+          "birth": "11001"
+        }
+      ],
+      "forbidden_effects": []
+    },
+    {
+      "id": "server-Z-after",
+      "accepted": false,
+      "state_reads": 2,
+      "ledger_reads": 1,
+      "proc_reads": 4,
+      "validator_calls": 0,
+      "matching_births": true,
+      "proc_trace": [
+        {
+          "kind": "worker",
+          "bookend": "before",
+          "state": "R",
+          "birth": "11001"
+        },
+        {
+          "kind": "server",
+          "bookend": "before",
+          "state": "S",
+          "birth": "11002"
+        },
+        {
+          "kind": "worker",
+          "bookend": "after",
+          "state": "R",
+          "birth": "11001"
+        },
+        {
+          "kind": "server",
+          "bookend": "after",
+          "state": "Z",
+          "birth": "11002"
+        }
+      ],
+      "forbidden_effects": []
+    },
+    {
+      "id": "server-X-after",
+      "accepted": false,
+      "state_reads": 2,
+      "ledger_reads": 1,
+      "proc_reads": 4,
+      "validator_calls": 0,
+      "matching_births": true,
+      "proc_trace": [
+        {
+          "kind": "worker",
+          "bookend": "before",
+          "state": "R",
+          "birth": "11001"
+        },
+        {
+          "kind": "server",
+          "bookend": "before",
+          "state": "S",
+          "birth": "11002"
+        },
+        {
+          "kind": "worker",
+          "bookend": "after",
+          "state": "R",
+          "birth": "11001"
+        },
+        {
+          "kind": "server",
+          "bookend": "after",
+          "state": "X",
+          "birth": "11002"
+        }
+      ],
+      "forbidden_effects": []
+    },
+    {
+      "id": "server-x-after",
+      "accepted": false,
+      "state_reads": 2,
+      "ledger_reads": 1,
+      "proc_reads": 4,
+      "validator_calls": 0,
+      "matching_births": true,
+      "proc_trace": [
+        {
+          "kind": "worker",
+          "bookend": "before",
+          "state": "R",
+          "birth": "11001"
+        },
+        {
+          "kind": "server",
+          "bookend": "before",
+          "state": "S",
+          "birth": "11002"
+        },
+        {
+          "kind": "worker",
+          "bookend": "after",
+          "state": "R",
+          "birth": "11001"
+        },
+        {
+          "kind": "server",
+          "bookend": "after",
+          "state": "x",
+          "birth": "11002"
+        }
+      ],
+      "forbidden_effects": []
+    },
+    {
+      "id": "server-?-after",
+      "accepted": false,
+      "state_reads": 2,
+      "ledger_reads": 1,
+      "proc_reads": 4,
+      "validator_calls": 0,
+      "matching_births": true,
+      "proc_trace": [
+        {
+          "kind": "worker",
+          "bookend": "before",
+          "state": "R",
+          "birth": "11001"
+        },
+        {
+          "kind": "server",
+          "bookend": "before",
+          "state": "S",
+          "birth": "11002"
+        },
+        {
+          "kind": "worker",
+          "bookend": "after",
+          "state": "R",
+          "birth": "11001"
+        },
+        {
+          "kind": "server",
+          "bookend": "after",
+          "state": "?",
+          "birth": "11002"
+        }
+      ],
+      "forbidden_effects": []
+    }
+  ],
+  "diagnostics": "test_only_changed_owner_state_branch (__main__.OwnerLiveness) ... ok\n\n----------------------------------------------------------------------\nRan 1 test in 0.050s\n\nOK\n",
+  "failures": 0,
+  "errors": 0
+}

@@ -1,0 +1,74 @@
+{
+  "schema": "mckernel.native-offline-exec-temp-root.light-container.v1",
+  "recorded_at_utc": "2026-09-29T19:47:51Z",
+  "status": "PASS_LIGHT_VALIDATION",
+  "acceptance": {
+    "source_correction": true,
+    "isolated_light_validation": true,
+    "heavy_build": false,
+    "kernel_runtime": false,
+    "application": false,
+    "production": false
+  },
+  "source_commit": "66ced088c259d87f20634d241c150fb1ff19fe17",
+  "container": {
+    "name": "mckernel-offline-temp-66ced088-2",
+    "id": "3c169e5cb840557bf43314aed0e12427bac5a71b206d7334236072e50f075366",
+    "image": "sha256:0f8ad280e47d76b23554de4aec411752e1f779f9b2fc7fece6b0b3375dc9775d",
+    "state": "exited",
+    "exit_code": 0,
+    "oom_killed": false,
+    "pid": 0,
+    "restart_count": 0,
+    "started_at": "2026-09-29T19:43:47.114084169Z",
+    "finished_at": "2026-09-29T19:44:17.669746476Z",
+    "profile": "cpus 2-3; 2 GiB memory/no swap; 128 pids; no network; read-only root; all capabilities dropped; no-new-privileges; uid/gid 1000; /tmp tmpfs noexec; /evidence writable executable ext4 bind; candidate source read-only"
+  },
+  "raw_evidence": {
+    "root": "/home/holden/mckernel-work/scratch/offline-exec-temp-root-probe-66ced088-2",
+    "create_stdout_sha256": "8cfe3616aed815d3360521e2197d2c57a82a4500f0d098024328949aec98d9fe",
+    "stdout_sha256": "8a0466506055292350e457a564fb24848d6bfdaffed016f11c6fe101e1837b10",
+    "stderr_sha256": "641ff4a525198fff54dd21c83ef7890a766806a94d0fde52cb3729745e098755",
+    "exit_receipt_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "inspect_sha256": "8d4bb3bc2a7b71d79d5708d742cada5b12322cd7d2efc56baca24a3e245c6baa",
+    "final_build_root_entries": 0
+  },
+  "archive": {
+    "path": "docs/verification/evidence/stability-native-offline-exec-temp-root-light-success-66ced088-20260929-2.tar.gz",
+    "sha256": "1c3ec354e2eaaa00918fd43d7e374319ce9d873edd9247336deaad6a9bd681f6",
+    "member_count": 13
+  },
+  "overlays": {
+    "scripts/native_rust_exact_build_offline.py": "afc035bba4c9d85debab355d7319f6789b4d2a3719c28f31ff953857f2e5c629",
+    "scripts/tests/test_native_rust_exact_build_offline.py": "1371bc9f6fd3e5a10a316ed7ebd5d55404f227d2a04e555c837b0663df1a11ba",
+    "scripts/tests/fixtures/ihk_smp_loader_compile.rs": "1296dc6f861dca67a8844f59624a79647d97f5b9c84f13f4105dcf33a45b81d6",
+    "scripts/tests/test_ihk_smp_image.py": "3be601ceebf6e4889865c17f114bb677789c2d6f4f4de8a1d506c35d40e687c6",
+    "scripts/tests/test_rust_target_compatibility_patches.py": "755bbc1d9513ff4a66313d5527946f8571f253625410f82f1a92c10c6a669dc0"
+  },
+  "results": [
+    "Pinned rustc reports release 1.92.0 and is selected at /usr/bin/rustc.",
+    "The focused SMP image module plus exact allocator test passed four tests without skips.",
+    "All 19 offline-driver tests passed and the exact native queue fixture passed.",
+    "The consolidated Python chain ran 85 tests: 84 passed and the unchanged external Rocky-source audit alone skipped.",
+    "The compiled OS registry, device registry, ioctl and SMP resource fixtures passed 15, 39, 39, 17 and 51 tests respectively.",
+    "Page allocator, page owner and mapping source-contract fixtures verified and emitted their non-crediting markers.",
+    "The final EXACT_PHASE0_TEMP_ROOT_PASS marker was emitted and /evidence/build was empty."
+  ],
+  "review": {
+    "source": "PASS_SOURCE",
+    "postflight_initial": "BLOCKED_EVIDENCE_RECORD_ACCURACY",
+    "postflight_after_bounded_additive_correction": "PASS_LIGHT_VALIDATION",
+    "correction_path": "docs/verification/stability-native-offline-exec-temp-root-light-failure-record-correction-57133e95-20260929-1.json",
+    "correction_sha256": "80b31e0a3e79de27e7ba6524aa3b6767ca98d3b756f6c9cb9954fad2359edcfa"
+  },
+  "limitations": [
+    "This is isolated fixture and phase-0 infrastructure evidence only.",
+    "The one external Rocky-source API audit remained skipped and is not credited here.",
+    "No full build, McKernel runtime, guest application, production gate or language gate is accepted."
+  ],
+  "next_actions": [
+    "Create and independently review a fresh retention-preparation packet for both obsolete f5d8d914-1 tmpfs roots.",
+    "Run the retention preparation once, review its inventory and restoration capsule, then separately release one fail-closed retirement operation.",
+    "After verified retirement, prepare a wholly fresh candidate from the fetched corrected commit and seek a new heavy-build release."
+  ]
+}

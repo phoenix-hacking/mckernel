@@ -1,0 +1,87 @@
+{
+  "baseline_scope": "Only the explicit selected-pair regression and ordinary signal/futex facts in final_checkpoint are accepted.",
+  "draft_queue": {
+    "path": "scripts/application-tests/draft-queue.json",
+    "sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+    "size": 26404
+  },
+  "draft_reporting_root": "/work/application-test-drafts-20260909/ultra-handoff-1",
+  "drafting_only": true,
+  "execution_enabled": false,
+  "execution_inputs_complete": false,
+  "final_checkpoint": {
+    "path": "docs/verification/ultra-final-checkpoint-20260909.json",
+    "sha256": "d17d00597992954f569033412a97c235b0fced229afda0cb0093bdd0a204770d",
+    "size": 435332
+  },
+  "fresh_queue_run_id": "ultra-handoff-1",
+  "mode": "draft-only",
+  "runtime_execution_authorized": false,
+  "schema_version": 1,
+  "selected_pair": {
+    "actual_fault_injection_claimed": false,
+    "core": {
+      "path": "/work/native-application-core-build-20260908-1/native-application-core",
+      "sha256": "558d1607e4648321c9537215084e759496937d9591c319a21443f443193fda9a",
+      "size": 39488
+    },
+    "guest_production_inputs": 44,
+    "host_compiler_bindings": 57,
+    "image_profiles": [
+      "fallback",
+      "legacy-rust",
+      "native-rust",
+      "native-sysfs-verify"
+    ],
+    "image_record": {
+      "path": "/work/mckernel-native-ultra-images-20260909-3/record.json",
+      "sha256": "5508223fb9fd9951f64163dd7ef7ecf6a268ed8b4a7879551961142f9ba7691d",
+      "size": 218483
+    },
+    "launcher": {
+      "path": "/work/native-application-launcher-20260908-2/rust/executer/user/mcexec",
+      "sha256": "b786e9c98ecc3d429c5ce4d683f1ef4ebca7b3ea132b8435ed6026fc9e984639",
+      "size": 453288
+    },
+    "linux_kernel": {
+      "path": "/work/native-ultra-module-20260909-1/bzImage",
+      "sha256": "b6cbd689108f499d37ba8d3768f2cdd6cb0f3422d93a4e091af93680686e94eb",
+      "size": 16130048
+    },
+    "mckernel_image": {
+      "path": "/work/mckernel-native-ultra-images-20260909-3/native-rust/kernel/mckernel.img",
+      "sha256": "eb58a8b064212d7fa3ca6949778fd811f985433a54aaf26e7f3e2a0f373a4fd8",
+      "size": 8048432
+    },
+    "module_record": {
+      "path": "/work/native-ultra-module-20260909-1/record.json",
+      "sha256": "484f0bc651773d150472bc1ee38988f25da6baad105e6d8ccd0ac9e63ef6ca1e",
+      "size": 44508
+    },
+    "modules": [
+      {
+        "path": "/work/native-ultra-module-20260909-1/ihk.ko",
+        "sha256": "2443a0b50b2aa1ad8f003558cd30bb0628ae35544925ca67e998a7cbc01545df",
+        "size": 1357704
+      },
+      {
+        "path": "/work/native-ultra-module-20260909-1/ihk-smp-x86_64.ko",
+        "sha256": "607b2507aed68eed3c762fc63d25558f989d3e08297a69c5942c4cee3f20a5bc",
+        "size": 11039064
+      },
+      {
+        "path": "/work/native-ultra-module-20260909-1/mcctrl.ko",
+        "sha256": "332d7560e02f64844a4d01b837c2d64e65d0f792f3d186bdb8e3e19553efce46",
+        "size": 1916160
+      }
+    ]
+  },
+  "source_binding_authority": "Exact current source/compiler identities and detailed accepted evidence are in final_checkpoint; a prior source_parent commit alone is insufficient.",
+  "status": "PREPARED_FOR_DRAFTING",
+  "unresolved_runtime_inputs": {
+    "capability_acceptance": "All broader catalog execution remains blocked by global and case-specific gates.",
+    "oracles": "Independent per-case oracle artifacts remain unresolved and unaccepted.",
+    "payloads": "Per-case payloads are not drafted or built.",
+    "runner": "The broader repository execution runner and its runtime validation remain incomplete."
+  }
+}

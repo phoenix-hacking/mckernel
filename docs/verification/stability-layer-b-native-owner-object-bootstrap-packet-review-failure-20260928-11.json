@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "record_kind": "layer_b_native_owner_object_bootstrap_packet_review",
+  "recorded_utc": "2026-09-28T09:27:00Z",
+  "status": "FAIL_OBJECT_BOOTSTRAP_PACKET",
+  "packet10_sha256": "b65c345bc8b15e6043bf0ae728d23e0cba895dcfbf3ad383160011094900acbd",
+  "correction11_sha256": "c5966dd64e8d38857433f2c9bbdd0b4a41793e40535f9d32a20a35af03519604",
+  "finding": "The corrected prerequisite rule exempts the exact source from the outside-root rule but still applies header-baseline membership to it, so every valid dependency file is rejected because the separately pinned source is not below an include root.",
+  "convergence_decision": "The bounded prose correction is exhausted. Replace prose-only correction with an executable controller that encodes and tests separate source/header classification before any compile release.",
+  "compilation_released": false,
+  "owner_execution_released": false,
+  "acceptance_credit": false
+}

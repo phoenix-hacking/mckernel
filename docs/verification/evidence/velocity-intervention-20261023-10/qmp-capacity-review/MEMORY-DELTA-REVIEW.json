@@ -1,0 +1,55 @@
+{
+  "schema": "mckernel.independent-qmp-memory-delta-review.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ACCEPT_MEMORY_ONLY_SOURCE_DELTA_FOR_ONE_FRESH_ROOT_GRANTED_ORDINARY_REGRESSION",
+  "review": "MEMORY-DELTA-REVIEW.md",
+  "review_scope": "Only declared row-memory correction and closed memory/admission arithmetic; no full source reaudit.",
+  "current_markers": {
+    "SOURCE-READY.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/qmp-capacity-fix/SOURCE-READY.json",
+      "sha256": "d5969c8f777a3f3ff4f1bcb7e2829f805ae592cbd1fa3e1ba0a182248a4339bc"
+    },
+    "MEMORY-CORRECTION.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/qmp-capacity-fix/MEMORY-CORRECTION.json",
+      "sha256": "8c963eab09b5d998aee8b61617e0fd3396fea207c6c07be1c7e1bdcbd1d2950e"
+    }
+  },
+  "corrected_test_source": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/qmp-capacity-fix/candidate/scripts/tests/test_qmp_capture.py",
+    "bytes": 24142,
+    "sha256": "421063d4ded1c80acec0ee3e0ad39a156737ac83cde7d7a4a68525f61a18d237"
+  },
+  "six_runtime_source_hashes_unchanged": true,
+  "first_failure_byte_preservation_confirmed": true,
+  "actual_first_test_result": {
+    "tests": 24,
+    "passed": 23,
+    "failed": 1,
+    "measured_row_bytes": 542,
+    "old_allowance": 512
+  },
+  "corrected_declared_row_allowance_bytes": 640,
+  "fixed_interpreter_control_allowance_MiB": 256,
+  "verified_memory_arithmetic_MiB": {
+    "row_metadata": 642.5,
+    "extra_metadata": 128.5,
+    "inner_data": 1654.5,
+    "outer_data": 1622.5,
+    "inner_with_fixed": 1910.5,
+    "outer_with_fixed": 1878.5,
+    "per_process_AS": 2048,
+    "inner_AS_margin": 137.5,
+    "outer_AS_margin": 169.5,
+    "guest_failure_overlap": 10102.5,
+    "container_memory": 12288,
+    "container_margin": 2185.5
+  },
+  "logical_growth_MiB_unchanged": 4224,
+  "shared_capture_MiB_unchanged": 640,
+  "new_reservation_increase_required": false,
+  "corrected_fixture_measures_own_VmSize_and_full_sums": true,
+  "reviewer_test_root_or_workload_calls": 0,
+  "second_test_acceptance": false,
+  "native_release_or_P12_credit": false,
+  "remaining_check": "One fresh direct root-granted run with corrected markers/test source; retain actual row-memory-model.json and preserve any failure without an automatic extra test cycle."
+}

@@ -1,0 +1,160 @@
+
+/output/build/drivers/misc/mckernel/m15_mmap_trace_gates.o:     file format elf64-x86-64
+
+SYMBOL TABLE:
+0000000000000000 l    d  .text	0000000000000000 .text
+0000000000000000 l    d  __jump_table	0000000000000000 __jump_table
+0000000000000000 l    d  .debug_info	0000000000000000 .debug_info
+0000000000000000 l    d  .debug_abbrev	0000000000000000 .debug_abbrev
+0000000000000000 l    d  .debug_line	0000000000000000 .debug_line
+0000000000000000 l    d  .debug_line_str	0000000000000000 .debug_line_str
+0000000000000010 g     F .text	0000000000000017 m15_mmap_trace_start_enabled
+0000000000000000         *UND*	0000000000000000 __x86_return_thunk
+0000000000000000         *UND*	0000000000000000 __tracepoint_mmap_lock_start_locking
+0000000000000040 g     F .text	0000000000000017 m15_mmap_trace_acquire_enabled
+0000000000000000         *UND*	0000000000000000 __tracepoint_mmap_lock_acquire_returned
+0000000000000070 g     F .text	0000000000000017 m15_mmap_trace_release_enabled
+0000000000000000         *UND*	0000000000000000 __tracepoint_mmap_lock_released
+
+
+
+Disassembly of section .text:
+
+0000000000000000 <m15_mmap_trace_start_enabled-0x10>:
+   0:	90                   	nop
+   1:	90                   	nop
+   2:	90                   	nop
+   3:	90                   	nop
+   4:	90                   	nop
+   5:	90                   	nop
+   6:	90                   	nop
+   7:	90                   	nop
+   8:	90                   	nop
+   9:	90                   	nop
+   a:	90                   	nop
+   b:	90                   	nop
+   c:	90                   	nop
+   d:	90                   	nop
+   e:	90                   	nop
+   f:	90                   	nop
+
+0000000000000010 <m15_mmap_trace_start_enabled>:
+  10:	f3 0f 1e fa          	endbr64
+  14:	eb 07                	jmp    1d <m15_mmap_trace_start_enabled+0xd>
+  16:	31 c0                	xor    %eax,%eax
+  18:	e9 00 00 00 00       	jmp    1d <m15_mmap_trace_start_enabled+0xd>
+			19: R_X86_64_PLT32	__x86_return_thunk-0x4
+  1d:	b8 01 00 00 00       	mov    $0x1,%eax
+  22:	e9 00 00 00 00       	jmp    27 <m15_mmap_trace_start_enabled+0x17>
+			23: R_X86_64_PLT32	__x86_return_thunk-0x4
+  27:	90                   	nop
+  28:	90                   	nop
+  29:	90                   	nop
+  2a:	90                   	nop
+  2b:	90                   	nop
+  2c:	90                   	nop
+  2d:	90                   	nop
+  2e:	90                   	nop
+  2f:	90                   	nop
+  30:	90                   	nop
+  31:	90                   	nop
+  32:	90                   	nop
+  33:	90                   	nop
+  34:	90                   	nop
+  35:	90                   	nop
+  36:	90                   	nop
+  37:	90                   	nop
+  38:	90                   	nop
+  39:	90                   	nop
+  3a:	90                   	nop
+  3b:	90                   	nop
+  3c:	90                   	nop
+  3d:	90                   	nop
+  3e:	90                   	nop
+  3f:	90                   	nop
+
+0000000000000040 <m15_mmap_trace_acquire_enabled>:
+  40:	f3 0f 1e fa          	endbr64
+  44:	eb 07                	jmp    4d <m15_mmap_trace_acquire_enabled+0xd>
+  46:	31 c0                	xor    %eax,%eax
+  48:	e9 00 00 00 00       	jmp    4d <m15_mmap_trace_acquire_enabled+0xd>
+			49: R_X86_64_PLT32	__x86_return_thunk-0x4
+  4d:	b8 01 00 00 00       	mov    $0x1,%eax
+  52:	e9 00 00 00 00       	jmp    57 <m15_mmap_trace_acquire_enabled+0x17>
+			53: R_X86_64_PLT32	__x86_return_thunk-0x4
+  57:	90                   	nop
+  58:	90                   	nop
+  59:	90                   	nop
+  5a:	90                   	nop
+  5b:	90                   	nop
+  5c:	90                   	nop
+  5d:	90                   	nop
+  5e:	90                   	nop
+  5f:	90                   	nop
+  60:	90                   	nop
+  61:	90                   	nop
+  62:	90                   	nop
+  63:	90                   	nop
+  64:	90                   	nop
+  65:	90                   	nop
+  66:	90                   	nop
+  67:	90                   	nop
+  68:	90                   	nop
+  69:	90                   	nop
+  6a:	90                   	nop
+  6b:	90                   	nop
+  6c:	90                   	nop
+  6d:	90                   	nop
+  6e:	90                   	nop
+  6f:	90                   	nop
+
+0000000000000070 <m15_mmap_trace_release_enabled>:
+  70:	f3 0f 1e fa          	endbr64
+  74:	eb 07                	jmp    7d <m15_mmap_trace_release_enabled+0xd>
+  76:	31 c0                	xor    %eax,%eax
+  78:	e9 00 00 00 00       	jmp    7d <m15_mmap_trace_release_enabled+0xd>
+			79: R_X86_64_PLT32	__x86_return_thunk-0x4
+  7d:	b8 01 00 00 00       	mov    $0x1,%eax
+  82:	e9 00 00 00 00       	jmp    87 <m15_mmap_trace_release_enabled+0x17>
+			83: R_X86_64_PLT32	__x86_return_thunk-0x4
+
+/output/build/drivers/misc/mckernel/m15_mm_write_warning.o:     file format elf64-x86-64
+
+SYMBOL TABLE:
+0000000000000000 l    d  .text	0000000000000000 .text
+0000000000000000 l    d  __bug_table	0000000000000000 __bug_table
+0000000000000000 l    d  .rodata.str1.1	0000000000000000 .rodata.str1.1
+0000000000000000 l    d  .debug_info	0000000000000000 .debug_info
+0000000000000000 l    d  .debug_abbrev	0000000000000000 .debug_abbrev
+0000000000000000 l    d  .debug_line	0000000000000000 .debug_line
+0000000000000000 l    d  .debug_line_str	0000000000000000 .debug_line_str
+0000000000000010 g     F .text	000000000000000b m15_mmap_write_lock_warning
+0000000000000000         *UND*	0000000000000000 __x86_return_thunk
+
+
+
+Disassembly of section .text:
+
+0000000000000000 <m15_mmap_write_lock_warning-0x10>:
+   0:	90                   	nop
+   1:	90                   	nop
+   2:	90                   	nop
+   3:	90                   	nop
+   4:	90                   	nop
+   5:	90                   	nop
+   6:	90                   	nop
+   7:	90                   	nop
+   8:	90                   	nop
+   9:	90                   	nop
+   a:	90                   	nop
+   b:	90                   	nop
+   c:	90                   	nop
+   d:	90                   	nop
+   e:	90                   	nop
+   f:	90                   	nop
+
+0000000000000010 <m15_mmap_write_lock_warning>:
+  10:	f3 0f 1e fa          	endbr64
+  14:	0f 0b                	ud2
+  16:	e9 00 00 00 00       	jmp    1b <m15_mmap_write_lock_warning+0xb>
+			17: R_X86_64_PLT32	__x86_return_thunk-0x4

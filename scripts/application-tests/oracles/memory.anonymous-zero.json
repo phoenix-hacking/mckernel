@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "case_id": "memory.anonymous-zero",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/memory.anonymous-zero"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "parameters": {"bytes": [1, 4095, 4096, 4097, 65553, 1048576]},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "canonical-record-with-relations", "fields": ["bytes", "zero_bad", "fill_bad", "munmap"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["zero_bad equals bytes for every vector", "fill_bad equals bytes after complete readback", "munmap equals 0 for every mapping"],
+  "unresolved_expectations": ["Freeze canonical output and reviewed input/oracle SHA256 before execution."],
+  "max_question_for_reviewer": "Confirm anonymous private mappings are required to be zero-filled before first access for all six sizes."
+}

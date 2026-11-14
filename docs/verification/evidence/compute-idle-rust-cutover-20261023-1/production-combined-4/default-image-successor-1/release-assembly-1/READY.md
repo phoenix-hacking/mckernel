@@ -1,0 +1,11 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+Release assembly for actual candidate8826312b and compact static request65f8f8f0. Existing reviewed request/release templates advance only accepted source/controller/manifest/namespace bindings. The root-recorded genuine source/profile verdict, source acceptance, next checkpoint/fetched blobs, fresh physical predecessor/current_postjoin, UUID/loop/backing/full-growth capacity, aggregate grant and independent execution release remain null. Historical failed227 physical reference2ba0 is reference only; any newer227 run supersedes it.
+
+Three small exact controller sources are copied under source-publication/ for the next root checkpoint and direct fetched-blob comparison. The accepted static request/source tree were neither recopied nor rematerialized. SOURCE-PUBLICATION-BINDINGS.json binds private and repository bytes; fetched fields remain null.
+
+REMAINING-COMMANDS.NOT-EXECUTED.json contains exact proposed finite read-only identity/space/memory, findmnt UUID, backing/full-sparse-gap stat, and sudo -A losetup association argv. None ran. Its finalization argv reads a fresh root-owned five-field fact file and exclusively creates canonical compact FINAL request with only the approved null fields filled. Syntax and the actual newline serialization were checked without running it. Do not execute before genuine root admission; static data remains nonexecutable. Existing root reviewed release/guard protocol must be bound to this cohort, not invoked unchanged from a historical dispatcher.
+
+Strict227 owns next-heavy priority. A private HOST-output M14 build may run only at a reviewed quiescent boundary. Existing profile stays CPUs2-5/4jobs/12GiB/no swap/512tasks/no network, permanentmutex27:4 preserved, HOST16GiB and scratch12GiB floors plus full sparse gap and actual filesystem growth. No142growth prerequisite is inferred, and no fresh capacity fact is supplied here.
+
+Next executable observation: root's released fresh finite admission capture after latest physical227 retirement, followed by exact checkpoint/fetched-source binding and one-shot execution review. No root/probe/compiler/Docker/guest or final-request write occurred. No new acceptance credit.

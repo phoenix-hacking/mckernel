@@ -1,0 +1,25 @@
+{
+  "operation": {
+    "name": "run-launcher",
+    "argv": [
+      "/usr/bin/taskset",
+      "-c",
+      "6",
+      "/usr/bin/prlimit",
+      "--as=2147483648:2147483648",
+      "--cpu=30:30",
+      "--fsize=8388608:8388608",
+      "--nofile=4096:4096",
+      "--",
+      "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-v2-launcher"
+    ],
+    "expected_exit": 1,
+    "executable_pin": "Require fresh compiled binary hash recorded after preceding compile and before run"
+  },
+  "compiled_binary_pin": {
+    "path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-v2-launcher",
+    "sha256": "0b4e3e3e7a1c98d69882ea28ec3f15d0f3e2bf61a080076d586e279764a9cf09",
+    "bytes": 3975232
+  },
+  "aggregate_remaining_seconds": 22.703426475985907
+}

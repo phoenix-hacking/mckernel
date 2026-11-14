@@ -1,0 +1,37 @@
+warning: target feature `sse2` must be enabled to ensure that the ABI of the current target can be implemented correctly
+  |
+  = note: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+  = note: for more information, see issue #116344 <https://github.com/rust-lang/rust/issues/116344>
+
+error[E0428]: the name `kmalloc_cache_alloc_bridge` is defined multiple times
+    --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/full-current-private-source-production-preparation-1/bounded-compiler-token-source-correction-1/source/kernel/rust/mem_helpers.rs:6962:1
+     |
+  66 |     fn kmalloc_cache_alloc_bridge(size: SizeT, flag: CULong) -> *mut c_void;
+     |     ------------------------------------------------------------------------ previous definition of the value `kmalloc_cache_alloc_bridge` here
+...
+6962 | pub unsafe extern "C" fn kmalloc_cache_alloc_bridge(size: SizeT, flag: CULong) -> *mut c_void {
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `kmalloc_cache_alloc_bridge` redefined here
+     |
+     = note: `kmalloc_cache_alloc_bridge` must be defined only once in the value namespace of this module
+
+warning: the feature `core_intrinsics` is internal to the compiler or standard library
+ --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/full-current-private-source-production-preparation-1/bounded-compiler-token-source-correction-1/source/kernel/rust/lib.rs:2:12
+  |
+2 | #![feature(core_intrinsics)]
+  |            ^^^^^^^^^^^^^^^
+  |
+  = note: using it is strongly discouraged
+  = note: `#[warn(internal_features)]` on by default
+
+error[E0609]: no field `error` on type `X86BasicRegs`
+     --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/full-current-private-source-production-preparation-1/bounded-compiler-token-source-correction-1/source/kernel/rust/mem_helpers.rs:10028:66
+      |
+10028 |                 if context.is_null() { 0 } else { (*context).gpr.error },
+      |                                                                  ^^^^^ unknown field
+      |
+      = note: available fields are: `r15`, `r14`, `r13`, `r12`, `rbp` ... and 16 others
+
+error: aborting due to 2 previous errors; 2 warnings emitted
+
+Some errors have detailed explanations: E0428, E0609.
+For more information about an error, try `rustc --explain E0428`.

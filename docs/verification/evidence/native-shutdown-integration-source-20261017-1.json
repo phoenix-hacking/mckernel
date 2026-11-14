@@ -1,0 +1,544 @@
+{
+  "schema": 1,
+  "task_id": "native-shutdown-integration-source-20261017-1",
+  "status": "PASS_SOURCE_INTEGRATION_PENDING_INDEPENDENT_REVIEW_NOT_NATIVE_ACCEPTANCE",
+  "source_base_checkpoint": "0d90840a (dispatcher supplied; input bytes snapshotted before edits; no Git operations by author)",
+  "scope": "Actual provider consumer of same-live-boot claim, safe busy rejection, CPU/IRQ proof, unlocked worker joins and namespace rundown, ledger prerequisites, coupled logical commit. New candidate has not been built or run natively.",
+  "source_and_tests": [
+    {
+      "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
+      "sha256": "33b783c1e34727c0ae2e7202447a0516f7b8841a683b7580805c2b7d4fb0dc54",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/ihk_smp_x86_64.rs",
+      "current_sha256": "5b12bf77664095c966245ac8a1312a41c2fc16dd4a8233abd9e6c602305ecd6d",
+      "current_snapshot": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/frozen-inputs/ihk_smp_x86_64.rs"
+    },
+    {
+      "path": "host-kernel/native-rust/smp_cpu.rs",
+      "sha256": "a3a2db7fbfc2e73cf0aee2a950131128e4776075fbd4d6115eb46ad528d6fa45",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/smp_cpu.rs",
+      "current_sha256": "8e37d195fad58607549ff65e79b6aabb046f026404affe9180a88da98cf6a2a9",
+      "current_snapshot": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/frozen-inputs/smp_cpu.rs"
+    },
+    {
+      "path": "host-kernel/native-rust/smp_memory.rs",
+      "sha256": "374e397db63fe79ebf3290c68c4be9111d83932888b1e8b7db5e8a2404a8b659",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/smp_memory.rs",
+      "current_sha256": "8b2f2074417c8f681fa8972a40bbab3aa25a48f72bc7f145f7d553d64d3217ba",
+      "current_snapshot": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/frozen-inputs/smp_memory.rs"
+    },
+    {
+      "path": "host-kernel/native-rust/smp_service.rs",
+      "sha256": "69eef654f7258acd079a8a0dc3788330fb8a512a57522fdf181c940f469f63bc",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/smp_service.rs",
+      "current_sha256": "cd97c1528602323c43aaf70f528342fc3874fe9da1660cf1a767d27284cb5b5a",
+      "current_snapshot": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/frozen-inputs/smp_service.rs"
+    },
+    {
+      "path": "host-kernel/native-rust/smp_application.rs",
+      "sha256": "6b37a71ba79bf5746fd72123b82ebe5afc71c809310a2a942cea08a3d66cf5e8",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/smp_application.rs",
+      "current_sha256": "127829f3dd35b3d44c2b098279b7439dccb31a53508055e3cdd1fd9e450682e2",
+      "current_snapshot": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/frozen-inputs/smp_application.rs"
+    },
+    {
+      "path": "host-kernel/native-rust/sysfs_remote.rs",
+      "sha256": "a4fd15f2393493f081371ea22bb84092a95558cd19087e2c7a79da7b1c5a552d",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/sysfs_remote.rs",
+      "current_sha256": "fe4ec42333148770a36843a82f0c4cdf675a27065dbed1f13449a2b61472dfa9",
+      "current_snapshot": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/frozen-inputs/sysfs_remote.rs"
+    },
+    {
+      "path": "scripts/tests/test_native_shutdown_epoch_source_20261017_1.py",
+      "sha256": "8a09da48df85a1548212ef6fda18a606851f93ec2c159d3ff3125f76cd861ceb",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/before-compatibility-test_native_shutdown_epoch_source_20261017_1.py",
+      "current_sha256": "efd263f5a0fb7561f71a87ada9d725979b1ec1ef33cf3695dae731bcf5effc75",
+      "current_snapshot": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/frozen-inputs/test_native_shutdown_epoch_source_20261017_1.py"
+    },
+    {
+      "path": "scripts/tests/test_sysfs_remote_shutdown_20261017.py",
+      "sha256": "94010b6dbde2d9ce1514741976b063771ae648898cee38ee32ade5d1772c19fa",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/before-compatibility-test_sysfs_remote_shutdown_20261017.py",
+      "current_sha256": "a6b01e53bfec798feaca230481b717912c9acbf025e5ad5a63f96d8ff6eee559",
+      "current_snapshot": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/frozen-inputs/test_sysfs_remote_shutdown_20261017.py"
+    },
+    {
+      "path": "scripts/tests/test_native_shutdown_integration_source_20261017_1.py",
+      "sha256": "5817829b9327775b198f0a06332d76c3e2e5ff12bb92326e2b90d44faafb2387",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/frozen-inputs/test_native_shutdown_integration_source_20261017_1.py",
+      "new": true
+    },
+    {
+      "path": "scripts/tests/fixtures/native_shutdown_integration_source_20261017_1.rs",
+      "sha256": "de6660e6efa71760864c1b3b3a3a1bc1c6433ab3eea557e75bd3a0af3f251ad7",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/frozen-inputs/native_shutdown_integration_source_20261017_1.rs",
+      "new": true
+    }
+  ],
+  "coherent_nine_file_source_closure_sha256": {
+    "host-kernel/native-rust/ihk_smp_x86_64.rs": "5b12bf77664095c966245ac8a1312a41c2fc16dd4a8233abd9e6c602305ecd6d",
+    "host-kernel/native-rust/smp_cpu.rs": "8e37d195fad58607549ff65e79b6aabb046f026404affe9180a88da98cf6a2a9",
+    "host-kernel/native-rust/smp_memory.rs": "8b2f2074417c8f681fa8972a40bbab3aa25a48f72bc7f145f7d553d64d3217ba",
+    "host-kernel/native-rust/smp_service.rs": "cd97c1528602323c43aaf70f528342fc3874fe9da1660cf1a767d27284cb5b5a",
+    "host-kernel/native-rust/smp_application.rs": "127829f3dd35b3d44c2b098279b7439dccb31a53508055e3cdd1fd9e450682e2",
+    "host-kernel/native-rust/sysfs_remote.rs": "fe4ec42333148770a36843a82f0c4cdf675a27065dbed1f13449a2b61472dfa9",
+    "host-kernel/native-rust/smp_file_pager.rs": "655c029bcddf937b6445ee01d076978ff9606832d60fd038e07076bee939e96c",
+    "host-kernel/native-rust/smp_procfs.rs": "4ae39992d0354b2f0b32de4a3e26ce8a621ede6dff69dd92ce303d4ab90232ea",
+    "host-kernel/native-rust/sysfs_memory.rs": "d64efe15ff3545e6f21733cdc6dcbf026df370049484a7221a653d502612bfc1"
+  },
+  "retained_dependency_sha256": {
+    "host-kernel/native-rust/sysfs_objects.rs": "2b04c57b43516550f0c3bdaf115b667d4a64393030494e79b553248c42aa7453",
+    "host-kernel/native-rust/sysfs_tree.rs": "3ee25a02b17654b6f23776d13aaa62de5b597e23cb214ca9c519b5886c29b232",
+    "host-kernel/native-rust/procfs_objects.rs": "4d1247a87706e94fa75d7bea667d9349d48b7c525eba99d02688a87f5369411c",
+    "host-kernel/native-rust/os_runtime.rs": "65107aafb28868e76640cb2e1862e5d9e36a930a2e9dab850824d5108879225a",
+    "host-kernel/native-rust/smp_resource.rs": "d4a5794f60be7fa5e549e7c9b806e366276d87370adbc5df94e51b8d464e8dcd"
+  },
+  "drain_prerequisite": {
+    "report": "docs/verification/evidence/native-shutdown-drain-helpers-source-20261017-1.json",
+    "sha256": "65fa10b904614eaa6621b4fb330805c236ff025552ed83b0dbc9de59c666047e",
+    "source_hashes": {
+      "host-kernel/native-rust/smp_file_pager.rs": "655c029bcddf937b6445ee01d076978ff9606832d60fd038e07076bee939e96c",
+      "host-kernel/native-rust/smp_procfs.rs": "4ae39992d0354b2f0b32de4a3e26ce8a621ede6dff69dd92ce303d4ab90232ea",
+      "host-kernel/native-rust/sysfs_memory.rs": "d64efe15ff3545e6f21733cdc6dcbf026df370049484a7221a653d502612bfc1"
+    },
+    "producer_dependency": "These helpers require the changed scoped PeerStopped accessor below; no claim of compilation against unchanged epoch2 Remote bytes",
+    "expert_execution": "Author reviewed prepared helper adapter and ran exactly once CPU6/1GiB; seven actual-body/open/SlotDrop cases PASS; raw test-expert-correction retained in helper report; original two adapter failures preserved and escalated"
+  },
+  "proof_visibility_delta": {
+    "file": "host-kernel/native-rust/sysfs_remote.rs",
+    "before_sha256": "a4fd15f2393493f081371ea22bb84092a95558cd19087e2c7a79da7b1c5a552d",
+    "after_sha256": "fe4ec42333148770a36843a82f0c4cdf675a27065dbed1f13449a2b61472dfa9",
+    "signature": "fn matches_owner(&self, owner: super::smp_resource::OsToken) -> bool -> pub(super) fn matches_owner(...) -> bool",
+    "reason": "Actual nested smp_memory::service::procfs close helper consumes the real borrowed proof via crate::sysfs_remote::PeerStopped; constructor and witness fields remain private",
+    "actual_nested_path_compiled": true
+  },
+  "implementation": [
+    "ihk_smp_shutdown_v6 acquires ShutdownBoot inside the unchanged synchronous os_runtime v6 operation/module lease and moves that exact claim into shutdown_os_boot",
+    "Application reservation closure shares slots mutex with actual reserve; shutdown_closed rejects preobtained Application clones; live entries/release mailboxes/pagers remain intact and return EBUSY before CPU effects",
+    "Existing IRQ close/drain and exact epoch-bound actual CPU reset journal produce the scoped PeerStopped; CPU/hotplug/memory guards are dropped before service joins and namespace removal",
+    "Procfs admission closes fail-closed; retained sessions/processes reject teardown. Existing stop_join gate joins three workers. Pending metadata/zeroing/procfs/master replies keep owners busy",
+    "Service Options detach under short locks, then existing synchronous sysfs Tree/File and procfs Owner removal drops run outside dependent locks. Remote call drain and every transient mapping ledger are rechecked",
+    "Only successful exact-runtime service retirement transitions the live boot epoch to SERVICES_RETIRED. finish_shutdown_claim requires that stamp, exact epoch Arc and same Started runtime before coupled logical commit",
+    "reconcile_shutdown_boot consumes the original claim, revalidates exact CPU identities/journal epoch under CPU->memory ordering, and drops final Started clone only after guards are gone",
+    "Legacy owner-only continuing/sysfs fail-closed guard remains; it additionally blocks a live services-retired claim. No busy entry/ledger is discarded. Post-effect failures preserve physical allocations, logical owners and journals",
+    "Normal stopped-peer Attribute destruction omits a meaningless RELEASE RPC after validated remote closure; unrelated errors are not suppressed. New specific service stage logs identify the first failing boundary"
+  ],
+  "test_profile": {
+    "cpu": 0,
+    "jobs": 1,
+    "rlimit_as_bytes": 1073741824,
+    "python": "/home/holden/anaconda3/bin/python3",
+    "rustc": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+    "flags": [
+      "--edition=2021",
+      "--test",
+      "-Wrust_2018_idioms",
+      "-Dwarnings"
+    ],
+    "environment": "Private HOME/TMPDIR in retained root; PATH=/usr/bin:/bin; PYTHONDONTWRITEBYTECODE=1",
+    "root": false,
+    "docker": false,
+    "heavy_build": false,
+    "guest": false
+  },
+  "results": {
+    "python_checks": 10,
+    "distinct_actual_body_rust_cases": 33,
+    "prior_cases_preserved": 25,
+    "new_integration_cases": 8,
+    "distinct_compile_rejection_controls": 5,
+    "standalone_compatibility_replays": "Old six epoch and four Remote case runners PASS against the actual current consumer fixture; duplicate runs are not distinct progress",
+    "positive": "Actual v6 callback -> actual shutdown consumer -> actual service/ledger checks -> actual same-claim memory/CPU logical commit; exactly one release, three joins and both namespace drops",
+    "negative": [
+      "active app and pager pre-effect EBUSY keep entries",
+      "active Remote callback, pending worker work, procfs slot/process post-effect busy keep namespace/physical owners",
+      "transient ledger/map preflight/IRQ release failure keep both logical maps and CPU devices",
+      "same-generation reboot journal rejection and stale epoch after callback drain prevent commit",
+      "blocked worker join prevents release with all dependent locks free",
+      "actual Tree/File Drop bodies block callback payload drop and final commit until modeled Linux sysfs_remove_file_ns returns",
+      "claim/proof cannot escape (E0521/E0515); actual service omitted lifetime rejected under production lints; two Send E0277 controls"
+    ],
+    "actual_nested_proof_visibility_and_module_path_compiled": true
+  },
+  "failure_history": [
+    {
+      "family": "new integration test adapter",
+      "first": "attempt1 compile E0603 fixture-only service hook visibility + unused alias; no production failure",
+      "bounded_correction": "Test hook visibility adjusted only; unused alias removed; attempt2 PASS17; original retained"
+    },
+    {
+      "family": "legacy standalone Started adapter compatibility",
+      "first": "obsolete-epoch-adapter E0599 omitted new actual Started admission/retire methods; retained raw",
+      "bounded_correction": "Authorized old runner test methods now lazily consume current integration fixture, preserve exact 6+4 case filters and all lifetime oracles; final standalone runners PASS"
+    },
+    {
+      "family": "drain dependency fixture",
+      "history": "Two prior attempts escalated; expert inspected prepared correction and executed once PASS7. Genuine procfs crate path source correction and independent source hashes retained in helper report; no reset of history"
+    }
+  ],
+  "limits": [
+    "No actual module/image compilation or native lifecycle execution of this source closure; immutable first1769263c artifact/package unchanged",
+    "Linux hardware/IRQ closure, real kthread exit and Linux namespace APIs remain deterministic adapters in this source check. Actual CPU journal/consumer/service/commit bodies execute; no hardware or native restoration acceptance is claimed",
+    "Existing sysfs Tree/File Drop bodies execute in the blocked callback test. Existing procfs Owner::drop/proc_remove path is source-bound and reviewed as dependency; no real Linux procfs rundown was executed here",
+    "Live applications or retained procfs/pager/ledger owners return busy rather than being forcibly cancelled/discarded. This safe quiescent integration does not claim full active-application shutdown cancellation",
+    "The unchanged os_runtime operation/module lease contract is source-bound at os_runtime.rs:1260-1308; this fixture invokes the actual provider callback directly and is not a fresh executable IHK/module-lease test",
+    "Full native build and guest execution require independent review and dispatcher execution release. Practical M05 remains unaccepted until actual matching artifact native lifecycle evidence"
+  ],
+  "next_executable_observation": "Independent review of this exact coherent closure and canonical evidence; then dispatcher matched native module build and fresh quiet boot->shutdown->resource-release/reboot diagnostic under reviewed isolation. Keep first artifact/guest failures retained.",
+  "raw_results": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/attempt1/actual.rs",
+      "sha256": "9f4ada8c25ad04e906edd96bb64fd198e39e735c3bb79525074283858e7ca6c0"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/attempt1/compile.status",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/attempt1/compile.stderr",
+      "sha256": "a87fe1bdac04da0e1c4f39eaae415f9e3e513907bce31bc369e863c95ec75b4f"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/attempt1/compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/attempt2/actual.rs",
+      "sha256": "cbe01b214a6a20ad3441e76b5850dd05f3a7025e9d32853a27d3a391553dca4c"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/attempt2/compile.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/attempt2/compile.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/attempt2/compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/attempt2/escape-claim.rs",
+      "sha256": "7d088c4bf8b560295c100656eb38ef4daaddc7a88f40f2a2d2834f8f5ce8f3e5"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/attempt2/escape-claim.status",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/attempt2/escape-claim.stderr",
+      "sha256": "f88bc94ddc8bb32d89c34fbb8866a243d25fa48c13a525872d6d47621b630864"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/attempt2/escape-proof.rs",
+      "sha256": "7ff49d6cdd36d124a657844b1a96892bf644eaff1ba9333ae3761acb0e81e469"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/attempt2/escape-proof.status",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/attempt2/escape-proof.stderr",
+      "sha256": "734878c1afcb024288c607823e15af089287529a905d98f399b18bc97d295ac9"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/attempt2/run.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/attempt2/run.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/attempt2/run.stdout",
+      "sha256": "37cc9ef95b66782fb56e3ed363e0caf549b4ef582c73ad655277d557bb77ec26"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/callback-boundary-extension/actual.rs",
+      "sha256": "e0b44dbbb5dda4af9edf8061365d3aba34db6a547d53b93badf1d22884b90a06"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/callback-boundary-extension/compile.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/callback-boundary-extension/compile.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/callback-boundary-extension/compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/callback-boundary-extension/elided-service-lifetime.rs",
+      "sha256": "95c42bd66b27daaa031feef3866ed41f46d77a5f725f77fa1d6592885d5e4e7a"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/callback-boundary-extension/elided-service-lifetime.status",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/callback-boundary-extension/elided-service-lifetime.stderr",
+      "sha256": "bd4081d262f4be375c19ea6b0f4443f54b3b176d1311895c834b83ffc5a08da4"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/callback-boundary-extension/escape-claim.rs",
+      "sha256": "cf75c273f742ec788e164c121f7ee4b73928d131d9bfa9b0fd195ada500c9385"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/callback-boundary-extension/escape-claim.status",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/callback-boundary-extension/escape-claim.stderr",
+      "sha256": "a6e4ab6389574fcf31b3dbb446bc69ce923d594294902dc0d4f73a0985f5591b"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/callback-boundary-extension/escape-proof.rs",
+      "sha256": "54c832dcaa5ddfccd483f401b4ce35d6221e0b330670f5305c3be2cc0a1419b0"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/callback-boundary-extension/escape-proof.status",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/callback-boundary-extension/escape-proof.stderr",
+      "sha256": "ed249c99edbcda4a96da9c3867a7b7d337ce53de68946be99182b9781689f3f0"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/callback-boundary-extension/run.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/callback-boundary-extension/run.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/callback-boundary-extension/run.stdout",
+      "sha256": "a93cac7632b5f99b61939cbd20468ef47860e2557343944380af0a5c116a7c63"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/obsolete-epoch-adapter/actual.rs",
+      "sha256": "b8136f759ff4e208ab38f73e7b7b4e97a5258fca77fb227afa1cd7eda043683b"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/obsolete-epoch-adapter/compile.status",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/obsolete-epoch-adapter/compile.stderr",
+      "sha256": "d3c891a8120487f24613722f2923561e857e1706494e9f9d9379f261df78c19f"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/obsolete-epoch-adapter/compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/final-integration/actual.rs",
+      "sha256": "17c089417080513624f967e88b43c7d18285d535a3a7a778ee4ebec5d29e9d86"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/final-integration/compile.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/final-integration/compile.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/final-integration/compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/final-integration/elided-service-lifetime.rs",
+      "sha256": "a3e4f9f0ad2100e921cfd03c8c1d60f95b407795ff75d53eb97836bbde62f838"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/final-integration/elided-service-lifetime.status",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/final-integration/elided-service-lifetime.stderr",
+      "sha256": "4d1921cadc07d000261549e4e84b84bf077f4084102d379d1419a29f91a3f6f1"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/final-integration/escape-claim.rs",
+      "sha256": "4d6a8b0688ec1ed023244f4b35f0168fefdee2f8ca0036acbae7f4e7c84b34a6"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/final-integration/escape-claim.status",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/final-integration/escape-claim.stderr",
+      "sha256": "6f7335258f712372e924df1300a5b98efb86d2587c1d00dd264379983a228366"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/final-integration/escape-proof.rs",
+      "sha256": "e2e91352e1c83eda6c843d9480a2286fa40306f887da3f48203bf2cef7c8da41"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/final-integration/escape-proof.status",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/final-integration/escape-proof.stderr",
+      "sha256": "3c59d60eb7782bde0348e435ba90147735cee6b3c8b5a96c9b979f16f4faab09"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/final-integration/run.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/final-integration/run.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/final-integration/run.stdout",
+      "sha256": "a93cac7632b5f99b61939cbd20468ef47860e2557343944380af0a5c116a7c63"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/final-epoch-compatibility/actual.rs",
+      "sha256": "17c089417080513624f967e88b43c7d18285d535a3a7a778ee4ebec5d29e9d86"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/final-epoch-compatibility/compile.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/final-epoch-compatibility/compile.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/final-epoch-compatibility/compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/final-epoch-compatibility/elided-service-lifetime.rs",
+      "sha256": "a3e4f9f0ad2100e921cfd03c8c1d60f95b407795ff75d53eb97836bbde62f838"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/final-epoch-compatibility/elided-service-lifetime.status",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/final-epoch-compatibility/elided-service-lifetime.stderr",
+      "sha256": "30ca2d0bfa316907a1e36eeca739cd656f983dd095f94a6cadc32afbb521a5fc"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/final-epoch-compatibility/escape-claim.rs",
+      "sha256": "9d5b6794be7dc7ee377a2596ca8b81563a7ca5564486e405ae3689961ac151df"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/final-epoch-compatibility/escape-claim.status",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/final-epoch-compatibility/escape-claim.stderr",
+      "sha256": "c9a389e9e8eb6a9fd6bab704b699a7cd9b503d7660c8753bf9afea8581cf96d1"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/final-epoch-compatibility/escape-proof.rs",
+      "sha256": "17613a0316f31e823b9a3928c825372735e9e2d156281d64c8d5a1887ec8a5b7"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/final-epoch-compatibility/escape-proof.status",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/final-epoch-compatibility/escape-proof.stderr",
+      "sha256": "8f970f35a2fd830ac9782d9745f6198a5c0ba6fa6c171dee607bbff53846ff31"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/final-epoch-compatibility/run.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/final-epoch-compatibility/run.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/final-epoch-compatibility/run.stdout",
+      "sha256": "0a7bbdcbc5dfba9904e69a7198b42ac309625af7f0576ae5a03d26e90c6d16c4"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/final-remote-compatibility/actual.rs",
+      "sha256": "17c089417080513624f967e88b43c7d18285d535a3a7a778ee4ebec5d29e9d86"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/final-remote-compatibility/compile.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/final-remote-compatibility/compile.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/final-remote-compatibility/compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/final-remote-compatibility/run.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/final-remote-compatibility/run.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/final-remote-compatibility/run.stdout",
+      "sha256": "04154fbb853059b2b98d72ba4eceb274f597d4e174b9be1399814996a443ceac"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/oracle.json",
+      "sha256": "9473edbbbbb39712e529e24fb2d9cc187a244e5f1df45c241262ca11a219077f"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/oracle-callback-boundary-extension.json",
+      "sha256": "f3160234ecd642531cd13e8b53d9701596b3c233e89242a55386b5160f8800cb"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/consumer-suite.stdout",
+      "sha256": "44504826bd3e5c0cb4f3c2f15adc52b0f66a2b194288ee358e49c1645bb97a16"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/consumer-suite.stderr",
+      "sha256": "c0e6304de24e639ed3bf4d1a446e9d0722db861309b18214ef41b8b7374ff7d8"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/consumer-suite.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/obsolete-adapter.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/obsolete-adapter.stderr",
+      "sha256": "ec20bb1b8546a68d2c468c4f21fff5184d975b874a6730fa9b27e748ea662986"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/obsolete-adapter.status",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/final-suite.stdout",
+      "sha256": "077f662126fffeee3d2cc6977e847d0a06eb693f0761a7f8c3e36dfac23800dc"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/final-suite.stderr",
+      "sha256": "52829cc4a1f1ee7dd5688a3d45a3f88e508ef0852838749e56e86b7cc3fe8246"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/final-suite.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/source-and-test.diff",
+      "sha256": "125ba0774deff37d7845912ddffc15b7e405e47afb67c548dbf05053e765496e"
+    }
+  ],
+  "full_owned_source_and_test_diff": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1/source-and-test.diff",
+  "reproduction": "ulimit -v 1048576; taskset -c 0 env HOME=<raw_root>/home TMPDIR=<raw_root>/tmp PATH=/usr/bin:/bin PYTHONDONTWRITEBYTECODE=1 MCKERNEL_SHUTDOWN_TEST_OUTPUT=<fresh-remote-output> MCKERNEL_SHUTDOWN_EPOCH_OUTPUT=<fresh-epoch-output> MCKERNEL_SHUTDOWN_INTEGRATION_OUTPUT=<fresh-integration-output> MCKERNEL_RUSTC_1_92=<rustc-above> /home/holden/anaconda3/bin/python3 -m unittest scripts.tests.test_native_shutdown_integration_source_20261017_1.ShutdownIntegrationTests scripts.tests.test_native_shutdown_epoch_source_20261017_1.ShutdownEpochTests scripts.tests.test_sysfs_remote_shutdown_20261017.SysfsRemoteShutdownTests scripts.tests.test_shutdown_cpu_reclaim.ShutdownCpuReclaimTests",
+  "raw_root": "/home/holden/mckernel-work/scratch/native-shutdown-integration-source-20261017-1"
+}

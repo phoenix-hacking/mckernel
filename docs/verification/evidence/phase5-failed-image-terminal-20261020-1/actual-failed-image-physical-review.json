@@ -1,0 +1,570 @@
+{
+  "all_owned_groups_empty": true,
+  "build_status": "FAIL",
+  "cleanup_separately_required": true,
+  "client_positive_contract": "Accepted Docker.call starts a fresh client session, waits the direct subprocess, records exited/code0, fsyncs closed streams; no signalled sudo or uncertain client latch. All eight actual client statuses are exited/code0. Guard prove_retired additionally accepts exact fresh stopped container and no client-retirement latch.",
+  "clients": [
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "create",
+        "--name",
+        "mckernel-image-e416df1d0e0b4605952ee3d28fd11da8",
+        "--label",
+        "mckernel.owner=5489099bb2aa4760886e80665106355e",
+        "--init",
+        "--network=none",
+        "--ipc=private",
+        "--cpus=4",
+        "--cpuset-cpus=2-5",
+        "--memory=12g",
+        "--memory-swap=12g",
+        "--pids-limit=512",
+        "--user",
+        "1000:1000",
+        "--cap-drop=ALL",
+        "--security-opt=no-new-privileges",
+        "--read-only",
+        "--tmpfs",
+        "/tmp:rw,nodev,nosuid,size=256m",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/python39-materialization-correction-1/materialized-source,dst=/src,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/thin-inputs.json,dst=/inputs.json,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/pre-common-gitlink-binding-diagnostic-1/gitlink-inputs-current-manifest-PROPOSAL.json,dst=/libdwarf-inputs.json,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/scratch/native-exact-mckernel-gitlink-libdwarf-942c927b-scratch22-authority3-image1-20261017,dst=/src/executer/user/lib/libdwarf/libdwarf,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/image-toolchain.json,dst=/toolchain.json,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/gitlink-nine-copy-observer-correction-1/native_rust_exact_mckernel_image_offline.py,dst=/driver.py,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/runtime-binding-correction-1/native_rust_exact_build_offline.py,dst=/native_rust_exact_build_offline.py,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/gitlink-nine-copy-observer-correction-1/full-image-attempt-1/owner-work,dst=/work",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output,dst=/out,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/scratch/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu,dst=/nightly,readonly",
+        "--entrypoint",
+        "/usr/bin/python3",
+        "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5",
+        "/driver.py",
+        "--source-root",
+        "/src",
+        "--candidate-sha",
+        "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+        "--ihk-sha",
+        "3114d9e7101ad52030eb3effa849a5c108972a1f",
+        "--manifest",
+        "/inputs.json",
+        "--toolchain",
+        "/toolchain.json",
+        "--output",
+        "/work/output",
+        "--evidence",
+        "/work/evidence",
+        "--jobs",
+        "4",
+        "--timeout",
+        "19800",
+        "--gitlink-manifest",
+        "/libdwarf-inputs.json",
+        "--native-fork-owned-transaction"
+      ],
+      "exit_code": 0,
+      "pid": 1999478,
+      "state": "exited",
+      "status": {
+        "bytes": 3309,
+        "path": "/home/holden/mckernel-work/scratch/native-rust-phase5-current-optin-image-guard-05383c1b3822457490dd41992ce0d899/command-3f0e05b5f11d471387786c9a9ab82fbd/status.json",
+        "sha256": "427f0d0b2361597b8b3db7ccef4cd27c372cf583a22d8f0efb331e6d616e1cc2"
+      },
+      "stderr": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/scratch/native-rust-phase5-current-optin-image-guard-05383c1b3822457490dd41992ce0d899/command-3f0e05b5f11d471387786c9a9ab82fbd/stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 65,
+        "path": "/home/holden/mckernel-work/scratch/native-rust-phase5-current-optin-image-guard-05383c1b3822457490dd41992ce0d899/command-3f0e05b5f11d471387786c9a9ab82fbd/stdout",
+        "sha256": "ae0fbe28bf63007da044dd75ad2d0e366f23f5b63b265b1a142bd0fa1f518d15"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "wait",
+        "mckernel-image-e416df1d0e0b4605952ee3d28fd11da8"
+      ],
+      "exit_code": 0,
+      "pid": 1999551,
+      "state": "exited",
+      "status": {
+        "bytes": 259,
+        "path": "/home/holden/mckernel-work/scratch/native-rust-phase5-current-optin-image-guard-05383c1b3822457490dd41992ce0d899/command-509683446daa4b788ea1d08799d4d3e1/status.json",
+        "sha256": "d3b37c367de99d5f8daa20a625885bc0f3e810dbf705713b68524f5592f5b1fa"
+      },
+      "stderr": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/scratch/native-rust-phase5-current-optin-image-guard-05383c1b3822457490dd41992ce0d899/command-509683446daa4b788ea1d08799d4d3e1/stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 2,
+        "path": "/home/holden/mckernel-work/scratch/native-rust-phase5-current-optin-image-guard-05383c1b3822457490dd41992ce0d899/command-509683446daa4b788ea1d08799d4d3e1/stdout",
+        "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "inspect",
+        "mckernel-image-e416df1d0e0b4605952ee3d28fd11da8"
+      ],
+      "exit_code": 0,
+      "pid": 2002502,
+      "state": "exited",
+      "status": {
+        "bytes": 260,
+        "path": "/home/holden/mckernel-work/scratch/native-rust-phase5-current-optin-image-guard-05383c1b3822457490dd41992ce0d899/command-517efbbd591144b9b952ad5946714b3f/status.json",
+        "sha256": "fee490db16261c0591b9146d38e9028e6c70b0e73862787211b023b33f0a3242"
+      },
+      "stderr": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/scratch/native-rust-phase5-current-optin-image-guard-05383c1b3822457490dd41992ce0d899/command-517efbbd591144b9b952ad5946714b3f/stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 16889,
+        "path": "/home/holden/mckernel-work/scratch/native-rust-phase5-current-optin-image-guard-05383c1b3822457490dd41992ce0d899/command-517efbbd591144b9b952ad5946714b3f/stdout",
+        "sha256": "340422a07c9a4926cf681d2a0f4bb815e4398789275f356cf80afcf4afdc0e94"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "image",
+        "inspect",
+        "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5"
+      ],
+      "exit_code": 0,
+      "pid": 1999470,
+      "state": "exited",
+      "status": {
+        "bytes": 297,
+        "path": "/home/holden/mckernel-work/scratch/native-rust-phase5-current-optin-image-guard-05383c1b3822457490dd41992ce0d899/command-9c640cbc823446d4b29772efbc203b12/status.json",
+        "sha256": "3b7a09305c6b84e7be390f21a9be48f0ec075cbcc13550786d5b88e4afcecb13"
+      },
+      "stderr": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/scratch/native-rust-phase5-current-optin-image-guard-05383c1b3822457490dd41992ce0d899/command-9c640cbc823446d4b29772efbc203b12/stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 3033,
+        "path": "/home/holden/mckernel-work/scratch/native-rust-phase5-current-optin-image-guard-05383c1b3822457490dd41992ce0d899/command-9c640cbc823446d4b29772efbc203b12/stdout",
+        "sha256": "ec329466befdb28861175d2a70be0eed867b2a295f36f5d94e33b738dc70cb9b"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "inspect",
+        "mckernel-image-e416df1d0e0b4605952ee3d28fd11da8"
+      ],
+      "exit_code": 0,
+      "pid": 2002005,
+      "state": "exited",
+      "status": {
+        "bytes": 260,
+        "path": "/home/holden/mckernel-work/scratch/native-rust-phase5-current-optin-image-guard-05383c1b3822457490dd41992ce0d899/command-af49698c1aef40519b306ffae989c477/status.json",
+        "sha256": "1f0b14fb397221a649eb0a480dc695ef6de848fc6eb3c86e296ba41ee8a16db3"
+      },
+      "stderr": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/scratch/native-rust-phase5-current-optin-image-guard-05383c1b3822457490dd41992ce0d899/command-af49698c1aef40519b306ffae989c477/stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 16889,
+        "path": "/home/holden/mckernel-work/scratch/native-rust-phase5-current-optin-image-guard-05383c1b3822457490dd41992ce0d899/command-af49698c1aef40519b306ffae989c477/stdout",
+        "sha256": "84b8a22fc502649525c1bfcbf443a741884febe4c08ac8284fb82759c5e649e4"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "start",
+        "mckernel-image-e416df1d0e0b4605952ee3d28fd11da8"
+      ],
+      "exit_code": 0,
+      "pid": 1999494,
+      "state": "exited",
+      "status": {
+        "bytes": 258,
+        "path": "/home/holden/mckernel-work/scratch/native-rust-phase5-current-optin-image-guard-05383c1b3822457490dd41992ce0d899/command-ba17397544554552bdcaf8a917cba819/status.json",
+        "sha256": "ad4c38df0ce9d042a23d14fd5977e4de0b2ef2ce2fdc6a382250050eb4d06fa0"
+      },
+      "stderr": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/scratch/native-rust-phase5-current-optin-image-guard-05383c1b3822457490dd41992ce0d899/command-ba17397544554552bdcaf8a917cba819/stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 48,
+        "path": "/home/holden/mckernel-work/scratch/native-rust-phase5-current-optin-image-guard-05383c1b3822457490dd41992ce0d899/command-ba17397544554552bdcaf8a917cba819/stdout",
+        "sha256": "58f84af16800e25587ca320a32b8abaf3368dd20317bc6502daf4f425f8e15d9"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "logs",
+        "mckernel-image-e416df1d0e0b4605952ee3d28fd11da8"
+      ],
+      "exit_code": 0,
+      "pid": 2002015,
+      "state": "exited",
+      "status": {
+        "bytes": 257,
+        "path": "/home/holden/mckernel-work/scratch/native-rust-phase5-current-optin-image-guard-05383c1b3822457490dd41992ce0d899/command-c00d1bbb7ee44759a45f01d49ae29ef4/status.json",
+        "sha256": "21050b3511d2d57ca528982581d2c0df9f8bc5a34e0fe38fae319639a61aeff9"
+      },
+      "stderr": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/scratch/native-rust-phase5-current-optin-image-guard-05383c1b3822457490dd41992ce0d899/command-c00d1bbb7ee44759a45f01d49ae29ef4/stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 22691,
+        "path": "/home/holden/mckernel-work/scratch/native-rust-phase5-current-optin-image-guard-05383c1b3822457490dd41992ce0d899/command-c00d1bbb7ee44759a45f01d49ae29ef4/stdout",
+        "sha256": "5a6f567660b69ef17a9d0d4eed1fc0470254a4a3a5b0bd855fb62a3eb5fc72bf"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "inspect",
+        "mckernel-image-e416df1d0e0b4605952ee3d28fd11da8"
+      ],
+      "exit_code": 0,
+      "pid": 1999486,
+      "state": "exited",
+      "status": {
+        "bytes": 260,
+        "path": "/home/holden/mckernel-work/scratch/native-rust-phase5-current-optin-image-guard-05383c1b3822457490dd41992ce0d899/command-d90db2e18b2c44c895606bdcf5727f86/status.json",
+        "sha256": "38fa28a442fcdce866ae56c5a417a3e2e080bc4e95455656603bfb3cbb79eb70"
+      },
+      "stderr": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/scratch/native-rust-phase5-current-optin-image-guard-05383c1b3822457490dd41992ce0d899/command-d90db2e18b2c44c895606bdcf5727f86/stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 16230,
+        "path": "/home/holden/mckernel-work/scratch/native-rust-phase5-current-optin-image-guard-05383c1b3822457490dd41992ce0d899/command-d90db2e18b2c44c895606bdcf5727f86/stdout",
+        "sha256": "75e889b21ecd842da79ff4456ff9c8aa63713ff1105ea6c23c49c3fb6a76fdc0"
+      }
+    }
+  ],
+  "container_absent": false,
+  "container_id": "21b97f2121f344e6df9683f30035331cddf1b5c8f2fb8a4853247579026be1ed",
+  "container_name": "mckernel-image-e416df1d0e0b4605952ee3d28fd11da8",
+  "container_retained": true,
+  "created_at": "2026-10-20T11:08:29.172463+00:00",
+  "current_group_readback": {
+    "absence_is_supplemental": "Positive closed wait receipts and exact container inspection are the primary evidence.",
+    "at_utc": "2026-10-20T11:08:29.203405+00:00",
+    "guard_pid_exists": false,
+    "members": [],
+    "outer_pid_exists": false,
+    "pgids": [
+      1999470,
+      1999478,
+      1999486,
+      1999494,
+      1999551,
+      2002005,
+      2002015,
+      2002502
+    ],
+    "proc_read_errors": []
+  },
+  "decision": "PASS_FAILED_IMAGE_CONTAINER_AND_CLIENT_RETIREMENT_WITH_RETAINED_OWNERSHIP_ONLY",
+  "driver_receipt": {
+    "bytes": 28885,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/gitlink-nine-copy-observer-correction-1/full-image-attempt-1/owner-work/evidence/receipt.json",
+    "sha256": "4083d7d5afabc09354f83ea3627d4a8b4da46dfbd15d4ab0ca08a5bd114f0050"
+  },
+  "execution_release": {
+    "bytes": 14671,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/gitlink-nine-copy-observer-correction-1/image-execution-preparation-1/image-execution-release.json",
+    "sha256": "3fbda294e458bb597dd3fbb65ec1f5d20285497c2a5cc0a12ee3f3ada47cad10"
+  },
+  "execution_review": {
+    "bytes": 8984,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-production-link-image-independent-review-20261020-1/FINAL-SUCCESSOR-CURRENT-OPT-IN-IMAGE-EXECUTION-REVIEW.json",
+    "sha256": "0cfa2157e4161ac6e84295d23ba86eb449878ff8ed6245a5c50862b3e2f353a5"
+  },
+  "failure": {
+    "build_stderr": {
+      "bytes": 72944,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/gitlink-nine-copy-observer-correction-1/full-image-attempt-1/owner-work/evidence/build.stderr.log",
+      "sha256": "70b3a3ec9c36188c58bb949c3ec6a43f37956c5ca57cdbca83266371535f90b1"
+    },
+    "build_stdout": {
+      "bytes": 6113,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/gitlink-nine-copy-observer-correction-1/full-image-attempt-1/owner-work/evidence/build.stdout.log",
+      "sha256": "06512793f810eaf64e4ca30bde699062d752d82a865ca92e631eec8d55826135"
+    },
+    "diagnostic_lines": [
+      1609,
+      1626
+    ],
+    "driver_error": "build failed",
+    "driver_finished_at": 1792494122.8230054,
+    "driver_phase": "build",
+    "exit_code": 2,
+    "failed_argv": [
+      "/usr/bin/cmake",
+      "--build",
+      "/work/output/build",
+      "--target",
+      "mckernel.img",
+      "-j4"
+    ],
+    "failed_recorded_command_index": 16,
+    "first_link_error": "undefined reference to core::panicking::panic_bounds_check from fork_control_registry::snapshot_handles at fork_control_registry.rs:284",
+    "following_family": "undefined reference to core::option::unwrap_failed from owned_caller_current, runnable start_and_publish and final_ack destruction consumers",
+    "guard_seconds": 206.58313073898898,
+    "outer_seconds": 206.87589863996254,
+    "owner_finished_at": 1792494153.6685796,
+    "passed_prefix": [
+      {
+        "exit_code": 0,
+        "phase": "configure"
+      },
+      {
+        "exit_code": 0,
+        "phase": "production-abi-cpu"
+      },
+      {
+        "exit_code": 0,
+        "phase": "production-abi-process"
+      },
+      {
+        "exit_code": 0,
+        "phase": "release-full-cpu-selected"
+      },
+      {
+        "exit_code": 0,
+        "phase": "release-full-cpu-fallback"
+      },
+      {
+        "exit_code": 0,
+        "phase": "release-full-crate-native"
+      },
+      {
+        "exit_code": 0,
+        "phase": "release-full-crate-legacy"
+      },
+      {
+        "exit_code": 0,
+        "phase": "release-tid-full-process-selected"
+      },
+      {
+        "exit_code": 0,
+        "phase": "release-tid-full-process-fallback"
+      },
+      {
+        "exit_code": 0,
+        "phase": "affinity-full-syscall-selected"
+      },
+      {
+        "exit_code": 0,
+        "phase": "affinity-full-syscall-fallback"
+      },
+      {
+        "exit_code": 0,
+        "phase": "affinity-actual-Rust-layout"
+      },
+      {
+        "exit_code": 0,
+        "phase": "affinity-layout-capture-selected-syscall"
+      },
+      {
+        "exit_code": 0,
+        "phase": "affinity-layout-capture-fallback-syscall"
+      },
+      {
+        "exit_code": 0,
+        "phase": "affinity-layout-capture-actual-rust-layout"
+      }
+    ],
+    "passed_recorded_command_count": 15,
+    "scope_limit": "Recorded prebuild Rust/C/ABI checks passed; no complete image or postbuild artifact target proof is accepted.",
+    "stage": "final-image-link"
+  },
+  "functional_scope": "Functional supported OS/apps plus active compute-C retirement into Rust/reviewed assembly.",
+  "guard_result": {
+    "bytes": 299,
+    "path": "/home/holden/mckernel-work/scratch/native-rust-phase5-current-optin-image-guard-05383c1b3822457490dd41992ce0d899/guard-result.json",
+    "sha256": "71dd84d586a983f4dce5711828a51990ff7df11d2307344131c3f443cc8bedf7"
+  },
+  "guard_status": {
+    "bytes": 1018,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/gitlink-nine-copy-observer-correction-1/image-execution-preparation-1/image-guard.status.json",
+    "sha256": "8214a792b65ebf22e60e8957261bd5dfee7b0f28cbb4ffba6a27054694158415"
+  },
+  "guard_stderr": {
+    "bytes": 0,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/gitlink-nine-copy-observer-correction-1/image-execution-preparation-1/image-guard.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "guard_stdout": {
+    "bytes": 285,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/gitlink-nine-copy-observer-correction-1/image-execution-preparation-1/image-guard.stdout",
+    "sha256": "c9af81a6e87fe42e413399d04351c7f98728d0dcc7659dc051237187a152e72e"
+  },
+  "image_accepted": false,
+  "implementation_ownership": false,
+  "native_accepted": false,
+  "outer_direct_joined": true,
+  "outer_group_absent": true,
+  "outer_status": {
+    "bytes": 1187,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/gitlink-nine-copy-observer-correction-1/image-execution-preparation-1/actual-root-owner-1/status.json",
+    "sha256": "f851683d72242aeedadef8ff588b6b0673726b48f13ce8e04d8bd88749ee7e6c"
+  },
+  "outer_stderr": {
+    "bytes": 0,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/gitlink-nine-copy-observer-correction-1/image-execution-preparation-1/actual-root-owner-1/stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "outer_stdout": {
+    "bytes": 3221,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/gitlink-nine-copy-observer-correction-1/image-execution-preparation-1/actual-root-owner-1/stdout",
+    "sha256": "b620fd3cdd251f6c1cd644e66aced0cc8add3c0155338d32d66fc191704441cf"
+  },
+  "owner_nonce": "5489099bb2aa4760886e80665106355e",
+  "owner_receipt": {
+    "bytes": 19913,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/gitlink-nine-copy-observer-correction-1/full-image-attempt-1/owner-evidence/owner-receipt.json",
+    "sha256": "7fb71715a5c36fac0b36fa27f35fddde99c7320bfc47130c860437ccc5c1cb6e"
+  },
+  "record_release_complete": false,
+  "request": {
+    "bytes": 26525254,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/gitlink-nine-copy-observer-correction-1/image-request.json",
+    "sha256": "22b4cd2ae009b72df3784464794326d80123393d942cf9077112304fb3c9782a"
+  },
+  "retained_ownership": {
+    "common": {
+      "bytes": 272,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 48369405,
+      "mode": 384,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/gitlink-nine-copy-observer-correction-1/full-image-attempt-1/common-exclusion.json",
+      "record": {
+        "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+        "dev": 66306,
+        "inode": 48369405,
+        "pid": 1998116,
+        "request_sha256": "08813d52f955003b780ccb4df3788204f9a50e464e82f3248ebc91560dcd0c0d",
+        "schema": "mckernel.native-exact-operational-exclusion.v1",
+        "starttime": "29139229"
+      },
+      "sha256": "b5533798e2fc01f04a42a4eadf84230c88003b21ad4a4f464881202bf9e81955",
+      "uid": 1000
+    },
+    "lease_absent": true,
+    "permanent_mutex": {
+      "device": 27,
+      "gid": 0,
+      "inode": 4,
+      "nlink": 1,
+      "path": "/run/lock/mckernel-development.lock",
+      "uid": 0,
+      "unlinked": false
+    },
+    "shared": {
+      "bytes": 269,
+      "device": 1828,
+      "gid": 1000,
+      "inode": 116133,
+      "mode": 384,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock",
+      "record": {
+        "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+        "device": 1828,
+        "inode": 116133,
+        "kind": "image",
+        "pid": 1998116,
+        "request_sha256": "6225259ec4b0c39448805d49f4376c7610c1752920f3bcfe2ce8574890f13f2a",
+        "schema": "mckernel.heavy-operation.v1",
+        "starttime": "29139229"
+      },
+      "sha256": "652ba6cefdbc619f6c227677d402af7858a9b627d962102792716903396613b8",
+      "uid": 1000
+    }
+  },
+  "retired": true,
+  "reviewer": "/root/owned_offload_review",
+  "reviewer_operations": "Closed selected receipt/stream hashes, eight client statuses, read-only current proc group and stable FD record/mutex identities; new private report only. No root, Docker, signals, unlink, compiler, tests, sourcecopy or Git.",
+  "schema": "mckernel.independent-current-image.failed-build-and-retained-retirement.v1",
+  "scope": "Current successor image actual final-link failure and positive stopped-container/client/outer retirement only; shared/common remain owned for separate authenticated terminal release.",
+  "status": "PASS",
+  "terminal_fresh_inspect": {
+    "bytes": 13213,
+    "path": "/home/holden/mckernel-work/scratch/native-rust-phase5-current-optin-image-guard-05383c1b3822457490dd41992ce0d899/inspect-terminal-fresh.json",
+    "sha256": "f2ecd3e55965d2ec76e4700ecc43a86705e6e9715eb15419b283fa5b12cf457c"
+  },
+  "terminal_route": [
+    "Root must positively reacquire same permanent27:4 after original whole join and authenticate exact retained records/container identity.",
+    "Reuse frozen failure-capable c6fdf configure_cleanup case specialization with actual exit1 and complete protected metadata inventories of current work_root and owner_evidence_root; preserve source/backup/captures/partial objects and original failure bytes.",
+    "No success generate_terminal/configure_fourleaf artifact-PASS gate, no fabricated build acceptance. Retention and exact container/common/shared authenticated release require their existing separately reviewed authority.",
+    "No next-heavy exclusivity credit from this report while shared/common remain retained."
+  ],
+  "terminal_state": {
+    "Dead": false,
+    "Error": "",
+    "ExitCode": 1,
+    "FinishedAt": "2026-10-20T11:02:02.89774058Z",
+    "OOMKilled": false,
+    "Paused": false,
+    "Pid": 0,
+    "Restarting": false,
+    "Running": false,
+    "StartedAt": "2026-10-20T11:00:12.108022409Z",
+    "Status": "exited"
+  }
+}

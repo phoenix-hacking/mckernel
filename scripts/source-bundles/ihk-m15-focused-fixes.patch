@@ -1,0 +1,269 @@
+From 5f43aea5f45359e9e605543fea6362952beac42f Mon Sep 17 00:00:00 2001
+From: OpenAI Codex <codex@openai.com>
+Date: Sun, 1 Nov 2026 04:37:16 +0100
+Subject: [PATCH 1/3] Preserve CPU zero formatting and bind IHK compiler inputs
+
+---
+ linux/user/CMakeLists.txt                                | 9 +++++----
+ linux/user/ihklib.c                                      | 2 +-
+ linux/user/rust/ihkconfig.rs                             | 2 +-
+ linux/user/rust/whole70/Whole70ProducerQualified.cmake   | 6 ++++--
+ linux/user/rust/whole70/ihklib_cli_parsers_ikc_shared.rs | 2 +-
+ 5 files changed, 12 insertions(+), 9 deletions(-)
+
+diff --git a/linux/user/CMakeLists.txt b/linux/user/CMakeLists.txt
+index 137dd94..5834e77 100644
+--- a/linux/user/CMakeLists.txt
++++ b/linux/user/CMakeLists.txt
+@@ -159,2 +159,3 @@ if(ENABLE_RUST_USER_TOOLS AND "${ARCH}" STREQUAL "x86_64")
+-  if(NOT IHK_USER_RUSTC OR NOT IS_ABSOLUTE "${IHK_USER_RUSTC}")
+-    message(FATAL_ERROR "Set absolute IHK_USER_RUSTC from the pinned user toolchain; preserve compute RUSTC")
++  if(NOT IHK_USER_RUSTC OR NOT IS_ABSOLUTE "${IHK_USER_RUSTC}"
++     OR NOT EXISTS "${IHK_USER_RUSTC}" OR IS_DIRECTORY "${IHK_USER_RUSTC}")
++    message(FATAL_ERROR "Set absolute IHK_USER_RUSTC to the existing pinned user compiler file; preserve compute RUSTC")
+@@ -177 +178 @@ if(ENABLE_RUST_USER_TOOLS AND "${ARCH}" STREQUAL "x86_64")
+-    DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/rust/ihkconfig.rs"
++    DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/rust/ihkconfig.rs" "${IHK_USER_RUSTC}"
+@@ -207 +208 @@ if(ENABLE_RUST_USER_TOOLS AND "${ARCH}" STREQUAL "x86_64")
+-    DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/rust/ihkosctl.rs"
++    DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/rust/ihkosctl.rs" "${IHK_USER_RUSTC}"
+diff --git a/linux/user/ihklib.c b/linux/user/ihklib.c
+index 3d99534..c059b2f 100644
+--- a/linux/user/ihklib.c
++++ b/linux/user/ihklib.c
+@@ -597 +597 @@ static char *cpu_array2str(int num_cpus, int *cpus)
+-			if (prev_cpu > 0) {
++			if (prev_cpu >= 0) {
+diff --git a/linux/user/rust/ihkconfig.rs b/linux/user/rust/ihkconfig.rs
+index b55e0e6..9d3102a 100644
+--- a/linux/user/rust/ihkconfig.rs
++++ b/linux/user/rust/ihkconfig.rs
+@@ -302 +302 @@ unsafe fn query_string(cpu: &CpuReq, mem: &MemReq, is_cpu: bool) -> *mut c_char
+-                if previous > 0 { n += append(&mut s, &mut capacity, n, 0, previous as usize, 0); }
++                if previous >= 0 { n += append(&mut s, &mut capacity, n, 0, previous as usize, 0); }
+diff --git a/linux/user/rust/whole70/Whole70ProducerQualified.cmake b/linux/user/rust/whole70/Whole70ProducerQualified.cmake
+index b4d5235..d514a88 100644
+--- a/linux/user/rust/whole70/Whole70ProducerQualified.cmake
++++ b/linux/user/rust/whole70/Whole70ProducerQualified.cmake
+@@ -5,2 +5,3 @@ find_package(PythonInterp 3 REQUIRED)
+-if(NOT IHK_USER_RUSTC OR NOT IS_ABSOLUTE "${IHK_USER_RUSTC}")
+-  message(FATAL_ERROR "Set the pinned supported user Rust compiler; preserve compute RUSTC")
++if(NOT IHK_USER_RUSTC OR NOT IS_ABSOLUTE "${IHK_USER_RUSTC}"
++   OR NOT EXISTS "${IHK_USER_RUSTC}" OR IS_DIRECTORY "${IHK_USER_RUSTC}")
++  message(FATAL_ERROR "Set IHK_USER_RUSTC to the existing pinned supported user compiler file; preserve compute RUSTC")
+@@ -29,0 +31 @@ add_custom_command(
++    "${IHK_USER_RUSTC}" "${CMAKE_C_COMPILER}"
+diff --git a/linux/user/rust/whole70/ihklib_cli_parsers_ikc_shared.rs b/linux/user/rust/whole70/ihklib_cli_parsers_ikc_shared.rs
+index 7dc6255..620ebdc 100644
+--- a/linux/user/rust/whole70/ihklib_cli_parsers_ikc_shared.rs
++++ b/linux/user/rust/whole70/ihklib_cli_parsers_ikc_shared.rs
+@@ -155 +155 @@ unsafe fn query_string(cpu: &CpuReq, mem: &MemReq, is_cpu: bool) -> *mut c_char
+-                if previous > 0 { n += append(&mut s, &mut capacity, n, 0, previous as usize, 0); }
++                if previous >= 0 { n += append(&mut s, &mut capacity, n, 0, previous as usize, 0); }
+
+From 78f731e5eed1abc4faf69e347d48d473a0727935 Mon Sep 17 00:00:00 2001
+From: OpenAI Codex <codex@openai.com>
+Date: Sun, 1 Nov 2026 09:54:30 +0100
+Subject: [PATCH 2/3] Fix IHK query failures, argument ownership, and daemon
+ help
+
+---
+ linux/user/ihkconfig.c                     |  7 ++++++
+ linux/user/ihklib.c                        |  6 ++---
+ linux/user/ihkmond.c                       |  8 ++++---
+ linux/user/ihkosctl.c                      |  7 ++++++
+ linux/user/rust/ihkconfig.rs               | 15 ++++++++-----
+ linux/user/rust/ihkmond.rs                 |  2 +-
+ linux/user/rust/ihkosctl.rs                | 12 +++++-----
+ linux/user/rust/whole70/ihklib_os_kargs.rs | 26 +++++++++++-----------
+ 8 files changed, 51 insertions(+), 32 deletions(-)
+
+diff --git a/linux/user/ihkconfig.c b/linux/user/ihkconfig.c
+index 73fd26d..f961891 100644
+--- a/linux/user/ihkconfig.c
++++ b/linux/user/ihkconfig.c
+@@ -301,0 +302 @@ static int do_release(int fd)
++				goto fn_exit;
+@@ -315,0 +317 @@ static int do_release(int fd)
++				goto fn_exit;
+@@ -372,0 +375,2 @@ static int do_query(int fd)
++			ret = req_cpu.num_cpus;
++			goto fn_exit;
+@@ -382,0 +387 @@ static int do_query(int fd)
++			goto fn_exit;
+@@ -394,0 +400 @@ static int do_query(int fd)
++			goto fn_exit;
+@@ -409,0 +416 @@ static int do_query(int fd)
++			goto fn_exit;
+diff --git a/linux/user/ihklib.c b/linux/user/ihklib.c
+index c059b2f..f767a7d 100644
+--- a/linux/user/ihklib.c
++++ b/linux/user/ihklib.c
+@@ -2876 +2876 @@ int ihk_os_kargs(int index, char* kargs)
+-	char *token;
++	char *token, *cursor;
+@@ -2907 +2907 @@ int ihk_os_kargs(int index, char* kargs)
+-	_kargs = strdup(kargs);
++	_kargs = cursor = strdup(kargs);
+@@ -2916 +2916 @@ int ihk_os_kargs(int index, char* kargs)
+-	while ((token = strsep(&_kargs, " "))) {
++	while ((token = strsep(&cursor, " "))) {
+diff --git a/linux/user/ihkmond.c b/linux/user/ihkmond.c
+index cc39337..928fcc6 100644
+--- a/linux/user/ihkmond.c
++++ b/linux/user/ihkmond.c
+@@ -549,0 +550,2 @@ static void show_usage(char** argv) {
++	const char *name = strrchr(argv[0], '/');
++	name = name ? name + 1 : argv[0];
+@@ -557 +559 @@ static void show_usage(char** argv) {
+-		   strrchr(argv[0], '/') + 1);
++		   name);
+@@ -576 +578 @@ int main(int argc, char** argv) {
+-	while ((opt = getopt_long(argc, argv, "f:k:i:", longopt, NULL)) != -1) {
++	while ((opt = getopt_long(argc, argv, "?f:k:i:", longopt, NULL)) != -1) {
+@@ -597 +599 @@ int main(int argc, char** argv) {
+-			break;
++			return 0;
+diff --git a/linux/user/ihkosctl.c b/linux/user/ihkosctl.c
+index 6f8a0c6..8b14698 100644
+--- a/linux/user/ihkosctl.c
++++ b/linux/user/ihkosctl.c
+@@ -498,0 +499 @@ static int do_release(int fd)
++				goto fn_exit;
+@@ -512,0 +514 @@ static int do_release(int fd)
++				goto fn_exit;
+@@ -569,0 +572,2 @@ static int do_query(int fd)
++			ret = cnt;
++			goto fn_exit;
+@@ -580,0 +585 @@ static int do_query(int fd)
++			goto fn_exit;
+@@ -592,0 +598 @@ static int do_query(int fd)
++			goto fn_exit;
+@@ -607,0 +614 @@ static int do_query(int fd)
++			goto fn_exit;
+diff --git a/linux/user/rust/ihkconfig.rs b/linux/user/rust/ihkconfig.rs
+index 9d3102a..9cd51f2 100644
+--- a/linux/user/rust/ihkconfig.rs
++++ b/linux/user/rust/ihkconfig.rs
+@@ -242 +242,2 @@ unsafe fn release(fd: c_int) -> c_int {
+-                if ioctl(fd, QUERY_MEM, &mut mem as *mut MemReq) != 0 { fprintf(stderr, c!("error: get mem chunks\n")); }
++                let ret = ioctl(fd, QUERY_MEM, &mut mem as *mut MemReq);
++                if ret != 0 { fprintf(stderr, c!("error: get mem chunks\n")); return ret; }
+@@ -254 +255,2 @@ unsafe fn release(fd: c_int) -> c_int {
+-                if ioctl(fd, QUERY_MEM, &mut mem as *mut MemReq) != 0 { fprintf(stderr, c!("error: querying memory\n")); }
++                let ret = ioctl(fd, QUERY_MEM, &mut mem as *mut MemReq);
++                if ret != 0 { fprintf(stderr, c!("error: querying memory\n")); return ret; }
+@@ -332 +334 @@ unsafe fn query(fd: c_int) -> c_int {
+-            if cpu.num_cpus < 0 { fprintf(stderr, c!("error: querying num CPUs\n")); }
++            if cpu.num_cpus < 0 { fprintf(stderr, c!("error: querying num CPUs\n")); return cpu.num_cpus; }
+@@ -336 +338 @@ unsafe fn query(fd: c_int) -> c_int {
+-            if ret != 0 { fprintf(stderr, c!("error: querying CPUs\n")); }
++            if ret != 0 { fprintf(stderr, c!("error: querying CPUs\n")); return ret; }
+@@ -338 +340,2 @@ unsafe fn query(fd: c_int) -> c_int {
+-            if ioctl(fd, QUERY_MEM, &mut mem as *mut MemReq) != 0 { fprintf(stderr, c!("error: get mem chunks\n")); }
++            let count_ret = ioctl(fd, QUERY_MEM, &mut mem as *mut MemReq);
++            if count_ret != 0 { fprintf(stderr, c!("error: get mem chunks\n")); return count_ret; }
+@@ -345 +348 @@ unsafe fn query(fd: c_int) -> c_int {
+-            if ret != 0 { fprintf(stderr, c!("error: querying memory\n")); }
++            if ret != 0 { fprintf(stderr, c!("error: querying memory\n")); return ret; }
+diff --git a/linux/user/rust/ihkmond.rs b/linux/user/rust/ihkmond.rs
+index 73f003c..a1bf1f7 100644
+--- a/linux/user/rust/ihkmond.rs
++++ b/linux/user/rust/ihkmond.rs
+@@ -257 +257 @@ fn run()->i32{
+- loop{let opt=unsafe{getopt_long(strings.len() as i32,argv.as_mut_ptr(),c!("f:k:i:"),options.as_ptr(),std::ptr::null_mut())};if opt==-1{break}match opt{102=>{let bytes=unsafe{CStr::from_ptr(optarg).to_bytes()};let found=(0..8).find(|n|bytes==format!("LOG_LOCAL{n}").as_bytes());if let Some(n)=found{facility=128+n*8}else{return fail(255,"Unknown facility\n")}},107=>kmsg=unsafe{atoi(optarg)},105=>interval=unsafe{atoi(optarg)},_=>usage(&logid)}}
++ loop{let opt=unsafe{getopt_long(strings.len() as i32,argv.as_mut_ptr(),c!("?f:k:i:"),options.as_ptr(),std::ptr::null_mut())};if opt==-1{break}match opt{102=>{let bytes=unsafe{CStr::from_ptr(optarg).to_bytes()};let found=(0..8).find(|n|bytes==format!("LOG_LOCAL{n}").as_bytes());if let Some(n)=found{facility=128+n*8}else{return fail(255,"Unknown facility\n")}},107=>kmsg=unsafe{atoi(optarg)},105=>interval=unsafe{atoi(optarg)},_=>{usage(&logid);return 0;}}}
+diff --git a/linux/user/rust/ihkosctl.rs b/linux/user/rust/ihkosctl.rs
+index 939f987..9c76b57 100644
+--- a/linux/user/rust/ihkosctl.rs
++++ b/linux/user/rust/ihkosctl.rs
+@@ -119 +119 @@ unsafe fn change_resources(fd:c_int,assign:bool)->c_int{
+-    if ioctl(fd,QUERY_MEM,&mut mem as *mut MemReq)!=0{fprintf(stderr,c!("error: get mem chunks\n"));}mem.num_chunks
++    let ret=ioctl(fd,QUERY_MEM,&mut mem as *mut MemReq);if ret!=0{fprintf(stderr,c!("error: get mem chunks\n"));return ret;}mem.num_chunks
+@@ -123 +123 @@ unsafe fn change_resources(fd:c_int,assign:bool)->c_int{
+-   if all{if ioctl(fd,QUERY_MEM,&mut mem as *mut MemReq)!=0{fprintf(stderr,c!("error: querying memory\n"));}}
++   if all{let ret=ioctl(fd,QUERY_MEM,&mut mem as *mut MemReq);if ret!=0{fprintf(stderr,c!("error: querying memory\n"));return ret;}}
+@@ -149 +149 @@ unsafe fn query(fd:c_int)->c_int{
+-   let count=ioctl(fd,NUM_CPUS);if count<0{fprintf(stderr,c!("error: querying num CPUs\n"));}
++   let count=ioctl(fd,NUM_CPUS);if count<0{fprintf(stderr,c!("error: querying num CPUs\n"));return count;}
+@@ -151 +151 @@ unsafe fn query(fd:c_int)->c_int{
+-   ret=ioctl(fd,QUERY_CPU,&mut cpu as *mut CpuReq);if ret!=0{fprintf(stderr,c!("error: querying CPUs\n"));}
++   ret=ioctl(fd,QUERY_CPU,&mut cpu as *mut CpuReq);if ret!=0{fprintf(stderr,c!("error: querying CPUs\n"));return ret;}
+@@ -154 +154 @@ unsafe fn query(fd:c_int)->c_int{
+-   if ioctl(fd,QUERY_MEM,&mut mem as *mut MemReq)!=0{fprintf(stderr,c!("error: get mem chunks\n"));}
++   let count_ret=ioctl(fd,QUERY_MEM,&mut mem as *mut MemReq);if count_ret!=0{fprintf(stderr,c!("error: get mem chunks\n"));return count_ret;}
+@@ -157 +157 @@ unsafe fn query(fd:c_int)->c_int{
+-   ret=ioctl(fd,QUERY_MEM,&mut mem as *mut MemReq);if ret!=0{fprintf(stderr,c!("error: querying memory\n"));}
++   ret=ioctl(fd,QUERY_MEM,&mut mem as *mut MemReq);if ret!=0{fprintf(stderr,c!("error: querying memory\n"));return ret;}
+diff --git a/linux/user/rust/whole70/ihklib_os_kargs.rs b/linux/user/rust/whole70/ihklib_os_kargs.rs
+index 294c347..70c1254 100644
+--- a/linux/user/rust/whole70/ihklib_os_kargs.rs
++++ b/linux/user/rust/whole70/ihklib_os_kargs.rs
+@@ -2 +2 @@
+-//! Space-token mandatory-hidos rule, preserving the original strdup cursor leak.
++//! Space-token mandatory-hidos rule with owned temporary argument storage.
+@@ -17,5 +17,4 @@ unsafe extern "C" {
+-unsafe fn finish(fd: c_int, cursor: *mut c_char, result: c_int) -> c_int {
+-    // SAFETY: cursor is NULL on every reachable completed-tokenization path,
+-    // exactly as C's advanced _kargs cursor. The lost allocation base is explicit
+-    // parity debt, not a claim of leak-free ownership or a silent correctness fix.
+-    unsafe { free(cursor.cast()) };
++unsafe fn finish(fd: c_int, allocation: *mut c_char, result: c_int) -> c_int {
++    // SAFETY: allocation is the unchanged strdup base or NULL. The separate
++    // tokenization cursor never transfers or replaces ownership of this storage.
++    unsafe { free(allocation.cast()) };
+@@ -61,2 +60,2 @@ pub unsafe extern "C" fn ihk_os_kargs(index: c_int, kargs: *mut c_char) -> c_int
+-    let mut cursor = unsafe { strdup(kargs) };
+-    if cursor.is_null() {
++    let allocation = unsafe { strdup(kargs) };
++    if allocation.is_null() {
+@@ -66 +65 @@ pub unsafe extern "C" fn ihk_os_kargs(index: c_int, kargs: *mut c_char) -> c_int
+-        return unsafe { finish(fd, cursor, result) };
++        return unsafe { finish(fd, allocation, result) };
+@@ -67,0 +67 @@ pub unsafe extern "C" fn ihk_os_kargs(index: c_int, kargs: *mut c_char) -> c_int
++    let mut cursor = allocation;
+@@ -84,2 +84,2 @@ pub unsafe extern "C" fn ihk_os_kargs(index: c_int, kargs: *mut c_char) -> c_int
+-        // SAFETY: cursor is now NULL; fd is still owned by this function.
+-        return unsafe { finish(fd, cursor, -22) };
++        // SAFETY: allocation retains its base; fd is still owned by this call.
++        return unsafe { finish(fd, allocation, -22) };
+@@ -95,2 +95,2 @@ pub unsafe extern "C" fn ihk_os_kargs(index: c_int, kargs: *mut c_char) -> c_int
+-    // SAFETY: fd remains owned; the consumed cursor is NULL as in original C.
+-    unsafe { finish(fd, cursor, result) }
++    // SAFETY: fd and the unchanged allocation base remain owned by this call.
++    unsafe { finish(fd, allocation, result) }
+
+From c032c975fdbe17be846bd61cc48cb541e7ab5830 Mon Sep 17 00:00:00 2001
+From: Codex <codex@openai.com>
+Date: Sun, 1 Nov 2026 11:00:46 +0100
+Subject: [PATCH 3/3] Stop boot polling at the first terminal result
+
+---
+ linux/user/ihklib.c                            | 2 +-
+ linux/user/rust/whole70/ihklib_os_load_boot.rs | 8 ++++----
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/linux/user/ihklib.c b/linux/user/ihklib.c
+index f767a7d..4bdcc61 100644
+--- a/linux/user/ihklib.c
++++ b/linux/user/ihklib.c
+@@ -2975 +2974,0 @@ int ihk_os_boot(int index)
+-
+@@ -2984,0 +2984 @@ int ihk_os_boot(int index)
++		break;
+diff --git a/linux/user/rust/whole70/ihklib_os_load_boot.rs b/linux/user/rust/whole70/ihklib_os_load_boot.rs
+index c372687..88d2d37 100644
+--- a/linux/user/rust/whole70/ihklib_os_load_boot.rs
++++ b/linux/user/rust/whole70/ihklib_os_load_boot.rs
+@@ -2 +2 @@
+-//! Public load/boot source port. Preserve the original polling and error contracts.
++//! Public load/boot source port with bounded polling through the first terminal result.
+@@ -57 +57 @@ pub unsafe extern "C" fn ihk_os_load(index: c_int, filename: *mut c_char) -> c_i
+-/// Issue BOOT and preserve the exact existing fifty-read status-poll behavior.
++/// Issue BOOT and poll at most fifty times, stopping at a terminal status or error.
+@@ -86,0 +87,2 @@ pub unsafe extern "C" fn ihk_os_boot(index: c_int) -> c_int {
++        } else {
++            break;
+@@ -88,2 +89,0 @@ pub unsafe extern "C" fn ihk_os_boot(index: c_int) -> c_int {
+-        // The C switch's default break exits only the switch, not the for loop.
+-        // Preserve all fifty status reads even after RUNNING or an earlier error.

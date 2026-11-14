@@ -1,0 +1,31 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/run_build_only.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/run_build_only.py
+@@ -121,8 +121,8 @@
+     require(isinstance(profile['producer_contract']['process_delta'],str) and profile['producer_contract']['process_delta'],'Root must state exact new process delta')
+     if 'unchanged_completed_process_prefix' in profile:require(profile['unchanged_completed_process_prefix']['Root_decision'] is not None,'Root must disposition already completed unchanged F02 process prefix before grant')
+     commands=profile['exact_commands']
+-    outputs=['rust/mckernel_rust.o','CMakeFiles/mckernel.img.dir/syscall.c.o','CMakeFiles/mckernel.img.dir/process.c.o','mckernel.img']
+-    sources=['/src/kernel/rust/lib.rs','/src/kernel/syscall.c','/src/kernel/process.c']
++    outputs=['rust/mckernel_rust.o','CMakeFiles/mckernel.img.dir/process.c.o','CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o','mckernel.img']
++    sources=['/src/kernel/rust/lib.rs','/src/kernel/process.c','/src/arch/x86_64/kernel/syscall.c']
+     require(len(commands)==4,'exact four selected successor commands')
+     require(set(s.removeprefix('/src/') for s in sources)<={r['relative'] for r in profile['inputs']['postimages']}|{r['relative'] for r in source_directory_postimages(profile)},'all three changed compiler source paths must be bound readonly postimages')
+     require(sum(not r['replace'] for r in profile['inputs']['objects'])==8 and sum(r['replace'] for r in profile['inputs']['objects'])==3,'eight accepted retained and three new objects')
+@@ -199,13 +199,16 @@
+     origin_target.parent.mkdir(mode=0o700)
+     require(not os.path.lexists(origin_target),'fresh exact origin header bind target')
+     origin_target.touch(mode=0o400,exist_ok=False)
++    metadata_target=origin_target.parent/'f06_clone_cpuid_metadata.rs'
++    require(not os.path.lexists(metadata_target),'fresh exact cpuid metadata bind target')
++    metadata_target.touch(mode=0o400,exist_ok=False)
+     for row in profile['inputs']['configuration']+[r for r in profile['inputs']['objects'] if not r['replace']]:
+         target=build/row['build_relative'];target.parent.mkdir(mode=0o700,parents=True,exist_ok=True);target.touch(mode=0o400,exist_ok=False)
+     (output/'plan.json').write_text(json.dumps(dict(runtime_authority=None,deadline_epoch=DEADLINE,commands=commands,tool_files=export['container_tool_files'],producer_contract=profile['producer_contract'],source_profile=reference(D/'PROFILE.SOURCE-ONLY.json')),indent=2)+'\n')
+     rows=mounts(profile,export,output)
+     require(len({r['target'] for r in rows})==len(rows),'no duplicate RO mount targets')
+     for row in rows:require(os.access(row['host'],os.R_OK),'actual UID1000 input bind read access')
+-    name='current114-build-only-'+grant['nonce'];require(name.replace('-','').isalnum() and len(name)<=120,'bounded container identity')
++    name='current115-build-only-'+grant['nonce'];require(name.replace('-','').isalnum() and len(name)<=120,'bounded container identity')
+     current_operation_guard()
+     argv=docker_argv(profile,name,rows,output)
+     (output/'claim.json').write_text(json.dumps(dict(grant=reference(grant_path),argv=argv,pid=os.getpid(),scope=profile['scope'],native_authority=False),indent=2)+'\n')

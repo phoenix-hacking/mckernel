@@ -1,0 +1,11 @@
+error[E0609]: no field `__val` on type `SigSet`
+  --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-1/fixture-source/wakeup.FRAGMENT.rs:88:60
+   |
+88 |         if doint != 0 && mask & unsafe { (*target).sigmask.__val[0] } == 0 {
+   |                                                            ^^^^^ unknown field
+   |
+   = note: available field is: `val`
+
+error: aborting due to 1 previous error
+
+For more information about this error, try `rustc --explain E0609`.

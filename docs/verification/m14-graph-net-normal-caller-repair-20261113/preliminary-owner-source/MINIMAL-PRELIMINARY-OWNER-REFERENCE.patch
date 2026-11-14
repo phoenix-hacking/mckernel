@@ -1,0 +1,11 @@
+--- normal-operation-1/preliminary-current.py
++++ normal-operation-1/preliminary-current.py
+@@ -181,7 +181,7 @@
+     if type(usage) is not dict:
+         raise ValueError('actual account receipt usage required')
+     helper_path = CURRENT / 'current_account_snapshot.py'
+-    owner_path = CURRENT / 'CURRENT-ACTUAL-OWNER.json'
++    owner_path = Path('/home/holden/mckernel-work/resume-20261112T094452Z-native-first-repeat-1f5f-binding-1/reporting-generation-first-repeat-binding-1/actual-a7-generation-binding-1/current64017-custody-read-1/saved-data-projection-1/retained-errors-binding-correction-1/current-parser-contract-correction-1/normal-fixed30-net-successor-source-1/final-source-1/normal-operation-1/CURRENT-ACTUAL-OWNER.json')
+     helper_raw, _ = read_bound(helper_path, 65536)
+     owner_raw, _ = read_bound(owner_path, 65536)
+     if (hashlib.sha256(helper_raw).hexdigest() != 'fe2c38a7d559e0066c45da9de0fd65b5597b61cebbd5249663c645cfe08c7fe6' or

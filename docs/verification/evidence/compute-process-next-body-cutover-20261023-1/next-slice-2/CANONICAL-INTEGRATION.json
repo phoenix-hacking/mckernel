@@ -1,0 +1,37 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ROOT_CANONICAL_EXACT_TWO_REVIEWED_POSTIMAGES_INTEGRATED",
+  "source_leaf_review": {
+    "reviewer": "/root/m14_build_release_review",
+    "verdict": "PASS_PRIVATE_SCHED_REQUEST_MIGRATE_SOURCE_ABI_AND_ACTUAL_LEAF_ONLY",
+    "implementation_ownership": false
+  },
+  "production_Rust_review": {
+    "reviewer": "/root/m14_build_release_review",
+    "verdict": "PASS_PRIVATE_SCHED_REQUEST_MIGRATE_SOURCE_ABI_AND_ACTUAL_PRODUCTION_RUST_OBJECT_ONLY",
+    "receipt_sha256": "30f0f80d85d860941c729e5b085078f2388ae041e7e6912c9d412dbebad3f970",
+    "implementation_ownership": false
+  },
+  "changes": {
+    "kernel/process.c": {
+      "before": "9e3cdea2027618ce954b80f2436ed44ef16e2df448c83a5b3734d77ffb161798",
+      "after": "89222734622ac054510b2c2cf6fbce1c83d3aa5dc764a3268e78be5e4c5949fa",
+      "active_P12_source156_direct_pin_excluded": true
+    },
+    "kernel/rust/sched_helpers.rs": {
+      "before": "5a09c8420d33027483d302ce9f94c350ed2dfdad450a3834214cd224023ab4f8",
+      "after": "75cdf5430eb6ecec8d0cd0c7c10192d678e656427589fda79dd68990fa3d09bd",
+      "active_P12_source156_direct_pin_excluded": true
+    }
+  },
+  "actual_production_compile_seconds": 14.278036775,
+  "compile_count": 1,
+  "actual_U_delta": "559\u2192560 ONLY existing C process_sched_migrate_log_bridge added",
+  "whole_C_TU": null,
+  "default_link": null,
+  "native": null,
+  "current_functional_image_unchanged": "10972f87277e8429e2badd238d3ac53e451b8a2351a8ebf013941e1dfb95e1e2",
+  "SDK6_host_source_closure_unaffected": true,
+  "no_live_compute_compiler_or_guest": true,
+  "scope_qualification": "Leaf scheduling/locks/IRQ/completion modeled; actual production Rust object proven, no finalprovider/defaultlink/native retirement credit."
+}

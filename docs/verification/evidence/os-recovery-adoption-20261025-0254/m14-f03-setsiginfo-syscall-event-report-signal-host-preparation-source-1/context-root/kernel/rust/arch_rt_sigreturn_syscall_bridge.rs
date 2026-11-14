@@ -1,0 +1,19 @@
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+use core::ffi::c_void;
+use crate::abi::{CInt, CLong, X86UserContext};
+
+unsafe extern "C" {
+    #[link_name = "syscall"]
+    fn f06_signal_adapter_syscall(number: CInt, context: *mut X86UserContext) -> CLong;
+}
+
+/// # Safety
+/// Original public kernel syscall dispatcher contract. Never call this production
+/// wrapper on HOST: its kernel syscall symbol must be linked, not libc syscall.
+#[no_mangle]
+pub unsafe extern "C" fn arch_rt_sigreturn_syscall_bridge(
+    number: CInt, context: *mut c_void,
+) -> CLong {
+    // SAFETY: unchanged int/context/long ABI and synchronous actual dispatcher.
+    unsafe { f06_signal_adapter_syscall(number, context.cast()) }
+}

@@ -209,6 +209,8 @@ typedef void (*process_thread_proc_action_fn_t)(void *process, void *thread);
 typedef void (*process_thread_tid_action_fn_t)(void *process, void *thread,
 					       int new_tid);
 typedef void (*process_vm_action_fn_t)(void *vm);
+/* Checked VM release: 0 consumed/nonfinal, 1 final/free, negative unproven. */
+typedef int (*process_vm_release_checked_fn_t)(void *vm);
 typedef void (*process_mcs_rwlock_fn_t)(unsigned long lock_addr, void *node);
 typedef int (*process_alloc_debugreg_fn_t)(void *thread);
 typedef void (*process_ptrace_traceme_log_fn_t)(int event, int pid,
@@ -1551,6 +1553,30 @@ int process_release_thread_body_result(
 	process_thread_action_fn_t destroy_thread_fn,
 	process_vm_action_fn_t release_vm_fn);
 int process_release_vm_body_result(
+	void *vm, unsigned long refcount_offset, unsigned long proc_offset,
+	unsigned long proc_mckfd_offset, unsigned long proc_mckfd_lock_offset,
+	unsigned long mckfd_next_offset, unsigned long mckfd_close_offset,
+	unsigned long vm_free_cb_offset, unsigned long vm_opt_offset,
+	unsigned long vm_address_space_offset, unsigned long proc_pid_offset,
+	unsigned long proc_vm_offset, unsigned long vm_policy_tree_offset,
+	unsigned long policy_node_offset,
+	process_ref_dec_and_test_fn_t dec_fn,
+	process_spin_lock_fn_t lock_fn, process_spin_unlock_fn_t unlock_fn,
+	process_vm_action_fn_t flush_fn, process_vm_action_fn_t free_ranges_fn,
+	process_detach_address_space_fn_t detach_fn,
+	process_release_process_fn_t release_process_fn,
+	process_policy_free_fn_t policy_free_fn, process_free_fn_t free_vm_fn);
+
+/* Additive checked releases. A negative result never authorizes a retry of
+ * either input pointer; a callback may have destroyed it before reporting. */
+int process_release_thread_checked_body_result(
+	void *thread, unsigned long refcount_offset, unsigned long vm_offset,
+	unsigned long proc_offset, process_ref_dec_and_test_fn_t dec_fn,
+	process_thread_profile_fn_t profile_fn,
+	process_thread_action_fn_t procfs_delete_fn,
+	process_thread_action_fn_t destroy_thread_fn,
+	process_vm_release_checked_fn_t release_vm_fn);
+int process_release_vm_checked_body_result(
 	void *vm, unsigned long refcount_offset, unsigned long proc_offset,
 	unsigned long proc_mckfd_offset, unsigned long proc_mckfd_lock_offset,
 	unsigned long mckfd_next_offset, unsigned long mckfd_close_offset,

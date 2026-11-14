@@ -1,0 +1,36 @@
+--- a/retirement_settlement.inc
++++ b/retirement_settlement.inc
+@@ -50,7 +50,7 @@
+         if(!before || before<previous || before>=deadline)return -1;
+         int n=long_kernel_snapshot(log,capacity-1);
+         int snapshot_errno=errno;
+-        if(n<=0 || (size_t)n>=capacity-1) {
++        if(n<=0 || (size_t)n>capacity-1) {
+             pair_settlement_snapshot_error.valid=1;
+             pair_settlement_snapshot_error.n=n;
+             pair_settlement_snapshot_error.errno_after=snapshot_errno;
+--- a/long_bridge.inc
++++ b/long_bridge.inc
+@@ -63,7 +63,7 @@
+             pair_settlement_snapshot_error.pid1);
+     n=long_kernel_snapshot(log,sizeof log-1);
+     int snapshot_errno=errno;
+-    if(n<=0 || n==(int)sizeof log-1) {
++    if(n<=0 || n>(int)sizeof log-1) {
+         long_snapshot_error_line(console,"failure_export",n,snapshot_errno,sizeof log-1,
+                                  long_observed_round,pair_results[0].pid,pair_results[1].pid);
+         static const char error[]="P12_LONG_FAILURE_TRACE_ERROR stage=snapshot\n";
+--- a/pair_collector.c
++++ b/pair_collector.c
+@@ -570,7 +570,11 @@
+     static char kernel_log[262144];
+ #endif
+     int n = klogctl(3, kernel_log, sizeof kernel_log);
++#ifdef ND_PAIR_LONG
++    if (n < 0 || n > (int)sizeof kernel_log) good = 0;
++#else
+     if (n < 0 || n == (int)sizeof kernel_log) good = 0;
++#endif
+     else if (save_file("/case/evidence/kernel.log", kernel_log, (size_t)n) || console < 0) good = 0;
+     else {
+ #ifdef ND_PAIR_LAUNCH_EXPANSION

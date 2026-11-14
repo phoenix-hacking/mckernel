@@ -1,0 +1,126 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "milestone": "M15-F06",
+  "selected_source": "/home/holden/mckernel/ihk/linux/user/ihkconfig.c",
+  "decision": "ihkconfig chosen as requested; 601 lines versus ihkosctl874; no broad history search; current pinned IHK has no readily identified Rust CLI",
+  "candidate": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-7/m15-ihkconfig/ihkconfig.rs",
+  "public_libihk_imports": [
+    "ihk_reserve_cpu",
+    "ihk_reserve_mem",
+    "ihk_get_num_os_instances",
+    "ihk_get_os_instances"
+  ],
+  "temporary_c_debt": [
+    "current libihk implementation remains C and must be separately migrated; Rust CLI alone is not C-free runtime closure"
+  ],
+  "source_semantics": [
+    "all create/destroy/scratch/sbox/read/mmap/ioctl/clear_kmsg/clear_kmsg_write/reserve/release/query/get actions retained",
+    "conditional reserve_mem_max_ratio uses ihkconfig_krm_workaround cfg; default OFF matches retained profile",
+    "private CPU/memory count/parse/format semantics copied into Rust, including original count-only validation quirks, decimal/hex atoi/strtol behavior and CPU range-formatting behavior",
+    "original stdout versus stderr routing, diagnostics, argument precedence, open/close/ioctl sequence and integer-to-shell exit semantics retained for defined inputs",
+    "no new help option or CLI syntax added; --help follows existing argc/action behavior",
+    "no private libihk parser/_ihk_* exports imported",
+    "configured BUILDID length supplied by build-only adapter rather than hardcoded production capacity"
+  ],
+  "defined_behavior_changes_requiring_root_review": [
+    {
+      "case": "short successful pread",
+      "original": "prints indeterminate unread tail from 16-byte stack buffer",
+      "rust": "zeroes unread tail; prints all16 bytes as before",
+      "fixture": "Rust-only short read8 proposal; never execute C on this undefined-data input"
+    },
+    {
+      "case": "buildid success with missing terminator",
+      "original": "printf may read outside result buffer",
+      "rust": "zero initialized buffer and forced last-byte NUL bound printf to configured capacity",
+      "fixture": "Rust-only missing-NUL proposal"
+    },
+    {
+      "case": "query string realloc failure",
+      "original": "helper frees result and caller may continue using null string",
+      "rust": "stop formatting and return existing build-result-string error with-1",
+      "fixture": "Rust-only format-growth allocation failure proposal"
+    },
+    {
+      "case": "extreme signed arithmetic overflow",
+      "original": "signed overflow or signed shifts can be undefined (CPU INT_MAX iteration/count, oversized memory sizes)",
+      "rust": "wrapping arithmetic plus terminating INT_MAX CPU iterator avoids implicit panic/undefined arithmetic",
+      "fixture": "ordinary defined-range parity only; overflow behavior not accepted or exhaustively exercised"
+    }
+  ],
+  "fixture": {
+    "driver": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-7/m15-ihkconfig/fixture/run_equivalence.py",
+    "c_reference": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-7/m15-ihkconfig/reference/ihkconfig.c",
+    "c_helper_oracle": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-7/m15-ihkconfig/reference/ihklib_helpers.c",
+    "abi_stub": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-7/m15-ihkconfig/fixture/abi_stub.c",
+    "headers": "minimal verbatim current UAPI structs/constants/public/private prototypes under fixture/include; not production headers",
+    "profile_cases": 188,
+    "rust_only_defined_behavior_contracts": 3,
+    "observations": [
+      "stdout bytes",
+      "stderr bytes",
+      "process exit status",
+      "normalized open/close/ioctl and public libihk argument trace"
+    ],
+    "coverage": [
+      "all commands",
+      "missing and invalid arguments",
+      "help/unknown action precedence",
+      "ignored trailing arguments",
+      "resource lists/count-only parser quirks",
+      "public library success/negative/positive returns",
+      "open/ioctl/pread/pwrite/mmap errors",
+      "zero/negative counts",
+      "allocation and strdup failures",
+      "long formatted memory result",
+      "default and optional KRM profile"
+    ],
+    "isolation": "test-only --wrap stubs intercept every direct device-facing C/Rust symbol; no LD_PRELOAD and no native device access; public libihk replaced with test ABI stub",
+    "not_proven": [
+      "Rust/C compilation or link",
+      "fixtures have not run",
+      "configured production libihk ABI/artifact link",
+      "native actions, lifecycle or resource restoration",
+      "assembly or whole-runtime retirement"
+    ],
+    "first_command": "/usr/bin/python3 -I /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-7/m15-ihkconfig/fixture/run_equivalence.py --execute --profile default --cc /usr/bin/cc --rustc /home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
+    "optional_second_profile": "Use --profile both only in granted profile; retains default and KRM results separately",
+    "requested_bounds": {
+      "cpu_count": 1,
+      "memory_mib": 1024,
+      "tasks_max": 64,
+      "wall_seconds": 180,
+      "storage_mib": 64,
+      "device_access": "none",
+      "root": "none",
+      "Docker": "none",
+      "guest": "none",
+      "jobs": 1
+    },
+    "driver_limits": "180-second global deadline, compiler commands60/30seconds each, child2seconds; fixed <=256 cases/profile; existing fixture-output causes refusal rather than overwrite; retain all outputs/failures"
+  },
+  "validation_performed": [
+    "Python AST syntax parsing for build adapter and fixture driver",
+    "fixture preparation-only invocation reported188 cases, no compiler or candidate executed",
+    "source/ABI review and explicit Rust struct size assertions16/32/16; C stub contains matching size/offset asserts",
+    "host compiler path existence metadata only, no version/tool qualification",
+    "Exact proposed /usr/bin/python3 -I driver preparation-only path passed:188 cases/profile; compilers_or_fixtures_run=false"
+  ],
+  "integration_proposal": {
+    "cmake": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-7/m15-ihkconfig/CMake-selection-proposal.cmake",
+    "build_adapter": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-7/m15-ihkconfig/build_ihkconfig.py",
+    "source_destination_if_accepted": "ihk/linux/user/rust/ihkconfig.rs plus build_ihkconfig.py",
+    "behavior": "default Rust/x86_64; require rustc, no silent C fallback; explicit comparison-only C fallback option; leave original libraries/PIC/install rules; generated config.h plus public headers in dependencies",
+    "production_integration": "proposal only; no canonical or IHK gitlink edits"
+  },
+  "accounting": {
+    "source_ready": true,
+    "compiler_pass": false,
+    "fixture_pass": false,
+    "default_selected_in_canonical": false,
+    "linked_production": false,
+    "native_acceptance": false,
+    "c_free_closure": false,
+    "functional_35_denominator_changed": false
+  }
+}

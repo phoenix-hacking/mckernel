@@ -1,0 +1,268 @@
+--- v6/sdk13_compile_host_helper.v6.py
++++ v7/sdk13_compile_host_helper.v7.py
+@@ -669,6 +669,23 @@
+             signal.signal(sig, handler)
+ 
+ 
++def _sdk13_client_deadlines(boundary,timeout,now):
++    origin=boundary.get('mono')
++    if not isinstance(origin,(int,float)) or not isinstance(timeout,(int,float)) or timeout<=0:
++        raise RuntimeError('SDK13 client deadline input invalid')
++    deadline=boundary.get('absolute_deadline_mono',origin+timeout)
++    if not isinstance(deadline,(int,float)) or not origin<deadline<=origin+timeout:
++        raise RuntimeError('SDK13 absolute client deadline invalid')
++    work_deadline=deadline-5.0
++    if now>=work_deadline:raise TimeoutError('SDK13 no client retirement window')
++    return deadline,work_deadline
++
++def _sdk13_deadline_remaining(deadline,now,max_wait):
++    remaining=deadline-now
++    if remaining<=0:raise TimeoutError('SDK13 client retirement deadline')
++    return min(max_wait,remaining)
++
++
+ class Docker:
+     def __init__(self, log, signals=None, sudo=False, effect_gate=None):
+         self.log = Path(log)
+@@ -706,9 +723,13 @@
+             self.client_retirement_unproven = True
+             status['client_retirement_unproven'] = True
+ 
+-    def _retire_client(self, process, status):
+-        """TERM the client group, then boundedly reap it; KILL is unproven."""
++    def _retire_client(self, process, status, deadline):
++        """Use only the original absolute deadline; uncertain retirement stays UNKNOWN."""
+         if process is None:
++            return
++        if time.monotonic() >= deadline:
++            self.client_retirement_unproven = True
++            status['client_deadline_overrun'] = True
+             return
+         if process.poll() is not None:
+             self._record_client_exit(process.returncode, status)
+@@ -716,119 +737,120 @@
+             if survivors:
+                 self.client_retirement_unproven = True
+                 status['client_survivors'] = survivors
++            if time.monotonic() >= deadline:
++                self.client_retirement_unproven = True
++                status['client_deadline_overrun'] = True
++            return
++        expected=status.get('identity')
++        try:
++            raw=Path('/proc',str(process.pid),'stat').read_text(); fields=raw.rsplit(')',1)[1].split()
++            actual={'pid':process.pid,'birth':int(fields[19]),'ppid':int(fields[1]),
++                    'pgid':int(fields[2]),'sid':int(fields[3])}
++            if expected is None or actual!=expected or time.monotonic()>=deadline:
++                raise RuntimeError('client identity or deadline unknown')
++            os.killpg(process.pid,signal.SIGTERM)
++        except BaseException as exc:
++            self.client_retirement_unproven=True
++            status['client_term_error']=str(exc)
++            return
++        remaining=deadline-time.monotonic()
++        if remaining<=0:
++            self.client_retirement_unproven=True;status['client_deadline_overrun']=True
+             return
+         try:
+-            os.killpg(process.pid, signal.SIGTERM)
++            process.wait(timeout=_sdk13_deadline_remaining(deadline,time.monotonic(),2.0))
++        except subprocess.TimeoutExpired:
++            pass
+         except BaseException as exc:
+-            self.client_retirement_unproven = True
+-            status['client_term_error'] = str(exc)
++            self.client_retirement_unproven=True;status['client_term_wait_error']=str(exc)
++            return
++        if process.poll() is None:
++            self.client_retirement_unproven=True;status['client_forced']=True
++            try:
++                raw=Path('/proc',str(process.pid),'stat').read_text();fields=raw.rsplit(')',1)[1].split()
++                actual={'pid':process.pid,'birth':int(fields[19]),'ppid':int(fields[1]),
++                        'pgid':int(fields[2]),'sid':int(fields[3])}
++                if actual!=expected or time.monotonic()>=deadline:raise RuntimeError('client identity or deadline unknown')
++                os.killpg(process.pid,signal.SIGKILL)
++                remaining=deadline-time.monotonic()
++                if remaining<=0:raise TimeoutError('client retirement deadline')
++                process.wait(timeout=_sdk13_deadline_remaining(deadline,time.monotonic(),remaining))
++            except BaseException as exc:
++                status['client_reap_error']=str(exc)
++                return
++        self._record_client_exit(process.returncode,status)
++        survivors=self._surviving_group_members(process.pid)
++        if survivors:
++            self.client_retirement_unproven=True;status['client_survivors']=survivors
++        if time.monotonic()>=deadline:
++            self.client_retirement_unproven=True;status['client_deadline_overrun']=True
++
++    def call(self, args, timeout=120, check=True):
++        if self.signals:self.signals.check()
++        capture=self.log.parent/('command-'+uuid.uuid4().hex);capture.mkdir()
++        stdout_path,stderr_path=capture/'stdout',capture/'stderr'
++        command=[*self.command_prefix,*args]
++        status={'argv':command,'timeout':timeout,'state':'starting'}
++        atomic(capture/'status.json',status)
++        with self.log.open('a') as stream:
++            stream.write('$ '+json.dumps(command)+'\n[capture '+str(capture)+']\n')
++            stream.flush();os.fsync(stream.fileno())
++        process=None;deadline=None;code=None
+         try:
+-            process.wait(timeout=5)
++            with stdout_path.open('xb',buffering=0) as stdout,stderr_path.open('xb',buffering=0) as stderr:
++                environment=docker_env()
++                if not callable(self.effect_gate):raise RuntimeError('SDK13 Docker pre-effect gate missing')
++                boundary=self.effect_gate(tuple(args));status['effect_boundary']=boundary
++                # One gate-derived deadline includes direct client retirement.
++                # The independent parent watchdog bounds any blocking syscall.
++                deadline,work_deadline=_sdk13_client_deadlines(boundary,timeout,time.monotonic())
++                status.update(absolute_deadline_mono=deadline,retirement_reserve_seconds=5.0)
++                process=subprocess.Popen(command,env=environment,stdout=stdout,stderr=stderr,start_new_session=True)
++                if time.monotonic()>=work_deadline:raise TimeoutError('SDK13 Popen consumed client deadline')
++                try:
++                    procstat=Path('/proc',str(process.pid),'stat').read_text();fields=procstat.rsplit(')',1)[1].split()
++                    client_identity={'pid':process.pid,'birth':int(fields[19]),'ppid':int(fields[1]),
++                                     'pgid':int(fields[2]),'sid':int(fields[3])}
++                except (OSError,ValueError,IndexError):
++                    self.client_retirement_unproven=True;raise
++                if (client_identity['birth']<=0 or client_identity['ppid']!=os.getpid() or
++                    client_identity['pgid']!=process.pid or client_identity['sid']!=process.pid):
++                    self.client_retirement_unproven=True;raise RuntimeError('docker direct client identity unknown')
++                status.update(state='running',pid=process.pid,identity=client_identity)
++                if time.monotonic()>=work_deadline:raise TimeoutError('SDK13 identity capture exceeded deadline')
++                atomic(capture/'status.json',status)
++                if time.monotonic()>=work_deadline:raise TimeoutError('SDK13 capture fsync exceeded deadline')
++                while True:
++                    if self.signals:self.signals.check()
++                    remaining=work_deadline-time.monotonic()
++                    if remaining<=0:raise TimeoutError('SDK13 Docker command deadline')
++                    try:
++                        code=process.wait(timeout=min(0.1,remaining))
++                        self._record_client_exit(code,status)
++                        self._retire_client(process,status,deadline)
++                        break
++                    except subprocess.TimeoutExpired:continue
++                if time.monotonic()>=work_deadline:raise TimeoutError('SDK13 direct join exceeded work deadline')
++                os.fsync(stdout.fileno());os.fsync(stderr.fileno())
++                if time.monotonic()>=work_deadline:raise TimeoutError('SDK13 stream fsync exceeded work deadline')
++            status.update(state='exited',exit_code=code)
+         except BaseException as exc:
+-            self.client_retirement_unproven = True
+-            status['client_term_wait_error'] = str(exc)
+-        if process.poll() is None:
+-            self.client_retirement_unproven = True
+-            status['client_forced'] = True
+-            try:
+-                os.killpg(process.pid, signal.SIGKILL)
+-            except BaseException as exc:
+-                self.client_retirement_unproven = True
+-                status['client_kill_error'] = str(exc)
+-            try:
+-                process.wait(timeout=5)
+-            except BaseException as exc:
+-                self.client_retirement_unproven = True
+-                status['client_reap_error'] = str(exc)
+-        self._record_client_exit(process.returncode, status)
+-        survivors = self._surviving_group_members(process.pid)
+-        if survivors:
+-            self.client_retirement_unproven = True
+-            status['client_survivors'] = survivors
+-
+-    def call(self, args, timeout=120, check=True):
+-        if self.signals:
+-            self.signals.check()
+-        # These files are the primary evidence, not a buffer flushed by the
+-        # owner after command completion. Child writes survive owner SIGKILL.
+-        capture = self.log.parent / ('command-' + uuid.uuid4().hex)
+-        capture.mkdir()
+-        stdout_path, stderr_path = capture / 'stdout', capture / 'stderr'
+-        command = [*self.command_prefix, *args]
+-        status = {'argv': command, 'timeout': timeout, 'state': 'starting'}
+-        atomic(capture / 'status.json', status)
+-        with self.log.open('a') as stream:
+-            stream.write('$ ' + json.dumps(command) + '\n[capture ' + str(capture) + ']\n')
+-            stream.flush()
+-            os.fsync(stream.fileno())
+-        process = None
+-        try:
+-            with stdout_path.open('xb', buffering=0) as stdout, stderr_path.open('xb', buffering=0) as stderr:
+-                # A separate client process group permits exact client rundown;
+-                # container retirement remains the owner's independent duty.
+-                environment = docker_env()
+-                if not callable(self.effect_gate):
+-                    raise RuntimeError('SDK13 Docker pre-effect gate missing')
+-                status['effect_boundary'] = self.effect_gate(tuple(args))
+-                bound=status['effect_boundary'].get('max_call_seconds')
+-                if bound is not None:
+-                    if not isinstance(bound,(int,float)) or not 0<bound<=30:
+-                        raise RuntimeError('SDK13 bounded containment time invalid')
+-                    timeout=min(timeout,bound)
+-                process = subprocess.Popen(command, env=environment, stdout=stdout,
+-                                           stderr=stderr, start_new_session=True)
+-                # Bind actual direct client birth and session immediately after spawn.
+-                # An exited or unreadable child is UNKNOWN; existing exception
+-                # handling retains the client retirement latch and owner lease.
+-                try:
+-                    procstat = Path('/proc', str(process.pid), 'stat').read_text()
+-                    fields = procstat.rsplit(')', 1)[1].split()
+-                    client_identity = {'pid': process.pid, 'birth': int(fields[19]),
+-                                       'ppid': int(fields[1]), 'pgid': int(fields[2]),
+-                                       'sid': int(fields[3])}
+-                except (OSError, ValueError, IndexError):
+-                    self.client_retirement_unproven = True
+-                    raise
+-                if (client_identity['birth'] <= 0 or client_identity['ppid'] != os.getpid() or
+-                        client_identity['pgid'] != process.pid or client_identity['sid'] != process.pid):
+-                    self.client_retirement_unproven = True
+-                    raise RuntimeError('docker direct client identity unknown')
+-                status.update(state='running', pid=process.pid, identity=client_identity)
+-                atomic(capture / 'status.json', status)
+-                deadline = time.monotonic() + timeout
+-                while True:
+-                    if self.signals:
+-                        self.signals.check()
+-                    remaining = deadline - time.monotonic()
+-                    if remaining <= 0:
+-                        raise RuntimeError('docker command timed out: ' + args[0])
+-                    try:
+-                        code = process.wait(timeout=min(0.1, remaining))
+-                        self._record_client_exit(code, status)
+-                        # Successful direct join must also prove this client's
+-                        # process group has no surviving children. Never scan,
+-                        # signal or retire the native guest's process group.
+-                        self._retire_client(process, status)
+-                        break
+-                    except subprocess.TimeoutExpired:
+-                        continue
+-                os.fsync(stdout.fileno())
+-                os.fsync(stderr.fileno())
+-            status.update(state='exited', exit_code=code)
+-        except BaseException as exc:
+-            status.update(state='failed', error=str(exc))
+-            if process is not None:
+-                self._retire_client(process, status)
++            status.update(state='failed',error=str(exc))
++            if process is not None and deadline is not None:self._retire_client(process,status,deadline)
+             raise
+         finally:
+-            atomic(capture / 'status.json', status)
++            if deadline is not None and time.monotonic()>=deadline:
++                self.client_retirement_unproven=True;status.update(state='UNKNOWN',client_deadline_overrun=True)
++            atomic(capture/'status.json',status)
+             with self.log.open('a') as stream:
+-                stream.write('[command status ' + json.dumps(status) + ']\n')
+-        result = subprocess.CompletedProcess(command, code,
+-                                             stdout_path.read_text(errors='replace'),
+-                                             stderr_path.read_text(errors='replace'))
+-        if check and result.returncode:
+-            raise RuntimeError('docker command failed: ' + args[0])
++                stream.write('[command status '+json.dumps(status)+']\n');stream.flush();os.fsync(stream.fileno())
++            if deadline is not None and time.monotonic()>=deadline:
++                self.client_retirement_unproven=True
++                raise RuntimeError('SDK13 client deadline exceeded; retirement UNKNOWN')
++        result=subprocess.CompletedProcess(command,code,stdout_path.read_text(errors='replace'),stderr_path.read_text(errors='replace'))
++        if deadline is not None and time.monotonic()>=deadline:
++            self.client_retirement_unproven=True;raise RuntimeError('SDK13 capture read deadline exceeded; retirement UNKNOWN')
++        if check and result.returncode:raise RuntimeError('docker command failed: '+args[0])
+         return result
+ 
+ 

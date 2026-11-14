@@ -1,0 +1,325 @@
+#!/usr/bin/env python3
+"""Render the McKernel autonomous campaign's human-readable progress dashboard."""
+from __future__ import annotations
+
+import argparse
+import json
+import re
+from datetime import datetime, timezone
+from os.path import relpath
+from pathlib import Path
+
+import stable_core_tracker
+
+
+ROOT = Path(__file__).resolve().parents[1]
+TRACKER_DIR = ROOT / "docs/verification/os-milestones-20260914"
+
+
+def read_json(path: Path, default):
+    try:
+        return json.loads(path.read_text())
+    except (OSError, ValueError):
+        return default
+
+
+def bar(done: int, total: int, width: int = 24) -> str:
+    if not total:
+        return "[" + "?" * width + "] n/a"
+    filled = max(0, min(width, round(width * done / total)))
+    percent = 100.0 * done / total
+    return "[" + "#" * filled + "." * (width - filled) + "] " + f"{percent:.1f}% ({done}/{total})"
+
+
+def current_value(text: str, pattern: str, fallback: str) -> str:
+    match = re.search(pattern, text, re.IGNORECASE)
+    return match.group(1) if match else fallback
+
+
+def status_word(state: dict) -> str:
+    if state.get("phase") == "stopped":
+        return "STOPPED (resume is operator-controlled)"
+    if state.get("phase") == "running":
+        return "RUNNING"
+    return str(state.get("phase") or state.get("status") or "UNKNOWN").upper()
+
+
+def practical_panel(doc: dict) -> list[str]:
+    """Render recorded practical states without deriving an engineering score."""
+    def cell(value):
+        return str(value).replace("|", "\\|").replace("\n", "<br>")
+
+    def evidence_cell(item):
+        if not isinstance(item, dict):
+            return cell(item)
+        path = item.get("path")
+        if not isinstance(path, str) or not path:
+            return "not recorded"
+        source = Path(path)
+        target = source if source.is_absolute() else ROOT / source
+        return "[" + cell(source.name) + "](" + Path(relpath(target, TRACKER_DIR)).as_posix() + ")"
+
+    lines = ["## Primary target: practical kernel and applications", "",
+             "Scope: `" + doc["scope_id"] + "`. See [PRACTICAL-GOAL.md](PRACTICAL-GOAL.md) "
+             "and [practical-milestones.json](practical-milestones.json).", "",
+             "Closure states below are recorded assessments. Unassessed does not mean "
+             "no engineering progress; no percentage is inferred. Reuse matching valid evidence.", "",
+             "| ID | Practical milestone | Engineering state | Closure state | Exit condition | Current evidence / gap |",
+             "| --- | --- | --- | --- | --- | --- |"]
+    for milestone in doc.get("milestones", []):
+        lines.append("| " + " | ".join(cell(milestone.get(key, "unassessed")) for key in
+                     ("id", "title", "engineering_state", "completion_status", "exit_condition",
+                      "current_evidence_summary")) + " |")
+    lines += ["", "### Practical exit checks", "",
+              "| Check | Required behavior | State | Evidence |", "| --- | --- | --- | --- |"]
+    for milestone in doc.get("milestones", []):
+        for check in milestone.get("checks", []):
+            evidence = "; ".join(evidence_cell(item)
+                                 for item in check.get("evidence", [])) or "not recorded"
+            lines.append("| " + " | ".join((cell(check["id"]), cell(check["description"]),
+                         cell(check.get("status", "unassessed")), evidence)) + " |")
+    budget = doc.get("validation_budget", {})
+    lines += ["", "### Practical final validation targets", "",
+              "; ".join(str(budget.get(key, "unassessed")) + " " + label for key, label in
+                        (("fresh_guest_boots", "fresh guest boots"),
+                         ("complete_native_lifecycle_cycles", "complete native lifecycle cycles"),
+                         ("successful_application_launches", "successful application launches"),
+                         ("mixed_workload_minutes", "minutes of mixed workload"))) + ". "
+              "These are required targets, not results. Checks may overlap and reuse valid evidence; "
+              "application vectors are not separate launches.", "", "### Next practical work", ""]
+    lines += ["- " + cell(action) for action in doc.get("next_actions", [])]
+    return lines + ["", "Original formal qualification is **historical / DEFERRED**. Deferred does not mean passed; "
+                    "its counters below do not define practical completion.", ""]
+
+
+def rust_cutover_panel(doc: dict) -> list[str]:
+    """Keep full LWK conversion visible outside the practical check denominator."""
+    if doc.get("id") != "M14":
+        return []
+
+    def cell(value):
+        return str(value).replace("|", "\\|").replace("\n", "<br>")
+
+    lines = ["## Separate active milestone: M14 Rust/assembly cutover", "",
+             "See [RUST-CUTOVER-M14.md](RUST-CUTOVER-M14.md) and "
+             "[rust-cutover-m14.json](rust-cutover-m14.json). This milestone is "
+             "separate from the 35 practical functional checks and remains active in parallel.", "",
+             "File rows contain existing partial Rust work. Unassessed subgoals do not mean "
+             "zero engineering progress; no conversion percentage is inferred.", "",
+             "| File goal | Compute C translation unit | Functional subgoals | File state |",
+             "| --- | --- | --- | --- |"]
+    for item in doc.get("files", []):
+        subgoals = item.get("functional_subgoals", [])
+        completed = sum(goal.get("status") == "complete" for goal in subgoals)
+        progress = ("assessment pending (" + str(len(subgoals)) + " listed)"
+                    if all(goal.get("status") == "unassessed" for goal in subgoals)
+                    else str(completed) + "/" + str(len(subgoals)) + " complete")
+        lines.append("| " + " | ".join(cell(value) for value in
+                     (item.get("id", "unassessed"), item.get("c_file", "unassessed"),
+                      progress, item.get("status", "unassessed"))) + " |")
+    return lines + ["", "M14 closes only with final default Rust/assembly ownership and applicable "
+                    "native functional proof. Practical 35/35 alone does not establish that result.", ""]
+
+
+def project_runtime_cutover_panel(doc: dict) -> list[str]:
+    """Expose custom runtime debt without changing functional check counts."""
+    if doc.get("id") != "M15":
+        return []
+
+    def cell(value):
+        return str(value).replace("|", "\\|").replace("\n", "<br>")
+
+    lines = ["## Separate active milestone: M15 custom runtime Rust cutover", "",
+             "See [RUST-CUTOVER-M15.md](RUST-CUTOVER-M15.md) and "
+             "[rust-cutover-m15.json](rust-cutover-m15.json). Existing native "
+             "IHK/SMP/mcctrl Rust implementations are reused. Remaining project "
+             "C adapters, executors, libraries and installed programs stay explicit.", "",
+             "This milestone is outside the 35 functional checks and M14. "
+             "Source selection is not final link/native proof; no completion "
+             "percentage is inferred from these rows.", "",
+             "| Goal | Project runtime source | State |",
+             "| --- | --- | --- |"]
+    for item in doc.get("files", []) + doc.get("runtime_programs", []):
+        lines.append("| " + " | ".join(cell(item.get(key, "unassessed"))
+                     for key in ("id", "path", "status")) + " |")
+    return lines + ["", "M15 closes with the delivered-runtime ownership manifest, "
+                    "actual Rust/assembly project artifacts and matching functional "
+                    "module/application/lifecycle evidence.", ""]
+
+
+def render(core_doc=None) -> str:
+    if core_doc is None:
+        core_doc = stable_core_tracker.load_tracker()
+        stable_core_tracker.validate(core_doc, root=ROOT)
+    core_counts = stable_core_tracker.summarize(core_doc)
+    practical = read_json(TRACKER_DIR / "practical-milestones.json", {})
+    if practical.get("scope_id") != "practical-kernel-apps-v1-20261017":
+        practical = {}
+    state = read_json(ROOT / ".git/os-autopilot/state.json", {})
+    watcher = read_json(ROOT / ".git/os-autopilot/watcher.json", {})
+    gate_map = read_json(TRACKER_DIR / "gate-map.json", {})
+    tasks_doc = read_json(TRACKER_DIR / "tasks.json", {})
+    current_path = TRACKER_DIR / "CURRENT.md"
+    current = current_path.read_text(errors="replace") if current_path.exists() else ""
+    status_counts = gate_map.get("status_counts", {})
+    passed = int(status_counts.get("PASS", 0))
+    in_progress = int(status_counts.get("IN_PROGRESS", 0))
+    gates = int(gate_map.get("native_gate_count", 0))
+    points = int(gate_map.get("earned_points", 0))
+    total_points = int(gate_map.get("total_points", 0))
+    task_count = len(tasks_doc.get("tasks", []))
+    last_update = state.get("heartbeat_at") or state.get("updated_at") or watcher.get("heartbeat_utc") or "unknown"
+    refreshed = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
+    application_cases = current_value(current, r"(\d+/\d+) application cases accepted", "0/273")
+    fault_modes = current_value(current, r"(\d+/\d+) narrow fault modes accepted", "2/4")
+    language_gates = current_value(current, r"(\d+/\d+) language gates", "0/7")
+    phase_rows = [
+        ("S1", "Trustworthy execution lane", "accepted source, native, root, guest, cleanup and comparison evidence", "ACTIVE", "M02-B root-positive infrastructure is accepted; adverse/native/guest closure remains open"),
+        ("S2", "Kernel and runtime closure", "VM, pending-free, lifecycle, transport, shutdown and failure ownership", "NEXT", "M03-A/B, M02-C..F and runtime ownership still require executable proof"),
+        ("S3", "Application acceptance", "all catalog cases, application oracles, fault modes and integration", "NOT STARTED", "0/273 application cases are accepted; three compiled cases do not count"),
+        ("S4", "Platform and release qualification", "language gates, Rocky package, hardware, performance and independent release", "NOT STARTED", "0/7 language gates; platform and release gates remain downstream"),
+    ]
+    lines = [
+        "# McKernel Progress Dashboard",
+        "",
+        "> Generated by `scripts/update_progress_tracker.py`. This is a progress view, not acceptance authority.",
+        "> Evidence and completion remain governed by `gate-map.json`, the task contracts, and `CURRENT.md`.",
+        "",
+        "## Snapshot",
+        "",
+        f"- Dashboard refreshed: `{refreshed}`",
+        f"- Launcher state heartbeat: `{last_update}`",
+        f"- Launcher: **{status_word(state)}**; phase `{state.get('phase', 'unknown')}`; stop reason `{state.get('stop_reason') or 'none'}`",
+        f"- Worker PID: `{state.get('worker_pid') or 'none'}`; server PID: `{state.get('server_pid') or 'none'}`",
+        f"- Run directory: `{state.get('run_dir') or state.get('log_dir') or 'not recorded'}`",
+        "",
+        "## Stable kernel core: engineering progress",
+        "",
+        "Read the [detailed SC1 tracker](../../../STABLE-CORE.md) for every bounded behavior, "
+        "known result, next check, owner role, dependency and evidence link.",
+        f"Engineering snapshot: `{core_doc['as_of']}` at `{core_doc['source_revision']}`; "
+        f"milestone **{core_doc['status']}**. Refreshing this dashboard does not refresh that evidence.",
+        "",
+        "| Work | Verified substeps | Historical baseline | Implemented | Partial | Blocked | Unmeasured | Planned |",
+        "| --- | --- | --- | --- | --- | --- | --- | --- |",
+    ]
+    for kind, label in (("core", "Kernel behavior"), ("enabler", "Test / execution infrastructure")):
+        counts = core_counts["by_kind"][kind]
+        lines.append("| " + label + " | " + " | ".join(
+            str(counts[status]) for status in stable_core_tracker.STATUSES
+        ) + " |")
+    lines += [
+        "",
+        "These are separate engineering states, not a stability percentage. Existing baseline "
+        "behavior is preserved; unmeasured does not mean unimplemented. Infrastructure results "
+        "never count as kernel results. The full tracker declares the first tested profile and "
+        "explicitly separates multicore/features/platform qualification.",
+        "",
+        "## Acceptance Bars",
+        "",
+        f"- Native production gates: `{bar(passed, gates)}`; `{in_progress}` additional gate(s) in progress; `{gates - passed - in_progress}` TODO.",
+        f"- Earned contractual points: `{bar(points, total_points)}`.",
+        f"- Planned dispatcher task packets: `{bar(0, task_count)}`; plan status is intentionally not acceptance status.",
+        f"- Application catalog: `{application_cases}` accepted.",
+        f"- Narrow fault modes: `{fault_modes}` accepted.",
+        f"- Language gates: `{language_gates}` accepted.",
+        "",
+        "## Intermediary Goal Ladder",
+        "",
+        "| ID | Goal | Exit condition | Status | Current evidence / gap |",
+        "| --- | --- | --- | --- | --- |",
+    ]
+    for ident, goal, exit_condition, status, note in phase_rows:
+        lines.append(f"| {ident} | {goal} | {exit_condition} | **{status}** | {note} |")
+    lines += [
+        "",
+        "## Detailed Work Queue",
+        "",
+        "| Track | Current target | Required proof before the bar moves | State | Next action |",
+        "| --- | --- | --- | --- | --- |",
+        "| M00 | durable ledger, preserved work, resource policy | exact source/evidence identity and fetched checkpoint | mostly accepted | keep ledger and tracker synchronized at every checkpoint |",
+        "| M01 | all four published-response fault modes | source contract plus executable native/root/guest comparison | partial | finish fault-mode matrix and retain negative controls |",
+        "| M02 | Linux/McKernel execution and comparison | root-positive, adverse, native collector, guest terminal and cleanup receipts | partial | continue M02-C through M02-F after the accepted root-positive packet |",
+        "| M03 | pending-free, invalidation and safe admission | real Rust/C boundary execution, invalid input preservation, reuse and pressure evidence | open | replace rejected candidate with a reviewed runnable packet |",
+        "| M04-M07 | application, shutdown, syscall, vector and failure behavior | applicable catalog cases with exact oracle and production integration | open | expand only after execution lane contracts are trustworthy |",
+        "| M08-M09 | native Rust and executable closure | clean build, load, runtime, unload and assembly evidence | open | preserve source review, then schedule native qualification |",
+        "| M10-M13 | Rocky, integration, hardware/performance and release | reproducible package/runtime/benchmark/release evidence | downstream | do not claim complete from local source progress |",
+        "",
+        "## Current Blockers",
+        "",
+        f"- `{state.get('stop_reason') or 'none'}`: launcher state is currently `{state.get('phase', 'unknown')}`.",
+        "- The OS objective is not complete: source review and infrastructure packets are not substitutes for native, guest, application, language, platform or release proof.",
+        "- The heavy build/guest lease and free-space policy must be checked immediately before every expensive run.",
+        "- External hardware, hosted CI, and platform-specific acceptance remain later gates even when local preparation is complete.",
+        "",
+        "## Checkpoint Protocol",
+        "",
+        "0. Update touched `stable-core.json` rows with actual source/artifact-bound results, "
+        "blockers and next checks. Keep historical evidence; do not infer progress from this refresh.",
+        "1. Run `python3 scripts/update_progress_tracker.py` after every accepted packet, diagnosis, or launcher checkpoint.",
+        "2. Record the exact evidence path, source revision, test command, result, blocker, and next action in `CURRENT.md`.",
+        "3. Commit and push the tracker together with the verified checkpoint; never inflate a bar for source-only or rejected work.",
+        "4. Watch this file with `watch -n 15 sed -n '1,220p' docs/verification/os-milestones-20260914/PROGRESS.md`.",
+        "",
+        "## Source Of Truth",
+        "",
+        "- `stable-core.json` and root `STABLE-CORE.md` - granular SC1 engineering snapshot; not production acceptance.",
+        "- `docs/verification/os-milestones-20260914/gate-map.json` - contractual gate and point counts.",
+        "- `docs/verification/os-milestones-20260914/tasks.json` - 68 planned task packets and dependencies.",
+        "- `docs/verification/os-milestones-20260914/CURRENT.md` - detailed chronological evidence cursor.",
+        "- `.git/os-autopilot/state.json` - launcher-owned runtime state; do not edit by hand.",
+        "",
+    ]
+    if practical:
+        # Keep the established launcher/core content and legacy counter values.
+        # Only the reporting priority and qualification labels change.
+        position = lines.index("## Snapshot")
+        cutover = read_json(TRACKER_DIR / "rust-cutover-m14.json", {})
+        runtime_cutover = read_json(TRACKER_DIR / "rust-cutover-m15.json", {})
+        lines[position:position] = (practical_panel(practical) + rust_cutover_panel(cutover)
+                                   + project_runtime_cutover_panel(runtime_cutover))
+        lines[3] = "> Practical completion follows `PRACTICAL-GOAL.md` and `practical-milestones.json`; " \
+                   "separate active Rust cutovers follow M14/M15. Original formal qualification remains DEFERRED."
+        renamed = {"## Acceptance Bars": "## Historical / DEFERRED qualification counters",
+                   "## Intermediary Goal Ladder": "## Historical / DEFERRED qualification ladder",
+                   "## Detailed Work Queue": "## Historical / DEFERRED qualification queue",
+                   "## Current Blockers": "## Historical qualification gaps (DEFERRED)"}
+        lines = [renamed.get(line, line) for line in lines]
+        for index, line in enumerate(lines):
+            if line.startswith("| S"):
+                for state in ("ACTIVE", "NEXT", "NOT STARTED"):
+                    line = line.replace("**" + state + "**", "**DEFERRED (historical " + state + ")**")
+                lines[index] = line
+            elif line.startswith("- The OS objective is not complete:"):
+                lines[index] = "- Original qualification gaps are preserved and deferred; " \
+                               "they do not define the active practical completion condition."
+        position = lines.index("## Source Of Truth") + 2
+        lines[position:position] = ["- `PRACTICAL-GOAL.md` and `practical-milestones.json` - active scoped "
+                                   "completion requirements, recorded check states, evidence and next work.",
+                                   "- `RUST-CUTOVER-M14.md` and `rust-cutover-m14.json` - separate active "
+                                   "file-by-file compute-kernel Rust/assembly cutover; outside the 35 checks.",
+                                   "- `RUST-CUTOVER-M15.md` and `rust-cutover-m15.json` - separate custom "
+                                   "module/executor/library/tool Rust cutover; outside the 35 checks."]
+    return "\n".join(lines)
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", type=Path, default=TRACKER_DIR / "PROGRESS.md")
+    args = parser.parse_args()
+    core_doc = stable_core_tracker.load_tracker()
+    stable_core_tracker.validate(core_doc, root=ROOT)
+    core_report = stable_core_tracker.render(core_doc)
+    dashboard = render(core_doc)
+    core_output = ROOT / "STABLE-CORE.md"
+    if core_output.is_symlink():
+        raise stable_core_tracker.TrackerError("STABLE-CORE.md must not be a symlink")
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    core_output.write_text(core_report, encoding="utf-8")
+    args.output.write_text(dashboard, encoding="utf-8")
+    print(args.output)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

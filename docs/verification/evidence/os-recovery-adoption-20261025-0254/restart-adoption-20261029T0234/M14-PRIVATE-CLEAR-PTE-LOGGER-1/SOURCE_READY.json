@@ -1,0 +1,50 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_CLEAR_PTE_LOGGER_SOURCE_READY_UNCOMPILED",
+  "runtime_authority": null,
+  "filemap": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-CLEAR-PTE-LOGGER-1/FILEMAP.SOURCE-ONLY.json",
+    "bytes": 3208,
+    "sha256": "1bcec205fc4654ceb4f4350abef44ad7bfe4fb8654b6b8fc1753c3645b56d2d7"
+  },
+  "Rust_leaf": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-CLEAR-PTE-LOGGER-1/postimage/kernel/rust/syscall_clear_host_pte_logger.rs",
+    "bytes": 772,
+    "sha256": "1982650efce731c33d02084b809b10fa9f2e44ceee69ef755325e253f5bf33f5"
+  },
+  "patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-CLEAR-PTE-LOGGER-1/CLEAR-PTE-LOGGER.PRIVATE-NOT-APPLIED.patch",
+    "bytes": 2317,
+    "sha256": "7082876d22e26c9dd7b744af4ace0d315ff91c2984080e2eed8b72d73782dfff"
+  },
+  "source_checks": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-CLEAR-PTE-LOGGER-1/SOURCE-CHECKS.json",
+    "bytes": 2287,
+    "sha256": "a713e584269f219e0cb80c4ded2c8f939eb59fba5d0dbae04359fe9a4c9e304c"
+  },
+  "selected_condition": "Existing MCKERNEL_RUST_SYSCALL_POLICY_HELPERS only; no new selector",
+  "linkage": "Existing same-name callback moves from local C definition to Rust no_mangle C-linkage definition when selected; actual symbol resolution must be qualified by compiler/relink.",
+  "unsafe_invariant": "Static NUL string with one%ld; CLong matches selected64-bit signed C long and is passed unchanged; no pointer payload or runtime state.",
+  "canonical_writes": 0,
+  "independent_source_review": null,
+  "compiler_link_native_retirement_credit": 0,
+  "original389_preserved_only_source_scope": true,
+  "next_check": {
+    "status": "REQUIRES_ROOT_LATER_SOURCE_CURRENT_ACCOUNT_RESOURCE_RELEASE_AND_CURRENT119_FEEDBACK",
+    "argv": [
+      "/usr/bin/cmake",
+      "--build",
+      "REQUIRED_ROOT_REVIEWED_CANDIDATE_BUILD",
+      "--target",
+      "mckernel_rust_obj",
+      "--",
+      "-j1",
+      "VERBOSE=1"
+    ],
+    "then": "Selected syscall.c compile/coherent relink, exact callback resolution and matching functional/native qualification; no oracle rewriting."
+  },
+  "weekly_only": true,
+  "weekly_reset_upper_bound": 1793774133,
+  "M15_paused": true,
+  "active_owned_operations": []
+}

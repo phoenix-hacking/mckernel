@@ -1,0 +1,152 @@
+{
+  "application_acceptance": false,
+  "command": [
+    "/usr/bin/python3",
+    "-B",
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_overlay.py",
+    "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-20261017-1/initramfs.cpio.gz",
+    "/home/holden/mckernel-work/scratch/memory-calloc-zero-static-20261017-1/app",
+    "/home/holden/mckernel-work/scratch/signal-mask-restore-compile-20261017-nX2kCR/init",
+    "/home/holden/mckernel-work/scratch/mcexec-preload-fastpath-build-20260928-1/rust/executer/user/mcexec",
+    "/home/holden/mckernel-work/scratch/memory-calloc-zero-current942-overlay-20261017-1.cpio.gz",
+    "--collector-sha256",
+    "8089d5b7bcf8166e69cb9ea90fc4614674b4906813a40aa219972c02c7ec5e39",
+    "--mcexec-sha256",
+    "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b",
+    "--payload-sha256",
+    "59691094c6caa8858f6a98d91353d178e2c2c59d4e80406274fe5e24cc6fef98",
+    "--base-sha256",
+    "bd503adcd1d45b437eb91902a50b09b9eeb094368ca4085546ef682fd1a5a694",
+    "--base-size",
+    "12347108",
+    "--base-cpio-sha256",
+    "7e69601b68dafb44c945d2998b10ec024a73518303bb505f275490d83e4c6767",
+    "--base-cpio-size",
+    "39677952"
+  ],
+  "draft_oracle_caveat": [
+    "Exact stdout serialization is prepared as line list; execution capture may later switch to binary/structured record"
+  ],
+  "environment": {
+    "HOME": "/home/holden/mckernel-work/scratch/memory-calloc-zero-static-20261017-1/home",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "PATH": "/usr/bin:/bin",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "TMPDIR": "/home/holden/mckernel-work/scratch/memory-calloc-zero-static-20261017-1/tmp",
+    "TZ": "UTC"
+  },
+  "formal_case_credit": false,
+  "frozen_oracle": {
+    "exit_code": 0,
+    "stderr_hex": "",
+    "stdout_hex": "63616c6c6f632d7a65726f2073697a653d31207374617475733d504153530a63616c6c6f632d7a65726f2073697a653d34303935207374617475733d504153530a63616c6c6f632d7a65726f2073697a653d34303936207374617475733d504153530a63616c6c6f632d7a65726f2073697a653d34303937207374617475733d504153530a63616c6c6f632d7a65726f2073697a653d3635353533207374617475733d504153530a63616c6c6f632d7a65726f2073697a653d31303438353736207374617475733d504153530a"
+  },
+  "inputs": {
+    "base": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-20261017-1/initramfs.cpio.gz",
+      "sha256": "bd503adcd1d45b437eb91902a50b09b9eeb094368ca4085546ef682fd1a5a694",
+      "size": 12347108
+    },
+    "base_cpio": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-20261017-1/initramfs.cpio",
+      "sha256": "7e69601b68dafb44c945d2998b10ec024a73518303bb505f275490d83e4c6767",
+      "size": 39677952
+    },
+    "collector": {
+      "mode": 33216,
+      "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-compile-20261017-nX2kCR/init",
+      "sha256": "8089d5b7bcf8166e69cb9ea90fc4614674b4906813a40aa219972c02c7ec5e39",
+      "size": 1021928
+    },
+    "mcexec": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/scratch/mcexec-preload-fastpath-build-20260928-1/rust/executer/user/mcexec",
+      "sha256": "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b",
+      "size": 453352
+    },
+    "oracle": {
+      "mode": 33204,
+      "path": "/home/holden/mckernel/scripts/application-tests/oracles/memory.calloc-zero.json",
+      "sha256": "ee72669633d6050616f2f8fa7d6057c7c23d4dc746b9f15fc3f6468ef9d202fc",
+      "size": 1216
+    },
+    "payload": {
+      "mode": 33216,
+      "path": "/home/holden/mckernel-work/scratch/memory-calloc-zero-static-20261017-1/app",
+      "sha256": "59691094c6caa8858f6a98d91353d178e2c2c59d4e80406274fe5e24cc6fef98",
+      "size": 871888
+    },
+    "source": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_overlay.py",
+      "sha256": "46d41bc0727fa77e4126e739f25352c53eadf2e1fa8e23ef06a6e46c9b3ba27d",
+      "size": 26579
+    }
+  },
+  "manifest": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/scratch/memory-calloc-zero-current942-manifest-20261017-1.json",
+    "sha256": "589a4a8616691093d26b275bba498bd84f646bd8359db6b17f4fb7bb6d1e000d",
+    "size": 5775
+  },
+  "new_guest_runs": 0,
+  "overlay_capture": {
+    "elapsed_seconds": 8.210846,
+    "exit_code": 0,
+    "stderr_hex": "",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_manifest": "/home/holden/mckernel-work/scratch/memory-calloc-zero-current942-overlay-20261017-1.json",
+    "stdout_sha256": "4aba5de0061b711cb3fd5dd0f631c7ff804b27780a09b9e1f7cc1a6d9d203929",
+    "stdout_size": 14816
+  },
+  "overlay_output": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/scratch/memory-calloc-zero-current942-overlay-20261017-1.cpio.gz",
+    "sha256": "762926e38c759cfcbcb93c4322a46613e4cfea756a048ad3b6d0e7ff049b64d0",
+    "size": 13276057
+  },
+  "production_acceptance": false,
+  "resources": {
+    "address_space_limit_bytes": 1073741824,
+    "core": 0,
+    "cpu_affinity": [
+      7
+    ],
+    "cpu_seconds": 150,
+    "file_size_limit_bytes": 67108864,
+    "nofile": 256,
+    "outer_wall_seconds": 180
+  },
+  "review_prerequisites": [
+    "Independent exact manifest/overlay review.",
+    "Current image cleanup/retirement and applicable launcher reuse authority.",
+    "Fresh reviewed one-shot owner execution packet/live preflight; memory guest follows signal guest.",
+    "Diagnostic-only six-size calloc coverage; unchanged draft oracle caveat retained."
+  ],
+  "runtime_release": false,
+  "schema": "mckernel.memory-calloc-zero-current942-staging.v1",
+  "scope": "Offline overlay transform and read-only strict manifest load only; no stager/rebuild/root/Docker/guest/prepare_attempt/backend execution.",
+  "source_manifest": {
+    "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-manifest-20261017-1.json",
+    "sha256": "47eb95897b0a4f2d8b2cb2673c2ed3b3feff11895654ac160c854710cc7582da"
+  },
+  "source_reference_evidence": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/memory-calloc-zero-static-reference-20261017-1.json",
+    "sha256": "a568c744ca37095e2168fc26973806aeffab38e92c1b3fd430d2b75aefd134f4"
+  },
+  "status": "PASS_OVERLAY_STRICT_MANIFEST_59_MEMBER_JOINS",
+  "task_id": "memory-calloc-zero-current942-staging-20261017-1",
+  "validation": {
+    "backend_called": false,
+    "call": "native_diagnostic.load_manifest(absolute_manifest_path) only",
+    "elapsed_seconds": 0.083387,
+    "final_member_count": 59,
+    "join_scope": "All final members equal already authenticated signal overlay map except apps/app, which joins exact calloc payload hash/size/mode; strict loader checks current references and source/output identities.",
+    "loader_source_sha256": "8af67bcf5015cbf1915a65fdb3ce50d09ed68ea39f3b08fa95fa29625fd7afbc",
+    "prepare_attempt_called": false,
+    "result": "PASS"
+  }
+}

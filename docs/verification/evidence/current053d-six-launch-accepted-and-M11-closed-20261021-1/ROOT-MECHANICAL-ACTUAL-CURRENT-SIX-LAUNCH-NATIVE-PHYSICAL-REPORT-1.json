@@ -1,0 +1,1450 @@
+{
+  "schema": "mckernel.current-numa-launcher.native-owner-physical-lifecycle-review.v1",
+  "status": "PASS_ACTUAL_CURRENT_NATIVE_OWNER_PHYSICAL_RETIREMENT_AND_JOIN_ONLY",
+  "decision": "PASS_CURRENT_NATIVE_CONTAINER_LEASE_PROCESS_AND_CONTROLLER_TERMINAL_SCOPE_ONLY",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/numa_image_source_review",
+  "implementation_ownership": false,
+  "container_id": "1de6fe5491ce9f6e662184fabe9c65a490c334dda85d04da8c8f7a07e7882ff5",
+  "owner_nonce": "5bfb7039bfcb43c0bce3850c326ffef1",
+  "current_native_owner_physical_release": true,
+  "current_native_request_lease_release": true,
+  "current_owner_terminal": true,
+  "retired": true,
+  "container_absent": true,
+  "all_14_owned_caller_and_rootchild_groups_observed_absent": true,
+  "all_30_saved_docker_client_commands_reaped": true,
+  "all_three_readbacks_exact_join": true,
+  "readback_stderr_empty": true,
+  "qemu_teardown_observed": true,
+  "guest_procfs_empty": true,
+  "lease_retained": false,
+  "primary_failure": null,
+  "secondary_failures": [],
+  "secondary_failures_omitted": 0,
+  "capture_errors": [],
+  "atomic_owner_receipt_sha256": "23c69ede17f9e6167feb3973c68dba20359f645e4598cc7ef156fe61e2594bcd",
+  "owner_record_sha256": "76e498391ba1b59d22f318526c867da72125d7545ddf69aa7522090dbce33aaa",
+  "controller_pair_sha256": "aaf03e4109130f0105f4536689160507906197fd3e2129b3535175622f6911eb",
+  "controller_source_sha256": "f13fa9b602ee60b52e2dd2864e229b34b778494bac2586999673af4f9caae4d1",
+  "outer_os_identity": null,
+  "outer_process_group_observation": null,
+  "postjoin_root_mutex_reacquisition_observed": false,
+  "new_global_census_performed": false,
+  "application_acceptance": false,
+  "public_lifecycle_acceptance": false,
+  "C_retirement_credit": false,
+  "owner_record": {
+    "application_acceptance": false,
+    "attempt": "/home/holden/mckernel-work/scratch/s6p-261021-3/p/attempt-5bfb7039bfcb43c0bce3850c326ffef1",
+    "cgroup_profile": {
+      "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_period_us": "100000",
+      "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_quota_us": "400000",
+      "/sys/fs/cgroup/memory/mckernel-dev/memory.limit_in_bytes": "12884901888",
+      "/sys/fs/cgroup/memory/mckernel-dev/memory.use_hierarchy": "1",
+      "/sys/fs/cgroup/pids/mckernel-dev/pids.max": "512"
+    },
+    "lock": {
+      "dev": 27,
+      "gid": 0,
+      "ino": 4,
+      "mode": 420,
+      "nlink": 1,
+      "uid": 0
+    },
+    "name": "mckernel-native-diagnostic-5bfb7039bfcb43c0bce3850c326ffef1",
+    "nonce": "5bfb7039bfcb43c0bce3850c326ffef1",
+    "outer": {
+      "pgid": 2822921,
+      "pid": 2822924,
+      "proc_starttime": 41690910,
+      "sid": 2822921
+    },
+    "owner_sha256": "d2903422f8ca417ff99700e5d7ad9eb768352cb03c2779b5a9b81aef56c11d43"
+  },
+  "atomic_owner_receipt": {
+    "archive_member": "./result.json",
+    "bytes": 257,
+    "sha256": "23c69ede17f9e6167feb3973c68dba20359f645e4598cc7ef156fe61e2594bcd",
+    "value": {
+      "absence_verified": true,
+      "application_acceptance": false,
+      "container": "1de6fe5491ce9f6e662184fabe9c65a490c334dda85d04da8c8f7a07e7882ff5",
+      "failure": null,
+      "lease_retained": false,
+      "secondary": [],
+      "secondary_omitted": 0,
+      "signal_number": null,
+      "status": "PROTOCOL_PASS"
+    }
+  },
+  "container_terminal_state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-10-21T21:51:05.104511101Z",
+    "FinishedAt": "2026-10-21T21:51:48.169183855Z"
+  },
+  "actual_closed_births": [
+    {
+      "direct_joined": true,
+      "group_absent": true,
+      "returncode": 0,
+      "role": "LAST-snapshot",
+      "owned_caller": {
+        "pid": 2822897,
+        "start": 41690825,
+        "status": {
+          "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/runtime-packet-preparation-1/native-packet-1/root-seven1-LAST-snapshot.status.json",
+          "sha256": "66501a9a2406f906934a3e7b5493ef22e8e44c7544cee69fd54ea7fb89ead0db",
+          "bytes": 1121
+        }
+      },
+      "rootchild": {
+        "pid": 2822898,
+        "start": "41690829",
+        "status": {
+          "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/runtime-packet-preparation-1/native-packet-1/snapshot.status.json",
+          "sha256": "4646dbba1e2c2984d156dedd292e436866ee2656f3b4f2a32357823fe0b7c06f",
+          "bytes": 2199
+        }
+      }
+    },
+    {
+      "direct_joined": true,
+      "group_absent": true,
+      "returncode": 0,
+      "role": "machine-assembly",
+      "owned_caller": {
+        "pid": 2822914,
+        "start": 41690878,
+        "status": {
+          "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/runtime-packet-preparation-1/native-packet-1/root-seven1-machine-assembly.status.json",
+          "sha256": "2e9bc2971cfcee0c953c4d11919f4e5902a9bcb645e035213e41ea6ac7f0a6a8",
+          "bytes": 1126
+        }
+      },
+      "rootchild": {
+        "pid": 2822915,
+        "start": "41690882",
+        "status": {
+          "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/runtime-packet-preparation-1/native-packet-1/captures/01-machine-assembly/status.json",
+          "sha256": "71f89b69ad6a7c45662fbb87140e3a7af15515cb5015d5f3fbb1fcb021becabc",
+          "bytes": 3324
+        }
+      }
+    },
+    {
+      "direct_joined": true,
+      "group_absent": true,
+      "returncode": 0,
+      "role": "final-guard",
+      "owned_caller": {
+        "pid": 2822917,
+        "start": 41690886,
+        "status": {
+          "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/runtime-packet-preparation-1/native-packet-1/root-seven1-final-guard.status.json",
+          "sha256": "a7074cad5d964f9944c7153560ac56939a8858263790466006ddf62c1ff0c086",
+          "bytes": 1120
+        }
+      },
+      "rootchild": {
+        "pid": 2822918,
+        "start": "41690891",
+        "status": {
+          "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/runtime-packet-preparation-1/native-packet-1/captures/02-final-guard/status.json",
+          "sha256": "dc860dcf07d87eede62160f8339a9ea7d5dc908cffe8267c6910ae25f39cc7ff",
+          "bytes": 2023
+        }
+      }
+    },
+    {
+      "direct_joined": true,
+      "group_absent": true,
+      "returncode": 0,
+      "role": "native-owner",
+      "owned_caller": {
+        "pid": 2822920,
+        "start": 41690898,
+        "status": {
+          "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/runtime-packet-preparation-1/native-packet-1/root-seven1-native-owner.status.json",
+          "sha256": "919eea42883ed6dd73264d190d886b4e6f7cf24c867ef80d08c5ddd451fb04a4",
+          "bytes": 1048
+        }
+      },
+      "rootchild": {
+        "pid": 2822921,
+        "start": "41690902",
+        "status": {
+          "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/runtime-packet-preparation-1/native-packet-1/captures/03-native-owner/status.json",
+          "sha256": "89385f871c5c333b188b977856fa71a5dc3fa22edf707006c698a4e02900971b",
+          "bytes": 1964
+        }
+      }
+    },
+    {
+      "direct_joined": true,
+      "group_absent": true,
+      "returncode": 0,
+      "role": "readback-1",
+      "owned_caller": {
+        "pid": 2823639,
+        "start": 41695346,
+        "status": {
+          "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/runtime-packet-preparation-1/native-packet-1/root-seven1-readback-1.status.json",
+          "sha256": "f2719b9bcdb163f11a49960a2bad747ce6d0d8271c8ecd0ecf32b0f0f0830817",
+          "bytes": 1120
+        }
+      },
+      "rootchild": {
+        "pid": 2823640,
+        "start": "41695350",
+        "status": {
+          "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/runtime-packet-preparation-1/native-packet-1/captures/04-readback-1/status.json",
+          "sha256": "d9a78cac04eefbc6515184fc8616e2ba1c831cf405582952b4e36c1b28ce4233",
+          "bytes": 1609
+        }
+      }
+    },
+    {
+      "direct_joined": true,
+      "group_absent": true,
+      "returncode": 0,
+      "role": "readback-2",
+      "owned_caller": {
+        "pid": 2823645,
+        "start": 41695363,
+        "status": {
+          "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/runtime-packet-preparation-1/native-packet-1/root-seven1-readback-2.status.json",
+          "sha256": "9d204bbc913a428bb875cdc5f21523df9b508f35a9aea2924c0fb1b1b72257cf",
+          "bytes": 1118
+        }
+      },
+      "rootchild": {
+        "pid": 2823646,
+        "start": "41695367",
+        "status": {
+          "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/runtime-packet-preparation-1/native-packet-1/captures/05-readback-2/status.json",
+          "sha256": "8ae8980b8cc3a00f99a9fb6e66c2dcb2b8a85a9714f02e058fb610296591f4f2",
+          "bytes": 1584
+        }
+      }
+    },
+    {
+      "direct_joined": true,
+      "group_absent": true,
+      "returncode": 0,
+      "role": "readback-3",
+      "owned_caller": {
+        "pid": 2823651,
+        "start": 41695380,
+        "status": {
+          "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/runtime-packet-preparation-1/native-packet-1/root-seven1-readback-3.status.json",
+          "sha256": "f78d2cf3241c7fd4f9c3f254bd3e4c52fc52a1d4b1239aa5fea9ca25665a3e8a",
+          "bytes": 1120
+        }
+      },
+      "rootchild": {
+        "pid": 2823652,
+        "start": "41695384",
+        "status": {
+          "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/runtime-packet-preparation-1/native-packet-1/captures/06-readback-3/status.json",
+          "sha256": "0adddafc86fc62257c9687c14d7d1e4d9306310b57a4b0613be2c9cbae738ab9",
+          "bytes": 1633
+        }
+      }
+    }
+  ],
+  "actual_chain": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/runtime-packet-preparation-1/native-packet-1/root-seven-whole-1.json",
+    "sha256": "7f49a751529071f5455efe32c7959bb02ec9828258e788de4cc094effd370ce8",
+    "bytes": 3019
+  },
+  "actual_seven": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/runtime-packet-preparation-1/native-packet-1/FINAL-SEVEN-ROOT-CALL-DATA.json",
+    "sha256": "816041366241bf8875ba0bbc19da5daefbee0c7515569f6af0f505baf1caaeef",
+    "bytes": 65343
+  },
+  "execution_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/exact-native-release-data-preparation-1/INDEPENDENT-EXACT-CURRENT-SIX-LAUNCH-SEVEN-STEP-EXECUTION-REVIEW-1.json",
+    "sha256": "4aad100f0a4c690756724084ef2d5d138fe6e304d8442c624bfceec89accb7fb",
+    "bytes": 3899
+  },
+  "controller_terminal_pair": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/current-native-acceptance-1/ACTUAL-CURRENT-SIX-LAUNCH-TYPED-TOOL-CONTROLLER-PAIR-1.json",
+    "sha256": "aaf03e4109130f0105f4536689160507906197fd3e2129b3535175622f6911eb",
+    "bytes": 790
+  },
+  "controller_terminal_contract": {
+    "capture_source": {
+      "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/runtime-packet-preparation-1/native-packet-1/root-execute-seven-1.py",
+      "sha256": "f13fa9b602ee60b52e2dd2864e229b34b778494bac2586999673af4f9caae4d1",
+      "bytes": 6188
+    },
+    "capture_source_sha256": "f13fa9b602ee60b52e2dd2864e229b34b778494bac2586999673af4f9caae4d1",
+    "decision": "PASS_TOOL_TERMINAL_AND_SINGLE_CHILD_CONTROL_FLOW",
+    "implementation_ownership": false,
+    "kind": "tool-owned-unified-exec-terminal",
+    "outer_os_group": null,
+    "outer_os_pid": null,
+    "reviewer": "/root/numa_image_source_review",
+    "tool_terminal": [
+      "exec-217b2498-68d7-439d-a5ce-3d38fedae69c",
+      "97265",
+      45617
+    ]
+  },
+  "container_removed_command": {
+    "archive_member": "./027-rm.json",
+    "record": {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "rm",
+        "--force",
+        "1de6fe5491ce9f6e662184fabe9c65a490c334dda85d04da8c8f7a07e7882ff5"
+      ],
+      "command": {
+        "pgid": 2823615,
+        "pid": 2823615,
+        "proc_starttime": 41695316,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 2822921
+      },
+      "failure": null,
+      "returncode": 0,
+      "timeout": 4
+    }
+  },
+  "final_empty_queries": [
+    {
+      "archive_member": "./028-ps.json",
+      "record": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "ps",
+          "-aq",
+          "--no-trunc",
+          "--filter",
+          "name=^/mckernel-native-diagnostic-5bfb7039bfcb43c0bce3850c326ffef1$"
+        ],
+        "command": {
+          "pgid": 2823621,
+          "pid": 2823621,
+          "proc_starttime": 41695318,
+          "reaped": true,
+          "returncode": 0,
+          "sid": 2822921
+        },
+        "failure": null,
+        "returncode": 0,
+        "timeout": 10
+      }
+    },
+    {
+      "archive_member": "./029-ps.json",
+      "record": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "ps",
+          "-aq",
+          "--no-trunc",
+          "--filter",
+          "label=mckernel.native-diagnostic.owner=5bfb7039bfcb43c0bce3850c326ffef1"
+        ],
+        "command": {
+          "pgid": 2823627,
+          "pid": 2823627,
+          "proc_starttime": 41695320,
+          "reaped": true,
+          "returncode": 0,
+          "sid": 2822921
+        },
+        "failure": null,
+        "returncode": 0,
+        "timeout": 10
+      }
+    },
+    {
+      "archive_member": "./030-ps.json",
+      "record": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "ps",
+          "-aq",
+          "--no-trunc",
+          "--filter",
+          "id=1de6fe5491ce9f6e662184fabe9c65a490c334dda85d04da8c8f7a07e7882ff5"
+        ],
+        "command": {
+          "pgid": 2823633,
+          "pid": 2823633,
+          "proc_starttime": 41695321,
+          "reaped": true,
+          "returncode": 0,
+          "sid": 2822921
+        },
+        "failure": null,
+        "returncode": 0,
+        "timeout": 10
+      }
+    }
+  ],
+  "readback_artifacts": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/runtime-packet-preparation-1/native-packet-1/captures/04-readback-1/stdout",
+      "sha256": "08661d25c9a851add5f0baf222e149e626b2c89edea01d330adc8d10de29553e",
+      "bytes": 1003520
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/runtime-packet-preparation-1/native-packet-1/captures/05-readback-2/stdout",
+      "sha256": "64c63b1f4625c8365a88a8348c755b8c3a74d1a69c99d24fb53a86aab833ccf0",
+      "bytes": 213548
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/runtime-packet-preparation-1/native-packet-1/captures/06-readback-3/stdout",
+      "sha256": "5243743b9e2371d6e14be86f0d773c03b92385f735c16e3699419ee7d9491f5f",
+      "bytes": 696320
+    }
+  ],
+  "guest_report": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/runtime-packet-preparation-1/native-packet-1/captures/05-readback-2/stdout",
+    "sha256": "64c63b1f4625c8365a88a8348c755b8c3a74d1a69c99d24fb53a86aab833ccf0",
+    "bytes": 213548
+  },
+  "qemu_identity": {
+    "argv": [
+      "/usr/libexec/qemu-kvm",
+      "-machine",
+      "q35",
+      "-accel",
+      "tcg,thread=multi",
+      "-cpu",
+      "max,la57=off",
+      "-smp",
+      "4,sockets=2,cores=2,threads=1",
+      "-m",
+      "8192",
+      "-object",
+      "memory-backend-ram,size=4G,id=ram-node0",
+      "-object",
+      "memory-backend-ram,size=4G,id=ram-node1",
+      "-numa",
+      "node,nodeid=0,cpus=0-1,memdev=ram-node0",
+      "-numa",
+      "node,nodeid=1,cpus=2-3,memdev=ram-node1",
+      "-nic",
+      "none",
+      "-display",
+      "none",
+      "-no-reboot",
+      "-no-shutdown",
+      "-S",
+      "-monitor",
+      "none",
+      "-qmp",
+      "unix:/home/holden/mckernel-work/scratch/s6p-261021-3/p/attempt-5bfb7039bfcb43c0bce3850c326ffef1/qmp.sock,server=on,wait=off",
+      "-serial",
+      "file:/home/holden/mckernel-work/scratch/s6p-261021-3/p/attempt-5bfb7039bfcb43c0bce3850c326ffef1/serial.log",
+      "-debugcon",
+      "file:/home/holden/mckernel-work/scratch/s6p-261021-3/p/attempt-5bfb7039bfcb43c0bce3850c326ffef1/debugcon.log",
+      "-global",
+      "isa-debugcon.iobase=0xe9",
+      "-kernel",
+      "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/bzImage",
+      "-initrd",
+      "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/source-correction-1/stage-current-six-launch-1/lifecycle.cpio.gz",
+      "-append",
+      "console=ttyS0,115200n8 rdinit=/init nokaslr panic=-1 memmap=4K%0x80000-1"
+    ],
+    "pgid": 10,
+    "pid": 10,
+    "returncode": -9,
+    "sid": 10,
+    "starttime_ticks": 41691093
+  },
+  "qemu_cleanup": {
+    "errors": [],
+    "reaped": true
+  },
+  "global_new_census": false,
+  "global_new_census_performed": false,
+  "root_mutex_fresh_reacquisition_observed": false,
+  "full_public_lifecycle_acceptance": false,
+  "native_acceptance": false,
+  "raw_diagnostic_application_acceptance": false,
+  "raw_diagnostic_mckernel_application_executed": false,
+  "raw_diagnostic_labels_unchanged": true,
+  "application_review": {
+    "schema": "mckernel.current-six-launch.actual-application-review.v1",
+    "status": "PASS_ACTUAL_CURRENT_053D_SIX_STRICT_APPLICATION_LAUNCHES_ONLY",
+    "decision": "ACCEPT_CURRENT_MATCHED_TUPLE_SELECTED_SUITE_REGRESSION_REPLAY",
+    "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+    "reviewer": "/root/numa_compiler_review",
+    "implementation_ownership": false,
+    "application_acceptance": true,
+    "evidence_base": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/runtime-packet-preparation-1/native-packet-1",
+    "evidence": {
+      "root-seven-whole-1.json": {
+        "sha256": "7f49a751529071f5455efe32c7959bb02ec9828258e788de4cc094effd370ce8",
+        "bytes": 3019
+      },
+      "captures/05-readback-2/stdout": {
+        "sha256": "64c63b1f4625c8365a88a8348c755b8c3a74d1a69c99d24fb53a86aab833ccf0",
+        "bytes": 213548,
+        "type": "Actual guest-result JSON"
+      },
+      "captures/04-readback-1/stdout": {
+        "sha256": "08661d25c9a851add5f0baf222e149e626b2c89edea01d330adc8d10de29553e",
+        "bytes": 1003520,
+        "type": "Owner-evidence TAR"
+      },
+      "captures/06-readback-3/stdout": {
+        "sha256": "5243743b9e2371d6e14be86f0d773c03b92385f735c16e3699419ee7d9491f5f",
+        "bytes": 696320,
+        "type": "Attempt TAR"
+      }
+    },
+    "observed_scope": {
+      "case_id": "practical.rust.fixed-three-rounds.current053d-launcher33f",
+      "rounds": 3,
+      "applications_per_round": 2,
+      "completed_launches": 6,
+      "mckernel_cpus": [
+        0,
+        1
+      ],
+      "os": 0,
+      "generation": 1,
+      "application_pids": [
+        [
+          260,
+          259
+        ],
+        [
+          267,
+          268
+        ],
+        [
+          275,
+          276
+        ]
+      ],
+      "all_seven_chain_rows_exit0": true,
+      "native_owner_outer_elapsed_seconds": 44.474360005988274
+    },
+    "strict_results": {
+      "app0_stdout_bytes": 387,
+      "app0_stdout_sha256": "e5aab46f5a720bacdbb2fb3cb83d682b02df7261336e79663c79fa78022b9bc4",
+      "app1_stdout_bytes": 254,
+      "app1_stdout_sha256": "52095dafd5235a8c1073248bbda3964f8a7b749722306ceaabf321d2fdcd4816",
+      "every_launch_matches_manifest_argv_env_cwd_cpu_and_exact_oracle": true,
+      "every_stderr_empty": true,
+      "every_raw_wait_status": 0,
+      "every_stream_EOF_complete_without_truncation_or_discard": true,
+      "every_launch_clean1_fault0_timeout0": true,
+      "every_application_reaped_before_finished": true,
+      "procfs_empty_before_and_after_every_round": true,
+      "all_six_final_application_retirement_errno0": true,
+      "all_six_final_process_release_cleanup_errno0": true,
+      "original_protocol_capture_errors_empty": true,
+      "unchanged_accepted_suite_trace_ABI_pager_and_log_assertions_reused": true
+    },
+    "matched_tuple": "Accepted053d kernel, separately accepted33f launcher and matched51b4/82c9/6571 modules; current manifeste04f64a4.",
+    "preservation": "Original application_acceptance=false and mckernel_application_executed=false diagnostic fields remain unchanged in raw evidence. This independent decision establishes application acceptance separately.",
+    "limitations": [
+      "Three pair rounds in one guest; no ten-cycle,60minute or full-budget claim.",
+      "Current-tuple regression replay; no new distinct behavior, Rust-path or whole-milestone credit.",
+      "No public CPU/memory restoration or physical-owner clearance is established by this application review.",
+      "No throughput speedup claim."
+    ],
+    "physical_clearance": false,
+    "future_runtime_permission": false,
+    "C_retirement_credit": false,
+    "counter_delta": 0,
+    "reviewer_runtime_runs": 0,
+    "reviewer_operations": "Bounded read-only retained evidence inspection; no application execution, source changes, test replay, root operation or extraction writes."
+  },
+  "findings": [],
+  "evidence": {
+    "genuine_independent_physical_review": {
+      "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/current-native-acceptance-1/INDEPENDENT-ACTUAL-CURRENT-SIX-LAUNCH-PHYSICAL-ACCEPTANCE-1.json",
+      "sha256": "4b518560ad0cc39b266b3977559889e9d9f474f01c0839da423bdfc236bc999f",
+      "bytes": 1832
+    },
+    "genuine_application_review": {
+      "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/current-native-acceptance-1/INDEPENDENT-ACTUAL-CURRENT-SIX-LAUNCH-APPLICATION-ACCEPTANCE-1.json",
+      "sha256": "a04292eb8f7a82df9f59b2e240a141048fc06d3e46302337c792c24ee9e88261",
+      "bytes": 3764
+    }
+  },
+  "mechanical_projection_authorization": "Exact current records copied under genuine physical review message authorization; existing consumer field vocabulary only, no new reviewer decision or physical observation.",
+  "root_recorder": "/root",
+  "original_physical_authority": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/current-native-acceptance-1/INDEPENDENT-ACTUAL-CURRENT-SIX-LAUNCH-PHYSICAL-ACCEPTANCE-1.json",
+    "sha256": "4b518560ad0cc39b266b3977559889e9d9f474f01c0839da423bdfc236bc999f",
+    "bytes": 1832
+  },
+  "docker_client_ledger": [
+    {
+      "archive_member": "./001-ps.json",
+      "record": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "ps",
+          "-aq",
+          "--no-trunc",
+          "--filter",
+          "name=^/mckernel-native-diagnostic-5bfb7039bfcb43c0bce3850c326ffef1$"
+        ],
+        "command": {
+          "pgid": 2822925,
+          "pid": 2822925,
+          "proc_starttime": 41690948,
+          "reaped": true,
+          "returncode": 0,
+          "sid": 2822921
+        },
+        "failure": null,
+        "returncode": 0,
+        "timeout": 10
+      }
+    },
+    {
+      "archive_member": "./002-ps.json",
+      "record": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "ps",
+          "-aq",
+          "--no-trunc",
+          "--filter",
+          "label=mckernel.native-diagnostic.owner=5bfb7039bfcb43c0bce3850c326ffef1"
+        ],
+        "command": {
+          "pgid": 2822931,
+          "pid": 2822931,
+          "proc_starttime": 41690950,
+          "reaped": true,
+          "returncode": 0,
+          "sid": 2822921
+        },
+        "failure": null,
+        "returncode": 0,
+        "timeout": 10
+      }
+    },
+    {
+      "archive_member": "./003-image.json",
+      "record": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "image",
+          "inspect",
+          "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94"
+        ],
+        "command": {
+          "pgid": 2822937,
+          "pid": 2822937,
+          "proc_starttime": 41690951,
+          "reaped": true,
+          "returncode": 0,
+          "sid": 2822921
+        },
+        "failure": null,
+        "returncode": 0,
+        "timeout": 10
+      }
+    },
+    {
+      "archive_member": "./004-create.json",
+      "record": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "create",
+          "--pull=never",
+          "--attach=stdout",
+          "--attach=stderr",
+          "--init",
+          "--name",
+          "mckernel-native-diagnostic-5bfb7039bfcb43c0bce3850c326ffef1",
+          "--label",
+          "mckernel.native-diagnostic.owner=5bfb7039bfcb43c0bce3850c326ffef1",
+          "--cpus=4",
+          "--cpuset-cpus=2-5",
+          "--cgroup-parent=/mckernel-dev",
+          "--memory=12g",
+          "--memory-swap=12g",
+          "--pids-limit=512",
+          "--cap-drop=ALL",
+          "--security-opt=no-new-privileges",
+          "--read-only",
+          "--network=none",
+          "--user=1000:1000",
+          "--ulimit",
+          "core=0",
+          "--ulimit",
+          "nofile=4096:4096",
+          "--tmpfs",
+          "/tmp:rw,nodev,nosuid,size=256m",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel,dst=/home/holden/mckernel,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/scratch,dst=/home/holden/mckernel-work/scratch,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/repaired-affinity-n3-variant-20261019-1,dst=/home/holden/mckernel-work/host-preparation/repaired-affinity-n3-variant-20261019-1,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1,dst=/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/image-request.json,dst=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/image-request.json,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/thin-inputs.json,dst=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/thin-inputs.json,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/materialization-receipt.json,dst=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/materialization-receipt.json,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/postbuild-preparation-1,dst=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/postbuild-preparation-1,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1,dst=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/heavy-proposal-1/source-sha256.json,dst=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/heavy-proposal-1/source-sha256.json,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1,dst=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/postbuild-execution-preparation-1/copy-pin-correction-1/facts-inline-correction-1/actual-positive-fixture-facts.json,dst=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/postbuild-execution-preparation-1/copy-pin-correction-1/facts-inline-correction-1/actual-positive-fixture-facts.json,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1,dst=/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-independent-review-20261019-1,dst=/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-independent-review-20261019-1,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-independent-review-20261019-1,dst=/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-independent-review-20261019-1,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1,dst=/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-independent-review-20261019-1,dst=/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-independent-review-20261019-1,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1,dst=/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-independent-review-20261020-1,dst=/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-independent-review-20261020-1,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/readonly-root-correction-1/runtime-source-1,dst=/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/readonly-root-correction-1/runtime-source-1,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/current-image-six-launch-regression-plan-1/source-correction-1,dst=/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/current-image-six-launch-regression-plan-1/source-correction-1,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-stage-preparation-1/actual-data-1/CONSUMER-CONTRACT.ACTUAL-ACCEPTED-LAUNCHER.json,dst=/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-stage-preparation-1/actual-data-1/CONSUMER-CONTRACT.ACTUAL-ACCEPTED-LAUNCHER.json,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/independent-runtime-binding-review-1/ROOT-RECORDED-CANONICAL-ARTIFACT-SCHEMA-PROJECTION-1.json,dst=/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/independent-runtime-binding-review-1/ROOT-RECORDED-CANONICAL-ARTIFACT-SCHEMA-PROJECTION-1.json,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-artifact-acceptance-1/ROOT-RECORDED-INDEPENDENT-LAUNCHER-ARTIFACT-ACCEPTANCE-1.json,dst=/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-artifact-acceptance-1/ROOT-RECORDED-INDEPENDENT-LAUNCHER-ARTIFACT-ACCEPTANCE-1.json,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-artifact-acceptance-1/ROOT-RECORDED-INDEPENDENT-LAUNCHER-DEPENDENCY-ACCEPTANCE-1.json,dst=/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-artifact-acceptance-1/ROOT-RECORDED-INDEPENDENT-LAUNCHER-DEPENDENCY-ACCEPTANCE-1.json,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/source-correction-1,dst=/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/source-correction-1,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/postbuild-numa-stage-runtime-data-preparation-1/image-only-consumer-source-1/ABI-AND-CONSUMER-CONTRACT.FINAL.json,dst=/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/postbuild-numa-stage-runtime-data-preparation-1/image-only-consumer-source-1/ABI-AND-CONSUMER-CONTRACT.FINAL.json,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/production-preflight-correction-preparation-1/ROOT-RECORDED-INDEPENDENT-CURRENT-IMAGE-ARTIFACT-ACCEPTANCE-1.json,dst=/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/production-preflight-correction-preparation-1/ROOT-RECORDED-INDEPENDENT-CURRENT-IMAGE-ARTIFACT-ACCEPTANCE-1.json,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/production-preflight-correction-preparation-1/full-image-attempt-2/owner-work/evidence/artifacts/mckernel.img,dst=/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/production-preflight-correction-preparation-1/full-image-attempt-2/owner-work/evidence/artifacts/mckernel.img,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-successor-preparation-1/launcher-attempt-1/owner-work/output/build/executer/user/mcexec,dst=/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-successor-preparation-1/launcher-attempt-1/owner-work/output/build/executer/user/mcexec,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/scratch/s6p-261021-3/p,dst=/home/holden/mckernel-work/scratch/s6p-261021-3/p",
+          "--env",
+          "HOME=/tmp",
+          "--env",
+          "TMPDIR=/tmp",
+          "--env",
+          "PYTHONDONTWRITEBYTECODE=1",
+          "--workdir=/home/holden/mckernel-work/scratch/s6p-261021-3/p",
+          "--entrypoint=/usr/bin/python3",
+          "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+          "-B",
+          "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/readonly-root-correction-1/runtime-source-1/native_diagnostic_container_owner.py",
+          "--inside",
+          "--owner-sha256",
+          "d2903422f8ca417ff99700e5d7ad9eb768352cb03c2779b5a9b81aef56c11d43",
+          "--manifest",
+          "/home/holden/mckernel-work/scratch/s6m-261021-3/manifest.json",
+          "--manifest-sha256",
+          "e04f64a44ea0bd929521bd4c34eefd205cc1983ae50219b6ba66396ebb013cf2",
+          "--attempt-parent",
+          "/home/holden/mckernel-work/scratch/s6p-261021-3/p",
+          "--nonce",
+          "5bfb7039bfcb43c0bce3850c326ffef1"
+        ],
+        "command": {
+          "pgid": 2822943,
+          "pid": 2822943,
+          "proc_starttime": 41690952,
+          "reaped": true,
+          "returncode": 0,
+          "sid": 2822921
+        },
+        "failure": null,
+        "returncode": 0,
+        "timeout": 10
+      }
+    },
+    {
+      "archive_member": "./005-ps.json",
+      "record": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "ps",
+          "-aq",
+          "--no-trunc",
+          "--filter",
+          "name=^/mckernel-native-diagnostic-5bfb7039bfcb43c0bce3850c326ffef1$"
+        ],
+        "command": {
+          "pgid": 2822949,
+          "pid": 2822949,
+          "proc_starttime": 41690957,
+          "reaped": true,
+          "returncode": 0,
+          "sid": 2822921
+        },
+        "failure": null,
+        "returncode": 0,
+        "timeout": 10
+      }
+    },
+    {
+      "archive_member": "./006-ps.json",
+      "record": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "ps",
+          "-aq",
+          "--no-trunc",
+          "--filter",
+          "label=mckernel.native-diagnostic.owner=5bfb7039bfcb43c0bce3850c326ffef1"
+        ],
+        "command": {
+          "pgid": 2822955,
+          "pid": 2822955,
+          "proc_starttime": 41690960,
+          "reaped": true,
+          "returncode": 0,
+          "sid": 2822921
+        },
+        "failure": null,
+        "returncode": 0,
+        "timeout": 10
+      }
+    },
+    {
+      "archive_member": "./007-ps.json",
+      "record": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "ps",
+          "-aq",
+          "--no-trunc",
+          "--filter",
+          "id=1de6fe5491ce9f6e662184fabe9c65a490c334dda85d04da8c8f7a07e7882ff5"
+        ],
+        "command": {
+          "pgid": 2822961,
+          "pid": 2822961,
+          "proc_starttime": 41690961,
+          "reaped": true,
+          "returncode": 0,
+          "sid": 2822921
+        },
+        "failure": null,
+        "returncode": 0,
+        "timeout": 10
+      }
+    },
+    {
+      "archive_member": "./008-inspect.json",
+      "record": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "inspect",
+          "1de6fe5491ce9f6e662184fabe9c65a490c334dda85d04da8c8f7a07e7882ff5"
+        ],
+        "command": {
+          "pgid": 2822967,
+          "pid": 2822967,
+          "proc_starttime": 41690963,
+          "reaped": true,
+          "returncode": 0,
+          "sid": 2822921
+        },
+        "failure": null,
+        "returncode": 0,
+        "timeout": 10
+      }
+    },
+    {
+      "archive_member": "./009-start.json",
+      "record": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "start",
+          "--attach",
+          "1de6fe5491ce9f6e662184fabe9c65a490c334dda85d04da8c8f7a07e7882ff5"
+        ],
+        "command": {
+          "pgid": 2822973,
+          "pid": 2822973,
+          "proc_starttime": 41690964,
+          "reaped": true,
+          "returncode": 0,
+          "sid": 2822921
+        },
+        "failure": null,
+        "returncode": 0,
+        "timeout": 360
+      }
+    },
+    {
+      "archive_member": "./010-wait.json",
+      "record": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "wait",
+          "1de6fe5491ce9f6e662184fabe9c65a490c334dda85d04da8c8f7a07e7882ff5"
+        ],
+        "command": {
+          "pgid": 2823512,
+          "pid": 2823512,
+          "proc_starttime": 41695290,
+          "reaped": true,
+          "returncode": 0,
+          "sid": 2822921
+        },
+        "failure": null,
+        "returncode": 0,
+        "timeout": 5
+      }
+    },
+    {
+      "archive_member": "./011-ps.json",
+      "record": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "ps",
+          "-aq",
+          "--no-trunc",
+          "--filter",
+          "name=^/mckernel-native-diagnostic-5bfb7039bfcb43c0bce3850c326ffef1$"
+        ],
+        "command": {
+          "pgid": 2823518,
+          "pid": 2823518,
+          "proc_starttime": 41695292,
+          "reaped": true,
+          "returncode": 0,
+          "sid": 2822921
+        },
+        "failure": null,
+        "returncode": 0,
+        "timeout": 10
+      }
+    },
+    {
+      "archive_member": "./012-ps.json",
+      "record": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "ps",
+          "-aq",
+          "--no-trunc",
+          "--filter",
+          "label=mckernel.native-diagnostic.owner=5bfb7039bfcb43c0bce3850c326ffef1"
+        ],
+        "command": {
+          "pgid": 2823524,
+          "pid": 2823524,
+          "proc_starttime": 41695293,
+          "reaped": true,
+          "returncode": 0,
+          "sid": 2822921
+        },
+        "failure": null,
+        "returncode": 0,
+        "timeout": 10
+      }
+    },
+    {
+      "archive_member": "./013-ps.json",
+      "record": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "ps",
+          "-aq",
+          "--no-trunc",
+          "--filter",
+          "id=1de6fe5491ce9f6e662184fabe9c65a490c334dda85d04da8c8f7a07e7882ff5"
+        ],
+        "command": {
+          "pgid": 2823530,
+          "pid": 2823530,
+          "proc_starttime": 41695295,
+          "reaped": true,
+          "returncode": 0,
+          "sid": 2822921
+        },
+        "failure": null,
+        "returncode": 0,
+        "timeout": 10
+      }
+    },
+    {
+      "archive_member": "./014-inspect.json",
+      "record": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "inspect",
+          "1de6fe5491ce9f6e662184fabe9c65a490c334dda85d04da8c8f7a07e7882ff5"
+        ],
+        "command": {
+          "pgid": 2823536,
+          "pid": 2823536,
+          "proc_starttime": 41695297,
+          "reaped": true,
+          "returncode": 0,
+          "sid": 2822921
+        },
+        "failure": null,
+        "returncode": 0,
+        "timeout": 10
+      }
+    },
+    {
+      "archive_member": "./015-wait.json",
+      "record": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "wait",
+          "1de6fe5491ce9f6e662184fabe9c65a490c334dda85d04da8c8f7a07e7882ff5"
+        ],
+        "command": {
+          "pgid": 2823542,
+          "pid": 2823542,
+          "proc_starttime": 41695298,
+          "reaped": true,
+          "returncode": 0,
+          "sid": 2822921
+        },
+        "failure": null,
+        "returncode": 0,
+        "timeout": 3
+      }
+    },
+    {
+      "archive_member": "./016-logs.json",
+      "record": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "logs",
+          "--timestamps",
+          "1de6fe5491ce9f6e662184fabe9c65a490c334dda85d04da8c8f7a07e7882ff5"
+        ],
+        "command": {
+          "pgid": 2823548,
+          "pid": 2823548,
+          "proc_starttime": 41695300,
+          "reaped": true,
+          "returncode": 0,
+          "sid": 2822921
+        },
+        "failure": null,
+        "returncode": 0,
+        "timeout": 3
+      }
+    },
+    {
+      "archive_member": "./017-inspect.json",
+      "record": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "inspect",
+          "1de6fe5491ce9f6e662184fabe9c65a490c334dda85d04da8c8f7a07e7882ff5"
+        ],
+        "command": {
+          "pgid": 2823555,
+          "pid": 2823555,
+          "proc_starttime": 41695301,
+          "reaped": true,
+          "returncode": 0,
+          "sid": 2822921
+        },
+        "failure": null,
+        "returncode": 0,
+        "timeout": 3
+      }
+    },
+    {
+      "archive_member": "./018-ps.json",
+      "record": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "ps",
+          "-aq",
+          "--no-trunc",
+          "--filter",
+          "name=^/mckernel-native-diagnostic-5bfb7039bfcb43c0bce3850c326ffef1$"
+        ],
+        "command": {
+          "pgid": 2823561,
+          "pid": 2823561,
+          "proc_starttime": 41695302,
+          "reaped": true,
+          "returncode": 0,
+          "sid": 2822921
+        },
+        "failure": null,
+        "returncode": 0,
+        "timeout": 10
+      }
+    },
+    {
+      "archive_member": "./019-ps.json",
+      "record": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "ps",
+          "-aq",
+          "--no-trunc",
+          "--filter",
+          "label=mckernel.native-diagnostic.owner=5bfb7039bfcb43c0bce3850c326ffef1"
+        ],
+        "command": {
+          "pgid": 2823567,
+          "pid": 2823567,
+          "proc_starttime": 41695304,
+          "reaped": true,
+          "returncode": 0,
+          "sid": 2822921
+        },
+        "failure": null,
+        "returncode": 0,
+        "timeout": 10
+      }
+    },
+    {
+      "archive_member": "./020-ps.json",
+      "record": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "ps",
+          "-aq",
+          "--no-trunc",
+          "--filter",
+          "id=1de6fe5491ce9f6e662184fabe9c65a490c334dda85d04da8c8f7a07e7882ff5"
+        ],
+        "command": {
+          "pgid": 2823573,
+          "pid": 2823573,
+          "proc_starttime": 41695305,
+          "reaped": true,
+          "returncode": 0,
+          "sid": 2822921
+        },
+        "failure": null,
+        "returncode": 0,
+        "timeout": 10
+      }
+    },
+    {
+      "archive_member": "./021-inspect.json",
+      "record": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "inspect",
+          "1de6fe5491ce9f6e662184fabe9c65a490c334dda85d04da8c8f7a07e7882ff5"
+        ],
+        "command": {
+          "pgid": 2823579,
+          "pid": 2823579,
+          "proc_starttime": 41695307,
+          "reaped": true,
+          "returncode": 0,
+          "sid": 2822921
+        },
+        "failure": null,
+        "returncode": 0,
+        "timeout": 10
+      }
+    },
+    {
+      "archive_member": "./022-stop.json",
+      "record": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "stop",
+          "--time=2",
+          "1de6fe5491ce9f6e662184fabe9c65a490c334dda85d04da8c8f7a07e7882ff5"
+        ],
+        "command": {
+          "pgid": 2823585,
+          "pid": 2823585,
+          "proc_starttime": 41695308,
+          "reaped": true,
+          "returncode": 0,
+          "sid": 2822921
+        },
+        "failure": null,
+        "returncode": 0,
+        "timeout": 4
+      }
+    },
+    {
+      "archive_member": "./023-kill.json",
+      "record": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "kill",
+          "1de6fe5491ce9f6e662184fabe9c65a490c334dda85d04da8c8f7a07e7882ff5"
+        ],
+        "command": {
+          "pgid": 2823591,
+          "pid": 2823591,
+          "proc_starttime": 41695310,
+          "reaped": true,
+          "returncode": 1,
+          "sid": 2822921
+        },
+        "failure": null,
+        "returncode": 1,
+        "timeout": 2
+      }
+    },
+    {
+      "archive_member": "./024-wait.json",
+      "record": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "wait",
+          "1de6fe5491ce9f6e662184fabe9c65a490c334dda85d04da8c8f7a07e7882ff5"
+        ],
+        "command": {
+          "pgid": 2823597,
+          "pid": 2823597,
+          "proc_starttime": 41695311,
+          "reaped": true,
+          "returncode": 0,
+          "sid": 2822921
+        },
+        "failure": null,
+        "returncode": 0,
+        "timeout": 1
+      }
+    },
+    {
+      "archive_member": "./025-logs.json",
+      "record": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "logs",
+          "--timestamps",
+          "1de6fe5491ce9f6e662184fabe9c65a490c334dda85d04da8c8f7a07e7882ff5"
+        ],
+        "command": {
+          "pgid": 2823603,
+          "pid": 2823603,
+          "proc_starttime": 41695312,
+          "reaped": true,
+          "returncode": 0,
+          "sid": 2822921
+        },
+        "failure": null,
+        "returncode": 0,
+        "timeout": 1
+      }
+    },
+    {
+      "archive_member": "./026-inspect.json",
+      "record": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "inspect",
+          "1de6fe5491ce9f6e662184fabe9c65a490c334dda85d04da8c8f7a07e7882ff5"
+        ],
+        "command": {
+          "pgid": 2823609,
+          "pid": 2823609,
+          "proc_starttime": 41695314,
+          "reaped": true,
+          "returncode": 0,
+          "sid": 2822921
+        },
+        "failure": null,
+        "returncode": 0,
+        "timeout": 1
+      }
+    },
+    {
+      "archive_member": "./027-rm.json",
+      "record": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "rm",
+          "--force",
+          "1de6fe5491ce9f6e662184fabe9c65a490c334dda85d04da8c8f7a07e7882ff5"
+        ],
+        "command": {
+          "pgid": 2823615,
+          "pid": 2823615,
+          "proc_starttime": 41695316,
+          "reaped": true,
+          "returncode": 0,
+          "sid": 2822921
+        },
+        "failure": null,
+        "returncode": 0,
+        "timeout": 4
+      }
+    },
+    {
+      "archive_member": "./028-ps.json",
+      "record": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "ps",
+          "-aq",
+          "--no-trunc",
+          "--filter",
+          "name=^/mckernel-native-diagnostic-5bfb7039bfcb43c0bce3850c326ffef1$"
+        ],
+        "command": {
+          "pgid": 2823621,
+          "pid": 2823621,
+          "proc_starttime": 41695318,
+          "reaped": true,
+          "returncode": 0,
+          "sid": 2822921
+        },
+        "failure": null,
+        "returncode": 0,
+        "timeout": 10
+      }
+    },
+    {
+      "archive_member": "./029-ps.json",
+      "record": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "ps",
+          "-aq",
+          "--no-trunc",
+          "--filter",
+          "label=mckernel.native-diagnostic.owner=5bfb7039bfcb43c0bce3850c326ffef1"
+        ],
+        "command": {
+          "pgid": 2823627,
+          "pid": 2823627,
+          "proc_starttime": 41695320,
+          "reaped": true,
+          "returncode": 0,
+          "sid": 2822921
+        },
+        "failure": null,
+        "returncode": 0,
+        "timeout": 10
+      }
+    },
+    {
+      "archive_member": "./030-ps.json",
+      "record": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "ps",
+          "-aq",
+          "--no-trunc",
+          "--filter",
+          "id=1de6fe5491ce9f6e662184fabe9c65a490c334dda85d04da8c8f7a07e7882ff5"
+        ],
+        "command": {
+          "pgid": 2823633,
+          "pid": 2823633,
+          "proc_starttime": 41695321,
+          "reaped": true,
+          "returncode": 0,
+          "sid": 2822921
+        },
+        "failure": null,
+        "returncode": 0,
+        "timeout": 10
+      }
+    }
+  ]
+}

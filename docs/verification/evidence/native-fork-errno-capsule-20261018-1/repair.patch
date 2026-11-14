@@ -1,0 +1,64 @@
+--- a/os_runtime.rs
++++ b/os_runtime.rs
+@@ -1928,7 +1928,7 @@
+     fn reserve(object: &OsObject, owner: Arc<ForkProviderOwner>, child_context: usize) -> Result<Self> {
+         let mut table = object.forks.lock();
+         let index = table.entries.iter().position(Option::is_none).ok_or(EBUSY)?;
+-        let epoch = table.next_epoch.checked_add(1).ok_or(EOVERFLOW)?;
++        let epoch = table.next_epoch.checked_add(1).ok_or_else(|| errno(-75))?;
+         table.next_epoch = epoch;
+         table.entries[index] = Some(ForkPendingEntry {
+             owner: owner.clone(), identity: None, epoch, phase: 0,
+--- a/smp_application.rs
++++ b/smp_application.rs
+@@ -284,7 +284,7 @@
+     };
+     let mut state = ForkAdoption::reserve(identity)?;
+     state.prepare_lease()?;
+-    let parent_refs = p.fork_prepared_parent_refs.checked_add(1).ok_or(EOVERFLOW)?;
++    let parent_refs = p.fork_prepared_parent_refs.checked_add(1).ok_or_else(|| errno(-75))?;
+     let token = Token::allocate().map_err(errno)?;
+     let result = token.wire();
+     slots[parent_index].as_mut().unwrap().fork_prepared_parent_refs = parent_refs;
+--- a/smp_fork_link.rs
++++ b/smp_fork_link.rs
+@@ -117,7 +117,7 @@
+             k.parent == parent.wire() && k.child_pid as i64 == args[1] as i64
+         })).ok_or(ENOENT)?;
+         if ci == pi { return Err(EACCES); }
+-        let parent_refs = p.fork_prepared_parent_refs.checked_add(1).ok_or(EOVERFLOW)?;
++        let parent_refs = p.fork_prepared_parent_refs.checked_add(1).ok_or_else(|| errno(-75))?;
+         let c = slots[ci].as_mut().unwrap();
+         if c.closed || c.needs_cleanup || c.quarantined || c.prepare.is_some() { return Err(EBUSY); }
+         if c.owner_slot != self.owner.slot() as i32 || c.owner_generation != self.owner.generation() { return Err(EACCES); }
+@@ -140,7 +140,7 @@
+             if !request_matches(old, worker, serial, cpu, &request) { return Err(EACCES); }
+         } else {
+             if gate_state != 0 { return Err(EACCES); }
+-            record.last_sequence = record.last_sequence.checked_add(1).ok_or(EOVERFLOW)?;
++            record.last_sequence = record.last_sequence.checked_add(1).ok_or_else(|| errno(-75))?;
+             record.second = Some(second.clone());
+         }
+         record.busy = true;
+--- a/smp_fork_ingress.rs
++++ b/smp_fork_ingress.rs
+@@ -250,7 +250,7 @@
+                 entry.fork.as_ref().is_some_and(|fork| fork.reservation.identity.root == geometry.root)
+                     || entry.fork_ingress.as_ref().is_some_and(|marker| marker.request.arguments()[3] == geometry.root
+                         || marker.parent == parent && marker.serial == serial)) { return Err(EBUSY); }
+-            let refs = slots[pi].as_ref().unwrap().fork_prepared_parent_refs.checked_add(1).ok_or(EOVERFLOW)?;
++            let refs = slots[pi].as_ref().unwrap().fork_prepared_parent_refs.checked_add(1).ok_or_else(|| errno(-75))?;
+             slots[ci].as_mut().unwrap().fork_ingress = Some(ForkIngressMarker {
+                 parent, child, token, worker, serial, cpu: request.cpu(), request: request.clone(),
+                 child_owner, seal, cancelled: false, retained_ticket: None, retained_lease: None,
+--- a/smp_application_image.rs
++++ b/smp_application_image.rs
+@@ -155,7 +155,7 @@
+         self.check(identity)?;
+         if !matches!(self.phase, ForkPhase::AdoptedAwaitFirstReturn | ForkPhase::FirstReturnPublished
+             | ForkPhase::GuestLinkObserved | ForkPhase::Linked) { return Err(EBUSY); }
+-        self.accesses = self.accesses.checked_add(1).ok_or(EOVERFLOW)?;
++        self.accesses = self.accesses.checked_add(1).ok_or_else(|| errno(-75))?;
+         Ok(())
+     }
+ 

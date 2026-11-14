@@ -1,0 +1,71 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_RUST_OWNERSHIP_REPAIR_AND_STRICT_HOST_MATRIX_READY_FOR_INDEPENDENT_REVIEW",
+  "candidate": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/ldump2mcdump_helpers.ownership-candidate.rs",
+    "bytes": 32135,
+    "sha256": "dc0d6f75f0d6fbc648223a4b75da6419f4e7d8fbbdacb77a6056daceafd22cac"
+  },
+  "patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/OWNERSHIP-REPAIR.patch",
+    "bytes": 5781,
+    "sha256": "6f8c63650a8891778cac5cafbd15f7020a10af7a50cd74f71a4ee5241bd814e1"
+  },
+  "strict_fixture": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/strict_fixture.c",
+    "bytes": 15940,
+    "sha256": "86b4028e3470b3bc20894622a4936328e33fe31f0dec3b15270523d14529d70e"
+  },
+  "strict_driver": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/run_strict_fixture.py",
+    "bytes": 9060,
+    "sha256": "cb5dede92b486a844acbf7c6b17a6b022cbaf4d8a77b6ae8db58a802430bf8d1"
+  },
+  "strict_result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/RESULT.json",
+    "bytes": 96432,
+    "sha256": "0cee4564693154fe0680f0e7136997fe35d30a11f6a3bd6c9dca67cb77f989a7"
+  },
+  "exact_scope": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/EXACT-REPAIR-SCOPE.json",
+    "bytes": 1791,
+    "sha256": "77eb343f16f93fe44c69a5adfd8ab263d40057116f2a5ecfb396b13900289a63"
+  },
+  "BFD_contract": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/BFD-OWNERSHIP-AND-NEW-FFI-CONTRACT.json",
+    "bytes": 3871,
+    "sha256": "25798b65897270ede6d9809b27d3ee961653c7e09a0b4d667718aeb71e4e2de5"
+  },
+  "original_fixture_independent_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/independent-source-review-1/REVIEW.json",
+    "bytes": 9006,
+    "sha256": "336a85681e14d9149206d03b621d714e788a304acd1480075a5db2b9072d0f2d"
+  },
+  "constraints": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/independent-source-review-1/RUST-OWNERSHIP-REPAIR-CONSTRAINTS.json",
+    "bytes": 3985,
+    "sha256": "806086a654ca43bba2ecf42021013fc9df1bea9fa42c55f000dbd8f89ffc6a11"
+  },
+  "original_ownership_FAILURE": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/OWNERSHIP-FAILURES.ACTUAL.json",
+    "bytes": 8599,
+    "sha256": "fa697a5719c7ceed6bb2a96b9d7a5f5b8f63c7d149a65be70c30c81484b5223b"
+  },
+  "strict_cases": 56,
+  "genuine_Rust_compiles": 1,
+  "genuine_C_links": 1,
+  "body_invocations": 56,
+  "commands_positive_wait4": 59,
+  "all_tested_returns_zero_live_project_allocations": true,
+  "all_tested_opened_mock_BFD_handles_consumed_once": true,
+  "wall_seconds": 0.4680323810316622,
+  "child_CPU_seconds": 0.3991379999999997,
+  "peak_command_RSS_KiB": 99916,
+  "new_failed_compiler_or_runtime_attempts": 0,
+  "source_preparation_assertion_failure_retained": true,
+  "independent_review": null,
+  "actual_SDK_archive_identity_bound": false,
+  "SDK_or_real_BFD_or_native_or_whole_file_acceptance": false,
+  "canonical_writes": 0,
+  "runtime_authority": null
+}

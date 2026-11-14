@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/retire_exact_failed_guard.py", line 217, in <module>
+    if __name__=='__main__':main()
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/retire_exact_failed_guard.py", line 216, in main
+    execute,_=rebound_protocol();print(json.dumps(execute(a.release,a.release_sha256),sort_keys=True))
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/retire_exact_failed_guard.py", line 536, in execute
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/retire_exact_failed_guard.py", line 122, in snapshot
+    inputs=protected_inputs(release,profile)
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/retire_exact_failed_guard.py", line 40, in protected_inputs
+    T.authenticated(r);row,_=M.file_identity(Path(r['path']))
+  File "/home/holden/mckernel/scripts/native_exact_scratch22_authority1_quarantine_recovery.py", line 100, in file_identity
+    fd = os.open(path.name, os.O_RDONLY | os.O_NOFOLLOW | noatime | os.O_CLOEXEC |
+PermissionError: [Errno 1] Operation not permitted: 'container.cid'

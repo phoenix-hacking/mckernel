@@ -1,0 +1,97 @@
+--- a/kernel/process.c
++++ b/kernel/process.c
+@@ -56,7 +56,14 @@
+ #define DDEBUG_DEFAULT DDEBUG_PRINT
+ #ifdef MCKERNEL_RUST_PROCESS_HELPERS
+ /* Existing compile-time dump gate, exposed as readonly ABI data only. */
++#ifdef MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE
++extern const int process_dump_tree_enabled;
++_Static_assert((1) == 0, "process_dump_tree_enabled selected supported configuration");
++#else
++#line 59
+ const int process_dump_tree_enabled = 1;
++#endif
++#line 60
+ #else
+ static void dtree(struct rb_node *node, int l) {
+ 	struct vm_range *range;
+@@ -76,7 +83,14 @@
+ #endif
+ #else
+ #ifdef MCKERNEL_RUST_PROCESS_HELPERS
++#ifdef MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE
++extern const int process_dump_tree_enabled;
++_Static_assert((0) == 0, "process_dump_tree_enabled selected supported configuration");
++#else
++#line 79
+ const int process_dump_tree_enabled = 0;
++#endif
++#line 80
+ #else
+ static void dump_tree(struct process_vm *vm) {}
+ #endif
+@@ -2939,9 +2953,23 @@
+ 
+ #ifdef MCKERNEL_RUST_PROCESS_HELPERS
+ #ifdef ARCH_FAST_MEMSET
++#ifdef MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE
++extern const int process_memset_smp_fast_word_pattern;
++_Static_assert((1) == 1, "process_memset_smp_fast_word_pattern selected supported configuration");
++#else
++#line 2198
+ const int process_memset_smp_fast_word_pattern = 1;
+-#else
++#endif
++#line 2199
++#else
++#ifdef MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE
++extern const int process_memset_smp_fast_word_pattern;
++_Static_assert((0) == 1, "process_memset_smp_fast_word_pattern selected supported configuration");
++#else
++#line 2200
+ const int process_memset_smp_fast_word_pattern = 0;
++#endif
++#line 2201
+ #endif
+ void process_memset_smp_memset_bridge(void *addr, int value, size_t len);
+ #else
+@@ -4065,9 +4093,23 @@
+  .line = 3151, .flags = DDEBUG_DEFAULT,
+ };
+ #ifdef PROFILE_ENABLE
++#ifdef MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE
++extern const int process_page_fault_anon_clear_profile_event;
++_Static_assert((PROFILE_page_fault_anon_clr) == 4002, "process_page_fault_anon_clear_profile_event selected supported configuration");
++#else
++#line 2952
+ const int process_page_fault_anon_clear_profile_event = PROFILE_page_fault_anon_clr;
+-#else
++#endif
++#line 2953
++#else
++#ifdef MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE
++extern const int process_page_fault_anon_clear_profile_event;
++_Static_assert((0) == 0, "process_page_fault_anon_clear_profile_event selected supported configuration");
++#else
++#line 2954
+ const int process_page_fault_anon_clear_profile_event = 0;
++#endif
++#line 2955
+ #endif
+ #endif
+ #ifndef MCKERNEL_RUST_PROCESS_HELPERS
+@@ -4733,7 +4775,14 @@
+ const int process_init_stack_alloc_line = __LINE__ - 122;
+ const char *const process_init_stack_free_file = __FILE__;
+ const int process_init_stack_free_line = __LINE__ - 119;
++#ifdef MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE
++extern const int process_init_stack_user_category;
++_Static_assert((IHK_MC_PG_USER) == 1, "process_init_stack_user_category selected supported configuration");
++#else
++#line 3465
+ const int process_init_stack_user_category = IHK_MC_PG_USER;
++#endif
++#line 3466
+ struct ddebug __aligned(8) __attribute__((section("__verbose")))
+ process_init_stack_log_size_debug = {
+     .file = __FILE__, .func = "process_init_stack_log_bridge",

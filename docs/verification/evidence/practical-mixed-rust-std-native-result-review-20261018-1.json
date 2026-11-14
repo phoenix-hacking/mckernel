@@ -1,0 +1,333 @@
+{
+  "schema": "mckernel.practical-mixed-rust-std-native-result-review.v1",
+  "status": "PASS",
+  "reviewer": "/root/mixed_rust_actual_review_0825",
+  "implementation_ownership": false,
+  "created_utc": "2026-10-18T08:27:58.667894+00:00",
+  "scope": "Functional PRACTICAL-GOAL kernel/apps AND active compute C retirement into Rust plus reviewed assembly; original qualification deferred.",
+  "image_sha256": "da0f1bf760d5472693ed1d24f0bee717d8bf4c0880d4eb92d98203cd737e814f",
+  "payload_sha256": "4ebbe30ec084e47a17f3f03b0f0d42d9a0f122da35db27c95d2145ed970f3a49",
+  "actual_acceptance": {
+    "status": "PASS",
+    "raw_wait_status": 0,
+    "exit_code": 0,
+    "stdout_bytes": 156,
+    "stdout_sha256": "0bc276ed5f3b2588004c90a36ac7de431d5e8e27388a996c72d7b880c21dc2db",
+    "stderr_bytes": 0,
+    "discarded_bytes": 0,
+    "guest_pid": 257,
+    "rounds": 3,
+    "bytes_each": 8193,
+    "checksums": [
+      1024005,
+      1024090,
+      1024175
+    ],
+    "checksum_total": 3072270,
+    "checked_closes": 6,
+    "reopens": 3,
+    "eof_checks": 3,
+    "removed_files": 3,
+    "joined_worker_lifetimes": 6,
+    "alternating_turns": 768,
+    "worker_tids": [
+      258,
+      259
+    ],
+    "procfs_publications": 7,
+    "procfs_deletions": 7,
+    "three_overlapping_TID_windows": 3,
+    "tid_transfer_bytes": 512,
+    "retirement_token": 88,
+    "cleanup_errno": 0,
+    "preserved_initial_retirement": {
+      "token": 87,
+      "errno": -11,
+      "ownership_retained": true
+    },
+    "pager_accounting": "Static Rust ELF: no file-pager CREATE or RELEASE claims; no dynamic-library pager reference exists in this run."
+  },
+  "positive_retirement": {
+    "status": "PASS",
+    "owner_pid": 923797,
+    "owner_starttime": 10931828,
+    "owner_returncode": 0,
+    "owner_join_seconds": 35.901666316000046,
+    "distinct_client_identity_reap_receipts": 30,
+    "container_id": "88360e76756323df485f8f3e5d91e0095dc9925b506653e9afa30b9f003a5787",
+    "container_removed": true,
+    "successful_container_waits": 3,
+    "final_name_nonce_id_queries_empty": true,
+    "oom": false,
+    "recovery": false,
+    "retained_lease": false,
+    "cgroup_profile": {
+      "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_period_us": "100000",
+      "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_quota_us": "400000",
+      "/sys/fs/cgroup/memory/mckernel-dev/memory.limit_in_bytes": "12884901888",
+      "/sys/fs/cgroup/memory/mckernel-dev/memory.use_hierarchy": "1",
+      "/sys/fs/cgroup/pids/mckernel-dev/pids.max": "512"
+    },
+    "root_mutex": "27:4 release proven by exact checked zero-exit owner path; no new live observation",
+    "qmp": "Guest shutdown observed before reviewed QEMU -9 teardown; app exit0 independently raw-wait-bound"
+  },
+  "distinct_behavior_increment": 1,
+  "distinct_native_behaviors_total": 17,
+  "new_current_candidate_builds": 0,
+  "new_guest_runs": 1,
+  "formal_acceptance_credit": 0,
+  "production_language_retirement_credit": 0,
+  "archive_review": {
+    "owner_members": 101,
+    "attempt_members": 7,
+    "validated_before_private_extraction": true,
+    "no_traversal_or_links": true,
+    "transport_stderr": "Only exact readback3 qmp.sock socket ignored warning; app stderr remains empty"
+  },
+  "checks": {
+    "frozen_release_source_oracle_closure": "PASS",
+    "exact_image_modules_payload_overlay_binding": "PASS",
+    "real_load_boot_schedule": "PASS",
+    "exact_stdout_raw_wait_stream_accounting": "PASS",
+    "unchanged_production_evaluator_replay_kernel_scan": "PASS",
+    "six_worker_lifetimes_three_overlap_windows_procfs_removal": "PASS",
+    "file_write_sync_close_reopen_read_EOF_unlink_sampled_routes": "PASS",
+    "owner_all30clients_container_cgroup_lease_positive_retirement": "PASS"
+  },
+  "evidence": {
+    "execution_release": {
+      "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-native-preparation-20261018-1/execution-release-1.json",
+      "sha256": "b68734a68ad081111906e5b92ba2e3cc0bfee6be1202f46a9283cb468410415d",
+      "size": 3280
+    },
+    "archive_validation": {
+      "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-native-actual-review-20261018-1/archive-validation.json",
+      "sha256": "a1c181715f4e1491c6770282e893ddcb1d187cf77be1bd35ebeedd0586558c9a",
+      "size": 17108
+    },
+    "review_script": {
+      "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-native-actual-review-20261018-1/review_actual.py",
+      "sha256": "9130f49e844e4f1696147ef2323d056cb0dbedac7c69fc7e2a9765576d9de50b",
+      "size": 14697
+    },
+    "validator": {
+      "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-native-actual-review-20261018-1/validate_extract.py",
+      "sha256": "16adb49819de720016c940b1a83a4193e9dfc20b6141ddb72af9d00122f6335c",
+      "size": 2490
+    },
+    "captures": [
+      {
+        "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-native-preparation-20261018-1/owner-join.json",
+        "sha256": "ced01e794d0a247f8af5d22854f864bd1a45dc36b8da120e1833c4d07f5e1f02",
+        "size": 923
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-native-preparation-20261018-1/owner.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-native-preparation-20261018-1/owner.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-native-preparation-20261018-1/readback-1.stdout",
+        "sha256": "0dad3d79bf8071e8cd068ee0ae7536f5881d88c429501c407e2f65f3ed10c821",
+        "size": 573440
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-native-preparation-20261018-1/readback-1.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-native-preparation-20261018-1/readback-1.command.json",
+        "sha256": "83316a5a362ee5e809c4277bea8f600dec4999ae00537da6f40347cfb565d3e5",
+        "size": 333
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-native-preparation-20261018-1/readback-2.stdout",
+        "sha256": "b28b8a1c1a25c9932770c613e77bb3835f5cf59dccbdd55cff92d104c992254f",
+        "size": 98798
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-native-preparation-20261018-1/readback-2.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-native-preparation-20261018-1/readback-2.command.json",
+        "sha256": "6b7df73084733aa2e03316143d5a6ae63cc3ec7b8f3f374ba66f9ed39d7b3938",
+        "size": 294
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-native-preparation-20261018-1/readback-3.stdout",
+        "sha256": "fe06f1db514c2538e6b0696624a5e1b599f548b2180fbe25c8ba85f1ebfe145d",
+        "size": 430080
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-native-preparation-20261018-1/readback-3.stderr",
+        "sha256": "a27b3689ab11da6ff162668a3d1b14ccaa2d78cb34307a70c88d78c7bd93e0bd",
+        "size": 41
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-native-preparation-20261018-1/readback-3.command.json",
+        "sha256": "c07eaac04ee4e9a519e05f1366166aedb95799f7c8037d4732c8432f0237deab",
+        "size": 335
+      }
+    ],
+    "verified_references": [
+      {
+        "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-native-preparation-20261018-1/execution-release-1.json",
+        "sha256": "b68734a68ad081111906e5b92ba2e3cc0bfee6be1202f46a9283cb468410415d",
+        "size": 3280
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-native-stage-execution-review-20261018-1/execution-decision.json",
+        "sha256": "98f8171d658620a09b8150f1cbbd653b6d31aafba8b388fc7168374e0f73f707",
+        "size": 6198
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-native-preparation-20261018-1/fresh-live-preflight-1.json",
+        "sha256": "5f2b91775dbe4740e48ccbe57d440d29420b157a7ecfec62c8122f9106de4c52",
+        "size": 2104
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-native-preparation-20261018-1/conditional-metadata.json",
+        "sha256": "94a600560267bc53ed8a0a3212d808e0851cd8b8567d6aa24d3e4efb471dc0da",
+        "size": 4433
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-native-preparation-20261018-1/execution-proposal.json",
+        "sha256": "f9bca700342825ee3bc6dcbc91fed2728b0a2705039edc7a7f679fe4e354981b",
+        "size": 16208
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-native-stage-execution-review-20261018-1/source-closure.json",
+        "sha256": "96742f2ad8fc71fabaf3561eb3d8066d4c533c9edc0bb41683ade6d3a92f7382",
+        "size": 1392
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-native-stage-execution-review-20261018-1/stage-check-result.json",
+        "sha256": "91696081a797e4a03c0a5bd632978e80bc4f0980acfdb63eee59f4b3268378bf",
+        "size": 2813
+      },
+      {
+        "path": "/home/holden/mckernel/docs/verification/evidence/practical-mixed-rust-std-native-stage-review-20261018-1.json",
+        "sha256": "05b6343a0e5c35cbf74f360fdcd7bbb92e61cb64dae42c963615c6d7baa9f3ea",
+        "size": 7571
+      },
+      {
+        "path": "/home/holden/mckernel/docs/verification/evidence/practical-mixed-rust-std-source-linux-review-20261018-1.json",
+        "sha256": "1512621c0fae57e185e818ee0381166e4a9ab608136dc87b8d3f05786baa364f",
+        "size": 7378
+      },
+      {
+        "path": "/home/holden/mckernel/docs/verification/evidence/rust-three-port-image-threads-result-review-20261018-1.json",
+        "sha256": "2a634dfb44d34b8e814cdb1259a22a5e84a48312976419e5eb94ecbb9e641601",
+        "size": 15728
+      },
+      {
+        "path": "/home/holden/mckernel/docs/verification/evidence/rust-three-port-image-terminal-result-review-20261018-1.json",
+        "sha256": "4d75d8e5e11e43fe5039a11a37380be1580a5c1e0671ce41598822de92cfb1a6",
+        "size": 12463
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-native-preparation-20261018-1/stage/manifest.json",
+        "sha256": "9e47523224a314629ede9804bdaa32378286ee94c56f3149970826c38f78dd71",
+        "size": 5703
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/bzImage",
+        "sha256": "032653ee0661b059c325e2a0911a9d492805f1a889c4df515473d69a8be105bc",
+        "size": 16130048
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/rust-three-port-native-case-preparation-20261018-1/stage-avx/base.cpio.gz",
+        "sha256": "405c4036fa7df3395b95e1c967f7bbe481f5717f950510c6676bbc25a88011d3",
+        "size": 12744541
+      },
+      {
+        "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/native-proposal/stage-correction-1/stage/root/lib64/libc.so.6",
+        "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+        "size": 2339896
+      },
+      {
+        "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/native-proposal/stage-correction-1/stage/root/lib64/ld-linux-x86-64.so.2",
+        "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b",
+        "size": 930600
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/mcexec-preload-fastpath-build-20260928-1/rust/executer/user/mcexec",
+        "sha256": "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b",
+        "size": 453352
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/rust-next-three-port-image-preparation-20261018-1/owner-work/output/build/kernel/mckernel.img",
+        "sha256": "da0f1bf760d5472693ed1d24f0bee717d8bf4c0880d4eb92d98203cd737e814f",
+        "size": 7920368
+      },
+      {
+        "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/native-proposal/stage-correction-1/stage/root/bin/native-boot",
+        "sha256": "6b9f753e34d12da474c701ca64ce62825788295646b60f67482ef9ec8690c417",
+        "size": 31208
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-preparation-20261018-1/app",
+        "sha256": "4ebbe30ec084e47a17f3f03b0f0d42d9a0f122da35db27c95d2145ed970f3a49",
+        "size": 5672360
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/rust-three-port-native-case-preparation-20261018-1/stage-avx/base.cpio.gz",
+        "sha256": "405c4036fa7df3395b95e1c967f7bbe481f5717f950510c6676bbc25a88011d3",
+        "size": 12744541
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/nsd-c-a7d84db0d8b54b9b94347fd0aff57594/modules/ihk.ko",
+        "sha256": "51b48a9e42eaa2411cab2a28edf9bb5db8b2d648675d083473e926f91dd0e038",
+        "size": 1440392
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/nsd-c-a7d84db0d8b54b9b94347fd0aff57594/modules/ihk-smp-x86_64.ko",
+        "sha256": "82c9021f7491fa8bc6d178fe99e7d4b7b6f90838474a9c91b62ddb8edb3d13f8",
+        "size": 11630064
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/nsd-c-a7d84db0d8b54b9b94347fd0aff57594/modules/mcctrl.ko",
+        "sha256": "6571ac7eca13559d8bab65125d54facbbc65e84f815d4ff3fc77ec6aa1104972",
+        "size": 1913904
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/rust-three-port-native-case-preparation-20261018-1/stage-avx/base.cpio.gz",
+        "sha256": "405c4036fa7df3395b95e1c967f7bbe481f5717f950510c6676bbc25a88011d3",
+        "size": 12744541
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-native-preparation-20261018-1/stage/lifecycle.cpio.gz",
+        "sha256": "e72f3d6638a7612997be092c048c9e5b01e896bfe230b29adc6542ef9f678a3a",
+        "size": 15123328
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/thread-tls-isolation-static-20261017-1/init",
+        "sha256": "ead247cdf56556c7491bd5d8f746c6c668c0c944414ce51392f7caaed895a63a",
+        "size": 1021968
+      },
+      {
+        "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_overlay.py",
+        "sha256": "46d41bc0727fa77e4126e739f25352c53eadf2e1fa8e23ef06a6e46c9b3ba27d",
+        "size": 26579
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-native-preparation-20261018-1/stage/overlay-manifest.json",
+        "sha256": "a66f64b888070d92672c379f5a0376f477736ba497602383794b7ea4a357830e",
+        "size": 19403
+      }
+    ]
+  },
+  "limitations": [
+    "No new kernel implementation or language-retirement credit; reused accepted exact da0 image and d99 modules.",
+    "This distinct mixed Rust std memory/file/thread behavior adds practical native behavior only, not deferred qualification.",
+    "Futex call totals are not the native oracle; exact frozen semantic output plus successful source-bound execution and actual worker lifecycle provide acceptance."
+  ]
+}

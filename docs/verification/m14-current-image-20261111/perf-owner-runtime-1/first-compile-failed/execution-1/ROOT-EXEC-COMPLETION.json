@@ -1,0 +1,42 @@
+{
+  "schema": "mckernel-root-tool-completion-v1",
+  "observation_at": "2026-11-11T15:30:45.183Z",
+  "request_sha256": "a3f81da5d70b04f37fa638cc059e00163d3af8291c94d146421c0ce408285686",
+  "parent_sha256": "9767abb38a3c0a8c9a3d64d8bfdbd3c01d49327685d1183f631ba735c1a3f8b1",
+  "admission": {
+    "chunk_id": "9541b8",
+    "wall_time_seconds": 0.000059689,
+    "exit_code": 0,
+    "original_token_count": 123,
+    "output": "{\"status\": \"ADMITTED\", \"driver\": \"/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/run_root_once.py\", \"review\": \"/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-four-family-operation-review-sourceacq-max-1/REVIEW.json\", \"review_sha256\": \"22400f23308c1a3aaddaff48db4ebd358c54d8c7748e77c960480f35980cf8eb\", \"MemAvailable_bytes\": 29298311168, \"overhead_bytes\": 1496895488, \"new_job_bytes\": 2147483648}\n"
+  },
+  "args": {
+    "cmd": "'/usr/bin/python3' '-I' '-B' '/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/run_root_once.py' '/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-four-family-operation-review-sourceacq-max-1/REVIEW.json' '22400f23308c1a3aaddaff48db4ebd358c54d8c7748e77c960480f35980cf8eb'",
+    "workdir": "/home/holden/mckernel",
+    "login": false,
+    "tty": false,
+    "yield_time_ms": 1000,
+    "max_output_tokens": 6000
+  },
+  "initial": {
+    "chunk_id": "193109",
+    "wall_time_seconds": 0.524022729,
+    "exit_code": 1,
+    "original_token_count": 86,
+    "output": "Traceback (most recent call last):\n  File \"/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/run_root_once.py\", line 23, in <module>\n    assert r.returncode==c[\"expected_exit\"]==rec[\"status\"],phase\nAssertionError: compile-actual18-owner-units-common-four-callers-and-real-ABI\n"
+  },
+  "final": {
+    "chunk_id": "193109",
+    "wall_time_seconds": 0.524022729,
+    "exit_code": 1,
+    "original_token_count": 86,
+    "output": "Traceback (most recent call last):\n  File \"/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/run_root_once.py\", line 23, in <module>\n    assert r.returncode==c[\"expected_exit\"]==rec[\"status\"],phase\nAssertionError: compile-actual18-owner-units-common-four-callers-and-real-ABI\n"
+  },
+  "actual_terminal_exit": 1,
+  "session_id_remaining": null,
+  "full_root_tool_terminal": true,
+  "original_child_status": 1,
+  "runtime_executed": false,
+  "automatic_resource_release": false,
+  "all_prior_unknowns_retained": true
+}

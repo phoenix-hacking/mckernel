@@ -1,0 +1,69 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_NOT_COMPILED",
+  "changes": {
+    "kernel/process.c": {
+      "before": {
+        "path": "/home/holden/mckernel/kernel/process.c",
+        "sha256": "9e3cdea2027618ce954b80f2436ed44ef16e2df448c83a5b3734d77ffb161798",
+        "bytes": 161155
+      },
+      "after": {
+        "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-2/source/kernel/process.c",
+        "sha256": "89222734622ac054510b2c2cf6fbce1c83d3aa5dc764a3268e78be5e4c5949fa",
+        "bytes": 161266
+      }
+    },
+    "kernel/rust/sched_helpers.rs": {
+      "before": {
+        "path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+        "sha256": "5a09c8420d33027483d302ce9f94c350ed2dfdad450a3834214cd224023ab4f8",
+        "bytes": 181991
+      },
+      "after": {
+        "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-2/source/kernel/rust/sched_helpers.rs",
+        "sha256": "75cdf5430eb6ecec8d0cd0c7c10192d678e656427589fda79dd68990fa3d09bd",
+        "bytes": 184886
+      }
+    }
+  },
+  "references": {
+    "kernel/rust/abi.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "bytes": 76151
+    },
+    "kernel/rust/waitq.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/waitq.rs",
+      "sha256": "246a850a7e305d69d55de5903273e35ba62cc204167cc95acc90973c8f0aaefc",
+      "bytes": 10868
+    },
+    "kernel/rust/process_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "sha256": "526baf9363a0845ad50aade7e9b2296d27c8840527f3510d95a1105fc626d8d3",
+      "bytes": 351847
+    },
+    "kernel/include/process.h": {
+      "path": "/home/holden/mckernel/kernel/include/process.h",
+      "sha256": "8848d536f2fa847a59af72d573ec9c55838c27cea664d46438ab4e038bf83649",
+      "bytes": 26602
+    },
+    "kernel/include/waitq.h": {
+      "path": "/home/holden/mckernel/kernel/include/waitq.h",
+      "sha256": "f3fc8247a033a77efa407f6fe365a2b1bcad404e96de2cbf845f407a2e5946ff",
+      "bytes": 1847
+    },
+    "kernel/include/sched_helpers.h": {
+      "path": "/home/holden/mckernel/kernel/include/sched_helpers.h",
+      "sha256": "9712a3df59eb0251f517ce01254e4576119868924b35f7da6fbee294bff966ae",
+      "bytes": 34428
+    }
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-2/PRIVATE-PRODUCTION.patch",
+    "sha256": "07845ea76596547c7fd613ff01ad7e5acdb98916fd1a64248a0afa17954e5c69",
+    "bytes": 5384
+  },
+  "selected_C_line": 4918,
+  "existing_Rust_body_line": 2182
+}

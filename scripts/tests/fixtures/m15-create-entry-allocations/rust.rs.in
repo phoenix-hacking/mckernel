@@ -1,0 +1,69 @@
+// Complete actual private creation function and its allocation-owning helpers.
+// Local callbacks observe lifecycle boundaries only, never IHK/backend/native proof.
+use core::ffi::{c_char,c_int,c_long,c_ulong,c_void};
+use core::ptr::null_mut;
+#[repr(C)]pub struct IhkMemChunk{pub size:c_ulong,pub numa_node_number:c_int}
+unsafe extern "C"{
+ #[link_name="observation_calloc"]fn calloc(n:usize,size:usize)->*mut c_void;
+ #[link_name="observation_free"]fn free(pointer:*mut c_void);
+ #[link_name="observation_strndup"]fn strndup(text:*const c_char,size:usize)->*mut c_char;
+ #[link_name="observation_strdup"]fn strdup(text:*const c_char)->*mut c_char;
+ fn strsep(cursor:*mut *mut c_char,delimiter:*const c_char)->*mut c_char;
+ fn strcmp(a:*const c_char,b:*const c_char)->c_int;
+ fn strtol(text:*const c_char,end:*mut *mut c_char,base:c_int)->c_long;
+ fn sprintf(output:*mut c_char,format:*const c_char,...)->c_int;
+ fn __errno_location()->*mut c_int;
+ #[link_name="observation_cpu_count"]fn ihk_get_num_reserved_cpus(index:c_int)->c_int;
+ #[link_name="observation_mem_count"]fn ihk_get_num_reserved_mem_chunks(index:c_int)->c_int;
+ #[link_name="observation_query_cpu"]fn ihk_query_cpu(index:c_int,cpus:*mut c_int,count:c_int)->c_int;
+ #[link_name="observation_query_mem"]fn ihk_query_mem(index:c_int,chunks:*mut IhkMemChunk,count:c_int)->c_int;
+ #[link_name="observation_release_cpu"]fn ihk_release_cpu(index:c_int,cpus:*mut c_int,count:c_int)->c_int;
+ #[link_name="observation_release_mem"]fn ihk_release_mem(index:c_int,chunks:*mut IhkMemChunk,count:c_int)->c_int;
+ #[link_name="observation_create"]fn ihk_create_os(index:c_int)->c_int;
+ #[link_name="observation_os_count"]fn ihk_get_num_os_instances(index:c_int)->c_int;
+ #[link_name="observation_list"]fn ihk_get_os_instances(index:c_int,list:*mut c_int,count:c_int)->c_int;
+ #[link_name="observation_destroy"]fn ihk_destroy_os(index:c_int,os:c_int)->c_int;
+ fn observation_assign_cpu(os:c_int,cpus:*mut c_int,count:c_int)->c_int;
+ fn observation_assign_mem(os:c_int,chunks:*mut IhkMemChunk,count:c_int)->c_int;
+ fn observation_assigned_cpu_count(os:c_int)->c_int;
+ fn observation_query_assigned_cpu(os:c_int,cpus:*mut c_int,count:c_int)->c_int;
+ fn observation_release_assigned_cpu(os:c_int,cpus:*mut c_int,count:c_int)->c_int;
+ fn observation_release_assigned_mem(os:c_int,chunks:*mut IhkMemChunk,count:c_int)->c_int;
+ fn observation_reserve_conf(device:c_int,key:c_int,value:*mut c_void)->c_int;
+ fn observation_raw(index:c_int,text:*mut c_char,error:*mut c_char)->c_int;
+ fn observation_load(os:c_int,image:*mut c_char)->c_int;
+ fn observation_kargs(os:c_int,args:*mut c_char)->c_int;
+ fn observation_run(create:unsafe extern "C" fn(c_int,*mut c_int,*const c_char,c_int,*const c_char,*const c_char,*mut c_char)->c_int)->c_int;
+}
+mod os_cpu{
+ use super::*;
+ pub unsafe fn ihk_os_assign_cpu(os:c_int,cpus:*mut c_int,count:c_int)->c_int{unsafe{observation_assign_cpu(os,cpus,count)}}
+ pub unsafe fn ihk_os_get_num_assigned_cpus(os:c_int)->c_int{unsafe{observation_assigned_cpu_count(os)}}
+ pub unsafe fn ihk_os_query_cpu(os:c_int,cpus:*mut c_int,count:c_int)->c_int{unsafe{observation_query_assigned_cpu(os,cpus,count)}}
+ pub unsafe fn ihk_os_release_cpu(os:c_int,cpus:*mut c_int,count:c_int)->c_int{unsafe{observation_release_assigned_cpu(os,cpus,count)}}
+}
+mod accepted_cpu_memory{pub mod ihklib_memory_os{
+ use super::super::*;
+ pub unsafe fn ihk_os_assign_mem(os:c_int,chunks:*mut IhkMemChunk,count:c_int)->c_int{unsafe{observation_assign_mem(os,chunks,count)}}
+ pub unsafe fn ihk_os_release_mem(os:c_int,chunks:*mut IhkMemChunk,count:c_int)->c_int{unsafe{observation_release_assigned_mem(os,chunks,count)}}
+}}
+mod runtime_state{use super::*;pub unsafe fn ihk_reserve_mem_conf(device:c_int,key:c_int,value:*mut c_void)->c_int{unsafe{observation_reserve_conf(device,key,value)}}}
+mod raw_strings{
+ use super::*;
+ pub unsafe fn _ihk_reserve_cpu_str(device:c_int,text:*mut c_char,error:*mut c_char)->c_int{unsafe{observation_raw(device,text,error)}}
+ pub unsafe fn _ihk_reserve_mem_str(device:c_int,text:*mut c_char,error:*mut c_char)->c_int{unsafe{observation_raw(device,text,error)}}
+ pub unsafe fn _ihk_os_set_ikc_map_str(os:c_int,text:*mut c_char,error:*mut c_char)->c_int{unsafe{observation_raw(os,text,error)}}
+}
+mod os_load_boot{use super::*;pub unsafe fn ihk_os_load(os:c_int,image:*mut c_char)->c_int{unsafe{observation_load(os,image)}}}
+mod os_kargs{use super::*;pub unsafe fn ihk_os_kargs(os:c_int,args:*mut c_char)->c_int{unsafe{observation_kargs(os,args)}}}
+mod actual{
+ use super::*;
+ mod origins{
+__ORIGINS__
+ }
+__ERROR__
+__HELPERS__
+__CONFIG_AND_IS__
+__CREATE__
+}
+fn main(){std::process::exit(unsafe{observation_run(actual::ihk_create_os_str)});}

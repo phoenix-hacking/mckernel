@@ -1,0 +1,280 @@
+{
+  "status": "PASS_TWO_FOCUSED_LANES_EIGHT_METHODS",
+  "review_sha256": "0e13710d6895a95e92a8c603af003791fbc9903ba7fafaa920e4071927492681",
+  "commands": [
+    {
+      "label": "baseline-chronology",
+      "cpu": 6,
+      "argv": [
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261110T044806Z-3ecbebf5/shared-control-behavior-1/baseline-chronology.metrics",
+        "/usr/bin/timeout",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "unittest",
+        "-v",
+        "scripts.tests.test_os_goal_instruction_order.InstructionOrderTests.test_source_ids_deliver_by_submission_despite_reverse_hash_filename_order",
+        "scripts.tests.test_os_goal_instruction_order.InstructionOrderTests.test_local_and_source_instructions_share_submission_chronology",
+        "scripts.tests.test_os_goal_instruction_order.InstructionOrderTests.test_stable_source_id_dedup_preserves_original_content_and_accepted_receipt",
+        "scripts.tests.test_os_goal_instruction_order.InstructionOrderTests.test_unresolved_sending_instruction_blocks_newer_delivery_after_recovery"
+      ],
+      "pid": 745252,
+      "birth": "37315822",
+      "joined": true,
+      "returncode": 1
+    },
+    {
+      "label": "baseline-flags",
+      "cpu": 7,
+      "argv": [
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261110T044806Z-3ecbebf5/shared-control-behavior-1/baseline-flags.metrics",
+        "/usr/bin/timeout",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "unittest",
+        "-v",
+        "scripts.tests.test_os_goal_service.ServiceTests.test_validator_preserves_each_explicit_optional_flag_combination",
+        "scripts.tests.test_os_goal_service.ServiceTests.test_validator_none_keeps_intentional_both_true_defaults",
+        "scripts.tests.test_os_goal_service.ServiceTests.test_legacy_forwarding_reaches_real_validator_without_adding_optional_flags",
+        "scripts.tests.test_os_goal_service.ServiceTests.test_engine_exec_preserves_flags_and_authenticated_recovery_lineage"
+      ],
+      "pid": 745255,
+      "birth": "37315822",
+      "joined": true,
+      "returncode": 1
+    },
+    {
+      "label": "chronology-apply-check",
+      "pid": 745260,
+      "birth": "37315848",
+      "joined": true,
+      "returncode": 0
+    },
+    {
+      "label": "chronology-apply",
+      "pid": 745261,
+      "birth": "37315848",
+      "joined": true,
+      "returncode": 0
+    },
+    {
+      "label": "flags-apply-check",
+      "pid": 745262,
+      "birth": "37315848",
+      "joined": true,
+      "returncode": 0
+    },
+    {
+      "label": "flags-apply",
+      "pid": 745263,
+      "birth": "37315849",
+      "joined": true,
+      "returncode": 0
+    },
+    {
+      "label": "stage-sources",
+      "pid": 745264,
+      "birth": "37315849",
+      "joined": true,
+      "returncode": 0
+    },
+    {
+      "label": "staged-paths",
+      "pid": 745285,
+      "birth": "37315861",
+      "joined": true,
+      "returncode": 0
+    },
+    {
+      "label": "staged-format",
+      "pid": 745286,
+      "birth": "37315863",
+      "joined": true,
+      "returncode": 0
+    },
+    {
+      "label": "staged-source-review",
+      "pid": 745287,
+      "birth": "37315865",
+      "joined": true,
+      "returncode": 0
+    },
+    {
+      "label": "candidate-chronology",
+      "cpu": 6,
+      "argv": [
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261110T044806Z-3ecbebf5/shared-control-behavior-1/candidate-chronology.metrics",
+        "/usr/bin/timeout",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "unittest",
+        "-v",
+        "scripts.tests.test_os_goal_instruction_order.InstructionOrderTests.test_source_ids_deliver_by_submission_despite_reverse_hash_filename_order",
+        "scripts.tests.test_os_goal_instruction_order.InstructionOrderTests.test_local_and_source_instructions_share_submission_chronology",
+        "scripts.tests.test_os_goal_instruction_order.InstructionOrderTests.test_stable_source_id_dedup_preserves_original_content_and_accepted_receipt",
+        "scripts.tests.test_os_goal_instruction_order.InstructionOrderTests.test_unresolved_sending_instruction_blocks_newer_delivery_after_recovery"
+      ],
+      "pid": 745348,
+      "birth": "37320198",
+      "joined": true,
+      "returncode": 0
+    },
+    {
+      "label": "candidate-flags",
+      "cpu": 7,
+      "argv": [
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261110T044806Z-3ecbebf5/shared-control-behavior-1/candidate-flags.metrics",
+        "/usr/bin/timeout",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "unittest",
+        "-v",
+        "scripts.tests.test_os_goal_service.ServiceTests.test_validator_preserves_each_explicit_optional_flag_combination",
+        "scripts.tests.test_os_goal_service.ServiceTests.test_validator_none_keeps_intentional_both_true_defaults",
+        "scripts.tests.test_os_goal_service.ServiceTests.test_legacy_forwarding_reaches_real_validator_without_adding_optional_flags",
+        "scripts.tests.test_os_goal_service.ServiceTests.test_engine_exec_preserves_flags_and_authenticated_recovery_lineage"
+      ],
+      "pid": 745351,
+      "birth": "37320199",
+      "joined": true,
+      "returncode": 0
+    }
+  ],
+  "selectors": {
+    "chronology": [
+      "scripts.tests.test_os_goal_instruction_order.InstructionOrderTests.test_source_ids_deliver_by_submission_despite_reverse_hash_filename_order",
+      "scripts.tests.test_os_goal_instruction_order.InstructionOrderTests.test_local_and_source_instructions_share_submission_chronology",
+      "scripts.tests.test_os_goal_instruction_order.InstructionOrderTests.test_stable_source_id_dedup_preserves_original_content_and_accepted_receipt",
+      "scripts.tests.test_os_goal_instruction_order.InstructionOrderTests.test_unresolved_sending_instruction_blocks_newer_delivery_after_recovery"
+    ],
+    "flags": [
+      "scripts.tests.test_os_goal_service.ServiceTests.test_validator_preserves_each_explicit_optional_flag_combination",
+      "scripts.tests.test_os_goal_service.ServiceTests.test_validator_none_keeps_intentional_both_true_defaults",
+      "scripts.tests.test_os_goal_service.ServiceTests.test_legacy_forwarding_reaches_real_validator_without_adding_optional_flags",
+      "scripts.tests.test_os_goal_service.ServiceTests.test_engine_exec_preserves_flags_and_authenticated_recovery_lineage"
+    ]
+  },
+  "profile": {
+    "cpus": [
+      6,
+      7
+    ],
+    "jobs": 2,
+    "aggregate_jobs_ceiling": 3,
+    "aggregate_gib_ceiling_including_overhead": 4,
+    "each_as_gib": 1,
+    "each_cpu_seconds": 45,
+    "each_wall_seconds": 60,
+    "kill_after_seconds": 5,
+    "core_bytes": 0,
+    "no_other_light_jobs": true
+  },
+  "usage": {
+    "at": "2026-11-10T04:58:55.088259+00:00",
+    "used_percent": 46,
+    "remaining_percent": 54,
+    "normal_guard_passed": true,
+    "included_only": true
+  },
+  "MemAvailable": 29739302912,
+  "no_operational_frontdoor_or_service_mailbox_activation": true,
+  "original_acceptance_delta": 0,
+  "baseline": {
+    "chronology": {
+      "methods": 4,
+      "failures": 2,
+      "errors": 0,
+      "failing_methods": [
+        [
+          "FAIL",
+          "test_source_ids_deliver_by_submission_despite_reverse_hash_filename_order"
+        ],
+        [
+          "FAIL",
+          "test_local_and_source_instructions_share_submission_chronology"
+        ]
+      ],
+      "returncode": 1
+    },
+    "flags": {
+      "methods": 4,
+      "failures": 7,
+      "errors": 0,
+      "failing_methods": [
+        [
+          "FAIL",
+          "test_validator_preserves_each_explicit_optional_flag_combination"
+        ],
+        [
+          "FAIL",
+          "test_validator_preserves_each_explicit_optional_flag_combination"
+        ],
+        [
+          "FAIL",
+          "test_validator_preserves_each_explicit_optional_flag_combination"
+        ],
+        [
+          "FAIL",
+          "test_legacy_forwarding_reaches_real_validator_without_adding_optional_flags"
+        ],
+        [
+          "FAIL",
+          "test_legacy_forwarding_reaches_real_validator_without_adding_optional_flags"
+        ],
+        [
+          "FAIL",
+          "test_legacy_forwarding_reaches_real_validator_without_adding_optional_flags"
+        ],
+        [
+          "FAIL",
+          "test_engine_exec_preserves_flags_and_authenticated_recovery_lineage"
+        ]
+      ],
+      "returncode": 1
+    }
+  },
+  "all_started_waits_joined": true,
+  "Root_staged_source_review": "Both exact staged diffs read after baseline joins. Four-line timestamp sort and four forced-flag deletions match independent GO; no additional canonical source changes.",
+  "candidate": {
+    "chronology": {
+      "status": "PASS",
+      "methods": 4,
+      "returncode": 0
+    },
+    "flags": {
+      "status": "PASS",
+      "methods": 4,
+      "returncode": 0,
+      "flag_vectors": 10
+    }
+  },
+  "all_direct_waits_joined": true,
+  "test_cpus_released": [
+    6,
+    7
+  ],
+  "finished_at": "2026-11-10T05:02:16.243737+00:00"
+}

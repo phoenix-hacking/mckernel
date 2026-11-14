@@ -1,0 +1,26 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": 1793400052.2644002,
+  "status": "PASS_PARENT3_CHILD4_CASES_AND_ACTUAL_LOADER128",
+  "exit_status": 0,
+  "positive_tool_terminal": true,
+  "owner": {
+    "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+    "pid": 3096648,
+    "ppid": 2996005,
+    "pgid": 3096648,
+    "start": "119749665",
+    "at": 1793400052.0072083
+  },
+  "group_members": [],
+  "census_errors": [],
+  "grant_released": true,
+  "ordinary_reservation_released_bytes": 536870912,
+  "tests_run": 30,
+  "stderr": "test_confirmed_close_only_once (test_parent_source.TestRetirement) ... ok\ntest_exact_frame_rejects_bool_and_float_aliases (test_parent_source.TestRetirement) ... ok\ntest_uncertain_close_is_never_retried (test_parent_source.TestRetirement) ... ok\ntest_fork_error_actual_failure_path_stops_recorded_handle (test_parent_source.TestRecovery) ... ok\ntest_pidfd_verification_error_never_signalled (test_parent_source.TestRecovery) ... ok\ntest_pidfd_wrong_identity_never_signalled (test_parent_source.TestRecovery) ... ok\ntest_recorded_pidfd_birth_read_failure_can_be_reverified (test_parent_source.TestRecovery) ... ok\ntest_actual_final_serialization_expression (test_parent_source.TestBootstrapBytes) ... ok\ntest_open_failure_keeps_previous_ancestor (test_bootstrap_fd.TestAncestors) ... ok\ntest_profile_literal_and_limits (test_bootstrap_fd.TestAncestors) ... ok\ntest_repeated_paths_keep_leaves_and_bound_live_descriptors (test_bootstrap_fd.TestAncestors) ... ok\ntest_uncertain_close_is_recorded_and_never_retried (test_bootstrap_fd.TestAncestors) ... ok\ntest_changed_ipc_is_rejected (test_direct_model.DirectModel) ... ok\ntest_exact_model_keeps_unknown (test_direct_model.DirectModel) ... ok\ntest_global_empty_cannot_be_inferred (test_direct_model.DirectModel) ... ok\ntest_native_currentfree_cannot_be_inferred (test_direct_model.DirectModel) ... ok\ntest_old_timeout_model_is_rejected (test_direct_model.DirectModel) ... ok\ntest_terminal_requires_real_integer_wait_and_zero (test_direct_model.DirectModel) ... ok\ntest_actual_pidfd_verification_error_retains_raw_without_signal (test_direct_ack.Ack) ... ok\ntest_exact_ack_requires_parent_recheck (test_direct_ack.Ack) ... ok\ntest_extra_received_descriptor_does_not_authorize (test_direct_ack.Ack) ... ok\ntest_float_sequence_does_not_alias_integer (test_direct_ack.Ack) ... ok\ntest_parent_death_after_ack_does_not_authorize (test_direct_ack.Ack) ... ok\ntest_ready_observes_installer_terminal (test_direct_ack.Ack) ... ok\ntest_unpinned_child_remains_unknown_without_signal (test_direct_ack.Ack) ... ok\ntest_verified_record_can_be_stopped_and_directly_joined (test_direct_ack.Ack) ... ok\ntest_wrong_nonce_does_not_authorize (test_direct_ack.Ack) ... ok\ntest_a_one_shot_loader_and_inherited_reuse_fit_128 (test_loader_budget.LoaderBudget) ... ok\ntest_b_ambiguous_close_is_sticky_and_never_retried (test_loader_budget.LoaderBudget) ... ok\ntest_c_source_compiles_under_actual_python_38 (test_loader_budget.LoaderBudget) ... ok\n\n----------------------------------------------------------------------\nRan 30 tests in 0.101s\n\nOK\n",
+  "stdout": "{\"fd_count_before_loader_imports\": 5, \"fd_count_after_cases\": 33, \"nofile_limit_unchanged\": 128}\n",
+  "metrics_raw": "\tCommand being timed: \"/usr/bin/python3 -s -E -S -B /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/direct-parent-child-0004/run_cases.py\"\n\tUser time (seconds): 0.19\n\tSystem time (seconds): 0.01\n\tPercent of CPU this job got: 99%\n\tElapsed (wall clock) time (h:mm:ss or m:ss): 0:00.20\n\tAverage shared text size (kbytes): 0\n\tAverage unshared data size (kbytes): 0\n\tAverage stack size (kbytes): 0\n\tAverage total size (kbytes): 0\n\tMaximum resident set size (kbytes): 24148\n\tAverage resident set size (kbytes): 0\n\tMajor (requiring I/O) page faults: 0\n\tMinor (reclaiming a frame) page faults: 5980\n\tVoluntary context switches: 1\n\tInvoluntary context switches: 0\n\tSwaps: 0\n\tFile system inputs: 0\n\tFile system outputs: 16\n\tSocket messages sent: 0\n\tSocket messages received: 0\n\tSignals delivered: 0\n\tPage size (bytes): 4096\n\tExit status: 0\n",
+  "EMFILE_failure_to_validated_fix_seconds": 469.74606442451477,
+  "limits": "realread-onlyloader128only; fullprivilegedroles256peakunmeasured; mockstop/root/proof; no RootlaunchorCretirement",
+  "native_C_retirement_delta": 0
+}

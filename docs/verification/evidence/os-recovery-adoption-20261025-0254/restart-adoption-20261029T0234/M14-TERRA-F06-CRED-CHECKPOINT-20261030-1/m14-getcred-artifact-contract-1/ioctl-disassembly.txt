@@ -1,0 +1,150 @@
+
+/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-default-rust-mm-strict235-preparation-1/offline-preparation-1/runtime-inputs/mcctrl.ko:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+00000000000020d0 <_RNvCsjIkZ8hqbvqs_11mcctrl_rust5ioctl>:
+    20d0:	f3 0f 1e fa          	endbr64 
+    20d4:	48 c7 c0 ea ff ff ff 	mov    $0xffffffffffffffea,%rax
+    20db:	83 f9 01             	cmp    $0x1,%ecx
+    20de:	0f 87 11 02 00 00    	ja     22f5 <_RNvCsjIkZ8hqbvqs_11mcctrl_rust5ioctl+0x225>
+    20e4:	53                   	push   %rbx
+    20e5:	48 8d 64 24 f0       	lea    -0x10(%rsp),%rsp
+    20ea:	89 f3                	mov    %esi,%ebx
+    20ec:	48 89 fe             	mov    %rdi,%rsi
+    20ef:	40 0f 94 c7          	sete   %dil
+    20f3:	49 89 d0             	mov    %rdx,%r8
+    20f6:	49 c1 e8 20          	shr    $0x20,%r8
+    20fa:	41 0f 95 c0          	setne  %r8b
+    20fe:	41 84 f8             	test   %dil,%r8b
+    2101:	0f 85 e9 01 00 00    	jne    22f0 <_RNvCsjIkZ8hqbvqs_11mcctrl_rust5ioctl+0x220>
+    2107:	81 fb 0a 29 a0 30    	cmp    $0x30a0290a,%ebx
+    210d:	7f 43                	jg     2152 <_RNvCsjIkZ8hqbvqs_11mcctrl_rust5ioctl+0x82>
+    210f:	81 fb 02 29 a0 30    	cmp    $0x30a02902,%ebx
+    2115:	7e 74                	jle    218b <_RNvCsjIkZ8hqbvqs_11mcctrl_rust5ioctl+0xbb>
+    2117:	81 fb 06 29 a0 30    	cmp    $0x30a02906,%ebx
+    211d:	0f 8f da 00 00 00    	jg     21fd <_RNvCsjIkZ8hqbvqs_11mcctrl_rust5ioctl+0x12d>
+    2123:	81 fb 03 29 a0 30    	cmp    $0x30a02903,%ebx
+    2129:	0f 84 48 01 00 00    	je     2277 <_RNvCsjIkZ8hqbvqs_11mcctrl_rust5ioctl+0x1a7>
+    212f:	81 fb 04 29 a0 30    	cmp    $0x30a02904,%ebx
+    2135:	0f 85 b5 01 00 00    	jne    22f0 <_RNvCsjIkZ8hqbvqs_11mcctrl_rust5ioctl+0x220>
+    213b:	31 c0                	xor    %eax,%eax
+    213d:	83 f9 01             	cmp    $0x1,%ecx
+    2140:	0f 94 c0             	sete   %al
+    2143:	48 89 e7             	mov    %rsp,%rdi
+    2146:	89 c1                	mov    %eax,%ecx
+    2148:	e8 a3 51 00 00       	call   72f0 <_RNvMsh_NtCsjIkZ8hqbvqs_11mcctrl_rust14mcctrl_processNtB5_7Context14return_syscall>
+    214d:	e9 8a 01 00 00       	jmp    22dc <_RNvCsjIkZ8hqbvqs_11mcctrl_rust5ioctl+0x20c>
+    2152:	81 fb 11 29 a0 30    	cmp    $0x30a02911,%ebx
+    2158:	7e 6c                	jle    21c6 <_RNvCsjIkZ8hqbvqs_11mcctrl_rust5ioctl+0xf6>
+    215a:	81 fb 25 29 a0 30    	cmp    $0x30a02925,%ebx
+    2160:	0f 8f c5 00 00 00    	jg     222b <_RNvCsjIkZ8hqbvqs_11mcctrl_rust5ioctl+0x15b>
+    2166:	81 fb 12 29 a0 30    	cmp    $0x30a02912,%ebx
+    216c:	0f 84 19 01 00 00    	je     228b <_RNvCsjIkZ8hqbvqs_11mcctrl_rust5ioctl+0x1bb>
+    2172:	81 fb 13 29 a0 30    	cmp    $0x30a02913,%ebx
+    2178:	0f 85 72 01 00 00    	jne    22f0 <_RNvCsjIkZ8hqbvqs_11mcctrl_rust5ioctl+0x220>
+    217e:	48 89 e7             	mov    %rsp,%rdi
+    2181:	e8 0a 63 00 00       	call   8490 <_RNvMsh_NtCsjIkZ8hqbvqs_11mcctrl_rust14mcctrl_processNtB5_7Context16close_executable>
+    2186:	e9 51 01 00 00       	jmp    22dc <_RNvCsjIkZ8hqbvqs_11mcctrl_rust5ioctl+0x20c>
+    218b:	81 fb 00 29 a0 30    	cmp    $0x30a02900,%ebx
+    2191:	0f 84 12 01 00 00    	je     22a9 <_RNvCsjIkZ8hqbvqs_11mcctrl_rust5ioctl+0x1d9>
+    2197:	81 fb 01 29 a0 30    	cmp    $0x30a02901,%ebx
+    219d:	0f 84 27 01 00 00    	je     22ca <_RNvCsjIkZ8hqbvqs_11mcctrl_rust5ioctl+0x1fa>
+    21a3:	81 fb 02 29 a0 30    	cmp    $0x30a02902,%ebx
+    21a9:	0f 85 41 01 00 00    	jne    22f0 <_RNvCsjIkZ8hqbvqs_11mcctrl_rust5ioctl+0x220>
+    21af:	31 c0                	xor    %eax,%eax
+    21b1:	83 f9 01             	cmp    $0x1,%ecx
+    21b4:	0f 94 c0             	sete   %al
+    21b7:	48 89 e7             	mov    %rsp,%rdi
+    21ba:	89 c1                	mov    %eax,%ecx
+    21bc:	e8 8f 2a 00 00       	call   4c50 <_RNvMsh_NtCsjIkZ8hqbvqs_11mcctrl_rust14mcctrl_processNtB5_7Context11start_image>
+    21c1:	e9 16 01 00 00       	jmp    22dc <_RNvCsjIkZ8hqbvqs_11mcctrl_rust5ioctl+0x20c>
+    21c6:	81 fb 0b 29 a0 30    	cmp    $0x30a0290b,%ebx
+    21cc:	0f 84 eb 00 00 00    	je     22bd <_RNvCsjIkZ8hqbvqs_11mcctrl_rust5ioctl+0x1ed>
+    21d2:	81 fb 0c 29 a0 30    	cmp    $0x30a0290c,%ebx
+    21d8:	74 72                	je     224c <_RNvCsjIkZ8hqbvqs_11mcctrl_rust5ioctl+0x17c>
+    21da:	81 fb 0e 29 a0 30    	cmp    $0x30a0290e,%ebx
+    21e0:	0f 85 0a 01 00 00    	jne    22f0 <_RNvCsjIkZ8hqbvqs_11mcctrl_rust5ioctl+0x220>
+    21e6:	31 c0                	xor    %eax,%eax
+    21e8:	83 f9 01             	cmp    $0x1,%ecx
+    21eb:	0f 94 c0             	sete   %al
+    21ee:	48 89 e7             	mov    %rsp,%rdi
+    21f1:	89 c1                	mov    %eax,%ecx
+    21f3:	e8 28 48 00 00       	call   6a20 <_RNvMsh_NtCsjIkZ8hqbvqs_11mcctrl_rust14mcctrl_processNtB5_7Context14create_process>
+    21f8:	e9 df 00 00 00       	jmp    22dc <_RNvCsjIkZ8hqbvqs_11mcctrl_rust5ioctl+0x20c>
+    21fd:	81 fb 07 29 a0 30    	cmp    $0x30a02907,%ebx
+    2203:	74 47                	je     224c <_RNvCsjIkZ8hqbvqs_11mcctrl_rust5ioctl+0x17c>
+    2205:	81 fb 08 29 a0 30    	cmp    $0x30a02908,%ebx
+    220b:	0f 85 df 00 00 00    	jne    22f0 <_RNvCsjIkZ8hqbvqs_11mcctrl_rust5ioctl+0x220>
+    2211:	31 c0                	xor    %eax,%eax
+    2213:	83 f9 01             	cmp    $0x1,%ecx
+    2216:	0f 94 c0             	sete   %al
+    2219:	48 89 e7             	mov    %rsp,%rdi
+    221c:	48 89 d6             	mov    %rdx,%rsi
+    221f:	89 c2                	mov    %eax,%edx
+    2221:	e8 2a 6b 00 00       	call   8d50 <_RNvNtCsjIkZ8hqbvqs_11mcctrl_rust11mcctrl_exec11copy_string>
+    2226:	e9 b1 00 00 00       	jmp    22dc <_RNvCsjIkZ8hqbvqs_11mcctrl_rust5ioctl+0x20c>
+    222b:	81 fb 28 29 a0 30    	cmp    $0x30a02928,%ebx
+    2231:	74 62                	je     2295 <_RNvCsjIkZ8hqbvqs_11mcctrl_rust5ioctl+0x1c5>
+    2233:	81 fb 26 29 a0 30    	cmp    $0x30a02926,%ebx
+    2239:	0f 85 b1 00 00 00    	jne    22f0 <_RNvCsjIkZ8hqbvqs_11mcctrl_rust5ioctl+0x220>
+    223f:	48 89 e7             	mov    %rsp,%rdi
+    2242:	e8 b9 63 00 00       	call   8600 <_RNvMsh_NtCsjIkZ8hqbvqs_11mcctrl_rust14mcctrl_processNtB5_7Context17pool_thread_limit>
+    2247:	e9 90 00 00 00       	jmp    22dc <_RNvCsjIkZ8hqbvqs_11mcctrl_rust5ioctl+0x20c>
+    224c:	8b 7e 10             	mov    0x10(%rsi),%edi
+    224f:	48 8b 76 08          	mov    0x8(%rsi),%rsi
+    2253:	89 da                	mov    %ebx,%edx
+    2255:	e8 00 00 00 00       	call   225a <_RNvCsjIkZ8hqbvqs_11mcctrl_rust5ioctl+0x18a>
+    225a:	48 89 c1             	mov    %rax,%rcx
+    225d:	48 85 c0             	test   %rax,%rax
+    2260:	48 c7 c0 ea ff ff ff 	mov    $0xffffffffffffffea,%rax
+    2267:	48 0f 45 c1          	cmovne %rcx,%rax
+    226b:	81 fb 07 29 a0 30    	cmp    $0x30a02907,%ebx
+    2271:	48 0f 45 c1          	cmovne %rcx,%rax
+    2275:	eb 79                	jmp    22f0 <_RNvCsjIkZ8hqbvqs_11mcctrl_rust5ioctl+0x220>
+    2277:	31 c0                	xor    %eax,%eax
+    2279:	83 f9 01             	cmp    $0x1,%ecx
+    227c:	0f 94 c0             	sete   %al
+    227f:	48 89 e7             	mov    %rsp,%rdi
+    2282:	89 c1                	mov    %eax,%ecx
+    2284:	e8 17 2d 00 00       	call   4fa0 <_RNvMsh_NtCsjIkZ8hqbvqs_11mcctrl_rust14mcctrl_processNtB5_7Context12wait_syscall>
+    2289:	eb 51                	jmp    22dc <_RNvCsjIkZ8hqbvqs_11mcctrl_rust5ioctl+0x20c>
+    228b:	48 89 e7             	mov    %rsp,%rdi
+    228e:	e8 9d 5c 00 00       	call   7f30 <_RNvMsh_NtCsjIkZ8hqbvqs_11mcctrl_rust14mcctrl_processNtB5_7Context15open_executable>
+    2293:	eb 47                	jmp    22dc <_RNvCsjIkZ8hqbvqs_11mcctrl_rust5ioctl+0x20c>
+    2295:	31 c0                	xor    %eax,%eax
+    2297:	83 f9 01             	cmp    $0x1,%ecx
+    229a:	0f 94 c0             	sete   %al
+    229d:	48 89 e7             	mov    %rsp,%rdi
+    22a0:	89 c1                	mov    %eax,%ecx
+    22a2:	e8 09 60 00 00       	call   82b0 <_RNvMsh_NtCsjIkZ8hqbvqs_11mcctrl_rust14mcctrl_processNtB5_7Context16clear_user_space>
+    22a7:	eb 33                	jmp    22dc <_RNvCsjIkZ8hqbvqs_11mcctrl_rust5ioctl+0x20c>
+    22a9:	31 c0                	xor    %eax,%eax
+    22ab:	83 f9 01             	cmp    $0x1,%ecx
+    22ae:	0f 94 c0             	sete   %al
+    22b1:	48 89 e7             	mov    %rsp,%rdi
+    22b4:	89 c1                	mov    %eax,%ecx
+    22b6:	e8 05 3f 00 00       	call   61c0 <_RNvMsh_NtCsjIkZ8hqbvqs_11mcctrl_rust14mcctrl_processNtB5_7Context13prepare_image>
+    22bb:	eb 1f                	jmp    22dc <_RNvCsjIkZ8hqbvqs_11mcctrl_rust5ioctl+0x20c>
+    22bd:	48 89 e7             	mov    %rsp,%rdi
+    22c0:	48 89 d6             	mov    %rdx,%rsi
+    22c3:	e8 88 6e 00 00       	call   9150 <_RNvNtCsjIkZ8hqbvqs_11mcctrl_rust11mcctrl_exec11credentials>
+    22c8:	eb 12                	jmp    22dc <_RNvCsjIkZ8hqbvqs_11mcctrl_rust5ioctl+0x20c>
+    22ca:	31 c0                	xor    %eax,%eax
+    22cc:	83 f9 01             	cmp    $0x1,%ecx
+    22cf:	0f 94 c0             	sete   %al
+    22d2:	48 89 e7             	mov    %rsp,%rdi
+    22d5:	89 c1                	mov    %eax,%ecx
+    22d7:	e8 34 55 00 00       	call   7810 <_RNvMsh_NtCsjIkZ8hqbvqs_11mcctrl_rust14mcctrl_processNtB5_7Context14transfer_image>
+    22dc:	8b 0c 24             	mov    (%rsp),%ecx
+    22df:	8b 54 24 04          	mov    0x4(%rsp),%edx
+    22e3:	48 8b 44 24 08       	mov    0x8(%rsp),%rax
+    22e8:	f6 c1 01             	test   $0x1,%cl
+    22eb:	74 03                	je     22f0 <_RNvCsjIkZ8hqbvqs_11mcctrl_rust5ioctl+0x220>
+    22ed:	48 63 c2             	movslq %edx,%rax
+    22f0:	48 83 c4 10          	add    $0x10,%rsp
+    22f4:	5b                   	pop    %rbx
+    22f5:	e9 00 00 00 00       	jmp    22fa <_RNvCsjIkZ8hqbvqs_11mcctrl_rust5ioctl+0x22a>
+
+Disassembly of section .init.text:

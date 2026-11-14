@@ -1,0 +1,4 @@
+1985:   pub struct Mutex<T>(std::sync::Mutex<T>);impl<T> Mutex<T>{pub fn new(x:T)->Self{Self(std::sync::Mutex::new(x))}pub fn lock(&self)->std::sync::MutexGuard<'_,T>{self.0.lock().unwrap()}}
+2442:struct Mutex<T>(std::sync::Mutex<T>);
+2525:pub(crate) struct Remote { owner: OsToken, slots: Mutex<Vec<Option<Entry>>>, transport_failed: AtomicBool, release_token: Token, releases: Mutex<Mailbox<Memory>> }
+5561:struct Mutex<T>(RefCell<T>);

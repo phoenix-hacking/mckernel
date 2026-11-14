@@ -1,0 +1,154 @@
+{
+  "CPU6_pinned_userspace_conflicts": [],
+  "CPU6_stable_PF_KTHREAD_exclusions": [
+    {
+      "affinity": [
+        6
+      ],
+      "comm": "cpuhp/6",
+      "flags": 69238848,
+      "pid": 49,
+      "start": "14"
+    },
+    {
+      "affinity": [
+        6
+      ],
+      "comm": "idle_inject/6",
+      "flags": 69238848,
+      "pid": 50,
+      "start": "14"
+    },
+    {
+      "affinity": [
+        6
+      ],
+      "comm": "migration/6",
+      "flags": 69238848,
+      "pid": 51,
+      "start": "14"
+    },
+    {
+      "affinity": [
+        6
+      ],
+      "comm": "ksoftirqd/6",
+      "flags": 69238848,
+      "pid": 52,
+      "start": "14"
+    },
+    {
+      "affinity": [
+        6
+      ],
+      "comm": "kworker/6:0H-events_highpri",
+      "flags": 69238880,
+      "pid": 54,
+      "start": "14"
+    },
+    {
+      "affinity": [
+        6
+      ],
+      "comm": "kworker/6:1H-kblockd",
+      "flags": 69238880,
+      "pid": 229,
+      "start": "66"
+    },
+    {
+      "affinity": [
+        6
+      ],
+      "comm": "kworker/6:0-events_freezable",
+      "flags": 69238880,
+      "pid": 2113535,
+      "start": "30818515"
+    },
+    {
+      "affinity": [
+        6
+      ],
+      "comm": "kworker/6:2-cgroup_destroy",
+      "flags": 69238880,
+      "pid": 2157251,
+      "start": "31439902"
+    }
+  ],
+  "MemAvailable_bytes": 28815675392,
+  "admitted": true,
+  "bounded_observer_correction": "Disjoint ordinary CPU6 grant checks actual affinity exactly{6}, preserving root-owned aggregate grant; broad-affinity host housekeeping does not create a second CPU6 grant. Prior false-positive observer stopped before any workload. No active source/argv/oracle changed.",
+  "capacity": {
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1": {
+      "available_bytes": 43673092096,
+      "minimum_bytes": 18887655424
+    },
+    "/home/holden/mckernel-work/scratch": {
+      "available_bytes": 14153953280,
+      "minimum_bytes": 14026801152
+    }
+  },
+  "created_epoch": 1792519081.5285077,
+  "exact_outer_argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2",
+    "35",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=30:30",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--nofile=256:256",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/run_prepare_once.py",
+    "--late-fields",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/LATE-STAGE-BINDING.json",
+    "--late-sha256",
+    "62da5776bf441227c5df74693d9fbfcc76a3d25fc97011efb45c0b7fccf660ae"
+  ],
+  "fresh_outputs": [
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/ordinary-capture-1",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/outer-capture-1",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/ACTUAL-NATIVE-PREFLIGHT.json",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/ACTUAL-BINDING.json",
+    "/home/holden/mckernel-work/scratch/vpg-n261020-1",
+    "/home/holden/mckernel-work/scratch/vpg-s261020-1"
+  ],
+  "kernel_thread_mask": 2097152,
+  "normalization_runs": 0,
+  "preserved_prior_observer_refusal": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/ROOT-GRANT-AND-FRESH-ADMISSION.json",
+    "sha256": "ce67ba732923b370dd9fd33e884af99d68d95ed35d148a078a6fb028fbc1e336",
+    "size": 69594
+  },
+  "review": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-valid-protection-closure-independent-review-20261020-1/PROTECTION-GRACE-COMPLETE-RUNTIME-NORMALIZATION-SOURCE-REVIEW.json",
+    "sha256": "74e284b05b04853cf4471be83aac40ed112d82e459d9bf57c5a3f208edd9a8b7",
+    "size": 12581
+  },
+  "root_aggregate_cpu_RAM_job_ownership": "Root granted soleCPU6 job after all known priorCPU6 operations positively joined/released; this does not reserve a full build per agent.",
+  "root_grant": "One exact reviewed ordinary normalization per root followup task, freshCPU6 aggregate admission, at most once, preserve failure, no retry/native/root/Git.",
+  "schema": "mckernel.m03-grace-corrected-fresh-CPU6-admission.v1",
+  "scratch_uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52",
+  "service": {
+    "limitPercent": 100,
+    "phase": "running",
+    "purchased_API_billing_forbidden": true,
+    "stop_reason": null,
+    "usedPercent": 32
+  },
+  "source_freeze": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/SOURCE-FREEZE.json",
+    "sha256": "db6e410797f73edeebc238b13c0af00d977ed2820876f2249fd97c5cc148fabf",
+    "size": 10019
+  },
+  "source_pin_verification": 203
+}

@@ -1,0 +1,387 @@
+//! Process-context carrier ownership registry. There is no allocator or destructor here.
+//!
+//! All carrier dereferences belong to the producer/consumer module. The registry
+//! lock protects only slot metadata. In particular, a visitor runs after unlock.
+
+use core::cell::UnsafeCell;
+use core::ptr::NonNull;
+use core::sync::atomic::{AtomicBool, Ordering};
+
+use crate::fork_control_guest::Carrier;
+
+pub(crate) const CAPACITY: usize = 64;
+const ENOENT: i32 = -2;
+const EIO: i32 = -5;
+const EBUSY: i32 = -16;
+const EINVAL: i32 = -22;
+const ENOSPC: i32 = -28;
+const EOVERFLOW: i32 = -75;
+
+#[repr(C)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) struct Handle {
+    pub(crate) slot: u32,
+    pub(crate) reserved: u32,
+    pub(crate) epoch: u64,
+}
+
+impl Handle {
+    pub(crate) const EMPTY: Self = Self { slot: 0, reserved: 0, epoch: 0 };
+
+    fn valid(self) -> bool {
+        self.reserved == 0 && (self.slot as usize) < CAPACITY && self.epoch != 0
+    }
+}
+
+const _: () = {
+    assert!(core::mem::size_of::<Handle>() == 16);
+    assert!(core::mem::align_of::<Handle>() == 8);
+    assert!(core::mem::offset_of!(Handle, slot) == 0);
+    assert!(core::mem::offset_of!(Handle, reserved) == 4);
+    assert!(core::mem::offset_of!(Handle, epoch) == 8);
+};
+
+#[derive(Clone, Copy, Eq, PartialEq)]
+enum Phase { Private, Escaped, Retained }
+
+#[derive(Clone, Copy)]
+struct Slot {
+    carrier: Option<NonNull<Carrier>>,
+    epoch: u64,
+    phase: Phase,
+    busy: bool,
+    runtime_thread: usize,
+    runtime_exit_observed: bool,
+}
+
+impl Slot {
+    const EMPTY: Self = Self {
+        carrier: None, epoch: 0, phase: Phase::Private, busy: false,
+        runtime_thread: 0, runtime_exit_observed: false,
+    };
+}
+
+struct State {
+    slots: [Slot; CAPACITY],
+    last_epoch: u64,
+    draining_parents: [usize; CAPACITY],
+}
+
+impl State {
+    fn matching(&mut self, handle: Handle) -> Option<&mut Slot> {
+        if handle.reserved != 0 || handle.epoch == 0 { return None; }
+        let slot = self.slots.get_mut(handle.slot as usize)?;
+        if slot.carrier.is_some() && slot.epoch == handle.epoch { Some(slot) } else { None }
+    }
+}
+
+struct Registry {
+    held: AtomicBool,
+    state: UnsafeCell<State>,
+}
+
+// SAFETY: every access to state is exclusively bracketed by lock/unlock; no
+// carrier reference is made here, and the lock is released before user code.
+unsafe impl Sync for Registry {}
+
+impl Registry {
+    fn lock(&self) {
+        // The actual scheduler's post-switch observer also writes metadata.
+        // Do not let it run on this CPU while a metadata holder is suspended.
+        // Visitors remain preemptible: they run after unlock, never here.
+        unsafe { crate::cls::preempt_disable(); }
+        while self.held.swap(true, Ordering::Acquire) {
+            // Existing core-linked reviewed assembly primitive. Process context only.
+            unsafe { crate::x86_cpu_helpers::cpu_pause(); }
+        }
+    }
+
+    fn unlock(&self) {
+        self.held.store(false, Ordering::Release);
+        unsafe { crate::cls::preempt_enable(); }
+    }
+}
+
+static REGISTRY: Registry = Registry {
+    held: AtomicBool::new(false),
+    state: UnsafeCell::new(State { slots: [Slot::EMPTY; CAPACITY], last_epoch: 0,
+        draining_parents: [0; CAPACITY] }),
+};
+
+/// Serialization only, never liveness or release authority. The authenticated
+/// current-parent caller and its existing Thread edges keep the address live.
+/// This metadata is independent of Carrier detach/epoch reuse. No lock or
+/// preemption guard remains held over the actual transport/destructors.
+pub(crate) struct ParentDrainGuard { parent: usize }
+pub(crate) fn claim_parent_drain(parent: usize) -> Result<ParentDrainGuard,i32> {
+    if parent==0{return Err(EINVAL);}
+    REGISTRY.lock();
+    let result=unsafe {
+        let state=&mut *REGISTRY.state.get();
+        if state.draining_parents.contains(&parent){Err(EBUSY)}
+        else if let Some(slot)=state.draining_parents.iter_mut().find(|slot|**slot==0){
+            *slot=parent;Ok(ParentDrainGuard{parent})
+        }else{Err(EBUSY)}
+    };
+    REGISTRY.unlock();result
+}
+impl Drop for ParentDrainGuard {
+    fn drop(&mut self){
+        REGISTRY.lock();
+        unsafe {let state=&mut *REGISTRY.state.get();
+            if let Some(slot)=state.draining_parents.iter_mut().find(|slot|**slot==self.parent){*slot=0;}}
+        REGISTRY.unlock();
+    }
+}
+
+/// Transfer ownership to the registry only on success. On error the caller
+/// still owns `carrier` and must perform any destruction after this call.
+///
+/// # Safety
+/// `carrier` is a unique, initialized, live allocation, absent from this registry.
+/// The caller must stop accessing it except through the explicit private
+/// initialization/begin protocol or a scoped visitor. It must not be freed after
+/// success unless `cancel` returns the owned pointer. Initialization using the
+/// returned handle/epoch must finish before `begin` publishes eligibility.
+pub(crate) unsafe fn insert_private(
+    carrier: NonNull<Carrier>,
+) -> Result<Handle, (i32, NonNull<Carrier>)> {
+    REGISTRY.lock();
+    let result = {
+        let state = &mut *REGISTRY.state.get();
+        match state.last_epoch.checked_add(1) {
+            None => Err((EOVERFLOW, carrier)),
+            Some(epoch) => match state.slots.iter().position(|slot| slot.carrier.is_none()) {
+                None => Err((ENOSPC, carrier)),
+                Some(index) => {
+                    state.last_epoch = epoch;
+                    state.slots[index] = Slot {
+                        carrier: Some(carrier), epoch, phase: Phase::Private, busy: false,
+        runtime_thread: 0, runtime_exit_observed: false,
+                    };
+                    Ok(Handle { slot: index as u32, reserved: 0, epoch })
+                }
+            },
+        }
+    };
+    REGISTRY.unlock();
+    result
+}
+
+/// Mark the allocation escaped before returning its pointer. There is no
+/// transition from Escaped/Retained back to Private, and no implicit free.
+pub(crate) fn begin(handle: Handle) -> Result<NonNull<Carrier>, i32> {
+    if !handle.valid() { return Err(EINVAL); }
+    REGISTRY.lock();
+    let result = unsafe {
+        match (&mut *REGISTRY.state.get()).matching(handle) {
+            None => Err(ENOENT),
+            Some(slot) if slot.busy || slot.phase != Phase::Private => Err(EBUSY),
+            Some(slot) => match slot.carrier {
+                Some(carrier) => { slot.phase = Phase::Escaped; Ok(carrier) }
+                None => Err(EIO),
+            },
+        }
+    };
+    REGISTRY.unlock();
+    result
+}
+
+/// Remove a still-private, nonbusy allocation and return ownership for freeing
+/// outside the lock. An escaped allocation is retained and returns EBUSY.
+pub(crate) fn cancel(handle: Handle) -> Result<NonNull<Carrier>, i32> {
+    if !handle.valid() { return Err(EINVAL); }
+    REGISTRY.lock();
+    let result = unsafe {
+        match (&mut *REGISTRY.state.get()).matching(handle) {
+            None => Err(ENOENT),
+            Some(slot) if slot.busy => Err(EBUSY),
+            Some(slot) if slot.phase != Phase::Private => {
+                slot.phase = Phase::Retained;
+                Err(EBUSY)
+            }
+            Some(slot) => slot.carrier.take().ok_or(EIO),
+        }
+    };
+    REGISTRY.unlock();
+    result
+}
+
+/// Quarantine the allocation without freeing it or assuming host retirement.
+pub(crate) fn retain(handle: Handle) -> Result<(), i32> {
+    if !handle.valid() { return Err(EINVAL); }
+    REGISTRY.lock();
+    let result = unsafe {
+        match (&mut *REGISTRY.state.get()).matching(handle) {
+            None => Err(ENOENT),
+            Some(slot) if slot.busy => Err(EBUSY),
+            Some(slot) => { slot.phase = Phase::Retained; Ok(()) }
+        }
+    };
+    REGISTRY.unlock();
+    result
+}
+
+/// # Safety
+/// The unique current producer has acquired the SAME final ACK Response and
+/// positively checked its constructor graph destruction. No observer/transport
+/// retains a Carrier borrow. This only detaches metadata; destruction runs
+/// outside this lock. Stale snapshots can no longer discover the allocation.
+pub(crate) unsafe fn detach_terminal(handle:Handle,expected:NonNull<Carrier>)->Result<NonNull<Carrier>,i32>{
+    if !handle.valid(){return Err(EINVAL);}
+    REGISTRY.lock();
+    let result=match (&mut *REGISTRY.state.get()).matching(handle){
+        Some(slot) if !slot.busy&&slot.phase!=Phase::Private&&slot.carrier==Some(expected)=>slot.carrier.take().ok_or(EIO),
+        Some(_)=>Err(EBUSY),None=>Err(ENOENT),
+    };
+    REGISTRY.unlock();result
+}
+
+/// Execute one exclusive, scoped carrier callback outside the registry lock.
+/// Reentrant visits/cancel/retain/begin on this handle see EBUSY. A callback that
+/// does not return leaves the allocation busy and retained by the registry.
+///
+/// # Safety
+/// The callback must not free the carrier, retain references into it, or permit
+/// concurrent direct dereferences through an escaped pointer. All such accesses
+/// must share this visit protocol (or an externally proven stronger exclusion).
+pub(crate) unsafe fn visit(handle: Handle, callback: impl FnOnce(NonNull<Carrier>) -> i32) -> i32 {
+    if !handle.valid() { return EINVAL; }
+    REGISTRY.lock();
+    let claimed = {
+        match (&mut *REGISTRY.state.get()).matching(handle) {
+            None => Err(ENOENT),
+            Some(slot) if slot.busy => Err(EBUSY),
+            Some(slot) => match slot.carrier {
+                Some(carrier) => { slot.busy = true; Ok(carrier) }
+                None => Err(EIO),
+            },
+        }
+    };
+    REGISTRY.unlock();
+    let carrier = match claimed { Ok(carrier) => carrier, Err(rc) => return rc };
+    let callback_rc = callback(carrier);
+    REGISTRY.lock();
+    let result = {
+        match (&mut *REGISTRY.state.get()).matching(handle) {
+            Some(slot) if slot.carrier == Some(carrier) && slot.busy => {
+                slot.busy = false;
+                callback_rc
+            }
+            _ => EIO,
+        }
+    };
+    REGISTRY.unlock();
+    result
+}
+
+/// Copy only eligible handle metadata for the actual return hook. A snapshot
+/// grants no carrier access: each candidate still needs an epoch-checked visit.
+/// Private entries are excluded until producer initialization and begin finish.
+pub(crate) fn snapshot_handles(out: &mut [Handle; CAPACITY]) -> usize {
+    REGISTRY.lock();
+    let mut count = 0;
+    unsafe {
+        let mut destinations = out.iter_mut();
+        for (index, slot) in (&*REGISTRY.state.get()).slots.iter().enumerate() {
+            if slot.carrier.is_some() && slot.phase != Phase::Private {
+                let Some(destination) = destinations.next() else { break; };
+                *destination = Handle { slot: index as u32, reserved: 0, epoch: slot.epoch };
+                count += 1;
+            }
+        }
+    }
+    REGISTRY.unlock();
+    count
+}
+
+/// Bind the constructor-owned child before any list/runqueue publication.
+/// Called inside the exact current Carrier visitor. A failure transfers no
+/// credit and must leave every owner retained. This is metadata, not a pin.
+pub(crate) fn bind_runtime_exit(handle: Handle, thread: usize) -> i32 {
+    if !handle.valid() || thread == 0 { return EINVAL; }
+    REGISTRY.lock();
+    let result = unsafe {
+        let state = &mut *REGISTRY.state.get();
+        if state.slots.iter().any(|slot| slot.carrier.is_some() && slot.runtime_thread == thread) {
+            EBUSY
+        } else {
+            match state.matching(handle) {
+                None => ENOENT,
+                Some(slot) if slot.phase == Phase::Private || !slot.busy || slot.runtime_thread != 0 => EBUSY,
+                Some(slot) => { slot.runtime_thread = thread; 0 }
+            }
+        }
+    };
+    REGISTRY.unlock();
+    result
+}
+
+/// Opaque metadata binding captured while the actual old Thread is live.
+/// It owns no reference, release right or ACK authority and cannot be forged
+/// by callers. In particular, an untracked old Thread yields no token.
+pub(crate) struct RuntimeExitToken { handle: Handle, thread: usize }
+
+/// Capture only the current bound slot/epoch before the scheduler drops its
+/// ordinary Thread edge. Ignore Carrier busy; no Carrier pointer is borrowed.
+///
+/// # Safety
+/// Only the actual scheduler exit cleanup may capture this token, with its
+/// live PS_EXITED old Thread after the completed context switch. A tracked old
+/// child remains pinned by its runtime owner; an untracked old child may free
+/// on the following ordinary release, so its address must never be relooked up.
+pub(crate) unsafe fn capture_runtime_exit_before_release(thread: usize) -> Option<RuntimeExitToken> {
+    if thread == 0 { return None; }
+    REGISTRY.lock();
+    let result = {
+        let state = &*REGISTRY.state.get();
+        state.slots.iter().enumerate().find(|(_, slot)|
+            slot.carrier.is_some() && slot.phase != Phase::Private
+                && slot.runtime_thread == thread).map(|(index, slot)|
+            RuntimeExitToken { handle: Handle { slot: index as u32, reserved: 0,
+                epoch: slot.epoch }, thread })
+    };
+    REGISTRY.unlock();
+    result
+}
+
+/// Complete ONLY the pre-release binding. None stays untracked even if the
+/// freed address is now a newly bound child. Never look up an address after
+/// release and never dereference the old Thread or Carrier here.
+///
+/// # Safety
+/// The same actual scheduler cleanup must have consumed the ordinary Thread
+/// edge between capture and this call. A token alone proves no such release.
+pub(crate) unsafe fn complete_runtime_exit_after_release(token: Option<RuntimeExitToken>) -> i32 {
+    let Some(token) = token else { return 0; };
+    REGISTRY.lock();
+    let result = {
+        let state = &mut *REGISTRY.state.get();
+        match state.matching(token.handle) {
+            Some(slot) if slot.phase != Phase::Private
+                && slot.runtime_thread == token.thread => {
+                if slot.runtime_exit_observed { 0 }
+                else { slot.runtime_exit_observed = true; 1 }
+            }
+            _ => 0,
+        }
+    };
+    REGISTRY.unlock();
+    result
+}
+
+/// This observation is only ONE prerequisite. It does not authorize a runtime
+/// pin/parent/host release, detach, CPU release, destructor retry or final ACK.
+pub(crate) fn runtime_exit_observed(handle: Handle, thread: usize) -> Result<bool, i32> {
+    if !handle.valid() || thread == 0 { return Err(EINVAL); }
+    REGISTRY.lock();
+    let result = unsafe {
+        match (&mut *REGISTRY.state.get()).matching(handle) {
+            None => Err(ENOENT),
+            Some(slot) if slot.runtime_thread != thread => Err(EINVAL),
+            Some(slot) => Ok(slot.runtime_exit_observed),
+        }
+    };
+    REGISTRY.unlock();
+    result
+}

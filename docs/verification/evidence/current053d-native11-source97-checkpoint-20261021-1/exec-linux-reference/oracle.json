@@ -1,0 +1,19 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "state": "SOURCE_PREPARATION_UNCOMPILED_UNEXECUTED",
+  "independence": "Expected bytes and exit frozen independently before first compilation; adapted existing test_practical_process_exec_wait.py capture/reference machinery, no expectations learned from output.",
+  "stdout_hex": "657865632d7265736574206265666f7265206361756768743d696e7374616c6c65642069676e6f7265643d69676e6f7265642064656661756c743d64656661756c74206d61736b3d3235363020616c743d656e61626c65642073697a653d36353533360a657865632d7265736574206166746572206361756768743d64656661756c742069676e6f7265643d69676e6f7265642064656661756c743d64656661756c74206d61736b3d3235363020616c743d64697361626c65642073703d302073697a653d300a",
+  "stderr_hex": "",
+  "exit_code": 37,
+  "requires": [
+    "before-exec real rt_sigaction queries confirm installed caught/ignored/default",
+    "before-exec mask=2560 and enabled 65536-byte altstack",
+    "raw syscall59 selfexec; every return fails",
+    "new-image first signal queries before libc/std startup: caught default, ignored retained, default retained, mask2560 retained, altstack disabled/null/zero"
+  ],
+  "does_not_prove": [
+    "concurrent shared-sighand writer race stress",
+    "native exec provider operation",
+    "whole image or C retirement"
+  ]
+}

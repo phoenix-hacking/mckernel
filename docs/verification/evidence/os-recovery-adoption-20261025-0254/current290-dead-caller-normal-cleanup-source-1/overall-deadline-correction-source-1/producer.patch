@@ -1,0 +1,123 @@
+--- docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/observation-producer-source-1/produce_actual_owner1043716_cleanup_observation.EXACT-DEAD-CALLER.READONLY.NOT_RELEASED.py
++++ docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/overall-deadline-correction-source-1/produce_actual_owner1043716_cleanup_observation.EXACT-DEAD-CALLER.READONLY.NOT_RELEASED.py
+@@ -1,8 +1,9 @@
+ """Functional OS only; no security testing. READONLY producer; no cleanup entry calls."""
+-import argparse,ast,hashlib,importlib.util,json,os,stat,subprocess,fcntl
++import argparse,ast,hashlib,importlib.util,json,os,stat,subprocess,fcntl,signal
++from contextlib import contextmanager
+ from pathlib import Path
+ PROFILE=Path(__file__).parent/'EXACT-OWNER1043716-DEAD-CALLER-READONLY-OBSERVATION-PROFILE.json'
+-PROFILE_SHA='fa0f5a376a9a7cbb243143316149afd3d7f08684bb806de67e7644ed93e43f27'
++PROFILE_SHA='f00b2fa763829ed96b29528674606e88d7c3ad2f39d4dfe4052f8fea61a589a4'
+ REQUIRED=frozenset(('mount','root','boot_id','root_lock','request','target','container_inspect','retained_exclusions','request_lease_absent','inventories','candidate_root','candidate_commit','candidate_tree','selected_files','backup_root','namespace_binding','namespace_ancestry','client_ledger','ownership_case','shared_record_already_absent','normal_owner_join'))
+ def need(value,message):
+  if not value:raise ValueError(message)
+@@ -24,18 +25,55 @@
+  try:os.fsync(fd)
+  finally:os.close(fd)
+  return dict(path=str(p),bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
++class ObserverDeadlineExpired(RuntimeError):
++ pass
++
++@contextmanager
++def own_observer_deadline(seconds=240):
++ need(seconds==240,'exact240seconddeadline')
++ previous_handler=signal.getsignal(signal.SIGALRM)
++ previous_timer=signal.getitimer(signal.ITIMER_REAL)
++ # Refuse an existing timer; do not steal or reset another owner's deadline.
++ need(previous_timer==(0.0,0.0),'existingalarmrefused')
++ def expired(signum,frame):
++  raise ObserverDeadlineExpired('readonly observer overall240s deadline expired')
++ signal.signal(signal.SIGALRM,expired)
++ try:
++  signal.setitimer(signal.ITIMER_REAL,seconds)
++  yield
++ finally:
++  signal.setitimer(signal.ITIMER_REAL,0)
++  signal.signal(signal.SIGALRM,previous_handler)
++
+ def query(p,out,label):
+- need(label in ('inspect','findmnt'),'queryallowlist');argv=p['query_allowlist'][label];stdout=b'';stderr=b'';status={}
++ need(label in ('inspect','findmnt'),'queryallowlist');argv=p['query_allowlist'][label];status={};deadline=None
++ paths={stream:out/(label+'.'+stream) for stream in ('stdout','stderr')}
++ # File-backed capture preserves bytes even when our own SIGALRM interrupts
++ # subprocess.run. Its BaseException path kills/reaps only this query child.
++ streams={}
+  try:
+-  result=subprocess.run(argv,stdin=subprocess.DEVNULL,stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=p['query_timeout_seconds'],check=False);stdout=result.stdout;stderr=result.stderr;status={'returncode':result.returncode}
+- except subprocess.TimeoutExpired as exc:
+-  stdout=exc.stdout or b'';stderr=exc.stderr or b'';status={'error':'TimeoutExpired'}
+- except OSError as exc:status={'error':type(exc).__name__,'errno':exc.errno}
+- # Raw capture is durable before all parsing/status/size oracles, including errors.
+- refs={stream:publish(out,label+'.'+stream,raw) for stream,raw in [('stdout',stdout),('stderr',stderr)]}
++  for stream,path in paths.items():
++   fd=os.open(path,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW,0o600)
++   streams[stream]=os.fdopen(fd,'wb',buffering=0)
++  try:
++   result=subprocess.run(argv,stdin=subprocess.DEVNULL,stdout=streams['stdout'],stderr=streams['stderr'],timeout=p['query_timeout_seconds'],check=False)
++   status={'returncode':result.returncode}
++  except subprocess.TimeoutExpired:status={'error':'TimeoutExpired'}
++  except ObserverDeadlineExpired as exc:
++   status={'error':'ObserverDeadlineExpired'};deadline=exc
++  except OSError as exc:status={'error':type(exc).__name__,'errno':exc.errno}
++ finally:
++  try:
++   for stream in streams.values():os.fsync(stream.fileno())
++  finally:
++   for stream in streams.values():stream.close()
++ stdout=paths['stdout'].read_bytes();stderr=paths['stderr'].read_bytes()
++ refs={stream:dict(path=str(path),bytes=path.stat().st_size,sha256=hashlib.sha256(path.read_bytes()).hexdigest()) for stream,path in paths.items()}
+  status.update(argv=argv,timeout=p['query_timeout_seconds'],captures=refs);publish(out,label+'.status.json',(json.dumps(status,sort_keys=True)+'\n').encode())
++ if deadline is not None:raise deadline
+  need(status.get('returncode')==0 and stderr==b'' and len(stdout)<=p['query_caps'][label],'readonlyqueryrefused:'+label)
+  return stdout
++
+ def dead_caller_check(e,p,ready):
+  need(p['dead_caller_new_ofd']==e.DEAD_CALLER_FROZEN,'exactdeadcallerprofile')
+  e.DEAD_CALLER_BINDING=e.validate_dead_caller_binding(dict(cleanup_mode=e.DEAD_CALLER_MODE,inherited_root_lock=None,dead_caller_new_ofd=p['dead_caller_new_ofd']))
+@@ -86,17 +124,35 @@
+  for row in identities:need(e.observe_identity(Path(row['path']))==row,'recordraced')
+  dead_caller_check(e,p,ready);need(not os.path.lexists(e.LEASE) and e.namespace_ancestry()==ancestry,'leaseornamespaceraced');return obs
+ 
++def readable_evidence(raw):
++ need(len(raw)<=20<<20,'readableevidencebound')
++ return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest(),raw_utf8=raw.decode('utf-8','strict'))
++
+ def main():
+  parser=argparse.ArgumentParser();parser.add_argument('--execute-readonly',action='store_true');args=parser.parse_args();need(args.execute_readonly and os.geteuid()==0,'explicitrootreadonlyrequired')
+- p,e=bootstrap();out=Path(p['capture_directory']);out.mkdir(mode=0o700);fd=None
++ result=None;readable={}
+  try:
+-  fd=acquire_readonly_custody(e,p)
+-  obs=produce(p,e,lambda label:query(p,out,label))
+-  publish(out,'OBSERVATION.json',e.canonical(obs))
+-  print(json.dumps(dict(status='PASS_READONLY_OBSERVATION_ONLY_NOT_CLEANUP_RELEASE',observation=str(out/'OBSERVATION.json'),keys=len(obs),queries=2,cleanup_actions=0),sort_keys=True))
+- finally:
+-  # Durable EOF raw/compact process evidence also survives a refused oracle.
+-  try:publish(out,'dead-caller-proc-evidence.json',e.canonical(e.DEAD_CALLER_OBSERVATIONS))
+-  finally:
+-   if fd is not None:os.close(fd)
++  with own_observer_deadline(240):
++   p,e=bootstrap();need(p['overall_deadline_seconds']==240,'profile240seconddeadline');out=Path(p['capture_directory']);out.mkdir(mode=0o700);fd=None
++   try:
++    fd=acquire_readonly_custody(e,p)
++    obs=produce(p,e,lambda label:query(p,out,label))
++    observation_raw=e.canonical(obs);publish(out,'OBSERVATION.json',observation_raw)
++    readable['observation']=readable_evidence(observation_raw)
++    result=dict(status='PASS_READONLY_OBSERVATION_ONLY_NOT_CLEANUP_RELEASE',observation=str(out/'OBSERVATION.json'),keys=len(obs),queries=2,cleanup_actions=0)
++   finally:
++    # Root originals remain0600/root0700. UID1000 receives exact lossless JSON
++    # through its existing outer full-EOF stdout capture; no ownership changes.
++    try:
++     proc_raw=e.canonical(e.DEAD_CALLER_OBSERVATIONS)
++     publish(out,'dead-caller-proc-evidence.json',proc_raw)
++     readable['process_evidence']=readable_evidence(proc_raw)
++    finally:
++     if fd is not None:os.close(fd)
++ except Exception as error:
++  print(json.dumps(dict(status='REFUSED_READONLY_OBSERVER',error=type(error).__name__+':'+str(error),readable_evidence=readable),sort_keys=True))
++  raise
++ # PASS is emitted only after custody/evidence cleanup and deadline restoration.
++ result['readable_evidence']=readable
++ print(json.dumps(result,sort_keys=True))
+ if __name__=='__main__':main()

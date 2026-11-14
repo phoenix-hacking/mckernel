@@ -1,0 +1,45 @@
+--- /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/bounded-provider-rebind-1/run_corrected_fixture_once.py
++++ /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/expert-fixture-import-correction-1/run_expert_import_corrected_fixture_once.py
+@@ -1,9 +1,9 @@
+ """Functional McKernel OS/apps and Rust/assembly migration only; no security testing."""
+ from pathlib import Path
+ import hashlib,importlib.util,json,os,resource,signal,sys,time
+-D=Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem');P=D/'bounded-provider-rebind-1/CORRECTED-RECIPE.NOT-EXECUTED.json'
++D=Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem');P=D/'expert-fixture-import-correction-1/CORRECTED-RECIPE.NOT-EXECUTED.json'
+ def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()
+-assert sha(P)=='566736b9ba595b3f9f719388943412e62f08b853703738039dde9c985515e379'
++assert sha(P)=='8efb2a771a775644ec4eda9f088938dffb31b319ecd6805e89c8e4ed2de15e0a'
+ plan=json.loads(P.read_bytes())
+ H=Path('/home/holden/mckernel/docs/verification/evidence/phase5-m03-handshake-runtime-checkpoint-20261020-1/sdk-physical-source/run_two_commands_source_bound_corrected.py')
+ assert sha(H)==plan['profile']['helper_sha256']
+@@ -11,7 +11,7 @@
+ for n in (signal.SIGTERM,signal.SIGINT,signal.SIGALRM):signal.signal(n,c.stop)
+ os.umask(0o077);os.chdir(D);os.sched_setaffinity(0,{6});os.environ['RUST_MIN_STACK']='2097152'
+ for k,v in [(resource.RLIMIT_AS,2<<30),(resource.RLIMIT_CPU,60),(resource.RLIMIT_FSIZE,32<<20),(resource.RLIMIT_NOFILE,256),(resource.RLIMIT_CORE,0)]:resource.setrlimit(k,(v,v))
+-A=D/'actual-fixture-cohort-2';A.mkdir(mode=0o700);results=[];begin=time.monotonic()
++A=D/'actual-fixture-cohort-3';A.mkdir(mode=0o700);results=[];begin=time.monotonic()
+ try:
+  assert Path(sys.executable).resolve()==Path('/home/holden/anaconda3/bin/python3').resolve() and sys.version_info[:2]==(3,9)
+  c.write(A/'INTERPRETER.json',{'path':sys.executable,'version':sys.version,'before_child':True})
+@@ -24,7 +24,20 @@
+  host=os.statvfs('/home/holden');scratch=os.statvfs('/home/holden/mckernel-work/scratch');bs=Path('/home/holden/mckernel-work/scratch.ext4').stat();gap=max(0,bs.st_size-bs.st_blocks*512)
+  facts={'memory_available':mem,'memory_required':19<<30,'host_available':host.f_bavail*host.f_frsize,'host_required':(16<<30)+gap+(128<<20)+679477248,'scratch_available':scratch.f_bavail*scratch.f_frsize,'scratch_required':(12<<30)+679477248,'full_sparse_gap':gap,'backing_size':bs.st_size,'backing_dev':bs.st_dev,'backing_inode':bs.st_ino,'reserves_preserved':679477248,'CPU':6,'root_grant':'exclusive CPU6 onejob eight sequential commands; no competing CPU6 grant'}
+  c.write(A/'HEADROOM.json',facts);assert mem>=facts['memory_required'] and facts['host_available']>=facts['host_required'] and facts['scratch_available']>=facts['scratch_required'],facts
+- (D/'output-1').mkdir(mode=0o700)
++ # Root-authorized reuse only of the empty owned directory from failed Rust compile.
++ import stat
++ outdir=D/'output-1';od=outdir.lstat()
++ assert stat.S_ISDIR(od.st_mode) and not stat.S_ISLNK(od.st_mode) and od.st_uid==1000 and stat.S_IMODE(od.st_mode)==0o700
++ assert od.st_ino==56125057 and od.st_dev==66306 and not list(outdir.iterdir())
++ outputs=[]
++ for command in plan['commands']:
++  av=command['argv']
++  for j,arg in enumerate(av):
++   if arg=='-o':outputs.append(Path(av[j+1]))
++   if arg.startswith('--emit=obj='):outputs.append(Path(arg[len('--emit=obj='):]))
++ assert len(outputs)==4 and set(outputs)=={outdir/'fixture-rust.o',outdir/'fixture-c.o',outdir/'memset.o',outdir/'fixture'}
++ for output in outputs:assert not os.path.lexists(output),str(output)
++ c.write(A/'EXISTING-EMPTY-OUTPUT-GUARD.json',{'directory':str(outdir),'device':od.st_dev,'inode':od.st_ino,'uid':od.st_uid,'mode':oct(stat.S_IMODE(od.st_mode)),'empty':True,'all_eight_commands_output_paths_absent':[str(x) for x in outputs],'never_delete_or_overwrite':True,'prior_compile_failure':'59d29c058593561e09d0c05d7605a584dc4d30cd215bbd051e5f1eb8064f30c0'})
+  c.write(A/'PROFILE.json',{'scope':__doc__,'CPU':6,'AS':2<<30,'CPU_seconds':60,'wall_seconds':90,'retirement_seconds':6,'FSIZE':32<<20,'NOFILE':256,'core':0,'stack':2097152,'helper_sha256':sha(H),'Rust':{'path':plan['commands'][0]['argv'][0],'sha256':sha(Path(plan['commands'][0]['argv'][0]))}})
+  signal.setitimer(signal.ITIMER_REAL,96)
+  for i,item in enumerate(plan['commands'],1):

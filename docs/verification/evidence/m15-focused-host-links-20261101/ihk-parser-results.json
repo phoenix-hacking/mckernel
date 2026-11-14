@@ -1,0 +1,1169 @@
+{
+  "status": "PASS_ACTUAL_SHARED_LIBRARY_PURE_PARSER_CONSUMER_AND_SYMBOL_REVIEW",
+  "scope": "Current-source HOST link/consumer only; actual recovered IHK headers and libihk.so with explicit host libc/runtime supplementation. No native or deployed acceptance.",
+  "tests": {
+    "nonempty_small_cpu_subsets": 255,
+    "explicit_cpu_zero_gap": 1,
+    "empty_formatter": 1,
+    "sparse_growth": 1,
+    "parser_formatter_round_trips": 257
+  },
+  "required_exports": {
+    "__argc": {
+      "expected_nm_type": "B",
+      "dynamic_symbol": {
+        "type": "OBJECT",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "29",
+        "size": 4
+      },
+      "header_declarations": [],
+      "declaration_scope": "implementation_export_only"
+    },
+    "__argv": {
+      "expected_nm_type": "B",
+      "dynamic_symbol": {
+        "type": "OBJECT",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "29",
+        "size": 8
+      },
+      "header_declarations": [],
+      "declaration_scope": "implementation_export_only"
+    },
+    "_ihk_os_assign_cpu_str": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 10
+      },
+      "header_declarations": [],
+      "declaration_scope": "implementation_export_only"
+    },
+    "_ihk_os_set_ikc_map_str": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 618
+      },
+      "header_declarations": [],
+      "declaration_scope": "implementation_export_only"
+    },
+    "_ihk_reserve_cpu_str": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 7
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib_private.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "_ihk_reserve_mem_str": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 505
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib_private.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "cpu_req2str": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 34
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib_private.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "cpu_str2count": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 9
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib_private.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "cpu_str2req": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 238
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib_private.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "dump_reserve_mem_conf": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 107
+      },
+      "header_declarations": [],
+      "declaration_scope": "implementation_export_only"
+    },
+    "ihk_create_os": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 85
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_create_os_str": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 2160
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_destroy_os": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 150
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_get_num_os_instances": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 163
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_get_num_reserved_cpus": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 83
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_get_num_reserved_mem_chunks": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 308
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_get_os_instances": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 338
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_os_assign_cpu": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 10
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_os_assign_cpu_str": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 256
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_os_assign_mem": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 465
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_os_boot": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 190
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_os_clear_kmsg": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 81
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_os_freeze": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 10
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_os_get_eventfd": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 282
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_os_get_ikc_map": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 10
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_os_get_kmsg_size": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 34
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_os_get_num_assigned_cpus": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 65
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_os_get_num_assigned_mem_chunks": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 107
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_os_get_num_numa_nodes": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 83
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_os_get_num_pagesizes": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 34
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_os_get_pagesizes": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 149
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_os_get_status": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 91
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_os_getperfevent": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 95
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_os_getrusage": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 129
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_os_kargs": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 405
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_os_kargs_str": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 190
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_os_kmsg": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 127
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_os_load": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 94
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_os_makedumpfile": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 2149
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_os_perfctl": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 99
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_os_query_cpu": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 331
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_os_query_free_mem": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 12
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_os_query_mem": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 636
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_os_query_total_mem": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 12
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_os_release_cpu": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 10
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_os_release_mem": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 706
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_os_set_ikc_map": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 7
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_os_set_ikc_map_str": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 168
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_os_setperfevent": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 144
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_os_shutdown": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 300
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_os_thaw": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 10
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_query_cpu": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 318
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_query_mem": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 524
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_release_cpu": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 10
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_release_mem": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 590
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_reserve_cpu": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 10
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_reserve_cpu_str": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 256
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_reserve_mem": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 1927
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_reserve_mem_conf": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 189
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_reserve_mem_conf_str": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 459
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_reserve_mem_str": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 168
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihk_set_loglevel": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 12
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihklib_device_open": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 177
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib_private.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihklib_os_open": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 177
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib_private.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihklib_os_query_mem_sysfs": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 940
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib_private.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ihklib_os_query_mem_type_str": {
+      "expected_nm_type": "D",
+      "dynamic_symbol": {
+        "type": "OBJECT",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "28",
+        "size": 16
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib_private.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ikc_req2str": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 1550
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib_private.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ikc_str2count": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 11
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib_private.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "ikc_str2req": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 254
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib_private.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "loglevel": {
+      "expected_nm_type": "D",
+      "dynamic_symbol": {
+        "type": "OBJECT",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "28",
+        "size": 4
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "mem_req2str": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 17
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib_private.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "mem_str2count": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 9
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib_private.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "mem_str2req": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 57
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib_private.h"
+      ],
+      "declaration_scope": "actual_header"
+    },
+    "namespace_files": {
+      "expected_nm_type": "D",
+      "dynamic_symbol": {
+        "type": "OBJECT",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "28",
+        "size": 192
+      },
+      "header_declarations": [],
+      "declaration_scope": "implementation_export_only"
+    },
+    "parse_env": {
+      "expected_nm_type": "T",
+      "dynamic_symbol": {
+        "type": "FUNC",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "12",
+        "size": 437
+      },
+      "header_declarations": [],
+      "declaration_scope": "implementation_export_only"
+    },
+    "reserve_mem_conf": {
+      "expected_nm_type": "D",
+      "dynamic_symbol": {
+        "type": "OBJECT",
+        "binding": "GLOBAL",
+        "visibility": "DEFAULT",
+        "index": "28",
+        "size": 24
+      },
+      "header_declarations": [
+        "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib_private.h"
+      ],
+      "declaration_scope": "actual_header"
+    }
+  },
+  "header_declared_function_count": 66,
+  "all_actual_public_and_private_header_function_declarations_present": {
+    "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h": [
+      "ihk_reserve_cpu",
+      "ihk_reserve_cpu_str",
+      "ihk_get_num_reserved_cpus",
+      "ihk_query_cpu",
+      "ihk_release_cpu",
+      "ihk_reserve_mem_conf",
+      "ihk_reserve_mem_conf_str",
+      "ihk_reserve_mem",
+      "ihk_reserve_mem_str",
+      "ihk_get_num_reserved_mem_chunks",
+      "ihk_query_mem",
+      "ihk_release_mem",
+      "ihk_create_os",
+      "ihk_get_num_os_instances",
+      "ihk_get_os_instances",
+      "ihk_destroy_os",
+      "ihk_os_assign_cpu",
+      "ihk_os_assign_cpu_str",
+      "ihk_os_get_num_assigned_cpus",
+      "ihk_os_query_cpu",
+      "ihk_os_release_cpu",
+      "ihk_os_set_ikc_map",
+      "ihk_os_set_ikc_map_str",
+      "ihk_os_get_ikc_map",
+      "ihk_os_assign_mem",
+      "ihk_os_get_num_assigned_mem_chunks",
+      "ihk_os_query_mem",
+      "ihk_os_release_mem",
+      "ihk_os_get_eventfd",
+      "ihk_os_load",
+      "ihk_os_kargs",
+      "ihk_os_kargs_str",
+      "ihk_create_os_str",
+      "ihk_os_boot",
+      "ihk_os_shutdown",
+      "ihk_os_get_status",
+      "ihk_os_get_kmsg_size",
+      "ihk_os_kmsg",
+      "ihk_os_clear_kmsg",
+      "ihk_os_get_num_numa_nodes",
+      "ihk_os_query_free_mem",
+      "ihk_os_query_total_mem",
+      "ihk_os_get_num_pagesizes",
+      "ihk_os_get_pagesizes",
+      "ihk_os_getrusage",
+      "ihk_os_setperfevent",
+      "ihk_os_perfctl",
+      "ihk_os_getperfevent",
+      "ihk_os_freeze",
+      "ihk_os_thaw",
+      "ihk_os_makedumpfile",
+      "ihk_set_loglevel"
+    ],
+    "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib_private.h": [
+      "ihklib_device_open",
+      "ihklib_os_open",
+      "ihklib_os_query_mem_sysfs",
+      "cpu_str2count",
+      "cpu_str2req",
+      "cpu_req2str",
+      "mem_str2count",
+      "mem_str2req",
+      "mem_req2str",
+      "ikc_str2count",
+      "ikc_str2req",
+      "ikc_req2str",
+      "_ihk_reserve_cpu_str",
+      "_ihk_reserve_mem_str"
+    ]
+  },
+  "implementation_export_only": [
+    "__argc",
+    "__argv",
+    "_ihk_os_assign_cpu_str",
+    "_ihk_os_set_ikc_map_str",
+    "dump_reserve_mem_conf",
+    "namespace_files",
+    "parse_env"
+  ],
+  "no_exported_or_interposing_project_provider_in_consumer": true,
+  "actual_private_header_local_data": [
+    "ihklib_os_query_mem_type_str"
+  ],
+  "library_sha256": "962ced992676d3c3a445848070d264665d00ff904aa2b8ebc802c8e917ce4d5d",
+  "input_hashes": {
+    "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib.h": "00b5bc8a195fbb94e2b14f73c6925bb85621da8a33aa349d32f20c70dcc4055a",
+    "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihklib_private.h": "4f23ed46409f3ee55720cfb2f291b912ef7824e743c1dd6ba0f0f8f22af53320",
+    "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include/ihk/ihk_host_user.h": "2335260024075a08becbe74651162a950aee8bea603e9a451cb8bcae3aa0ef97",
+    "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/parser-abi-consumer.c": "6c9b782f4340366b0809b5594f9c47de404afc01c3246ce481a2dade59c388ec",
+    "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/run-parser-abi-consumer.py": "550a0d2740d27f6cb86a25149311134605d4cc7de5acb1127eb87711591df75b",
+    "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/required-exports.json": "3698c30c06e7751a78c2dd944169fab14f78d506212bf5b0238435624e83ee2b"
+  },
+  "output_hashes": {
+    "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/parser-abi-consumer": "579efae21f87b844cc8f9feab048cca5d642695c7feef930ec4240f49a484ee9",
+    "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/parser-consumer-run.stdout": "a0c3b0b2c9b689ca455a2944f9ffde5a5810854067495eeb95ffeea8f3d97249",
+    "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/parser-consumer-run.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "limitations": [
+    "Export types are symbol-kind checks, not proof of all 70 function signatures or behavior.",
+    "Parser API declarations are in the actual private header; the consumer tests the exported C ABI, not public-header API membership.",
+    "The actual private header defines initialized ihklib_os_query_mem_type_str data. It remains a local hidden data symbol, cannot interpose on the shared library and supplies no parser provider; independent nm checks verify no global required project provider is defined in the consumer.",
+    "No OS/device API, kernel/module operation or synthetic project provider."
+  ]
+}

@@ -1,0 +1,261 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "independent": true,
+  "reviewer": "/root/custody_release_review",
+  "decision": "DIAGNOSED_OBSERVATION_COMPLETION_RACE_STRICT_F05_NATIVE_LIFECYCLE_REMAINS_FAIL",
+  "runtime_authority": null,
+  "actual_attempt": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/f05v2n4/attempt-6e8068fed0e1dd27d6724a46ffbbff14/serial.log",
+      "bytes": 79827,
+      "sha256": "94aff962752ffc28b1caac963347a83aa49fae5065f0d49e043fd2725fc438f6"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/f05v2n4/attempt-6e8068fed0e1dd27d6724a46ffbbff14/result.json",
+      "bytes": 3034,
+      "sha256": "d3d715aeeea6969eca81ee2f102f1fc7043ffa728f2ac3cf4d26a2777fc35f09"
+    }
+  ],
+  "manifest": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/root-adopted-stage-source-1/offline-materialization-1/manifest.HOST-STATIC.json",
+    "bytes": 9810,
+    "sha256": "a035f93e5193e92183ac47b3c4271a40e4184563489f7cb7aa59bc7bebff573a"
+  },
+  "evaluator": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/bound-native-runtime-1/native_diagnostic.py",
+    "bytes": 100261,
+    "sha256": "529830adcd6fafa13979bf6036b2812c88630c5e0112ce4d80f9fc28cc30d4da"
+  },
+  "module_build_source_receipt": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/resource-parallelism/sdk-operation/inert-rust-boilerplate-correction-1/workspace/native-running-modules-candidate-15817c3475cb4d3da5b21edd26b5ffb2/evidence/receipt.json",
+    "bytes": 28840,
+    "sha256": "1c320375b8bebf122ec7f7f397022e559275b88a4f410f28b2536ca5abbefef3"
+  },
+  "selected_exact_host_Rust_sources": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/resource-parallelism/sdk-operation/inert-rust-boilerplate-correction-1/workspace/native-running-modules-candidate-15817c3475cb4d3da5b21edd26b5ffb2/modules/smp_procfs.rs",
+      "bytes": 28512,
+      "sha256": "4ae39992d0354b2f0b32de4a3e26ce8a621ede6dff69dd92ce303d4ab90232ea"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/resource-parallelism/sdk-operation/inert-rust-boilerplate-correction-1/workspace/native-running-modules-candidate-15817c3475cb4d3da5b21edd26b5ffb2/modules/procfs_objects.rs",
+      "bytes": 19245,
+      "sha256": "4d1247a87706e94fa75d7bea667d9349d48b7c525eba99d02688a87f5369411c"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/resource-parallelism/sdk-operation/inert-rust-boilerplate-correction-1/workspace/native-running-modules-candidate-15817c3475cb4d3da5b21edd26b5ffb2/modules/smp_application.rs",
+      "bytes": 74960,
+      "sha256": "6adb4d11e7285caadd699bf22359bf21922f7dbfa4828b12b7a96fb7a1b07be0"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/resource-parallelism/sdk-operation/inert-rust-boilerplate-correction-1/workspace/native-running-modules-candidate-15817c3475cb4d3da5b21edd26b5ffb2/modules/mcctrl_process.rs",
+      "bytes": 54854,
+      "sha256": "8bf30cd8ae79cc778bd91816f30aaf7a37ccc2aab59822ca2a03587426a212b8"
+    }
+  ],
+  "selected_exact_current110_LWK_Rust_sources": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/rust-subtree/fork_final_ack.rs",
+      "bytes": 5506,
+      "sha256": "093f742dfe4969d78b2ca6b8b643df94042945e890d26003dec9d1818c34826b"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/rust-subtree/fork_runnable_child.rs",
+      "bytes": 12855,
+      "sha256": "a9387ae13b85785176b95fc6ddc79b08bd31dd7960b0730307b41b5a05b5d137"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/rust-subtree/host_helpers.rs",
+      "bytes": 180826,
+      "sha256": "79ec492e531d9793206cd9ebc84482ab695fcfdc284675492d81ee5a072eeaac"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/rust-subtree/object_helpers.rs",
+      "bytes": 235965,
+      "sha256": "7444ec38a30cdb2b0505b939f02eacb5018d3732a97fcd12b3eba189133f0f06"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/rust-subtree/process_helpers.rs",
+      "bytes": 608687,
+      "sha256": "b93ee208c78e05243cdece49bf6d7ceb50b9afc3c3c2b62af1637c2fc4346d91"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/rust-subtree/procfs.rs",
+      "bytes": 36968,
+      "sha256": "6a3609c3ced73cafdffec032e3f2876e08eee5628ba2470137729ca7a804c90e"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/rust-subtree/syscall_policy.rs",
+      "bytes": 1263273,
+      "sha256": "2ddde21dfcf32402d281d7ba70e62d765cb60e60bf225d7303b17221959a5477"
+    }
+  ],
+  "collector_source": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-helper-failure-export-1/errno-correction-1/native_diagnostic_guest_collector.helper-diagnostic.c",
+    "bytes": 25205,
+    "sha256": "b3fc4fe0d46ae95a0b428a3c2ff46a8836affc0d929da9a2809cbe3e15b5e2d6"
+  },
+  "frozen_tuple": {
+    "modules": [
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/module-runtime-snapshots-1/ihk.ko",
+        "sha256": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c",
+        "size": 1527808
+      },
+      {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-final-native-preparation-new12h-1/offline-materialization-1/runtime-inputs/ihk-smp-x86_64.ko",
+        "sha256": "887dc3567e6035c921588e61b45b41a8ef32a972d142fe2ba82ec48442353b12",
+        "size": 13098896,
+        "mode": 33188
+      },
+      {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-final-native-preparation-new12h-1/offline-materialization-1/runtime-inputs/mcctrl.ko",
+        "sha256": "57546af5110c0674b307e5ac5a328228abbe784f890f69521db5f594f21f6ae8",
+        "size": 2578512,
+        "mode": 33188
+      }
+    ],
+    "image": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT110-HOST19-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/mckernel.img",
+      "size": 10255112,
+      "sha256": "60e62f97ef48ecaf14174af1c5b75d7181969f439c1b45c618d6c16d4bc40d57",
+      "mode": 33261
+    },
+    "mcexec": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/launcher-runtime-snapshot-1/mcexec",
+      "sha256": "dca0250159ce04a272a72dd1217213a4b6e0f21ec8c21da211eede250c451954",
+      "size": 394648
+    },
+    "collector": {
+      "mode": 33277,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-helper-failure-export-1/errno-correction-1/collector-helper-diagnostic",
+      "sha256": "c020a8e0ab43e222caf901d92bfecb2a8d8cf20ea0b539910a17a578f1fd12fc",
+      "size": 1021320
+    }
+  },
+  "actual_observations": {
+    "parent": 254,
+    "child": 257,
+    "stdout_observed": 204,
+    "stdout_exact": true,
+    "raw_wait_status": 0,
+    "stderr_observed": 0,
+    "collector_procfs_empty": true,
+    "serial_rows": [
+      {
+        "serial_line": 902,
+        "text": "<6>[   32.383722] ihk_smp_x86_64: IHK-SMP: application SCHEDULE os=0 generation=1 pid=254 cpu=0"
+      },
+      {
+        "serial_line": 903,
+        "text": "<6>[   32.393594] ihk_smp_x86_64: IHK-SMP: application procfs published os=0 generation=1 pid=254 tid=254"
+      },
+      {
+        "serial_line": 949,
+        "text": "<6>[   32.735599] ihk_smp_x86_64: IHK-SMP: application procfs published os=0 generation=1 pid=257 tid=257"
+      },
+      {
+        "serial_line": 962,
+        "text": "<6>[   32.768097] mcctrl: application_syscall=delivered os=0 generation=1 pid=257 worker=29 delivery=36 cpu=0 number=231"
+      },
+      {
+        "serial_line": 969,
+        "text": "<6>[   32.777829] mcctrl: application_process=cleanup_requested os=0 generation=1 pid=257 intent_errno=0"
+      },
+      {
+        "serial_line": 972,
+        "text": "<6>[   32.784868] ihk_smp_x86_64: IHK-SMP: application cleanup ACK os=0 generation=1 pid=257 token=27 errno=0 abandoned=0"
+      },
+      {
+        "serial_line": 973,
+        "text": "<6>[   32.788843] ihk_smp_x86_64: IHK-SMP: application retirement os=0 generation=1 pid=257 token=40 errno=-11"
+      },
+      {
+        "serial_line": 992,
+        "text": "<6>[   32.838788] mcctrl: application_syscall=delivered os=0 generation=1 pid=254 worker=6 delivery=50 cpu=0 number=231"
+      },
+      {
+        "serial_line": 994,
+        "text": "<6>[   32.843222] mcctrl: application_process=cleanup_requested os=0 generation=1 pid=254 intent_errno=0"
+      },
+      {
+        "serial_line": 995,
+        "text": "<6>[   32.848839] ihk_smp_x86_64: IHK-SMP: application cleanup ACK os=0 generation=1 pid=254 token=3 errno=0 abandoned=0"
+      },
+      {
+        "serial_line": 996,
+        "text": "<6>[   32.851127] ihk_smp_x86_64: IHK-SMP: application procfs deleted os=0 generation=1 pid=257 tid=257"
+      },
+      {
+        "serial_line": 997,
+        "text": "<6>[   32.852708] ihk_smp_x86_64: IHK-SMP: application retirement os=0 generation=1 pid=254 token=51 errno=-11"
+      }
+    ],
+    "child_write1_RET0_before_child_terminal231": true,
+    "parent_wait61_RET257_after_child_terminal": true,
+    "parent_procfs_deletion_absent": true,
+    "both_real_cleanup_ACK_errno": 0,
+    "both_real_cleanup_ACK_abandoned": 0,
+    "retirement_results_observed": [
+      -11,
+      -11
+    ],
+    "successful_retirement_result_observed": false,
+    "child_delete_after_parent_terminal": true,
+    "reaped_ns": 32870319991,
+    "report_finished_ns": 33075767052,
+    "post_reap_report_elapsed_seconds": 0.205447061
+  },
+  "source_conclusions": [
+    {
+      "fact": "Visible procfs removal and final lifecycle ledger retirement are distinct domains.",
+      "source": "smp_procfs.rs:606 close sets context.live=false;847-862 retire removes Published nodes once false;821-843 delete logs only actual advisory TID_DELETE and updates tids. threads_retired at612 requires main_seen and tids empty.",
+      "implication": "Collector can truthfully see numeric directory emptiness while parent deletion ledger and final retirement remain outstanding. Root cleanup ACK errno0 does not prove final LWK process disappearance."
+    },
+    {
+      "fact": "Collector stops its retirement loop at the first empty numeric directory and captures the kernel log once.",
+      "source": "collector:287-298 scans numeric entries in /proc/mcos0;535-543 exits immediately on empty;555-560 single klogctl(3) snapshot;563 restores then suppresses printk for publication.",
+      "implication": "Correct pathname, insufficient completion condition. Later deletion/retry logs may occur outside the retained snapshot while console is suppressed. procfs_empty=true cannot override evaluator1602 or1338."
+    },
+    {
+      "fact": "EAGAIN is an authentic negative observation and schedules a later query.",
+      "source": "CURRENT110 host_helpers.rs:6009-6028 locked find_process returns0 only on absence, -EAGAIN on presence. Exact SMP6adb request_cleanup146-163 and accept685-697 retries at integer ktime_get_seconds()+1.",
+      "implication": "Both processes existed at their queried instants. Absence of later0 in this short snapshot cannot distinguish eventual completion from a persistent reference leak. Do not claim either eventual success or a proven leak."
+    },
+    {
+      "fact": "LWK DELETE notification is asynchronous; no parent-terminal causal barrier is established by wait4 alone.",
+      "source": "object_helpers.rs:2518-2527 waits for CREATE only; DELETE returns send status. procfs.rs315-348 sends DELETE; process_helpers.rs11578-11619 only emits deletion when final thread ref decrements to zero. fork_runnable_child173-180 explicitly says wait/return does not imply quiescence.",
+      "implication": "Child delete line996 after parent terminal line992 is consistent with independent delivery/observation. It still violates the frozen F05 predicate1626; post-exit collector waiting cannot change that captured order."
+    }
+  ],
+  "classification": {
+    "proven_implementation_defect": "Collector completion predicate observes namespace disappearance instead of final lifecycle completion and snapshots too early. This is an observation implementation fault.",
+    "kernel_unsafe_lifecycle_fault_proven": false,
+    "persistent_kernel_reference_leak_proven": false,
+    "eventual_parent_retirement_proven": false,
+    "remaining_original_predicates": [
+      "Complete positive parent+child publication/deletion1602",
+      "Child deletion strictly before parent terminal1626",
+      "Parent real ACK and unique bounded fresh retirement attempts ending errno0 via1332-1338",
+      "Retained original strict235/227 full trace/ABI/ownership predicates"
+    ]
+  },
+  "next_bounded_source_work": [
+    "Prepare a Rust observer successor that keeps the exact stdout/status/timeout and all original evaluator assertions, waits within the existing bounded retirement window for actual selected owner lifecycle completion as well as procfs emptiness, and captures complete raw logs through that boundary. Use original retry result semantics (fresh tokens, interim-11, final0), never label namespace disappearance as ledger retirement. Cheap offline event-sequence fixtures must cover visible-empty-before-DELETE, -11 then0, final0 missing, wrong generation/PID, duplicate tokens and unreadable procfs.",
+    "Resolve the child-before-parent-terminal requirement with an explicit causal synchronization design in the selected Rust lifecycle/terminal path before another native attempt; do not merely wait after parent exit or filter/reorder logs. Use the real linked child ownership and advisory event ledger; retain resources on uncertainty and avoid blocking under slot/registry locks or retaining invalid task pointers. This diagnosis does not authorize a destructor/refcount repair; its exact safe barrier location still needs focused source review.",
+    "Only after the concrete source correction and offline observer regression pass should Root separately review current source/artifact/resource/native release. Preserve this original failure and all original235/227 obligations; do not replay unchanged design."
+  ],
+  "actions": {
+    "read_hash_source_and_retained_log_analysis_only": true,
+    "workload_or_replay": 0,
+    "compiler": 0,
+    "native_or_resource_query": 0,
+    "guard": 0,
+    "cleanup": 0,
+    "canonical_edits": 0,
+    "subagents": 0
+  },
+  "ownership": "Actual native ownership retirement is assessed independently by the daemon owner; this diagnosis supplies no free-resource or retirement grant."
+}

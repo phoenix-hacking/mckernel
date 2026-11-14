@@ -1,0 +1,20 @@
+--- a/arch/x86_64/kernel/syscall.c
++++ b/arch/x86_64/kernel/syscall.c
+@@ -3684,6 +3684,9 @@
+ #endif
+ }
+ 
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++extern int move_pages_smp_handler(int cpu_index, int nr_cpus, void *arg);
++#else
+ int move_pages_smp_handler(int cpu_index, int nr_cpus, void *arg)
+ {
+ 	int i, i_s, i_e, phase = 1;
+@@ -4037,6 +4040,7 @@
+ 
+ 	return mpsr->phase_ret;
+ }
++#endif /* complete SMP migration callback is selected from Rust */
+ 
+ #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ time_t time(void) {

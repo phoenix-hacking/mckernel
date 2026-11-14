@@ -1,0 +1,103 @@
+{
+  "status": "DERIVED_GENUINE_RUST_ONLY_FINITE_PROFILE_UNEXECUTED",
+  "at_utc": "2026-11-11T16:14:23.714380+00:00",
+  "supported_features": [
+    "compiler-builtins",
+    "no-asm"
+  ],
+  "actual_version": "compiler_builtins0.1.160 from the retained sameRust1.95 source",
+  "edition": 2024,
+  "crate_attribute": "feature compiler-builtins activates #![compiler_builtins]; real #![no_builtins] prevents recursive lowering and #![no_std] prevents libstd.",
+  "no_alternate_or_stub_body": true,
+  "cfgs": [
+    "feature=\"compiler-builtins\"",
+    "feature=\"no-asm\"",
+    "intrinsics_enabled",
+    "optimizations_enabled",
+    "feature=\"unstable-intrinsics\"",
+    "feature=\"mem-unaligned\""
+  ],
+  "derived_build_rs_decisions": [
+    {
+      "source": "Cargo.toml:default features",
+      "decision": "compiler-builtins ON; no-asm is an actual supported feature; no c/mem/mangled-names/rustc-dep-of-std/unstable-public-internals option enabled."
+    },
+    {
+      "source": "configure.rs::configure_aliases",
+      "decision": "x86_64 is neither thumb nor x86, so thumb/thumb_1/x86_no_sse aliases are absent. f16_enabled/f128_enabled are explicitly unset finite inputs, not a statement about native target support."
+    },
+    {
+      "source": "build.rs::configure_libm",
+      "decision": "intrinsics_enabled always ON; no-asm makes arch_enabled absent; O2 selects optimizations_enabled; nightly feature unstable-intrinsics ON."
+    },
+    {
+      "source": "build.rs::main x86_64 branch",
+      "decision": "feature mem-unaligned ON. x86_64-unknown-linux-gnu does not trigger automatic named mem exports; C compiler branch is absent because c is OFF."
+    },
+    {
+      "source": "src/macros.rs mem_builtin",
+      "decision": "Real internal Rust memory routines remain compiled; feature mem OFF omits only optional named weak C mem aliases. Existing real McKernel memory providers remain the final image obligation."
+    }
+  ],
+  "compiler_codegen_flags": [
+    "-C",
+    "panic=abort",
+    "-C",
+    "opt-level=2",
+    "-C",
+    "debuginfo=2",
+    "-C",
+    "code-model=large",
+    "-C",
+    "relocation-model=static",
+    "-C",
+    "no-redzone=yes",
+    "-C",
+    "force-frame-pointers=yes",
+    "-C",
+    "overflow-checks=off",
+    "-C",
+    "force-unwind-tables=no",
+    "-C",
+    "no-vectorize-loops",
+    "-C",
+    "no-vectorize-slp",
+    "-C",
+    "target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma",
+    "-Z",
+    "dep-info-omit-d-target",
+    "-Z",
+    "binary-dep-depinfo"
+  ],
+  "target": "Same native compiler target as the real existing kernel (no new --target or custom target). x86_64-unknown-linux-gnu is the same195 compiler host identity already bound by the existing toolchain, not an additional ABI waiver.",
+  "metadata_identity": "mckernel_kernel_195_builtins",
+  "extra_filename": "none; output filenames explicit",
+  "required_Rust_compile_environment": {},
+  "build_script_executed": false,
+  "build_script_reason": "The selected branch is statically derived from pinned source; direct rustc receives its semantic cfgs, so no extra HOST build-script compiler/executable is introduced.",
+  "build_script_diagnostic_env_outputs_not_required_by_selected_Rust_tree": [
+    "CFG_CARGO_FEATURES",
+    "CFG_OPT_LEVEL",
+    "CFG_TARGET_FEATURES"
+  ],
+  "generated_OUT_DIR_or_C_or_compiler_rt_files_required_for_this_branch": [],
+  "check_cfg_directives": "Build-script rustc-check-cfg messages declare lint expectations; no extra --check-cfg policy is introduced, matching the existing direct rustc rule.",
+  "actually_disabled_aliases": [
+    "arch_enabled",
+    "f16_enabled",
+    "f128_enabled",
+    "thumb",
+    "thumb_1",
+    "x86_no_sse",
+    "kernel_user_helpers",
+    "all optimized-c cfgs"
+  ],
+  "explicit_no_fallback": [
+    "HOST prebuilt core/builtins",
+    "Linux panic-placeholder compiler_builtins.rs",
+    "libstd/CRT/libc",
+    "C compiler or prebuilt compiler-rt",
+    "new panic strategy or disabled safety checks"
+  ],
+  "unproved": "No compiler/type/codegen/link success has occurred. Real upstream builtins includes float/libm code: all-SIMD-off compatibility may produce a genuine diagnostic and must be measured by the first admitted compile, not bypassed by a replacement."
+}

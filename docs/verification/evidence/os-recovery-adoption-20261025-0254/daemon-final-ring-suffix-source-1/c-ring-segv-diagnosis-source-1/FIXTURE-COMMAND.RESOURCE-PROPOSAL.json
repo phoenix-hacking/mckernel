@@ -1,0 +1,92 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PROPOSAL_NOT_EXECUTABLE_UNTIL_FRESH_NAMESPACE_BINDING_AND_REVIEW",
+  "old_command": [
+    "/usr/bin/env",
+    "RUST_MIN_STACK=2097152",
+    "IHKMOND_FIXTURE_OUTPUT_BINDING=/preparation/OUTPUT-BINDING.ACTUAL.json",
+    "IHKMOND_FIXTURE_NONCE=ACTUAL_REQUEST_NONCE",
+    "/usr/bin/taskset",
+    "--cpu-list",
+    "2",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=60:60",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--core=0:0",
+    "--stack=2097152:2097152",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-daemon-validation/read-errors-successor-1/fixture/run_final_suffix.py",
+    "--execute"
+  ],
+  "proposed_command": [
+    "/usr/bin/env",
+    "RUST_MIN_STACK=2097152",
+    "IHKMOND_FIXTURE_OUTPUT_BINDING=/preparation/OUTPUT-BINDING.ACTUAL.json",
+    "IHKMOND_FIXTURE_NONCE=ACTUAL_REQUEST_NONCE",
+    "/usr/bin/taskset",
+    "--cpu-list",
+    "2",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=60:60",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--core=0:0",
+    "--stack=8388608:8388608",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-daemon-validation/read-errors-successor-1/fixture/run_final_suffix.py",
+    "--execute"
+  ],
+  "required_source_overlays": {
+    "read-errors-successor-1/fixture/owned_process.py": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/c-ring-segv-diagnosis-source-1/owned_process_stack8.py"
+  },
+  "fixture_controller_stack": [
+    8388608,
+    8388608
+  ],
+  "child_stack_limits": {
+    "ring-C": [
+      8388608,
+      8388608
+    ],
+    "ring-Rust": [
+      2097152,
+      2097152
+    ],
+    "oversize-Rust": [
+      2097152,
+      2097152
+    ]
+  },
+  "Rust_worker_environment": {
+    "RUST_MIN_STACK": "2097152"
+  },
+  "driver_preexec_stack": [
+    8388608,
+    8388608
+  ],
+  "unchanged_limits": {
+    "AS": 2147483648,
+    "CPU": 60,
+    "FSIZE": 33554432,
+    "NOFILE": 256,
+    "CORE": 0,
+    "child_wall_seconds": 8,
+    "fixture_wall_seconds": 90,
+    "pids": 64,
+    "container_CPUs": "2-5",
+    "container_memory": 12884901888
+  },
+  "compilers": 0,
+  "prefix_replay": false,
+  "old_nonce_consumed": "d27509b612927d235adf7f07748f3f82",
+  "new_nonce_required": true
+}

@@ -1,0 +1,82 @@
+--- a/scripts/run_os_goal.py
++++ b/scripts/run_os_goal.py
+@@ -1636,7 +1636,8 @@
+             raise RuntimeError("Goal objective changed externally; launcher will not alter it.")
+         receipt = None
+         transport_receipt = None
+-        if current and current["status"] == "active":
++        paused_active = bool(current and current["status"] == "active")
++        if paused_active:
+             before = dict(current)
+             generation = self.primary_stop_generation
+             current = self.rpc.call("thread/goal/set", {"threadId": ident, "status": "paused"})["goal"]
+@@ -1683,9 +1684,18 @@
+         if transport_receipt is not None:
+             fields["transport_shutdown_pause"] = transport_receipt
+         self.save(**fields)
+-
+-    def request_checkpoint(self):
+-        self.pause()
++        return bool(paused_active and current and current["status"] == "paused")
++
++    def request_checkpoint(self, reason=None):
++        if reason is not None and (self.stop_reason or self.stop_now):
++            return False
++        paused_active = self.pause()
++        if reason is not None:
++            # The pause-time read may observe a newer terminal goal or stop.
++            # Commit milestone checkpointing only after pausing an active goal.
++            if not paused_active or self.stop_reason or self.stop_now:
++                return False
++            self.stop_reason = reason
+         self.checkpoint_requested = True
+         ident = self.state["thread_id"]
+         turn = self.active.get(ident)
+@@ -1703,6 +1713,7 @@
+                     "complete or resume it during shutdown. A subsequent launcher "
+                     "invocation authorizes continuation; this pause is not permanent."}]})
+         self.output.notice("Checkpoint requested; waiting for bounded active work to finish.")
++        return True
+ 
+     def stop(self):
+         if not self.rpc or self.stopping or not self.controlled:
+@@ -1768,15 +1779,6 @@
+                                 and not self.stop_reason and not self.stop_now
+                                 and not self.checkpoint_requested)
+                 current_turn = (self.state.get("last_turn") or {}).get("id")
+-                if (getattr(self.args, "stop_after_m14_m15", False)
+-                        and not self.stop_reason and not self.stop_now and not self.checkpoint_requested
+-                        and (now >= next_acceptance_check or current_turn != acceptance_turn)):
+-                    next_acceptance_check, acceptance_turn = now + 30, current_turn
+-                    if m14_m15_closed(self.repo):
+-                        self.stop_reason = "requested_milestones_complete"
+-                        self.request_checkpoint()
+-                        stop_deadline = min(deadline, now + self.args.grace_seconds)
+-                        blocked_wait = False
+                 if self.stop_now:
+                     code = 21 if self.stop_reason in {"quota_exhausted", "included_usage_guard",
+                                                       "included_usage_unknown", "credit_balance_decreased",
+@@ -1784,10 +1786,21 @@
+                                                       "chatgpt_auth_changed", "credit_budget_exhausted",
+                                                       "credit_budget_unknown"} else 23
+                     break
+-                if (status in TERMINAL_CODES and not self.checkpoint_requested
+-                        and not blocked_wait and not self.stop_reason):
++                if (status in TERMINAL_CODES and not blocked_wait
++                        and ((not self.checkpoint_requested and not self.stop_reason)
++                             or (self.stop_reason == "requested_milestones_complete"
++                                 and status != "paused"))):
+                     code = TERMINAL_CODES[status]
+                     break
++                if (getattr(self.args, "stop_after_m14_m15", False) and status == "active"
++                        and not self.stop_reason and not self.stop_now and not self.checkpoint_requested
++                        and (now >= next_acceptance_check or current_turn != acceptance_turn)):
++                    next_acceptance_check, acceptance_turn = now + 30, current_turn
++                    if m14_m15_closed(self.repo):
++                        if not self.request_checkpoint("requested_milestones_complete"):
++                            continue
++                        stop_deadline = min(deadline, now + self.args.grace_seconds)
++                        blocked_wait = False
+                 if blocked_wait:
+                     self.review_blocked_goal()
+                     if self.stop_now:

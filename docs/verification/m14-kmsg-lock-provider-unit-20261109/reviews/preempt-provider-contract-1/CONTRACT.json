@@ -1,0 +1,117 @@
+{
+  "status": "SOURCE_CONTRACT_GO_FINITE_PREEMPT_ADDITION_PENDING_ROOT_SELECTION",
+  "owner": "/root/create_empty_entry_parity_high",
+  "created_utc": "2026-11-09T18:02:59.362316+00:00",
+  "source_bindings": {
+    "/home/holden/mckernel/kernel/rust/cls.rs": "c0260e7634d53fcc0873746af8bd16b6691ee0a4b7f394ca18896aef070f6bba",
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "/home/holden/mckernel/kernel/rust/init.rs": "42ca08af0f1087b3914a58e9c445fff6ae27e3b76da2ee2ee3255181bb4b8886",
+    "/home/holden/mckernel/kernel/include/cls.h": "19719fe663c33bc3aec62875baa7f1b8d4a0e0042b5a8aae94fe7b6c9799a4c1",
+    "/home/holden/mckernel/kernel/rust/lib.rs": "e6e8f0203ea587789977c7dd23a1e7bbd8f89a9f6c84b8aeaa874b2f0880fe0b",
+    "/home/holden/mckernel/kernel/CMakeLists.txt": "1254c624f883166d3eaefb5e795571afcaf962ff10b0991524b317be71bec057"
+  },
+  "exact_added_definitions": {
+    "atomic_counter": {
+      "source": "/home/holden/mckernel/kernel/rust/cls.rs",
+      "definition_start_line": 114,
+      "fn_line": 115,
+      "exact_definition": "#[inline(always)]\nunsafe fn atomic_counter(counter: *mut crate::abi::IhkAtomic) -> &'static AtomicI32 {\n    AtomicI32::from_ptr(&raw mut (*counter).counter)\n}",
+      "sha256": "043ac5c0c6a26aac28e61989a3b8efefad94735a91305be84650974429813a81"
+    },
+    "this_cpu_local_var": {
+      "source": "/home/holden/mckernel/kernel/rust/cls.rs",
+      "definition_start_line": 119,
+      "fn_line": 120,
+      "exact_definition": "#[inline(always)]\nunsafe fn this_cpu_local_var() -> *mut CpuLocalVar {\n    get_cpu_local_var(ihk_mc_get_processor_id())\n}",
+      "sha256": "cb11102230fa32af4efc52aa2ddcecfd158a045d7103e642011c906e089c250e"
+    },
+    "preempt_enable": {
+      "source": "/home/holden/mckernel/kernel/rust/cls.rs",
+      "definition_start_line": 177,
+      "fn_line": 178,
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn preempt_enable() {\n    if cpu_local_var_initialized != 0 {\n        let v = this_cpu_local_var();\n        atomic_counter(&raw mut (*v).no_preempt).fetch_sub(1, Ordering::SeqCst);\n    }\n}",
+      "sha256": "a0b9215c18db34c308710d36ffa894ca0dba20a7f595f6c4dc5b8b7230862512"
+    },
+    "preempt_disable": {
+      "source": "/home/holden/mckernel/kernel/rust/cls.rs",
+      "definition_start_line": 185,
+      "fn_line": 186,
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn preempt_disable() {\n    if cpu_local_var_initialized != 0 {\n        let v = this_cpu_local_var();\n        atomic_counter(&raw mut (*v).no_preempt).fetch_add(1, Ordering::SeqCst);\n    }\n}",
+      "sha256": "5ec6f876c93a21affacae325309825094a556e54d1a01e1b2311e8c2f48e51de"
+    }
+  },
+  "exact_added_original_storage": {
+    "source": "/home/holden/mckernel/kernel/rust/cls.rs",
+    "line": 69,
+    "exact_definition": "#[no_mangle]\npub static mut cpu_local_var_initialized: CInt = 0;",
+    "sha256": "831a3dc1866f05e3de317003cf7b8ab71506f6031219831d7b647fd86eb3f2ba",
+    "C_ABI": "Existing NoMangleglobal CInt(i32),size4/align4,originalinitializer0. No newfakeinitializedpreemptstate. This must be ONEglobalowner, notduplicatedwiththefuturefullcls/globaldataowner.",
+    "not_a_runtime_proof": "Original0 means entry skipscounteroperation beforebootinitialization. A test/claimofzero-onlyfunctionreturn wouldnotqualifylivepreemption."
+  },
+  "genuine_imports": [
+    {
+      "name": "get_cpu_local_var",
+      "actual_C_ABI": "unsafeexternC fn(CInt)->*mutCpuLocalVar",
+      "new_unit_declaration": "fn get_cpu_local_var(id: CInt) -> *mut CpuLocalVar;",
+      "current_owner_kind": "T",
+      "bytes": 24,
+      "fact": "Alreadyqualifiedactuallowerprovider exportsactualclv.add(id asusize), no copyingitsdefinition/clvglobal."
+    },
+    {
+      "name": "ihk_mc_get_processor_id",
+      "actual_C_ABI": "unsafeexternC fn()->CInt",
+      "new_unit_declaration": "fn ihk_mc_get_processor_id() -> CInt;",
+      "current_owner_kind": "T",
+      "bytes": 77,
+      "fact": "AlreadyqualifiedactualnativeCPUprovider; MSR/GS/runtime/current-freeholdsremain. No equivalenceorCPUconstant."
+    }
+  ],
+  "actual_call_chain": "Eachpreemptentry checksactualcpu_local_var_initialized!=0; originalprivate this_cpu_local_var callsCABI get_cpu_local_var(ihk_mc_get_processor_id()); originalprivateatomic_counter mapsactualIhkAtomic.counter toAtomicI32::from_ptr,thenenablefetch_sub1/disablefetch_add1, Ordering::SeqCst.",
+  "ABI": {
+    "base": "Directactualabi.rsinclude; CInt=i32. IhkAtomicreprC{counter:CInt},4byte/align4,counteroffset0; actualCpuLocalVarreprC align64,fieldno_preempt:IhkAtomic. CurrentnonTOFU no_preemptoffset7976 peroriginalassert2505; TOFU24432branchnotselected. Useactualtype,notahandwrittenprefix/layout orhiddenpointerarithmetic.",
+    "atomic": "AtomicI32::from_ptr usesoriginalunsafehelper andactualalignedlive4bytecounter. KeeporiginalSeqCstfetchadd/sub andoriginalflagsguardread, no newfence/semanticrewrite.",
+    "private_helpers": "Both source-localRusthelpers retain originalinline(always)/unsafe signatures. this_cpu_local_var mayappearalreadyasprivateinlowerunit, but noexternRust/private-mangledimport or duplicatepublicgetteris introduced. Independentcrate-localinlining/helpers maycoexist while actualclv/CPU/globalflagowners remainunique. Actualemittedmetadata mustbeobserved, no privatecountguess.",
+    "public_prototypes": "BothoriginalNoMangle externC fn()->void; realarch-lock.h alreadydeclarespreemptfunctions, no callback/provider substitution."
+  },
+  "actual_boot_writer_outside_addition": {
+    "writer_source_only": {
+      "source": "/home/holden/mckernel/kernel/rust/cls.rs",
+      "definition_start_line": 124,
+      "fn_line": 125,
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn cpu_local_var_init() {\n    let bytes = size_of::<CpuLocalVar>() * (num_processors as usize);\n    let nr_pages = (bytes + PAGE_SIZE - 1) >> PAGE_SHIFT;\n    let base = _ihk_mc_alloc_aligned_pages_node(\n        nr_pages as CInt,\n        0,\n        IHK_MC_AP_CRITICAL as CULong,\n        -1,\n        IHK_MC_PG_KERNEL,\n        CULong::MAX,\n        file_ptr(),\n        line!() as CInt,\n    )\n    .cast::<CpuLocalVar>();\n\n    clv = base;\n    core::ptr::write_bytes(base.cast::<u8>(), 0, nr_pages * PAGE_SIZE);\n\n    let monitor_cpu = monitor\n        .cast::<u8>()\n        .add(size_of::<IhkOsMonitor>())\n        .cast::<crate::abi::IhkOsCpuMonitor>();\n    let rusage_cpu = core::ptr::addr_of_mut!(rusage.cpu).cast::<RusagePercpu>();\n\n    let mut cpu = 0;\n    while cpu < num_processors {\n        let v = base.add(cpu as usize);\n        (*v).monitor = monitor_cpu.add(cpu as usize);\n        (*v).rusage = rusage_cpu.add(cpu as usize);\n        init_list_head(&raw mut (*v).smp_func_req_list);\n        init_list_head(&raw mut (*v).backlog_list);\n        #[cfg(enable_per_cpu_alloc_cache)]\n        {\n            (*v).free_chunks.rb_node = null_mut();\n        }\n        cpu += 1;\n    }\n\n    cpu_local_var_initialized = 1;\n    fence(Ordering::SeqCst);\n}",
+      "sha256": "478cd08643e5ec43d1c6c5fadf134761b189e1604005503c0f87d94a2e85c485"
+    },
+    "caller": "kernel/rust/init.rs379 rest_init: handler_init\u2192ap_init\u2192cpu_local_var_init\u2192multi_intr_init\u2192nmi_init\u2192time_init. No callerbodyisimportedintoproposedcut.",
+    "writer_semantics": "Actualcpu_local_var_init computesnum_processors*sizeofCpuLocalVar pages,allocatesgenuine_ihk_mc_alloc_aligned_pages_nodecritical/kernel,setsoriginalclv,zerosrealallocatedrange,assignsmonitor/rusageandperCPUlists,thenwritesflag1andSeqCstfence. No fabricatedvalidCPU/array/readyflag introduced.",
+    "runtime_obligations": "Actualalignedallocation,size/CPUrange,initialzeroedno_preempt,monitor/rusagemappings,GS/CPUidentity/publication,thread/interruptnestedcounterlifetimeandshutdownmustbeprovenatactualsupportedboot. Writerorwholecls isnotpartofeligibleaddition; codegen/partialjoincannotestablishthese.",
+    "data_ownership": "Existingqualifiedclvglobalisreused,notredefined. Newlyproposedflag0isactualsingleoriginalstorage; bootwriterflag1assignmentremainsgenuineexternalinitialization responsibility."
+  },
+  "current_object_unique_owner_binding": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/output/kprintf_storage_partial.o",
+    "sha256": "ca06d0e48d88beb010df1d6a548c9978e4dd4445322b2e235e3896714b44b438",
+    "bytes": 31984,
+    "actual42owner_raw_nm": {
+      "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/joined-symbols.stdout",
+      "sha256": "ed7602f900301b23dba8bbd95cc17e06a421fa2074147c52605b94cef517680a"
+    },
+    "new_public_or_global_intersection": [],
+    "get_cpu_local_var_and_native_CPU_owners_reused": true,
+    "qualified_lower_source_review": {
+      "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/lower-provider-review-1/REVIEW.json",
+      "sha256": "b561384eb385a815849098feac035ab9e3a5e27015b45137c51fbcf4d5d4fd15"
+    },
+    "no_old_cohort_c205_or_private_symbol_reuse": true
+  },
+  "integration_proposal_not_selection": {
+    "addition": "4exactfunctions(2publicC+2privateinlinehelpers)+1originalglobalflag.",
+    "if_Root_selects": "Addasownfinitecls/preemptmoduletoAsunexecuted15function/12Cexport+2datapacket, yielding19functions/14originalCexports+3originaldatadefs. ExistingCPU/localprovidersstay2realU atstandalonecodegen,resolveonlyagainstactualqualifiedcohortinafutureseparatelyreviewedjoin. No speculativeemittedprivate/globalcount.",
+    "A_old_packet": "Frozen15onlyREQUESTcf62320e remainsimmutable/preparationuntilRootselects; do notsilentlywiden/overwriteit. Useclearlysupersedingprivateversion/newrequest ifselected. No15greenworkloadexists/replayrequired.",
+    "smallest_next_proof": "Rootselectaddition; Aincludeonlyexact4blocks+flag/directactualabi+2genuineCABIimports,sourceproof/newexactcodegenmetadatarequest. IndependentconcreteABI/storageuniqueowner/profileGOthenfreshRootadmission. Actualmetadata mustrecordallcompilerprivate/data/relocs andexactoneflaginstancebeforefuturejoin."
+  },
+  "eligibility_decision": "GO exactunheldfinitepreemptsourceadditionfornonexecutedcodegenpreparationonly. No genuine source/type closure blocker identified. Boot/runtime/native/GS/allocator/sourcecustody/heldgeneric-offloadacceptance staysOPEN; no compiler/function/hardware/native execution or canonicalimplementation isauthorized.",
+  "not_in_scope": "No wholecls/module/crate, cpu_local_var_initbodyimport, duplicatedget_cpu/get_thisCPU/clv/nativeCPU definitions, fabricatedinitializedflag/counters/callbacks,SDKremap,generic/exec/ACK/TID/XPMEMsourcebody, newlifecyclebehaviororacceptedF04replay.",
+  "compiler_link_runtime_function_native_execution": false,
+  "canonical_or_index_writes": false,
+  "Root_selection_or_execution_admission": false,
+  "new_gate_score_C_retirement_or_acceptance": false
+}

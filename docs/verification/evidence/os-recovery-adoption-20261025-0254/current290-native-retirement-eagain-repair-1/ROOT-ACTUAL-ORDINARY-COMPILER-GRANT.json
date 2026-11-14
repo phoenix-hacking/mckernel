@@ -1,0 +1,58 @@
+{
+  "author": "/root",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "GRANT_ONE_ORDINARY_COLLECTOR_AND_PARSER_COMPILE_AND_REGRESSION",
+  "commands": [
+    [
+      "/usr/bin/gcc",
+      "-std=gnu11",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-static",
+      "-fno-pie",
+      "-no-pie",
+      "-Wl,-z,noexecstack",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-native-retirement-eagain-repair-1/native_diagnostic_guest_collector.c",
+      "-o",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-native-retirement-eagain-repair-1/init"
+    ],
+    [
+      "/usr/bin/gcc",
+      "-std=gnu11",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-fno-pie",
+      "-no-pie",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-native-retirement-eagain-repair-1/test_retirement_parser.c",
+      "-o",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-native-retirement-eagain-repair-1/test_retirement_parser"
+    ],
+    [
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-native-retirement-eagain-repair-1/test_retirement_parser",
+      "/home/holden/mckernel-work/scratch/n290startup1/p/attempt-bcc6706bcaa04ddfb223d6aa142a5c50/serial.log"
+    ]
+  ],
+  "profile": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=536870912:536870912",
+    "--cpu=6:6",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--"
+  ],
+  "wall_seconds_per_command": 45,
+  "observed_at": 1793052464.259656,
+  "MemAvailable_bytes": 27410853888,
+  "RAM_reserved_bytes": 536870912,
+  "other_reserved_bytes": 19327352832,
+  "aggregate_RAM_ceiling_GiB": 22.0439,
+  "maximum_each_invocations": 1,
+  "native_authority": false
+}

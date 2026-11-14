@@ -1,0 +1,171 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_EXACT_SELECTED_HEADER_API_LAYOUT_CONTRACT_HOST_TESTED_NOT_SDK",
+  "prior_ABI_checklist": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/independent-ownership-review-1/SELECTED-BFD-ABI-BLOCKER-AND-CHECKLIST.json",
+    "bytes": 6328,
+    "sha256": "c779e8c163a6bfe89e491ce9aa4caaf19b02035ebd9f8d4ed4b1f6c6e34c3d3f"
+  },
+  "old_owned_candidate": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/ldump2mcdump_helpers.ownership-candidate.rs",
+    "bytes": 32135,
+    "sha256": "dc0d6f75f0d6fbc648223a4b75da6419f4e7d8fbbdacb77a6056daceafd22cac"
+  },
+  "private_corrected_candidate": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/selected-bfd-abi-repair-source-1/ldump2mcdump_helpers.selected-bfd-candidate.rs",
+    "bytes": 32826,
+    "sha256": "5aab8a4270858287d4eb61a1109d96126bae9bf06913da31adf79c3e8c1b7c2a"
+  },
+  "selected_header": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/selected-bfd-abi-repair-source-1/selected-include/bfd.h",
+    "bytes": 252810,
+    "sha256": "de900a9fe4ac94543ee1382cebc3063c3d7e20d16bc934fc816133dd55fe2432"
+  },
+  "same_source_archive_dependencies": {
+    "ansidecl.h": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/selected-bfd-abi-repair-source-1/selected-include/ansidecl.h",
+      "bytes": 11773,
+      "sha256": "fe1b2660b8393691c6e89f0099cfe0b0287a4eccaccd84ea9cdcfb9afc050aa6"
+    },
+    "diagnostics.h": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/selected-bfd-abi-repair-source-1/selected-include/diagnostics.h",
+      "bytes": 5323,
+      "sha256": "4b0272a4540cc2acccbc40eafd668f5e10b6f8f62dbabe9b2e0f1e31e0aa2460"
+    },
+    "symcat.h": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/selected-bfd-abi-repair-source-1/selected-include/symcat.h",
+      "bytes": 2191,
+      "sha256": "51dc65606b842617374d454a538abdded150c87bc05a7f59dcd71207529af4c2"
+    }
+  },
+  "upstream_archive": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/selected-bfd-source-evidence-1/rpm-data/binutils-2.41.tar.xz",
+    "bytes": 26765692,
+    "sha256": "ae9a5789e23459e59606e6714723f2d3ffc31c03174191ef0d015bdf06007450"
+  },
+  "all_11_BFD_imports": [
+    {
+      "name": "bfd_init",
+      "selected_C": "unsigned int bfd_init(void)",
+      "new_Rust": "fn bfd_init() -> c_uint",
+      "typed_C_header_witness": true,
+      "actual_full_body_callback_exercised": true
+    },
+    {
+      "name": "bfd_fopen",
+      "selected_C": "bfd *bfd_fopen(const char *, const char *, const char *, int)",
+      "new_Rust": "fn bfd_fopen(*const c_char,*const c_char,*const c_char,c_int) -> *mut Bfd",
+      "typed_C_header_witness": true,
+      "actual_full_body_callback_exercised": true
+    },
+    {
+      "name": "bfd_perror",
+      "selected_C": "void bfd_perror(const char *)",
+      "new_Rust": "fn bfd_perror(*const c_char) -> ()",
+      "typed_C_header_witness": true,
+      "actual_full_body_callback_exercised": true
+    },
+    {
+      "name": "bfd_set_format",
+      "selected_C": "bool bfd_set_format(bfd *, bfd_format)",
+      "new_Rust": "fn bfd_set_format(*mut Bfd,c_int) -> bool",
+      "typed_C_header_witness": true,
+      "actual_full_body_callback_exercised": true
+    },
+    {
+      "name": "bfd_make_section_anyway",
+      "selected_C": "asection *bfd_make_section_anyway(bfd *, const char *)",
+      "new_Rust": "fn bfd_make_section_anyway(*mut Bfd,*const c_char) -> *mut ASection",
+      "typed_C_header_witness": true,
+      "actual_full_body_callback_exercised": true
+    },
+    {
+      "name": "bfd_set_section_size",
+      "selected_C": "bool bfd_set_section_size(asection *, bfd_size_type)",
+      "new_Rust": "fn bfd_set_section_size(*mut ASection,u64) -> bool",
+      "typed_C_header_witness": true,
+      "actual_full_body_callback_exercised": true
+    },
+    {
+      "name": "bfd_set_section_flags",
+      "selected_C": "bool bfd_set_section_flags(asection *, flagword)",
+      "new_Rust": "fn bfd_set_section_flags(*mut ASection,u32) -> bool",
+      "typed_C_header_witness": true,
+      "actual_full_body_callback_exercised": true
+    },
+    {
+      "name": "bfd_get_section_by_name",
+      "selected_C": "asection *bfd_get_section_by_name(bfd *, const char *)",
+      "new_Rust": "fn bfd_get_section_by_name(*mut Bfd,*const c_char) -> *mut ASection",
+      "typed_C_header_witness": true,
+      "actual_full_body_callback_exercised": true
+    },
+    {
+      "name": "bfd_set_section_contents",
+      "selected_C": "bool bfd_set_section_contents(bfd *, asection *, const void *, file_ptr, bfd_size_type)",
+      "new_Rust": "fn bfd_set_section_contents(*mut Bfd,*mut ASection,*const c_void,i64,u64) -> bool",
+      "typed_C_header_witness": true,
+      "actual_full_body_callback_exercised": true
+    },
+    {
+      "name": "bfd_close",
+      "selected_C": "bool bfd_close(bfd *)",
+      "new_Rust": "fn bfd_close(*mut Bfd) -> bool",
+      "typed_C_header_witness": true,
+      "actual_full_body_callback_exercised": true
+    },
+    {
+      "name": "bfd_close_all_done",
+      "selected_C": "bool bfd_close_all_done(bfd *)",
+      "new_Rust": "fn bfd_close_all_done(*mut Bfd) -> bool",
+      "typed_C_header_witness": true,
+      "actual_full_body_callback_exercised": true
+    }
+  ],
+  "integer_contract": {
+    "bfd_vma": "u64",
+    "bfd_size_type": "u64",
+    "file_ptr": "i64",
+    "flagword": "u32",
+    "bfd_format": "Cenum c_int32, bfd_object1"
+  },
+  "layout_witness": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/selected-bfd-abi-repair-source-1/section_layout_witness.c",
+    "bytes": 3223,
+    "sha256": "3375c309059ad65b0f18d0431b7c413d10d9ed8196beec82409bdf715c3dc427"
+  },
+  "actual_generated_Rust_binding": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/selected-bfd-abi-repair-source-1/actual-selected-header-run-1/section_layout.rs",
+    "bytes": 616,
+    "sha256": "0d5b261473c33d919980ee65ef3a8635ff7228b772dc34de0ffa0e7dee50709f"
+  },
+  "actual_layout": {
+    "sizeof_asection": 280,
+    "alignof_asection": 8,
+    "name": 0,
+    "flags": 36,
+    "vma": 48,
+    "lma": 56,
+    "size": 64,
+    "user_set_vma_byte": 40,
+    "user_set_vma_mask": 1
+  },
+  "Rust_section_type": "Opaque; no invented prefix or direct-field Rust references",
+  "Rust_VMA_method": "Raw writes to selected witness VMA/LMA offsets and OR of selected packed flag byte; same effects as selected inline bfd_set_section_vma; live selected asection/alignment is caller precondition",
+  "whole_section_oracle": "memcmp all280bytes against same header inline result, including independent canary fields and packed flags",
+  "typed_negative_tests": [
+    "Old3arg setters rejected by selected prototypes",
+    "OldVMA40/section64 assertions rejected by selected layout"
+  ],
+  "no_new_BFD_imports_relative_owned_candidate": true,
+  "ownership_guards_and_terminal_consumption_unchanged": true,
+  "future_build_fragment": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/selected-bfd-abi-repair-source-1/Ldump2SelectedBfdLayout.FUTURE.cmake",
+    "bytes": 2568,
+    "sha256": "78bc5d6faecd013d3bfb263c097831ce880b76f0a567b99b5787baa6805ad0c4"
+  },
+  "future_build_binding": "MCKERNEL_LDUMP2_BFD_LAYOUT_RS=<genuine selected SDK witness output>; object DEPENDS on witness/generated data/header dependencies",
+  "fragment_executed": false,
+  "actual_SDK_GCC14_libBFD_archive_qualification": false,
+  "runtime_authority": null
+}

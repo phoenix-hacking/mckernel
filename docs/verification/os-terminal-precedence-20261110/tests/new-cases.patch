@@ -1,0 +1,152 @@
+--- a/scripts/tests/test_os_goal_continuous.py
++++ b/scripts/tests/test_os_goal_continuous.py
+@@ -378,5 +378,149 @@
+         self.assertEqual(state["active_turns"], {})
+ 
+ 
++    def run_terminal_milestone_case(self, rpc, expected, status, reason=None):
++        # All transport and state are isolated FakeRPC/tempdir fixtures. The
++        # original ledger is genuinely closed, not a mocked acceptance result.
++        self.assertIsInstance(rpc, FakeRPC)
++        with patch.object(launcher, "check_resources"), redirect_stdout(io.StringIO()):
++            campaign = launcher.Campaign(self.terminal_args, self.repo, self.repo, rpc.factory)
++            self.assertEqual(campaign.run(), expected)
++        self.assertTrue(rpc.closed)
++        state = json.loads((self.repo / "state.json").read_text())
++        self.assertEqual(state["goal"], rpc.goal)
++        self.assertEqual(state["goal"]["status"], status)
++        self.assertEqual(state["stop_reason"], reason)
++        self.assertEqual(state["exit_code"], expected)
++        self.assertEqual(state["stop_decision"]["goal_status"], status)
++        self.assertEqual(state["stop_decision"]["reason"], reason)
++        self.assertFalse(campaign.checkpoint_requested)
++        self.assertFalse(any(method in {"thread/start", "thread/goal/set", "turn/start", "turn/steer"}
++                             for method, _ in rpc.calls))
++        records = [json.loads(line) for line in (self.repo / "stop-events.jsonl").read_text().splitlines()]
++        stopped = records[-1]
++        self.assertEqual(stopped, json.loads((self.repo / "latest-stop.json").read_text()))
++        self.assertEqual(stopped["event"], "worker_stopped")
++        self.assertEqual(stopped["exit_code"], expected)
++        self.assertEqual(stopped["goal_status"], status)
++        self.assertEqual(stopped["reason"], reason)
++        self.assertEqual(stopped["log_dir"], state["log_dir"])
++        self.assertNotEqual(stopped["category"], "requested_milestones_complete")
++        self.assertNotIn("requested_milestones_complete", [row["reason"] for row in records])
++        return state, stopped
++
++    def terminal_milestone_saved(self, status):
++        self.terminal_args = launcher.arguments([
++            "--hours", "0", "--agent-windows", "off", "--recovered", "--stop-after-m14-m15",
++        ])
++        current = goal(status)
++        launcher.atomic_json(self.repo / "state.json", {
++            "schema_version": 1, "repo": str(self.repo),
++            "thread_id": "test-thread", "goal": current,
++        })
++        return current
++
++    def test_milestone_checkpoint_preserves_saved_complete(self):
++        self.write(self.accepted())
++        self.assertTrue(launcher.m14_m15_closed(self.repo))
++        current = self.terminal_milestone_saved("complete")
++        rpc = FakeRPC(self.terminal_args, copy.deepcopy(current))
++        state, stopped = self.run_terminal_milestone_case(rpc, 0, "complete")
++        self.assertEqual(state["goal"], current)
++        self.assertEqual(stopped["category"], "goal_completed")
++        self.assertFalse(any(method == "thread/resume" for method, _ in rpc.calls))
++
++    def test_milestone_checkpoint_preserves_recovered_usage_limited(self):
++        self.write(self.accepted())
++        self.assertTrue(launcher.m14_m15_closed(self.repo))
++        current = self.terminal_milestone_saved("usageLimited")
++        rpc = FakeRPC(self.terminal_args, copy.deepcopy(current))
++        state, _ = self.run_terminal_milestone_case(rpc, 21, "usageLimited")
++        self.assertEqual(state["goal"], current)
++        self.assertFalse(any(method == "thread/resume" for method, _ in rpc.calls))
++
++    def test_milestone_checkpoint_preserves_recovered_budget_limited(self):
++        self.write(self.accepted())
++        self.assertTrue(launcher.m14_m15_closed(self.repo))
++        current = self.terminal_milestone_saved("budgetLimited")
++        rpc = FakeRPC(self.terminal_args, copy.deepcopy(current))
++        state, _ = self.run_terminal_milestone_case(rpc, 22, "budgetLimited")
++        self.assertEqual(state["goal"], current)
++        self.assertFalse(any(method == "thread/resume" for method, _ in rpc.calls))
++
++    def test_live_terminal_update_precedes_newly_closed_milestone_checkpoint(self):
++        for status, expected in (("complete", 0), ("usageLimited", 21), ("budgetLimited", 22)):
++            with self.subTest(status=status):
++                data = self.accepted()
++                data["requirements"][0]["accepted"] = False
++                self.write(data)
++                self.assertFalse(launcher.m14_m15_closed(self.repo))
++                self.terminal_milestone_saved("active")
++
++                def finish(rpc):
++                    rpc.completed()
++                    rpc.status(status)
++                    self.write(self.accepted())
++                    self.assertTrue(launcher.m14_m15_closed(self.repo))
++
++                rpc = FakeRPC(self.terminal_args, goal(), [finish])
++                self.run_terminal_milestone_case(rpc, expected, status)
++
++    def test_terminal_goal_discovered_by_checkpoint_pause_read_is_preserved(self):
++        for status, expected in (("complete", 0), ("usageLimited", 21), ("budgetLimited", 22)):
++            with self.subTest(status=status):
++                self.write(self.accepted())
++                self.assertTrue(launcher.m14_m15_closed(self.repo))
++                self.terminal_milestone_saved("active")
++
++                class TerminalAtPauseRPC(FakeRPC):
++                    goal_reads = 0
++                    terminal_read_delivered = False
++
++                    def call(inner, method, params, **kwargs):
++                        if method == "thread/goal/get":
++                            inner.goal_reads += 1
++                            # The saved-goal read and post-resume read stay
++                            # ACTIVE. The checkpoint's real pause() read is the
++                            # first observation of this external terminal state.
++                            if inner.goal_reads == 3:
++                                inner.completed()
++                                inner.status(status)
++                                inner.terminal_read_delivered = True
++                        return super().call(method, params, **kwargs)
++
++                rpc = TerminalAtPauseRPC(self.terminal_args, goal())
++                self.run_terminal_milestone_case(rpc, expected, status)
++                self.assertTrue(rpc.terminal_read_delivered)
++
++    def test_current_hard_stop_precedes_terminal_and_closed_milestones(self):
++        for kind, expected, reason, category in (
++            ("usage", 21, "included_usage_guard", "usage_limit"),
++            ("policy", 23, "server_error", "policy_rejection"),
++        ):
++            with self.subTest(kind=kind):
++                data = self.accepted()
++                data["requirements"][0]["accepted"] = False
++                self.write(data)
++                self.terminal_milestone_saved("active")
++
++                def stop(rpc):
++                    rpc.completed()
++                    rpc.status("complete")
++                    self.write(self.accepted())
++                    if kind == "usage":
++                        limits = copy.deepcopy(rpc.limits)
++                        limits["primary"]["usedPercent"] = 100
++                        rpc.emit("account/rateLimits/updated", {"rateLimits": limits})
++                    else:
++                        rpc.emit("error", {"threadId": "test-thread", "error": {
++                            "message": "service stop", "codexErrorInfo": "cyberPolicy"},
++                            "willRetry": False})
++
++                rpc = FakeRPC(self.terminal_args, goal(), [stop])
++                _, stopped = self.run_terminal_milestone_case(rpc, expected, "complete", reason)
++                self.assertEqual(stopped["category"], category)
++
++
++
+ if __name__ == "__main__":
+     unittest.main()

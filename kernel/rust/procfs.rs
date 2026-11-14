@@ -427,8 +427,8 @@ unsafe fn lock_failed(
 ) -> CInt {
     if procfs_lock_failed_action_result(result as CULong) == PROCFS_LOCK_ACTION_BACKLOG {
         let error = procfs_backlog(vm, rpacket);
+        *errp = error;
         if error != 0 {
-            *errp = error;
             return -1;
         }
     } else if !result.is_null() {
@@ -573,6 +573,9 @@ unsafe fn process_procfs_request_inner(rpacket: *mut IkcScdPacket, result: *mut 
             kprintf(NO_TID.as_ptr().cast(), pid, tid);
             if procfs_task_missing_terminal_result(task_matches) != 0 {
                 process_unlock(proc, proc_lock.as_mut_ptr());
+                // find_process lent a locked pointer; hold_process has not
+                // happened on this missing-task path. Cleanup owns no ref.
+                proc = null_mut();
                 goto_end(r, ans, eof, buf_top, &mut err);
                 goto_cleanup(
                     rpacket, err, vbuf, npages, pbuf_phys, r, parg, tmp, proc, thread, vm,
@@ -693,9 +696,9 @@ unsafe fn process_procfs_request_inner(rpacket: *mut IkcScdPacket, result: *mut 
                 );
                 return err;
             }
-            goto_cleanup(
-                rpacket, err, vbuf, npages, pbuf_phys, r, parg, tmp, proc, thread, vm,
-            );
+            // The original or retried backlog still owns this request. Only
+            // unwind this attempt's mappings/references; do not acknowledge it.
+            goto_out(vbuf, npages, pbuf_phys, r, parg, tmp, proc, thread, vm);
             return err;
         }
         let range = lookup_process_memory_range(vm, 0, CULong::MAX);
@@ -752,9 +755,9 @@ unsafe fn process_procfs_request_inner(rpacket: *mut IkcScdPacket, result: *mut 
                 );
                 return err;
             }
-            goto_cleanup(
-                rpacket, err, vbuf, npages, pbuf_phys, r, parg, tmp, proc, thread, vm,
-            );
+            // The original or retried backlog still owns this request. Only
+            // unwind this attempt's mappings/references; do not acknowledge it.
+            goto_out(vbuf, npages, pbuf_phys, r, parg, tmp, proc, thread, vm);
             return err;
         }
         ans = procfs_pagemap_body_result(
@@ -798,9 +801,9 @@ unsafe fn process_procfs_request_inner(rpacket: *mut IkcScdPacket, result: *mut 
                 );
                 return err;
             }
-            goto_cleanup(
-                rpacket, err, vbuf, npages, pbuf_phys, r, parg, tmp, proc, thread, vm,
-            );
+            // The original or retried backlog still owns this request. Only
+            // unwind this attempt's mappings/references; do not acknowledge it.
+            goto_out(vbuf, npages, pbuf_phys, r, parg, tmp, proc, thread, vm);
             return err;
         }
         let range = lookup_process_memory_range(vm, 0, CULong::MAX);
@@ -998,7 +1001,24 @@ unsafe fn goto_cleanup(
     thread: *mut Thread,
     vm: *mut ProcessVm,
 ) {
+    goto_out(vbuf, npages, pbuf_phys, r, parg, tmp, proc, thread, vm);
+    // Terminal completion authorizes host buffer reuse. No request/data or
+    // process/thread/VM owner may be accessed after this publication.
     send_procfs_answer(rpacket, err);
+}
+
+#[allow(clippy::too_many_arguments)]
+unsafe fn goto_out(
+    vbuf: *mut c_void,
+    npages: CInt,
+    pbuf_phys: CULong,
+    r: *mut ProcfsRead,
+    parg: CULong,
+    tmp: *mut c_void,
+    proc: *mut Process,
+    thread: *mut Thread,
+    vm: *mut ProcessVm,
+) {
     if !vbuf.is_null() {
         ihk_mc_unmap_virtual(vbuf.cast::<CULong>(), npages as CULong);
         if !r.is_null() {
@@ -1032,9 +1052,11 @@ unsafe extern "C" fn do_procfs_backlog(arg: *mut c_void) -> CInt {
     let rpacket = arg.cast::<IkcScdPacket>();
     let mut result = 0;
 
-    let ret = process_procfs_request_inner(rpacket, &mut result);
+    let _ = process_procfs_request_inner(rpacket, &mut result);
     if result == 0 {
         kernel_free(arg);
     }
-    ret
+    // cls::do_backlog interprets this as a retry flag, not the operation errno.
+    // A terminal error has already replied and freed its copied packet.
+    result
 }

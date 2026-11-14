@@ -1,0 +1,78 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/m07_remaining_stager_consumer_review",
+  "implementation_ownership": false,
+  "decision": "PASS_ACTUAL_REMAINING_APP_ONLY_OFFLINE_STAGE_AND_MANIFEST_ONLY",
+  "producer": {
+    "path": "/home/holden/mckernel/scratch/m07r-261022-1/numa/stage-result.json",
+    "sha256": "214c572255fe97b601c7c0a892ed36ef8e27dfab4334da4149dad7313a78126e",
+    "bytes": 19769,
+    "mode": 33152
+  },
+  "manifest": {
+    "path": "/home/holden/mckernel-work/scratch/m07rm-261022-1/numa/manifest.json",
+    "sha256": "c2d2ab3cb6e19d67ca3a206305540f20583e1901fd69a565c103d1d02ffcee6b",
+    "bytes": 5143,
+    "mode": 33152
+  },
+  "observed_stage": {
+    "final_members": 60,
+    "unchanged_members": 59,
+    "sole_changed_member": "apps/app",
+    "changed_fields": ["size", "sha256"],
+    "old_payload_bytes": 1522832,
+    "new_payload_bytes": 1556824,
+    "new_payload_sha256": "51240e57b8b960b1543d2c1daeff17afdf335d81627dd5cf0fe0223cae513ee5",
+    "guest_payload_mode": 33261,
+    "all_original_metadata_preserved": true,
+    "producer_and_overlay_manifest_final_maps_equal": true,
+    "accepted_compressed_base_byte_exact": true,
+    "aggregate_stage_bytes": 27958824,
+    "overlay": {
+      "sha256": "99bc80de08c520ab5622a789e91d79d461171a6cc95aad19e994f8b15c63c98f",
+      "bytes": 14038350
+    },
+    "overlay_manifest": {
+      "sha256": "74ebb4ea12f1f942ec2d7c5c15138cda7d9b0f8d3a6c20ab046ec4835da742b7",
+      "bytes": 19435
+    }
+  },
+  "consumer_fields": {
+    "case_id": "vector.remaining-components-preservation",
+    "argv": ["/bin/mcexec", "-t", "1", "0", "app", "threads"],
+    "cwd": "/case/work",
+    "env": {
+      "COKERNEL_PATH": "/apps",
+      "PATH": "/usr/bin:/bin"
+    },
+    "oracle": {
+      "stdout_hex": "52454d41494e494e475f54595045445f4f55545055545f56310a",
+      "stderr_hex": "",
+      "exit_code": 0
+    },
+    "stdout_limit_bytes": 1024,
+    "stderr_limit_bytes": 1024,
+    "producer_manifest_artifact_and_staging_joins": true,
+    "unchanged_profile": "native-diagnostic-4vcpu-8192mib; 4 vCPUs, 8192 MiB, 2 NUMA nodes",
+    "unchanged_dependencies": "053d kernel, 33f launcher, 4312 native boot, 2f8c collector, original three modules, loader/libc and overlay helper",
+    "typed_adapter_binding": "Still pending; sentinel is not an actual-output oracle"
+  },
+  "actual_lifecycle": {
+    "owned_result_sha256": "a79dfdbac6500d38a9a305a548318d73cf174341b2c3c991f44b24ff6d84ac13",
+    "pid": 2947485,
+    "starttime": 43605339,
+    "returncode": 0,
+    "seconds": 10.62968675699085,
+    "child_joined": true,
+    "group_absent": true,
+    "streams_closed": true,
+    "stderr_empty": true,
+    "errors": null
+  },
+  "evidence_basis": "Reviewed raw captures, grant, producer, manifest and changed-output hashes; independently compared all60 final-map entries with the accepted predecessor. Full raw metadata preservation uses the previously reviewed stager's successful actual postconditions. No repeated archive audit or Linux replay.",
+  "projection_permission": "Root may record this genuine exact offline-stage acceptance and use its manifest for separately reviewed consumer preparation.",
+  "limitations": "Earlier constructor refusal remains separate; its repair is not reviewed here. No runtime-source acceptance, execution release, native preservation, application acceptance, whole-M07 completion or compute-C retirement credit.",
+  "native_credit_delta": 0,
+  "execution_release": null,
+  "quiescent": true
+}

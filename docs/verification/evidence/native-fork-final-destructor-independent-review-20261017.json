@@ -1,0 +1,98 @@
+{
+  "schema": "mckernel.native-fork-final-destructor-independent-review.v1",
+  "decision": "PASS_SCOPED_API",
+  "reviewer": "/root/fork_adoption_boundary_review",
+  "author": "/root/fork_ownership",
+  "model": "gpt-6.1-sol",
+  "independent_of_implementation_author": true,
+  "scope": "The five-file additive checked-release API is safe to integrate while native fork admission/ACK remain disabled. Review covers the changed API, public wrappers/bridge, C fallback selection, exact decrement interpretation, final callback lifetimes and retained actual-body regressions. It does not certify the broader fork transaction or native runtime.",
+  "source_root": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1",
+  "source_sha256": {
+    "kernel/rust/process_helpers.rs": "4991258b970e49a1998f3605311f08da96a3fcd218ef02e8b8afeb73b6e24911",
+    "kernel/process_helpers.c": "e436497031918d96d386afb7f3cbcc3af1e38692bb627b83dcf4d698c15be6c9",
+    "kernel/include/process_helpers.h": "1e4eceec2c06dcd409d86cbd5e24616684d83e828d62d6ca534e08c4e0a20bcb",
+    "kernel/process.c": "a5b503ad98deb916e30ec70a78fb1ede64adbc7944216b4279943888e6632f3e",
+    "kernel/include/process.h": "8848d536f2fa847a59af72d573ec9c55838c27cea664d46438ab4e038bf83649",
+    "scripts/tests/test_native_fork_final_destructor_20261017.py": "c961af2306fae9b5eec3ecc9effa14799eab2ae70f674ce44b0fd69f8954e8d8",
+    "scripts/tests/fixtures/native_fork_final_destructor_20261017.rs": "ac399d775207ef59ea2c98dc7ee6686719d63d7f85204ccbbc507079f9379bd3",
+    "scripts/tests/fixtures/native_fork_final_destructor_20261017.c": "70b3de3debb9459228f3634a85f670e116c2d06ec018996864f613fc4c895133",
+    "host-kernel/native-rust/mcctrl_process.rs": "148134730b5fed7f14770eb070529b5227bb6ab790b7199f8800968219dffc70"
+  },
+  "contract": {
+    "path": "docs/verification/evidence/native-fork-final-destructor-boundary-review-20261017.json",
+    "sha256": "dbcdcec630b4c0d2c2c5a237732af4a8df936d6c8321caf76c88da2ab1d84467"
+  },
+  "findings": [
+    {
+      "subject": "Checked validation and decrement",
+      "result": "PASS",
+      "evidence": "Both languages validate the required callbacks and live cached VM/proc fields before decrement. Each new helper consumes at most one selected reference. Exact decrement 0 returns nonfinal; exact 1 enters teardown; negative propagates; any other positive returns -EINVAL. Neither checked helper uses the old dec!=0 predicate. Missing mandatory callback, invalid object and injected error cannot reach final free or final-proof success."
+    },
+    {
+      "subject": "Thread-to-VM completion lifetime",
+      "result": "PASS",
+      "evidence": "process_release_thread_checked_body_result caches VM/proc while thread is live, preserves profile/procfs-delete/destroy order, then calls the integer-returning VM callback with only cached VM. It reads neither thread nor VM after that callback. VM result 0 maps to thread 1, VM 1 maps to thread 2, errors propagate and invalid positives reject. Thus result 2 is not produced from a void callback, retained VM or malformed result."
+    },
+    {
+      "subject": "Final VM destruction ordering",
+      "result": "PASS",
+      "evidence": "Checked VM teardown preserves the original lock/FD-close/unlock, optional pre-free, flush, memory-range release, address-space detach/process release, policy drainage and final VM free sequence. All mandatory callbacks are validated before decrement. After process release, only the still-live VM policy state is accessed; after free_vm_fn(vm), each implementation returns literal 1 with no further object/field read. Existing pre-free and other teardown callbacks retain their original borrowed-object contracts and are not treated as the final destructor."
+    },
+    {
+      "subject": "Public ABI and fallback selection",
+      "result": "PASS_SOURCE_LEVEL",
+      "evidence": "New typed wrappers return the checked helper result and use the same production offsets/callbacks as their legacy counterparts, with the thread wrapper selecting only the new result-returning bridge. Rust supplies matching CInt exports and callback ABI; C definitions/prototypes match. C fallback bodies, wrappers and bridge are selected only without MCKERNEL_RUST_PROCESS_HELPERS, with the corresponding declaration when Rust supplies the bridge. The diff leaves all old body/void-wrapper/bridge definitions unchanged and adds no object field or layout change. Actual native linking remains a later compiler layer."
+    },
+    {
+      "subject": "Scope of completion authority",
+      "result": "PASS_GATE_CLOSED",
+      "evidence": "The new checked APIs have no kernel/syscall.c caller and do not enable adoption. Non-null CREATE_PPD remains the original -95 gate. Existing void APIs retain their old behavior. A future fork caller must separately prove HostRevoked and use saved scalar identity; only exact checked thread result 2 could authorize ACK. Results 0/1/error give no asynchronous completion, rollback or pointer-retry authority."
+    }
+  ],
+  "actual_body_execution": {
+    "reviewed_profile": "docs/verification/evidence/native-fork-final-destructor-cheap-profile-review-20261017.json",
+    "profile_sha256": "2e158e780d34e061440de48caab2c2744b86ec52c22fa6f24ef31a165481ed6f",
+    "capture_root": "/home/holden/mckernel-work/scratch/native-cheap-20261017-sYWtkx",
+    "generated_root": "tmp/native-fork-final-destructor-20261017-rm7pzmjs",
+    "python_tests_passed": 4,
+    "rust_test_cases_passed": 2,
+    "vectors_per_language": 46,
+    "languages": ["C fallback bodies", "Rust 1.92 actual bodies linked to the same C adapters"],
+    "poison_control_children": 2,
+    "expected_control_signal": "SIGSEGV",
+    "driver_exit": 0,
+    "c_compile_exit": 0,
+    "rust_compile_link_exit": 0,
+    "fixture_exit": 0,
+    "elapsed_seconds": 1.03,
+    "peak_rss_kib": 120348,
+    "compiler_or_tests_rerun_by_reviewer": false,
+    "coverage": "Retained source checks freeze ten old C/Rust body/wrapper/bridge regions, three C structure regions and the Rust layout hash; check additive prototype/offset/fallback selection and closed gate. Executable vectors distinguish thread nonfinal, thread final/VM nonfinal, both final, direct VM outcomes, optional callbacks/lists, every required callback omission, null fields, decrement 0/1/-5/2 and VM callback -5/2. The same adapter runs and asserts expected results/traces for C and Rust, then compares their reports. Scalar-only caller vectors require HostRevoked/identity before one release and ACK only exact result 2.",
+    "post_free_detector": "Destroy-thread, process-release and final-VM-free callbacks mprotect separate own pages PROT_NONE. A subsequent field read by either actual body would fault. Two independent child reads prove protected-page reads terminate SIGSEGV. Nondumpable guards run before suite assertions and protected accesses and are repeated in each child; guard failure exits 86 and cannot satisfy the signal oracle.",
+    "limits": "Helpers execute verbatim, but object layouts, refcounts, FD/policy operations, kernel locks and concrete destructor bridges are adapters. Public wrappers are source/ABI checked rather than executed against the real kernel. Protected pages detect memory reads, not kernel TLB retirement or guest teardown. No native build, real VM destruction, host-revoke proof, guest ACK or application acceptance follows from this fixture."
+  },
+  "capture_sha256": {
+    "driver.stdout": "593ea92699c0a0422a466cfd2f488f093fd6594d4e95982adf0a9ae0226e09fe",
+    "driver.stderr": "ba6ffcecbf29ab902bf7acc4a1d7715b7685086d9b3e775718d91062b8cfeb25",
+    "driver.status": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "tmp/native-fork-final-destructor-20261017-rm7pzmjs/actual_bodies.rs": "7de6e3be7e6015e50675731b67b3d33a52562ff7feab7348df936f9c966e31f6",
+    "tmp/native-fork-final-destructor-20261017-rm7pzmjs/actual_bodies.c": "1c0fe6fc8ec793517c69f4feb4ed79e2a5d9917b20f36b932bdc4cef850adfff",
+    "tmp/native-fork-final-destructor-20261017-rm7pzmjs/compile-c.status.json": "df4d721d233a2334088d2d2e0110346ae9e509ff46bf0b379fbcfa85c715af4d",
+    "tmp/native-fork-final-destructor-20261017-rm7pzmjs/compile-rust.status.json": "df4d721d233a2334088d2d2e0110346ae9e509ff46bf0b379fbcfa85c715af4d",
+    "tmp/native-fork-final-destructor-20261017-rm7pzmjs/run.stdout": "8eaf3005046488266b39c25f9c0e04098ffa96011ae48849d6fd00dac335bf5e",
+    "tmp/native-fork-final-destructor-20261017-rm7pzmjs/run.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "tmp/native-fork-final-destructor-20261017-rm7pzmjs/run.status.json": "df4d721d233a2334088d2d2e0110346ae9e509ff46bf0b379fbcfa85c715af4d",
+    "tmp/native-fork-final-destructor-20261017-rm7pzmjs/cc-version.stdout": "a2c6f19b6698aa4249442367c19c93accd1bb85cfcd901fce4c02116f30da891",
+    "tmp/native-fork-final-destructor-20261017-rm7pzmjs/rustc-version.stdout": "ecda74ca828b18debf1624cb36209a5b844fb1e1c1905ffb3d51b56cc275f96f"
+  },
+  "history_preserved": "The author record retains the corrected original C-bridge baseline extraction and original dumpable fixture/profile side-effect finding. This review uses the corrected exact profile/source hashes and successful central execution; it neither erases failures nor resets their family history.",
+  "blocking_findings": [],
+  "required_source_correction": null,
+  "integration_decision": "Integrate the additive checked APIs and their retained tests under the dispatcher's normal source/compiler workflow. Keep old APIs unchanged and all fork admission/ACK integration disabled. No repeat compiler run or broader fork design review is required to resolve this source review.",
+  "execution_release": false,
+  "native_compile_pass": false,
+  "guest_behavior_verified": false,
+  "formal_case_credit": false,
+  "fork_acceptance": false,
+  "campaign_scope": "Reviewer wrote only this new evidence file and made no implementation, compiler, Git, root, Docker, guest or network changes. Image candidate fd099 and the independent image-first critical path remain untouched."
+}

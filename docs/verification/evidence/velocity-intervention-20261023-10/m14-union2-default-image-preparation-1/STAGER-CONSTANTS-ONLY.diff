@@ -1,0 +1,19 @@
+--- /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-default-image-preparation-1/materialize_current_source.CHECKPOINT79620055.CPU7.py
++++ /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-union2-default-image-preparation-1/materialize_union2_source.CPU7.py
+@@ -13,13 +13,13 @@
+ import time
+ 
+ REPO = Path('/home/holden/mckernel')
+-OUT = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-default-image-preparation-1/source-materialization-current-checkpoint-1')
++OUT = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-union2-default-image-preparation-1/source-materialization-1')
+ BASE = Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/source-materialization-attempt-1')
+ SOURCE = BASE / 'materialized-source'
+ DEST = OUT / 'materialized-source'
+-AUTHORITY = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-default-image-preparation-1/CANONICAL-SOURCE-SUCCESSOR-BASIS.CHECKPOINT79620055.json')
++AUTHORITY = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-union2-default-image-preparation-1/CANONICAL-SOURCE-SUCCESSOR-BASIS.CHECKPOINT-PENDING.json')
+ BASE_CANONICAL_SHA = '77fd79cde7d48ceb65aaf9de2ff8be78005274f22031fe12c58d8309173c58a4'
+-POST = {'kernel/mem.c': '9d53106e7228b5a7654f4250bab58e20e7bc47a28f8ad9675b1c9ac92599b976', 'kernel/rust/mem_helpers.rs': '6a527f7a55930d72d6d72c775ee0261c3550e2bd0094fe01031f3aa3238aefd6', 'kernel/process.c': '1ecbc287f2e704e738cc4e9fbe18289226b5aadadc9da88d226dc0ad0bb57234', 'kernel/rust/process_helpers.rs': '70015d712c29e416881e2fbaccd67026ee15ac7eb915cb80e828485d6f34d71f', 'kernel/syscall.c': '34ec8a08c5790aa7533e5a8e3905d1dd1d4989bf0f431b8517ae6d50bbaa54f4', 'arch/x86_64/kernel/cpu.c': 'c779079fb6de66991c861c823dca06b2a9ceec16ac4c984995200b668d7e78ce', 'kernel/rust/x86_cpu_helpers.rs': '98914e1ff4d50c2f42ccbdeb1f4f338024b7a9a2143fbad2f59ebd6f6b50dd0b', 'arch/x86_64/kernel/memory.c': '93df0ac24de8163cc5a7e2cce277d3a46c89a607b924c1937f2413e12edf0f66', 'kernel/rust/x86_memory_helpers.rs': '800a18bb4db0e28bf76441fca783b3f8d47066260240fb5107967c23775aa494', 'arch/x86_64/kernel/syscall.c': '912fb97a58cc797407979ce835c422578949ff876ac519193d2ebc4855cce791', 'kernel/rust/syscall_policy.rs': '3ef8288617db7bcc26c56039491295d3f48c53d4f76d111b68dfcc3186546f7d'}
++POST = {'kernel/mem.c': '4d2d267cacb48a69179d9b29dec5d905748143210e0f6c7d555e0ac508b419f3', 'kernel/rust/mem_helpers.rs': 'be693dec5e53b20f06f7963b7418a7c0dff68cbecaaa2360e291d8542784e045', 'kernel/process.c': '7ab29dad607ac06e9548065f4395c6e870359558a2777844c1052d67e046ca13', 'kernel/rust/process_helpers.rs': '5bf085bfa3f60217abacbda380e80d35d2fd56922c0e82f82dbab1d5fe09d4d1', 'kernel/syscall.c': '07af5efb4af2754988376301d19887ea90743b8f304455b7df980738f2629399', 'arch/x86_64/kernel/cpu.c': '5574c151cef8d26fa14e3eac72d54b55703be153e4f147f831c5a9e9b63c70bc', 'kernel/rust/x86_cpu_helpers.rs': 'a44a391c7eb461b82cb181089941f52e8845ae90b04d34319aff6437deebb3e4', 'arch/x86_64/kernel/memory.c': 'ceed123214cd293f5afefd21dd071e39aa824cf3424cc6355a841c1ae5467f39', 'kernel/rust/x86_memory_helpers.rs': '087240006b3f1b99c844c77c1c645118710bf34f53546637eb12d54215822092', 'arch/x86_64/kernel/syscall.c': 'd876e0b24f789372e6747fee7c554a53a3deaa9cee7034d7096374c2dff34ad6', 'kernel/rust/syscall_policy.rs': 'c5d6ddd9ce210ffd51f0e84c3feefddcf4d115044ced76018b9e946aad9cb6f5'}
+ MAX_GROWTH = 256 << 20
+ EXTRA = 16 << 20
+ SCOPE = 'Functional McKernel OS/apps and Rust/assembly migration only; no security testing.'

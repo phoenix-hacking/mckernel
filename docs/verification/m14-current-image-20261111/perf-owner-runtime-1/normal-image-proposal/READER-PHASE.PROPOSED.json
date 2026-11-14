@@ -1,0 +1,352 @@
+{
+  "schema": 1,
+  "status": "CONDITIONAL_UNSTARTED_PASSIVE_PERF_READER_PROPOSAL_NOT_ADMITTED",
+  "source_commit": null,
+  "source_binding": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/SOURCE-BINDINGS.PROPOSED.json",
+    "bytes": 16251,
+    "sha256": "b05455fc33bbdc9043d64e728b98fb52e44b3063203837cd06f94cb805b436c5"
+  },
+  "metadata_phase": {
+    "create_argv": [
+      "/usr/bin/sudo",
+      "-A",
+      "/usr/bin/docker",
+      "--host=unix:///var/run/docker.sock",
+      "create",
+      "--name",
+      "mck-m14-perf-owner-metadata-20261111-1",
+      "--label",
+      "mckernel.preparation-owner=m14-perf-owner-metadata-1",
+      "--init",
+      "--pull=never",
+      "--network=none",
+      "--ipc=private",
+      "--cpus=1",
+      "--cpuset-cpus=6",
+      "--memory=512m",
+      "--memory-swap=512m",
+      "--pids-limit=64",
+      "--ulimit",
+      "core=0:0",
+      "--ulimit",
+      "fsize=1073741824:1073741824",
+      "--ulimit",
+      "cpu=120:120",
+      "--user",
+      "1000:1000",
+      "--read-only",
+      "--cap-drop=ALL",
+      "--security-opt=no-new-privileges",
+      "--tmpfs",
+      "/tmp:rw,nodev,nosuid,noexec,size=16m,mode=1777",
+      "--workdir",
+      "/work/output",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output,dst=/work/output,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/input,dst=/producer,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/metadata-1,dst=/evidence",
+      "--entrypoint",
+      "/usr/bin/env",
+      "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+      "-i",
+      "BASH_ENV=",
+      "ENV=",
+      "LANG=C",
+      "LC_ALL=C",
+      "PATH=/usr/bin:/bin",
+      "TZ=UTC",
+      "LD_LIBRARY_PATH=",
+      "LD_PRELOAD=",
+      "/usr/bin/bash",
+      "--noprofile",
+      "--norc",
+      "/producer/read_perf_owner_metadata.sh"
+    ],
+    "expected_mount_count": 3,
+    "expected_mounts": [
+      {
+        "destination": "/work/output",
+        "read_only": true,
+        "role": "Actual new matching image/affected2objects plus retained source/config/provider identities",
+        "source": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output"
+      },
+      {
+        "destination": "/producer",
+        "read_only": true,
+        "role": "Exact perf passive helper, readonly",
+        "source": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/input"
+      },
+      {
+        "destination": "/evidence",
+        "read_only": false,
+        "role": "Fresh exclusive actual metadata, onlyRW",
+        "source": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/metadata-1"
+      }
+    ],
+    "expected_returncode": 0,
+    "gate": "NOT ADMITTED. Exact Root29-source commit/runtime PASS/source+selection+operation GO, then actual new normal build PASS/four artifact identities/all positive client+container+fullRoot retirement and fresh serialized metadata admission required.",
+    "helper": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/input/read_perf_owner_metadata.sh",
+      "bytes": 5253,
+      "sha256": "8ce3622339dc5f17c9bb9b29edad7620fcea36449a6ab6e790a9b618a6ffb00b"
+    },
+    "literal_commands": [
+      [
+        "/usr/bin/test",
+        "-s",
+        "/work/output/build/kernel/mckernel.img"
+      ],
+      [
+        "/usr/bin/test",
+        "-s",
+        "/work/output/build/kernel/mckernel.img.map"
+      ],
+      [
+        "/usr/bin/test",
+        "-s",
+        "/work/output/build/tmp.resolve_MODULES_END/driver.ko"
+      ],
+      [
+        "/usr/bin/readelf",
+        "-W",
+        "-h",
+        "-l",
+        "-S",
+        "-n",
+        "/work/output/build/kernel/mckernel.img"
+      ],
+      [
+        "/usr/bin/readelf",
+        "-W",
+        "-s",
+        "-r",
+        "/work/output/build/kernel/mckernel.img"
+      ],
+      [
+        "/usr/bin/readelf",
+        "-W",
+        "-s",
+        "-r",
+        "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "/work/output/build/kernel/rust/mckernel_rust.o"
+      ],
+      [
+        "/usr/bin/nm",
+        "-n",
+        "/work/output/build/kernel/mckernel.img"
+      ],
+      [
+        "/usr/bin/cat",
+        "/work/output/build/kernel/mckernel.img.map"
+      ],
+      [
+        "/usr/bin/sha256sum",
+        "/work/output/build/config.h",
+        "/work/output/build/ihk/config.h",
+        "/work/output/build/kernel/config/smp-x86.lds",
+        "/work/output/build/kernel/mckernel.img",
+        "/work/output/build/kernel/mckernel.img.map",
+        "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/mem.c.o",
+        "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+        "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o",
+        "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/context.S.o",
+        "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+        "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/interrupt.S.o",
+        "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o",
+        "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/trampoline.S.o",
+        "/work/output/build/kernel/rust/mckernel_rust.o",
+        "/work/output/build/tmp.resolve_MODULES_END/driver.ko"
+      ],
+      [
+        "/usr/bin/stat",
+        "--format=%a %s %n",
+        "/work/output/build/config.h",
+        "/work/output/build/ihk/config.h",
+        "/work/output/build/kernel/config/smp-x86.lds",
+        "/work/output/build/kernel/mckernel.img",
+        "/work/output/build/kernel/mckernel.img.map",
+        "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/mem.c.o",
+        "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+        "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o",
+        "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/context.S.o",
+        "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+        "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/interrupt.S.o",
+        "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o",
+        "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/trampoline.S.o",
+        "/work/output/build/kernel/rust/mckernel_rust.o",
+        "/work/output/build/tmp.resolve_MODULES_END/driver.ko"
+      ],
+      [
+        "/usr/bin/cat",
+        "/work/output/build/CMakeCache.txt"
+      ],
+      [
+        "/usr/bin/cat",
+        "/work/output/build/compile_commands.json"
+      ],
+      [
+        "/usr/bin/cat",
+        "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/flags.make"
+      ],
+      [
+        "/usr/bin/cat",
+        "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/build.make"
+      ],
+      [
+        "/usr/bin/cat",
+        "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/link.txt"
+      ],
+      [
+        "/usr/bin/cat",
+        "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/link.d"
+      ],
+      [
+        "/usr/bin/cat",
+        "/work/output/build/kernel/rust/mckernel_rust.d"
+      ],
+      [
+        "/usr/bin/cat",
+        "/work/output/build/kernel/rust/mckernel_rust.raw.d"
+      ],
+      [
+        "/usr/bin/cat",
+        "/work/output/build/kernel/CMakeFiles/mckernel_rust_obj.dir/build.make"
+      ],
+      [
+        "/usr/bin/readelf",
+        "-W",
+        "-x",
+        ".rodata",
+        "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o"
+      ],
+      [
+        "/usr/bin/readelf",
+        "-W",
+        "-x",
+        ".lrodata.f03_do_fork_rust_abi_words",
+        "/work/output/build/kernel/rust/mckernel_rust.o"
+      ],
+      [
+        "/usr/bin/readelf",
+        "-W",
+        "-x",
+        ".rodata",
+        "/work/output/build/kernel/mckernel.img"
+      ],
+      [
+        "/usr/bin/objdump",
+        "-drw",
+        "--disassemble=sys_perf_event_open",
+        "/work/output/build/kernel/rust/mckernel_rust.o"
+      ],
+      [
+        "/usr/bin/objdump",
+        "-drw",
+        "--disassemble=sys_perf_event_open",
+        "/work/output/build/kernel/mckernel.img"
+      ],
+      [
+        "/usr/bin/objdump",
+        "-drw",
+        "--disassemble=perf_event_open_do_syscall_bridge",
+        "/work/output/build/kernel/rust/mckernel_rust.o"
+      ],
+      [
+        "/usr/bin/objdump",
+        "-drw",
+        "--disassemble=perf_event_open_do_syscall_bridge",
+        "/work/output/build/kernel/mckernel.img"
+      ]
+    ],
+    "max_wall_seconds": 180,
+    "output_contract": {
+      "alias_handling": "True compiler aliases are judged by actual source/types/ranges/bytes/relocations; a namedobjdump output header/absence is neither proof nor rejection alone.",
+      "generated_result_file": null,
+      "literal_command_count": 26,
+      "record_count": 23,
+      "record_count_definition": "19 actual image/affected genericC+wholeRust/generated/current104/table/ABI records plus4 input/final lowerings for only2 new public Rust perf owners;3 test-s gates,26 commands/23 records.",
+      "record_root": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/metadata-1",
+      "required_files": [
+        "image-elf.stdout",
+        "image-symbols-relocations.stdout",
+        "affected-constituent-symbols-relocations.stdout",
+        "image-nm.stdout",
+        "image-map.stdout",
+        "artifact-identities.sha256",
+        "artifact-modes.stdout",
+        "regenerated-CMakeCache.txt",
+        "regenerated-compile_commands.json",
+        "regenerated-flags.make",
+        "regenerated-build.make",
+        "regenerated-link.txt",
+        "regenerated-link.d",
+        "regenerated-mckernel_rust.d",
+        "regenerated-mckernel_rust.raw.d",
+        "regenerated-Rust-build.make",
+        "C-tables-and-ABI-rodata.stdout",
+        "Rust-ABI104-rodata.stdout",
+        "image-tables-and-ABI-rodata.stdout",
+        "new-sys_perf_event_open-Rust-disassembly.stdout",
+        "new-sys_perf_event_open-final-disassembly.stdout",
+        "new-perf_event_open_do_syscall_bridge-Rust-disassembly.stdout",
+        "new-perf_event_open_do_syscall_bridge-final-disassembly.stdout"
+      ],
+      "stdout_files": [
+        "image-elf.stdout",
+        "image-symbols-relocations.stdout",
+        "affected-constituent-symbols-relocations.stdout",
+        "image-nm.stdout",
+        "image-map.stdout",
+        "artifact-identities.sha256",
+        "artifact-modes.stdout",
+        "regenerated-CMakeCache.txt",
+        "regenerated-compile_commands.json",
+        "regenerated-flags.make",
+        "regenerated-build.make",
+        "regenerated-link.txt",
+        "regenerated-link.d",
+        "regenerated-mckernel_rust.d",
+        "regenerated-mckernel_rust.raw.d",
+        "regenerated-Rust-build.make",
+        "C-tables-and-ABI-rodata.stdout",
+        "Rust-ABI104-rodata.stdout",
+        "image-tables-and-ABI-rodata.stdout",
+        "new-sys_perf_event_open-Rust-disassembly.stdout",
+        "new-sys_perf_event_open-final-disassembly.stdout",
+        "new-perf_event_open_do_syscall_bridge-Rust-disassembly.stdout",
+        "new-perf_event_open_do_syscall_bridge-final-disassembly.stdout"
+      ],
+      "stdout_record_count": 23
+    },
+    "output_root": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/metadata-1"
+  },
+  "resources": {
+    "CPU": [
+      6
+    ],
+    "CPU_seconds": 120,
+    "FSIZE_bytes": 1073741824,
+    "container_memory_bytes": 536870912,
+    "jobs": 1,
+    "memory_swap_bytes": 536870912,
+    "new_output_disk_headroom_bytes": 1073741824,
+    "pids": 64,
+    "wall_seconds": 180
+  },
+  "oracles": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/AFFECTED-READER-ORACLES.json",
+    "bytes": 5283,
+    "sha256": "438e1a825dda4796397a0b6e459fde5de17956916f9792366285c9e669aebe2e"
+  },
+  "shared_resource_and_ownership_gates": "Root fresh HOST4GiB/max3 incl all overhead and current owners, available>=26GiB, host16/scratch12GiB floors plus actual parentbatch headroom. Serialize producer/heavy retirement before this reader. Current Docker name absent/no conflict, own exact CID/profile/3mounts inspected, direct client+whole family waits/streams/nonOOM/Pid0+ownedremoval positive before current release. No native2-5/12GiB or CPU1 use, no other UNKNOWN/hold release. Parent SDK binds existing corrected capture CPU6 specialization and actual serial ownership; no new executor/framework.",
+  "standalone_Docker_execution_authorized": false,
+  "new_output_root_not_created": true,
+  "read_only_effects": "test/readelf/nm/cat/hash/stat/objdump actual new production artifacts only; never image/main/native execution"
+}

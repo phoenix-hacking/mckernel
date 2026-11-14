@@ -1,0 +1,103 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "generator_unchanged": {
+    "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/prepare_current_M07_runtime_sources.PROC24e.py",
+    "sha256": "02fb0fca7c4e998f1884d6c1e38581e76acc27b0b3ea8d90ca818dfffa4027ef",
+    "bytes": 23856
+  },
+  "generator_input": {
+    "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/actual-normalization-bound-source-1/CURRENT-M07-RUNTIME-BINDINGS.ACTUAL-NORM-PENDING-SOURCE-REVIEW.json",
+    "sha256": "bfb5458ba07018348326e6952cc0e2c3bbc4a8395dad547845a94a984ad23ab5",
+    "bytes": 20449
+  },
+  "exact_source_bodies_expected_after_generator": {
+    "bind_numa_native_packet.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/actual-normalization-bound-source-1/bind_numa_native_packet.py",
+      "sha256": "5a6c26625e24afac1897f674091ab912c7f486867bf3193341e742e3ee292e52",
+      "bytes": 27745
+    },
+    "root_manual_snapshot_threads.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/actual-normalization-bound-source-1/root_manual_snapshot_threads.py",
+      "sha256": "d0466c6f7ff292cfcdae154c2ed44531fece1b236d17ef1d4235b520a9578eeb",
+      "bytes": 17136
+    }
+  },
+  "pending_templates_immutable": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/templates/bind_numa_native_packet.py",
+      "sha256": "93277e063ef9df86d741b005465554912fb09ba68b923058bb6754f3b684ce20",
+      "bytes": 27745
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/templates/root_manual_snapshot_threads.py",
+      "sha256": "c837f069bdbbae7cbc8d94a67c8a436316c9a6debb8055a8ed2216de15aeca22",
+      "bytes": 17136
+    }
+  ],
+  "wholechecker_source_unchanged": {
+    "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/templates/check_current_whole_caller.py",
+    "sha256": "f16159cecaaa364a1aefa241d9a5edd45f64260dab23726e1c68f89b9aae19a2",
+    "bytes": 4983
+  },
+  "paired_actual_field_matrix": {
+    "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/actual-normalization-bound-source-1/COMPLETE-PAIRED-M07-PRODUCER-CONSUMER-FIELD-MATRIX-1.json",
+    "sha256": "97d048495c9d5c52c6a69bb2ba50f21ee9d9ea5919c6b50d0b1d58826d4884a3",
+    "bytes": 5359
+  },
+  "genuine_normalization_same_both_pins": {
+    "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/normalization-preparation-1/manifest-row-correction-1/actual-normalization-acceptance-1/ROOT-MECHANICAL-COMPLETE-ACTUAL-M07-NORMALIZATION-REVIEW-1.json",
+    "sha256": "957e78e22a5c3ac88f92a7b22f449df3a77d2f5dd36c68f1bd9049df239ddd52",
+    "bytes": 32720
+  },
+  "source_change_scope": "Only original809e\u2192genuine957e normalization literal in each expectedbody; generator already performs those unique substitutions from DATA. No generator algorithm/bodychange, normreport unchanged.",
+  "future_current_source_review": null,
+  "ready_binding_step": "Bind genuine combinedsource-review ref in runtime.static_inputs.observer_source_acceptance; root serializes additive FINALDATA/exactSHA. Generator itself captures actual12FD map; no worker tests/imports/checks.",
+  "constructor_command": [
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "taskset",
+    "-c",
+    "6",
+    "prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=30:30",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--nofile=256:256",
+    "--",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/prepare_current_M07_runtime_sources.PROC24e.py",
+    "runtime",
+    "--bindings",
+    "<FINAL_SOURCE_REVIEW_BOUND_DATA>",
+    "--bindings-sha256",
+    "<EXACTSHA>"
+  ],
+  "wholecaller_command": [
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "60s",
+    "taskset",
+    "-c",
+    "6",
+    "prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=55:55",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--nofile=256:256",
+    "--",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/bound-runtime-source-1/check_current_whole_caller.py"
+  ],
+  "future_runtime_release": null,
+  "future_publication_proof": null,
+  "not_executed": true
+}

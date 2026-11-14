@@ -1,0 +1,371 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root",
+  "at": "2026-10-28T21:25:19.895252+00:00",
+  "decision": "ACTUAL_SECOND_RETIREMENT_ATTEMPT_FAILED_IN_PREINSPECT_BEFORE_REMOVAL",
+  "source_executor": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/retire_exact_bfd_stopped_container.py",
+    "bytes": 41767,
+    "sha256": "0cabb9cdc29e9d8f90a35869b09f7eb8abf94e35ff8202a089e8fd319680afe9"
+  },
+  "release": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/BFD-RETIREMENT-RELEASE-2/ROOT-RELEASE.ACTUAL.json",
+    "bytes": 6879,
+    "sha256": "bd5ae8f08af9a581e5893c44ee454166a525e28f59440e391422ca41af7f2c87"
+  },
+  "actor": {
+    "pid": 2153594,
+    "birth": "101972261",
+    "argv": [
+      "/usr/bin/taskset",
+      "-c",
+      "0",
+      "/usr/bin/prlimit",
+      "--as=2147483648:2147483648",
+      "--fsize=33554432:33554432",
+      "--nofile=256:256",
+      "--core=0:0",
+      "--",
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/retire_exact_bfd_stopped_container.py",
+      "--release",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/BFD-RETIREMENT-RELEASE-2/ROOT-RELEASE.ACTUAL.json",
+      "--release-sha256",
+      "bd5ae8f08af9a581e5893c44ee454166a525e28f59440e391422ca41af7f2c87",
+      "--execute"
+    ],
+    "release": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/BFD-RETIREMENT-RELEASE-2/ROOT-RELEASE.ACTUAL.json",
+      "bytes": 6879,
+      "sha256": "bd5ae8f08af9a581e5893c44ee454166a525e28f59440e391422ca41af7f2c87"
+    }
+  },
+  "parent_join": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/BFD-RETIREMENT-RELEASE-2/ACTUAL-RETIREMENT.PARENT-JOIN.json",
+    "bytes": 866,
+    "sha256": "b62389aec3208495fe0d65009692e683702ac24259e4ece2309bb40c0a049be6"
+  },
+  "stdout": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/BFD-RETIREMENT-RELEASE-2/ACTUAL-RETIREMENT.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "stderr": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/BFD-RETIREMENT-RELEASE-2/ACTUAL-RETIREMENT.stderr",
+    "bytes": 2333,
+    "sha256": "1241809e241b923151de4d4aac345343814d5b6db413e662498901b069dc3291"
+  },
+  "attempt_started": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/actual-retirement-root2-faac/STARTED.json",
+    "bytes": 718,
+    "sha256": "9fe9dc75937d5df8979868d7977376a481f31b9d11a97c6fef7030f94696d3f7"
+  },
+  "commands": [
+    {
+      "directory": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/actual-retirement-root2-faac/command-5347cc9983414455aef445fa86afadee",
+      "join": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/python3",
+          "-I",
+          "-B",
+          "-c",
+          "\nimport json,os,sys\ncaller=[int(sys.argv[2]),sys.argv[3]]\ncaller_parent=int(open('/proc/'+str(caller[0])+'/stat','rb').read().rpartition(b') ')[2].split()[1])\nheavy={'qemu-system-x86_64','qemu-system-aarch64','qemu-kvm','mcexec','firecracker',\n       'rustc','cargo','make','ninja','buildah','gcc','g++','cc','clang','clang++'}\ndef publisher(exe,argv):\n    name=os.path.basename(exe[:-10] if exe.endswith(' (deleted)') else exe)\n    if name in heavy or name.startswith('qemu-system-'): return True\n    if name in ('docker','podman') and any(a in ('build','run','start') for a in argv[1:]): return True\n    if any(path in argv for path in ['/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/cohort/run_build_only.py', '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/cohort/hold_and_run_build_only.py', '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/retire_exact_bfd_stopped_container.py']): return True\n    for arg in argv:\n        base=os.path.basename(arg)\n        if (base.startswith(('native_rust_exact_','native-exact-','native_exact_')) and\n            base.endswith(('.py','.sh')) and any(term in base for term in ('build','cleanup','recovery','prepare'))): return True\n    return False\ndef snapshot():\n    rows=[]; publishers=[]; groups=[]; found=False\n    entries=os.listdir('/proc')\n    if len(entries)>4096: raise ValueError('process-count')\n    for name in entries:\n        if not name.isdigit(): continue\n        pid=int(name)\n        with open('/proc/'+name+'/stat','rb') as f: raw=f.read(65537)\n        if len(raw)>65536: raise ValueError('stat-size')\n        left,sep,right=raw.rpartition(b') ')\n        if not sep or not left.startswith(str(pid).encode()+b' ('): raise ValueError('stat-prefix')\n        fields=right.split()\n        if len(fields)<50 or fields[0] not in (b'R',b'S',b'D',b'Z',b'T',b't',b'X',b'x',b'K',b'W',b'P',b'I'): raise ValueError('stat-fields')\n        for field in fields[1:]:\n            digits=field[1:] if field.startswith(b'-') else field\n            if not digits or any(c<48 or c>57 for c in digits): raise ValueError('stat-number')\n        ppid=int(fields[1]); start=int(fields[19])\n        if ppid<0 or start<0: raise ValueError('stat-number')\n        with open('/proc/'+name+'/cmdline','rb') as f: command=f.read(65537)\n        if len(command)>65536 or (command and not command.endswith(b'\\0')): raise ValueError('cmdline-size-or-termination')\n        argv=[a.decode('utf-8','strict') for a in command[:-1].split(b'\\0')] if command else []\n        if len(argv)>256 or any(len(a)>16384 for a in argv): raise ValueError('cmdline-arguments')\n        if not argv and fields[0] not in (b'Z',b'X',b'x') and not (int(fields[6]) & 0x200000): raise ValueError('live-cmdline-empty')\n        exe=os.readlink('/proc/'+name+'/exe') if argv else ''\n        with open('/proc/'+name+'/stat','rb') as f: again=f.read(65537)\n        check=again.rpartition(b') ')[2].split()\n        if len(check)<50 or check[19]!=fields[19]: raise ValueError('process-raced')\n        if pid==caller[0]:\n            if str(start)!=caller[1]: raise ValueError('caller-raced')\n            found=True\n        elif argv and not (pid==caller_parent and os.path.basename(exe)=='sudo') and publisher(exe,argv): publishers.append([pid,str(start),exe])\n        rows.append([pid,ppid,str(start)]); groups.append([pid,ppid,str(start),int(fields[2]),int(fields[3])])\n    if not found: raise ValueError('caller-missing')\n    return sorted(rows),publishers,sorted(groups)\nif os.geteuid()!=0: raise ValueError('not-root')\nwith open('/proc/sys/kernel/random/boot_id') as f: boot=f.read().strip()\nfirst,pubs1,groups1=snapshot(); second,pubs2,groups2=snapshot()\nwith open('/proc/sys/kernel/random/boot_id') as f: after=f.read().strip()\nif boot!=after: raise ValueError('boot-raced')\nprint(json.dumps({'schema':'fp-save-image.proc.v1','uid':os.geteuid(),'boot_id':boot,\n                  'challenge':sys.argv[1],'caller':caller,'publishers':pubs1+pubs2,'snapshots':[first,second], 'groups':[groups1,groups2]}))\n",
+          "2831bc6e521441e183bec75dcfe4bdc2",
+          "2153594",
+          "101972261"
+        ],
+        "birth": 101972338,
+        "client_retirement_unproven": false,
+        "finished_epoch": 1793222278.832496,
+        "group_absent": true,
+        "group_members": [],
+        "peak_rss_kib": 21616,
+        "pid": 2153595,
+        "positive_wait4": true,
+        "process_group": 2153595,
+        "raw": {
+          "status.json": {
+            "bytes": 4628,
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/actual-retirement-root2-faac/command-5347cc9983414455aef445fa86afadee/status.json",
+            "sha256": "88381162ce667c9a3fcbc852fa608fd881a00191d6ec7362545687d6bdd5fb05"
+          },
+          "stderr": {
+            "bytes": 0,
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/actual-retirement-root2-faac/command-5347cc9983414455aef445fa86afadee/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "stdout": {
+            "bytes": 34787,
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/actual-retirement-root2-faac/command-5347cc9983414455aef445fa86afadee/stdout",
+            "sha256": "44df28dd208af59f93b04d62e9d8148ced89856778391a4508f46b7d9975d392"
+          }
+        },
+        "returncode": 0,
+        "signals_sent": 0,
+        "started_epoch": 1793222278.6923733,
+        "started_monotonic": 1004385.261234945,
+        "streams_closed": true,
+        "system_cpu_seconds": 0.037408,
+        "user_cpu_seconds": 0.09761299999999999,
+        "wait4_pid": 2153595,
+        "wait4_status": 0,
+        "wall_seconds": 0.1402174240211025
+      },
+      "files": [
+        {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/actual-retirement-root2-faac/command-5347cc9983414455aef445fa86afadee/JOIN-WAIT4.json",
+          "bytes": 6361,
+          "sha256": "a86ea1c75e54f8668995465e44eb789cb87f8ffd837f0614cca9fde8cd1e5e4c"
+        },
+        {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/actual-retirement-root2-faac/command-5347cc9983414455aef445fa86afadee/status.json",
+          "bytes": 4628,
+          "sha256": "88381162ce667c9a3fcbc852fa608fd881a00191d6ec7362545687d6bdd5fb05"
+        },
+        {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/actual-retirement-root2-faac/command-5347cc9983414455aef445fa86afadee/stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/actual-retirement-root2-faac/command-5347cc9983414455aef445fa86afadee/stdout",
+          "bytes": 34787,
+          "sha256": "44df28dd208af59f93b04d62e9d8148ced89856778391a4508f46b7d9975d392"
+        }
+      ]
+    },
+    {
+      "directory": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/actual-retirement-root2-faac/command-708f7f00579e49c78c2dff8c6406d7a2",
+      "join": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "--host=unix:///var/run/docker.sock",
+          "ps",
+          "-a",
+          "--no-trunc",
+          "--format",
+          "{{json .}}"
+        ],
+        "birth": 101972387,
+        "client_retirement_unproven": false,
+        "finished_epoch": 1793222279.504192,
+        "group_absent": true,
+        "group_members": [],
+        "peak_rss_kib": 30216,
+        "pid": 2153599,
+        "positive_wait4": true,
+        "process_group": 2153599,
+        "raw": {
+          "status.json": {
+            "bytes": 261,
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/actual-retirement-root2-faac/command-708f7f00579e49c78c2dff8c6406d7a2/status.json",
+            "sha256": "97d662ee049d76c4172f1738971a30ee33eaf9cd9ec25a3629fd793eb0fddb62"
+          },
+          "stderr": {
+            "bytes": 0,
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/actual-retirement-root2-faac/command-708f7f00579e49c78c2dff8c6406d7a2/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "stdout": {
+            "bytes": 352493,
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/actual-retirement-root2-faac/command-708f7f00579e49c78c2dff8c6406d7a2/stdout",
+            "sha256": "7267d0270b98e2e4191fef18f70c14d355763e5b6d811466e281795c6c0e5c1f"
+          }
+        },
+        "returncode": 0,
+        "signals_sent": 0,
+        "started_epoch": 1793222279.1772609,
+        "started_monotonic": 1004385.746084141,
+        "streams_closed": true,
+        "system_cpu_seconds": 0.023524,
+        "user_cpu_seconds": 0.069617,
+        "wait4_pid": 2153599,
+        "wait4_status": 0,
+        "wall_seconds": 0.32706771802622825
+      },
+      "files": [
+        {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/actual-retirement-root2-faac/command-708f7f00579e49c78c2dff8c6406d7a2/JOIN-WAIT4.json",
+          "bytes": 1984,
+          "sha256": "11fa6dbe27d2b5451e00257674e758927f37e1cb84713b0d2b2c2f0a0d978311"
+        },
+        {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/actual-retirement-root2-faac/command-708f7f00579e49c78c2dff8c6406d7a2/status.json",
+          "bytes": 261,
+          "sha256": "97d662ee049d76c4172f1738971a30ee33eaf9cd9ec25a3629fd793eb0fddb62"
+        },
+        {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/actual-retirement-root2-faac/command-708f7f00579e49c78c2dff8c6406d7a2/stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/actual-retirement-root2-faac/command-708f7f00579e49c78c2dff8c6406d7a2/stdout",
+          "bytes": 352493,
+          "sha256": "7267d0270b98e2e4191fef18f70c14d355763e5b6d811466e281795c6c0e5c1f"
+        }
+      ]
+    },
+    {
+      "directory": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/actual-retirement-root2-faac/command-7db4b1dcfc6e4a85819aa7a11f7ed72c",
+      "join": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "--host=unix:///var/run/docker.sock",
+          "inspect",
+          "--type",
+          "container",
+          "2460c49fbbbf8be6ee5ae931e7e769eec2f26e352937e7f4a4dcf5d2ebec8008"
+        ],
+        "birth": 101972458,
+        "client_retirement_unproven": false,
+        "finished_epoch": 1793222279.9675145,
+        "group_absent": true,
+        "group_members": [],
+        "peak_rss_kib": 26148,
+        "pid": 2153607,
+        "positive_wait4": true,
+        "process_group": 2153607,
+        "raw": {
+          "status.json": {
+            "bytes": 307,
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/actual-retirement-root2-faac/command-7db4b1dcfc6e4a85819aa7a11f7ed72c/status.json",
+            "sha256": "cf1f2dd1d2429471062ce7c940228df7889591fe3768313c3fc44268fb876543"
+          },
+          "stderr": {
+            "bytes": 0,
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/actual-retirement-root2-faac/command-7db4b1dcfc6e4a85819aa7a11f7ed72c/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "stdout": {
+            "bytes": 14317,
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/actual-retirement-root2-faac/command-7db4b1dcfc6e4a85819aa7a11f7ed72c/stdout",
+            "sha256": "5e12dd1eef545be5b0bc94362071955a8d016ca9474e1d696e351e4b912c3a6b"
+          }
+        },
+        "returncode": 0,
+        "signals_sent": 0,
+        "started_epoch": 1793222279.885816,
+        "started_monotonic": 1004386.454657725,
+        "streams_closed": true,
+        "system_cpu_seconds": 0.009231999999999999,
+        "user_cpu_seconds": 0.070667,
+        "wait4_pid": 2153607,
+        "wait4_status": 0,
+        "wall_seconds": 0.08181593508925289
+      },
+      "files": [
+        {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/actual-retirement-root2-faac/command-7db4b1dcfc6e4a85819aa7a11f7ed72c/JOIN-WAIT4.json",
+          "bytes": 2041,
+          "sha256": "d4c10184640cb034f38d68a722b1562d071da42271428ef3bf80951da65c6935"
+        },
+        {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/actual-retirement-root2-faac/command-7db4b1dcfc6e4a85819aa7a11f7ed72c/status.json",
+          "bytes": 307,
+          "sha256": "cf1f2dd1d2429471062ce7c940228df7889591fe3768313c3fc44268fb876543"
+        },
+        {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/actual-retirement-root2-faac/command-7db4b1dcfc6e4a85819aa7a11f7ed72c/stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/actual-retirement-root2-faac/command-7db4b1dcfc6e4a85819aa7a11f7ed72c/stdout",
+          "bytes": 14317,
+          "sha256": "5e12dd1eef545be5b0bc94362071955a8d016ca9474e1d696e351e4b912c3a6b"
+        }
+      ]
+    },
+    {
+      "directory": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/actual-retirement-root2-faac/command-ba3e4bdb867a44f5b51557ba3f64d648",
+      "join": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "--host=unix:///var/run/docker.sock",
+          "image",
+          "inspect",
+          "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5"
+        ],
+        "birth": 101972497,
+        "client_retirement_unproven": false,
+        "finished_epoch": 1793222280.3570652,
+        "group_absent": true,
+        "group_members": [],
+        "peak_rss_kib": 26280,
+        "pid": 2153616,
+        "positive_wait4": true,
+        "process_group": 2153616,
+        "raw": {
+          "status.json": {
+            "bytes": 296,
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/actual-retirement-root2-faac/command-ba3e4bdb867a44f5b51557ba3f64d648/status.json",
+            "sha256": "08c41f1837e5d9d36a5c0b31fea81dbaf3273709e08faea2fa357650bcdd3abf"
+          },
+          "stderr": {
+            "bytes": 0,
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/actual-retirement-root2-faac/command-ba3e4bdb867a44f5b51557ba3f64d648/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "stdout": {
+            "bytes": 3033,
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/actual-retirement-root2-faac/command-ba3e4bdb867a44f5b51557ba3f64d648/stdout",
+            "sha256": "ec329466befdb28861175d2a70be0eed867b2a295f36f5d94e33b738dc70cb9b"
+          }
+        },
+        "returncode": 0,
+        "signals_sent": 0,
+        "started_epoch": 1793222280.2752647,
+        "started_monotonic": 1004386.844132965,
+        "streams_closed": true,
+        "system_cpu_seconds": 0.011241,
+        "user_cpu_seconds": 0.062815,
+        "wait4_pid": 2153616,
+        "wait4_status": 0,
+        "wall_seconds": 0.08188877708744258
+      },
+      "files": [
+        {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/actual-retirement-root2-faac/command-ba3e4bdb867a44f5b51557ba3f64d648/JOIN-WAIT4.json",
+          "bytes": 2018,
+          "sha256": "62f200a2ee6062923af952ce93b615a0721a85f837fe3f269a123a6b2b2e5995"
+        },
+        {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/actual-retirement-root2-faac/command-ba3e4bdb867a44f5b51557ba3f64d648/status.json",
+          "bytes": 296,
+          "sha256": "08c41f1837e5d9d36a5c0b31fea81dbaf3273709e08faea2fa357650bcdd3abf"
+        },
+        {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/actual-retirement-root2-faac/command-ba3e4bdb867a44f5b51557ba3f64d648/stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/actual-retirement-root2-faac/command-ba3e4bdb867a44f5b51557ba3f64d648/stdout",
+          "bytes": 3033,
+          "sha256": "ec329466befdb28861175d2a70be0eed867b2a295f36f5d94e33b738dc70cb9b"
+        }
+      ]
+    }
+  ],
+  "removal_claim_created": false,
+  "removals": 0,
+  "permanent_mutex_rows_now": [],
+  "failure": "Exact container Labels and Env equal pinned image; inherited image mckernel.owner c56c894429a44fd19710ae638df0c5f3 incorrectly required absent",
+  "family": "inherited_image_profile_assumption",
+  "bounded_correction_authorized": 1,
+  "container_retained": true,
+  "current_physical_clearance": false,
+  "build_nonce": "faac1b4804174de5800c58d61ba98004",
+  "build_nonce_remains_consumed_once": true
+}

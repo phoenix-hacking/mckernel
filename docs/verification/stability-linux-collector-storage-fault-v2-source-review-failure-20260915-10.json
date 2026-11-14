@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_review",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "review_attempt": 14,
+  "status": "FAIL_SOURCE",
+  "recorded_utc": "2026-09-16T01:25:10Z",
+  "review_input": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260915-16.tar.gz",
+    "sha256": "19a51d537f17d8fdd75597a468b8bc18555708f8235cd17d79dda85bb1d8afa2",
+    "size": 328730,
+    "members": 25
+  },
+  "source_sha256": {
+    "prepare.py": "1d09a2f4f143af79de7eb98e7cc6d5c6a01efa89e15fa925d2c7869c78ab2df4",
+    "witness_owner.py": "4554efcda371a395681ff7f7353e05d98adf6ab4aae656b40d524f128fdf4670",
+    "supervise.py": "22b4b669d5f4082402bbb214b1e7e20e218a28eba8c0f9c71a5e4c1b215edea6",
+    "oracle.py": "2dec9dd59bd27f785aa05d7b8b8af1915ad45dc5adeb52d373d401d05f0bc9ca",
+    "test_collector_storage_fault_packet.py": "6960c3f3bb86ab7ed4245256f97ab5a0e1f5e1723f5caf27174433b21368b5b7"
+  },
+  "checks_before_review": {
+    "python3.9.12": "84/84 PASS",
+    "python3.8.10": "84/84 PASS",
+    "pycompile": "PASS on both interpreters"
+  },
+  "findings": [
+    "The adopted signal-error expiration join accepts an ECHILD after the error and before the deadline.",
+    "Late publication finalization is absent from preflight failure and already-incomplete cleanup branches.",
+    "The oracle accepts duplicate publication-finish deadline records.",
+    "The supervisor oracle accepts Boolean schema_version because exact integer typing is missing."
+  ],
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

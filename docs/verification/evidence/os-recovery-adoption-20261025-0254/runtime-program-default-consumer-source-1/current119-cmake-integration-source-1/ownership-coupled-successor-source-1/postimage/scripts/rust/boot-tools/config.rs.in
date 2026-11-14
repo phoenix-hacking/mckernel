@@ -1,0 +1,3 @@
+// Configured by CMake @ONLY, matching installed SMP paths.
+#[derive(Clone)] pub struct Config {pub sbin:String,pub etc:String,pub modules:String,pub kernel:String,pub arch:String,pub buildid:String,pub linux_work_irq:bool,pub trampoline:String}
+impl Config {pub fn installed()->Self{Self{sbin:"@prefix@/sbin".into(),etc:"@ETCDIR@".into(),modules:"@KMODDIR@".into(),kernel:"@MCKERNELDIR@".into(),arch:"@ARCH@".into(),buildid:"@BUILDID@".into(),linux_work_irq:"@ENABLE_LINUX_WORK_IRQ_FOR_IKC@"=="ON",trampoline:std::env::var("IHK_TRAMPOLINE_PHYS").unwrap_or_default()}}}

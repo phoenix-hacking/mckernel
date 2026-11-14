@@ -1,0 +1,106 @@
+{
+  "profile": "CPU6 / 1job /1GiBAS /30CPU /35+2wall /32MiBperstream",
+  "rustc_sha256": "f8d033fd72e878ec60493788c8bffec2e6c154dcab6f0cb4c145af8ada26a7ed",
+  "results": [
+    {
+      "environment": {
+        "RUSTC_BOOTSTRAP": "1"
+      },
+      "name": "syntax-fork_control_registry-1",
+      "command": [
+        "/home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "-Zunpretty=normal",
+        "/home/holden/mckernel-work/host-preparation/phase5-kernel-panic-free-link-repair-20261020-1/source/kernel/rust/fork_control_registry.rs"
+      ],
+      "pid": 2008813,
+      "exit_code": 0,
+      "elapsed": 0.017206909018568695,
+      "positive_wait": true,
+      "stdout_sha256": "16c3574811b2ba90f34151a8b4ff3cc172944b5688b8e6430c6894dd86a97dc1",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "environment": {
+        "RUSTC_BOOTSTRAP": "1"
+      },
+      "name": "syntax-fork_child_credits-1",
+      "command": [
+        "/home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "-Zunpretty=normal",
+        "/home/holden/mckernel-work/host-preparation/phase5-kernel-panic-free-link-repair-20261020-1/source/kernel/rust/fork_child_credits.rs"
+      ],
+      "pid": 2008816,
+      "exit_code": 0,
+      "elapsed": 0.0167810270213522,
+      "positive_wait": true,
+      "stdout_sha256": "14df8d7c454c397563308b8419dfd6fe0fee59b2e3b3a46e925d45331ac5eb0e",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "environment": {
+        "RUSTC_BOOTSTRAP": "1"
+      },
+      "name": "syntax-fork_runnable_child-1",
+      "command": [
+        "/home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "-Zunpretty=normal",
+        "/home/holden/mckernel-work/host-preparation/phase5-kernel-panic-free-link-repair-20261020-1/source/kernel/rust/fork_runnable_child.rs"
+      ],
+      "pid": 2008819,
+      "exit_code": 0,
+      "elapsed": 0.016877428977750242,
+      "positive_wait": true,
+      "stdout_sha256": "bb42ef0ff63972fd52d968fc45f8270077244c86459c96eeb36ff4bd39a39bd0",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "environment": {
+        "RUSTC_BOOTSTRAP": "1"
+      },
+      "name": "syntax-fork_final_ack-1",
+      "command": [
+        "/home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "-Zunpretty=normal",
+        "/home/holden/mckernel-work/host-preparation/phase5-kernel-panic-free-link-repair-20261020-1/source/kernel/rust/fork_final_ack.rs"
+      ],
+      "pid": 2008822,
+      "exit_code": 0,
+      "elapsed": 0.016700358013622463,
+      "positive_wait": true,
+      "stdout_sha256": "3874ff0e01b2ffa34ee793da34ac0fad762e9eab68ad9298221ea339c4568a01",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "environment": {
+        "RUSTC_BOOTSTRAP": "1"
+      },
+      "name": "panic-free-actual-body-compile-1",
+      "command": [
+        "/home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--cfg",
+        "native_linux_irq_work_v6_12",
+        "--test",
+        "-C",
+        "codegen-units=1",
+        "-C",
+        "debuginfo=0",
+        "-C",
+        "linker=/usr/bin/x86_64-linux-gnu-gcc-9",
+        "/home/holden/mckernel-work/host-preparation/phase5-kernel-panic-free-link-repair-20261020-1/fixture-1/actual-phase5.rs",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/phase5-kernel-panic-free-link-repair-20261020-1/panic-free-tests-1"
+      ],
+      "pid": 2008825,
+      "exit_code": 1,
+      "elapsed": 0.4658155210199766,
+      "positive_wait": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "28881b08f1b31c4f090c6a42efbf602aacfa6123dfdaabbfd34fe75d06496f4e"
+    }
+  ]
+}

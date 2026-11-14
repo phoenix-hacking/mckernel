@@ -1,0 +1,13 @@
+{
+  "schema": "mckernel.f021-evidence-retirement-observer-failure.v1",
+  "status": "FAIL_CLOSED_BEFORE_DELETION",
+  "command": ["/usr/bin/python3", "docs/verification/evidence/native-exact-f021bdee-evidence-retirement-20260930.py", "--audit"],
+  "exit_code": 1,
+  "output": "FAIL_CLOSED: source differs from archived map",
+  "first_difference": {"member": "container.log", "field": "allocated_bytes", "map": 78422016, "live_snapshot": null},
+  "map_member_count": 286318,
+  "live_snapshot_member_count": 286318,
+  "source": {"path": "/home/holden/mckernel-work/scratch/native-exact-build-evidence-f021bdee-scratch-8", "identity": "1831:6684763", "state": "intact"},
+  "result": {"path": "/home/holden/mckernel-work/retained-exact-candidates/native-exact-build-evidence-f021bdee-scratch-8-retirement-20260930.result.json", "state": "absent"},
+  "deletion": "none"
+}

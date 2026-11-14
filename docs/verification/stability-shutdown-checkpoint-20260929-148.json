@@ -1,0 +1,65 @@
+{
+  "schema": "mckernel-stability-shutdown-checkpoint-v1",
+  "checkpoint": 148,
+  "recorded_at": "2026-09-29T07:09:01-07:00",
+  "status": "PAUSED_INCOMPLETE",
+  "reason": "launcher shutdown request",
+  "head_before_checkpoint_commit": "a85cf3a83641eed42a0dd94d62a61396e6472a45",
+  "dispatch_stopped": true,
+  "all_child_agents_terminal": true,
+  "active_bounded_operations": [],
+  "heavy_build_or_guest_active": false,
+  "launcher": {
+    "boot_id": "c733d83b-a5ae-4f91-9ce6-9f8ccf119afd",
+    "launcher_pid": 3399308,
+    "launcher_starttime": 83682487,
+    "worker_pid": 3399313,
+    "worker_starttime": 83682494,
+    "app_server_pid": 3399317,
+    "app_server_starttime": 83682500
+  },
+  "preserved_failure": {
+    "record": "docs/verification/stability-native-exact-build-704f6654-failure-20260929-1.json",
+    "archive": "docs/verification/evidence/stability-native-exact-build-704f6654-failure-20260929-1.tar.gz",
+    "archive_sha256": "e09ca937456ede3494c81c611c96d45960f5f633e7874817dd1c54a309568417",
+    "family": "queue fixture compiler output absent or non-executable in phase 0",
+    "unchanged_retry_forbidden": true
+  },
+  "preserved_runtime": {
+    "candidate": "/dev/shm/mckernel-exact-candidate-704f6654-1",
+    "candidate_device": 26,
+    "candidate_inode": 36767,
+    "backup": "/dev/shm/mckernel-exact-metadata-backup-704f6654-1",
+    "backup_device": 26,
+    "backup_inode": 47413,
+    "lease_present": false,
+    "artifact_output_empty": true,
+    "evidence_root_present": true,
+    "terminal_container_id": "68881c0557b704b188dc62028b194e23ec896565ee231558aa42383d935927a6",
+    "terminal_container_status": "exited",
+    "terminal_container_exit": 1,
+    "terminal_container_pid": 0,
+    "terminal_container_oom_killed": false,
+    "terminal_container_restart_policy": "no"
+  },
+  "capacity": {
+    "host_available_bytes": 23679508480,
+    "scratch_available_bytes": 21554311168,
+    "tmpfs_available_bytes": 7502585856,
+    "mem_available_kib": 19563268,
+    "swap_free_kib": 29816
+  },
+  "acceptance": {
+    "successful_current_candidate_builds": 0,
+    "real_guest_applications_this_window": 0,
+    "application_catalog": "0/273",
+    "os_complete": false
+  },
+  "next_tasks": [
+    "Reconcile the launcher identities, preserved roots, terminal container, lease absence and capacity.",
+    "Reproduce whether the reviewed container's temporary filesystem is non-executable and preserve the exact probe.",
+    "Apply one bounded queue-checker correction with exact diagnostics and a verified writable executable fixture location.",
+    "Run the isolated exact Rust compile and seven-test queue fixture regression under the reviewed light profile, then obtain independent source review.",
+    "Create a wholly fresh commit-derived candidate and request before seeking any new heavy-build release; never rerun the unchanged 704f6654-1 request."
+  ]
+}

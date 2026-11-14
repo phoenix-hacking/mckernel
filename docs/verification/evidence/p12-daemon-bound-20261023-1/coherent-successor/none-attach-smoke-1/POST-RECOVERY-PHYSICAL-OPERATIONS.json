@@ -1,0 +1,149 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "sources": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/readonly_export_retired_owner.py",
+      "sha256": "d514137bfd5bc09931605ca80cd6ddd1b12a19e0504907396dd05bea85f9eebb",
+      "bytes": 1712
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-resume-20261023-1/retirement-preparation/readonly_current_proc.py",
+      "sha256": "a24a82383e83e7363b2a1833f9bdee942e8590ca1a369f44a5af59baf3cce097",
+      "bytes": 1724
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-resume-20261023-1/retirement-preparation/readonly_current_mutex_paths_positive.py",
+      "sha256": "ca4226a4b7afe068db63b086177333d5662331d0c6ab0d9ef2ad322015a36418",
+      "bytes": 2288
+    }
+  ],
+  "operations": [
+    {
+      "name": "export",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=30:30",
+        "--fsize=33554432:33554432",
+        "--core=0:0",
+        "--nofile=256",
+        "--",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/readonly_export_retired_owner.py"
+      ]
+    },
+    {
+      "name": "proc",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=30:30",
+        "--fsize=33554432:33554432",
+        "--core=0:0",
+        "--nofile=256",
+        "--",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/native235-resume-20261023-1/retirement-preparation/readonly_current_proc.py"
+      ]
+    },
+    {
+      "name": "mutex",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=30:30",
+        "--fsize=33554432:33554432",
+        "--core=0:0",
+        "--nofile=256",
+        "--",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/native235-resume-20261023-1/retirement-preparation/readonly_current_mutex_paths_positive.py"
+      ]
+    },
+    {
+      "name": "name",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=30:30",
+        "--fsize=33554432:33554432",
+        "--core=0:0",
+        "--nofile=256",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "/usr/bin/docker",
+        "--config=/dev/null",
+        "--host=unix:///var/run/docker.sock",
+        "ps",
+        "-aq",
+        "--no-trunc",
+        "--filter",
+        "name=^/mckernel-native-diagnostic-7247e16d234147afa148cd0ef24206d4$"
+      ]
+    },
+    {
+      "name": "label",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=30:30",
+        "--fsize=33554432:33554432",
+        "--core=0:0",
+        "--nofile=256",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "/usr/bin/docker",
+        "--config=/dev/null",
+        "--host=unix:///var/run/docker.sock",
+        "ps",
+        "-aq",
+        "--no-trunc",
+        "--filter",
+        "label=mckernel.native-diagnostic.owner=7247e16d234147afa148cd0ef24206d4"
+      ]
+    }
+  ],
+  "capture": "OrdinarydirectO_EXCLregularfiles, no signals/nooutertimeout; waitdirectjoin/close. Readonlyrootcodebounded; export<=8MiB/16MiBencoded, sourceunchangedapartROOTliteral.",
+  "preceding_facts": "Exactshiminstalled0/.515s GILreleased/detach0, flags/error/queuepreserved. Currentordinary3502879+3502874positiveENOENT; mutex27:4unheld. OwnerproducedFAIL+normalrecoveryrootfiles pendingexport beforephysicalacceptance.",
+  "mutations": 0,
+  "physical_clearance": false
+}

@@ -1,0 +1,65 @@
+{
+  "at": "2026-11-11T20:32:54.206476+00:00",
+  "status": "POSITIVE_FULL_ORIGINAL_STAGE_TOOL_COMPLETION",
+  "tool_calls": [
+    {
+      "tool": "exec_command",
+      "arguments": {
+        "cmd": "/usr/bin/taskset -c 0 /usr/bin/prlimit --as=268435456:1073741824 --core=0 --cpu=330 --fsize=8388608:268435456 /usr/bin/python3 -I -B /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-scoped-staging-p04tests-max-1/fd-cleanup-escalation-1/profile-inheritance-correction-1/run_root_once.py /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-scoped-staging-review-p04source-max-1/fd-cleanup-escalation-1/profile-inheritance-correction-1/REVIEW.json a797555ed2cdaafcbd910e28581aa3b9df14338ad52e113dd27f3e207289e8d1",
+        "workdir": "/home/holden/mckernel",
+        "login": false,
+        "tty": false,
+        "yield_time_ms": 1000,
+        "max_output_tokens": 3500
+      },
+      "result": {
+        "chunk_id": "eb5fb7",
+        "wall_time_seconds": 1.000767602,
+        "session_id": 28073,
+        "original_token_count": 0,
+        "output": ""
+      }
+    },
+    {
+      "tool": "write_stdin",
+      "arguments": {
+        "session_id": 28073,
+        "chars": "",
+        "yield_time_ms": 1000,
+        "max_output_tokens": 3500
+      },
+      "result": {
+        "chunk_id": "b7fa5e",
+        "wall_time_seconds": 5.001890939,
+        "session_id": 28073,
+        "original_token_count": 0,
+        "output": ""
+      }
+    },
+    {
+      "tool": "write_stdin",
+      "arguments": {
+        "session_id": 28073,
+        "chars": "",
+        "yield_time_ms": 1000,
+        "max_output_tokens": 3500
+      },
+      "result": {
+        "chunk_id": "54149f",
+        "wall_time_seconds": 3.4273e-05,
+        "exit_code": 0,
+        "original_token_count": 68,
+        "output": "{\"status\": \"PASS_CURRENT_A2F_HOST_STAGE_ONLY\", \"output\": \"/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1\", \"materialized_files\": 43, \"native_execution\": false, \"Root_qualification_pending\": true}\n"
+      }
+    }
+  ],
+  "tool_exit_code": 0,
+  "tool_session_id": null,
+  "original_tool_session_id": 28073,
+  "all_owned_clients_waits_streams_joined": true,
+  "remaining_owned_children": [],
+  "result_sha256": "ab0bc1fd3b3b4c5d15ac3be51f599fb84b1ddab4a70e8153ad563c8517c01827",
+  "only_current_a2f_HOST_stage": true,
+  "native_controller_or_claim_not_executed": true,
+  "all_other_holds_unchanged": true
+}

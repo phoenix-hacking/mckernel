@@ -1,0 +1,159 @@
+{
+  "schema": "mckernel.numa-native-app.actual-offline-stage-review.v1",
+  "status": "PASS_ACTUAL_OFFLINE_STAGE_AND_STRICT_MANIFEST_ONLY",
+  "decision": "ACCEPT_EXACT_ACTUAL_MANIFEST_FOR_DOWNSTREAM_SOURCE_NORMALIZATION_AND_RUNTIME_PREPARATION",
+  "reviewer": "/root/numa_image_source_review",
+  "implementation_ownership": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "strict_loader_passed": true,
+  "all_metadata_equal": true,
+  "launcher_equal": true,
+  "launcher_equal_scope": "Accepted runtime launcher33f remains unchanged; kernel053d, init and modules remain unchanged.",
+  "archive_members": 60,
+  "archive_records_excluding_trailers": 66,
+  "archive_trailers": 2,
+  "unchanged_members": 59,
+  "observed_delta": {
+    "apps/app": {
+      "size": [
+        5619416,
+        5620160
+      ],
+      "sha256": [
+        "0339cb5fcba4ea4f1f2977fd0d3a7653b48e0af1de7e0625fbfafbfe13fce5fb",
+        "029065eb89fb79885d535f338395f986f890a1ed764062bb76ba463777b92ab3"
+      ]
+    }
+  },
+  "actual_capture_facts": {
+    "returncode": 0,
+    "elapsed_seconds": 11.438655008969363,
+    "pid": 2827986,
+    "start": 41771094,
+    "direct_joined": true,
+    "process_group_absent": true,
+    "streams_closed": true,
+    "stderr_bytes": 0,
+    "status_sha256": "ae77d47b71b26f8e8fdc4fc3e948a4efc2b331836727be9eab650031b8bb51b9"
+  },
+  "stage_result_sha256": "86bb8d21e2eb30bf96f8bc8850b8e736e8d67534bcf130cc6164b959f6fb4e9b",
+  "reported_aggregate_stage_bytes": 42550958,
+  "aggregate_asset_bytes_including_result": 42570348,
+  "base_prefix_verified": true,
+  "overlay_frame_verified": true,
+  "changed_payload_bytes_verified": true,
+  "qmp_endpoint_encoded_bytes": 101,
+  "runtime_release": false,
+  "physical_release": false,
+  "native_accepted": false,
+  "normalization_accepted": false,
+  "compute_C_retirement_credit": false,
+  "counter_delta": 0,
+  "reviewer_reran_stage_or_artifact_audit": false,
+  "manifest": {
+    "path": "/home/holden/mckernel-work/scratch/nov-m-261021-1/numa/manifest.json",
+    "sha256": "e468d7a77d2add5e5605057e6a29293d64f0f9b1f5971af02f18d4dde2822e25",
+    "size": 5256,
+    "mode": 33152
+  },
+  "base": {
+    "path": "/home/holden/mckernel/scratch/nov-a-261021-1/numa/base.cpio.gz",
+    "sha256": "4ac78ee9bd5fc6ecc4d56f35277cf86e920297984c7c4dc15322728588acb4dc",
+    "size": 12874441,
+    "mode": 33152
+  },
+  "overlay": {
+    "path": "/home/holden/mckernel/scratch/nov-a-261021-1/numa/lifecycle.cpio.gz",
+    "sha256": "0f3907c624879f48838d4590a96430d498f38972ee8a0afb94a77b9ea3f8b5bc",
+    "size": 15206902,
+    "mode": 33152
+  },
+  "image": {
+    "path": "/home/holden/mckernel/scratch/nov-a-261021-1/image.artifact",
+    "sha256": "053d59b533665eef9d56fe1b348e699d97159e954fbc1fbff973bbe46113f485",
+    "size": 8435496,
+    "mode": 33261
+  },
+  "mcexec": {
+    "path": "/home/holden/mckernel/scratch/nov-a-261021-1/mcexec",
+    "sha256": "33f88082a995857c17ca07dab698e51d78064632462b4069b3c2396e0d29a131",
+    "size": 394656,
+    "mode": 33261
+  },
+  "payload": {
+    "path": "/home/holden/mckernel/scratch/nov-a-261021-1/numa.app",
+    "sha256": "029065eb89fb79885d535f338395f986f890a1ed764062bb76ba463777b92ab3",
+    "size": 5620160,
+    "mode": 33261
+  },
+  "overlay_manifest": {
+    "path": "/home/holden/mckernel/scratch/nov-a-261021-1/numa/overlay-manifest.json",
+    "sha256": "d5881438817e683f4d632303014823a3dcca8b96e390177b3c2fa8a7654607be",
+    "size": 19303,
+    "mode": 33152
+  },
+  "module_tuple": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-a7d84db0d8b54b9b94347fd0aff57594/modules/ihk.ko",
+      "sha256": "51b48a9e42eaa2411cab2a28edf9bb5db8b2d648675d083473e926f91dd0e038",
+      "size": 1440392,
+      "mode": 33188
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-a7d84db0d8b54b9b94347fd0aff57594/modules/ihk-smp-x86_64.ko",
+      "sha256": "82c9021f7491fa8bc6d178fe99e7d4b7b6f90838474a9c91b62ddb8edb3d13f8",
+      "size": 11630064,
+      "mode": 33188
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-a7d84db0d8b54b9b94347fd0aff57594/modules/mcctrl.ko",
+      "sha256": "6571ac7eca13559d8bab65125d54facbbc65e84f815d4ff3fc77ec6aa1104972",
+      "size": 1913904,
+      "mode": 33188
+    }
+  ],
+  "payload_contract": {
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "app",
+      "threads"
+    ],
+    "cwd": "/case/work",
+    "env": {
+      "COKERNEL_PATH": "/apps",
+      "PATH": "/usr/bin:/bin"
+    },
+    "oracle": {
+      "stdout_hex": "6e756d61206f7665726c61703d312062696e64733d3320717565726965733d34382073706c69743d31207265696e736572743d31206e65696768626f72733d342070726f636573733d31206775617264733d312062797465733d3238363732207072657365727665643d3320756e6d61707065643d310a",
+      "stderr_hex": "",
+      "exit_code": 37
+    },
+    "stdout_limit_bytes": 1024,
+    "stderr_limit_bytes": 1024
+  },
+  "bzImage": {
+    "mode": 33188,
+    "path": "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/bzImage",
+    "sha256": "032653ee0661b059c325e2a0911a9d492805f1a889c4df515473d69a8be105bc",
+    "size": 16130048
+  },
+  "assets_root": "/home/holden/mckernel/scratch/nov-a-261021-1",
+  "manifests_root": "/home/holden/mckernel-work/scratch/nov-m-261021-1",
+  "endpoint": "/home/holden/mckernel-work/scratch/nov-p-261021-1/t/attempt-2df79055769c445d8800cf1775993e2d/qmp.sock",
+  "original_authority": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/INDEPENDENT-ACTUAL-119B-APP-ONLY-STAGE-ACCEPTANCE-1.json",
+    "sha256": "9c92361c30207e2a87dc5e64c900ef9e0dfc63bb73fdcec46e33220bb3eacded",
+    "bytes": 1934
+  },
+  "stage_result": {
+    "path": "/home/holden/mckernel/scratch/nov-a-261021-1/numa/stage-result.json",
+    "sha256": "86bb8d21e2eb30bf96f8bc8850b8e736e8d67534bcf130cc6164b959f6fb4e9b",
+    "bytes": 19390
+  },
+  "projection_only": true,
+  "recorder": "/root",
+  "projection_provenance": "Exact producer fields copied under genuine reviewer authorization in retained raw decision; typed descriptors/integers unchanged, no new stage or runtime acceptance."
+}

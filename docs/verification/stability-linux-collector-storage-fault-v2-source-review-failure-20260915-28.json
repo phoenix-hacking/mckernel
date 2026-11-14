@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_review_failure",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "review_attempt": 32,
+  "status": "FAIL_SOURCE",
+  "recorded_utc": "2026-09-16T06:31:20Z",
+  "review_input": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260915-35.tar.gz",
+    "sha256": "701d73ce1a7ff67c538dbdd5522569fbea1fe9f6124e8c8d88b872e5fb41006a",
+    "size": 37391676,
+    "members": 29,
+    "safe_unique_members": true
+  },
+  "reviewed_source_sha256": {
+    "oracle.py": "22268c42bb26b41760683d6d5327a9610239c58332316a37a4df6caae3fdd346",
+    "test_collector_storage_fault_packet.py": "2011883a0210cd9c1af6800c85e42fae12a147c833dd75d105e33309e51065cb"
+  },
+  "verified_inputs": {
+    "python_3_9_12": "120/120 PASS",
+    "python_3_8_10": "120/120 PASS",
+    "pycompile_both": "PASS",
+    "outer_manifest_and_nested_archive34": true
+  },
+  "finding": "The selector-2/6 I/O exception applies to every sink rather than request.bin alone, permitting impossible truncated, I/O-error and overflowing events-sink counters despite complete retained events.",
+  "representative_accepted_canonical_sha256": {
+    "events_truncated": "ba163d9b5769b444835c52de3de6a11deb244110f94cc73715e3268bf6ca2044",
+    "events_io_error": "41b7a8316ee3f3702784218bb0a402441b638aa544f6a9b633890eabd44addb6",
+    "events_seen_u64_overflow": "4dffbd1f1d07e87ef6df904624fd7ad2d62111364f1b2c816eff71fe037f3495"
+  },
+  "required_next": [
+    "Restrict selector-2/6 failure semantics to request.bin; require a healthy exact events sink.",
+    "Bound all sink counters to the producer uint64 range and preserve exact counter relationships.",
+    "Add complete-fixture selector-2 and selector-6 controls, rerun both pinned suites and obtain fresh independent review."
+  ],
+  "review_scope_complete": false,
+  "source_accepted": false,
+  "compiler_packet_released": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

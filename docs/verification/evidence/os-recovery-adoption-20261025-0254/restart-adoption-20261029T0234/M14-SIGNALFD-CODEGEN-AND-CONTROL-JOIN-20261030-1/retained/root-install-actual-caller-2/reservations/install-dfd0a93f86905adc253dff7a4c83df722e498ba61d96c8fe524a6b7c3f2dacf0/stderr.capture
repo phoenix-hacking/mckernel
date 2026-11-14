@@ -1,0 +1,19 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-parent-successor-4/root_parent.py", line 203, in run
+    ready_parent_socket(parent_sock,keeper_fd,handoff_caps)
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-parent-successor-4/root_parent.py", line 87, in ready_parent_socket
+    if events&(select.POLLERR|select.POLLHUP|select.POLLNVAL):raise Unknown('custody channel lost')
+root_parent.Unknown: custody channel lost
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<string>", line 128, in <module>
+  File "<string>", line 125, in main
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-parent-successor-4/root_parent.py", line 294, in serve
+    result,latch,lease_fd,root_fd=run(admission_raw,admission_sha,review_raw,review_sha,nonce,caps,actor_pids)
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-parent-successor-4/root_parent.py", line 284, in run
+    time.sleep(1)
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-parent-successor-4/root_parent.py", line 185, in on_stop
+    raise InterruptedError('configured stop received')
+InterruptedError: configured stop received

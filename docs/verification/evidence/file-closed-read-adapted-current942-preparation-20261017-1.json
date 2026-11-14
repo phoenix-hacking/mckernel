@@ -1,0 +1,480 @@
+{
+  "adaptation": "Only change second output label to buffer-last and interpret each printed byte through unsigned char before int. Source operations, EBADF assertion and original exact oracle are unchanged.",
+  "application_acceptance": false,
+  "artifacts": {
+    "app": {
+      "sha256": "8f7297b35859ca364e0a32afaf013637030b7aecaf4f9d2626e077a7e9d7dd39",
+      "size": 871992
+    },
+    "app.d": {
+      "sha256": "32829768dfbe46e799ff97ad14a0051da3c67deacdf65423d06d0e10aa78fb7a",
+      "size": 2601
+    }
+  },
+  "captures": {
+    "adaptation.diff": {
+      "sha256": "228d5e1f86152ec94520ee7349ba7dc7a7f898905ee32b0218a1e479314019cc",
+      "size": 820
+    },
+    "app": {
+      "sha256": "8f7297b35859ca364e0a32afaf013637030b7aecaf4f9d2626e077a7e9d7dd39",
+      "size": 871992
+    },
+    "app.d": {
+      "sha256": "32829768dfbe46e799ff97ad14a0051da3c67deacdf65423d06d0e10aa78fb7a",
+      "size": 2601
+    },
+    "executed.c": {
+      "sha256": "f50d970258c1016c87f8c640b26d6ae1f9a1dd458650bc351c627aa82c0b6a5f",
+      "size": 929
+    },
+    "expected.stdout": {
+      "sha256": "a774f1ac5452ba211d9f4ee0130223afde7d5ba8bdc0f8bcd24994ec56926581",
+      "size": 56
+    },
+    "frozen-oracle.json": {
+      "sha256": "7b2a2c124d1ffa6884cb18a5ecfcff098ad66a7712dae8b06e7a22e720feeb66",
+      "size": 933
+    },
+    "frozen-source.c": {
+      "sha256": "f50d970258c1016c87f8c640b26d6ae1f9a1dd458650bc351c627aa82c0b6a5f",
+      "size": 929
+    },
+    "linux-reference.status": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    "linux-reference.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "linux-reference.stdout": {
+      "sha256": "a774f1ac5452ba211d9f4ee0130223afde7d5ba8bdc0f8bcd24994ec56926581",
+      "size": 56
+    },
+    "observe.py": {
+      "sha256": "ffe3c8d401a407e406527a8dfdb186782a0d96a676642f13862e936d83626c08",
+      "size": 6238
+    },
+    "original.c": {
+      "sha256": "24cc7ec1d240df1bc34870a0e7ab685d11c38b80c1a5a2a40e3291bcf20a8d9c",
+      "size": 684
+    },
+    "payload-compile.status": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    "payload-compile.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "payload-compile.stdout": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    }
+  },
+  "collector_evaluator_contract": {
+    "bytes_negative": "wrong payload bytes",
+    "caveat": "Protocol-only regression: harmless actual default C serializer populated with exact original frozen oracle/Linux-reference bytes replaces only ND_PAYLOAD in a copy of retained TLS transport. No closed-read guest execution or acceptance inferred. Original retained transport is unchanged.",
+    "evaluator": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic.py",
+      "sha256": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e",
+      "size": 53440
+    },
+    "files": {
+      "/home/holden/mckernel-work/scratch/file-closed-read-adapted-current942-20261017-1/contract/default-compile.json": {
+        "sha256": "6b196efddd475ac25cb8253fad6e506aca70f24edddeaaab29aba1b0a448476b",
+        "size": 728
+      },
+      "/home/holden/mckernel-work/scratch/file-closed-read-adapted-current942-20261017-1/contract/default-compile.stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "/home/holden/mckernel-work/scratch/file-closed-read-adapted-current942-20261017-1/contract/default-compile.stdout": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "/home/holden/mckernel-work/scratch/file-closed-read-adapted-current942-20261017-1/contract/default-constants.json": {
+        "sha256": "d668d2299e4f19b95f74a30cfc12664d82cee2d9256bf5e760debe2a3c8afe9f",
+        "size": 513
+      },
+      "/home/holden/mckernel-work/scratch/file-closed-read-adapted-current942-20261017-1/contract/default-constants.stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "/home/holden/mckernel-work/scratch/file-closed-read-adapted-current942-20261017-1/contract/default-constants.stdout": {
+        "sha256": "2e2ba7ae8f66f2d707986ecb5c4590ba4f80e7d93b519277f77ec96d08ab2172",
+        "size": 671
+      },
+      "/home/holden/mckernel-work/scratch/file-closed-read-adapted-current942-20261017-1/contract/default-wrapper": {
+        "sha256": "1b1822b13745834f7039e52a573015d2a1e2d0967be98ec690807d98d85c79a3",
+        "size": 31512
+      },
+      "/home/holden/mckernel-work/scratch/file-closed-read-adapted-current942-20261017-1/contract/default-wrapper.c": {
+        "sha256": "907182f3ff088693412fd01a117efd1d25ca2290d7124704e38846be964928a6",
+        "size": 1013
+      },
+      "/home/holden/mckernel-work/scratch/file-closed-read-adapted-current942-20261017-1/contract/retained-transport-observation.json": {
+        "sha256": "7da3f32072ad5160dca6cbbdcf9fdca365d5c2ebc05104c3c8eff89c7df0256e",
+        "size": 76477
+      }
+    },
+    "helper": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel/scripts/tests/test_native_diagnostic_collector_manifest_limits.py",
+      "sha256": "069ca83563798044ae2b69be183cdb8665bac86d79db8b35dd540e66f033d1c2",
+      "size": 10462
+    },
+    "limit_negative": "stream accounting",
+    "positive": "PROTOCOL_PASS",
+    "producer": {
+      "argv": [
+        "/bin/mcexec",
+        "-t",
+        "1",
+        "0",
+        "app",
+        "A",
+        "",
+        "B"
+      ],
+      "cwd": "/case/work",
+      "env": {
+        "COKERNEL_PATH": "/apps",
+        "PATH": "/usr/bin:/bin"
+      },
+      "finished_ns": 3,
+      "procfs_empty": true,
+      "raw_wait_status": 0,
+      "reaped_ns": 2,
+      "started_ns": 1,
+      "streams": {
+        "stderr": {
+          "discarded": 0,
+          "eof": true,
+          "eof_ns": 2,
+          "hex": "",
+          "limit": 1024,
+          "observed": 0,
+          "retained": 0,
+          "truncated": false
+        },
+        "stdout": {
+          "discarded": 0,
+          "eof": true,
+          "eof_ns": 2,
+          "hex": "726561642d72657475726e3d2d31206572726e6f3d390a6275666665722d66697273743d323034206275666665722d6c6173743d3230340a",
+          "limit": 1024,
+          "observed": 56,
+          "retained": 56,
+          "truncated": false
+        }
+      }
+    },
+    "result": "PASS_ACTUAL_DEFAULT_C_PRODUCER_SELECTED_ORACLE_POSITIVE_LIMIT_AND_BYTES_NEGATIVES",
+    "retained_transport_source": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/scratch/thread-tls-isolation-current942-dispatch-20261017-2/attempt-result.json",
+      "sha256": "7afb0762d2390e598dd89c6689d7ff5f5d5a4a7ced9f9da417c8c95e62dadee4",
+      "size": 81613
+    },
+    "wrapper_selection": "Existing helper exact wrapper expression plus command/check_contract, only default profile; concrete bounded stream bytes/eof accounting injected into wrapper, PID1 main never executed."
+  },
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/gcc",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-static",
+        "-fno-pie",
+        "-no-pie",
+        "-Wl,-z,noexecstack",
+        "-MD",
+        "-MF",
+        "/home/holden/mckernel-work/scratch/file-closed-read-adapted-current942-20261017-1/app.d",
+        "/home/holden/mckernel/scripts/application-tests/native_file_closed_read_probe.c",
+        "-o",
+        "/home/holden/mckernel-work/scratch/file-closed-read-adapted-current942-20261017-1/app"
+      ],
+      "cwd": "/home/holden/mckernel-work/scratch/file-closed-read-adapted-current942-20261017-1",
+      "label": "payload-compile",
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "timeout_seconds": 60
+    },
+    {
+      "argv": [
+        "/home/holden/mckernel-work/scratch/file-closed-read-adapted-current942-20261017-1/app",
+        "A",
+        "",
+        "B"
+      ],
+      "cwd": "/home/holden/mckernel-work/scratch/file-closed-read-adapted-current942-20261017-1/case/work",
+      "label": "linux-reference",
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "a774f1ac5452ba211d9f4ee0130223afde7d5ba8bdc0f8bcd24994ec56926581",
+      "timeout_seconds": 10
+    }
+  ],
+  "consumed_inputs_sha256": {
+    "/home/holden/mckernel/scripts/application-tests/native_file_closed_read_probe.c": "f50d970258c1016c87f8c640b26d6ae1f9a1dd458650bc351c627aa82c0b6a5f",
+    "/usr/include/asm-generic/errno-base.h": "2c148e92b8318deeb767fabd60822113e575ee664ff09a1873aed8f7a495793c",
+    "/usr/include/asm-generic/errno.h": "fb7b5a504015f3a9074c641e7371b250d867d751d90e4a22a8ac17fced3d50af",
+    "/usr/include/errno.h": "bb34795fb8a34bea0b33a4bcf4e60e1aa24ca03bba063e045b90447ee79e1137",
+    "/usr/include/fcntl.h": "0b7409e674c5802bd43659ba883773e4e50332abff9614b767b3b7b07eb61cae",
+    "/usr/include/features.h": "981a26a502075c066b75617ea8db7623f98935b035e470833c46e53f1dea4e2b",
+    "/usr/include/linux/errno.h": "a47fb2f49bce0546a1e88805cec954338abb1b2ac87de042166e8e3a74b23261",
+    "/usr/include/stdc-predef.h": "64fdf694f7b3d51ec6c45c06dcb71ebbe9455742d3ea673012016668853d3bff",
+    "/usr/include/stdio.h": "e7d85131c888412c0eaaaca3a7165d86f147c8645993ddf333a5b2500117a478",
+    "/usr/include/string.h": "2315bb9e39fcb045b120599524f17461bd20bdf007c857b6fa52663cd620466d",
+    "/usr/include/strings.h": "ddce67e40651b6d2765cc3e9e72ea7376a810ba99b92b30e30c26422ef024832",
+    "/usr/include/unistd.h": "690e12d91da100d6916752f38804386710d427823f7783f730218a9ac2d043e2",
+    "/usr/include/x86_64-linux-gnu/asm/errno.h": "4ee384515a4325315992e61dd957f0fa91f3858fe7c079de59f56edded51de86",
+    "/usr/include/x86_64-linux-gnu/bits/confname.h": "091903356b086e4c7a46054f7321d583d51ae35296b1f077d3216f5f3a76f4de",
+    "/usr/include/x86_64-linux-gnu/bits/endian.h": "12b47b421313cf9ddc75afa754101c7034bca71ddb797f4f8ae06fc6c4161517",
+    "/usr/include/x86_64-linux-gnu/bits/endianness.h": "659a7060004eda113671a38852c4d1e9cb97a35932bcd1d8540f98c09c180747",
+    "/usr/include/x86_64-linux-gnu/bits/environments.h": "5f0d55d7cb0330bae9ef464394de98c9045d0e5880d266d3801034678843f435",
+    "/usr/include/x86_64-linux-gnu/bits/errno.h": "7e7e8b459ac9a9683fa9ed91fb05c89ea874ed70b6d4aa6ef407db87a28b023b",
+    "/usr/include/x86_64-linux-gnu/bits/fcntl-linux.h": "1dc43f7aa98e2cea8ea4c26e8661ecdacb9ce4bb775bf8a959d4f5b1d6d9da97",
+    "/usr/include/x86_64-linux-gnu/bits/fcntl.h": "14001f0553d6adb1b08f16ec879f797a59034d59c81f1ef0b44eeb9f90ce0bf2",
+    "/usr/include/x86_64-linux-gnu/bits/fcntl2.h": "d2d3302ebcc06ffda2db2785a917b91a79e1a31bb7df4ed2cd55b14068ea0873",
+    "/usr/include/x86_64-linux-gnu/bits/getopt_core.h": "9fa5de6af98115c111cf43befe7468827d6e283edb400e1a6ca7a609a11aadbc",
+    "/usr/include/x86_64-linux-gnu/bits/getopt_posix.h": "530d55a1958c75b33eb8a65a04a746c27cf876ec3c47827bb3e11595761824ac",
+    "/usr/include/x86_64-linux-gnu/bits/libc-header-start.h": "42053eaf4d2751e7be1cc8342f4c1c7404a6670c330ca493b7e884b20d6c1747",
+    "/usr/include/x86_64-linux-gnu/bits/long-double.h": "1d92fbb09acd8375debde9c0b4c6dd3e38d096d27159e32a537e3742f6b2cc25",
+    "/usr/include/x86_64-linux-gnu/bits/posix_opt.h": "8417772f0c9fa7a39fcec5323c23e9869454e1f0c63531dd878bc7e81e694fe6",
+    "/usr/include/x86_64-linux-gnu/bits/stat.h": "c7b261ced7bf6f6173097656d935f4a4dcf5bd7d40c92d5588652da1d1686978",
+    "/usr/include/x86_64-linux-gnu/bits/stdio.h": "68f7c4aa205c5043f0b9363f4809851c3d735d17e145051ef3c9e771880ddb4f",
+    "/usr/include/x86_64-linux-gnu/bits/stdio2.h": "f30effdddb33b0a38dee1cd596c1277d0f8f800a0fbfdadb2fe214f33c86129a",
+    "/usr/include/x86_64-linux-gnu/bits/stdio_lim.h": "8b383d348468ce009e52ec801dfb0467f72b0f75496bb840f0ae0ef8a5f399a1",
+    "/usr/include/x86_64-linux-gnu/bits/string_fortified.h": "4793434f02bbcd7fe6227451e5d35f7448f776f57f322838809cb2b1e45c0268",
+    "/usr/include/x86_64-linux-gnu/bits/strings_fortified.h": "7b47eb8f646951f268c71a5a29d98c9ed7159d3a1912425dc1e51562140a34f0",
+    "/usr/include/x86_64-linux-gnu/bits/sys_errlist.h": "7ef402713da42e35dc8d50a4838b3fbb8bfe959176dd86dd621ec47ac547b5b6",
+    "/usr/include/x86_64-linux-gnu/bits/time64.h": "14312d2bcdc321b6691ef167e4768124d9af1ace8bac0142eb1159fac5a1b3b7",
+    "/usr/include/x86_64-linux-gnu/bits/timesize.h": "9c1a1a3517fe96894cf4e09cd362c999faac951caf8e70c3c579506a777b522b",
+    "/usr/include/x86_64-linux-gnu/bits/types.h": "69454c580d77b06559520ed59cd14551d626cb494fcf5fd95a29144d79b2538b",
+    "/usr/include/x86_64-linux-gnu/bits/types/FILE.h": "37515f78be386f2edad4746f2947c928f480728c56d9a94e25302ebbdaef3c96",
+    "/usr/include/x86_64-linux-gnu/bits/types/__FILE.h": "26c909942e8a6bc82725e9c402f393aed9e32d94190257ddf71e1b5f819b4e5e",
+    "/usr/include/x86_64-linux-gnu/bits/types/__fpos64_t.h": "8afae3abf006beb39fd9d4d4bae38745cdf08a91e6217ddf25833c8d4b04751b",
+    "/usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h": "603e58ab31ed75b7e0ab09a2ca94e99955f7fbc63310466321ce27c906227eb4",
+    "/usr/include/x86_64-linux-gnu/bits/types/__locale_t.h": "3263b6f6b2b75c11f881796e09d636b7c2baf6421b52d750b76ace42ffe89153",
+    "/usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h": "c561df72d5b987ccbd022059fdb1bcb6899c3e94b403997a0576ef3e1afb0f94",
+    "/usr/include/x86_64-linux-gnu/bits/types/locale_t.h": "19cb01f0a44723edb409ecb6fdabbcdf9bca9733439f46e962a33d4b0f7bb348",
+    "/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h": "4a1aefe381b17ad50add602a8f31c9d4579499064ad3dde703f7f6df48498311",
+    "/usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h": "494c455857a5fe8641d7f034a6892f848f1a2d304791bea3434e209a72d6b1cb",
+    "/usr/include/x86_64-linux-gnu/bits/typesizes.h": "dd38f16bed43eda106684d2af8b57af4373814fd1c4404b37302fdefde7be2e0",
+    "/usr/include/x86_64-linux-gnu/bits/unistd.h": "282a609004d8f3ccc4f5d92d58767d5c6d4fe8c95daa38e25691f3b65be14409",
+    "/usr/include/x86_64-linux-gnu/bits/unistd_ext.h": "b2fafcd2805dbd6869e0ef89833d2ae03c197ac8c01b89bab86a13c2499fca0a",
+    "/usr/include/x86_64-linux-gnu/bits/wordsize.h": "716d8459074e2a082d65a28192b32eddbfd7587348372395b1c283a723ae4c18",
+    "/usr/include/x86_64-linux-gnu/gnu/stubs-64.h": "bae35edf2e1f5c08d88ff8a5b839e951c42839b855894751efdf94ae69cc0814",
+    "/usr/include/x86_64-linux-gnu/gnu/stubs.h": "ef444295a0a9e8f5c40918399a00cc91ba0bd79774110cdf6e652baa6cfadb2e",
+    "/usr/include/x86_64-linux-gnu/sys/cdefs.h": "3cc074d3fb0761b678ab4d2a6108b5eb02b9b29341e0bae6a0755cfbbd69cf1f",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/include/stdarg.h": "0b1d4f68c42c238ae96d07e0e9d5868732054fc8ba704c1dde891649ff117483",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h": "45e80e1302342753d2f9e5945248fe3af7cf328a99804d2ec561850bbb550f7d"
+  },
+  "draft_oracle_caveat": [
+    "Exact buffer byte dump may be normalized in execution capture to avoid line-specific assertions."
+  ],
+  "elf_verified": {
+    "no_wx_load": true,
+    "nonexecuting_stack": true,
+    "static_no_interp_no_dynamic": true
+  },
+  "environment": {
+    "HOME": "/home/holden/mckernel-work/scratch/file-closed-read-adapted-current942-20261017-1/home",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "PATH": "/usr/bin:/bin",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "TMPDIR": "/home/holden/mckernel-work/scratch/file-closed-read-adapted-current942-20261017-1/tmp",
+    "TZ": "UTC"
+  },
+  "evidence_root": "/home/holden/mckernel-work/scratch/file-closed-read-adapted-current942-20261017-1",
+  "explicit_diagnostic_case_id": "file.closed-read-adapted",
+  "formal_case_credit": false,
+  "frozen_inputs_sha256": {
+    "/home/holden/mckernel/scripts/application-tests/cases/file/file.closed-read.c": "24cc7ec1d240df1bc34870a0e7ab685d11c38b80c1a5a2a40e3291bcf20a8d9c",
+    "/home/holden/mckernel/scripts/application-tests/native_file_closed_read_probe.c": "f50d970258c1016c87f8c640b26d6ae1f9a1dd458650bc351c627aa82c0b6a5f",
+    "/home/holden/mckernel/scripts/application-tests/oracles/file.closed-read.json": "7b2a2c124d1ffa6884cb18a5ecfcff098ad66a7712dae8b06e7a22e720feeb66"
+  },
+  "installed_link_inputs_sha256": {
+    "/usr/lib/gcc/x86_64-linux-gnu/9/cc1": "c09275e2d3f811e23d255eac415bfedd9e68ba8b5cf4b261d2fce136b5e8fc99",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/collect2": "5228dbf1e15d16694059023d16e7f13f201ea0d76a82e8837c6483dc21d66682",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/crtbeginT.o": "9fe07384ef0078de4a23fe2acc4137cb5aeeddcc715cf189cc0d985b602d348a",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/crtend.o": "c29d8ba35b3afad85993fa8f64b1a4d91678deaeb0f1cae952f12c0bdd4c83c1",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/libgcc.a": "82b6c0bfc28d5314fffaaa2a920516575f347972f685b5805f5749a87a617df0",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/libgcc_eh.a": "1dc66e2a55a6cefe1458b4e94f9b321e453a5b7279638cd7d12e1ddf83ec59f8",
+    "/usr/lib/x86_64-linux-gnu/crt1.o": "27daac7b3f9e861ef8df49f45b2a8ffb7130a1899f86efe53c6f84d63fd3cd0d",
+    "/usr/lib/x86_64-linux-gnu/crti.o": "2f1c31070d95f398fe4c1388408e83283cc7e0cee0ebb64882e0b331e8e178e8",
+    "/usr/lib/x86_64-linux-gnu/crtn.o": "a2266079f95b84ccc2162ebbf279bcd78858a748aa1882e0bdb912316c76a58f",
+    "/usr/lib/x86_64-linux-gnu/libc.a": "f9831edeccd3a87eb3fbba795f92bfa83409b3951f05ec40ca5df432b8699127"
+  },
+  "manifest": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/scratch/file-closed-read-adapted-current942-20261017-1/staging/manifest.json",
+    "sha256": "bc4b4e4f40c17244aee927c015b7b6148a433cdfcb9e4a212ff29a2668166db5",
+    "size": 5530
+  },
+  "metadata_join": {
+    "comparison": "Authenticated signal final map unchanged except apps/app exact new size/hash; all other fields preserved, including nonzero base mtimes.",
+    "fields": [
+      "mode",
+      "uid",
+      "gid",
+      "nlink",
+      "mtime",
+      "size",
+      "sha256",
+      "rdevmajor",
+      "rdevminor"
+    ],
+    "nonzero_mtime_member_count": 40,
+    "result": "PASS_ALL_59_MEMBERS_ALL_9_METADATA_FIELDS"
+  },
+  "new_guest_runs": 0,
+  "new_kernel_builds": 0,
+  "oracle": {
+    "exit_code": 0,
+    "stderr_hex": "",
+    "stdout_hex": "726561642d72657475726e3d2d31206572726e6f3d390a6275666665722d66697273743d323034206275666665722d6c6173743d3230340a"
+  },
+  "original_blocker": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/file-closed-read-current942-preparation-20261017-1.json",
+    "sha256": "c1c824677080445a9c852e1adcca7ec1d6b4222692975cc83454a3656956dc62"
+  },
+  "original_catalog_case_id": "file.closed-read",
+  "original_source": {
+    "path": "/home/holden/mckernel/scripts/application-tests/cases/file/file.closed-read.c",
+    "sha256": "24cc7ec1d240df1bc34870a0e7ab685d11c38b80c1a5a2a40e3291bcf20a8d9c"
+  },
+  "overlay": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/scratch/file-closed-read-adapted-current942-20261017-1/staging/initramfs.cpio.gz",
+    "sha256": "74b45166633f64241423dadcbf33ee827e3030cea378e8e085f89be5dfa84bf0",
+    "size": 13276192
+  },
+  "overlay_capture": {
+    "elapsed_seconds": 8.619871,
+    "exit_code": 0,
+    "stderr_hex": "",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_sha256": "2328582a8a3f54d2f8377f5312dc8f311ebdaacf83232a48dcaf3a1ee0c60fa3"
+  },
+  "overlay_command": [
+    "/home/holden/anaconda3/bin/python3",
+    "-B",
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_overlay.py",
+    "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-20261017-1/initramfs.cpio.gz",
+    "/home/holden/mckernel-work/scratch/file-closed-read-adapted-current942-20261017-1/app",
+    "/home/holden/mckernel-work/scratch/signal-mask-restore-compile-20261017-nX2kCR/init",
+    "/home/holden/mckernel-work/scratch/mcexec-preload-fastpath-build-20260928-1/rust/executer/user/mcexec",
+    "/home/holden/mckernel-work/scratch/file-closed-read-adapted-current942-20261017-1/staging/initramfs.cpio.gz",
+    "--collector-sha256",
+    "8089d5b7bcf8166e69cb9ea90fc4614674b4906813a40aa219972c02c7ec5e39",
+    "--mcexec-sha256",
+    "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b",
+    "--payload-sha256",
+    "8f7297b35859ca364e0a32afaf013637030b7aecaf4f9d2626e077a7e9d7dd39",
+    "--base-sha256",
+    "bd503adcd1d45b437eb91902a50b09b9eeb094368ca4085546ef682fd1a5a694",
+    "--base-size",
+    "12347108",
+    "--base-cpio-sha256",
+    "7e69601b68dafb44c945d2998b10ec024a73518303bb505f275490d83e4c6767",
+    "--base-cpio-size",
+    "39677952"
+  ],
+  "overlay_manifest": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/scratch/file-closed-read-adapted-current942-20261017-1/staging/overlay-result.json",
+    "sha256": "2328582a8a3f54d2f8377f5312dc8f311ebdaacf83232a48dcaf3a1ee0c60fa3",
+    "size": 14826
+  },
+  "production_acceptance": false,
+  "profile_path": "/home/holden/mckernel/docs/verification/evidence/signal-mask-restore-compile-profile-review-20261017.json",
+  "profile_sha256": "320d19452c638e0853d21798628d59387d551ff2b212806e1061d9d0b644ff31",
+  "readelf": {
+    "argv": [
+      "/usr/bin/readelf",
+      "-W",
+      "-h",
+      "-l",
+      "/home/holden/mckernel-work/scratch/file-closed-read-adapted-current942-20261017-1/app"
+    ],
+    "exit_code": 0,
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_sha256": "d5a233d911e3b3d60d24498b0809d1d832ae863baf3327612aab691a5e3b7d09"
+  },
+  "resources": {
+    "address_space_bytes": 1073741824,
+    "core_bytes": 0,
+    "cpu_affinity": [
+      6
+    ],
+    "cpu_seconds": 150,
+    "file_size_bytes": 268435456,
+    "nofile": 256,
+    "outer_wall_seconds": 180
+  },
+  "reuse_observation": "No original closed-read executable was run or reused; explicit separately named diagnostic adaptation compiled and referenced once under new authority. Original blocker/source/oracle remain unchanged.",
+  "review_prerequisites": [
+    "Independent explicit source adaptation/static reference/staging and protocol regression review.",
+    "Separate fresh one-shot owner execution release and live identity/resource/lock/scratch/QMP preflight after positive preceding retirement.",
+    "Case remains file.closed-read-adapted diagnostic. Original source/oracle/catalog and blocker remain immutable; no original formal-case acceptance."
+  ],
+  "runtime_release": false,
+  "schema": "mckernel.file-closed-read-adapted-current942-preparation.v1",
+  "semantic_limit": "Adapted closed-fd read diagnostic preserves original operations and EBADF assertions; exact oracle verifies first/last buffer bytes only. No whole-buffer inspection, descriptor-race stress or formal original-case credit.",
+  "source_manifest": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-manifest-20261017-1.json",
+    "sha256": "47eb95897b0a4f2d8b2cb2673c2ed3b3feff11895654ac160c854710cc7582da",
+    "size": 5455
+  },
+  "static_record": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/scratch/file-closed-read-adapted-current942-20261017-1/record.json",
+    "sha256": "4e0a6e2e0c13ef30e2901ae38525f82ff3c5fc102a3c6982ea3383829cc4d550",
+    "size": 15504
+  },
+  "status": "PASS_EXPLICIT_ADAPTATION_STATIC_REFERENCE_ACTUAL_PRODUCER_EVALUATOR_OVERLAY_STRICT_MANIFEST_PREPARATION_ONLY",
+  "task_id": "file-closed-read-adapted-static-reference-20261017-1",
+  "toolchain_bindings": {
+    "assembler": {
+      "path": "/usr/bin/as",
+      "resolved_path": "/usr/bin/x86_64-linux-gnu-as",
+      "sha256": "8d45684bbd6420e3e97907257c510f199bb6c5f9b02ea8ee0a590c1a8b662ead"
+    },
+    "gcc": {
+      "path": "/usr/bin/gcc",
+      "resolved_path": "/usr/bin/x86_64-linux-gnu-gcc-9",
+      "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f"
+    },
+    "linker": {
+      "path": "/usr/bin/ld",
+      "resolved_path": "/usr/bin/x86_64-linux-gnu-ld.bfd",
+      "sha256": "476b24d5cc1fef54f80412d06e7430b2dcf4e2b6f1525ee17e6eaaf16b28a00f"
+    },
+    "python_capture_runner": {
+      "path": "/home/holden/anaconda3/bin/python3",
+      "resolved_path": "/home/holden/anaconda3/bin/python3.9",
+      "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb"
+    }
+  },
+  "validation": {
+    "actual_collector_contract": "PASS",
+    "backend_called": false,
+    "bytes_negative": "REJECTED wrong payload bytes",
+    "frozen_evaluator_positive": "PROTOCOL_PASS",
+    "limit_negative": "REJECTED stream accounting",
+    "load_manifest": "PASS",
+    "prepare_attempt_called": false
+  }
+}

@@ -3,7 +3,7 @@ use core::mem::{offset_of, size_of, MaybeUninit};
 use core::ptr::{write, write_bytes};
 
 use crate::abi::{
-    AddressSpace, CInt, CLong, CULong, CpuLocalVar, Mckfd, OffT, Process, ProcessVm, SizeT,
+    AddressSpace, CInt, CLong, CULong, CpuLocalVar, IhkMcPtAttribute, Mckfd, OffT, Process, ProcessVm, SizeT,
     Thread, VmRange, VmRegions, XpmemAccessPermit, XpmemAttachment, XpmemHashlist,
     XpmemPartitionPrefix, XpmemPerm, XpmemSegment, XpmemThreadGroupPrefix, VM_RANGE_CACHE_SIZE,
 };
@@ -149,7 +149,7 @@ unsafe extern "C" {
         pte: *mut c_void,
         pgsize: SizeT,
         phys: CULong,
-        attr: CInt,
+        attr: IhkMcPtAttribute,
     ) -> CInt;
     fn ihk_mc_pt_set_range(
         page_table: *mut c_void,
@@ -157,7 +157,7 @@ unsafe extern "C" {
         start: *mut c_void,
         end: *mut c_void,
         phys: CULong,
-        attr: CInt,
+        attr: IhkMcPtAttribute,
         pgshift: CInt,
         vmr: *mut VmRange,
         replace: CInt,
@@ -175,7 +175,7 @@ unsafe extern "C" {
         pgaddrp: *mut *mut c_void,
         pgsizep: *mut SizeT,
     );
-    fn arch_vrflag_to_ptattr(flag: CULong, fault: CULong, ptep: *mut c_void) -> CInt;
+    fn arch_vrflag_to_ptattr(flag: CULong, fault: CULong, ptep: *mut c_void) -> IhkMcPtAttribute;
     fn flush_tlb_single(addr: CULong);
 }
 
@@ -1935,7 +1935,7 @@ pub unsafe extern "C" fn xpmem_pt_set_pte_bridge(
     phys: CULong,
     attr: CULong,
 ) -> CInt {
-    ihk_mc_pt_set_pte(page_table, pte, pgsize, phys, attr as CInt)
+    ihk_mc_pt_set_pte(page_table, pte, pgsize, phys, attr)
 }
 
 #[no_mangle]
@@ -1956,7 +1956,7 @@ pub unsafe extern "C" fn xpmem_pt_set_range_bridge(
         start as *mut c_void,
         end as *mut c_void,
         phys,
-        attr as CInt,
+        attr,
         pgshift,
         vmr.cast::<VmRange>(),
         replace,

@@ -1,0 +1,24 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "sources": {
+    "test_child.py": "617c3a51b884fd7ef47de0fd65dffb2b0d1425a1a89c549d4c94ca090e7a35b0",
+    "HEADER-DERIVED-ABI.json": "92623a7c651b26ace315ff6278d0d8dcc5414f14d6638287084b8ff4c6b45058",
+    "ROOT-CANCEL-PROFILE.NOT-RELEASED.json": "de5723b95e485f12a4dadfc3e5f4b1ca2f6a9e4545357bee33bb0c9076a1b7bf",
+    "test_child.py.diff": "fc615ef37c58ae60f22c7e427a74c7e4c901a34313f2975af7ed01147784761a",
+    "ROOT-ARGV.NOT-RELEASED.json": "3422956ad262562ceaf123e3a39624229be4b84a97bb65a45359fe72579b8952",
+    "run_child_fixture_owned.py": "3d6a83943bbf18606b01ca776cddc166bbafe3edfac86f4c45fe1e5cd9b2ee6a",
+    "fixture_cancel_child.py": "d04805510c73c80533034ecff851698a1b9132c7c60f14348b6409aa44bb5495",
+    "cancel_exact_owner_once.py": "950b8b162e13cf547b05993f1e1ca7e92aa501ceb4ec539ffa815fc372077b21"
+  },
+  "helper_unchanged": true,
+  "fixture_guards_unchanged": true,
+  "command": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/p12-long-normal-cancel-20261023-1/owned-child-fixture-expert-1/bounded-correction-1/run_child_fixture_owned.py"
+  ],
+  "no_live_operation": true,
+  "cause": "Retained actual traceback proves handler print reentered BufferedWriter during readiness print",
+  "correction": "Only owned child stdout writes use bounded exact raw os.write; strict handler count/nonce/exit remain"
+}

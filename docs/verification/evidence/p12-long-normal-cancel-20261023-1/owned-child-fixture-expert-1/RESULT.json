@@ -1,0 +1,127 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_EXPERT_CORRECTED_OWNED_CHILD_FIXTURE_UNCHANGED_PIDFD_HELPER",
+  "cause": "Actual retained child traceback: handler print interrupted READY print and reentered Python BufferedWriter, causing RuntimeError/exit1; this establishes fixture stdout reentrancy, not failed pidfd delivery.",
+  "correction": "Fixture child only: precompute JSON and use exact bounded raw os.write for READY and handler output. Parent retains every actual child outcome before assertions and uses a bounded raw READY handshake.",
+  "production_helper_unchanged": true,
+  "source": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-normal-cancel-20261023-1/owned-child-fixture-expert-1/bounded-correction-1/cancel_exact_owner_once.py",
+    "sha256": "950b8b162e13cf547b05993f1e1ca7e92aa501ceb4ec539ffa815fc372077b21",
+    "bytes": 8549
+  },
+  "helper_original_source": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-normal-cancel-20261023-1/pidfd-syscall-provider-2/cancel_exact_owner_once.py",
+    "sha256": "950b8b162e13cf547b05993f1e1ca7e92aa501ceb4ec539ffa815fc372077b21",
+    "bytes": 8549
+  },
+  "header_ABI": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-normal-cancel-20261023-1/owned-child-fixture-expert-1/bounded-correction-1/HEADER-DERIVED-ABI.json",
+    "sha256": "92623a7c651b26ace315ff6278d0d8dcc5414f14d6638287084b8ff4c6b45058",
+    "bytes": 1503
+  },
+  "unchanged_root_profile": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-normal-cancel-20261023-1/owned-child-fixture-expert-1/bounded-correction-1/ROOT-CANCEL-PROFILE.NOT-RELEASED.json",
+    "sha256": "de5723b95e485f12a4dadfc3e5f4b1ca2f6a9e4545357bee33bb0c9076a1b7bf",
+    "bytes": 1555
+  },
+  "unchanged_root_argv": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-normal-cancel-20261023-1/owned-child-fixture-expert-1/bounded-correction-1/ROOT-ARGV.NOT-RELEASED.json",
+    "sha256": "3422956ad262562ceaf123e3a39624229be4b84a97bb65a45359fe72579b8952",
+    "bytes": 476
+  },
+  "failed_expert_candidate": {
+    "outcome": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-normal-cancel-20261023-1/owned-child-fixture-expert-1/ACTUAL-CHILD-OUTCOME.BEFORE-ASSERT.json",
+      "sha256": "b3a0b9a4a38e91dc2c981cc7db15d43557369d41cd570074ecf0de0a358da1cd",
+      "bytes": 1392
+    },
+    "actual": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-normal-cancel-20261023-1/owned-child-fixture-expert-1/ACTUAL-API-CHILD-FIXTURE-RESULT.json",
+      "sha256": "a31e80732268d03afcd90ce07b2feb8535b2c487cb1bf4f9d8efa1741f7893e2",
+      "bytes": 5460
+    },
+    "closed": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-normal-cancel-20261023-1/owned-child-fixture-expert-1/actual-api-child-fixture-1/RESULT.json",
+      "sha256": "93a6a44038f45cedc6fd1b7e442a4e0182398f8264c923a142dfe938f516e2e6",
+      "bytes": 1123
+    }
+  },
+  "corrected_candidate": {
+    "frozen_source_command": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-normal-cancel-20261023-1/owned-child-fixture-expert-1/bounded-correction-1/FROZEN-SOURCE-AND-COMMAND.json",
+      "sha256": "6d65eb50558f1c290368b577e260d44b92d37df37d844263691285c691845811",
+      "bytes": 1486
+    },
+    "before_assert_outcome": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-normal-cancel-20261023-1/owned-child-fixture-expert-1/bounded-correction-1/ACTUAL-CHILD-OUTCOME.BEFORE-ASSERT.json",
+      "sha256": "506edec2caf3d0f101969307646169b7ee42d57a7bc03680630b4a629fda6019",
+      "bytes": 271
+    },
+    "actual": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-normal-cancel-20261023-1/owned-child-fixture-expert-1/bounded-correction-1/ACTUAL-API-CHILD-FIXTURE-RESULT.json",
+      "sha256": "3063fa475a0320aae7a07b62a90afb61bcd845c970896cd3df475f355a566893",
+      "bytes": 6449
+    },
+    "closed": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-normal-cancel-20261023-1/owned-child-fixture-expert-1/bounded-correction-1/actual-api-child-fixture-1/RESULT.json",
+      "sha256": "0bfe771c8ed414f728c2af40f790ad4e85659943f54d4f418473e9b90dfb4483",
+      "bytes": 1163
+    },
+    "one_send": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-normal-cancel-20261023-1/owned-child-fixture-expert-1/bounded-correction-1/ACTUAL-ONE-SEND-RESULT.json",
+      "sha256": "296a005815e17dfc527b7e6678cb7a4812725db8bcf81cc823a4fdebc2fd716c",
+      "bytes": 777
+    },
+    "ready_identity": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-normal-cancel-20261023-1/owned-child-fixture-expert-1/bounded-correction-1/ACTUAL-READY-AND-CHILD-IDENTITY.json",
+      "sha256": "c81da3edc96153dd4eb65949100e8ea904c0e47b94a2e365b4b187b903837c7c",
+      "bytes": 1551
+    }
+  },
+  "meaningful_actual_results": {
+    "typed_EINVAL_open": true,
+    "typed_EBADF_send": true,
+    "nine_identity_mutations_refused": true,
+    "negative_guard_pidfd_leaks": 0,
+    "exact_child_PID_start_PGID_SID_UID_GID_cmdline_source_boot_checked": true,
+    "signal_calls": 1,
+    "handler_invocations": 1,
+    "child_returncode": 42,
+    "stderr_bytes": 0,
+    "nonce": "TESTONLY-never-live-owner",
+    "already_absent_no_signal": true,
+    "child_reaped_ECHILD": true,
+    "fd_count_before": 4,
+    "fd_count_after": 4,
+    "all_direct_child_joined": true,
+    "group_absent": true,
+    "closed_streams": true,
+    "seconds": 0.12888563598971814
+  },
+  "failure_history": "Old native-Python API candidate failure and old compound-assert candidate failure retained; expert diagnostic candidate failed with exact retained cause; one bounded child-only correction passed. No further retries.",
+  "profile": {
+    "cpu": [
+      0
+    ],
+    "AS": 2147483648,
+    "CPU": 30,
+    "wall": 60,
+    "grace": 6,
+    "FSIZE": 33554432,
+    "NOFILE": 256,
+    "core": 0,
+    "interpreter": "/home/holden/anaconda3/bin/python3",
+    "version": "3.9.12",
+    "owned_capture_source_sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8"
+  },
+  "CPU0_released": true,
+  "live_owner_read_or_signaled": false,
+  "root": 0,
+  "Docker": 0,
+  "QMP": 0,
+  "actual_live_cancel": null,
+  "root_release": null,
+  "independent_ABI_and_execution_review": null,
+  "physical_clearance": false,
+  "application_acceptance": false
+}

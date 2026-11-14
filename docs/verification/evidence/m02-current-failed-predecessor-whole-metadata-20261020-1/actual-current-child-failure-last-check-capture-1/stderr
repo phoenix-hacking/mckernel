@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/phase5-exit7-accepted-timeout-preparation-20261020-1/runtime-data-preparation-1/correction-1/next-predecessor-preparation-1/check_current_child_failure_last_once.py", line 92, in <module>
+    main()
+  File "/home/holden/mckernel-work/host-preparation/phase5-exit7-accepted-timeout-preparation-20261020-1/runtime-data-preparation-1/correction-1/next-predecessor-preparation-1/check_current_child_failure_last_once.py", line 70, in main
+    cases.append(refusal(lambda: snapshot.terminal_joins(terminal, bad_source), 'current_M02_terminal_wrong_decoder_source'))
+  File "/home/holden/mckernel-work/host-preparation/phase5-exit7-accepted-timeout-preparation-20261020-1/runtime-data-preparation-1/correction-1/next-predecessor-preparation-1/check_current_child_failure_last_once.py", line 40, in refusal
+    call()
+  File "/home/holden/mckernel-work/host-preparation/phase5-exit7-accepted-timeout-preparation-20261020-1/runtime-data-preparation-1/correction-1/next-predecessor-preparation-1/check_current_child_failure_last_once.py", line 70, in <lambda>
+    cases.append(refusal(lambda: snapshot.terminal_joins(terminal, bad_source), 'current_M02_terminal_wrong_decoder_source'))
+  File "/home/holden/mckernel-work/host-preparation/phase5-exit7-accepted-timeout-preparation-20261020-1/runtime-data-preparation-1/correction-1/current-sources/root_manual_snapshot_m03.py", line 61, in terminal_joins
+    need(hashlib.sha256(source.read_bytes()).hexdigest()==b['physical_projection_source']['sha256'],'exact selected known-kind physical decoder')
+  File "/home/holden/mckernel-work/host-preparation/phase5-exit7-accepted-timeout-preparation-20261020-1/runtime-data-preparation-1/correction-1/current-sources/root_manual_snapshot_m03.py", line 14, in need
+    if not ok:raise Refusal(message)
+actual_current_M02_LAST_terminal_body.Refusal: exact selected known-kind physical decoder

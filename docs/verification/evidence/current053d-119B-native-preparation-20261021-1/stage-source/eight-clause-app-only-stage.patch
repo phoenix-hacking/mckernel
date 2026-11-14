@@ -1,0 +1,82 @@
+--- /home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/postbuild-numa-stage-runtime-data-preparation-1/image-only-consumer-source-1/stage_numa_image.py
++++ /home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/stage_numa_overlap.py
+@@ -1,4 +1,4 @@
+-"""One existing image-only NUMA stage derivative with separately accepted sentinel launcher. No native execution.
++"""One existing app-only119B NUMA stage derivative with accepted053d/sentinel33f. No native execution.
+ Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+ Requires dispatcher ordinary source/profile release; preserves accepted metadata route.
+ """
+@@ -21,7 +21,7 @@
+  s=p.lstat();need(p.resolve()==p and stat.S_ISDIR(s.st_mode)and s.st_uid==1000 and stat.S_IMODE(s.st_mode)==0o700,'private canonical directory '+str(p))
+ def main():
+  ap=argparse.ArgumentParser(allow_abbrev=False);ap.add_argument('--case',choices=['numa'],required=True);ap.add_argument('--binding',required=True);ap.add_argument('--binding-sha256',required=True);ap.add_argument('--preflight-only',action='store_true');a=ap.parse_args()
+- need(os.sched_getaffinity(0)=={6}and resource.getrlimit(resource.RLIMIT_AS)[0]<=1073741824,'CPU6/1GiB')
++ need(os.sched_getaffinity(0)=={7}and resource.getrlimit(resource.RLIMIT_AS)[0]<=1073741824,'CPU7/1GiB')
+  need(sha(Path(a.binding).read_bytes())==a.binding_sha256,'binding bytes');b=json.loads(Path(a.binding).read_text());c=b['cases'][a.case]
+  review=b['image_artifact_review'];exact(review);r=json.loads(Path(review['path']).read_bytes())
+  need(review['sha256']=='afdf6a8d5dcf9aec104e5d68f4bbf57d82034ade5d3ea20cbc1576bf319cfa41','fixed genuine image artifact decision')
+@@ -40,13 +40,16 @@
+  need(dep['schema']=='mckernel.launcher-only-dependency-join-review.v1' and dep['status']=='PASS_ACTUAL_LAUNCHER_ONLY_DEPENDENCY_JOIN' and dep['implementation_ownership'] is False and dep['reviewer'],'independent actual new launcher dependency join')
+  need(dep['launcher']==launcher_fact and dep['baseline_dependency_acceptance']==b['dynamic_closure_observation'] and dep['actual_elf_needed_provider_join'] is True,'actual new ELF/needed/provider join to unchanged dependency ancestry')
+  exact(b['consumer_contract']);exact(b['accepted_actual_app_review']);exact(b['accepted_threads_stage']);exact(b['dynamic_closure_observation'])
+- stage=json.loads(Path(b['accepted_threads_stage']['path']).read_bytes());need(b['accepted_threads_stage']['sha256']=='da272086f483410d8c00c332ac58e86dec7f19e8cb4422de6ef6fd776395cdec','accepted actual threads stage')
++ stage=json.loads(Path(b['accepted_threads_stage']['path']).read_bytes());need(b['accepted_threads_stage']['sha256']=='51ec8964e4501264430b5dc98fd2494f58cdebdaf9f37913137518b968c67337','accepted actual053d original116 baseline stage')
+  need(c['old_manifest']==stage['manifest'] and c['old_base']==stage['base'] and c['old_overlay']==stage['overlay'] and c['old_overlay_manifest']==stage['overlay_manifest'],'exact actual current threads baseline')
+  need(stage['mcexec']['sha256']==new_launcher['sha256']=='33f88082a995857c17ca07dab698e51d78064632462b4069b3c2396e0d29a131' and stage['mcexec']['size']==new_launcher['size']==394656,'separately accepted sentinel launcher equals current baseline')
+  need(b['dynamic_closure_observation']['sha256']=='338f6eafeefce26cf4fb826c58d17762c7c204806e146b09ec480facd4452314','reuse genuine unchanged dependency ancestry; new launcher join independently bound above')
+- need(b['accepted_actual_app_review']['sha256']=='3abbf0e84f3921e87a52199a83db86baf187adb775fa15e78765f39dabf00001','accepted unchanged Linux NUMA payload/oracle')
+- need(c['payload']['sha256']=='0339cb5fcba4ea4f1f2977fd0d3a7653b48e0af1de7e0625fbfafbfe13fce5fb' and c['payload']['size']==5619416,'fixed already compiled NUMA payload')
+- need(b['payload_contract']=={'argv': ['/bin/mcexec', '-t', '1', '0', 'app', 'threads'], 'cwd': '/case/work', 'env': {'COKERNEL_PATH': '/apps', 'PATH': '/usr/bin:/bin'}, 'oracle': {'stdout_hex': '6e756d6120616c6c6f7765643d3120696e74657276616c3d3120717565726965733d39206d6f64653d31206d61736b3d31206e65696768626f72733d322070726f636573733d31206775617264733d312062797465733d3132323838207072657365727665643d3120756e6d61707065643d310a', 'stderr_hex': '', 'exit_code': 37}, 'stdout_limit_bytes': 1024, 'stderr_limit_bytes': 1024},'exact NUMA oracle and honest init argv')
++ need(b['accepted_actual_app_review']['sha256']=='06afa9d9be97cde78371011b9b2ecd14b4da267f5fa6d9e71f0e60b0635f5231','genuine independently accepted separate119B app review')
++ app_review=json.loads(Path(b['accepted_actual_app_review']['path']).read_bytes())
++ need(app_review['schema']=='mckernel.numa-nonempty-overlap.source-oracle-linux-reference-review.v1' and app_review['status']=='PASS_SOURCE_ORACLE_AND_ACTUAL_LINUX_REFERENCE_ONLY' and app_review['decision']=='ELIGIBLE_SEPARATE_FUTURE_STAGE_AND_STRICT_NATIVE_CASE' and app_review['implementation_ownership'] is False and app_review['reviewer'],'independent separate119B source/oracle/Linux reference scope')
++ need(app_review['source']['sha256']=='8cc2093cb17568e5d08080f997d66ebdb5926ab379e3132f8138c3c710f2ae92' and app_review['compiled_binary']['sha256']==c['payload']['sha256'] and app_review['compiled_binary']['bytes']==c['payload']['size'] and app_review['accepted_oracle']['stdout_bytes']==119 and app_review['accepted_oracle']['stdout_sha256']=='eaacab76026f77de6ba00785df71cdf37347a45bf6dd42f43525bedb09a8a7c5' and app_review['accepted_oracle']['stderr_bytes']==0 and app_review['accepted_oracle']['exit_code']==37 and app_review['native_acceptance'] is False,'exact genuine new binary/oracle evidence without native claim')
++ need(c['payload']['sha256']=='029065eb89fb79885d535f338395f986f890a1ed764062bb76ba463777b92ab3' and c['payload']['size']==5620160,'fixed already compiled NUMA payload')
++ need(b['payload_contract']=={'argv': ['/bin/mcexec', '-t', '1', '0', 'app', 'threads'], 'cwd': '/case/work', 'env': {'COKERNEL_PATH': '/apps', 'PATH': '/usr/bin:/bin'}, 'oracle': {'stdout_hex': '6e756d61206f7665726c61703d312062696e64733d3320717565726965733d34382073706c69743d31207265696e736572743d31206e65696768626f72733d342070726f636573733d31206775617264733d312062797465733d3238363732207072657365727665643d3320756e6d61707065643d310a', 'stderr_hex': '', 'exit_code': 37}, 'stdout_limit_bytes': 1024, 'stderr_limit_bytes': 1024},'exact NUMA oracle and honest init argv')
+  for k in ['old_manifest','old_base','old_overlay','old_overlay_manifest','payload','collector','mcexec']:exact(c[k])
+  exact(b['overlay_source']);exact(b['diagnostic_source']);assets=Path(b['assets_root']);manifests=Path(b['manifests_root']);out=Path(c['output_dir']);mp=Path(c['manifest_dir'])
+  need(REPO in assets.parents and SCRATCH in manifests.parents,'unchanged visible mount roots');need(not os.path.lexists(out)and not os.path.lexists(mp),'fresh case output')
+@@ -61,35 +64,21 @@
+  launcher=assets/'mcexec';write(launcher,Path(b['mcexec_source']['path']).read_bytes());launcher.chmod(0o755);launcher_ref=ref(launcher)
+  payload_visible=assets/'numa.app';write(payload_visible,Path(c['payload']['path']).read_bytes());payload_visible.chmod(0o755);payload_ref=ref(payload_visible);need(payload_ref['sha256']==c['payload']['sha256'] and payload_ref['size']==c['payload']['size'],'exact runtime-visible NUMA payload copy')
+  image=ref(visible);m=json.loads(Path(c['old_manifest']['path']).read_text());ov=mod('scheduler_stage_overlay',b['overlay_source']['path']);nd=mod('scheduler_stage_nd',b['diagnostic_source']['path']);raw=gzip.decompress(Path(c['old_base']['path']).read_bytes());records,_=ov.parse_newc(raw)
+- parts=[];pos=0;count=0;data=visible.read_bytes();proof=[]
+- while pos<len(raw):
+-  if raw[pos]==0:
+-   end=pos+1
+-   while end<len(raw)and raw[end]==0:end+=1
+-   parts.append(raw[pos:end]);pos=end;continue
+-  h=raw[pos:pos+110];v=ov._fields(h);name=raw[pos+110:pos+110+v[11]-1].decode();name=name[2:]if name.startswith('./')else name;ds=(pos+110+v[11]+3)&~3;end=(ds+v[6]+3)&~3
+-  if name=='images/mckernel.img':
+-   hh=bytearray(h);hh[54:62]=('%08x'%len(data)).encode()
+-   if h[:6]==b'070702':hh[102:110]=('%08x'%(sum(data)&0xffffffff)).encode()
+-   parts.append(bytes(hh)+raw[pos+110:ds]+data+b'\0'*(-len(data)%4));count+=1;proof.append(dict(name=name,old_header_hex=h.hex(),new_header_hex=bytes(hh).hex()))
+-  else:parts.append(raw[pos:end])
+-  pos=end
+- need(count==1,'one image record');patched=b''.join(parts);rr,_=ov.parse_newc(patched);need(len(records)==len(rr),'all original records')
+- for x,y in zip(records,rr):
+-  omit={'data','size','sha256'}if x['name']=='images/mckernel.img'else set();need({k:v for k,v in x.items()if k not in omit}=={k:v for k,v in y.items()if k not in omit},'all record metadata and order')
+- base=out/'base.cpio.gz';write(base,ov._gzip(patched));need(ref(base)['sha256']!=c['old_base']['sha256'],'new accepted kernel changes base bytes');overlay=out/'lifecycle.cpio.gz'
++ need(stage['image']['sha256']==image['sha256']=='053d59b533665eef9d56fe1b348e699d97159e954fbc1fbff973bbe46113f485' and stage['image']['size']==image['size']==8435496,'accepted kernel bytes unchanged for app-only case')
++ patched=raw;proof=[]
++ base=out/'base.cpio.gz';write(base,Path(c['old_base']['path']).read_bytes());need(ref(base)['sha256']==c['old_base']['sha256'] and base.stat().st_size==c['old_base']['size'],'accepted base archive byte-identical; no kernel rewrite');overlay=out/'lifecycle.cpio.gz'
+  om=ov.build_overlay(str(base),str(payload_visible),c['collector']['path'],str(launcher),str(overlay),collector_sha256=c['collector']['sha256'],mcexec_sha256=c['mcexec']['sha256'],payload_sha256=c['payload']['sha256'],base_sha256=ref(base)['sha256'],base_size=base.stat().st_size,base_cpio_sha256=sha(patched),base_cpio_size=len(patched));js(out/'overlay-manifest.json',om)
+  old=json.loads(Path(c['old_overlay_manifest']['path']).read_text())['final_map'];full=ov._replay_records(ov.parse_newc(gzip.decompress(overlay.read_bytes()))[0]);final=ov._manifest(full);need(final==om['final_map']and len(final)==len(old)==60 and set(final)==set(old),'full60 concatenated replay')
+- deltas={n:{k:[old[n][k],final[n][k]]for k in old[n]if old[n][k]!=final[n][k]}for n in final if final[n]!=old[n]};need(set(deltas)=={'images/mckernel.img'}and all(set(v)<={'sha256','size'}for v in deltas.values()),'only kernel data delta against accepted NUMA overlay')
+- need(all(final[n]==old[n] for n in ('bin/mcexec','apps/app','init')) and sum(final[n]==old[n] for n in final)==59,'exact59 unchanged; launcher/payload/init explicitly equal')
++ deltas={n:{k:[old[n][k],final[n][k]]for k in old[n]if old[n][k]!=final[n][k]}for n in final if final[n]!=old[n]};need(set(deltas)=={'apps/app'}and all(set(v)<={'sha256','size'}for v in deltas.values()),'only separate119B app data delta against accepted053d NUMA overlay')
++ need(all(final[n]==old[n] for n in ('images/mckernel.img','bin/mcexec','init')) and sum(final[n]==old[n] for n in final)==59,'exact59 unchanged; kernel/launcher/init explicitly equal')
+  oldfull=ov._replay_records(ov.parse_newc(gzip.decompress(Path(c['old_overlay']['path']).read_bytes()))[0])
+  for n in full:
+   for k in full[n]:
+    if k not in {'data','size','sha256'}:need(full[n][k]==oldfull[n][k],'all final metadata '+n+' '+k)
+- m['case_id']='current-numa-interval';m['payload']=b['payload_contract'];m['artifacts']['payload']=payload_ref;m['artifacts']['mckernel_image']=image;m['artifacts']['mcexec']=launcher_ref
++ m['case_id']='numa-nonempty-overlap';m['payload']=b['payload_contract'];m['artifacts']['payload']=payload_ref;m['artifacts']['mckernel_image']=image;m['artifacts']['mcexec']=launcher_ref
+  for k in ['initramfs','root_base']:m['artifacts'][k]=ref(base)
+  m['staging'].update(base_initramfs=ref(base),derived_initramfs=ref(overlay),overlay_manifest=ref(out/'overlay-manifest.json'));js(mp/'manifest.json',m);nd.load_manifest(str(mp/'manifest.json'))
+  used=sum(p.stat().st_size for p in assets.rglob('*')if p.is_file());need(used<=64*1024**2,'64MiB aggregate stage output')
+- js(out/'stage-result.json',dict(status='PASS_NUMA_IMAGE_ONLY_STAGE_PENDING_ACTUAL_CONSUMER_BINDING_AND_REVIEW',manifest=ref(mp/'manifest.json'),image=image,mcexec=launcher_ref,payload=payload_ref,artifact_review=review,launcher_artifact_review=launcher_review,launcher_dependency_join=b['launcher_dependency_join'],base=ref(base),overlay=ref(overlay),deltas=deltas,raw_header_proof=proof,final_map=final,own_accepted_base_preserved=True,all_other_final_metadata_equal=True,aggregate_stage_bytes=used,runtime_release=False))
+- print(json.dumps(dict(status='PASS_SINGLE_NUMA_IMAGE_ONLY_STAGE',case=a.case,image_sha256=image['sha256'],image_bytes=image['size'],aggregate_stage_bytes=used,guests=0,runtime_release=False)))
++ js(out/'stage-result.json',dict(status='PASS_NUMA_OVERLAP_APP_ONLY_STAGE_PENDING_ACTUAL_CONSUMER_BINDING_AND_REVIEW',manifest=ref(mp/'manifest.json'),image=image,mcexec=launcher_ref,payload=payload_ref,artifact_review=review,launcher_artifact_review=launcher_review,launcher_dependency_join=b['launcher_dependency_join'],base=ref(base),overlay=ref(overlay),deltas=deltas,raw_header_proof=proof,final_map=final,own_accepted_base_preserved=True,all_other_final_metadata_equal=True,aggregate_stage_bytes=used,runtime_release=False))
++ print(json.dumps(dict(status='PASS_SINGLE_NUMA_OVERLAP_APP_ONLY_STAGE',case=a.case,image_sha256=image['sha256'],image_bytes=image['size'],aggregate_stage_bytes=used,guests=0,runtime_release=False)))
+ if __name__=='__main__':main()

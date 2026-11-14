@@ -1,0 +1,42 @@
+test_empty_equal_flags_allowed (__main__.Regression) ... ERROR
+test_override_forms_rejected (__main__.Regression) ... 
+======================================================================
+ERROR: test_empty_equal_flags_allowed (__main__.Regression)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-configure-quiescence-correction-1/test_predecessor.py", line 13, in test_empty_equal_flags_allowed
+    m.v._selectors({'commands':c},{'commands':c})
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-configure-sdk-v8-source-1/validator.successor.py", line 143, in _selectors
+    _require(len(values)==1 and len(values[0])>len('-D'+flag+'='), 'missing or duplicate '+flag)
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-configure-sdk-v8-source-1/validator.successor.py", line 28, in _require
+    raise ValueError(why)
+ValueError: missing or duplicate KBUILD_MAKE_FLAGS
+
+======================================================================
+FAIL: test_override_forms_rejected (__main__.Regression) (extra='-DMCKERNEL_M14_NONHELD13_DATA32_EXPERIMENTAL:BOOL=OFF')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-configure-quiescence-correction-1/test_predecessor.py", line 10, in test_override_forms_rejected
+    with self.subTest(extra=extra),self.assertRaises(ValueError):m.v._selectors({'commands':c},{'commands':c})
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_override_forms_rejected (__main__.Regression) (extra='-UKERNEL_DIR')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-configure-quiescence-correction-1/test_predecessor.py", line 10, in test_override_forms_rejected
+    with self.subTest(extra=extra),self.assertRaises(ValueError):m.v._selectors({'commands':c},{'commands':c})
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_override_forms_rejected (__main__.Regression) (extra='-C/tmp/initial.cmake')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-configure-quiescence-correction-1/test_predecessor.py", line 10, in test_override_forms_rejected
+    with self.subTest(extra=extra),self.assertRaises(ValueError):m.v._selectors({'commands':c},{'commands':c})
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.001s
+
+FAILED (failures=3, errors=1)

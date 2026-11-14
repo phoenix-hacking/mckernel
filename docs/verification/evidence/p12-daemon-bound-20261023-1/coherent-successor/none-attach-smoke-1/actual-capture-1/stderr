@@ -1,0 +1,33 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/source/native_diagnostic_container_owner.py", line 476, in bounded_command
+    code = child.wait(timeout=max(0.001, end - time.monotonic()))
+  File "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/source/native_diagnostic_container_owner.py", line 358, in wait
+    self.returncode = os.waitstatus_to_exitcode(status)
+AttributeError: module 'os' has no attribute 'waitstatus_to_exitcode'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/smoke.NOT-RELEASED.py", line 83, in <module>
+    if __name__=='__main__':raise SystemExit(main())
+  File "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/smoke.NOT-RELEASED.py", line 82, in main
+    o=load();return o.execute_owner(make(o))
+  File "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/source/native_diagnostic_container_owner.py", line 1223, in execute_owner
+    raise owner.failure
+  File "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/source/native_diagnostic_container_owner.py", line 1191, in execute_owner
+    owner.run()
+  File "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/smoke.NOT-RELEASED.py", line 65, in run
+    if self.failure is not None:raise self.failure
+  File "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/smoke.NOT-RELEASED.py", line 37, in run
+    o.need(self._lookup() is None,'fresh smoke owner identity')
+  File "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/source/native_diagnostic_container_owner.py", line 785, in _lookup
+    result = self._call(["ps", "-aq", "--no-trunc", "--filter", value])
+  File "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/source/native_diagnostic_container_owner.py", line 766, in _call
+    raise failure
+  File "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/source/native_diagnostic_container_owner.py", line 720, in _call
+    result = self.backend.call(command, timeout=timeout)
+  File "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/source/native_diagnostic_container_owner.py", line 547, in call
+    return bounded_command(argv, timeout, env=env, ledger=self.children)
+  File "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/source/native_diagnostic_container_owner.py", line 491, in bounded_command
+    raise command_error from exc
+p12_none_smoke_owner.CommandError: AttributeError

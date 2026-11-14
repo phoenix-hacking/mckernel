@@ -1,0 +1,19 @@
+--- /home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/postbuild-numa-stage-runtime-data-preparation-1/runtime-current-image-preparation-1/postmutation-recovery-data-preparation-1/check_actual_paired_wire_bodies_once.py
++++ /home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/postbuild-numa-stage-runtime-data-preparation-1/runtime-current-image-preparation-1/postmutation-recovery-data-preparation-1/check_actual_paired_wire_bodies.CORRECTION-1.py
+@@ -20,9 +20,14 @@
+ exec(compile(ast.fix_missing_locations(ast.Module(body=definitions(decoder,['raw_original','root_proof_bytes']),type_ignores=[])),b['decoder']['path'],'exec'),dg)
+ source_rows=pre['transaction_paths']+[pre['cleanup_source'],pre['release']];need(len(source_rows)==len({r['path']for r in source_rows})==9,'genuine nine inputs');wire=[]
+ for row in source_rows:
+-    expected=base64.b64decode(row['raw_base64'],validate=True);need(row['raw_complete']is True and row['stable_full9']is True and row['named_before']==row['fd_before']==row['fd_after']==row['named_after'] and len(expected)==row['bytes'] and hashlib.sha256(expected).hexdigest()==row['sha256'],'authenticated actual prestate FD/bytes')
++    need(row['stable_full9']is True and row['named_before']==row['fd_before']==row['fd_after']==row['named_after'] and row['bytes']==row['fd_before']['size'],'authenticated actual prestate full9/byte count')
++    if row['kind']=='regular':
++        expected=base64.b64decode(row['raw_base64'],validate=True);need(row['raw_complete']is True and len(expected)==row['bytes'] and hashlib.sha256(expected).hexdigest()==row['sha256'],'authenticated actual retained bytes')
++    else:
++        need(row['kind']=='regular_hash_only' and row['path'].endswith('/numa-insert-clear-image-terminal-20261021-1.docker-logs.capture') and 'raw_base64'not in row,'exact observed hash-only log row');expected=None
+     actual,observed=pg['preserved_snapshot'](dict(path=row['path'],sha256=row['sha256'],full9=row['fd_before']),export=True)
+-    need(observed==expected and actual['full9']==row['fd_before'],'actual preserved formatter and prior exact bytes')
++    need(len(observed)==row['bytes'] and hashlib.sha256(observed).hexdigest()==row['sha256'] and actual['full9']==row['fd_before'],'actual producer FD/full9/retained hash join')
++    if expected is not None:need(observed==expected,'actual producer and retained complete bytes')
+     need(dg['raw_original'](actual,actual['raw_base64'])==observed,'actual decoder nested full9/raw bytes')
+     wire.append(actual)
+ # Execute the exact actual decoder nine-row predicate too: UID/GID come from

@@ -1,0 +1,20 @@
+--- /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/root-union-preparation-2/consume_retained_union_results.py
++++ /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/root-union-preparation-2/consume_retained_union_results.expert_attribute1.py
+@@ -7,7 +7,7 @@
+ import hashlib, json, os, re, stat
+ 
+ D = Path(__file__).resolve().parent
+-S = D / 'abi-include-path-correction-1'
++S = D / 'expert-attribute-correction-1'
+ H = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/accepted_ELF64_symtab_RELA.ACTUAL-FUNCTION.py')
+ H_SHA = '874bd6814dc73b51d7a81676657b05b0dcb9f976c183267fd19063ab583c8126'
+ 
+@@ -77,7 +77,7 @@
+     for key,path in paths.items():
+         receipt = produced_objects[key]
+         need(receipt['path'] == str(path) and re.fullmatch('[0-9a-f]{64}', receipt['sha256']) and all(receipt[k] == v for k,v in file_stat(path).items()), 'actual durable object identity ' + key)
+-    need(hashlib.sha256((D/'source/F06-real-header-ABI-and-callers.path-correction1.c').read_bytes()).hexdigest() == 'be298ece3033952f6a2298211cac4d4a472afae19498afefac6930ff85fe54e2', 'only corrected witness bytes')
++    need(hashlib.sha256((D/'source/F06-real-header-ABI-and-callers.expert-attribute1.c').read_bytes()).hexdigest() == '3bcf909aaaf6f1190f08d33d630dd9d2a5121ca79a02bb7fcbb72047f1bf009f', 'only corrected witness bytes')
+     need(hashlib.sha256((D/'source/arch/x86_64/kernel/syscall.c').read_bytes()).hexdigest() == 'd876e0b24f789372e6747fee7c554a53a3deaa9cee7034d7096374c2dff34ad6', 'exact staged F06 whole C source')
+     expected_sets = small_json(D/'EXPECTED-GLOBAL-SYMBOL-SETS.json')
+     rust = nm(texts[1]); arch = nm(texts[5]); abi = nm(texts[8]); partial = nm(texts[12])

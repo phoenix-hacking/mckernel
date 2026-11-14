@@ -1,0 +1,80 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/independent",
+  "independent": true,
+  "implementation_ownership": false,
+  "recorded_at": "2026-10-28T06:35:28.727799+00:00",
+  "decision": "PASS_F03_CLEAR_HOST_PTE_PRIVATE_SOURCE_ABI_AND_ACTUAL_HOST_FIXTURE_ONLY",
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body2-source-20261028-1/SOURCE-READY.json",
+    "bytes": 6367,
+    "sha256": "c028dec2c34deccde3ac6a277be2eddd037f21d27e7e0c0ca97b98e1cd96c613"
+  },
+  "entry": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body2-source-20261028-1/clear-host-pte-entry.Rust.inc",
+    "bytes": 2141,
+    "sha256": "c135972ba0eb6084858df55237b1cbc96bfb46971cb852dcb1ec73297b44f872"
+  },
+  "data_binding": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body2-source-20261028-1/clear-host-pte-binding.C.inc",
+    "bytes": 440,
+    "sha256": "1369efb72553a694bb54394e7ac3797e587f9d3d8edc23c61d18442b9a32a8b3"
+  },
+  "integration_patches": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body2-source-20261028-1/syscall.c.patch",
+      "bytes": 1202,
+      "sha256": "f416f3b5d5ac95b827bcc8910244d98d8bc53cdd496fbea1e9076e99bb038a3f"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body2-source-20261028-1/syscall_policy.rs.patch",
+      "bytes": 2373,
+      "sha256": "56762f71b08acc1b5a994e7cc562b6431e4cdea35bd5ed671de41b92c2ac0bbf"
+    }
+  ],
+  "actual_HOST_result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body2-source-20261028-1/output-PENDING-ROOT/ACTUAL-HOST-RESULT.json",
+    "bytes": 12934,
+    "sha256": "96c4c13ff18973a43df941b5c87e69dfdfe6bfb6d23a7b2fd12f83659844c182"
+  },
+  "checks": {
+    "selected_C_remaining_in_actual116": "clear_host_pte global0x81=129B",
+    "exact_commands": 3,
+    "ABI_words": 18,
+    "C_Rust_pairs": 2304,
+    "independent_per_invocation_oracles": 4608,
+    "all_directjoins_groups_absent_streamsclosed": true,
+    "existing_Rust_body_exact_reused": true,
+    "original_C_wrapper_exact": true,
+    "reviewer_fixture_or_compiler_replays": 0
+  },
+  "source_findings": [
+    "Actual currentCPU/thread/VM pointers are borrowed without new ownership or references. Original synchronous current-thread/CPU/range-lock exclusion remains required. New entry uses genuine offset_of!(ProcessVm,is_memory_range_lock_taken) and actual currentCPU+processor helper.",
+    "Existing complete clear_host_pte_body_result is reused byte-for-byte. Any nonzero holding flag publishes CPU marker before forwarding, restores -1 after every returned forwarding result, and logs every nonzero result only after restoration. Exact signed result and fullwidth addr/size survive unchanged. No new MM, lock, allocation, forwarding endpoint or error behavior.",
+    "Immutable24B reprC header-derived binding supplies actual munmap syscall and genuine forward/log callbacks. No C runtime function is added. Existing clear_host_pte_log_bridge and syscall_do_syscall3_bridge remain explicit C debt and original forwarding request/endpoint holds are unchanged.",
+    "Real-header ABI18 and2304pairs cover fullwidth args, signed flags/CPU/results,3initial marker states and4608 individuallychecked exactcalls/publication/restore/log/fullCPU/thread/VM byte states. This is mocked functional behavior, without real MM/CPUlocal hardware/syscalls.",
+    "Selected/fallback C wrappers and source logical line states are preserved by paired existing Rust-helper selector; shared CMake/ABI files are unchanged.",
+    "One Rust fixture warning identifies retained canonical unused foreign clear_host_pte declaration. The new exported child symbol is used by actual C link; warning is retained, not suppressed. Held setresuid/driver drafts are excluded from every ready patch/command and receive no acceptance."
+  ],
+  "integration_conditions": [
+    "Root may merge exact reviewed entry/pair/data into coherent private118 after117, with fresh preimage reconciliation for shared syscall_policy.rs and kernel/syscall.c; preserve concurrent changes.",
+    "Full production crate and selected generic TU/link must prove one Rust global clear_host_pte, zero selected C definition, all actual callers resolving to Rust and24B binding pointing to real unchanged forwarding/log providers. Preserve helper-off fallback/line metadata.",
+    "Compile actual production currentCPU/processVM ABI and provider imports; HOST fixture substitutes the CPU-local provider and cannot prove architecture runtime state. Matching current-candidate host-PTE/unmap/lifecycle native proof remains required.",
+    "Source-ready/ABI/HOST qualification earns no default/native/file or actual C-retirement credit; new header-derived C data24B and existing C providers remain honest debt."
+  ],
+  "held_scope": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body2-source-20261028-1/SETRESUID-HOLD.json",
+    "bytes": 857,
+    "sha256": "3b2153ade02b4c50e194def544043a6948005948086de8273ecb9bc07b55b03a"
+  },
+  "counts": {
+    "qualified_source_body": 1,
+    "actual_HOST_fixture": 1,
+    "planned_C_functions_removed": 1,
+    "actual_default_builds": 0,
+    "native": 0,
+    "file_closures": 0,
+    "actual_C_retirement": 0
+  },
+  "runtime_authority": null
+}

@@ -1,0 +1,30 @@
+{
+  "schema": "mckernel.execution-release.v1",
+  "recorded_at": "2026-09-28T09:35:55-07:00",
+  "decision": "PASS_EXACT_ONE_SHOT_EXECUTION_RELEASE",
+  "packet": "docs/verification/stability-native-diagnostic-current-signal-execution-packet-20260928-5.md",
+  "packet_sha256": "e0745c3c74bb83527d0b742332dce862f85e6874e701d4f3d3115d118172c57b",
+  "bound_commit": "b020d8476117a309e8b22fe40f08ad9dd17aa8e9",
+  "parent": "/home/holden/mckernel-work/scratch/ndcs-20260928-5",
+  "nonce": "7f531aa8f8ee209b7ca79955460a01c3",
+  "owner_sha256": "c46b7cb0e66d653f644777d140b8e152bf1a572711bcff3d9b6cbaa00bb34d00",
+  "command": "/usr/bin/sudo -A /home/holden/anaconda3/bin/python3 -B /home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py --attempt-parent /home/holden/mckernel-work/scratch/ndcs-20260928-5 --nonce 7f531aa8f8ee209b7ca79955460a01c3 --owner-sha256 c46b7cb0e66d653f644777d140b8e152bf1a572711bcff3d9b6cbaa00bb34d00",
+  "attempts_released": 1,
+  "preconditions": [
+    "Fresh coordinator capacity, process, container and development-lock checks pass immediately before setup.",
+    "Parent, inner attempt and evidence sibling remain absent before creating the parent once as uid/gid 1000 mode 0700.",
+    "Packet 3 and 4 parents/nonces remain nonreusable.",
+    "No source, manifest, artifact, profile, command, deadline, oracle or cleanup rule drifts."
+  ],
+  "verified": [
+    "pushed/fetched commit and six runtime source blobs",
+    "strict manifest and complete artifact closure",
+    "exact outer and generated QEMU argv",
+    "100-byte QMP pathname",
+    "UID1000 CPUs2-5 12GiB 512-task no-network profile",
+    "91-byte stdout, empty stderr and exit-zero oracle",
+    "progressive process identity and exact reap evidence",
+    "cleanup uncertainty and delayed-publication retry contracts"
+  ],
+  "limitations": "One diagnostic protocol attempt only; no application, M04, production-gate or whole-OS acceptance."
+}

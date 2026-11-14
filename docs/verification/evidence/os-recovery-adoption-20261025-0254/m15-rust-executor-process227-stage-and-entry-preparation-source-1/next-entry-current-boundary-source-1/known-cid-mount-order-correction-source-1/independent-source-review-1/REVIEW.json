@@ -1,0 +1,91 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_SOURCE",
+  "decision": "PASS_SOURCE_ONE_KNOWN_CID_FULL_MOUNT_RECORD_ORDER_COMPARISON_CORRECTION",
+  "independent": true,
+  "reviewer": "/root/guardian_execution_review",
+  "implementation_ownership": false,
+  "runtime_authority": null,
+  "reviewed_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/next-entry-current-boundary-source-1/known-cid-mount-order-correction-source-1/READY.json",
+    "bytes": 2929,
+    "sha256": "d7e386c67cb73e32fcdfb699f54927eeeddabbb80e5ce2f4e6ae75204cdf4827"
+  },
+  "reviewed_helper": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/next-entry-current-boundary-source-1/known-cid-mount-order-correction-source-1/known_cid_inspect_compare.py",
+    "bytes": 2056,
+    "sha256": "fb2dbf184ee6c4c3bd861963b72918cda3c781e1bbd47c278b993ccecf6a02a1"
+  },
+  "reviewed_common_observer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/next-entry-current-boundary-source-1/known-cid-mount-order-correction-source-1/observe_root57_known_cid_mount_order.py",
+    "bytes": 12952,
+    "sha256": "e1b5d1b51af0c2b5d78bf23143dfdd41fadc6382bd2cdbc3fabbda388c67dc7b"
+  },
+  "reviewed_schema": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/next-entry-current-boundary-source-1/known-cid-mount-order-correction-source-1/OBSERVER-SCHEMA.SOURCE-ONLY.json",
+    "bytes": 697,
+    "sha256": "f6f7efbb4772b970ff6af44596291b1df1e867e56027d8865fcc7d033dd49aa1"
+  },
+  "reviewed_renderer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/next-entry-current-boundary-source-1/known-cid-mount-order-correction-source-1/render_observer_successor.py",
+    "bytes": 1570,
+    "sha256": "b4b0f0d4f4df6b697ddce90205f4314eed7fbb6d7af09416fd316a6a77ad1601"
+  },
+  "retained_actual_diagnosis": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-1/cid-inspect-order-diagnosis-1/DIAGNOSIS.json",
+    "bytes": 737,
+    "sha256": "5fdd150c15f441003ba709ca8b04a32af0bf9342bd9f36454d595250ee86917b"
+  },
+  "retained_controls": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/next-entry-current-boundary-source-1/known-cid-mount-order-correction-source-1/PURE-REAL-JSON-REGRESSION.json",
+    "bytes": 2911,
+    "sha256": "40637adc2a5c7465c3eb5a2d08a1f78adac1fabd3bd0d693a83f3c4ad2eeb172"
+  },
+  "preserved_old_common": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/next-entry-current-boundary-source-1/BOUND-CURRENT-OBSERVER.SOURCE-ONLY.py",
+    "bytes": 12545,
+    "sha256": "838f7883701f4b1946b219b99b4cf317004443d4ab857f54cac7ce4f77941f01"
+  },
+  "reused_old_common_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/next-entry-current-boundary-source-1/independent-root57-source-review-1/REVIEW.json",
+    "bytes": 7273,
+    "sha256": "ca761d3b9ba13bc5c0f2587c98484ee8b1af5cf79c1b077729a21cb220261b03"
+  },
+  "independent_retained_data_checks": {
+    "actual_and_retained_stdout_refs_match": true,
+    "one_exactCID_container_each": true,
+    "all_nonMount_keys_values_types_and_other_listorder_canonical_exact": true,
+    "full_Mountrecord_multiset_equal": true,
+    "Mountrecords": 53,
+    "uniqueDestinations": 53,
+    "original_rawstdout_difference_preserved": true,
+    "entire_observer_AST_equal_after_removing_helperpin_and_reverting_singlecomparison": true,
+    "sourcecontrols": 16,
+    "new_livecalls": 0
+  },
+  "findings": [
+    "RetainedRootdiagnosis5fdd/actuale1dd/retained4af7 proves exactly one actualknownCID inspect exit0/emptyerr/positivejoin; only Mounts listorder differs, same53fullJSONrecords. All other parsedfields andtypes comparecanonicallyexact. Originalfailedresource/observer/error namespace remains failed andunmodified.",
+    "Purehelper is confined to exactargv inspect CID52ae. Requires rc0/emptyerr, oneJSONlist element, dictionary exactknownId. DuplicateJSONkeys andnonfinite scalars reject. No process/guard/query APIs exist in helper.",
+    "FullnonMountcontainer object canonicallycompared with allkeys/values/types/listorders retained, so boolfalse vs integer0, changedState/config, added/droppedfields andothersemanticdifferences reject. It does not select a weaker subset of inspect fields.",
+    "BothMountlists require exactly53dictrecords, absolute string uniqueDestination. Counter containscanonical serialization of every entire record, so source/destination/RW/propagation/type/unknownfield/value/duplicate/missingrecord changes reject. Only recordorder varies.",
+    "ThreeotherCLIresponses retain original rc/stdout/stderr rawexact comparison. WrongCIDargv does not gain normalization or special handling.",
+    "Commone1b5 matches entire old838f AST after removing pinnedhelperreference and replacing oneoriginalassert with exactpinnedcomparator load/call. Root57/68/currentfree270a, fullhistory onebaseobserve, actors/processgroups/probes/cgroups/floors/account/v2clocks andall4queries unchanged. Schemarebind changesobserveridentity only.",
+    "16retainedrealJSONcontrols cover actualpermutation/equalpositive plus alteredState/ExitCodebooltype/MountRW/source/destination/duplicates/droppedfield/config/wrongCID/extraRootfield/rc/stderr/otherCLIwhitespace negatives. Reviewer independently comparedactualvsretaineddata; didnotrerunobserver orqueries.",
+    "Renderer authenticates originalsourcehash, replaces exactlyoneliteralassert, addspinnedpurehelper andcreatesexclusiveadditiveoutput. A matching235case successor and build116adapter require their own coherent exactnewsource/schema/currentboundary refs; this source review doesnotturncommon227contextinto235casecontext."
+  ],
+  "source_scope": "Sharedpurecomparison and commonphysicalobserver source only; no newcase/nativequota/framework andno relaxation ofstate/custody/mountcontents. Actualcase2source/nonce/currentauthority remainRootseparate.",
+  "required_next": [
+    "Freshmatching235namespace2/newnonce with exactcorrected235observer/schema andnormalstatic/publication/oncecontext; preserveold838f/5ad7/failure",
+    "Mandatorywholeofflineproducer\u2192actualnormalprepare check-static beforefreshclock, designatedindependentwaiterready",
+    "FreshRootcurrent/account/resource/independentexecutionrelease for actualnative; no staleprefix/release reuse"
+  ],
+  "actual_effects_by_reviewer": {
+    "helper_or_observerexecutions": 0,
+    "guard_queries": 0,
+    "Docker_queries": 0,
+    "resource_capture": 0,
+    "grant_or_native": 0,
+    "canonical_or_original_source_mutations": 0
+  },
+  "blockers": []
+}

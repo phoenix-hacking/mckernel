@@ -1,0 +1,82 @@
+{
+  "actual_signal_launch_state_edits": 0,
+  "argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/included-usage-100-controller-handoff-20261020-1/handoff_once.py",
+    "--arm",
+    "/home/holden/mckernel-work/host-preparation/included-usage-100-controller-handoff-20261020-1/ROOT-ARMED.json",
+    "--arm-sha256",
+    "GENUINE_ROOT_ARM_SHA256",
+    "--execute"
+  ],
+  "canonical_resume": [
+    "scripts/run_os_parallel.py",
+    "--run",
+    "--background"
+  ],
+  "controller_source": {
+    "scripts/run_os_goal.py": {
+      "bytes": 80328,
+      "path": "/home/holden/mckernel/scripts/run_os_goal.py",
+      "sha256": "287e6a81d8747f08774947a09fb75eae6fe77da98fe82a686133f9b1ffab4ec5"
+    },
+    "scripts/run_os_parallel.py": {
+      "bytes": 14340,
+      "path": "/home/holden/mckernel/scripts/run_os_parallel.py",
+      "sha256": "135f3d2b1794db8fa64852021e9d89be243d1bfca656a589f11b9bfc7866d317"
+    },
+    "scripts/watch_os_goal.py": {
+      "bytes": 17784,
+      "path": "/home/holden/mckernel/scripts/watch_os_goal.py",
+      "sha256": "182ffe05bbef52a01b7f7519052fa10cfd06cd642c4acbaea2be3fcbfd749947"
+    }
+  },
+  "expected_owners": {
+    "server": {
+      "pid": 1347807,
+      "start": "18269770"
+    },
+    "watcher": {
+      "pid": 1347803,
+      "start": "18269758"
+    },
+    "worker": {
+      "pid": 1347805,
+      "start": "18269764"
+    }
+  },
+  "failure_rule": "any service/auth/policy/quota stop, unidentified owner, unexpected exit, lock/source/boot/goal mismatch or canonical refusal is terminal; never retry; retain once marker and evidence",
+  "finite_limits_seconds": {
+    "arm_plus_oldretirement": 1800,
+    "canonicalmanualrun": 180,
+    "new_effective_worker": 120
+  },
+  "helper": {
+    "bytes": 16569,
+    "path": "/home/holden/mckernel-work/host-preparation/included-usage-100-controller-handoff-20261020-1/handoff_once.py",
+    "sha256": "e05783e0d7b770c6e3554d125e7e9dacb9e7ce215d54cea103ff13fec3c3ffc2"
+  },
+  "known_semantic_limit": "oldwatcher numeric exit unknown because not direct child; watcher declaredexit10 kept separate from actual pidfdexit; cleanup_verifiedfalse is explicitly not physical runtimeproof",
+  "late_root_arm_fields": [
+    "statusPASS_ROOT_ARMED",
+    "thread_id",
+    "checkpoint_commit/tree",
+    "publication_verified",
+    "publication_proof(path/SHA/bytes)"
+  ],
+  "no_fresh_session_or_custom_restart_loop": true,
+  "old_lifecycle": "existing watch.on_signal -> graceful workercheckpoint -> existing retire_server -> watcher_stopped -> all3pidfdexit + bothlockacquisition",
+  "only_signal": "one pidfd SIGTERM to authenticated oldwatcher; never worker/server/helper escalation",
+  "proof": "fresh sourceimport100 + same savedthread running active + newwatcher/worker/server birth andparentage + effective worker settings100 + heldrun/watchlocks",
+  "root_arm_DATA": {
+    "bytes": 990,
+    "path": "/home/holden/mckernel-work/host-preparation/included-usage-100-controller-handoff-20261020-1/ROOT-ARM-DATA.json",
+    "sha256": "e7606d7d807bd795736f044c70ca4634871450f9367cbc3b713107a330ed3a88"
+  },
+  "root_effects_not_authorized_by_preparation": true,
+  "schema": "mckernel.included100.controller-handoff-preparation.v1",
+  "status": "SOURCE_ONLY_INDEPENDENT_REVIEW_AND_ROOT_ARM_REQUIRED",
+  "tests_run": 0
+}

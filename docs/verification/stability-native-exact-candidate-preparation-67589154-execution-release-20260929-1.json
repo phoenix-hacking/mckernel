@@ -1,0 +1,61 @@
+{
+  "allowed_command_argv": [
+    "/bin/bash",
+    "/home/holden/mckernel/docs/verification/evidence/native-exact-candidate-preparation-67589154-1.sh"
+  ],
+  "allowed_privileged_preflight_argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/docker",
+    "--host",
+    "unix:///var/run/docker.sock",
+    "ps",
+    "--all",
+    "--no-trunc",
+    "--format",
+    "{{json .}}"
+  ],
+  "build_acceptance": false,
+  "candidate_sha": "675891545c881b8d625256ade56fe66ac69fe794",
+  "historical_packet_sha256": "15f40733a88bcc1e94d89cac43e0eeba4056ace5fe023051cd566b5006f07461",
+  "ihk_sha": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+  "independent_review": {
+    "decision": "CONDITIONAL_PASS_ONE_SHOT_AFTER_COMMIT_PUSH_FETCH_AND_FRESH_PREFLIGHT",
+    "limitations": [
+      "source-contract tests do not provide execution or failure-injection coverage",
+      "closure fingerprints observe file metadata rather than hashing every object body",
+      "uncatchable termination requires outer evidence and postflight reconciliation"
+    ],
+    "scope": "one non-root preparation packet plus one exact read-only privileged Docker ps preflight; no build, lease, Docker create/run/remove, guest, retry or cleanup"
+  },
+  "one_shot": true,
+  "owner_sha256": "a8c4c9fc61fab312e3a6e48e93b417453ec12e6543d6adbb7038933f92e79155",
+  "packet_sha256": "34249db7443a196e1b4928ae016611bc91b40841e7f80027faec8702b12a5a33",
+  "preflight_output_root": "/home/holden/mckernel-work/scratch/native-exact-preflight-67589154-1",
+  "record_kind": "native_exact_candidate_preparation_execution_release",
+  "required_before_execution": [
+    "candidate source checkpoint, exact packet, exact tests and this release committed, pushed and fetched byte-identically",
+    "fresh O_EXCL process/starttime, lock, all-lease, capacity, target-absence and exact read-only Docker ps evidence completes without denial or uncertainty",
+    "no conflicting heavy owner, build, QEMU, mcexec, lease or Docker bind to any fresh target",
+    "host and MemAvailable at least 16 GiB, scratch at least 12 GiB, tmpfs at least 4 GiB, and candidate plus backup plus 12-GiB prospective container at most 24 GiB",
+    "all nine packet destinations remain absent including dangling symlinks"
+  ],
+  "required_retained_evidence": [
+    "fresh preflight and postflight receipts with commands, timing, statuses, streams and hashes",
+    "inner and outer logs, exact exit statuses and fsync results",
+    "metadata receipt and backup, placement and closure observations, manifest and request",
+    "allocation measurement, empty output/evidence observations, lease absence and surviving-process reconciliation"
+  ],
+  "retry": false,
+  "runtime_acceptance": false,
+  "schema_version": 1,
+  "status": "PASS_ONE_SHOT_PREPARATION_ONLY",
+  "test_history": {
+    "corrected_command": "/usr/bin/python3 -I -B scripts/tests/test_native_exact_candidate_preparation_67589154.py",
+    "corrected_result": "PASS_5_TESTS",
+    "initial_command": "/usr/bin/python3 -I -B -m unittest -v scripts/tests/test_native_exact_candidate_preparation_67589154.py",
+    "initial_result": "EXIT_1_MODULE_NOT_FOUND_SCRIPTS; enclosing cleanup also found its temporary directory nonempty",
+    "intermediate_result": "two test-assumption failures exposed and corrected within the allowlisted test only"
+  },
+  "test_sha256": "3815ef4d2724b5ccd8a13508f1eb6dcbcb1d3b15f498c98b12e3b5f6525ce0b9"
+}

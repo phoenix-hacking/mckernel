@@ -1,6 +1,18 @@
 McKernel Core OS Rust Ownership Tracker
 Updated: 2026-05-30
 
+Current interpretation and reuse baseline (2026-09-06)
+------------------------------------------------------------
+Existing Rust is preserved and recorded in docs/verification/rust-reuse-plan.md
+and rust-reuse-baseline-24a151fe.json in the same directory: 129 tracked Rust
+files / 163,073 raw lines including fixtures. The plan maps existing core and
+host bodies to native adaptation work; it does not claim new body ownership.
+The sequencing percentages and campaign deltas below retain their historical
+scope. They are not current whole-OS or native production completion scores.
+Use rust-source-retirement.txt for revision-bound guest-image language evidence
+and final-push.txt for native production acceptance. Before estimating new code,
+identify the existing Rust symbols and remaining Linux integration in the plan.
+
 Purpose
 ------------------------------------------------------------
 
@@ -3588,3 +3600,11 @@ Core ownership claims should be backed by non-reboot validation first:
 
 Reboot-capable validation remains opt-in and must not be run without explicit
 approval.
+Active goal clarification (2026-09-07): the final McKernel kernel implementation
+must be entirely Rust or assembly. Retain and integrate the existing Rust across
+the repository; remove C implementation and fallback dependencies from the final
+production kernel after verified replacement. Historical sequencing percentages
+do not satisfy this requirement. The additional artifact/source/runtime checks
+are in docs/verification/mckernel-rust-assembly-completion.md; native Linux 6.12
+integration and final-push.txt acceptance are also required. Assembly is allowed
+and recorded separately from Rust. Rocky/Linux remains the Linux control kernel.

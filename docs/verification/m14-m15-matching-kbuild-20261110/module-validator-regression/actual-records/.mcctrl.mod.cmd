@@ -1,0 +1,1 @@
+savedcmd_drivers/misc/mckernel/mcctrl.mod := printf '%s\n'   mcctrl_rust.o m15_mmap_trace_gates.o m15_mm_write_warning.o | awk '!x[$$0]++ { print("drivers/misc/mckernel/"$$0) }' > drivers/misc/mckernel/mcctrl.mod

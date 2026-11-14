@@ -1,0 +1,62 @@
+
+/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o:     file format elf64-x86-64
+
+
+Disassembly of section .ltext.process_sched_rusage_debug_bridge:
+
+0000000000000000 <process_sched_rusage_debug_bridge>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	41 57                	push   %r15
+   6:	41 56                	push   %r14
+   8:	41 54                	push   %r12
+   a:	53                   	push   %rbx
+   b:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	d: R_X86_64_64	process_schedule_exit_debug_input
+  15:	4c 8b 38             	mov    (%rax),%r15
+  18:	4d 85 ff             	test   %r15,%r15
+  1b:	0f 84 9e 00 00 00    	je     bf <process_sched_rusage_debug_bridge+0xbf>
+  21:	49 8b 07             	mov    (%r15),%rax
+  24:	48 8b 00             	mov    (%rax),%rax
+  27:	48 83 f8 01          	cmp    $0x1,%rax
+  2b:	0f 85 8e 00 00 00    	jne    bf <process_sched_rusage_debug_bridge+0xbf>
+  31:	49 8b 47 08          	mov    0x8(%r15),%rax
+  35:	48 8b 30             	mov    (%rax),%rsi
+  38:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	3a: R_X86_64_64	.lrodata.str1.1+0x781e
+  42:	49 bc 00 00 00 00 00 00 00 00 	movabs $0x0,%r12	44: R_X86_64_64	kprintf
+  4c:	31 c0                	xor    %eax,%eax
+  4e:	41 ff d4             	call   *%r12
+  51:	41 83 7f 20 00       	cmpl   $0x0,0x20(%r15)
+  56:	7e 67                	jle    bf <process_sched_rusage_debug_bridge+0xbf>
+  58:	48 bb 00 00 00 00 00 00 00 00 	movabs $0x0,%rbx	5a: R_X86_64_64	.lrodata.str1.1+0x7857
+  62:	45 31 f6             	xor    %r14d,%r14d
+  65:	66 66 2e 0f 1f 84 00 00 00 00 00 	data16 cs nopw 0x0(%rax,%rax,1)
+  70:	49 8b 47 10          	mov    0x10(%r15),%rax
+  74:	4a 8b 14 f0          	mov    (%rax,%r14,8),%rdx
+  78:	48 89 df             	mov    %rbx,%rdi
+  7b:	44 89 f6             	mov    %r14d,%esi
+  7e:	31 c0                	xor    %eax,%eax
+  80:	41 ff d4             	call   *%r12
+  83:	49 ff c6             	inc    %r14
+  86:	49 63 47 20          	movslq 0x20(%r15),%rax
+  8a:	49 39 c6             	cmp    %rax,%r14
+  8d:	7c e1                	jl     70 <process_sched_rusage_debug_bridge+0x70>
+  8f:	85 c0                	test   %eax,%eax
+  91:	7e 2c                	jle    bf <process_sched_rusage_debug_bridge+0xbf>
+  93:	48 bb 00 00 00 00 00 00 00 00 	movabs $0x0,%rbx	95: R_X86_64_64	.lrodata.str1.1+0x7836
+  9d:	45 31 f6             	xor    %r14d,%r14d
+  a0:	49 8b 47 18          	mov    0x18(%r15),%rax
+  a4:	4a 8b 14 f0          	mov    (%rax,%r14,8),%rdx
+  a8:	48 89 df             	mov    %rbx,%rdi
+  ab:	44 89 f6             	mov    %r14d,%esi
+  ae:	31 c0                	xor    %eax,%eax
+  b0:	41 ff d4             	call   *%r12
+  b3:	49 ff c6             	inc    %r14
+  b6:	49 63 47 20          	movslq 0x20(%r15),%rax
+  ba:	49 39 c6             	cmp    %rax,%r14
+  bd:	7c e1                	jl     a0 <process_sched_rusage_debug_bridge+0xa0>
+  bf:	5b                   	pop    %rbx
+  c0:	41 5c                	pop    %r12
+  c2:	41 5e                	pop    %r14
+  c4:	41 5f                	pop    %r15
+  c6:	5d                   	pop    %rbp
+  c7:	c3                   	ret    

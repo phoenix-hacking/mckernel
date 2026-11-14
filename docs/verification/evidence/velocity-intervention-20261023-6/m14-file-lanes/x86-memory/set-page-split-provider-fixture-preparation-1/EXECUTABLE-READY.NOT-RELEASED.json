@@ -1,0 +1,106 @@
+{
+  "CPU_reservation": null,
+  "actual_existing_provider_snapshots": [
+    {
+      "snapshot": {
+        "bytes": 76151,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/set-page-split-provider-fixture-preparation-1/rust/abi.rs",
+        "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+      },
+      "source": {
+        "bytes": 76151,
+        "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+        "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+      }
+    },
+    {
+      "snapshot": {
+        "bytes": 3105,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/set-page-split-provider-fixture-preparation-1/rust/spinlock_helpers.rs",
+        "sha256": "7b6c1e87f521eaf4674128afd7bff71785bead4ff7c9eb3c9a668d6a0cb0cbe7"
+      },
+      "source": {
+        "bytes": 3105,
+        "path": "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs",
+        "sha256": "7b6c1e87f521eaf4674128afd7bff71785bead4ff7c9eb3c9a668d6a0cb0cbe7"
+      }
+    },
+    {
+      "snapshot": {
+        "bytes": 17367,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/set-page-split-provider-fixture-preparation-1/rust/page_helpers.rs",
+        "sha256": "cfc64f72bf9b94c65417bc8f4e29d65b81f98239fe52ab2a7dd0352ebdfc3f70"
+      },
+      "source": {
+        "bytes": 17367,
+        "path": "/home/holden/mckernel/kernel/rust/page_helpers.rs",
+        "sha256": "cfc64f72bf9b94c65417bc8f4e29d65b81f98239fe52ab2a7dd0352ebdfc3f70"
+      }
+    }
+  ],
+  "actual_outputs": null,
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/set-page-split-provider-fixture-preparation-1/run_actual_once.NOT-RELEASED.py"
+  ],
+  "coverage": "Exact four new Rust provider bodies plus genuine complete existing spinlock_helpers/page_helpers modules and existing zeroing/allocator helpers; no Rust behavioral model. C controls external IRQ/preemption/hashlock/log/physical-allocator and table-mutation endpoint only. Real Rust atomics/list operations execute for real aligned observer-owned Page objects. Proves bounded orchestration/callbacks, not real IRQ hardware, physical page ownership, table mutation, contention or native behavior. Product spinlock nominal type corrected additively before compilation.",
+  "driver": {
+    "bytes": 7233,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/set-page-split-provider-fixture-preparation-1/run_actual_once.NOT-RELEASED.py",
+    "sha256": "ad2da023f91397798bb66e36259ffe86c1e5f4b938f74960fda40e984436775b"
+  },
+  "execution_grant": null,
+  "held_passed_four_provider_suffix": "c03ce4ee remains frozen separate, pending central union3 Rust/Cmem binding; this is the only executable source fixture queue.",
+  "prior_failure_history": "937 CWD initial failure/correction preserved; L1 declaration failure/correction preserved. No execution of this new family. Source-only nominal type defect cb4f corrected additively; no old frozen source overwritten.",
+  "production_default_native": null,
+  "profile": {
+    "AS_bytes": 2147483648,
+    "CPU_seconds": 60,
+    "FSIZE_bytes": 33554432,
+    "HOST_floor_bytes": 17179869184,
+    "NOFILE": 256,
+    "OS_stack_bytes": 2097152,
+    "Rust_CGU": 1,
+    "Rust_stack_bytes": 2097152,
+    "aggregate_bytes": 20401094656,
+    "capture": "Accepted990 owned_capture dict recipe + signal handlers + CWD binding",
+    "core": 0,
+    "cpu": 6,
+    "full_sparse_growth_required": true,
+    "jobs": 1,
+    "retirement_seconds": 6,
+    "scratch_floor_bytes": 12884901888,
+    "toolchains": "Pinned Rust1.92 and GCC9 exactly as accepted L3 leaf profile",
+    "wall_seconds": 90
+  },
+  "recipe": {
+    "bytes": 31014,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/set-page-split-provider-fixture-preparation-1/SET-SPLIT-FIXTURE-RECIPE.NOT-EXECUTED.json",
+    "sha256": "c70d9b9f05bc587262cf3b91764c25c59d46e73f824353de22fd44e817abce7f"
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\nOne exact original-C/Rust set-page/split callback fixture queue; source only.\n",
+  "source_postimages": [
+    {
+      "bytes": 92311,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/set-page-split-provider-fixture-preparation-1/candidate/arch/x86_64/kernel/memory.c",
+      "sha256": "ecda4e8af5a80fc6d82ba4f1a318e910fa737b365157c959560ce3c3deb1cad7"
+    },
+    {
+      "bytes": 212722,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/set-page-split-provider-fixture-preparation-1/candidate/kernel/rust/x86_memory_helpers.rs",
+      "sha256": "41a38ffd682b912a22b9079665e016eba1c1134b147e4b8928fd3eee3b24ab78"
+    }
+  ],
+  "status": "ONE_SOURCE_FIXTURE_QUEUE_READY_NO_EXECUTION",
+  "total_expected_pairs": 498,
+  "type_correction": {
+    "bytes": 488,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/set-page-split-provider-fixture-preparation-1/ADDITIVE-EXACT-SPINLOCK-NOMINAL-TYPE.patch",
+    "sha256": "898e4c947a2ea20547cc9805a34eacdf0d5872ac0b89920717cf1b10820c83a3"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "preparation_only": true,
+  "execution_released": false,
+  "after_successful_default_image_target": true,
+  "commands": [
+    {
+      "argv": ["/usr/bin/nm", "-u", "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o"],
+      "expect_exact_once_imports": ["sched_idle_loop_body_result", "sched_idle_current_cpu_bridge"]
+    },
+    {
+      "argv": ["/usr/bin/readelf", "-rW", "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o"],
+      "expect_relocations_to": ["sched_idle_loop_body_result", "sched_idle_current_cpu_bridge"]
+    },
+    {
+      "argv": ["/usr/bin/objdump", "-dr", "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o"],
+      "retain": "Actual default idle entry and callback data relocation evidence, not only standalone TU evidence. The original C idle orchestration must be excluded under MCKERNEL_RUST_PROCESS_HELPERS."
+    }
+  ],
+  "compile_commands_join": {
+    "file": "/work/output/build/compile_commands.json",
+    "select_unique_file": "/src/kernel/process.c",
+    "require_define": "-DMCKERNEL_RUST_PROCESS_HELPERS",
+    "require_exact_selected_pinned_GCC14_flags": true,
+    "require_source_manifest_match": true
+  },
+  "final_image_requirements": "Use the full Rust/final-image unique-definition and zero-undefined observations in PINNED-PRODUCTION-CONSUMER-COMMANDS.json. Bind new final artifact SHA256, actual default object, exact selected generated command and source derivative together. No unused-symbol presence alone establishes native execution."
+}

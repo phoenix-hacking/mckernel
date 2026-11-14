@@ -1,0 +1,26 @@
+{
+  "decision": "PASS_EXACT_PARENT_DIRECTORY_FSYNC_ADDITION_ONLY",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "original_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/interrupt_exact_unlaunched_holder.py",
+    "bytes": 11035,
+    "sha256": "570b306904398f8d36d7bca3f6bc3cc2725e8bf698ce93accbb55c4942c225af"
+  },
+  "original_READY": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/READY.json",
+    "bytes": 2277,
+    "sha256": "a21fbe64429b1a5c18502d4a2927296c07509f06c7259ecf48f3f3f8e92f49a0"
+  },
+  "corrected_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/interrupt_exact_unlaunched_holder.DIRECTORY-FSYNC-CORRECTED.py",
+    "bytes": 11252,
+    "sha256": "10772f6af24e47198a9917036d74a13a9e8059d6adee8f4137313b360f1fb822"
+  },
+  "delta": "After first fsynced ENTERED: open containing D with O_DIRECTORY|O_NOFOLLOW|O_CLOEXEC; fsync directory fd; finally close own directory fd. Before verify_live/pidfd_open/SIGINT.",
+  "unchanged_AST_after_removing_added_statements": true,
+  "retained_original_source_sha256_verified": true,
+  "queries": 0,
+  "signals": 0,
+  "guard_calls": 0,
+  "execution_grant": null
+}

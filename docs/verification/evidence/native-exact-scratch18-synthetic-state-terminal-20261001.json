@@ -1,0 +1,54 @@
+{
+  "schema": "mckernel.native-exact.synthetic-state-terminal.v1",
+  "result": "PASS_TERMINAL_AFTER_BOUNDED_CORRECTION",
+  "acceptance_credit": false,
+  "published_source_commit": "7fc64c4bc33ca7f11dfec78f0592706d0323fc9d",
+  "source_sha256": "80845b08b3595ed6e2a9fb0a18595f7ad4dba1269a80fd4c338911f2789a9a18",
+  "tests_sha256": "79fae5be269e39166fbde7e6276019b5b518cc5cde43e1791aece4e9517fc1cb",
+  "first_attempt": {
+    "result": "REFUSED",
+    "reason": "record-mutated:native-exact-scratch18-interrupt-cleanup.plan.json.synthetic-v1.sentinel",
+    "cause": "The real scratch filesystem advanced atime while the captured plan was read; the original helper compared the complete stat result.",
+    "preserved_prefix": "plan active pathname held the sentinel directory, exact plan inode 90737 was captured at the sentinel pathname, and exact journal inode 90738 remained live"
+  },
+  "correction": "Exclude only atime from before/after read comparison while retaining exact bytes/hash, device/inode, type/mode, ownership, link count, size, mtime_ns and ctime_ns.",
+  "verification": {
+    "focused_tests": "21/21 PASS",
+    "independent_review": "PASS for publication and serialized recovery from observed stage [2,0]",
+    "execute": "PASS_EXECUTED terminal=true",
+    "postflight": "PASS_VALIDATE_ONLY terminal=true"
+  },
+  "archives": {
+    "plan": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-scratch18-interrupt-cleanup.plan.json.synthetic-v1.archive",
+      "device": 1831,
+      "inode": 90737,
+      "size": 169,
+      "sha256": "b12ca96f9464f5488a243d7de4ea1ecf0132efccf911ddc52a0807c9b9274c88"
+    },
+    "journal": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-scratch18-interrupt-cleanup.journal.jsonl.synthetic-v1.archive",
+      "device": 1831,
+      "inode": 90738,
+      "size": 1251,
+      "sha256": "b1eb871a3b2fc6beba2af00500e15df7fb4f4191b228800eeb819f6a3e7c94cb"
+    },
+    "retained_marker_directories": [
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-exact-scratch18-interrupt-cleanup.plan.json.synthetic-v1.sentinel.archive",
+        "device": 1831,
+        "inode": 5373997,
+        "mode": "0700"
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-exact-scratch18-interrupt-cleanup.journal.jsonl.synthetic-v1.sentinel.archive",
+        "device": 1831,
+        "inode": 5767172,
+        "mode": "0700"
+      }
+    ]
+  },
+  "active_source_paths_absent": true,
+  "real_scratch18_ownership_records_unchanged": true,
+  "next": "Publish and independently release the real scratch18 ownership cleanup, run its privileged validate-only census, then consume it once."
+}

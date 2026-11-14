@@ -1,0 +1,72 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": 1793404167.1476939,
+  "status": "ROOT_ADMITS_ONE_REAL_UNPRIVILEGED_DEFERRED_RESTORE_PROBE",
+  "thread_id": "01a18bc3-e072-7810-9426-75101b0856c0",
+  "source_pins": {
+    "root-install-deferred-child-restore-check-1/correction-2/SOURCE-BOUND.json": "0514167ca9adcbab25b5ea6ab9a5e60fcff20d870fb3eaba86f05eca9e374c25",
+    "root-install-deferred-child-restore-check-1/correction-2/restore_probe.py": "3b927a1b7773762ef6ec40e5b3dddfb219c310530b5e418d3b8a704ab8d6b872",
+    "root-install-deferred-child-restore-check-1/correction-2/PROFILE.SOURCE-ONLY.json": "dfab3052f0493587ae2a1465bd2b067c2ad7756a366969e9bc752354f28b38ed",
+    "root-install-source-10/package/deferred_fork.py": "b28d2f3483fb90c858479b65c9cebe6bd1b586c01902f004ec44964da6b4625f"
+  },
+  "runner_sha256": "2d709c697ccc0f9ba6adb0f151f300894b080e1e16a705abf76c09ab62ae49ba",
+  "cpu": [
+    6
+  ],
+  "jobs": 1,
+  "address_space_bytes": 536870912,
+  "cpu_seconds": 30,
+  "wall_seconds": 45,
+  "kill_after_seconds": 5,
+  "native_root_fork_pidfd_signal_immutable": false,
+  "actual_effects": "one actual UID1000 fork, own pidfd/pipe/directwait; no Root/SUDO/native/otherPIDsignals",
+  "unchanged5_protocolcases_not_replayed": true,
+  "weekly_used_percent": 96,
+  "weekly_observed_at": 1793404160.561755,
+  "controllers": {
+    "guardian": {
+      "pid": 2996157,
+      "ppid": 2995936,
+      "start": "118034389",
+      "state": "R"
+    },
+    "monitor": {
+      "pid": 2996160,
+      "ppid": 2995936,
+      "start": "118034501",
+      "state": "R"
+    },
+    "server": {
+      "pid": 2996005,
+      "ppid": 2996003,
+      "start": "118034116",
+      "state": "S"
+    },
+    "watcher": {
+      "pid": 2996001,
+      "ppid": 2995936,
+      "start": "118034086",
+      "state": "S"
+    },
+    "worker": {
+      "pid": 2996003,
+      "ppid": 2996001,
+      "start": "118034102",
+      "state": "S"
+    }
+  },
+  "capacity": {
+    "MemAvailable_bytes": 27384098816,
+    "free_bytes": {
+      "/home/holden/mckernel": 142291542016,
+      "/home/holden/mckernel-work/scratch": 47613485056
+    }
+  },
+  "nonce": "3986b394ec6caeb5922e9e1b73d5d2462e5a4235938fd6df63e327c8d40cc506",
+  "original_unknown_operation_reservation_bytes": 4294967296,
+  "original_operation_reservation_released": false,
+  "aggregate_planned_bytes": 19864223744,
+  "native_reserved_jobs": 4,
+  "joint_jobs": 5,
+  "foreground_timeout_is_not_a_descendant_join": true
+}

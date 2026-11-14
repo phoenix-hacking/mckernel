@@ -1,0 +1,508 @@
+{
+  "status": "READY_EXACT_DELAY_JOIN_ONLY_PENDING_ONE_COMBINED_EMISSION_JOIN_REVIEW_AND_ROOT_ADMISSION",
+  "owner": "/root/m15_public_abi_high",
+  "cwd": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/join-1",
+  "private_output": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/join-1/output",
+  "commands": [
+    {
+      "label": "partial-join",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/join-1/partial-join.metrics",
+        "/usr/bin/ld",
+        "-r",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/join-1/output/delay_kmsg_partial.o",
+        "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/output/delay_provider.o",
+        "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-provider-unit-1/expanded-1/join-1/output/kmsg_string_partial.o"
+      ],
+      "environment_overrides": {},
+      "stdout_path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/join-1/partial-join.stdout",
+      "stderr_path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/join-1/partial-join.stderr",
+      "expected_returncode": 0,
+      "expected_stderr": ""
+    },
+    {
+      "label": "joined-symbols",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/join-1/joined-symbols.metrics",
+        "/usr/bin/nm",
+        "-S",
+        "--format=posix",
+        "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/join-1/output/delay_kmsg_partial.o"
+      ],
+      "environment_overrides": {},
+      "stdout_path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/join-1/joined-symbols.stdout",
+      "stderr_path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/join-1/joined-symbols.stderr",
+      "expected_returncode": 0,
+      "expected_stderr": ""
+    },
+    {
+      "label": "joined-elf",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/join-1/joined-elf.metrics",
+        "/usr/bin/readelf",
+        "-h",
+        "-SW",
+        "-Ws",
+        "-Wr",
+        "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/join-1/output/delay_kmsg_partial.o"
+      ],
+      "environment_overrides": {},
+      "stdout_path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/join-1/joined-elf.stdout",
+      "stderr_path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/join-1/joined-elf.stderr",
+      "expected_returncode": 0,
+      "expected_stderr": ""
+    }
+  ],
+  "inputs": {
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/join-1/join_checks.py": "bc3cbc6fc1ed0396132415e44d2052c71fa1e8202c5a74a3bec92865b14a4cbc",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/join-1/INPUT-OWNERS.json": "73e109d78a381ac8d610577f675800ad244d7dfd02a8d1a638a178d1fabbd81d",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/RESULT.json": "8dea2a4d6144ce4a5211dfcc7872609b8c1b764aa0c89f8215a5279184612be9",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/ACTUAL-OBJECT-CHECK.json": "f5cb35c6c22a73bad5bc1af615525c36d0c27f90c0787224b02a9263ce7eac91",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/ACTUAL-ELF-METADATA.json": "02158bbd3b386badd11b95b701f1549bc9e198a31f4d55312d178866feb8181a",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/provider-symbols.stdout": "4749c437fd243313394130c23e44dcdf6b70097624b31d6ea8c9d27264d8f006",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-provider-unit-1/expanded-1/join-1/RESULT.json": "e52cb6c3d067f2f7f0657ea78c89d9d39db20bd483d185cedc8b3f3770c8dc40",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-provider-unit-1/expanded-1/join-1/joined-symbols.stdout": "793b1ffc41ecc781638f0c0e5e15a77599a93348f75e063be424f5f3b862074e",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-provider-unit-1/expanded-1/join-1/POSTJOIN-CHECK.json": "5ccdf93d996796285730bc7e4b4de74f4fdb32429a7942d6f42b9cc51e33a410",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-provider-unit-1/expanded-1/join-1/join_checks.py": "93a8f429f77664a4df90fafc227801575751138ac32e7c2d3ed46d16a5f462c8",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-review-1/REVIEW.json": "268b3d3663c554364a6374248e23f9493f8b3e27f34ca5f8b2265632f22a7a53",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/output/delay_provider.o": "e9d1ee97d7f1fc448e01002d8bcc258cca5699011a3dd2638aadfc17f26be595",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-provider-unit-1/expanded-1/join-1/output/kmsg_string_partial.o": "346cf6c2573b302ebc3579c22844289304692d4147b1016907ba7e7b2d7ce9f5",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/join_checks.py": "8e713e3311f55d5316e3dc5a7bff4b72e39f650e48e5f9e6616fdf77e5933a0c",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/storage_predicate.py": "a4df81bb2b86d97f4199ae816dab7965213ceba05dca17945f9eae861dc31892",
+    "/usr/bin/ld": "476b24d5cc1fef54f80412d06e7430b2dcf4e2b6f1525ee17e6eaaf16b28a00f",
+    "/usr/bin/nm": "5fb0dd8acc18e3f348ed0acbcada0580dbdddd1eb5de3c8323613af13580032b",
+    "/usr/bin/readelf": "41a813335a74480f145fba9400aa7fb5c0ec7ffcaa7af7f33e832dc75eb90ffb"
+  },
+  "object_inputs": [
+    {
+      "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/output/delay_provider.o",
+      "sha256": "e9d1ee97d7f1fc448e01002d8bcc258cca5699011a3dd2638aadfc17f26be595",
+      "bytes": 1472
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-provider-unit-1/expanded-1/join-1/output/kmsg_string_partial.o",
+      "sha256": "346cf6c2573b302ebc3579c22844289304692d4147b1016907ba7e7b2d7ce9f5",
+      "bytes": 38160
+    }
+  ],
+  "actual_new_nm": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/provider-symbols.stdout",
+  "actual_prior_nm": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-provider-unit-1/expanded-1/join-1/joined-symbols.stdout",
+  "joined_object": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/join-1/output/delay_kmsg_partial.o",
+  "joined_nm": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/join-1/joined-symbols.stdout",
+  "qualified_ELF_reader": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/storage_predicate.py",
+    "sha256": "a4df81bb2b86d97f4199ae816dab7965213ceba05dca17945f9eae861dc31892",
+    "qualification_receipt": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/RESULT.json",
+    "scope": "Reuse existing exact Image/parse_nm for ELF64-LE/x86_64 REL metadata/bytes only, not storage predicate re-review or new parser/loader."
+  },
+  "qualified_owner_helpers": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/join_checks.py",
+    "sha256": "8e713e3311f55d5316e3dc5a7bff4b72e39f650e48e5f9e6616fdf77e5933a0c",
+    "actual_qualification_receipt": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/RESULT.json",
+    "reuse": "Image/check_nm/local/compare_owner/reference helpers only; no repeatedkprintfpredicate/codegen/oldmetadata execution."
+  },
+  "qualified_lock_relocation_helpers": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-provider-unit-1/expanded-1/join-1/join_checks.py",
+    "sha256": "93a8f429f77664a4df90fafc227801575751138ac32e7c2d3ed46d16a5f462c8",
+    "qualification_receipt": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-provider-unit-1/expanded-1/join-1/RESULT.json",
+    "reuse": "ActualqualifiedprivateNOBITSownerrelocnormalization+ownerhelpers only; no oldpredicate/metadata/codegenreplay."
+  },
+  "predicate": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/join-1/join_checks.py",
+    "sha256": "bc3cbc6fc1ed0396132415e44d2052c71fa1e8202c5a74a3bec92865b14a4cbc",
+    "prejoin_callable": "prejoin(request)",
+    "postjoin_callable": "postjoin(request)",
+    "must_be_called_before_ld_r": true,
+    "must_be_called_after_actual_joined_nm_and_ELF_readback": true,
+    "prepared_AST_only_not_executed": true
+  },
+  "expected": {
+    "actual_prior60": {
+      "_RNvNtNtCs5mudLkas02F_21provider_storage_unit18x86_memory_helpers17owned_memory_data10TRACE_FILE": {
+        "kind": "R",
+        "size": 319
+      },
+      "__ihk_mc_spinlock_lock": {
+        "kind": "T",
+        "size": 108
+      },
+      "__ihk_mc_spinlock_lock_noirq": {
+        "kind": "T",
+        "size": 91
+      },
+      "__ihk_mc_spinlock_unlock": {
+        "kind": "T",
+        "size": 61
+      },
+      "__ihk_mc_spinlock_unlock_noirq": {
+        "kind": "T",
+        "size": 59
+      },
+      "clv": {
+        "kind": "B",
+        "size": 8
+      },
+      "cpu_disable_interrupt_save": {
+        "kind": "T",
+        "size": 6
+      },
+      "cpu_interrupt_disabled": {
+        "kind": "T",
+        "size": 16
+      },
+      "cpu_local_var_initialized": {
+        "kind": "B",
+        "size": 4
+      },
+      "cpu_pause": {
+        "kind": "T",
+        "size": 3
+      },
+      "cpu_restore_interrupt": {
+        "kind": "T",
+        "size": 5
+      },
+      "do_setresgid": {
+        "kind": "T",
+        "size": 173
+      },
+      "do_setresuid": {
+        "kind": "T",
+        "size": 173
+      },
+      "format_decode_result": {
+        "kind": "T",
+        "size": 876
+      },
+      "get_cpu_local_var": {
+        "kind": "T",
+        "size": 24
+      },
+      "get_this_cpu_local_var": {
+        "kind": "T",
+        "size": 99
+      },
+      "getcred": {
+        "kind": "T",
+        "size": 259
+      },
+      "getcred_body_result": {
+        "kind": "T",
+        "size": 272
+      },
+      "ihk_mc_get_processor_id": {
+        "kind": "T",
+        "size": 77
+      },
+      "ihk_mc_spinlock_init": {
+        "kind": "T",
+        "size": 5
+      },
+      "kmsg_buf": {
+        "kind": "B",
+        "size": 8
+      },
+      "kmsg_init": {
+        "kind": "T",
+        "size": 15
+      },
+      "kprintf": {
+        "kind": "T",
+        "size": 706
+      },
+      "kprintf_lock": {
+        "kind": "T",
+        "size": 107
+      },
+      "kprintf_unlock": {
+        "kind": "T",
+        "size": 71
+      },
+      "linux_page_offset_base": {
+        "kind": "B",
+        "size": 8
+      },
+      "locals": {
+        "kind": "B",
+        "size": 8
+      },
+      "memset": {
+        "kind": "T",
+        "size": 113
+      },
+      "num_processors": {
+        "kind": "D",
+        "size": 4
+      },
+      "preempt_disable": {
+        "kind": "T",
+        "size": 54
+      },
+      "preempt_enable": {
+        "kind": "T",
+        "size": 54
+      },
+      "printf_copy_literal_result": {
+        "kind": "T",
+        "size": 174
+      },
+      "printf_emit_char_result": {
+        "kind": "T",
+        "size": 14
+      },
+      "printf_terminate_result": {
+        "kind": "T",
+        "size": 19
+      },
+      "printf_write_nchars_result": {
+        "kind": "T",
+        "size": 25
+      },
+      "ptrace_detach_do_kill_bridge": {
+        "kind": "T",
+        "size": 12
+      },
+      "ptrace_detach_wakeup_bridge": {
+        "kind": "T",
+        "size": 12
+      },
+      "put_dec_full_result": {
+        "kind": "T",
+        "size": 174
+      },
+      "put_dec_result": {
+        "kind": "T",
+        "size": 291
+      },
+      "put_dec_trunc_result": {
+        "kind": "T",
+        "size": 214
+      },
+      "skip_atoi_result": {
+        "kind": "T",
+        "size": 66
+      },
+      "snprintf": {
+        "kind": "T",
+        "size": 76
+      },
+      "strnlen": {
+        "kind": "T",
+        "size": 57
+      },
+      "syscall_do_syscall2_bridge": {
+        "kind": "T",
+        "size": 167
+      },
+      "syscall_do_syscall3_bridge": {
+        "kind": "T",
+        "size": 171
+      },
+      "syscall_get_processor_id_bridge": {
+        "kind": "T",
+        "size": 77
+      },
+      "syscall_policy_do_syscall2_bridge": {
+        "kind": "T",
+        "size": 167
+      },
+      "syscall_policy_do_syscall3_bridge": {
+        "kind": "T",
+        "size": 171
+      },
+      "syscall_refresh_cred_fields_body_result": {
+        "kind": "T",
+        "size": 163
+      },
+      "syscall_virt_to_phys_bridge": {
+        "kind": "T",
+        "size": 165
+      },
+      "terminate_host": {
+        "kind": "T",
+        "size": 183
+      },
+      "virt_to_phys": {
+        "kind": "T",
+        "size": 165
+      },
+      "wait_host_wait4_bridge": {
+        "kind": "T",
+        "size": 166
+      },
+      "x86_addr_log_bridge": {
+        "kind": "T",
+        "size": 98
+      },
+      "x86_addr_log_kernel_debug": {
+        "kind": "D",
+        "size": 32
+      },
+      "x86_addr_log_straight_debug": {
+        "kind": "D",
+        "size": 32
+      },
+      "x86_kernel_phys_base": {
+        "kind": "B",
+        "size": 8
+      },
+      "x86_map_kernel_start_geometry": {
+        "kind": "R",
+        "size": 8
+      },
+      "x86_user_map_kernel_start_bridge": {
+        "kind": "T",
+        "size": 14
+      },
+      "x86_virt_to_phys_body_result": {
+        "kind": "T",
+        "size": 105
+      }
+    },
+    "actual_new3": {
+      "arch_delay": {
+        "kind": "T",
+        "size": 91
+      },
+      "ihk_mc_delay_us": {
+        "kind": "T",
+        "size": 91
+      },
+      "rdtsc": {
+        "kind": "T",
+        "size": 12
+      }
+    },
+    "actual_prior14U": [
+      "do_kill",
+      "do_syscall",
+      "eventfd",
+      "f03_terminate_host_refcount_set_v1",
+      "f03_wait_release_process",
+      "f03_wait_release_thread",
+      "ihk_mc_delay_us",
+      "sched_wakeup_thread",
+      "syscall_do_kill_thread_bridge",
+      "syscall_do_syscall_request_bridge",
+      "syscall_find_process_bridge",
+      "syscall_generic_forwarding_body_result",
+      "syscall_process_unlock_bridge",
+      "terminate_host_body_result"
+    ],
+    "actual_new1U": [
+      "cpu_pause"
+    ],
+    "actual_partial13U": [
+      "do_kill",
+      "do_syscall",
+      "eventfd",
+      "f03_terminate_host_refcount_set_v1",
+      "f03_wait_release_process",
+      "f03_wait_release_thread",
+      "sched_wakeup_thread",
+      "syscall_do_kill_thread_bridge",
+      "syscall_do_syscall_request_bridge",
+      "syscall_find_process_bridge",
+      "syscall_generic_forwarding_body_result",
+      "syscall_process_unlock_bridge",
+      "terminate_host_body_result"
+    ],
+    "original_old_LOCAL_KMSG_LOCK": {
+      "name": "_RNvNtCs3AfSQJNpqeM_31kmsg_lock_preempt_provider_unit5debug9KMSG_LOCK",
+      "bind": 0,
+      "type": 1,
+      "other": 0,
+      "section": 92,
+      "value": 0,
+      "size": 4
+    },
+    "retained_old2LOCAL_helpers": {
+      "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse17number_ref_result": 1190,
+      "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result": 3395
+    },
+    "old_source_owned_jump_tables": [
+      ".lrodata._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result",
+      ".lrodata.format_decode_result"
+    ],
+    "actual_new_compiler_code_alias": [
+      "arch_delay",
+      "ihk_mc_delay_us"
+    ]
+  },
+  "profile": {
+    "CPU": [
+      6
+    ],
+    "local_serial_jobs": 1,
+    "AS_bytes": 1073741824,
+    "CPU_seconds": 45,
+    "wall_seconds": 60,
+    "kill_after_seconds": 5,
+    "FSIZE_bytes": 67108864,
+    "core_bytes": 0,
+    "aggregate_HOST_CPUs": [
+      0,
+      6,
+      7
+    ],
+    "aggregate_jobs_max": 3,
+    "aggregate_HOST_total_bytes_all_overhead": 4294967296,
+    "retained_prior_bytes": 19327352832,
+    "host_floor_bytes": 4294967296,
+    "fresh_MemAvailable_minimum_bytes": 27917287424
+  },
+  "no_compiler_metadata_or_behavior_replay": true,
+  "no_function_RDTSC_or_hardware_native_operation": true,
+  "scope": "Exact2input e9d1+published346 nonexecutedld-r+2reads. Preserveall60prior+3newglobalowners/2LOCALt/helpers/tables/oneLOCALbprivateKMSG/aliases/source-relocs.63globals52T11data13genuineU ifactualmetadataagrees. No RDTSC/timing/calibration/delaycompletion/boot/default/native/providerclosure acceptance.",
+  "canonical_index_writes": false,
+  "not_runnable_until": "Fonecombinedactualemission/finiteowner/alias/predicateGO thenRootfreshCPU6admission. FirstunexpectedfailureSTOP/noautomaticretry or codegenreplay."
+}

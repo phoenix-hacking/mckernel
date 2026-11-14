@@ -1,0 +1,1756 @@
+
+docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT109-NEXT-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000004740 <do_fork>:
+    4740:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    4747:	00 00 00 
+			17: R_X86_64_64	.rodata
+			32: R_X86_64_64	__verbose+0x1340
+			42: R_X86_64_64	.rodata.str1.1+0x34
+			4e: R_X86_64_64	kprintf
+			62: R_X86_64_64	__verbose+0x13c0
+			72: R_X86_64_64	.rodata.str1.8
+			7e: R_X86_64_64	kprintf
+			92: R_X86_64_64	__verbose+0x13a0
+			a2: R_X86_64_64	.rodata.str1.1
+			ae: R_X86_64_64	kprintf
+			c2: R_X86_64_64	__verbose+0x1380
+			d6: R_X86_64_64	.rodata.str1.1+0x10
+			e2: R_X86_64_64	kprintf
+			f2: R_X86_64_64	__verbose+0x1360
+			106: R_X86_64_64	.rodata.str1.1+0x23
+			112: R_X86_64_64	kprintf
+			122: R_X86_64_64	kprintf
+			131: R_X86_64_64	.rodata.str1.1+0x48
+			142: R_X86_64_64	kprintf
+			150: R_X86_64_64	.rodata.str1.8+0x30
+			162: R_X86_64_64	__mcs_rwlock_writer_lock_noirq
+			172: R_X86_64_64	__mcs_rwlock_writer_lock
+			182: R_X86_64_64	__mcs_rwlock_writer_unlock
+			192: R_X86_64_64	__mcs_rwlock_writer_unlock_noirq
+			1a2: R_X86_64_64	.rodata.str1.1+0x64
+			1b1: R_X86_64_64	kmalloc_tracked
+			1c2: R_X86_64_64	do_kill
+			1d2: R_X86_64_64	.rodata.str1.1+0x64
+			1e1: R_X86_64_64	kfree_tracked
+			1f2: R_X86_64_64	.rodata.str1.1+0x64
+			201: R_X86_64_64	kfree_tracked
+			212: R_X86_64_64	syscall_generic_forwarding
+			222: R_X86_64_64	ptrace_report_signal
+			232: R_X86_64_64	ihk_atomic64_read
+			242: R_X86_64_64	ihk_mc_event_update
+			252: R_X86_64_64	ihk_mc_perfctr_stop
+			262: R_X86_64_64	ihk_mc_perfctr_start
+			272: R_X86_64_64	ihk_mc_event_set_period
+			282: R_X86_64_64	ihk_mc_perf_counter_mask_check
+			292: R_X86_64_64	ihk_mc_perfctr_init_raw
+			2a2: R_X86_64_64	ihk_mc_perfctr_set_extra
+			2b2: R_X86_64_64	ihk_mc_syscall_arg0
+			2db: R_X86_64_64	ihk_mc_syscall_arg1
+			2ed: R_X86_64_64	ihk_mc_syscall_arg2
+			2ff: R_X86_64_64	ihk_mc_syscall_arg3
+			311: R_X86_64_64	ihk_mc_syscall_arg4
+			324: R_X86_64_64	ihk_mc_syscall_arg5
+			33f: R_X86_64_64	do_mmap
+			34a: R_X86_64_64	perf_mmap_body_result
+			382: R_X86_64_64	ihk_mc_perfctr_alloc
+			3b3: R_X86_64_64	.text+0x4d0
+			3c1: R_X86_64_64	ihk_mc_get_extra_reg_idx
+			3cb: R_X86_64_64	ihk_mc_get_extra_reg_msr
+			3d7: R_X86_64_64	ihk_mc_get_extra_reg_id
+			3e3: R_X86_64_64	ihk_mc_validate_event
+			3ef: R_X86_64_64	ihk_mc_raw_event_map
+			3fb: R_X86_64_64	ihk_mc_hw_cache_extra_reg_map
+			407: R_X86_64_64	ihk_mc_hw_cache_event_map
+			413: R_X86_64_64	ihk_mc_hw_event_map
+			41f: R_X86_64_64	f03_sync_child_count_set_v2
+			42b: R_X86_64_64	.text+0x1d0
+			437: R_X86_64_64	.text+0x1a0
+			45a: R_X86_64_64	perf_event_alloc_body_result
+			4d2: R_X86_64_64	hw_perf_event_init
+			4ee: R_X86_64_64	syscall_copy_from_user_bridge
+			50a: R_X86_64_64	syscall_alloc_bridge
+			515: R_X86_64_64	f03_ptrace_io_unlock
+			520: R_X86_64_64	f03_ptrace_io_find
+			52b: R_X86_64_64	.rodata+0x420
+			536: R_X86_64_64	ptrace_setsiginfo_body_result
+			552: R_X86_64_64	get_this_cpu_local_var
+			59b: R_X86_64_64	.text+0x650
+			5a5: R_X86_64_64	.rodata+0x480
+			5b0: R_X86_64_64	.text+0x1c0
+			5bb: R_X86_64_64	.text+0x1f0
+			5c6: R_X86_64_64	.text+0x660
+			5d1: R_X86_64_64	.text+0x180
+			5dc: R_X86_64_64	.text+0x670
+			5e7: R_X86_64_64	.text+0x170
+			5f2: R_X86_64_64	.text+0x680
+			5fd: R_X86_64_64	.text+0x690
+			608: R_X86_64_64	.text+0x8d0
+			613: R_X86_64_64	f03_ptrace_io_unlock
+			61e: R_X86_64_64	f03_ptrace_io_find
+			62e: R_X86_64_64	ptrace_wakeup_sig_body_result
+			652: R_X86_64_64	sched_wakeup_thread
+			662: R_X86_64_64	process_thread_ptrace_pending_signal_take_result
+			672: R_X86_64_64	process_thread_ptrace_trace_syscall_update_result
+			682: R_X86_64_64	set_single_step
+			692: R_X86_64_64	process_thread_ptrace_saved_context_clear_result
+			6b1: R_X86_64_64	__verbose+0x1400
+			6c2: R_X86_64_64	__verbose+0x13e0
+			6d2: R_X86_64_64	.rodata.str1.8+0xa8
+			6de: R_X86_64_64	kprintf
+			6f2: R_X86_64_64	.rodata.str1.8+0x88
+			6fe: R_X86_64_64	kprintf
+			712: R_X86_64_64	.rodata.str1.8+0x58
+			71e: R_X86_64_64	kprintf
+			732: R_X86_64_64	__verbose+0x1260
+			753: R_X86_64_64	.rodata.str1.1+0x7a
+			75d: R_X86_64_64	.rodata.str1.1+0x84
+			769: R_X86_64_64	kprintf
+			792: R_X86_64_64	__verbose+0xf40
+			7a2: R_X86_64_64	.rodata.str1.8+0xd0
+			7ae: R_X86_64_64	kprintf
+			7c2: R_X86_64_64	__verbose+0xf60
+			7d2: R_X86_64_64	.rodata.str1.1+0x9e
+			7de: R_X86_64_64	kprintf
+			7f2: R_X86_64_64	__verbose+0xf20
+			802: R_X86_64_64	.rodata.str1.8+0xf8
+			80e: R_X86_64_64	kprintf
+			83d: R_X86_64_64	kprintf
+			84d: R_X86_64_64	.rodata.str1.1+0xb9
+			86b: R_X86_64_64	.rodata.str1.8+0x120
+			882: R_X86_64_64	__verbose+0xd20
+			892: R_X86_64_64	kprintf
+			8a2: R_X86_64_64	.rodata.str1.8+0x178
+			8bc: R_X86_64_64	.rodata.str1.1+0xb9
+			8e2: R_X86_64_64	__verbose+0x700
+			8f2: R_X86_64_64	.rodata.str1.8+0x1a8
+			8fe: R_X86_64_64	kprintf
+			912: R_X86_64_64	get_this_cpu_local_var
+			94b: R_X86_64_64	ihk_mc_syscall_set_arg0
+			95d: R_X86_64_64	ihk_mc_syscall_set_arg1
+			96f: R_X86_64_64	ihk_mc_syscall_set_arg2
+			984: R_X86_64_64	set_host_vma_body_result
+			9b2: R_X86_64_64	get_this_cpu_local_var
+			9eb: R_X86_64_64	ihk_mc_syscall_set_arg0
+			9fd: R_X86_64_64	ihk_mc_syscall_set_arg1
+			a0f: R_X86_64_64	ihk_mc_syscall_set_arg2
+			a24: R_X86_64_64	set_host_vma_body_result
+			a52: R_X86_64_64	get_this_cpu_local_var
+			a79: R_X86_64_64	ihk_mc_get_processor_id
+			a9c: R_X86_64_64	.text+0x120
+			aad: R_X86_64_64	.text+0xff0
+			ab8: R_X86_64_64	clear_host_pte_body_result
+			aea: R_X86_64_64	get_this_cpu_local_var
+			b51: R_X86_64_64	__verbose+0x1560
+			b7c: R_X86_64_64	syscall_offload_counted_result
+			bc8: R_X86_64_64	syscall_offload_prepare_result
+			be0: R_X86_64_64	__verbose+0x1540
+			bfd: R_X86_64_64	send_syscall
+			c07: R_X86_64_64	syscall_preempt_disable_needed_result
+			c20: R_X86_64_64	__verbose+0x1520
+			c40: R_X86_64_64	syscall_offload_wait_reply
+			c59: R_X86_64_64	__verbose+0x1500
+			c7a: R_X86_64_64	.bss+0x1064
+			c84: R_X86_64_64	.data
+			c8e: R_X86_64_64	syscall_log_budget_result
+			cad: R_X86_64_64	syscall_offload_counted_result
+			cc6: R_X86_64_64	syscall_proxy_dead_result
+			cd9: R_X86_64_64	__verbose+0x14e0
+			d07: R_X86_64_64	syscall_profile_event_needed_result
+			d1b: R_X86_64_64	__verbose+0x14c0
+			d6c: R_X86_64_64	.rodata.str1.8+0x230
+			d76: R_X86_64_64	kprintf
+			d92: R_X86_64_64	preempt_disable
+			d9e: R_X86_64_64	__verbose+0x1520
+			dc4: R_X86_64_64	.rodata+0x2d8
+			dce: R_X86_64_64	.rodata.str1.8+0x200
+			dd8: R_X86_64_64	kprintf
+			df2: R_X86_64_64	preempt_enable
+			dfe: R_X86_64_64	__verbose+0x1500
+			e1a: R_X86_64_64	.rodata+0x2d8
+			e2a: R_X86_64_64	.rodata.str1.8+0x1d0
+			e34: R_X86_64_64	kprintf
+			e4a: R_X86_64_64	rdtsc
+			e63: R_X86_64_64	profile_syscall2offload
+			e74: R_X86_64_64	profile_event_add
+			e8a: R_X86_64_64	rdtsc
+			e9a: R_X86_64_64	__verbose+0x1560
+			eae: R_X86_64_64	ihk_mc_get_processor_id
+			ebe: R_X86_64_64	.rodata.str1.1+0xca
+			ec8: R_X86_64_64	kprintf
+			ef2: R_X86_64_64	.rodata+0x2d8
+			f01: R_X86_64_64	.rodata.str1.1+0xe7
+			f0b: R_X86_64_64	kprintf
+			f2d: R_X86_64_64	.rodata+0x2d8
+			f37: R_X86_64_64	.rodata.str1.8+0x2a8
+			f41: R_X86_64_64	kprintf
+			f62: R_X86_64_64	.rodata+0x2d8
+			f6c: R_X86_64_64	.rodata.str1.8+0x280
+			f76: R_X86_64_64	kprintf
+			f99: R_X86_64_64	ihk_mc_get_processor_id
+			fca: R_X86_64_64	do_syscall
+			fe2: R_X86_64_64	do_syscall
+			ff2: R_X86_64_64	ihk_mc_get_processor_id
+			101f: R_X86_64_64	do_syscall
+			1032: R_X86_64_64	get_this_cpu_local_var
+			10b7: R_X86_64_64	memcpy
+			10cd: R_X86_64_64	f03_execveat_filename_admission_v1
+			10fe: R_X86_64_64	.rodata.str1.1+0x64
+			1108: R_X86_64_64	f03_execveat_allocate_descriptor_v1
+			112c: R_X86_64_64	virt_to_phys
+			1136: R_X86_64_64	ihk_mc_get_processor_id
+			1179: R_X86_64_64	do_syscall
+			1191: R_X86_64_64	__verbose+0xee0
+			11ca: R_X86_64_64	flatten_strings_from_user
+			11d6: R_X86_64_64	flatten_strings_from_user
+			1224: R_X86_64_64	f03_munmap_all_current_v1
+			123f: R_X86_64_64	f03_execveat_install_user_context_v1
+			1268: R_X86_64_64	prepare_process_ranges_args_envs
+			12a3: R_X86_64_64	get_this_cpu_local_var
+			12dc: R_X86_64_64	.text+0x120
+			12ee: R_X86_64_64	.text+0xff0
+			12f9: R_X86_64_64	clear_host_pte_body_result
+			1315: R_X86_64_64	virt_to_phys
+			1362: R_X86_64_64	do_syscall
+			137a: R_X86_64_64	exec_reset_signal_state_current_v1
+			1393: R_X86_64_64	f03_execveat_ptrace_report_v1
+			13ad: R_X86_64_64	__verbose+0xec0
+			13f2: R_X86_64_64	.rodata.str1.1+0x64
+			1402: R_X86_64_64	f03_execveat_release_temporaries_v1
+			1414: R_X86_64_64	f03_execveat_finish_switch_v1
+			1461: R_X86_64_64	.rodata.str1.8+0x310
+			146b: R_X86_64_64	kprintf
+			1482: R_X86_64_64	__verbose+0xf00
+			14a2: R_X86_64_64	.rodata.str1.8+0x390
+			14b1: R_X86_64_64	kprintf
+			14bd: R_X86_64_64	preempt_enable
+			14e8: R_X86_64_64	do_kill
+			1502: R_X86_64_64	strlen_user
+			151b: R_X86_64_64	.rodata.str1.1+0x64
+			1528: R_X86_64_64	kmalloc_tracked
+			1542: R_X86_64_64	strcpy_from_user
+			1553: R_X86_64_64	.rodata.str1.8+0x340
+			155d: R_X86_64_64	kprintf
+			1571: R_X86_64_64	.rodata.str1.1+0x64
+			157b: R_X86_64_64	kfree_tracked
+			1592: R_X86_64_64	.rodata.str1.1+0xf9
+			159e: R_X86_64_64	.rodata.str1.8+0x340
+			15a8: R_X86_64_64	kprintf
+			15c2: R_X86_64_64	.rodata.str1.8+0x3f8
+			15ce: R_X86_64_64	kprintf
+			15e2: R_X86_64_64	.rodata.str1.8+0x3d0
+			15ee: R_X86_64_64	kprintf
+			160b: R_X86_64_64	strlen_user
+			1621: R_X86_64_64	.rodata.str1.1+0x64
+			162e: R_X86_64_64	kmalloc_tracked
+			165a: R_X86_64_64	strcpy_from_user
+			166b: R_X86_64_64	.rodata.str1.8+0x368
+			1675: R_X86_64_64	kprintf
+			1689: R_X86_64_64	.rodata.str1.1+0x64
+			1693: R_X86_64_64	kfree_tracked
+			16b2: R_X86_64_64	.rodata.str1.8+0x2d0
+			16c1: R_X86_64_64	kprintf
+			16d2: R_X86_64_64	.rodata.str1.1+0xf9
+			16de: R_X86_64_64	.rodata.str1.8+0x368
+			16e8: R_X86_64_64	kprintf
+			1702: R_X86_64_64	do_syscall
+			1712: R_X86_64_64	get_this_cpu_local_var
+			173e: R_X86_64_64	ihk_mc_get_processor_id
+			175f: R_X86_64_64	.text+0xfe0
+			176a: R_X86_64_64	atomic_cmpxchg_ulong
+			1775: R_X86_64_64	terminate_mcexec_body_result
+			17c1: R_X86_64_64	get_this_cpu_local_var
+			1818: R_X86_64_64	sync_child_event
+			1839: R_X86_64_64	__mcs_rwlock_writer_lock_noirq
+			185d: R_X86_64_64	__mcs_rwlock_writer_lock
+			1870: R_X86_64_64	terminate_process_exited_result
+			1884: R_X86_64_64	__verbose+0x1300
+			18a6: R_X86_64_64	tsc_to_ts
+			18c6: R_X86_64_64	ts_add
+			18dc: R_X86_64_64	tsc_to_ts
+			18f9: R_X86_64_64	ts_add
+			1912: R_X86_64_64	terminate_status_result
+			1959: R_X86_64_64	__mcs_rwlock_writer_unlock
+			197e: R_X86_64_64	__mcs_rwlock_writer_unlock_noirq
+			19a2: R_X86_64_64	ihk_mc_get_processor_id
+			19b7: R_X86_64_64	.text+0xfe0
+			19cf: R_X86_64_64	atomic_cmpxchg_ulong
+			19d9: R_X86_64_64	terminate_mcexec_body_result
+			19e7: R_X86_64_64	terminate_thread_is_other_result
+			1a0b: R_X86_64_64	__mcs_rwlock_writer_lock
+			1a25: R_X86_64_64	process_list_detach_result
+			1a4c: R_X86_64_64	__mcs_rwlock_writer_unlock
+			1a65: R_X86_64_64	__mcs_rwlock_reader_lock
+			1ae3: R_X86_64_64	__mcs_rwlock_reader_unlock
+			1afd: R_X86_64_64	terminate_thread_active_result
+			1b12: R_X86_64_64	__mcs_rwlock_reader_lock
+			1b75: R_X86_64_64	schedule
+			1baf: R_X86_64_64	__mcs_rwlock_writer_lock
+			1bc8: R_X86_64_64	process_list_add_tail_result
+			1bde: R_X86_64_64	__mcs_rwlock_writer_unlock
+			1bf1: R_X86_64_64	free_all_process_memory_range
+			1c0c: R_X86_64_64	.rodata.str1.1+0x64
+			1c1b: R_X86_64_64	kfree_tracked
+			1c2e: R_X86_64_64	list_empty
+			1c57: R_X86_64_64	terminate_report_thread_ptrace_result
+			1c81: R_X86_64_64	terminate_report_thread_release_needed_result
+			1c99: R_X86_64_64	f03_ptrace_detach_thread_v1
+			1cd2: R_X86_64_64	terminate_child_cleanup_needed_result
+			1d22: R_X86_64_64	__mcs_rwlock_writer_lock
+			1dbf: R_X86_64_64	__mcs_rwlock_writer_lock_noirq
+			1de0: R_X86_64_64	terminate_child_action_result
+			1e23: R_X86_64_64	process_list_del_init_result
+			1e37: R_X86_64_64	process_list_del_init_result
+			1e4d: R_X86_64_64	__mcs_rwlock_writer_unlock_noirq
+			1e5c: R_X86_64_64	terminate_release_child_needed_result
+			1e70: R_X86_64_64	release_process
+			1ea6: R_X86_64_64	__mcs_rwlock_writer_unlock
+			1eca: R_X86_64_64	__verbose+0x12e0
+			1ede: R_X86_64_64	f03_finalize_process_v1
+			1eed: R_X86_64_64	preempt_disable
+			1f07: R_X86_64_64	__mcs_rwlock_writer_lock
+			1f27: R_X86_64_64	__mcs_rwlock_writer_unlock
+			1f40: R_X86_64_64	release_thread
+			1f4a: R_X86_64_64	kprintf
+			1f59: R_X86_64_64	release_process_vm
+			1f65: R_X86_64_64	preempt_enable
+			1f71: R_X86_64_64	schedule
+			1f7f: R_X86_64_64	.rodata.str1.8+0x470
+			1f89: R_X86_64_64	.rodata+0x278
+			1f95: R_X86_64_64	.rodata.str1.1+0x10c
+			1f9f: R_X86_64_64	panic
+			1fd0: R_X86_64_64	__mcs_rwlock_writer_lock
+			1fe4: R_X86_64_64	process_thread_report_detach_result
+			2003: R_X86_64_64	__mcs_rwlock_writer_unlock
+			2012: R_X86_64_64	release_thread
+			202d: R_X86_64_64	process_thread_termsig_clear_result
+			203e: R_X86_64_64	f03_ptrace_detach_thread_v1
+			204d: R_X86_64_64	release_thread
+			2070: R_X86_64_64	.rodata.str1.1+0x64
+			207a: R_X86_64_64	kmalloc_tracked
+			20fb: R_X86_64_64	__mcs_rwlock_reader_unlock
+			210c: R_X86_64_64	do_kill
+			2179: R_X86_64_64	.rodata.str1.1+0x64
+			2183: R_X86_64_64	kfree_tracked
+			219d: R_X86_64_64	.rodata.str1.1+0xfa
+			21a7: R_X86_64_64	kprintf
+			21c6: R_X86_64_64	.rodata+0x278
+			21d0: R_X86_64_64	.rodata.str1.8+0x448
+			21da: R_X86_64_64	kprintf
+			2200: R_X86_64_64	__mcs_rwlock_writer_lock_noirq
+			2220: R_X86_64_64	__mcs_rwlock_writer_lock_noirq
+			2269: R_X86_64_64	process_child_reparent_result
+			2283: R_X86_64_64	__mcs_rwlock_writer_unlock_noirq
+			2299: R_X86_64_64	__mcs_rwlock_writer_unlock_noirq
+			22c0: R_X86_64_64	__mcs_rwlock_writer_lock_noirq
+			22e0: R_X86_64_64	__mcs_rwlock_writer_lock_noirq
+			231e: R_X86_64_64	__verbose+0x1320
+			2332: R_X86_64_64	preempt_disable
+			2343: R_X86_64_64	tsc_to_ts
+			234d: R_X86_64_64	ts_add
+			23c6: R_X86_64_64	f03_thread_exit_signal_v1
+			23e0: R_X86_64_64	__mcs_rwlock_writer_unlock
+			23fa: R_X86_64_64	__mcs_rwlock_writer_unlock_noirq
+			2409: R_X86_64_64	release_thread
+			2415: R_X86_64_64	preempt_enable
+			2421: R_X86_64_64	schedule
+			2440: R_X86_64_64	.rodata+0x278
+			244a: R_X86_64_64	.rodata.str1.8+0x420
+			2454: R_X86_64_64	kprintf
+			2472: R_X86_64_64	get_this_cpu_local_var
+			24b1: R_X86_64_64	syscall_do_kill_thread_bridge
+			24c8: R_X86_64_64	f03_wait_release_process
+			24d3: R_X86_64_64	f03_wait_release_thread
+			24de: R_X86_64_64	f03_terminate_host_refcount_set_v1
+			24e9: R_X86_64_64	syscall_process_unlock_bridge
+			24f4: R_X86_64_64	syscall_find_process_bridge
+			24ff: R_X86_64_64	terminate_host_body_result
+			2532: R_X86_64_64	__verbose+0x12a0
+			2570: R_X86_64_64	ihk_mc_syscall_set_arg0
+			2584: R_X86_64_64	ihk_mc_syscall_set_arg1
+			2596: R_X86_64_64	ihk_mc_syscall_set_arg2
+			25aa: R_X86_64_64	syscall_generic_forwarding
+			25de: R_X86_64_64	.rodata.str1.8+0x4a8
+			25e8: R_X86_64_64	kprintf
+			2602: R_X86_64_64	.rodata.str1.8+0x4d0
+			2611: R_X86_64_64	kprintf
+			2632: R_X86_64_64	__verbose+0x1280
+			264a: R_X86_64_64	kprintf
+			2658: R_X86_64_64	.rodata.str1.1+0x112
+			2672: R_X86_64_64	terminate
+			2682: R_X86_64_64	get_this_cpu_local_var
+			26b2: R_X86_64_64	get_this_cpu_local_var
+			26d9: R_X86_64_64	ihk_mc_get_processor_id
+			26fc: R_X86_64_64	.text+0x120
+			270d: R_X86_64_64	.text+0xff0
+			2718: R_X86_64_64	clear_host_pte_body_result
+			2742: R_X86_64_64	get_this_cpu_local_var
+			278c: R_X86_64_64	.text+0x730
+			2797: R_X86_64_64	f03_unmap_finish
+			27a2: R_X86_64_64	.text+0x910
+			27ad: R_X86_64_64	.text+0xa50
+			27b8: R_X86_64_64	f03_unmap_remove
+			27c3: R_X86_64_64	f03_unmap_begin
+			27ce: R_X86_64_64	do_munmap_body_result
+			27f2: R_X86_64_64	get_this_cpu_local_var
+			2873: R_X86_64_64	__verbose+0x1200
+			28b1: R_X86_64_64	__inline_memset
+			28ca: R_X86_64_64	ihk_mc_syscall_set_arg0
+			28e0: R_X86_64_64	ihk_mc_syscall_set_arg1
+			28f6: R_X86_64_64	ihk_mc_syscall_set_arg2
+			2908: R_X86_64_64	ihk_mc_syscall_set_arg3
+			291e: R_X86_64_64	ihk_mc_syscall_set_arg4
+			2937: R_X86_64_64	ihk_mc_syscall_set_arg5
+			2951: R_X86_64_64	syscall_mckfd_unlock_bridge
+			2964: R_X86_64_64	.rodata+0x1c0
+			296f: R_X86_64_64	syscall_mckfd_lock_bridge
+			297a: R_X86_64_64	do_mmap_mckfd_dispatch_body_result
+			299c: R_X86_64_64	flush_nfo_tlb
+			29d3: R_X86_64_64	f03_do_mmap_smaller_page_v2
+			29e5: R_X86_64_64	ihk_mc_get_linux_default_huge_page_shift
+			2a01: R_X86_64_64	do_mmap_page_size_body_result
+			2a0d: R_X86_64_64	.rodata.str1.8+0x718
+			2a33: R_X86_64_64	ihk_rwspinlock_write_lock_noirq
+			2a90: R_X86_64_64	do_munmap
+			2ab2: R_X86_64_64	anon_on_demand
+			2abe: R_X86_64_64	mmap_base_vrflags
+			2ad6: R_X86_64_64	mmap_populated_mapping_result
+			2aec: R_X86_64_64	__verbose+0x11c0
+			2b03: R_X86_64_64	.rodata.str1.1+0xf9
+			2b0d: R_X86_64_64	.rodata.str1.1+0x129
+			2b17: R_X86_64_64	.rodata.str1.1+0x135
+			2b3a: R_X86_64_64	.rodata+0x198
+			2b4a: R_X86_64_64	.rodata.str1.1+0x15d
+			2b54: R_X86_64_64	kprintf
+			2b78: R_X86_64_64	mmap_should_set_host_ro
+			2c28: R_X86_64_64	.rodata.str1.1+0x64
+			2c3f: R_X86_64_64	_ihk_mc_alloc_aligned_pages_node
+			2c5d: R_X86_64_64	profile_event_add
+			2c75: R_X86_64_64	__verbose+0x1120
+			2c90: R_X86_64_64	virt_to_phys
+			2cc0: R_X86_64_64	get_this_cpu_local_var
+			2cdd: R_X86_64_64	ihk_mc_syscall_set_arg0
+			2cf3: R_X86_64_64	ihk_mc_syscall_set_arg1
+			2d07: R_X86_64_64	ihk_mc_syscall_set_arg2
+			2d26: R_X86_64_64	set_host_vma_body_result
+			2d4b: R_X86_64_64	.rodata.str1.8+0x7d8
+			2d62: R_X86_64_64	kprintf
+			2d85: R_X86_64_64	ihk_rwspinlock_write_unlock_noirq
+			2d9f: R_X86_64_64	ihk_rwspinlock_read_lock_noirq
+			2db2: R_X86_64_64	ihk_rwspinlock_read_unlock_noirq
+			2dd1: R_X86_64_64	memobj_unref
+			2ddd: R_X86_64_64	__verbose+0x1060
+			2e29: R_X86_64_64	PROT_TO_VR_FLAG
+			2e51: R_X86_64_64	VRFLAG_PROT_TO_MAXPROT
+			2e7d: R_X86_64_64	ihk_mc_get_memory_chunk
+			2eaf: R_X86_64_64	ihk_mc_get_nr_memory_chunks
+			2ecc: R_X86_64_64	.rodata+0x1a0
+			2ed6: R_X86_64_64	kprintf
+			2eed: R_X86_64_64	.rodata.str1.8+0x510
+			2f27: R_X86_64_64	arch_get_smaller_page_size
+			2f50: R_X86_64_64	.rodata.str1.8+0x578
+			2fae: R_X86_64_64	.rodata.str1.8+0x5a0
+			2fdb: R_X86_64_64	f03_search_free_space_v1
+			2fef: R_X86_64_64	__verbose+0x11e0
+			3052: R_X86_64_64	add_process_memory_range
+			307a: R_X86_64_64	.rodata.str1.8+0x660
+			30ac: R_X86_64_64	arch_vrflag_to_ptattr
+			30d0: R_X86_64_64	ihk_mc_pt_set_range
+			311d: R_X86_64_64	.rodata.str1.8+0x6c0
+			3187: R_X86_64_64	f03_search_free_space_v1
+			31ad: R_X86_64_64	kprintf
+			31c5: R_X86_64_64	.rodata+0x198
+			31cf: R_X86_64_64	.rodata.str1.8+0x7a0
+			31ea: R_X86_64_64	mmap_is_shared
+			3201: R_X86_64_64	__verbose+0x10e0
+			321c: R_X86_64_64	zeroobj_create
+			3228: R_X86_64_64	.rodata.str1.8+0xaa0
+			326b: R_X86_64_64	mmap_update_private_maxprot
+			328c: R_X86_64_64	mmap_prot_denied_result
+			32a8: R_X86_64_64	mmap_maxprot_to_vrflags
+			32d0: R_X86_64_64	mmap_should_force_straight
+			32f1: R_X86_64_64	__verbose+0x10c0
+			3311: R_X86_64_64	profile_event_add
+			3362: R_X86_64_64	add_process_memory_range
+			33a1: R_X86_64_64	__verbose+0x10a0
+			33b5: R_X86_64_64	phys_to_virt
+			33d0: R_X86_64_64	__inline_memset
+			3429: R_X86_64_64	ihk_rwspinlock_write_unlock_noirq
+			3443: R_X86_64_64	ihk_rwspinlock_read_lock_noirq
+			347c: R_X86_64_64	ihk_rwspinlock_read_unlock_noirq
+			34af: R_X86_64_64	memobj_unref
+			34bb: R_X86_64_64	__verbose+0x1060
+			34cf: R_X86_64_64	kprintf
+			34e0: R_X86_64_64	.rodata+0x1a0
+			3516: R_X86_64_64	.rodata.str1.8+0x4f0
+			3520: R_X86_64_64	kprintf
+			354a: R_X86_64_64	.rodata+0x1a0
+			3568: R_X86_64_64	.rodata.str1.8+0xcb8
+			35e2: R_X86_64_64	__verbose+0x1100
+			3604: R_X86_64_64	__inline_memset
+			3646: R_X86_64_64	shmobj_create
+			365c: R_X86_64_64	.rodata.str1.8+0xa78
+			3668: R_X86_64_64	kprintf
+			36b4: R_X86_64_64	kprintf
+			36be: R_X86_64_64	.rodata.str1.8+0x778
+			36fd: R_X86_64_64	populate_process_memory
+			3720: R_X86_64_64	.rodata.str1.1+0xf9
+			372a: R_X86_64_64	.rodata.str1.1+0x143
+			373b: R_X86_64_64	.rodata+0x1a0
+			3745: R_X86_64_64	.rodata.str1.1+0x14f
+			374f: R_X86_64_64	.rodata.str1.8+0xc58
+			3764: R_X86_64_64	kprintf
+			37b0: R_X86_64_64	fileobj_create
+			37d3: R_X86_64_64	.rodata.str1.1+0x172
+			37e2: R_X86_64_64	strncmp
+			3807: R_X86_64_64	__verbose+0x11a0
+			3851: R_X86_64_64	devobj_create
+			387e: R_X86_64_64	profile_event_add
+			38a8: R_X86_64_64	.rodata.str1.1+0x19b
+			38b7: R_X86_64_64	strncmp
+			3923: R_X86_64_64	mmap_should_set_host_ro
+			394c: R_X86_64_64	__verbose+0x1180
+			399f: R_X86_64_64	kprintf
+			39a9: R_X86_64_64	.rodata+0x198
+			39b3: R_X86_64_64	.rodata.str1.8+0x868
+			3a07: R_X86_64_64	ihk_rwspinlock_write_unlock_noirq
+			3a21: R_X86_64_64	ihk_rwspinlock_read_lock_noirq
+			3a34: R_X86_64_64	ihk_rwspinlock_read_unlock_noirq
+			3a63: R_X86_64_64	.rodata.str1.1+0x64
+			3a6d: R_X86_64_64	_ihk_mc_free_pages
+			3a9a: R_X86_64_64	kprintf
+			3aa4: R_X86_64_64	.rodata.str1.1+0x1c8
+			3afe: R_X86_64_64	get_this_cpu_local_var
+			3b2d: R_X86_64_64	profile_event_add
+			3b7e: R_X86_64_64	add_process_memory_range
+			3bb0: R_X86_64_64	kprintf
+			3bc1: R_X86_64_64	.rodata.str1.8+0xb38
+			3bd6: R_X86_64_64	.rodata+0x1a0
+			3c09: R_X86_64_64	xpmem_update_process_page_table
+			3c31: R_X86_64_64	kprintf
+			3c42: R_X86_64_64	.rodata+0x198
+			3c4c: R_X86_64_64	.rodata.str1.8+0xc08
+			3c6c: R_X86_64_64	ihk_rwspinlock_read_unlock_noirq
+			3c9c: R_X86_64_64	.rodata.str1.8+0x548
+			3cb9: R_X86_64_64	.rodata+0x1a0
+			3cca: R_X86_64_64	.rodata.str1.8+0xba0
+			3cd4: R_X86_64_64	kprintf
+			3cf2: R_X86_64_64	kprintf
+			3cfc: R_X86_64_64	.rodata+0x1a0
+			3d06: R_X86_64_64	.rodata.str1.8+0x748
+			3d33: R_X86_64_64	ihk_rwspinlock_write_unlock_noirq
+			3d4d: R_X86_64_64	ihk_rwspinlock_read_lock_noirq
+			3d60: R_X86_64_64	ihk_rwspinlock_read_unlock_noirq
+			3d83: R_X86_64_64	memobj_unref
+			3d8f: R_X86_64_64	__verbose+0x1060
+			3dc0: R_X86_64_64	.rodata+0x198
+			3dca: R_X86_64_64	.rodata.str1.8+0x800
+			3dd4: R_X86_64_64	kprintf
+			3e22: R_X86_64_64	__verbose+0x1060
+			3e4d: R_X86_64_64	atomic_cmpxchg4
+			3e9e: R_X86_64_64	ihk_rwspinlock_write_unlock_noirq
+			3eb8: R_X86_64_64	ihk_rwspinlock_read_lock_noirq
+			3ef1: R_X86_64_64	ihk_rwspinlock_read_unlock_noirq
+			3f0e: R_X86_64_64	profile_event_add
+			3f30: R_X86_64_64	get_this_cpu_local_var
+			3f4d: R_X86_64_64	ihk_mc_syscall_set_arg0
+			3f63: R_X86_64_64	ihk_mc_syscall_set_arg1
+			3f77: R_X86_64_64	ihk_mc_syscall_set_arg2
+			3f96: R_X86_64_64	set_host_vma_body_result
+			3fb2: R_X86_64_64	.rodata+0x1a0
+			3fbc: R_X86_64_64	.rodata.str1.1+0x1b0
+			3fc6: R_X86_64_64	kprintf
+			3fe2: R_X86_64_64	.rodata+0x1a0
+			3ff6: R_X86_64_64	.rodata.str1.8+0xa50
+			4000: R_X86_64_64	kprintf
+			4021: R_X86_64_64	.rodata+0x1a0
+			4032: R_X86_64_64	.rodata.str1.8+0xac8
+			403c: R_X86_64_64	kprintf
+			4075: R_X86_64_64	__verbose+0x1080
+			4085: R_X86_64_64	.rodata+0x1a0
+			4096: R_X86_64_64	.rodata.str1.1+0x1e2
+			40a0: R_X86_64_64	kprintf
+			410c: R_X86_64_64	f03_search_free_space_v1
+			4132: R_X86_64_64	kprintf
+			4142: R_X86_64_64	.rodata.str1.8+0x8d8
+			417a: R_X86_64_64	__verbose+0x1140
+			419d: R_X86_64_64	profile_event_add
+			41ba: R_X86_64_64	zeroobj_create
+			41df: R_X86_64_64	kprintf
+			41ed: R_X86_64_64	.rodata+0x1a0
+			4203: R_X86_64_64	.rodata.str1.8+0x9e8
+			4223: R_X86_64_64	__verbose+0x1160
+			4245: R_X86_64_64	.rodata+0x198
+			424f: R_X86_64_64	.rodata.str1.8+0x950
+			4266: R_X86_64_64	kprintf
+			4290: R_X86_64_64	hugefileobj_create
+			42d2: R_X86_64_64	.rodata.str1.1+0x185
+			42de: R_X86_64_64	kprintf
+			4300: R_X86_64_64	get_this_cpu_local_var
+			430f: R_X86_64_64	ihk_mc_syscall_set_arg0
+			4328: R_X86_64_64	ihk_mc_syscall_set_arg1
+			433c: R_X86_64_64	ihk_mc_syscall_set_arg2
+			435c: R_X86_64_64	set_host_vma_body_result
+			4368: R_X86_64_64	.rodata.str1.8+0x7d8
+			43a2: R_X86_64_64	.rodata.str1.8+0x630
+			43d2: R_X86_64_64	.rodata.str1.8+0x608
+			43f2: R_X86_64_64	__verbose+0x1060
+			4422: R_X86_64_64	.rodata.str1.8+0x5e0
+			4450: R_X86_64_64	.rodata.str1.8+0x698
+			446c: R_X86_64_64	.rodata+0x1a0
+			4493: R_X86_64_64	.rodata.str1.8+0xa10
+			449d: R_X86_64_64	kprintf
+			44b4: R_X86_64_64	.rodata+0x1a0
+			44ce: R_X86_64_64	.rodata.str1.8+0x980
+			44d8: R_X86_64_64	kprintf
+			44f6: R_X86_64_64	.rodata.str1.8+0x910
+			4500: R_X86_64_64	kprintf
+			454b: R_X86_64_64	kprintf
+			4555: R_X86_64_64	.rodata+0x198
+			455f: R_X86_64_64	.rodata.str1.8+0x8a0
+			459a: R_X86_64_64	.rodata.str1.1+0x1a6
+			45d0: R_X86_64_64	arch_vrflag_to_ptattr
+			4602: R_X86_64_64	ihk_mc_pt_set_range
+			460c: R_X86_64_64	virt_to_phys
+			46b5: R_X86_64_64	.rodata+0x1a0
+			46c4: R_X86_64_64	.rodata.str1.8+0xbd8
+			46ce: R_X86_64_64	kprintf
+			46e8: R_X86_64_64	.rodata+0x198
+			46f2: R_X86_64_64	.rodata.str1.8+0xb08
+			46fc: R_X86_64_64	kprintf
+			4712: R_X86_64_64	.text+0x220
+			4721: R_X86_64_64	ptrace_syscall_event_body_result
+			4732: R_X86_64_64	.text+0x1030
+			4742: R_X86_64_64	get_this_cpu_local_var
+    474a:	4c 8d 54 24 08       	lea    0x8(%rsp),%r10
+    474f:	48 83 e4 c0          	and    $0xffffffffffffffc0,%rsp
+    4753:	41 ff 72 f8          	push   -0x8(%r10)
+    4757:	55                   	push   %rbp
+    4758:	48 89 e5             	mov    %rsp,%rbp
+    475b:	41 57                	push   %r15
+    475d:	41 56                	push   %r14
+    475f:	41 55                	push   %r13
+    4761:	41 54                	push   %r12
+    4763:	49 89 f4             	mov    %rsi,%r12
+    4766:	41 52                	push   %r10
+    4768:	53                   	push   %rbx
+    4769:	48 81 ec c0 01 00 00 	sub    $0x1c0,%rsp
+    4770:	89 bd 7c fe ff ff    	mov    %edi,-0x184(%rbp)
+    4776:	4d 8b 2a             	mov    (%r10),%r13
+    4779:	48 89 95 70 fe ff ff 	mov    %rdx,-0x190(%rbp)
+    4780:	48 89 8d 60 fe ff ff 	mov    %rcx,-0x1a0(%rbp)
+    4787:	4c 89 85 58 fe ff ff 	mov    %r8,-0x1a8(%rbp)
+    478e:	4c 89 8d 68 fe ff ff 	mov    %r9,-0x198(%rbp)
+    4795:	ff d0                	call   *%rax
+    4797:	c7 85 84 fe ff ff 00 	movl   $0x0,-0x17c(%rbp)
+    479e:	00 00 00 
+    47a1:	48 8b 98 a8 1e 00 00 	mov    0x1ea8(%rax),%rbx
+    47a8:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    47af:	00 00 00 
+			47aa: R_X86_64_64	__verbose+0xea0
+    47b2:	48 c7 85 88 fe ff ff 	movq   $0x0,-0x178(%rbp)
+    47b9:	00 00 00 00 
+    47bd:	80 78 1b 00          	cmpb   $0x0,0x1b(%rax)
+    47c1:	4c 8b bb d0 10 00 00 	mov    0x10d0(%rbx),%r15
+    47c8:	0f 85 ba 05 00 00    	jne    4d88 <do_fork+0x648>
+    47ce:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    47d5:	00 00 00 
+			47d0: R_X86_64_64	__verbose+0xe80
+    47d8:	80 78 1b 00          	cmpb   $0x0,0x1b(%rax)
+    47dc:	0f 85 7e 05 00 00    	jne    4d60 <do_fork+0x620>
+    47e2:	48 8b bb c8 10 00 00 	mov    0x10c8(%rbx),%rdi
+    47e9:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    47f0:	00 00 00 
+			47eb: R_X86_64_64	ihk_mc_syscall_number
+    47f3:	ff d0                	call   *%rax
+    47f5:	48 3d b3 01 00 00    	cmp    $0x1b3,%rax
+    47fb:	74 24                	je     4821 <do_fork+0xe1>
+    47fd:	48 8b 95 70 fe ff ff 	mov    -0x190(%rbp),%rdx
+    4804:	8b bd 7c fe ff ff    	mov    -0x184(%rbp),%edi
+    480a:	4c 89 e6             	mov    %r12,%rsi
+    480d:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    4814:	00 00 00 
+			480f: R_X86_64_64	clone_pthread_marker_result
+    4817:	ff d0                	call   *%rax
+    4819:	85 c0                	test   %eax,%eax
+    481b:	0f 85 af 01 00 00    	jne    49d0 <do_fork+0x290>
+    4821:	8b 43 10             	mov    0x10(%rbx),%eax
+    4824:	4c 8b b3 50 14 00 00 	mov    0x1450(%rbx),%r14
+    482b:	48 c7 83 50 14 00 00 	movq   $0x0,0x1450(%rbx)
+    4832:	00 00 00 00 
+    4836:	41 8b b7 70 06 00 00 	mov    0x670(%r15),%esi
+    483d:	8b bd 7c fe ff ff    	mov    -0x184(%rbp),%edi
+    4843:	89 85 44 fe ff ff    	mov    %eax,-0x1bc(%rbp)
+    4849:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    4850:	00 00 00 
+			484b: R_X86_64_64	clone_flags_result
+    4853:	ff d0                	call   *%rax
+    4855:	89 85 48 fe ff ff    	mov    %eax,-0x1b8(%rbp)
+    485b:	89 85 84 fe ff ff    	mov    %eax,-0x17c(%rbp)
+    4861:	85 c0                	test   %eax,%eax
+    4863:	0f 85 77 05 00 00    	jne    4de0 <do_fork+0x6a0>
+    4869:	41 8b 87 88 05 00 00 	mov    0x588(%r15),%eax
+    4870:	85 c0                	test   %eax,%eax
+    4872:	74 40                	je     48b4 <do_fork+0x174>
+    4874:	41 8b 8f 90 05 00 00 	mov    0x590(%r15),%ecx
+    487b:	8d 51 01             	lea    0x1(%rcx),%edx
+    487e:	39 d0                	cmp    %edx,%eax
+    4880:	0f 84 7a 07 00 00    	je     5000 <do_fork+0x8c0>
+    4886:	c7 83 5c 14 00 00 00 	movl   $0x0,0x145c(%rbx)
+    488d:	00 00 00 
+    4890:	31 d2                	xor    %edx,%edx
+    4892:	48 be 00 00 00 00 00 	movabs $0x0,%rsi
+    4899:	00 00 00 
+			4894: R_X86_64_64	.rodata+0x178
+    489c:	31 c0                	xor    %eax,%eax
+    489e:	48 bf 00 00 00 00 00 	movabs $0x0,%rdi
+    48a5:	00 00 00 
+			48a0: R_X86_64_64	.rodata.str1.1+0x1ff
+    48a8:	48 b9 00 00 00 00 00 	movabs $0x0,%rcx
+    48af:	00 00 00 
+			48aa: R_X86_64_64	kprintf
+    48b2:	ff d1                	call   *%rcx
+    48b4:	4d 85 f6             	test   %r14,%r14
+    48b7:	0f 85 93 05 00 00    	jne    4e50 <do_fork+0x710>
+    48bd:	48 c7 85 50 fe ff ff 	movq   $0x0,-0x1b0(%rbp)
+    48c4:	00 00 00 00 
+    48c8:	8b bb 5c 14 00 00    	mov    0x145c(%rbx),%edi
+    48ce:	41 8b b7 8c 05 00 00 	mov    0x58c(%r15),%esi
+    48d5:	f6 85 7e fe ff ff 01 	testb  $0x1,-0x182(%rbp)
+    48dc:	74 11                	je     48ef <do_fork+0x1af>
+    48de:	41 8b 87 88 05 00 00 	mov    0x588(%r15),%eax
+    48e5:	09 f0                	or     %esi,%eax
+    48e7:	09 f8                	or     %edi,%eax
+    48e9:	0f 84 41 0a 00 00    	je     5330 <do_fork+0xbf0>
+    48ef:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    48f6:	00 00 00 
+			48f1: R_X86_64_64	clone_use_last_cpu_result
+    48f9:	ff d0                	call   *%rax
+    48fb:	49 8d bf 80 04 00 00 	lea    0x480(%r15),%rdi
+    4902:	89 c6                	mov    %eax,%esi
+    4904:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    490b:	00 00 00 
+			4906: R_X86_64_64	obtain_clone_cpuid
+    490e:	ff d0                	call   *%rax
+    4910:	c7 85 40 fe ff ff 00 	movl   $0x0,-0x1c0(%rbp)
+    4917:	00 00 00 
+    491a:	89 85 78 fe ff ff    	mov    %eax,-0x188(%rbp)
+    4920:	83 bd 78 fe ff ff ff 	cmpl   $0xffffffff,-0x188(%rbp)
+    4927:	0f 84 db 0b 00 00    	je     5508 <do_fork+0xdc8>
+    492d:	8b 8d 7c fe ff ff    	mov    -0x184(%rbp),%ecx
+    4933:	4d 85 e4             	test   %r12,%r12
+    4936:	4d 0f 45 ec          	cmovne %r12,%r13
+    493a:	89 c8                	mov    %ecx,%eax
+    493c:	25 00 01 00 00       	and    $0x100,%eax
+    4941:	89 85 3c fe ff ff    	mov    %eax,-0x1c4(%rbp)
+    4947:	0f 85 d3 04 00 00    	jne    4e20 <do_fork+0x6e0>
+    494d:	44 8b 85 78 fe ff ff 	mov    -0x188(%rbp),%r8d
+    4954:	48 8b b5 68 fe ff ff 	mov    -0x198(%rbp),%rsi
+    495b:	4c 89 ea             	mov    %r13,%rdx
+    495e:	48 89 df             	mov    %rbx,%rdi
+    4961:	4c 8d 8d 88 fe ff ff 	lea    -0x178(%rbp),%r9
+    4968:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    496f:	00 00 00 
+			496a: R_X86_64_64	process_fork_construct_current_v1
+    4972:	ff d0                	call   *%rax
+    4974:	49 89 c4             	mov    %rax,%r12
+    4977:	4d 85 e4             	test   %r12,%r12
+    497a:	0f 84 00 07 00 00    	je     5080 <do_fork+0x940>
+    4980:	4d 85 f6             	test   %r14,%r14
+    4983:	74 7b                	je     4a00 <do_fork+0x2c0>
+    4985:	48 8b 85 50 fe ff ff 	mov    -0x1b0(%rbp),%rax
+    498c:	48 85 c0             	test   %rax,%rax
+    498f:	74 6f                	je     4a00 <do_fork+0x2c0>
+    4991:	48 8b 40 38          	mov    0x38(%rax),%rax
+    4995:	48 85 c0             	test   %rax,%rax
+    4998:	74 66                	je     4a00 <do_fork+0x2c0>
+    499a:	48 8b 48 30          	mov    0x30(%rax),%rcx
+    499e:	48 85 c9             	test   %rcx,%rcx
+    49a1:	74 5d                	je     4a00 <do_fork+0x2c0>
+    49a3:	49 8d 7c 24 18       	lea    0x18(%r12),%rdi
+    49a8:	4c 89 f2             	mov    %r14,%rdx
+    49ab:	31 c0                	xor    %eax,%eax
+    49ad:	48 be 00 00 00 00 00 	movabs $0x0,%rsi
+    49b4:	00 00 00 
+			49af: R_X86_64_64	.rodata.str1.1+0x271
+    49b7:	49 b8 00 00 00 00 00 	movabs $0x0,%r8
+    49be:	00 00 00 
+			49b9: R_X86_64_64	sprintf
+    49c1:	41 ff d0             	call   *%r8
+    49c4:	eb 61                	jmp    4a27 <do_fork+0x2e7>
+    49c6:	66 2e 0f 1f 84 00 00 	cs nopw 0x0(%rax,%rax,1)
+    49cd:	00 00 00 
+    49d0:	48 8b 85 70 fe ff ff 	mov    -0x190(%rbp),%rax
+    49d7:	48 89 83 50 14 00 00 	mov    %rax,0x1450(%rbx)
+    49de:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    49e5:	00 00 00 
+			49e0: R_X86_64_64	__verbose+0xe60
+    49e8:	80 78 1b 00          	cmpb   $0x0,0x1b(%rax)
+    49ec:	0f 85 26 06 00 00    	jne    5018 <do_fork+0x8d8>
+    49f2:	31 c0                	xor    %eax,%eax
+    49f4:	e9 0f 04 00 00       	jmp    4e08 <do_fork+0x6c8>
+    49f9:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+    4a00:	49 8d 7c 24 18       	lea    0x18(%r12),%rdi
+    4a05:	31 c0                	xor    %eax,%eax
+    4a07:	48 ba 00 00 00 00 00 	movabs $0x0,%rdx
+    4a0e:	00 00 00 
+			4a09: R_X86_64_64	.rodata.str1.1+0x27c
+    4a11:	48 be 00 00 00 00 00 	movabs $0x0,%rsi
+    4a18:	00 00 00 
+			4a13: R_X86_64_64	.rodata.str1.1+0x286
+    4a1b:	48 b9 00 00 00 00 00 	movabs $0x0,%rcx
+    4a22:	00 00 00 
+			4a1d: R_X86_64_64	sprintf
+    4a25:	ff d1                	call   *%rcx
+    4a27:	8b 85 40 fe ff ff    	mov    -0x1c0(%rbp),%eax
+    4a2d:	4d 8b ac 24 d0 10 00 	mov    0x10d0(%r12),%r13
+    4a34:	00 
+    4a35:	85 c0                	test   %eax,%eax
+    4a37:	0f 84 93 00 00 00    	je     4ad0 <do_fork+0x390>
+    4a3d:	48 8d b5 50 ff ff ff 	lea    -0xb0(%rbp),%rsi
+    4a44:	ba 80 00 00 00       	mov    $0x80,%edx
+    4a49:	49 8d bc 24 30 12 00 	lea    0x1230(%r12),%rdi
+    4a50:	00 
+    4a51:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    4a58:	00 00 00 
+			4a53: R_X86_64_64	sched_clone_affinity_inherit_result
+    4a5b:	ff d0                	call   *%rax
+    4a5d:	85 c0                	test   %eax,%eax
+    4a5f:	74 6f                	je     4ad0 <do_fork+0x390>
+    4a61:	48 8b bd 88 fe ff ff 	mov    -0x178(%rbp),%rdi
+    4a68:	c7 85 84 fe ff ff ea 	movl   $0xffffffea,-0x17c(%rbp)
+    4a6f:	ff ff ff 
+    4a72:	48 85 ff             	test   %rdi,%rdi
+    4a75:	0f 85 6a 05 00 00    	jne    4fe5 <do_fork+0x8a5>
+    4a7b:	8b 85 3c fe ff ff    	mov    -0x1c4(%rbp),%eax
+    4a81:	85 c0                	test   %eax,%eax
+    4a83:	0f 84 17 08 00 00    	je     52a0 <do_fork+0xb60>
+    4a89:	48 bb 00 00 00 00 00 	movabs $0x0,%rbx
+    4a90:	00 00 00 
+			4a8b: R_X86_64_64	ihk_atomic_set
+    4a93:	49 8d bc 24 14 12 00 	lea    0x1214(%r12),%rdi
+    4a9a:	00 
+    4a9b:	be 01 00 00 00       	mov    $0x1,%esi
+    4aa0:	ff d3                	call   *%rbx
+    4aa2:	4c 89 e7             	mov    %r12,%rdi
+    4aa5:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    4aac:	00 00 00 
+			4aa7: R_X86_64_64	release_thread
+    4aaf:	ff d0                	call   *%rax
+    4ab1:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    4ab8:	00 00 00 
+			4ab3: R_X86_64_64	release_cpuid
+    4abb:	8b bd 78 fe ff ff    	mov    -0x188(%rbp),%edi
+    4ac1:	ff d0                	call   *%rax
+    4ac3:	48 63 85 84 fe ff ff 	movslq -0x17c(%rbp),%rax
+    4aca:	e9 39 03 00 00       	jmp    4e08 <do_fork+0x6c8>
+    4acf:	90                   	nop
+    4ad0:	49 8b 84 24 68 10 00 	mov    0x1068(%r12),%rax
+    4ad7:	00 
+    4ad8:	8b bd 78 fe ff ff    	mov    -0x188(%rbp),%edi
+    4ade:	48 8b 30             	mov    (%rax),%rsi
+    4ae1:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    4ae8:	00 00 00 
+			4ae3: R_X86_64_64	cpu_set
+    4aeb:	48 8d 96 a0 00 00 00 	lea    0xa0(%rsi),%rdx
+    4af2:	48 83 c6 20          	add    $0x20,%rsi
+    4af6:	ff d0                	call   *%rax
+    4af8:	44 8b b5 3c fe ff ff 	mov    -0x1c4(%rbp),%r14d
+    4aff:	45 85 f6             	test   %r14d,%r14d
+    4b02:	0f 84 40 04 00 00    	je     4f48 <do_fork+0x808>
+    4b08:	49 8d 85 c0 00 00 00 	lea    0xc0(%r13),%rax
+    4b0f:	48 8d b5 90 fe ff ff 	lea    -0x170(%rbp),%rsi
+    4b16:	48 89 85 50 fe ff ff 	mov    %rax,-0x1b0(%rbp)
+    4b1d:	48 89 c7             	mov    %rax,%rdi
+    4b20:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    4b27:	00 00 00 
+			4b22: R_X86_64_64	__mcs_rwlock_writer_lock
+    4b2a:	ff d0                	call   *%rax
+    4b2c:	45 8b 9d 08 01 00 00 	mov    0x108(%r13),%r11d
+    4b33:	45 85 db             	test   %r11d,%r11d
+    4b36:	0f 84 54 05 00 00    	je     5090 <do_fork+0x950>
+    4b3c:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    4b43:	00 00 00 
+			4b3e: R_X86_64_64	.rodata.str1.1+0x64
+    4b46:	48 89 85 68 fe ff ff 	mov    %rax,-0x198(%rbp)
+    4b4d:	41 c7 44 24 14 00 00 	movl   $0x0,0x14(%r12)
+    4b54:	00 00 
+    4b56:	49 63 85 08 01 00 00 	movslq 0x108(%r13),%rax
+    4b5d:	85 c0                	test   %eax,%eax
+    4b5f:	0f 8e 9b 00 00 00    	jle    4c00 <do_fork+0x4c0>
+    4b65:	49 8b 95 00 01 00 00 	mov    0x100(%r13),%rdx
+    4b6c:	48 c1 e0 04          	shl    $0x4,%rax
+    4b70:	45 31 f6             	xor    %r14d,%r14d
+    4b73:	eb 14                	jmp    4b89 <do_fork+0x449>
+    4b75:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+    4b7c:	00 00 00 00 
+    4b80:	49 83 c6 10          	add    $0x10,%r14
+    4b84:	4c 39 f0             	cmp    %r14,%rax
+    4b87:	74 77                	je     4c00 <do_fork+0x4c0>
+    4b89:	4a 83 7c 32 08 00    	cmpq   $0x0,0x8(%rdx,%r14,1)
+    4b8f:	75 ef                	jne    4b80 <do_fork+0x440>
+    4b91:	4a 8d 7c 32 08       	lea    0x8(%rdx,%r14,1),%rdi
+    4b96:	31 f6                	xor    %esi,%esi
+    4b98:	4c 89 e2             	mov    %r12,%rdx
+    4b9b:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    4ba2:	00 00 00 
+			4b9d: R_X86_64_64	atomic_cmpxchg_ptr
+    4ba5:	ff d0                	call   *%rax
+    4ba7:	48 85 c0             	test   %rax,%rax
+    4baa:	75 aa                	jne    4b56 <do_fork+0x416>
+    4bac:	49 8b 85 00 01 00 00 	mov    0x100(%r13),%rax
+    4bb3:	42 8b 14 30          	mov    (%rax,%r14,1),%edx
+    4bb7:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    4bbe:	00 00 00 
+			4bb9: R_X86_64_64	__verbose+0xe00
+    4bc1:	80 78 1b 00          	cmpb   $0x0,0x1b(%rax)
+    4bc5:	41 89 54 24 14       	mov    %edx,0x14(%r12)
+    4bca:	74 34                	je     4c00 <do_fork+0x4c0>
+    4bcc:	48 be 00 00 00 00 00 	movabs $0x0,%rsi
+    4bd3:	00 00 00 
+			4bce: R_X86_64_64	.rodata+0x178
+    4bd6:	4c 89 e1             	mov    %r12,%rcx
+    4bd9:	31 c0                	xor    %eax,%eax
+    4bdb:	48 bf 00 00 00 00 00 	movabs $0x0,%rdi
+    4be2:	00 00 00 
+			4bdd: R_X86_64_64	.rodata.str1.1+0x29b
+    4be5:	49 b8 00 00 00 00 00 	movabs $0x0,%r8
+    4bec:	00 00 00 
+			4be7: R_X86_64_64	kprintf
+    4bef:	41 ff d0             	call   *%r8
+    4bf2:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+    4bf9:	00 00 00 00 
+    4bfd:	0f 1f 00             	nopl   (%rax)
+    4c00:	48 8b bd 50 fe ff ff 	mov    -0x1b0(%rbp),%rdi
+    4c07:	48 8d b5 90 fe ff ff 	lea    -0x170(%rbp),%rsi
+    4c0e:	49 be 00 00 00 00 00 	movabs $0x0,%r14
+    4c15:	00 00 00 
+			4c10: R_X86_64_64	__mcs_rwlock_writer_unlock
+    4c18:	41 ff d6             	call   *%r14
+    4c1b:	45 8b 4c 24 14       	mov    0x14(%r12),%r9d
+    4c20:	45 85 c9             	test   %r9d,%r9d
+    4c23:	0f 84 57 08 00 00    	je     5480 <do_fork+0xd40>
+    4c29:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    4c30:	00 00 00 
+			4c2b: R_X86_64_64	clone_parent_tid_store_needed_result
+    4c33:	8b bd 7c fe ff ff    	mov    -0x184(%rbp),%edi
+    4c39:	ff d0                	call   *%rax
+    4c3b:	85 c0                	test   %eax,%eax
+    4c3d:	74 36                	je     4c75 <do_fork+0x535>
+    4c3f:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    4c46:	00 00 00 
+			4c41: R_X86_64_64	__verbose+0xde0
+    4c49:	80 78 1b 00          	cmpb   $0x0,0x1b(%rax)
+    4c4d:	0f 85 07 09 00 00    	jne    555a <do_fork+0xe1a>
+    4c53:	41 8b 74 24 14       	mov    0x14(%r12),%esi
+    4c58:	48 8b bd 70 fe ff ff 	mov    -0x190(%rbp),%rdi
+    4c5f:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    4c66:	00 00 00 
+			4c61: R_X86_64_64	setint_user
+    4c69:	ff d0                	call   *%rax
+    4c6b:	c7 85 84 fe ff ff 00 	movl   $0x0,-0x17c(%rbp)
+    4c72:	00 00 00 
+    4c75:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    4c7c:	00 00 00 
+			4c77: R_X86_64_64	clone_child_cleartid_needed_result
+    4c7f:	8b bd 7c fe ff ff    	mov    -0x184(%rbp),%edi
+    4c85:	ff d0                	call   *%rax
+    4c87:	85 c0                	test   %eax,%eax
+    4c89:	74 23                	je     4cae <do_fork+0x56e>
+    4c8b:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    4c92:	00 00 00 
+			4c8d: R_X86_64_64	__verbose+0xdc0
+    4c95:	80 78 1b 00          	cmpb   $0x0,0x1b(%rax)
+    4c99:	0f 85 df 08 00 00    	jne    557e <do_fork+0xe3e>
+    4c9f:	48 8b 85 60 fe ff ff 	mov    -0x1a0(%rbp),%rax
+    4ca6:	49 89 84 24 18 12 00 	mov    %rax,0x1218(%r12)
+    4cad:	00 
+    4cae:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    4cb5:	00 00 00 
+			4cb0: R_X86_64_64	clone_child_tid_store_needed_result
+    4cb8:	8b bd 7c fe ff ff    	mov    -0x184(%rbp),%edi
+    4cbe:	ff d0                	call   *%rax
+    4cc0:	85 c0                	test   %eax,%eax
+    4cc2:	0f 85 68 08 00 00    	jne    5530 <do_fork+0xdf0>
+    4cc8:	44 8b 85 44 fe ff ff 	mov    -0x1bc(%rbp),%r8d
+    4ccf:	48 8b 8d 58 fe ff ff 	mov    -0x1a8(%rbp),%rcx
+    4cd6:	4c 89 e6             	mov    %r12,%rsi
+    4cd9:	48 89 df             	mov    %rbx,%rdi
+    4cdc:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    4ce3:	00 00 00 
+			4cde: R_X86_64_64	f03_clone_initialize_execution_state_v1
+    4ce6:	8b 95 7c fe ff ff    	mov    -0x184(%rbp),%edx
+    4cec:	49 b9 00 00 00 00 00 	movabs $0x0,%r9
+    4cf3:	00 00 00 
+			4cee: R_X86_64_64	__verbose+0xda0
+    4cf6:	ff d0                	call   *%rax
+    4cf8:	48 8b 8d 68 fe ff ff 	mov    -0x198(%rbp),%rcx
+    4cff:	4c 89 e6             	mov    %r12,%rsi
+    4d02:	48 89 df             	mov    %rbx,%rdi
+    4d05:	48 8d 95 84 fe ff ff 	lea    -0x17c(%rbp),%rdx
+    4d0c:	41 b8 1e 1e 00 00    	mov    $0x1e1e,%r8d
+    4d12:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    4d19:	00 00 00 
+			4d14: R_X86_64_64	f03_clone_prepare_remote_argument_v1
+    4d1c:	ff d0                	call   *%rax
+    4d1e:	85 c0                	test   %eax,%eax
+    4d20:	0f 84 7a 06 00 00    	je     53a0 <do_fork+0xc60>
+    4d26:	4c 89 ef             	mov    %r13,%rdi
+    4d29:	8b b5 48 fe ff ff    	mov    -0x1b8(%rbp),%esi
+    4d2f:	b9 78 1e 00 00       	mov    $0x1e78,%ecx
+    4d34:	48 8b 95 68 fe ff ff 	mov    -0x198(%rbp),%rdx
+    4d3b:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    4d42:	00 00 00 
+			4d3d: R_X86_64_64	f03_clone_release_empty_tid_table_v1
+    4d45:	ff d0                	call   *%rax
+    4d47:	48 8b bd 88 fe ff ff 	mov    -0x178(%rbp),%rdi
+    4d4e:	48 85 ff             	test   %rdi,%rdi
+    4d51:	0f 85 8e 02 00 00    	jne    4fe5 <do_fork+0x8a5>
+    4d57:	e9 2d fd ff ff       	jmp    4a89 <do_fork+0x349>
+    4d5c:	0f 1f 40 00          	nopl   0x0(%rax)
+    4d60:	4c 89 ea             	mov    %r13,%rdx
+    4d63:	4c 89 e6             	mov    %r12,%rsi
+    4d66:	31 c0                	xor    %eax,%eax
+    4d68:	48 bf 00 00 00 00 00 	movabs $0x0,%rdi
+    4d6f:	00 00 00 
+			4d6a: R_X86_64_64	.rodata.str1.8+0xd70
+    4d72:	48 b9 00 00 00 00 00 	movabs $0x0,%rcx
+    4d79:	00 00 00 
+			4d74: R_X86_64_64	kprintf
+    4d7c:	ff d1                	call   *%rcx
+    4d7e:	e9 5f fa ff ff       	jmp    47e2 <do_fork+0xa2>
+    4d83:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+    4d88:	48 83 ec 08          	sub    $0x8,%rsp
+    4d8c:	4c 8b 8d 60 fe ff ff 	mov    -0x1a0(%rbp),%r9
+    4d93:	4c 89 e1             	mov    %r12,%rcx
+    4d96:	31 c0                	xor    %eax,%eax
+    4d98:	4c 8b 85 70 fe ff ff 	mov    -0x190(%rbp),%r8
+    4d9f:	41 55                	push   %r13
+    4da1:	48 be 00 00 00 00 00 	movabs $0x0,%rsi
+    4da8:	00 00 00 
+			4da3: R_X86_64_64	.rodata+0x180
+    4dab:	48 bf 00 00 00 00 00 	movabs $0x0,%rdi
+    4db2:	00 00 00 
+			4dad: R_X86_64_64	.rodata.str1.8+0xd20
+    4db5:	ff b5 68 fe ff ff    	push   -0x198(%rbp)
+    4dbb:	8b 95 7c fe ff ff    	mov    -0x184(%rbp),%edx
+    4dc1:	49 ba 00 00 00 00 00 	movabs $0x0,%r10
+    4dc8:	00 00 00 
+			4dc3: R_X86_64_64	kprintf
+    4dcb:	ff b5 58 fe ff ff    	push   -0x1a8(%rbp)
+    4dd1:	41 ff d2             	call   *%r10
+    4dd4:	48 83 c4 20          	add    $0x20,%rsp
+    4dd8:	e9 f1 f9 ff ff       	jmp    47ce <do_fork+0x8e>
+    4ddd:	0f 1f 00             	nopl   (%rax)
+    4de0:	8b 85 7c fe ff ff    	mov    -0x184(%rbp),%eax
+    4de6:	25 00 01 01 00       	and    $0x10100,%eax
+    4deb:	3d 00 01 00 00       	cmp    $0x100,%eax
+    4df0:	0f 84 5a 02 00 00    	je     5050 <do_fork+0x910>
+    4df6:	3d 00 00 01 00       	cmp    $0x10000,%eax
+    4dfb:	0f 84 4f 02 00 00    	je     5050 <do_fork+0x910>
+    4e01:	48 63 85 48 fe ff ff 	movslq -0x1b8(%rbp),%rax
+    4e08:	48 8d 65 d0          	lea    -0x30(%rbp),%rsp
+    4e0c:	5b                   	pop    %rbx
+    4e0d:	41 5a                	pop    %r10
+    4e0f:	41 5c                	pop    %r12
+    4e11:	41 5d                	pop    %r13
+    4e13:	41 5e                	pop    %r14
+    4e15:	41 5f                	pop    %r15
+    4e17:	5d                   	pop    %rbp
+    4e18:	49 8d 62 f8          	lea    -0x8(%r10),%rsp
+    4e1c:	c3                   	ret    
+    4e1d:	0f 1f 00             	nopl   (%rax)
+    4e20:	8b 8d 7c fe ff ff    	mov    -0x184(%rbp),%ecx
+    4e26:	48 8b b5 68 fe ff ff 	mov    -0x198(%rbp),%rsi
+    4e2d:	4c 89 ea             	mov    %r13,%rdx
+    4e30:	48 89 df             	mov    %rbx,%rdi
+    4e33:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    4e3a:	00 00 00 
+			4e35: R_X86_64_64	clone_thread
+    4e3d:	ff d0                	call   *%rax
+    4e3f:	49 89 c4             	mov    %rax,%r12
+    4e42:	e9 30 fb ff ff       	jmp    4977 <do_fork+0x237>
+    4e47:	66 0f 1f 84 00 00 00 	nopw   0x0(%rax,%rax,1)
+    4e4e:	00 00 
+    4e50:	48 8b 83 68 10 00 00 	mov    0x1068(%rbx),%rax
+    4e57:	48 8d b8 b4 00 00 00 	lea    0xb4(%rax),%rdi
+    4e5e:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    4e65:	00 00 00 
+			4e60: R_X86_64_64	ihk_rwspinlock_read_lock_noirq
+    4e68:	ff d0                	call   *%rax
+    4e6a:	48 8b bb 68 10 00 00 	mov    0x1068(%rbx),%rdi
+    4e71:	49 8d 56 01          	lea    0x1(%r14),%rdx
+    4e75:	4c 89 f6             	mov    %r14,%rsi
+    4e78:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    4e7f:	00 00 00 
+			4e7a: R_X86_64_64	lookup_process_memory_range
+    4e82:	ff d0                	call   *%rax
+    4e84:	48 8b 8b 68 10 00 00 	mov    0x1068(%rbx),%rcx
+    4e8b:	48 89 85 50 fe ff ff 	mov    %rax,-0x1b0(%rbp)
+    4e92:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    4e99:	00 00 00 
+			4e94: R_X86_64_64	ihk_rwspinlock_read_unlock_noirq
+    4e9c:	48 8d b9 b4 00 00 00 	lea    0xb4(%rcx),%rdi
+    4ea3:	ff d0                	call   *%rax
+    4ea5:	48 8b 85 50 fe ff ff 	mov    -0x1b0(%rbp),%rax
+    4eac:	48 85 c0             	test   %rax,%rax
+    4eaf:	0f 84 08 fa ff ff    	je     48bd <do_fork+0x17d>
+    4eb5:	48 8b 40 38          	mov    0x38(%rax),%rax
+    4eb9:	48 85 c0             	test   %rax,%rax
+    4ebc:	0f 84 06 fa ff ff    	je     48c8 <do_fork+0x188>
+    4ec2:	48 8b 78 30          	mov    0x30(%rax),%rdi
+    4ec6:	48 85 ff             	test   %rdi,%rdi
+    4ec9:	0f 84 f9 f9 ff ff    	je     48c8 <do_fork+0x188>
+    4ecf:	48 ba 00 00 00 00 00 	movabs $0x0,%rdx
+    4ed6:	00 00 00 
+			4ed1: R_X86_64_64	strstr
+    4ed9:	48 be 00 00 00 00 00 	movabs $0x0,%rsi
+    4ee0:	00 00 00 
+			4edb: R_X86_64_64	.rodata.str1.1+0x21b
+    4ee3:	ff d2                	call   *%rdx
+    4ee5:	48 ba 00 00 00 00 00 	movabs $0x0,%rdx
+    4eec:	00 00 00 
+			4ee7: R_X86_64_64	strstr
+    4eef:	48 85 c0             	test   %rax,%rax
+    4ef2:	0f 84 9b 08 00 00    	je     5793 <do_fork+0x1053>
+    4ef8:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    4eff:	00 00 00 
+			4efa: R_X86_64_64	__verbose+0xe40
+    4f02:	80 78 1b 00          	cmpb   $0x0,0x1b(%rax)
+    4f06:	0f 84 bc f9 ff ff    	je     48c8 <do_fork+0x188>
+    4f0c:	48 8b 85 50 fe ff ff 	mov    -0x1b0(%rbp),%rax
+    4f13:	48 be 00 00 00 00 00 	movabs $0x0,%rsi
+    4f1a:	00 00 00 
+			4f15: R_X86_64_64	.rodata.str1.1+0x24d
+    4f1d:	48 bf 00 00 00 00 00 	movabs $0x0,%rdi
+    4f24:	00 00 00 
+			4f1f: R_X86_64_64	.rodata.str1.1+0x231
+    4f27:	48 b9 00 00 00 00 00 	movabs $0x0,%rcx
+    4f2e:	00 00 00 
+			4f29: R_X86_64_64	kprintf
+    4f31:	48 8b 40 38          	mov    0x38(%rax),%rax
+    4f35:	48 8b 50 30          	mov    0x30(%rax),%rdx
+    4f39:	31 c0                	xor    %eax,%eax
+    4f3b:	ff d1                	call   *%rcx
+    4f3d:	e9 86 f9 ff ff       	jmp    48c8 <do_fork+0x188>
+    4f42:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+    4f48:	49 8b 87 18 01 00 00 	mov    0x118(%r15),%rax
+    4f4f:	44 8b bd 7c fe ff ff 	mov    -0x184(%rbp),%r15d
+    4f56:	4c 8b b5 88 fe ff ff 	mov    -0x178(%rbp),%r14
+    4f5d:	8b b0 c8 01 00 00    	mov    0x1c8(%rax),%esi
+    4f63:	44 89 ff             	mov    %r15d,%edi
+    4f66:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    4f6d:	00 00 00 
+			4f68: R_X86_64_64	clone_host_parent_flags_result
+    4f70:	ff d0                	call   *%rax
+    4f72:	48 83 ec 08          	sub    $0x8,%rsp
+    4f76:	8b 95 78 fe ff ff    	mov    -0x188(%rbp),%edx
+    4f7c:	45 89 f9             	mov    %r15d,%r9d
+    4f7f:	48 63 c8             	movslq %eax,%rcx
+    4f82:	48 8d 85 d0 fe ff ff 	lea    -0x130(%rbp),%rax
+    4f89:	4d 89 f0             	mov    %r14,%r8
+    4f8c:	4c 89 e6             	mov    %r12,%rsi
+    4f8f:	50                   	push   %rax
+    4f90:	8b 85 44 fe ff ff    	mov    -0x1bc(%rbp),%eax
+    4f96:	48 89 df             	mov    %rbx,%rdi
+    4f99:	ff b5 60 fe ff ff    	push   -0x1a0(%rbp)
+    4f9f:	50                   	push   %rax
+    4fa0:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    4fa7:	00 00 00 
+			4fa2: R_X86_64_64	process_fork_owned_caller_runnable_current_v2
+    4faa:	ff d0                	call   *%rax
+    4fac:	89 85 84 fe ff ff    	mov    %eax,-0x17c(%rbp)
+    4fb2:	48 83 c4 20          	add    $0x20,%rsp
+    4fb6:	85 c0                	test   %eax,%eax
+    4fb8:	75 1b                	jne    4fd5 <do_fork+0x895>
+    4fba:	8b bd d0 fe ff ff    	mov    -0x130(%rbp),%edi
+    4fc0:	48 63 85 d4 fe ff ff 	movslq -0x12c(%rbp),%rax
+    4fc7:	85 ff                	test   %edi,%edi
+    4fc9:	0f 85 39 fe ff ff    	jne    4e08 <do_fork+0x6c8>
+    4fcf:	89 85 84 fe ff ff    	mov    %eax,-0x17c(%rbp)
+    4fd5:	48 8b bd 88 fe ff ff 	mov    -0x178(%rbp),%rdi
+    4fdc:	48 85 ff             	test   %rdi,%rdi
+    4fdf:	0f 84 bb 02 00 00    	je     52a0 <do_fork+0xb60>
+    4fe5:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    4fec:	00 00 00 
+			4fe7: R_X86_64_64	process_fork_cancel_constructed_current_v1
+    4fef:	ff d0                	call   *%rax
+    4ff1:	85 c0                	test   %eax,%eax
+    4ff3:	0f 84 b8 fa ff ff    	je     4ab1 <do_fork+0x371>
+    4ff9:	48 98                	cltq   
+    4ffb:	e9 08 fe ff ff       	jmp    4e08 <do_fork+0x6c8>
+    5000:	c7 83 5c 14 00 00 01 	movl   $0x1,0x145c(%rbx)
+    5007:	00 00 00 
+    500a:	ba 01 00 00 00       	mov    $0x1,%edx
+    500f:	e9 7e f8 ff ff       	jmp    4892 <do_fork+0x152>
+    5014:	0f 1f 40 00          	nopl   0x0(%rax)
+    5018:	48 8b 95 70 fe ff ff 	mov    -0x190(%rbp),%rdx
+    501f:	31 c0                	xor    %eax,%eax
+    5021:	48 be 00 00 00 00 00 	movabs $0x0,%rsi
+    5028:	00 00 00 
+			5023: R_X86_64_64	.rodata+0x180
+    502b:	48 bf 00 00 00 00 00 	movabs $0x0,%rdi
+    5032:	00 00 00 
+			502d: R_X86_64_64	.rodata.str1.8+0xdc0
+    5035:	48 b9 00 00 00 00 00 	movabs $0x0,%rcx
+    503c:	00 00 00 
+			5037: R_X86_64_64	kprintf
+    503f:	ff d1                	call   *%rcx
+    5041:	31 c0                	xor    %eax,%eax
+    5043:	e9 c0 fd ff ff       	jmp    4e08 <do_fork+0x6c8>
+    5048:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+    504f:	00 
+    5050:	48 bf 00 00 00 00 00 	movabs $0x0,%rdi
+    5057:	00 00 00 
+			5052: R_X86_64_64	.rodata.str1.8+0xde8
+    505a:	31 c0                	xor    %eax,%eax
+    505c:	48 ba 00 00 00 00 00 	movabs $0x0,%rdx
+    5063:	00 00 00 
+			505e: R_X86_64_64	kprintf
+    5066:	ff d2                	call   *%rdx
+    5068:	8b 85 84 fe ff ff    	mov    -0x17c(%rbp),%eax
+    506e:	89 85 48 fe ff ff    	mov    %eax,-0x1b8(%rbp)
+    5074:	e9 88 fd ff ff       	jmp    4e01 <do_fork+0x6c1>
+    5079:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+    5080:	c7 85 84 fe ff ff f4 	movl   $0xfffffff4,-0x17c(%rbp)
+    5087:	ff ff ff 
+    508a:	e9 22 fa ff ff       	jmp    4ab1 <do_fork+0x371>
+    508f:	90                   	nop
+    5090:	49 ba 00 00 00 00 00 	movabs $0x0,%r10
+    5097:	00 00 00 
+			5092: R_X86_64_64	num_processors
+    509a:	49 bb 00 00 00 00 00 	movabs $0x0,%r11
+    50a1:	00 00 00 
+			509c: R_X86_64_64	allow_oversubscribe
+    50a4:	41 8b 02             	mov    (%r10),%eax
+    50a7:	45 8b 13             	mov    (%r11),%r10d
+    50aa:	8d 3c 85 00 00 00 00 	lea    0x0(,%rax,4),%edi
+    50b1:	45 85 d2             	test   %r10d,%r10d
+    50b4:	0f 85 76 03 00 00    	jne    5430 <do_fork+0xcf0>
+    50ba:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    50c1:	00 00 00 
+			50bc: R_X86_64_64	.rodata.str1.1+0x64
+    50c4:	b9 f4 1e 00 00       	mov    $0x1ef4,%ecx
+    50c9:	be 02 00 00 00       	mov    $0x2,%esi
+    50ce:	49 b8 00 00 00 00 00 	movabs $0x0,%r8
+    50d5:	00 00 00 
+			50d0: R_X86_64_64	kmalloc_tracked
+    50d8:	48 89 85 68 fe ff ff 	mov    %rax,-0x198(%rbp)
+    50df:	48 89 c2             	mov    %rax,%rdx
+    50e2:	41 ff d0             	call   *%r8
+    50e5:	49 b8 00 00 00 00 00 	movabs $0x0,%r8
+    50ec:	00 00 00 
+			50e7: R_X86_64_64	kmalloc_tracked
+    50ef:	49 ba 00 00 00 00 00 	movabs $0x0,%r10
+    50f6:	00 00 00 
+			50f1: R_X86_64_64	num_processors
+    50f9:	49 bb 00 00 00 00 00 	movabs $0x0,%r11
+    5100:	00 00 00 
+			50fb: R_X86_64_64	allow_oversubscribe
+    5103:	48 85 c0             	test   %rax,%rax
+    5106:	49 89 c6             	mov    %rax,%r14
+    5109:	0f 84 4b 06 00 00    	je     575a <do_fork+0x101a>
+    510f:	41 8b 02             	mov    (%r10),%eax
+    5112:	45 8b 0b             	mov    (%r11),%r9d
+    5115:	89 c7                	mov    %eax,%edi
+    5117:	c1 e7 04             	shl    $0x4,%edi
+    511a:	45 85 c9             	test   %r9d,%r9d
+    511d:	0f 85 2d 03 00 00    	jne    5450 <do_fork+0xd10>
+    5123:	48 8b 95 68 fe ff ff 	mov    -0x198(%rbp),%rdx
+    512a:	b9 fc 1e 00 00       	mov    $0x1efc,%ecx
+    512f:	be 02 00 00 00       	mov    $0x2,%esi
+    5134:	41 ff d0             	call   *%r8
+    5137:	49 ba 00 00 00 00 00 	movabs $0x0,%r10
+    513e:	00 00 00 
+			5139: R_X86_64_64	num_processors
+    5141:	49 bb 00 00 00 00 00 	movabs $0x0,%r11
+    5148:	00 00 00 
+			5143: R_X86_64_64	allow_oversubscribe
+    514b:	48 85 c0             	test   %rax,%rax
+    514e:	49 89 85 00 01 00 00 	mov    %rax,0x100(%r13)
+    5155:	0f 84 71 06 00 00    	je     57cc <do_fork+0x108c>
+    515b:	41 8b 3b             	mov    (%r11),%edi
+    515e:	41 8b 32             	mov    (%r10),%esi
+    5161:	85 ff                	test   %edi,%edi
+    5163:	0f 85 ff 02 00 00    	jne    5468 <do_fork+0xd28>
+    5169:	b9 ba 00 00 00       	mov    $0xba,%ecx
+    516e:	48 8d bd d0 fe ff ff 	lea    -0x130(%rbp),%rdi
+    5175:	4c 89 f2             	mov    %r14,%rdx
+    5178:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    517f:	00 00 00 
+			517a: R_X86_64_64	.text+0x140
+    5182:	49 b9 00 00 00 00 00 	movabs $0x0,%r9
+    5189:	00 00 00 
+			5184: R_X86_64_64	ihk_mc_get_processor_id
+    518c:	50                   	push   %rax
+    518d:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    5194:	00 00 00 
+			518f: R_X86_64_64	syscall_do_syscall_request_bridge
+    5197:	49 b8 00 00 00 00 00 	movabs $0x0,%r8
+    519e:	00 00 00 
+			5199: R_X86_64_64	syscall_virt_to_phys_bridge
+    51a1:	50                   	push   %rax
+    51a2:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    51a9:	00 00 00 
+			51a4: R_X86_64_64	syscall_settid_body_result
+    51ac:	ff d0                	call   *%rax
+    51ae:	45 31 c0             	xor    %r8d,%r8d
+    51b1:	49 b9 00 00 00 00 00 	movabs $0x0,%r9
+    51b8:	00 00 00 
+			51b3: R_X86_64_64	__verbose+0xe20
+    51bb:	49 ba 00 00 00 00 00 	movabs $0x0,%r10
+    51c2:	00 00 00 
+			51bd: R_X86_64_64	num_processors
+    51c5:	85 c0                	test   %eax,%eax
+    51c7:	89 85 84 fe ff ff    	mov    %eax,-0x17c(%rbp)
+    51cd:	49 bb 00 00 00 00 00 	movabs $0x0,%r11
+    51d4:	00 00 00 
+			51cf: R_X86_64_64	allow_oversubscribe
+    51d7:	59                   	pop    %rcx
+    51d8:	5e                   	pop    %rsi
+    51d9:	0f 88 37 05 00 00    	js     5716 <do_fork+0xfd6>
+    51df:	4c 89 a5 48 fe ff ff 	mov    %r12,-0x1b8(%rbp)
+    51e6:	4d 89 f4             	mov    %r14,%r12
+    51e9:	49 89 de             	mov    %rbx,%r14
+    51ec:	4c 89 c3             	mov    %r8,%rbx
+    51ef:	eb 2b                	jmp    521c <do_fork+0xadc>
+    51f1:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+    51f8:	48 89 d8             	mov    %rbx,%rax
+    51fb:	48 83 c3 01          	add    $0x1,%rbx
+    51ff:	48 c1 e0 04          	shl    $0x4,%rax
+    5203:	49 03 85 00 01 00 00 	add    0x100(%r13),%rax
+    520a:	89 08                	mov    %ecx,(%rax)
+    520c:	48 c7 40 08 00 00 00 	movq   $0x0,0x8(%rax)
+    5213:	00 
+    5214:	41 83 85 08 01 00 00 	addl   $0x1,0x108(%r13)
+    521b:	01 
+    521c:	41 8b 13             	mov    (%r11),%edx
+    521f:	41 8b 02             	mov    (%r10),%eax
+    5222:	85 d2                	test   %edx,%edx
+    5224:	74 0c                	je     5232 <do_fork+0xaf2>
+    5226:	01 c0                	add    %eax,%eax
+    5228:	ba 80 00 00 00       	mov    $0x80,%edx
+    522d:	39 d0                	cmp    %edx,%eax
+    522f:	0f 4c c2             	cmovl  %edx,%eax
+    5232:	39 d8                	cmp    %ebx,%eax
+    5234:	0f 8e be 00 00 00    	jle    52f8 <do_fork+0xbb8>
+    523a:	41 8b 0c 9c          	mov    (%r12,%rbx,4),%ecx
+    523e:	85 c9                	test   %ecx,%ecx
+    5240:	0f 84 b2 00 00 00    	je     52f8 <do_fork+0xbb8>
+    5246:	41 80 79 1b 00       	cmpb   $0x0,0x1b(%r9)
+    524b:	74 ab                	je     51f8 <do_fork+0xab8>
+    524d:	49 bb 00 00 00 00 00 	movabs $0x0,%r11
+    5254:	00 00 00 
+			524f: R_X86_64_64	kprintf
+    5257:	89 da                	mov    %ebx,%edx
+    5259:	31 c0                	xor    %eax,%eax
+    525b:	48 be 00 00 00 00 00 	movabs $0x0,%rsi
+    5262:	00 00 00 
+			525d: R_X86_64_64	.rodata+0x180
+    5265:	48 bf 00 00 00 00 00 	movabs $0x0,%rdi
+    526c:	00 00 00 
+			5267: R_X86_64_64	.rodata.str1.1+0x289
+    526f:	41 ff d3             	call   *%r11
+    5272:	41 8b 0c 9c          	mov    (%r12,%rbx,4),%ecx
+    5276:	49 b9 00 00 00 00 00 	movabs $0x0,%r9
+    527d:	00 00 00 
+			5278: R_X86_64_64	__verbose+0xe20
+    5280:	49 bb 00 00 00 00 00 	movabs $0x0,%r11
+    5287:	00 00 00 
+			5282: R_X86_64_64	allow_oversubscribe
+    528a:	49 ba 00 00 00 00 00 	movabs $0x0,%r10
+    5291:	00 00 00 
+			528c: R_X86_64_64	num_processors
+    5294:	e9 5f ff ff ff       	jmp    51f8 <do_fork+0xab8>
+    5299:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+    52a0:	49 8b 84 24 d0 10 00 	mov    0x10d0(%r12),%rax
+    52a7:	00 
+    52a8:	be 01 00 00 00       	mov    $0x1,%esi
+    52ad:	48 bb 00 00 00 00 00 	movabs $0x0,%rbx
+    52b4:	00 00 00 
+			52af: R_X86_64_64	ihk_atomic_set
+    52b7:	48 8d b8 a0 01 00 00 	lea    0x1a0(%rax),%rdi
+    52be:	ff d3                	call   *%rbx
+    52c0:	49 8b bd 70 04 00 00 	mov    0x470(%r13),%rdi
+    52c7:	ba 2e 20 00 00       	mov    $0x202e,%edx
+    52cc:	48 be 00 00 00 00 00 	movabs $0x0,%rsi
+    52d3:	00 00 00 
+			52ce: R_X86_64_64	.rodata.str1.1+0x64
+    52d6:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    52dd:	00 00 00 
+			52d8: R_X86_64_64	kfree_tracked
+    52e0:	ff d0                	call   *%rax
+    52e2:	49 c7 85 70 04 00 00 	movq   $0x0,0x470(%r13)
+    52e9:	00 00 00 00 
+    52ed:	e9 a1 f7 ff ff       	jmp    4a93 <do_fork+0x353>
+    52f2:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+    52f8:	4c 89 f3             	mov    %r14,%rbx
+    52fb:	4d 89 e6             	mov    %r12,%r14
+    52fe:	48 8b b5 68 fe ff ff 	mov    -0x198(%rbp),%rsi
+    5305:	4c 8b a5 48 fe ff ff 	mov    -0x1b8(%rbp),%r12
+    530c:	ba 14 1f 00 00       	mov    $0x1f14,%edx
+    5311:	4c 89 f7             	mov    %r14,%rdi
+    5314:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    531b:	00 00 00 
+			5316: R_X86_64_64	kfree_tracked
+    531e:	ff d0                	call   *%rax
+    5320:	c7 85 48 fe ff ff 01 	movl   $0x1,-0x1b8(%rbp)
+    5327:	00 00 00 
+    532a:	e9 1e f8 ff ff       	jmp    4b4d <do_fork+0x40d>
+    532f:	90                   	nop
+    5330:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    5337:	00 00 00 
+			5332: R_X86_64_64	num_processors
+    533a:	b9 80 00 00 00       	mov    $0x80,%ecx
+    533f:	44 8b 00             	mov    (%rax),%r8d
+    5342:	48 8d 95 50 ff ff ff 	lea    -0xb0(%rbp),%rdx
+    5349:	49 8d b7 80 04 00 00 	lea    0x480(%r15),%rsi
+    5350:	48 8d bb 30 12 00 00 	lea    0x1230(%rbx),%rdi
+    5357:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    535e:	00 00 00 
+			5359: R_X86_64_64	sched_clone_affinity_snapshot_result
+    5361:	ff d0                	call   *%rax
+    5363:	85 c0                	test   %eax,%eax
+    5365:	0f 85 b5 01 00 00    	jne    5520 <do_fork+0xde0>
+    536b:	48 8d 95 50 ff ff ff 	lea    -0xb0(%rbp),%rdx
+    5372:	31 f6                	xor    %esi,%esi
+    5374:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    537b:	00 00 00 
+			5376: R_X86_64_64	obtain_clone_cpuid
+    537e:	48 89 d7             	mov    %rdx,%rdi
+    5381:	ff d0                	call   *%rax
+    5383:	c7 85 40 fe ff ff 01 	movl   $0x1,-0x1c0(%rbp)
+    538a:	00 00 00 
+    538d:	89 85 78 fe ff ff    	mov    %eax,-0x188(%rbp)
+    5393:	e9 88 f5 ff ff       	jmp    4920 <do_fork+0x1e0>
+    5398:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+    539f:	00 
+    53a0:	8b 8d 7c fe ff ff    	mov    -0x184(%rbp),%ecx
+    53a6:	4c 89 ea             	mov    %r13,%rdx
+    53a9:	4c 89 fe             	mov    %r15,%rsi
+    53ac:	4c 89 e7             	mov    %r12,%rdi
+    53af:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    53b6:	00 00 00 
+			53b1: R_X86_64_64	f03_clone_publish_thread_process_v1
+    53b9:	ff d0                	call   *%rax
+    53bb:	8b 83 20 11 00 00    	mov    0x1120(%rbx),%eax
+    53c1:	89 85 70 fe ff ff    	mov    %eax,-0x190(%rbp)
+    53c7:	85 c0                	test   %eax,%eax
+    53c9:	0f 85 92 02 00 00    	jne    5661 <do_fork+0xf21>
+    53cf:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    53d6:	00 00 00 
+			53d1: R_X86_64_64	__verbose+0xd80
+    53d9:	80 78 1b 00          	cmpb   $0x0,0x1b(%rax)
+    53dd:	0f 85 4b 02 00 00    	jne    562e <do_fork+0xeee>
+    53e3:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    53ea:	00 00 00 
+			53e5: R_X86_64_64	clone_report_thread_result
+    53ed:	8b bd 7c fe ff ff    	mov    -0x184(%rbp),%edi
+    53f3:	40 0f b6 df          	movzbl %dil,%ebx
+    53f7:	89 de                	mov    %ebx,%esi
+    53f9:	ff d0                	call   *%rax
+    53fb:	85 c0                	test   %eax,%eax
+    53fd:	0f 85 b0 01 00 00    	jne    55b3 <do_fork+0xe73>
+    5403:	8b b5 78 fe ff ff    	mov    -0x188(%rbp),%esi
+    5409:	4c 89 e7             	mov    %r12,%rdi
+    540c:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    5413:	00 00 00 
+			540e: R_X86_64_64	runq_add_thread
+    5416:	ff d0                	call   *%rax
+    5418:	8b 95 70 fe ff ff    	mov    -0x190(%rbp),%edx
+    541e:	85 d2                	test   %edx,%edx
+    5420:	0f 85 7c 01 00 00    	jne    55a2 <do_fork+0xe62>
+    5426:	49 63 44 24 14       	movslq 0x14(%r12),%rax
+    542b:	e9 d8 f9 ff ff       	jmp    4e08 <do_fork+0x6c8>
+    5430:	01 c0                	add    %eax,%eax
+    5432:	ba 80 00 00 00       	mov    $0x80,%edx
+    5437:	39 d0                	cmp    %edx,%eax
+    5439:	0f 4c c2             	cmovl  %edx,%eax
+    543c:	8d 3c 85 00 00 00 00 	lea    0x0(,%rax,4),%edi
+    5443:	e9 72 fc ff ff       	jmp    50ba <do_fork+0x97a>
+    5448:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+    544f:	00 
+    5450:	8d 3c 00             	lea    (%rax,%rax,1),%edi
+    5453:	b8 80 00 00 00       	mov    $0x80,%eax
+    5458:	39 c7                	cmp    %eax,%edi
+    545a:	0f 4c f8             	cmovl  %eax,%edi
+    545d:	c1 e7 04             	shl    $0x4,%edi
+    5460:	e9 be fc ff ff       	jmp    5123 <do_fork+0x9e3>
+    5465:	0f 1f 00             	nopl   (%rax)
+    5468:	01 f6                	add    %esi,%esi
+    546a:	b8 80 00 00 00       	mov    $0x80,%eax
+    546f:	39 c6                	cmp    %eax,%esi
+    5471:	0f 4c f0             	cmovl  %eax,%esi
+    5474:	e9 f0 fc ff ff       	jmp    5169 <do_fork+0xa29>
+    5479:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+    5480:	49 be 00 00 00 00 00 	movabs $0x0,%r14
+    5487:	00 00 00 
+			5482: R_X86_64_64	.rodata+0x180
+    548a:	31 c0                	xor    %eax,%eax
+    548c:	45 31 ff             	xor    %r15d,%r15d
+    548f:	48 bf 00 00 00 00 00 	movabs $0x0,%rdi
+    5496:	00 00 00 
+			5491: R_X86_64_64	.rodata.str1.1+0x2b6
+    5499:	48 bb 00 00 00 00 00 	movabs $0x0,%rbx
+    54a0:	00 00 00 
+			549b: R_X86_64_64	kprintf
+    54a3:	4c 89 f6             	mov    %r14,%rsi
+    54a6:	ff d3                	call   *%rbx
+    54a8:	45 8b 85 08 01 00 00 	mov    0x108(%r13),%r8d
+    54af:	45 85 c0             	test   %r8d,%r8d
+    54b2:	7e 41                	jle    54f5 <do_fork+0xdb5>
+    54b4:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+    54bb:	00 00 00 00 
+    54bf:	90                   	nop
+    54c0:	4c 89 f8             	mov    %r15,%rax
+    54c3:	44 89 fa             	mov    %r15d,%edx
+    54c6:	4c 89 f6             	mov    %r14,%rsi
+    54c9:	48 bf 00 00 00 00 00 	movabs $0x0,%rdi
+    54d0:	00 00 00 
+			54cb: R_X86_64_64	.rodata.str1.1+0x2d2
+    54d3:	48 c1 e0 04          	shl    $0x4,%rax
+    54d7:	49 03 85 00 01 00 00 	add    0x100(%r13),%rax
+    54de:	49 83 c7 01          	add    $0x1,%r15
+    54e2:	8b 08                	mov    (%rax),%ecx
+    54e4:	4c 8b 40 08          	mov    0x8(%rax),%r8
+    54e8:	31 c0                	xor    %eax,%eax
+    54ea:	ff d3                	call   *%rbx
+    54ec:	45 39 bd 08 01 00 00 	cmp    %r15d,0x108(%r13)
+    54f3:	7f cb                	jg     54c0 <do_fork+0xd80>
+    54f5:	c7 85 84 fe ff ff f4 	movl   $0xfffffff4,-0x17c(%rbp)
+    54fc:	ff ff ff 
+    54ff:	e9 22 f8 ff ff       	jmp    4d26 <do_fork+0x5e6>
+    5504:	0f 1f 40 00          	nopl   0x0(%rax)
+    5508:	48 bf 00 00 00 00 00 	movabs $0x0,%rdi
+    550f:	00 00 00 
+			550a: R_X86_64_64	.rodata.str1.1+0x255
+    5512:	31 c0                	xor    %eax,%eax
+    5514:	48 ba 00 00 00 00 00 	movabs $0x0,%rdx
+    551b:	00 00 00 
+			5516: R_X86_64_64	kprintf
+    551e:	ff d2                	call   *%rdx
+    5520:	48 c7 c0 f5 ff ff ff 	mov    $0xfffffffffffffff5,%rax
+    5527:	e9 dc f8 ff ff       	jmp    4e08 <do_fork+0x6c8>
+    552c:	0f 1f 40 00          	nopl   0x0(%rax)
+    5530:	49 8b bc 24 68 10 00 	mov    0x1068(%r12),%rdi
+    5537:	00 
+    5538:	49 8d 54 24 14       	lea    0x14(%r12),%rdx
+    553d:	b9 04 00 00 00       	mov    $0x4,%ecx
+    5542:	48 8b b5 60 fe ff ff 	mov    -0x1a0(%rbp),%rsi
+    5549:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    5550:	00 00 00 
+			554b: R_X86_64_64	write_process_vm
+    5553:	ff d0                	call   *%rax
+    5555:	e9 6e f7 ff ff       	jmp    4cc8 <do_fork+0x588>
+    555a:	48 8b b5 70 fe ff ff 	mov    -0x190(%rbp),%rsi
+    5561:	31 c0                	xor    %eax,%eax
+    5563:	48 bf 00 00 00 00 00 	movabs $0x0,%rdi
+    556a:	00 00 00 
+			5565: R_X86_64_64	.rodata.str1.8+0xe30
+    556d:	48 ba 00 00 00 00 00 	movabs $0x0,%rdx
+    5574:	00 00 00 
+			556f: R_X86_64_64	kprintf
+    5577:	ff d2                	call   *%rdx
+    5579:	e9 d5 f6 ff ff       	jmp    4c53 <do_fork+0x513>
+    557e:	48 8b b5 60 fe ff ff 	mov    -0x1a0(%rbp),%rsi
+    5585:	31 c0                	xor    %eax,%eax
+    5587:	48 bf 00 00 00 00 00 	movabs $0x0,%rdi
+    558e:	00 00 00 
+			5589: R_X86_64_64	.rodata.str1.8+0xe60
+    5591:	48 ba 00 00 00 00 00 	movabs $0x0,%rdx
+    5598:	00 00 00 
+			5593: R_X86_64_64	kprintf
+    559b:	ff d2                	call   *%rdx
+    559d:	e9 fd f6 ff ff       	jmp    4c9f <do_fork+0x55f>
+    55a2:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    55a9:	00 00 00 
+			55a4: R_X86_64_64	schedule
+    55ac:	ff d0                	call   *%rax
+    55ae:	e9 73 fe ff ff       	jmp    5426 <do_fork+0xce6>
+    55b3:	4c 8d 95 d0 fe ff ff 	lea    -0x130(%rbp),%r10
+    55ba:	4d 8d af c0 00 00 00 	lea    0xc0(%r15),%r13
+    55c1:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    55c8:	00 00 00 
+			55c3: R_X86_64_64	__mcs_rwlock_writer_lock
+    55cb:	4c 89 d6             	mov    %r10,%rsi
+    55ce:	4c 89 ef             	mov    %r13,%rdi
+    55d1:	ff d0                	call   *%rax
+    55d3:	49 8d 87 98 00 00 00 	lea    0x98(%r15),%rax
+    55da:	89 d9                	mov    %ebx,%ecx
+    55dc:	4d 89 f9             	mov    %r15,%r9
+    55df:	50                   	push   %rax
+    55e0:	41 b8 08 11 00 00    	mov    $0x1108,%r8d
+    55e6:	ba 01 00 00 00       	mov    $0x1,%edx
+    55eb:	4c 89 e7             	mov    %r12,%rdi
+    55ee:	49 8d 84 24 10 11 00 	lea    0x1110(%r12),%rax
+    55f5:	00 
+    55f6:	be 64 10 00 00       	mov    $0x1064,%esi
+    55fb:	50                   	push   %rax
+    55fc:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    5603:	00 00 00 
+			55fe: R_X86_64_64	process_thread_report_attach_result
+    5606:	ff d0                	call   *%rax
+    5608:	4c 8d 95 d0 fe ff ff 	lea    -0x130(%rbp),%r10
+    560f:	4c 89 ef             	mov    %r13,%rdi
+    5612:	4c 89 d6             	mov    %r10,%rsi
+    5615:	41 ff d6             	call   *%r14
+    5618:	4c 89 e7             	mov    %r12,%rdi
+    561b:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    5622:	00 00 00 
+			561d: R_X86_64_64	hold_thread
+    5625:	ff d0                	call   *%rax
+    5627:	59                   	pop    %rcx
+    5628:	5e                   	pop    %rsi
+    5629:	e9 d5 fd ff ff       	jmp    5403 <do_fork+0xcc3>
+    562e:	8b 4b 14             	mov    0x14(%rbx),%ecx
+    5631:	41 8b 95 c8 01 00 00 	mov    0x1c8(%r13),%edx
+    5638:	31 c0                	xor    %eax,%eax
+    563a:	48 bf 00 00 00 00 00 	movabs $0x0,%rdi
+    5641:	00 00 00 
+			563c: R_X86_64_64	.rodata.str1.8+0xe90
+    5644:	45 8b 44 24 14       	mov    0x14(%r12),%r8d
+    5649:	8b b5 78 fe ff ff    	mov    -0x188(%rbp),%esi
+    564f:	49 b9 00 00 00 00 00 	movabs $0x0,%r9
+    5656:	00 00 00 
+			5651: R_X86_64_64	kprintf
+    5659:	41 ff d1             	call   *%r9
+    565c:	e9 82 fd ff ff       	jmp    53e3 <do_fork+0xca3>
+    5661:	89 c7                	mov    %eax,%edi
+    5663:	8b b5 7c fe ff ff    	mov    -0x184(%rbp),%esi
+    5669:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    5670:	00 00 00 
+			566b: R_X86_64_64	ptrace_clone_event_result
+    5673:	ff d0                	call   *%rax
+    5675:	89 85 70 fe ff ff    	mov    %eax,-0x190(%rbp)
+    567b:	85 c0                	test   %eax,%eax
+    567d:	0f 84 4c fd ff ff    	je     53cf <do_fork+0xc8f>
+    5683:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    568a:	00 00 00 
+			5685: R_X86_64_64	get_this_cpu_local_var
+    568d:	ff d0                	call   *%rax
+    568f:	48 83 ec 08          	sub    $0x8,%rsp
+    5693:	8b 95 70 fe ff ff    	mov    -0x190(%rbp),%edx
+    5699:	4c 89 e6             	mov    %r12,%rsi
+    569c:	48 8b 88 a8 1e 00 00 	mov    0x1ea8(%rax),%rcx
+    56a3:	4c 8d 8d 90 fe ff ff 	lea    -0x170(%rbp),%r9
+    56aa:	48 89 df             	mov    %rbx,%rdi
+    56ad:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    56b4:	00 00 00 
+			56af: R_X86_64_64	.text+0x780
+    56b7:	49 b8 00 00 00 00 00 	movabs $0x0,%r8
+    56be:	00 00 00 
+			56b9: R_X86_64_64	.rodata+0x120
+    56c1:	50                   	push   %rax
+    56c2:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    56c9:	00 00 00 
+			56c4: R_X86_64_64	f03_exit_notify_wake
+    56cc:	50                   	push   %rax
+    56cd:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    56d4:	00 00 00 
+			56cf: R_X86_64_64	.text+0x1c0
+    56d7:	50                   	push   %rax
+    56d8:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    56df:	00 00 00 
+			56da: R_X86_64_64	f03_ptrace_attach_thread_addr_v1
+    56e2:	50                   	push   %rax
+    56e3:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    56ea:	00 00 00 
+			56e5: R_X86_64_64	.text+0x190
+    56ed:	50                   	push   %rax
+    56ee:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    56f5:	00 00 00 
+			56f0: R_X86_64_64	.text+0x160
+    56f8:	50                   	push   %rax
+    56f9:	48 8d 85 d0 fe ff ff 	lea    -0x130(%rbp),%rax
+    5700:	50                   	push   %rax
+    5701:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    5708:	00 00 00 
+			5703: R_X86_64_64	ptrace_report_clone_body_result
+    570b:	ff d0                	call   *%rax
+    570d:	48 83 c4 40          	add    $0x40,%rsp
+    5711:	e9 b9 fc ff ff       	jmp    53cf <do_fork+0xc8f>
+    5716:	48 8b bd 50 fe ff ff 	mov    -0x1b0(%rbp),%rdi
+    571d:	48 8d b5 90 fe ff ff 	lea    -0x170(%rbp),%rsi
+    5724:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    572b:	00 00 00 
+			5726: R_X86_64_64	__mcs_rwlock_writer_unlock
+    572e:	ff d0                	call   *%rax
+    5730:	48 8b b5 68 fe ff ff 	mov    -0x198(%rbp),%rsi
+    5737:	ba 08 1f 00 00       	mov    $0x1f08,%edx
+    573c:	4c 89 f7             	mov    %r14,%rdi
+    573f:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    5746:	00 00 00 
+			5741: R_X86_64_64	kfree_tracked
+    5749:	ff d0                	call   *%rax
+    574b:	c7 85 48 fe ff ff 01 	movl   $0x1,-0x1b8(%rbp)
+    5752:	00 00 00 
+    5755:	e9 cc f5 ff ff       	jmp    4d26 <do_fork+0x5e6>
+    575a:	48 8b bd 50 fe ff ff 	mov    -0x1b0(%rbp),%rdi
+    5761:	48 8d b5 90 fe ff ff 	lea    -0x170(%rbp),%rsi
+    5768:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    576f:	00 00 00 
+			576a: R_X86_64_64	__mcs_rwlock_writer_unlock
+    5772:	ff d0                	call   *%rax
+    5774:	48 8b bd 88 fe ff ff 	mov    -0x178(%rbp),%rdi
+    577b:	c7 85 84 fe ff ff f4 	movl   $0xfffffff4,-0x17c(%rbp)
+    5782:	ff ff ff 
+    5785:	48 85 ff             	test   %rdi,%rdi
+    5788:	0f 85 57 f8 ff ff    	jne    4fe5 <do_fork+0x8a5>
+    578e:	e9 f6 f2 ff ff       	jmp    4a89 <do_fork+0x349>
+    5793:	48 8b 85 50 fe ff ff 	mov    -0x1b0(%rbp),%rax
+    579a:	48 be 00 00 00 00 00 	movabs $0x0,%rsi
+    57a1:	00 00 00 
+			579c: R_X86_64_64	.rodata.str1.1+0x222
+    57a4:	48 8b 40 38          	mov    0x38(%rax),%rax
+    57a8:	48 8b 78 30          	mov    0x30(%rax),%rdi
+    57ac:	ff d2                	call   *%rdx
+    57ae:	48 89 c2             	mov    %rax,%rdx
+    57b1:	a0 00 00 00 00 00 00 	movabs 0x0,%al
+    57b8:	00 00 
+			57b2: R_X86_64_64	__verbose+0xe5b
+    57ba:	48 85 d2             	test   %rdx,%rdx
+    57bd:	74 47                	je     5806 <do_fork+0x10c6>
+    57bf:	84 c0                	test   %al,%al
+    57c1:	0f 84 01 f1 ff ff    	je     48c8 <do_fork+0x188>
+    57c7:	e9 40 f7 ff ff       	jmp    4f0c <do_fork+0x7cc>
+    57cc:	48 8b bd 50 fe ff ff 	mov    -0x1b0(%rbp),%rdi
+    57d3:	48 8d b5 90 fe ff ff 	lea    -0x170(%rbp),%rsi
+    57da:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    57e1:	00 00 00 
+			57dc: R_X86_64_64	__mcs_rwlock_writer_unlock
+    57e4:	ff d0                	call   *%rax
+    57e6:	48 8b b5 68 fe ff ff 	mov    -0x198(%rbp),%rsi
+    57ed:	ba ff 1e 00 00       	mov    $0x1eff,%edx
+    57f2:	4c 89 f7             	mov    %r14,%rdi
+    57f5:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    57fc:	00 00 00 
+			57f7: R_X86_64_64	kfree_tracked
+    57ff:	ff d0                	call   *%rax
+    5801:	e9 6e ff ff ff       	jmp    5774 <do_fork+0x1034>
+    5806:	84 c0                	test   %al,%al
+    5808:	74 31                	je     583b <do_fork+0x10fb>
+    580a:	48 8b 85 50 fe ff ff 	mov    -0x1b0(%rbp),%rax
+    5811:	48 be 00 00 00 00 00 	movabs $0x0,%rsi
+    5818:	00 00 00 
+			5813: R_X86_64_64	.rodata.str1.1+0x22a
+    581b:	48 bf 00 00 00 00 00 	movabs $0x0,%rdi
+    5822:	00 00 00 
+			581d: R_X86_64_64	.rodata.str1.1+0x231
+    5825:	48 b9 00 00 00 00 00 	movabs $0x0,%rcx
+    582c:	00 00 00 
+			5827: R_X86_64_64	kprintf
+    582f:	48 8b 40 38          	mov    0x38(%rax),%rax
+    5833:	48 8b 50 30          	mov    0x30(%rax),%rdx
+    5837:	31 c0                	xor    %eax,%eax
+    5839:	ff d1                	call   *%rcx
+    583b:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+    5842:	00 00 00 
+			583d: R_X86_64_64	ihk_mc_get_processor_id
+    5845:	ff d0                	call   *%rax
+    5847:	c7 85 40 fe ff ff 00 	movl   $0x0,-0x1c0(%rbp)
+    584e:	00 00 00 
+    5851:	89 85 78 fe ff ff    	mov    %eax,-0x188(%rbp)
+    5857:	e9 d1 f0 ff ff       	jmp    492d <do_fork+0x1ed>

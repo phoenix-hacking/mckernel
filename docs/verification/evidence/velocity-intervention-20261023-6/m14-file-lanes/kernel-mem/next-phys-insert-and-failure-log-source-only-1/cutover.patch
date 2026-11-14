@@ -1,0 +1,83 @@
+--- a/kernel/mem.c
++++ b/kernel/mem.c
+@@ -5854,12 +5854,19 @@
+  * NOTE: page->count is zero for new pages and the caller
+  * is responsible to increase it.
+  */
++#ifdef MCKERNEL_RUST_PAGE_HELPERS
++extern void phys_to_page_insert_hash_log_bridge(uint64_t phys);
++#else
+ static void phys_to_page_insert_hash_log_bridge(uint64_t phys)
+ {
+ 	(void)phys;
+ 	kprintf("%s: error allocating page\n", "phys_to_page_insert_hash");
+ }
+-
++#endif
++
++#ifdef MCKERNEL_RUST_PAGE_HELPERS
++extern struct page *phys_to_page_insert_hash(uint64_t phys);
++#else
+ struct page *phys_to_page_insert_hash(uint64_t phys)
+ {
+ 	return phys_to_page_insert_hash_body_result(phys,
+@@ -5871,6 +5878,7 @@
+ 			phys_to_page_insert_hash_orchestrate_result,
+ 			phys_to_page_insert_hash_log_bridge);
+ }
++#endif
+ 
+ PAGE_UNMAP_PUBLIC_BRIDGE void page_unmap_log_bridge(int event, struct page *page, int ret)
+ {
+--- a/kernel/rust/mem_helpers.rs
++++ b/kernel/rust/mem_helpers.rs
+@@ -7006,3 +7006,49 @@
+         ).cast::<MemPage>()
+     }
+ }
++
++// Exact IHK_MC_AP_CRITICAL value from existing lib/include/ihk/mm.h.
++const PAGE_INSERT_ALLOC_CRITICAL: CInt = 0x000001;
++
++unsafe extern "C" {
++    // Existing tracked-allocation callback symbol; usize is the helper's
++    // unsigned-long address/size ABI on the supported 64-bit profile.
++    #[link_name = "page_hash_alloc_bridge"]
++    fn page_insert_alloc_callback(size: usize, flag: CInt) -> *mut crate::page_helpers::Page;
++}
++
++/// Same NULL-only insertion failure event; phys was ignored by original C.
++#[no_mangle]
++pub unsafe extern "C" fn phys_to_page_insert_hash_log_bridge(_phys: CULong) {
++    unsafe {
++        kprintf(
++            b"%s: error allocating page\n\0".as_ptr().cast::<i8>(),
++            b"phys_to_page_insert_hash\0".as_ptr().cast::<i8>(),
++        );
++    }
++}
++
++/// Preserve the existing bucket ownership and zero initial Page count.
++/// Existing pages are returned without allocation/reference changes; a new
++/// Page remains count==0 and the caller must retain its original increment.
++#[no_mangle]
++pub unsafe extern "C" fn phys_to_page_insert_hash(phys: CULong) -> *mut crate::page_helpers::Page {
++    unsafe {
++        crate::page_helpers::phys_to_page_insert_hash_body_result(
++            phys,
++            core::ptr::addr_of!(PAGE_INIT_HASH_FIRST) as usize,
++            core::ptr::addr_of!(PAGE_INIT_LOCK_FIRST) as usize,
++            page_unmap_hash_shift,
++            page_unmap_hash_mask,
++            page_init_hash_head_stride,
++            page_unmap_lock_stride,
++            size_of::<crate::page_helpers::Page>(),
++            PAGE_INSERT_ALLOC_CRITICAL,
++            Some(page_count_lock_callback),
++            Some(page_count_unlock_callback),
++            Some(page_insert_alloc_callback),
++            Some(crate::page_helpers::phys_to_page_insert_hash_orchestrate_result),
++            Some(phys_to_page_insert_hash_log_bridge),
++        )
++    }
++}

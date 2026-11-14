@@ -1,0 +1,205 @@
+{
+  "accepted_source_identity": "41b16e6440eb6539cdbb0768ba641d87a965c4f534d13a9961f5205c767475ff",
+  "allowed_checkpoint": "Root may commit the exact coherent host Rust overlay plus reviewed production build glue, preserving preexisting WIP and all disabled activation defaults.",
+  "build_decision": "Canonical mcctrl.ko uses exact composite mcctrl_rust.o plus mcctrl_vm_write_compat.o. Stager aliases unchanged repository mcctrl.rs to mcctrl_rust.rs, includes current_fork_task_mm.rs recursive support, and admits only exact named C/header dcbe065e/ff25bb43. One Linux control C object contains exactly three existing Linux MM wrappers; generic C inputs remain rejected.",
+  "closed_test_observation": {
+    "compiler_or_module_execution": false,
+    "direct_child_joined": true,
+    "original_discovery_failures": "actual-check-1 retained; corrected actual positive2/check2 and final selected28/check3 retained",
+    "process_group_absent": true,
+    "returncode": 0,
+    "selected_tests": 28,
+    "stream_SHA_size_and_stable_FD_metadata_verified": true,
+    "test_body_seconds": 14.128,
+    "whole_owner_seconds": 14.243233749002684
+  },
+  "decision": "PASS_EXACT_PHASE3_ALLOCATOR_SOURCE_INTEGRATION_AND_NARROW_PRODUCTION_BUILD_WIRING",
+  "evidence": {
+    "actual_SDK_physical": {
+      "bytes": 10003,
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-independent-review-20261020-1/ALLOCATOR-CORRECTION1-ACTUAL-PHYSICAL-RETIREMENT-REVIEW.json",
+      "sha256": "1b9998702e05f1ca1fdae8134ae40a044aaad93727d8b51af84b0cd0e82f342c"
+    },
+    "actual_SDK_source_FFI_link": {
+      "bytes": 35101,
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-independent-review-20261020-1/ALLOCATOR-CORRECTION1-ACTUAL-COMPOSITE64-MODULE-SOURCE-FFI-LINK-ACCEPTANCE.json",
+      "sha256": "dfe1cc3878528f689523935c29747304425dacb64fc44af883eb1c62dd76b56f"
+    },
+    "allocator_correction": {
+      "bytes": 1369,
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-20261020-1/phase3-allocator-abi-correction-1/RECEIPT.json",
+      "sha256": "e8387cd4b4f58416d024d2abf2eec404329296df5e11b4dd6524cc158554993e"
+    },
+    "build_wiring_closed_test_status": {
+      "bytes": 3032,
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-sdk-preparation-20261020-1/production-build-wiring-1/actual-check-3/status.json",
+      "sha256": "f8a7eb96514a04ff6f4dce9bf9f1f8abac8957449e14321d786bb3fafbe36793"
+    },
+    "build_wiring_implementation": {
+      "bytes": 3647,
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-sdk-preparation-20261020-1/production-build-wiring-1/IMPLEMENTATION-AND-CLOSED-TESTS.json",
+      "sha256": "8b5deb219b2aea400c901ce34fa60a3969fac55106c432bdcac2a02eb503691c"
+    },
+    "phase3_source": {
+      "bytes": 4715,
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-20261020-1/phase3-current-composite-1/RECEIPT.json",
+      "sha256": "59f9e76dacd1d945949910e7f0fda0fac1f017f80de7697cd088e5221338b4d1"
+    }
+  },
+  "functional_scope": "Functional supported-profile kernel/apps AND actual compute-C retirement into Rust/reviewed assembly.",
+  "host_Rust_file_pins": [
+    {
+      "bytes": 4722,
+      "path": "host-kernel/native-rust/abi/application.rs",
+      "sha256": "184cd8efe68e4592b6c472e86665ab77ec2a03563f3c6df3a6d9a92fc8a7e210"
+    },
+    {
+      "bytes": 10080,
+      "path": "host-kernel/native-rust/application_rpc.rs",
+      "sha256": "9f811c86c4e996294a6cd3be6b83315dabd20a3fb375419e091f4b9dedcfad39"
+    },
+    {
+      "bytes": 19764,
+      "path": "host-kernel/native-rust/application_syscall.rs",
+      "sha256": "65670a19382aaae816f50b14c161e10a82b83fc6221b3b3a1ecd5c0086d3cff9"
+    },
+    {
+      "bytes": 4578,
+      "path": "host-kernel/native-rust/current_fork_task_mm.rs",
+      "sha256": "e2e124e84030aa6be957af6ff9c2a03116ac1b20118e28c974d24e05048b6dfe"
+    },
+    {
+      "bytes": 35874,
+      "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
+      "sha256": "03cd3ad22651d5548c4f5f9c2c6a16bf90e04832d29f07d1d8189084e47e0304"
+    },
+    {
+      "bytes": 47175,
+      "path": "host-kernel/native-rust/mcctrl_process.rs",
+      "sha256": "018fd57974dbc5fc9f16cfcd021370b8c9cec058aeec139e926282d32e5b437e"
+    },
+    {
+      "bytes": 26999,
+      "path": "host-kernel/native-rust/mcctrl_vm.rs",
+      "sha256": "234d0590751b69d30ec4345c2dc332692b69b89ad71eaca3128d00af27063dbf"
+    },
+    {
+      "bytes": 81132,
+      "path": "host-kernel/native-rust/os_runtime.rs",
+      "sha256": "9315b275280232fec0f97bbbc99813be850188d76484253331f929f575224ff6"
+    },
+    {
+      "bytes": 65470,
+      "path": "host-kernel/native-rust/smp_application.rs",
+      "sha256": "733691a4fabfce7f2c5ba2158abe32f86b8b34bda5c8a35cd0e6c26f3023b2b1"
+    },
+    {
+      "bytes": 9716,
+      "path": "host-kernel/native-rust/smp_application_image.rs",
+      "sha256": "cf3eb651aac4a5510f8ddcf9cc5376479e3379528582a33e1fc55c084f1317b5"
+    },
+    {
+      "bytes": 27928,
+      "path": "host-kernel/native-rust/smp_application_syscall.rs",
+      "sha256": "617cff45843640c8cad42bb206e77daa1006ddd67bbbff3fde89e006ed818319"
+    },
+    {
+      "bytes": 46890,
+      "path": "host-kernel/native-rust/smp_service.rs",
+      "sha256": "64f403d2287dc04dab0f54e7bb822491f247130605566918caa6cf32be768182"
+    },
+    {
+      "bytes": 27915,
+      "path": "host-kernel/native-rust/sysfs_memory.rs",
+      "sha256": "c8f4669f7d243ee96eb391d2745f421d5cd407f37eb45a01bb4434574079f52f"
+    }
+  ],
+  "limits": [
+    "Source/build-wiring checkpoint only; no updated production-stager SDK build acceptance",
+    "Prior SDK64 artifacts retain their exact source/ABI/module link scope",
+    "No module load, default consumer/provider/native qualification",
+    "No host task/MM/seal/revoke/finalACK acceptance",
+    "No whole-kernel Rust-retirement claim"
+  ],
+  "preserved_invariants": [
+    "CURRENT_FORK_ADOPTION_ENABLED remains false; no new guest/default gate activation.",
+    "Preserve inner Mirror CurrentMm unlock/drop before local publication and qualified outer ActiveChildMm spanning callback until publication locks end.",
+    "Retain sealed child/VM/CPU/Response/task/MM/Remote/IHK owners; no scalar or first receipt grants revoke/finalACK/runnable/destructor authority.",
+    "All existing failed evidence and preexisting WIP preserved; phase4 remains separate held work."
+  ],
+  "production_build_file_pins": [
+    {
+      "bytes": 422,
+      "path": "/home/holden/mckernel/host-kernel/kbuild/Kbuild.in",
+      "sha256": "21594ad6b3830ddd688420abebd94893e07078a9db03c0ccb03c50b7a1ae2d1b"
+    },
+    {
+      "bytes": 18180,
+      "path": "/home/holden/mckernel/host-kernel/kbuild/stage-manifest.json",
+      "sha256": "41b4c86cff2d01bc2381bd3fb9d6183e1f2362a080435fa6f6c78901afda5652"
+    },
+    {
+      "bytes": 480,
+      "path": "/home/holden/mckernel/host-kernel/native-rust/mcctrl_vm_write_compat.c",
+      "sha256": "dcbe065ede329b51b41abcaf0563015532920fe6a34391c7bf77ed1c2f0abdf0"
+    },
+    {
+      "bytes": 368,
+      "path": "/home/holden/mckernel/host-kernel/native-rust/mcctrl_vm_write_compat.h",
+      "sha256": "ff25bb43907149fc9303b0dd0a7db1c84b9fc2c6f49f1922f18ca9c32b57c527"
+    },
+    {
+      "bytes": 100102,
+      "path": "/home/holden/mckernel/scripts/rocky_rust_staging.py",
+      "sha256": "a5f2c5e03507d57e9df6337df2f18987daebee65aa73140e078e95c04cf23e49"
+    },
+    {
+      "bytes": 79493,
+      "path": "/home/holden/mckernel/scripts/native_rust_host_audit.py",
+      "sha256": "b6950c13a0e7a4f29df48606e1aa8119ffcca82ff18d2615c5e1d05cbb721ad7"
+    },
+    {
+      "bytes": 7575,
+      "path": "/home/holden/mckernel/scripts/native_rust_kconfig_policy.py",
+      "sha256": "e4bc10700040e1f0a73e2736b016ae02370c1a115a6c21be3b7e3a75078d0b28"
+    },
+    {
+      "bytes": 23928,
+      "path": "/home/holden/mckernel/scripts/native_rust_build_surface_audit.py",
+      "sha256": "79aa206f7542831bf6d9def1b31cead08e9adf1750f65bb33393042bb3ffb2dd"
+    },
+    {
+      "bytes": 53435,
+      "path": "/home/holden/mckernel/scripts/tests/test_rocky_rust_staging.py",
+      "sha256": "6d55dc778e2ab5873465ac8f8001ef8b150b4830f1cc75af4d34d6dd5d261577"
+    },
+    {
+      "bytes": 35829,
+      "path": "/home/holden/mckernel/scripts/tests/test_native_rust_host_audit.py",
+      "sha256": "7aea4a2445cefb865ca334c715af555095dbcfb8ac2f8cd1a3b9e5fc0f7d5770"
+    },
+    {
+      "bytes": 14043,
+      "path": "/home/holden/mckernel/scripts/tests/test_native_rust_kconfig_policy.py",
+      "sha256": "1876b6b6971ff9dbf7e7549c6e512739ca3e920473f093a3a13c6e53118825e0"
+    },
+    {
+      "bytes": 27755,
+      "path": "/home/holden/mckernel/scripts/tests/test_native_rust_build_surface_audit.py",
+      "sha256": "d3bd37453364c0a974136c582d2bd98d8bb6aba8a8eaafd99ac7fcfbaba86b6d"
+    }
+  ],
+  "purpose": "Persist the independent decisions already delivered to root; no new audit, execution, test or source rehash is claimed.",
+  "recorded_at": "2026-10-20T06:06:21.932470+00:00",
+  "reused_source_review_hashes": [
+    "8980d55e1e082f7dcf3e297951bd66c8d26d4ad52ab5a9abefb54a4a441733b2",
+    "53f2a662313d12373d4e9811f15320b45cf88150651dae3430b18b8bcfe80ac1",
+    "556738c3f332eb012e34ea1fad26e5883b329ff594945f95ecf044a22ecc5af6"
+  ],
+  "reviewer": "/root/owned_offload_review",
+  "root_scope": "Root owns shared integration, Git checkpoint and future execution release. Reviewer wrote only this new private decision file.",
+  "schema": "mckernel.current-v6-production-source-integration-decision.v1",
+  "source_decision": "All12 original composite patch hunks matched actual root preimages and reproduced frozen phase3 bytes in memory; application_rpc already identical. Root subsequently applied cleanly and verified all13 actual source bytes, followed only by accepted VmaOwner allocator-tail conversion. No new owner/normal-VMA/prototype blocker remained after prior closed deferred-close/readiness findings and actual current three-module FFI/provider proof.",
+  "status": "PASS",
+  "validator_decision": "Manifest/EXPECTED_INPUTS/BUILD_CONTRACT hardlocks and all17 currentroute source locks matched accepted corrected SDK64 source bytes. Alias normalization is exact and C/header exclusions named. Missing/changed/extra compatibility input, resealed currenttaskMM escape, wrong alias and five noncanonical composite vectors are rejected. No generic escape allowance or automatic reseal introduced."
+}

@@ -1,0 +1,73 @@
+{
+  "ABI": "page_table_topaquePT/virt ->*mutc_void; unsignedlongsize CULong64; enumprepareflag existingpublicRustproviderCInt32ABI unchanged. CIntreturnexact, nocast/narrow/clampnewpolicy.",
+  "Rust_fragment": {
+    "bytes": 472,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/next-vmap-pt-prepare-adapter-source-only-1/pt-prepare-map.rs.fragment",
+    "sha256": "215f29c6c13507a2e562005dee5150ff6ada5047610baa7bf0f0d045b267697f"
+  },
+  "actual": null,
+  "actual_existing_Rust_provider": {
+    "exact_function_sha256": "302c44e3c67e60bc4a911f9fe5092c991e8db3d88504c860079588f33c4805b5",
+    "function": "ihk_mc_pt_prepare_map",
+    "path": "/home/holden/mckernel/kernel/rust/x86_memory_helpers.rs",
+    "root_union2_source_authority": "root-union-preparation-2/CANONICAL-INTEGRATION.json"
+  },
+  "base": [
+    {
+      "bytes": 228366,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/next-vmap-pagealloc-adapters-source-only-1/candidate/kernel/mem.c",
+      "sha256": "6b60e5e5af8bc9126fe6c73337c044e18b930e8775970351e59fd4061f6bb877"
+    },
+    {
+      "bytes": 214465,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/next-vmap-pagealloc-adapters-source-only-1/candidate/kernel/rust/mem_helpers.rs",
+      "sha256": "399ae3e33db05d552435b969a188975ad9163e900816f540081e9a5c6482d3d9"
+    }
+  ],
+  "engineering_percentage": null,
+  "execution": null,
+  "future_consumer": {
+    "bytes": 2483,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/next-vmap-pt-prepare-adapter-source-only-1/future-actual-consumer-fragment.c",
+    "sha256": "fae963e341b1fbc2f77337a188abe60fb2e4684407ef8e4ccf1c06d272c65523"
+  },
+  "named_remaining": [
+    "mem_vmap_allocator_bridge Cstaticstoragegetter: needsdata-ownedpointerrepresentationwithoutnewgetter.",
+    "mem_pt_set_page_bridge/mem_pt_clear_page_bridge/mem_flush_tlb_single_bridge/mem_barrier_bridge actualCVMcallbacks; existingRust/ASM providersavailablebutnotportedhere.",
+    "virtual_allocator_init Cwrapper remains: existingRustwholehelperavailable; privateCallocatorstorage+MAPgeometry binding needed.",
+    "page_unmap_log_bridge mutable__verbose/debugreadgating needsactualtypedbitfieldABI, notassumedoffset.",
+    "LowerPTElookup/physicalmapping/accountingownershipCdebt preserved."
+  ],
+  "original_C": {
+    "bytes": 179,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/next-vmap-pt-prepare-adapter-source-only-1/actual-original-C-body.inc",
+    "sha256": "6ced3121e7667bce254a38670e2a527aeae2354d2519a123398614a22fab3dc5"
+  },
+  "ownership_order": "No newnull/tablevalidity/mapping/lock/ref/cleanup/preemption action. Caller/actualexistingRustprovider retainsemantics. Existing virtualallocatorinit consumers allocator-result storebeforeprepare; no inventedmapACK orerrorcleanup.",
+  "patch": {
+    "bytes": 1313,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/next-vmap-pt-prepare-adapter-source-only-1/cutover.patch",
+    "sha256": "7d317cef2de79a83c77cacf05bfb50f4fc5ca3d88b6e59ea895757fa7d4f347d"
+  },
+  "postimages": [
+    {
+      "bytes": 228310,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/next-vmap-pt-prepare-adapter-source-only-1/candidate/kernel/mem.c",
+      "sha256": "bfdf74af428404aab74b87b6a9e20e954d870626b35e8ef02fa4fa9bb4693f43"
+    },
+    {
+      "bytes": 214938,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/next-vmap-pt-prepare-adapter-source-only-1/candidate/kernel/rust/mem_helpers.rs",
+      "sha256": "abca28bb93884310c0b4781b8f8c87e75a668ec64b947d0b183704ce47c68a5c"
+    }
+  ],
+  "reuse": "Directexistingx86_memory_helpers::ihk_mc_pt_prepare_map; samex86_pt_prepare_map_result/initPT/alloc/virtphys/setpage providerchain, unchangedcallbacks/flags/errors. Noalgorithmcopy.",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "scope_limits": [
+    "Independentnextbodyafter3allocatoradapters; privatecoherentfuturebasecontainsthoseuntestedadapters, notpassedunion3work.",
+    "Frozenpassed48+167 suffix unchanged; sharedunion3Rust object/sourceNULL. No compiler/reservation/secondqueue.",
+    "Default/fullpartial/native proofs pending."
+  ],
+  "selection": "OnlyoldMEM_HELPERS Ccallbackbodybecomesexternwithinexistingselector; originalnonRustvirtualallocatorinitbranch andotherCcallbacks untouched.",
+  "status": "COMPLETE_LIVE_PT_PREPARE_ADAPTER_PRIVATE_SOURCE_ONLY_UNTESTED"
+}

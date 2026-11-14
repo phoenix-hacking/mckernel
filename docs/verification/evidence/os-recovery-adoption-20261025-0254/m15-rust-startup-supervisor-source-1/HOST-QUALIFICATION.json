@@ -1,0 +1,126 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PROPOSED_ONLY_ROOT_EXACT_ORDINARY_HOST_RELEASE_REQUIRED",
+  "reuse_profile": "Existing ordinaryCPU6/onecompilerjob; testsserialized, samepositivejoin/groupabsence/closedstreams/deadline/evidence rules. No heavy/native resource grant.",
+  "predecessor_qualification": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-host-qualification-1/independent-actual-review-1/REVIEW.json",
+    "bytes": 27823,
+    "sha256": "9b5433a8f3cf35ea159e33d1d342292daa4237eeb1a2f95a5c623370b5bc0e91"
+  },
+  "actual_output_root": null,
+  "binding_rule": "Root supplies one fresh absolute outputroot and actualsource hashes before issuing commands. {output_root} below is an unbound path template, never a future hash/authority.",
+  "steps": [
+    {
+      "label": "Functional OS only; no security testing. Compile small HOST-only rawargv fakeexec",
+      "argv_template": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "-D",
+        "warnings",
+        "-C",
+        "codegen-units=1",
+        "-C",
+        "opt-level=1",
+        "-C",
+        "panic=abort",
+        "-C",
+        "target-feature=+crt-static",
+        "-C",
+        "relocation-model=static",
+        "-C",
+        "link-arg=-no-pie",
+        "-C",
+        "link-arg=-Wl,-z,noexecstack",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-supervisor-source-1/fakeexec.rs",
+        "-o",
+        "{output_root}/startup-fakeexec"
+      ]
+    },
+    {
+      "label": "Functional OS only; no security testing. Compile16ordinarycontrols",
+      "env_overlay_template": {
+        "STARTUP_FAKEEXEC_PATH": "{output_root}/startup-fakeexec"
+      },
+      "note": "Compiletime helperpath for testharness only; actualsupervised payload ENV remains original2entries.",
+      "argv_template": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "-D",
+        "warnings",
+        "-C",
+        "codegen-units=1",
+        "--test",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-supervisor-source-1/main.rs",
+        "-o",
+        "{output_root}/startup-tests"
+      ]
+    },
+    {
+      "label": "Functional OS only; no security testing. Run16finitegeneric/startupcontrols",
+      "argv_template": [
+        "{output_root}/startup-tests",
+        "--test-threads=1"
+      ],
+      "deadline_seconds": 30
+    },
+    {
+      "label": "Functional OS only; no security testing. Compile fixedstartup productioncollector",
+      "argv_template": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "-D",
+        "warnings",
+        "-C",
+        "codegen-units=1",
+        "-C",
+        "opt-level=1",
+        "-C",
+        "panic=abort",
+        "-C",
+        "target-feature=+crt-static",
+        "-C",
+        "relocation-model=static",
+        "-C",
+        "link-arg=-no-pie",
+        "-C",
+        "link-arg=-Wl,-z,noexecstack",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-supervisor-source-1/main.rs",
+        "-o",
+        "{output_root}/startup-supervisor"
+      ]
+    },
+    {
+      "label": "Functional OS only; no security testing. Qualify actualcollectorELF",
+      "argv_template": [
+        "/usr/bin/readelf",
+        "-W",
+        "-h",
+        "-l",
+        "-d",
+        "{output_root}/startup-supervisor"
+      ],
+      "require": "ELF64 x86-64, ET_EXEC, noINTERP/NEEDED, sourcebound Rootartifact receipt"
+    }
+  ],
+  "prepared_controls": {
+    "pure_generic_frame_deadline_stream": 5,
+    "retained_ownedleader_guards": 2,
+    "retained_ordinary_real_child": 6,
+    "specific_startup_exec_frame_rejection_cwd": 3,
+    "total": 16
+  },
+  "new_control_meaning": [
+    "ActualHOST fakeexec reads rawargv0..7including empty andargv8NULL plus exacttwoenv andenv2NULL; emits originalstartuporacle only onexactmatch",
+    "Sameactualsupervisor result is framed using samefixedprofile array and checkedagainst originaloraclehex/status0",
+    "Actualwrongc0205argv anddroppedempty7argv returnraw41/35stderr, never relabeled viafixedstartupframe",
+    "Freshprivatecwd isobserved byactual child; no /case/work requirement onHOST and no nativecwdclaim"
+  ],
+  "prohibited": "Never execute PID1main onHOST or stage fakeexec asreal mcexec; no module/guest/guard/cleanup workload or nativeauthority.",
+  "source_worker_executed": {
+    "compiler": 0,
+    "test_executable": 0,
+    "native": 0,
+    "actual_signals": 0
+  },
+  "next_after_HOST": "Independentactualqualification and Root actualcaseprofile/sourceartifact/manifest/overlay/adoptionbinding; original5298full evaluator unchanged, be6eowner1 must be positivelyretired before newnative."
+}

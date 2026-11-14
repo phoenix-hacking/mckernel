@@ -1,0 +1,57 @@
+{
+  "kind": "FINITE_ACCEPTED_F02_SCHEDULER_WRAPPER_SOURCE_BOUNDARY_AND_PROFILE_REVIEW",
+  "decision": "GO_BOUNDED_WRAPPER_ONLY_PREPARATION_INPUT_NOT_EXECUTION_OR_ENGINE_CLOSURE",
+  "reviewer": "Existing saved m15_readonly_config_input Sol/HIGH route",
+  "plan_basis": [
+    "AGENTS.md",
+    "CAMPAIGN.md updated2026-11-09T20:45Z; accepted M14-F02 includes scheduling, inheritance/publication and lifetime; accepted scope stays closed."
+  ],
+  "source_hold_boundary": {
+    "records": [
+      "docs/verification/m14-generic-source-hold-binding-20261106.json",
+      "docs/verification/m14-kernel-notify-source-eligibility-20261109.json"
+    ],
+    "retained_conditions": "Original rejected generic_c payload/issuer/scoped release remain UNKNOWN; held=true,replay=false,equivalent_reassignment=false. Both retained generic C cohorts selecting EXEC_DEFINED_TAIL remain excluded. Exact notification partition remains NO_GO.",
+    "affirmative_independent_scope": "The proposed current sched_helpers.rs export corresponds to the original accepted-F02 process.c scheduler wrapper, selected separately by MCKERNEL_RUST_PROCESS_HELPERS. Current plan expressly accepts F02 scheduling and says the notification NO_GO is not a blanket hold on other files. The user/Root clarification limits this task to this genuine accepted-F02 function/type/profile and leaving downstream genuine imports unresolved.",
+    "no_release_inferred": "Accepted F02 context authorizes only this distinguished scheduler wrapper preparation; no generic/exec/notification/ACK/TID/XPMEM/perf/mmap/native/source custody hold changes. Prior provider patterns are methodology, not release authority."
+  },
+  "exact_wrapper": {
+    "Rust": "kernel/rust/sched_helpers.rs:3362-3365",
+    "definition": "#[no_mangle] pub unsafe extern \"C\" fn sched_wakeup_thread(thread:*mut Thread,valid_states:CInt)->CInt { unsafe { __sched_wakeup_thread(thread,valid_states,0) } }",
+    "C_owner": "kernel/process.c:7248-7251 under #ifndef MCKERNEL_RUST_PROCESS_HELPERS",
+    "selection": [
+      "kernel/rust/lib.rs:54 mod sched_helpers",
+      "kernel/CMakeLists.txt:174 lists sched_helpers.rs; process.c compile definition MCKERNEL_RUST_PROCESS_HELPERS at668"
+    ],
+    "sole_genuine_callable_dependency": "__sched_wakeup_thread(*mut actual crate::abi::Thread,CInt,CInt)->CInt",
+    "dependency_evidence": "Finite-contract reviewer result supplied by Root in this turn: wrapper has no private/helper body, offset/constant or data owner beyond literal0; exact preliminary provider is1T sched_wakeup_thread plus1genuineU __sched_wakeup_thread.",
+    "excluded": "Underlying __sched_wakeup_thread engine implementation and every additional helper/data body; separate fresh source-only boundary/contract review is required before any engine preparation. This review neither claims engine held nor claims engine qualified."
+  },
+  "compatible_real_types": {
+    "path": "kernel/rust/abi.rs",
+    "current_sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "matches_qualified_type_source": "Exact match to docs/verification/m14-delay-provider-unit-20261109/PACKAGE-MANIFEST.json source/selected/kernel/rust/abi.rs.",
+    "CInt": "i32 atabi.rs:5",
+    "Thread": "Actual repr(C) Thread atabi.rs:1542-1617; use source type, never a fabricated opaque substitute/layout.",
+    "type_module_boundary": "abi.rs imports core only and has no crate::/include!/super implementation dependency. Its types/assertions can be reused without importing any held module body. Existing feature-conditioned layouts are retained; no new cfg profile.",
+    "layout_claim_limit": "Wrapper passes an actual Thread pointer without field access. Reused type identity is sufficient for this finite call ABI review; no new C-header/native layout acceptance or scheduler behavior is asserted."
+  },
+  "compatible_existing_partial_profile": {
+    "reference": "docs/verification/m14-delay-provider-unit-20261109/core/REQUEST.json compiler_profile and commands; source/CONTRACT.json",
+    "compiler": "rustc1.95.0-nightly c04308580 2026-02-18",
+    "compiler_sha256": "70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09",
+    "shape": "Exact no_std edition2021 lib/object HOST partial-codegen profile; panicabort,opt2,code-model large,relocation static,no-redzone,no-vectorize-loops/no-vectorize-slp,target-feature -sse/-sse2/-sse3/-ssse3/-sse4.1/-sse4.2/-avx/-avx2/-fma; no optional cfg enabled.",
+    "diagnostics": "Retain exact inherited single SSE2 ABI warning contract; this remains explicitly HOST partial-codegen scope, never final/native ABI acceptance. New unexpected diagnostics require review; no warning suppression.",
+    "resource_admission": "No inherited execution admission transfers. Root must separately admit exact new finite commands under current aggregate HOST controls before any compile/link."
+  },
+  "smallest_concrete_next_input": {
+    "prepare": "Root may review a finite exact-source wrapper-only unit using unchanged real abi.rs, original wrapper bytes and genuine __sched_wakeup_thread extern signature. No whole sched_helpers/module import, new wrapper behavior, provider stub, symbol rename or fake layout.",
+    "future_object_obligation": "If admitted, actual metadata predicate must establish exactly the one exported sched_wakeup_thread definition, the genuine helper import, and no unexpected function/data/helper owner before any join.",
+    "future_join_obligation": "Only the reviewed retained aaaf8a1a partial and new wrapper object may join; resolve existing sched_wakeup_thread reference while exposing genuine __sched_wakeup_thread. Root finite reviewer predicts13 remaining genuine imports, not completed closure. Preserve prior symbol bytes,ownership and relocations; actual predicates decide, no blind count substitution.",
+    "scope_limit": "Object/relocatable-link proof only. No function execution,scheduling/IRQ/event/thread/lifetime/boot/native behavior or full/default image acceptance. All held downstream implementation/imports remain unresolved."
+  },
+  "review_actions": "Read active plan, bounded current hold records, exact wrapper/C signature, selected source/type/profile evidence; one necessary abi.rs hash-to-existing-profile comparison. No source extraction/unit generation, underlying scheduler engine preparation, held source body inspection, metadata/codegen/link/test/device/native action or canonical/index change.",
+  "sole_written_artifact": "/home/holden/mckernel-work/m14-m15-explicit-restart-20261109T200836Z/scheduler-provider-boundary-review-20261109T2114.json",
+  "goal_resume_or_execution_authorized": false,
+  "acceptance_C_retirement_or_score_delta": 0
+}

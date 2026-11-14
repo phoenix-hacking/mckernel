@@ -1,0 +1,30 @@
+{
+  "schema": "mckernel.native-exact-build-failure.v1",
+  "status": "FAIL_SOURCE_BINDING_BEFORE_COMPILATION",
+  "candidate_commit": "43e9dbbddd384d4197f981ada7f7a6ecced75555",
+  "request_sha256": "6f6dd8f9aebbd042c60cf2fb85202b214019bc41cb79b8d4cd20f941835e1409",
+  "failure": "ihk-smp-native-lifecycle-check: FAIL: SMP compiled dependency digest differs: host-kernel/native-rust/smp_memory.rs",
+  "classification": "Fail-closed stale lifecycle dependency binding; no lifecycle semantic failure observed.",
+  "container_id": "a06adba2c3337baf15fa6f4a52b27b64300132d730518208df3d59eca961c6f0",
+  "container_name": "mckernel-exact-dbbdff5c13b5464fa1bd27c95c64a963",
+  "container_state": "exited",
+  "container_exit_code": 1,
+  "owner_nonce": "743644ea329d4e45b1c8932915278f4e",
+  "operational_exclusion_identity": "1831:57567",
+  "operational_exclusion_sha256": "54494d76d55de57927c9d24472e592c90938d48684b58d19784b29a77d93cf5a",
+  "owner_receipt_sha256": "254f9d27c96da9fbfd909254c5a1876203740e06b8594c0e48e43d56c61efb09",
+  "build_receipt_sha256": "b5d19b52fb5383780bc79b1a482514f1f81cfaf31de545f8d0ee8d28988c8e8f",
+  "driver_log_sha256": "0f00ca5a1925b12bab6c066aedff5f88454c1c337ea7187e01e12aba26d5fb9d",
+  "failure_archive_sha256": "8956c1cdb93442d54136d6177c80448a274d2f5a36e08ac11e236c8537b6b5cf",
+  "compiled_artifacts": 0,
+  "runtime": "NOT_RUN",
+  "bounded_correction": {
+    "lifecycle_contract_sha256": "d5485b2bd2cee6fc08e22b6b7e822794f4dc7ea8b5006c74f3f741c8dcaa38f3",
+    "lifecycle_checker_sha256": "0bd553ee2e7455a04ce71292f7c6311058faaaa2330682c825ac55210e37e3fc",
+    "lifecycle_tests": "89/89 PASS",
+    "unsafe_ffi_ledger_sha256": "4fb240780d08f775da29be4de24a2a5a3264ae6ff003a1159cfa36f03b87363c",
+    "unsafe_ffi_tests": "45/45 PASS; 55 inputs, 637 sites, RS-011 NOT_READY",
+    "independent_review": "PASS_SOURCE"
+  },
+  "scope": "Diagnostic build failure only; no compilation, image, boot, guest, application, shutdown, or acceptance result."
+}

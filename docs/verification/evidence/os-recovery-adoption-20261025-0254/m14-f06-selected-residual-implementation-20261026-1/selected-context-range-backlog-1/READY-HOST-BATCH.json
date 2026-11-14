@@ -1,0 +1,432 @@
+{
+  "status": "READY_FOR_ROOT_SPECIFIC_GRANT_NOT_GRANTED",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "entries": [
+    {
+      "leaf": "ptrace-context",
+      "plan": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-context/FUTURE-HOST-COMMAND-PLAN.json",
+        "bytes": 12601,
+        "sha256": "36330a8ef7106bbb59026292637f8e6a05c246613cb397c8817fc4f680b6d6e2"
+      },
+      "purpose": "C lookup_user_context mock records raw thread pointer and returns opaque context bits; no actual current-stack/GS/TSS/context materialization.",
+      "cases": 64,
+      "commands": [
+        {
+          "purpose": "Functional OS only; exact existing ptrace-context Rust adapter with controlled provider; no security testing",
+          "argv": [
+            "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+            "--edition=2021",
+            "--crate-type=staticlib",
+            "-C",
+            "panic=abort",
+            "-C",
+            "opt-level=2",
+            "--cfg",
+            "f06_ptrace_context_candidate",
+            "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-context/fixture.rs",
+            "-o",
+            "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-context/future-host-output-1/libadapter.a"
+          ]
+        },
+        {
+          "purpose": "Functional OS only; complete genuine-prologue original-C/Rust typed ABI comparison; no security testing",
+          "argv": [
+            "/usr/bin/gcc-9",
+            "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+            "-DIHK_OS_MANYCORE",
+            "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+            "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+            "-DMCKERNEL_NATIVE_CLONE3",
+            "-DMCKERNEL_NATIVE_CLONE_TID",
+            "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+            "-DMCKERNEL_NATIVE_FUTEX",
+            "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+            "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+            "-DMCKERNEL_RUST_BITOPS",
+            "-DMCKERNEL_RUST_LIST_HELPERS",
+            "-DMCKERNEL_RUST_LOCK_HELPERS",
+            "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+            "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+            "-DMCKERNEL_RUST_PTE_HELPERS",
+            "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+            "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+            "-DPROFILE_ENABLE",
+            "-D__KERNEL__",
+            "-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+            "-DMCKERNEL_RUST_X86_CPU_HELPERS",
+            "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/include",
+            "-I/home/holden/mckernel/kernel/include",
+            "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel",
+            "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build",
+            "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64/include",
+            "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64",
+            "-I/home/holden/mckernel/ihk/ikc/include",
+            "-I/home/holden/mckernel/ihk/linux/include",
+            "-I/home/holden/mckernel/lib/include",
+            "-I/home/holden/mckernel/arch/x86_64/kernel/include",
+            "-g",
+            "-Wall",
+            "-Wextra",
+            "-Wno-unused-parameter",
+            "-Wno-sign-compare",
+            "-Wno-unused-function",
+            "-Wno-implicit-fallthrough",
+            "-Wno-stringop-truncation",
+            "-ffreestanding",
+            "-O2",
+            "-nostdinc",
+            "-isystem",
+            "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+            "-fno-omit-frame-pointer",
+            "-mcmodel=large",
+            "-mno-red-zone",
+            "-mno-sse",
+            "-Werror",
+            "-ffunction-sections",
+            "-fdata-sections",
+            "-no-pie",
+            "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-context/fixture.c",
+            "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-context/future-host-output-1/libadapter.a",
+            "-Wl,--gc-sections",
+            "-o",
+            "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-context/future-host-output-1/fixture"
+          ]
+        },
+        {
+          "purpose": "Functional OS only;64 controlled original-C/provider comparisons; no security testing",
+          "argv": [
+            "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-context/future-host-output-1/fixture"
+          ]
+        }
+      ]
+    },
+    {
+      "leaf": "ptrace-alloc",
+      "plan": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-alloc/FUTURE-HOST-COMMAND-PLAN.json",
+        "bytes": 12948,
+        "sha256": "4c499be3bcadc9683587384eea5be65916b24868b9f73676dfbc72a179764977"
+      },
+      "purpose": "C kmalloc_tracked mock records narrowed size/full flags and checks distinct exact C/Rust filename+line constants before returning opaque bits; no allocation/free/OOM logging.",
+      "cases": 832,
+      "commands": [
+        {
+          "purpose": "Functional OS only; exact existing ptrace-alloc Rust adapter with controlled provider; no security testing",
+          "argv": [
+            "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+            "--edition=2021",
+            "--crate-type=staticlib",
+            "-C",
+            "panic=abort",
+            "-C",
+            "opt-level=2",
+            "--cfg",
+            "f06_ptrace_alloc_candidate",
+            "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-alloc/fixture.rs",
+            "-o",
+            "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-alloc/future-host-output-1/libadapter.a"
+          ]
+        },
+        {
+          "purpose": "Functional OS only; complete genuine-prologue original-C/Rust typed ABI comparison; no security testing",
+          "argv": [
+            "/usr/bin/gcc-9",
+            "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+            "-DIHK_OS_MANYCORE",
+            "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+            "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+            "-DMCKERNEL_NATIVE_CLONE3",
+            "-DMCKERNEL_NATIVE_CLONE_TID",
+            "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+            "-DMCKERNEL_NATIVE_FUTEX",
+            "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+            "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+            "-DMCKERNEL_RUST_BITOPS",
+            "-DMCKERNEL_RUST_LIST_HELPERS",
+            "-DMCKERNEL_RUST_LOCK_HELPERS",
+            "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+            "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+            "-DMCKERNEL_RUST_PTE_HELPERS",
+            "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+            "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+            "-DPROFILE_ENABLE",
+            "-D__KERNEL__",
+            "-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+            "-DMCKERNEL_RUST_X86_CPU_HELPERS",
+            "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/include",
+            "-I/home/holden/mckernel/kernel/include",
+            "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel",
+            "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build",
+            "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64/include",
+            "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64",
+            "-I/home/holden/mckernel/ihk/ikc/include",
+            "-I/home/holden/mckernel/ihk/linux/include",
+            "-I/home/holden/mckernel/lib/include",
+            "-I/home/holden/mckernel/arch/x86_64/kernel/include",
+            "-g",
+            "-Wall",
+            "-Wextra",
+            "-Wno-unused-parameter",
+            "-Wno-sign-compare",
+            "-Wno-unused-function",
+            "-Wno-implicit-fallthrough",
+            "-Wno-stringop-truncation",
+            "-ffreestanding",
+            "-O2",
+            "-nostdinc",
+            "-isystem",
+            "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+            "-fno-omit-frame-pointer",
+            "-mcmodel=large",
+            "-mno-red-zone",
+            "-mno-sse",
+            "-Werror",
+            "-ffunction-sections",
+            "-fdata-sections",
+            "-no-pie",
+            "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-alloc/fixture.c",
+            "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-alloc/future-host-output-1/libadapter.a",
+            "-Wl,--gc-sections",
+            "-o",
+            "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-alloc/future-host-output-1/fixture"
+          ]
+        },
+        {
+          "purpose": "Functional OS only;832 controlled original-C/provider comparisons; no security testing",
+          "argv": [
+            "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-alloc/future-host-output-1/fixture"
+          ]
+        }
+      ]
+    },
+    {
+      "leaf": "vdso-add-range",
+      "plan": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-add-range/FUTURE-HOST-COMMAND-PLAN.json",
+        "bytes": 12673,
+        "sha256": "6ed5a342562f54d99a1f3105ca385d52b41effe09cc02d63fe080368035cc4ff"
+      },
+      "purpose": "C add_process_memory_range mock records all10args and writes only a valid nonnull caller output slot, including controlled error-return paths; no VM/ref/allocator/mapping operation.",
+      "cases": 112,
+      "commands": [
+        {
+          "purpose": "Functional OS only; exact existing vdso-add-range Rust adapter with controlled provider; no security testing",
+          "argv": [
+            "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+            "--edition=2021",
+            "--crate-type=staticlib",
+            "-C",
+            "panic=abort",
+            "-C",
+            "opt-level=2",
+            "--cfg",
+            "f06_vdso_add_range_candidate",
+            "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-add-range/fixture.rs",
+            "-o",
+            "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-add-range/future-host-output-1/libadapter.a"
+          ]
+        },
+        {
+          "purpose": "Functional OS only; complete genuine-prologue original-C/Rust typed ABI comparison; no security testing",
+          "argv": [
+            "/usr/bin/gcc-9",
+            "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+            "-DIHK_OS_MANYCORE",
+            "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+            "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+            "-DMCKERNEL_NATIVE_CLONE3",
+            "-DMCKERNEL_NATIVE_CLONE_TID",
+            "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+            "-DMCKERNEL_NATIVE_FUTEX",
+            "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+            "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+            "-DMCKERNEL_RUST_BITOPS",
+            "-DMCKERNEL_RUST_LIST_HELPERS",
+            "-DMCKERNEL_RUST_LOCK_HELPERS",
+            "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+            "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+            "-DMCKERNEL_RUST_PTE_HELPERS",
+            "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+            "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+            "-DPROFILE_ENABLE",
+            "-D__KERNEL__",
+            "-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+            "-DMCKERNEL_RUST_X86_CPU_HELPERS",
+            "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/include",
+            "-I/home/holden/mckernel/kernel/include",
+            "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel",
+            "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build",
+            "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64/include",
+            "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64",
+            "-I/home/holden/mckernel/ihk/ikc/include",
+            "-I/home/holden/mckernel/ihk/linux/include",
+            "-I/home/holden/mckernel/lib/include",
+            "-I/home/holden/mckernel/arch/x86_64/kernel/include",
+            "-g",
+            "-Wall",
+            "-Wextra",
+            "-Wno-unused-parameter",
+            "-Wno-sign-compare",
+            "-Wno-unused-function",
+            "-Wno-implicit-fallthrough",
+            "-Wno-stringop-truncation",
+            "-ffreestanding",
+            "-O2",
+            "-nostdinc",
+            "-isystem",
+            "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+            "-fno-omit-frame-pointer",
+            "-mcmodel=large",
+            "-mno-red-zone",
+            "-mno-sse",
+            "-Werror",
+            "-ffunction-sections",
+            "-fdata-sections",
+            "-no-pie",
+            "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-add-range/fixture.c",
+            "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-add-range/future-host-output-1/libadapter.a",
+            "-Wl,--gc-sections",
+            "-o",
+            "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-add-range/future-host-output-1/fixture"
+          ]
+        },
+        {
+          "purpose": "Functional OS only;112 controlled original-C/provider comparisons; no security testing",
+          "argv": [
+            "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-add-range/future-host-output-1/fixture"
+          ]
+        }
+      ]
+    },
+    {
+      "leaf": "vdso-set-range",
+      "plan": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-set-range/FUTURE-HOST-COMMAND-PLAN.json",
+        "bytes": 12612,
+        "sha256": "d1b43fbef398eb3665991d93f236cd24e7c1e2ba233d6cda0ea4852652467cb3"
+      },
+      "purpose": "C ihk_mc_pt_set_range mock records all9args and controlled status only; no page-table write, lock, IRQ, translation, syscall or mapping effect.",
+      "cases": 56,
+      "commands": [
+        {
+          "purpose": "Functional OS only; exact existing vdso-set-range Rust adapter with controlled provider; no security testing",
+          "argv": [
+            "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+            "--edition=2021",
+            "--crate-type=staticlib",
+            "-C",
+            "panic=abort",
+            "-C",
+            "opt-level=2",
+            "--cfg",
+            "f06_vdso_set_range_candidate",
+            "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-set-range/fixture.rs",
+            "-o",
+            "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-set-range/future-host-output-1/libadapter.a"
+          ]
+        },
+        {
+          "purpose": "Functional OS only; complete genuine-prologue original-C/Rust typed ABI comparison; no security testing",
+          "argv": [
+            "/usr/bin/gcc-9",
+            "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+            "-DIHK_OS_MANYCORE",
+            "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+            "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+            "-DMCKERNEL_NATIVE_CLONE3",
+            "-DMCKERNEL_NATIVE_CLONE_TID",
+            "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+            "-DMCKERNEL_NATIVE_FUTEX",
+            "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+            "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+            "-DMCKERNEL_RUST_BITOPS",
+            "-DMCKERNEL_RUST_LIST_HELPERS",
+            "-DMCKERNEL_RUST_LOCK_HELPERS",
+            "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+            "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+            "-DMCKERNEL_RUST_PTE_HELPERS",
+            "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+            "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+            "-DPROFILE_ENABLE",
+            "-D__KERNEL__",
+            "-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+            "-DMCKERNEL_RUST_X86_CPU_HELPERS",
+            "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/include",
+            "-I/home/holden/mckernel/kernel/include",
+            "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel",
+            "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build",
+            "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64/include",
+            "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64",
+            "-I/home/holden/mckernel/ihk/ikc/include",
+            "-I/home/holden/mckernel/ihk/linux/include",
+            "-I/home/holden/mckernel/lib/include",
+            "-I/home/holden/mckernel/arch/x86_64/kernel/include",
+            "-g",
+            "-Wall",
+            "-Wextra",
+            "-Wno-unused-parameter",
+            "-Wno-sign-compare",
+            "-Wno-unused-function",
+            "-Wno-implicit-fallthrough",
+            "-Wno-stringop-truncation",
+            "-ffreestanding",
+            "-O2",
+            "-nostdinc",
+            "-isystem",
+            "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+            "-fno-omit-frame-pointer",
+            "-mcmodel=large",
+            "-mno-red-zone",
+            "-mno-sse",
+            "-Werror",
+            "-ffunction-sections",
+            "-fdata-sections",
+            "-no-pie",
+            "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-set-range/fixture.c",
+            "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-set-range/future-host-output-1/libadapter.a",
+            "-Wl,--gc-sections",
+            "-o",
+            "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-set-range/future-host-output-1/fixture"
+          ]
+        },
+        {
+          "purpose": "Functional OS only;56 controlled original-C/provider comparisons; no security testing",
+          "argv": [
+            "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-set-range/future-host-output-1/fixture"
+          ]
+        }
+      ]
+    }
+  ],
+  "max_commands": 12,
+  "total_cases": 1064,
+  "resources": {
+    "CPU_slot": 6,
+    "granted": false,
+    "jobs": 1,
+    "AS_bytes": 2147483648,
+    "CPU_per_command_seconds": 60,
+    "FSIZE_bytes": 67108864,
+    "core": 0,
+    "wall_per_command_seconds": 90,
+    "aggregate_reserved_bytes": 21474836480
+  },
+  "accepted_admission_supervisor": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-selected-1/next-prctl-getter-selected-1/actual-host-getter-1/reviewed-account-supervisor-correction-1/run_sealed.py",
+    "bytes": 6620,
+    "sha256": "e8b84de39128433542b213fc3a374dd50d3e12f232bd397dddaa24859349a805"
+  },
+  "accepted_account_policy": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-selected-1/next-prctl-getter-selected-1/actual-host-getter-1/reviewed-account-supervisor-correction-1/accepted_account_policy.py",
+    "bytes": 1501,
+    "sha256": "d300c64f6df103af42b628eff65db07387f9d7840bc2c842163e06a9d8fdfddc"
+  },
+  "prior_sequential_four_leaf_supervisor": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-four-leaf-host-1/run_granted_batch.py",
+    "bytes": 6507,
+    "sha256": "fe8780a16954fb7594f95614c90629f78b55db64114883dd352a927a840749e9"
+  },
+  "instruction": "On Root specific grant, reuse the same finite sequential batch/profile and unchanged e8b84de3 admission04b5/adf/fixedcutoffs; replace only frozen ITEMS with these exact leaf references. Stopfirstfailure/preserveprefix; no perleaf controller/profile or kernel effects.",
+  "actual": null
+}

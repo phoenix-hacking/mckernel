@@ -1,0 +1,81 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_SOURCE_EXACT_LINE_PRESERVING_SEVEN_LEAF_COMPOSITION",
+  "independent": true,
+  "implementation_ownership": false,
+  "reviewer": "/root/recovery_receipts",
+  "recorded_epoch": 1793309413.6575885,
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SEVEN-LEAF-BATCH-1/line-preserving-composition-correction-1/SOURCE-READY.json",
+    "bytes": 4521,
+    "sha256": "41a3fc9cc087008c30f2e5bc34919a25419e5bfd8f6f89d2d216dd0da2cad4f4"
+  },
+  "patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SEVEN-LEAF-BATCH-1/line-preserving-composition-correction-1/SEVEN-LEAF-LINE-PRESERVED.PRIVATE-NOT-APPLIED.patch",
+    "bytes": 20007,
+    "sha256": "22feacf6221bd16c9b08a41e30e2c91f1fe5f5427009e8e5455dda9fea965634"
+  },
+  "changed_policy": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SEVEN-LEAF-BATCH-1/line-preserving-composition-correction-1/postimage/kernel/rust/syscall_policy.rs",
+    "bytes": 1302893,
+    "sha256": "bc82e3dfa3fb11f78ef3e02c468952fd9ef05a167f803e6ad689bf49e992ca0a"
+  },
+  "prior_two_leaf_body_acceptance_and_original_defect": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SEVEN-LEAF-BATCH-1/independent-source-review-1/REVIEW.ACTUAL.json",
+    "bytes": 5837,
+    "sha256": "604d8291c6bc52eff48587230837a00adf5e145ea1ea451ff92fa246ba0491ee"
+  },
+  "reused_five_leaf_source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-LOGGER-LOCK-BATCH-1/independent-source-review-1/REVIEW.ACTUAL.json",
+    "bytes": 9158,
+    "sha256": "33f25ba33420a30279276478ad5dc8641dd9411b8615f4f20d4b8beef0cfc664"
+  },
+  "reused_paired_lock_review": {
+    "bytes": 7276,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-PTRACE-CLONE-LOCK-BRIDGE-1/independent-source-review-1/REVIEW.ACTUAL.json",
+    "sha256": "5ed8b1934ab9fb5ac08910e300496808b700e601511606c2bbf995cd6326d253"
+  },
+  "checks": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SEVEN-LEAF-BATCH-1/line-preserving-composition-correction-1/independent-review-1/CHECKS.json",
+    "bytes": 2630,
+    "sha256": "28a59a2ff3818800cb8e18a5ef5149c34848e7b9191819c7c16cf51f8d3af9db"
+  },
+  "checker": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SEVEN-LEAF-BATCH-1/line-preserving-composition-correction-1/independent-review-1/check_placement_only.py",
+    "bytes": 5721,
+    "sha256": "ac94eaffc9fb536568f8d935d82bdfd349d165054ddbb34dc03ab848bfb4020a"
+  },
+  "findings": [
+    "The only postimage change from failedsevenleafd323 is exactplacement of six existing syscall_policy child-module blocks. Stripping those six blocks from the failed policy reconstructs frozen119preimage byte-for-byte; correctedpolicy equals that fullpreimage plus the exactsixblockbyte streams atEOF. No cfg/path/mod token, lexicalparent, export, algorithm or callback is changed.",
+    "All11postimage subjects authenticated. The seven Rustleaves and every nonpolicy postimage\u2014including C callbacks/fallback selectors, crate lib.rs and CMake dependencies\u2014are byte-identical to the originalsevenleaf. Reuse604d newgetter/utilbody acceptance and priorfive/pairedlock proofs; no duplicatebodyaudit or newport.",
+    "All53line! and53file! source sites in syscall_policy match frozen119 at exactphysical line/column/fulltext. There are0column! sites, and lib.rs has0locationmacro sites. Oldcandidate+25shift is reproduced and remains preserved. EOFblocks add no locationmacro expansions.",
+    "The four source-projected Rust-owned Cdescriptor rows combined with unchanged originalrecords match originalaf46full389Counter; C newline count and every logical #line directive physicalposition remainexact. Originaloracleandoriginalfailure are unchanged. This is complete sourceidentity restoration, notactualELF389 acceptance.",
+    "Moving same #[path]/cfg/module blocks within the same syscall_policy module does not change sourcepath resolution or Rustlexical moduleownership. Existing parent function declarations/bodies precede the appended item blocks exactly as in frozen119; Rustitem order adds no new runtimeinitialization.",
+    "Originalnewgetter valid-domain/lifetime invariants and util static%s variadic ABI are unchanged. Undefined ptrace_wakeup vararg-domain holds remain excluded; no newformatcast, nullpolicy, refcount, lock or synchronization claim is approved."
+  ],
+  "source_blockers": [],
+  "source_acceptance_scope": "Exactline-preserving correctedprivate sevenleafcomposition only. Wholefile/native/C-retirement and matchedcompiler/artifact acceptance remain separate.",
+  "test_result": {
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/usr/bin/python3",
+      "-B",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SEVEN-LEAF-BATCH-1/line-preserving-composition-correction-1/independent-review-1/check_placement_only.py"
+    ],
+    "returncode": 0,
+    "result": "PASS_EXACT_EOF_PLACEMENT_AND_ALL_INHERITED_SOURCE_LOCATION_IDENTITIES",
+    "original_negative_case_retained": true
+  },
+  "next_Root_step": "Use exactcorrectedpatch22fe only after authenticating canonicalpreimages; bind all sevenRust dependencies/currentconsumerconfig, actualRust+selectedC compiler and coherentlink; unchangedfull389 actualartifact/ABI/provider checks and applicable nativefunctional proof remainrequired. This SOURCEPASS is not executionrelease.",
+  "canonical_applied": false,
+  "compiler_preprocessor_ELF_HOST_native_guard_cleanup_actions": 0,
+  "new_C_retirement_credit": 0,
+  "artifact_acceptance": false,
+  "native_acceptance": false,
+  "wholefile_acceptance": false,
+  "execution_authority": null,
+  "runtime_authority": null,
+  "owned_live_resources": []
+}

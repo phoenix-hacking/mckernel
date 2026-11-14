@@ -1,0 +1,162 @@
+{
+  "schema": "mckernel.scheduler-ipi-log-provider-lookahead.v1",
+  "request": "2026-11-09T22:02Z same-Root scheduled source-only lookahead",
+  "invocation": "20261109T211917Z-488788ba",
+  "decision": "GO_EXACT_EXISTING_ACCEPTED_F04_IPI_SLOT_BRIDGE_AND_LOGGER_PLUS_GENUINE_SELECTOR_OWNER_SOURCE_PREPARATION",
+  "owner": "Saved Root sole compositor; actual source/profile/ABI review and fresh operation admission remain separate",
+  "scope": "Only2actual Rust function bodies and one actual32byte debug descriptor, with real callback-slot and logger/currentCPU imports. No APIC/MSR/IRQ backend implementation or execution.",
+  "eligibility_boundary": {
+    "basis": "Positive original accepted-F04 general CPU interrupt/diagnostic source, exact existing forwarding/logger/declarative selector definitions and matching C selection/callsite semantics. This is independently distinguished from notification packet/generic/exec/ACK/TID/XPMEM endpoints.",
+    "IPI": "Actual bridge only reads the genuine boot-selected function-pointer slot and calls its original unsigned32 ABI; source contains no APIC/MMIO/MSR/IRQ instructions or backend implementation. The indirect target remains outside this partition and unexecuted.",
+    "logging": "Actual CPU diagnostic logger and descriptor introduce no notification, dispatch or held runtime body. Only live volatile selector gating and original strings/argument evaluation are preserved.",
+    "data": "Exact debug descriptor is data-only, not a guessed disabled callback or substitute runtime owner. Its initial low24bit line/high8bit flags are source/profile-defined; dynamic flag mutation remains owned by original debug registry.",
+    "no_hold_release": "Original generic/exec/notification source/service, SDK, native/current-free and every UNKNOWN remain unchanged. Accepted source gives no hardware/IRQ/native execution permission.",
+    "stop": "Do not include actual x86_issue_ipi selected target, APIC/x2APIC implementation, callback publication/boot selection or entire CPU/debug module without separate exact eligibility. No alternate callback or pointer state is invented."
+  },
+  "actual_functions": [
+    {
+      "symbol": "x86_issue_ipi_bridge",
+      "source": "kernel/rust/x86_cpu_helpers.rs:6107–6111, remaining_cpu_callbacks",
+      "ABI": "unsafe extern \"C\" fn(CULong,CInt)",
+      "body": "Exact addr_of!(x86_issue_ipi).read().unwrap_unchecked()(apic_id as u32,vector as u32); preserve original unchecked nonnull callback use and narrowing.",
+      "private_helpers": [],
+      "data_borrow": "Original boot-selected callback slot must contain actual live initialized target when runtime caller uses it. This contract neither initializes it nor authorizes calling a NULL/unpublished slot.",
+      "types": [
+        "actual abi::CULong=u64",
+        "actual abi::CInt=i32",
+        "actual Option<unsafe extern C fn(u32,u32)> slot"
+      ],
+      "cfg": "No local feature/equivalence branch on exact bridge.",
+      "paired_C": "arch/x86_64/kernel/cpu.c:3365 declaration and3396 original call through unsigned-int x86_issue_ipi slot; C implicitly narrows both arguments. There is no invented C-only replacement body.",
+      "required_U": [
+        "x86_issue_ipi"
+      ]
+    },
+    {
+      "symbol": "x86_interrupt_log_bridge",
+      "source": "kernel/rust/x86_cpu_helpers.rs:4393–4418",
+      "ABI": "unsafe extern \"C\" fn(CInt,CInt,CInt)",
+      "body": "Preserve event1 unconditional invalidCPU message; event2 actual volatile x86_interrupt_log_debug.line_flags>>24 and only then currentCPU lookup/kprintf; unknown events silent. Vector unused; logger return ignored.",
+      "private_helpers": [],
+      "types": [
+        "actual CInt",
+        "actual Ddebug line_flags type/layout"
+      ],
+      "cfg": "Keep complete actual logger regardless initial descriptor flags; do not compile away or replace event2.",
+      "formats": [
+        "%s: invalid CPU id: %d\\n\\0",
+        "ihk_mc_interrupt_cpu\\0",
+        "[%d] ihk_mc_interrupt_cpu: %d\\n\\0"
+      ],
+      "required_U": [
+        "kprintf",
+        "ihk_mc_get_processor_id"
+      ],
+      "data_borrow": "Only scalar logging arguments, static strings and current CPU getter; no pointer/context/lock retention."
+    }
+  ],
+  "actual_debug_owner": {
+    "name": "x86_interrupt_log_debug",
+    "source": "kernel/rust/x86_cpu_helpers.rs:6687–6696, selected_cpu_verbose_records",
+    "declaration": "pub static mut x86_interrupt_log_debug: actual Ddebug",
+    "attributes": [
+      "#[used]",
+      "#[no_mangle]",
+      "#[link_section=\"__verbose\"]"
+    ],
+    "fields": {
+      "file": "FILE.as_ptr().cast(); actual FILE=concat!(env!(\"MCKERNEL_CPU_C_FILE\"),\"\\0\").as_bytes() at6513",
+      "func": "b\"x86_interrupt_log_bridge\\0\" pointer",
+      "fmt": null,
+      "line_flags": 3140
+    },
+    "bytes": 32,
+    "alignment": 8,
+    "section": "__verbose allocated writable initialized data",
+    "C_match": "arch/x86_64/kernel/cpu.c:3371–3379 original record uses actual __FILE__,samefunc,line3140,DDEBUG_DEFAULT under paired selected ownership.",
+    "type": "Exact kernel/rust/debug.rs:26–32 repr(C) Ddebug:3actual i8 pointers(file/func/fmt),u32line_flags. Existing size32/align8/offsets0,8,16,24 assertions preserved; do not import debug module runtime.",
+    "relocations": "Two descriptor pointer fields resolve to actual source-owned readonly filename/function NUL strings; fmt isNULL and line_flags namedfield3140. Preserve actual retention/section/writable alignment; record padding without inventing a semantic padding promise.",
+    "mutability": "Original dynamic-debug registry may change flags. Initial source flags0 does not mean logger disabled forever; actual volatile gated event2 and currentCPU evaluation remain.",
+    "cfg_and_filename_input": "Use exact MCKERNEL_CPU_C_FILE producer input, never Rust file!() or relative CPU_FILE constant. kernel/CMakeLists.txt:511,522 pairs actual absolute C source spelling used by C.",
+    "profile_flags": "This exact existing Rust descriptor encodes flags0. That is grounded in the supported source profile: cpu.c only enables DDEBUG_PRINT under DEBUG_PRINT_CPU, and current selected C guards at2463–2464/2511–2512 reject an enabled-debug profile; x86_cpu_helpers.rs:6967–6969 documents that actual currentCPU81 compiler profile. Do not claim compatibility for DEBUG_PRINT_CPU defined even to0, or a compiler override of DDEBUG_DEFAULT.",
+    "remaining_profile_binding": "Before compilation, Root must bind actual selected filename spelling and supported DEBUG_PRINT_CPU-undefined/defaultflag profile from concrete reviewed source/config provenance. This is not permission to guess0 merely to satisfy a unit."
+  },
+  "genuine_dependencies": [
+    {
+      "symbol": "x86_issue_ipi",
+      "kind": "mutable callback-pointer data",
+      "actual_abi": "extern static mut Option<unsafe extern C fn(u32,u32)>",
+      "source_declaration": "kernel/rust/x86_cpu_helpers.rs:5707",
+      "actual_Rust_owner": "kernel/rust/x86_cpu_helpers.rs:5296 dispatch_and_msr_entries static, original None initialization; exact Option<IssueIpi>size8/align8 assertions at5308. Owner is NOT included.",
+      "matching_C": "arch/x86_64/kernel/cpu.c:606–609 void(*x86_issue_ipi)(unsigned int,unsigned int); actual selected target publications at1427/1435 remain uninspected/unprepared.",
+      "treatment": "U only, retain real bootselected live slot. No duplicate None/nonnull/fixedbackend storage, new setter/ACK/lifetime or invented APIC registers."
+    },
+    {
+      "symbol": "kprintf",
+      "kind": "function",
+      "ABI": "extern C fn(*const i8,...)->CInt",
+      "treatment": "Existing actual kernel logger only; current aaaf foundation already has genuine T0x2c2. No libc/logger callback substitute."
+    },
+    {
+      "symbol": "ihk_mc_get_processor_id",
+      "kind": "function",
+      "ABI": "extern C fn()->CInt",
+      "treatment": "Existing currentCPU provider; current aaaf foundation already has genuine T0x4d; call remains behind actual event2 selector. No CPU getter/runtime execution."
+    }
+  ],
+  "finite_source_closure": {
+    "function_count": 2,
+    "source_private_functions": [],
+    "data_count": 1,
+    "types": [
+      "actual kernel/rust/abi.rs CInt/CULong",
+      "exact Ddebug type/assertions extracted from actual debug.rs only",
+      "exact existing Option<unsafe extern C fn(u32,u32)> declaration"
+    ],
+    "core_imports": [
+      "core::ptr::addr_of (bridge slotread and logfieldaddress)",
+      "core::ptr::read_volatile (actual logger selector)"
+    ],
+    "prelude": "Existing selected_cpu_verbose_records FILE const with env!(MCKERNEL_CPU_C_FILE), exact function/string/data attributes. No SSE/march/descriptor/boot arrays required by this finite source cut.",
+    "expected_new_ownership": "2globalT+1global initialized writable OBJECT32,0fake/newruntime storage. Three genuineU:callbackslot,kprintf,currentCPU. Private source helpers absent; actual readonly strings/possible compiler readonly metadata and eh_frame retained.",
+    "expected_partial_effect": "Resolve genuine x86_issue_ipi_bridge and x86_interrupt_log_bridge imports of current CPU/IPI caller partial; existing kernel kprintf/currentCPU resolve logger imports. New genuine x86_issue_ipi slot staysU unless separately already defined by current actual cohort; do not add its owner by assumption.",
+    "prejoin_unknowns": "Root binds exact latest admitted partial identity/owners, not oldaaaf/c205 as replacement. Actual metadata/collision predicate must reject a preexisting definition of either function or descriptor, and preserve every existing owner/alias/relocation."
+  },
+  "actual_reference_reuse": [
+    "Current CAMPAIGN updated21:53 and exact CPU/IPI caller eligibility contract20261109T2142; no source producer replay.",
+    "docs/verification/m14-delay-provider-results-20261109.json and its named exact aaaf joined-symbol metadata: kprintf/currentCPU definitions known; none of x86_issue_ipi/bridge/logger/debug owner listed there.",
+    "Root's pending/actual scheduler tenbridge/primitive/debug partial identities are joined only through fresh concrete current metadata, not inferred from earlier symbol counts."
+  ],
+  "smallest_following_task": [
+    {
+      "id": "IPI-LOG-SOURCE",
+      "owner": "Root/private finite source preparer",
+      "required_input": "Exact2functions+actual descriptor+actual type/FILE prelude and3genuine declarations; supported filename/flag sourceprofile binding.",
+      "done_when": "Concrete private source exactly reproduces actual cast/unchecked callback behavior, live volatile logging branch/late getter/string/descriptor fields and source attributes, with no backend/wholemodule body or duplicate slot owner.",
+      "verification_method": "Read body/type/attribute/ABI/profile/include closure against actual current source and matching C semantic/data references."
+    },
+    {
+      "id": "IPI-LOG-PROFILE-REVIEW",
+      "owner": "Independent source/ABI/profile reviewer and Root compositor",
+      "required_input": "Concrete unit/command/environment/currentpartial input and expected2T1D/3U.",
+      "done_when": "Reviewer confirms accepted-F04-only boundary, actual slot ABI/nonNULL runtime precondition leftunchanged, CPU_C_FILE binding, DEBUG_PRINT_CPU undefined profile and live mutable selector nofolding; no hardware/native grant.",
+      "verification_method": "Inspect exact source/provenance/config/string/field/cfg ownership and current collision plan; unknown profile stops compiler rather than inferring defaults."
+    },
+    {
+      "id": "IPI-LOG-CODEGEN-GATE",
+      "owner": "Root fresh admitted HOST job owner",
+      "required_input": "Concrete GO and fresh actual resource/source admission under unchanged partialprofile.",
+      "done_when": "One actual compile+necessary symbol/ELF reads produce2real functions/32B selector, true callbackslot/kprintf/currentCPU U and two real selector-string relocations; actual metadata predicate CALLED before anylater link.",
+      "verification_method": "Capture actual compiler/source/env/config/diagnostics/bytes/sizes/visibility/relocs and actual gate proof; no targetfunction/logger/callback execution."
+    },
+    {
+      "id": "IPI-LOG-CURRENT-JOIN",
+      "owner": "Root sole compositor",
+      "required_input": "Newqualified object and exact current CPU/IPI consumer partial with concrete source/owner/collision review and fresh admission.",
+      "done_when": "Only exact matching current inputs partially link; real bridge/logger bind, descriptor uniquely owned, old code/data/private/alias/relocs retained and bootselected IPI slotU explicit.",
+      "verification_method": "Actual CALLED prejoin beforeld-r and postjoin metadata comparisons; no oldcohort/greenproducer replay or hardware/default/native acceptance."
+    }
+  ],
+  "preserved": "Original SDK/sourcecustody/native/currentfree/service/generic/notification/ACK/TID/XPMEM controls, UNKNOWN owners/outcomes and all accepted scopes unchanged; no API/vector/error/logging policy invented.",
+  "operations": "Read current AGENTS/CAMPAIGN and exact existing IPI slot bridge/logger/debug owner/type/moduleprelude/Csourceprofile/selector declarations; named current metadata reference reused. Only this authorized JSON written. No unitgeneration/source edit/compiler/preprocessor/link/test/newmetadata run, actual function/slotread/APIC/MSR/IRQ/device/native action, wholemodule/heldbody, inventory, goalcontrol or spawn."
+}

@@ -1,0 +1,291 @@
+{
+  "status": "SOURCE_ONLY_ROOT_GRANT_REQUIRED",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\nOne source-only process-VM public-entry driver composition; no compiler invocation.\n",
+  "purpose": "Compile actual public entry/body and genuine-header C baseline; compare ABI22 and controlled40 boundary pairs plus4 invalid flags; no kernel effects.",
+  "canonical": [
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+      "bytes": 114344,
+      "sha256": "d3cd4d9a9bb1a604dfa5da28b02aef033fb78510a4aed24905b3dedec10ed96c"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "bytes": 1251016,
+      "sha256": "5bc789e1a842a93d64047a7b97e888cdff3ee429de394006d8d522ab3951833c"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    }
+  ],
+  "reused": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/f06_process_vm_entry.rs",
+      "bytes": 5428,
+      "sha256": "0e9d9d23db1a376f38757fba98c6b34d0aed4f4b6c45398b0b9372d7624c3d2e"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/future-abi-facts-output-3/real-ABI-and-validation-caller.c",
+      "bytes": 2875,
+      "sha256": "0ed1c4f71590952954d87141e54f3e407ac619c1f2c1efc9ef426e2a7031478b"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-process-vm-rw-source-1/future-fixture-source-only/real-ABI-Rust-facts.inc",
+      "bytes": 993,
+      "sha256": "c75ba2642c76ff235342046a627f43ef5c15b34aebb268336397b31d69db78f6"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/lock_helpers.rs",
+      "bytes": 12202,
+      "sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3"
+    }
+  ],
+  "genuine_configuration": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/GENUINE-NOCACHE-CONFIGURATION.json",
+    "bytes": 91114,
+    "sha256": "a74a4a7b3edef59a5db47c41e1056768540439002331aaaf158dd95e21c7888c"
+  },
+  "tools": [
+    {
+      "path": "/usr/bin/gcc-9",
+      "bytes": 1158288,
+      "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "bytes": 654904,
+      "sha256": "028fd60b0e0add5505c661cd3ccde91393d615c8729bd95d94ab1e91409b36a1"
+    }
+  ],
+  "inputs": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/ABI-caller.inc",
+      "bytes": 2875,
+      "sha256": "0ed1c4f71590952954d87141e54f3e407ac619c1f2c1efc9ef426e2a7031478b"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/Rust-ABI-facts.inc",
+      "bytes": 993,
+      "sha256": "c75ba2642c76ff235342046a627f43ef5c15b34aebb268336397b31d69db78f6"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/actual-body.inc",
+      "bytes": 15638,
+      "sha256": "0282d4bf4312f6ee247989d5ab0ae480cc4b68589f2d9f3bb8a879653ebb96f3"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/actual-constants.inc",
+      "bytes": 547,
+      "sha256": "666474f6df0c24ad0c3979e8fb7ac4c26571e597f4e95dcf072752a303beec24"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/actual-layouts.inc",
+      "bytes": 646,
+      "sha256": "876c179f89af9757e195039499e6a143f9c89df8499f439c73bb9a147c51118c"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/actual-node.inc",
+      "bytes": 584,
+      "sha256": "c46af959c074dcdd576f179a0708aca891faa3f1eed13582d47e669816e31727"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/actual-offsets.inc",
+      "bytes": 973,
+      "sha256": "af98c0ed3bb0005ba1ad665330f52ab680b3920c8513cac3b9b2f1fa75005a75"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/actual-types.inc",
+      "bytes": 1069,
+      "sha256": "94c709d33ebf69fd1c5451f8b277d01352afd66183d46e281b1b583615855399"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/controlled-driver.inc",
+      "bytes": 10275,
+      "sha256": "b0e0638599035c5a65cccd9f422143115b925211b1a65b474645d9f3d630b2a6"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/f06_process_vm_entry.rs",
+      "bytes": 5428,
+      "sha256": "0e9d9d23db1a376f38757fba98c6b34d0aed4f4b6c45398b0b9372d7624c3d2e"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/fixture-providers.rs",
+      "bytes": 2767,
+      "sha256": "09c0c06b819384a99d91a0bf15838ce0559a4228927b963c2b5df51159f8034a"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/fixture.c",
+      "bytes": 2844,
+      "sha256": "29876f470d6ead187235b1ca88de381e364fccc6f022fbedb425751925e6d7cd"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/fixture.rs",
+      "bytes": 931,
+      "sha256": "35d480067248c19aa642cbfd89e15e11d51027e99c545a38e93d5c8c23ea8e8b"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/genuine-prologue.inc",
+      "bytes": 982,
+      "sha256": "e69cb389f69cf92a6e81e114a0bb03391a137fa3ba0c7b15d49a51606c1359de"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/original-adapters.inc",
+      "bytes": 2096,
+      "sha256": "b586eb303ec8019976bb9711586f3bc169c412d737e22360668bb060b3a6089d"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/original-body-prototype.inc",
+      "bytes": 1022,
+      "sha256": "aa9ac66ef2402dd07249fa73769110cf9cbe68ab7c5eadab6011ff36363cba3e"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/original-entry.inc",
+      "bytes": 7495,
+      "sha256": "3b8d2f76fbcd8aae3ae02f60d9c7ce15612d47af0455c26e2d54e7756815af1d"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/original-types.inc",
+      "bytes": 1574,
+      "sha256": "2799931e736643b0034936f7e809f55bb5847637d67b2fcec2a55b07f4fd2909"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/prepare_source.py",
+      "bytes": 9252,
+      "sha256": "c10c9a9cd4e1cd047f24ada6260d5211c9f3d2601cf0ed271e579df0f8797d9c"
+    }
+  ],
+  "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1",
+  "fresh_output": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/future-output-1",
+  "commands": [
+    [
+      "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2021",
+      "--crate-name",
+      "f06_process_vm_fixture",
+      "--crate-type",
+      "staticlib",
+      "-C",
+      "panic=abort",
+      "-C",
+      "opt-level=1",
+      "-C",
+      "code-model=large",
+      "-C",
+      "relocation-model=static",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/fixture.rs",
+      "-o",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/future-output-1/libfixture.a"
+    ],
+    [
+      "/usr/bin/gcc-9",
+      "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+      "-DIHK_OS_MANYCORE",
+      "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+      "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+      "-DMCKERNEL_NATIVE_CLONE3",
+      "-DMCKERNEL_NATIVE_CLONE_TID",
+      "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+      "-DMCKERNEL_NATIVE_FUTEX",
+      "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+      "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+      "-DMCKERNEL_RUST_BITOPS",
+      "-DMCKERNEL_RUST_LIST_HELPERS",
+      "-DMCKERNEL_RUST_LOCK_HELPERS",
+      "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+      "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+      "-DMCKERNEL_RUST_PTE_HELPERS",
+      "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+      "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+      "-DPROFILE_ENABLE",
+      "-D__KERNEL__",
+      "-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+      "-DMCKERNEL_RUST_X86_CPU_HELPERS",
+      "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/include",
+      "-I/home/holden/mckernel/kernel/include",
+      "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel",
+      "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build",
+      "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64/include",
+      "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64",
+      "-I/home/holden/mckernel/ihk/ikc/include",
+      "-I/home/holden/mckernel/ihk/linux/include",
+      "-I/home/holden/mckernel/lib/include",
+      "-I/home/holden/mckernel/arch/x86_64/kernel/include",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-Wno-unused-parameter",
+      "-Wno-sign-compare",
+      "-Wno-unused-function",
+      "-Wno-implicit-fallthrough",
+      "-Wno-stringop-truncation",
+      "-ffreestanding",
+      "-O2",
+      "-nostdinc",
+      "-isystem",
+      "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+      "-fno-omit-frame-pointer",
+      "-mcmodel=large",
+      "-mno-red-zone",
+      "-mno-sse",
+      "-o",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/future-output-1/fixture.o",
+      "-c",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/fixture.c"
+    ],
+    [
+      "/usr/bin/gcc-9",
+      "-no-pie",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/future-output-1/fixture.o",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/future-output-1/libfixture.a",
+      "-o",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/future-output-1/driver"
+    ],
+    [
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/future-output-1/driver"
+    ]
+  ],
+  "limits": {
+    "cpu": 6,
+    "jobs": 1,
+    "address_space_bytes": 2147483648,
+    "cpu_seconds": 60,
+    "file_size_bytes": 67108864,
+    "core_bytes": 0,
+    "wall_seconds": 90,
+    "resource_floor_bytes": 21474836480
+  },
+  "admission": "Unchanged reviewed e8b84de3.admission()/04b5/adf, fixed cutoffs, HOST/scratch floors, fresh Root grant before dispatch.",
+  "redirects": {
+    "get_this_cpu_local_var": "fixture_cpu",
+    "ihk_rwspinlock_read_lock_noirq": "fixture_range_lock",
+    "ihk_rwspinlock_read_unlock_noirq": "fixture_range_unlock",
+    "lookup_process_memory_range": "fixture_lookup",
+    "find_process": "fixture_find",
+    "process_unlock": "fixture_process_unlock",
+    "mcs_rwlock_reader_lock_noirq": "fixture_update_lock",
+    "mcs_rwlock_reader_unlock_noirq": "fixture_update_unlock",
+    "hold_process_vm": "fixture_hold",
+    "release_process_vm": "fixture_release",
+    "ihk_mc_pt_virt_to_phys_size": "fixture_vtop",
+    "page_fault_process_vm": "fixture_fault",
+    "phys_to_virt": "fixture_phys",
+    "fast_memcpy": "fixture_copy",
+    "do_process_vm_read_writev": "original_selected_process_vm_rw"
+  },
+  "expected_stdout": "PASS process_vm public entry ABI22 controlled pairs40 invalidflags4\n",
+  "holds": [
+    "real MM/usercopy/fault/concurrency",
+    "VMlock192/ABI6 direct receipt unresolved",
+    "final-reference and current-stack ownership",
+    "native/default selection"
+  ],
+  "actual_compile": null,
+  "actual_link": null,
+  "actual_runtime": null
+}

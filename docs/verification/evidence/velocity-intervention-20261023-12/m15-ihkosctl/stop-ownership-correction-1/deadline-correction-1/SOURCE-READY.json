@@ -1,0 +1,33 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_READY_UNRUN",
+  "original_ready_sha256": "7569c0370bd2e6e8b034d7fbf195f92e91987fb1e864e10e75ad96924933bf33",
+  "prior_actual_pass": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/m15-ihkosctl/stop-ownership-correction-1/root-actual-termination-1/RESULT.json",
+  "single_deadline": "Actual stop timestamp (or normal-finally entry) +6seconds; creator TERM/KILL/direct wait and adopted-child retirement share actiondeadline+5; reserve1second for streamclose/fsync/durableFAIL receipts. No phase resets deadline. Unprovable joins and deadline overrun fail; no qualification of pathological uninterruptible filesystem fsync latency.",
+  "signals": "Blocked through all retirement and durable closed receipt; creator stays WNOWAIT-unreaped until creator group signals finish; no group signal after reap. Adopted direct children retain existing waitpidWNOHANG+kill+reap ownership.",
+  "files": {
+    "OWNERSHIP-DEADLINE.diff": {
+      "sha256": "ee18648e00391867826b3a457bd4bef8f281fda862e74a8cdf39263b05af9c41",
+      "bytes": 7353
+    },
+    "test_termination.py": {
+      "sha256": "9cf8d69d1aec791c813c6a48e3003b046c23f99b797f0dc0178ca5383570cc68",
+      "bytes": 2360
+    },
+    "owned_process.py": {
+      "sha256": "b49a5c31e5776196b4a9bd7932725b2bbab0eb391cf3bf17c885c029d2f895d2",
+      "bytes": 8241
+    },
+    "run_equivalence.py": {
+      "sha256": "efb8e19799e02ccb0229dc6e0da2f2d43c97bc2a5285b06d7dabe57473ef962f",
+      "bytes": 7181
+    }
+  },
+  "regression_argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/m15-ihkosctl/stop-ownership-correction-1/deadline-correction-1/test_termination.py"
+  ],
+  "regression_result": null,
+  "grant": null,
+  "CLI_reference_cases_changed": false
+}

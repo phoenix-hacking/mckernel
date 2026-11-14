@@ -1,0 +1,19 @@
+# QMP capacity correction — private source ready
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+The released LONG inherited the short8MiB raw QMP default, while its50ms query-status loop could run7800seconds. It failed before60mixedminutes:364 rounds/728reported launches/2008.862mixedseconds. The later24MiB JSON writer check also failed before opening qmp.transcript.json, so that file is absent; exact raw bytes/row counts and growth were not retained. Do not invent them or claim a kernel pass. QEMU was reaped with-9; a fresh same-image session is required after physical clearance.
+
+The six-file candidate binds LONG-only32MiB ordinary raw,128MiB ordinary JSON, existing2MiB raw recovery and8MiB JSON recovery, and1,048,576ordinary rows+4096recovery rows. Every ordinary offending record remains retained beforefailure; hard-reserve overflow remains fatal. No polls/commands/frames are dropped, coalesced or slowed. Terminal quit temporarily uses recovery mode and restores its prior state, allowing original failures to retain priority without ordinarycap blocking quit. Short default8MiB/raw and24MiB/2second capture remain unchanged.
+
+The matched writer/owner cap is136MiB. LONG serialization gets10seconds only aftertheQEMU teardown attempt (failedreap overlap remains charged); LONG owner readback/JSONvalidation reuses the existing sibling alarm for10seconds only aftercontainer removal/lockrelease. Normalreadback has no added timer. Sharedbuffer rises512→640MiB and logicalgrowth4096→4224MiB;384MiBperfile FSIZE remains sufficient. Maximum pending captures384serial+136QMP+12other+32metadata=564MiB leaves76MiB shared headroom.
+
+The full7800s/50ms model allows156064status/controlpairs,192raw bytes/pair plus1MiBstartup, and96metadata bytes perrow. This is31,012,864raw bytes and91,990,018encoded bytes, below32/128MiBordinary budgets. Nominal312128rows have>3.35x margin beforethefinite rowbound. Actual request/status JSON format is covered by focused fixture; arbitrary larger/fragmented traffic remains bounded and fails truthfully.
+
+The first rootdirect actual regression preserved23PASS/1FAIL: pinnedPython3.9 decodedrow overhead542B exceeded the512B model. ONE coherent correction uses640B perrow (98B/18.1% margin), with the same1,048,576+4096 row cap. Metadata now642.5MiB. Including2*34MiBhexchars,136MiBJSONunicode+136MiBencodedbytes,384serial/256trace/32metadata planning, innerdata1654.5MiB; outerreadbackdata1622.5MiB. Adding256MiB fixedinterpreter/control allowance yields1910.5MiB/1878.5MiB, below2GiB with137.5/169.5MiB headroom. Revisedfixture records actualdecodedrow bytes and its ownVmSize, and must check fixedallowance plus ALL modelinequalities beforequalification.
+
+Writer executes afterteardown ATTEMPT evenif reapingfailed. Full8GiBQEMU+1910.5MiBwriter overlap=10102.5MiB, below12GiB by2185.5MiB; ownership/physicalhold remains onfailedreap. Outerreadback is strictly afterabsence/release/innerexit. Additional128.5MiB is in-memorymetadata; file/raw/encoded/shared caps and4224MiBlogicaldiskgrowth stay unchanged. No source/harnesscapacity/acceptance code changed in this modelcorrection; six production source hashes remain identical.
+
+`SOURCE-READY.json` binds exact released bases/candidates, patch, focused fixture command and remaining root-owned machine-cohort/publication/admission steps. Candidate owner still contains immutable predecessor path/hash data; root must freeze a new coherent namespace and source pins before any runtime execution. No live source or control was modified.
+
+Firstrootdirect24-test job is retained underroot-actual-qmp-fixture-1 and copied immutably into pre-memory-correction-1. No foreground tests ran. Revisedexistingfixture and fullmodel need one freshrootdirect ordinary job afterindependentmemorydelta acceptance. No root/Docker/guest/workload was run bythis author.

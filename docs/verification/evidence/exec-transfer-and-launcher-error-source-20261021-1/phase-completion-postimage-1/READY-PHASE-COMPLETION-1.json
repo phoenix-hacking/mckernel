@@ -1,0 +1,116 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_COUPLED_SOURCE_READY_UNCOMPILED_UNWIRED",
+  "actual_body_tests_prepared": 4,
+  "no_compile_or_test_executed_by_worker": true,
+  "sources": {
+    "sysfs_memory.rs": {
+      "sha256": "a06bef19cc2f0c847a4e394703f3cb0e9450c8a8453252c46745e324fe83d600",
+      "bytes": 36934
+    },
+    "smp_application.rs": {
+      "sha256": "c3e95e0b51ded304497001bedc31699afcee18033f7f099b0989750571d65f61",
+      "bytes": 67246
+    },
+    "smp_service.rs.before": {
+      "sha256": "7c153e7d2b7ebe81a9a234690c1ac4cf3219720590e86264ddcb0e4fb25c647e",
+      "bytes": 47241
+    },
+    "smp_application_syscall.rs": {
+      "sha256": "99ff248d61dd7b62579d235befcd6241b75e3b8dc6e66017590b856b649ea783",
+      "bytes": 33666
+    },
+    "smp_application.rs.before": {
+      "sha256": "babfb6d60f1393637fd08f9549e9a77c06f3c308f1b40d4b74a9a995f70f745a",
+      "bytes": 65940
+    },
+    "application_image.rs": {
+      "sha256": "25b7810c273c9f4b5dbff073f54e67db52c69636e63760c7d5f62e471b7a61b2",
+      "bytes": 8356
+    },
+    "mcctrl_process.rs": {
+      "sha256": "7e8572f10af6e5e38b76186c246abe672ec06f63df71e5aaa889b3a09f4fb035",
+      "bytes": 50530
+    },
+    "application_pager.rs": {
+      "sha256": "adb65c878f6e9817cfb0932c38ac2f87d2715659468051957a1b747b7974ad19",
+      "bytes": 3196
+    },
+    "exec_delivery.rs": {
+      "sha256": "65ab86c4aff79e04e46a0f6b9b2eb2397e4e94d16bc5163579e55663eac83b7d",
+      "bytes": 2058
+    },
+    "mcctrl_process.rs.before": {
+      "sha256": "73989fa5a5507f8ac634600ce3cb1a920187386ff7b2d7502308f784d64f30cd",
+      "bytes": 49776
+    },
+    "smp_application_syscall.rs.before": {
+      "sha256": "38e9816b37f72bc85a7631ef1c78cd240efc8cd3f00148c3b0eba36059fa669e",
+      "bytes": 31165
+    },
+    "application_syscall.rs.before": {
+      "sha256": "daaa3b0fabb002b40cafdc4d7c74ed6cdfd606e18dc82d3bb32bc3055e1a96e0",
+      "bytes": 20310
+    },
+    "SOURCE-BASELINES.json": {
+      "sha256": "3ac0a40986fff22c895fe2588c5b9a2124540d59810543f4b4d606bf1c4bbe24",
+      "bytes": 745
+    },
+    "smp_service.rs": {
+      "sha256": "fd2c19bc7e09911c9332ec32432060b04e2ce3d4c2918cf94a996eeef82deeac",
+      "bytes": 47527
+    },
+    "abi_application.rs.before": {
+      "sha256": "80183a0d743aa266fa8931f6cd1915de1e7de7ea9cfb26c3215db4505b711ec5",
+      "bytes": 5785
+    },
+    "UNWIRED-CRATE-DECLARATIONS.txt": {
+      "sha256": "d972dd0ba93497a416aca30d2d3e6a801091fc6ff88d9893bb41c9726535e710",
+      "bytes": 212
+    },
+    "application_rpc.rs": {
+      "sha256": "9f811c86c4e996294a6cd3be6b83315dabd20a3fb375419e091f4b9dedcfad39",
+      "bytes": 10080
+    },
+    "exec_transfer_checked.rs": {
+      "sha256": "a7dae8a829da028cab0ad2d9de233304a587fd7d09059f4bf87c4fee16b67907",
+      "bytes": 9875
+    },
+    "ihk_smp_x86_64.rs.before": {
+      "sha256": "3dac121b4a019d53f50f73d0c7c88b9692a309cdfcf72b090f1e2c6454cc6816",
+      "bytes": 36511
+    },
+    "actual_phase_completion_tests.rs": {
+      "sha256": "b8a7418fa0d6f87173fa685b79c6b279a3f244fdd066d02f59d7998cd83929ca",
+      "bytes": 12683
+    },
+    "ihk_smp_x86_64.rs": {
+      "sha256": "1e8a65d2093e56bc453cd5384038d3903dd92adabc1dba303db9b75b472ffa69",
+      "bytes": 36681
+    },
+    "application_rpc.rs.before": {
+      "sha256": "9f811c86c4e996294a6cd3be6b83315dabd20a3fb375419e091f4b9dedcfad39",
+      "bytes": 10080
+    },
+    "application_syscall.rs": {
+      "sha256": "daaa3b0fabb002b40cafdc4d7c74ed6cdfd606e18dc82d3bb32bc3055e1a96e0",
+      "bytes": 20310
+    },
+    "actual-ledger-response-bodies.rs": {
+      "sha256": "a651cc8abe7b94d98f6ac58d55b94fe7b3a80554fe364c752b2c4b8e4d51b68a",
+      "bytes": 16588
+    },
+    "abi/application.rs": {
+      "sha256": "cc91eb844cbffdb8818f4c2d728bf3dcbd0b39883655cdd0a5e0d98815925eb4",
+      "bytes": 6056
+    }
+  },
+  "compile": "<pinned rustc> --edition=2021 --test actual_phase_completion_tests.rs -o <fresh-output>/actual_phase_completion_tests",
+  "run": "<fresh-output>/actual_phase_completion_tests --test-threads=1",
+  "limits": [
+    "Source-only uncompiled, full-module/link/ABI/native activation unproven.",
+    "Existing reviewed ledger-postimage1 preserved; this directory extends a copied derivative.",
+    "Selected launcher page-transfer error propagation remains separate.",
+    "Crate-root module declarations and actual linked/default activation deliberately unwired."
+  ]
+}

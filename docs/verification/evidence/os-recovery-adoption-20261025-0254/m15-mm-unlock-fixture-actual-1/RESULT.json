@@ -1,0 +1,90 @@
+{
+  "task": "m15-mm-unlock-fixture-actual-1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "cwd": "/home/holden/mckernel",
+  "environment": {
+    "uname": [
+      "Linux",
+      "holden-linux-drive",
+      "5.15.0-139-generic",
+      "#149~20.04.1-Ubuntu SMP Wed Apr 16 08:29:56 UTC 2025",
+      "x86_64"
+    ],
+    "PATH": "/home/holden/.codex/packages/standalone/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/holden/.local/bin:/home/holden/.codex/tmp/arg0-linux/codex-arg0zhkCqC:/home/holden/.codex/packages/standalone/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/holden/anaconda3/bin:/home/holden/anaconda3/condabin:/home/holden/.cargo/bin:/home/holden/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
+    "LD_LIBRARY_PATH": null,
+    "RUSTFLAGS": null,
+    "RUSTC_WRAPPER": null
+  },
+  "grant_sha256": "8a2f5894b1c10b5651e5e54b66d9bf4cb54065c8d3364684400a33ab08c64b6c",
+  "commands": [
+    {
+      "stage": "compile",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Compile frozen actual-body host ABI fixture.",
+      "argv": [
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mm-unlock-fixture-actual-1/compile-time.txt",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=1s",
+        "45s",
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=536870912",
+        "--cpu=6",
+        "--fsize=33554432",
+        "--core=0",
+        "--",
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--cfg",
+        "m15_fixture",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "panic=abort",
+        "-C",
+        "codegen-units=1",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/m15-mm-parallel-implementation-1/unlock_actual_body.rs",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mm-unlock-fixture-actual-1/unlock.fixture"
+      ],
+      "cwd": "/home/holden/mckernel",
+      "start_utc": "2026-10-26T22:05:02.188990+00:00",
+      "returncode": 0,
+      "finish_utc": "2026-10-26T22:05:02.431076+00:00"
+    },
+    {
+      "stage": "run",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Execute frozen actual-body host ABI fixture.",
+      "argv": [
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mm-unlock-fixture-actual-1/run-time.txt",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=1s",
+        "45s",
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=536870912",
+        "--cpu=6",
+        "--fsize=33554432",
+        "--core=0",
+        "--",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mm-unlock-fixture-actual-1/unlock.fixture"
+      ],
+      "cwd": "/home/holden/mckernel",
+      "start_utc": "2026-10-26T22:05:02.431340+00:00",
+      "returncode": 0,
+      "finish_utc": "2026-10-26T22:05:02.434419+00:00"
+    }
+  ],
+  "status": "HOST_FIXTURE_PASS_READY_FOR_REVIEW_NOT_NATIVE_ACCEPTANCE"
+}

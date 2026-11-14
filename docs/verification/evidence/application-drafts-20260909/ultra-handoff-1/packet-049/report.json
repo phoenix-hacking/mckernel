@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-049",
+  "packet_version": 1,
+  "context_sha256": "4116ba64c5ceaf2d8903fc76322d72520504f8217c95e3bb2d70cea5fcce5c0a",
+  "started_utc": "2026-09-09T11:44:00Z",
+  "finished_utc": "2026-09-09T11:45:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "process.wait-nochild",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/process/process.wait-nochild.c",
+      "oracle": "scripts/application-tests/oracles/process.wait-nochild.json",
+      "changed_files": ["scripts/application-tests/cases/process/process.wait-nochild.c", "scripts/application-tests/oracles/process.wait-nochild.json"],
+      "parameter_vectors": {"first_reap": ["exact child"], "second_wait": ["same PID"], "expected_errno": ["ECHILD"]},
+      "implemented_operations": ["child exit 7", "first blocking wait", "second wait ECHILD capture"],
+      "unresolved_oracle_notes": ["Reap ownership and ECHILD ABI evidence require Max review."],
+      "max_reviewer_question": "Confirm a reaped child cannot be waited again and returns ECHILD directly."
+    },
+    {
+      "case_id": "process.wait-nohang",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/process/process.wait-nohang.c",
+      "oracle": "scripts/application-tests/oracles/process.wait-nohang.json",
+      "changed_files": ["scripts/application-tests/cases/process/process.wait-nohang.c", "scripts/application-tests/oracles/process.wait-nohang.json"],
+      "parameter_vectors": {"flag": ["WNOHANG"], "early_result": [0], "child_exit_code": [19], "release": ["pipe token"]},
+      "implemented_operations": ["barrier-held child", "early WNOHANG probe", "release and exact late wait"],
+      "unresolved_oracle_notes": ["Handshake scheduling and raw wait-status evidence require Max review."],
+      "max_reviewer_question": "Confirm early WNOHANG cannot report premature status and late wait owns the exact child."
+    },
+    {
+      "case_id": "process.wait-signal",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/process/process.wait-signal.c",
+      "oracle": "scripts/application-tests/oracles/process.wait-signal.json",
+      "changed_files": ["scripts/application-tests/cases/process/process.wait-signal.c", "scripts/application-tests/oracles/process.wait-signal.json"],
+      "parameter_vectors": {"child_signal": ["SIGTERM"], "wait_status": ["WIFSIGNALED"], "signal_number": [15]},
+      "implemented_operations": ["paused child", "kill(SIGTERM)", "raw WIFSIGNALED/WTERMSIG checks"],
+      "unresolved_oracle_notes": ["Raw signal status and child-retirement evidence require Max review."],
+      "max_reviewer_question": "Confirm SIGTERM remains WIFSIGNALED with exact child PID ownership."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/process/process.wait-nochild.c", "sha256": "6be00955d21baf665f263253f336a03dd44c2a51b518c7c1afcb97fcfafbc196"},
+    {"path": "scripts/application-tests/oracles/process.wait-nochild.json", "sha256": "99a229c54babdf9f63742132cbdb00273e438e1a060314cc7dbbd91b9e281352"},
+    {"path": "scripts/application-tests/cases/process/process.wait-nohang.c", "sha256": "e51a8dc4397b763b20c98f2eb7043e9bc1311650ea8a3fb6c92cc588e515fb7f"},
+    {"path": "scripts/application-tests/oracles/process.wait-nohang.json", "sha256": "74d069613c5d374c2a34ba3e07a7d6c9782eb2dce0a8724a79da30f0e2523928"},
+    {"path": "scripts/application-tests/cases/process/process.wait-signal.c", "sha256": "b27ae7f5d98fb5b09f8eeeb4d09d600ef1a5711465e91c2b41867e22b35c0279"},
+    {"path": "scripts/application-tests/oracles/process.wait-signal.json", "sha256": "fefcb082e1d70ba357c79c130013579571c1639484dbf180690559ea20006462"},
+    {"path": "docs/verification/evidence/application-drafts-20260909/ultra-handoff-1/packet-049/context.json", "sha256": "4116ba64c5ceaf2d8903fc76322d72520504f8217c95e3bb2d70cea5fcce5c0a"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-049.json --emit-context /tmp/application-packet-049-context-20260909-1.json", "outcome": "PASS; planning metadata only; runtime_authorized=false"},
+    {"command": "python3 -m json.tool packet-049/report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["No-child, WNOHANG, and signal-termination waits need final process ABI, status, PID, scheduler, and canonical record review."],
+  "blocked_execution_capabilities": ["current-inputs", "runtime-transport-fault-injection", "runner-contract"],
+  "first_failure_event": null,
+  "max_escalation": ["Review ECHILD ownership", "Review WNOHANG barrier ordering", "Review SIGTERM raw status"],
+  "next_packet_id": "packet-050"
+}

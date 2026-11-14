@@ -1,0 +1,962 @@
+{
+  "capability_contracts": {
+    "current-inputs": {
+      "acceptance": "Full compiler source bindings, exact executable/DSO closure and current native module/image regression replay.",
+      "state": "blocked"
+    },
+    "dynamic-etexec": {
+      "acceptance": "Accepted only on retained signal module1/image2. New modified inputs require exact rebinding and current-pair replay.",
+      "state": "historical-baseline-only"
+    },
+    "runner-contract": {
+      "acceptance": "Repository runner/supervisor implements argv-only execution, same-guest Linux reference, raw wait status, bounded dual-stream pumps, watchdog and evidence requirements.",
+      "state": "blocked"
+    },
+    "runtime-transport-fault-injection": {
+      "acceptance": "Real guest prepublication hard fault, postpublication notify fault, recovery before deadline and permanent pressure pass with exact phase/ownership assertions.44 protocol tests alone do not satisfy this gate.",
+      "state": "blocked"
+    },
+    "vector-avx512-state": {
+      "acceptance": "Both engines report required leaf7 feature bits, OSXSAVE and XCR0 contains0xE6, CPUID0xD permits/components fit reviewed allocation and signal/scheduler state sizes. HistoricalTCG0x21f does not enable this.",
+      "state": "blocked"
+    },
+    "vector-instruction-audit": {
+      "acceptance": "Exact payload ELFs and scalar reference disassembly prove required opcodes/widths, preserved-register critical windows, no accidental optional instruction in dispatch and no auto-vectorization or contraction in independent scalar references.",
+      "state": "blocked"
+    },
+    "vector-runtime-discovery": {
+      "acceptance": "Baseline-generic CPUID leaf0/1/7/0xD and guarded XGETBV(0) captured separately in pinned Linux guest and McKernel; feature masks and enabled xstate offsets/sizes independently checked. No optional instruction before both-engine gate.",
+      "state": "blocked"
+    }
+  },
+  "cases": [
+    {
+      "acceptance_status": "not-verified",
+      "cleanup": "normal-retirement-v1",
+      "command_argv": [
+        "python3",
+        "-B",
+        "/workspace/scripts/application-tests/run.py",
+        "--inputs",
+        "{input_manifest}",
+        "--case",
+        "vector.avx512-ifma52",
+        "--attempt",
+        "{fresh_attempt}",
+        "--profile",
+        "baseline-root-1cpu",
+        "--mode",
+        "differential-guest"
+      ],
+      "depends_on": [
+        "vector.capability-snapshot"
+      ],
+      "evidence": [
+        "exact-input-manifest",
+        "original-and-executed-source",
+        "compiler-command-and-dependencies",
+        "payload-interpreter-dso-hashes",
+        "both-engine-argv-env-identity-cwd-fd-inputs",
+        "raw-stdout-stderr-and-wait-status",
+        "per-assertion-observed-and-expected",
+        "schedule-os-generation-pid-tids-and-matched-delivery",
+        "trace-coverage-and-loss",
+        "cleanup-owner-pager-claim-snapshot",
+        "full-serial-debugcon-qemu-command",
+        "physical-memory-queue-register-captures",
+        "failure-and-timeout-captures",
+        "sha256-retention-index",
+        "both-engine-raw-cpuid-leaves-and-guarded-xgetbv",
+        "selected-target-and-scalar-reference-disassembly",
+        "feature-mask-evaluation-by-parameter",
+        "register-window-and-owner-transition-proof"
+      ],
+      "execution_status": "blocked",
+      "family": "vector",
+      "id": "vector.avx512-ifma52",
+      "implementation_status": "not-created",
+      "limits": {
+        "application_children": 0,
+        "application_threads": 1,
+        "case_file_bytes": 1048576,
+        "cleanup_timeout_seconds": 15,
+        "container_cpus": [
+          2,
+          3,
+          4,
+          5
+        ],
+        "container_memory_bytes": 12884901888,
+        "container_swap_bytes": 0,
+        "container_tasks": 512,
+        "linux_memory_bytes": 8589934592,
+        "linux_vcpus": 4,
+        "mckernel_cpus": 1,
+        "mckernel_memory_bytes": 134217728,
+        "payload_live_allocation_bytes": 2097152,
+        "payload_timeout_seconds": 10,
+        "preparation_timeout_seconds": 120,
+        "qemu_timeout_seconds": 300,
+        "stderr_limit_bytes": 65536,
+        "stdout_limit_bytes": 65536,
+        "thread_stack_bytes": 262144
+      },
+      "logical_case_count": 1,
+      "mode": "differential-guest",
+      "oracle": {
+        "artifact": "scripts/application-tests/oracles/vector.avx512-ifma52.json",
+        "assertions": [
+          "Each lane equals independent integer128-bit product sliced at52bits plus accumulator modulo2^64; input high12bits are deliberately varied to verify ignored bits.",
+          "Raw payload wait status is exited with code0 only after all required vectors and provenance assertions pass; missing feature is a separate BLOCKED outcome, never a successful skipped vector."
+        ],
+        "independent_source": "Frozen architectural bit/byte contracts plus independent scalar integer or reviewed high-precision mathematical reference; primary Intel instruction/xstate documentation named in ultra-vector-test-plan-20260909.md. Same-binary pinned Linux guest is a second reference, not the oracle source.",
+        "kind": "fixed-and-relational-v1",
+        "normalization_allowlist": [],
+        "readiness": "draft-unresolved",
+        "reference": "same-binary-pinned-linux-guest",
+        "stderr": {
+          "hex": "",
+          "kind": "exact-bytes"
+        },
+        "unresolved": [
+          "Freeze canonical output schema, all exact seed/input byte arrays and expected arrays, and oracle artifact SHA256 before first execution.",
+          "Review exact target disassembly, transitive feature masks, defined-state fields and runtime same-guest feature evidence; no broad instruction-family allowlist."
+        ],
+        "wait_status": {
+          "code": 0,
+          "kind": "exited"
+        }
+      },
+      "parameters": {},
+      "payload_contract": {
+        "argv": [
+          "/apps/vector.avx512-ifma52"
+        ],
+        "argv_options_status": "fixed-fixture-interface",
+        "build_profile": "generic-dispatch-isolated-target-assembly",
+        "cwd": "/case/work",
+        "environment": {
+          "LANG": "C",
+          "LC_ALL": "C",
+          "TZ": "UTC"
+        },
+        "feature_test_macros": [
+          "_GNU_SOURCE"
+        ],
+        "identity_profile": "baseline-root",
+        "operation": "Execute low/high52-bit multiply-add using bounded52-bit operands and64-bit accumulators.",
+        "path": "cases/vector/vector.avx512-ifma52.c",
+        "shell_interpretation": false,
+        "vector_contract": {
+          "baseline_dispatch_flags": [
+            "-march=x86-64",
+            "-mtune=generic",
+            "-mno-avx",
+            "-mno-avx2",
+            "-mno-avx512f"
+          ],
+          "critical_register_windows": "assembly only; no libc calls, compiler spills/reloads or VZEROUPPER unless that instruction is the subject",
+          "feature_contracts": {
+            "avx": {
+              "all_of": [
+                "sse2"
+              ],
+              "both_engines_required": true,
+              "cpuid_all_bits": [
+                {
+                  "leaf": "0x1",
+                  "mask": "0x1c000000",
+                  "register": "ecx",
+                  "subleaf": "0x0"
+                }
+              ],
+              "cpuid_d_0_xcr0_supported_all_bits": "0x6",
+              "missing_result": "BLOCKED",
+              "never_enable_from_host_cpuinfo": true,
+              "xcr0_all_bits": "0x6"
+            },
+            "avx512f": {
+              "all_of": [
+                "avx"
+              ],
+              "both_engines_required": true,
+              "cpuid_all_bits": [
+                {
+                  "leaf": "0x7",
+                  "mask": "0x10000",
+                  "register": "ebx",
+                  "subleaf": "0x0"
+                }
+              ],
+              "cpuid_d_0_xcr0_supported_all_bits": "0xe6",
+              "missing_result": "BLOCKED",
+              "never_enable_from_host_cpuinfo": true,
+              "xcr0_all_bits": "0xe6"
+            },
+            "avx512ifma": {
+              "all_of": [
+                "avx512f"
+              ],
+              "both_engines_required": true,
+              "cpuid_all_bits": [
+                {
+                  "leaf": "0x7",
+                  "mask": "0x200000",
+                  "register": "ebx",
+                  "subleaf": "0x0"
+                }
+              ],
+              "cpuid_d_0_xcr0_supported_all_bits": "0x0",
+              "missing_result": "BLOCKED",
+              "never_enable_from_host_cpuinfo": true,
+              "xcr0_all_bits": "0x0"
+            },
+            "sse2": {
+              "all_of": [],
+              "both_engines_required": true,
+              "cpuid_all_bits": [
+                {
+                  "leaf": "0x1",
+                  "mask": "0x7000000",
+                  "register": "edx",
+                  "subleaf": "0x0"
+                }
+              ],
+              "cpuid_d_0_xcr0_supported_all_bits": "0x0",
+              "missing_result": "BLOCKED",
+              "never_enable_from_host_cpuinfo": true,
+              "xcr0_all_bits": "0x0"
+            }
+          },
+          "feature_reference": "Transitive feature contracts embedded here; frozen runtime manifest supplies raw CPUID/XCR0 records for both engines.",
+          "features": [
+            "avx512ifma"
+          ],
+          "host_instruction_execution_forbidden": true,
+          "missing_feature_status": "BLOCKED",
+          "required_instructions": [
+            "vpmadd52luq",
+            "vpmadd52huq"
+          ],
+          "scalar_reference_flags": [
+            "-fno-tree-vectorize",
+            "-fno-tree-slp-vectorize",
+            "-ffp-contract=off",
+            "-fno-fast-math"
+          ],
+          "xsave_observation_buffer_max_bytes": 16384
+        }
+      },
+      "repeatability": {
+        "fault_cases_fresh_guest_each_attempt": true,
+        "fresh_guest_repeats": 1,
+        "same_os_repeats": 3
+      },
+      "requires": [
+        "current-inputs",
+        "runner-contract",
+        "dynamic-etexec",
+        "vector-runtime-discovery",
+        "vector-instruction-audit",
+        "vector-avx512-state"
+      ],
+      "status": "blocked",
+      "title": "vector / avx512 ifma52",
+      "version": 1
+    },
+    {
+      "acceptance_status": "not-verified",
+      "cleanup": "normal-retirement-v1",
+      "command_argv": [
+        "python3",
+        "-B",
+        "/workspace/scripts/application-tests/run.py",
+        "--inputs",
+        "{input_manifest}",
+        "--case",
+        "vector.avx512-bit-popcounts",
+        "--attempt",
+        "{fresh_attempt}",
+        "--profile",
+        "baseline-root-1cpu",
+        "--mode",
+        "differential-guest"
+      ],
+      "depends_on": [
+        "vector.capability-snapshot"
+      ],
+      "evidence": [
+        "exact-input-manifest",
+        "original-and-executed-source",
+        "compiler-command-and-dependencies",
+        "payload-interpreter-dso-hashes",
+        "both-engine-argv-env-identity-cwd-fd-inputs",
+        "raw-stdout-stderr-and-wait-status",
+        "per-assertion-observed-and-expected",
+        "schedule-os-generation-pid-tids-and-matched-delivery",
+        "trace-coverage-and-loss",
+        "cleanup-owner-pager-claim-snapshot",
+        "full-serial-debugcon-qemu-command",
+        "physical-memory-queue-register-captures",
+        "failure-and-timeout-captures",
+        "sha256-retention-index",
+        "both-engine-raw-cpuid-leaves-and-guarded-xgetbv",
+        "selected-target-and-scalar-reference-disassembly",
+        "feature-mask-evaluation-by-parameter",
+        "register-window-and-owner-transition-proof"
+      ],
+      "execution_status": "blocked",
+      "family": "vector",
+      "id": "vector.avx512-bit-popcounts",
+      "implementation_status": "not-created",
+      "limits": {
+        "application_children": 0,
+        "application_threads": 1,
+        "case_file_bytes": 1048576,
+        "cleanup_timeout_seconds": 15,
+        "container_cpus": [
+          2,
+          3,
+          4,
+          5
+        ],
+        "container_memory_bytes": 12884901888,
+        "container_swap_bytes": 0,
+        "container_tasks": 512,
+        "linux_memory_bytes": 8589934592,
+        "linux_vcpus": 4,
+        "mckernel_cpus": 1,
+        "mckernel_memory_bytes": 134217728,
+        "payload_live_allocation_bytes": 2097152,
+        "payload_timeout_seconds": 10,
+        "preparation_timeout_seconds": 120,
+        "qemu_timeout_seconds": 300,
+        "stderr_limit_bytes": 65536,
+        "stdout_limit_bytes": 65536,
+        "thread_stack_bytes": 262144
+      },
+      "logical_case_count": 1,
+      "mode": "differential-guest",
+      "oracle": {
+        "artifact": "scripts/application-tests/oracles/vector.avx512-bit-popcounts.json",
+        "assertions": [
+          "Each count equals independent unsigned bit loop for zero/all-one/one-hot/alternating lanes; BITALG parameter requires its own explicit capability, absent parameter is BLOCKED not a casePASS.",
+          "Raw payload wait status is exited with code0 only after all required vectors and provenance assertions pass; missing feature is a separate BLOCKED outcome, never a successful skipped vector."
+        ],
+        "independent_source": "Frozen architectural bit/byte contracts plus independent scalar integer or reviewed high-precision mathematical reference; primary Intel instruction/xstate documentation named in ultra-vector-test-plan-20260909.md. Same-binary pinned Linux guest is a second reference, not the oracle source.",
+        "kind": "fixed-and-relational-v1",
+        "normalization_allowlist": [],
+        "readiness": "draft-unresolved",
+        "reference": "same-binary-pinned-linux-guest",
+        "stderr": {
+          "hex": "",
+          "kind": "exact-bytes"
+        },
+        "unresolved": [
+          "Freeze canonical output schema, all exact seed/input byte arrays and expected arrays, and oracle artifact SHA256 before first execution.",
+          "Review exact target disassembly, transitive feature masks, defined-state fields and runtime same-guest feature evidence; no broad instruction-family allowlist."
+        ],
+        "wait_status": {
+          "code": 0,
+          "kind": "exited"
+        }
+      },
+      "parameters": {
+        "forms": [
+          {
+            "features": [
+              "avx512vpopcntdq"
+            ],
+            "instructions": [
+              "vpopcntd",
+              "vpopcntq"
+            ]
+          },
+          {
+            "features": [
+              "avx512bitalg"
+            ],
+            "instructions": [
+              "vpopcntb",
+              "vpopcntw"
+            ]
+          }
+        ]
+      },
+      "payload_contract": {
+        "argv": [
+          "/apps/vector.avx512-bit-popcounts"
+        ],
+        "argv_options_status": "fixed-fixture-interface",
+        "build_profile": "generic-dispatch-isolated-target-assembly",
+        "cwd": "/case/work",
+        "environment": {
+          "LANG": "C",
+          "LC_ALL": "C",
+          "TZ": "UTC"
+        },
+        "feature_test_macros": [
+          "_GNU_SOURCE"
+        ],
+        "identity_profile": "baseline-root",
+        "operation": "Check dword/qword population counts and, in separately gated parameter, BITALG byte/word counts.",
+        "path": "cases/vector/vector.avx512-bit-popcounts.c",
+        "shell_interpretation": false,
+        "vector_contract": {
+          "baseline_dispatch_flags": [
+            "-march=x86-64",
+            "-mtune=generic",
+            "-mno-avx",
+            "-mno-avx2",
+            "-mno-avx512f"
+          ],
+          "critical_register_windows": "assembly only; no libc calls, compiler spills/reloads or VZEROUPPER unless that instruction is the subject",
+          "feature_contracts": {
+            "avx": {
+              "all_of": [
+                "sse2"
+              ],
+              "both_engines_required": true,
+              "cpuid_all_bits": [
+                {
+                  "leaf": "0x1",
+                  "mask": "0x1c000000",
+                  "register": "ecx",
+                  "subleaf": "0x0"
+                }
+              ],
+              "cpuid_d_0_xcr0_supported_all_bits": "0x6",
+              "missing_result": "BLOCKED",
+              "never_enable_from_host_cpuinfo": true,
+              "xcr0_all_bits": "0x6"
+            },
+            "avx512bitalg": {
+              "all_of": [
+                "avx512bw"
+              ],
+              "both_engines_required": true,
+              "cpuid_all_bits": [
+                {
+                  "leaf": "0x7",
+                  "mask": "0x1000",
+                  "register": "ecx",
+                  "subleaf": "0x0"
+                }
+              ],
+              "cpuid_d_0_xcr0_supported_all_bits": "0x0",
+              "missing_result": "BLOCKED",
+              "never_enable_from_host_cpuinfo": true,
+              "xcr0_all_bits": "0x0"
+            },
+            "avx512bw": {
+              "all_of": [
+                "avx512f"
+              ],
+              "both_engines_required": true,
+              "cpuid_all_bits": [
+                {
+                  "leaf": "0x7",
+                  "mask": "0x40000000",
+                  "register": "ebx",
+                  "subleaf": "0x0"
+                }
+              ],
+              "cpuid_d_0_xcr0_supported_all_bits": "0x0",
+              "missing_result": "BLOCKED",
+              "never_enable_from_host_cpuinfo": true,
+              "xcr0_all_bits": "0x0"
+            },
+            "avx512f": {
+              "all_of": [
+                "avx"
+              ],
+              "both_engines_required": true,
+              "cpuid_all_bits": [
+                {
+                  "leaf": "0x7",
+                  "mask": "0x10000",
+                  "register": "ebx",
+                  "subleaf": "0x0"
+                }
+              ],
+              "cpuid_d_0_xcr0_supported_all_bits": "0xe6",
+              "missing_result": "BLOCKED",
+              "never_enable_from_host_cpuinfo": true,
+              "xcr0_all_bits": "0xe6"
+            },
+            "avx512vpopcntdq": {
+              "all_of": [
+                "avx512f"
+              ],
+              "both_engines_required": true,
+              "cpuid_all_bits": [
+                {
+                  "leaf": "0x7",
+                  "mask": "0x4000",
+                  "register": "ecx",
+                  "subleaf": "0x0"
+                }
+              ],
+              "cpuid_d_0_xcr0_supported_all_bits": "0x0",
+              "missing_result": "BLOCKED",
+              "never_enable_from_host_cpuinfo": true,
+              "xcr0_all_bits": "0x0"
+            },
+            "sse2": {
+              "all_of": [],
+              "both_engines_required": true,
+              "cpuid_all_bits": [
+                {
+                  "leaf": "0x1",
+                  "mask": "0x7000000",
+                  "register": "edx",
+                  "subleaf": "0x0"
+                }
+              ],
+              "cpuid_d_0_xcr0_supported_all_bits": "0x0",
+              "missing_result": "BLOCKED",
+              "never_enable_from_host_cpuinfo": true,
+              "xcr0_all_bits": "0x0"
+            }
+          },
+          "feature_reference": "Transitive feature contracts embedded here; frozen runtime manifest supplies raw CPUID/XCR0 records for both engines.",
+          "features": [
+            "avx512vpopcntdq"
+          ],
+          "host_instruction_execution_forbidden": true,
+          "missing_feature_status": "BLOCKED",
+          "required_instructions": [
+            "vpopcntd",
+            "vpopcntq"
+          ],
+          "scalar_reference_flags": [
+            "-fno-tree-vectorize",
+            "-fno-tree-slp-vectorize",
+            "-ffp-contract=off",
+            "-fno-fast-math"
+          ],
+          "xsave_observation_buffer_max_bytes": 16384
+        }
+      },
+      "repeatability": {
+        "fault_cases_fresh_guest_each_attempt": true,
+        "fresh_guest_repeats": 1,
+        "same_os_repeats": 3
+      },
+      "requires": [
+        "current-inputs",
+        "runner-contract",
+        "dynamic-etexec",
+        "vector-runtime-discovery",
+        "vector-instruction-audit",
+        "vector-avx512-state"
+      ],
+      "status": "blocked",
+      "title": "vector / avx512 bit popcounts",
+      "version": 1
+    },
+    {
+      "acceptance_status": "not-verified",
+      "cleanup": "normal-retirement-v1",
+      "command_argv": [
+        "python3",
+        "-B",
+        "/workspace/scripts/application-tests/run.py",
+        "--inputs",
+        "{input_manifest}",
+        "--case",
+        "vector.avx512-conflict",
+        "--attempt",
+        "{fresh_attempt}",
+        "--profile",
+        "baseline-root-1cpu",
+        "--mode",
+        "differential-guest"
+      ],
+      "depends_on": [
+        "vector.capability-snapshot"
+      ],
+      "evidence": [
+        "exact-input-manifest",
+        "original-and-executed-source",
+        "compiler-command-and-dependencies",
+        "payload-interpreter-dso-hashes",
+        "both-engine-argv-env-identity-cwd-fd-inputs",
+        "raw-stdout-stderr-and-wait-status",
+        "per-assertion-observed-and-expected",
+        "schedule-os-generation-pid-tids-and-matched-delivery",
+        "trace-coverage-and-loss",
+        "cleanup-owner-pager-claim-snapshot",
+        "full-serial-debugcon-qemu-command",
+        "physical-memory-queue-register-captures",
+        "failure-and-timeout-captures",
+        "sha256-retention-index",
+        "both-engine-raw-cpuid-leaves-and-guarded-xgetbv",
+        "selected-target-and-scalar-reference-disassembly",
+        "feature-mask-evaluation-by-parameter",
+        "register-window-and-owner-transition-proof"
+      ],
+      "execution_status": "blocked",
+      "family": "vector",
+      "id": "vector.avx512-conflict",
+      "implementation_status": "not-created",
+      "limits": {
+        "application_children": 0,
+        "application_threads": 1,
+        "case_file_bytes": 1048576,
+        "cleanup_timeout_seconds": 15,
+        "container_cpus": [
+          2,
+          3,
+          4,
+          5
+        ],
+        "container_memory_bytes": 12884901888,
+        "container_swap_bytes": 0,
+        "container_tasks": 512,
+        "linux_memory_bytes": 8589934592,
+        "linux_vcpus": 4,
+        "mckernel_cpus": 1,
+        "mckernel_memory_bytes": 134217728,
+        "payload_live_allocation_bytes": 2097152,
+        "payload_timeout_seconds": 10,
+        "preparation_timeout_seconds": 120,
+        "qemu_timeout_seconds": 300,
+        "stderr_limit_bytes": 65536,
+        "stdout_limit_bytes": 65536,
+        "thread_stack_bytes": 262144
+      },
+      "logical_case_count": 1,
+      "mode": "differential-guest",
+      "oracle": {
+        "artifact": "scripts/application-tests/oracles/vector.avx512-conflict.json",
+        "assertions": [
+          "Each output lane bitmask is exactly the set of earlier equal-input lanes; upper-half duplicates and all-equal/unique inputs are fixed.",
+          "Raw payload wait status is exited with code0 only after all required vectors and provenance assertions pass; missing feature is a separate BLOCKED outcome, never a successful skipped vector."
+        ],
+        "independent_source": "Frozen architectural bit/byte contracts plus independent scalar integer or reviewed high-precision mathematical reference; primary Intel instruction/xstate documentation named in ultra-vector-test-plan-20260909.md. Same-binary pinned Linux guest is a second reference, not the oracle source.",
+        "kind": "fixed-and-relational-v1",
+        "normalization_allowlist": [],
+        "readiness": "draft-unresolved",
+        "reference": "same-binary-pinned-linux-guest",
+        "stderr": {
+          "hex": "",
+          "kind": "exact-bytes"
+        },
+        "unresolved": [
+          "Freeze canonical output schema, all exact seed/input byte arrays and expected arrays, and oracle artifact SHA256 before first execution.",
+          "Review exact target disassembly, transitive feature masks, defined-state fields and runtime same-guest feature evidence; no broad instruction-family allowlist."
+        ],
+        "wait_status": {
+          "code": 0,
+          "kind": "exited"
+        }
+      },
+      "parameters": {},
+      "payload_contract": {
+        "argv": [
+          "/apps/vector.avx512-conflict"
+        ],
+        "argv_options_status": "fixed-fixture-interface",
+        "build_profile": "generic-dispatch-isolated-target-assembly",
+        "cwd": "/case/work",
+        "environment": {
+          "LANG": "C",
+          "LC_ALL": "C",
+          "TZ": "UTC"
+        },
+        "feature_test_macros": [
+          "_GNU_SOURCE"
+        ],
+        "identity_profile": "baseline-root",
+        "operation": "Detect conflicts among duplicate dword/qword lanes with distinct prior-occurrence sets.",
+        "path": "cases/vector/vector.avx512-conflict.c",
+        "shell_interpretation": false,
+        "vector_contract": {
+          "baseline_dispatch_flags": [
+            "-march=x86-64",
+            "-mtune=generic",
+            "-mno-avx",
+            "-mno-avx2",
+            "-mno-avx512f"
+          ],
+          "critical_register_windows": "assembly only; no libc calls, compiler spills/reloads or VZEROUPPER unless that instruction is the subject",
+          "feature_contracts": {
+            "avx": {
+              "all_of": [
+                "sse2"
+              ],
+              "both_engines_required": true,
+              "cpuid_all_bits": [
+                {
+                  "leaf": "0x1",
+                  "mask": "0x1c000000",
+                  "register": "ecx",
+                  "subleaf": "0x0"
+                }
+              ],
+              "cpuid_d_0_xcr0_supported_all_bits": "0x6",
+              "missing_result": "BLOCKED",
+              "never_enable_from_host_cpuinfo": true,
+              "xcr0_all_bits": "0x6"
+            },
+            "avx512cd": {
+              "all_of": [
+                "avx512f"
+              ],
+              "both_engines_required": true,
+              "cpuid_all_bits": [
+                {
+                  "leaf": "0x7",
+                  "mask": "0x10000000",
+                  "register": "ebx",
+                  "subleaf": "0x0"
+                }
+              ],
+              "cpuid_d_0_xcr0_supported_all_bits": "0x0",
+              "missing_result": "BLOCKED",
+              "never_enable_from_host_cpuinfo": true,
+              "xcr0_all_bits": "0x0"
+            },
+            "avx512f": {
+              "all_of": [
+                "avx"
+              ],
+              "both_engines_required": true,
+              "cpuid_all_bits": [
+                {
+                  "leaf": "0x7",
+                  "mask": "0x10000",
+                  "register": "ebx",
+                  "subleaf": "0x0"
+                }
+              ],
+              "cpuid_d_0_xcr0_supported_all_bits": "0xe6",
+              "missing_result": "BLOCKED",
+              "never_enable_from_host_cpuinfo": true,
+              "xcr0_all_bits": "0xe6"
+            },
+            "sse2": {
+              "all_of": [],
+              "both_engines_required": true,
+              "cpuid_all_bits": [
+                {
+                  "leaf": "0x1",
+                  "mask": "0x7000000",
+                  "register": "edx",
+                  "subleaf": "0x0"
+                }
+              ],
+              "cpuid_d_0_xcr0_supported_all_bits": "0x0",
+              "missing_result": "BLOCKED",
+              "never_enable_from_host_cpuinfo": true,
+              "xcr0_all_bits": "0x0"
+            }
+          },
+          "feature_reference": "Transitive feature contracts embedded here; frozen runtime manifest supplies raw CPUID/XCR0 records for both engines.",
+          "features": [
+            "avx512cd"
+          ],
+          "host_instruction_execution_forbidden": true,
+          "missing_feature_status": "BLOCKED",
+          "required_instructions": [
+            "vpconflictd",
+            "vpconflictq"
+          ],
+          "scalar_reference_flags": [
+            "-fno-tree-vectorize",
+            "-fno-tree-slp-vectorize",
+            "-ffp-contract=off",
+            "-fno-fast-math"
+          ],
+          "xsave_observation_buffer_max_bytes": 16384
+        }
+      },
+      "repeatability": {
+        "fault_cases_fresh_guest_each_attempt": true,
+        "fresh_guest_repeats": 1,
+        "same_os_repeats": 3
+      },
+      "requires": [
+        "current-inputs",
+        "runner-contract",
+        "dynamic-etexec",
+        "vector-runtime-discovery",
+        "vector-instruction-audit",
+        "vector-avx512-state"
+      ],
+      "status": "blocked",
+      "title": "vector / avx512 conflict",
+      "version": 1
+    }
+  ],
+  "catalog_sha256": "e8402f71283634f53923b57a1a920d9bc5e4a0670c6c6aba03eb967f893bf316",
+  "execution_enabled": false,
+  "execution_inputs": "UNRESOLVED; no runtime authorization",
+  "mode": "draft-only",
+  "notice": "Metadata/context restriction is not an operating-system sandbox. No case has passed.",
+  "packet": {
+    "blocked_by": [
+      "runner-contract",
+      "current-inputs",
+      "runtime-transport-fault-injection"
+    ],
+    "candidate_fix_policy": {
+      "allowed": "One bounded candidate for a simple diagnosed defect after preserving the first failure. Scope must be authorized by the active packet; writes outside allowlist are forbidden.",
+      "invalidate_previous_binary_coverage": true,
+      "max_candidates": 1,
+      "not_automatic_acceptance": true,
+      "prohibited": [
+        "oracle weakening",
+        "allowed-errno widening",
+        "hidden retry",
+        "kernel or launcher change in a draft-only packet",
+        "changing baseline fixtures",
+        "rewriting failed evidence"
+      ],
+      "reviewer": "Max for native correctness, lifetime, ABI, scheduler, unsafe or unclear semantics; independently reviewed candidate before any acceptance"
+    },
+    "case_ids": [
+      "vector.avx512-ifma52",
+      "vector.avx512-bit-popcounts",
+      "vector.avx512-conflict"
+    ],
+    "command_templates_are_implemented": false,
+    "completion": [
+      "Draft each selected source/input specification and independent oracle within its exact allowlist; report unresolved semantics explicitly.",
+      "Represent every listed parameter without inflating logical case counts; feature-blocked execution still permits drafting.",
+      "No runtime execution, kernel/launcher edits, oracle weakening or invented capability acceptance in this draft-only packet.",
+      "Write the immutable packet-specific draft report, including exact changed-file hashes, unresolved oracles and any preserved failure/Max escalation.",
+      "After reporting, advance automatically only to the next packet already listed in the reviewed draft queue; request no repeated user permission and never enable execution."
+    ],
+    "execution_enabled": false,
+    "executor_model": "Luna or Spark; user chooses",
+    "inputs": {
+      "capability_manifest": "{reviewed_capability_manifest}",
+      "case_subset_only": true,
+      "catalog": "scripts/application-tests/cases.json",
+      "input_manifest": "{reviewed_input_manifest}"
+    },
+    "limits": {
+      "active_cases_max": 3,
+      "candidate_fix_changed_lines_max": 80,
+      "candidate_fix_files_max": 2,
+      "candidate_fix_minutes_max": 15,
+      "container_cpus": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "container_memory_bytes": 12884901888,
+      "container_network": "none",
+      "container_tasks": 512,
+      "host_tests_forbidden": true
+    },
+    "mode": "draft-only",
+    "packet_id": "packet-088",
+    "permitted_commands": [
+      [
+        "python3",
+        "-B",
+        "/workspace/scripts/application-tests/validate.py",
+        "--packet",
+        "/workspace/scripts/application-tests/packets/packet-088.json"
+      ],
+      [
+        "git",
+        "diff",
+        "--check"
+      ]
+    ],
+    "queue": {
+      "active_case_limit": 3,
+      "advance_only_when_queue_reviewed": true,
+      "new_user_permission_per_packet_required": false,
+      "next_packet_id": "packet-089",
+      "path": "scripts/application-tests/draft-queue.json",
+      "position": 88
+    },
+    "read_allowlist": [
+      "scripts/application-tests/README.md",
+      "scripts/application-tests/packets/packet-088.json",
+      "{reviewed_capability_manifest}",
+      "{reviewed_input_manifest}",
+      "cases.json#vector.avx512-ifma52",
+      "cases.json#vector.avx512-bit-popcounts",
+      "cases.json#vector.avx512-conflict",
+      "docs/verification/ultra-vector-test-plan-20260909.md"
+    ],
+    "reporting": {
+      "draft_statuses": [
+        "DRAFTED",
+        "DRAFTED_WITH_UNRESOLVED",
+        "BLOCKED",
+        "FAILED"
+      ],
+      "failure_artifact_directory": "/work/application-test-drafts-20260909/{fresh_queue_run_id}/packet-088/failures/",
+      "failure_log_creation": "Open a nonsymlink regular file with O_APPEND|O_CREAT|O_NOFOLLOW, serialize one complete JSON object per line and fsync; never truncate, edit or remove old events.",
+      "failure_log_path": "/work/application-test-drafts-20260909/{fresh_queue_run_id}/failures.jsonl",
+      "failure_preservation": "Immediately append the first unexpected failure event and preserve original output/source/diff/context before diagnosis; no hidden retry. Runtime/validation failures also retain the established root kernel.log record.",
+      "max_escalation": "Record exact smallest reproducer, evidence paths and unresolved semantic question for Max. No model switch or production patch in a draft packet. Continue later independent drafting; mark dependency-blocked drafts precisely.",
+      "report_creation": "Create once exclusively after draft work; do not replace a prior report. A resumed/revised run uses a new fresh_queue_run_id and links prior failed evidence.",
+      "report_path": "/work/application-test-drafts-20260909/{fresh_queue_run_id}/packet-088/report.json",
+      "required_failure_event_fields": [
+        "schema_version",
+        "sequence",
+        "utc",
+        "queue_run_id",
+        "packet_id",
+        "case_ids",
+        "stage",
+        "exact_command_argv_or_tool_action",
+        "environment_summary",
+        "error",
+        "original_artifact_paths_and_sha256",
+        "source_and_context_sha256",
+        "max_escalation_required"
+      ],
+      "required_report_fields": [
+        "schema_version",
+        "queue_run_id",
+        "queue_sha256",
+        "packet_id",
+        "packet_version",
+        "context_sha256",
+        "started_utc",
+        "finished_utc",
+        "draft_status",
+        "cases",
+        "changed_files_with_sha256",
+        "commands_and_outcomes",
+        "unresolved_oracles",
+        "blocked_execution_capabilities",
+        "first_failure_event",
+        "max_escalation",
+        "next_packet_id"
+      ],
+      "scratch_write_exception": "Only this packet report, original failure artifacts within its named failure directory, and append-only shared failure log. No production-source scope expansion.",
+      "test_pass_status_forbidden": true
+    },
+    "schema_version": 1,
+    "status": "planned",
+    "version": 1,
+    "write_allowlist": [
+      "scripts/application-tests/cases/vector/vector.avx512-ifma52.c",
+      "scripts/application-tests/oracles/vector.avx512-ifma52.json",
+      "scripts/application-tests/cases/vector/vector.avx512-bit-popcounts.c",
+      "scripts/application-tests/oracles/vector.avx512-bit-popcounts.json",
+      "scripts/application-tests/cases/vector/vector.avx512-conflict.c",
+      "scripts/application-tests/oracles/vector.avx512-conflict.json"
+    ]
+  },
+  "packet_sha256": "b5602600358478cf9225fbf94b9ed03e3e8d61a871c89f884419a6f874dd6a23",
+  "queue_cursor": {
+    "index": 88,
+    "next_packet_id": "packet-089",
+    "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+    "review_state": "released-for-drafting",
+    "total": 97
+  },
+  "schema_version": 1
+}

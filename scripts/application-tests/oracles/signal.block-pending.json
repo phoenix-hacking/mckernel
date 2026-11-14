@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "signal.block-pending",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/signal.block-pending"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["pending_before=1 pending_after=0 handled=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["SIGUSR1 is pending while blocked", "Unblocking delivers exactly one handler invocation and clears the pending bit"],
+  "unresolved_expectations": ["Freeze pending-set timing and signal-delivery ordering evidence before execution."],
+  "max_question_for_reviewer": "Confirm pending state is sampled before unblock and delivery completes before the post-unblock assertion."
+}

@@ -1,0 +1,90 @@
+--- a/arch/x86_64/kernel/memory.c
++++ b/arch/x86_64/kernel/memory.c
+@@ -2401,10 +2401,12 @@
+ }
+ #endif
+ 
++#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+ X86_MEMORY_PUBLIC_BRIDGE unsigned long x86_init_text_end_bridge(void)
+ {
+ 	return (unsigned long)_end;
+ }
++#endif
+ 
+ X86_MEMORY_PUBLIC_BRIDGE void x86_init_text_panic_bridge(void)
+ {
+--- a/kernel/rust/x86_memory_helpers.rs
++++ b/kernel/rust/x86_memory_helpers.rs
+@@ -260,7 +260,6 @@
+     );
+     fn x86_init_linux_panic_bridge();
+     fn x86_init_text_log_bridge(event: CInt, a: CULong, b: CULong, c: CULong);
+-    fn x86_init_text_end_bridge() -> CULong;
+     fn x86_init_text_panic_bridge();
+     fn x86_init_low_panic_bridge();
+     fn x86_init_fixed_panic_bridge();
+@@ -272,6 +271,8 @@
+     static mut X86_ATTR_MASK: CULong;
+     #[link_name = "x86_map_kernel_start_geometry"]
+     static X86_MAP_KERNEL_START_GEOMETRY: CULong;
++    #[link_name = "_end"]
++    static X86_END: u8;
+     #[link_name = "_head"]
+     static mut X86_HEAD: u8;
+     #[link_name = "ap_trampoline"]
+@@ -4865,6 +4866,12 @@
+ }
+ 
+ #[no_mangle]
++pub extern "C" fn x86_init_text_end_bridge() -> CULong {
++    // The linker boundary may be one-past storage: form its address, never read it.
++    core::ptr::addr_of!(X86_END) as CULong
++}
++
++#[no_mangle]
+ pub unsafe extern "C" fn init_text_area(pt: *mut c_void) {
+     let ret = unsafe {
+         x86_init_text_area_body_result(
+--- a/kernel/rust/tests/run_equivalence.sh
++++ b/kernel/rust/tests/run_equivalence.sh
+@@ -90973,6 +90973,9 @@
+ extern unsigned long x86_init_text_map_kernel_start_bridge(void)
+ 	__attribute__((weak));
+ extern const unsigned long x86_map_kernel_start_geometry;
++extern unsigned long x86_init_text_end_bridge(void)
++	__attribute__((weak));
++extern char _end[];
+ extern int set_pt_large_page(void *, void *, unsigned long, unsigned long)
+ 	__attribute__((weak));
+ extern int x86_init_normal_set_large_bridge(void *, unsigned long, unsigned long, unsigned long)
+@@ -93954,6 +93957,8 @@
+ 	if (x86_init_text_map_kernel_start_bridge)
+ 		require(x86_init_text_map_kernel_start_bridge() ==
+ 				x86_map_kernel_start_geometry);
++	if (x86_init_text_end_bridge)
++		require(x86_init_text_end_bridge() == (unsigned long)_end);
+ 	if (set_pt_large_page && ihk_mc_pt_set_large_page &&
+ 			ihk_mc_pt_set_page) {
+ 		x86_rust_stub_pt_set_page_calls = 0;
+@@ -142873,10 +142878,6 @@
+ 	(void)c;
+ }
+ const unsigned long x86_map_kernel_start_geometry = 0xfffffe0000000000UL;
+-unsigned long x86_init_text_end_bridge(void)
+-{
+-	return 0xfffffe0000200000UL;
+-}
+ void x86_init_text_panic_bridge(void)
+ {
+ }
+@@ -145468,7 +145469,9 @@
+ grep -Eq ' T x86_init_text_map_kernel_start_bridge$' "${tmpdir}/out/rust.global"
+ grep -Eq 'U x86_map_kernel_start_geometry$' "${tmpdir}/out/rust.undefined"
+ ! grep -Eq 'U x86_init_text_map_kernel_start_bridge$' "${tmpdir}/out/rust.undefined"
+-grep -Eq 'U x86_init_text_end_bridge' "${tmpdir}/out/rust.undefined"
++grep -Eq ' T x86_init_text_end_bridge$' "${tmpdir}/out/rust.global"
++grep -Eq 'U _end$' "${tmpdir}/out/rust.undefined"
++! grep -Eq 'U x86_init_text_end_bridge$' "${tmpdir}/out/rust.undefined"
+ grep -Eq 'U x86_init_text_panic_bridge' "${tmpdir}/out/rust.undefined"
+ grep -Eq 'U x86_init_low_panic_bridge' "${tmpdir}/out/rust.undefined"
+ grep -Eq 'U x86_init_fixed_panic_bridge' "${tmpdir}/out/rust.undefined"

@@ -1,0 +1,61 @@
+{
+  "schema": "mckernel.m15-mm-body-fixture-profile.v2",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_READY_REQUIRES_ROOT_REVIEW_FRESH_ORDINARY_SLOT_AND_EXACT_CAPTURE",
+  "argv": [
+    "/usr/bin/python3",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-13/m15-mm-finish/batch-1/run_candidate_fixture.py",
+    "--execute-after-campaign-grant",
+    "--phase",
+    "body",
+    "--output",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-13/m15-mm-finish/batch-1/actual-body-attempt-1",
+    "--cc",
+    "/usr/bin/cc",
+    "--rustc",
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc"
+  ],
+  "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-13/m15-mm-finish/batch-1",
+  "python_interpreter": {
+    "invocation": "/usr/bin/python3",
+    "resolved": "/usr/bin/python3.8",
+    "sha256": "298a9e830ed52f36c299427565485d717d1ce0179c0597cc16560513eb780b06",
+    "bytes": 5490456,
+    "invoked_by_lane": false
+  },
+  "resources": {
+    "ordinary_compiler_slots": 1,
+    "cpus": 1,
+    "memory_bytes": 1073741824,
+    "whole_job_timeout_seconds": 120,
+    "each_command_timeout_seconds": 30,
+    "maximum_private_output_bytes": 67108864,
+    "network": "none",
+    "root": false,
+    "Docker": false,
+    "kernel_module_or_guest": false
+  },
+  "capture_contract": {
+    "outer_capture_must_bind_exact_argv_and_current_python_sha": true,
+    "inner_capture": "COMMANDS.json plus per-command stdout/stderr, positive subprocess retirement/launch error/timeout; RESULT.json preserves first failure; no automatic retry",
+    "fresh_output": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-13/m15-mm-finish/batch-1/actual-body-attempt-1",
+    "historical_failure_evidence": "Keep predecessor source/profile and any earlier held/rejected/failed root capture unchanged; this is a coherent successor requiring a fresh grant."
+  },
+  "assertions": {
+    "unchanged_selected_C_wrappers": 3,
+    "exact_current_extracted_functions": 15,
+    "valid_base_vectors": 22,
+    "successive_epoch_cases": 1,
+    "rejected_schedules": 4,
+    "isolated_warning_vectors": 6,
+    "source_hardware_warning_UD2_is_not_executed": true
+  },
+  "acceptance_limits": [
+    "Body fixture replaces lower MM primitives, outer/inner trace gates and warning emission with recorded callbacks.",
+    "Body source uses exact actual Rust candidate and raw shared-word asm; it is not a hand-written Rust model.",
+    "No kernel/MM concurrency, actual jump-label registration, warning trap, production link or native proof."
+  ],
+  "gate_probe_in_this_profile": false,
+  "retained_objtool_not_invoked_by_body_phase": true,
+  "production_module_native_C_retirement_acceptance": false
+}

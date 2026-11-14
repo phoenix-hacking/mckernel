@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "record_kind": "native_collector_lifecycle_model_source_failure",
+  "task_id": "M02-C-lifecycle-producer-model-source",
+  "attempt": 1,
+  "status": "FAIL_SOURCE_REVIEW",
+  "recorded_utc": "2026-09-15T09:35:00Z",
+  "reviewed_base_commit": "a1009ecd232696c9477b08f744dcff6c035414e2",
+  "archive": {
+    "path": "docs/verification/evidence/stability-native-collector-lifecycle-model-source-failure-20260915-1.tar.gz",
+    "sha256": "c5725d33a1fe590eac36d1426746d0b01f4a62164872f5f7daff04ebc71939cd",
+    "size": 7369,
+    "members": 8
+  },
+  "source_sha256": {
+    "README.md": "596d52c40a087270ad225c2461ef2b1aa7a022d3f4b86ca0fe6561e10ed8521c",
+    "model.rs": "0bd333c42890bb6692041ad8d69765da8bf90d6c073004b6a382e56d57741ead",
+    "reference.c": "3bbb640edf2712fe00c757216311accadd3acd185d47f6c5ba5427acd6277714",
+    "vectors.json": "8d620c83b87cc4527eb719e6f2ae255fb67e5132019b8b65fb7dcf8890b2ffbc",
+    "expected.json": "914a7f25431327d03e8a952b482c2d2fa4520022165bbaf70dfab05577eccb13",
+    "harness.py": "75e09dcabc5e32a7c8b98d50fe9b99a1e237b8e7e54c0bcceaf840fd05798462",
+    "test_native_lifecycle_model.py": "42aea5de3c7d68cfd63418f56a94bdcb0662e701d37b561fd03755715a371cfd"
+  },
+  "findings": [
+    "operation rows do not consistently join allocation and later process/thread identities, and at least one row violates the declared arity",
+    "retirement accepts an unowned integer destruction flag, permits reference resurrection, and does not require authoritative process terminal or abort",
+    "process and thread state share one object row and lookups omit capture, OS generation, application and exec identity while numeric IDs narrow unchecked",
+    "literal expectations omit complete event and ownership state, and the harness does not validate S or E row fields"
+  ],
+  "source_checks_run": false,
+  "compiler_execution": false,
+  "model_execution": false,
+  "native_execution": false,
+  "immediate_retry_released": true,
+  "abi_freeze_released": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

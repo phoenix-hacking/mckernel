@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-001",
+  "packet_version": 2,
+  "context_sha256": "44fd13912b28b6f009f8f82360a718361d43f46dfe1b5297eeab83c250846d03",
+  "started_utc": "2026-09-09T09:44:38Z",
+  "finished_utc": "2026-09-09T09:44:58Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "startup.argv-empty",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/startup/startup.argv-empty.c",
+      "oracle": "scripts/application-tests/oracles/startup.argv-empty.json",
+      "changed_files": [
+        "scripts/application-tests/cases/startup/startup.argv-empty.c",
+        "scripts/application-tests/oracles/startup.argv-empty.json"
+      ],
+      "unresolved_oracle_notes": [
+        "Payload argv contract lists only executable, but case assertions require four argv entries (app, A, empty, B)."
+      ],
+      "max_reviewer_question": "Can runner/runtime metadata provide argv expansion to app/A/empty/B without changing fixture scope?"
+    },
+    {
+      "case_id": "startup.environment",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/startup/startup.environment.c",
+      "oracle": "scripts/application-tests/oracles/startup.environment.json",
+      "changed_files": [
+        "scripts/application-tests/cases/startup/startup.environment.c",
+        "scripts/application-tests/oracles/startup.environment.json"
+      ],
+      "unresolved_oracle_notes": [
+        "Runtime source for the two fixed environment keys is not yet bound in this packet's manifest."
+      ],
+      "max_reviewer_question": "Please confirm the intended fixed environment variable keys and whether runner is responsible for binding APP_STARTUP_ENV_ALPHA / APP_STARTUP_ENV_BETA."
+    },
+    {
+      "case_id": "startup.stdout-stderr",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/startup/startup.stdout-stderr.c",
+      "oracle": "scripts/application-tests/oracles/startup.stdout-stderr.json",
+      "changed_files": [
+        "scripts/application-tests/cases/startup/startup.stdout-stderr.c",
+        "scripts/application-tests/oracles/startup.stdout-stderr.json"
+      ],
+      "unresolved_oracle_notes": [
+        "Case-level stdout/stderr binary expectations are not yet wired into existing generic output capture contracts."
+      ],
+      "max_reviewer_question": "Should fixed byte-output fixtures remain exact bytes with direct stream-specific diff or can a canonical text wrapper be introduced?"
+    }
+  ],
+  "changed_files_with_sha256": [
+    {
+      "path": "scripts/application-tests/cases/startup/startup.argv-empty.c",
+      "sha256": "c15fb5a0e7df71710f1f59c3ac58bccaf7b57c5e4eaebd7d1165c44985a4005e"
+    },
+    {
+      "path": "scripts/application-tests/oracles/startup.argv-empty.json",
+      "sha256": "e809ed818e388710605b2112bd33c743e2978a247b8acfa11f02992425c70e97"
+    },
+    {
+      "path": "scripts/application-tests/cases/startup/startup.environment.c",
+      "sha256": "b47b74129866949413ffdb6ac9455a80fc61eb7c4323ed2a92f0c5a151cb1cbd"
+    },
+    {
+      "path": "scripts/application-tests/oracles/startup.environment.json",
+      "sha256": "7eb9e5593814b9e1e7a45a0dd91bf3fe714959b25f3e5840b66e2d8caaa8f958"
+    },
+    {
+      "path": "scripts/application-tests/cases/startup/startup.stdout-stderr.c",
+      "sha256": "4bfa7ccced1fed26837b80507d5725b582803e0ce93529f36c6a80524310ac87"
+    },
+    {
+      "path": "scripts/application-tests/oracles/startup.stdout-stderr.json",
+      "sha256": "eb90880d6e03673ed2a5d159818c3c827108fc21ee2c53d67e3827304570ebe9"
+    }
+  ],
+  "commands_and_outcomes": [
+    {
+      "command": "python3 -B /home/holden/mckernel/scripts/application-tests/validate.py --packet /home/holden/mckernel/scripts/application-tests/packets/packet-001.json",
+      "outcome": "PASS"
+    },
+    {
+      "command": "python3 -B /home/holden/mckernel/scripts/application-tests/validate.py --packet /home/holden/mckernel/scripts/application-tests/packets/packet-001.json --emit-context /home/holden/mckernel-work/scratch/application-test-drafts-20260909/packet-001-context-attempt-1.json",
+      "outcome": "PASS"
+    },
+    {
+      "command": "git diff --check",
+      "outcome": "PASS"
+    }
+  ],
+  "unresolved_oracles": [
+    "argv-empty requires argv vector expansion beyond metadata path",
+    "startup.environment key names not yet validated against runtime manifest",
+    "stdout-stderr capture contract still relies on fixed binary fixtures"
+  ],
+  "blocked_execution_capabilities": [
+    "runner-contract",
+    "current-inputs",
+    "runtime-transport-fault-injection"
+  ],
+  "first_failure_event": null,
+  "max_escalation": [
+    "Clarify argv fixture contract for startup.argv-empty (4-entry argv requirement vs one entry currently defined).",
+    "Confirm fixed environment key set for startup.environment."
+  ],
+  "next_packet_id": "packet-002"
+}

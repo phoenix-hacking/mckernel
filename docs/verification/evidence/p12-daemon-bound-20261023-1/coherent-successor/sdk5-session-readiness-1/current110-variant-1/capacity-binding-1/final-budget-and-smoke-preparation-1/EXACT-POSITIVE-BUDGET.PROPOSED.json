@@ -1,0 +1,65 @@
+{
+  "HOST_capture_reservation_bytes": 4294967296,
+  "allowance_meanings": {
+    "campaign_bytes": "Proposed positive256MiB. Known source/artifact sizes plus planned HOST stage caps fit below this allowance; no prior selected campaign reserve is lowered.",
+    "emergency_bytes": "Reuse accepted positive648MiB allowance as directed by parent; reserve576MiB proposal remains separately pending and unchanged.",
+    "remaining_backing_growth_bytes": "Entire current110GiB backing length reserved as conservative upper allowance for full sparse gap. Fresh actual gap must still be measured and checked by existing admission. No resize authorized or required by this proposal.",
+    "scratch_input_growth_bytes": "Proposed positive64MiB covering up to4MiB manifest plus1MiB release logical payload and59MiB additional allocated-block/metadata allowance. This is a budget, not proof of a filesystem allocation bound; root must bind actual inputs/allocation and reject over-budget staging."
+  },
+  "arithmetic": {
+    "HOST": "17179869184 + 118111600640 + 4294967296 + 679477248 + 268435456 = 140534349824",
+    "scratch": "12884901888 + 67108864 + 679477248 + 268435456 = 13899923456"
+  },
+  "campaign_working_set": {
+    "HOST_stage_capture_cap_bytes": 16777216,
+    "HOST_stage_output_cap_bytes": 134217728,
+    "accepted_LONG_ELF_bytes": 1628432,
+    "actual_new_stage_capsule_size": null,
+    "actual_new_stage_manifest": null,
+    "campaign_headroom_bytes": 115524044,
+    "new_LONG_inputs_destination": "HOST; existing SDK5 module/image/launcher readonly reuse; no duplicate large artifacts on scratch",
+    "runtime_sources_bytes": 288036,
+    "sum_bytes": 152911412
+  },
+  "capacity_admission_proposal": {
+    "campaign_bytes": 268435456,
+    "emergency_bytes": 679477248,
+    "host_floor_bytes": 17179869184,
+    "remaining_backing_growth_bytes": 118111600640,
+    "scratch_floor_bytes": 12884901888,
+    "scratch_input_growth_bytes": 67108864
+  },
+  "existing_admission_consumer": {
+    "bytes": 15548,
+    "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/source/long_transport.py",
+    "sha256": "739e072012c4b1b7aed77064c643bce0145a70e813855fe2324e8c7606894fef"
+  },
+  "preservation": {
+    "142GiB_growth_held_variant": "preserved unchanged",
+    "failed_smoke_evidence": "preserved unchanged",
+    "reserve576MiB_pending": "preserved unchanged",
+    "source_or_oracle_changes": false
+  },
+  "provided_capacity_context_only": {
+    "HOST_context_bytes": 172000000000,
+    "HOST_context_minus_requirement_bytes": 31465650176,
+    "fresh_UUID_loop_backing_identity": null,
+    "fresh_actual_HOST_available_bytes": null,
+    "fresh_actual_backing_gap_bytes": null,
+    "fresh_actual_scratch_available_bytes": null,
+    "fresh_probe_performed": false,
+    "note": "Approximate parent context does not substitute for independent exact live admission. Margin does not establish a scratch-growth need or absence of such need.",
+    "parent_reported_HOST": "172GB",
+    "parent_reported_scratch": "14.103GB",
+    "scratch_context_bytes": 14103000000,
+    "scratch_context_minus_requirement_bytes": 203076544,
+    "unit_interpretation_for_conservative_arithmetic": "decimal GB, context only"
+  },
+  "required_HOST_available_bytes": 140534349824,
+  "required_scratch_available_bytes": 13899923456,
+  "root_admission": null,
+  "root_budget_selection": null,
+  "runtime_acceptance": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "EXACT_POSITIVE_BUDGET_PROPOSED_NOT_ADMITTED"
+}

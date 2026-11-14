@@ -1,0 +1,168 @@
+{
+  "actor": {
+    "cmdline_sha256": "20667c2ccc9b9990a19ba83a53a2b897c17864c74f5ada684f3cdb28dacd68d5",
+    "credentials": {
+      "Gid:": [
+        "0",
+        "0",
+        "0",
+        "0"
+      ],
+      "Uid:": [
+        "0",
+        "0",
+        "0",
+        "0"
+      ]
+    },
+    "exe": "/home/holden/anaconda3/bin/python3.9",
+    "pgid": 1060803,
+    "pid": 1060806,
+    "ppid": 1060803,
+    "starttime": "80309560"
+  },
+  "actual_grant": {
+    "bytes": 3031,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/custody-guard-correction-source-1/ROOT-ACTUAL-EXCEPTION-READ-PREPARATION-1/ROOT-ACTUAL-EXCEPTION-READ-GRANT.json",
+    "sha256": "13fb3b6be49eb578b29c5e398af90c274529294ac4ebbf89527140cde7499b4d"
+  },
+  "actual_join": {
+    "bytes": 1003,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/custody-guard-correction-source-1/ROOT-ACTUAL-EXCEPTION-READ-PREPARATION-1/ROOT-ACTUAL-EXCEPTION-READ-OUTER-1/JOIN.json",
+    "sha256": "f166ee7c82677cb70c05cb7306e911df08f18c2b9ed5df94c7366f5c43b89088"
+  },
+  "actual_process": {
+    "bytes": 1083,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/custody-guard-correction-source-1/ROOT-ACTUAL-EXCEPTION-READ-PREPARATION-1/ROOT-ACTUAL-EXCEPTION-READ-OUTER-1/PROCESS.json",
+    "sha256": "86aaaa493bed7740fac452a249a8bbe4fa7375b586b9cb7fa320229499267547"
+  },
+  "actual_stderr": {
+    "bytes": 0,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/custody-guard-correction-source-1/ROOT-ACTUAL-EXCEPTION-READ-PREPARATION-1/ROOT-ACTUAL-EXCEPTION-READ-OUTER-1/stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "actual_stdout": {
+    "bytes": 4555,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/custody-guard-correction-source-1/ROOT-ACTUAL-EXCEPTION-READ-PREPARATION-1/ROOT-ACTUAL-EXCEPTION-READ-OUTER-1/stdout",
+    "sha256": "44c6338f1debd7dcd55ab8dcc7a912cb8b2d32ef9accb20cd27dfbea24ad7dc8"
+  },
+  "actual_summary": {
+    "closed_streams": true,
+    "cpu_seconds": 0.81917,
+    "direct_child_joined": true,
+    "group_members": [],
+    "group_observation_errors": [],
+    "peak_rss_kib": 159704,
+    "pid": 1069539,
+    "returncode": 0,
+    "wall_seconds": 0.9054086208343506
+  },
+  "before_after_custody_exactly_equal": true,
+  "capture_binding": {
+    "bytes": 2547,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-post-recovery-retirement-review-1/QUARANTINE-EXCEPTION-8906-CAPTURE-BINDING-REVIEW.json",
+    "sha256": "24919c99168d8e1f8c128de9f2c982f78f26437d72d1886e5b426a5f29a78221"
+  },
+  "cleanup_complete": false,
+  "cleanup_or_custody_transfer_authority": false,
+  "debugger_returncode": 0,
+  "decision": "PASS_ACTUAL_EXACT_EXCEPTION_READ_ONLY_CUSTODY_PRESERVED",
+  "execution_review": {
+    "bytes": 15753,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-post-recovery-retirement-review-1/QUARANTINE-EXCEPTION-7754-INDEPENDENT-EXECUTION-REVIEW.json",
+    "sha256": "8180a76dcd0949f4672dbabbf4c4e57e7602daee0ff00b5f9d2aa75e6630b863"
+  },
+  "held_permanent_fd": {
+    "fd": 3,
+    "fdinfo": "pos:\t0\nflags:\t02504000\nmnt_id:\t32\nino:\t4\nlock:\t1: FLOCK  ADVISORY  WRITE 1060806 00:1b:4 0 EOF\n",
+    "global_lock": [
+      "FLOCK",
+      "ADVISORY",
+      "WRITE",
+      "1060806",
+      "00:1b:4",
+      "0",
+      "EOF"
+    ],
+    "identity": {
+      "device": 27,
+      "gid": 0,
+      "inode": 4,
+      "mode": 420,
+      "nlink": 1,
+      "size": 0,
+      "uid": 0
+    },
+    "link": "/run/lock/mckernel-development.lock"
+  },
+  "implementation_ownership": false,
+  "independent_checks": [
+    "Outer directJOIN0, emptygroup/noobservationerrors, closed fullstreams and emptyouterstderr verified.",
+    "Unique exacthelperPASSJSON and extraction equality; rawhex lengths/SHA recomputed for all debuggerstdout/stderr.",
+    "Before==after entireactor/parent/boot/permanentFDinfo+identity+solegloballock verified, actor1060806/start80309560 retains FD3 permanent27:4.",
+    "Observed exactrecover.error.args[0] is root-command-failed:/usr/bin/python3; no underlying collector returncode/stdout/stderr observed yet."
+  ],
+  "mutex_free": false,
+  "new_attach_or_expanded_read_authority": false,
+  "new_workload_authority": false,
+  "next_diagnostic_design": {
+    "justified": true,
+    "required_proofs": [
+      "Genuine samePython3.9 ownedfixture retains known CompletedProcess result in exceptiontraceback and exact decoder yields expected known bytes/returncode/argsmetadata.",
+      "Retain existing pre/post actualPID/birth/source/boot/group/permanentFDlock guard and success/error/timeout detach+heldflock fixture proofs.",
+      "Bound output bytes at reviewedcollector scope, verifycommandmetadata selects exact frozen PROC_CODE invocation and originalcaller identity; no arbitrarylocals/heap/memorydump.",
+      "Source/helper/profile/argv fixture and independent exactexecutionreview required before expandedattach; current acceptance authorizes none."
+    ],
+    "scope": "Same positively owned actor; follow retained exception traceback only to exact e49 root_command frame and its named result local. Read only CompletedProcess.returncode/stdout/stderr and bounded args metadata; do not rerun any function, collector or cleanup."
+  },
+  "observed_exception": {
+    "co_filename": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/bounded-observer-correction-source-1/native_rust_cutover_image_terminal_cleanup.CURRENT290.EXACT-DEAD-CALLER.py",
+    "co_name": "recover",
+    "error_argument": "root-command-failed:/usr/bin/python3",
+    "exception_type": "Refusal",
+    "frames_visited": 4,
+    "interpreters": 1,
+    "local": "error",
+    "status": "PASS_EXACT_RECOVER_ERROR_READ",
+    "threads": 1
+  },
+  "parent": {
+    "cmdline_sha256": "632d0ffc51da5d0ecb9f1b37da55921def92f9a532cfd497506ffd51d532dd41",
+    "credentials": {
+      "Gid:": [
+        "0",
+        "0",
+        "0",
+        "0"
+      ],
+      "Uid:": [
+        "0",
+        "0",
+        "0",
+        "0"
+      ]
+    },
+    "exe": "/usr/bin/sudo",
+    "pgid": 1060803,
+    "pid": 1060803,
+    "ppid": 1060802,
+    "starttime": "80309553"
+  },
+  "raw_debugger_evidence_checks": {
+    "stderr": {
+      "bytes": 67,
+      "raw_hex_length_sha_verified": true,
+      "sha256": "b34f46f15c68c56ab9b378e2eb1ef5311a823de69b446ab5ece29804eaefa6a6"
+    },
+    "stdout": {
+      "bytes": 800,
+      "raw_hex_length_sha_verified": true,
+      "sha256": "785a177dffef2cfdeabb3a21e79fe4659d92616c8b945188daf0a38f6dbbe758"
+    }
+  },
+  "recorded_at": "2026-10-26T09:44:06.728494+00:00",
+  "reviewer": "/root/current_owner_retirement",
+  "schema": "mckernel.current290.quarantine.actual-exception-read.independent-acceptance.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_narrowing": "In frozen e49 source the Python3 root-command call is the PROC_CODE census collector. This identifies its failed command boundary, while the exact underlying collector error still requires retained result evidence."
+}

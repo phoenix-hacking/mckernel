@@ -1,0 +1,127 @@
+{
+  "schema": "mckernel.supervisor.m07.conservative-state-declaration.v1",
+  "status": "BOUNDED_CONSERVATIVE_DECLARATION_READY_FOR_INDEPENDENT_REVIEW",
+  "scope": "Functional supported OS/apps and active compute-C retirement into Rust/reviewed assembly. Read-only source/artifact investigation; no shared edits or workload. Historical failures/scores unchanged.",
+  "decision": {
+    "P-M07-01": "Recommend accepting the conservative declaration below as the literal requirements declaration. It deliberately requires support for possibly used MPX3/4 and PKRU9; it does not assert their use or absence. Exact linked full-mask/full-extent mechanism is independently corroborated below. Dispatcher/independent reviewer owns the status edit.",
+    "P-M07-02": "Already complete in current worklist. No new runtime, logical behavior or per-class preservation credit here.",
+    "whole_M07": "Do not automatically mark complete from this report. Existing actual observations cover YMM/SSE and selected x87/MXCSR; MPX/PKRU get structural full-mask/full-extent support, not a new observed preservation claim. A focused reviewer can now decide the requirements-to-coverage join using these exact linked bodies and retained practical checks, without requiring whole-startup non-use. If actual MPX/PKRU preservation must be observed to close the whole exit, identify that separately; no new guest is authorized or specified here."
+  },
+  "conservative_declaration": {
+    "rule": "For every selected application/library path, require preservation of every enabled user xstate component represented by the process XCR0 readback; the known exposed0x21f profile gives R={0:x87,1:SSE/MXCSR,2:YMM upper,3:MPX BNDREGS,4:MPX BNDCSR,9:PKRU}. This is a justified architectural upper bound, not evidence that exposure implies execution. It includes all state of every legal eligible dispatch variant under that profile.",
+    "mpx_actual_use": "Unresolved; retained and newly inspected selected entry bodies contain no direct MPX instructions. Declared possible and required support; no no-use inference.",
+    "pkru_actual_use": "Unresolved; exact dynamic libc contains rdpkru/wrpkru in pkey APIs. Declared possible and required support; symbol presence and OSPKE clear are not used to infer use/non-use.",
+    "AVX512": "Known observed0x21f profile lacks xstate5/6/7 and CPUID7.EBX.AVX512F. Do not advertise AVX512. Current205 implementation reads the complete runtime mask/extent rather than hardcoding0x21f; this report does not relabel old08210 exposure capture as a new ff4f readback.",
+    "scope_preserved": "Baseline dynamic C, baseline static Rust, selected vector probes, and current205 mixed/FP-thread apps remain included. Other selected applications remain subject to the same all-enabled-state requirement; the accepted20 pair is not substituted for the entire supported suite. No flags, binaries or exposure are narrowed."
+  },
+  "identity_references": {
+    "requirements_review": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/practical-m07-current-requirements-review-20261018-1.json",
+      "sha256": "37d72a774354fac3eb9190132b5c6ad8ac6685327d3be768821519378a8bf47a"
+    },
+    "baseline_requirements": "/home/holden/mckernel-work/scratch/practical-m07-current-requirements-20261018-1/requirements.json (683c3038ceb0c164f80fdba1b42bb6fae92fdf8f058a7e9e2e48a3568d3a19bd)",
+    "baseline_C": "/home/holden/mckernel-work/scratch/native-application-core-build-20260908-1/native-application-core (558d1607e4648321c9537215084e759496937d9591c319a21443f443193fda9a)",
+    "baseline_Rust": "/home/holden/mckernel-work/scratch/practical-rust-std-app-static-20261017-2/app (6d1865a0a8817a7b5beceb883ef34c6275e7d52993f026177159a34d67861e55)",
+    "current205_stage": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1/stage-preparation-1/stage-launches-1/manifest.json",
+      "sha256": "ab8cedd248f6d1c8e17a7d5b0ce888042e3e47a3741d77f086de53911a06c8ef"
+    },
+    "current205_image": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/host-preparation/repaired-affinity-n3-variant-20261019-1/repaired-image-fresh8b-runtime-0755",
+      "sha256": "ff4fca457e9ffe50dc4eca930c5f91faf317eeee15bf0c2907067cffa77b23bb",
+      "size": 7988768
+    },
+    "current205_apps": [
+      {
+        "mode": 33216,
+        "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/app0",
+        "sha256": "024fa5620735622c684283df1a8270c2d7c78f62dd82d294c544f5eb3b197ac4",
+        "size": 5685552
+      },
+      {
+        "mode": 33216,
+        "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/app1",
+        "sha256": "1f51f0e3c8288bc05aabbc0309d1bf84abab1cbc6d8593c4ec7b1460b38163b7",
+        "size": 5666048
+      }
+    ],
+    "libc": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/native-proposal/stage-correction-1/stage/root/lib64/libc.so.6",
+      "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+      "size": 2339896
+    },
+    "loader": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/native-proposal/stage-correction-1/stage/root/lib64/ld-linux-x86-64.so.2",
+      "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b",
+      "size": 930600
+    },
+    "current205_source_binding": {
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/thin-inputs.json",
+      "sha256": "d3495242284b653ef10de9f4f70706fc0ea118696189aa957305ce8bf5df8098",
+      "materialized_repository_files": {
+        "arch/x86_64/kernel/cpu.c": "67dd7ea590ad9c1470ce34434770efa5e8cd7449b5f28d3b4ee5d3e0c96eb348",
+        "arch/x86_64/kernel/syscall.c": "2abee2d3c4813e7fb9769719e6bb07daf944490a3ac199f2762a7015a97d54f1",
+        "kernel/rust/x86_cpu_helpers.rs": "59d0723c5d4d35ba63120b59c0422d6bc357246e1146d6cbbd010fe2d727a651",
+        "kernel/rust/native_xstate.rs": "b0b39e0df8298740f53a6b76c5ce6905dfdd9092328578df18225c4a57e8100e"
+      }
+    },
+    "current205_artifact_acceptance": {
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-ACTUAL-PRODUCTION-ARTIFACT-REVIEW.json",
+      "sha256": "fa39824773f75a0e44303afcdcaf52a26fa8249bd7d0fe1d066c3dd2b6dd9813"
+    },
+    "current205_source_authority": "/home/holden/mckernel-work/host-preparation/repaired-affinity-n3-variant-20261019-1/authority-inputs-fresh8b.json (6a7e06affcf998f9c2c4f767cd2489a657b1547cbcc0a3b5087f21df851c7f66)",
+    "reuse_note": "Artifact/report identities reused from retained bindings, not freshly rehashed. Static reads target the retained paths; current working-tree source is not used as exact ff4f proof."
+  },
+  "compiler_and_application_declaration": {
+    "baseline_C": "Retained GCC14.3.1 -O2/-pthread dynamic build; missing explicit AVX flags does not constrain prebuilt libc. Original metadata is in baseline requirements reference.",
+    "Rust": "Baseline and current205 apps retain Rust1.92 x86_64-unknown-linux-gnu, opt-level1, codegen-units1, +crt-static, static relocation/no-pie. Exact current compile argv: evening-two-app-batch-20261019-1/compile0.status.json and compile1.status.json. No compiler/payload execution here.",
+    "FP_thread": "Exact current app1.rs includes fp_state.S, which directly loads/stores YMM0..15 and changes/restores x87 CW and MXCSR. It gates AVX/XSAVE/OSXSAVE and XCR0 bits0..2. This is positive known use within R, not a bound on libc.",
+    "new_distinct_ELF_checks": "In each baseline6d1865a0/current024fa562/current1f51f0e3 ELF, directly inspected memchr detect installs that ELF own find_sse2. Current two find_sse2 target bodies were independently read and contain scalar/SSE instructions with no MPX/PKRU. Each ELF memmove resolver independently offers SSE/SSSE3/ERMS/AVX/AVX512 target names. These are scoped direct observations, not a transfer of old findings or a whole-library state closure."
+  },
+  "exact_ff4f_linked_mechanism": [
+    "init_fpu@fffffffffe81a8e0 stores CPUID.D0.ECX to xsave_size@fffffffffe9422c8; reads/updates XCR0 through xgetbv/xsetbv and stores the full readback to xsave_mask@fffffffffe9422c0. It snapshots the complete mask to a4096-byte aligned initial_fp_regs buffer when xsave_size<=4096.2696 fits; the mask is not reduced to7.",
+    "save_fp_regs@fffffffffe81d450 loads the complete mask/size/available globals into the actual Rust provider@fffffffffe894af0. Rust allocates rounded(size,4096), zeros it, returns ENOMEM on allocation failure, and executes XSAVE atfffffffffe894ba1 with EDX:EAX formed from the complete64-bit mask.",
+    "copy_fp_regs@fffffffffe81d490 passes runtime xsave_size to rust_x86_copy_fp_regs@fffffffffe894690. The Rust provider rounds allocation to pages and calls memcpy@fffffffffe872330 atfffffffffe894778 with runtime size in RDX. No1088-byte struct truncation and no class-specific exclusion.",
+    "restore_fp_regs@fffffffffe81d4c0 passes full mask to rust_x86_restore_fp_regs@fffffffffe8949d0. Non-null state XRSTOR@fffffffffe894a0a uses both mask halves; initial-state XRSTOR@fffffffffe894ac3 also uses both. The FINIT/LDMXCSR fallback is separately visible and is not promoted to full extended-state reset proof.",
+    "do_signal@fffffffffe8231b0 obtains configured runtime size and full get_xsave_mask, allocates size+64 with64-byte alignment, zeroes configured bytes and XSAVE@fffffffffe823df5 uses both mask halves. copy_to_user@fffffffffe823e1a receives configured size. This includes the complete standard area when the supported profile extent is2696.",
+    "arch_native_signal_restore_fp_bridge@fffffffffe8217c0 requires provided size to match configured size, allocates size+63/alignment64, copies all configured bytes, passes the full mask to native_xstate_validate_result and native_xrstor_checked. Validator@fffffffffe876ce0 permits XSTATE_BV bits within the supplied mask; it does not mask those bits down to7. It rejects compacted header/reserved bytes and invalid MXCSR. native_xrstor_checked@fffffffffe825970 executes XRSTOR@fffffffffe82597a with full EDX:EAX. Thus there is no observed mask/extent exclusion ofMPX3/4 orPKRU9 on normal non-null signal frames."
+  ],
+  "bounded_libc_findings": {
+    "pkru_candidates": "Dynamic libc pkey_get@0x106c00 contains RDPKRU@0x106c0b; pkey_set@0x106c80 contains RDPKRU@0x106c92 and WRPKRU@0x106cad. Baseline C imports no pkey API, but that alone does not prove transitive library non-use.",
+    "entry_scope": "Selected dynamic libc startup/early-init/pthread-create/start-thread/create-thread/clone-internal and loader startup/TLS/CPU-feature entry bodies inspected directly show no MPX/PKRU instructions. They have transitive/indirect calls; their absence is not extrapolated to all library code.",
+    "stop": "Conservative all-enabled-state declaration removes the need to chase those calls solely to prove non-use. No broader callgraph/library audit proposed."
+  },
+  "coverage_and_limits": {
+    "observed_preservation": "Reuse accepted x87/SSE/YMM syscall/blocking-futex/signal evidence and current205 FP-thread/pair observations under their original exact image/profile limits.",
+    "structural_join": "MPX3/4 andPKRU9 fit the complete runtime standard-XSAVE mask/area mechanism above. This is linked-artifact support, not hardware observation of noninitial MPX/PKRU values surviving each boundary.",
+    "not_claimed": [
+      "MPX/PKRU instructions executed by selected apps",
+      "MPX/PKRU empirical preservation",
+      "new current205 CPUID/XCR0 readback",
+      "full extended-state NULL-fpstate reset",
+      "cross-CPU migration proof",
+      "whole-library instruction closure",
+      "whole M07 or practical-goal completion"
+    ],
+    "smallest_remaining_decision": "Independent requirements-to-coverage review: accept conservative R plus complete linked mechanism and existing relevant actual checks as sufficient for the functional M07 exit, or name the specific uncovered actual used-state requirement. Do not turn unresolved use into an unconditional new guest requirement."
+  },
+  "evidence_captures": {
+    "library_selected_symbols": "/home/holden/mckernel-work/host-preparation/supervisor-m07-used-state-declaration-20261020-1/selected-symbol-inspection.json",
+    "current205_selected_FPU_signal_symbols": "/home/holden/mckernel-work/host-preparation/supervisor-m07-used-state-declaration-20261020-1/current205-symbol-inspection.json",
+    "tool_compatibility": "/home/holden/mckernel-work/host-preparation/supervisor-m07-used-state-declaration-20261020-1/tool-compatibility.txt"
+  },
+  "accounting": {
+    "new_builds": 0,
+    "new_tests": 0,
+    "new_guests": 0,
+    "new_launches": 0,
+    "new_native_behaviors": 0,
+    "new_Rust_retirement_credit": 0,
+    "shared_edits": 0,
+    "Git_actions": 0,
+    "root_actions": 0
+  }
+}

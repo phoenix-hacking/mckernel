@@ -1,0 +1,59 @@
+{
+  "schema": "mckernel.native-exact-scratch18-image-build-attempt2-failure.v1",
+  "status": "FAIL_PRESERVED",
+  "candidate_sha": "89ab5c555aac9177a789efc67ddc775dacb25d6d",
+  "execution": {
+    "proposal_sha256": "42234be84166cb74795c03d1203d1835e163c5d19dc690655f7d523dc50fa903",
+    "independent_decision": "PASS_EXECUTION",
+    "invocations": 1,
+    "exit_code": 1
+  },
+  "result": {
+    "failure_phase": "offline driver source validation before compilation",
+    "error": "ImageBuildError: source checkout is dirty",
+    "actual_main_status": [
+      " D executer/user/lib/syscall_intercept",
+      " D executer/user/lib/uti",
+      " M ihk"
+    ],
+    "required_main_status": [
+      " M ihk"
+    ],
+    "cause": "the two other tracked unconsumed gitlinks remain absent, while the driver requires an otherwise-clean porcelain status",
+    "build_output_bytes": 0,
+    "owner_receipt": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-owner-evidence-89ab5c55-scratch18-retry2-attempt2-20261001/owner-receipt.json",
+    "owner_receipt_sha256": "92a34439cce1d89e0d0f0c7f08edae1bfcaf9f99ecb22b6c234c0d7e9f5d4608",
+    "owner_receipt_device_inode": "1831:6685319",
+    "container_log_sha256": "f8a5fc596f884170a03522961fc288a46e7e9bdb00685d843704e9c2538d9357",
+    "docker_log_sha256": "fa2b12676030020138d61053784009eb9cb41687adbd79098183c172e5535045"
+  },
+  "ownership": {
+    "container_id": "199591e8a9d9fca3ee1026fe43457b6f775888e22431dc89caafc5e865ebb562",
+    "container_name": "mckernel-image-a54e9e91af62474c8de5042bef79741d",
+    "owner_nonce": "3db31b9648044af19daf952651a1cb05",
+    "state": "exited",
+    "pid": 0,
+    "exit_code": 1,
+    "oom_killed": false,
+    "started_at": "2026-10-01T19:42:37.098714521Z",
+    "finished_at": "2026-10-01T19:43:22.808401581Z",
+    "lease_absent": true,
+    "candidate_exclusion": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch18-image-1.json",
+      "device_inode": "1831:57661",
+      "sha256": "6cfeab6f651956db68d93ccda51782ddb90b6685e4e64c35e900f156594908f3"
+    },
+    "shared_exclusion": {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock",
+      "device_inode": "1831:57659",
+      "sha256": "3ea7739ed466d16bc78ab6019f0ede878e2fb3c63ccf8dd633cc44cd03e35efe"
+    }
+  },
+  "convergence": {
+    "mountpoint_failure_family": "corrected; container and driver started successfully",
+    "new_failure_family": "driver exact-clean-status versus absent unconsumed gitlinks",
+    "unchanged_retry_forbidden": true,
+    "next": "independently clean the exact terminal attempt, then apply one bounded correction for the new source-status family"
+  },
+  "acceptance": "no image artifact, guest, application, production or OS acceptance"
+}

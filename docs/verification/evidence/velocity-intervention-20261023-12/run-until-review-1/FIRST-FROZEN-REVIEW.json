@@ -1,0 +1,47 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "FIRST_FROZEN_SOURCE_NOT_ARM_READY_ONE_BOUNDED_CORRECTION_REQUESTED",
+  "candidate_root": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-controller-1",
+  "first_reviewed_declared_source_sha256": {
+    "bridge.py": "e93047171b01641826ac9c7820a3d9ea0b27a2a272a7062bc22b4be458e4ebe6",
+    "finite_launcher.py": "01a7ff979032c710132941a832928a8fae40b381f84276bdb7e1f1804564530b",
+    "test_bridge.py": "3f0a338f3bebf5f4bbfab6008cb2e6e0eb0f0a168634c34301b455c1148782ae"
+  },
+  "accepted_design_boundaries": [
+    "Existing watcher and CreditBudget are reused; no canonical launcher rewrite.",
+    "Current healthy LONG and resident model are left untouched while the bridge waits.",
+    "Only exact included_usage_guard plus real weekly exhaustion or a current exact-final-state handoff permit can authorize prepaid transition.",
+    "New model may first reconcile preserved native ownership; new guests/builds still require normal actual clearance.",
+    "Legacy worker-only expiry uses PIDfd with birth/PPID checks; ordinary finite-watcher drain is not deliberately signaled twice."
+  ],
+  "bounded_corrections": [
+    {
+      "id": "R1",
+      "source": "bridge.py run/decide and finite_launcher.py remaining",
+      "finding": "After credit launch the bridge delegates expiry to a relative monotonic watcher even if wall UTC jumps forward to the absolute deadline. A forward-then-backward correction may produce HOLD_CLOCK_REGRESSION and exit the only guardian for a legacy hours0 worker. Other transition/source HOLD exits have the same deadline-supervision problem.",
+      "required": "Persist the earliest effective cutoff across forward/backward changes and rearm; suppress new launches on HOLD while retaining deadline supervision. Expiry/user cancellation must still cause at most one exact-worker normal drain, with fresh already-draining checks and no watcher/group/server/guest signal."
+    },
+    {
+      "id": "R2",
+      "source": "bridge.py launcher_argv/run and finite_launcher.py main",
+      "finding": "SOURCE-READY source pins are recorded but not enforced at arm/delayed spawn/adapter entry; startup-instruction digest is recomputed from potentially changed bytes.",
+      "required": "Enforce the frozen private/canonical packet identities at actual execution boundaries, use the frozen current startup digest, and refuse inference/relaunch on drift while retaining deadline supervision."
+    },
+    {
+      "id": "R3",
+      "source": "bridge.py replacement Popen ownership",
+      "finding": "Replacement watcher is a direct child but is never polled/joined. It may remain a same-birth zombie indefinitely, preventing positive retirement and normal bridge termination.",
+      "required": "Poll/reap the owned child, preserve actual exit/join identity and keep process-group/lease reconciliation distinct. Add a mock lifecycle case. Author independently identified this same issue."
+    },
+    {
+      "id": "R4",
+      "source": "bridge.py strict_restart",
+      "finding": "Negative exit with retained launcher_error/retryable or prior recoverable metadata can still pass the wrapper; current tests cover only a negative exit with empty reason.",
+      "required": "Reject generic negative-exit fallback; retain only any explicitly justified existing positive watchdog classification. Add negative-exit/stale-metadata mocks."
+    }
+  ],
+  "next_check": "After one coherent revised source freeze, root grants one offline mocked regression job covering actual loop/admission/drain/child ownership boundaries, not only pure decision examples. No production arming before source acceptance and actual tests.",
+  "reviewer_product_import_test_subprocess_root_signal_billing_model_runtime_or_canonical_edit_calls": 0,
+  "preserve_first_freeze": true,
+  "current_healthy_workload_touched": false
+}

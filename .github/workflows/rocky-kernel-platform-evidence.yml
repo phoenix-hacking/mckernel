@@ -1,0 +1,142 @@
+name: Rocky 10.2 kernel platform evidence
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/rocky-rust-validation]
+    paths:
+      - .github/workflows/rocky-kernel-platform-evidence.yml
+      - host-kernel/rocky/evidence-plan-v1.json
+      - host-kernel/rocky/source-lock.json
+      - host-kernel/rocky/patches/series.json
+      - host-kernel/rocky/toolchain-lock.json
+      - host-kernel/rocky/config-policy.json
+      - host-kernel/rocky/configs/rust-minimal.config
+      - scripts/rocky_kernel_source_lock.py
+      - scripts/rocky_kernel_platform_lock.py
+      - scripts/rocky_kernel_platform_evidence.py
+  pull_request:
+    branches: [development]
+    paths:
+      - .github/workflows/rocky-kernel-platform-evidence.yml
+      - host-kernel/rocky/evidence-plan-v1.json
+      - host-kernel/rocky/source-lock.json
+      - host-kernel/rocky/patches/series.json
+      - host-kernel/rocky/toolchain-lock.json
+      - host-kernel/rocky/config-policy.json
+      - host-kernel/rocky/configs/rust-minimal.config
+      - scripts/rocky_kernel_source_lock.py
+      - scripts/rocky_kernel_platform_lock.py
+      - scripts/rocky_kernel_platform_evidence.py
+
+permissions:
+  contents: read
+
+env:
+  RK_PLATFORM_CONTAINER_IMAGE: rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176
+  EXPECTED_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+
+jobs:
+  repository-direct:
+    name: Signed repositories, direct RPMs, and build roots
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    container:
+      # Official Rocky 10.2 linux/amd64 OCI manifest. The capture script also
+      # rejects any runtime that is not x86_64 Rocky 10.2 and binds the exact
+      # image string into the evidence manifest.
+      image: rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Check out the bootstrap contract at the candidate commit
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ env.EXPECTED_HEAD_SHA }}
+          fetch-depth: 1
+          persist-credentials: false
+          set-safe-directory: false
+
+      - name: Install the digest-pinned bootstrap with repositories disabled
+        env:
+          EVIDENCE_ROOT: ${{ runner.temp }}/rk003-rk005-platform-evidence
+        run: |
+          set -euo pipefail
+          test "$(uname -m)" = x86_64
+          . /etc/os-release
+          test "$ID" = rocky
+          test "$VERSION_ID" = 10.2
+          test ! -e "$EVIDENCE_ROOT"
+          test ! -L "$EVIDENCE_ROOT"
+          mkdir -m 700 "$EVIDENCE_ROOT"
+          python3 scripts/rocky_kernel_platform_evidence.py \
+            --repo "$GITHUB_WORKSPACE" \
+            --bootstrap \
+            --output-dir "$EVIDENCE_ROOT/bootstrap" \
+            --github-head-sha "$EXPECTED_HEAD_SHA" \
+            --github-run-id "$GITHUB_RUN_ID" \
+            --github-run-attempt "$GITHUB_RUN_ATTEMPT" \
+            --github-repository "$GITHUB_REPOSITORY" \
+            --container-image "$RK_PLATFORM_CONTAINER_IMAGE"
+          (
+            cd "$EVIDENCE_ROOT/bootstrap"
+            sha256sum --check --strict SHA256SUMS
+          )
+
+      - name: Re-check out the exact candidate with pinned Git
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ env.EXPECTED_HEAD_SHA }}
+          fetch-depth: 1
+          persist-credentials: false
+          # checkout uses an isolated temporary HOME and trusts only this
+          # exact workspace path while its own Git process populates .git.
+          set-safe-directory: true
+
+      - name: Verify bounded phase contract without claiming gate credit
+        run: |
+          set -euo pipefail
+          canonical_workspace="$(python3 -c \
+            'import os, sys; print(os.path.realpath(sys.argv[1]))' \
+            "$GITHUB_WORKSPACE")"
+          test -n "$canonical_workspace"
+          test "$(git -c "safe.directory=$canonical_workspace" \
+            -C "$canonical_workspace" rev-parse HEAD)" = "$EXPECTED_HEAD_SHA"
+          for tool in git gpg gpgv python3 rpm rpmkeys rpmspec sha256sum; do
+            command -v "$tool" >/dev/null
+          done
+          python3 scripts/rocky_kernel_platform_evidence.py \
+            --repo "$GITHUB_WORKSPACE" \
+            --check
+
+      - name: Capture repository-direct evidence and seal collector HTTP
+        env:
+          EVIDENCE_ROOT: ${{ runner.temp }}/rk003-rk005-platform-evidence
+        run: |
+          set -euo pipefail
+          python3 scripts/rocky_kernel_platform_evidence.py \
+            --repo "$GITHUB_WORKSPACE" \
+            --run \
+            --phase repository-direct \
+            --output-dir "$EVIDENCE_ROOT/capture" \
+            --bootstrap-manifest "$EVIDENCE_ROOT/bootstrap/bootstrap.json" \
+            --github-head-sha "$EXPECTED_HEAD_SHA" \
+            --github-run-id "$GITHUB_RUN_ID" \
+            --github-run-attempt "$GITHUB_RUN_ATTEMPT" \
+            --github-repository "$GITHUB_REPOSITORY" \
+            --container-image "$RK_PLATFORM_CONTAINER_IMAGE"
+          (
+            cd "$EVIDENCE_ROOT/capture"
+            sha256sum --check --strict SHA256SUMS
+          )
+
+      - name: Upload canonical platform evidence and RPM archives
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: rk003-rk005-platform-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/rk003-rk005-platform-evidence/
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0

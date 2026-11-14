@@ -1,0 +1,45 @@
+{
+  "commands": [
+    {
+      "argv": [
+        "python3",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/original227-runtime-bindings-restart-20261028-1/recursive-successor-1/prepare_recursive_successor.py",
+        "--root-inputs",
+        "ROOT_ACTUAL_STATIC_INPUT_PATH",
+        "--root-inputs-sha256",
+        "ROOT_ACTUAL_STATIC_INPUT_SHA256",
+        "--destination",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/original227-runtime-bindings-restart-20261028-1/recursive-successor-1/prepared-cohort-2"
+      ],
+      "order": 1,
+      "purpose": "Pure new successor static/bridge composition; no nonce replay"
+    },
+    {
+      "argv": [
+        "python3",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/original227-runtime-bindings-restart-20261028-1/recursive-successor-1/prepare_recursive_successor.py",
+        "--bind-dependencies",
+        "--root-inputs",
+        "ROOT_ACTUAL_DEPENDENCY_INPUT_PATH",
+        "--root-inputs-sha256",
+        "ROOT_ACTUAL_DEPENDENCY_INPUT_SHA256",
+        "--destination",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/original227-runtime-bindings-restart-20261028-1/recursive-successor-1/prepared-cohort-2"
+      ],
+      "order": 2,
+      "purpose": "Pure new successor current60 dependency DATA binding after independent reviews"
+    }
+  ],
+  "forbidden_replays": [
+    "old prepare --nonce",
+    "old finalizer seal-source-context",
+    "old finalizer bind-bridge",
+    "HOST26",
+    "stage/compose/archive readback",
+    "any accepted default/native prefix"
+  ],
+  "runtime_authority": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing."
+}

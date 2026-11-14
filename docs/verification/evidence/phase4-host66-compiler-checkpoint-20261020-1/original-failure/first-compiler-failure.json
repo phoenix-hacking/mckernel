@@ -1,0 +1,54 @@
+{
+  "actual_type": "Result<Arc<VmaOwner>,kernel::alloc::AllocError>",
+  "compiler_or_link_or_native_acceptance": false,
+  "compiler_suggested_bounded_correction": "Ok(Arc::new(Self{deferred:ManuallyDrop::new(node)},GFP_KERNEL)?)",
+  "driver_returncode": 1,
+  "expected_type": "Result<Arc<VmaOwner>,kernel::error::Error>",
+  "failure_family": "REAL_SDK_KERNEL_ALLOCERROR_TO_KERNEL_ERROR_CONVERSION",
+  "first_error": "E0308",
+  "line": 140,
+  "make_returncode": 2,
+  "module_target": "mcctrl_rust.o",
+  "new_request_or_retry": false,
+  "next_action": "Separate one bounded source correction review using genuine SDK error; root independent physical retirement and next fresh reviewed source/request/release before any compile",
+  "observed_error_count": 1,
+  "outer_returncode": 1,
+  "parser_only_failure": false,
+  "producer": "VmaOwner::new -> kernel::Result<Arc<Self>>",
+  "source": "mcctrl_vm.rs",
+  "source_request_workspace_preserved": true,
+  "status": "ACTUAL_COMPILER_FAILURE_PRESERVED_NOT_RETRIED",
+  "whole_join": {
+    "direct_child_joined": true,
+    "elapsed_seconds": 18.91237998,
+    "observer_error": null,
+    "process_group_absent": true
+  },
+  "witnesses": [
+    {
+      "bytes": 1809,
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-sdk-preparation-20261020-1/actual-sdk-build-1/dispatch.status.json",
+      "sha256": "92fea2fd3fc22d7e4575ea2a2c8d2b9a1da482537bca9fdc611abaf3a753d6b4"
+    },
+    {
+      "bytes": 36808,
+      "path": "/home/holden/mckernel-work/scratch/nsd-o-6c3023d47a774750a79a1da6c20e1234/owner-receipt.json",
+      "sha256": "d3862ddd9e9ce62575b30a53c55d1f5e181c37958661a216b3b9a6749beefa70"
+    },
+    {
+      "bytes": 22192,
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-6c3023d47a774750a79a1da6c20e1234/evidence/receipt.json",
+      "sha256": "2837fec20f0583438ee85b28571d8b562275eb10365c163a3b44fa50d6a67515"
+    },
+    {
+      "bytes": 1557,
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-6c3023d47a774750a79a1da6c20e1234/evidence/make.stderr",
+      "sha256": "094c2061c35e7abcfa6dba7f066920427f3944e978e4cea8e7633353cf0bd124"
+    },
+    {
+      "bytes": 346,
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-6c3023d47a774750a79a1da6c20e1234/evidence/make.stdout",
+      "sha256": "c5d3153b5180210c06fcbc04037a34e8bc4f912818d7b025f24e5c0127729507"
+    }
+  ]
+}

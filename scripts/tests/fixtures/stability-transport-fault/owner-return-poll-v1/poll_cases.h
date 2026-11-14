@@ -1,0 +1,25 @@
+/* Frozen literal raw inputs; expectations are in poll-expectations.json. */
+struct poll_case { const char *name, *raw; int error; enum return_sample_kind expected; };
+static const struct poll_case poll_cases[] = {
+    { "actual-00", "0 0x0 0x547ffffffcf8 0x10 0x1555555355e0 0x0 0x547ffffffbf7 0x7ffff7dc3d28 0x7ffff7ed115d\n", 0, RETURN_SAMPLE_OTHER },
+    { "actual-01", "0 0x0 0x547ffffffcf8 0x10 0x1555555355e0 0x0 0x547ffffffbf7 0x7ffff7dc3d28 0x7ffff7ed115d\n", 0, RETURN_SAMPLE_OTHER },
+    { "actual-02", "16 0x3 0x30a02904 0x7ffff7dc3da8 0x1555555355e0 0x0 0x547ffffffbf7 0x7ffff7dc3d40 0x7ffff7eced1f\n", 0, RETURN_SAMPLE_RET },
+    { "actual-03", "16 0x3 0x30a02904 0x7ffff7dc3da8 0x1555555355e0 0x0 0x547ffffffbf7 0x7ffff7dc3d40 0x7ffff7eced1f\n", 0, RETURN_SAMPLE_RET },
+    { "actual-04", "16 0x3 0x30a02904 0x7ffff7dc3da8 0x1555555355e0 0x0 0x547ffffffbf7 0x7ffff7dc3d40 0x7ffff7eced1f\n", 0, RETURN_SAMPLE_RET },
+    { "actual-05", "16 0x3 0x30a02904 0x7ffff7dc3da8 0x1555555355e0 0x0 0x547ffffffbf7 0x7ffff7dc3d40 0x7ffff7eced1f\n", 0, RETURN_SAMPLE_RET },
+    { "actual-06", "16 0x3 0x30a02904 0x7ffff7dc3da8 0x1555555355e0 0x0 0x547ffffffbf7 0x7ffff7dc3d40 0x7ffff7eced1f\n", 0, RETURN_SAMPLE_RET },
+    { "actual-07", "16 0x3 0x30a02904 0x7ffff7dc3da8 0x1555555355e0 0x0 0x547ffffffbf7 0x7ffff7dc3d40 0x7ffff7eced1f\n", 0, RETURN_SAMPLE_RET },
+    { "actual-08", "16 0x3 0x30a02904 0x7ffff7dc3da8 0x1555555355e0 0x0 0x547ffffffbf7 0x7ffff7dc3d40 0x7ffff7eced1f\n", 0, RETURN_SAMPLE_RET },
+    { "actual-09", "16 0x3 0x30a02904 0x7ffff7dc3da8 0x1555555355e0 0x0 0x547ffffffbf7 0x7ffff7dc3d40 0x7ffff7eced1f\n", 0, RETURN_SAMPLE_RET },
+    { "actual-10", "16 0x3 0x30a02904 0x7ffff7dc3da8 0x1555555355e0 0x0 0x547ffffffbf7 0x7ffff7dc3d40 0x7ffff7eced1f\n", 0, RETURN_SAMPLE_RET },
+    { "actual-11", "16 0x3 0x30a02904 0x7ffff7dc3da8 0x1555555355e0 0x0 0x547ffffffbf7 0x7ffff7dc3d40 0x7ffff7eced1f\n", 0, RETURN_SAMPLE_RET },
+    { "actual-12", "16 0x3 0x30a02904 0x7ffff7dc3da8 0x1555555355e0 0x0 0x547ffffffbf7 0x7ffff7dc3d40 0x7ffff7eced1f\n", 0, RETURN_SAMPLE_RET },
+    { "actual-13", "running\n", 0, RETURN_SAMPLE_UNKNOWN },
+    { "empty", "", 0, RETURN_SAMPLE_UNKNOWN },
+    { "negative-no-syscall", "-1 0x123 0x456\n", 0, RETURN_SAMPLE_UNKNOWN },
+    { "partial-ioctl", "16 0x3 0x30a02904\n", 0, RETURN_SAMPLE_UNKNOWN },
+    { "trailing-token", "16 0x3 0x30a02904 0x7ffff7dc3da8 0x1555555355e0 0x0 0x547ffffffbf7 0x7ffff7dc3d40 0x7ffff7eced1f x\n", 0, RETURN_SAMPLE_UNKNOWN },
+    { "read-error", "0 0x0 0x547ffffffcf8 0x10 0x1555555355e0 0x0 0x547ffffffbf7 0x7ffff7dc3d28 0x7ffff7ed115d\n", 5, RETURN_SAMPLE_UNKNOWN },
+    { "disappeared-syscall-file", "", 2, RETURN_SAMPLE_UNKNOWN },
+    { "negative-complete-record", "-1 0x0 0x0 0x0 0x0 0x0 0x0 0x123 0x456\n", 0, RETURN_SAMPLE_UNKNOWN },
+};

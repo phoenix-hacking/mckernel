@@ -1,0 +1,110 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_EXPERT_M05_READINESS_READER_CORRECTION_AND_FULL_STATIC_ELF_NO_NATIVE_ACCEPTANCE",
+  "source_failure_family": {
+    "original_495e": "Procfs-only wait admitted shutdown before successful actual retirement. Preserved earlier source/result.",
+    "prior_readiness_source": "13d066 Rust source accepted for ACK-before-intent and separate token namespaces; prior fixture save_file stub omitted real O_EXCL behavior.",
+    "new_native7589": {
+      "path": "/home/holden/mckernel-work/native-runs/m05h1/p/attempt-758924c510a14144a46fe53801f9e356/result.json",
+      "sha256": "69e1ad884baffa6c62eea4dfe76a3a948fffe0891a1551afe5a83d40dba6b799",
+      "bytes": 81267
+    },
+    "new_native7589_serial": {
+      "path": "/home/holden/mckernel-work/native-runs/m05h1/p/attempt-758924c510a14144a46fe53801f9e356/serial.log",
+      "sha256": "97748556f329a36a1be4fcb210488836760e5627cd38829d19b1d6f444384f09",
+      "bytes": 74231
+    },
+    "observed_current_failure": "Final host evaluator reports M05 case: payload after resource capture; serial shows real ACK0, retirement21=-11 and DELETE, then procfs_empty=false/poweroff before any public shutdown.",
+    "expert_exact_counterexample": "Actual retained reboot_snapshot -> actual save_file(O_CREAT|O_EXCL), called with same fixed epoch filename, returns pending0 on firstpoll then EEXIST/-1 on secondpoll. This explains immediate loop exit without waiting five seconds; original readiness Rust parses retained7589 LF-derived snapshot as pending0."
+  },
+  "fix": {
+    "candidate_C": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/collector.c",
+      "sha256": "01ddc7c19151a6a36a63cdf37cecb12843054dae8e22383005da651db89f115b",
+      "bytes": 50934
+    },
+    "diff": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/collector.c.diff",
+      "sha256": "aafd1277d3691796df356e8020d990796a47f85900479183ff90249d849aa4ac",
+      "bytes": 2398
+    },
+    "Rust_unchanged": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/begin_readiness.rs",
+      "sha256": "13d066654384b585f400a35b2e9de2425f7eeeef611a5232d9f8a82fc034c4c9",
+      "bytes": 5665
+    },
+    "delta": "Replace readiness-only reboot_snapshot acquisition+save on each poll with the same bounded read-only klogctl3 acquisition; retain first snapshot at original O_EXCL epoch filename, terminal at distinct O_EXCL name only after unchanged Rust gate returns1. No unlink/truncate/overwrite.",
+    "retained_snapshot_bound": {
+      "epochs": 2,
+      "snapshots_per_epoch": 2,
+      "snapshot_size_exclusive_upper_bound": 262144,
+      "whole_retained_bytes_max": 1048572,
+      "additional_static_memory_bytes": 0
+    },
+    "preserved": [
+      "both exact original five-second loops",
+      "full Rust identity/intent0/ACK0/DELETE/finalretirement0 gate",
+      "append-only log prefix and epoch transition guard",
+      "real readable and empty procfs required before readiness",
+      "original final kernel capture and reboot/resource helper code",
+      "no shutdown retries or delay-as-retirement proof"
+    ]
+  },
+  "artifact": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/attempt-1/collector.init",
+    "sha256": "024c1872f30fd63272ff3e6da014baffffa9fc169dd7159223888e1428a43276",
+    "bytes": 1636640
+  },
+  "artifact_mode": "0o100700",
+  "ABI": {
+    "ELF64_EXEC_AMD64": true,
+    "INTERP": false,
+    "dynamic_section": false,
+    "undefined_references": [],
+    "unique_m05_begin_ready": true,
+    "full_GCC9_static_gc_flags": "Exact argv retained in attempt-1/EXACT-COMMANDS-BEFORE-EXECUTION.json"
+  },
+  "tests": {
+    "exact_controlled_reader_save_file_real_IO": "Original2pollEEXIST reproduced; corrected actual7589 pending500reads through unchanged5s loop; two pendingpolls then controlled final0 in each generation; first snapshot inode/metadata/bytes preserved; four distinct first/terminal files.",
+    "retained_source_lifecycle_fixture": "1884 assertions PASS, including original495e pending, strict mutation rejects, ACK-before-intent, independent token namespaces, both five-second loops, epoch2 readiness, append-only/error guards. Assertion count decreases from prior3706 because pendingpolls no longer call save_file stub.",
+    "actual_reader_error_controls": "O_EXCL existing snapshot retains KEEP bytes and fails; missing/nonempty real procfs surrogate blocks; klog EIO, empty0, full262144, oversize262145 all fail before parser/retention.",
+    "main_operations": 16,
+    "reader_bounds_operations": 4,
+    "all_zero_whole_join_group_gone_closed": true,
+    "main_elapsed_seconds": 1.9645765770692378,
+    "main_CPU_seconds": 1.891861,
+    "main_result": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/attempt-1/RESULT.json",
+      "sha256": "8772723ef3b57a6d89d01d53e462a9b23e12f4c72878fee2fc842b352ce7fb56",
+      "bytes": 21282
+    },
+    "reader_bounds_result": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/reader-bounds-1/RESULT.json",
+      "sha256": "0454e1ed417a33315fefbbb3a41884b4d49bb078f090ecf08328e37f83c198e2",
+      "bytes": 5303
+    }
+  },
+  "fixture_truthfulness": {
+    "actual": [
+      "unprivileged real filesystem open(O_EXCL)/write/close/opendir/readdir/closedir",
+      "original C reader/save_file/write_all/procfs bodies",
+      "unchanged Rust FFI implementation and full static collector link"
+    ],
+    "controlled": [
+      "klog provider supplies console-derived7589 LF snapshot rather than live klog syscall",
+      "matching final0 records and all epoch2 records are explicitly controlled additions",
+      "clock and nanosleep in fixture are simulated; native five-second bodies remain exact",
+      "/case/evidence and /proc/mcos0 paths translate to private owned fixture directories"
+    ],
+    "native_acceptance": false,
+    "application_acceptance": false,
+    "new_native_launches": 0
+  },
+  "profile": "CPU0 ordinary onejob AS2GiB CPU60 wall90+6 FSIZE32MiB NOFILE256 core0 Rust1.92/GCC9 CGU1 2MiBstack; accepted owned_capture990807 AST-extracted, all20 commands wholejoined.",
+  "CPU0_released": true,
+  "first_expert_candidate_pass": true,
+  "bounded_candidate_correction_used": false,
+  "independent_source_review": null,
+  "root_stage_execution_release": null,
+  "next_prerequisite": "Independent source/build review, coherent staging binding and separately released fresh native M05; actual matching successful retirement remains unproven by controlled fixture."
+}

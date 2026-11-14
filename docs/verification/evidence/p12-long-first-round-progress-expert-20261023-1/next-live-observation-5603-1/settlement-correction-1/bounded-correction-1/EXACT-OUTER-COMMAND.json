@@ -1,0 +1,26 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=2147483648",
+    "--cpu=60",
+    "--fsize=33554432",
+    "--nofile=256",
+    "--core=0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-correction-1/bounded-correction-1/run_settlement_fixture.py"
+  ],
+  "driver_sha256": "c895be5d1ec1ef7b386acabb37f95929b1e3ad22eec372f6771866db360b2641",
+  "capture_source_sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8",
+  "TERM_INT_ALRM_registered": true,
+  "parallel_jobs": 1,
+  "outer_wall_seconds": 90,
+  "bounded_correction": "Supply byte-identical accepted fixture include actual-final-gates.inc omitted from first fixture copy; production sources unchanged",
+  "included_fixture_sha256": "6c6db09119ff67fa1dadfed12081d1d11ff21667c3c48ad2904ac6c916ee2cff"
+}

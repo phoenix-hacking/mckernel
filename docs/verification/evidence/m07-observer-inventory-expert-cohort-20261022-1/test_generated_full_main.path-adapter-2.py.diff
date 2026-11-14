@@ -1,0 +1,50 @@
+--- /home/holden/mckernel-work/host-preparation/m07-observer-inventory-expert-cohort-20261022-1/test_generated_full_main.corrected-binding-1.py
++++ /home/holden/mckernel-work/host-preparation/m07-observer-inventory-expert-cohort-20261022-1/test_generated_full_main.path-adapter-2.py
+@@ -19,7 +19,7 @@
+  s=importlib.util.spec_from_file_location(name,p);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);return m
+ 
+ class RetainedAttempt:
+- def __init__(self,label):self.label=label;self.path=D/('retained-fixture-'+label+'-1');self.stage='new'
++ def __init__(self,label):self.label=label;self.path=D/('retained-fixture-'+label+'-path-adapter-2');self.stage='new'
+  def record(self,stage,**values):
+   self.stage=stage;path=self.path/('stage-%02d.json'%len(list(self.path.glob('stage-*.json'))))
+   with path.open('x') as out:json.dump(dict(label=self.label,stage=stage,location=str(self.path),**values),out,sort_keys=True);out.write('\n');out.flush();os.fsync(out.fileno())
+@@ -95,7 +95,7 @@
+   write(reviews[0][0],reviews[0][1]);release['source_review']={k:v for k,v in ref(reviews[0][0]).items() if k!='bytes'}
+   reviews[1][1]['reviewed_observation_payload_sha256']=sha(o.canonical_payload(release));write(reviews[1][0],reviews[1][1]);release['execution_review']={k:v for k,v in ref(reviews[1][0]).items() if k!='bytes'}
+   releasepath=prep/'release.json';write(releasepath,release)
+-  real_stat=os.stat;real_fstat=os.fstat;real_lstat=os.lstat;real_read=Path.read_text
++  real_stat=os.stat;real_fstat=os.fstat;real_lstat=os.lstat;real_path_stat=Path.stat;real_path_lstat=Path.lstat;real_read=Path.read_text
+   def model(meta,p):
+    if p==lock or p==diagnosticdir or diagnosticdir in p.parents:
+     fields={k:getattr(meta,k) for k in dir(meta) if k.startswith('st_')}
+@@ -112,6 +112,12 @@
+    path=Path(p)
+    if not path.is_absolute():path=(Path(os.readlink('/proc/self/fd/'+str(dir_fd))) if dir_fd is not None else Path.cwd())/path
+    return model(real_lstat(p,*a,dir_fd=dir_fd,**kw),path)
++  def path_stat_call(p,*a,**kw):
++   path=p if p.is_absolute() else Path.cwd()/p
++   return model(real_path_stat(p,*a,**kw),path)
++  def path_lstat_call(p,*a,**kw):
++   path=p if p.is_absolute() else Path.cwd()/p
++   return model(real_path_lstat(p,*a,**kw),path)
+   def read_text(p,*a,**kw):return boot if str(p)=='/proc/sys/kernel/random/boot_id' else real_read(p,*a,**kw)
+   calls=[]
+   def command(argv,**kw):
+@@ -123,7 +129,7 @@
+    else:raise AssertionError('nonfixture command:'+repr(argv))
+    return subprocess.CompletedProcess(argv,0,canon(value)+b'\n',b'')
+   with contextlib.ExitStack() as stack:
+-   for p in (patch.object(os,'getuid',return_value=0),patch.object(os,'geteuid',return_value=0),patch.object(o.resource,'setrlimit'),patch.object(os,'fstat',fstat),patch.object(os,'stat',stat_call),patch.object(os,'lstat',lstat_call),patch.object(Path,'read_text',read_text),patch.object(subprocess,'run',command)):stack.enter_context(p)
++   for p in (patch.object(os,'getuid',return_value=0),patch.object(os,'geteuid',return_value=0),patch.object(o.resource,'setrlimit'),patch.object(os,'fstat',fstat),patch.object(os,'stat',stat_call),patch.object(os,'lstat',lstat_call),patch.object(Path,'stat',path_stat_call),patch.object(Path,'lstat',path_lstat_call),patch.object(Path,'read_text',read_text),patch.object(subprocess,'run',command)):stack.enter_context(p)
+    attempt.record('before-generated-observer-main',generated_observer=str(G/'observe_current_pass_image_retirement.py'))
+    try:
+     with contextlib.redirect_stdout(io.StringIO()):o.main(['--git-commit','0'*40,'--git-tree','0'*40,'--observation-release',str(releasepath),'--observation-release-sha256',sha(releasepath.read_bytes())])
+@@ -176,6 +182,6 @@
+  'incomplete-client-ledger':lambda c,p,m:p['client:7:status.json'].rename(p['client:7:status.json'].with_name('missing-status')),
+  }
+  for label,mutate in variants.items():results.append(test(label,mutate))
+- (D/'FULL-MAIN-RESULTS.json').write_text(json.dumps(dict(status='PASS',scope='unprivileged fixture only; no physical clearance, no execution release',results=results),indent=2)+'\n')
++ (D/'FULL-MAIN-RESULTS.path-adapter-2.json').write_text(json.dumps(dict(status='PASS',scope='unprivileged fixture only; no physical clearance, no execution release',results=results),indent=2)+'\n')
+  print(json.dumps(results,sort_keys=True))
+ if __name__=='__main__':main()

@@ -1,0 +1,55 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_CONFIGURED_ROOT59_COMMON_AND_DEPENDENCY_INTERFACE_SOURCE_ONLY",
+  "independent": true,
+  "reviewer": "/root/observerreview",
+  "implementation_ownership": false,
+  "runtime_authority": null,
+  "reviewed_observer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-newwindow-integration-source-20261028-1/configured-dependencies-successor-1/observe_root59_configured.py",
+    "bytes": 23317,
+    "sha256": "5877ec1acbc121c99dd564e3c5f0801995417ae08e66887e34afd3b4c8a30515"
+  },
+  "reviewed_current116_wrapper": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-newwindow-integration-source-20261028-1/configured-dependencies-successor-1/observe_root59_current116_configured.py",
+    "bytes": 3385,
+    "sha256": "20390bcc8f4d5dbfcf8d36480b43b1004b2f57d990213592254e8654dfdd2264"
+  },
+  "reviewed_guard_adapter": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-operation-guards-source-20261028-1/current116_guard_adapter.py",
+    "bytes": 3003,
+    "sha256": "af2f25cb88bc3853789df9eef85ae2b9e209e637fa2a7e553055894a9ed8b32c"
+  },
+  "reviewed_physical_configure_interface_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-physical-history-successor-source-20261028-1/physical_history_successor.py",
+    "bytes": 9521,
+    "sha256": "af7cfd5a37a56672205ef0bc133d0c679aa5a7103450cf73ff1ba4f50479ca87"
+  },
+  "reviewed_binding_template": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-newwindow-integration-source-20261028-1/configured-dependencies-successor-1/ROOT-ACTUAL-RUNTIME-DEPENDENCIES.TEMPLATE.NOT-AUTHORITY.json",
+    "bytes": 1504,
+    "sha256": "59b64dd38618a7001aad58a144d118a02e76c19bece4764007c88dda9992c0c9"
+  },
+  "reviewed_review_template": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-newwindow-integration-source-20261028-1/configured-dependencies-successor-1/DEPENDENCY-REVIEW.TEMPLATE.NOT-AUTHORITY.json",
+    "bytes": 1241,
+    "sha256": "6da5679fea50c9d8afd5b9e49a091fd79ed7a065fd6c27d4fd3198f91ea0cbf9"
+  },
+  "independent_pipeline_controls": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/CURRENT116-CONFIGURED-INDEPENDENT-CONTROLS.json",
+    "bytes": 1490,
+    "sha256": "f00d8b9a9f0085196d8bff361231344db4a0b8d66f6dab19013ab59a1b66259c"
+  },
+  "findings": [
+    "Common requires exact configured dependency JSON key set/schema, Root author/self/Root59 and runtime_authority null. Independent dependency review must have implementation_ownership false and exact source/config/self joins.",
+    "All four dependency source/config refs authenticate as BYTE subjects before module imports. Guard configure declares JSON and authenticates sealed operation/source/review; physical configure declares JSON and authenticates independent config/source-chain joins before observations.",
+    "Only after both real configure methods succeed does common call guard.guard/physical.observe. Pure tests perform real configure methods and immutable binding checks while guard/account/physical/procfs/child effects are explicit TEST_ONLY substitutes.",
+    "All original common functions except observe are AST-identical, preserving exact Root59/f76/native4d1c custody/clientreap/query and ownership predicates. observe only replaces missing dependency setup with configured helper; later physical/native observations remain unchanged.",
+    "Actual wrapper20390bcc pins common5877ec1a and successor consumer boundary; schemaf2edf959 names actual wrapper bytes. It delegates common once and adapts only current_boundary.",
+    "Four wrong-config controls reject changed guard/physical bytes, wrong operation and mismatched physical review/config before effects. Nine substituted query calls represent8 unique argv, preserving original repeated query."
+  ],
+  "actual_runtime_configuration_refs_reviewed": false,
+  "actual_dependency_binding_decision_not_issued": true,
+  "required_actual_dependency_review_decision": "PASS_EXACT_ROOT59_CONFIGURED_NEW_WINDOW_OBSERVER_DEPENDENCIES",
+  "actual_guard_or_physical_calls": 0
+}

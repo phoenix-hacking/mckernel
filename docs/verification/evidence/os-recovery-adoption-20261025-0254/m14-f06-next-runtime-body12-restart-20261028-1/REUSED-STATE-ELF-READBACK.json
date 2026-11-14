@@ -1,0 +1,152 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_REUSED_BODY6_BODY7_REAL_OBJECT_AND_PARTIAL_LINK_COMPLETE_FINAL_ONLY_USED_OFFSET",
+  "readbacks": [
+    {
+      "artifact": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/future-host-output-1/runtime_vdso_map_log.o",
+        "bytes": 3696,
+        "sha256": "999203c251cd86cab2e69bdeac640a2575135ecd4377fa841202958da9285938"
+      },
+      "actual_reused_provider_symbols": [
+        {
+          "name": "mckernel_f06_vdso_offset",
+          "type": 1,
+          "bind": 1,
+          "other": 0,
+          "ndx": 13,
+          "value": 0,
+          "size": 8,
+          "section": ".bss.mckernel_f06_vdso_offset",
+          "section_type": 8,
+          "section_flags": 3,
+          "section_alignment": 8
+        },
+        {
+          "name": "arch_vdso_state_bridge",
+          "type": 2,
+          "bind": 1,
+          "other": 0,
+          "ndx": 7,
+          "value": 0,
+          "size": 46,
+          "section": ".text.arch_vdso_state_bridge",
+          "section_type": 1,
+          "section_flags": 6,
+          "section_alignment": 16
+        },
+        {
+          "name": "mckernel_f06_vdso_state",
+          "type": 1,
+          "bind": 1,
+          "other": 0,
+          "ndx": 14,
+          "value": 0,
+          "size": 88,
+          "section": ".bss.mckernel_f06_vdso_state",
+          "section_type": 8,
+          "section_flags": 3,
+          "section_alignment": 8
+        },
+        {
+          "name": "mckernel_f06_vdso_container_size",
+          "type": 1,
+          "bind": 1,
+          "other": 0,
+          "ndx": 10,
+          "value": 0,
+          "size": 8,
+          "section": ".bss.mckernel_f06_vdso_container_size",
+          "section_type": 8,
+          "section_flags": 3,
+          "section_alignment": 8
+        }
+      ]
+    },
+    {
+      "artifact": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/future-host-output-1/joined.o",
+        "bytes": 91264,
+        "sha256": "7d485f94c6329d8a0d821f1452ed7e7f7dbba2e27383ac259540d83e12124a49"
+      },
+      "actual_reused_provider_symbols": [
+        {
+          "name": "mckernel_f06_vdso_container_size",
+          "type": 1,
+          "bind": 1,
+          "other": 0,
+          "ndx": 21,
+          "value": 0,
+          "size": 8,
+          "section": ".bss.mckernel_f06_vdso_container_size",
+          "section_type": 8,
+          "section_flags": 3,
+          "section_alignment": 8
+        },
+        {
+          "name": "mckernel_f06_vdso_offset",
+          "type": 1,
+          "bind": 1,
+          "other": 0,
+          "ndx": 22,
+          "value": 0,
+          "size": 8,
+          "section": ".bss.mckernel_f06_vdso_offset",
+          "section_type": 8,
+          "section_flags": 3,
+          "section_alignment": 8
+        },
+        {
+          "name": "arch_vdso_state_bridge",
+          "type": 2,
+          "bind": 1,
+          "other": 0,
+          "ndx": 5,
+          "value": 0,
+          "size": 46,
+          "section": ".text.arch_vdso_state_bridge",
+          "section_type": 1,
+          "section_flags": 6,
+          "section_alignment": 16
+        },
+        {
+          "name": "mckernel_f06_vdso_state",
+          "type": 1,
+          "bind": 1,
+          "other": 0,
+          "ndx": 23,
+          "value": 0,
+          "size": 88,
+          "section": ".bss.mckernel_f06_vdso_state",
+          "section_type": 8,
+          "section_flags": 3,
+          "section_alignment": 8
+        }
+      ]
+    },
+    {
+      "artifact": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/future-host-output-1/fixture",
+        "bytes": 6134744,
+        "sha256": "0051139b09264cff18e29ce6b410504c474971afdc60e90ec8919c679ee3227d"
+      },
+      "actual_reused_provider_symbols": [
+        {
+          "name": "mckernel_f06_vdso_offset",
+          "type": 1,
+          "bind": 1,
+          "other": 0,
+          "ndx": 31,
+          "value": 2945040,
+          "size": 8,
+          "section": ".bss",
+          "section_type": 8,
+          "section_flags": 3,
+          "section_alignment": 32
+        }
+      ]
+    }
+  ],
+  "final_scope": "Compiler inlined existing offset-only state bridge path; final fixture GC removes unused state/container_size/standalone state bridge sections. Final still contains actual shared offset8B, new logger and descriptor. No claim that final HOST binary retains those unused symbols.",
+  "not_new_Body6_Body7_retirement_credit": true
+}

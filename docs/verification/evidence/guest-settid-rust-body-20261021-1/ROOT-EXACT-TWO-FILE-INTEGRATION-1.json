@@ -1,0 +1,30 @@
+{
+  "created_utc": "2026-10-21T01:36:48.422746+00:00",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "review_sha256": "9f13514cd85466f4180ca9f14dce559cc930dd0ed60bcfa93e0aaf521e77f354",
+  "files": [
+    {
+      "path": "kernel/syscall.c",
+      "pre_sha256": "2183284fa35f6b25fbf8feb121c298f70aac13cea6840030f536775ee880d5bb",
+      "pre_bytes": 837964,
+      "post_sha256": "81404ef35d90cf965c1f46ba200d6d83106576373c0ddd84128c638dffe3b6fb",
+      "post_bytes": 838685,
+      "patch_sha256": "f0f0833058f8c1466448bcea986ef096a0782b55ec8b9ccba1903708e1358f59"
+    },
+    {
+      "path": "kernel/rust/syscall_policy.rs",
+      "pre_sha256": "7bed3b6f62d7c305693e7e0370d0e6f9f08d1125b66c39d148c1a0af5e00f6fe",
+      "pre_bytes": 696999,
+      "post_sha256": "54f3103ee88d34f91f29c3c81b647bb9b24cef576bfb02a8c777742547ce97b1",
+      "post_bytes": 698330,
+      "patch_sha256": "9d0e143884e45a4b2e7f1d13b5f79988cedab5ab15e47752a79f79e7f902a587"
+    }
+  ],
+  "actual_tests": 12,
+  "scope_of_test": "finite actual-body parity with equivalent transport glue",
+  "full_current_crate": false,
+  "production_C_compile": false,
+  "kernel_link": false,
+  "native_acceptance": false,
+  "C_retirement": false
+}

@@ -1,0 +1,63 @@
+{
+  "schema": "mckernel.native-exact-gitlink-preparation-success.v1",
+  "recorded_at": "2026-09-30T22:03:00-07:00",
+  "status": "PASS_RESULT_EXPORTSET26_GITLINK",
+  "scope": "one unprivileged c81/exportset-26 libdwarf gitlink preparation; no build, guest, application, or acceptance claim",
+  "release": {
+    "commit": "5a4efa533dcb6ef7d00e52c3b6b2f2e40b973215",
+    "packet": "docs/verification/evidence/native-exact-mckernel-gitlink-preparation-c81aeaca-exportset26-20261001.sh",
+    "packet_sha256": "c8c0dceb695ddbd001bb17334e57e85fe1f36ea8e9f41dffd402cc49884815ca",
+    "independent_decision": "PASS_EXECUTION",
+    "invocations": 1
+  },
+  "external_commit_witness": {
+    "wrapper_exit_code": 0,
+    "stdout_exact": "{\"terminal\": \"/home/holden/mckernel-work/scratch/native-exact-mckernel-gitlink-preparation-c81aeaca-exportset-26-terminal.json\", \"terminal_sha256\": \"90d5c20e741d803360ed2e92a9ee8acb9e90ecaf529e980762ca05b3be745e22\", \"preparation_returncode\": 0, \"log_final_fsync\": \"PASS\"}\n",
+    "basis": "original coordinator unified-exec result; terminal alone is insufficient"
+  },
+  "artifacts": {
+    "terminal": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-gitlink-preparation-c81aeaca-exportset-26-terminal.json",
+      "sha256": "90d5c20e741d803360ed2e92a9ee8acb9e90ecaf529e980762ca05b3be745e22",
+      "device_inode": "1831:90694",
+      "mode": "0600",
+      "returncode": 0
+    },
+    "log": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-gitlink-preparation-c81aeaca-exportset-26.log",
+      "sha256": "c7d2c3a8469feee00b6ca14ed2780096d1ef82039ffa842796cc806a3ef0621c",
+      "device_inode": "1831:90692",
+      "mode": "0600"
+    },
+    "manifest": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-gitlink-inputs-c81aeaca-exportset-26.json",
+      "sha256": "ec6c0995f128153e8b98fca922bc32f78c1aaa2cdd2cebea6cbae57b819cc492",
+      "device_inode": "1831:90693",
+      "mode": "0600"
+    },
+    "checkout": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-gitlink-libdwarf-c81aeaca-exportset-26",
+      "device_inode": "1831:1858957",
+      "mode": "0700"
+    }
+  },
+  "bindings": {
+    "candidate_sha": "c81aeaca5cedd893981a058444fa11a03a49a744",
+    "ihk_sha": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+    "base_manifest_sha256": "1bf7aea3f3dbccc92a08f307e2b96626a4a24b879bdb592478851e3d2121eed3",
+    "libdwarf_commit": "ab9230b2b8aa66a3d1d52e4be11fca17a3b63753",
+    "libdwarf_tree": "dcc29777813bf8625dce8bfb239c225d5535d668",
+    "tracked_files": 412,
+    "git_metadata_files": 21
+  },
+  "retirement": {
+    "owner_pid": 2400910,
+    "child_pid": 2400914,
+    "helper_pid": 2400915,
+    "all_absent": true,
+    "same_uid_open_references": 0,
+    "limitation": "Three protected proc entries were unreadable; no privileged system-wide descriptor census is claimed."
+  },
+  "review": "PASS_RESULT_EXPORTSET26_GITLINK; exact artifacts, complete checkout inventory, external stdout witness and process retirement independently verified",
+  "next": "Prepare and independently review the fresh c81/exportset-26 non-executable image request, then obtain a separate one-shot heavy-build release."
+}

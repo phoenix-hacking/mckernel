@@ -1,0 +1,136 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_NOT_GRANTED_NOT_EXECUTED",
+  "CPU": 0,
+  "ordinary_jobs": 1,
+  "aggregate_AS_bytes": 536870912,
+  "parent_AS_bytes": 67108864,
+  "child_AS_bytes": 469762048,
+  "commands": [
+    {
+      "name": "00-original-C-oracle",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 00-original-C-oracle; original C/Rust diagnostic behavior parity with controlled mock layouts only.",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-fno-pie",
+        "-c",
+        "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/fixture/parity.c",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/output-debug-parity-first-1/actual_c.o"
+      ],
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/output-debug-parity-first-1"
+    },
+    {
+      "name": "01-actual-Rust-body",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 01-actual-Rust-body; original C/Rust diagnostic behavior parity with controlled mock layouts only.",
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--crate-type=lib",
+        "--emit=obj",
+        "--crate-name",
+        "m14_process_debug_parity",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=1",
+        "-C",
+        "codegen-units=1",
+        "-C",
+        "relocation-model=static",
+        "-C",
+        "overflow-checks=off",
+        "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/fixture/parity.rs",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/output-debug-parity-first-1/actual_rust.o"
+      ],
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/output-debug-parity-first-1"
+    },
+    {
+      "name": "02-link-original-and-Rust",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 02-link-original-and-Rust; original C/Rust diagnostic behavior parity with controlled mock layouts only.",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-no-pie",
+        "-Wl,--no-undefined",
+        "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/output-debug-parity-first-1/actual_c.o",
+        "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/output-debug-parity-first-1/actual_rust.o",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/output-debug-parity-first-1/actual_parity"
+      ],
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/output-debug-parity-first-1"
+    },
+    {
+      "name": "03-actual-debug-parity",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 03-actual-debug-parity; original C/Rust diagnostic behavior parity with controlled mock layouts only.",
+      "argv": [
+        "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/output-debug-parity-first-1/actual_parity"
+      ],
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/output-debug-parity-first-1"
+    }
+  ],
+  "inputs": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/fixture/parity.c",
+      "sha256": "5277c071223236c04920881a05d192498716111e1ad9a66a142c328f6ef54e2c",
+      "bytes": 7049
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/fixture/parity.rs",
+      "sha256": "bc183bc63a7b8cbc4cfbc79f085b71c6cc0517e3782f840ee703ec2457b42206",
+      "bytes": 2105
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/fixture/debug_log.ACTUAL-RUST.inc",
+      "sha256": "285794c0328983166271a6ea9c23000758633df46df8e07a3e324bf56237c52e",
+      "bytes": 7040
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/fixture/original_debug_log.ACTUAL-C.inc",
+      "sha256": "845b0df91fe21122b5d184bf879820936238769c74e80e3cfb6d5410df199f74",
+      "bytes": 2558
+    }
+  ],
+  "tools": {
+    "gcc9": {
+      "path": "/usr/bin/gcc-9",
+      "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f",
+      "bytes": 1158288
+    },
+    "rust1.92.0": {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "sha256": "028fd60b0e0add5505c661cd3ccde91393d615c8729bd95d94ab1e91409b36a1",
+      "bytes": 654904
+    },
+    "python3.9": {
+      "path": "/home/holden/anaconda3/bin/python3.9",
+      "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb",
+      "bytes": 15880080
+    }
+  },
+  "profile_provenance": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/extend-cow-fixture-preparation-1/sourcehandoff/run_owned_extend_cow4480_once.py",
+    "sha256": "b4fd453ce91f4dd17af872d43c4c2afa9efc6ecbb6d83e0ef57aad0907ee0938",
+    "bytes": 10353
+  },
+  "capture_helper": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/phase5-m03-handshake-runtime-checkpoint-20261020-1/sdk-physical-source/run_two_commands_source_bound_corrected.py",
+    "sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8",
+    "bytes": 14753
+  },
+  "tool_version_provenance": "Existing reviewed profile pins GCC9 executable and pinned Rust1.92.0 path/hash. No version subprocess executed in this source-only turn.",
+  "runner": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/run_debug_parity_once.py",
+    "sha256": "7d9e9168731cf42118faa6203892bc6f48d7700b02911d70062fb7e939fb48d7",
+    "bytes": 9384
+  },
+  "requires": "Root actual COPY7 physical acceptance plus ROOT-GRANT.DEBUG-PARITY.json exact recipe/runner and accepted clearance binding. No workload admission from recipe or source readiness."
+}

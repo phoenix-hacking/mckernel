@@ -1,0 +1,43 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-current26eb-next-default-source-1/validator-templates/qualify_retained_f02_owners.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/resource-and-qualifier-preparation-1/validator-templates/qualify_retained_f02_owners.py
+@@ -9,7 +9,7 @@
+ source=(D/'qualify_clone_pointer_and_warning_suffix.py').read_text();prefix=source[:source.index("\nclone=ns['_reuse_elf_function']")]
+ ctx=dict(__file__=str(D/'qualify_four_f02_owners.py'));exec(compile(prefix,str(D/'qualify_clone_pointer_and_warning_suffix.py')+':REUSED_STRICT_ELF_READERS','exec'),ctx)
+ E=ctx['E'];B=ctx['B'];P=ctx['P'];Elf=ctx['Elf'];rust=ctx['rust'];process=ctx['process'];final=ctx['final'];data=ctx['data'];sections=ctx['sections'];ref=ctx['ref'];object_bytes=ctx['ns']['_reuse_elf_object_bytes'];relocs=ctx['ns']['_reuse_elf_owning_relocations']
+-EXPECTED=json.loads(Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-current26eb-next-default-source-1/ACCEPTANCE-INPUTS.SOURCE-ONLY.json').read_text())
++EXPECTED=json.loads(Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/resource-and-qualifier-preparation-1/ACCEPTANCE-INPUTS.SOURCE-ONLY.json').read_text())
+ FOUR=['idle_halt','allow_oversubscribe','time_sharing','process_idle_callbacks']
+ THIRTEEN=[r['name'] for r in EXPECTED['HOST13_records']]
+ TARGETS=['sched_idle_current_cpu_bridge','process_spin_lock_bridge','process_spin_unlock_bridge','cpu_enable_interrupt','cpu_disable_interrupt','schedule','sched_do_migrate_public','kmalloc_consolidate_free_list','process_sched_zero_free_bridge','cpu_safe_halt']
+@@ -96,18 +96,18 @@
+  # Exact remaining C OBJECT names, binding, type, size, initial bytes and target
+  # relocations; normalizing only incidental C string-pool address movement.
+  oldmeta={s['name']:s for s in allocated(oldprocess,1)};newmeta={s['name']:s for s in allocated(process,1)}
+- assert len(oldmeta)==88 and len(newmeta)==70
+- assert set(oldmeta)-set(newmeta)==set(FOUR+THIRTEEN+['process_timer_runtime_offsets']) and not set(newmeta)-set(oldmeta)
++ assert len(oldmeta)==88 and len(newmeta)==68
++ assert set(oldmeta)-set(newmeta)==set(FOUR+THIRTEEN+['process_timer_runtime_offsets','process_idle_offsets','process_idle_values']) and not set(newmeta)-set(oldmeta)
+  differences=[]
+  for name,s in sorted(newmeta.items()):
+   old=oldmeta[name]
+   if tuple(s[k] for k in ['bind','type','size'])!=tuple(old[k] for k in ['bind','type','size']) or object_bytes(process,s)!=object_bytes(oldprocess,old) or [normalized_relocation(process,r) for r in relocs(process,s)]!=[normalized_relocation(oldprocess,r) for r in relocs(oldprocess,old)]:differences.append(name)
+  assert not differences,('remaining C metadata differences',differences)
+- report['phases']['remaining_selected_C_metadata']=dict(original_allocated_OBJECTs=88,new_allocated_OBJECTs=70,only_removed_objects=FOUR+THIRTEEN+['process_timer_runtime_offsets'],all_70_binding_type_size_initial_bytes_and_relocations_preserved=True,no_new_C_functions=True)
++ report['phases']['remaining_selected_C_metadata']=dict(original_allocated_OBJECTs=88,new_allocated_OBJECTs=68,only_removed_objects=FOUR+THIRTEEN+['process_timer_runtime_offsets','process_idle_offsets','process_idle_values'],all_68_binding_type_size_initial_bytes_and_relocations_preserved=True,no_new_C_functions=True)
+  # Current b816 baseline is separately authenticated by the HOST13 gate;
+  # all71 metadata names/bytes/RELA above also match the predecessor before F02.
+  # This preserves46 mutable descriptor families/78 entries and25 other rodata.
+- report['phases']['metadata_classification']=dict(mutable_Ddebug_families=46,descriptor_entries=78,other_readonly_objects=24,logical_line_file_and_relocation_semantics_preserved=True)
++ report['phases']['metadata_classification']=dict(mutable_Ddebug_families=46,descriptor_entries=78,other_readonly_objects=22,logical_line_file_and_relocation_semantics_preserved=True)
+  # Actual fixed LP64 C/Rust source assertions and constructor signatures.
+  helper=Path(P['inputs']['source_directory_exports'][0]['host_path'])/'process_helpers.rs';text=helper.read_text()
+  start=text.index('pub static process_idle_callbacks:');snippet=text[max(0,start-5000):start+2000]
+@@ -123,7 +123,7 @@
+  assert 'fn process_spin_unlock_bridge(lock_addr: usize, irqstate: CULong);' in text
+  report['compiled_actual_C_and_Rust_assertions']='PASS_FIXED_LP64_POINTER_AND_ULONG8_TABLE80_ALIGN8_TEN_FIELD_OFFSETS_C_EXTERN_CONST_AND_TYPED_INITIALIZERS'
+  report['phases']['actual_source_ABI_bindings']=dict(process_helpers=ref(helper),process_source=next(r['postimage'] for r in P['inputs']['postimages'] if r['relative']=='kernel/process.c'),callback_fields=10,field_stride=8,CInt_bytes=4,callback_alignment=8,pointer_and_CULong_bytes=8,new_declaration_warning_debt='Two new usize/u64 signature spellings; ABI-equivalent under the fixed x86_64 LP64 producer, retained without suppressions/casts/wrappers.')
+- report['status']='PASS_RETAINED_F02_FOUR_OWNER_ABI_FINAL_POINTER_70_PROCESS_METADATA_WITH_NARROW_ALIAS_IDENTITIES'
++ report['status']='PASS_RETAINED_F02_FOUR_OWNER_ABI_FINAL_POINTER_68_PROCESS_METADATA_WITH_NARROW_ALIAS_IDENTITIES'
+ except BaseException as error:
+  report['status']='FAIL_FIRST_F02_DATA_OWNER_VALIDATOR_PRESERVED';report['first_failure']=repr(error);report['traceback']=traceback.format_exc()
+ (D/'RETAINED-F02-DATA-OWNERS-RESULT.json').write_text(json.dumps(report,indent=2)+'\n')

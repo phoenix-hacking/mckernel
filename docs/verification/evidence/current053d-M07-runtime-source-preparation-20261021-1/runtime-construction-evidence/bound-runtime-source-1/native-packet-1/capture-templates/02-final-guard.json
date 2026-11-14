@@ -1,0 +1,73 @@
+{
+  "operations": [
+    {
+      "argv_template": [],
+      "profile": "metadata",
+      "role": "UNUSED_INDEX_ZERO_DO_NOT_EXECUTE"
+    },
+    {
+      "argv_template": [
+        "/usr/bin/taskset",
+        "--cpu-list",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--core=0",
+        "--nofile=256",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1/review_final_threads_release.py",
+        "--config-sha256",
+        "083ddb022d6d6ecda262406bb1f48da93aefed870c58ff091a248e8a750978f1",
+        "--machine-sha256",
+        null,
+        "--snapshot-sha256",
+        null
+      ],
+      "profile": "metadata",
+      "role": "final-guard",
+      "status_path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1/captures/02-final-guard/status.json",
+      "stderr_path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1/captures/02-final-guard/stderr",
+      "stdout_path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1/captures/02-final-guard/stdout"
+    }
+  ],
+  "profiles": {
+    "metadata": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 40,
+      "stream_fsize": 33554432
+    },
+    "native": {
+      "cpu": 7,
+      "parent_kill_grace_seconds": null,
+      "parent_wall_seconds": null,
+      "stream_fsize": 33554432
+    },
+    "reader": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 35,
+      "stream_fsize": 33554432
+    },
+    "snapshot": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 40,
+      "stream_fsize": 33554432
+    }
+  },
+  "release": {
+    "bytes": 1753,
+    "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/actual-final-binder-and-static-joins-1/INDEPENDENT-ACTUAL-M07-COMBINED-STATIC-ACCEPTANCE-1.json",
+    "sha256": "a034c572f631fc2fba610bcae88a33addae72115dcfe77f28ae51aae7d726883"
+  },
+  "root_installed_release_path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/actual-final-binder-and-static-joins-1/INDEPENDENT-ACTUAL-M07-COMBINED-STATIC-ACCEPTANCE-1.json"
+}

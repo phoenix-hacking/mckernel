@@ -1,0 +1,29 @@
+--- acceptedSDK6febfcquery
++++ settlement221bfailed5603physicaldataquery
+@@ -5,7 +5,7 @@
+ import ast,fcntl,hashlib,importlib.util,json,os,resource,stat,subprocess,sys,time
+ from pathlib import Path
+ D=Path(__file__).resolve().parent
+-CONFIG_SHA = '3c7c9f7c4cb7ad3d7cf77bc364eca3742cdc943647568aeb972b3a9efb24917a'
++CONFIG_SHA = '3b60e875c6378db2b5288d30c86e70499b6719615a0179e5ab6f3f21a527825e'
+ ENGINE=Path('/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/bound-matched-image-terminal-source-2/cleanup_pass_image.py')
+ ENGINE_SHA='59efab0bc29fa5784dc855743cec397237552821bc150b60ea1d6c2e5f7ac00d'
+ def need(v,m):
+@@ -47,7 +47,7 @@
+ def validate(f,c,growth):
+  need(f['uid']==f['euid']==0 and f['affinity']==[7],'root query CPU7')
+  need(f['proc']['status']=='COMPLETE' and f['proc']['failure'] is None and f['proc']['publishers']==[] and len(f['proc']['snapshots'])==2,'complete publisher-free census')
+- need(f['physical']['verdict']=='PASS_ACTUAL_SDK6_PHYSICAL_RETIREMENT_AND_CURRENT_POSTJOIN' and f['physical']['current_live_postjoin']=='SDK6_BUILD_POSITIVELY_RETIRED' and f['physical']['physical_clearance'] is True and f['physical']['root_uninterrupted_continuity'] is True and f['physical']['owner_pid']==3838054 and f['physical']['owner_start']==57597269 and f['physical']['owner_all15_clients_absent_both'] is True and f['physical']['clients_reaped']=={'Docker':14,'admission':1} and f['physical']['container_removed_three_empty_queries'] is True and f['physical']['permanent_mutex']=='27:4' and f['physical']['eight_paths_absent'] is True and f['physical']['publishers']==[],'actual SDK6 positive physical/current postjoin')
++ need(f['physical']['verdict']=='PASS_ACTUAL_FAILED5603_SDK6_LONG_PHYSICAL_RETIREMENT_AND_CURRENT_POSTJOIN' and f['physical']['current_live_postjoin']=='FAILED_SDK6_LONG_5603_POSITIVELY_RETIRED' and f['physical']['physical_clearance'] is True and f['physical']['owner']=={'pid':3857698,'start':57872098} and f['physical']['outer']['pid']==3857691 and f['physical']['outer']['start']==57872086 and f['physical']['outer']['joined'] is True and f['physical']['outer']['group_absent'] is True and f['physical']['outer']['streams_closed'] is True and f['physical']['client_reaps']==23 and f['physical']['container_removed_and_three_empty_queries'] is True and f['physical']['exact_identities_absent']==25 and f['physical']['init_pid']==3857780 and f['physical']['init_birth'] is None and f['physical']['init_absent_both'] is True and f['physical']['directory_command_rows']==23 and f['physical']['permanent_mutex']=='27:4' and f['physical']['ownership_paths_absent']==8,'actual failed5603 SDK6 LONG positive physical/current postjoin')
+  p=f['parent'];need(p['directory'] and p['uid']==p['gid']==1000 and p['mode']==0o700 and p['children']==[] and p['dev']==c['operation']['HOST_identity']['dev'] and p['ino']==c['operation']['HOST_identity']['inode'],'fresh exact private HOST LONG parent exists empty UID1000 mode700')
+  need(not any(f['output_paths_exist'].values()),'fresh LONG capture owner attempt and unpublished release/request paths absent')
+  need(not any(f['ownership_paths_exist'].values()),'exact SDK image launcher ownership paths absent')
+@@ -81,7 +81,7 @@
+  g_parent=growth.output_parent(str(parent),fresh=True)
+  parent_info=parent_fact(parent)
+  outputs={str(p):os.path.lexists(p) for p in [Path(c['operation']['capture_directory']),parent.with_name(parent.name+'.owner-'+c['operation']['nonce']),parent/('attempt-'+c['operation']['nonce']),Path(c['operation']['future_release_path']),Path(c['operation']['future_request_path'])]}
+- # Retained prior-owner evidence remains historical; SDK6 febfc is current physical authority. Only prospective outputs require absence.
++ # Retained prior-owner evidence remains historical; failed5603 physical10c5 is current authority. Only prospective outputs require absence.
+  # Exact lease/exclusion list inherited unchanged from accepted M05 query.
+  leases=['/home/holden/mckernel-work/scratch/native-running-external-modules.lease.json', '/home/holden/mckernel-work/scratch/native-running-external-modules-operational-exclusion.json', '/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch18-image-1.json', '/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock', '/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/common-exclusion.json', '/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/lease.json', '/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/driver-hash-correction-1/pinned-launcher-attempt-1/common-exclusion.json', '/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/driver-hash-correction-1/pinned-launcher-attempt-1/image-lease.json']
+  lock=Path('/run/lock/mckernel-development.lock').stat();key='%02x:%02x:%d'%(os.major(lock.st_dev),os.minor(lock.st_dev),lock.st_ino)

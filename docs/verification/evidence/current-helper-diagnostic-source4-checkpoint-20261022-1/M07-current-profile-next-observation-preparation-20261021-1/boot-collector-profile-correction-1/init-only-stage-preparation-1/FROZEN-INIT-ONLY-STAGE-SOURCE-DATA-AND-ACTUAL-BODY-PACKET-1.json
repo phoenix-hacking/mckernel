@@ -1,0 +1,63 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "stage_source": {
+    "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/boot-collector-profile-correction-1/init-only-stage-preparation-1/stage_m07_init_failure_context.py",
+    "sha256": "a79343f12a0ffddd8833fec41fb1d28e5452d5eed2d20a37eb64cbab1b3f9a6d",
+    "size": 13589,
+    "mode": 33152
+  },
+  "binding": {
+    "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/boot-collector-profile-correction-1/init-only-stage-preparation-1/BINDING.M07-INIT-ONLY.PROPOSED.json",
+    "sha256": "713125c9b89e2468dc745c4524a348f473d2dc12fa7b2e5d89dc9e98ac0e151f",
+    "size": 15926,
+    "mode": 33152
+  },
+  "actual_body_check": {
+    "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/boot-collector-profile-correction-1/init-only-stage-preparation-1/ACTUAL-INIT-ENTRY-AND-MANIFEST-LOADER-BODY-RESULT-1.json",
+    "sha256": "d5e123f9349e0afb17f5c1401242a9895f9875b6c67c0dd420dcb52a841191cd",
+    "size": 1742,
+    "mode": 33152
+  },
+  "collector_packet": {
+    "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/boot-collector-profile-correction-1/bounded-compile-correction-1/FROZEN-HELPER-FAILURE-CONTEXT-CORRECTION-PACKET-1.json",
+    "sha256": "754362f51ee8dd91cf0091e9c9c3f76484f1660971f7f807f3787d4accd4973d",
+    "size": 1879,
+    "mode": 33152
+  },
+  "actual_helper_controlpath": {
+    "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/boot-collector-profile-correction-1/bounded-compile-correction-1/actual-helper-controlpath-1/ACTUAL-HELPER-FAILURE-SERIALIZATION-AND-SUCCESS-RESULT-1.json",
+    "sha256": "21a6aa6b6e44cf9ff8e2e9f5e25e96b036710ef389141e352b55f0dbd4c3be77",
+    "size": 5521,
+    "mode": 33152
+  },
+  "exact_next_ordinary_stage_argv": [
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "taskset",
+    "-c",
+    "7",
+    "prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=30:30",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--nofile=256:256",
+    "--",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/boot-collector-profile-correction-1/init-only-stage-preparation-1/stage_m07_init_failure_context.py",
+    "--case",
+    "numa",
+    "--binding",
+    "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/boot-collector-profile-correction-1/init-only-stage-preparation-1/BINDING.M07-INIT-ONLY.PROPOSED.json",
+    "--binding-sha256",
+    "713125c9b89e2468dc745c4524a348f473d2dc12fa7b2e5d89dc9e98ac0e151f"
+  ],
+  "execution_release": null,
+  "fresh_grant": null,
+  "stage_executed": false,
+  "semantics": "init-only failure visibility diagnostic; actual bootstrap cause unknown; strict boot/helper and M07 oracles unchanged"
+}

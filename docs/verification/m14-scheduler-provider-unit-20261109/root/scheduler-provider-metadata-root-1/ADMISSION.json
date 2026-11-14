@@ -1,0 +1,88 @@
+{
+  "status": "ROOT_FRESH_EXACT_METADATA_ONLY_ADMISSION",
+  "at": "2026-11-09T21:35:06.934389+00:00",
+  "review_sha256": "36edbc20a8de88938553280cd2fc0851388d914e9c1c30b92202910ad6540825",
+  "request_sha256": "479365c501cbcb899b88a9fcbebf2d9bd670eba55dc6e521f0de3f6819121228",
+  "controller_sha256": "673f7f82282a2d00b0f817f3340bf260e113dc73aef8678a0e7f49f655fc2aff",
+  "commands": [
+    {
+      "label": "provider-symbols",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-provider-execution-1/provider-symbols.metrics",
+        "/usr/bin/nm",
+        "-S",
+        "--format=posix",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-provider-execution-1/output/scheduler_provider.o"
+      ],
+      "stdout_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-provider-execution-1/provider-symbols.stdout",
+      "stderr_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-provider-execution-1/provider-symbols.stderr"
+    },
+    {
+      "label": "provider-elf",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-provider-execution-1/provider-elf.metrics",
+        "/usr/bin/readelf",
+        "-h",
+        "-SW",
+        "-Ws",
+        "-Wr",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-provider-execution-1/output/scheduler_provider.o"
+      ],
+      "stdout_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-provider-execution-1/provider-elf.stdout",
+      "stderr_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-provider-execution-1/provider-elf.stderr"
+    }
+  ],
+  "predicate": "CALLED object/prejoin persisted; NO link",
+  "compiled_producer": "PASS29bb80dc; neverreplay",
+  "MemAvailable": 29814583296,
+  "disk_free": {
+    "/home/holden/mckernel": 132196913152,
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba": 132196913152
+  },
+  "usage": {
+    "at": "2026-11-09T21:30:59.424147+00:00",
+    "used_percent": 34,
+    "remaining_percent": 66,
+    "window_minutes": 10080,
+    "spendControlReached": false,
+    "rateLimitReachedType": null,
+    "included_only": true
+  },
+  "HOST_total_bytes_including_all_overhead": 4294967296,
+  "payload_cpu": 6,
+  "aggregate_jobs_max": 3,
+  "batch_jobs": 1,
+  "native_SOURCE_UNKNOWN_holds": "unchanged"
+}

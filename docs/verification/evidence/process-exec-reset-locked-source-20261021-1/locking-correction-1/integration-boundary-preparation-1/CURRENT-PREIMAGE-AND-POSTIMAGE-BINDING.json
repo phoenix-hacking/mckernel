@@ -1,0 +1,27 @@
+{
+  "status": "SOURCE_ONLY_CURRENT_PREIMAGE_BOUND_NOT_INTEGRATED",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "postimage_identity": "ce189697b01c31bc48506970cb384ccef43e4a981e5a4172e77c713faf692ec4",
+  "files": {
+    "kernel/syscall.c": {
+      "pre_sha256": "bca4d642d927da7a034124a25cdc1fd80189e48c1ffd6a2f44282f33340ea24f",
+      "pre_bytes": 842598,
+      "post_sha256": "ebcafd68cc98f31553bdb1674e1be80c2eac26f6a8436ee73978fe2288bb5c61",
+      "post_bytes": 842954
+    },
+    "kernel/rust/syscall_policy.rs": {
+      "pre_sha256": "3234a38477355e9f0a671853046a0aefe12672958906240a5e471c8992c5206a",
+      "pre_bytes": 707836,
+      "post_sha256": "4edf51b9c391ddca12fd4505ac1c6b51f6a73e3919f3f1cd49b3ebcb87a38a69",
+      "post_bytes": 709680
+    }
+  },
+  "candidate": {
+    "path": "/home/holden/mckernel-work/host-preparation/process-owned-fork-rust-next-preparation-20261021-1/locking-correction-1/exec_reset_signal_state_current_v1.rs",
+    "sha256": "f53b74d7a35ae410d52276594353af58de2f7cb0bf2b7bca5213a1f1b906f20f"
+  },
+  "same_patch_as_locked_packet": true,
+  "actual_body_result": "root reports locked actual-body-comparison-1 PASS0/0.249911385s; frozen three commands/eight seeds x two incoming IRQ states; no repeated test",
+  "write_scope": "new private integration-boundary-preparation-1 only; current shared files read, never changed",
+  "execution_profile": "commands reuse accepted unprivileged production compiler flags/paths; original reusable container4CPU2-5/12GiB/noSwap/512/nonet. No new profile, grant, materialization, execution release, container, lease, resource measurement or privileged action is created here. CPU6 source-only prep ends quiescent."
+}

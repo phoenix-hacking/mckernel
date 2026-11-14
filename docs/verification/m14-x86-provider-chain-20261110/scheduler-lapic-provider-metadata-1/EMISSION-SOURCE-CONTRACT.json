@@ -1,0 +1,202 @@
+{
+  "schema": "mckernel.scheduler-lapic.actual-emission-source-contract.v1",
+  "capture_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-metadata-1/ACTUAL-CAPTURE-BEFORE-GATE.json",
+  "capture_sha256": "151e4399fef50201ab76ed9c131150a333e2d0d906dd19711fb0a6f6551fa916",
+  "capture_is_not_prior_owner_gate_PASS": true,
+  "unit_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-unit-1/scheduler_lapic_provider_unit.rs",
+  "unit_sha256": "68eb48635613f0b611787ef64a0dbb269b80dc066b9e858e2b1e478dcb407113",
+  "manifest_sha256": "e30bb72568e7436a03d5ea9f919c676fefa611c1b7e8f2cc421a297e6c1fef0b",
+  "actual_functions": [
+    {
+      "name": "lapic_timer_disable",
+      "actual_size": 22,
+      "section": ".ltext.lapic_timer_disable",
+      "section_flags": 268435462,
+      "section_alignment": 16,
+      "symbol_value": 0,
+      "code_hex": "48b80000000000000000488b00bf8003000031f6ffe0",
+      "source_block_sha256": "6f89e356c6f80a5c81227feb0c6007f6921aaabdd305843e21316c06a03e8fdd",
+      "source_lines": [
+        1890,
+        1893
+      ],
+      "source_semantics_and_inlining": "Exact wrapper/disable engine/write bridge inline: original slot load, CInt register0x380/u32zero forwarding, indirect tail call. No None check added to the real slot."
+    },
+    {
+      "name": "lapic_timer_enable",
+      "actual_size": 51,
+      "section": ".ltext.lapic_timer_enable",
+      "section_flags": 268435462,
+      "section_alignment": 16,
+      "symbol_value": 0,
+      "code_hex": "5389fec1ee0448bb0000000000000000bf80030000ff13bfe0030000be03000000ff13488b03bf20030000beef0002005bffe0",
+      "source_block_sha256": "1c6fc9889a1dabe38d529a91fac65fb3f3263e90ec83a0c450afae068a173368",
+      "source_lines": [
+        1873,
+        1876
+      ],
+      "source_semantics_and_inlining": "Exact wrapper/enable engine/write bridge inline: u32 clocks logical shift4 (division16), ordered register0x380(initial),0x3e0(divide3),0x320(vector0x200ef) callbacks through real slot. Original borrowed live callback contract only."
+    },
+    {
+      "name": "x86_lapic_timer_disable_body_result",
+      "actual_size": 31,
+      "section": ".ltext.x86_lapic_timer_disable_body_result",
+      "section_flags": 268435462,
+      "section_alignment": 16,
+      "symbol_value": 0,
+      "code_hex": "534885ff74104889f831dbbf8003000031f6ffd0eb05bbeaffffff89d85bc3",
+      "source_block_sha256": "47e8be151101ec1f4d35c3aaad7a46dad15f17ce07ebb41ba6d25590c2b017f5",
+      "source_lines": [
+        1878,
+        1888
+      ],
+      "source_semantics_and_inlining": "Original typed optional parameter: None->CInt-22; Some callback receives register0x380/value0 once; return0."
+    },
+    {
+      "name": "x86_lapic_timer_enable_body_result",
+      "actual_size": 56,
+      "section": ".ltext.x86_lapic_timer_enable_body_result",
+      "section_flags": 268435462,
+      "section_alignment": 16,
+      "symbol_value": 0,
+      "code_hex": "534889f34885f6742889fec1ee04bf80030000ffd3bfe0030000be03000000ffd3bf20030000beef000200ffd331c05bc3b8eaffffff5bc3",
+      "source_block_sha256": "512b1e2a6163b67f78637b9b88f358d08eb91702a5ab4a2b7cf06de350a8a9ef",
+      "source_lines": [
+        1858,
+        1871
+      ],
+      "source_semantics_and_inlining": "Original typed optional parameter: None->CInt-22; Some receives ordered0x380(clocks/16),0x3e0(3),0x320(0x200ef), return0."
+    },
+    {
+      "name": "x86_lapic_write_bridge",
+      "actual_size": 15,
+      "section": ".ltext.x86_lapic_write_bridge",
+      "section_flags": 268435462,
+      "section_alignment": 16,
+      "symbol_value": 0,
+      "code_hex": "48b80000000000000000488b00ffe0",
+      "source_block_sha256": "cb0fe1355864e882c6fccc496e360cb5c26292555acd477e27f8acc9235eb79a",
+      "source_lines": [
+        5742,
+        5750
+      ],
+      "source_semantics_and_inlining": "Exact original addr_of(lapic_write).read().unwrap_unchecked() forwarding CInt register/u32 value unchanged; indirect tailcall through real slot; no boot target supplied."
+    }
+  ],
+  "actual_aliases": [],
+  "actual_slot": {
+    "name": "lapic_write",
+    "kind": "B",
+    "size": 8,
+    "section": ".lbss.lapic_write",
+    "section_type": 8,
+    "section_flags": 268435459,
+    "section_align": 8,
+    "source_block_sha256": "3613d6fe0e375cb08b9176113349649570429be3b3559c0dc4f3e8e8fc5020d2",
+    "source_initializer": "None",
+    "NOBITS_is_declaration_only_not_initialized_runtime_bytes": true,
+    "no_target_relocation": true
+  },
+  "actual_relocations": [
+    {
+      "section": ".ltext.lapic_timer_disable",
+      "offset": 2,
+      "type": 1,
+      "symbol_name": "lapic_write",
+      "symbol_section": ".lbss.lapic_write",
+      "symbol_type": 1,
+      "symbol_bind": 1,
+      "addend": 0,
+      "source_binding": "Original real slot address after bridge/engine source inlining; R_X86_64_64 exact captured+0, no fabricated callback target."
+    },
+    {
+      "section": ".ltext.lapic_timer_enable",
+      "offset": 8,
+      "type": 1,
+      "symbol_name": "lapic_write",
+      "symbol_section": ".lbss.lapic_write",
+      "symbol_type": 1,
+      "symbol_bind": 1,
+      "addend": 0,
+      "source_binding": "Original real slot address after bridge/engine source inlining; R_X86_64_64 exact captured+0, no fabricated callback target."
+    },
+    {
+      "section": ".ltext.x86_lapic_write_bridge",
+      "offset": 2,
+      "type": 1,
+      "symbol_name": "lapic_write",
+      "symbol_section": ".lbss.lapic_write",
+      "symbol_type": 1,
+      "symbol_bind": 1,
+      "addend": 0,
+      "source_binding": "Original real slot address after bridge/engine source inlining; R_X86_64_64 exact captured+0, no fabricated callback target."
+    },
+    {
+      "section": ".eh_frame",
+      "offset": 32,
+      "type": 24,
+      "symbol_name": "",
+      "symbol_section": ".ltext.lapic_timer_disable",
+      "symbol_type": 3,
+      "symbol_bind": 0,
+      "addend": 0,
+      "source_binding": "Compiler unwind PC64 exact captured code-section+0 reference to one actual original function, not data/provider import."
+    },
+    {
+      "section": ".eh_frame",
+      "offset": 64,
+      "type": 24,
+      "symbol_name": "",
+      "symbol_section": ".ltext.lapic_timer_enable",
+      "symbol_type": 3,
+      "symbol_bind": 0,
+      "addend": 0,
+      "source_binding": "Compiler unwind PC64 exact captured code-section+0 reference to one actual original function, not data/provider import."
+    },
+    {
+      "section": ".eh_frame",
+      "offset": 104,
+      "type": 24,
+      "symbol_name": "",
+      "symbol_section": ".ltext.x86_lapic_timer_disable_body_result",
+      "symbol_type": 3,
+      "symbol_bind": 0,
+      "addend": 0,
+      "source_binding": "Compiler unwind PC64 exact captured code-section+0 reference to one actual original function, not data/provider import."
+    },
+    {
+      "section": ".eh_frame",
+      "offset": 144,
+      "type": 24,
+      "symbol_name": "",
+      "symbol_section": ".ltext.x86_lapic_timer_enable_body_result",
+      "symbol_type": 3,
+      "symbol_bind": 0,
+      "addend": 0,
+      "source_binding": "Compiler unwind PC64 exact captured code-section+0 reference to one actual original function, not data/provider import."
+    },
+    {
+      "section": ".eh_frame",
+      "offset": 184,
+      "type": 24,
+      "symbol_name": "",
+      "symbol_section": ".ltext.x86_lapic_write_bridge",
+      "symbol_type": 3,
+      "symbol_bind": 0,
+      "addend": 0,
+      "source_binding": "Compiler unwind PC64 exact captured code-section+0 reference to one actual original function, not data/provider import."
+    }
+  ],
+  "private_functions_or_data": [],
+  "allocated_readonly": [
+    {
+      "name": ".eh_frame",
+      "size": 208,
+      "flags": 2,
+      "alignment": 8,
+      "role": "Only compiler unwind metadata, exactly5PC64 code references/source functions; not runtime/provider state."
+    }
+  ],
+  "large_model": "Preserve exact captured .ltext/.lbss SHF_X86_64_LARGE flags, no small-section renaming or assumedzeroaddends. All8exactaddends observed0 and individually sourcebound here.",
+  "source_profile_scope": "No function/controller/target/readiness/boot/native execution. Unique within standalone actual object only; future latestcohort collision/join remains UNBOUND."
+}

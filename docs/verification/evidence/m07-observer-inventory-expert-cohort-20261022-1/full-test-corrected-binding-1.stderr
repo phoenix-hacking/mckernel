@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/m07-observer-inventory-expert-cohort-20261022-1/test_generated_full_main.corrected-binding-1.py", line 181, in <module>
+    if __name__=='__main__':main()
+  File "/home/holden/mckernel-work/host-preparation/m07-observer-inventory-expert-cohort-20261022-1/test_generated_full_main.corrected-binding-1.py", line 164, in main
+    results=[test('positive')]
+  File "/home/holden/mckernel-work/host-preparation/m07-observer-inventory-expert-cohort-20261022-1/test_generated_full_main.corrected-binding-1.py", line 129, in test
+    with contextlib.redirect_stdout(io.StringIO()):o.main(['--git-commit','0'*40,'--git-tree','0'*40,'--observation-release',str(releasepath),'--observation-release-sha256',sha(releasepath.read_bytes())])
+  File "/home/holden/mckernel-work/host-preparation/m07-observer-inventory-expert-cohort-20261022-1/bound-terminal-expert-source-1/observe_current_pass_image_retirement.py", line 269, in main
+    validate_observation_release(Path(opts.observation_release),opts.observation_release_sha256,opts.git_commit,opts.git_tree)
+  File "/home/holden/mckernel-work/host-preparation/m07-observer-inventory-expert-cohort-20261022-1/bound-terminal-expert-source-1/observe_current_pass_image_retirement.py", line 142, in validate_observation_release
+    release=json.loads(stable_bytes(path,expected))
+  File "/home/holden/mckernel-work/host-preparation/m07-observer-inventory-expert-cohort-20261022-1/bound-terminal-expert-source-1/observe_current_pass_image_retirement.py", line 61, in stable_bytes
+    need(all(getattr(before,k)==getattr(after,k) for k in keys) and
+  File "/home/holden/mckernel-work/host-preparation/m07-observer-inventory-expert-cohort-20261022-1/bound-terminal-expert-source-1/observe_current_pass_image_retirement.py", line 40, in need
+    raise RuntimeError(reason)
+RuntimeError: source read raced

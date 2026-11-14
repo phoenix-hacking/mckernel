@@ -1,0 +1,164 @@
+{
+  "status": "READY_TIMER2DATA_ONLY_TWO_METADATA_READBACKS_AND_CALLED_SOURCE_CONTENT_UNIQUE_OWNER_GATE_PENDING_E_GO_ROOT_ADMISSION",
+  "owner": "/root/m15_public_abi_high",
+  "cwd": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-metadata-1",
+  "commands": [
+    {
+      "label": "provider-symbols",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-metadata-1/provider-symbols.metrics",
+        "/usr/bin/nm",
+        "-S",
+        "--format=posix",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-unit-1/output/scheduler_timer_data.o"
+      ],
+      "stdout_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-metadata-1/provider-symbols.stdout",
+      "stderr_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-metadata-1/provider-symbols.stderr"
+    },
+    {
+      "label": "provider-elf",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-metadata-1/provider-elf.metrics",
+        "/usr/bin/readelf",
+        "-h",
+        "-SW",
+        "-Ws",
+        "-Wr",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-unit-1/output/scheduler_timer_data.o"
+      ],
+      "stdout_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-metadata-1/provider-elf.stdout",
+      "stderr_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-metadata-1/provider-elf.stderr"
+    }
+  ],
+  "environment_replace": {
+    "PATH": "/usr/bin:/bin",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "inputs": {
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-unit-1/scheduler_timer_data_unit.rs": "718c230ea6a2ff612842c2b199bc47733dc2fc308a1e820e839ec94ec6c90686",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-unit-1/SOURCE-MANIFEST.json": "73ba9ef0281f6b4df1545c378f154adb4f635805e5a3012c85db102907bdbf5b",
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "/home/holden/mckernel/kernel/rust/process_helpers.rs": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+    "/home/holden/mckernel/kernel/rust/sched_helpers.rs": "c4e6153bef33ec018d2efc88c93854a4dc351f78c901ed3cb25f73524d7c0020",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-unit-1/SOURCE-PROFILE-PROOF.json": "c49d9b92b90faede25c8c43681e9a9b5a6ee0d72405cca1b1b9ae4d667a7a1f4",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-unit-1/COMPILE-PROPOSAL.json": "ce6222cc02c7c283383e80c66162eb3877be297cd4b72a75b27200e97db7950c",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-review-1/REVIEW.json": "a8cdaa6636d323952ccdc1e3566b034a8bd0356a12645ed0358a8d058b0f8d49",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/timer-data-producer-root-1/RESULT.json": "8ad17b00a8a95308dd6ccc0277d1453c2bd6e12f76afb44f3f6f20c0e439dda9",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/timer-data-producer-root-1/ADMISSION.json": "58f3a69de03a7ab2a93d6b467c25ea4e0430132ce4ebee7800349f91c6bdfb5c",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-unit-1/output/scheduler_timer_data.o": "05be11507024eb5de4c1d368245f8382e1f49c5966222def22d633d08c8957bb",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-metadata-1/timer_data_checks.py": "237a4221d6891b848a7fb72c5cdd7e75629ff4699201720230c765bf3dcb6acc",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-metadata-1/run_metadata.py": "83bea729e5b313d84b657c6ddb08b80222a1ec088541e3724bcda01eb851e537",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-metadata-1/OFFSET-SOURCE-CONTRACT.json": "59931f40dcabd7984b4459debe7d2a2fbbba7cb89b73047a4ae5362010c449ff",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/storage_predicate.py": "a4df81bb2b86d97f4199ae816dab7965213ceba05dca17945f9eae861dc31892",
+    "/usr/bin/nm": "5fb0dd8acc18e3f348ed0acbcada0580dbdddd1eb5de3c8323613af13580032b",
+    "/usr/bin/readelf": "41a813335a74480f145fba9400aa7fb5c0ec7ffcaa7af7f33e832dc75eb90ffb"
+  },
+  "source_bindings": {
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-unit-1/scheduler_timer_data_unit.rs": "718c230ea6a2ff612842c2b199bc47733dc2fc308a1e820e839ec94ec6c90686",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-unit-1/SOURCE-MANIFEST.json": "73ba9ef0281f6b4df1545c378f154adb4f635805e5a3012c85db102907bdbf5b",
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "/home/holden/mckernel/kernel/rust/process_helpers.rs": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+    "/home/holden/mckernel/kernel/rust/sched_helpers.rs": "c4e6153bef33ec018d2efc88c93854a4dc351f78c901ed3cb25f73524d7c0020"
+  },
+  "compiled_input": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-unit-1/output/scheduler_timer_data.o",
+    "sha256": "05be11507024eb5de4c1d368245f8382e1f49c5966222def22d633d08c8957bb",
+    "bytes": 1016,
+    "actual_producer_RESULT": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/timer-data-producer-root-1/RESULT.json",
+    "actual_producer_RESULT_sha256": "8ad17b00a8a95308dd6ccc0277d1453c2bd6e12f76afb44f3f6f20c0e439dda9",
+    "actual_compile_pid": 641757,
+    "actual_compile_birth": "35113683",
+    "actual_compile_wait_joined": true,
+    "compile_replay": false
+  },
+  "actual_nm": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-metadata-1/provider-symbols.stdout",
+  "actual_elf": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-metadata-1/provider-elf.stdout",
+  "actual_metadata_capture": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-metadata-1/ACTUAL-ELF-METADATA.json",
+  "offset_source_contract": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-metadata-1/OFFSET-SOURCE-CONTRACT.json",
+  "qualified_ELF_reader": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/storage_predicate.py",
+    "sha256": "a4df81bb2b86d97f4199ae816dab7965213ceba05dca17945f9eae861dc31892",
+    "qualification_receipt": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/RESULT.json",
+    "scope": "Reuse existing exact Image/parse_nm for ELF64-LE/x86_64 REL metadata/bytes only, not storage predicate re-review or new parser/loader."
+  },
+  "object_predicate": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-metadata-1/timer_data_checks.py",
+    "sha256": "237a4221d6891b848a7fb72c5cdd7e75629ff4699201720230c765bf3dcb6acc",
+    "callable": "actual_object_gate(q)",
+    "must_IMPORT_and_CALL_after2actualreadbacks_before_any_future_link": true,
+    "captureallactualmetadata_before_source_content_assertions": true
+  },
+  "controller": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-metadata-1/run_metadata.py",
+    "sha256": "83bea729e5b313d84b657c6ddb08b80222a1ec088541e3724bcda01eb851e537",
+    "literal_argv": [
+      "/usr/bin/python3",
+      "-B",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-metadata-1/run_metadata.py",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-metadata-1/REQUEST.json"
+    ],
+    "only2literalpayloads_no_compiler_link": true
+  },
+  "inherited_resource_profile": {
+    "CPU": [
+      6
+    ],
+    "local_serial_jobs": 1,
+    "AS_bytes": 1073741824,
+    "CPU_seconds": 45,
+    "wall_seconds": 60,
+    "kill_after_seconds": 5,
+    "FSIZE_bytes": 67108864,
+    "core_bytes": 0,
+    "aggregate_CPUs": [
+      0,
+      6,
+      7
+    ],
+    "aggregate_jobs_max": 3,
+    "aggregate_HOST_total_bytes_all_overhead": 4294967296,
+    "retained_prior_GiB": 18,
+    "floor_GiB": 4,
+    "minimum_MemAvailable_GiB": 26
+  },
+  "source_expected": "ONLYtime_sharingD4original1+immutableTimerRuntimeOffsetsR120/15realoffset_of values,0T0U/no extra definedstate/private/read-only.11sourceABIasserts+4finiteactualreprCfieldrelationships independentlybindstoredvalues, no guessednumeric/zero descriptors.",
+  "selected_profile": "Originalprocess_global_storage_candidate preserved, intendedlinux6.12Rustdata-onlyprofile; no Cdebugguard/completeowner/default/nativeclaim.",
+  "future_unique_owner_join": "UNBOUND untilnewactualcontentGO+actualmatchingcurrentcohort/Cduplicate-ownerexclusion andRootfreshjoinreview/admission. Standalonegateprovesonlyunique2sourceowners, no inventedfullCownership.",
+  "no_source_compiler_metadata_predicate_runtime_in_preparation": true,
+  "canonical_index_other_owner_edits": false,
+  "not_runnable_until": "Econcrete15fieldsource/value/ELF/content/profileGO thenRootfreshscopedmetadataadmission. FirstunexpectedfailureSTOP/noautomaticretry/compilerreplay."
+}

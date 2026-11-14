@@ -1,0 +1,33 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_PURE_OLD_MISSING_TARGET_AND_CORRECTED_TARGET_LAYOUT_NOT_OCI_ACCEPTANCE",
+  "command": [
+    "taskset",
+    "-c",
+    "2",
+    "prlimit",
+    "--as=2147483648:2147483648",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-unprivileged-build-only-source-1/oci-ro-nested-config-target-data-correction-1/test_readonly_mount_targets.py"
+  ],
+  "returncode": 0,
+  "family": "OCI_RO_NESTED_CONFIG_TARGET",
+  "bounded_correction": 1,
+  "old_missing_config_reproduced": true,
+  "corrected_first_level_child_targets_present": 18,
+  "copied_exact_config_bytes": 464,
+  "hardlinks_created": 0,
+  "source_profile_worker_wrapper_unchanged": true,
+  "original_sources_and_failed_attempt_preserved": true,
+  "corrected_export": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-unprivileged-build-only-source-1/oci-ro-nested-config-target-data-correction-1/INPUT-EXPORT.CORRECTED.DRAFT.NOT-AUTHORITY.json",
+    "bytes": 24574,
+    "sha256": "43b44e003ce13f1869504bc3334ca541782e5bcf7ea2d2bc727661d5974ea951"
+  },
+  "Docker_compiler_root_lock_actions": 0,
+  "next": "Root adopts corrected exports; fresh nonce/output/27:4 reservation and exact review/grant; no automatic retry. A second same-family failure requires expert escalation."
+}

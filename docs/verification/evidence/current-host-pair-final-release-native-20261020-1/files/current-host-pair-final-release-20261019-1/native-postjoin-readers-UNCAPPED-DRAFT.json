@@ -1,0 +1,34 @@
+{
+  "argv": [
+    [
+      "/usr/bin/sudo",
+      "-A",
+      "/usr/bin/tar",
+      "--create",
+      "--file=-",
+      "--directory=/home/holden/mckernel-work/scratch/hpf-p-261019-1/a.owner-03f9280c0b7896a86fd25a32dd9f63a8",
+      "."
+    ],
+    [
+      "/usr/bin/sudo",
+      "-A",
+      "/usr/bin/cat",
+      "/home/holden/mckernel-work/scratch/hpf-p-261019-1/a/attempt-03f9280c0b7896a86fd25a32dd9f63a8/result.json"
+    ],
+    [
+      "/usr/bin/sudo",
+      "-A",
+      "/usr/bin/tar",
+      "--create",
+      "--file=-",
+      "--exclude=./qmp.sock",
+      "--directory=/home/holden/mckernel-work/scratch/hpf-p-261019-1/a/attempt-03f9280c0b7896a86fd25a32dd9f63a8",
+      "."
+    ]
+  ],
+  "timeout_seconds": 30,
+  "cpu_seconds": 30,
+  "cpu": 7,
+  "fsize_bytes": 33554432,
+  "only_after": "directowner0+source-known retiredclient/evidence flush; nonzero stops for separate failure-only readback release"
+}

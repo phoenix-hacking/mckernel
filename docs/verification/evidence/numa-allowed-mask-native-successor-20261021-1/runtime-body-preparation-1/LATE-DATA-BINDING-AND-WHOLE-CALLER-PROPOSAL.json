@@ -1,0 +1,87 @@
+{
+  "argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=30:30",
+    "--fsize=67108864:67108864",
+    "--core=0:0",
+    "--nofile=256:256",
+    "--",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/runtime-body-preparation-1/bind_actual_physical_data.py",
+    "--bindings",
+    null,
+    "--bindings-sha256",
+    null
+  ],
+  "constructor": {
+    "bytes": 9275,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/runtime-body-preparation-1/bind_actual_physical_data.py",
+    "sha256": "16fe57c58e8dea332d896356711bdf35138f326be9d20a643194aedf84264f4e"
+  },
+  "current_physical": null,
+  "exclusive_observer_or_cleanup_census_overlap": false,
+  "late_bindings_template": {
+    "bytes": 58,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/runtime-body-preparation-1/LATE-PHYSICAL-BINDINGS.PENDING.json",
+    "sha256": "c5cafc09b3282cab5c6cf46fa0e6b4ed7cdbb6ab631204846c3edd0462b75bb5"
+  },
+  "next_existing_whole_caller": {
+    "argv": [
+      "/usr/bin/taskset",
+      "-c",
+      "6",
+      "/usr/bin/prlimit",
+      "--as=1073741824:1073741824",
+      "--cpu=55:55",
+      "--fsize=33554432:33554432",
+      "--core=0:0",
+      "--nofile=256:256",
+      "--",
+      "/home/holden/anaconda3/bin/python3.9",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/runtime-body-preparation-1/physical-bound-1/check_current_whole_caller.py"
+    ],
+    "capture_destination": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/runtime-body-preparation-1/physical-bound-1/actual-whole-caller-capture-1",
+    "expected": "Existing actual physical decoder\u2192owner loader\u2192pending19\u2192snapshot terminal joins and unchanged four refusals; no root snapshot, guest or success-only readbacks.",
+    "profile": {
+      "Docker": false,
+      "aggregate_cpu_seconds": 55,
+      "as_bytes": 1073741824,
+      "child_wall_seconds": 52,
+      "cpu": 6,
+      "jobs": 1,
+      "network": false,
+      "outer_wall_seconds": 60,
+      "root": false
+    }
+  },
+  "profile": {
+    "Docker": false,
+    "as_bytes": 1073741824,
+    "cpu": 6,
+    "cpu_seconds": 30,
+    "fsize_bytes": 67108864,
+    "grace_seconds": 2,
+    "jobs": 1,
+    "network": false,
+    "nofile": 256,
+    "root": false,
+    "wall_seconds": 35
+  },
+  "publication": "Root publishes changed code under existing checkpoint policy before guest. No metadata-only push prerequisite is introduced.",
+  "resource_grant": null,
+  "runtime_release": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "FROZEN_BODY_AND_CONSTRUCTION_PROPOSAL_NO_EXECUTION"
+}

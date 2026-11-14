@@ -1,0 +1,60 @@
+{
+  "schema": "mckernel.native-exact-tool-image-failure.v1",
+  "recorded_at": "2026-09-30T11:45:00-07:00",
+  "base_commit": "ff48e657b828e6e293be3ddfaea7239b32d2e23a",
+  "status": "FAIL",
+  "scope": "source-free Rocky tool-image preparation attempt1",
+  "candidate_sha": "4e99a82c9b87a7cf3d6002b75ec380fef37af7a1",
+  "output_root": {
+    "path": "/home/holden/mckernel-exact-image-f0a97d42-1",
+    "identity": "66306:45493667",
+    "allocated_bytes": 4096
+  },
+  "evidence_root": {
+    "path": "/home/holden/mckernel-exact-image-evidence-f0a97d42-1",
+    "identity": "66306:45494833",
+    "allocated_bytes": 385024
+  },
+  "receipt_sha256": "eb295e7f74518a142f7cf69e4b3d751ae0e6a8d56065b6c1a2770d64962c8392",
+  "terminal_inspect_sha256": "0892e76c1f42d64ee993fbfb702a34d15fd4bb053bef901746a71a4d10705e32",
+  "failed_command_status_sha256": "9ad93491c71cc27cdf2fb38675908fa94b1d1d48f07e03d85b35fcd3c75cf330",
+  "failed_command_stderr_sha256": "7be3897df53a4c50c60a09429f7584939f9cb37b4838abbff9edf57727947633",
+  "observed_failure": {
+    "phase": "networked preparation probe after successful package installation and DNF cleanup",
+    "error": "canonical /usr/bin/lld --version exited 1 because generic LLD dispatch requires the ld.lld lookup spelling in argv[0]",
+    "image_created": false,
+    "offline_probe_started": false
+  },
+  "container": {
+    "id": "5b11e19e3fd5149caed5d6b6291771a142ae7021d70de46e879fddf39ac197f6",
+    "name": "mckernel-tools-ca65434adc6048069b205d8f5f6747fa",
+    "nonce": "1a9035ad683a4b4cacd62b564b539c63",
+    "state": "exited",
+    "exit_code": 143,
+    "oom_killed": false,
+    "pid": 0,
+    "retained": true
+  },
+  "lease_after_retirement": "absent",
+  "successful_observations_before_failure": [
+    "pinned Rocky base pull/readback",
+    "reviewed bridge preparation profile",
+    "DNF package installation including cmake-0:3.31.8-1.el10.x86_64",
+    "DNF cleanup",
+    "bounded terminal retirement"
+  ],
+  "bounded_correction": {
+    "source_sha256": "bbe0ee6c4f8ff2b15fbfed283950b389b80ff25e9a1e800b65a895e64abbc0b2",
+    "test_sha256": "4f5befcffcbe5effb631689f9ae372cfd84e6d26e76b30656a01c7b58177c0db",
+    "behavior": "retain canonical target for RPM owner/NEVRA/hash, but execute the PATH lookup spelling for executable version output",
+    "tests": "82 combined preparation/owner tests PASS; py_compile and diff-check PASS",
+    "independent_review": "PASS_EXECUTION_CORRECTION",
+    "fresh_attempt": 2
+  },
+  "attempt2_paths": {
+    "output": "/home/holden/mckernel-exact-image-f0a97d42-2",
+    "evidence": "/home/holden/mckernel-exact-image-evidence-f0a97d42-2",
+    "lease": "/home/holden/mckernel-work/scratch/native-exact-image-preparation-lease-f0a97d42-2.json"
+  },
+  "acceptance": "No tool image, McKernel image, guest, application or OS acceptance is established by this failure or correction review."
+}

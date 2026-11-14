@@ -1,0 +1,63 @@
+{
+  "schema": "mckernel.native-exact-scratch18-image-attempt3-cleanup-execution-release.v1",
+  "status": "PROPOSED",
+  "scope": "one exact successful attempt-3 image cleanup invocation only",
+  "candidate_sha": "89ab5c555aac9177a789efc67ddc775dacb25d6d",
+  "published_commit": "8e4e2ef25fad0ddcf5cdd1d95efd144e430f72e3",
+  "fetched_commit_verified": true,
+  "implementation": {
+    "path": "docs/verification/evidence/native-exact-scratch18-image-attempt3-cleanup-20261001.py",
+    "sha256": "0ba74cfd18c3e03827a1e4bcfc50c21b188d57a206823c35836692528850e6fd",
+    "tests_path": "scripts/tests/test_native_exact_scratch18_image_attempt3_cleanup_20261001.py",
+    "tests_sha256": "082e4065114c33db13d5927aff900d8f0e39b9e07532a54f17c6567496b2bf2d",
+    "tests": "51 passed",
+    "independent_source_review": "PASS"
+  },
+  "command": [
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/native-exact-scratch18-image-attempt3-cleanup-20261001.py",
+    "--execute"
+  ],
+  "preflight": {
+    "validate_only": "PASS_VALIDATE_ONLY",
+    "events": 0,
+    "container_present": true,
+    "transaction_files_absent": true,
+    "host_free_bytes": 39244554240,
+    "scratch_free_bytes": 34420285440,
+    "memory_available_bytes": 23024222208
+  },
+  "target": {
+    "container_id": "a24d40c58d472befc7392f5ee31286d4a165e6acc267ae2ec34e692ef58ec821",
+    "container_name": "mckernel-image-762f686fc788463d95aeae7500c6be5d",
+    "owner_nonce": "5ac3b2e7b103420ab54e90fdc12389f6",
+    "required_state": "exited",
+    "required_pid": 0,
+    "required_exit_code": 0,
+    "required_oom_killed": false,
+    "image_lease_required_absent": true
+  },
+  "protected_results": {
+    "files": 49,
+    "image_sha256": "fa6685543160fcaa5000b535ec8bd6fc70230465109564c3fb2beecb95bf39ed",
+    "postlink_sha256": "682e23b3d8b485ff7e3340185f526ed2e8857de70d145d619a56a5445ee42e9e",
+    "linked_text_sha256": "26b7a74b437af1bf8b79034693df727fccb7ba7c3e3f5a16abdab25c8485786a"
+  },
+  "authorized_effects": [
+    "capture and authenticate exact Docker logs",
+    "remove only the exact terminal container without force",
+    "transactionally archive and release exact candidate/shared exclusion records"
+  ],
+  "preserve": [
+    "all compiled image/map/Rust-object bytes and inode identities",
+    "all owner/build/postlink/linked-text evidence",
+    "current c81 image and five prior diagnostic guest passes"
+  ],
+  "not_authorized": [
+    "guest execution",
+    "application or OS acceptance"
+  ],
+  "execution_requires": "a separate independent PASS_EXECUTION over this exact published release"
+}

@@ -1,0 +1,60 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": "2026-10-28T06:06:07.201019+00:00",
+  "measurements": [
+    {
+      "lane": "m14-f03-next-runtime-body-source-20261028-1",
+      "source_ready_sha256": "4d097a2417777eda1d5b7e04a043447240c84867ff6a158181a4e393d96bf4a3",
+      "source_ready_file_mtime_epoch": 1793167211.8252792,
+      "first_compiler_started_epoch": null,
+      "measured_file_signal_to_first_compiler_seconds": null,
+      "qualification_acceptance_to_compiler_latency": "unmeasured",
+      "metrics": [
+        {
+          "started_UTC": "2026-10-28T06:01:36.663347+00:00",
+          "wall_seconds": 0.11025171203073114,
+          "user_CPU_seconds": 0.049576999999999996,
+          "system_CPU_seconds": 0.016524999999999998,
+          "fresh_batch_peak_child_RSS_KiB": 95320,
+          "RSS_scope": "actual cumulative child high water; per-command RSS unknown"
+        },
+        {
+          "started_UTC": "2026-10-28T06:01:36.776088+00:00",
+          "wall_seconds": 0.04616932000499219,
+          "user_CPU_seconds": 0.017275,
+          "system_CPU_seconds": 0.0038200000000000005,
+          "fresh_batch_peak_child_RSS_KiB": 95320,
+          "RSS_scope": "actual cumulative child high water; per-command RSS unknown"
+        }
+      ]
+    },
+    {
+      "lane": "m14-f06-next-runtime-body-source-20261028-1",
+      "source_ready_sha256": "fd4cccbf60e67f0300f66848eeb7791ed61cd83e6234bfd7dc3226847e48d061",
+      "source_ready_file_mtime_epoch": 1793167215.5814004,
+      "first_compiler_started_epoch": 1793167309.9632163,
+      "measured_file_signal_to_first_compiler_seconds": 94.38181591033936,
+      "qualification_acceptance_to_compiler_latency": "unmeasured",
+      "metrics": [
+        {
+          "wall_seconds": 0.06222754996269941,
+          "CPU_seconds": 0.048069999999999995,
+          "maximum_RSS_KiB": 26224
+        },
+        {
+          "wall_seconds": 0.14242655702400953,
+          "CPU_seconds": 0.14155399999999999,
+          "maximum_RSS_KiB": 123168
+        },
+        {
+          "wall_seconds": 0.021889880998060107,
+          "CPU_seconds": 0.0019299999999999999,
+          "maximum_RSS_KiB": 8364
+        }
+      ]
+    }
+  ],
+  "limits": "File mtime is the observed source-ready artifact signal, not independently measured semantic readiness or queue-only delay; qualification and build/native acceptance remain separate.",
+  "new_guest_apps": 0,
+  "current_candidate_builds": 0
+}

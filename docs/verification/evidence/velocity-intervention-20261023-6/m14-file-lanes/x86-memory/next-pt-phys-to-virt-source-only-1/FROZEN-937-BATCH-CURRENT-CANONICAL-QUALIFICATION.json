@@ -1,0 +1,75 @@
+{
+  "CPU_grant": null,
+  "actual_fixture": null,
+  "canonical": [
+    {
+      "bytes": 88466,
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/memory.c",
+      "sha256": "93df0ac24de8163cc5a7e2cce277d3a46c89a607b924c1937f2413e12edf0f66"
+    },
+    {
+      "bytes": 201809,
+      "path": "/home/holden/mckernel/kernel/rust/x86_memory_helpers.rs",
+      "sha256": "800a18bb4db0e28bf76441fca783b3f8d47066260240fb5107967c23775aa494"
+    }
+  ],
+  "canonical_authority": {
+    "bytes": 3051,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/root-union-preparation-1/CANONICAL-INTEGRATION.json",
+    "sha256": "fdc721a4d72df1b15cea2e1479e26de548af527772b11bb0b4524d6647456e4c"
+  },
+  "driver_or_recipe_modified": false,
+  "exact_reference_provider_relations": [
+    {
+      "body_sha256": "acf748ef97946dd298673182619f9ca22aa1473a53ee65d1e84f711adbc978da",
+      "current_C_body_equals_historical_oracle_and_private_fallback": true,
+      "symbol": "x86_clear_range_walk_l1_bridge"
+    },
+    {
+      "body_sha256": "ea467d40d417fa0786976796bef16c35185e8fa103459de7219f5e139ac05374",
+      "current_C_body_equals_historical_oracle_and_private_fallback": true,
+      "symbol": "x86_clear_range_walk_l2_bridge"
+    },
+    {
+      "body_sha256": "79c7c1489866ae3c5b94af2d8d3d82b3030e3294a6ea44e5bbd72f8ba045775e",
+      "current_C_body_equals_historical_oracle_and_private_fallback": true,
+      "symbol": "x86_clear_range_walk_l3_bridge"
+    },
+    {
+      "body_sha256": "7d8261b79b4f1fc29e1e3fd307f021ab56d0861ff916de17d013290e1db6c63b",
+      "current_C_body_equals_historical_oracle_and_private_fallback": true,
+      "symbol": "x86_clear_rss_sub_bridge"
+    },
+    {
+      "body_sha256": "851cc38899978abd95cc0e90897586858673e9d2a723ab7251cd63f6f761ce6b",
+      "current_C_body_equals_historical_oracle_and_private_fallback": true,
+      "symbol": "x86_clear_memobj_rss_sub_bridge"
+    },
+    {
+      "body_sha256": "2bd7364b99fd086f679717c493ca15e36a28eed9dd264c9e8ad9e90bd04f14f0",
+      "current_C_body_equals_historical_oracle_and_private_fallback": true,
+      "symbol": "x86_clear_memobj_flush_bridge"
+    }
+  ],
+  "frozen_driver": {
+    "bytes": 6242,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/batch-walkers-rss-flush-fixture-preparation-1/run_actual_once.NOT-RELEASED.py",
+    "sha256": "dbc5f88643276facadbda6297754c11e493fc2fb8d989598135afadedaa36a89"
+  },
+  "frozen_recipe": {
+    "bytes": 40627,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/batch-walkers-rss-flush-fixture-preparation-1/BATCH-FIXTURE-FINAL-RECIPE.NOT-EXECUTED.json",
+    "sha256": "50eb9bf22f54bc3ecc08f4278befaef363285eb508df88b17a2309fba1e37805"
+  },
+  "historical_oracle": {
+    "bytes": 87978,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/preimage/arch/x86_64/kernel/memory.c",
+    "sha256": "28a435d862d1a52263c3bf7b08bd401b4a28be914c2f7f9bdd6fedc68283ec46"
+  },
+  "independent_current_full78_proof": false,
+  "integrated_Rust_clear_L1_L2_bodies_equal_private": true,
+  "old_canonical_source_precheck_present": false,
+  "qualification": "Frozen batch uses immutable historical modules; root-union changes to other Rust modules are not retroactive proof of this cohort. No source refresh or new queue.",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\nSource-only qualification and one backing-provider port; no fixture execution.\n",
+  "status": "SOURCE_RELATION_QUALIFIED_ONLY_NO_EXECUTION"
+}

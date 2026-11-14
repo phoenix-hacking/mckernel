@@ -1,0 +1,76 @@
+{
+  "scope": "functional OS/apps and Rust compute cutover; unpublished fork finalACK uncertainty only",
+  "command": [
+    "python3",
+    "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/run_checks.py"
+  ],
+  "profile": "ordinary unprivileged CPU6/one job/1GiB AS/30 CPU seconds/35+2 wall seconds/32MiB streams",
+  "compiler": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+  "tests": 3,
+  "proof": "current production actual bodies with explicit adapters; no native or runtime proof",
+  "failure_family": "new transport and missing-publication injection on already destroyed constructor graph; historical original phase4 failures retained outside packet, not replayed",
+  "stop": "one failed candidate and one bounded correction only; service/auth/quota stop immediately",
+  "inputs": [
+    {
+      "path": "fixture/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    {
+      "path": "fixture/actual-finalack.rs",
+      "sha256": "727e709d0d389a00d5f839f561a39cd8eb0d98d14924c66200266f1aa5c47e1e"
+    },
+    {
+      "path": "fixture/application_rpc.rs",
+      "sha256": "9f811c86c4e996294a6cd3be6b83315dabd20a3fb375419e091f4b9dedcfad39"
+    },
+    {
+      "path": "fixture/application_syscall.rs",
+      "sha256": "65670a19382aaae816f50b14c161e10a82b83fc6221b3b3a1ecd5c0086d3cff9"
+    },
+    {
+      "path": "fixture/fork_child_credits.rs",
+      "sha256": "63b82c97cc6e1204585cfaf2b89ef378b88c1d207a8e82c2f1400bc352f9c98d"
+    },
+    {
+      "path": "fixture/fork_constructed_credits.rs",
+      "sha256": "4c1e96ef4fbf5cb66acc54d900d37fcd68fb4d50dd1337c4428b3f5e2ecd1972"
+    },
+    {
+      "path": "fixture/fork_control_guest.rs",
+      "sha256": "64504af74cdbd069aea3156fbe4cc8f5b570299eff218c0d21f9ad87190aac60"
+    },
+    {
+      "path": "fixture/fork_control_registry.rs",
+      "sha256": "a2f92bb11cba42fef0d95e1f1e1a4c526351ff90860baed7913fa26c91137ba5"
+    },
+    {
+      "path": "fixture/fork_final_ack.rs",
+      "sha256": "093f742dfe4969d78b2ca6b8b643df94042945e890d26003dec9d1818c34826b"
+    },
+    {
+      "path": "fixture/fork_runnable_child.rs",
+      "sha256": "a9387ae13b85785176b95fc6ddc79b08bd31dd7960b0730307b41b5a05b5d137"
+    },
+    {
+      "path": "fixture/lock_helpers.rs",
+      "sha256": "411e1fb23f831ea1fbd9fbf5b424e2e97edafe21e315a8bd46f0dba7b403154f"
+    },
+    {
+      "path": "fixture/process_helpers.rs",
+      "sha256": "08acffe2d34f24919046471f647412b1a822feee82606a27365e809299612f53"
+    },
+    {
+      "path": "fixture/sched_helpers.rs",
+      "sha256": "d4b7ba5b453772cf345d834094bf47ab34307d32b75926a1a53e594c43c86510"
+    },
+    {
+      "path": "fixture/syscall_policy.rs",
+      "sha256": "4ba92a474871f2e5dc6f041e7de6b636dbc72058b9b4138e72693409db150ad1"
+    },
+    {
+      "path": "fixture/x86_cpu_helpers.rs",
+      "sha256": "bafdfc99f66f700746bb3e8596ed4f24f67e60f225c3df3809cdd799778c704d"
+    }
+  ],
+  "runner_sha256": "1b48ff119a11a80a8ba6c0b1c8671446c86f25a30cf33d1765b7aa1ad4cdbf87"
+}

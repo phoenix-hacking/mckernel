@@ -1,0 +1,65 @@
+{
+  "task_id": "M14-F06-PRCTL-SET-REGISTER-SELECTOR",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\nOne selected bridge selector. All writes remain in this private task directory.\n",
+  "before": [
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+      "bytes": 113935,
+      "sha256": "d6bf00d0a46755f37f511bff0c098487f04a155842f11a4ac64f2a1795faa8c1"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "bytes": 1228858,
+      "sha256": "fefec3eb05be2f714dfeca34310901a566557f82ee08de9b9ad0ef0344f74d62"
+    }
+  ],
+  "reused_fragment": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-mapping-prctl-clone-adapters-source-1/candidate/syscall_policy.mapping_prctl_clone.FRAGMENT.rs",
+    "bytes": 9464,
+    "sha256": "286494880bcc53a5025473c16c4c59a5ad5e8424bc19f79744530f9b79f54e59"
+  },
+  "selected_frontier": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/chat-thirty-minute-oversight-1/M14-SELECTED-OBJECT-FRONTIER.json",
+    "bytes": 5819,
+    "sha256": "350d5ce90e73ed4cc5b742fe582fe587e19aa3aafb7de66613c0a60d250bf72f"
+  },
+  "existing_cpu_provider": {
+    "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+    "bytes": 255992,
+    "sha256": "8db479fbea9493ee498bf5d78aef71589b49d9f065e13a8617b5765cd681c194"
+  },
+  "genuine_header": {
+    "path": "/home/holden/mckernel/lib/include/ihk/cpu.h",
+    "bytes": 5479,
+    "sha256": "a25efd9095efe3f357efb2a2d7d810e2a6d1ed0aea3c6e1d4fac2c0ee8a83c81"
+  },
+  "after": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-selected-1/syscall.c",
+      "bytes": 113988,
+      "sha256": "643bbc07e4ed02ad36cb4f6cbff8a128dc8fd9503f1fb14a130f6f7aaf8ccf96"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-selected-1/syscall_policy.rs",
+      "bytes": 1229052,
+      "sha256": "bcdb66c8e2fd1259654d8fd532b712fe675769887ca79610500f76a3abb80b27"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-selected-1/f06_prctl_set_register.rs",
+      "bytes": 659,
+      "sha256": "7cfbad6524e5ca293b22d5efaa7572492a95bfd2953ba8b01ee09113a287c3a2"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-selected-1/original_bridge.inc",
+      "bytes": 126,
+      "sha256": "069a219f885837adc5108ae149748217c14cc6bb1cb2b7f1bab96151534e68d4"
+    }
+  ],
+  "activation": {
+    "C": "MCKERNEL_RUST_F06_PRCTL_SET_REGISTER",
+    "Rust": "f06_prctl_set_register_candidate"
+  },
+  "compile": null,
+  "link": null,
+  "native": null
+}

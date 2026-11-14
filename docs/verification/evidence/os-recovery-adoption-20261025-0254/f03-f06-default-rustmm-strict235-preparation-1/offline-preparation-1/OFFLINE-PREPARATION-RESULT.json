@@ -1,0 +1,123 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "OFFLINE_F03_F06_IMAGE685ACE_RUSTMM_STRICT235_CANDIDATE_ONLY",
+  "old10972_MM_base": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-mm-source-1/native-queue-source-2/mm-strict235-coherent-base-1.cpio.gz",
+    "sha256": "472fa126ad3209c20fb2737bddfe29d2cb1dd4e6fb63c89e5a405463e538686b",
+    "size": 12915408
+  },
+  "current_image": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F03-F06-QUALIFIED-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/mckernel.img",
+    "size": 10221264,
+    "sha256": "685ace3f1536a959198343d7c965e027dfd91f00b17b36e4d6906a177873087f",
+    "mode": 33261
+  },
+  "changed_base_records": [
+    "images/mckernel.img"
+  ],
+  "raw_header_proof": [
+    {
+      "name": "images/mckernel.img",
+      "old_header_hex": "3037303730313030303030303137303030303831454430303030303030303030303030303030303030303030303136414441393038443030383043383038303030303030303030303030303030303030303030303030303030303030303030303030303031343030303030303030",
+      "new_header_hex": "3037303730313030303030303137303030303831454430303030303030303030303030303030303030303030303136414441393038443030396266366430303030303030303030303030303030303030303030303030303030303030303030303030303031343030303030303030"
+    }
+  ],
+  "all_other_base_records_identical": true,
+  "modules": [
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/module-runtime-snapshots-1/ihk.ko",
+      "sha256": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c",
+      "size": 1527808
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-f06-default-rustmm-strict235-preparation-1/offline-preparation-1/runtime-inputs/ihk-smp-x86_64.ko",
+      "sha256": "887dc3567e6035c921588e61b45b41a8ef32a972d142fe2ba82ec48442353b12",
+      "size": 13098896,
+      "mode": 33188
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-f06-default-rustmm-strict235-preparation-1/offline-preparation-1/runtime-inputs/mcctrl.ko",
+      "sha256": "57546af5110c0674b307e5ac5a328228abbe784f890f69521db5f594f21f6ae8",
+      "size": 2578512,
+      "mode": 33188
+    }
+  ],
+  "original235_payload": {
+    "mode": 33261,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/following-process-recovery-cases-1/abi2-helper-c020-successor-1/case-235/payload.snapshot",
+    "sha256": "537cb22b2af1f7fca1202afaf45b017364823c185c2ec47474093e51647ba5b8",
+    "size": 5628568
+  },
+  "collector": {
+    "mode": 33277,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-helper-failure-export-1/errno-correction-1/collector-helper-diagnostic",
+    "sha256": "c020a8e0ab43e222caf901d92bfecb2a8d8cf20ea0b539910a17a578f1fd12fc",
+    "size": 1021320
+  },
+  "manifest": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-f06-default-rustmm-strict235-preparation-1/offline-preparation-1/manifest.HOST-STATIC.json",
+    "sha256": "76ce63adc17a76fc90ca972f759f54c46a148799a0112f92f344feed1f87b20a",
+    "size": 8729,
+    "mode": 33152
+  },
+  "base": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-f06-default-rustmm-strict235-preparation-1/offline-preparation-1/f03-f06-current290-mm-base.cpio.gz",
+    "sha256": "fe995808038df425138dc4b3b6c7e30a44dd24463ba94e7a900fe42b73a085e1",
+    "size": 13305560,
+    "mode": 33152
+  },
+  "base_cpio_sha256": "94f89fcaea1027bf75955fe5d776fa25255a1f5e7cf5d30f55e79047a77b3aac",
+  "base_cpio_size": 44394416,
+  "overlay": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-f06-default-rustmm-strict235-preparation-1/offline-preparation-1/strict235.cpio.gz",
+    "sha256": "480124249d275d0d34dc922d6c9918bb6a5beb025358b45913655a4c833c3252",
+    "size": 15642618,
+    "mode": 33152
+  },
+  "existing_overlay_equivalent_argv": [
+    "/usr/bin/taskset",
+    "--cpu-list",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=536870912",
+    "--cpu=30",
+    "--core=0",
+    "--fsize=134217728",
+    "--nofile=256",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/native_diagnostic_overlay.py",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-f06-default-rustmm-strict235-preparation-1/offline-preparation-1/f03-f06-current290-mm-base.cpio.gz",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/following-process-recovery-cases-1/abi2-helper-c020-successor-1/case-235/payload.snapshot",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-helper-failure-export-1/errno-correction-1/collector-helper-diagnostic",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/launcher-runtime-snapshot-1/mcexec",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-f06-default-rustmm-strict235-preparation-1/offline-preparation-1/strict235.cpio.gz",
+    "--collector-sha256",
+    "c020a8e0ab43e222caf901d92bfecb2a8d8cf20ea0b539910a17a578f1fd12fc",
+    "--mcexec-sha256",
+    "dca0250159ce04a272a72dd1217213a4b6e0f21ec8c21da211eede250c451954",
+    "--payload-sha256",
+    "537cb22b2af1f7fca1202afaf45b017364823c185c2ec47474093e51647ba5b8",
+    "--base-sha256",
+    "fe995808038df425138dc4b3b6c7e30a44dd24463ba94e7a900fe42b73a085e1",
+    "--base-size",
+    "13305560",
+    "--base-cpio-sha256",
+    "94f89fcaea1027bf75955fe5d776fa25255a1f5e7cf5d30f55e79047a77b3aac",
+    "--base-cpio-size",
+    "44394416"
+  ],
+  "already_materialized": true,
+  "do_not_replay_equivalent_argv": true,
+  "module_builds": 0,
+  "image_builds": 0,
+  "guest_runs": 0,
+  "native_MM_changed_path_acceptance": false,
+  "current_physical": null,
+  "independent_execution_release": null,
+  "runtime_authority": null
+}

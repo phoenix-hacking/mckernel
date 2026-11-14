@@ -1,0 +1,51 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/native-entry-source-preparation-1/root37-successor-source-1/root_once_f05_v3_entry.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-outer-cdc-1/root_once_f05_v3_entry.py
+@@ -15,7 +15,7 @@
+ import time
+ 
+ BASE = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1')
+-STARTUP = BASE/'root-adopted-native-entry-root37-1'
++STARTUP = BASE/'root-adopted-native-entry-outer-cdc-1'
+ AUTH = STARTUP/'ROOT-CONDITIONAL-ONCE-ENTRY-AUTHORIZATION.json'
+ STATIC = STARTUP/'STATIC-NATIVE-BINDINGS.NOT-RELEASED.json'
+ PENDING = STARTUP/'ROOT-EXECUTION-GRANT.PENDING-REVIEW.json'
+@@ -32,10 +32,10 @@
+ HELPER = STARTUP/'run_native_f05_v3_capture.py'
+ GUARD = BASE.parent/'operation-account-window-new12h-source-1/actual-guardian-clamp-successor-1/actual_account_window_v2.py'
+ STATIC_SHA = None  # Root fills exact actual static bytes before publication/capture
+-HELPER_SHA = 'a70bce36bc718bc6479aff1ba2ba422daf601942f02e521bba54a7115a62ec8f'
++HELPER_SHA = '78beebf58c0c400fbe1ad536a09b2fc15a430db1b7673ef7296108c78929ba80'
+ GUARD_SHA = '1f152e3f18384643cd35d203fcc2a4292950a1c90758734859bdb980cf45fda0'
+ PROFILE_SHA = 'e5584b2c6fecbec0660dfeda3193468cf78af6a9dee0f4cc849e64abbdca1081'
+-NONCE = '31770ebb739fea402ded939617921dda'
++NONCE = 'cdc739fc1e365619d5be1b9745ecc291'
+ CASE = 'M14-05-05-owned-processvm-v3-causal-204B'
+ REVIEWER = '/root/daemon_execution_review'
+ HELPER_ARGV = ['/home/holden/anaconda3/bin/python3','-I','-B',str(HELPER)]
+@@ -129,7 +129,7 @@
+          and packet['expected_case'] == CASE and packet['maximum_invocations'] == 1,'exact pending Startup entry')
+     need(packet['static_bindings'] == file_ref(STATIC) and packet['exact_argv'] == static['exact_argv']
+          and packet['profile'] == static['profile'],'pending source/profile/argv binding')
+-    for key in ('source_authority','case_capability','stage_map_acceptance','root_ledger37','manifest',
++    for key in ('source_authority','case_capability','stage_map_acceptance','root_ledger38','manifest',
+                 'scratch_manifest_stage','artifact_acceptance'):
+         need(packet[key] == static[key],'pending/static binding '+key)
+         checked(packet[key])
+@@ -141,7 +141,7 @@
+     publication = checked(packet['source_publication'],PUBLICATION)
+     need(publication['status'] == 'PASS_ACTUAL_PUSH_FETCH_AND_EXACT_NATIVE_STATIC_BLOBS','actual source publication')
+     need(file_ref(STATIC) in publication['files'] and all(r in publication['files'] for r in packet['capture_sources'].values()),'published exact static/helpers')
+-    need(resource['root_ledger37'] == static['root_ledger37'] and resource['actual_latest_operation_postjoin_acceptance'] == static['latest_serial_operation_physical_acceptance']
++    need(resource['root_ledger38'] == static['root_ledger38'] and resource['actual_latest_operation_postjoin_acceptance'] == static['latest_serial_operation_physical_acceptance']
+          and resource['no_existing_heavy'] is True and resource['pids_current'] == 0,'exact resource/current occupancy')
+     refs = dict(authorization=file_ref(AUTH),static=file_ref(STATIC),pending=file_ref(PENDING),
+                 resource=file_ref(RESOURCE),publication=file_ref(PUBLICATION))
+@@ -155,7 +155,7 @@
+          and review['pending_execution_packet'] == refs['pending'],'PASS binds actual pending bytes')
+     need(review['exact_argv'] == packet['exact_argv'] and review['static_bindings'] == refs['static']
+          and review['fresh_resource_physical'] == refs['resource'] and review['source_publication'] == refs['publication'],'PASS exact source/resource/publication')
+-    need(review['manifest'] == packet['manifest'] and review['root_ledger37'] == packet['root_ledger37']
++    need(review['manifest'] == packet['manifest'] and review['root_ledger38'] == packet['root_ledger38']
+          and review['source_authority'] == packet['source_authority'],'PASS exact manifest/ledger/authority')
+     return file_ref(REVIEW)
+ 

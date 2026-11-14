@@ -1,0 +1,2355 @@
+--- a/package/compositor.py
++++ b/package/compositor.py
+@@ -31,16 +31,36 @@
+         raise ValueError(message)
+ 
+ 
+-def _collect(*_args, **_kwargs):
+-    # This is a separate, additive candidate; original collector remains intact.
++def _collect(*args, **kwargs):
++    if len(args)==1 and not kwargs and type(args[0]) is NativeSourcePlan:
++        plan=args[0];plan.revalidate()
++        _require(plan.source_accepted,'named source not accepted')
++        result=plan.source.collect()
++        _require(type(result) is bytes,'genuine source DATA bytes required')
++        plan.collection=result
++        return result
++    # The old graph collector remains unselected, with its refusal preserved.
+     raise ValueError('SOURCE_ONLY: authenticated source and effective-view release unbound')
+ 
+ 
+-def _accept_source_binding(*_args, **_kwargs):
++def _accept_source_binding(*args, **kwargs):
++    if len(args)==1 and not kwargs and type(args[0]) is NativeSourcePlan:
++        plan=args[0];plan.revalidate()
++        _require(plan.source.manifest_sha256==plan.admission.cfg['native']['source_manifest']['sha256'],
++                 'actual pinned named source commitment differs')
++        plan.source_accepted=True
++        return plan.source
+     raise ValueError('SOURCE_ONLY: source binding not released')
+ 
+ 
+-def _accept_effective_view(*_args, **_kwargs):
++def _accept_effective_view(*args, **kwargs):
++    if len(args)==1 and not kwargs and type(args[0]) is NativeSourcePlan:
++        plan=args[0];plan.revalidate()
++        _require(plan.source_accepted and plan.source.effective is not None and
++                 plan.source.effective['container']==plan.admission.owner.container,
++                 'real created native container/source view required')
++        plan.effective_accepted=True
++        return plan.source.effective
+     raise ValueError('SOURCE_ONLY: effective view not released')
+ 
+ 
+@@ -190,6 +210,8 @@
+     The adapter owns authentication semantics and is unbound pending independent
+     review. Channel possession is not a workload, profile, or native release.
+     """
++    if type(operation_custody) is OperationCustody and getattr(operation_custody,'native_admission',None) is not None:
++        return _prepare_named_native(fd,operation_custody)
+     profile=_profile()
+     _require(type(fd) is int and fd>=0,'inherited channel required')
+     contract=json.loads(_read_regular(Path(__file__).parent/'GRAPH-CONTRACT.json',CONTRACT_SHA256))
+@@ -222,9 +244,74 @@
+         raise
+ 
+ 
+-def launch(*_args, **_kwargs):
++def launch(*args, **kwargs):
++    if len(args)==1 and not kwargs and type(args[0]) is NativeSourcePlan:
++        plan=args[0];plan.revalidate()
++        _require(plan.source_accepted and type(plan.collection) is bytes and
++                 plan.custody.state=='NATIVE_SOURCE_HELD','actual named source collection required')
++        plan.admission.plan=plan
++        plan.custody.state='NATIVE_RUNNING'
++        # Effective acceptance is performed by the actual owner's created
++        # inspect gate before start, not guessed from a proposed mount list.
++        result=plan.admission.launch(plan.source)
++        plan.custody.state='NATIVE_TERMINAL_CLEAN'
++        return result
+     raise ValueError('SOURCE_ONLY: launch not released')
+ 
+ 
+-def release_lease(*_args, **_kwargs):
++def release_lease(*args, **kwargs):
++    if len(args)==2 and not kwargs and type(args[0]) is NativeSourcePlan:
++        plan,completion=args
++        _require(plan.custody.state=='NATIVE_TERMINAL_CLEAN','native terminal custody absent')
++        plan.source.restore(completion)
++        plan.source.close_restored()
++        result=plan.admission.release(completion,plan.source)
++        plan.custody.state='RETIRED_CURRENT_NATIVE_OPERATION_ONLY'
++        return result
+     raise ValueError('SOURCE_ONLY: lease retirement not released')
++
++
++class NativeSourcePlan:
++    """Real named source DATA plus internally owned resource custody.
++
++    The live account socket remains only a veto. Root-pinned request, inherited
++    watchdog lease, actual kernel lock/counters, genuine native owner and exact
++    source epoch are all required before this type can be constructed.
++    """
++    authority=None
++    status='NAMED_NATIVE_SOURCE_DATA_ONLY'
++    def __init__(self,custody,admission,source):
++        import native_resource_admission as native
++        import native_source_binding
++        _require(os.getuid()==os.geteuid()==0 and type(admission) is native.NativeAdmission and
++                 type(source) is native_source_binding.NativeSourceCustody and
++                 source is admission.source and custody.native_admission is admission,
++                 'actual native/source owner types required')
++        self.custody,self.admission,self.source=custody,admission,source
++        self.session=admission.client
++        self.source_accepted=False;self.effective_accepted=False;self.collection=None
++        self.revalidate()
++
++    def revalidate(self):
++        _require(self.custody.state in ('NATIVE_REGISTERED','NATIVE_SOURCE_HELD','NATIVE_RUNNING'),
++                 'named custody no longer live')
++        self.admission.verify();self.source.verify()
++        return self.source.rows
++
++    def accept_effective(self):
++        return _accept_effective_view(self)
++
++
++def _prepare_named_native(fd,custody):
++    import native_resource_admission as native
++    admission=custody.native_admission
++    _require(os.getuid()==os.geteuid()==0 and type(admission) is native.NativeAdmission and
++             custody.state=='NATIVE_REGISTERED' and custody.nonce==admission.nonce and
++             type(fd) is int and fd==admission.client.sock.fileno() and
++             admission.client.close_state=='OPEN','actual owned current-control channel required')
++    # This is the authentic owning-Campaign channel carried by the normal Root
++    # supervisor; no caller-created DATA, callback or ordinary old graph grants.
++    admission.verify();admission.client.revalidate();admission.source.verify()
++    plan=NativeSourcePlan(custody,admission,admission.source)
++    custody.plan=plan;custody.session=admission.client;custody.state='NATIVE_SOURCE_HELD'
++    return plan
+--- /dev/null
++++ b/package/native_current_owner.py
+@@ -0,0 +1,316 @@
++"""Current owning-Campaign account/control handoff; never a native RAM grant.
++
++Imported by the existing worker and by its immutable root-operation package.
++Only CurrentOwnerServer calls the already-owning Campaign's account methods.
++No Campaign/RPC/CreditBudget object is constructed here. Import launches nothing.
++"""
++import hashlib
++import json
++import math
++import os
++from pathlib import Path
++import secrets
++import select
++import socket
++import stat
++import struct
++import time
++import pidfd_compat
++from decimal import Decimal
++
++ROOT_THREAD = '01a18bc3-e072-7810-9426-75101b0856c0'
++CREDIT_RUN = '7c6ef3604bfb4008a917bba8cfb6cfaa'
++SCHEMA = 'mckernel-current-owning-controller-v1'
++MAX_FRAME = 32768
++MAX_AGE = 5.0
++HANDOFF_SECONDS = 60.0
++ACCOUNT_RESERVE_SECONDS = 45.0
++HOLDS = ('service_hold','policy_hold','auth_hold','billing_hold','budget_hold',
++         'permission_hold','source_hold','resource_hold','native_hold',
++         'transport_uncertain','pending_request','credit_budget_error')
++LOADED_SOURCE_SHA256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
++
++
++def need(ok, message):
++    if not ok: raise RuntimeError(message)
++
++
++def birth(pid):
++    raw = Path('/proc/%d/stat' % pid).read_bytes()
++    need(len(raw)<=4096 and raw.startswith(('%d (' % pid).encode()),'controller process stat')
++    tail=raw.rsplit(b')',1)[1].split()
++    need(len(tail)>=20 and tail[0] not in (b'Z',b'X',b'x'),'controller process unavailable')
++    return tail[19].decode()
++
++
++def unique(pairs):
++    value={}
++    for k,v in pairs:
++        need(k not in value,'duplicate control key');value[k]=v
++    return value
++
++
++def digest(value):
++    return hashlib.sha256(json.dumps(value,sort_keys=True,separators=(',',':'),allow_nan=False).encode()).hexdigest()
++
++
++class ChannelCleanupError(RuntimeError):
++    def __init__(self, primary, secondary):
++        super().__init__('current-owner channel cleanup incomplete')
++        self.primary=primary;self.secondary=tuple(secondary)
++        self.interrupt=interruption(primary)
++        if self.interrupt is None:
++            for row in self.secondary:
++                error=row[-1] if isinstance(row,tuple) else row
++                self.interrupt=interruption(error)
++                if self.interrupt is not None:break
++
++
++def interruption(error):
++    if isinstance(error,(KeyboardInterrupt,SystemExit)):return error
++    if isinstance(error,ChannelCleanupError):return error.interrupt
++    return None
++
++
++def remaining(deadline):
++    need(type(deadline) in (int,float) and math.isfinite(deadline),'absolute control deadline')
++    left=deadline-time.monotonic();need(left>0,'current control total deadline')
++    return left
++
++
++def send(sock,value,deadline):
++    raw=json.dumps(value,sort_keys=True,separators=(',',':'),allow_nan=False).encode()
++    need(0<len(raw)<=MAX_FRAME,'control frame bound')
++    frame=struct.pack('!I',len(raw))+raw;offset=0
++    while offset<len(frame):
++        sock.settimeout(remaining(deadline))
++        n=sock.send(frame[offset:]);need(n>0,'control channel EOF');offset+=n
++    remaining(deadline)
++
++
++def receive(sock,deadline):
++    def read(n):
++        out=bytearray()
++        while len(out)<n:
++            sock.settimeout(remaining(deadline))
++            part=sock.recv(n-len(out));need(bool(part),'control channel EOF');out.extend(part)
++        remaining(deadline);return bytes(out)
++    n=struct.unpack('!I',read(4))[0];need(0<n<=MAX_FRAME,'control frame bound')
++    value=json.loads(read(n),object_pairs_hook=unique,
++        parse_constant=lambda _: (_ for _ in ()).throw(ValueError('nonfinite control frame')))
++    remaining(deadline);return value
++
++
++def close_pair(conn,pfd):
++    errors=[]
++    # Attempt every owned handle once; never retry an ambiguous numeric close.
++    for name,handle,close in [('socket',conn,lambda:conn.close()),
++                              ('pidfd',pfd,lambda:os.close(pfd))]:
++        if handle is None:continue
++        try:close()
++        except BaseException as error:errors.append((name,handle,error))
++    return errors
++
++
++class CurrentOwnerServer:
++    """Polled only by the existing Campaign.run loop, not a second controller.
++
++    Root peers obtain data from fresh actual account reads. The reply deliberately
++    grants no native allocation; the root physical-resource owner remains separate.
++    """
++    def __init__(self, campaign):
++        self.campaign=campaign;self.clients=[];self.closed=False;self.close_state='OPEN';self.close_errors=[];self.unknown_handles=[];self.sock=None;self.identity=None;self.path=None
++        self.pid=os.getpid();self.start=birth(self.pid)
++        self._owning_context()
++        self.path=str(campaign.directory/('native-current-owner.%d.%s.sock'%(self.pid,self.start)))
++        need(len(os.fsencode(self.path))<104,'owning controller socket pathname')
++        need(not os.path.lexists(self.path),'current controller channel already exists')
++        self.sock=socket.socket(socket.AF_UNIX,socket.SOCK_STREAM)
++        self.sock.bind(self.path)
++        info=os.lstat(self.path);self.identity=(info.st_dev,info.st_ino)
++        os.chmod(self.path,0o600);self.sock.listen(1);self.sock.setblocking(False)
++
++    def _owning_context(self):
++        c=self.campaign
++        need(c.controlled and c.rpc is not None and c.state.get('thread_id')==ROOT_THREAD,
++             'current already-owning Campaign required')
++        need(c.state.get('worker_pid')==os.getpid() and str(c.state.get('worker_start'))==birth(os.getpid()),
++             'foreign or recovered Campaign object')
++        guard=c.credit_guard
++        need(guard is not None and guard.identifier==CREDIT_RUN and guard.initialized,
++             'same durable initialized credit run required')
++        need(getattr(c.args,'credit_run_id',None)==CREDIT_RUN,'credit-run argument mismatch')
++        need(hashlib.sha256(Path(__file__).read_bytes()).hexdigest()==LOADED_SOURCE_SHA256,
++             'owning control source changed after import')
++
++    def _snapshot(self, request, deadline):
++        self._owning_context();c=self.campaign
++        # Existing account/read<=10s plus actual refresh retries<=33s; reserve
++        # those unchanged calls inside this SAME60s handoff. No RPC proxy or
++        # replacement credit guard can change same-RPC fallback semantics.
++        need(remaining(deadline)>=ACCOUNT_RESERVE_SECONDS,'account handoff reserve exhausted')
++        need(type(request) is dict and set(request)=={'schema','nonce','config_sha256','challenge','seq'},
++             'current control request shape')
++        need(request['schema']==SCHEMA and type(request['seq']) is int and request['seq']>0,
++             'current control request identity')
++        for k in ('nonce','config_sha256','challenge'):
++            need(type(request[k]) is str and len(request[k])==64 and
++                 all(ch in '0123456789abcdef' for ch in request[k]),'current control digest')
++        # These calls execute only here, in the real already-owning controller.
++        # refresh_credit_budget retains its actual same-RPC notification fallback,
++        # persisted cumulative budget, unknown/exhausted stops and no new allowance.
++        account=c.rpc.call('account/read',{'refreshToken':False},timeout=10).get('account') or {}
++        if account.get('type')!='chatgpt':
++            c.stop_reason,c.stop_now='chatgpt_auth_changed',True;c.save(auth_mode=account.get('type'))
++        need(account.get('type')=='chatgpt','current signed-in ChatGPT account required')
++        c.refresh_credit_budget()
++        need(not c.stop_now and not c.stop_reason and not c.checkpoint_requested and not c.stopping,
++             'owning controller stop/checkpoint')
++        need(c.state.get('phase') in ('running','ready'),'owning controller phase')
++        need(not any(c.state.get(k) for k in HOLDS),'current controller hold or unknown')
++        budget=c.state.get('credit_budget')
++        need(type(budget) is dict and budget.get('id')==CREDIT_RUN and
++             Decimal(budget.get('budget'))==c.credit_guard.budget and
++             Decimal(budget.get('remaining'))>0,'actual retained credit budget unavailable')
++        self._owning_context();remaining(deadline)
++        now=time.clock_gettime(time.CLOCK_BOOTTIME)
++        return dict(schema=SCHEMA,authority=None,native_grant=False,
++          scope='fresh-current-controller-account-data-only',request=request,
++          controller_pid=self.pid,controller_birth=self.start,thread_id=ROOT_THREAD,
++          guardian_run_id=c.state.get('guardian_run_id'),credit_run_id=CREDIT_RUN,
++          credit_budget=budget,observed_boot=now,expires_boot=now+MAX_AGE,
++          boot_id=Path('/proc/sys/kernel/random/boot_id').read_text().strip(),
++          source_sha256=LOADED_SOURCE_SHA256)
++
++    def poll(self):
++        self._owning_context();need(self.close_state=='OPEN','controller service closed')
++        try:
++            conn,_=self.sock.accept();pfd=None
++            try:
++                conn.settimeout(15)
++                pid,uid,gid=struct.unpack('3i',conn.getsockopt(socket.SOL_SOCKET,socket.SO_PEERCRED,12))
++                need(uid==0 and pid>1,'root native-operation peer required')
++                start=birth(pid)
++                try:pfd=pidfd_compat.open_pidfd(pid,0)
++                except pidfd_compat.PidfdVerificationError as error:
++                    pfd=error.fd;raise
++                need(birth(pid)==start,'native-operation peer changed')
++                need(not self.clients,'one native account handoff at a time')
++                self.clients.append([conn,pid,start,pfd,None,0])
++            except BaseException as primary:
++                errors=close_pair(conn,pfd)
++                if errors:
++                    self.unknown_handles.extend(errors)
++                    raise ChannelCleanupError(primary,errors) from primary
++                raise
++        except BlockingIOError:pass
++        for client in tuple(self.clients):
++            conn,pid,start,pfd,binding,seq=client
++            poll=select.poll();poll.register(pfd,select.POLLIN)
++            ready=select.poll();ready.register(conn,select.POLLIN|select.POLLHUP|select.POLLERR)
++            events=ready.poll(0)
++            if poll.poll(0) or birth(pid)!=start or (events and events[0][1]&(select.POLLHUP|select.POLLERR)):
++                self.clients.remove(client)
++                errors=close_pair(conn,pfd)
++                if errors:
++                    self.unknown_handles.extend(errors);raise ChannelCleanupError(None,errors)
++                continue
++            if not events:continue
++            try:
++                deadline=time.monotonic()+HANDOFF_SECONDS
++                request=receive(conn,deadline)
++                current=(request.get('nonce'),request.get('config_sha256'))
++                need((binding is None or binding==current) and request.get('seq')==seq+1,
++                     'native control binding or sequence changed')
++                response=self._snapshot(request,deadline);send(conn,response,deadline)
++                client[4],client[5]=current,seq+1
++            except BaseException as primary:
++                self.clients.remove(client)
++                errors=close_pair(conn,pfd)
++                if errors:
++                    self.unknown_handles.extend(errors)
++                    raise ChannelCleanupError(primary,errors) from primary
++                raise
++
++    def close(self):
++        if self.close_state=='CLOSED':return
++        if self.close_state!='OPEN':
++            raise ChannelCleanupError(None,self.close_errors)
++        self.close_state='CLOSING';errors=[]
++        clients,self.clients=self.clients,[]
++        for conn,pid,start,pfd,binding,seq in clients:
++            errors.extend(close_pair(conn,pfd))
++        if self.sock is not None:
++            try:self.sock.close()
++            except BaseException as error:errors.append(('listener',self.sock,error))
++        if self.identity is not None:
++            try:
++                st=os.lstat(self.path)
++                need((st.st_dev,st.st_ino)==self.identity and stat.S_ISSOCK(st.st_mode),
++                     'current controller socket ownership changed')
++                os.unlink(self.path)  # exact own socket only, never a resource lease
++            except BaseException as error:errors.append(('socket_path',self.path,error))
++        errors=self.unknown_handles+errors
++        self.close_errors=errors
++        self.closed=not errors;self.close_state='UNKNOWN_RETAINED' if errors else 'CLOSED'
++        if errors:raise ChannelCleanupError(None,errors)
++
++
++class CurrentOwnerSession:
++    """Root-side authenticated client; has no native RAM permission semantics."""
++    def __init__(self,path,controller_pid,controller_birth,source_sha256,nonce,config_sha256):
++        self.sock=None;self.pidfd=None;self.closed=False;self.close_state='OPEN';self.close_errors=[];self.data=None
++        need(os.geteuid()==0,'root operation caller required')
++        st=os.lstat(path)
++        need(stat.S_ISSOCK(st.st_mode) and st.st_uid==1000 and stat.S_IMODE(st.st_mode)==0o600,
++             'owning controller socket identity')
++        self.sock=socket.socket(socket.AF_UNIX,socket.SOCK_STREAM);self.sock.settimeout(15)
++        self.sock.connect(path)
++        pid,uid,gid=struct.unpack('3i',self.sock.getsockopt(socket.SOL_SOCKET,socket.SO_PEERCRED,12))
++        need((pid,uid)==(controller_pid,1000) and birth(pid)==controller_birth,
++             'actual owning controller peer differs')
++        self.pid,self.birth,self.source_sha=pid,controller_birth,source_sha256
++        self.nonce,self.config_sha,self.seq=nonce,config_sha256,0
++        try:self.pidfd=pidfd_compat.open_pidfd(pid,0)
++        except pidfd_compat.PidfdVerificationError as error:
++            self.pidfd=error.fd;raise
++        need(birth(pid)==controller_birth,'controller changed during pidfd acquisition')
++        self.revalidate()
++
++    def revalidate(self):
++        need(self.close_state=='OPEN' and birth(self.pid)==self.birth,'current owner session unavailable')
++        p=select.poll();p.register(self.pidfd,select.POLLIN);need(not p.poll(0),'owning controller exited')
++        if self.data is not None and time.clock_gettime(time.CLOCK_BOOTTIME)+0.5<self.data['expires_boot']:
++            return self.data
++        self.seq+=1
++        request=dict(schema=SCHEMA,nonce=self.nonce,config_sha256=self.config_sha,
++                     challenge=secrets.token_hex(32),seq=self.seq)
++        deadline=time.monotonic()+HANDOFF_SECONDS
++        start=time.clock_gettime(time.CLOCK_BOOTTIME)
++        send(self.sock,request,deadline);row=receive(self.sock,deadline)
++        need(type(row) is dict and set(row)=={'schema','authority','native_grant','scope','request',
++          'controller_pid','controller_birth','thread_id','guardian_run_id','credit_run_id',
++          'credit_budget','observed_boot','expires_boot','boot_id','source_sha256'},'owning snapshot shape')
++        now=time.clock_gettime(time.CLOCK_BOOTTIME)
++        need(row['schema']==SCHEMA and row['authority'] is None and row['native_grant'] is False and
++          row['scope']=='fresh-current-controller-account-data-only' and row['request']==request and
++          (row['controller_pid'],row['controller_birth'])==(self.pid,self.birth) and
++          row['thread_id']==ROOT_THREAD and row['credit_run_id']==CREDIT_RUN and
++          row['source_sha256']==self.source_sha==LOADED_SOURCE_SHA256 and
++          row['boot_id']==Path('/proc/sys/kernel/random/boot_id').read_text().strip(),
++          'owning snapshot binding')
++        need(type(row['observed_boot']) in (int,float) and type(row['expires_boot']) in (int,float) and
++          math.isfinite(row['observed_boot']) and math.isfinite(row['expires_boot']) and
++          start<=row['observed_boot']<=now<row['expires_boot']<=row['observed_boot']+MAX_AGE,
++          'owning snapshot stale')
++        need(birth(self.pid)==self.birth and not p.poll(0),'owning controller lost after reply')
++        self.data=row;return row
++
++    def close(self):
++        if self.close_state=='CLOSED':return
++        if self.close_state!='OPEN':raise ChannelCleanupError(None,self.close_errors)
++        self.close_state='CLOSING'
++        errors=close_pair(self.sock,self.pidfd)
++        self.close_errors=errors
++        self.closed=not errors;self.close_state='UNKNOWN_RETAINED' if errors else 'CLOSED'
++        if errors:raise ChannelCleanupError(None,errors)
+--- /dev/null
++++ b/package/native_resource_admission.py
+@@ -0,0 +1,666 @@
++"""One named native physical-resource admission, separate from account data.
++
++No import/constructor is an execution entrypoint. The verified supervisor owns
++this object before initialization. It requires its genuine RootLease, a fresh
++owning-controller session, the exact root-pinned reviewed native configuration,
++the real DiagnosticOwner preflight and the actual kernel development FLOCK.
++Only this new operation may be retired; retained historical scopes stay held.
++"""
++import fcntl
++import base64
++import sys
++import hashlib
++import json
++import math
++import os
++from pathlib import Path
++import stat
++import time
++import native_current_owner
++import root_bootstrap
++import graph_producer
++import runtime_binding
++
++GIB=1024**3
++UNKNOWN=[]
++EXPECTED=dict(mckernel_image='c66492d44e2e71a072114f637cd04dff5feb77bd2216c42ef69f7a56944c7a5f',
++ payload='77e8dfe6f8089f18b22524ad474e057cb061d67501f9e9fdb4f391dd4790f45d',
++ libc='b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4',
++ loader='0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b')
++MODULES=('04f5d3e0dbf0c70b7ff5aeb281fabda310751bc45c4916cb582575cf3f81155e',
++ 'ae67f463920ae6267710624139c56ef5dcfa8d1c60f4fc1a42f0e52604066696',
++ 'dc46a4f552776d6f9200cbdc8127882ea3f5d69d119f3e5b00672dce234eabcc')
++CGROUP={'/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_period_us':'100000',
++ '/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_quota_us':'400000',
++ '/sys/fs/cgroup/memory/mckernel-dev/memory.limit_in_bytes':'12884901888',
++ '/sys/fs/cgroup/memory/mckernel-dev/memory.use_hierarchy':'1',
++ '/sys/fs/cgroup/pids/mckernel-dev/pids.max':'512'}
++MEMBERS=('/sys/fs/cgroup/cpu/mckernel-dev/tasks',
++ '/sys/fs/cgroup/memory/mckernel-dev/tasks','/sys/fs/cgroup/pids/mckernel-dev/tasks')
++
++
++def need(ok,msg):
++    if not ok:raise RuntimeError(msg)
++
++
++def read_kernel(path):
++    fd=os.open(path,os.O_RDONLY|os.O_CLOEXEC|os.O_NOFOLLOW)
++    try:
++        raw=os.read(fd,4097);need(len(raw)<=4096,'kernel resource bound: '+path)
++        return raw.decode('ascii').strip()
++    finally:os.close(fd)
++
++
++def physical_snapshot(require_empty):
++    profile={path:read_kernel(path) for path in CGROUP}
++    need(profile==CGROUP,'actual native cgroup profile differs')
++    members={path:read_kernel(path) for path in MEMBERS}
++    for path,value in members.items():
++        need(all(x.isdigit() and int(x)>0 for x in value.split()),'native member record malformed: '+path)
++    usage=int(read_kernel('/sys/fs/cgroup/memory/mckernel-dev/memory.usage_in_bytes'))
++    pids=int(read_kernel('/sys/fs/cgroup/pids/mckernel-dev/pids.current'))
++    need(usage>=0 and pids>=0,'native counters malformed')
++    if require_empty:
++        # Actual readable kernel counters/membership, never missing-path=>free.
++        need(all(not x for x in members.values()) and usage==0 and pids==0,
++             'native scope not positively idle')
++    return dict(profile=profile,members=members,memory_usage_bytes=usage,pids=pids)
++
++
++def file_identity(fd):
++    s=os.fstat(fd)
++    return dict(device=s.st_dev,inode=s.st_ino,uid=s.st_uid,mode=stat.S_IMODE(s.st_mode),nlink=s.st_nlink)
++
++
++def current_flock(fd):
++    st=os.fstat(fd);found=[]
++    for line in Path('/proc/locks').read_text().splitlines():
++        f=line.split()
++        if len(f)<8 or f[1:4]!=['FLOCK','ADVISORY','WRITE']:continue
++        major,minor,inode=f[5].split(':')
++        if (int(major,16),int(minor,16),int(inode))==(os.major(st.st_dev),os.minor(st.st_dev),st.st_ino):
++            found.append(int(f[4]))
++    need(found==[os.getpid()],'actual current native development-lock owner differs')
++    return found[0]
++
++
++KIND='mckernel-native-signal-operation-v1'
++
++
++class VerifiedNativeRequest:
++    """Held root-pinned reviewed request, not a caller dict or an account grant.
++
++    Root's later operation-specific review/admission must issue this immutable
++    one-shot file; merely writing a source candidate issues nothing. Both the
++    watchdog and supervisor independently hold and compare these exact bytes.
++    """
++    def __init__(self,path,expected_sha):
++        self.fd=None;self.path=path;self.sha256=expected_sha
++        self.fd,self.raw=root_bootstrap.pinned_root_file(path,expected_sha)
++        self.identity=file_identity(self.fd)
++        self.cfg=json.loads(self.raw,object_pairs_hook=native_current_owner.unique,
++          parse_constant=lambda _: (_ for _ in ()).throw(ValueError('nonfinite native request')))
++        cfg=self.cfg
++        need(type(cfg) is dict and set(cfg)=={'kind','nonce','boot_id','caps','watchdog_pid',
++          'watchdog_birth','runtime','owner','native','operation_root'},'named native request fields')
++        need(cfg['kind']==KIND,'only named native signal request selected')
++        root=cfg['operation_root']
++        need(type(root) is dict and set(root)=={'device','inode','uid','mode','nlink'} and
++             root['uid']==0 and root['mode']==0o700 and
++             type(root['device']) is int and root['device']>=0 and
++             all(type(root[k]) is int and root[k]>0 for k in ('inode','nlink')),
++             'exact one-shot actual operation-root identity required')
++        for k in ('nonce',):
++            need(type(cfg[k]) is str and len(cfg[k])==64 and all(c in '0123456789abcdef' for c in cfg[k]),'fresh native nonce')
++        need(type(cfg['watchdog_pid']) is int and cfg['watchdog_pid']>1 and
++          type(cfg['watchdog_birth']) is str and cfg['watchdog_birth'].isdigit(),'native watchdog identity')
++        need(type(cfg['runtime']) is dict and set(cfg['runtime'])=={'path','sha256'},'native runtime pin')
++        need(type(cfg['owner']) is dict and set(cfg['owner'])=={'path','sha256'},'genuine owner source pin')
++        runtime_binding.verify_current(cfg['runtime']['path'],cfg['runtime']['sha256'])
++        self.verify()
++
++    def verify(self):
++        need(self.fd is not None and file_identity(self.fd)==self.identity,'native request fd changed')
++        fd,raw=root_bootstrap.pinned_root_file(self.path,self.sha256)
++        try:need(file_identity(fd)==self.identity and raw==self.raw,'native request path changed')
++        finally:os.close(fd)
++        cfg=self.cfg;caps=cfg['caps']
++        need(type(caps) is dict and set(caps)=={'utc','boot','mono','boot_id'} and
++          caps['boot_id']==cfg['boot_id']==Path('/proc/sys/kernel/random/boot_id').read_text().strip(),
++          'native request current boot')
++        for k,now in [('utc',time.time()),('boot',time.clock_gettime(time.CLOCK_BOOTTIME)),('mono',time.monotonic())]:
++            need(type(caps[k]) in (int,float) and math.isfinite(caps[k]) and now<caps[k]<=now+600,
++                 'native one-shot clock domain expired or unbounded')
++        # Do not trust a mutated decoded dict, even in this owning process.
++        need(json.loads(self.raw,object_pairs_hook=native_current_owner.unique)==cfg,'native request decoded fields changed')
++        return self
++
++
++class VerifiedResourceScope:
++    """Consume exact7f7 reviewed arithmetic, never an approved/native-free flag.
++
++    Native12 is static nonadditive capacity. Prior678ab already retired only
++    R3 process-memory4; R3 persistent/source, scratch21 and mutex27:4 remain.
++    Fresh actual native claim/FLOCK/kernel/current-account checks are separate.
++    """
++    FACTS_SHA='7f7f4f58c733d6f42d631a1821241e3a632b823e981236038b03e675bdd4e362'
++    def __init__(self,binding,request):
++        self.fd=None;self.source_fds=[]
++        need(type(binding) is dict and set(binding)=={'path','sha256'} and
++          binding['sha256']==self.FACTS_SHA,'exact reviewed current retained-scope facts missing')
++        self.fd,self.raw=root_bootstrap.pinned_root_file(binding['path'],binding['sha256'])
++        self.binding=dict(binding);self.request=request
++        value=json.loads(self.raw,object_pairs_hook=native_current_owner.unique)
++        need(value.get('schema')=='mckernel.native-retained-memory-scope-source-review.v1',
++             'actual source-scope review schema')
++        facts=value['source_input_facts_for_actual_native_admission']
++        rows=facts['retained_memory_rows']
++        need([(r['id'],r['kind'],r['bytes'],r['status']) for r in rows]==[
++          ('original_install_dfd0a93f','retained_memory_charge',4*GIB,'UNKNOWN_RETAINED'),
++          ('V2_unknown_parent','retained_memory_charge',2*GIB,'UNKNOWN_RETAINED'),
++          ('native_cpu2_5','retained_native_capacity',12*GIB,'HELD_CAPACITY_NOT_CURRENT_OPERATION_PROOF')],
++          'actual remaining install4/V2_2/staticnative12 rows differ')
++        need(facts['retained_total_bytes']==18*GIB and
++          facts['retained_other_than_native_capacity_bytes']==6*GIB,
++          'actual retained18 arithmetic differs')
++        r3=facts['R3_memory_row']
++        need(r3['issued_bytes']==4*GIB and r3['current_process_charge_bytes']==0 and
++          r3['disposition_source']['sha256']=='678ab265971ff032a82e204d1739ab6feb56d3969b607403bacf443a8fb0f231',
++          'prior R3 process-only disposition changed')
++        held=facts['persistent_nonmemory_UNKNOWN_rows']
++        need([(r['id'],r['status']) for r in held]==[
++          ('R3_nonce8c12_persistent_custody','UNKNOWN_PRESERVED'),
++          ('R3_source_exclusion','UNKNOWN_PRESERVED'),('scratch21','HELD_PRESERVED'),
++          ('mutex27:4','HELD_PRESERVED')] and held[0]['additional_memory_bytes'] is None,
++          'persistent/source/scratch/mutex outcomes must remain unchanged')
++        # The static native pool is counted once. This is only accounting; no
++        # resource state, source permission or current operation follows from it.
++        self.required_bytes=facts['retained_total_bytes']+4*GIB+4*GIB
++        self.value=value
++
++    def verify(self):
++        self.request.verify()
++        fd,raw=root_bootstrap.pinned_root_file(self.binding['path'],self.binding['sha256'])
++        try:need(file_identity(fd)==file_identity(self.fd) and raw==self.raw,'resource scope changed')
++        finally:os.close(fd)
++        return self
++
++
++class NativeCompletion:
++    """Minted only from this admission's real terminal owner, never caller JSON."""
++    def __init__(self,admission,owner,result):
++        need(type(admission) is NativeAdmission and owner is admission.owner and
++          admission.state=='RUNNING','native terminal owner binding')
++        need(owner.absent and owner.lock is None and (not owner.create_issued or owner.create_completed) and
++          not owner.backend.children.pending and not owner.backend.children.final_reap_records,
++          'actual native owner not positively retired')
++        self.admission,self.owner,self.result=admission,owner,result
++        self.nonce=admission.nonce;self.physical=physical_snapshot(True)
++        self.functional_pass=owner.failure is None
++
++
++class NativeAdmission:
++    def __init__(self,root_fd,lease,request,owner_module):
++        self.state='INITIALIZING';self.root_fd=root_fd;self.lease=lease
++        self.client=None;self.owner=None;self.development_fd=None;self.claim_fd=None;self.package_fd=None;self.resource_scope=None
++        self.open_fds=[];self.loader_fds=[];self.source_members=[];self.failure=None;self.completion=None
++        need(os.getuid()==os.geteuid()==0,'actual root native owner required')
++        need(type(lease) is graph_producer.RootLease and lease.root_fd==root_fd,
++             'genuine inherited RootLease required')
++        need(type(request) is VerifiedNativeRequest,'root-pinned typed native request required')
++        request.verify();self.request=request;cfg=request.cfg
++        need(cfg['watchdog_pid']==os.getppid() and
++          native_current_owner.birth(os.getppid())==cfg['watchdog_birth'] and
++          lease.nonce==cfg['nonce'],'actual inherited watchdog/request/nonce join')
++        actual_root=file_identity(root_fd)
++        need(actual_root==cfg['operation_root'],'request/actual operation root differs')
++        lease.verify();self.nonce=lease.nonce;self.cfg=cfg;self.config_sha=request.sha256
++        self.caps=dict(cfg['caps']);self.boot_id=cfg['boot_id']
++        need(owner_module.__file__==cfg['owner']['path'] and
++          hashlib.sha256(Path(owner_module.__file__).read_bytes()).hexdigest()==cfg['owner']['sha256'],
++          'actual verified owner module differs')
++        spec=cfg['native']
++        need(type(spec) is dict and set(spec)=={'manifest','attempt_parent','source_manifest',
++          'source_package','profile','scope','controller','deadline_seconds'},'native config shape')
++        need(spec['profile']=={'cpus':[2,3,4,5],'memory_bytes':12*GIB,'memory_swap_bytes':12*GIB,
++          'pids':512,'network':'none','heavy_jobs':1},'exact native execution profile')
++        # A static capacity label is not an allocated operation. The new Root-
++        # reviewed request selects the existing reserved pool; old install4/V2,
++        # scratch21/mutex/UNKNOWN are neither reused nor released by this object.
++        self.resource_scope=VerifiedResourceScope.__new__(VerifiedResourceScope)
++        self.resource_scope.__init__(spec['scope'],request)
++        self._clocks()
++        package=spec['source_package']
++        need(type(package) is dict and set(package)=={'path','device','inode','uid','mode'},
++             'actual immutable package generation identity')
++        need(type(package['path']) is str and package['path'].startswith('/var/lib/mckernel-native-'),
++             'named immutable package path')
++        import inplace_custody
++        self.package_fd=inplace_custody.open_exact(package['path'])
++        self.open_fds.append(self.package_fd)
++        ps=os.fstat(self.package_fd)
++        need(stat.S_ISDIR(ps.st_mode) and ps.st_uid==0 and stat.S_IMODE(ps.st_mode)&0o022==0 and
++             inplace_custody.flags(self.package_fd)&inplace_custody.IMMUTABLE and
++             {'device':ps.st_dev,'inode':ps.st_ino,'uid':ps.st_uid,'mode':stat.S_IMODE(ps.st_mode)}==
++             {k:package[k] for k in ('device','inode','uid','mode')},'named source generation changed')
++        self._registered_loader()
++        controller=spec['controller']
++        need(type(controller) is dict and set(controller)=={'path','pid','birth','source_sha256'},
++             'actual owning controller channel config')
++        self.client=native_current_owner.CurrentOwnerSession.__new__(native_current_owner.CurrentOwnerSession)
++        self.client.__init__(controller['path'],controller['pid'],controller['birth'],
++                             controller['source_sha256'],self.nonce,self.config_sha)
++        self._capacity()
++        self.initial=physical_snapshot(True)
++        manifest=spec['manifest']
++        need(type(manifest) is dict and set(manifest)=={'path','sha256'},'native manifest ref')
++        self.owner_module=owner_module
++        # Real canonical owner/preflight validates all artifacts, source hashes,
++        # staging/finalmap/QEMU inputs. No dummy provider/backend is accepted.
++        self.owner=_bound_owner(owner_module,self,spec['attempt_parent'],manifest)
++        self.retained=owner_module.DiagnosticOwner._preflight(self.owner)
++        self._named_manifest(self.owner.manifest)
++        self.claim_fd=os.open('NATIVE-CLAIM-'+self.nonce+'.jsonl',
++          os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW|os.O_CLOEXEC,0o600,dir_fd=root_fd)
++        self.open_fds.append(self.claim_fd)
++        self._record('REGISTERED_BEFORE_RESOURCE_ACQUISITION')
++        owner_module.DiagnosticOwner._acquire(self.owner)
++        self.development_fd=self.owner.lock;self.development_identity=file_identity(self.development_fd)
++        need(self.development_identity['uid']==0 and self.development_identity['nlink']==1,
++             'real development FLOCK identity')
++        current_flock(self.development_fd);physical_snapshot(True)
++        self.state='CLAIMED';self._record('HELD_ACTUAL_EXCLUSIVE_NEW_OPERATION')
++
++    def _registered_loader(self):
++        # These are the actual normal supervisor_argv positions, not a new
++        # caller-selected sys.path or an unregistered source-loader fallback.
++        need(len(sys.argv)==5 and sys.argv[0]=='-c','registered supervisor inline argv')
++        fd,raw=root_bootstrap.pinned_root_file(sys.argv[2],sys.argv[3]);self.loader_fds.append(fd)
++        loader=json.loads(raw,object_pairs_hook=native_current_owner.unique)
++        need(type(loader) is dict and set(loader)=={'kind','modules','extra_files',
++          'operation_config_path','operation_config_sha','runtime'} and
++          loader['kind']=='mckernel-native-signal-loader-v1' and
++          loader['operation_config_path']==self.request.path and
++          loader['operation_config_sha']==self.request.sha256 and loader['runtime']==self.cfg['runtime'],
++          'actual immutable loader/request binding')
++        original=('ownership_latch','custody_protocol_v2','graph_observations','pidfd_compat','runtime_binding',
++          'pidfd_custody','deferred_fork','inplace_custody','immutable_epoch','adapter','materializer',
++          'source_freeze','split_inventory','union_server_guarded','graph_producer','graph_server',
++          'operation_supervisor','supervisor_entry')
++        named=('native_current_owner','native_diagnostic_container_owner','native_resource_admission',
++          'native_source_binding','compositor','operation_watchdog')
++        need(type(loader['modules']) is dict and set(loader['modules'])==set(original+named),
++             'complete actual original18 plus named dependencies required')
++        need(loader['modules']['supervisor_entry']['path']==sys.argv[4], 'actual selected entry source')
++        for name in original+named:
++            ref=loader['modules'][name]
++            need(type(ref) is dict and set(ref)=={'path','sha256'},'actual module source pin')
++            mf,_=root_bootstrap.pinned_root_file(ref['path'],ref['sha256']);self.loader_fds.append(mf)
++            need(name in sys.modules and sys.modules[name].__file__==ref['path'],
++                 'actual verified module origin differs: '+name)
++            self.source_members.append(ref['path'])
++        local=os.path.dirname(loader['modules']['materializer']['path'])
++        extras=loader['extra_files']
++        need(set(extras)=={os.path.join(local,n) for n in
++          ('verify_scripts_fd.py','verified_owner_loader.py','union_owner.py','root_owner_entry.py')},
++          'exact registered checker/parent lineage source set')
++        for path,sha in extras.items():
++            ef,_=root_bootstrap.pinned_root_file(path,sha);self.loader_fds.append(ef);self.source_members.append(path)
++        actual_bootstrap=base64.b64decode(sys.argv[1],validate=True)
++        bootstrap_path=os.path.join(self.cfg['native']['source_package']['path'],'root_bootstrap.py')
++        bf,body=root_bootstrap.pinned_root_file(bootstrap_path,hashlib.sha256(actual_bootstrap).hexdigest())
++        self.loader_fds.append(bf);self.source_members.append(bootstrap_path)
++        need(body==actual_bootstrap,'executed parent-verified bootstrap source differs')
++        self.loader=loader;self.loader_sha256=sys.argv[3]
++
++    def _clocks(self):
++        self.request.verify()
++        need(type(self.caps) is dict and set(self.caps)=={'utc','boot','mono','boot_id'} and
++          self.caps['boot_id']==self.boot_id==Path('/proc/sys/kernel/random/boot_id').read_text().strip(),
++          'native current boot/caps')
++        for k,now in [('utc',time.time()),('boot',time.clock_gettime(time.CLOCK_BOOTTIME)),('mono',time.monotonic())]:
++            need(type(self.caps[k]) in (int,float) and math.isfinite(self.caps[k]) and
++              now<self.caps[k]<=now+600,'native finite one-shot clock bound')
++
++    def _capacity(self):
++        rows=[x for x in Path('/proc/meminfo').read_text().splitlines() if x.startswith('MemAvailable:')]
++        self.resource_scope.verify()
++        required=self.resource_scope.required_bytes
++        need(required>=26*GIB and len(rows)==1 and int(rows[0].split()[1])*1024>=required,
++             'actual shared/native memory headroom for every retained scope')
++        for path,floor in [('/home/holden/mckernel',16*GIB),('/home/holden/mckernel-work/scratch',12*GIB)]:
++            fs=os.statvfs(path);need(fs.f_bavail*fs.f_frsize>=floor,'actual host/scratch floor: '+path)
++
++    def _named_manifest(self,manifest):
++        for name,sha in EXPECTED.items():need(manifest['artifacts'][name]['sha256']==sha,'matched native artifact: '+name)
++        need(tuple(x['sha256'] for x in manifest['modules'])==MODULES,'matched native099 modules')
++        need(manifest['payload']['argv']==['/bin/mcexec','-t','1','0','/apps/signal.alternate-repeat'] and
++          manifest['payload']['cwd']=='/case/work' and manifest['payload']['env']==
++          {'PATH':'/usr/bin:/bin','COKERNEL_PATH':'/apps','LANG':'C','LC_ALL':'C','TZ':'UTC'},
++          'only exact selected signal operation')
++
++    def _record(self,status):
++        row=dict(status=status,nonce=self.nonce,config_sha256=self.config_sha,
++          scope='CURRENT_NAMED_NATIVE_OPERATION_ONLY',native_pool_reservation='RETAINED',
++          root_lease_sha256=self.lease.lease_sha256,pid=os.getpid(),
++          birth=native_current_owner.birth(os.getpid()),boot_id=self.boot_id)
++        raw=(json.dumps(row,sort_keys=True,separators=(',',':'))+'\n').encode()
++        n=0
++        while n<len(raw):
++            wrote=os.write(self.claim_fd,raw[n:]);need(wrote>0,'native claim journal');n+=wrote
++        os.fsync(self.claim_fd);os.fsync(self.root_fd)
++
++    def verify(self,cleanup=False):
++        self.lease.verify()
++        need(self.state in ('CLAIMED','SOURCE_HELD','RUNNING','TERMINAL_CLEAN'),
++             'native operation admission no longer live')
++        need(file_identity(self.development_fd)==self.development_identity,'native resource lease changed')
++        current_flock(self.development_fd)
++        package=self.cfg['native']['source_package']
++        import inplace_custody
++        ps=os.fstat(self.package_fd);named=inplace_custody.open_exact(package['path'])
++        try:
++            ns=os.fstat(named)
++            need((ps.st_dev,ps.st_ino)==(ns.st_dev,ns.st_ino)==(package['device'],package['inode']) and
++                 inplace_custody.flags(self.package_fd)&inplace_custody.IMMUTABLE,
++                 'native source generation custody changed')
++        finally:os.close(named)
++        if not cleanup:
++            self._clocks();self.resource_scope.verify();self.client.revalidate()
++        return self
++
++    def source_held(self,source):
++        self.verify();need(self.state=='CLAIMED' and source.admission is self and source.state=='HELD',
++             'genuine selected source custody required')
++        self.source=source;self.state='SOURCE_HELD';self._record('SOURCE_HELD')
++
++    def launch(self,source):
++        self.verify();need(self.state=='SOURCE_HELD' and source is self.source,'source/native lifetime')
++        source.verify();self.state='RUNNING';self._record('NATIVE_RUNNING')
++        result=None;primary=None
++        try:
++            result=self.owner_module.execute_owner(self.owner)
++        except BaseException as error:
++            primary=error;self.failure=error
++        finally:
++            # execute_owner retains uncertain container/children and never proves
++            # cleanup from timeout or direct wait alone. Only actual clean owner
++            # can mint this current-operation terminal object.
++            if self.owner.absent and self.owner.lock is None and not self.owner.backend.children.pending and not self.owner.backend.children.final_reap_records:
++                self.completion=NativeCompletion(self,self.owner,result)
++                self.state='TERMINAL_CLEAN';self._record('NATIVE_TERMINAL_CLEAN')
++            else:self.retain_unknown('native owner/container restoration unresolved')
++        if primary is not None:
++            # A failed functional result with positively retired resources still
++            # carries completion for source restoration; do not lose it on raise.
++            if self.completion is not None:self.completion.failure=primary
++            else:raise primary
++        return self.completion
++
++    def release(self,completion,source):
++        need(type(completion) is NativeCompletion and completion is self.completion and
++          completion.admission is self and source is self.source and source.state=='CLOSED_RESTORED' and
++          self.state=='TERMINAL_CLEAN','actual current native/source completion required')
++        self.verify(cleanup=True);physical_snapshot(True)
++        self._record('CURRENT_OPERATION_NATIVE_AND_SOURCE_POSITIVELY_RESTORED_RELEASE_INTENT')
++        import signal
++        mask=signal.pthread_sigmask(signal.SIG_BLOCK,self.owner_module.OWNER_SIGNALS)
++        self.release_errors=[]
++        try:
++            fd=self.development_fd
++            # Do not retry an ambiguous numeric close. The exact new resource
++            # lease is released only after native+source positive completion.
++            fcntl.flock(fd,fcntl.LOCK_UN)
++            self.development_fd=None;self.development_historical_fd=fd
++            try:os.close(fd)
++            except BaseException as error:self.release_errors.append(('development_fd',error))
++            try:self._record('CURRENT_RESOURCE_FLOCK_RELEASED_HISTORICAL_SCOPES_RETAINED')
++            except BaseException as error:self.release_errors.append(('release_receipt',error))
++            try:self.client.close()
++            except BaseException as error:self.release_errors.append(('controller_channel',error))
++            scope_handles=[('scope_source_'+str(n),fd) for n,fd in enumerate(self.resource_scope.source_fds)]
++            scope_handles.append(('scope_fd',self.resource_scope.fd))
++            scope_handles.extend(('loader_'+str(n),fd) for n,fd in enumerate(self.loader_fds))
++            for name,handle in [('package_fd',self.package_fd),('request_fd',self.request.fd),('claim_fd',self.claim_fd)]+scope_handles:
++                if handle is None:continue
++                # Each handle's attempt is retained before close; no retry on
++                # interrupted/failed closure and no loss of the original error.
++                if name=='request_fd':self.request.fd=None
++                elif name=='scope_fd':self.resource_scope.fd=None
++                elif name.startswith('scope_source_'):self.resource_scope.source_fds[int(name.rsplit('_',1)[1])]=None
++                elif name.startswith('loader_'):self.loader_fds[int(name.rsplit('_',1)[1])]=None
++                else:setattr(self,name,None)
++                try:os.close(handle)
++                except BaseException as error:self.release_errors.append((name,error))
++            if self.release_errors:
++                self.state='RESOURCE_RELEASED_CLOSURE_UNKNOWN'
++                if self not in UNKNOWN:UNKNOWN.append(self)
++                raise native_current_owner.ChannelCleanupError(None,self.release_errors)
++            self.state='RELEASED'
++        finally:signal.pthread_sigmask(signal.SIG_SETMASK,mask)
++        return completion
++
++    def retain_unknown(self,error):
++        self.failure=error;self.state='UNKNOWN_RETAINED'
++        if self not in UNKNOWN:UNKNOWN.append(self)
++        if self.claim_fd is not None:
++            try:self._record('UNKNOWN_RETAINED')
++            except BaseException:pass
++
++
++def _bound_owner(module,admission,parent,manifest):
++    class BoundOwner(module.DiagnosticOwner):
++        def _preflight(self):
++            admission.verify();admission.source.verify()
++            return admission.retained
++        def _acquire(self):
++            admission.verify();self.lock=admission.development_fd
++            self.lock_identity=dict(admission.development_identity)
++            # DiagnosticOwner uses dev/ino keys in its real owner evidence.
++            self.lock_identity['dev']=self.lock_identity.pop('device')
++            self.lock_identity['ino']=self.lock_identity.pop('inode')
++        def _release(self):
++            module.need(self.absent and not self.backend.children.pending and
++              not self.backend.children.final_reap_records and (not self.create_issued or self.create_completed),
++              'cannot return uncertain native container custody')
++            admission.verify(cleanup=True)
++            # Return only the borrow; root admission keeps the actual FLOCK until
++            # positive physical and source restoration. No early global release.
++            self.lock=None
++        def _profile(self,row,image):
++            super()._profile(row,image)
++            if row.get('State',{}).get('Status')=='created' and admission.source.effective is None:
++                admission.source.observe_effective(row)
++                admission.plan.accept_effective()
++            elif admission.source.effective is not None:
++                # Later exited/cleanup observations keep the exact created
++                # source/mount commitment; they never mint a new launch grant.
++                admission.source.verify(cleanup=self.cleaning)
++        def _call(self,*args,**kwargs):
++            if self.cleaning:
++                need(args and type(args[0]) is list and args[0] and
++                     args[0][0] in ('ps','inspect','stop','kill','wait','logs','rm'),
++                     'revocation permits only actual owned bounded retirement commands')
++            admission.verify(cleanup=self.cleaning)
++            if args and args[0] and args[0][0]=='start':
++                need(admission.source.effective is not None and admission.plan.effective_accepted,
++                     'actual source/effective view required before native start')
++            return super()._call(*args,**kwargs)
++    owner=BoundOwner(parent,manifest=manifest['path'],manifest_sha256=manifest['sha256'],
++                     nonce=admission.nonce[:32])
++    owner.admission_owner_module=module
++    owner.owner_repo,owner.owner_scratch,owner.owner_image=module.REPO,module.SCRATCH,module.IMAGE
++    owner.source_package=admission.cfg['native']['source_package']['path']
++    need(type(owner.source_package) is str and owner.source_package.startswith('/var/lib/mckernel-native-'),
++         'exact root-owned named source generation required')
++    owner.admitted_source_paths=tuple(sorted(set(module.SOURCE_HASHES)|{module.SELF,module.IMAGE_RECORD}))
++    # Veto only; this callback grants nothing. The actual typed admission was
++    # established above from root/current/kernel evidence before owner launch.
++    owner.backend.admission_check=lambda:admission.verify(cleanup=owner.cleaning)
++    return owner
++
++
++class NativeParentRetirement:
++    """Parent's independent readback of its one actual joined native child.
++
++    A direct wait or terminal JSON alone never suffices. Root also checks the
++    new child identity, real private owner results/direct-command waits, exact
++    restored-source journal/inodes/flags, current native counters and actual
++    absence of the development FLOCK. No historical outcome is retired.
++    """
++    def __init__(self, watchdog):
++        self.watchdog=watchdog;self.request=watchdog.native_request
++        need(type(self.request) is VerifiedNativeRequest and
++             watchdog.wait_status is not None and os.WIFEXITED(watchdog.wait_status),
++             'exact current direct native supervisor join required')
++        need(file_identity(watchdog.root_fd)==self.request.cfg['operation_root'] and
++             self.request.cfg['watchdog_pid']==os.getpid() and
++             native_current_owner.birth(os.getpid())==self.request.cfg['watchdog_birth'],
++             'actual current parent/root scope differs')
++        nonce=self.request.cfg['nonce']
++        raw=self._root_record('NATIVE-OPERATION-TERMINAL-'+nonce+'.json')
++        terminal=json.loads(raw,object_pairs_hook=native_current_owner.unique)
++        need(terminal.get('kind')=='named-native-operation-terminal-v1' and
++             terminal.get('nonce')==nonce and terminal.get('config_sha256')==self.request.sha256 and
++             terminal.get('supervisor_pid')==watchdog.pid and
++             terminal.get('supervisor_birth')==watchdog.birth and
++             terminal.get('current_resource_state')=='RELEASED' and
++             terminal.get('source_state')=='CLOSED_RESTORED' and terminal.get('container_absent') is True,
++             'genuine current child terminal/source/resource record missing')
++        if terminal.get('container') is None:
++            need(terminal.get('create_issued') is False and terminal.get('functional_pass') is False,
++                 'no-container completion requires no issued create and failed work')
++        else:
++            need(type(terminal.get('container')) is str and len(terminal['container'])==64 and
++                 all(x in '0123456789abcdef' for x in terminal['container']) and
++                 terminal.get('create_completed') is True, 'actual new container identity')
++        self.terminal=terminal
++        self._restored_sources(nonce)
++        self._owner_records(nonce,terminal)
++        self.physical=physical_snapshot(True)
++        # Read the exact development lock inode and actual kernel lock table;
++        # do not acquire/release it or infer freedom from a missing pathname.
++        module=sys.modules['native_diagnostic_container_owner']
++        fd=os.open(module.LOCK,os.O_RDONLY|os.O_CLOEXEC|os.O_NOFOLLOW)
++        try:
++            identity=file_identity(fd)
++            need(identity==terminal['development_lock_identity'],'native lock inode changed')
++            for line in Path('/proc/locks').read_text().splitlines():
++                fields=line.split()
++                if len(fields)<8 or fields[1:4]!=['FLOCK','ADVISORY','WRITE']:continue
++                major,minor,inode=fields[5].split(':')
++                need((int(major,16),int(minor,16),int(inode))!=
++                     (os.major(identity['device']),os.minor(identity['device']),identity['inode']),
++                     'native development FLOCK still held by an actual owner')
++        finally:os.close(fd)
++        self.state='CURRENT_NATIVE_AND_SOURCE_RESTORED'
++
++    def _root_record(self,name):
++        fd=os.open(name,os.O_RDONLY|os.O_NOFOLLOW|os.O_CLOEXEC,dir_fd=self.watchdog.root_fd)
++        try:
++            st=os.fstat(fd)
++            need(stat.S_ISREG(st.st_mode) and st.st_uid==0 and stat.S_IMODE(st.st_mode)==0o600 and
++                 st.st_nlink==1 and 0<st.st_size<=2*1024*1024,'actual private root terminal record')
++            raw=os.read(fd,st.st_size+1)
++            need(len(raw)==st.st_size and file_identity(fd)==file_identity_from_stat(st),
++                 'native terminal record changed')
++            return raw
++        finally:os.close(fd)
++
++    def _restored_sources(self,nonce):
++        import inplace_custody
++        spec=self.request.cfg['native']['source_manifest']
++        fd,raw=root_bootstrap.pinned_root_file(spec['path'],spec['sha256'])
++        try:manifest=json.loads(raw,object_pairs_hook=native_current_owner.unique)
++        finally:os.close(fd)
++        rows=manifest['sources'];expected={r['host'] for r in rows}
++        raw=self._root_record('NATIVE-SOURCE-FLAGS-'+nonce+'.jsonl')
++        events=[json.loads(line,object_pairs_hook=native_current_owner.unique) for line in raw.splitlines()]
++        plan={};restored={}
++        for row in events:
++            if set(row)=={'path','device','inode','old_flags'}:
++                need(row['path'] not in plan,'source prior-flags repeated');plan[row['path']]=row
++            elif row.get('status')=='RESTORED_INODE':
++                need(row.get('nonce')==nonce and row['path'] not in restored,
++                     'source restored inode binding');restored[row['path']]=row
++        need(set(plan)==set(restored)==expected and events[-1].get('status')=='RESTORED_CURRENT_SOURCE_CUT_ONLY',
++             'every actual source prior flag must have positive restoration')
++        for path in sorted(plan):
++            prior=plan[path];after=restored[path]
++            need((prior['device'],prior['inode'],prior['old_flags'])==
++                 (after['device'],after['inode'],after['original_flags']), 'source restore/prior row differs')
++            fd=inplace_custody.open_exact(path)
++            try:
++                st=os.fstat(fd)
++                need((st.st_dev,st.st_ino)==(prior['device'],prior['inode']) and
++                     inplace_custody.flags(fd)==prior['old_flags'],'actual source prior inode/flags not restored')
++            finally:os.close(fd)
++
++    def _owner_records(self,nonce,terminal):
++        import inplace_custody
++        module=sys.modules['native_diagnostic_container_owner']
++        parent=Path(self.request.cfg['native']['attempt_parent'])
++        evidence=parent.with_name(parent.name+'.owner-'+nonce[:32])
++        fd=inplace_custody.open_exact(str(evidence))
++        try:
++            inplace_custody.root_private(fd)
++            def read(name):
++                opened=os.open(name,os.O_RDONLY|os.O_NOFOLLOW|os.O_CLOEXEC,dir_fd=fd)
++                try:
++                    st=os.fstat(opened)
++                    need(stat.S_ISREG(st.st_mode) and st.st_uid==0 and st.st_nlink==1 and
++                         stat.S_IMODE(st.st_mode)==0o600 and st.st_size<=module.LIMIT,
++                         'actual new native owner record')
++                    raw=os.read(opened,st.st_size+1);need(len(raw)==st.st_size,'owner record read bound')
++                    return module.strict_json(raw)
++                finally:os.close(opened)
++            owner=read('owner.json');result=read('result.json')
++            need(owner['nonce']==nonce[:32] and owner['outer']['pid']==self.watchdog.pid and
++                 str(owner['outer']['proc_starttime'])==self.watchdog.birth and
++                 owner['owner_sha256']==self.request.cfg['owner']['sha256'], 'actual native owner/process/source join')
++            need(result['container']==terminal['container'] and result['absence_verified'] is True and
++                 result['lease_retained'] is False, 'actual native owner not positively absent')
++            names=os.listdir(fd)
++            import re
++            commands=sorted(n for n in names if re.fullmatch(r'[0-9]+-[a-z]+\.json',n))
++            need(bool(commands) and len(commands)<=4096,'actual bounded command records missing')
++            # A previously unjoined command's old raw row stays intact; only
++            # the genuine ledger's appended exact-birth final reap may join it.
++            late={}
++            for name in sorted(n for n in names if re.fullmatch(r'command-retirements-[0-9]+\.json',n)):
++                updates=read(name);need(type(updates) is list,'actual late-reap row list')
++                for update in updates:
++                    initial,final=update['initial'],update['final']
++                    keys=('pid','pgid','sid','proc_starttime')
++                    need(all(initial.get(k)==final.get(k) for k in keys) and
++                         final.get('reaped') is True and type(final.get('returncode')) is int,
++                         'actual late direct wait differs')
++                    key=tuple(initial.get(k) for k in keys)
++                    need(key not in late,'duplicate late wait identity');late[key]=final
++            sequences=[]
++            for name in commands:
++                sequences.append(int(name.split('-',1)[0]));row=read(name);record=row.get('command')
++                need(type(record) is dict,'actual command ownership record missing')
++                keys=('pid','pgid','sid','proc_starttime')
++                if all(record.get(k) is None for k in keys):
++                    need(record.get('reaped') is False and record.get('returncode') is None and
++                         row.get('failure') is not None,'no-child command refusal source differs')
++                    continue
++                if record.get('reaped') is not True:
++                    record=late.get(tuple(record.get(k) for k in keys))
++                need(type(record) is dict and record.get('reaped') is True and
++                     type(record.get('returncode')) is int and
++                     all(type(record.get(k)) is int and record[k]>0 for k in keys),
++                     'actual Docker direct-client wait missing')
++            need(sorted(sequences)==list(range(1,len(sequences)+1)), 'actual command record sequence gap')
++            need(result['status'] in ('PROTOCOL_PASS','FAIL'),'actual owner result status')
++            if result['status']=='PROTOCOL_PASS':
++                state=read('state.json')
++                need(state.get('Status')=='exited' and state.get('ExitCode')==0 and
++                     state.get('OOMKilled') is False,'actual native final state record missing')
++            self.owner_result=result;self.command_count=len(commands)
++        finally:os.close(fd)
++
++
++def file_identity_from_stat(s):
++    return dict(device=s.st_dev,inode=s.st_ino,uid=s.st_uid,mode=stat.S_IMODE(s.st_mode),nlink=s.st_nlink)
+--- /dev/null
++++ b/package/native_source_binding.py
+@@ -0,0 +1,273 @@
++"""Exact regular-file source custody for the one named native signal request.
++
++Uses the recovered registered source/epoch providers. It never selects the old
++16-mount/157-member graph or treats a controller account reply as permission.
++Every changed immutable bit has a durable first prior-flags row, and restoration
++requires this admission's actual positive native completion.
++"""
++import fcntl
++import hashlib
++import json
++import os
++from pathlib import Path
++import stat
++import struct
++import time
++import graph_observations as obs
++import inplace_custody as source
++import immutable_epoch
++import native_resource_admission as native
++from ownership_latch import CustodyLatch
++
++UNKNOWN = []
++
++
++def need(ok, message):
++    if not ok:
++        raise RuntimeError(message)
++
++
++def canonical(value):
++    return json.dumps(value, sort_keys=True, separators=(',', ':'), allow_nan=False).encode()
++
++
++def file_key(st):
++    return (st.st_dev, st.st_ino, st.st_mode, st.st_uid, st.st_gid,
++            st.st_nlink, st.st_size, st.st_mtime_ns)
++
++
++class NativeSourceCustody:
++    def __init__(self, admission):
++        # Supervisor preallocates and retains this object before any open.
++        self.state = 'INITIALIZING'
++        self.admission = admission
++        self.fds = {}; self.before = {}; self.plan = {}
++        self.epoch = None; self.journal = None; self.manifest_fd = None
++        self.namespace_fd = None; self.failure = None
++        self.effective = None; self.effective_sha256 = None
++        self.closed_fds = set(); self.close_errors = []
++        need(type(admission) is native.NativeAdmission and admission.state == 'CLAIMED',
++             'actual named native admission required')
++        admission.verify()
++        self.lease, self.root_fd = admission.lease, admission.root_fd
++        self.latch = CustodyLatch('OWNER_HELD')
++        spec = admission.cfg['native']['source_manifest']
++        need(type(spec) is dict and set(spec) == {'path', 'sha256'}, 'source manifest pin')
++        self.manifest_fd, raw = native.root_bootstrap.pinned_root_file(spec['path'], spec['sha256'])
++        self.manifest_sha256 = spec['sha256']
++        manifest = json.loads(raw, object_pairs_hook=source.unique)
++        need(type(manifest) is dict and set(manifest) ==
++             {'sources', 'inode_plan_sha256', 'mount_map_sha256'}, 'exact source manifest shape')
++        for key in ('inode_plan_sha256', 'mount_map_sha256'):
++            native.graph_producer.wire.sha256_hex(manifest[key])
++        self.manifest = manifest
++        rows = manifest['sources']
++        need(type(rows) is list and bool(rows), 'nonempty actual source cut required')
++        self.rows = rows
++        self.namespace_fd = os.open('/proc/self/ns/mnt', os.O_RDONLY | os.O_CLOEXEC)
++        st = os.fstat(self.namespace_fd); self.namespace = (st.st_dev, st.st_ino)
++        process = obs.process(os.getpid())
++        need((process[1], process[2]) == self.namespace, 'actual source namespace')
++        self.mounts = obs.read_mountinfo(os.getpid(), process)
++        selected_mounts = {}; seen = {}
++        for row in rows:
++            need(type(row) is dict and set(row) == {'target', 'host', 'content_sha256'},
++                 'source regular-file row shape')
++            # Actual DiagnosticOwner uses identical absolute bind destinations.
++            need(row['target'] == row['host'] and row['host'] not in self.fds,
++                 'unique identical source/target path required')
++            native.graph_producer.wire.sha256_hex(row['content_sha256'])
++            fd = source.open_exact(row['host']); self.fds[row['host']] = fd
++            st = os.fstat(fd)
++            need(stat.S_ISREG(st.st_mode) and st.st_nlink == 1, 'regular-file source cut only')
++            need(source.digest_path(row['host'], st) == row['content_sha256'], 'source bytes differ')
++            self.before[row['host']] = file_key(st)
++            source.enumerate_source(fd, row['host'], st.st_dev, self.plan, seen)
++            ancestors = [p for p in self.mounts if row['host'] == p or row['host'].startswith(p.rstrip('/') + '/')]
++            need(bool(ancestors), 'source mount ancestry missing')
++            point = max(ancestors, key=len)
++            selected_mounts[row['host']] = dict(mountpoint=point, **self.mounts[point])
++        self.plan_bytes = canonical({p: list(self.plan[p]) for p in sorted(self.plan)})
++        mount_bytes = canonical({'namespace': list(self.namespace), 'roots': selected_mounts})
++        need(hashlib.sha256(self.plan_bytes).hexdigest() == manifest['inode_plan_sha256'],
++             'Root-admitted first inode/prior-flags plan differs')
++        need(hashlib.sha256(mount_bytes).hexdigest() == manifest['mount_map_sha256'],
++             'Root-admitted actual mount plan differs')
++        need(obs.process(os.getpid()) == process and
++             obs.read_mountinfo(os.getpid(), process) == self.mounts, 'source preflight topology changed')
++        self.state = 'PREPARED'
++
++    def acquire(self):
++        need(self.state == 'PREPARED', 'source custody single acquisition')
++        self.admission.verify(); token = self.latch.begin('OWNER_HELD')
++        name = 'NATIVE-SOURCE-FLAGS-' + self.lease.nonce + '.jsonl'
++        self.journal = os.open(name, os.O_WRONLY | os.O_APPEND | os.O_CREAT |
++                               os.O_EXCL | os.O_NOFOLLOW | os.O_CLOEXEC,
++                               0o600, dir_fd=self.root_fd)
++        self._record('INTENT')
++        self.state = 'FREEZING'
++        try:
++            source.apply_plan(self.plan, self.journal, self.lease, self.latch, token)
++            roots = {r['target']: r['host'] for r in self.rows}
++            hashes = {r['target']: r['content_sha256'] for r in self.rows}
++            self.epoch = immutable_epoch.ImmutableEpoch.__new__(immutable_epoch.ImmutableEpoch)
++            self.latch.retain(self.epoch)
++            self.epoch.__init__(roots, hashes, self.admission.caps['boot'])
++            self._verify_files()
++            self.latch.commit(token, 'SOURCE_HELD', self)
++            self.state = 'HELD'; self._record('HELD')
++            return self
++        except BaseException as error:
++            self.retain_unknown(error); raise
++
++    def _record(self, status):
++        row = dict(status=status, nonce=self.lease.nonce, scope='CURRENT_NAMED_SOURCE_CUT_ONLY',
++                   lease_sha256=self.lease.lease_sha256,
++                   source_manifest_sha256=self.manifest_sha256)
++        source.write_all(self.journal, canonical(row) + b'\n')
++        os.fsync(self.journal); os.fsync(self.root_fd)
++
++    def _verify_files(self):
++        self.lease.verify()
++        ns = os.fstat(self.namespace_fd)
++        process = obs.process(os.getpid())
++        need((ns.st_dev, ns.st_ino) == self.namespace == (process[1], process[2]),
++             'source namespace identity changed')
++        need(obs.read_mountinfo(os.getpid(), process) == self.mounts,
++             'source mount topology changed')
++        for row in self.rows:
++            path = row['host']; st = os.fstat(self.fds[path])
++            named = source.open_exact(path)
++            try:
++                need(file_key(st) == self.before[path] == file_key(os.fstat(named)),
++                     'held source inode/path changed')
++                need(source.flags(self.fds[path]) & source.IMMUTABLE, 'source immutable bit lost')
++            finally:
++                os.close(named)
++
++    def verify(self, cleanup=False):
++        need(self.state == 'HELD', 'source custody not held')
++        self.admission.verify(cleanup=cleanup)
++        self._verify_files()
++        if not cleanup:
++            need(self.epoch is not None, 'source epoch absent')
++            self.epoch.verify()
++        # Cleanup validates every exact held inode/immutable bit and mount
++        # topology even after work/account deadlines; it grants no further work.
++        return self
++
++    def collect(self):
++        self.verify()
++        owner = self.admission.owner
++        diagnostic, actual = owner_module_manifest(owner)
++        need(actual == owner.manifest, 'strict named manifest changed')
++        required = {owner.manifest_path}
++        required.update(ref['path'] for ref in actual['artifacts'].values())
++        required.update(ref['path'] for ref in actual['modules'])
++        required.update(owner.admitted_source_paths)
++        required.update(self.admission.source_members)
++        need(required <= set(self.fds), 'consumed diagnostic source/artifact file omitted from cut')
++        return canonical(dict(kind='named-native-source-collection-v1', authority=None,
++                              nonce=self.lease.nonce, manifest=actual,
++                              manifest_sha256=owner.manifest_sha256,
++                              source_manifest_sha256=self.manifest_sha256,
++                              source_rows=self.rows))
++
++    def observe_effective(self, row):
++        """Called only after the actual owner verifies its real created inspect."""
++        self.verify()
++        owner = self.admission.owner
++        need(self.effective is None and row.get('Id') == owner.container and
++             row.get('Image') == owner.owner_image and
++             row.get('State', {}).get('Status') == 'created' and
++             row['State'].get('Running') is False, 'actual created native view required')
++        expected = [(owner.owner_repo, owner.owner_repo, True),
++                    (owner.owner_scratch, owner.owner_scratch, True),
++                    (str(owner.parent), str(owner.parent), False),
++                    (owner.source_package, owner.source_package, True)]
++        actual = []
++        for mount in row.get('Mounts', []):
++            if mount.get('Type') == 'tmpfs':
++                need(mount.get('Destination') == '/tmp' and mount.get('RW') is True,
++                     'native temporary mount differs')
++                continue
++            need(mount.get('Type') == 'bind' and type(mount.get('RW')) is bool and
++                 mount.get('Propagation') == 'rprivate', 'actual native bind kind')
++            actual.append((mount.get('Source'), mount.get('Destination'), not mount['RW']))
++        need(sorted(actual) == sorted(expected), 'actual exact four native binds differ')
++        root_only={owner.admission_owner_module.IMAGE_RECORD}
++        for target in self.fds:
++            if target in root_only:
++                # The genuine outer preflight consumes this exact pinned image
++                # metadata on HOST only; it is not falsely called container RO.
++                continue
++            covering = [x for x in actual if target == x[1] or target.startswith(x[1].rstrip('/') + '/')]
++            need(bool(covering) and max(covering, key=lambda x: len(x[1]))[2] is True,
++                 'source cut not in an actual readonly effective bind')
++        self.effective = dict(root_only_sources=sorted(root_only), container=owner.container, image=row['Image'],
++                              mounts=sorted(actual), state='created',
++                              source_manifest_sha256=self.manifest_sha256)
++        self.effective_sha256 = hashlib.sha256(canonical(self.effective)).hexdigest()
++        return self.effective
++
++    def restore(self, completion):
++        need(type(completion) is native.NativeCompletion and
++             completion is self.admission.completion and completion.admission is self.admission and
++             self.admission.state == 'TERMINAL_CLEAN', 'actual current native completion required')
++        self.verify(cleanup=True)
++        self.state = 'RESTORING'
++        try:
++            self._record('RESTORE_BEGIN_AFTER_NATIVE_TERMINAL')
++            for path in sorted(self.plan):
++                self.lease.verify()
++                fd = self.fds[path]; device, inode, kind, original = self.plan[path]
++                st = os.fstat(fd)
++                named = source.open_exact(path)
++                try:
++                    need((st.st_dev, st.st_ino, stat.S_IFMT(st.st_mode)) ==
++                         (device, inode, kind) and file_key(st) == file_key(os.fstat(named)),
++                         'source restoration identity differs')
++                    need(source.flags(fd) == (original | source.IMMUTABLE),
++                         'source flags changed outside this operation')
++                    # Only this exact admission's added bit is restored. A prior
++                    # immutable source stays immutable; no old scope is thawed.
++                    if not original & source.IMMUTABLE:
++                        fcntl.ioctl(fd, source.SETFLAGS, struct.pack('I', original))
++                    need(source.flags(fd) == original, 'source prior flags not restored')
++                    source.write_all(self.journal, canonical(dict(status='RESTORED_INODE',
++                        nonce=self.lease.nonce, path=path, device=device, inode=inode,
++                        original_flags=original)) + b'\n'); os.fsync(self.journal)
++                finally:
++                    os.close(named)
++            self._record('RESTORED_CURRENT_SOURCE_CUT_ONLY')
++            self.state = 'RESTORED'
++            return self
++        except BaseException as error:
++            self.retain_unknown(error); raise
++
++    def close_restored(self):
++        need(self.state == 'RESTORED', 'unrestored source cannot close custody')
++        errors = []
++        descriptors = list(self.fds.values()) + [self.namespace_fd, self.manifest_fd, self.journal]
++        if self.epoch is not None:
++            descriptors.append(self.epoch.namespace_fd)
++        for fd in descriptors:
++            if fd is None or fd in self.closed_fds:
++                continue
++            # Record a close attempt first: uncertainty never retries a number.
++            self.closed_fds.add(fd)
++            try: os.close(fd)
++            except BaseException as error: errors.append((fd, error))
++        self.close_errors = errors
++        if errors:
++            self.retain_unknown('source close uncertain'); raise RuntimeError('source closure uncertain')
++        self.state = 'CLOSED_RESTORED'
++
++    def retain_unknown(self, error):
++        self.failure = error; self.state = 'UNKNOWN_RETAINED'; self.latch.fail(error, self)
++        if self not in UNKNOWN: UNKNOWN.append(self)
++        self.admission.retain_unknown(error)
++
++
++def owner_module_manifest(owner):
++    return owner.admission_owner_module.bound_manifest(owner.manifest_path, owner.manifest_sha256)
+--- a/package/operation_watchdog.py
++++ b/package/operation_watchdog.py
+@@ -75,9 +75,25 @@
+ 
+ 
+ def launch_reviewed(root_fd,nonce,executable,executable_sha,bootstrap_path,bootstrap_sha,
+-                    loader_manifest,loader_sha,entry_path,environment,deadline_boot,grace_seconds,runtime_path,runtime_sha):
++                    loader_manifest,loader_sha,entry_path,environment,deadline_boot,grace_seconds,runtime_path,runtime_sha,native_request=None):
+     """Future root-owner entry; reserve custody before a possible fork."""
+     runtime_binding.verify_current(runtime_path,runtime_sha)
++    if native_request is not None:
++        import native_resource_admission as native
++        if type(native_request) is not native.VerifiedNativeRequest:fail('typed named watchdog request')
++        native_request.verify()
++        cfg=native_request.cfg
++        if native.file_identity(root_fd)!=cfg['operation_root']:fail('named operation root changed')
++        if (cfg['watchdog_pid']!=os.getpid() or cfg['watchdog_birth']!=obs.process(os.getpid())[0] or
++            cfg['nonce']!=nonce or deadline_boot!=cfg['caps']['boot']):fail('actual named watchdog/request join')
++        lf,lr=root_bootstrap.pinned_root_file(loader_manifest,loader_sha)
++        try:
++            import json
++            loader=json.loads(lr,object_pairs_hook=source.unique)
++            if (loader.get('kind')!='mckernel-native-signal-loader-v1' or
++                loader.get('operation_config_path')!=native_request.path or
++                loader.get('operation_config_sha')!=native_request.sha256):fail('named loader/request join')
++        finally:os.close(lf)
+     if executable!=runtime_path or executable_sha!=runtime_sha:fail('watchdog/supervisor runtime differs')
+     latch=CustodyLatch('WATCHDOG_HELD');latch.retain(root_fd)
+     record=None
+@@ -95,7 +111,7 @@
+         if result[0]!='BOUND':raise RuntimeError('supervisor pidfd unavailable')
+         birth=record.birth
+         watchdog=Watchdog.__new__(Watchdog);record.add(watchdog)
+-        watchdog.__init__(root_fd,lease_fd,nonce,pid,pidfd,birth,deadline_boot,grace_seconds)
++        watchdog.__init__(root_fd,lease_fd,nonce,pid,pidfd,birth,deadline_boot,grace_seconds,native_request)
+         watchdog.latch=latch;watchdog.child_record=record
+         latch.commit(token,'SUPERVISOR_BOUND',watchdog)
+         return watchdog
+@@ -122,11 +138,18 @@
+     Caller must hold approved root operation/admission and independently assess
+     all descendants and native state. A signal or direct wait never proves cleanup.
+     """
+-    def __init__(self,root_fd,lease_fd,nonce,pid,pidfd,birth,deadline_boot,grace_seconds):
++    def __init__(self,root_fd,lease_fd,nonce,pid,pidfd,birth,deadline_boot,grace_seconds,native_request=None):
+         source.root_private(root_fd);wire.sha256_hex(nonce)
+         if type(pid) is not int or pid<=0 or type(birth) is not str or not birth.isdigit():fail('child identity')
+         if obs.process(pid)[0]!=birth:fail('child birth changed')
+-        if type(deadline_boot) not in (int,float) or not wire.boot_now()<deadline_boot<=1571567.6959065471:fail('deadline')
++        if native_request is None:
++            if type(deadline_boot) not in (int,float) or not wire.boot_now()<deadline_boot<=1571567.6959065471:fail('deadline')
++        else:
++            import native_resource_admission as native
++            if type(native_request) is not native.VerifiedNativeRequest:fail('named watchdog type')
++            native_request.verify()
++            if not wire.boot_now()<deadline_boot==native_request.cfg['caps']['boot']:fail('named watchdog deadline')
++        self.native_request=native_request
+         if type(grace_seconds) not in (int,float) or not 0<grace_seconds<=30:fail('grace')
+         self.root_fd,self.lease_fd,self.nonce=root_fd,lease_fd,nonce
+         self.pid,self.pidfd,self.birth,self.deadline,self.grace=pid,pidfd,birth,deadline_boot,grace_seconds
+@@ -154,12 +177,46 @@
+             # waitpid only for this own child; other process/cgroup custody is unknown.
+             got,status=os.waitpid(self.pid,0)
+             if got!=self.pid:fail('direct wait identity')
+-            self.wait_status=status;self.state='UNKNOWN_RETAINED';self.latch.fail('direct wait only')
++            self.wait_status=status
++            if self.native_request is not None:
++                import native_resource_admission as native
++                terminal=native.NativeParentRetirement.__new__(native.NativeParentRetirement)
++                self.latch.retain(terminal)
++                terminal.__init__(self)
++                self.native_terminal=terminal;self.state='CURRENT_NATIVE_RESTORED_PENDING_OWN_FD_CLOSE'
++                return {'status':'CURRENT_NAMED_NATIVE_RESTORED_DATA_ONLY','wait_status':status,
++                        'nonce':self.nonce,'functional_pass':terminal.terminal['functional_pass'],
++                        'application_acceptance':False,'actual_client_waits':terminal.command_count}
++            self.state='UNKNOWN_RETAINED';self.latch.fail('direct wait only')
+             return {'status':'DIRECT_WAIT_ONLY_UNKNOWN_RETAINED','wait_status':status,'nonce':self.nonce}
+         except BaseException as error:
+             self.state='UNKNOWN_RETAINED';self.latch.fail(error);raise
+ 
+     def retire(self):
++        if self.native_request is not None:
++            import native_resource_admission as native
++            if self.state!='CURRENT_NATIVE_RESTORED_PENDING_OWN_FD_CLOSE' or type(getattr(self,'native_terminal',None)) is not native.NativeParentRetirement:
++                fail('positive current native/source/parent retirement required')
++            # Recheck kernel/source/owner facts immediately before closing only
++            # this new watchdog's own descriptors. No historical scope changes.
++            check=native.NativeParentRetirement(self)
++            handles=[self.lease_fd,self.pidfd]
++            handles += [x for x in self.child_record.handles if type(x) is int and x>=3 and x!=self.root_fd]
++            handles += list(getattr(self,'source_loader_holds',[]))
++            handles.append(self.native_request.fd)
++            errors=[];attempted=set()
++            for fd in handles:
++                if fd is None or fd in attempted:continue
++                attempted.add(fd)
++                try:os.close(fd)
++                except BaseException as error:errors.append((fd,error))
++            self.closed_handle_attempts=attempted;self.close_errors=errors
++            if errors:
++                self.state='OWN_CLOSURE_UNKNOWN';self.latch.fail('own descriptor close uncertain',errors)
++                raise RuntimeError('current watchdog descriptor close uncertain')
++            self.state='RETIRED_CURRENT_NATIVE_OPERATION_ONLY'
++            return {'status':self.state,'nonce':self.nonce,'native_pool':'STATIC_HELD_UNCHANGED',
++                    'historical_outcomes':'UNCHANGED','application_acceptance':False}
+         raise RuntimeError('lease and flags remain held pending independent physical retirement')
+ 
+ 
+--- a/package/root_bootstrap.py
++++ b/package/root_bootstrap.py
+@@ -103,14 +103,22 @@
+   d[k]=v
+  return d
+ config=json.loads(raw,object_pairs_hook=unique)
+-if set(config)!={'modules','extra_files','operation_config_path','operation_config_sha','runtime'}:raise ValueError('loader config')
++native=config.get('kind')=='mckernel-native-signal-loader-v1'
++keys={'modules','extra_files','operation_config_path','operation_config_sha','runtime'}
++if set(config)!=(keys|{'kind'} if native else keys):raise ValueError('loader config')
+ names=('ownership_latch','custody_protocol_v2','graph_observations','pidfd_compat','runtime_binding','pidfd_custody','deferred_fork','inplace_custody','immutable_epoch','adapter','materializer','source_freeze','split_inventory','union_server_guarded','graph_producer','graph_server','operation_supervisor','supervisor_entry')
+-if set(config['modules'])!=set(names):raise ValueError('module set')
++native_names=('native_current_owner','native_diagnostic_container_owner','native_resource_admission','native_source_binding','compositor','operation_watchdog') if native else ()
++if set(config['modules'])!=set(names)|set(native_names):raise ValueError('module set')
+ checker=os.path.join(os.path.dirname(config['modules']['materializer']['path']),'verify_scripts_fd.py')
+-if set(config['extra_files'])!={checker}:raise ValueError('checker source closure')
++if native:
++ local=os.path.dirname(config['modules']['materializer']['path'])
++ transitive={checker,os.path.join(local,'verified_owner_loader.py'),os.path.join(local,'union_owner.py'),os.path.join(local,'root_owner_entry.py')}
++ if set(config['extra_files'])!=transitive:raise ValueError('native registered transitive source closure')
++else:
++ if set(config['extra_files'])!={checker}:raise ValueError('checker source closure')
+ for path,sha in config['extra_files'].items():
+  fd,_=m.pinned_root_file(path,sha);hold.append(fd)
+-for name in names:
++for name in names+native_names:
+  spec=config['modules'][name]
+  if set(spec)!={'path','sha256'}:raise ValueError('module pin')
+  fd,mod=m.load_verified_module(name,spec['path'],spec['sha256']);hold.append(fd)
+@@ -278,3 +286,61 @@
+ 
+ if __name__=='__main__':
+     raise RuntimeError('SOURCE ONLY: no reviewed root bootstrap, owner custody or execution admission')
++
++
++def launch_named_native_from_registered_loader(bootstrap_path,bootstrap_sha,loader_path,loader_sha,root_fd,environment,grace_seconds):
++    """Normal Root watchdog frontdoor for the one newly reviewed native domain.
++
++    This function grants nothing at import and is never called by the model or
++    ordinary validator. Root must separately review/admit the actual immutable
++    package, current request/caps/resources/owners and exact operation command.
++    """
++    import json
++    fd,raw=pinned_root_file(loader_path,loader_sha)
++    hold=[fd]
++    config=json.loads(raw,object_pairs_hook=lambda pairs: _unique_loader_pairs(pairs))
++    if set(config)!={'kind','modules','extra_files','operation_config_path','operation_config_sha','runtime'} or config['kind']!='mckernel-native-signal-loader-v1':
++        raise ValueError('only exact named native loader accepted')
++    names=('ownership_latch','custody_protocol_v2','graph_observations','pidfd_compat','runtime_binding',
++      'pidfd_custody','deferred_fork','inplace_custody','immutable_epoch','adapter','materializer','source_freeze',
++      'split_inventory','union_server_guarded','graph_producer','graph_server','operation_supervisor','supervisor_entry',
++      'native_current_owner','native_diagnostic_container_owner','native_resource_admission','native_source_binding',
++      'compositor','operation_watchdog')
++    if set(config['modules'])!=set(names):raise ValueError('complete original18 plus named source modules required')
++    local=os.path.dirname(config['modules']['materializer']['path'])
++    expected={os.path.join(local,n) for n in ('verify_scripts_fd.py','verified_owner_loader.py','union_owner.py','root_owner_entry.py')}
++    if set(config['extra_files'])!=expected:raise ValueError('registered parent/checker source closure')
++    for path,sha in config['extra_files'].items():
++        extra,_=pinned_root_file(path,sha);hold.append(extra)
++    for name in names:
++        spec=config['modules'][name]
++        if type(spec) is not dict or set(spec)!={'path','sha256'}:raise ValueError('module pin shape')
++        mf,module=load_verified_module(name,spec['path'],spec['sha256']);hold.append(mf)
++    native=sys.modules['native_resource_admission']
++    request=native.VerifiedNativeRequest.__new__(native.VerifiedNativeRequest)
++    # Retain before initialization or possible compatibility/pinning failure.
++    _NATIVE_FRONTDOOR_HELD.append((hold,request))
++    request.__init__(config['operation_config_path'],config['operation_config_sha'])
++    runtime=config['runtime']
++    if runtime!=request.cfg['runtime']:raise ValueError('Root runtime/request disagreement')
++    bootstrap_fd,bootstrap_raw=pinned_root_file(bootstrap_path,bootstrap_sha)
++    hold.append(bootstrap_fd)
++    entry=config['modules']['supervisor_entry']['path']
++    watchdog=sys.modules['operation_watchdog'].launch_reviewed(root_fd,request.cfg['nonce'],
++      runtime['path'],runtime['sha256'],bootstrap_path,bootstrap_sha,
++      loader_path,loader_sha,entry,environment,request.cfg['caps']['boot'],grace_seconds,
++      runtime['path'],runtime['sha256'],native_request=request)
++    watchdog.source_loader_holds=list(hold)
++    _NATIVE_FRONTDOOR_HELD.append(watchdog)
++    return watchdog
++
++
++def _unique_loader_pairs(pairs):
++    value={}
++    for key,item in pairs:
++        if key in value:raise ValueError('duplicate named loader key')
++        value[key]=item
++    return value
++
++
++_NATIVE_FRONTDOOR_HELD=[]
+--- a/package/supervisor_entry.py
++++ b/package/supervisor_entry.py
+@@ -47,12 +47,85 @@
+     finally:os.close(parent)
+ 
+ 
+-def verify_actual_operation_gates():
+-    # A frozen config and process liveness do not prove current controls,
+-    # stop/hold, weekly account, native ownership or resource admission.
+-    # Keep activation disabled until a separately reviewed live-gate adapter
+-    # binds those actual facts and the exact one-shot operation.
++def verify_actual_operation_gates(request=None,root_fd=None,lease=None,owner_module=None):
++    if request is not None:
++        import native_resource_admission as native
++        if type(request) is not native.VerifiedNativeRequest:
++            fail('genuine root-pinned native request required')
++        # Preallocate and retain before constructor can open account/resource FDs.
++        admission=native.NativeAdmission.__new__(native.NativeAdmission)
++        _NATIVE_OWNERS.append(admission)
++        try:admission.__init__(root_fd,lease,request,owner_module)
++        except BaseException as error:
++            # The constructor may already own a compat pidfd, native FLOCK or
++            # journal. Keep the preallocated object/process under its watchdog.
++            admission.retain_unknown(error)
++            while True:signal.pause()
++        return admission
++    # Existing held graph activation is not widened by the new named path.
+     raise RuntimeError('actual fresh operation gates are not implemented')
++
++
++_NATIVE_OWNERS=[]
++
++
++def _run_named_native(config_path,config_sha,root_fd,lease_fd):
++    import native_resource_admission as native
++    import native_source_binding
++    import native_diagnostic_container_owner as owner_module
++    import graph_producer
++    import compositor
++    request=native.VerifiedNativeRequest.__new__(native.VerifiedNativeRequest)
++    _NATIVE_OWNERS.append(request)
++    request.__init__(config_path,config_sha)
++    cfg=request.cfg
++    lease=graph_producer.RootLease(lease_fd,root_fd,cfg['nonce'],
++                                   cfg['watchdog_pid'],cfg['watchdog_birth'])
++    _NATIVE_OWNERS.append(lease)
++    admission=None;source_custody=None
++    try:
++        admission=verify_actual_operation_gates(request,root_fd,lease,owner_module)
++        source_custody=native_source_binding.NativeSourceCustody.__new__(native_source_binding.NativeSourceCustody)
++        _NATIVE_OWNERS.append(source_custody)
++        source_custody.__init__(admission)
++        source_custody.acquire();admission.source_held(source_custody)
++        custody=compositor.OperationCustody(admission.claim_fd,admission.nonce)
++        custody.native_admission=admission;custody.state='NATIVE_REGISTERED'
++        _NATIVE_OWNERS.append(custody)
++        plan=compositor.prepare_from_inherited_channel(admission.client.sock.fileno(),custody)
++        compositor._accept_source_binding(plan)
++        collection=compositor._collect(plan)
++        completion=compositor.launch(plan)
++        if type(completion) is not native.NativeCompletion:
++            fail('no actual positive native completion')
++        compositor.release_lease(plan,completion)
++        # DATA records actual native outcome, never milestone/application credit.
++        record={'kind':'named-native-operation-terminal-v1','authority':None,
++          'nonce':admission.nonce,'config_sha256':config_sha,
++          'supervisor_pid':os.getpid(),'supervisor_birth':native.native_current_owner.birth(os.getpid()),
++          'development_lock_identity':admission.development_identity,
++          'functional_pass':completion.functional_pass,'application_acceptance':False,
++          'current_resource_state':admission.state,'source_state':source_custody.state,
++          'container':admission.owner.container,'container_absent':admission.owner.absent,
++          'create_issued':admission.owner.create_issued,'create_completed':admission.owner.create_completed,
++          'physical':completion.physical,'collection_sha256':hashlib.sha256(collection).hexdigest(),
++          'effective_view_sha256':source_custody.effective_sha256,
++          'historical_scopes':'HELD_OR_UNKNOWN_UNCHANGED'}
++        name='NATIVE-OPERATION-TERMINAL-'+admission.nonce+'.json'
++        fd=os.open(name,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW|os.O_CLOEXEC,0o600,dir_fd=root_fd)
++        try:source.write_all(fd,obs.canonical(record)+b'\n');os.fsync(fd);os.fsync(root_fd)
++        finally:os.close(fd)
++        if not completion.functional_pass:
++            raise getattr(completion,'failure',RuntimeError('native functional result failed'))
++        return record
++    except BaseException as error:
++        # A positively completed current operation is already restored. All
++        # uncertain acquisitions, source states or descendants stay reachable
++        # and under the original watchdog; no broad native release is inferred.
++        if admission is not None and getattr(admission,'state',None)!='RELEASED':
++            admission.retain_unknown(error)
++            while True:signal.pause()
++        raise
+ 
+ 
+ def run(config_path,config_sha,root_fd,lease_fd):
+@@ -66,6 +139,9 @@
+     config_fd,raw=root_bootstrap.pinned_root_file(config_path,config_sha)
+     held=[config_fd]
+     cfg=json.loads(raw,object_pairs_hook=unique)
++    if type(cfg) is dict and cfg.get('kind')=='mckernel-native-signal-operation-v1':
++        try:return _run_named_native(config_path,config_sha,root_fd,lease_fd)
++        finally:os.close(config_fd)
+     keys={'nonce','boot_id','caps','watchdog_pid','watchdog_birth','owner','source_manifest',
+           'target','validator','supervisor_entry_path','supervisor_entry_sha','interpreter_sha',
+           'deadline_boot','mount_poll_seconds','runtime'}
+--- a/scripts/run_os_goal.py
++++ b/scripts/run_os_goal.py
+@@ -628,6 +628,8 @@
+         self.last_activity = time.monotonic()
+         self.stopping = False
+         self.controlled = False
++        self.native_owner_control = None
++        self.native_owner_control_failed = False
+         self.output = LiveOutput(self.log_dir, quiet=args.quiet, agent_windows=args.agent_windows)
+         self.output.primary = self.state.get("thread_id")
+         # Saved hints belong to the preceding launcher instance, never this monitor.
+@@ -650,6 +652,56 @@
+             self.state['capture_progress_registration'] = dict(
+                 directory=str(path), registered_at=utc(), terminal=False,
+                 direct_child_joined=False, release_authorized=False)
++
++    def poll_native_owner_control(self):
++        """Service this owning controller only; replies never grant native RAM."""
++        if not self.controlled or self.native_owner_control_failed:
++            return
++        try:
++            import native_current_owner
++            if self.native_owner_control is None:
++                self.native_owner_control = native_current_owner.CurrentOwnerServer.__new__(native_current_owner.CurrentOwnerServer)
++                self.native_owner_control.__init__(self)
++                self.save(native_current_owner=dict(path=self.native_owner_control.path,
++                    pid=os.getpid(), birth=self.native_owner_control.start,
++                    source_sha256=native_current_owner.LOADED_SOURCE_SHA256,
++                    scope="controller_account_data_only_not_native_admission"))
++            self.native_owner_control.poll()
++        except Exception as error:
++            # Close every own data-channel handle BEFORE a possibly failing
++            # receipt. Neither cleanup nor receipt loss changes native custody.
++            self.native_owner_control_failed = True
++            secondary = []
++            primary_interrupt = getattr(error, "interrupt", None)
++            if self.native_owner_control is not None:
++                try:self.native_owner_control.close()
++                except BaseException as close_error:secondary.append(close_error)
++            # Select any real interruption BEFORE fallible diagnostics. The
++            # close wrapper retains nested KeyboardInterrupt/SystemExit too.
++            for close_error in secondary:
++                interrupt = (close_error if isinstance(close_error, (KeyboardInterrupt, SystemExit))
++                             else getattr(close_error, "interrupt", None))
++                if primary_interrupt is None and interrupt is not None:
++                    primary_interrupt = interrupt
++            try:
++                self.save(native_current_owner_error=str(error),
++                          native_current_owner_close_errors=[str(x) for x in secondary])
++            except BaseException as receipt_error:
++                receipt_error.native_primary_error = error
++                receipt_error.native_close_errors = secondary
++                if primary_interrupt is not None:
++                    primary_interrupt.native_secondary_errors = secondary + [receipt_error]
++                    raise primary_interrupt from error
++                raise
++            if primary_interrupt is not None:
++                primary_interrupt.native_secondary_errors = secondary
++                raise primary_interrupt from error
++            for close_error in secondary:
++                interrupt = (close_error if isinstance(close_error, (KeyboardInterrupt, SystemExit))
++                             else getattr(close_error, "interrupt", None))
++                if interrupt is not None:
++                    interrupt.native_primary_error = error
++                    raise interrupt
+ 
+     def poll_capture_progress(self):
+         """Read two registered hints only; never dispatch, signal or grant clearance."""
+@@ -1856,6 +1908,7 @@
+                         "method": None, "mutating": False})
+                     code = 24
+                     break
++                self.poll_native_owner_control()
+                 self.deliver_instruction()
+                 self.rpc.pump(timeout=1)
+                 self.output.flush()
+@@ -1906,40 +1959,68 @@
+                     "class": failure["class"], "error": failure["error"], "method": failure["method"]})
+             self.output.notice(str(error))
+         finally:
+-            # Capture the actual reason/goal before shutdown may pause it. Keep
+-            # the original diagnostic identity; old failures are not relabelled.
+-            stop_snapshot = dict(self.state, goal=dict(self.goal) if self.goal else None,
+-                                 stop_reason=self.stop_reason, phase="stopping",
+-                                 active_turns=dict(self.active))
++            # Preserve an already propagating interruption and any interruption
++            # acquired while closing the data channel across ALL later cleanup.
++            native_primary = sys.exc_info()[1]
++            native_close_interrupt = (native_primary if isinstance(native_primary, (KeyboardInterrupt, SystemExit))
++                                      else getattr(native_primary, "interrupt", None))
++            native_close_errors = []
++            if self.native_owner_control is not None:
++                try:self.native_owner_control.close()
++                except BaseException as native_error:
++                    native_close_errors.append(native_error)
++                    if native_close_interrupt is None:
++                        native_close_interrupt = (native_error if isinstance(native_error, (KeyboardInterrupt, SystemExit))
++                                                  else getattr(native_error, "interrupt", None))
++            # Retain exception objects before formatting or persistence.
++            self.native_owner_control_cleanup_errors = native_close_errors
+             try:
+-                self.stop()
++                self.state["native_current_owner_close_errors"] = [str(x) for x in native_close_errors]
++                # Capture the actual reason/goal before shutdown may pause it. Keep
++                # the original diagnostic identity; old failures are not relabelled.
++                stop_snapshot = dict(self.state, goal=dict(self.goal) if self.goal else None,
++                                     stop_reason=self.stop_reason, phase="stopping",
++                                     active_turns=dict(self.active))
++                try:
++                    self.stop()
++                finally:
++                    try:
++                        close_errors = []
++                        try:
++                            if self.rpc:
++                                self.rpc.close()
++                        except Exception as error:
++                            close_errors.append(str(error))
++                        known = getattr(self.rpc, "close_errors", None)
++                        if isinstance(known, list):
++                            close_errors = known + close_errors
++                        self.save(phase="stopped", stop_reason=self.stop_reason, exit_code=code,
++                                  server_close_errors=close_errors, cleanup_verified=False,
++                                  stop_decision={"goal_status": (stop_snapshot.get("goal") or {}).get("status"),
++                                      "log_dir": str(self.log_dir), "worker_pid": self.state.get("worker_pid"),
++                                      "worker_start": self.state.get("worker_start"), "reason": self.stop_reason})
++                        if self.stop_reason == "guardian_recovery" and self.state.get("guardian_checkpoint_request"):
++                            request = self.state["guardian_checkpoint_request"]
++                            self.save(guardian_checkpoint={"run_id": request["run_id"], "request_id": request["request_id"],
++                                      "worker_pid": os.getpid(), "worker_start": self.state.get("worker_start")})
++                        self.record_stop_diagnostic("worker_stopped", reason=self.stop_reason,
++                                                    exit_code=code, snapshot=stop_snapshot)
++                        self.output.notice("Stopped: goal reports " + str((self.goal or {}).get("status", "unknown"))
++                                           + "; " + (self.stop_reason or "goal status") + ".")
++                        self.output.notice("State: " + str(self.state_path) + "; " + restart_advice(self.state))
++                    finally:
++                        self.output.close()
++            except BaseException as native_cleanup_error:
++                native_close_errors.append(native_cleanup_error)
++                if native_close_interrupt is None:
++                    native_close_interrupt = (native_cleanup_error if isinstance(native_cleanup_error, (KeyboardInterrupt, SystemExit))
++                                              else getattr(native_cleanup_error, "interrupt", None))
++                raise
+             finally:
+-                try:
+-                    close_errors = []
+-                    try:
+-                        if self.rpc:
+-                            self.rpc.close()
+-                    except Exception as error:
+-                        close_errors.append(str(error))
+-                    known = getattr(self.rpc, "close_errors", None)
+-                    if isinstance(known, list):
+-                        close_errors = known + close_errors
+-                    self.save(phase="stopped", stop_reason=self.stop_reason, exit_code=code,
+-                              server_close_errors=close_errors, cleanup_verified=False,
+-                              stop_decision={"goal_status": (stop_snapshot.get("goal") or {}).get("status"),
+-                                  "log_dir": str(self.log_dir), "worker_pid": self.state.get("worker_pid"),
+-                                  "worker_start": self.state.get("worker_start"), "reason": self.stop_reason})
+-                    if self.stop_reason == "guardian_recovery" and self.state.get("guardian_checkpoint_request"):
+-                        request = self.state["guardian_checkpoint_request"]
+-                        self.save(guardian_checkpoint={"run_id": request["run_id"], "request_id": request["request_id"],
+-                                  "worker_pid": os.getpid(), "worker_start": self.state.get("worker_start")})
+-                    self.record_stop_diagnostic("worker_stopped", reason=self.stop_reason,
+-                                                exit_code=code, snapshot=stop_snapshot)
+-                    self.output.notice("Stopped: goal reports " + str((self.goal or {}).get("status", "unknown"))
+-                                       + "; " + (self.stop_reason or "goal status") + ".")
+-                    self.output.notice("State: " + str(self.state_path) + "; " + restart_advice(self.state))
+-                finally:
+-                    self.output.close()
++                if native_close_interrupt is not None:
++                    native_close_interrupt.native_primary_error = native_primary
++                    native_close_interrupt.native_secondary_errors = list(native_close_errors)
++                    raise native_close_interrupt
+         return code
+ 
+ 
+--- /dev/null
++++ b/scripts/native_current_owner.py
+@@ -0,0 +1,316 @@
++"""Current owning-Campaign account/control handoff; never a native RAM grant.
++
++Imported by the existing worker and by its immutable root-operation package.
++Only CurrentOwnerServer calls the already-owning Campaign's account methods.
++No Campaign/RPC/CreditBudget object is constructed here. Import launches nothing.
++"""
++import hashlib
++import json
++import math
++import os
++from pathlib import Path
++import secrets
++import select
++import socket
++import stat
++import struct
++import time
++import pidfd_compat
++from decimal import Decimal
++
++ROOT_THREAD = '01a18bc3-e072-7810-9426-75101b0856c0'
++CREDIT_RUN = '7c6ef3604bfb4008a917bba8cfb6cfaa'
++SCHEMA = 'mckernel-current-owning-controller-v1'
++MAX_FRAME = 32768
++MAX_AGE = 5.0
++HANDOFF_SECONDS = 60.0
++ACCOUNT_RESERVE_SECONDS = 45.0
++HOLDS = ('service_hold','policy_hold','auth_hold','billing_hold','budget_hold',
++         'permission_hold','source_hold','resource_hold','native_hold',
++         'transport_uncertain','pending_request','credit_budget_error')
++LOADED_SOURCE_SHA256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
++
++
++def need(ok, message):
++    if not ok: raise RuntimeError(message)
++
++
++def birth(pid):
++    raw = Path('/proc/%d/stat' % pid).read_bytes()
++    need(len(raw)<=4096 and raw.startswith(('%d (' % pid).encode()),'controller process stat')
++    tail=raw.rsplit(b')',1)[1].split()
++    need(len(tail)>=20 and tail[0] not in (b'Z',b'X',b'x'),'controller process unavailable')
++    return tail[19].decode()
++
++
++def unique(pairs):
++    value={}
++    for k,v in pairs:
++        need(k not in value,'duplicate control key');value[k]=v
++    return value
++
++
++def digest(value):
++    return hashlib.sha256(json.dumps(value,sort_keys=True,separators=(',',':'),allow_nan=False).encode()).hexdigest()
++
++
++class ChannelCleanupError(RuntimeError):
++    def __init__(self, primary, secondary):
++        super().__init__('current-owner channel cleanup incomplete')
++        self.primary=primary;self.secondary=tuple(secondary)
++        self.interrupt=interruption(primary)
++        if self.interrupt is None:
++            for row in self.secondary:
++                error=row[-1] if isinstance(row,tuple) else row
++                self.interrupt=interruption(error)
++                if self.interrupt is not None:break
++
++
++def interruption(error):
++    if isinstance(error,(KeyboardInterrupt,SystemExit)):return error
++    if isinstance(error,ChannelCleanupError):return error.interrupt
++    return None
++
++
++def remaining(deadline):
++    need(type(deadline) in (int,float) and math.isfinite(deadline),'absolute control deadline')
++    left=deadline-time.monotonic();need(left>0,'current control total deadline')
++    return left
++
++
++def send(sock,value,deadline):
++    raw=json.dumps(value,sort_keys=True,separators=(',',':'),allow_nan=False).encode()
++    need(0<len(raw)<=MAX_FRAME,'control frame bound')
++    frame=struct.pack('!I',len(raw))+raw;offset=0
++    while offset<len(frame):
++        sock.settimeout(remaining(deadline))
++        n=sock.send(frame[offset:]);need(n>0,'control channel EOF');offset+=n
++    remaining(deadline)
++
++
++def receive(sock,deadline):
++    def read(n):
++        out=bytearray()
++        while len(out)<n:
++            sock.settimeout(remaining(deadline))
++            part=sock.recv(n-len(out));need(bool(part),'control channel EOF');out.extend(part)
++        remaining(deadline);return bytes(out)
++    n=struct.unpack('!I',read(4))[0];need(0<n<=MAX_FRAME,'control frame bound')
++    value=json.loads(read(n),object_pairs_hook=unique,
++        parse_constant=lambda _: (_ for _ in ()).throw(ValueError('nonfinite control frame')))
++    remaining(deadline);return value
++
++
++def close_pair(conn,pfd):
++    errors=[]
++    # Attempt every owned handle once; never retry an ambiguous numeric close.
++    for name,handle,close in [('socket',conn,lambda:conn.close()),
++                              ('pidfd',pfd,lambda:os.close(pfd))]:
++        if handle is None:continue
++        try:close()
++        except BaseException as error:errors.append((name,handle,error))
++    return errors
++
++
++class CurrentOwnerServer:
++    """Polled only by the existing Campaign.run loop, not a second controller.
++
++    Root peers obtain data from fresh actual account reads. The reply deliberately
++    grants no native allocation; the root physical-resource owner remains separate.
++    """
++    def __init__(self, campaign):
++        self.campaign=campaign;self.clients=[];self.closed=False;self.close_state='OPEN';self.close_errors=[];self.unknown_handles=[];self.sock=None;self.identity=None;self.path=None
++        self.pid=os.getpid();self.start=birth(self.pid)
++        self._owning_context()
++        self.path=str(campaign.directory/('native-current-owner.%d.%s.sock'%(self.pid,self.start)))
++        need(len(os.fsencode(self.path))<104,'owning controller socket pathname')
++        need(not os.path.lexists(self.path),'current controller channel already exists')
++        self.sock=socket.socket(socket.AF_UNIX,socket.SOCK_STREAM)
++        self.sock.bind(self.path)
++        info=os.lstat(self.path);self.identity=(info.st_dev,info.st_ino)
++        os.chmod(self.path,0o600);self.sock.listen(1);self.sock.setblocking(False)
++
++    def _owning_context(self):
++        c=self.campaign
++        need(c.controlled and c.rpc is not None and c.state.get('thread_id')==ROOT_THREAD,
++             'current already-owning Campaign required')
++        need(c.state.get('worker_pid')==os.getpid() and str(c.state.get('worker_start'))==birth(os.getpid()),
++             'foreign or recovered Campaign object')
++        guard=c.credit_guard
++        need(guard is not None and guard.identifier==CREDIT_RUN and guard.initialized,
++             'same durable initialized credit run required')
++        need(getattr(c.args,'credit_run_id',None)==CREDIT_RUN,'credit-run argument mismatch')
++        need(hashlib.sha256(Path(__file__).read_bytes()).hexdigest()==LOADED_SOURCE_SHA256,
++             'owning control source changed after import')
++
++    def _snapshot(self, request, deadline):
++        self._owning_context();c=self.campaign
++        # Existing account/read<=10s plus actual refresh retries<=33s; reserve
++        # those unchanged calls inside this SAME60s handoff. No RPC proxy or
++        # replacement credit guard can change same-RPC fallback semantics.
++        need(remaining(deadline)>=ACCOUNT_RESERVE_SECONDS,'account handoff reserve exhausted')
++        need(type(request) is dict and set(request)=={'schema','nonce','config_sha256','challenge','seq'},
++             'current control request shape')
++        need(request['schema']==SCHEMA and type(request['seq']) is int and request['seq']>0,
++             'current control request identity')
++        for k in ('nonce','config_sha256','challenge'):
++            need(type(request[k]) is str and len(request[k])==64 and
++                 all(ch in '0123456789abcdef' for ch in request[k]),'current control digest')
++        # These calls execute only here, in the real already-owning controller.
++        # refresh_credit_budget retains its actual same-RPC notification fallback,
++        # persisted cumulative budget, unknown/exhausted stops and no new allowance.
++        account=c.rpc.call('account/read',{'refreshToken':False},timeout=10).get('account') or {}
++        if account.get('type')!='chatgpt':
++            c.stop_reason,c.stop_now='chatgpt_auth_changed',True;c.save(auth_mode=account.get('type'))
++        need(account.get('type')=='chatgpt','current signed-in ChatGPT account required')
++        c.refresh_credit_budget()
++        need(not c.stop_now and not c.stop_reason and not c.checkpoint_requested and not c.stopping,
++             'owning controller stop/checkpoint')
++        need(c.state.get('phase') in ('running','ready'),'owning controller phase')
++        need(not any(c.state.get(k) for k in HOLDS),'current controller hold or unknown')
++        budget=c.state.get('credit_budget')
++        need(type(budget) is dict and budget.get('id')==CREDIT_RUN and
++             Decimal(budget.get('budget'))==c.credit_guard.budget and
++             Decimal(budget.get('remaining'))>0,'actual retained credit budget unavailable')
++        self._owning_context();remaining(deadline)
++        now=time.clock_gettime(time.CLOCK_BOOTTIME)
++        return dict(schema=SCHEMA,authority=None,native_grant=False,
++          scope='fresh-current-controller-account-data-only',request=request,
++          controller_pid=self.pid,controller_birth=self.start,thread_id=ROOT_THREAD,
++          guardian_run_id=c.state.get('guardian_run_id'),credit_run_id=CREDIT_RUN,
++          credit_budget=budget,observed_boot=now,expires_boot=now+MAX_AGE,
++          boot_id=Path('/proc/sys/kernel/random/boot_id').read_text().strip(),
++          source_sha256=LOADED_SOURCE_SHA256)
++
++    def poll(self):
++        self._owning_context();need(self.close_state=='OPEN','controller service closed')
++        try:
++            conn,_=self.sock.accept();pfd=None
++            try:
++                conn.settimeout(15)
++                pid,uid,gid=struct.unpack('3i',conn.getsockopt(socket.SOL_SOCKET,socket.SO_PEERCRED,12))
++                need(uid==0 and pid>1,'root native-operation peer required')
++                start=birth(pid)
++                try:pfd=pidfd_compat.open_pidfd(pid,0)
++                except pidfd_compat.PidfdVerificationError as error:
++                    pfd=error.fd;raise
++                need(birth(pid)==start,'native-operation peer changed')
++                need(not self.clients,'one native account handoff at a time')
++                self.clients.append([conn,pid,start,pfd,None,0])
++            except BaseException as primary:
++                errors=close_pair(conn,pfd)
++                if errors:
++                    self.unknown_handles.extend(errors)
++                    raise ChannelCleanupError(primary,errors) from primary
++                raise
++        except BlockingIOError:pass
++        for client in tuple(self.clients):
++            conn,pid,start,pfd,binding,seq=client
++            poll=select.poll();poll.register(pfd,select.POLLIN)
++            ready=select.poll();ready.register(conn,select.POLLIN|select.POLLHUP|select.POLLERR)
++            events=ready.poll(0)
++            if poll.poll(0) or birth(pid)!=start or (events and events[0][1]&(select.POLLHUP|select.POLLERR)):
++                self.clients.remove(client)
++                errors=close_pair(conn,pfd)
++                if errors:
++                    self.unknown_handles.extend(errors);raise ChannelCleanupError(None,errors)
++                continue
++            if not events:continue
++            try:
++                deadline=time.monotonic()+HANDOFF_SECONDS
++                request=receive(conn,deadline)
++                current=(request.get('nonce'),request.get('config_sha256'))
++                need((binding is None or binding==current) and request.get('seq')==seq+1,
++                     'native control binding or sequence changed')
++                response=self._snapshot(request,deadline);send(conn,response,deadline)
++                client[4],client[5]=current,seq+1
++            except BaseException as primary:
++                self.clients.remove(client)
++                errors=close_pair(conn,pfd)
++                if errors:
++                    self.unknown_handles.extend(errors)
++                    raise ChannelCleanupError(primary,errors) from primary
++                raise
++
++    def close(self):
++        if self.close_state=='CLOSED':return
++        if self.close_state!='OPEN':
++            raise ChannelCleanupError(None,self.close_errors)
++        self.close_state='CLOSING';errors=[]
++        clients,self.clients=self.clients,[]
++        for conn,pid,start,pfd,binding,seq in clients:
++            errors.extend(close_pair(conn,pfd))
++        if self.sock is not None:
++            try:self.sock.close()
++            except BaseException as error:errors.append(('listener',self.sock,error))
++        if self.identity is not None:
++            try:
++                st=os.lstat(self.path)
++                need((st.st_dev,st.st_ino)==self.identity and stat.S_ISSOCK(st.st_mode),
++                     'current controller socket ownership changed')
++                os.unlink(self.path)  # exact own socket only, never a resource lease
++            except BaseException as error:errors.append(('socket_path',self.path,error))
++        errors=self.unknown_handles+errors
++        self.close_errors=errors
++        self.closed=not errors;self.close_state='UNKNOWN_RETAINED' if errors else 'CLOSED'
++        if errors:raise ChannelCleanupError(None,errors)
++
++
++class CurrentOwnerSession:
++    """Root-side authenticated client; has no native RAM permission semantics."""
++    def __init__(self,path,controller_pid,controller_birth,source_sha256,nonce,config_sha256):
++        self.sock=None;self.pidfd=None;self.closed=False;self.close_state='OPEN';self.close_errors=[];self.data=None
++        need(os.geteuid()==0,'root operation caller required')
++        st=os.lstat(path)
++        need(stat.S_ISSOCK(st.st_mode) and st.st_uid==1000 and stat.S_IMODE(st.st_mode)==0o600,
++             'owning controller socket identity')
++        self.sock=socket.socket(socket.AF_UNIX,socket.SOCK_STREAM);self.sock.settimeout(15)
++        self.sock.connect(path)
++        pid,uid,gid=struct.unpack('3i',self.sock.getsockopt(socket.SOL_SOCKET,socket.SO_PEERCRED,12))
++        need((pid,uid)==(controller_pid,1000) and birth(pid)==controller_birth,
++             'actual owning controller peer differs')
++        self.pid,self.birth,self.source_sha=pid,controller_birth,source_sha256
++        self.nonce,self.config_sha,self.seq=nonce,config_sha256,0
++        try:self.pidfd=pidfd_compat.open_pidfd(pid,0)
++        except pidfd_compat.PidfdVerificationError as error:
++            self.pidfd=error.fd;raise
++        need(birth(pid)==controller_birth,'controller changed during pidfd acquisition')
++        self.revalidate()
++
++    def revalidate(self):
++        need(self.close_state=='OPEN' and birth(self.pid)==self.birth,'current owner session unavailable')
++        p=select.poll();p.register(self.pidfd,select.POLLIN);need(not p.poll(0),'owning controller exited')
++        if self.data is not None and time.clock_gettime(time.CLOCK_BOOTTIME)+0.5<self.data['expires_boot']:
++            return self.data
++        self.seq+=1
++        request=dict(schema=SCHEMA,nonce=self.nonce,config_sha256=self.config_sha,
++                     challenge=secrets.token_hex(32),seq=self.seq)
++        deadline=time.monotonic()+HANDOFF_SECONDS
++        start=time.clock_gettime(time.CLOCK_BOOTTIME)
++        send(self.sock,request,deadline);row=receive(self.sock,deadline)
++        need(type(row) is dict and set(row)=={'schema','authority','native_grant','scope','request',
++          'controller_pid','controller_birth','thread_id','guardian_run_id','credit_run_id',
++          'credit_budget','observed_boot','expires_boot','boot_id','source_sha256'},'owning snapshot shape')
++        now=time.clock_gettime(time.CLOCK_BOOTTIME)
++        need(row['schema']==SCHEMA and row['authority'] is None and row['native_grant'] is False and
++          row['scope']=='fresh-current-controller-account-data-only' and row['request']==request and
++          (row['controller_pid'],row['controller_birth'])==(self.pid,self.birth) and
++          row['thread_id']==ROOT_THREAD and row['credit_run_id']==CREDIT_RUN and
++          row['source_sha256']==self.source_sha==LOADED_SOURCE_SHA256 and
++          row['boot_id']==Path('/proc/sys/kernel/random/boot_id').read_text().strip(),
++          'owning snapshot binding')
++        need(type(row['observed_boot']) in (int,float) and type(row['expires_boot']) in (int,float) and
++          math.isfinite(row['observed_boot']) and math.isfinite(row['expires_boot']) and
++          start<=row['observed_boot']<=now<row['expires_boot']<=row['observed_boot']+MAX_AGE,
++          'owning snapshot stale')
++        need(birth(self.pid)==self.birth and not p.poll(0),'owning controller lost after reply')
++        self.data=row;return row
++
++    def close(self):
++        if self.close_state=='CLOSED':return
++        if self.close_state!='OPEN':raise ChannelCleanupError(None,self.close_errors)
++        self.close_state='CLOSING'
++        errors=close_pair(self.sock,self.pidfd)
++        self.close_errors=errors
++        self.closed=not errors;self.close_state='UNKNOWN_RETAINED' if errors else 'CLOSED'
++        if errors:raise ChannelCleanupError(None,errors)
+--- /dev/null
++++ b/scripts/pidfd_compat.py
+@@ -0,0 +1,97 @@
++"""Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++Native pidfd APIs or Linux x86_64/64-bit UAPI syscall equivalents. No PID signals.
++"""
++import ctypes
++import errno
++import fcntl
++import os
++import signal
++import struct
++import sys
++
++# Independently checked against root-owned asm/unistd_64.h and installed 5.15
++# generated x86 UAPI headers; exact local header hashes are in the checkpoint.
++NR_PIDFD_SEND_SIGNAL=424
++NR_PIDFD_OPEN=434
++
++
++class UnsupportedRuntime(RuntimeError):pass
++
++
++class PidfdVerificationError(RuntimeError):
++    """The new pidfd exists and must remain retained by its caller."""
++    def __init__(self,fd,reason):
++        super().__init__('new pidfd verification failed; retain descriptor: '+str(reason))
++        self.fd=fd
++
++
++def fallback_supported():
++    return (sys.platform=='linux' and os.uname().machine=='x86_64' and
++            struct.calcsize('P')==8 and ctypes.sizeof(ctypes.c_long)==8)
++
++
++def _syscall():
++    if not fallback_supported():raise UnsupportedRuntime('pidfd syscall fallback supports only Linux x86_64/64-bit')
++    try:fn=ctypes.CDLL(None,use_errno=True).syscall
++    except (OSError,AttributeError) as error:raise UnsupportedRuntime('libc syscall unavailable') from error
++    fn.argtypes=[ctypes.c_long];fn.restype=ctypes.c_long
++    return fn
++
++
++def _native_open():return getattr(os,'pidfd_open',None)
++
++
++def _native_signal():return getattr(signal,'pidfd_send_signal',None)
++
++
++def require_implementation():
++    if callable(_native_open()) and callable(_native_signal()):
++        return
++    _syscall()
++
++
++def open_pidfd(pid,flags=0):
++    if type(pid) is not int or not 0<pid<=0x7fffffff:raise ValueError('positive pid required')
++    nonblock=getattr(os,'O_NONBLOCK',0)
++    if type(flags) is not int or flags not in (0,nonblock):raise ValueError('unsupported pidfd flags')
++    native=_native_open()
++    if callable(native):fd=native(pid,flags)
++    else:
++        fn=_syscall();ctypes.set_errno(0)
++        fd=fn(ctypes.c_long(NR_PIDFD_OPEN),ctypes.c_int(pid),ctypes.c_uint(flags))
++        if fd==-1:
++            error=ctypes.get_errno();raise OSError(error,os.strerror(error))
++        fd=int(fd)
++    # Failure after creation is returned with the live FD, never silently lost.
++    try:
++        if type(fd) is not int or fd<0:raise ValueError('invalid new pidfd')
++        descriptor=fcntl.fcntl(fd,fcntl.F_GETFD)
++        status=fcntl.fcntl(fd,fcntl.F_GETFL)
++        if not descriptor&fcntl.FD_CLOEXEC:raise ValueError('pidfd is not close-on-exec')
++        if bool(status&nonblock)!=bool(flags&nonblock):raise ValueError('pidfd nonblocking mode differs')
++    except BaseException as error:
++        raise PidfdVerificationError(fd,error) from error
++    return fd
++
++
++def send_signal(pidfd,sig,flags=0):
++    if type(pidfd) is not int or pidfd<0:raise ValueError('pidfd required')
++    if not isinstance(sig,int) or isinstance(sig,bool) or not 0<=int(sig)<signal.NSIG:raise ValueError('signal number')
++    if type(flags) is not int or flags!=0:raise ValueError('unsupported signal flags')
++    native=_native_signal()
++    if callable(native):return native(pidfd,int(sig),None,0)
++    fn=_syscall();ctypes.set_errno(0)
++    result=fn(ctypes.c_long(NR_PIDFD_SEND_SIGNAL),ctypes.c_int(pidfd),ctypes.c_int(int(sig)),
++              ctypes.c_void_p(None),ctypes.c_uint(0))
++    if result==-1:
++        error=ctypes.get_errno();raise OSError(error,os.strerror(error))
++    if result!=0:raise OSError(errno.EIO,'unexpected pidfd signal result')
++    return None
++
++
++def waitstatus_exitcode(status):
++    """Portable terminal wait conversion; never implies descendant retirement."""
++    if type(status) is not int or status<0:raise ValueError('invalid wait status')
++    if os.WIFEXITED(status):return os.WEXITSTATUS(status)
++    if os.WIFSIGNALED(status):return -os.WTERMSIG(status)
++    raise ValueError('wait status is not exited or signalled')
+--- a/scripts/application-tests/native_diagnostic_container_owner.py
++++ b/scripts/application-tests/native_diagnostic_container_owner.py
+@@ -442,7 +442,7 @@
+ COMMAND_LEDGER = CommandLedger()
+ 
+ 
+-def bounded_command(argv, timeout, *, env=None, ledger=None):
++def bounded_command(argv, timeout, *, env=None, ledger=None, admission_check=None):
+     """Drain bounded pipes without communicate()'s unbounded memory capture."""
+     need(type(timeout) in (int, float) and math.isfinite(timeout) and timeout > 0, "command deadline")
+     end = time.monotonic() + timeout
+@@ -465,6 +465,8 @@
+                 os.set_blocking(stream.fileno(), False)
+                 selector.register(stream, selectors.EVENT_READ, index)
+             while selector.get_map():
++                if admission_check is not None:
++                    admission_check()  # veto only; ignored return is never permission
+                 remaining = end - time.monotonic()
+                 need(remaining > 0, "command timeout")
+                 for key, _ in selector.select(min(remaining, 0.1)):
+@@ -545,7 +547,8 @@
+         env = {"PATH": "/usr/bin:/bin", "LANG": "C", "LC_ALL": "C"}
+         if "SUDO_ASKPASS" in os.environ:
+             env["SUDO_ASKPASS"] = os.environ["SUDO_ASKPASS"]
+-        return bounded_command(argv, timeout, env=env, ledger=self.children)
++        return bounded_command(argv, timeout, env=env, ledger=self.children,
++                               admission_check=getattr(self, "admission_check", None))
+ 
+ 
+ def _manifest_identity(path, digest):
+@@ -787,7 +790,7 @@
+                 "--attempt-parent", str(self.parent), "--nonce", self.nonce]
+ 
+     def _create_argv(self):
+-        return ["create", "--pull=never", "--attach=stdout", "--attach=stderr", "--init", "--name", self.name, "--label", self.label,
++        argv = ["create", "--pull=never", "--attach=stdout", "--attach=stderr", "--init", "--name", self.name, "--label", self.label,
+                 "--cpus=4", "--cpuset-cpus=2-5", "--cgroup-parent=/mckernel-dev",
+                 "--memory=12g", "--memory-swap=12g", "--pids-limit=512", "--cap-drop=ALL",
+                 "--security-opt=no-new-privileges", "--read-only", "--network=none",
+@@ -798,6 +801,15 @@
+                 "--mount", "type=bind,src=" + str(self.parent) + ",dst=" + str(self.parent),
+                 "--env", "HOME=/tmp", "--env", "TMPDIR=/tmp", "--env", "PYTHONDONTWRITEBYTECODE=1",
+                 "--workdir=" + str(self.parent), "--entrypoint=/usr/bin/python3", IMAGE, *self._inside_args()]
++        package = getattr(self, "source_package", None)
++        if package is not None:
++            # Only the typed Root native-admission path sets this exact source
++            # generation. Existing three-bind CLI/default profiles stay intact.
++            need(type(package) is str and package.startswith("/var/lib/mckernel-native-"),
++                 "named immutable package source")
++            index = argv.index("--env")
++            argv[index:index] = ["--mount", "type=bind,src=" + package + ",dst=" + package + ",readonly"]
++        return argv
+ 
+     def _profile(self, row, image):
+         self._owned(row, self.container)
+@@ -869,6 +881,9 @@
+                  type(mount.get("ReadOnly", False)) is bool, "requested mount options")
+             requested.append((mount.get("Source"), mount.get("Target"), mount.get("ReadOnly", False)))
+         expected_mounts = [(REPO, REPO, True), (SCRATCH, SCRATCH, True), (str(self.parent), str(self.parent), False)]
++        package = getattr(self, "source_package", None)
++        if package is not None:
++            expected_mounts.append((package, package, True))
+         need(sorted(requested) == sorted(expected_mounts), "requested mount identities")
+         tmpfs = 0
+         for mount in row.get("Mounts", []):

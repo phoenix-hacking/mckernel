@@ -1,0 +1,3 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+Exact retained private source cohort, actual raw-stage/overlay/strict-native-manifest join and12+4 focused checks, with all failed fixtures, are mapped in CAPSULE-SOURCE-MAP.json. Large retained initramfs binary is not duplicated; its actual path/size/hash is bound in the genuine generated native manifest. Private owner paths remain execution identities; published copies are retention evidence. Root still owns current Git, independent source/profile/execution release, fresh resource/physical/nonce admission and scratch metadata publication. No native acceptance or guest execution is claimed.

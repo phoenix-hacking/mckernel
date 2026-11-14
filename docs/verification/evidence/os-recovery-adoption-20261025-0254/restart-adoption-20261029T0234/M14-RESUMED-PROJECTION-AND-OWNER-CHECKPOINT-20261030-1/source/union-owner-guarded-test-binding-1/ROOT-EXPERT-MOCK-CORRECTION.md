@@ -1,0 +1,3 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+Root expert diagnosis: exact /usr/lib/python3.8/unittest/mock.py __getattr__ rejects assert/assret names even when present in _mock_methods. LeaseChannel really defines assert_live (union_owner.py:142). The bounded correction still used getattr before configuring return_value. Assigning an explicit Mock to that existing method bypasses only the fixture lookup and preserves spec and guard call-count assertions. No unsafe=True, production change or oracle weakening. Both prior failing runs remain retained. Expert source unrun until its fresh Root grant.

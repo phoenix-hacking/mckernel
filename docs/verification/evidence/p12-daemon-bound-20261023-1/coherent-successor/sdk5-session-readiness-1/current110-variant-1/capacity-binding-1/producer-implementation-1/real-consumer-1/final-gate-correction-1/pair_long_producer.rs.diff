@@ -1,0 +1,45 @@
+--- preimage/pair_long_producer.rs
++++ final-gate/pair_long_producer.rs
+@@ -225,9 +225,7 @@
+     if clock(ctx, ops, &mut previous)? >= absolute { return Err(Failure::Deadline); }
+     line!(ctx, ops, "ND_PAIR_LONG_TRACE_END {{\"bytes\":{}}}\n", summary.trace_bytes)?;
+     if clock(ctx, ops, &mut previous)? >= absolute { return Err(Failure::Deadline); }
+-    line!(ctx, ops, "ND_PAIR_LONG_COMPLETE {{\"rounds\":{},\"launches\":{},\"work_ns\":{},\"elapsed_ns\":{},\"trace_bytes\":{},\"os\":0,\"generation\":1,\"procfs_empty\":true}}\n", summary.rounds, summary.launches, summary.work_ns, summary.elapsed_ns, summary.trace_bytes)?;
+-    if clock(ctx, ops, &mut previous)? >= absolute { return Err(Failure::Deadline); }
+-    summary.completed = 1;
++    // Collector final evidence/restoration gates must run before terminal publication.
+     Ok(())
+ }
+ 
+@@ -241,5 +239,31 @@
+     match run(ctx, &*ops, &mut *summary) { Ok(()) => 0, Err(error) => error as i32 }
+ }
+ 
++/// One-shot terminal publication after the actual collector final gates. The
++/// C owner retains context/summary and supplies the SAME absolute wall bound.
++/// A failure after visible bytes requires fail-closed PID1 retention, not poweroff.
++#[no_mangle]
++pub unsafe extern "C" fn pair_complete_long_session(
++    ctx: *mut c_void, operations: *const Operations, result: *mut Summary,
++    not_before: u64, absolute: u64,
++) -> i32 {
++    if operations.is_null() || result.is_null() { return Failure::Invalid as i32; }
++    let ops=&*operations;let summary=&mut *result;
++    if summary.completed!=0 || summary.ownership_complete!=1 || summary.rounds==0 ||
++       summary.rounds>ROUND_CAP as u64 || summary.launches!=summary.rounds*2 ||
++       summary.launches<MIN_LAUNCHES || summary.work_ns<WORK_NS ||
++       summary.elapsed_ns>=WALL_NS || summary.trace_bytes==0 || summary.trace_bytes>TRACE_CAP ||
++       not_before==0 || absolute<=not_before { return Failure::Invalid as i32; }
++    let mut previous=not_before;
++    let finish=(|| {
++        if clock(ctx,ops,&mut previous)? >= absolute { return Err(Failure::Deadline); }
++    line!(ctx, ops, "ND_PAIR_LONG_COMPLETE {{\"rounds\":{},\"launches\":{},\"work_ns\":{},\"elapsed_ns\":{},\"trace_bytes\":{},\"os\":0,\"generation\":1,\"procfs_empty\":true}}\n", summary.rounds, summary.launches, summary.work_ns, summary.elapsed_ns, summary.trace_bytes)?;
++        if clock(ctx,ops,&mut previous)? >= absolute { return Err(Failure::Deadline); }
++        summary.completed=1;
++        Ok(())
++    })();
++    match finish {Ok(())=>0,Err(error)=>error as i32}
++}
++
+ #[cfg(test)]
+ mod tests;

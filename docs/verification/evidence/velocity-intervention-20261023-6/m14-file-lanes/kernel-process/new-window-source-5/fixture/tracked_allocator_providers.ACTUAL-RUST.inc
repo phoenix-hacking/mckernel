@@ -1,0 +1,175 @@
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+mod remaining_process_tracked_allocators {
+    use core::ffi::c_void;
+
+    use crate::abi::{CInt, CULong, VmRange};
+
+    use super::IHK_MC_AP_NOWAIT;
+
+    unsafe extern "C" {
+        static process_tracked_allocator_source_file: *const i8;
+        static process_alloc_bridge_source_line: CInt;
+        static process_add_range_alloc_bridge_source_line: CInt;
+        static process_mckfd_free_bridge_source_line: CInt;
+        static process_policy_free_bridge_source_line: CInt;
+        static process_optional_free_bridge_source_line: CInt;
+        static process_free_vm_bridge_source_line: CInt;
+        static process_range_kfree_bridge_source_line: CInt;
+        static process_add_range_free_bridge_source_line: CInt;
+    }
+
+    /// Allocate through the same tracked allocator and source location.
+    ///
+    /// # Safety
+    /// The existing caller supplies allocator-valid size/flags and observes the
+    /// same nullable allocation result and ownership transfer as C. The narrowed
+    /// signed size matches the original C int parameter conversion. Source
+    /// metadata stays live and the allocator never modifies its file bytes.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_alloc_bridge(size: CULong, flags: CULong) -> *mut c_void {
+        // SAFETY: The same tracked allocator owns allocation and OOM reporting.
+        // Readonly source metadata preserves the existing call-site diagnostic.
+        unsafe {
+            crate::mem_helpers::kmalloc_tracked(
+                size as CInt,
+                flags,
+                process_tracked_allocator_source_file as *mut i8,
+                process_alloc_bridge_source_line,
+            )
+        }
+    }
+
+    /// Allocate range storage with the original NOWAIT flag and trace location.
+    ///
+    /// # Safety
+    /// The caller retains the original allocator size domain and must initialize
+    /// the returned nullable raw storage before field access. No reference or
+    /// initialized VmRange value is formed here; allocator ownership is unchanged.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_add_range_alloc_bridge(size: CULong) -> *mut VmRange {
+        // SAFETY: Preserve original int narrowing and IHK_MC_AP_NOWAIT=2. The
+        // existing allocator alone chooses/initializes allocation bookkeeping.
+        unsafe {
+            crate::mem_helpers::kmalloc_tracked(
+                size as CInt,
+                IHK_MC_AP_NOWAIT,
+                process_tracked_allocator_source_file as *mut i8,
+                process_add_range_alloc_bridge_source_line,
+            )
+            .cast::<VmRange>()
+        }
+    }
+
+    /// Release the original final-owned descriptor allocation through tracking.
+    ///
+    /// # Safety
+    /// The caller supplies exactly the pointer accepted by the existing tracked
+    /// free contract, with exclusive final-release authority. Null forwarding and
+    /// diagnostics retain the provider's existing policy; no new guard is added.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_mckfd_free_bridge(fdp: *mut c_void) {
+        // SAFETY: The caller owns the same allocation's final release; source
+        // metadata is immutable and valid for this synchronous provider call.
+        unsafe {
+            crate::mem_helpers::kfree_tracked(
+                fdp,
+                process_tracked_allocator_source_file as *mut i8,
+                process_mckfd_free_bridge_source_line,
+            );
+        }
+    }
+
+    /// Release the original policy allocation without changing its free policy.
+    ///
+    /// # Safety
+    /// `policy` satisfies the existing tracked-free provenance and final-owner
+    /// obligations; null retains the original allocator's handling.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_policy_free_bridge(policy: *mut c_void) {
+        // SAFETY: Same pointer, ownership transfer and stable source metadata.
+        unsafe {
+            crate::mem_helpers::kfree_tracked(
+                policy,
+                process_tracked_allocator_source_file as *mut i8,
+                process_policy_free_bridge_source_line,
+            );
+        }
+    }
+
+    /// Forward the original optional allocation to its tracked free provider.
+    ///
+    /// # Safety
+    /// The caller has the same nullable allocation provenance and final-release
+    /// authority required by the existing provider. This adds no null filter.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_optional_free_bridge(ptr: *mut c_void) {
+        // SAFETY: The existing allocator owns the exact pointer/null handling.
+        unsafe {
+            crate::mem_helpers::kfree_tracked(
+                ptr,
+                process_tracked_allocator_source_file as *mut i8,
+                process_optional_free_bridge_source_line,
+            );
+        }
+    }
+
+    /// Release final-owned VM storage through its original tracked free site.
+    ///
+    /// # Safety
+    /// The caller has completed VM teardown and supplies the same allocator-valid
+    /// pointer with exclusive final ownership. Underlying null handling is kept.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_free_vm_bridge(vm: *mut c_void) {
+        // SAFETY: Same allocation/provenance and one-time release contract as C.
+        unsafe {
+            crate::mem_helpers::kfree_tracked(
+                vm,
+                process_tracked_allocator_source_file as *mut i8,
+                process_free_vm_bridge_source_line,
+            );
+        }
+    }
+
+    /// Release range storage at the original merge-cleanup tracking location.
+    ///
+    /// # Safety
+    /// The original range owner has detached/finished the range as required by
+    /// the caller and grants the same one-time allocation free. No fields are read.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_range_kfree_bridge(range: *mut VmRange) {
+        // SAFETY: Raw conversion keeps the same allocation address and ownership.
+        unsafe {
+            crate::mem_helpers::kfree_tracked(
+                range.cast::<c_void>(),
+                process_tracked_allocator_source_file as *mut i8,
+                process_range_kfree_bridge_source_line,
+            );
+        }
+    }
+
+    /// Release the original add-range rollback allocation through tracking.
+    ///
+    /// # Safety
+    /// The existing rollback owner supplies allocator-valid range storage and
+    /// authorizes its final release. No new rollback or publication path is added.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_add_range_free_bridge(range: *mut VmRange) {
+        // SAFETY: Preserve the caller's exact rollback pointer and trace site.
+        unsafe {
+            crate::mem_helpers::kfree_tracked(
+                range.cast::<c_void>(),
+                process_tracked_allocator_source_file as *mut i8,
+                process_add_range_free_bridge_source_line,
+            );
+        }
+    }
+
+    const _: unsafe extern "C" fn(CULong, CULong) -> *mut c_void = process_alloc_bridge;
+    const _: unsafe extern "C" fn(CULong) -> *mut VmRange = process_add_range_alloc_bridge;
+    const _: unsafe extern "C" fn(*mut c_void) = process_mckfd_free_bridge;
+    const _: unsafe extern "C" fn(*mut c_void) = process_policy_free_bridge;
+    const _: unsafe extern "C" fn(*mut c_void) = process_optional_free_bridge;
+    const _: unsafe extern "C" fn(*mut c_void) = process_free_vm_bridge;
+    const _: unsafe extern "C" fn(*mut VmRange) = process_range_kfree_bridge;
+    const _: unsafe extern "C" fn(*mut VmRange) = process_add_range_free_bridge;
+}

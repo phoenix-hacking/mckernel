@@ -1,0 +1,32 @@
+/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
+#include "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/two-VM-fixture-preparation-1/fixture/actual_kernel_declarations.h"
+extern void *mem_vmap_init_bridge(unsigned long,unsigned long,unsigned long);
+extern unsigned long mem_vmap_alloc_bridge(void*,int,int);
+extern void mem_vmap_free_bridge(void*,unsigned long,int);
+extern int mem_pt_prepare_map_bridge(page_table_t,void*,unsigned long,enum ihk_mc_pt_prepare_flag);
+typedef void *(*init_fn)(unsigned long,unsigned long,unsigned long);
+typedef int(*prepare_fn)(page_table_t,void*,unsigned long,enum ihk_mc_pt_prepare_flag);
+extern int mem_virtual_allocator_init_body_result(void**,unsigned long,unsigned long,unsigned long,int,init_fn,prepare_fn);
+#include "actual-original-four-C-bodies.inc"
+struct call_record{unsigned calls,kind;unsigned long start,size,unit,address;void *desc;int npages,p2align;page_table_t pt;void *virt;enum ihk_mc_pt_prepare_flag flag;};
+static struct call_record call;static void *init_result;static unsigned long alloc_result;static int prep_result;
+static void **expected_slot;static unsigned phase,provider_error;static unsigned long descriptor_words[2];
+static void reset(void){memset(&call,0,sizeof call);phase=provider_error=0;expected_slot=0;}
+void *ihk_pagealloc_init(unsigned long start,unsigned long size,unsigned long unit){call.calls++;call.kind=1;call.start=start;call.size=size;call.unit=unit;if(phase)provider_error=1;phase=1;return init_result;}
+unsigned long ihk_pagealloc_alloc(void *desc,int n,int a){call.calls++;call.kind=2;call.desc=desc;call.npages=n;call.p2align=a;return alloc_result;}
+void ihk_pagealloc_free(void *desc,unsigned long address,int n){call.calls++;call.kind=3;call.desc=desc;call.address=address;call.npages=n;}
+int ihk_mc_pt_prepare_map(page_table_t pt,void *virt,unsigned long size,enum ihk_mc_pt_prepare_flag flag){call.calls++;call.kind=4;call.pt=pt;call.virt=virt;call.size=size;call.flag=flag;if(expected_slot){if(phase!=1||*expected_slot!=init_result)provider_error=1;phase=2;}return prep_result;}
+static int init_pair(unsigned long s,unsigned long n,unsigned long u,void *result){struct call_record first;init_result=result;reset();void *a=original_mem_vmap_init_bridge(s,n,u);memcpy(&first,&call,sizeof first);if(provider_error||phase!=1)return 1;reset();void *b=mem_vmap_init_bridge(s,n,u);return a!=result||a!=b||provider_error||phase!=1||call.calls!=1||memcmp(&first,&call,sizeof call);}
+static int alloc_pair(void*d,int n,int p,unsigned long result){struct call_record first;alloc_result=result;reset();unsigned long a=original_mem_vmap_alloc_bridge(d,n,p);memcpy(&first,&call,sizeof first);reset();unsigned long b=mem_vmap_alloc_bridge(d,n,p);return a!=result||a!=b||call.calls!=1||memcmp(&first,&call,sizeof call);}
+static int free_pair(void*d,unsigned long address,int n){struct call_record first;reset();original_mem_vmap_free_bridge(d,address,n);memcpy(&first,&call,sizeof first);reset();mem_vmap_free_bridge(d,address,n);return call.calls!=1||memcmp(&first,&call,sizeof call);}
+static int prepare_pair(page_table_t pt,void*virt,unsigned long size,enum ihk_mc_pt_prepare_flag flag,int result){struct call_record first;prep_result=result;reset();int a=original_mem_pt_prepare_map_bridge(pt,virt,size,flag);memcpy(&first,&call,sizeof first);reset();int b=mem_pt_prepare_map_bridge(pt,virt,size,flag);return a!=result||a!=b||call.calls!=1||memcmp(&first,&call,sizeof call);}
+static int init_consumer_pair(unsigned long start,unsigned long size,unsigned long unit,int flag,void*desc,int result){struct call_record first;void *slot=&descriptor_words[1];init_result=desc;prep_result=result;reset();expected_slot=&slot;int a=mem_virtual_allocator_init_body_result(&slot,start,size,unit,flag,original_mem_vmap_init_bridge,original_mem_pt_prepare_map_bridge);if(a!=result||slot!=desc||phase!=2||provider_error||call.calls!=2||call.start!=start||call.unit!=unit||call.size!=size||call.pt||call.virt!=(void*)start||(int)call.flag!=flag)return 1;memcpy(&first,&call,sizeof first);slot=&descriptor_words[1];reset();expected_slot=&slot;int b=mem_virtual_allocator_init_body_result(&slot,start,size,unit,flag,mem_vmap_init_bridge,mem_pt_prepare_map_bridge);return a!=b||slot!=desc||phase!=2||provider_error||call.calls!=2||memcmp(&first,&call,sizeof call);}
+static int negative_consumer_pair(unsigned mode){for(unsigned variant=0;variant<2;variant++){void *slot=&descriptor_words[1];reset();init_fn init=variant?mem_vmap_init_bridge:original_mem_vmap_init_bridge;prepare_fn prep=variant?mem_pt_prepare_map_bridge:original_mem_pt_prepare_map_bridge;int r=mem_virtual_allocator_init_body_result(mode==0?0:&slot,0,0,0,0,mode==1?0:init,mode==2?0:prep);if(r!=-EINVAL||call.calls||slot!=&descriptor_words[1]||provider_error)return 1;}return 0;}
+int main(void){const unsigned long vals[]={0,4096,0x8000000000000000UL,~0UL};const int ints[]={(-2147483647-1),-1,0,1,2147483647};const int results[]={(-2147483647-1),-EINVAL,-1,0,1,2147483647};void *ptrs[]={0,&descriptor_words[0],&descriptor_words[1]};const enum ihk_mc_pt_prepare_flag flags[]={IHK_MC_PT_FIRST_LEVEL,IHK_MC_PT_LAST_LEVEL,(enum ihk_mc_pt_prepare_flag)-1,(enum ihk_mc_pt_prepare_flag)0x80000000U};unsigned ni=0,na=0,nf=0,np=0,nc=0,nn=0;
+for(unsigned s=0;s<4;s++)for(unsigned n=0;n<4;n++)for(unsigned u=0;u<4;u++)for(unsigned r=0;r<3;r++){if(init_pair(vals[s],vals[n],vals[u],ptrs[r]))return 11;ni++;}
+for(unsigned d=0;d<3;d++)for(unsigned n=0;n<5;n++)for(unsigned a=0;a<5;a++)for(unsigned r=0;r<3;r++){if(alloc_pair(ptrs[d],ints[n],ints[a],vals[r]))return 12;na++;}
+for(unsigned d=0;d<3;d++)for(unsigned a=0;a<4;a++)for(unsigned n=0;n<5;n++){if(free_pair(ptrs[d],vals[a],ints[n]))return 13;nf++;}
+for(unsigned p=0;p<3;p++)for(unsigned v=0;v<4;v++)for(unsigned n=0;n<4;n++)for(unsigned f=0;f<4;f++)for(unsigned r=0;r<6;r++){if(prepare_pair((page_table_t)ptrs[p],(void*)vals[v],vals[n],flags[f],results[r]))return 14;np++;}
+for(unsigned s=0;s<4;s++)for(unsigned n=0;n<4;n++)for(unsigned u=0;u<4;u++)for(unsigned f=0;f<2;f++)for(unsigned d=0;d<3;d++)for(unsigned r=0;r<3;r++){if(init_consumer_pair(vals[s],vals[n],vals[u],(int)flags[f],ptrs[d],results[r+1]))return 15;nc++;}
+for(unsigned m=0;m<3;m++){if(negative_consumer_pair(m))return 16;nn++;}
+__builtin_printf("PASS actualOriginalC_Rust init=%u alloc=%u free=%u prepare=%u consumer=%u negative=%u total=%u\n",ni,na,nf,np,nc,nn,ni+na+nf+np+nc+nn);return 0;}

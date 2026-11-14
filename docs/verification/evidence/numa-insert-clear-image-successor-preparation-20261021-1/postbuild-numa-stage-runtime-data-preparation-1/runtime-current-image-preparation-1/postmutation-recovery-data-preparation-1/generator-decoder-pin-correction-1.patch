@@ -1,0 +1,11 @@
+--- /home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/postbuild-numa-stage-runtime-data-preparation-1/runtime-current-image-preparation-1/postmutation-recovery-data-preparation-1/prepare_eight_state_runtime_sources.py
++++ /home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/postbuild-numa-stage-runtime-data-preparation-1/runtime-current-image-preparation-1/postmutation-recovery-data-preparation-1/prepare_eight_state_runtime_sources.CORRECTION-1.py
+@@ -176,7 +176,7 @@
+         expected[pair['role']]=(y['id'],y['processId'],y['durationMs'])
+     need(set(expected)=={'holder-retirement','physical-reconciliation'} and len(physical['positive_closed_births'])==2,'TWO genuine innerbirths, no outerOS invention')
+     p=outdir('/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/postbuild-numa-stage-runtime-data-preparation-1/runtime-current-image-preparation-1/postmutation-recovery-data-preparation-1/bound-runtime-source-1'); (p/'native-packet-1').mkdir(mode=0o700)
+-    decoder=pinned(Path('/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/postbuild-numa-stage-runtime-data-preparation-1/runtime-current-image-preparation-1/postmutation-recovery-data-preparation-1/current_insert_clear_eight_state_physical.UNBOUND.py'),'d4079c2b67cde06ebb24392018032407483078b027ab3a3dbfb51572a0b587d1')
++    decoder=pinned(Path('/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/postbuild-numa-stage-runtime-data-preparation-1/runtime-current-image-preparation-1/postmutation-recovery-data-preparation-1/current_insert_clear_eight_state_physical.CORRECTION-1.UNBOUND.py'),'c169666669bfbbcb2b6b7749404970c27de0a52da10a9b22c5012700193b1af7')
+     counts=mapping['current_actual_counts']
+     instance=dict(mapping=r['physical_mapping'],physical_report=r['physical_report'],tool_terminals=expected,execution_review_sha256=a['execution_review']['sha256'],cleanup_engine_sha256=a['source_reconciliation']['sha256'],selected_files=counts['selected_files'],objects=counts['postreader_actual_objects'],roles=counts['finite_roles'])
+     decoder=bind_global(decoder,instance)

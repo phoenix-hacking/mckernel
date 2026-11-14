@@ -1,0 +1,76 @@
+{
+  "operations": [
+    {
+      "argv_template": [],
+      "profile": "snapshot",
+      "role": "UNUSED_INDEX_ZERO_DO_NOT_EXECUTE"
+    },
+    {
+      "argv_template": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--core=0",
+        "--nofile=256",
+        "--fsize=33554432",
+        "--",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/stage-preparation-1/root_manual_snapshot_three_round_native_db3.py",
+        "--bindings-sha256",
+        "caf781bf2fb536c75c466696f8c1e8e791270e1a65c60d123b8532500a4c9652",
+        "--terminal",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-physical-review-20261019-1/decision.json",
+        "--terminal-sha256",
+        "db3dacceb9c72a774987e8fdd2b18449b1f40af9cb52737b907afafa44c28ff6"
+      ],
+      "profile": "snapshot",
+      "role": "LAST-snapshot",
+      "status_path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-snapshot-20261019-1/three-round205-case-1/captures/snapshot-1.status.json",
+      "stderr_path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-snapshot-20261019-1/three-round205-case-1/captures/snapshot-1.stderr",
+      "stdout_path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-snapshot-20261019-1/three-round205-case-1/captures/snapshot-1.stdout"
+    }
+  ],
+  "profiles": {
+    "metadata": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 40,
+      "stream_fsize": 33554432
+    },
+    "native": {
+      "cpu": 7,
+      "parent_kill_grace_seconds": null,
+      "parent_wall_seconds": null,
+      "stream_fsize": 33554432
+    },
+    "reader": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 35,
+      "stream_fsize": 33554432
+    },
+    "snapshot": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 40,
+      "stream_fsize": 33554432
+    }
+  },
+  "release": {
+    "bytes": 10100,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-independent-review-20261020-1/FINAL-THREE-ROUND-SNAPSHOT-SOURCE-AND-NONTEMPORAL-REVIEW.json",
+    "sha256": "e93f3012595987d32457abca9e4aae4fc98669a324823b93566b11e470dfa6f9"
+  },
+  "root_installed_release_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-independent-review-20261020-1/FINAL-THREE-ROUND-SNAPSHOT-SOURCE-AND-NONTEMPORAL-REVIEW.json"
+}

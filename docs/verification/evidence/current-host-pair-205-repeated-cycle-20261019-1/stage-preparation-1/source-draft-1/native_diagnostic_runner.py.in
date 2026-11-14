@@ -1,0 +1,9 @@
+"""Only import bindings change; original CLI, process and QMP ownership stay."""
+import hashlib,importlib.util
+from pathlib import Path
+PATH=Path(@RUNNER_PATH@)
+if hashlib.sha256(PATH.read_bytes()).hexdigest()!=@RUNNER_SHA@:raise ValueError('pinned runner')
+spec=importlib.util.spec_from_file_location('accepted_single_pair_runner',PATH);base=importlib.util.module_from_spec(spec);spec.loader.exec_module(base)
+base._HERE=Path(__file__).resolve().parent
+globals().update({k:v for k,v in vars(base).items() if not k.startswith('__')})
+if __name__=='__main__':raise SystemExit(base.main())

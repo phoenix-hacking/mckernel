@@ -1,0 +1,69 @@
+{
+  "operations": [
+    null,
+    {
+      "argv_template": [
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--nofile=256",
+        "--core=0",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "30s",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/decode_fp_attempt_archive.py",
+        "--archive",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/readback-3.stdout",
+        "--archive-sha256",
+        "85ce9cfa168a5d01d994a41c2943ffffe23700894b03e218fa1bfd689ce24e88",
+        "--output",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/decoded-mckernel-evidence"
+      ],
+      "profile": "metadata",
+      "role": "decode-ring",
+      "status_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/decode-ring.status.json",
+      "stderr_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/decode-ring.stderr",
+      "stdout_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/decode-ring.stdout"
+    }
+  ],
+  "profiles": {
+    "metadata": {
+      "as_limit": 1073741824,
+      "cpu": 7,
+      "cpu_limits": 30,
+      "parent_kill_grace_seconds": 4,
+      "parent_wall_seconds": 35,
+      "stream_fsize": 33554432
+    },
+    "native": {
+      "as_limit": null,
+      "cpu": 7,
+      "cpu_limits": null,
+      "parent_kill_grace_seconds": null,
+      "parent_wall_seconds": null,
+      "stream_fsize": 33554432
+    },
+    "snapshot_metadata": {
+      "as_limit": 1073741824,
+      "cpu": 6,
+      "cpu_limits": 30,
+      "parent_kill_grace_seconds": 4,
+      "parent_wall_seconds": 35,
+      "stream_fsize": 33554432
+    }
+  },
+  "release": {
+    "bytes": 16123,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-physical-review-20261019-1/decision.json",
+    "sha256": "7d869a4f69a7d840a14bd18b4638f0a5043354ac246a1d5c57adf9e23f75001c"
+  },
+  "root_installed_release_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-physical-review-20261019-1/decision.json"
+}

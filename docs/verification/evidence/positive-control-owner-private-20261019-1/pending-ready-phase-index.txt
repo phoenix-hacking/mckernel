@@ -1,0 +1,36 @@
+1885:const FORK_PROVIDER_BUSY: u32 = 4;
+2009:            owner: owner.clone(), identity: None, epoch, phase: 0,
+2023:            || entry.phase != 0 || entry.identity.is_some()
+2033:                if self.active && entry.phase == 0 {
+2034:                    entry.phase = if quarantined { FORK_PROVIDER_QUARANTINED } else { FORK_PROVIDER_PENDING };
+2035:                } else if !self.active && quarantined && entry.phase == FORK_PROVIDER_PENDING {
+2038:                    entry.phase = FORK_PROVIDER_QUARANTINED;
+2052:                entry.epoch == self.epoch && Arc::ptr_eq(&entry.owner, &self.owner) && entry.phase == 0)
+2112:        if entry.epoch != reservation.epoch || entry.phase != 0
+2137:            if entry.epoch != reservation.epoch || entry.phase != 0
+2177:            if entry.epoch != reservation.epoch || entry.phase != 0
+2188:            if entry.epoch != reservation.epoch || entry.phase != 0
+2246:        if entry.epoch != reservation.epoch || entry.phase != 0 || entry.identity.is_none()
+2256:        entry.phase = FORK_PROVIDER_PENDING;
+2270:    previous_phase: u32,
+2298:        if entry.phase == 0 || entry.phase == FORK_PROVIDER_BUSY
+2326:            identity, previous_phase: entry.phase, guest_released: entry.guest_released,
+2328:        entry.phase = FORK_PROVIDER_BUSY;
+2338:            || !Arc::ptr_eq(&entry.owner, &self.owner) || entry.phase != FORK_PROVIDER_BUSY
+2350:            || !Arc::ptr_eq(&entry.owner, &self.owner) || entry.phase != FORK_PROVIDER_BUSY
+2352:        entry.phase = self.previous_phase;
+2361:            || !Arc::ptr_eq(&entry.owner, &self.owner) || entry.phase != FORK_PROVIDER_BUSY
+2365:        entry.phase = self.previous_phase;
+2375:                || !Arc::ptr_eq(&entry.owner, &self.owner) || entry.phase != FORK_PROVIDER_BUSY
+2379:            entry.phase = self.previous_phase;
+2394:            || !Arc::ptr_eq(&entry.owner, &self.owner) || entry.phase != FORK_PROVIDER_BUSY
+2414:            || !Arc::ptr_eq(&entry.owner, &self.owner) || entry.phase != FORK_PROVIDER_BUSY
+2423:            || !Arc::ptr_eq(&entry.owner, &self.owner) || entry.phase != FORK_PROVIDER_BUSY
+2449:            || !Arc::ptr_eq(&entry.owner, &self.owner) || entry.phase != FORK_PROVIDER_BUSY
+2466:                && Arc::ptr_eq(&entry.owner, &self.owner) && entry.phase == FORK_PROVIDER_BUSY
+2487:                || !Arc::ptr_eq(&entry.owner, &self.owner) || entry.phase != FORK_PROVIDER_BUSY
+2491:                entry.phase = FORK_PROVIDER_HOST_REVOKED;
+2521:                && Arc::ptr_eq(&entry.owner, &self.owner) && entry.phase == FORK_PROVIDER_BUSY
+2522:            { entry.phase = FORK_PROVIDER_QUARANTINED; }
+2546:        if entry.epoch != reservation.epoch || entry.phase != 0 || entry.identity != Some(identity)
+2568:    if entry.epoch != reservation.epoch || entry.phase != 0 || entry.identity != Some(identity)

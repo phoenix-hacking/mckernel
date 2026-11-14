@@ -1,0 +1,94 @@
+{
+  "C4_current_body_owner_ABI_contracts": {
+    "bytes": 20797,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/m14-i01-e1-ownership-assessment-p04source-max-1/C4-SOURCE-OWNER-CONTRACTS.json",
+    "sha256": "22f0146493e251163b070ffaea860768acd24f55c1371c07caec9f9a2db8d659"
+  },
+  "actual_cohort": {
+    "C": {
+      "bytes": 183672,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+      "sha256": "0ade1bb0cdb58dee3c081c7e420b064bacf9c8ecf19c9193283764430f98d260"
+    },
+    "Rust": {
+      "bytes": 21579336,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/rust/mckernel_rust.o",
+      "sha256": "a15699ebd17b7d7293b9b748bfc0301e3eedfd6e2482f1851218c0875903ca73"
+    },
+    "image": {
+      "bytes": 13349576,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/mckernel.img",
+      "sha256": "a2f00a6105f20642db8ef95fe12ade0873120594531f325ef363a4bb59f0ff8a"
+    },
+    "map": {
+      "bytes": 1274247,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/mckernel.img.map",
+      "sha256": "15b10db2310f91d83ac72f28fdeae0ea361d6bd152f64bca1a42976e2cfa3e98"
+    },
+    "source_commit": "c964be3917c8f4c5031108aa927c84894584b667"
+  },
+  "at": "2026-11-11T20:43:24.074638+00:00",
+  "canonical_or_account_or_scope_mutation": false,
+  "criterion": {
+    "bytes": 4584,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/m14-i01-e1-ownership-assessment-p04source-max-1/ORIGINAL-CRITERION.json",
+    "sha256": "e2a018a7d4fba4c9e599e0f0ea65978b4f9c699aed31175da17d5b10c1f5c0e6"
+  },
+  "decision": "GO_RECOMMENDED_WHOLE_LITERAL_M14_I01_E1_OWNERSHIP_MANIFEST_ONLY_PENDING_INDEPENDENT_REVIEW",
+  "effort": "max",
+  "findings": [],
+  "manifest": {
+    "bytes": 28372,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/m14-i01-e1-ownership-assessment-p04source-max-1/SELECTED-EMITTED-OWNERSHIP-MANIFEST.json",
+    "sha256": "0bfd151b0a7fc5e53a337762e675834cf20bec88edaa30989c28017822827a73"
+  },
+  "model": "gpt-6.1-sol",
+  "next_action": "Independent existing owner reviews this exact clause matrix/current source contracts; Root alone may then record only originalE1. No E2/E3/parent or C4 migration credit follows.",
+  "original_check_id": "M14-I01-E1",
+  "original_done_when": "Establish final selected/emitted compute ownership manifest across original sources, headers, macros, callbacks and unknown owners; exact matching proof has no unresolved required owner, ABI/provider obligation, unexplained failure or unreviewed project-C implementation. The ownership manifest covers original sources, emitted headers/macros/callbacks and every unknown owner, and distinguishes legitimate Linux/third-party/generated code from project runtime.",
+  "owner": "/root/p04_source_max",
+  "result": {
+    "generated_linker_owner_joins": 5,
+    "linked_inputs": 13,
+    "named_undefined": 0,
+    "new_C_retirements": 0,
+    "new_compiler_reader_test_or_native_commands": 0,
+    "physical_mismatches": 0,
+    "physical_owner_joins": 5052,
+    "reviewed_live_C_function_bytes": 2965,
+    "reviewed_live_C_functions": [
+      "do_execveat",
+      "syscall_execveat_bridge",
+      "util_thread",
+      "syscall_util_indicate_clone_disabled_bridge"
+    ],
+    "strong_import_occurrences": 255,
+    "unknown_owners": 0
+  },
+  "schema": "original-M14-I01-E1-whole-assessment-v1",
+  "separate_open": {
+    "C4": [
+      "do_execveat",
+      "syscall_execveat_bridge",
+      "util_thread",
+      "syscall_util_indicate_clone_disabled_bridge"
+    ],
+    "M14_I01_E2": "Each live project compute implementation Rust/permittedASM remains unsatisfied by current explicit C4.",
+    "M14_I01_E3": "C4 final replacement and actual selection/link retirement remains open; source review/elision is not retirement.",
+    "holds": "Generic/exec replay, XPMEM, old partial/held objects, source custody/native/current-free/account/Scratch/resource UNKNOWN controls remain binding; read-only classification grants no execution permission.",
+    "native_FUNCTIONAL_parent_file_milestone": "Not accepted or inferred."
+  },
+  "smallest_additional_E1_implementation_or_build_command": null,
+  "source_and_evidence_bindings": {
+    "bytes": 4615,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/m14-i01-e1-ownership-assessment-p04source-max-1/SOURCE-BINDINGS.json",
+    "sha256": "5869046d13ee8345abdb03cce22f0e59200270e5b8036988f77a7f43a9a73a6e"
+  },
+  "tests_builds_readelf_or_native_executed": false,
+  "whole_E1_done_when_recommended_satisfied": true,
+  "whole_clause_matrix": {
+    "bytes": 10459,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/m14-i01-e1-ownership-assessment-p04source-max-1/CLAUSE-MATRIX.json",
+    "sha256": "4f286f80ec205880a53d0c1c8db36c07b2fb8ae0559cef9ce20c2dc725a2b105"
+  }
+}

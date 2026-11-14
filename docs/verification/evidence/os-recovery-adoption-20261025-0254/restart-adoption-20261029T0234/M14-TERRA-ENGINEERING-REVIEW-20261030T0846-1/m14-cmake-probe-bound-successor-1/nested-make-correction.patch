@@ -1,0 +1,38 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -194,9 +194,21 @@
+         message(FATAL_ERROR "M14 configure requires the Unix Makefiles generator")
+     endif()
+     if (NOT IS_ABSOLUTE "${CMAKE_MAKE_PROGRAM}" OR NOT EXISTS "${CMAKE_MAKE_PROGRAM}" OR
+-        NOT DEFINED MCKERNEL_M14_EXPECTED_MAKE_SHA256)
++        NOT "${CMAKE_MAKE_PROGRAM}" MATCHES "^/[A-Za-z0-9_./+-]+$" OR
++        NOT "${KERNEL_DIR}" MATCHES "^/[A-Za-z0-9_./+-]+$" OR
++        NOT "${CMAKE_CURRENT_BINARY_DIR}" MATCHES "^/[A-Za-z0-9_./+-]+$" OR
++        NOT DEFINED MCKERNEL_M14_EXPECTED_MAKE_SHA256 OR
++        NOT DEFINED MCKERNEL_M14_EXPECTED_KBUILD_MAKE_FLAGS)
+         message(FATAL_ERROR "M14 configure requires a bound absolute make executable")
+     endif()
++    if (NOT "${KBUILD_MAKE_FLAGS}" STREQUAL "${MCKERNEL_M14_EXPECTED_KBUILD_MAKE_FLAGS}" OR
++        NOT "${KBUILD_MAKE_FLAGS}" MATCHES "^[-A-Za-z0-9_=;./+:]*$")
++        message(FATAL_ERROR "M14 configure Kbuild make flags are not bound")
++    endif()
++    string(REPLACE ";" " " MCKERNEL_M14_EXPECTED_KBUILD_MAKE_FLAGS_STR "${MCKERNEL_M14_EXPECTED_KBUILD_MAKE_FLAGS}")
++    if (NOT "${KBUILD_MAKE_FLAGS_STR}" STREQUAL "${MCKERNEL_M14_EXPECTED_KBUILD_MAKE_FLAGS_STR}")
++        message(FATAL_ERROR "M14 configure Kbuild make flag expansion changed")
++    endif()
+     string(LENGTH "${MCKERNEL_M14_EXPECTED_MAKE_SHA256}" MCKERNEL_M14_MAKE_HASH_LENGTH)
+     if (NOT MCKERNEL_M14_MAKE_HASH_LENGTH EQUAL 64 OR
+         NOT MCKERNEL_M14_EXPECTED_MAKE_SHA256 MATCHES "^[0-9a-f]+$")
+@@ -234,7 +246,12 @@
+ file(APPEND ${tmpdir}/driver.c "unsigned long MAP_KERNEL_START = MODULES_END - (1UL << 23);\n")
+ file(WRITE ${tmpdir}/Makefile "obj-m := driver.o\n")
+ file(APPEND ${tmpdir}/Makefile "all:\n")
++if (MCKERNEL_M14_NONHELD13_DATA32_EXPERIMENTAL)
++    # Use the same hash-bound GNU Make for the nested kernel build.
++    file(APPEND ${tmpdir}/Makefile "\t${CMAKE_MAKE_PROGRAM} ${KBUILD_MAKE_FLAGS_STR} -C ${KERNEL_DIR} M=${tmpdir} modules\n")
++else()
+ file(APPEND ${tmpdir}/Makefile "\tmake ${KBUILD_MAKE_FLAGS_STR} -C ${KERNEL_DIR} M=${tmpdir} modules\n")
++endif()
+ 
+ if (MCKERNEL_M14_NONHELD13_DATA32_EXPERIMENTAL)
+     if (NOT DEFINED MCKERNEL_M14_EXPECTED_UNAME_R OR MCKERNEL_M14_EXPECTED_UNAME_R STREQUAL "" OR

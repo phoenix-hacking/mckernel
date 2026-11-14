@@ -1,0 +1,16 @@
+static void
+ptrace_report_clone_log_bridge(int event, int value, int result)
+{
+	if (event == PTRACE_REPORT_CLONE_LOG_ENTER) {
+		dkprintf("ptrace_report_clone,enter\n");
+	}
+	else if (event == PTRACE_REPORT_CLONE_LOG_KILL_SIGCHLD) {
+		(void)value;
+		dkprintf("ptrace_report_clone,kill SIGCHLD\n");
+	}
+	else if (event == PTRACE_REPORT_CLONE_LOG_DO_KILL_FAILED) {
+		(void)value;
+		(void)result;
+		dkprintf("ptrace_report_clone,do_kill failed\n");
+	}
+}

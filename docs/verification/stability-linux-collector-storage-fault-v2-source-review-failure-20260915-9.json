@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_review",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "review_attempt": 13,
+  "status": "FAIL_SOURCE",
+  "recorded_utc": "2026-09-16T00:55:47Z",
+  "review_input": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260915-14.tar.gz",
+    "sha256": "4394820878dc3bc9792ed3ee2c3e684861e1051254845775cd0c6c6ff06eac1d",
+    "size": 93496,
+    "members": 33
+  },
+  "source_sha256": {
+    "prepare.py": "1d09a2f4f143af79de7eb98e7cc6d5c6a01efa89e15fa925d2c7869c78ab2df4",
+    "witness_owner.py": "4554efcda371a395681ff7f7353e05d98adf6ab4aae656b40d524f128fdf4670",
+    "supervise.py": "3267dc9e2cfedeb560eec3c756f1ae38f4e8cdd2ebccd32de54c4fddd76a8a26",
+    "oracle.py": "7413f46c9859309d6d200a284eef40df8c47968e66cef2c67b162b43b899913b",
+    "test_collector_storage_fault_packet.py": "787354f809c49766141abb307f7960c278655993efa094baa05572c204ecac60"
+  },
+  "checks_before_review": {
+    "python3.9.12": "75/75 PASS",
+    "python3.8.10": "75/75 PASS",
+    "pycompile": "PASS on both interpreters"
+  },
+  "findings": [
+    "TERM/KILL stage timeouts suppress the mandatory final direct timeout because the producer tests only timeout kind and PID.",
+    "COMPLETE does not require the real owner direct wait timestamp to be no later than the original 220-second owner deadline.",
+    "Wrong-parent later identity pairs can establish direct wait birth and direct timeout birth is not joined to established authority.",
+    "Direct signal errors can follow the direct wait and adopted signal errors do not require immediate identity-pair authority or later retirement.",
+    "Owner cleanup adopted raw waits are not passed through the terminal wait-status decoder."
+  ],
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

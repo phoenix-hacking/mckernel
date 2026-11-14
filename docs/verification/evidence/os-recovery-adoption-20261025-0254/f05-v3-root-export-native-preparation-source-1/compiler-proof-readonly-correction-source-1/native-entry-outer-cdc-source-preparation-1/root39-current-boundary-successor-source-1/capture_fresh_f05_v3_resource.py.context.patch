@@ -1,0 +1,123 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/compiler-proof-readonly-correction-source-1/native-entry-outer-cdc-source-preparation-1/capture_fresh_f05_v3_resource.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-outer-cdc-root39-1/capture_fresh_f05_v3_resource.py
+@@ -1,6 +1,6 @@
+ """Functional McKernel OS/apps and Rust migration only; no security testing.
+ Private source successor of strict native resource capture. No execution grant.
+-Retains reviewed historical physical observer and adds exact Root38/pre-guest failed31770 retirement (source preparation boundary only; later operation requires actual latest context successor) plus retained CURRENT112/native/111 ownership.
++Retains reviewed historical physical observer and adds exact Root39/corrected113 current-free boundary plus separate historical failed31770/failed113 retirement plus retained CURRENT112/native/111 ownership.
+ """
+ from pathlib import Path
+ import argparse
+@@ -16,15 +16,17 @@
+ GUARD_SHA = '1f152e3f18384643cd35d203fcc2a4292950a1c90758734859bdb980cf45fda0'
+ OBSERVER = E/'daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/resource-observer-window-correction-source-1/check_postnative_current_new12h.py'
+ OBSERVER_SHA = '2b7362126fbe70475a208e40df9eb56fa12df0993d83d0aa9b9a22a36638481c'
+-LEDGER = E/'ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER38.json'
+-LEDGER_SHA = '9b3d64ab84d59b6abbc7b1df05cf4034a9d53a2dd1cfb4d76013f554f0b7e282'
+-FREE = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-root37-1/independent-actual-native-review-1/REVIEW.json')
++LEDGER = E/'ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER39.json'
++LEDGER_SHA = 'eacc369bb4d3691000ea8adb1e736e6f9c734d251ca06151fb41ffc2ec9ef56e'
++FREE = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT113-ABI-PRIVATE-CORRECTION-BUILD-ADMISSION-1/independent-postbuild-current-free-review-1/CURRENT-FREE.json')
++INHERITED_PRE_GUEST = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-root37-1/independent-actual-native-review-1/REVIEW.json')
++INHERITED_ROOT38 = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER38.json')
+ INHERITED113 = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT113-CORRECTED-SCALAR4-NEXT4-BUILD-ADMISSION-1/independent-failed-build-review-1/CURRENT-FREE.json')
+ INHERITED_ROOT37 = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER37.json')
+ INHERITED_STARTUP = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-startup-native-entry-source-1/root-adopted-entry-1/independent-actual-native-review-1/REVIEW.json')
+ INHERITED_ROOT36 = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER36.json')
+ INHERITED112 = E/'ROOT-CURRENT112-EVENT2-ALLOC2-BUILD-ADMISSION-1/independent-postbuild-review-1/CURRENT-FREE.json'
+-FREE_SHA = '9d3aa7ff83c3bec493a575a8035ce59963e92fb2a82d549febd89ab34c8ce066'
++FREE_SHA = '13ed764e3ba6fd28861336eacbce7effffc29e879210122ea0e92a2bbb0f952d'
+ INHERITED111 = E/'ROOT-CURRENT111-COUNTER3-RUNQUEUE208-BUILD-ADMISSION-2/INDEPENDENT-POSTBUILD-CURRENT-FREE.json'
+ INHERITED_NATIVE = E/'f05-v2-root-export-and-native-preparation-source-1/root-adopted-native-entry-4/independent-postjoin-review-1/REVIEW.json'
+ 
+@@ -56,16 +58,39 @@
+         free = json.loads(FREE.read_bytes())
+         assert ledger['author'] == '/root' and ledger['complete_within_declared_current_boundary'] is True
+         assert ledger['root_attests_no_unlisted_post_boundary_execution_or_custody_operation'] is True
+-        assert len(ledger['consumed_nonces']) == len(set(ledger['consumed_nonces'])) == 38
++        assert len(ledger['consumed_nonces']) == len(set(ledger['consumed_nonces'])) == 39
+         assert ledger['latest_accepted_free_boundary'] == ref(FREE)
+-        assert free['decision']=='PASS_POSITIVE_F05_V3_PRE_GUEST_FAILED_BATCH_RETIREMENT_AND_CURRENT_FREE'
++        assert free['decision']=='PASS_POSITIVE_CURRENT113_CORRECTED_FOUR_COMMAND_TERMINATION_AND_CURRENT_FREE_PERMANENT_MUTEX'
+         assert free['independent'] is True and free['implementation_ownership'] is False
+-        assert free['nonce']=='31770ebb739fea402ded939617921dda' and free['nonce']==ledger['consumed_nonces'][-1] and free['nonce_consumed'] is True
++        assert free['nonce']==ledger['consumed_nonces'][-1] and free['nonce_consumed'] is True
+         assert free['normal_owned_retirement'] is True and free['current_free'] is True
+-        assert free['owned_client_retirement']['all_exact_reaped'] is True
+-        assert free['actual_statuses']['owner_positive_wait'] is True and free['actual_statuses']['helper_positive_wait'] is True
+-        assert free['actual_statuses']['owner_result']['absence_verified'] is True and free['actual_statuses']['owner_result']['lease_retained'] is False
+-        assert not free['fresh_current']['census_errors'] and len(free['fresh_current']['closed_permanent_mutex_probes'])==2
++        assert free['holder']['pid']==1740038 and free['holder']['starttime']==93979211 and free['holder']['device']==27 and free['holder']['inode']==4
++        assert free['runner']==dict(pid=1740211,starttime=93985841,returncode=0,joined=True)
++        assert free['retained_stopped_container']=='bd5d81e6d79b527932bbe45ce139e7b358b546c701d63e8677c7035441e61f97'
++        corrected_current=checked(free['current_observation'])
++        assert corrected_current['pids_current']==0 and corrected_current['permanent_mutex_currently_free'] is True
++        assert corrected_current['new_actors_absent']==[dict(pid=1740038,starttime=93979211,role='holder'),dict(pid=1740211,starttime=93985841,role='runner')]
++        assert checked(free['runner_join'])==free['runner']
++        corrected_local=checked(free['local_terminal'])
++        assert corrected_local['joined'] is True and corrected_local['returncode']==0 and corrected_local['holder']==free['holder']
++        corrected_tool=checked(free['holder_tool_result'])
++        assert corrected_tool['tool_terminal_observed'] is True and corrected_tool['terminal_exit_code']==0 and corrected_tool['holder']==free['holder'] and corrected_tool['runner']==free['runner']
++        corrected_terminal=checked(free['container_terminal'])
++        assert corrected_terminal['container']==free['retained_stopped_container'] and corrected_terminal['returncode']==0
++        assert corrected_terminal['state']['Running'] is False and corrected_terminal['state']['Pid']==0 and corrected_terminal['state']['ExitCode']==0 and corrected_terminal['state']['OOMKilled'] is False
++        assert ref(INHERITED_ROOT38)['sha256']=='9b3d64ab84d59b6abbc7b1df05cf4034a9d53a2dd1cfb4d76013f554f0b7e282'
++        prior38=json.loads(INHERITED_ROOT38.read_bytes())
++        assert prior38['latest_accepted_free_boundary']==ref(INHERITED_PRE_GUEST)
++        assert ref(INHERITED_PRE_GUEST)['sha256']=='9d3aa7ff83c3bec493a575a8035ce59963e92fb2a82d549febd89ab34c8ce066'
++        inherited_pre_guest=json.loads(INHERITED_PRE_GUEST.read_bytes())
++        assert inherited_pre_guest['decision']=='PASS_POSITIVE_F05_V3_PRE_GUEST_FAILED_BATCH_RETIREMENT_AND_CURRENT_FREE'
++        assert inherited_pre_guest['independent'] is True and inherited_pre_guest['implementation_ownership'] is False
++        assert inherited_pre_guest['nonce']=='31770ebb739fea402ded939617921dda' and inherited_pre_guest['nonce'] in ledger['consumed_nonces'] and inherited_pre_guest['nonce_consumed'] is True
++        assert inherited_pre_guest['normal_owned_retirement'] is True and inherited_pre_guest['current_free'] is True
++        assert inherited_pre_guest['owned_client_retirement']['all_exact_reaped'] is True
++        assert inherited_pre_guest['actual_statuses']['owner_positive_wait'] is True and inherited_pre_guest['actual_statuses']['helper_positive_wait'] is True
++        assert inherited_pre_guest['actual_statuses']['owner_result']['absence_verified'] is True and inherited_pre_guest['actual_statuses']['owner_result']['lease_retained'] is False
++        assert not inherited_pre_guest['fresh_current']['census_errors'] and len(inherited_pre_guest['fresh_current']['closed_permanent_mutex_probes'])==2
+         assert ref(INHERITED_ROOT37)['sha256']=='b6ed7c321b348e90e13a51607d88af09893ab760e3decdd4d16d000a130155e8'
+         prior37=json.loads(INHERITED_ROOT37.read_bytes())
+         assert prior37['latest_accepted_free_boundary']==ref(INHERITED113)
+@@ -132,7 +157,7 @@
+         assert inherited_native['owned_client_retirement']['all_exact_reaped'] is True
+         assert inherited_native['actual_statuses']['owner_protocol_result']['absence_verified'] is True and inherited_native['actual_statuses']['owner_protocol_result']['lease_retained'] is False
+         static = json.loads((A/'STATIC-NATIVE-BINDINGS.NOT-RELEASED.json').read_bytes())
+-        assert static['root_ledger38'] == ref(LEDGER) and static['latest_serial_operation_physical_acceptance'] == ref(FREE)
++        assert static['root_ledger39'] == ref(LEDGER) and static['latest_serial_operation_physical_acceptance'] == ref(FREE)
+         assert static['expected_case'] == 'M14-05-05-owned-processvm-v3-causal-204B'
+         assert static['nonce'] not in ledger['consumed_nonces'] + ledger['reserved_abandoned_unconsumed_nonces']
+         for source in static['capture_sources'].values():
+@@ -155,12 +180,12 @@
+         assert len(current['closed_exclusive_probes']) == 2
+         census = current['group_membership_observation']
+         assert not census['errors']
+-        actors = [inherited113['holder'],inherited113['runner'],inherited112['holder'],inherited112['runner'],inherited111['holder'],inherited111['runner']] + [dict(pid=pid) for pid in inherited_startup['fresh_current']['all_28_owned_pids_and_groups_absent']] + [dict(pid=pid) for pid in free['fresh_current']['all_28_owned_pids_and_groups_absent']] + [dict(pid=pid) for pid in inherited_native['fresh_current']['all_owned_pids_and_groups_absent']]
++        actors = [free['holder'],free['runner'],inherited113['holder'],inherited113['runner'],inherited112['holder'],inherited112['runner'],inherited111['holder'],inherited111['runner']] + [dict(pid=pid) for pid in inherited_startup['fresh_current']['all_28_owned_pids_and_groups_absent']] + [dict(pid=pid) for pid in inherited_pre_guest['fresh_current']['all_28_owned_pids_and_groups_absent']] + [dict(pid=pid) for pid in inherited_native['fresh_current']['all_owned_pids_and_groups_absent']]
+         for actor in actors:
+             assert not Path('/proc',str(actor['pid'])).exists()
+             assert not any(row['pid'] == actor['pid'] or row['pgrp'] == actor['pid'] for row in census['rows'])
+         prefix = ['/usr/bin/sudo','-A','/usr/bin/docker','--host=unix:///var/run/docker.sock']
+-        queries = [prefix+['ps','-q','--no-trunc'],prefix+['inspect',inherited112['retained_stopped_container']],prefix+['inspect',inherited111['retained_stopped_container']],prefix+['ps','-aq','--no-trunc','--filter','id='+inherited_native['container']],prefix+['ps','-aq','--no-trunc','--filter','id='+inherited_startup['container']],prefix+['inspect',inherited113['retained_stopped_container']],prefix+['ps','-aq','--no-trunc','--filter','id='+free['container']]]
++        queries = [prefix+['ps','-q','--no-trunc'],prefix+['inspect',inherited112['retained_stopped_container']],prefix+['inspect',inherited111['retained_stopped_container']],prefix+['ps','-aq','--no-trunc','--filter','id='+inherited_native['container']],prefix+['ps','-aq','--no-trunc','--filter','id='+inherited_startup['container']],prefix+['inspect',inherited113['retained_stopped_container']],prefix+['ps','-aq','--no-trunc','--filter','id='+inherited_pre_guest['container']],prefix+['inspect',free['retained_stopped_container']]]
+         docker = []
+         for argv in queries:
+             result = subprocess.run(argv,capture_output=True,text=True,timeout=15)
+@@ -168,7 +193,7 @@
+             if 'inspect' in argv:
+                 data = json.loads(result.stdout)
+                 assert len(data) == 1 and data[0]['Id'] == argv[-1]
+-                assert data[0]['State']['Running'] is False and data[0]['State']['Pid'] == 0 and data[0]['State']['ExitCode'] == (1 if argv[-1]==inherited113['retained_stopped_container'] else 0)
++                assert data[0]['State']['Running'] is False and data[0]['State']['Pid'] == 0 and data[0]['State']['ExitCode'] == (1 if argv[-1]==inherited113['retained_stopped_container'] else 0) and data[0]['State']['OOMKilled'] is False
+             else:
+                 assert not result.stdout.strip()
+             docker.append(dict(argv=argv,returncode=result.returncode,stdout=result.stdout,stderr=result.stderr,positive_wait=True))
+@@ -186,8 +211,8 @@
+             directories.append(dict(path=str(path),device=info.st_dev,inode=info.st_ino,mode=info.st_mode,uid=info.st_uid,gid=info.st_gid))
+         assert all(a < b for a,b in zip(guard.guard(),cutoffs))
+         value = dict(scope=__doc__.splitlines()[0],observed_clocks=clocks,fixed_cutoffs=list(cutoffs),freshness_seconds_max=120,
+-            boot_id=guard.BOOT,root_ledger38=ref(LEDGER),actual_latest_operation_postjoin_acceptance=ref(FREE),
+-            current_physical_observation=current,known_actual_actor_controls_absent=actors,retained_current112_terminal=terminal,inherited_current112=ref(INHERITED112),latest_native_retirement=ref(INHERITED_STARTUP),inherited_Root36=ref(INHERITED_ROOT36),retained_current113_terminal=retained113,inherited_Root37=ref(INHERITED_ROOT37),inherited_current113=ref(INHERITED113),latest_pre_guest_retirement=ref(FREE),
++            boot_id=guard.BOOT,root_ledger39=ref(LEDGER),actual_latest_operation_postjoin_acceptance=ref(FREE),
++            current_physical_observation=current,known_actual_actor_controls_absent=actors,retained_current112_terminal=terminal,inherited_current112=ref(INHERITED112),latest_native_retirement=ref(INHERITED_STARTUP),inherited_Root36=ref(INHERITED_ROOT36),retained_current113_terminal=retained113,inherited_Root37=ref(INHERITED_ROOT37),inherited_current113=ref(INHERITED113),latest_pre_guest_retirement=ref(INHERITED_PRE_GUEST),inherited_Root38=ref(INHERITED_ROOT38),retained_corrected113_terminal=corrected_terminal,
+             inherited_current111=ref(INHERITED111),inherited_native_retirement=ref(INHERITED_NATIVE),retained_current111_terminal=inherited_terminal,
+             no_existing_heavy=True,running_container_observation=docker[0],retained_stopped_observation=docker[1],
+             active_shared_records_absent=True,capacity=current['capacity'],memory=memory,cgroup=cgroup,pids_current=pids,

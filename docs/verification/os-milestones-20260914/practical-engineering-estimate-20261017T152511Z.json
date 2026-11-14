@@ -1,0 +1,168 @@
+{
+  "schema_version": 1,
+  "scope_id": "practical-kernel-apps-v1-20261017",
+  "baseline_id": "practical-engineering-estimate-20261017T152511Z",
+  "created_at_utc": "2026-10-17T15:29:55Z",
+  "comparison_anchor_utc": "2026-10-17T15:25:11Z",
+  "estimate_kind": "subjective engineering-completion ranges for the new practical goal",
+  "confidence": "low",
+  "measured_completion": false,
+  "percentage_definition": "Rough judgment about implementation, targeted tests and integration against PRACTICAL-GOAL.md, not checklist fraction, reliability, elapsed/remaining time or a weighted whole-OS score.",
+  "prior_baseline_comparability": "Original engineering-estimate-20261017T025932Z.json describes comprehensive qualification; its percentages cannot be directly subtracted from this new practical-scope baseline. No prior practical percentage baseline existed at adoption14:47; no retrospective percentage uplift is invented.",
+  "milestones": [
+    {
+      "id": "M00",
+      "title": "Preservation and practical workflow",
+      "estimated_complete_percent_range": [
+        85,
+        95
+      ],
+      "basis": "Recoverable sources/artifacts, operational instructions and checkpoints exist; final-profile handoff remains."
+    },
+    {
+      "id": "M01",
+      "title": "Requests, responses and recovery",
+      "estimated_complete_percent_range": [
+        50,
+        70
+      ],
+      "basis": "Actual request/retirement paths work and source-bound cancellation/epoch primitives exist; used error/recovery integration remains."
+    },
+    {
+      "id": "M02",
+      "title": "Execution and comparison runner",
+      "estimated_complete_percent_range": [
+        70,
+        85
+      ],
+      "basis": "Nine actual diagnostic/app behaviors accepted with raw results and retirement, including nonzero expected exit37; selected timeout/rejection/final-profile closure remains."
+    },
+    {
+      "id": "M03",
+      "title": "Memory and mapping correctness",
+      "estimated_complete_percent_range": [
+        45,
+        65
+      ],
+      "basis": "Actual malloc/mmap/data/mprotect roundtrip/munmap/free passed; forbidden-write enforcement, failure ownership and broader concurrent mapping evidence remain."
+    },
+    {
+      "id": "M04",
+      "title": "Useful C and Rust applications",
+      "estimated_complete_percent_range": [
+        45,
+        65
+      ],
+      "basis": "Useful dynamic-libc memory app accepted; file/signal/thread diagnostic evidence exists. Real Ruststd app compiles/references/stages but McKernel guest pending."
+    },
+    {
+      "id": "M05",
+      "title": "Native lifecycle and restoration",
+      "estimated_complete_percent_range": [
+        15,
+        30
+      ],
+      "basis": "Known native shutdown EBUSY remains. Running/log modules compiled but new runtime pending; cancellation/worker/epoch APIs remain unwired and restoration unproved."
+    },
+    {
+      "id": "M06",
+      "title": "Processes, threads and used syscalls",
+      "estimated_complete_percent_range": [
+        30,
+        50
+      ],
+      "basis": "TLS/mutex vectors and lifetime primitives exist; process creation/exec/wait, true contention and required final integration remain."
+    },
+    {
+      "id": "M07",
+      "title": "Used FPU/vector state",
+      "estimated_complete_percent_range": [
+        10,
+        30
+      ],
+      "basis": "Existing implementation is not zero; selected-profile preservation coverage is poorly measured and needs actual assessment."
+    },
+    {
+      "id": "M08",
+      "title": "Native modules and interfaces",
+      "estimated_complete_percent_range": [
+        75,
+        90
+      ],
+      "basis": "All three new Rust modules compiled/linked and matched artifacts independently accepted; updated-module load/runtime/lifecycle interfaces still need observation."
+    },
+    {
+      "id": "M09",
+      "title": "Rust and assembly integration",
+      "estimated_complete_percent_range": [
+        80,
+        95
+      ],
+      "basis": "Existing Rust consumers and compiled native/guest baseline preserved; changed final boundaries need matched artifact validation. Whole-image zero-C certification is outside practical scope."
+    },
+    {
+      "id": "M10",
+      "title": "Repeatable runnable build",
+      "estimated_complete_percent_range": [
+        50,
+        70
+      ],
+      "basis": "Pinned tools/dependencies and first module-only build path demonstrated, with honest artifact-only correction. One final clean recipe replay remains."
+    },
+    {
+      "id": "M11",
+      "title": "Integrated functional regression",
+      "estimated_complete_percent_range": [
+        50,
+        70
+      ],
+      "basis": "Nine behavior passes and relevant source/protocol negatives exist; final integrated regression and actual lifecycle defects remain."
+    },
+    {
+      "id": "M12",
+      "title": "Bounded repeatability and stress",
+      "estimated_complete_percent_range": [
+        10,
+        25
+      ],
+      "basis": "Repeated fresh diagnostic boots/launches provide partial evidence; final-profile ten native cycles,100launches and60-minute mixed run remain."
+    },
+    {
+      "id": "M13",
+      "title": "Practical delivery",
+      "estimated_complete_percent_range": [
+        25,
+        45
+      ],
+      "basis": "Runnable baseline instructions, provenance, artifacts and recoverable checkpoints exist; final functional set, capability summary and final review remain."
+    }
+  ],
+  "factual_changes_since_practical_adoption": {
+    "accepted_diagnostic_app_behaviors": {
+      "at_adoption": 6,
+      "current": 9
+    },
+    "new_useful_dynamic_libc_memory_guest": true,
+    "new_matched_rust_modules_compiled_linked": 3,
+    "artifact_only_revalidation_accepted": true,
+    "new_modules_native_runtime_accepted": false,
+    "rust_std_source_linux_reference_staging_pass": true,
+    "rust_std_mckernel_guest_accepted": false,
+    "shutdown_epoch_prerequisite_source_review_pass": true,
+    "shutdown_epoch_integrated": false,
+    "native_restoration_accepted": false
+  },
+  "evidence": [
+    "docs/verification/evidence/native-core-memory-current942-result-review-20261017-1.json",
+    "docs/verification/evidence/native-running-external-modules-artifact-review-20261017-1.json",
+    "docs/verification/evidence/practical-rust-std-app-preparation-20261017-2.json",
+    "docs/verification/evidence/native-shutdown-epoch-source-20261017-2.json"
+  ],
+  "comparison_policy": [
+    "Preserve this baseline; future same-scope comparisons may report estimated range-midpoint percentage-point deltas with actual code/test/integration evidence.",
+    "Do not infer numerical gains from activity/tokens/time/commits or merely removing qualification requirements.",
+    "Do not sum or average overlapping milestone percentages into an OS score.",
+    "Keep unchanged/negative estimates when warranted; uncertainty or unassessed coverage is not zero engineering progress.",
+    "Do not change practical check status or original formal acceptance from these estimates."
+  ]
+}

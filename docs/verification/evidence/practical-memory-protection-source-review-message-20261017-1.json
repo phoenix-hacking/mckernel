@@ -1,0 +1,33 @@
+{
+  "artifact": {
+    "mode": 33216,
+    "path": "/home/holden/mckernel-work/scratch/practical-memory-protection-20261017-1/app",
+    "sha256": "a4bbba00f9c3ed174ebe31498be4ab92e0326c439611bb4fababf635de7f3223",
+    "size": 876848
+  },
+  "authority": "Coordinator relayed independent reviewer /root/image_retirement_review PASS for source9cb0/report2812 and explicitly directed staging.",
+  "caveats": [
+    "Linux reference does not prove McKernel fault delivery.",
+    "Exact si_code/address assertions must remain frozen.",
+    "Preserve outer10second owned-process-group watchdog."
+  ],
+  "decision": "PASS_SOURCE_ORACLE_STATIC_REFERENCE",
+  "findings": "Coordinator confirms independent PASS for exact source9cb0/report2812. Actual RO write, exact SIGSEGV/SEGV_ACCERR/address recovery, restored-write/full-mask cleanup; no fork.",
+  "guest_authority": false,
+  "reviewer": "/root/image_retirement_review",
+  "schema": "mckernel.independent-review-message-capture.v1",
+  "source": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel/scripts/application-tests/practical_memory_protection.c",
+    "sha256": "9cb00ff2244a17f8b8c28aed4ad1e3573a878eeedec2c5c72bf0244624b5b448",
+    "size": 4752
+  },
+  "source_evidence": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel/docs/verification/evidence/practical-memory-protection-source-linux-20261017-1.json",
+    "sha256": "2812e66701d2daf0935939a732ccd2d172f3a48466def88bfe0ce2ba6404416f",
+    "size": 32248
+  },
+  "stdout_bytes": 61,
+  "stdout_sha256": "2fe98a36071f63e1eb3dfd0e528eb352d691f826797ae377e988eea08e511c49"
+}

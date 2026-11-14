@@ -1,0 +1,38 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRELIMINARY_SOURCE_REVIEW_AWAITING_FINAL_AUTHOR_POSTIMAGE",
+  "selected_profile": {
+    "mixed_work_seconds": 3600,
+    "producer_wall_seconds": 7200,
+    "inner_seconds": 7800,
+    "outer_seconds": 8100,
+    "poll_interval_seconds": 0.05
+  },
+  "capacity_model_not_runtime_evidence": {
+    "conservative_status_transactions": 156001,
+    "raw_bytes_per_transaction_assumption": 144,
+    "serialized_bytes_per_transaction_assumption": 512,
+    "base_raw_bytes": 22464144,
+    "base_encoded_bytes": 79872512,
+    "control_and_event_allowance_bytes": 1048576,
+    "ordinary_raw_limit_proposed": 33554432,
+    "ordinary_encoded_limit_proposed": 134217728,
+    "raw_reserve": 2097152,
+    "encoded_reserve": 8388608,
+    "serialized_writer_and_reader_limit": 142606336,
+    "aggregate_pending_maximum_before_other_metadata": 557842432,
+    "aggregate_with_32MiB_metadata": 591396864,
+    "proposed_shared_capture": 671088640,
+    "proposed_logical_growth": 4429185024
+  },
+  "assumption_limit": "Model covers the selected status-only control cadence with ordinary QEMU replies and bounded event allowance. It is not an upper bound for arbitrary1MiB replies/byte-fragmented streams; finite raw/encoded/row limits must still fail closed without trimming evidence or altering polling.",
+  "review_conditions": [
+    "LONG raw/encoded/session writer/owner cap/profile/shared capture/growth closure",
+    "Retain first ordinary over-budget record before raising; preserve original lifecycle error",
+    "Terminalquit uses bounded reserve and restores prior recovery state even on exceptions",
+    "Exact serialized list accounting including delimiters; finite row/object memory reasoning",
+    "LONG-only bounded postretirement serialization/write deadline; unchanged shortprofile",
+    "Fresh actual source-cohort/admission successor required; no newkernel/module/collector/oracle changes",
+    "Root-granted small regression tests before source integration/release; none executed by reviewer"
+  ]
+}

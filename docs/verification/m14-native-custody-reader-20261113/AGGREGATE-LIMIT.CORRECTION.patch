@@ -1,0 +1,57 @@
+--- failed-candidate-1/collect_current64017.READONLY.py
++++ collect_current64017.READONLY.py
+@@ -190,20 +190,28 @@
+     return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest(),
+                 raw_base64=base64.b64encode(raw).decode('ascii'),complete=complete)
+ 
+-def account_metadata(raw):
++def metadata_pread(fd,limit,offset=0):
++    remaining=reader.max_total-reader.total
++    if remaining<=0:raise Bound('aggregate metadata budget exhausted before pread')
++    ask=min(limit+1,remaining)
++    raw=os.pread(fd,ask,offset)
+     reader.total+=len(raw)
+-    check(reader.total<=reader.max_total,'aggregate bounded raw metadata')
+     return raw
+ 
+ def read_current(path,limit,dir_fd=None):
++    if reader.max_total-reader.total<=0:raise Bound('aggregate metadata budget exhausted before read')
+     handle=reader.open(path,dir_fd=dir_fd)
+     try:
+-        raw=bytearray()
++        raw=bytearray();eof=False
+         while len(raw)<=limit:
+-            block=os.read(handle['fd'],min(65536,limit+1-len(raw)))
+-            if not block:break
++            remaining=reader.max_total-reader.total
++            if remaining<=0:break
++            ask=min(65536,limit+1-len(raw),remaining)
++            block=os.read(handle['fd'],ask)
++            reader.total+=len(block)
++            if not block:eof=True;break
+             raw.extend(block)
+-        return account_metadata(bytes(raw)),len(raw)<=limit
++        return bytes(raw),eof and len(raw)<=limit
+     finally:reader.close(handle)
+ 
+ def exact_handle(path):
+@@ -304,7 +312,7 @@
+         handle=reader.open(name,dir_fd=root);st=os.fstat(handle['fd'])
+         value['identity_before']=identity(st)
+         check(stat.S_ISREG(st.st_mode) and st.st_uid==0 and st.st_nlink==1,'bound Root journal regular identity')
+-        limit=q['bounds']['journal_bytes_max'];raw=account_metadata(os.pread(handle['fd'],limit+1,0))
++        limit=q['bounds']['journal_bytes_max'];raw=metadata_pread(handle['fd'],limit)
+         complete=len(raw)<=limit and len(raw)==st.st_size
+         value['bytes_record']=blob(raw,complete)
+         lines=raw.splitlines(keepends=True)
+@@ -400,8 +408,8 @@
+             value['identity_after']=identity(os.fstat(handle['fd']))
+             value['held_identity_bookend_equal']=value.get('identity_before')==value['identity_after']
+             if label in q['journal_names']:
+-                limit=q['bounds']['journal_bytes_max'];again=account_metadata(os.pread(handle['fd'],limit+1,0))
+-                value['current_bytes_after']=blob(again,len(again)<=limit)
++                limit=q['bounds']['journal_bytes_max'];again=metadata_pread(handle['fd'],limit)
++                value['current_bytes_after']=blob(again,len(again)<=limit and len(again)==os.fstat(handle['fd']).st_size)
+                 value['journal_raw_bookend_equal']=value.get('bytes_record',{}).get('sha256')==hashlib.sha256(again).hexdigest()
+             else:value['flags_after']=flags(handle['fd'])
+         except BaseException as error:value['bookend_error']=error_row(label+'-bookend',error)

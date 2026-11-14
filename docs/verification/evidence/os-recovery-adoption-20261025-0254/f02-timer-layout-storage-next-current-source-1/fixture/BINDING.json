@@ -1,0 +1,106 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "FOCUSED_FIXTURE_SOURCE_ONLY_NOT_COMPILED",
+  "old_timer_fixture_sources": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/compute-process-next-body-cutover-20261023-1/fixture/main.c",
+      "bytes": 6531,
+      "sha256": "0e5c2b7307a78858d60d8ab9f4d10950ba44f0829895e72f26af9847c324b538"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/compute-process-next-body-cutover-20261023-1/fixture/actual.rs",
+      "bytes": 5748,
+      "sha256": "90a089ad392ecc4a18f21cb933f7dfdf4e75cc5029d4d7495508086ec0d6316f"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/compute-process-next-body-cutover-20261023-1/fixture/original.c",
+      "bytes": 358,
+      "sha256": "c5daa569c057bec90c8e02026bdf6bb5ebb969ed0350f4597b5883fc4e9ded6d"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/compute-process-next-body-cutover-20261023-1/fixture/timer-offsets.h",
+      "bytes": 607,
+      "sha256": "1ad9d822ff9d2b93810fe43a46c56ba002681665409e90d37e4bc069b893aecb"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/compute-process-next-body-cutover-20261023-1/fixture/abi.c",
+      "bytes": 506,
+      "sha256": "3e81bbbd2418b359491cb09f2aeaba4c033a07d0eca8f33f4b11a7ee0e1ca988"
+    }
+  ],
+  "current_Source37_scheduler_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-37-coherent-lifetime-worker-whole-rust-source-1/bounded-pregrant-correction-1/candidate/kernel/rust/sched_helpers.rs",
+    "bytes": 187985,
+    "sha256": "8c996419bee50ad2e24895b98bf78f94436ad050e9542d77b7bb6413221eeb02"
+  },
+  "current_Rust_consumer_spans": [
+    {
+      "name": "set_timer",
+      "sha256": "382c6e1459090dc8fe42659181921642a64a7b3b41c95f87c85d209668757320",
+      "exact_current_and_Source37": true
+    },
+    {
+      "name": "list_next",
+      "sha256": "d99b5169107d728ed5574b47b1d51c58a6f3da3984f85dcdd5b1214196aa6e44",
+      "exact_current_and_Source37": true
+    },
+    {
+      "name": "list_empty_addr",
+      "sha256": "ffa95bdd80e327498546c1444239062914739f83bc5dd4c2eca3f19287dda5ac",
+      "exact_current_and_Source37": true
+    },
+    {
+      "name": "timer_set_timer_body_result",
+      "sha256": "d1a7cabc2b45e5d1896d7c12b113a6a2467ae1ffa1e73603ec194837969aca48",
+      "exact_current_and_Source37": true
+    }
+  ],
+  "actual_table_type_sha256": "eda9f864411676ffde983b0364c76d1219d4e14316dce547aabc465a25169696",
+  "fixture_sources": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/fixture/abi.ACTUAL.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/fixture/actual.rs",
+      "bytes": 5530,
+      "sha256": "c6ccb29101a36dd56e2136f7a49b3c452850b11c3788a66c604db30981cfaef6"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/fixture/genuine_abi.c",
+      "bytes": 7179,
+      "sha256": "5bec914a52e95c2fe5b8561ed2b1beebff821e6cb4dd873b3ab10a5ef29fcaf2"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/fixture/main.c",
+      "bytes": 7360,
+      "sha256": "c1cdbfc0eb156fdccac376c91148b024721de6ed3b8983fc62e0057489aaf53a"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/fixture/original.c",
+      "bytes": 358,
+      "sha256": "c5daa569c057bec90c8e02026bdf6bb5ebb969ed0350f4597b5883fc4e9ded6d"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/fixture/selected_or_fallback_table.c",
+      "bytes": 1609,
+      "sha256": "27791ccd75e19adb5f8f466f0419a642855b2630b15bd8e05420f81a4eb2b980"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/fixture/timer_layout_storage.ACTUAL.rs.inc",
+      "bytes": 1707,
+      "sha256": "ede1d013292aef7093cf556a9f9d34d46a9be49ed60c38b5c0089fd4def7ba72"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/fixture/timer_offsets.ORIGINAL-C.inc",
+      "bytes": 1228,
+      "sha256": "d9ede6e752c63a223a566508b54bf53fcce761da0e2854cb99bb2ac593f34cec"
+    }
+  ],
+  "original_C_wrapper_byte_exact": true,
+  "all25750_existing_CHECK_conditions_and_loops_retained": true,
+  "calibration": "Synthetic C/Rust structs replaced by genuine current headers/abi.rs; C table definition becomes Rust-owned. CHECK failure logger changes fprintf(stderr) to printf only, preserving its condition/exit. Two additive table120B/alignment/fullbytes assertions. Existing body is renamed leaf_timer_set_timer_body_result only to retain the accepted C capture boundary.",
+  "support_scope": "CPUcurrent getter and four timer primitive callbacks remain existing controlled HOST effects. No real spinlock/LAPIC/IRQ/native operation.",
+  "runtime_authority": null
+}

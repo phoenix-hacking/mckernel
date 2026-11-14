@@ -1,0 +1,135 @@
+--- /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-perf-host-light-runner-source-1/perf_two_phase_owner.py
++++ perf_owner.successor.py
+@@ -307,70 +307,103 @@
+         return self.data
+ 
+ 
+-# Specific source-only perf compiler/fixture owner. No generic dispatch or CLI.
+-# These three gates are not filled by a request, mock, or historical profile.
++import math
++# Disabled two-phase perf source successor; no generic dispatch or CLI.
+ PERF_LIGHT_DISABLED = True
+ PERF_LIGHT_BINDING = None
++PERF_LIGHT_BINDING_SHA256 = None
+ PERF_LIGHT_AUTHORITY = None
+ PERF_LIGHT_WATCHDOG = None
+ PERF_LIGHT_PHASES = ('perf_compile','perf_fixture')
++PERF_MAX_UTC = 1793774133.0
++
++def _canon(value):
++    return json.dumps(value,sort_keys=True,separators=(',',':'),allow_nan=False).encode()
++
++def _positive_finite(value):
++    return type(value) in (int,float) and math.isfinite(value) and value>0
++
++def _binding_check():
++    require(isinstance(PERF_LIGHT_BINDING,dict) and isinstance(PERF_LIGHT_BINDING_SHA256,str) and len(PERF_LIGHT_BINDING_SHA256)==64,'exact binding unbound')
++    digest=hashlib.sha256(_canon(PERF_LIGHT_BINDING)).hexdigest()
++    require(digest==PERF_LIGHT_BINDING_SHA256,'exact binding hash differs')
++    binding=json.loads(_canon(PERF_LIGHT_BINDING))
++    require(set(binding)=={'phases','deadline_caps','deadline_mono'},'binding shape')
++    phases=binding['phases'];require(isinstance(phases,list) and len(phases)==2 and tuple(x.get('phase') for x in phases)==PERF_LIGHT_PHASES,'two exact phases')
++    for x in phases:
++        require(set(x)=={'phase','argv','cwd','env'} and isinstance(x['argv'],list) and x['argv'] and
++                all(isinstance(a,str) and a and '\0' not in a for a in x['argv']) and
++                x['argv'][0].startswith('/') and isinstance(x['cwd'],str) and x['cwd'].startswith('/') and
++                isinstance(x['env'],dict) and all(isinstance(k,str) and isinstance(v,str) and '\0' not in k+v for k,v in x['env'].items()),'exact phase input')
++    caps=binding['deadline_caps'];require(isinstance(caps,dict) and set(caps)=={'utc','boot','monotonic'} and all(_positive_finite(x) for x in caps.values()),'deadline caps invalid')
++    require(caps['utc']<=PERF_MAX_UTC and _positive_finite(binding['deadline_mono']) and binding['deadline_mono']<=caps['monotonic'],'deadline widened')
++    return binding,digest
++
++def _check_deadline(binding):
++    caps=binding['deadline_caps'];now=(time.time(),time.clock_gettime(time.CLOCK_BOOTTIME),time.monotonic())
++    require(all(_positive_finite(x) for x in now) and now[0]<caps['utc'] and now[1]<caps['boot'] and now[2]<caps['monotonic'] and now[2]<binding['deadline_mono'],'deadline elapsed or unknown')
++    return binding['deadline_mono']-now[2]
++
++def _gate(callback,binding,digest,label):
++    require(callable(callback),label+' unbound')
++    before=_canon(binding);provided=json.loads(before)
++    value=callback(provided)
++    require(value is True,label+' must positively pass')
++    require(_canon(provided)==before and _canon(binding)==before and hashlib.sha256(_canon(PERF_LIGHT_BINDING)).hexdigest()==digest,label+' changed binding')
++    _check_deadline(binding)
+ 
+ class PerfLightOwner:
+     def __init__(self):
+         self.state='NEW';self.interrupt=None;self.child=None;self.proof=None;self.results=[];self.error=None
+     def _signal(self,signum,frame):
+-        # Never raise or signal children from this handler: if a signal arrives
+-        # between fork and Popen assignment, the exact child must first be bound.
++        # Handler only records stop, including the Popen fork/assignment window.
+         if self.interrupt is None:self.interrupt=signum
+     def _unknown(self,exc):
+         self.state='UNKNOWN';self.error=type(exc).__name__+': '+str(exc)
+     def run(self,streams):
+         require(PERF_LIGHT_DISABLED is False,'SOURCE_ONLY: perf light owner disabled')
+-        require(PERF_LIGHT_BINDING is not None and PERF_LIGHT_AUTHORITY is not None and PERF_LIGHT_WATCHDOG is not None,'source, authority or watchdog unbound')
+         require(self.state=='NEW','single-use or unknown owner')
+-        previous={}
++        # Claim before every callback: reentrant calls cannot spawn or overwrite custody.
++        self.state='CLAIMED';previous={}
+         try:
+-            require(isinstance(PERF_LIGHT_BINDING,dict) and tuple(x['phase'] for x in PERF_LIGHT_BINDING['phases'])==PERF_LIGHT_PHASES,'exact two phases required')
++            binding,digest=_binding_check()
+             require(isinstance(streams,dict) and set(streams)==set(PERF_LIGHT_PHASES),'exact capture streams required')
+-            # Independently authenticated release/watchdog and exact source,
+-            # tools, clean env and fresh output proof are not implemented here.
+-            PERF_LIGHT_AUTHORITY(PERF_LIGHT_BINDING)
+-            PERF_LIGHT_WATCHDOG(PERF_LIGHT_BINDING)
+             for sig in (signal.SIGTERM,signal.SIGINT,signal.SIGALRM):previous[sig]=signal.signal(sig,self._signal)
+-            enable_subreaper()
+-            self.state='READY'
+-            for spec in PERF_LIGHT_BINDING['phases']:
+-                require(self.interrupt is None,'interrupt pending before spawn')
+-                PERF_LIGHT_AUTHORITY(PERF_LIGHT_BINDING);PERF_LIGHT_WATCHDOG(PERF_LIGHT_BINDING)
++            _gate(PERF_LIGHT_AUTHORITY,binding,digest,'authority');_gate(PERF_LIGHT_WATCHDOG,binding,digest,'watchdog')
++            require(self.interrupt is None,'stop before subreaper')
++            enable_subreaper();self.state='READY'
++            for spec in binding['phases']:
++                require(self.interrupt is None,'stop before phase')
++                _gate(PERF_LIGHT_AUTHORITY,binding,digest,'authority');_gate(PERF_LIGHT_WATCHDOG,binding,digest,'watchdog')
+                 pre=prepare_launch()
+-                require(isinstance(spec['argv'],list) and spec['argv'] and all(isinstance(x,str) and x and '\0' not in x for x in spec['argv']),'bound argv')
+-                require(isinstance(spec['cwd'],str) and isinstance(spec['env'],dict),'bound command inputs')
++                require(hashlib.sha256(_canon(PERF_LIGHT_BINDING)).hexdigest()==digest,'binding drift before spawn')
++                _check_deadline(binding)
++                # Last check immediately after all pre-spawn gates/observation.
++                require(self.interrupt is None,'stop immediately before spawn')
+                 stdout,stderr=streams[spec['phase']]
+                 self.state='SPAWN_ATTEMPTED'
+                 self.child=subprocess.Popen(spec['argv'],cwd=spec['cwd'],env=dict(spec['env']),stdin=subprocess.DEVNULL,stdout=stdout,stderr=stderr,start_new_session=True)
+-                # This constructor reads the actual direct identity and first
+-                # census before any wait or poll. A failure retains UNKNOWN.
+                 self.proof=ProcessProof(self.child,privileged_wrapper=False,pre_launch=pre)
+                 require(self.proof.data.get('identity') is not None and self.proof.data['identity'].get('pid')==self.child.pid and not self.proof.data['uncertainties'],'direct identity unavailable')
+                 self.state='CHILD_BOUND'
+-                require(self.interrupt is None,'interrupt pending after child identity')
++                require(self.interrupt is None,'stop after child identity')
+                 while True:
+-                    PERF_LIGHT_AUTHORITY(PERF_LIGHT_BINDING);PERF_LIGHT_WATCHDOG(PERF_LIGHT_BINDING)
+-                    require(self.interrupt is None,'interrupt pending while waiting')
++                    _gate(PERF_LIGHT_AUTHORITY,binding,digest,'authority');_gate(PERF_LIGHT_WATCHDOG,binding,digest,'watchdog')
++                    require(self.interrupt is None,'stop while waiting')
+                     self.proof.observe('waiting');require(not self.proof.data['uncertainties'],'census unknown')
+-                    try:code=self.child.wait(timeout=0.1);break
++                    remaining=_check_deadline(binding)
++                    try:code=self.child.wait(timeout=min(0.1,remaining));break
+                     except subprocess.TimeoutExpired:continue
+-                require(type(code) is int,'direct wait missing')
++                require(type(code) is int,'direct wait missing');_check_deadline(binding)
+                 raw=self.proof.joined(code)
+                 require(raw.get('retirement_proven') is True and raw.get('direct_wait',{}).get('exit_code')==code,'descendant closure unproven')
+                 validate_proof(raw)
+-                PERF_LIGHT_WATCHDOG(PERF_LIGHT_BINDING);PERF_LIGHT_AUTHORITY(PERF_LIGHT_BINDING)
+-                require(self.interrupt is None,'interrupt pending after join')
++                _gate(PERF_LIGHT_WATCHDOG,binding,digest,'watchdog');_gate(PERF_LIGHT_AUTHORITY,binding,digest,'authority')
++                require(self.interrupt is None,'stop after join')
+                 self.results.append({'phase':spec['phase'],'exit_code':code,'proof':raw})
+                 require(code==0,'phase failed; no next phase')
+                 self.child=None;self.proof=None;self.state='READY'
+-            self.state='SYNTHETIC_SOURCE_ONLY_COMPLETE'
+-            return self.results
++            self.state='SYNTHETIC_SOURCE_ONLY_COMPLETE';return self.results
+         except BaseException as exc:
+             self._unknown(exc);raise
+         finally:

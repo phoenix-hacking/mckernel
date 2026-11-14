@@ -1,0 +1,39 @@
+{
+  "changed_paths": [
+    "scripts/application-tests/native_diagnostic_stager.py",
+    "scripts/tests/test_application_native_diagnostic_stager.py",
+    "docs/verification/evidence/signal-mask-restore-stager-retention-20261017-1.json"
+  ],
+  "command": [
+    "/usr/bin/python3",
+    "-B",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "scripts/tests",
+    "-p",
+    "test_application_native_diagnostic_stager.py",
+    "-v"
+  ],
+  "elapsed_seconds": 0.283,
+  "environment": {
+    "address_space_limit_bytes": 1073741824,
+    "cpu_affinity": [
+      7
+    ],
+    "cwd": "/home/holden/mckernel",
+    "timeout_seconds": 120
+  },
+  "exit_code": 0,
+  "runtime_acceptance": false,
+  "scope": "Disposable fake bytes only; existing success tests invoke installed cpio and fake gzip. No payload execution, compiler, root, Docker, guest, network, or real staging invocation.",
+  "source_sha256": {
+    "scripts/application-tests/native_diagnostic_stager.py": "d4d29757e34cdc4c8e208b420709d2b4a7c10eb2f8f40c29bfeca3d08f568952",
+    "scripts/tests/test_application_native_diagnostic_stager.py": "6b9e7547cd05d1b6bfd3fe482d52297d234876ac10b574f8bf8f36441774f114"
+  },
+  "status": "PASS_FOCUSED_CHECKS_READY_FOR_REVIEW",
+  "stderr": "test_authenticated_four_artifact_replacements_are_staged_and_recorded (test_application_native_diagnostic_stager.StagerTests) ... 5 blocks\nok\ntest_failed_tree_copy_retains_output_and_original_error (test_application_native_diagnostic_stager.StagerTests) ... ok\ntest_final_replacement_drift_before_inventory_is_rejected (test_application_native_diagnostic_stager.StagerTests) ... ok\ntest_five_artifact_mode_replaces_stale_mcexec_exactly (test_application_native_diagnostic_stager.StagerTests) ... 5 blocks\nok\ntest_fresh_output_and_inputs_fail_closed (test_application_native_diagnostic_stager.StagerTests) ... ok\ntest_mcexec_expected_digest_is_current_artifact (test_application_native_diagnostic_stager.StagerTests) ... ok\ntest_mcexec_replacement_requires_corrected_hash_size_and_mode (test_application_native_diagnostic_stager.StagerTests) ... ok\ntest_missing_closure_and_payload_hash_rejected (test_application_native_diagnostic_stager.StagerTests) ... ok\ntest_newc_rejects_malformed_metadata_names_padding_and_truncation (test_application_native_diagnostic_stager.StagerTests) ... 5 blocks\nok\ntest_parent_substitution_after_validation_rejected_even_for_same_inode (test_application_native_diagnostic_stager.StagerTests) ... ok\ntest_partial_replacement_write_retains_bytes_and_original_error (test_application_native_diagnostic_stager.StagerTests) ... ok\ntest_replacement_inode_substitution_and_parent_symlink_are_rejected (test_application_native_diagnostic_stager.StagerTests) ... ok\ntest_replacement_map_is_exact_and_sources_are_authenticated (test_application_native_diagnostic_stager.StagerTests) ... ok\ntest_same_size_archive_content_mutation_is_rejected_during_stage (test_application_native_diagnostic_stager.StagerTests) ... 5 blocks\nok\ntest_second_build_is_byte_identical_and_output_cannot_be_nested (test_application_native_diagnostic_stager.StagerTests) ... 5 blocks\n5 blocks\nok\ntest_stages_replays_and_does_not_modify_source (test_application_native_diagnostic_stager.StagerTests) ... 5 blocks\nok\ntest_stale_base_still_rejected_without_mcexec_replacement (test_application_native_diagnostic_stager.StagerTests) ... ok\n\n----------------------------------------------------------------------\nRan 17 tests in 0.206s\n\nOK\n",
+  "stdout": "",
+  "task_id": "signal-mask-restore-stager-retention-20261017-1"
+}

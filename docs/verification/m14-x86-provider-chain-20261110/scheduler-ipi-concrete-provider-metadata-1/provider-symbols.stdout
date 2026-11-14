@@ -1,0 +1,16 @@
+apic_icr_write T 0 2d
+apic_wait_icr_idle T 0 49
+apic_x86_issue_ipi T 0 8a
+cpu_disable_interrupt_save U         
+cpu_restore_interrupt U         
+ihk_mc_mb U         
+lapic_read U         
+x2apic_icr_write T 0 1a
+x2apic_x86_issue_ipi T 0 53
+x86_apic_issue_ipi_body_result T 0 78
+x86_cpu_pause_bridge U         
+x86_icr_geometry R 0 20
+x86_ipi_icr_id_shift R 0 4
+x86_lapic_write_bridge U         
+x86_write_msr_bridge U         
+x86_x2apic_issue_ipi_body_result T 0 5e

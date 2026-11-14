@@ -1,0 +1,171 @@
+--- a/counter_epoch_family.rs
++++ b/counter_epoch_family.rs
+@@ -36,6 +36,10 @@
+     pub(super) hook_group_entries_after_append: usize,
+     pub(super) hook_late_member_mapped_for_child: bool,
+     pub(super) hook_late_actor_mapping_error: abi::CInt,
++    pub(super) late_constructor_window_valid: bool,
++    pub(super) late_constructor_atomic_writes: usize,
++    pub(super) late_constructor_atomic_values: [abi::CLong; 2],
++    pub(super) late_constructor_count_then_period_order: bool,
+     pub(super) reset_zero_writes: usize,
+     pub(super) reset_targets_and_order_match_original_two_member_epoch: bool,
+     pub(super) init_calls: usize,
+@@ -44,7 +48,7 @@
+     pub(super) aggregate_start_calls: usize,
+     pub(super) aggregate_start_mask_matches_actual_actor_maps: bool,
+     pub(super) critical_effect_order_preserved: bool,
+-    pub(super) no_late_member_reset_or_init: bool,
++    pub(super) no_late_member_scheduler_reset_or_init: bool,
+     pub(super) original_start_continues_after_nonzero_init: bool,
+     pub(super) actor_monitor_not_resurrected: bool,
+     pub(super) actor_old_bits_released_after_sequence: bool,
+@@ -79,6 +83,10 @@
+     hook_group_entries_after_append: 3,
+     hook_late_member_mapped_for_child: true,
+     hook_late_actor_mapping_error: -22,
++    late_constructor_window_valid: true,
++    late_constructor_atomic_writes: 2,
++    late_constructor_atomic_values: [0, 0],
++    late_constructor_count_then_period_order: true,
+     reset_zero_writes: 4,
+     reset_targets_and_order_match_original_two_member_epoch: true,
+     init_calls: 2,
+@@ -87,7 +95,7 @@
+     aggregate_start_calls: 1,
+     aggregate_start_mask_matches_actual_actor_maps: true,
+     critical_effect_order_preserved: true,
+-    no_late_member_reset_or_init: true,
++    no_late_member_scheduler_reset_or_init: true,
+     original_start_continues_after_nonzero_init: true,
+     actor_monitor_not_resurrected: true,
+     actor_old_bits_released_after_sequence: true,
+@@ -188,6 +196,7 @@
+     old_actor_bits: abi::CULong, old_child_indices: [abi::CInt; 2],
+     actor_cleared: bool, actor_bits_retained: bool, late_fd: abi::CLong,
+     group_entries: usize, child_late_bound: bool, actor_late_error: abi::CInt,
++    constructor_trace_start: usize, constructor_trace_end: usize,
+     late_pin: Option<super::DescriptorPin>, late_event: Option<EventPin>,
+ }
+ static HOOK_STATE: AtomicPtr<HookState> = AtomicPtr::new(null_mut());
+@@ -201,8 +210,13 @@
+     state.actor_cleared = unsafe { monitoring(actor_process).is_null() };
+     let retained_after_clear = unsafe { bitmap(state.actor) == state.old_actor_bits };
+ 
++    // Read-only positions in the SAME complete effect trace. The original real
++    // late constructor and scheduler use the SAME atomic_set endpoint; retain
++    // both sets of effects and attribute only this exact real open call window.
++    state.constructor_trace_start = crate::host_perf_bindings::perf_trace().len();
+     state.late_fd = unsafe { open_for(state.configuration, state.tool,
+         (*actor_process).pid, state.leader_fd) };
++    state.constructor_trace_end = crate::host_perf_bindings::perf_trace().len();
+     assert_eq!(state.late_fd, OPEN_FDS[3]);
+     let pin = unsafe { pin_fd(state.tool, state.late_fd as abi::CInt) };
+     let event = pin.event().expect("actual late group member");
+@@ -256,7 +270,12 @@
+     assert_eq!(unsafe { (bitmap(tool), bitmap(actor), bitmap(child)) }, (0, 0, 0));
+     assert!(unsafe { (*tool_process).mckfd.is_null() && (*actor_process).mckfd.is_null() && (*child_process).mckfd.is_null() });
+     assert!(!configuration.attr.is_null());
+-    unsafe { (*configuration.attr.cast::<crate::f03_perf_attr_callbacks::PerfEventAttr>()).flags |= 2 };
++    let attribute = configuration.attr.cast::<crate::f03_perf_attr_callbacks::PerfEventAttr>();
++    // Exact existing common inputs, not derived output-as-oracle: the genuine
++    // allocation body must initialize count=0 then period_left=sample_period=0.
++    assert_eq!(unsafe { (*attribute).frequency() }, 0);
++    assert_eq!(unsafe { (*attribute).sampling.sample_period }, 0);
++    unsafe { (*attribute).flags |= 2 };
+     crate::host_effects::set_host_replies(&OPEN_FDS);
+     crate::host_effects::set_forward_replies(&[0, 0, 0, 0]);
+ 
+@@ -327,6 +346,7 @@
+         old_actor_bits: actor_mask, old_child_indices: child_indices,
+         actor_cleared: false, actor_bits_retained: false, late_fd: -1,
+         group_entries: 0, child_late_bound: false, actor_late_error: 0,
++        constructor_trace_start: 0, constructor_trace_end: 0,
+         late_pin: None, late_event: None,
+     };
+     assert!(HOOK_STATE.swap(&mut hook, Ordering::SeqCst).is_null());
+@@ -342,12 +362,19 @@
+     unsafe { super::lifecycle::switch_monitor(actor, control.pp_reset, control.pp_count) };
+     assert_eq!(HOOK_STATE.swap(null_mut(), Ordering::SeqCst), &mut hook as *mut HookState);
+     assert!(!effects::hook_pending());
++    // Bound this trace to the completed original switch call. All later real
++    // close/retirement effects remain legitimate; they are not scheduler events.
+     let trace = effects::perf_trace();
++    let constructor_window_valid = hook.constructor_trace_start < hook.constructor_trace_end
++        && hook.constructor_trace_end <= trace.len()
++        && trace[..hook.constructor_trace_start].iter().any(|effect| matches!(effect, PerfEffect::HookFired));
++    assert!(constructor_window_valid, "actual late open boundaries must be inside the switch trace");
+     let late_pin = hook.late_pin.take().expect("hook performed actual late open");
+     let late_event = hook.late_event.take().expect("actual late event pin");
+     let leader_count = unsafe { addr_of!((*leader.raw_event().cast::<Event>()).count) } as usize;
+     let member_count = unsafe { addr_of!((*member.raw_event().cast::<Event>()).count) } as usize;
+     let late_count = unsafe { addr_of!((*late_event.raw_event().cast::<Event>()).count) } as usize;
++    let late_period_left = unsafe { addr_of!((*late_event.raw_event().cast::<Event>()).hw.period_left) } as usize;
+     let late_creation_index = unsafe { (*late_event.raw_event().cast::<Event>()).counter_id };
+     assert!(!actor_indices.contains(&late_creation_index));
+     let mut zero_targets = Vec::new();
+@@ -357,14 +384,30 @@
+     let mut critical = Vec::new();
+     let mut hook_calls = 0usize;
+     let mut late_was_reset_or_initialized = false;
+-    for effect in &trace {
++    let mut constructor_writes = Vec::new();
++    for (position, effect) in trace.iter().enumerate() {
++        let in_constructor = hook.constructor_trace_start <= position
++            && position < hook.constructor_trace_end;
+         match effect {
+             PerfEffect::AtomicSet { address, value } if *address == leader_count || *address == member_count => {
+                 all_reset_values_zero &= *value == 0;
+                 zero_targets.push(*address);
+                 critical.push(if *address == leader_count { 0u8 } else { 2u8 });
+             }
+-            PerfEffect::AtomicSet { address, .. } if *address == late_count => late_was_reset_or_initialized = true,
++            PerfEffect::AtomicSet { address, value } if *address == late_count || *address == late_period_left => {
++                if in_constructor {
++                    let field = if *address == late_count { 0u8 } else { 1u8 };
++                    constructor_writes.push((field, *value));
++                    // Retain genuine constructor stores in the critical order;
++                    // they are neither suppressed nor mislabeled as reset.
++                    critical.push(if field == 0 { 6 } else { 7 });
++                } else {
++                    // Outside the actual constructor call, this late event is
++                    // absent from the Actor's captured scheduler epoch/maps.
++                    late_was_reset_or_initialized = true;
++                    critical.push(8);
++                }
++            },
+             PerfEffect::HookFired => { hook_calls += 1; critical.push(1); }
+             PerfEffect::InitRaw { counter, result, .. } => {
+                 inits.push((*counter, *result));
+@@ -375,6 +418,9 @@
+             _ => {},
+         }
+     }
++    let constructor_values = if constructor_writes.len() == 2 {
++        [constructor_writes[0].1, constructor_writes[1].1]
++    } else { [abi::CLong::MIN, abi::CLong::MIN] };
+     let init_statuses = if inits.len() == 2 { [inits[0].1, inits[1].1] } else { [0, 0] };
+     let original_continues = inits == vec![(actor_indices[0], SCRIPTED_INIT_FAILURE), (actor_indices[1], 0)]
+         && starts == vec![(actor_mask, 0)];
+@@ -431,6 +477,10 @@
+         hook_group_entries_after_append: hook.group_entries,
+         hook_late_member_mapped_for_child: hook.child_late_bound,
+         hook_late_actor_mapping_error: hook.actor_late_error,
++        late_constructor_window_valid: constructor_window_valid,
++        late_constructor_atomic_writes: constructor_writes.len(),
++        late_constructor_atomic_values: constructor_values,
++        late_constructor_count_then_period_order: constructor_writes == vec![(0, 0), (1, 0)],
+         reset_zero_writes: zero_targets.len(),
+         reset_targets_and_order_match_original_two_member_epoch: all_reset_values_zero
+             && zero_targets == vec![leader_count, member_count, leader_count, member_count],
+@@ -439,8 +489,8 @@
+         init_indices_match_actual_actor_maps: inits.iter().map(|v|v.0).collect::<Vec<_>>() == actor_indices,
+         aggregate_start_calls: starts.len(),
+         aggregate_start_mask_matches_actual_actor_maps: starts == vec![(actor_mask, 0)],
+-        critical_effect_order_preserved: critical == vec![0, 1, 2, 0, 2, 3, 4, 5],
+-        no_late_member_reset_or_init: !late_was_reset_or_initialized,
++        critical_effect_order_preserved: critical == vec![0, 1, 6, 7, 2, 0, 2, 3, 4, 5],
++        no_late_member_scheduler_reset_or_init: !late_was_reset_or_initialized,
+         original_start_continues_after_nonzero_init: original_continues,
+         actor_monitor_not_resurrected: actor_not_resurrected,
+         actor_old_bits_released_after_sequence: actor_bits_released,

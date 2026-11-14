@@ -1,0 +1,127 @@
+{
+  "schema": "mckernel.p04.owned-descendant-lifecycle.corrected-execution-review.v1",
+  "at": "2026-11-10T10:13:49.173375+00:00",
+  "decision": "GO_EXACT_CORRECTED_ABI_FIRST_SINGLE_CASE_OPERATION_AFTER_ROOT_FRESH_ADMISSION",
+  "review_owner": "/root/source_acquisition_review_max direct same-Root; no recursion",
+  "scope": "Final source/ownership/unsafe/ABI/testprofile review plus delta-only controller correction. One actual same-session-child condition at baseline/candidate scope. No reviewer test/compiler/witness/helper/pidfd/signal/process/Docker/native/credential operation; only source/header/data reads and this private review write.",
+  "bindings": {
+    "request": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/REQUEST.json",
+      "sha256": "ef2f00caf12758c7955e2957027848ebd3b14af89d90e7ac1b8025a1c31fd036"
+    },
+    "controller": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/run_case.py",
+      "sha256": "62cf1004be817f29e38f8701fc4352675f0dda511afb541796b868507443a7cd"
+    },
+    "INPUTS": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/INPUTS.json",
+      "sha256": "b7e1c7f04acf033b4aaf6aa785e9317e7800560d8e6bd2cf784969cd0e3bf5bc"
+    },
+    "bounded_controller_patch": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-1/CONTROLLER-BINDING-ONLY.patch",
+      "sha256": "1074fb46520f8b77cdf29dfddff91e499a9c983a5bc908bfe05aa10cdbb1ecf8"
+    },
+    "correction_receipt_sha256": "546dee84f9431ed7996c03f259d3d570baecd76252723cfcf94704720e4319a4",
+    "preserved_NO_GO": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-review-max-1/REVIEW.json",
+      "sha256": "082b2c338365611620cd1bc20267d32268cc09fb2491dceff72c87a795312c73"
+    },
+    "preserved_rejected_request_sha256": "74a2572332ed8423358dbc3af6d9ada7c73847b87d5cf74b6783a0e3ccee2252",
+    "preserved_rejected_controller_sha256": "00b41937d7039cf3443129931cd6c54111984a24f6d58979daca042ad66d32ae",
+    "production_ready_sha256": "3a4987871b523ac7b764545b35deffb9d150a9b73d63cd8120c30758d56847c4",
+    "production_source_patch_sha256": "e6eaf6d22a6040fe3b3fd5164ef8baa5dc3e7bdedda19dfbe2c6f8d79134ca96",
+    "baseline_source_sha256": "44329596ff8fcb1f197878664bf4999407648f056f81280008d885802f6e5427",
+    "candidate_source_sha256": "ee647c17bd7337d881fe6ecdb3805ccf5e25eb60a1879da95a8ccbbbb1702a4b",
+    "unchanged_driver_sha256": "780314f265b88969c786afea8f097096bbc9b91502602415b0ec211947415e6a",
+    "unchanged_CASE_sha256": "e065fd10896a90c095936ca7024f3839df802b3c20ae8c502a89bb4b06f58782",
+    "unchanged_typed_C_witness_sha256": "6b61d56b739dcfe888613a57d11bd16f928dd06236089c3ca3896583354bebe8",
+    "unchanged_peer_sha256": "0f5fd17ff2b3a5a14041c919be08364b45945d6ee8cce98f6819257cf813b6c6",
+    "unchanged_qualified_Owner_sha256": "afe7403ead1bf8b2c527dfa34a0c0c19010cde5f27a646ccf1545fb8f3b9bc1d"
+  },
+  "resolved_finding": {
+    "id": "P04-CONTROLLER-PIDFD-AUTH-ORDER-01",
+    "decision": "RESOLVED_BY_EXACT_BOUNDED_PRIVATE_CONTROLLER_DELTA",
+    "proof": "bind_fd keeps the newdescriptor local while post-openpid/birth/ppid/pgid/sid allmatch. Anyexception closes onlythelocalfd; closeerror is retainedwithoutmaskingprimary, and role isneverregistered. Successfulproof publishes identity thenfd. send_exact requires authenticatedidentity+fd and validpositivePID/birth/descriptor beforepoll orpidfd_send_signal. The former fd-before-proof cleanup signal path is removed; no numericfallback exists.",
+    "unchanged_fields_verified": "SourceREADY/request/patch/ABI,CASE,driver,qualifiedOwner,Cwitness,outerargv,cwd,environment,sixoperations,compileinputprofile andresourceprofile are structurallyidentical to rejectedrequest. Controller/INPUTS/request metadata are theonlymeaningful changed executioninputs. No extra case or productionRust edit."
+  },
+  "source_ownership_and_ABI_GO": {
+    "retained_source_result": "Reuse complete source findings in preserved082b2c review; no source defect was confirmed at this defined Linuxx86_64LP64 condition.",
+    "leader": "No initialchildren via nonreapingP_ALL/ECHILD; privately save/setsubreaper. OwnedRustChild staysunreaped while verifiedpidfd observes exit. SuccessfulP_PIDFD/WEXITED/WNOWAIT afterreadiness is required before the sole numericprivatePGIDkill. No numericgroup signal afterreap/identityfailure andnoPIDreusefallback.",
+    "descendants_and_publication": "PositiveChild.wait andpositiveadoptedwaitpid calls drain solely the initiallyempty private scope toECHILD; restoreprevioussubreaper beforefinishreturns. Unchangedconvert calls staging.publish only aftersuccessfulfinish andmatchedACK. Anyidentity/acquisition/wait/join/restore failure stops publication andretainsunprovedcustody.",
+    "unsafe_ABI": "Rustwaitid writes MaybeUninit opaque128byte/alignment8 storage withoutreadingafield orassuminginitializeddata. ActuallocalLinux/glibcheaders bind434/424,prctl36/37,P_ALL0/P_PIDFD3,WNOHANG1/WEXITED4/WNOWAIT0x01000000,pid/idwidths andwaitid/waitpid/prctl/syscall prototypes. Typed nonshippedCwitness must actuallycompileandrun beforeanycontroller/runtime; failurestopsallvariants.",
+    "witness_correctness": "UAPIvalues are captured before conflictingmacros areundefined andglibcwaitdeclarationsincluded. Staticasserts validateopaque128align8,unsignedidtype/id,signedpid,prototypes/constants; mainonlyemitsJSON andmakes0process-controlcalls. No siginfofield layout/offset is fabricated.",
+    "source_limits": "No supportedfullplatform/error/escaped-session/wholelifecycle/default/native result follows fromthiscase. UnchangedARGV/fivecommands/ACK/staging/permissions/rename and22/56accepted scopes stayclosed withoutreplay."
+  },
+  "exact_test_GO": {
+    "outer_argv": [
+      "/usr/bin/taskset",
+      "-c",
+      "0",
+      "/usr/bin/prlimit",
+      "--as=2147483648:2147483648",
+      "--core=0:0",
+      "--fsize=67108864:67108864",
+      "--",
+      "/usr/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/run_lifecycle.py",
+      "--execute"
+    ],
+    "cwd": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1",
+    "clean_parent_environment": {
+      "PATH": "/usr/bin:/bin",
+      "LANG": "C",
+      "LC_ALL": "C",
+      "CMAKE_BUILD_PARALLEL_LEVEL": "1",
+      "MAKEFLAGS": "-j1",
+      "OMP_NUM_THREADS": "1"
+    },
+    "sequence": "Exactly6serialOwnercommands: CABIcompile,Witnessvalues,baselineRustcompile,baselinecontroller,candidateRustcompile,candidatecontroller. Baseline expecteddefect must be reproduced andpositivelyretired before candidatecompilation/runtime. Everycommand stillrequiresreturn0 withimmediatefullOwnerfacts; no outercleanup maymanufacturePASS.",
+    "ABI_first_gate": "ActualCwitness0 andexactJSON values must precede anywrapper/controller. Headerhashes arecheckedbeforecompile. No guessedABI,version-only substitute or skippedwitness.",
+    "actual_case": "Exactpeer forksonecontrolledsame-sessionchild; actualparent/birth/SID/PGID,HUPignorebit,closedstandardPTYfds andselfheldread/writepipe arebound beforetrigger. Authenticatedstablepidfds andpost-openproof precede anysignal. No external/globalPIDselector is used bynewcontroller.",
+    "baseline_PASS_scope": "Exactstatus0/ARGV/fivecommands/ACK/staging/syntheticpublication withlivebounddescendant, directwrapperwait andcontrolleradoption/WNOHANG0. ExactlyonedescendantpidfdSIGKILLrescue pluspositiveadoptedwait/signaled9 andemptyrestoredscope produces only FAIL_EXPECTED_BASELINE_PUBLISHED_WITH_LIVE_DESCENDANT.",
+    "candidate_PASS_scope": "Samefunctionalpublication/status withchildpidfdalreadydead,exactwaitECHILD,nocontrollerrescue/adoptedreap,emptyrestoredscope andpositivewrapperwait. No initiallylive/selfblockedchild mayauto-die to satisfybaseline. Ownershipobservations plusreviewedsource establishwait-before-publication atthiscontrolledscope; no inventedwaittrace is claimed.",
+    "unexpected_failure": "Only authenticatedpidfds may beretired byprivatecontroller. Unknown/unboundresiduals stayfailed forqualifiedouterOwner exactunreapedchild cleanup; anyouterrescue/reap/error/timeout/UNKNOWN failsoperation. Primary/cleanup/rawreceipts retained; no retry/newvariant.",
+    "Python_scope": "Newcontroller uses rawctypespidfd syscalls plusstandardpoll/wait APIs andrequiresnoPython>=3.10feature. Rootreports actualAnaconda3.9.12capability. Exactoperationretainsliteral/usr/bin/python3 andexistingreferencedqualifiedbinding; actualRootadmission must bindthatliteralroute consistently. Ambientinterpreterversion is not a claimthatthepreparedliteralpath oritsbindingchanged.",
+    "runtime_bounds": {
+      "CPU": [
+        0
+      ],
+      "jobs": 1,
+      "process_AS_bytes": 2147483648,
+      "FSIZE_bytes": 67108864,
+      "CORE_bytes": 0,
+      "whole_outer_wall_seconds": 160,
+      "driver_work_seconds": 150,
+      "each_Rust_compile_wall_seconds": 60,
+      "each_wrapper_wall_seconds": 8,
+      "inner_retirement_seconds": 6,
+      "each_controller_outer_seconds": 16,
+      "outer_owner_retirement_seconds": 6,
+      "planning_RSS_slice_bytes_from_same_HOST_pool": 1073741824,
+      "new_actual_peak_not_claimed": "Reuse prior matching compiler peak planning; record actual RUSAGE_CHILDREN maxrss and fresh Root aggregate actualRSS. No per-owner multiplied grant.",
+      "private_output_disk_allowance_bytes": 268435456,
+      "HOST_total_bytes_including_all_controllers_workers": 4294967296,
+      "aggregate_HOST_jobs_max": 3,
+      "HOST_CPUs": [
+        0,
+        6,
+        7
+      ],
+      "fresh_MemAvailable_minimum_bytes": 27917287424,
+      "host_disk_floor_bytes": 17179869184,
+      "scratch_disk_floor_bytes": 12884901888,
+      "native_CPUs2_5_12GiB_and_retained18_UNKNOWN_unchanged": true
+    },
+    "fresh_admission": "Root alone admitsCPU0onejob/AS2GiB withplanning1GiBRSS insideHOST4GiB TOTAL/max3aggregatejobs/fresh26GiB; host16GiB/scratch12GiB floors+256MiBoutput/capture. Confirmcurrentaccount/service/spend/stopguard,unownedfreshprivateoutput andactualqualifiedHOSTcompiler/Python/headerinputs. Native2-5/12GiB/prior18GiB/allUNKNOWN remainheld.",
+    "lifetime": "RootcapturesdriverPID/birth/argv/env/stdio/waits/streams/metrics;150sdriverwork and160souterbound must leave6squalifiedOwnerretirement. Controller8swork+6sinnerretirement fits16sownerbound. Existingexactbirth/sessionmechanism handlesunexpectedtermination; no broadnumericPIDsignal orreleaseinference.",
+    "required_final_receipts": "ActualtypedABIpass; exactly6fullyjoinednoresidualOwnerrecords; baselineexpecteddefect andonepositiveexactchildrescue; candidatePASSwith0signals/0adoptedwaits; wrapperoutputs/receipts/bindings retained and topPASS_BASELINE_DEFECT_REPRODUCED_AND_CANDIDATE_CONTROLLED_SCOPE. Actualpeaks/outputsizes recorded."
+  },
+  "holds_and_credit": "OneoriginalP04/I01controlledlifecycle proof only. No22/56replay,converter/realcrash/validdump/native/image/module/default/deployed acceptance,Cretirement orcountedpercentage gain. M14acceptancebeforeM15; generic/exec/equivalent/replay,source/native/currentfree/cleanup UNKNOWN andactualservice/account/budgetholds remain.",
+  "next_action": "Root fresh-admits and executes only thisexactcorrectedABI-firstoperation. Preserve rejectedunexecutedcontroller/request and originalNO_GO plusallactualfailedrawresults. Anynewfailure requires meaningfulchangedinput andfocusedindependentreview beforeanotherattempt.",
+  "executed": false,
+  "reviewer_process_control_calls": 0,
+  "acceptance_delta": 0,
+  "resource_releases": 0
+}

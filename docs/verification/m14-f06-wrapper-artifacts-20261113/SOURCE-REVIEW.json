@@ -1,0 +1,88 @@
+{
+  "M14_06_01_FUNCTIONAL_whole_or_TLS_only_acceptance": false,
+  "Root_thread_id": "01a18bc3-e072-7810-9426-75101b0856c0",
+  "SHM_review": {
+    "cleanup": "At most one RMID attempt and one attempt per tracked attachment on uncertain failures; no success after failed or unproved remove/detach. No IPC_SET/global enumeration/foreign object mutation. Full normal Root/OS restoration still required for failed scopes.",
+    "data_and_lifetime": "Two distinct own attachments, initial zero bytes, bidirectional alias data, owncreator/0600/4096 and quiescent nattch2. One RMID marks DEST but attached bytes remain live; one detach gives nattch1; final detach retires object and only selected-source EINVAL(absentindex)/EIDRM(staleseq) old-ID errors are accepted.",
+    "huge_error": "Nonzero huge shift20 is rejectedEINVAL before allocation by the selected architecture wrapper. No huge allocation/default-shift case is smuggled in.",
+    "key": "Raw register0x100000000UL genuinely exercises CInt/key_t low32 narrowing to IPC_PRIVATE0 via arch_do_shmget_bridge, not a user-library pre-narrowing call or named global key lookup.",
+    "public_ABI": "Source assertions select Linuxx64 LP64 key_t/int/pid_t32 and shmid_ds112/segsz48/nattch88. Relevant kernel public structure includes 48B ipc_perm and cpid80. Actual guest libc/header/ELF measurement remains future compiler/provider proof.",
+    "selected": "c964 arch_shmget_body_result:11231, f06_shmget_dispatch, do_shmget:27929, shmctl_body_result:5019/IPC_STAT:5234 and shmobj_list_lookup:27573, matching original C descriptor/lifetime behavior.",
+    "source": {
+      "bytes": 5404,
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-F06-wrapper-functional-1/cases/f06.shm-private-own.c",
+      "sha256": "413cf83bca53f9efc322ad6b2b33fabcc91b5ded26d28758cb5f0d63b9e17961"
+    }
+  },
+  "all_future_operations": "UNISSUED; no compiler/stage/ABI/caller/native execution GO from this review.",
+  "approved_sha256": {
+    "clone_oracle_sha256": "9d15e6aec4bb5f94953b5060eef7a8a2eb861d82cfb3dddf64bfd2fa5afb297d",
+    "clone_source_sha256": "83c32b38ce2186fce46f113152487f03be66ab255690eed839123a0f4d0b1aa8",
+    "mmap_fixed_oracle_sha256": "c52fbc08053de9c0d60423e4dd5ab90a80a4577660b693a19052f635ff31d2c5",
+    "mmap_fixed_source_sha256": "293abbca7470aa397bf8238aba0a5b410280f29028c7c891a92bf9698636d6b9",
+    "next_inputs_sha256": "899967751e8b35b5fccbf037b3109c5445f5c7e2ca3f6efd542e3447fd7ce91b",
+    "original_clause_reuse_sha256": "7a4090a2580ea4cc190e6c6a45907ad1e2666e563af83a2b5a753f4c6453b0eb",
+    "prepared_source_sha256": "0a54493ff6d3f0ef5140355095950de3d0a45ee966b0c56258b5c9c03a3b774f",
+    "selected_contract_sha256": "efcc3e834ac0c16c3473bc556ac4cf1df93609698c456074de3c794e0e4c2ac1",
+    "shm_oracle_sha256": "4500586b0db7cefe5a65e52505e5232dc6934178043a25e7c454ddb37ff6975c",
+    "shm_source_sha256": "413cf83bca53f9efc322ad6b2b33fabcc91b5ded26d28758cb5f0d63b9e17961",
+    "specific_holds_sha256": "d5ccd1c3c1bc9d6c9b80a550b697cfefea76087bfe55164368220616d980d471"
+  },
+  "at": "2026-11-13T01:05:35.588559+00:00",
+  "author": "/root/functional_delta_review",
+  "cleanup_and_caller_boundary": "Each success requires its source-owned child/mapping/IPC checks; app exit and exact text alone never qualify collector/controller/native owner/Root waits, streams, FD closure, runtime restoration or current-free. Future normal mcexec -t1 0 exact case caller, library/loader/collector/oracle/sourcecut must be separately bound and reviewed.",
+  "clone_review": {
+    "ABI": "nr56, flags SIGCHLD only, child stack/parent_tid/child_tid/tls0; Linuxx64 LP64 public syscall and libc provider obligations remain real future SDK/ELF binding. No inline assembly or own register-clobber promise is introduced.",
+    "behavior": "Volatile original/child changed first+last owned-page bytes; child rawSYS_exit73; parent waitpid retries only EINTR for its positive int32 PID, requires exact exit73 and unchanged parent bytes, then successful owned munmap before golden.",
+    "failure": "All failure branches return nonzero; impossible PID/failed wait/unmap earns no child/resource closure and requires original normal Root/guest disposition. No retry of clone or arbitrary PID signal.",
+    "hold_boundary": "Zero user-visible TID flags does not waive lower selected do_fork host-clone/TID/ACK/source/native dependencies. Future Root operation must refuse if a genuine held provider/selection is reached.",
+    "selected": "c964 syscall_policy sys_clone:11589 -> arch_clone_body_result:10947 -> do_fork, matching C sys_clone:2953-2968.",
+    "source": {
+      "bytes": 2599,
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-F06-wrapper-functional-1/cases/f06.clone-basic-own.c",
+      "sha256": "83c32b38ce2186fce46f113152487f03be66ab255690eed839123a0f4d0b1aa8"
+    },
+    "stack_and_context": "NULL new stack selects the original user stack in do_fork; non-CLONE_VM copy supplies a valid independent COW process stack so the ordinary libc syscall return may resume the caller. No CLONE_SETTLS/TID/THREAD flags, handlers or exec."
+  },
+  "concrete_blocking_findings": [],
+  "decision": "GO_ORDINARY_CLONE_MMAP_SHM_SOURCE_GOLDEN_ABI_CLEANUP_ONLY",
+  "excluded_rejected_task": {
+    "disposition": "EXCLUDED_FROM_REPLAY_REPHRASING_REASSIGNMENT",
+    "task": "signal/frame/xstate collector request and equivalents",
+    "turn": "01a1ce01-20cf-7e03-9442-f6d521fb8b02",
+    "worker": "01a1c48d-4d96-7cc3-b733-73a97973152f"
+  },
+  "golden_review": "All three new .stdout byte files exactly equal their JSON exact-byte stdout and the literal success puts lines, one LF/exit0/stderr0. These are source-derived expectations, not observed HOST/native outputs.",
+  "invocation": "20261112T094452Z-12a4bea0",
+  "literal_original_criterion": "The supported x86_64 TLS/arch_prctl and clone/mmap/SHM wrappers agree with the selected real ABI and preserve values, results and required context behavior in the matching image.",
+  "mmap_review": {
+    "ABI": "addr/size64, prot/flags/fd32, signed off64, vrf0=0/private_dataNULL unchanged. Two owned pages, second page wholly in original allocation.",
+    "behavior": "Checks exact fixed return, first-page pattern preserved, replaced page zero and writable readback, then whole-range munmap before exact golden.",
+    "failure": "No success when returned address/prefix/zero/RW/unmap checks fail. Unexpected alternative mapping and original-range cleanup remain failure paths; any uncertain cleanup remains external native/guest disposition, not acceptance.",
+    "holds": "No XPMEM/file/foreign/huge/protection-fault/signal scenario or current f133/sourceflag change is proposed.",
+    "selected": "c964 arch_mmap_body_result:13544 and exact eight-argument f06_mmap_dispatch_bridge; C sys_mmap:2793-2946 supports PRIVATE|ANON|FIXED and 4KiB base pages.",
+    "source": {
+      "bytes": 2136,
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-F06-wrapper-functional-1/cases/f06.mmap-fixed-own.c",
+      "sha256": "293abbca7470aa397bf8238aba0a5b410280f29028c7c891a92bf9698636d6b9"
+    }
+  },
+  "next_concrete_artifact": "Root/compiler owner freezes a genuinely matching ordinary C payload SDK/header/startup/link/provider/compiler+capture operation for the three new sources and only genuinely missing reused artifacts. Reuse the existing matching46d/gcc2092/libcb058/loader0853 producer profile where exact; no broad new inventory or fake ABI witness. Then separate named stage/normal guard/native operation after actual firstrepeat cleanup and source/execACK/ownership/current-resource admission.",
+  "original_acceptance_credit": 0,
+  "preserved": "All actual source/service/account/native12/execACK/UNKNOWN/finite7c6/current c964-a2f-f133 ownership and specific TID/XPMEM/generic/undefinedABI holds; no source or other owner files changed.",
+  "reused_cases_review": {
+    "memory.anonymous-zero": "Six bounded sizes; oracle must validate every zero_bad==bytes/fill_bad==bytes/munmap0 record. Exit0 alone is insufficient because the source prints data mismatches for oracle validation. Exact canonical future output and an actual supported validator remain to bind.",
+    "memory.mmap-zero-length": "Selected source rounds length to0 and returnsEINVAL before do_mmap. Prepared golden failed1/errno22 is supported, no current runtime proof.",
+    "memory.munmap-unaligned": "Unaligned own munmap rejectsEINVAL and original pages remain valid; final whole-range munmap is checked. Prepared exact result only.",
+    "process.clone3-size-small": "Readable zero struct,size63 -> selected clone3::read size<64 rejection before copy/provider/child work. No actual clone3 syscall-table/image result or child cleanup is inferred from prepared oracle."
+  },
+  "reviewer": "/root/time_functional_source; explicit gpt-6.1-sol/MAX; depth1/no recursion",
+  "schema": "mckernel.M14-06-01.wrapper-independent-source-review.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_evidence": {
+    "bytes": 11963,
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-F06-wrapper-functional-1/independent-source-review-1/SOURCE-GOLDEN-ABI-EVIDENCE.json",
+    "sha256": "885f356f60bdfc0f0a2c7d5195392a400258aca50873911f1c2a257fce4621ac"
+  },
+  "source_review_scope": "Only source/golden/current-selectedABI/caller/cleanup of the three new narrow cases plus four existing prepared sources/oracles; no operation/runtime/native/whole-leaf GO."
+}

@@ -1,0 +1,225 @@
+{
+  "schema": "scratch22-authority1.cleanup-execution-preparation.v1",
+  "recorded_at_utc": "2026-10-17T05:07:57Z",
+  "status": "NOT_RELEASED",
+  "reviewer": "/root/cheap_profile_review",
+  "model": "gpt-6.1-sol",
+  "implementation_ownership": false,
+  "scope": "Concrete cleanup execution-release shape and proof checklist only. No live process/root-lock/container/tree operation or runtime authority.",
+  "source_review": {
+    "path": "docs/verification/evidence/scratch22-authority1-cleanup-actual-size-independent-review-20261017.json",
+    "sha256": "6073c68102ec1fbbfb63726961b9b48aa39b9e2d1aae97fdd6e1e05581b34841",
+    "decision": "PASS_SOURCE"
+  },
+  "source_checkpoint": {
+    "commit": "aea751ec3b1d727be7c384210682d797b671b119",
+    "tree": "778bc8b02a78074b354423f9d57852f132501d6a",
+    "source_sha256": "15b7f9241741ccaff065819ea6847323d6ce47ac1fc69a3ea87fbdbad9b01098",
+    "tests_sha256": "6ff24e9b6139aa7a0d71d69194f6e9be63396756fbf7a65bfc572ca87442339c",
+    "local_git_blobs_verified": true,
+    "fetched_remote_proof_verified_by_this_preparation": false
+  },
+  "observation": {
+    "raw_path": "/home/holden/mckernel-work/scratch/native-exact-scratch22-authority1-cleanup-observation-20261017.json",
+    "raw_sha256": "cbf85c1d574588652e87d11d6870411045fbf5fa062c87b4017c7947769a28c4",
+    "raw_size": 146835695,
+    "raw_identity": {
+      "device": 1828,
+      "inode": 57756,
+      "mode": 384,
+      "uid": 1000
+    },
+    "retained_gzip_path": "docs/verification/evidence/scratch22-authority1-cleanup-observation-20261017.json.gz",
+    "retained_gzip_sha256": "58fab66d6d310e95d31e324e65a3fe0f3d2863f14e5dcf37dfd39209121ee7cf",
+    "retention_manifest": "docs/verification/evidence/scratch22-authority1-cleanup-observation-retention-20261017.json",
+    "verification": "Raw file streamed SHA256 matches and stable fd identity/size/mtime/ctime holds through parsing; retained gzip SHA256 matches. Parent reports lossless gzip/raw full comparison. No live protected tree was traversed or rehashed.",
+    "inventories": {
+      "output_entries": 140028,
+      "evidence_entries": 286298,
+      "combined_entries": 426326,
+      "selected_files": 13
+    },
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "scratch_uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52",
+    "scratch_device": 1828,
+    "root_lock": {
+      "device": 27,
+      "inode": 4,
+      "path": "/run/lock/mckernel-development.lock",
+      "uid": 0,
+      "gid": 0,
+      "mode": "0o644",
+      "nlink": 1
+    },
+    "target": {
+      "container_id": "18ce9ef597cfc38f4c661a7a36d80d872d3dfc96f6e93551651bc8f0b31b5aa6",
+      "container_name": "mckernel-exact-154a592e9c9841618a114901cdfd3e17",
+      "image_id": "sha256:0f8ad280e47d76b23554de4aec411752e1f779f9b2fc7fece6b0b3375dc9775d",
+      "owner_nonce": "d4ad604bc9cf47a1a1a2b5e4655ebc41",
+      "owner_pid": 80867,
+      "owner_starttime": "722300",
+      "exit_code": 1
+    },
+    "candidate_commit": "fd09933c64adaba32bf975ec96e5d518a42544e9",
+    "candidate_tree": "c6c846de121da56a179bcb2178668022b383e4a6",
+    "request_sha256": "520fbc79a87a800e9c2875bdcdd24eb3d4c449a7ba15ec1fd85aa664520cecbe",
+    "exclusion_inodes": {
+      "attempt": 57729,
+      "shared": 57728
+    }
+  },
+  "mount_order_decision": {
+    "cleanup_source_change_required": false,
+    "source_behavior": "configure compares sorted six-field mount tuples (Destination, Source, Type, RW); validate_container_profile sorts complete Mounts objects by Destination before canonical comparison. Other selected inspect fields remain exact.",
+    "read_only_experiment": "Execute only the audited canonical/validate_container_profile AST definitions against the saved observation in memory. Reversing Mounts passes; changing one Source after reordering raises container-mounts-binding. No Docker call.",
+    "result": "PASS: cleanup does not share the separate recovery helper's order-sensitive comparison defect."
+  },
+  "pending_proof_rows": [
+    {
+      "gate": "Actual process recovery",
+      "required": "Exact independent release/review and source bindings for the corrected recovery helper, command success, and immutable receipt schema scratch22-authority1.quarantine-recovery-complete.v1 with status COMPLETE_PROCESS_RECOVERY. Bind exact outer guard PID80259/start718109 and observed boot, sole approved signal/exit proof, unchanged protected inputs, replacement_root_lock [27,4], build_status FAIL, cleanup_required true and acceptance_credit false. PREPARED, the prior pre-signal refusal, a source PASS or missing process alone cannot satisfy this gate.",
+      "expected_receipt_path": "/home/holden/mckernel-work/scratch/native-exact-scratch22-authority1-quarantine-recovery-20261017.correction1.complete.json",
+      "current_status": "PENDING; not inspected or inferred here"
+    },
+    {
+      "gate": "Fresh process/root-lock proof after recovery",
+      "required": "Reviewed read-only post-recovery root census binds exact PID/start/boot and confirms the retired outer guard, actual owner80867 and all related Docker clients/descendants are absent; root lock27:4 has no unapproved holder and its full identity remains the observed root-owned0644 single-link empty regular file. The cleanup helper must acquire it through its existing nonblocking flock only after this prerequisite."
+    },
+    {
+      "gate": "Fresh container/boot/mount proof",
+      "required": "Reviewed read-only snapshots bind the exact stopped exit1 container/name/nonce/image, complete config/host-profile/mount values, no active/unexpected publisher, stable boot and scratch UUID/device/mount flags. Mount list iteration order alone is irrelevant. Any actual changed immutable field requires reconciliation."
+    },
+    {
+      "gate": "Retained authority inputs",
+      "required": "Preserve exact request, lease absence, two exclusion inodes/bytes, all13 selected file bindings and both full inventories from the lossless observation. Use the existing cleanup configure/protected_files/census checks at runtime; do not commission another duplicate whole-tree review scan. New recovery receipts should remain outside the protected output/evidence roots; any changed protected input requires a fresh reviewed observation rather than edited historical bytes."
+    },
+    {
+      "gate": "Fetched exact source and new release",
+      "required": "Dispatcher retains exact commit/tree plus fetched-blob evidence for cleanup source15b7f924 and tests6ff24e9b. If choosing a later commit, prove the same exact blobs and tree. Freeze a fresh final release payload including actual recovery/fresh-proof pointers, obtain independent execution review, then bind the final raw release SHA256. No historical release transfers authority."
+    }
+  ],
+  "release_template": {
+    "schema": "scratch22-authority1.cleanup-release.v1",
+    "status": "NOT_RELEASED",
+    "author": "/root",
+    "script_sha256": "15b7f9241741ccaff065819ea6847323d6ce47ac1fc69a3ea87fbdbad9b01098",
+    "tests_sha256": "6ff24e9b6139aa7a0d71d69194f6e9be63396756fbf7a65bfc572ca87442339c",
+    "baseline_source_sha256": "6606af40114eb5b6019438c4127948081d80bbe65144d841e906a7cba84aabed",
+    "git_commit": "aea751ec3b1d727be7c384210682d797b671b119",
+    "git_tree": "778bc8b02a78074b354423f9d57852f132501d6a",
+    "fetched_source_verified": false,
+    "source_review": {
+      "status": "PASS",
+      "reviewer": "/root/cheap_profile_review",
+      "evidence_sha256": "6073c68102ec1fbbfb63726961b9b48aa39b9e2d1aae97fdd6e1e05581b34841"
+    },
+    "execution_review": null,
+    "publisher_contract": {
+      "schema": "scratch22-authority1.publisher-contract.v1",
+      "coordination": "sole-campaign-coordinator-no-concurrent-build-or-cleanup",
+      "publishers": "project-owned-regular-file-O_CREAT|O_EXCL-only",
+      "census": "root-full-process-and-container-before-transaction-and-every-rmdir",
+      "excluded": "arbitrary-same-UID-directory-substitution-after-final-check"
+    },
+    "observation": null,
+    "transaction_paths": [
+      "/home/holden/mckernel-work/scratch/native-exact-scratch22-authority1-terminal-cleanup-20261017.mutex",
+      "/home/holden/mckernel-work/scratch/native-exact-scratch22-authority1-terminal-cleanup-20261017.plan.json",
+      "/home/holden/mckernel-work/scratch/native-exact-scratch22-authority1-terminal-cleanup-20261017.journal.jsonl",
+      "/home/holden/mckernel-work/scratch/native-exact-scratch22-authority1-terminal-cleanup-20261017.docker-logs.capture",
+      "/home/holden/mckernel-work/scratch/native-exact-scratch22-authority1-terminal-cleanup-20261017.quarantine.json",
+      "/home/holden/mckernel-work/scratch/native-exact-scratch22-authority1-terminal-cleanup-20261017.attempt.archive",
+      "/home/holden/mckernel-work/scratch/native-exact-scratch22-authority1-terminal-cleanup-20261017.shared.archive"
+    ],
+    "prerequisite_proofs": {
+      "actual_process_recovery": null,
+      "fresh_process_and_root_lock": null,
+      "fresh_container_boot_and_mount": null,
+      "fetched_source": null
+    },
+    "execution_profile": {
+      "cpu_affinity": [
+        0
+      ],
+      "address_space_bytes": 4294967296,
+      "concurrent_jobs": 1,
+      "outer_timeout_seconds": null,
+      "compiler": false,
+      "guest": false,
+      "network": false
+    }
+  },
+  "binding_instructions": [
+    "Embed the COMPLETE original parsed observation object in release.observation; a path/hash pointer alone is not accepted by configure. Preserve all rows and identities. Keep the original raw and compressed observation immutable.",
+    "source_review/execution_review are the cleanup helper's inline attestation format (status PASS, independent reviewer, evidence_sha256). The referenced source producer keeps its actual decision PASS_SOURCE; do not rewrite or normalize its stored record.",
+    "After all pending proof rows pass, set fetched_source_verified true, choose the actual verified source commit/tree, set candidate release status PASS_EXECUTION_RELEASE, and freeze every payload field except execution_review while that field remains null. This candidate is still non-executable because configure refuses missing independent execution_review.",
+    "Independent execution review should bind SHA256 of canonical release payload excluding solely execution_review and its actual proof-record hashes. Then fill execution_review with its real independent PASS/evidence hash and freeze the final raw release bytes; record their SHA256 for --release-sha256. Do not add self-referential release/evidence digests to the hashed payload.",
+    "The helper's terminal release_sha256 is SHA256(json.dumps(RELEASE,sort_keys=True,separators=(',',':')).encode()) with NO trailing newline; --release-sha256 binds raw file bytes. Preserve this distinction from the recovery helper's newline-terminated canonical receipt digest.",
+    "--prepare-observation may generate an unreleased draft from the raw observation, with stdout captured to a fresh exclusive file (roughly150MiB), never printed into the tool transcript. No configure/recover or root operation is permitted by that draft."
+  ],
+  "planned_root_command": [
+    "/usr/bin/sudo",
+    "-A",
+    "--",
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=4294967296",
+    "--nofile=256",
+    "--core=0",
+    "--",
+    "/usr/bin/python3.8",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/scripts/native_exact_scratch22_authority1_terminal_cleanup.py",
+    "--release",
+    "FRESH_FINAL_REVIEWED_RELEASE_PATH",
+    "--release-sha256",
+    "FINAL_RAW_RELEASE_SHA256",
+    "--execute"
+  ],
+  "planned_root_profile": {
+    "status": "NOT_RELEASED",
+    "cpu_affinity": [
+      0
+    ],
+    "address_space_bytes": 4294967296,
+    "aggregate_planning_share_gib": 4,
+    "concurrent_jobs": 1,
+    "outer_timeout_seconds": null,
+    "rationale": "4GiB covers the reviewed large-document/inventory path as a planning/AS share, subject to exact execution review; source's existing root command timeouts remain unchanged. No outer hard timeout or CPU-limit signal may kill the mutating lock owner.",
+    "safety": "Existing HUP/INT/TERM/QUIT deferral, root-development flock, publisher/process/container checks, original-inode archival transaction, nonreturning uncertainty quarantine and retained failure evidence remain mandatory. Safe success removes only the exact stopped container and authorized empty exclusion sentinels; complete source/output/evidence are preserved.",
+    "environment": "Use inherited SUDO_ASKPASS only through sudo -A, without reading it or exposing credentials. Pin the actual Python3.8/helper/tool identities in the final execution review, clear unrelated interpreter/loader overrides, use noninteractive commands and capture exact stdout/stderr/status. No purchased billing or new launcher.",
+    "resource_scope": "One CPU/4GiB share from the unchanged aggregate seven-job/24GiB budget; no build/guest concurrency expansion. Preserve host/scratch capacity floors."
+  },
+  "offline_checks": {
+    "raw_digest_and_stable_file_read": "PASS",
+    "observation_shape": "PASS exact14keys; both root-first Path-sorted inventories contain unique paths, no omissions through truncation, correct140028/286298counts, 13unique selected rows below128MiB and exact request/exclusion joins.",
+    "mount_permutation_and_mutation": "PASS",
+    "source_commit_blobs": "PASS local source/tests exact; remote fetch proof pending",
+    "reviewer_check_correction": "One review-only ordering assertion first used string sorting and raised AssertionError. Corrected it to the source's pathlib.Path ordering; the unchanged observation then passes. No producer/source/data/oracle was changed and no runtime attempt occurred."
+  },
+  "blocking_findings": [],
+  "runtime_preconditions_pending": true,
+  "not_performed": [
+    "root execution",
+    "live process/lock inspection or signalling",
+    "Docker",
+    "candidate/output/evidence traversal",
+    "guard/lease/exclusion access or mutation",
+    "cleanup",
+    "compiler",
+    "guest",
+    "network",
+    "Git writes"
+  ],
+  "acceptance": {
+    "execution_released": false,
+    "process_recovery_complete_claimed": false,
+    "cleanup_complete_claimed": false,
+    "native_build_success_claimed": false,
+    "formal_credit": false,
+    "os_complete": false
+  }
+}

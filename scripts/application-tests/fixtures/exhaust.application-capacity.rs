@@ -1,0 +1,1 @@
+fn main() { let capacity: u32 = 32; let mut reservations = 0; while reservations < capacity { reservations += 1; } println!("resource=application reservations={} capacity={} next=ENOSPC cleanup=required", reservations, capacity); }

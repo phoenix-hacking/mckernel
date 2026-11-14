@@ -1,0 +1,70 @@
+{
+  "schema": "mckernel.native-exact-c81-startup-diagnostic-checkpoint.v1",
+  "recorded_at": "2026-10-01T07:16:00Z",
+  "status": "PASS_DIAGNOSTIC_C81_STARTUP_AND_PASS_GUEST_POSTFLIGHT_STARTUP",
+  "candidate_sha": "c81aeaca5cedd893981a058444fa11a03a49a744",
+  "candidate_image_sha256": "fa6685543160fcaa5000b535ec8bd6fc70230465109564c3fb2beecb95bf39ed",
+  "current_candidate_builds": 1,
+  "accepted_current_candidate_diagnostic_applications": 3,
+  "formal_application_acceptance": false,
+  "packet": {
+    "path": "docs/verification/stability-native-diagnostic-startup-c81-execution-packet-20261001-1.md",
+    "commit": "0e3a9dd48204d3bbadca85567841adbb4641d09e",
+    "sha256": "41ae67f0630ca870d785cb4b55fa5dc671cdb0e6aba01c2b528575f4aaf2f143",
+    "manifest_sha256": "7f7a7150142848e315676ed3fba09847e5f52c9f7b0491858ab65467268439fb",
+    "manifest_review": "PASS_STARTUP_MANIFEST_C81",
+    "execution_review": "PASS_EXECUTION_C81_STARTUP"
+  },
+  "attempt": {
+    "nonce": "26e1561d2a993a8fc687324f3a84bfb4",
+    "root": "/home/holden/mckernel-work/scratch/ndsc81-20261001-1/attempt-26e1561d2a993a8fc687324f3a84bfb4",
+    "result_sha256": "dbea9b726f943607990760fab5e40c5dbed116b7800be2fbe7fbee6f6fdab1b9",
+    "serial_sha256": "ddff4c4217f32a265c71f34b66cc15e8eedfc46b4db9690c56e170089a1deff7",
+    "qmp_transcript_sha256": "be2b95fa563ed1b6acce588f1b7747e4005fdaff2113a2af350e4db19b60d25e",
+    "independent_result_review": "PASS_DIAGNOSTIC_C81_STARTUP",
+    "argv": ["/bin/mcexec", "-t", "1", "0", "app", "A", "", "B"],
+    "stdout_hex": "7b2263617365223a22737461727475702e617267762d656d707479222c2261726763223a342c2261726776223a5b22617070222c2241222c22222c2242225d2c227465726d696e61746f725f69735f6e756c6c223a747275657d0a",
+    "stdout_bytes": 91,
+    "stderr_hex": "",
+    "raw_wait_status": 0,
+    "exit_status": 0,
+    "stdout_eof": true,
+    "stderr_eof": true,
+    "stream_truncated_or_discarded": false,
+    "procfs_empty": true,
+    "capture_errors": [],
+    "observed_behavior": "One OS0/generation1/PID257 launch preserved the empty argument; 17 syscall deliveries, 16 returns and seven route records; pager handle20 four references and 473 reads drained to zero; transient retirement -11 was followed by successful retirement, procfs deletion and process release.",
+    "raw_conservative_fields_preserved": {
+      "application_acceptance": false,
+      "mckernel_application_executed": false,
+      "runtime_blocker": "protocol observation only; independent guest execution review is pending"
+    }
+  },
+  "postflight": {
+    "result": "PASS_GUEST_POSTFLIGHT_STARTUP",
+    "owner_result_path": "/home/holden/mckernel-work/scratch/ndsc81-20261001-1.owner-26e1561d2a993a8fc687324f3a84bfb4/result.json",
+    "owner_result_sha256": "185254f8f8af4d01b24d1562ae9ffc48d131ea4a4b4bb673195f4c875c2d34af",
+    "owner_pid": 2916187,
+    "owner_absent": true,
+    "container_id": "8d53082b983a8a81be76199fcd011bfc5622c93ddd71751a184880c0a1b7147c",
+    "container_exit_status": 0,
+    "container_oom": false,
+    "container_absent": true,
+    "docker_clients_reaped": 30,
+    "qemu_pid_pgid_sid": "10:10:10",
+    "qemu_starttime_ticks": 104855722,
+    "qemu_returncode": -9,
+    "qmp_guest_shutdown_observed": true,
+    "development_lock_released": true,
+    "lease_retained": false,
+    "evidence_directories_preserved": true,
+    "unrelated_container_equivalence": "NOT_ESTABLISHED; no authenticated pre/post snapshots were required or retained."
+  },
+  "scope": "One current-candidate startup diagnostic only. No formal catalog/application, shutdown, production, language or whole-OS acceptance.",
+  "next_tasks": [
+    "Bind/commit/fetch the reviewed threads packet and obtain a fresh one-shot release before running threads.",
+    "Independently review the prepared signals overlay and run signals only under its separate release.",
+    "Continue effect-aware native OS shutdown implementation; application/guest poweroff is not McKernel OS shutdown."
+  ],
+  "os_goal_complete": false
+}

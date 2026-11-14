@@ -1,0 +1,113 @@
+--- original/reboot_workload_capture.py
++++ final/reboot_workload_capture.py
+@@ -51,15 +51,34 @@
+ )]
+ 
+ 
+-def workload_view(serial, generation):
++BEGIN_ND = '/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/runtime-first-restoration-1/native_diagnostic.py'
++BEGIN_ND_SHA = '059c40c95b2306265f21bce2a77c49edc7baeb4792e977b189770fc0d21685f1'
++BEGIN_AUDIT = [re.compile(PREFIX + module + operation + IDENTITY + suffix) for module, operation, suffix in (
++    (r'mcctrl: ', r'application_process=cleanup_requested ', r' intent_errno=-?[0-9]+'),
++    (r'ihk_smp_x86_64: IHK-SMP: ', r'application cleanup ACK ', r' token=[0-9]+ errno=-?[0-9]+ abandoned=[01]'),
++)]
++
++def begin_diagnostic(manifest):
++    if manifest is None or 'cleanup_profile' not in manifest:
++        return None
++    diagnostic = bound('reboot_workload_begin_nd', BEGIN_ND, BEGIN_ND_SHA)
++    diagnostic._validate_cleanup_profile(manifest['cleanup_profile'], manifest['modules'])
++    return diagnostic
++
++
++def workload_view(serial, generation, manifest=None):
+     """Lossless strict audit partition with complete identity/terminal joins.
+ 
+     Source-supported transient retirement EAGAIN is kept before its successful
+     distinct-token retry. Quarantine errors, foreign identities and duplicate
+     events fail before any line can be removed from either epoch's view.
+     """
++    begin = begin_diagnostic(manifest)
++    patterns = AUDIT + BEGIN_AUDIT if begin is not None else AUDIT
+     markers = ('application_syscall=', 'application SCHEDULE',
+                'application retirement', 'application_process=', 'application procfs')
++    if begin is not None:
++        markers += ('application cleanup ACK',)
+     epochs = {'1': [], '2': []}
+     classified = []
+     for position, line in enumerate(serial.splitlines(keepends=True)):
+@@ -69,7 +88,7 @@
+             wire = line[:-1]
+             if wire.endswith('\r'):
+                 wire = wire[:-1]
+-            matches = [(kind, match) for kind, pattern in enumerate(AUDIT)
++            matches = [(kind, match) for kind, pattern in enumerate(patterns)
+                        if (match := pattern.fullmatch(wire))]
+             need(len(matches) == 1, 'exact source-supported application audit')
+             kind, row = matches[0]
+@@ -87,8 +106,8 @@
+         pid = scheduled[0][2]
+         need(all(row[2] == pid for row in rows), 'all audit rows belong to scheduled PID')
+         need(len({(kind, wire) for _, kind, _, wire in rows}) == len(rows), 'duplicate audit event')
+-        events = {kind: [row for row in rows if row[1] == kind] for kind in range(8)}
+-        for kind in (2, 3, 4):
++        events = {kind: [row for row in rows if row[1] == kind] for kind in range(11 if begin is not None else 8)}
++        for kind in ((3, 4) if begin is not None else (2, 3, 4)):
+             need(len(events[kind]) == 1, 'one release/procfs event per epoch')
+         for kind in (3, 4):
+             need(events[kind][0][3].endswith(' tid=' + pid), 'procfs TID matches simple workload PID')
+@@ -103,8 +122,20 @@
+              'transient retries precede unique successful retirement')
+         exits = [position for position, _, _, wire in events[5] if wire.endswith(' number=231')]
+         need(len(exits) == 1 and scheduled[0][0] < events[3][0][0] < exits[0] <
+-             events[4][0][0] < terminal[0] < events[2][0][0] and
++             events[4][0][0] < terminal[0] and
+              all(exits[0] < position for position, _, _ in retirement), 'per-epoch retirement order')
++        if begin is None:
++            need(terminal[0] < events[2][0][0], 'per-epoch legacy release order')
++        else:
++            need(not events[2], 'BEGIN profile cannot substitute a legacy release row')
++            epoch_view = ''.join(line for found, line in classified if found is None or found == epoch)
++            # Invoke the accepted checker on the exact epoch, with its own exit.
++            terminal_index = next(i for i, line in enumerate(epoch_view.splitlines())
++                                  if 'application_syscall=delivered ' in line and
++                                  re.search(r'os=0 generation=' + epoch + r' pid=' + pid +
++                                            r' worker=[0-9]+ delivery=[0-9]+ cpu=0 number=231$', line))
++            begin._check_begin_cleanup(epoch_view, 'os=0 generation=' + epoch + ' pid=' + pid,
++                                       terminal_index)
+     return ''.join(line for epoch, line in classified if epoch is None or epoch == str(generation))
+ 
+ 
+@@ -112,9 +143,9 @@
+     serial = observation['serial']
+     base = bound('reboot_workload_base', BASE, BASE_SHA256)
+     result = base.evaluate(serial)  # All original release/boot assertions retained.
+-    diagnostic = bound('reboot_workload_nd', ND, ND_SHA256)
++    diagnostic = begin_diagnostic(manifest) or bound('reboot_workload_nd', ND, ND_SHA256)
+     need(not diagnostic.BAD_MARKERS.search(serial + '\n' + observation['debugcon']), 'kernel failure marker')
+-    first_observation = dict(observation, serial=workload_view(serial, 1))
++    first_observation = dict(observation, serial=workload_view(serial, 1, manifest))
+     first = diagnostic.evaluate(manifest, first_observation)
+     lifecycle = bound('reboot_workload_lifecycle', '/home/holden/mckernel/scripts/application-tests/native_diagnostic_lifecycle_capture.py',
+                       '0585f78b80e603c010316418ce307794d59e1d92581b845ec6b2e74e22c8954b')
+@@ -165,11 +196,17 @@
+     schedules = re.findall(r'application SCHEDULE os=0 generation=2 pid=(\d+) cpu=0\b', serial)
+     need(len(schedules) == 1, 'fresh generation2 workload schedule')
+     prefix = r'os=0 generation=2 pid=' + schedules[0]
+-    for pattern in (r'application retirement ' + prefix + r' token=\d+ errno=0\b',
+-                    r'application_process=release ' + prefix + r' cleanup_errno=0\b',
++    legacy_lifecycle = () if 'cleanup_profile' in manifest else (
++                    r'application retirement ' + prefix + r' token=\d+ errno=0\b',
++                    r'application_process=release ' + prefix + r' cleanup_errno=0\b')
++    for pattern in (*legacy_lifecycle,
+                     *[r'application procfs ' + op + ' ' + prefix + r' tid=' + schedules[0] + r'\b'
+                       for op in ('published', 'deleted')]):
+         need(len(re.findall(pattern, serial)) == 1, 'generation2 retirement/release')
+-    diagnostic._check_syscall_trace(workload_view(serial, 2), prefix)
++    second_view = workload_view(serial, 2, manifest)
++    if 'cleanup_profile' in manifest:
++        diagnostic._check_syscall_trace(second_view, prefix, True)
++    else:
++        diagnostic._check_syscall_trace(second_view, prefix)
+     return dict(result, first_workload_protocol=first['status'], rebooted_os_workload_protocol='PASS', second_workload=report,
+                 second_stop_verified=False, native_execution_verified=False, full_cycle_verified=False)

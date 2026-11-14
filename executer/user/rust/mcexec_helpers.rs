@@ -82,7 +82,7 @@ const MPOL_DEFAULT: c_int = 0;
 const MPOL_PREFERRED: c_int = 1;
 const MPOL_BIND: c_int = 2;
 const MPOL_INTERLEAVE: c_int = 3;
-const PLD_MPOL_MAX: c_int = 4;
+const PLD_MPOL_MAX: c_int = 5;
 
 const MPOL_NODEMASK_NONE: i32 = 0;
 const MPOL_NODEMASK_LOCAL: i32 = 1;
@@ -90,6 +90,7 @@ const MPOL_NODEMASK_NONLOCAL: i32 = 2;
 const MPOL_NODEMASK_ALL: i32 = 3;
 
 const EINVAL: i32 = 22;
+const ECHILD: i32 = 10;
 const ENOENT: i32 = 2;
 const EBADF: i32 = 9;
 const ENOEXEC: i32 = 8;
@@ -102,6 +103,8 @@ const EAGAIN: i32 = 11;
 const ESRCH: i32 = 3;
 const ERANGE: i32 = 34;
 const ENOSYS: i32 = 38;
+const EOPNOTSUPP: i32 = 95;
+const PRIVATE_FORK_CARRIER_MARKER_V1: u64 = 0x313030434b46434d;
 const X_OK: c_int = 1;
 const SC_OPEN_MAX: c_int = 4;
 const F_GETFD: c_int = 1;
@@ -172,7 +175,8 @@ static MCEXEC_ALT_ROOT_ENV: &[u8] = b"MCEXEC_ALT_ROOT\0";
 static MCEXEC_DEFAULT_ALTROOT: &[u8] = b"/usr/linux-k1om-4.7/linux-k1om\0";
 static LD_PRELOAD_ENVNAME_LITERAL: &[u8] = b"ld_preload_envname\0";
 static OBJDUMP_RPATH_PREFIX: &[u8] = b"objdump -x ";
-static OBJDUMP_RPATH_SUFFIX: &[u8] = b" | awk '/RPATH/ { print $2 }'";
+// Preserve whitespace inside the literal library directory after its tag.
+static OBJDUMP_RPATH_SUFFIX: &[u8] = b" | awk '$1 ~ /^(RPATH|RUNPATH)$/ { sub(/^[[:space:]]*(RPATH|RUNPATH)[[:space:]]+/, \"\"); print }'";
 static MCEXEC_USAGE_PREFIX: &[u8] = b"usage: ";
 static MCEXEC_USAGE_WITH_ENVS: &[u8] = b" [-c target_core] [-n nr_partitions] [<-e ENV_NAME=value>...] [--mpol-threshold=N] [--enable-straight-map] [--extend-heap-by=N] [-s (--stack-premap=)[premap_size][,max]] [--mpol-no-heap] [--mpol-no-bss] [--mpol-no-stack] [--mpol-shm-premap] [--disable-sched-yield] [--enable-uti] [--uti-thread-rank=N] [--uti-use-last-cpu] [<mcos-id>] (program) [args...]\n";
 static MCEXEC_USAGE_WITHOUT_ENVS: &[u8] = b" [-c target_core] [-n nr_partitions] [--mpol-threshold=N] [--enable-straight-map] [--extend-heap-by=N] [-s (--stack-premap=)[premap_size][,max]] [--mpol-no-heap] [--mpol-no-bss] [--mpol-no-stack] [--mpol-shm-premap] [--disable-sched-yield]  [--enable-uti] [--uti-thread-rank=N] [--uti-use-last-cpu] [<mcos-id>] (program) [args...]\n";
@@ -605,7 +609,7 @@ unsafe extern "C" {
         mode: c_ulong,
     ) -> c_long;
     fn mcexec_path_open_bridge(path: *const u8, flags: c_ulong, mode: c_ulong) -> c_long;
-    fn mcexec_cred_get_bridge(fd: c_int, arg: c_ulong);
+    fn mcexec_cred_get_bridge(fd: c_int, arg: c_ulong) -> c_long;
     fn mcexec_cred_setfsuid_bridge(uid: c_ulong) -> c_long;
     fn mcexec_cred_setresuid_bridge(ruid: c_ulong, euid: c_ulong, suid: c_ulong) -> c_long;
     fn mcexec_cred_setreuid_bridge(ruid: c_ulong, euid: c_ulong) -> c_long;
@@ -1457,8 +1461,8 @@ pub unsafe extern "C" fn act_rt_sigprocmask(
 #[no_mangle]
 pub unsafe extern "C" fn act_setfsuid(w: *const McexecSyscallWaitDesc, fd: c_int, cpu: c_int) {
     let ret = if mcexec_setfsuid_needs_cred_result(unsafe { (*w).sr.args[1] }) != 0 {
-        unsafe { mcexec_cred_get_bridge(fd, (*w).sr.args[0]) };
-        0
+        // Report the actual synchronous GET_CRED status to the error-aware guest.
+        unsafe { mcexec_cred_get_bridge(fd, (*w).sr.args[0]) }
     } else {
         unsafe { mcexec_cred_setfsuid_bridge((*w).sr.args[0]) }
     };
@@ -2000,29 +2004,51 @@ pub unsafe extern "C" fn act_clone_complete(
     fd: c_int,
     cpu: c_int,
 ) {
-    let pid = unsafe { (*w).sr.args[1] as c_int };
+    // Selector1 commits the host child's existing fork-sync owner. A missing
+    // owner cannot be reported as successful child start to the guest.
+    let pid = match i32::try_from(unsafe { (*w).sr.args[1] }) {
+        Ok(pid) if pid > 0 => pid,
+        _ => { unsafe { do_syscall_return(fd, cpu, -EINVAL as c_long, 0, 0, 0, 0) }; return; }
+    };
     let mut fs: *mut ForkSync = core::ptr::null_mut();
     let mut node: *mut ForkSyncContainer = core::ptr::null_mut();
-
     unsafe {
         mcexec_fork_sync_lock_bridge();
-        if mcexec_fork_sync_complete_result(
-            core::ptr::addr_of_mut!(MCEXEC_FORK_SYNC_TOP),
-            pid,
-            &mut fs,
-            &mut node,
-        ) > 0
-        {
-            if !fs.is_null() {
-                mcexec_fork_sync_munmap_bridge(fs as *mut c_void);
-            }
-            if !node.is_null() {
-                mcexec_fork_sync_free_bridge(node as *mut c_void);
-            }
+        let completed = mcexec_fork_sync_complete_result(
+            core::ptr::addr_of_mut!(MCEXEC_FORK_SYNC_TOP), pid, &mut fs, &mut node,
+        );
+        if completed == 1 {
+            // The producer checked both pointers before changing success or
+            // unlinking. These are the exact detached owner, consumed once.
+            mcexec_fork_sync_munmap_bridge(fs.cast());
+            mcexec_fork_sync_free_bridge(node.cast());
         }
         mcexec_fork_sync_unlock_bridge();
-        do_syscall_return(fd, cpu, 0, 0, 0, 0, 0);
+        let result = if completed == 1 { 0 } else if completed < 0 { completed } else { -ECHILD };
+        do_syscall_return(fd, cpu, result as c_long, 0, 0, 0, 0);
     }
+}
+
+// Reserved native fork controls are transport requests, never Linux fork()
+// requests. The launcher has no IHK pending-owner claim or receipt writer;
+// routing metadata and RET0 cannot authenticate revoke/destruction authority.
+// Until that actual backend hook exists, return an explicit refusal without
+// allocating a fork-sync owner, spawning a process or touching carrier bytes.
+unsafe fn act_private_fork_control(
+    w: *const McexecSyscallWaitDesc, fd: c_int, cpu: c_int,
+) -> bool {
+    let request = unsafe { &(*w).sr };
+    let selector = request.args[0];
+    if selector != 2 && selector != 3 { return false; }
+    let route_matches = request.number == SYS_CLONE as c_ulong && cpu >= 0
+        && unsafe { (*w).cpu } == cpu as c_ulong
+        && request.args[5] as u64 == PRIVATE_FORK_CARRIER_MARKER_V1;
+    // Selector3 has an existing guest final-ACK shape (stage2). Selector2 has
+    // no authenticated revoke protocol yet; no new wire phase is inferred.
+    let known_shape = selector != 3 || request.args[1] == 2;
+    let result = if route_matches && known_shape { -EOPNOTSUPP } else { -EINVAL };
+    unsafe { do_syscall_return(fd, cpu, result as c_long, 0, 0, 0, 0) };
+    true
 }
 
 #[no_mangle]
@@ -2032,6 +2058,7 @@ pub unsafe extern "C" fn act_clone_start(
     cpu: c_int,
     main_loop_ret: *mut c_long,
 ) -> c_int {
+    if unsafe { act_private_fork_control(w, fd, cpu) } { return 0; }
     let mut rc: c_long = -1;
     let fs = unsafe { mcexec_clone_alloc_fork_sync_bridge() as *mut ForkSync };
 
@@ -2321,9 +2348,8 @@ pub unsafe extern "C" fn act_execve_phase2(
     if desc.is_null() {
         unsafe {
             mcexec_execve2_alloc_desc_failed_bridge();
-            do_syscall_return(fd, cpu, -1, 0, 0, 0, 0);
         }
-        return 0;
+        return -1;
     }
     unsafe { zero_bytes(desc, size) };
 
@@ -2343,9 +2369,8 @@ pub unsafe extern "C" fn act_execve_phase2(
     {
         unsafe {
             mcexec_execve2_transfer_desc_failed_bridge();
-            do_syscall_return(fd, cpu, EINVAL as c_long, 0, 0, 0, 0);
         }
-        return 0;
+        return -1;
     }
 
     unsafe { mcexec_execve2_transfer_desc_ok_bridge() };
@@ -2362,8 +2387,9 @@ pub unsafe extern "C" fn act_execve_phase2(
     }
 
     if unsafe { close_cloexec_fds(fd) } < 0 {
-        unsafe { do_syscall_return(fd, cpu, EINVAL as c_long, 0, 0, 0, 0) };
-        return 0;
+        // Descriptor delivery and image writes already happened. Failure here
+        // is fatal to this replacement image; do not fabricate a guest RET.
+        return -1;
     }
 
     unsafe { do_syscall_return(fd, cpu, 0, 0, 0, 0, 0) };
@@ -2434,7 +2460,15 @@ pub unsafe extern "C" fn act_execve(
                         *main_loop_ret = ret;
                     }
                 }
-                1
+                // Phase two follows destruction of the old guest userspace.
+                // Worker return values are discarded by join_all_threads, so
+                // propagate fatal image failure through the existing process
+                // exit path. Uncertain guest responses retain their claims.
+                unsafe {
+                    mcexec_exit_cmd_servers_bridge();
+                    mcexec_exit_process_bridge(1);
+                }
+                1 // The existing void bridge exits the real process.
             } else {
                 0
             }
@@ -2967,7 +3001,14 @@ pub unsafe extern "C" fn act_main_loop_body(
         break;
     }
 
-    unsafe { mcexec_main_loop_timeout_bridge() };
+    unsafe {
+        mcexec_main_loop_timeout_bridge();
+        // A terminal WAIT failure otherwise disappears when the joining main
+        // discards this worker return and exits zero. Preserve the existing
+        // fatal launcher exit path; retained kernel ownership stays retained.
+        mcexec_exit_cmd_servers_bridge();
+        mcexec_exit_process_bridge(1);
+    }
     1
 }
 
@@ -3420,7 +3461,8 @@ pub unsafe extern "C" fn transfer_image(fd: c_int, desc: *mut c_void) -> c_int {
             } != 0
             {
                 unsafe { perror(DMA_PERROR_TAG.as_ptr()) };
-                break;
+                // A partial image is unusable; propagate the failed transfer.
+                return -1;
             }
         }
 
@@ -6756,9 +6798,12 @@ pub unsafe extern "C" fn mcexec_find_libdir_body(libdir: *mut u8, len: usize) ->
         return -(error as isize);
     }
 
+    // EOF need not set errno; do not report success or a stale error.
+    unsafe { *__errno_location() = 0 };
     rc = unsafe { mcexec_find_libdir_getline_bridge(&mut line, &mut linelen, filep) };
     if rc <= 0 {
         let error = unsafe { *__errno_location() };
+        let error = if error == 0 { ENOENT } else { error };
         unsafe {
             mcexec_find_libdir_rpath_not_found_bridge(error);
             mcexec_find_libdir_pclose_bridge(filep);
@@ -6770,7 +6815,9 @@ pub unsafe extern "C" fn mcexec_find_libdir_body(libdir: *mut u8, len: usize) ->
     }
 
     unsafe {
-        *line.add((rc - 1) as usize) = 0;
+        if *line.add((rc - 1) as usize) == b'\n' {
+            *line.add((rc - 1) as usize) = 0;
+        }
     }
 
     let line_bytes = unsafe { cstr_bytes(line as *const u8) };
@@ -6793,20 +6840,35 @@ pub unsafe extern "C" fn mcexec_find_libdir_body(libdir: *mut u8, len: usize) ->
 pub unsafe extern "C" fn mcexec_ld_preload_init_body() {
     let mut libdir = [0u8; PATH_MAX];
     let mut envbuf = [0u8; PATH_MAX];
+    let enable_uti = unsafe { mcexec_ld_preload_enable_uti_bridge() } != 0;
+    let disable_sched_yield =
+        unsafe { mcexec_ld_preload_disable_sched_yield_bridge() } != 0;
+    let enable_qlmpi = unsafe { mcexec_ld_preload_enable_qlmpi_bridge() } != 0;
+    let existing = unsafe { mcexec_ld_preload_getenv_bridge(MCKERNEL_LD_PRELOAD_ENV.as_ptr()) };
+
+    if !enable_uti && !disable_sched_yield && !enable_qlmpi && existing.is_null() {
+        if !unsafe { mcexec_ld_preload_getenv_bridge(LD_PRELOAD_ENVNAME_LITERAL.as_ptr()) }
+            .is_null()
+        {
+            unsafe {
+                mcexec_ld_preload_unsetenv_bridge();
+            }
+        }
+        return;
+    }
 
     if unsafe { mcexec_find_libdir_body(libdir.as_mut_ptr(), libdir.len()) } < 0 {
         unsafe { mcexec_ld_preload_find_failed_bridge() };
         return;
     }
 
-    let existing = unsafe { mcexec_ld_preload_getenv_bridge(MCKERNEL_LD_PRELOAD_ENV.as_ptr()) };
     let rc = unsafe {
         mcexec_build_ld_preload_result(
             libdir.as_ptr(),
             existing as *const u8,
-            mcexec_ld_preload_enable_uti_bridge(),
-            mcexec_ld_preload_disable_sched_yield_bridge(),
-            mcexec_ld_preload_enable_qlmpi_bridge(),
+            enable_uti as i32,
+            disable_sched_yield as i32,
+            enable_qlmpi as i32,
             envbuf.as_mut_ptr(),
             envbuf.len(),
         )
@@ -8147,7 +8209,7 @@ pub unsafe extern "C" fn mcexec_fork_sync_complete_result(
     fs_out: *mut *mut ForkSync,
     node_out: *mut *mut ForkSyncContainer,
 ) -> i32 {
-    if top.is_null() || fs_out.is_null() || node_out.is_null() {
+    if top.is_null() || fs_out.is_null() || node_out.is_null() || pid <= 0 {
         return -EINVAL;
     }
 
@@ -8161,6 +8223,10 @@ pub unsafe extern "C" fn mcexec_fork_sync_complete_result(
     while !current.is_null() {
         let next = unsafe { (*current).next };
         if unsafe { (*current).pid } == pid {
+            // Refuse before effects: no live sync object means no child-start
+            // producer, and the list owner must remain available for repair.
+            let fs = unsafe { (*current).fs };
+            if fs.is_null() { return -EINVAL; }
             if prev.is_null() {
                 unsafe {
                     *top = next;
@@ -8171,12 +8237,7 @@ pub unsafe extern "C" fn mcexec_fork_sync_complete_result(
                 }
             }
 
-            let fs = unsafe { (*current).fs };
-            if !fs.is_null() {
-                unsafe {
-                    (*fs).success = 1;
-                }
-            }
+            unsafe { (*fs).success = 1; }
             unsafe {
                 *fs_out = fs;
                 *node_out = current;
@@ -8664,3 +8725,39 @@ fn panic(_info: &PanicInfo) -> ! {
         core::hint::spin_loop();
     }
 }
+
+#[path = "mcexec_overlay_fd.rs"]
+mod mcexec_overlay_fd;
+
+#[path = "mcexec_worker_lifecycle.rs"]
+mod mcexec_worker_lifecycle;
+
+#[path = "mcexec_clone_child.rs"]
+mod mcexec_clone_child;
+
+#[path = "mcexec_load_descriptor.rs"]
+mod mcexec_load_descriptor;
+
+#[path = "mcexec_signal_wait_exit.rs"]
+mod mcexec_signal_wait_exit;
+
+#[path = "mcexec_platform_syscalls.rs"]
+mod mcexec_platform_syscalls;
+
+#[path = "mcexec_cpu_topology.rs"]
+mod mcexec_cpu_topology;
+
+#[path = "mcexec_diagnostics.rs"]
+mod mcexec_diagnostics;
+
+#[path = "mcexec_launch_state.rs"]
+mod mcexec_launch_state;
+
+#[path = "mcexec_residual_functional.rs"]
+mod mcexec_residual_functional;
+
+#[path = "mcexec_entry_metadata_options.rs"]
+mod mcexec_entry_metadata_options;
+
+#[path = "mcexec_runtime_data.rs"]
+mod mcexec_runtime_data;

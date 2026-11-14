@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "record_kind": "native_collector_lifecycle_multithread_literal_review",
+  "task_id": "M02-C-lifecycle-multithread-literal-review",
+  "attempt": 1,
+  "status": "PASS_MULTITHREAD_LITERAL_SLICE_ONLY",
+  "recorded_utc": "2026-09-15T11:15:00Z",
+  "reviewed_base_commit": "146f335097b2c6441bb4227a02ea40a1d4f30802",
+  "archive": {
+    "path": "docs/verification/evidence/stability-native-collector-lifecycle-multithread-literal-slice-20260915-1.tar.gz",
+    "sha256": "d55dc09c396ef43d79cfffb72169a7d9ed89aae379b9820b67bcee5236048b7e",
+    "size": 11789,
+    "members": 5
+  },
+  "source_sha256": {
+    "README.md": "b14fc0707fcf5afd3ded06df0c4cd5037fc298a4ade76020d33365d04683c853",
+    "harness.py": "c86edf0f37f66f6959650ad3f9aa279f10b2839980769d03d73af4c9bb00294e",
+    "vectors.json": "349d9cf2e8fcf963f0ed6f204f3f6b6c16faae39c3f60b60f985bcd438b68aa0",
+    "expected.json": "399b8e7950908a5d2b5a24b1a4370fd06e0730d5c464388289f1d385ecbb13ea",
+    "test_native_lifecycle_model.py": "868c27c40461619b3e09a23a8cac22dd2b347bdc5bcbbc50e1c8af2c60b4c3b1"
+  },
+  "accepted_scope": {
+    "vectors": [
+      "thread-only-exit",
+      "last-thread-exit",
+      "live-sibling-retirement",
+      "competing-group-orders",
+      "inherited-status",
+      "tid-reuse"
+    ],
+    "materialized_vectors_total": 34,
+    "group_orderings": 2,
+    "process_terminal_branch": 2,
+    "inherited_thread_branch": 3,
+    "synthesized_sibling_events": 0,
+    "retired_identity_retained_across_tid_reuse": true,
+    "live_sibling_blocks_vm_release": true
+  },
+  "corpus_complete": false,
+  "models_replaced": false,
+  "source_checks_run": false,
+  "compiler_execution": false,
+  "model_execution": false,
+  "native_execution": false,
+  "whole_source_packet_accepted": false,
+  "abi_freeze_released": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

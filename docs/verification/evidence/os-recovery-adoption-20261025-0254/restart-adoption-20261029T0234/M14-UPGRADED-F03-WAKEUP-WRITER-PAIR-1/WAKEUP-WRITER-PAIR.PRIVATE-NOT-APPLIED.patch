@@ -1,0 +1,121 @@
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -24913,12 +24913,12 @@
+ #endif
+ #line 24447
+ 
+-static void
+-ptrace_wakeup_update_lock_bridge(unsigned long lock_addr, void *node)
+-{
+-	mcs_rwlock_writer_lock((struct mcs_rwlock_lock *)lock_addr,
+-			(struct mcs_rwlock_node_irqsave *)node);
+-}
++#if defined(MCKERNEL_RUST_F03_WAKEUP_WRITER_PAIR)
++extern void ptrace_wakeup_update_lock_bridge(unsigned long lock_addr, void *node);
++#else
++static void ptrace_wakeup_update_lock_bridge(unsigned long lock_addr, void *node) { mcs_rwlock_writer_lock((struct mcs_rwlock_lock *)lock_addr, (struct mcs_rwlock_node_irqsave *)node); }
++
++#endif
+ 
+ #if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PTRACE_ENTRY)
+ extern int ptrace_wakeup_trace_syscall_bridge(unsigned long, unsigned long, int);
+@@ -24934,12 +24934,12 @@
+ #endif
+ #line 24462
+ 
+-static void
+-ptrace_wakeup_update_unlock_bridge(unsigned long lock_addr, void *node)
+-{
+-	mcs_rwlock_writer_unlock((struct mcs_rwlock_lock *)lock_addr,
+-			(struct mcs_rwlock_node_irqsave *)node);
+-}
++#if defined(MCKERNEL_RUST_F03_WAKEUP_WRITER_PAIR)
++extern void ptrace_wakeup_update_unlock_bridge(unsigned long lock_addr, void *node);
++#else
++static void ptrace_wakeup_update_unlock_bridge(unsigned long lock_addr, void *node) { mcs_rwlock_writer_unlock((struct mcs_rwlock_lock *)lock_addr, (struct mcs_rwlock_node_irqsave *)node); }
++
++#endif
+ 
+ #if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PTRACE_ENTRY)
+ extern unsigned long ptrace_wakeup_pending_take_bridge(unsigned long,
+--- a/kernel/rust/lib.rs
++++ b/kernel/rust/lib.rs
+@@ -148,3 +148,7 @@
+ mod f06_prctl_log_storage;
+ #[cfg(f06_vdso_map_log_candidate)]
+ mod f06_vdso_map_log;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(all(f03_wakeup_writer_pair_candidate, target_arch = "x86_64"))]
++mod f03_wakeup_writer_pair;
+--- a/kernel/CMakeLists.txt
++++ b/kernel/CMakeLists.txt
+@@ -119,6 +119,7 @@
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/listeners.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/list_helpers.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/lock_helpers.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_wakeup_writer_pair.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/mem_helpers.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/mikc.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/numparse.rs"
+@@ -215,6 +216,7 @@
+ 			list(APPEND RUST_KERNEL_CFG "--cfg" "f03_syscall_table_clone3")
+ 			# Qualified next cohort: current native x86_64 Linux6.12, no UBSAN.
+ 			if (ARCH STREQUAL "x86_64" AND NOT ENABLE_UBSAN)
++				list(APPEND RUST_KERNEL_CFG "--cfg" "f03_wakeup_writer_pair_candidate")
+ 				list(APPEND RUST_KERNEL_CFG "--cfg" "f03_prlimit_body_candidate")
+ 				list(APPEND RUST_KERNEL_CFG "--cfg" "f03_do_exit_supported_candidate")
+ 				list(APPEND RUST_KERNEL_CFG "--cfg" "f03_unmap_begin_selected_candidate")
+@@ -598,7 +600,7 @@
+ 			COMPILE_DEFINITIONS MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE)
+ 		if (ARCH STREQUAL "x86_64" AND NOT ENABLE_UBSAN)
+ 			set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+-				COMPILE_DEFINITIONS "MCKERNEL_RUST_F03_PERF_ATTR_CALLBACKS;MCKERNEL_RUST_F03_PRLIMIT_BODY;MCKERNEL_RUST_F03_EXEC_DEFINED_TAIL;MCKERNEL_RUST_F03_DO_EXIT_V2;MCKERNEL_RUST_F03_UNMAP_BEGIN;MCKERNEL_RUST_F03_UNMAP_REMOVE;MCKERNEL_RUST_F03_UNMAP_FINISH;MCKERNEL_RUST_F03_MMAP_PAGE_CALLBACK;MCKERNEL_RUST_F03_WAIT_RELEASE;MCKERNEL_RUST_F03_WAIT_PROCESS_RELEASE;MCKERNEL_RUST_F03_TERMINATE_REFCOUNT;MCKERNEL_RUST_F03_TERMINATE_CMPXCHG;MCKERNEL_RUST_F03_PTRACE_IO_FIND;MCKERNEL_RUST_F03_PTRACE_IO_UNLOCK;MCKERNEL_RUST_F03_PTRACE_IO_COPY_FROM;MCKERNEL_RUST_F03_SYNC_CHILD_EVENT;MCKERNEL_RUST_F03_WAKEUP_FIND;MCKERNEL_RUST_F03_WAKEUP_UNLOCK;MCKERNEL_RUST_F03_EXIT_WAITQ_WAKE")
++				COMPILE_DEFINITIONS "MCKERNEL_RUST_F03_WAKEUP_WRITER_PAIR;MCKERNEL_RUST_F03_PERF_ATTR_CALLBACKS;MCKERNEL_RUST_F03_PRLIMIT_BODY;MCKERNEL_RUST_F03_EXEC_DEFINED_TAIL;MCKERNEL_RUST_F03_DO_EXIT_V2;MCKERNEL_RUST_F03_UNMAP_BEGIN;MCKERNEL_RUST_F03_UNMAP_REMOVE;MCKERNEL_RUST_F03_UNMAP_FINISH;MCKERNEL_RUST_F03_MMAP_PAGE_CALLBACK;MCKERNEL_RUST_F03_WAIT_RELEASE;MCKERNEL_RUST_F03_WAIT_PROCESS_RELEASE;MCKERNEL_RUST_F03_TERMINATE_REFCOUNT;MCKERNEL_RUST_F03_TERMINATE_CMPXCHG;MCKERNEL_RUST_F03_PTRACE_IO_FIND;MCKERNEL_RUST_F03_PTRACE_IO_UNLOCK;MCKERNEL_RUST_F03_PTRACE_IO_COPY_FROM;MCKERNEL_RUST_F03_SYNC_CHILD_EVENT;MCKERNEL_RUST_F03_WAKEUP_FIND;MCKERNEL_RUST_F03_WAKEUP_UNLOCK;MCKERNEL_RUST_F03_EXIT_WAITQ_WAKE")
+ 			if (ENABLE_PERF)
+ 				set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+ 					COMPILE_DEFINITIONS "MCKERNEL_RUST_F03_PERF_ALLOC_BRIDGES;MCKERNEL_RUST_F03_PERF_COUNTER_CONTROL_BRIDGES;MCKERNEL_RUST_F03_PERF_EVENT_PROVIDER_BRIDGES;MCKERNEL_RUST_F03_PERF_PROVIDER_NEXT3_BRIDGES")
+--- /dev/null
++++ b/kernel/rust/f03_wakeup_writer_pair.rs
+@@ -0,0 +1,41 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Paired IRQ-saving MCS writer callbacks use the existing lock provider.
++use core::ffi::c_void;
++use core::mem::{align_of, size_of};
++use crate::abi::CULong;
++use crate::lock_helpers::{self, McsRwlockLock, McsRwlockNodeIrqsave};
++
++const _: () = {
++    assert!(size_of::<CULong>() == 8);
++    assert!(size_of::<McsRwlockLock>() == 64 && align_of::<McsRwlockLock>() == 64);
++    assert!(size_of::<McsRwlockNodeIrqsave>() == 64 && align_of::<McsRwlockNodeIrqsave>() == 64);
++};
++
++/// Acquire the caller's IRQ-saving writer lock and save flags in its node.
++///
++/// # Safety
++/// The caller provides the original live, 64-byte-aligned lock and exclusive,
++/// writable IRQ-save node, follows existing lock ordering and IRQ context, and
++/// retains both objects until the matching release completes.
++#[no_mangle]
++pub unsafe extern "C" fn ptrace_wakeup_update_lock_bridge(lock_addr: CULong, node: *mut c_void) {
++    // SAFETY: The selected x86 lock and IRQ-save node have the provider's C
++    // representation; raw casts preserve their addresses and caller ownership.
++    unsafe { lock_helpers::__mcs_rwlock_writer_lock(lock_addr as *mut McsRwlockLock, node.cast::<McsRwlockNodeIrqsave>()) };
++}
++
++/// Release the matching writer acquisition and restore its saved IRQ flags.
++///
++/// # Safety
++/// The caller owns the matching acquisition and provides the same live lock
++/// and node without concurrent node reuse until this release has completed.
++#[no_mangle]
++pub unsafe extern "C" fn ptrace_wakeup_update_unlock_bridge(lock_addr: CULong, node: *mut c_void) {
++    // SAFETY: The original lock and saved node are passed to the paired provider;
++    // it performs the release and restores the original saved interrupt state.
++    unsafe { lock_helpers::__mcs_rwlock_writer_unlock(lock_addr as *mut McsRwlockLock, node.cast::<McsRwlockNodeIrqsave>()) };
++}
++
++type WriterCallback = unsafe extern "C" fn(CULong, *mut c_void);
++const _: WriterCallback = ptrace_wakeup_update_lock_bridge;
++const _: WriterCallback = ptrace_wakeup_update_unlock_bridge;

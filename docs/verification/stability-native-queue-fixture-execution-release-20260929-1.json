@@ -1,0 +1,86 @@
+{
+  "schema": "mckernel.native-queue-fixture-execution-release.v1",
+  "date": "2026-09-29",
+  "status": "PASS_CONDITIONAL_ONE_SHOT_LIGHT_FIXTURE",
+  "failure_family": "IHK native queue snapshot checker/source contract mismatch",
+  "strategy": "expert-directed parser scoping plus coherent source/test inventory reseal after one failed candidate and one bounded correction",
+  "source_review": {
+    "status": "PASS_SOURCE",
+    "checker_sha256": "c9b4d0121632e7985300b85b062a982802e684fdcb8267bff182f730b7a1aa96",
+    "checker_tests_sha256": "fca204692cb1aa2af2d4ee6ca30ea95fb0e4ed4517e748ef1a637adeb4056e11",
+    "contract_sha256": "b64022b87356394ddc7eb4313f604100fd05889ddc9b1b7ac232a78d0e49f9fd",
+    "production_source_sha256": "3163d9cc7541941e49059aed7f8824a62229cbe8a650e02f79a4eb7a3944e9c5",
+    "fixture_sha256": "95b555195003c7a0e84ac87aa975ba05d6f1b1d779487644a511487bf50f767b",
+    "canonical_abi_sha256": "89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3",
+    "python38_tests": "PASS 31",
+    "python39_tests": "PASS 31",
+    "direct_check": "SOURCE-CONTRACT-VERIFIED with compiler honestly absent; no gate credit"
+  },
+  "inputs": {
+    "repository": "/home/holden/mckernel",
+    "image_id": "sha256:0f8ad280e47d76b23554de4aec411752e1f779f9b2fc7fece6b0b3375dc9775d",
+    "image_receipt_sha256": "18225919a44e2c07e87a66711c8d1c9483d10e15da91fa5d7fcb7339ff888172",
+    "required_rustc": "rustc 1.92.0 (ded5c06cf 2025-12-08) (Red Hat 1.92.0-1.el10)",
+    "input_write_exclusion": "the six reviewed input files must retain exact hashes throughout execution"
+  },
+  "fresh_targets": {
+    "output": "/home/holden/mckernel-work/scratch/native-queue-fixture-output-20260929-1",
+    "evidence": "/home/holden/mckernel-work/scratch/native-queue-fixture-evidence-20260929-1",
+    "container_name": "mckernel-queue-fixture-20260929-1"
+  },
+  "profile": {
+    "cpus": 2,
+    "memory_bytes": 2147483648,
+    "memory_swap_bytes": 2147483648,
+    "pids_limit": 128,
+    "file_size_limit_bytes": 268435456,
+    "network": "none",
+    "root_filesystem": "read-only",
+    "capabilities": "all dropped",
+    "no_new_privileges": true,
+    "container_user": "1000:1000",
+    "tmpfs_tmp_bytes": 134217728,
+    "command_timeout_seconds": 390,
+    "observer_timeout_seconds": 420
+  },
+  "execution": {
+    "docker_authority": "/usr/bin/sudo -A /usr/bin/docker --host unix:///var/run/docker.sock",
+    "create_once": true,
+    "start_attach_once_by_returned_exact_id": true,
+    "automatic_remove": false,
+    "image_pull": false,
+    "entrypoint": "/usr/bin/timeout",
+    "payload": "verify exact rustc version; compile fixture with --edition=2021 --test -C overflow-checks=yes to /out/queue-tests; execute --nocapture --test-threads=1",
+    "stop_kill_rule": "after 420 seconds only, use the exact returned ID; preserve terminal container and all partial evidence",
+    "unchanged_retry": false
+  },
+  "preflight": [
+    "exact six input hashes and immutable image identity",
+    "fresh nonsymlink output/evidence roots owned by UID/GID 1000",
+    "absent exact container name",
+    "complete process, lease, Docker owner and mount-conflict inventory",
+    "campaign host/scratch/tmpfs/memory floors and aggregate seven-job/24-GiB budget",
+    "consumed heavy container remains terminal and untouched"
+  ],
+  "required_evidence": [
+    "exact argv, timestamps, input pre/post hashes and statuses",
+    "Docker image, pre-start and terminal inspections",
+    "create/start/attach results and complete stdout/stderr",
+    "queue-tests binary SHA256",
+    "all seven exact test names, seven passes, zero failures/ignored/measured/filtered",
+    "exit zero, no OOM and proven terminal state"
+  ],
+  "acceptance": {
+    "scope": "current-source queue fixture compilation and execution only",
+    "kernel_build": false,
+    "module": false,
+    "guest": false,
+    "application": false,
+    "gate_credit": false,
+    "formal_counters_changed": false
+  },
+  "retained_exclusions": {
+    "consumed_heavy_request": "67589154-1 may never be retried or reused",
+    "retained_heavy_container": "decd7cf92467e1214cc955d15a00b847587ada37016f206e9a82019cbb72c6b9 may not be cleaned by this release"
+  }
+}

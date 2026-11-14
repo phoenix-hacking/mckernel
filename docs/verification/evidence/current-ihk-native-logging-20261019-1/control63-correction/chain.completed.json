@@ -1,0 +1,33 @@
+{
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--fsize=33554432",
+    "--nofile=256",
+    "--core=0",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "-c",
+    "import json,subprocess,time,os\nfrom pathlib import Path\nq=Path('/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/control-receipt-correction-1');d=json.loads((q/'compile-stage-consumer-profile.json').read_bytes());end=time.monotonic()+28\nfor c in d['commands']:\n with (q/(c['label']+'.stdout')).open('xb') as o,(q/(c['label']+'.stderr')).open('xb') as e:\n  t=time.monotonic();p=subprocess.Popen(c['argv'],stdout=o,stderr=e);rc=p.wait(timeout=max(.1,end-time.monotonic()));o.flush();e.flush();os.fsync(o.fileno());os.fsync(e.fileno())\n row=dict(label=c['label'],argv=c['argv'],pid=p.pid,returncode=rc,direct_child_joined=True,elapsed_seconds=time.monotonic()-t);(q/(c['label']+'.status.json')).write_text(json.dumps(row,indent=2)+'\\n');assert rc==0,c['label']\nprint(json.dumps(dict(status='PASS_COMPILE_STAGE_TYPED_METADATA_CHAIN',commands=3)))\n"
+  ],
+  "pid": 1664212,
+  "starttime_ticks": "24403351",
+  "returncode": 0,
+  "direct_child_joined": true,
+  "process_group_absent": true,
+  "streams_closed": true,
+  "elapsed_seconds": 19.203890850010794,
+  "chain.stdout": {
+    "sha256": "24253a9d158d0e24d7730d796ef1b1ae3d114d3dddbd57886ed9d5a7f1865945",
+    "bytes": 69
+  },
+  "chain.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  }
+}

@@ -1,0 +1,201 @@
+{
+  "C_retirement": false,
+  "actual_admission_by_reviewer": false,
+  "actual_metadata_proof": {
+    "combined_metadata_result": {
+      "bytes": 3847,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/consumer-native46d-1/runtime-libuv-successor-1/alias-correction-1/execution-1/RESULT.json",
+      "sha256": "1da3ea1cffb60ecf0b75becac18408c09f36dedc22072faf6429cfcdac812bc2"
+    },
+    "exact_alias_stdout": {
+      "bytes": 1201,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/consumer-native46d-1/runtime-libuv-successor-1/alias-correction-1/execution-1/1/payload.stdout",
+      "sha256": "cb3dd99ce71331501322755145e089ec9e40d0b8a8860f751d484d11272ec552"
+    },
+    "installed_runtime_provider_stdout": {
+      "bytes": 374,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/consumer-native46d-1/runtime-libuv-successor-1/alias-correction-1/execution-1/2/payload.stdout",
+      "sha256": "3a2494d487c2433bf991752176d3eb4c963d355b0acb3003b2869106e16cc990"
+    },
+    "retained_successful_loader_result": {
+      "bytes": 998,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/consumer-native46d-1/runtime-libuv-successor-1/execution-1/1/RESULT.json",
+      "sha256": "da58057fddda9e107c39bfba07bcee02ba148367c4fa6ca0eef6d99333ac88ec"
+    },
+    "retained_successful_loader_stdout": {
+      "bytes": 1827,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/consumer-native46d-1/runtime-libuv-successor-1/execution-1/1/payload.stdout",
+      "sha256": "a3268c4a76ec6793dda27caa9cc8e8bda3ccfc7d92b490961c3e9ea803436337"
+    },
+    "selected_build_file_owner_stdout": {
+      "bytes": 319,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/consumer-native46d-1/runtime-libuv-successor-1/alias-correction-1/execution-1/3/payload.stdout",
+      "sha256": "e7ffa2e0101d59477fc0a34a59f9f5a98a222f0effad03e7042221fb3a2de7ac"
+    }
+  },
+  "at": "2026-11-10T11:57:39.204098+00:00",
+  "blocking_source_defects": [],
+  "decision": "GO_EXACT_CURRENT_MCINSPECT_NAMED_BUILD_AND_READBACK_SUBJECT_TO_ROOT_FRESH_ACTUAL_ADMISSION",
+  "exact_operation_findings": [
+    "All4 materializedcreateargv exactly equal the prior0f082628 buildprefix with the declaredname plus matchingphaseargv. Sharedprefix remains unchanged: native46d,11readonly providers,readonly/source,private/outputRW,CPU7/quota1,1GiBmem=swap/AS,64pids,rootreadonly/networknone/capsdrop/no-new-privileges.",
+    "Configure, named--targetmcinspect---j1VERBOSE1 and finalreadelf commands are identical to priorconditional recipe. Only lastnm expands newartifact inputreads by actualdwarf/libdwarf.a and finalmcinspect, enabling genuine matchedprovider inspection. This is not replay of a previousbuild or green suite.",
+    "Read actual privateCMake commands: actualBFDlayout witness and libdwarf featureprobes execute duringconfigure; newly built genuinethirdparty gennames executes duringbuild. These are necessary ordinary buildsteps. Finalmcinspectmain is never executed.",
+    "Outputmustbe empty before firstconfigure; observations are preparationonly. Root checks freshownership/no stalecache/objects and executablebacking for CMake try_run and gennames. Noexec/tmp remains unchanged; build executables live under executable/output. Do not clear unknown content.",
+    "Fullactual compiler/linkargv, map+trace/archive-member identity and generatedobjects/archive/finalELF must be retained. A symbols-onlyPASS is insufficient: final actualimports/versions/providerselection and absence of projectC implementation must be independently joined after successful build."
+  ],
+  "exact_permitted_serial_phases": [
+    {
+      "create_argv_sha256": "cf5a9d7937152769cf98636ce1c52322d10daf3cb5dbb86e60f9e149bb7f1a2f",
+      "expected_returncode": 0,
+      "inner_argv": [
+        "/usr/bin/cmake",
+        "-S",
+        "/source",
+        "-B",
+        "/output",
+        "-G",
+        "Unix Makefiles",
+        "-DCMAKE_MAKE_PROGRAM:FILEPATH=/usr/bin/make",
+        "-DCMAKE_C_COMPILER:FILEPATH=/usr/bin/cc",
+        "-DCMAKE_CXX_COMPILER:FILEPATH=/usr/bin/clang",
+        "-DCMAKE_BUILD_TYPE:STRING=Release",
+        "-DMCKERNEL_RUNTIME_TOOL_RUSTC:FILEPATH=/usr/bin/rustc"
+      ],
+      "name": "mck-m15-mcinspect-configure-20261110-1",
+      "phase": "configure",
+      "wall_seconds": 120
+    },
+    {
+      "create_argv_sha256": "2d3df96054d3773fa09a790068db8d6906100fe17eac6537db4953605ada65f0",
+      "expected_returncode": 0,
+      "inner_argv": [
+        "/usr/bin/cmake",
+        "--build",
+        "/output",
+        "--target",
+        "mcinspect",
+        "--",
+        "-j1",
+        "VERBOSE=1"
+      ],
+      "name": "mck-m15-mcinspect-build-20261110-1",
+      "phase": "named-current-tool",
+      "wall_seconds": 120
+    },
+    {
+      "create_argv_sha256": "f066b456864fe06cfa8545780646740a17150e5a5246061f1699a1484cf72b4e",
+      "expected_returncode": 0,
+      "inner_argv": [
+        "/usr/bin/readelf",
+        "--wide",
+        "--file-header",
+        "--program-headers",
+        "--dynamic",
+        "--dyn-syms",
+        "--version-info",
+        "/output/mcinspect"
+      ],
+      "name": "mck-m15-mcinspect-elf-20261110-1",
+      "phase": "ELF-readback",
+      "wall_seconds": 30
+    },
+    {
+      "create_argv_sha256": "18a4f651a4d12079b52945b47a6f6cc1201b2a18dbfc431103312054cc72c0a8",
+      "expected_returncode": 0,
+      "inner_argv": [
+        "/usr/bin/nm",
+        "--defined-only",
+        "/output/rust/mcinspect_helpers.o",
+        "/output/rust/bfd_accessors.o",
+        "/output/dwarf/libdwarf.a",
+        "/output/mcinspect"
+      ],
+      "name": "mck-m15-mcinspect-symbols-20261110-1",
+      "phase": "project-provider-readback",
+      "wall_seconds": 30
+    }
+  ],
+  "future_required_evidence": {
+    "Root_precondition": "Reconfirm empty before first configure; no stale object, cached layout, hidden old green or whole old build reuse. Do not delete unknown content; stop and reconcile if changed.",
+    "actual_outputs_to_bind_after_success": [
+      "CMakeCache.txt",
+      "CMakeFiles/mcinspect.dir/link.txt",
+      "rust/bfd_layout.rs",
+      "rust/bfd_accessors.o",
+      "rust/mcinspect_helpers.o",
+      "dwarf/gennames",
+      "dwarf/libdwarf.a",
+      "dwarf/libdwarf.h",
+      "dwarf/config.h",
+      "mcinspect",
+      "mcinspect.map"
+    ],
+    "capture": "Actual configure/build/readelf/nm stdout/stderr, complete normal build compiler and linker argv from VERBOSE=1, link trace/map provider/member selections, actual hashes/sizes and source/provider image identity, positive client waits and container terminal/nonOOM/removal. Reuse unchanged source/header/profile receipts, record only new produced outputs. Verify TAG unsigned contract via retained41 source evidence plus real current full-source compile/link; do not rerun41/layout/header/test suites.",
+    "observed_empty_at_preparation": true,
+    "private_output_root": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/consumer-native46d-1/build-output",
+    "provider_postcondition": "Real current mcinspect object defines full-body main and expected helpers; BFD object supplies checked bridges; new exact bundled dwarf archive and pinned BFD/script/sframe/iberty plus actual system z/elf/dl/libc link closure have concrete final trace/map/ELF identities. No residual project C mcinspect.o or synthetic provider admitted."
+  },
+  "holds": "HOLD-GENERIC/replayfalse/equivalentfalse/exact12/source/native/currentfree/service/account/spend and allUNKNOWN remain binding.",
+  "independent": true,
+  "mandatory_Root_admission": [
+    "Root freshly reconciles actual currentowners/leases/positivepriorwaits and nootherrunningcontainer beforeeachphase. Exactnewnames absent acrossallstates, singleRootheavy/imageowner, no competingDocker/native/heavy action. Preserve oldexited/created/UNKNOWN objects and allnative/currentfree reservations; prior receipt age never establishes currentfree.",
+    "Check exactrequest/source/currentRust/privateproviderfile identities and sameimmutable46d; fresh privateoutput ownership/emptybeforeconfigure/executablebacking fortry_run+gennames, no sourcewriter overlap. Inspect actualnewimmutableCID/profile/read-onlysource+11providers/privateoutputRW/user1000/CPU7/quota1/mem=swap1GiB/AS1GiB/pids64/networknone/ROroot/capsdrop/security/limits beforestart.",
+    "Fresh HOSTallcontrollers/workers/containers<=4GiB, max3aggregatejobs CPUs0/6/7, MemAvailable>=26GiB; preserve prior18GiB/native2-5/12GiB/CPU1 and host16/scratch12GiB floors plus2GiBbuild/captureheadroom. Independent already-reviewed disjointHOST source/tests on0/6 mayoverlap onlyif actualsum/jobs fit; no otherDocker or expandedgrant. Otherwise serial.",
+    "Enforce configure120s/build120s/readelf30s/nm30s daemon-side immutableCID deadlines, unchangedcpu90/64MiBperfile/1GiBmemory+AS as boundedcandidates, not a fitguarantee. Bind exactclientbirths/argv/stdio; retain allstdout/stderr/primaryfailures/partialartifacts and availablepeak/events/OOM/limits before onlyownedterminalCID removal, with positiveclient/container/streamjoins. No sourcepermission/config/resourcehold waiver onfailure.",
+    "Run4phases in dependencyorder and stop atfirstfailure; onefailedcandidate plus oneboundedmeaningfullychangedcorrection per realfailurefamily with independentreview/newadmission. No unchanged retry, provider/tool/loader/alias/layout/header/testsuite rerun or sourceinventory.",
+    "After successbind actual CMakeCache/link.txt/generatedbfdlayout, bothrealRustobjects/gennames/dwarfarchive+headers/config/finalmcinspect/map, hashes/sizes/verbosecommands/ELF/import/provider/archive-member/cleanup evidence. Require actualfull-bodymain and properbridge/providers; unique matchedsource/ABI/import ownership requires focusedreview and cannot be accepted from visible names alone."
+  ],
+  "original_acceptance_delta": 0,
+  "preserved_original_profile": {
+    "bytes": 42995,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/consumer-native46d-1/REQUEST.json",
+    "sha256": "a3e3a8f48c6e74570d929e35d569353df5672a78981550e902a09ec986b76e04"
+  },
+  "preserved_provider_successor": {
+    "bytes": 64368,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/consumer-native46d-1/runtime-libuv-successor-1/REQUEST.json",
+    "sha256": "0f0826286b2db0c43089b1dd9234fe84b53a09c055229f1919ea92a352c0bc08"
+  },
+  "request": {
+    "bytes": 73165,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/consumer-native46d-1/named-build-1/REQUEST.json",
+    "sha256": "48c260e19e688e9005b0326124394050ba52115872d9368b319c3845a7760e83"
+  },
+  "reused_alias_review": {
+    "bytes": 9335,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-review-source-acquisition-max-1/runtime-libuv-successor-1/alias-correction-1/REVIEW.json",
+    "sha256": "3c7bec487e20ee86a76709dd6ec25dcd271798ca0488227ff3ed49f3a4091cca"
+  },
+  "reviewer": "/root/source_acquisition_review_max",
+  "reviewer_execution": {
+    "CMake": 0,
+    "Docker": 0,
+    "canonical_edits": 0,
+    "compiler": 0,
+    "loader": 0,
+    "network": 0,
+    "private_REVIEW_write_only": true,
+    "project_or_native_execution": 0,
+    "source_and_saved_metadata_reads": true,
+    "tests": 0,
+    "toolprobes": 0
+  },
+  "scope": "Exact first current full-Rust mcinspect configure, namedbuild and two newartifact readbacks on reconstructed native46d ordinaryHOST profile. No finalmcinspectmain, separateldump2mcdump, broad targetbuild, native/device/service action or originalacceptance.",
+  "scope_limits": {
+    "M14_before_M15_preserved": true,
+    "Rust1_92_full_compile_yet_executed": false,
+    "final_program_main_authorized": false,
+    "ldump2mcdump_built_or_accepted": false,
+    "native_or_currentfree_released": false,
+    "source_only_or_metadata_retire_C": false,
+    "whole_M15_I03_acceptance": false
+  },
+  "source_and_provider_findings": [
+    "Actual combined1da3 result has3 phases0, attach0, terminalPid0/nonrunning/nonOOM, directwaitsjoined and exactownedcontainersremoved. Actualcb3 alias report proves directory/file equality,233392B/e14 payload and exactrofilemount. Raw3a2494 has all11 required installedSONAME/version providers; rawe7ffa2 has8 selectedtool/header/linkfileowners. Saved loadera3268 resolvesall8 plus transitive inputs; oldouter/phaseFAIL retained as the correcteddisplayed-alias postgate, never replayed.",
+    "Sameimmutable46d/nativeRust1.92/cc2092/clang21 and trustedCMake3.31.8/CMake-data/binutils-devel2.41-63 filepins are reused. Libuv remains exactly trustedprivateheader/signature/SONAME/hash/mountprovider, never an installedRPMdb premise. All originalGLIBC2.38/GLIBCXX3.4.32/CXXABI1.3.15 plusactualDT_RELR obligations are present.",
+    "Actual6 sourcepayload bytes/hashes match the frozen0f082628 inputs and wholeprivateRust e9a9 equals actualcanonicalcurrente9a9. Source declares dwarf_get_TAG_name(c_uint,...) and casts actualu16tag to c_uint; unchanged41header/layoutfacts are reused at their scope. CMake compiles the entire source with mcinspect_full_body and native/usr/bin/rustc, not a helper-only slice.",
+    "Read exact039d8 privateCMake targetgraph and unchangedproductionBfdRustAccessors.cmake. Nativeconfigure keeps all4 header/script/compiler/archive SHA pins and actual consumed-field/callback C layout try_run, configflags checks and no cached try_run. No CMake/sourceguard/SDK/compiler fallback or warning/layout waiver.",
+    "Namedmcinspect selects exactlyRustbfd_accessors.o and wholeRustmcinspect_helpers.o, real ab923 bundleddwarf/gennames dependency and finalPIE linked through genuine dwarf,z,elf,selectedBFD script/archive/sframe/iberty/dl/libc. Native upstream libdwarf C and nonshipped CMake/compiler/layout featurewitnesses remain legitimate dependencies; no projectC mcinspect.o or heldcompute/executor/module graph is selected. Actual compiler/feature/layout/gennames build prerequisites must run normally on the new profile.",
+    "Productionldump2mcdump is separate/unselected and unclaimed. The packet supplies a necessary focusedcurrentmcinspect build; no wholepublicABI/consumer cohort/OS image closure is inferred."
+  ]
+}

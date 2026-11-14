@@ -1,0 +1,21 @@
+From: McKernel Rust migration <mckernel@example.invalid>
+Subject: [PATCH] rust: expose existing x86 APIC driver declarations
+
+Allow the native SMP adapter to check the active driver's physical-destination
+contract before using Linux's already exported APIC mask static call. This adds
+only the existing architecture header to bindgen's input; no C function body or
+export changes.
+
+--- a/rust/bindings/bindings_helper.h
++++ b/rust/bindings/bindings_helper.h
+@@ -6,6 +6,10 @@
+  * Sorted alphabetically.
+  */
+ 
++#ifdef CONFIG_X86_64
++#include <asm/apic.h>
++#endif
++
+ #include <kunit/test.h>
+ #include <linux/blk-mq.h>
+ #include <linux/blk_types.h>

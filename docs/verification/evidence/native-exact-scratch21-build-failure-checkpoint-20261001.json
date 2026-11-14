@@ -1,0 +1,86 @@
+{
+  "schema": "mckernel.native-exact-scratch21-build-failure-checkpoint.v1",
+  "status": "FAIL_BEFORE_COMPILATION",
+  "acceptance_credit": false,
+  "candidate": {
+    "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21",
+    "commit": "28a905bfc177627e338a3fd91f69329ac2e74046",
+    "tree": "1d7bfce8a37ab5dd1bdd8197c4531a157ffdfd0f"
+  },
+  "execution": {
+    "release_commit": "96a7d9a8ab61a01371488ba4d70080798a45e685",
+    "request_path": "/home/holden/mckernel-work/scratch/native-exact-build-request-scratch-21.execution.json",
+    "request_sha256": "35efb73b2b5356507bd4b740b8925a3bd325135257ffaf39bffcefa9930c45b6",
+    "release_terminal_sha256": "919a01c2929580a96afb5955b6c77f272c2fa6265800b01cb90dba6691137226",
+    "owner_receipt_sha256": "c772a969145c9c8fbb7032b5ce801d204ca983aa90bda481a709e59cdb8bc51c",
+    "driver_receipt_sha256": "2e0d57f5012c1a4af0e4a4ce8e9f092179a8dddd57f518d90a91b2a591b45ef5",
+    "driver_log_sha256": "15c9539eb672df33bfd32457d28c6d3011ad23be4d082fcb4f4a393c9dc8bb4d",
+    "failure": "native Rust build-surface audit failed: os_runtime.rs authority digest drift",
+    "phase": 0,
+    "compilation_started": false,
+    "output_inventory": []
+  },
+  "terminal_owner": {
+    "container_id": "e1f6dd145149c026c46adb82c3f3addb9e3c9e2a12b0d71a6813f00895220ea9",
+    "container_name": "mckernel-exact-57e76f6bf33a48da82047f98242bf019",
+    "owner_nonce": "1439909012a04cf789981b951b34d399",
+    "image_id": "sha256:0f8ad280e47d76b23554de4aec411752e1f779f9b2fc7fece6b0b3375dc9775d",
+    "state": "exited",
+    "pid": 0,
+    "exit_code": 1,
+    "oom_killed": false,
+    "dead": false,
+    "retired": true,
+    "cleanup_separately_required": true,
+    "request_lease_absent": true,
+    "owner_pid": 3788091,
+    "owner_starttime": "110575783",
+    "owner_process_absent": true
+  },
+  "retained_exclusions": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock",
+      "device": 1831,
+      "inode": 57687,
+      "mode": "0600",
+      "uid": 1000,
+      "gid": 1000,
+      "size": 269,
+      "sha256": "7be39d1cf3bebcf4e586716badf2e3be366fae928ce2b39ce21fa6db770a7134"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch18.json",
+      "device": 1831,
+      "inode": 57688,
+      "mode": "0600",
+      "uid": 1000,
+      "gid": 1000,
+      "size": 269,
+      "sha256": "eeb41f3a01bf2b31e5ff15232ba31ab6cf92676b8587963d1faffeace44451f5"
+    }
+  ],
+  "source_correction": {
+    "actual_os_runtime_sha256": "af4864fc05f6b5bf46c307abe8b3bae9cbd1372d1815a287c5b5557cad4c4413",
+    "stale_sha256": "aa9fa37f67762565c3d1be1a0c7662736932a136bc43a3fd3ef2deb319c2a4b6",
+    "edited_consumers": [
+      "host-kernel/kbuild/stage-manifest.json",
+      "scripts/rocky_rust_staging.py",
+      "host-kernel/native-rust/ihk-lifecycle-contract-v1.json",
+      "host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json"
+    ],
+    "native_rust_build_surface_audit": "PASS",
+    "rocky_rust_staging": "FAIL: modules[1].source lacks one exact audited extern boundary",
+    "native_rust_unsafe_ffi_ledger": "FAIL: RS-011 ledger digest is stale",
+    "ihk_native_lifecycle_check": "FAIL: support_sources[6] digest is stale",
+    "state": "UNREVIEWED_BOUNDED_CORRECTION; DO NOT BUILD"
+  },
+  "next_action": "independently review and release an exact scratch21 terminal cleanup; then finish the staging extern-boundary, lifecycle support-source and ledger self-digest corrections and their full source checks, commit/fetch, prepare a fresh scratch22 candidate/request, and seek a new one-shot build release; never replay scratch21",
+  "counts": {
+    "compiled_current_candidates": 3,
+    "bounded_diagnostic_guest_passes": 12,
+    "formal_applications": "0/273",
+    "production_gates": "6/130",
+    "language_gates": "0/7"
+  },
+  "whole_os_complete": false
+}

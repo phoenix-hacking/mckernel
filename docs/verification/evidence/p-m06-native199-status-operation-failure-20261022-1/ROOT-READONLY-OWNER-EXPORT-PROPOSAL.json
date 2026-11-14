@@ -1,0 +1,58 @@
+{
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=30:30",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--nofile=256",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1/actual-status-failure-retirement-1/readonly_export_exact_owner.py"
+  ],
+  "delta": {
+    "bytes": 852,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1/actual-status-failure-retirement-1/ROOT-LITERAL-ONLY.diff",
+    "sha256": "28c7d40948d540c4b664140f270dafb2562ba3493b91edf047ceff5a4af804db"
+  },
+  "output_stderr": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1/actual-status-failure-retirement-1/root-owner-export-1.stderr",
+  "output_stdout": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1/actual-status-failure-retirement-1/root-owner-export-1.stdout.json",
+  "preimage": {
+    "bytes": 1638,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/actual-199-payload-launch-failure-1/readonly_export_exact_owner.py",
+    "sha256": "5d543a67365a74724fcea98da71cca0ab8164d55f63a615563cca0b18700e5c6"
+  },
+  "profile": {
+    "AS_bytes": 2147483648,
+    "CPU_seconds": 30,
+    "NPROC": "inherited",
+    "cpu": [
+      7
+    ],
+    "jobs": 1,
+    "stderr_cap_bytes": 1048576,
+    "stdout_FSIZE_bytes": 33554432,
+    "wall_seconds": 35
+  },
+  "review": null,
+  "root": "/home/holden/mckernel-work/scratch/n199b1/p.owner-e696db0e49884b968eaebc267731b88b",
+  "root_mutations": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source": {
+    "bytes": 1638,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1/actual-status-failure-retirement-1/readonly_export_exact_owner.py",
+    "sha256": "79bd9776c785c39c7b8bc4589101764bcb8cd582c64a8b8a98ec10fa3e7f9b5f"
+  },
+  "source_byte_cap": 8388608,
+  "source_delta": "ONLY ROOT literal n199a2/e052\u2192n199b1/e696. StableFD,regularsinglelink,parentmode,8MiB source/16MiBJSON caps unchanged.",
+  "status": "ROOT_READONLY_EXACT_NEW_OWNER_EXPORT_PROPOSAL_NOT_EXECUTED",
+  "total_encoded_JSON_cap": 16777216,
+  "worker_root_execution": false
+}

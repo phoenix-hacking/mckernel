@@ -1,0 +1,102 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_ACTUAL_C_RUST_TARGET972_INFO138_CONTROLLED_ONLY",
+  "actual_report": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-3/actual-target-capture-1/ACTUAL-WHOLE-JOIN.json",
+    "bytes": 11094,
+    "sha256": "18380e1600f4ce93ca8bb3f7ee1bb63cf5c65fdabab3281447342d53f870f7ce"
+  },
+  "stdout": "PASS actual_C_Rust_target cases=972 prepare=138 ABI=25 ordered_locks=1 reused_node=1\n",
+  "actual_TID_cases": 972,
+  "actual_info_cases": 138,
+  "ABI_values": 25,
+  "selected_fragments": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-3/fixture-source/do_kill_thread_target.FRAGMENT.rs",
+      "bytes": 5304,
+      "sha256": "5c294d6557a74efe1b14d2cf0d52091f30eb28ff957d94aa20f219441515f5b1"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-3/fixture-source/do_kill_prepare_info.FRAGMENT.rs",
+      "bytes": 1818,
+      "sha256": "2cc8d887096d6329b8c680a47d906858c97d6a9385a2326a5b4610a0653b4a77"
+    }
+  ],
+  "C_patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-3/patch/syscall.c.diff",
+    "bytes": 1790,
+    "sha256": "ecfb1472a133279e205cc52a223ed3f4cc47a268246de6c52eac4c925485accb"
+  },
+  "queue": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-3/EXACT-TARGET-QUEUE.NOT-GRANTED.json",
+    "bytes": 38715,
+    "sha256": "4e2d60879a07ccc959ad903692d465bfb11db250330aed6a70f6757af721cf48"
+  },
+  "commands": [
+    {
+      "name": "00-exact-Rust-TID-info-and-real-byte-list-providers",
+      "pid": 495995,
+      "start": 69726212,
+      "returncode": 0,
+      "direct_child_joined": true,
+      "group_absent": true,
+      "closed_streams": true
+    },
+    {
+      "name": "01-real-header-original-C-and-public-Rust-consumer",
+      "pid": 496002,
+      "start": 69726229,
+      "returncode": 0,
+      "direct_child_joined": true,
+      "group_absent": true,
+      "closed_streams": true
+    },
+    {
+      "name": "02-genuine-HOST-runtime-link",
+      "pid": 496005,
+      "start": 69726245,
+      "returncode": 0,
+      "direct_child_joined": true,
+      "group_absent": true,
+      "closed_streams": true
+    },
+    {
+      "name": "03-original-C-Rust972-target138-info-comparisons",
+      "pid": 496008,
+      "start": 69726260,
+      "returncode": 0,
+      "direct_child_joined": true,
+      "group_absent": true,
+      "closed_streams": true
+    },
+    {
+      "name": "04-unique-public-provider-symbols",
+      "pid": 496009,
+      "start": 69726265,
+      "returncode": 0,
+      "direct_child_joined": true,
+      "group_absent": true,
+      "closed_streams": true
+    },
+    {
+      "name": "05-genuine-HOST-runtime-symbols",
+      "pid": 496010,
+      "start": 69726270,
+      "returncode": 0,
+      "direct_child_joined": true,
+      "group_absent": true,
+      "closed_streams": true
+    }
+  ],
+  "seconds": 0.6712835760554299,
+  "CPU_seconds": 0.6897139999999999,
+  "CPU0_released": true,
+  "remaining": [
+    "Source2 process-target parity",
+    "Full source4 production compute crate/C consumers compile and link",
+    "Full orchestration ordered-effects behavior",
+    "Independent lock/ref/ABI review and default image/native behavior"
+  ],
+  "controls": "Noirq lock, hold_thread, IRQ restore and kprintf are controlled effect endpoints; actual Rust hash function/list/byte helpers, full actual Rust ABI and real C headers/original byte-extracted C bodies. Explicit nested hash/threads same-node reuse preserved. This does not prove real locks/refcounts/native effects.",
+  "no_default_link_native_or_wholefile_credit": true
+}

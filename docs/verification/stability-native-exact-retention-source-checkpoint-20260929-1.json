@@ -1,0 +1,57 @@
+{
+  "schema": "mckernel.native-exact-retention-source-checkpoint.v1",
+  "captured_at_utc": "2026-09-29T08:53:53Z",
+  "status": "PASS_SOURCE_AND_PURE_FIXTURES_ONLY",
+  "source_checkpoint_parent": "61e08d61a0c35b599a516a675c6da112cae76485",
+  "final_inputs": {
+    "scripts/native_exact_candidate_retention_capsule.py": "ac3bb0354d1353928fd5f63ddf6743b636642fab79a4f5a3ec9195d5721d0b26",
+    "scripts/native_exact_candidate_retention_archive.py": "6a28184e13e4ddec3a5e2fe6229c618929df29f235901083d55918c8291ac06e",
+    "scripts/native_exact_candidate_retire.py": "744beaced167a4259f68fe2e5f8ab86b2089437885ee4fd82a3fa3d8e0a21b5d",
+    "scripts/tests/test_native_exact_candidate_retention_capsule.py": "ae6f129ac8f86379d98ad2ca1eec1e03034d3754a6786300014c140320743c9a",
+    "scripts/tests/test_native_exact_candidate_retention_archive.py": "fa9d727d74e462a9d6fdb2d96f3a3a597ccdab331b4321b92a2d11eaeb48355e",
+    "scripts/tests/test_native_exact_candidate_retire.py": "3605a65be5c3d7184d0618c0193eda670474a9975c44dd502f0b55d241ee2fce"
+  },
+  "tests": [
+    {"command": "/usr/bin/python3 -B -m unittest scripts.tests.test_native_exact_candidate_retention_capsule scripts.tests.test_native_exact_candidate_retention_archive scripts.tests.test_native_exact_candidate_retire", "python": "3.8", "result": "40/40 PASS"},
+    {"command": "/home/holden/anaconda3/bin/python3 -B -m unittest scripts.tests.test_native_exact_candidate_retention_capsule scripts.tests.test_native_exact_candidate_retention_archive scripts.tests.test_native_exact_candidate_retire", "python": "3.9", "result": "40/40 PASS"},
+    {"command": "python3 -m py_compile <six final inputs>", "result": "PASS"},
+    {"command": "git diff --check -- <six final inputs>", "result": "PASS"}
+  ],
+  "preserved_failure_family": {
+    "capsule_attempts": [
+      {"source_sha256": "fdec03c834ab9dc6da4d5d885e2346141e6effbcd38fb1de71e49744932a05ef", "result": "FAIL", "finding": "Rejected all legitimate tracked symlinks and queried the nested IHK commit through the main repository."},
+      {"source_sha256": "e6eb3d1ec81a8521355641f5c2a293358c02a7f95751cdd9b495531b95b7f586", "result": "FAIL_AFTER_BOUNDED_CORRECTION", "finding": "Reopened every regular file by pathname after descriptor hashing, allowed overwrite publication and incompletely handled nested Git metadata."}
+    ],
+    "archive_attempts": [
+      {"source_sha256": "0989fb9d203087bfc79d6899e8d0e89c1ed7d4141cd9eca6015d37379a48ab4a", "result": "FAIL", "finding": "Rejected reconstructible tracked symlinks and had a scan-to-copy replacement window."},
+      {"source_sha256": "72450220115dbf5cf374801135d8b71341f082d1d4b21413db039f0e129b6a23", "result": "FAIL_AFTER_BOUNDED_CORRECTION", "finding": "Identity checks were tautological, directory and post-copy revalidation were incomplete, and standalone verification did not require exact member types."}
+    ],
+    "retirement_attempts": [
+      {"source_sha256": "257371f92ffef4c67e17c19ff08f680fb73d034a232bfbd8b6a2388d6367cdd8", "result": "FAIL", "finding": "Consumed observations before sealing, omitted quarantine transition and did not bind sealed membership to deletion."},
+      {"source_sha256": "5976cf753eb579717b9fe48985a648ef955b0c81bea7c2dc72df2401a9cefe75", "result": "FAIL_AFTER_BOUNDED_CORRECTION", "finding": "Still passed no sealed inventory to deletion, lacked v7 and complete Docker validation, and had no durable per-entry state machine."},
+      {"source_sha256": "335f746966adbea779f363dd92cf350c74079f0dd2d23ccb8f2d79b667fe5b58", "result": "FAIL_EXPERT_IMPLEMENTATION_REVIEW", "finding": "Accepted arbitrary equal artifact digests, protected only quarantine paths, accepted stale synthetic observer records, and deleted a substituted post-journal file."},
+      {"source_sha256": "85675e86045362ff95a9c29876bc6cd14d1efa25b3ac81d9b1c86309e4a48d52", "result": "FAIL_INTEGRATION_REVIEW", "finding": "Consumed an invented manifest schema, reopened capsule path after hashing and required top-level fields absent from the actual v7 producer."}
+    ]
+  },
+  "independent_review": {
+    "result": "PASS",
+    "scope": "Frozen source and pure temporary-fixture behavior only",
+    "verified": [
+      "Direct planner-to-archive-to-retirement integration with the actual v7 top-level shape",
+      "Exact main/IHK Git and gitlink proof with tracked safe symlinks",
+      "Strict already-hashed archive byte verification and deterministic normalized members",
+      "Original and quarantine Docker path protection with exact retained terminal-container exception",
+      "Rejection of arbitrary hashes, partial/unrelated capsules, nested roots, metadata symlinks, stale observations and post-journal replacement"
+    ]
+  },
+  "not_proved": [
+    "Live candidate 49-link inventory and actual restoration capsule",
+    "Live artifact durability, process/mount/Docker census or operational exclusion",
+    "Candidate retirement or space recovery",
+    "Native build, module, guest, diagnostic application or acceptance gate"
+  ],
+  "formal_counters_changed": false,
+  "successful_current_candidate_builds": 0,
+  "guest_applications_this_checkpoint": 0,
+  "next_action": "Commit, push and fetch-verify these exact source/test bytes, then prepare a fresh hash-bound one-shot packet for live manifest and archive generation only and obtain independent execution review. Do not retire either root yet."
+}

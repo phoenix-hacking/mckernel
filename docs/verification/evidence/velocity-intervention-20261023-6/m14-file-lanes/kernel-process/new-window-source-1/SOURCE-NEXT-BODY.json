@@ -1,0 +1,105 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "DEBUG_LOG_PRIVATE_SOURCE_ACTUAL_C_RUST_PARITY_14_PASSED_MOCK_LAYOUT_ONLY",
+  "owner": "/root/m14_process",
+  "base": {
+    "C": {
+      "path": "/home/holden/mckernel/kernel/process.c",
+      "sha256": "71b1b5d95f19f32847034ae5e993021fd958f35e31206e07492528fc1976a1e4",
+      "bytes": 189853
+    },
+    "Rust": {
+      "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "sha256": "f763f05e317e359f93b355d90b908c83e8a6b87fe575088b9530735fff49b7ac",
+      "bytes": 463423
+    }
+  },
+  "postimages": {
+    "kernel/process.c": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/candidate/kernel/process.c",
+      "sha256": "5eed915e655b124b0a5f682e4e7ba6c713eff21b3bbdf6930717328367ab5114",
+      "bytes": 189938
+    },
+    "kernel/rust/process_helpers.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/candidate/kernel/rust/process_helpers.rs",
+      "sha256": "89b428fa815621ed07e85685f3e38e46d61045da744c77867af5baed3eb4a61c",
+      "bytes": 470464
+    }
+  },
+  "original": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/fixture/original_debug_log.ACTUAL-C.inc",
+    "sha256": "845b0df91fe21122b5d184bf879820936238769c74e80e3cfb6d5410df199f74",
+    "bytes": 2558
+  },
+  "new_Rust": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/fixture/debug_log.ACTUAL-RUST.inc",
+    "sha256": "285794c0328983166271a6ea9c23000758633df46df8e07a3e324bf56237c52e",
+    "bytes": 7040
+  },
+  "providers": {
+    "kernel/rust/abi.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "bytes": 76151
+    },
+    "kernel/rust/lock_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/lock_helpers.rs",
+      "sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3",
+      "bytes": 12202
+    },
+    "kernel/include/process.h": {
+      "path": "/home/holden/mckernel/kernel/include/process.h",
+      "sha256": "8848d536f2fa847a59af72d573ec9c55838c27cea664d46438ab4e038bf83649",
+      "bytes": 26602
+    }
+  },
+  "preserved": [
+    "Existing FP/process fixes and all current COW/anonymous/install-finish bodies",
+    "Original case 1/2 reader lock per bucket and original case 3/4 unlocked traversal",
+    "Bucket/list/printf order, exact six format strings, pid1 process omission",
+    "Existing typed ABI and Rust __mcs_rwlock_reader_lock/unlock providers",
+    "Unknown code produces no output or lock operations"
+  ],
+  "ownership": "No allocation/free/refcount change or list mutation; borrowed diagnostic views only. Unlocked cases preserve original caller-stable lifetime requirement.",
+  "next_executable_check": "After root physical acceptance and ordinary compiler grant: actual C-reference/Rust parity of empty/multi-bucket/multi-entry/pid1/unknown-code cases with exact output and lock trace; full compute crate and selected/default plus fallback process consumer compile/link.",
+  "downstream_unlock": "Retires the remaining live debug_log traversal body into Rust; reduces process.c runtime debt while retaining full current-candidate/native proof open.",
+  "compiler_jobs": 1,
+  "actual_tests": 14,
+  "CPU_reservations": 0,
+  "new_executable_queues": 0,
+  "canonical_mutations": 0,
+  "all_prior_failures_retained": true,
+  "fullcrate_default_native_credit": false,
+  "parity_fixture": {
+    "fixture/parity.c": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/fixture/parity.c",
+      "sha256": "5277c071223236c04920881a05d192498716111e1ad9a66a142c328f6ef54e2c",
+      "bytes": 7049
+    },
+    "fixture/parity.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/fixture/parity.rs",
+      "sha256": "bc183bc63a7b8cbc4cfbc79f085b71c6cc0517e3782f840ee703ec2457b42206",
+      "bytes": 2105
+    }
+  },
+  "parity_fixture_cases": 14,
+  "parity_fixture_limit": "Mock-layout behavior only; production ABI/fullcrate/selected-consumer/link/native proof remains open. Fixture has not compiled or run.",
+  "ordinary_runner": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/run_debug_parity_once.py",
+    "sha256": "7d9e9168731cf42118faa6203892bc6f48d7700b02911d70062fb7e939fb48d7",
+    "bytes": 9384
+  },
+  "ordinary_recipe": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/EXACT-DEBUG-PARITY.NOT-GRANTED.json",
+    "sha256": "5c5eeb34f3ebe4c91c7ea19a9fbad45cdbdb88e8a7f01ec4614f53980be64651",
+    "bytes": 7765
+  },
+  "actual_debug_parity_result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/DEBUG-PARITY-FIRST-WHOLE-JOIN.json",
+    "sha256": "6380e90711de45f15f502a4ce69d29caaf157caf7ba22449f0982753c08ebcc8",
+    "bytes": 11955
+  },
+  "actual_commands": 4,
+  "last_completed_CPU": 0,
+  "all_children_joined": true
+}

@@ -1,0 +1,27 @@
+--- a/kernel/process.c
++++ b/kernel/process.c
+@@ -2685,15 +2685,23 @@
+ 	struct vm_range *range;
+ };
+ 
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++int process_pte_is_null_bridge(void *);
++#else
+ int process_pte_is_null_bridge(void *ptep)
+ {
+ 	return pte_is_null((pte_t *)ptep);
+ }
+-
++#endif
++
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++int process_pte_is_fileoff_bridge(void *, size_t);
++#else
+ int process_pte_is_fileoff_bridge(void *ptep, size_t pgsize)
+ {
+ 	return pte_is_fileoff((pte_t *)ptep, pgsize);
+ }
++#endif
+ 
+ uintptr_t process_pte_get_phys_bridge(void *ptep)
+ {

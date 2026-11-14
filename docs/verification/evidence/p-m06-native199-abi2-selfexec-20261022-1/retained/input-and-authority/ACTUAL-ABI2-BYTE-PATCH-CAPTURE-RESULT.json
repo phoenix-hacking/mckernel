@@ -1,0 +1,126 @@
+{
+  "application_acceptance": false,
+  "argv": [
+    "/usr/bin/taskset",
+    "--cpu-list",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=536870912",
+    "--cpu=30",
+    "--core=0",
+    "--fsize=134217728",
+    "--nofile=256",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport contextlib,hashlib,json,sys\ndef load(n,p):\n import importlib.util\n s=importlib.util.spec_from_file_location(n,p);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);return m\nD=json.loads(Path(sys.argv[1]).read_text())\nassert D['only_replacement_member']=='bin/native-boot' and D['old_boothelper']['sha256']=='4558995ea1ae70c8d5a115542e333ad695a54b4b8f450ea717df37fd1e631af3'\nB=D['input_cpio'];H=D['new_boothelper'];assert all(H.get(k)is not None for k in('path','sha256','size','mode','compile_result','source_review'))\nov=load('unchanged_overlay','/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/native_diagnostic_overlay.py')\np=load('accepted_byte_record_patch','/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/n3-variant/stage_repaired_kernel_elf.py')\nwith contextlib.ExitStack()as stack:\n base=ov._Source(B['path'],stack);helper=ov._Source(H['path'],stack)\n assert ov._digest(base.data)==B['sha256'] and len(base.data)==B['size'] and base.identity['st_mode']==B['mode']\n assert ov._digest(helper.data)==H['sha256'] and len(helper.data)==H['size'] and helper.identity['st_mode']==H['mode']\n ov._check_collector(helper.data)\n derived,proof=p.derive_base_payloads(ov,base.data,{'bin/native-boot':(helper.data,D['old_boothelper']['sha256'])})\n old=ov._manifest(ov._replay_records(ov.parse_newc(base.data)[0]));new=ov._manifest(ov._replay_records(ov.parse_newc(derived)[0]))\n assert set(old)==set(new) and all(old[k]==new[k]for k in old if k!='bin/native-boot')\n assert new['bin/native-boot']['sha256']==H['sha256']and new['bin/native-boot']['size']==H['size']and all(old['bin/native-boot'][k]==new['bin/native-boot'][k]for k in old['bin/native-boot']if k not in('sha256','size'))\n base.verify();helper.verify()\n p.write(Path(D['patched_cpio']),derived);p.write(Path(D['patched_gzip']),ov._gzip(derived))\n assert __import__('gzip').decompress(Path(D['patched_gzip']).read_bytes())==derived\n base.verify();helper.verify()\n result=dict(status='PASS_SINGLE_BOOT_RECORD_PATCH_ONLY_PENDING_OVERLAY_NATIVE_BIND',inputs=D,sources=dict(base=base.manifest(),new_boothelper=helper.manifest()),raw_header_proof=proof,only_changed_member='bin/native-boot',all_original_record_order_metadata_preserved=True,all_other_final_members_identical=True,patched_cpio=p.ref(D['patched_cpio']),patched_gzip=p.ref(D['patched_gzip']),final_map=new,actual_new_rawtree_created=False,guest_runs=0)\n p.js(Path(D['patch_receipt']),result)\n print(json.dumps(result,sort_keys=True))\n",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/abi2-boothelper-substitution-1/BOOTHELPER-ONLY-BINDING.ACTUAL.json"
+  ],
+  "cleanup_complete": true,
+  "cleanup_timeout_seconds": 3.0,
+  "cwd": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/abi2-boothelper-substitution-1",
+  "descendant_records_omitted": 0,
+  "descendants": [],
+  "elapsed_seconds": 9.789759993960615,
+  "env": {
+    "HOME": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/abi2-boothelper-substitution-1",
+    "LC_ALL": "C",
+    "PATH": "/usr/bin:/bin",
+    "TMPDIR": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/abi2-boothelper-substitution-1"
+  },
+  "events": [
+    {
+      "kind": "cleanup_started",
+      "monotonic": 492532.634712986,
+      "reason": "leader_exited"
+    }
+  ],
+  "executable": {
+    "path": "/usr/bin/taskset",
+    "sha256": "28f2dd426247d7d1d794c0fb8a723efc6a1ae3c56393a238b180fe9a0dc32f1c",
+    "size": 35048
+  },
+  "executable_path": "/usr/bin/taskset",
+  "fd_setup": {
+    "close_fds": true,
+    "pass_fds": [],
+    "stderr": "separate owned pipe",
+    "stdin": "regular file or /dev/null",
+    "stdout": "owned pipe"
+  },
+  "gid": 1000,
+  "groups": [
+    4,
+    20,
+    24,
+    27,
+    30,
+    46,
+    120,
+    131,
+    132,
+    133,
+    1000
+  ],
+  "monotonic_finished": 492532.636211712,
+  "monotonic_started": 492522.846451718,
+  "payload_completion_observed_monotonic": 492532.634703955,
+  "payload_monotonic_deadline": 492552.84692093,
+  "payload_monotonic_started": 492522.84692093,
+  "process": {
+    "pgid": 3369918,
+    "pid": 3369918,
+    "ppid": 3369917,
+    "session": 3369918,
+    "starttime_ticks": 50786097,
+    "state": "R"
+  },
+  "provenance": "Linux process collection only; no McKernel evidence",
+  "raw_wait_status": 0,
+  "schema_version": 1,
+  "status": "COMPLETED",
+  "stderr_limit_bytes": 8388608,
+  "stdin": {
+    "kind": "devnull"
+  },
+  "stdin_path": null,
+  "stdout_limit_bytes": 8388608,
+  "streams": {
+    "stderr": {
+      "artifact": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/abi2-boothelper-substitution-1/actual-abi2-byte-patch-capture-1/stderr.bin",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "bytes_observed": 0,
+      "bytes_retained": 0,
+      "discarded_observed_bytes": 0,
+      "eof": true,
+      "limit_bytes": 8388608,
+      "truncated": false
+    },
+    "stdout": {
+      "artifact": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/abi2-boothelper-substitution-1/actual-abi2-byte-patch-capture-1/stdout.bin",
+        "sha256": "cb6ec45cdf898ae2b8300356be9bf89b6cc32e1644dd520b75fd43d1aab65a3b",
+        "size": 17008
+      },
+      "bytes_observed": 17008,
+      "bytes_retained": 17008,
+      "discarded_observed_bytes": 0,
+      "eof": true,
+      "limit_bytes": 8388608,
+      "truncated": false
+    }
+  },
+  "supervisor_pid": 3369917,
+  "timeout_seconds": 30.0,
+  "uid": 1000,
+  "umask": "0077",
+  "wait_status": {
+    "code": 0,
+    "kind": "exited"
+  }
+}

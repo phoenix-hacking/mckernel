@@ -1,0 +1,9 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+This explicit successor retains the eight-source Root51 physical-history chain and all297 physical assertions. Original sources and captures remain unchanged. It authenticates every dependency, routes only those exact observer source paths through the successor and replaces the expired operation guard with the reviewed explicitly configured adapter. All Docker calls retain exact argv, stdout/stderr predicates and timeouts. The shared fb2d full-record Mounts comparator remains owned by the common postnative observer and is unchanged.
+
+Historical boundary receipts bind original source bytes. Their original __file__ expressions now explicitly denote those authenticated historical paths. The actual executing module metadata names physical_history_successor.py. The output separately records actual successor and historical predicate source. This is an explicit reviewed source successor, not a claim that transformed bytes are the original bytes.
+
+Root must configure(runtime_binding_ref) once before observe(). The binding authenticates successor, all eight sources, actual no-argument operation adapter, separate exact adapter config and independent review. Observer subprocess children keep the original interpreter, -I/-B and timeout while passing the exact binding path/hash. No defaults admit an unconfigured observer.
+
+Nine pure controls pass: all297 assert AST nodes retained, actual Root51/49 custody and HOST predicates, changed completion/nonce-ledger rejection, unconfigured rejection, unchanged Docker dispatch and explicit child routing. No live guard, physical observer, Docker, root, guest, nonce, grant or controller action occurred. Actual postnative common needs explicit configure calls for physical and guard dependencies, followed by exact-source review. Runtime authority is null.

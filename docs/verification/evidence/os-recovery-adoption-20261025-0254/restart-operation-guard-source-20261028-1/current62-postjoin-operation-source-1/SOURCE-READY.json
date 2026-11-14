@@ -1,0 +1,113 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_READY_FOR_INDEPENDENT_REVIEW_NOT_RUNTIME_RELEASED",
+  "owner": "/root/restart_guard",
+  "operation": "bfd-postjoin-current62",
+  "predecessor_cutoffs": null,
+  "first_prepared_window_sha256": "0bfb54bff698f53c744d797e2f57db94db08cd20120da70566d555fa6c1e320e",
+  "operation_cutoffs": [
+    1793253600,
+    1035704.5689393478,
+    1051042.6959879305
+  ],
+  "expected_source_owners": [
+    "/root",
+    "/root/m14_compose",
+    "/root/bfd_route",
+    "/root/restart_guard"
+  ],
+  "sources": {
+    "check_source.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/current62-postjoin-operation-source-1/check_source.py",
+      "bytes": 5666,
+      "sha256": "5f264d94714c0f84b10ccaa6fc59a221106db5ce06095d1477aabcfc50ce2d8f"
+    },
+    "current62_guard_adapter.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/current62-postjoin-operation-source-1/current62_guard_adapter.py",
+      "bytes": 3015,
+      "sha256": "60cc7f0f63e9d6095b6db49d0694d7c619f757c5cf3afd8aa459584fff2a1232"
+    },
+    "operation_window_guard62.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/current62-postjoin-operation-source-1/operation_window_guard62.py",
+      "bytes": 8531,
+      "sha256": "bc749fd082688320d2f5d9a1b6b4a3e5b0a7d0cf6ab863b16b61a7db0ea11167"
+    }
+  },
+  "templates": {
+    "ROOT62-ADAPTER-CONFIG.TEMPLATE.NOT-AUTHORITY.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/current62-postjoin-operation-source-1/ROOT62-ADAPTER-CONFIG.TEMPLATE.NOT-AUTHORITY.json",
+      "bytes": 500,
+      "sha256": "131b2f96b2c0e14c7c04ababbe835015fcd9f16e84a8ce177c12a867705da731"
+    },
+    "ROOT62-INDEPENDENT-OPERATION-REVIEW.TEMPLATE.NOT-AUTHORITY.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/current62-postjoin-operation-source-1/ROOT62-INDEPENDENT-OPERATION-REVIEW.TEMPLATE.NOT-AUTHORITY.json",
+      "bytes": 191,
+      "sha256": "c96aff1d3495e454dfd2273c04228f71234101613d68a328708fb1969271db30"
+    },
+    "ROOT62-OPERATION-SUCCESSOR.TEMPLATE.NOT-AUTHORITY.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/current62-postjoin-operation-source-1/ROOT62-OPERATION-SUCCESSOR.TEMPLATE.NOT-AUTHORITY.json",
+      "bytes": 1044,
+      "sha256": "0f828b5ba230010343fb41d503ab256d42d26c81b27695c8db3923fe51cce25c"
+    }
+  },
+  "deltas": {
+    "current62_guard_adapter.py.delta.patch": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/current62-postjoin-operation-source-1/current62_guard_adapter.py.delta.patch",
+      "bytes": 519,
+      "sha256": "c00c4ca83a792188de129af5862a9be15d31e170b3eb6a1a436b48ec7d0467c5"
+    },
+    "operation_window_guard62.py.delta.patch": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/current62-postjoin-operation-source-1/operation_window_guard62.py.delta.patch",
+      "bytes": 1722,
+      "sha256": "eb0def9e0a69cfdecb53157a249436d0def863dc2cd59663e6a13f1ec8fd08d2"
+    }
+  },
+  "reviewed_predecessor_sources": {
+    "guard": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/current118-operation-source-1/operation_window_guard118.py",
+      "bytes": 8511,
+      "sha256": "d02781a862ff41f8116b84eab955f66969b0db8137b9b255ba6b656958eac275"
+    },
+    "adapter": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/current118-operation-source-1/current118_guard_adapter.py",
+      "bytes": 3009,
+      "sha256": "3a90d200d4bcb81d68f9aed22c37f8a3ebc5389896c29b6f2a7973e9ae66da91"
+    },
+    "guardian": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/guardian_guard.py",
+      "bytes": 13388,
+      "sha256": "48893862bb3262a2c81d282215e4b9771b8f659e635a21856096c41233774f18"
+    }
+  },
+  "pure_checks": {
+    "command": "python3 -B /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/current62-postjoin-operation-source-1/check_source.py",
+    "status": "PASS_PURE_SOURCE_ONLY",
+    "positive_checks": 8,
+    "negative_checks": 33,
+    "exit_code": 0,
+    "affinity": [
+      0
+    ],
+    "jobs": 1,
+    "address_space_bytes": 2147483648,
+    "live_guard_calls": 0,
+    "query_calls": 0,
+    "subprocesses": 0
+  },
+  "api": {
+    "direct": "guard(operation, successor_ref, review_ref, expected_subjects)",
+    "pure": "validate_operation(successor, review, operation, subjects, clocks, boot_id=BOOT)",
+    "adapter": "configure(config_ref) once; guard(); current_cutoffs()"
+  },
+  "changes": [
+    "Only operation identity and matching diagnostic label differ from reviewed current118 guard.",
+    "Only operation identity differs from reviewed current118 adapter.",
+    "Directory depth is unchanged: E=HERE.parent.parent resolves same evidence/account predecessor.",
+    "No old operation, window, account, guardian, runtime-source or producer grant is renewed."
+  ],
+  "actual_root_subjects": null,
+  "actual_operation_successor": null,
+  "actual_independent_operation_review": null,
+  "actual_census": null,
+  "native_clearance": false
+}

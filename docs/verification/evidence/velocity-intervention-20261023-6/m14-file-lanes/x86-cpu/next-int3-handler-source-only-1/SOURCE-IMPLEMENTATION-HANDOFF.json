@@ -1,0 +1,90 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_COMPLETE_LIVE_INT3_ORCHESTRATION_SOURCE_ONLY",
+  "target": "arch/x86_64/kernel/cpu.c::int3_handler",
+  "patch_preimages": {
+    "C": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+      "sha256": "c779079fb6de66991c861c823dca06b2a9ceec16ac4c984995200b668d7e78ce",
+      "bytes": 95605
+    },
+    "Rust": {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "98914e1ff4d50c2f42ccbdeb1f4f338024b7a9a2143fbad2f59ebd6f6b50dd0b",
+      "bytes": 93305
+    }
+  },
+  "postimages": {
+    "arch/x86_64/kernel/cpu.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-int3-handler-source-only-1/candidate/arch/x86_64/kernel/cpu.c",
+      "sha256": "2bc4ca92f49c17e77689f1ebf4844bd5d88481d4664247bf0ea624a0f040dfb3",
+      "bytes": 95997
+    },
+    "kernel/rust/x86_cpu_helpers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-int3-handler-source-only-1/candidate/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "34feaef6e1b1c572e5da7733bb42c18998b427262636b96a0749c8ef7df86d11",
+      "bytes": 96205
+    }
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-int3-handler-source-only-1/PRIVATE-COMPLETE-INT3-HANDLER.patch",
+    "sha256": "1c8e28813a884e15f24e858c02fcae97edcd5247ce4e9d453fe835de70aa5bc5",
+    "bytes": 4186
+  },
+  "original_C": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-int3-handler-source-only-1/ORIGINAL-C-BODY.inc",
+    "sha256": "0a83a60269e0b329b3cd08ea96582d1061e509badb52c9bc32818cff1bb387c1",
+    "bytes": 538
+  },
+  "actual_Rust": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-int3-handler-source-only-1/ACTUAL-RUST-BODY.rs",
+    "sha256": "a6c71eb858b7505924097a62b0ac0e7a724f988d1a28577249b96fe3bf1fa2b9",
+    "bytes": 2243
+  },
+  "declarations": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-int3-handler-source-only-1/ACTUAL-RUST-PROVIDER-DECLARATIONS.inc",
+    "sha256": "e31e06d694ec1cc133fee0378ec84e4f2a97cd718a0743e25343de55b609bb83",
+    "bytes": 656
+  },
+  "C_config_data": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-int3-handler-source-only-1/DECLARATIVE-C-CONFIG-DATA.inc",
+    "sha256": "8f2c1ea562dec0587d65163c56b22e79cd0e139c14b0cbeb1beb0742c1279fe7",
+    "bytes": 292
+  },
+  "consumer_plan": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-int3-handler-source-only-1/SOURCE-CONSUMER-PLAN.json",
+    "sha256": "4681224f0e05705545858896372f09eb007ecd4a7cec2abb63bdbb39e8829849",
+    "bytes": 5064
+  },
+  "fixture_fragments": {
+    "fixture-source-fragment/real-header-ABI.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-int3-handler-source-only-1/fixture-source-fragment/real-header-ABI.c",
+      "sha256": "00560b924fb35cf86052f99c914aea225aff6c257c1fb91a78ae017fea64791e",
+      "bytes": 1880
+    },
+    "fixture-source-fragment/actual-Rust-ABI.inc": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-int3-handler-source-only-1/fixture-source-fragment/actual-Rust-ABI.inc",
+      "sha256": "f385401741ea116c02f68f5e32e431935981b462f132eeacf3e5c3aa4bc43c88",
+      "bytes": 583
+    },
+    "fixture-source-fragment/recorded-boundaries.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-int3-handler-source-only-1/fixture-source-fragment/recorded-boundaries.c",
+      "sha256": "4a68a8f754f4c7619ccd868f04c8996e5ff0a7af05c450d5a6758a99441fe370",
+      "bytes": 4295
+    }
+  },
+  "invariants": [
+    "CompleteoriginalCfallbackliteralunchanged. Onlyint3bodyselection/readonlycfgdatumandnewRustbody/aliasesadded.",
+    "ActualSigInfobytestoragezeroedall128includingpadding; onlysi_codewrittenbeforeexistingmutablesignalcallback; noassume_initmove/pointerescape.",
+    "NoRustreferenceacrossproviders; classifiercalledtwicearoundexistinginterrupt_exit; optionaldebugblockcontrolledbyactualCtranslationgate.",
+    "No newruntimeChelper/getter/function, sharedABIlayout/header/CMake, trapinstruction, panic/retry/NULLrepair."
+  ],
+  "accepted_base_preserved": "Canonicalc779/9891context+ulong bodiesunchanged. GPEsourcec2cf and8000batchallbytesuntouched.",
+  "actual_leaf_production_defaultlink_native": null,
+  "wholefile_retirement": false,
+  "compiler_jobs": 0,
+  "test_jobs": 0,
+  "CPU_slots_held": 0,
+  "canonical_shared_Git_P12_writes": 0,
+  "failure_history": "AllpriorCPUlogger/kmsg/8MiBqualificationandcorrectedcontextproofsretained; noint3attemptyet."
+}

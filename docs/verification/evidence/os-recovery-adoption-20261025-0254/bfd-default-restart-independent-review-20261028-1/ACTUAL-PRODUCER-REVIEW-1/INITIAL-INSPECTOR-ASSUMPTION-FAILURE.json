@@ -1,0 +1,7 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "failure": "Inspector expected newer readelf PIE presentation; actual host labels ET_DYN Shared object file while DT_FLAGS_1 confirms PIE.",
+  "bounded_correction": "Use raw ELF e_type3 and explicit FLAGS_1 PIE. Verify real static BFD linkage using recorded link.d libbfd.so->libbfd.a and defined local bfd_openr/check_format rather than assuming DT_NEEDED libbfd.",
+  "artifact_failure": false,
+  "producer_replayed": false
+}

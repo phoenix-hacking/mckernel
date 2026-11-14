@@ -1,0 +1,88 @@
+{
+  "status": "PRIVATE_CONDITIONAL_SUPPORTED_PROFILE_SELECTION_PROPOSAL_NOT_ACTIVATION",
+  "at_utc": "2026-11-11T15:22:51.134328+00:00",
+  "actual_production_TYPE_qualification": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-first-whole-compile-review-sourceacq-max-1/escalation-events-1/actual-result-1/QUALIFICATION.json",
+    "bytes": 16047,
+    "sha256": "ed8ca29c5370dc005bd1e6bf957395a0966c13ed7fb61eb97f2972f888c11de1"
+  },
+  "exact_TYPE_28_manifest": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/first-whole-compile-1/escalation-events-1/COMPILED-SOURCE-MANIFEST.json",
+    "bytes": 45823,
+    "sha256": "0a69d59700266222c736dad72632d26be8f7aa68385d61245740774a273391c1"
+  },
+  "exact_TYPE_overlay": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/first-whole-compile-1/escalation-events-1/SOURCE-OVERLAY.json",
+    "bytes": 96064,
+    "sha256": "c5d8cc8b391c18178ea874087c4fe898fff13f0aaf753c4ebfdccfcd63c59ab3"
+  },
+  "profile_predicate": "MCKERNEL_RUST_F06_WHOLE_DEFAULT AND ENABLE_RUST_F06_SYSCALL_WHOLE AND\n            MCKERNEL_DO_FORK_SELECTED AND MCKERNEL_DO_SYSCALL_OUTER_SELECTED AND\n            MCKERNEL_WAIT_HOST_PROVIDER_SELECTED AND MCKERNEL_TERMINATE_HOST_PROVIDER_SELECTED AND\n            NOT ENABLE_NATIVE_FORK_OWNED_TRANSACTION AND NOT DCFA_KMOD",
+  "predicate_scope": "Inside existing ENABLE_RUST_KERNEL/x86_64 Rust block. MCKERNEL_RUST_F06_WHOLE_DEFAULT requires linux-6.12, !UBSAN, profiling/perf/rusage/WORKIRQ, !Tofu/!Fugaku, !broad adapters/!experimental signal. Existing do_fork, outer, wait and termination selectors additionally guarantee genuine current lifecycle/offload participants; owned fork and DCFA remain excluded.",
+  "new_Rust_cfg": "f03_perf_owner_protocol",
+  "paired_C_macro": "MCKERNEL_RUST_F03_PERF_OWNER_PROTOCOL",
+  "paired_C_source": "kernel/syscall.c",
+  "pairing_placement": "C macro appended after all base source properties; no replacement of previous F03/F06/root/fork/clone guards.",
+  "new_explicit_owner_source_dependencies": [
+    "kernel/rust/f03_perf_owner.rs",
+    "kernel/rust/f03_perf_owner/callbacks.rs",
+    "kernel/rust/f03_perf_owner/copy_borrows.rs",
+    "kernel/rust/f03_perf_owner/descriptors.rs",
+    "kernel/rust/f03_perf_owner/entry.rs",
+    "kernel/rust/f03_perf_owner/events.rs",
+    "kernel/rust/f03_perf_owner/fork_copy.rs",
+    "kernel/rust/f03_perf_owner/forward_gate.rs",
+    "kernel/rust/f03_perf_owner/groups.rs",
+    "kernel/rust/f03_perf_owner/hardware.rs",
+    "kernel/rust/f03_perf_owner/lifecycle.rs",
+    "kernel/rust/f03_perf_owner/maps.rs",
+    "kernel/rust/f03_perf_owner/monitors.rs",
+    "kernel/rust/f03_perf_owner/process_targets.rs",
+    "kernel/rust/f03_perf_owner/runtime.rs",
+    "kernel/rust/f03_perf_owner/target_process.rs",
+    "kernel/rust/f03_perf_owner/terminal.rs",
+    "kernel/rust/f03_perf_owner/thread_counters.rs",
+    "kernel/rust/f03_perf_owner/transactions.rs"
+  ],
+  "existing_changed_helper_sources_already_tracked": [
+    "kernel/rust/f03_do_fork.rs",
+    "kernel/rust/f03_terminate.rs",
+    "kernel/rust/lib.rs",
+    "kernel/rust/process_helpers.rs",
+    "kernel/rust/sched_helpers.rs",
+    "kernel/rust/syscall_policy.rs",
+    "kernel/rust/x86_cpu_helpers.rs",
+    "kernel/rust/x86_perfctr.rs"
+  ],
+  "new_options_or_cache_defaults_or_compiler_flags": [],
+  "canonical_selection_state": "UNSELECTED: canonical kernel/CMakeLists.txt unchanged; private proposed selector takes effect ONLY after Root reviewed integration/admission.",
+  "typed_bodies_unchanged": 28,
+  "only_additional_source_change": "kernel/CMakeLists.txt three additive hunks",
+  "all_previous_source_options_flags_profiles_and_unknowns_unchanged": true,
+  "actual_pending_gates": [
+    "Actual four-family runtime PASS and complete source/material review at this exact production tuple",
+    "Independent selection/source and operation/profile review",
+    "Root actual canonical commit and all29 postimage readbacks, preserving33dirty and existing IHK8d",
+    "Root fresh shared HOST admission and single current cache owner"
+  ],
+  "C_exclusions_to_prove_in_new_image": [
+    "sys_perf_event_open",
+    "perf_event_open_do_syscall_bridge"
+  ],
+  "actual_prior_C6": [
+    "perf_event_open_do_syscall_bridge",
+    "do_execveat",
+    "syscall_execveat_bridge",
+    "sys_perf_event_open",
+    "util_thread",
+    "syscall_util_indicate_clone_disabled_bridge"
+  ],
+  "expected_remaining_C4_if_only_this_cut_changes": [
+    "do_execveat",
+    "syscall_execveat_bridge",
+    "util_thread",
+    "syscall_util_indicate_clone_disabled_bridge"
+  ],
+  "C_ledger_rule": "Observe actual complete C ledger; four is scoped expectation, not quota or zero-C acceptance. Preserve all genuine exec/general UTI debt/holds.",
+  "no_HOST_fixture_or_lower_double_source_in_production": true,
+  "no_CMake_compiler_test_image_native_or_canonical_execution": true
+}

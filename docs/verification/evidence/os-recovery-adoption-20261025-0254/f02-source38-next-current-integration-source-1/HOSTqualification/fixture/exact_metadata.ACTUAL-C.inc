@@ -1,0 +1,15 @@
+const char *const process_tracked_allocator_source_file = "/src/kernel/process.c";
+const char *const process_page_fault_anon_alloc_file = "/src/kernel/process.c";
+extern const int process_mckfd_free_bridge_source_line;
+extern const int process_policy_free_bridge_source_line;
+extern const int process_optional_free_bridge_source_line;
+extern const int process_alloc_bridge_source_line;
+extern const int process_free_vm_bridge_source_line;
+extern const int process_create_thread_alloc_pages_source_line;
+extern const int process_split_range_alloc_source_line;
+extern const int process_range_kfree_bridge_source_line;
+extern const int process_free_range_pages_source_line;
+extern const int process_add_range_alloc_bridge_source_line;
+extern const int process_add_range_free_bridge_source_line;
+extern const int process_page_fault_anon_alloc_line;
+extern const int process_free_thread_pages_source_line;

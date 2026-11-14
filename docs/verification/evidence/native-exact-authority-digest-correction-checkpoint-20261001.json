@@ -1,0 +1,27 @@
+{
+  "schema": "mckernel.native-exact-authority-digest-correction.v1",
+  "status": "PASS_BOUNDED_CORRECTION",
+  "source_head": "81691656298dca9c732a3ec185bb1e40b7118b9e",
+  "failure_evidence": "docs/verification/evidence/native-exact-build-scratch15-authority-failure-20261001.json",
+  "changed_files": {
+    "host-kernel/kbuild/stage-manifest.json": "1d0ecb3c7c3c7fdad6343825b7fcd1ecfd9495ee8313870f32d9273a00e63869",
+    "scripts/rocky_rust_staging.py": "9b0943b3e8682fdba81cda7fa7c60c2e6574354523c6fd4dcd6ea1606c60f53e"
+  },
+  "corrected_inputs": {
+    "mcctrl_process.rs": "148134730b5fed7f14770eb070529b5227bb6ab790b7199f8800968219dffc70",
+    "os_runtime.rs": "aa9fa37f67762565c3d1be1a0c7662736932a136bc43a3fd3ef2deb319c2a4b6"
+  },
+  "review": {
+    "result": "PASS",
+    "manifest_inputs_verified_against_head": 56,
+    "crate_roots_verified_against_head": 3,
+    "original_manifest_result": "mcctrl_process.rs authority digest drift",
+    "mcctrl_only_result": "os_runtime.rs authority digest drift",
+    "complete_correction_result": "native build-surface audit PASS; three modules",
+    "strict_staging_manifest_result": "PASS; credit_eligible remains false",
+    "diff_check": "PASS"
+  },
+  "exclusions": ["Uncommitted rejected shutdown edits in host-kernel/native-rust/smp_cpu.rs and smp_memory.rs are untouched, differ from HEAD and are not included in this review."],
+  "next": "Checkpoint the original failure and correction, then prepare a fresh source candidate and fresh one-shot build request. Never rerun scratch15.",
+  "acceptance": "Source authority correction only; no compilation, boot, guest, diagnostic application, formal application, shutdown correctness or OS acceptance."
+}

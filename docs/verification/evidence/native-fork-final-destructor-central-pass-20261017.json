@@ -1,0 +1,204 @@
+{
+  "schema": "mckernel.native-fork-final-destructor-isolated-implementation.v1",
+  "status": "PASS_SCOPED_CHECKED_RELEASE_SOURCE_BODIES_AND_LEGACY_ABI_PRESERVATION",
+  "author": "/root/fork_ownership",
+  "model": "gpt-6.1-sol",
+  "worktree": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1",
+  "worktree_base": "09f438751c28df0f497ed45a6bf6a4c6e0821d7b",
+  "boundary_review": "docs/verification/evidence/native-fork-final-destructor-boundary-review-20261017.json",
+  "boundary_review_sha256": "dbcdcec630b4c0d2c2c5a237732af4a8df936d6c8321caf76c88da2ab1d84467",
+  "workspace_materialization": "docs/verification/evidence/fork-workspace-extension-20261017.json",
+  "main_production_modified": false,
+  "fork_admission_enabled": false,
+  "syscall_integration": false,
+  "application_acceptance": false,
+  "production_acceptance": false,
+  "formal_case_credit": false,
+  "implemented": {
+    "bodies": ["process_release_thread_checked_body_result", "process_release_vm_checked_body_result"],
+    "wrappers": ["release_thread_checked", "release_process_vm_checked", "process_release_vm_checked_bridge"],
+    "languages": "Exact additive Rust implementation plus mutually selected C fallback. Existing void wrappers, bodies, callback types and object structures are unchanged.",
+    "thread_contract": "Validate thread, cached VM/proc and mandatory callbacks before one decrement. Accept exact 0 or 1; propagate negative errors and reject other positive results. For final thread, preserve profile/procfs/delete/destroy order, then invoke checked VM release using the cached VM pointer only. Map VM0 to thread1, VM1 to thread2; errors never yield final proof.",
+    "vm_contract": "Validate live VM/proc plus every mandatory teardown callback before one strict decrement. For final VM preserve lock/close/unlock, optional pre-free, flush, ranges, detach/process release, policy drainage and final-free order. Return literal1 after final-free with no object reads afterward.",
+    "ack_contract": "Only a later exact pending fork caller with proven HostRevoked and checked thread result2 may issue scalar-only destruction ACK. No such production caller is wired here. Results0/1/error give no ACK, pointer retry, rollback or asynchronous completion authority.",
+    "selection": "C fallback bodies and wrappers remain under !MCKERNEL_RUST_PROCESS_HELPERS; checked C bridge is a declaration when Rust supplies it and a definition otherwise. Rust supplies the matching five exports."
+  },
+  "isolated_source_sha256": {
+    "kernel/rust/process_helpers.rs": "4991258b970e49a1998f3605311f08da96a3fcd218ef02e8b8afeb73b6e24911",
+    "kernel/process_helpers.c": "e436497031918d96d386afb7f3cbcc3af1e38692bb627b83dcf4d698c15be6c9",
+    "kernel/include/process_helpers.h": "1e4eceec2c06dcd409d86cbd5e24616684d83e828d62d6ca534e08c4e0a20bcb",
+    "kernel/process.c": "a5b503ad98deb916e30ec70a78fb1ede64adbc7944216b4279943888e6632f3e",
+    "kernel/include/process.h": "8848d536f2fa847a59af72d573ec9c55838c27cea664d46438ab4e038bf83649",
+    "scripts/tests/test_native_fork_final_destructor_20261017.py": "c961af2306fae9b5eec3ecc9effa14799eab2ae70f674ce44b0fd69f8954e8d8",
+    "scripts/tests/fixtures/native_fork_final_destructor_20261017.rs": "ac399d775207ef59ea2c98dc7ee6686719d63d7f85204ccbbc507079f9379bd3",
+    "scripts/tests/fixtures/native_fork_final_destructor_20261017.c": "70b3de3debb9459228f3634a85f670e116c2d06ec018996864f613fc4c895133"
+  },
+  "source_only_execution": {
+    "command": "taskset -c 7 /usr/bin/prlimit --as=1073741824 --cpu=45 --nofile=256 --core=0 timeout 60s /home/holden/anaconda3/bin/python3 -B -m unittest scripts.tests.test_native_fork_final_destructor_20261017.NativeForkFinalDestructorTests.test_old_body_wrapper_and_struct_bytes_unchanged scripts.tests.test_native_fork_final_destructor_20261017.NativeForkFinalDestructorTests.test_additive_signatures_wrappers_and_symbol_selection scripts.tests.test_native_fork_final_destructor_20261017.NativeForkFinalDestructorTests.test_extracts_exact_bodies_with_no_markers_and_keeps_gate_closed -v",
+    "cwd": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1",
+    "result": "3 passed, 0 failed, exit0, 0.108 seconds",
+    "proofs": [
+      "Ten original C/Rust body/void-wrapper/bridge regions retain their exact hashes.",
+      "Process, Thread and ProcessVm C structure regions retain exact hashes; original Rust ABI file and its layout assertions retain review-bound SHA256 ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e.",
+      "New checked body C prototypes match definitions; new Rust body parameter shapes match old ones except the selected integer-returning thread VM callback.",
+      "C fallback guard and wrapper offset-order checks match the selected contract; old gate still rejects non-null CREATE_PPD with -95.",
+      "Generated fixtures contain the exact four old/new release-body definitions in each language without unexpanded extraction markers."
+    ],
+    "compiler_invocations_by_author": 0,
+    "compiler_status": "C-object compilation, pinned Rust-test linking and the protected-page fixture were centrally executed by the dispatcher under profile2e158e78 and passed. The author invoked no compiler or replay. Exact results/artifact hashes follow in central_actual_body_execution."
+  },
+  "central_actual_body_execution": {
+    "execution_owner": "dispatcher",
+    "profile_review": "docs/verification/evidence/native-fork-final-destructor-cheap-profile-review-20261017.json",
+    "profile_review_sha256": "2e158e780d34e061440de48caab2c2744b86ec52c22fa6f24ef31a165481ed6f",
+    "capture_root": "/home/holden/mckernel-work/scratch/native-cheap-20261017-sYWtkx",
+    "generated_subdirectory": "tmp/native-fork-final-destructor-20261017-rm7pzmjs",
+    "python_command": [
+      "/home/holden/anaconda3/bin/python3",
+      "-B",
+      "-m",
+      "unittest",
+      "-v",
+      "scripts.tests.test_native_fork_final_destructor_20261017"
+    ],
+    "compiler_commands": [
+      [
+        "/usr/bin/cc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-c",
+        "/home/holden/mckernel-work/scratch/native-cheap-20261017-sYWtkx/tmp/native-fork-final-destructor-20261017-rm7pzmjs/actual_bodies.c",
+        "-o",
+        "/home/holden/mckernel-work/scratch/native-cheap-20261017-sYWtkx/tmp/native-fork-final-destructor-20261017-rm7pzmjs/actual_c.o"
+      ],
+      [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--test",
+        "-Dwarnings",
+        "/home/holden/mckernel-work/scratch/native-cheap-20261017-sYWtkx/tmp/native-fork-final-destructor-20261017-rm7pzmjs/actual_bodies.rs",
+        "-C",
+        "link-arg=/home/holden/mckernel-work/scratch/native-cheap-20261017-sYWtkx/tmp/native-fork-final-destructor-20261017-rm7pzmjs/actual_c.o",
+        "-o",
+        "/home/holden/mckernel-work/scratch/native-cheap-20261017-sYWtkx/tmp/native-fork-final-destructor-20261017-rm7pzmjs/actual_bodies"
+      ]
+    ],
+    "fixture_arguments": [
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    "resources": {
+      "cpu": 7,
+      "planning_ram_bytes": 2147483648,
+      "wall_limit_seconds": 180,
+      "wall_seconds": 1.03,
+      "max_rss_kib": 120348,
+      "swaps": 0,
+      "rlimit_cpu_seconds": 150,
+      "rlimit_nofile": 256,
+      "rlimit_fsize_bytes": 67108864,
+      "rlimit_core_bytes": 0
+    },
+    "result": {
+      "python_tests_passed": 4,
+      "rust_tests_passed": 2,
+      "c_vectors": 46,
+      "rust_vectors": 46,
+      "nondumpable_sigsegv_controls": 2,
+      "compile_c_exit": 0,
+      "compile_rust_link_exit": 0,
+      "run_exit": 0,
+      "driver_exit": 0
+    },
+    "retained_sha256": {
+      "driver.status": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "driver.stderr": "ba6ffcecbf29ab902bf7acc4a1d7715b7685086d9b3e775718d91062b8cfeb25",
+      "driver.stdout": "593ea92699c0a0422a466cfd2f488f093fd6594d4e95982adf0a9ae0226e09fe",
+      "tmp/native-fork-final-destructor-20261017-rm7pzmjs/actual_bodies": "d52217611734f1dac31a66a14f4d592c762e49ff1844b4c65e65165372177ef6",
+      "tmp/native-fork-final-destructor-20261017-rm7pzmjs/actual_bodies.c": "1c0fe6fc8ec793517c69f4feb4ed79e2a5d9917b20f36b932bdc4cef850adfff",
+      "tmp/native-fork-final-destructor-20261017-rm7pzmjs/actual_bodies.rs": "7de6e3be7e6015e50675731b67b3d33a52562ff7feab7348df936f9c966e31f6",
+      "tmp/native-fork-final-destructor-20261017-rm7pzmjs/actual_c.o": "3b77e98cefac50add46f454fb6223dbbc6532838274dac268877582afa17b1e6",
+      "tmp/native-fork-final-destructor-20261017-rm7pzmjs/cc-version.command.json": "3f40af84de4f7f5fb837b1ced363ed41be601452e09fa13fd6cf6eda0cb3f626",
+      "tmp/native-fork-final-destructor-20261017-rm7pzmjs/cc-version.status.json": "df4d721d233a2334088d2d2e0110346ae9e509ff46bf0b379fbcfa85c715af4d",
+      "tmp/native-fork-final-destructor-20261017-rm7pzmjs/cc-version.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tmp/native-fork-final-destructor-20261017-rm7pzmjs/cc-version.stdout": "a2c6f19b6698aa4249442367c19c93accd1bb85cfcd901fce4c02116f30da891",
+      "tmp/native-fork-final-destructor-20261017-rm7pzmjs/compile-c.command.json": "1abeccf1bf8919b51d350969af9fedcd2fff71ef29892a0f43c904aefda31052",
+      "tmp/native-fork-final-destructor-20261017-rm7pzmjs/compile-c.status.json": "df4d721d233a2334088d2d2e0110346ae9e509ff46bf0b379fbcfa85c715af4d",
+      "tmp/native-fork-final-destructor-20261017-rm7pzmjs/compile-c.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tmp/native-fork-final-destructor-20261017-rm7pzmjs/compile-c.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tmp/native-fork-final-destructor-20261017-rm7pzmjs/compile-rust.command.json": "c1613981a835bc7095302d97da26a9c9b476858b84e01cdb85ed5384a6cb7a91",
+      "tmp/native-fork-final-destructor-20261017-rm7pzmjs/compile-rust.status.json": "df4d721d233a2334088d2d2e0110346ae9e509ff46bf0b379fbcfa85c715af4d",
+      "tmp/native-fork-final-destructor-20261017-rm7pzmjs/compile-rust.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tmp/native-fork-final-destructor-20261017-rm7pzmjs/compile-rust.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tmp/native-fork-final-destructor-20261017-rm7pzmjs/run.command.json": "e8f6b7585a3b92ecffae854db99c288d6071a186eca8f04c9d7f5de6ea3bbf7f",
+      "tmp/native-fork-final-destructor-20261017-rm7pzmjs/run.status.json": "df4d721d233a2334088d2d2e0110346ae9e509ff46bf0b379fbcfa85c715af4d",
+      "tmp/native-fork-final-destructor-20261017-rm7pzmjs/run.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tmp/native-fork-final-destructor-20261017-rm7pzmjs/run.stdout": "8eaf3005046488266b39c25f9c0e04098ffa96011ae48849d6fd00dac335bf5e",
+      "tmp/native-fork-final-destructor-20261017-rm7pzmjs/rustc-version.command.json": "f3a86d4ebf35ac329fcb448d439b046b97af9ab2e8bb4ac1b5f616f531a6ef16",
+      "tmp/native-fork-final-destructor-20261017-rm7pzmjs/rustc-version.status.json": "df4d721d233a2334088d2d2e0110346ae9e509ff46bf0b379fbcfa85c715af4d",
+      "tmp/native-fork-final-destructor-20261017-rm7pzmjs/rustc-version.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tmp/native-fork-final-destructor-20261017-rm7pzmjs/rustc-version.stdout": "ecda74ca828b18debf1624cb36209a5b844fb1e1c1905ffb3d51b56cc275f96f"
+    },
+    "scope": "PASS for the exact extracted source bodies, result/trace parity, legacy API/layout preservation and explicit protected-page post-destruction-read controls. Refcounts, object destruction/list/lock operations remain test adapters; no native module, guest fork, production cancellation or formal acceptance is established.",
+    "author_replay": false,
+    "code_frozen": true
+  },
+  "prepared_actual_body_suite": {
+    "driver_imports": "Python standard library only. Reads the eight isolated production/test inputs, the unchanged isolated mcctrl_process gate, and read-only main kernel/rust/abi.rs for its frozen layout hash. No subprocess is called by source-only methods.",
+    "generated_rust": {"bytes": 12046, "sha256": "7de6e3be7e6015e50675731b67b3d33a52562ff7feab7348df936f9c966e31f6"},
+    "generated_c": {"bytes": 25223, "sha256": "1c0fe6fc8ec793517c69f4feb4ed79e2a5d9917b20f36b932bdc4cef850adfff"},
+    "unexpanded_markers": false,
+    "planned_commands": [
+      "/usr/bin/cc --version",
+      "<pinned-rustc-1.92> --version",
+      "/usr/bin/cc -std=c11 -Wall -Wextra -Werror -c <fresh-root>/actual_bodies.c -o <fresh-root>/actual_c.o",
+      "<pinned-rustc-1.92> --edition=2021 --test -Dwarnings <fresh-root>/actual_bodies.rs -C link-arg=<fresh-root>/actual_c.o -o <fresh-root>/actual_bodies",
+      "<fresh-root>/actual_bodies --test-threads=1 --nocapture"
+    ],
+    "retention": "Persistent mkdtemp beneath inherited reviewed TMPDIR; generated C/Rust source, C object, linked test, version/compile/run commands, stdout/stderr bytes and return/timeout statuses remain after any failure.",
+    "vector_count": "PASS:46 independently asserted vectors in C and the same46 through exact Rust bodies produced matching canonical reports. Both forked nondumpable protected-page control reads terminated SIGSEGV. Four Python checks and two Rust tests passed; see central_actual_body_execution.",
+    "vectors": [
+      "Thread reference nonfinal; final thread/nonfinal VM; final thread/final VM; optional profile absent.",
+      "Direct VM nonfinal and final; optional pre-free present/absent; empty/nonempty FD and policy lists with exact callback order.",
+      "Null objects, cached VM/proc and each mandatory callback reject before the decrement counter changes.",
+      "Injected decrement0/1/-5/2 in both helpers and checked VM callback -5/2 after thread destruction obey exact result contracts.",
+      "Original legacy thread result1 remains thread-only; original normal C/Rust callback traces and VM results agree.",
+      "A scalar-only caller rejects missing HostRevoked/mismatched identity and emits one ACK only for thread result2; all other results invoke at most one consuming release and no ACK."
+    ],
+    "poison_boundary": "Both exported C fixture entrypoints first call prctl(PR_SET_DUMPABLE,0); failure immediately exits86 before assertions or protected accesses. Each poison child repeats this guard before its read, and also inherits the parent's nondumpable state. Thread-destroy, final-VM-free and process-release callbacks use mprotect(PROT_NONE) on separate anonymous object pages. A later production field read faults. Separate real child reads must still terminate SIGSEGV, so guard failure cannot satisfy the unchanged detector oracle. Object allocation/refcounts/list operations/locking remain explicit adapters, not kernel execution.",
+    "process_profile_change": "Requires separate dispatcher admission because it adds local C object compilation/linking and two serial in-process fixture forks. No root, Docker, module, guest, network, toolchain installation or native image build is involved."
+  },
+  "preserved_profile_sideeffect_input": {
+    "original_template_path": "scripts/tests/fixtures/native_fork_final_destructor_20261017.c",
+    "original_template_sha256": "d8b773b4be66d852a6d6a9eb8cf05d25b407182feb5dc0779023b651c29d55f1",
+    "original_template_complete_utf8": "/* SPDX-License-Identifier: GPL-2.0 */\n/* Exact checked and legacy C bodies with explicit kernel-operation adapters. */\n#define _GNU_SOURCE\n#include <assert.h>\n#include <errno.h>\n#include <signal.h>\n#include <stddef.h>\n#include <stdio.h>\n#include <string.h>\n#include <sys/mman.h>\n#include <sys/wait.h>\n#include <unistd.h>\n@CALLBACK_TYPES@\nstruct rb_root { void *head; };\nstruct fd_node { void *next; int (*close_cb)(void *, void *); };\nstruct policy_node { struct policy_node *next; };\nstruct process { void *mckfd; unsigned long lock; int pid; void *vm; };\nstruct process_vm {\n    int refs; void *proc; process_vm_free_cb_fn_t free_cb; void *opt;\n    void *address_space; struct rb_root policy;\n};\nstruct thread { int refs; void *vm; void *proc; };\n@RUST_BODY_PROTOTYPES@\n\nstatic char trace[1024], report[128];\nstatic size_t trace_length;\nstatic int rust_selected, dec_calls, thread_dec, vm_dec, checked_vm_override;\nstatic unsigned int vectors;\nstatic void *thread_page, *vm_page, *proc_page;\nstatic struct fd_node fds[2];\nstatic struct policy_node policies[2];\nstatic void event(char value) { assert(trace_length + 1 < sizeof(trace)); trace[trace_length++] = value; trace[trace_length] = 0; }\nstatic void *page(void) {\n    void *result = mmap(NULL, 4096, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);\n    assert(result != MAP_FAILED); return result;\n}\nstatic void poison(void *object) { assert(mprotect(object, 4096, PROT_NONE) == 0); }\nstatic int injected_dec(void *object, unsigned long offset) {\n    int injected = object == thread_page ? thread_dec : vm_dec;\n    if (injected != 99) return injected;\n    return --*(int *)((char *)object + offset) == 0;\n}\nint process_ref_dec_and_test_result(void *object, unsigned long offset, process_ref_dec_and_test_fn_t dec) {\n    dec_calls++;\n    return dec ? dec(object, offset) : --*(int *)((char *)object + offset) == 0;\n}\nint process_ref_release_should_destroy_result(int result) { return result != 0; }\nint process_thread_profile_result(void *thread, void *proc, process_thread_profile_fn_t action) {\n    if (action) { action(thread, proc); } return 0;\n}\nint process_thread_action_result(void *object, process_thread_action_fn_t action) {\n    if (!action) { return -EINVAL; } action(object); return 0;\n}\nint process_vm_action_result(void *object, process_vm_action_fn_t action) {\n    if (!action) { return -EINVAL; } action(object); return 0;\n}\nunsigned long process_spin_lock_result(unsigned long lock, process_spin_lock_fn_t action) { return action ? action(lock) : 0; }\nint process_spin_unlock_result(unsigned long lock, unsigned long state, process_spin_unlock_fn_t action) {\n    if (!action) { return -EINVAL; } action(lock, state); return 0;\n}\nint process_mckfd_close_all_result(void *head, unsigned long next, unsigned long close) {\n    int count = 0;\n    while (head) {\n        int (*action)(void *, void *) = *(int (**)(void *, void *))((char *)head + close);\n        if (action) { action(head, NULL); count++; }\n        head = *(void **)((char *)head + next);\n    }\n    return count;\n}\nint process_release_vm_should_run_free_cb_result(unsigned long address) { return address != 0; }\nint process_vm_free_cb_result(void *vm, void *opt, process_vm_free_cb_fn_t action) { if (action) action(vm, opt); return 0; }\nint process_release_vm_detach_process_result(void *vm, unsigned long as_offset, unsigned long proc_offset,\n    unsigned long pid_offset, unsigned long proc_vm_offset, process_detach_address_space_fn_t detach,\n    process_release_process_fn_t release) {\n    if (!vm || !detach || !release) return 0;\n    void *proc = *(void **)((char *)vm + proc_offset);\n    if (!proc) return 0;\n    detach(*(void **)((char *)vm + as_offset), *(int *)((char *)proc + pid_offset));\n    *(void **)((char *)proc + proc_vm_offset) = NULL;\n    release(proc); return 1;\n}\nint process_vm_policy_drain_free_result(struct rb_root *root, unsigned long node_offset, process_policy_free_fn_t action) {\n    int count = 0;\n    if (!root || !action) return 0;\n    while (root->head) {\n        struct policy_node *node = root->head;\n        root->head = node->next;\n        action((char *)node - node_offset); count++;\n    }\n    return count;\n}\nint process_free_callback_result(void *object, process_free_fn_t action) { if (!action) { return -EINVAL; } action(object); return 0; }\n\n/* Keep extracted fallback bodies byte-for-byte; rename symbols only through\n * the C preprocessor to link both language implementations in one test. */\n#define process_release_thread_body_result c_process_release_thread_body_result\n#define process_release_vm_body_result c_process_release_vm_body_result\n#define process_release_thread_checked_body_result c_process_release_thread_checked_body_result\n#define process_release_vm_checked_body_result c_process_release_vm_checked_body_result\n@ACTUAL_C_BODIES@\n#undef process_release_thread_body_result\n#undef process_release_vm_body_result\n#undef process_release_thread_checked_body_result\n#undef process_release_vm_checked_body_result\n\nstatic void profile(void *thread, void *proc) { assert(thread == thread_page && proc == proc_page); event('P'); }\nstatic void procfs_delete(void *thread) { assert(thread == thread_page); event('X'); }\nstatic void destroy_thread(void *thread) { assert(thread == thread_page); event('D'); poison(thread); }\nstatic unsigned long lock_vm(unsigned long lock) { assert(lock == (unsigned long)proc_page + offsetof(struct process, lock)); event('L'); return 77; }\nstatic void unlock_vm(unsigned long lock, unsigned long state) { assert(lock == (unsigned long)proc_page + offsetof(struct process, lock) && state == 77); event('U'); }\nstatic int close_fd(void *fd, void *unused) { assert(fd && !unused); event('C'); return 0; }\nstatic void pre_free(void *vm, void *opt) { assert(vm == vm_page && opt == (void *)55); event('B'); }\nstatic void flush_vm(void *vm) { assert(vm == vm_page); event('F'); }\nstatic void free_ranges(void *vm) { assert(vm == vm_page); event('R'); }\nstatic void detach_vm(void *address_space, int pid) { assert(address_space == (void *)66 && pid == 123); event('A'); }\nstatic void release_proc(void *proc) { assert(proc == proc_page); event('Q'); poison(proc); }\nstatic void free_policy(void *policy) { assert(policy == &policies[0] || policy == &policies[1]); event('N'); }\nstatic void free_vm(void *vm) { assert(vm == vm_page); event('Z'); poison(vm); }\n\n#define VM_ARGS(vm, mask) (vm), offsetof(struct process_vm, refs), offsetof(struct process_vm, proc), \\\n    offsetof(struct process, mckfd), offsetof(struct process, lock), offsetof(struct fd_node, next), \\\n    offsetof(struct fd_node, close_cb), offsetof(struct process_vm, free_cb), offsetof(struct process_vm, opt), \\\n    offsetof(struct process_vm, address_space), offsetof(struct process, pid), offsetof(struct process, vm), \\\n    offsetof(struct process_vm, policy), 0, injected_dec, \\\n    ((mask)&1 ? NULL : lock_vm), ((mask)&2 ? NULL : unlock_vm), ((mask)&4 ? NULL : flush_vm), \\\n    ((mask)&8 ? NULL : free_ranges), ((mask)&16 ? NULL : detach_vm), ((mask)&32 ? NULL : release_proc), \\\n    ((mask)&64 ? NULL : free_policy), ((mask)&128 ? NULL : free_vm)\nstatic int call_vm(void *vm, unsigned int mask, int checked) {\n    if (checked) {\n        if (rust_selected) return process_release_vm_checked_body_result(VM_ARGS(vm, mask));\n        return c_process_release_vm_checked_body_result(VM_ARGS(vm, mask));\n    }\n    if (rust_selected) return process_release_vm_body_result(VM_ARGS(vm, mask));\n    return c_process_release_vm_body_result(VM_ARGS(vm, mask));\n}\nstatic int checked_vm_bridge(void *vm) {\n    event('V');\n    if (checked_vm_override != 99) return checked_vm_override;\n    return call_vm(vm, 0, 1);\n}\nstatic void legacy_vm_bridge(void *vm) { event('V'); (void)call_vm(vm, 0, 0); }\nstatic int call_thread(void *thread, unsigned int mask, int checked, int optional_profile) {\n    process_thread_profile_fn_t p = optional_profile ? NULL : profile;\n    process_thread_action_fn_t x = mask&1 ? NULL : procfs_delete;\n    process_thread_action_fn_t d = mask&2 ? NULL : destroy_thread;\n    if (checked) {\n        process_vm_release_checked_fn_t v = mask&4 ? NULL : checked_vm_bridge;\n        if (rust_selected) return process_release_thread_checked_body_result(thread,\n            offsetof(struct thread, refs), offsetof(struct thread, vm), offsetof(struct thread, proc), injected_dec, p, x, d, v);\n        return c_process_release_thread_checked_body_result(thread,\n            offsetof(struct thread, refs), offsetof(struct thread, vm), offsetof(struct thread, proc), injected_dec, p, x, d, v);\n    }\n    if (rust_selected) return process_release_thread_body_result(thread,\n        offsetof(struct thread, refs), offsetof(struct thread, vm), offsetof(struct thread, proc), injected_dec, p, x, d, legacy_vm_bridge);\n    return c_process_release_thread_body_result(thread,\n        offsetof(struct thread, refs), offsetof(struct thread, vm), offsetof(struct thread, proc), injected_dec, p, x, d, legacy_vm_bridge);\n}\nstatic void setup(int thread_refs, int vm_refs, int optional_free, int lists) {\n    thread_page = page(); vm_page = page(); proc_page = page();\n    struct thread *thread = thread_page;\n    struct process_vm *vm = vm_page;\n    struct process *proc = proc_page;\n    *thread = (struct thread){thread_refs, vm, proc};\n    *vm = (struct process_vm){vm_refs, proc, optional_free ? pre_free : NULL, (void *)55, (void *)66, {NULL}};\n    *proc = (struct process){NULL, 0, 123, vm};\n    fds[0] = (struct fd_node){&fds[1], close_fd}; fds[1] = (struct fd_node){NULL, close_fd};\n    policies[0].next = &policies[1]; policies[1].next = NULL;\n    if (lists) { proc->mckfd = &fds[0]; vm->policy.head = &policies[0]; }\n    trace_length = 0; trace[0] = 0; dec_calls = 0;\n    thread_dec = vm_dec = checked_vm_override = 99;\n}\nstatic void done(int result, int expected, const char *expected_trace) {\n    assert(result == expected); assert(strcmp(trace, expected_trace) == 0);\n    assert(munmap(thread_page, 4096) == 0); assert(munmap(vm_page, 4096) == 0); assert(munmap(proc_page, 4096) == 0);\n    vectors++;\n}\nstatic int ack_adapter(int host_revoked, unsigned long expected, unsigned long identity, int *acks, int *calls) {\n    /* Cache scalar identity before the consuming release; no object read or\n     * retry follows it. This adapter is not production fork integration. */\n    unsigned long cached = identity;\n    if (!host_revoked || cached != expected) return -EPERM;\n    (*calls)++;\n    int result = call_thread(thread_page, 0, 1, 0);\n    if (result == 2 && cached == expected) (*acks)++;\n    return result;\n}\nconst char *fork_final_destructor_suite(int use_rust) {\n    rust_selected = use_rust; vectors = 0;\n    setup(2, 1, 1, 1); int r = call_thread(thread_page, 0, 1, 0); assert(dec_calls == 1); done(r, 0, \"\");\n    setup(1, 2, 1, 1); r = call_thread(thread_page, 0, 1, 0); assert(dec_calls == 2); done(r, 1, \"PXDV\");\n    setup(1, 1, 1, 1); r = call_thread(thread_page, 0, 1, 0); assert(dec_calls == 2); done(r, 2, \"PXDVLCCUBFRAQNNZ\");\n    setup(1, 1, 0, 0); done(call_thread(thread_page, 0, 1, 1), 2, \"XDVLUFRAQZ\");\n    setup(1, 2, 1, 1); done(call_vm(vm_page, 0, 1), 0, \"\");\n    const char *vm_traces[2][2] = {{\"LUFRAQZ\", \"LCCUFRAQNNZ\"}, {\"LUBFRAQZ\", \"LCCUBFRAQNNZ\"}};\n    for (int optional = 0; optional < 2; optional++) {\n        for (int lists = 0; lists < 2; lists++) {\n            setup(1, 1, optional, lists); done(call_vm(vm_page, 0, 1), 1, vm_traces[optional][lists]);\n        }\n    }\n    for (unsigned int mask = 1; mask <= 4; mask <<= 1) {\n        setup(1, 1, 1, 1); r = call_thread(thread_page, mask, 1, 0); assert(dec_calls == 0); done(r, -EINVAL, \"\");\n    }\n    for (unsigned int mask = 1; mask <= 128; mask <<= 1) {\n        setup(1, 1, 1, 1); r = call_vm(vm_page, mask, 1); assert(dec_calls == 0); done(r, -EINVAL, \"\");\n    }\n    setup(1, 1, 1, 1); r = call_thread(NULL, 0, 1, 0); assert(dec_calls == 0); done(r, -EINVAL, \"\");\n    setup(1, 1, 1, 1); r = call_vm(NULL, 0, 1); assert(dec_calls == 0); done(r, -EINVAL, \"\");\n    setup(1, 1, 1, 1); ((struct thread *)thread_page)->vm = NULL;\n    r = call_thread(thread_page, 0, 1, 0); assert(dec_calls == 0); done(r, -EINVAL, \"\");\n    setup(1, 1, 1, 1); ((struct thread *)thread_page)->proc = NULL;\n    r = call_thread(thread_page, 0, 1, 0); assert(dec_calls == 0); done(r, -EINVAL, \"\");\n    setup(1, 1, 1, 1); ((struct process_vm *)vm_page)->proc = NULL;\n    r = call_vm(vm_page, 0, 1); assert(dec_calls == 0); done(r, -EINVAL, \"\");\n    const int decrements[] = {0, 1, -5, 2};\n    for (size_t index = 0; index < sizeof(decrements)/sizeof(decrements[0]); index++) {\n        int dec = decrements[index];\n        setup(1, 1, 1, 1); thread_dec = dec;\n        r = call_thread(thread_page, 0, 1, 0);\n        done(r, dec == 1 ? 2 : dec == 2 ? -EINVAL : dec, dec == 1 ? \"PXDVLCCUBFRAQNNZ\" : \"\");\n        setup(1, 1, 1, 1); vm_dec = dec;\n        r = call_vm(vm_page, 0, 1);\n        done(r, dec == 2 ? -EINVAL : dec, dec == 1 ? \"LCCUBFRAQNNZ\" : \"\");\n    }\n    for (int index = 0; index < 2; index++) {\n        setup(1, 1, 1, 1); checked_vm_override = index == 0 ? -5 : 2;\n        done(call_thread(thread_page, 0, 1, 0), index == 0 ? -5 : -EINVAL, \"PXDV\");\n    }\n    /* Legacy result 1 still proves only thread destruction. Its original body\n     * and public wrappers are separately byte/hash-frozen by Python checks. */\n    setup(1, 2, 1, 1); done(call_thread(thread_page, 0, 0, 0), 1, \"PXDV\");\n    setup(1, 1, 1, 1); done(call_thread(thread_page, 0, 0, 0), 1, \"PXDVLCCUBFRAQNNZ\");\n    setup(1, 2, 1, 1); done(call_vm(vm_page, 0, 0), 0, \"\");\n    setup(1, 1, 1, 1); done(call_vm(vm_page, 0, 0), 1, \"LCCUBFRAQNNZ\");\n    for (int invalid = 0; invalid < 2; invalid++) {\n        int acks = 0, calls = 0;\n        setup(1, 1, 1, 1);\n        r = ack_adapter(invalid, 55, invalid ? 56 : 55, &acks, &calls);\n        assert(acks == 0 && calls == 0 && dec_calls == 0); done(r, -EPERM, \"\");\n    }\n    for (int outcome = 0; outcome < 5; outcome++) {\n        int acks = 0, calls = 0;\n        setup(outcome == 0 ? 2 : 1, outcome == 1 ? 2 : 1, 1, 1);\n        if (outcome >= 3) checked_vm_override = outcome == 3 ? -5 : 2;\n        r = ack_adapter(1, 55, 55, &acks, &calls);\n        assert(calls == 1 && acks == (outcome == 2));\n        const int expected[] = {0, 1, 2, -5, -EINVAL};\n        done(r, expected[outcome], outcome == 0 ? \"\" : outcome == 2 ? \"PXDVLCCUBFRAQNNZ\" : \"PXDV\");\n    }\n    assert(vectors == 46);\n    snprintf(report, sizeof(report), \"checked-release-vectors=%u;poisoned-thread-vm-proc=1;ack-only-result2=1\", vectors);\n    return report;\n}\n\nint fork_final_destructor_poison_controls(void) {\n    for (int index = 0; index < 2; index++) {\n        void *object = page(); poison(object);\n        pid_t child = fork(); assert(child >= 0);\n        if (child == 0) { volatile int value = *(volatile int *)object; (void)value; _exit(99); }\n        int status; assert(waitpid(child, &status, 0) == child);\n        assert(WIFSIGNALED(status) && WTERMSIG(status) == SIGSEGV);\n        assert(munmap(object, 4096) == 0);\n    }\n    return 2;\n}\n",
+    "finding": "Independent profile review found host core_pattern uses a piped Apport handler. RLIMIT_CORE=0 alone does not prevent that handler for intentional or candidate-induced SIGSEGV/SIGABRT.",
+    "authorized_correction": "Test-only PR_SET_DUMPABLE=0 at the first operation of both exported C fixture entrypoints and each poison child, before assertions or protected reads. Guard failure exits with distinct code86 and cannot satisfy the SIGSEGV oracle. No host sysctl or production change.",
+    "history": "One consolidated test side-effect profile correction before compiler admission; previous source-check and static-baseline failure history remain preserved.",
+    "original_retention_verified": "SHA256 of original_template_complete_utf8 UTF-8 bytes exactly equals d8b773b4be66d852a6d6a9eb8cf05d25b407182feb5dc0779023b651c29d55f1.",
+    "corrected_template_sha256": "70b3de3debb9459228f3634a85f670e116c2d06ec018996864f613fc4c895133",
+    "unchanged_driver_sha256": "c961af2306fae9b5eec3ecc9effa14799eab2ae70f674ce44b0fd69f8954e8d8",
+    "post_correction_source_checks": "Same three source-only checks pass, exit0, 0.116 seconds. All five production hashes remain unchanged. No compiler, child fork, prctl or protected access was executed.",
+    "admission": "Independent PASS_LAYER_B profile2e158e780d34e061440de48caab2c2744b86ec52c22fa6f24ef31a165481ed6f admitted the exact correction; the dispatcher then centrally ran the successful retained compiler/test attempt."
+  },
+  "preserved_static_failure": {
+    "family": "original-C-bridge-baseline-extraction",
+    "initial_driver_sha256": "a0fd01e297fe7a4eaf456f73a03252b48ac14b7ba29f421ab3315a246f87bf49",
+    "initial_result": "2 source tests passed; old-body freeze test failed, exit1, 0.100 seconds.",
+    "assertion": "kernel/process.c:process_release_vm_bridge expected a7c5c30d3584b043d67c0614fab074d57e4b2ff65c516fe4260eb92dff33e508 but actual definition hash was 906c47fa8ead045b8ee792d3b23f12df2ac184de676eee9d70427ae7224a588e.",
+    "cause": "The one-off initial inventory searched the first matching prototype and scanned to a later opening brace. The test's definition-aware extractor correctly selected only the real function body. Independent read-only comparison proved the isolated body exactly equals main's unchanged original.",
+    "verified_original_bytes": "void process_release_vm_bridge(void *vm)\n{\n\trelease_process_vm(vm);\n}",
+    "single_bounded_correction": "Replace only that mistaken expected digest with the verified original-definition digest. No production or callback expectation changed.",
+    "exact_original_driver_reconstruction": "Starting from corrected driver SHA256 c961af2306fae9b5eec3ecc9effa14799eab2ae70f674ce44b0fd69f8954e8d8, replace its unique literal 906c47fa8ead045b8ee792d3b23f12df2ac184de676eee9d70427ae7224a588e with a7c5c30d3584b043d67c0614fab074d57e4b2ff65c516fe4260eb92dff33e508; resulting bytes must hash to initial_driver_sha256. All other inputs were unchanged at that baseline correction. The later profile correction changes only the C template; its complete original bytes from this failure are retained in preserved_profile_sideeffect_input.",
+    "history_limit": "The bounded correction passed. Preserve this failure and reconstruction; no renamed attempt resets its family history."
+  },
+  "inherited_history": [
+    "docs/verification/evidence/native-fork-ownership-20261017.json retains original nr56=-95/raw wait256 and rejected Mirror-only candidate hashes.",
+    "docs/verification/evidence/native-fork-adoption-implementation-20261017.json retains previous central3Python/12Rust PASS; those tests did not execute a guest final destructor.",
+    "No previous slice or failed source/capture was overwritten by this addition."
+  ],
+  "next_executable_observation": "Perform the essential independent unsafe-ownership review of the frozen additive checked APIs and retained passing source-body result before any native/syscall integration. Reuse this exact compiler/test baseline; no replay is required absent changed code or a concrete unresolved finding. Nonfinal results remain retained/quarantined; no asynchronous ACK or fork-admission integration is implemented.",
+  "campaign_boundary": "This API-only WIP stays isolated and cannot delay the independent image-first scratch22 build/diagnostic path. No main production, authority manifest, ledger, Git state, launcher or credential/billing state was modified."
+}

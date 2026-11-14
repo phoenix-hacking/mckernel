@@ -1,0 +1,13 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+Private default-OFF proposal: next two selected C bodies arch_rt_sigreturn_alloc_bridge and arch_rt_sigreturn_free_bridge. Reuse canonical mem_helpers::kmalloc_tracked/kfree_tracked and the qualified f06_ptrace_alloc ABI pattern. size_t64 narrows to allocator int32; flags64 and opaque return/free pointers pass unchanged, exactly one call. No pointer dereference, allocation policy, IRQ or ownership changes.
+
+Provenance: logical allocator/free lines385/391 and C TU __FILE__ bytes/static lifetime preserved. Selectors reset logical lines382/388/394. No filename pointer-identity assumption; fixture compares bytes. Original C extractor uses #line filename to represent source bytes independently. All later canonical tracking expressions must remain unchanged under all four selector combinations.
+
+EXCEPTION/DEBT: proposal adds exactly one C runtime metadata object f06_rt_sigreturn_source_file when either selector is enabled. It holds __FILE__ bytes only, adds no C compute body, but is an explicit +1 C object requiring Root disposition and qualification before integration. No canonical change or C retirement. Whole-file closure remains blocked until token ownership is qualified. Do not enable either selector automatically.
+
+Concrete Rust-owned alternative: freeze actual selected C compilation source path plus prefix-map flags and compiler preprocessor-produced __FILE__ byte string in a source-bound generated Rust static [u8; N] including trailing NUL. Replace only this extern metadata binding with that static, retaining both forwarding bodies and385/391. This is NOT implemented as a second candidate: actual future compiler path/flags must first be bound; never assume /src or HOST pathname.
+
+Prepared focused oracle: genuine full C prologue + original unchanged bodies + controlled tracked provider, 832 allocation vectors and8 free vectors, exact filename bytes and385/391, NULL and high pointer words, size narrowing/high flags/result identity, one callback per invocation. No allocator behavior/OOM effects/native proof is simulated. Three HOST commands remain UNRUN; Root must grant ordinary slot and current recipe/header context first. No compiler/test/workload executed by this owner.
+
+Next executable check: proposed rustc staticlib, genuine-header GCC9 fixture link, fixture run in FUTURE-HOST-COMMAND-PLAN.json. Before integration independently review selector #line tracking and new metadata-object exception. Downstream: production complete Rust + selected C TU + link, new allocated C-function/table census, matching native signal-return proof. CURRENT109 and HOST19 never replayed.

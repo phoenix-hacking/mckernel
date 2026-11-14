@@ -1,0 +1,14 @@
+--- failed/actual.rs
++++ corrected/actual.rs
+@@ -34,11 +34,6 @@
+     let g=&*geometry;event(&format!("ihk:{parent:p}:{child:p}:{}:{}:{}",g.root,g.start,g.length));STATE.with(|s|s.borrow_mut().ihk_calls+=1);
+     if let Mode::IhkErr(n)=mode(){return n;}if mode()!=Mode::MissingCalled{consumer.unwrap()(context,ptr::null());}0
+ }
+-macro_rules! fixture {($name:ident,$method:literal)=>{mod $name{use super::*;pub(super) struct Context{pub(super) slot:u32,pub(super) generation:u64,pub(super) process:Arc<Process>}
+-    impl Context {fn process(&self)->Result<Arc<Process>>{event("process");if mode()==Mode::ProcessErr{Err(EINVAL)}else{Ok(self.process.clone())}}
+-    include!($method);
+-    pub(super) fn execute(context:&Context,descriptor:&[u8;24],compat:bool)->Result<isize>{context.adopt_current_fork_v4(descriptor,compat)}
+-}}}
+ mod pre {use super::*;pub(super) struct Context{pub(super) slot:u32,pub(super) generation:u64,pub(super) process:Arc<Process>}
+ impl Context {fn process(&self)->Result<Arc<Process>>{event("process");if mode()==Mode::ProcessErr{Err(EINVAL)}else{Ok(self.process.clone())}}
+     fn adopt_current_fork_v4(&self,descriptor:&[u8;24],compat:bool)->Result<isize> {

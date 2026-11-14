@@ -1,0 +1,361 @@
+{
+  "Root_actual_execution": {
+    "actual_closure_requirements": "Each createdclient must have positivebirth/originaldirectwait/streams; actual sameCID0/nonOOM/Pid0/explicitwait0/ownedrm/no residual/pending, all input postpins and full original Root initial+session waits to terminal/noSession required. Root alone retires only this next current2GiB/job after actual proof; no PIDabsence inference.",
+    "before_any_parent_or_sudo_child": [
+      "Pin exact9527/7b5c/this GO/actual776a sourceGO, current source/coremetadata and immutable prerequisites. Actual current sameRoot account/credit/stop/service guard required.",
+      "Record fresh EXTERNAL same-run measured admission before parent/Docker preflights, then existing admit repeats before creating output/payload. Root actual current failedjob843f and firstcore3253 releases apply only their own process scopes.",
+      "One exclusiveCPU6/2GiB/j1 family incl everycompiler/passivechild + allcontroller/worker/daemon/helpers/currentjobs <=HOST4GiB TOTAL/max3. FreshMemAvailable>=26GiB; host16/scratch12GiB floors plus5GiB batch headroom; no native2-5/CPU1/retained18 borrowing.",
+      "Freeze exact entire source/toolchain and oldcore metadata/helper throughout; use new-2 names/fresh output+capture, same cleanenv/4mounts/pids256/networknone/readonlyrootfs/mem=swap/3600CPU+wall/fsize4GiB. Preserve source RO and original failed outputs."
+    ],
+    "container_create_argv": [
+      "/usr/bin/sudo",
+      "-A",
+      "/usr/bin/docker",
+      "--host=unix:///var/run/docker.sock",
+      "create",
+      "--name",
+      "mck-m14-perf-builtins-dependency-20261111-2",
+      "--label",
+      "mckernel.preparation-owner=m14-perf-builtins-dependency-2",
+      "--init",
+      "--pull=never",
+      "--network=none",
+      "--ipc=private",
+      "--cpus=1",
+      "--cpuset-cpus=6",
+      "--memory=2g",
+      "--memory-swap=2g",
+      "--pids-limit=256",
+      "--ulimit",
+      "core=0:0",
+      "--ulimit",
+      "fsize=4294967296:4294967296",
+      "--ulimit",
+      "cpu=3600:3600",
+      "--user",
+      "1000:1000",
+      "--read-only",
+      "--cap-drop=ALL",
+      "--security-opt=no-new-privileges",
+      "--tmpfs",
+      "/tmp:rw,nodev,nosuid,noexec,size=64m,mode=1777",
+      "--workdir",
+      "/core-output",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu,dst=/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/input,dst=/producer,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/cwd-output-correction-1/output-1,dst=/core-output",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/first-core-compile-1/output-1/libcore.rmeta,dst=/core-output/libcore.rmeta,readonly",
+      "--entrypoint",
+      "/usr/bin/env",
+      "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+      "-i",
+      "BASH_ENV=",
+      "ENV=",
+      "LANG=C",
+      "LC_ALL=C",
+      "PATH=/usr/bin:/bin",
+      "TZ=UTC",
+      "PYTHONDONTWRITEBYTECODE=1",
+      "LD_LIBRARY_PATH=",
+      "LD_PRELOAD=",
+      "SOURCE_DATE_EPOCH=1786434034",
+      "TMPDIR=/tmp",
+      "TMP=/tmp",
+      "TEMP=/tmp",
+      "/usr/bin/bash",
+      "--noprofile",
+      "--norc",
+      "/producer/build_builtins.sh"
+    ],
+    "cwd": "/home/holden/mckernel",
+    "failure_boundary": "Preserve any actual new source/type/codegen diagnostic and all primary/secondary/custodyUNKNOWN. No runtime modification of feature flags/ABI/source/body/metadata or during-run permission workaround; failedsource cannot be retried unchanged.",
+    "literal_payload_compiler_argv": [
+      "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+      "--crate-name",
+      "compiler_builtins",
+      "--crate-type",
+      "rlib",
+      "--edition=2024",
+      "--sysroot=/dev/null",
+      "-C",
+      "metadata=mckernel_kernel_195_builtins",
+      "-C",
+      "panic=abort",
+      "-C",
+      "opt-level=2",
+      "-C",
+      "debuginfo=2",
+      "-C",
+      "code-model=large",
+      "-C",
+      "relocation-model=static",
+      "-C",
+      "no-redzone=yes",
+      "-C",
+      "force-frame-pointers=yes",
+      "-C",
+      "overflow-checks=off",
+      "-C",
+      "force-unwind-tables=no",
+      "-C",
+      "no-vectorize-loops",
+      "-C",
+      "no-vectorize-slp",
+      "-C",
+      "target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma",
+      "-Z",
+      "dep-info-omit-d-target",
+      "-Z",
+      "binary-dep-depinfo",
+      "--extern",
+      "core=/core-output/libcore.rmeta",
+      "-L",
+      "dependency=/core-output",
+      "--cfg",
+      "feature=\"compiler-builtins\"",
+      "--cfg",
+      "feature=\"no-asm\"",
+      "--cfg",
+      "intrinsics_enabled",
+      "--cfg",
+      "optimizations_enabled",
+      "--cfg",
+      "feature=\"unstable-intrinsics\"",
+      "--cfg",
+      "feature=\"mem-unaligned\"",
+      "--emit=obj=/core-output/compiler_builtins.o,metadata=/core-output/libcompiler_builtins.rmeta,dep-info=/core-output/compiler_builtins.raw.d",
+      "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/compiler-builtins/compiler-builtins/src/lib.rs"
+    ],
+    "login": false,
+    "max_output_tokens": 5000,
+    "outer_prefix": [
+      "/usr/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/cwd-output-correction-1/run_root_once.py"
+    ],
+    "resources": {
+      "build": {
+        "AS": "Actual2GiB cgroup cap; previous real image sampled highwater513519616B/nonOOM reused as profile context, not a prediction of this changed cohort peak.",
+        "CPU": [
+          6
+        ],
+        "CPU_seconds": 3600,
+        "FSIZE_bytes": 4294967296,
+        "container_memory_bytes": 2147483648,
+        "jobs": 1,
+        "memory_swap_bytes": 2147483648,
+        "new_output_disk_headroom_bytes": 4294967296,
+        "pids": 256,
+        "wall_seconds": 3600
+      },
+      "serialization": "Root only; one CPU6/2GiB-j1 namedimage/cache owner, all overhead/current payloads insideHOST4GiB/max3/fresh26GiB+floors; later passive metadata is separately SDK/PublicABI bound and serialized after positive producer closure. Native2-5/12GiB andCPU1/retained owners remain untouched.",
+      "shared": "HOST CPUs0,6,7/max3jobs/4GiBTOTAL including all controllers/worker/daemon/helper/container/otherjobs. FreshMemAvailable>=26GiB; host16/scratch12GiB floors plus5GiB batch headroom. Native2-5/12GiB/CPU1/retained18GiB unchanged. Actual540/a41 releases old currentHOST512MiB/twojobs only; retain missing-wait history/all other holds and UNKNOWNs. Root fresh admission, not assumed free."
+    },
+    "review_SHA": "Use actual frozen SHA256 emitted after writing",
+    "review_path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-first-builtins-compile-review-sourceacq-max-1/cwd-output-correction-1/REVIEW.json",
+    "tty": false,
+    "yield_time_ms": 1000
+  },
+  "actual_failed_first_builtin_qualification": {
+    "bytes": 17242,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-first-builtins-compile-review-sourceacq-max-1/actual-result-1/QUALIFICATION.json",
+    "sha256": "97daa81e969377ec26e9134c488dbfc0d4e02f38931af3537831b9a9290c6fbd"
+  },
+  "at": "2026-11-11T16:41:11.264572+00:00",
+  "bounded_delta": {
+    "bytes": 4562,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/cwd-output-correction-1/BOUNDED-DELTA.json",
+    "sha256": "ef98a0ce05a156af689794bd7dd8b28442cd05bccd552ea0ebe4085fb7c6fcdb"
+  },
+  "completed_prerequisites": {
+    "actual_core_Root_completion": {
+      "bytes": 2496,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/first-core-compile-1/execution-1/ROOT-EXEC-COMPLETION.json",
+      "sha256": "c39be2db4cf53d1b20027f99acc6b59c1a1cc8dd7afbca33ae40523de903354d"
+    },
+    "actual_core_current_only_retirement": {
+      "bytes": 939,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/first-core-compile-1/CURRENT-PROCESS-MEMORY-RETIREMENT.json",
+      "sha256": "3253b70fac6da2794c659ede8892c0b600e6ca06b69783db781587ce51355f99"
+    },
+    "actual_core_independent_qualification": {
+      "bytes": 21225,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-first-core-compile-operation-review-sourceacq-max-1/actual-result-1/QUALIFICATION.json",
+      "sha256": "c044223125e51db884803bb112951e543c8d44a4fee9a2df5efe2989aedb41ee"
+    },
+    "actual_core_result": {
+      "bytes": 10455,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/first-core-compile-1/execution-1/RESULT.json",
+      "sha256": "e01d1ba413305c086b3d44d1428b85b343e43d18710ea68ba9fbd5b3d75c39e6"
+    },
+    "first_core_operation_GO": {
+      "bytes": 13607,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-first-core-compile-operation-review-sourceacq-max-1/REVIEW.json",
+      "sha256": "c7db91fc9009bd93579c1d8f8b065b872a0153322d9c4eb34240ac411ff72910"
+    },
+    "first_core_repair_contract": {
+      "bytes": 6256,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/first-core-compile-1/REPAIR-CONTRACT.json",
+      "sha256": "dfe8d833c2ea4a1e90c0d6fe460f680f7d32c5e7c975411172afd953e8ff34c5"
+    },
+    "first_core_source_material_GO": {
+      "bytes": 12496,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-review-publicabi-max-1/first-core-compile-1/REVIEW.json",
+      "sha256": "dd40c65f4d0b2661f6e2e1b13398a67a341950813e419a4f23ce6ebed68e23fb"
+    },
+    "genuine_builtins_recipe": {
+      "bytes": 6124,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-p04source-max-1/builtin-build-unit/BUILD-RECIPE.json",
+      "sha256": "a99d9c7647db735455ca0e011934dc9ef824c034c30073a98f2f605792a7ee45"
+    },
+    "genuine_builtins_source_binding": {
+      "bytes": 7041,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-p04source-max-1/builtin-build-unit/SOURCE-BINDINGS.json",
+      "sha256": "9cbc665df15374a34e68b3098a8aac9a85e3ae2de830ccc493253628676e9b72"
+    },
+    "genuine_builtins_source_profile": {
+      "bytes": 4248,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-p04source-max-1/builtin-build-unit/SOURCE-PROFILE.json",
+      "sha256": "d3bd15adce508333de19d3dbe8f75a14d2fa1a510c580aa9b63ddb7d9114b184"
+    },
+    "prior_builtin_source_operation_GO": {
+      "bytes": 18558,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-first-builtins-compile-review-sourceacq-max-1/REVIEW.json",
+      "sha256": "7b9a2ddeeabe704b6bb7f7ef06c326b0dbc9402c648b2af068ef7709e3508fd0"
+    },
+    "prior_failed_builtin_Root_completion": {
+      "bytes": 2895,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/execution-1/ROOT-EXEC-COMPLETION.json",
+      "sha256": "d3255800616c047768d8ea132b0332fafbd2c27f4df34469a91e0da6cf8a3aae"
+    },
+    "prior_failed_builtin_current_only_retirement": {
+      "bytes": 835,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/CURRENT-PROCESS-MEMORY-RETIREMENT.json",
+      "sha256": "843f6c375b2e6c18acb8013c081d7b583c4c0472f2a491b650b8b96997c49362"
+    },
+    "prior_failed_builtin_independent_qualification": {
+      "bytes": 17242,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-first-builtins-compile-review-sourceacq-max-1/actual-result-1/QUALIFICATION.json",
+      "sha256": "97daa81e969377ec26e9134c488dbfc0d4e02f38931af3537831b9a9290c6fbd"
+    },
+    "prior_failed_builtin_result": {
+      "bytes": 9303,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/execution-1/RESULT.json",
+      "sha256": "2c7d8e3503f25bbc695f84a4a90183c3a29b59aea6e0c528e6c98eae4b0d84e2"
+    },
+    "prior_failed_builtin_stderr": {
+      "bytes": 538,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/execution-1/builtins-build-payload.stderr",
+      "sha256": "84c2d5e5bdf9201703ef8b95048fc7ddfd2edd1ba41ff32452986aaa64dec681"
+    }
+  },
+  "decision": "GO_EXACT_BOUNDED_BUILTINS_CWD_TO_EXISTING_GRANTED_FRESH_OUTPUT_RETRY_ONLY_PENDING_FRESH_ROOT_ADMISSION",
+  "independent_cwd_source_profile_delta_GO": {
+    "bytes": 8858,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-builtins-cwd-review-p04source-max-1/REVIEW.json",
+    "sha256": "776ab622171580ae854d0ab803f52f02f98d7f1ce58ae9b1813ca1a5d453cd15"
+  },
+  "inputs": {
+    "bytes": 13591,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/cwd-output-correction-1/INPUTS.json",
+    "sha256": "a136ad734a6fb9034bf71fe7c1fb72776429c226b6e5f009bcacfdb8d261ea84"
+  },
+  "later_gates_not_first_compiler_prerequisites": [
+    "Actual core/builtin ISA/provider compatibility",
+    "Whole unchanged consumer compile",
+    "Fatal/Option/Result/bounds behavior tests",
+    "Final dependency CMake/image/link/affectedreader/originalDEFAULT"
+  ],
+  "material_findings": [],
+  "meaningful_bounded_correction": {
+    "actual_failure": "Retained actual2c7d/raw84c/d325 reported relative compiler_builtins...rcgu.o write at readonly source cwd. Failure had no completed builtin object or accepted tuple. Actual97daa qualified only current process closure; Root843f retired only that2GiB/job.",
+    "all_source_codegen_feature_metadata_permissions_and_resource_inputs_equal": true,
+    "effective_change": "Only container workdir is /core-output, which is already the authorized fresh RW output mount. Relative rustc codegen intermediates now fall inside that owned boundary. Source remains readonly; no source chmod/remount/elevation/actor substitution or access bypass.",
+    "exact_actual_core_input_RO_source_unchanged": {
+      "bytes": 62088310,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/first-core-compile-1/output-1/libcore.rmeta",
+      "sha256": "7ec5faeecbe4c7bd2c865000bf4e4b66367269f3bd5bbb0fc1c46015ee014aa9"
+    },
+    "exact_create_argv_differences": [
+      {
+        "index": 6,
+        "new": "mck-m14-perf-builtins-dependency-20261111-2",
+        "old": "mck-m14-perf-builtins-dependency-20261111-1"
+      },
+      {
+        "index": 8,
+        "new": "mckernel.preparation-owner=m14-perf-builtins-dependency-2",
+        "old": "mckernel.preparation-owner=m14-perf-builtins-dependency-1"
+      },
+      {
+        "index": 32,
+        "new": "/core-output",
+        "old": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/compiler-builtins/compiler-builtins"
+      },
+      {
+        "index": 38,
+        "new": "type=bind,src=/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/cwd-output-correction-1/output-1,dst=/core-output",
+        "old": "type=bind,src=/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/output-1,dst=/core-output"
+      }
+    ],
+    "fresh_names": "mck-m14-perf-builtins-dependency-20261111-2 and ownerlabel-2, fresh nested output-1 and execution-1. Old first attempt/helper/source/partialfiles/rawfailure remain immutable.",
+    "no_partial_old_builtin_metadata_or_dep_adopted": true,
+    "original_55_compiler_tokens_and_3_passive_commands_equal": true,
+    "original_helper_same_file8992_bytes": {
+      "bytes": 1716,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/input/build_builtins.sh",
+      "sha256": "899225e74d2f41b9681fb6071f48a291bafac63edfe790b5fafe49a3d5090e29"
+    },
+    "same4_mount_destinations_and_RO_flags": true
+  },
+  "new_framework_or_agents": false,
+  "next_action": "Root sole fresh-admit/run exact meaningful cwd-corrected compiler once, then qualify actual new complete builtin object/metadata/depfile+readbacks and fullclosure. No unrelated or already green replay.",
+  "original_acceptance": false,
+  "parent": {
+    "bytes": 7808,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/cwd-output-correction-1/run_root_once.py",
+    "sha256": "7b5cbc97c8b8d13ea279ee6f166aff159ec7b87e0fc9ed4b7919e04657a5dc36"
+  },
+  "parent_delta": {
+    "bytes": 4341,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/cwd-output-correction-1/ROOT-PARENT-DELTA.patch",
+    "sha256": "02f94ccaa4aa1135144efb8ac21c6e60a8e4b527ea37974e9ff204883e3327fa"
+  },
+  "prior_material_source_and_operation_GO": {
+    "bytes": 18558,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-first-builtins-compile-review-sourceacq-max-1/REVIEW.json",
+    "sha256": "7b9a2ddeeabe704b6bb7f7ef06c326b0dbc9402c648b2af068ef7709e3508fd0"
+  },
+  "request": {
+    "bytes": 21154,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/cwd-output-correction-1/REQUEST.json",
+    "sha256": "952763d9844fb4c5f0469c971d096b77bf39bf49755d280fab1e76c56bf1e34b"
+  },
+  "reviewer": "/root/source_acquisition_review_max",
+  "reviewer_payload_compiler_helper_or_native_execution": false,
+  "reviewer_source_canonical_cache_or_state_mutation": false,
+  "schema": 1,
+  "scope": "Only ef98 bounded actual output-placement correction and exact9527/7b5c source/custody/profile/capture bindings. Unchanged firstbuiltin genuine source/55argv/protected operation7b9 reused; independent P04Source exact cwd/profiledelta776a read/pinned. No core/type/runtime green re-audit, new source/compiler flag, output permission expansion or new framework.",
+  "scope_limits": "No core green rerun, source/TYPE/18runtime suites, partialbuiltin adoption, currentcache/canonical/controller/Scratch/native action or originalacceptance. All modelVM2+rollback1/native/history/source/UNKNOWN/credit-service holds preserved.",
+  "source_ready": {
+    "bytes": 4152,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/cwd-output-correction-1/SOURCE-READY.NOT-EXECUTED.json",
+    "sha256": "dcb0beda7f8b1a13ebd9351829223163ac47ad44be22c597119ae45aa098d91b"
+  },
+  "static_operation_checks": {
+    "actual22_HOST_input_and18_receipt_pins_exact": true,
+    "actual_core_e01_c39_c044_3253_and_companion9154_preserved": true,
+    "actual_failed_builtin_2c7d_84c_d325_97daa_843f_preserved": true,
+    "all16_completed_prerequisite_pins_exact": true,
+    "core_namespace": "Old actual7ec5 metadata is a RO file bind above a fresh builtins-only RW directory; input cannot be overwritten by compiler. Future depfile maps that container file back to old firstcore input, not host output placeholder. No core recompilation or current kernel/cache mount.",
+    "fresh_output_and_capture_absent": true,
+    "postphase": "Real new compiler +3 passive outputs must all complete0, output6 actual identities/nonemptyobjectELF, all source+coremetadata postpins exact and no ownedCID/pendingcall/directchild. Compiler correctness remains UNPROVED until this actual retry.",
+    "prior_retirement_guard": "Parent pins actual failed result/error/fullRoot/currentretirement and requires failure preserved, original full tool terminal1/noSession, retired after0/job0 tied to97daa andd325. No historical/resource/UNKNOWN repair or fake release.",
+    "protected_capture_and_cleanup": "Exact e088call/7266phase loaded in the same order and hashes, prefix setup byte-equal7156 and outer except/finally/ownedCIDcleanup AST equal. No capture/admit/clientguard/authority fallback change; only completed failure assertions and newrequest pin added."
+  }
+}

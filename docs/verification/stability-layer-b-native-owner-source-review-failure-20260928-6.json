@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "record_kind": "layer_b_native_owner_source_review",
+  "recorded_utc": "2026-09-28T08:42:00Z",
+  "status": "FAIL_SOURCE",
+  "owner_sha256": "23cd94d695a50a851812612dd004f1bdf97287ab2a8d7823f42bc7ecee451323",
+  "static_test_sha256": "e44e1095b9b6fc01a463788ec617ff0004af772fa1ade0d3a8f95cea9a67ff2c",
+  "blocking_findings": [
+    "The actual seccomp socket branch remained reversed; the disconnected Python model did not consume the BPF instruction array.",
+    "A direct-child/P_ALL duplicate-acquisition race could reap the adopted duplicate and leave the original ECHILD path spinning outside every deadline.",
+    "Inherited SIGCHLD SIG_IGN or SA_NOCLDWAIT was not normalized before fork.",
+    "Live-child uncertainty never cleared after authoritative later ECHILD.",
+    "No-child setup failures and fully cleaned post-fork failures entered indefinite UNRESOLVED instead of returning a recorded execution failure.",
+    "The acknowledgment still asserted takeover without a concrete trusted counterpart protocol."
+  ],
+  "required_escalation": "Carry both source reviews into a coherent implementation repair; remove false ACK/handoff if no trustworthy protocol exists and use source-derived models for the actual BPF/state arrays.",
+  "compilation_or_execution": false,
+  "profile_released": false,
+  "acceptance_credit": false
+}

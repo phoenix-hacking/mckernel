@@ -1,0 +1,890 @@
+{
+  "schema": "mckernel.current-kill-actual-source-debug-owner-correction-unstarted-link.v1",
+  "status": "FROZEN_ACTUAL_OBJECT_SOURCE_BOUND_OWNER_CORRECTION_PENDING_SDK_DELTA_GO_AND_ROOT_FRESH_ADMISSION",
+  "owner": "public_abi_join_max existing actual Sol/MAX; Root sole canonical/executor; independent reviewer assigned by Root",
+  "cwd": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/emitted-debug-correction-1",
+  "source_manifest": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/SOURCE-MANIFEST.json",
+  "output_directory": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/emitted-debug-correction-1/output",
+  "provider_object": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/output/kill_providers.o",
+  "provider_nm": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/provider-nm.stdout",
+  "provider_elf": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/provider-elf.stdout",
+  "joined_object": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/emitted-debug-correction-1/output/kill_b483_partial.o",
+  "joined_nm": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/emitted-debug-correction-1/joined-nm.stdout",
+  "joined_elf": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/emitted-debug-correction-1/joined-elf.stdout",
+  "commands": [
+    {
+      "label": "partial-link",
+      "argv": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "30s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=15:15",
+        "--fsize=16777216:16777216",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/emitted-debug-correction-1/partial-link.metrics",
+        "/usr/bin/ld",
+        "-r",
+        "-o",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/emitted-debug-correction-1/output/kill_b483_partial.o",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/flag-correction-1/output/process_pair_e1a_partial.o",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/output/kill_providers.o"
+      ],
+      "stdout_path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/emitted-debug-correction-1/partial-link.stdout",
+      "stderr_path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/emitted-debug-correction-1/partial-link.stderr"
+    },
+    {
+      "label": "joined-nm",
+      "argv": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "20s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=10:10",
+        "--fsize=16777216:16777216",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/emitted-debug-correction-1/joined-nm.metrics",
+        "/usr/bin/nm",
+        "-S",
+        "--format=posix",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/emitted-debug-correction-1/output/kill_b483_partial.o"
+      ],
+      "stdout_path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/emitted-debug-correction-1/joined-nm.stdout",
+      "stderr_path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/emitted-debug-correction-1/joined-nm.stderr"
+    },
+    {
+      "label": "joined-elf",
+      "argv": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "20s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=10:10",
+        "--fsize=16777216:16777216",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/emitted-debug-correction-1/joined-elf.metrics",
+        "/usr/bin/readelf",
+        "-h",
+        "-SW",
+        "-Ws",
+        "-Wr",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/emitted-debug-correction-1/output/kill_b483_partial.o"
+      ],
+      "stdout_path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/emitted-debug-correction-1/joined-elf.stdout",
+      "stderr_path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/emitted-debug-correction-1/joined-elf.stderr"
+    }
+  ],
+  "environment_replace": {
+    "PATH": "/usr/bin:/bin",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "MCKERNEL_INTERRUPT_SYSCALL_C_FILE": "/home/holden/mckernel/kernel/syscall.c"
+  },
+  "inputs": {
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/flag-correction-1/output/process_pair_e1a_partial.o": "b4835b0a9276376c3f523220b469062f3dff73c468279a5ce7557f7321769b13",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/flag-correction-1/joined-nm.stdout": "5f4078804e3781b45a44974094e872b9bae246bafa6fad800c44bd4bddb2e089",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/flag-correction-1/ACTUAL-JOINED-METADATA.json": "4cdc2ae298c55a69276ebad4dc454ff515a5901535f29a7141b4fdcfbfdf296b",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/flag-correction-1/qualification-1/RESULT.json": "a668defd3f7680a3d8a197b67c711fb1a6ecaf74a08c5de1bae4f363b1c097b3",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-review-1/producer-1/flag-correction-1/actual-result-1/REVIEW.json": "e7fea84c8e186c892422ad00a516b751468613aa8c611d98c1414ae98bfbd1e6",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/flag-correction-1/RESULT.json": "a662286bc2b39c2f185075bb13110c4e5446e81858f67841f6e19b55732e4856",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/output/kill_providers.o": "f9ea63f1e953ad009b313c75c9b894677a0b14f46f3f7e06c4f3d1f0a062d78e",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/provider-nm.stdout": "aa308bdd95d5f28004a806f4b80bb06f92ce5a6241dc79a20d0096d2fbfcaf2e",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/provider-elf.stdout": "8c868de5b6317d04218a87dc270871579a7840b8cde0c208e5c8188a487a758f",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/SOURCE-MANIFEST.json": "0b845e5b5f56c718665ce629ae168bf5f236f87c2c273b346e864c87a8928f09",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/REQUEST.json": "e938522a481b6c5d2eee304ab8eb5c1506f653de453a9bb7939623f806d2f647",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/FIRST-FAILURE.json": "99a615a05f631631b6563b0c3017df031de3d71eecfd9320ddd8c551b38451f5",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/COMMANDS.json": "0b62db270ec7ddc6ca532770e00f307ded0594322b3232cbe84f7e507c9f7744",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/BINDINGS-CHECK.json": "1b54116ceacdd5d0a389edeb6ad06008bd1c10129828087366956df2ef8b8db8",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/root-execution-1/RESULT.json": "d9e9973e7ddc658a52169ce1ec765cf888890160a13cfb5e0357dcc81bd4d668",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/root-execution-1/ADMISSION.json": "3a23f2ddddf5ff4e9b50d3f40e1119efa100edf4e396f872af5fce007294fe93",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/root-execution-1/ownership.json": "c93d0df1a3ad149e1901a64911f6c79e90da372dc900ec8e5bc3d167b0c914b9",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/provider-compile.stderr": "52aa1b68329c0e77b9847f4d1c1d5a4f88f802ffe2e6a69f2dace0fadf9add99",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/provider-compile.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/provider-nm.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/provider-elf.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/holden/mckernel/docs/verification/m14-f03-adapters-unit-20261105-2/stderr.txt": "52aa1b68329c0e77b9847f4d1c1d5a4f88f802ffe2e6a69f2dace0fadf9add99",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/emitted-debug-correction-1/EMITTED-OWNER-CONTRACT.json": "e0e5fe7ed23e06f2d0c076a0605d05c74e9c6744b5050d6adad39a11c696d431",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/emitted-debug-correction-1/checks.py": "5fbe3a5a01f7a9a52b461ff67f81fa8271e214ede9d492284d51569baf72e2e8",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/emitted-debug-correction-1/run.py": "8961b8efbfd932005c8e8d4849e6755d9b4b904fa8d447dd7fa0cd0899a144b4",
+    "/usr/bin/python3": "298a9e830ed52f36c299427565485d717d1ce0179c0597cc16560513eb780b06",
+    "/usr/bin/taskset": "28f2dd426247d7d1d794c0fb8a723efc6a1ae3c56393a238b180fe9a0dc32f1c",
+    "/usr/bin/timeout": "91db1e64064f0bf5ee99abda3a054cc6f05748dad2af5a145f890c9172d28d73",
+    "/usr/bin/prlimit": "06a57e4767f1bdfcc8c5a39b4b58decb9366447b007a8bdd9d6b12d1e6698d8c",
+    "/usr/bin/time": "f3c4104d963b00e1b3a3dcf80722fea57f15f67b57a512cc30adc434b60e6e03",
+    "/usr/bin/ld": "476b24d5cc1fef54f80412d06e7430b2dcf4e2b6f1525ee17e6eaaf16b28a00f",
+    "/usr/bin/nm": "5fb0dd8acc18e3f348ed0acbcada0580dbdddd1eb5de3c8323613af13580032b",
+    "/usr/bin/readelf": "41a813335a74480f145fba9400aa7fb5c0ec7ffcaa7af7f33e832dc75eb90ffb",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/spinlock_helpers.rs": "87cca0023e1d2f2e10a61be7ee0017a46065b97d55b080d50a4514d4873ad4e5",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/lock_helpers.rs": "50c22948f4c3a4c45331e19a91a9797f23848d63be03650a3624f67c7216ff18",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/debug.rs": "03c016d6d75ddac265298867df17d0739b89784e602f8e6404d778bb19f74e88",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/list_helpers.rs": "764180ec2f971e8d5eb6210002c0c4bd23f1e99204d69cea5b0f3ec1970db6f5",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/string.rs": "00953e40586fb67d02439819e8a9d3f1b503acbf3956b49e60f3bdcb7af023c2",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/mem_helpers.rs": "aec18c0fb22f57accd8f4f1155287f907ba8e5e1cd5851b97d4d97da5c383161",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/process_helpers.rs": "d82f462f7828eb5b9f54ee40ba1d5e1d402e02b5433061c85224950b6c77daea",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/profile.rs": "dd0fcb6945aba76ebd3ec0f3f5788eb97205bf4473d01ede5dfbd26d6a9d5d97",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/sched_helpers.rs": "47e5a316249e74554aa893213d380974e891e55b1955d0ac32c16be885725ed9",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/syscall_policy.rs": "2d9d103d5ac758a969ceb74dd78742ff1ecb65e72bd0916cfbf5881f4f63daa2",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/x86_cpu_helpers.rs": "bfdbd128b1ad8c153cb541c1b31c3735687bc6108fe622ce2b9ef02f03b570c3",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/kill_provider_unit.rs": "bc979d36c028cd9effd890fdc618ee2c475034f215169c78b0922dd612531d08",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/f03_interrupt_syscall.rs": "004e8dd5c5158858d5236386e9f250734567948b2fdcc5b6a14a497c4daf6436",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/storage_predicate.py": "a4df81bb2b86d97f4199ae816dab7965213ceba05dca17945f9eae861dc31892",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/RESULT.json": "0e3047ea8d08d3f9ba7837f135142fcd29c14cdb1116e62743f1bd01214136fb",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/join_checks.py": "8e713e3311f55d5316e3dc5a7bff4b72e39f650e48e5f9e6616fdf77e5933a0c",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/RESULT.json": "86b94cb33ea32c4fea505438f478b0f02ed8409b40bde2a3865189335b40c827",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-provider-unit-1/expanded-1/join-1/join_checks.py": "93a8f429f77664a4df90fafc227801575751138ac32e7c2d3ed46d16a5f462c8",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-provider-unit-1/expanded-1/join-1/RESULT.json": "e52cb6c3d067f2f7f0657ea78c89d9d39db20bd483d185cedc8b3f3770c8dc40"
+  },
+  "expected_compile_stderr": {
+    "path": "/home/holden/mckernel/docs/verification/m14-f03-adapters-unit-20261105-2/stderr.txt",
+    "sha256": "52aa1b68329c0e77b9847f4d1c1d5a4f88f802ffe2e6a69f2dace0fadf9add99"
+  },
+  "compiler_profile": {
+    "source_receipt": "/home/holden/mckernel/docs/verification/m14-f03-adapters-unit-20261105-2/receipt.json",
+    "compiler": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+    "compiler_sha256": "70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09",
+    "compiler_version_from_receipt": "rustc 1.95.0-nightly (c04308580 2026-02-18)",
+    "no_std": true,
+    "warning_policy": "Require exact unchanged retained single target-feature sse2 ABI warning bytes; no extra warnings suppressed. This is inherited HOST partial-codegen scope, not final/native ABI acceptance.",
+    "expected_compile_stderr_path": "/home/holden/mckernel/docs/verification/m14-f03-adapters-unit-20261105-2/stderr.txt",
+    "expected_compile_stderr_sha256": "52aa1b68329c0e77b9847f4d1c1d5a4f88f802ffe2e6a69f2dace0fadf9add99",
+    "required_source_feature": "No new nightly language feature or target/lint suppression. The four actual supported CMake cfg selections and canonicalC debug-origin environment are explicit new profile inputs for these current functions; they do not change the unchanged ABIff48 field layout. No old b483 function is recompiled.",
+    "retained_compiler_codegen_options_unchanged": true,
+    "source_selection_delta": "Current complete do_kill+seven helpers+kill_thread alias, SourceAcq independently reviewed interrupt004e and required genuine lower implementations; exact base19 flags unchanged, four actual supported CMakecfg selections explicit, canonicalC origin env declared. No old function rebuild, fake callback or body shim."
+  },
+  "exact_rust_flags": [
+    "--edition=2021",
+    "--crate-type=lib",
+    "-C",
+    "panic=abort",
+    "-C",
+    "opt-level=2",
+    "-C",
+    "code-model=large",
+    "-C",
+    "relocation-model=static",
+    "-C",
+    "no-redzone=yes",
+    "-C",
+    "no-vectorize-loops",
+    "-C",
+    "no-vectorize-slp",
+    "-C",
+    "target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma",
+    "--emit=obj"
+  ],
+  "actual_cfg_flags": [
+    "--cfg",
+    "f03_signal_process_bridges_candidate",
+    "--cfg",
+    "enable_profile",
+    "--cfg",
+    "native_linux_irq_work_v6_12",
+    "--cfg",
+    "f03_interrupt_syscall_candidate"
+  ],
+  "retained_object": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/flag-correction-1/output/process_pair_e1a_partial.o",
+    "sha256": "b4835b0a9276376c3f523220b469062f3dff73c468279a5ce7557f7321769b13",
+    "actual_nm": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/flag-correction-1/joined-nm.stdout",
+    "capture": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/flag-correction-1/ACTUAL-JOINED-METADATA.json",
+    "actual_qualification": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/flag-correction-1/qualification-1/RESULT.json",
+      "sha256": "a668defd3f7680a3d8a197b67c711fb1a6ecaf74a08c5de1bae4f363b1c097b3"
+    },
+    "independent_actual_review": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-review-1/producer-1/flag-correction-1/actual-result-1/REVIEW.json",
+      "sha256": "e7fea84c8e186c892422ad00a516b751468613aa8c611d98c1414ae98bfbd1e6"
+    },
+    "actual_execution": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/flag-correction-1/RESULT.json",
+      "sha256": "a662286bc2b39c2f185075bb13110c4e5446e81858f67841f6e19b55732e4856"
+    }
+  },
+  "retained_genuine_U": [
+    "do_kill",
+    "do_syscall",
+    "eventfd",
+    "f03_terminate_host_refcount_set_v1",
+    "f03_wait_release_process",
+    "f03_wait_release_thread",
+    "syscall_do_kill_thread_bridge",
+    "syscall_do_syscall_request_bridge",
+    "syscall_generic_forwarding_body_result",
+    "terminate_host_body_result"
+  ],
+  "expected_new_global_T": [
+    "__mcs_rwlock_reader_lock_noirq",
+    "__mcs_rwlock_reader_unlock_noirq",
+    "__list_add",
+    "list_add",
+    "list_add_tail",
+    "memcpy",
+    "__inline_memset",
+    "kmalloc_tracked",
+    "kfree_tracked",
+    "thread_hash",
+    "hold_thread",
+    "release_thread",
+    "process_hold_thread_body_result",
+    "process_release_thread_body_result",
+    "process_ref_dec_and_test_result",
+    "process_ref_dec_and_test_direct_result",
+    "process_ref_inc_direct_result",
+    "process_ref_inc_result",
+    "process_ref_hold_body_result",
+    "process_hold_thread_warn_result",
+    "process_thread_action_result",
+    "process_thread_profile_result",
+    "process_vm_action_result",
+    "process_procfs_delete_thread_bridge",
+    "process_destroy_thread_bridge",
+    "process_release_vm_bridge",
+    "process_hold_thread_warn_exited_result",
+    "process_ref_release_should_destroy_result",
+    "process_release_thread_profile_bridge",
+    "process_hold_thread_warn_bridge",
+    "arch_do_kill_process_group_result",
+    "arch_do_kill_direct_target_gate_result",
+    "arch_do_kill_pending_enqueue_result",
+    "arch_do_kill_wakeup_result",
+    "arch_do_kill_process_target_result",
+    "arch_do_kill_thread_target_result",
+    "arch_do_kill_prepare_info_result",
+    "do_kill",
+    "syscall_do_kill_thread_bridge",
+    "ihk_mc_syscall_set_arg0",
+    "ihk_mc_syscall_set_arg1",
+    "ihk_mc_syscall_set_arg2",
+    "interrupt_syscall"
+  ],
+  "expected_new_global_data": {
+    "_RNvNtCsjSxraHYHbm2_18kill_provider_unit21f03_interrupt_syscall15INTERRUPT_DEBUG": {
+      "kind": "D",
+      "bytes": 32,
+      "bind": 1,
+      "visibility": 0,
+      "source": "exact reviewed Ddebug32 static"
+    },
+    "_RNvNtNtCsjSxraHYHbm2_18kill_provider_unit14syscall_policy28f06_do_kill_wakeup_candidate9IPI_DEBUG": {
+      "kind": "D",
+      "bytes": 32,
+      "bind": 1,
+      "visibility": 0,
+      "source": "exact reviewed Ddebug32 static"
+    },
+    "_RNvNtNtCsjSxraHYHbm2_18kill_provider_unit14syscall_policy26f06_full_do_kill_candidate11ENTER_DEBUG": {
+      "kind": "D",
+      "bytes": 32,
+      "bind": 1,
+      "visibility": 0,
+      "source": "exact reviewed Ddebug32 static"
+    }
+  },
+  "source_bound_import_contracts": {
+    "_kmalloc": {
+      "source": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+      "source_sha256": "f544c5177156ad5de8544bb95c46bbc8e2ac870a25c4895ca4cefb7c8cc79680",
+      "first_line": 4103,
+      "actual_signature": "pub unsafe extern \"C\" fn _kmalloc(\n    size: CInt,\n    flag: CULong,\n    file: *mut i8,\n    line: CInt,\n) -> *mut c_void",
+      "actual_b483_strong_owner": null,
+      "source_body_recompiled_in_this_packet": false,
+      "provider_boundary": "Existing genuine current Rust implementation; exact new emitted import goes to P04 matching image/provider closure, no dummy provider."
+    },
+    "_kfree": {
+      "source": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+      "source_sha256": "f544c5177156ad5de8544bb95c46bbc8e2ac870a25c4895ca4cefb7c8cc79680",
+      "first_line": 4130,
+      "actual_signature": "pub unsafe extern \"C\" fn _kfree(ptr: *mut c_void, file: *mut i8, line: CInt)",
+      "actual_b483_strong_owner": null,
+      "source_body_recompiled_in_this_packet": false,
+      "provider_boundary": "Existing genuine current Rust implementation; exact new emitted import goes to P04 matching image/provider closure, no dummy provider."
+    },
+    "destroy_thread": {
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "first_line": 10110,
+      "actual_signature": "pub unsafe extern \"C\" fn destroy_thread(thread: *mut Thread)",
+      "actual_b483_strong_owner": null,
+      "source_body_recompiled_in_this_packet": false,
+      "provider_boundary": "Existing genuine current Rust implementation; exact new emitted import goes to P04 matching image/provider closure, no dummy provider."
+    },
+    "release_process_vm": {
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "first_line": 10298,
+      "actual_signature": "pub unsafe extern \"C\" fn release_process_vm(vm: *mut ProcessVm)",
+      "actual_b483_strong_owner": null,
+      "source_body_recompiled_in_this_packet": false,
+      "provider_boundary": "Existing genuine current Rust implementation; exact new emitted import goes to P04 matching image/provider closure, no dummy provider."
+    },
+    "procfs_delete_thread": {
+      "source": "/home/holden/mckernel/kernel/rust/procfs.rs",
+      "source_sha256": "6a3609c3ced73cafdffec032e3f2876e08eee5628ba2470137729ca7a804c90e",
+      "first_line": 347,
+      "actual_signature": "pub unsafe extern \"C\" fn procfs_delete_thread(thread: *mut Thread)",
+      "actual_b483_strong_owner": null,
+      "source_body_recompiled_in_this_packet": false,
+      "provider_boundary": "Existing genuine current Rust implementation; exact new emitted import goes to P04 matching image/provider closure, no dummy provider."
+    },
+    "profile_accumulate_events": {
+      "source": "/home/holden/mckernel/kernel/rust/profile.rs",
+      "source_sha256": "2eacbb02e1988ac524e94b1c7824629cfa97bf5a18ddef5c046f0c60106ce543",
+      "first_line": 405,
+      "actual_signature": "pub unsafe extern \"C\" fn profile_accumulate_events(thread: *mut Thread, proc: *mut Process)",
+      "actual_b483_strong_owner": null,
+      "source_body_recompiled_in_this_packet": false,
+      "provider_boundary": "Existing genuine current Rust implementation; exact new emitted import goes to P04 matching image/provider closure, no dummy provider."
+    },
+    "profile_dealloc_thread_events": {
+      "source": "/home/holden/mckernel/kernel/rust/profile.rs",
+      "source_sha256": "2eacbb02e1988ac524e94b1c7824629cfa97bf5a18ddef5c046f0c60106ce543",
+      "first_line": 496,
+      "actual_signature": "pub unsafe extern \"C\" fn profile_dealloc_thread_events(thread: *mut Thread)",
+      "actual_b483_strong_owner": null,
+      "source_body_recompiled_in_this_packet": false,
+      "provider_boundary": "Existing genuine current Rust implementation; exact new emitted import goes to P04 matching image/provider closure, no dummy provider."
+    },
+    "syscall_generic_forwarding": {
+      "source": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "source_sha256": "11df0a7dbaeedcb009f5275e422f17eed444f4b513e7322e14f19e88566a2f1e",
+      "first_line": 2630,
+      "actual_signature": "pub unsafe extern \"C\" fn syscall_generic_forwarding(n: CInt, ctx: *mut X86UserContext) -> CLong",
+      "actual_b483_strong_owner": null,
+      "source_body_recompiled_in_this_packet": false,
+      "provider_boundary": "Existing genuine current Rust implementation; exact new emitted import goes to P04 matching image/provider closure, no dummy provider."
+    },
+    "get_this_cpu_local_var": {
+      "source": "/home/holden/mckernel/kernel/rust/cls.rs",
+      "source_sha256": "c0260e7634d53fcc0873746af8bd16b6691ee0a4b7f394ca18896aef070f6bba",
+      "first_line": 173,
+      "actual_signature": "pub unsafe extern \"C\" fn get_this_cpu_local_var() -> *mut CpuLocalVar",
+      "actual_b483_strong_owner": {
+        "name": "get_this_cpu_local_var",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "section": 78,
+        "value": 0,
+        "size": 99
+      },
+      "source_body_recompiled_in_this_packet": false,
+      "provider_boundary": "Existing qualified b483 owner reused"
+    },
+    "kprintf": {
+      "source": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "source_sha256": "fed7537d21f5d5fe0fc3ffdb1fe44783f5f9ac13937b3bdbbcc452cc2fa5eb16",
+      "first_line": 252,
+      "actual_signature": "pub unsafe extern \"C\" fn kprintf(format: *const i8, mut args: ...) -> CInt",
+      "actual_b483_strong_owner": {
+        "name": "kprintf",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "section": 61,
+        "value": 0,
+        "size": 706
+      },
+      "source_body_recompiled_in_this_packet": false,
+      "provider_boundary": "Existing qualified b483 owner reused"
+    },
+    "process_hash": {
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "first_line": 911,
+      "actual_signature": "pub extern \"C\" fn process_hash(pid: CInt) -> CInt",
+      "actual_b483_strong_owner": {
+        "name": "process_hash",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "section": 177,
+        "value": 0,
+        "size": 35
+      },
+      "source_body_recompiled_in_this_packet": false,
+      "provider_boundary": "Existing qualified b483 owner reused"
+    },
+    "__mcs_rwlock_reader_lock": {
+      "source": "/home/holden/mckernel/kernel/rust/lock_helpers.rs",
+      "source_sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3",
+      "first_line": 355,
+      "actual_signature": "pub unsafe extern \"C\" fn __mcs_rwlock_reader_lock(\n    lock: *mut McsRwlockLock,\n    node: *mut McsRwlockNodeIrqsave,\n)",
+      "actual_b483_strong_owner": {
+        "name": "__mcs_rwlock_reader_lock",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "section": 170,
+        "value": 0,
+        "size": 21
+      },
+      "source_body_recompiled_in_this_packet": false,
+      "provider_boundary": "Existing qualified b483 owner reused"
+    },
+    "__mcs_rwlock_reader_unlock": {
+      "source": "/home/holden/mckernel/kernel/rust/lock_helpers.rs",
+      "source_sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3",
+      "first_line": 363,
+      "actual_signature": "pub unsafe extern \"C\" fn __mcs_rwlock_reader_unlock(\n    lock: *mut McsRwlockLock,\n    node: *mut McsRwlockNodeIrqsave,\n)",
+      "actual_b483_strong_owner": {
+        "name": "__mcs_rwlock_reader_unlock",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "section": 172,
+        "value": 0,
+        "size": 15
+      },
+      "source_body_recompiled_in_this_packet": false,
+      "provider_boundary": "Existing qualified b483 owner reused"
+    },
+    "__mcs_rwlock_writer_lock_noirq": {
+      "source": "/home/holden/mckernel/kernel/rust/lock_helpers.rs",
+      "source_sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3",
+      "first_line": 307,
+      "actual_signature": "pub unsafe extern \"C\" fn __mcs_rwlock_writer_lock_noirq(\n    lock: *mut McsRwlockLock,\n    _node: *mut core::ffi::c_void,\n)",
+      "actual_b483_strong_owner": {
+        "name": "__mcs_rwlock_writer_lock_noirq",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "section": 107,
+        "value": 0,
+        "size": 12
+      },
+      "source_body_recompiled_in_this_packet": false,
+      "provider_boundary": "Existing qualified b483 owner reused"
+    },
+    "__mcs_rwlock_writer_unlock_noirq": {
+      "source": "/home/holden/mckernel/kernel/rust/lock_helpers.rs",
+      "source_sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3",
+      "first_line": 315,
+      "actual_signature": "pub unsafe extern \"C\" fn __mcs_rwlock_writer_unlock_noirq(\n    lock: *mut McsRwlockLock,\n    _node: *mut core::ffi::c_void,\n)",
+      "actual_b483_strong_owner": {
+        "name": "__mcs_rwlock_writer_unlock_noirq",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "section": 109,
+        "value": 0,
+        "size": 12
+      },
+      "source_body_recompiled_in_this_packet": false,
+      "provider_boundary": "Existing qualified b483 owner reused"
+    },
+    "__ihk_mc_spinlock_lock_noirq": {
+      "source": "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs",
+      "source_sha256": "7b6c1e87f521eaf4674128afd7bff71785bead4ff7c9eb3c9a668d6a0cb0cbe7",
+      "first_line": 90,
+      "actual_signature": "pub unsafe extern \"C\" fn __ihk_mc_spinlock_lock_noirq(lock: *mut IhkSpinlock)",
+      "actual_b483_strong_owner": {
+        "name": "__ihk_mc_spinlock_lock_noirq",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "section": 32,
+        "value": 0,
+        "size": 91
+      },
+      "source_body_recompiled_in_this_packet": false,
+      "provider_boundary": "Existing qualified b483 owner reused"
+    },
+    "__ihk_mc_spinlock_unlock_noirq": {
+      "source": "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs",
+      "source_sha256": "7b6c1e87f521eaf4674128afd7bff71785bead4ff7c9eb3c9a668d6a0cb0cbe7",
+      "first_line": 116,
+      "actual_signature": "pub unsafe extern \"C\" fn __ihk_mc_spinlock_unlock_noirq(lock: *mut IhkSpinlock)",
+      "actual_b483_strong_owner": {
+        "name": "__ihk_mc_spinlock_unlock_noirq",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "section": 36,
+        "value": 0,
+        "size": 59
+      },
+      "source_body_recompiled_in_this_packet": false,
+      "provider_boundary": "Existing qualified b483 owner reused"
+    },
+    "cpu_disable_interrupt_save": {
+      "source": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "source_sha256": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde",
+      "first_line": 853,
+      "actual_signature": "pub unsafe extern \"C\" fn cpu_disable_interrupt_save() -> CULong",
+      "actual_b483_strong_owner": {
+        "name": "cpu_disable_interrupt_save",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "section": 38,
+        "value": 0,
+        "size": 6
+      },
+      "source_body_recompiled_in_this_packet": false,
+      "provider_boundary": "Existing qualified b483 owner reused"
+    },
+    "cpu_restore_interrupt": {
+      "source": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "source_sha256": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde",
+      "first_line": 841,
+      "actual_signature": "pub unsafe extern \"C\" fn cpu_restore_interrupt(flags: CULong)",
+      "actual_b483_strong_owner": {
+        "name": "cpu_restore_interrupt",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "section": 41,
+        "value": 0,
+        "size": 5
+      },
+      "source_body_recompiled_in_this_packet": false,
+      "provider_boundary": "Existing qualified b483 owner reused"
+    },
+    "sched_wakeup_thread": {
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "source_sha256": "c4e6153bef33ec018d2efc88c93854a4dc351f78c901ed3cb25f73524d7c0020",
+      "first_line": 3363,
+      "actual_signature": "pub unsafe extern \"C\" fn sched_wakeup_thread(thread: *mut Thread, valid_states: CInt) -> CInt",
+      "actual_b483_strong_owner": {
+        "name": "sched_wakeup_thread",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "section": 24,
+        "value": 0,
+        "size": 14
+      },
+      "source_body_recompiled_in_this_packet": false,
+      "provider_boundary": "Existing qualified b483 owner reused"
+    },
+    "ihk_mc_get_vector": {
+      "source": "/home/holden/mckernel/kernel/rust/x86_setup.rs",
+      "source_sha256": "1bf9b326873b22034dfba47165c95bdcc599d41533a112c64de72950e99589fe",
+      "first_line": 536,
+      "actual_signature": "pub unsafe extern \"C\" fn ihk_mc_get_vector(type_: CInt) -> CInt",
+      "actual_b483_strong_owner": {
+        "name": "ihk_mc_get_vector",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "section": 112,
+        "value": 0,
+        "size": 37
+      },
+      "source_body_recompiled_in_this_packet": false,
+      "provider_boundary": "Existing qualified b483 owner reused"
+    },
+    "ihk_mc_interrupt_cpu": {
+      "source": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "source_sha256": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde",
+      "first_line": 908,
+      "actual_signature": "pub unsafe extern \"C\" fn ihk_mc_interrupt_cpu(cpu: CInt, vector: CInt) -> CInt",
+      "actual_b483_strong_owner": {
+        "name": "ihk_mc_interrupt_cpu",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "section": 116,
+        "value": 0,
+        "size": 142
+      },
+      "source_body_recompiled_in_this_packet": false,
+      "provider_boundary": "Existing qualified b483 owner reused"
+    },
+    "memset": {
+      "source": "/home/holden/mckernel/kernel/rust/string.rs",
+      "source_sha256": "579d8c06bb766a270548399a8820733516a167bb8af5d1fea46d8a51f7e8fbf3",
+      "first_line": 272,
+      "actual_signature": "pub unsafe extern \"C\" fn memset(s: *mut c_void, c: CInt, mut n: SizeT) -> *mut c_void",
+      "actual_b483_strong_owner": {
+        "name": "memset",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "section": 53,
+        "value": 0,
+        "size": 113
+      },
+      "source_body_recompiled_in_this_packet": false,
+      "provider_boundary": "Existing qualified b483 owner reused"
+    }
+  },
+  "expected_verbose_flags": 2097155,
+  "qualified_ELF_reader": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/storage_predicate.py",
+    "sha256": "a4df81bb2b86d97f4199ae816dab7965213ceba05dca17945f9eae861dc31892",
+    "qualification_receipt": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/RESULT.json",
+    "scope": "Reuse existing exact Image/parse_nm for ELF64-LE/x86_64 REL metadata/bytes only, not storage predicate re-review or new parser/loader."
+  },
+  "qualified_owner_helpers": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/join_checks.py",
+    "sha256": "8e713e3311f55d5316e3dc5a7bff4b72e39f650e48e5f9e6616fdf77e5933a0c",
+    "actual_qualification_receipt": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/RESULT.json",
+    "reuse": "Image/check_nm/local/compare_owner/reference helpers only; no repeatedkprintfpredicate/codegen/oldmetadata execution."
+  },
+  "qualified_relocation_helpers": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-provider-unit-1/expanded-1/join-1/join_checks.py",
+    "sha256": "93a8f429f77664a4df90fafc227801575751138ac32e7c2d3ed46d16a5f462c8",
+    "qualification_receipt": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-provider-unit-1/expanded-1/join-1/RESULT.json",
+    "reuse": "ActualqualifiedprivateNOBITSownerrelocnormalization+ownerhelpers only; no oldpredicate/metadata/codegenreplay."
+  },
+  "profile": {
+    "CPU": [
+      7
+    ],
+    "local_serial_jobs": 1,
+    "allocation_bytes_including_controller_and_child_overhead": 1073741824,
+    "AS_limit_each_process_bytes": 1073741824,
+    "phase_wall_seconds": [
+      30,
+      20,
+      20
+    ],
+    "phase_CPU_seconds": [
+      15,
+      10,
+      10
+    ],
+    "controller_wall_seconds": 100,
+    "controller_CPU_seconds": 60,
+    "FSIZE_bytes_each_file": 16777216,
+    "core_bytes": 0,
+    "disk_headroom_minimum_bytes": 536870912,
+    "finite_disk_bound": "Only3 unstarted commands x3 capturefiles x16MiB +one joinedELF16MiB +<=7 JSONfiles x16MiB +outerstdout16MiB =288MiB; unchanged512MiB headroom. No compiler/new provider output/readback/reacquisition. Allocation/CPU7/AS/core/aggregate/UNKNOWN controls unchanged.",
+    "aggregate_HOST_CPUs": [
+      0,
+      6,
+      7
+    ],
+    "aggregate_jobs_max": 3,
+    "aggregate_HOST_total_bytes_all_overhead": 4294967296,
+    "fresh_MemAvailable_minimum_bytes": 27917287424,
+    "prior_reservations_bytes": 19327352832,
+    "host_RAM_floor_bytes": 4294967296,
+    "host_disk_floor_bytes": 17179869184,
+    "scratch_disk_floor_bytes": 12884901888,
+    "old_UNJOINED_CPU0_bytes": 268435456,
+    "old_UNJOINED_jobs": 1,
+    "parallelism": "No automatic overlap grant; Root measures actual all-controller/worker sums and existing exact live owners, no competing heavy/native job. OldCPU0 source-reader UNKNOWN remains held and counted."
+  },
+  "driver_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "100s",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=60:60",
+    "--fsize=16777216:16777216",
+    "--core=0:0",
+    "--",
+    "/usr/bin/python3",
+    "-B",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/emitted-debug-correction-1/run.py",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/emitted-debug-correction-1/REQUEST.json"
+  ],
+  "scope_and_eligibility": {
+    "current_authority": "Root current explicit coherent kill/provider source/codegen assignment under actual a83e USER-SCOPE-CLARIFICATION; ordinary source and typed provider engineering, not invented external inventory. Historical actual service error/control evidence remains intact.",
+    "coherent_members": "Retained actual f9ea object, all43 genuine current typed functions on42 physical ranges and exact3 source-owned GLOBAL DEFAULT Ddebug32 objects. No source/ABI/compiler/cfg/env change; only source-grounded emitted-data linkage/section gate correction plus previously unstarted link/read commands.",
+    "interrupt_boundary": {
+      "independent_source_GO_consumed": true,
+      "review": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/interrupt-syscall-review-p04tests-max-1/REVIEW.json",
+        "sha256": "164dca645edcf5b67c5337eb9a753cc207d5e38376de793abd51965bf39e2574"
+      },
+      "SOURCE_READY": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/interrupt-syscall-ownership-1/SOURCE-READY.json",
+        "sha256": "012ef4f552b65c3208711627943627215fbe18119834281706362bdec47848c4"
+      },
+      "source_bindings": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/interrupt-syscall-ownership-1/SOURCE-BINDINGS.json",
+        "sha256": "08032f49a06e91d2579f473277d1b1cf0748e5dfeae1e4954cf8072d8e5d5b15"
+      },
+      "module_bytes_unchanged": true,
+      "no_optional_standalone_check_selected": "P04Tests metadata-only dc25 remains unrun; this coherent compile includes actual changed module/context/setters once."
+    },
+    "normal_production_C_selection": "SourceAcq materialGO patch pairs C MCKERNEL_RUST_F03_INTERRUPT_SYSCALL with Rust f03_interrupt_syscall_candidate in supported Linux6.12/x86/!UBSAN, preserving clone initializer and logicalCdebug5666. Root alone integrates CMake/lib/Cguard. This partial has no C object; full-image matching/duplicate-C elimination remains P04/Root real production check.",
+    "shared_baseline": "Unchanged b483140 contains process_hash, IRQsave readers and all qualified lowerCPU/spinlock/scheduler/IPI/formatter/data; import and preserve them, never recompile/copy another old artifact cohort. Real full-image command uses normal CMake provider selection; no b483/e1a injection is proposed by this packet.",
+    "actual_new_frontier": "Do not invent a new exact U count before actual compile. Only source-typed listed imports may emit; prejoin records the actual newU bound to b483 and actual newU requiring normal full-image owners. Actual source implementations for deeper allocator/destructor/VM/profile/forwarding providers exist and are named; no fake return, C/platform waiver or blanket optional provider allowance.",
+    "behavior_and_lifetime": "Reuse actual9b83 state/ABI/IRQ/ref/domain source contracts. No sig0 or negativeTID/INT_MIN policy change; no invented IRQrestore on LinuxUTI terminal path; real target ref/acquire/release/VM/process/allocator lifetime obligations remain required beyond compile/link. No prior Direct-TID/TERMRESET fixture/source/result/equivalent replay.",
+    "debug_origin": "Actual GLOBAL DEFAULT OBJECT32 records, exact names/type/bind/visibility/width/sectionattrs/initialflags/NULLfmt/file/function/two R64 relocations checked. Actual provider has three separate same-named __verbose sections66/68/70; permit only lossless preserve/merge of their exact contributions with old section, conserving every source owner/reloc and aggregate bytes. Retained qualified GLOBAL normalization applies; incorrect LOCAL exemption is removed.",
+    "excluded": [
+      "all old behavior/suite/provider/codegen replay",
+      "held Direct-TID/TERMRESET/old generic-exec cohort or equivalent",
+      "native/IRQ/GS/MSR/IPI/scheduler/kernel function execution",
+      "device, service, dump or boot activity",
+      "canonical/index/launcher/credit/account edits"
+    ]
+  },
+  "expected_scope": "Retained actual43 strong typed function names+exact3GLOBAL DEFAULT data objects32B each; no missing/extra function or data owner allowed. Expected joined186 globals/158functions28data only if actual link confirms; preserve old140global/LOCAL/RO/NOBITS owner bytes, aliases and normalizedrelocs, plus all46 new source owner records and their actual section contributions. Actual remaining16genuineU is source-derived union: old8 stillopen plus8actual new deeper providers. No image/default/runtime/native/Cretirement acceptance.",
+  "failure_rule": "Append actual command record before Popen, preserve primary exception and pid/birth/wait/streams. Stop on a correction failure for focused escalation; no unchanged retry, no oldCPU0 UNKNOWN release. No source/compiler fallback or different profile.",
+  "review_and_execution_gate": "Existing SDK independent diagnosis and focused correction GO, then Root fresh CPU7/1GiB/sharedHOST/UNKNOWN/source operation admission. First actual failure retained; no compiler/provider metadata replay or source change. Normal CMake fullimage operation is independent and higher priority.",
+  "pre_handoff_profile_text_correction": {
+    "prior_sha256": "88f303e4ed094023937dee53edd2dc1550f80af70eb992eb0f615ad567ae455b",
+    "actual_payload_ran": false,
+    "delta": "One inherited descriptive required_source_feature field corrected to acknowledge explicit four new production cfgs, replacing stale no-new-cfg wording. No actual argv/source/helper/profile/resource predicate changed."
+  },
+  "source_debug_contracts": [
+    {
+      "symbol_tokens": [
+        "f03_interrupt_syscall",
+        "INTERRUPT_DEBUG"
+      ],
+      "file_utf8": "/home/holden/mckernel/kernel/syscall.c",
+      "function_utf8": "interrupt_syscall",
+      "line_flags": 5666,
+      "fmt_NULL": true,
+      "source_C_origin": true,
+      "symbol_name": "_RNvNtCsjSxraHYHbm2_18kill_provider_unit21f03_interrupt_syscall15INTERRUPT_DEBUG",
+      "expected_bind": 1,
+      "expected_visibility": 0,
+      "actual_source_section": 66,
+      "expected_bytes": 32
+    },
+    {
+      "symbol_tokens": [
+        "IPI_DEBUG"
+      ],
+      "file_utf8": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/syscall_policy.rs",
+      "function_utf8": "do_kill",
+      "line_flags": 238,
+      "source_expression": "line!() & 0x00ff_ffff",
+      "source_private_file": true,
+      "symbol_name": "_RNvNtNtCsjSxraHYHbm2_18kill_provider_unit14syscall_policy28f06_do_kill_wakeup_candidate9IPI_DEBUG",
+      "expected_bind": 1,
+      "expected_visibility": 0,
+      "actual_source_section": 70,
+      "expected_bytes": 32
+    },
+    {
+      "symbol_tokens": [
+        "ENTER_DEBUG"
+      ],
+      "file_utf8": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/syscall_policy.rs",
+      "function_utf8": "do_kill",
+      "line_flags": 700,
+      "source_expression": "line!() & 0x00ff_ffff",
+      "source_private_file": true,
+      "symbol_name": "_RNvNtNtCsjSxraHYHbm2_18kill_provider_unit14syscall_policy26f06_full_do_kill_candidate11ENTER_DEBUG",
+      "expected_bind": 1,
+      "expected_visibility": 0,
+      "actual_source_section": 68,
+      "expected_bytes": 32
+    }
+  ],
+  "expected_new_global_D": [
+    "_RNvNtCsjSxraHYHbm2_18kill_provider_unit21f03_interrupt_syscall15INTERRUPT_DEBUG",
+    "_RNvNtNtCsjSxraHYHbm2_18kill_provider_unit14syscall_policy28f06_do_kill_wakeup_candidate9IPI_DEBUG",
+    "_RNvNtNtCsjSxraHYHbm2_18kill_provider_unit14syscall_policy26f06_full_do_kill_candidate11ENTER_DEBUG"
+  ],
+  "retained_provider_sha256": "f9ea63f1e953ad009b313c75c9b894677a0b14f46f3f7e06c4f3d1f0a062d78e",
+  "prior_request": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/REQUEST.json",
+    "sha256": "e938522a481b6c5d2eee304ab8eb5c1506f653de453a9bb7939623f806d2f647"
+  },
+  "prior_failure": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/FIRST-FAILURE.json",
+    "sha256": "99a615a05f631631b6563b0c3017df031de3d71eecfd9320ddd8c551b38451f5"
+  },
+  "prior_root_result": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/root-execution-1/RESULT.json",
+    "sha256": "d9e9973e7ddc658a52169ce1ec765cf888890160a13cfb5e0357dcc81bd4d668"
+  },
+  "prior_bindings": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/BINDINGS-CHECK.json",
+    "sha256": "1b54116ceacdd5d0a389edeb6ad06008bd1c10129828087366956df2ef8b8db8"
+  },
+  "emitted_owner_contract": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/emitted-debug-correction-1/EMITTED-OWNER-CONTRACT.json",
+    "sha256": "e0e5fe7ed23e06f2d0c076a0605d05c74e9c6744b5050d6adad39a11c696d431"
+  },
+  "source_operation_correction": {
+    "one_failed_candidate": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/REQUEST.json",
+      "sha256": "e938522a481b6c5d2eee304ab8eb5c1506f653de453a9bb7939623f806d2f647"
+    },
+    "actual_failure_preserved": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/FIRST-FAILURE.json",
+      "sha256": "99a615a05f631631b6563b0c3017df031de3d71eecfd9320ddd8c551b38451f5"
+    },
+    "reviewed_old_operation": "kill-provider-review-sdk-max-1/REVIEW.json12d7f671",
+    "source_and_actual_provider_unchanged": true,
+    "actual_compile_readbacks_passed_once": [
+      "provider-compile",
+      "provider-nm",
+      "provider-elf"
+    ],
+    "compiled_T_exact": 43,
+    "new_defined_DATA_exact": {
+      "_RNvNtCsjSxraHYHbm2_18kill_provider_unit21f03_interrupt_syscall15INTERRUPT_DEBUG": {
+        "kind": "D",
+        "bytes": 32,
+        "bind": 1,
+        "visibility": 0,
+        "source": "exact reviewed Ddebug32 static"
+      },
+      "_RNvNtNtCsjSxraHYHbm2_18kill_provider_unit14syscall_policy28f06_do_kill_wakeup_candidate9IPI_DEBUG": {
+        "kind": "D",
+        "bytes": 32,
+        "bind": 1,
+        "visibility": 0,
+        "source": "exact reviewed Ddebug32 static"
+      },
+      "_RNvNtNtCsjSxraHYHbm2_18kill_provider_unit14syscall_policy26f06_full_do_kill_candidate11ENTER_DEBUG": {
+        "kind": "D",
+        "bytes": 32,
+        "bind": 1,
+        "visibility": 0,
+        "source": "exact reviewed Ddebug32 static"
+      }
+    },
+    "no_rerun_commands": [
+      "rustc",
+      "nm provider",
+      "readelf provider",
+      "old tests or checks"
+    ],
+    "changed_checks_only": [
+      "exact new GLOBAL Ddebug owner classification/record",
+      "remove inapplicable LOCAL writable-relocation special case; use qualified GLOBAL helper",
+      "exact three source section contributions conserved instead of singleton prediction"
+    ],
+    "link_input_order_unchanged": [
+      "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/flag-correction-1/output/process_pair_e1a_partial.o",
+      "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/output/kill_providers.o"
+    ],
+    "only_new_commands": [
+      "partial-link",
+      "joined-nm",
+      "joined-elf"
+    ],
+    "old_source_manifest_and_checks_preserved": {
+      "manifest_sha256": "0b845e5b5f56c718665ce629ae168bf5f236f87c2c273b346e864c87a8928f09",
+      "original_checker_sha256": "3274954e107592814b1b7b50c3f38485c89f32b8e0cb16e1a167f5ebd5275628"
+    },
+    "no_wildcard_or_count_only_or_optional_data_admission": true,
+    "review": "Existing SDK independently diagnoses/reviews this combined exact delta before Root admission; full normal image build remains priority."
+  }
+}

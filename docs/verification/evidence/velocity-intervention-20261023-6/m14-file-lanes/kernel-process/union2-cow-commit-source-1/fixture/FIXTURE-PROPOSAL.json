@@ -1,0 +1,21 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_FRAGMENTS_ONLY_NO_SECOND_QUEUE",
+  "strict_cases": [
+    "NULL/nonNULL original Page; RSS add and page_unmap signed zero/positive/negative returns; assert exact call order and no unmap for NULL",
+    "pgsize4096,2MiB,INT_MAX+1,high-bit64; exact CULong accounting size and CInt narrowing with no error normalization",
+    "independent two diagnostic flags0,1,2,255, exact formats/varargs/function name and ignored signed logger result",
+    "RSS provider/log/unmap may mutate range.memobj; exact post-unmap/post-log value read by RSS-sub",
+    "translation returns zero/high-bit physical and phys_to_page returns NULL/different Page; old outputs retained until prescribed publication; snapshot no extra free/ref/unlock",
+    "leave owning new allocation/install and original error/out labels with caller; no synthetic native success or kernel ACK"
+  ],
+  "actual_provider_reuse": "Existing Rust rusage_memory_stat_add/sub under original enable_rusage configuration; existing Rust Page-unmap public entry with same C geometry/lock/log callbacks; existing Rust virt_to_phys; existing typed process phys_to_page extern retained as explicit C debt.",
+  "abi": "Real original C declarations and current Rust signatures captured. Hosted models, if used, must be named as controlled effects; no actual lock/ref/backend/native credit.",
+  "copy_log_hold": "Original kprintf argument list contains both phys_to_virt(phys) and virt_to_phys(virt). C does not sequence those argument evaluations. Require exact selected GCC9 generated caller/controlled-call witness before choosing a Rust evaluation sequence; no inferred order/ACK.",
+  "PTE_count_provider_hold": "Original success debug consumes page ? ihk_atomic_read(&page->count) : 0. Current page_helpers::Page.count is private; existing public predicates only return booleans, F01 offset getter does not supply this read. Keep C diagnostic until exact typed borrowed atomic-count provider is supplied/reviewed, without duplicating Page fields or offset guessing.",
+  "expected_execution": null,
+  "compiler_jobs": 0,
+  "CPU_reservations": 0,
+  "new_executable_queues": 0,
+  "default_native_credit": false
+}

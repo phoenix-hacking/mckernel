@@ -1,0 +1,53 @@
+{
+  "after_retention_consumption": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-terminal-preparation-20261018-1/retained-authority-consumed.json",
+    "sha256": "04863e248d9f838a1d2bb1dff60bd00a95caf1514ca66c531630647fa54222df"
+  },
+  "commands": [
+    [
+      "/usr/bin/install",
+      "-m",
+      "0644",
+      "--",
+      "/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-terminal-preparation-20261018-1/cleanup.py",
+      "/home/holden/mckernel/scripts/native_rust_cutover_image_terminal_cleanup.py"
+    ],
+    [
+      "/usr/bin/install",
+      "-m",
+      "0644",
+      "--",
+      "/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-terminal-preparation-20261018-1/publication-cleanup-tests.py",
+      "/home/holden/mckernel/scripts/tests/test_native_rust_cutover_image_terminal_cleanup.py"
+    ]
+  ],
+  "execution_authorized": false,
+  "files": [
+    {
+      "destination": "/home/holden/mckernel/scripts/native_rust_cutover_image_terminal_cleanup.py",
+      "source": {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-terminal-preparation-20261018-1/cleanup.py",
+        "sha256": "f7a35968f510c60791ac6604cdaaa6a2abbd1a991d04f6afb4ad61c84cb76ef8"
+      }
+    },
+    {
+      "destination": "/home/holden/mckernel/scripts/tests/test_native_rust_cutover_image_terminal_cleanup.py",
+      "source": {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-terminal-preparation-20261018-1/publication-cleanup-tests.py",
+        "sha256": "b6ba9086896cad9198a9ab157c9e9a4ef25eec014e29c38742852d91fdaad272"
+      }
+    }
+  ],
+  "git": "Dispatcher commit/push/fetched blob proof; worker does not invoke Git.",
+  "profile": {
+    "address_space_bytes": 1073741824,
+    "cpu": 6,
+    "cpu_seconds": 30,
+    "docker": false,
+    "jobs": 1,
+    "max_total_new_file_bytes": 98672,
+    "root": false,
+    "wall_seconds": 35
+  },
+  "status": "EXACT_SOURCE_TEST_PUBLICATION_REVIEW_REQUIRED"
+}

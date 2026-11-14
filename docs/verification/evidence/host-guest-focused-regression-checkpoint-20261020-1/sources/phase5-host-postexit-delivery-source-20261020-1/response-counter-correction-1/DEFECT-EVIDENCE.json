@@ -1,0 +1,8 @@
+{
+  "original_failure": "../capture-1/test.stdout: actual.rs144 expected0 observed1 after actual successful publication",
+  "production_cause": "application_syscall.rs Completion::publish takes response then calls unsafe response.memory.release() after the final status=1 Release store; test Memory::release increments Shared.release",
+  "fixture_error": "Both ResponseMemory::release and host revoke capsule release used Shared.release. Expected zero after successful Response publication was wrong.",
+  "bounded_correction": "Separate Shared.capsule_release incremented only by host revoke release callback; require Shared.release==1 and capsule_release==0 after actual publication. Wrong worker/serial negative transitions remain exact EBUSY with both counters0 and reservations intact.",
+  "production_changes": 0,
+  "native_or_ack_claim": false
+}

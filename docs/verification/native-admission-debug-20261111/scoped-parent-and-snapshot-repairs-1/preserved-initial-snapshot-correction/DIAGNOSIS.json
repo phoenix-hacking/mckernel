@@ -1,0 +1,92 @@
+{
+  "actual_failure": {
+    "bytes": 1489,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/a2f-fixed30-normal-operation-proposal-1/correction-1/ROOT-TOOL-FAILURE.CAPTURE.json",
+    "sha256": "d51e10c0c72ab98dc1ff7bb292bf8e1aa4df9f8644939a50d5957a41d891f569"
+  },
+  "actual_source_mechanism": {
+    "conclusion": "Reader selects distinct independently updated observations without any bookend consistency check. A legitimate new event/poll or in-progress record/ledger publication can invalidate full equality against its earlier snapshot; there is no atomic acquisition at131.",
+    "controller_source": {
+      "bytes": 139343,
+      "path": "/home/holden/mckernel/scripts/run_os_goal.py",
+      "sha256": "6fe65a95407c54cf01a220a333453fa76146653df926b97627f6a79d9f8e2e0b"
+    },
+    "credit_source": {
+      "bytes": 5178,
+      "path": "/home/holden/mckernel/scripts/os_goal_credits.py",
+      "sha256": "adf5187240ed8199746eef3b59b79d4d38c4ae8ac5821c8d8324833926b21ec3"
+    },
+    "historical_causality_limit": "No captured failed state/event values establish which individual update interleaving or primary field caused this invocation. Do not label it harmless, normalized, a proven spend/service hold, or a proven absence of a hold.",
+    "no_primary_normalization_in_reached_controller_source": true,
+    "wrapper_order": [
+      "State JSON is loaded once at74 before the actor/procfs/resource reads.",
+      "Only later109-126 the latest notification is selected from protocol tail.",
+      "Full primary comparison131 uses that earlier state; credit checks later use that same snapshot."
+    ],
+    "writer_order": [
+      "RPC.pump writes notification protocol JSONL before calling on_event.",
+      "Controller.event forwards the unchanged rateLimits object to record_rate_limits.",
+      "record_rate_limits first atomically saves last_rate_limits, then CreditBudget.observe persists the same durable credit run, then atomically saves credit_budget.",
+      "refresh_credit_budget also records a genuine account/rateLimits/read reply into controller state; RPC replies are not appended as notification protocol events."
+    ]
+  },
+  "failed_preissue_record": {
+    "bytes": 1077,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/a2f-fixed30-normal-operation-proposal-1/correction-1/ROOT-FAILED-PREISSUE.json",
+    "sha256": "63c05d22677b96db9a7e876d0d750e197f50016ea5a179b5ead4e525469b1ed4"
+  },
+  "failed_wrapper": {
+    "bytes": 13182,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/a2f-fixed30-normal-operation-proposal-1/correction-1/ROOT-ISSUE-AND-EXECUTE-ONCE.py",
+    "sha256": "229c8708eb1a0a3b3cbb3d323504b5ad7f6e1ab721d0687dbb6dbd7070119d20"
+  },
+  "first_failed_predicate": {
+    "expression": "usage['primary'] == state['last_rate_limits']['primary']",
+    "line": 131,
+    "proven": "The full primary objects differed. Exact historical compared field/value snapshots were not captured."
+  },
+  "independent_preissue_process_scope_Q": {
+    "bytes": 7026,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-fixed30-adoption-review-sourceacq-max-1/normal-operation-1/correction-1/actual-preissue-failure-1/QUALIFICATION.json",
+    "sha256": "8cf3f341c515797133a9633bb3361afa889e52553cb4dfa3dc935b08af173ac4"
+  },
+  "local_sanitized_evidence": {
+    "bytes": 2067,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/a2f-fixed30-normal-operation-proposal-1/correction-1/account-snapshot-correction-1/SANITIZED-LOCAL-OBSERVATIONS.json",
+    "sha256": "34d0116253872c77b33cdb49f4cea2991938098dc88d7e368d8ff26fbaeb0b5f"
+  },
+  "no_issued_output_absence_observed": {
+    "ACTUAL-ACCOUNT-CURRENT.json": true,
+    "ACTUAL-CAPACITY-CURRENT.json": true,
+    "ACTUAL-CONTROLS-CURRENT.json": true,
+    "ACTUAL-VALUES-CURRENT.json": true,
+    "ROOT-DYNAMIC-ADMISSION.ACTUAL.json": true,
+    "ROOT-ONE-SHOT-CAP.ACTUAL.json": true,
+    "reservations": true
+  },
+  "no_retry_or_issuer_authority_from_diagnosis": true,
+  "not_reached_at_failed_run": [
+    "auth_mode guard132",
+    "same finite credit ledger/state equality and positive balance/budget guards133-137",
+    "weekly window guard139",
+    "first source write_once142",
+    "nonce creation144",
+    "caller execv and sudo/privileged producer"
+  ],
+  "old_S_source_and_failure_unchanged": true,
+  "passed_at_failed_run": [
+    "actual independent review and all source hashes",
+    "early running/stop/weekly guards",
+    "same-Root live actor checks and resource floors",
+    "selected event existed and was younger than25s",
+    "selected event rateLimitReachedType absent and spendControlReached absent/false"
+  ],
+  "schema": 1,
+  "smallest_source_correction_contract": {
+    "acquire": "Immediately around local protocol/credit reads take two fresh controller snapshots; validate all stop/auth/account guards on each, retain only an unchanged account-relevant snapshot whose full primary matches the latest fresh no-hold event and whose credit record exactly equals the original durable ledger.",
+    "bounded_mismatch": "At most3 immediate read-only consistency attempts; observed hold/invalid/unknown accounting fails immediately, persistent mismatch fails closed before first write/nonce.",
+    "preserve": "Full primary equality, latest event only,25s freshness, same protocol/controller scope, every running/stop/auth/weekly/credit/sameRoot/resource guard and original durable id/budget; no state overwrite or external query.",
+    "tests_needed": "Finite actual acquisition function with controlled local record reads: consistent latest snapshot, interleaving update, persistent mismatch and immediate hold/unknown veto. No issuer/main or old suite replay."
+  },
+  "status": "PROVEN_UNSYNCHRONIZED_LOCAL_ACCOUNT_SELECTION_SOURCE_DEFECT_HISTORICAL_FAILED_VALUES_UNRECORDED"
+}

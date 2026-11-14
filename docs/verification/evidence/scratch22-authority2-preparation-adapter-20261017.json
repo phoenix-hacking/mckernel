@@ -1,0 +1,144 @@
+{
+  "schema": "mckernel.scratch22-authority2-preparation-adapter.v1",
+  "status": "TEMPLATE_NOT_RELEASED_ACTUAL_RETIREMENT_CONTRACT_PENDING",
+  "author": "/root/scratch22_adapter",
+  "files_sha256": {
+    "scripts/prepare_native_exact_scratch22_authority2.py": "3bcaa00fd0785a0bb47100dc28f6b05decef58b7a654cac2876422b74f933e83",
+    "scripts/tests/test_prepare_native_exact_scratch22_authority2.py": "6fa6a11368233be2b4d1055d0dd99434609cc9266b77100cefd1f136279812e2"
+  },
+  "preserved_parent": {
+    "path": "scripts/prepare_native_exact_scratch22_authority1.py",
+    "sha256": "5e002228f09c2df3c712422d94f96f333bbc0df597335203de57350162723717",
+    "tests": "scripts/tests/test_prepare_native_exact_scratch22_authority1.py",
+    "tests_sha256": "6ebf69788aac085eeb7d330883049bde3c75144c1667ce22dd721dee5541c83e",
+    "mutation": false,
+    "method": "Mechanical apply_patch sourcecopy because the accepted parent adapter has fixed module-global namespace identities and no safe namespace-selection delegation API. No import/global mutation of the original adapter is used."
+  },
+  "new_names": {
+    "attempt": "scratch22-authority2",
+    "source_admission_schema": "scratch22-authority2-source-admission-v1",
+    "preparation_schema": "scratch22-authority2.preparation-release.v1",
+    "candidate": "mckernel-exact-candidate-scratch-22-authority2",
+    "backup": "mckernel-exact-candidate-scratch-22-authority2-metadata-backup",
+    "output": "mckernel-exact-candidate-scratch-22-authority2-output",
+    "evidence": "mckernel-exact-candidate-scratch-22-authority2-evidence",
+    "manifest": "native-exact-inputs-scratch-22-authority2.json",
+    "request": "native-exact-delta-request-scratch-22-authority2.json",
+    "log": "native-exact-candidate-delta-preparation-scratch-22-authority2.log",
+    "terminal": "native-exact-candidate-delta-preparation-scratch-22-authority2-terminal.json",
+    "lease": "native-exact-build-lease-scratch-22-authority2.json",
+    "shared_operational_slot": "native-exact-candidate-operational-exclusion-scratch18.json",
+    "note": "All roots under the existing scratch mount; names are source templates, not materialized roots or observed absence. No old scratch21/original22/authority1 object is reused or modified."
+  },
+  "alias_census": {
+    "count": 8,
+    "roots": [
+      "mckernel-exact-candidate-1e95abdc-scratch-15",
+      "mckernel-exact-candidate-ddb8d7d5-scratch-16",
+      "mckernel-exact-candidate-scratch-18",
+      "mckernel-exact-candidate-50b08432-scratch-17",
+      "mckernel-exact-candidate-scratch-20",
+      "mckernel-exact-candidate-scratch-21",
+      "mckernel-exact-candidate-scratch-22",
+      "mckernel-exact-candidate-scratch-22-authority1"
+    ],
+    "shared_files": 486,
+    "initial_links": "8 only if complete dynamic census authenticates every path/hash/mode/device/inode and accounts for every link",
+    "materialized_links": "9 only after a separately released fresh authority2 materialization; this worker did not run it",
+    "tests": "Disposable actual hardlinks verify complete2/7/8/9-link topologies and refuse hidden links/replacements/symlinks; mocked adapter branch supplies initial8/final9."
+  },
+  "accepted_source_layers": {
+    "unchanged": [
+      "Original scratch21 cleanup/release/postflight plan+journal/capture/archive validation",
+      "Original RS011 author/check/review hash authority",
+      "Accepted historical observer authority review and exact four-file map",
+      "All inherited default bindings and real canonical candidate owner validation",
+      "Exact controller HEAD binding is separate from the minimal source target/ref binding"
+    ],
+    "minimal_repair": {
+      "field": "repair_review:{path,sha256}",
+      "decision": "PASS_MINIMAL_SOURCE_REPAIR",
+      "actual_reviewer": "/root/fork_adoption_boundary_review",
+      "required_fields": [
+        "baseline_candidate",
+        "target",
+        "target_tree",
+        "implementation_author",
+        "reviewer",
+        "implementation_ownership=false",
+        "source_checks_baseline:{path,sha256}",
+        "source_review_baseline:{path,sha256}",
+        "files_sha256_delta"
+      ],
+      "exact_allowlist": [
+        "host-kernel/native-rust/ihk_smp_x86_64.rs",
+        "scripts/tests/fixtures/shutdown_v6_provider.rs"
+      ],
+      "delta_values": "Each file maps baseline_sha256,target_sha256. The review must bind exact current release baseline/target/tree and immutable RS011 pointer hashes. Every source target row outside the exact repair remains equal to the accepted RS011 baseline.",
+      "production_delta": "Only fn shutdown_v6_post_effect(error: kernel::Error) becomes kernel::error::Error. Complete before/after source bytes must equal that exact one-time replacement.",
+      "fixture_delta": "Only the exact original one-line kernel Error alias becomes the reviewed nested kernel::error::Error namespace adapter with the retained historical root alias/comments. Complete fixture bytes must equal that exact replacement.",
+      "release_delta": "Exactly2 M entries matching the repair allowlist; raw target-parent Git delta remains authenticated by inherited release checks.",
+      "baseline": "Released target parent is dynamic; dispatcher reported baseline fd09933c64adaba32bf975ec96e5d518a42544e9 and minimal target d37d2216a60c6db10442ba8bc238d64fbd59c5ea/tree95cbbdba1bdfa58e48ba7edba6a2d0d20259ecc6, but none is embedded as fabricated authority in this adapter.",
+      "old_compiler_claim": "Old RS011 source checks and ledger do not become current target native compiler evidence. Compiler/module/guest obligations remain pending.",
+      "prep_review_addition": "repair_review_sha256 joins the existing exact reviewed input map."
+    }
+  },
+  "concrete_retirement_blocker": {
+    "validator": "validate_authority1_retirement(release)",
+    "current_behavior": "Always refuses with actual authority1 cleanup and quarantine recovery contracts pending, before inherited preparation is called. This deliberately prevents source-only PASS fields or a guessed future receipt schema from enabling materialization.",
+    "known_cleanup_producer": "scripts/native_exact_scratch22_authority1_terminal_cleanup.py emits scratch22-authority1.cleanup-result.v1 with actual PASS_EXECUTED/PASS_TERMINAL_REPLAY and terminal/container_absent plus exact release/plan/journal/capture/archive identities.",
+    "missing": "Future independently accepted actual authority1 terminal cleanup and quarantine-recovery result/review identities/schema bindings. Rootguard80259 and failed80MiBcapture/exclusions are dispatcher-owned live evidence, not abandoned debris.",
+    "integration_rule": "After those actual records exist or their producer/reviewer contracts are frozen, a separately reviewed bounded integration must replace this refusal with exact digest/status/identity joins and add all actual receipt/review hashes to the preparation review input map. Do not fabricate accepted records, normalize away quarantine, mutate failed output, or enable the inert heavy wrapper.",
+    "execution_released": false
+  },
+  "test_profile": {
+    "command": "taskset -c 6 timeout --kill-after=5s 120s prlimit --as=2147483648 --cpu=110 --nofile=256 --fsize=67108864 --core=0 python3 -B -m unittest -v scripts.tests.test_prepare_native_exact_scratch22_authority2",
+    "CPU": 6,
+    "planning_memory_bytes": 2147483648,
+    "wall_seconds": 120,
+    "no_real_Git": "All git calls are strict disposable mocks; Git blob-format oracle is computed in Python.",
+    "no_compiler": true,
+    "no_root": true,
+    "no_Docker": true,
+    "no_network": true,
+    "no_subagents": true,
+    "no_materialization": true
+  },
+  "checks": {
+    "initial_template_result": "30 synthetic tests passed in0.141s before final independent repair-review contract alignment.",
+    "preserved_failed_contract_alignment_run": {
+      "exit_code": 1,
+      "full_combined_stdout_stderr": "test_actual_authority1_retirement_contract_gap_blocks_preparation (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_authority_digest_drift_and_symlink_refused (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_authority_fixed_file_map_and_target_hash_are_enforced (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_authority_review_cannot_be_pending_same_author_or_missing (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_authority_review_is_additive_and_cannot_weaken_rs011 (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... FAIL\ntest_canonical_owner_validation_and_nonexecutable_request (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_changed_shared_bytes_and_duplicate_roots_refused (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_cleanup_original_release_and_capture_drift_refused (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_cleanup_requires_complete_chain_and_retained_failure_bytes (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_closed_without_authority_and_execute_refused_first (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_dynamic_census_accepts_different_complete_topologies (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_eight_retained_aliases_preserve_old22_and_authority1_with_fresh_authority2_names (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_exact_fetched_ref_required (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_exact_preparation_review_binds_code_and_actual_evidence (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_exact_two_file_repair_and_unaffected_rs011_hashes (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_materialization_calls_real_adapter_branch_and_request_boundary (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_materialization_refuses_source_only_release_before_any_mutation (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_names_are_fresh_except_required_owner_slot (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_nested_symlink_is_not_an_authenticated_alias (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_original_safety_body_ast_is_preserved_without_old_module_mutation (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_prepare_passes_only_explicit_nonexecuting_arguments (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_release_accepts_exact_external_identity (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_repair_review_rejects_extra_edits_inside_selected_production_file (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_replaced_alias_rejected_even_with_same_bytes_and_link_count (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_scratch19_frozen_default_leak_reproduced_and_prevented (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_scratch20_exclusion_mismatch_precedes_preparation (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_source_review_cannot_bind_different_authority (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... FAIL\ntest_terminal_result_without_accepted_postflight_cannot_materialize (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_unaccepted_cleanup_is_not_authority (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_unlisted_link_cannot_hide_missing_alias (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\n\n======================================================================\nFAIL: test_authority_review_is_additive_and_cannot_weaken_rs011 (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2)\n----------------------------------------------------------------------\n_scratch22_authority2_private_ancestor.Refusal: minimal repair review immutable source baseline binding differs\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/home/holden/mckernel/scripts/tests/test_prepare_native_exact_scratch22_authority2.py\", line 463, in test_authority_review_is_additive_and_cannot_weaken_rs011\n    p.validate_release(ROOT, pointer['path'], pointer['sha256'])\nAssertionError: \"accepted source checks\" does not match \"minimal repair review immutable source baseline binding differs\"\n\n======================================================================\nFAIL: test_source_review_cannot_bind_different_authority (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2)\n----------------------------------------------------------------------\n_scratch22_authority2_private_ancestor.Refusal: minimal repair review immutable source baseline binding differs\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/home/holden/mckernel/scripts/tests/test_prepare_native_exact_scratch22_authority2.py\", line 201, in test_source_review_cannot_bind_different_authority\n    p.validate_release(ROOT, bound['path'], bound['sha256'])\nAssertionError: \"source review author record mismatch\" does not match \"minimal repair review immutable source baseline binding differs\"\n\n----------------------------------------------------------------------\nRan 30 tests in 0.144s\n\nFAILED (failures=2)\n",
+      "cause": "Two inherited negative fixtures changed source-check/review pointers; the newly added repair review correctly rejected those mismatches earlier than the old expected refusal. Production gate was correct.",
+      "bounded_correction": "Changed only the two expected precise refusal strings to the stronger earlier immutable-baseline join. No source/oracle predicate weakened."
+    },
+    "final": {
+      "exit_code": 0,
+      "cases": 30,
+      "full_combined_stdout_stderr": "test_actual_authority1_retirement_contract_gap_blocks_preparation (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_authority_digest_drift_and_symlink_refused (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_authority_fixed_file_map_and_target_hash_are_enforced (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_authority_review_cannot_be_pending_same_author_or_missing (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_authority_review_is_additive_and_cannot_weaken_rs011 (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_canonical_owner_validation_and_nonexecutable_request (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_changed_shared_bytes_and_duplicate_roots_refused (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_cleanup_original_release_and_capture_drift_refused (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_cleanup_requires_complete_chain_and_retained_failure_bytes (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_closed_without_authority_and_execute_refused_first (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_dynamic_census_accepts_different_complete_topologies (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_eight_retained_aliases_preserve_old22_and_authority1_with_fresh_authority2_names (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_exact_fetched_ref_required (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_exact_preparation_review_binds_code_and_actual_evidence (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_exact_two_file_repair_and_unaffected_rs011_hashes (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_materialization_calls_real_adapter_branch_and_request_boundary (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_materialization_refuses_source_only_release_before_any_mutation (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_names_are_fresh_except_required_owner_slot (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_nested_symlink_is_not_an_authenticated_alias (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_original_safety_body_ast_is_preserved_without_old_module_mutation (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_prepare_passes_only_explicit_nonexecuting_arguments (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_release_accepts_exact_external_identity (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_repair_review_rejects_extra_edits_inside_selected_production_file (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_replaced_alias_rejected_even_with_same_bytes_and_link_count (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_scratch19_frozen_default_leak_reproduced_and_prevented (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_scratch20_exclusion_mismatch_precedes_preparation (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_source_review_cannot_bind_different_authority (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_terminal_result_without_accepted_postflight_cannot_materialize (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_unaccepted_cleanup_is_not_authority (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\ntest_unlisted_link_cannot_hide_missing_alias (scripts.tests.test_prepare_native_exact_scratch22_authority2.Scratch22Authority2) ... ok\n\n----------------------------------------------------------------------\nRan 30 tests in 0.146s\n\nOK\n"
+    }
+  },
+  "failure_families": [
+    {
+      "name": "S22-NATIVE-SHUTDOWN-ERROR-PATH-1",
+      "actual_native_failures": 1,
+      "bounded_repairs": 1,
+      "reset": false
+    },
+    {
+      "name": "S22-OBSERVER-CAPTURE-BOUND-1",
+      "actual_observer_failures": 1,
+      "bounded_repair": "Separate wrapper/retirement owners; adapter does not reset or repair it",
+      "reset": false
+    }
+  ],
+  "next_action": "Independent source review of namespace/repair authority boundary. Freeze actual authority1 cleanup+quarantine-recovery contracts, integrate their existing accepted records without invented authority, then dispatcher chooses a new exact controller/preparation release. No live --materialize command is presently valid.",
+  "acceptance": {
+    "native_builds": 0,
+    "images": 0,
+    "guests": 0,
+    "formal_apps": 0,
+    "production_gates": 0,
+    "execution_release": false
+  }
+}

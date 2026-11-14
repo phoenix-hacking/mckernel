@@ -1,0 +1,49 @@
+{
+  "schema": "mckernel.native-exact-scratch18-image-build-attempt1-failure.v1",
+  "status": "FAIL_PRESERVED",
+  "candidate_sha": "89ab5c555aac9177a789efc67ddc775dacb25d6d",
+  "execution_release": {
+    "proposal_sha256": "7c76a6fb40dd77efbaa7836592aa1fd1ac6f5585a97bf5158495856059d65fe4",
+    "independent_decision": "PASS_EXECUTION",
+    "invocations": 1
+  },
+  "result": {
+    "exit_code": 1,
+    "failure_phase": "docker start before driver or compilation",
+    "error": "OCI runtime could not create /src/executer/user/lib/libdwarf/libdwarf beneath the read-only /src bind",
+    "owner_receipt": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-owner-evidence-89ab5c55-scratch18-retry2-20261001/owner-receipt.json",
+    "owner_receipt_sha256": "d5e0e3670409c61cddbbb80f8c26d29fb7856e6bf5f4615faaca782cbfb4f5ef",
+    "docker_log_sha256": "73c9fc18525a8eb9847b0ca74c69b1cef856c4b0d4bd3c799028a5682e05b2f0",
+    "start_stderr_sha256": "6f5381cac6a569c087b3a80705cbab8cbf916dc32cfc1ac9321589cd2fae484c",
+    "build_output_bytes": 0
+  },
+  "ownership": {
+    "container_id": "482d8bdb0e6186082531bcf73b801e45fed5e2f810162b12679a96d3d5845c13",
+    "container_name": "mckernel-image-a16e098cae6f43b09fb6fc847c568fc6",
+    "owner_nonce": "78a66b69ed7a4b41a3af541e2ce52422",
+    "state": "created",
+    "pid": 0,
+    "exit_code": 128,
+    "oom_killed": false,
+    "lease_absent": true,
+    "candidate_exclusion": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch18-image-1.json",
+      "device_inode": "1831:57654",
+      "sha256": "891e8e0d22d0682f1cc696b61e51712ce5f3fa30d674e3fbf8fe5c74d498b5c3"
+    },
+    "shared_exclusion": {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock",
+      "device_inode": "1831:57653",
+      "sha256": "792925a927f25eba9b286d80ad31c8940f642f91bf05919e5e75e3ee6efe2253"
+    }
+  },
+  "diagnosis": {
+    "scratch18_gitlink_mountpoint": "absent",
+    "c81_precedent_mountpoint": "present empty directory",
+    "deterministic": true,
+    "unchanged_retry_forbidden": true,
+    "correction_budget": "one bounded correction for this mountpoint family after separately reviewed cleanup"
+  },
+  "acceptance": "no image artifact, guest, application, production or OS acceptance",
+  "next": "independently review exact cleanup and a source-preserving mountpoint correction; do not retry unchanged"
+}

@@ -1,0 +1,2395 @@
+{
+  "schema": "mckernel.c964-a2f-f133.manifest-only-staging-retention-gap-and-six-copy-proposal.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Original coherent-image/module/deployment artifact retention only.",
+  "owner": "/root/m15_installed_leaf_review; explicit gpt-6.1-sol/MAX; depth1/no recursion; private-only writer",
+  "at_utc": "2026-11-12T20:11:13.922Z",
+  "status": "MANIFEST_JOIN_COMPLETE_SIX_MISSING_CAPSULES_PROPOSED_EXECUTION_UNISSUED",
+  "original_requirement_scope": "Existing c964/a2f compute image plus exact f133 matching deployment/module/guest assets; preserve this qualified cohort without rebuild, promotion or acceptance change.",
+  "cohort": {
+    "compute_source": "c964be3917c8f4c5031108aa927c84894584b667",
+    "compute_image_sha256": "a2f00a6105f20642db8ef95fe12ade0873120594531f325ef363a4bb59f0ff8a",
+    "native_manifest_sha256": "f13363e5eb31efee749e6fc2c9f9ca83f8d2304318e1b31c63318c20411f49d7",
+    "IHK_source_commit": "8d288b8bd81b50cc3a3f814d949b89bf416a6ec7",
+    "module_profile": "099/Linux6.12/config106055",
+    "stage_root": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1",
+    "source_and_native_current_bindings_changed": false
+  },
+  "source_references": {
+    "current_preserved_manifest": {
+      "path": "/home/holden/mckernel/docs/verification/m14-current-image-20261111/perf-supported-default-1/preserved-cohort/PRESERVED-COHORT.json",
+      "bytes": 17139,
+      "recorded_sha256": "6024f36ad02385f07f3988566c45d712e48e5f4d69395652f7e9c89d14e42b45"
+    },
+    "existing_Root25_row_manifest": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/preserved-c964-a2f00a61-1/PRESERVED-COHORT.json",
+      "bytes": 17139,
+      "sha256": "6024f36ad02385f07f3988566c45d712e48e5f4d69395652f7e9c89d14e42b45"
+    },
+    "existing_preservation_method_receipt": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/qualification-1/dispatch-owner-correction-1/PRESERVED-COHORT-AND-INDEPENDENT-RECEIPTS.json",
+      "status": "SIDECAR_OF_EXISTING_FROZEN_COMPONENT_QUALIFICATION_NO_NEW_GATE_OR_SUT_ACTION",
+      "all25_manifest_rows_reused_without_new_hash_round": true
+    },
+    "qualified43_rows": {
+      "original_path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-stage-qualification-p03-max-1/qualification-1/ACTUAL43-FILES-AND21-DIRECTORIES.json",
+      "original_sha256": "cdc2dd71804aa18756bdf498325f32356669639a36aabde3f89ca437c6ed0494",
+      "published_path": "docs/verification/native-admission-debug-20261111/a2f-actual-stage-and-new-generation-1/stage/qualification/ACTUAL43-FILES-AND21-DIRECTORIES.json",
+      "published_sha256": "cdc2dd71804aa18756bdf498325f32356669639a36aabde3f89ca437c6ed0494",
+      "bytes": 78281,
+      "private_cap_redacted": false
+    },
+    "qualified17_source_rows": {
+      "original_path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-stage-qualification-p03-max-1/qualification-1/ACTUAL-MANIFEST-AND17-SOURCE-ROWS.json",
+      "original_sha256": "b709dc4295591d64d899811b1294dcd5b28c256cb24a9f48673c00e9712b0868",
+      "published_path": "docs/verification/native-admission-debug-20261111/a2f-actual-stage-and-new-generation-1/stage/qualification/ACTUAL-MANIFEST-AND17-SOURCE-ROWS.json",
+      "published_sha256": "b709dc4295591d64d899811b1294dcd5b28c256cb24a9f48673c00e9712b0868",
+      "bytes": 26041,
+      "private_cap_redacted": false
+    },
+    "qualified_current_stage": {
+      "original_path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-stage-qualification-p03-max-1/qualification-1/QUALIFICATION.json",
+      "original_sha256": "4cc2e385d54cc7e291262e579150be8d6506b4155cc3d701079913c40eb738c0",
+      "published_path": "docs/verification/native-admission-debug-20261111/a2f-actual-stage-and-new-generation-1/stage/qualification/QUALIFICATION.json",
+      "published_sha256": "4cc2e385d54cc7e291262e579150be8d6506b4155cc3d701079913c40eb738c0",
+      "bytes": 8047,
+      "private_cap_redacted": false
+    },
+    "actual_archive_join": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-stage-qualification-p03-max-1/qualification-1/ACTUAL-BASE-AND-DERIVED-ARCHIVE-JOINS.json",
+      "bytes": 86631,
+      "recorded_sha256": "121b39664e6b365050bda8014f765535eea126439193f105f44e845ca2c1b2c9"
+    },
+    "durable_publication_index": {
+      "path": "/home/holden/mckernel/docs/verification/native-admission-debug-20261111/a2f-actual-stage-and-new-generation-1/PUBLICATION-SCOPE.json",
+      "scope": "Previously published matching raw evidence/identities; no new payload hash or staging validation."
+    },
+    "adopted_guide": {
+      "path": "/home/holden/mckernel/docs/development/M14-STABLE-BASELINE.md",
+      "bytes": 23231,
+      "sha256": "354580312e8201fedaa18a185468c1fab6999350fe85bda5fbc21f37fba58650",
+      "source_commit": "40d359aff7c0fd04260702b8a1ee699dd64f6425",
+      "adoption_record": "/home/holden/mckernel-work/resume-20261112T094452Z-baseline-guide-adoption-1/ADOPTION.json",
+      "source_text_equal": true,
+      "reference_only_CAMPAIGN_is_sole_active_plan": true,
+      "applicable_instructions": "Guide83-89: preserve only staging assets not already covered, use existing workflow after genuine current resource ownership permits it; no whole-tree copy/hash-only qualification round."
+    }
+  },
+  "method": "Compare ONLY manifest-listed path/content identities and existing declared preservation/publication records. Reuse exact qualified archive member/stream joins instead of reading payload content again. Current unprivileged stat checks were limited to25 retained rows, the six proposed source files and the already-published native manifest. No asset hashes, archives, ELF or source bodies were reread/rehashed.",
+  "current_25_row_preservation": {
+    "rows": 25,
+    "all_recorded_bytes_dev_inode_matches": true,
+    "all_current_nlink1_and_no_write_bits": true,
+    "stat_rows": [
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/preserved-c964-a2f00a61-1/build/kernel/mckernel.img",
+        "stat_matches_recorded_bytes_inode": true,
+        "readonly": true,
+        "nlink1": true
+      },
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/preserved-c964-a2f00a61-1/build/kernel/mckernel.img.map",
+        "stat_matches_recorded_bytes_inode": true,
+        "readonly": true,
+        "nlink1": true
+      },
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/preserved-c964-a2f00a61-1/build/kernel/rust/mckernel_rust.o",
+        "stat_matches_recorded_bytes_inode": true,
+        "readonly": true,
+        "nlink1": true
+      },
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/preserved-c964-a2f00a61-1/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "stat_matches_recorded_bytes_inode": true,
+        "readonly": true,
+        "nlink1": true
+      },
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/preserved-c964-a2f00a61-1/build/kernel/rust/freestanding/compiler_builtins.o",
+        "stat_matches_recorded_bytes_inode": true,
+        "readonly": true,
+        "nlink1": true
+      },
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/preserved-c964-a2f00a61-1/build/kernel/rust/freestanding/libcompiler_builtins.rmeta",
+        "stat_matches_recorded_bytes_inode": true,
+        "readonly": true,
+        "nlink1": true
+      },
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/preserved-c964-a2f00a61-1/build/kernel/rust/freestanding/compiler_builtins_integer.rs",
+        "stat_matches_recorded_bytes_inode": true,
+        "readonly": true,
+        "nlink1": true
+      },
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/preserved-c964-a2f00a61-1/build/kernel/rust/freestanding/compiler_builtins.raw.d",
+        "stat_matches_recorded_bytes_inode": true,
+        "readonly": true,
+        "nlink1": true
+      },
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/preserved-c964-a2f00a61-1/build/kernel/rust/freestanding/compiler_builtins.d",
+        "stat_matches_recorded_bytes_inode": true,
+        "readonly": true,
+        "nlink1": true
+      },
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/preserved-c964-a2f00a61-1/qualified-core-input/core.o",
+        "stat_matches_recorded_bytes_inode": true,
+        "readonly": true,
+        "nlink1": true
+      },
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/preserved-c964-a2f00a61-1/qualified-core-input/libcore.rmeta",
+        "stat_matches_recorded_bytes_inode": true,
+        "readonly": true,
+        "nlink1": true
+      },
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/preserved-c964-a2f00a61-1/build/kernel/CMakeFiles/mckernel.img.dir/mem.c.o",
+        "stat_matches_recorded_bytes_inode": true,
+        "readonly": true,
+        "nlink1": true
+      },
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/preserved-c964-a2f00a61-1/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+        "stat_matches_recorded_bytes_inode": true,
+        "readonly": true,
+        "nlink1": true
+      },
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/preserved-c964-a2f00a61-1/build/kernel/CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o",
+        "stat_matches_recorded_bytes_inode": true,
+        "readonly": true,
+        "nlink1": true
+      },
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/preserved-c964-a2f00a61-1/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/context.S.o",
+        "stat_matches_recorded_bytes_inode": true,
+        "readonly": true,
+        "nlink1": true
+      },
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/preserved-c964-a2f00a61-1/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+        "stat_matches_recorded_bytes_inode": true,
+        "readonly": true,
+        "nlink1": true
+      },
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/preserved-c964-a2f00a61-1/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/interrupt.S.o",
+        "stat_matches_recorded_bytes_inode": true,
+        "readonly": true,
+        "nlink1": true
+      },
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/preserved-c964-a2f00a61-1/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o",
+        "stat_matches_recorded_bytes_inode": true,
+        "readonly": true,
+        "nlink1": true
+      },
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/preserved-c964-a2f00a61-1/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "stat_matches_recorded_bytes_inode": true,
+        "readonly": true,
+        "nlink1": true
+      },
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/preserved-c964-a2f00a61-1/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/trampoline.S.o",
+        "stat_matches_recorded_bytes_inode": true,
+        "readonly": true,
+        "nlink1": true
+      },
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/preserved-c964-a2f00a61-1/build/kernel/config/smp-x86.lds",
+        "stat_matches_recorded_bytes_inode": true,
+        "readonly": true,
+        "nlink1": true
+      },
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/preserved-c964-a2f00a61-1/build/CMakeCache.txt",
+        "stat_matches_recorded_bytes_inode": true,
+        "readonly": true,
+        "nlink1": true
+      },
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/preserved-c964-a2f00a61-1/build/kernel/rust/mckernel_rust.raw.d",
+        "stat_matches_recorded_bytes_inode": true,
+        "readonly": true,
+        "nlink1": true
+      },
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/preserved-c964-a2f00a61-1/build/kernel/rust/mckernel_rust.d",
+        "stat_matches_recorded_bytes_inode": true,
+        "readonly": true,
+        "nlink1": true
+      },
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/preserved-c964-a2f00a61-1/build/kernel/CMakeFiles/mckernel.img.dir/link.txt",
+        "stat_matches_recorded_bytes_inode": true,
+        "readonly": true,
+        "nlink1": true
+      }
+    ],
+    "files_recopied": 0,
+    "content_hashes_recomputed": 0,
+    "source_cache_or_old_preserved_entries_modified": false
+  },
+  "counted_manifest_join": {
+    "qualified_base_regular_files": 43,
+    "qualified_base_directories": 21,
+    "qualified_native_consumed_rows": 17,
+    "qualified_archive_rows": 3,
+    "union_unique_current_stage_paths": 54,
+    "already_retained_by_existing_snapshot_or_durable_exact_record": 3,
+    "current_not_yet_protected_unique_paths": 51,
+    "covered_after_new_archive_copies_by_exact_member_records": 44,
+    "raw_base_recoverable_after_new_base_gzip_copy": 1,
+    "direct_new_protected_payload_files": 6,
+    "direct_new_protected_payload_bytes": 67930797,
+    "interpretation": "The54-path union is43 base-root files plus17 consumed paths and3 archive identities with duplicates joined. It is not a filesystem walk or a new whole-stage inventory. Currently51 lack a separate retained copy in the named records. Six new retained capsules will cover these51 identities; coverage is NOT claimed complete before actual copies/receipt."
+  },
+  "already_covered_without_new_copy": [
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/images/mckernel.img",
+      "bytes": 13349576,
+      "sha256": "a2f00a6105f20642db8ef95fe12ade0873120594531f325ef363a4bb59f0ff8a",
+      "protection_kind": "existing-independent-readonly-25-row-cohort",
+      "existing_preserved_path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/preserved-c964-a2f00a61-1/build/kernel/mckernel.img",
+      "accepted_record": {
+        "original_path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/mckernel.img",
+        "preserved_path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/preserved-c964-a2f00a61-1/build/kernel/mckernel.img",
+        "bytes": 13349576,
+        "sha256": "a2f00a6105f20642db8ef95fe12ade0873120594531f325ef363a4bb59f0ff8a",
+        "original_dev_inode": [
+          66306,
+          2246962
+        ],
+        "preserved_dev_inode": [
+          66306,
+          2246968
+        ],
+        "independent_inode": true
+      }
+    },
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/usr/local/smp-x86/kernel/mckernel.img",
+      "bytes": 13349576,
+      "sha256": "a2f00a6105f20642db8ef95fe12ade0873120594531f325ef363a4bb59f0ff8a",
+      "protection_kind": "existing-independent-readonly-25-row-cohort",
+      "existing_preserved_path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/preserved-c964-a2f00a61-1/build/kernel/mckernel.img",
+      "accepted_record": {
+        "original_path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/mckernel.img",
+        "preserved_path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/preserved-c964-a2f00a61-1/build/kernel/mckernel.img",
+        "bytes": 13349576,
+        "sha256": "a2f00a6105f20642db8ef95fe12ade0873120594531f325ef363a4bb59f0ff8a",
+        "original_dev_inode": [
+          66306,
+          2246962
+        ],
+        "preserved_dev_inode": [
+          66306,
+          2246968
+        ],
+        "independent_inode": true
+      }
+    },
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/native-diagnostic-manifest.json",
+      "bytes": 5994,
+      "sha256": "f13363e5eb31efee749e6fc2c9f9ca83f8d2304318e1b31c63318c20411f49d7",
+      "protection_kind": "existing-durable-published-artifact-record",
+      "existing_preserved_path": "/home/holden/mckernel/docs/verification/native-admission-debug-20261111/a2f-actual-stage-and-new-generation-1/stage/actual-output/native-diagnostic-manifest.json",
+      "accepted_record": {
+        "original_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/native-diagnostic-manifest.json",
+        "original_sha256": "f13363e5eb31efee749e6fc2c9f9ca83f8d2304318e1b31c63318c20411f49d7",
+        "published_path": "docs/verification/native-admission-debug-20261111/a2f-actual-stage-and-new-generation-1/stage/actual-output/native-diagnostic-manifest.json",
+        "published_sha256": "f13363e5eb31efee749e6fc2c9f9ca83f8d2304318e1b31c63318c20411f49d7",
+        "bytes": 5994,
+        "private_cap_redacted": false
+      }
+    }
+  ],
+  "archive_member_coverage_after_proposed_copy": [
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/bin/native-boot",
+      "bytes": 4493400,
+      "sha256": "cd50d3da3f8707a3bb1735da4873f9ac09e8ac6990abfbb423a7a518f4cd7818",
+      "recorded_HOST_identity": {
+        "device": 66306,
+        "inode": 49551916,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 493,
+        "nlink": 1
+      },
+      "member_coverage": [
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/base.cpio.gz",
+          "source_archive": "base.cpio.gz",
+          "member_name": "bin/native-boot",
+          "bytes": 4493400,
+          "sha256": "cd50d3da3f8707a3bb1735da4873f9ac09e8ac6990abfbb423a7a518f4cd7818",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        },
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz",
+          "source_archive": "derived.cpio.gz",
+          "member_name": "bin/native-boot",
+          "bytes": 4493400,
+          "sha256": "cd50d3da3f8707a3bb1735da4873f9ac09e8ac6990abfbb423a7a518f4cd7818",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        }
+      ],
+      "coverage_status": "NOT_YET_PROTECTED; becomes recoverable through the six-copy plan only after actual archive-copy receipt",
+      "source_scope": [
+        "qualified43-base-root",
+        "qualified17-native-consumed"
+      ]
+    },
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/ld-linux-x86-64.so.2",
+      "bytes": 930600,
+      "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b",
+      "recorded_HOST_identity": {
+        "device": 66306,
+        "inode": 49551920,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 493,
+        "nlink": 1
+      },
+      "member_coverage": [
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/base.cpio.gz",
+          "source_archive": "base.cpio.gz",
+          "member_name": "lib64/ld-linux-x86-64.so.2",
+          "bytes": 930600,
+          "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        },
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz",
+          "source_archive": "derived.cpio.gz",
+          "member_name": "lib64/ld-linux-x86-64.so.2",
+          "bytes": 930600,
+          "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        }
+      ],
+      "coverage_status": "NOT_YET_PROTECTED; becomes recoverable through the six-copy plan only after actual archive-copy receipt",
+      "source_scope": [
+        "qualified43-base-root",
+        "qualified17-native-consumed"
+      ]
+    },
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libacl.so.1",
+      "bytes": 40896,
+      "sha256": "342a0213a17809ee41816a95c939f11ba25ff92da53ae849bc88cf3da81649aa",
+      "recorded_HOST_identity": {
+        "device": 66306,
+        "inode": 49551932,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 493,
+        "nlink": 1
+      },
+      "member_coverage": [
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/base.cpio.gz",
+          "source_archive": "base.cpio.gz",
+          "member_name": "lib64/libacl.so.1",
+          "bytes": 40896,
+          "sha256": "342a0213a17809ee41816a95c939f11ba25ff92da53ae849bc88cf3da81649aa",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        },
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz",
+          "source_archive": "derived.cpio.gz",
+          "member_name": "lib64/libacl.so.1",
+          "bytes": 40896,
+          "sha256": "342a0213a17809ee41816a95c939f11ba25ff92da53ae849bc88cf3da81649aa",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        }
+      ],
+      "coverage_status": "NOT_YET_PROTECTED; becomes recoverable through the six-copy plan only after actual archive-copy receipt",
+      "source_scope": [
+        "qualified43-base-root"
+      ]
+    },
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libattr.so.1",
+      "bytes": 28296,
+      "sha256": "1369a9dd4a7bcd8d4bf71293b369f6d222a1ea12132d988ed529d796522076a0",
+      "recorded_HOST_identity": {
+        "device": 66306,
+        "inode": 49551934,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 493,
+        "nlink": 1
+      },
+      "member_coverage": [
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/base.cpio.gz",
+          "source_archive": "base.cpio.gz",
+          "member_name": "lib64/libattr.so.1",
+          "bytes": 28296,
+          "sha256": "1369a9dd4a7bcd8d4bf71293b369f6d222a1ea12132d988ed529d796522076a0",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        },
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz",
+          "source_archive": "derived.cpio.gz",
+          "member_name": "lib64/libattr.so.1",
+          "bytes": 28296,
+          "sha256": "1369a9dd4a7bcd8d4bf71293b369f6d222a1ea12132d988ed529d796522076a0",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        }
+      ],
+      "coverage_status": "NOT_YET_PROTECTED; becomes recoverable through the six-copy plan only after actual archive-copy receipt",
+      "source_scope": [
+        "qualified43-base-root"
+      ]
+    },
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libaudit.so.1",
+      "bytes": 192352,
+      "sha256": "ab76f679c3cc8aadde6cc961d6aede927b4891f761615233389d396a06c6f3cc",
+      "recorded_HOST_identity": {
+        "device": 66306,
+        "inode": 49551936,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 493,
+        "nlink": 1
+      },
+      "member_coverage": [
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/base.cpio.gz",
+          "source_archive": "base.cpio.gz",
+          "member_name": "lib64/libaudit.so.1",
+          "bytes": 192352,
+          "sha256": "ab76f679c3cc8aadde6cc961d6aede927b4891f761615233389d396a06c6f3cc",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        },
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz",
+          "source_archive": "derived.cpio.gz",
+          "member_name": "lib64/libaudit.so.1",
+          "bytes": 192352,
+          "sha256": "ab76f679c3cc8aadde6cc961d6aede927b4891f761615233389d396a06c6f3cc",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        }
+      ],
+      "coverage_status": "NOT_YET_PROTECTED; becomes recoverable through the six-copy plan only after actual archive-copy receipt",
+      "source_scope": [
+        "qualified43-base-root"
+      ]
+    },
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libblkid.so.1",
+      "bytes": 242128,
+      "sha256": "6149c97e401f088ee8e4d9681e0498486e41a90b90618b0dafca0b8545230143",
+      "recorded_HOST_identity": {
+        "device": 66306,
+        "inode": 49551938,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 493,
+        "nlink": 1
+      },
+      "member_coverage": [
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/base.cpio.gz",
+          "source_archive": "base.cpio.gz",
+          "member_name": "lib64/libblkid.so.1",
+          "bytes": 242128,
+          "sha256": "6149c97e401f088ee8e4d9681e0498486e41a90b90618b0dafca0b8545230143",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        },
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz",
+          "source_archive": "derived.cpio.gz",
+          "member_name": "lib64/libblkid.so.1",
+          "bytes": 242128,
+          "sha256": "6149c97e401f088ee8e4d9681e0498486e41a90b90618b0dafca0b8545230143",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        }
+      ],
+      "coverage_status": "NOT_YET_PROTECTED; becomes recoverable through the six-copy plan only after actual archive-copy receipt",
+      "source_scope": [
+        "qualified43-base-root"
+      ]
+    },
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libc.so.6",
+      "bytes": 2339896,
+      "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+      "recorded_HOST_identity": {
+        "device": 66306,
+        "inode": 49551940,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 493,
+        "nlink": 1
+      },
+      "member_coverage": [
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/base.cpio.gz",
+          "source_archive": "base.cpio.gz",
+          "member_name": "lib64/libc.so.6",
+          "bytes": 2339896,
+          "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        },
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz",
+          "source_archive": "derived.cpio.gz",
+          "member_name": "lib64/libc.so.6",
+          "bytes": 2339896,
+          "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        }
+      ],
+      "coverage_status": "NOT_YET_PROTECTED; becomes recoverable through the six-copy plan only after actual archive-copy receipt",
+      "source_scope": [
+        "qualified43-base-root",
+        "qualified17-native-consumed"
+      ]
+    },
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libcap-ng.so.0",
+      "bytes": 32336,
+      "sha256": "0ee946e3dbce118176795986e931d2c16c95734220c3d5d47d9de1ada9517832",
+      "recorded_HOST_identity": {
+        "device": 66306,
+        "inode": 49551942,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 493,
+        "nlink": 1
+      },
+      "member_coverage": [
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/base.cpio.gz",
+          "source_archive": "base.cpio.gz",
+          "member_name": "lib64/libcap-ng.so.0",
+          "bytes": 32336,
+          "sha256": "0ee946e3dbce118176795986e931d2c16c95734220c3d5d47d9de1ada9517832",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        },
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz",
+          "source_archive": "derived.cpio.gz",
+          "member_name": "lib64/libcap-ng.so.0",
+          "bytes": 32336,
+          "sha256": "0ee946e3dbce118176795986e931d2c16c95734220c3d5d47d9de1ada9517832",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        }
+      ],
+      "coverage_status": "NOT_YET_PROTECTED; becomes recoverable through the six-copy plan only after actual archive-copy receipt",
+      "source_scope": [
+        "qualified43-base-root"
+      ]
+    },
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libcap.so.2",
+      "bytes": 53168,
+      "sha256": "70e8dbe271e2ea63127fbc20270ce60541d1244f0b170888d258b86b2573bcbf",
+      "recorded_HOST_identity": {
+        "device": 66306,
+        "inode": 49551944,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 493,
+        "nlink": 1
+      },
+      "member_coverage": [
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/base.cpio.gz",
+          "source_archive": "base.cpio.gz",
+          "member_name": "lib64/libcap.so.2",
+          "bytes": 53168,
+          "sha256": "70e8dbe271e2ea63127fbc20270ce60541d1244f0b170888d258b86b2573bcbf",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        },
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz",
+          "source_archive": "derived.cpio.gz",
+          "member_name": "lib64/libcap.so.2",
+          "bytes": 53168,
+          "sha256": "70e8dbe271e2ea63127fbc20270ce60541d1244f0b170888d258b86b2573bcbf",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        }
+      ],
+      "coverage_status": "NOT_YET_PROTECTED; becomes recoverable through the six-copy plan only after actual archive-copy receipt",
+      "source_scope": [
+        "qualified43-base-root"
+      ]
+    },
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libcrypt.so.2",
+      "bytes": 197000,
+      "sha256": "3cb0985cf4ae9bf1f2eabee655527d1e7baf295a9c00c202781cc0e1ad8bd8f7",
+      "recorded_HOST_identity": {
+        "device": 66306,
+        "inode": 49551946,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 493,
+        "nlink": 1
+      },
+      "member_coverage": [
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/base.cpio.gz",
+          "source_archive": "base.cpio.gz",
+          "member_name": "lib64/libcrypt.so.2",
+          "bytes": 197000,
+          "sha256": "3cb0985cf4ae9bf1f2eabee655527d1e7baf295a9c00c202781cc0e1ad8bd8f7",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        },
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz",
+          "source_archive": "derived.cpio.gz",
+          "member_name": "lib64/libcrypt.so.2",
+          "bytes": 197000,
+          "sha256": "3cb0985cf4ae9bf1f2eabee655527d1e7baf295a9c00c202781cc0e1ad8bd8f7",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        }
+      ],
+      "coverage_status": "NOT_YET_PROTECTED; becomes recoverable through the six-copy plan only after actual archive-copy receipt",
+      "source_scope": [
+        "qualified43-base-root"
+      ]
+    },
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libcrypto.so.3",
+      "bytes": 5631152,
+      "sha256": "3da8e54521ce53e2a09d9ca0d1d5c3368b8abba252492cee21affd6146f72d82",
+      "recorded_HOST_identity": {
+        "device": 66306,
+        "inode": 49551948,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 493,
+        "nlink": 1
+      },
+      "member_coverage": [
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/base.cpio.gz",
+          "source_archive": "base.cpio.gz",
+          "member_name": "lib64/libcrypto.so.3",
+          "bytes": 5631152,
+          "sha256": "3da8e54521ce53e2a09d9ca0d1d5c3368b8abba252492cee21affd6146f72d82",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        },
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz",
+          "source_archive": "derived.cpio.gz",
+          "member_name": "lib64/libcrypto.so.3",
+          "bytes": 5631152,
+          "sha256": "3da8e54521ce53e2a09d9ca0d1d5c3368b8abba252492cee21affd6146f72d82",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        }
+      ],
+      "coverage_status": "NOT_YET_PROTECTED; becomes recoverable through the six-copy plan only after actual archive-copy receipt",
+      "source_scope": [
+        "qualified43-base-root"
+      ]
+    },
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libeconf.so.0",
+      "bytes": 49336,
+      "sha256": "4465c7bedc9db8bca0092b82ab414b651c2d437ac48e8b7f6b511bf8edb241ed",
+      "recorded_HOST_identity": {
+        "device": 66306,
+        "inode": 49551950,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 493,
+        "nlink": 1
+      },
+      "member_coverage": [
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/base.cpio.gz",
+          "source_archive": "base.cpio.gz",
+          "member_name": "lib64/libeconf.so.0",
+          "bytes": 49336,
+          "sha256": "4465c7bedc9db8bca0092b82ab414b651c2d437ac48e8b7f6b511bf8edb241ed",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        },
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz",
+          "source_archive": "derived.cpio.gz",
+          "member_name": "lib64/libeconf.so.0",
+          "bytes": 49336,
+          "sha256": "4465c7bedc9db8bca0092b82ab414b651c2d437ac48e8b7f6b511bf8edb241ed",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        }
+      ],
+      "coverage_status": "NOT_YET_PROTECTED; becomes recoverable through the six-copy plan only after actual archive-copy receipt",
+      "source_scope": [
+        "qualified43-base-root"
+      ]
+    },
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libgcc_s.so.1",
+      "bytes": 186528,
+      "sha256": "cc9c9d070f290bd0b39a7208f8850f6f6cb85491cf6aee80ef4502c3f040c2cb",
+      "recorded_HOST_identity": {
+        "device": 66306,
+        "inode": 49551952,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 493,
+        "nlink": 1
+      },
+      "member_coverage": [
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/base.cpio.gz",
+          "source_archive": "base.cpio.gz",
+          "member_name": "lib64/libgcc_s.so.1",
+          "bytes": 186528,
+          "sha256": "cc9c9d070f290bd0b39a7208f8850f6f6cb85491cf6aee80ef4502c3f040c2cb",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        },
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz",
+          "source_archive": "derived.cpio.gz",
+          "member_name": "lib64/libgcc_s.so.1",
+          "bytes": 186528,
+          "sha256": "cc9c9d070f290bd0b39a7208f8850f6f6cb85491cf6aee80ef4502c3f040c2cb",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        }
+      ],
+      "coverage_status": "NOT_YET_PROTECTED; becomes recoverable through the six-copy plan only after actual archive-copy receipt",
+      "source_scope": [
+        "qualified43-base-root"
+      ]
+    },
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/liblzma.so.5",
+      "bytes": 215496,
+      "sha256": "a1ccc4236761114ffa9efa797501b9f34398a20de75ca0ca22df9410cbe41bde",
+      "recorded_HOST_identity": {
+        "device": 66306,
+        "inode": 49551954,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 493,
+        "nlink": 1
+      },
+      "member_coverage": [
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/base.cpio.gz",
+          "source_archive": "base.cpio.gz",
+          "member_name": "lib64/liblzma.so.5",
+          "bytes": 215496,
+          "sha256": "a1ccc4236761114ffa9efa797501b9f34398a20de75ca0ca22df9410cbe41bde",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        },
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz",
+          "source_archive": "derived.cpio.gz",
+          "member_name": "lib64/liblzma.so.5",
+          "bytes": 215496,
+          "sha256": "a1ccc4236761114ffa9efa797501b9f34398a20de75ca0ca22df9410cbe41bde",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        }
+      ],
+      "coverage_status": "NOT_YET_PROTECTED; becomes recoverable through the six-copy plan only after actual archive-copy receipt",
+      "source_scope": [
+        "qualified43-base-root"
+      ]
+    },
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libm.so.6",
+      "bytes": 720624,
+      "sha256": "e5963b5e3cbd54ad0c9eb1dbd24f175e5728c09378831196c9bb53733ed8c2a6",
+      "recorded_HOST_identity": {
+        "device": 66306,
+        "inode": 49551956,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 493,
+        "nlink": 1
+      },
+      "member_coverage": [
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/base.cpio.gz",
+          "source_archive": "base.cpio.gz",
+          "member_name": "lib64/libm.so.6",
+          "bytes": 720624,
+          "sha256": "e5963b5e3cbd54ad0c9eb1dbd24f175e5728c09378831196c9bb53733ed8c2a6",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        },
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz",
+          "source_archive": "derived.cpio.gz",
+          "member_name": "lib64/libm.so.6",
+          "bytes": 720624,
+          "sha256": "e5963b5e3cbd54ad0c9eb1dbd24f175e5728c09378831196c9bb53733ed8c2a6",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        }
+      ],
+      "coverage_status": "NOT_YET_PROTECTED; becomes recoverable through the six-copy plan only after actual archive-copy receipt",
+      "source_scope": [
+        "qualified43-base-root"
+      ]
+    },
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libmount.so.1",
+      "bytes": 333512,
+      "sha256": "5199b49c7ad1565700fd649e9b13024919192128908536203fe95fff4adadb2c",
+      "recorded_HOST_identity": {
+        "device": 66306,
+        "inode": 49551958,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 493,
+        "nlink": 1
+      },
+      "member_coverage": [
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/base.cpio.gz",
+          "source_archive": "base.cpio.gz",
+          "member_name": "lib64/libmount.so.1",
+          "bytes": 333512,
+          "sha256": "5199b49c7ad1565700fd649e9b13024919192128908536203fe95fff4adadb2c",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        },
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz",
+          "source_archive": "derived.cpio.gz",
+          "member_name": "lib64/libmount.so.1",
+          "bytes": 333512,
+          "sha256": "5199b49c7ad1565700fd649e9b13024919192128908536203fe95fff4adadb2c",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        }
+      ],
+      "coverage_status": "NOT_YET_PROTECTED; becomes recoverable through the six-copy plan only after actual archive-copy receipt",
+      "source_scope": [
+        "qualified43-base-root"
+      ]
+    },
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libnuma.so.1",
+      "bytes": 62328,
+      "sha256": "be20c2b16781eea6c69d47816bf15869f90f2a009628c310049da1d2f3c31e4e",
+      "recorded_HOST_identity": {
+        "device": 66306,
+        "inode": 49551960,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 493,
+        "nlink": 1
+      },
+      "member_coverage": [
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/base.cpio.gz",
+          "source_archive": "base.cpio.gz",
+          "member_name": "lib64/libnuma.so.1",
+          "bytes": 62328,
+          "sha256": "be20c2b16781eea6c69d47816bf15869f90f2a009628c310049da1d2f3c31e4e",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        },
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz",
+          "source_archive": "derived.cpio.gz",
+          "member_name": "lib64/libnuma.so.1",
+          "bytes": 62328,
+          "sha256": "be20c2b16781eea6c69d47816bf15869f90f2a009628c310049da1d2f3c31e4e",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        }
+      ],
+      "coverage_status": "NOT_YET_PROTECTED; becomes recoverable through the six-copy plan only after actual archive-copy receipt",
+      "source_scope": [
+        "qualified43-base-root"
+      ]
+    },
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libpam.so.0",
+      "bytes": 73808,
+      "sha256": "3b27cfc9a13a898e7184ea90ecca48bce9e8721b820dff13b5b4a60bb06fc925",
+      "recorded_HOST_identity": {
+        "device": 66306,
+        "inode": 49551962,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 493,
+        "nlink": 1
+      },
+      "member_coverage": [
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/base.cpio.gz",
+          "source_archive": "base.cpio.gz",
+          "member_name": "lib64/libpam.so.0",
+          "bytes": 73808,
+          "sha256": "3b27cfc9a13a898e7184ea90ecca48bce9e8721b820dff13b5b4a60bb06fc925",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        },
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz",
+          "source_archive": "derived.cpio.gz",
+          "member_name": "lib64/libpam.so.0",
+          "bytes": 73808,
+          "sha256": "3b27cfc9a13a898e7184ea90ecca48bce9e8721b820dff13b5b4a60bb06fc925",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        }
+      ],
+      "coverage_status": "NOT_YET_PROTECTED; becomes recoverable through the six-copy plan only after actual archive-copy receipt",
+      "source_scope": [
+        "qualified43-base-root"
+      ]
+    },
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libpcre2-8.so.0",
+      "bytes": 665664,
+      "sha256": "ac0dcbb0620261d144a5255ce79c30c583593e7a29822df7a529c06922852e94",
+      "recorded_HOST_identity": {
+        "device": 66306,
+        "inode": 49551964,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 493,
+        "nlink": 1
+      },
+      "member_coverage": [
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/base.cpio.gz",
+          "source_archive": "base.cpio.gz",
+          "member_name": "lib64/libpcre2-8.so.0",
+          "bytes": 665664,
+          "sha256": "ac0dcbb0620261d144a5255ce79c30c583593e7a29822df7a529c06922852e94",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        },
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz",
+          "source_archive": "derived.cpio.gz",
+          "member_name": "lib64/libpcre2-8.so.0",
+          "bytes": 665664,
+          "sha256": "ac0dcbb0620261d144a5255ce79c30c583593e7a29822df7a529c06922852e94",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        }
+      ],
+      "coverage_status": "NOT_YET_PROTECTED; becomes recoverable through the six-copy plan only after actual archive-copy receipt",
+      "source_scope": [
+        "qualified43-base-root"
+      ]
+    },
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libproc2.so.0",
+      "bytes": 173848,
+      "sha256": "f5df8f1abb757eb85293854bd4cc4e6fcd0fa2f9e5399e56e28957cec66f8de2",
+      "recorded_HOST_identity": {
+        "device": 66306,
+        "inode": 49551966,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 493,
+        "nlink": 1
+      },
+      "member_coverage": [
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/base.cpio.gz",
+          "source_archive": "base.cpio.gz",
+          "member_name": "lib64/libproc2.so.0",
+          "bytes": 173848,
+          "sha256": "f5df8f1abb757eb85293854bd4cc4e6fcd0fa2f9e5399e56e28957cec66f8de2",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        },
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz",
+          "source_archive": "derived.cpio.gz",
+          "member_name": "lib64/libproc2.so.0",
+          "bytes": 173848,
+          "sha256": "f5df8f1abb757eb85293854bd4cc4e6fcd0fa2f9e5399e56e28957cec66f8de2",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        }
+      ],
+      "coverage_status": "NOT_YET_PROTECTED; becomes recoverable through the six-copy plan only after actual archive-copy receipt",
+      "source_scope": [
+        "qualified43-base-root"
+      ]
+    },
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libpthread.so.0",
+      "bytes": 15496,
+      "sha256": "f2791d4558ccad3fd23808f206e1b8e861b448b04d1e5cc75ae405e3e028fa1a",
+      "recorded_HOST_identity": {
+        "device": 66306,
+        "inode": 49551968,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 493,
+        "nlink": 1
+      },
+      "member_coverage": [
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/base.cpio.gz",
+          "source_archive": "base.cpio.gz",
+          "member_name": "lib64/libpthread.so.0",
+          "bytes": 15496,
+          "sha256": "f2791d4558ccad3fd23808f206e1b8e861b448b04d1e5cc75ae405e3e028fa1a",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        },
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz",
+          "source_archive": "derived.cpio.gz",
+          "member_name": "lib64/libpthread.so.0",
+          "bytes": 15496,
+          "sha256": "f2791d4558ccad3fd23808f206e1b8e861b448b04d1e5cc75ae405e3e028fa1a",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        }
+      ],
+      "coverage_status": "NOT_YET_PROTECTED; becomes recoverable through the six-copy plan only after actual archive-copy receipt",
+      "source_scope": [
+        "qualified43-base-root"
+      ]
+    },
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libseccomp.so.2",
+      "bytes": 135488,
+      "sha256": "fd624d73c660ffc8dc6dccb714223112285f2460dec7a6b1e31efdb65373a015",
+      "recorded_HOST_identity": {
+        "device": 66306,
+        "inode": 49551970,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 493,
+        "nlink": 1
+      },
+      "member_coverage": [
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/base.cpio.gz",
+          "source_archive": "base.cpio.gz",
+          "member_name": "lib64/libseccomp.so.2",
+          "bytes": 135488,
+          "sha256": "fd624d73c660ffc8dc6dccb714223112285f2460dec7a6b1e31efdb65373a015",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        },
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz",
+          "source_archive": "derived.cpio.gz",
+          "member_name": "lib64/libseccomp.so.2",
+          "bytes": 135488,
+          "sha256": "fd624d73c660ffc8dc6dccb714223112285f2460dec7a6b1e31efdb65373a015",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        }
+      ],
+      "coverage_status": "NOT_YET_PROTECTED; becomes recoverable through the six-copy plan only after actual archive-copy receipt",
+      "source_scope": [
+        "qualified43-base-root"
+      ]
+    },
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libselinux.so.1",
+      "bytes": 200664,
+      "sha256": "79e73dd27d4a90f25969c43c298ad32aa21c718c8508ef86c5a8e6ee083723a9",
+      "recorded_HOST_identity": {
+        "device": 66306,
+        "inode": 49551972,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 493,
+        "nlink": 1
+      },
+      "member_coverage": [
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/base.cpio.gz",
+          "source_archive": "base.cpio.gz",
+          "member_name": "lib64/libselinux.so.1",
+          "bytes": 200664,
+          "sha256": "79e73dd27d4a90f25969c43c298ad32aa21c718c8508ef86c5a8e6ee083723a9",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        },
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz",
+          "source_archive": "derived.cpio.gz",
+          "member_name": "lib64/libselinux.so.1",
+          "bytes": 200664,
+          "sha256": "79e73dd27d4a90f25969c43c298ad32aa21c718c8508ef86c5a8e6ee083723a9",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        }
+      ],
+      "coverage_status": "NOT_YET_PROTECTED; becomes recoverable through the six-copy plan only after actual archive-copy receipt",
+      "source_scope": [
+        "qualified43-base-root"
+      ]
+    },
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libsystemd.so.0",
+      "bytes": 1225176,
+      "sha256": "88ce44c4762330ddb10c33ea0c6fa264af74ce7d204166221a6f4156304c172c",
+      "recorded_HOST_identity": {
+        "device": 66306,
+        "inode": 49551974,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 493,
+        "nlink": 1
+      },
+      "member_coverage": [
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/base.cpio.gz",
+          "source_archive": "base.cpio.gz",
+          "member_name": "lib64/libsystemd.so.0",
+          "bytes": 1225176,
+          "sha256": "88ce44c4762330ddb10c33ea0c6fa264af74ce7d204166221a6f4156304c172c",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        },
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz",
+          "source_archive": "derived.cpio.gz",
+          "member_name": "lib64/libsystemd.so.0",
+          "bytes": 1225176,
+          "sha256": "88ce44c4762330ddb10c33ea0c6fa264af74ce7d204166221a6f4156304c172c",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        }
+      ],
+      "coverage_status": "NOT_YET_PROTECTED; becomes recoverable through the six-copy plan only after actual archive-copy receipt",
+      "source_scope": [
+        "qualified43-base-root"
+      ]
+    },
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libz.so.1",
+      "bytes": 140824,
+      "sha256": "2fd5dcd6bc0953f3db71958b10c0cdf55ce49e1ceb4ab9d1f869398e39e994eb",
+      "recorded_HOST_identity": {
+        "device": 66306,
+        "inode": 49551976,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 493,
+        "nlink": 1
+      },
+      "member_coverage": [
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/base.cpio.gz",
+          "source_archive": "base.cpio.gz",
+          "member_name": "lib64/libz.so.1",
+          "bytes": 140824,
+          "sha256": "2fd5dcd6bc0953f3db71958b10c0cdf55ce49e1ceb4ab9d1f869398e39e994eb",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        },
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz",
+          "source_archive": "derived.cpio.gz",
+          "member_name": "lib64/libz.so.1",
+          "bytes": 140824,
+          "sha256": "2fd5dcd6bc0953f3db71958b10c0cdf55ce49e1ceb4ab9d1f869398e39e994eb",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        }
+      ],
+      "coverage_status": "NOT_YET_PROTECTED; becomes recoverable through the six-copy plan only after actual archive-copy receipt",
+      "source_scope": [
+        "qualified43-base-root"
+      ]
+    },
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libzstd.so.1",
+      "bytes": 729608,
+      "sha256": "250dc1e1302e3eedd9f483c7cb3d52ab15882bf9d12072539cc4f06660b384e1",
+      "recorded_HOST_identity": {
+        "device": 66306,
+        "inode": 49551978,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 493,
+        "nlink": 1
+      },
+      "member_coverage": [
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/base.cpio.gz",
+          "source_archive": "base.cpio.gz",
+          "member_name": "lib64/libzstd.so.1",
+          "bytes": 729608,
+          "sha256": "250dc1e1302e3eedd9f483c7cb3d52ab15882bf9d12072539cc4f06660b384e1",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        },
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz",
+          "source_archive": "derived.cpio.gz",
+          "member_name": "lib64/libzstd.so.1",
+          "bytes": 729608,
+          "sha256": "250dc1e1302e3eedd9f483c7cb3d52ab15882bf9d12072539cc4f06660b384e1",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        }
+      ],
+      "coverage_status": "NOT_YET_PROTECTED; becomes recoverable through the six-copy plan only after actual archive-copy receipt",
+      "source_scope": [
+        "qualified43-base-root"
+      ]
+    },
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/modules/ihk-smp-x86_64.ko",
+      "bytes": 13092960,
+      "sha256": "ae67f463920ae6267710624139c56ef5dcfa8d1c60f4fc1a42f0e52604066696",
+      "recorded_HOST_identity": {
+        "device": 66306,
+        "inode": 49551980,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 420,
+        "nlink": 1
+      },
+      "member_coverage": [
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/base.cpio.gz",
+          "source_archive": "base.cpio.gz",
+          "member_name": "modules/ihk-smp-x86_64.ko",
+          "bytes": 13092960,
+          "sha256": "ae67f463920ae6267710624139c56ef5dcfa8d1c60f4fc1a42f0e52604066696",
+          "archive_mode": 33188,
+          "archive_uid": 0,
+          "archive_gid": 0
+        },
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz",
+          "source_archive": "derived.cpio.gz",
+          "member_name": "modules/ihk-smp-x86_64.ko",
+          "bytes": 13092960,
+          "sha256": "ae67f463920ae6267710624139c56ef5dcfa8d1c60f4fc1a42f0e52604066696",
+          "archive_mode": 33188,
+          "archive_uid": 0,
+          "archive_gid": 0
+        }
+      ],
+      "coverage_status": "NOT_YET_PROTECTED; becomes recoverable through the six-copy plan only after actual archive-copy receipt",
+      "source_scope": [
+        "qualified43-base-root",
+        "qualified17-native-consumed"
+      ]
+    },
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/modules/ihk.ko",
+      "bytes": 1521480,
+      "sha256": "04f5d3e0dbf0c70b7ff5aeb281fabda310751bc45c4916cb582575cf3f81155e",
+      "recorded_HOST_identity": {
+        "device": 66306,
+        "inode": 49551982,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 420,
+        "nlink": 1
+      },
+      "member_coverage": [
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/base.cpio.gz",
+          "source_archive": "base.cpio.gz",
+          "member_name": "modules/ihk.ko",
+          "bytes": 1521480,
+          "sha256": "04f5d3e0dbf0c70b7ff5aeb281fabda310751bc45c4916cb582575cf3f81155e",
+          "archive_mode": 33188,
+          "archive_uid": 0,
+          "archive_gid": 0
+        },
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz",
+          "source_archive": "derived.cpio.gz",
+          "member_name": "modules/ihk.ko",
+          "bytes": 1521480,
+          "sha256": "04f5d3e0dbf0c70b7ff5aeb281fabda310751bc45c4916cb582575cf3f81155e",
+          "archive_mode": 33188,
+          "archive_uid": 0,
+          "archive_gid": 0
+        }
+      ],
+      "coverage_status": "NOT_YET_PROTECTED; becomes recoverable through the six-copy plan only after actual archive-copy receipt",
+      "source_scope": [
+        "qualified43-base-root",
+        "qualified17-native-consumed"
+      ]
+    },
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/modules/mcctrl.ko",
+      "bytes": 2374656,
+      "sha256": "dc46a4f552776d6f9200cbdc8127882ea3f5d69d119f3e5b00672dce234eabcc",
+      "recorded_HOST_identity": {
+        "device": 66306,
+        "inode": 49551984,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 420,
+        "nlink": 1
+      },
+      "member_coverage": [
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/base.cpio.gz",
+          "source_archive": "base.cpio.gz",
+          "member_name": "modules/mcctrl.ko",
+          "bytes": 2374656,
+          "sha256": "dc46a4f552776d6f9200cbdc8127882ea3f5d69d119f3e5b00672dce234eabcc",
+          "archive_mode": 33188,
+          "archive_uid": 0,
+          "archive_gid": 0
+        },
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz",
+          "source_archive": "derived.cpio.gz",
+          "member_name": "modules/mcctrl.ko",
+          "bytes": 2374656,
+          "sha256": "dc46a4f552776d6f9200cbdc8127882ea3f5d69d119f3e5b00672dce234eabcc",
+          "archive_mode": 33188,
+          "archive_uid": 0,
+          "archive_gid": 0
+        }
+      ],
+      "coverage_status": "NOT_YET_PROTECTED; becomes recoverable through the six-copy plan only after actual archive-copy receipt",
+      "source_scope": [
+        "qualified43-base-root",
+        "qualified17-native-consumed"
+      ]
+    },
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/sbin/insmod",
+      "bytes": 182088,
+      "sha256": "7e91f52ed2cd5e2c4f82de4bb07bbaa7179cd5c053b7afcf2fd231056681ed55",
+      "recorded_HOST_identity": {
+        "device": 66306,
+        "inode": 49551986,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 493,
+        "nlink": 1
+      },
+      "member_coverage": [
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/base.cpio.gz",
+          "source_archive": "base.cpio.gz",
+          "member_name": "sbin/insmod",
+          "bytes": 182088,
+          "sha256": "7e91f52ed2cd5e2c4f82de4bb07bbaa7179cd5c053b7afcf2fd231056681ed55",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        },
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz",
+          "source_archive": "derived.cpio.gz",
+          "member_name": "sbin/insmod",
+          "bytes": 182088,
+          "sha256": "7e91f52ed2cd5e2c4f82de4bb07bbaa7179cd5c053b7afcf2fd231056681ed55",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        }
+      ],
+      "coverage_status": "NOT_YET_PROTECTED; becomes recoverable through the six-copy plan only after actual archive-copy receipt",
+      "source_scope": [
+        "qualified43-base-root"
+      ]
+    },
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/usr/bin/chown",
+      "bytes": 52,
+      "sha256": "497a658c90080afd7bba33da8297fdb1be37cf36a3465a344164a8cb14390b53",
+      "recorded_HOST_identity": {
+        "device": 66306,
+        "inode": 49551988,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 365,
+        "nlink": 1
+      },
+      "member_coverage": [
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/base.cpio.gz",
+          "source_archive": "base.cpio.gz",
+          "member_name": "usr/bin/chown",
+          "bytes": 52,
+          "sha256": "497a658c90080afd7bba33da8297fdb1be37cf36a3465a344164a8cb14390b53",
+          "archive_mode": 33133,
+          "archive_uid": 0,
+          "archive_gid": 0
+        },
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz",
+          "source_archive": "derived.cpio.gz",
+          "member_name": "usr/bin/chown",
+          "bytes": 52,
+          "sha256": "497a658c90080afd7bba33da8297fdb1be37cf36a3465a344164a8cb14390b53",
+          "archive_mode": 33133,
+          "archive_uid": 0,
+          "archive_gid": 0
+        }
+      ],
+      "coverage_status": "NOT_YET_PROTECTED; becomes recoverable through the six-copy plan only after actual archive-copy receipt",
+      "source_scope": [
+        "qualified43-base-root"
+      ]
+    },
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/usr/bin/coreutils",
+      "bytes": 1347728,
+      "sha256": "8e7928bf899599dbe98a4baaf2b5cba78a0b003213ab83104182e31475c068ff",
+      "recorded_HOST_identity": {
+        "device": 66306,
+        "inode": 49551990,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 493,
+        "nlink": 1
+      },
+      "member_coverage": [
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/base.cpio.gz",
+          "source_archive": "base.cpio.gz",
+          "member_name": "usr/bin/coreutils",
+          "bytes": 1347728,
+          "sha256": "8e7928bf899599dbe98a4baaf2b5cba78a0b003213ab83104182e31475c068ff",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        },
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz",
+          "source_archive": "derived.cpio.gz",
+          "member_name": "usr/bin/coreutils",
+          "bytes": 1347728,
+          "sha256": "8e7928bf899599dbe98a4baaf2b5cba78a0b003213ab83104182e31475c068ff",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        }
+      ],
+      "coverage_status": "NOT_YET_PROTECTED; becomes recoverable through the six-copy plan only after actual archive-copy receipt",
+      "source_scope": [
+        "qualified43-base-root"
+      ]
+    },
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/usr/bin/pidof",
+      "bytes": 24064,
+      "sha256": "66a8f1ea5012d82ac6979165feb6bcc818532e57c9367c5b4bd095624d138312",
+      "recorded_HOST_identity": {
+        "device": 66306,
+        "inode": 49551992,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 493,
+        "nlink": 1
+      },
+      "member_coverage": [
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/base.cpio.gz",
+          "source_archive": "base.cpio.gz",
+          "member_name": "usr/bin/pidof",
+          "bytes": 24064,
+          "sha256": "66a8f1ea5012d82ac6979165feb6bcc818532e57c9367c5b4bd095624d138312",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        },
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz",
+          "source_archive": "derived.cpio.gz",
+          "member_name": "usr/bin/pidof",
+          "bytes": 24064,
+          "sha256": "66a8f1ea5012d82ac6979165feb6bcc818532e57c9367c5b4bd095624d138312",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        }
+      ],
+      "coverage_status": "NOT_YET_PROTECTED; becomes recoverable through the six-copy plan only after actual archive-copy receipt",
+      "source_scope": [
+        "qualified43-base-root"
+      ]
+    },
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/usr/bin/sync",
+      "bytes": 51,
+      "sha256": "5f3ecf316cc8d0461cdc69e55f97c575a2c37f250e77461ac6241d049d65b177",
+      "recorded_HOST_identity": {
+        "device": 66306,
+        "inode": 49551994,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 365,
+        "nlink": 1
+      },
+      "member_coverage": [
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/base.cpio.gz",
+          "source_archive": "base.cpio.gz",
+          "member_name": "usr/bin/sync",
+          "bytes": 51,
+          "sha256": "5f3ecf316cc8d0461cdc69e55f97c575a2c37f250e77461ac6241d049d65b177",
+          "archive_mode": 33133,
+          "archive_uid": 0,
+          "archive_gid": 0
+        },
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz",
+          "source_archive": "derived.cpio.gz",
+          "member_name": "usr/bin/sync",
+          "bytes": 51,
+          "sha256": "5f3ecf316cc8d0461cdc69e55f97c575a2c37f250e77461ac6241d049d65b177",
+          "archive_mode": 33133,
+          "archive_uid": 0,
+          "archive_gid": 0
+        }
+      ],
+      "coverage_status": "NOT_YET_PROTECTED; becomes recoverable through the six-copy plan only after actual archive-copy receipt",
+      "source_scope": [
+        "qualified43-base-root"
+      ]
+    },
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/usr/bin/systemctl",
+      "bytes": 326688,
+      "sha256": "c1ab70e9b250c2fdfa49373d9748842846a84eaa971eac40430d0eeb607a2bec",
+      "recorded_HOST_identity": {
+        "device": 66306,
+        "inode": 49551996,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 493,
+        "nlink": 1
+      },
+      "member_coverage": [
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/base.cpio.gz",
+          "source_archive": "base.cpio.gz",
+          "member_name": "usr/bin/systemctl",
+          "bytes": 326688,
+          "sha256": "c1ab70e9b250c2fdfa49373d9748842846a84eaa971eac40430d0eeb607a2bec",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        },
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz",
+          "source_archive": "derived.cpio.gz",
+          "member_name": "usr/bin/systemctl",
+          "bytes": 326688,
+          "sha256": "c1ab70e9b250c2fdfa49373d9748842846a84eaa971eac40430d0eeb607a2bec",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        }
+      ],
+      "coverage_status": "NOT_YET_PROTECTED; becomes recoverable through the six-copy plan only after actual archive-copy receipt",
+      "source_scope": [
+        "qualified43-base-root"
+      ]
+    },
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/usr/bin/tee",
+      "bytes": 50,
+      "sha256": "97a3eca66552d324751b1e8e5af6ca4295328b98fa57bc43f1f81cc0a53e197e",
+      "recorded_HOST_identity": {
+        "device": 66306,
+        "inode": 49551998,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 365,
+        "nlink": 1
+      },
+      "member_coverage": [
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/base.cpio.gz",
+          "source_archive": "base.cpio.gz",
+          "member_name": "usr/bin/tee",
+          "bytes": 50,
+          "sha256": "97a3eca66552d324751b1e8e5af6ca4295328b98fa57bc43f1f81cc0a53e197e",
+          "archive_mode": 33133,
+          "archive_uid": 0,
+          "archive_gid": 0
+        },
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz",
+          "source_archive": "derived.cpio.gz",
+          "member_name": "usr/bin/tee",
+          "bytes": 50,
+          "sha256": "97a3eca66552d324751b1e8e5af6ca4295328b98fa57bc43f1f81cc0a53e197e",
+          "archive_mode": 33133,
+          "archive_uid": 0,
+          "archive_gid": 0
+        }
+      ],
+      "coverage_status": "NOT_YET_PROTECTED; becomes recoverable through the six-copy plan only after actual archive-copy receipt",
+      "source_scope": [
+        "qualified43-base-root"
+      ]
+    },
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/usr/lib64/systemd/libsystemd-shared-257-23.el10_2.1.rocky.0.1.so",
+      "bytes": 4930680,
+      "sha256": "eadc13fc65d2c132427d03fcac5c4543a29b33d8dccf18ca3d1a1a630d42ba96",
+      "recorded_HOST_identity": {
+        "device": 66306,
+        "inode": 49552000,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 493,
+        "nlink": 1
+      },
+      "member_coverage": [
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/base.cpio.gz",
+          "source_archive": "base.cpio.gz",
+          "member_name": "usr/lib64/systemd/libsystemd-shared-257-23.el10_2.1.rocky.0.1.so",
+          "bytes": 4930680,
+          "sha256": "eadc13fc65d2c132427d03fcac5c4543a29b33d8dccf18ca3d1a1a630d42ba96",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        },
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz",
+          "source_archive": "derived.cpio.gz",
+          "member_name": "usr/lib64/systemd/libsystemd-shared-257-23.el10_2.1.rocky.0.1.so",
+          "bytes": 4930680,
+          "sha256": "eadc13fc65d2c132427d03fcac5c4543a29b33d8dccf18ca3d1a1a630d42ba96",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        }
+      ],
+      "coverage_status": "NOT_YET_PROTECTED; becomes recoverable through the six-copy plan only after actual archive-copy receipt",
+      "source_scope": [
+        "qualified43-base-root"
+      ]
+    },
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/usr/local/lib64/libihk.so",
+      "bytes": 12095128,
+      "sha256": "b7bcafd0923de851cd04b3934207e7217065e28434e95e505d4ed5fd4bfc96c2",
+      "recorded_HOST_identity": {
+        "device": 66306,
+        "inode": 49552002,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 493,
+        "nlink": 1
+      },
+      "member_coverage": [
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/base.cpio.gz",
+          "source_archive": "base.cpio.gz",
+          "member_name": "usr/local/lib64/libihk.so",
+          "bytes": 12095128,
+          "sha256": "b7bcafd0923de851cd04b3934207e7217065e28434e95e505d4ed5fd4bfc96c2",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        },
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz",
+          "source_archive": "derived.cpio.gz",
+          "member_name": "usr/local/lib64/libihk.so",
+          "bytes": 12095128,
+          "sha256": "b7bcafd0923de851cd04b3934207e7217065e28434e95e505d4ed5fd4bfc96c2",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        }
+      ],
+      "coverage_status": "NOT_YET_PROTECTED; becomes recoverable through the six-copy plan only after actual archive-copy receipt",
+      "source_scope": [
+        "qualified43-base-root"
+      ]
+    },
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/usr/local/sbin/ihkconfig",
+      "bytes": 40960,
+      "sha256": "95b661ae705775b0806e1f132758b155fba27ba062a16c82a3b32e623751a87b",
+      "recorded_HOST_identity": {
+        "device": 66306,
+        "inode": 49552004,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 493,
+        "nlink": 1
+      },
+      "member_coverage": [
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/base.cpio.gz",
+          "source_archive": "base.cpio.gz",
+          "member_name": "usr/local/sbin/ihkconfig",
+          "bytes": 40960,
+          "sha256": "95b661ae705775b0806e1f132758b155fba27ba062a16c82a3b32e623751a87b",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        },
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz",
+          "source_archive": "derived.cpio.gz",
+          "member_name": "usr/local/sbin/ihkconfig",
+          "bytes": 40960,
+          "sha256": "95b661ae705775b0806e1f132758b155fba27ba062a16c82a3b32e623751a87b",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        }
+      ],
+      "coverage_status": "NOT_YET_PROTECTED; becomes recoverable through the six-copy plan only after actual archive-copy receipt",
+      "source_scope": [
+        "qualified43-base-root"
+      ]
+    },
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/usr/local/sbin/ihkosctl",
+      "bytes": 37776,
+      "sha256": "85bb95dad74941c680e6f43078648569b2de1b0aa7b449a1a81b59ed0844c672",
+      "recorded_HOST_identity": {
+        "device": 66306,
+        "inode": 49552006,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 493,
+        "nlink": 1
+      },
+      "member_coverage": [
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/base.cpio.gz",
+          "source_archive": "base.cpio.gz",
+          "member_name": "usr/local/sbin/ihkosctl",
+          "bytes": 37776,
+          "sha256": "85bb95dad74941c680e6f43078648569b2de1b0aa7b449a1a81b59ed0844c672",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        },
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz",
+          "source_archive": "derived.cpio.gz",
+          "member_name": "usr/local/sbin/ihkosctl",
+          "bytes": 37776,
+          "sha256": "85bb95dad74941c680e6f43078648569b2de1b0aa7b449a1a81b59ed0844c672",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        }
+      ],
+      "coverage_status": "NOT_YET_PROTECTED; becomes recoverable through the six-copy plan only after actual archive-copy receipt",
+      "source_scope": [
+        "qualified43-base-root"
+      ]
+    },
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/usr/sbin/getenforce",
+      "bytes": 15792,
+      "sha256": "f0ee5942bf7c31e995da955022d676e73734ac71367efe22b262356bc93dc788",
+      "recorded_HOST_identity": {
+        "device": 66306,
+        "inode": 49552012,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 493,
+        "nlink": 1
+      },
+      "member_coverage": [
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/base.cpio.gz",
+          "source_archive": "base.cpio.gz",
+          "member_name": "usr/sbin/getenforce",
+          "bytes": 15792,
+          "sha256": "f0ee5942bf7c31e995da955022d676e73734ac71367efe22b262356bc93dc788",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        },
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz",
+          "source_archive": "derived.cpio.gz",
+          "member_name": "usr/sbin/getenforce",
+          "bytes": 15792,
+          "sha256": "f0ee5942bf7c31e995da955022d676e73734ac71367efe22b262356bc93dc788",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        }
+      ],
+      "coverage_status": "NOT_YET_PROTECTED; becomes recoverable through the six-copy plan only after actual archive-copy receipt",
+      "source_scope": [
+        "qualified43-base-root"
+      ]
+    },
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/assets/mcexec",
+      "bytes": 398096,
+      "sha256": "df65517e79c5f0923cd7c1547469f645dd2857648a596349781d5e62c79682b4",
+      "recorded_HOST_identity": {
+        "device": 66306,
+        "inode": 49552024,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 493,
+        "nlink": 1
+      },
+      "member_coverage": [
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz",
+          "source_archive": "derived.cpio.gz",
+          "member_name": "bin/mcexec",
+          "bytes": 398096,
+          "sha256": "df65517e79c5f0923cd7c1547469f645dd2857648a596349781d5e62c79682b4",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        }
+      ],
+      "coverage_status": "NOT_YET_PROTECTED; becomes recoverable through the six-copy plan only after actual archive-copy receipt",
+      "source_scope": [
+        "qualified17-native-consumed"
+      ]
+    },
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/assets/signal.alternate-repeat",
+      "bytes": 18736,
+      "sha256": "77e8dfe6f8089f18b22524ad474e057cb061d67501f9e9fdb4f391dd4790f45d",
+      "recorded_HOST_identity": {
+        "device": 66306,
+        "inode": 49552026,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 493,
+        "nlink": 1
+      },
+      "member_coverage": [
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz",
+          "source_archive": "derived.cpio.gz",
+          "member_name": "apps/signal.alternate-repeat",
+          "bytes": 18736,
+          "sha256": "77e8dfe6f8089f18b22524ad474e057cb061d67501f9e9fdb4f391dd4790f45d",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        }
+      ],
+      "coverage_status": "NOT_YET_PROTECTED; becomes recoverable through the six-copy plan only after actual archive-copy receipt",
+      "source_scope": [
+        "qualified17-native-consumed"
+      ]
+    },
+    {
+      "source_path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/assets/collector",
+      "bytes": 1029880,
+      "sha256": "9a553f4a33d4ed99b106bc4795bb34e75071dbbf08469115a0765f4f7f364914",
+      "recorded_HOST_identity": {
+        "device": 66306,
+        "inode": 49552028,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 493,
+        "nlink": 1
+      },
+      "member_coverage": [
+        {
+          "retention_archive_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz",
+          "source_archive": "derived.cpio.gz",
+          "member_name": "init",
+          "bytes": 1029880,
+          "sha256": "9a553f4a33d4ed99b106bc4795bb34e75071dbbf08469115a0765f4f7f364914",
+          "archive_mode": 33261,
+          "archive_uid": 0,
+          "archive_gid": 0
+        }
+      ],
+      "coverage_status": "NOT_YET_PROTECTED; becomes recoverable through the six-copy plan only after actual archive-copy receipt",
+      "source_scope": [
+        "qualified17-native-consumed"
+      ]
+    }
+  ],
+  "raw_base_without_redundant81MB_copy": {
+    "source": {
+      "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/base.cpio",
+      "bytes": 81807360,
+      "sha256": "e9b8250467e5f8be29d2870398bc474946bf2e04cdff57e3198a53f9260a3dda",
+      "identity": {
+        "device": 66306,
+        "inode": 49552014,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 384,
+        "nlink": 1
+      }
+    },
+    "base_gzip_source": {
+      "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/base.cpio.gz",
+      "bytes": 25589058,
+      "sha256": "b2250121357ffa70c8e781d062c5f6e0720ec978f3cf352765b5cbdc6ee0d0a4",
+      "identity": {
+        "device": 66306,
+        "inode": 49552016,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 384,
+        "nlink": 1
+      }
+    },
+    "proposed_base_gzip_destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/base.cpio.gz",
+    "existing_qualified_uncompressed_bytes": 81807360,
+    "existing_qualified_uncompressed_sha256": "e9b8250467e5f8be29d2870398bc474946bf2e04cdff57e3198a53f9260a3dda",
+    "exact_raw_base_stream_join": true,
+    "why_no_raw_copy": "Accepted121b already proves the base gzip decompresses to the exact81,807,360B/e9b825 raw base stream. Retaining the unchanged b225 gzip plus that existing proof retains the raw bytes recoverably; do not copy or regenerate base.cpio.",
+    "no_decompression_or_revalidation_by_this_worker": true
+  },
+  "missing_only_copy_selection": [
+    {
+      "source": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/assets/bzImage",
+      "destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/assets/bzImage",
+      "relative_path": "assets/bzImage",
+      "bytes": 16134144,
+      "sha256": "415b951d9d83f62ec9253eee43ffbd0c6daf3fa02b25618d995d89dc3de928c4",
+      "qualified_source_identity": {
+        "device": 66306,
+        "inode": 49552022,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 420,
+        "nlink": 1
+      },
+      "current_unprivileged_stat": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/assets/bzImage",
+        "bytes": 16134144,
+        "device": 66306,
+        "inode": 49552022,
+        "mode_octal": "644",
+        "uid": 1000,
+        "gid": 1000,
+        "nlink": 1
+      },
+      "current_stat_matches_qualified_record": true,
+      "new_destination_mode_octal": "444",
+      "proposed_existing_copy_argv": [
+        "/usr/bin/cp",
+        "--reflink=never",
+        "--preserve=mode,timestamps",
+        "--no-clobber",
+        "--",
+        "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/assets/bzImage",
+        "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/assets/bzImage"
+      ],
+      "proposed_new_destination_readonly_argv": [
+        "/usr/bin/chmod",
+        "444",
+        "--",
+        "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/assets/bzImage"
+      ],
+      "source_scope": [
+        "qualified17-native-consumed"
+      ]
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/base.cpio.gz",
+      "destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/base.cpio.gz",
+      "relative_path": "base.cpio.gz",
+      "bytes": 25589058,
+      "sha256": "b2250121357ffa70c8e781d062c5f6e0720ec978f3cf352765b5cbdc6ee0d0a4",
+      "qualified_source_identity": {
+        "device": 66306,
+        "inode": 49552016,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 384,
+        "nlink": 1
+      },
+      "current_unprivileged_stat": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/base.cpio.gz",
+        "bytes": 25589058,
+        "device": 66306,
+        "inode": 49552016,
+        "mode_octal": "600",
+        "uid": 1000,
+        "gid": 1000,
+        "nlink": 1
+      },
+      "current_stat_matches_qualified_record": true,
+      "new_destination_mode_octal": "400",
+      "proposed_existing_copy_argv": [
+        "/usr/bin/cp",
+        "--reflink=never",
+        "--preserve=mode,timestamps",
+        "--no-clobber",
+        "--",
+        "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/base.cpio.gz",
+        "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/base.cpio.gz"
+      ],
+      "proposed_new_destination_readonly_argv": [
+        "/usr/bin/chmod",
+        "400",
+        "--",
+        "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/base.cpio.gz"
+      ],
+      "source_scope": [
+        "qualified17-native-consumed",
+        "qualified-actual-archive-base_gzip"
+      ]
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root-base.json",
+      "destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/root-base.json",
+      "relative_path": "root-base.json",
+      "bytes": 11768,
+      "sha256": "9c80d1382c90e1b3778273db87153ddeea619178dd317391ba5639dfd898a1ba",
+      "qualified_source_identity": {
+        "device": 66306,
+        "inode": 49552018,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 384,
+        "nlink": 1
+      },
+      "current_unprivileged_stat": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root-base.json",
+        "bytes": 11768,
+        "device": 66306,
+        "inode": 49552018,
+        "mode_octal": "600",
+        "uid": 1000,
+        "gid": 1000,
+        "nlink": 1
+      },
+      "current_stat_matches_qualified_record": true,
+      "new_destination_mode_octal": "400",
+      "proposed_existing_copy_argv": [
+        "/usr/bin/cp",
+        "--reflink=never",
+        "--preserve=mode,timestamps",
+        "--no-clobber",
+        "--",
+        "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root-base.json",
+        "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/root-base.json"
+      ],
+      "proposed_new_destination_readonly_argv": [
+        "/usr/bin/chmod",
+        "400",
+        "--",
+        "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/root-base.json"
+      ],
+      "source_scope": [
+        "qualified17-native-consumed"
+      ]
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/derived.cpio.gz",
+      "destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz",
+      "relative_path": "derived.cpio.gz",
+      "bytes": 26152936,
+      "sha256": "1fee3a938c6af1797ea49d56dc87d61967e1f9fcddc9d74abd3f4101d97009c1",
+      "qualified_source_identity": {
+        "device": 66306,
+        "inode": 49552034,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 384,
+        "nlink": 1
+      },
+      "current_unprivileged_stat": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/derived.cpio.gz",
+        "bytes": 26152936,
+        "device": 66306,
+        "inode": 49552034,
+        "mode_octal": "600",
+        "uid": 1000,
+        "gid": 1000,
+        "nlink": 1
+      },
+      "current_stat_matches_qualified_record": true,
+      "new_destination_mode_octal": "400",
+      "proposed_existing_copy_argv": [
+        "/usr/bin/cp",
+        "--reflink=never",
+        "--preserve=mode,timestamps",
+        "--no-clobber",
+        "--",
+        "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/derived.cpio.gz",
+        "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz"
+      ],
+      "proposed_new_destination_readonly_argv": [
+        "/usr/bin/chmod",
+        "400",
+        "--",
+        "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/derived.cpio.gz"
+      ],
+      "source_scope": [
+        "qualified17-native-consumed",
+        "qualified-actual-archive-derived_gzip"
+      ]
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/overlay-manifest.json",
+      "destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/overlay-manifest.json",
+      "relative_path": "overlay-manifest.json",
+      "bytes": 15535,
+      "sha256": "5f72b018fa30fd3d140890c3d77e9362d8582ef632c9b7c1279a6a46ab41b0cf",
+      "qualified_source_identity": {
+        "device": 66306,
+        "inode": 49552036,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 384,
+        "nlink": 1
+      },
+      "current_unprivileged_stat": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/overlay-manifest.json",
+        "bytes": 15535,
+        "device": 66306,
+        "inode": 49552036,
+        "mode_octal": "600",
+        "uid": 1000,
+        "gid": 1000,
+        "nlink": 1
+      },
+      "current_stat_matches_qualified_record": true,
+      "new_destination_mode_octal": "400",
+      "proposed_existing_copy_argv": [
+        "/usr/bin/cp",
+        "--reflink=never",
+        "--preserve=mode,timestamps",
+        "--no-clobber",
+        "--",
+        "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/overlay-manifest.json",
+        "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/overlay-manifest.json"
+      ],
+      "proposed_new_destination_readonly_argv": [
+        "/usr/bin/chmod",
+        "400",
+        "--",
+        "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/overlay-manifest.json"
+      ],
+      "source_scope": [
+        "qualified17-native-consumed"
+      ]
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/source/native_diagnostic_overlay.py",
+      "destination": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/source/native_diagnostic_overlay.py",
+      "relative_path": "source/native_diagnostic_overlay.py",
+      "bytes": 27356,
+      "sha256": "0891bc13a8750d09f7758d31031828f8270bc480fe5dc0c25d545528ab454640",
+      "qualified_source_identity": {
+        "device": 66306,
+        "inode": 49552032,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": 384,
+        "nlink": 1
+      },
+      "current_unprivileged_stat": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/source/native_diagnostic_overlay.py",
+        "bytes": 27356,
+        "device": 66306,
+        "inode": 49552032,
+        "mode_octal": "600",
+        "uid": 1000,
+        "gid": 1000,
+        "nlink": 1
+      },
+      "current_stat_matches_qualified_record": true,
+      "new_destination_mode_octal": "400",
+      "proposed_existing_copy_argv": [
+        "/usr/bin/cp",
+        "--reflink=never",
+        "--preserve=mode,timestamps",
+        "--no-clobber",
+        "--",
+        "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/source/native_diagnostic_overlay.py",
+        "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/source/native_diagnostic_overlay.py"
+      ],
+      "proposed_new_destination_readonly_argv": [
+        "/usr/bin/chmod",
+        "400",
+        "--",
+        "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/source/native_diagnostic_overlay.py"
+      ],
+      "source_scope": [
+        "qualified17-native-consumed"
+      ]
+    }
+  ],
+  "preservation_destination": {
+    "proposed_new_root": "/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1",
+    "create_only_after_review_and_admission": true,
+    "required_fresh_absent_root": true,
+    "root_mode_octal": "0700",
+    "owner_UID": 1000,
+    "owner_GID": 1000,
+    "existing_preserved25_root_or_working_cache_untouched": true,
+    "stage_and_embedded_manifest_paths_not_rewritten": true,
+    "current_native_consumers_not_repointed_to_retention_tree": true,
+    "no_hardlinks_reflinks_or_mutation_of_current_stage": true,
+    "new_files_independent_inode_nlink1_and_readonly": true
+  },
+  "existing_workflow_handoff": {
+    "method": "Use the already established independent readonly-copy plus PRESERVED-COHORT receipt workflow with ONLY these six rows. Reuse the25-row record/receipt and the accepted43/17/archive joins verbatim. No new storage service or preservation framework.",
+    "literal_copy_and_readonly_commands_in_each_row_are_proposed_only": true,
+    "command_scope": "Six source→fresh independent destination copies and destination-only readonly mode, then one preserved-cohort receipt mapping original/staged/archive-member/retained identities. No whole-tree cp/tar, mkdir traversal outside the selected fresh root, hardlink, archive generation, overwrite, deletion, source chmod/chattr or source hash inventory.",
+    "required_source_and_copy_identity_contract": [
+      "Before any copy, Root's existing workflow must bind actual copy callsite/tools, current source ownership/permissions and all existing immutability/custody/UNKNOWN constraints, plus exact selected six file identities and recorded SHA/bytes.",
+      "Open/pin only each selected regular source; require qualified dev/inode/UID/GID/mode/nlink/size. Preserve every source flag, inode, alias and original stage namespace unchanged. If anything changed, stop that exact row for source reconciliation.",
+      "Create only absent fresh destinations with independent inodes/nlink1; no clobber or skipped-copy success. cp --no-clobber is a proposal guard, not sufficient evidence: actual receipt must prove a new copy was created, its bytes match recorded expectedSHA and source held/path bookends remained stable.",
+      "Verify/hash only the six NEW copied artifacts as part of their real copy batch. Prefer a single streamed copy+digest in the existing workflow; never add a separate whole-stage or25-file hash-only round.",
+      "Set only new destination readonly mode preserving read/execute bits from original source. fsync new files/parents/receipt as the existing workflow requires; capture all original Popen/wait/stream/input/output FD outcomes.",
+      "Actual independent result review and Root receipt must bind new dev/inodes, SHA/bytes/modes and full six-copy success. Do not relabel this preparation as preserved."
+    ],
+    "exact_executable_source_binding_status": "This is the complete data/command/identity handoff for Root's existing workflow. The guide and historical receipt do not name a frozen current executable producer file; Root must bind its existing actual copy callsite/tools in the operation packet before independent operation review. No missing external artifact or permission is asserted here."
+  },
+  "proposed_resource_contract": {
+    "not_an_actual_grant": true,
+    "CPU": [
+      7
+    ],
+    "jobs": 1,
+    "total_family_planning_bytes": 268435456,
+    "only_new_copy_bytes": 67930797,
+    "additional_disk_planning_bytes": 134217728,
+    "max_one_copy_at_a_time": true,
+    "current_loaded_shared_HOST_total_bytes": 4294967296,
+    "current_loaded_shared_jobs_max": 3,
+    "fresh_MemAvailable_floor_bytes": 27917287424,
+    "current_host_scratch_floors_and_planned_growth_required": true,
+    "all_worker_controller_retained_overhead_counted": true,
+    "native_CPUs2_to5_12GiB_separate": true,
+    "CPU1_excluded": true,
+    "Root_current_status_steering_only": "Root reports UTI2GiB retired7f117, F05 failed-created1GiB held, F08 member-read256MiB actual PASS pendingQ. Preserve those exact active/retired scopes until their own actual receipts; this is not a fresh census or scheduling permission.",
+    "admission_next": "Wait for the actual independent copy operation review and a genuine compatible fresh all-owner/source/account/Unix-permission/resource admission; do not infer availability from this source-only plan."
+  },
+  "recorded_unavailable_local_git_object": {
+    "attempt": "git show --format=fuller --name-only --no-renames 40d359aff7c0fd04260702b8a1ee699dd64f6425",
+    "exit": 128,
+    "diagnostic": "fatal: bad object 40d359aff7c0fd04260702b8a1ee699dd64f6425",
+    "resolution": "Root separately adopted exact byte-equal guide via existing GitHub connector and supplied local354580 file/adoption record. This worker performed no git fetch/checkout/network action; no external guide gap remains."
+  },
+  "preserved_controls": {
+    "Root_thread_id": "01a18bc3-e072-7810-9426-75101b0856c0",
+    "invocation": "invocation20261112T094452Z-12a4bea0",
+    "same_Root_finite_credit_run_id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+    "private_budget_preserved_without_amount": true,
+    "M14_before_M15": true,
+    "native12_source_service_resource_global_UNKNOWN_raw621_c309_normallease_partialinstall_preserved": true
+  },
+  "excluded_rejected_task": {
+    "worker": "01a1c48d-4d96-7cc3-b733-73a97973152f",
+    "turn": "01a1ce01-20cf-7e03-9442-f6d521fb8b02",
+    "request": "signal/frame/xstate collector",
+    "disposition": "Excluded from replay/rephrasing/reassignment. This task only joins existing artifact identities; no collector content analysis, execution or task replay."
+  },
+  "actual_artifact_copies": 0,
+  "actual_artifact_hash_inventory": 0,
+  "builds_or_tests_or_native_actions": 0,
+  "canonical_or_guide_edits": 0,
+  "actual_retention_closed": false,
+  "artifact_promotion": false,
+  "original_criterion_weight_or_credit_change": false,
+  "F03_F04_specific_NO_GO_unchanged": true,
+  "F08_existing_GO_not_reassessed": true,
+  "next_action": {
+    "owner": "/root",
+    "action": "Bind the existing preservation copy callsite to this six-row selection and exact current tools/identity/capture profile; obtain separate independent operation review/current admission, then preserve only these six new artifacts and record the one scoped receipt. Reuse all existing25/43/17/archive proofs without replay."
+  }
+}

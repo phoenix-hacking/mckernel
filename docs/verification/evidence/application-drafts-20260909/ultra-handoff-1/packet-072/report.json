@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-072",
+  "packet_version": 1,
+  "context_sha256": "62ab6c70813a94a4ad2e223f83315c358dc1eba1120dadc3a891ba54d5e3c7c1",
+  "started_utc": "2026-09-09T15:10:00Z",
+  "finished_utc": "2026-09-09T15:14:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "vector.dispatch-negative-vectors",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/vector/vector.dispatch-negative-vectors.c",
+      "oracle": "scripts/application-tests/oracles/vector.dispatch-negative-vectors.json",
+      "changed_files": ["scripts/application-tests/cases/vector/vector.dispatch-negative-vectors.c", "scripts/application-tests/oracles/vector.dispatch-negative-vectors.json"],
+      "parameter_vectors": {"baseline": ["accepted"], "missing_avx": ["rejected"], "missing_osxsave": ["rejected"], "missing_xcr0_sse": ["rejected"], "optional_instruction_count": [0]},
+      "implemented_operations": ["synthetic CPUID/XCR0 predicate records", "negative dispatch vectors", "no optional-instruction evaluation"],
+      "unresolved_oracle_notes": ["Complete feature matrix, guarded CPUID leaf records, and both-engine capability evidence require Max review."],
+      "max_reviewer_question": "Confirm all required negative vectors, leaf bounds, and independent raw CPUID/XCR0 records before enabling any optional instruction case."
+    },
+    {
+      "case_id": "vector.fxsave-layout",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/vector/vector.fxsave-layout.c",
+      "oracle": "scripts/application-tests/oracles/vector.fxsave-layout.json",
+      "changed_files": ["scripts/application-tests/cases/vector/vector.fxsave-layout.c", "scripts/application-tests/oracles/vector.fxsave-layout.json"],
+      "parameter_vectors": {"feature": ["sse2"], "instruction": ["fxsave64"], "alignment": [16], "buffer_bytes": [512], "guards": ["unchanged"]},
+      "implemented_operations": ["aligned guarded area", "raw fninit/fxsave64 window", "defined-field and guard predicates"],
+      "unresolved_oracle_notes": ["Exact seeded x87/XMM values, FXSAVE offsets, and instruction-window disassembly require Max review."],
+      "max_reviewer_question": "Confirm the 16-byte alignment and defined-field offset map, then replace the draft seed placeholders with exact architectural byte arrays."
+    },
+    {
+      "case_id": "vector.xsave-layout",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/vector/vector.xsave-layout.c",
+      "oracle": "scripts/application-tests/oracles/vector.xsave-layout.json",
+      "changed_files": ["scripts/application-tests/cases/vector/vector.xsave-layout.c", "scripts/application-tests/oracles/vector.xsave-layout.json"],
+      "parameter_vectors": {"feature": ["xsave"], "instruction": ["xsave64"], "alignment": [64], "requested_mask": ["0x3"], "buffer_max_bytes": [16384]},
+      "implemented_operations": ["64-byte aligned 16KiB area", "standard XSAVE64 mask0x3", "XSTATE_BV mask invariant"],
+      "unresolved_oracle_notes": ["Current enabled user-state mask, CPUID component offsets/sizes, and seeded defined bytes require Max review."],
+      "max_reviewer_question": "Bind the current paired-engine xstate mask and CPUID offsets before replacing the draft requested mask or accepting component bytes."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/vector/vector.dispatch-negative-vectors.c", "sha256": "28e7828ffaf161b524b735be109a436e4101371e76ed2195272ae9a149183a98"},
+    {"path": "scripts/application-tests/oracles/vector.dispatch-negative-vectors.json", "sha256": "28d208dfd4c74c3dd28ad86c0bed1d9cb2f23c75806630176a63db42eb56d844"},
+    {"path": "scripts/application-tests/cases/vector/vector.fxsave-layout.c", "sha256": "939de7f31dab545ee4910881d1a3777c651d5da16f81614a6b2b05f271d82201"},
+    {"path": "scripts/application-tests/oracles/vector.fxsave-layout.json", "sha256": "9e32df3c62df84e29da9deef09975e976657cd43b69a833d1f596d719bdd37c1"},
+    {"path": "scripts/application-tests/cases/vector/vector.xsave-layout.c", "sha256": "d3357579333e8320db08124b51cfa8ff1797574f6fbcfe2b5597023e0b8cd6b2"},
+    {"path": "scripts/application-tests/oracles/vector.xsave-layout.json", "sha256": "da301e4554d9e23348950b9581fb2676675b85cdafd46bde5421ec1330368235"},
+    {"path": "docs/verification/evidence/application-drafts-20260909/ultra-handoff-1/packet-072/context.json", "sha256": "62ab6c70813a94a4ad2e223f83315c358dc1eba1120dadc3a891ba54d5e3c7c1"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-072.json --emit-context /tmp/application-packet-072-context-20260909-1.json", "outcome": "PASS; planning metadata only; runtime_authorized=false"},
+    {"command": "python3 -m json.tool packet-072/report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Raw CPUID/XCR0 evidence, exact x87/XMM seeded bytes, FXSAVE/XSAVE offsets, masks, and disassembly require final Max review."],
+  "blocked_execution_capabilities": ["runner-contract", "current-inputs", "vector-runtime-discovery", "vector-instruction-audit", "vector-context-observer"],
+  "first_failure_event": null,
+  "max_escalation": ["Review negative feature predicates", "Review FXSAVE defined fields and alignment", "Review XSAVE mask, component offsets, and buffer bounds"],
+  "next_packet_id": "packet-073"
+}

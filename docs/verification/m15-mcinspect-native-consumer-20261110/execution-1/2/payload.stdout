@@ -1,0 +1,222 @@
+/usr/bin/cmake -S/source -B/output --check-build-system CMakeFiles/Makefile.cmake 0
+/usr/bin/make  -f CMakeFiles/Makefile2 mcinspect
+make[1]: Entering directory '/output'
+/usr/bin/cmake -S/source -B/output --check-build-system CMakeFiles/Makefile.cmake 0
+/usr/bin/cmake -E cmake_progress_start /output/CMakeFiles 69
+/usr/bin/make  -f CMakeFiles/Makefile2 CMakeFiles/mcinspect.dir/all
+make[2]: Entering directory '/output'
+/usr/bin/make  -f dwarf/CMakeFiles/gennames.dir/build.make dwarf/CMakeFiles/gennames.dir/depend
+make[3]: Entering directory '/output'
+cd /output && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /source /source/lib/libdwarf /output /output/dwarf /output/dwarf/CMakeFiles/gennames.dir/DependInfo.cmake "--color="
+make[3]: Leaving directory '/output'
+/usr/bin/make  -f dwarf/CMakeFiles/gennames.dir/build.make dwarf/CMakeFiles/gennames.dir/build
+make[3]: Entering directory '/output'
+[  1%] Building C object dwarf/CMakeFiles/gennames.dir/libdwarf/libdwarf/gennames.c.o
+cd /output/dwarf && /usr/bin/cc   -O3 -DNDEBUG -MD -MT dwarf/CMakeFiles/gennames.dir/libdwarf/libdwarf/gennames.c.o -MF CMakeFiles/gennames.dir/libdwarf/libdwarf/gennames.c.o.d -o CMakeFiles/gennames.dir/libdwarf/libdwarf/gennames.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/gennames.c
+[  2%] Building C object dwarf/CMakeFiles/gennames.dir/libdwarf/libdwarf/dwgetopt.c.o
+cd /output/dwarf && /usr/bin/cc   -O3 -DNDEBUG -MD -MT dwarf/CMakeFiles/gennames.dir/libdwarf/libdwarf/dwgetopt.c.o -MF CMakeFiles/gennames.dir/libdwarf/libdwarf/dwgetopt.c.o.d -o CMakeFiles/gennames.dir/libdwarf/libdwarf/dwgetopt.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/dwgetopt.c
+[  4%] Linking C executable gennames
+cd /output/dwarf && /usr/bin/cmake -E cmake_link_script CMakeFiles/gennames.dir/link.txt --verbose=1
+/usr/bin/cc -O3 -DNDEBUG -Wl,--dependency-file=CMakeFiles/gennames.dir/link.d CMakeFiles/gennames.dir/libdwarf/libdwarf/gennames.c.o CMakeFiles/gennames.dir/libdwarf/libdwarf/dwgetopt.c.o -o gennames
+make[3]: Leaving directory '/output'
+[  4%] Built target gennames
+/usr/bin/make  -f dwarf/CMakeFiles/dwarf.dir/build.make dwarf/CMakeFiles/dwarf.dir/depend
+make[3]: Entering directory '/output'
+[  5%] Generating dwarf_names.c, dwarf_names.h, dwarf_names_enum.h, dwarf_names_new.h
+cd /output/dwarf && ./gennames -s -i /source/lib/libdwarf/libdwarf/libdwarf/ -o .
+./gennames [ 2018-08-09 08:32:59-07:00   Release]
+Arguments: -s -i /source/lib/libdwarf/libdwarf/libdwarf/ -o . 
+cd /output && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /source /source/lib/libdwarf /output /output/dwarf /output/dwarf/CMakeFiles/dwarf.dir/DependInfo.cmake "--color="
+make[3]: Leaving directory '/output'
+/usr/bin/make  -f dwarf/CMakeFiles/dwarf.dir/build.make dwarf/CMakeFiles/dwarf.dir/build
+make[3]: Entering directory '/output'
+[  7%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_abbrev.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_abbrev.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_abbrev.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_abbrev.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/dwarf_abbrev.c
+[  8%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_alloc.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_alloc.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_alloc.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_alloc.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/dwarf_alloc.c
+[ 10%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_arange.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_arange.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_arange.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_arange.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/dwarf_arange.c
+[ 11%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_die_deliv.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_die_deliv.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_die_deliv.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_die_deliv.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/dwarf_die_deliv.c
+[ 13%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_dnames.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_dnames.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_dnames.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_dnames.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/dwarf_dnames.c
+[ 14%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_dsc.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_dsc.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_dsc.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_dsc.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/dwarf_dsc.c
+[ 15%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_elf_access.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_elf_access.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_elf_access.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_elf_access.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/dwarf_elf_access.c
+[ 17%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_error.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_error.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_error.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_error.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/dwarf_error.c
+[ 18%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_form.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_form.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_form.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_form.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/dwarf_form.c
+[ 20%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_frame.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_frame.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_frame.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_frame.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/dwarf_frame.c
+[ 21%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_frame2.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_frame2.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_frame2.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_frame2.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/dwarf_frame2.c
+[ 23%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_funcs.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_funcs.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_funcs.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_funcs.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/dwarf_funcs.c
+[ 24%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_gdbindex.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_gdbindex.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_gdbindex.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_gdbindex.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/dwarf_gdbindex.c
+[ 26%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_global.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_global.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_global.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_global.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/dwarf_global.c
+[ 27%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_groups.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_groups.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_groups.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_groups.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/dwarf_groups.c
+[ 28%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_harmless.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_harmless.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_harmless.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_harmless.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/dwarf_harmless.c
+[ 30%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_init_finish.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_init_finish.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_init_finish.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_init_finish.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/dwarf_init_finish.c
+[ 31%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_leb.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_leb.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_leb.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_leb.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/dwarf_leb.c
+[ 33%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_line.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_line.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_line.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_line.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/dwarf_line.c
+[ 34%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_loc.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_loc.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_loc.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_loc.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/dwarf_loc.c
+[ 36%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_macro.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_macro.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_macro.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_macro.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/dwarf_macro.c
+[ 37%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_macro5.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_macro5.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_macro5.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_macro5.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/dwarf_macro5.c
+[ 39%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_original_elf_init.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_original_elf_init.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_original_elf_init.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_original_elf_init.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/dwarf_original_elf_init.c
+[ 40%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_pubtypes.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_pubtypes.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_pubtypes.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_pubtypes.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/dwarf_pubtypes.c
+[ 42%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_query.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_query.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_query.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_query.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/dwarf_query.c
+[ 43%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_ranges.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_ranges.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_ranges.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_ranges.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/dwarf_ranges.c
+[ 44%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_string.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_string.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_string.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_string.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/dwarf_string.c
+[ 46%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_tied.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_tied.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_tied.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_tied.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/dwarf_tied.c
+[ 47%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_str_offsets.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_str_offsets.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_str_offsets.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_str_offsets.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/dwarf_str_offsets.c
+[ 49%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_tsearchhash.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_tsearchhash.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_tsearchhash.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_tsearchhash.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/dwarf_tsearchhash.c
+[ 50%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_types.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_types.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_types.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_types.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/dwarf_types.c
+[ 52%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_util.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_util.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_util.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_util.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/dwarf_util.c
+[ 53%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_vars.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_vars.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_vars.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_vars.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/dwarf_vars.c
+[ 55%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_weaks.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_weaks.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_weaks.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_weaks.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/dwarf_weaks.c
+[ 56%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_xu_index.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_xu_index.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_xu_index.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_xu_index.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/dwarf_xu_index.c
+[ 57%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_print_lines.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_print_lines.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_print_lines.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_print_lines.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/dwarf_print_lines.c
+[ 59%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/malloc_check.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/malloc_check.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/malloc_check.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/malloc_check.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/malloc_check.c
+[ 60%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_alloc.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_alloc.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_alloc.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_alloc.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/pro_alloc.c
+[ 62%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_arange.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_arange.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_arange.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_arange.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/pro_arange.c
+[ 63%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_die.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_die.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_die.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_die.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/pro_die.c
+[ 65%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_encode_nm.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_encode_nm.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_encode_nm.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_encode_nm.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/pro_encode_nm.c
+[ 66%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_error.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_error.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_error.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_error.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/pro_error.c
+[ 68%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_expr.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_expr.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_expr.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_expr.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/pro_expr.c
+[ 69%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_finish.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_finish.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_finish.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_finish.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/pro_finish.c
+[ 71%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_forms.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_forms.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_forms.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_forms.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/pro_forms.c
+[ 72%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_funcs.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_funcs.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_funcs.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_funcs.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/pro_funcs.c
+[ 73%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_frame.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_frame.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_frame.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_frame.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/pro_frame.c
+[ 75%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_init.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_init.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_init.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_init.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/pro_init.c
+[ 76%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_line.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_line.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_line.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_line.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/pro_line.c
+[ 78%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_reloc.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_reloc.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_reloc.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_reloc.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/pro_reloc.c
+[ 79%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_reloc_stream.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_reloc_stream.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_reloc_stream.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_reloc_stream.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/pro_reloc_stream.c
+[ 81%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_reloc_symbolic.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_reloc_symbolic.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_reloc_symbolic.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_reloc_symbolic.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/pro_reloc_symbolic.c
+[ 82%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_pubnames.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_pubnames.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_pubnames.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_pubnames.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/pro_pubnames.c
+[ 84%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_section.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_section.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_section.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_section.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/pro_section.c
+[ 85%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_types.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_types.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_types.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_types.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/pro_types.c
+[ 86%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_vars.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_vars.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_vars.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_vars.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/pro_vars.c
+[ 88%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_macinfo.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_macinfo.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_macinfo.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_macinfo.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/pro_macinfo.c
+[ 89%] Building C object dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_weaks.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_weaks.c.o -MF CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_weaks.c.o.d -o CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_weaks.c.o -c /source/lib/libdwarf/libdwarf/libdwarf/pro_weaks.c
+[ 91%] Building C object dwarf/CMakeFiles/dwarf.dir/dwarf_names.c.o
+cd /output/dwarf && /usr/bin/cc  -I/output/dwarf -I/source/lib/libdwarf/libdwarf/libdwarf -O3 -DNDEBUG -fPIC -MD -MT dwarf/CMakeFiles/dwarf.dir/dwarf_names.c.o -MF CMakeFiles/dwarf.dir/dwarf_names.c.o.d -o CMakeFiles/dwarf.dir/dwarf_names.c.o -c /output/dwarf/dwarf_names.c
+[ 92%] Linking C static library libdwarf.a
+cd /output/dwarf && /usr/bin/cmake -P CMakeFiles/dwarf.dir/cmake_clean_target.cmake
+cd /output/dwarf && /usr/bin/cmake -E cmake_link_script CMakeFiles/dwarf.dir/link.txt --verbose=1
+/usr/bin/ar qc libdwarf.a CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_abbrev.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_alloc.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_arange.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_die_deliv.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_dnames.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_dsc.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_elf_access.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_error.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_form.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_frame.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_frame2.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_funcs.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_gdbindex.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_global.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_groups.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_harmless.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_init_finish.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_leb.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_line.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_loc.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_macro.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_macro5.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_original_elf_init.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_pubtypes.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_query.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_ranges.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_string.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_tied.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_str_offsets.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_tsearchhash.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_types.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_util.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_vars.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_weaks.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_xu_index.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_print_lines.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/malloc_check.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_alloc.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_arange.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_die.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_encode_nm.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_error.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_expr.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_finish.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_forms.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_funcs.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_frame.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_init.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_line.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_reloc.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_reloc_stream.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_reloc_symbolic.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_pubnames.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_section.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_types.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_vars.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_macinfo.c.o CMakeFiles/dwarf.dir/libdwarf/libdwarf/pro_weaks.c.o CMakeFiles/dwarf.dir/dwarf_names.c.o
+/usr/bin/ranlib libdwarf.a
+make[3]: Leaving directory '/output'
+[ 92%] Built target dwarf
+/usr/bin/make  -f CMakeFiles/bfd_rust_accessors.dir/build.make CMakeFiles/bfd_rust_accessors.dir/depend
+make[3]: Entering directory '/output'
+cd /output && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /source /source /output /output /output/CMakeFiles/bfd_rust_accessors.dir/DependInfo.cmake "--color="
+make[3]: Leaving directory '/output'
+/usr/bin/make  -f CMakeFiles/bfd_rust_accessors.dir/build.make CMakeFiles/bfd_rust_accessors.dir/build
+make[3]: Entering directory '/output'
+[ 94%] Building Rust BFD accessors from checked selected-header layout
+/usr/bin/cmake -E env MAKEFLAGS= MCKERNEL_BFD_LAYOUT_RS=/output/rust/bfd_layout.rs /usr/bin/rustc --crate-name bfd_accessors --crate-type lib --edition=2021 -C panic=abort -C opt-level=2 -C debuginfo=1 -C force-unwind-tables=no --emit=obj=/output/rust/bfd_accessors.o /source/rust/bfd_accessors.rs
+make[3]: Leaving directory '/output'
+[ 94%] Built target bfd_rust_accessors
+/usr/bin/make  -f CMakeFiles/mcinspect_rust_helpers.dir/build.make CMakeFiles/mcinspect_rust_helpers.dir/depend
+make[3]: Entering directory '/output'
+cd /output && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /source /source /output /output /output/CMakeFiles/mcinspect_rust_helpers.dir/DependInfo.cmake "--color="
+make[3]: Leaving directory '/output'
+/usr/bin/make  -f CMakeFiles/mcinspect_rust_helpers.dir/build.make CMakeFiles/mcinspect_rust_helpers.dir/build
+make[3]: Entering directory '/output'
+[ 95%] Generating rust/mcinspect_helpers.o
+/usr/bin/cmake -E make_directory /output/rust
+/usr/bin/cmake -E env MAKEFLAGS= /usr/bin/rustc --crate-name mcinspect_helpers --crate-type lib --edition=2021 -C panic=abort -C opt-level=2 -C debuginfo=1 -C force-unwind-tables=no --cfg mcinspect_full_body --emit=obj=/output/rust/mcinspect_helpers.o /source/rust/mcinspect_helpers.rs
+make[3]: Leaving directory '/output'
+[ 95%] Built target mcinspect_rust_helpers
+/usr/bin/make  -f CMakeFiles/mcinspect.dir/build.make CMakeFiles/mcinspect.dir/depend
+make[3]: Entering directory '/output'
+cd /output && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /source /source /output /output /output/CMakeFiles/mcinspect.dir/DependInfo.cmake "--color="
+make[3]: Leaving directory '/output'
+/usr/bin/make  -f CMakeFiles/mcinspect.dir/build.make CMakeFiles/mcinspect.dir/build
+make[3]: Entering directory '/output'
+[ 97%] Linking C executable mcinspect
+/usr/bin/cmake -E cmake_link_script CMakeFiles/mcinspect.dir/link.txt --verbose=1
+/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/Scrt1.o
+/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crti.o
+/usr/lib/gcc/x86_64-redhat-linux/14/crtbeginS.o
+rust/bfd_accessors.o
+rust/mcinspect_helpers.o
+dwarf/libdwarf.a
+/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/libz.so
+/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/libelf.so
+/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/libbfd.so
+/usr/lib64/libbfd.a
+/usr/lib64/libsframe.a
+/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/libiberty.a
+/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/libz.so
+/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/libdl.a
+/usr/lib/gcc/x86_64-redhat-linux/14/libgcc.a
+/usr/lib/gcc/x86_64-redhat-linux/14/libgcc_s.so
+/lib64/libgcc_s.so.1
+/usr/lib/gcc/x86_64-redhat-linux/14/libgcc.a
+/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/libc.so
+/lib64/libc.so.6
+/usr/lib64/libc_nonshared.a
+/lib64/ld-linux-x86-64.so.2
+/usr/lib64/libc_nonshared.a
+/lib64/ld-linux-x86-64.so.2
+/usr/lib/gcc/x86_64-redhat-linux/14/libgcc.a
+/usr/lib/gcc/x86_64-redhat-linux/14/libgcc_s.so
+/lib64/libgcc_s.so.1
+/usr/lib/gcc/x86_64-redhat-linux/14/libgcc.a
+/usr/lib/gcc/x86_64-redhat-linux/14/crtendS.o
+/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crtn.o
+/usr/bin/cc -O3 -DNDEBUG -fPIE -pie -Wl,--trace -Wl,-Map=/output/mcinspect.map -Wl,--dependency-file=CMakeFiles/mcinspect.dir/link.d rust/bfd_accessors.o rust/mcinspect_helpers.o -o mcinspect  dwarf/libdwarf.a -lz -lelf -lbfd
+make[3]: Leaving directory '/output'
+[100%] Built target mcinspect
+make[2]: Leaving directory '/output'
+/usr/bin/cmake -E cmake_progress_start /output/CMakeFiles 0
+make[1]: Leaving directory '/output'

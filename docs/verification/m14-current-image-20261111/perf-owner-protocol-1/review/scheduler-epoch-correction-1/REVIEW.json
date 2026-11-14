@@ -1,0 +1,117 @@
+{
+  "API": {
+    "bytes": 8431,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/ownership-proposal-1/implementation-1/scheduler-epoch-correction-1/API-HANDOFF.json",
+    "sha256": "cdd8c95e5af953a9979c36560e28af0206b9a7ce1023e0f37f95b1de639ae349"
+  },
+  "Root_sole_compositor_executor_and_credit": true,
+  "SUT_compiler_test_import_or_helper_execution": false,
+  "all_original_holds_preserved": true,
+  "author_step_body_equivalence": {
+    "bytes": 972,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/ownership-proposal-1/implementation-1/scheduler-epoch-correction-1/UNCHANGED-STEP-BODIES.json",
+    "sha256": "77412f190136a49d77b8e5c7b40af7d2cf60ea0db525900380b44453be8b8dd8"
+  },
+  "canonical_native_permission_or_source_grant": false,
+  "children_spawned": false,
+  "correction_contract": {
+    "bytes": 2466,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/ownership-proposal-1/implementation-1/scheduler-epoch-correction-1/CORRECTION.json",
+    "sha256": "0308786ed3a4543a1e4a86e638dffd4c3e9c288eec66974f69b7870d87dd3dc4"
+  },
+  "created_utc": "2026-11-11T13:53:26.373820+00:00",
+  "decision": "GO_SOURCE_DELTA_CLOSES_PERF_COMMON_01_ONLY_COMPILER_RUNTIME_IMAGE_STILL_UNPROVED",
+  "delta_patch": {
+    "bytes": 6917,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/ownership-proposal-1/implementation-1/scheduler-epoch-correction-1/SCHEDULER-EPOCH-DELTA.patch",
+    "sha256": "48a1a510b0ab7a402cda87d785bc5ab8767ed997e37cefdf79140aecfad14560"
+  },
+  "exact_changes": [
+    {
+      "new": {
+        "bytes": 23378,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/ownership-proposal-1/implementation-1/scheduler-epoch-correction-1/candidate/kernel/rust/f03_perf_owner/hardware.rs",
+        "sha256": "0d7ca949b101b3faa35eb18051bfa6d2e37fd1451db32c65d572c35ca49e4cf3"
+      },
+      "original": {
+        "bytes": 19850,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/ownership-proposal-1/implementation-1/candidate/kernel/rust/f03_perf_owner/hardware.rs",
+        "sha256": "ddaf850da5230b0bb18f1941c4f0549cfe62e38add253531e13a87e585ee64a1"
+      },
+      "path": "kernel/rust/f03_perf_owner/hardware.rs"
+    },
+    {
+      "new": {
+        "bytes": 7494,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/ownership-proposal-1/implementation-1/scheduler-epoch-correction-1/candidate/kernel/rust/f03_perf_owner/lifecycle.rs",
+        "sha256": "f2132285fc787548455debe347e7e89b353abb0ebc2ae9e79e5df73173596deb"
+      },
+      "original": {
+        "bytes": 7972,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/ownership-proposal-1/implementation-1/candidate/kernel/rust/f03_perf_owner/lifecycle.rs",
+        "sha256": "9e2ba022bd2cd2056fd86f07b3386ad4c595b6c504065088a7b4f55bb8d0d71d"
+      },
+      "path": "kernel/rust/f03_perf_owner/lifecycle.rs"
+    }
+  ],
+  "finding_disposition": {
+    "author_confirmed_original_interleaving_valid": true,
+    "id": "PERF-COMMON-01",
+    "minimum_late_clear_append_runtime_regression": "Bind the actual corrected common/hardware functions and real group/token functions into the already-planned Thread/group family. Force clear/replacement+append between steps, require identical old member-key/actual-index set through all scheduled steps, late member excluded, old token retained to final step, no missing-map EINVAL or foreign bit release, and full subsequent step order after a backend nonzero status. No second suite or native/hardware execution is authorized by this review.",
+    "source_status": "RESOLVED_IN_THIS_EXACT_SUCCESSOR"
+  },
+  "manifest": {
+    "bytes": 32595,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/ownership-proposal-1/implementation-1/scheduler-epoch-correction-1/SOURCE-MANIFEST.json",
+    "sha256": "279ba05aae50f7584cd74a647a3f7fa2018cc4e45354c66fb8f4d460633238f8"
+  },
+  "material_resolution": [
+    "capture_switch_sequence receives the same R acquired with the actual Process monitor EventPin. Under that single exclusion it captures mapping cursor, optional first reset, second reset and start cursors from the same selected GroupRef. No append/tombstone can change sequence/tail between these captures.",
+    "The complete actual executing-Thread HardwareLeases set is retained ONCE from the mapping cursor before R unlock. Each step uses those exact leases and its already-captured cursor; no later membership/map capture can widen to a late appended unmapped member.",
+    "After capture, R is released before any S, real hardware/backend call or per-event runtime operation. There is no allocator, sleepable gate, usercopy or new ENOMEM in this void scheduler path. Each next() holds R only to read one stable captured topology step.",
+    "EventPin owns real own/containing GroupRefs throughout. GroupReads keep the same epoch old-reader ownership, and HardwareLeases keep the exact Operation counter users after monitor clear/replacement. The old captured tail excludes a late append; tombstones born/dead against captured sequence preserve an earlier member and defer only its matching retirement.",
+    "On initial mapping-capture failure, HardwareLeases releases any partial owned tokens under the same R, all already-captured cursors finish explicitly under R, then R is dropped and Err returns. No destructor recursively acquires R. lifecycle retains the existing invariant panic rather than silently ignoring a missing map.",
+    "PP_COUNT still skips. PP_RESET executes reset/reset/start; another non-count state executes reset/start. Each complete original reset and start body is text-identical after replacing only its old operation.walk/leases parameter expressions. Every subsequent original void step runs even after a prior backend status; Ok records the first status while the void caller deliberately ignores that existing backend result.",
+    "When the sequence returns, no S/provider guard is live. Each GroupRead and then the real HardwareLeases retire through the existing outside-lock destructors; the caller EventPin outlives the whole sequence. No permanent Thread/Process strong edge, guessed map, new callback or refcount semantics were added."
+  ],
+  "prior_full_common_review": {
+    "bytes": 13911,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-coherent-source-review-sourceacq-max-1/REVIEW.json",
+    "sha256": "6bbb8bc323bba35026bbcc0e8c0d6838770560d14891c0f303607f3c6032105d"
+  },
+  "remaining_boundaries": [
+    "Actual first whole compiler4a67 failed with SIX errors in callbacks/runtime/groups. That original failure and source remain frozen; P03 separately prepares one exact three-file compiler correction. This scheduler GO does not turn original metadata into PASS.",
+    "Any combined five-file successor must explicitly bind this two-file branch plus the independently reviewed three-file compiler correction. No silent substitution into original in-flight or saved source overlay7fb.",
+    "Exact changed-input whole compiler operation and real four-family runtime operation/results need their own review/fresh admission. No reduced ownership stubs or previous green-suite replay.",
+    "Normal paired C/Rust image, actual ABI104/provider/unique Rust ownership/C exclusions/cleanup and original DEFAULT/FUNCTIONAL/native/milestone conditions remain unproved at their literal scope."
+  ],
+  "retained_actual_compiler_failure": {
+    "bytes": 13623,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-first-whole-compile-review-sourceacq-max-1/actual-failure-1/QUALIFICATION.json",
+    "sha256": "5ef330b3bd1833ad951dee3d23ba8f88f5ec88faa9f23ff589ce387b7eb96af1"
+  },
+  "reviewer": "/root/source_acquisition_review_max",
+  "schema": "mckernel.perf-common-scheduler-epoch-focused-delta-review.v1",
+  "scope": "Only the two-file source correction of PERF-COMMON-01 on frozen fb154. All other common findings and terminalf7a/hardwarea821 original math/unit scope are reused. This source GO supplies no compiler/runtime/normal image/selector/ABI/provider or original acceptance result.",
+  "source_or_execution_edits_by_reviewer": false,
+  "source_ready": {
+    "bytes": 3243,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/ownership-proposal-1/implementation-1/scheduler-epoch-correction-1/SOURCE-READY.NOT-EXECUTED.json",
+    "sha256": "f948ccb95bca654e329c4fa0dba1e689b2a92a452553e07be2ce2f4d0434221c"
+  },
+  "static_identity_checks": {
+    "all28_successor_size_SHA_verified": true,
+    "all_other26_bytes_equal": true,
+    "first_compile_overlay7fb_unmodified": true,
+    "independently_extracted_original_start_reset_steps_equal_after_only_parameter_substitution": true,
+    "kernel_CMake_cfg_Cguard_default_still_unselected": true,
+    "only2_changed_paths": true,
+    "original_all28_size_SHA_preserved": true,
+    "unified2file_delta_reconstructed_byte_equal": true
+  },
+  "whole_unselected_patch": {
+    "bytes": 291060,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/ownership-proposal-1/implementation-1/scheduler-epoch-correction-1/PERF-OWNER-PROTOCOL.UNSELECTED.patch",
+    "sha256": "3437e372d23c43a9dff3c17fdd1feb16f5ba72977dcc8f3405ea7db9c33e85e4"
+  }
+}

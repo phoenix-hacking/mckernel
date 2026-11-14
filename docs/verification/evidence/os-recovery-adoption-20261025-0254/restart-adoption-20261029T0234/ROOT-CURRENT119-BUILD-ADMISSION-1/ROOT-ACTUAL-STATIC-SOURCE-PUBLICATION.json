@@ -1,0 +1,560 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root",
+  "decision": "ROOT_VERIFIES_PUSHED_FETCHED_EXACT_SOURCE_ONLY",
+  "commit": "b7fbe153c19985b2d0d3d1ceff1718475609be49",
+  "fetched_commit": "b7fbe153c19985b2d0d3d1ceff1718475609be49",
+  "exact_changed_blobs": [
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/m14-exclusive-producer-binding-1/ROOT-ACTUAL-ORIGIN119-1/ORIGIN-BINDING.json",
+      "bytes": 5101,
+      "sha256": "ac57fc154e6f1ac50b97c91c85b7dd915c66861f018287f99f223c6b5a2789d6"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/m14-exclusive-producer-binding-1/ROOT-ACTUAL-ORIGIN119-1/f06_clone_cpuid_metadata.rs",
+      "bytes": 201,
+      "sha256": "71e4b0ab7f5ca612e4cd06bf2150e2e6b7b5e3e39717e466cfb626b1ce249a48"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/m14-exclusive-producer-binding-1/ROOT-ACTUAL-ORIGIN119-1/f06_rt_sigreturn_origin.cmake",
+      "bytes": 333,
+      "sha256": "61b91aba6af582d6d754154d4226bde9c6dc8f9b62db1b321af0bb1eced88fc3"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/m14-exclusive-producer-binding-1/ROOT-ACTUAL-ORIGIN119-1/f06_rt_sigreturn_origin.h",
+      "bytes": 268,
+      "sha256": "aeece54c3b6f01c326fff3eb925b89b88acd3b198b0047393c8c9c0d78f74ded"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/m14-exclusive-producer-binding-1/ROOT-ACTUAL-ORIGIN119-1/rust-environment.json",
+      "bytes": 338,
+      "sha256": "558fe3914722d00262ddf4f891adf795741f9b1e273cdb23238371447e78229f"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/CURRENT119-PRODUCER-GUARD-1/FIXED-INPUTS.SOURCE-ONLY.json",
+      "bytes": 4727,
+      "sha256": "e5d02301d120a59e2cc50ecebb7094d8177e85ed3c036fbb61f42e936955d185"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/CURRENT119-PRODUCER-GUARD-1/ROOT-NEXT.md",
+      "bytes": 3736,
+      "sha256": "c85a11c0b6aa74659a35ff4487b6e1925b6474ba509076bff2e1478b165218bd"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/CURRENT119-PRODUCER-GUARD-1/ROOT-PRODUCER-INTENT.TEMPLATE.NOT-AUTHORITY.json",
+      "bytes": 340,
+      "sha256": "4e079f9f54f37d0b48d023739443cf8fa82f415eda4aa5cc2fe276ef3fa7e349"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/CURRENT119-PRODUCER-GUARD-1/SOURCE-CHECKS.json",
+      "bytes": 813,
+      "sha256": "8011752b23c9ae0f863194771df55bee0bfb4cdd169d928d1bdae1aca4261f78"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/CURRENT119-PRODUCER-GUARD-1/SOURCE-READY.json",
+      "bytes": 3542,
+      "sha256": "799fb4c9f5ba1449bf9c201d9460379e2313c2df22e8d1b8ef2496ce7051cb80"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/CURRENT119-PRODUCER-GUARD-1/confirmed-period-correction-source-1/FIXED-INPUTS.SOURCE-ONLY.json",
+      "bytes": 4727,
+      "sha256": "e5d02301d120a59e2cc50ecebb7094d8177e85ed3c036fbb61f42e936955d185"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/CURRENT119-PRODUCER-GUARD-1/confirmed-period-correction-source-1/ROOT-NEXT.md",
+      "bytes": 2474,
+      "sha256": "c32464d90ef23e25515a9bc36e1d3978c9252b29f64529e7bb815ce7087efdfb"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/CURRENT119-PRODUCER-GUARD-1/confirmed-period-correction-source-1/ROOT-PRODUCER-INTENT.TEMPLATE.NOT-AUTHORITY.json",
+      "bytes": 340,
+      "sha256": "4e079f9f54f37d0b48d023739443cf8fa82f415eda4aa5cc2fe276ef3fa7e349"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/CURRENT119-PRODUCER-GUARD-1/confirmed-period-correction-source-1/SOURCE-CHECKS.json",
+      "bytes": 985,
+      "sha256": "61beceda3304943cbc4dfc81e97a65c432f4e9c081b71b87d807ce5438700e96"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/CURRENT119-PRODUCER-GUARD-1/confirmed-period-correction-source-1/SOURCE-READY.json",
+      "bytes": 4531,
+      "sha256": "30e91e446dea424b932b52d1f7e6b4ebef6339cf25a882255a0d5d2c212bab29"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/CURRENT119-PRODUCER-GUARD-1/confirmed-period-correction-source-1/prepare_operation.py",
+      "bytes": 2801,
+      "sha256": "022bbdcd3fb271aa28a616acffb66049453546dd637387863ed04a310d165496"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/CURRENT119-PRODUCER-GUARD-1/confirmed-period-correction-source-1/runtime_guard.py",
+      "bytes": 9710,
+      "sha256": "a3fb65f2b84ad5cbc2d60b2247c084064e0555ad4623cd385b2daefe1f93e6d2"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/CURRENT119-PRODUCER-GUARD-1/confirmed-period-correction-source-1/test_producer_guard.py",
+      "bytes": 4992,
+      "sha256": "ccd53cbedb928de489b9e4fa9b46f5b72e2ae6745dda8d04610f70ee40a2b81b"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/CURRENT119-PRODUCER-GUARD-1/confirmed-period-correction-source-1/tightening-minimum-correction-source-1/CURRENT119-OPERATION.PENDING-REVIEW.json",
+      "bytes": 74258,
+      "sha256": "ceb78129850677c9e0a4af59cfdf2e35f47ecb3ca93804e991e8bf0d65514483"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/CURRENT119-PRODUCER-GUARD-1/confirmed-period-correction-source-1/tightening-minimum-correction-source-1/FIXED-INPUTS.SOURCE-ONLY.json",
+      "bytes": 4727,
+      "sha256": "e5d02301d120a59e2cc50ecebb7094d8177e85ed3c036fbb61f42e936955d185"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/CURRENT119-PRODUCER-GUARD-1/confirmed-period-correction-source-1/tightening-minimum-correction-source-1/ROOT-NEXT.md",
+      "bytes": 2775,
+      "sha256": "6d82b472d9d2d1f9635e195d5e583578d4acccba2019d5470405d48934d6ddc6"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/CURRENT119-PRODUCER-GUARD-1/confirmed-period-correction-source-1/tightening-minimum-correction-source-1/ROOT-PRODUCER-GUARD-BINDING.ACTUAL.json",
+      "bytes": 1616,
+      "sha256": "a7ae87af2ea6e882277f0c3d8e90331f84b013ff64a67b50acc0534785643bc0"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/CURRENT119-PRODUCER-GUARD-1/confirmed-period-correction-source-1/tightening-minimum-correction-source-1/ROOT-PRODUCER-INTENT.ACTUAL.json",
+      "bytes": 2314,
+      "sha256": "dd3f08a014014b5902bfa39c24624b21fbc398c0efc792214a930c782a3dcef5"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/CURRENT119-PRODUCER-GUARD-1/confirmed-period-correction-source-1/tightening-minimum-correction-source-1/ROOT-PRODUCER-INTENT.TEMPLATE.NOT-AUTHORITY.json",
+      "bytes": 340,
+      "sha256": "4e079f9f54f37d0b48d023739443cf8fa82f415eda4aa5cc2fe276ef3fa7e349"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/CURRENT119-PRODUCER-GUARD-1/confirmed-period-correction-source-1/tightening-minimum-correction-source-1/SOURCE-CHECKS.json",
+      "bytes": 1313,
+      "sha256": "0e9dd01fa86251ef4e7136363eab87e53d7b22ea8e337a40767c206c576c48ac"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/CURRENT119-PRODUCER-GUARD-1/confirmed-period-correction-source-1/tightening-minimum-correction-source-1/SOURCE-READY.json",
+      "bytes": 4881,
+      "sha256": "2ec5edf21c24ca1b248335070c33ca1798f03891698d31fc85db8a8093ea1166"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/CURRENT119-PRODUCER-GUARD-1/confirmed-period-correction-source-1/tightening-minimum-correction-source-1/independent-source-review-1/OPERATION-REVIEW.ACTUAL.json",
+      "bytes": 81091,
+      "sha256": "6789cd0607c238d53f12017e47cf161b216f0933a1a1d610a0f441396e232afc"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/CURRENT119-PRODUCER-GUARD-1/confirmed-period-correction-source-1/tightening-minimum-correction-source-1/independent-source-review-1/SOURCE-REVIEW.ACTUAL.json",
+      "bytes": 7421,
+      "sha256": "00ae9a6db46922cee688149a4a3a9cf68f950afaadafa52c798b02078cf344f7"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/CURRENT119-PRODUCER-GUARD-1/confirmed-period-correction-source-1/tightening-minimum-correction-source-1/prepare_operation.py",
+      "bytes": 2801,
+      "sha256": "022bbdcd3fb271aa28a616acffb66049453546dd637387863ed04a310d165496"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/CURRENT119-PRODUCER-GUARD-1/confirmed-period-correction-source-1/tightening-minimum-correction-source-1/runtime_guard.py",
+      "bytes": 9804,
+      "sha256": "14debb632383f15bcadcf6cbd0f5e3edbdddc68b4705ba3a0add311569265158"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/CURRENT119-PRODUCER-GUARD-1/confirmed-period-correction-source-1/tightening-minimum-correction-source-1/test_producer_guard.py",
+      "bytes": 9378,
+      "sha256": "007e4c6688ad960a255e1ac791277b9f8755f77f08c09094729e68a8b13bc9f5"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/CURRENT119-PRODUCER-GUARD-1/independent-source-review-1/FIRST-SOURCE-BLOCKER.ACTUAL.json",
+      "bytes": 2478,
+      "sha256": "caa2fd1281c25cced513b813c67a11765a2e955c4e8bf333019da6b129150d04"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/CURRENT119-PRODUCER-GUARD-1/prepare_operation.py",
+      "bytes": 2801,
+      "sha256": "022bbdcd3fb271aa28a616acffb66049453546dd637387863ed04a310d165496"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/CURRENT119-PRODUCER-GUARD-1/runtime_guard.py",
+      "bytes": 9531,
+      "sha256": "57d3090ff04b7c8df75c7ee7c530a78baba3599d71aab7c0ca1b9e3f1e6401cc"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/CURRENT119-PRODUCER-GUARD-1/test_producer_guard.py",
+      "bytes": 3782,
+      "sha256": "e215c1a43b34a95343493a55b4ad65b7864c7d18ffff7079e274c7de3cb5fae0"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/ROOT-ACTUAL-CAPTURE-ENTRY-1.json",
+      "bytes": 536,
+      "sha256": "08219baf0abe7392393f32bd91b06c65866badd06b83879e067879a16982c2c0"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/actual-postjoin-acceptance-1/CURRENT-FREE.ACTUAL.json",
+      "bytes": 17331,
+      "sha256": "8104e4fc9bbb7decb5f977c80965d9de3c18b29a94b47f3c5f4e130b1546619b"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/actual-postjoin-capture-live-cap-root1/CAPTURE.json",
+      "bytes": 25530212,
+      "sha256": "1a41c733eb11c06910fb30c60c52b44aaeb25abe4e3825290fdfe278e02a46d1"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/actual-postjoin-capture-live-cap-root1/command-09e650a5c0474fe9ae208fb616510795/JOIN-WAIT4.json",
+      "bytes": 11405,
+      "sha256": "1bd967ab7d5b0bf79f00ae29675d8dcc05f7797f6e7c0a5e62e9fa73f4d4f954"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/actual-postjoin-capture-live-cap-root1/command-09e650a5c0474fe9ae208fb616510795/status.json",
+      "bytes": 9539,
+      "sha256": "7c1b319ab195b09c02f2760a4048205795ac80d2294a6204bbb3a22c4793ab42"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/actual-postjoin-capture-live-cap-root1/command-09e650a5c0474fe9ae208fb616510795/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/actual-postjoin-capture-live-cap-root1/command-09e650a5c0474fe9ae208fb616510795/stdout",
+      "bytes": 35811,
+      "sha256": "da8c0c48675ecaf8f542dc968ede61ccc4312d09bd23c3a8c92f7ecce6259270"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/actual-postjoin-capture-live-cap-root1/command-10dfe3c6a3e642589bf428e745d4452b/JOIN-WAIT4.json",
+      "bytes": 6486,
+      "sha256": "4bb8f33e0bc61ca403fb515135661822a424ec0d8502ad2a58e18c77990a601e"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/actual-postjoin-capture-live-cap-root1/command-10dfe3c6a3e642589bf428e745d4452b/status.json",
+      "bytes": 4642,
+      "sha256": "ae1dcf5f3310cde3fdaf4ebe5eea67dc1ea65645414231e824ea5fbd3e485cf9"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/actual-postjoin-capture-live-cap-root1/command-10dfe3c6a3e642589bf428e745d4452b/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/actual-postjoin-capture-live-cap-root1/command-10dfe3c6a3e642589bf428e745d4452b/stdout",
+      "bytes": 35675,
+      "sha256": "c9fb7a1ea2c6d324d8a8eb03dcecb18a808dcc1db25d1a4f39ed1168427c7ed2"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/actual-postjoin-capture-live-cap-root1/command-60d174b4e6e04867acafabc14fb1a86d/JOIN-WAIT4.json",
+      "bytes": 2170,
+      "sha256": "53ce84e001922401a2cf1c07b00f5c548825cc6719fed8c6dd174909422a2f88"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/actual-postjoin-capture-live-cap-root1/command-60d174b4e6e04867acafabc14fb1a86d/status.json",
+      "bytes": 319,
+      "sha256": "6368cb71b0ff20c0ca65fdd0296e56e4a8c7307a96208595f4ec96ab3dc1b4f8"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/actual-postjoin-capture-live-cap-root1/command-60d174b4e6e04867acafabc14fb1a86d/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/actual-postjoin-capture-live-cap-root1/command-60d174b4e6e04867acafabc14fb1a86d/stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/actual-postjoin-capture-live-cap-root1/command-6275cc46a00441fa921cf1d6f68930e8/JOIN-WAIT4.json",
+      "bytes": 2158,
+      "sha256": "37a175c6c93f9bebb3bb9c4981465230883d8c53d721810000fc0fb55639c19a"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/actual-postjoin-capture-live-cap-root1/command-6275cc46a00441fa921cf1d6f68930e8/status.json",
+      "bytes": 319,
+      "sha256": "b9f1959188595ed54b8f9dc6b0fb4745e403429b5b54caabf7b17ac3a32c2889"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/actual-postjoin-capture-live-cap-root1/command-6275cc46a00441fa921cf1d6f68930e8/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/actual-postjoin-capture-live-cap-root1/command-6275cc46a00441fa921cf1d6f68930e8/stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/actual-postjoin-capture-live-cap-root1/command-785c7ec93ea843feaa2542caef85bcdb/JOIN-WAIT4.json",
+      "bytes": 6508,
+      "sha256": "9bfdac5ea20969a27b7dbb870a01d0f9ba4c09a805062fc9f7c6650b6da11ff9"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/actual-postjoin-capture-live-cap-root1/command-785c7ec93ea843feaa2542caef85bcdb/status.json",
+      "bytes": 4642,
+      "sha256": "18465a1d1467e1bf21d42510a1bd74e850a875d7014044f042f8df610c99b19c"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/actual-postjoin-capture-live-cap-root1/command-785c7ec93ea843feaa2542caef85bcdb/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/actual-postjoin-capture-live-cap-root1/command-785c7ec93ea843feaa2542caef85bcdb/stdout",
+      "bytes": 35675,
+      "sha256": "b67ce8dc278c75b778b2cb38b4a584e4ffea62b90598b980530dc8a407c5c021"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/actual-postjoin-capture-live-cap-root1/command-9896512dbb0c4cc69ff722620ca4354b/JOIN-WAIT4.json",
+      "bytes": 2079,
+      "sha256": "0bf01be763d970d364e76e927980627317a3cfdebe189ec14f3cc42a129129ba"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/actual-postjoin-capture-live-cap-root1/command-9896512dbb0c4cc69ff722620ca4354b/status.json",
+      "bytes": 227,
+      "sha256": "ed77f6f9c2495655e3d44e390f8ad59db0356dc25295f304756ed2f91788e656"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/actual-postjoin-capture-live-cap-root1/command-9896512dbb0c4cc69ff722620ca4354b/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/actual-postjoin-capture-live-cap-root1/command-9896512dbb0c4cc69ff722620ca4354b/stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/actual-postjoin-capture-live-cap-root1/command-a3574b6c933b42da9ce69661408b55bd/JOIN-WAIT4.json",
+      "bytes": 2162,
+      "sha256": "6a188589e53e942308d8192f836cf817d5d49cd066f75a57b8231583356c43f9"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/actual-postjoin-capture-live-cap-root1/command-a3574b6c933b42da9ce69661408b55bd/status.json",
+      "bytes": 315,
+      "sha256": "7b07d61b95baa38c00abd80ae22c4078079db5eebeb974ed82b77999201a45eb"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/actual-postjoin-capture-live-cap-root1/command-a3574b6c933b42da9ce69661408b55bd/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/actual-postjoin-capture-live-cap-root1/command-a3574b6c933b42da9ce69661408b55bd/stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/actual-postjoin-capture-live-cap-root1/command-fa6c7206ca524cfb878ffd45b2aed522/JOIN-WAIT4.json",
+      "bytes": 2172,
+      "sha256": "2627d2b15dae3df0a32025d4bfed37ed827cf4247c336b633e6b5c7f3491adcf"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/actual-postjoin-capture-live-cap-root1/command-fa6c7206ca524cfb878ffd45b2aed522/status.json",
+      "bytes": 320,
+      "sha256": "7c32e19588939fcce9df36a3f2cab2bfd0b739e23114174821cfe54377ca6fde"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/actual-postjoin-capture-live-cap-root1/command-fa6c7206ca524cfb878ffd45b2aed522/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/actual-postjoin-capture-live-cap-root1/command-fa6c7206ca524cfb878ffd45b2aed522/stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/actual-postjoin-capture-live-cap-root1/commands.log",
+      "bytes": 41830,
+      "sha256": "eab0d7c59fe654c0964e31a88fc37876df94bc73b9f83a120937b630bafbfe80"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/actual-postjoin-parent-root1/DIRECT-PARENT-JOIN.ACTUAL.json",
+      "bytes": 3484,
+      "sha256": "17959641dd65a5652b512562cea65d284be94874d01884a9eff3437baab50073"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/actual-postjoin-parent-root1/STARTED.json",
+      "bytes": 1958,
+      "sha256": "8448847f216787f324e3ca892d7c77cece011ec3e4e9b0d259251f3c3d6fb259"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/actual-postjoin-parent-root1/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/actual-postjoin-parent-root1/stdout",
+      "bytes": 508,
+      "sha256": "991a26e9fa3417474a186f680c39c8a1a34c27fd0eea523e577db00102170e56"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/current119/PROFILE.SOURCE-ONLY.json",
+      "bytes": 129458,
+      "sha256": "b60b342ca18fe438cfa9d342972ac73cafa83f65ee19a32d88c915c9b5d9b0d5"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/current119/ROOT-CURRENT119-INPUT.ACTUAL.json",
+      "bytes": 3783,
+      "sha256": "4b4fad8c6cc915a4e27c8aba79dd67cf55e7e28e67b41fa0e26daa2b1057a36c"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/current119/ROOT-SOURCE-BINDING.ACTUAL.json",
+      "bytes": 4600,
+      "sha256": "54de568f361b59c7148163ffc3cfcf147e865c99b1063468ce64124aa0b20036"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/current119/build_only_worker.py",
+      "bytes": 4112,
+      "sha256": "d3806c4d579ec3ad05efad71d0d0b1ad8c4c2cc8ad262117a42038030fca1ac9"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/current119/run_build_only.py",
+      "bytes": 27040,
+      "sha256": "0f3c81fe1fa62c0a61627d5ea5b8715c72e1267bd8ab15146f9de397b5c58794"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CURRENT119-BUILD-ADMISSION-1/ROOT-ACTUAL-READONLY-INPUT-EXPORT-AUTHORITY.json",
+      "bytes": 68435,
+      "sha256": "744457bdd079a52f13215eae6cc4c5c835543abf38f80c714d7de51a8cceee10"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CURRENT119-BUILD-ADMISSION-1/ROOT-HOLDER-BOOTSTRAP-GRANT.json",
+      "bytes": 2392,
+      "sha256": "0a49896ae9b2378a876beafe68cd7a7ab12a9e0c6d522f0d02895145ab6aebaa"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CURRENT119-BUILD-ADMISSION-1/ROOT-TRANSACTION.ACTUAL.json",
+      "bytes": 696,
+      "sha256": "445afdbcdd880230d08297a6b8bcef863b4f7e711f20b0588bd576c0ab7b4a07"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CURRENT119-BUILD-ADMISSION-1/STATIC-REQUEST-PAYLOAD.SOURCE-ONLY.json",
+      "bytes": 3136,
+      "sha256": "680861e6069730b183ac0e10d4415f23c8118385dff096be6d76dcbfa517d381"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT65-CURRENT119-ADOPTION-1/ACTUAL-Q-CONTROL-BUNDLE.json",
+      "bytes": 1184,
+      "sha256": "2107d6e1a010598e6de932fb96a558988620d4bc02d1df1d1cbb8a8122a27b2a"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT65-CURRENT119-ADOPTION-1/OBSERVER-SCHEMA.ACTUAL.json",
+      "bytes": 693,
+      "sha256": "0f4a8ce4fb07dd6d44ddfb518375c760ecb94c59eb3568b29a2a50900d5aadca"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT65-CURRENT119-ADOPTION-1/ORIGIN119-PRODUCER.ACTUAL.json",
+      "bytes": 3301,
+      "sha256": "f162b34a0da3c094255255d216cd61c725139c497815fe52883bbd7e260afe99"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT65-CURRENT119-ADOPTION-1/ORIGIN119.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT65-CURRENT119-ADOPTION-1/ORIGIN119.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT65-CURRENT119-ADOPTION-1/ROOT65-ADOPTION.ACTUAL.json",
+      "bytes": 1794,
+      "sha256": "d7fde3de9d836b39e5e57dda969dc3ebf66787957d7de0b0554f50c8cfafa26d"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT65-CURRENT119-ADOPTION-1/ROOT65-CURRENT-BINDINGS.ACTUAL.json",
+      "bytes": 3997,
+      "sha256": "6d9592c5c41f6037275b503fd52dc33f9c5fc59a08652d7c7496f3234b5a6d5a"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT65-CURRENT119-ADOPTION-1/ROOT65-CURRENT-BINDINGS.CONFIGURED.PENDING-REVIEW.json",
+      "bytes": 3668,
+      "sha256": "ff60af57a3d654937f0211cf197e45e56bf7fc3e61d36f527839dc755cc491d4"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT65-CURRENT119-ADOPTION-1/ROOT65-CURRENT-BINDINGS.PENDING-REVIEW.json",
+      "bytes": 3367,
+      "sha256": "ee078bfb126f1453ad6e6e7164deeef80f5deb484450aa00b34e5d747a139aa9"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT65-CURRENT119-ADOPTION-1/ROOT65-CURRENT-BOUNDARY.ACTUAL.json",
+      "bytes": 2644,
+      "sha256": "886b39110d78871c2a841c9e1a8f4da9936334b1c2fbd86b8178673edc959577"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT65-CURRENT119-ADOPTION-1/ROOT65-CURRENT-BOUNDARY.PENDING-REVIEW.json",
+      "bytes": 2326,
+      "sha256": "28bacc31509f0764a6447783df3a83cff1c6b3a0e032d257c36932102a2b49f0"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT65-CURRENT119-ADOPTION-1/ROOT65-CURRENT-GUARD-CONFIG.ACTUAL.json",
+      "bytes": 43974,
+      "sha256": "8e12ffef40a02c0053236a033486f02fe0941cf05838b6702f27de0d5ed23d9a"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT65-CURRENT119-ADOPTION-1/ROOT65-CURRENT-OPERATION.ACTUAL.json",
+      "bytes": 44030,
+      "sha256": "86e1bfcadf94f935af76cd0e7df662cd3d62f1b9d54f6f3f55cb24524512e53b"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT65-CURRENT119-ADOPTION-1/ROOT65-NONCE-LEDGER.ACTUAL.json",
+      "bytes": 47557,
+      "sha256": "2e39a7536a627bb472d2699aa367d68c8035110c52d6e2dd4ef71ebed5ae37ee"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT65-CURRENT119-ADOPTION-1/independent-adoption-review-1/BOUNDARY-REVIEW.ACTUAL.json",
+      "bytes": 6772,
+      "sha256": "b5baad70d443ba6849bda64ba890ec38e440c5322dcd822bd8204c4782d4754d"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT65-CURRENT119-ADOPTION-1/independent-adoption-review-1/CURRENT-DEPENDENCY-REVIEW.ACTUAL.json",
+      "bytes": 50834,
+      "sha256": "dfa3f743d6ae99cb5250a469219b8aa40e5301361ad1c2d79ea8b74ed04dcb10"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT65-CURRENT119-ADOPTION-1/independent-adoption-review-1/CURRENT-OPERATION-REVIEW.ACTUAL.json",
+      "bytes": 46635,
+      "sha256": "6c94a693eaa59ba2dc9b928efc21edb6ebb7a391b9532094ac033983a72b9e46"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT65-CURRENT119-ADOPTION-1/independent-adoption-review-1/LEDGER-REVIEW.ACTUAL.json",
+      "bytes": 3188,
+      "sha256": "1890cddf9622a9fc253576ac089c8c227b607581abf1eb96c02448ef7a7a205a"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT65-CURRENT119-ADOPTION-1/independent-adoption-review-1/OBSERVER-SCHEMA-REVIEW.ACTUAL.json",
+      "bytes": 1976,
+      "sha256": "8069d70bd25c17ffe2970cfe0b38458262d21dc2e0279ef95f170601985c02ed"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/weekly-only-manual-resume-20261029T191857/CHECKPOINTF328D8317.FETCHED.json",
+      "bytes": 48657,
+      "sha256": "da9138d7adbc5865ec4c979d3c5d3e4d1411389ff1e188775b1261be54071c3d"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/weekly-only-manual-resume-20261029T191857/STEERING-20261029T200002-CLOSED-BUCKET.json",
+      "bytes": 2104,
+      "sha256": "656316df6551b69bdd3bedff6d85bf459c90c48220a40b4a3feb7ed7496c5fe9"
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/weekly-only-manual-resume-20261029T191857/STEERING-20261029T202004-CLOSED-BUCKET.json",
+      "bytes": 2138,
+      "sha256": "e90334dc5a2a19b1837c45ba8332ceab10521611dddcff3858b671f6b1e796bc"
+    },
+    {
+      "path": "docs/verification/os-milestones-20260914/CURRENT.md",
+      "bytes": 2212292,
+      "sha256": "c248f114ecfb5b34b1fd015b246dabd68fcb36b7fcb0593d19ae4a518209bf42"
+    },
+    {
+      "path": "docs/verification/os-milestones-20260914/HANDOFF.md",
+      "bytes": 1304257,
+      "sha256": "409f6bdb218bdafaa384a6572ad680bcf91d6f3d54fe75f5aac186be227cfa8e"
+    },
+    {
+      "path": "docs/verification/os-milestones-20260914/PROGRESS.md",
+      "bytes": 76708,
+      "sha256": "61862b0f8dc4143e29eb2e8332742a06f484a6dc69b5c6f8be4b478d6b5a6bf4"
+    },
+    {
+      "path": "docs/verification/os-milestones-20260914/rust-cutover-m14.json",
+      "bytes": 247043,
+      "sha256": "64e2503ab543cb0f6d4eab3fd305f9801ae82468c9ae445b9a7f03a8700a20c2"
+    }
+  ],
+  "runtime_authority": null
+}

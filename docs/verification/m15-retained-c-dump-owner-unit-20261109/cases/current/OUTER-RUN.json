@@ -1,0 +1,36 @@
+{
+  "driver_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "310s",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=45:45",
+    "--fsize=67108864:67108864",
+    "--core=0:0",
+    "--",
+    "/usr/bin/python3",
+    "-B",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/retained-c-dump-owner-cases-1/run_packet.py",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/retained-c-dump-owner-cases-1/REQUEST.json"
+  ],
+  "environment_replace": {
+    "PATH": "/usr/bin:/bin",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "request_sha256": "9aa844acba0dda262cf745f38321aafccdbdf12109bcf6b61069e03f6dbd9d7c",
+  "admission_sha256": "f9d877a83fbb4feb4f32ff087a29edaba22a311ae8381f6d4bd182c7ce8d57e4",
+  "current_route_path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/retained-c-dump-owner-source-1/CURRENT-SHARED-ROUTES.json",
+  "current_route_sha256": "a0a38db495c462296f1b37680a6d5b94de2bf82553675913f510d8d05c371a18",
+  "driver_pid": 575419,
+  "proc_start_ticks": "33719914",
+  "direct_wait_joined": true,
+  "returncode": 0,
+  "wall_seconds": 0.15712679199350532
+}

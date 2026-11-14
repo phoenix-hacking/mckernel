@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "app.gzip-compress",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"generator": {"kind": "repeat-byte", "hex_byte": "41", "count": 1048576}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "canonical-record-with-relations", "fields": ["compressed_size", "header_metadata_absent", "decoded_size", "decoded_sha256", "valid"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["gzip -n -c emits a valid stream with no input-name/time metadata", "Independent decompression yields exactly 1048576 bytes of 0x41"],
+  "unresolved_expectations": ["Pinned gzip identity, DEFLATE implementation details, and compressed-byte reference require Max review."],
+  "max_question_for_reviewer": "Confirm gzip -n metadata suppression and the independent decompressed-byte oracle; bind exact compressed bytes only after pinned reference execution."
+}

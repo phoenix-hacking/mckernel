@@ -1,0 +1,161 @@
+{
+  "status": "READY_TWO_BRIDGE_METADATA_READBACKS_AND_FINITE_OBJECT_GATE_PENDING_F_REVIEW_ROOT_ADMISSION",
+  "owner": "/root/m15_public_abi_high",
+  "cwd": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-metadata-1",
+  "commands": [
+    {
+      "label": "provider-symbols",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-metadata-1/provider-symbols.metrics",
+        "/usr/bin/nm",
+        "-S",
+        "--format=posix",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-unit-1/output/scheduler_bridge_provider.o"
+      ],
+      "stdout_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-metadata-1/provider-symbols.stdout",
+      "stderr_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-metadata-1/provider-symbols.stderr"
+    },
+    {
+      "label": "provider-elf",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-metadata-1/provider-elf.metrics",
+        "/usr/bin/readelf",
+        "-h",
+        "-SW",
+        "-Ws",
+        "-Wr",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-unit-1/output/scheduler_bridge_provider.o"
+      ],
+      "stdout_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-metadata-1/provider-elf.stdout",
+      "stderr_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-metadata-1/provider-elf.stderr"
+    }
+  ],
+  "environment_replace": {
+    "PATH": "/usr/bin:/bin",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "inputs": {
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-unit-1/scheduler_bridge_provider_unit.rs": "9b4024125fe7359db2df645bc93e0426dd31cb85a2930b41b9e36ad817dbdd5f",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-unit-1/SOURCE-MANIFEST.json": "23261c1bc305d29f81d3882fa4bd219619e7d674dd94dcce2575124e1e5612b6",
+    "/home/holden/mckernel/kernel/rust/process_helpers.rs": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+    "/home/holden/mckernel/kernel/rust/debug.rs": "fed7537d21f5d5fe0fc3ffdb1fe44783f5f9ac13937b3bdbbcc452cc2fa5eb16",
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-unit-1/SOURCE-PROFILE-PROOF.json": "04c4306101245e1d799403ce798fa0a96b620a9365e8beb217eb440eebcd690a",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-unit-1/COMPILE-PROPOSAL.json": "c8cbbb36aee3f116b1f2453bba713d1356ded32d5a86131dc6c904518a469523",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-review-1/REVIEW.json": "0158c0882bc39d3697fbf9042db7415947a3e2ece1de9b90bb90f79092b69484",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-producer-1/correction-1/RESULT.json": "944e925c8af8f56ed030daf026c0d4c7568e9e63033d1a7569adcead0dee6a20",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-producer-1/correction-1/ADMISSION.json": "4c19aece0f8dc18d2e0a4588d7417af2e4ab114c4b4da2caa4c372ef1166ed66",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-unit-1/output/scheduler_bridge_provider.o": "33500c973350e0acdaf4f2f3f251a5889378ccadf8805d2cfed806d1e4466a69",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-metadata-1/SOURCE-EMISSION-CONTRACT.json": "a337c28b4da08c63e9804a5336685444766d6f096a7ebea014f0b33afc6f6045",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-metadata-1/bridge_metadata_checks.py": "8d8475878d8cba2f0ac9ddcf0795c7db9d20e298067e5cf083cf5aec7d097cc7",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-metadata-1/run_metadata.py": "c9f30149c16c62c5e1af950bac6fa33888c7cea808af29af5c63b2f13f7a5ad0",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/storage_predicate.py": "a4df81bb2b86d97f4199ae816dab7965213ceba05dca17945f9eae861dc31892",
+    "/usr/bin/nm": "5fb0dd8acc18e3f348ed0acbcada0580dbdddd1eb5de3c8323613af13580032b",
+    "/usr/bin/readelf": "41a813335a74480f145fba9400aa7fb5c0ec7ffcaa7af7f33e832dc75eb90ffb"
+  },
+  "source_bindings": {
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-unit-1/scheduler_bridge_provider_unit.rs": "9b4024125fe7359db2df645bc93e0426dd31cb85a2930b41b9e36ad817dbdd5f",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-unit-1/SOURCE-MANIFEST.json": "23261c1bc305d29f81d3882fa4bd219619e7d674dd94dcce2575124e1e5612b6",
+    "/home/holden/mckernel/kernel/rust/process_helpers.rs": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+    "/home/holden/mckernel/kernel/rust/debug.rs": "fed7537d21f5d5fe0fc3ffdb1fe44783f5f9ac13937b3bdbbcc452cc2fa5eb16",
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+  },
+  "compiled_input": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-unit-1/output/scheduler_bridge_provider.o",
+    "sha256": "33500c973350e0acdaf4f2f3f251a5889378ccadf8805d2cfed806d1e4466a69",
+    "bytes": 7384,
+    "actual_compile_RESULT": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-producer-1/correction-1/RESULT.json",
+    "actual_compile_RESULT_sha256": "944e925c8af8f56ed030daf026c0d4c7568e9e63033d1a7569adcead0dee6a20",
+    "compile_already_joined_CPU6_released": true,
+    "no_compiler_replay": true
+  },
+  "actual_nm": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-metadata-1/provider-symbols.stdout",
+  "actual_elf": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-metadata-1/provider-elf.stdout",
+  "actual_metadata_capture": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-metadata-1/ACTUAL-ELF-METADATA.json",
+  "source_emission_contract": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-metadata-1/SOURCE-EMISSION-CONTRACT.json",
+  "qualified_ELF_reader": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/storage_predicate.py",
+    "sha256": "a4df81bb2b86d97f4199ae816dab7965213ceba05dca17945f9eae861dc31892",
+    "qualification_receipt": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/RESULT.json",
+    "scope": "Reuse existing exact Image/parse_nm for ELF64-LE/x86_64 REL metadata/bytes only, not storage predicate re-review or new parser/loader."
+  },
+  "object_predicate": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-metadata-1/bridge_metadata_checks.py",
+    "sha256": "8d8475878d8cba2f0ac9ddcf0795c7db9d20e298067e5cf083cf5aec7d097cc7",
+    "callable": "actual_object_gate(q)",
+    "must_IMPORT_and_CALL_after_both_actual_readbacks_before_any_future_link": true,
+    "allactualmetadata_retained_before_source_owner_assertions": true
+  },
+  "controller": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-metadata-1/run_metadata.py",
+    "sha256": "c9f30149c16c62c5e1af950bac6fa33888c7cea808af29af5c63b2f13f7a5ad0",
+    "literal_argv": [
+      "/usr/bin/python3",
+      "-B",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-metadata-1/run_metadata.py",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-metadata-1/REQUEST.json"
+    ],
+    "only2literalpayloads_no_compiler_or_link": true
+  },
+  "inherited_resource_profile": {
+    "CPU": [
+      6
+    ],
+    "local_serial_jobs": 1,
+    "AS_bytes": 1073741824,
+    "CPU_seconds": 45,
+    "wall_seconds": 60,
+    "kill_after_seconds": 5,
+    "FSIZE_bytes": 67108864,
+    "core_bytes": 0,
+    "aggregate_CPUs": [
+      0,
+      6,
+      7
+    ],
+    "aggregate_jobs_max": 3,
+    "aggregate_HOST_total_bytes_all_overhead": 4294967296,
+    "retained_prior_GiB": 18,
+    "floor_GiB": 4,
+    "minimum_MemAvailable_GiB": 26
+  },
+  "source_expected": "Exact10T/12genuineU/no writabledefineddata. PrivateenabledexactRustsourcepath/bytes/relocs; readonlyONLYactualsourceformatstrings/mergedsuffixes, fullpointerjumptabletargetingexactlogger, retainedprofileeh_frameownedbyselectedfunctions. Unexpectedintrinsic/private/readonlyvariationSTOPforreviewbeforelink.",
+  "no_debug_defaults_or_external_array_owner_claim": true,
+  "future_engine_partial_and_join": "UNBOUND; no predictedengineoutput/count/hash or linkcommand; sourceenginepacketownedB/Eseparately.",
+  "no_current_metadata_or_compiler_or_runtime_executed_in_preparation": true,
+  "no_canonical_index_or_other_worker_edits": true
+}

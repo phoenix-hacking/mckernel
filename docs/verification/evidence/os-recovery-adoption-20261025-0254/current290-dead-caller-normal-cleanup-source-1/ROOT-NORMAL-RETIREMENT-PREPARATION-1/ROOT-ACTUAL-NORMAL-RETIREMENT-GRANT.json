@@ -1,0 +1,59 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root",
+  "decision": "GRANT_EXACT_DEAD_CALLER_NORMAL_RETIREMENT_ONCE",
+  "granted_at": "2026-10-26T09:07:30.770371+00:00",
+  "packet": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/ROOT-NORMAL-RETIREMENT-PREPARATION-1/EXACT-CLEANUP-CAPTURE-PACKET.ACTUAL.json",
+    "bytes": 3140,
+    "sha256": "218ac32f3cd6508d17921f4847aef57f12089fb58957689b23d4d5c41b824e46"
+  },
+  "independent_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-post-recovery-retirement-review-1/EXACT-E49-NORMAL-CLEANUP-INDEPENDENT-EXECUTION-REVIEW.json",
+    "bytes": 10238,
+    "sha256": "a9a892117335d886c7c00ad1c4776a90e0906f498875525f1aef755221b769b0"
+  },
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "--",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/bounded-observer-correction-source-1/native_rust_cutover_image_terminal_cleanup.CURRENT290.EXACT-DEAD-CALLER.py",
+    "--release",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/ROOT-NORMAL-RETIREMENT-PREPARATION-1/RELEASE.PASS_EXECUTION_RELEASE.json",
+    "--release-sha256",
+    "9c7589afa411c1b40fe02777facf69007b885d228632b12c3f34e5a091b517e9",
+    "--execute",
+    "--exact-dead-caller-new-ofd"
+  ],
+  "capture_wrapper": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/ROOT-NORMAL-RETIREMENT-PREPARATION-1/ROOT-CAPTURE-EXACT-NORMAL-RETIREMENT-ONCE.py",
+    "bytes": 3075,
+    "sha256": "b464f6d9bc18487881ceb883040d7e9020169063e2c291164ee33e9bd5fde3c8"
+  },
+  "outer_capture_directory": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/ROOT-NORMAL-RETIREMENT-PREPARATION-1/ROOT-ACTUAL-CLEANUP-OUTER-1",
+  "resources": {
+    "MemAvailable_bytes": 27979132928,
+    "disk_available_bytes": {
+      "/home/holden/mckernel": 152133574656,
+      "/home/holden/mckernel-work/scratch": 14100373504
+    },
+    "cpu": "7",
+    "jobs": 1,
+    "address_space_bytes": 2147483648,
+    "aggregate_cap": "7jobs/22.0485GiB unchanged"
+  },
+  "new_workload_admission": false,
+  "normal_retirement_only": true,
+  "same_OFD_claim": false
+}

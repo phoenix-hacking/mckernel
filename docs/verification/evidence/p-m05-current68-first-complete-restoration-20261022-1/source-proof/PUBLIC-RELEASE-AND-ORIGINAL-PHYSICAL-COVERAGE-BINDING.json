@@ -1,0 +1,112 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_BOUND_PUBLIC_RELEASE_ROUTE_NOT_NATIVE_OBSERVATION",
+  "SDK_source_pins": {
+    "smp_cpu.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/m05-sdk68-current-source-bundle-20261022-1/source-modules/smp_cpu.rs",
+      "bytes": 78237,
+      "sha256": "f65f3aea00dfdd0a7905d3dd396e67684fd428c71cf34dd6e15a56896c73f912"
+    },
+    "smp_memory.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/m05-sdk68-current-source-bundle-20261022-1/source-modules/smp_memory.rs",
+      "bytes": 127757,
+      "sha256": "60758aeafac150bd8aac62455844e3f4e4200a082f82f80ce66c3c871d4909be"
+    },
+    "smp_service.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/m05-sdk68-current-source-bundle-20261022-1/source-modules/smp_service.rs",
+      "bytes": 47527,
+      "sha256": "fd2c19bc7e09911c9332ec32432060b04e2ce3d4c2918cf94a996eeef82deeac"
+    }
+  },
+  "accepted_source_observation_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/m05-used-resource-retirement-observation-source-20261022-1/M05-USED-RESOURCE-OBSERVATION-INDEPENDENT-SOURCE-REVIEW.json",
+    "bytes": 4024,
+    "sha256": "f45ef37d5b4666287c12145d4310729c5ecf3341c601f184c17e6f49e2013d24"
+  },
+  "linked_provider_acceptance": {
+    "path": "/home/holden/mckernel-work/host-preparation/m05-sdk68-canonical-host-output-request-20261022-1/INDEPENDENT-CURRENT68-RETAINED-ARTIFACT-ACCEPTANCE-1.json",
+    "bytes": 1960,
+    "sha256": "1471eb15683255085a824714c1b3ca98d7a4902654330608541a9c689bec33ca"
+  },
+  "shutdown_order": [
+    {
+      "source": "smp_cpu.rs",
+      "function": "shutdown -> reconcile_shutdown_boot",
+      "line": 1649,
+      "requirements": "close/drain IRQ senders; exact claim revalidated before/after reset; reset/reonline exact journal owner+boot_epoch; retire services using peer-stopped proof; CPU preflight then memory coupled commit."
+    },
+    {
+      "source": "smp_service.rs",
+      "function": "Started::retire_after_peer_stop",
+      "line": 879,
+      "requirements": "application quiescent/procfs sessions closed; workers synchronously joined; pending/procfs/zero queues and masterreply empty; process service quiescent; callback owners dropped outside locks; remote callbacks drained; repeat application/procfs and memory ledger quiescence."
+    },
+    {
+      "source": "smp_memory.rs",
+      "function": "finish_shutdown_claim",
+      "line": 1464,
+      "requirements": "same claim/boot epoch and SERVICES_RETIRED; exact continuing runtime; release drained IRQ; infallible coupled CPU/memory policy commit -> reserved pool. Does not itself free Linux PageOwner allocation."
+    }
+  ],
+  "public_release_route": {
+    "probe_source": {
+      "path": "/home/holden/mckernel/scripts/application-tests/native_resource_release_probe.c",
+      "bytes": 8093,
+      "sha256": "d87df88114863cc439e8a3931c80e369f77e4e4ffc6aee48cb9efe6afb7e91c2"
+    },
+    "guest_argv": [
+      "/bin/native-resource-release-probe"
+    ],
+    "callsite": {
+      "source": {
+        "path": "/home/holden/mckernel-work/host-preparation/native-second-stop-case-preparation-20261021-1/current053d-normalization-runtime-preparation-1/current-runtime-construction-preparation-1/two-generation-bootstrap-contract-correction-1/main-callsite-and-fixture-braces-correction-1/native-second-stop-collector.two-generation.c",
+        "sha256": "694b3eba48e01d4a88ffa87fc1b2dd641b806115f2e625a6612cb010d3738dfe",
+        "bytes": 48797
+      },
+      "line": 645
+    },
+    "public_expectations": [
+      "After external shutdown, public status0 and online_before_release1.",
+      "Reserved CPU before/returned count0; reserved MEM before/returned exact128MiB (size/NUMA inventory), assigned CPU/MEM must fail EBUSY16 closed_admission.",
+      "Close OS descriptor; IHK_DEVICE_DESTROY_OS returns0; query returned reserved inventory.",
+      "IHK_DEVICE_RELEASE_MEM returns0 for exact returned mem_req; query final reservedCPU0/MEM0; online_after_release1; streams complete/empty stderr/exit0.",
+      "Probe PASS_PUBLIC_RELEASE JSON deliberately sets physical_identity_verified/generation_verified/reboot_verified false. Keep unchanged; combine with separate valid provider/native identity proof, never relabel probe result."
+    ],
+    "release_implementation": {
+      "source": {
+        "path": "/home/holden/mckernel-work/host-preparation/m05-sdk68-current-source-bundle-20261022-1/source-modules/smp_memory.rs",
+        "bytes": 127757,
+        "sha256": "60758aeafac150bd8aac62455844e3f4e4200a082f82f80ce66c3c871d4909be"
+      },
+      "function": "Context::release",
+      "line": 1670,
+      "original_physical_interval_checks_lines": [
+        1760,
+        1783
+      ],
+      "checks": "Choose unowned exact physical MemoryExtent ranges. Compare every overlapping original self.pages PageOwner allocation: full containment only, reject partial overlap; sum original allocation lengths must equal wanted interval bytes. Prepare map remove-free transaction before external effects. Reverse-index remove+drop PageOwner synchronously invokes __free_pages(original page,order); commit+verify before return0.",
+      "synchronous_drop_line": 1791,
+      "PageOwner_drop_line": 404
+    },
+    "original_allocation_interval_identity": {
+      "source": {
+        "path": "/home/holden/mckernel-work/host-preparation/m05-sdk68-current-source-bundle-20261022-1/source-modules/smp_memory.rs",
+        "bytes": 127757,
+        "sha256": "60758aeafac150bd8aac62455844e3f4e4200a082f82f80ce66c3c871d4909be"
+      },
+      "fields": "PageOwner.page,physical,order,node; len=PAGE_BYTES<<order; end=physical+len; no synthesized/reallocated replacement owner",
+      "actual_prior_boot_physical_intervals": null,
+      "actual_public_release_return": null,
+      "actual_source_link_and_runtime_join": null
+    }
+  },
+  "native_full_restoration_slots": {
+    "full_host_kernel_log": null,
+    "independently_bound_segment_resource_rows": null,
+    "public_release_probe_streams": null,
+    "mapping_callback_reference_frame_retirement": null,
+    "runtime_per_operation_physical_retirement": null,
+    "actual_reboot_and_second_workload": null
+  },
+  "credit_rule": "Resource-map ownership return alone grants no Linux page-release or complete-cycle credit. Actual public RELEASE0 through exact linked source plus complete original physical coverage and genuine shutdown/service/worker/callback/process/pending quiescence must be joined to live evidence. Actual first full restoration then actual reboot boundary counts toward ten cycles; two stop calls do not equal two completed full cycles. Native/completecycle credits here0."
+}

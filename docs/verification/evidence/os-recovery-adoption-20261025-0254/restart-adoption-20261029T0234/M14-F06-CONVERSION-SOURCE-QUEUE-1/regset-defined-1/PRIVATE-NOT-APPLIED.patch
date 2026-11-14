@@ -1,0 +1,64 @@
+--- /dev/null
++++ b/kernel/rust/syscall_regset_defined_logger.rs
+@@ -0,0 +1,18 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Root-approved defined diagnostic correction; no parity claim for old long/%x.
++
++use super::{kprintf, CInt, CLong, CULong};
++
++/// Preserve the public callback ABI; render the complete unsigned long bit value.
++#[no_mangle]
++pub(super) extern "C" fn arch_ptrace_regset_log_bridge(event: CInt, type_: CLong) {
++    let format = match event {
++        1 => c"ptrace_read_regset: not supported type 0x%lx\n",
++        2 => c"ptrace_write_regset: not supported type 0x%lx\n",
++        _ => return,
++    };
++    // SAFETY: immutable NUL-terminated format has one %lx slot. CULong is the
++    // actual u64 unsigned long variadic type. Conversion preserves all 64 bits,
++    // including negative CLong values. No pointer/object lifetime crosses here.
++    unsafe { kprintf(format.as_ptr().cast(), type_ as CULong); }
++}
+--- a/arch/x86_64/kernel/syscall.c
++++ b/arch/x86_64/kernel/syscall.c
+@@ -1622,6 +1622,10 @@
+ #endif
+ #line 1446
+ 
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_REGSET_DEFINED_DIAGNOSTIC)
++extern void arch_ptrace_regset_log_bridge(int event, long type);
++#else
++#line 1447
+ void
+ arch_ptrace_regset_log_bridge(int event, long type)
+ {
+@@ -1632,6 +1636,8 @@
+ 		kprintf("ptrace_write_regset: not supported type 0x%x\n", type);
+ 	}
+ }
++#endif
++#line 1457
+ #endif
+ #line 1458
+ 
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -1,4 +1,8 @@
+ use core::ffi::c_void;
++
++#[cfg(f06_regset_defined_diagnostic_candidate)]
++#[path = "syscall_regset_defined_logger.rs"]
++mod syscall_regset_defined_logger;
+ use core::mem::{align_of, offset_of, size_of, ManuallyDrop, MaybeUninit};
+ use core::ptr::{
+     addr_of, addr_of_mut, copy_nonoverlapping, null_mut, read_volatile, write, write_volatile,
+--- a/kernel/CMakeLists.txt
++++ b/kernel/CMakeLists.txt
+@@ -142,6 +142,7 @@
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/smp_ikc.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/sysfs.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_policy.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_regset_defined_logger.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/timer.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/tofu_uapi.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/ubsan.rs"

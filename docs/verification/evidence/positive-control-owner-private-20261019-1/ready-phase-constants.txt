@@ -1,0 +1,12 @@
+// ownership. All table access uses OsObject.forks; lookup clones an Arc while
+// holding that mutex before it may release the guard. No raw table pointer is
+// read outside exclusion. A monotonic epoch distinguishes every slot reuse.
+const FORK_PROVIDER_CAPACITY: usize = 64;
+const FORK_PROVIDER_PENDING: u32 = 1;
+const FORK_PROVIDER_QUARANTINED: u32 = 2;
+const FORK_PROVIDER_HOST_REVOKED: u32 = 3;
+const FORK_PROVIDER_BUSY: u32 = 4;
+static FORK_PROVIDER_OWNER_COUNT: AtomicU32 = AtomicU32::new(0);
+
+struct ForkProviderCapacity;
+impl ForkProviderCapacity {

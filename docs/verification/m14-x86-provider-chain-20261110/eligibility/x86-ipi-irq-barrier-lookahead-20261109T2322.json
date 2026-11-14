@@ -1,0 +1,79 @@
+{
+  "kind": "CURRENT_OWNER_AWARE_ACCEPTED_F04_IRQ_BARRIER_SOURCE_CONTRACT",
+  "decision": "GO_ONE_NEW_IHK_MC_MB_ONLY_REUSE_TWO_QUALIFIED_IRQ_OWNERS",
+  "owner": "Existing saved Sol/HIGH read-only source reviewer; Root sole compositor/reviewer/admission",
+  "current_evidence": {
+    "97_owner_result": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-next-provider-join-1/JOIN-RESULT.json",
+    "status": "PASS_FIVE_MATCHING_CURRENT_AND_GENUINE_NEXT_PROVIDER_PARTIAL",
+    "actual_partial_sha256": "4b4cc4a00304bb0896864446896cbf159cd597bafa8a111b141bf346c460eb91",
+    "saved_symbol_text": "scheduler-next-provider-join-1/joined-symbols.stdout",
+    "already_qualified": [
+      {
+        "symbol": "cpu_disable_interrupt_save",
+        "kind": "T",
+        "size_hex": "6"
+      },
+      {
+        "symbol": "cpu_restore_interrupt",
+        "kind": "T",
+        "size_hex": "5"
+      }
+    ],
+    "missing_requested_owner": "ihk_mc_mb absent from this actual saved partial symbol text.",
+    "actual_new_IPI_capture": "scheduler-ipi-concrete-provider-metadata-1/ACTUAL-CAPTURE-BEFORE-GATE.json lists standalone imports cpu_disable_interrupt_save,cpu_restore_interrupt,ihk_mc_mb plus four other genuine imports. This is actual metadata capture only, not ownershipgatePASS and not proof all imports remainU after a matching partial join.",
+    "preparation_overlap": "Checked bounded current IPI/lapic source manifest/proposal packets and current invocation names. IPI manifest lists these as genuine_U; no separate ihk_mc_mb provider preparation/owner was established. Reuse the two IRQ definitions; do not duplicate their codegen.",
+    "no_new_nm_metadata_or_hash_census": true
+  },
+  "affirmative_source_membership": {
+    "scope": "Original acceptedF04 CPU primitive/barrier and interrupt-flags helpers, exact selected current Rust definitions and C counterparts only. No generic/exec/notification endpoint, held payload, wholemodule or neighbor preparation.",
+    "selection": "kernel/rust/lib.rs94 selects x86_cpu_helpers; kernelCMake187 includes actual source and729-730 pairs archCPU C reference with MCKERNEL_RUST_X86_CPU_HELPERS. AcceptedF04 stays closed; this supplies a genuine new partial-provider dependency without reopening acceptance.",
+    "profile": "Current actual nonexecuted no_std/nightly1.95/edition2021/large-static/no-redzone/no-vector/no-SSE partial-codegen profile; current ABI CULong=u64. Existing IRQ definitions retain cfg(not(mckernel_equivalence)); do not enable equivalence cfg or substitute behavior. No native/SDK/currentfree authority is inferred."
+  },
+  "one_new_exact_source_cut": {
+    "name": "ihk_mc_mb",
+    "Rust": "kernel/rust/x86_cpu_helpers.rs810-813",
+    "signature": "#[no_mangle] pub unsafe extern C fn()->()",
+    "exact_existing_body": "core::arch::asm!(\"mfence\", options(nostack,preserves_flags));",
+    "Ccounterpart": "arch/x86_64/kernel/cpu.c195-198 void ihk_mc_mb(void) { asm volatile(\"mfence\" : : : \"memory\"); }; declaration arch/x86_64/kernel/include/registers.h87.",
+    "attributes_and_order": "Preserve one mfence and original no_mangle/unsafe/externC boundary. Original Rust omits nomem/readonly/pure, preserving compiler-visible memory effects corresponding to Cmemoryclobber; nostack and preserves_flags remain exact. Do not replace with a compiler-only fence, atomic fence, noop, callback or weakened asm options.",
+    "private_helpers": [],
+    "types_or_constants_beyond_core_asm": [],
+    "data_owners": [],
+    "genuine_imports": [],
+    "local_cfg": "No cfg on ihk_mc_mb. Source closure is one existing definition only; no neighboring rdmsr/halt/interrupt function body included.",
+    "future_object_obligation": "If Root separately prepares/reviews/admits this unit, actual object/disassembly must establish the genuine single exported barrier owner and original mfence semantics with no unexpected provider/data/helper or diagnostic variation. Do not infer exact emitted size before actual proof."
+  },
+  "two_existing_IRQ_sources_for_reuse_not_codegen": [
+    {
+      "name": "cpu_disable_interrupt_save",
+      "Rust": "kernel/rust/x86_cpu_helpers.rs851-861",
+      "signature": "unsafe extern C fn()->CULong",
+      "guard": "#[cfg(not(mckernel_equivalence))], #[no_mangle]",
+      "assembly": "pushfq; pop {flags}; cli, flags=lateout(reg) flags; original no options()",
+      "semantics": "Read actual full flags before cli; return unchanged saved64bit value. Original asm uses stack and does not claim nomem,nostack,preserves_flags,pure or readonly. Preserve order and compiler-visible memory/flags effects.",
+      "C": "arch/x86_64/kernel/cpu.c2701-2709: pushf;pop output;cli with memory,cc clobbers; actual ulong flags returned.",
+      "current_owner": "Existing4b4cc4a0 T6; do not extract/redefine/recompile."
+    },
+    {
+      "name": "cpu_restore_interrupt",
+      "Rust": "kernel/rust/x86_cpu_helpers.rs839-843",
+      "signature": "unsafe extern C fn(CULong)",
+      "guard": "#[cfg(not(mckernel_equivalence))], #[no_mangle]",
+      "assembly": "push {flags}; popfq, flags=in(reg) flags; original no options()",
+      "semantics": "Restore supplied actual64bit flags through original push/popfq; no boolean reduction/sti replacement, new mask or flags claim. Existing stack/memory/conditioncode effects remain; do not add nostack/nomem/preserves_flags.",
+      "C": "arch/x86_64/kernel/cpu.c2674-2677: push input;popf with memory,cc clobbers.",
+      "current_owner": "Existing4b4cc4a0 T5; do not extract/redefine/recompile."
+    }
+  ],
+  "smallest_followthrough": "Root can prepare only the exact new ihk_mc_mb source plus no_std wrapper context, then obtain ordinary concrete review/admission for codegen/actual object checks and later join with matching current partial/IPI owner. Reuse actual IRQ owners and existing predicates/bytes; no green suite or hardware/function execution. All other IPI imports remain genuine external until separately qualified.",
+  "limits": "This cut addresses one actual IPI callback-target dependency at object/provider level. It does not publish callbacks, change prebootNone, initialize CPU/controller state, execute IRQ/barrier hardware, prove scheduling/delivery/native ABI or release original held scope. Root latest owner reconciliation remains required before any join; no blind remaining-U count.",
+  "actions": {
+    "CPU0_reads": true,
+    "source_unit_created": false,
+    "compiler_metadata_link_test_runtime_or_privileged_CPU_execution": false,
+    "canonical_source_index_ledger_launcher_or_goal_changes": false,
+    "wholemodule_or_held_neighbor_preparation": false,
+    "sole_written_file": "/home/holden/mckernel-work/m14-m15-scheduler-resume-20261109T211802Z/x86-ipi-irq-barrier-lookahead-20261109T2322.json"
+  },
+  "original_checklist_credit": 0
+}

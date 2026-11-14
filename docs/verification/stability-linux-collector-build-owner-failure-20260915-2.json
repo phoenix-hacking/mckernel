@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "record_kind": "collector_build_owner_failure",
+  "task_id": "M02-B-rebuild-owner",
+  "attempt": 2,
+  "status": "FAIL_SOURCE_REVIEW",
+  "base_commit": "55ad29bb3fbb0a843e939701de6d109c484d9ff5",
+  "candidate_files": [
+    {"path": "docs/verification/evidence/stability-linux-collector-build-owner-20260915.py", "sha256": "f2c919e9adbbf60431ae9ff98b102fa948a118b66d55c27fba266a8d558b562c"},
+    {"path": "scripts/tests/test_stability_linux_collector_build_owner.py", "sha256": "a493fc41f4dd4c900acfe4791fb5564d32ba83393ec2fe29aa088b5b502b8d96"}
+  ],
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-build-owner-failure-20260915-2.tar.gz",
+    "size": 5226,
+    "sha256": "3c7d9e3f678128fe6cdc91bc7c1c15d257d03ce7d625ae6a29d8d97055d7236d",
+    "members": 2
+  },
+  "independent_review": {
+    "role": "Astra/high ownership and runtime-acceptance reviewer",
+    "status": "FAIL",
+    "p1_findings": [
+      "Only the watchdog normal path retries indefinitely; exception/signal and missing-ID paths can release serialization before absence.",
+      "No watchdog ready, source, pipe, lock or fork-identity gate precedes container work.",
+      "The separated mount still relies on umask-filtered mode 0777 rather than verified UID-1000 ownership.",
+      "Docker environment/client/socket, cgroups, image and full actual configuration remain insufficiently bound.",
+      "Docker command output remains unbounded and partial timeout streams are not retained.",
+      "Unbounded recovery also retains unbounded state and reuses an exclusive journal name after partial-write failure."
+    ],
+    "p2_findings": [
+      "Writes/config transitions remain incomplete or non-additive and omit directory fsync.",
+      "The PASS predicate incompletely binds build outputs and mislabels decoded watchdog status as raw wait status."
+    ]
+  },
+  "heavy_build_executed": false,
+  "runtime_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}

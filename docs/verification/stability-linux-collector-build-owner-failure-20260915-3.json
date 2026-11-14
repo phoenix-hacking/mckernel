@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "record_kind": "collector_build_owner_failure",
+  "task_id": "M02-B-rebuild-owner",
+  "attempt": 3,
+  "status": "FAIL_STRUCTURAL_INCOMPATIBILITY",
+  "base_commit": "55ad29bb3fbb0a843e939701de6d109c484d9ff5",
+  "candidate_files": [
+    {"path": "docs/verification/evidence/stability-linux-collector-build-owner-20260915.py", "sha256": "721790abfb370c01a35ebfd2eac1c83946808ffea762cc7db9565fb3cb4ea55c"},
+    {"path": "scripts/tests/test_stability_linux_collector_build_owner.py", "sha256": "a493fc41f4dd4c900acfe4791fb5564d32ba83393ec2fe29aa088b5b502b8d96"}
+  ],
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-build-owner-failure-20260915-3.tar.gz",
+    "size": 5576,
+    "sha256": "a07706371bc5236ee77cfbef5786c3c0f50694184f338535a9776b682b5a5dec",
+    "members": 2
+  },
+  "failure": {
+    "source": "implementer self-audit after independent attempt-2 review",
+    "finding": "The new parent lifecycle remains structurally incompatible with the SHA-bound reviewed watchdog ABI; its name, label, retained supervisor, source identity and deadline configuration do not satisfy watchdog entry checks.",
+    "required_fix": "Replace the parallel lifecycle with a narrow parent built directly on the reviewed Commands, recovery, watchdog configuration and finalization contracts."
+  },
+  "heavy_build_executed": false,
+  "runtime_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}

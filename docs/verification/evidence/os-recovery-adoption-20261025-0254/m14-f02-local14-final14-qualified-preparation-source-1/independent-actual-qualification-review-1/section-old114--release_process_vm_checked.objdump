@@ -1,0 +1,165 @@
+
+/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o:     file format elf64-x86-64
+
+
+Disassembly of section .ltext.release_process_vm_checked:
+
+0000000000000000 <release_process_vm_checked>:
+   0:	b8 ea ff ff ff       	mov    $0xffffffea,%eax
+   5:	48 85 ff             	test   %rdi,%rdi
+   8:	0f 84 80 02 00 00    	je     28e <release_process_vm_checked+0x28e>
+   e:	55                   	push   %rbp
+   f:	48 89 e5             	mov    %rsp,%rbp
+  12:	41 57                	push   %r15
+  14:	41 56                	push   %r14
+  16:	41 55                	push   %r13
+  18:	41 54                	push   %r12
+  1a:	53                   	push   %rbx
+  1b:	50                   	push   %rax
+  1c:	48 89 fb             	mov    %rdi,%rbx
+  1f:	4c 8b a7 88 00 00 00 	mov    0x88(%rdi),%r12
+  26:	4d 85 e4             	test   %r12,%r12
+  29:	0f 84 51 02 00 00    	je     280 <release_process_vm_checked+0x280>
+  2f:	31 c0                	xor    %eax,%eax
+  31:	f0 ff 8b bc 00 00 00 	lock decl 0xbc(%rbx)
+  38:	0f 85 42 02 00 00    	jne    280 <release_process_vm_checked+0x280>
+  3e:	9c                   	pushf  
+  3f:	41 5f                	pop    %r15
+  41:	fa                   	cli    
+  42:	49 bd 00 00 00 00 00 00 00 00 	movabs $0x0,%r13	44: R_X86_64_64	cpu_local_var_initialized
+  4c:	41 83 7d 00 00       	cmpl   $0x0,0x0(%r13)
+  51:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	53: R_X86_64_64	locals
+  5b:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	5d: R_X86_64_64	clv
+  65:	74 54                	je     bb <release_process_vm_checked+0xbb>
+  67:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+  6c:	0f 32                	rdmsr  
+  6e:	48 c1 e2 20          	shl    $0x20,%rdx
+  72:	89 c1                	mov    %eax,%ecx
+  74:	48 09 d1             	or     %rdx,%rcx
+  77:	48 8b 16             	mov    (%rsi),%rdx
+  7a:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+  81:	48 39 ca             	cmp    %rcx,%rdx
+  84:	77 23                	ja     a9 <release_process_vm_checked+0xa9>
+  86:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	88: R_X86_64_64	num_processors
+  90:	48 63 36             	movslq (%rsi),%rsi
+  93:	48 c1 e6 0e          	shl    $0xe,%rsi
+  97:	48 01 f2             	add    %rsi,%rdx
+  9a:	48 39 ca             	cmp    %rcx,%rdx
+  9d:	72 0a                	jb     a9 <release_process_vm_checked+0xa9>
+  9f:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+  a7:	48 98                	cltq   
+  a9:	48 8b 0f             	mov    (%rdi),%rcx
+  ac:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+  b3:	f0 ff 84 01 28 1f 00 00 	lock incl 0x1f28(%rcx,%rax,1)
+  bb:	b9 00 00 02 00       	mov    $0x20000,%ecx
+  c0:	f0 41 0f c1 8c 24 04 05 00 00 	lock xadd %ecx,0x504(%r12)
+  ca:	89 c8                	mov    %ecx,%eax
+  cc:	c1 e8 10             	shr    $0x10,%eax
+  cf:	66 39 c1             	cmp    %ax,%cx
+  d2:	75 2c                	jne    100 <release_process_vm_checked+0x100>
+  d4:	4d 8b b4 24 08 05 00 00 	mov    0x508(%r12),%r14
+  dc:	eb 05                	jmp    e3 <release_process_vm_checked+0xe3>
+  de:	66 90                	xchg   %ax,%ax
+  e0:	4d 8b 36             	mov    (%r14),%r14
+  e3:	4d 85 f6             	test   %r14,%r14
+  e6:	74 29                	je     111 <release_process_vm_checked+0x111>
+  e8:	49 8b 46 38          	mov    0x38(%r14),%rax
+  ec:	48 85 c0             	test   %rax,%rax
+  ef:	74 ef                	je     e0 <release_process_vm_checked+0xe0>
+  f1:	4c 89 f7             	mov    %r14,%rdi
+  f4:	31 f6                	xor    %esi,%esi
+  f6:	ff d0                	call   *%rax
+  f8:	eb e6                	jmp    e0 <release_process_vm_checked+0xe0>
+  fa:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+ 100:	41 8b 8c 24 04 05 00 00 	mov    0x504(%r12),%ecx
+ 108:	66 39 c1             	cmp    %ax,%cx
+ 10b:	74 c7                	je     d4 <release_process_vm_checked+0xd4>
+ 10d:	f3 90                	pause  
+ 10f:	eb ef                	jmp    100 <release_process_vm_checked+0x100>
+ 111:	66 f0 41 83 84 24 04 05 00 00 02 	lock addw $0x2,0x504(%r12)
+ 11c:	41 83 7d 00 00       	cmpl   $0x0,0x0(%r13)
+ 121:	74 74                	je     197 <release_process_vm_checked+0x197>
+ 123:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+ 128:	0f 32                	rdmsr  
+ 12a:	48 c1 e2 20          	shl    $0x20,%rdx
+ 12e:	89 c1                	mov    %eax,%ecx
+ 130:	48 09 d1             	or     %rdx,%rcx
+ 133:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	135: R_X86_64_64	locals
+ 13d:	48 8b 10             	mov    (%rax),%rdx
+ 140:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+ 147:	48 39 ca             	cmp    %rcx,%rdx
+ 14a:	77 2f                	ja     17b <release_process_vm_checked+0x17b>
+ 14c:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	14e: R_X86_64_64	num_processors
+ 156:	48 63 36             	movslq (%rsi),%rsi
+ 159:	48 c1 e6 0e          	shl    $0xe,%rsi
+ 15d:	48 01 f2             	add    %rsi,%rdx
+ 160:	48 39 ca             	cmp    %rcx,%rdx
+ 163:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	165: R_X86_64_64	clv
+ 16d:	72 16                	jb     185 <release_process_vm_checked+0x185>
+ 16f:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+ 177:	48 98                	cltq   
+ 179:	eb 0a                	jmp    185 <release_process_vm_checked+0x185>
+ 17b:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	17d: R_X86_64_64	clv
+ 185:	48 8b 09             	mov    (%rcx),%rcx
+ 188:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+ 18f:	f0 ff 8c 01 28 1f 00 00 	lock decl 0x1f28(%rcx,%rax,1)
+ 197:	41 57                	push   %r15
+ 199:	9d                   	popf   
+ 19a:	48 8b 83 98 00 00 00 	mov    0x98(%rbx),%rax
+ 1a1:	48 85 c0             	test   %rax,%rax
+ 1a4:	74 0c                	je     1b2 <release_process_vm_checked+0x1b2>
+ 1a6:	48 8b b3 90 00 00 00 	mov    0x90(%rbx),%rsi
+ 1ad:	48 89 df             	mov    %rbx,%rdi
+ 1b0:	ff d0                	call   *%rax
+ 1b2:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	1b4: R_X86_64_64	free_all_process_memory_range
+ 1bc:	48 89 df             	mov    %rbx,%rdi
+ 1bf:	ff d0                	call   *%rax
+ 1c1:	4c 8b b3 88 00 00 00 	mov    0x88(%rbx),%r14
+ 1c8:	4d 85 f6             	test   %r14,%r14
+ 1cb:	74 30                	je     1fd <release_process_vm_checked+0x1fd>
+ 1cd:	48 8b 3b             	mov    (%rbx),%rdi
+ 1d0:	41 8b b6 c8 01 00 00 	mov    0x1c8(%r14),%esi
+ 1d7:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	1d9: R_X86_64_64	detach_address_space
+ 1e1:	ff d0                	call   *%rax
+ 1e3:	49 c7 86 80 00 00 00 00 00 00 00 	movq   $0x0,0x80(%r14)
+ 1ee:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	1f0: R_X86_64_64	release_process
+ 1f8:	4c 89 f7             	mov    %r14,%rdi
+ 1fb:	ff d0                	call   *%rax
+ 1fd:	48 89 5d d0          	mov    %rbx,-0x30(%rbp)
+ 201:	49 89 de             	mov    %rbx,%r14
+ 204:	49 bd 00 00 00 00 00 00 00 00 	movabs $0x0,%r13	206: R_X86_64_64	process_tracked_allocator_source_file
+ 20e:	49 bc 00 00 00 00 00 00 00 00 	movabs $0x0,%r12	210: R_X86_64_64	_kfree
+ 218:	49 81 c6 f8 00 00 00 	add    $0xf8,%r14
+ 21f:	74 4a                	je     26b <release_process_vm_checked+0x26b>
+ 221:	49 8b 06             	mov    (%r14),%rax
+ 224:	48 85 c0             	test   %rax,%rax
+ 227:	74 42                	je     26b <release_process_vm_checked+0x26b>
+ 229:	48 bb 00 00 00 00 00 00 00 00 	movabs $0x0,%rbx	22b: R_X86_64_64	rb_erase
+ 233:	66 66 66 66 2e 0f 1f 84 00 00 00 00 00 	data16 data16 data16 cs nopw 0x0(%rax,%rax,1)
+ 240:	49 89 c7             	mov    %rax,%r15
+ 243:	48 8b 40 10          	mov    0x10(%rax),%rax
+ 247:	48 85 c0             	test   %rax,%rax
+ 24a:	75 f4                	jne    240 <release_process_vm_checked+0x240>
+ 24c:	4c 89 ff             	mov    %r15,%rdi
+ 24f:	4c 89 f6             	mov    %r14,%rsi
+ 252:	ff d3                	call   *%rbx
+ 254:	49 8b 75 00          	mov    0x0(%r13),%rsi
+ 258:	4c 89 ff             	mov    %r15,%rdi
+ 25b:	ba fd 00 00 00       	mov    $0xfd,%edx
+ 260:	41 ff d4             	call   *%r12
+ 263:	49 8b 06             	mov    (%r14),%rax
+ 266:	48 85 c0             	test   %rax,%rax
+ 269:	75 d5                	jne    240 <release_process_vm_checked+0x240>
+ 26b:	49 8b 75 00          	mov    0x0(%r13),%rsi
+ 26f:	48 8b 7d d0          	mov    -0x30(%rbp),%rdi
+ 273:	ba 31 02 00 00       	mov    $0x231,%edx
+ 278:	41 ff d4             	call   *%r12
+ 27b:	b8 01 00 00 00       	mov    $0x1,%eax
+ 280:	48 83 c4 08          	add    $0x8,%rsp
+ 284:	5b                   	pop    %rbx
+ 285:	41 5c                	pop    %r12
+ 287:	41 5d                	pop    %r13
+ 289:	41 5e                	pop    %r14
+ 28b:	41 5f                	pop    %r15
+ 28d:	5d                   	pop    %rbp
+ 28e:	c3                   	ret    

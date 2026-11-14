@@ -1,0 +1,29 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-sync-processvm-host13-five-stage-source-1/validator-templates/qualify_clone_pointer_and_warning_suffix.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sync-processvm-host13-unused-import-warning-correction-1/validator-templates/qualify_clone_pointer_and_warning_suffix.py
+@@ -53,7 +53,25 @@
+ oldwarning=Path(EXPECTED['warning_policy']['baseline_Rust_stderr']['path']);oldtext=oldwarning.read_text();oh=re.findall(r'^warning(?:\[[^\]]+\])?: .+$',oldtext,re.M)
+ added=Counter(headers)-Counter(oh);removed=Counter(oh)-Counter(headers)
+ new_actual_headers=[h for h in added if not re.fullmatch(r'warning: [0-9]+ warnings emitted',h)]
+-allowed=lambda h: h.startswith('warning: unused import:') or ('redeclares' in h and any(name in h for name in ['lookup_user_context','ihk_mc_pt_set_range']))
++def exact_layout_fixture_unused_import(header, stderr, policy_text, argv):
++ if header!='warning: unused imports: `align_of` and `size_of`':return False
++ marker='mod f03_sync_child_layout_v2 {';import_line=' use core::mem::{size_of,align_of,offset_of};'
++ if policy_text.count(marker)!=1 or policy_text.count(import_line)!=1:return False
++ if 'f03_sync_child_event_candidate' not in argv or 'f03_sync_child_fixture' in argv:return False
++ body=policy_text.split(marker,1)[1].split('\n}\n',1)[0]
++ if body.count('#[cfg(f03_sync_child_fixture)]')!=1:return False
++ live,fixture=body.split('#[cfg(f03_sync_child_fixture)]',1)
++ live=live.replace(import_line,'',1)
++ if 'size_of' in live or 'align_of' in live or 'offset_of!(' not in live:return False
++ if 'pub static F03_SYNC_CHILD_LAYOUT_ABI' not in fixture or 'size_of::<' not in fixture or 'align_of::<' not in fixture:return False
++ line=policy_text[:policy_text.index(import_line)].count('\n')+1
++ context=header+'\n     --> /src/kernel/rust/syscall_policy.rs:'+str(line)+':18\n      |\n'+str(line)+' | '+import_line+'\n      |                  ^^^^^^^ ^^^^^^^^'
++ return stderr.splitlines().count(header)==1 and context in stderr
++policy_path=Path(P['inputs']['source_directory_exports'][0]['host_path'])/'syscall_policy.rs'
++policy_ref=next(r['postimage'] for r in P['cohort_source_bindings'] if r['relative']=='kernel/rust/syscall_policy.rs')
++assert ref(policy_path)==policy_ref, 'exact compiled policy source changed'
++policy_text=policy_path.read_text()
++allowed=lambda h: h.startswith('warning: unused import:') or ('redeclares' in h and any(name in h for name in ['lookup_user_context','ihk_mc_pt_set_range'])) or exact_layout_fixture_unused_import(h,newwarn,policy_text,P['exact_commands'][0]['argv'])
+ unknown=[h for h in new_actual_headers if not allowed(h)];assert not unknown,('new Rust warnings need exact source/ABI disposition',unknown)
+ Cwarning_rows={}
+ for index,label,baseline_key in [(1,'process','baseline_process_C_stderr'),(2,'kernel','baseline_kernel_C_stderr'),(3,'arch','baseline_arch_C_stderr')]:

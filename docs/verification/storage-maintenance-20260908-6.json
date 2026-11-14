@@ -1,0 +1,122 @@
+{
+  "artifacts": [
+    {
+      "path": "docs/verification/evidence/cleanup-archived-captures-20260908-6.py.gz",
+      "sha256": "2b9be9671cff0f182749e190cc0bf45d64146005422ed9a7c38dc22db0daa08c",
+      "size": 4670,
+      "source": "/home/holden/mckernel-work/scratch/cleanup-archived-captures-20260908-6.py",
+      "source_sha256": "0f227cfc1f5a8b33d9d6ee274ee17a8614af719fe7a58dfe104ab8da20ba794b"
+    },
+    {
+      "path": "docs/verification/evidence/storage-cleanup-20260908-6-audit-failure-1.json.gz",
+      "sha256": "26525dac3a92fed6f46da11b743271dfc368361958f4e5a76ccdd92356bfcd10",
+      "size": 380,
+      "source": "/home/holden/mckernel-work/scratch/storage-cleanup-20260908-6-audit-failure-1.json",
+      "source_sha256": "cda173dc83cc7b09a3738875bfa4824a3f0eefa8e3f14f3d59086e94ab4c4279"
+    },
+    {
+      "path": "docs/verification/evidence/cleanup-archived-captures-20260908-6-2.py.gz",
+      "sha256": "638d6276e767f8615ead3084765d923dac865d0bb7a0cf8f3103523edf0dbe4c",
+      "size": 4680,
+      "source": "/home/holden/mckernel-work/scratch/cleanup-archived-captures-20260908-6-2.py",
+      "source_sha256": "754deae168a30ce2d98197cd01a5b0ab14a925e5576592c95cbd1785bc5277f0"
+    },
+    {
+      "path": "docs/verification/evidence/storage-cleanup-20260908-6-2-plan.json.gz",
+      "sha256": "8433556ea6dc67875b71491bf2286363bdd71049559a5f5d6b331913394b6f12",
+      "size": 154682,
+      "source": "/home/holden/mckernel-work/scratch/storage-cleanup-20260908-6-2-plan.json",
+      "source_sha256": "3618d0b45cac213e27ab915e5a348e6e96eb82191ba16cc51561b0f492bf2956"
+    },
+    {
+      "path": "docs/verification/evidence/storage-cleanup-20260908-6-2-report.json.gz",
+      "sha256": "b2cd509e6a4fea8bf4cdaf2a4397b5ef967eabb77ad4d79372f2e1f321a95203",
+      "size": 3033,
+      "source": "/home/holden/mckernel-work/scratch/storage-cleanup-20260908-6-2-report.json",
+      "source_sha256": "a9dc968a8b04e0cce8cfa67eb0acf4e97968603adcf4e9da4da6d3c0abc79852"
+    },
+    {
+      "path": "docs/verification/evidence/trim-scratch-storage-20260908-6.py.gz",
+      "sha256": "ee7a6671db64d45bc2cffc6bcaccbb0a9b1e23f1fba428dfbd4531e063a10d7f",
+      "size": 706,
+      "source": "/home/holden/mckernel-work/scratch/trim-scratch-storage-20260908-6.py",
+      "source_sha256": "fc21827fade88dfbe4712ef96d89573428e48751fe7614dc1532329fb2811e55"
+    },
+    {
+      "path": "docs/verification/evidence/storage-scratch-trim-20260908-6.json.gz",
+      "sha256": "07890363646e7b8841928e2af90068dc2b8dd8b2ef8ef6d1b3a72bf6cb870197",
+      "size": 377,
+      "source": "/home/holden/mckernel-work/scratch/storage-scratch-trim-20260908-6.json",
+      "source_sha256": "ef9a6d30c4245859deaa9d4377eb34a967cbd67535d4f36516329b676dac789c"
+    },
+    {
+      "path": "docs/verification/evidence/storage-preserved-inputs-after-20260908-6.json.gz",
+      "sha256": "3f2061eeba18b85a4f6ef7e15fb76f97f4587963c400226cd7c1cc57919d2286",
+      "size": 156,
+      "source": "/home/holden/mckernel-work/scratch/storage-preserved-inputs-after-20260908-6.json",
+      "source_sha256": "550fb36d433785d740991d9c85c71eb19334b2ed0900c6c56ee75898ade467ca"
+    }
+  ],
+  "checks": [
+    "All 14 expanded captures match every file byte, mode, directory and symlink in their committed archives at the verified GitHub branch HEAD.",
+    "All 19 extra compressed archives match their canonical committed SHA-256, size and Git blob. All 30 retained originals verify; there are no incomplete-archive exclusions.",
+    "Every deletion is restricted to the enumerated completed sysfs/mcctrl capture directories or duplicate archives in the completed executable retention folder. Current compiler sources, objects, kernels and images remain.",
+    "Visible process descriptors, working directories and memory mappings, including /work path aliases, were checked before removal; metadata snapshots were checked immediately before each deletion.",
+    "All 2,427 checked current files remain byte-identical after deletion and targeted scratch trim; all 67 protected dependency directories remain present.",
+    "The sparse scratch image remains mounted and retains its original 60-GiB logical size. Host reclamation is measured from the reduction in allocated backing-file blocks.",
+    "All eight maintenance artifacts pass exact gzip round-trip checks."
+  ],
+  "current_root_available_bytes": 163018514432,
+  "current_scratch_available_bytes": 43418800128,
+  "evidence_checked_at_pushed_head": "e1a1d633869c7200dd85e371a397d916ee0e2fc1",
+  "finished_utc": "2026-09-08T12:45:55.627864+00:00",
+  "first_audit_failure": {
+    "command": "python3 -B /home/holden/mckernel-work/scratch/cleanup-archived-captures-20260908-6.py audit",
+    "correction": "Preserve external repository paths and retry with fresh helper cleanup-archived-captures-20260908-6-2.py; original failure and helper retained.",
+    "deletion_started": false,
+    "reason": "The inherited preservation list contains repository files outside scratch; the eligibility filter incorrectly applied relative_to(WORK) to all paths."
+  },
+  "kind": "Requested ongoing cleanup of completed, committed McKernel verification captures",
+  "limitations": [
+    "Open-file checks cover visible processes; inaccessible descriptor counts are recorded in the plan. No active McKernel build or guest was running.",
+    "Recent host journals, active caches, installed environments, personal files, VM disks, other project workspaces and all Docker images/containers/volumes were preserved.",
+    "The backing-file reduction includes previously freed scratch blocks as well as this deletion. The fstrim advertised discard count is not reported as physically reclaimed capacity; unrelated activity can change overall free space.",
+    "This is host storage maintenance, with no kernel build, guest test or application acceptance credit. Native process/image/VM/syscall services and the full original verification goal remain active."
+  ],
+  "preserved_current_files": 2427,
+  "protected_directories": 67,
+  "reclaimed_host_allocated_bytes": 846270464,
+  "references": [
+    {
+      "path": "docs/verification/storage-maintenance-20260908-5.json",
+      "sha256": "14780fbe67c22a2c82f47a662159e68ff4dc0df6badeed1658e0e045e07eaccd",
+      "size": 6069
+    },
+    {
+      "path": "docs/verification/native-mcctrl-exec-checkpoint-20260908.json",
+      "sha256": "fbfc7cf417d8fdc821521b4785f2cfbd4f998d80b4410a5dc42da2a10da6916f",
+      "size": 37399
+    },
+    {
+      "path": "docs/verification/native-mcctrl-service-checkpoint-20260908.json",
+      "sha256": "4bfe1e12b2cc015a6097bd5c7b394329abbaf0bd70f385d1d8206145c29b731d",
+      "size": 28786
+    },
+    {
+      "path": "docs/verification/native-guest-sysfs-checkpoint-20260908.json",
+      "sha256": "190f9a09dbd5462844bd635807524c6f4ad27d6565fc70a980a8bfa2b70a64ba",
+      "size": 1108046
+    }
+  ],
+  "removed_expanded_captures": 14,
+  "removed_retention_archive_copies": 19,
+  "removed_scratch_allocated_bytes": 844783616,
+  "restoration": [
+    "The compressed cleanup plan/report map each removed capture to its complete canonical committed archive and exact Git blob. Restore that archive to its original /work path before historical replay; retain original failed-attempt statuses and never reuse attempt names.",
+    "All removed failed runs remain completely recoverable from their original archives. Current native-mcctrl-exec-module-20260908-2, native-mcctrl-service-module-20260908-2, native-sysfs-snoop modules, kernel, source, image and setup dependencies remain expanded.",
+    "Extra archive copies can be restored byte-for-byte from their mapped canonical repository artifacts. Earlier source-checkout evidence restoration maps remain in force."
+  ],
+  "status": "PASS",
+  "total_reclaimed_across_nine_cleanups_bytes": 80344375296,
+  "verified_retained_files": 30
+}

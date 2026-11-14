@@ -1,0 +1,758 @@
+{
+  "interface_mapping": {
+    "process_clone_config": {
+      "debug[0]": "process_clone_vm_debug",
+      "debug[1]": "process_clone_ranges_debug",
+      "debug[2]": "process_clone_ranges_ok_debug",
+      "debug[3]": "process_clone_sigcommon_debug",
+      "debug[4]": "process_clone_sigshared_debug"
+    },
+    "process_copy_entry_config": {
+      "found_debug": "process_copy_pte_found_debug",
+      "size_debug": "process_copy_pte_size_debug",
+      "allocated_debug": "process_copy_pte_allocated_debug",
+      "zeroed_debug": "process_copy_pte_zeroed_debug",
+      "copied_debug": "process_copy_pte_copied_debug",
+      "installed_debug": "process_copy_pte_installed_debug"
+    },
+    "process_extend_region_entry_config": {
+      "exists_debug": "process_extend_region_exists_debug",
+      "alloc_debug": "process_extend_region_alloc_debug",
+      "success_debug": "process_extend_region_success_debug"
+    }
+  },
+  "local_descriptors": [
+    {
+      "name": "process_clone_vm_debug",
+      "local": true,
+      "slots": 1,
+      "bytes": 32,
+      "array": false,
+      "entries": [
+        {
+          "function": "clone_thread",
+          "line": 1098,
+          "fmt": null,
+          "flags": "MCKERNEL_PROCESS_DDEBUG_FLAGS",
+          "file": "MCKERNEL_PROCESS_C_FILE"
+        }
+      ],
+      "physical_first": 1221,
+      "physical_after": 1226,
+      "logical_first": 1005,
+      "logical_after": 1010,
+      "file_token": null
+    },
+    {
+      "name": "process_clone_ranges_debug",
+      "local": true,
+      "slots": 1,
+      "bytes": 32,
+      "array": false,
+      "entries": [
+        {
+          "function": "clone_thread",
+          "line": 1118,
+          "fmt": null,
+          "flags": "MCKERNEL_PROCESS_DDEBUG_FLAGS",
+          "file": "MCKERNEL_PROCESS_C_FILE"
+        }
+      ],
+      "physical_first": 1226,
+      "physical_after": 1231,
+      "logical_first": 1010,
+      "logical_after": 1015,
+      "file_token": null
+    },
+    {
+      "name": "process_clone_ranges_ok_debug",
+      "local": true,
+      "slots": 1,
+      "bytes": 32,
+      "array": false,
+      "entries": [
+        {
+          "function": "clone_thread",
+          "line": 1176,
+          "fmt": null,
+          "flags": "MCKERNEL_PROCESS_DDEBUG_FLAGS",
+          "file": "MCKERNEL_PROCESS_C_FILE"
+        }
+      ],
+      "physical_first": 1231,
+      "physical_after": 1236,
+      "logical_first": 1015,
+      "logical_after": 1020,
+      "file_token": null
+    },
+    {
+      "name": "process_clone_sigcommon_debug",
+      "local": true,
+      "slots": 1,
+      "bytes": 32,
+      "array": false,
+      "entries": [
+        {
+          "function": "clone_thread",
+          "line": 1193,
+          "fmt": null,
+          "flags": "MCKERNEL_PROCESS_DDEBUG_FLAGS",
+          "file": "MCKERNEL_PROCESS_C_FILE"
+        }
+      ],
+      "physical_first": 1236,
+      "physical_after": 1241,
+      "logical_first": 1020,
+      "logical_after": 1025,
+      "file_token": null
+    },
+    {
+      "name": "process_clone_sigshared_debug",
+      "local": true,
+      "slots": 1,
+      "bytes": 32,
+      "array": false,
+      "entries": [
+        {
+          "function": "clone_thread",
+          "line": 1208,
+          "fmt": null,
+          "flags": "MCKERNEL_PROCESS_DDEBUG_FLAGS",
+          "file": "MCKERNEL_PROCESS_C_FILE"
+        }
+      ],
+      "physical_first": 1241,
+      "physical_after": 1246,
+      "logical_first": 1025,
+      "logical_after": 1030,
+      "file_token": null
+    },
+    {
+      "name": "process_copy_pte_found_debug",
+      "local": true,
+      "slots": 1,
+      "bytes": 32,
+      "array": false,
+      "entries": [
+        {
+          "function": "copy_user_pte",
+          "line": 1460,
+          "fmt": null,
+          "flags": "MCKERNEL_PROCESS_DDEBUG_FLAGS",
+          "file": "MCKERNEL_PROCESS_C_FILE"
+        }
+      ],
+      "physical_first": 1690,
+      "physical_after": 1695,
+      "logical_first": 1417,
+      "logical_after": 1422,
+      "file_token": null
+    },
+    {
+      "name": "process_copy_pte_size_debug",
+      "local": true,
+      "slots": 1,
+      "bytes": 32,
+      "array": false,
+      "entries": [
+        {
+          "function": "copy_user_pte",
+          "line": 1461,
+          "fmt": null,
+          "flags": "MCKERNEL_PROCESS_DDEBUG_FLAGS",
+          "file": "MCKERNEL_PROCESS_C_FILE"
+        }
+      ],
+      "physical_first": 1695,
+      "physical_after": 1700,
+      "logical_first": 1422,
+      "logical_after": 1427,
+      "file_token": null
+    },
+    {
+      "name": "process_copy_pte_allocated_debug",
+      "local": true,
+      "slots": 1,
+      "bytes": 32,
+      "array": false,
+      "entries": [
+        {
+          "function": "copy_user_pte",
+          "line": 1471,
+          "fmt": null,
+          "flags": "MCKERNEL_PROCESS_DDEBUG_FLAGS",
+          "file": "MCKERNEL_PROCESS_C_FILE"
+        }
+      ],
+      "physical_first": 1700,
+      "physical_after": 1705,
+      "logical_first": 1427,
+      "logical_after": 1432,
+      "file_token": null
+    },
+    {
+      "name": "process_copy_pte_zeroed_debug",
+      "local": true,
+      "slots": 1,
+      "bytes": 32,
+      "array": false,
+      "entries": [
+        {
+          "function": "copy_user_pte",
+          "line": 1494,
+          "fmt": null,
+          "flags": "MCKERNEL_PROCESS_DDEBUG_FLAGS",
+          "file": "MCKERNEL_PROCESS_C_FILE"
+        }
+      ],
+      "physical_first": 1705,
+      "physical_after": 1710,
+      "logical_first": 1432,
+      "logical_after": 1437,
+      "file_token": null
+    },
+    {
+      "name": "process_copy_pte_copied_debug",
+      "local": true,
+      "slots": 1,
+      "bytes": 32,
+      "array": false,
+      "entries": [
+        {
+          "function": "copy_user_pte",
+          "line": 1496,
+          "fmt": null,
+          "flags": "MCKERNEL_PROCESS_DDEBUG_FLAGS",
+          "file": "MCKERNEL_PROCESS_C_FILE"
+        }
+      ],
+      "physical_first": 1710,
+      "physical_after": 1715,
+      "logical_first": 1437,
+      "logical_after": 1442,
+      "file_token": null
+    },
+    {
+      "name": "process_copy_pte_installed_debug",
+      "local": true,
+      "slots": 1,
+      "bytes": 32,
+      "array": false,
+      "entries": [
+        {
+          "function": "copy_user_pte",
+          "line": 1514,
+          "fmt": null,
+          "flags": "MCKERNEL_PROCESS_DDEBUG_FLAGS",
+          "file": "MCKERNEL_PROCESS_C_FILE"
+        }
+      ],
+      "physical_first": 1715,
+      "physical_after": 1720,
+      "logical_first": 1442,
+      "logical_after": 1447,
+      "file_token": null
+    },
+    {
+      "name": "process_extend_region_exists_debug",
+      "local": true,
+      "slots": 1,
+      "bytes": 32,
+      "array": false,
+      "entries": [
+        {
+          "function": "extend_process_region",
+          "line": 3394,
+          "fmt": null,
+          "flags": "MCKERNEL_PROCESS_DDEBUG_FLAGS",
+          "file": "MCKERNEL_PROCESS_C_FILE"
+        }
+      ],
+      "physical_first": 4849,
+      "physical_after": 4854,
+      "logical_first": 3506,
+      "logical_after": 3511,
+      "file_token": null
+    },
+    {
+      "name": "process_extend_region_alloc_debug",
+      "local": true,
+      "slots": 1,
+      "bytes": 32,
+      "array": false,
+      "entries": [
+        {
+          "function": "extend_process_region",
+          "line": 3411,
+          "fmt": null,
+          "flags": "MCKERNEL_PROCESS_DDEBUG_FLAGS",
+          "file": "MCKERNEL_PROCESS_C_FILE"
+        }
+      ],
+      "physical_first": 4854,
+      "physical_after": 4859,
+      "logical_first": 3511,
+      "logical_after": 3516,
+      "file_token": null
+    },
+    {
+      "name": "process_extend_region_success_debug",
+      "local": true,
+      "slots": 1,
+      "bytes": 32,
+      "array": false,
+      "entries": [
+        {
+          "function": "extend_process_region",
+          "line": 3428,
+          "fmt": null,
+          "flags": "MCKERNEL_PROCESS_DDEBUG_FLAGS",
+          "file": "MCKERNEL_PROCESS_C_FILE"
+        }
+      ],
+      "physical_first": 4859,
+      "physical_after": 4864,
+      "logical_first": 3516,
+      "logical_after": 3521,
+      "file_token": null
+    }
+  ],
+  "configs": [
+    {
+      "name": "process_clone_config",
+      "Rust_type": "ProcessCloneConfig",
+      "bytes": 136,
+      "alignment": 8,
+      "original_C_bytes": "2000000000000000001000000000000000000000000000000200000000000000000000000200000001000000020000000000000000000000ea030000270400003b0400007804000081040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "scalars": {
+        "stack_pages": 32,
+        "page_size": 4096,
+        "page_align": 0,
+        "nowait": 2,
+        "kernel": 0,
+        "ss_disable": 2,
+        "sp_reg": 1,
+        "pc_reg": 2
+      },
+      "fields": {
+        "stack_pages": [
+          0,
+          "i"
+        ],
+        "page_size": [
+          8,
+          "Q"
+        ],
+        "page_align": [
+          16,
+          "i"
+        ],
+        "nowait": [
+          24,
+          "Q"
+        ],
+        "kernel": [
+          32,
+          "i"
+        ],
+        "ss_disable": [
+          36,
+          "i"
+        ],
+        "sp_reg": [
+          40,
+          "i"
+        ],
+        "pc_reg": [
+          44,
+          "i"
+        ],
+        "file": [
+          48,
+          "ptr"
+        ],
+        "lines": [
+          56,
+          "[5i]"
+        ],
+        "debug": [
+          80,
+          "[5ptr]"
+        ],
+        "modify_context": [
+          120,
+          "fn"
+        ],
+        "copy_ranges": [
+          128,
+          "fn"
+        ]
+      },
+      "relocations": [
+        {
+          "offset": 48,
+          "type": 1,
+          "target": "",
+          "target_kind": 3,
+          "target_binding": 0,
+          "target_section": ".rodata.str1.1",
+          "addend": 0
+        },
+        {
+          "offset": 80,
+          "type": 1,
+          "target": "",
+          "target_kind": 3,
+          "target_binding": 0,
+          "target_section": "__verbose",
+          "addend": 2304
+        },
+        {
+          "offset": 88,
+          "type": 1,
+          "target": "",
+          "target_kind": 3,
+          "target_binding": 0,
+          "target_section": "__verbose",
+          "addend": 2272
+        },
+        {
+          "offset": 96,
+          "type": 1,
+          "target": "",
+          "target_kind": 3,
+          "target_binding": 0,
+          "target_section": "__verbose",
+          "addend": 2240
+        },
+        {
+          "offset": 104,
+          "type": 1,
+          "target": "",
+          "target_kind": 3,
+          "target_binding": 0,
+          "target_section": "__verbose",
+          "addend": 2208
+        },
+        {
+          "offset": 112,
+          "type": 1,
+          "target": "",
+          "target_kind": 3,
+          "target_binding": 0,
+          "target_section": "__verbose",
+          "addend": 2176
+        },
+        {
+          "offset": 120,
+          "type": 1,
+          "target": "process_user_context_modify_bridge",
+          "target_kind": 0,
+          "target_binding": 1,
+          "target_section": null,
+          "addend": 0
+        },
+        {
+          "offset": 128,
+          "type": 1,
+          "target": "copy_user_ranges",
+          "target_kind": 0,
+          "target_binding": 1,
+          "target_section": null,
+          "addend": 0
+        }
+      ]
+    },
+    {
+      "name": "process_copy_entry_config",
+      "Rust_type": "ProcessCopyEntryConfig",
+      "bytes": 112,
+      "alignment": 8,
+      "original_C_bytes": "00100000000000000c000000000000000200000000000000010000000000000000000080000000000000000000000000b8050000f00500000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "scalars": {
+        "page_size": 4096,
+        "page_shift": 12,
+        "nowait": 2,
+        "user_category": 1,
+        "kernel_category": 0,
+        "wipe_on_fork": 2147483648,
+        "alloc_line": 1464,
+        "free_line": 1520,
+        "visit_flags": 1
+      },
+      "fields": {
+        "page_size": [
+          0,
+          "Q"
+        ],
+        "page_shift": [
+          8,
+          "i"
+        ],
+        "nowait": [
+          16,
+          "Q"
+        ],
+        "user_category": [
+          24,
+          "i"
+        ],
+        "kernel_category": [
+          28,
+          "i"
+        ],
+        "wipe_on_fork": [
+          32,
+          "Q"
+        ],
+        "file": [
+          40,
+          "ptr"
+        ],
+        "alloc_line": [
+          48,
+          "i"
+        ],
+        "free_line": [
+          52,
+          "i"
+        ],
+        "visit_flags": [
+          56,
+          "i"
+        ],
+        "found_debug": [
+          64,
+          "ptr"
+        ],
+        "size_debug": [
+          72,
+          "ptr"
+        ],
+        "allocated_debug": [
+          80,
+          "ptr"
+        ],
+        "zeroed_debug": [
+          88,
+          "ptr"
+        ],
+        "copied_debug": [
+          96,
+          "ptr"
+        ],
+        "installed_debug": [
+          104,
+          "ptr"
+        ]
+      },
+      "relocations": [
+        {
+          "offset": 40,
+          "type": 1,
+          "target": "",
+          "target_kind": 3,
+          "target_binding": 0,
+          "target_section": ".rodata.str1.1",
+          "addend": 0
+        },
+        {
+          "offset": 64,
+          "type": 1,
+          "target": "",
+          "target_kind": 3,
+          "target_binding": 0,
+          "target_section": "__verbose",
+          "addend": 2144
+        },
+        {
+          "offset": 72,
+          "type": 1,
+          "target": "",
+          "target_kind": 3,
+          "target_binding": 0,
+          "target_section": "__verbose",
+          "addend": 2112
+        },
+        {
+          "offset": 80,
+          "type": 1,
+          "target": "",
+          "target_kind": 3,
+          "target_binding": 0,
+          "target_section": "__verbose",
+          "addend": 2080
+        },
+        {
+          "offset": 88,
+          "type": 1,
+          "target": "",
+          "target_kind": 3,
+          "target_binding": 0,
+          "target_section": "__verbose",
+          "addend": 2048
+        },
+        {
+          "offset": 96,
+          "type": 1,
+          "target": "",
+          "target_kind": 3,
+          "target_binding": 0,
+          "target_section": "__verbose",
+          "addend": 2016
+        },
+        {
+          "offset": 104,
+          "type": 1,
+          "target": "",
+          "target_kind": 3,
+          "target_binding": 0,
+          "target_section": "__verbose",
+          "addend": 1984
+        }
+      ]
+    },
+    {
+      "name": "process_extend_region_entry_config",
+      "Rust_type": "ProcessExtendRegionEntryConfig",
+      "bytes": 136,
+      "alignment": 8,
+      "original_C_bytes": "00100000000000000c0000000000000000f0ffffffffffff00002000000000000000e0ffffffffff09000000000000000000000000000000150000000000000001000000000000000200000000000000001000000000000001000000000000000000000000000000500d00005f0d0000000000000000000000000000000000000000000000000000",
+      "scalars": {
+        "page_size": 4096,
+        "page_shift": 12,
+        "page_mask": 18446744073709547520,
+        "large_page_size": 2097152,
+        "large_page_mask": 18446744073707454464,
+        "large_page_p2align": 9,
+        "page_p2align": 0,
+        "large_page_shift": 21,
+        "mpol_no_heap": 1,
+        "ap_nowait": 2,
+        "ap_user": 4096,
+        "pg_user": 1,
+        "alloc_line": 3408,
+        "free_line": 3423
+      },
+      "fields": {
+        "page_size": [
+          0,
+          "Q"
+        ],
+        "page_shift": [
+          8,
+          "i"
+        ],
+        "page_mask": [
+          16,
+          "Q"
+        ],
+        "large_page_size": [
+          24,
+          "Q"
+        ],
+        "large_page_mask": [
+          32,
+          "Q"
+        ],
+        "large_page_p2align": [
+          40,
+          "Q"
+        ],
+        "page_p2align": [
+          48,
+          "Q"
+        ],
+        "large_page_shift": [
+          56,
+          "i"
+        ],
+        "mpol_no_heap": [
+          64,
+          "Q"
+        ],
+        "ap_nowait": [
+          72,
+          "Q"
+        ],
+        "ap_user": [
+          80,
+          "Q"
+        ],
+        "pg_user": [
+          88,
+          "i"
+        ],
+        "file": [
+          96,
+          "ptr"
+        ],
+        "alloc_line": [
+          104,
+          "i"
+        ],
+        "free_line": [
+          108,
+          "i"
+        ],
+        "exists_debug": [
+          112,
+          "ptr"
+        ],
+        "alloc_debug": [
+          120,
+          "ptr"
+        ],
+        "success_debug": [
+          128,
+          "ptr"
+        ]
+      },
+      "relocations": [
+        {
+          "offset": 96,
+          "type": 1,
+          "target": "",
+          "target_kind": 3,
+          "target_binding": 0,
+          "target_section": ".rodata.str1.1",
+          "addend": 0
+        },
+        {
+          "offset": 112,
+          "type": 1,
+          "target": "",
+          "target_kind": 3,
+          "target_binding": 0,
+          "target_section": "__verbose",
+          "addend": 96
+        },
+        {
+          "offset": 120,
+          "type": 1,
+          "target": "",
+          "target_kind": 3,
+          "target_binding": 0,
+          "target_section": "__verbose",
+          "addend": 64
+        },
+        {
+          "offset": 128,
+          "type": 1,
+          "target": "",
+          "target_kind": 3,
+          "target_binding": 0,
+          "target_section": "__verbose",
+          "addend": 32
+        }
+      ]
+    }
+  ],
+  "counts": {
+    "debug_objects": 14,
+    "debug_slots": 14,
+    "debug_bytes": 448,
+    "config_objects": 3,
+    "config_bytes": 384
+  }
+}

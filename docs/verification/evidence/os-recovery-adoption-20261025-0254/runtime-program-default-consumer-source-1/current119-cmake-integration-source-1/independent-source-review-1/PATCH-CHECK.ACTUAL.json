@@ -1,0 +1,131 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_EXACT_SIXTEEN_PRIVATE_POSTIMAGES",
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/git",
+        "apply",
+        "--check",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/current119-cmake-integration-source-1/CURRENT119-RUNTIME-CONSUMERS.PRIVATE.patch"
+      ],
+      "cwd": "/home/holden/mckernel",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/usr/bin/git",
+        "apply",
+        "--directory=docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/current119-cmake-integration-source-1/independent-source-review-1/PATCH-MATERIALIZATION",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/current119-cmake-integration-source-1/CURRENT119-RUNTIME-CONSUMERS.PRIVATE.patch"
+      ],
+      "cwd": "/home/holden/mckernel",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "rows": [
+    {
+      "proposed_path": "CMakeLists.txt",
+      "bytes": 14388,
+      "sha256": "fd8410b20f5cb7972d05ca101c13c759af3f66282f76cd11025d97e65f2472ef",
+      "matches_postimage": true
+    },
+    {
+      "proposed_path": "executer/user/CMakeLists.txt",
+      "bytes": 28048,
+      "sha256": "2e2fb13ff9bbbd9e740ee49fb8973ffc906bc21a58517ecf61ee70248e9a6d05",
+      "matches_postimage": true
+    },
+    {
+      "proposed_path": "executer/user/cmake/SelectRustVmcore2mckdump.cmake",
+      "bytes": 2297,
+      "sha256": "0772eb990997c817e9ae7ee5852f2496a148bbc6e7f349ee0fbb7068f83bf32a",
+      "matches_postimage": true
+    },
+    {
+      "proposed_path": "scripts/rust/boot-tools/SelectRustBootTools.cmake",
+      "bytes": 2502,
+      "sha256": "798cc5b6f6919450859109a2e392baf7941a9b5d47c444c442982c1a2dc12cd1",
+      "matches_postimage": true
+    },
+    {
+      "proposed_path": "scripts/rust/eclair-backtrace/SelectRustEclairBacktrace.cmake",
+      "bytes": 2273,
+      "sha256": "15a0adbda3d6d9491de881ceef65a31a2854372056896d0456787976b1390817",
+      "matches_postimage": true
+    },
+    {
+      "proposed_path": "scripts/rust/boot-tools/config.rs.in",
+      "bytes": 570,
+      "sha256": "1babd031ec00d02a7589f5ce4a649db7981aaa160a910a993eca2b467ee0f0ad",
+      "matches_postimage": true
+    },
+    {
+      "proposed_path": "scripts/rust/boot-tools/platform.rs",
+      "bytes": 4395,
+      "sha256": "7e837af3533f3496f35fea94561d39b4cedf55334ebc8864ac34308dd1aef10c",
+      "matches_postimage": true
+    },
+    {
+      "proposed_path": "scripts/rust/boot-tools/reboot.rs",
+      "bytes": 12648,
+      "sha256": "36d32e918c2f69694bd8c3e54ff3041f57cac5ad511a524de11c313aec4986da",
+      "matches_postimage": true
+    },
+    {
+      "proposed_path": "scripts/rust/boot-tools/stop.rs",
+      "bytes": 2526,
+      "sha256": "71d2ba856347d9f830bf0ca2bfab0c877adb139d5661dfae10e0a34da499f00b",
+      "matches_postimage": true
+    },
+    {
+      "proposed_path": "scripts/rust/boot-tools/mcreboot_main.rs",
+      "bytes": 287,
+      "sha256": "9bed3da348b7d663d9599888a4d6b8f49af65679bc81d2e0613b67106ed69473",
+      "matches_postimage": true
+    },
+    {
+      "proposed_path": "scripts/rust/boot-tools/mcstop_main.rs",
+      "bytes": 281,
+      "sha256": "c1c46356e9b89de7208208022916135529cd0f3b0cd5f611549363205199cc69",
+      "matches_postimage": true
+    },
+    {
+      "proposed_path": "scripts/rust/eclair-backtrace/config.rs.in",
+      "bytes": 110,
+      "sha256": "27acdd3d59e11969ac95bbc58f8debcefdc2a369e4ff1148e308b35cde6d1806",
+      "matches_postimage": true
+    },
+    {
+      "proposed_path": "scripts/rust/eclair-backtrace/eclair_backtrace.rs",
+      "bytes": 3713,
+      "sha256": "1d69aa1a5840b31787c813698131b96af567ccd35f51ec2665e61d07d5aab865",
+      "matches_postimage": true
+    },
+    {
+      "proposed_path": "scripts/rust/eclair-backtrace/eclair_native.rs",
+      "bytes": 2304,
+      "sha256": "b6e82247f81e32ceb857069baa788a808d3052f8aae48c3586c85c8a7b127e2a",
+      "matches_postimage": true
+    },
+    {
+      "proposed_path": "scripts/rust/eclair-backtrace/eclair_main.rs",
+      "bytes": 352,
+      "sha256": "295c495f3400d35bd0b965910b7e19b3d9114b121a81bb8ab99a6b674bd5f8be",
+      "matches_postimage": true
+    },
+    {
+      "proposed_path": "executer/user/rust/vmcore2mckdump.rs",
+      "bytes": 12392,
+      "sha256": "44329596ff8fcb1f197878664bf4999407648f056f81280008d885802f6e5427",
+      "matches_postimage": true
+    }
+  ],
+  "canonical_writes": 0,
+  "compile_native_Docker_root_calls": 0,
+  "runtime_authority": null
+}

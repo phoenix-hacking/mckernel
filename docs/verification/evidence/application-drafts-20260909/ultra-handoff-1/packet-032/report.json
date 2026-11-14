@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-032",
+  "packet_version": 1,
+  "context_sha256": "4dd20f7c872357c3b2901490bfe44ae4255d0e8684f22a67df6d1685508df273",
+  "started_utc": "2026-09-09T13:50:00Z",
+  "finished_utc": "2026-09-09T13:50:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {"case_id": "futex.relative-timeout", "status": "DRAFTED_WITH_UNRESOLVED", "fixture": "scripts/application-tests/cases/futex/futex.relative-timeout.c", "oracle": "scripts/application-tests/oracles/futex.relative-timeout.json", "changed_files": ["scripts/application-tests/cases/futex/futex.relative-timeout.c", "scripts/application-tests/oracles/futex.relative-timeout.json"], "parameter_vectors": {}, "unresolved_oracle_notes": ["Pinned ETIMEDOUT numeric binding and timing evidence require review."], "max_reviewer_question": "Confirm 20 ms relative timeout and no exact microsecond comparison."},
+    {"case_id": "futex.invalid-nanoseconds", "status": "DRAFTED_WITH_UNRESOLVED", "fixture": "scripts/application-tests/cases/futex/futex.invalid-nanoseconds.c", "oracle": "scripts/application-tests/oracles/futex.invalid-nanoseconds.json", "changed_files": ["scripts/application-tests/cases/futex/futex.invalid-nanoseconds.c", "scripts/application-tests/oracles/futex.invalid-nanoseconds.json"], "parameter_vectors": {}, "unresolved_oracle_notes": ["Pinned EINVAL numeric binding and no-waiter evidence require review."], "max_reviewer_question": "Confirm invalid nanoseconds reject synchronously without waiter retention."},
+    {"case_id": "futex.negative-seconds", "status": "DRAFTED_WITH_UNRESOLVED", "fixture": "scripts/application-tests/cases/futex/futex.negative-seconds.c", "oracle": "scripts/application-tests/oracles/futex.negative-seconds.json", "changed_files": ["scripts/application-tests/cases/futex/futex.negative-seconds.c", "scripts/application-tests/oracles/futex.negative-seconds.json"], "parameter_vectors": {}, "unresolved_oracle_notes": ["Pinned EINVAL numeric binding and no-waiter evidence require review."], "max_reviewer_question": "Confirm negative timeout seconds reject synchronously with unchanged word."}
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/futex/futex.relative-timeout.c", "sha256": "9582272cc147a55e5a6e1d5196f5d5bce1b1b0b87378be6143d7d2ef216c4bff"},
+    {"path": "scripts/application-tests/oracles/futex.relative-timeout.json", "sha256": "ee00f347c9de9be52f53d7cfb8f2fd3a7e8e489aca14204f27af3e42dfa1c574"},
+    {"path": "scripts/application-tests/cases/futex/futex.invalid-nanoseconds.c", "sha256": "e65335c5458df9f387c5200b24811b72d8c5c8e50ab93b3bcc7a6b40ded013f7"},
+    {"path": "scripts/application-tests/oracles/futex.invalid-nanoseconds.json", "sha256": "994f6e5f0b183dbb78ecf691bd4216328e515eb7a59e6f320a5a2ff4403de35a"},
+    {"path": "scripts/application-tests/cases/futex/futex.negative-seconds.c", "sha256": "56898e6c38e93d288cf719eb1caa74ec6171f312e4a73d0cc1981abf6b1ac459"},
+    {"path": "scripts/application-tests/oracles/futex.negative-seconds.json", "sha256": "5dd67b6b1fefdc7525d4616c50a3a896e0decad3b00646a3c3ad69110b1621d4"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-032.json --emit-context /tmp/application-packet-032-context.json", "outcome": "PASS; metadata only"},
+    {"command": "python3 -m json.tool report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Three futex timeout-validation cases need final ABI, timing, and canonical record review."],
+  "blocked_execution_capabilities": ["current-inputs", "runtime-transport-fault-injection", "runner-contract"],
+  "first_failure_event": null,
+  "max_escalation": ["Review timeout errno, invalid timespec validation, and waiter-retirement evidence."],
+  "next_packet_id": "packet-033"
+}

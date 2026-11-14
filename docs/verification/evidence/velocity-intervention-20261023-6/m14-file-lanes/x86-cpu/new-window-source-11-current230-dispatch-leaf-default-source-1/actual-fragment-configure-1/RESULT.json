@@ -1,0 +1,70 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_THREE_CURRENT230_DISPATCH_LEAF_PAIRED_PRODUCER_CONFIGURES",
+  "cases": [
+    {
+      "name": "rust_x86",
+      "argv": [
+        "/usr/bin/cmake",
+        "-S",
+        "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-11-current230-dispatch-leaf-default-source-1/actual-fragment-configure-1/producer-fragment",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-11-current230-dispatch-leaf-default-source-1/actual-fragment-configure-1/rust_x86",
+        "-DARCH=x86_64",
+        "-DENABLE_RUST_KERNEL=ON"
+      ],
+      "returncode": 0,
+      "selected": true,
+      "observed": {
+        "rust": "ON",
+        "cfg": "--cfg;f03_io_diagnostic_callbacks_candidate;--cfg;f03_mincore_candidate;--cfg;f03_move_pages_candidate;--cfg;f03_sched_bridges_candidate;--cfg;f03_signal_process_bridges_candidate;--cfg;f03_dispatch_context_candidate;--cfg;f03_leaf_callbacks_candidate",
+        "cdefs": "MCKERNEL_RUST_SHMID_HELPERS;MCKERNEL_RUST_SHM_PERM_HELPERS;MCKERNEL_RUST_RLIMIT_HELPERS;MCKERNEL_RUST_SCHED_PRIO_HELPERS;MCKERNEL_RUST_SCHED_POLICY_HELPERS;MCKERNEL_RUST_SYSCALL_POLICY_HELPERS;MCKERNEL_RUST_SYSCALL_OFFLOAD;MCKERNEL_RUST_SIGNAL_HELPERS;MCKERNEL_RUST_F03_IO_DIAGNOSTICS;MCKERNEL_RUST_F03_MINCORE;MCKERNEL_RUST_F03_MOVE_PAGES;MCKERNEL_RUST_F03_SCHED_BRIDGES;MCKERNEL_RUST_F03_SIGNAL_PROCESS_BRIDGES;MCKERNEL_RUST_F03_DISPATCH_CONTEXT;MCKERNEL_RUST_F03_LEAF_CALLBACKS"
+      }
+    },
+    {
+      "name": "fallback_x86",
+      "argv": [
+        "/usr/bin/cmake",
+        "-S",
+        "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-11-current230-dispatch-leaf-default-source-1/actual-fragment-configure-1/producer-fragment",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-11-current230-dispatch-leaf-default-source-1/actual-fragment-configure-1/fallback_x86",
+        "-DARCH=x86_64",
+        "-DENABLE_RUST_KERNEL=OFF"
+      ],
+      "returncode": 0,
+      "selected": false,
+      "observed": {
+        "rust": "OFF",
+        "cfg": "",
+        "cdefs": "NOTFOUND"
+      }
+    },
+    {
+      "name": "non_x86",
+      "argv": [
+        "/usr/bin/cmake",
+        "-S",
+        "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-11-current230-dispatch-leaf-default-source-1/actual-fragment-configure-1/producer-fragment",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-11-current230-dispatch-leaf-default-source-1/actual-fragment-configure-1/non_x86",
+        "-DARCH=arm64",
+        "-DENABLE_RUST_KERNEL=ON"
+      ],
+      "returncode": 0,
+      "selected": false,
+      "observed": {
+        "rust": "OFF",
+        "cfg": "",
+        "cdefs": "NOTFOUND"
+      }
+    }
+  ],
+  "source_delta_exact": true,
+  "compiler_invoked": false,
+  "whole_project_configure": false,
+  "SDK_build": false,
+  "native": false,
+  "retirement_credit": 0,
+  "limits": "Extracted real producer guards/statements only; full root compiler discovery, default graph/link and matching native proof remain open."
+}

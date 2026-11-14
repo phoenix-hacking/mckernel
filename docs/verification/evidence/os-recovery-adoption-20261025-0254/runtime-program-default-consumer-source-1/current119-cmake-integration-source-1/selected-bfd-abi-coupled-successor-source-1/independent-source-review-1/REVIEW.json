@@ -1,0 +1,134 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_SOURCE_AND_GENERATOR_JOINT19_SDK_OPEN",
+  "reviewer": "/root/recovery_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/current119-cmake-integration-source-1/selected-bfd-abi-coupled-successor-source-1/SOURCE_READY.SDK-OPEN.json",
+    "bytes": 3906,
+    "sha256": "4b162ad2cd13696adbb5817a1bf6f6afa3794c46d8b200690696965c0b48eea0"
+  },
+  "filemap": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/current119-cmake-integration-source-1/selected-bfd-abi-coupled-successor-source-1/FILEMAP.SOURCE-ONLY.json",
+    "bytes": 20424,
+    "sha256": "9e840685e488b79cf450f5424cec28ebfaeb9d2523ea5fd8f6ea6b5f66cfe971"
+  },
+  "patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/current119-cmake-integration-source-1/selected-bfd-abi-coupled-successor-source-1/JOINT19-SELECTED-BFD-ABI.PRIVATE.patch",
+    "bytes": 73063,
+    "sha256": "c314e5498c555f904780f46705e620c35a301e4ab1d221080461aa61dd86f61c"
+  },
+  "generator": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/current119-cmake-integration-source-1/selected-bfd-abi-coupled-successor-source-1/generation-checks-2/RESULT.json",
+    "bytes": 7420,
+    "sha256": "5d5bd3b04f5b43297259c4afb52bde61f1b5723ef020cf59b2e0e3a6121a3bd5"
+  },
+  "evidence_check": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/current119-cmake-integration-source-1/selected-bfd-abi-coupled-successor-source-1/independent-source-review-1/EVIDENCE-CHECK.ACTUAL.json",
+    "bytes": 20155,
+    "sha256": "318da2eb638f47b94ca132bb4775e8dfbe3379c2b1bc091d90115696db11717c"
+  },
+  "prior17_map": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/current119-cmake-integration-source-1/ownership-coupled-successor-source-1/FILEMAP.SOURCE-ONLY.json",
+    "bytes": 18673,
+    "sha256": "de2083d922b34ad8966bcf7d80ef7d128126c27ee1e35f007f6758184d9bbd5d"
+  },
+  "prior17_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/current119-cmake-integration-source-1/ownership-coupled-successor-source-1/SOURCE_READY.CONDITIONAL.json",
+    "bytes": 3770,
+    "sha256": "4fc3a05d4e75b6504a7e2152230bc5ee9fa276431c142b1698074a143f87852d"
+  },
+  "selected_ABI_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/selected-bfd-abi-repair-source-1/independent-selected-abi-review-1/REVIEW.json",
+    "bytes": 10468,
+    "sha256": "e1f923704dd20846103df6916e3cf49525216361464cf1208fabac6be855aa4a"
+  },
+  "selected_ABI_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/selected-bfd-abi-repair-source-1/READY.SOURCE-AND-SELECTED-HEADER-HOST-ONLY.json",
+    "bytes": 3804,
+    "sha256": "dbfe5d7c3ad197a2ef323a95c281067d6b25e6ec175f89e3b783805d28dafa19"
+  },
+  "selected_ABI_HOST56": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/selected-bfd-abi-repair-source-1/actual-selected-header-run-1/RESULT.json",
+    "bytes": 124919,
+    "sha256": "068e5f7c8570c48c89eb88ae894d173c69f07a60ab8197fbc102b49d13a821dd"
+  },
+  "fixture_failure": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/current119-cmake-integration-source-1/selected-bfd-abi-coupled-successor-source-1/GENERATOR-FIXTURE-FAILURE-1.json",
+    "bytes": 614,
+    "sha256": "2d07d933dc5001325aff7e87532752bb1c931023d24fed5ba476eafa0934dad8"
+  },
+  "source_reuse": {
+    "prior_paths": 17,
+    "byte_identical_prior_paths": [
+      "CMakeLists.txt",
+      "scripts/rust/boot-tools/SelectRustBootTools.cmake",
+      "scripts/rust/eclair-backtrace/SelectRustEclairBacktrace.cmake",
+      "scripts/rust/boot-tools/config.rs.in",
+      "scripts/rust/boot-tools/platform.rs",
+      "scripts/rust/boot-tools/reboot.rs",
+      "scripts/rust/boot-tools/stop.rs",
+      "scripts/rust/boot-tools/mcreboot_main.rs",
+      "scripts/rust/boot-tools/mcstop_main.rs",
+      "scripts/rust/eclair-backtrace/config.rs.in",
+      "scripts/rust/eclair-backtrace/eclair_backtrace.rs",
+      "scripts/rust/eclair-backtrace/eclair_native.rs",
+      "scripts/rust/eclair-backtrace/eclair_main.rs",
+      "executer/user/rust/vmcore2mckdump.rs"
+    ],
+    "three_focused_successor_paths": [
+      "executer/user/CMakeLists.txt",
+      "executer/user/cmake/SelectRustVmcore2mckdump.cmake",
+      "executer/user/rust/ldump2mcdump_helpers.rs"
+    ],
+    "two_new_nonshipped_paths": [
+      "executer/user/cmake/ldump2-selected-bfd/Ldump2SelectedBfdLayout.cmake",
+      "executer/user/cmake/ldump2-selected-bfd/section_layout_witness.c"
+    ]
+  },
+  "runtime_authority": null,
+  "actual_SDK_witness_compiler_probe_calls": 0,
+  "reviewer_graph_or_Rust_or_body_reruns": 0,
+  "canonical_writes": 0,
+  "SDK_archive_bound": false,
+  "SDK_default_native_whole_file_acceptance": false,
+  "findings": [
+    {
+      "boundary": "Complete private coherent source",
+      "result": "PASS_SOURCE",
+      "details": "Exact joint19 map9e84/patchc314 authenticates against three unchanged canonical preimages (top e60b,usera77d,converter4e03). Independent git apply--check and private-only application reproduce all19 declared postimages. Prior17 paths are preserved as a scope:14byte-identical, userCMake gets only3 wiring additions, vmcore selector gets only new5aab hash, converter gets exact reviewed5aab. Two added paths are exact nonshipped3375 C witness and78bc layout fragment. Frozen16/17 and original sources/evidence remain unchanged."
+    },
+    {
+      "boundary": "Actual default Rust producer integration",
+      "result": "PASS_SOURCE_AND_GENERATOR",
+      "details": "Fragment include is within existing ENABLE_RUST_USER_TOOLS/x86_64/RUSTC branch before actual ldump object custom command, outside vmcore wrapper selector. The same existing full-body producer receives LDUMP2_BFD_LAYOUT_ENV in cmake-E-env and LDUMP2_BFD_LAYOUT_DEPENDS in actual object DEPENDS. All other flags/compiler selection, source EXTERNAL_OBJECT/GENERATED settings, helper target/dependency, library creation/link language and install behavior are unchanged. Default vmcoreOFF still requires the witness for default Rust ldump; no newly added source/target/compiler-flag fallback bypasses a witness failure. Compute RUSTC selection and current mcexec/BFD/libelf/mcps graph remain unchanged outside exact delta."
+    },
+    {
+      "boundary": "Hash/provider gates and existing defaults",
+      "result": "PASS_SOURCE_AND_GENERATOR",
+      "details": "Vmcore gate now permits only exact5aab and rejects retained520566/dc0 sources in focused cases. Runtime boot/backtrace/vmcore selectors remainOFF and installed names/PROGRAMS modes are unchanged. Exact78bc fragment still rejects crosscompile and wrong selected headerde900/compiler2092 hashes; no production TEST_ONLY override exists. Compiler/runtime defaults are not widened by this integration."
+    },
+    {
+      "boundary": "Focused real generation and honest oracle",
+      "result": "PASS_GENERATOR_ONLY",
+      "details": "116 independent selected evidence assertions verify actual five retained CMake LANGUAGESNONE results and individual ldump rules. Both vmcoreOFF/ON graphs contain explicit layout environment, generated Rust data, witness and exact selected-header/dependency paths with original full-body flags. Crosscompile/stale source cases fail1 for expected reasons. Harness explicitly overrides only selected SHA and try_run effect leaves with TEST_ONLY metadata; fake compiler remains nonexecutable. Thus these are graph proofs, not genuine SDK probe/compiler outputs. First normal-variable versus CACHE policy fixture error is retained; bounded correction supplies actualFILEPATH cache argv. No old8/2 tests or Rust/body matrix was rerun by reviewer."
+    },
+    {
+      "boundary": "Preserved ABI/ownership qualification scope",
+      "result": "PASS_BOUND_PRIOR_SOURCE_HEADER_HOST_ONLY",
+      "details": "Joint source reuses exact5aab independently approved e1f92370 and its genuine56case/63join selected-header HOST result068e. No new runtime-body implementation or oracle weakening occurs here. Nonshipped witness-to-Rust data pattern remains, with no production C callback addition. Existing ownership, BFD terminal lifetime, correct11import/opaque-section and beforeACK cleanup results retain their original scopes."
+    },
+    {
+      "boundary": "SDK source and runtime prerequisites",
+      "result": "OPEN",
+      "details": "Actual SDK GCC14/compiler/header witness generation has not run. Root must bind genuine SDK-generated layout DATA into this now-wired producer; TEST_ONLY graph DATA and prior HOST witness are not substitutes. Actual selected libbfd.a2324byte comparison plus new bool FFI/provider link, matching production compile/link, installed/default behavior, real BFD descriptor/heap cleanup, valid dump/native and M15 whole-file acceptance remain open. Source/generator review grants no operation/guest/heavy/control authority."
+    }
+  ],
+  "source_or_generator_blockers": [],
+  "next_actual_checks": [
+    "Current coherent operation/account/identity/resource and sole-heavy-slot admission with fresh source/output plus exact SDK/readset/export prefixes at accepted scope.",
+    "Actual selected GCC14 typed C witness/header/probe output, selected archive2324 byte binding and matching FFI object/provider link.",
+    "Production graph compiler feedback for named targets; then separate installed/default/native and real valid-dump qualification."
+  ]
+}

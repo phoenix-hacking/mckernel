@@ -1,0 +1,6017 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "exact_frozen_reader": {
+    "source": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/independent-artifact-review-preparation-1/review_consumers115.py",
+      "bytes": 8685,
+      "sha256": "387e2cf62369de8a8c347a25b561a1d9fef0b22f9358e7c8067d4bf3597501db"
+    },
+    "name": "relocated_function",
+    "first_line": 21,
+    "last_line": 63,
+    "source_segment_sha256": "d9cd83cf0a5fc201e755f7da27ddbe9df527e498bc085ea95fe235a6f8aca3a9",
+    "AST_sha256": "99d018f303ac50104518707c6cf7da24bc53d3e31de2ce1e35e18e596d5b904f",
+    "reuse": "EXACT_AUTHENTICATED_NODE_NO_OLD_REVIEW_TOPLEVEL"
+  },
+  "change": "Only eight explicit C functions: accept .rodata.str1.8 via identical literal() proving PROGBITS/MERGE/STRINGS/ALLOC/readonly flags, in-range terminated source string, exact final literal bytes and whole function reconstruction. No address masking or metadata normalization.",
+  "proofs": [
+    {
+      "name": "do_execveat",
+      "input": {
+        "index": 41,
+        "name": "do_execveat",
+        "bind": 0,
+        "type": 2,
+        "shndx": 1,
+        "value": 9680,
+        "size": 1659
+      },
+      "final": {
+        "name": "do_execveat",
+        "bind": 0,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684399568,
+        "size": 1659
+      },
+      "all_final_bytes": true,
+      "records": [
+        {
+          "offset": 2,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe85dbf0",
+          "kind": "NAMED",
+          "target": "get_this_cpu_local_var",
+          "addend": 0
+        },
+        {
+          "offset": 135,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe87d9b0",
+          "kind": "NAMED",
+          "target": "memcpy",
+          "addend": 0
+        },
+        {
+          "offset": 157,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe84c960",
+          "kind": "NAMED",
+          "target": "f03_execveat_filename_admission_v1",
+          "addend": 0
+        },
+        {
+          "offset": 206,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe900b20",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f73797363616c6c2e6300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 216,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe84c8d0",
+          "kind": "NAMED",
+          "target": "f03_execveat_allocate_descriptor_v1",
+          "addend": 0
+        },
+        {
+          "offset": 252,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe87d630",
+          "kind": "NAMED",
+          "target": "virt_to_phys",
+          "addend": 0
+        },
+        {
+          "offset": 308,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe869520",
+          "kind": "NAMED",
+          "target": "ihk_mc_get_processor_id",
+          "addend": 0
+        },
+        {
+          "offset": 329,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe803090",
+          "kind": "NAMED",
+          "target": "do_syscall",
+          "addend": 0
+        },
+        {
+          "offset": 353,
+          "type": 1,
+          "input_addend": 3776,
+          "actual_final_address": "0xfffffffffe8fe5a0",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.33"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 410,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe857280",
+          "kind": "NAMED",
+          "target": "flatten_strings_from_user",
+          "addend": 0
+        },
+        {
+          "offset": 422,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe857280",
+          "kind": "NAMED",
+          "target": "flatten_strings_from_user",
+          "addend": 0
+        },
+        {
+          "offset": 500,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe84de90",
+          "kind": "NAMED",
+          "target": "f03_munmap_all_current_v1",
+          "addend": 0
+        },
+        {
+          "offset": 527,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe84cde0",
+          "kind": "NAMED",
+          "target": "f03_execveat_install_user_context_v1",
+          "addend": 0
+        },
+        {
+          "offset": 568,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe88ea30",
+          "kind": "NAMED",
+          "target": "prepare_process_ranges_args_envs",
+          "addend": 0
+        },
+        {
+          "offset": 629,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8403c0",
+          "kind": "NAMED",
+          "target": "clear_host_pte",
+          "addend": 0
+        },
+        {
+          "offset": 710,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe869520",
+          "kind": "NAMED",
+          "target": "ihk_mc_get_processor_id",
+          "addend": 0
+        },
+        {
+          "offset": 731,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe803090",
+          "kind": "NAMED",
+          "target": "do_syscall",
+          "addend": 0
+        },
+        {
+          "offset": 755,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe84b460",
+          "kind": "NAMED",
+          "target": "exec_reset_signal_state_current_v1",
+          "addend": 0
+        },
+        {
+          "offset": 780,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe84cf80",
+          "kind": "NAMED",
+          "target": "f03_execveat_ptrace_report_v1",
+          "addend": 0
+        },
+        {
+          "offset": 806,
+          "type": 1,
+          "input_addend": 3744,
+          "actual_final_address": "0xfffffffffe8fe580",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.32"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 875,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe900b20",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f73797363616c6c2e6300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 891,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe84d280",
+          "kind": "NAMED",
+          "target": "f03_execveat_release_temporaries_v1",
+          "addend": 0
+        },
+        {
+          "offset": 909,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe84cc00",
+          "kind": "NAMED",
+          "target": "f03_execveat_finish_switch_v1",
+          "addend": 0
+        },
+        {
+          "offset": 993,
+          "type": 1,
+          "input_addend": 2456,
+          "actual_final_address": "0xfffffffffe9020c0",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "65786563766528293a20454c4620646573632072656365697665642c206e756d2073656374696f6e733a2025640a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 1003,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 1026,
+          "type": 1,
+          "input_addend": 3808,
+          "actual_final_address": "0xfffffffffe8fe5c0",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.34"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 1058,
+          "type": 1,
+          "input_addend": 2584,
+          "actual_final_address": "0xfffffffffe902140",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "65786563766528293a204552524f523a20707265706172696e672072616e6765732c20617267732c20656e76732c20737461636b2c207265743a2025640a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 1073,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 1085,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe88e9b0",
+          "kind": "NAMED",
+          "target": "preempt_enable",
+          "addend": 0
+        },
+        {
+          "offset": 1128,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe847720",
+          "kind": "NAMED",
+          "target": "do_kill",
+          "addend": 0
+        },
+        {
+          "offset": 1154,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8bed80",
+          "kind": "NAMED",
+          "target": "strlen_user",
+          "addend": 0
+        },
+        {
+          "offset": 1179,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe900b20",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f73797363616c6c2e6300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 1192,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874260",
+          "kind": "NAMED",
+          "target": "kmalloc_tracked",
+          "addend": 0
+        },
+        {
+          "offset": 1218,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8be6c0",
+          "kind": "NAMED",
+          "target": "strcpy_from_user",
+          "addend": 0
+        },
+        {
+          "offset": 1235,
+          "type": 1,
+          "input_addend": 2504,
+          "actual_final_address": "0xfffffffffe9020f0",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "4552524f523a206e6f206172677620666f722065786563757461626c653a2025733f0a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 1245,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 1265,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe900b20",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f73797363616c6c2e6300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 1275,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8728c0",
+          "kind": "NAMED",
+          "target": "kfree_tracked",
+          "addend": 0
+        },
+        {
+          "offset": 1298,
+          "type": 1,
+          "input_addend": 34,
+          "actual_final_address": "0xfffffffffe900ba7",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 1310,
+          "type": 1,
+          "input_addend": 2504,
+          "actual_final_address": "0xfffffffffe9020f0",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "4552524f523a206e6f206172677620666f722065786563757461626c653a2025733f0a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 1320,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 1346,
+          "type": 1,
+          "input_addend": 2688,
+          "actual_final_address": "0xfffffffffe9021a8",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "65786563766528293a20737769746368696e6720746f206e65772070726f636573730a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 1358,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 1378,
+          "type": 1,
+          "input_addend": 2648,
+          "actual_final_address": "0xfffffffffe902180",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "65786563766528293a204552524f523a207074726163655f7265706f72745f6578656328290a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 1390,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 1419,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8bed80",
+          "kind": "NAMED",
+          "target": "strlen_user",
+          "addend": 0
+        },
+        {
+          "offset": 1441,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe900b20",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f73797363616c6c2e6300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 1454,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874260",
+          "kind": "NAMED",
+          "target": "kmalloc_tracked",
+          "addend": 0
+        },
+        {
+          "offset": 1498,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8be6c0",
+          "kind": "NAMED",
+          "target": "strcpy_from_user",
+          "addend": 0
+        },
+        {
+          "offset": 1515,
+          "type": 1,
+          "input_addend": 2544,
+          "actual_final_address": "0xfffffffffe902118",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "4552524f523a206e6f20656e767020666f722065786563757461626c653a2025733f0a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 1525,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 1545,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe900b20",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f73797363616c6c2e6300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 1555,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8728c0",
+          "kind": "NAMED",
+          "target": "kfree_tracked",
+          "addend": 0
+        },
+        {
+          "offset": 1586,
+          "type": 1,
+          "input_addend": 2392,
+          "actual_final_address": "0xfffffffffe902080",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "65786563766528293a204552524f523a20686f7374206661696c656420746f206c6f616420656c66206865616465722c206572726e6f3a2025640a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 1601,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 1618,
+          "type": 1,
+          "input_addend": 34,
+          "actual_final_address": "0xfffffffffe900ba7",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 1630,
+          "type": 1,
+          "input_addend": 2544,
+          "actual_final_address": "0xfffffffffe902118",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "4552524f523a206e6f20656e767020666f722065786563757461626c653a2025733f0a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 1640,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        }
+      ]
+    },
+    {
+      "name": "do_fork",
+      "input": {
+        "index": 230,
+        "name": "do_fork",
+        "bind": 1,
+        "type": 2,
+        "shndx": 1,
+        "value": 15232,
+        "size": 4380
+      },
+      "final": {
+        "name": "do_fork",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684405120,
+        "size": 4380
+      },
+      "all_final_bytes": true,
+      "records": [
+        {
+          "offset": 2,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe85dbf0",
+          "kind": "NAMED",
+          "target": "get_this_cpu_local_var",
+          "addend": 0
+        },
+        {
+          "offset": 106,
+          "type": 1,
+          "input_addend": 3712,
+          "actual_final_address": "0xfffffffffe8fe560",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.31"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 144,
+          "type": 1,
+          "input_addend": 3680,
+          "actual_final_address": "0xfffffffffe8fe540",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.30"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 171,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe86d780",
+          "kind": "NAMED",
+          "target": "ihk_mc_syscall_number",
+          "addend": 0
+        },
+        {
+          "offset": 207,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe841890",
+          "kind": "NAMED",
+          "target": "clone_pthread_marker_result",
+          "addend": 0
+        },
+        {
+          "offset": 267,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8417c0",
+          "kind": "NAMED",
+          "target": "clone_flags_result",
+          "addend": 0
+        },
+        {
+          "offset": 340,
+          "type": 1,
+          "input_addend": 152,
+          "actual_final_address": "0xfffffffffe9029d8",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "__FUNCTION__.4"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 352,
+          "type": 1,
+          "input_addend": 308,
+          "actual_final_address": "0xfffffffffe900c53",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a206d6f645f636c6f6e652069732073657420746f2025640a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 362,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 433,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe841910",
+          "kind": "NAMED",
+          "target": "clone_use_last_cpu_result",
+          "addend": 0
+        },
+        {
+          "offset": 454,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe885890",
+          "kind": "NAMED",
+          "target": "obtain_clone_cpuid",
+          "addend": 0
+        },
+        {
+          "offset": 554,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8962c0",
+          "kind": "NAMED",
+          "target": "process_fork_construct_current_v1",
+          "addend": 0
+        },
+        {
+          "offset": 623,
+          "type": 1,
+          "input_addend": 422,
+          "actual_final_address": "0xfffffffffe900cc5",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "3078256c78204020257300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 633,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8be570",
+          "kind": "NAMED",
+          "target": "sprintf",
+          "addend": 0
+        },
+        {
+          "offset": 672,
+          "type": 1,
+          "input_addend": 3648,
+          "actual_final_address": "0xfffffffffe8fe520",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.29"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 713,
+          "type": 1,
+          "input_addend": 433,
+          "actual_final_address": "0xfffffffffe900cd0",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "5b756e6b6e6f776e5d00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 723,
+          "type": 1,
+          "input_addend": 443,
+          "actual_final_address": "0xfffffffffe900ccd",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "257300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 733,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8be570",
+          "kind": "NAMED",
+          "target": "sprintf",
+          "addend": 0
+        },
+        {
+          "offset": 787,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8b05d0",
+          "kind": "NAMED",
+          "target": "sched_clone_affinity_inherit_result",
+          "addend": 0
+        },
+        {
+          "offset": 843,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe852c80",
+          "kind": "NAMED",
+          "target": "ihk_atomic_set",
+          "addend": 0
+        },
+        {
+          "offset": 871,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe853600",
+          "kind": "NAMED",
+          "target": "release_thread",
+          "addend": 0
+        },
+        {
+          "offset": 883,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8aba10",
+          "kind": "NAMED",
+          "target": "release_cpuid",
+          "addend": 0
+        },
+        {
+          "offset": 931,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe844160",
+          "kind": "NAMED",
+          "target": "cpu_set",
+          "addend": 0
+        },
+        {
+          "offset": 994,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe830700",
+          "kind": "NAMED",
+          "target": "__mcs_rwlock_writer_lock",
+          "addend": 0
+        },
+        {
+          "offset": 1022,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe900b20",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f73797363616c6c2e6300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 1117,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe83d150",
+          "kind": "NAMED",
+          "target": "atomic_cmpxchg_ptr",
+          "addend": 0
+        },
+        {
+          "offset": 1145,
+          "type": 1,
+          "input_addend": 3552,
+          "actual_final_address": "0xfffffffffe8fe4c0",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.26"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 1166,
+          "type": 1,
+          "input_addend": 152,
+          "actual_final_address": "0xfffffffffe9029d8",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "__FUNCTION__.4"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 1181,
+          "type": 1,
+          "input_addend": 464,
+          "actual_final_address": "0xfffffffffe900cec",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a207469642025642061737369676e656420746f2025700a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 1191,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 1232,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe830850",
+          "kind": "NAMED",
+          "target": "__mcs_rwlock_writer_unlock",
+          "addend": 0
+        },
+        {
+          "offset": 1259,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe841860",
+          "kind": "NAMED",
+          "target": "clone_parent_tid_store_needed_result",
+          "addend": 0
+        },
+        {
+          "offset": 1281,
+          "type": 1,
+          "input_addend": 3520,
+          "actual_final_address": "0xfffffffffe8fe4a0",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.25"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 1313,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8b9270",
+          "kind": "NAMED",
+          "target": "setint_user",
+          "addend": 0
+        },
+        {
+          "offset": 1335,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8417a0",
+          "kind": "NAMED",
+          "target": "clone_child_cleartid_needed_result",
+          "addend": 0
+        },
+        {
+          "offset": 1357,
+          "type": 1,
+          "input_addend": 3488,
+          "actual_final_address": "0xfffffffffe8fe480",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.24"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 1392,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8417b0",
+          "kind": "NAMED",
+          "target": "clone_child_tid_store_needed_result",
+          "addend": 0
+        },
+        {
+          "offset": 1438,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe84ba60",
+          "kind": "NAMED",
+          "target": "f03_clone_initialize_execution_state_v1",
+          "addend": 0
+        },
+        {
+          "offset": 1454,
+          "type": 1,
+          "input_addend": 3456,
+          "actual_final_address": "0xfffffffffe8fe460",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "tls_debug.23"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 1492,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe84baf0",
+          "kind": "NAMED",
+          "target": "f03_clone_prepare_remote_argument_v1",
+          "addend": 0
+        },
+        {
+          "offset": 1533,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe84c050",
+          "kind": "NAMED",
+          "target": "f03_clone_release_empty_tid_table_v1",
+          "addend": 0
+        },
+        {
+          "offset": 1578,
+          "type": 1,
+          "input_addend": 3016,
+          "actual_final_address": "0xfffffffffe9022f0",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "646f5f666f726b28293a20737461636b5f706f696e74722070617373656420696e3a203078256c582c20737461636b20706f696e746572206f662063616c6c65723a203078256c780a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 1588,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 1635,
+          "type": 1,
+          "input_addend": 160,
+          "actual_final_address": "0xfffffffffe9029e0",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "__func__.5"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 1645,
+          "type": 1,
+          "input_addend": 2936,
+          "actual_final_address": "0xfffffffffe9022a0",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25732c666c6167733d253038782c6e657773703d256c782c707469647074723d256c782c637469647074723d256c782c746c733d256c782c63757270633d256c782c63757273703d256c7800",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 1667,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 1781,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8418e0",
+          "kind": "NAMED",
+          "target": "clone_thread",
+          "addend": 0
+        },
+        {
+          "offset": 1824,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe86f7b0",
+          "kind": "NAMED",
+          "target": "ihk_rwspinlock_read_lock_noirq",
+          "addend": 0
+        },
+        {
+          "offset": 1850,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe84dd90",
+          "kind": "NAMED",
+          "target": "lookup_process_memory_range",
+          "addend": 0
+        },
+        {
+          "offset": 1876,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe86f9d0",
+          "kind": "NAMED",
+          "target": "ihk_rwspinlock_read_unlock_noirq",
+          "addend": 0
+        },
+        {
+          "offset": 1937,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8bf120",
+          "kind": "NAMED",
+          "target": "strstr",
+          "addend": 0
+        },
+        {
+          "offset": 1947,
+          "type": 1,
+          "input_addend": 336,
+          "actual_final_address": "0xfffffffffe900c6f",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "6f6d702e736f00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 1959,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8bf120",
+          "kind": "NAMED",
+          "target": "strstr",
+          "addend": 0
+        },
+        {
+          "offset": 1978,
+          "type": 1,
+          "input_addend": 3616,
+          "actual_final_address": "0xfffffffffe8fe500",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.28"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 2005,
+          "type": 1,
+          "input_addend": 386,
+          "actual_final_address": "0xfffffffffe900ca1",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "636f6d7075746500",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 2015,
+          "type": 1,
+          "input_addend": 358,
+          "actual_final_address": "0xfffffffffe900c85",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "636c6f6e6528293a202573207468726561642066726f6d2025730a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 2025,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 2088,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe841840",
+          "kind": "NAMED",
+          "target": "clone_host_parent_flags_result",
+          "addend": 0
+        },
+        {
+          "offset": 2146,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe896750",
+          "kind": "NAMED",
+          "target": "process_fork_owned_caller_runnable_current_v2",
+          "addend": 0
+        },
+        {
+          "offset": 2215,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8961d0",
+          "kind": "NAMED",
+          "target": "process_fork_cancel_constructed_current_v1",
+          "addend": 0
+        },
+        {
+          "offset": 2275,
+          "type": 1,
+          "input_addend": 160,
+          "actual_final_address": "0xfffffffffe9029e0",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "__func__.5"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 2285,
+          "type": 1,
+          "input_addend": 3096,
+          "actual_final_address": "0xfffffffffe902340",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a20636c6f6e655f707468726561645f73746172745f726f7574696e653a203078256c780a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 2295,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 2322,
+          "type": 1,
+          "input_addend": 3136,
+          "actual_final_address": "0xfffffffffe902368",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "636c6f6e6528293a204552524f523a20434c4f4e455f564d20616e6420434c4f4e455f5448524541442073686f756c642062652073657420746f6765746865720a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 2334,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 2386,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe9009d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "addend": 0
+        },
+        {
+          "offset": 2396,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe95a040",
+          "kind": "NAMED",
+          "target": "allow_oversubscribe",
+          "addend": 0
+        },
+        {
+          "offset": 2428,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe900b20",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f73797363616c6c2e6300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 2448,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874260",
+          "kind": "NAMED",
+          "target": "kmalloc_tracked",
+          "addend": 0
+        },
+        {
+          "offset": 2471,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874260",
+          "kind": "NAMED",
+          "target": "kmalloc_tracked",
+          "addend": 0
+        },
+        {
+          "offset": 2481,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe9009d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "addend": 0
+        },
+        {
+          "offset": 2491,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe95a040",
+          "kind": "NAMED",
+          "target": "allow_oversubscribe",
+          "addend": 0
+        },
+        {
+          "offset": 2553,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe9009d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "addend": 0
+        },
+        {
+          "offset": 2563,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe95a040",
+          "kind": "NAMED",
+          "target": "allow_oversubscribe",
+          "addend": 0
+        },
+        {
+          "offset": 2618,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8cf230",
+          "kind": "NAMED",
+          "target": "syscall_settid_log_bridge",
+          "addend": 0
+        },
+        {
+          "offset": 2628,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe869520",
+          "kind": "NAMED",
+          "target": "ihk_mc_get_processor_id",
+          "addend": 0
+        },
+        {
+          "offset": 2639,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe88bcf0",
+          "kind": "NAMED",
+          "target": "syscall_do_syscall_request_bridge",
+          "addend": 0
+        },
+        {
+          "offset": 2649,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe87d630",
+          "kind": "NAMED",
+          "target": "syscall_virt_to_phys_bridge",
+          "addend": 0
+        },
+        {
+          "offset": 2660,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8cf1b0",
+          "kind": "NAMED",
+          "target": "syscall_settid_body_result",
+          "addend": 0
+        },
+        {
+          "offset": 2675,
+          "type": 1,
+          "input_addend": 3584,
+          "actual_final_address": "0xfffffffffe8fe4e0",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.27"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 2685,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe9009d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "addend": 0
+        },
+        {
+          "offset": 2703,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe95a040",
+          "kind": "NAMED",
+          "target": "allow_oversubscribe",
+          "addend": 0
+        },
+        {
+          "offset": 2831,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 2845,
+          "type": 1,
+          "input_addend": 160,
+          "actual_final_address": "0xfffffffffe9029e0",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "__func__.5"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 2855,
+          "type": 1,
+          "input_addend": 446,
+          "actual_final_address": "0xfffffffffe900cda",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a20746964735b25645d3a2025640a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 2872,
+          "type": 1,
+          "input_addend": 3584,
+          "actual_final_address": "0xfffffffffe8fe4e0",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.27"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 2882,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe95a040",
+          "kind": "NAMED",
+          "target": "allow_oversubscribe",
+          "addend": 0
+        },
+        {
+          "offset": 2892,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe9009d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "addend": 0
+        },
+        {
+          "offset": 2927,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe852c80",
+          "kind": "NAMED",
+          "target": "ihk_atomic_set",
+          "addend": 0
+        },
+        {
+          "offset": 2958,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe900b20",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f73797363616c6c2e6300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 2968,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8728c0",
+          "kind": "NAMED",
+          "target": "kfree_tracked",
+          "addend": 0
+        },
+        {
+          "offset": 3030,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8728c0",
+          "kind": "NAMED",
+          "target": "kfree_tracked",
+          "addend": 0
+        },
+        {
+          "offset": 3058,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe9009d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "addend": 0
+        },
+        {
+          "offset": 3097,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8b0830",
+          "kind": "NAMED",
+          "target": "sched_clone_affinity_snapshot_result",
+          "addend": 0
+        },
+        {
+          "offset": 3126,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe885890",
+          "kind": "NAMED",
+          "target": "obtain_clone_cpuid",
+          "addend": 0
+        },
+        {
+          "offset": 3185,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe84bc60",
+          "kind": "NAMED",
+          "target": "f03_clone_publish_thread_process_v1",
+          "addend": 0
+        },
+        {
+          "offset": 3217,
+          "type": 1,
+          "input_addend": 3424,
+          "actual_final_address": "0xfffffffffe8fe440",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.22"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 3237,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8418c0",
+          "kind": "NAMED",
+          "target": "clone_report_thread_result",
+          "addend": 0
+        },
+        {
+          "offset": 3278,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8aef20",
+          "kind": "NAMED",
+          "target": "runq_add_thread",
+          "addend": 0
+        },
+        {
+          "offset": 3394,
+          "type": 1,
+          "input_addend": 160,
+          "actual_final_address": "0xfffffffffe9029e0",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "__func__.5"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 3409,
+          "type": 1,
+          "input_addend": 491,
+          "actual_final_address": "0xfffffffffe900d07",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a206e6f206d6f7265205449447320617661696c61626c650a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 3419,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 3467,
+          "type": 1,
+          "input_addend": 519,
+          "actual_final_address": "0xfffffffffe900d23",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a20693d25642c7469643d25642c7468726561643d25700a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 3530,
+          "type": 1,
+          "input_addend": 394,
+          "actual_final_address": "0xfffffffffe900ca9",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "646f5f666f726b2c636f7265206e6f7420617661696c61626c650a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 3542,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 3595,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8de030",
+          "kind": "NAMED",
+          "target": "write_process_vm",
+          "addend": 0
+        },
+        {
+          "offset": 3621,
+          "type": 1,
+          "input_addend": 3208,
+          "actual_final_address": "0xfffffffffe9023b0",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "636c6f6e655f666c616773202620434c4f4e455f504152454e545f5345545449443a203078256c580a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 3631,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 3657,
+          "type": 1,
+          "input_addend": 3256,
+          "actual_final_address": "0xfffffffffe9023e0",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "636c6f6e655f666c616773202620434c4f4e455f4348494c445f434c4541525449443a203078256c580a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 3667,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 3684,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8b4760",
+          "kind": "NAMED",
+          "target": "schedule",
+          "addend": 0
+        },
+        {
+          "offset": 3715,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe830700",
+          "kind": "NAMED",
+          "target": "__mcs_rwlock_writer_lock",
+          "addend": 0
+        },
+        {
+          "offset": 3774,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8a1790",
+          "kind": "NAMED",
+          "target": "process_thread_report_attach_result",
+          "addend": 0
+        },
+        {
+          "offset": 3805,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe85f9e0",
+          "kind": "NAMED",
+          "target": "hold_thread",
+          "addend": 0
+        },
+        {
+          "offset": 3836,
+          "type": 1,
+          "input_addend": 3304,
+          "actual_final_address": "0xfffffffffe902410",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "636c6f6e653a206b69636b696e67207363686564756c6572212c63707569643d2564207069643d256420746964202564202d3e207469643d25640a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 3857,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 3883,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8a6790",
+          "kind": "NAMED",
+          "target": "ptrace_clone_event_result",
+          "addend": 0
+        },
+        {
+          "offset": 3909,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe85dbf0",
+          "kind": "NAMED",
+          "target": "get_this_cpu_local_var",
+          "addend": 0
+        },
+        {
+          "offset": 3951,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8a8020",
+          "kind": "NAMED",
+          "target": "ptrace_report_clone_log_bridge",
+          "addend": 0
+        },
+        {
+          "offset": 3961,
+          "type": 1,
+          "input_addend": 64,
+          "actual_final_address": "0xfffffffffe902980",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "offsets.3"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 3972,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe84d3c0",
+          "kind": "NAMED",
+          "target": "f03_exit_notify_wake",
+          "addend": 0
+        },
+        {
+          "offset": 3983,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe801000",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ptrace_detach_do_kill_bridge"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 3994,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe84f000",
+          "kind": "NAMED",
+          "target": "f03_ptrace_attach_thread_addr_v1",
+          "addend": 0
+        },
+        {
+          "offset": 4005,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8a8140",
+          "kind": "NAMED",
+          "target": "ptrace_report_clone_noirq_unlock_bridge",
+          "addend": 0
+        },
+        {
+          "offset": 4016,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8a80a0",
+          "kind": "NAMED",
+          "target": "ptrace_report_clone_noirq_lock_bridge",
+          "addend": 0
+        },
+        {
+          "offset": 4035,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8a7d50",
+          "kind": "NAMED",
+          "target": "ptrace_report_clone_body_result",
+          "addend": 0
+        },
+        {
+          "offset": 4070,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe830850",
+          "kind": "NAMED",
+          "target": "__mcs_rwlock_writer_unlock",
+          "addend": 0
+        },
+        {
+          "offset": 4097,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8728c0",
+          "kind": "NAMED",
+          "target": "kfree_tracked",
+          "addend": 0
+        },
+        {
+          "offset": 4138,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe830850",
+          "kind": "NAMED",
+          "target": "__mcs_rwlock_writer_unlock",
+          "addend": 0
+        },
+        {
+          "offset": 4188,
+          "type": 1,
+          "input_addend": 343,
+          "actual_final_address": "0xfffffffffe900c76",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "6c6962666a393000",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 4210,
+          "type": 1,
+          "input_addend": 3643,
+          "actual_final_address": "0xfffffffffe8fe51b",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.28"
+          ],
+          "delta": 27
+        },
+        {
+          "offset": 4252,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe830850",
+          "kind": "NAMED",
+          "target": "__mcs_rwlock_writer_unlock",
+          "addend": 0
+        },
+        {
+          "offset": 4279,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8728c0",
+          "kind": "NAMED",
+          "target": "kfree_tracked",
+          "addend": 0
+        },
+        {
+          "offset": 4307,
+          "type": 1,
+          "input_addend": 351,
+          "actual_final_address": "0xfffffffffe900c7e",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "68656c70657200",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 4317,
+          "type": 1,
+          "input_addend": 358,
+          "actual_final_address": "0xfffffffffe900c85",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "636c6f6e6528293a202573207468726561642066726f6d2025730a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 4327,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 4349,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe869520",
+          "kind": "NAMED",
+          "target": "ihk_mc_get_processor_id",
+          "addend": 0
+        }
+      ]
+    },
+    {
+      "name": "do_mmap",
+      "input": {
+        "index": 97,
+        "name": "do_mmap",
+        "bind": 1,
+        "type": 2,
+        "shndx": 1,
+        "value": 368,
+        "size": 7963
+      },
+      "final": {
+        "name": "do_mmap",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684390256,
+        "size": 7963
+      },
+      "all_final_bytes": true,
+      "records": [
+        {
+          "offset": 2,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe85dbf0",
+          "kind": "NAMED",
+          "target": "get_this_cpu_local_var",
+          "addend": 0
+        },
+        {
+          "offset": 131,
+          "type": 1,
+          "input_addend": 4480,
+          "actual_final_address": "0xfffffffffe8fe860",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.48"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 193,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe830020",
+          "kind": "NAMED",
+          "target": "__inline_memset",
+          "addend": 0
+        },
+        {
+          "offset": 218,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe86d7e0",
+          "kind": "NAMED",
+          "target": "ihk_mc_syscall_set_arg0",
+          "addend": 0
+        },
+        {
+          "offset": 240,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe86d800",
+          "kind": "NAMED",
+          "target": "ihk_mc_syscall_set_arg1",
+          "addend": 0
+        },
+        {
+          "offset": 262,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe86d820",
+          "kind": "NAMED",
+          "target": "ihk_mc_syscall_set_arg2",
+          "addend": 0
+        },
+        {
+          "offset": 280,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe86d840",
+          "kind": "NAMED",
+          "target": "ihk_mc_syscall_set_arg3",
+          "addend": 0
+        },
+        {
+          "offset": 302,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe86d850",
+          "kind": "NAMED",
+          "target": "ihk_mc_syscall_set_arg4",
+          "addend": 0
+        },
+        {
+          "offset": 327,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe86d870",
+          "kind": "NAMED",
+          "target": "ihk_mc_syscall_set_arg5",
+          "addend": 0
+        },
+        {
+          "offset": 353,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe82dd10",
+          "kind": "NAMED",
+          "target": "syscall_mckfd_unlock_bridge",
+          "addend": 0
+        },
+        {
+          "offset": 372,
+          "type": 1,
+          "input_addend": 224,
+          "actual_final_address": "0xfffffffffe902a20",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "mmap_mckfd_offsets.9"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 383,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe82d980",
+          "kind": "NAMED",
+          "target": "syscall_mckfd_lock_bridge",
+          "addend": 0
+        },
+        {
+          "offset": 394,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe847be0",
+          "kind": "NAMED",
+          "target": "do_mmap_mckfd_dispatch_body_result",
+          "addend": 0
+        },
+        {
+          "offset": 428,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe836640",
+          "kind": "NAMED",
+          "target": "flush_nfo_tlb",
+          "addend": 0
+        },
+        {
+          "offset": 483,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe84c800",
+          "kind": "NAMED",
+          "target": "f03_do_mmap_smaller_page_v2",
+          "addend": 0
+        },
+        {
+          "offset": 501,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe868ef0",
+          "kind": "NAMED",
+          "target": "ihk_mc_get_linux_default_huge_page_shift",
+          "addend": 0
+        },
+        {
+          "offset": 529,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe847d00",
+          "kind": "NAMED",
+          "target": "do_mmap_page_size_body_result",
+          "addend": 0
+        },
+        {
+          "offset": 541,
+          "type": 1,
+          "input_addend": 592,
+          "actual_final_address": "0xfffffffffe901978",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "646f5f6d6d61703a617263685f6765745f736d616c6c65725f706167655f73697a65206661696c65642e2025640a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 579,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe83f020",
+          "kind": "NAMED",
+          "target": "ihk_rwspinlock_write_lock_noirq",
+          "addend": 0
+        },
+        {
+          "offset": 672,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe847db0",
+          "kind": "NAMED",
+          "target": "do_munmap",
+          "addend": 0
+        },
+        {
+          "offset": 706,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe95a044",
+          "kind": "NAMED",
+          "target": "anon_on_demand",
+          "addend": 0
+        },
+        {
+          "offset": 718,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe87ef40",
+          "kind": "NAMED",
+          "target": "mmap_base_vrflags",
+          "addend": 0
+        },
+        {
+          "offset": 742,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe87efa0",
+          "kind": "NAMED",
+          "target": "mmap_populated_mapping_result",
+          "addend": 0
+        },
+        {
+          "offset": 764,
+          "type": 1,
+          "input_addend": 4416,
+          "actual_final_address": "0xfffffffffe8fe820",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.46"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 787,
+          "type": 1,
+          "input_addend": 34,
+          "actual_final_address": "0xfffffffffe900ba7",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 797,
+          "type": 1,
+          "input_addend": 22,
+          "actual_final_address": "0xfffffffffe900b36",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "7c4d41505f4c4f434b454400",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 807,
+          "type": 1,
+          "input_addend": 35,
+          "actual_final_address": "0xfffffffffe900b42",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "7c4d41505f504f50554c41544500",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 842,
+          "type": 1,
+          "input_addend": 184,
+          "actual_final_address": "0xfffffffffe9029f8",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "__func__.7"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 858,
+          "type": 1,
+          "input_addend": 75,
+          "actual_final_address": "0xfffffffffe900b6a",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a203078256c783a256c7520257325737c0a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 868,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 904,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe87f020",
+          "kind": "NAMED",
+          "target": "mmap_should_set_host_ro",
+          "addend": 0
+        },
+        {
+          "offset": 1080,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe900b20",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f73797363616c6c2e6300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 1103,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe832470",
+          "kind": "NAMED",
+          "target": "_ihk_mc_alloc_aligned_pages_node",
+          "addend": 0
+        },
+        {
+          "offset": 1133,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8a5f10",
+          "kind": "NAMED",
+          "target": "profile_event_add",
+          "addend": 0
+        },
+        {
+          "offset": 1157,
+          "type": 1,
+          "input_addend": 4256,
+          "actual_final_address": "0xfffffffffe8fe780",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.41"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 1184,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe87d630",
+          "kind": "NAMED",
+          "target": "virt_to_phys",
+          "addend": 0
+        },
+        {
+          "offset": 1232,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe85dbf0",
+          "kind": "NAMED",
+          "target": "get_this_cpu_local_var",
+          "addend": 0
+        },
+        {
+          "offset": 1261,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe86d7e0",
+          "kind": "NAMED",
+          "target": "ihk_mc_syscall_set_arg0",
+          "addend": 0
+        },
+        {
+          "offset": 1283,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe86d800",
+          "kind": "NAMED",
+          "target": "ihk_mc_syscall_set_arg1",
+          "addend": 0
+        },
+        {
+          "offset": 1303,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe86d820",
+          "kind": "NAMED",
+          "target": "ihk_mc_syscall_set_arg2",
+          "addend": 0
+        },
+        {
+          "offset": 1334,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8b6aa0",
+          "kind": "NAMED",
+          "target": "set_host_vma_body_result",
+          "addend": 0
+        },
+        {
+          "offset": 1371,
+          "type": 1,
+          "input_addend": 784,
+          "actual_final_address": "0xfffffffffe901a38",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "646f5f6d6d61703a7365745f686f73745f766d61206661696c65642e2025640a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 1394,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 1429,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe83f0b0",
+          "kind": "NAMED",
+          "target": "ihk_rwspinlock_write_unlock_noirq",
+          "addend": 0
+        },
+        {
+          "offset": 1455,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe86f7b0",
+          "kind": "NAMED",
+          "target": "ihk_rwspinlock_read_lock_noirq",
+          "addend": 0
+        },
+        {
+          "offset": 1474,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe86f9d0",
+          "kind": "NAMED",
+          "target": "ihk_rwspinlock_read_unlock_noirq",
+          "addend": 0
+        },
+        {
+          "offset": 1505,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe87e6c0",
+          "kind": "NAMED",
+          "target": "memobj_unref",
+          "addend": 0
+        },
+        {
+          "offset": 1517,
+          "type": 1,
+          "input_addend": 4064,
+          "actual_final_address": "0xfffffffffe8fe6c0",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.35"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 1593,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe808750",
+          "kind": "NAMED",
+          "target": "PROT_TO_VR_FLAG",
+          "addend": 0
+        },
+        {
+          "offset": 1633,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe808ad0",
+          "kind": "NAMED",
+          "target": "VRFLAG_PROT_TO_MAXPROT",
+          "addend": 0
+        },
+        {
+          "offset": 1677,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8691b0",
+          "kind": "NAMED",
+          "target": "ihk_mc_get_memory_chunk",
+          "addend": 0
+        },
+        {
+          "offset": 1727,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe869270",
+          "kind": "NAMED",
+          "target": "ihk_mc_get_nr_memory_chunks",
+          "addend": 0
+        },
+        {
+          "offset": 1756,
+          "type": 1,
+          "input_addend": 192,
+          "actual_final_address": "0xfffffffffe902a00",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "__FUNCTION__.8"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 1766,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 1789,
+          "type": 1,
+          "input_addend": 72,
+          "actual_final_address": "0xfffffffffe901770",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a2073747261696768745f70615f73746172743a203078256c782c2073747261696768745f70615f656e643a203078256c780a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 1847,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe836690",
+          "kind": "NAMED",
+          "target": "arch_get_smaller_page_size",
+          "addend": 0
+        },
+        {
+          "offset": 1888,
+          "type": 1,
+          "input_addend": 176,
+          "actual_final_address": "0xfffffffffe9017d8",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a207573696e6720706167652073686966743a2025642c207073697a653a20256c750a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 1982,
+          "type": 1,
+          "input_addend": 216,
+          "actual_final_address": "0xfffffffffe901800",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a20616c69676e65642073747261696768745f70615f73746172743a203078256c782c2073747261696768745f70615f656e643a203078256c780a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 2027,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe851bc0",
+          "kind": "NAMED",
+          "target": "f03_search_free_space_v1",
+          "addend": 0
+        },
+        {
+          "offset": 2047,
+          "type": 1,
+          "input_addend": 4448,
+          "actual_final_address": "0xfffffffffe8fe840",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.47"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 2146,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe833ea0",
+          "kind": "NAMED",
+          "target": "add_process_memory_range",
+          "addend": 0
+        },
+        {
+          "offset": 2186,
+          "type": 1,
+          "input_addend": 408,
+          "actual_final_address": "0xfffffffffe9018c0",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a2073747261696768745f76613a203078256c782c2072616e67652d3e706773686966743a2025642c2072616e6765204f4b0a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 2236,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe83d060",
+          "kind": "NAMED",
+          "target": "arch_vrflag_to_ptattr",
+          "addend": 0
+        },
+        {
+          "offset": 2272,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe86c600",
+          "kind": "NAMED",
+          "target": "ihk_mc_pt_set_range",
+          "addend": 0
+        },
+        {
+          "offset": 2349,
+          "type": 1,
+          "input_addend": 504,
+          "actual_final_address": "0xfffffffffe901920",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a207374726169676874206d617070696e673a203078256c783a256c752040203078256c782c207073697a653a20256c752c2073747261696768745f6d61705f7468726573686f6c643a20256c750a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 2455,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe851bc0",
+          "kind": "NAMED",
+          "target": "f03_search_free_space_v1",
+          "addend": 0
+        },
+        {
+          "offset": 2493,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 2517,
+          "type": 1,
+          "input_addend": 184,
+          "actual_final_address": "0xfffffffffe9029f8",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "__func__.7"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 2527,
+          "type": 1,
+          "input_addend": 728,
+          "actual_final_address": "0xfffffffffe901a00",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a206572726f723a207365617263685f667265655f737061636528256c782c256c782c256c7829206661696c65642e2025640a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 2554,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe87e5f0",
+          "kind": "NAMED",
+          "target": "mmap_is_shared",
+          "addend": 0
+        },
+        {
+          "offset": 2577,
+          "type": 1,
+          "input_addend": 4192,
+          "actual_final_address": "0xfffffffffe8fe740",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.39"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 2604,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8f4360",
+          "kind": "NAMED",
+          "target": "zeroobj_create",
+          "addend": 0
+        },
+        {
+          "offset": 2616,
+          "type": 1,
+          "input_addend": 1496,
+          "actual_final_address": "0xfffffffffe901d00",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "646f5f6d6d61703a7a65726f6f626a5f637265617465206661696c65642e2025640a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 2683,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe87f040",
+          "kind": "NAMED",
+          "target": "mmap_update_private_maxprot",
+          "addend": 0
+        },
+        {
+          "offset": 2716,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe87efc0",
+          "kind": "NAMED",
+          "target": "mmap_prot_denied_result",
+          "addend": 0
+        },
+        {
+          "offset": 2744,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe87ef90",
+          "kind": "NAMED",
+          "target": "mmap_maxprot_to_vrflags",
+          "addend": 0
+        },
+        {
+          "offset": 2784,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe87eff0",
+          "kind": "NAMED",
+          "target": "mmap_should_force_straight",
+          "addend": 0
+        },
+        {
+          "offset": 2817,
+          "type": 1,
+          "input_addend": 4160,
+          "actual_final_address": "0xfffffffffe8fe720",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.38"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 2849,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8a5f10",
+          "kind": "NAMED",
+          "target": "profile_event_add",
+          "addend": 0
+        },
+        {
+          "offset": 2930,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe833ea0",
+          "kind": "NAMED",
+          "target": "add_process_memory_range",
+          "addend": 0
+        },
+        {
+          "offset": 2993,
+          "type": 1,
+          "input_addend": 4128,
+          "actual_final_address": "0xfffffffffe8fe700",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.37"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 3013,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe87bd40",
+          "kind": "NAMED",
+          "target": "phys_to_virt",
+          "addend": 0
+        },
+        {
+          "offset": 3040,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe830020",
+          "kind": "NAMED",
+          "target": "__inline_memset",
+          "addend": 0
+        },
+        {
+          "offset": 3129,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe83f0b0",
+          "kind": "NAMED",
+          "target": "ihk_rwspinlock_write_unlock_noirq",
+          "addend": 0
+        },
+        {
+          "offset": 3155,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe86f7b0",
+          "kind": "NAMED",
+          "target": "ihk_rwspinlock_read_lock_noirq",
+          "addend": 0
+        },
+        {
+          "offset": 3212,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe86f9d0",
+          "kind": "NAMED",
+          "target": "ihk_rwspinlock_read_unlock_noirq",
+          "addend": 0
+        },
+        {
+          "offset": 3263,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe87e6c0",
+          "kind": "NAMED",
+          "target": "memobj_unref",
+          "addend": 0
+        },
+        {
+          "offset": 3275,
+          "type": 1,
+          "input_addend": 4064,
+          "actual_final_address": "0xfffffffffe8fe6c0",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.35"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 3295,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 3312,
+          "type": 1,
+          "input_addend": 192,
+          "actual_final_address": "0xfffffffffe902a00",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "__FUNCTION__.8"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 3366,
+          "type": 1,
+          "input_addend": 40,
+          "actual_final_address": "0xfffffffffe901750",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "646f5f6d6d617028256c782c256c782c25782c25782c25642c256c78290a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 3376,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 3418,
+          "type": 1,
+          "input_addend": 192,
+          "actual_final_address": "0xfffffffffe902a00",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "__FUNCTION__.8"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 3448,
+          "type": 1,
+          "input_addend": 2032,
+          "actual_final_address": "0xfffffffffe901f18",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a203078256c783a25386c752c20287265713a203078256c783a256c75292c2070726f743a2025782c20666c6167733a2025782c2066643a2025642c206f66663a20256c752c206572726f723a20256c642c20616464723a203078256c780a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 3570,
+          "type": 1,
+          "input_addend": 4224,
+          "actual_final_address": "0xfffffffffe8fe760",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.40"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 3604,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe830020",
+          "kind": "NAMED",
+          "target": "__inline_memset",
+          "addend": 0
+        },
+        {
+          "offset": 3670,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8bb5c0",
+          "kind": "NAMED",
+          "target": "shmobj_create",
+          "addend": 0
+        },
+        {
+          "offset": 3692,
+          "type": 1,
+          "input_addend": 1456,
+          "actual_final_address": "0xfffffffffe901cd8",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "646f5f6d6d61703a73686d6f626a5f637265617465206661696c65642e2025640a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 3704,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 3780,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 3790,
+          "type": 1,
+          "input_addend": 688,
+          "actual_final_address": "0xfffffffffe9019d8",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "646f5f6d6d61703a646f5f6d756e6d617028256c782c256c7829206661696c65642e2025640a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 3853,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe88e0c0",
+          "kind": "NAMED",
+          "target": "populate_process_memory",
+          "addend": 0
+        },
+        {
+          "offset": 3888,
+          "type": 1,
+          "input_addend": 34,
+          "actual_final_address": "0xfffffffffe900ba7",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 3898,
+          "type": 1,
+          "input_addend": 49,
+          "actual_final_address": "0xfffffffffe900b50",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "4d41505f4c4f434b45442000",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 3915,
+          "type": 1,
+          "input_addend": 192,
+          "actual_final_address": "0xfffffffffe902a00",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "__FUNCTION__.8"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 3925,
+          "type": 1,
+          "input_addend": 61,
+          "actual_final_address": "0xfffffffffe900b5c",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "4d41505f504f50554c4154452000",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 3935,
+          "type": 1,
+          "input_addend": 1936,
+          "actual_final_address": "0xfffffffffe901eb8",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a205741524e494e473a20706f70756c6174655f70726f636573735f6d656d6f727928293a20766d3a2025702c20616464723a2025702c206c656e3a2025642028666c6167733a202573257329206661696c65642025640a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 3956,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 4032,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8539b0",
+          "kind": "NAMED",
+          "target": "fileobj_create",
+          "addend": 0
+        },
+        {
+          "offset": 4067,
+          "type": 1,
+          "input_addend": 96,
+          "actual_final_address": "0xfffffffffe900b7f",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f6465762f73686d2f7563785f706f73697800",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 4082,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8bef40",
+          "kind": "NAMED",
+          "target": "strncmp",
+          "addend": 0
+        },
+        {
+          "offset": 4119,
+          "type": 1,
+          "input_addend": 4384,
+          "actual_final_address": "0xfffffffffe8fe800",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.45"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 4193,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8461a0",
+          "kind": "NAMED",
+          "target": "devobj_create",
+          "addend": 0
+        },
+        {
+          "offset": 4238,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8a5f10",
+          "kind": "NAMED",
+          "target": "profile_event_add",
+          "addend": 0
+        },
+        {
+          "offset": 4280,
+          "type": 1,
+          "input_addend": 137,
+          "actual_final_address": "0xfffffffffe900ba8",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f746d702f6f6d70692e00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 4295,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8bef40",
+          "kind": "NAMED",
+          "target": "strncmp",
+          "addend": 0
+        },
+        {
+          "offset": 4403,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe87f020",
+          "kind": "NAMED",
+          "target": "mmap_should_set_host_ro",
+          "addend": 0
+        },
+        {
+          "offset": 4444,
+          "type": 1,
+          "input_addend": 4352,
+          "actual_final_address": "0xfffffffffe8fe7e0",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.44"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 4527,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 4537,
+          "type": 1,
+          "input_addend": 184,
+          "actual_final_address": "0xfffffffffe9029f8",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "__func__.7"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 4547,
+          "type": 1,
+          "input_addend": 928,
+          "actual_final_address": "0xfffffffffe901ac8",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a206572726f723a2066696c65206d617070696e67206661696c65642c2066643a2025642c206572726f723a2025640a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 4631,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe83f0b0",
+          "kind": "NAMED",
+          "target": "ihk_rwspinlock_write_unlock_noirq",
+          "addend": 0
+        },
+        {
+          "offset": 4657,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe86f7b0",
+          "kind": "NAMED",
+          "target": "ihk_rwspinlock_read_lock_noirq",
+          "addend": 0
+        },
+        {
+          "offset": 4676,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe86f9d0",
+          "kind": "NAMED",
+          "target": "ihk_rwspinlock_read_unlock_noirq",
+          "addend": 0
+        },
+        {
+          "offset": 4723,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe900b20",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f73797363616c6c2e6300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 4733,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe832ca0",
+          "kind": "NAMED",
+          "target": "_ihk_mc_free_pages",
+          "addend": 0
+        },
+        {
+          "offset": 4778,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 4788,
+          "type": 1,
+          "input_addend": 182,
+          "actual_final_address": "0xfffffffffe900bd5",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "646f5f6d6d61703a64656e6965642025782e2025782025780a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 4878,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe85dbf0",
+          "kind": "NAMED",
+          "target": "get_this_cpu_local_var",
+          "addend": 0
+        },
+        {
+          "offset": 4925,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8a5f10",
+          "kind": "NAMED",
+          "target": "profile_event_add",
+          "addend": 0
+        },
+        {
+          "offset": 5006,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe833ea0",
+          "kind": "NAMED",
+          "target": "add_process_memory_range",
+          "addend": 0
+        },
+        {
+          "offset": 5056,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 5073,
+          "type": 1,
+          "input_addend": 1648,
+          "actual_final_address": "0xfffffffffe901d98",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a206164645f70726f636573735f6d656d6f72795f72616e6765206661696c656420666f72203078256c783a256c7520666c6167733a20256c782c207672666c6167733a20256c782c20706773686966743a2025642c206572726f723a2025640a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 5094,
+          "type": 1,
+          "input_addend": 192,
+          "actual_final_address": "0xfffffffffe902a00",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "__FUNCTION__.8"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 5145,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8f3470",
+          "kind": "NAMED",
+          "target": "xpmem_update_process_page_table",
+          "addend": 0
+        },
+        {
+          "offset": 5185,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 5202,
+          "type": 1,
+          "input_addend": 184,
+          "actual_final_address": "0xfffffffffe9029f8",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "__func__.7"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 5212,
+          "type": 1,
+          "input_addend": 1856,
+          "actual_final_address": "0xfffffffffe901e68",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a2078706d656d5f7570646174655f70726f636573735f706167655f7461626c6528293a20766d3a2025702c2072616e67653a20256c782d256c78206661696c65642025640a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 5244,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe86f9d0",
+          "kind": "NAMED",
+          "target": "ihk_rwspinlock_read_unlock_noirq",
+          "addend": 0
+        },
+        {
+          "offset": 5292,
+          "type": 1,
+          "input_addend": 128,
+          "actual_final_address": "0xfffffffffe9017a8",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a20617263685f6765745f736d616c6c65725f706167655f73697a65206661696c65643a2025640a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 5321,
+          "type": 1,
+          "input_addend": 192,
+          "actual_final_address": "0xfffffffffe902a00",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "__FUNCTION__.8"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 5338,
+          "type": 1,
+          "input_addend": 1752,
+          "actual_final_address": "0xfffffffffe901e00",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a2072616e6765203078256c783a256c75206973207374726169676874207374617274696e67206174203078256c780a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 5348,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 5378,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 5388,
+          "type": 1,
+          "input_addend": 192,
+          "actual_final_address": "0xfffffffffe902a00",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "__FUNCTION__.8"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 5398,
+          "type": 1,
+          "input_addend": 640,
+          "actual_final_address": "0xfffffffffe9019a8",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a2063616e2774206d6170204d41505f464958454420696e746f207374726169676874206d617070696e670a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 5443,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe83f0b0",
+          "kind": "NAMED",
+          "target": "ihk_rwspinlock_write_unlock_noirq",
+          "addend": 0
+        },
+        {
+          "offset": 5469,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe86f7b0",
+          "kind": "NAMED",
+          "target": "ihk_rwspinlock_read_lock_noirq",
+          "addend": 0
+        },
+        {
+          "offset": 5488,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe86f9d0",
+          "kind": "NAMED",
+          "target": "ihk_rwspinlock_read_unlock_noirq",
+          "addend": 0
+        },
+        {
+          "offset": 5523,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe87e6c0",
+          "kind": "NAMED",
+          "target": "memobj_unref",
+          "addend": 0
+        },
+        {
+          "offset": 5535,
+          "type": 1,
+          "input_addend": 4064,
+          "actual_final_address": "0xfffffffffe8fe6c0",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.35"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 5584,
+          "type": 1,
+          "input_addend": 184,
+          "actual_final_address": "0xfffffffffe9029f8",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "__func__.7"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 5594,
+          "type": 1,
+          "input_addend": 824,
+          "actual_final_address": "0xfffffffffe901a60",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a206d6d617020666c6167733a20256c782c20706174683a2025732c206d656d6f626a2d3e666c6167733a20256c782c20706773686966743a2025642c207032616c69676e3a202564202d3e20464958494e4720706167652073697a650a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 5604,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 5682,
+          "type": 1,
+          "input_addend": 4064,
+          "actual_final_address": "0xfffffffffe8fe6c0",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.35"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 5725,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe83d140",
+          "kind": "NAMED",
+          "target": "atomic_cmpxchg4",
+          "addend": 0
+        },
+        {
+          "offset": 5806,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe83f0b0",
+          "kind": "NAMED",
+          "target": "ihk_rwspinlock_write_unlock_noirq",
+          "addend": 0
+        },
+        {
+          "offset": 5832,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe86f7b0",
+          "kind": "NAMED",
+          "target": "ihk_rwspinlock_read_lock_noirq",
+          "addend": 0
+        },
+        {
+          "offset": 5889,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe86f9d0",
+          "kind": "NAMED",
+          "target": "ihk_rwspinlock_read_unlock_noirq",
+          "addend": 0
+        },
+        {
+          "offset": 5918,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8a5f10",
+          "kind": "NAMED",
+          "target": "profile_event_add",
+          "addend": 0
+        },
+        {
+          "offset": 5952,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe85dbf0",
+          "kind": "NAMED",
+          "target": "get_this_cpu_local_var",
+          "addend": 0
+        },
+        {
+          "offset": 5981,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe86d7e0",
+          "kind": "NAMED",
+          "target": "ihk_mc_syscall_set_arg0",
+          "addend": 0
+        },
+        {
+          "offset": 6003,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe86d800",
+          "kind": "NAMED",
+          "target": "ihk_mc_syscall_set_arg1",
+          "addend": 0
+        },
+        {
+          "offset": 6023,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe86d820",
+          "kind": "NAMED",
+          "target": "ihk_mc_syscall_set_arg2",
+          "addend": 0
+        },
+        {
+          "offset": 6054,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8b6aa0",
+          "kind": "NAMED",
+          "target": "set_host_vma_body_result",
+          "addend": 0
+        },
+        {
+          "offset": 6082,
+          "type": 1,
+          "input_addend": 192,
+          "actual_final_address": "0xfffffffffe902a00",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "__FUNCTION__.8"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 6092,
+          "type": 1,
+          "input_addend": 158,
+          "actual_final_address": "0xfffffffffe900bbd",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a20616e6f6e2664656d616e642d706167696e670a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 6102,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 6130,
+          "type": 1,
+          "input_addend": 192,
+          "actual_final_address": "0xfffffffffe902a00",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "__FUNCTION__.8"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 6150,
+          "type": 1,
+          "input_addend": 1416,
+          "actual_final_address": "0xfffffffffe901cb0",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a204d41505f5348415245442c666c6167733d25782c6c656e3d256c640a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 6160,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 6193,
+          "type": 1,
+          "input_addend": 192,
+          "actual_final_address": "0xfffffffffe902a00",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "__FUNCTION__.8"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 6210,
+          "type": 1,
+          "input_addend": 1536,
+          "actual_final_address": "0xfffffffffe901d28",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a2072616e6765203078256c783a256c752077696c6c2062652073747261696768742c2061646464696e672056525f44454d414e440a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 6220,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 6277,
+          "type": 1,
+          "input_addend": 4096,
+          "actual_final_address": "0xfffffffffe8fe6e0",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.36"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 6293,
+          "type": 1,
+          "input_addend": 192,
+          "actual_final_address": "0xfffffffffe902a00",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "__FUNCTION__.8"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 6310,
+          "type": 1,
+          "input_addend": 208,
+          "actual_final_address": "0xfffffffffe900bef",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a206d656d6f626a203078256c78207072652d6d61707065640a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 6320,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 6428,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe851bc0",
+          "kind": "NAMED",
+          "target": "f03_search_free_space_v1",
+          "addend": 0
+        },
+        {
+          "offset": 6466,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 6482,
+          "type": 1,
+          "input_addend": 1040,
+          "actual_final_address": "0xfffffffffe901b38",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "646f5f6d6d61703a7365617263685f667265655f737061636528256c782c256c782c256429206661696c65642e2025640a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 6538,
+          "type": 1,
+          "input_addend": 4288,
+          "actual_final_address": "0xfffffffffe8fe7a0",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.42"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 6573,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8a5f10",
+          "kind": "NAMED",
+          "target": "profile_event_add",
+          "addend": 0
+        },
+        {
+          "offset": 6602,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8f4360",
+          "kind": "NAMED",
+          "target": "zeroobj_create",
+          "addend": 0
+        },
+        {
+          "offset": 6639,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 6653,
+          "type": 1,
+          "input_addend": 192,
+          "actual_final_address": "0xfffffffffe902a00",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "__FUNCTION__.8"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 6675,
+          "type": 1,
+          "input_addend": 1312,
+          "actual_final_address": "0xfffffffffe901c48",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a207a65726f6f626a5f637265617465206661696c65642c206572726f723a2025640a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 6707,
+          "type": 1,
+          "input_addend": 4320,
+          "actual_final_address": "0xfffffffffe8fe7c0",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.43"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 6741,
+          "type": 1,
+          "input_addend": 184,
+          "actual_final_address": "0xfffffffffe9029f8",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "__func__.7"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 6751,
+          "type": 1,
+          "input_addend": 1160,
+          "actual_final_address": "0xfffffffffe901bb0",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a206465766963652066643a202564206f66663a20256c75206d617070696e67206174202570202d2025700a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 6774,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 6816,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8632f0",
+          "kind": "NAMED",
+          "target": "hugefileobj_create",
+          "addend": 0
+        },
+        {
+          "offset": 6882,
+          "type": 1,
+          "input_addend": 115,
+          "actual_final_address": "0xfffffffffe900b92",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "646f5f6d6d61703a686974206e6f6e20565245470a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 6894,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 6928,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe85dbf0",
+          "kind": "NAMED",
+          "target": "get_this_cpu_local_var",
+          "addend": 0
+        },
+        {
+          "offset": 6943,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe86d7e0",
+          "kind": "NAMED",
+          "target": "ihk_mc_syscall_set_arg0",
+          "addend": 0
+        },
+        {
+          "offset": 6968,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe86d800",
+          "kind": "NAMED",
+          "target": "ihk_mc_syscall_set_arg1",
+          "addend": 0
+        },
+        {
+          "offset": 6988,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe86d820",
+          "kind": "NAMED",
+          "target": "ihk_mc_syscall_set_arg2",
+          "addend": 0
+        },
+        {
+          "offset": 7020,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8b6aa0",
+          "kind": "NAMED",
+          "target": "set_host_vma_body_result",
+          "addend": 0
+        },
+        {
+          "offset": 7032,
+          "type": 1,
+          "input_addend": 784,
+          "actual_final_address": "0xfffffffffe901a38",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "646f5f6d6d61703a7365745f686f73745f766d61206661696c65642e2025640a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 7090,
+          "type": 1,
+          "input_addend": 360,
+          "actual_final_address": "0xfffffffffe901890",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a206572726f723a20616464696e67207374726169676874206d656d6f72792072616e6765200a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 7138,
+          "type": 1,
+          "input_addend": 320,
+          "actual_final_address": "0xfffffffffe901868",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a2073747261696768745f76613a203078256c7820746f20626520757365640a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 7170,
+          "type": 1,
+          "input_addend": 4064,
+          "actual_final_address": "0xfffffffffe8fe6c0",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.35"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 7218,
+          "type": 1,
+          "input_addend": 280,
+          "actual_final_address": "0xfffffffffe901840",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a207365617263685f667265655f73706163652829206661696c65643a2025640a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 7264,
+          "type": 1,
+          "input_addend": 464,
+          "actual_final_address": "0xfffffffffe9018f8",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a2069686b5f6d635f70745f7365745f72616e67652829206661696c65643a2025640a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 7292,
+          "type": 1,
+          "input_addend": 192,
+          "actual_final_address": "0xfffffffffe902a00",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "__FUNCTION__.8"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 7331,
+          "type": 1,
+          "input_addend": 1352,
+          "actual_final_address": "0xfffffffffe901c70",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a20307825783a256c75204d41505f414e4f4e594d4f555320616c6c6f63617465642025642070616765732c207032616c69676e3a20256c780a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 7341,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 7364,
+          "type": 1,
+          "input_addend": 192,
+          "actual_final_address": "0xfffffffffe902a00",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "__FUNCTION__.8"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 7390,
+          "type": 1,
+          "input_addend": 1208,
+          "actual_final_address": "0xfffffffffe901be0",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a207761726e696e673a206661696c656420746f20616c6c6f6361746520256420636f6e746967756f757320706167657320202862797465733a20256c752c20706773686966743a202564292c20656e61626c696e672064656d616e6420706167696e670a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 7400,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 7430,
+          "type": 1,
+          "input_addend": 1096,
+          "actual_final_address": "0xfffffffffe901b70",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "43726561746564206875676566696c656f626a202570202825643a257820256c6c782d256c6c782c2066642025642c2070677368696674202564290a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 7440,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 7515,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 7525,
+          "type": 1,
+          "input_addend": 184,
+          "actual_final_address": "0xfffffffffe9029f8",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "__func__.7"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 7535,
+          "type": 1,
+          "input_addend": 984,
+          "actual_final_address": "0xfffffffffe901b00",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a206572726f72206372656174696e672068756765746c626673206d656d6f626a2c2066643a2025642c206572726f723a2025640a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 7594,
+          "type": 1,
+          "input_addend": 148,
+          "actual_final_address": "0xfffffffffe900bb3",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f6465762f73686d2f00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 7648,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe83d060",
+          "kind": "NAMED",
+          "target": "arch_vrflag_to_ptattr",
+          "addend": 0
+        },
+        {
+          "offset": 7698,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe86c600",
+          "kind": "NAMED",
+          "target": "ihk_mc_pt_set_range",
+          "addend": 0
+        },
+        {
+          "offset": 7708,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe87d630",
+          "kind": "NAMED",
+          "target": "virt_to_phys",
+          "addend": 0
+        },
+        {
+          "offset": 7877,
+          "type": 1,
+          "input_addend": 192,
+          "actual_final_address": "0xfffffffffe902a00",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "__FUNCTION__.8"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 7892,
+          "type": 1,
+          "input_addend": 1808,
+          "actual_final_address": "0xfffffffffe901e38",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a204552524f523a206d617070696e672025642070616765206f66207072652d6d61707065642066696c650a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 7902,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 7928,
+          "type": 1,
+          "input_addend": 184,
+          "actual_final_address": "0xfffffffffe9029f8",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "__func__.7"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 7938,
+          "type": 1,
+          "input_addend": 1600,
+          "actual_final_address": "0xfffffffffe901d68",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a20636f6e746967756f757320627574206e6f742073747261696768743f206c656e3a20256c750a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 7948,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        }
+      ]
+    },
+    {
+      "name": "do_syscall",
+      "input": {
+        "index": 151,
+        "name": "do_syscall",
+        "bind": 1,
+        "type": 2,
+        "shndx": 1,
+        "value": 8336,
+        "size": 1197
+      },
+      "final": {
+        "name": "do_syscall",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684398224,
+        "size": 1197
+      },
+      "all_final_bytes": true,
+      "records": [
+        {
+          "offset": 10,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe85dbf0",
+          "kind": "NAMED",
+          "target": "get_this_cpu_local_var",
+          "addend": 0
+        },
+        {
+          "offset": 113,
+          "type": 1,
+          "input_addend": 5312,
+          "actual_final_address": "0xfffffffffe8feba0",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.58"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 156,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8cc9e0",
+          "kind": "NAMED",
+          "target": "syscall_offload_counted_result",
+          "addend": 0
+        },
+        {
+          "offset": 232,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8cc9f0",
+          "kind": "NAMED",
+          "target": "syscall_offload_prepare_result",
+          "addend": 0
+        },
+        {
+          "offset": 256,
+          "type": 1,
+          "input_addend": 5280,
+          "actual_final_address": "0xfffffffffe8feb80",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.57"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 285,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8b61b0",
+          "kind": "NAMED",
+          "target": "send_syscall",
+          "addend": 0
+        },
+        {
+          "offset": 295,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8ceb50",
+          "kind": "NAMED",
+          "target": "syscall_preempt_disable_needed_result",
+          "addend": 0
+        },
+        {
+          "offset": 320,
+          "type": 1,
+          "input_addend": 5248,
+          "actual_final_address": "0xfffffffffe8feb60",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.56"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 352,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8cca90",
+          "kind": "NAMED",
+          "target": "syscall_offload_wait_reply",
+          "addend": 0
+        },
+        {
+          "offset": 377,
+          "type": 1,
+          "input_addend": 5216,
+          "actual_final_address": "0xfffffffffe8feb40",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.55"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 410,
+          "type": 1,
+          "input_addend": 4196,
+          "actual_final_address": "0xfffffffffe948064",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "mcexec_v10_offload_return_logs.14"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 420,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8f5000",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "mcexec_v10_offload_return_pid.15"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 430,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8cc3e0",
+          "kind": "NAMED",
+          "target": "syscall_log_budget_result",
+          "addend": 0
+        },
+        {
+          "offset": 461,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8cc9e0",
+          "kind": "NAMED",
+          "target": "syscall_offload_counted_result",
+          "addend": 0
+        },
+        {
+          "offset": 486,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8cebb0",
+          "kind": "NAMED",
+          "target": "syscall_proxy_dead_result",
+          "addend": 0
+        },
+        {
+          "offset": 505,
+          "type": 1,
+          "input_addend": 5184,
+          "actual_final_address": "0xfffffffffe8feb20",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.54"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 551,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8ceba0",
+          "kind": "NAMED",
+          "target": "syscall_profile_event_needed_result",
+          "addend": 0
+        },
+        {
+          "offset": 571,
+          "type": 1,
+          "input_addend": 5152,
+          "actual_final_address": "0xfffffffffe8feb00",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.53"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 652,
+          "type": 1,
+          "input_addend": 2232,
+          "actual_final_address": "0xfffffffffe901fe0",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "6d63657865635f7631303a206f66666c6f61645f72657475726e206370753d2564207069643d2564207469643d2564206e723d2564207265743d3078256c78207265745f7369676e65643d256c640a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 662,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 690,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe88e930",
+          "kind": "NAMED",
+          "target": "preempt_disable",
+          "addend": 0
+        },
+        {
+          "offset": 702,
+          "type": 1,
+          "input_addend": 5248,
+          "actual_final_address": "0xfffffffffe8feb60",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.56"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 740,
+          "type": 1,
+          "input_addend": 376,
+          "actual_final_address": "0xfffffffffe902ab8",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "__FUNCTION__.16"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 750,
+          "type": 1,
+          "input_addend": 2184,
+          "actual_final_address": "0xfffffffffe901fb0",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a2073797363616c6c206e756d3a20256420676f7420686f7374207265706c793a202564200a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 760,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 786,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe88e9b0",
+          "kind": "NAMED",
+          "target": "preempt_enable",
+          "addend": 0
+        },
+        {
+          "offset": 798,
+          "type": 1,
+          "input_addend": 5216,
+          "actual_final_address": "0xfffffffffe8feb40",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.55"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 826,
+          "type": 1,
+          "input_addend": 376,
+          "actual_final_address": "0xfffffffffe902ab8",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "__FUNCTION__.16"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 842,
+          "type": 1,
+          "input_addend": 2136,
+          "actual_final_address": "0xfffffffffe901f80",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a2073797363616c6c206e756d3a2025642077616974696e6720666f72204c696e75782e2e200a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 852,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 874,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe87d200",
+          "kind": "NAMED",
+          "target": "rdtsc",
+          "addend": 0
+        },
+        {
+          "offset": 899,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8a60f0",
+          "kind": "NAMED",
+          "target": "profile_syscall2offload",
+          "addend": 0
+        },
+        {
+          "offset": 916,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8a5f10",
+          "kind": "NAMED",
+          "target": "profile_event_add",
+          "addend": 0
+        },
+        {
+          "offset": 938,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe87d200",
+          "kind": "NAMED",
+          "target": "rdtsc",
+          "addend": 0
+        },
+        {
+          "offset": 954,
+          "type": 1,
+          "input_addend": 5312,
+          "actual_final_address": "0xfffffffffe8feba0",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.58"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 974,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe869520",
+          "kind": "NAMED",
+          "target": "ihk_mc_get_processor_id",
+          "addend": 0
+        },
+        {
+          "offset": 990,
+          "type": 1,
+          "input_addend": 237,
+          "actual_final_address": "0xfffffffffe900c0c",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "5343282564295b2533645d2073656e64696e672073797363616c6c0a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 1000,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 1042,
+          "type": 1,
+          "input_addend": 376,
+          "actual_final_address": "0xfffffffffe902ab8",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "__FUNCTION__.16"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 1057,
+          "type": 1,
+          "input_addend": 266,
+          "actual_final_address": "0xfffffffffe900c29",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a207574692c20747469643d25640a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 1067,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 1101,
+          "type": 1,
+          "input_addend": 376,
+          "actual_final_address": "0xfffffffffe902ab8",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "__FUNCTION__.16"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 1111,
+          "type": 1,
+          "input_addend": 2352,
+          "actual_final_address": "0xfffffffffe902058",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a206f66666c6f61642073797363616c6c203e202564203f3f203a2025640a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 1121,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 1154,
+          "type": 1,
+          "input_addend": 376,
+          "actual_final_address": "0xfffffffffe902ab8",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "__FUNCTION__.16"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 1164,
+          "type": 1,
+          "input_addend": 2312,
+          "actual_final_address": "0xfffffffffe902030",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a2070726f78792050494420256420697320646561642c207465726d696e61746528290a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 1174,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        }
+      ]
+    },
+    {
+      "name": "interrupt_syscall",
+      "input": {
+        "index": 227,
+        "name": "interrupt_syscall",
+        "bind": 1,
+        "type": 2,
+        "shndx": 1,
+        "value": 14960,
+        "size": 249
+      },
+      "final": {
+        "name": "interrupt_syscall",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684404848,
+        "size": 249
+      },
+      "all_final_bytes": true,
+      "records": [
+        {
+          "offset": 2,
+          "type": 1,
+          "input_addend": 4608,
+          "actual_final_address": "0xfffffffffe8fe8e0",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.49"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 64,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe86d7e0",
+          "kind": "NAMED",
+          "target": "ihk_mc_syscall_set_arg0",
+          "addend": 0
+        },
+        {
+          "offset": 84,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe86d800",
+          "kind": "NAMED",
+          "target": "ihk_mc_syscall_set_arg1",
+          "addend": 0
+        },
+        {
+          "offset": 102,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe86d820",
+          "kind": "NAMED",
+          "target": "ihk_mc_syscall_set_arg2",
+          "addend": 0
+        },
+        {
+          "offset": 122,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8cbae0",
+          "kind": "NAMED",
+          "target": "syscall_generic_forwarding",
+          "addend": 0
+        },
+        {
+          "offset": 174,
+          "type": 1,
+          "input_addend": 2864,
+          "actual_final_address": "0xfffffffffe902258",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "696e746572727570745f73797363616c6c207069643d2564207469643d2564207369673d25640a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 184,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 210,
+          "type": 1,
+          "input_addend": 2904,
+          "actual_final_address": "0xfffffffffe902280",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "696e746572727570745f73797363616c6c206661696c65642e20256c640a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 225,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        }
+      ]
+    },
+    {
+      "name": "ptrace_wakeup_log_bridge",
+      "input": {
+        "index": 10,
+        "name": "ptrace_wakeup_log_bridge",
+        "bind": 0,
+        "type": 2,
+        "shndx": 1,
+        "value": 304,
+        "size": 56
+      },
+      "final": {
+        "name": "ptrace_wakeup_log_bridge",
+        "bind": 0,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684390192,
+        "size": 56
+      },
+      "all_final_bytes": true,
+      "records": [
+        {
+          "offset": 18,
+          "type": 1,
+          "input_addend": 1760,
+          "actual_final_address": "0xfffffffffe8fddc0",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.21"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 34,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe901728",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "7074726163655f77616b6575705f7369672c7069643d25642c646174613d253038780a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 46,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        }
+      ]
+    },
+    {
+      "name": "terminate",
+      "input": {
+        "index": 184,
+        "name": "terminate",
+        "bind": 1,
+        "type": 2,
+        "shndx": 1,
+        "value": 11488,
+        "size": 3273
+      },
+      "final": {
+        "name": "terminate",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684401376,
+        "size": 3273
+      },
+      "all_final_bytes": true,
+      "records": [
+        {
+          "offset": 33,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe85dbf0",
+          "kind": "NAMED",
+          "target": "get_this_cpu_local_var",
+          "addend": 0
+        },
+        {
+          "offset": 120,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8bf2a0",
+          "kind": "NAMED",
+          "target": "sync_child_event",
+          "addend": 0
+        },
+        {
+          "offset": 153,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8307b0",
+          "kind": "NAMED",
+          "target": "__mcs_rwlock_writer_lock_noirq",
+          "addend": 0
+        },
+        {
+          "offset": 189,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe830700",
+          "kind": "NAMED",
+          "target": "__mcs_rwlock_writer_lock",
+          "addend": 0
+        },
+        {
+          "offset": 208,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe897c40",
+          "kind": "NAMED",
+          "target": "terminate_process_exited_result",
+          "addend": 0
+        },
+        {
+          "offset": 228,
+          "type": 1,
+          "input_addend": 4704,
+          "actual_final_address": "0xfffffffffe8fe940",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.51"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 262,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8d04b0",
+          "kind": "NAMED",
+          "target": "tsc_to_ts",
+          "addend": 0
+        },
+        {
+          "offset": 294,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8d6e30",
+          "kind": "NAMED",
+          "target": "ts_add",
+          "addend": 0
+        },
+        {
+          "offset": 316,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8d04b0",
+          "kind": "NAMED",
+          "target": "tsc_to_ts",
+          "addend": 0
+        },
+        {
+          "offset": 345,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8d6e30",
+          "kind": "NAMED",
+          "target": "ts_add",
+          "addend": 0
+        },
+        {
+          "offset": 370,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8d3410",
+          "kind": "NAMED",
+          "target": "terminate_status_result",
+          "addend": 0
+        },
+        {
+          "offset": 441,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe830850",
+          "kind": "NAMED",
+          "target": "__mcs_rwlock_writer_unlock",
+          "addend": 0
+        },
+        {
+          "offset": 478,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8308e0",
+          "kind": "NAMED",
+          "target": "__mcs_rwlock_writer_unlock_noirq",
+          "addend": 0
+        },
+        {
+          "offset": 514,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe869520",
+          "kind": "NAMED",
+          "target": "ihk_mc_get_processor_id",
+          "addend": 0
+        },
+        {
+          "offset": 535,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe88bcf0",
+          "kind": "NAMED",
+          "target": "terminate_mcexec_do_syscall_bridge",
+          "addend": 0
+        },
+        {
+          "offset": 559,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe83d150",
+          "kind": "NAMED",
+          "target": "atomic_cmpxchg_ulong",
+          "addend": 0
+        },
+        {
+          "offset": 569,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8d32e0",
+          "kind": "NAMED",
+          "target": "terminate_mcexec_body_result",
+          "addend": 0
+        },
+        {
+          "offset": 583,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8d3450",
+          "kind": "NAMED",
+          "target": "terminate_thread_is_other_result",
+          "addend": 0
+        },
+        {
+          "offset": 619,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe830700",
+          "kind": "NAMED",
+          "target": "__mcs_rwlock_writer_lock",
+          "addend": 0
+        },
+        {
+          "offset": 645,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe899c30",
+          "kind": "NAMED",
+          "target": "process_list_detach_result",
+          "addend": 0
+        },
+        {
+          "offset": 684,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe830850",
+          "kind": "NAMED",
+          "target": "__mcs_rwlock_writer_unlock",
+          "addend": 0
+        },
+        {
+          "offset": 709,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe830700",
+          "kind": "NAMED",
+          "target": "__mcs_rwlock_reader_lock",
+          "addend": 0
+        },
+        {
+          "offset": 835,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe830850",
+          "kind": "NAMED",
+          "target": "__mcs_rwlock_reader_unlock",
+          "addend": 0
+        },
+        {
+          "offset": 861,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8d3430",
+          "kind": "NAMED",
+          "target": "terminate_thread_active_result",
+          "addend": 0
+        },
+        {
+          "offset": 882,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe830700",
+          "kind": "NAMED",
+          "target": "__mcs_rwlock_reader_lock",
+          "addend": 0
+        },
+        {
+          "offset": 981,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8b4760",
+          "kind": "NAMED",
+          "target": "schedule",
+          "addend": 0
+        },
+        {
+          "offset": 1039,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe830700",
+          "kind": "NAMED",
+          "target": "__mcs_rwlock_writer_lock",
+          "addend": 0
+        },
+        {
+          "offset": 1064,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe899b70",
+          "kind": "NAMED",
+          "target": "process_list_add_tail_result",
+          "addend": 0
+        },
+        {
+          "offset": 1086,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe830850",
+          "kind": "NAMED",
+          "target": "__mcs_rwlock_writer_unlock",
+          "addend": 0
+        },
+        {
+          "offset": 1105,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe858260",
+          "kind": "NAMED",
+          "target": "free_all_process_memory_range",
+          "addend": 0
+        },
+        {
+          "offset": 1132,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe900b20",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f73797363616c6c2e6300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 1147,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8728c0",
+          "kind": "NAMED",
+          "target": "kfree_tracked",
+          "addend": 0
+        },
+        {
+          "offset": 1166,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874a80",
+          "kind": "NAMED",
+          "target": "list_empty",
+          "addend": 0
+        },
+        {
+          "offset": 1207,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe82e2e0",
+          "kind": "NAMED",
+          "target": "terminate_report_thread_ptrace_result",
+          "addend": 0
+        },
+        {
+          "offset": 1249,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8d33f0",
+          "kind": "NAMED",
+          "target": "terminate_report_thread_release_needed_result",
+          "addend": 0
+        },
+        {
+          "offset": 1273,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe84fb80",
+          "kind": "NAMED",
+          "target": "f03_ptrace_detach_thread_v1",
+          "addend": 0
+        },
+        {
+          "offset": 1330,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8d3160",
+          "kind": "NAMED",
+          "target": "terminate_child_cleanup_needed_result",
+          "addend": 0
+        },
+        {
+          "offset": 1410,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe830700",
+          "kind": "NAMED",
+          "target": "__mcs_rwlock_writer_lock",
+          "addend": 0
+        },
+        {
+          "offset": 1567,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8307b0",
+          "kind": "NAMED",
+          "target": "__mcs_rwlock_writer_lock_noirq",
+          "addend": 0
+        },
+        {
+          "offset": 1600,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8d3140",
+          "kind": "NAMED",
+          "target": "terminate_child_action_result",
+          "addend": 0
+        },
+        {
+          "offset": 1667,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe899ba0",
+          "kind": "NAMED",
+          "target": "process_list_del_init_result",
+          "addend": 0
+        },
+        {
+          "offset": 1687,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe899ba0",
+          "kind": "NAMED",
+          "target": "process_list_del_init_result",
+          "addend": 0
+        },
+        {
+          "offset": 1709,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8308e0",
+          "kind": "NAMED",
+          "target": "__mcs_rwlock_writer_unlock_noirq",
+          "addend": 0
+        },
+        {
+          "offset": 1724,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe82e2e0",
+          "kind": "NAMED",
+          "target": "terminate_release_child_needed_result",
+          "addend": 0
+        },
+        {
+          "offset": 1744,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8abdc0",
+          "kind": "NAMED",
+          "target": "release_process",
+          "addend": 0
+        },
+        {
+          "offset": 1798,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe830850",
+          "kind": "NAMED",
+          "target": "__mcs_rwlock_writer_unlock",
+          "addend": 0
+        },
+        {
+          "offset": 1834,
+          "type": 1,
+          "input_addend": 4672,
+          "actual_final_address": "0xfffffffffe8fe920",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.50"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 1854,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe84d3e0",
+          "kind": "NAMED",
+          "target": "f03_finalize_process_v1",
+          "addend": 0
+        },
+        {
+          "offset": 1869,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe88e930",
+          "kind": "NAMED",
+          "target": "preempt_disable",
+          "addend": 0
+        },
+        {
+          "offset": 1895,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe830700",
+          "kind": "NAMED",
+          "target": "__mcs_rwlock_writer_lock",
+          "addend": 0
+        },
+        {
+          "offset": 1927,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe830850",
+          "kind": "NAMED",
+          "target": "__mcs_rwlock_writer_unlock",
+          "addend": 0
+        },
+        {
+          "offset": 1952,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe853600",
+          "kind": "NAMED",
+          "target": "release_thread",
+          "addend": 0
+        },
+        {
+          "offset": 1962,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 1977,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8ac640",
+          "kind": "NAMED",
+          "target": "release_process_vm",
+          "addend": 0
+        },
+        {
+          "offset": 1989,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe88e9b0",
+          "kind": "NAMED",
+          "target": "preempt_enable",
+          "addend": 0
+        },
+        {
+          "offset": 2001,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8b4760",
+          "kind": "NAMED",
+          "target": "schedule",
+          "addend": 0
+        },
+        {
+          "offset": 2015,
+          "type": 1,
+          "input_addend": 2808,
+          "actual_final_address": "0xfffffffffe902220",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a204552524f523a2072657475726e65642066726f6d207465726d696e6174652829202d3e207363686564756c6528290a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 2025,
+          "type": 1,
+          "input_addend": 344,
+          "actual_final_address": "0xfffffffffe902a98",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "__FUNCTION__.12"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 2037,
+          "type": 1,
+          "input_addend": 302,
+          "actual_final_address": "0xfffffffffe900c4d",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "70616e696300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 2047,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe88a4e0",
+          "kind": "NAMED",
+          "target": "panic",
+          "addend": 0
+        },
+        {
+          "offset": 2096,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe830700",
+          "kind": "NAMED",
+          "target": "__mcs_rwlock_writer_lock",
+          "addend": 0
+        },
+        {
+          "offset": 2116,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8a1800",
+          "kind": "NAMED",
+          "target": "process_thread_report_detach_result",
+          "addend": 0
+        },
+        {
+          "offset": 2147,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe830850",
+          "kind": "NAMED",
+          "target": "__mcs_rwlock_writer_unlock",
+          "addend": 0
+        },
+        {
+          "offset": 2162,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe853600",
+          "kind": "NAMED",
+          "target": "release_thread",
+          "addend": 0
+        },
+        {
+          "offset": 2189,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8a1930",
+          "kind": "NAMED",
+          "target": "process_thread_termsig_clear_result",
+          "addend": 0
+        },
+        {
+          "offset": 2206,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe84fb80",
+          "kind": "NAMED",
+          "target": "f03_ptrace_detach_thread_v1",
+          "addend": 0
+        },
+        {
+          "offset": 2221,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe853600",
+          "kind": "NAMED",
+          "target": "release_thread",
+          "addend": 0
+        },
+        {
+          "offset": 2256,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe900b20",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f73797363616c6c2e6300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 2266,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874260",
+          "kind": "NAMED",
+          "target": "kmalloc_tracked",
+          "addend": 0
+        },
+        {
+          "offset": 2395,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe830850",
+          "kind": "NAMED",
+          "target": "__mcs_rwlock_reader_unlock",
+          "addend": 0
+        },
+        {
+          "offset": 2412,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe847720",
+          "kind": "NAMED",
+          "target": "do_kill",
+          "addend": 0
+        },
+        {
+          "offset": 2521,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe900b20",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f73797363616c6c2e6300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 2531,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8728c0",
+          "kind": "NAMED",
+          "target": "kfree_tracked",
+          "addend": 0
+        },
+        {
+          "offset": 2557,
+          "type": 1,
+          "input_addend": 284,
+          "actual_final_address": "0xfffffffffe900c3b",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "7465726d696e6174652c7069643d25640a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 2567,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 2598,
+          "type": 1,
+          "input_addend": 344,
+          "actual_final_address": "0xfffffffffe902a98",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "__FUNCTION__.12"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 2608,
+          "type": 1,
+          "input_addend": 2768,
+          "actual_final_address": "0xfffffffffe9021f8",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a205049443a2025642c205449443a2025642073657474696e672050535f4558495445440a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 2618,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 2656,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8307b0",
+          "kind": "NAMED",
+          "target": "__mcs_rwlock_writer_lock_noirq",
+          "addend": 0
+        },
+        {
+          "offset": 2688,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8307b0",
+          "kind": "NAMED",
+          "target": "__mcs_rwlock_writer_lock_noirq",
+          "addend": 0
+        },
+        {
+          "offset": 2761,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8914d0",
+          "kind": "NAMED",
+          "target": "process_child_reparent_result",
+          "addend": 0
+        },
+        {
+          "offset": 2787,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8308e0",
+          "kind": "NAMED",
+          "target": "__mcs_rwlock_writer_unlock_noirq",
+          "addend": 0
+        },
+        {
+          "offset": 2809,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8308e0",
+          "kind": "NAMED",
+          "target": "__mcs_rwlock_writer_unlock_noirq",
+          "addend": 0
+        },
+        {
+          "offset": 2848,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8307b0",
+          "kind": "NAMED",
+          "target": "__mcs_rwlock_writer_lock_noirq",
+          "addend": 0
+        },
+        {
+          "offset": 2880,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8307b0",
+          "kind": "NAMED",
+          "target": "__mcs_rwlock_writer_lock_noirq",
+          "addend": 0
+        },
+        {
+          "offset": 2942,
+          "type": 1,
+          "input_addend": 4736,
+          "actual_final_address": "0xfffffffffe8fe960",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.52"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 2962,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe88e930",
+          "kind": "NAMED",
+          "target": "preempt_disable",
+          "addend": 0
+        },
+        {
+          "offset": 2979,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8d04b0",
+          "kind": "NAMED",
+          "target": "tsc_to_ts",
+          "addend": 0
+        },
+        {
+          "offset": 2989,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8d6e30",
+          "kind": "NAMED",
+          "target": "ts_add",
+          "addend": 0
+        },
+        {
+          "offset": 3110,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe852c90",
+          "kind": "NAMED",
+          "target": "f03_thread_exit_signal_v1",
+          "addend": 0
+        },
+        {
+          "offset": 3136,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe830850",
+          "kind": "NAMED",
+          "target": "__mcs_rwlock_writer_unlock",
+          "addend": 0
+        },
+        {
+          "offset": 3162,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8308e0",
+          "kind": "NAMED",
+          "target": "__mcs_rwlock_writer_unlock_noirq",
+          "addend": 0
+        },
+        {
+          "offset": 3177,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe853600",
+          "kind": "NAMED",
+          "target": "release_thread",
+          "addend": 0
+        },
+        {
+          "offset": 3189,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe88e9b0",
+          "kind": "NAMED",
+          "target": "preempt_enable",
+          "addend": 0
+        },
+        {
+          "offset": 3201,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8b4760",
+          "kind": "NAMED",
+          "target": "schedule",
+          "addend": 0
+        },
+        {
+          "offset": 3232,
+          "type": 1,
+          "input_addend": 344,
+          "actual_final_address": "0xfffffffffe902a98",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "__FUNCTION__.12"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 3242,
+          "type": 1,
+          "input_addend": 2728,
+          "actual_final_address": "0xfffffffffe9021d0",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a205049443a2025642c205449443a2025642050535f45584954454420616c72656164790a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 3252,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        }
+      ]
+    },
+    {
+      "name": "util_thread",
+      "input": {
+        "index": 302,
+        "name": "util_thread",
+        "bind": 1,
+        "type": 2,
+        "shndx": 1,
+        "value": 20624,
+        "size": 1244
+      },
+      "final": {
+        "name": "util_thread",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684410512,
+        "size": 1244
+      },
+      "all_final_bytes": true,
+      "records": [
+        {
+          "offset": 8,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe85dbf0",
+          "kind": "NAMED",
+          "target": "get_this_cpu_local_var",
+          "addend": 0
+        },
+        {
+          "offset": 25,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874260",
+          "kind": "NAMED",
+          "target": "kmalloc_tracked",
+          "addend": 0
+        },
+        {
+          "offset": 62,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe900b20",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f73797363616c6c2e6300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 84,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8728c0",
+          "kind": "NAMED",
+          "target": "kfree_tracked",
+          "addend": 0
+        },
+        {
+          "offset": 129,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe87d630",
+          "kind": "NAMED",
+          "target": "virt_to_phys",
+          "addend": 0
+        },
+        {
+          "offset": 157,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8b0310",
+          "kind": "NAMED",
+          "target": "save_uctx",
+          "addend": 0
+        },
+        {
+          "offset": 179,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe900b20",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f73797363616c6c2e6300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 208,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe85dbf0",
+          "kind": "NAMED",
+          "target": "get_this_cpu_local_var",
+          "addend": 0
+        },
+        {
+          "offset": 251,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe869520",
+          "kind": "NAMED",
+          "target": "ihk_mc_get_processor_id",
+          "addend": 0
+        },
+        {
+          "offset": 357,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe95d020",
+          "kind": "NAMED",
+          "target": "idle_halt",
+          "addend": 0
+        },
+        {
+          "offset": 373,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe85d400",
+          "kind": "NAMED",
+          "target": "get_futex_queues",
+          "addend": 0
+        },
+        {
+          "offset": 469,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe87d9b0",
+          "kind": "NAMED",
+          "target": "memcpy",
+          "addend": 0
+        },
+        {
+          "offset": 512,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe948058",
+          "kind": "NAMED",
+          "target": "uti_desc",
+          "addend": 0
+        },
+        {
+          "offset": 559,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe803090",
+          "kind": "NAMED",
+          "target": "do_syscall",
+          "addend": 0
+        },
+        {
+          "offset": 574,
+          "type": 1,
+          "input_addend": 352,
+          "actual_final_address": "0xfffffffffe8fd840",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.20"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 605,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8d77d0",
+          "kind": "NAMED",
+          "target": "util_show_syscall_profile",
+          "addend": 0
+        },
+        {
+          "offset": 621,
+          "type": 1,
+          "input_addend": 320,
+          "actual_final_address": "0xfffffffffe8fd820",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.19"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 656,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe900b20",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f73797363616c6c2e6300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 666,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8728c0",
+          "kind": "NAMED",
+          "target": "kfree_tracked",
+          "addend": 0
+        },
+        {
+          "offset": 687,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe900b20",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f73797363616c6c2e6300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 723,
+          "type": 1,
+          "input_addend": 256,
+          "actual_final_address": "0xfffffffffe8fd7e0",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.17"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 743,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe84c0e0",
+          "kind": "NAMED",
+          "target": "f03_do_exit_supported_v2",
+          "addend": 0
+        },
+        {
+          "offset": 772,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe900b20",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f73797363616c6c2e6300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 792,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe900b20",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f73797363616c6c2e6300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 834,
+          "type": 1,
+          "input_addend": 288,
+          "actual_final_address": "0xfffffffffe8fd800",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "ddebug.18"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 881,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe803ce0",
+          "kind": "NAMED",
+          "target": "terminate",
+          "addend": 0
+        },
+        {
+          "offset": 898,
+          "type": 1,
+          "input_addend": 16,
+          "actual_final_address": "0xfffffffffe902950",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "__FUNCTION__.1"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 910,
+          "type": 1,
+          "input_addend": 546,
+          "actual_final_address": "0xfffffffffe900d3e",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a206d636578656320776f726b6572207469643d25640a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 920,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 955,
+          "type": 1,
+          "input_addend": 16,
+          "actual_final_address": "0xfffffffffe902950",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "__FUNCTION__.1"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 965,
+          "type": 1,
+          "input_addend": 3368,
+          "actual_final_address": "0xfffffffffe902450",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a2072657475726e65642066726f6d20646f5f73797363616c6c2c7469643d25642c72633d256c780a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 975,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 994,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8cebb0",
+          "kind": "NAMED",
+          "target": "syscall_proxy_dead_result",
+          "addend": 0
+        },
+        {
+          "offset": 1027,
+          "type": 1,
+          "input_addend": 16,
+          "actual_final_address": "0xfffffffffe902950",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "__FUNCTION__.1"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 1037,
+          "type": 1,
+          "input_addend": 3504,
+          "actual_final_address": "0xfffffffffe9024d8",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a2072656c656173655f68616e646c65722c7069643d25642c7469643d25642c72633d256c780a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 1047,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 1090,
+          "type": 1,
+          "input_addend": 16,
+          "actual_final_address": "0xfffffffffe902950",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "__FUNCTION__.1"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 1105,
+          "type": 1,
+          "input_addend": 3552,
+          "actual_final_address": "0xfffffffffe902508",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a204552524f523a20646f5f73797363616c6c2829206661696c65642028256c64290a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 1115,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 1147,
+          "type": 1,
+          "input_addend": 16,
+          "actual_final_address": "0xfffffffffe902950",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "__FUNCTION__.1"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 1157,
+          "type": 1,
+          "input_addend": 3416,
+          "actual_final_address": "0xfffffffffe902480",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a20657869745f67726f75702c207469643d25642c72633d256c780a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 1167,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 1200,
+          "type": 1,
+          "input_addend": 16,
+          "actual_final_address": "0xfffffffffe902950",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "__FUNCTION__.1"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 1210,
+          "type": 1,
+          "input_addend": 3448,
+          "actual_final_address": "0xfffffffffe9024a0",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a2065786974206f72206b696c6c6564206279207369676e616c2c207069643d25642c7469643d25642c72633d256c780a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 1220,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        }
+      ]
+    }
+  ],
+  "failures": []
+}

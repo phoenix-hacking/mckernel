@@ -1,0 +1,334 @@
+{
+  "schema_version": 1,
+  "scope_id": "practical-kernel-apps-v1-20261017",
+  "estimate_id": "practical-engineering-estimate-20261018T041908Z",
+  "created_at_utc": "2026-10-18T04:19:08.059471+00:00",
+  "engineering_evidence_cutoff_utc": "2026-10-18T04:18:17Z",
+  "comparison_baseline": "docs/verification/os-milestones-20260914/practical-engineering-estimate-20261017T152511Z.json",
+  "comparison_baseline_id": "practical-engineering-estimate-20261017T152511Z",
+  "estimate_kind": "subjective engineering-completion ranges for the new practical goal",
+  "confidence": "low",
+  "measured_completion": false,
+  "percentage_definition": "Rough judgment about implementation, targeted tests and integration against PRACTICAL-GOAL.md, not checklist fraction, reliability, elapsed/remaining time or a weighted whole-OS score.",
+  "milestones": [
+    {
+      "id": "M00",
+      "title": "Preservation and practical workflow",
+      "baseline_complete_percent_range": [
+        85,
+        95
+      ],
+      "estimated_complete_percent_range": [
+        85,
+        95
+      ],
+      "estimated_midpoint_change_percentage_points": 0.0,
+      "basis": "Preservation and checkpoints remain strong; final supported-profile handoff still open.",
+      "previous_estimate_percent_range": [
+        85,
+        95
+      ],
+      "estimated_midpoint_change_since_previous_percentage_points": 0.0
+    },
+    {
+      "id": "M01",
+      "title": "Requests, responses and recovery",
+      "baseline_complete_percent_range": [
+        50,
+        70
+      ],
+      "estimated_complete_percent_range": [
+        55,
+        75
+      ],
+      "estimated_midpoint_change_percentage_points": 5.0,
+      "basis": "Actual Running/shutdown/reboot request paths and source-bound fork receipt tests advanced; native cancellation and final publication remain open.",
+      "previous_estimate_percent_range": [
+        55,
+        75
+      ],
+      "estimated_midpoint_change_since_previous_percentage_points": 0.0
+    },
+    {
+      "id": "M02",
+      "title": "Execution and comparison runner",
+      "baseline_complete_percent_range": [
+        70,
+        85
+      ],
+      "estimated_complete_percent_range": [
+        75,
+        90
+      ],
+      "estimated_midpoint_change_percentage_points": 5.0,
+      "basis": "Sixteen actual diagnostic/application behaviors and reviewed runner/owner call-site adapters; final supported-suite timeout/negative closure remains.",
+      "previous_estimate_percent_range": [
+        75,
+        90
+      ],
+      "estimated_midpoint_change_since_previous_percentage_points": 0.0
+    },
+    {
+      "id": "M03",
+      "title": "Memory and mapping correctness",
+      "baseline_complete_percent_range": [
+        45,
+        65
+      ],
+      "estimated_complete_percent_range": [
+        55,
+        75
+      ],
+      "estimated_midpoint_change_percentage_points": 10.0,
+      "basis": "Actual forbidden-write fault/recovery now accepted; mapping concurrency and complete restoration still unproved.",
+      "previous_estimate_percent_range": [
+        55,
+        75
+      ],
+      "estimated_midpoint_change_since_previous_percentage_points": 0.0
+    },
+    {
+      "id": "M04",
+      "title": "Useful C and Rust applications",
+      "baseline_complete_percent_range": [
+        45,
+        65
+      ],
+      "estimated_complete_percent_range": [
+        70,
+        85
+      ],
+      "estimated_midpoint_change_percentage_points": 22.5,
+      "basis": "One actual standalone libc utility copied 10,247 binary bytes across buffers, checked its checksum, closed/reopened/read back the file and unlinked its output, with independent byte-exact collection and complete guest/owner retirement. Rust std and earlier useful apps remain accepted; native fork/exec/wait and the full required application set remain open.",
+      "previous_estimate_percent_range": [
+        70,
+        85
+      ],
+      "estimated_midpoint_change_since_previous_percentage_points": 0.0
+    },
+    {
+      "id": "M05",
+      "title": "Native lifecycle and restoration",
+      "baseline_complete_percent_range": [
+        15,
+        30
+      ],
+      "estimated_complete_percent_range": [
+        50,
+        70
+      ],
+      "estimated_midpoint_change_percentage_points": 37.5,
+      "basis": "Accepted actual second-generation boot ran the unchanged signal application after public stop/destroy/release, with verified teardown. Complete mapping/callback/reference restoration and final-profile repeatability remain open; this adds no final quota credit.",
+      "previous_estimate_percent_range": [
+        50,
+        70
+      ],
+      "estimated_midpoint_change_since_previous_percentage_points": 0.0
+    },
+    {
+      "id": "M06",
+      "title": "Processes, threads and used syscalls",
+      "baseline_complete_percent_range": [
+        30,
+        50
+      ],
+      "estimated_complete_percent_range": [
+        40,
+        60
+      ],
+      "estimated_midpoint_change_percentage_points": 10.0,
+      "basis": "Real contended pthread behavior and reviewed source fork transport/destructor joins advanced; native fork/exec/wait and final host authority remain unavailable.",
+      "previous_estimate_percent_range": [
+        40,
+        60
+      ],
+      "estimated_midpoint_change_since_previous_percentage_points": 0.0
+    },
+    {
+      "id": "M07",
+      "title": "Used FPU/vector state",
+      "baseline_complete_percent_range": [
+        10,
+        30
+      ],
+      "estimated_complete_percent_range": [
+        50,
+        70
+      ],
+      "estimated_midpoint_change_percentage_points": 40.0,
+      "basis": "The XSAVE copy-extent repair is now in built image08210 with independently verified linked xsave_size copy and allocation-failure handling; the unchanged AVX/YMM, selected SSE/x87 syscall/futex/signal case passes natively on that image with positive retirement. This advances repaired-image integration. It adds no distinct behavior or direct child-copy-tail native proof; libc/IFUNC requirement reconciliation, multicore and final supported-profile closure remain open.",
+      "previous_estimate_percent_range": [
+        45,
+        65
+      ],
+      "estimated_midpoint_change_since_previous_percentage_points": 5.0
+    },
+    {
+      "id": "M08",
+      "title": "Native modules and interfaces",
+      "baseline_complete_percent_range": [
+        75,
+        90
+      ],
+      "estimated_complete_percent_range": [
+        85,
+        95
+      ],
+      "estimated_midpoint_change_percentage_points": 7.5,
+      "basis": "Earlier matched module build/load and repaired SMP native lifecycle remain accepted. Three later fork candidate builds have failed; the newest requires an FFI-safe opaque-pointer correction.",
+      "previous_estimate_percent_range": [
+        85,
+        95
+      ],
+      "estimated_midpoint_change_since_previous_percentage_points": 0.0
+    },
+    {
+      "id": "M09",
+      "title": "Rust and assembly integration",
+      "baseline_complete_percent_range": [
+        80,
+        95
+      ],
+      "estimated_complete_percent_range": [
+        80,
+        95
+      ],
+      "estimated_midpoint_change_percentage_points": 0.0,
+      "basis": "Existing Rust/assembly integration retained; no new broad language-retirement or whole-image migration completion is established.",
+      "previous_estimate_percent_range": [
+        80,
+        95
+      ],
+      "estimated_midpoint_change_since_previous_percentage_points": 0.0
+    },
+    {
+      "id": "M10",
+      "title": "Repeatable runnable build",
+      "baseline_complete_percent_range": [
+        50,
+        70
+      ],
+      "estimated_complete_percent_range": [
+        60,
+        80
+      ],
+      "estimated_midpoint_change_percentage_points": 10.0,
+      "basis": "Second affected module build and frozen corrected FPU image configure/build/artifact verification succeeded; final coherent clean recipe replay remains.",
+      "previous_estimate_percent_range": [
+        60,
+        80
+      ],
+      "estimated_midpoint_change_since_previous_percentage_points": 0.0
+    },
+    {
+      "id": "M11",
+      "title": "Integrated functional regression",
+      "baseline_complete_percent_range": [
+        50,
+        70
+      ],
+      "estimated_complete_percent_range": [
+        60,
+        75
+      ],
+      "estimated_midpoint_change_percentage_points": 7.5,
+      "basis": "Five additional distinct behaviors plus actual lifecycle and focused compiler/protocol negatives; coherent final integrated regression remains.",
+      "previous_estimate_percent_range": [
+        60,
+        75
+      ],
+      "estimated_midpoint_change_since_previous_percentage_points": 0.0
+    },
+    {
+      "id": "M12",
+      "title": "Bounded repeatability and stress",
+      "baseline_complete_percent_range": [
+        10,
+        25
+      ],
+      "estimated_complete_percent_range": [
+        15,
+        30
+      ],
+      "estimated_midpoint_change_percentage_points": 5.0,
+      "basis": "First public native cycle accepted. Final-profile two boots, ten cycles, 100 launches and 60-minute mixed workload remain incomplete.",
+      "previous_estimate_percent_range": [
+        15,
+        30
+      ],
+      "estimated_midpoint_change_since_previous_percentage_points": 0.0
+    },
+    {
+      "id": "M13",
+      "title": "Practical delivery",
+      "baseline_complete_percent_range": [
+        25,
+        45
+      ],
+      "estimated_complete_percent_range": [
+        30,
+        50
+      ],
+      "estimated_midpoint_change_percentage_points": 5.0,
+      "basis": "More tested artifacts and exact recovery/run prerequisites retained; final runnable package, supported capability statement and final review remain open.",
+      "previous_estimate_percent_range": [
+        30,
+        50
+      ],
+      "estimated_midpoint_change_since_previous_percentage_points": 0.0
+    }
+  ],
+  "factual_progress_since_baseline": {
+    "accepted_distinct_native_behaviors_baseline": 9,
+    "accepted_distinct_native_behaviors_current": 16,
+    "accepted_distinct_native_behaviors_since_previous": 0,
+    "accepted_post_second_boot_signal_workload_since_previous": false,
+    "final_profile_native_cycle_quota_credit_since_previous": 0,
+    "practical_native_cycle_progress_retained": "1/10; separate post-reboot workload observation grants no additional final-profile quota credit",
+    "native_fork_exec_wait_acceptance": false,
+    "new_XSAVE_copy_repair_native_credit": false,
+    "all_14_milestones_completion_status": "open",
+    "practical_checks": {
+      "complete": 3,
+      "open": 32
+    },
+    "current_campaign_phase": "running/active",
+    "not_percentage_credit": [
+      "Targeted trim and inactive cache cleanup",
+      "User-authorized root ext4 reserve adjustment; operational capacity only",
+      "Unexecuted new candidates or host-only fixtures"
+    ],
+    "new_build_status": "New CPU-copy image build, linked-body review and AVX regression accepted; subsequent conditional66 module attempt returned nonzero and its compiler cause is not yet established",
+    "supported_goal": "Practical kernel and application infrastructure under the existing Linux control plane; comprehensive qualification deferred",
+    "accepted_file_stream_utility_since_previous": false,
+    "accepted_AVX_replay_on_repaired_image_since_previous": true,
+    "XSAVE_copy_repaired_image_native_regression_accepted": true,
+    "copy_specific_child_extended_state_native_proof": false
+  },
+  "evidence": [
+    "docs/verification/evidence/practical-rust-std-current942-result-review-20261017-1.json",
+    "docs/verification/evidence/practical-pthread-contention-current942-result-review-20261017-1.json",
+    "docs/verification/evidence/practical-memory-protection-current942-independent-result-review-20261017-1.json",
+    "docs/verification/evidence/native-vector-preservation-result-review-20261017-1.json",
+    "docs/verification/evidence/native-resource-reboot-cycle-result-review-20261017-2.json",
+    "docs/verification/evidence/native-cpu-reacquire-external-modules-result-review-20261017-1.json",
+    "docs/verification/evidence/native-fp-save-thin-image-artifact-review-20261017-1.json",
+    "docs/verification/evidence/native-fork-carrier-link-races-source-20261017-1.json",
+    "docs/verification/evidence/native-reboot-workload-host-source-20261017-1.json",
+    "docs/verification/evidence/native-postreboot-workload-result-review-20261018-1.json",
+    "docs/verification/evidence/native-m07-avx-actual-result-review-20261018-1.json",
+    "docs/verification/evidence/practical-file-stream-current-a0f-result-review-20261018-1.json",
+    "docs/verification/evidence/native-fork-third-build-failure-retirement-review-20261018-1.json",
+    "docs/verification/evidence/practical-m07-avx-cpu-copy-image-result-review-20261018-1.json"
+  ],
+  "comparison_policy": [
+    "Preserve the original baseline and each comparison; future same-scope comparisons may report estimated range-midpoint percentage-point deltas with actual code/test/integration evidence.",
+    "Do not infer numerical gains from activity/tokens/time/commits or merely removing qualification requirements.",
+    "Do not sum or average overlapping milestone percentages into an OS score.",
+    "Keep unchanged/negative estimates when warranted; uncertainty or unassessed coverage is not zero engineering progress.",
+    "Do not change practical check status or original formal acceptance from these estimates."
+  ],
+  "previous_comparison": "docs/verification/os-milestones-20260914/practical-engineering-estimate-20261018T031355Z.json",
+  "previous_comparison_id": "practical-engineering-estimate-20261018T031355Z",
+  "latest_estimate_change_scope": "M07 +5 midpoint percentage points for built repaired-image integration and native regression; all other estimates unchanged. Subjective engineering judgment, not measured percentage completion or practical-check closure."
+}

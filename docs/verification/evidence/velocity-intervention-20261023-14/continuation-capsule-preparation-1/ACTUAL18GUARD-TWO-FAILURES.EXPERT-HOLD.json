@@ -1,0 +1,62 @@
+{
+  "actual_failures": [
+    {
+      "candidate": "guard-fixture-preparation-1",
+      "capture_result": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-capsule-preparation-1/guard-fixture-preparation-1/actual-controller-guard-fixture-1/RESULT.json",
+        "sha256": "f5adbafeea307ea9e20c4ac3fff079cd0d4068e50c446aba0c882ac0212724d7",
+        "size": 1202
+      },
+      "closed_streams": true,
+      "direct_child_joined": true,
+      "error": null,
+      "failure_text": "Traceback (most recent call last):\n  File \"/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-capsule-preparation-1/guard-fixture-preparation-1/fixture_actual_controller_guards.py\", line 47, in <module>\n    oldrequest=OLRUNTIME/'CAPTURE-REQUEST.json';expect('actual_failed_aa5_controller_original_serialized_request',OLCONTROLLER,oldrequest,sha(oldrequest.read_bytes()),'exact LONG owner/release paths')\nNameError: name 'OLRUNTIME' is not defined\n",
+      "group_absent": true,
+      "retirement_error": null,
+      "returncode": 1,
+      "seconds": 0.07742585300002247,
+      "stderr": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-capsule-preparation-1/guard-fixture-preparation-1/actual-controller-guard-fixture-1/stderr",
+        "sha256": "2e1a48a72820db87226b842945405477981ba96d7c7ce4cdf9d1bf66e19fb3b5",
+        "size": 487
+      }
+    },
+    {
+      "candidate": "guard-fixture-binding-correction-1",
+      "capture_result": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-capsule-preparation-1/guard-fixture-binding-correction-1/actual-controller-guard-fixture-1/RESULT.json",
+        "sha256": "cd8045432f1080becc359976234fa537d210982a8e69cd5c7f10eccbe375256c",
+        "size": 1217
+      },
+      "closed_streams": true,
+      "direct_child_joined": true,
+      "error": null,
+      "failure_text": "Traceback (most recent call last):\n  File \"/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-capsule-preparation-1/guard-fixture-binding-correction-1/fixture_actual_controller_guards.py\", line 41, in expect\n    try:consume(controller,p,h)\n  File \"/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-capsule-preparation-1/guard-fixture-binding-correction-1/fixture_actual_controller_guards.py\", line 37, in consume\n    try:m.main()\n  File \"/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/runtime-successor-2/capture_root_SEGMENT.NOT-RELEASED.py\", line 62, in main\n    out=Path(r['capture_directory']);need(out.parent==req.parent and out.name=='actual-capture-1','exact fresh capture path')\n  File \"/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/runtime-successor-2/capture_root_SEGMENT.NOT-RELEASED.py\", line 21, in need\n    if not ok:raise RuntimeError(msg)\nRuntimeError: exact fresh capture path\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-capsule-preparation-1/guard-fixture-binding-correction-1/fixture_actual_controller_guards.py\", line 48, in <module>\n    corrected=json.loads((D/'TESTONLY-CORRECTED-REQUEST.json').read_bytes());p,h=request_file(corrected);expect('corrected_actual_guard_prefix_with_real_sourcefilepins',CONTROLLER,p,h)\n  File \"/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-capsule-preparation-1/guard-fixture-binding-correction-1/fixture_actual_controller_guards.py\", line 45, in expect\n    assert reason is not None and str(e)==reason,(label,str(e),reason);checks.append(dict(name=label,status='PASS_REFUSE',error=str(e)));return\nAssertionError: ('corrected_actual_guard_prefix_with_real_sourcefilepins', 'exact fresh capture path', None)\n",
+      "group_absent": true,
+      "retirement_error": null,
+      "returncode": 1,
+      "seconds": 0.13045614096336067,
+      "stderr": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-capsule-preparation-1/guard-fixture-binding-correction-1/actual-controller-guard-fixture-1/stderr",
+        "sha256": "c8b6bc56ed0cd5d0ec5c87a2242398e7c897266331bf40f630de0a76ff31ab7b",
+        "size": 2049
+      }
+    }
+  ],
+  "actual_guard_acceptance": null,
+  "author_fixture_or_runtime_patch_after_second_failure": false,
+  "current_concrete_failure": "Positive TESTONLY request is created in private guard directory but wrapper requires request.parent equal capture.parent (runtime-successor-2). Runtime source not established defective.",
+  "current_live_postjoin": null,
+  "expert_owner": "native235_release_review",
+  "next": "Only expert-directed bounded data/fixture correction may proceed; current runtime2 pins remain available for independent admission/finalization source preparation.",
+  "prepared_fixture_ready_status_superseded_by_actual_results": true,
+  "runtime2_source_map_handoff": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-capsule-preparation-1/RUNTIME2-COHORT-AND-CORRECTED-FIXTURE.HANDOFF.json",
+    "sha256": "79b6ab22e338ac209c33824add17965efba3f5fa28e38bb6635c13d77b4bf78a",
+    "size": 8274
+  },
+  "runtime_admission": null,
+  "runtime_release": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "HOLD_TWO_ACTUAL_FIXTURE_FAILURES_EXPERT_REQUIRED_NO_AUTHOR_RETRY"
+}

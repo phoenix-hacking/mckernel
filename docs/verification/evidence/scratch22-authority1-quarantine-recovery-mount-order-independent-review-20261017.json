@@ -1,0 +1,49 @@
+{
+  "schema": "scratch22-authority1.quarantine-recovery-correction-independent-review.v1",
+  "decision": "PASS_SOURCE",
+  "reviewer": "/root/scratch21_source_review",
+  "implementation_author": "/root/scratch21_transaction",
+  "implementation_ownership": false,
+  "source_checkpoint": "9a60f6e5b2e1d4468e6be1f49247766373b12777",
+  "profile_sha256": "be4ea78f63872e69f9f1463d0587a9d6ebe6eeab5fbec923588101c5c89e4a19",
+  "files_sha256": {
+    "scripts/native_exact_scratch22_authority1_quarantine_recovery.py": "3fdb4dde4dbbd5d07d85d68c02e68d4aee3acca45dce12be3479f3252765abd6",
+    "scripts/tests/test_native_exact_scratch22_authority1_quarantine_recovery.py": "d789dd53c4a286402cd9a5b5431b2930441114765e9824b504bb9da1ccb6e458"
+  },
+  "author_record": {
+    "path": "docs/verification/evidence/scratch22-authority1-quarantine-recovery-mount-order-correction-20261017.json",
+    "sha256": "7a89c4d7d45698d3111c423f8eca1d29ebe557595442e40b89e6c2119c96d3e8"
+  },
+  "original_review_preserved": {
+    "path": "docs/verification/evidence/scratch22-authority1-quarantine-recovery-source-independent-review-20261017.json",
+    "sha256": "dc18fb271c19bf92d3713db40b1b2fa9fc11bd37906a8fb521295aea3d4c70b3"
+  },
+  "original_failure_sha256": {
+    "/home/holden/mckernel-work/scratch/scratch22-authority1-quarantine-recovery-execution-20261017.stderr": "a5b9268da8ce645636691b72c2b5848acbaf6611ec244b669da63bcbcd9ec006",
+    "/home/holden/mckernel-work/scratch/native-exact-scratch22-authority1-quarantine-recovery-20261017.before1.process.json": "921f27731a6fd4d554b83f6f9b3001f5f465677f3bb317ae9bf41544d6a4da2d",
+    "/home/holden/mckernel-work/scratch/scratch22-authority1-recovery-environment-inspect-20261017.json": "5fb9f8983ca81c5857203e7d6ac290af5a81e9aa74392b1f3d79c1dd267d770f"
+  },
+  "essential_correction_review": [
+    "Actual retained terminal and exact-environment capture differ only at Mounts. All six complete mount records are identical after Destination sorting. This establishes the actual failure cause without a live Docker retry.",
+    "Normalization applies solely to the top-level Mounts array and requires unique absolute string Destination keys. Every complete mount field, mount count and all other arrays/fields remain exact; malformed or duplicate identities refuse. The inputs are not mutated.",
+    "Actual raw inspect bytes are now durably published before parsing/comparison, preserving malformed and mismatching observations.",
+    "Fresh correction1 names preserve the original attempt. Release validation requires the exact three-file original-failure map and fresh hashes, and copies those bindings into PREPARED and COMPLETE. This is the single bounded correction in the existing failure family.",
+    "AST comparison against accepted303c source confirms PIDFD open/binding/signal, positive exit, root-lock acquisition/quarantine, guard/protected-input identity, root observer and process validation functions unchanged. The accepted thirteen-test ownership baseline is reused."
+  ],
+  "independent_checks": {
+    "focused_tests": [
+      "test_actual_six_mount_permutation_only_preserves_exact_comparison",
+      "test_snapshot_preserves_raw_inspect_before_mismatch_or_parse_failure",
+      "test_future_source_authorization_and_one_shot_gate_are_exact"
+    ],
+    "returncode": 0,
+    "observed": "Ran3tests in0.017s; OK",
+    "negative_controls": "Changed Source/RW/extra field, missing/extra mount, other-array order and terminal state remain unequal; duplicate/missing/nonstring Destination and wrong Mounts shape refuse. Raw malformed/mismatch captures survive refusal; missing original-failure release bindings refuse.",
+    "static_and_capture_result": "PASS actual capture comparison, all three original failure hashes and exact source/test/author-record fetched9a60f6e5 blobs.",
+    "profile": "CPU6/2GiB/120seconds, one ordinary mocked/disposable Python process. No children, live proc/root lock/Docker/census/signal/compiler/network/Git mutation and no large receipt parse or baseline suite rerun."
+  },
+  "blocking_findings": [],
+  "execution_performed": false,
+  "acceptance_credit": false,
+  "scope": "Exact bounded source correction under the existing be4 profile. Dispatcher still supplies a new exact digest-bound release and runs its fresh runtime predicates before the sole PIDFD action. Actual process recovery, cleanup and postflight acceptance remain unclaimed."
+}

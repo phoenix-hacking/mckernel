@@ -1,0 +1,104 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ROOT_GRANTED_ORDINARY_CPU0_PURE_DIAGNOSTIC_FIXTURE_NOT_YET_EXECUTED",
+  "authority": "Root explicit CPU0ordinary onejob2GiBAS60CPU90wall+6 FSIZE32MiBNOFILE256core0 Rust1.92CGU1/2MiBstack+h990807acceptedstophandlers. Diagnostic only; no root/SDKmodule/guest/native/canonical execution.",
+  "profile": {
+    "CPU": 0,
+    "jobs": 1,
+    "AS_bytes": 2147483648,
+    "CPU_seconds": 60,
+    "wall_seconds": 90,
+    "retirement_seconds": 6,
+    "FSIZE_bytes": 33554432,
+    "NOFILE": 256,
+    "core": 0,
+    "RUST_MIN_STACK": 2097152
+  },
+  "tools": {
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc": {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "sha256": "028fd60b0e0add5505c661cd3ccde91393d615c8729bd95d94ab1e91409b36a1",
+      "bytes": 654904
+    }
+  },
+  "source_bindings": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/SOURCE-BINDINGS.json",
+    "sha256": "8a27adafd596d0692db43ba2168351525f13869643c319d560aebe90e102e710",
+    "bytes": 4848
+  },
+  "fixture_bindings": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/FIXTURE-SOURCE-BINDINGS.json",
+    "sha256": "fb5410e42e85e5b764cae53d25321a6a0cfe6ab02ddae43c5c45851790273afb",
+    "bytes": 2684
+  },
+  "source_files": {
+    "fixture/actual_request.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/fixture/actual_request.rs",
+      "sha256": "30f20f5acfed8ff1b45991cd09ab18a6f957c61067f393b26a82803518cad041",
+      "bytes": 1795
+    },
+    "fixture/actual_quarantine_branch.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/fixture/actual_quarantine_branch.rs",
+      "sha256": "9de0b0793ccd3b3c8233c62c7dc24551fc8dc8d663f02a0e2e85821679c2c7ba",
+      "bytes": 214
+    },
+    "fixture/ACTUAL-Memory-syscall.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/fixture/ACTUAL-Memory-syscall.rs",
+      "sha256": "b28046f9aeba93cebd6b155ceafa5386cc79a07e3bdbef2a3308bd1a3595a5d6",
+      "bytes": 2664
+    },
+    "fixture/diagnostic.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/fixture/diagnostic.rs",
+      "sha256": "b0f5f8aa7450338dd0107c02d03cb9e47b8426ebebe72bf3eb864086b2ed42e8",
+      "bytes": 21194
+    },
+    "fixture/ORIGINAL-Memory-syscall.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/fixture/ORIGINAL-Memory-syscall.rs",
+      "sha256": "8725a220de445e4d15504dce326012faaa04624c0f342b9ea720e9f050438cf5",
+      "bytes": 1649
+    },
+    "source/smp_service.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/source/smp_service.rs",
+      "sha256": "900499c5902d6a5b2b206aeaedd5fc8a0a48a24788bde15d0bb377bad924d094",
+      "bytes": 51196
+    },
+    "source/sysfs_memory.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/source/sysfs_memory.rs",
+      "sha256": "067b53c460b21ea7e67505992cff667c8154d3ed444e44e00226392da29b1f90",
+      "bytes": 41106
+    },
+    "PRIVATE-DIAGNOSTIC.patch": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/PRIVATE-DIAGNOSTIC.patch",
+      "sha256": "d5df0fbad18f8aa3928f20911084e8d674f04dfb88c305328280b098d90871ef",
+      "bytes": 15310
+    }
+  },
+  "commands": [
+    {
+      "name": "00-pure-actual-body-Rust-compile",
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "panic=abort",
+        "-C",
+        "codegen-units=1",
+        "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/fixture/diagnostic.rs",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/fixture-output-1/diagnostic-fixture"
+      ]
+    },
+    {
+      "name": "01-functional-pure-error-context-fixture",
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/fixture-output-1/diagnostic-fixture"
+      ]
+    }
+  ],
+  "expected_output": "PASS memory_pairs=8195 conflict_bucket_masks=256 origins=10 observer_before_quarantine=1 errors_claims_callcounts_unchanged=1 budgets=16; HOST_PRIMITIVES_MODELED_NO_NATIVE",
+  "preserved_original_conflicts_and_tag_functions": true,
+  "models": "Kernel Arc/Mutex/Vec, memoryaddress mapping, fail_service/application and Remote receiver only. Actual source bodies/Request decoder/getters/quarantine branch extracted. This is not kerneltype/layout/runtime/diagnosticcause proof.",
+  "canonical_unchanged": true
+}

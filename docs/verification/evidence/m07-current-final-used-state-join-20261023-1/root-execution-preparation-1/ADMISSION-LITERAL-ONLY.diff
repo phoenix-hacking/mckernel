@@ -1,0 +1,18 @@
+--- /home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/m05-readiness-runtime-failure-2/coherent-successor-preparation-1/next-native-preparation-1/read_only_m05_HOST_admission.py
++++ /home/holden/mckernel-work/host-preparation/m07-current-final-used-state-join-20261023-1/root-execution-preparation-1/read_only_m07_HOST_admission.py
+@@ -29,11 +29,11 @@
+ locks=[l for l in Path('/proc/locks').read_text().splitlines() if key in l.split()];need(not locks,'permanent mutex currently held')
+ mutex_fd=os.open('/run/lock/mckernel-development.lock',os.O_RDONLY|os.O_CLOEXEC|os.O_NOFOLLOW);need((os.fstat(mutex_fd).st_dev,os.fstat(mutex_fd).st_ino)==(27,4),'stable27:4FD');fcntl.flock(mutex_fd,fcntl.LOCK_EX|fcntl.LOCK_NB)
+ paths=['/home/holden/mckernel-work/scratch/native-running-external-modules.lease.json', '/home/holden/mckernel-work/scratch/native-running-external-modules-operational-exclusion.json', '/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch18-image-1.json', '/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock', '/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/common-exclusion.json', '/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/lease.json', '/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/driver-hash-correction-1/pinned-launcher-attempt-1/common-exclusion.json', '/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/driver-hash-correction-1/pinned-launcher-attempt-1/image-lease.json'];need(all(not os.path.lexists(p) for p in paths),'fresh exact current SDK/image/launcher ownership paths absent')
+-cid='9ddbc559d8a6182f89102df466f93878390abe77b47ec65fd08e1557afcd828d'
++cid='6f9bebd3605da11ba97081ef5a131df723a5c617128170eef5033ec27eb61631'
+ need(run(['/usr/bin/docker','ps','-aq','--no-trunc','--filter','id='+cid])=='','latest retired container absent')
+-need(run(['/usr/bin/docker','ps','-aq','--no-trunc','--filter','name=^/mckernel-native-diagnostic-efb4312b2dc644519320ccc24fa1219c$'])=='','fresh exactnonce name absent')
+-need(run(['/usr/bin/docker','ps','-aq','--no-trunc','--filter','label=mckernel.native-diagnostic.owner=efb4312b2dc644519320ccc24fa1219c'])=='','fresh exactnonce label absent')
+-need(not os.path.lexists('/home/holden/mckernel-work/native-runs/m05h2/p/attempt-efb4312b2dc644519320ccc24fa1219c'),'fresh exact M05 attempt absent')
++need(run(['/usr/bin/docker','ps','-aq','--no-trunc','--filter','name=^/mckernel-native-diagnostic-3cf46420bf424c07b4d83a3500b87a89$'])=='','fresh exactnonce name absent')
++need(run(['/usr/bin/docker','ps','-aq','--no-trunc','--filter','label=mckernel.native-diagnostic.owner=3cf46420bf424c07b4d83a3500b87a89'])=='','fresh exactnonce label absent')
++need(not os.path.lexists('/home/holden/mckernel-work/native-runs/m07t1/p/attempt-3cf46420bf424c07b4d83a3500b87a89'),'fresh exact M05 attempt absent')
+ running=run(['/usr/bin/docker','ps','-q','--no-trunc']);need(not running,'competing running container')
+ freehost=host.f_bavail*host.f_frsize;freescratch=scratch.f_bavail*scratch.f_frsize;growth=bs.st_size-bs.st_blocks*512;minimum=16*2**30+growth+536870912+679477248
+ need(freehost>=minimum and freescratch>=14101250048,'full capacity growth/reserves')

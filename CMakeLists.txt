@@ -289,7 +289,7 @@ if (EXISTS ${PROJECT_SOURCE_DIR}/${IHK_SOURCE_DIR}/CMakeLists.txt)
 elseif (EXISTS /${IHK_SOURCE_DIR}/CMakeLists.txt)
 	set(IHK_FULL_SOURCE_DIR /${IHK_SOURCE_DIR})
 else()
-	message(FATAL_ERROR "Could not find ihk dir, or it does not contain CMakeLists.txt, either clone ihk or run git submodule update --init")
+	message(FATAL_ERROR "Could not find IHK sources; restore the tracked ihk/ directory or set IHK_SOURCE_DIR to a complete IHK source tree")
 endif()
 
 add_subdirectory(${IHK_SOURCE_DIR} ihk)
@@ -303,18 +303,10 @@ add_subdirectory(kernel)
 add_subdirectory(tools/mcstat)
 add_subdirectory(tools/crash)
 
-configure_file(scripts/mcreboot-smp.sh.in mcreboot.sh @ONLY)
-configure_file(scripts/mcstop+release-smp.sh.in mcstop+release.sh @ONLY)
+include("${CMAKE_CURRENT_SOURCE_DIR}/scripts/rust/boot-tools/SelectRustBootTools.cmake")
 configure_file(scripts/mcreboot.1in mcreboot.1 @ONLY)
-configure_file(scripts/eclair-dump-backtrace.exp.in eclair-dump-backtrace.exp @ONLY)
+include("${CMAKE_CURRENT_SOURCE_DIR}/scripts/rust/eclair-backtrace/SelectRustEclairBacktrace.cmake")
 configure_file(test/mck_test_config.sample.in mck_test_config.sample @ONLY)
-install(PROGRAMS
-		"${CMAKE_CURRENT_BINARY_DIR}/mcreboot.sh"
-		"${CMAKE_CURRENT_BINARY_DIR}/mcstop+release.sh"
-	DESTINATION "${CMAKE_INSTALL_SBINDIR}")
-install(PROGRAMS
-		"${CMAKE_CURRENT_BINARY_DIR}/eclair-dump-backtrace.exp"
-	DESTINATION "${CMAKE_INSTALL_BINDIR}")
 install(FILES "scripts/irqbalance_mck.in"
 	DESTINATION "${CMAKE_INSTALL_SYSCONFDIR}")
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/mcreboot.1"

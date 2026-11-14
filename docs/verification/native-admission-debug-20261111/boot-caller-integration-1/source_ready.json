@@ -1,0 +1,63 @@
+{
+  "status": "READY_EXACT_EXISTING_C48_SOURCE_SELECTION_NO_EXECUTION",
+  "at": "2026-11-11T07:02:56.302129+00:00",
+  "owner": "/root/p04_source_max; Root sole canonical compositor",
+  "actual_canonical_HEAD_at_preimage_read": "7003c57d804d7982356b63182c975d51d9c18c31",
+  "Root_reported_f7a_integration": "7003c57d",
+  "changed_path": "scripts/application-tests/native_diagnostic_guest_collector.c",
+  "canonical_preimage": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-coherent-operation-source-p04-1/boot-caller-selection-1/PREIMAGE.native_diagnostic_guest_collector.c",
+    "bytes": 24226,
+    "sha256": "806958926967ef7aefe7d12ea8f3a143c3ded85ce4091cd485883cb78999a43f"
+  },
+  "qualified_candidate": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-coherent-operation-source-p04-1/boot-caller-selection-1/CANDIDATE.native_diagnostic_guest_collector.c",
+    "bytes": 24604,
+    "sha256": "c48cbdcbc3648f4e1d8838e451d6d578c5a0b2876fc6e2401aff26ee4372a5b8"
+  },
+  "exact_existing_patch": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-coherent-operation-source-p04-1/boot-caller-selection-1/PRODUCTION-REBOOT-ARGV.patch",
+    "bytes": 976,
+    "sha256": "e64d7dc7d327f7aa6cc48f6b6d58ad3481db7f5daf36dcb8d5ebd6ed694fe35a"
+  },
+  "original_contract": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/SOURCE-CONTRACT.json",
+    "bytes": 13862,
+    "sha256": "14fbb95a6c7e1c985572565d3aebc145d9159fa1d2c1aa028c46010bd1e2e524"
+  },
+  "actual_HOST_producer_qualification": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/qualification-1/RESULT.json",
+    "bytes": 19395,
+    "sha256": "4d6d9e7b599892681a818f19d72b68601fd738d2c1f9e173d37a7cc9979fa98d"
+  },
+  "actual_HOST_execution": {
+    "bytes": 3414,
+    "mode": "0o600",
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/execution-1/RESULT.json",
+    "regular_no_symlink": true,
+    "sha256": "4d64bd5eeeced46bc61318fd68805f3c820d4dfe311379953427408eb5459991"
+  },
+  "selected_existing_collector_ELF": {
+    "bytes": 1029880,
+    "mode": "0o755",
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/output-1/collector",
+    "regular_no_symlink": true,
+    "sha256": "9a553f4a33d4ed99b106bc4795bb34e75071dbbf08469115a0765f4f7f364914"
+  },
+  "selected_actual_profile": "ActualHOSTgcc9 -static -no-pie C11/O2/g1/Wall/Wextra/Werror/ND_SIGNAL_ALTERNATE_REPEAT=1; .d/map/trace captured, privateTMPDIR used. Collectoritselfneverexecuted.",
+  "source_semantics": "Only the original two reviewed insertions: six-token signal_boot_argv plus its existing helper boot branch under ND_SIGNAL_ALTERNATE_REPEAT. Named payload argv/env/frame/helper environment/timeout/ownership/cleanup remain as qualified f7a.",
+  "selected_boot_argv": [
+    "/bin/native-boot",
+    "-R",
+    "-c1",
+    "-m128M@0",
+    "-o0",
+    "-T0"
+  ],
+  "why_required": "The real selected Rust mcreboot supplier needs explicit reservation and guest CPU/memory/owner/no-sharing options after existing collector loads3 modules. Original806 default bare boot caller is a different contract; its eae8 ELF is not used as c48.",
+  "profile_boundary": "Use actual retained HOST GCC9/static libc/no-pie production collector9a55 and its own producer proofs. No equivalence to Rocky GCC14, no compiler re-execution or semantic label replacement. Native one-shot still uses explicit1e64/c664 cohort.",
+  "no_behavior_tests_replayed": true,
+  "no_canonical_edit_or_native_action": true,
+  "Root_action_after_independent_GO": "Apply only exact976B e64d patch on806 preimage, then qualify/consume the already produced9a55 collector in the coherent offline guest staging packet. No new collector compile is needed for unchanged c48 bytes.",
+  "native_or_loader_or_admission_authority": false
+}

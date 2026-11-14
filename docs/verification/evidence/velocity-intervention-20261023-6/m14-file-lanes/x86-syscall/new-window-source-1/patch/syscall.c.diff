@@ -1,0 +1,34 @@
+--- a/arch/x86_64/kernel/syscall.c
++++ b/arch/x86_64/kernel/syscall.c
+@@ -2158,6 +2158,12 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++extern int arch_do_kill_wakeup_result(struct thread *caller,
++		struct thread *target, struct process *target_proc, int sig,
++		int ptracecont, unsigned long mask, int doint, int rc);
++#endif
++
+ unsigned long
+ do_kill(struct thread *thread, int pid, int tid, int sig, siginfo_t *info,
+         int ptracecont)
+@@ -2438,6 +2444,10 @@
+ 	mcs_rwlock_writer_unlock_noirq(savelock, &mcs_rw_node);
+ 	cpu_restore_interrupt(irqstate);
+ 
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++	return arch_do_kill_wakeup_result(thread, tthread, tproc, sig,
++			ptracecont, mask, doint, rc);
++#else
+ 	if (sig == SIGCONT || ptracecont == 1) {
+ 		/* Wake up the target only when stopped by SIGSTOP */
+ 		if (sched_wakeup_thread(tthread, PS_STOPPED) == 0) {
+@@ -2483,6 +2493,7 @@
+ 	}
+ 	release_thread(tthread);
+ 	return rc;
++#endif
+ }
+ 
+ #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS

@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "process.pipe-epipe",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/process.pipe-epipe"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["rc=-1 errno=32 epipe=1 sigpipe=0"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["With SIGPIPE ignored and no readers, write returns EPIPE", "No fatal SIGPIPE is delivered and the descriptor cleanup completes"],
+  "unresolved_expectations": ["Pipe endpoint lifetime and exact EPIPE binding require runtime review."],
+  "max_question_for_reviewer": "Confirm ignored SIGPIPE converts the no-reader write to EPIPE without a signal event."
+}

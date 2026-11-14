@@ -1,0 +1,52 @@
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -6236,6 +6236,9 @@
+     int, off_t, int, void *);
+ _Static_assert(__builtin_types_compatible_p(__typeof__(&do_mmap),
+     mckernel_do_mmap_signature_t), "do_mmap complete eight-argument ABI");
++_Static_assert(sizeof(size_t) == 8 && _Alignof(size_t) == 8
++    && sizeof(unsigned long) == 8 && _Alignof(unsigned long) == 8,
++    "Rust do_mmap lossless size_t/unsigned long conversions");
+ _Static_assert(sizeof(struct memobj) == 56 && _Alignof(struct memobj) == 8,
+     "Rust do_mmap memobj geometry");
+ _Static_assert(offsetof(struct memobj, status) == 12 && offsetof(struct memobj, size) == 16,
+--- a/kernel/rust/f03_do_mmap.rs
++++ b/kernel/rust/f03_do_mmap.rs
+@@ -82,6 +82,8 @@
+ // Matching C assertions live in the selected source guard. These are typed
+ // existing ABI structures, not offsets projected through an invented layout.
+ const _: () = {
++    assert!(size_of::<SizeT>() == 8 && align_of::<SizeT>() == 8);
++    assert!(size_of::<CULong>() == 8 && align_of::<CULong>() == 8);
+     assert!(size_of::<Memobj>() == 56 && align_of::<Memobj>() == 8);
+     assert!(offset_of!(Memobj, status) == 12 && offset_of!(Memobj, size) == 16);
+     assert!(offset_of!(Memobj, pages) == 32 && offset_of!(Memobj, nr_pages) == 40);
+@@ -156,7 +158,7 @@
+         };
+         let mut ctx: X86UserContext = core::mem::zeroed();
+         crate::x86_cpu_helpers::ihk_mc_syscall_set_arg0(&mut ctx, addr0);
+-        crate::x86_cpu_helpers::ihk_mc_syscall_set_arg1(&mut ctx, len);
++        crate::x86_cpu_helpers::ihk_mc_syscall_set_arg1(&mut ctx, len as CULong);
+         crate::x86_cpu_helpers::ihk_mc_syscall_set_arg2(&mut ctx, prot as CLong as CULong);
+         crate::x86_cpu_helpers::ihk_mc_syscall_set_arg3(&mut ctx, flags as CLong as CULong);
+         crate::x86_cpu_helpers::ihk_mc_syscall_set_arg4(&mut ctx, fd as CLong as CULong);
+@@ -187,16 +189,16 @@
+             }
+             kprintf(b"%s: straight_pa_start: 0x%lx, straight_pa_end: 0x%lx\n\0".as_ptr().cast(),
+                 NAME.as_ptr(), start, end);
+-            let mut psize = PAGE_SIZE;
++            let mut query_psize: SizeT = PAGE_SIZE as SizeT;
+             let mut alignment = 0;
+             let error = crate::x86_memory_helpers::arch_get_smaller_page_size(null_mut(),
+-                end.wrapping_sub(start), &mut psize, &mut alignment);
++                end.wrapping_sub(start) as SizeT, &mut query_psize, &mut alignment);
+             if error != 0 {
+                 kprintf(b"%s: arch_get_smaller_page_size failed: %d\n\0".as_ptr().cast(), NAME.as_ptr(), error);
+                 break 'straight;
+             }
+             // Preserve the actual C override, even when a larger page exists.
+-            psize = 1 << 29;
++            let psize: CULong = 1 << 29;
+             alignment = 29 - PAGE_SHIFT;
+             kprintf(b"%s: using page shift: %d, psize: %lu\n\0".as_ptr().cast(),
+                 NAME.as_ptr(), PAGE_SHIFT + alignment, psize);

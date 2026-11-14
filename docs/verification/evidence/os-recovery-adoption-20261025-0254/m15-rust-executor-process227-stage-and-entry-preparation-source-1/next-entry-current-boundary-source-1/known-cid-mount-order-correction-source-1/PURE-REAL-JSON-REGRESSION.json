@@ -1,0 +1,57 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_REAL_RETAINED_JSON_ONLY_MOUNT_ORDER_AND_NEGATIVE_CONTROLS",
+  "helper": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/next-entry-current-boundary-source-1/known-cid-mount-order-correction-source-1/known_cid_inspect_compare.py",
+    "bytes": 2056,
+    "sha256": "fb2dbf184ee6c4c3bd861963b72918cda3c781e1bbd47c278b993ccecf6a02a1"
+  },
+  "actual_real_stdout": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-1/cid-inspect-order-diagnosis-1/actual.stdout",
+    "bytes": 70022,
+    "sha256": "e1dd93641022603842eb7c6e039e3fbe413af0345c4985aecbd4396f2822394b"
+  },
+  "retained_real_stdout": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-1/cid-inspect-order-diagnosis-1/retained.stdout",
+    "bytes": 70022,
+    "sha256": "4af7ca5a33f93890d8b3dd0685f882d6eed1961bfa97838428df2655ffca6479"
+  },
+  "actual_stderr": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-1/cid-inspect-order-diagnosis-1/actual.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "diagnosis": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-1/cid-inspect-order-diagnosis-1/DIAGNOSIS.json",
+    "bytes": 737,
+    "sha256": "5fdd150c15f441003ba709ca8b04a32af0bf9342bd9f36454d595250ee86917b"
+  },
+  "checks": [
+    "actualretained-realJSON53Mounts permutation PASS/fullremainingJSONexact",
+    "sameexactretainedJSON PASS",
+    "reject:alteredStateRunning",
+    "reject:alteredStateExitCodeType",
+    "reject:alteredMountRW",
+    "reject:alteredMountSource",
+    "reject:alteredMountDestination",
+    "reject:duplicateDestination",
+    "reject:duplicateFullMount",
+    "reject:droppedMountField",
+    "reject:changedOtherConfig",
+    "reject:wrongCID",
+    "reject:extraRootField",
+    "reject:nonzero",
+    "reject:stderr",
+    "reject:otherCLIrawWhitespaceDrift"
+  ],
+  "controls": 16,
+  "mount_records": 53,
+  "unique_destination_required": true,
+  "all_nonMount_JSON_keys_values_types_lists_exact": true,
+  "other3_CLI_rawexact": true,
+  "observer_AST_identical_except_comparator_and_pin": true,
+  "live_queries": 0,
+  "guard_calls": 0,
+  "native_calls": 0,
+  "runtime_authority": null
+}

@@ -1,0 +1,57 @@
+{
+  "attempt_count": 1,
+  "command_exit_status": 1,
+  "deleter_stderr_sha256": "166c9c5457a8b969434d3a20ce9d417005f7e60c2f99de0ed2eeee22eb145d8b",
+  "deletion_started": false,
+  "evidence": {
+    "archive": {
+      "members": 40,
+      "path": "docs/verification/evidence/stability-native-exact-cleanup-failure-raw-20260929-1.tar.gz",
+      "regular_files_verified": 39,
+      "sha256": "cc38687005d52ecc4b0d48ffa9ff650832169ba9d426add604b0c4e0f8893eea"
+    },
+    "execution_directory": "/home/holden/mckernel-work/scratch/native-exact-cleanup-execution-68cf089a-1",
+    "journal": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-candidate-delete-68cf089a-1.journal.jsonl",
+      "sha256": "6bf129586cd9edc9bb2b89519bdad2fb697606dea876eb6ecac1a86d43a04ebe"
+    },
+    "lease": {
+      "device_number": 1831,
+      "gid": 0,
+      "inode": 31447,
+      "mode": "0600",
+      "path": "/home/holden/mckernel-work/scratch/native-exact-build-lease-68cf089a-1.json",
+      "pid": 3673971,
+      "process_terminal": true,
+      "sha256": "69ced2395f7c16019b70d9d1b2de45ff2519014178ee145a453e2ed2a24f47e3",
+      "uid": 0
+    },
+    "observer_stderr": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-live-reference-post-seal-68cf089a-1.stderr.txt",
+      "sha256": "e9e6526237e203fa99fe62b05fc0421e6bfb888c4e38c75d6348f0fa55e24d68"
+    },
+    "observer_stdout": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-live-reference-post-seal-68cf089a-1.stdout.json",
+      "sha256": "8eb6762e135a808a252d0cfa991935af6d6db6814a1203baa7e1ec04b98dac06"
+    }
+  },
+  "failure": "post-seal observer returned FAIL before any delete-entry phase",
+  "formal_acceptance_credit": false,
+  "observer_rounds": [
+    {"clean": false, "complete_mount_proofs": true, "map_files_churn": 815, "mount_violations": 48, "permission_denials": 0, "round": 1, "tasks": 815},
+    {"clean": false, "complete_mount_proofs": true, "map_files_churn": 815, "mount_violations": 48, "permission_denials": 0, "round": 2, "tasks": 815},
+    {"clean": false, "complete_mount_proofs": true, "map_files_churn": 815, "mount_violations": 48, "permission_denials": 0, "round": 3, "tasks": 815},
+    {"clean": false, "complete_mount_proofs": true, "map_files_churn": 815, "mount_violations": 48, "permission_denials": 0, "round": 4, "tasks": 815},
+    {"clean": false, "complete_mount_proofs": true, "map_files_churn": 815, "mount_violations": 48, "permission_denials": 0, "round": 5, "tasks": 815}
+  ],
+  "original_roots_absent": true,
+  "packet_checkpoint": "8c0795f53d637849e9ddfedb17b9d2f0e78e16aa",
+  "quarantines": [
+    {"device_number": 26, "gid": 0, "inode": 14117, "mode": "0700", "path": "/dev/shm/.mckernel-quarantine-mckernel-exact-candidate-68cf089a-1", "uid": 0},
+    {"device_number": 26, "gid": 0, "inode": 24701, "mode": "0700", "path": "/dev/shm/.mckernel-quarantine-mckernel-exact-metadata-backup-68cf089a-1", "uid": 0}
+  ],
+  "record_kind": "native_exact_candidate_cleanup_failure",
+  "retry_authorized": false,
+  "schema_version": 1,
+  "status": "FAIL_PRESERVED"
+}

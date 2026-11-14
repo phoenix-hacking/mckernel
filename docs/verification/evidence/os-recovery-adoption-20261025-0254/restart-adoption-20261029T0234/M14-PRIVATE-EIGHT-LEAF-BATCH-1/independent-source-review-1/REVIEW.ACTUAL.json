@@ -1,0 +1,76 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_SOURCE_ONE_NEW_FORWARDING_BODY_AND_EIGHT_LEAF_COMPOSITION",
+  "reviewer": "/root/recovery_receipts",
+  "independent": true,
+  "implementation_ownership": false,
+  "recorded_epoch": 1793310241.0266304,
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-EIGHT-LEAF-BATCH-1/SOURCE-READY.json",
+    "bytes": 3825,
+    "sha256": "3bb9ddef2edf785f51851a65a92d07febc524d1a08fe99c2db6cc0b81c7f85f7"
+  },
+  "patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-EIGHT-LEAF-BATCH-1/EIGHT-LEAF-BATCH.PRIVATE-NOT-APPLIED.patch",
+    "bytes": 22450,
+    "sha256": "d5ed68b28879f0605d4b489091f07c409c94f5f5adc7265a5c66ef445f81d76d"
+  },
+  "new_body_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-NEXT-GENERIC-BODY-1/SOURCE-READY.json",
+    "bytes": 3540,
+    "sha256": "c9ae533a801ab373c61e6022ee6c2d416af0171eb87c46e58322481547804ba2"
+  },
+  "new_leaf": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-NEXT-GENERIC-BODY-1/postimage/kernel/rust/syscall_munmap_clear_host_forward.rs",
+    "bytes": 1417,
+    "sha256": "8c0f771b28c76551f387b4936064b05ef8c646d22045ad296b98cd4abd7c6ec1"
+  },
+  "reused_seven_source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SEVEN-LEAF-BATCH-1/line-preserving-composition-correction-1/independent-review-1/REVIEW.ACTUAL.json",
+    "bytes": 6500,
+    "sha256": "f0218681b64f20bd22ff11998d54003f2ec5ed4bded121de0b0e3d7574bbd9f1"
+  },
+  "checks": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-EIGHT-LEAF-BATCH-1/independent-source-review-1/CHECKS.json",
+    "bytes": 2663,
+    "sha256": "213952a34acad7a658f13b3ea687d9ec0039aec0c216aa2ada307fc929b9e019"
+  },
+  "checker": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-EIGHT-LEAF-BATCH-1/independent-source-review-1/check_new_body_and_composition.py",
+    "bytes": 6464,
+    "sha256": "87712638fe3e2eacbe370b344432e4be361b79c9876fb1cd98acdb271b4ff16a"
+  },
+  "findings": [
+    "OriginalC do_munmap_clear_host_bridge is exactly one return clear_host_pte(addr,len,holding_lock), with no other side effects. NewRustleaf directly calls the same existing qualifiedclear_host_pte Rustprovider once and returns its signedlong unchanged. No argumentcast/orderchange/boolean normalization, error/nullpolicy, VM/context/request/endpoint/lock/retry/cleanup code is introduced.",
+    "ExistingC long(unsignedlong,size_t,int) callback and immutable f03_do_munmap_binding_v1.clear_host field retain their exact names/types. CLong/CULong/SizeT/CInt aliases match selected LP64(8/8/8/4); leaf contains exact compile-time function-pointer equality for provider and wrapper plus widthassertions. These are sourcefacts, not a newly compiledABIwitness. Providerbody and ABIdefinitions remain exactfrozen119prefix; unsafe currentCPU/thread/VM/range-lock/synchronousforwarding invariants are inherited unchanged.",
+    "Cdelta against acceptedsevenleaf is confined to one originalfive-line callbackregion: pairedleafcallback+x86 selectedextern, token-identical compactOFFfallback andline-neutralpadding. Every outsideCline, followingtypedbinding/callsite, original logical#line physicalposition and held/undefined-domain body is unchanged.",
+    "All seven previouslyacceptedleafbyte streams and crate lib.rs remain exact. The only Rustpolicy change is one exactsameparent cfg/path/module block appended after acceptedsevenleafEOF; the complete frozen119policy and acceptedsevenleafpolicy are byteprefixes. All53line! and53file! coordinate/fulltextidentities remain exact; no newdescriptor orlocationmacro is added.",
+    "CMake differs only by one exactnewleafdependency; current pairedf03_leaf_callbacks_candidate/MCKERNEL_RUST_F03_LEAF_CALLBACKS/x86 selection is reused, not a newprofile. No duplicatednewmodule/definition, unexpectedsharedwrite or sourcecopy appears. Compiler invocation must carry existingbatch lockpairflags as alreadyreviewed.",
+    "Fulloriginal389sourceidentity/projection proof carries from acceptedf021sevenleaf because all descriptor leaves and inheritedlocation sites are unchanged, and the newforwarding leaf has noDdebug/verbose entry. Actualnew linked389/provider/layout/default/native proof remains separate. Original42source-stub forwardingfixture is reused without rerun; it is no VM/host/nativeexecution acceptance."
+  ],
+  "source_blockers": [],
+  "holds": "All existing request/endpoint/credential/signal/lifetime and undefinedvariadic-domain holds remain at originalscope; no sourcePASS clears an executionhold.",
+  "test_result": {
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/usr/bin/python3",
+      "-B",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-EIGHT-LEAF-BATCH-1/independent-source-review-1/check_new_body_and_composition.py"
+    ],
+    "returncode": 0,
+    "result": "PASS_NEW_FORWARDING_SOURCE_AND_EXACT_EIGHT_LEAF_COMPOSITION",
+    "unchanged_seven_body_tests_or_42_fixture_rerun": false
+  },
+  "next_Root_step": "Aftermatching119nativequalification/applicableadmission, authenticatecanonicalpreimages and use one affected-unit compile/link cycle: currentRustcrate+generic syscallC TU, matchingABI/provider/source/original389artifactchecks; preserveactual119archobject30bd plus qualified8retainedobjects/SDK21 at exactunchangedscope. No operation granted here.",
+  "canonical_applied": false,
+  "actual_compiler_preprocessor_ELF_HOST_native_guard_proc_stage_cleanup_controller_billing_actions": 0,
+  "new_C_retirement_credit": 0,
+  "native_acceptance": false,
+  "artifact_acceptance": false,
+  "wholefile_acceptance": false,
+  "runtime_authority": null,
+  "execution_authority": null,
+  "owned_live_resources": []
+}

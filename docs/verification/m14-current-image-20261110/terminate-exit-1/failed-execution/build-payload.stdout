@@ -1,0 +1,44 @@
+Change Dir: '/work/output/build'
+
+Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile -j1 mckernel.img
+/usr/bin/cmake -S/src -B/work/output/build --check-build-system CMakeFiles/Makefile.cmake 0
+Re-run cmake file: Makefile older than: /src/kernel/CMakeLists.txt
+make[1]: Entering directory '/work/output/build/tmp.resolve_MODULES_END'
+make -j1 LLVM=1 LOCALVERSION=-211.44.1.el10_2.mckernel1.x86_64 -C /output/build M=/work/output/build/tmp.resolve_MODULES_END modules
+make[2]: Entering directory '/output/build'
+  CC [M]  /work/output/build/tmp.resolve_MODULES_END/driver.o
+  MODPOST /work/output/build/tmp.resolve_MODULES_END/Module.symvers
+  CC [M]  /work/output/build/tmp.resolve_MODULES_END/driver.mod.o
+  CC [M]  /work/output/build/tmp.resolve_MODULES_END/.module-common.o
+  LD [M]  /work/output/build/tmp.resolve_MODULES_END/driver.ko
+  BTF [M] /work/output/build/tmp.resolve_MODULES_END/driver.ko
+make[2]: Leaving directory '/output/build'
+make[1]: Leaving directory '/work/output/build/tmp.resolve_MODULES_END'
+-- libdwarf not found; compiling bundled libdwarf locally
+-- Assuming struct Elf for the default libdwarf.h
+-- Checking compiler supports __attribute__ unused... 1
+-- Checking zlib.h usability... 1
+-- Configuring done (2.5s)
+-- Generating done (0.0s)
+-- Build files have been written to: /work/output/build
+/usr/bin/make  -f CMakeFiles/Makefile2 mckernel.img
+make[1]: Entering directory '/work/output/build'
+/usr/bin/cmake -S/src -B/work/output/build --check-build-system CMakeFiles/Makefile.cmake 0
+/usr/bin/cmake -E cmake_progress_start /work/output/build/CMakeFiles 10
+/usr/bin/make  -f CMakeFiles/Makefile2 kernel/CMakeFiles/mckernel.img.dir/all
+make[2]: Entering directory '/work/output/build'
+/usr/bin/make  -f kernel/CMakeFiles/mckernel_rust_obj.dir/build.make kernel/CMakeFiles/mckernel_rust_obj.dir/depend
+make[3]: Entering directory '/work/output/build'
+cd /work/output/build && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /src /src/kernel /work/output/build /work/output/build/kernel /work/output/build/kernel/CMakeFiles/mckernel_rust_obj.dir/DependInfo.cmake "--color="
+Dependencies file "kernel/rust/mckernel_rust.d" is newer than depends file "/work/output/build/kernel/CMakeFiles/mckernel_rust_obj.dir/compiler_depend.internal".
+Consolidate compiler generated dependencies of target mckernel_rust_obj
+make[3]: Leaving directory '/work/output/build'
+/usr/bin/make  -f kernel/CMakeFiles/mckernel_rust_obj.dir/build.make kernel/CMakeFiles/mckernel_rust_obj.dir/build
+make[3]: Entering directory '/work/output/build'
+[ 10%] Building Rust kernel object
+cd /work/output/build/kernel && /usr/bin/cmake -E make_directory /work/output/build/kernel/rust
+cd /work/output/build/kernel && /usr/bin/cmake -E env MAKEFLAGS= MCKERNEL_RUST_VERSION=1.8.0 MCKERNEL_RUST_BUILDID=8d288b8 MCKERNEL_X86_ENABLE_SSE=1 MCKERNEL_CPU_C_FILE=/src/arch/x86_64/kernel/cpu.c MCKERNEL_DO_SYSCALL_C_FILE=/src/kernel/syscall.c MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS=0 MCKERNEL_PROCESS_C_FILE=/src/kernel/process.c MCKERNEL_PROCESS_DDEBUG_FLAGS=0 MCKERNEL_INTERRUPT_SYSCALL_C_FILE=/src/kernel/syscall.c MCKERNEL_TERMINATE_C_FILE=/src/kernel/syscall.c MCKERNEL_F06_RT_SIGRETURN_ORIGIN=/src/arch/x86_64/kernel/syscall.c MCKERNEL_F06_CLONE_CPUID_METADATA_RS=/work/output/build/kernel/rust/f06-origin/f06_clone_cpuid_metadata.rs MCKERNEL_F06_SIGNAL_METADATA_RS=/work/output/build/kernel/rust/f06-origin/f06_signal_metadata.rs /home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc --crate-name mckernel_rust --crate-type lib --edition=2021 -C panic=abort -C opt-level=2 -C debuginfo=2 -C code-model=large -C relocation-model=static -C no-redzone=yes -C force-frame-pointers=yes -C overflow-checks=off -C force-unwind-tables=no -C no-vectorize-loops -C no-vectorize-slp -C target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma -Z dep-info-omit-d-target -Z binary-dep-depinfo --cfg process_verbose_data --cfg process_verbose_local_companions --cfg f06_signal_context_candidate --cfg f06_do_signal_whole_candidate --cfg f06_do_signal_reuse_qualified_context --cfg f06_rt_sigreturn_xrstor_candidate --cfg f06_debug_constants_candidate --cfg f06_signal_ptrace_diagnostics_candidate --cfg f06_signal_trap_info_candidate --cfg f03_io_diagnostic_callbacks_candidate --cfg f03_mincore_candidate --cfg f03_move_pages_candidate --cfg f03_sched_bridges_candidate --cfg f03_signal_process_bridges_candidate --cfg f03_dispatch_context_candidate --cfg f03_leaf_callbacks_candidate --cfg native_linux_irq_work_v6_12 --cfg f03_syscall_entry_candidate --cfg f03_futex_atomic_candidate --cfg f03_futex_no_uaccess_candidate --cfg process_global_storage_candidate --cfg f03_syscall_table_candidate --cfg f03_ptrace_entry_candidate --cfg f03_syscall_table_clone3 --cfg f03_terminate_candidate --cfg f03_interrupt_syscall_candidate --cfg f03_host_cleanup_candidate --cfg f03_exit_group_bridges_candidate --cfg f03_credential_refresh_candidate --cfg f03_prlimit_body_candidate --cfg f03_do_exit_supported_candidate --cfg f03_unmap_begin_selected_candidate --cfg f03_unmap_remove_selected_candidate --cfg f03_unmap_finish_selected_candidate --cfg f03_mmap_page_callback_candidate --cfg f03_wait_release_selected_candidate --cfg f03_wait_process_release_selected_candidate --cfg f03_terminate_refcount_selected_candidate --cfg f03_ptrace_io_find_selected_candidate --cfg f03_ptrace_io_unlock_selected_candidate --cfg f06_mmap_flag_providers --cfg f06_prctl_set_register_candidate --cfg f06_prctl_get_register_candidate --cfg f06_mmap_dispatch_bridge_candidate --cfg f06_ptrace_context_candidate --cfg f06_ptrace_alloc_candidate --cfg f06_vdso_add_range_candidate --cfg f06_vdso_set_range_candidate --cfg f06_process_vm_entry_candidate --cfg f03_exit_waitq_wake_selected_candidate --cfg f06_copy_to_user_candidate --cfg f06_copy_from_user_candidate --cfg f06_forward_context_candidate --cfg f06_rt_sigreturn_syscall_candidate --cfg f06_rt_sigreturn_set_signal_candidate --cfg f06_rt_sigreturn_check_signal_candidate --cfg f06_clone_reader_lock_candidate --cfg f06_clone_reader_unlock_candidate --cfg f06_ptrace_find_thread_candidate --cfg f06_ptrace_thread_unlock_candidate --cfg f06_obtain_clone_cpuid_candidate --cfg f06_shmget_dispatch_candidate --cfg f06_native_signal_restore_fp_candidate --cfg f06_vdso_info_candidate --cfg f06_ptrace_xstate_copy_to_candidate --cfg f06_ptrace_xstate_copy_from_candidate --cfg f06_vdso_setup_log_candidate --cfg f06_vdso_state_candidate --cfg f06_vdso_storage_candidate --cfg f06_ptrace_user_bridges_candidate --cfg f06_ptrace_gpregs_bridges_candidate --cfg f06_prctl_log_candidate --cfg f06_prctl_log_storage_candidate --cfg f06_vdso_map_log_candidate --cfg f06_rt_sigreturn_alloc_candidate --cfg f06_rt_sigreturn_free_candidate --cfg f03_perf_alloc_bridges_selected_candidate --cfg f03_perf_counter_control_bridges_selected_candidate --cfg f03_perf_provider_next3_bridges_selected_candidate --cfg f03_perf_event_provider_bridges_selected_candidate --cfg f03_sync_child_event_candidate --cfg enable_profile --cfg enable_perf --cfg enable_rusage --cfg f03_do_syscall_outer_candidate --emit=obj=/work/output/build/kernel/rust/mckernel_rust.o,dep-info=/work/output/build/kernel/rust/mckernel_rust.raw.d /src/kernel/rust/lib.rs
+make[3]: Leaving directory '/work/output/build'
+make[2]: Leaving directory '/work/output/build'
+make[1]: Leaving directory '/work/output/build'
+

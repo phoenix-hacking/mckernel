@@ -1,0 +1,67 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/m07_remaining_stager_consumer_review",
+  "implementation_ownership": false,
+  "decision": "PASS_EXACT_FAILURE_DIAGNOSTIC_SOURCE_AND_RETAINED_LINUX_HANDLER_EVIDENCE_ONLY",
+  "root": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/remaining-components-functional-case-preparation-20261022-1/joint-mpx-exact-fault-correction-1/native-125-failure-evidence-correction-1",
+  "references_relative_to_root": {
+    "SOURCE-FREEZE-1.json": {
+      "sha256": "ee0a3db56ff5494d7e3b8942f796575c6770f20a81c6d64a9c01df4c0d9cd9d4",
+      "bytes": 5084
+    },
+    "COMPLETED-UNIT-1.json": {
+      "sha256": "c9f590e253129304a4cdbc91eea4a2fd7aa23118d5980d51f5aa7fbbb0dc8711",
+      "bytes": 14988
+    },
+    "remaining-state.c": {
+      "sha256": "604a9c7ee214247759caf943b93c03629a39ddcf758e01ce80230e8e8e03be27",
+      "bytes": 11578
+    },
+    "remaining-state-static": {
+      "sha256": "743002457716113509fc98c8aa942fdf82139b0a2a8c40a485e0d760a727e7da",
+      "bytes": 1581368
+    }
+  },
+  "source_review": {
+    "findings": [],
+    "sole_functional_delta": "Unexpected fault branch emits diagnostic before the unchanged _exit(125).",
+    "recovery_predicate": "Exact original eligibility-active, armed-PC, known-instruction and UD/GP predicates preserved.",
+    "permitted_fault_behavior": "Original eligibility fields, armed-instruction clearing and access_refused redirection unchanged.",
+    "assembly_and_oracles": "Exact accepted bytes unchanged.",
+    "serializer": "Stack-only scalar formatting; no allocation or stdio; one write(STDERR_FILENO), no retry; short/failed write proceeds to unchanged exit125.",
+    "bounds": {
+      "literal_bytes": 97,
+      "decimal_fields": 9,
+      "maximum_decimal_bytes_each": 11,
+      "pointer_fields": 3,
+      "pointer_bytes_each": 18,
+      "maximum_record_bytes": 250,
+      "stack_buffer_bytes": 384,
+      "capture_limit_bytes": 1024,
+      "INT_MIN_conversion": "Unsigned arithmetic avoids signed negation overflow."
+    }
+  },
+  "retained_evidence": {
+    "all_frozen_source_and_binary_hashes_match": true,
+    "six_raw_status_records_match_completion": true,
+    "all_twelve_stream_hashes_and_lengths_match": true,
+    "compile": "Corrected static compile passes with original -Wall/-Wextra/-Werror flags.",
+    "linux_reference": "Exit0; exact291B stdout e929f58e7ec36dc94e95c932ccc362b83df452a9e27afa9ea2ef89634cfbabe3; empty stderr; unchanged oracle passes.",
+    "handler_body": "Exact included private handler: two permitted vectors return silently; seven rejected vectors emit diagnostics and exit125. INT_MIN error/INT_MAX code covered; largest observed record179B.",
+    "lifecycle": "All six retained owned captures joined, groups absent and streams closed.",
+    "original_compiler_failure": "warn_unused_result failure and failed source retained. Sole source correction stores write return in ssize_t and ignores that local; no behavioral relaxation."
+  },
+  "original_native_failure": {
+    "raw_wait_status": 32000,
+    "decoded_exit": 125,
+    "stdout_bytes": 0,
+    "stderr_bytes": 0,
+    "cause": "UNKNOWN",
+    "provenance_limit": "Exact33f launcher/2f8 collector producer closure remains unproven. No claim that this app handler accounts for every possible exit125."
+  },
+  "projection_permission": "Root may preserve and project this genuine source/Linux/handler review for the exact changed artifact. Fresh stage and runtime bindings require separate review and release.",
+  "limitations": "Handler vectors use synthetic signal contexts. No native diagnostic emission, native fault cause, write-failure injection, application acceptance or whole-M07 completion proved. This review imposes no dependency on M05 native work.",
+  "native_credit_delta": 0,
+  "execution_release": null,
+  "quiescent": true
+}

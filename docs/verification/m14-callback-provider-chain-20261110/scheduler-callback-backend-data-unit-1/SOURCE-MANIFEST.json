@@ -1,0 +1,181 @@
+{
+  "schema": "mckernel.callback-backend.two-original-data-source.v1",
+  "status": "FROZEN_DATA_ONLY_SOURCE_PREPARATION_NOT_COMPILED_OR_GUARD_QUALIFIED",
+  "owner": "/root/m15_public_abi_high private source; Root sole compositor/admission",
+  "unit_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-backend-data-unit-1/scheduler_callback_backend_data_unit.rs",
+  "unit_sha256": "1c938fcf5a2088e150461b1e0823e28ab2ce410f620ce9cefd2b5a4c8b437f42",
+  "unit_bytes": 716,
+  "contracts": {
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-data-owner-eligibility-1/RESULT.json": "377a09a39aaeae1847ca9ec9cddf154da52b6f7f64fc87659a78e1bee53f7174",
+    "/home/holden/mckernel-work/m14-m15-scheduler-resume-20261109T211802Z/x86-apic-backend-data-lookahead-20261110T0022.json": "1ff513c6c9de38e323fe0a203db933acd8a1f849ca83fee95708ebdd343017c7"
+  },
+  "source_bindings": {
+    "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde",
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "/home/holden/mckernel/arch/x86_64/kernel/cpu.c": "9adb2435e75a1b27cd9511f4b69739fe25d2bb95dc0fc80eb73d2abd60c34813"
+  },
+  "source_blocks": [
+    {
+      "name": "CUInt",
+      "kind": "original_scalar_alias",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 9,
+      "last_line": 9,
+      "source_sha256": "c805374cb64cd23693fd085ad2b8826126eb2efd01b8e083c7686ec006e7f358",
+      "bytes": 18,
+      "source_bytes": "type CUInt = u32;\n",
+      "unit_byte_offset": 97
+    },
+    {
+      "name": "lapic_vp",
+      "kind": "original_mutable_pointer_storage",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 4496,
+      "last_line": 4497,
+      "source_sha256": "379f0e95f74cd594ac9beb621a071a25d736bcbd2044558645c53584bd8c27c4",
+      "bytes": 90,
+      "source_bytes": "    #[no_mangle]\n    pub(crate) static mut lapic_vp: *mut c_void = core::ptr::null_mut();\n",
+      "unit_byte_offset": 173
+    },
+    {
+      "name": "fixed_selector_header_requirement",
+      "kind": "original_source_comment_contract",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 6804,
+      "last_line": 6807,
+      "source_sha256": "11a0ceb88dd3768230d31cd23d9ce04103ff4a21d3b5ed641f59cbc54257dfd3",
+      "bytes": 316,
+      "source_bytes": "// Literal values transcribed from the exact selected C macro definitions.\n// No build-dependent MAP_KERNEL_START or configuration policy is inferred here.\n// Real-header object equality remains mandatory before these private providers\n// can be integrated; alternate header values are not qualified by this source.\n",
+      "unit_byte_offset": 266
+    },
+    {
+      "name": "x86_local_apic_base_msr",
+      "kind": "original_immutable_u32_storage",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 6813,
+      "last_line": 6814,
+      "source_sha256": "37521e3388395e1d44da3cd9579aa92bd67f47490048c6218d1f3a86518f9fc4",
+      "bytes": 72,
+      "source_bytes": "    #[no_mangle]\n    pub static x86_local_apic_base_msr: CUInt = 0x800;\n",
+      "unit_byte_offset": 640
+    }
+  ],
+  "original_source_C_selection_header_guard_evidence": [
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 4488,
+      "last_line": 4497,
+      "sha256": "04100c782c70ab62854967dc1ad986745a27dfc1c476d19117047f113853f68d",
+      "role": "Only original module/type-import/storage prelude; no init body",
+      "exact_source": "mod initialization_entries {\n    use core::ffi::c_void;\n    use core::ptr::addr_of_mut;\n\n    use crate::abi::{CInt, CULong};\n\n    // Storage ownership only; mapping, feature publication and all device\n    // accesses remain in the unchanged selected provider bodies.\n    #[no_mangle]\n    pub(crate) static mut lapic_vp: *mut c_void = core::ptr::null_mut();\n"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 6808,
+      "last_line": 6814,
+      "sha256": "288456e4c36bf72c27cc0dfbff033ff3d70474d8a572d59fe6e6c80829609b6e",
+      "role": "Only fixed-selector module/type import/one data owner",
+      "exact_source": "mod selected_fixed_cpu_selectors {\n    use crate::abi::{CInt, CULong};\n    use super::CUInt;\n\n    // Existing cpu.c APIC_BASE_MSR definition, retained source value 0x800.\n    #[no_mangle]\n    pub static x86_local_apic_base_msr: CUInt = 0x800;\n"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 3932,
+      "last_line": 3935,
+      "sha256": "69f48bfbe98341c9b9527b58df5901953ff68e1da5098134aa20f07e347f3e9e",
+      "role": "Only exact consumer original linked pointer/u32 extern declarations",
+      "exact_source": "    unsafe extern \"C\" {\n        #[link_name = \"lapic_vp\"]\n        static mut mapped_local_apic: *mut c_void;\n        static x86_local_apic_base_msr: u32;\n"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+      "first_line": 326,
+      "last_line": 326,
+      "sha256": "6a46606bfb31bf20d26f6a5ce0e1f5f2fd280219d972d80f39b5edb8d7e7aee5",
+      "role": "Actual source APIC_BASE_MSR macro",
+      "exact_source": "#define APIC_BASE_MSR\t\t0x800\n"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+      "first_line": 339,
+      "last_line": 348,
+      "sha256": "ac8e1cbf64bf859c00d542dcadc5c9132ef8178e19e3a1556389f10107bbf6e8",
+      "role": "Exact Rust/C storage owner selection",
+      "exact_source": "#ifdef MCKERNEL_RUST_X86_CPU_HELPERS\nextern void *lapic_vp; /* Rust-owned slot; existing device lifetime unchanged. */\n#ifdef MCKERNEL_RUST_X86_CPU_HELPERS\nextern const unsigned int x86_local_apic_base_msr;\n#else\nconst unsigned int x86_local_apic_base_msr = APIC_BASE_MSR;\n#endif\n#else\nstatic void *lapic_vp;\n#endif\n"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/lib.rs",
+      "first_line": 94,
+      "last_line": 94,
+      "sha256": "4fefcc69e0dc6f48051ca4ae83e2a725ccefc386861463a2e76508354c5bdbbc",
+      "role": "Actual source selection",
+      "exact_source": "mod x86_cpu_helpers;\n"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "first_line": 187,
+      "last_line": 187,
+      "sha256": "cce0758db812ec01f3ec037f576e8e612ca1ebc38bbd17bcf64ebc10284766cd",
+      "role": "Actual build source input",
+      "exact_source": "\t\t\"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_cpu_helpers.rs\"\n"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "first_line": 729,
+      "last_line": 730,
+      "sha256": "4256c5202df3cad22f53ced67131586dced0f7179e081c1740b6d95039cf352e",
+      "role": "Paired C Rust-owner definition",
+      "exact_source": "\tset_source_files_properties(\"${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/cpu.c\"\n\t\tPROPERTIES COMPILE_DEFINITIONS MCKERNEL_RUST_X86_CPU_HELPERS)\n"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+      "first_line": 4205,
+      "last_line": 4205,
+      "sha256": "cbba09d87abd495a2cf427ecdb74db31e663dea65db04b275f7bc4ea9c473edd",
+      "role": "Original selected C static assertion remains required; inspected only, not preprocessed or passed",
+      "exact_source": "_Static_assert((APIC_BASE_MSR) == (0x800), \"Rust selected APIC_BASE_MSR binding\");\n"
+    }
+  ],
+  "actual_ABI": {
+    "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+    "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "pointer": "Exactcore::ffi::c_void mutablepointer, selectedLP64 8/8; no fabricatedstruct/layout",
+    "CUInt": "Originalx86_cpu_helpers.rs9 u32alias, not invented abi::CUInt"
+  },
+  "data": [
+    {
+      "ELF_name": "lapic_vp",
+      "namespace": "initialization_entries",
+      "type": "*mut core::ffi::c_void",
+      "attributes": [
+        "#[no_mangle]"
+      ],
+      "visibility": "pub(crate) staticmut",
+      "initializer": "Originalcore::ptr::null_mut()",
+      "expected_B_bytes": 8,
+      "expected_align": 8,
+      "consumer_Rust_alias": "mapped_local_apic importsactualELFlapic_vp throughORIGINALlink_name; no mapped_local_apic/lapic_virtpage ownerdefined",
+      "runtime": "NULLstorageONLY/notmappedcontroller"
+    },
+    {
+      "ELF_name": "x86_local_apic_base_msr",
+      "namespace": "selected_fixed_cpu_selectors",
+      "type": "OriginalCUInt=u32",
+      "attributes": [
+        "#[no_mangle]"
+      ],
+      "visibility": "pub static immutable",
+      "initializer": "Original0x800 fromRust6814, actualCmacroAPIC_BASE_MSR326 andexistingstaticguard4205",
+      "expected_R_bytes": 4,
+      "expected_align": 4,
+      "runtime": "Index-baseconstantONLY/notenabledx2APIC or validMSRcontext"
+    }
+  ],
+  "source_functions_private_helpers_imports": [],
+  "source_expected_T": 0,
+  "source_expected_U": [],
+  "expected_source_objects": 2,
+  "source_constants_beyond_original_two_initializers": [],
+  "source_glue": "Onlyno_std/actualABIpath/finiteoriginalnamespaces/minimalcorec_voidandsuperCUIntimports/braces; allownerattributes/types/initializers andoriginalrealheaderwarningcomment exact. No function/body/moduleexpansion/newcfg/constructor/guardprocessing.",
+  "C_header_ownership_boundary": "Originalcpu.c339-348 externRustowner selection,326macro0x800,4205staticassert andactualheader/CMakepairing are sourceevidenceONLY. No preprocessing/guardPASS or selectedheaderobject equality established. Originalreal-header equality/duplicateCowner exclusion requiredbeforecorrespondingintegration.",
+  "future_actual_current_partial": "UNBOUND; latestmatchingtarget/currentcohort uniqueowner/byte/type/reloc proof andfreshRootjoinadmission separate. Existingtarget5/WRMSR/CPU/publisher owners not copied/recompiled.",
+  "operations": "Private source/JSONwrite, sourcebyte/hash/profilecomparisons only; no compiler/GNU/parser/predicate/gate/link/function/target/mapping/device/boot/native/runtime/canonical/index/state or recursiveagent."
+}

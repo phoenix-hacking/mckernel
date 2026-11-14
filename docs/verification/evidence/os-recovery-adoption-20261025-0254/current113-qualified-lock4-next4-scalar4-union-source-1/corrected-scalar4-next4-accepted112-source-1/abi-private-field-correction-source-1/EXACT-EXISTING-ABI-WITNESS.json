@@ -1,0 +1,27 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "runtime_authority": null,
+  "defining_source": {
+    "path": "/home/holden/mckernel/kernel/rust/lock_helpers.rs",
+    "bytes": 12202,
+    "sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3"
+  },
+  "accepted_current112_snapshot": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/rust-subtree/lock_helpers.rs",
+    "bytes": 12202,
+    "sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3"
+  },
+  "line": 59,
+  "predicate": "assert!(offset_of!(McsRwlockNodeIrqsave, irqsave) == 0);",
+  "same_semantic_predicate_removed_from_illegal_scope": "assert!(core::mem::offset_of!(McsRwlockNodeIrqsave, irqsave) == 0);",
+  "existing_const_block": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/abi-private-field-correction-source-1/defining-module-existing-const-witness.rs.inc",
+    "bytes": 917,
+    "sha256": "e136f13059a742671044e5b694204d56e3ba54bf21d0957f2b3084070835ddc3"
+  },
+  "unconditional_in_defining_module": true,
+  "private_field_visibility_unchanged": true,
+  "all_other_leaf_witnesses_unchanged": true,
+  "runtime_bodies_changed": false,
+  "source_only": true
+}

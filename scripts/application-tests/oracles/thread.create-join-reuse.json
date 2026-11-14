@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "thread.create-join-reuse",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/thread.create-join-reuse"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["jobs=32 unique_jobs=32"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Thirty-two sequential create/join jobs execute exactly once", "Every joined worker is retired before the next creation"],
+  "unresolved_expectations": ["Guest TID retirement and owner-count evidence must come from the runner trace; the fixture records logical completion only."],
+  "max_question_for_reviewer": "Confirm runner-side TID retirement evidence is required in addition to the 32 logical completions."
+}

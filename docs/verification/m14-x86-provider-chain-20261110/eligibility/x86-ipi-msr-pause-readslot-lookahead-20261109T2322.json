@@ -1,0 +1,134 @@
+{
+  "schema": "mckernel.x86-ipi-msr-pause-readslot-lookahead.v1",
+  "request": "2026-11-09T23:22Z exact dependency follow-on",
+  "decision": "GO_FINITE_ACCEPTED_F04_SOURCE_CUT_REUSING_EXISTING_CPU_PAUSE",
+  "owner": "Saved Root sole source/review/admission/compositor owner; original countedcredit0",
+  "captured_need": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-concrete-provider-metadata-1/ACTUAL-CAPTURE-BEFORE-GATE.json",
+    "status": "ACTUAL_EMITTED_METADATA_CAPTURE_ONLY_NOT_OWNERSHIP_GATE_PASS",
+    "object_sha256": "1f4a6b978f6b81737c4bf2bf62c94fbdd71a4003c59161db7abec761209be2e0",
+    "relevant_actual_U": [
+      "x86_cpu_pause_bridge",
+      "x86_write_msr_bridge",
+      "lapic_read"
+    ],
+    "other_U": [
+      "cpu_disable_interrupt_save",
+      "cpu_restore_interrupt",
+      "ihk_mc_mb",
+      "x86_lapic_write_bridge"
+    ],
+    "scope": "Only the three relevant edges investigated; other edges remain Root's existing provider/composition work. Capture is not relabeled as passed gate."
+  },
+  "existing_owners_and_overlap": {
+    "current97_result": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-next-provider-join-1/JOIN-RESULT.json",
+    "saved_symbol_text": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-next-provider-join-1/joined-symbols.stdout",
+    "actual_partial_sha256": "4b4cc4a00304bb0896864446896cbf159cd597bafa8a111b141bf346c460eb91",
+    "actual_owners": "97global=81T+16data; genuine savedcpu_pauseT,size3 alreadyprovided",
+    "missing": "No wrmsr,x86_cpu_pause_bridge,x86_write_msr_bridge orlapic_read owner found in that exactsavedtext.",
+    "reuse": "cpu_pause must remain external to this newunit and resolve to existing original owner. Do not include/recompile its body or change itsnativecfg/profile.",
+    "current_packets": "Bounded exact-symbol lookup of currentRoot Rustunit/request files found these bridges only as IPIproducer extern declarations, not prepared definitions; no lapic_read storage definition wasfound. Root must reuse a newly created sameowner packet if it appeared after this observation.",
+    "no_new_metadata": "Savedtext and actualJSONcapture consumed read-only; no nm/readelf/predicate/hashrun/census."
+  },
+  "eligibility": {
+    "positive_source": "Existing accepted-F04 general CPU primitives/native WRMSR and forwarding bridges plus authentic nullable LAPICread storage; exact bodies independently excluded from held packet/generic/exec/ACK/TID/XPMEM request source.",
+    "native_asm_boundary": "Actual wrmsr is a finite existing accepted Rust/allowedasm primitive. Nonexecuted sourcepreparation/codegen under explicit retainednativeprofile is routine engineering, not an unprovided externalapproval. Actual legal MSR, privileged CPU context, backendmapping/boot/IRQ/native/sourcecustody/currentfree authority remains required for ANY runtime use.",
+    "excluded": "Wholex86_cpu_helpers/module, concrete MMIO/APIC/x2APICread target, bootselector/publication, unrelatedcpu_pausedefinition, otherlapic slots, heldsource bodies and runtime tests.",
+    "stop": "If concretepreparation expands into a differentbody/profile/heldrequest or syntheticinitializedcallback, stop for exactreview; original controls unchanged."
+  },
+  "new_definitions": [
+    {
+      "symbol": "x86_cpu_pause_bridge",
+      "source": "kernel/rust/x86_cpu_helpers.rs:6039–6041",
+      "ABI": "unsafe extern \"C\" fn()",
+      "body": "Exact unsafe {super::cpu_pause();}",
+      "new_helper": "None",
+      "genuine_U": "cpu_pause; actualexisting3byteT owner reused.",
+      "matching_C": "arch/x86_64/kernel/cpu.c:2805 originalbridgeprototype and2678–2687 retainedcpu_pauseC reference.",
+      "flags": "Bridgehasno localcfg; currentcpu_pausebody is cfg(not(mckernel_equivalence)) and remains existing qualifiednativeprovider."
+    },
+    {
+      "symbol": "x86_write_msr_bridge",
+      "source": "kernel/rust/x86_cpu_helpers.rs:5793–5795",
+      "ABI": "unsafe extern \"C\" fn(register:CInt,value:CULong)",
+      "body": "Exact unsafe {super::wrmsr(register as u32,value);}",
+      "callee": "Include only exact existing wrmsr below, no new registervalidation or alternateMSRwrapper.",
+      "matching_C": "arch/x86_64/kernel/cpu.c:1184 prototype int register/unsignedlong value; preserve actualsigned-to-u32bitconversion."
+    },
+    {
+      "symbol": "wrmsr",
+      "source": "kernel/rust/x86_cpu_helpers.rs:765–777",
+      "ABI": "unsafe extern \"C\" fn(index:CUInt,value:CULong); actual CUInt=u32",
+      "body": "low=value asu32; high=(value>>32) asu32; exact asm!(\"wrmsr\",in(\"ecx\")index,in(\"eax\")low,in(\"edx\")high,options(nostack,preserves_flags)).",
+      "native_attributes": [
+        "#[no_mangle]",
+        "Exact existing asm operand directions/registers and options"
+      ],
+      "critical_memory_contract": "Do NOT add nomem: original Rust omitsnomem, matching C's memoryclobber. Keep both low/high truncations, no fake registers/valuepolicy.",
+      "matching_C": "arch/x86_64/kernel/cpu.c:167–175 original wrmsr(unsignedint,unsignedlong), low32/high32, ECX/EAX/EDX asm volatile and memoryclobber.",
+      "imports": "None",
+      "cfg": "Exactwrmsr hasno localcfg or wholemodulefeature requirement; no mckernel_equivalence substitute is used."
+    }
+  ],
+  "new_storage": {
+    "symbol": "lapic_read",
+    "source": "kernel/rust/x86_cpu_helpers.rs:5289–5290",
+    "definition": "#[no_mangle] pub(crate) static mut lapic_read:Option<ReadRegister>=None;",
+    "alias": "Actualexisting ReadRegister=unsafe extern C fn(CInt)->u32 at5278.",
+    "layout": "Preserve actual Option<ReadRegister>size8/align8 assertions at5300–5301.",
+    "C_match": "arch/x86_64/kernel/cpu.c:359–369: Rustselected profile extern unsignedint(*lapic_read)(int); referenceprofile original staticNULLslot.",
+    "initial_storage": "Genuine initial None/NULL BSS/NOBITS8, no targetrelocation; data-owner source cut only.",
+    "live_state": "Original boot/APIC selection later publishes realreadtarget. None is not a published readprovider; do not call or claim MMIO/controller/runtime-ready. No readtarget or bootinitializer included.",
+    "imports": "None; nofakeSome/noop/errorfallback/callbackstub."
+  },
+  "types_and_profile": {
+    "types": [
+      "Actual kernel/rust/abi.rs CInt=i32,CULong=u64",
+      "Actual x86_cpu_helpers.rs CUInt=u32",
+      "Actual ReadRegister alias and Optionfunctionpointer assertions"
+    ],
+    "core_imports": "Use exact core::arch::asm! inwrmsr; no other helper/structure/register layout required.",
+    "private_functions": "None required when wrmsr included as originalpublicprovider; no CPUlocal/Ddebug/otherdata needed.",
+    "profile": "Same reviewednative x86_64 LP64freestanding Rust1.95 flags/retainedwarning policy, no mckernel_equivalence or wholemoduleimport. Follow latestRoot concretecurrentinput, not stalecohort.",
+    "ownership": "This cut is disjoint from alreadycompiledLAPICtimerpair/LAPICwritebridge+slot/IPIproducer and currentcpu_pause. Currentqueued actualobjects require source-bound metadata GO before anydependentjoin."
+  },
+  "expected_actual_metadata": {
+    "public_T": [
+      "x86_cpu_pause_bridge",
+      "x86_write_msr_bridge",
+      "wrmsr"
+    ],
+    "global_data": [
+      {
+        "symbol": "lapic_read",
+        "size": 8,
+        "alignment": 8,
+        "expected": "realNoneinitialNOBITS/BSS"
+      }
+    ],
+    "external_U": [
+      "cpu_pause"
+    ],
+    "no_other_data_or_helpers": true,
+    "compiler_alias_policy": "Actual compiler may inline wrmsr into itsbridge or coalesce identical code under distinctoriginalnames. Record actual codeowner ranges/aliases/relocations; no fixedfunctionbytes, no duplicate-sourceowner or artificialsymbolrename.",
+    "nativecode_check": "Future actualmetadata predicate must inspect existing WRMSRinstruction/operand lowering and preservedsourceprofile without executing it; record actualbridgecall/alias, actualcpu_pausereference and slotinitialstate. No functiontest or generichardwarecase invented.",
+    "current_join": "Newobject onlyplus latestmatching admittedpartial/neededactualIPIproducer after concreteprejoin. Existingcpu_pause binds U; newbridge/readslot supply genuinecapturedIPIedges. Preserve alloldcode/data/privateowners/aliases/relocations; no oldc205/override/hostlibc."
+  },
+  "next_steps": [
+    {
+      "id": "SOURCE_REVIEW",
+      "owner": "Root/private sourcepreparer+independentreviewer",
+      "required_input": "Exact3functions+actualreadslot/aliases/types/sourceprofile and currentowner evidence",
+      "done_when": "Concretefiniteunit matches actualsource/asm/memoryclobber/initialization and reuses cpu_pause rather than emitting duplicate.",
+      "verification_method": "Exactsource/attribute/type/include/owner comparison; preserve source-supportedprofile and exclusions."
+    },
+    {
+      "id": "ACTUAL_QUALIFICATION_LATER",
+      "owner": "Root actualsource/resourceadmission owner",
+      "required_input": "ConcreteGO/fresh exactHOSTadmission; no execution authorized bythislookahead",
+      "done_when": "One newcompile+necessary actualmetadata reads/gate and separatelyreviewedcurrentonlyjoin produce exactgenuineowners while retaining Nonepreboot/runtime distinction.",
+      "verification_method": "Actualcalledprovider and pre/postjoin predicates before dependentld-r; no metadata/greenreplay, fakehelper/target, runtime/MSR/IRQ/nativeproof or originalscorecredit."
+    }
+  ],
+  "operations": "ReadcurrentAGENTS/CAMPAIGN, exact capturedIPI metadataJSON, savedcurrent97symboltext, exactRust/C bridge/callee/slot/type/cfg/asm context and boundedRootoverlaplookup. WroteonlyauthorizedprivateJSON. No unitextraction/generation/edit, compiler/GNU/predicate/link/test, actualfunction/MSR/APIC/IRQ/device/hardware/native action, sourcecensus, canonical/ledger/launcher mutation, goalcontrol/spawn."
+}

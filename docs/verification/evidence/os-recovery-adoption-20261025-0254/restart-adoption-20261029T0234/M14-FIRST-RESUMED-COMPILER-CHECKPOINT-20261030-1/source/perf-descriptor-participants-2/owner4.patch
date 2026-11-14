@@ -1,0 +1,75 @@
+--- a/kernel/rust/perf_group_owner.rs
++++ b/kernel/rust/perf_group_owner.rs
+@@ -154,10 +154,21 @@
+ 
+ /// Actual selected tracked allocator, called outside process/registry/group locks.
+ /// Caller owns this private registration until insertion or matched free.
+-pub(super) unsafe fn allocate_registration() -> Result<*mut Registration, CInt> {
+-    let p = super::perf_event_alloc_kmalloc_bridge(core::mem::size_of::<Registration>(), super::IHK_MC_AP_NOWAIT)
+-        .cast::<Registration>();
+-    if p.is_null() { return Err(-12); }
++#[derive(Debug)]
++pub(super) enum RegistrationAllocationError { NoMemory, Oversize, Misaligned { raw:*mut c_void } }
++pub(super) unsafe fn allocate_registration() -> Result<*mut Registration, RegistrationAllocationError> {
++    let size=core::mem::size_of::<Registration>();
++    if size > CInt::MAX as usize {return Err(RegistrationAllocationError::Oversize);}
++    let raw=super::perf_event_alloc_kmalloc_bridge(size,super::IHK_MC_AP_NOWAIT);
++    initialize_registration_allocation(raw)
++}
++/// This function does not free any rejected pointer: the caller owns it.
++unsafe fn initialize_registration_allocation(raw:*mut c_void) -> Result<*mut Registration, RegistrationAllocationError> {
++    if raw.is_null() {return Err(RegistrationAllocationError::NoMemory);}
++    if (raw as usize)%core::mem::align_of::<Registration>()!=0 {
++        return Err(RegistrationAllocationError::Misaligned {raw});
++    }
++    let p=raw.cast::<Registration>();
+     core::ptr::write(p, Registration {
+         node: crate::rbtree::RbNode { __rb_parent_color: 0, rb_right: null_mut(), rb_left: null_mut() },
+         descriptor: null_mut(), event: null_mut(), group: null_mut(), generation: 0, active: false,
+@@ -179,7 +190,7 @@
+ pub(super) unsafe fn register_descriptor_locked(desc: *mut Mckfd, reg: *mut Registration,
+     pin: DescriptorLease, expected: ExpectedCallbacks) -> Result<RegistrationKey, (CInt, DescriptorLease)> {
+     if desc.is_null() || reg.is_null() || pin.event.is_null() || pin.group.is_null()
+-        || (*reg).active || !(*desc).opt.is_null() || expected.read.is_null() || expected.ioctl.is_null()
++        || (*reg).active || !(*desc).opt.is_null() || !(*desc).dup_cb.is_null() || expected.read.is_null() || expected.ioctl.is_null()
+         || expected.mmap.is_null() || expected.close.is_null() || expected.fcntl.is_null()
+         || (*desc).read_cb != expected.read || (*desc).ioctl_cb != expected.ioctl
+         || (*desc).mmap_cb != expected.mmap || (*desc).close_cb != expected.close
+@@ -216,20 +227,24 @@
+     Ok(RegistrationKey { descriptor: desc, generation })
+ }
+ 
+-/// Caller holds process lock; returns a generation key without retaining a raw
+-/// registration pointer. A subsequent unregister rechecks the live tree entry.
+-pub(super) unsafe fn registration_key_locked(desc: *mut Mckfd) -> Result<RegistrationKey, CInt> {
+-    if desc.is_null() { return Err(-EINVAL); }
+-    let registry = core::ptr::addr_of_mut!(PERF_REGISTRY);
+-    let lock = addr_of_mut!((*registry).lock).cast::<c_void>();
+-    let irq = super::syscall_mckfd_lock_bridge(lock);
+-    let result = match registry_search(registry, desc) {
+-        Ok(RegistrySearch::Found(reg)) if (*reg).active && (*desc).opt == reg.cast() =>
+-            Ok(RegistrationKey { descriptor: desc, generation: (*reg).generation }),
+-        _ => Err(-EINVAL),
++/// Absence is not evidence of a non-perf provider. Invalid includes an
++/// inconsistent registered entry or bounded search failure. Process lock held.
++#[must_use]
++pub(super) enum RegistrationLookup { Absent, Found(RegistrationKey), Invalid(CInt) }
++pub(super) unsafe fn registration_lookup_locked(desc: *mut Mckfd) -> RegistrationLookup {
++    if desc.is_null() {return RegistrationLookup::Invalid(-EINVAL);}
++    let registry=core::ptr::addr_of_mut!(PERF_REGISTRY);
++    let lock=addr_of_mut!((*registry).lock).cast::<c_void>();
++    let irq=super::syscall_mckfd_lock_bridge(lock);
++    let result=match registry_search(registry,desc) {
++        Ok(RegistrySearch::Vacant {..})=>RegistrationLookup::Absent,
++        Ok(RegistrySearch::Found(reg)) if (*reg).active && (*reg).descriptor==desc
++            && (*reg).generation!=0 && !(*reg).event.is_null() && !(*reg).group.is_null()
++            && (*desc).opt==reg.cast() => RegistrationLookup::Found(RegistrationKey {descriptor:desc,generation:(*reg).generation}),
++        Ok(RegistrySearch::Found(_))=>RegistrationLookup::Invalid(-EINVAL),
++        Err(e)=>RegistrationLookup::Invalid(e),
+     };
+-    super::syscall_mckfd_unlock_bridge(lock, irq);
+-    result
++    super::syscall_mckfd_unlock_bridge(lock,irq); result
+ }
+ 
+ /// Caller holds process lock; registry lock serializes unregister with clone.

@@ -1,0 +1,21 @@
+#include <stdio.h>
+
+int main(void) {
+    const unsigned char stdout_payload[] = {
+        0x73, 0x74, 0x64, 0x6f, 0x75, 0x74, 0x2d, 0x32, 0x2d, 0x73, 0x74, 0x64, 0x65, 0x72, 0x72, 0x0a
+    };
+    const unsigned char stderr_payload[] = {
+        0x73, 0x74, 0x64, 0x65, 0x72, 0x72, 0x2d, 0x31, 0x2d, 0x73, 0x74, 0x64, 0x6f, 0x75, 0x74, 0x0a
+    };
+
+    for (size_t i = 0; i < sizeof(stdout_payload); i++) {
+        putchar_unlocked((int)stdout_payload[i]);
+        if ((i % 4) == 3) {
+            fflush(stdout);
+            putchar_unlocked((int)stderr_payload[i]);
+            fflush(stderr);
+        }
+    }
+
+    return 0;
+}

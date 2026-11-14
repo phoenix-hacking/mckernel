@@ -1,0 +1,216 @@
+{
+  "actual_request": {
+    "bytes": 2305,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-20261019-1/request.json",
+    "sha256": "2ba04a12cc0fb051d848d3cd1fe8048bee936574a1482b05e65b7d477969cf02"
+  },
+  "actual_result": {
+    "bytes": 2552,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-20261019-1/actual-source-materialization-1/result.json",
+    "sha256": "86ebe9fdce34987c1f31cab5d5d525896a29809036e0eb7e5c0e5c0f4caf050a"
+  },
+  "actual_stages": [
+    {
+      "argv": [
+        "/usr/bin/findmnt",
+        "-J",
+        "-T",
+        "/home/holden/mckernel-work/scratch",
+        "-o",
+        "TARGET,UUID,FSTYPE,OPTIONS,MAJ:MIN"
+      ],
+      "direct_child_joined": true,
+      "elapsed_seconds": 0.004601580003509298,
+      "expected_returncode": 0,
+      "label": "fresh-scratch-mount",
+      "pid": 1670270,
+      "process_group_absent": true,
+      "returncode": 0,
+      "start": 24503256,
+      "streams": {
+        "stderr": {
+          "ctime_ns": 1792447587860170620,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48118022,
+          "mode": "0o600",
+          "mtime_ns": 1792447587860170620,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-20261019-1/actual-source-materialization-1/fresh-scratch-mount/stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0,
+          "uid": 1000
+        },
+        "stdout": {
+          "ctime_ns": 1792447587860170620,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48118021,
+          "mode": "0o600",
+          "mtime_ns": 1792447587860170620,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-20261019-1/actual-source-materialization-1/fresh-scratch-mount/stdout",
+          "sha256": "1305ac0e3c7d48a625b801fd8ed475ddfdb91866de840266a077a6d2b853c57c",
+          "size": 203,
+          "uid": 1000
+        }
+      },
+      "timed_out": false
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-20261019-1/materialize_request.py",
+        "--materialize"
+      ],
+      "direct_child_joined": true,
+      "elapsed_seconds": 0.06480008800281212,
+      "expected_returncode": 0,
+      "label": "source-materialization",
+      "pid": 1670271,
+      "process_group_absent": true,
+      "returncode": 0,
+      "start": 24503256,
+      "streams": {
+        "stderr": {
+          "ctime_ns": 1792447587864170733,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48118029,
+          "mode": "0o600",
+          "mtime_ns": 1792447587864170733,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-20261019-1/actual-source-materialization-1/source-materialization/stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0,
+          "uid": 1000
+        },
+        "stdout": {
+          "ctime_ns": 1792447587908171982,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48118028,
+          "mode": "0o600",
+          "mtime_ns": 1792447587908171982,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-20261019-1/actual-source-materialization-1/source-materialization/stdout",
+          "sha256": "00a5eacc5db1a314d9ec1a851af76f8d9810a93d504ab6ff846dc49e59d4d40f",
+          "size": 288,
+          "uid": 1000
+        }
+      },
+      "timed_out": false
+    }
+  ],
+  "build_or_native_or_module_load": false,
+  "candidate_identity": {
+    "device": 1828,
+    "gid": 1000,
+    "inode": 115534,
+    "mode": 448,
+    "path": "/home/holden/mckernel-work/scratch/nsd-c-c5280df71731403a97d5520f4dabc378",
+    "uid": 1000
+  },
+  "decision": "PASS_ACTUAL_CURRENT_HOST_PAIR_SOURCE_MATERIALIZATION_AND_REQUEST_ONLY",
+  "failure_history": "Prior mailbox/FIFO/sourcebinding/publication failures preserved; no test, probe or compiler replay.",
+  "heavy_execution_authorized": false,
+  "implementation_author": "/root/next_live_process_rust_batch",
+  "implementation_ownership": false,
+  "input_identity": {
+    "device": 1828,
+    "gid": 1000,
+    "inode": 115535,
+    "mode": 448,
+    "path": "/home/holden/mckernel-work/scratch/nsd-i-c5280df71731403a97d5520f4dabc378",
+    "uid": 1000
+  },
+  "mount": {
+    "fstype": "ext4",
+    "maj:min": "7:36",
+    "options": "rw,nosuid,nodev,relatime",
+    "target": "/home/holden/mckernel-work/scratch",
+    "uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52"
+  },
+  "pending": [
+    "Actual source publication/fetch and complete finite runtime/source/input/control joins",
+    "Exact canonical owner release and independent execution review",
+    "Root sole-heavy/fresh admission/latest accepted physical predecessor/controller lifetime profile"
+  ],
+  "request_equals_reviewed_template_except_two_actual_identities": true,
+  "reviewed_at": "2026-10-19T22:06:54.619566+00:00",
+  "reviewer": "/root/next_replace_tid_review",
+  "schema": "mckernel.current-host-rust-pair-sdk-actual-materialization-review.v1",
+  "selected_actual_source_and_input_FDs": {
+    "make-pipe-proof.json": {
+      "ctime_ns": 1792447587904171868,
+      "device": 1828,
+      "gid": 1000,
+      "inode": 115545,
+      "mode": "0o600",
+      "mtime_ns": 1792447587904171868,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/scratch/nsd-i-c5280df71731403a97d5520f4dabc378/make-pipe-proof.json",
+      "sha256": "462e6fd3dc0db4de7b03370d12b1c50db31156737f072b8859352a9c2ce97cf5",
+      "size": 4863,
+      "uid": 1000
+    },
+    "modules/os_runtime.rs": {
+      "ctime_ns": 1792447587900171755,
+      "device": 1828,
+      "gid": 1000,
+      "inode": 629690,
+      "mode": "0o600",
+      "mtime_ns": 1792447587900171755,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-c5280df71731403a97d5520f4dabc378/modules/os_runtime.rs",
+      "sha256": "6b736f94751c21a6b745f0476484d516c0de536c1cc2f4e1717eb899bf8be5e7",
+      "size": 77117,
+      "uid": 1000
+    },
+    "modules/smp_application_syscall.rs": {
+      "ctime_ns": 1792447587900171755,
+      "device": 1828,
+      "gid": 1000,
+      "inode": 629697,
+      "mode": "0o600",
+      "mtime_ns": 1792447587900171755,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-c5280df71731403a97d5520f4dabc378/modules/smp_application_syscall.rs",
+      "sha256": "33e7b92712ca90fdc2b88cff234ad2a981f3538fbd38fc705dfc2cde937a7378",
+      "size": 21681,
+      "uid": 1000
+    },
+    "preparation.json": {
+      "ctime_ns": 1792447587904171868,
+      "device": 1828,
+      "gid": 1000,
+      "inode": 115536,
+      "mode": "0o600",
+      "mtime_ns": 1792447587904171868,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/scratch/nsd-i-c5280df71731403a97d5520f4dabc378/preparation.json",
+      "sha256": "0a50fba2215e05e6059320ea7943dc32659b2cfcb29f985e291102a2cdf1318d",
+      "size": 57610,
+      "uid": 1000
+    }
+  },
+  "source_copy_counts": {
+    "bytes": 1797403,
+    "input_rows": 15,
+    "module_sources": 60,
+    "total_rows": 75
+  },
+  "source_identity_authority": "Actual materializer verified all75 sources before writes and per-copy hashes; independent review reuses that completed command proof and selected changed pair/prep/pipe copies. No repeated75-file corpus rehash. Heavy owner must independently validate exact inputs before effects.",
+  "source_review": {
+    "bytes": 9152,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-independent-review-20261019-1/CURRENT-HOST-PAIR-SOURCE-AND-ORDINARY-MATERIALIZATION-REVIEW.json",
+    "sha256": "069260274baab5cbdd946eb7f6938dbe2de9b5906bcaae910c9bc3d4e75ab90f"
+  },
+  "status": "PASS",
+  "untouched_absent": {
+    "common_exclusion_path": true,
+    "lease_path": true,
+    "owner_evidence_root": true
+  }
+}

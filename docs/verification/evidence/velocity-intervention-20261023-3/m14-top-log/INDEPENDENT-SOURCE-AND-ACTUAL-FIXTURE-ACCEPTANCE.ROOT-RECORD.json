@@ -1,0 +1,26 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "utc": "2026-10-23T20:26:26.923706+00:00",
+  "reviewer": "/root/m14_callback_review",
+  "verdict": "PASS_SOURCE_AND_ACTUAL_HOSTED_LOGGER_FIXTURE_SCOPE",
+  "patch_sha256": "0ddc73cbe18ee7a4266bf13f732413a9c04f92e07716d9c222969c71fc74ef69",
+  "fixture_sha256": "d2e61a4eff2a38f386d3d9f8027c6b57244dcdec2f8a5e2dc83f10b2f7fd22fe",
+  "postimages": {
+    "arch/x86_64/kernel/memory.c": "e52b056f783641ab8b48a5a0d6cec793b89c764f8a5ba3b0f16550eac2fd615f",
+    "kernel/rust/x86_memory_helpers.rs": "8d9cf2a72a5fcca67edf25e99f20c84fb2aaac4d6c7f95ec73a8e7de9d46b1cc"
+  },
+  "observations": [
+    "PUBLIC Rust export exactABI/nonPUBLIC exactoriginalCfallback",
+    "ekprintf is unconditional kprintf passthrough",
+    "events6/7 preserve format, promoted argument widths and ignoredreturn; other events silent",
+    "179200actualC/Rust comparisons through realCvarargs/vsnprintf, allthreecommands0/joinedgoneclosed/nullerrors"
+  ],
+  "canonical_integration": false,
+  "open": [
+    "fullproductionRustcrate",
+    "CselectionTU",
+    "productionRustformatter/nativekmsg",
+    "defaultlink",
+    "native"
+  ]
+}

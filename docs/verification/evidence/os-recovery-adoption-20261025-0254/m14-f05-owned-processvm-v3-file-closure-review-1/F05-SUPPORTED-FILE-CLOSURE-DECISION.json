@@ -1,0 +1,235 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_M14_F05_ORIGINAL_SUPPORTED_FILE_EXIT_WITH_EXPLICIT_NATIVE_SCOPE_LIMITS",
+  "independent": true,
+  "implementation_ownership": false,
+  "reviewer": "/root/custody_release_review",
+  "at": "2026-10-27T23:37:05.482843+00:00",
+  "file_id": "M14-F05",
+  "file_path": "arch/x86_64/kernel/memory.c",
+  "remaining_subgoal": "M14-05-05",
+  "whole_supported_file_closure_eligible": true,
+  "independent_supported_file_acceptance": true,
+  "original_remaining_native_gap_closed": true,
+  "blocker": null,
+  "canonical_worklist_changed": false,
+  "Root_final_adoption_required": true,
+  "runtime_authority": null,
+  "original_contract": {
+    "title": "Usercopy and process-VM verify/read/write/patch entrypoints, bounded mapping lifetimes and fault fixups.",
+    "native_proof_clause": "Demonstrate applicable actual native functional behavior on matching artifacts; record exact supported scope and unresolved branches. Model-only results are insufficient.",
+    "prior_single_decisive_unproved_obligation": "M14-05-05 matching native usercopy read/write behavior over page boundaries with exact transferred bytes and bounded mapping lifetime. The accepted memory payload performs in-process heap/mapping operations and only24B stdout transfer; it has no read/pread or cross-page write/pwrite byte-contract. HOST semantic fixtures and Rust/link ownership establish other scopes and cannot supply this missing native behavior.",
+    "file_exit": "All supported live implementations from this translation unit and included headers/macros Rust/reviewed assembly; no substantive C callbacks/wrappers/unknown owners.",
+    "interpretation": "Applicable source/ABI/default-link and actual functional native behavior are combined at matching component scope. The original clause permits explicit unresolved native branches; it does not require every exported helper or every error branch to receive a separate native transaction."
+  },
+  "matching_source_build_proof": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f05-owned-processvm-v3-file-closure-review-1/MATCHED-F05-60E-SOURCE-LINK-REUSE.json",
+    "bytes": 83566,
+    "sha256": "a78a99a390f1af60d3a8f84b9a272329ab9e24148adbfcfd90122784bf5d5c87"
+  },
+  "exact_native_case": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-outer-cdc-root39-1/independent-actual-native-review-1/REVIEW.json",
+    "bytes": 8353,
+    "sha256": "e3c1b81cd7d277c94c899db968ef5ef756fad67544c141e7548b456ed263bfcb"
+  },
+  "complete_trace_causal_proof": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-outer-cdc-root39-1/independent-actual-native-review-1/TRACE-AND-CAUSAL-PROOF.json",
+    "bytes": 52335,
+    "sha256": "f3ba0edfcc6dca5950b3e74c50657d496da19e6de5e5fe283a104d65d02a2b64"
+  },
+  "normal_current_free": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-outer-cdc-root39-1/independent-actual-native-review-1/CURRENT-FREE.json",
+    "bytes": 7877,
+    "sha256": "d4ca62159bacb2aa20cbdd34760b455dcadfcafa1c0727ccbb06dfc632824706"
+  },
+  "matched_tuple": {
+    "kernel": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT110-HOST19-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/mckernel.img",
+      "bytes": 10255112,
+      "sha256": "60e62f97ef48ecaf14174af1c5b75d7181969f439c1b45c618d6c16d4bc40d57"
+    },
+    "Rust": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT110-HOST19-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o",
+      "bytes": 18274528,
+      "sha256": "e2c3032791bbd657a85629dd48ca86b3b93f3ef729305568031776d5674ad9d0"
+    },
+    "memory_object": {
+      "bytes": 2888,
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o",
+      "sha256": "d3207c7a7844086196676c82d66e6aa4f1233e37b167460e23ba089ec71aca85"
+    },
+    "modules": [
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/module-runtime-snapshots-1/ihk.ko",
+        "sha256": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c",
+        "size": 1527808
+      },
+      {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-final-native-preparation-new12h-1/offline-materialization-1/runtime-inputs/ihk-smp-x86_64.ko",
+        "sha256": "887dc3567e6035c921588e61b45b41a8ef32a972d142fe2ba82ec48442353b12",
+        "size": 13098896,
+        "mode": 33188
+      },
+      {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-final-native-preparation-new12h-1/offline-materialization-1/runtime-inputs/mcctrl.ko",
+        "sha256": "57546af5110c0674b307e5ac5a328228abbe784f890f69521db5f594f21f6ae8",
+        "size": 2578512,
+        "mode": 33188
+      }
+    ],
+    "launcher": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/launcher-runtime-snapshot-1/mcexec",
+      "sha256": "dca0250159ce04a272a72dd1217213a4b6e0f21ec8c21da211eede250c451954",
+      "size": 394648
+    },
+    "supervisor": {
+      "bytes": 5725328,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-host-qualification-1/attempt-2/f05-causal-supervisor",
+      "sha256": "908f147ef0a61959becc20820d6e889aaf5eb4418adda0c99f13b3c3e6cf72a1"
+    },
+    "payload": {
+      "bytes": 5627368,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-v3-causal-host-qualification-1/future-host-output-1/app",
+      "sha256": "125c0dc8d59c30b618bae9c53308a9f61341eec729a6bc9b69016355491f1033"
+    },
+    "evaluator": {
+      "bytes": 130020,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-runtime-1/native_diagnostic.py",
+      "sha256": "e55ad576c45a5eaee742b47081612924a0fca12fc803d30fb359cc9ea6bc57e2"
+    }
+  },
+  "covered_clauses": [
+    {
+      "clause": "Supported implementation/header/macro ownership",
+      "decision": "CLOSED_SELECTED_SCOPE",
+      "evidence": "Original fixed343 Rust providers from three unchanged source modules all rejoin current60e/e2c final definitions. Retained selected GCC14 memory.o d320 has0runtimeFUNC/OBJECT/allocatedRELA; sole48B GNU property is metadata. No implementation emitted from selected C headers/macros; seven current final storage pointers land in genuine zero-initialized Rust cells."
+    },
+    {
+      "clause": "ABI/default build/link and supported configuration",
+      "decision": "CLOSED_SELECTED_SCOPE",
+      "evidence": "Reuse accepted source/real-header ABI/focused regression and343+7 reconciliation. Actual five production commands0, exact retained memory.o in raw11inputlink, matching source3 digests/current60e image and Rust object. No source-only or HOST-only artifact is substituted for native kernel."
+    },
+    {
+      "clause": "M14-05-01 through M14-05-04 applicable memory/TLB/ownership baseline",
+      "decision": "REUSED_MATCHING_COMPONENT_PROOF",
+      "evidence": "Prior accepted startup/core memory mapping/protection/readback/unmap/retirement and focused move/teardown checks retained at their declared scopes. F05 source modules byte-identical; current native60e boots and runs private fork/COW mappings plus complete current child/parent retirement. No new exhaustive page-size/TLB/CPU quota imposed."
+    },
+    {
+      "clause": "M14-05-05 verify/read behavior and exact cross-page bytes",
+      "decision": "CLOSED_APPLICABLE_NATIVE_GAP",
+      "evidence": "Exact native125c payload/qualified50d source performs owned-child ptrace101 PEEKDATA and readback across4KiB. Selected f03_ptrace_peektext_v1 -> f03_ptrace_vm_read -> read_process_vm -> x86_read_process_vm_public_result/shared verified copy engine. Full204-byte result/raw0 and unchanged source/oracle establish byte checks; raw host trace does not independently sample ptrace arguments/data."
+    },
+    {
+      "clause": "M14-05-05 normal write and patch/private COW behavior",
+      "decision": "CLOSED_APPLICABLE_NATIVE_GAP",
+      "evidence": "PEEK returns via original syscall_copy_to_user_bridge -> copy_to_user normal-write implementation; POKEDATA routes f03_ptrace_poketext_v1 -> f03_ptrace_vm_write -> patch_process_vm, selecting shared WRITE engine with PF_PATCH. Exact cross-page child readback/child verification and unchanged parent-private mapping checks pass. Public write_process_vm wrapper has source/ABI/link ownership; no separate observation of its entry address is claimed or required as a new helper quota."
+    },
+    {
+      "clause": "Bounded mapping/process lifetime and causal completion",
+      "decision": "CLOSED_EXACT_NATIVE_CASE",
+      "evidence": "Daemon full e55 evaluator replay preserves original all-row/foreign/worker/CPU/RET checks. Actual parent256/child259: cloneRET259, child writeRET0/terminal231, parent terminal waitRET259, childDELETE/ACK0/finalretirement0 before parent gate readRET1/terminal, parentDELETE/ACK0/final0.10s app/1024streams, EOF/notruncation, procfs empty. Current-free independently proves30clients reaped/33actors absent/exactCIDremoved/pids0/leasesfalse/two27:4 probes."
+    },
+    {
+      "clause": "Fault/error scope",
+      "decision": "RETAINED_EXPLICIT_LIMITS",
+      "evidence": "Current successful readonly-private patch exercises actual fault/COW write semantics; applicable error/lifetime focused proof retains original scope. Deliberate usercopy EFAULT/partial-return fault-fixup branches are not separately observed native and are not reclassified as passed. Original native stage requires applicable behavior with unresolved branches recorded, not complete native branch coverage."
+    }
+  ],
+  "source_and_native_inference_limits": [
+    "G causality is an inference from exact executed908f supervisor/125c payload/source and complete native ordering. There is no invented standalone G-write log; raw readRET1 alone is not identified as G.",
+    "Direct native public write_process_vm wrapper-address execution, deliberate EFAULT/partial-transfer/error-recovery branches, every large-page/TLB/concurrent path and exhaustive fault-fixup coverage are not claimed.",
+    "Parent host_mapping invalidated value0/completed0 remains exact; no completed1 normalization. Original complete deletion/finalretirement0 predicates supply release proof.",
+    "Full captures and original oracles remain immutable and complete. Daemon exclusively performed full RAW/native/ownership review; this file review did not duplicate native replay or ownership queries."
+  ],
+  "preserved_failures_and_holds": [
+    "Original whole FP4096-declared/1024-actual stream FAIL remains FAIL; no normalization.",
+    "Historical strict235/227 and v2 wholecase failures retain original identities/oracles/scores; newv3 is additive only.",
+    "Source38 and lifetime obligations outside exact supportedF05 scope remain OPEN.",
+    "Latest CURRENT113 image5a5944/C83/Rust56/process63 default acceptance is distinct from frozenF05native60e/dca/908f/125c/e55 tuple. No CURRENT113 whole-image native acceptance is inferred.",
+    "Working mixed C+Rust-helper launcherdca remains selected; no M15 executor or whole-project language closure.",
+    "M14 remaining files/final integration and practical35 denominator unchanged by this independent file decision; Root alone records canonical file-count update."
+  ],
+  "counts": {
+    "selected_memory_C_runtime_functions": 0,
+    "selected_memory_C_runtime_OBJECTs": 0,
+    "selected_memory_C_allocated_relocations": 0,
+    "Rust_providers": 343,
+    "Rust_storage_cells": 7,
+    "new_native_cases_from_reused_daemon_proof": 1,
+    "new_guest_cases_from_reused_daemon_proof": 1,
+    "extra_native_runs_by_this_review": 0,
+    "extra_compilers": 0
+  },
+  "prior_evidence": {
+    "SELECTED-F05-RECONCILIATION.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m14-f05-nearest-file-closure-1/SELECTED-F05-RECONCILIATION.json",
+      "bytes": 56742,
+      "sha256": "faf1d548f34d23edf2cd0eee1c3cbdb9c36b8a908bc1aeb6c603ea891442c0e3"
+    },
+    "F05-CLOSURE-DECISION.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m14-f05-nearest-file-closure-1/F05-CLOSURE-DECISION.json",
+      "bytes": 6850,
+      "sha256": "34f35e212cfc521e71545bd700ac7fd1a2f3965226453524e439346c000b9e2b"
+    },
+    "F05-FILES-AND-NEXT-CONSUMER-DECISION.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m14-f05-nearest-file-closure-1/F05-FILES-AND-NEXT-CONSUMER-DECISION.json",
+      "bytes": 19484,
+      "sha256": "a47fc50dbe7066a373a63757f0835c770a70bfaed656377f49293061d90a2d30"
+    },
+    "F05-STRICT235-ACTUAL-USERCOPY-SCOPE-DECISION.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m14-f05-nearest-file-closure-1/F05-STRICT235-ACTUAL-USERCOPY-SCOPE-DECISION.json",
+      "bytes": 6258,
+      "sha256": "ea95101d62a5e2fd7f6d6210d85a94280f738968f4d8d7709e510520addab1d8"
+    },
+    "ACTUAL-F05-MOVE-TEARDOWN-SIX-COMPOSITIONS-INDEPENDENT-HOST-ACCEPTANCE.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ACTUAL-F05-MOVE-TEARDOWN-SIX-COMPOSITIONS-INDEPENDENT-HOST-ACCEPTANCE.json",
+      "bytes": 1495,
+      "sha256": "f08027b1f978c4ae18005a3610529c997096bc566284bc1a58db3b4dca750a23"
+    },
+    "CURRENT290-MEMORY1-INDEPENDENT-CASE-ACCEPTANCE.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT290-MEMORY1-INDEPENDENT-CASE-ACCEPTANCE.json",
+      "bytes": 1765,
+      "sha256": "f92aeeb8a823b9084d074a7fbf248661f388bf1b8abfae18466710d135a2ea55"
+    },
+    "CURRENT290-MEMORY1-INDEPENDENT-POSTJOIN-ACCEPTANCE.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT290-MEMORY1-INDEPENDENT-POSTJOIN-ACCEPTANCE.json",
+      "bytes": 1767,
+      "sha256": "86b693c55760b6d519185f6b785c520892fe762402c919b973037d053955dd56"
+    },
+    "CURRENT290-NATIVE2-INDEPENDENT-STARTUP-CASE-ACCEPTANCE.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT290-NATIVE2-INDEPENDENT-STARTUP-CASE-ACCEPTANCE.json",
+      "bytes": 2511,
+      "sha256": "267a357e29f1be9cbcdd88293010d539c20c709eb9dc0ef6efe2ac9f4a6f7a22"
+    },
+    "CURRENT110-default": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT110-INDEPENDENT-DEFAULT-ARTIFACT-ACCEPTANCE.json",
+      "bytes": 1187,
+      "sha256": "eea9eb098cca17dc29fd2fe3111aa1b53c3119aed7827101fdbd7c69d4e15737"
+    },
+    "v3-stage": {
+      "bytes": 28131,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/independent-actual-stage-review-1/REVIEW.json",
+      "sha256": "f1dc620ad30e534fefbc14068ed6ced3a4e3a58c04cb5bf35c8dc15c8bd70a41"
+    },
+    "supervisor-HOST": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-host-qualification-1/independent-actual-review-1/REVIEW.json",
+      "bytes": 27823,
+      "sha256": "9b5433a8f3cf35ea159e33d1d342292daa4237eeb1a2f95a5c623370b5bc0e91"
+    },
+    "payload-HOST": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-v3-causal-host-qualification-1/ACTUAL-RESULT.json",
+      "bytes": 9057,
+      "sha256": "71cf2a970c5f853be322811ee9d9cb0df0e536603d6efca50a5f831c4c7554b5"
+    }
+  },
+  "actions": {
+    "readonly_original_requirements_and_retained_evidence": true,
+    "original_validator_fixed343_plus7_matching_rejoin_only": true,
+    "RAW_or_oracle_truncation_or_modification": false,
+    "new_native_or_model_quotas": false,
+    "new_guard_queries_workload_cleanup_canonical_Git": 0,
+    "subagents": 0
+  }
+}

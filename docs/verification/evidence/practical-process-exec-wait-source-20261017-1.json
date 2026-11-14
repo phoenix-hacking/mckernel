@@ -1,0 +1,1042 @@
+{
+  "schema": "mckernel.practical-process-exec-wait-source.v1",
+  "task_id": "M06-practical-process-exec-wait-source-20261017-1",
+  "status": "PASS_STATIC_LINUX_REFERENCE_NATIVE_FORK_ADAPTER_BLOCKED",
+  "source": {
+    "path": "/home/holden/mckernel/scripts/application-tests/practical_process_exec_wait.c",
+    "sha256": "f5eb184714fce6ba32da5c435cedc41fa6af2314254e51d2ebbc75eb50c70e28",
+    "size": 7267
+  },
+  "focused_test": {
+    "path": "/home/holden/mckernel/scripts/tests/test_practical_process_exec_wait.py",
+    "sha256": "c19cd7332d91637dcfaf47fec108b8c76a56ab6ef4af8096be845ca7fcdd51f6",
+    "size": 4864
+  },
+  "executed_source_snapshot": {
+    "path": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/compile-reference-1/executed.c",
+    "sha256": "f5eb184714fce6ba32da5c435cedc41fa6af2314254e51d2ebbc75eb50c70e28",
+    "size": 7267
+  },
+  "artifact": {
+    "path": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/compile-reference-1/app",
+    "sha256": "18690867b0f32885cf019d6d3498aedb378e6456af240f8e7368e337a043ad0b",
+    "size": 882368
+  },
+  "independent_oracle": {
+    "record": {
+      "path": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/compile-reference-1/oracle.json",
+      "sha256": "f4c0541dba352167ebf951e9201bae13c520d7556498fabe3e7a425d00c79242",
+      "size": 458
+    },
+    "freeze": "Python constant and oracle files written before compiler invocation; never derived from observed app output.",
+    "stdout_hex": "70726f636573732d657865632d77616974206368696c643d3337206f75747075743d766572696669656420656f663d3120656368696c643d310a",
+    "stdout_utf8": "process-exec-wait child=37 output=verified eof=1 echild=1\n",
+    "stdout_bytes": 58,
+    "stderr_hex": "",
+    "exit_code": 0,
+    "child_marker": "PRACTICAL_PROCESS_EXEC_CHILD\n",
+    "child_exit_code": 37,
+    "derivation": "A single successful program path requires real fork child, execve same absolute frozen executable with exact child argv/env, exact captured child marker/EOF, waitpid returned owned childPID/exited37, then waitpid samePID yieldsECHILD. Only parent emits public constant resultline."
+  },
+  "actual_linux_result": {
+    "test_result": {
+      "returncode": 0,
+      "elapsed_seconds": 0.18881458699615905,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "60a1278b6fd9388cde972b5cc941e3739ccf53fd670f63e5a34be854e82c9aa2"
+    },
+    "tests_passed": 1,
+    "compiler_invocations": 1,
+    "reference_invocations": 1,
+    "readelf_invocations": 1,
+    "exit_code": 0,
+    "stdout": "process-exec-wait child=37 output=verified eof=1 echild=1\n",
+    "stderr_bytes": 0,
+    "no_extra_vectors": "ECHILD is a required check in the same actual integration path, not a separate synthetic vector."
+  },
+  "elf": {
+    "kind": "staticGNUcrt x86_64 EXEC/nonPIE",
+    "interpreter": null,
+    "dynamic_segment": false,
+    "writable_executable_LOAD": false,
+    "nonexecuting_stack": true,
+    "evidence": {
+      "path": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/compile-reference-1/02-readelf.stdout",
+      "sha256": "f2cf848edac3d70578ab9b8d6166a7d3dda1b4e73921b033ca05ed8ec5574c13",
+      "size": 2567
+    }
+  },
+  "selected_current942_routes": {
+    "provenance_path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-work-942c927b-scratch22-authority3-image1-20261017/evidence/provenance.json",
+    "candidate_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+    "selected_sources": [
+      {
+        "path": "kernel/syscall.c",
+        "sha256": "1f4836b5deef84b75801e461d4d13f683db2cb74802454f96965e8b7ca011647",
+        "pinned942_sha256": "1f4836b5deef84b75801e461d4d13f683db2cb74802454f96965e8b7ca011647",
+        "matches": true
+      },
+      {
+        "path": "kernel/rust/syscall_policy.rs",
+        "sha256": "2edc424e01e3bb3acc7542432dde8fa0f977884558d3525efb0354acbc3c04ea",
+        "pinned942_sha256": "2edc424e01e3bb3acc7542432dde8fa0f977884558d3525efb0354acbc3c04ea",
+        "matches": true
+      },
+      {
+        "path": "arch/x86_64/kernel/syscall.c",
+        "sha256": "22be13dd5cbee2f0500ee49fd59b9a56649a940a243f0d529a193a0e465bb07c",
+        "pinned942_sha256": "22be13dd5cbee2f0500ee49fd59b9a56649a940a243f0d529a193a0e465bb07c",
+        "matches": true
+      },
+      {
+        "path": "arch/x86_64/kernel/include/syscall_list.h",
+        "sha256": "a9680be6ce9d26c6f1d3df2110e1ed4407a51f577381875c66801b07a54d5ead",
+        "pinned942_sha256": "a9680be6ce9d26c6f1d3df2110e1ed4407a51f577381875c66801b07a54d5ead",
+        "matches": true
+      },
+      {
+        "path": "host-kernel/native-rust/mcctrl_process.rs",
+        "sha256": "148134730b5fed7f14770eb070529b5227bb6ab790b7199f8800968219dffc70",
+        "pinned942_sha256": "148134730b5fed7f14770eb070529b5227bb6ab790b7199f8800968219dffc70",
+        "matches": true
+      },
+      {
+        "path": "host-kernel/native-rust/mcctrl.rs",
+        "sha256": "b3898d1a4d08ba5512ee9b12e66224409f6aed4db3adc293b47631aa16fa8030",
+        "pinned942_sha256": "b3898d1a4d08ba5512ee9b12e66224409f6aed4db3adc293b47631aa16fa8030",
+        "matches": true
+      },
+      {
+        "path": "executer/user/mcexec.c",
+        "sha256": "310301305e41bab4eda63026849ee6f166bb6e5d4d6f2c789aa8003e94745056",
+        "pinned942_sha256": "310301305e41bab4eda63026849ee6f166bb6e5d4d6f2c789aa8003e94745056",
+        "matches": true
+      },
+      {
+        "path": "executer/user/rust/mcexec_helpers.rs",
+        "sha256": "b77d54434bb75fbd2db5772ad30a2deba111bd21805cf76d289cdb99d2e9665d",
+        "pinned942_sha256": "b77d54434bb75fbd2db5772ad30a2deba111bd21805cf76d289cdb99d2e9665d",
+        "matches": true
+      }
+    ],
+    "fork_blocker": "Native mcctrl_process Context::create_process non-null CREATE_PPD returnsEOPNOTSUPP(-95); guest !CLONE_VM fork hostclone calls Rustact_clone_start\u2192C mcexec_clone_child_bridge\u2192nonnullrpt CREATE_PPD."
+  },
+  "route_findings": {
+    "table": "arch/x86_64/kernel/include/syscall_list.h selects native clone56/fork57/execve59/wait4-61. Presence is not runtime capability acceptance.",
+    "fork": "Architecture Rust syscall-policy sys_fork/sys_clone call arch_fork_body_result/arch_clone_body_result and existing do_fork. Non-CLONE_VM guest do_fork delegates hostclone with guestVM start/length/page-table.",
+    "launcher": "MCEXEC_RUST_HELPERS __NR_clone dispatches act_clone_start; Rust helper invokes mcexec_clone_child_bridge, which issues non-null rpgtable_desc MCEXEC_UP_CREATE_PPD. Legacy C branch issues same non-null CREATE_PPD.",
+    "actual_blocker": "host-kernel/native-rust/mcctrl.rs dispatches CREATE_PPD to Context::create_process. mcctrl_process.rs argument!=0 decodes24native/12compat bytes then returnsEOPNOTSUPP(-95), without registration, because legacy post-fork mirror-VMA clearing has no native adapter.",
+    "execve": "Guest sys_execve uses Rust execve_body_result\u2192C syscall_execveat_bridge\u2192do_execveat. Host __NR_execve phases obtainELF descriptor and handle image transfer/replacement through existing launcher helper routes. Not exercised in McKernel here.",
+    "wait": "Guest Rust sys_wait4 uses wait4_body_result\u2192wait4_do_wait_bridge\u2192do_wait; launcher __NR_wait4 uses act_wait4/hostwaitid for delegated hostchild reap. glibc waitpid uses the wait4 API boundary on this target; no raw Linux syscall-number trace was collected.",
+    "status": "These8 source files were directly hash-equal to the pinned942image provenance. No new kernel source repair, API/ownership design or activation is included."
+  },
+  "lifetime_and_timeout_contract": {
+    "normal_path": "Exactly one child, no grandchildren; both owned pipe endpoints closed; exact childPID reaped and secondwaitECHILD before public success.",
+    "child_argv": [
+      "process-exec-child",
+      "--child",
+      "fixed-token"
+    ],
+    "child_environment": [
+      "PATH=/usr/bin:/bin",
+      "LC_ALL=C",
+      "PRACTICAL_EXEC_TOKEN=fixed-v1"
+    ],
+    "same_executable": "Parent requires one argv entry with absolute executable pathname; execve uses that same frozen pathname. Any execve return exits96 without child marker. Future guest staging must preserve immutable path/bytes.",
+    "fd_contract": "Requires descriptor0/1/2 open as supplied by ordinary collector. pipe2 uses O_NONBLOCK|O_CLOEXEC; childdup2 stdout preserves pipe across exec, original endpoints close.",
+    "signals": "Parent restores defaultSIGCHLD/unblocks it to avoid inherited auto-reap. Child ignoresSIGPIPE and uses only close/dup2/sigaction/execve/_exit between fork and exec; no stdio/allocator there.",
+    "deadlines": "Parent monotonic operation budget6s, failed-child SIGKILL+WNOHANG reap budget2s; reference owning process-group timeout9s/killafter1s. Child markerwrite budget2s. Existing guest owning <=10s group supervisor remains mandatory for blocking OS/fork/exec faults.",
+    "cleanup_ownership": "Signal only positive unreaped ownedPID; never signal a reaped PID or afterECHILD. Failure emits child_retired status and cannot produce success marker.",
+    "uncertain_retirement": "If clock/kill/reap cannot establish retirement, fail with child_retired=0; the outer owning group supervisor must reject/retire the entire run. No claim of universally bounded kernel syscall latency or guaranteed self-cleanup under an unresponsive OS."
+  },
+  "runtime_capability_constraints": [
+    "Current942non-nullCREATE_PPD support must be implemented/reviewed/compiled/validated before this fork/exec/wait success can be admitted as a native functional case. Do not treat a native-unsupported result as a pass.",
+    "Use parentargv with exactly one absolute path such as /apps/app; ordinary default app/A/empty/B argv is not this contract. A later reviewed existingND_FUTEX or equivalent packet must bind actual argv/boot/profile/stream limits.",
+    "Exec image replacement, child mirror/resource/process ownership and native wait/reap remain actual integration obligations; Linux success is not a substitute.",
+    "No arbitrary exec targets, process trees, multithreaded fork, sustained process stress or formal application acceptance is claimed."
+  ],
+  "evidence_root": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1",
+  "commands": [
+    {
+      "command": {
+        "argv": [
+          "/usr/bin/gcc",
+          "-std=gnu11",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-static",
+          "-fno-pie",
+          "-no-pie",
+          "-Wl,-z,noexecstack",
+          "-MD",
+          "-MF",
+          "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/compile-reference-1/app.d",
+          "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/compile-reference-1/executed.c",
+          "-o",
+          "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/compile-reference-1/app"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/tmp"
+        },
+        "cwd": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/compile-reference-1"
+      },
+      "result": {
+        "returncode": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "path": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/compile-reference-1/01-compile.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/compile-reference-1/01-compile.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      }
+    },
+    {
+      "command": {
+        "argv": [
+          "/usr/bin/readelf",
+          "-W",
+          "-h",
+          "-l",
+          "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/compile-reference-1/app"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/tmp"
+        },
+        "cwd": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/compile-reference-1"
+      },
+      "result": {
+        "returncode": 0,
+        "stdout_sha256": "f2cf848edac3d70578ab9b8d6166a7d3dda1b4e73921b033ca05ed8ec5574c13",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "path": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/compile-reference-1/02-readelf.stdout",
+        "sha256": "f2cf848edac3d70578ab9b8d6166a7d3dda1b4e73921b033ca05ed8ec5574c13",
+        "size": 2567
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/compile-reference-1/02-readelf.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      }
+    },
+    {
+      "command": {
+        "argv": [
+          "/usr/bin/timeout",
+          "-k",
+          "1s",
+          "9s",
+          "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/compile-reference-1/app"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/tmp"
+        },
+        "cwd": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/compile-reference-1/case/work"
+      },
+      "result": {
+        "returncode": 0,
+        "stdout_sha256": "2ba97dadb3330340757872c4773462ffa3d53f6a2882f9c873e547938fc271f1",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "path": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/compile-reference-1/03-linux-reference.stdout",
+        "sha256": "2ba97dadb3330340757872c4773462ffa3d53f6a2882f9c873e547938fc271f1",
+        "size": 58
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/compile-reference-1/03-linux-reference.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      }
+    }
+  ],
+  "outer_command": {
+    "argv": [
+      "/usr/bin/taskset",
+      "-c",
+      "7",
+      "/usr/bin/prlimit",
+      "--as=1073741824",
+      "--cpu=90",
+      "--nofile=256",
+      "--fsize=67108864",
+      "--core=0",
+      "/usr/bin/timeout",
+      "-k",
+      "5s",
+      "120s",
+      "/home/holden/anaconda3/bin/python3",
+      "-B",
+      "-m",
+      "unittest",
+      "-f",
+      "scripts.tests.test_practical_process_exec_wait"
+    ],
+    "environment": {
+      "PATH": "/usr/bin:/bin",
+      "LANG": "C",
+      "LC_ALL": "C",
+      "HOME": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/home",
+      "TMPDIR": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/tmp",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PRACTICAL_PROCESS_EXEC_EVIDENCE": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/compile-reference-1"
+    },
+    "cwd": "/home/holden/mckernel",
+    "pinned_gcc": {
+      "path": "/usr/bin/x86_64-linux-gnu-gcc-9",
+      "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f"
+    },
+    "source_sha256": "f5eb184714fce6ba32da5c435cedc41fa6af2314254e51d2ebbc75eb50c70e28",
+    "test_sha256": "c19cd7332d91637dcfaf47fec108b8c76a56ab6ef4af8096be845ca7fcdd51f6",
+    "scope": "One static C build/readelf and real Linux fork/exec/wait reference. No native IHK/guest/runtime acceptance."
+  },
+  "depfile": {
+    "path": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/compile-reference-1/app.d",
+    "sha256": "3ed6469cd64c7690faf445af29e03dcb934222f2751d0c269efabf9a494a4f32",
+    "size": 5682
+  },
+  "dependency_bindings": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/compile-reference-1/executed.c",
+      "sha256": "f5eb184714fce6ba32da5c435cedc41fa6af2314254e51d2ebbc75eb50c70e28",
+      "size": 7267
+    },
+    {
+      "path": "/usr/include/stdc-predef.h",
+      "sha256": "64fdf694f7b3d51ec6c45c06dcb71ebbe9455742d3ea673012016668853d3bff",
+      "size": 2290
+    },
+    {
+      "path": "/usr/include/errno.h",
+      "sha256": "bb34795fb8a34bea0b33a4bcf4e60e1aa24ca03bba063e045b90447ee79e1137",
+      "size": 1679
+    },
+    {
+      "path": "/usr/include/features.h",
+      "sha256": "981a26a502075c066b75617ea8db7623f98935b035e470833c46e53f1dea4e2b",
+      "size": 17079
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/sys/cdefs.h",
+      "sha256": "3cc074d3fb0761b678ab4d2a6108b5eb02b9b29341e0bae6a0755cfbbd69cf1f",
+      "size": 18308
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/wordsize.h",
+      "sha256": "716d8459074e2a082d65a28192b32eddbfd7587348372395b1c283a723ae4c18",
+      "size": 442
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/long-double.h",
+      "sha256": "1d92fbb09acd8375debde9c0b4c6dd3e38d096d27159e32a537e3742f6b2cc25",
+      "size": 962
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/gnu/stubs.h",
+      "sha256": "ef444295a0a9e8f5c40918399a00cc91ba0bd79774110cdf6e652baa6cfadb2e",
+      "size": 384
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/gnu/stubs-64.h",
+      "sha256": "bae35edf2e1f5c08d88ff8a5b839e951c42839b855894751efdf94ae69cc0814",
+      "size": 523
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/errno.h",
+      "sha256": "7e7e8b459ac9a9683fa9ed91fb05c89ea874ed70b6d4aa6ef407db87a28b023b",
+      "size": 1426
+    },
+    {
+      "path": "/usr/include/linux/errno.h",
+      "sha256": "a47fb2f49bce0546a1e88805cec954338abb1b2ac87de042166e8e3a74b23261",
+      "size": 23
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/asm/errno.h",
+      "sha256": "4ee384515a4325315992e61dd957f0fa91f3858fe7c079de59f56edded51de86",
+      "size": 31
+    },
+    {
+      "path": "/usr/include/asm-generic/errno.h",
+      "sha256": "fb7b5a504015f3a9074c641e7371b250d867d751d90e4a22a8ac17fced3d50af",
+      "size": 5648
+    },
+    {
+      "path": "/usr/include/asm-generic/errno-base.h",
+      "sha256": "2c148e92b8318deeb767fabd60822113e575ee664ff09a1873aed8f7a495793c",
+      "size": 1612
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/types/error_t.h",
+      "sha256": "8b424ad860b52b27391b94ac486bdf86475ee6ece9bc378576859c2d904c76ec",
+      "size": 894
+    },
+    {
+      "path": "/usr/include/fcntl.h",
+      "sha256": "0b7409e674c5802bd43659ba883773e4e50332abff9614b767b3b7b07eb61cae",
+      "size": 9710
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/types.h",
+      "sha256": "69454c580d77b06559520ed59cd14551d626cb494fcf5fd95a29144d79b2538b",
+      "size": 8757
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/timesize.h",
+      "sha256": "9c1a1a3517fe96894cf4e09cd362c999faac951caf8e70c3c579506a777b522b",
+      "size": 1081
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/typesizes.h",
+      "sha256": "dd38f16bed43eda106684d2af8b57af4373814fd1c4404b37302fdefde7be2e0",
+      "size": 3546
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/time64.h",
+      "sha256": "14312d2bcdc321b6691ef167e4768124d9af1ace8bac0142eb1159fac5a1b3b7",
+      "size": 1340
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/fcntl.h",
+      "sha256": "14001f0553d6adb1b08f16ec879f797a59034d59c81f1ef0b44eeb9f90ce0bf2",
+      "size": 2246
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/fcntl-linux.h",
+      "sha256": "1dc43f7aa98e2cea8ea4c26e8661ecdacb9ce4bb775bf8a959d4f5b1d6d9da97",
+      "size": 14912
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/types/struct_iovec.h",
+      "sha256": "89d865d365d7ae720892788154ad9e0c9c45087e14c759766b44315d30b22421",
+      "size": 1066
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h",
+      "sha256": "45e80e1302342753d2f9e5945248fe3af7cf328a99804d2ec561850bbb550f7d",
+      "size": 12959
+    },
+    {
+      "path": "/usr/include/linux/falloc.h",
+      "sha256": "e35cbe823cf1b8ccb9d1ed755cc6ab8e842cfa0d240f9818cc554423dc0ceee0",
+      "size": 3584
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h",
+      "sha256": "494c455857a5fe8641d7f034a6892f848f1a2d304791bea3434e209a72d6b1cb",
+      "size": 728
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/endian.h",
+      "sha256": "12b47b421313cf9ddc75afa754101c7034bca71ddb797f4f8ae06fc6c4161517",
+      "size": 1905
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/endianness.h",
+      "sha256": "659a7060004eda113671a38852c4d1e9cb97a35932bcd1d8540f98c09c180747",
+      "size": 273
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/stat.h",
+      "sha256": "c7b261ced7bf6f6173097656d935f4a4dcf5bd7d40c92d5588652da1d1686978",
+      "size": 7620
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/fcntl2.h",
+      "sha256": "d2d3302ebcc06ffda2db2785a917b91a79e1a31bb7df4ed2cd55b14068ea0873",
+      "size": 5575
+    },
+    {
+      "path": "/usr/include/poll.h",
+      "sha256": "04bd7e134e86aabf9499d9ef2f5b13546a7d0e113e141e8f935076d87ba185fd",
+      "size": 22
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/sys/poll.h",
+      "sha256": "fda2956fcb460a554f36295cf99ced1237266b826c91e62505497d61194f00a1",
+      "size": 2550
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/poll.h",
+      "sha256": "a1ce68bdd9798cb20c61cea95033502b245824e96860aae4cf79fabfd29e95b3",
+      "size": 2076
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h",
+      "sha256": "05291a7d38bb1d0da1ed01c09fe85fa2b1f4d5bc708e06bb930efec672db08d5",
+      "size": 206
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/poll2.h",
+      "sha256": "75fc09a3a7c3fa3239d17972c81b70f09d06ec64db77773beb98cbfa20476ba2",
+      "size": 2937
+    },
+    {
+      "path": "/usr/include/signal.h",
+      "sha256": "f9c42bf1df8c113861410d711967973a3e8578641d88fbb9021effa8d928aaf9",
+      "size": 12309
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/signum.h",
+      "sha256": "796e7e4116a0cc06c2ed40751fe13f47353eb93d14a0ea84eff2ba4215b676dd",
+      "size": 1634
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/signum-generic.h",
+      "sha256": "f12870e9fb54111b77278a2d5d5c96643c91f455e8ae5be9a378253bb1fd9d04",
+      "size": 4341
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/types/sig_atomic_t.h",
+      "sha256": "8c44b91c2eb6e509905e1becec6b98f8ac006709bfa5d85d86e34a46eb9013cc",
+      "size": 272
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/types/sigset_t.h",
+      "sha256": "3db5ded9d98a694e8c7196a06690b2e816ec6bb82689940d281f6504533f37e1",
+      "size": 195
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/types/siginfo_t.h",
+      "sha256": "88b1392b88af3a08d908866f4e9c5650c5cddb0c8e021b0a3f8293cef6616feb",
+      "size": 3892
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/types/__sigval_t.h",
+      "sha256": "368161d070efa731428f02559f0996ec72e5f69150e3b76bf7a056ecd43c2687",
+      "size": 1148
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/siginfo-arch.h",
+      "sha256": "0839bdc7af291182ff9822a7b6419659fb26a49af5e4264857a71af4ccb12213",
+      "size": 729
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/siginfo-consts.h",
+      "sha256": "fc701a5ba17dfdd6fa149c1a6298bb50d037f79467cc103290fa63eee938effa",
+      "size": 6855
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/siginfo-consts-arch.h",
+      "sha256": "56e019330b859cc4e28af30854df4d29be120ec4bff74849301bb3c40c9f19ca",
+      "size": 204
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/types/sigval_t.h",
+      "sha256": "7d94a894bed0b9490967e8dbcd53725c0f2af9559e58d4b19bd14d3707974ee3",
+      "size": 599
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/types/sigevent_t.h",
+      "sha256": "7125083b8096dd146e6498a61f38bf3bc7215c1c9237e92469550bb355545bab",
+      "size": 1204
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/sigevent-consts.h",
+      "sha256": "276d7c2dff64f09341c4894cf8244691b2878e657b3df8d77cc5c08336e8811a",
+      "size": 1471
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/sigaction.h",
+      "sha256": "834c1d1132bd3b1d156612c06204b7bb70698b1040381bf5247b95a9fcff2ae3",
+      "size": 2935
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/sigcontext.h",
+      "sha256": "3d6c257508c625908a74876ad1810b9c800581d05ffbb6a023c95f4854cf528d",
+      "size": 4266
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/types/stack_t.h",
+      "sha256": "5a70eeeebffb4a5141f728f5816067287aa41a3ed5aa3e88a6cdca4aaed529f6",
+      "size": 1062
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/sys/ucontext.h",
+      "sha256": "6ea27d7ac320650fdb2924c6927ec73c71fcb1eb0303a40844b591fa4c278de4",
+      "size": 5842
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/sigstack.h",
+      "sha256": "ad115beaa73b88165428b91a3549f12589b8f8ac6241a9c9345bda93fedb8863",
+      "size": 1168
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/ss_flags.h",
+      "sha256": "862d34c6cc7bd9df60e8e6c772a450b00086c4025205f3666d4a5a89086c6c6b",
+      "size": 1188
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/types/struct_sigstack.h",
+      "sha256": "04d7127ad6e3f781903f13d98d4dba3aa69d33f0007a68a74cc62f94cf7131b7",
+      "size": 1073
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/pthreadtypes.h",
+      "sha256": "bde992d95141320a2f4162d2d1336349b00f36531fb79b4b9d4bb2ec5dfd176b",
+      "size": 3072
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/thread-shared-types.h",
+      "sha256": "233b18bdcb7fa4332cebd6b5e6b9e35213538994582e322253459605d53fc273",
+      "size": 3982
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h",
+      "sha256": "306fc6a0ccf8eea0e57f0cc4a6a6f0acd7c845c99c42cc509959f9ff8c13b731",
+      "size": 1838
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/struct_mutex.h",
+      "sha256": "f09453b4d356c8dc577f9b3f0c37b69c0ae76662e2c60be1cbd02b8f91865c51",
+      "size": 1810
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/struct_rwlock.h",
+      "sha256": "b596548e86bc3f016b511778bcf88603938b349d7e44eaccf03b8ffb49210a60",
+      "size": 2027
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/sigthread.h",
+      "sha256": "0980803c3e101171029fbbcff761d44590ad4997e72cb82c1171ecbd6d764ee6",
+      "size": 1692
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/signal_ext.h",
+      "sha256": "e91d623617ba0f2cc5c1477f587e32f1f6cd0bcc3f89b41dc4488f9376229a00",
+      "size": 1285
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/stdint.h",
+      "sha256": "86a7914ab7d6a18465a6fb9a7b54f945cad604fdbf3ca0d10e4e0254e0037911",
+      "size": 328
+    },
+    {
+      "path": "/usr/include/stdint.h",
+      "sha256": "1053c4020a8656922a2c2107228a43f1b889be46864f9b82b364ca67ee13b7a9",
+      "size": 8474
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/libc-header-start.h",
+      "sha256": "42053eaf4d2751e7be1cc8342f4c1c7404a6670c330ca493b7e884b20d6c1747",
+      "size": 3288
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/wchar.h",
+      "sha256": "43a321c5d22bfb678fcee382298c125e272ad21d05e55a2efea8e36f2a1e5cc0",
+      "size": 1906
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/stdint-intn.h",
+      "sha256": "c29565a4c6cdbe6134a46ac42d882b5f1c1dadd335657b43e0155d5f235b5a86",
+      "size": 1037
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/stdint-uintn.h",
+      "sha256": "14a8f967badbfc7633134ff1d5ebe45bc7398bb7d0baceda8de6e23235b38ee7",
+      "size": 1049
+    },
+    {
+      "path": "/usr/include/stdio.h",
+      "sha256": "e7d85131c888412c0eaaaca3a7165d86f147c8645993ddf333a5b2500117a478",
+      "size": 29950
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/stdarg.h",
+      "sha256": "0b1d4f68c42c238ae96d07e0e9d5868732054fc8ba704c1dde891649ff117483",
+      "size": 4072
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h",
+      "sha256": "603e58ab31ed75b7e0ab09a2ca94e99955f7fbc63310466321ce27c906227eb4",
+      "size": 381
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h",
+      "sha256": "c561df72d5b987ccbd022059fdb1bcb6899c3e94b403997a0576ef3e1afb0f94",
+      "size": 564
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/types/__fpos64_t.h",
+      "sha256": "8afae3abf006beb39fd9d4d4bae38745cdf08a91e6217ddf25833c8d4b04751b",
+      "size": 410
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/types/__FILE.h",
+      "sha256": "26c909942e8a6bc82725e9c402f393aed9e32d94190257ddf71e1b5f819b4e5e",
+      "size": 110
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/types/FILE.h",
+      "sha256": "37515f78be386f2edad4746f2947c928f480728c56d9a94e25302ebbdaef3c96",
+      "size": 180
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h",
+      "sha256": "4a1aefe381b17ad50add602a8f31c9d4579499064ad3dde703f7f6df48498311",
+      "size": 4104
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h",
+      "sha256": "e0f62133861106e467e0454988891e150dc6eb6f4a5098cedcf94a7d37e9aea6",
+      "size": 2725
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/stdio_lim.h",
+      "sha256": "8b383d348468ce009e52ec801dfb0467f72b0f75496bb840f0ae0ef8a5f399a1",
+      "size": 1213
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/sys_errlist.h",
+      "sha256": "7ef402713da42e35dc8d50a4838b3fbb8bfe959176dd86dd621ec47ac547b5b6",
+      "size": 1216
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/stdio.h",
+      "sha256": "68f7c4aa205c5043f0b9363f4809851c3d735d17e145051ef3c9e771880ddb4f",
+      "size": 5584
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/stdio2.h",
+      "sha256": "f30effdddb33b0a38dee1cd596c1277d0f8f800a0fbfdadb2fe214f33c86129a",
+      "size": 12679
+    },
+    {
+      "path": "/usr/include/string.h",
+      "sha256": "2315bb9e39fcb045b120599524f17461bd20bdf007c857b6fa52663cd620466d",
+      "size": 17660
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/types/locale_t.h",
+      "sha256": "19cb01f0a44723edb409ecb6fdabbcdf9bca9733439f46e962a33d4b0f7bb348",
+      "size": 983
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/types/__locale_t.h",
+      "sha256": "3263b6f6b2b75c11f881796e09d636b7c2baf6421b52d750b76ace42ffe89153",
+      "size": 1722
+    },
+    {
+      "path": "/usr/include/strings.h",
+      "sha256": "ddce67e40651b6d2765cc3e9e72ea7376a810ba99b92b30e30c26422ef024832",
+      "size": 4753
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/strings_fortified.h",
+      "sha256": "7b47eb8f646951f268c71a5a29d98c9ed7159d3a1912425dc1e51562140a34f0",
+      "size": 1209
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/string_fortified.h",
+      "sha256": "4793434f02bbcd7fe6227451e5d35f7448f776f57f322838809cb2b1e45c0268",
+      "size": 4314
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/sys/types.h",
+      "sha256": "74ee1354a61ec7c6583e7995174223b69878915465fc36cafbc2d76d7f32262e",
+      "size": 5713
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/types/clock_t.h",
+      "sha256": "81e60e8a8d99b28bc723c14b156d7f7fc8ff663d98a857a3f5aea90431f577e3",
+      "size": 143
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/types/clockid_t.h",
+      "sha256": "dcd64d184855b245e5c7acf21910a0aaca590f1faf094e400da5d30551d11eb0",
+      "size": 174
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/types/time_t.h",
+      "sha256": "08a01b91752dc9dda93eb0f8c571e2c57fbb67b9768f5c23ad180fd0894e97a3",
+      "size": 138
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/types/timer_t.h",
+      "sha256": "d96a2452da0d933941273d11d1048ea525f033306892835b0a7a0999b13853aa",
+      "size": 159
+    },
+    {
+      "path": "/usr/include/endian.h",
+      "sha256": "043dbd7fc10f60f4efc0c7759bf0d5c202fcecfede131232ac53c62edf93ffda",
+      "size": 2299
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/byteswap.h",
+      "sha256": "f68b8ddac8c43067083eb8bcee4309f565bba36805e5dc746732ddb731e744c4",
+      "size": 2450
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/uintn-identity.h",
+      "sha256": "789cb0b97f2ab1484b9d520ecdb94c93c07d2eb6c34d6c981b8e02785b90c137",
+      "size": 1542
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/sys/select.h",
+      "sha256": "1fe9febd98bdea3ac0cfaa55a06e4bc5e0962783cd4ab22246117c8647c389b1",
+      "size": 4141
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/select.h",
+      "sha256": "bebcf564c0b0f5298e352bee095128dfe8cf483426bc6d36869043bb4a0e2fae",
+      "size": 2106
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h",
+      "sha256": "0909a593d7f6dfae1ca5cef6cf1e62b6a67aaa586e50f6215f3622a47be854d4",
+      "size": 287
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/select2.h",
+      "sha256": "0737611741ded5876a746c48f3a54a5f533fa8c24d9d27de75d40adc57253544",
+      "size": 1438
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/sys/wait.h",
+      "sha256": "8217c6eb62cbb576fc2fb7f98711f8b1158d447f2031691b2f4ca758ef4669b5",
+      "size": 5313
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/waitflags.h",
+      "sha256": "4b5a3c68814e83b0f24286101a50c7f8a838ab502c8ee0ab1729e4fc845b0c75",
+      "size": 2218
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/waitstatus.h",
+      "sha256": "0b1a7624c450768f914aae61f3c45fb0aa48edd633285a64b6864aebae008703",
+      "size": 2287
+    },
+    {
+      "path": "/usr/include/time.h",
+      "sha256": "e88cfe6848c864eec16061f3a23a2c37aaa39ef1cf4e271e81b00b9df94ce05d",
+      "size": 10276
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/time.h",
+      "sha256": "2f1af538c704ea54e3364fe05ee3f9028c998ba842fc925a1dc767868cc6ea52",
+      "size": 2999
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/timex.h",
+      "sha256": "0e1462ebbb5070579e80a5eb4a59d4a4f715741739b6cf27b2e670634767b41b",
+      "size": 4596
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/types/struct_tm.h",
+      "sha256": "e7bdda3f42eb0633850ed150fef0a0cf6193cbba8fa740e7505925424a595566",
+      "size": 760
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h",
+      "sha256": "d6299fbc46fc57e7d14635cd5cf69125710ed021ab7305586c84644a03a39f8e",
+      "size": 288
+    },
+    {
+      "path": "/usr/include/unistd.h",
+      "sha256": "690e12d91da100d6916752f38804386710d427823f7783f730218a9ac2d043e2",
+      "size": 42804
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/posix_opt.h",
+      "sha256": "8417772f0c9fa7a39fcec5323c23e9869454e1f0c63531dd878bc7e81e694fe6",
+      "size": 5913
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/environments.h",
+      "sha256": "5f0d55d7cb0330bae9ef464394de98c9045d0e5880d266d3801034678843f435",
+      "size": 3791
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/confname.h",
+      "sha256": "091903356b086e4c7a46054f7321d583d51ae35296b1f077d3216f5f3a76f4de",
+      "size": 23709
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/getopt_posix.h",
+      "sha256": "530d55a1958c75b33eb8a65a04a746c27cf876ec3c47827bb3e11595761824ac",
+      "size": 1810
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/getopt_core.h",
+      "sha256": "9fa5de6af98115c111cf43befe7468827d6e283edb400e1a6ca7a609a11aadbc",
+      "size": 3667
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/unistd.h",
+      "sha256": "282a609004d8f3ccc4f5d92d58767d5c6d4fe8c95daa38e25691f3b65be14409",
+      "size": 13316
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/unistd_ext.h",
+      "sha256": "b2fafcd2805dbd6869e0ef89833d2ae03c197ac8c01b89bab86a13c2499fca0a",
+      "size": 1613
+    }
+  ],
+  "tools": [
+    {
+      "path": "/usr/bin/x86_64-linux-gnu-gcc-9",
+      "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f",
+      "size": 1158288
+    },
+    {
+      "path": "/usr/bin/x86_64-linux-gnu-ld.bfd",
+      "sha256": "476b24d5cc1fef54f80412d06e7430b2dcf4e2b6f1525ee17e6eaaf16b28a00f",
+      "size": 1732192
+    },
+    {
+      "path": "/usr/bin/x86_64-linux-gnu-readelf",
+      "sha256": "41a813335a74480f145fba9400aa7fb5c0ec7ffcaa7af7f33e832dc75eb90ffb",
+      "size": 658360
+    }
+  ],
+  "captures": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/command.json",
+      "sha256": "68ef77d6771fd78cd9982aeea848d6863b1313fb699cc0651bf9117e7e826eed",
+      "size": 1311
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/result.json",
+      "sha256": "0c5dc1cc93a32748c43f3d323d2ae10babfa13a7daffe3cdb3e90d0fbaf04b32",
+      "size": 238
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/selected-current942-route-bindings.json",
+      "sha256": "d76a3e0cd538152561076c5569a4306c31003d355dd9cd3aad09c90d196e8be1",
+      "size": 2580
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/stderr",
+      "sha256": "60a1278b6fd9388cde972b5cc941e3739ccf53fd670f63e5a34be854e82c9aa2",
+      "size": 98
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/compile-reference-1/01-compile.command.json",
+      "sha256": "a115c7ab296bf2b2a6c931aa58087f0b03683422594c66bb4a6ba8ec8de8f3ef",
+      "size": 922
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/compile-reference-1/01-compile.result.json",
+      "sha256": "c7a482f29ca8abe4c93877f8d2a1cf0d93ab0a32a623da0278bf4d9507667a40",
+      "size": 196
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/compile-reference-1/01-compile.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/compile-reference-1/01-compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/compile-reference-1/02-readelf.command.json",
+      "sha256": "aedbe68cd5d11b9c74fcf60c358f41c25049556dc7a919885e0f594f5d6592c5",
+      "size": 561
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/compile-reference-1/02-readelf.result.json",
+      "sha256": "32784bbf3da722d7a149393f2368af53ddca7a63cfd10c3bd4dddc823437682c",
+      "size": 196
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/compile-reference-1/02-readelf.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/compile-reference-1/02-readelf.stdout",
+      "sha256": "f2cf848edac3d70578ab9b8d6166a7d3dda1b4e73921b033ca05ed8ec5574c13",
+      "size": 2567
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/compile-reference-1/03-linux-reference.command.json",
+      "sha256": "df9d437bacd935454b17e0a8392bb36860f1c9cd991bc35fcf8ae6df5941be37",
+      "size": 571
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/compile-reference-1/03-linux-reference.result.json",
+      "sha256": "9a4f15ca391fc43b5584f9a362e4a4e56666b308163558eb0b7effc6e8ad423f",
+      "size": 196
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/compile-reference-1/03-linux-reference.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/compile-reference-1/03-linux-reference.stdout",
+      "sha256": "2ba97dadb3330340757872c4773462ffa3d53f6a2882f9c873e547938fc271f1",
+      "size": 58
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/compile-reference-1/app",
+      "sha256": "18690867b0f32885cf019d6d3498aedb378e6456af240f8e7368e337a043ad0b",
+      "size": 882368
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/compile-reference-1/app.d",
+      "sha256": "3ed6469cd64c7690faf445af29e03dcb934222f2751d0c269efabf9a494a4f32",
+      "size": 5682
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/compile-reference-1/executed.c",
+      "sha256": "f5eb184714fce6ba32da5c435cedc41fa6af2314254e51d2ebbc75eb50c70e28",
+      "size": 7267
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/compile-reference-1/expected.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/compile-reference-1/expected.stdout",
+      "sha256": "2ba97dadb3330340757872c4773462ffa3d53f6a2882f9c873e547938fc271f1",
+      "size": 58
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-20261017-1/compile-reference-1/oracle.json",
+      "sha256": "f4c0541dba352167ebf951e9201bae13c520d7556498fabe3e7a425d00c79242",
+      "size": 458
+    }
+  ],
+  "acceptance": {
+    "linux_reference_pass": true,
+    "mckernel_executed": false,
+    "native_fork_exec_wait_capability_pass": false,
+    "runtime_release": false,
+    "formal_case_credit": false,
+    "application_acceptance": false,
+    "production_acceptance": false
+  },
+  "failures": [],
+  "blocker": "Native non-null CREATE_PPD fork mirror adapter is explicitlyEOPNOTSUPP in pinned942; no current native guest success packet released.",
+  "next_task": "Independent payload/deadline/cleanup review; separately scoped kernel process/mirror ownership investigation/implementation for non-nullCREATE_PPD, then matching artifact validation and separately reviewed guest packet."
+}

@@ -1,0 +1,126 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "FINAL_SHORT32_M05_BOUNDED_LOGGING_OPERATION_NOT_RELEASED",
+  "case_id": "native.second-stop.current68.twoCPU.exact67.two-generation",
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--fsize=33554432",
+    "--as=2147483648:2147483648",
+    "--core=0:0",
+    "--",
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/runtime-current68-filebound-successor-1/logging-revision-1/native_diagnostic_container_owner.py",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/nm05a1/p",
+    "--nonce",
+    "be5b3a70eeb641df92878acfe335735c",
+    "--owner-sha256",
+    "ba656f27330eee02dd6bf4f5a5fe74b6bdacf76a609a0c6eadf5b09c9b1fd184",
+    "--manifest",
+    "/home/holden/mckernel-work/scratch/nm05a1/m.json",
+    "--manifest-sha256",
+    "b8366ba7b8b7878bd3743858816be96d34877429967cc9a3aea911d67726a257"
+  ],
+  "capture_directory": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/runtime-current68-filebound-successor-1/logging-revision-1/actual-M05-SHORT32-native-owner-capture-1",
+  "CPU": 7,
+  "manifest_source": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/actual-stage-1/manifest.json",
+    "bytes": 5913,
+    "sha256": "b8366ba7b8b7878bd3743858816be96d34877429967cc9a3aea911d67726a257"
+  },
+  "manifest_publication": "/home/holden/mckernel-work/scratch/nm05a1/m.json",
+  "nonce": "be5b3a70eeb641df92878acfe335735c",
+  "runtime_release": null,
+  "review": null,
+  "live_admission": null,
+  "contract": "Two-generation f043 M05; no199singleapp substitution.",
+  "source_cohort": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/runtime-current68-filebound-successor-1/logging-revision-1/native_diagnostic_container_owner.py",
+      "bytes": 64669,
+      "sha256": "ba656f27330eee02dd6bf4f5a5fe74b6bdacf76a609a0c6eadf5b09c9b1fd184"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/runtime-current68-filebound-successor-1/native_diagnostic_runner.py",
+      "bytes": 7582,
+      "sha256": "49dba552cee10260e3c4cc3bf8cab8242b8b7d4124060b98fbdfd9760ee15794"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/runtime-current68-filebound-successor-1/native_diagnostic_backend.py",
+      "bytes": 25640,
+      "sha256": "956ff9436940d97671a82df7c024a10d59835f07bdc980f2002741e4860ae5d5"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/runtime-current68-filebound-successor-1/native_diagnostic.py",
+      "bytes": 53666,
+      "sha256": "250a4d16d67f733331b0242cb62e55ecfadef702f2607caa546144197cf74422"
+    }
+  ],
+  "profile": {
+    "container_CPU": "2-5",
+    "CPU_count": 4,
+    "memory": 12884901888,
+    "swap": 0,
+    "pids": 512,
+    "network": "none",
+    "oneheavy": true,
+    "qualified_M05_container_ulimits": [
+      {
+        "Name": "core",
+        "Soft": 0,
+        "Hard": 0
+      },
+      {
+        "Name": "fsize",
+        "Soft": 33554432,
+        "Hard": 33554432
+      },
+      {
+        "Name": "nofile",
+        "Soft": 4096,
+        "Hard": 4096
+      }
+    ],
+    "outer_AS": 2147483648,
+    "outer_fsize": 33554432,
+    "outer_CPU": 7,
+    "hostUID_NPROC": "inherited",
+    "capture_profile": "Root binds exact genericwholecapture/streamlimits under native release; no automaticone-shot timeout/kill",
+    "live_FSIZElimits": {
+      "outer_owner": [
+        33554432,
+        33554432
+      ],
+      "Docker_config_and_inside_owner": [
+        33554432,
+        33554432
+      ],
+      "runner_and_diagnostic": [
+        33554432,
+        33554432
+      ],
+      "QEMU_backend_preacquire_and_prespawn": [
+        33554432,
+        33554432
+      ]
+    },
+    "Docker_LogConfig": {
+      "Type": "json-file",
+      "Config": {
+        "max-size": "16m",
+        "max-file": "2"
+      }
+    }
+  },
+  "cpu": 7,
+  "role": "native199-owner",
+  "capture_role_semantics": "Historical genericcaptureenum only; actualinnerowner andcase are M05two-generationf043, never199singleapp.",
+  "stream_cap_bytes": 33554432
+}

@@ -1,0 +1,498 @@
+{
+  "application_acceptance": false,
+  "binary": {
+    "path": "/home/holden/mckernel-work/scratch/practical-rust-std-app-static-20261017-2/app",
+    "sha256": "6d1865a0a8817a7b5beceb883ef34c6275e7d52993f026177159a34d67861e55",
+    "size": 5685960
+  },
+  "captures": {
+    "app": {
+      "sha256": "6d1865a0a8817a7b5beceb883ef34c6275e7d52993f026177159a34d67861e55",
+      "size": 5685960
+    },
+    "executed.rs": {
+      "sha256": "b0c1c255aa954f0dd98fd437f102055cadbc2b73b9f4d541576d09ee7bcc978e",
+      "size": 3872
+    },
+    "expected.stdout": {
+      "sha256": "8dd6a466fcbbec44e3582ddde6433f6f176e4272f54166c127c28c51b1cebfb6",
+      "size": 144
+    },
+    "linux-reference.status": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    "linux-reference.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "linux-reference.stdout": {
+      "sha256": "8dd6a466fcbbec44e3582ddde6433f6f176e4272f54166c127c28c51b1cebfb6",
+      "size": 144
+    },
+    "readelf.status": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    "readelf.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "readelf.stdout": {
+      "sha256": "fc6dd239162aeafc7c2f2496f7fa25f0c2cd450bb3a400ec2064108aed7d5c93",
+      "size": 2620
+    },
+    "rustc-static-compile.status": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    "rustc-static-compile.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "rustc-static-compile.stdout": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    }
+  },
+  "commands": [
+    {
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "-D",
+        "warnings",
+        "-C",
+        "opt-level=1",
+        "-C",
+        "codegen-units=1",
+        "-C",
+        "target-feature=+crt-static",
+        "-C",
+        "relocation-model=static",
+        "-C",
+        "link-arg=-no-pie",
+        "-C",
+        "link-arg=-Wl,-z,noexecstack",
+        "/home/holden/mckernel/scripts/application-tests/practical_rust_std_app.rs",
+        "-o",
+        "/home/holden/mckernel-work/scratch/practical-rust-std-app-static-20261017-2/app"
+      ],
+      "cwd": "/home/holden/mckernel-work/scratch/practical-rust-std-app-static-20261017-2",
+      "elapsed_seconds": 0.476523,
+      "label": "rustc-static-compile",
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "timeout_seconds": 100
+    },
+    {
+      "argv": [
+        "/usr/bin/readelf",
+        "-W",
+        "-h",
+        "-l",
+        "-d",
+        "/home/holden/mckernel-work/scratch/practical-rust-std-app-static-20261017-2/app"
+      ],
+      "cwd": "/home/holden/mckernel-work/scratch/practical-rust-std-app-static-20261017-2",
+      "elapsed_seconds": 0.002481,
+      "label": "readelf",
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "fc6dd239162aeafc7c2f2496f7fa25f0c2cd450bb3a400ec2064108aed7d5c93",
+      "timeout_seconds": 10
+    },
+    {
+      "argv": [
+        "/home/holden/mckernel-work/scratch/practical-rust-std-app-static-20261017-2/app"
+      ],
+      "cwd": "/home/holden/mckernel-work/scratch/practical-rust-std-app-static-20261017-2/case/work",
+      "elapsed_seconds": 0.005328,
+      "label": "linux-reference",
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "8dd6a466fcbbec44e3582ddde6433f6f176e4272f54166c127c28c51b1cebfb6",
+      "timeout_seconds": 15
+    }
+  ],
+  "dynamic_artifacts_preserved": true,
+  "elf": {
+    "interpreter": null,
+    "link_mode": "GNU crt-static",
+    "needed": [],
+    "no_dynamic_segment": true,
+    "no_writable_executable_LOAD": true,
+    "nonexecuting_stack": true,
+    "type": "EXEC"
+  },
+  "environment": {
+    "HOME": "/home/holden/mckernel-work/scratch/practical-rust-std-app-static-20261017-2/home",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "PATH": "/usr/bin:/bin",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "TMPDIR": "/home/holden/mckernel-work/scratch/practical-rust-std-app-static-20261017-2/tmp",
+    "TZ": "UTC"
+  },
+  "evidence_root": "/home/holden/mckernel-work/scratch/practical-rust-std-app-static-20261017-2",
+  "executed_source_snapshot": {
+    "path": "/home/holden/mckernel-work/scratch/practical-rust-std-app-static-20261017-2/executed.rs",
+    "sha256": "b0c1c255aa954f0dd98fd437f102055cadbc2b73b9f4d541576d09ee7bcc978e",
+    "size": 3872
+  },
+  "failure_policy": "Exactly one new static variant compile/reference; preserve any failure and stop without unchanged retry.",
+  "file_close_scope": "sync_all is checked and File is dropped before remove_file; File::drop closes but does not report close errors. No close-error check claimed.",
+  "formal_case_credit": false,
+  "independent_expectation": {
+    "checksum": 1024005,
+    "counter": "2 workers each perform1000 mutex-protected increments, expected2000.",
+    "derivation": "37 is coprime to251, so every251-byte cycle sums to251*250/2=31375;8193=32*251+161, and independent Python tail sum=20005; total1024005. Independent direct-sum cross-check agrees.",
+    "freeze_before_run": true,
+    "word_counts": {
+      "files": 1,
+      "rust": 3,
+      "std": 2,
+      "threads": 1
+    }
+  },
+  "installed_static_link_inputs": {
+    "/usr/lib/x86_64-linux-gnu/crt1.o": {
+      "path": "/usr/lib/x86_64-linux-gnu/crt1.o",
+      "sha256": "27daac7b3f9e861ef8df49f45b2a8ffb7130a1899f86efe53c6f84d63fd3cd0d",
+      "size": 2040
+    },
+    "/usr/lib/x86_64-linux-gnu/crti.o": {
+      "path": "/usr/lib/x86_64-linux-gnu/crti.o",
+      "sha256": "2f1c31070d95f398fe4c1388408e83283cc7e0cee0ebb64882e0b331e8e178e8",
+      "size": 1360
+    },
+    "/usr/lib/x86_64-linux-gnu/crtn.o": {
+      "path": "/usr/lib/x86_64-linux-gnu/crtn.o",
+      "sha256": "a2266079f95b84ccc2162ebbf279bcd78858a748aa1882e0bdb912316c76a58f",
+      "size": 760
+    },
+    "/usr/lib/x86_64-linux-gnu/libc.a": {
+      "path": "/usr/lib/x86_64-linux-gnu/libc.a",
+      "sha256": "f9831edeccd3a87eb3fbba795f92bfa83409b3951f05ec40ca5df432b8699127",
+      "size": 5747618
+    },
+    "/usr/lib/x86_64-linux-gnu/libdl.a": {
+      "path": "/usr/lib/x86_64-linux-gnu/libdl.a",
+      "sha256": "a3aaba96cafd853c9e5d0700b64618ff784c0fd18299896cec61d470576a5922",
+      "size": 15034
+    },
+    "/usr/lib/x86_64-linux-gnu/libm.a": {
+      "path": "/usr/lib/x86_64-linux-gnu/libm.a",
+      "sha256": "7a4224b5c126fd3708f576afa09c3575633446ab73b646eaf5b0a7cd00d9788c",
+      "size": 132
+    },
+    "/usr/lib/x86_64-linux-gnu/libpthread.a": {
+      "path": "/usr/lib/x86_64-linux-gnu/libpthread.a",
+      "sha256": "2f90e0cb347e80a583aca3536715f93255593c9a1214ddbeba1fcc4055aab019",
+      "size": 6590210
+    },
+    "/usr/lib/x86_64-linux-gnu/librt.a": {
+      "path": "/usr/lib/x86_64-linux-gnu/librt.a",
+      "sha256": "3626504459678d333cdda257dd6b42a616f6f5638855176b6d067ec0bfc2d541",
+      "size": 82090
+    },
+    "/usr/lib/x86_64-linux-gnu/libutil.a": {
+      "path": "/usr/lib/x86_64-linux-gnu/libutil.a",
+      "sha256": "3888c108c3a093cc80da4a90937d536dbd00f98007770c4469910dcfc0851127",
+      "size": 15096
+    }
+  },
+  "installed_target_rlib_bindings_reference": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/practical-rust-std-app-preparation-20261017-1.json",
+    "sha256": "dc21ad51b212016976f4fed1b30e412ca407712758d52d1c12fe523f56a44226",
+    "size": 26137
+  },
+  "link_mode": "Explicit supported GNU crt-static Rust std variant; no no_std substitution or source/oracle change.",
+  "new_guest_runs": 0,
+  "oracle": {
+    "exit_code": 0,
+    "stderr_hex": "",
+    "stdout_hex": "7665632062797465733d3831393320636865636b73756d3d313032343030350a66696c6520726f756e64747269703d3120656f663d312072656d6f7665643d310a776f7264732066696c65733a3120727573743a33207374643a3220746872656164733a310a746872656164733d3220636f756e7465723d3230303020746c733d3120706172656e745f746c733d310a",
+    "stdout_utf8": "vec bytes=8193 checksum=1024005\nfile roundtrip=1 eof=1 removed=1\nwords files:1 rust:3 std:2 threads:1\nthreads=2 counter=2000 tls=1 parent_tls=1\n"
+  },
+  "previous_dynamic_variant": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/practical-rust-std-app-preparation-20261017-1.json",
+    "sha256": "dc21ad51b212016976f4fed1b30e412ca407712758d52d1c12fe523f56a44226",
+    "size": 26137
+  },
+  "production_acceptance": false,
+  "reference_summary": {
+    "String_BTreeMap_word_count": "files1 rust3 std2 threads1",
+    "Vec_bytes": 8193,
+    "barrier_participants": 3,
+    "case_work_empty_after_remove": true,
+    "counter": 2000,
+    "exit_code": 0,
+    "stderr_empty": true,
+    "stdout_exact": true,
+    "thread_local_checks": "Distinct worker values1000/1001 and parent77 checked after barrier and all joins.",
+    "workers_joined": 2
+  },
+  "resources": {
+    "address_space_limit_bytes": 1073741824,
+    "application_worker_threads": 2,
+    "codegen_units": 1,
+    "core": 0,
+    "cpu_affinity": [
+      6
+    ],
+    "cpu_seconds": 150,
+    "file_size_limit_bytes": 268435456,
+    "nofile": 256,
+    "one_job": true,
+    "outer_wall_seconds": 180,
+    "requested_stack_bytes_each": 262144
+  },
+  "review_prerequisites": [
+    "Independent exact Rust source/static variant/reference/staging and actual producer/evaluator protocol review.",
+    "Separate one-shot guest execution release and fresh parent/nonce/QMP/owner/resource/lock/scratch preflight after prior retirement.",
+    "Actual Rust std McKernel runtime remains required; no catalog, Rust/assembly or whole-OS acceptance promoted."
+  ],
+  "runtime_release": false,
+  "schema": "mckernel.practical-rust-std-app-static-preparation.v1",
+  "source": {
+    "path": "/home/holden/mckernel/scripts/application-tests/practical_rust_std_app.rs",
+    "sha256": "b0c1c255aa954f0dd98fd437f102055cadbc2b73b9f4d541576d09ee7bcc978e",
+    "size": 3872
+  },
+  "staging": {
+    "actual_collector_evaluator_contract": {
+      "bytes_negative": "wrong payload bytes",
+      "caveat": "Protocol-only check. Existing harmless C wrapper expression compiled for ND_FUTEX; concrete frozen Rust Linux-reference bytes/eof accounting injected into frame serializer. Replace only ND_PAYLOAD in copied retained TLS transport. No Rust guest/runtime acceptance inferred; original transport unchanged.",
+      "evaluator": {
+        "mode": 33152,
+        "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic.py",
+        "sha256": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e",
+        "size": 53440
+      },
+      "files": {
+        "/home/holden/mckernel-work/scratch/practical-rust-std-app-static-20261017-2/contract/futex-compile.json": {
+          "sha256": "b3cf9bd745dc68779234e1d6a873510b3837b523b95c13337fa9e2be7742cbad",
+          "size": 724
+        },
+        "/home/holden/mckernel-work/scratch/practical-rust-std-app-static-20261017-2/contract/futex-compile.stderr": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        "/home/holden/mckernel-work/scratch/practical-rust-std-app-static-20261017-2/contract/futex-compile.stdout": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        "/home/holden/mckernel-work/scratch/practical-rust-std-app-static-20261017-2/contract/futex-constants.json": {
+          "sha256": "ec71eae921c1d74dd7834f540eea4e9c1b5d15b7704c3f6f60ce42909533cbba",
+          "size": 499
+        },
+        "/home/holden/mckernel-work/scratch/practical-rust-std-app-static-20261017-2/contract/futex-constants.stderr": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        "/home/holden/mckernel-work/scratch/practical-rust-std-app-static-20261017-2/contract/futex-constants.stdout": {
+          "sha256": "ca0c0042665e9ec8f7b742828dc0940ee2dda8a9245e085c6e8194ef6eb1b2da",
+          "size": 845
+        },
+        "/home/holden/mckernel-work/scratch/practical-rust-std-app-static-20261017-2/contract/futex-wrapper": {
+          "sha256": "74a5298d7f6022c437a8fa5a554d9a2451f0da66e749df7eb05ec59dcdd23b43",
+          "size": 31592
+        },
+        "/home/holden/mckernel-work/scratch/practical-rust-std-app-static-20261017-2/contract/futex-wrapper.c": {
+          "sha256": "82d52d9e562b78318b3fb1c5bff5191e5ff35b12af675fd9e737419375fd08de",
+          "size": 1368
+        },
+        "/home/holden/mckernel-work/scratch/practical-rust-std-app-static-20261017-2/contract/retained-transport-observation.json": {
+          "sha256": "e6b561d3b0b17c32329e7e84563b2c3c518dbcff751f2c5ca50f62215f19bf48",
+          "size": 76641
+        }
+      },
+      "helper": {
+        "mode": 33152,
+        "path": "/home/holden/mckernel/scripts/tests/test_native_diagnostic_collector_manifest_limits.py",
+        "sha256": "069ca83563798044ae2b69be183cdb8665bac86d79db8b35dd540e66f033d1c2",
+        "size": 10462
+      },
+      "limit_negative": "stream accounting",
+      "positive": "PROTOCOL_PASS",
+      "producer": {
+        "argv": [
+          "/bin/mcexec",
+          "-t",
+          "1",
+          "0",
+          "/apps/app"
+        ],
+        "cwd": "/case/work",
+        "env": {
+          "COKERNEL_PATH": "/apps",
+          "PATH": "/usr/bin:/bin"
+        },
+        "finished_ns": 3,
+        "procfs_empty": true,
+        "raw_wait_status": 0,
+        "reaped_ns": 2,
+        "started_ns": 1,
+        "streams": {
+          "stderr": {
+            "discarded": 0,
+            "eof": true,
+            "eof_ns": 2,
+            "hex": "",
+            "limit": 4096,
+            "observed": 0,
+            "retained": 0,
+            "truncated": false
+          },
+          "stdout": {
+            "discarded": 0,
+            "eof": true,
+            "eof_ns": 2,
+            "hex": "7665632062797465733d3831393320636865636b73756d3d313032343030350a66696c6520726f756e64747269703d3120656f663d312072656d6f7665643d310a776f7264732066696c65733a3120727573743a33207374643a3220746872656164733a310a746872656164733d3220636f756e7465723d3230303020746c733d3120706172656e745f746c733d310a",
+            "limit": 4096,
+            "observed": 144,
+            "retained": 144,
+            "truncated": false
+          }
+        }
+      },
+      "result": "PASS_ND_FUTEX_SELECTED_ORACLE_POSITIVE_AND_LIMIT_BYTES_NEGATIVES",
+      "retained_transport_source": {
+        "mode": 33152,
+        "path": "/home/holden/mckernel-work/scratch/thread-tls-isolation-current942-dispatch-20261017-2/attempt-result.json",
+        "sha256": "7afb0762d2390e598dd89c6689d7ff5f5d5a4a7ced9f9da417c8c95e62dadee4",
+        "size": 81613
+      }
+    },
+    "actual_payload_argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "/apps/app"
+    ],
+    "boot_argv": [
+      "/bin/native-boot",
+      "hidos",
+      "allow_oversubscribe"
+    ],
+    "capture": {
+      "elapsed_seconds": 9.269381,
+      "exit_code": 0,
+      "stderr_hex": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "3d2d99a66c0a1548b61c0898416426654aa99d17a9ab3d43c6f8e49c42b6eae7"
+    },
+    "case_id": "practical.rust-std-app-static",
+    "collector_preparation": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel/docs/verification/evidence/thread-tls-isolation-current942-preparation-20261017-1.json",
+      "sha256": "6a48dd1ae43842ef0ee29ecf34534616bc6ee2917eb5cae6633af901b7e2192f",
+      "size": 41297
+    },
+    "collector_profile": "ND_FUTEX",
+    "command": [
+      "/home/holden/anaconda3/bin/python3",
+      "-B",
+      "/home/holden/mckernel/scripts/application-tests/native_diagnostic_overlay.py",
+      "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-20261017-1/initramfs.cpio.gz",
+      "/home/holden/mckernel-work/scratch/practical-rust-std-app-static-20261017-2/app",
+      "/home/holden/mckernel-work/scratch/thread-tls-isolation-static-20261017-1/init",
+      "/home/holden/mckernel-work/scratch/mcexec-preload-fastpath-build-20260928-1/rust/executer/user/mcexec",
+      "/home/holden/mckernel-work/scratch/practical-rust-std-app-static-20261017-2/staging/initramfs.cpio.gz",
+      "--collector-sha256",
+      "ead247cdf56556c7491bd5d8f746c6c668c0c944414ce51392f7caaed895a63a",
+      "--mcexec-sha256",
+      "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b",
+      "--payload-sha256",
+      "6d1865a0a8817a7b5beceb883ef34c6275e7d52993f026177159a34d67861e55",
+      "--base-sha256",
+      "bd503adcd1d45b437eb91902a50b09b9eeb094368ca4085546ef682fd1a5a694",
+      "--base-size",
+      "12347108",
+      "--base-cpio-sha256",
+      "7e69601b68dafb44c945d2998b10ec024a73518303bb505f275490d83e4c6767",
+      "--base-cpio-size",
+      "39677952"
+    ],
+    "manifest": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/scratch/practical-rust-std-app-static-20261017-2/staging/manifest.json",
+      "sha256": "364191b167b9b63f038f955c5c5d1f29778474f08ea8d03d3748017baa93480c",
+      "size": 5663
+    },
+    "metadata_join": {
+      "comparison": "Authenticated TLS final map unchanged except apps/app exact static Rust binary size/hash; all other metadata including nonzero base mtimes preserved.",
+      "fields": [
+        "mode",
+        "uid",
+        "gid",
+        "nlink",
+        "mtime",
+        "size",
+        "sha256",
+        "rdevmajor",
+        "rdevminor"
+      ],
+      "nonzero_mtime_member_count": 40,
+      "result": "PASS_ALL_59_MEMBERS_ALL_9_METADATA_FIELDS"
+    },
+    "overlay": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/scratch/practical-rust-std-app-static-20261017-2/staging/initramfs.cpio.gz",
+      "sha256": "83a08d35e1f4fd50d6cf41a32bca876117bef3894616ea628ef805be43d32a66",
+      "size": 14732691
+    },
+    "overlay_manifest": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/scratch/practical-rust-std-app-static-20261017-2/staging/overlay-result.json",
+      "sha256": "3d2d99a66c0a1548b61c0898416426654aa99d17a9ab3d43c6f8e49c42b6eae7",
+      "size": 14816
+    },
+    "root": "/home/holden/mckernel-work/scratch/practical-rust-std-app-static-20261017-2/staging",
+    "source_manifest": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/scratch/thread-tls-isolation-current942-20261017-1/manifest.json",
+      "sha256": "15bbc7c6a3a6b3bccaad4c6be08f3804a4916641715a69817105dd4889f917ce",
+      "size": 5462
+    },
+    "status": "PASS_ACTUAL_PRODUCER_EVALUATOR_OVERLAY_STRICT_MANIFEST_ALL_59_METADATA_JOINS",
+    "stderr_limit_bytes": 4096,
+    "stdout_limit_bytes": 4096,
+    "validation": {
+      "actual_ND_FUTEX_contract": "PASS",
+      "backend_called": false,
+      "bytes_negative": "REJECTED wrong payload bytes",
+      "frozen_evaluator_positive": "PROTOCOL_PASS",
+      "limit_negative": "REJECTED stream accounting",
+      "load_manifest": "PASS",
+      "prepare_attempt_called": false
+    }
+  },
+  "status": "PASS_REAL_RUST_STD_GNU_STATIC_LINUX_REFERENCE_STAGED_STRICT_MANIFEST_PENDING_EXECUTION_REVIEW",
+  "task_id": "practical-rust-std-app-preparation-20261017-2",
+  "toolchain": {
+    "capture_python": {
+      "path": "/home/holden/anaconda3/bin/python3",
+      "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb",
+      "size": 15880080
+    },
+    "cc": {
+      "path": "/usr/bin/cc",
+      "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f",
+      "size": 1158288
+    },
+    "ld": {
+      "path": "/usr/bin/ld",
+      "sha256": "476b24d5cc1fef54f80412d06e7430b2dcf4e2b6f1525ee17e6eaaf16b28a00f",
+      "size": 1732192
+    },
+    "rustc": {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "sha256": "028fd60b0e0add5505c661cd3ccde91393d615c8729bd95d94ab1e91409b36a1",
+      "size": 654904
+    }
+  }
+}

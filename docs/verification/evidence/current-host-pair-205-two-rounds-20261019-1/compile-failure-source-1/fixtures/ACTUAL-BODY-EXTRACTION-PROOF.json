@@ -1,0 +1,29 @@
+{
+  "source_original": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/original/pair_collector.c",
+  "source_candidate_runtime": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/candidate/pair_runtime.inc",
+  "extractions": [
+    {
+      "kind": "actual types",
+      "sha256": "390517f744a4743c6919bdbd1214cb355c23521837a9ff74f3213e04e6ae858a",
+      "bytes": 291
+    },
+    {
+      "kind": "actual append/stream/write/save",
+      "sha256": "9816d42bb5cdd61074f16a3e81a8abd8b9ca8ef6138ce2751383fab50d5a9782",
+      "bytes": 1926
+    },
+    {
+      "kind": "actual load/publish",
+      "sha256": "a4562aceca00d52707ff358c7e31495b141fb08316f96544df13288584136347",
+      "bytes": 2037
+    }
+  ],
+  "full_default_C_consumer_compile_required": true,
+  "test_only_boundaries": [
+    "application execution pair_run",
+    "kernel klogctl",
+    "procfs retired_at",
+    "monotonic clock"
+  ],
+  "hardware_or_target_calls": false
+}

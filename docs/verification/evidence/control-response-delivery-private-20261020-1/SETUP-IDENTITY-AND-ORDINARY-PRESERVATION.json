@@ -1,0 +1,28 @@
+{
+  "status": "SOURCE_SETUP_AUDIT_ONLY_NOT_RUN",
+  "scenarios": 4,
+  "one_Joined_per_exact_test_process": true,
+  "first_return": {
+    "worker": 200,
+    "response": "0x1b00000",
+    "never_reused": true
+  },
+  "parked_control": {
+    "worker": 201,
+    "wire_requester": 201,
+    "response": "0x1c00000"
+  },
+  "unrelated_only_scenario1": {
+    "helper": "delivered_unrelated",
+    "worker": 202,
+    "wire_requester": 202,
+    "response": "0x1d00000",
+    "actual_admit_reserve_copied": true
+  },
+  "scenario2": "no new deliveries after worker201 park; wake2/send retry same completion",
+  "scenario3": "actual close_worker201 retains same parked response; no new delivery",
+  "scenario4": "two no-transfer grammar refusals then malformedstate3 same owned response; no new delivery",
+  "old_duplicate_worker201_refusal_unchanged": true,
+  "static_guest_reset": false,
+  "prior_201busy_history": "retained prior park family; no new delivery test executed yet"
+}

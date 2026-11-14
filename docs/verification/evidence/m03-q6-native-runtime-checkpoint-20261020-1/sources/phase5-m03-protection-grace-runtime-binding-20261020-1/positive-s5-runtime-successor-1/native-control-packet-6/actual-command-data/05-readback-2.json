@@ -1,0 +1,67 @@
+{
+  "operations": [
+    {
+      "argv_template": [],
+      "profile": "reader",
+      "role": "UNUSED_INDEX_ZERO_DO_NOT_EXECUTE"
+    },
+    {
+      "argv_template": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/taskset",
+        "--cpu-list",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--core=0",
+        "--nofile=256",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "30s",
+        "/usr/bin/cat",
+        "/home/holden/mckernel-work/scratch/vpg-s261020-1/p/attempt-10134fa809c34d048c37df62f32b31cc/result.json"
+      ],
+      "profile": "reader",
+      "role": "readback-2",
+      "status_path": "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/positive-s5-runtime-successor-1/native-control-packet-6/captures/05-readback-2/status.json",
+      "stderr_path": "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/positive-s5-runtime-successor-1/native-control-packet-6/captures/05-readback-2/stderr",
+      "stdout_path": "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/positive-s5-runtime-successor-1/native-control-packet-6/captures/05-readback-2/stdout"
+    }
+  ],
+  "profiles": {
+    "metadata": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 40,
+      "stream_fsize": 33554432
+    },
+    "native": {
+      "cpu": 7,
+      "parent_kill_grace_seconds": null,
+      "parent_wall_seconds": null,
+      "stream_fsize": 33554432
+    },
+    "reader": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 35,
+      "stream_fsize": 33554432
+    },
+    "snapshot": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 40,
+      "stream_fsize": 33554432
+    }
+  },
+  "release": {
+    "bytes": 13149,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/M03-POSITIVE-S5-S6Q6-NATIVE-SOURCE-AND-NONTEMPORAL-RELEASE.json",
+    "sha256": "d656dd4fba1f462cc908a05a040efad1be2644e1bf15cbe55cc5fda67c5fdeed"
+  },
+  "root_installed_release_path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/M03-POSITIVE-S5-S6Q6-NATIVE-SOURCE-AND-NONTEMPORAL-RELEASE.json"
+}

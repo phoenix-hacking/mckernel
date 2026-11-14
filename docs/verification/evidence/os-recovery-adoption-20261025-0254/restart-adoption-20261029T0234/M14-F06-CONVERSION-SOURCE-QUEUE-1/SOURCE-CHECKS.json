@@ -1,0 +1,56 @@
+{
+  "approved_contract_hash": "df27b12ba91eefa710271b9c2bc9d15bda06855bb9857b925d22325fdb6ea4d4",
+  "regset_original_C_fallback_exact": true,
+  "regset_no_dkprintf_or_descriptor": true,
+  "regset_full_CULong_lx": true,
+  "xrstor_reused_body_exact": true,
+  "badframe_reused_body_exact": true,
+  "provider_visibility_only": true,
+  "format_support_source": "debug.rs vkprintf_locked \u2192 numparse::vsnprintf_va_list_result; numparse.rs x sets SMALL/base16; l selects FORMAT_TYPE_ULONG; va reader args.arg::<CULong>(). Source inspection only.",
+  "original389": "No Ddebug additions/removals; regset/badframe kprintf are unconditional. C fallback physical insertions reset original logical lines. Runtime registry comparison still OPEN.",
+  "history": [
+    "Initial include/errno.h + include/signal.h missing; retained tool output; bounded correction authorized.",
+    "Requested arch/x86_64/include missing; actual arch/x86_64/kernel/include discovered.",
+    "Guessed kernel/include/lwk/errno.h missing; actual arch errno header includes generic-errno.h; no compile performed."
+  ],
+  "execution": {
+    "compiler": 0,
+    "native": 0,
+    "service_query": 0,
+    "canonical_edit": 0
+  },
+  "regset_retained_dkprintf_logical_lines_equal": true,
+  "signal_retained_dkprintf_logical_lines_equal": true,
+  "contract_examples_source_model": [
+    {
+      "event": 1,
+      "type": 0,
+      "output_suffix": "0\n"
+    },
+    {
+      "event": 2,
+      "type": 4294967295,
+      "output_suffix": "ffffffff\n"
+    },
+    {
+      "event": 1,
+      "type": 4294967296,
+      "output_suffix": "100000000\n"
+    },
+    {
+      "event": 2,
+      "type": -1,
+      "output_suffix": "ffffffffffffffff\n"
+    },
+    {
+      "event": 1,
+      "type": -9223372036854775808,
+      "output_suffix": "8000000000000000\n"
+    },
+    {
+      "event": 0,
+      "type": -1,
+      "output_suffix": ""
+    }
+  ]
+}

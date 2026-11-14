@@ -1,0 +1,388 @@
+{
+  "artifact_policy": {
+    "environment_generated_metadata": [
+      "rhelversion",
+      "srcversion",
+      "vermagic"
+    ],
+    "rocky_10_2_build_and_load_required_for_gate": true
+  },
+  "control_device_shell": {
+    "close_symbol": "ihk_smp_provider_close_v1",
+    "compat_ioctl": {
+      "explicit_when_config_compat": true,
+      "implicit_pointer_conversion_fallback": false,
+      "pointer_conversion": "arg as u32 as usize",
+      "unsupported_commands_errno": -22
+    },
+    "credit_eligible": false,
+    "default_release_drops_receipt": true,
+    "device_name": "mcd0",
+    "device_node_source_reachable": true,
+    "file_operations_owner": "THIS_MODULE",
+    "gate_claims": {
+      "IHK-003": false,
+      "IHK-004": false,
+      "RS-006": false
+    },
+    "gate_status": "TODO",
+    "get_buildid": {
+      "build_identity_semantics": "unchanged IHK consumer compatibility identity; native source candidate provenance is separate",
+      "command": "0x0011290b",
+      "copies_nul_terminator": true,
+      "copy_failure_errno": -14,
+      "generated_metadata_file": "ihk-compat-build-id.bin",
+      "safe_usercopy": "kernel::uaccess::UserSlice::writer::write_slice",
+      "source_fixture": {
+        "expected_tests": 8,
+        "path": "scripts/tests/fixtures/ihk_smp_buildid_compile.rs",
+        "sha256": "2998807ec73766c2a50dfae7ba6a6c89cabfef208a7acddef7ac8b16ffa1a83e",
+        "size": 11833
+      },
+      "source_fixture_scope": "extracted production dispatch with mock UserSlice; no kernel usercopy or runtime proof",
+      "success_result": 0
+    },
+    "minor": 0,
+    "native_ioctl": {
+      "explicit": true,
+      "unsupported_commands_errno": -22
+    },
+    "noncopy_fixture": {
+      "claim_scope": "Rust language compile-fail shape only; not a kernel build or runtime result",
+      "minimum_rustc": "1.92.0",
+      "path": "scripts/tests/fixtures/ihk_smp_provider_open_lease_compile_fail.rs",
+      "sha256": "eefe2b68114c227c8591677a935818eacd6e3e135816466a2b8f1c63b1f9be2a",
+      "size": 541
+    },
+    "open_allocation_failure_releases_receipt": true,
+    "open_close_abi": "scalar-only",
+    "open_receipt": {
+      "close_exactly_once": true,
+      "concurrent_shared_opens": true,
+      "duplicate_close_detectable_while_other_references_exist": false,
+      "non_clone": true,
+      "non_copy": true,
+      "positive": true,
+      "provider_policy": "shared-reference-counted-generation-receipts",
+      "raw_value_logged": false,
+      "same_generation_token_may_repeat": true,
+      "trusted_noncopy_owner_balance_required": true
+    },
+    "open_symbol": "ihk_smp_provider_open_v1",
+    "pinned_registration": true,
+    "provider_attach_before_registration": true,
+    "provider_operation_callbacks_reachable": false,
+    "raw_data_pointer": false,
+    "registration_failure_releases_provider_lease": true,
+    "rocky_runtime_validated": false,
+    "runtime_behavior_proven": false,
+    "scope": "SMP-owned mcd0 with native/compat BUILDID, unbooted OS create/destroy with a versioned resource callback pair, CPU reserve/release/count/query and memory reserve/query/full/partial release; OS resource commands use mcosN; boot remains pending",
+    "teardown_order": [
+      "deregister-control-device",
+      "retire-memory-controller-and-owned-pages",
+      "retire-cpu-controller-and-hotplug-callback",
+      "detach-provider-lease",
+      "emit-unload-diagnostic"
+    ],
+    "tracker_credit": false,
+    "unsupported_file_operations": [
+      "read",
+      "read_iter",
+      "write",
+      "write_iter",
+      "mmap",
+      "poll"
+    ],
+    "usercopy_reachable": true,
+    "valid_ioctl_commands": [
+      "IHK_DEVICE_GET_BUILDID",
+      "IHK_DEVICE_CREATE_OS",
+      "IHK_DEVICE_DESTROY_OS",
+      "IHK_DEVICE_RESERVE_CPU",
+      "IHK_DEVICE_RELEASE_CPU",
+      "IHK_DEVICE_GET_NUM_CPUS",
+      "IHK_DEVICE_QUERY_CPU",
+      "IHK_DEVICE_RESERVE_MEM",
+      "IHK_DEVICE_RELEASE_MEM",
+      "IHK_DEVICE_QUERY_MEM",
+      "IHK_DEVICE_RELEASE_MEM_PARTIALLY"
+    ]
+  },
+  "crate_modules": [
+    {
+      "destination": "smp_resource.rs",
+      "path": "host-kernel/native-rust/smp_resource.rs",
+      "sha256": "d4a5794f60be7fa5e549e7c9b806e366276d87370adbc5df94e51b8d464e8dcd"
+    },
+    {
+      "destination": "smp_cpu.rs",
+      "path": "host-kernel/native-rust/smp_cpu.rs",
+      "sha256": "ed5520878d89e9a79d7ffeb128ccbb54fbab5472b4b0f57abd00a0399fc8e9cb"
+    },
+    {
+      "destination": "abi/x86_64.rs",
+      "path": "host-kernel/native-rust/abi/x86_64.rs",
+      "sha256": "89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3"
+    },
+    {
+      "destination": "smp_memory.rs",
+      "path": "host-kernel/native-rust/smp_memory.rs",
+      "sha256": "db0c5f94b5ea41610c501002ff359b7f23a38841715a0307e8b8f7872ac65522"
+    },
+    {
+      "destination": "ihk_mapping.rs",
+      "path": "host-kernel/native-rust/ihk_mapping.rs",
+      "sha256": "085f4f4e7935bd273d89ae4c7f7d600da557ce1da8873f57a142dc12bf9677dc"
+    },
+    {
+      "destination": "smp_image.rs",
+      "path": "host-kernel/native-rust/smp_image.rs",
+      "sha256": "4f35ec396494fa428c55298c91ffe14aa0142d0282dd37d922f94a901a692689"
+    },
+    {
+      "destination": "smp_loader.rs",
+      "path": "host-kernel/native-rust/smp_loader.rs",
+      "sha256": "fa86ebb489454cd95c2607bba3a3d564ca36d6e65c5eea6bd6aa319bb40100e6"
+    },
+    {
+      "destination": "smp_startup.rs",
+      "path": "host-kernel/native-rust/smp_startup.rs",
+      "sha256": "12c3a816af6ff20dcf916c946b780ff988e90650300ab7c00e07a83cda1474a2"
+    }
+  ],
+  "dependency_contract": {
+    "built_symbol_reference_validated": false,
+    "dependencies": [
+      "ihk"
+    ],
+    "import_namespaces": [
+      "MCKERNEL_IHK_V1"
+    ],
+    "provider_symbol": "ihk_provider_lifecycle_v1",
+    "scope": "source-bound namespaced symbol dependency; built relocation and runtime ordering require Rocky evidence",
+    "source_symbol_reference_required": true
+  },
+  "gate_id": "SMP-001",
+  "kbuild": {
+    "composite_object": "ihk-smp-x86_64-y := ihk_smp_x86_64.o",
+    "config_symbol": "CONFIG_MCKERNEL_IHK_SMP_X86_64_RUST",
+    "module_object": "ihk-smp-x86_64.o",
+    "path": "host-kernel/kbuild/Kbuild.in"
+  },
+  "kconfig": {
+    "path": "host-kernel/kbuild/Kconfig",
+    "provider_symbol": "MCKERNEL_IHK_RUST",
+    "symbol": "MCKERNEL_IHK_SMP_X86_64_RUST",
+    "type": "tristate"
+  },
+  "legacy_source_commit": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+  "lifecycle_logs": {
+    "load": "lifecycle=load parameters={} dependency={} import_namespace={}",
+    "unload": "lifecycle=unload parameters={} dependency={} import_namespace={}"
+  },
+  "module": {
+    "forbidden_static_metadata": [
+      "author",
+      "description",
+      "version"
+    ],
+    "license": "Dual BSD/GPL",
+    "name": "ihk_smp_x86_64",
+    "output": "ihk-smp-x86_64.ko"
+  },
+  "os_resource_bridge": {
+    "allowed_status": "NotBooted",
+    "authority": "exact live IHK OsLease or exclusive DestroyGuard, never userspace identities",
+    "callback_abi": 1,
+    "callback_lifetime": "OS-owned Linux SMP module reference",
+    "commands": [
+      "IHK_OS_ASSIGN_CPU",
+      "IHK_OS_RELEASE_CPU",
+      "IHK_OS_QUERY_CPU",
+      "IHK_OS_GET_NUM_CPUS",
+      "IHK_OS_ASSIGN_MEM",
+      "IHK_OS_RELEASE_MEM",
+      "IHK_OS_QUERY_MEM",
+      "IHK_OS_LOAD"
+    ],
+    "compat_address": "zero-extended once in IHK; reject out-of-range address or compat flag in SMP",
+    "compatibility_create_export": "ihk_os_create_unbooted_v1",
+    "cpu_assignment": "preserve requested logical rank; whole-batch ownership validation",
+    "create_symbol": "ihk_os_create_unbooted_v2",
+    "credit_eligible": false,
+    "destroy": "preflight CPU and memory before either commit; return to reserved pool before minor reuse",
+    "image_loading": {
+      "command": "0x00112a00",
+      "file_limit_bytes": 67108864,
+      "file_owner": "Linux kernel_read_file_from_path vmalloc buffer released exactly once with kvfree",
+      "filename_limit_bytes": 256,
+      "geometry": "reuse ihk_mapping checked physical ranges and page alignment",
+      "image_window_bytes": 8388608,
+      "invalidates_prior_image": "before replacement file read and memory resource changes",
+      "linux_read_purpose": "READING_KEXEC_IMAGE",
+      "loading_state": "IHK publishes Loading while holding the OS operation mutex; restores NotBooted after every result",
+      "preflight": "all ELF segments, executable file-backed entry and reserved startup space checked before writes",
+      "prerequisites": "assigned CPU and exact-generation owned bootstrap extent",
+      "program_header_limit": 64,
+      "starts_cpus": false,
+      "startup_tables": {
+        "allocation": "GFP_KERNEL, ZERO, COMP, NORETRY, NOWARN and DMA32; Linux alloc_pages_noprof resolves node selection",
+        "cleanup": "failed/replaced load, memory resource changes and unbooted destruction release the original compound allocation",
+        "mapping": "256 GiB identity and straight-map windows share a subtree; checked 8 MiB kernel window",
+        "native_boot_proven": false,
+        "original_compound_order": 9,
+        "ownership": "noncopy Linux allocation owner retained inside exact-generation LoadedImage",
+        "preflight": "allocate and fill tables before first image write; no capability or CPU starts",
+        "readback": "volatile physical table bytes checked by an independent x86 guest capture model",
+        "root_limit_exclusive": 4294967296,
+        "tracker_credit": false,
+        "useful_pages": 260
+      },
+      "tracker_credit": false,
+      "writes": "zero bounded window and copy segments without spanning original PageOwner allocations"
+    },
+    "ioctl_callback": "ihk_smp_os_ioctl_v2",
+    "memory_assignment": "reuse canonical MemoryMap and retained Linux allocation owners",
+    "native_boot_proven": false,
+    "node_family": "/dev/mcosN",
+    "release_callback": "ihk_smp_os_release_v2",
+    "serialization": "per-OS sleepable mutex before CPU then memory controller locks",
+    "source_reachable": true,
+    "tracker_credit": false
+  },
+  "parameters": [
+    {
+      "default": 0,
+      "description": "IHK reserved CPU cores",
+      "legacy_source": "ihk/linux/driver/smp/smp-driver.c",
+      "name": "ihk_cores",
+      "ops": "param_ops_uint",
+      "permission": "0644",
+      "rust_type": "core::ffi::c_uint",
+      "type": "uint"
+    },
+    {
+      "default": 0,
+      "description": "Target CPU of IHK IKC IRQ",
+      "legacy_source": "ihk/linux/driver/smp/arch/x86_64/smp-arch-driver.c",
+      "name": "ihk_ikc_irq_core",
+      "ops": "param_ops_uint",
+      "permission": "0644",
+      "rust_type": "core::ffi::c_uint",
+      "type": "uint"
+    },
+    {
+      "default": 0,
+      "description": "IHK reserved memory in MBs",
+      "legacy_source": "ihk/linux/driver/smp/smp-driver.c",
+      "name": "ihk_mem",
+      "ops": "param_ops_ulong",
+      "permission": "0644",
+      "rust_type": "core::ffi::c_ulong",
+      "type": "ulong"
+    },
+    {
+      "default": 0,
+      "description": "IHK reserved physical memory start address",
+      "legacy_source": "ihk/linux/driver/smp/smp-driver.c",
+      "name": "ihk_phys_start",
+      "ops": "param_ops_ulong",
+      "permission": "0644",
+      "rust_type": "core::ffi::c_ulong",
+      "type": "ulong"
+    },
+    {
+      "default": 0,
+      "description": "IHK IKC IPI to be scanned from this IRQ vector",
+      "legacy_source": "ihk/linux/driver/smp/arch/x86_64/smp-arch-driver.c",
+      "name": "ihk_start_irq",
+      "ops": "param_ops_uint",
+      "permission": "0644",
+      "rust_type": "core::ffi::c_uint",
+      "type": "uint"
+    },
+    {
+      "default": 0,
+      "description": "IHK trampoline page physical address",
+      "legacy_source": "ihk/linux/driver/smp/arch/x86_64/smp-arch-driver.c",
+      "name": "ihk_trampoline",
+      "ops": "param_ops_ulong",
+      "permission": "0644",
+      "rust_type": "core::ffi::c_ulong",
+      "type": "ulong"
+    }
+  ],
+  "production_source": "host-kernel/native-rust/ihk_smp_x86_64.rs",
+  "provider_lease": {
+    "attach_symbol": "ihk_smp_provider_attach_v2",
+    "callback_abi": 1,
+    "callback_payload_reachable": false,
+    "compatibility_exports": [
+      "ihk_smp_provider_attach_v1",
+      "ihk_smp_provider_detach_v1"
+    ],
+    "credit_eligible": false,
+    "detach_symbol": "ihk_smp_provider_detach_v2",
+    "device_node_reachable": false,
+    "errno_statuses": [
+      -2,
+      -12,
+      -16,
+      -22,
+      -75,
+      -116,
+      -117
+    ],
+    "gate_status": "TODO",
+    "lifecycle_callbacks": {
+      "arguments": "none",
+      "exit_before_vacate": true,
+      "exit_identity_retained": true,
+      "exit_symbol": "ihk_smp_provider_exit_v2",
+      "init_before_publish": true,
+      "init_symbol": "ihk_smp_provider_init_v2",
+      "operation_callbacks_reachable": false,
+      "raw_data_pointer": false,
+      "unpublishing_guard_across_exit": true
+    },
+    "minor": 0,
+    "namespace": "MCKERNEL_IHK_V1",
+    "raw_token_logged": false,
+    "rocky_runtime_validated": false,
+    "runtime_behavior_proven": false,
+    "scope": "scalar minor-zero module-lifetime provider lease plus scalar-only init/exit callbacks; no provider operation payload",
+    "token_version": 1,
+    "tracker_credit": false,
+    "unknown_status_errno": -117
+  },
+  "provider_source": "host-kernel/native-rust/ihk.rs",
+  "reference_inventory": "host-kernel/reference/legacy-host-modules-f2eb7352.json",
+  "resource_foundation": {
+    "credit_eligible": false,
+    "external_effect_failure_policy": {
+      "cpu": "quarantine-affected-slots-unless-compensated-rollback",
+      "memory": "poison-live-map-unless-compensated-rollback"
+    },
+    "fixture": {
+      "expected_fixture_tests": 14,
+      "expected_in_file_tests": 38,
+      "expected_total_tests": 52,
+      "minimum_rustc": "1.92.0",
+      "negative_path": "scripts/tests/fixtures/ihk_smp_resource_workspace_alias_compile_fail.rs",
+      "negative_sha256": "4a3ee8971e6e34f48f4ee0a920fcdb21e713784a01838da4b05ab3bcc7276159",
+      "positive_path": "scripts/tests/fixtures/ihk_smp_resource_compile.rs",
+      "positive_sha256": "cd38c200b5aa8f7cfa2f42ac0f9b47676958df53a0fdf19aeb2354294f6188f1"
+    },
+    "integration_blockers": [
+      "OS resource assignment and image loading require declared-stage integration and production acceptance",
+      "CPU physical eject, suspend, topology replacement and uncertain-state reconciliation need production acceptance",
+      "IKC optional-versus-complete mapping compatibility is not selected at the ABI boundary",
+      "APIC reset, IRQ, IKC and native McKernel boot remain unreachable"
+    ],
+    "linux_reachable": true,
+    "os_token_minting": "explicit-unsafe-contract-requires-exact-ihk-v2-os-lease-or-destroy-guard-and-smp-module-owner",
+    "status": "native-cpu-memory-and-os-resource-adapters-with-bounded-image-loading"
+  },
+  "schema_version": 1,
+  "stage_manifest": "host-kernel/kbuild/stage-manifest.json"
+}

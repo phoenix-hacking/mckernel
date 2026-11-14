@@ -1,0 +1,32 @@
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -7068,6 +7068,9 @@
+ #endif
+ }
+ 
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++extern void f03_execveat_unmap_old_image_v1(void);
++#else
+ static void
+ munmap_all_free_ranges_bridge(void *vm)
+ {
+@@ -7096,6 +7099,7 @@
+ 			munmap_do_bridge, munmap_all_free_ranges_bridge,
+ 			munmap_all_log_bridge);
+ } /* munmap_all() */
++#endif
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ _Static_assert(_NSIG == 64 && SS_DISABLE == 2, "Rust exec signal constants");
+@@ -7208,7 +7212,11 @@
+ 	}
+ 
+ 	/* Unmap all memory areas of the process, userspace will be gone */
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++	f03_execveat_unmap_old_image_v1();
++#else
+ 	munmap_all();
++#endif
+ 
+ 	/* Code assumes no process switch from here on */
+ 	preempt_disable();

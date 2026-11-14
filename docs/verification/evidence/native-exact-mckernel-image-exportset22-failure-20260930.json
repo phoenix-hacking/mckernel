@@ -1,0 +1,85 @@
+{
+  "schema": "mckernel.native-exact-mckernel-image-exportset22-failure.v1",
+  "recorded_at": "2026-09-30T14:12:14-07:00",
+  "result": "FAIL_CONFIGURE",
+  "acceptance_effect": "none",
+  "candidate_sha": "4e99a82c9b87a7cf3d6002b75ec380fef37af7a1",
+  "ihk_sha": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+  "released_request": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-request-4e99a82c-exportset-22.json",
+    "sha256": "7a9c1c525c03e0329e43cec140dbc20784c4a6be8042cc82583a0f237c7b4c60"
+  },
+  "execution": {
+    "command": [
+      "python3",
+      "-I",
+      "-B",
+      "scripts/native_rust_exact_mckernel_image_container_owner.py",
+      "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-request-4e99a82c-exportset-22.json"
+    ],
+    "invocations": 1,
+    "owner_status": "FAIL",
+    "owner_error": "offline image driver failed",
+    "owner_exit_code": 1,
+    "driver_status": "FAIL",
+    "driver_phase": "configure",
+    "driver_error": "configure failed",
+    "cmake_invocations": 1
+  },
+  "retained_evidence": {
+    "owner_root": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-owner-evidence-4e99a82c-exportset-22",
+    "owner_receipt_sha256": "6f35ae64ae3023d17b89b6bad2b0fa81658659f4f75855af72d00564bf0c0255",
+    "driver_root": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-work-4e99a82c-exportset-22/evidence",
+    "driver_receipt_sha256": "36a7cf063608bbc462de2e378e7ed5f96c26b39e08ace4672c5bd34e80990ad9",
+    "stderr_sha256": "fa96d87c0b369a95537fac07cc4df447d0b14342789ddfd96f24bf80e0b5a91f",
+    "stdout_sha256": "cb16d33f974ec9ca6944312d4ca29617faff53ea1f2baaddafab3d19bf392074",
+    "provenance_sha256": "4f3b206e1901df6ef876930e90924b3693ee86b4f3fa7882d1467bae1b9cd5ab"
+  },
+  "terminal_container": {
+    "id": "4dc6377ec81950703c1f539bfb2f491f6d9a5344d8930cd4db9fb166c6412707",
+    "name": "mckernel-image-d6f5a553c80b41c48f52ec26afb90439",
+    "owner_nonce": "c35d5f2a696c4a2d8f46d8be893337ba",
+    "status": "exited",
+    "pid": 0,
+    "exit_code": 1,
+    "oom_killed": false,
+    "retained": true,
+    "cleanup_separately_required": true
+  },
+  "coordination": {
+    "heavy_lease_present_after_run": false,
+    "common_exclusion_path": "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-22.json",
+    "common_exclusion_present_after_run": true,
+    "repeat_unchanged_attempt_prohibited": true
+  },
+  "observed_failure": {
+    "missing_paths": [
+      "/src/executer/user/lib/libdwarf/libdwarf/libdwarf/libdwarf.h.in",
+      "/src/executer/user/lib/libdwarf/libdwarf/libdwarf/config.h.in.cmake"
+    ],
+    "kbuild_external_module_probe": "PASS with CC=/usr/bin/clang and LD=/usr/bin/ld.lld",
+    "libnuma_probe": "PASS"
+  },
+  "diagnosis": {
+    "gitlink": "executer/user/lib/libdwarf/libdwarf",
+    "required_commit": "ab9230b2b8aa66a3d1d52e4be11fca17a3b63753",
+    "candidate_state": "gitlink recorded but nested source directory empty",
+    "authenticated_local_source": "clean matching submodule with 412 tracked files and complete packed objects",
+    "libdwarf_h_in_sha256": "727cd79fecf8b9f469eb20fd0d1cf4bd3102b1d96a77b3320a99d323763f527c",
+    "config_h_in_cmake_sha256": "58ffc3c99df0bdeee9182d09a716b341e7bd93ed9bc20356709e668f1edf3c68",
+    "expert_constraint": "materialized bytes must be additively authenticated; do not disable mcinspect or DWARF and do not vendor-copy into the superproject",
+    "review_status": "expert review interrupted for shutdown after confirming the unauthenticated-gitlink hole"
+  },
+  "next_action": "Design and independently review an additive exact-gitlink dependency binding for libdwarf ab9230b2, preserve the retained host-kernel output, advance the owner namespace, and prepare a fresh packet; do not repeat exportset22 unchanged.",
+  "resource_state_after_run": {
+    "host_free_bytes": 17285165056,
+    "scratch_free_bytes": 15074672640,
+    "mem_available_kib": 29990784
+  },
+  "launcher_processes": [
+    {"pid": 1442141, "role": "wrapper", "started": "2026-09-30T10:46:42-07:00"},
+    {"pid": 1442142, "role": "launcher", "started": "2026-09-30T10:46:42-07:00"},
+    {"pid": 1442145, "role": "worker", "started": "2026-09-30T10:46:42-07:00"},
+    {"pid": 1442149, "role": "server", "started": "2026-09-30T10:46:42-07:00"}
+  ]
+}

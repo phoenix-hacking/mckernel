@@ -1,0 +1,305 @@
+{
+  "actual": {
+    "child_rows": 3,
+    "controller_pid": 2402772,
+    "controller_start": 35219037,
+    "direct_joined_group_absent_closed_streams": true,
+    "outer_stderr_bytes": 0,
+    "record_count": 4,
+    "returncode": 1,
+    "root_child_pid": 2402773,
+    "root_child_start": "35219041",
+    "seconds": 0.33375255699502304,
+    "stdout_bytes": 116177,
+    "stdout_sha256": "8c1c1ae6da50ccc4df0f1e43336353162e55a5eab857ba64d60dfbe14b30f4f0",
+    "summary": {
+      "cleanup_executed": false,
+      "commands": 3,
+      "container_record_mutex_effects": false,
+      "original_first_failed_argv_claim": false,
+      "readonly_only": true,
+      "reason": "root-command-failed:/usr/bin/docker",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "status": "REFUSED"
+    }
+  },
+  "child_results": [
+    {
+      "argv": [
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "ps",
+        "-a",
+        "--no-trunc",
+        "--format",
+        "{{json .}}"
+      ],
+      "bound_release_sha256": "302b004a98fbf5de8cf22773f0a225e261c79a07f61e6e1f284098602adeeb1e",
+      "direct_child_joined": true,
+      "engine_sha256": "ec7126516041ef267e68127180fbe1dca785847078d795cf9009389980483ba2",
+      "limits_before_after": {
+        "AS": [
+          2147483648,
+          2147483648
+        ],
+        "CORE": [
+          0,
+          0
+        ],
+        "CPU": [
+          -1,
+          -1
+        ],
+        "FSIZE": [
+          134217728,
+          134217728
+        ],
+        "NOFILE": [
+          4096,
+          1048576
+        ],
+        "affinity": [
+          7
+        ],
+        "euid": 0,
+        "uid": 0
+      },
+      "returncode": 0,
+      "stderr": {
+        "complete": true,
+        "observed_bytes": 0,
+        "observed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "retained_bytes": 0,
+        "retained_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "truncated": false
+      },
+      "stdout": {
+        "complete": false,
+        "observed_bytes": 71319,
+        "observed_sha256": "1a3f6a858379420cef0428e7a96829c5adbfc8760ef1436976ca75e4b67007c0",
+        "retained_bytes": 65536,
+        "retained_sha256": "5b541e9621f8b0feabcb93f8b533cb1e2d54a6348f337d98f0f351fe7060a38d",
+        "truncated": true
+      },
+      "strict_rejection_flags": {
+        "nonempty_stderr": false,
+        "nonzero_returncode": false,
+        "stdout_over_limit": false
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "inspect",
+        "--type",
+        "container",
+        "88102070029b941df8c18c8a25a11778625a28390887c91127539bae5914b120"
+      ],
+      "bound_release_sha256": "302b004a98fbf5de8cf22773f0a225e261c79a07f61e6e1f284098602adeeb1e",
+      "direct_child_joined": true,
+      "engine_sha256": "ec7126516041ef267e68127180fbe1dca785847078d795cf9009389980483ba2",
+      "limits_before_after": {
+        "AS": [
+          2147483648,
+          2147483648
+        ],
+        "CORE": [
+          0,
+          0
+        ],
+        "CPU": [
+          -1,
+          -1
+        ],
+        "FSIZE": [
+          134217728,
+          134217728
+        ],
+        "NOFILE": [
+          4096,
+          1048576
+        ],
+        "affinity": [
+          7
+        ],
+        "euid": 0,
+        "uid": 0
+      },
+      "returncode": 0,
+      "stderr": {
+        "complete": true,
+        "observed_bytes": 0,
+        "observed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "retained_bytes": 0,
+        "retained_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "truncated": false
+      },
+      "stdout": {
+        "complete": true,
+        "observed_bytes": 16634,
+        "observed_sha256": "d41bf271a63f02f5f4163c761b2fb8a5e6e3bec7654897feb2da9e2e0dd57e27",
+        "retained_bytes": 16634,
+        "retained_sha256": "d41bf271a63f02f5f4163c761b2fb8a5e6e3bec7654897feb2da9e2e0dd57e27",
+        "truncated": false
+      },
+      "strict_rejection_flags": {
+        "nonempty_stderr": false,
+        "nonzero_returncode": false,
+        "stdout_over_limit": false
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "logs",
+        "--",
+        "88102070029b941df8c18c8a25a11778625a28390887c91127539bae5914b120"
+      ],
+      "bound_release_sha256": "302b004a98fbf5de8cf22773f0a225e261c79a07f61e6e1f284098602adeeb1e",
+      "direct_child_joined": true,
+      "engine_sha256": "ec7126516041ef267e68127180fbe1dca785847078d795cf9009389980483ba2",
+      "limits_before_after": {
+        "AS": [
+          2147483648,
+          2147483648
+        ],
+        "CORE": [
+          0,
+          0
+        ],
+        "CPU": [
+          -1,
+          -1
+        ],
+        "FSIZE": [
+          134217728,
+          134217728
+        ],
+        "NOFILE": [
+          4096,
+          1048576
+        ],
+        "affinity": [
+          7
+        ],
+        "euid": 0,
+        "uid": 0
+      },
+      "returncode": 0,
+      "stderr": {
+        "complete": true,
+        "observed_bytes": 746,
+        "observed_sha256": "3a01121644174ac971c1f15c6120ffb1363a0caa8d1aac05bf3367a388031df2",
+        "retained_bytes": 746,
+        "retained_sha256": "3a01121644174ac971c1f15c6120ffb1363a0caa8d1aac05bf3367a388031df2",
+        "truncated": false
+      },
+      "stdout": {
+        "complete": true,
+        "observed_bytes": 0,
+        "observed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "retained_bytes": 0,
+        "retained_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "truncated": false
+      },
+      "strict_rejection_flags": {
+        "nonempty_stderr": true,
+        "nonzero_returncode": false,
+        "stdout_over_limit": false
+      }
+    }
+  ],
+  "corrective_boundary": "Author may prepare one exact-currentcase capture_logs adapter and actual-body positive/error/channel refusals, preserving globalroot_command strictness and full expectedlog byte comparison. Exact tuple can permit only return0/stdoutempty/stderr byte-equal to current pinned expected application log under existing precompiler identity guard; unexpected/mixed/changed/nonzero/timeout output must still refuse and remain retained. Coupled observer/postjoin/release/source/fresh transaction namespace need review; no cleanup replay from this result.",
+  "created_utc": "2026-10-21T03:54:25.412090+00:00",
+  "decision": "Confirm current logs STDERR compatibility defect; preserve actual diagnosticrc1 and both original failures. No cleanup or physical acceptance.",
+  "evidence": [
+    {
+      "bytes": 1914,
+      "path": "/home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1/independent-review-1/current-terminal-preparation-1/readonly-docker-diagnostic-1/actual-readonly-docker-diagnostic-capture-1/status.json",
+      "sha256": "7ae90bd4722cc9f0c1fb0db012662f88a9d826897e022ff75fc1e72f7eeb0c13",
+      "stable_full_identity": {
+        "st_ctime_ns": 1792554746059550982,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48403148,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792554746059550982,
+        "st_nlink": 1,
+        "st_size": 1914,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 116177,
+      "path": "/home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1/independent-review-1/current-terminal-preparation-1/readonly-docker-diagnostic-1/actual-readonly-docker-diagnostic-capture-1/stdout",
+      "sha256": "8c1c1ae6da50ccc4df0f1e43336353162e55a5eab857ba64d60dfbe14b30f4f0",
+      "stable_full_identity": {
+        "st_ctime_ns": 1792554746043550450,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48403143,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792554746043550450,
+        "st_nlink": 1,
+        "st_size": 116177,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1/independent-review-1/current-terminal-preparation-1/readonly-docker-diagnostic-1/actual-readonly-docker-diagnostic-capture-1/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stable_full_identity": {
+        "st_ctime_ns": 1792554745715539557,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48403144,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792554745715539557,
+        "st_nlink": 1,
+        "st_size": 0,
+        "st_uid": 1000
+      }
+    }
+  ],
+  "first_cleanup_attribution_limit": "This diagnostic confirms the current exact logs boundary defect while ps/inspect pass. Original cleanup retained only genericroot-command-failed and no childargv/conjunct; do not fabricate an original traced first argv. Original pre-mutation classificationf89d remains based on its own closure/marker/source facts.",
+  "implementation_ownership": false,
+  "preserved_authority": {
+    "build_native_C_retirement_credit": false,
+    "cleanup_or_postjoin_retry_release": false,
+    "common_shared_release": false,
+    "diagnostic": "REFUSED1 retained",
+    "new_heavy_grant": false,
+    "original_build": "FAIL_PRECOMPILER_SOURCE_PREREQUISITE_DRIFT",
+    "original_cleanup": "JoinedREFUSED1 before transaction mutation",
+    "physical_acceptance": false
+  },
+  "review_actions": {
+    "Git": 0,
+    "builds": 0,
+    "census": 0,
+    "effects": 0,
+    "imports": 0,
+    "leases": 0,
+    "root": 0,
+    "source_inventory": 0,
+    "tests": 0
+  },
+  "reviewer": "/root/m06_closed_stage_review",
+  "schema": "mckernel.independent-actual-current-readonly-Docker-boundary-diagnostic-adoption.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1/current-terminal-review-1/exact-release-bound-readonly-docker-diagnostic-review.json",
+    "sha256": "396150da499de13bd7a12b9b6e40269d4bba580c1d317d4795e380db1e6003cc"
+  },
+  "status": "ACCEPT_ACTUAL_DIAGNOSTIC_REFUSAL_DATA_ONLY",
+  "verified_findings": [
+    "All three exact read-only Docker commands completed0 under reviewed2GiB/CPU7/CPUunlimited/128MiBFSIZE/core0 profile and clean production environment; no timeout/launch error.",
+    "ps stdout71319 below1MiB and empty stderr passes strict helper. Only64KiB prefix is retained with explicit truncation/full observed hash; reviewer does not claim complete ps bytes were retained.",
+    "inspect stdout16634 and empty stderr passes; full decoded data retains exact exited currentCID/PID0/Exit1. This is current read-only state, not cleanup or full physical release.",
+    "logs returns0 with stdout0 and complete stderr746 exactly SHA3a011216, byte-equal to retained original container.log. Nonempty_stderr is its sole strict rejection. No resource or daemon error inferred from that expected application failure log.",
+    "All rows were captured before unchanged strict refusal; final actualREFUSED1 is correct diagnostic data and remains unchanged. Legacy operation rolepostjoin is capture policy only; this was no postjoin."
+  ]
+}

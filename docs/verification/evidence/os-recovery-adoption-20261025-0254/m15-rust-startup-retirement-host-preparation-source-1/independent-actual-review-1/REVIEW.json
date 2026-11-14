@@ -1,0 +1,526 @@
+{
+  "ELF": {
+    "DYNAMIC": false,
+    "INTERP": false,
+    "NEEDED": false,
+    "class": "ELF64",
+    "endianness": "little",
+    "entry": 2355440,
+    "entry_in_executable_LOAD": true,
+    "independent_method": "Direct bounded ELF header/program and section table parsing on actual artifact; no execution/readelf rerun.",
+    "machine": "x86_64",
+    "program_headers": 10,
+    "readelf": {
+      "bytes": 2620,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-capture-1/step4/stdout",
+      "sha256": "7fa5d37176f29dafd8e89fa6fe84bd2968e521c9cae6bae3b92dde732a9a967d"
+    },
+    "section_headers": 45,
+    "type": "ET_EXEC"
+  },
+  "actual_artifact_mode": "0o700",
+  "actual_collector": {
+    "bytes": 5675672,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-output-1/startup-supervisor",
+    "sha256": "33c11bb60d337a2a8dd99fbb3b5d4cf9522f44996d3b36080dfd534f38dc6144"
+  },
+  "actual_dispatch_source": {
+    "bytes": 4760,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/ROOT-ACTUAL-HOST-DISPATCH-SOURCE.py",
+    "sha256": "508b1dcfd166b735b9d9de429cdbec4afc345ab28c8d8b826c934b8fe9e0f66a"
+  },
+  "actual_dispatch_tool_result": {
+    "bytes": 831,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/ROOT-ACTUAL-HOST-DISPATCH-TOOL-RESULT.json",
+    "sha256": "c7c4ee4d2f0e60719d45e14f1bbfadc1bceb624c71d87f55bfc7c516391103a7"
+  },
+  "actual_interface": {
+    "HOST_protocol_evidence": "Actual realchild fakeexec tested exact8argv incl empty/argvNULL/twoenv/envNULL/cwd; source-built frame matches. Full22names include both positive and c020/dropped-empty negative controls.",
+    "ND_schema": "Source/report byteexact reuse; internal actual leader PID not serialized.",
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "app",
+      "A",
+      "",
+      "B"
+    ],
+    "cwd": "/case/work",
+    "env": {
+      "COKERNEL_PATH": "/apps",
+      "PATH": "/usr/bin:/bin"
+    },
+    "limits": {
+      "collector_timeout_seconds": 120,
+      "frame_limit_bytes": 4096,
+      "outer_native_timeout_seconds": 300,
+      "payload_timeout_ms": 10000,
+      "post_reap_retirement_ms": 5000,
+      "raw_kernel_snapshot_limit_bytes": 262144,
+      "stderr_limit_bytes": 1024,
+      "stdout_limit_bytes": 1024
+    },
+    "oracle": {
+      "exit_code": 0,
+      "stderr_hex": "",
+      "stdout_hex": "7b2263617365223a22737461727475702e617267762d656d707479222c2261726763223a342c2261726776223a5b22617070222c2241222c22222c2242225d2c227465726d696e61746f725f69735f6e756c6c223a747275657d0a"
+    },
+    "startup_boot_argv": [
+      "/bin/native-boot"
+    ]
+  },
+  "actual_result": {
+    "bytes": 9260,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-capture-1/RESULTS.json",
+    "sha256": "dc5b76556263059782feba217d1f00e8d2f59fcca2b8c18a98ae39f70fb18d57"
+  },
+  "actual_steps": [
+    {
+      "admission": {
+        "bytes": 1087,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-capture-1/step0/admission.json",
+        "sha256": "379de384c43499f279d2a39e1dc08ba41784ce41ae18e7cdea13a805d942015a"
+      },
+      "argv": [
+        "/usr/bin/env",
+        "TMPDIR=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-output-1",
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "-D",
+        "warnings",
+        "-C",
+        "codegen-units=1",
+        "-C",
+        "opt-level=1",
+        "-C",
+        "panic=abort",
+        "-C",
+        "target-feature=+crt-static",
+        "-C",
+        "relocation-model=static",
+        "-C",
+        "link-arg=-no-pie",
+        "-C",
+        "link-arg=-Wl,-z,noexecstack",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-diagnosis-source-1/retirement-completion-successor-1/fakeexec.rs",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-output-1/startup-fakeexec"
+      ],
+      "capture": {
+        "stderr": {
+          "bytes": 0,
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-capture-1/step0/stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout": {
+          "bytes": 0,
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-capture-1/step0/stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-diagnosis-source-1/retirement-completion-successor-1",
+      "direct_wait": {
+        "bytes": 82,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-capture-1/step0/direct-wait.json",
+        "sha256": "3c49ec7e07bfd6b4000f76b1dcb00c82409c69485e197008ac439372bcce63b4"
+      },
+      "index": 0,
+      "join": {
+        "closed_streams": true,
+        "direct_child_joined": true,
+        "group_absent": true,
+        "pid": 1765014,
+        "returncode": 0,
+        "seconds": 0.11930419900454581,
+        "start": 94360423
+      },
+      "purpose": "Functional OS only; no security testing. Compile small HOST-only rawargv fakeexec"
+    },
+    {
+      "admission": {
+        "bytes": 1087,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-capture-1/step1/admission.json",
+        "sha256": "2a33a412fa0163b14eaadcd3c02dc47609500c026c243ef1852460b6427d08fe"
+      },
+      "argv": [
+        "/usr/bin/env",
+        "TMPDIR=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-output-1",
+        "STARTUP_FAKEEXEC_PATH=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-output-1/startup-fakeexec",
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "-D",
+        "warnings",
+        "-C",
+        "codegen-units=1",
+        "--test",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-diagnosis-source-1/retirement-completion-successor-1/main.rs",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-output-1/startup-tests"
+      ],
+      "capture": {
+        "stderr": {
+          "bytes": 0,
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-capture-1/step1/stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout": {
+          "bytes": 0,
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-capture-1/step1/stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-diagnosis-source-1/retirement-completion-successor-1",
+      "direct_wait": {
+        "bytes": 82,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-capture-1/step1/direct-wait.json",
+        "sha256": "33f05c8da9f655f8b13e15989588a22f0919ac2e1f0766a08119a3f911a64819"
+      },
+      "index": 1,
+      "join": {
+        "closed_streams": true,
+        "direct_child_joined": true,
+        "group_absent": true,
+        "pid": 1765025,
+        "returncode": 0,
+        "seconds": 0.5486267519881949,
+        "start": 94360453
+      },
+      "purpose": "Functional OS only; no security testing. Compile exact source-bound retained16 plus actualproducer observer controls"
+    },
+    {
+      "admission": {
+        "bytes": 1087,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-capture-1/step2/admission.json",
+        "sha256": "a86a93ab0fbcc942534ff6c145fd461ed45709a21ba1c9838dd51d226ea26dcc"
+      },
+      "argv": [
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-output-1/startup-tests",
+        "--test-threads=1"
+      ],
+      "capture": {
+        "stderr": {
+          "bytes": 0,
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-capture-1/step2/stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout": {
+          "bytes": 2084,
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-capture-1/step2/stdout",
+          "sha256": "ff04e7c14d1858b4fe4ddd5ca2988aac3ed0c9f0356ba73b7ea0ed6c29458c42"
+        }
+      },
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-diagnosis-source-1/retirement-completion-successor-1",
+      "direct_wait": {
+        "bytes": 82,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-capture-1/step2/direct-wait.json",
+        "sha256": "4d3e842cc190569ec575e7881031297ba303877533d648a04ca76cb473597989"
+      },
+      "index": 2,
+      "join": {
+        "closed_streams": true,
+        "direct_child_joined": true,
+        "group_absent": true,
+        "pid": 1765036,
+        "returncode": 0,
+        "seconds": 1.2736489379312843,
+        "start": 94360528
+      },
+      "purpose": "Functional OS only; no security testing. Run finite source-bound startup and retirement controls"
+    },
+    {
+      "admission": {
+        "bytes": 1084,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-capture-1/step3/admission.json",
+        "sha256": "8e6b01f0db303c11d25469da32b55b2290a9bdfb1d8bec7c7132b25864e0e730"
+      },
+      "argv": [
+        "/usr/bin/env",
+        "TMPDIR=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-output-1",
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "-D",
+        "warnings",
+        "-C",
+        "codegen-units=1",
+        "-C",
+        "opt-level=1",
+        "-C",
+        "panic=abort",
+        "-C",
+        "target-feature=+crt-static",
+        "-C",
+        "relocation-model=static",
+        "-C",
+        "link-arg=-no-pie",
+        "-C",
+        "link-arg=-Wl,-z,noexecstack",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-diagnosis-source-1/retirement-completion-successor-1/main.rs",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-output-1/startup-supervisor"
+      ],
+      "capture": {
+        "stderr": {
+          "bytes": 0,
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-capture-1/step3/stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout": {
+          "bytes": 0,
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-capture-1/step3/stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-diagnosis-source-1/retirement-completion-successor-1",
+      "direct_wait": {
+        "bytes": 82,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-capture-1/step3/direct-wait.json",
+        "sha256": "b06c2e0cade2006144cf40c698d21fcc8633d6252a65aa16ccc47a706eb0e5c9"
+      },
+      "index": 3,
+      "join": {
+        "closed_streams": true,
+        "direct_child_joined": true,
+        "group_absent": true,
+        "pid": 1765085,
+        "returncode": 0,
+        "seconds": 1.1189720059046522,
+        "start": 94360674
+      },
+      "purpose": "Functional OS only; no security testing. Compile fixedstartup productioncollector"
+    },
+    {
+      "admission": {
+        "bytes": 1084,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-capture-1/step4/admission.json",
+        "sha256": "c61331bafa3320ad89cc6ab43878597ab5788c1dea85eeeb4ee818da52d63619"
+      },
+      "argv": [
+        "/usr/bin/readelf",
+        "-W",
+        "-h",
+        "-l",
+        "-d",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-output-1/startup-supervisor"
+      ],
+      "capture": {
+        "stderr": {
+          "bytes": 0,
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-capture-1/step4/stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout": {
+          "bytes": 2620,
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-capture-1/step4/stdout",
+          "sha256": "7fa5d37176f29dafd8e89fa6fe84bd2968e521c9cae6bae3b92dde732a9a967d"
+        }
+      },
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-diagnosis-source-1/retirement-completion-successor-1",
+      "direct_wait": {
+        "bytes": 82,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-capture-1/step4/direct-wait.json",
+        "sha256": "89010877905ba3c3ebcbac6c37b6b6e3a8efa0ea49308a6ee00413d068387af1"
+      },
+      "index": 4,
+      "join": {
+        "closed_streams": true,
+        "direct_child_joined": true,
+        "group_absent": true,
+        "pid": 1765096,
+        "returncode": 0,
+        "seconds": 0.023461770033463836,
+        "start": 94360804
+      },
+      "purpose": "Functional OS only; no security testing. Qualify actualcollectorELF"
+    }
+  ],
+  "actual_tests": {
+    "count": 22,
+    "failed": 0,
+    "filtered": 0,
+    "full_names": [
+      "host_tests::host_actual_child_observes_requested_fresh_private_cwd",
+      "host_tests::host_missing_namespace_is_an_error",
+      "host_tests::host_real_binary_streams_and_raw_wait_status",
+      "host_tests::host_real_exec_and_cwd_failures_keep_exact_setup_stage",
+      "host_tests::host_real_orphan_descendant_is_reaped_before_clean_result",
+      "host_tests::host_real_stream_overflow_counts_without_exceeding_retention",
+      "host_tests::host_real_timeout_signals_pinned_group_and_reaps_ignored_term",
+      "host_tests::host_startup_actual_exec_argv_empty_null_and_frame_pair",
+      "host_tests::host_startup_rejects_original_c020_noargs_and_dropped_empty_argument",
+      "startup_retirement::tests::actual_negative_delete_empty_then_fresh_late_zero_completes",
+      "startup_retirement::tests::missing_delete_unreadable_namespace_and_late_zero_do_not_complete",
+      "startup_retirement::tests::permanent_negative_and_shortcuts_cannot_complete_at_original_deadline",
+      "startup_retirement::tests::query_before_ack_or_terminal_and_duplicate_delete_or_unknown_rows_fail",
+      "startup_retirement::tests::raw_prefix_loss_overflow_and_incomplete_envelope_fail_without_reconstruction",
+      "startup_retirement::tests::wrong_owner_duplicate_token_bad_errno_and_excess_queries_fail",
+      "supervisor::leader_ownership_tests::descendant_reap_keeps_leader_pin_but_echild_removes_all_signal_authority",
+      "supervisor::leader_ownership_tests::positive_leader_reap_forbids_signals_on_every_later_clock_or_error_branch",
+      "tests::original_deadlines_clamp_without_renewal",
+      "tests::original_startup_retirement_requires_readable_empty_namespace_before_deadline",
+      "tests::oversize_frame_uses_original_failure_fallback",
+      "tests::report_and_execution_share_exact_startup_argv_with_empty_element",
+      "tests::stream_capture_retains_1024_and_counts_all_bytes"
+    ],
+    "ignored": 0,
+    "new_retirement_controls": 6,
+    "passed": 22,
+    "retained_startup_ownership_controls": 16,
+    "stdout": {
+      "bytes": 2084,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-capture-1/step2/stdout",
+      "sha256": "ff04e7c14d1858b4fe4ddd5ca2988aac3ed0c9f0356ba73b7ea0ed6c29458c42"
+    }
+  },
+  "all_direct_joined_groups_absent_streams_closed": true,
+  "all_five_returncodes": 0,
+  "all_five_stderr_empty": true,
+  "application_acceptance": false,
+  "binding_facts": {
+    "bytes": 8409,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/independent-actual-review-1/COLLECTOR-BINDING-FACTS.json",
+    "sha256": "5b51f08a1677d5b80fdb9a69d72d4fae4d15a3bcdc859953654b2c02db854c42"
+  },
+  "blocker": null,
+  "bound_profile": {
+    "bytes": 26731,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/BOUND-RECIPE.NOT-GRANTED.json",
+    "sha256": "bd22cbfdc0b67a80a6aa79b8983ef3ae1b353ab2fccc565af7edf3206fa44d1c"
+  },
+  "caseprofile": {
+    "bytes": 6884,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-diagnosis-source-1/retirement-completion-successor-1/COLLECTOR-CASEPROFILE.json",
+    "sha256": "1ccf48aae1958b1bffc2f81c4c9b560b7815f406beb418c7b49492cc4d3d8c37"
+  },
+  "consumed_grant": {
+    "bytes": 1892,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-capture-1/CONSUMED-GRANT.json",
+    "sha256": "6f501883c1fa88d0bcc1cfed82a51c41b21f4b3dcd3b7bc1dd9c03b525e11714"
+  },
+  "decision": "PASS_ACTUAL_FIVE_HOST_STEPS_22_CONTROLS_AND_STATIC_ELF_COLLECTOR_BINDING_ONLY",
+  "implementation_ownership": false,
+  "independent": true,
+  "independent_source_review": {
+    "bytes": 10781,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-diagnosis-source-1/retirement-completion-successor-1/independent-source-review-1/REVIEW.json",
+    "sha256": "f758c7b98270f9259a20c29fc4c664a8bae1819ba9286c2890da0f01d12f2c77"
+  },
+  "native_acceptance": false,
+  "native_qualification": null,
+  "next_step": "Root may adopt exact33c11 collector and these binding facts into coherent startup stage; actual native final0/raw compatibility still requires fresh separate authority.",
+  "preserved_failures": [
+    "Original startup wrongargv/be6e FAIL",
+    "6d2e missing definitive retirement0 FAIL",
+    "Old d0bf collector retained",
+    "F05 supervisor908f/native proof separate",
+    "Original strict235/227 and5298 full evaluator unchanged"
+  ],
+  "resource_scope": "Existing Root finite API CPU6 one job AS2GiB/60CPU/90wall; captured admission granted aggregate<=7jobs/21.6619GiB with conservative4job/12GiB other reservation. No reviewer resource queries.",
+  "reviewer": "/root/custody_release_review",
+  "reviewer_compile_test_guest_query_cleanup_canonical_Git": 0,
+  "runtime_authority": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_and_toolchain": {
+    "HOST_only_modules": [
+      {
+        "bytes": 3130,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-diagnosis-source-1/retirement-completion-successor-1/tests.rs",
+        "sha256": "1f4b82546db14736a87476a21b71f9cdcb9f4717e6cd0b852bd1d0f39f78cd30"
+      },
+      {
+        "bytes": 6818,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-diagnosis-source-1/retirement-completion-successor-1/host_tests.rs",
+        "sha256": "f1b2d17c78717abfb75ec1bea0bd188d708526b6bb4726427e7275a4477387f0"
+      },
+      {
+        "bytes": 2044,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-diagnosis-source-1/retirement-completion-successor-1/fakeexec.rs",
+        "sha256": "cc3092a4e7a560c8417fd439006e643764b60d47b239adb4856ed8b1308f9d2c"
+      }
+    ],
+    "bound_input_count": 57,
+    "compiler_ref": {
+      "bytes": 654904,
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "sha256": "028fd60b0e0add5505c661cd3ccde91393d615c8729bd95d94ab1e91409b36a1"
+    },
+    "eight_module_refs_verified": true,
+    "production_modules": [
+      {
+        "bytes": 14464,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-diagnosis-source-1/retirement-completion-successor-1/main.rs",
+        "sha256": "7ccf31f4e66151fc06a9fd4d2c3904ad2ad91e8b5919be92f6994c6d55f6f0cf"
+      },
+      {
+        "bytes": 1016,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-diagnosis-source-1/retirement-completion-successor-1/profile.rs",
+        "sha256": "b395546ba05320c50d215770d760bc4ea6f4348a35b8ce03458f21bc6ca7df0a"
+      },
+      {
+        "bytes": 2196,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-diagnosis-source-1/retirement-completion-successor-1/report.rs",
+        "sha256": "da958f3e0ca75817781b2914843f40bddbcbf9735204ff7f1658549ddcdaf4b9"
+      },
+      {
+        "bytes": 22348,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-diagnosis-source-1/retirement-completion-successor-1/supervisor.rs",
+        "sha256": "c48d5679126f2ac1b16da9c55a28bb3b5f5b3a93105212da81150a5156deebf6"
+      },
+      {
+        "bytes": 16654,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-diagnosis-source-1/retirement-completion-successor-1/startup_retirement.rs",
+        "sha256": "79d8fd1b1f1c7479f75ee65de723ee8e71fd5eaf92016b6cfe80e75720e8da79"
+      }
+    ],
+    "source_and_toolchain_preflight": "Actual retained dispatcher verifies all finite profile inputs and plan before admission and each command. All eight current Rust source refs independently matched exact profile and reviewed closure; unchanged large toolchain archive hashes reused from bound closure rather than broad rehash.",
+    "source_module_paths_absolute": true,
+    "static_compile_argv": [
+      "/usr/bin/env",
+      "TMPDIR=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-output-1",
+      "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2021",
+      "-D",
+      "warnings",
+      "-C",
+      "codegen-units=1",
+      "-C",
+      "opt-level=1",
+      "-C",
+      "panic=abort",
+      "-C",
+      "target-feature=+crt-static",
+      "-C",
+      "relocation-model=static",
+      "-C",
+      "link-arg=-no-pie",
+      "-C",
+      "link-arg=-Wl,-z,noexecstack",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-diagnosis-source-1/retirement-completion-successor-1/main.rs",
+      "-o",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-output-1/startup-supervisor"
+    ],
+    "test_compile_argv": [
+      "/usr/bin/env",
+      "TMPDIR=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-output-1",
+      "STARTUP_FAKEEXEC_PATH=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-output-1/startup-fakeexec",
+      "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2021",
+      "-D",
+      "warnings",
+      "-C",
+      "codegen-units=1",
+      "--test",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-diagnosis-source-1/retirement-completion-successor-1/main.rs",
+      "-o",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-output-1/startup-tests"
+    ]
+  },
+  "source_ready": {
+    "bytes": 7307,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-diagnosis-source-1/retirement-completion-successor-1/READY.json",
+    "sha256": "eb59c96afd80affd945d98baca63c5d4f854f661756c7453af24810c07daa3d8"
+  },
+  "total_measured_command_seconds": 3.084013664862141,
+  "whole_file_retirement": false
+}

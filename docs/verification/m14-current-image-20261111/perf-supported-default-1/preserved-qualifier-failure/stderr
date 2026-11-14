@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/qualify_saved_perf_core_integer.py", line 260, in <module>
+    dispatch=regionmap['actual_dispatch_binding'];dispatchname=dispatch['table_physical_owner']['name'];dispatchbinding=dispatch['binding_physical_owner']['name'];dtable=required_rust(dispatchname,'OBJECT');dbinding=required_rust(dispatchbinding,'OBJECT');dispatchproof=dict(table=dtable,binding=dbinding,table_all_current_data_and_relocations=bytes_join(rustobj,dtable['owner']['input'],dtable['final']),binding_all_current_data_and_relocations=bytes_join(rustobj,dbinding['owner']['input'],dbinding['final']))
+  File "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/qualify_saved_perf_core_integer.py", line 198, in required_rust
+    item=owner_by_name[name];assert item['owner']['object']==rustobj and item['final']['type']==kind and item['final']['bytes']>0,name
+AssertionError: f03_syscall_dispatch_binding_v1

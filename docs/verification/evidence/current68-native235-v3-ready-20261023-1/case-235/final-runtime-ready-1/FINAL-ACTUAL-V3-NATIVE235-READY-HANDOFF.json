@@ -1,0 +1,239 @@
+{
+  "actual_overlay": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-235/v3-native235-overlay-1.cpio.gz",
+    "sha256": "0089e218e67fb8c3d9b0f7c76ca016b00458e7b95562b517ab086fa7006e6a60",
+    "size": 15244488
+  },
+  "actual_stage_consumer_join": {
+    "bytes": 6850,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-235/ACTUAL-V3-CASE-ARTIFACT-AND-STRICT-CONSUMER-JOIN.json",
+    "sha256": "d75b010d1e9ef5c1270f72a5d6ed9c7843e91a23320731d2cae908946ece2390"
+  },
+  "case227": {
+    "bytes": 7750,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-227/CASE-DATA.BASE-BOUND.json",
+    "sha256": "4dbabf6080a84c033d895de8324d9cf335961c40fc5741bc54ce9a5168d6023b"
+  },
+  "case227_rule": "sharedactualbase+4tupledataready; no227overlay executionauthorized, distinctnonce/oracle/release after235outcome+physical.",
+  "case_id": "P-M06-01-process-exec-wait-235B",
+  "manifest": {
+    "bytes": 6650,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-235/ACTUAL-V3-NATIVE235-MANIFEST.json",
+    "sha256": "2f05f97f082b2a3d9efc48c4ba9f2a46239d8697ae543370aca3a901f1b0e8c7"
+  },
+  "metadata_publication": {
+    "argv": [
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "-c",
+      "from pathlib import Path; import hashlib,os,sys; src=Path(sys.argv[1]); root=Path(sys.argv[2]); digest=sys.argv[3]; raw=src.read_bytes(); assert hashlib.sha256(raw).hexdigest()==digest; assert os.getuid()==os.geteuid()==os.getgid()==os.getegid()==1000; root.mkdir(mode=0o700); (root/'p').mkdir(mode=0o700); f=(root/'m.json').open('xb'); f.write(raw); f.flush(); os.fsync(f.fileno()); f.close(); os.chmod(root/'m.json',0o600); assert hashlib.sha256((root/'m.json').read_bytes()).hexdigest()==digest",
+      "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-235/ACTUAL-V3-NATIVE235-MANIFEST.json",
+      "/home/holden/mckernel-work/scratch/n235v1",
+      "2f05f97f082b2a3d9efc48c4ba9f2a46239d8697ae543370aca3a901f1b0e8c7"
+    ],
+    "descriptor": {
+      "bytes": 863,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-235/METADATA-PUBLICATION-ARGV.ACTUAL.json",
+      "sha256": "aee6ed548b50f5dfcb2c31ed86b5ecb19f63aad77f92f2034b4a09324fca3570"
+    }
+  },
+  "native_acceptance": false,
+  "native_capture_argv_descriptor": {
+    "bytes": 515,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-235/NATIVE-CAPTURE-ARGV.ACTUAL.json",
+    "sha256": "6341bcaee63ea8888771c5d33edf735c0ef1773926a884e7bf74ff12317ac71c"
+  },
+  "native_execution_authorized": false,
+  "native_operation": {
+    "bytes": 2002,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-235/NATIVE-OPERATION.ACTUAL.json",
+    "sha256": "2586d60727c0caae9b80c67856bb63d924f8bccb899e72208e73a271db54ebff"
+  },
+  "native_profile": {
+    "container_CPU_affinity": "2-5",
+    "container_CPU_count": 4,
+    "container_fsize": [
+      33554432,
+      33554432
+    ],
+    "container_memory_bytes": 12884901888,
+    "container_network": "none",
+    "container_swap_bytes": 0,
+    "container_tasks": 512,
+    "cpu": 7,
+    "host_UID_NPROC": "inherited126258:126258; no per-UID512",
+    "jobs": 1,
+    "outer_grace_kill": null,
+    "outer_wall_kill": null,
+    "owner_CPU_limits": [
+      -1,
+      -1
+    ],
+    "owner_as_bytes": [
+      2147483648,
+      2147483648
+    ],
+    "payload_timeout_ms": 10000,
+    "required_inherited_cpu_limits": [
+      -1,
+      -1
+    ],
+    "runner_timeout_seconds": 300,
+    "stream_fsize": 33554432
+  },
+  "next_native_capture_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/capture_native199_owner.py",
+    "--operation",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-235/NATIVE-OPERATION.ACTUAL.json",
+    "--sha256",
+    "2586d60727c0caae9b80c67856bb63d924f8bccb899e72208e73a271db54ebff"
+  ],
+  "nonce": "8646cb69db21440ca31573ab1b3d0691",
+  "overlay_manifest": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-235/v3-native235-overlay-1.manifest.json",
+    "sha256": "9c46d8929bc08c4a1640d620eec574fb306ed630be9fbcc8d0c781abdafe664c",
+    "size": 15369
+  },
+  "owner_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--fsize=33554432",
+    "--as=2147483648:2147483648",
+    "--core=0:0",
+    "--",
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/native_diagnostic_container_owner.py",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/n235v1/p",
+    "--nonce",
+    "8646cb69db21440ca31573ab1b3d0691",
+    "--owner-sha256",
+    "4d7ae097cae866389ed044a6247e01f1bc78ff8744fc8d72f39fb294b55bb298",
+    "--manifest",
+    "/home/holden/mckernel-work/scratch/n235v1/m.json",
+    "--manifest-sha256",
+    "2f05f97f082b2a3d9efc48c4ba9f2a46239d8697ae543370aca3a901f1b0e8c7"
+  ],
+  "owner_parent": "/home/holden/mckernel-work/scratch/n235v1/p",
+  "production_guard": {
+    "argv": [
+      "/usr/bin/taskset",
+      "-c",
+      "7",
+      "/usr/bin/prlimit",
+      "--as=2147483648:2147483648",
+      "--cpu=30:30",
+      "--fsize=8388608",
+      "--core=0:0",
+      "--nofile=256",
+      "--",
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "-c",
+      "from pathlib import Path\nimport importlib.util,json,hashlib,os\nB=Path(__import__('sys').argv[1]);P=json.loads(Path(__import__('sys').argv[2]).read_text())\ndef load(n,path):\n s=importlib.util.spec_from_file_location(n,path);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);return m\no=load('actual_owner',B/'native_diagnostic_container_owner.py');d=load('actual_diagnostic',B/'native_diagnostic.py');parent=Path(P['new_owner_parent']);manifest=Path(P['new_manifest']);need='2f05f97f082b2a3d9efc48c4ba9f2a46239d8697ae543370aca3a901f1b0e8c7'\nassert hashlib.sha256((B/'native_diagnostic_container_owner.py').read_bytes()).hexdigest()=='4d7ae097cae866389ed044a6247e01f1bc78ff8744fc8d72f39fb294b55bb298'\nassert hashlib.sha256(manifest.read_bytes()).hexdigest()==need\no.private_parent(str(parent));o._manifest_identity(str(manifest),need);o._manifest_outside_writable_parent(str(manifest),parent)\nattempt=parent/('attempt-'+P['fresh_nonce']);assert not os.path.lexists(attempt)\na=d.expected_qemu_argv(json.loads(manifest.read_text()),attempt);q=P['qmp_socket'];assert a[a.index('-qmp')+1]=='unix:'+q+',server=on,wait=off';assert len(os.fsencode(q))==93\nprint('PASS actual source4d7 parent/scratch manifest/outside-writable guards and actual expected_qemu_argv with93byte QMP socket')",
+      "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1",
+      "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-235/final-runtime-ready-1/EXACT-GUARD-DATA.json"
+    ],
+    "argv_descriptor": {
+      "bytes": 1848,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-235/final-runtime-ready-1/EXACT-PRODUCTION-GUARD-ARGV.json",
+      "sha256": "ef555a9d2c25062b41dcd2ea4d6f449156d890e7b2fb4d6ada00bd358eb73f25"
+    },
+    "data": {
+      "bytes": 308,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-235/final-runtime-ready-1/EXACT-GUARD-DATA.json",
+      "sha256": "bc94f5ae6599498a3c5e14b85fe862a0eced26b99b16bc08ae4fa6b92987dab2"
+    },
+    "delta": "only actualmanifest hash/currentguarddata path; owner/privateparent/manifest identity/outsidewritable/QMPchecks unchanged",
+    "predecessor_command": {
+      "bytes": 1833,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/following-process-recovery-cases-1/abi2-helper-c020-successor-1/case-235/root-actual-production-guard-1/command.json",
+      "sha256": "4320407f3f1346baaab65e3262c272b73e0aaf3c9808603fa42a28721b59179e"
+    }
+  },
+  "qmp_encoded_bytes": 93,
+  "qmp_socket": "/home/holden/mckernel-work/scratch/n235v1/p/attempt-8646cb69db21440ca31573ab1b3d0691/qmp.sock",
+  "required_root_bindings": {
+    "current_Git_pushed_fetched": null,
+    "current_live_postjoin": null,
+    "current_source139_tool_backend_pins": null,
+    "fresh_exactnonce_container_name_and_label_absence": null,
+    "fresh_sixrecord_absence_under27_4": null,
+    "fullgrowth_capacity_and_aggregate_headroom": null,
+    "independent_exactcase_execution_review": null,
+    "latest_launcher_positive_physical": null,
+    "one_shot_root_execution_release": null,
+    "root_metadata_identity_and_guard_capture": null
+  },
+  "resource_storage": {
+    "fresh_measurement": null,
+    "host_formula": {
+      "campaign": 679477248,
+      "floor": 17179869184,
+      "full_current_backing_gap": "max(0,size118111600640-st_blocks*512)",
+      "transaction": 536870912
+    },
+    "model": {
+      "bytes": 5289,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/NATIVE-FINITE-GROWTH-AND-CAPTURE-SUPPLEMENT.json",
+      "sha256": "bb506c5fe9ca5085effd77f28597a5092e86cb6b1aa28626057e733a5c51ba1a"
+    },
+    "prospective_credit": false,
+    "reserve576_used": false,
+    "scratch_formula": {
+      "campaign": 679477248,
+      "emergency": 134217728,
+      "floor": 12884901888,
+      "runtime": 402653184
+    },
+    "scratch_required_bytes": 14101250048
+  },
+  "root_sequence": [
+    "Bind actual latestlauncher positivephysical/source-data fetchedcheckpoint; freshallsource/tool/artifactidentities/sixrecords/27:4/currentnonce2queries/fullgrowthfloors/oneheavyheadroom.",
+    "Execute exact exclusive metadata argv once then readonly productionguard under existing closedcapture; bind actualidentities/captures.",
+    "After exact235independentrelease execute nativecaptureargv once. Originalfailed235release remainshistorical."
+  ],
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_publication_map": {
+    "bytes": 13368,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-235/final-runtime-ready-1/EXACT-SOURCE-DATA-PUBLICATION-MAP.json",
+    "sha256": "11c2486946dc96e14c38088f5bf1038798b8b6fa38b44f4a86e163c26031b420"
+  },
+  "status": "ACTUAL_V3_NATIVE235_STATIC_READY_PENDING_ROOT_PHYSICAL_LIVE_AND_RELEASE",
+  "strict_consumer_capture": {
+    "bytes": 3651,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-235/ACTUAL-V3-STRICT-CONSUMER-CAPTURE-RESULT.json",
+    "sha256": "48565069f3c6e34b32daeb41d145cfa19dc9e6d7d923e3178087f64b13473594"
+  },
+  "strict_oracle": {
+    "exit_code": 0,
+    "stderr": {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/expected.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr_bytes_hex": "",
+    "stdout": {
+      "bytes": 235,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/expected.stdout",
+      "sha256": "0e7aa2ed289b122be9c38f44dc284cbb7bda64a662c2b09b4036a030f3f2d17b"
+    },
+    "stdout_bytes_hex": "706172656e742073746172740a6368696c642065786563207375636365737320746f6b656e3d66697865642d76310a706172656e742077616974207375636365737320657869743d333720656f663d31207265617065643d3120656368696c643d310a6368696c642065786563206572726f72206572726e6f3d454e4f454e542073746174653d333720756e6368616e6765643d310a706172656e742077616974206572726f7220657869743d343220656f663d31207265617065643d3120656368696c643d310a706172656e7420636f6d706c657465206368696c6472656e3d32206f776e65643d300a"
+  }
+}

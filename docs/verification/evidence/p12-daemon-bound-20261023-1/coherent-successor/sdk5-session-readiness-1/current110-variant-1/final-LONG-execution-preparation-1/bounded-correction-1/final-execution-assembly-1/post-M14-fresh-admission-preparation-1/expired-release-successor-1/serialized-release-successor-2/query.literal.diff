@@ -1,0 +1,28 @@
+--- failed-renewal1/query
++++ renewal2/query
+@@ -5,7 +5,7 @@
+ import ast,fcntl,hashlib,importlib.util,json,os,resource,stat,subprocess,sys,time
+ from pathlib import Path
+ D=Path(__file__).resolve().parent
+-CONFIG_SHA='d69bf52dc4f0a782de47edd9756057b545420e2015c8ae12bda55a0d5ae8ac56'
++CONFIG_SHA = '62f6482caedf4cf5ced17661fafd7c136a552977982e7dfdf96c9f08f3471890'
+ ENGINE=Path('/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/bound-matched-image-terminal-source-2/cleanup_pass_image.py')
+ ENGINE_SHA='59efab0bc29fa5784dc855743cec397237552821bc150b60ea1d6c2e5f7ac00d'
+ def need(v,m):
+@@ -81,6 +81,7 @@
+  g_parent=growth.output_parent(str(parent),fresh=True)
+  parent_info=parent_fact(parent)
+  outputs={str(p):os.path.lexists(p) for p in [Path(c['operation']['capture_directory']),parent.with_name(parent.name+'.owner-'+c['operation']['nonce']),parent/('attempt-'+c['operation']['nonce']),Path(c['operation']['future_release_path']),Path(c['operation']['future_request_path'])]}
++ outputs.update({p:os.path.lexists(p) for p in c['prior_failed_owner_paths']})
+  # Exact lease/exclusion list inherited unchanged from accepted M05 query.
+  leases=['/home/holden/mckernel-work/scratch/native-running-external-modules.lease.json', '/home/holden/mckernel-work/scratch/native-running-external-modules-operational-exclusion.json', '/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch18-image-1.json', '/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock', '/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/common-exclusion.json', '/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/lease.json', '/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/driver-hash-correction-1/pinned-launcher-attempt-1/common-exclusion.json', '/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/driver-hash-correction-1/pinned-launcher-attempt-1/image-lease.json']
+  lock=Path('/run/lock/mckernel-development.lock').stat();key='%02x:%02x:%d'%(os.major(lock.st_dev),os.minor(lock.st_dev),lock.st_ino)
+@@ -93,7 +94,7 @@
+   host=os.statvfs(sd);other=os.statvfs(scratch)
+   mount=json.loads(run(['/usr/bin/findmnt','-J','-o','TARGET,UUID','-T',str(scratch)]))['filesystems']
+   identities={}
+-  for filt in ['name=^/mckernel-native-diagnostic-'+c['operation']['nonce']+'$','label=mckernel.native-diagnostic.owner='+c['operation']['nonce']]:
++  for filt in [kind+nonce+suffix for nonce in (c['operation']['nonce'],c['prior_failed_nonce']) for kind,suffix in [('name=^/mckernel-native-diagnostic-','$'),('label=mckernel.native-diagnostic.owner=','')]]:
+    identities[filt]=run(['/usr/bin/docker','ps','-aq','--no-trunc','--filter',filt])
+   server=json.loads(run(['/usr/bin/docker','version','--format','{{json .Server}}']))
+   info=json.loads(run(['/usr/bin/docker','info','--format','{{json .}}']))

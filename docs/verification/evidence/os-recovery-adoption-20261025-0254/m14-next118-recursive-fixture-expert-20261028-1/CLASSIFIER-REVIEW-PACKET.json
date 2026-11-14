@@ -1,0 +1,49 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PENDING_INDEPENDENT_CLASSIFIER_REVIEW_NO_MORE_FULL_RECURSIVE_EXECUTION",
+  "source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/retained_effect_oracle.py",
+    "bytes": 7745,
+    "sha256": "9e6ef78fb3b2e56429194c76bf16f92f5871be254573c09fdc539facd50eead8"
+  },
+  "patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/PROSPECTIVE-COMPLETE-QUERY-CLASSIFIER.patch",
+    "bytes": 1442,
+    "sha256": "8491908ce16a2ac5f74cae5af821712f9248aa8fe9ee0711687e5642d0807ff5"
+  },
+  "retained_query_manifest": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/COMPLETE-ORACLE-CLASSIFIER-SOURCE-MANIFEST.json",
+    "bytes": 864849,
+    "sha256": "0fa28e5e4c39ddc700d464cfc9f8b7ccc2adb6f89118e9c06e1c10cb47c4ec4e"
+  },
+  "source_audit": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/CLASSIFIER-SOURCE-AUDIT.json",
+    "bytes": 1345,
+    "sha256": "86fa59427ecca7a15faef1b47df4b6e70d6bdc04cb8218c8dbf4bbbae551b3ed"
+  },
+  "original_first_failure": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/EXPERT-FIRST-PURE-RECURSIVE.stdout",
+    "bytes": 5305,
+    "sha256": "d4be2811be41f6244960a277483bb035ad009b68ae341b54f36fd09145ca85a2"
+  },
+  "after_classifier_correction_failure": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/EXPERT-CLASSIFIER-FIRST-PURE-RECURSIVE.stdout",
+    "bytes": 4198,
+    "sha256": "d4d6aa5bae13cf6c6c9a95508ed7fc4e5078acd81a9ee178badd2268d9e6bc0a"
+  },
+  "source_of_unchanged_full_test": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/test_recursive_routing_expert.py",
+    "bytes": 15086,
+    "sha256": "b9e27a5dce71310a943d393688153cdb72cbf191959f5b556bd16450ac17661a"
+  },
+  "API": {
+    "query": "qualify exact retained Docker ps/inspect argv records only",
+    "add": "store raw query argv plus sudo versus /usr/bin/sudo alias; Docker spelling itself remains unchanged",
+    "get": "exact tuple membership only; missing tuple raises AssertionError; never a default or blank result",
+    "normalization": "Only equivalent sudo executable spelling is generated; bare/absolute docker keys come from actual retained rows",
+    "reply": "exact returncode/stdout/stderr from authenticated receipt+JSONpointer; inspect Id/State projections use authenticated container_terminal only when no raw query exists"
+  },
+  "failure_family": "pure_effect_fixture_missing_retained_command_reply / classifier_executable_identity",
+  "expert_full_runs": 2,
+  "runtime_authority": null
+}

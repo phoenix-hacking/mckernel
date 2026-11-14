@@ -1,0 +1,54 @@
+{
+  "actual_failed_tool_receipt": {
+    "chunk_id": "139f61",
+    "exit_code": 1,
+    "wall_time_seconds": 0.648925458
+  },
+  "allowed_exact_annotation_changes": [
+    {
+      "after_type": "UNINITIALIZED",
+      "before_type": "STRING",
+      "key": "CMAKE_ASM_COMPILER",
+      "value_unchanged": "/usr/bin/cc"
+    },
+    {
+      "after_type": "UNINITIALIZED",
+      "before_type": "STRING",
+      "key": "CMAKE_C_COMPILER",
+      "value_unchanged": "/usr/bin/cc"
+    },
+    {
+      "after_type": "UNINITIALIZED",
+      "before_type": "FILEPATH",
+      "key": "CMAKE_LINKER",
+      "value_unchanged": "/usr/bin/ld"
+    }
+  ],
+  "corrected_source": {
+    "bytes": 45937,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/next-credential-f06-1/f06-successor-1/qualification-1/qualify_saved_image.py",
+    "sha256": "25159a9cb710cc75bf48e9412dcc17c2913a90fa8b71a906983f8ef1e0caf5e4"
+  },
+  "diagnostic": "AssertionError at rawcachetext equality; actual cache differs by3untyped-D annotation/help stanzas with identical compiler/linker values plus intended one BOOL value OFF\u2192ON",
+  "failed_command": [
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/next-credential-f06-1/f06-successor-1/qualification-1/qualify_saved_image.py"
+  ],
+  "failed_source": {
+    "bytes": 45281,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/next-credential-f06-1/f06-successor-1/qualification-1/qualify_saved_image.failed-1.py",
+    "sha256": "d197fa00a87c15e438a5f607c08c832278a63a9dc171f0960448494f619491c2"
+  },
+  "only_effective_value_delta": {
+    "after": "ON",
+    "before": "OFF",
+    "key": "ENABLE_RUST_F06_SYSCALL_WHOLE",
+    "type_unchanged": "BOOL"
+  },
+  "producer_build_readback_test_rerun": false,
+  "schema": "m14-F06-data-qualifier-exact-cache-annotation-correction-v1",
+  "status": "OFFLINE_QUALIFIER_ONLY_NOT_SUT_FAILURE",
+  "strict_scope": "Exact3 observed help/type stanzas and one BOOL replacement, all other cachebytes must match; no broad type/config/compiler/provider waiver. Actual full57argv differsonlyoneBOOL; actual compiler/linker commands/qualifiedphysicaltools/CABI source proofs remain bound."
+}

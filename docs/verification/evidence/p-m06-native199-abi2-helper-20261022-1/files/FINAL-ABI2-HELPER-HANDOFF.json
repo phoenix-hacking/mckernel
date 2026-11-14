@@ -1,0 +1,90 @@
+{
+  "status": "STATIC_HELPER_COMPILE_AND_TWELVE_MODELED_CASES_PASS_NOT_RELEASED",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "diagnosis": "Supported ABI/helper expectation mismatch. Actual selected provider uses callback ABI2; successful BOOT publishes Running5. Helper legacy exactReady4 assertion is stale for this selected tuple. No provider Rust change or status relaxation is justified.",
+  "source": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/native-boot.c",
+    "bytes": 11178,
+    "sha256": "541fb393492eeda72be26046f0e42389a50f1960a6a70b4667c658126d62ab0e"
+  },
+  "boolean_contract": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/native-boot-status-contract.h",
+    "bytes": 284,
+    "sha256": "f9e6e105d3f8b17a5d8b119f732ac1e47f79e51267a2e9c3151f8170960da44b"
+  },
+  "helper": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/native-boot.callback-abi2",
+    "bytes": 31000,
+    "sha256": "cccbf269ce80d92a4c16256f5189a65bc7cbc83044d70f752e4910a92c2b45ec"
+  },
+  "validation": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/ordinary-check-1/result.json",
+    "bytes": 10073,
+    "sha256": "262a70b2dffe7fb50628f9cede0f75d69b9c42d399516a0ac9ee411a64a272fd"
+  },
+  "proposal": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/EXECUTABLE-VALIDATION-PROPOSAL.json",
+    "bytes": 19888,
+    "sha256": "4a88ab1a1bd67dff9808975ce99c8e53b30990b6872bd1fc2dc0a967c8958f49"
+  },
+  "independent_source_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/INDEPENDENT-ABI2-BOOT-STATUS-SOURCE-REVIEW.json",
+    "bytes": 5724,
+    "sha256": "b904cc913c6972a107f7693e6c0eeb333145b66ace0b833f08756216a259105e"
+  },
+  "compile_argv": [
+    "/usr/bin/x86_64-linux-gnu-gcc-9",
+    "-m64",
+    "-O2",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-ffreestanding",
+    "-fno-builtin",
+    "-fno-stack-protector",
+    "-fno-pie",
+    "-nostdlib",
+    "-static",
+    "-no-pie",
+    "-Wl,-e,_start",
+    "-Wl,-z,noexecstack",
+    "-DCPUHP_FAILURE_STATE=234",
+    "-DNATIVE_VDSO_REV3=1",
+    "-DNATIVE_SYSFS_OS=1",
+    "-DNATIVE_SYSFS_SETUP=1",
+    "-DNATIVE_SYSFS_SERVICE=1",
+    "-DNATIVE_MCCTRL_SERVICE=1",
+    "-DBOOT_PREPARE_ONLY=0",
+    "-DNATIVE_BOOT_CALLBACK_ABI2=1",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/native-boot.c",
+    "-o",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/native-boot.callback-abi2"
+  ],
+  "checks": [
+    {
+      "abi": 1,
+      "accepted_only": 4,
+      "cases": 6,
+      "signed_diagnostic_exact": false
+    },
+    {
+      "abi": 2,
+      "accepted_only": 5,
+      "cases": 6,
+      "signed_diagnostic_exact": true
+    }
+  ],
+  "wall_seconds": 0.6556880819844082,
+  "cpu_seconds": 0.601948,
+  "captured_output_bytes": 1588,
+  "all_direct_children_joined": true,
+  "all_groups_absent": true,
+  "all_streams_closed": true,
+  "cpu6_released": true,
+  "remaining": "Parent must bind exact new helper ELF in its helper-only overlay and execute only under separately authenticated native authorization. Actual successful boot/application behavior is not established by these modeled cases.",
+  "module_image_collector_app_changes": false,
+  "native_events": 0,
+  "native_acceptance": false,
+  "actual_stage": null,
+  "actual_release": null
+}

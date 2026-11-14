@@ -1,0 +1,81 @@
+{
+  "schema": "mckernel-native-shared-heavy-contract-shutdown-wip-v1",
+  "captured_at": "2026-10-01T06:27:27-07:00",
+  "base_commit": "3a71bd6d3b742f08ab6072c1f56a4abdfefe402c",
+  "status": "WIP_INTERRUPTED_UNREVIEWED_NO_EXECUTION_RELEASE",
+  "reason": "launcher shutdown checkpoint interrupted the coordinated source-release integration lane",
+  "accepted_inputs": {
+    "guest_source_review": "PASS_SOURCE_GUEST_LOCK_FINAL",
+    "guest_runner_sha256": "7e84063a1536addeb8c50f18002853aea1fd817f0b0be96d7f6b3b402bfd00d5",
+    "pre_integration_guest_helper_sha256": "60f4ebada3b7c4332c3130a80a9a3f362ea58b3483610033f0fd2f3282a16fb4",
+    "pre_integration_guest_tests_sha256": "74d4475e9678aff9e9ad4946c2192232833b100c82633222362cc5046efe7521",
+    "pre_integration_build_wrapper_sha256": "578d34e8fa96a08a0729edb9ff58ffa9d66837bbf30eed8cb75fa9da9f7f26b1",
+    "pre_integration_image_owner_sha256": "07af959ebc4bafb834476273aa084f6ba97da46152eb352954d269b16c07e72b"
+  },
+  "interrupted_worktree": {
+    "scripts/native_rust_exact_disk_build_wrapper.py": "150f74c78cc6e319c17edf918443ae60408af084d3a9436b96e09623cc678243",
+    "scripts/native_rust_exact_mckernel_image_container_owner.py": "1f815a24be9692ecbad03bc40567a9b9db4cc3e499271c5694093ddcaeec4ccc",
+    "scripts/qemu-mckernel-guest.sh": "7e84063a1536addeb8c50f18002853aea1fd817f0b0be96d7f6b3b402bfd00d5",
+    "scripts/qemu_guest_heavy_v1.py": "23a052475522808ff5c7b02214b15e011cc317f681fc772f7cfaace0f2aef44b",
+    "scripts/tests/test_qemu_guest_heavy_v1.py": "f9c76862bc33a6fb61e041d13493e966d258c67b8d94c3a4e9d59e1f05db2365",
+    "scripts/tests/test_native_rust_exact_mckernel_image_container_owner.py": "b9ed3ceafa6d77f389e425407756cfe6ec3d5ad07f5e6a9830025ca1c8489465",
+    "docs/verification/evidence/native-exact-scratch17-build-execution-20261001.py": "18cc27074b2594312912213736e139cc4a9c1199b677a3f3565e937fc04ccf90"
+  },
+  "bounded_shutdown_checks": [
+    {
+      "command": "taskset -c 6,7 python3 -m unittest scripts.tests.test_native_rust_exact_build_container_owner scripts.tests.test_native_rust_exact_disk_build_wrapper scripts.tests.test_native_exact_historical_lease_observer scripts.tests.test_native_exact_scratch17_build_execution_20261001",
+      "result": "PASS_123_OF_123"
+    },
+    {
+      "command": "taskset -c 6,7 python3 -m unittest scripts.tests.test_native_rust_exact_mckernel_image_container_owner scripts.tests.test_native_rust_exact_build_image_prepare scripts.tests.test_native_rust_exact_build_container_owner",
+      "result": "PASS_124_OF_124"
+    },
+    {
+      "command": "taskset -c 6,7 python3 -m unittest scripts.tests.test_qemu_guest_heavy_v1",
+      "result": "PASS_60_OF_60"
+    },
+    {
+      "command": "bash -n scripts/qemu-mckernel-guest.sh && git diff --check",
+      "result": "PASS"
+    }
+  ],
+  "runtime_state": {
+    "shared_heavy_lock": "absent",
+    "campaign_build_qemu_or_unittest_processes": [],
+    "campaign_owned_running_containers": [],
+    "unrelated_running_containers": [
+      {
+        "id": "1e470f1cba7ba44dc96d8441404f88cb8b086c9e12a7869e717dfff9575050b5",
+        "name": "kasper-results_web-interface_1",
+        "host_pid": 3449,
+        "started_at": "2026-09-19T03:56:25.611678864Z"
+      },
+      {
+        "id": "8da74b66cf274dcf833954acd1c40fe431e5feb1dddff93f087e80fbaa3e97a3",
+        "name": "kasper-results_db_1",
+        "host_pid": 3450,
+        "started_at": "2026-09-19T03:56:25.675549660Z"
+      }
+    ],
+    "launcher_processes_preserved": [
+      {"pid": 1442141, "starttime": 100022769, "role": "tmux server"},
+      {"pid": 1442145, "starttime": 100022779, "role": "launcher worker"},
+      {"pid": 1442149, "starttime": 100022785, "role": "codex app server"}
+    ]
+  },
+  "claims": {
+    "compiled_current_candidate_count": 1,
+    "diagnostic_guest_pass_count": 5,
+    "formal_application_acceptance_count": 0,
+    "new_build_or_guest_ran": false,
+    "coordinated_source_release_accepted": false,
+    "os_complete": false
+  },
+  "next_actions": [
+    "independently review the exact interrupted integration hashes and repair or finish them without reusing an unchanged failure",
+    "rerun all build, image and guest source suites and verify one common lock inode plus paired release switches",
+    "publish and fetch a new selective side target based on 50b084322610a9326b1b7b528edd4cd73b635632; do not use 227d1fe393c592ed4e81f9db2eefc889e234c5ad",
+    "prepare fresh scratch18 only after that target is reviewed and reachable",
+    "retain scratch17 as terminal non-releasable and never mutate or rerun it"
+  ]
+}

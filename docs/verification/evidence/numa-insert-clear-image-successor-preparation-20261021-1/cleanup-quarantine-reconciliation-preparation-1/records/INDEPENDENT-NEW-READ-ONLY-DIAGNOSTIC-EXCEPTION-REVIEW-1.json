@@ -1,0 +1,47 @@
+{
+  "status": "PASS_CONDITIONAL_NARROW_READ_ONLY_DIAGNOSTIC_PROTOCOL",
+  "reviewer": "/root/insert_c_correction_review",
+  "implementation_ownership": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "authority": "The stated new user instruction permits this diagnostic exception to prior quiescence requirements. Active cleanup mutation rights remain unchanged.",
+  "prior_transients": {
+    "reported_diagnostic_pid": 2776191,
+    "reported_start_ticks": "40940896",
+    "reported_exit_code": 0,
+    "independently_observed_by_this_review": false,
+    "disposition": "Record the diagnostic and subsequent control transient explicitly. Preserve any resulting census refusal; infer no physical clearance."
+  },
+  "eligible_reader": {
+    "count": 1,
+    "cpu": 0,
+    "python_flags": ["-I", "-B", "-u"],
+    "address_space_bytes": 268435456,
+    "cpu_seconds": 10,
+    "identity": "Emit actual self PID and start ticks before accepting requests; retain that identity with every response.",
+    "transport": "Existing tool stdin for explicit requests; stdout only for results.",
+    "subprocesses": false,
+    "filesystem_writes": false,
+    "signals_unlock_or_mutation": false
+  },
+  "required_restrictions": [
+    "Freeze the exact absolute initial allowlist, including the launcher state path, before launch. Reject unlisted paths, relative paths, wildcards and unknown request operations.",
+    "Use O_RDONLY|O_NOFOLLOW|O_CLOEXEC|O_NONBLOCK, then verify an allowed regular or specifically selected proc file before reading. O_NONBLOCK avoids blocking during open if a fixed pathname has become a FIFO.",
+    "Enforce at most16 paths per request,131072 bytes per file and1048576 total bytes read per request. Separately bound serialized responses, including encoding and metadata.",
+    "Report truncation explicitly. Never parse a truncated release, source or state record as complete authority; never silently bypass the per-file cap.",
+    "Record fstat before and after with exact integers. Live captures and proc files may change; report changes without asserting a coherent snapshot or retrying.",
+    "Permit proc reads only for self, the two recorded PID/start identities, or genuinely derived current helper/engine/holder ancestry. Bind derived PID/start identities and concrete relationship evidence; maximum depth4 and16 PIDs. No enumeration of /proc.",
+    "Verify recorded or derived start ticks around proc observations; report disappearance, reuse or inconsistent lineage without following a replacement process.",
+    "Bind the exact journal pathname through a separate explicit request only after deriving it from sufficient retained current source/release evidence. No directory traversal or discovery walk.",
+    "Require explicit finite requests. No automatic polling, retries, fallback paths, source imports or execution of captured code.",
+    "Report failures as observations; do not alter owner state, locks, release files, containers or guest state."
+  ],
+  "limitations": [
+    "This accepts the protocol subject to implementation of these restrictions; no exact reader source or command bytes were supplied for verification.",
+    "The exception does not make the unchanged engine census accept the reader. Any refusal remains genuine evidence.",
+    "Diagnostic reads establish no cleanup completion, internal cause, recovery authority or physical clearance."
+  ],
+  "recovery_mutation_authorized": false,
+  "physical_clearance": false,
+  "tools_invoked": false,
+  "reviewer_quiescent_after_review": true
+}

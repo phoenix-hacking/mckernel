@@ -1,0 +1,95 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": "2026-10-25T23:12:34.835625+00:00",
+  "status": "OWNER_VALIDATE_FAIL_SHARED_EXCLUSION_RETAINED_PARENT_QUARANTINED",
+  "entry_epoch": 1792969713.9261785,
+  "query_to_entry_seconds": 95.02052283287048,
+  "owner_join": {
+    "argv": [
+      "/usr/bin/taskset",
+      "-c",
+      "7",
+      "/usr/bin/prlimit",
+      "--fsize=33554432",
+      "--as=2147483648:2147483648",
+      "--core=0:0",
+      "--",
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/native_rust_exact_mckernel_image_container_owner.CURRENT290.ENV22_0485.COMPACT.NEW18H.SOURCE-ONLY.py",
+      "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-request.CURRENT290.IMAGE-ONLY.ENV22_0485.COMPACT.NEW18H.SOURCE-ONLY.json"
+    ],
+    "captures": {
+      "stderr": {
+        "bytes": 2955,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/diagnostic-c252-refusal-successor-source-1/actual-entry-1/owner.stderr",
+        "sha256": "f9eeef377a1fe8705b405ced4201723e2c916c2f0bbf5d33308750b996b4c421"
+      },
+      "stdout": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/diagnostic-c252-refusal-successor-source-1/actual-entry-1/owner.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "closed_streams": true,
+    "direct_child_joined": true,
+    "error": null,
+    "finished_at_epoch": 1792969714.5610785,
+    "group_absent": true,
+    "pid": 867329,
+    "retirement_error": null,
+    "returncode": 1,
+    "started_at_epoch": 1792969713.9324114,
+    "starttime": "76715862",
+    "stderr": {
+      "bytes": 2955,
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/diagnostic-c252-refusal-successor-source-1/actual-entry-1/owner.stderr",
+      "sha256": "f9eeef377a1fe8705b405ced4201723e2c916c2f0bbf5d33308750b996b4c421"
+    },
+    "stdout": {
+      "bytes": 0,
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/diagnostic-c252-refusal-successor-source-1/actual-entry-1/owner.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "compiler_commands": 0,
+  "first_compiler_at": null,
+  "failure": "OwnerError offline provenance release hash, owner97 _validate_request1073",
+  "side_effect_order": "shared acquire1488 precedes validate1490. Common/attempt/lease/Docker/receipt follow failed guard. Do not assert no effects.",
+  "shared_record": {
+    "path": "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock",
+    "device": 1828,
+    "inode": 116858,
+    "bytes": 268,
+    "sha256": "324ae871e07d57c1453e57473b64bb31f947d073a9a903b1adca1dad1c1aaaed",
+    "owner_pid": 867329,
+    "owner_starttime": "76715862"
+  },
+  "parent": {
+    "pid": 866814,
+    "starttime": "76706306",
+    "fd": 3,
+    "permanent_mutex_device": 27,
+    "permanent_mutex_inode": 4,
+    "state": "quarantine loop, tool session65454 live"
+  },
+  "independent_review": "review18h NO_NORMAL_CLEANUP_RELEASE; fresh full readonly process/container/record/input proof then fresh exact pidfd-bound ownedparent recovery; shared record retained through process retirement, separately reconciled afterward.",
+  "actions_not_taken": [
+    "signal",
+    "record unlink",
+    "normal cleanup",
+    "heavy retry"
+  ],
+  "next_owners": {
+    "postjoin18h": "fresh readonly snapshot and process-only recovery source",
+    "review18h": "independent actualeffect/recovery release",
+    "default18h": "one data-binding successor for provenance7b/host-control96/common-exclusion/new namespace; no predicates weakened"
+  },
+  "closures": {
+    "default": 0,
+    "native": 0,
+    "whole_file": 0,
+    "C_retirement": 0
+  }
+}

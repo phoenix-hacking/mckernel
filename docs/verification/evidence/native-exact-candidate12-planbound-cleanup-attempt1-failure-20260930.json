@@ -1,0 +1,67 @@
+{
+  "schema": "mckernel.candidate12-cleanup-attempt.v1",
+  "status": "FAIL_PREFLIGHT",
+  "recorded_at": "2026-09-30T16:37:00-07:00",
+  "release_commit": "e6390a03c008ebeb9ca36a8b5443c4d1d9546c78",
+  "release_sha256": "2dd558b70a911c65cc5c1f966d11fadadc1ddd796fc2cd876edd6a065217be09",
+  "tool_sha256": "43afae3704644fe73bea48a2e02cee73e6869378618dc763c8a46da887c0fff9",
+  "plan_sha256": "eaba225bfeb8e58fa1a6a7d5cfe1ae622e5bb1f9355e359af16464968ac0f957",
+  "result": {
+    "phase": "preflight",
+    "error": "container-intersection",
+    "attempted": null,
+    "interrupted": false,
+    "target_count": 2507,
+    "states": {"original": 2507},
+    "quarantine_exists": false,
+    "delete_intent_count": 0,
+    "removed_files": 0
+  },
+  "outputs": {
+    "journal": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-candidate12-planbound-cleanup-20260930-1.journal.jsonl",
+      "sha256": "39a9b1955767546ed23ab32e9add5d2a0347df6d3f945efaf1ceb67a9853f23e",
+      "size": 1490558,
+      "dev": 1831,
+      "ino": 90652,
+      "mode": 384,
+      "nlink": 1
+    },
+    "receipt": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-candidate12-planbound-cleanup-20260930-1.receipt.json",
+      "sha256": "c0480b1d2d49be187057f965f8b028c35ffb0b2a2ff3af277c8609eb1831825d",
+      "size": 1403891,
+      "dev": 1831,
+      "ino": 90653,
+      "mode": 384,
+      "nlink": 1
+    },
+    "status": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-candidate12-planbound-cleanup-20260930-1.status.json",
+      "sha256": "6d01b09e343379e7ae81b44ffdc855c83fb6c28792250fd273d52ff601309fee",
+      "size": 252,
+      "dev": 1831,
+      "ino": 90654,
+      "mode": 384,
+      "nlink": 1
+    }
+  },
+  "census": {
+    "all_container_count": 41,
+    "candidate_intersection_count": 6,
+    "bound_and_observed": [
+      "053b5528de7605a712b7842b0145c7e777843c2fd14225174ac8959918a7d24f",
+      "4d15b3493f869a1b0a89f1dc16fda59e1c145b78e2b57308bed35f3d954e4f86"
+    ],
+    "observed_but_omitted": [
+      "282dff5ea9f3775fe8a8e2cdf8d767f86ea81b0f5a9a516a0e6ff817d1d36dde",
+      "a6e3772f3470c79a55807d38a12e0b02e84f4e0b12771d17742b99f55f2cb0ae",
+      "4dc6377ec81950703c1f539bfb2f491f6d9a5344d8930cd4db9fb166c6412707",
+      "4f2b721b552eba9da33d5dffd664ef525b6d92e4d4d53dbf2adb1aa9cb1e8fb3"
+    ]
+  },
+  "correction_policy": "Do not repeat attempt 1. Expert escalation requires one explicit immutable six-container inventory with proof kind, receipt identity, owner nonce, restart count, terminal state and exact mounts; current intersection set must equal that inventory.",
+  "diagnostic_acceptance": false,
+  "production_acceptance": false,
+  "os_complete": false
+}

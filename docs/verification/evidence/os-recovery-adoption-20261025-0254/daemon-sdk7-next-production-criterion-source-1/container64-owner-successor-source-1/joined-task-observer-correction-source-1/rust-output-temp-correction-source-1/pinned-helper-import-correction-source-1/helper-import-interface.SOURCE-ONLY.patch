@@ -1,0 +1,74 @@
+--- Source29/temp_contract.py
++++ Source30/adopt_contract.py
+@@ -3,11 +3,12 @@
+ """
+ from pathlib import Path
+ import hashlib,json,os,re,stat
++from pinned_helpers import helper
+ HERE=Path(__file__).resolve().parent
+ PREPARATION=HERE/'PREPARATION.SOURCE-ONLY.json'
+-PREPARATION_SHA='8b17ebaa2fd561be566bb57ba5bcb796b4789d025f537fa03b73f1c91ba00f59'
+-OUTPUT_PARENT=HERE/'workspace';MIRROR=HERE/'input-mirror';DRIVER=HERE/'temp_driver.py'
+-OWNER=HERE/'temp_owner.py';CUTOFFS=[1793100290.0,882395.5689528405,897734.6960034363]
++PREPARATION_SHA='dd7e8bfe430c812fd4e10c2085d02b5a43515b889150088aa9a8f9a46617f081'
++OUTPUT_PARENT=HERE/'workspace';MIRROR=HERE/'input-mirror';DRIVER=HERE/'adopt_driver.py'
++OWNER=HERE/'adopt_owner.py';CUTOFFS=[1793100290.0,882395.5689528405,897734.6960034363]
+ BOOT='7bfc5687-6c04-4d15-84eb-b92ab9a55dcb'
+ 
+ def need(ok,message):
+@@ -117,18 +118,18 @@
+  return summary
+ 
+ def verify_retained_prefix(root):
+- from prefix_evidence import verify_files,load
++ prefix=helper('prefix');verify_files=prefix.verify_files;load=prefix.load
+  count=verify_files(root,PREP['retained_prefix_files']);load(root,cases());return count
+ 
+ def validate_fixture_tree(root,prefix=None,mock_prefix=None,fixture_pid=None):
+- from joined_audit import validate as validate_audit
+- from prefix_evidence import load
++ validate_audit=helper('audit').validate
++ load=helper('prefix').load
+  root=Path(root);prefix=Path(PREP['retained_prefix_host']) if prefix is None else Path(prefix)
+  mock_prefix=Path(PREP['retained_mock_host']) if mock_prefix is None else Path(mock_prefix)
+  verify_retained_mock(mock_prefix)
+  regular(root/'mock.o');need((root/'mock.o').read_bytes()==(mock_prefix/'mock.o').read_bytes(),'exact passed d413 mock object required')
+  verify_retained_prefix(prefix)
+- from rust_output_contract import validate_receipt
++ validate_receipt=helper('rustio').validate_receipt
+  command=json_bytes((root/'Rust-daemon-build.command.json').read_bytes())
+  recorded_command=json_bytes((root/'Rust-daemon-build/command.json').read_bytes())
+  need(recorded_command['argv']==command['argv'] and recorded_command['cwd']==command['cwd'],'actual child compiler argv/cwd differs')
+@@ -164,7 +165,7 @@
+ 
+ 
+ def verify_retained_mock(root):
+- from prefix_evidence import verify_files,join
++ prefix=helper('prefix');verify_files=prefix.verify_files;join=prefix.join
+  count=verify_files(root,PREP['retained_mock_files']);join(root,'mock-build',0);join(root,'Rust-daemon-build',1)
+  raw=(Path(root)/'Rust-daemon-build/stderr').read_text()
+  need("couldn't create a temp dir" in raw and 'Read-only file system' in raw and '/rmeta' in raw,'exact retained output-directory failure required')
+--- Source29/run_fixture_suffix.py
++++ Source30/run_fixture_suffix.py
+@@ -6,6 +6,10 @@
+ from pathlib import Path
+ BASE=Path(__file__).resolve().parent.parent
+ WRAPS=['daemon','eventfd','signalfd','epoll_create','epoll_ctl','epoll_wait','open','close','read','write','stat','ioctl','geteuid','pthread_create','pthread_join']
++def fixture_helper_bindings():
++    from pinned_helpers import helper
++    return (helper('audit').validate,helper('prefix').load,helper('rustio').validate,helper('rustio').runtime_preflight)
++
+ def admit_precreated_output(out, binding, nonce):
+     """Exact fresh nested bind target, supplied by actual Root-owned preparation."""
+     import re,stat
+@@ -30,9 +34,7 @@
+     if str(binding_path)!='/preparation/OUTPUT-BINDING.ACTUAL.json':raise ValueError('exact container output binding path')
+     admit_precreated_output(out,json.loads(binding_path.read_bytes()),os.environ['IHKMOND_FIXTURE_NONCE'])
+     started=time.monotonic();sys.path.insert(0,str(BASE/'fixture'));from owned_process import Owner
+-    from joined_audit import validate as validate_join_audit
+-    from prefix_evidence import load as load_prefix
+-    from rust_output_contract import validate as validate_rust_output, runtime_preflight as probe_rust_output
++    validate_join_audit,load_prefix,validate_rust_output,probe_rust_output=fixture_helper_bindings()
+     retained_mock=Path('/retained-mock-build')
+     baseline_rust_argv=json.loads((retained_mock/'Rust-daemon-build.command.json').read_bytes())['argv']
+     owner=Owner(out)

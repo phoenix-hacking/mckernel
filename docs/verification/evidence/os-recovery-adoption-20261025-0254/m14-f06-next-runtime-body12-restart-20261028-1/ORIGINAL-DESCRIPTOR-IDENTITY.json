@@ -1,0 +1,39 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "registry_reference": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/F03-cumulative-next-source-1/CURRENT116-REGISTRY-REFERENCE.json",
+    "bytes": 84536,
+    "sha256": "af46e443770080fa9712c196233517bf7a9a8363d3d82659bd2ec4964d2402a2"
+  },
+  "accepted_registry_count": 389,
+  "selected_record": {
+    "file": "/src/arch/x86_64/kernel/syscall.c",
+    "function": "arch_vdso_map_log_bridge",
+    "fmt": null,
+    "line": 3084,
+    "flags": 0,
+    "padding": 0
+  },
+  "record_bytes": 32,
+  "alignment": 8,
+  "line_flags_offset": 24,
+  "flag_byte_offset": 27,
+  "actual116_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body4-restart-20261028-1/BASE.syscall.c",
+    "bytes": 117955,
+    "sha256": "8d24cb88289de08ac581eaa9a88de7690a05b54db4897069e06a3a24ddd80561"
+  },
+  "actual116_original_start": 3077,
+  "actual116_original_site": 3084,
+  "canonical118_start": 3079,
+  "canonical118_site": 3086,
+  "canonical118_site_drift_preexisting": 2,
+  "candidate_fallback_original_line_restore": 3077,
+  "candidate_Rust_descriptor_line": 3084,
+  "after_function_restores_canonical118_line": 3104,
+  "outer_exit_restores": [
+    3107
+  ],
+  "unrelated_source_not_rewritten": true,
+  "oracle_function_identifier": "arch_vdso_map_log_bridge unchanged via asm-label alias, preserving __func__; only HOST #line sets original filename."
+}

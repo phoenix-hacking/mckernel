@@ -1,0 +1,247 @@
+{
+  "application_acceptance": false,
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-B",
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/ndcmem-1",
+    "--nonce",
+    "20e8aedfa5344096b879c0639cabaf25",
+    "--owner-sha256",
+    "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+    "--manifest",
+    "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/memory-1/manifest.json",
+    "--manifest-sha256",
+    "36fa25c946b8537173eaba34ccb640f24c12fb1490b512de0b799ef28d44d0f8"
+  ],
+  "assembly": {
+    "address_space_limit_bytes": 1073741824,
+    "command_capture": "/home/holden/mckernel-work/scratch/native-core-memory-current942-proposal-assembly-20261017-1/command.json",
+    "cpu_affinity": [
+      0
+    ],
+    "execution_approved": false,
+    "fresh_parent_bound": true,
+    "parent_created": false,
+    "pattern": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/file-closed-read-adapted-current942-execution-proposal-20261017-1.json",
+      "sha256": "02948c93f353e23f354aa9112d3baf0716c2ca5f5f0a9a4af4e19792ed984a4b",
+      "size": 8390
+    },
+    "runtime_called": false,
+    "scope": "Selected preparation/manifest/current owner records only; no artifact corpus rehash, compile, preparation/protocol replay, root/Docker/guest/Git or live preflight.",
+    "tests_run": false
+  },
+  "author": "/root",
+  "boot_profile": {
+    "argv": [
+      "/bin/native-boot"
+    ],
+    "proof": {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/memory-1/boot-profile-proof.json",
+      "sha256": "956e87f1d4864cb7ce54c131f5e83b48fabc2e8da90389fcf0ac1ed81a5cbfab",
+      "size": 4905
+    }
+  },
+  "candidate_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+  "collector": {
+    "mode": 33216,
+    "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/memory-1/init",
+    "sha256": "2d4c8cadb955717aebfbb4359620d3629fb4dd2e13e9c897fac12e809b74bedb",
+    "size": 1021968
+  },
+  "collector_source": {
+    "compile_macro": "ND_CORE_MEMORY",
+    "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_guest_collector.c",
+    "sha256": "82825cf128689ba8f8a74d9528c1acffb724a9356a2c6192c67c8abe4a74965e",
+    "unchanged": true
+  },
+  "execution_count": 1,
+  "formal_case_credit": false,
+  "interpreter_binding": {
+    "path": "/home/holden/anaconda3/bin/python3",
+    "resolved_path": "/home/holden/anaconda3/bin/python3.9",
+    "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb",
+    "version": "3.9.12 (main, Apr  5 2022, 06:56:58) \n[GCC 7.5.0]"
+  },
+  "manifest": {
+    "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/memory-1/manifest.json",
+    "sha256": "36fa25c946b8537173eaba34ccb640f24c12fb1490b512de0b799ef28d44d0f8",
+    "size": 5460
+  },
+  "nonce": "20e8aedfa5344096b879c0639cabaf25",
+  "oracle": {
+    "exit_code": 37,
+    "stderr_hex": "",
+    "stdout_hex": "4e41544956455f434f52452050415353206d656d6f72790a"
+  },
+  "other_monitor_endpoints": [],
+  "owner": {
+    "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+    "sha256": "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+    "size": 58828
+  },
+  "parent": {
+    "device": 1828,
+    "gid": 1000,
+    "inode": 109526,
+    "mode": "0o700",
+    "path": "/home/holden/mckernel-work/scratch/ndcmem-1",
+    "uid": 1000
+  },
+  "payload": {
+    "mode": 33261,
+    "path": "/home/holden/mckernel-work/scratch/native-application-core-build-20260908-1/native-application-core",
+    "sha256": "558d1607e4648321c9537215084e759496937d9591c319a21443f443193fda9a",
+    "size": 39488
+  },
+  "payload_contract": {
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "app",
+      "memory"
+    ],
+    "cwd": "/case/work",
+    "env": {
+      "COKERNEL_PATH": "/apps",
+      "PATH": "/usr/bin:/bin"
+    },
+    "oracle": {
+      "exit_code": 37,
+      "stderr_hex": "",
+      "stdout_hex": "4e41544956455f434f52452050415353206d656d6f72790a"
+    },
+    "stderr_limit_bytes": 1024,
+    "stdout_limit_bytes": 1024
+  },
+  "postjoin_readback": {
+    "argv": [
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/ndcmem-1.owner-20e8aedfa5344096b879c0639cabaf25",
+        "."
+      ],
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/cat",
+        "/home/holden/mckernel-work/scratch/ndcmem-1/attempt-20e8aedfa5344096b879c0639cabaf25/result.json"
+      ],
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/ndcmem-1/attempt-20e8aedfa5344096b879c0639cabaf25",
+        "."
+      ]
+    ],
+    "capture_limit_bytes_per_command": 33554432,
+    "conditions": "Only after joined positive owner/client retirement; verify unchanged canonical exact nonce-bound directories and regular result. Fresh ordinary-UID captures; default tar without dereference.",
+    "requested": true,
+    "timeout_seconds_per_command": 30,
+    "approved": true
+  },
+  "prerequisites": {
+    "image_archival_cleanup": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/scratch22-authority3-image-cleanup-result-review-20261017-1.json",
+      "sha256": "47cc7673788cb9b8c15443eec7f24c07d749b1bfe05875673d2c2b9af72bc15d",
+      "size": 1892
+    },
+    "image_retirement_proof": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/scratch22-image-fresh-retirement-observation-20261017-1.json",
+      "sha256": "1cdf3af9fa657d160a801bf909f9e5c0e77dd132d3c38b3f1a38482bd1691da8",
+      "size": 1439
+    },
+    "live_preflight": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-core-memory-current942-live-preflight-20261017-1.json",
+      "sha256": "4aab9288043ad9bd83e00d09e15c159aa98809344811d049c8a5e52ec691e21b",
+      "size": 3932
+    },
+    "preceding_closed_read_retirement": {
+      "dispatcher_reported": "Prior closed-read actual exit0 and three postjoin readbacks done; independent review/preservation pending. No acceptance inferred by this assembly.",
+      "scope": "Dispatcher may add exact accepted preceding retirement/preservation reference before release without changing runtime bindings.",
+      "status": "PENDING_DISPATCHER_JOIN_OF_INDEPENDENT_RESULT_AND_PRESERVATION"
+    },
+    "independent_execution_review": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-core-memory-current942-execution-review-20261017-1.json",
+      "sha256": "bf27d10f5048b1fd2fc5f483e2c8024e96177f2a8846791b28b8f8d52b2c8e27",
+      "size": 970
+    }
+  },
+  "production_acceptance": false,
+  "profile": {
+    "cleanup_timeout_seconds": 15,
+    "cpus": 4,
+    "cpuset": "2-5",
+    "guest_memory_mib": 8192,
+    "guest_numa_nodes": 2,
+    "guest_timeout_seconds": 300,
+    "guest_vcpus": 4,
+    "heavy_operations": 1,
+    "mckernel_cpus": 1,
+    "mckernel_memory_mib": 128,
+    "memory": 12884901888,
+    "memory_swap": 12884901888,
+    "network": "none",
+    "payload_timeout_seconds": 10,
+    "pids": 512
+  },
+  "retained_reference": {
+    "build_record_sha256": "fdad31da77cdea1115a2db6d486d55cca650dcf4b899e36089bd59f12ca2e765",
+    "not_rerun": true,
+    "result": {
+      "case": "memory",
+      "exit_code": 37,
+      "mckernel": false,
+      "stdout": "NATIVE_CORE PASS memory\n"
+    },
+    "same_binary_sha256": "558d1607e4648321c9537215084e759496937d9591c319a21443f443193fda9a",
+    "same_source_sha256": "525bb7416c579da09c5f780b3ff6962287f07143488b6669bbee5ae744412743",
+    "stdout": {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/scratch/native-application-core-build-20260908-1/linux-reference-memory.log",
+      "sha256": "fd482982db547fb56b476aabdc66a2e8066da2e2887a0846aea4692c9e56d82a",
+      "size": 24
+    }
+  },
+  "runtime_release": false,
+  "schema": "mckernel.native-core-memory-execution-proposal.v1",
+  "scope": "Exactly one original ordinary dynamic-libc native core memory-mode diagnostic on immutable942 kernel/image/matched modules. Original malloc, anonymous64*4096 mapping, deterministic byte checks, mprotect roundtrip, mapped write, munmap/free assertions unchanged. Existing ND_CORE_MEMORY collector, both stream limits1024 and strict24byte stdout/exit37/empty stderr frozen. No lifecycle STOP probe or Running5 requirement; new176 module candidate is separate and excluded. Exact native_diagnostic.evaluate result, fullerror scan and independently reviewed positive retirement remain required. No formal case or whole-OS credit.",
+  "staging_evidence": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-core-memory-current942-preparation-20261017-1.json",
+    "sha256": "0df94c1709ac7cf036d76f516d1996b9dd5b7628b969a07dda7cd7fd4cc2bb92",
+    "size": 31678
+  },
+  "status": "PASS_EXECUTION_RELEASE",
+  "stdout_bytes": 24,
+  "task_id": "native-core-memory-current942-execution-proposal-20261017-1",
+  "unix_monitor_endpoints": [
+    {
+      "encoded_bytes": 93,
+      "max_bytes": 107,
+      "path": "/home/holden/mckernel-work/scratch/ndcmem-1/attempt-20e8aedfa5344096b879c0639cabaf25/qmp.sock"
+    }
+  ],
+  "reviewed_proposal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-core-memory-current942-execution-proposal-20261017-1.json",
+    "sha256": "8ea0a473e0fa9f71237c1a09fa3a72f7af1de2295c033c4257bc247d03043c2f",
+    "size": 9202
+  },
+  "previous_module_build_retirement": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-running-external-modules-attempt-review-20261017-1.json",
+    "sha256": "e60296b79d55224bf90c74ef3acaf8ef7556f3a7b52932d4ecef6ac59b428e9d",
+    "size": 10287
+  }
+}

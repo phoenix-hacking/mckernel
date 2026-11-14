@@ -1,0 +1,312 @@
+[
+  {
+    "name": "defined-front-end-add-remove",
+    "mode": "frontend",
+    "args": [
+      "-k",
+      "0",
+      "-i",
+      "-1"
+    ],
+    "status": 255,
+    "expect_mon": 0,
+    "expect_kmsg": 0,
+    "reference_defined_compare": true,
+    "expected_unreleased_leases": 0,
+    "expected_syslog_messages": 0
+  },
+  {
+    "name": "help-retains-original-continue",
+    "mode": "help",
+    "args": [
+      "-k",
+      "0",
+      "-i",
+      "-1",
+      "--help"
+    ],
+    "status": 255,
+    "expect_mon": 0,
+    "expect_kmsg": 0,
+    "reference_defined_compare": true,
+    "expected_unreleased_leases": 0,
+    "expected_syslog_messages": 0
+  },
+  {
+    "name": "unknown-facility",
+    "mode": "frontend",
+    "args": [
+      "-k",
+      "0",
+      "-i",
+      "-1",
+      "-f",
+      "bad"
+    ],
+    "status": 255,
+    "expect_mon": 0,
+    "expect_kmsg": 0,
+    "reference_defined_compare": true,
+    "expected_unreleased_leases": 0,
+    "expected_syslog_messages": 0
+  },
+  {
+    "name": "daemon-fail-defined-reference",
+    "mode": "daemon-fail",
+    "args": [
+      "-k",
+      "0",
+      "-i",
+      "-1"
+    ],
+    "status": 255,
+    "expect_mon": 0,
+    "expect_kmsg": 0,
+    "reference_defined_compare": true,
+    "expected_unreleased_leases": 0,
+    "expected_syslog_messages": 0
+  },
+  {
+    "name": "udev-new-fail-defined-reference",
+    "mode": "udev-new-fail",
+    "args": [
+      "-k",
+      "0",
+      "-i",
+      "-1"
+    ],
+    "status": 255,
+    "expect_mon": 0,
+    "expect_kmsg": 0,
+    "reference_defined_compare": true,
+    "expected_unreleased_leases": 0,
+    "expected_syslog_messages": 0
+  },
+  {
+    "name": "monitor-new-fail-defined-reference",
+    "mode": "monitor-new-fail",
+    "args": [
+      "-k",
+      "0",
+      "-i",
+      "-1"
+    ],
+    "status": 255,
+    "expect_mon": 0,
+    "expect_kmsg": 0,
+    "reference_defined_compare": true,
+    "expected_unreleased_leases": 0,
+    "expected_syslog_messages": 0
+  },
+  {
+    "name": "filter-fail-defined-reference",
+    "mode": "filter-fail",
+    "args": [
+      "-k",
+      "0",
+      "-i",
+      "-1"
+    ],
+    "status": 255,
+    "expect_mon": 0,
+    "expect_kmsg": 0,
+    "reference_defined_compare": true,
+    "expected_unreleased_leases": 0,
+    "expected_syslog_messages": 0
+  },
+  {
+    "name": "enable-fail-defined-reference",
+    "mode": "enable-fail",
+    "args": [
+      "-k",
+      "0",
+      "-i",
+      "-1"
+    ],
+    "status": 255,
+    "expect_mon": 0,
+    "expect_kmsg": 0,
+    "reference_defined_compare": true,
+    "expected_unreleased_leases": 0,
+    "expected_syslog_messages": 0
+  },
+  {
+    "name": "full-lifecycle",
+    "mode": "lifecycle",
+    "args": [],
+    "status": 0,
+    "expect_mon": 1,
+    "expect_kmsg": 1,
+    "reference_defined_compare": false,
+    "expected_unreleased_leases": 0,
+    "expected_gets": 1,
+    "expected_syslog_messages": 4
+  },
+  {
+    "name": "two-lifecycle-generations",
+    "mode": "repeat",
+    "args": [],
+    "status": 0,
+    "expect_mon": 1,
+    "expect_kmsg": 1,
+    "reference_defined_compare": false,
+    "expected_unreleased_leases": 0,
+    "expected_gets": 2,
+    "expected_syslog_messages": 8
+  },
+  {
+    "name": "stop-with-active-kmsg-lease",
+    "mode": "stop-active",
+    "args": [],
+    "status": 0,
+    "expect_mon": 1,
+    "expect_kmsg": 1,
+    "reference_defined_compare": false,
+    "expected_unreleased_leases": 0,
+    "expected_gets": 1,
+    "expected_syslog_messages": 4
+  },
+  {
+    "name": "hungup-monitor-only",
+    "mode": "lifecycle",
+    "args": [
+      "-k",
+      "0"
+    ],
+    "status": 0,
+    "expect_mon": 1,
+    "expect_kmsg": 0,
+    "reference_defined_compare": false,
+    "expected_unreleased_leases": 0,
+    "expected_gets": 0,
+    "expected_syslog_messages": 0
+  },
+  {
+    "name": "kmsg-only",
+    "mode": "lifecycle",
+    "args": [
+      "-i",
+      "-1"
+    ],
+    "status": 0,
+    "expect_mon": 0,
+    "expect_kmsg": 1,
+    "reference_defined_compare": false,
+    "expected_unreleased_leases": 0,
+    "expected_gets": 1,
+    "expected_syslog_messages": 4
+  },
+  {
+    "name": "configured-facility",
+    "mode": "lifecycle",
+    "args": [
+      "-i",
+      "-1",
+      "-f",
+      "LOG_LOCAL2"
+    ],
+    "status": 0,
+    "expect_mon": 0,
+    "expect_kmsg": 1,
+    "reference_defined_compare": false,
+    "expected_unreleased_leases": 0,
+    "expected_gets": 1,
+    "expected_syslog_messages": 4
+  },
+  {
+    "name": "partial-main-setup-with-waiting-workers",
+    "mode": "udev-new-fail",
+    "args": [],
+    "status": 255,
+    "expect_mon": 1,
+    "expect_kmsg": 1,
+    "reference_defined_compare": false,
+    "expected_unreleased_leases": 0,
+    "expected_gets": 0,
+    "expected_syslog_messages": 0
+  },
+  {
+    "name": "kmsg-eventfd-fail",
+    "mode": "kmsg-eventfd-fail",
+    "args": [],
+    "status": 234,
+    "expect_mon": 1,
+    "expect_kmsg": 1,
+    "reference_defined_compare": false,
+    "expected_unreleased_leases": 0,
+    "expected_gets": 1,
+    "expected_syslog_messages": 0
+  },
+  {
+    "name": "status-eventfd-fail",
+    "mode": "status-eventfd-fail",
+    "args": [],
+    "status": 234,
+    "expect_mon": 1,
+    "expect_kmsg": 1,
+    "reference_defined_compare": false,
+    "expected_unreleased_leases": 0,
+    "expected_gets": 1,
+    "expected_syslog_messages": 0
+  },
+  {
+    "name": "ctl-status-fail",
+    "mode": "ctl-status-fail",
+    "args": [],
+    "status": 234,
+    "expect_mon": 1,
+    "expect_kmsg": 1,
+    "reference_defined_compare": false,
+    "expected_unreleased_leases": 0,
+    "expected_gets": 1,
+    "expected_syslog_messages": 0
+  },
+  {
+    "name": "kmsg-handle-acquisition-failure",
+    "mode": "get-handle-fail",
+    "args": [],
+    "status": 251,
+    "expect_mon": 1,
+    "expect_kmsg": 1,
+    "reference_defined_compare": false,
+    "expected_unreleased_leases": 0,
+    "expected_gets": 0,
+    "expected_syslog_messages": 0
+  },
+  {
+    "name": "kmsg-read-failure",
+    "mode": "read-fail",
+    "args": [],
+    "status": 234,
+    "expect_mon": 1,
+    "expect_kmsg": 1,
+    "reference_defined_compare": false,
+    "expected_unreleased_leases": 0,
+    "expected_gets": 1,
+    "expected_syslog_messages": 0
+  },
+  {
+    "name": "release-failure-not-claimed-restored",
+    "mode": "release-fail",
+    "args": [],
+    "status": 251,
+    "expect_mon": 1,
+    "expect_kmsg": 1,
+    "reference_defined_compare": false,
+    "expected_unreleased_leases": 1,
+    "expected_gets": 1,
+    "expected_syslog_messages": 4
+  },
+  {
+    "name": "epoll-error-stops-workers",
+    "mode": "main-epoll-fail",
+    "args": [],
+    "status": 234,
+    "expect_mon": 1,
+    "expect_kmsg": 1,
+    "reference_defined_compare": false,
+    "expected_unreleased_leases": 0,
+    "expected_gets": 0,
+    "expected_syslog_messages": 0
+  }
+]

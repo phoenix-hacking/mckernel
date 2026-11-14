@@ -1,0 +1,74 @@
+{
+  "accepted_scope": "One actual frozen Rust std file case on FP1e7a: seek/overwrite/shrink/grow/zero-extension/error-state/data assertions and checked close/removal, application and host VM/container retirement",
+  "actual_result_sha256": "9b9ce960e431d43ec4517c4d6c0bbf2424cea7fe34b0930edfd59c8ba0be802b",
+  "attempt_archive_sha256": "a4dcd49be76bdd8ec9f4343b90fed132aa5d10ceafdc06f920679a218aaff9b1",
+  "compute_c_retirement_credit": false,
+  "decision": "PASS_ACTUAL_NATIVE_RUST_FILE_ROUNDTRIP_AND_HOST_RETIREMENT",
+  "dispatcher_status_sha256": "fd3d454d43a566b975d31a20ca22232a0bc3f38f3e3be48b6e8bf5f263cea686",
+  "expected_diagnostics": [
+    "Unsigned module signature taint warning",
+    "Application retirement EAGAIN then successful retirement",
+    "Cleanup kill already stopped; removal and absence succeed",
+    "Third readback only tar qmp.sock socket ignored warning; all six regular attempt evidence files complete"
+  ],
+  "findings": [],
+  "first_FP_native_application_evidence": true,
+  "limitations": [
+    "Trace syscall numbers/results do not expose ftruncate lengths; lengths/content established by bound application assertions",
+    "No native McKernel stop/destroy/resource-restoration-cycle credit",
+    "No non-null FP copy-path or compute-C retirement proof",
+    "Original protocol acceptance=false flags unchanged",
+    "No whole milestone/broader regression/OS completion claim",
+    "No reviewer replay/tests/edits/root/Git"
+  ],
+  "machine_sha256": "c065e7b5b7d4839a7921ea2a1c37d8196fdd204c52511f87b6ff37641741ccdc",
+  "manifest_sha256": "364d5a4aed6e50526eb789e66f1350d994b234a0f4914836a70bc1177cc9a682",
+  "milestone_completion": false,
+  "nonnull_FP_path_credit": false,
+  "owner_archive_sha256": "2219408616e06108a5d4e2feaf5b2bc9ccfe7025cce8f03df0daeee6f818bee9",
+  "owner_join_sha256": "a437a84848f169c384f411ac0866ff9cf713afbc93069482aa933f2780c0b276",
+  "reviewer": "/root/rust_file_roundtrip_review_2123",
+  "schema": "mckernel.rust-roundtrip-FP-native-result-review.v1",
+  "verified": {
+    "Docker_client_commands_reaped": 30,
+    "PID255_retirement_release_and_procfs_deletion": true,
+    "QEMU_returncode": -9,
+    "QMP_shutdown_and_QEMU_reaped": true,
+    "authenticated_container_removal": true,
+    "complete_EOF_without_loss_or_truncation": true,
+    "complete_kernel_error_marker_scan_clean": true,
+    "dispatcher_and_owner_directly_joined_exit0": true,
+    "dispatcher_stderr_bytes": 0,
+    "final_name_label_ID_queries_empty": true,
+    "final_statx_return": -2,
+    "fsync_unlink_returns": [
+      0,
+      0
+    ],
+    "ftruncate_returns": [
+      0,
+      0
+    ],
+    "guest_boot_status": "observed=5 expected=5",
+    "guest_exit": 0,
+    "guest_procfs_empty": true,
+    "guest_stderr_bytes": 0,
+    "negative_lseek_then_cursor_returns": [
+      -22,
+      14
+    ],
+    "only_negative_sampled_syscalls": "Expected lseek EINVAL and final statx ENOENT",
+    "owner_absence_verified": true,
+    "owner_failure_and_secondary_errors": false,
+    "owner_lease_retained": false,
+    "raw_captures_observation_and_capture_hashes_join": true,
+    "sampled_deliveries_and_returns": [
+      54,
+      53
+    ],
+    "stdout_matches_frozen_oracle_bytes": 133,
+    "three_readbacks_match_approved_argv_and_return0": true,
+    "three_result_copies_identical": true,
+    "unreturned_delivery": "Final exit_group only"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_review_failure",
+  "task_id": "M02-B-storage-fault-v2-source-review",
+  "attempt": 1,
+  "status": "FAIL_SOURCE",
+  "recorded_utc": "2026-09-15T18:10:00Z",
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-failure-20260915-1.tar.gz",
+    "sha256": "f09c32e1cd7a3ca693371fa3a1c898983ac0abafe393f0c387a6bf5e1fd9db01",
+    "size": 26860,
+    "members": 15
+  },
+  "cheap_checks": {"python3.9.12": "6/6 PASS", "python3.8.10": "6/6 PASS"},
+  "review_blockers": [
+    "ordinary acknowledgement sequence is off by one",
+    "producer packet schema conflicts with reviewed packet and oracle",
+    "durable owner result and captured output/filesystem evidence are absent",
+    "adopted-child and early-failure cleanup is incomplete",
+    "absolute deadline and packet-limit semantics are incorrect",
+    "oracle does not independently join real phases, identities, acquisitions or bytes",
+    "synthetic tests conceal producer-oracle incompatibility"
+  ],
+  "source_review_released": false,
+  "build_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

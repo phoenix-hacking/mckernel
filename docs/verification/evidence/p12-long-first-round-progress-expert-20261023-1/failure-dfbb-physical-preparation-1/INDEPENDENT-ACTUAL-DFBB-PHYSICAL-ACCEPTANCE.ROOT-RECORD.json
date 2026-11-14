@@ -1,0 +1,59 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "verdict": "PASS_ACTUAL_DFBB_LONG_PHYSICAL_RETIREMENT_AND_CURRENT_POSTJOIN",
+  "reviewer": "/root/native235_release_review",
+  "at": "2026-10-23T16:47:02.093803+00:00",
+  "inputs": [
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/failure-dfbb-physical-preparation-1/actual-retired-owner-export-1/ACTUAL-CLOSED-CAPTURE.json",
+      "sha256": "abf552c46368683540d52a3234a16e3eefe4089b6847b0439a09ded27056b264"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/failure-dfbb-physical-preparation-1/actual-retired-owner-export-1/stdout",
+      "sha256": "e10e2f02ca31d1ca01e0edd47716e001e234f1f15701cc448d28d6a2640e120f"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/failure-dfbb-physical-preparation-1/actual-final-proc-1/ACTUAL-CLOSED-CAPTURE.json",
+      "sha256": "8a1835b179e62643024a3158a94005c60de2fa9d3fe06c9a5f19f5f0a9436b4b"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/failure-dfbb-physical-preparation-1/actual-final-proc-1/stdout",
+      "sha256": "dde678372792d83ad362083fd85ab3c219266f461826ad76398ccef33548b59a"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/failure-dfbb-physical-preparation-1/actual-final-mutex-1/ACTUAL-CLOSED-CAPTURE.json",
+      "sha256": "7995a5db921d16959c4177e06faf0c2b6cd81124bf1d28e43bb9412608bbee9c"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/failure-dfbb-physical-preparation-1/actual-final-mutex-1/stdout",
+      "sha256": "5e8d2c1942ea3edf7ee6a623d19e2aea16bba50f1639c63fc1aff209b5641c20"
+    }
+  ],
+  "current_live_postjoin": {
+    "state": "FAILED_DFBB_LONG_POSITIVELY_RETIRED",
+    "nonce": "dfbb3adb1c7d45b689a899140f3afffc",
+    "owner_pid": 3801631,
+    "owner_start": 57068588,
+    "outer_pid": 3801627,
+    "outer_start": 57068576,
+    "complete_proc_snapshots": 2,
+    "bound_owner_client_identities_absent": 25,
+    "client_reaps": 23,
+    "container_absent": true,
+    "container_init_pid": null,
+    "container_init_birth": null,
+    "owner_lease_retained": false,
+    "permanent_mutex_device_inode": [
+      27,
+      4
+    ],
+    "mutex_free": true,
+    "shared_paths_absent": 8
+  },
+  "original_failure": "FAIL OwnerError docker start; inside bound_manifest canonical resolution of missing retained historical source mount; all raw evidence preserved",
+  "guest_attempt": false,
+  "application_credit": 0,
+  "mixed_minutes_credit": 0,
+  "restoration_credit": 0,
+  "next_authority": "Fresh corrected successor admission and separate execution release; no extra cleanup/query needed."
+}

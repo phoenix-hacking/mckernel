@@ -1,0 +1,45 @@
+smp_fork_link.rs
+61 fn payload_matches(payload: &ForkPayload, key: ForkIdentity, physical: u64, response: u64) -> bool {
+210 pub(super) fn commit_revoked_fork_carrier_in_slots(owner: OsToken,
+276 pub(crate) unsafe fn finish_with_payload(&mut self, payload: &mut ForkPayload) -> Result {
+324 fn receipt_bytes(record: &ForkLinkRecord, sequence: u64, kind: u32, result: i64) -> [u8; 128] {
+493 pub(crate) unsafe fn park(&mut self, payload: &ForkPayload) -> Result {
+
+smp_application.rs
+203 pub(crate) unsafe fn finish_with_payload(&mut self, mut payload: NonNull<super::smp_memory::ForkPayload>) -> Result {
+1917 pub(crate) unsafe fn verify(&mut self, mut payload: NonNull<super::smp_memory::ForkPayload>) -> Result {
+2000 fn fork_progress_in_slots(
+2004 use super::application_abi::{FORK_HOST_REVOKED_V1, FORK_GUEST_DESTROYED_V1};
+2020 if stage == FORK_HOST_REVOKED_V1 {
+2049 if stage == FORK_HOST_REVOKED_V1 {
+2061 pub(crate) fn begin_fork_progress(&self, child: Token, identity: ForkIdentity, stage: u32) -> Result {
+2071 pub(crate) unsafe fn finish_fork_progress(&self, child: Token, identity: ForkIdentity, stage: u32) -> Result {
+2078 pub(crate) unsafe fn finish_fork_progress_payload(&self, child: Token, identity: ForkIdentity,
+2080 if stage != super::application_abi::FORK_HOST_REVOKED_V1 { return Err(EBUSY); }
+2084 unsafe fn finish_fork_progress_inner(&self, child: Token, identity: ForkIdentity, stage: u32,
+2086 use super::application_abi::{FORK_HOST_REVOKED_V1, FORK_ABORT_RETURN_V1};
+2089 if stage == FORK_HOST_REVOKED_V1 {
+2098 fork_link::commit_revoked_fork_carrier_in_slots(
+
+os_runtime.rs
+1971 const FORK_PROVIDER_HOST_REVOKED: u32 = 3;
+2064 struct ForkCompletedReceipt {
+2167 unsafe fn fork_payload_scope_binding(scope: *mut super::application_abi::ForkPayloadScopeV1)
+2189 unsafe fn abort_fork_payload_scope(raw: *mut ForkPayloadScopeStack, rollback_ready: bool) -> Result {
+2241 unsafe extern "C" fn fork_payload_attach_scope(
+2304 pub(crate) unsafe extern "C" fn abort_fork_payload_application(
+2320 pub(crate) unsafe extern "C" fn ready_fork_payload_application(
+2382 if stage == super::application_abi::FORK_HOST_REVOKED_V1 && entry.host_revoked {
+2402 if stage != super::application_abi::FORK_HOST_REVOKED_V1 { return Err(EIO); }
+2416 if stage == super::application_abi::FORK_HOST_REVOKED_V1 { entry.attempted = true; }
+2622 if stage == super::application_abi::FORK_HOST_REVOKED_V1 {
+2624 entry.phase = FORK_PROVIDER_HOST_REVOKED;
+3425 pub(crate) unsafe extern "C" fn fork_progress_application(
+3432 use super::application_abi::{FORK_HOST_REVOKED_V1, FORK_GUEST_DESTROYED_V1};
+3434 if identity.is_null() || !matches!(stage, FORK_HOST_REVOKED_V1 | FORK_GUEST_DESTROYED_V1)
+3449 if stage == FORK_HOST_REVOKED_V1 {
+
+abi/application.rs
+119 pub(crate) const FORK_HOST_REVOKED_V1: u32 = 1;
+138 pub(crate) type ForkProgressV1 = unsafe extern "C" fn(
+244 pub(crate) type ForkProgressPayloadV1 = unsafe extern "C" fn(

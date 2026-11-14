@@ -1,0 +1,29 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "parent_pid": 2247305,
+  "parent_birth": 103642905,
+  "pid": 2247306,
+  "birth": 103642908,
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--core=0:0",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/retire_exact_failed_guard.py",
+    "--release",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-FAILED-GUARD-RETIREMENT-RELEASE-1/ROOT-RELEASE.ACTUAL.json",
+    "--release-sha256",
+    "200fd90e3214829b396b2f28559b8a3bb4dd52bb64d49fcdec670df1f214fc68",
+    "--execute"
+  ],
+  "start_epoch": 1793238984.3896189,
+  "release_sha256": "200fd90e3214829b396b2f28559b8a3bb4dd52bb64d49fcdec670df1f214fc68"
+}

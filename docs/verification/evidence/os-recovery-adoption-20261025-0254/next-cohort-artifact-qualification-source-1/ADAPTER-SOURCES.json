@@ -1,0 +1,38 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "EXACT_READONLY_NEXT_CONTEXT_ADAPTERS_NO_WORKLOAD",
+  "runtime_authority": null,
+  "adapters": {
+    "qualify_clone_pointer_and_warning_suffix.py": {
+      "source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-default-actual-qualification-1/qualify_clone_pointer_and_warning_suffix.py",
+      "source_sha256": "a125d4b606d42134033bd4ae487d6406446c313a53c112760b0b70546734af42",
+      "adapter_sha256": "b10881559970fff275fb92373aca989694d57eca6b389328cfb6cdd5714d0475"
+    },
+    "qualify_actual_f02_profile.py": {
+      "source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-default-actual-qualification-1/qualify_actual_f02_profile.py",
+      "source_sha256": "e222d4f3ac37b7db892761d294efe16e28d7dab4cbe6bd6ea443a6d2210905a8",
+      "adapter_sha256": "e7fccde192c56f9ed0ce3df4ec61e4d9f4b3031925a86cc3d0c802362b865ee5"
+    },
+    "qualify_actual_image_suffix.py": {
+      "source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-default-actual-qualification-1/qualify_actual_image_suffix.py",
+      "source_sha256": "d91fa36d260b5ce307db1d4e9fb37ef3ff35c06dcc9e550898c160a2aa1e1c6b",
+      "adapter_sha256": "0da9d76ad0b178fa7b381ca1d2e960e749290486eb62c8575c734716cc3540c8"
+    }
+  },
+  "exact_next_imports_removed": [
+    "arch_do_mmap_bridge",
+    "arch_mmap_error_flags_bridge",
+    "arch_mmap_ignored_flags_bridge",
+    "arch_mmap_supported_flags_bridge",
+    "arch_prctl_get_register_bridge",
+    "arch_prctl_set_register_bridge",
+    "exit_do_exit_bridge",
+    "reset_cputime",
+    "set_cputime",
+    "syscall_do_prlimit64_bridge"
+  ],
+  "exact_new_genuine_C_imports": [
+    "f03_do_exit_debug_v2",
+    "sync_child_event"
+  ]
+}

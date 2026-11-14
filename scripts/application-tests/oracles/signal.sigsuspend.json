@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "signal.sigsuspend",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/signal.sigsuspend"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["rc=-1 errno=4 eintr=1 handled=1 restored=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["sigsuspend temporarily unblocks SIGUSR1 and returns EINTR after one handler event", "The pre-suspend blocked mask is restored on return"],
+  "unresolved_expectations": ["Pending delivery ordering and exact mask restoration evidence require Max review."],
+  "max_question_for_reviewer": "Confirm sigsuspend atomically swaps the mask and restores the blocked SIGUSR1 state on EINTR."
+}

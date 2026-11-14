@@ -1,0 +1,88 @@
+{
+  "Root_sole_compositor_executor_admission_and_credit": true,
+  "actual_failed_command_diagnostic": {
+    "bytes": 76620,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/first-whole-compile-1/correction-1/execution-1/compile-payload.stderr",
+    "sha256": "d0668ff6ebfbf2cfc8135e01a4c17e93a9357a84e5b5fc2c1b4a49d09a9ce780"
+  },
+  "actual_failure_qualification": {
+    "bytes": 13913,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-first-whole-compile-review-sourceacq-max-1/correction-1/actual-failure-1/QUALIFICATION.json",
+    "sha256": "f3be9aa1fb748b847e49c79645c9c7e7109357e4dfb073c6d020505adbab4fed"
+  },
+  "all_original_holds_preserved": true,
+  "candidate": {
+    "bytes": 24619,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-events-autoref-correction-p04source-max-1/candidate/kernel/rust/f03_perf_owner/events.rs",
+    "sha256": "15979c5d7f9ee02586cc13f300f26359e577a8e817053eb85275232b7ad23c6a"
+  },
+  "children_spawned": false,
+  "contract": {
+    "bytes": 4259,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-events-autoref-correction-p04source-max-1/CONTRACT.json",
+    "sha256": "cf042d2dd13a38b264aec4b1748e2f0ea5c04c42fbe4e15eeede61c03f828b0c"
+  },
+  "created_utc": "2026-11-11T14:11:48.260925+00:00",
+  "decision": "GO_EXACT_EVENTS433_EXPLICIT_EPHEMERAL_SHARED_PIN_BORROW_SOURCE_ONLY",
+  "exact_order_preserved": [
+    "close_locked",
+    "ephemeral pin borrow and copy raw Owner pointer",
+    "checked storage decrement",
+    "queue origin and retain owner if last storage",
+    "ManuallyDrop::take",
+    "EventPin::release_locked"
+  ],
+  "identity_checks": {
+    "all_declared_input_sizes_SHA_verified": true,
+    "no_old_cohort_or_overlay_mutation": true,
+    "old_raw_d066_and112e_preserved": true,
+    "one_literal_source_replacement_only": true,
+    "reverse_to_entire_c790_preimage_exact": true,
+    "unified_patch_reconstructed_byte_equal": true
+  },
+  "inputs": {
+    "bytes": 2586,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-events-autoref-correction-p04source-max-1/INPUTS.json",
+    "sha256": "557d6fa7e3d7d4e34998efd306baee1c642a4f652f24779380fdedddd0f217a2"
+  },
+  "next_eligible_action": "Existing P04Tests composes only this15979 events source over exact reviewed cbea/23c2 other27 into a fresh pinned whole-Rust compiler overlay/request. Independent focused operationGO and Root fresh admission/positive current-job retirement are required before one meaningful retry. No lint relaxation/other source change or unchanged retry.",
+  "patch": {
+    "bytes": 582,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-events-autoref-correction-p04source-max-1/EXPLICIT-DROP-PIN-SHARED-BORROW.patch",
+    "sha256": "4ef5aeeacc2aa8b87feaedbc69c90dca9b93463754f6ff78c430646f4a40c1b2"
+  },
+  "preimage": {
+    "bytes": 24616,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/ownership-proposal-1/implementation-1/compiler-scheduler-composition-1/candidate/kernel/rust/f03_perf_owner/events.rs",
+    "sha256": "c7909e8e9de975d0dbae0e2ea3abf25ae18a934c7910d307e3b4342700247c5d"
+  },
+  "reused_full_common_and_five_file_source_GO": {
+    "bytes": 12716,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-coherent-source-review-sourceacq-max-1/compiler-scheduler-composition-1/REVIEW.json",
+    "sha256": "c8c265f293b6e3df617117246002c83f9160e22569d8352bfaee5387ca94c6a0"
+  },
+  "reviewer": "/root/source_acquisition_review_max",
+  "reviewer_source_or_canonical_edit_or_execution": false,
+  "schema": "mckernel.perf-events-single-explicit-shared-borrow-unsafe-source-review.v1",
+  "scope": "Exact one-statement explicit borrow in DescriptorEvent::drop over actual cbea composed source. Focused escalation after actual bounded retry exposed this new dangerous_implicit_autorefs error. All unrelated common source/ownership/provider bodies reused; no lint allowance or compiler execution.",
+  "source_only_no_implicit_operation_or_resource_release": true,
+  "source_ready": {
+    "bytes": 1871,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-events-autoref-correction-p04source-max-1/SOURCE-READY.NOT-EXECUTED.json",
+    "sha256": "a71472dd3066383bfe1335bedefab9e0464ae36bae662d56761092361cdf47d5"
+  },
+  "unproved": [
+    "Actual whole-Rust metadata/name/type compile success after this source fix",
+    "Four real runtime families including scheduler late-clear+append and real27 unchanged composition providers",
+    "Normal paired image/C headers/ABI104/codegen/link/provider/unique ownership/cleanup",
+    "Original DEFAULT/FUNCTIONAL/native/current-owner/current-free/restoration/parent/file/milestone acceptance"
+  ],
+  "unsafe_and_lifetime_decision": [
+    "Actual descriptor Record finalizer owns last DescriptorPin or exclusively owned unpublished Prepared. DescriptorEvent::drop therefore has exclusive &mut self to a stable initialized DescriptorState inside UnsafeCell; no active descriptor borrower may concurrently take the pin.",
+    "Drop takes R before close_locked and holds that same R through unchanged scalar bookkeeping and release. close_locked returns before the new expression and neither takes nor moves the stored initialized ManuallyDrop<EventPin>. Its temporary mutable state borrow has ended.",
+    "The exact new expression intentionally borrows only the live ManuallyDrop<EventPin> field. Its existing safe Deref yields EventPin and copies the raw EventRef.owner pointer. No reference to Owner is created, no lifetime is extended/stored, no transmute/cast/provider is substituted.",
+    "The shared pin reference is used only in this statement and ends before later mutable ManuallyDrop::take. EventPin contains raw owner/group pointers, so reading a raw owner value does not alias subsequent R-protected Owner fields through an immutable Rust &Owner.",
+    "The descriptor EventPin retains the genuine Owner throughout checked descriptor_storages decrement. If last storage, the actual queue_origin_locked at107-115 first retains a distinct explicit Owner edge and then publishes the notification. This occurs before the final EventPin take/release.",
+    "After copying Owner, storage update and optional queueing remain in the same original order. ManuallyDrop::take then consumes exactly one pin and release_locked balances actual event/own/containing group edges under already-held R. There is no owner dereference after final release, no automatic second Drop, no allocator/callback/offload under R and no moved-state read."
+  ]
+}

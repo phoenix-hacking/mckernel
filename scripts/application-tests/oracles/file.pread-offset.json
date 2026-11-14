@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "file.pread-offset",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/file.pread-offset"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["read=5 bad_index=5 offset=7"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["pread returns five bytes from file offset 11", "Returned bytes equal input[11..15]", "The current descriptor offset remains 7"],
+  "unresolved_expectations": ["Freeze canonical output and reviewed input/oracle SHA256 before execution."],
+  "max_question_for_reviewer": "Confirm pread uses its explicit offset and does not modify the descriptor position."
+}

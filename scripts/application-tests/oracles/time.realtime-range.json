@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "time.realtime-range",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/time.realtime-range"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "canonical-record-with-relations", "fields": ["first_sec", "first_nsec", "second_sec", "second_nsec", "nondecreasing", "valid"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Both timestamps have valid nanoseconds", "Application values fall within the supervisor bracket plus the declared two-second allowance", "The test makes no monotonic CLOCK_REALTIME claim"],
+  "unresolved_expectations": ["Bind supervisor bracket fields, canonical record, and input/oracle hashes before execution."],
+  "max_question_for_reviewer": "Confirm the bracket comparison and two-second scheduling allowance are supplied by the runner, not inferred by the payload."
+}

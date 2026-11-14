@@ -1,0 +1,229 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_ACTUAL_NEXT_COHORT_DEFAULT_PRODUCER_ELF_PROVIDER_LINK_AND_RETAINED_DATA_QUALIFICATION",
+  "actual_producer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F03-F06-QUALIFIED-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/evidence/producer-contract.json",
+    "bytes": 12952,
+    "sha256": "cf6088e84cb05d01fff5d2934b279fbec27a9c85199749555eb616e9fae68db7"
+  },
+  "actual_profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F03-F06-QUALIFIED-DEFAULT-BUILD-ADMISSION-1/PROFILE.SOURCE-ONLY.json",
+    "bytes": 90783,
+    "sha256": "bda130dc62879e00e1728d21300ebb0bc62cd84dc5e31b0744546ed16a316cec"
+  },
+  "compiled_outputs": [
+    {
+      "path": "/work/output/build/kernel/rust/mckernel_rust.o",
+      "bytes": 18178104,
+      "sha256": "96c230cc7319631d898076046f0ee77ac3ca54dfe235f73941bec87e3f473ff6"
+    },
+    {
+      "path": "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+      "bytes": 370664,
+      "sha256": "50436ae4013d1b86c4ec7762e320bb2a77cf89d0949bfc76323e041ef1a1d290"
+    },
+    {
+      "path": "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+      "bytes": 131904,
+      "sha256": "2923d8716843ad229407d21b464d8ea922c73406b2c9add1071b851e6a97f08f"
+    },
+    {
+      "path": "/work/output/build/kernel/mckernel.img",
+      "bytes": 10221264,
+      "sha256": "685ace3f1536a959198343d7c965e027dfd91f00b17b36e4d6906a177873087f"
+    }
+  ],
+  "actual_commands": 4,
+  "all_actual_command_returncodes": [
+    0,
+    0,
+    0,
+    0
+  ],
+  "retained_C_inputs": 8,
+  "matching_F02_process_not_recompiled": true,
+  "qualified_Rust_exports": 23,
+  "actual_C_function_delta": {
+    "CMakeFiles/mckernel.img.dir/syscall.c.o": {
+      "original_allocated_FUNC_count": 96,
+      "actual_allocated_FUNC_count": 82,
+      "actual_removed_names": [
+        "do_exit",
+        "do_mmap_smaller_page_bridge",
+        "do_munmap_begin_bridge",
+        "do_munmap_finish_bridge",
+        "do_munmap_remove_range_bridge",
+        "do_prlimit64",
+        "exit_do_exit_bridge",
+        "perf_counter_attr_flags_bridge",
+        "perf_read_attr_flags_bridge",
+        "ptrace_report_exec_arch_event_bridge",
+        "reset_cputime",
+        "set_cputime",
+        "syscall_do_prlimit64_bridge",
+        "wait_thread_release_bridge"
+      ],
+      "new_C_function_names": [],
+      "exact_expected_selected_provider_removals": [
+        "do_exit",
+        "do_mmap_smaller_page_bridge",
+        "do_munmap_begin_bridge",
+        "do_munmap_finish_bridge",
+        "do_munmap_remove_range_bridge",
+        "do_prlimit64",
+        "exit_do_exit_bridge",
+        "perf_counter_attr_flags_bridge",
+        "perf_read_attr_flags_bridge",
+        "ptrace_report_exec_arch_event_bridge",
+        "reset_cputime",
+        "set_cputime",
+        "syscall_do_prlimit64_bridge",
+        "wait_thread_release_bridge"
+      ],
+      "retained_partial_bodies": [
+        "do_execveat",
+        "do_fork",
+        "do_mmap",
+        "terminate"
+      ]
+    },
+    "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o": {
+      "original_allocated_FUNC_count": 55,
+      "actual_allocated_FUNC_count": 49,
+      "actual_removed_names": [
+        "arch_do_mmap_bridge",
+        "arch_mmap_error_flags_bridge",
+        "arch_mmap_ignored_flags_bridge",
+        "arch_mmap_supported_flags_bridge",
+        "arch_prctl_get_register_bridge",
+        "arch_prctl_set_register_bridge"
+      ],
+      "new_C_function_names": [],
+      "exact_expected_selected_provider_removals": [
+        "arch_do_mmap_bridge",
+        "arch_mmap_error_flags_bridge",
+        "arch_mmap_ignored_flags_bridge",
+        "arch_mmap_supported_flags_bridge",
+        "arch_prctl_get_register_bridge",
+        "arch_prctl_set_register_bridge"
+      ],
+      "retained_partial_bodies": []
+    }
+  },
+  "default_allocated_C_functions_removed": 20,
+  "no_new_C_function_names": true,
+  "additional_C_removal_classification": {
+    "do_prlimit64": "Qualified PRLIMIT_BODY C fallback is unselected; Rust body+forward exports verified",
+    "ptrace_report_exec_arch_event_bridge": "Original static C helper source unchanged; compiler no longer emits it after qualified exec-tail consumer selection; no separate new-body port claim",
+    "source": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-cohort-next-static-source-1/candidate/kernel/syscall.c",
+      "bytes": 913009,
+      "sha256": "2e1c3d5537551bb6a330ea37371ceed20718692d82e0522e004769bf1dcb7f89"
+    }
+  },
+  "exact_undefined_delta": {
+    "removed": [
+      "arch_do_mmap_bridge",
+      "arch_mmap_error_flags_bridge",
+      "arch_mmap_ignored_flags_bridge",
+      "arch_mmap_supported_flags_bridge",
+      "arch_prctl_get_register_bridge",
+      "arch_prctl_set_register_bridge",
+      "exit_do_exit_bridge",
+      "reset_cputime",
+      "set_cputime",
+      "syscall_do_prlimit64_bridge"
+    ],
+    "added_genuine_C": [
+      "f03_do_exit_debug_v2",
+      "sync_child_event"
+    ],
+    "all_other_imports_unchanged": true,
+    "unsupported_core_panics_absent": true
+  },
+  "unchanged_gates": [
+    "four LOCAL logger descriptors and consumers",
+    "clone27B/twoR64 source-object-final pointer proof",
+    "three original Rust list/lock providers",
+    "four F02 flags/table owners and exact ten original named function pointer targets",
+    "F02 process84metadata and unchanged exact process object",
+    "full eleven-input rawld/link.d/ELF/native-required symbols",
+    "closed101file Rust source map and eight exact retained object inputs"
+  ],
+  "supported_configuration": "Pinned Linux6.12/x86_64, existing no-UBSAN/non-DCFA ticket-lock ABI, genuine NOCACHE undefined; no unsupported config expansion",
+  "warnings": {
+    "Rust_predecessor": 137,
+    "Rust_current": 140,
+    "exact_new_Rust_headers": {
+      "warning: unused import: `super::*`": 3,
+      "warning: 140 warnings emitted": 1
+    },
+    "all_prior_137_headers_retained": true,
+    "kernel_C_current": [
+      "/src/kernel/syscall.c:7524:19: warning: unused variable \u2018range\u2019 [-Wunused-variable]",
+      "/src/kernel/syscall.c:26376:44: warning: \u2018syscall_itimer_offsets\u2019 defined but not used [-Wunused-const-variable=]",
+      "/src/kernel/syscall.c:26058:43: warning: \u2018sched_syscall_offsets\u2019 defined but not used [-Wunused-const-variable=]",
+      "/src/kernel/syscall.c:24297:59: warning: \u2018syscall_cputime_offsets\u2019 defined but not used [-Wunused-const-variable=]",
+      "/src/kernel/syscall.c:4905:46: warning: \u2018wait_scan_kernel_offsets\u2019 defined but not used [-Wunused-const-variable=]",
+      "/src/kernel/syscall.c:4872:48: warning: \u2018wait_zombie_kernel_offsets\u2019 defined but not used [-Wunused-const-variable=]",
+      "/src/kernel/syscall.c:4720:43: warning: \u2018ptrace_detach_kernel_offsets\u2019 defined but not used [-Wunused-const-variable=]"
+    ],
+    "kernel_C_predecessor_baseline": "UNKNOWN_NOT_RECOMPILED",
+    "arch_C_stderr_empty": true,
+    "exact_ld_RWX_warning": "/usr/bin/ld: warning: mckernel.img has a LOAD segment with RWX permissions\n",
+    "prior_two_fixed_LP64_ABI_equivalent_declaration_warnings_remain_debt": true
+  },
+  "observer_expectation_refinements": [
+    "Initial named kernel-C bridge expectation12 tightened to exact actual14 after frozen-source proof: qualified do_prlimit64 fallback unselected and byte-unchanged static ptrace arch helper compiler-elided. No source/compiler/oracle relaxation."
+  ],
+  "current_cohort_observer_failures": [],
+  "historical_failures_preserved": true,
+  "Source38_different_source_debt_closed": false,
+  "native_acceptance": false,
+  "whole_file_retirement": false,
+  "physical_postjoin": "SEPARATE_ROOT_CURRENT_PHYSICAL_READER",
+  "independent_acceptance_receipt": "ROOT_OWNS_RECORDING",
+  "compiler_container_grant_canonical_Git_actions": 0,
+  "evidence": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next-cohort-artifact-qualification-source-1/ACTUAL-BASE-QUALIFICATION.json",
+      "bytes": 419,
+      "sha256": "ba46ee6f55c0f66d6fb22ee573039b1f91450656ac2a62e020e8dca3d6336dcc"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next-cohort-artifact-qualification-source-1/RESULT.json",
+      "bytes": 26925,
+      "sha256": "ab1fc0e203fc5fd6424723786852aa3b709c87a325809deb1006dc9a82394d72"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next-cohort-artifact-qualification-source-1/IMAGE-LINK-RESULT.json",
+      "bytes": 14332,
+      "sha256": "6599c48300102b069220696ef59135896330e76e27aea33c905298deadef796a"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next-cohort-artifact-qualification-source-1/CLONE-FINAL-POINTER-AND-WARNINGS.json",
+      "bytes": 20611,
+      "sha256": "975293edf1524d0fbb5b013943dbb90f72d0564469cfea750ae3f81789f2a51c"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next-cohort-artifact-qualification-source-1/fresh-compiled-rust-ownership-proof.json",
+      "bytes": 9146,
+      "sha256": "0a417218c163f56ec3e950850e0f4c00c23101981c311ee3128708ed886d8e4a"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next-cohort-artifact-qualification-source-1/NEXT-PROVIDERS-RESULT.json",
+      "bytes": 17920,
+      "sha256": "3d36af1a7b2844e440be817bd633256fd580c89157b30d1614175dc4318daf1e"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next-cohort-artifact-qualification-source-1/RETAINED-F02-DATA-OWNERS-RESULT.json",
+      "bytes": 13104,
+      "sha256": "176370c1e9d38abae9ae80ada4e575173f60d12fe7b24ea4bb2b2d2dfcd546dc"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next-cohort-artifact-qualification-source-1/CURRENT-NARROW-ALIAS-IDENTITY-GATE.json",
+      "bytes": 3811,
+      "sha256": "0c5cc26f4e2fa807220c48b5dd9ebfbb820403998bc44bc76e46b4b72117b930"
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-009",
+  "packet_version": 1,
+  "context_sha256": "9db7bb0a3a822f8ac6b45b4e5bdc4b41ab90b77120a991858bb7f7452c9a2dae",
+  "started_utc": "2026-09-09T10:05:00Z",
+  "finished_utc": "2026-09-09T10:05:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "startup.pagesize",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/startup/startup.pagesize.c",
+      "oracle": "scripts/application-tests/oracles/startup.pagesize.json",
+      "changed_files": [
+        "scripts/application-tests/cases/startup/startup.pagesize.c",
+        "scripts/application-tests/oracles/startup.pagesize.json"
+      ],
+      "unresolved_oracle_notes": [
+        "Canonical stdout schema and reviewed input/oracle bindings require Max confirmation before execution."
+      ],
+      "max_reviewer_question": "Confirm 4096-byte pinned guest baseline and approve the three-line record schema."
+    },
+    {
+      "case_id": "startup.auxv-entry",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/startup/startup.auxv-entry.c",
+      "oracle": "scripts/application-tests/oracles/startup.auxv-entry.json",
+      "changed_files": [
+        "scripts/application-tests/cases/startup/startup.auxv-entry.c",
+        "scripts/application-tests/oracles/startup.auxv-entry.json"
+      ],
+      "unresolved_oracle_notes": [
+        "The immutable ET_EXEC artifact and ELF-derived address bindings are not yet available."
+      ],
+      "max_reviewer_question": "Bind the reviewed ET_EXEC e_entry, PT_PHDR and e_phnum values before runtime comparison."
+    },
+    {
+      "case_id": "startup.stdin-binary",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/startup/startup.stdin-binary.c",
+      "oracle": "scripts/application-tests/oracles/startup.stdin-binary.json",
+      "changed_files": [
+        "scripts/application-tests/cases/startup/startup.stdin-binary.c",
+        "scripts/application-tests/oracles/startup.stdin-binary.json"
+      ],
+      "unresolved_oracle_notes": [
+        "Frozen assertion requires SHA256 while this draft records an independently computed FNV-1a diagnostic; digest contract must be resolved before execution."
+      ],
+      "max_reviewer_question": "Should the fixture emit SHA256 as the frozen assertion requires, or should the assertion be versioned to FNV-1a32?"
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/startup/startup.pagesize.c", "sha256": "25905eb1e9acb5f147d155e59bf37e899a48cf8cccd362749150277ab41a8202"},
+    {"path": "scripts/application-tests/oracles/startup.pagesize.json", "sha256": "4cce20e7d216ccf480f6933c8b1e5ff806fd5c6d20a2a7e569c84a68b184cd49"},
+    {"path": "scripts/application-tests/cases/startup/startup.auxv-entry.c", "sha256": "f85c1185881bfbd89d1279c2a1a717bec683f0a8650af831f420b2d0ceac9063"},
+    {"path": "scripts/application-tests/oracles/startup.auxv-entry.json", "sha256": "530903ff049da4c5714417428faa259921f0fe1853400b2db2ac8d7e963bd2c4"},
+    {"path": "scripts/application-tests/cases/startup/startup.stdin-binary.c", "sha256": "15e0ff956f4177cfa4af1f88c9c25af56bb53d141266a2fd58f421e5dd321d92"},
+    {"path": "scripts/application-tests/oracles/startup.stdin-binary.json", "sha256": "e36c2b371970ffa35f1347d95e6c28aed34a8e86598420692de52a509b40032b"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-009.json --emit-context /tmp/application-packet-009-context.json", "outcome": "PASS; metadata only"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": [
+    "startup.pagesize: canonical record and input binding",
+    "startup.auxv-entry: immutable ET_EXEC ELF bindings",
+    "startup.stdin-binary: SHA256 versus FNV-1a32 digest contract"
+  ],
+  "blocked_execution_capabilities": ["current-inputs", "runtime-transport-fault-injection", "runner-contract"],
+  "first_failure_event": null,
+  "max_escalation": [
+    "Resolve the three packet-specific oracle questions before enabling runtime execution."
+  ],
+  "next_packet_id": "packet-010"
+}

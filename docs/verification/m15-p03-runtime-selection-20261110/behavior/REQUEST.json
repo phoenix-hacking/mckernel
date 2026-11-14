@@ -1,0 +1,180 @@
+{
+  "clean_environment": {
+    "CARGO_MAKEFLAGS": "",
+    "CMAKE_BUILD_PARALLEL_LEVEL": "1",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "MAKEFLAGS": "",
+    "OMP_NUM_THREADS": "1",
+    "PATH": "/usr/bin:/bin",
+    "PYTHONNOUSERSITE": "1"
+  },
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--core=0:0",
+        "--fsize=67108864:67108864",
+        "--",
+        "/usr/bin/cmake",
+        "-S",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/source",
+        "-B",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/output/p03-controlled-build-1",
+        "-G",
+        "Unix Makefiles",
+        "-DCMAKE_MAKE_PROGRAM:FILEPATH=/usr/bin/make",
+        "-DCMAKE_INSTALL_PREFIX:PATH=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/controlled-prefix",
+        "-DARCH:STRING=x86_64",
+        "-DENABLE_RUST_ECLAIR_BACKTRACE:BOOL=ON",
+        "-DMCKERNEL_RUNTIME_TOOL_RUSTC:FILEPATH=/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc"
+      ],
+      "cwd": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1",
+      "role": "configure controlled-prefix existing selector",
+      "sequential": true
+    },
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--core=0:0",
+        "--fsize=67108864:67108864",
+        "--",
+        "/usr/bin/cmake",
+        "--build",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/output/p03-controlled-build-1",
+        "--target",
+        "eclair_backtrace_rust_program",
+        "--",
+        "-j1",
+        "VERBOSE=1"
+      ],
+      "cwd": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1",
+      "role": "compile/link changed-config controlled-prefix target",
+      "sequential": true
+    },
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--core=0:0",
+        "--fsize=67108864:67108864",
+        "--",
+        "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--test",
+        "--crate-name",
+        "eclair_backtrace_contract",
+        "-C",
+        "opt-level=2",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/source/scripts/rust/eclair-backtrace/fixture.rs",
+        "-o",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/output/p03-byte-stream-tests"
+      ],
+      "cwd": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1",
+      "role": "compile original six-test byte-stream fixture",
+      "sequential": true
+    },
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--core=0:0",
+        "--fsize=67108864:67108864",
+        "--",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/output/p03-byte-stream-tests",
+        "--test-threads=1"
+      ],
+      "cwd": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1",
+      "role": "run original six byte-stream cases",
+      "sequential": true
+    },
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--core=0:0",
+        "--fsize=67108864:67108864",
+        "--",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/run_behavior.py"
+      ],
+      "cwd": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1",
+      "role": "run one actual controlled-child PTY case",
+      "sequential": true
+    }
+  ],
+  "correction_proof": {
+    "bytes": 2697,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/correction-1/CORRECTION-PROOF.json",
+    "sha256": "a33e57a077996f2e33502e36ee69c75a2290b5baa58b5fdf165db7d5a4a246ed"
+  },
+  "execution_requirements": [
+    "Independent source/profile/ownership review before fresh Root admission.",
+    "All commands strictly serial; Root existing controller retains each direct PID/birth/stdout/stderr/wait and actual outputs.",
+    "Verify source/compiler bindings and clean output roots; no existing result overwrite/replay.",
+    "Outer control must permit bounded owned retirement before force termination; retain UNKNOWN if it cannot observe all joins.",
+    "Any first failure retains raw diagnostics/candidate; no unchanged rerun.",
+    "Require six tests PASS and one PTYcase PASS with no residual/adopted child, not only zero returncode."
+  ],
+  "limits": [
+    "No actual /usr/local/eclair/kernel/boot/module/dump invocation.",
+    "No original Expect execution because interpreter absent; no claimed runtime parity.",
+    "No installation, canonical CMake patch, defaultflip, production/native acceptance.",
+    "Production-prefix compile a8529138 reused; only changed fixture-config program compiled.",
+    "No P05/generator8 replay or P01/P02/P04 operation."
+  ],
+  "original_check": "M15-P03 focused state-machine and HOST PTY interaction/exit/cleanup; M14 acceptance remains prior",
+  "preparation_only": "Sources read/copied/private scripts+JSON written; no compiler/cmake/test/driver/import/runtime execution by writer.",
+  "python_binding": {
+    "bytes": 358,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/PYTHON-BINDING.json",
+    "sha256": "aa8f6679b7b5656590cfa049e48f4ba452797394f7870adc910b8bc3da0c76c7"
+  },
+  "resources": {
+    "CPU": 6,
+    "PTY_owner_deadline_seconds": 20,
+    "fresh_Root_aggregate_admission_required": true,
+    "fresh_available_GiB_before_batch": 26,
+    "jobs": 1,
+    "process_AS_bytes": 2147483648,
+    "retirement_seconds": 6,
+    "shared_HOST_total_bytes": 4294967296,
+    "whole_serial_batch_wall_seconds": 120
+  },
+  "source_contract": {
+    "bytes": 9045,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/SOURCE-AND-CONTRACT.json",
+    "sha256": "e11c0cde1bd0c9df7d064274642a619ca177bc8b8f02d3392e866533299f37cd"
+  },
+  "status": "CORRECTED_PROPOSAL_NOT_ADMITTED_NOT_EXECUTED",
+  "supersedes_unexecuted_request": {
+    "bytes": 7161,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/correction-1/original/REQUEST.json",
+    "sha256": "9a856e496db04e00b789e31240c40d3040e5210b28299616f93b91163cf7be53"
+  },
+  "test_harness_profile": "Rust --test uses normal unwind test harness, edition2021/opt2, deliberately no production panic=abort. Same exact parsermodule; no native PTY module in six-test binary. Controlled-prefix actual program uses unchanged selector panicabort/opt2.",
+  "toolchain_reuse": {
+    "bytes": 43555,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-source-1/HOST-TOOLCHAIN-BINDING.json",
+    "sha256": "e27a98348bd44a341a37db8528008303111f7753af6a8fb441cd14199ec243ac"
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "scope": "EXPLICIT_FLAG_PRESERVATION focused source-only test preparation; no execution",
+  "owner": "/root/create_empty_entry_parity_high",
+  "incoming_commit": "ad526fc4e8484fced90265668486167566d7087d",
+  "exact_parent": "96886e8450964979861c104772e6e9aa84b8eefa",
+  "source_test_path": "scripts/tests/test_os_goal_service.py",
+  "incoming_test_sha256": "d6e31fae465bc46bef3a5b54c893214d3311d94acd1476e66610c6f1dfb55e17",
+  "candidate_test_sha256": "7ba88c808dfe011d787d56690c39ee16f4057d3cc4e8d48abae972431fa41afb",
+  "test_patch_sha256": "324bdd615f73b45e262182f69d4c5b1ef3297c11192f303b8daf2c68c0c02279",
+  "candidate_service": {
+    "path": "/home/holden/mckernel-work/resume-20261110T044806Z-3ecbebf5/explicit-flags-source-1/CANDIDATE-os_goal_service.py",
+    "sha256": "db1f492d78be56b3c2eb50b8dbf2477c5c7ffba3ea6583966dd3dd9a09b1047e"
+  },
+  "selectors": [
+    "scripts.tests.test_os_goal_service.ServiceTests.test_validator_preserves_each_explicit_optional_flag_combination",
+    "scripts.tests.test_os_goal_service.ServiceTests.test_validator_none_keeps_intentional_both_true_defaults",
+    "scripts.tests.test_os_goal_service.ServiceTests.test_legacy_forwarding_reaches_real_validator_without_adding_optional_flags",
+    "scripts.tests.test_os_goal_service.ServiceTests.test_engine_exec_preserves_flags_and_authenticated_recovery_lineage"
+  ],
+  "source_derived_expectations": {
+    "incoming_ad526": "Pure explicit and real legacy path each expose three flag-pair failures: neither becomes T/T, repaironly becomesT/T, milestoneonly becomesT/T; both control and None defaults remainT/T. Modified engine explicit-list preservation assertion also exposes forcedtrue. These are predicted from source, not observed tests.",
+    "D_candidate": "All4 selected methods predictedPASS: four explicit pairs preserved at validator and real legacy\u2192service start path; None retains intentionalT/T; authenticated engine explicit args retainF/F with recovery lineage unchanged. Not executed."
+  },
+  "actual_test_boundaries": "Existing ServiceTests fake repo/TemporaryDirectory scaffolding reused. Validator/launcher.arguments and legacy.launch_legacy/service.main/service.start remain real; validation spy wraps real implementation. Only outer systemctl/install/mailbox/ownership/authorization/config publication/exec/process effects mocked. No real frontdoor/service/network/account/model/inhibitor/guardian state writes. Existing engine case fakeexec/mockguardian temporary JSON only.",
+  "HOST_memory_boundary": "Explicit planner memory_gib12 remains parsed12 while exact startup instruction retains actual HOST4GiB TOTAL and preserved source/native/service holds. No resolve_resources/environment/controller or RAM grant asserted.",
+  "necessary_existing_assertion_change": "Existing engine preservation test asserted bothtrue for an explicit flagless list, encoding the defect. Two false assertions now express supplied CLI semantics; this changed behavior is a necessary modified control, not an unchanged green replay.",
+  "no_execution": "Only gitshow/read/source comparisons/private writes and AST syntax parse. No SUT/test imports, unittest execution, service/frontdoor/systemctl/mailbox/gh/network/process/model/state/canonical action. Root alone selects/stages/executes after exact review/admission.",
+  "no_broad_rerun": "Exactly4 selectors proposed, no166tests/old7or12 rerun; no chronology file edits/security fuzz.",
+  "Root_integration": "Apply TESTS.PRIVATE.patch to incoming ad526 testfile; preserve other writers. Root must stage baseline/candidate SUT separately and supply bounded execution packet; no execution authorization inferred here.",
+  "incoming_source_sha256": {
+    "scripts/os_goal_service.py": "0768d2b28599e20d41734d30126e7cd8ecbb3a015d519c278ad593539eaedef3",
+    "scripts/run_os_goal.py": "cf9a639f8e5820fb6745fe700486d6326d8c088493e09d59aa6e269feca992bd",
+    "scripts/start_os_overnight.py": "c88d44d43578af58c8ae1cb0faf2d0f461cbc776efe21e17ff8ca44323b059da"
+  },
+  "source_derived_method_vector_counts": {
+    "pure_explicit": 4,
+    "None_default": 1,
+    "legacy_real_validator_route": 4,
+    "modified_authenticated_engine": 1
+  },
+  "test_execution_performed": false
+}

@@ -1,0 +1,144 @@
+--- a/kernel/rust/f03_clone_lifetime.rs
++++ b/kernel/rust/f03_clone_lifetime.rs
+@@ -58,6 +58,7 @@
+     tid_count:CInt,
+     child_release_result:CInt,
+     vm_release_result:CInt,
++    constructor_thread_refs_remaining:CInt,
+ }
+ #[used]
+ static UNKNOWN_CLONES:AtomicPtr<UnknownCloneRecord>=AtomicPtr::new(null_mut());
+@@ -119,7 +120,7 @@
+             obligations:ORIGINAL_CHILD|(if reserved!=0{CALLER_CPU}else{0}),
+             child,process:null_mut(),vm:null_mut(),cpu,cpu_reservation_obtained:reserved,
+             child_tid:0,tid_table_created:table_created,tid_table:null_mut(),tid_count:0,
+-            child_release_result:CInt::MIN,vm_release_result:CInt::MIN,
++            child_release_result:CInt::MIN,vm_release_result:CInt::MIN,constructor_thread_refs_remaining:2,
+         });}
+         if current.is_null()||child.is_null()||cpu<0{
+             unsafe{retain_record(record,-EINVAL);}return Err(-EINVAL);
+@@ -175,6 +176,48 @@
+         unsafe{retain_record(record.as_ptr(),error);}
+     }
+ 
++    /// Release only our new storage refs on a pre-enqueue error, then retain
++    /// every original child/CPU/TID obligation in the exact UNKNOWN record.
++    ///
++    /// # Safety
++    /// Caller has not published graph/runqueue/ptrace state. The original two
++    /// constructor Thread edges and current parent's VM edge remain owned, so
++    /// BOTH new-reference releases must be nonfinal. No original constructor
++    /// reference, CPU reservation, TID slot or process allocation is released.
++    pub(crate) unsafe fn quarantine_after_releasing_added_refs(self,error:CInt)->CInt{
++        let record=self.record;core::mem::forget(self);
++        let r=unsafe{&mut*record.as_ptr()};
++        let reason=if error<0{error}else{-EBUSY};
++        let required=ORIGINAL_CHILD|CHILD_PIN|VM_PIN;
++        if r.obligations&required!=required
++            ||r.obligations&(ORIGINAL_PUBLICATION_UNKNOWN|CHILD_RELEASE_STARTED|VM_RELEASE_STARTED)!=0
++            ||r.constructor_thread_refs_remaining!=2{
++            unsafe{retain_record(record.as_ptr(),-EBUSY);}return -EBUSY;
++        }
++        // Consume ONLY our additional Thread ref. A nonzero result contradicts
++        // the still-owned constructor edges or reports a partial/destructive
++        // operation. Preserve exact stage and do not touch the VM in that case.
++        r.obligations=(r.obligations&!CHILD_PIN)|CHILD_RELEASE_STARTED;
++        r.child_release_result=unsafe{crate::process_helpers::release_thread_checked(r.child)};
++        if r.child_release_result!=0{
++            let failure=if r.child_release_result<0{r.child_release_result}else{-EBUSY};
++            unsafe{retain_record(record.as_ptr(),failure);}return failure;
++        }
++        // Current parent is still running and owns its separate VM reference.
++        // No range/graph lock is held across the real checked teardown provider.
++        r.obligations=(r.obligations&!VM_PIN)|VM_RELEASE_STARTED;
++        r.vm_release_result=unsafe{crate::process_helpers::release_process_vm_checked(r.vm)};
++        if r.vm_release_result!=0{
++            let failure=if r.vm_release_result<0{r.vm_release_result}else{-EBUSY};
++            unsafe{retain_record(record.as_ptr(),failure);}return failure;
++        }
++        // Only our new edges have been consumed. Constructor(2), process/VM
++        // graph, CPU and any matched TID slot remain UNKNOWN; no destructor,
++        // refcount reset, local TID free or CPU release is inferred here.
++        unsafe{retain_record(record.as_ptr(),reason);}
++        reason
++    }
++
+     /// Reuse the exact enqueue helper after caller's existing graph/ptrace work.
+     ///
+     /// # Safety
+--- a/kernel/rust/lib.rs
++++ b/kernel/rust/lib.rs
+@@ -165,3 +165,7 @@
+ // Append only to the private typecheck overlay lib.rs. Default selection stays off.
+ #[cfg(m14_clone_lifetime_typecheck)]
+ mod f03_clone_lifetime;
++
++// Functional-only private prototype check; default/C activation remains off.
++#[cfg(m14_clone_lifetime_typecheck)]
++mod f03_fork_namespace;
+--- a/kernel/rust/fork_control_guest.rs
++++ b/kernel/rust/fork_control_guest.rs
+@@ -310,3 +310,14 @@
+ 
+ const _:()={assert!(size_of::<GuestIdentity>()==88);assert!(size_of::<ControlObservation>()==128);
+     assert!(core::mem::offset_of!(Carrier,bytes)%8==0);};
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Private frontend names only; no provider implementation/export/selector changes.
++#[cfg(m14_clone_lifetime_typecheck)]
++pub(crate) use self::child_credits::constructed::{
++    process_fork_construct_current_v1, process_fork_cancel_constructed_current_v1,
++};
++#[cfg(m14_clone_lifetime_typecheck)]
++pub(crate) use self::child_credits::{
++    CallerForkOutcome, process_fork_owned_caller_runnable_current_v2,
++};
+--- /dev/null
++++ b/kernel/rust/f03_fork_namespace.rs
+@@ -0,0 +1,46 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Eligible namespace/prototype/source-width repairs; no do_fork activation.
++use core::ffi::c_void;
++use core::mem::MaybeUninit;
++use core::ptr::addr_of_mut;
++use crate::abi::{CInt,CLong,CULong,Process,Thread};
++use crate::lock_helpers::McsRwlockNodeIrqsave;
++use crate::fork_control_guest::{
++    CallerForkOutcome,process_fork_construct_current_v1,
++    process_fork_cancel_constructed_current_v1,
++    process_fork_owned_caller_runnable_current_v2,
++};
++
++/// Copy only the host flag word under the actual parent-edge update lock.
++/// # Safety
++/// Running caller retains process; all parent-edge replacement takes its
++/// update writer, and the current edge retains parent storage while locked.
++/// This requires the same graph contract as existing clone-parent publication.
++pub(crate) unsafe fn snapshot_host_parent_flags(process:*mut Process,flags:CInt)->Result<CULong,CInt>{
++    if process.is_null(){return Err(-22);}
++    let mut node=MaybeUninit::<McsRwlockNodeIrqsave>::uninit();
++    unsafe{
++        let lock=addr_of_mut!((*process).update_lock).cast();
++        crate::lock_helpers::__mcs_rwlock_reader_lock(lock,node.as_mut_ptr());
++        let parent=(*process).ppid_parent;
++        let result=if parent.is_null(){Err(-22)}else{
++            let policy:CInt=crate::syscall_policy::clone_host_parent_flags_result(flags,(*parent).pid);
++            // Original C passes signed int to unsigned long. First widen int
++            // to signed long, then apply that original modulo-2^64 conversion.
++            // No narrowing or alternate provider ABI is introduced.
++            let signed:CLong=CLong::from(policy);
++            Ok(signed as CULong)
++        };
++        crate::lock_helpers::__mcs_rwlock_reader_unlock(lock,node.as_mut_ptr());
++        result
++    }
++}
++
++// Exact existing real-crate signatures. They typecheck without exposing the
++// pub(super) constructed module itself or copying any constructor/host body.
++const _:unsafe extern "C" fn(*mut Thread,CULong,CULong,CInt,CInt,*mut *mut c_void)->*mut Thread
++    =process_fork_construct_current_v1;
++const _:unsafe extern "C" fn(*mut c_void)->CInt
++    =process_fork_cancel_constructed_current_v1;
++const _:unsafe extern "C" fn(*mut Thread,*mut Thread,CInt,CULong,*mut c_void,CInt,CInt,CULong,*mut CallerForkOutcome)->CInt
++    =process_fork_owned_caller_runnable_current_v2;

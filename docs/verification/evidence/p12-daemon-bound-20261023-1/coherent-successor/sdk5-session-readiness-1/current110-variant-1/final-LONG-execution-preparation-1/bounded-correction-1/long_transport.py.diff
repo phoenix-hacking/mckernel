@@ -1,0 +1,11 @@
+--- accepted/long_transport.py
++++ private-successor/long_transport.py
+@@ -34,7 +34,7 @@
+ EXTERNAL_CAPTURE_BYTES = (EXTERNAL_CAPTURE['command_count'] * EXTERNAL_CAPTURE['stream_slots'] *
+                           EXTERNAL_CAPTURE['retained_copies'] * EXTERNAL_CAPTURE['stream_file_bytes'])
+ # No final wrapper/argv/path/copy binding exists in this private cohort.
+-EXTERNAL_CAPTURE_BINDING = None
++EXTERNAL_CAPTURE_BINDING = {'schema': 'mckernel.p12.exact-LONG-owner-capture-binding.v1', 'controller_path': '/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/capture_root_LONG.NOT-RELEASED.py', 'controller_sha256': 'e386ac40399ff0620496d9aafe4735f4c8deac1862559b157fd48485530590a9', 'request_path': '/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/CAPTURE-REQUEST.json', 'capture_directory': '/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/actual-capture-1', 'command_source_path': '/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/source/native_diagnostic_container_owner.py', 'command_interpreter': '/home/holden/anaconda3/bin/python3', 'controller_interpreter': '/home/holden/anaconda3/bin/python3', 'command_count': 1, 'stream_slots': 2, 'stream_file_bytes': 402653184, 'retained_copies': 1, 'soft_wall_seconds': 8100, 'no_forcekill': True, 'persistent_retirement_wait': True, 'owner_runtime_release_digest': 'Bound after independent release by finalrequest+exactownerargv; omitted here to avoid source/release digest cycle', 'owner_digest': 'Bound after source freeze by finalrequest/ownerCLI; omitted here to avoid selfdigest cycle'}
+ TRANSPORT = dict(docker_log=DOCKER_LOG, docker_log_bytes=DOCKER_LOG_BYTES, unused_slack_bytes=UNUSED_SLACK_BYTES, host_output=HOST_OUTPUT, schema='mckernel.p12.long-transport-profile.v2',
+                  producer=PROFILE, inner_seconds=7800, outer_seconds=8100,
+                  serial_bytes=384 * 2**20, shared_capture_bytes=512 * 2**20,

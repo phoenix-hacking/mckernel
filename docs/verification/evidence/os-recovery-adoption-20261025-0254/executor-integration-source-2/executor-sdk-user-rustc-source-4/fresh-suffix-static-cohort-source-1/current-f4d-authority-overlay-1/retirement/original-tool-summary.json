@@ -1,0 +1,185 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "FAIL_CONFIGURE_AFTER_SELECTED_ABI_COMPILER_PASS",
+  "recorded_at": "2026-10-25T06:29:27.763548+00:00",
+  "tool_session_id": 94383,
+  "terminal_tool_chunk": "30a831",
+  "actual_tool_exit_code": 1,
+  "owner_pid": 568167,
+  "owner_start": "70709178",
+  "query_age_at_preexec_seconds": 39.56661939620972,
+  "direct_owner": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/executor-integration-source-2/executor-sdk-config-path-source-3/precommand-input-closure-source-1/static-successor-source-1/actual-root-final-publish-and-owner-1/DIRECT-OWNER-PROCESS-BEFORE-EXEC.json",
+    "bytes": 3151,
+    "sha256": "3f47cb772ab3546f29faccd0fd1487f05a0b299929753f4ea9577c3694eb0838"
+  },
+  "owner_stdout": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/executor-integration-source-2/executor-sdk-config-path-source-3/precommand-input-closure-source-1/static-successor-source-1/actual-root-final-publish-and-owner-1/owner.stdout",
+    "bytes": 44088,
+    "sha256": "cf5f77dedf16eb872fdc40a83aa2473e0da37de6d6ae94f98f99062d9df9c220"
+  },
+  "owner_stderr": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/executor-integration-source-2/executor-sdk-config-path-source-3/precommand-input-closure-source-1/static-successor-source-1/actual-root-final-publish-and-owner-1/owner.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "container_log": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/executor-integration-source-2/sdk11-lifetime-adapter-source-1/workspace/native-running-modules-owner-03c828b9dc994d25a082ecc8cbe54f51/container.log",
+    "bytes": 426,
+    "sha256": "5501f5b86d7ca2397f570d267a73d5d22dfbd60ece3a5a72d0998d61a07ccac3"
+  },
+  "container_id": "a2af07c8fd70162ef5a37e2a5792e791f32de4126f16567c41b288ac73ff6dc7",
+  "cleanup_status": "PASS_OWNED_REMOVAL_AND_RECORD_RELEASE",
+  "retired": true,
+  "cleanup_separately_required": false,
+  "original_workload_status": "FAIL",
+  "SDK_commands_executed": 4,
+  "successful_command_indices": [
+    0,
+    1,
+    2
+  ],
+  "first_failure_command_index": 3,
+  "first_compiler": "Actual selected-platform C ABI compilation passed; Rust executor build not reached.",
+  "candidate_nonempty_expected": true,
+  "candidate_root": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/executor-integration-source-2/sdk11-lifetime-adapter-source-1/workspace/native-running-modules-candidate-03c828b9dc994d25a082ecc8cbe54f51",
+  "command_results": [
+    {
+      "index": 0,
+      "label": "fresh-output-directory",
+      "argv": [
+        "/usr/bin/cmake",
+        "-E",
+        "make_directory",
+        "/work/output/m15-executor-sdk-default-1"
+      ],
+      "returncode": 0,
+      "wall_seconds": 0.03721629490610212,
+      "proof": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/executor-integration-source-2/sdk11-lifetime-adapter-source-1/workspace/native-running-modules-candidate-03c828b9dc994d25a082ecc8cbe54f51/output/m15-executor-captures/00/RESULT.json",
+        "bytes": 1259,
+        "sha256": "b5455dfd8b67ae2a797e347a0cc376afab9691b4ae1a51059c223f3bc2aa9374"
+      },
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/executor-integration-source-2/sdk11-lifetime-adapter-source-1/workspace/native-running-modules-candidate-03c828b9dc994d25a082ecc8cbe54f51/output/m15-executor-captures/00/stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/executor-integration-source-2/sdk11-lifetime-adapter-source-1/workspace/native-running-modules-candidate-03c828b9dc994d25a082ecc8cbe54f51/output/m15-executor-captures/00/stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "joined": true,
+      "group_absent": true,
+      "closed_streams": true
+    },
+    {
+      "index": 1,
+      "label": "actual-selected-platform-header-ABI",
+      "argv": [
+        "/usr/bin/cc",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-c",
+        "/src/executer/user/rust/m15_selected_platform_ABI.c",
+        "-o",
+        "/work/output/m15-executor-sdk-default-1/selected-platform-ABI.o"
+      ],
+      "returncode": 0,
+      "wall_seconds": 0.05540159798692912,
+      "proof": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/executor-integration-source-2/sdk11-lifetime-adapter-source-1/workspace/native-running-modules-candidate-03c828b9dc994d25a082ecc8cbe54f51/output/m15-executor-captures/01/RESULT.json",
+        "bytes": 1388,
+        "sha256": "d034bb63848b33ad331f2ff00a032a357d68cd11e70148a5586d0565bc1fb811"
+      },
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/executor-integration-source-2/sdk11-lifetime-adapter-source-1/workspace/native-running-modules-candidate-03c828b9dc994d25a082ecc8cbe54f51/output/m15-executor-captures/01/stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/executor-integration-source-2/sdk11-lifetime-adapter-source-1/workspace/native-running-modules-candidate-03c828b9dc994d25a082ecc8cbe54f51/output/m15-executor-captures/01/stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "joined": true,
+      "group_absent": true,
+      "closed_streams": true
+    },
+    {
+      "index": 2,
+      "label": "actual-selected-platform-ABI-object",
+      "argv": [
+        "/usr/bin/readelf",
+        "-SWs",
+        "/work/output/m15-executor-sdk-default-1/selected-platform-ABI.o"
+      ],
+      "returncode": 0,
+      "wall_seconds": 0.014632252044975758,
+      "proof": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/executor-integration-source-2/sdk11-lifetime-adapter-source-1/workspace/native-running-modules-candidate-03c828b9dc994d25a082ecc8cbe54f51/output/m15-executor-captures/02/RESULT.json",
+        "bytes": 1287,
+        "sha256": "a61f3901215e2e3d38b88008c578a0fe41afe3bc2b5b8a0ba339caff168c00a3"
+      },
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/executor-integration-source-2/sdk11-lifetime-adapter-source-1/workspace/native-running-modules-candidate-03c828b9dc994d25a082ecc8cbe54f51/output/m15-executor-captures/02/stdout",
+        "bytes": 1838,
+        "sha256": "458fdc9eb13298e6d8e921ae88ff1dc43a6ba97e013544c04fb89ec67207432b"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/executor-integration-source-2/sdk11-lifetime-adapter-source-1/workspace/native-running-modules-candidate-03c828b9dc994d25a082ecc8cbe54f51/output/m15-executor-captures/02/stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "joined": true,
+      "group_absent": true,
+      "closed_streams": true
+    },
+    {
+      "index": 3,
+      "label": "production-default-source-configure",
+      "argv": [
+        "/usr/bin/cmake",
+        "-C",
+        "/src/executer/user/rust/m15_selected_sdk_cache.cmake",
+        "-S",
+        "/src",
+        "-B",
+        "/work/output/m15-executor-sdk-default-1/build",
+        "-DENABLE_RUST_USER_TOOLS=ON",
+        "-DRUSTC:FILEPATH=/nightly/bin/rustc",
+        "-DMCKERNEL_RUNTIME_TOOL_RUSTC:FILEPATH=/nightly/bin/rustc",
+        "-DIHKLIB_USE_QUALIFIED_EXTERNAL_ARCHIVE=OFF",
+        "-DENABLE_QLMPI=OFF",
+        "-DENABLE_TOFU=OFF",
+        "-DENABLE_UTI=OFF"
+      ],
+      "returncode": 1,
+      "wall_seconds": 3.0559813869185746,
+      "proof": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/executor-integration-source-2/sdk11-lifetime-adapter-source-1/workspace/native-running-modules-candidate-03c828b9dc994d25a082ecc8cbe54f51/output/m15-executor-captures/03/RESULT.json",
+        "bytes": 1582,
+        "sha256": "9dd24799c2a89fa8e08b9197f8cb3a9a048da80f2c131d806d833f845e52c9e6"
+      },
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/executor-integration-source-2/sdk11-lifetime-adapter-source-1/workspace/native-running-modules-candidate-03c828b9dc994d25a082ecc8cbe54f51/output/m15-executor-captures/03/stdout",
+        "bytes": 2067,
+        "sha256": "754af890e6a6e166d41e5f2474416b258b65e4c09e81d94dda40d6f0f8b2e85a"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/executor-integration-source-2/sdk11-lifetime-adapter-source-1/workspace/native-running-modules-candidate-03c828b9dc994d25a082ecc8cbe54f51/output/m15-executor-captures/03/stderr",
+        "bytes": 431,
+        "sha256": "beba076e8c2e2b0b13fd0d63b7058d26dc04fe50e3dea1e9586d02e7a5484ac5"
+      },
+      "joined": true,
+      "group_absent": true,
+      "closed_streams": true
+    }
+  ],
+  "first_failure": "Whole70ProducerQualified.cmake requires separate pinned supported user Rust compiler; retain compute RUSTC.",
+  "physical_current_acceptance": false
+}

@@ -1,0 +1,86 @@
+{
+  "actual_table": {
+    "final": {
+      "binding": "GLOBAL",
+      "bytes": 24,
+      "index": 4120,
+      "name": "f03_futex_retained_providers_v1",
+      "section_index": 40,
+      "type": "OBJECT",
+      "value": 18446744073685469728,
+      "visibility": 0
+    },
+    "name": "f03_futex_retained_providers_v1",
+    "owner": {
+      "input": {
+        "binding": "GLOBAL",
+        "bytes": 24,
+        "index": 121,
+        "name": "f03_futex_retained_providers_v1",
+        "section_index": 8,
+        "type": "OBJECT",
+        "value": 352,
+        "visibility": 0
+      },
+      "object": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+      "placement": {
+        "address": 18446744073685469376,
+        "bytes": 2976
+      },
+      "section": ".rodata"
+    }
+  },
+  "at": "2026-11-11T08:46:34.527665+00:00",
+  "final_file_offset": 1083936,
+  "physical_source": {
+    "bytes": 5773209,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-reader-p03-max-1/qualification-1/OWNER-PROVIDER-JOINS.json",
+    "sha256": "34e8f08788817388d5ff259fd1ad979f5dd03fb705ecb5de25028ac648a8cc62"
+  },
+  "platform_dependency_scope": "Unchanged optional Linux clock/wait/printk slots preserve their real nullable ABI, serialized initialization/null-refusal and UTI caller contract. They are platform callbacks, not invented project implementation providers. Ordinary sys_futex passes no UTI/LINUX endpoints and uses actual Rust local clock/futex/atomics/queues; util_thread caller remains separate original03-01 work, not classified retired.",
+  "pointer_decodes": [
+    {
+      "Rust_bytes": 585,
+      "Rust_owner": "rust/mckernel_rust.o",
+      "actual_C_rodata_R64": "0000000000000160  0000007a00000001 R_X86_64_64            0000000000000000 f03_futex_native_syscall_time_v2 + 0",
+      "actual_final8hex": "100585feffffffff",
+      "actual_pointer": "0xfffffffffe850510",
+      "field": "syscall_time",
+      "offset": 0,
+      "source_macro_expansion": "f03_futex_native_syscall_time_v2",
+      "typed_Rust_contract": "unsafe extern C fn(CInt,CInt,*mut TimeSpec)->CInt"
+    },
+    {
+      "Rust_bytes": 26,
+      "Rust_owner": "rust/mckernel_rust.o",
+      "actual_C_rodata_R64": "0000000000000168  0000007b00000001 R_X86_64_64            0000000000000000 syscall_ns_per_tsc_bridge + 0",
+      "actual_final8hex": "10bf86feffffffff",
+      "actual_pointer": "0xfffffffffe86bf10",
+      "field": "ns_per_tsc",
+      "offset": 8,
+      "source_macro_expansion": "syscall_ns_per_tsc_bridge",
+      "typed_Rust_contract": "unsafe extern C fn()->CULong"
+    },
+    {
+      "Rust_bytes": 407,
+      "Rust_owner": "rust/mckernel_rust.o",
+      "actual_C_rodata_R64": "0000000000000170  0000007c00000001 R_X86_64_64            0000000000000000 f03_futex_log_bridge_v2 + 0",
+      "actual_final8hex": "700385feffffffff",
+      "actual_pointer": "0xfffffffffe850370",
+      "field": "log",
+      "offset": 16,
+      "source_macro_expansion": "f03_futex_log_bridge_v2",
+      "typed_Rust_contract": "unsafe extern C fn(*const FutexLogRecord)->unit"
+    }
+  ],
+  "readonly_C_table_is_data": true,
+  "real_supported_robust_contract": {
+    "C_source": "kernel/syscall.c:20585 comment deliberately ignores start_thread registration because McKernel does not unlock a killed thread's mutexes; C body only validates length24. This is the actual baseline supported contract.",
+    "Rust_source": "kernel/rust/syscall_policy.rs:1506,1515,13318 validate len==24 ->0 else-EINVAL, context null ->EFAULT; no head read or invented robust cleanup algorithm. Actual Rust bodies/nonempty owners checked in INDEPENDENT-AFFECTED-BYTES.",
+    "no_stub_or_compiler_elision_inference": "Small length-only implementation faithfully implements complete baseline; not an invented promised Linux robust-mutex feature."
+  },
+  "reviewer_actions": "Saved immutable bytes and current source/table/ELF record text only; no new ELF tool, helper, testcase, compiler, native, Linux API or real futex operation.",
+  "schema": 1,
+  "source_commit": "6aae8273960583ec7fb194926292bd10ab1bc585",
+  "status": "PASS_SOURCE_BOUND_UNCHANGED_REQUIRED_FUTEX_THREE_CALLBACKS_IN_CURRENT_IMAGE"
+}

@@ -1,0 +1,55 @@
+{
+  "actual_result": {
+    "path": "/home/holden/mckernel-work/scratch/m07-enabled-state-closure-20261017-1/native-proposal/execution-assembly-20261018-1/readback-2.stdout",
+    "sha256": "dbd4144c15911dedb95c9144517a7dc0b2885688b2f20f92346aa02f20505632",
+    "size": 83556
+  },
+  "attempt_archive": {
+    "path": "/home/holden/mckernel-work/scratch/m07-enabled-state-closure-20261017-1/native-proposal/execution-assembly-20261018-1/readback-3.stdout",
+    "sha256": "34d6b4cf21c19d1f43a691773d68cd2f0b1bd6e5dce10d8900222575db550f27",
+    "size": 389120
+  },
+  "decision": "PASS_ACTUAL_AVX_DIAGNOSTIC_AND_RETIREMENT",
+  "distinct_application_behaviors_total": 15,
+  "formal_acceptance": false,
+  "full_M07_or_IFUNC_or_AVX512_or_multicore_acceptance": false,
+  "implementation_ownership": false,
+  "later_cpu_copy_repair_runtime_credit": false,
+  "observed": {
+    "CPUID_D0": [
+      "21f",
+      "a88",
+      "a88",
+      "0"
+    ],
+    "XCR0": "0x21f",
+    "exit_status": 0,
+    "required_mask": "0x7",
+    "stderr_bytes": 0,
+    "stdout_bytes": 380
+  },
+  "owner_archive": {
+    "path": "/home/holden/mckernel-work/scratch/m07-enabled-state-closure-20261017-1/native-proposal/execution-assembly-20261018-1/readback-1.stdout",
+    "sha256": "12772b21c425a50c955539d3972b5d7d8727b399e565dfcc7d868a6f534121ae",
+    "size": 532480
+  },
+  "raw_acceptance_flags_preserved": true,
+  "release": {
+    "path": "/home/holden/mckernel-work/scratch/m07-enabled-state-closure-20261017-1/native-proposal/execution-assembly-20261018-1/execution-release-20261018-1.json",
+    "sha256": "23ece2e9b63fe0f32eaa63ab3f59286430fb67ec8668b913dc58262e429f00f2",
+    "size": 18323
+  },
+  "reviewer": "/root/postreboot_actual_result_review",
+  "schema": "mckernel.native-m07-avx-actual-review.v1",
+  "serial_sha256": "b86338a5d11984401f3a5fc73db5541a04c07e0ec1e310152fe17d369adb57ee",
+  "status": "SUCCESS",
+  "tested_image_sha256": "a0f508540d03819d45da6de78a849ae1241fa988feb9e1a90d997b667ea1b7eb",
+  "verified": [
+    "Actual private adapter/typed parser/unchanged base replay equals saved evaluation.",
+    "YMM0-15 full bits, selected x87/control/TOP/MXCSR across exercised syscall/futex/signal boundaries.",
+    "Executed wait0/wake1 checks and distinct clobber patterns on one assigned McKernel CPU.",
+    "PID255/TID257 publication/deletion; retirement token25 errno0/processrelease0/emptyprocfs.",
+    "30 distinct PID/start Docker clients all reaped; three wait0; exactCIDrm0; final three queries empty.",
+    "Guest shutdown/status precedes QMPquit/QEMUreap; owner0 and three bounded readbacks0; no recovery/quarantine."
+  ]
+}

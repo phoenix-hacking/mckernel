@@ -1,0 +1,119 @@
+{
+  "actual_binutils_refs": null,
+  "actual_build_refs": {
+    "Rust_object": {
+      "bytes": 13576160,
+      "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1/owner-work/output/build/kernel/rust/mckernel_rust.o",
+      "sha256": "e3a2a623c39b05776af21805553a3523568b6d6a9b85ff447f6ab786ed90f36b"
+    },
+    "image": {
+      "bytes": 8427720,
+      "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1/owner-work/output/build/kernel/mckernel.img",
+      "sha256": "1d8c4e78f7219792c0d2008952e11602a19451eb6697593ec10f0c77a8f1c101"
+    },
+    "owner_receipt": {
+      "bytes": 19544,
+      "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1/owner-evidence/owner-receipt.json",
+      "sha256": "d3e543369b5a8d0895039860e605e900650110cb9a62b6a382aa0c4f41f53c42"
+    },
+    "producer_receipt": {
+      "bytes": 41900,
+      "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1/owner-work/evidence/receipt.json",
+      "sha256": "21e543405e6611313d704340cfccc522da82ca991429b7f16e784cfab5318150"
+    },
+    "root_owner_status": {
+      "bytes": 1120,
+      "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/execution-preparation-1/actual-root-owner-1/status.json",
+      "sha256": "d7b8046addcf5194975477e6b2f017bacb98e07e8ca3f9118c4ffb05d5d088be"
+    }
+  },
+  "caller": "existing normal-UID bounded whole-command capture/directwait route; exact direct argv below; no new wrapper",
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=30:30",
+        "--fsize=33554432",
+        "--core=0:0",
+        "--nofile=256:256",
+        "--",
+        "/usr/bin/nm",
+        "--undefined-only",
+        "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1/owner-work/output/build/kernel/mckernel.img"
+      ],
+      "capture_directory": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/artifact-consumer-preparation-1/actual-final-strong-undefined-capture-1",
+      "new_actual_whole": null,
+      "role": "final-strong-undefined"
+    },
+    {
+      "argv": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=30:30",
+        "--fsize=33554432",
+        "--core=0:0",
+        "--nofile=256:256",
+        "--",
+        "/usr/bin/objdump",
+        "-dr",
+        "--disassemble=get_mempolicy_body_result",
+        "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1/owner-work/output/build/kernel/rust/mckernel_rust.o"
+      ],
+      "capture_directory": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/artifact-consumer-preparation-1/actual-allowed-body-production-object-capture-1",
+      "new_actual_whole": null,
+      "role": "allowed-body-production-object"
+    },
+    {
+      "argv": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=30:30",
+        "--fsize=33554432",
+        "--core=0:0",
+        "--nofile=256:256",
+        "--",
+        "/usr/bin/objdump",
+        "-d",
+        "--disassemble=get_mempolicy_body_result",
+        "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1/owner-work/output/build/kernel/mckernel.img"
+      ],
+      "capture_directory": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/artifact-consumer-preparation-1/actual-allowed-body-final-image-capture-1",
+      "new_actual_whole": null,
+      "role": "allowed-body-final-image"
+    }
+  ],
+  "new_artifact_acceptance": null,
+  "no_recompile_or_new_qualification": true,
+  "profile": "existing reusable CPU7/onejob/1GiB/30CPU/35wall/32MiB streams, normalUID, no root/Docker/compiler/import",
+  "required_before_run": [
+    "new immutable actual owner/producer receipt and positive closed root result",
+    "new image/Rust object exact descriptor refs",
+    "actual existing qualified host binutils refs/runtime prerequisites",
+    "fresh ordinary source/output/resource grant, no overlapping ownership mutation"
+  ],
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "skip_only_duplicate_capture": "Only reuse exact already bound NEW producer output with same tool/argv/artifact identity; never skip oracle",
+  "status": "GENUINE_NEW_BUILD_REFS_BOUND_PENDING_ROOT_ORDINARY_GRANT_AND_TOOL_BINDINGS"
+}

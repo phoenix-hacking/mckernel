@@ -1,0 +1,1501 @@
+{
+  "actions": "Only fixed-symbol saved metadata and preserved actual bytes read with Pythonstdlib; no ELFtool/compiler/helper/import/runtime/native/oldtests or canonical actions.",
+  "actual_C": {
+    "bytes": 192128,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/stable-baselinef199-1/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+    "sha256": "35975861fbd7d878ff91940f202300d7dfa6c747bc293f2e7b44cd7c4c787588"
+  },
+  "actual_Rust": {
+    "bytes": 19300192,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/stable-baselinef199-1/build/kernel/rust/mckernel_rust.o",
+    "sha256": "01214130dd9eea001c61a252f0b0c1a7a5aeb21d458342a3ef17e99da683b234"
+  },
+  "actual_baseline": {
+    "bytes": 28388,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/stable-baselinef199-1/BASELINE.json",
+    "sha256": "0ddffc56414ab8c5fa8148e103703ea99c39c30c25308e7ef27ad2acc4956199"
+  },
+  "actual_image": {
+    "bytes": 10663560,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/stable-baselinef199-1/build/kernel/mckernel.img",
+    "sha256": "1aee02d2fb387e08ab6a771aa2e7d9d01a6673ad364a06685e3bc3e926bdb690"
+  },
+  "actual_paired_mprotect_and_memory_selection": true,
+  "at": "2026-11-11T07:13:59.466191+00:00",
+  "current_C9_explicit": [
+    {
+      "binding": "LOCAL",
+      "bytes": 70,
+      "name": "wait_host_wait4_bridge"
+    },
+    {
+      "binding": "LOCAL",
+      "bytes": 12,
+      "name": "terminate_mcexec_do_syscall_bridge"
+    },
+    {
+      "binding": "LOCAL",
+      "bytes": 1659,
+      "name": "do_execveat"
+    },
+    {
+      "binding": "LOCAL",
+      "bytes": 12,
+      "name": "perf_event_open_do_syscall_bridge"
+    },
+    {
+      "binding": "GLOBAL",
+      "bytes": 136,
+      "name": "terminate_mcexec"
+    },
+    {
+      "binding": "GLOBAL",
+      "bytes": 12,
+      "name": "syscall_execveat_bridge"
+    },
+    {
+      "binding": "GLOBAL",
+      "bytes": 482,
+      "name": "sys_perf_event_open"
+    },
+    {
+      "binding": "GLOBAL",
+      "bytes": 1260,
+      "name": "util_thread"
+    },
+    {
+      "binding": "GLOBAL",
+      "bytes": 34,
+      "name": "syscall_util_indicate_clone_disabled_bridge"
+    }
+  ],
+  "named_final_UND": [],
+  "new_mprotect_endpoint": {
+    "C_FUNC_absent": true,
+    "C_UND_reference": [
+      {
+        "binding": "GLOBAL",
+        "bytes": 0,
+        "index": 156,
+        "name": "mprotect_set_host_vma_bridge",
+        "section": "UND",
+        "type": "NOTYPE",
+        "value": 0,
+        "visibility": "DEFAULT"
+      }
+    ],
+    "actual_final_file_offset": 301872,
+    "actual_final_nonempty_code_sha256": "c8edb41c4e122dbf9d51c5ee841ff5f7a6874509918bbd924592e55afdd0c33c",
+    "actual_input_nonempty_code_sha256": "9bde7dbaf6823999dad21e76d95fc787e7f8e85d77285e26c775997dcb3680f6",
+    "alias_disposition": "Both genuine typed same-signature source wrappers lower to identical116B Rust body/inputsection/finaladdress; no demand for distinct address/name-only objdump. Real f181 set_host_vma native body and quiet CInt/error/borrow behavior are unchanged under source440dd/actualmemory9 4b33.",
+    "final": {
+      "binding": "GLOBAL",
+      "bytes": 116,
+      "index": 4819,
+      "name": "mprotect_set_host_vma_bridge",
+      "section": "1",
+      "type": "FUNC",
+      "value": 18446744073684687664,
+      "visibility": "DEFAULT"
+    },
+    "input_Rust": {
+      "binding": "GLOBAL",
+      "bytes": 116,
+      "index": 8316,
+      "name": "mprotect_set_host_vma_bridge",
+      "section": "1202",
+      "type": "FUNC",
+      "value": 0,
+      "visibility": "DEFAULT"
+    },
+    "map_actual_shared_body_rows": [
+      " .ltext.do_munmap_set_host_bridge",
+      "                0xfffffffffe849b30       0x74 rust/mckernel_rust.o",
+      "                0xfffffffffe849b30                do_munmap_set_host_bridge",
+      "                0xfffffffffe849b30                mprotect_set_host_vma_bridge",
+      " *fill*         0xfffffffffe849ba4        0xc ",
+      " .ltext.do_pagein",
+      "                0xfffffffffe849bb0      0x5ad rust/mckernel_rust.o"
+    ],
+    "same_real_body_as_qualified_f181": {
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 116,
+        "index": 4295,
+        "name": "do_munmap_set_host_bridge",
+        "section": "1",
+        "type": "FUNC",
+        "value": 18446744073684687664,
+        "visibility": "DEFAULT"
+      },
+      "input_Rust": {
+        "binding": "GLOBAL",
+        "bytes": 116,
+        "index": 4991,
+        "name": "do_munmap_set_host_bridge",
+        "section": "1202",
+        "type": "FUNC",
+        "value": 0,
+        "visibility": "DEFAULT"
+      }
+    }
+  },
+  "record_envelope": {
+    "bytes": 11691,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-signal-reader-p03-max-1/qualification-1/ACTUAL-RECORD-ENVELOPE.json",
+    "sha256": "cfd96238a7218e94cd29e77c618c48c5c5dd45a32e9f57c8559fedc9483c6149"
+  },
+  "schema": "f03-vm-whole-default-targeted-current-saved-byte-joins-v1",
+  "scope": "Fixed originalVMentry roots and two real typed consumer tables/new Rust alias only; no global nm/ELF parser or producer replay. This is saved data evidence, not an execution fixture.",
+  "selected21_original_region_Rust_roots": [
+    {
+      "C_FUNC_definition_absent": true,
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 1348,
+        "index": 4380,
+        "name": "sys_mmap",
+        "section": "1",
+        "type": "FUNC",
+        "value": 18446744073685201776,
+        "visibility": "DEFAULT"
+      },
+      "final_file_offset": 815984,
+      "input_Rust": {
+        "binding": "GLOBAL",
+        "bytes": 1348,
+        "index": 7116,
+        "name": "sys_mmap",
+        "section": "4327",
+        "type": "FUNC",
+        "value": 0,
+        "visibility": "DEFAULT"
+      },
+      "name": "sys_mmap",
+      "nonempty_final_code_sha256": "08b53061060a522b42a91dd235183d572fc73ca58ceeac95acea0baa7f7f0b01"
+    },
+    {
+      "C_FUNC_definition_absent": true,
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 8387,
+        "index": 3874,
+        "name": "do_mmap",
+        "section": "1",
+        "type": "FUNC",
+        "value": 18446744073684678016,
+        "visibility": "DEFAULT"
+      },
+      "final_file_offset": 292224,
+      "input_Rust": {
+        "binding": "GLOBAL",
+        "bytes": 8387,
+        "index": 4319,
+        "name": "do_mmap",
+        "section": "1193",
+        "type": "FUNC",
+        "value": 0,
+        "visibility": "DEFAULT"
+      },
+      "name": "do_mmap",
+      "nonempty_final_code_sha256": "f2b132c76f09fc1a5d2590e668baba1050fa6ecfc1ce837c9f03bea62ff2ec16"
+    },
+    {
+      "C_FUNC_definition_absent": true,
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 17,
+        "index": 4149,
+        "name": "arch_do_mmap_bridge",
+        "section": "1",
+        "type": "FUNC",
+        "value": 18446744073684593296,
+        "visibility": "DEFAULT"
+      },
+      "final_file_offset": 207504,
+      "input_Rust": {
+        "binding": "GLOBAL",
+        "bytes": 17,
+        "index": 4639,
+        "name": "arch_do_mmap_bridge",
+        "section": "810",
+        "type": "FUNC",
+        "value": 0,
+        "visibility": "DEFAULT"
+      },
+      "name": "arch_do_mmap_bridge",
+      "nonempty_final_code_sha256": "22e757146f7cabfe63e16c38c95c61ffa99da63b812e8bf97c1ceed6b22daf0c"
+    },
+    {
+      "C_FUNC_definition_absent": true,
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 816,
+        "index": 1993,
+        "name": "sys_munmap",
+        "section": "1",
+        "type": "FUNC",
+        "value": 18446744073685208256,
+        "visibility": "DEFAULT"
+      },
+      "final_file_offset": 822464,
+      "input_Rust": {
+        "binding": "GLOBAL",
+        "bytes": 816,
+        "index": 7125,
+        "name": "sys_munmap",
+        "section": "4341",
+        "type": "FUNC",
+        "value": 0,
+        "visibility": "DEFAULT"
+      },
+      "name": "sys_munmap",
+      "nonempty_final_code_sha256": "b6d4e8d1e8aa506da055994f91efe16179dc38916e4c9e363287eeb2c33d7068"
+    },
+    {
+      "C_FUNC_definition_absent": true,
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 459,
+        "index": 3896,
+        "name": "do_munmap",
+        "section": "1",
+        "type": "FUNC",
+        "value": 18446744073684686880,
+        "visibility": "DEFAULT"
+      },
+      "final_file_offset": 301088,
+      "input_Rust": {
+        "binding": "GLOBAL",
+        "bytes": 459,
+        "index": 4975,
+        "name": "do_munmap",
+        "section": "1197",
+        "type": "FUNC",
+        "value": 0,
+        "visibility": "DEFAULT"
+      },
+      "name": "do_munmap",
+      "nonempty_final_code_sha256": "614f3a45ae81a5a0dbb4c42aa54e2dfa76495f3a8e1dfd477c738612bff6d669"
+    },
+    {
+      "C_FUNC_definition_absent": true,
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 489,
+        "index": 388,
+        "name": "sys_mprotect",
+        "section": "1",
+        "type": "FUNC",
+        "value": 18446744073685205776,
+        "visibility": "DEFAULT"
+      },
+      "final_file_offset": 819984,
+      "input_Rust": {
+        "binding": "GLOBAL",
+        "bytes": 489,
+        "index": 7119,
+        "name": "sys_mprotect",
+        "section": "4331",
+        "type": "FUNC",
+        "value": 0,
+        "visibility": "DEFAULT"
+      },
+      "name": "sys_mprotect",
+      "nonempty_final_code_sha256": "725d60cbace795087630053671542410a3055d0c92b4b6c7281fdb62518ade7d"
+    },
+    {
+      "C_FUNC_definition_absent": true,
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 862,
+        "index": 591,
+        "name": "sys_brk",
+        "section": "1",
+        "type": "FUNC",
+        "value": 18446744073685187984,
+        "visibility": "DEFAULT"
+      },
+      "final_file_offset": 802192,
+      "input_Rust": {
+        "binding": "GLOBAL",
+        "bytes": 862,
+        "index": 7062,
+        "name": "sys_brk",
+        "section": "4248",
+        "type": "FUNC",
+        "value": 0,
+        "visibility": "DEFAULT"
+      },
+      "name": "sys_brk",
+      "nonempty_final_code_sha256": "8353f384f8dd63e77c8318ba5b7b8679669390a5702cbf595d30c83b5d3fa686"
+    },
+    {
+      "C_FUNC_definition_absent": true,
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 483,
+        "index": 4541,
+        "name": "sys_mremap",
+        "section": "1",
+        "type": "FUNC",
+        "value": 18446744073685206272,
+        "visibility": "DEFAULT"
+      },
+      "final_file_offset": 820480,
+      "input_Rust": {
+        "binding": "GLOBAL",
+        "bytes": 483,
+        "index": 7121,
+        "name": "sys_mremap",
+        "section": "4333",
+        "type": "FUNC",
+        "value": 0,
+        "visibility": "DEFAULT"
+      },
+      "name": "sys_mremap",
+      "nonempty_final_code_sha256": "3e378aa321f245b02a6e6dc7d8905ceca4c384fea47dd1e6ce3a98678d1339d5"
+    },
+    {
+      "C_FUNC_definition_absent": true,
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 434,
+        "index": 1488,
+        "name": "sys_remap_file_pages",
+        "section": "1",
+        "type": "FUNC",
+        "value": 18446744073685213952,
+        "visibility": "DEFAULT"
+      },
+      "final_file_offset": 828160,
+      "input_Rust": {
+        "binding": "GLOBAL",
+        "bytes": 434,
+        "index": 7142,
+        "name": "sys_remap_file_pages",
+        "section": "4369",
+        "type": "FUNC",
+        "value": 0,
+        "visibility": "DEFAULT"
+      },
+      "name": "sys_remap_file_pages",
+      "nonempty_final_code_sha256": "ec240b47f394598380dbae2c324173d908feaafabea305faf4ddbd2021bc0d40"
+    },
+    {
+      "C_FUNC_definition_absent": true,
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 167,
+        "index": 1114,
+        "name": "sys_madvise",
+        "section": "1",
+        "type": "FUNC",
+        "value": 18446744073685199056,
+        "visibility": "DEFAULT"
+      },
+      "final_file_offset": 813264,
+      "input_Rust": {
+        "binding": "GLOBAL",
+        "bytes": 167,
+        "index": 7103,
+        "name": "sys_madvise",
+        "section": "4315",
+        "type": "FUNC",
+        "value": 0,
+        "visibility": "DEFAULT"
+      },
+      "name": "sys_madvise",
+      "nonempty_final_code_sha256": "004b559a096bf58d8cfde88d8534079bd5d668524131414d3828e14c480c6ac8"
+    },
+    {
+      "C_FUNC_definition_absent": true,
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 554,
+        "index": 4416,
+        "name": "sys_mbind",
+        "section": "1",
+        "type": "FUNC",
+        "value": 18446744073685199232,
+        "visibility": "DEFAULT"
+      },
+      "final_file_offset": 813440,
+      "input_Rust": {
+        "binding": "GLOBAL",
+        "bytes": 554,
+        "index": 7105,
+        "name": "sys_mbind",
+        "section": "4317",
+        "type": "FUNC",
+        "value": 0,
+        "visibility": "DEFAULT"
+      },
+      "name": "sys_mbind",
+      "nonempty_final_code_sha256": "01f42cdb6c9f5fe4a1305f7fd540a1423b3e9fdb42d216608a7ae5c6824a3789"
+    },
+    {
+      "C_FUNC_definition_absent": true,
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 252,
+        "index": 1066,
+        "name": "sys_set_mempolicy",
+        "section": "1",
+        "type": "FUNC",
+        "value": 18446744073685221824,
+        "visibility": "DEFAULT"
+      },
+      "final_file_offset": 836032,
+      "input_Rust": {
+        "binding": "GLOBAL",
+        "bytes": 252,
+        "index": 7164,
+        "name": "sys_set_mempolicy",
+        "section": "4407",
+        "type": "FUNC",
+        "value": 0,
+        "visibility": "DEFAULT"
+      },
+      "name": "sys_set_mempolicy",
+      "nonempty_final_code_sha256": "e6e47bf35ad204e6cff8aadb5687534cfa3da54510ef016e483456515be9bfd9"
+    },
+    {
+      "C_FUNC_definition_absent": true,
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 335,
+        "index": 1246,
+        "name": "sys_get_mempolicy",
+        "section": "1",
+        "type": "FUNC",
+        "value": 18446744073685194096,
+        "visibility": "DEFAULT"
+      },
+      "final_file_offset": 808304,
+      "input_Rust": {
+        "binding": "GLOBAL",
+        "bytes": 335,
+        "index": 7080,
+        "name": "sys_get_mempolicy",
+        "section": "4276",
+        "type": "FUNC",
+        "value": 0,
+        "visibility": "DEFAULT"
+      },
+      "name": "sys_get_mempolicy",
+      "nonempty_final_code_sha256": "e4105711061140f4549f338712b78a434a7e01220f585c133f096ba3d2cc8128"
+    },
+    {
+      "C_FUNC_definition_absent": true,
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 56,
+        "index": 669,
+        "name": "sys_migrate_pages",
+        "section": "1",
+        "type": "FUNC",
+        "value": 18446744073685199792,
+        "visibility": "DEFAULT"
+      },
+      "final_file_offset": 814000,
+      "input_Rust": {
+        "binding": "GLOBAL",
+        "bytes": 56,
+        "index": 7110,
+        "name": "sys_migrate_pages",
+        "section": "4319",
+        "type": "FUNC",
+        "value": 0,
+        "visibility": "DEFAULT"
+      },
+      "name": "sys_migrate_pages",
+      "nonempty_final_code_sha256": "033732e8dab4394210b4759ffbfbd75bc2101b0a4a0c151f580b21eef3b18f43"
+    },
+    {
+      "C_FUNC_definition_absent": true,
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 2625,
+        "index": 2456,
+        "name": "sys_move_pages",
+        "section": "1",
+        "type": "FUNC",
+        "value": 18446744073685203136,
+        "visibility": "DEFAULT"
+      },
+      "final_file_offset": 817344,
+      "input_Rust": {
+        "binding": "GLOBAL",
+        "bytes": 2625,
+        "index": 7117,
+        "name": "sys_move_pages",
+        "section": "4329",
+        "type": "FUNC",
+        "value": 0,
+        "visibility": "DEFAULT"
+      },
+      "name": "sys_move_pages",
+      "nonempty_final_code_sha256": "3173b6a180c59e855e9365512f93a96e0c0798c0eff2489d33a93713adae2463"
+    },
+    {
+      "C_FUNC_definition_absent": true,
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 467,
+        "index": 4075,
+        "name": "sys_process_vm_readv",
+        "section": "1",
+        "type": "FUNC",
+        "value": 18446744073685211856,
+        "visibility": "DEFAULT"
+      },
+      "final_file_offset": 826064,
+      "input_Rust": {
+        "binding": "GLOBAL",
+        "bytes": 467,
+        "index": 7134,
+        "name": "sys_process_vm_readv",
+        "section": "4357",
+        "type": "FUNC",
+        "value": 0,
+        "visibility": "DEFAULT"
+      },
+      "name": "sys_process_vm_readv",
+      "nonempty_final_code_sha256": "0ef9772392eef5d88b2dd49a616c018cb318191a630fcd73d6b8ecd71a467566"
+    },
+    {
+      "C_FUNC_definition_absent": true,
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 467,
+        "index": 3323,
+        "name": "sys_process_vm_writev",
+        "section": "1",
+        "type": "FUNC",
+        "value": 18446744073685212336,
+        "visibility": "DEFAULT"
+      },
+      "final_file_offset": 826544,
+      "input_Rust": {
+        "binding": "GLOBAL",
+        "bytes": 467,
+        "index": 7135,
+        "name": "sys_process_vm_writev",
+        "section": "4359",
+        "type": "FUNC",
+        "value": 0,
+        "visibility": "DEFAULT"
+      },
+      "name": "sys_process_vm_writev",
+      "nonempty_final_code_sha256": "526901f0f5d0730fcc89533470e576bdea66172dad0da370005af84be5165458"
+    },
+    {
+      "C_FUNC_definition_absent": true,
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 382,
+        "index": 1027,
+        "name": "do_process_vm_read_writev",
+        "section": "1",
+        "type": "FUNC",
+        "value": 18446744073684693312,
+        "visibility": "DEFAULT"
+      },
+      "final_file_offset": 307520,
+      "input_Rust": {
+        "binding": "GLOBAL",
+        "bytes": 382,
+        "index": 4998,
+        "name": "do_process_vm_read_writev",
+        "section": "1208",
+        "type": "FUNC",
+        "value": 0,
+        "visibility": "DEFAULT"
+      },
+      "name": "do_process_vm_read_writev",
+      "nonempty_final_code_sha256": "f57f12d87c5b3d23c3e0ae710505c5d67913920ae47be74314eedfb038774866"
+    },
+    {
+      "C_FUNC_definition_absent": true,
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 35,
+        "index": 4046,
+        "name": "sys_mlock",
+        "section": "1",
+        "type": "FUNC",
+        "value": 18446744073685201456,
+        "visibility": "DEFAULT"
+      },
+      "final_file_offset": 815664,
+      "input_Rust": {
+        "binding": "GLOBAL",
+        "bytes": 35,
+        "index": 7114,
+        "name": "sys_mlock",
+        "section": "4323",
+        "type": "FUNC",
+        "value": 0,
+        "visibility": "DEFAULT"
+      },
+      "name": "sys_mlock",
+      "nonempty_final_code_sha256": "d9a586c1866da3ba08c8a0349c2323718de4fec97bc14dca63908677a5554772"
+    },
+    {
+      "C_FUNC_definition_absent": true,
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 27,
+        "index": 3339,
+        "name": "sys_munlock",
+        "section": "1",
+        "type": "FUNC",
+        "value": 18446744073685208192,
+        "visibility": "DEFAULT"
+      },
+      "final_file_offset": 822400,
+      "input_Rust": {
+        "binding": "GLOBAL",
+        "bytes": 27,
+        "index": 7123,
+        "name": "sys_munlock",
+        "section": "4337",
+        "type": "FUNC",
+        "value": 0,
+        "visibility": "DEFAULT"
+      },
+      "name": "sys_munlock",
+      "nonempty_final_code_sha256": "837e22c341cf0ce65e8b1681f95bae20e459c595270a9305f226e946f892a2fd"
+    },
+    {
+      "C_FUNC_definition_absent": true,
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 1596,
+        "index": 2653,
+        "name": "sys_mincore",
+        "section": "1",
+        "type": "FUNC",
+        "value": 18446744073685199856,
+        "visibility": "DEFAULT"
+      },
+      "final_file_offset": 814064,
+      "input_Rust": {
+        "binding": "GLOBAL",
+        "bytes": 1596,
+        "index": 7112,
+        "name": "sys_mincore",
+        "section": "4321",
+        "type": "FUNC",
+        "value": 0,
+        "visibility": "DEFAULT"
+      },
+      "name": "sys_mincore",
+      "nonempty_final_code_sha256": "95a95f1b2547a7daa660c14721a9752d4887e141d244dbb36758a9d882daba70"
+    }
+  ],
+  "source_commit": "f1992ec2c5f18bb3a7f139647edde6818c34991b",
+  "two_current_immutable_typed_consumer_tables": [
+    {
+      "actual_final_bytes_hex": "00d183feffffffff90d183feffffffffd00a85feffffffff900b85feffffffffb00b85feffffffffa00885feffffffff700885feffffffff309b84feffffffff604483feffffffff900885feffffffffc00885feffffffff",
+      "actual_final_file_offset": 1086272,
+      "all11_pointer_joins": [
+        {
+          "Rust_FUNC_source": {
+            "binding": "GLOBAL",
+            "bytes": 142,
+            "index": 8544,
+            "name": "munmap_write_lock_bridge",
+            "section": "1045",
+            "type": "FUNC",
+            "value": 0,
+            "visibility": "DEFAULT"
+          },
+          "final_FUNC": {
+            "binding": "GLOBAL",
+            "bytes": 142,
+            "index": 2698,
+            "name": "munmap_write_lock_bridge",
+            "section": "1",
+            "type": "FUNC",
+            "value": 18446744073684635904,
+            "visibility": "DEFAULT"
+          },
+          "final_value": "0xfffffffffe83d100",
+          "input_R64": {
+            "addend": 0,
+            "raw": "0000000000000a80  0000009800000001 R_X86_64_64            0000000000000000 munmap_write_lock_bridge + 0",
+            "target": "munmap_write_lock_bridge",
+            "type": "R_X86_64_64"
+          },
+          "offset": 0,
+          "target": "munmap_write_lock_bridge",
+          "target_final_bytes": 142
+        },
+        {
+          "Rust_FUNC_source": {
+            "binding": "GLOBAL",
+            "bytes": 131,
+            "index": 8653,
+            "name": "munmap_write_unlock_bridge",
+            "section": "1047",
+            "type": "FUNC",
+            "value": 0,
+            "visibility": "DEFAULT"
+          },
+          "final_FUNC": {
+            "binding": "GLOBAL",
+            "bytes": 131,
+            "index": 1991,
+            "name": "munmap_write_unlock_bridge",
+            "section": "1",
+            "type": "FUNC",
+            "value": 18446744073684636048,
+            "visibility": "DEFAULT"
+          },
+          "final_value": "0xfffffffffe83d190",
+          "input_R64": {
+            "addend": 0,
+            "raw": "0000000000000a88  0000009900000001 R_X86_64_64            0000000000000000 munmap_write_unlock_bridge + 0",
+            "target": "munmap_write_unlock_bridge",
+            "type": "R_X86_64_64"
+          },
+          "offset": 8,
+          "target": "munmap_write_unlock_bridge",
+          "target_final_bytes": 131
+        },
+        {
+          "Rust_FUNC_source": {
+            "binding": "GLOBAL",
+            "bytes": 188,
+            "index": 4316,
+            "name": "f03_mprotect_lookup_bridge_v1",
+            "section": "1314",
+            "type": "FUNC",
+            "value": 0,
+            "visibility": "DEFAULT"
+          },
+          "final_FUNC": {
+            "binding": "GLOBAL",
+            "bytes": 188,
+            "index": 3682,
+            "name": "f03_mprotect_lookup_bridge_v1",
+            "section": "1",
+            "type": "FUNC",
+            "value": 18446744073684716240,
+            "visibility": "DEFAULT"
+          },
+          "final_value": "0xfffffffffe850ad0",
+          "input_R64": {
+            "addend": 0,
+            "raw": "0000000000000a90  0000009a00000001 R_X86_64_64            0000000000000000 f03_mprotect_lookup_bridge_v1 + 0",
+            "target": "f03_mprotect_lookup_bridge_v1",
+            "type": "R_X86_64_64"
+          },
+          "offset": 16,
+          "target": "f03_mprotect_lookup_bridge_v1",
+          "target_final_bytes": 188
+        },
+        {
+          "Rust_FUNC_source": {
+            "binding": "GLOBAL",
+            "bytes": 17,
+            "index": 4337,
+            "name": "f03_mprotect_next_bridge_v1",
+            "section": "1316",
+            "type": "FUNC",
+            "value": 0,
+            "visibility": "DEFAULT"
+          },
+          "final_FUNC": {
+            "binding": "GLOBAL",
+            "bytes": 17,
+            "index": 889,
+            "name": "f03_mprotect_next_bridge_v1",
+            "section": "1",
+            "type": "FUNC",
+            "value": 18446744073684716432,
+            "visibility": "DEFAULT"
+          },
+          "final_value": "0xfffffffffe850b90",
+          "input_R64": {
+            "addend": 0,
+            "raw": "0000000000000a98  000000da00000001 R_X86_64_64            0000000000000000 f03_mprotect_next_bridge_v1 + 0",
+            "target": "f03_mprotect_next_bridge_v1",
+            "type": "R_X86_64_64"
+          },
+          "offset": 24,
+          "target": "f03_mprotect_next_bridge_v1",
+          "target_final_bytes": 17
+        },
+        {
+          "Rust_FUNC_source": {
+            "binding": "GLOBAL",
+            "bytes": 17,
+            "index": 4336,
+            "name": "f03_mprotect_split_bridge_v1",
+            "section": "1318",
+            "type": "FUNC",
+            "value": 0,
+            "visibility": "DEFAULT"
+          },
+          "final_FUNC": {
+            "binding": "GLOBAL",
+            "bytes": 17,
+            "index": 735,
+            "name": "f03_mprotect_split_bridge_v1",
+            "section": "1",
+            "type": "FUNC",
+            "value": 18446744073684716464,
+            "visibility": "DEFAULT"
+          },
+          "final_value": "0xfffffffffe850bb0",
+          "input_R64": {
+            "addend": 0,
+            "raw": "0000000000000aa0  000000db00000001 R_X86_64_64            0000000000000000 f03_mprotect_split_bridge_v1 + 0",
+            "target": "f03_mprotect_split_bridge_v1",
+            "type": "R_X86_64_64"
+          },
+          "offset": 32,
+          "target": "f03_mprotect_split_bridge_v1",
+          "target_final_bytes": 17
+        },
+        {
+          "Rust_FUNC_source": {
+            "binding": "GLOBAL",
+            "bytes": 17,
+            "index": 4335,
+            "name": "f03_mprotect_join_bridge_v1",
+            "section": "1308",
+            "type": "FUNC",
+            "value": 0,
+            "visibility": "DEFAULT"
+          },
+          "final_FUNC": {
+            "binding": "GLOBAL",
+            "bytes": 17,
+            "index": 1315,
+            "name": "f03_mprotect_join_bridge_v1",
+            "section": "1",
+            "type": "FUNC",
+            "value": 18446744073684715680,
+            "visibility": "DEFAULT"
+          },
+          "final_value": "0xfffffffffe8508a0",
+          "input_R64": {
+            "addend": 0,
+            "raw": "0000000000000aa8  000000dc00000001 R_X86_64_64            0000000000000000 f03_mprotect_join_bridge_v1 + 0",
+            "target": "f03_mprotect_join_bridge_v1",
+            "type": "R_X86_64_64"
+          },
+          "offset": 40,
+          "target": "f03_mprotect_join_bridge_v1",
+          "target_final_bytes": 17
+        },
+        {
+          "Rust_FUNC_source": {
+            "binding": "GLOBAL",
+            "bytes": 17,
+            "index": 5075,
+            "name": "f03_mprotect_change_bridge_v1",
+            "section": "1305",
+            "type": "FUNC",
+            "value": 0,
+            "visibility": "DEFAULT"
+          },
+          "final_FUNC": {
+            "binding": "GLOBAL",
+            "bytes": 17,
+            "index": 985,
+            "name": "f03_mprotect_change_bridge_v1",
+            "section": "1",
+            "type": "FUNC",
+            "value": 18446744073684715632,
+            "visibility": "DEFAULT"
+          },
+          "final_value": "0xfffffffffe850870",
+          "input_R64": {
+            "addend": 0,
+            "raw": "0000000000000ab0  000000dd00000001 R_X86_64_64            0000000000000000 f03_mprotect_change_bridge_v1 + 0",
+            "target": "f03_mprotect_change_bridge_v1",
+            "type": "R_X86_64_64"
+          },
+          "offset": 48,
+          "target": "f03_mprotect_change_bridge_v1",
+          "target_final_bytes": 17
+        },
+        {
+          "Rust_FUNC_source": {
+            "binding": "GLOBAL",
+            "bytes": 116,
+            "index": 8316,
+            "name": "mprotect_set_host_vma_bridge",
+            "section": "1202",
+            "type": "FUNC",
+            "value": 0,
+            "visibility": "DEFAULT"
+          },
+          "final_FUNC": {
+            "binding": "GLOBAL",
+            "bytes": 116,
+            "index": 4819,
+            "name": "mprotect_set_host_vma_bridge",
+            "section": "1",
+            "type": "FUNC",
+            "value": 18446744073684687664,
+            "visibility": "DEFAULT"
+          },
+          "final_value": "0xfffffffffe849b30",
+          "input_R64": {
+            "addend": 0,
+            "raw": "0000000000000ab8  0000009c00000001 R_X86_64_64            0000000000000000 mprotect_set_host_vma_bridge + 0",
+            "target": "mprotect_set_host_vma_bridge",
+            "type": "R_X86_64_64"
+          },
+          "offset": 56,
+          "target": "mprotect_set_host_vma_bridge",
+          "target_final_bytes": 116
+        },
+        {
+          "Rust_FUNC_source": {
+            "binding": "GLOBAL",
+            "bytes": 6,
+            "index": 8482,
+            "name": "mprotect_flush_nfo_bridge",
+            "section": "848",
+            "type": "FUNC",
+            "value": 0,
+            "visibility": "DEFAULT"
+          },
+          "final_FUNC": {
+            "binding": "GLOBAL",
+            "bytes": 6,
+            "index": 2497,
+            "name": "mprotect_flush_nfo_bridge",
+            "section": "1",
+            "type": "FUNC",
+            "value": 18446744073684599904,
+            "visibility": "DEFAULT"
+          },
+          "final_value": "0xfffffffffe834460",
+          "input_R64": {
+            "addend": 0,
+            "raw": "0000000000000ac0  000000de00000001 R_X86_64_64            0000000000000000 mprotect_flush_nfo_bridge + 0",
+            "target": "mprotect_flush_nfo_bridge",
+            "type": "R_X86_64_64"
+          },
+          "offset": 64,
+          "target": "mprotect_flush_nfo_bridge",
+          "target_final_bytes": 6
+        },
+        {
+          "Rust_FUNC_source": {
+            "binding": "GLOBAL",
+            "bytes": 12,
+            "index": 5076,
+            "name": "f03_mprotect_flush_tlb_bridge_v1",
+            "section": "1307",
+            "type": "FUNC",
+            "value": 0,
+            "visibility": "DEFAULT"
+          },
+          "final_FUNC": {
+            "binding": "GLOBAL",
+            "bytes": 12,
+            "index": 4167,
+            "name": "f03_mprotect_flush_tlb_bridge_v1",
+            "section": "1",
+            "type": "FUNC",
+            "value": 18446744073684715664,
+            "visibility": "DEFAULT"
+          },
+          "final_value": "0xfffffffffe850890",
+          "input_R64": {
+            "addend": 0,
+            "raw": "0000000000000ac8  000000df00000001 R_X86_64_64            0000000000000000 f03_mprotect_flush_tlb_bridge_v1 + 0",
+            "target": "f03_mprotect_flush_tlb_bridge_v1",
+            "type": "R_X86_64_64"
+          },
+          "offset": 72,
+          "target": "f03_mprotect_flush_tlb_bridge_v1",
+          "target_final_bytes": 12
+        },
+        {
+          "Rust_FUNC_source": {
+            "binding": "GLOBAL",
+            "bytes": 518,
+            "index": 5078,
+            "name": "f03_mprotect_log_bridge_v1",
+            "section": "1310",
+            "type": "FUNC",
+            "value": 0,
+            "visibility": "DEFAULT"
+          },
+          "final_FUNC": {
+            "binding": "GLOBAL",
+            "bytes": 518,
+            "index": 1414,
+            "name": "f03_mprotect_log_bridge_v1",
+            "section": "1",
+            "type": "FUNC",
+            "value": 18446744073684715712,
+            "visibility": "DEFAULT"
+          },
+          "final_value": "0xfffffffffe8508c0",
+          "input_R64": {
+            "addend": 0,
+            "raw": "0000000000000ad0  000000e000000001 R_X86_64_64            0000000000000000 f03_mprotect_log_bridge_v1 + 0",
+            "target": "f03_mprotect_log_bridge_v1",
+            "type": "R_X86_64_64"
+          },
+          "offset": 80,
+          "target": "f03_mprotect_log_bridge_v1",
+          "target_final_bytes": 518
+        }
+      ],
+      "final_section": {
+        "address": 18446744073685465888,
+        "align": 32,
+        "bytes": 12656,
+        "flags": 2,
+        "name": 1767,
+        "offset": 1080096,
+        "type": 1
+      },
+      "final_symbol": {
+        "binding": "GLOBAL",
+        "bytes": 88,
+        "index": 3662,
+        "name": "f03_mprotect_providers_v1",
+        "section": "40",
+        "type": "OBJECT",
+        "value": 18446744073685472064,
+        "visibility": "DEFAULT"
+      },
+      "input_C_section": {
+        "address": 0,
+        "align": 32,
+        "bytes": 2976,
+        "flags": 2,
+        "name": 89,
+        "offset": 39648,
+        "type": 1
+      },
+      "input_C_symbol": {
+        "binding": "GLOBAL",
+        "bytes": 88,
+        "index": 217,
+        "name": "f03_mprotect_providers_v1",
+        "section": "8",
+        "type": "OBJECT",
+        "value": 2688,
+        "visibility": "DEFAULT"
+      },
+      "name": "f03_mprotect_providers_v1",
+      "scalar_prefix_bytes": 0,
+      "set_host_final_bytes": "309b84feffffffff",
+      "set_host_vma_offset": 56
+    },
+    {
+      "actual_final_bytes_hex": "3c000000000000004000000000000000000000000000000054000000000000005c00000000000000580000000000000060000000000000006400000000000000704f85feffffffff705085feffffffff805285feffffffff305385feffffffff00d183feffffffff90d183feffffffffd00a85feffffffff505385feffffffff309b84feffffffff404f85feffffffff005185feffffffff",
+      "actual_final_file_offset": 1084256,
+      "all11_pointer_joins": [
+        {
+          "Rust_FUNC_source": {
+            "binding": "GLOBAL",
+            "bytes": 251,
+            "index": 5145,
+            "name": "f03_shmat_list_lock_v1",
+            "section": "1406",
+            "type": "FUNC",
+            "value": 0,
+            "visibility": "DEFAULT"
+          },
+          "final_FUNC": {
+            "binding": "GLOBAL",
+            "bytes": 251,
+            "index": 1031,
+            "name": "f03_shmat_list_lock_v1",
+            "section": "1",
+            "type": "FUNC",
+            "value": 18446744073684733808,
+            "visibility": "DEFAULT"
+          },
+          "final_value": "0xfffffffffe854f70",
+          "input_R64": {
+            "addend": 0,
+            "raw": "00000000000002e0  0000008700000001 R_X86_64_64            0000000000000000 f03_shmat_list_lock_v1 + 0",
+            "target": "f03_shmat_list_lock_v1",
+            "type": "R_X86_64_64"
+          },
+          "offset": 64,
+          "target": "f03_shmat_list_lock_v1",
+          "target_final_bytes": 251
+        },
+        {
+          "Rust_FUNC_source": {
+            "binding": "GLOBAL",
+            "bytes": 140,
+            "index": 5146,
+            "name": "f03_shmat_list_unlock_v1",
+            "section": "1408",
+            "type": "FUNC",
+            "value": 0,
+            "visibility": "DEFAULT"
+          },
+          "final_FUNC": {
+            "binding": "GLOBAL",
+            "bytes": 140,
+            "index": 2548,
+            "name": "f03_shmat_list_unlock_v1",
+            "section": "1",
+            "type": "FUNC",
+            "value": 18446744073684734064,
+            "visibility": "DEFAULT"
+          },
+          "final_value": "0xfffffffffe855070",
+          "input_R64": {
+            "addend": 0,
+            "raw": "00000000000002e8  0000008800000001 R_X86_64_64            0000000000000000 f03_shmat_list_unlock_v1 + 0",
+            "target": "f03_shmat_list_unlock_v1",
+            "type": "R_X86_64_64"
+          },
+          "offset": 72,
+          "target": "f03_shmat_list_unlock_v1",
+          "target_final_bytes": 140
+        },
+        {
+          "Rust_FUNC_source": {
+            "binding": "GLOBAL",
+            "bytes": 170,
+            "index": 5149,
+            "name": "f03_shmat_lookup_obj_v1",
+            "section": "1414",
+            "type": "FUNC",
+            "value": 0,
+            "visibility": "DEFAULT"
+          },
+          "final_FUNC": {
+            "binding": "GLOBAL",
+            "bytes": 170,
+            "index": 1287,
+            "name": "f03_shmat_lookup_obj_v1",
+            "section": "1",
+            "type": "FUNC",
+            "value": 18446744073684734592,
+            "visibility": "DEFAULT"
+          },
+          "final_value": "0xfffffffffe855280",
+          "input_R64": {
+            "addend": 0,
+            "raw": "00000000000002f0  0000008900000001 R_X86_64_64            0000000000000000 f03_shmat_lookup_obj_v1 + 0",
+            "target": "f03_shmat_lookup_obj_v1",
+            "type": "R_X86_64_64"
+          },
+          "offset": 80,
+          "target": "f03_shmat_lookup_obj_v1",
+          "target_final_bytes": 170
+        },
+        {
+          "Rust_FUNC_source": {
+            "binding": "GLOBAL",
+            "bytes": 31,
+            "index": 5150,
+            "name": "f03_shmat_memobj_unref_v1",
+            "section": "1416",
+            "type": "FUNC",
+            "value": 0,
+            "visibility": "DEFAULT"
+          },
+          "final_FUNC": {
+            "binding": "GLOBAL",
+            "bytes": 31,
+            "index": 752,
+            "name": "f03_shmat_memobj_unref_v1",
+            "section": "1",
+            "type": "FUNC",
+            "value": 18446744073684734768,
+            "visibility": "DEFAULT"
+          },
+          "final_value": "0xfffffffffe855330",
+          "input_R64": {
+            "addend": 0,
+            "raw": "00000000000002f8  0000009700000001 R_X86_64_64            0000000000000000 f03_shmat_memobj_unref_v1 + 0",
+            "target": "f03_shmat_memobj_unref_v1",
+            "type": "R_X86_64_64"
+          },
+          "offset": 88,
+          "target": "f03_shmat_memobj_unref_v1",
+          "target_final_bytes": 31
+        },
+        {
+          "Rust_FUNC_source": {
+            "binding": "GLOBAL",
+            "bytes": 142,
+            "index": 8544,
+            "name": "munmap_write_lock_bridge",
+            "section": "1045",
+            "type": "FUNC",
+            "value": 0,
+            "visibility": "DEFAULT"
+          },
+          "final_FUNC": {
+            "binding": "GLOBAL",
+            "bytes": 142,
+            "index": 2698,
+            "name": "munmap_write_lock_bridge",
+            "section": "1",
+            "type": "FUNC",
+            "value": 18446744073684635904,
+            "visibility": "DEFAULT"
+          },
+          "final_value": "0xfffffffffe83d100",
+          "input_R64": {
+            "addend": 0,
+            "raw": "0000000000000300  0000009800000001 R_X86_64_64            0000000000000000 munmap_write_lock_bridge + 0",
+            "target": "munmap_write_lock_bridge",
+            "type": "R_X86_64_64"
+          },
+          "offset": 96,
+          "target": "munmap_write_lock_bridge",
+          "target_final_bytes": 142
+        },
+        {
+          "Rust_FUNC_source": {
+            "binding": "GLOBAL",
+            "bytes": 131,
+            "index": 8653,
+            "name": "munmap_write_unlock_bridge",
+            "section": "1047",
+            "type": "FUNC",
+            "value": 0,
+            "visibility": "DEFAULT"
+          },
+          "final_FUNC": {
+            "binding": "GLOBAL",
+            "bytes": 131,
+            "index": 1991,
+            "name": "munmap_write_unlock_bridge",
+            "section": "1",
+            "type": "FUNC",
+            "value": 18446744073684636048,
+            "visibility": "DEFAULT"
+          },
+          "final_value": "0xfffffffffe83d190",
+          "input_R64": {
+            "addend": 0,
+            "raw": "0000000000000308  0000009900000001 R_X86_64_64            0000000000000000 munmap_write_unlock_bridge + 0",
+            "target": "munmap_write_unlock_bridge",
+            "type": "R_X86_64_64"
+          },
+          "offset": 104,
+          "target": "munmap_write_unlock_bridge",
+          "target_final_bytes": 131
+        },
+        {
+          "Rust_FUNC_source": {
+            "binding": "GLOBAL",
+            "bytes": 188,
+            "index": 4316,
+            "name": "f03_mprotect_lookup_bridge_v1",
+            "section": "1314",
+            "type": "FUNC",
+            "value": 0,
+            "visibility": "DEFAULT"
+          },
+          "final_FUNC": {
+            "binding": "GLOBAL",
+            "bytes": 188,
+            "index": 3682,
+            "name": "f03_mprotect_lookup_bridge_v1",
+            "section": "1",
+            "type": "FUNC",
+            "value": 18446744073684716240,
+            "visibility": "DEFAULT"
+          },
+          "final_value": "0xfffffffffe850ad0",
+          "input_R64": {
+            "addend": 0,
+            "raw": "0000000000000310  0000009a00000001 R_X86_64_64            0000000000000000 f03_mprotect_lookup_bridge_v1 + 0",
+            "target": "f03_mprotect_lookup_bridge_v1",
+            "type": "R_X86_64_64"
+          },
+          "offset": 112,
+          "target": "f03_mprotect_lookup_bridge_v1",
+          "target_final_bytes": 188
+        },
+        {
+          "Rust_FUNC_source": {
+            "binding": "GLOBAL",
+            "bytes": 52,
+            "index": 5151,
+            "name": "f03_shmat_search_free_v1",
+            "section": "1417",
+            "type": "FUNC",
+            "value": 0,
+            "visibility": "DEFAULT"
+          },
+          "final_FUNC": {
+            "binding": "GLOBAL",
+            "bytes": 52,
+            "index": 1460,
+            "name": "f03_shmat_search_free_v1",
+            "section": "1",
+            "type": "FUNC",
+            "value": 18446744073684734800,
+            "visibility": "DEFAULT"
+          },
+          "final_value": "0xfffffffffe855350",
+          "input_R64": {
+            "addend": 0,
+            "raw": "0000000000000318  0000009b00000001 R_X86_64_64            0000000000000000 f03_shmat_search_free_v1 + 0",
+            "target": "f03_shmat_search_free_v1",
+            "type": "R_X86_64_64"
+          },
+          "offset": 120,
+          "target": "f03_shmat_search_free_v1",
+          "target_final_bytes": 52
+        },
+        {
+          "Rust_FUNC_source": {
+            "binding": "GLOBAL",
+            "bytes": 116,
+            "index": 8316,
+            "name": "mprotect_set_host_vma_bridge",
+            "section": "1202",
+            "type": "FUNC",
+            "value": 0,
+            "visibility": "DEFAULT"
+          },
+          "final_FUNC": {
+            "binding": "GLOBAL",
+            "bytes": 116,
+            "index": 4819,
+            "name": "mprotect_set_host_vma_bridge",
+            "section": "1",
+            "type": "FUNC",
+            "value": 18446744073684687664,
+            "visibility": "DEFAULT"
+          },
+          "final_value": "0xfffffffffe849b30",
+          "input_R64": {
+            "addend": 0,
+            "raw": "0000000000000320  0000009c00000001 R_X86_64_64            0000000000000000 mprotect_set_host_vma_bridge + 0",
+            "target": "mprotect_set_host_vma_bridge",
+            "type": "R_X86_64_64"
+          },
+          "offset": 128,
+          "target": "mprotect_set_host_vma_bridge",
+          "target_final_bytes": 116
+        },
+        {
+          "Rust_FUNC_source": {
+            "binding": "GLOBAL",
+            "bytes": 34,
+            "index": 5144,
+            "name": "f03_shmat_add_range_v1",
+            "section": "1404",
+            "type": "FUNC",
+            "value": 0,
+            "visibility": "DEFAULT"
+          },
+          "final_FUNC": {
+            "binding": "GLOBAL",
+            "bytes": 34,
+            "index": 949,
+            "name": "f03_shmat_add_range_v1",
+            "section": "1",
+            "type": "FUNC",
+            "value": 18446744073684733760,
+            "visibility": "DEFAULT"
+          },
+          "final_value": "0xfffffffffe854f40",
+          "input_R64": {
+            "addend": 0,
+            "raw": "0000000000000328  0000009d00000001 R_X86_64_64            0000000000000000 f03_shmat_add_range_v1 + 0",
+            "target": "f03_shmat_add_range_v1",
+            "type": "R_X86_64_64"
+          },
+          "offset": 136,
+          "target": "f03_shmat_add_range_v1",
+          "target_final_bytes": 34
+        },
+        {
+          "Rust_FUNC_source": {
+            "binding": "GLOBAL",
+            "bytes": 377,
+            "index": 5147,
+            "name": "f03_shmat_log_bridge_v1",
+            "section": "1410",
+            "type": "FUNC",
+            "value": 0,
+            "visibility": "DEFAULT"
+          },
+          "final_FUNC": {
+            "binding": "GLOBAL",
+            "bytes": 377,
+            "index": 2313,
+            "name": "f03_shmat_log_bridge_v1",
+            "section": "1",
+            "type": "FUNC",
+            "value": 18446744073684734208,
+            "visibility": "DEFAULT"
+          },
+          "final_value": "0xfffffffffe855100",
+          "input_R64": {
+            "addend": 0,
+            "raw": "0000000000000330  0000009e00000001 R_X86_64_64            0000000000000000 f03_shmat_log_bridge_v1 + 0",
+            "target": "f03_shmat_log_bridge_v1",
+            "type": "R_X86_64_64"
+          },
+          "offset": 144,
+          "target": "f03_shmat_log_bridge_v1",
+          "target_final_bytes": 377
+        }
+      ],
+      "final_section": {
+        "address": 18446744073685465888,
+        "align": 32,
+        "bytes": 12656,
+        "flags": 2,
+        "name": 1767,
+        "offset": 1080096,
+        "type": 1
+      },
+      "final_symbol": {
+        "binding": "GLOBAL",
+        "bytes": 152,
+        "index": 2184,
+        "name": "f03_shmat_data_v1",
+        "section": "40",
+        "type": "OBJECT",
+        "value": 18446744073685470048,
+        "visibility": "DEFAULT"
+      },
+      "input_C_section": {
+        "address": 0,
+        "align": 32,
+        "bytes": 2976,
+        "flags": 2,
+        "name": 89,
+        "offset": 39648,
+        "type": 1
+      },
+      "input_C_symbol": {
+        "binding": "GLOBAL",
+        "bytes": 152,
+        "index": 150,
+        "name": "f03_shmat_data_v1",
+        "section": "8",
+        "type": "OBJECT",
+        "value": 672,
+        "visibility": "DEFAULT"
+      },
+      "name": "f03_shmat_data_v1",
+      "scalar_prefix_bytes": 64,
+      "set_host_final_bytes": "309b84feffffffff",
+      "set_host_vma_offset": 128
+    }
+  ]
+}

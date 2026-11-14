@@ -1,0 +1,181 @@
+{
+  "schema_version": 1,
+  "recorded_utc": "2026-11-13T19:40:32Z",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "CHANGED_SOURCE_REVIEW_COMPLETE_CANONICAL_ADOPTION_HELD_BY_NONPASSING_TRACKER",
+  "PR": 11,
+  "candidate_head": "9876b029a60423cff1d0001e0222eeabff8f0637",
+  "candidate_base": "70c187c7ebab83d78c509ece63fb01294b4ceec3",
+  "canonical_before_this_evidence": "2fe848885a158a6325314697cdbe0b278f7dff76",
+  "candidate_applied": false,
+  "changed_source_review": {
+    "reviewer": "Root, same canonical compositor; no worker/model restart or new dispatch.",
+    "paths": [
+      ".github/workflows/final-push-tracker.yml",
+      ".github/workflows/m14-f06-qualification.yml",
+      ".github/workflows/m14-focused.yml",
+      "docs/development/M14-STABLE-BASELINE.md",
+      "scripts/derive_f06_origin.py",
+      "scripts/derive_f06_signal_metadata.py",
+      "scripts/run_m14_focused_checks.py",
+      "scripts/tests/test_final_push_tracker_workflow.py",
+      "scripts/tests/test_m14_f03_host_cleanup.py",
+      "scripts/tests/test_m14_f03_ptrace_adapters.py",
+      "scripts/tests/test_m14_metadata_reuse.py",
+      "scripts/tests/test_run_m14_focused_checks.py"
+    ],
+    "result": "No blocking defect found in the reviewed PR11 delta; this is not overall CI or runtime acceptance.",
+    "checks": [
+      "Both existing generators compare complete final UTF-8 bytes before each of seven output writes; changed/missing outputs still update and strict input validation precedes output generation.",
+      "Runner --list returns before test imports/tool probes. Explicit repeated --module is allowlisted and deduplicated in stable order; unchanged default is all18 modules.",
+      "Subset/full and unselected scope are recorded. Skip, expected failure, unexpected success, empty run, loader/fingerprint/result-write failure cannot pass.",
+      "Fingerprints remain explicit incomplete post-test metadata, not cached acceptance or a transitive reuse key.",
+      "Cleanup fixture tests neither selector, either selector and both; ptrace fixture follows the current combined guard without changing its behavior oracle.",
+      "Source/mixed paths retain frozen-host and tracker checks; only development Markdown can omit the frozen-host segment. Tracker validation remains required.",
+      "Hosted PR concurrency is event-scoped and cancels only superseded isolated PR runs; no workstation/controller/native handling is added."
+    ],
+    "compatibility": {
+      "all12_worktree_paths_equal_candidate_base_or_new_absent": true,
+      "unrelated_dirty_paths": 41,
+      "six_current_frozen_requests_directly_checked": true,
+      "direct_changed_path_reference_matches": [],
+      "limits": "Direct declared-reference comparison is not a transitive proof or execution/source-custody admission. No frozen request, source, argv or current in-flight byte was changed.",
+      "F08_actual_request_path_suffix": "consumed-scalar-correction-1/REQUEST.json",
+      "F08_actual_request_sha256": "93967233920afb3370c874abb2ddcc9991a92f91b1a108a83a014489df741467",
+      "candidate_patch_not_applied": {
+        "bytes": 55669,
+        "sha256": "57a3e419872ceeb35b45494089c33265f9945aa3f9196894c0771a34f79c1ac2",
+        "private_path": "/home/holden/mckernel-work/qualified-functional-checkpoint-97/PR11-COMPATIBLE-ADOPTION.PATCH.NOT-APPLIED"
+      },
+      "production_cache_or_generated_outputs_written": false,
+      "retained_c964_a2f_f133_changed": false
+    },
+    "future_producer_identities": [
+      {
+        "path": "scripts/derive_f06_origin.py",
+        "bytes": 9657,
+        "sha256": "ab95c1eda1bb7ebf0d988f582b42195e4019a92d0c32a3100a7e0ab632982982"
+      },
+      {
+        "path": "scripts/derive_f06_signal_metadata.py",
+        "bytes": 4880,
+        "sha256": "57570934d2469655fb065cab75f8d027e83f92d614e2b54854baee3364080f08"
+      }
+    ],
+    "host_guide": "docs/development/M14-STABLE-BASELINE.md remains at its canonical baseline until coherent source adoption; no misleading guide-only promotion."
+  },
+  "hosted_evidence": [
+    {
+      "head": "9876b029a60423cff1d0001e0222eeabff8f0637",
+      "run": 43491154706,
+      "job": 132112383559,
+      "conclusion": "success",
+      "new_runner_metadata_tests": 14,
+      "new_tests_seconds": 0.525,
+      "full_allowlist_modules": 18,
+      "full_tests": 40,
+      "full_seconds": 6.214,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "source": "Dedicated GitHub job steps and full job logs read; exact emitted result lines verified.",
+      "url": "https://github.com/phoenix-hacking/mckernel/actions/runs/43491154706/job/132112383559"
+    },
+    {
+      "head": "9876b029a60423cff1d0001e0222eeabff8f0637",
+      "run": 43491154764,
+      "job": 132112385019,
+      "conclusion": "success",
+      "full_tests": 40,
+      "full_seconds": 7.964,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "actual_C_ownership_debugger_data_ABI": "PASS_AT_HOSTED_SCOPE",
+      "source": "Dedicated GitHub job steps and full job logs read; exact emitted result lines verified.",
+      "url": "https://github.com/phoenix-hacking/mckernel/actions/runs/43491154764/job/132112385019"
+    }
+  ],
+  "tracker_gate": {
+    "run": 43491154712,
+    "job": 132112383864,
+    "head": "9876b029a60423cff1d0001e0222eeabff8f0637",
+    "conclusion": "cancelled",
+    "step": "Validate frozen host-module inventory",
+    "step_result": "cancelled",
+    "cancellation_log_utc": "2026-11-13T19:30:01.5047372Z",
+    "tracker_implementation_idempotence_invalid_input_steps": "SKIPPED",
+    "artifact_upload": "failure",
+    "first_observed_nonpassing_test": "test_built_artifact_rejects_hidden_raw_parameter_record_drift (test_ihk_smp_native_lifecycle_check.IhkSmpNativeLifecycleCheckTests): ERROR at19:25:07.6117293Z",
+    "other_observed_errors": [
+      "IHK lifecycle CLI refused active occurrence count for the Rust control_device_request unbooted-OS/module-owner boundary.",
+      "test_built_artifact_requires_provider_anchor_relocation (test_mcctrl_native_lifecycle_check.McctrlNativeLifecycleCheckTests): ERROR.",
+      "mcctrl lifecycle CLI refused a composite project-object list."
+    ],
+    "failure_counts_and_first_exception_traceback": "NOT_AVAILABLE_IN_CANCELLED_LOG; unittest final summary/tracebacks did not complete.",
+    "primary_cancellation_cause": "UNPROVED_NOT_INFERRED",
+    "result": "NOT_PASS_NOT_WAIVED; do not call all checks green.",
+    "url": "https://github.com/phoenix-hacking/mckernel/actions/runs/43491154712/job/132112383864",
+    "next_concrete_action": "Reconcile the existing IHK SMP/mcctrl source-inventory checkers and fixtures with the pinned restored source and qualified production ownership contracts; preserve strict ABI/provider/C-ownership checks. Obtain the necessary focused failure evidence and a bounded source correction before rerunning the affected gate. Do not modify qualified kernel/module code merely to satisfy stale textual expectations.",
+    "source_inputs": [
+      "scripts/tests/test_ihk_smp_native_lifecycle_check.py",
+      "scripts/ihk_smp_native_lifecycle_check.py",
+      "scripts/tests/test_mcctrl_native_lifecycle_check.py",
+      "scripts/mcctrl_native_lifecycle_check.py",
+      "scripts/restore_ihk_source.py"
+    ],
+    "owner": "Existing eligible canonical source/review owners after genuine dispatch eligibility; no new assignment issued through account-PENDING. GitHub Actions supplies actual CI receipts.",
+    "not_an_external_engineering_contract": "These checker/source/fixture contracts are project engineering work; original-owner runtime capability is a distinct external execution blocker."
+  },
+  "local_checks": {
+    "selected_tests_run": 0,
+    "elapsed_seconds": null,
+    "reason": "Reuse pinned green hosted checks per user instruction. Current account-PENDING and retained exclusive owning scopes permit no fresh workload admission.",
+    "incremental_configure_or_build_run": false,
+    "production_speedup_claim": false
+  },
+  "actual_workers": {
+    "active_source_workers": [],
+    "six_canonical_slots": "Retained completed handoffs; no new task dispatched.",
+    "eligibility_blocker": "Genuine current account/source/resource eligibility required; newest recorded account PENDING cannot be replaced by old ACCEPTED."
+  },
+  "original_milestone_delta": {
+    "newly_closed": [],
+    "old_verified": 105,
+    "new_verified": 105,
+    "total": 156,
+    "M14_percent": 70,
+    "M15_percent": 74.59,
+    "native_or_full_image_or_C_retirement_credit": false
+  },
+  "incident": {
+    "decision": "C complete",
+    "request": "docs/verification/m14-m15-original-owner-incident-20261113/OPERATOR-REQUEST.NOT-ACTION-GO.json",
+    "original_sessions": [
+      18067,
+      40491
+    ],
+    "retained_payload_bytes": 2415919104,
+    "retained_jobs": 2,
+    "additional_overhead": true,
+    "new_signal_or_actor_or_publisher_or_release": false,
+    "UNKNOWNs": "PRESERVED_SEPARATE"
+  },
+  "next_original_provider_checks": [
+    "M14-03-01-DEFAULT",
+    "M14-I01-E2",
+    "M14-I01-E3"
+  ],
+  "ready_after_genuine_scope_closure_and_admission": [
+    "UTI13-input link7a071344/77f693f8",
+    "F08 both-worker no-event5458522c/b8a6b0a4",
+    "F05 artifactdb332ff6/92418a1a",
+    "F05 caller623e0ba3/e89f4887"
+  ],
+  "budget_and_goal": "Same Root/finite7c6/cumulative ceiling/history. ONE additional100% weekly tranche authorized; actual available usage UNKNOWN pending genuine current guard. Goal stays BLOCKED. Preferred target Nov14 19:00UTC; first-native/restoration four-hour checkpoint Nov13 23:00UTC.",
+  "excluded_task": {
+    "worker": "01a1c48d-4d96-7cc3-b733-73a97973152f",
+    "turn": "01a1ce01-20cf-7e03-9442-f6d521fb8b02",
+    "status": "NO_REPLAY_REPHRASE_REASSIGNMENT"
+  }
+}

@@ -1,0 +1,25 @@
+--- /home/holden/mckernel-work/host-preparation/m07-observer-full-inventory-schema-correction-20261022-1/postjoin_readback.py
++++ /home/holden/mckernel-work/host-preparation/m07-observer-inventory-expert-cohort-20261022-1/bound-terminal-expert-source-1/postjoin_readback.py
+@@ -3,10 +3,10 @@
+ import base64,fcntl,hashlib,json,os,resource,stat,subprocess,sys,types
+ from pathlib import Path
+ ROOT=Path('/home/holden/mckernel-work/scratch')
+-ENGINE = Path('/home/holden/mckernel-work/host-preparation/m07-sigill-successor-native-data-preparation-20261022-1/actual-terminal-preparation-1/bound-terminal-source-correction-1/cleanup_pass_image.py')
+-ENGINE_SHA = '7a878db6c495ce63006d478855550d4818ec9d63731a06add0f421315fe7492c'
+-OBSERVER = Path('/home/holden/mckernel-work/host-preparation/m07-observer-full-inventory-schema-correction-20261022-1/observe_current_pass_image_retirement.py')
+-OBSERVER_SHA = '6087e825dc7c049c0c020eaeba0ec7b67fa223434b4bf7f0f0d7a7498b0e4ff3'
++ENGINE = Path('/home/holden/mckernel-work/host-preparation/m07-observer-inventory-expert-cohort-20261022-1/bound-terminal-expert-source-1/cleanup_pass_image.py')
++ENGINE_SHA = '6ba2ae5cde9bfd550051c9fc9501b3ab263c6894e1f9661749e92f0d8cfcff56'
++OBSERVER = Path('/home/holden/mckernel-work/host-preparation/m07-observer-inventory-expert-cohort-20261022-1/bound-terminal-expert-source-1/observe_current_pass_image_retirement.py')
++OBSERVER_SHA = '26d7b36653db05ed5cf27cb6e97c1b08f29e01334aeef0445b883594777ed6f9'
+ CAP=128*2**20
+ DIAGNOSTIC_CAP=65536
+ 
+@@ -82,6 +82,7 @@
+     actual=objects();need(len(actual)==len(finite_paths) and actual==meta['objects'],'all finite current PASS descriptors differ')
+     return actual,objects
+ 
++
+ def main():
+     need(os.getuid()==os.geteuid()==0,'released root readback required')
+     resource.setrlimit(resource.RLIMIT_AS,(1073741824,2147483648));resource.setrlimit(resource.RLIMIT_CORE,(0,0));resource.setrlimit(resource.RLIMIT_FSIZE,(CAP,CAP))

@@ -1,0 +1,89 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "actual118_profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3/PROFILE.SOURCE-ONLY.json",
+    "bytes": 128051,
+    "sha256": "b2f30422d9b4e29bac2046f789ff4023e8b7855325330171ca687c831734538d"
+  },
+  "joint_recipe": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/CURRENT119-FOUR-COMMANDS.NOT-GRANTED.json",
+    "bytes": 32637,
+    "sha256": "0c01ec0ee7b91decc9c6749fae8edf076f50e35f360f577bd3deac3d56edadfd"
+  },
+  "encoding_source": {
+    "path": "/home/holden/mckernel/scripts/host_module_failure_sites.py",
+    "bytes": 89369,
+    "sha256": "332148b8703d5fe340251f8e886adc170c108976a4d4ff8050d084566cc56514"
+  },
+  "changes": [
+    {
+      "index": 0,
+      "stage": "full current default Rust object",
+      "cwd_unchanged": true,
+      "old_tokens": 168,
+      "new_tokens": 188,
+      "argv_unchanged": false,
+      "added_unique_tokens": [
+        "f06_ptrace_xstate_copy_to_candidate",
+        "f06_ptrace_xstate_copy_from_candidate",
+        "f06_vdso_setup_log_candidate",
+        "f06_vdso_state_candidate",
+        "f06_vdso_storage_candidate",
+        "f06_ptrace_user_bridges_candidate",
+        "f06_ptrace_gpregs_bridges_candidate",
+        "f06_prctl_log_candidate",
+        "f06_prctl_log_storage_candidate",
+        "f06_vdso_map_log_candidate"
+      ],
+      "removed_unique_tokens": [],
+      "exact_new_argv_sha256": "aa8e41c315e237c7a88a83134e5e08b54f63cdf7a7dcdfc5ddfb837128f1d877"
+    },
+    {
+      "index": 1,
+      "stage": "selected kernel syscall object",
+      "cwd_unchanged": true,
+      "old_tokens": 95,
+      "new_tokens": 95,
+      "argv_unchanged": true,
+      "added_unique_tokens": [],
+      "removed_unique_tokens": [],
+      "exact_new_argv_sha256": "de8e04dd84a1f1a82f363c09a80d5543e1b8c4733c796f3439fe89c9ba752491"
+    },
+    {
+      "index": 2,
+      "stage": "selected x86 syscall object",
+      "cwd_unchanged": true,
+      "old_tokens": 80,
+      "new_tokens": 90,
+      "argv_unchanged": false,
+      "added_unique_tokens": [
+        "-DMCKERNEL_RUST_F06_PRCTL_LOG",
+        "-DMCKERNEL_RUST_F06_PRCTL_LOG_STORAGE",
+        "-DMCKERNEL_RUST_F06_VDSO_MAP_LOG",
+        "-DMCKERNEL_RUST_F06_PTRACE_XSTATE_COPY_TO",
+        "-DMCKERNEL_RUST_F06_PTRACE_XSTATE_COPY_FROM",
+        "-DMCKERNEL_RUST_F06_VDSO_SETUP_LOG",
+        "-DMCKERNEL_RUST_F06_VDSO_STATE",
+        "-DMCKERNEL_RUST_F06_VDSO_STORAGE",
+        "-DMCKERNEL_RUST_F06_PTRACE_USER_BRIDGES",
+        "-DMCKERNEL_RUST_F06_PTRACE_GPREGS_BRIDGES"
+      ],
+      "removed_unique_tokens": [],
+      "exact_new_argv_sha256": "c98933ae1e9fcfd08c62351026037554aafbb8f4466ad4e347faa52a0d89fdf6"
+    },
+    {
+      "index": 3,
+      "stage": "exact eleven-input raw link",
+      "cwd_unchanged": true,
+      "old_tokens": 21,
+      "new_tokens": 21,
+      "argv_unchanged": true,
+      "added_unique_tokens": [],
+      "removed_unique_tokens": [],
+      "exact_new_argv_sha256": "14c988484795330d38bd9b5a476e4edf20500ed7af150c9d038527b179cd1d92"
+    }
+  ],
+  "existing_four_command_path_preserved": true,
+  "actual_new_commands": 0,
+  "runtime_authority": null
+}

@@ -1,0 +1,714 @@
+{
+  "schema": "m14-ptrace-seven-finite-host-request-v1",
+  "status": "FROZEN_NOT_EXECUTED_PENDING_INDEPENDENT_TEST_OPERATION_GO_AND_ROOT_ADMISSION",
+  "at": "2026-11-11T03:22:11.277058+00:00",
+  "owner": "/root/public_abi_join_max actual Sol/MAX private source/test author; Root sole compositor/executor",
+  "source_ready": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-ownership-publicabi-max-1/SOURCE-READY.json",
+    "bytes": 3069,
+    "sha256": "478cdf21a3948b37d5b84d370689de25872ca2a7fb8f546c1ad8d9e3cb2589e5"
+  },
+  "source_GO": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-review-p03-max-1/REVIEW.json",
+    "bytes": 19857,
+    "sha256": "297d61c5f27dd267f58e380408ca3f14055036a77233aadfd488ad1d6afd3b64"
+  },
+  "inputs": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-tests-publicabi-max-1/INPUTS.json",
+    "bytes": 6160,
+    "sha256": "d14feffb38314aac8757ac719a662f938fb73af67ea8367c1f1d1a7d267923a4"
+  },
+  "contract": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-tests-publicabi-max-1/TEST-CONTRACT.json",
+    "bytes": 8032,
+    "sha256": "37635326893333838487fdb93ae2b123cd0a29446491cfd4a4efcb7378d4c4a2"
+  },
+  "cwd": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-tests-publicabi-max-1",
+  "capture_root": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-tests-publicabi-max-1/execution-1",
+  "fresh_output_root": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-tests-publicabi-max-1/output-1",
+  "private_tmp": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-tests-publicabi-max-1/output-1/tmp",
+  "commands": [
+    {
+      "id": "compile-full-new7-and-exact-existing-policy-composition",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648",
+        "--cpu=60",
+        "--fsize=16777216",
+        "--nofile=64",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-tests-publicabi-max-1/output-1/tmp",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "MCKERNEL_DO_SYSCALL_C_FILE=/src/kernel/syscall.c",
+        "MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS=0",
+        "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+        "--crate-name",
+        "ptrace_callback_lifecycle",
+        "--edition=2021",
+        "-Dwarnings",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "debuginfo=1",
+        "-C",
+        "force-unwind-tables=no",
+        "-C",
+        "codegen-units=1",
+        "--cfg",
+        "native_linux_irq_work_v6_12",
+        "--cfg",
+        "enable_profile",
+        "--cfg",
+        "enable_perf",
+        "--cfg",
+        "enable_rusage",
+        "--cfg",
+        "f03_ptrace_entry_candidate",
+        "--cfg",
+        "f03_ptrace_io_find_selected_candidate",
+        "--cfg",
+        "f03_ptrace_io_unlock_selected_candidate",
+        "--cfg",
+        "f06_ptrace_resume_callbacks_candidate",
+        "--cfg",
+        "ptrace_callback_host_controls",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-tests-publicabi-max-1/ptrace_callback_lifecycle.rs",
+        "-o",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-tests-publicabi-max-1/output-1/ptrace-callback-lifecycle"
+      ],
+      "wall_seconds": 60,
+      "expected_exit": 0,
+      "required_stdout": "empty",
+      "required_stderr": "empty",
+      "required_output": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-tests-publicabi-max-1/output-1/ptrace-callback-lifecycle"
+    },
+    {
+      "id": "seven-changed-ptrace-callback-lifecycle-families",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648",
+        "--cpu=60",
+        "--fsize=16777216",
+        "--nofile=64",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-tests-publicabi-max-1/output-1/tmp",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-tests-publicabi-max-1/output-1/ptrace-callback-lifecycle"
+      ],
+      "wall_seconds": 5,
+      "expected_exit": 0,
+      "required_stderr": "empty",
+      "required_stdout_json": {
+        "status": "PASS",
+        "scope": "changed-ptrace-callback-composition-with-explicit-HOST-lower-controls",
+        "case_count": 7,
+        "kernel_runtime": false,
+        "native_execution": false,
+        "actual_provider_binding": false,
+        "layout": {
+          "ops_size": 152,
+          "ops_slots": 19,
+          "wakeup_offset": 8,
+          "irq_node_size": 64,
+          "irq_node_alignment": 64,
+          "siginfo_size": 128,
+          "pending_info_offset": 24
+        },
+        "cases": [
+          {
+            "id": "direct-provider-ABI-debug-origin",
+            "vectors": [
+              {
+                "id": "direct",
+                "return": -9223372036854775805,
+                "events": [
+                  "log",
+                  "lock",
+                  "unlock_irq",
+                  "free",
+                  "kill",
+                  "wake"
+                ],
+                "current_lookups": 0,
+                "finds": 0,
+                "thread_unlocks": 0,
+                "saved_after": 7,
+                "ptrace_after": 640,
+                "frees": 1,
+                "wakes": 1,
+                "steps": 0,
+                "irq_pairs": 1,
+                "irq_restored": true,
+                "borrow_released": false,
+                "send_retained": false,
+                "recv_retained": false,
+                "kill_args": [
+                  [
+                    42,
+                    -1,
+                    10,
+                    1
+                  ]
+                ],
+                "kill_info128": [
+                  "1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111"
+                ],
+                "prints": [
+                  [
+                    -7,
+                    2147483649
+                  ]
+                ],
+                "free_origins": [
+                  "/src/kernel/syscall.c:4657"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "lookup-and-data-errors",
+            "vectors": [
+              {
+                "id": "miss",
+                "return": -3,
+                "events": [
+                  "current",
+                  "log",
+                  "find"
+                ],
+                "current_lookups": 1,
+                "finds": 1,
+                "thread_unlocks": 0,
+                "saved_after": 7,
+                "ptrace_after": 640,
+                "frees": 0,
+                "wakes": 0,
+                "steps": 0,
+                "irq_pairs": 0,
+                "irq_restored": true,
+                "borrow_released": true,
+                "send_retained": false,
+                "recv_retained": false,
+                "kill_args": [],
+                "kill_info128": [],
+                "prints": [
+                  [
+                    42,
+                    0
+                  ]
+                ],
+                "free_origins": []
+              },
+              {
+                "id": "negative-data",
+                "return": -22,
+                "events": [
+                  "current",
+                  "log",
+                  "find",
+                  "thread_unlock"
+                ],
+                "current_lookups": 1,
+                "finds": 1,
+                "thread_unlocks": 1,
+                "saved_after": 7,
+                "ptrace_after": 640,
+                "frees": 0,
+                "wakes": 0,
+                "steps": 0,
+                "irq_pairs": 0,
+                "irq_restored": true,
+                "borrow_released": true,
+                "send_retained": false,
+                "recv_retained": false,
+                "kill_args": [],
+                "kill_info128": [],
+                "prints": [
+                  [
+                    42,
+                    4294967295
+                  ]
+                ],
+                "free_origins": []
+              },
+              {
+                "id": "above-NSIG",
+                "return": -22,
+                "events": [
+                  "current",
+                  "log",
+                  "find",
+                  "thread_unlock"
+                ],
+                "current_lookups": 1,
+                "finds": 1,
+                "thread_unlocks": 1,
+                "saved_after": 7,
+                "ptrace_after": 640,
+                "frees": 0,
+                "wakes": 0,
+                "steps": 0,
+                "irq_pairs": 0,
+                "irq_restored": true,
+                "borrow_released": true,
+                "send_retained": false,
+                "recv_retained": false,
+                "kill_args": [],
+                "kill_info128": [],
+                "prints": [
+                  [
+                    42,
+                    65
+                  ]
+                ],
+                "free_origins": []
+              }
+            ]
+          },
+          {
+            "id": "KILL-success-error",
+            "vectors": [
+              {
+                "id": "kill-success",
+                "return": 0,
+                "events": [
+                  "current",
+                  "log",
+                  "find",
+                  "kill",
+                  "wake",
+                  "thread_unlock"
+                ],
+                "current_lookups": 1,
+                "finds": 1,
+                "thread_unlocks": 1,
+                "saved_after": 0,
+                "ptrace_after": 640,
+                "frees": 0,
+                "wakes": 1,
+                "steps": 0,
+                "irq_pairs": 0,
+                "irq_restored": true,
+                "borrow_released": true,
+                "send_retained": false,
+                "recv_retained": false,
+                "kill_args": [
+                  [
+                    42,
+                    -1,
+                    9,
+                    0
+                  ]
+                ],
+                "kill_info128": [
+                  "0900000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+                ],
+                "prints": [
+                  [
+                    42,
+                    0
+                  ]
+                ],
+                "free_origins": []
+              },
+              {
+                "id": "kill-error",
+                "return": -77,
+                "events": [
+                  "current",
+                  "log",
+                  "find",
+                  "kill",
+                  "thread_unlock"
+                ],
+                "current_lookups": 1,
+                "finds": 1,
+                "thread_unlocks": 1,
+                "saved_after": 0,
+                "ptrace_after": 640,
+                "frees": 0,
+                "wakes": 0,
+                "steps": 0,
+                "irq_pairs": 0,
+                "irq_restored": true,
+                "borrow_released": true,
+                "send_retained": false,
+                "recv_retained": false,
+                "kill_args": [
+                  [
+                    42,
+                    -1,
+                    9,
+                    0
+                  ]
+                ],
+                "kill_info128": [
+                  "0900000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+                ],
+                "prints": [
+                  [
+                    42,
+                    0
+                  ]
+                ],
+                "free_origins": []
+              }
+            ]
+          },
+          {
+            "id": "CONT-no-signal-SIGSTOP",
+            "vectors": [
+              {
+                "id": "cont-zero",
+                "return": 0,
+                "events": [
+                  "current",
+                  "log",
+                  "find",
+                  "lock",
+                  "unlock_irq",
+                  "wake",
+                  "thread_unlock"
+                ],
+                "current_lookups": 1,
+                "finds": 1,
+                "thread_unlocks": 1,
+                "saved_after": 0,
+                "ptrace_after": 128,
+                "frees": 0,
+                "wakes": 1,
+                "steps": 0,
+                "irq_pairs": 1,
+                "irq_restored": true,
+                "borrow_released": true,
+                "send_retained": false,
+                "recv_retained": false,
+                "kill_args": [],
+                "kill_info128": [],
+                "prints": [
+                  [
+                    42,
+                    0
+                  ]
+                ],
+                "free_origins": []
+              },
+              {
+                "id": "cont-SIGSTOP",
+                "return": 0,
+                "events": [
+                  "current",
+                  "log",
+                  "find",
+                  "lock",
+                  "unlock_irq",
+                  "wake",
+                  "thread_unlock"
+                ],
+                "current_lookups": 1,
+                "finds": 1,
+                "thread_unlocks": 1,
+                "saved_after": 0,
+                "ptrace_after": 128,
+                "frees": 0,
+                "wakes": 1,
+                "steps": 0,
+                "irq_pairs": 1,
+                "irq_restored": true,
+                "borrow_released": true,
+                "send_retained": false,
+                "recv_retained": false,
+                "kill_args": [],
+                "kill_info128": [],
+                "prints": [
+                  [
+                    42,
+                    19
+                  ]
+                ],
+                "free_origins": []
+              }
+            ]
+          },
+          {
+            "id": "SINGLESTEP-user-signal",
+            "vectors": [
+              {
+                "id": "single-user",
+                "return": 0,
+                "events": [
+                  "current",
+                  "log",
+                  "find",
+                  "step",
+                  "lock",
+                  "unlock_irq",
+                  "kill",
+                  "wake",
+                  "thread_unlock"
+                ],
+                "current_lookups": 1,
+                "finds": 1,
+                "thread_unlocks": 1,
+                "saved_after": 0,
+                "ptrace_after": 128,
+                "frees": 0,
+                "wakes": 1,
+                "steps": 1,
+                "irq_pairs": 1,
+                "irq_restored": true,
+                "borrow_released": true,
+                "send_retained": true,
+                "recv_retained": true,
+                "kill_args": [
+                  [
+                    42,
+                    -1,
+                    10,
+                    1
+                  ]
+                ],
+                "kill_info128": [
+                  "0a000000000000000000000000000000f4010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+                ],
+                "prints": [
+                  [
+                    42,
+                    10
+                  ]
+                ],
+                "free_origins": []
+              }
+            ]
+          },
+          {
+            "id": "SYSCALL-user-error",
+            "vectors": [
+              {
+                "id": "syscall-user-error",
+                "return": -91,
+                "events": [
+                  "current",
+                  "log",
+                  "find",
+                  "lock",
+                  "unlock_irq",
+                  "kill",
+                  "thread_unlock"
+                ],
+                "current_lookups": 1,
+                "finds": 1,
+                "thread_unlocks": 1,
+                "saved_after": 0,
+                "ptrace_after": 640,
+                "frees": 0,
+                "wakes": 0,
+                "steps": 0,
+                "irq_pairs": 1,
+                "irq_restored": true,
+                "borrow_released": true,
+                "send_retained": true,
+                "recv_retained": true,
+                "kill_args": [
+                  [
+                    42,
+                    -1,
+                    12,
+                    1
+                  ]
+                ],
+                "kill_info128": [
+                  "0c000000000000000000000000000000f4010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+                ],
+                "prints": [
+                  [
+                    42,
+                    12
+                  ]
+                ],
+                "free_origins": []
+              }
+            ]
+          },
+          {
+            "id": "CONT-pending-copy128-free-error",
+            "vectors": [
+              {
+                "id": "cont-sendsig",
+                "return": 0,
+                "events": [
+                  "current",
+                  "log",
+                  "find",
+                  "lock",
+                  "unlock_irq",
+                  "free",
+                  "kill",
+                  "wake",
+                  "thread_unlock"
+                ],
+                "current_lookups": 1,
+                "finds": 1,
+                "thread_unlocks": 1,
+                "saved_after": 0,
+                "ptrace_after": 128,
+                "frees": 1,
+                "wakes": 1,
+                "steps": 0,
+                "irq_pairs": 1,
+                "irq_restored": true,
+                "borrow_released": true,
+                "send_retained": false,
+                "recv_retained": true,
+                "kill_args": [
+                  [
+                    42,
+                    -1,
+                    10,
+                    1
+                  ]
+                ],
+                "kill_info128": [
+                  "030a11181f262d343b424950575e656c737a81888f969da4abb2b9c0c7ced5dce3eaf1f8ff060d141b222930373e454c535a61686f767d848b9299a0a7aeb5bcc3cad1d8dfe6edf4fb020910171e252c333a41484f565d646b727980878e959ca3aab1b8bfc6cdd4dbe2e9f0f7fe050c131a21282f363d444b525960676e757c"
+                ],
+                "prints": [
+                  [
+                    42,
+                    10
+                  ]
+                ],
+                "free_origins": [
+                  "/src/kernel/syscall.c:4657"
+                ]
+              },
+              {
+                "id": "cont-recvsig-error",
+                "return": -5,
+                "events": [
+                  "current",
+                  "log",
+                  "find",
+                  "lock",
+                  "unlock_irq",
+                  "free",
+                  "kill",
+                  "thread_unlock"
+                ],
+                "current_lookups": 1,
+                "finds": 1,
+                "thread_unlocks": 1,
+                "saved_after": 0,
+                "ptrace_after": 128,
+                "frees": 1,
+                "wakes": 0,
+                "steps": 0,
+                "irq_pairs": 1,
+                "irq_restored": true,
+                "borrow_released": true,
+                "send_retained": false,
+                "recv_retained": false,
+                "kill_args": [
+                  [
+                    42,
+                    -1,
+                    10,
+                    1
+                  ]
+                ],
+                "kill_info128": [
+                  "0b121920272e353c434a51585f666d747b828990979ea5acb3bac1c8cfd6dde4ebf2f900070e151c232a31383f464d545b626970777e858c939aa1a8afb6bdc4cbd2d9e0e7eef5fc030a11181f262d343b424950575e656c737a81888f969da4abb2b9c0c7ced5dce3eaf1f8ff060d141b222930373e454c535a61686f767d84"
+                ],
+                "prints": [
+                  [
+                    42,
+                    10
+                  ]
+                ],
+                "free_origins": [
+                  "/src/kernel/syscall.c:4657"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "profile": {
+    "Docker_network_native": false,
+    "all_worker_controller_overhead_included": true,
+    "batch_wall_seconds": 90,
+    "cpu": 6,
+    "fresh_MemAvailable_floor_GiB": 26,
+    "host_disk_floor_GiB": 16,
+    "jobs": 1,
+    "kind": "Existing qualified HOSTnightly1.95 changed-input lane; new finite ptrace7 composition,one codegen unit; no extra grant",
+    "max_address_space_bytes": 2147483648,
+    "max_aggregate_HOST_bytes": 4294967296,
+    "max_aggregate_jobs": 3,
+    "old_HOST_only_retirement": "Only actual540/a41 prior two HOST charges retired; current prior memory/time/fork jobs require actual positive release at Root admission. Native12/allother18GiB/source/Scratch/UNKNOWN remain held.",
+    "output_disk_reservation_bytes": 33554432,
+    "output_max_file_bytes": 16777216,
+    "runtime_processes": 1,
+    "runtime_threads": 1,
+    "scratch_disk_floor_GiB": 12
+  },
+  "ownership": {
+    "exceptions": "Compile/Owner/deadline/oracle exceptions stop before further command; preserve primary phase/id/argv/error/rawstreams/returned records in best-effort partial failure receipt, with exact authenticated existing Owner cleanup. No numeric/global/reaped PID fallback or absence-based release; no unchanged retry.",
+    "final": "Exactly2 success records plus outer Root direct wait/tool completion, no residual/UNKNOWN/open stream. Retire/release only current reservation on positive scoped proof.",
+    "helper": {
+      "bytes": 4668,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/owned_process.py",
+      "sha256": "afe7403ead1bf8b2c527dfa34a0c0c19010cde5f27a646ccf1545fb8f3b9bc1d"
+    },
+    "immediate_required": [
+      "positive leader PID+birth",
+      "literal argv/cwd/label",
+      "status expected0",
+      "leader_parent_joined=true",
+      "whole_descendants_joined=true",
+      "streams_closed=true",
+      "timed_out=false",
+      "leader_group_signalled=false",
+      "adopted_reaps=[]",
+      "adopted_kills=[]",
+      "remaining_direct_children=[]",
+      "error=null"
+    ],
+    "labels": [
+      "phase-1",
+      "phase-2"
+    ],
+    "record_count": 2
+  },
+  "preconditions": [
+    "Independent material test/operation GO binds478cdf/297d/2a00, all exact copied/extracted/controlled source and C-derived full external oracles before any payload.",
+    "Root fresh same-run service/account/stop/source/hold controls and operation-specific HOST admission: all actual worker/controller/driver/compiler/linker overhead<=4GiB/max3, available>=26GiB,16/12GiB disk floors+32MiB. Serialize other heavy owner unless actual aggregate fits; no native/retained slice borrow.",
+    "Verify exact inputs/tool/std/Owner pins and absent fresh output/capture. Never overwrite previous evidence. Root creates private output-1/tmp and execution capture only after actual grant; env-i retains TMPDIR.",
+    "Use unchanged afe740 Owner only after verified grant/inputs; two serial literal argv, immediate per-record positive PID/birth/status/direct+whole-descendant+streams checks, no timeout/group-signal/adopted-reaps/adopted-kills/residual/error. No runtime on compile/output/diagnostic/ownership failure.",
+    "Compiler/launch/timeout/Owner/assertion/JSON-oracle failures stop before any next command; preserve exact primary phase/id/argv/error/raw streams and all known wait rows in partial failed RESULT/ownership. Existing Owner performs authenticated own-family cleanup only; no numeric/global fallback, false release or unchanged retry.",
+    "Success requires complete observed JSON exactly equal external EXPECTED, actual executable SHA/size/mode, both inner Owner records and positive Root outer direct/tool/family/stream completion. Release only this current reservation after actual proof; unrelated native/UNKNOWN/source controls remain."
+  ],
+  "no_execution_by_author": true,
+  "no_canonical_changes": true,
+  "acceptance_delta": 0,
+  "not_proved": "No genuine production lower providers/C19-table binding, kernel IRQ/locks/GS/current-thread/refcount/PTE/signal/scheduler/transport/native/restoration, C retirement or M14 DEFAULT/FUNCTIONAL/ACCEPT. Held590e/generic/exec/privateTID/TERMRESET/equivalent replay remains excluded. Root solely integrates, admits and executes."
+}

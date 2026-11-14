@@ -1,0 +1,87 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "runtime_authority": null,
+  "status": "PROPOSED_LITERAL_HOST_SOURCE_PRODUCER_NOT_EXECUTED",
+  "cwd": "/home/holden/mckernel",
+  "argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/candidate/scripts/derive_f06_origin.py",
+    "--profile",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/candidate/scripts/f06_origin_command_profile.json",
+    "--source",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/candidate/arch/x86_64/kernel/syscall.c",
+    "--output",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/oci-origin-bind-correction-source-1/ROOT-ORIGIN-PRODUCER-OUTPUT-1"
+  ],
+  "helpers": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/candidate/scripts/derive_f06_origin.py",
+      "bytes": 3997,
+      "sha256": "134afae3ce6ecddfcebae0e4ad56f4803b13511fee8179cfeaccd923e5596194"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/candidate/scripts/f06_origin_command_profile.json",
+      "bytes": 7093,
+      "sha256": "65886aa93a0e6613eef646a1dc37099aa170a5675d728310e79860ae40537510"
+    }
+  ],
+  "architecture_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/candidate/arch/x86_64/kernel/syscall.c",
+    "bytes": 116749,
+    "sha256": "a89d28371f099fd3a10aaf46f44d8d495c9e18efd1620a7b95004d85e2f81192"
+  },
+  "expected_output_root": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/oci-origin-bind-correction-source-1/ROOT-ORIGIN-PRODUCER-OUTPUT-1",
+  "required_output_precondition": "Root verifies output path absent, actual current source/account/ownership controls, then invokes exact source producer once under its authority; no compiler or SDK command.",
+  "expected_generated_header": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/oci-origin-bind-correction-source-1/ROOT-ORIGIN-PRODUCER-OUTPUT-1/f06_rt_sigreturn_origin.h",
+    "bytes": 268,
+    "sha256": "aeece54c3b6f01c326fff3eb925b89b88acd3b198b0047393c8c9c0d78f74ded"
+  },
+  "expected_origin_utf8": "/src/arch/x86_64/kernel/syscall.c",
+  "expected_origin_bytes_with_nul": [
+    47,
+    115,
+    114,
+    99,
+    47,
+    97,
+    114,
+    99,
+    104,
+    47,
+    120,
+    56,
+    54,
+    95,
+    54,
+    52,
+    47,
+    107,
+    101,
+    114,
+    110,
+    101,
+    108,
+    47,
+    115,
+    121,
+    115,
+    99,
+    97,
+    108,
+    108,
+    46,
+    99,
+    0
+  ],
+  "actual_invocations": 0,
+  "actual_outputs": null,
+  "Root_after_producer": [
+    "Authenticate actual producer/header bytes and command/context; preserve failure without replay.",
+    "Rebind header postimage and matching cohort/export entries from source preview to genuine generated output; actual profile/publication/review must include that new reference.",
+    "The exact archargv and Rust env must equal the bound origin-command profile; four compiler/link commands unchanged.",
+    "Canonical future configure uses retained CMake script/profile paths; these two source files remain Root adoption inputs, with no OCI bind needed in this no-configure build."
+  ]
+}

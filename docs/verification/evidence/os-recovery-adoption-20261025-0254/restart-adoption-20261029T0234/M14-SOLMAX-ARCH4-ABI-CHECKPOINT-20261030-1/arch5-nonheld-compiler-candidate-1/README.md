@@ -1,0 +1,38 @@
+# Private non-held ARCH5 compiler candidate
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+`ARCH5-NONHELD.PRIVATE.patch` is a six-path, source-only delta against the exact qualified-19 plus non-held constructor/perf/forward successor-2 Rust policy, the retained qualified arch C, and the retained x86 helper. `SOURCE-INVENTORY.json` binds each preimage/postimage and the standalone flags. It reuses the retained ARCH5 bodies, the approved fully initialized SIGTRAP notification constructor, the retained atomic diagnostic-budget change and its corrected safety comment. No canonical or compositor tree was changed. The optional 61-entry witness module/hook is excluded. All candidate selectors remain off until a separate compositor explicitly supplies the paired flags; no FULL28 or held selector is introduced.
+
+| Original C body | C selector on the arch TU | Rust owner/required cfg |
+| --- | --- | --- |
+| `arch_rt_sigreturn_xrstor_bridge(void *) -> void` | `MCKERNEL_RUST_F06_XRSTOR_LEAF` | `syscall_signal_leaf_adapters`, `f06_signal_leaf_adapters_candidate` |
+| `arch_native_signal_bad_frame_bridge(long) -> long` | `MCKERNEL_RUST_F06_BAD_FRAME_LEAF` | same leaf module, plus `native_linux_irq_work_v6_12` |
+| `arch_rt_sigreturn_context_bridge(thread **, x86_user_context **, int *) -> void` | `MCKERNEL_RUST_F06_SIGNAL_CONTEXT` | `f06_signal_context_candidate` |
+| `do_signal(unsigned long, void *, thread *, sig_pending *, int) -> int` | `MCKERNEL_RUST_F06_DO_SIGNAL_WHOLE` | `f06_do_signal_whole_candidate`, `f06_signal_context_candidate`, `f06_do_signal_reuse_qualified_context` |
+| `arch_ptrace_regset_log_bridge(int, long) -> void` | `MCKERNEL_RUST_F06_REGSET_DEFINED_DIAGNOSTIC` | `syscall_regset_defined_logger`, `f06_regset_defined_diagnostic_candidate` |
+
+The first, second and fifth C wrappers add explicit selected externs while retaining their old bodies under selector-off branches; existing context and whole-signal guards already suppress the other two original bodies. `MCKERNEL_RUST_SYSCALL_POLICY_HELPERS`, the existing x86/native Linux6.12/non-UBSAN profile and all inherited provider cfgs remain prerequisites. `SOURCE-INVENTORY.json` lists exact standalone C `-D` and Rust `--cfg` tokens; they are proposed additions to a separately bound actual command, not emitted flags or permission to compile. The defined regset diagnostic prints `%lx` and the full `CULong` bit pattern as previously approved; no parity is asserted for the old mismatched formatter.
+
+## ABI and lifetime constraints
+
+- The leaf adapter is a child of `syscall_policy` and imports `super::{kprintf, CInt, CLong, EFAULT}`; its raw restore calls the existing `x86_cpu_helpers::get_xsave_mask() -> CULong` and visibility-only `pub(crate) unsafe fn x86_restore_xstate(*const c_void, CULong)`. XRSTOR consumes the complete EDX:EAX boot mask and a live 64-byte aligned valid standard xstate covering the configured extent, with current-CPU/interrupt/FP exclusion and no generated FP/SIMD. Its raw failure semantics stay distinct from the checked native FP-return provider; native sigreturn does not thereby exercise this non-native bridge.
+- The context provider retains `unsafe extern "C" fn(*mut *mut Thread, *mut *mut X86UserContext, *mut CInt)` and the original optional output ordering. The shared `f06_signal_syscall_context` becomes `pub(super)` solely for its sibling whole-signal provider. GS base, current CPU, packed TSS `rsp0`, live full context immediately below that pointer and thread/stack lifetime through synchronous consumers remain runtime and codegen obligations. A size/offset witness cannot establish them.
+- Whole signal retains `unsafe extern "C" fn(CULong, *mut c_void, *mut Thread, *mut SigPending, CInt) -> CInt` and the existing parent imports/extern providers inside the selected module. The approved helper initializes all bytes of caller-owned `SigInfo`, writes SIGCHLD/CLD_TRAPPED and live thread tid/exit status after traced-state stores and before the synchronous notification. Thread, parent/report, `sigcommon`, pending-transfer and scheduler ownership remain open. Its xstate temporary requires positive boot-stable extent, no signed `size + 64` overflow, actual 64-byte alignment, complete capture/copy lifetime and correct original allocation release. This source correction does not establish those dynamic facts.
+- The internal exported `arch_do_signal_core_terminate_result` changes its final parameter to `*const AtomicU64` addressing the live aligned static atomic diagnostic budget. Both Rust call sites, the entry PID observation and both claims are changed together; a prior `*mut CInt` caller would be incompatible despite a pointer-shaped ABI. Previously observed source-only callers are not linked-consumer proof. Require actual symbol/caller and alignment evidence on the selected artifact.
+
+**Open behavior decision:** C checks the diagnostic budget and increments after `kprintf`; this candidate atomically reserves before formatting. It follows serial non-reentrant decisions, but reentrant/concurrent output and PID-reset attribution can differ. A delayed invocation claims against the then-current PID epoch; an in-flight formatter can finish after an epoch change, and repeated PID changes reset the shared count. This is not original-race parity, a per-PID lifetime quota, or a global output bound. Independent review and an explicit behavioral disposition are required; source readiness is not approval of those differences.
+
+## Origins, numerical witness and next checks
+
+The policy splice preserves all 94 surviving pre-existing `file!`/`line!`/`column!` coordinates. Twelve original macro sites are deliberately replaced by six original arch C debug tuples with logical lines 1778, 2077, 2081, 2106, 2109 and 2162; actual emitted original 389 registry, FILE/FUNC/line/flags, padding, link retention and default behavior remain open. The initial SIGTRAP and selected C sources use `#line` restorations; preprocessing must verify the exact selected/off profiles.
+
+The changed arch C keeps the exact old clone-CPU fallback body and logical debug lines 898/908; `SOURCE-INVENTORY.json` records old/new full hashes and the existing old-only origin receipt. For a HOST diagnostic on this exact private C file, the proposed narrow filename adjustment is:
+
+```text
+-fmacro-prefix-map=/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch5-nonheld-compiler-candidate-1/postimage/arch/x86_64/kernel/syscall.c=/src/arch/x86_64/kernel/syscall.c
+```
+
+That proposed mapping addresses the already observed filename-guard family; it does not establish a new full-source origin receipt. A rebased compositor path needs its own exact map and source/header binding. Rust HOST path strings can differ from production. The corrected independent HOST 46-value numeric review is reused only at its actual earlier geometry/source scope, and its witness objects must stay outside any diagnostic or production raw link. It does not prove these new selectors, GS/TSS lifetime, function ABI, codegen or native behavior.
+
+Next: compositor applies the exact six-path delta to a source-bound current non-held union, independent ABI/ownership/behavior/source review binds the actual flags and origin, then a separately admitted CPP/Rust compiler step can provide feedback. Original evidence/failures and service holds remain; no generic held work is assigned. No compiler, cpp, version, test, linker, validator, native, Docker, cleanup or controller ran for this packet. No source-only or HOST geometry result retires C or closes M14.

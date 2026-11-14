@@ -1,0 +1,28 @@
+# F06 clone-CPU default selection and genuine C descriptor proposal
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+Decision: ready for Root's selective source review and a coherent existing default-build batch. Not adopted, compiled, native-qualified or retired. Existing 32193 behavior vectors and real-header ABI8 passed once under the retained qualification; do not replay them. No new algorithm was written. The Rust function body from the 51fba bank is byte-exact; only descriptor initialization and module/source selection are composed against current canonical bytes.
+
+Blocking facts first: canonical C currently supplies obtain_clone_cpuid. The old bank broad helper guard alone does not establish paired selection. Its Rust file!/line! descriptors do not prove C metadata identity. This candidate supplies a dedicated C macro and Rust cfg in the existing supported x86_64/linux-6.12/non-UBSAN branch; it adds no Native cfg and widens no profile. Actual Rust compilation, C deselection, full final registry/caller linkage and native IRQ/AP/CPU-local/reservation-lock lifetime behavior remain unqualified. Source38/shared-GS/TSS/XSAVE and every existing native hold remain OPEN. They are not discharged by a HOST fixture or by this descriptor data.
+
+Six selective source changes are frozen in SELECTIVE-CANDIDATE-MANIFEST.json and patches/. Five exact current canonical preimages and one absent new module are guarded. Apply only these patches after review; do not replace an old bank module or overwrite a newer syscall_policy.rs. The private policy candidate preserves all current canonical bytes as an exact prefix. If canonical preimages change, stop and recompose these narrow insertions; these whole-file snapshots are review postimages, not permission to overwrite concurrent work.
+
+The exact old C fallback body is retained under the dedicated pair, with numeric #line 884 and downstream #line 926 preserving existing logical line identities. Existing syscall and host migration callers and public prototype remain byte-unchanged (CURRENT-CONSUMER-FACTS.json). Root must join their real object relocations and the unique final Rust provider in the actual batch; source lookup alone is not that join.
+
+The existing scripts/derive_f06_origin.py is extended with one exact body/header/command/profile data derivation. It reuses the old FILE producer and adds two generated line_flags constants. Genuine retained da1e metadata is FILE /src/arch/x86_64/kernel/syscall.c, FUNC obtain_clone_cpuid, line898/908, flags0, size32/alignment8; FILE and FUNC have R_X86_64_64, FMT is genuinely NULL with no relocation. The exact historical inactive DEBUG_PRINT_SC block is recognized; source or command activation is rejected. The initial overstrict source-guard failure is retained separately. lib/include/ihk/debug.h is an exact passive defining-header input and CMake configure dependency, not an adoption change.
+
+The new command profile is PROPOSED, not a record of a future compiler invocation. Root must compare the actual batch compiler command with this exact command/profile before claiming generated origin provenance; changed actual command/profile requires honest rebinding. No borrowed actual command or future artifact is fabricated here. Full crate compilation uses the existing build producer, include environment and real crate::debug::Ddebug; no mirrored ABI types and no fixture replacing production dependencies.
+
+Read-only source preflight now (no guard/resource/compiler calls):
+
+    python3 -B /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/default-origin-selection-source-1/check_source_preimages.py
+    python3 -B /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/default-origin-selection-source-1/qualify_two_descriptors.py --retained-c-selfcheck
+
+Root's next actual executable check, inside its already admitted coherent default batch, is the existing configure/compile/link/import/artifact sequence with the six reviewed source changes. Reuse the passed HOST behavior/ABI fixture and original holds. After actual fresh objects are closed and hash-bound, run this narrow source-bound object check with genuine actual paths and full SHA256 values:
+
+    python3 -B /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/default-origin-selection-source-1/qualify_two_descriptors.py --rust-object ACTUAL_DEFAULT_RUST_OBJECT --rust-sha256 ACTUAL_FULL_RUST_SHA256 --selected-c-object ACTUAL_SELECTED_ARCH_C_OBJECT --selected-c-sha256 ACTUAL_FULL_C_SHA256
+
+The checker imports only AST-extracted named functions/classes from the exact existing ELF readers pinned by ACTUAL-C-DESCRIPTOR-IDENTITY.json; it does not run their mains. It requires the same two 32-byte Rust descriptor records, exact strings/flags/line/padding/relocations, no matching C records or C definition, and one Rust provider. This intentionally grants only object identity/deselection scope. The existing whole-image registry/caller/ABI/default artifact review and a separately admitted matching native cohort remain required. Do not call the private candidate installed production.
+
+No new workload quota. Root alone owns canonical adoption, fresh current account/window/resource/source admission, operation grant, compiler/runtime dispatch and independent acceptance. Fixed UTC05:36:09Z, stricter existing MONO/BOOT clamps, same creditrun7f/ceiling57774.852125/spentfloor22812.3311, one-heavy/mutex/exclusions and all floors persist.

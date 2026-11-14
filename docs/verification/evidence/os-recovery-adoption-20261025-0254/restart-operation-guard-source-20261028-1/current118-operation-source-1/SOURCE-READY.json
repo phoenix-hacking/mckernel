@@ -1,0 +1,88 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_READY_FOR_INDEPENDENT_REVIEW_NOT_RUNTIME_RELEASED",
+  "owner": "/root/restart_guard",
+  "operation": "current118-build",
+  "predecessor_cutoffs": null,
+  "first_prepared_window_sha256": "0bfb54bff698f53c744d797e2f57db94db08cd20120da70566d555fa6c1e320e",
+  "api": {
+    "pure": "validate_operation(successor, review, operation, subjects, clocks, boot_id=BOOT)",
+    "live_read_only": "guard(operation, successor_ref, review_ref, expected_subjects)",
+    "adapter": "configure(config_ref) once; current_cutoffs(); guard()"
+  },
+  "source_owners": [
+    "/root",
+    "/root/m14_compose",
+    "/root/restart_guard"
+  ],
+  "operation_cutoffs": [
+    1793253600,
+    1035704.5689393478,
+    1051042.6959879305
+  ],
+  "sources": {
+    "current118_guard_adapter.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/current118-operation-source-1/current118_guard_adapter.py",
+      "bytes": 3009,
+      "sha256": "3a90d200d4bcb81d68f9aed22c37f8a3ebc5389896c29b6f2a7973e9ae66da91"
+    },
+    "operation_window_guard118.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/current118-operation-source-1/operation_window_guard118.py",
+      "bytes": 8511,
+      "sha256": "d02781a862ff41f8116b84eab955f66969b0db8137b9b255ba6b656958eac275"
+    },
+    "test_operation118.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/current118-operation-source-1/test_operation118.py",
+      "bytes": 8632,
+      "sha256": "acf78cd4efe83a00e6a0916857bb5b00911b77ed875a55805eff67e95633fb60"
+    }
+  },
+  "templates": {
+    "ROOT118-OPERATION-SUCCESSOR.TEMPLATE.NOT-AUTHORITY.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/current118-operation-source-1/ROOT118-OPERATION-SUCCESSOR.TEMPLATE.NOT-AUTHORITY.json",
+      "bytes": 1038,
+      "sha256": "450763bf88a258bfefe3cf338c6ddd00bb0fdf0c0f058eaf997098f549b09bd6"
+    }
+  },
+  "reused_sources": {
+    "guardian": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/guardian_guard.py",
+      "bytes": 13388,
+      "sha256": "48893862bb3262a2c81d282215e4b9771b8f659e635a21856096c41233774f18"
+    },
+    "operation117": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current117-next-default-cohort-source-20261028-1/operation_window_guard117.py",
+      "bytes": 8202,
+      "sha256": "5d81b57b20f4652b0f9e8d62f8935b66c98fc0d35fd63377a31aa1f2eec777c3"
+    },
+    "adapter117": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current117-next-default-cohort-source-20261028-1/current117_guard_adapter.py",
+      "bytes": 3009,
+      "sha256": "44bbe2e0ab0518eb7936f854935153dab5816df28133190eac6eae9af31cfe03"
+    }
+  },
+  "checks": {
+    "command": "python3 -B -m unittest discover -s /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/current118-operation-source-1 -p test_operation118.py -v",
+    "exit_code": 0,
+    "unittest_methods": 8,
+    "unittest_seconds": 0.041,
+    "live_guard_calls": 0,
+    "materializer_or_export_or_compiler_calls": 0
+  },
+  "runtime_authority": null,
+  "native_clearance": false,
+  "changed_from117": [
+    "Relative E path accounts for isolated nested successor directory; predecessor account bytes unchanged.",
+    "Operation identity current117-build -> current118-build; initial None predecessor semantics preserved.",
+    "New actual launcher THREAD identity and actual earliest operation clock clamps.",
+    "Exact byte-pinned reviewed restart guardian48893862 required instead of generic nonempty guardian data.",
+    "Adapter operation identity changed; external sealed config schema and API unchanged."
+  ],
+  "integration": [
+    "Use these absolute guard/adapter paths with byte refs from sources; do not copy without adapting E and repinning bytes.",
+    "New cohort runtime_guard subjects bind accepted116/source_map118/recipe118/allcohort.py exactly; Root fills same subjects into actual successor/review after independent source review.",
+    "Actual successor source_owners must contain Root and implementing owners; independent reviewer must be absent.",
+    "Root fill replaces null author/decision/subjects/source_owners/minimum_cumulative_spent and issues independent exact successor review. Template grants no authority.",
+    "No sealed9source or prior SOURCE-READY changed; no old grants or accepted prefixes replayed."
+  ]
+}

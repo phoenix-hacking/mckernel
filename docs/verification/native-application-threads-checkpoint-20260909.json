@@ -1,0 +1,1595 @@
+{
+  "actual_signals_guest_pass": false,
+  "actual_threads_guest_pass": true,
+  "allocator_zeroing": [
+    [
+      "1",
+      "308",
+      "0",
+      "337",
+      "340",
+      "97",
+      "0"
+    ],
+    [
+      "2",
+      "308",
+      "0",
+      "100",
+      "109",
+      "0",
+      "0"
+    ]
+  ],
+  "application_readiness_complete": false,
+  "artifact_bytes": 109089213,
+  "artifacts": [
+    {
+      "path": "docs/verification/evidence/native-application-tids-threads-guest-20260909-1.tar.gz",
+      "sha256": "99f65d53f2adbc3133394d265db896692c32fc9d4ed522a79f3e74118f937433",
+      "size": 23701456,
+      "source": "/work/native-application-tids-threads-guest-20260909-1"
+    },
+    {
+      "path": "docs/verification/evidence/native-application-trace-adapter-20260909-1.tar.gz",
+      "sha256": "8251bfd1c9f490c1d8f9f74aa2045b1166d4fe137c927a6728f1f5e071a910fa",
+      "size": 226739,
+      "source": "/work/native-application-trace-adapter-20260909-1"
+    },
+    {
+      "path": "docs/verification/evidence/native-application-trace-adapter-20260909-2.tar.gz",
+      "sha256": "3176c5cb08cc8e8733e4c58089194a8a8b459352f5b89a0fc8711ec447599831",
+      "size": 3592875,
+      "source": "/work/native-application-trace-adapter-20260909-2"
+    },
+    {
+      "path": "docs/verification/evidence/native-application-tids-module-20260909-2.tar.gz",
+      "sha256": "9b9a8e7c2dbe622c1030fc974d24e3aa725df538541aa4dd191181897f56a476",
+      "size": 34136578,
+      "source": "/work/native-application-tids-module-20260909-2"
+    },
+    {
+      "path": "docs/verification/evidence/native-application-tids-threads-guest-20260909-2.tar.gz",
+      "sha256": "2008ec0a22b5345abd56d33667591c698bb97fa6dd73addb6de62c2d1fa1da1e",
+      "size": 23702027,
+      "source": "/work/native-application-tids-threads-guest-20260909-2"
+    },
+    {
+      "path": "docs/verification/evidence/native-application-tids-signals-guest-20260909-1.tar.gz",
+      "sha256": "f3096185b3839e8dc55789c4cad9aae8aa9fc8a953e6d6eaa02cb3999b538563",
+      "size": 23681287,
+      "source": "/work/native-application-tids-signals-guest-20260909-1"
+    },
+    {
+      "path": "docs/verification/evidence/native-application-threads-20260909-format-replay.tar.gz",
+      "sha256": "ac9076bb9d5a8e731583b3765b9be593656259917b1f5aab0bb51dd551992b03",
+      "size": 43446,
+      "source": "/work/native-application-threads-retained-20260909-1/format-replay"
+    },
+    {
+      "path": "docs/verification/evidence/native-application-threads-20260909-retention-helper.gz",
+      "sha256": "829544f59a2da53c5d1d654e7d9ceb024c43b0d4fc7794eeb8b3b80b9e0119b9",
+      "size": 4805,
+      "source": "/work/native-application-threads-retained-20260909-1/helper.py"
+    }
+  ],
+  "boot_probe_adaptation": {
+    "executed_command": [
+      "cc",
+      "-m64",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-ffreestanding",
+      "-fno-builtin",
+      "-fno-stack-protector",
+      "-fno-pie",
+      "-nostdlib",
+      "-static",
+      "-no-pie",
+      "-Wl,-e,_start",
+      "-Wl,-z,noexecstack",
+      "-DCPUHP_FAILURE_STATE=234",
+      "-DNATIVE_VDSO_REV3=1",
+      "-DNATIVE_SYSFS_OS=1",
+      "-DNATIVE_SYSFS_SETUP=1",
+      "-DNATIVE_SYSFS_SERVICE=1",
+      "-DNATIVE_MCCTRL_SERVICE=1",
+      "-DBOOT_PREPARE_ONLY=0",
+      "/work/native-application-tids-threads-guest-20260909-2/boot-probe-source/native-boot.c",
+      "-o",
+      "/work/native-application-tids-threads-guest-20260909-2/root/bin/native-boot"
+    ],
+    "kernel_command_line": "hidos allow_oversubscribe",
+    "original_command": [
+      "cc",
+      "-m64",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-ffreestanding",
+      "-fno-builtin",
+      "-fno-stack-protector",
+      "-fno-pie",
+      "-nostdlib",
+      "-static",
+      "-no-pie",
+      "-Wl,-e,_start",
+      "-Wl,-z,noexecstack",
+      "-DCPUHP_FAILURE_STATE=234",
+      "-DNATIVE_VDSO_REV3=1",
+      "-DNATIVE_SYSFS_OS=1",
+      "-DNATIVE_SYSFS_SETUP=1",
+      "-DNATIVE_SYSFS_SERVICE=1",
+      "-DNATIVE_MCCTRL_SERVICE=1",
+      "-DBOOT_PREPARE_ONLY=0",
+      "/work/native-mcctrl-image-guest-20260908-x86_64-4/probe-source/native-boot.c",
+      "-o",
+      "/work/native-mcctrl-image-guest-20260908-x86_64-4/root/bin/native-boot"
+    ],
+    "reason": "Enable the existing supported configuration for two pthreads on one McKernel CPU; all original boot/application assertions retained."
+  },
+  "captures": [
+    {
+      "name": "native-application-tids-threads-guest-20260909-1",
+      "original_status": "FAIL",
+      "record": {
+        "path": "/work/native-application-tids-threads-guest-20260909-1/record.json",
+        "sha256": "f85c071ad2e22d9a6f07f30a7c517c4168eba17195480c3c2fdc3a35c381df75",
+        "size": 50849
+      }
+    },
+    {
+      "name": "native-application-trace-adapter-20260909-1",
+      "original_status": "FAIL",
+      "record": {
+        "path": "/work/native-application-trace-adapter-20260909-1/record.json",
+        "sha256": "6f5d28fb8bb7640995b5993c3ece99a37969a83be6f3bb45357abfbd969a754f",
+        "size": 8918
+      }
+    },
+    {
+      "name": "native-application-trace-adapter-20260909-2",
+      "original_status": "PASS",
+      "record": {
+        "path": "/work/native-application-trace-adapter-20260909-2/record.json",
+        "sha256": "3fd9877ccccd6a8bba17bcc25adb45d2a17b0716a2c74ba83896e0616eb84313",
+        "size": 6709
+      }
+    },
+    {
+      "name": "native-application-tids-module-20260909-2",
+      "original_status": "PASS",
+      "record": {
+        "path": "/work/native-application-tids-module-20260909-2/record.json",
+        "sha256": "cd5abcd0c0108cb1f94a99aabf0cf5de4bd8f0f8f947197e747c1617f946681d",
+        "size": 45961
+      }
+    },
+    {
+      "name": "native-application-tids-threads-guest-20260909-2",
+      "original_status": "PASS",
+      "record": {
+        "path": "/work/native-application-tids-threads-guest-20260909-2/record.json",
+        "sha256": "bc0c57628675bcbb80d85dd45125d9954930eaf58af5c851a54467c0dcb484db",
+        "size": 59264
+      }
+    },
+    {
+      "name": "native-application-tids-signals-guest-20260909-1",
+      "original_status": "FAIL",
+      "record": {
+        "path": "/work/native-application-tids-signals-guest-20260909-1/record.json",
+        "sha256": "0cdf4bfb6cebb115cea764dbd5f4fe4f47b1ba3eb0e33b38b1df2de3b60680ef",
+        "size": 44029
+      }
+    }
+  ],
+  "complete_captures": 6,
+  "core_application": {
+    "case": "threads",
+    "delivered": [
+      [
+        "70",
+        "72",
+        "0",
+        "21"
+      ],
+      [
+        "70",
+        "73",
+        "0",
+        "257"
+      ],
+      [
+        "69",
+        "74",
+        "0",
+        "257"
+      ],
+      [
+        "70",
+        "75",
+        "0",
+        "262"
+      ],
+      [
+        "69",
+        "76",
+        "0",
+        "257"
+      ],
+      [
+        "70",
+        "77",
+        "0",
+        "262"
+      ],
+      [
+        "69",
+        "78",
+        "0",
+        "257"
+      ],
+      [
+        "69",
+        "79",
+        "0",
+        "0"
+      ],
+      [
+        "69",
+        "80",
+        "0",
+        "17"
+      ],
+      [
+        "70",
+        "81",
+        "0",
+        "5"
+      ],
+      [
+        "69",
+        "82",
+        "0",
+        "17"
+      ],
+      [
+        "70",
+        "568",
+        "0",
+        "3"
+      ],
+      [
+        "70",
+        "569",
+        "0",
+        "334"
+      ],
+      [
+        "69",
+        "573",
+        "0",
+        "13"
+      ],
+      [
+        "69",
+        "574",
+        "0",
+        "14"
+      ],
+      [
+        "70",
+        "577",
+        "0",
+        "318"
+      ],
+      [
+        "69",
+        "578",
+        "0",
+        "14"
+      ],
+      [
+        "70",
+        "579",
+        "0",
+        "186"
+      ],
+      [
+        "69",
+        "580",
+        "0",
+        "14"
+      ],
+      [
+        "70",
+        "581",
+        "0",
+        "14"
+      ],
+      [
+        "69",
+        "584",
+        "0",
+        "14"
+      ],
+      [
+        "69",
+        "586",
+        "0",
+        "14"
+      ],
+      [
+        "70",
+        "585",
+        "0",
+        "14"
+      ],
+      [
+        "69",
+        "587",
+        "0",
+        "14"
+      ],
+      [
+        "70",
+        "588",
+        "0",
+        "14"
+      ],
+      [
+        "70",
+        "589",
+        "0",
+        "5"
+      ],
+      [
+        "69",
+        "590",
+        "0",
+        "1"
+      ],
+      [
+        "70",
+        "591",
+        "0",
+        "231"
+      ]
+    ],
+    "exit_code": 37,
+    "marked_retirement": true,
+    "no_process_nodes": true,
+    "normal_dynamic_libc": true,
+    "pid": 308,
+    "registration_released": true,
+    "return_routes": [
+      [
+        "308",
+        "69",
+        "74",
+        "1",
+        "0"
+      ],
+      [
+        "308",
+        "69",
+        "76",
+        "1",
+        "0"
+      ],
+      [
+        "308",
+        "69",
+        "78",
+        "1",
+        "0"
+      ],
+      [
+        "308",
+        "69",
+        "79",
+        "1",
+        "0"
+      ],
+      [
+        "308",
+        "69",
+        "80",
+        "1",
+        "0"
+      ],
+      [
+        "308",
+        "69",
+        "82",
+        "1",
+        "0"
+      ],
+      [
+        "308",
+        "69",
+        "573",
+        "1",
+        "0"
+      ],
+      [
+        "308",
+        "69",
+        "574",
+        "1",
+        "0"
+      ],
+      [
+        "308",
+        "69",
+        "578",
+        "1",
+        "0"
+      ],
+      [
+        "308",
+        "69",
+        "580",
+        "1",
+        "0"
+      ],
+      [
+        "308",
+        "69",
+        "584",
+        "1",
+        "0"
+      ],
+      [
+        "308",
+        "69",
+        "586",
+        "1",
+        "0"
+      ],
+      [
+        "308",
+        "69",
+        "587",
+        "1",
+        "0"
+      ],
+      [
+        "308",
+        "69",
+        "590",
+        "1",
+        "0"
+      ]
+    ],
+    "returned": [
+      [
+        "70",
+        "72",
+        "0",
+        "-2"
+      ],
+      [
+        "70",
+        "73",
+        "0",
+        "-2"
+      ],
+      [
+        "69",
+        "74",
+        "0",
+        "-2"
+      ],
+      [
+        "70",
+        "75",
+        "0",
+        "-2"
+      ],
+      [
+        "69",
+        "76",
+        "0",
+        "-2"
+      ],
+      [
+        "70",
+        "77",
+        "0",
+        "-2"
+      ],
+      [
+        "69",
+        "78",
+        "0",
+        "6"
+      ],
+      [
+        "69",
+        "79",
+        "0",
+        "832"
+      ],
+      [
+        "69",
+        "80",
+        "0",
+        "784"
+      ],
+      [
+        "70",
+        "81",
+        "0",
+        "0"
+      ],
+      [
+        "69",
+        "82",
+        "0",
+        "784"
+      ],
+      [
+        "70",
+        "568",
+        "0",
+        "0"
+      ],
+      [
+        "70",
+        "569",
+        "0",
+        "-22"
+      ],
+      [
+        "69",
+        "573",
+        "0",
+        "0"
+      ],
+      [
+        "69",
+        "574",
+        "0",
+        "0"
+      ],
+      [
+        "70",
+        "577",
+        "0",
+        "8"
+      ],
+      [
+        "69",
+        "578",
+        "0",
+        "0"
+      ],
+      [
+        "70",
+        "579",
+        "0",
+        "0"
+      ],
+      [
+        "69",
+        "580",
+        "0",
+        "0"
+      ],
+      [
+        "70",
+        "581",
+        "0",
+        "0"
+      ],
+      [
+        "69",
+        "584",
+        "0",
+        "0"
+      ],
+      [
+        "69",
+        "586",
+        "0",
+        "0"
+      ],
+      [
+        "70",
+        "585",
+        "0",
+        "0"
+      ],
+      [
+        "70",
+        "588",
+        "0",
+        "0"
+      ],
+      [
+        "69",
+        "587",
+        "0",
+        "0"
+      ],
+      [
+        "70",
+        "589",
+        "0",
+        "0"
+      ],
+      [
+        "69",
+        "590",
+        "0",
+        "25"
+      ]
+    ],
+    "stdout": "NATIVE_CORE PASS threads\n"
+  },
+  "current_objtool_matches_retained_zeroing_controls": true,
+  "file_pager_lifetime": {
+    "all_created_handles_released": true,
+    "events": [
+      [
+        "create",
+        "84",
+        "1",
+        "shared",
+        "0"
+      ],
+      [
+        "create",
+        "84",
+        "2",
+        "shared",
+        "1"
+      ],
+      [
+        "create",
+        "84",
+        "3",
+        "shared",
+        "1"
+      ],
+      [
+        "create",
+        "84",
+        "4",
+        "shared",
+        "1"
+      ],
+      [
+        "release",
+        "84",
+        "4",
+        "remaining",
+        "0"
+      ]
+    ],
+    "remaining_references": {
+      "84": 0
+    }
+  },
+  "finished_utc": "2026-09-09T03:53:50.148997+00:00",
+  "full_capture_retention_pending": false,
+  "host_invalidations": [
+    [
+      "69",
+      "85",
+      "0",
+      "0"
+    ],
+    [
+      "70",
+      "559",
+      "0",
+      "0"
+    ],
+    [
+      "69",
+      "561",
+      "0",
+      "0"
+    ],
+    [
+      "70",
+      "562",
+      "0",
+      "0"
+    ],
+    [
+      "70",
+      "564",
+      "0",
+      "0"
+    ],
+    [
+      "70",
+      "565",
+      "0",
+      "0"
+    ],
+    [
+      "70",
+      "567",
+      "0",
+      "0"
+    ],
+    [
+      "69",
+      "570",
+      "0",
+      "0"
+    ],
+    [
+      "69",
+      "571",
+      "0",
+      "0"
+    ],
+    [
+      "70",
+      "572",
+      "0",
+      "0"
+    ],
+    [
+      "70",
+      "575",
+      "0",
+      "0"
+    ],
+    [
+      "69",
+      "576",
+      "0",
+      "0"
+    ],
+    [
+      "69",
+      "582",
+      "0",
+      "0"
+    ],
+    [
+      "70",
+      "583",
+      "0",
+      "0"
+    ]
+  ],
+  "native_application": {
+    "applications": 8,
+    "launches": [
+      {
+        "delivered": [
+          [
+            "6",
+            "8",
+            "0",
+            "1"
+          ],
+          [
+            "7",
+            "9",
+            "0",
+            "231"
+          ]
+        ],
+        "exit_code": 37,
+        "iteration": 1,
+        "marked_retirement": true,
+        "pid": 268,
+        "registration_released": true,
+        "returned": [
+          [
+            "6",
+            "8",
+            "0",
+            "25"
+          ]
+        ],
+        "stdout_hex": "4e41544956455f4150504c49434154494f4e5f48454c4c4f0a",
+        "stdout_verification": "guest regular file, exact 25 bytes, successful newline read and exact line comparison; copied into ordered printk record",
+        "write_bytes": 25
+      },
+      {
+        "delivered": [
+          [
+            "13",
+            "16",
+            "0",
+            "1"
+          ],
+          [
+            "14",
+            "17",
+            "0",
+            "231"
+          ]
+        ],
+        "exit_code": 37,
+        "iteration": 2,
+        "marked_retirement": true,
+        "pid": 273,
+        "registration_released": true,
+        "returned": [
+          [
+            "13",
+            "16",
+            "0",
+            "25"
+          ]
+        ],
+        "stdout_hex": "4e41544956455f4150504c49434154494f4e5f48454c4c4f0a",
+        "stdout_verification": "guest regular file, exact 25 bytes, successful newline read and exact line comparison; copied into ordered printk record",
+        "write_bytes": 25
+      },
+      {
+        "delivered": [
+          [
+            "23",
+            "24",
+            "0",
+            "1"
+          ],
+          [
+            "21",
+            "25",
+            "0",
+            "231"
+          ]
+        ],
+        "exit_code": 37,
+        "iteration": 3,
+        "marked_retirement": true,
+        "pid": 278,
+        "registration_released": true,
+        "returned": [
+          [
+            "23",
+            "24",
+            "0",
+            "25"
+          ]
+        ],
+        "stdout_hex": "4e41544956455f4150504c49434154494f4e5f48454c4c4f0a",
+        "stdout_verification": "guest regular file, exact 25 bytes, successful newline read and exact line comparison; copied into ordered printk record",
+        "write_bytes": 25
+      },
+      {
+        "delivered": [
+          [
+            "30",
+            "32",
+            "0",
+            "1"
+          ],
+          [
+            "29",
+            "33",
+            "0",
+            "231"
+          ]
+        ],
+        "exit_code": 37,
+        "iteration": 4,
+        "marked_retirement": true,
+        "pid": 283,
+        "registration_released": true,
+        "returned": [
+          [
+            "30",
+            "32",
+            "0",
+            "25"
+          ]
+        ],
+        "stdout_hex": "4e41544956455f4150504c49434154494f4e5f48454c4c4f0a",
+        "stdout_verification": "guest regular file, exact 25 bytes, successful newline read and exact line comparison; copied into ordered printk record",
+        "write_bytes": 25
+      },
+      {
+        "delivered": [
+          [
+            "38",
+            "40",
+            "0",
+            "1"
+          ],
+          [
+            "37",
+            "41",
+            "0",
+            "231"
+          ]
+        ],
+        "exit_code": 37,
+        "iteration": 5,
+        "marked_retirement": true,
+        "pid": 288,
+        "registration_released": true,
+        "returned": [
+          [
+            "38",
+            "40",
+            "0",
+            "25"
+          ]
+        ],
+        "stdout_hex": "4e41544956455f4150504c49434154494f4e5f48454c4c4f0a",
+        "stdout_verification": "guest regular file, exact 25 bytes, successful newline read and exact line comparison; copied into ordered printk record",
+        "write_bytes": 25
+      },
+      {
+        "delivered": [
+          [
+            "46",
+            "48",
+            "0",
+            "1"
+          ],
+          [
+            "45",
+            "49",
+            "0",
+            "231"
+          ]
+        ],
+        "exit_code": 37,
+        "iteration": 6,
+        "marked_retirement": true,
+        "pid": 293,
+        "registration_released": true,
+        "returned": [
+          [
+            "46",
+            "48",
+            "0",
+            "25"
+          ]
+        ],
+        "stdout_hex": "4e41544956455f4150504c49434154494f4e5f48454c4c4f0a",
+        "stdout_verification": "guest regular file, exact 25 bytes, successful newline read and exact line comparison; copied into ordered printk record",
+        "write_bytes": 25
+      },
+      {
+        "delivered": [
+          [
+            "54",
+            "56",
+            "0",
+            "1"
+          ],
+          [
+            "53",
+            "57",
+            "0",
+            "231"
+          ]
+        ],
+        "exit_code": 37,
+        "iteration": 7,
+        "marked_retirement": true,
+        "pid": 298,
+        "registration_released": true,
+        "returned": [
+          [
+            "54",
+            "56",
+            "0",
+            "25"
+          ]
+        ],
+        "stdout_hex": "4e41544956455f4150504c49434154494f4e5f48454c4c4f0a",
+        "stdout_verification": "guest regular file, exact 25 bytes, successful newline read and exact line comparison; copied into ordered printk record",
+        "write_bytes": 25
+      },
+      {
+        "delivered": [
+          [
+            "63",
+            "64",
+            "0",
+            "1"
+          ],
+          [
+            "62",
+            "65",
+            "0",
+            "231"
+          ]
+        ],
+        "exit_code": 37,
+        "iteration": 8,
+        "marked_retirement": true,
+        "pid": 303,
+        "registration_released": true,
+        "returned": [
+          [
+            "63",
+            "64",
+            "0",
+            "25"
+          ]
+        ],
+        "stdout_hex": "4e41544956455f4150504c49434154494f4e5f48454c4c4f0a",
+        "stdout_verification": "guest regular file, exact 25 bytes, successful newline read and exact line comparison; copied into ordered printk record",
+        "write_bytes": 25
+      }
+    ],
+    "no_process_nodes_after_each": true,
+    "same_os_instance": true
+  },
+  "native_clone3_application": {
+    "all_thread_procfs_published_and_deleted": true,
+    "child_tids": [
+      311,
+      310
+    ],
+    "executing_guest_tids": [
+      308,
+      310,
+      311
+    ],
+    "host_clone3_delegations": 0,
+    "parent_tid": 308,
+    "pthread_barrier_mutex_tls_and_join_passed": true
+  },
+  "native_compiler_bindings": [
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/abi/application.rs",
+      "path": "host-kernel/native-rust/abi/application.rs",
+      "sha256": "d2b3770a111777d4f28a7a81814a03414d318a90d3ec7082d5c89149b1704a0f",
+      "size": 3171
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/abi/os_service.rs",
+      "path": "host-kernel/native-rust/abi/os_service.rs",
+      "sha256": "9dac670ec6567d379c346106d3b164ddb6d607be1dedc2be21283d4adffa5937",
+      "size": 2527
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/abi/sysfs.rs",
+      "path": "host-kernel/native-rust/abi/sysfs.rs",
+      "sha256": "fb2fd0529998d1a7a4c6fd39f8d03e0f2c65e4d276d4d600779b7afa28ef319a",
+      "size": 2629
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/abi/sysfs_request.rs",
+      "path": "host-kernel/native-rust/abi/sysfs_request.rs",
+      "sha256": "30d079fdd5ba21ca06ecd7ed6ab9a60de288d90303134be1f6a2ec428861f946",
+      "size": 6715
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/abi/vdso.rs",
+      "path": "host-kernel/native-rust/abi/vdso.rs",
+      "sha256": "d33c5aaf1ca422250819433f83a81a6be2a9dd3d81f9674c7f0530bc4fec6fb1",
+      "size": 14530
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/abi/x86_64.rs",
+      "path": "host-kernel/native-rust/abi/x86_64.rs",
+      "sha256": "89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3",
+      "size": 19740
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/application_image.rs",
+      "path": "host-kernel/native-rust/application_image.rs",
+      "sha256": "25b7810c273c9f4b5dbff073f54e67db52c69636e63760c7d5f62e471b7a61b2",
+      "size": 8356
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/application_pager.rs",
+      "path": "host-kernel/native-rust/application_pager.rs",
+      "sha256": "adb65c878f6e9817cfb0932c38ac2f87d2715659468051957a1b747b7974ad19",
+      "size": 3196
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/application_rpc.rs",
+      "path": "host-kernel/native-rust/application_rpc.rs",
+      "sha256": "9f811c86c4e996294a6cd3be6b83315dabd20a3fb375419e091f4b9dedcfad39",
+      "size": 10080
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/application_syscall.rs",
+      "path": "host-kernel/native-rust/application_syscall.rs",
+      "sha256": "a1f5e98413a83f7c11c069d23d883379aa64578b55e011dff49c528a236321fd",
+      "size": 15406
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/device_registry.rs",
+      "path": "host-kernel/native-rust/device_registry.rs",
+      "sha256": "43c3a4badd09bb70a31c9120d23e3b2b63ffa735412d172e0f0ac3d2edc85af5",
+      "size": 60221
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/ihk.rs",
+      "path": "host-kernel/native-rust/ihk.rs",
+      "sha256": "8ae67d7208229c22c503508d16d2c9718a7f19123542270cf5589569d21a51ec",
+      "size": 18754
+    },
+    {
+      "binding": "exact pinned rustfmt replay",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/ihk_ioctl.rs",
+      "formatted_sha256": "449a6cd7ac211534c82729e18122af888ac58c0dccfee8aaecefd2900c7b5f75",
+      "path": "host-kernel/native-rust/ihk_ioctl.rs",
+      "replay_command": [
+        "rustfmt",
+        "--edition",
+        "2021",
+        "--config",
+        "skip_children=true,reorder_modules=false",
+        "/work/native-application-threads-retained-20260909-1/format-replay/ihk_ioctl.rs"
+      ],
+      "sha256": "60739598352b236a0d698abae0c6104e7adfc05524be9a0653b2477b8728519e",
+      "size": 10467
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/ihk_mapping.rs",
+      "path": "host-kernel/native-rust/ihk_mapping.rs",
+      "sha256": "085f4f4e7935bd273d89ae4c7f7d600da557ce1da8873f57a142dc12bf9677dc",
+      "size": 21943
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/ihk_smp_x86_64.rs",
+      "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
+      "sha256": "f29f751b62884534a754c903c6a9a763f82af61235552074924ccc91a59395e1",
+      "size": 32772
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/ikc_master.rs",
+      "path": "host-kernel/native-rust/ikc_master.rs",
+      "sha256": "1e52c69093936291f309a0317fac707c47858c6d0151cb2d288ced12353853f3",
+      "size": 26480
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/ikc_queue.rs",
+      "path": "host-kernel/native-rust/ikc_queue.rs",
+      "sha256": "3163d9cc7541941e49059aed7f8824a62229cbe8a650e02f79a4eb7a3944e9c5",
+      "size": 23030
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/mcctrl.rs",
+      "path": "host-kernel/native-rust/mcctrl.rs",
+      "sha256": "b3898d1a4d08ba5512ee9b12e66224409f6aed4db3adc293b47631aa16fa8030",
+      "size": 8992
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/mcctrl_exec.rs",
+      "path": "host-kernel/native-rust/mcctrl_exec.rs",
+      "sha256": "02da754f4f5afa6256a572ff4fc17f72627d92f55e9793e25760fa0dac100ced",
+      "size": 8508
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/mcctrl_process.rs",
+      "path": "host-kernel/native-rust/mcctrl_process.rs",
+      "sha256": "392391cc1db8eaf8d26283ca77a7d69150a0bbf026dfd01120970d7fd601a925",
+      "size": 40451
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/mcctrl_vm.rs",
+      "path": "host-kernel/native-rust/mcctrl_vm.rs",
+      "sha256": "74facf8daac2d3843e2c7c862b7186c8d738d7a78573ac0f1e6ea81436da470d",
+      "size": 15927
+    },
+    {
+      "binding": "exact pinned rustfmt replay",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/os_registry.rs",
+      "formatted_sha256": "0d8597004f513f353abb2da8f16fcf5413c9959ebdf36805fe00b398460557bd",
+      "path": "host-kernel/native-rust/os_registry.rs",
+      "replay_command": [
+        "rustfmt",
+        "--edition",
+        "2021",
+        "--config",
+        "skip_children=true,reorder_modules=false",
+        "/work/native-application-threads-retained-20260909-1/format-replay/os_registry.rs"
+      ],
+      "sha256": "9a751f4e5b5bb49d0cd1d5a1b18b8bc7af98033c4c7b33e1df0034b3f33174a9",
+      "size": 17961
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/os_runtime.rs",
+      "path": "host-kernel/native-rust/os_runtime.rs",
+      "sha256": "49be478bf84e8d17ee355c154f5b7252ed42276ccff1e6cadd9fd6bf89fbf7bf",
+      "size": 46941
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/os_service.rs",
+      "path": "host-kernel/native-rust/os_service.rs",
+      "sha256": "f5fc0c7fa0f62e0c3d1cef366a280c74ce083030ee6569b8c52979d9b361a572",
+      "size": 6907
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/page_allocator.rs",
+      "path": "host-kernel/native-rust/page_allocator.rs",
+      "sha256": "8e2af0cde06cbb70204540b493e8a0a66d5203195ed671235b64bed44d328bc5",
+      "size": 21301
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/page_owner_registry.rs",
+      "path": "host-kernel/native-rust/page_owner_registry.rs",
+      "sha256": "443d58fa5b2e423f538c6622ef04d8e34338abc43c5e0fd34811d52fc21f4869",
+      "size": 13085
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/procfs_objects.rs",
+      "path": "host-kernel/native-rust/procfs_objects.rs",
+      "sha256": "d6c125166c6bf03094e8c452261544b88ffd60446c4960feb4c21ac6f990e641",
+      "size": 16161
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/smp_application.rs",
+      "path": "host-kernel/native-rust/smp_application.rs",
+      "sha256": "62967b81d30365a7a8ae695f7b928c18b54a1f2fd6c529151e089aec7be4d1c8",
+      "size": 38336
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/smp_application_image.rs",
+      "path": "host-kernel/native-rust/smp_application_image.rs",
+      "sha256": "7fb8c862a1793ea4db6f90200adb9f78ee9b9b2abd9899b9ffd4671d647d7985",
+      "size": 9210
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/smp_application_syscall.rs",
+      "path": "host-kernel/native-rust/smp_application_syscall.rs",
+      "sha256": "a2a18d660a5cbc3882b9f2dbc6190d78e3b2614b8888a3bec2be5193ea145d39",
+      "size": 19536
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/smp_boot_code.rs",
+      "path": "host-kernel/native-rust/smp_boot_code.rs",
+      "sha256": "51fa12dad686621e1fd170b2017515deddd67227b5f8aaee84102d070a4a3db7",
+      "size": 1317
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/smp_cpu.rs",
+      "path": "host-kernel/native-rust/smp_cpu.rs",
+      "sha256": "9826d4f401a75485befa8728080794e95858b978c59af19d034254722e3346e2",
+      "size": 38178
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/smp_file_pager.rs",
+      "path": "host-kernel/native-rust/smp_file_pager.rs",
+      "sha256": "08c427f5333b859b6628e3946668b679d1777a4abf49ceb2d08666dac28aefec",
+      "size": 12927
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/smp_ikc.rs",
+      "path": "host-kernel/native-rust/smp_ikc.rs",
+      "sha256": "87af7bfa59df5ee3164e5afca5fe5ff5a8256ff27c7635b2a72f8f769e3963b2",
+      "size": 12665
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/smp_image.rs",
+      "path": "host-kernel/native-rust/smp_image.rs",
+      "sha256": "359fc2a35865c114c7f8fc82ec0452433948684fcd59b31fe879ab62fd6ced3d",
+      "size": 14208
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/smp_loader.rs",
+      "path": "host-kernel/native-rust/smp_loader.rs",
+      "sha256": "fa86ebb489454cd95c2607bba3a3d564ca36d6e65c5eea6bd6aa319bb40100e6",
+      "size": 3194
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/smp_memory.rs",
+      "path": "host-kernel/native-rust/smp_memory.rs",
+      "sha256": "2004cee3e3e9a4a8e94f66f27f7f4710a13707c451138e1259d109f4e3bcc429",
+      "size": 98942
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/smp_procfs.rs",
+      "path": "host-kernel/native-rust/smp_procfs.rs",
+      "sha256": "7aba4319fdc6fa76761ca01128c7a7d920c4be85244737167122c914fc1268d5",
+      "size": 27574
+    },
+    {
+      "binding": "exact pinned rustfmt replay",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/smp_resource.rs",
+      "formatted_sha256": "66bb835e4f957d3a25768d2258ec36cc79f8c532554914f8ae3234b28e51d100",
+      "path": "host-kernel/native-rust/smp_resource.rs",
+      "replay_command": [
+        "rustfmt",
+        "--edition",
+        "2021",
+        "--config",
+        "skip_children=true,reorder_modules=false",
+        "/work/native-application-threads-retained-20260909-1/format-replay/smp_resource.rs"
+      ],
+      "sha256": "d8c567be5d3e3953bf2954d5e43130e5204ae4f6ad4158d18e7efb99088c64d3",
+      "size": 129861
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/smp_service.rs",
+      "path": "host-kernel/native-rust/smp_service.rs",
+      "sha256": "6d64f8d87737b5e3c9419ce89164512913eb272d50bc5e8a3b3f393844b29653",
+      "size": 39199
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/smp_startup.rs",
+      "path": "host-kernel/native-rust/smp_startup.rs",
+      "sha256": "12c3a816af6ff20dcf916c946b780ff988e90650300ab7c00e07a83cda1474a2",
+      "size": 4963
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/smp_startup_entry.S",
+      "path": "host-kernel/native-rust/smp_startup_entry.S",
+      "sha256": "b65dc8545456edc714fe2913e8bafe0c87bb287ab84e4769cf9575263a59d9b2",
+      "size": 1350
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/smp_topology.rs",
+      "path": "host-kernel/native-rust/smp_topology.rs",
+      "sha256": "83c655570347e4eb0f70a1e9a1bf96401a775585e79bd845b20060b7c62873f7",
+      "size": 10615
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/smp_trampoline.S",
+      "path": "host-kernel/native-rust/smp_trampoline.S",
+      "sha256": "18c960336e3803f2b554481a2f6fc7c3927190bfeeee1516264c37de6c126bcf",
+      "size": 3650
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/smp_trampoline.rs",
+      "path": "host-kernel/native-rust/smp_trampoline.rs",
+      "sha256": "acf14afe67aa9a0e758d45fe7525fc9d49bad7ef8aacf3b771f708431d73f9ca",
+      "size": 5477
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/smp_vdso.rs",
+      "path": "host-kernel/native-rust/smp_vdso.rs",
+      "sha256": "872525c91698bb308c7d111c86250a198983a4b1c94d426e076a709feca377e1",
+      "size": 5863
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/sysfs_memory.rs",
+      "path": "host-kernel/native-rust/sysfs_memory.rs",
+      "sha256": "11eadff3fde6d46edfefcd988e941cb9bbab443e059a03d082245c3db6f1ec73",
+      "size": 24656
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/sysfs_objects.rs",
+      "path": "host-kernel/native-rust/sysfs_objects.rs",
+      "sha256": "17369a7bd7d8d5b8079c3a2b30784de56b4db79a3b75c04ad42e613fab570980",
+      "size": 13753
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/sysfs_os.rs",
+      "path": "host-kernel/native-rust/sysfs_os.rs",
+      "sha256": "ce44efe98498383862bd2d897f3fe17201917aa141a144853459a0cac7ecffd2",
+      "size": 2451
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/sysfs_remote.rs",
+      "path": "host-kernel/native-rust/sysfs_remote.rs",
+      "sha256": "8a33f152307d66f7c205fe7557da1a4e02e5d230335dd9b36f16797e11db53ee",
+      "size": 8287
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/sysfs_rpc.rs",
+      "path": "host-kernel/native-rust/sysfs_rpc.rs",
+      "sha256": "d1bb17868dd426b3c6635171f2f8cc53e498b54779973c1abc58968d1d96cc4e",
+      "size": 6833
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/sysfs_setup.rs",
+      "path": "host-kernel/native-rust/sysfs_setup.rs",
+      "sha256": "aef0af92406948da3a4519c937dcfd32724b18d81ab00e394e66c89753863d62",
+      "size": 12683
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/sysfs_snoop.rs",
+      "path": "host-kernel/native-rust/sysfs_snoop.rs",
+      "sha256": "c795209a3d116142c6da2ab969d3cdb88ba69796287b20adbab2f59bdbe7249d",
+      "size": 5515
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/sysfs_tree.rs",
+      "path": "host-kernel/native-rust/sysfs_tree.rs",
+      "sha256": "3ee25a02b17654b6f23776d13aaa62de5b597e23cb214ca9c519b5886c29b232",
+      "size": 12276
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/sysfs_zeroing.rs",
+      "path": "host-kernel/native-rust/sysfs_zeroing.rs",
+      "sha256": "221b3427849c4c5d62254cf16445e2851631d3fed6f4f7875f4e59e2c0d6a290",
+      "size": 10243
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/user_string.rs",
+      "path": "host-kernel/native-rust/user_string.rs",
+      "sha256": "fa83818bc26d52ffff1a763a34a92684dff47775ba389fa6ac831d0835bf62d2",
+      "size": 603
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-tids-module-20260909-2/staged-source/zero_pages.rs",
+      "path": "host-kernel/native-rust/zero_pages.rs",
+      "sha256": "47a4e27b63f50366229af4045d79dc5dee6ace179307cc19c08cc338c68b1def",
+      "size": 4354
+    }
+  ],
+  "native_modules": 3,
+  "native_string_copy": {
+    "data_cases": 28,
+    "descriptor_faults": 8,
+    "guarded": true,
+    "interfaces": 2,
+    "source_and_destination_fields_preserved": true
+  },
+  "native_tid_transfer": {
+    "actual_gettid_result": 0,
+    "bytes": 512,
+    "delivery": 579,
+    "physical": 4355683616,
+    "worker": 70
+  },
+  "original_failures": 3,
+  "original_signal_failure": {
+    "errno": 0,
+    "interrupted_host_ret_observed": true,
+    "line": 142,
+    "scope": "First alternate-stack handler returns; the second handler is on the normal stack. Original two-delivery alternate-stack assertion fails. No signal or abnormal-owner acceptance.",
+    "signal_frames": [
+      [
+        "308",
+        "308",
+        "0x401fe0",
+        "0x2aaaaaa4b1c0",
+        "0x2aaaaaaa697c",
+        "0x547ffffff870",
+        "0x60f648"
+      ],
+      [
+        "308",
+        "308",
+        "0x401fe0",
+        "0x2aaaaaa4b1c0",
+        "0x2aaaaaaa180c",
+        "0x547ffffff8d0",
+        "0x547fffffec78"
+      ]
+    ]
+  },
+  "references": [
+    {
+      "path": "docs/verification/native-application-tids-checkpoint-20260909.json",
+      "sha256": "532c4263586381857878e1f98174cac8375c76e0d57522fbf976ea087298c80f",
+      "size": 29152
+    },
+    {
+      "path": "docs/verification/native-application-clone3-images-checkpoint-20260909.json",
+      "sha256": "c82e49490ecd416dd7426617bb6c9ea485332d0c614726c1d5e653f1ccda57cb",
+      "size": 45508
+    },
+    {
+      "path": "docs/verification/native-application-core-checkpoint-20260909.json",
+      "sha256": "fc4c56e3762e11d1c2e45108bdfc0f908bd0cb225af0f788c9271db43cd0a6eb",
+      "size": 44794
+    },
+    {
+      "path": "docs/verification/native-application-zeroing-host-checkpoint-20260909.json",
+      "sha256": "ba61100012410a7b6d5d2b7c4f159457232cef72ed26989517b9367adfa61739",
+      "size": 53415
+    }
+  ],
+  "scope": "Actual unchanged pthread/futex/TLS application PASS with all original audits, per-delivery tracing and exact native modules. Original trace fixture/audit failures and first actual signal failure fully retained. Signals, abnormal-owner and final regression/replay remain pending.",
+  "source_bindings": [
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-trace-adapter-20260909-2/original-inputs/host-kernel/native-rust/mcctrl_process.rs",
+      "path": "host-kernel/native-rust/mcctrl_process.rs",
+      "sha256": "392391cc1db8eaf8d26283ca77a7d69150a0bbf026dfd01120970d7fd601a925",
+      "size": 40451
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-trace-adapter-20260909-2/native-application-return-adapter.rs",
+      "path": "scripts/tests/fixtures/native-application-return-adapter.rs",
+      "sha256": "5a86ae41c1fca84a47d5417884b4860bdb1bf2e9f64cff3e1c13265b086d8ed2",
+      "size": 15438
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-core-build-20260908-1/native-application-core.c",
+      "path": "scripts/tests/fixtures/native-application-core.c",
+      "sha256": "525bb7416c579da09c5f780b3ff6962287f07143488b6669bbee5ae744412743",
+      "size": 5758
+    }
+  ],
+  "source_parent": "62f42cedf2e425d14782adb2d47570b25f5809de",
+  "started_utc": "2026-09-09T03:53:30.736170+00:00",
+  "status": "PASS",
+  "trace_tests": {
+    "bounded_deliveries": 64,
+    "exact_extracted_methods": [
+      {
+        "end_byte": 12024,
+        "name": "wait_syscall",
+        "sha256": "f26f188071a5da17d8d29b8912a7e56ea61a8e017f78e90651de1a36b8d65a67",
+        "start_byte": 7470
+      },
+      {
+        "end_byte": 14621,
+        "name": "return_syscall",
+        "sha256": "2105aac677bdcbf46e2f0120b0cc6add5214c68224afad97d0736c5e1ba46c63",
+        "start_byte": 12026
+      },
+      {
+        "end_byte": 4064,
+        "name": "trace",
+        "sha256": "f2af71e606775a767eb9f4c9b60bb35a86711db607c37c89affab14a12b656cc",
+        "start_byte": 3846
+      }
+    ],
+    "maximum_normal_trace_lines": 192,
+    "tests": 9
+  },
+  "unchanged_running_transfer_body": {
+    "current_compiler": "/work/native-application-tids-module-20260909-2/staged-source/mcctrl_process.rs",
+    "previous_compiler": "/work/native-application-tids-module-20260909-1/staged-source/mcctrl_process.rs",
+    "sha256": "0feae7d3df37879263884ee5d1920491e1a53ad06fe8a83d1e4c68a04a106957",
+    "size": 2699
+  }
+}

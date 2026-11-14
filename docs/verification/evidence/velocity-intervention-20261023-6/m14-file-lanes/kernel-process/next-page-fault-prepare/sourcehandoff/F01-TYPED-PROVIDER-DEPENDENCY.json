@@ -1,0 +1,20 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_handoff": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/page-offset-typed-provider-source-only-1/SOURCE-ONLY-TYPED-PROVIDER-HANDOFF.json",
+    "sha256": "382ff04682dca2813165b6ea2670597c1bad471a75e860b9eb344e4d97e477d7",
+    "bytes": 2553
+  },
+  "candidate": {
+    "bytes": 17782,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/page-offset-typed-provider-source-only-1/page_helpers.rs",
+    "sha256": "0d31598c6253ac662c5bb16c3c0b5e346e098dbefc8f56eb21c70c43c637e489"
+  },
+  "fragment": {
+    "bytes": 415,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/page-offset-typed-provider-source-only-1/page_get_offset.rs.fragment",
+    "sha256": "a1e9a5b0866e29ada651bab194d34850921aec35a847e985a406583150b2a3e4"
+  },
+  "contract": "F02 Rust process callback casts live borrowed opaque pointer to *const page_helpers::Page and calls page_get_offset synchronously after phys_to_page and before PTE exchange/TLB/page_unmap. Existing nonNULL check/lock/memobj ownership retained. F02 owns integration of that callback, not this lane.",
+  "status": "SOURCE_ONLY_DEPENDENCY_NOT_IN_CANONICAL_OR_THIS_LEAF_FIXTURE"
+}

@@ -1,0 +1,14 @@
+--- a/kernel/rust/f03_perf_group_cleanup.rs
++++ b/kernel/rust/f03_perf_group_cleanup.rs
+@@ -121,6 +121,11 @@
+ 
+     let sfd = mckfd_alloc(mckfd_size, mckfd_alloc_flags);
+     if sfd.is_null() {
++        // The selected standalone event is still private to this call.
++        // The host FD and counter-map ownership require separate resolution.
++        if group_fd == -1 {
++            unsafe { super::perf_event_alloc_free_bridge(event) };
++        }
+         return -ENOMEM as CLong;
+     }
+ 

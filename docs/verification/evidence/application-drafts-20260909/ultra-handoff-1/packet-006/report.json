@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-006",
+  "packet_version": 2,
+  "context_sha256": "1dd5a51a0d753b52a4e9f1e1281d18e318d34c32913aa18b9f90fdf7e246a3d9",
+  "started_utc": "2026-09-09T09:47:52Z",
+  "finished_utc": "2026-09-09T09:47:52Z",
+  "draft_status": "DRAFTED",
+  "cases": [
+    {
+      "case_id": "app.cat-file",
+      "status": "DRAFTED",
+      "fixture": "scripts/application-tests/inputs/app.cat-file.json",
+      "oracle": "scripts/application-tests/oracles/app.cat-file.json",
+      "changed_files": [
+        "scripts/application-tests/inputs/app.cat-file.json",
+        "scripts/application-tests/oracles/app.cat-file.json"
+      ],
+      "unresolved_oracle_notes": [],
+      "max_reviewer_question": "No additional reviewer question; pinned application contract should be reused as reviewed. "
+    },
+    {
+      "case_id": "app.cat-stdin",
+      "status": "DRAFTED",
+      "fixture": "scripts/application-tests/inputs/app.cat-stdin.json",
+      "oracle": "scripts/application-tests/oracles/app.cat-stdin.json",
+      "changed_files": [
+        "scripts/application-tests/inputs/app.cat-stdin.json",
+        "scripts/application-tests/oracles/app.cat-stdin.json"
+      ],
+      "unresolved_oracle_notes": [],
+      "max_reviewer_question": "No additional reviewer question; pinned application contract should be reused as reviewed. "
+    },
+    {
+      "case_id": "app.cat-empty",
+      "status": "DRAFTED",
+      "fixture": "scripts/application-tests/inputs/app.cat-empty.json",
+      "oracle": "scripts/application-tests/oracles/app.cat-empty.json",
+      "changed_files": [
+        "scripts/application-tests/inputs/app.cat-empty.json",
+        "scripts/application-tests/oracles/app.cat-empty.json"
+      ],
+      "unresolved_oracle_notes": [],
+      "max_reviewer_question": "No additional reviewer question; pinned application contract should be reused as reviewed. "
+    }
+  ],
+  "changed_files_with_sha256": [
+    {
+      "path": "scripts/application-tests/inputs/app.cat-file.json",
+      "sha256": "abfa59ee4eeff10fa897a87386c68a6ef0addd535366e0e198a6e60748c16fce"
+    },
+    {
+      "path": "scripts/application-tests/oracles/app.cat-file.json",
+      "sha256": "e1e0102f835c5912515b1eff5a36e0781f2afec276f6f2915482d59e783162c6"
+    },
+    {
+      "path": "scripts/application-tests/inputs/app.cat-stdin.json",
+      "sha256": "8a305f636da2483c242a67937965129b18fecb2cdf13cf0e95f06859a4891239"
+    },
+    {
+      "path": "scripts/application-tests/oracles/app.cat-stdin.json",
+      "sha256": "ab2d50dc05569d3592c352c2a501e5942ec88c2a6febfe02ea3026cfd444ff33"
+    },
+    {
+      "path": "scripts/application-tests/inputs/app.cat-empty.json",
+      "sha256": "4c870861c10732097b95e3f7c4fbbc7ad6416afd65b2a6c3ddbdb9c2c3f89ab2"
+    },
+    {
+      "path": "scripts/application-tests/oracles/app.cat-empty.json",
+      "sha256": "f18bc38ea8863eca4368efb82f1d22010834b1acac01e2d59dbb19fa0bde0bfd"
+    }
+  ],
+  "commands_and_outcomes": [
+    {
+      "command": "python3 -B /home/holden/mckernel/scripts/application-tests/validate.py --packet /home/holden/mckernel/scripts/application-tests/packets/packet-006.json",
+      "outcome": "PASS"
+    },
+    {
+      "command": "python3 -B /home/holden/mckernel/scripts/application-tests/validate.py --packet /home/holden/mckernel/scripts/application-tests/packets/packet-006.json --emit-context /home/holden/mckernel-work/scratch/application-test-drafts-20260909/packet-006-context-attempt-1.json",
+      "outcome": "PASS"
+    },
+    {
+      "command": "git diff --check",
+      "outcome": "PASS"
+    }
+  ],
+  "unresolved_oracles": [],
+  "blocked_execution_capabilities": [
+    "current-inputs",
+    "pinned-application-inventory",
+    "runtime-transport-fault-injection",
+    "runner-contract"
+  ],
+  "first_failure_event": null,
+  "max_escalation": [
+    "Pin pinned-application-inventory to the reviewed coreutils /usr/bin/coreutils argv contract before execution."
+  ],
+  "next_packet_id": "packet-007"
+}

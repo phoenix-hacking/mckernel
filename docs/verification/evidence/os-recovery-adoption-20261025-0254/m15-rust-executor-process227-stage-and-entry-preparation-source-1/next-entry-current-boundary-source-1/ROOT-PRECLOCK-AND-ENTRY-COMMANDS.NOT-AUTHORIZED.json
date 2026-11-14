@@ -1,0 +1,144 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "COMPLETE_MECHANICAL_PRECLOCK_AND_NORMAL_ONE_ENTRY_SEQUENCE_NOT_AUTHORIZED",
+  "current_Root57": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER57.json",
+    "bytes": 18845,
+    "sha256": "0140dcb85e685cce3c23d7f76b50b05c092f0db4fa8b5f3e651c8467bfdf2f55"
+  },
+  "latest_free": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/independent-postbuild-current-free-review-1/CURRENT-FREE.json",
+    "bytes": 5561,
+    "sha256": "270a93392db9d5c64c7546d43ac36cb604b85da4668884736b4920b623c3111d"
+  },
+  "actual_completed_stage": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/next-entry-current-boundary-source-1/ROOT-ACTUAL-SCRATCH-STAGE.json",
+    "bytes": 934,
+    "sha256": "6ceccfb91b0ad7fc1ff7d6353613345db4ab625670871b126114cbaca73ffb99"
+  },
+  "actual_completed_binder": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/next-entry-current-boundary-source-1/original227-contract-case-correction-source-1/ROOT-ACTUAL-BIND-RESULT.json",
+    "bytes": 1698,
+    "sha256": "1fdf831915fec76ed72344cc90c284d763b1c1754a98dfcb52ea15f65ec16c94"
+  },
+  "observer_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/next-entry-current-boundary-source-1/BOUND-CURRENT-OBSERVER.SOURCE-ONLY.py",
+    "bytes": 12545,
+    "sha256": "838f7883701f4b1946b219b99b4cf317004443d4ab857f54cac7ce4f77941f01"
+  },
+  "observer_schema": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/next-entry-current-boundary-source-1/BOUND-OBSERVER-SCHEMA.SOURCE-ONLY.json",
+    "bytes": 653,
+    "sha256": "9e59b8b3b5d0e10a960bc788faa752a017a7ed74e9447f01c7797cfdcb2856c5"
+  },
+  "observer_source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/next-entry-current-boundary-source-1/independent-root57-source-review-1/REVIEW.json",
+    "bytes": 7273,
+    "sha256": "ca761d3b9ba13bc5c0f2587c98484ee8b1af5cf79c1b077729a21cb220261b03"
+  },
+  "observer_schema_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/next-entry-current-boundary-source-1/independent-root57-source-review-1/OBSERVER-SCHEMA-BINDING-REVIEW.json",
+    "bytes": 2565,
+    "sha256": "ddace6a95236c8eda0c0cbd08ba2f6d8c7b4e78ecc710a4188a3ce886a7f43fe"
+  },
+  "steps": [
+    {
+      "step": "Root source/case/nonce data fill before clock",
+      "argv": null,
+      "inputs": [
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/next-entry-current-boundary-source-1/ROOT-SOURCE-AUTHORITY.TEMPLATE.NOT-AUTHORITY.json",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/next-entry-current-boundary-source-1/ROOT-CASE-CAPABILITY.TEMPLATE.NOT-AUTHORITY.json",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/next-entry-current-boundary-source-1/ROOT-NATIVE-FINAL-FILL.TEMPLATE.NOT-AUTHORITY.json"
+      ],
+      "requires": "Root supplies genuine sourceauthority/casecapability/stageacceptance/newunusednonce+reservation; actualstage/manifest/Root57/currentobserver reviews alreadyknown",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Root source/case/nonce data fill before clock"
+    },
+    {
+      "step": "Seal exact source context",
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/next-entry-current-boundary-source-1/finalize_original227_context.py",
+        "--seal-source-context",
+        "--root-inputs",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/next-entry-current-boundary-source-1/ROOT-ACTUAL-NATIVE-FINAL-FILL.INPUT.json",
+        "--root-inputs-sha256",
+        null
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Seal exact source context"
+    },
+    {
+      "step": "Literal owner/full original static check",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/next-entry-current-boundary-source-1/root-adopted-process227-entry-1/prepare_startup_bindings.py",
+        "--check-static"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Literal owner/full original static check"
+    },
+    {
+      "step": "Bind Root newly reserved unused original227 nonce",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/next-entry-current-boundary-source-1/root-adopted-process227-entry-1/prepare_startup_bindings.py",
+        "--nonce",
+        null
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Bind Root newly reserved unused original227 nonce"
+    },
+    {
+      "step": "Bind original normal once bridge source",
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/next-entry-current-boundary-source-1/finalize_original227_context.py",
+        "--bind-bridge"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Bind original normal once bridge source"
+    },
+    {
+      "step": "Root exact flat source publication",
+      "argv": null,
+      "requires": "Publish static+all5capture_sources+oncebridge+external838fobserver/9e59schema as files:list exact actualblobs; no rows/nestedmanifest substitution",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Root exact flat source publication"
+    },
+    {
+      "step": "Original normal Resource2 capture+immediate pending binder once",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/next-entry-current-boundary-source-1/root-adopted-process227-entry-1/run_startup_resource_once.py"
+      ],
+      "requires": "Root actual authority after allsource checks; original120s freshness starts onlyhere, no model/codeediting betweencapture/pending",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Original normal Resource2 capture+immediate pending binder once"
+    },
+    {
+      "step": "Independent exact original227 execution review + conditional Root one-entry authorization",
+      "argv": null,
+      "requires": "Positive wrapper0 and pending/resourcepresent/fresh; failure stop no retry/refresh. Original5298 oracles and controls exact.",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Independent exact original227 execution review + conditional Root one-entry authorization"
+    },
+    {
+      "step": "Original one normal entry bridge",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/next-entry-current-boundary-source-1/root-adopted-process227-entry-1/root_once_startup_entry.py"
+      ],
+      "requires": "Actual independentPASS +Rootconditionalauth, freshoneO_EXCLclaim only; Rootownspositivejoin/retirement/fullcase acceptance",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Original one normal entry bridge"
+    }
+  ],
+  "source_algorithm_ported": false,
+  "current54_or53_alias": false,
+  "frozen_subject": "227mcexece5d/image60e/collectorab3e/payload6abb/oracle4eba unchanged; commonRoot57observer doesnotselectapplicationtuple",
+  "actual_native_source_seal": null,
+  "actual_native_grant": null,
+  "runtime_authority": null
+}

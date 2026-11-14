@@ -1,0 +1,112 @@
+{
+  "schema": "scratch21.cleanup-independent-execution-review.v1",
+  "status": "PASS_EXECUTION_FINALIZATION",
+  "reviewer": "/root/scratch21_source_review",
+  "author": "/root/scratch21_transaction",
+  "independent_of_implementation": true,
+  "acceptance_credit": false,
+  "proposal": {
+    "path": "docs/verification/evidence/scratch21-cleanup-execution-proposal-20261017.json",
+    "sha256": "28f56af3e72c411a3753733d29fd83f550fc3c392911d5b3e001b5d39f0ea69b",
+    "published_commit": "748c9db2ecbd2b4fa0ebde7c2db061d01d412358",
+    "status": "NOT_RELEASED"
+  },
+  "source": {
+    "commit": "0c8f2cef2f200b88bcf79e40255d4dfe9bae1e25",
+    "tree": "6908f84a6fb119ecd39508248e6e2138a439efe9",
+    "script_path": "scripts/native_exact_scratch21_terminal_cleanup.py",
+    "script_sha256": "6606af40114eb5b6019438c4127948081d80bbe65144d841e906a7cba84aabed",
+    "tests_path": "scripts/tests/test_native_exact_scratch21_terminal_cleanup.py",
+    "tests_sha256": "e1467625cfcc848c7834e23c6bff26a535b40115a0d85bb512f488bf8fcb7d90",
+    "review_path": "docs/verification/evidence/scratch21-cleanup-independent-source-review-20261017.json",
+    "review_sha256": "f1c5065880df2b4a4769cde6b7b0ac68621108f663c480d1b332f16c599b3b91",
+    "local_and_committed_blobs_match": true,
+    "origin_branch_at_proposal_commit": true
+  },
+  "observation": {
+    "path": "docs/verification/evidence/scratch21-cleanup-execution-observation-20261017.json",
+    "sha256": "8f2d2fb0da327f3525233860e6573294b164ee608dbe2b6a65c7b3df6a3d7a60",
+    "exact_proposal_join": true,
+    "filesystem_uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52",
+    "scratch_device": 1828,
+    "mount": "/dev/loop36 ext4 rw,nosuid,nodev,relatime at /home/holden/mckernel-work/scratch",
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "root_lock_identity": [27, 4],
+    "retained_exclusion_inodes": [57687, 57688],
+    "container_id": "e1f6dd145149c026c46adb82c3f3addb9e3c9e2a12b0d71a6813f00895220ea9",
+    "container_exit_code": 1,
+    "container_pid": 0,
+    "owner_nonce": "1439909012a04cf789981b951b34d399",
+    "owner_pid_starttime": [3788091, "110575783"],
+    "full_container_profile_matches_frozen_baseline": true,
+    "mount_order_handling": "Compare Mounts after sorting by Destination; no field/value changes are accepted.",
+    "protected_failure_files": 5,
+    "owner_evidence_entries": 40,
+    "direct_input_bindings": 4,
+    "preserved_output_evidence_directories": 2,
+    "all_listed_file_metadata_and_hashes_checked_read_only": true,
+    "candidate_head": "28a905bfc177627e338a3fd91f69329ac2e74046",
+    "request_lease_absent": true,
+    "all_seven_transaction_paths_absent": true,
+    "privileged_observer_publishers": [],
+    "runtime_requirement": "The executor must freshly acquire the bound root flock and repeat its strict root full-process/container census, protected inventory, mount, boot and identity checks; this retained observation does not replace those checks."
+  },
+  "resource_profile": {
+    "operation": "One serialized host-root archival cleanup only; no new build/container/guest/compiler execution.",
+    "observed_host_available_bytes": 29457137664,
+    "observed_scratch_available_bytes": 33520865280,
+    "observed_memavailable_kib": 29786636,
+    "minimum_host_free_gib": 16,
+    "minimum_scratch_free_gib": 12,
+    "shared_aggregate_jobs": 7,
+    "shared_aggregate_planning_gib": 24,
+    "original_stopped_container_profile": "CPUs 2-5, 4 CPUs, 12 GiB, MemorySwap 12 GiB (no extra swap), 512 tasks, network none, unprivileged, all capabilities dropped; profile unchanged.",
+    "review_checks": "Read-only local file/Git/mount/capacity checks and disposable Python under CPU0, 2 GiB virtual-memory ceiling, 180-second timeout; no root calls by this reviewer."
+  },
+  "mechanical_finalization": {
+    "output_path": "docs/verification/evidence/scratch21-cleanup-execution-release-20261017.json",
+    "only_changed_top_level_fields": ["status", "execution_review"],
+    "status": "PASS_EXECUTION_RELEASE",
+    "execution_review": {
+      "status": "PASS",
+      "reviewer": "/root/scratch21_source_review",
+      "evidence_path": "docs/verification/evidence/scratch21-cleanup-independent-execution-review-20261017.json",
+      "evidence_sha256_rule": "The exact SHA256 of this completed report file."
+    },
+    "all_other_values": "Must remain structurally byte-value-equivalent to the exact hash-bound proposal. Whitespace and JSON key ordering may change; duplicate keys are forbidden.",
+    "before_root_execution": "Publish/fetch the proposal, report and mechanically finalized release; provide exact final release bytes/hash for independent confirmation. This finalization decision alone is not the final-release confirmation."
+  },
+  "command": {
+    "execute_once_template": [
+      "/usr/bin/sudo", "-A", "/home/holden/anaconda3/bin/python3", "-B",
+      "/home/holden/mckernel/scripts/native_exact_scratch21_terminal_cleanup.py",
+      "--release", "/home/holden/mckernel/docs/verification/evidence/scratch21-cleanup-execution-release-20261017.json",
+      "--release-sha256", "EXACT_INDEPENDENTLY_CONFIRMED_FINAL_RELEASE_SHA256", "--execute"
+    ],
+    "interpreter_resolves_to": "/home/holden/anaconda3/bin/python3.9",
+    "interpreter_sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb",
+    "credential_policy": "Inherited approved SUDO_ASKPASS via sudo -A; no -n, credential reads, direct helper invocation, printed secrets or added environment preservation.",
+    "post_execution_replay": "After a positive execution result, the same exact root command without --execute is authorized solely to capture immutable PASS_TERMINAL_REPLAY and prove unchanged transaction files for independent postflight. A replay performs no cleanup mutations.",
+    "capture": "Retain complete stdout/stderr, exit status, final release bytes/hash, exact process identities if still live, and plan/journal/capture/archive identities."
+  },
+  "execution_prerequisites": [
+    "Independent confirmation of the mechanically finalized release bytes and hash; exact script/tests/source remain unchanged.",
+    "One campaign coordinator; no concurrent project build/cleanup/native compiler/guest, and no conflicting heavy lease.",
+    "The declared project publisher contract is limited to regular-file O_CREAT|O_EXCL publishers. Arbitrary same-UID directory substitution after the final sentinel check remains excluded.",
+    "All fresh executor census, stable UUID/live device/boot/root-lock/protected-file identities and exact stopped container checks must pass immediately before mutations and each sentinel release.",
+    "Retain failed scratch21 request, original evidence, source inputs, stopped-container logs and archived exclusion originals; never replay scratch21 or raw-remove/unlink its objects."
+  ],
+  "failure_policy": [
+    "Any mismatch, uncertain observation or unclassified state refuses execution; do not substitute identities or weaken the oracle.",
+    "After uncertain mutation, preserve the live quarantine process and its root flock. Do not apply an outer kill/timeout, start another workload, or interpret absent status output as completed cleanup.",
+    "A failed attempt remains evidence. Do not retry an unchanged deterministic failure or create a renamed transaction; independent exact-state reconciliation is required.",
+    "Only independent postflight over actual result, exact release/plan/journal/capture/archives, protected failure inventory, current container absence and immutable terminal replay may issue PASS_CLEANUP."
+  ],
+  "preserved_review_checker_failure": {
+    "initial_result": "A read-only reviewer check initially compared unsorted Docker Mounts arrays and asserted false before any mutation.",
+    "bounded_correction": "Compared the same Mounts entries by Destination, matching the reviewed executor contract. Every field/value then matched the frozen baseline.",
+    "corrected_result": "Read-only source/input/evidence/transaction-path checks return 0; no source or proposal edits."
+  },
+  "blockers": [],
+  "scope": "Mechanical finalization of this sole scratch21 archival-cleanup release, pending exact final-byte confirmation; no scratch22 materialization/build/guest authority and no OS acceptance."
+}

@@ -1,0 +1,67 @@
+{
+  "operations": [
+    null,
+    {
+      "role": "readback-1",
+      "profile": "metadata",
+      "argv_template": [
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--nofile=256",
+        "--core=0",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "30s",
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/tar",
+        "-C",
+        "/home/holden/mckernel-work/scratch/cyc205-p/a.owner-4ca75a609b4b42b2b30d243a930e2f51",
+        "-czf",
+        "-",
+        "."
+      ],
+      "stdout_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/native-packet-1/readback-1.stdout",
+      "stderr_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/native-packet-1/readback-1.stderr",
+      "status_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/native-packet-1/readback-1.status.json"
+    }
+  ],
+  "profiles": {
+    "metadata": {
+      "cpu": 7,
+      "stream_fsize": 33554432,
+      "parent_wall_seconds": 35,
+      "parent_kill_grace_seconds": 4,
+      "cpu_limits": 30,
+      "as_limit": 1073741824
+    },
+    "native": {
+      "cpu": 7,
+      "stream_fsize": 33554432,
+      "parent_wall_seconds": null,
+      "parent_kill_grace_seconds": null,
+      "cpu_limits": null,
+      "as_limit": null
+    },
+    "snapshot_metadata": {
+      "cpu": 6,
+      "stream_fsize": 33554432,
+      "parent_wall_seconds": 35,
+      "parent_kill_grace_seconds": 4,
+      "cpu_limits": 30,
+      "as_limit": 1073741824
+    }
+  },
+  "release": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-physical-review-20261020-1/decision.json",
+    "sha256": "33e1d2c5e000b789f9adf0595e02a5e50075cbe54a61e6154f267a92bb9ca196",
+    "bytes": 16451
+  },
+  "root_installed_release_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-physical-review-20261020-1/decision.json"
+}

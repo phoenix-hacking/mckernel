@@ -1,0 +1,7 @@
+    args = arguments(argv)
+    os.umask(0o077)
+    git_dir = subprocess.check_output(["git", "-C", str(REPO), "rev-parse", "--git-common-dir"], text=True).strip()
+    directory = (REPO / git_dir).resolve() / "os-autopilot"
+    if args.status:
+        state = directory / "state.json"
+        current = json.loads(state.read_text()) if state.exists() else {"phase": "not_started", "state_path": str(state)}

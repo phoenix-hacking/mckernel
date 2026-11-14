@@ -1,0 +1,109 @@
+--- accepted-reference/numa_interval_app.rs
++++ proposed-new-case/numa_nonempty_overlap_app.rs
+@@ -7,11 +7,11 @@
+ use std::io::{self, Write};
+ 
+ const PAGE: usize = 4096;
+-const LEN: usize = 3 * PAGE;
++const LEN: usize = 7 * PAGE;
+ const GET_MEMPOLICY: usize = 239;
+ const MBIND: usize = 237;
+ const GUARD: u64 = 0x6b9ac318e52704df;
+-const PASS: &[u8] = b"numa allowed=1 interval=1 queries=9 mode=1 mask=1 neighbors=2 process=1 guards=1 bytes=12288 preserved=1 unmapped=1\n";
++const PASS: &[u8] = b"numa overlap=1 binds=3 queries=48 split=1 reinsert=1 neighbors=4 process=1 guards=1 bytes=28672 preserved=3 unmapped=1\n";
+ 
+ // No nomem option: the kernel reads and writes pointed-to application bytes.
+ unsafe fn syscall6(n: usize, a: [usize; 6]) -> isize {
+@@ -49,6 +49,36 @@
+         else { Some([mask[1], mask[2], mask[3], mask[4]]) } })
+ }
+ 
++fn bind(start: usize, len: usize, expected: &Policy) -> Result<(), Failure> {
++    let mask = expected.mask.as_ref().ok_or(Failure { stage: "bind-mask", raw: 0 })?;
++    let raw = unsafe { syscall6(MBIND, [start, len, expected.mode as usize,
++        mask.as_ptr() as usize, 256, 0]) };
++    require(raw == 0, "mbind", raw)
++}
++
++fn check_bytes(base: usize) -> Result<(), Failure> {
++    for i in 0..LEN {
++        let byte = unsafe { (base as *const u8).add(i).read_volatile() };
++        require(byte == ((i * 37 + 11) % 251) as u8, "mapping-bytes", i as isize)?;
++    }
++    Ok(())
++}
++
++fn check_layout(base: usize, a: &Policy, b: &Policy, neighbors: &[Policy; 4],
++                middle: [bool; 5]) -> Result<(), Failure> {
++    // Two independently specified endpoints per page: inclusive first/last byte.
++    for page in 0..7 {
++        for edge in 0..2 {
++            let address = base + page * PAGE + if edge == 0 { 0 } else { PAGE - 1 };
++            let expected = if page == 0 { &neighbors[edge] }
++                else if page == 6 { &neighbors[2 + edge] }
++                else if middle[page - 1] { b } else { a };
++            require(policy(address, 2)? == *expected, "layout-policy", address as isize)?;
++        }
++    }
++    check_bytes(base)
++}
++
+ fn consume(base: usize) -> Result<(), Failure> {
+     let mut allowed = [GUARD, 0, 0, 0, 0, GUARD];
+     let raw = unsafe { syscall6(GET_MEMPOLICY, [0, allowed[1..].as_mut_ptr() as usize, 256, 0, 4, 0]) };
+@@ -56,35 +86,30 @@
+     require(allowed[0] == GUARD && allowed[5] == GUARD, "allowed-guards", 0)?;
+     let (word, value) = allowed[1..5].iter().copied().enumerate()
+         .find(|(_, value)| *value != 0).ok_or(Failure { stage: "allowed-empty", raw: 0 })?;
+-    // Select from the actual exposed mask, never from assumed node numbering.
+     let mut selected = [0u64; 4];
+     selected[word] = 1u64 << value.trailing_zeros();
++    let baseline = policy(0, 0)?;
++    let a = Policy { mode: if baseline.mode == 2 { 1 } else { 2 }, mask: Some(selected) };
++    // Both interval modes differ from process fallback, even when it is nondefault.
++    // INTERLEAVE=3 is needed only when fallback already uses BIND/PREFERRED.
++    let b = Policy { mode: if baseline.mode != 1 && a.mode != 1 { 1 } else { 3 },
++        mask: Some(selected) };
++    let neighbors = [policy(base, 2)?, policy(base + PAGE - 1, 2)?,
++        policy(base + 6 * PAGE, 2)?, policy(base + LEN - 1, 2)?];
++    require(neighbors.iter().all(|p| p != &a), "neighbor-witness", 0)?;
+ 
+-    let baseline = policy(0, 0)?;
+-    // Distinct from fallback: BIND=2, or PREFERRED=1 if already BIND.
+-    let mode: i32 = if baseline.mode == 2 { 1 } else { 2 };
+-    let start = base + PAGE;
+-    // Both addresses remain mapped, immediately outside [start,start+PAGE).
+-    let neighbors = [start - 1, start + PAGE];
+-    let before = [policy(neighbors[0], 2)?, policy(neighbors[1], 2)?];
+-    let expected = Policy { mode, mask: Some(selected) };
+-    // Even an inherited interval policy must be distinguishable from the
+-    // selected target policy; otherwise that neighbor cannot witness bounds.
+-    require(before.iter().all(|p| p != &expected), "neighbor-witness", 0)?;
+-    let raw = unsafe { syscall6(MBIND, [start, PAGE, mode as usize, selected.as_ptr() as usize, 256, 0]) };
+-    require(raw == 0, "mbind", raw)?;
+-
+-    for address in [start, start + PAGE / 2, start + PAGE - 1] {
+-        require(policy(address, 2)? == expected, "target-policy", 0)?;
+-    }
+-    for (address, previous) in neighbors.into_iter().zip(before) {
+-        require(policy(address, 2)? == previous, "neighbor-policy", 0)?;
+-    }
++    // A on all five interior pages: first insertion, preserving exterior pages.
++    bind(base + PAGE, 5 * PAGE, &a)?;
++    check_layout(base, &a, &b, &neighbors, [false, false, false, false, false])?;
++    // Clear a strict interior of that existing A node. Both A tails survive;
++    // the clear allocates/reinserts the right tail before mbind inserts B.
++    bind(base + 3 * PAGE, PAGE, &b)?;
++    check_layout(base, &a, &b, &neighbors, [false, false, true, false, false])?;
++    // Cross both surviving A nodes and fully cover B: truncate both A tails,
++    // erase the old B, then insert the new three-page B interval.
++    bind(base + 2 * PAGE, 3 * PAGE, &b)?;
++    check_layout(base, &a, &b, &neighbors, [false, true, true, true, false])?;
+     require(policy(0, 0)? == baseline, "process-policy-changed", 0)?;
+-    for i in 0..LEN {
+-        let byte = unsafe { (base as *const u8).add(i).read_volatile() };
+-        require(byte == ((i * 37 + 11) % 251) as u8, "mapping-bytes", i as isize)?;
+-    }
+     Ok(())
+ }
+ 

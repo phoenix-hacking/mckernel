@@ -1,0 +1,96 @@
+--- a/adapters/native_rust_exact_mckernel_image_offline.py
++++ b/adapters/native_rust_exact_mckernel_image_offline.py
+@@ -1413,6 +1413,7 @@
+                 _validate_modules_end_probe(build, tools, evidence)
+                 _validate_reset_production_abi(source_root, build, tools, evidence, env, stdout, stderr, timeout, command_rows)
+                 _validate_release_fp_regs_production(source_root, build, tools, evidence, env, stdout, stderr, timeout, command_rows)
++                _validate_release_tid_production(source_root, build, tools, evidence, env, stdout, stderr, timeout, command_rows)
+         progress["phase"] = "artifact-validation"
+         _check_signal()
+         _atomic_json(evidence / "progress.json", progress)
+@@ -1669,6 +1670,85 @@
+                  'default_link': 'PENDING_IMAGE_MAKE', 'descriptor_relocations_and_release_body': 'PENDING_POSTBUILD'})
+ 
+ 
++RELEASE_TID_PROCESS_ASSERTIONS = '\n_Static_assert(sizeof(struct process)==1728 && _Alignof(struct process)==64,"Process layout");\n_Static_assert(sizeof(struct thread)==5568 && _Alignof(struct thread)==64,"Thread layout");\n_Static_assert(__builtin_offsetof(struct process,tids)==256,"Process.tids");\n_Static_assert(__builtin_offsetof(struct process,nr_tids)==264,"Process.nr_tids");\n_Static_assert(__builtin_offsetof(struct thread,tid)==20,"Thread.tid");\n_Static_assert(__builtin_types_compatible_p(__typeof__(((struct process*)0)->tids),struct mcexec_tid*),"TID array pointer ABI");\n_Static_assert(__builtin_types_compatible_p(__typeof__(((struct process*)0)->nr_tids),int),"TID count ABI");\n_Static_assert(__builtin_types_compatible_p(__typeof__(((struct thread*)0)->tid),int),"thread TID ABI");\n_Static_assert(sizeof(struct mcexec_tid)==16 && _Alignof(struct mcexec_tid)==8,"TID entry layout");\n_Static_assert(__builtin_offsetof(struct mcexec_tid,thread)==8,"TID entry thread offset");\n_Static_assert(__builtin_types_compatible_p(__typeof__(&__release_tid),void(*)(struct process*,struct thread*)),"real release entry prototype");\n_Static_assert(__builtin_types_compatible_p(__typeof__(&process_destroy_thread_release_tid_bridge),void(*)(void*,void*)),"real destroy consumer ABI");\n_Static_assert(__builtin_types_compatible_p(__typeof__(&process_release_tid_body_result),int(*)(void*,int,unsigned long,unsigned long,void*,int,process_tid_log_fn_t)),"existing selected helper ABI");\n_Static_assert(__builtin_types_compatible_p(process_tid_log_fn_t,void(*)(int,void*,int)),"logger callback ABI");\n_Static_assert(sizeof(struct ddebug)==32 && _Alignof(struct ddebug)==8,"dynamic debug descriptor ABI");\n_Static_assert(__builtin_offsetof(struct ddebug,fmt)==16,"dynamic debug pointer prefix");\n_Static_assert(__builtin_offsetof(struct thread,proc)==4304,"Thread.proc");\n_Static_assert(__builtin_offsetof(struct thread,system_tsc)==5040,"Thread.system_tsc");\n_Static_assert(__builtin_offsetof(struct thread,user_tsc)==5048,"Thread.user_tsc");\n_Static_assert(__builtin_offsetof(struct process,update_lock)==64,"Process.update_lock");\n_Static_assert(__builtin_offsetof(struct process,stime)==1296,"Process.stime");\n_Static_assert(__builtin_offsetof(struct process,utime)==1312,"Process.utime");\n_Static_assert(sizeof(struct timespec)==16 && _Alignof(struct timespec)==8,"timespec ABI");\n_Static_assert(sizeof(struct mcs_rwlock_node_irqsave)==64 && _Alignof(struct mcs_rwlock_node_irqsave)==64,"lock node ABI");\n_Static_assert(__builtin_types_compatible_p(__typeof__(&process_destroy_thread_time_account_bridge),void(*)(void*)),"real callback ABI");\n_Static_assert(__builtin_types_compatible_p(__typeof__(&tsc_to_ts),void(*)(unsigned long,struct timespec*)),"clock conversion ABI");\n_Static_assert(__builtin_types_compatible_p(__typeof__(&ts_add),void(*)(struct timespec*,const struct timespec*)),"time addition ABI");\n'
++
++def _validate_release_tid_production(source_root, build, tools, evidence, env, stdout, stderr, timeout, command_rows):
++    """Affected actual process TU and already-compiled real native/legacy crates."""
++    rows = json.loads((build / 'compile_commands.json').read_text())
++    process = source_root / 'kernel/process.c'
++    matches = [r for r in rows if Path(r['file']).resolve() == process.resolve()]
++    _fail(len(matches) == 1, 'release TID actual process compile row count')
++    row = matches[0]
++    args = list(row['arguments']) if 'arguments' in row else shlex.split(row['command'])
++    _fail(args[0] == tools['tools']['cc']['path'] and '14.3.1' in tools['tools']['cc']['version'], 'release TID pinned GCC14')
++    _fail(args.count('-DMCKERNEL_RUST_PROCESS_HELPERS') == 1, 'release TID default selected process macro')
++    out = build / 'release-tid-production'
++    out.mkdir(mode=0o700)
++    fixture = out / 'production-process.c'
++    # No release prototype is injected: real source must supply the declaration
++    # before its destroy bridge. Truthful source provenance remains source-root.
++    fixture.write_text('#line 1 ' + json.dumps(str(process)) + chr(10) + process.read_text() +
++                       chr(10) + '#line 1 "release_tid_assertions.inc"' + chr(10) + RELEASE_TID_PROCESS_ASSERTIONS)
++    common = [args[0]]
++    skip = False
++    for token in args[1:]:
++        if skip:
++            skip = False
++            continue
++        if token in ('-o', '-MF', '-MT', '-MQ'):
++            skip = True
++            continue
++        if token in ('-c', '-MD', '-MMD', '-MP') or token == str(process):
++            continue
++        common.append(token)
++    proof = []
++    for mode in ('selected', 'fallback'):
++        command = list(common)
++        if mode == 'fallback':
++            command.remove('-DMCKERNEL_RUST_PROCESS_HELPERS')
++        command += ['-Werror=implicit-function-declaration', '-c', str(fixture), '-o', str(out / (mode + '-process.o'))]
++        phase = 'release-tid-full-process-' + mode
++        row_proof = {'phase': phase, 'argv': command, 'cwd': row['directory'],
++                     'source_sha256': _sha256(process), 'full_TU_fixture_sha256': _sha256(fixture),
++                     'exit_code': None, 'no_injected_release_prototype': True}
++        command_rows.append(row_proof)
++        row_proof['exit_code'] = _run_process(command, Path(row['directory']), env, stdout, stderr, timeout, phase)
++        proof.append(row_proof)
++        _atomic_json(evidence / 'release-tid-production-checks.json', {'status': 'PENDING', 'checks': proof})
++        _fail(row_proof['exit_code'] == 0, phase + ' failed')
++    # Existing FP gate immediately before this extension produces both full crates
++    # once. Do not repeat those compiler invocations or accept extracted fixtures.
++    objects = [('selected-process.o', out / 'selected-process.o', False),
++               ('fallback-process.o', out / 'fallback-process.o', True),
++               ('native-mckernel_rust.o', build / 'release-fp-regs-production/native-mckernel_rust.o', True),
++               ('legacy-mckernel_rust.o', build / 'release-fp-regs-production/legacy-mckernel_rust.o', True)]
++    for name, obj, defined in objects:
++        nmout = out / (name + '.nm')
++        nmerr = out / (name + '.nm.stderr')
++        command = [tools['tools']['nm']['path'], '-S', str(obj)]
++        code = _run_process(command, out, env, nmout, nmerr, timeout, 'release-tid-export-' + name, output_fsize=1048576)
++        _fail(code == 0 and nmerr.stat().st_size == 0 and nmout.stat().st_size < 1048576, 'release TID symbol capture ' + name)
++        symbols = [line.split() for line in nmout.read_text().splitlines()]
++        definitions = [v for v in symbols if len(v) >= 4 and v[-1] == '__release_tid' and v[-2] == 'T']
++        unresolved = [v for v in symbols if len(v) >= 2 and v[-1] == '__release_tid' and v[-2] == 'U']
++        _fail(len(definitions) == int(defined), 'release TID symbol definition ' + name)
++        time_definitions = [v for v in symbols if len(v) >= 4 and v[-1] == 'process_destroy_thread_time_account_bridge' and v[-2] == 'T']
++        time_unresolved = [v for v in symbols if len(v) >= 2 and v[-1] == 'process_destroy_thread_time_account_bridge' and v[-2] == 'U']
++        _fail(len(time_definitions) == int(defined), 'normal time-account symbol definition ' + name)
++        _fail(len(time_unresolved) == 0, 'normal time-account unresolved symbol ' + name)
++        if name == 'selected-process.o':
++            _fail(len(unresolved) == 1, 'release TID actual selected destroy callback reference')
++        else:
++            _fail(len(unresolved) == 0, 'release TID unresolved symbol ' + name)
++        if 'mckernel_rust' in name:
++            descriptors = [v for v in symbols if len(v) >= 4 and 'RELEASE_TID_DEBUG' in v[-1]]
++            _fail(len(descriptors) == 1 and int(descriptors[0][-3], 16) == 32, 'release TID real crate descriptor size ' + name)
++        proof.append({'phase': 'release-tid-export-' + name, 'argv': command, 'exit_code': code,
++                      'object_sha256': _sha256(obj), 'stdout_sha256': _sha256(nmout), 'stderr_bytes': nmerr.stat().st_size})
++    _atomic_json(evidence / 'release-tid-production-checks.json',
++                 {'status': 'PASS', 'checks': proof, 'full_native_legacy_crates_reused': True,
++                  'default_link': 'PENDING_IMAGE_MAKE', 'body_consumer_descriptor': 'PENDING_POSTBUILD', 'two_leaf_symbols': ['__release_tid', 'process_destroy_thread_time_account_bridge']})
++
+ def main(argv=None):
+     parser = argparse.ArgumentParser()
+     parser.add_argument("--source-root", required=True, type=Path)

@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "ipc.epoll-remove",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/ipc.epoll-remove"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["wait_rc=0 read=1 data=Y removed=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Deleting a registered descriptor removes it from epoll delivery", "The descriptor remains independently readable after deletion"],
+  "unresolved_expectations": ["Epoll deletion lifetime and descriptor readiness isolation require Max review."],
+  "max_question_for_reviewer": "Confirm EPOLL_CTL_DEL suppresses events while leaving the pipe descriptor and queued byte usable."
+}

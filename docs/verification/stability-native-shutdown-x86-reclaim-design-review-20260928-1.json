@@ -1,0 +1,47 @@
+{
+  "schema": "mckernel.stability.design-review.v1",
+  "date": "2026-09-28",
+  "status": "PASS_DESIGN",
+  "scope": "native x86 assigned-AP reset and Linux re-online as CPU-reclamation proof",
+  "review_limit": "explicitly supported native x86 AP profile; source/design only",
+  "source_hashes": {
+    "ihk/linux/driver/smp/smp-driver.c": "90fefdcb66ecd49cff6d43d2f5b8c13ce28010be2bde8043400cb2baebfa2544",
+    "ihk/linux/driver/smp/arch/x86_64/smp-arch-driver.c": "6ec820741ce6e77e4f60ce4c6b6577ed215a42ecf1a7e30207390ed6d0cbb745",
+    "host-kernel/kbuild/patches/0006-x86-export-owned-secondary-start-primitives.patch": "3c8ff35227f6943f236e5eecb94a1a2b42d3c431a0eb3edbd938aedd9ba861fd",
+    "host-kernel/native-rust/smp_cpu.rs": "9826d4f401a75485befa8728080794e95858b978c59af19d034254722e3346e2",
+    "host-kernel/native-rust/smp_resource.rs": "d8c567be5d3e3953bf2954d5e43130e5204ae4f6ad4158d18e7efb99088c64d3",
+    "host-kernel/native-rust/smp_memory.rs": "2004cee3e3e9a4a8e94f66f27f7f4710a13707c451138e1259d109f4e3bcc429",
+    "kernel/rust/smp_ikc.rs": "64056fc3418792b6693875bd0dc4b3c59a76585bce2ce61e2e7203c38e35cfbe",
+    "linux-6.12.0-211.44.1.el10_2/arch/x86/kernel/smpboot.c": "d95592b9e83d89230b52207112f9fc1ea1d128576ae37c22f099c2a57d701739",
+    "linux-6.12.0-211.44.1.el10_2/kernel/cpu.c": "ac69ccc32de77903de63bb7c75c6cb4200567b23a30918004bfec6dee4d92850"
+  },
+  "accepted_design": {
+    "reset_primitive": "export the existing Linux send_init_sequence(apicid) as an attempted reset only; do not add SIPI",
+    "reclamation_proof": "successful synchronous device_online from the retained known-offline CPU identity, followed by identity and cpu_online revalidation",
+    "locking": "retain CPU policy and device-hotplug exclusion; hold CPU read exclusion for validation/reset effects, release it and restore preemption before sleepable device_online",
+    "failure_rule": "any failed or uncertain reset/online retains every owner and a per-CPU progress ledger; never compensate to guest-running after INIT"
+  },
+  "required_order": [
+    "close admission and retain exact generation, CPU/device identities, module pins, guest allocations and IRQ-work storage",
+    "quiesce all guest and host producers",
+    "validate completed original Linux offline state and retained device/APIC identity",
+    "issue per-AP INIT assert/deassert with preemption disabled",
+    "perform sleepable Linux device_online without CPU read exclusion",
+    "require device_online success and revalidate identity plus cpu_online for every assigned CPU",
+    "drain and unpublish callbacks, IRQ-work, workers and mappings before storage release or generation reuse"
+  ],
+  "blocking_followups": [
+    "implement the reset/re-online journal as a separate shutdown primitive rather than reusing ordinary hotplug rollback",
+    "implement exact per-generation Linux IRQ-work publication inventory, unpublish and callback drain",
+    "test wrong, BSP and online targets; partial reset; online failure/no-op; identity change; repeat recovery; concurrent hotplug; pending IRQ publication without IPI; callback drain and generation reuse",
+    "establish the explicitly supported APIC, firmware and hypervisor profile"
+  ],
+  "excluded": [
+    "implementation acceptance",
+    "production build or module acceptance",
+    "privileged or guest execution",
+    "IRQ-work or callback drain acceptance",
+    "universal x86 applicability",
+    "lifecycle or whole-OS acceptance"
+  ]
+}

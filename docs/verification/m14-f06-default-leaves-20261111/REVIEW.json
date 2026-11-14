@@ -1,0 +1,1064 @@
+{
+  "additional_necessary_source": {
+    "bytes": 619886,
+    "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+    "sha256": "d3be0ac4bfc9a103db7709fb8ba1d40b3e3e4eb144cc5c96fe3d54cbfefbcafe"
+  },
+  "at": "2026-11-11T01:29:09.287706+00:00",
+  "bound_current_source": {
+    "kernel/rust/f03_terminate.rs": {
+      "bytes": 21974,
+      "path": "/home/holden/mckernel/kernel/rust/f03_terminate.rs",
+      "sha256": "c32cbef93b4441aa8adc12090b9d02d3c9bedbcc8fd99aa3a1b6111f0f3dd328"
+    },
+    "kernel/rust/f06_process_vm_entry.rs": {
+      "bytes": 5428,
+      "path": "/home/holden/mckernel/kernel/rust/f06_process_vm_entry.rs",
+      "sha256": "0e9d9d23db1a376f38757fba98c6b34d0aed4f4b6c45398b0b9372d7624c3d2e"
+    },
+    "kernel/rust/f06_signal_tail.rs": {
+      "bytes": 69014,
+      "path": "/home/holden/mckernel/kernel/rust/f06_signal_tail.rs",
+      "sha256": "32e44bf79e3058ad2b43b8ed530d606281143fa7217aebad1a194cc49ccdfd97"
+    },
+    "kernel/rust/syscall_policy.rs": {
+      "bytes": 1240596,
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "sha256": "3c91a22fdae204240201969957036a175fa207cb1d076ff5723650ce5a9adb8f"
+    },
+    "kernel/syscall.c": {
+      "bytes": 946602,
+      "path": "/home/holden/mckernel/kernel/syscall.c",
+      "sha256": "81682ae8cac4a0792d521f5cca240cf81db837f087bdc1c898a9a6561621e9be"
+    }
+  },
+  "coherent_image": {
+    "bytes": 10588200,
+    "mode": "755",
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/mckernel.img",
+    "sha256": "100d078609104b9853b14705fb3d0ee6ef4d6597101e5dad3f948ae46a94a5e2"
+  },
+  "coherent_map": {
+    "bytes": 991255,
+    "mode": "644",
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/mckernel.img.map",
+    "sha256": "6f11926be391d76579a60f37a60297585c629b81f980a844e4c70f60b39c6cd9"
+  },
+  "current_original_ledger": {
+    "bytes": 892779,
+    "path": "/home/holden/mckernel/docs/verification/m14-m15-closure-progress.json",
+    "sha256": "b102e9f3b9b7b59efc56d7615be6d925f03f9295b2189adb9b568f4e67ba5b96"
+  },
+  "decision": "WHOLE_TECHNICAL_GO_06_02_AND_06_05;_06_03_NOT_YET_EXACT_SEVEN_PROJECT_C_RESUME_FUNCTIONS",
+  "finite_real_lower_provider_bindings": [
+    {
+      "bytes": 1421,
+      "input_section": ".ltext.do_syscall",
+      "kind": "FUNC",
+      "name": "do_syscall",
+      "owner": "rust/mckernel_rust.o",
+      "value": 18446744073684700992
+    },
+    {
+      "bytes": 448,
+      "input_section": ".ltext.syscall_generic_forwarding",
+      "kind": "FUNC",
+      "name": "syscall_generic_forwarding",
+      "owner": "rust/mckernel_rust.o",
+      "value": 18446744073685235328
+    },
+    {
+      "bytes": 456,
+      "input_section": ".ltext.sync_child_event",
+      "kind": "FUNC",
+      "name": "sync_child_event",
+      "owner": "rust/mckernel_rust.o",
+      "value": 18446744073685182336
+    },
+    {
+      "bytes": 143,
+      "input_section": ".ltext.f03_wait_release_thread",
+      "kind": "FUNC",
+      "name": "release_thread",
+      "owner": "rust/mckernel_rust.o",
+      "value": 18446744073684737360
+    },
+    {
+      "bytes": 672,
+      "input_section": ".ltext.release_process_vm",
+      "kind": "FUNC",
+      "name": "release_process_vm",
+      "owner": "rust/mckernel_rust.o",
+      "value": 18446744073685105424
+    },
+    {
+      "bytes": 1075,
+      "input_section": ".ltext.release_process",
+      "kind": "FUNC",
+      "name": "release_process",
+      "owner": "rust/mckernel_rust.o",
+      "value": 18446744073685103248
+    },
+    {
+      "bytes": 547,
+      "input_section": ".ltext.free_all_process_memory_range",
+      "kind": "FUNC",
+      "name": "free_process_memory_ranges",
+      "owner": "rust/mckernel_rust.o",
+      "value": 18446744073684756912
+    },
+    {
+      "bytes": 547,
+      "input_section": ".ltext.free_all_process_memory_range",
+      "kind": "FUNC",
+      "name": "free_all_process_memory_range",
+      "owner": "rust/mckernel_rust.o",
+      "value": 18446744073684756912
+    },
+    {
+      "bytes": 2328,
+      "input_section": ".ltext.process_memory_range_free_bridge",
+      "kind": "FUNC",
+      "name": "process_memory_range_free_bridge",
+      "owner": "rust/mckernel_rust.o",
+      "value": 18446744073685031392
+    },
+    {
+      "bytes": 17,
+      "input_section": ".ltext.process_free_all_ranges_bridge",
+      "kind": "FUNC",
+      "name": "process_free_all_ranges_bridge",
+      "owner": "rust/mckernel_rust.o",
+      "value": 18446744073685018048
+    },
+    {
+      "bytes": 6,
+      "input_section": ".ltext.flush_nfo_tlb_mm",
+      "kind": "FUNC",
+      "name": "flush_nfo_tlb_mm",
+      "owner": "rust/mckernel_rust.o",
+      "value": 18446744073684755328
+    },
+    {
+      "bytes": 270,
+      "input_section": ".ltext.detach_address_space",
+      "kind": "FUNC",
+      "name": "detach_address_space",
+      "owner": "rust/mckernel_rust.o",
+      "value": 18446744073684669168
+    },
+    {
+      "bytes": 188,
+      "input_section": ".ltext.f03_mprotect_lookup_bridge_v1",
+      "kind": "FUNC",
+      "name": "lookup_process_memory_range",
+      "owner": "rust/mckernel_rust.o",
+      "value": 18446744073684714832
+    },
+    {
+      "bytes": 1566,
+      "input_section": ".ltext.page_fault_process_vm",
+      "kind": "FUNC",
+      "name": "page_fault_process_vm",
+      "owner": "rust/mckernel_rust.o",
+      "value": 18446744073684951056
+    },
+    {
+      "bytes": 424,
+      "input_section": ".ltext.find_process",
+      "kind": "FUNC",
+      "name": "find_process",
+      "owner": "rust/mckernel_rust.o",
+      "value": 18446744073684751872
+    },
+    {
+      "bytes": 536,
+      "input_section": ".ltext.find_thread",
+      "kind": "FUNC",
+      "name": "find_thread",
+      "owner": "rust/mckernel_rust.o",
+      "value": 18446744073684752304
+    },
+    {
+      "bytes": 309,
+      "input_section": ".ltext.process_unlock",
+      "kind": "FUNC",
+      "name": "process_unlock",
+      "owner": "rust/mckernel_rust.o",
+      "value": 18446744073685061840
+    },
+    {
+      "bytes": 18,
+      "input_section": ".ltext.hold_process_vm",
+      "kind": "FUNC",
+      "name": "hold_process_vm",
+      "owner": "rust/mckernel_rust.o",
+      "value": 18446744073684787616
+    },
+    {
+      "bytes": 342,
+      "input_section": ".ltext.ihk_mc_pt_virt_to_phys_size",
+      "kind": "FUNC",
+      "name": "ihk_mc_pt_virt_to_phys_size",
+      "owner": "rust/mckernel_rust.o",
+      "value": 18446744073684841248
+    },
+    {
+      "bytes": 49,
+      "input_section": ".ltext.mem_phys_to_virt_bridge",
+      "kind": "FUNC",
+      "name": "phys_to_virt",
+      "owner": "rust/mckernel_rust.o",
+      "value": 18446744073684903424
+    },
+    {
+      "bytes": 955,
+      "input_section": ".ltext.copy_from_user",
+      "kind": "FUNC",
+      "name": "copy_from_user",
+      "owner": "rust/mckernel_rust.o",
+      "value": 18446744073684651360
+    },
+    {
+      "bytes": 955,
+      "input_section": ".ltext.copy_to_user",
+      "kind": "FUNC",
+      "name": "copy_to_user",
+      "owner": "rust/mckernel_rust.o",
+      "value": 18446744073684652320
+    },
+    {
+      "bytes": 193,
+      "input_section": ".ltext.memcpy",
+      "kind": "FUNC",
+      "name": "memcpy",
+      "owner": "rust/mckernel_rust.o",
+      "value": 18446744073684910704
+    },
+    {
+      "bytes": 130,
+      "input_section": ".ltext.memset",
+      "kind": "FUNC",
+      "name": "memset",
+      "owner": "rust/mckernel_rust.o",
+      "value": 18446744073684914368
+    },
+    {
+      "bytes": 1194,
+      "input_section": ".ltext._kfree",
+      "kind": "FUNC",
+      "name": "_kfree",
+      "owner": "rust/mckernel_rust.o",
+      "value": 18446744073684583648
+    },
+    {
+      "bytes": 2089,
+      "input_section": ".ltext._kmalloc",
+      "kind": "FUNC",
+      "name": "_kmalloc",
+      "owner": "rust/mckernel_rust.o",
+      "value": 18446744073684584848
+    },
+    {
+      "bytes": 171,
+      "input_section": ".ltext.__mcs_rwlock_reader_lock",
+      "kind": "FUNC",
+      "name": "__mcs_rwlock_writer_lock",
+      "owner": "rust/mckernel_rust.o",
+      "value": 18446744073684573616
+    },
+    {
+      "bytes": 135,
+      "input_section": ".ltext.__mcs_rwlock_reader_unlock",
+      "kind": "FUNC",
+      "name": "__mcs_rwlock_writer_unlock",
+      "owner": "rust/mckernel_rust.o",
+      "value": 18446744073684573952
+    },
+    {
+      "bytes": 171,
+      "input_section": ".ltext.__mcs_rwlock_reader_lock",
+      "kind": "FUNC",
+      "name": "__mcs_rwlock_reader_lock",
+      "owner": "rust/mckernel_rust.o",
+      "value": 18446744073684573616
+    },
+    {
+      "bytes": 135,
+      "input_section": ".ltext.__mcs_rwlock_reader_unlock",
+      "kind": "FUNC",
+      "name": "__mcs_rwlock_reader_unlock",
+      "owner": "rust/mckernel_rust.o",
+      "value": 18446744073684573952
+    },
+    {
+      "bytes": 155,
+      "input_section": ".ltext.__mcs_rwlock_reader_lock_noirq",
+      "kind": "FUNC",
+      "name": "__mcs_rwlock_reader_lock_noirq",
+      "owner": "rust/mckernel_rust.o",
+      "value": 18446744073684573792
+    },
+    {
+      "bytes": 130,
+      "input_section": ".ltext.__mcs_rwlock_reader_unlock_noirq",
+      "kind": "FUNC",
+      "name": "__mcs_rwlock_reader_unlock_noirq",
+      "owner": "rust/mckernel_rust.o",
+      "value": 18446744073684574096
+    },
+    {
+      "bytes": 148,
+      "input_section": ".ltext.ihk_rwspinlock_read_lock_noirq",
+      "kind": "FUNC",
+      "name": "ihk_rwspinlock_read_lock_noirq",
+      "owner": "rust/mckernel_rust.o",
+      "value": 18446744073684852640
+    },
+    {
+      "bytes": 128,
+      "input_section": ".ltext.ihk_rwspinlock_read_unlock_noirq",
+      "kind": "FUNC",
+      "name": "ihk_rwspinlock_read_unlock_noirq",
+      "owner": "rust/mckernel_rust.o",
+      "value": 18446744073684853184
+    },
+    {
+      "bytes": 25,
+      "input_section": ".ltext.ihk_mc_get_nr_numa_nodes",
+      "kind": "FUNC",
+      "name": "ihk_mc_get_nr_numa_nodes",
+      "owner": "rust/mckernel_rust.o",
+      "value": 18446744073684826752
+    },
+    {
+      "bytes": 283,
+      "input_section": ".ltext.ihk_mc_load_page_table",
+      "kind": "FUNC",
+      "name": "ihk_mc_load_page_table",
+      "owner": "rust/mckernel_rust.o",
+      "value": 18446744073684831776
+    },
+    {
+      "bytes": 12,
+      "input_section": ".ltext.pte_is_present",
+      "kind": "FUNC",
+      "name": "pte_is_present",
+      "owner": "rust/mckernel_rust.o",
+      "value": 18446744073685080256
+    },
+    {
+      "bytes": 19,
+      "input_section": ".ltext.process_pte_get_phys_bridge",
+      "kind": "FUNC",
+      "name": "pte_get_phys",
+      "owner": "rust/mckernel_rust.o",
+      "value": 18446744073685044128
+    },
+    {
+      "bytes": 38,
+      "input_section": ".ltext.pte_update_phys",
+      "kind": "FUNC",
+      "name": "pte_update_phys",
+      "owner": "rust/mckernel_rust.o",
+      "value": 18446744073685080400
+    },
+    {
+      "bytes": 241,
+      "input_section": ".ltext._ihk_mc_free_pages",
+      "kind": "FUNC",
+      "name": "_ihk_mc_free_pages",
+      "owner": "rust/mckernel_rust.o",
+      "value": 18446744073684583392
+    },
+    {
+      "bytes": 2085,
+      "input_section": ".ltext._ihk_mc_alloc_aligned_pages_node",
+      "kind": "FUNC",
+      "name": "_ihk_mc_alloc_aligned_pages_node",
+      "owner": "rust/mckernel_rust.o",
+      "value": 18446744073684581296
+    },
+    {
+      "bytes": 1547,
+      "input_section": ".ltext.smp_call_func",
+      "kind": "FUNC",
+      "name": "smp_call_func",
+      "owner": "rust/mckernel_rust.o",
+      "value": 18446744073685173088
+    }
+  ],
+  "holds_and_resources": "No workload executed, resource slice consumed/released, hold changed, credentials/elevation used or current-free inferred. Same Root owns all further source composition/admission/publication. The two historically stale HOST charges retain their separate current540/a41 disposition; all other real native/scratch/UNKNOWN/source/service/account controls remain unchanged.",
+  "independent_default_image_GO": {
+    "bytes": 17696,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/i02-e2-review-p03-max-1/REVIEW.json",
+    "sha256": "1f1d7bd2e364bf754fb55751cb7104fd23ab57f52e68e804fd4ab9560b402cab"
+  },
+  "independent_lifecycle_GO": {
+    "bytes": 17546,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/i02-e3-review-p03-max-1/REVIEW.json",
+    "sha256": "591774e1475c6b66087e2ca9b3296d882e419f96b4a5c545579c34936230c723"
+  },
+  "leaf_decisions": {
+    "M14-06-02-DEFAULT": {
+      "actual_selected_entries_and_data": [
+        {
+          "bytes": 2707,
+          "input_section": ".ltext.do_signal",
+          "kind": "FUNC",
+          "name": "do_signal",
+          "owner": "rust/mckernel_rust.o",
+          "value": 18446744073684698272
+        },
+        {
+          "bytes": 724,
+          "input_section": ".ltext.sys_rt_sigreturn",
+          "kind": "FUNC",
+          "name": "sys_rt_sigreturn",
+          "owner": "rust/mckernel_rust.o",
+          "value": 18446744073685211744
+        },
+        {
+          "bytes": 165,
+          "input_section": ".ltext.arch_rt_sigreturn_context_bridge",
+          "kind": "FUNC",
+          "name": "arch_rt_sigreturn_context_bridge",
+          "owner": "rust/mckernel_rust.o",
+          "value": 18446744073684621296
+        },
+        {
+          "bytes": 29,
+          "input_section": ".ltext.arch_rt_sigreturn_xrstor_bridge",
+          "kind": "FUNC",
+          "name": "arch_rt_sigreturn_xrstor_bridge",
+          "owner": "rust/mckernel_rust.o",
+          "value": 18446744073684621568
+        },
+        {
+          "bytes": 683,
+          "input_section": ".ltext.arch_native_signal_restore_fp_bridge",
+          "kind": "FUNC",
+          "name": "arch_native_signal_restore_fp_bridge",
+          "owner": "rust/mckernel_rust.o",
+          "value": 18446744073684611616
+        },
+        {
+          "bytes": 243,
+          "input_section": ".ltext.save_uctx",
+          "kind": "FUNC",
+          "name": "save_uctx",
+          "owner": "rust/mckernel_rust.o",
+          "value": 18446744073685120992
+        },
+        {
+          "bytes": 18,
+          "input_section": ".ltext.get_xsave_size",
+          "kind": "FUNC",
+          "name": "get_xsave_size",
+          "owner": "rust/mckernel_rust.o",
+          "value": 18446744073684780272
+        },
+        {
+          "bytes": 19,
+          "input_section": ".ltext.get_xsave_mask",
+          "kind": "FUNC",
+          "name": "get_xsave_mask",
+          "owner": "rust/mckernel_rust.o",
+          "value": 18446744073684780240
+        },
+        {
+          "bytes": 5669,
+          "input_section": ".ltext.terminate",
+          "kind": "FUNC",
+          "name": "terminate",
+          "owner": "rust/mckernel_rust.o",
+          "value": 18446744073685265536
+        },
+        {
+          "bytes": 3242,
+          "input_section": ".ltext.coredump",
+          "kind": "FUNC",
+          "name": "coredump",
+          "owner": "rust/mckernel_rust.o",
+          "value": 18446744073684655152
+        },
+        {
+          "bytes": 1215,
+          "input_section": ".ltext.do_kill",
+          "kind": "FUNC",
+          "name": "do_kill",
+          "owner": "rust/mckernel_rust.o",
+          "value": 18446744073684674976
+        },
+        {
+          "bytes": 332,
+          "input_section": ".ltext.set_signal",
+          "kind": "FUNC",
+          "name": "set_signal",
+          "owner": "rust/mckernel_rust.o",
+          "value": 18446744073685156560
+        },
+        {
+          "bytes": 19,
+          "input_section": ".ltext.check_signal",
+          "kind": "FUNC",
+          "name": "check_signal",
+          "owner": "rust/mckernel_rust.o",
+          "value": 18446744073684645152
+        }
+      ],
+      "decision": "GO_WHOLE_LITERAL_ORIGINAL_TECHNICAL_DEFAULT_AT_MATCHING_SUPPORTED_SCOPE",
+      "done_when_matches_original_machine_ledger": true,
+      "exact_original_task_preserved": {
+        "counted_in_requirement_rollup": true,
+        "definition_status": "completion_condition_defined; runnable packet waits for named original contract/admission inputs",
+        "dependencies": [
+          "HOLD-GENERIC",
+          "PROVIDER-CLOSURE",
+          "SOURCE-SDK-NATIVE"
+        ],
+        "done_when": "Every required original region in this scope has a complete implementation/selection mapping to Rust or allowed assembly, compatible actual ABI/providers, and a unique supported-default definition in the coherent image; no required behavior is supplied by a held object, guessed provider, live project C or compiler-elided placeholder.",
+        "evidence": [
+          "CAMPAIGN.md"
+        ],
+        "execution_profile": "ordinary_HOST",
+        "id": "M14-06-02-DEFAULT",
+        "owner": "Root integration/compositor; applicable original hold and native/source authorities retain release ownership",
+        "parent": "M14-06-02",
+        "percent_complete": 0,
+        "progress_metric": "binary verified completion at stated scope",
+        "required_inputs": {
+          "missing_before_execution": [
+            "Bind correct signal-frame, alternate-stack, context and configured xstate restoration to actual final sources/providers.",
+            "Run matching signal/rt_sigreturn behavior and error-path validation with actual native admission."
+          ],
+          "original_requirement": "M14-06-02",
+          "source_profile": "Original supported x86_64/Rocky profile; exact source/config/toolchain/artifact identities must match the proof scope.",
+          "target": "arch/x86_64/kernel/syscall.c"
+        },
+        "scope_limit": "Requires admissible final source/artifact cohort; source compilation or opt-in linking is insufficient.",
+        "status": "open_or_unverified",
+        "title": "Verify complete supported-default Rust/allowed-assembly selection, real ABI/provider and no duplicate live C ownership",
+        "verification_method": "Join source/config/toolchain/provider identities to the admitted final cohort; inspect actual selected/emitted/link ownership and execute only the original applicable defined functional scenarios after Root admission. Record exact command, result, cleanup and matching artifact identity; skipped/UNKNOWN results do not satisfy this step."
+      },
+      "implementation_and_behavior_mapping_reused": "Complete current do_signal and rt_sigreturn/native frame paths are Rust, including SIG_IGN/default/handler/stop/trap/core, pending retirement, ptrace-continuation, restart exclusions, altstack selection, usercopy/error cleanup, correct typed void terminate and real coredump providers. Shared context handles optional outputs and original GS/TSS lookup. No compiler-elided replacement supplies any listed root.",
+      "no_execution_or_canonical_credit_by_reviewer": true,
+      "not_claimed": "No native signal/app/frame/register/xstate/restoration behavior, wholeF06/file DEFAULT, FUNCTIONAL, parent or M14 acceptance is passed here.",
+      "remaining_required_technical_input": null,
+      "required_transitive_provider_assessment": [
+        "Complete signal/rt_sigreturn paths include ignored/default/handler/core/stop/trap/pending-transfer/ptrace-continuation/restart-exclusion/frame+XSAVE/usercopy/failure branches. Genuine selected Rust/assembly source bodies and actual generated frame/header data are reused from79d/437 and current100d physical joins; zero-text arch C alone is not the basis.",
+        "Actual required terminate5669B, coredump3242B, do_kill1215B, ptrace_report_signal1478B, set/check_signal, schedule, boot XSAVE/context getters, allocator/usercopy and lock providers are uniquely Rust-owned in the same image. terminate notify_host_exit directly calls the genuine Rust terminate_mcexec_body_result plus actual Rust do_syscall; the remaining C terminate_mcexec wrapper is not on this required call edge.",
+        "Release/VM/memory-range/fault/PT/allocator lower edges use the real current Rust process/memory providers in the recorded lower-provider table. Source process_memory_range_free_bridge supplies no host-invalidate callback (None,None at actual16086), so unrelated C do_munmap host callbacks are not silently adopted as this destructor implementation.",
+        "Typed void terminate callback, pending consumption before unlock, captured process/PID/fault values before free,64B IRQ node and lock/IRQ restoration order remain source- and compiler-bound. Real552B signal frame/128B SigInfo/224B context/GS180-TSS104 and boot XSAVE size/mask are retained. Actual29B XRSTOR lowering is instruction proof, never hardware execution.",
+        "The C ptrace resume input to generic sys_ptrace is a separate leaf03 required provider gap. It is not used as an implementation callback by this frame/rt_sigreturn path, which calls the genuine Rust ptrace_report_signal/wakeup/schedule providers."
+      ],
+      "scope": "Signal/rt_sigreturn frames, alternate stack, context and configured xstate restoration",
+      "separate_functional_condition": "Actual signal delivery/rt_sigreturn/native frame/error/alternate-stack/register/xstate behavior, current native/restoration and full FUNCTIONAL/ACCEPT remain unproved. Saved three signal ELFs and PID atomics do not satisfy those runtime conditions.",
+      "typed_ABI_and_lifetime_contract_reused": "Real compiled C and Rust frame552 (regs40/fpregs224/sigmask296/info424),128B SigInfo,64B aligned IRQ lock node, GS180/TSS104 context224, boot XSAVE size/mask, allocation-base/align64 pointer and pending/lock-release order are reused from79d/437 and current image. Actual29B XRSTOR lowering loads full64bit mask then EDX:EAX and uses RDI; instruction emission only, no hardware execution.",
+      "whole_done_when_satisfied": true
+    },
+    "M14-06-03-DEFAULT": {
+      "actual_selected_entries_and_data": [
+        {
+          "bytes": 37,
+          "input_section": ".ltext.arch_ptrace",
+          "kind": "FUNC",
+          "name": "arch_ptrace",
+          "owner": "rust/mckernel_rust.o",
+          "value": 18446744073684616064
+        },
+        {
+          "bytes": 463,
+          "input_section": ".ltext.ptrace_arch_prctl",
+          "kind": "FUNC",
+          "name": "ptrace_arch_prctl",
+          "owner": "rust/mckernel_rust.o",
+          "value": 18446744073685080464
+        },
+        {
+          "bytes": 290,
+          "input_section": ".ltext.ptrace_read_user",
+          "kind": "FUNC",
+          "name": "ptrace_read_user",
+          "owner": "rust/mckernel_rust.o",
+          "value": 18446744073685086064
+        },
+        {
+          "bytes": 379,
+          "input_section": ".ltext.ptrace_write_user",
+          "kind": "FUNC",
+          "name": "ptrace_write_user",
+          "owner": "rust/mckernel_rust.o",
+          "value": 18446744073685096096
+        },
+        {
+          "bytes": 122,
+          "input_section": ".ltext.ptrace_read_gpregs",
+          "kind": "FUNC",
+          "name": "ptrace_read_gpregs",
+          "owner": "rust/mckernel_rust.o",
+          "value": 18446744073685085648
+        },
+        {
+          "bytes": 90,
+          "input_section": ".ltext.ptrace_write_gpregs",
+          "kind": "FUNC",
+          "name": "ptrace_write_gpregs",
+          "owner": "rust/mckernel_rust.o",
+          "value": 18446744073685095664
+        },
+        {
+          "bytes": 64,
+          "input_section": ".ltext.ptrace_read_fpregs",
+          "kind": "FUNC",
+          "name": "ptrace_read_fpregs",
+          "owner": "rust/mckernel_rust.o",
+          "value": 18446744073685085584
+        },
+        {
+          "bytes": 58,
+          "input_section": ".ltext.ptrace_write_fpregs",
+          "kind": "FUNC",
+          "name": "ptrace_write_fpregs",
+          "owner": "rust/mckernel_rust.o",
+          "value": 18446744073685095600
+        },
+        {
+          "bytes": 286,
+          "input_section": ".ltext.ptrace_read_regset",
+          "kind": "FUNC",
+          "name": "ptrace_read_regset",
+          "owner": "rust/mckernel_rust.o",
+          "value": 18446744073685085776
+        },
+        {
+          "bytes": 336,
+          "input_section": ".ltext.ptrace_write_regset",
+          "kind": "FUNC",
+          "name": "ptrace_write_regset",
+          "owner": "rust/mckernel_rust.o",
+          "value": 18446744073685095760
+        },
+        {
+          "bytes": 1478,
+          "input_section": ".ltext.ptrace_report_signal",
+          "kind": "FUNC",
+          "name": "ptrace_report_signal",
+          "owner": "rust/mckernel_rust.o",
+          "value": 18446744073685088928
+        },
+        {
+          "bytes": 87,
+          "input_section": ".ltext.arch_ptrace_syscall_event",
+          "kind": "FUNC",
+          "name": "arch_ptrace_syscall_event",
+          "owner": "rust/mckernel_rust.o",
+          "value": 18446744073684618336
+        },
+        {
+          "bytes": 47,
+          "input_section": ".ltext.ptrace_syscall_event",
+          "kind": "FUNC",
+          "name": "ptrace_syscall_event",
+          "owner": "rust/mckernel_rust.o",
+          "value": 18446744073685093344
+        },
+        {
+          "bytes": 63,
+          "input_section": ".ltext.save_debugreg",
+          "kind": "FUNC",
+          "name": "save_debugreg",
+          "owner": "rust/mckernel_rust.o",
+          "value": 18446744073685120912
+        },
+        {
+          "bytes": 47,
+          "input_section": ".ltext.restore_debugreg",
+          "kind": "FUNC",
+          "name": "restore_debugreg",
+          "owner": "rust/mckernel_rust.o",
+          "value": 18446744073685114384
+        },
+        {
+          "bytes": 36,
+          "input_section": ".ltext.clear_debugreg",
+          "kind": "FUNC",
+          "name": "clear_debugreg",
+          "owner": "rust/mckernel_rust.o",
+          "value": 18446744073684645248
+        },
+        {
+          "bytes": 96,
+          "input_section": ".ldata.debug_constants",
+          "kind": "OBJECT",
+          "name": "debug_constants",
+          "owner": "rust/mckernel_rust.o",
+          "value": 18446744073685461184
+        }
+      ],
+      "author_disposition": "P04Tests confirmed in normal delivery that no frozen source/provider proof excludes this genuine resume path from original03 scope and that6a7 three-GO candidate was too broad. Frozen assessment remains intact; this review supplies the independent NOT_YET decision.",
+      "decision": "NOT_YET_REQUIRED_SELECTED_PTRACE_RESUME_PATH_STILL_HAS_LIVE_PROJECT_C",
+      "done_when_matches_original_machine_ledger": true,
+      "exact_actual_remaining_project_C_functions": {
+        "ptrace_detach_do_kill_bridge": {
+          "binding": "LOCAL",
+          "bytes": 12,
+          "index": 10,
+          "name": "ptrace_detach_do_kill_bridge",
+          "section_index": 1,
+          "type": "FUNC",
+          "value": 18446744073684390160,
+          "visibility": 0
+        },
+        "ptrace_detach_kfree_bridge": {
+          "binding": "LOCAL",
+          "bytes": 27,
+          "index": 9,
+          "name": "ptrace_detach_kfree_bridge",
+          "section_index": 1,
+          "type": "FUNC",
+          "value": 18446744073684390128,
+          "visibility": 0
+        },
+        "ptrace_detach_wakeup_bridge": {
+          "binding": "LOCAL",
+          "bytes": 12,
+          "index": 21,
+          "name": "ptrace_detach_wakeup_bridge",
+          "section_index": 1,
+          "type": "FUNC",
+          "value": 18446744073684392176,
+          "visibility": 0
+        },
+        "ptrace_wakeup_log_bridge": {
+          "binding": "LOCAL",
+          "bytes": 56,
+          "index": 23,
+          "name": "ptrace_wakeup_log_bridge",
+          "section_index": 1,
+          "type": "FUNC",
+          "value": 18446744073684392352,
+          "visibility": 0
+        },
+        "ptrace_wakeup_sig": {
+          "binding": "LOCAL",
+          "bytes": 249,
+          "index": 20,
+          "name": "ptrace_wakeup_sig",
+          "section_index": 1,
+          "type": "FUNC",
+          "value": 18446744073684391920,
+          "visibility": 0
+        },
+        "ptrace_wakeup_update_lock_bridge": {
+          "binding": "LOCAL",
+          "bytes": 12,
+          "index": 15,
+          "name": "ptrace_wakeup_update_lock_bridge",
+          "section_index": 1,
+          "type": "FUNC",
+          "value": 18446744073684391840,
+          "visibility": 0
+        },
+        "ptrace_wakeup_update_unlock_bridge": {
+          "binding": "LOCAL",
+          "bytes": 12,
+          "index": 16,
+          "name": "ptrace_wakeup_update_unlock_bridge",
+          "section_index": 1,
+          "type": "FUNC",
+          "value": 18446744073684391856,
+          "visibility": 0
+        }
+      },
+      "exact_original_task_preserved": {
+        "counted_in_requirement_rollup": true,
+        "definition_status": "completion_condition_defined; runnable packet waits for named original contract/admission inputs",
+        "dependencies": [
+          "HOLD-GENERIC",
+          "PROVIDER-CLOSURE",
+          "SOURCE-SDK-NATIVE"
+        ],
+        "done_when": "Every required original region in this scope has a complete implementation/selection mapping to Rust or allowed assembly, compatible actual ABI/providers, and a unique supported-default definition in the coherent image; no required behavior is supplied by a held object, guessed provider, live project C or compiler-elided placeholder.",
+        "evidence": [
+          "CAMPAIGN.md"
+        ],
+        "execution_profile": "ordinary_HOST",
+        "id": "M14-06-03-DEFAULT",
+        "owner": "Root integration/compositor; applicable original hold and native/source authorities retain release ownership",
+        "parent": "M14-06-03",
+        "percent_complete": 0,
+        "progress_metric": "binary verified completion at stated scope",
+        "required_inputs": {
+          "missing_before_execution": [
+            "Establish all required registers/debug-state and stop/wakeup/event ordering behavior with final source/providers.",
+            "Obtain valid matching runtime/native proof; unavailable owned-child Linux ptrace control remains unavailable, not passed."
+          ],
+          "original_requirement": "M14-06-03",
+          "source_profile": "Original supported x86_64/Rocky profile; exact source/config/toolchain/artifact identities must match the proof scope.",
+          "target": "arch/x86_64/kernel/syscall.c"
+        },
+        "scope_limit": "Requires admissible final source/artifact cohort; source compilation or opt-in linking is insufficient.",
+        "status": "open_or_unverified",
+        "title": "Verify complete supported-default Rust/allowed-assembly selection, real ABI/provider and no duplicate live C ownership",
+        "verification_method": "Join source/config/toolchain/provider identities to the admitted final cohort; inspect actual selected/emitted/link ownership and execute only the original applicable defined functional scenarios after Root admission. Record exact command, result, cleanup and matching artifact identity; skipped/UNKNOWN results do not satisfy this step."
+      },
+      "exact_required_path": [
+        {
+          "fact": "ptrace_request_dispatch_result maps PTRACE_KILL,CONT,SINGLESTEP,SYSCALL to PTRACE_DISPATCH_WAKEUP.",
+          "line": 17347,
+          "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs"
+        },
+        {
+          "fact": "ptrace_syscall_body_result calls the selected ops.wakeup_fn(pid,request,data).",
+          "line": 17414,
+          "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs"
+        },
+        {
+          "fact": "Actual selected f03_ptrace_entry_ops_v1 initializes wakeup_fn=ptrace_wakeup_sig.",
+          "line": 26295,
+          "path": "/home/holden/mckernel/kernel/syscall.c"
+        },
+        {
+          "fact": "The249B local C ptrace_wakeup_sig acquires currentThread/stack IRQ node and invokes genuine Rust ptrace_wakeup_sig_body_result with actual C update-lock/unlock, free, do_kill, wakeup and logging callbacks.",
+          "line": 25297,
+          "path": "/home/holden/mckernel/kernel/syscall.c"
+        }
+      ],
+      "external_missing_input": null,
+      "frozen_candidate_GO_rejected": "The13/17 entry/data ownership summaries and zero-text arch C do not cover this actual selected mandatory wakeup path. Original03 scope explicitly includes correct stop/wakeup/event ordering.",
+      "implementation_and_behavior_mapping_reused": "Rust owns architecture ptrace dispatch and supported arch_prctl request/order, all user/general/floating/regset reads+writes, xstate copy bridges, ptrace report signal/event, debug-register save/restore/clear and diagnostics. Unsupported arch request retains original EOPNOTSUPP; supported paths are not removed.",
+      "minimum_next_qualification": "Independent material source/ABI/lifetime/paired-selection review, then the necessary admitted changed normal image/readback joined to this same supported profile. Existing unaffected source/ABI/E2/E3/default proof remains reused. No standalone stub, alias-only partial, old fixture, old green suite or native replay is authorized by this review.",
+      "no_execution_or_canonical_credit_by_reviewer": true,
+      "physical_owner": "All seven are real nonempty LOCAL FUNC records in current100d final and in the selected syscall.c.o C32 runtime ledger; their input unit is kernel/CMakeFiles/mckernel.img.dir/syscall.c.o. f03_ptrace_entry_ops_v1 is real152B C rodata provider containing this actual callback, not guessed data.",
+      "scope": "Ptrace registers/debug state and stop/wakeup/event ordering",
+      "separate_functional_condition": "Actual matching ptrace controls and runtime stop/wakeup/order behavior remain FUNCTIONAL/native work; unavailable historical control stays unavailable, not passed.",
+      "smallest_source_requirement": "Complete the coherent real ptrace resume entry and seven-function required callback ownership family using the existing genuine Rust body/lower locks/ref/pending/free/kill/scheduler providers; pair only the necessary C-definition guards and Rust selectors in the supported profile. Preserve original request/error/pending/lock/IRQ/wakeup/logging/source-origin semantics and all previously proven register/debug/event paths. The required callbacks cannot be relabeled platform C or compiler-elided.",
+      "typed_ABI_and_lifetime_contract_reused": "Actual UserRegsStruct/X86UserContext/Process/Thread field contracts and fpreg/xstate lengths remain selected. find_thread/explicit unlock preserves lock-held target borrow, not an invented reference. ptrace_report_signal keeps distinct live stack IRQ node, status/debug snapshot then unlock-before-parent wake/schedule; current Rust signal tail preserves traced stop/TRAP notifications and pending lifetimes.",
+      "whole_done_when_satisfied": false
+    },
+    "M14-06-05-DEFAULT": {
+      "actual_selected_entries_and_data": [
+        {
+          "bytes": 467,
+          "input_section": ".ltext.sys_process_vm_readv",
+          "kind": "FUNC",
+          "name": "sys_process_vm_readv",
+          "owner": "rust/mckernel_rust.o",
+          "value": 18446744073685207776
+        },
+        {
+          "bytes": 467,
+          "input_section": ".ltext.sys_process_vm_writev",
+          "kind": "FUNC",
+          "name": "sys_process_vm_writev",
+          "owner": "rust/mckernel_rust.o",
+          "value": 18446744073685208256
+        },
+        {
+          "bytes": 382,
+          "input_section": ".ltext.do_process_vm_read_writev",
+          "kind": "FUNC",
+          "name": "do_process_vm_read_writev",
+          "owner": "rust/mckernel_rust.o",
+          "value": 18446744073684691904
+        },
+        {
+          "bytes": 2154,
+          "input_section": ".ltext.arch_process_vm_read_writev_body_result",
+          "kind": "FUNC",
+          "name": "arch_process_vm_read_writev_body_result",
+          "owner": "rust/mckernel_rust.o",
+          "value": 18446744073684613552
+        },
+        {
+          "bytes": 2625,
+          "input_section": ".ltext.sys_move_pages",
+          "kind": "FUNC",
+          "name": "sys_move_pages",
+          "owner": "rust/mckernel_rust.o",
+          "value": 18446744073685199184
+        },
+        {
+          "bytes": 4858,
+          "input_section": ".ltext.move_pages_smp_handler",
+          "kind": "FUNC",
+          "name": "move_pages_smp_handler",
+          "owner": "rust/mckernel_rust.o",
+          "value": 18446744073684919520
+        },
+        {
+          "bytes": 424,
+          "input_section": ".ltext.find_process",
+          "kind": "FUNC",
+          "name": "find_process",
+          "owner": "rust/mckernel_rust.o",
+          "value": 18446744073684751872
+        },
+        {
+          "bytes": 536,
+          "input_section": ".ltext.find_thread",
+          "kind": "FUNC",
+          "name": "find_thread",
+          "owner": "rust/mckernel_rust.o",
+          "value": 18446744073684752304
+        },
+        {
+          "bytes": 18,
+          "input_section": ".ltext.hold_process_vm",
+          "kind": "FUNC",
+          "name": "hold_process_vm",
+          "owner": "rust/mckernel_rust.o",
+          "value": 18446744073684787616
+        },
+        {
+          "bytes": 672,
+          "input_section": ".ltext.release_process_vm",
+          "kind": "FUNC",
+          "name": "release_process_vm",
+          "owner": "rust/mckernel_rust.o",
+          "value": 18446744073685105424
+        }
+      ],
+      "decision": "GO_WHOLE_LITERAL_ORIGINAL_TECHNICAL_DEFAULT_AT_MATCHING_SUPPORTED_SCOPE",
+      "done_when_matches_original_machine_ledger": true,
+      "exact_original_task_preserved": {
+        "counted_in_requirement_rollup": true,
+        "definition_status": "completion_condition_defined; runnable packet waits for named original contract/admission inputs",
+        "dependencies": [
+          "HOLD-GENERIC",
+          "PROVIDER-CLOSURE",
+          "SOURCE-SDK-NATIVE"
+        ],
+        "done_when": "Every required original region in this scope has a complete implementation/selection mapping to Rust or allowed assembly, compatible actual ABI/providers, and a unique supported-default definition in the coherent image; no required behavior is supplied by a held object, guessed provider, live project C or compiler-elided placeholder.",
+        "evidence": [
+          "CAMPAIGN.md"
+        ],
+        "execution_profile": "ordinary_HOST",
+        "id": "M14-06-05-DEFAULT",
+        "owner": "Root integration/compositor; applicable original hold and native/source authorities retain release ownership",
+        "parent": "M14-06-05",
+        "percent_complete": 0,
+        "progress_metric": "binary verified completion at stated scope",
+        "required_inputs": {
+          "missing_before_execution": [
+            "Establish final supported cross-process memory/move-pages providers, target ownership and NUMA callback lifetime contracts.",
+            "Qualify matching behavior, failure cleanup and lifetime on admitted coherent image without reopening accepted F01/F02/F05 scopes."
+          ],
+          "original_requirement": "M14-06-05",
+          "source_profile": "Original supported x86_64/Rocky profile; exact source/config/toolchain/artifact identities must match the proof scope.",
+          "target": "arch/x86_64/kernel/syscall.c"
+        },
+        "scope_limit": "Requires admissible final source/artifact cohort; source compilation or opt-in linking is insufficient.",
+        "status": "open_or_unverified",
+        "title": "Verify complete supported-default Rust/allowed-assembly selection, real ABI/provider and no duplicate live C ownership",
+        "verification_method": "Join source/config/toolchain/provider identities to the admitted final cohort; inspect actual selected/emitted/link ownership and execute only the original applicable defined functional scenarios after Root admission. Record exact command, result, cleanup and matching artifact identity; skipped/UNKNOWN results do not satisfy this step."
+      },
+      "implementation_and_behavior_mapping_reused": "Real Rust process_vm read/write entries call the complete existing read/write orchestration with actual callbacks; move_pages entry and complete SMP handler retain page/NUMA, migration/fault/PTE/copy/result/error logic. No requested operation is replaced by a stub or blanket rejection.",
+      "no_execution_or_canonical_credit_by_reviewer": true,
+      "not_claimed": "No actual native cross-process copy/move-pages/NUMA scheduling/cancellation/fault/lifecycle behavior or FUNCTIONAL/parent/M14 acceptance is passed here.",
+      "remaining_required_technical_input": null,
+      "required_transitive_provider_assessment": [
+        "The real sys_process_vm_readv/writev and do_process_vm_read_writev entry select the complete existing arch_process_vm_read_writev_body_result and actual callbacks from f06_process_vm_entry0e9d; no entry-symbol-only or generic callback placeholder is accepted.",
+        "Source callbacks call real Rust range reader lock/unlock, exact hash reader+IRQ process find/unlock, separate noirq update-node lock/unlock, hold/release VM, range lookup, page-fault, PTE translation, physical mapping and copy implementation. Actual source preserves two distinct stack nodes, hash borrow until unlock, owned VM hold before releasing target protection, partial byte/error return, and synchronous pointer lifetimes.",
+        "Actual move_pages entry supplies real usercopy, tracked allocation/free, table lock, native NUMA getter, genuine synchronous smp_call_func and the full4858B move_pages_smp_handler. Ready/barrier Release-Acquire, original CPU partition/odd-tail behavior, fault/PTE/large-page/error, migrate/physical copy/free/update and prior page-table restoration are all present in source. No C32 callback is used to provide these operations.",
+        "The exact current Rust page/range/RSS/PT providers are physically joined in100d. Existing corrected mmap transaction and64 paired ABI assertions/shared changed-path HOST proof are reused at unchanged scope; no native/accepted F01/F02/F05 behavior is reopened or generalized.",
+        "Required underlying Process/Thread/Iovec/CInt/CULong/SizeT/callback ABI and real current source/config/toolchain are bound by existing full-image and source ABI proofs, including the explicit ProcessVm free/ref lifetime route. The finite lower-provider table below corroborates real nonempty Rust owners instead of relying on matching entry counts."
+      ],
+      "scope": "Cross-process memory/move-pages, target references and NUMA callback lifetime",
+      "separate_functional_condition": "Actual native cross-process copying/move-pages/error/cancellation/NUMA callback scheduling and resource-restoring lifecycle remain FUNCTIONAL/native requirements; no held mmap/exec or TERMRESET/Direct-TID fixture replay is proposed.",
+      "typed_ABI_and_lifetime_contract_reused": "Process/Thread/Iovec/CInt/CULong/SizeT field and typed callback ABI from real compiled shared ABI. Process-VM entry uses two distinct stack nodes (irqsave target hash borrow and noirq update lock), acquires real target/VM hold under original order, keeps range lock over accesses, releases update/hash locks/VM exactly, and forwards partial bytes/error result. SMP callback retains real request until Release/Acquire ready completion, original CPU split and prior page-table restore.",
+      "whole_done_when_satisfied": true
+    }
+  },
+  "outside_this_three_leaf_review": "Original01 and04/file DEFAULT remain at the frozen author NOT_YET scope, including actual Cdo_fork4797 and timefallback55; no decision on them or their future corrections is made here. Root must not promote wholeF06/file/parent/native/ACCEPT from the two technical GOs.",
+  "reused_actual_default_build_and_readback": {
+    "E1_whole_GO": {
+      "bytes": 27608,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/i02-e1-review-publicabi-max-1/REVIEW.json",
+      "sha256": "7745ce954c6d380cecd5bc1912b8fe772e1433af0fdd58724ceb7af315493aba"
+    },
+    "actual_default_U_and_metadata": {
+      "bytes": 13979,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-wiring-p04source-max-1/default-observation-1/postgate-correction-1/qualification-1/QUALIFICATION.json",
+      "sha256": "01f3fa807f4f04570d1c6af4d7f60ac812067c689048a9f85120d93b1595d9d1"
+    },
+    "actual_required_default_named_image": {
+      "bytes": 45614,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-wiring-p04source-max-1/default-observation-1/required-named-image-1/whole-E2-qualification-1/QUALIFICATION.json",
+      "sha256": "f0f054985ecaae5a0cec7e9b3fcf99d47ad3742b6d8e19c7d34e5f69962436e2"
+    },
+    "actual_required_named_build": {
+      "bytes": 17633,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-wiring-p04source-max-1/default-observation-1/required-named-image-1/execution-1/RESULT.json",
+      "sha256": "9ac8c2a1e9094400b318b31fca3d66bd72dabcf336ec9c3508d81b0bcbb386f9"
+    },
+    "current_image": {
+      "bytes": 90254,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/qualification-1/QUALIFICATION.json",
+      "sha256": "2074b6aa194b210581bd5ec0700833f3c4477e21f2e7bac09ae81356cd379453"
+    },
+    "current_image_independent": {
+      "bytes": 19612,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-operation-review-publicabi-max-1/do-mmap-incremental-1/qualification-1/REVIEW.json",
+      "sha256": "f949b85f0e7d825020e7f9dc392eb6cb3b69ecdc2db35d9258371a2a64da625e"
+    },
+    "current_physical_owners": {
+      "bytes": 5886989,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/qualification-1/OWNER-PROVIDER-JOINS.json",
+      "sha256": "4a7d4e40af20543625abc5e5d0377a48428dbd59e06ede3c1eb295ea45c7b098"
+    },
+    "matching_module_ABI_owners": {
+      "bytes": 44000,
+      "path": "/home/holden/mckernel/docs/verification/m14-m15-matching-kbuild-20261110/other-technical-leaves/REVIEW.json",
+      "sha256": "c95bfdd50d9831c2f9e547c11f2f7993ec89b02dbc837956754a3a6fef86c6e4"
+    },
+    "matching_module_bindings": {
+      "bytes": 30444,
+      "path": "/home/holden/mckernel/docs/verification/m14-m15-matching-kbuild-20261110/bindings-qualified/BINDINGS.json",
+      "sha256": "0781087478376977da68666ee6ae257846d53dc5501cfa6b9b3ca170597f26be"
+    },
+    "shared_context_GO": {
+      "bytes": 8094,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-shared-context-review-source-acquisition-max-1/REVIEW.json",
+      "sha256": "43785f09519812ce425c0478d47cd5383548e4d5b9765923896b4bdce7f5a325"
+    },
+    "signal_unsafe_lifetime_GO": {
+      "bytes": 20473,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-remaining-ownership-review-publicabi-max-1/REVIEW.json",
+      "sha256": "79d066a09e591d232b614510f32cad5bebcd3a8690131bd5f07dadeb51f2cb8d"
+    },
+    "source_default_GO": {
+      "bytes": 20904,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-wiring-review-source-acquisition-max-1/REVIEW.json",
+      "sha256": "0ae41a393e76acbe93373ffb121cce7e023c318142309a64eb1a4ff912be7857"
+    }
+  },
+  "review_owner": "/root/source_acquisition_review_max",
+  "review_scope": "Only original M14-06-02/03/05-DEFAULT and required transitive implementation/provider/ABI/unique coherent supported-default ownership. No all-C census, new zero-C-whole-image rule, functional/native scenario quota, execution or canonical credit.",
+  "reviewer_actions": {
+    "canonical_index_ledger_acceptance_percentage_mutation": false,
+    "compiler_build_test_ELFtool_provider_Docker_network_app_native_or_controller_execution": false,
+    "held_fixture_or_equivalent_replay": false,
+    "peer_source_or_frozen_packet_mutation": false,
+    "private_review_write_only": true,
+    "recursive_agents": false,
+    "source_and_saved_data_reads": true
+  },
+  "schema": "m14-f06-three-whole-default-leaf-independent-result-review-v1",
+  "source_assessment": {
+    "bytes": 140030,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-leaf-decisions-p04tests-max-1/DECISIONS.json",
+    "sha256": "6a7eceef0cbb405db4d8cc74580f243458f52b450fa171f55454e2ee75b908d1"
+  },
+  "source_cohort": "f37463cdd25f7f25e6c92c3f418c6dce3054a74f; actual production cache-U/no explicit-DON normal image and all16 image/map/Rust/C-AS/config/linker bytes match independently qualified100d.",
+  "source_readback_checks": "All five quoted current source pins above still exactly match. Read only the named current source/paired build/provider contracts and saved image metadata; no source/helper/provider/program was executed.",
+  "unchanged_criteria": "The three exact original done_when clauses and required_inputs/verification_method/scope_limit are preserved verbatim per leaf. Technical DEFAULT is the complete real implementation/selection/ABI/provider/default ownership condition. Actual originally applicable functional/native scenarios and resource-restoring acceptance remain separately open and are not silently declared passed; no extra native prerequisite is added to this technical decision.",
+  "whole_image_physical_scope_reused": {
+    "disposition": "Full ownership/link proof provides exact real definitions and platform/generated identities; zero UND does not classify a C callee as Rust. That distinction produces the explicit03 NOT_YET.",
+    "linker_or_unmapped_globals": [],
+    "named_UND": [],
+    "physical_mismatches": [],
+    "real_input_global_joins": 4553
+  }
+}

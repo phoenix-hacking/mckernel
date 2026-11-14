@@ -1,0 +1,24 @@
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-perf-mmap-whole-defined-error-source-1/actual-helper-consumer-preparation-1/fixture/perf_mmap_actual.c: In function ‘main’:
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-perf-mmap-whole-defined-error-source-1/actual-helper-consumer-preparation-1/fixture/perf_mmap_actual.c:91:25: error: passing argument 2 of ‘invoke’ from incompatible pointer type [-Werror=incompatible-pointer-types]
+   91 |    CHECK(invoke(backend,controlled_map)==scripted_return);
+      |                         ^~~~~~~~~~~~~~
+      |                         |
+      |                         long int (*)(long unsigned int,  size_t,  int,  int,  int,  long int,  int,  void *) {aka long int (*)(long unsigned int,  long long unsigned int,  int,  int,  int,  long int,  int,  void *)}
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-perf-mmap-whole-defined-error-source-1/actual-helper-consumer-preparation-1/fixture/perf_mmap_actual.c:41:27: note: in definition of macro ‘CHECK’
+   41 | #define CHECK(c) do {if(!(c)){printf("FAIL line=%d positive=%d negative=%d callbacks=%d bad=%d\n",__LINE__,positive_cases,negative_cases,callbacks,bad_callback);return 1;}}while(0)
+      |                           ^
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-perf-mmap-whole-defined-error-source-1/actual-helper-consumer-preparation-1/fixture/perf_mmap_actual.c:59:50: note: expected ‘perf_do_mmap_fn_t’ {aka ‘long long int (*)(long long unsigned int,  long long unsigned int,  int,  int,  int,  long long int,  const int,  void *)’} but argument is of type ‘long int (*)(long unsigned int,  size_t,  int,  int,  int,  long int,  int,  void *)’ {aka ‘long int (*)(long unsigned int,  long long unsigned int,  int,  int,  int,  long int,  int,  void *)’}
+   59 | static long invoke(int backend,perf_do_mmap_fn_t map)
+      |                                ~~~~~~~~~~~~~~~~~~^~~
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-perf-mmap-whole-defined-error-source-1/actual-helper-consumer-preparation-1/fixture/perf_mmap_actual.c:104:18: error: passing argument 2 of ‘invoke’ from incompatible pointer type [-Werror=incompatible-pointer-types]
+  104 |   CHECK(invoke(2,controlled_map)==errors[e]);CHECK(callbacks==1 && !bad_callback);
+      |                  ^~~~~~~~~~~~~~
+      |                  |
+      |                  long int (*)(long unsigned int,  size_t,  int,  int,  int,  long int,  int,  void *) {aka long int (*)(long unsigned int,  long long unsigned int,  int,  int,  int,  long int,  int,  void *)}
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-perf-mmap-whole-defined-error-source-1/actual-helper-consumer-preparation-1/fixture/perf_mmap_actual.c:41:27: note: in definition of macro ‘CHECK’
+   41 | #define CHECK(c) do {if(!(c)){printf("FAIL line=%d positive=%d negative=%d callbacks=%d bad=%d\n",__LINE__,positive_cases,negative_cases,callbacks,bad_callback);return 1;}}while(0)
+      |                           ^
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-perf-mmap-whole-defined-error-source-1/actual-helper-consumer-preparation-1/fixture/perf_mmap_actual.c:59:50: note: expected ‘perf_do_mmap_fn_t’ {aka ‘long long int (*)(long long unsigned int,  long long unsigned int,  int,  int,  int,  long long int,  const int,  void *)’} but argument is of type ‘long int (*)(long unsigned int,  size_t,  int,  int,  int,  long int,  int,  void *)’ {aka ‘long int (*)(long unsigned int,  long long unsigned int,  int,  int,  int,  long int,  int,  void *)’}
+   59 | static long invoke(int backend,perf_do_mmap_fn_t map)
+      |                                ~~~~~~~~~~~~~~~~~~^~~
+cc1: some warnings being treated as errors

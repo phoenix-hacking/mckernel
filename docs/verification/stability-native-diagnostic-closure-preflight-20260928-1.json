@@ -1,0 +1,84 @@
+{
+  "schema": "mckernel.native-diagnostic-closure-preflight.v1",
+  "recorded_at": "2026-09-28T05:19:00-07:00",
+  "status": "BLOCKED_PROVENANCE_SUPERSEDED",
+  "case_id": "startup.argv-empty",
+  "inputs": {
+    "payload": {
+      "path": "/home/holden/mckernel-work/scratch/stability-packet001-compile-20260913-1/startup.argv-empty/payload",
+      "size": 20528,
+      "sha256": "ff227c83b2da598110768e13f5e042b437e049659706b56079cc73f7c818a836"
+    },
+    "interpreter": {
+      "path": "/home/holden/mckernel-work/scratch/native-ultra-futex-guest-20260909-2026091302/root/lib64/ld-linux-x86-64.so.2",
+      "size": 930600,
+      "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b"
+    },
+    "libc": {
+      "path": "/home/holden/mckernel-work/scratch/native-ultra-futex-guest-20260909-2026091302/root/lib64/libc.so.6",
+      "size": 2339896,
+      "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4"
+    },
+    "source": {
+      "path": "scripts/application-tests/reviewed/packet-001-v3/startup.argv-empty.c",
+      "size": 777,
+      "sha256": "1786835eccf68588b5def92a056c4bc83b10a6ce7163778b59dd4c5481b7b465"
+    },
+    "oracle": {
+      "path": "scripts/application-tests/reviewed/packet-001-v3/startup.argv-empty.oracle.json",
+      "size": 687,
+      "sha256": "0be4d0cbd276aa77e381de0734ccfcc77304b9f9fa5d00b576c69fb01326e6d8"
+    },
+    "compile_record": "docs/verification/stability-packet001-compile-20260913-1.json"
+  },
+  "command": [
+    "env",
+    "-i",
+    "PATH=/usr/bin:/bin",
+    "COKERNEL_PATH=/apps",
+    "/home/holden/mckernel-work/scratch/native-ultra-futex-guest-20260909-2026091302/root/lib64/ld-linux-x86-64.so.2",
+    "--inhibit-cache",
+    "--library-path",
+    "/home/holden/mckernel-work/scratch/native-ultra-futex-guest-20260909-2026091302/root/lib64",
+    "--argv0",
+    "app",
+    "/home/holden/mckernel-work/scratch/stability-packet001-compile-20260913-1/startup.argv-empty/payload",
+    "A",
+    "",
+    "B"
+  ],
+  "cwd": "/home/holden/mckernel-work/scratch/native-closure-preflight-20260928-xiRBKL/case/work",
+  "environment": {
+    "PATH": "/usr/bin:/bin",
+    "COKERNEL_PATH": "/apps"
+  },
+  "result": {
+    "raw_shell_exit_code": 0,
+    "stdout": {
+      "path": "/home/holden/mckernel-work/scratch/native-closure-preflight-20260928-xiRBKL/stdout.bin",
+      "size": 91,
+      "sha256": "e3ef69c5f8e85e2cdca6bac568664d3b146038ac5523185517595a70364a2884",
+      "hex": "7b2263617365223a22737461727475702e617267762d656d707479222c2261726763223a342c2261726776223a5b22617070222c2241222c22222c2242225d2c227465726d696e61746f725f69735f6e756c6c223a747275657d0a"
+    },
+    "stderr": {
+      "path": "/home/holden/mckernel-work/scratch/native-closure-preflight-20260928-xiRBKL/stderr.bin",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "scope": {
+    "host_subprocess_executed": true,
+    "mckernel_application_executed": false,
+    "linux_formal_acceptance": false,
+    "application_acceptance": false,
+    "production_gate_credit": false,
+    "purpose": "Prove that the exact retained loader/libc closure can execute the exact compiled payload with the frozen argv and bytes before guest staging."
+  },
+  "limitations": [
+    "The retained output files do not independently record the command, environment, cwd or raw exit; the coordinator reconstructed those fields and no inspectable launcher transcript was located.",
+    "This invocation bypasses mcexec, McKernel, QEMU, module loading, serial transport, process retirement and guest teardown.",
+    "Formal paired Linux/McKernel application acceptance remains NOT_RUN."
+  ],
+  "independent_review": "BLOCKED: matching stdout could not independently prove raw exit or invocation provenance.",
+  "superseded_by": "docs/verification/stability-native-diagnostic-closure-success-20260928-2.json"
+}

@@ -1,0 +1,174 @@
+{
+  "argv": [
+    "/usr/bin/env",
+    "-i",
+    "KBUILD_BUILD_HOST=rocky-10.2-x86_64",
+    "KBUILD_BUILD_TIMESTAMP=Tue, 11 Aug 2026 07:40:34 +0000",
+    "KBUILD_BUILD_USER=mckernel",
+    "KBUILD_BUILD_VERSION=1",
+    "SOURCE_DATE_EPOCH=1786434034",
+    "PATH=/usr/bin:/bin",
+    "LANG=C",
+    "LC_ALL=C",
+    "TZ=UTC",
+    "BASH_ENV=",
+    "ENV=",
+    "GNUMAKEFLAGS=",
+    "MAKEFILES=",
+    "MAKEFLAGS=",
+    "MAKEOVERRIDES=",
+    "MFLAGS=",
+    "LD_LIBRARY_PATH=",
+    "LD_PRELOAD=",
+    "HOME=/candidate/home",
+    "TMPDIR=/candidate/tmp",
+    "/usr/bin/make",
+    "-C",
+    "/out/source/linux-6.12.0-211.44.1.el10_2",
+    "O=/out/build",
+    "M=/candidate/modules",
+    "ARCH=x86_64",
+    "LLVM=1",
+    "LOCALVERSION=-211.44.1.el10_2.mckernel1.x86_64",
+    "KBUILD_BUILD_HOST=rocky-10.2-x86_64",
+    "KBUILD_BUILD_TIMESTAMP=Tue, 11 Aug 2026 07:40:34 +0000",
+    "KBUILD_BUILD_USER=mckernel",
+    "KBUILD_BUILD_VERSION=1",
+    "SOURCE_DATE_EPOCH=1786434034",
+    "--jobserver-style=pipe",
+    "-j2",
+    "modules"
+  ],
+  "cwd": "/out/build",
+  "environment": {
+    "BASH_ENV": "",
+    "ENV": "",
+    "GNUMAKEFLAGS": "",
+    "HOME": "/candidate/home",
+    "KBUILD_BUILD_HOST": "rocky-10.2-x86_64",
+    "KBUILD_BUILD_TIMESTAMP": "Tue, 11 Aug 2026 07:40:34 +0000",
+    "KBUILD_BUILD_USER": "mckernel",
+    "KBUILD_BUILD_VERSION": "1",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "LD_LIBRARY_PATH": "",
+    "LD_PRELOAD": "",
+    "MAKEFILES": "",
+    "MAKEFLAGS": "",
+    "MAKEOVERRIDES": "",
+    "MFLAGS": "",
+    "PATH": "/usr/bin:/bin",
+    "SOURCE_DATE_EPOCH": "1786434034",
+    "TMPDIR": "/candidate/tmp",
+    "TZ": "UTC"
+  },
+  "timeout_seconds": 1800,
+  "read_only_mounts": [
+    "/out",
+    "/inputs"
+  ],
+  "writable_mounts": [
+    "/candidate"
+  ],
+  "all_three_modules_required": [
+    "ihk",
+    "ihk-smp-x86_64",
+    "mcctrl"
+  ],
+  "application_acceptance": false,
+  "execution_release": false,
+  "source_provenance": {
+    "baseline_source_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+    "source_candidate_sha": "d5d775d58d3457a4eaa75fe95c55c98f564eed1327b8a717f70e78086933e598",
+    "closure_sha256": "2bc24ae91ec511e87923f8c114d503883ee218e51c05277a76f39746acd8516a",
+    "closure_hash_encoding": "SHA256 of UTF-8 JSON relative-path-to-SHA256 map, sorted keys, separators comma/colon",
+    "reviewed_deltas": [
+      {
+        "path": "abi/application.rs",
+        "baseline_sha256": "d2b3770a111777d4f28a7a81814a03414d318a90d3ec7082d5c89149b1704a0f",
+        "source_candidate_sha256": "3d7e5560ff5c3519c2eca9612a218df9a01573293ac3e8cbcfb018cd6194fefa"
+      },
+      {
+        "path": "application_syscall.rs",
+        "baseline_sha256": "03007f44c020c5d0cf797b18568ef8b329fd5cb4e81abe80bb5c542b58020c25",
+        "source_candidate_sha256": "4b91a972d48c132300dbcef4a5b8129fb867367449bfd46dbc2cfc6d844ea805"
+      },
+      {
+        "path": "current_fork_task_mm.rs",
+        "baseline_sha256": null,
+        "source_candidate_sha256": "7609f8ab87adf6f3efc77fca53bd249aa74cefbf6ff47e1820767ac5199a314a"
+      },
+      {
+        "path": "ihk_smp_x86_64.rs",
+        "baseline_sha256": "a353b2915a4038e7739d01cc440376daf091367f976cf6de297bceb1dd59fce8",
+        "source_candidate_sha256": "ec3f43e0897b9389e3c31199d1f8041a0b7a5cb408f9d674271ebf3d9998dc66"
+      },
+      {
+        "path": "mcctrl_process.rs",
+        "baseline_sha256": "148134730b5fed7f14770eb070529b5227bb6ab790b7199f8800968219dffc70",
+        "source_candidate_sha256": "3bb04e7d3267a9a90eba0f0155e46c18c01d727840e83816c339a8cfe397087f"
+      },
+      {
+        "path": "mcctrl_vm.rs",
+        "baseline_sha256": "83630dbe469466c7f69f51feb3a85438e2ae20049346b5e940d89d355f590ab3",
+        "source_candidate_sha256": "69dbb41c1ac123879a1102e5991ce881d662d1aae3da80a4c1ddf0c8009c1f2b"
+      },
+      {
+        "path": "os_runtime.rs",
+        "baseline_sha256": "9519b7f35f5d28c88cdf366fe5c67a244ea005db713690a3686afe8c2a60fcab",
+        "source_candidate_sha256": "920a7f44c0574c2f603456c86160c93837ba2651987f1c670fb7597c0785916f"
+      },
+      {
+        "path": "smp_application.rs",
+        "baseline_sha256": "6b37a71ba79bf5746fd72123b82ebe5afc71c809310a2a942cea08a3d66cf5e8",
+        "source_candidate_sha256": "2427d6f351304f7c1535267c2a352fe25a86aceb234e55540605096d696d6f22"
+      },
+      {
+        "path": "smp_application_syscall.rs",
+        "baseline_sha256": "4118de1401f33b2df17393660e6acbce2f337dca8a9cdfcf10965b1d3dc84c55",
+        "source_candidate_sha256": "a7ec18772c22178dea1274566c83e201bb0955e7714d1e37194ee9e229005ab0"
+      },
+      {
+        "path": "smp_cpu.rs",
+        "baseline_sha256": "ed5520878d89e9a79d7ffeb128ccbb54fbab5472b4b0f57abd00a0399fc8e9cb",
+        "source_candidate_sha256": "356853344bffaa5b3d625c97eb3928b8908d45abbc94d16902e19bdef45ea90c"
+      },
+      {
+        "path": "smp_file_pager.rs",
+        "baseline_sha256": "9876f1b374ecfb44fba09395aa9fca1ed840619488f9b4f8cde38a6693004cd9",
+        "source_candidate_sha256": "655c029bcddf937b6445ee01d076978ff9606832d60fd038e07076bee939e96c"
+      },
+      {
+        "path": "smp_memory.rs",
+        "baseline_sha256": "db0c5f94b5ea41610c501002ff359b7f23a38841715a0307e8b8f7872ac65522",
+        "source_candidate_sha256": "8785b1be4dffe2ef24bc54dc8f861c290418ce13773d46177692c709d69fb525"
+      },
+      {
+        "path": "smp_procfs.rs",
+        "baseline_sha256": "7aba4319fdc6fa76761ca01128c7a7d920c4be85244737167122c914fc1268d5",
+        "source_candidate_sha256": "4ae39992d0354b2f0b32de4a3e26ce8a621ede6dff69dd92ce303d4ab90232ea"
+      },
+      {
+        "path": "smp_service.rs",
+        "baseline_sha256": "bd0a109fe6c402e21b702b0fa96d99c2d9edbd5179877aa61f9f27bd595fe0e4",
+        "source_candidate_sha256": "fbfa3bafa9c167a608d15474d6de438d0dfeb0d8c1b1ab7b3fd749cd57ad52fd"
+      },
+      {
+        "path": "sysfs_memory.rs",
+        "baseline_sha256": "c4bb558432a85c565977a7820d42eaf06530398d7fe9b916bf58f6741ca78d81",
+        "source_candidate_sha256": "fc8b30fd81d530372aabbbdece24830b3e881737d3cadf054eff372d0ad53950"
+      },
+      {
+        "path": "sysfs_remote.rs",
+        "baseline_sha256": "8a33f152307d66f7c205fe7557da1a4e02e5d230335dd9b36f16797e11db53ee",
+        "source_candidate_sha256": "fe4ec42333148770a36843a82f0c4cdf675a27065dbed1f13449a2b61472dfa9"
+      }
+    ],
+    "compatibility_build_id": {
+      "path": "ihk-compat-build-id.bin",
+      "sha256": "6836dd3f0fd3d273816c58b067eeea1b53a2a7ab760c68e3d918eb14e80c38f0",
+      "meaning": "Retained baseline ABI compatibility blob; not proof of unchanged compiled source"
+    },
+    "excluded_working_tree": "Every unreviewed working-tree file excluded; retained current61 closure plus reviewed kmsg reader and mailbox failed-invalidation ownership pair included"
+  }
+}

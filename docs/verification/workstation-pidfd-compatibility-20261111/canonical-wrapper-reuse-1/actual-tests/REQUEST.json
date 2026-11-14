@@ -1,0 +1,410 @@
+{
+  "at": "2026-11-11T21:20:17.780830+00:00",
+  "canonical_or_installed_or_live_controller_edits": false,
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "0",
+        "/usr/bin/prlimit",
+        "--as=268435456",
+        "--cpu=10",
+        "--fsize=4194304",
+        "--nofile=64",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TZ=UTC",
+        "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-p04tests-max-1/canonical-wrapper-reuse-1/output-1/tmp",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-p04tests-max-1/canonical-wrapper-reuse-1/pidfd_compatibility_cases.py"
+      ],
+      "expected_exit": 0,
+      "id": "actual-anaconda-lazy-canonical-pidfd-five-cases",
+      "required_stderr": "empty",
+      "required_stdout_json": {
+        "actual_runtime": {
+          "OS_name": "posix",
+          "executable_real": "/home/holden/anaconda3/bin/python3.9",
+          "machine": "x86_64",
+          "pidfd_open_builtin_available": false,
+          "pidfd_send_builtin_available": false,
+          "pointer_bytes": 8,
+          "sysname": "Linux",
+          "version": [
+            3,
+            9,
+            12
+          ]
+        },
+        "canonical_watcher": {
+          "path": "/home/holden/mckernel/scripts/watch_os_goal.py",
+          "sha256": "9a105b4f37f61bed7ffbffd848ed0f02d2e792e4797a38609761e98480e7a1bb"
+        },
+        "cases": [
+          {
+            "builtin_open_calls": [],
+            "builtin_send_calls": [],
+            "close_calls": [
+              777
+            ],
+            "errno": null,
+            "exception": null,
+            "identity_reads": [
+              20000001
+            ],
+            "identity_replies_remaining": 0,
+            "loader_calls": [
+              {
+                "name": null,
+                "use_errno": true
+              },
+              {
+                "name": null,
+                "use_errno": true
+              }
+            ],
+            "message": null,
+            "name": "missing_builtins_real_wrapper_syscall_ABI",
+            "numeric_signal_calls": [],
+            "returned_none": true,
+            "syscall_replies_remaining": 0,
+            "syscalls": [
+              {
+                "argument_types": [
+                  "c_int",
+                  "c_uint"
+                ],
+                "arguments": [
+                  20000001,
+                  0
+                ],
+                "errno_before": 0,
+                "number": 434,
+                "number_type": "c_long",
+                "restype": "c_long"
+              },
+              {
+                "argument_types": [
+                  "c_int",
+                  "c_int",
+                  "c_void_p",
+                  "c_uint"
+                ],
+                "arguments": [
+                  777,
+                  15,
+                  null,
+                  0
+                ],
+                "errno_before": 0,
+                "number": 424,
+                "number_type": "c_long",
+                "restype": "c_long"
+              }
+            ]
+          },
+          {
+            "builtin_open_calls": [],
+            "builtin_send_calls": [],
+            "close_calls": [
+              777
+            ],
+            "errno": null,
+            "exception": "ValueError",
+            "identity_reads": [
+              20000001
+            ],
+            "identity_replies_remaining": 0,
+            "loader_calls": [
+              {
+                "name": null,
+                "use_errno": true
+              }
+            ],
+            "message": "Process birth differs; no signal sent",
+            "name": "birth_mismatch_no_send",
+            "numeric_signal_calls": [],
+            "returned_none": false,
+            "syscall_replies_remaining": 0,
+            "syscalls": [
+              {
+                "argument_types": [
+                  "c_int",
+                  "c_uint"
+                ],
+                "arguments": [
+                  20000001,
+                  0
+                ],
+                "errno_before": 0,
+                "number": 434,
+                "number_type": "c_long",
+                "restype": "c_long"
+              }
+            ]
+          },
+          {
+            "builtin_open_calls": [],
+            "builtin_send_calls": [],
+            "close_calls": [],
+            "errno": 38,
+            "exception": "OSError",
+            "identity_reads": [],
+            "identity_replies_remaining": 0,
+            "loader_calls": [
+              {
+                "name": null,
+                "use_errno": true
+              }
+            ],
+            "message": null,
+            "name": "open_errno_no_handle_or_send",
+            "numeric_signal_calls": [],
+            "returned_none": false,
+            "syscall_replies_remaining": 0,
+            "syscalls": [
+              {
+                "argument_types": [
+                  "c_int",
+                  "c_uint"
+                ],
+                "arguments": [
+                  20000001,
+                  0
+                ],
+                "errno_before": 0,
+                "number": 434,
+                "number_type": "c_long",
+                "restype": "c_long"
+              }
+            ]
+          },
+          {
+            "builtin_open_calls": [],
+            "builtin_send_calls": [],
+            "close_calls": [
+              777
+            ],
+            "errno": 3,
+            "exception": "ProcessLookupError",
+            "identity_reads": [
+              20000001
+            ],
+            "identity_replies_remaining": 0,
+            "loader_calls": [
+              {
+                "name": null,
+                "use_errno": true
+              },
+              {
+                "name": null,
+                "use_errno": true
+              }
+            ],
+            "message": null,
+            "name": "send_errno_still_closes_once",
+            "numeric_signal_calls": [],
+            "returned_none": false,
+            "syscall_replies_remaining": 0,
+            "syscalls": [
+              {
+                "argument_types": [
+                  "c_int",
+                  "c_uint"
+                ],
+                "arguments": [
+                  20000001,
+                  0
+                ],
+                "errno_before": 0,
+                "number": 434,
+                "number_type": "c_long",
+                "restype": "c_long"
+              },
+              {
+                "argument_types": [
+                  "c_int",
+                  "c_int",
+                  "c_void_p",
+                  "c_uint"
+                ],
+                "arguments": [
+                  777,
+                  15,
+                  null,
+                  0
+                ],
+                "errno_before": 0,
+                "number": 424,
+                "number_type": "c_long",
+                "restype": "c_long"
+              }
+            ]
+          },
+          {
+            "builtin_open_calls": [],
+            "builtin_send_calls": [],
+            "close_calls": [
+              777
+            ],
+            "errno": 5,
+            "exception": "OSError",
+            "identity_reads": [
+              20000001
+            ],
+            "identity_replies_remaining": 0,
+            "loader_calls": [
+              {
+                "name": null,
+                "use_errno": true
+              },
+              {
+                "name": null,
+                "use_errno": true
+              }
+            ],
+            "message": null,
+            "name": "close_failure_observable_no_retry",
+            "numeric_signal_calls": [],
+            "returned_none": false,
+            "syscall_replies_remaining": 0,
+            "syscalls": [
+              {
+                "argument_types": [
+                  "c_int",
+                  "c_uint"
+                ],
+                "arguments": [
+                  20000001,
+                  0
+                ],
+                "errno_before": 0,
+                "number": 434,
+                "number_type": "c_long",
+                "restype": "c_long"
+              },
+              {
+                "argument_types": [
+                  "c_int",
+                  "c_int",
+                  "c_void_p",
+                  "c_uint"
+                ],
+                "arguments": [
+                  777,
+                  15,
+                  null,
+                  0
+                ],
+                "errno_before": 0,
+                "number": 424,
+                "number_type": "c_long",
+                "restype": "c_long"
+              }
+            ]
+          }
+        ],
+        "real_process_signal_or_controller_service_action": false,
+        "scope": "ACTUAL_ANACONDA_GUARD_LAZY_CANONICAL_PIDFD_CONTROLLED_LOWER_ONLY"
+      },
+      "wall_seconds": 20
+    }
+  ],
+  "contract": {
+    "bytes": 2777,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-p04tests-max-1/canonical-wrapper-reuse-1/FOCUSED-TEST-CONTRACT.json",
+    "sha256": "d739fdf1a2a16bc97af003f90cf4bcba9bb3495261a6812cd9d85200a29c2706"
+  },
+  "cwd": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-p04tests-max-1/canonical-wrapper-reuse-1",
+  "external_oracles": {
+    "bytes": 6323,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-p04tests-max-1/canonical-wrapper-reuse-1/EXPECTED.json",
+    "sha256": "b59c0b515375b91e46031549ca06a7ea4cbb5a30669190c95e139e517220bbb3"
+  },
+  "fresh_output_root": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-p04tests-max-1/canonical-wrapper-reuse-1/output-1",
+  "inputs": {
+    "bytes": 6976,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-p04tests-max-1/canonical-wrapper-reuse-1/INPUTS.json",
+    "sha256": "19f3323a82da6dde474fc7e753db33f894c7a87e29a7943afd49b372201ae87b"
+  },
+  "limits": [
+    "Controlled lower effects only: no genuine pidfd syscall, process signal, numeric kill, guardian/controller/service stop/start/load, account, issuer, native or source state action.",
+    "Full actual candidate and interpreter compatibility/type/runtime outcomes remain unproved until actual command.",
+    "Already-loaded guardian retains its original helper until genuine separately reviewed positive retirement/new source-load. Fresh CLI import does not hot-update it.",
+    "No native/functional/default/parent/milestone credit or held/resource/account outcome release."
+  ],
+  "no_broad_suites_or_new_framework": true,
+  "original_acceptance": false,
+  "owner": "/root/p04_tests_max",
+  "ownership": {
+    "full_Root_tool_completion_before_current256MiB_release": true,
+    "guard_overhead_AST": {
+      "bytes": 8606,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/run_once.py",
+      "sha256": "983b8c3ceabcd8dc4d2e1999d75e6edbef91145a5f2ab18bfa1a2dfa6639c822"
+    },
+    "helper": {
+      "bytes": 4668,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/owned_process.py",
+      "sha256": "afe7403ead1bf8b2c527dfa34a0c0c19010cde5f27a646ccf1545fb8f3b9bc1d"
+    },
+    "immediate_positive_actual_PID_birth_direct_and_family_wait_streams_exactstatus": true,
+    "labels": [
+      "actual-anaconda-lazy-canonical-pidfd-five-controlled-cases"
+    ],
+    "peer_charge_not_retired": true,
+    "protected_parent_basis": {
+      "bytes": 5552,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-snapshot-helper-tests-p04tests-max-1/primary-guard-correction-1/run_root_once.py",
+      "sha256": "3c2f29de097328cb90a92c9ee34fa540e31f6658d73cf51234f3ec86d3eae809"
+    },
+    "record_count": 1
+  },
+  "private_tmp": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-p04tests-max-1/canonical-wrapper-reuse-1/output-1/tmp",
+  "profile": {
+    "CPU_seconds": 10,
+    "Root_actual_fresh_admission_required": true,
+    "all_controller_worker_overhead_inside_shared4": true,
+    "conservative_other_HOST_job_slots": 1,
+    "conservative_other_HOST_reserved_bytes": 268435456,
+    "cpu": 0,
+    "file_size_limit_bytes": 4194304,
+    "fresh_MemAvailable_floor_bytes": 27917287424,
+    "host_disk_floor_bytes": 17179869184,
+    "jobs": 1,
+    "max_address_space_bytes": 268435456,
+    "no_CPU1_or_native_borrow": true,
+    "other_payload_rule": "Root must freshly reconcile zero or atmost1 separately admitted other HOST job<=256MiB on another allowed CPU; no peer grant/release follows.",
+    "output_disk_reservation_bytes": 16777216,
+    "scratch_disk_floor_bytes": 12884901888,
+    "shared_HOST_total_bytes": 4294967296,
+    "shared_jobs_max": 3,
+    "wall_seconds": 20
+  },
+  "schema": 1,
+  "source_module_fixture_or_helper_executed_by_author": false,
+  "source_ready": {
+    "bytes": 2576,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/pidfd-compatibility-repair-1/canonical-wrapper-reuse-1/SOURCE-READY.NOT-EXECUTED.json",
+    "sha256": "fef2c6709f365a279c7405e49368388114c62e323720f2b65254dc7e174239ba"
+  },
+  "source_review": {
+    "bytes": 5579,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-p04tests-max-1/canonical-wrapper-reuse-1/SOURCE-REVIEW.json",
+    "sha256": "1664deceddee67912d95e0bffa3dd00ebde70af48474bcf660acea5028cc7cf4"
+  },
+  "status": "FROZEN_FIVE_LAZY_CANONICAL_PIDFD_CASES_UNEXECUTED",
+  "superseded_old_nine_case_packet_unexecuted": {
+    "bytes": 17275,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-p04tests-max-1/REQUEST.json",
+    "sha256": "fd181e12aa262d58ca3513c0d57395d924a38e2d62d127cb6d8fe0c40070e8a3"
+  }
+}

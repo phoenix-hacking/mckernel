@@ -1,0 +1,16 @@
+# M14 scripts verifier duplicate-key successor
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing. No retained source-tree scan, materialization, mount, Docker, native, guest, privilege, controller or cleanup operation ran. Fixtures are retained.
+
+The predecessor verifier already rejected duplicate JSON object keys: its `json.loads` used an `object_pairs_hook` that raised on repeated keys. The original fixture suite checked duplicate manifest paths but did not test duplicate JSON keys. This successor makes the duplicate-key function explicit, adds raw-JSON negative tests with a matching whole-manifest digest, and makes manifest authentication and root/ownership limits explicit in its output. It does not claim a reproduced predecessor acceptance bug.
+
+`verify_scripts_view.py` SHA256 `829185146662f0ae37df6515d5c8f9ac705c7ebe95a8cca60e5f39ddc4d03d5c` rejects duplicate object keys at every JSON nesting level before indexing or walking; output names the caller-supplied manifest digest and states that authentication and custody remain external. The retained prior implementation and evidence are unchanged.
+
+Tests, both from the parent attempt directory:
+
+- `python3 -B m14-scripts-verifier-duplicate-successor-1/test_verifier.py > m14-scripts-verifier-duplicate-successor-1/test-final.stdout 2> m14-scripts-verifier-duplicate-successor-1/test-final.stderr` exited 0: all 14 actual checker cases passed on fresh small local fixtures. Captured result JSON `fixture-jabmb33r/RESULTS.json` SHA256 `5888a1ca046932523ed9ebfa066b58562ec01d92e8201b8bb1c1dc51dafca3d2`.
+- `python3 -B m14-scripts-verifier-duplicate-successor-1/test_duplicate_keys.py > m14-scripts-verifier-duplicate-successor-1/duplicates.stdout 2> m14-scripts-verifier-duplicate-successor-1/duplicates.stderr` exited 0: both predecessor and successor accepted a valid empty fixture, and both rejected duplicate top-level key, nested path key and nested SHA256 key with each malformed file's correct supplied digest. Captured result JSON `json-fixture-53jn_w__/RESULTS.json` SHA256 `6687672803293f396b69002b01f84bc82fdb8f5d61e873691b30d8e25ea83548`. Both stderr streams are empty.
+
+The digest supplied by a caller is not authentication. Before any real use, an independent owner must authenticate the exact reviewed union-manifest digest and provenance through the actual approved evidence chain, bind that digest and this checker to the invocation, and ensure the target directory cannot choose either value. Current historical digest `48b2c25266784641b28100c08c7c7baa4559d0aaffe670223ee71936f3deaffa` is a source proposal, not an operation release.
+
+The no-follow walk and before/after metadata checks are local checks only. Root ancestor and mount identity, directory replacement, same-device bind aliases, preexisting writable file descriptors, host writers, UID/GID, ACL, path containment, and global quiescence over the entire walk and later use require separately witnessed custody and effective-mount checks. A link count of one does not establish exclusive access; per-file stability does not establish a global snapshot. No integration into the disabled owner/validator or actual materialization is authorized by this result.

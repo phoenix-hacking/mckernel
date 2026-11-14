@@ -1,0 +1,39 @@
+{
+  "label": "parity-compile",
+  "argv": [
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+    "--edition=2021",
+    "-Awarnings",
+    "-C",
+    "opt-level=2",
+    "/home/holden/mckernel-work/host-preparation/evening-next-live-process-rust-batch-20261019-1/checks-1/parity.rs",
+    "-C",
+    "link-arg=/home/holden/mckernel-work/host-preparation/evening-next-live-process-rust-batch-20261019-1/checks-1/reference.o",
+    "-C",
+    "link-arg=-no-pie",
+    "-o",
+    "/home/holden/mckernel-work/host-preparation/evening-next-live-process-rust-batch-20261019-1/checks-1/parity"
+  ],
+  "pid": 1403297,
+  "returncode": 1,
+  "direct_child_joined": true,
+  "seconds": 0.11493468901608139,
+  "timed_out": false,
+  "cleanup": [],
+  "capture_method": "direct regular-file child writes",
+  "cap_bytes_per_stream": 33554432,
+  "captures": {
+    "stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "within_cap": true,
+      "cap_reached": false
+    },
+    "stderr": {
+      "bytes": 903,
+      "sha256": "2ae1c506b377c510c993087132f57d64e5fb06c40f0c50987c81a7dc8dbe08fa",
+      "within_cap": true,
+      "cap_reached": false
+    }
+  }
+}

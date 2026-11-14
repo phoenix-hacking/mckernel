@@ -1,0 +1,323 @@
+{
+  "schema": "mckernel.native-running-lifecycle-execution-proposal.v1",
+  "status": "PASS_EXECUTION_RELEASE",
+  "author": "/root",
+  "candidate_sha": "1769263c751befa9983d19705833d3d5ac6a1ace",
+  "source_identity": {
+    "linux_and_mckernel_image_baseline": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+    "all_three_module_source_candidate": "1769263c751befa9983d19705833d3d5ac6a1ace",
+    "module_source_provenance": {
+      "baseline_source_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+      "closure_hash_encoding": "SHA256 of UTF-8 JSON relative-path-to-SHA256 map, sorted keys, separators comma/colon",
+      "closure_sha256": "cfbb0e4fdf6d55543485de002e5bc8b52bf22f759c3cff9231f76460839dd001",
+      "compatibility_build_id": {
+        "meaning": "Retained baseline ABI compatibility blob; not proof of unchanged compiled source",
+        "path": "ihk-compat-build-id.bin",
+        "sha256": "6836dd3f0fd3d273816c58b067eeea1b53a2a7ab760c68e3d918eb14e80c38f0"
+      },
+      "excluded_working_tree": "Every file outside the two reviewed deltas, including Remote and service-worker WIP",
+      "reviewed_deltas": [
+        {
+          "baseline_sha256": "a353b2915a4038e7739d01cc440376daf091367f976cf6de297bceb1dd59fce8",
+          "path": "ihk_smp_x86_64.rs",
+          "source_candidate_sha256": "33b783c1e34727c0ae2e7202447a0516f7b8841a683b7580805c2b7d4fb0dc54"
+        },
+        {
+          "baseline_sha256": "9519b7f35f5d28c88cdf366fe5c67a244ea005db713690a3686afe8c2a60fcab",
+          "path": "os_runtime.rs",
+          "source_candidate_sha256": "65107aafb28868e76640cb2e1862e5d9e36a930a2e9dab850824d5108879225a"
+        }
+      ],
+      "source_candidate_sha": "1769263c751befa9983d19705833d3d5ac6a1ace"
+    },
+    "compatibility_build_id_semantics": "Retained ABI compatibility blob; not proof of unchanged942 compiled sources."
+  },
+  "execution_count": 1,
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-B",
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/ndnlife-1",
+    "--nonce",
+    "015461121dc34cb4b7658b0602749823",
+    "--owner-sha256",
+    "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+    "--manifest",
+    "/home/holden/mckernel-work/scratch/native-running-lifecycle-postbuild-preparation-20261017-1/manifest.json",
+    "--manifest-sha256",
+    "dec492d23f14781d2870789db321c669c491ef9483b809d3b7c90b83a060909c"
+  ],
+  "owner": {
+    "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+    "sha256": "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+    "size": 58828
+  },
+  "manifest": {
+    "path": "/home/holden/mckernel-work/scratch/native-running-lifecycle-postbuild-preparation-20261017-1/manifest.json",
+    "sha256": "dec492d23f14781d2870789db321c669c491ef9483b809d3b7c90b83a060909c",
+    "size": 5587
+  },
+  "nonce": "015461121dc34cb4b7658b0602749823",
+  "parent": {
+    "path": "/home/holden/mckernel-work/scratch/ndnlife-1",
+    "device": 1828,
+    "inode": 109741,
+    "mode": "0o700",
+    "uid": 1000,
+    "gid": 1000
+  },
+  "profile": {
+    "cleanup_timeout_seconds": 15,
+    "cpus": 4,
+    "cpuset": "2-5",
+    "guest_memory_mib": 8192,
+    "guest_numa_nodes": 2,
+    "guest_timeout_seconds": 300,
+    "guest_vcpus": 4,
+    "heavy_operations": 1,
+    "mckernel_cpus": 1,
+    "mckernel_memory_mib": 128,
+    "memory": 12884901888,
+    "memory_swap": 12884901888,
+    "network": "none",
+    "payload_timeout_seconds": 10,
+    "pids": 512
+  },
+  "payload_contract": {
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "app",
+      "A",
+      "",
+      "B"
+    ],
+    "cwd": "/case/work",
+    "env": {
+      "COKERNEL_PATH": "/apps",
+      "PATH": "/usr/bin:/bin"
+    },
+    "oracle": {
+      "exit_code": 0,
+      "stderr_hex": "",
+      "stdout_hex": "68616e646c65643d31206f627365727665645f626c6f636b65643d3120726573746f7265643d310a"
+    },
+    "stderr_limit_bytes": 1024,
+    "stdout_limit_bytes": 1024
+  },
+  "oracle": {
+    "exit_code": 0,
+    "stderr_hex": "",
+    "stdout_hex": "68616e646c65643d31206f627365727665645f626c6f636b65643d3120726573746f7265643d310a"
+  },
+  "staging_evidence": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-running-lifecycle-postbuild-preparation-20261017-1.json",
+    "sha256": "6fc505f24f2f52a6240e9cbbd91375b1c7ac741b9164215d3790110ed9a0b1f8",
+    "size": 18486
+  },
+  "artifact_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-running-external-modules-artifact-review-20261017-1.json",
+    "sha256": "273f9897fc2aa8fee7ad094c53e240006d7700b8da6e96a752e6715b1046c064",
+    "size": 959
+  },
+  "matched_native_modules": [
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/scratch/native-running-modules-candidate-2a392fdcffaf426894bed7ed67a33c66/modules/ihk.ko",
+      "sha256": "51b48a9e42eaa2411cab2a28edf9bb5db8b2d648675d083473e926f91dd0e038",
+      "size": 1440392
+    },
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/scratch/native-running-modules-candidate-2a392fdcffaf426894bed7ed67a33c66/modules/ihk-smp-x86_64.ko",
+      "sha256": "fc7f3d38a32e806b3f905f283ba0bb4902e14455ad8efd14688f728f2af7e1ab",
+      "size": 11424624
+    },
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/scratch/native-running-modules-candidate-2a392fdcffaf426894bed7ed67a33c66/modules/mcctrl.ko",
+      "sha256": "6571ac7eca13559d8bab65125d54facbbc65e84f815d4ff3fc77ec6aa1104972",
+      "size": 1913904
+    }
+  ],
+  "retained_bzImage": {
+    "mode": 33188,
+    "path": "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/bzImage",
+    "sha256": "032653ee0661b059c325e2a0911a9d492805f1a889c4df515473d69a8be105bc",
+    "size": 16130048
+  },
+  "retained_mckernel_image": {
+    "mode": 33261,
+    "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-work-942c927b-scratch22-authority3-image1-20261017/evidence/artifacts/mckernel.img",
+    "sha256": "fa6685543160fcaa5000b535ec8bd6fc70230465109564c3fb2beecb95bf39ed",
+    "size": 7908256
+  },
+  "lifecycle_probe": {
+    "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-static-20261017-1/native-lifecycle-probe",
+    "sha256": "d8132525b6126ee93fc5de4f59ac06eb83ffeb90f85225da585d89060dfb1248",
+    "size": 872616
+  },
+  "lifecycle_collector": {
+    "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-static-20261017-1/native-lifecycle-collector",
+    "sha256": "8330e259adcd34136379f0deef2f77ecd5a8a8aba9161c5ba6329e8a0e70f89b",
+    "size": 1021992
+  },
+  "lifecycle_parser": {
+    "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_lifecycle_capture.py",
+    "sha256": "0585f78b80e603c010316418ce307794d59e1d92581b845ec6b2e74e22c8954b",
+    "size": 7025
+  },
+  "lifecycle_oracle": {
+    "argv": [
+      "/bin/native-lifecycle-probe",
+      "0"
+    ],
+    "status_before": 5,
+    "shutdown_return": 0,
+    "status_after": 0,
+    "transition_observed": true,
+    "resource_restoration_verified": false,
+    "os_destroyed": false,
+    "require_independent_payload_evaluation": true
+  },
+  "source_review": {
+    "reviewer": "/root/image_retirement_review",
+    "decision": "PASS_SOURCE_INTEGRATED_QMP_ADMISSION",
+    "diagnostic_sha256": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e",
+    "owner_sha256": "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+    "test_sha256": "6d7fdebda5a064dfbf8f1ddac8e4a771f9db237c575e2475bf643190560a8818",
+    "actual_test_exit": 0,
+    "tests_passed": 76
+  },
+  "crossbody_evidence": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-lifecycle-capture-crossbody-20261017-2.json",
+    "sha256": "12501910d607e7a48ad9fa32c3b4761cd7acd97fc33a52a18d20ff64260d9ebe",
+    "size": 13131
+  },
+  "original_actual_lifecycle_failure": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-lifecycle-current942-failure-review-20261017-1.json",
+    "sha256": "7c53515fc55152f419172e81bb6f0abb72c81a0e64c2cc35f0cd4c9f3e49d4da",
+    "size": 17317
+  },
+  "build_owner_retirement": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-running-external-modules-attempt-review-20261017-1.json",
+    "sha256": "e60296b79d55224bf90c74ef3acaf8ef7556f3a7b52932d4ecef6ac59b428e9d",
+    "size": 10287
+  },
+  "prerequisites": {
+    "image_archival_cleanup": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/scratch22-authority3-image-cleanup-result-review-20261017-1.json",
+      "sha256": "47cc7673788cb9b8c15443eec7f24c07d749b1bfe05875673d2c2b9af72bc15d",
+      "size": 1892
+    },
+    "image_retirement_proof": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/scratch22-image-fresh-retirement-observation-20261017-1.json",
+      "sha256": "1cdf3af9fa657d160a801bf909f9e5c0e77dd132d3c38b3f1a38482bd1691da8",
+      "size": 1439
+    },
+    "independent_stage_and_execution_review": {
+      "status": "PENDING",
+      "reviewer": "/root/signal_guest_execution_review",
+      "scope": "Exact60member stage, all3matched176modules and retained942kernel/image/probe/collector/parser, plus this one-shot proposal require independent review."
+    },
+    "preceding_c_memory_guest_retirement": {
+      "status": "PENDING_ACCEPTED_ACTUAL_REVIEW_AND_READBACK_REFERENCE",
+      "scope": "Dispatcher reports current942Cmemory session4548 joined0/38.104460s; actual review/readback not asserted by assembly. Add exact independently accepted immediate preceding retirement ref before release."
+    },
+    "live_preflight": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-running-lifecycle-live-preflight-20261017-1.json",
+      "sha256": "1c9b110480bccd923c068dd2a253dbd21ea0f03e85c76f367ba4f93f6ab33a57",
+      "size": 4008
+    },
+    "independent_execution_review": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-running-lifecycle-execution-review-20261017-1.json",
+      "sha256": "5349b572ebdeb69e98714e81f058bf3804a95a55bb428833273f21b85bf6ea17",
+      "size": 1153
+    }
+  },
+  "unix_monitor_endpoints": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/ndnlife-1/attempt-015461121dc34cb4b7658b0602749823/qmp.sock",
+      "encoded_bytes": 94,
+      "max_bytes": 107
+    }
+  ],
+  "postjoin_readback": {
+    "requested": true,
+    "conditions": "Only after joined positive owner/client retirement; verify unchanged canonical exact directories/regular result; use fresh ordinary-UID captures, default tar without dereference. Preserve every failed result and socket-omission stderr.",
+    "capture_limit_bytes_per_command": 33554432,
+    "timeout_seconds_per_command": 30,
+    "argv": [
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/ndnlife-1.owner-015461121dc34cb4b7658b0602749823",
+        "."
+      ],
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/cat",
+        "/home/holden/mckernel-work/scratch/ndnlife-1/attempt-015461121dc34cb4b7658b0602749823/result.json"
+      ],
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/ndnlife-1/attempt-015461121dc34cb4b7658b0602749823",
+        "."
+      ]
+    ],
+    "approved": true
+  },
+  "module_contract": {
+    "all_three_matched_modules_required": true,
+    "runtime_abi": "v6ABI2 full-ready opt-in must remain matched across IHK/SMP/mcctrl; do not mix new/old modules.",
+    "included_changes": "Only reviewed Running publication and shutdown-stage logging deltas from942baseline in source176candidate.",
+    "excluded_changes": "No epoch, Remote, service-worker or other working-tree WIP is in the frozen source closure.",
+    "compatibility_build_id": "Retained942compatibility blob is not proof of identical compiled module sources.",
+    "artifact_acceptance_scope": "Accepted artifact/source checks only; neither original failed driver/owner build receipt nor native runtime success is rewritten."
+  },
+  "scope": "One actual native module-candidate lifecycle investigation after exact signal payload and pre-probe emptyprocfs. Strict Running5\u2192shutdown0\u2192NotBooted0, clean close/PASS and independent ordinary payload evaluation remain mandatory. Shutdown may still fail: preserve original/result/log-stage/errno as failure, retain guards, no weakened oracle or blended retry. No destroy/rmmod/reboot/resource-restoration claim.",
+  "failure_policy": "One fresh attempt. Stop on unexpected failure, retain all streams/captures/raw flags/original actual Ready4\u2192-16\u2192Shutdown8 evidence, independently retire owner/client/guest and diagnose first busy stage. Any further execution requires a fresh reviewed packet.",
+  "assembly": {
+    "pattern": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-lifecycle-current942-execution-proposal-20261017-1.json",
+      "sha256": "e61e96689ea929229f8d07347cc8a97ae5890497c8f902dc05347f8d7b896b22",
+      "size": 6414
+    },
+    "staged_overlay_manifest": {
+      "path": "/home/holden/mckernel-work/scratch/native-running-lifecycle-postbuild-preparation-20261017-1/overlay-manifest.json",
+      "sha256": "9a1304a9ce7a2ecdabcfe7348d3cecf8a18912f32e3e2bd0cdd7d3e163ff9003",
+      "size": 19434
+    },
+    "selected_final_member_count": 60,
+    "execution_approved": false,
+    "runtime_called": false,
+    "tests_run": false,
+    "source_or_preparation_replayed": false,
+    "parent_created": false,
+    "fresh_parent_bound": true,
+    "scope": "Selected small immutable record/source/manifest/map joins and exact known parent metadata/emptiness/new-endpoint checks only; no corpus rehash, new compile, source repair or staging replay."
+  },
+  "reviewed_proposal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-running-lifecycle-execution-proposal-20261017-1.json",
+    "sha256": "50fb0123c081a7a3b357aba1e2c61c0a61c219efc06567ce608ae5eea184466c",
+    "size": 13807
+  },
+  "previous_core_memory_actual_retirement": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-core-memory-current942-result-review-20261017-1.json",
+    "sha256": "49d4a5b5dc0b7919f4097778fe9f99c75b216afc2345a59db8258eaab312c78f",
+    "size": 13664
+  }
+}

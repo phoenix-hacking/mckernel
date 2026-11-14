@@ -1,0 +1,28 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "authorization": "ROOT ONCE exact6puremockcontrols; no actual sudo/Docker/findmnt/query/ownershipaction. Stopfirstfailure,noautoretry",
+  "source_sha256": "8e522de460a3e075f9a8bc292fbf1f67b888e97d9a051d1f10624bfce9b73026",
+  "ready_sha256": "0ad4ec56e033bc7278f066c0d240540ad92b005d7bbde3809800a6a06edc25a1",
+  "test_sha256": "205506357353e0f6a42c934a49e5476252a7bd116e063e3cf4b8fbe881cdffac",
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=60:60",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--stack=2097152:2097152",
+    "--core=0:0",
+    "--",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=6",
+    "90",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/attempt3-coherent-entry-preparation-source-1/genuine-newbe87-physical-binding-preparation-source-1/actual7553-namespace6294-final-source-1/memory-floor-correction1-source-1/query-packet-pin-correction1-source-1/terminal-cleanup-preconstruction-source-1/test_owner935300_readonly_producer.PURE.NOT_RUN.py"
+  ]
+}

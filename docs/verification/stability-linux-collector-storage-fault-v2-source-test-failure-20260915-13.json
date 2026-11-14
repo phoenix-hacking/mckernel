@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_test_failure",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "attempt": 29,
+  "status": "FAIL_SOURCE_TEST",
+  "recorded_utc": "2026-09-16T03:55:26Z",
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-failure-20260915-29.tar.gz",
+    "sha256": "233adc1c10c7be6a8c57fd6fc32e8ebd725e82792ec6a8da5f7c8cba7f6eb6fc",
+    "size": 18006927,
+    "members": 27
+  },
+  "failing_source_sha256": {
+    "oracle.py": "3fa828b3eebffc4ffe6f77ab6b94ebb75f2c558b62c36f875a015b043cddc966",
+    "test_collector_storage_fault_packet.py": "d73a3546a745c3255f32dba7834bfe957ee236560b58c4d952d2fe3b83ca0184"
+  },
+  "accepted_counterexamples": {
+    "positive_birth": "7b3291baf911560a9dd2143189015debe63def4809e7391fb258dd9bea4dff22",
+    "null_to_positive_birth": "2f53e2859233b461cb8cd4af424cafd8862ecb96cfa23c275c99704fd07e6aac",
+    "equal_time_revival": "da837c8ca0fa27cf793b56feaa3cd48df620ae1d5628dd0c3125298ec633acd6",
+    "adopted_signal_error": "f32bf14caf226ccda0733cd10ef1d655334085c60f2f05e6bfe7fb3bb3660bc9"
+  },
+  "failure": "A direct wait did not update shared retired identity/PID state, allowing the same PID to reappear through adopted signal, signal-error and second-wait paths.",
+  "corrected_source_sha256": {
+    "prepare.py": "1d09a2f4f143af79de7eb98e7cc6d5c6a01efa89e15fa925d2c7869c78ab2df4",
+    "witness_owner.py": "4554efcda371a395681ff7f7353e05d98adf6ab4aae656b40d524f128fdf4670",
+    "supervise.py": "306a4982bd4d04721bc0478a5cfec553ac751dd0b5e9379cb9ba519bf4c92ce1",
+    "oracle.py": "cffe244a2e0d027898d5fcda86cf41637b68bc8a3ca939c8a053f7c7e111217a",
+    "test_collector_storage_fault_packet.py": "d73a3546a745c3255f32dba7834bfe957ee236560b58c4d952d2fe3b83ca0184"
+  },
+  "corrected_checks": {
+    "python3.9.12": "110/110 PASS",
+    "python3.8.10": "110/110 PASS",
+    "pycompile": "PASS on both interpreters for all four fixture Python sources"
+  },
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

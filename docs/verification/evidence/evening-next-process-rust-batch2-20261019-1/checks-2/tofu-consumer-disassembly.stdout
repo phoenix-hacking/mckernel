@@ -1,0 +1,78 @@
+
+/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-2/tofu/consumer.o:     file format elf64-x86-64
+
+
+Disassembly of section .ltext.process_current_resource_set_bridge:
+
+Disassembly of section .ltext.process_release_final_cleanup_bridge:
+
+Disassembly of section .ltext.release_process:
+
+0000000000000000 <release_process>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	41 57                	push   %r15
+   6:	41 56                	push   %r14
+   8:	41 55                	push   %r13
+   a:	41 54                	push   %r12
+   c:	53                   	push   %rbx
+   d:	50                   	push   %rax
+   e:	48 bb 00 00 00 00 00 	movabs $0x0,%rbx
+  15:	00 00 00 
+			10: R_X86_64_64	process_spin_unlock_bridge
+  18:	49 be 00 00 00 00 00 	movabs $0x0,%r14
+  1f:	00 00 00 
+			1a: R_X86_64_64	process_spin_lock_bridge
+  22:	49 bf 00 00 00 00 00 	movabs $0x0,%r15
+  29:	00 00 00 
+			24: R_X86_64_64	process_free_thread_pages_bridge
+  2c:	49 bc 00 00 00 00 00 	movabs $0x0,%r12
+  33:	00 00 00 
+			2e: R_X86_64_64	process_release_profile_bridge
+  36:	49 bd 00 00 00 00 00 	movabs $0x0,%r13
+  3d:	00 00 00 
+			38: R_X86_64_64	process_release_sibling_detach_bridge
+  40:	be a0 01 00 00       	mov    $0x1a0,%esi
+  45:	ba 00 01 00 00       	mov    $0x100,%edx
+  4a:	b9 a8 00 00 00       	mov    $0xa8,%ecx
+  4f:	41 b8 08 05 00 00    	mov    $0x508,%r8d
+  55:	41 b9 04 05 00 00    	mov    $0x504,%r9d
+  5b:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+  62:	00 00 00 
+			5d: R_X86_64_64	process_current_resource_set_bridge
+  65:	49 ba 00 00 00 00 00 	movabs $0x0,%r10
+  6c:	00 00 00 
+			67: R_X86_64_64	process_release_process_body_result
+  6f:	49 bb 00 00 00 00 00 	movabs $0x0,%r11
+  76:	00 00 00 
+			71: R_X86_64_64	process_release_final_cleanup_bridge
+  79:	41 53                	push   %r11
+  7b:	49 bb 00 00 00 00 00 	movabs $0x0,%r11
+  82:	00 00 00 
+			7d: R_X86_64_64	process_optional_free_bridge
+  85:	41 53                	push   %r11
+  87:	49 bb 00 00 00 00 00 	movabs $0x0,%r11
+  8e:	00 00 00 
+			89: R_X86_64_64	process_mckfd_free_bridge
+  91:	41 53                	push   %r11
+  93:	53                   	push   %rbx
+  94:	41 56                	push   %r14
+  96:	41 57                	push   %r15
+  98:	41 54                	push   %r12
+  9a:	41 55                	push   %r13
+  9c:	49 bb 00 00 00 00 00 	movabs $0x0,%r11
+  a3:	00 00 00 
+			9e: R_X86_64_64	process_release_hash_detach_bridge
+  a6:	41 53                	push   %r11
+  a8:	50                   	push   %rax
+  a9:	6a 00                	pushq  $0x0
+  ab:	6a 00                	pushq  $0x0
+  ad:	41 ff d2             	callq  *%r10
+  b0:	48 83 c4 68          	add    $0x68,%rsp
+  b4:	5b                   	pop    %rbx
+  b5:	41 5c                	pop    %r12
+  b7:	41 5d                	pop    %r13
+  b9:	41 5e                	pop    %r14
+  bb:	41 5f                	pop    %r15
+  bd:	5d                   	pop    %rbp
+  be:	c3                   	retq   

@@ -1,4 +1,6 @@
 set(CMAKE_SHARED_LIBRARY_LINK_C_FLAGS)
+set(CMAKE_C_LINKER_WRAPPER_FLAG "")
+set(CMAKE_C_LINKER_WRAPPER_FLAG_SEP "")
 set(CMAKE_C_LINK_EXECUTABLE "<CMAKE_LINKER> <LINK_FLAGS> <OBJECTS> -o <TARGET> <LINK_LIBRARIES>")
 set(CMAKE_ASM_FLAGS "${CMAKE_ASM_FLAGS} -D__ASSEMBLY__")
 
@@ -30,21 +32,112 @@ if (${ARCH} STREQUAL "arm64")
 endif()
 
 option(ENABLE_RUST_KERNEL "Enable Rust code in the McKernel image" ON)
+# Functional OS migration: paired typed Rust storage for 32 public debug objects.
+# Internal descriptors and their three configs use a separate atomic selector.
+option(ENABLE_RUST_PROCESS_VERBOSE_DATA "Use typed Rust process debug globals" ON)
+option(ENABLE_RUST_PROCESS_VERBOSE_LOCAL_COMPANIONS "Use joint Rust local debug/config storage" ON)
+set(MCKERNEL_PROCESS_VERBOSE_LOCAL_SELECTED OFF)
+option(ENABLE_PROCESS_DEBUG_PRINT "Initialize process dynamic debug as enabled" OFF)
+set(MCKERNEL_PROCESS_DDEBUG_FLAGS 0)
+if (ENABLE_PROCESS_DEBUG_PRINT)
+    set(MCKERNEL_PROCESS_DDEBUG_FLAGS 1)
+endif()
+set(MCKERNEL_PROCESS_C_FILE "${CMAKE_CURRENT_SOURCE_DIR}/process.c")
+# Restrict unsupported C literal spellings; C also asserts the actual __FILE__.
+if (NOT MCKERNEL_PROCESS_C_FILE MATCHES "^/[A-Za-z0-9_./+-]+$")
+    message(FATAL_ERROR "Unsupported process.c path for exact C/Rust debug identity")
+endif()
+option(ENABLE_NATIVE_SYSFS_VERIFY "Enable guest sysfs verification with a Linux test controller" OFF)
+option(ENABLE_NATIVE_FORK_OWNED_TRANSACTION "Enable the existing native owned-fork transaction" OFF)
+option(ENABLE_RUST_M14_SYSCALL_ADAPTERS "Build the unqualified M14 forwarding/signal adapter candidate" OFF)
+option(MCKERNEL_F03_SIGNAL_FORWARD_EXPERIMENTAL "Pair the unqualified x86 Rust signal forwarding bridges" OFF)
+if (MCKERNEL_F03_SIGNAL_FORWARD_EXPERIMENTAL AND
+        (NOT ENABLE_RUST_KERNEL OR NOT ARCH STREQUAL "x86_64"))
+    message(FATAL_ERROR "M14 signal forwarding requires an enabled x86_64 Rust kernel")
+endif()
+set(MCKERNEL_HOST_IRQ_ABI "legacy" CACHE STRING "Linux control-kernel IRQ-work ABI")
+set_property(CACHE MCKERNEL_HOST_IRQ_ABI PROPERTY STRINGS legacy linux-6.12)
+# Complete F06 default promotion requires matched image/native qualification.
+# Only the qualified ordinary profile changes default; no runtime authority is granted.
+set(MCKERNEL_RUST_F06_WHOLE_DEFAULT OFF)
+if (ENABLE_RUST_KERNEL AND ARCH STREQUAL "x86_64" AND
+    MCKERNEL_HOST_IRQ_ABI STREQUAL "linux-6.12" AND NOT ENABLE_UBSAN AND
+    PROFILE_ENABLE AND ENABLE_PERF AND ENABLE_RUSAGE AND
+    ENABLE_LINUX_WORK_IRQ_FOR_IKC AND NOT ENABLE_TOFU AND
+    NOT ENABLE_FUGAKU_HACKS AND NOT ENABLE_RUST_M14_SYSCALL_ADAPTERS AND
+    NOT MCKERNEL_F03_SIGNAL_FORWARD_EXPERIMENTAL)
+    set(MCKERNEL_RUST_F06_WHOLE_DEFAULT ON)
+endif()
+option(ENABLE_RUST_F06_SYSCALL_WHOLE "Build the complete F06 ownership candidate; production qualification pending" "${MCKERNEL_RUST_F06_WHOLE_DEFAULT}")
+if (ENABLE_RUST_F06_SYSCALL_WHOLE AND
+    (NOT ENABLE_RUST_KERNEL OR NOT ARCH STREQUAL "x86_64" OR
+     NOT MCKERNEL_HOST_IRQ_ABI STREQUAL "linux-6.12" OR ENABLE_UBSAN))
+    message(FATAL_ERROR "Complete F06 ownership requires the x86_64 Rust kernel, linux-6.12 IRQ ABI and UBSAN disabled")
+endif()
+
+if (NOT MCKERNEL_HOST_IRQ_ABI STREQUAL "legacy" AND
+    NOT MCKERNEL_HOST_IRQ_ABI STREQUAL "linux-6.12")
+	message(FATAL_ERROR "MCKERNEL_HOST_IRQ_ABI must be legacy or linux-6.12")
+endif()
+if (MCKERNEL_HOST_IRQ_ABI STREQUAL "linux-6.12" AND
+    (NOT ENABLE_RUST_KERNEL OR NOT "${ARCH}" STREQUAL "x86_64"))
+	message(FATAL_ERROR "linux-6.12 IRQ ABI requires the x86_64 Rust kernel")
+endif()
+if (ENABLE_NATIVE_SYSFS_VERIFY AND
+    (NOT ENABLE_RUST_KERNEL OR NOT "${ARCH}" STREQUAL "x86_64" OR
+     NOT MCKERNEL_HOST_IRQ_ABI STREQUAL "linux-6.12"))
+	message(FATAL_ERROR "Native sysfs verification requires the x86_64 Rust kernel and linux-6.12 IRQ ABI")
+endif()
+if (ENABLE_NATIVE_FORK_OWNED_TRANSACTION AND
+    (NOT ENABLE_RUST_KERNEL OR NOT "${ARCH}" STREQUAL "x86_64" OR
+     NOT MCKERNEL_HOST_IRQ_ABI STREQUAL "linux-6.12"))
+	message(FATAL_ERROR "Native owned-fork transaction requires the x86_64 Rust kernel and linux-6.12 IRQ ABI")
+endif()
+if (ENABLE_RUST_M14_SYSCALL_ADAPTERS AND
+    (NOT ENABLE_RUST_KERNEL OR NOT "${ARCH}" STREQUAL "x86_64" OR
+     NOT MCKERNEL_HOST_IRQ_ABI STREQUAL "linux-6.12" OR ENABLE_UBSAN))
+	message(FATAL_ERROR "M14 syscall adapter candidate requires the x86_64 Rust kernel, linux-6.12 IRQ ABI and UBSAN disabled")
+endif()
+# The outer entry has a narrower scope than the existing inner OFFLOAD macro.
+set(MCKERNEL_DO_SYSCALL_OUTER_SELECTED OFF)
+set(MCKERNEL_DO_MMAP_SELECTED OFF)
+set(MCKERNEL_DO_FORK_SELECTED OFF)
+set(MCKERNEL_PTRACE_RESUME_CALLBACKS_SELECTED OFF)
+set(MCKERNEL_DO_SYSCALL2_BRIDGE_SELECTED OFF)
+set(MCKERNEL_MEMORY_HOST_OFFLOAD_SELECTED OFF)
+set(MCKERNEL_POLICY_FORWARD_CONTEXT_SELECTED OFF)
+set(MCKERNEL_SIGNAL_FORWARD_PROVIDER_SELECTED OFF)
+set(MCKERNEL_WAIT_HOST_PROVIDER_SELECTED OFF)
+set(MCKERNEL_PERF_OWNER_PROTOCOL_SELECTED OFF)
+set(MCKERNEL_DO_SYSCALL_C_FILE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c")
+set(MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS 0)
 set(RUST_KERNEL_ENABLED OFF)
 if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
+	# Makefile depfiles require 3.20; the supported native SDK uses 3.28.3.
+	if (CMAKE_VERSION VERSION_LESS "3.20")
+		message(FATAL_ERROR "The Rust kernel requires CMake 3.20 or newer for compiler dependency tracking")
+	endif()
 	find_program(RUSTC rustc)
 	if (NOT RUSTC)
 		message(FATAL_ERROR "ENABLE_RUST_KERNEL requires rustc")
 	endif()
+	if (NOT IS_ABSOLUTE "${RUSTC}" OR NOT EXISTS "${RUSTC}" OR IS_DIRECTORY "${RUSTC}")
+		message(FATAL_ERROR "ENABLE_RUST_KERNEL requires an existing nondirectory absolute Rust compiler path")
+	endif()
+	set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${RUSTC}")
 	execute_process(
-		COMMAND ${RUSTC} --version
+		COMMAND "${RUSTC}" --version
+		RESULT_VARIABLE RUSTC_VERSION_RESULT
 		OUTPUT_VARIABLE RUSTC_VERSION
 		OUTPUT_STRIP_TRAILING_WHITESPACE
 	)
-	if (NOT RUSTC_VERSION MATCHES "nightly")
+	if (NOT RUSTC_VERSION_RESULT EQUAL 0 OR NOT RUSTC_VERSION MATCHES "nightly")
 		message(FATAL_ERROR "ENABLE_RUST_KERNEL requires nightly rustc; found ${RUSTC_VERSION}")
 	endif()
 	set(RUST_KERNEL_OBJ "${CMAKE_CURRENT_BINARY_DIR}/rust/mckernel_rust.o")
+	set(RUST_KERNEL_DEPFILE "${CMAKE_CURRENT_BINARY_DIR}/rust/mckernel_rust.d")
+	set(RUST_KERNEL_RAW_DEPFILE "${CMAKE_CURRENT_BINARY_DIR}/rust/mckernel_rust.raw.d")
+	set(MCKERNEL_RUST_DEPFILE_NORMALIZER "${PROJECT_SOURCE_DIR}/cmake/NormalizeRustDepfile.cmake")
 	set(RUST_KERNEL_SRCS
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/lib.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/abi.rs"
@@ -60,9 +153,16 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
 			"${CMAKE_CURRENT_SOURCE_DIR}/rust/debug.rs"
 			"${CMAKE_CURRENT_SOURCE_DIR}/rust/devobj.rs"
 			"${CMAKE_CURRENT_SOURCE_DIR}/rust/fileobj.rs"
+			"${CMAKE_CURRENT_SOURCE_DIR}/rust/fork_control_guest.rs"
+			"${CMAKE_CURRENT_SOURCE_DIR}/rust/fork_control_registry.rs"
+			"${CMAKE_CURRENT_SOURCE_DIR}/rust/fork_child_credits.rs"
+			"${CMAKE_CURRENT_SOURCE_DIR}/rust/fork_constructed_credits.rs"
+			"${CMAKE_CURRENT_SOURCE_DIR}/rust/fork_final_ack.rs"
+        "${CMAKE_CURRENT_SOURCE_DIR}/rust/fork_runnable_child.rs"
 			"${CMAKE_CURRENT_SOURCE_DIR}/rust/futex.rs"
 			"${CMAKE_CURRENT_SOURCE_DIR}/rust/gencore.rs"
 			"${CMAKE_CURRENT_SOURCE_DIR}/rust/freeze.rs"
+			"${CMAKE_CURRENT_SOURCE_DIR}/rust/hash.rs"
 			"${CMAKE_CURRENT_SOURCE_DIR}/rust/hugefileobj.rs"
 			"${CMAKE_CURRENT_SOURCE_DIR}/rust/ikc_manycore.rs"
 			"${CMAKE_CURRENT_SOURCE_DIR}/rust/ikc_master.rs"
@@ -102,15 +202,333 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/waitq.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_coredump.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_cpu_helpers.rs"
+		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_cpu_log_providers.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_local.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_memory_helpers.rs"
+		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_memory_logger_bridges.rs"
+		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_memory_loggers.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_perfctr.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_setup.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_vsyscall.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/xpmem_helpers.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/zeroobj.rs"
+		"${CMAKE_CURRENT_SOURCE_DIR}/../host-kernel/native-rust/abi/vdso.rs"
+		"${CMAKE_CURRENT_SOURCE_DIR}/rust/native_vdso.rs"
+		"${CMAKE_CURRENT_SOURCE_DIR}/../host-kernel/native-rust/zero_pages.rs"
+		"${CMAKE_CURRENT_SOURCE_DIR}/rust/clone3.rs"
+		"${CMAKE_CURRENT_SOURCE_DIR}/rust/native_signal.rs"
+		"${CMAKE_CURRENT_SOURCE_DIR}/rust/native_fault.rs"
+		"${CMAKE_CURRENT_SOURCE_DIR}/rust/native_futex.rs"
+		"${CMAKE_CURRENT_SOURCE_DIR}/rust/native_xstate.rs"
 	)
 		set(RUST_KERNEL_CFG)
+		if (MCKERNEL_F03_SIGNAL_FORWARD_EXPERIMENTAL)
+			list(APPEND RUST_KERNEL_CFG "--cfg" "f03_signal_forward_defined_candidate")
+			list(APPEND RUST_KERNEL_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_signal_forward_defined_candidate.rs")
+		endif()
+		if (ENABLE_RUST_M14_SYSCALL_ADAPTERS)
+			# Keep paired ownership opt-in until matching image/native qualification.
+			list(APPEND RUST_KERNEL_CFG
+				"--cfg" "f03_forward_adapters_candidate"
+				"--cfg" "f06_signal_ptrace_diagnostics_candidate"
+				"--cfg" "f06_signal_trap_info_candidate")
+			list(APPEND RUST_KERNEL_SRCS
+				"${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_forward_adapters.rs"
+				"${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_ptrace_adapters.rs"
+				"${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_host_cleanup.rs"
+				"${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_credential_refresh.rs"
+				"${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_signal_ptrace_diagnostics.rs"
+				"${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_signal_trap_info.rs")
+		endif()
+        # Existing config literals are qualified for this production profile.
+        if (ENABLE_RUST_PROCESS_VERBOSE_DATA AND
+            ENABLE_RUST_PROCESS_VERBOSE_LOCAL_COMPANIONS AND
+            MCKERNEL_HOST_IRQ_ABI STREQUAL "linux-6.12" AND
+            NOT ENABLE_UBSAN AND NOT ENABLE_PROCESS_DEBUG_PRINT AND
+            NOT ENABLE_FUGAKU_HACKS)
+            set(MCKERNEL_PROCESS_VERBOSE_LOCAL_SELECTED ON)
+        endif()
+        file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/rust/process_verbose_build_inputs.txt"
+            CONTENT "selected=${ENABLE_RUST_PROCESS_VERBOSE_DATA}\nlocal=${MCKERNEL_PROCESS_VERBOSE_LOCAL_SELECTED}\nfile=${MCKERNEL_PROCESS_C_FILE}\nflags=${MCKERNEL_PROCESS_DDEBUG_FLAGS}\n")
+        list(APPEND RUST_KERNEL_SRCS
+            "${CMAKE_CURRENT_BINARY_DIR}/rust/process_verbose_build_inputs.txt")
+        if (ENABLE_RUST_PROCESS_VERBOSE_DATA)
+            list(APPEND RUST_KERNEL_CFG "--cfg" "process_verbose_data")
+            if (MCKERNEL_PROCESS_VERBOSE_LOCAL_SELECTED)
+                list(APPEND RUST_KERNEL_CFG "--cfg" "process_verbose_local_companions")
+            endif()
+            list(APPEND RUST_KERNEL_SRCS
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/process_verbose_data.rs"
+                "${MCKERNEL_PROCESS_C_FILE}"
+                "${PROJECT_SOURCE_DIR}/lib/include/ihk/debug.h")
+        endif()
+		if (ENABLE_RUST_F06_SYSCALL_WHOLE)
+			list(APPEND RUST_KERNEL_CFG
+				"--cfg" "f06_signal_context_candidate"
+				"--cfg" "f06_do_signal_whole_candidate"
+				"--cfg" "f06_do_signal_reuse_qualified_context"
+				"--cfg" "f06_rt_sigreturn_xrstor_candidate"
+				"--cfg" "f06_debug_constants_candidate")
+			list(APPEND RUST_KERNEL_SRCS
+				"${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_rt_sigreturn_xrstor.rs"
+				"${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_signal_tail.rs")
+			if (NOT ENABLE_RUST_M14_SYSCALL_ADAPTERS)
+				list(APPEND RUST_KERNEL_CFG
+					"--cfg" "f06_signal_ptrace_diagnostics_candidate"
+					"--cfg" "f06_signal_trap_info_candidate")
+				list(APPEND RUST_KERNEL_SRCS
+					"${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_signal_ptrace_diagnostics.rs"
+					"${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_signal_trap_info.rs")
+			endif()
+		endif()
+		# Pair the existing F03 Rust providers with syscall.c source selectors below.
+		list(APPEND RUST_KERNEL_CFG
+			"--cfg" "f03_io_diagnostic_callbacks_candidate"
+			"--cfg" "f03_mincore_candidate")
+		list(APPEND RUST_KERNEL_CFG "--cfg" "f03_move_pages_candidate")
+		list(APPEND RUST_KERNEL_CFG "--cfg" "f03_sched_bridges_candidate")
+		list(APPEND RUST_KERNEL_CFG "--cfg" "f03_signal_process_bridges_candidate")
+		list(APPEND RUST_KERNEL_CFG "--cfg" "f03_dispatch_context_candidate")
+		list(APPEND RUST_KERNEL_CFG "--cfg" "f03_leaf_callbacks_candidate")
+		if (ENABLE_NATIVE_SYSFS_VERIFY)
+			list(APPEND RUST_KERNEL_CFG "--cfg" "native_sysfs_verify")
+			list(APPEND RUST_KERNEL_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../scripts/tests/fixtures/mckernel_guest_sysfs.rs")
+		endif()
+		if (MCKERNEL_HOST_IRQ_ABI STREQUAL "linux-6.12")
+			list(APPEND RUST_KERNEL_CFG "--cfg" "native_linux_irq_work_v6_12")
+			# Pair qualified current290 providers with the Linux6.12 C selectors.
+			list(APPEND RUST_KERNEL_CFG "--cfg" "f03_syscall_entry_candidate")
+			list(APPEND RUST_KERNEL_CFG "--cfg" "f03_futex_atomic_candidate")
+			list(APPEND RUST_KERNEL_CFG "--cfg" "f03_futex_no_uaccess_candidate")
+			list(APPEND RUST_KERNEL_CFG "--cfg" "process_global_storage_candidate")
+			list(APPEND RUST_KERNEL_CFG "--cfg" "f03_syscall_table_candidate")
+			list(APPEND RUST_KERNEL_CFG "--cfg" "f03_ptrace_entry_candidate")
+			list(APPEND RUST_KERNEL_CFG "--cfg" "f03_syscall_table_clone3")
+			# Qualified next cohort: current native x86_64 Linux6.12, no UBSAN.
+			if (ARCH STREQUAL "x86_64" AND NOT ENABLE_UBSAN)
+                # Genuine terminate orchestration for the current supported profile.
+                if (PROFILE_ENABLE AND NOT ENABLE_TOFU AND NOT DCFA_KMOD)
+                    list(APPEND RUST_KERNEL_CFG "--cfg" "f03_terminate_candidate")
+                    list(APPEND RUST_KERNEL_SRCS
+                        "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_terminate.rs")
+                endif()
+                # Genuine project interrupt_syscall paired only in this profile.
+                list(APPEND RUST_KERNEL_CFG "--cfg" "f03_interrupt_syscall_candidate")
+                list(APPEND RUST_KERNEL_SRCS
+                    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_interrupt_syscall.rs")
+                # Select only the genuine host-cleanup entry, without broad adapter opt-in.
+                list(APPEND RUST_KERNEL_CFG "--cfg" "f03_host_cleanup_candidate")
+                list(APPEND RUST_KERNEL_SRCS
+                    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_host_cleanup.rs")
+                # Three genuine exit_group edges, paired with the exact C/debug profile.
+                if (PROFILE_ENABLE)
+                    list(APPEND RUST_KERNEL_CFG "--cfg" "f03_exit_group_bridges_candidate")
+                    list(APPEND RUST_KERNEL_SRCS
+                        "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_exit_group.rs")
+                endif()
+                # Pair only the existing credential-refresh callbacks in this profile.
+                list(APPEND RUST_KERNEL_CFG "--cfg" "f03_credential_refresh_candidate")
+                if (NOT ENABLE_RUST_M14_SYSCALL_ADAPTERS)
+                    list(APPEND RUST_KERNEL_SRCS
+                        "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_credential_refresh.rs")
+                endif()
+				# Shared sigreturn context has an independent real implementation.
+				# Select it without activating whole do_signal/XRSTOR/debug ownership.
+				if (NOT ENABLE_RUST_F06_SYSCALL_WHOLE)
+					list(APPEND RUST_KERNEL_CFG "--cfg" "f06_signal_context_candidate")
+					list(APPEND RUST_KERNEL_SRCS
+					    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_signal_tail.rs")
+				endif()
+				list(APPEND RUST_KERNEL_CFG "--cfg" "f03_prlimit_body_candidate")
+				list(APPEND RUST_KERNEL_CFG "--cfg" "f03_do_exit_supported_candidate")
+				list(APPEND RUST_KERNEL_CFG "--cfg" "f03_unmap_begin_selected_candidate")
+				list(APPEND RUST_KERNEL_CFG "--cfg" "f03_unmap_remove_selected_candidate")
+				list(APPEND RUST_KERNEL_CFG "--cfg" "f03_unmap_finish_selected_candidate")
+				list(APPEND RUST_KERNEL_CFG "--cfg" "f03_mmap_page_callback_candidate")
+				list(APPEND RUST_KERNEL_CFG "--cfg" "f03_wait_release_selected_candidate")
+				list(APPEND RUST_KERNEL_CFG "--cfg" "f03_wait_process_release_selected_candidate")
+				list(APPEND RUST_KERNEL_CFG "--cfg" "f03_terminate_refcount_selected_candidate")
+				list(APPEND RUST_KERNEL_CFG "--cfg" "f03_ptrace_io_find_selected_candidate")
+				list(APPEND RUST_KERNEL_CFG "--cfg" "f03_ptrace_io_unlock_selected_candidate")
+				list(APPEND RUST_KERNEL_CFG "--cfg" "f06_mmap_flag_providers")
+				list(APPEND RUST_KERNEL_CFG "--cfg" "f06_prctl_set_register_candidate")
+				list(APPEND RUST_KERNEL_CFG "--cfg" "f06_prctl_get_register_candidate")
+				list(APPEND RUST_KERNEL_CFG "--cfg" "f06_mmap_dispatch_bridge_candidate")
+				list(APPEND RUST_KERNEL_CFG "--cfg" "f06_ptrace_context_candidate")
+				list(APPEND RUST_KERNEL_CFG "--cfg" "f06_ptrace_alloc_candidate")
+				list(APPEND RUST_KERNEL_CFG "--cfg" "f06_vdso_add_range_candidate")
+				list(APPEND RUST_KERNEL_CFG "--cfg" "f06_vdso_set_range_candidate")
+				list(APPEND RUST_KERNEL_CFG "--cfg" "f06_process_vm_entry_candidate")
+				list(APPEND RUST_KERNEL_CFG "--cfg" "f03_exit_waitq_wake_selected_candidate")
+				list(APPEND RUST_KERNEL_CFG "--cfg" "f06_copy_to_user_candidate")
+				list(APPEND RUST_KERNEL_CFG "--cfg" "f06_copy_from_user_candidate")
+				list(APPEND RUST_KERNEL_CFG "--cfg" "f06_forward_context_candidate")
+				list(APPEND RUST_KERNEL_CFG "--cfg" "f06_rt_sigreturn_syscall_candidate")
+				list(APPEND RUST_KERNEL_CFG "--cfg" "f06_rt_sigreturn_set_signal_candidate")
+				list(APPEND RUST_KERNEL_CFG "--cfg" "f06_rt_sigreturn_check_signal_candidate")
+				# Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+				# Source-only default OFF. Root inserts only in existing selected
+				# linux-6.12/x86_64/NOT ENABLE_UBSAN branch, alongside exact F06 providers.
+				list(APPEND RUST_KERNEL_CFG
+				    "--cfg" "f06_clone_reader_lock_candidate"
+				    "--cfg" "f06_clone_reader_unlock_candidate"
+				    "--cfg" "f06_ptrace_find_thread_candidate"
+				    "--cfg" "f06_ptrace_thread_unlock_candidate")
+				list(APPEND RUST_KERNEL_SRCS
+				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_clone_reader_lock.rs"
+				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_clone_reader_unlock.rs"
+				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_ptrace_find_thread.rs"
+				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_ptrace_thread_unlock.rs"
+				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_clone_ptrace_provider_abi.rs")
+				set_property(SOURCE "${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/syscall.c" APPEND PROPERTY
+				    COMPILE_DEFINITIONS
+				    "MCKERNEL_RUST_F06_CLONE_READER_LOCK;MCKERNEL_RUST_F06_CLONE_READER_UNLOCK;MCKERNEL_RUST_F06_PTRACE_FIND_THREAD;MCKERNEL_RUST_F06_PTRACE_THREAD_UNLOCK")
+				set(MCKERNEL_F06_ORIGIN_PROFILE "${PROJECT_SOURCE_DIR}/scripts/f06_origin_command_profile.json")
+				set(MCKERNEL_F06_SOURCE_BINDING "${PROJECT_SOURCE_DIR}/scripts/f06_origin_source_binding.json")
+				# Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+				# SOURCE ONLY. Root inserts in existing linux-6.12/x86_64/NOT ENABLE_UBSAN
+				# selected-candidate branch. No broad profile or default-enabling claim.
+				# Root installs derive_origin.py as scripts/derive_f06_origin.py before use.
+				if (NOT ENABLE_RUST_KERNEL OR NOT ARCH STREQUAL "x86_64" OR
+				    ENABLE_UBSAN OR NOT MCKERNEL_HOST_IRQ_ABI STREQUAL "linux-6.12")
+				    message(FATAL_ERROR "F06 original source origin has no qualified profile")
+				endif()
+				if (NOT MCKERNEL_F06_ORIGIN_PROFILE)
+				    message(FATAL_ERROR "F06 requires exact adopted SDK C argv profile")
+				endif()
+				find_package(Python3 REQUIRED COMPONENTS Interpreter)
+				set(MCKERNEL_F06_ORIGIN_PRODUCER "${PROJECT_SOURCE_DIR}/scripts/derive_f06_origin.py")
+				set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
+				    "${PROJECT_SOURCE_DIR}/scripts/derive_f06_signal_metadata.py")
+				set(MCKERNEL_F06_C_SOURCE "${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/syscall.c")
+				set(MCKERNEL_F06_ORIGIN_DIR "${CMAKE_CURRENT_BINARY_DIR}/rust/f06-origin")
+				set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
+				    "${MCKERNEL_F06_ORIGIN_PROFILE}"
+				    "${MCKERNEL_F06_SOURCE_BINDING}"
+				    "${MCKERNEL_F06_ORIGIN_PRODUCER}"
+				    "${MCKERNEL_F06_C_SOURCE}"
+				    "${PROJECT_SOURCE_DIR}/lib/include/ihk/debug.h")
+				execute_process(
+				    COMMAND "${Python3_EXECUTABLE}" "${MCKERNEL_F06_ORIGIN_PRODUCER}"
+				        --profile "${MCKERNEL_F06_ORIGIN_PROFILE}"
+				        --source "${MCKERNEL_F06_C_SOURCE}"
+				        --source-binding "${MCKERNEL_F06_SOURCE_BINDING}"
+				        --output "${MCKERNEL_F06_ORIGIN_DIR}"
+				    RESULT_VARIABLE MCKERNEL_F06_ORIGIN_RESULT
+				)
+				if (NOT MCKERNEL_F06_ORIGIN_RESULT EQUAL 0)
+				    message(FATAL_ERROR "F06 source origin producer rejected the profile/source")
+				endif()
+				include("${MCKERNEL_F06_ORIGIN_DIR}/f06_rt_sigreturn_origin.cmake")
+				if (ENABLE_RUST_F06_SYSCALL_WHOLE)
+					set(MCKERNEL_F06_SIGNAL_METADATA_RS "${MCKERNEL_F06_ORIGIN_DIR}/f06_signal_metadata.rs")
+					list(APPEND RUST_KERNEL_SRCS "${MCKERNEL_F06_SIGNAL_METADATA_RS}")
+					set_property(SOURCE "${MCKERNEL_F06_C_SOURCE}" APPEND PROPERTY
+						COMPILE_DEFINITIONS "MCKERNEL_RUST_F06_RT_SIGRETURN_XRSTOR;MCKERNEL_RUST_F06_DEBUG_CONSTANTS;MCKERNEL_RUST_F06_SIGNAL_CONTEXT;MCKERNEL_RUST_F06_DO_SIGNAL_WHOLE;MCKERNEL_RUST_F06_NATIVE_SIGNAL_BAD_FRAME;MCKERNEL_RUST_F06_PTRACE_REGSET_LOG;MCKERNEL_RUST_F06_SIGNAL_TRAP_INFO")
+				endif()
+
+				# Existing supported x86/linux6.12/non-UBSAN branch only; no new native profile.
+				list(APPEND RUST_KERNEL_CFG "--cfg" "f06_obtain_clone_cpuid_candidate")
+				list(APPEND RUST_KERNEL_SRCS
+				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_obtain_clone_cpuid.rs"
+				    "${MCKERNEL_F06_ORIGIN_DIR}/f06_clone_cpuid_metadata.rs")
+				set_property(SOURCE "${MCKERNEL_F06_C_SOURCE}" APPEND PROPERTY
+				    COMPILE_DEFINITIONS "MCKERNEL_RUST_F06_OBTAIN_CLONE_CPUID")
+				# Existing genuine-ABI shmget adapter; same supported profile/provider.
+				list(APPEND RUST_KERNEL_CFG "--cfg" "f06_shmget_dispatch_candidate")
+				list(APPEND RUST_KERNEL_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_shmget_dispatch.rs")
+				set_property(SOURCE "${MCKERNEL_F06_C_SOURCE}" APPEND PROPERTY
+				    COMPILE_DEFINITIONS "MCKERNEL_RUST_F06_SHMGET_DISPATCH")
+				# Complete existing native signal-return FP ownership transaction.
+				list(APPEND RUST_KERNEL_CFG "--cfg" "f06_native_signal_restore_fp_candidate")
+				list(APPEND RUST_KERNEL_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_native_signal_restore_fp.rs")
+				set_property(SOURCE "${MCKERNEL_F06_C_SOURCE}" APPEND PROPERTY
+				    COMPILE_DEFINITIONS "MCKERNEL_RUST_F06_NATIVE_SIGNAL_RESTORE_FP")
+				# Complete legacy VDSO info body under the same supported profile.
+				list(APPEND RUST_KERNEL_CFG "--cfg" "f06_vdso_info_candidate")
+				list(APPEND RUST_KERNEL_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_vdso_info.rs")
+				set_property(SOURCE "${MCKERNEL_F06_C_SOURCE}" APPEND PROPERTY
+				    COMPILE_DEFINITIONS "MCKERNEL_RUST_F06_VDSO_INFO")
+
+				# Exact F06 BODY3-9 cumulative selection; storage has one Rust owner each.
+				list(APPEND RUST_KERNEL_CFG
+				    "--cfg" "f06_ptrace_xstate_copy_to_candidate"
+				    "--cfg" "f06_ptrace_xstate_copy_from_candidate"
+				    "--cfg" "f06_vdso_setup_log_candidate"
+				    "--cfg" "f06_vdso_state_candidate"
+				    "--cfg" "f06_vdso_storage_candidate"
+				    "--cfg" "f06_ptrace_user_bridges_candidate"
+				    "--cfg" "f06_ptrace_gpregs_bridges_candidate"
+				    "--cfg" "f06_prctl_log_candidate"
+				    "--cfg" "f06_prctl_log_storage_candidate"
+				    "--cfg" "f06_vdso_map_log_candidate"
+				)
+				list(APPEND RUST_KERNEL_SRCS
+				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_ptrace_xstate_copy_to.rs"
+				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_ptrace_xstate_copy_from.rs"
+				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_vdso_setup_log.rs"
+				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_vdso_state.rs"
+				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_vdso_storage.rs"
+				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_ptrace_user_bridges.rs"
+				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_ptrace_gpregs_bridges.rs"
+				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_prctl_log.rs"
+				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_prctl_log_storage.rs"
+				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_vdso_map_log.rs"
+				)
+				set_property(SOURCE "${MCKERNEL_F06_C_SOURCE}" APPEND PROPERTY
+				    COMPILE_DEFINITIONS "MCKERNEL_RUST_F06_PTRACE_XSTATE_COPY_TO;MCKERNEL_RUST_F06_PTRACE_XSTATE_COPY_FROM;MCKERNEL_RUST_F06_VDSO_SETUP_LOG;MCKERNEL_RUST_F06_VDSO_STATE;MCKERNEL_RUST_F06_VDSO_STORAGE;MCKERNEL_RUST_F06_PTRACE_USER_BRIDGES;MCKERNEL_RUST_F06_PTRACE_GPREGS_BRIDGES;MCKERNEL_RUST_F06_PRCTL_LOG;MCKERNEL_RUST_F06_PRCTL_LOG_STORAGE;MCKERNEL_RUST_F06_VDSO_MAP_LOG")
+
+				set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
+				    "${MCKERNEL_F06_ORIGIN_PROFILE}"
+				    "${MCKERNEL_F06_ORIGIN_PRODUCER}"
+				    "${PROJECT_SOURCE_DIR}/lib/include/ihk/debug.h"
+				    "${MCKERNEL_F06_C_SOURCE}")
+				list(APPEND RUST_KERNEL_SRCS
+				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_rt_sigreturn_alloc_free.rs"
+				    "${MCKERNEL_F06_ORIGIN_DIR}/f06_rt_sigreturn_origin.cmake"
+				    "${MCKERNEL_F06_ORIGIN_DIR}/f06_rt_sigreturn_origin.h")
+				list(APPEND RUST_KERNEL_CFG
+				    "--cfg" "f06_rt_sigreturn_alloc_candidate"
+				    "--cfg" "f06_rt_sigreturn_free_candidate")
+				set_property(SOURCE "${MCKERNEL_F06_C_SOURCE}" APPEND PROPERTY
+				    COMPILE_DEFINITIONS
+				    "MCKERNEL_RUST_F06_RT_SIGRETURN_ALLOC;MCKERNEL_RUST_F06_RT_SIGRETURN_FREE")
+				set_property(SOURCE "${MCKERNEL_F06_C_SOURCE}" APPEND PROPERTY
+				    INCLUDE_DIRECTORIES "${MCKERNEL_F06_ORIGIN_DIR}")
+				set_property(SOURCE "${MCKERNEL_F06_C_SOURCE}" APPEND PROPERTY
+				    OBJECT_DEPENDS "${MCKERNEL_F06_ORIGIN_DIR}/f06_rt_sigreturn_origin.h")
+				if (ENABLE_PERF)
+					list(APPEND RUST_KERNEL_CFG "--cfg" "f03_perf_alloc_bridges_selected_candidate")
+					list(APPEND RUST_KERNEL_CFG "--cfg" "f03_perf_counter_control_bridges_selected_candidate")
+					list(APPEND RUST_KERNEL_CFG "--cfg" "f03_perf_provider_next3_bridges_selected_candidate")
+					list(APPEND RUST_KERNEL_CFG "--cfg" "f03_perf_event_provider_bridges_selected_candidate")
+				endif()
+				list(APPEND RUST_KERNEL_CFG "--cfg" "f03_sync_child_event_candidate")
+				list(APPEND RUST_KERNEL_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_attr_callbacks.rs")
+				list(APPEND RUST_KERNEL_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_event_attr_abi.rs")
+				list(APPEND RUST_KERNEL_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_prlimit.rs")
+				list(APPEND RUST_KERNEL_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_mmap_dispatch_bridge.rs")
+				list(APPEND RUST_KERNEL_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_ptrace_context.rs")
+				list(APPEND RUST_KERNEL_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_ptrace_alloc.rs")
+				list(APPEND RUST_KERNEL_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_vdso_add_range.rs")
+				list(APPEND RUST_KERNEL_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_vdso_set_range.rs")
+				list(APPEND RUST_KERNEL_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_process_vm_entry.rs")
+				list(APPEND RUST_KERNEL_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/rust/arch_copy_to_user_bridge.rs")
+				list(APPEND RUST_KERNEL_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/rust/arch_copy_from_user_bridge.rs")
+				list(APPEND RUST_KERNEL_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/rust/arch_syscall_forward_context_bridge.rs")
+				list(APPEND RUST_KERNEL_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/rust/arch_rt_sigreturn_syscall_bridge.rs")
+				list(APPEND RUST_KERNEL_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/rust/arch_rt_sigreturn_set_signal_bridge.rs")
+				list(APPEND RUST_KERNEL_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/rust/arch_rt_sigreturn_check_signal_bridge.rs")
+				list(APPEND RUST_KERNEL_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_prctl_set_register.rs")
+				list(APPEND RUST_KERNEL_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_mmap_flags.rs")
+				list(APPEND RUST_KERNEL_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_prctl_get_register.rs")
+			endif()
+			add_definitions(-DMCKERNEL_NATIVE_CLONE3)
+			add_definitions(-DMCKERNEL_NATIVE_SIGNAL_STACK)
+			add_definitions(-DMCKERNEL_NATIVE_FAULT_FIXUP)
+			add_definitions(-DMCKERNEL_NATIVE_FUTEX)
+			add_definitions(-DMCKERNEL_NATIVE_CLONE_TID)
+		endif()
 		if (ENABLE_TOFU)
 			list(APPEND RUST_KERNEL_CFG "--cfg" "enable_tofu")
 		endif()
@@ -129,32 +547,320 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
 		if (ENABLE_RUSAGE)
 			list(APPEND RUST_KERNEL_CFG "--cfg" "enable_rusage")
 		endif()
+		# Source-bound x86 policy and exact C diagnostic filename for these Rust providers.
+		set(MCKERNEL_CPU_MARCH_HEADER
+			"${IHK_FULL_SOURCE_DIR}/cokernel/smp/x86_64/include/march.h")
+		file(SHA256 "${MCKERNEL_CPU_MARCH_HEADER}" MCKERNEL_CPU_MARCH_SHA256)
+		if (NOT MCKERNEL_CPU_MARCH_SHA256 STREQUAL
+		    "32984f29c20133f89b2410c922fc291cd675f2942b6128cea55d0e0ff3826f49")
+			message(FATAL_ERROR "Unqualified x86 march.h SSE policy; qualify actual header first")
+		endif()
+		# The exact qualified header has one unconditional #define ENABLE_SSE.
+		set(MCKERNEL_X86_ENABLE_SSE 1)
+		# Same absolute spelling used in MCKERNEL_SRCS below, preserving C __FILE__.
+		set(MCKERNEL_CPU_C_FILE "${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/cpu.c")
+		list(APPEND RUST_KERNEL_SRCS "${MCKERNEL_CPU_MARCH_HEADER}" "${MCKERNEL_CPU_C_FILE}")
+		set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
+			"${MCKERNEL_CPU_MARCH_HEADER}")
+		# Real outer entry and its exact C guard are selected as one supported cut.
+		if (ENABLE_RUST_KERNEL AND ARCH STREQUAL "x86_64" AND
+		    MCKERNEL_HOST_IRQ_ABI STREQUAL "linux-6.12" AND
+		    NOT ENABLE_UBSAN AND PROFILE_ENABLE)
+			if (NOT MCKERNEL_DO_SYSCALL_C_FILE MATCHES "^/[A-Za-z0-9_./+-]+$")
+				message(FATAL_ERROR "Unsupported syscall.c path for exact C/Rust debug identity")
+			endif()
+			set(MCKERNEL_DO_SYSCALL_OUTER_SELECTED ON)
+            # Complete ordinary-x86 mapping entry; preserve all other C profiles.
+            if (NOT ENABLE_FUGAKU_HACKS AND NOT ENABLE_TOFU)
+                set(MCKERNEL_DO_MMAP_SELECTED ON)
+                list(APPEND RUST_KERNEL_CFG "--cfg" "f03_do_mmap_candidate")
+                list(APPEND RUST_KERNEL_SRCS
+                    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_do_mmap.rs"
+                    "${CMAKE_CURRENT_SOURCE_DIR}/include/memobj.h"
+                    "${CMAKE_CURRENT_SOURCE_DIR}/include/shm.h"
+                    "${CMAKE_CURRENT_SOURCE_DIR}/include/process.h"
+                    "${CMAKE_CURRENT_SOURCE_DIR}/include/profile.h")
+                # Complete ptrace resume callback ownership only for the already
+                # qualified ordinary whole-F06 profile. Broad adapters stay off.
+                if (ENABLE_RUST_F06_SYSCALL_WHOLE AND ENABLE_PERF AND ENABLE_RUSAGE AND
+                    ENABLE_LINUX_WORK_IRQ_FOR_IKC AND NOT DCFA_KMOD AND
+                    NOT ENABLE_RUST_M14_SYSCALL_ADAPTERS AND
+                    NOT MCKERNEL_F03_SIGNAL_FORWARD_EXPERIMENTAL AND
+                    NOT ENABLE_NATIVE_FORK_OWNED_TRANSACTION)
+                    set(MCKERNEL_PTRACE_RESUME_CALLBACKS_SELECTED ON)
+                    list(APPEND RUST_KERNEL_CFG "--cfg" "f06_ptrace_resume_callbacks_candidate")
+                    list(APPEND RUST_KERNEL_SRCS
+                        "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_ptrace_resume_callbacks.rs"
+                        "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_ptrace_adapters.rs"
+                        "${CMAKE_CURRENT_SOURCE_DIR}/include/process.h"
+                        "${CMAKE_CURRENT_SOURCE_DIR}/include/kmalloc.h"
+                        "${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/include/arch-lock.h"
+                        "${PROJECT_SOURCE_DIR}/lib/include/ihk/debug.h")
+                endif()
+                # Current legacy-host fork entry; the separate owned transaction
+                # retains its original C selection and holds.
+                if (ENABLE_RUST_F06_SYSCALL_WHOLE AND ENABLE_PERF AND ENABLE_RUSAGE AND
+                    ENABLE_LINUX_WORK_IRQ_FOR_IKC AND NOT ENABLE_RUST_M14_SYSCALL_ADAPTERS AND
+                    NOT MCKERNEL_F03_SIGNAL_FORWARD_EXPERIMENTAL AND
+                    NOT ENABLE_NATIVE_FORK_OWNED_TRANSACTION)
+                    set(MCKERNEL_DO_FORK_SELECTED ON)
+                    list(APPEND RUST_KERNEL_CFG "--cfg" "f03_do_fork_candidate")
+                    list(APPEND RUST_KERNEL_SRCS
+                        "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_do_fork.rs"
+                        "${CMAKE_CURRENT_SOURCE_DIR}/include/syscall.h"
+                        "${CMAKE_CURRENT_SOURCE_DIR}/include/process.h"
+                        "${CMAKE_CURRENT_SOURCE_DIR}/include/memobj.h"
+                        "${PROJECT_SOURCE_DIR}/lib/include/mc_perf_event.h"
+                        "${IHK_FULL_SOURCE_DIR}/cokernel/smp/x86_64/include/ihk/memconst.h")
+                endif()
+            endif()
+			list(APPEND RUST_KERNEL_CFG "--cfg" "f03_do_syscall_outer_candidate")
+			list(APPEND RUST_KERNEL_SRCS
+			    "${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_offload_entry.rs"
+			    "${MCKERNEL_DO_SYSCALL_C_FILE}"
+			    "${PROJECT_SOURCE_DIR}/lib/include/ihk/debug.h")
+		endif()
+        # The reviewed ordinary-profile predicate also excludes broad adapters.
+        # Select only the two-argument policy bridge; all other adapters stay as-is.
+        if (MCKERNEL_RUST_F06_WHOLE_DEFAULT)
+            set(MCKERNEL_DO_SYSCALL2_BRIDGE_SELECTED ON)
+            list(APPEND RUST_KERNEL_CFG "--cfg" "f03_do_syscall2_bridge_candidate")
+            list(APPEND RUST_KERNEL_SRCS
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_do_syscall2_bridge.rs")
+        endif()
+        # Close only the actual memory-host/three-argument provider frontier.
+        # Broad forwarding/owned transaction options keep their existing scope.
+        if (MCKERNEL_RUST_F06_WHOLE_DEFAULT AND NOT ENABLE_NATIVE_FORK_OWNED_TRANSACTION)
+            set(MCKERNEL_MEMORY_HOST_OFFLOAD_SELECTED ON)
+            list(APPEND RUST_KERNEL_CFG "--cfg" "f03_memory_host_offload_candidate")
+            list(APPEND RUST_KERNEL_SRCS
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_memory_host_offload.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/include/syscall.h"
+                "${CMAKE_CURRENT_SOURCE_DIR}/include/process.h"
+                "${IHK_FULL_SOURCE_DIR}/cokernel/smp/x86_64/include/ihk/memconst.h")
+        endif()
+        # The mprotect/shmat endpoint has the same complete host-VMA contract.
+        if (MCKERNEL_MEMORY_HOST_OFFLOAD_SELECTED)
+            list(APPEND RUST_KERNEL_CFG "--cfg" "f03_mprotect_host_provider_candidate")
+            list(APPEND RUST_KERNEL_SRCS
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_mprotect_host_provider.rs")
+        endif()
+        # Only the three current signal/context providers, with the paired C ABI.
+        # Keep the experimental/broad forwarding candidates and owned fork off.
+        if (MCKERNEL_RUST_F06_WHOLE_DEFAULT AND ENABLE_RUST_F06_SYSCALL_WHOLE AND
+            NOT ENABLE_NATIVE_FORK_OWNED_TRANSACTION AND NOT DCFA_KMOD)
+            set(MCKERNEL_SIGNAL_FORWARD_PROVIDER_SELECTED ON)
+            list(APPEND RUST_KERNEL_CFG "--cfg" "f03_signal_forward_provider_candidate")
+            list(APPEND RUST_KERNEL_SRCS
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_signal_forward_provider.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/include/syscall.h"
+                "${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/include/ihk/context.h"
+                "${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/include/registers.h"
+                "${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/include/signal.h")
+        endif()
+        # Only the required host wait4 callback; retain broad/owned selections.
+        if (MCKERNEL_RUST_F06_WHOLE_DEFAULT AND ENABLE_RUST_F06_SYSCALL_WHOLE AND
+            MCKERNEL_DO_SYSCALL_OUTER_SELECTED AND
+            NOT ENABLE_NATIVE_FORK_OWNED_TRANSACTION AND NOT DCFA_KMOD)
+            set(MCKERNEL_WAIT_HOST_PROVIDER_SELECTED ON)
+            list(APPEND RUST_KERNEL_CFG "--cfg" "f03_wait_host_provider_candidate")
+            list(APPEND RUST_KERNEL_SRCS
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_wait_host_provider.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/include/syscall.h"
+                "${IHK_FULL_SOURCE_DIR}/cokernel/smp/x86_64/include/ihk/memconst.h")
+        endif()
+        # Export the existing real Rust exit-notification transaction only here.
+        # Reuse its body and ordinary signal profile; keep owned/broad paths off.
+        if (MCKERNEL_SIGNAL_FORWARD_PROVIDER_SELECTED)
+            set(MCKERNEL_TERMINATE_HOST_PROVIDER_SELECTED ON)
+            list(APPEND RUST_KERNEL_CFG "--cfg" "f03_terminate_host_provider_candidate")
+            list(APPEND RUST_KERNEL_SRCS
+                "${CMAKE_CURRENT_SOURCE_DIR}/include/cls.h"
+                "${CMAKE_CURRENT_SOURCE_DIR}/include/process.h"
+                "${CMAKE_CURRENT_SOURCE_DIR}/include/syscall.h"
+                "${IHK_FULL_SOURCE_DIR}/cokernel/smp/x86_64/include/ihk/memconst.h")
+        endif()
+        # Narrow genuine context adapter; retain every existing generic/exec gate.
+        if (MCKERNEL_RUST_F06_WHOLE_DEFAULT AND NOT ENABLE_NATIVE_FORK_OWNED_TRANSACTION)
+            set(MCKERNEL_POLICY_FORWARD_CONTEXT_SELECTED ON)
+            list(APPEND RUST_KERNEL_CFG "--cfg" "f03_policy_forward_context_bridge_candidate")
+            list(APPEND RUST_KERNEL_SRCS
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_policy_forward_context_bridge.rs")
+        endif()
+        # Select the reviewed real perf owner only with all ordinary lifecycle
+        # and host-route providers. No held/broad/owned option is enabled here.
+        if (MCKERNEL_RUST_F06_WHOLE_DEFAULT AND ENABLE_RUST_F06_SYSCALL_WHOLE AND
+            MCKERNEL_DO_FORK_SELECTED AND MCKERNEL_DO_SYSCALL_OUTER_SELECTED AND
+            MCKERNEL_WAIT_HOST_PROVIDER_SELECTED AND MCKERNEL_TERMINATE_HOST_PROVIDER_SELECTED AND
+            NOT ENABLE_NATIVE_FORK_OWNED_TRANSACTION AND NOT DCFA_KMOD)
+            set(MCKERNEL_PERF_OWNER_PROTOCOL_SELECTED ON)
+            list(APPEND RUST_KERNEL_CFG "--cfg" "f03_perf_owner_protocol")
+            list(APPEND RUST_KERNEL_SRCS
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_owner.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_owner/callbacks.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_owner/copy_borrows.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_owner/descriptors.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_owner/entry.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_owner/events.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_owner/fork_copy.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_owner/forward_gate.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_owner/groups.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_owner/hardware.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_owner/lifecycle.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_owner/maps.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_owner/monitors.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_owner/process_targets.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_owner/runtime.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_owner/target_process.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_owner/terminal.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_owner/thread_counters.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_owner/transactions.rs"
+)
+        endif()
+        # One exact kernel codegen profile for rebuilt builtins and consumer.
+        set(MCKERNEL_RUST_CODEGEN_FLAGS
+            -C panic=abort -C opt-level=2 -C debuginfo=2
+            -C code-model=large -C relocation-model=static -C no-redzone=yes
+            -C force-frame-pointers=yes -C overflow-checks=off
+            -C force-unwind-tables=no -C no-vectorize-loops -C no-vectorize-slp
+            -C target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma)
+        set(MCKERNEL_RUST_PROVIDER_FLAGS)
+        set(MCKERNEL_RUST_PROVIDER_OBJECTS)
+        set(MCKERNEL_RUST_PROVIDER_DEPS)
+        if (MCKERNEL_PERF_OWNER_PROTOCOL_SELECTED)
+            # Genuine source-built core is a required SDK input, never the HOST
+            # prebuilt core. Root binds its actual compiler/profile/source tuple.
+            set(MCKERNEL_RUST_CORE_PROVIDER_DIR "" CACHE PATH
+                "Directory containing matching kernel-profile core.o and libcore.rmeta")
+            if (NOT IS_ABSOLUTE "${MCKERNEL_RUST_CORE_PROVIDER_DIR}" OR
+                NOT IS_DIRECTORY "${MCKERNEL_RUST_CORE_PROVIDER_DIR}")
+                message(FATAL_ERROR "Perf owner requires an actual kernel-profile core provider directory")
+            endif()
+            set(MCKERNEL_RUST_CORE_OBJECT "${MCKERNEL_RUST_CORE_PROVIDER_DIR}/core.o")
+            set(MCKERNEL_RUST_CORE_METADATA "${MCKERNEL_RUST_CORE_PROVIDER_DIR}/libcore.rmeta")
+            foreach(provider IN ITEMS "${MCKERNEL_RUST_CORE_OBJECT}" "${MCKERNEL_RUST_CORE_METADATA}")
+                if (NOT EXISTS "${provider}" OR IS_DIRECTORY "${provider}")
+                    message(FATAL_ERROR "Missing matching core provider: ${provider}")
+                endif()
+                file(SIZE "${provider}" provider_size)
+                if (provider_size EQUAL 0)
+                    message(FATAL_ERROR "Empty matching core provider: ${provider}")
+                endif()
+            endforeach()
+            # The genuine compiler-builtins Rust-only recipe is tied to the
+            # selected compiler's own complete rust-src tree, not a system rlib.
+            get_filename_component(MCKERNEL_RUST_BIN_DIR "${RUSTC}" DIRECTORY)
+            get_filename_component(MCKERNEL_RUST_TOOLCHAIN "${MCKERNEL_RUST_BIN_DIR}" DIRECTORY)
+            set(MCKERNEL_RUST_BUILTINS_PACKAGE
+                "${MCKERNEL_RUST_TOOLCHAIN}/lib/rustlib/src/rust/library/compiler-builtins/compiler-builtins")
+            # Only the actual required unsigned-division dependency closure.
+            # The canonical template changes declarations, never upstream bodies.
+            set(MCKERNEL_RUST_PROVIDER_BUILD "${CMAKE_CURRENT_BINARY_DIR}/rust/freestanding")
+            set(MCKERNEL_RUST_BUILTINS_TEMPLATE
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/compiler_builtins_integer.rs.in")
+            set(MCKERNEL_RUST_BUILTINS_SOURCE
+                "${MCKERNEL_RUST_PROVIDER_BUILD}/compiler_builtins_integer.rs")
+            if (NOT MCKERNEL_RUST_BUILTINS_PACKAGE MATCHES "^/[A-Za-z0-9_./+-]+$")
+                message(FATAL_ERROR "Unsupported compiler-builtins path for literal Rust source selection")
+            endif()
+            set(MCKERNEL_RUST_INTEGER_SOURCE_DEPS)
+            foreach(relative IN ITEMS
+                    src/macros.rs src/int/udiv.rs
+                    src/int/specialized_div_rem/mod.rs
+                    src/int/specialized_div_rem/norm_shift.rs
+                    src/int/specialized_div_rem/binary_long.rs
+                    src/int/specialized_div_rem/delegate.rs
+                    src/int/specialized_div_rem/trifecta.rs
+                    src/int/specialized_div_rem/asymmetric.rs)
+                set(actual "${MCKERNEL_RUST_BUILTINS_PACKAGE}/${relative}")
+                if (NOT EXISTS "${actual}" OR IS_DIRECTORY "${actual}")
+                    message(FATAL_ERROR "Missing genuine integer compiler-builtins source: ${actual}")
+                endif()
+                list(APPEND MCKERNEL_RUST_INTEGER_SOURCE_DEPS "${actual}")
+            endforeach()
+            file(MAKE_DIRECTORY "${MCKERNEL_RUST_PROVIDER_BUILD}")
+            configure_file("${MCKERNEL_RUST_BUILTINS_TEMPLATE}"
+                "${MCKERNEL_RUST_BUILTINS_SOURCE}" @ONLY)
+            set(MCKERNEL_RUST_BUILTINS_OBJECT "${MCKERNEL_RUST_PROVIDER_BUILD}/compiler_builtins.o")
+            set(MCKERNEL_RUST_BUILTINS_METADATA "${MCKERNEL_RUST_PROVIDER_BUILD}/libcompiler_builtins.rmeta")
+            set(MCKERNEL_RUST_BUILTINS_RAW_DEPFILE "${MCKERNEL_RUST_PROVIDER_BUILD}/compiler_builtins.raw.d")
+            set(MCKERNEL_RUST_BUILTINS_DEPFILE "${MCKERNEL_RUST_PROVIDER_BUILD}/compiler_builtins.d")
+            add_custom_command(
+                OUTPUT "${MCKERNEL_RUST_BUILTINS_OBJECT}" "${MCKERNEL_RUST_BUILTINS_METADATA}"
+                COMMAND "${CMAKE_COMMAND}" -E make_directory "${MCKERNEL_RUST_PROVIDER_BUILD}"
+                COMMAND "${RUSTC}" --crate-name compiler_builtins --crate-type rlib --edition=2024
+                    --sysroot=/dev/null -C metadata=mckernel_kernel_195_builtins
+                    ${MCKERNEL_RUST_CODEGEN_FLAGS}
+                    -Z dep-info-omit-d-target -Z binary-dep-depinfo
+                    --extern "core=${MCKERNEL_RUST_CORE_METADATA}"
+                    -L "dependency=${MCKERNEL_RUST_CORE_PROVIDER_DIR}"
+                    --cfg [=[feature="compiler-builtins"]=] --cfg [=[feature="no-asm"]=]
+                    --cfg intrinsics_enabled --cfg optimizations_enabled
+                    --cfg [=[feature="unstable-intrinsics"]=] --cfg [=[feature="mem-unaligned"]=]
+                    "--emit=obj=${MCKERNEL_RUST_BUILTINS_OBJECT},metadata=${MCKERNEL_RUST_BUILTINS_METADATA},dep-info=${MCKERNEL_RUST_BUILTINS_RAW_DEPFILE}"
+                    "${MCKERNEL_RUST_BUILTINS_SOURCE}"
+                COMMAND "${CMAKE_COMMAND}" "-DINPUT=${MCKERNEL_RUST_BUILTINS_RAW_DEPFILE}"
+                    "-DOUTPUT=${MCKERNEL_RUST_BUILTINS_DEPFILE}" -P "${MCKERNEL_RUST_DEPFILE_NORMALIZER}"
+                DEPENDS "${RUSTC}" "${MCKERNEL_RUST_BUILTINS_SOURCE}"
+                    "${MCKERNEL_RUST_BUILTINS_TEMPLATE}" ${MCKERNEL_RUST_INTEGER_SOURCE_DEPS}
+                    "${MCKERNEL_RUST_BUILTINS_PACKAGE}/Cargo.toml"
+                    "${MCKERNEL_RUST_BUILTINS_PACKAGE}/build.rs"
+                    "${MCKERNEL_RUST_CORE_OBJECT}" "${MCKERNEL_RUST_CORE_METADATA}"
+                    "${MCKERNEL_RUST_DEPFILE_NORMALIZER}"
+                DEPFILE "${MCKERNEL_RUST_BUILTINS_DEPFILE}"
+                BYPRODUCTS "${MCKERNEL_RUST_BUILTINS_DEPFILE}" "${MCKERNEL_RUST_BUILTINS_RAW_DEPFILE}"
+                WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
+                COMMENT "Building genuine matching kernel-profile integer compiler builtins"
+                VERBATIM)
+            # Both explicit metadata inputs prevent implicit HOST sysroot fallback.
+            list(APPEND MCKERNEL_RUST_PROVIDER_FLAGS --sysroot=/dev/null
+                --extern "core=${MCKERNEL_RUST_CORE_METADATA}"
+                --extern "compiler_builtins=${MCKERNEL_RUST_BUILTINS_METADATA}"
+                -L "dependency=${MCKERNEL_RUST_CORE_PROVIDER_DIR}"
+                -L "dependency=${MCKERNEL_RUST_PROVIDER_BUILD}")
+            list(APPEND MCKERNEL_RUST_PROVIDER_DEPS
+                "${MCKERNEL_RUST_CORE_OBJECT}" "${MCKERNEL_RUST_CORE_METADATA}"
+                "${MCKERNEL_RUST_BUILTINS_OBJECT}" "${MCKERNEL_RUST_BUILTINS_METADATA}")
+            list(APPEND MCKERNEL_RUST_PROVIDER_OBJECTS
+                "${MCKERNEL_RUST_CORE_OBJECT}" "${MCKERNEL_RUST_BUILTINS_OBJECT}")
+            set_source_files_properties("${MCKERNEL_RUST_CORE_OBJECT}" PROPERTIES EXTERNAL_OBJECT TRUE)
+            set_source_files_properties("${MCKERNEL_RUST_BUILTINS_OBJECT}"
+                PROPERTIES EXTERNAL_OBJECT TRUE GENERATED TRUE)
+        endif()
 		add_custom_command(
 		OUTPUT "${RUST_KERNEL_OBJ}"
 		COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/rust"
 		COMMAND ${CMAKE_COMMAND} -E env MAKEFLAGS=
 			MCKERNEL_RUST_VERSION=${MCKERNEL_VERSION}
 			MCKERNEL_RUST_BUILDID=${BUILDID}
-			${RUSTC}
+			MCKERNEL_X86_ENABLE_SSE=${MCKERNEL_X86_ENABLE_SSE}
+			MCKERNEL_CPU_C_FILE=${MCKERNEL_CPU_C_FILE}
+			"MCKERNEL_DO_SYSCALL_C_FILE=${MCKERNEL_DO_SYSCALL_C_FILE}"
+			"MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS=${MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS}"
+            "MCKERNEL_PROCESS_C_FILE=${MCKERNEL_PROCESS_C_FILE}"
+            "MCKERNEL_PROCESS_DDEBUG_FLAGS=${MCKERNEL_PROCESS_DDEBUG_FLAGS}"
+            "MCKERNEL_INTERRUPT_SYSCALL_C_FILE=${CMAKE_CURRENT_SOURCE_DIR}/syscall.c"
+            "MCKERNEL_TERMINATE_C_FILE=${CMAKE_CURRENT_SOURCE_DIR}/syscall.c"
+			"MCKERNEL_F06_RT_SIGRETURN_ORIGIN=${MCKERNEL_F06_RT_SIGRETURN_ORIGIN}"
+			"MCKERNEL_F06_CLONE_CPUID_METADATA_RS=${MCKERNEL_F06_CLONE_CPUID_METADATA_RS}"
+			"MCKERNEL_F06_SIGNAL_METADATA_RS=${MCKERNEL_F06_SIGNAL_METADATA_RS}"
+			"${RUSTC}"
 			--crate-name mckernel_rust
 			--crate-type lib
 			--edition=2021
-			-C panic=abort
-			-C opt-level=2
-			-C debuginfo=2
-			-C code-model=large
-			-C relocation-model=static
-			-C no-redzone=yes
-			-C force-frame-pointers=yes
-			-C overflow-checks=off
-			-C force-unwind-tables=no
-			-C no-vectorize-loops
-			-C no-vectorize-slp
-			-C target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma
+			${MCKERNEL_RUST_CODEGEN_FLAGS}
+			-Z dep-info-omit-d-target
+			-Z binary-dep-depinfo
 			${RUST_KERNEL_CFG}
-			--emit=obj=${RUST_KERNEL_OBJ}
+            ${MCKERNEL_RUST_PROVIDER_FLAGS}
+			"--emit=obj=${RUST_KERNEL_OBJ},dep-info=${RUST_KERNEL_RAW_DEPFILE}"
 			"${CMAKE_CURRENT_SOURCE_DIR}/rust/lib.rs"
-		DEPENDS ${RUST_KERNEL_SRCS}
+		COMMAND "${CMAKE_COMMAND}" "-DINPUT=${RUST_KERNEL_RAW_DEPFILE}"
+			"-DOUTPUT=${RUST_KERNEL_DEPFILE}" -P "${MCKERNEL_RUST_DEPFILE_NORMALIZER}"
+		# Replacing the selected compiler must not silently reuse an old object.
+		DEPENDS ${RUST_KERNEL_SRCS} "${RUSTC}" "${MCKERNEL_RUST_DEPFILE_NORMALIZER}" ${MCKERNEL_RUST_PROVIDER_DEPS}
+		DEPFILE "${RUST_KERNEL_DEPFILE}"
+		BYPRODUCTS "${RUST_KERNEL_DEPFILE}" "${RUST_KERNEL_RAW_DEPFILE}"
 		COMMENT "Building Rust kernel object"
 		VERBATIM
 	)
@@ -198,6 +904,7 @@ if (RUST_KERNEL_ENABLED)
 		-DMCKERNEL_RUST_SPINLOCK_HELPERS)
 	list(APPEND MCKERNEL_SRCS
 		"${RUST_KERNEL_OBJ}"
+        ${MCKERNEL_RUST_PROVIDER_OBJECTS}
 		rust/abi_checks.c
 	)
 	list(REMOVE_ITEM MCKERNEL_SRCS
@@ -293,7 +1000,54 @@ if (RUST_KERNEL_ENABLED)
 		PROPERTIES COMPILE_DEFINITIONS MCKERNEL_RUST_GENCORE_HELPERS)
 	set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/syscall.c"
 		PROPERTIES COMPILE_DEFINITIONS
-		"MCKERNEL_RUST_SHMID_HELPERS;MCKERNEL_RUST_SHM_PERM_HELPERS;MCKERNEL_RUST_RLIMIT_HELPERS;MCKERNEL_RUST_SCHED_PRIO_HELPERS;MCKERNEL_RUST_SCHED_POLICY_HELPERS;MCKERNEL_RUST_SYSCALL_POLICY_HELPERS;MCKERNEL_RUST_SIGNAL_HELPERS")
+		"MCKERNEL_RUST_SHMID_HELPERS;MCKERNEL_RUST_SHM_PERM_HELPERS;MCKERNEL_RUST_RLIMIT_HELPERS;MCKERNEL_RUST_SCHED_PRIO_HELPERS;MCKERNEL_RUST_SCHED_POLICY_HELPERS;MCKERNEL_RUST_SYSCALL_POLICY_HELPERS;MCKERNEL_RUST_SYSCALL_OFFLOAD;MCKERNEL_RUST_SIGNAL_HELPERS;MCKERNEL_RUST_F03_IO_DIAGNOSTICS;MCKERNEL_RUST_F03_MINCORE;MCKERNEL_RUST_F03_MOVE_PAGES;MCKERNEL_RUST_F03_SCHED_BRIDGES;MCKERNEL_RUST_F03_SIGNAL_PROCESS_BRIDGES;MCKERNEL_RUST_F03_DISPATCH_CONTEXT;MCKERNEL_RUST_F03_LEAF_CALLBACKS")
+	if (MCKERNEL_F03_SIGNAL_FORWARD_EXPERIMENTAL)
+		set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+			COMPILE_DEFINITIONS MCKERNEL_RUST_F03_SIGNAL_FORWARD)
+	endif()
+	if (MCKERNEL_HOST_IRQ_ABI STREQUAL "linux-6.12")
+		# Pair the existing Rust process_global_storage_candidate provider above.
+		set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/process.c" APPEND PROPERTY
+			COMPILE_DEFINITIONS MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE)
+		if (ENABLE_RUST_M14_SYSCALL_ADAPTERS)
+			set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+				COMPILE_DEFINITIONS MCKERNEL_RUST_F03_FORWARD_ADAPTERS)
+			set_property(SOURCE "${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/syscall.c" APPEND PROPERTY
+				COMPILE_DEFINITIONS "MCKERNEL_RUST_F06_NATIVE_SIGNAL_BAD_FRAME;MCKERNEL_RUST_F06_PTRACE_REGSET_LOG;MCKERNEL_RUST_F06_SIGNAL_TRAP_INFO")
+		endif()
+		if (ARCH STREQUAL "x86_64" AND NOT ENABLE_UBSAN)
+            if (PROFILE_ENABLE AND NOT ENABLE_TOFU AND NOT DCFA_KMOD)
+                set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+                    COMPILE_DEFINITIONS MCKERNEL_RUST_F03_TERMINATE)
+            endif()
+            set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+                COMPILE_DEFINITIONS MCKERNEL_RUST_F03_INTERRUPT_SYSCALL
+                    MCKERNEL_RUST_F03_HOST_CLEANUP
+                    MCKERNEL_RUST_F03_CREDENTIAL_REFRESH)
+            if (PROFILE_ENABLE)
+                set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+                    COMPILE_DEFINITIONS MCKERNEL_RUST_F03_EXIT_GROUP_BRIDGES)
+            endif()
+			if (NOT ENABLE_RUST_F06_SYSCALL_WHOLE)
+				set_property(SOURCE "${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/syscall.c" APPEND PROPERTY
+				    COMPILE_DEFINITIONS MCKERNEL_RUST_F06_SIGNAL_CONTEXT)
+			endif()
+			set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+				COMPILE_DEFINITIONS "MCKERNEL_RUST_F03_PERF_ATTR_CALLBACKS;MCKERNEL_RUST_F03_PRLIMIT_BODY;MCKERNEL_RUST_F03_EXEC_DEFINED_TAIL;MCKERNEL_RUST_F03_DO_EXIT_V2;MCKERNEL_RUST_F03_UNMAP_BEGIN;MCKERNEL_RUST_F03_UNMAP_REMOVE;MCKERNEL_RUST_F03_UNMAP_FINISH;MCKERNEL_RUST_F03_MMAP_PAGE_CALLBACK;MCKERNEL_RUST_F03_WAIT_RELEASE;MCKERNEL_RUST_F03_WAIT_PROCESS_RELEASE;MCKERNEL_RUST_F03_TERMINATE_REFCOUNT;MCKERNEL_RUST_F03_TERMINATE_CMPXCHG;MCKERNEL_RUST_F03_PTRACE_IO_FIND;MCKERNEL_RUST_F03_PTRACE_IO_UNLOCK;MCKERNEL_RUST_F03_PTRACE_IO_COPY_FROM;MCKERNEL_RUST_F03_SYNC_CHILD_EVENT;MCKERNEL_RUST_F03_WAKEUP_FIND;MCKERNEL_RUST_F03_WAKEUP_UNLOCK;MCKERNEL_RUST_F03_EXIT_WAITQ_WAKE")
+			if (ENABLE_PERF)
+				set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+					COMPILE_DEFINITIONS "MCKERNEL_RUST_F03_PERF_ALLOC_BRIDGES;MCKERNEL_RUST_F03_PERF_COUNTER_CONTROL_BRIDGES;MCKERNEL_RUST_F03_PERF_EVENT_PROVIDER_BRIDGES;MCKERNEL_RUST_F03_PERF_PROVIDER_NEXT3_BRIDGES")
+			endif()
+			set_property(SOURCE "${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/syscall.c" APPEND PROPERTY
+				COMPILE_DEFINITIONS "MCKERNEL_RUST_F06_MMAP_FLAG_PROVIDERS;MCKERNEL_RUST_F06_PRCTL_SET_REGISTER;MCKERNEL_RUST_F06_PRCTL_GET_REGISTER;MCKERNEL_RUST_F06_MMAP_DISPATCH_BRIDGE;MCKERNEL_RUST_F06_PTRACE_CONTEXT;MCKERNEL_RUST_F06_PTRACE_ALLOC;MCKERNEL_RUST_F06_VDSO_ADD_RANGE;MCKERNEL_RUST_F06_VDSO_SET_RANGE;MCKERNEL_RUST_F06_PROCESS_VM_ENTRY;MCKERNEL_RUST_F06_COPY_TO_USER;MCKERNEL_RUST_F06_COPY_FROM_USER;MCKERNEL_RUST_F06_FORWARD_CONTEXT;MCKERNEL_RUST_F06_RT_SIGRETURN_SYSCALL;MCKERNEL_RUST_F06_RT_SIGRETURN_SET_SIGNAL;MCKERNEL_RUST_F06_RT_SIGRETURN_CHECK_SIGNAL")
+		endif()
+		set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+			COMPILE_DEFINITIONS "MCKERNEL_RUST_F03_PTRACE_ENTRY;MCKERNEL_RUST_F03_SYSCALL_TABLE;MCKERNEL_RUST_F03_SYSCALL_ENTRY;MCKERNEL_RUST_F03_FUTEX_ATOMIC")
+	endif()
+	if (ENABLE_NATIVE_FORK_OWNED_TRANSACTION)
+		set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+			COMPILE_DEFINITIONS MCKERNEL_NATIVE_FORK_OWNED_TRANSACTION)
+	endif()
 	set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/xpmem.c"
 		PROPERTIES COMPILE_DEFINITIONS MCKERNEL_RUST_XPMEM_HELPERS)
 	set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/tofu/tof_utofu_main.c"
@@ -305,6 +1059,12 @@ else()
 		rbtree.c
 		llist.c
 		"${PROJECT_SOURCE_DIR}/lib/list.c")
+	if ("${ARCH}" STREQUAL "x86_64")
+		set_source_files_properties("${IHK_FULL_SOURCE_DIR}/cokernel/smp/x86_64/setup.c"
+			PROPERTIES COMPILE_DEFINITIONS MCKERNEL_IHK_STATIC_PERF_TABLES)
+		set_source_files_properties("${IHK_FULL_SOURCE_DIR}/ikc/queue.c"
+			PROPERTIES COMPILE_DEFINITIONS MCKERNEL_IHK_QUEUE_ATOMICS)
+	endif()
 endif()
 
 if (ENABLE_TOFU)
@@ -357,9 +1117,12 @@ if (BUILD_TARGET STREQUAL "smp-x86")
 		set_source_files_properties(
 			"${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/memory_helpers.c"
 			PROPERTIES COMPILE_DEFINITIONS MCKERNEL_RUST_X86_MEMORY_HELPERS)
-		set_source_files_properties(
+		# Earlier blocks pair Rust providers with F06 source guards. Preserve
+		# those definitions when adding the architecture's base helper guards.
+		set_property(SOURCE
 			"${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/syscall.c"
-			PROPERTIES COMPILE_DEFINITIONS MCKERNEL_RUST_SYSCALL_POLICY_HELPERS)
+			APPEND PROPERTY COMPILE_DEFINITIONS
+			"MCKERNEL_RUST_SYSCALL_POLICY_HELPERS;MCKERNEL_RUST_X86_CPU_HELPERS")
 	endif()
 elseif (BUILD_TARGET STREQUAL "smp-arm64")
 
@@ -459,6 +1222,77 @@ configure_file(
   @ONLY
   )
 
+# Apply after existing source properties, which otherwise overwrite definitions.
+if (ENABLE_PROCESS_DEBUG_PRINT)
+    set_property(SOURCE "${MCKERNEL_PROCESS_C_FILE}" APPEND PROPERTY
+        COMPILE_DEFINITIONS DEBUG_PRINT_PROCESS)
+endif()
+if (RUST_KERNEL_ENABLED AND ENABLE_RUST_PROCESS_VERBOSE_DATA)
+    set_property(SOURCE "${MCKERNEL_PROCESS_C_FILE}" APPEND PROPERTY
+        COMPILE_DEFINITIONS MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+        "MCKERNEL_PROCESS_DDEBUG_FLAGS=${MCKERNEL_PROCESS_DDEBUG_FLAGS}"
+        "MCKERNEL_PROCESS_DDEBUG_FILE=\"${MCKERNEL_PROCESS_C_FILE}\"")
+endif()
+
+if (RUST_KERNEL_ENABLED AND MCKERNEL_PROCESS_VERBOSE_LOCAL_SELECTED)
+    set_property(SOURCE "${MCKERNEL_PROCESS_C_FILE}" APPEND PROPERTY
+        COMPILE_DEFINITIONS MCKERNEL_RUST_PROCESS_VERBOSE_LOCAL_COMPANIONS)
+endif()
+
+# Apply after the existing source properties, which otherwise replace flags.
+if (MCKERNEL_PTRACE_RESUME_CALLBACKS_SELECTED)
+    set_property(SOURCE "${MCKERNEL_DO_SYSCALL_C_FILE}" APPEND PROPERTY
+        COMPILE_DEFINITIONS MCKERNEL_RUST_F06_PTRACE_RESUME_CALLBACKS)
+endif()
+if (MCKERNEL_DO_FORK_SELECTED)
+    set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+        COMPILE_DEFINITIONS MCKERNEL_RUST_F03_DO_FORK)
+endif()
+if (MCKERNEL_PERF_OWNER_PROTOCOL_SELECTED)
+    set_property(SOURCE "${MCKERNEL_DO_SYSCALL_C_FILE}" APPEND PROPERTY
+        COMPILE_DEFINITIONS MCKERNEL_RUST_F03_PERF_OWNER_PROTOCOL)
+endif()
+if (MCKERNEL_MEMORY_HOST_OFFLOAD_SELECTED)
+    set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+        COMPILE_DEFINITIONS MCKERNEL_RUST_F03_MEMORY_HOST_OFFLOAD
+        MCKERNEL_RUST_F03_MPROTECT_HOST_PROVIDER)
+endif()
+if (MCKERNEL_DO_MMAP_SELECTED)
+    set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+        COMPILE_DEFINITIONS MCKERNEL_RUST_F03_DO_MMAP)
+endif()
+if (MCKERNEL_DO_SYSCALL_OUTER_SELECTED)
+    set_property(SOURCE "${MCKERNEL_DO_SYSCALL_C_FILE}" APPEND PROPERTY
+        COMPILE_DEFINITIONS MCKERNEL_RUST_DO_SYSCALL_OUTER
+        "MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS=${MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS}"
+        "MCKERNEL_DO_SYSCALL_C_FILE=\"${MCKERNEL_DO_SYSCALL_C_FILE}\"")
+endif()
+
+if (MCKERNEL_DO_SYSCALL2_BRIDGE_SELECTED)
+    set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+        COMPILE_DEFINITIONS MCKERNEL_RUST_F03_DO_SYSCALL2_BRIDGE)
+endif()
+
+if (MCKERNEL_SIGNAL_FORWARD_PROVIDER_SELECTED)
+    set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+        COMPILE_DEFINITIONS MCKERNEL_RUST_F03_SIGNAL_FORWARD_PROVIDER)
+endif()
+
+if (MCKERNEL_WAIT_HOST_PROVIDER_SELECTED)
+    set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+        COMPILE_DEFINITIONS MCKERNEL_RUST_F03_WAIT_HOST_PROVIDER)
+endif()
+
+if (MCKERNEL_TERMINATE_HOST_PROVIDER_SELECTED)
+    set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+        COMPILE_DEFINITIONS MCKERNEL_RUST_F03_TERMINATE_HOST_PROVIDER)
+endif()
+
+if (MCKERNEL_POLICY_FORWARD_CONTEXT_SELECTED)
+    set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+        COMPILE_DEFINITIONS MCKERNEL_RUST_F03_POLICY_FORWARD_CONTEXT_BRIDGE)
+endif()
+
 add_executable(mckernel.img ${MCKERNEL_SRCS})
 if (RUST_KERNEL_ENABLED)
 	add_dependencies(mckernel.img mckernel_rust_obj)
@@ -466,7 +1300,7 @@ endif()
 
 set_target_properties(mckernel.img PROPERTIES INSTALL_RPATH "")
 set_target_properties(mckernel.img PROPERTIES LINK_FLAGS
-	"-e arch_start -T ${CMAKE_CURRENT_BINARY_DIR}/config/${LINKER_SCRIPT} --build-id")
+	"-e arch_start -T ${CMAKE_CURRENT_BINARY_DIR}/config/${LINKER_SCRIPT} --build-id -Map=${CMAKE_CURRENT_BINARY_DIR}/mckernel.img.map")
 
 install(TARGETS "mckernel.img"
 	DESTINATION "${MCKERNELDIR}")

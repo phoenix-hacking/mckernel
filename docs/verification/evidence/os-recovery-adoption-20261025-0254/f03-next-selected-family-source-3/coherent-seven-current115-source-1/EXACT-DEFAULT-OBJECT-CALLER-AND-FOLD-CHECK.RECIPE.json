@@ -1,0 +1,78 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "EXACT_FUTURE_OBJECT_AND_FINAL_IMAGE_PREDICATES_UNRUN",
+  "actual_future_refs": {
+    "Rust_object": null,
+    "generic_C_object": null,
+    "process_C_object": null,
+    "arch_C_object": null,
+    "image": null,
+    "map": null,
+    "qualified_WAKE4_HOST_Rust": null
+  },
+  "exact_container_output_paths": {
+    "Rust": "/work/output/build/kernel/rust/mckernel_rust.o",
+    "generic_C": "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+    "image": "/work/output/build/kernel/mckernel.img",
+    "map": "/work/output/build/kernel/mckernel.img.map"
+  },
+  "C_definition_deselections_required": [
+    "ptrace_setsiginfo",
+    "ptrace_syscall_event",
+    "ptrace_report_signal_bridge",
+    "ptrace_wakeup_clear_saved_bridge",
+    "ptrace_wakeup_set_single_step_bridge",
+    "ptrace_wakeup_trace_syscall_bridge",
+    "ptrace_wakeup_pending_take_bridge"
+  ],
+  "Rust_unique_global_allocated_FUNC_definitions_required": [
+    "f03_ptrace_setsiginfo_v1",
+    "ptrace_syscall_event",
+    "f03_exec_report_signal_v1",
+    "ptrace_wakeup_clear_saved_bridge",
+    "ptrace_wakeup_set_single_step_bridge",
+    "ptrace_wakeup_trace_syscall_bridge",
+    "ptrace_wakeup_pending_take_bridge"
+  ],
+  "current_consumer_predicates": [
+    "Current genericC f03_ptrace_entry_ops_v1 actual setsiginfo relocation targets f03_ptrace_setsiginfo_v1; bind exactfield/type and Rustsys_ptrace actualops consumer; no HOSTwitness substitute.",
+    "Current genericC ptrace_wakeup_sig allocatedfunction must contain positive allocatedrefs to EACHfour originalnameRustcallbacks. Definitions must be absent in C, present in actualRust and finalimage; f03_wakeup4_HOST_ABI is not a productionconsumer.",
+    "No surviving directproductionC signal edge required or credited: signalHOST_ABI_WITNESS remains onlyfixture. ActualRust syscall entry/return and exec report must satisfy explicit direct-call OR finitefold path below."
+  ],
+  "trio_fold_positive_contract": {
+    "retained_reference": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/actual-new-rust-folded-caller-proof-source-1/ACTUAL-FOLDED-CALLER-PROOF.json",
+      "bytes": 23821,
+      "sha256": "983f3da717461cf53d1f52640912292129f904b3e00236e0f7dafbc83403e188"
+    },
+    "selected_compile_gates": [
+      "f03_ptrace_entry_candidate",
+      "f03_syscall_entry_candidate"
+    ],
+    "functions": [
+      "syscall",
+      "arch_ptrace_syscall_event",
+      "f03_execveat_ptrace_report_v1",
+      "ptrace_syscall_event",
+      "f03_exec_report_signal_v1"
+    ],
+    "direct_case": "Bind currentobject allocatedrefs to the exactnewexports and finalimage targetaddresses with actualcallerfunction containment and argumentABI.",
+    "fold_case": "Read actualcurrentfunction bytes. Both syscall entry/return must show Thread.ptrace load from actualoffset(114value4384), null/PT_TRACE_SYSCALL0x200 branch; signalSIGTRAP5|((ptrace&1)<<7); unchangedThreadRDI/signalESI; exactptrace_report_signal relocation; ctx.RAX actualoffset(114value136) store(-38 entry/result return) beforecallback and reread afterward. Match47Bpublicevent/17Bsignalforwarder semantics and actualtypeoffset witnesses, not emptyarrays.",
+    "known_HOST_sites": "ExactpassedHOSTsyscall providerrelocs0x426/0x97e, calls42e/986; execreportproviderf8/291. Newdefaultoffsets must be positivelyverified, not assumed from HOST offsets.",
+    "exec_caller": "Bind selectedCdo_execveat realcall to Rustf03_execveat_ptrace_report_v1, then actualRustprovider argument/control sequence (execsignal0x405 and nested publicevent selection). No invented directCsignal call.",
+    "failure_rule": "If no positive current direct/fold proof, keepexactcaller predicateOPEN and preserve actualobject+functionbytes. No absenceacceptance or widening."
+  },
+  "WAKE4_provider_contract": "Compare actualsource body hashes in compositionproof and exact typeABI/currentHOSTqualified4callbackobject; verify directprovider relocations or actualfoldedmemory/single-step dataflow. Null/error/ptrace exclusion/pendingnodeownership stay with unchanged existingproviders; no newpolicy.",
+  "final_image_rule": "Use existing current114/115 finite ELF reader: recover each function from exactnewRustorigin, all nonrelocatedbytes plus each relocationtype/addend/actualtarget; reproduce finalimagefunctionbytes and namedtargetaddresses. Preserve GNU_RETAIN/undefinedsymbol/fullregistry/storage/warnings contracts. Do not accept same symbolname alone.",
+  "source_locations": "AcceptedpostENABLE_PERF restore21118/21150 and sharedwakeupouter24477/24491 each once. Existingbankconditionalprofile checks scoped, not allCPPprofiles claim.",
+  "actual_current114_C_total": 80,
+  "actual_current115_build": "UNRUN_NO_COUNT_UPDATE",
+  "private_seven_target_prediction_only": {
+    "generic_C61_to54": "source selection prediction only; exactlyseven targetedremainingCdefinitions",
+    "additional_Rust_exports": 7,
+    "combined_total_C": null,
+    "native_or_wholefile_delta": 0
+  },
+  "actual_test_or_native_quota_added": 0,
+  "runtime_authority": null
+}

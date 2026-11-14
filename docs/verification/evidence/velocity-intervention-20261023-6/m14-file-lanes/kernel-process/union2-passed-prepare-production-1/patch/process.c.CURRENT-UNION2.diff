@@ -1,0 +1,59 @@
+--- a/kernel/process.c
++++ b/kernel/process.c
+@@ -2705,10 +2705,14 @@
+ 	return phys_to_page(phys);
+ }
+ 
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++long process_page_offset_bridge(void *);
++#else
+ long process_page_offset_bridge(void *page)
+ {
+ 	return ((struct page *)page)->offset;
+ }
++#endif
+ 
+ void process_pte_make_fileoff_bridge(long off, size_t pgsize,
+ 					    void *ptep)
+@@ -2824,6 +2828,18 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++/* Original page-fault bounds diagnostic: static ABI data, Rust computation. */
++struct ddebug __aligned(8) __attribute__((section("__verbose")))
++process_page_fault_prepare_bounds_debug = {
++    .file = __FILE__, .func = "page_fault_process_memory_range",
++    .line = 2873, .flags = DDEBUG_DEFAULT,
++};
++int process_page_fault_prepare_body_result(struct process_vm *, struct vm_range *,
++        uintptr_t, uint64_t, pte_t **, void **, size_t *, int *, int *);
++#endif
++
++
+ int page_fault_process_memory_range(struct process_vm *vm,
+ 				    struct vm_range *range,
+ 				    uintptr_t fault_addr, uint64_t reason)
+@@ -2849,6 +2865,13 @@
+ 	}
+ 
+ 	dkprintf("page_fault_process_memory_range(%p,%lx-%lx %lx,%lx,%lx)\n", vm, range->start, range->end, range->flag, fault_addr, reason);
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++    /* Both Rust outcomes retain this same lock for the unchanged out: path.
++     * CONTINUE0 supplies original locals; GOTO_OUT1 also supplies error. */
++    if (process_page_fault_prepare_body_result(vm, range, fault_addr, reason,
++            &ptep, &pgaddr, &pgsize, &p2align, &error))
++        goto out;
++#else
+ 	ihk_mc_spinlock_lock_noirq(&vm->page_table_lock);
+ 	/*****/
+ 	ptep = ihk_mc_pt_lookup_pte(vm->address_space->page_table,
+@@ -2884,6 +2907,8 @@
+ 
+ 	arch_adjust_allocate_page_size(vm->address_space->page_table,
+ 				       fault_addr, ptep, &pgaddr, &pgsize);
++
++#endif
+ 
+ 	/*****/
+ 	dkprintf("%s: ptep=%lx,pte_is_null=%d,pte_is_fileoff=%d\n", __FUNCTION__, ptep, ptep ? pte_is_null(ptep) : -1, ptep ? pte_is_fileoff(ptep, pgsize) : -1);

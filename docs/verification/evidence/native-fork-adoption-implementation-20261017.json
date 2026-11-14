@@ -1,0 +1,121 @@
+{
+  "schema": "mckernel.native-fork-adoption-isolated-slice.v1",
+  "status": "ISOLATED_ACTUAL_BODY_SLICE_PASS_FROZEN_FOR_INDEPENDENT_REVIEW",
+  "author": "/root/fork_ownership",
+  "model": "gpt-6.1-sol",
+  "worktree": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1",
+  "worktree_base": "09f438751c28df0f497ed45a6bf6a4c6e0821d7b",
+  "boundary_review": "docs/verification/evidence/native-fork-adoption-boundary-review-20261017.json",
+  "boundary_review_sha256": "a72518e6184d16504c9aa3c0eaf2531c1118f1f55e3fb32f1e429d2a3db686a0",
+  "main_production_modified": false,
+  "incomplete_fork_gate": "mcctrl_process::Context::create_process still copies the original non-null descriptor then returns -95 before publishing a registration. No adopted backend/image/guest success path is enabled.",
+  "application_acceptance": false,
+  "production_acceptance": false,
+  "formal_case_credit": false,
+  "implemented_slice": [
+    "MappingFile now holds only a one-shot bootstrap Option<Arc<VmaOwner>>. Successful initial mmap consumes that owner into vm_private_data after all geometry checks. Validation failure leaves the bootstrap owned by the file; repeated mmap rejects.",
+    "VmaOwner retains the exact Registration and Mirror. Linux vm_ops.open clones the copied raw Arc without allocation for both split and fork; close consumes one reference and clears vm_private_data. Fault lookup and mirror-clear provenance read this per-VMA owner rather than file-private application ownership.",
+    "ForkAdoption compares exact scalar transaction identity and implements Reserved, AdoptedAwaitFirstReturn, FirstReturnPublished, GuestLinkObserved, Linked, AbortRequested, HostRevoked, GuestDestroyed, Released and Quarantined transitions. These helpers are not connected to backend admission in this slice.",
+    "Wrong positive first RET, repeated commit, reordered linkage, wrong identity and early ACK reject without the requested transition. Cancellation closes operation admission; outstanding access count blocks HostRevoked; failed revocation blocks guest-destruction permission; release requires separately proven final destruction and exact ACK.",
+    "HostRevoked and GuestDestroyed are unsafe proof boundaries with explicit requirements. No production caller currently supplies those proofs. Tests must not be interpreted as real Linux PTE/TLB revocation or a guest VM destructor."
+  ],
+  "isolated_files_sha256": {
+    "host-kernel/native-rust/mcctrl_vm.rs": "f00a3d7b7ef547b8ef8c598f0f8b890086d4657a9ae19504d3a8d3ff855ea44e",
+    "host-kernel/native-rust/smp_application_image.rs": "a559bf426360940760907b8cf840ac60b3e56ab148235a8c0e88d50dc002492b",
+    "scripts/tests/test_native_fork_ownership_20261017.py": "f1035bef192fc05e420985ad5d09438adff4fff5fab3195abb03369eaf6379b0",
+    "scripts/tests/fixtures/native_fork_ownership_20261017.rs": "49367dcd8ece7fe45419936604f631bcc9a7e00733facd93c6bf93f7ef4f9c22",
+    "scripts/tests/test_native_fork_adoption_transaction_20261017.py": "df5ed6c6b550d6df9bec50a683d78626529c1566b0fbe6a2eeba70a1a225025e",
+    "scripts/tests/fixtures/native_fork_adoption_transaction_20261017.rs": "6ecfcb36c425577492262c2241d773041f371c4b052ec70016a4bc3912c6990f"
+  },
+  "main_production_preserved_sha256": {
+    "host-kernel/native-rust/mcctrl_process.rs": "148134730b5fed7f14770eb070529b5227bb6ab790b7199f8800968219dffc70",
+    "host-kernel/native-rust/mcctrl_vm.rs": "83630dbe469466c7f69f51feb3a85438e2ae20049346b5e940d89d355f590ab3",
+    "host-kernel/native-rust/smp_application_image.rs": "7fb8c862a1793ea4db6f90200adb9f78ee9b9b2abd9899b9ffd4671d647d7985"
+  },
+  "checks": {
+    "static_python_command": "taskset -c 7 /usr/bin/prlimit --as=2147483648 --cpu=150 --nofile=256 --fsize=67108864 --core=0 timeout 180s /home/holden/anaconda3/bin/python3 -B -m unittest scripts.tests.test_native_fork_ownership_20261017.NativeForkOwnershipTests.test_fixture_contains_verbatim_actual_bodies scripts.tests.test_native_fork_adoption_transaction_20261017.NativeForkAdoptionTransactionTests.test_extracts_production_bodies_and_keeps_fork_gate_closed scripts.tests.test_native_fork_adoption_transaction_20261017.NativeForkAdoptionTransactionTests.test_file_is_neutral_and_vm_operations_have_owner_lifecycle -v",
+    "cwd": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1",
+    "static_python_result": "3 passed, 0 failed, exit 0, 0.001 seconds",
+    "compiler_invocations_by_author": 0,
+    "compiler_status": "Dispatcher independently released the scoped profile extension and centrally executed the pinned Rust 1.92 compile/test family. Three Python checks and twelve actual-body Rust tests passed, exit 0. The author invoked no compiler. No native module/image or guest ran for this slice.",
+    "executed_actual_body_vectors": [
+      "Preserve four previous negative/control tests for inherited child-MM fault rejection and backend worker preparation admission, adapted to the new VMA owner dependency.",
+      "Initial mmap validation failure preserves bootstrap and no raw owner; dropping the failed file balances the owner.",
+      "One-shot mmap, repeated-mmap rejection, same-MM split, different-MM fork and close balance the raw owner references while the consumed file is neutral.",
+      "Successful initial mmap followed by Linux close balances the transferred owner.",
+      "Thirteen changed identity fields/variants reject adoption, and eight invalid reserve geometries/identities reject construction.",
+      "Duplicate adoption, another PID's positive RET and reordered/duplicate linkage reject before transition.",
+      "Negative first or second RET closes access admission.",
+      "Event sequence requires admission close, access drainage, host revoke, final guest destruction and ACK; active access, revoke error and early/mismatched ACK are rejected.",
+      "Quarantine or missing destruction proof never permits release."
+    ],
+    "not_covered": "No live VMA rebind, native module compile, actual fork backend reservation, allocation rollback integration, root translation under an adopted image, real access drainage/PTE/TLB invalidation, real guest final destructor or independent normal parent/child runtime retirement."
+  },
+  "central_actual_body_execution": {
+    "execution_owner": "dispatcher",
+    "profile_extension": "docs/verification/evidence/native-fork-adoption-cheap-profile-extension-20261017.json",
+    "profile_extension_sha256": "b4b40a063cac43aecf6182ba1618a0b0f6c41083ddd4a27e7e24372926bc79da",
+    "capture_root": "/home/holden/mckernel-work/scratch/native-cheap-20261017-gj7VHZ",
+    "generated_subdirectory": "tmp/native-fork-adoption-20261017-wjr3wrgi",
+    "python_command": ["/home/holden/anaconda3/bin/python3", "-B", "-m", "unittest", "scripts.tests.test_native_fork_adoption_transaction_20261017", "-v"],
+    "compiler_command": ["/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc", "--edition=2021", "--test", "-Dwarnings", "/home/holden/mckernel-work/scratch/native-cheap-20261017-gj7VHZ/tmp/native-fork-adoption-20261017-wjr3wrgi/actual_bodies.rs", "-o", "/home/holden/mckernel-work/scratch/native-cheap-20261017-gj7VHZ/tmp/native-fork-adoption-20261017-wjr3wrgi/actual_bodies"],
+    "fixture_arguments": ["--test-threads=1"],
+    "resources": "CPU7, one CPU/2-GiB planning share, inherited 2-GiB AS/150-second CPU/256-file/64-MiB-file/core-zero limits, outer 180-second timeout; environment/isolation per the released extension.",
+    "result": {"python_tests": 3, "rust_tests": 12, "failed": 0, "compile_exit": 0, "run_exit": 0},
+    "retained_sha256": {
+      "inputs.sha256": "985e05de6e5ee20a6ba82376b98fac4795ccbc507a014026d66ee9e328489b79",
+      "unittest.capture": "f14caa66d44ffe5083c21709083f2f495a6a2c76f579bb6a14813df2aa8f43e0",
+      "status": "58304e22a2335464bf6b54991bf5fffa13bc960529269f5fe380c510933ba821",
+      "tmp/native-fork-adoption-20261017-wjr3wrgi/actual_bodies.rs": "a3fd986a122e690569bf45317515268c6720ed4fc1a844d950fc1451f3e9d027",
+      "tmp/native-fork-adoption-20261017-wjr3wrgi/actual_bodies": "20652fa8a0a6c35b3da6ae015f2d2ad5423d2436fba460be2a60f99ae84300d7",
+      "tmp/native-fork-adoption-20261017-wjr3wrgi/compiler-version.command.json": "f3a86d4ebf35ac329fcb448d439b046b97af9ab2e8bb4ac1b5f616f531a6ef16",
+      "tmp/native-fork-adoption-20261017-wjr3wrgi/compiler-version.stdout": "ecda74ca828b18debf1624cb36209a5b844fb1e1c1905ffb3d51b56cc275f96f",
+      "tmp/native-fork-adoption-20261017-wjr3wrgi/compiler-version.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tmp/native-fork-adoption-20261017-wjr3wrgi/compiler-version.status.json": "df4d721d233a2334088d2d2e0110346ae9e509ff46bf0b379fbcfa85c715af4d",
+      "tmp/native-fork-adoption-20261017-wjr3wrgi/compile.command.json": "079e37882c016b779fd0bf99fa8c534d0f883ba913858f0f4b0f1e481b297e8e",
+      "tmp/native-fork-adoption-20261017-wjr3wrgi/compile.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tmp/native-fork-adoption-20261017-wjr3wrgi/compile.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tmp/native-fork-adoption-20261017-wjr3wrgi/compile.status.json": "df4d721d233a2334088d2d2e0110346ae9e509ff46bf0b379fbcfa85c715af4d",
+      "tmp/native-fork-adoption-20261017-wjr3wrgi/run.command.json": "096c0a7a41e168b87d7619827ffbf028c7e0f96023b9556d37239e1f75c45b6b",
+      "tmp/native-fork-adoption-20261017-wjr3wrgi/run.stdout": "495f65e7c04eaa5353fd9e8a22f404736f46b066b74db5b77acbd433b7808333",
+      "tmp/native-fork-adoption-20261017-wjr3wrgi/run.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tmp/native-fork-adoption-20261017-wjr3wrgi/run.status.json": "df4d721d233a2334088d2d2e0110346ae9e509ff46bf0b379fbcfa85c715af4d"
+    },
+    "source_freeze": "The two production and four test files still match their recorded hashes after central execution and are frozen for independent ownership review. No main-source integration occurred.",
+    "scope": "Verbatim production decision/owner bodies with deterministic Linux/transport/refcount adapters. Unsafe host-revoke and final-destructor proofs are supplied by the fixture boundary; real host/guest revocation or destruction is not established."
+  },
+  "exact_remaining_boundaries": {
+    "linux_live_vma_write": {
+      "needed": "A reviewed Rust binding/helper for pinned Linux vma_start_write(struct vm_area_struct *) with the caller holding mmap write lock, before mutating already-linked vm_private_data or revoking adopted aliases.",
+      "source": "/home/holden/mckernel-work/scratch/native-source/linux-6.12.0-211.44.1.el10_2/include/linux/mm.h:824",
+      "observed": "The operation is static inline. Inspected exact generated build-output bindings contain vma_set_file at line 59226 but contain neither vma_start_write nor mmap_assert_write_locked. vma_set_file is valid only for initial VMA setup and cannot replace the missing live-VMA write operation.",
+      "generated_bindings_readonly": {
+        "root": "/home/holden/mckernel-work/scratch/native-build-base-24a151fe/rust/bindings",
+        "bindings_generated.rs_sha256": "89e60708ae31dbf48b4ebb60a118527c7f567e4954a4dbbaa41a58b2eccb22ec",
+        "bindings_helpers_generated.rs_sha256": "8e5d0035a389d3562eb742d54a489a9cdc02d55af9d8a2f6c2b061594b422ed5",
+        "query": "rg -n 'vma_start_write|mmap_assert_write_locked|vma_set_file' <root>/bindings_generated.rs <root>/bindings_helpers_generated.rs",
+        "result": "Only bindings_generated.rs:59226 pub fn vma_set_file(...) matched."
+      },
+      "action": "No live child VMA adoption mutation was written. Request one exact reviewed Linux helper/binding extension for vma_start_write; never emulate it using mmap_lock alone. Generated artifacts were inspected read-only."
+    },
+    "guest_final_destructor": {
+      "observed": "kernel/rust/process_helpers.rs::process_release_vm_body_result returns 1 only after free_vm_fn, but process_release_thread_body_result passes a void ProcessVmActionFn and returns 1 after that callback regardless of whether the VM refcount reached zero. Public release_thread and release_process_vm discard helper results. The C counterparts preserve the same limitation.",
+      "needed": "An additive checked/final-completion API that retains exact native fork transaction identity until the actual last VM destructor, after its pre-destruction host-revoke barrier. It must distinguish retained VM references from final destruction and never dereference a freed VM to assemble the ACK.",
+      "minimum_source_extension_for_review": [
+        "kernel/rust/process_helpers.rs",
+        "kernel/process_helpers.c",
+        "kernel/include/process_helpers.h",
+        "kernel/process.c",
+        "kernel/include/process.h if VM-held completion identity requires a new field"
+      ],
+      "action": "These files are outside the current nine-production-file write boundary. No destructor hook or guest ACK was implemented. Do not force a live VM refcount or infer safety from PID absence or void release_thread return."
+    }
+  },
+  "preserved_history": {
+    "original_failure_and_rejected_patch": "docs/verification/evidence/native-fork-ownership-20261017.json",
+    "original_corrected_test_capture": "/home/holden/mckernel-work/scratch/native-cheap-20261017-qkXcIW",
+    "original_negative_assertions": "The inherited-MM fault rejection and prepare=None worker rejection remain tested; no original capture or production failure bytes were overwritten."
+  },
+  "next_executable_observation": "Independent ownership review inspects the frozen owner/transition slice and its retained 3-Python/12-Rust result. Separately authorize the exact Linux vma_start_write helper/binding and final-VM destructor completion extensions before live VMA rebind or guest revoke/ACK wiring. No repeat compiler run is needed absent changed code or an unresolved review finding.",
+  "campaign_scope": "This isolated WIP is not integrated into the scratch22 source target and cannot delay image-first build/diagnostics. Main production, source-authority manifests, ledgers, Git state, launchers and scratch21 identities are untouched by this lane."
+}

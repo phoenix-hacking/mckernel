@@ -1,0 +1,72 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "REFUSE_COMPLETED_STAGE_ACCEPTANCE_CHECKER_PYTHON39_FINAL_IDENTITY_API_ERROR",
+  "independent": true,
+  "reviewer": "/root/observerreview",
+  "implementation_ownership": false,
+  "runtime_authority": null,
+  "checker": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/ORIGINAL227-ROOT61-REVIEW-1/ACTUAL-STAGE-REVIEW-1/check_retained_stage.py",
+    "bytes": 8882,
+    "sha256": "606f7dd794e21ceb2b6154dd500f65fcd4ad07f073bcbf26c8d9dd37acfe43d0"
+  },
+  "driver": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/ORIGINAL227-ROOT61-REVIEW-1/ACTUAL-STAGE-REVIEW-1/run_profiled_readback.py",
+    "bytes": 935,
+    "sha256": "3cbbbdffd46f2ff655a1d0a663fbff0af92317676755e905f3463df238c68426"
+  },
+  "once_claim": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/ORIGINAL227-ROOT61-REVIEW-1/ACTUAL-STAGE-REVIEW-1/ACTUAL-READBACK-CHILD.ONCE-CLAIM.json",
+    "bytes": 324,
+    "sha256": "0bc1e689681e500c1da2f9489a100523c6b726deb3a026b36e0f76cbc99d2ec3"
+  },
+  "actual_child_started": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/ORIGINAL227-ROOT61-REVIEW-1/ACTUAL-STAGE-REVIEW-1/ACTUAL-READBACK-CHILD.STARTED.json",
+    "bytes": 416,
+    "sha256": "f524a26bc74be25102d80d6793145a832df9d692220b9b72e1a539aad80f5a6a"
+  },
+  "actual_child_join": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/ORIGINAL227-ROOT61-REVIEW-1/ACTUAL-STAGE-REVIEW-1/ACTUAL-READBACK-CHILD.RESULT.json",
+    "bytes": 691,
+    "sha256": "88f051c95a46a086caab6cdf459e1078fd1e45d05bd85b0f179f5e652428f80d"
+  },
+  "stdout": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/ORIGINAL227-ROOT61-REVIEW-1/ACTUAL-STAGE-REVIEW-1/ACTUAL-READBACK-CHILD.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "stderr": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/ORIGINAL227-ROOT61-REVIEW-1/ACTUAL-STAGE-REVIEW-1/ACTUAL-READBACK-CHILD.stderr",
+    "bytes": 759,
+    "sha256": "b55c258f574b0839e0d36620ff39cf67f34299900993f4cc4d54a0454788340a"
+  },
+  "failure": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/ORIGINAL227-ROOT61-REVIEW-1/ACTUAL-STAGE-REVIEW-1/FAILURE.json",
+    "bytes": 174,
+    "sha256": "f3d7dfaae076a9d1a8451855d1033851bed1949f752152dd5c576e7d39d110d1"
+  },
+  "actual_affinity": [
+    0
+  ],
+  "actual_child_pid": 1921670,
+  "actual_child_birth": "96971500",
+  "positive_direct_wait4_join": true,
+  "streams_closed": true,
+  "process_group_absent": true,
+  "returncode": 1,
+  "wall_seconds": 0.7874872790416703,
+  "CPU_seconds": 0.76706,
+  "maximum_RSS_KiB": 213312,
+  "observed_failure": "TypeError: stat() got an unexpected keyword argument 'follow_symlinks'",
+  "failure_location": "Final source/output metadata recheck line69, after full archive parse/map equivalence, overlay ordering/metadata, exacttuple/29f9/7f06 and ownerAPI validations.",
+  "actual_archive_mismatch_reported": false,
+  "full_map_comparison_executed_before_error": true,
+  "complete_map_and_ordered_records_outputs_serialized": false,
+  "final_identity_recheck_complete": false,
+  "completed_stage_acceptance": false,
+  "actual_archive_parse_attempts": 1,
+  "retries": 0,
+  "archive_writes_repack_compiler_Docker_native_guard_account_nonce_controller_actions": 0,
+  "stop_reason": "Parent explicitly instructed preserve mismatch/defect and stop without retry. Await bounded compatibility completion decision; do not infer full receipt from incomplete helper.",
+  "minimal_code_defect": "Python3.9 pathlib.Path.stat has no follow_symlinks keyword. Existing os.stat(path, follow_symlinks=False) or Path.lstat provides intended no-follow metadata API; any actual completion/retry requires separate instruction."
+}

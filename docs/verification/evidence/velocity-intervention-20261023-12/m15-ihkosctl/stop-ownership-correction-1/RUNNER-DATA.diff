@@ -1,0 +1,23 @@
+--- original/run_equivalence.py
++++ successor/run_equivalence.py
+@@ -4,7 +4,7 @@
+ """
+ import argparse,json,os,shutil,sys,time
+ from pathlib import Path
+-BASE=Path(__file__).resolve().parent.parent
++BASE=Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/m15-ihkosctl')
+ WRAPS=['open','close','ioctl','calloc','malloc','strdup','time','localtime','strftime']
+ def main():
+     ap=argparse.ArgumentParser(description=__doc__)
+@@ -15,9 +15,9 @@
+     a=ap.parse_args();cases=json.loads((BASE/'fixture/cases.json').read_text());contracts=json.loads((BASE/'fixture/defined-contracts.json').read_text())
+     if not a.execute:
+         print(json.dumps({'state':'PREPARED_ONLY','comparison_cases':len(cases),'separate_defined_contracts':len(contracts),'profile':a.profile,'compilers_or_CLI_executed':False}));return 0
+-    out=BASE/'fixture-output'
++    out=Path(__file__).resolve().parent/'fixture-output'
+     if out.exists():raise SystemExit('Retain existing fixture-output; use reviewed successor, no overwrite')
+-    out.mkdir();start=time.monotonic();sys.path.insert(0,str(BASE/'fixture'));from owned_process import Owner
++    out.mkdir();start=time.monotonic();sys.path.insert(0,str(Path(__file__).resolve().parent));from owned_process import Owner
+     owner=Owner(out)
+     def remaining(limit):
+         left=150-(time.monotonic()-start)

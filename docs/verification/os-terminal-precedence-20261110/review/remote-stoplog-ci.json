@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "reviewed_commit": "8fa22bdc77da30d19f7c802fe520d3aa887c81f9",
+  "repository": "phoenix-hacking/mckernel",
+  "local_head": "3e63ff8f0d47642caa126903ec5ca9ae22bcb339",
+  "scope": "Independent source-only operational review; no kernel/held body inspection, execution, tests, adoption, goal or live-session changes.",
+  "sources": {
+    "authority": [
+      "/home/holden/mckernel/AGENTS.md",
+      "/home/holden/mckernel/CAMPAIGN.md"
+    ],
+    "remote_ref": "All remote source fetched through GitHub connector at exact reviewed_commit; compare reports ahead1/behind0 and merge-base equals local_head.",
+    "files": [
+      ".github/workflows/final-push-tracker.yml",
+      "scripts/os_goal_stop_log.py",
+      "scripts/run_os_goal.py",
+      "scripts/watch_os_goal.py",
+      "scripts/os_goal_handoff.py",
+      "scripts/os_goal_repair.py",
+      "scripts/restore_ihk_source.py",
+      "scripts/ihk_source_bundles.json",
+      "scripts/tests/test_os_goal_continuous.py",
+      "scripts/tests/test_os_goal_stop_log.py"
+    ]
+  },
+  "adoption": {
+    "decision": "CONDITIONAL_GO_CODE_ONLY; do not enable optional operational modes or launch/resume any session.",
+    "dirty_preservation": "Exact13 changed upstream paths have no local tracked diff and no untracked collisions in narrow read-only checks. Local dirty/untracked files elsewhere must remain intact. Narrow current overlap check required again immediately before adoption; parent remains sole compositor.",
+    "method": "Isolated pinned-commit review first; sole compositor may use exact fast-forward-only adoption after verifying unchanged starting HEAD and target-path/index compatibility. Never reset/clean/stash-overwrite dirty work. This review performs no adoption.",
+    "not_authorized": [
+      "Continuous launcher/watch invocation",
+      "--repair-agent-failures automatic one-turn unchanged-blocked diagnostic",
+      "Remote instruction file or command as user permission",
+      "--max-restarts -1",
+      "Changing six direct HIGH cap or4GiB TOTAL",
+      "Changing stall1200/maxrestarts3",
+      "Changing source/SDK/native/UNKNOWN holds or saved blockedgoal/budget"
+    ]
+  },
+  "confirmed_defects": [
+    {
+      "id": "TERMINAL_PRECEDENCE",
+      "severity": "medium",
+      "scope": "Opt-in --stop-after-m14-m15 only; no current OS acceptance credit or native admission.",
+      "source": "scripts/run_os_goal.py:1771-1790; begin early terminal return1480-1484; checkpoint exit1799-1801",
+      "trigger": "A genuine original-accepted M14/M15 ledger, --stop-after-m14-m15, and a saved terminal goal complete, or recovered usageLimited/budgetLimited (or live terminal update without stop_now). begin returns terminal without activation; run checks ledger before TERMINAL_CODES.",
+      "actual": "Sets requested_milestones_complete and request_checkpoint(), then exits10. Existing complete0/usageLimited21/budgetLimited22 outcome and stop-journal classification are replaced by milestone-checkpoint10. Underlying terminal goal remains unchanged and watcher still refuses terminal restart.",
+      "expected": "Existing terminal/user/account stop precedence must be honored; milestone checkpoint should apply only to an eligible running campaign, preserving original terminal exit and cause.",
+      "minimal_fix_scope": "Guard/reorder new milestone check behind terminal/hard-stop handling without weakening the active-goal checkpoint behavior.",
+      "meaningful_verification": "One focused offline FakeRPC extension of existing test_os_goal_continuous.py acceptance fixture with complete/usageLimited/budgetLimited terminal cases plus existing active case. Assert original0/21/22, no goal/set or turn/start, unchanged terminal status and absence of requested_milestones_complete. No live session, native or green-suite rerun.",
+      "execution": "Not run; source-confirmed control flow. Existing milestone test only covers activegoal, while fresh pause/policy/usage test does not combine accepted ledger+milestone flag."
+    }
+  ],
+  "stop_journal": {
+    "assessment": "No other concrete defect established within bounded review.",
+    "provenance": "os_goal_stop_log.py34-84 requires nonempty matching invocation logdir and rejects any conflicting supplied PID/birth/thread identities; last_error requires exact error-value match. Unknown/other-invocation diagnostics are retained as attribution metadata without old error text. Explicit event exceptions are labeled current_event. Missing historical identities are permitted if no supplied identity conflicts; this is invocation provenance, not per-error cause proof.",
+    "durability": "Allowlisted bounded/redacted fields, append journal under flock, fsync journal+directory, atomic latest replacement and second directory fsync. Journal remains authoritative if latest refresh fails; launcher/watch catch logging failures without granting restart authority.",
+    "watcher": "watch_os_goal.py410ff recording binds worker pid+birth and uses identity-matched stop_decision to retain pre-shutdown goal status. New diff adds journaling, not restart relaxation.",
+    "classification_limit": "Goal statuses usageLimited/budgetLimited with no explicit stop_reason/error are not given dedicated categories by _route and remain unknown. Raw goal_status and exit_code are retained; do not treat this limitation as permission or a separately established engineering requirement."
+  },
+  "ci_restore": {
+    "assessment": "GO for exact pinned-source CI restore contract; no native/source admission implied.",
+    "evidence": ".github/workflows/final-push-tracker.yml22-41 checks exact EXPECTED_HEAD_SHA then runs existing restore helper. Helper freezes HEAD once, loads manifest/blobs/gitlink from that revision, verifies blob mode+identity, final tip=gitlink, exact base FETCH_HEAD, bundle verification+advertised tips, detached staged target HEAD; refuses nonempty dirty/mismatched/sparse/hidden-index checkout and renames staged checkout only after recheck.",
+    "base_commit": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+    "ihk_tip": "8eb8cdcc651f588d2f8fc1275e49e8fe644f7472",
+    "bundle_last_blob": "d9046e40d1345c5c7e2ebb3bb2b7e2344f6bbf73",
+    "limits": "Public base fetch remains a transport dependency. Reviewed algorithm/manifest only, no bundle/network restore, CI or test execution. Subsequent CI compatibility patch is existing behavior; restore itself executes Git data operations, no archived scripts/build/runtime."
+  },
+  "semantics": {
+    "default": "Both new flags are store_true opt-in. Without repair flag blocked retains exit20. Recovered blocked path now returns without goal/set active; no mechanical unblock. Terminal budget safeguards in begin remain; confirmed milestone-precedence issue is above.",
+    "repair": "Flag permits one persisted-key diagnostic turn/start on unchanged blocked goal; receipt saved before mutating RPC and uncertain delivery retained. Wait remains blocked with regular heartbeat and no busy inference; queued user instruction may start a turn only in this opt-in mode. This is not currently authorized.",
+    "monitor": "progress_marker requires phase=running AND goal=active; waiting_for_input/repair_review blocked state has no agent-stall marker, so1200s progress timer does not manufacture a restart. Heartbeat watchdog remains. should_restart209-278 still rejects blocked, terminal, holds, uncertain delivery; maximumrestart guard638 stays unchanged. Preserve actual1200/3 invocation settings.",
+    "completion": "Requires exact unique21 original gate IDs, all accepted true, both milestone_accepted true, original_criteria_unchanged true. Percentages alone insufficient. Activegoal checkpoint pauses largergoal rather than declares it complete; no originalgate credit added."
+  },
+  "validation": {
+    "published_upstream": "66 focused tests reported passing by upstream; not independently rerun. Broader130-test baseline/candidate had same pre-existing constrained-checkout failure sets, not a green qualification.",
+    "performed": "Read source/patches and read-only local Git identity/target-overlap checks only.",
+    "limitations": "Initial Git status listing was broader than necessary and exposed legacy filenames only; subsequent status checks were restricted to exact13 changedpaths. No legacy narrative contents inspected; no source/test generation, execution or canonical mutation."
+  },
+  "owner": "Root sole canonical compositor/review/admission owner"
+}

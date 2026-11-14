@@ -1,0 +1,838 @@
+{
+  "schema": "mckernel.independent-rust-clear-debugreg-image-actual-review.v1",
+  "decision": "PASS_ACTUAL_PRODUCTION_IMAGE_ARTIFACT_AND_GUARD_RETIREMENT",
+  "reviewer": "/root/sched_image_actual_review_1558",
+  "implementation_ownership": false,
+  "created_utc": "2026-10-18T18:25:41.951891+00:00",
+  "scope": "Functional PRACTICAL-GOAL OS/apps and actual live compute-C retirement into Rust plus reviewed assembly. Supported-native full image production artifact/default clear path proof; hardware/native clear execution remains OPEN. Execve/forkACK exclusions unchanged.",
+  "actual_artifacts": {
+    "image": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/owner-work/output/build/kernel/mckernel.img",
+      "sha256": "e85a1e356e6d09a119d01bbfa2a5175b084dfda1158e9caff508c6434c9a216e",
+      "bytes": 7928528,
+      "dev": 66306,
+      "inode": 47872037,
+      "uid": 1000,
+      "mode": 493
+    },
+    "process": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+      "sha256": "250a61c8a68cb041f7ceb01ab789c59cba5b0d2a63fdbc096f44288bdda858a7",
+      "bytes": 318520,
+      "dev": 66306,
+      "inode": 47872027,
+      "uid": 1000,
+      "mode": 420
+    },
+    "rust": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/owner-work/output/build/kernel/rust/mckernel_rust.o",
+      "sha256": "37dc0abbf68908161a9d8a28d4338bf6fe775e59d6b2269c1f8a7b54bb9ca63e",
+      "bytes": 12641648,
+      "dev": 66306,
+      "inode": 47872010,
+      "uid": 1000,
+      "mode": 420
+    },
+    "syscall": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+      "sha256": "586531535da38b7a45f825b20f5f57985df0c9dd0ec6f26c15ad8a38cec67ec5",
+      "bytes": 211200,
+      "dev": 66306,
+      "inode": 47872033,
+      "uid": 1000,
+      "mode": 420
+    }
+  },
+  "retained_artifacts": {
+    "image": {
+      "bytes": 7928528,
+      "retained_dev": 66306,
+      "retained_inode": 47872143,
+      "retained_path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/retained-artifacts/image.artifact",
+      "sha256": "e85a1e356e6d09a119d01bbfa2a5175b084dfda1158e9caff508c6434c9a216e",
+      "source": {
+        "bytes": 7928528,
+        "ctime_ns": 1792347186182070158,
+        "dev": 66306,
+        "gid": 1000,
+        "inode": 47872037,
+        "mode": 493,
+        "mtime_ns": 1792347186182070158,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/owner-work/output/build/kernel/mckernel.img",
+        "sha256": "e85a1e356e6d09a119d01bbfa2a5175b084dfda1158e9caff508c6434c9a216e",
+        "uid": 1000
+      }
+    },
+    "process": {
+      "bytes": 318520,
+      "retained_dev": 66306,
+      "retained_inode": 47872141,
+      "retained_path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/retained-artifacts/process.artifact",
+      "sha256": "250a61c8a68cb041f7ceb01ab789c59cba5b0d2a63fdbc096f44288bdda858a7",
+      "source": {
+        "bytes": 318520,
+        "ctime_ns": 1792347185054145389,
+        "dev": 66306,
+        "gid": 1000,
+        "inode": 47872027,
+        "mode": 420,
+        "mtime_ns": 1792347185054145389,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+        "sha256": "250a61c8a68cb041f7ceb01ab789c59cba5b0d2a63fdbc096f44288bdda858a7",
+        "uid": 1000
+      }
+    },
+    "rust": {
+      "bytes": 12641648,
+      "retained_dev": 66306,
+      "retained_inode": 47872142,
+      "retained_path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/retained-artifacts/rust.artifact",
+      "sha256": "37dc0abbf68908161a9d8a28d4338bf6fe775e59d6b2269c1f8a7b54bb9ca63e",
+      "source": {
+        "bytes": 12641648,
+        "ctime_ns": 1792347184338193388,
+        "dev": 66306,
+        "gid": 1000,
+        "inode": 47872010,
+        "mode": 420,
+        "mtime_ns": 1792347184338193388,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/owner-work/output/build/kernel/rust/mckernel_rust.o",
+        "sha256": "37dc0abbf68908161a9d8a28d4338bf6fe775e59d6b2269c1f8a7b54bb9ca63e",
+        "uid": 1000
+      }
+    },
+    "syscall": {
+      "bytes": 211200,
+      "retained_dev": 66306,
+      "retained_inode": 47872140,
+      "retained_path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/retained-artifacts/syscall.artifact",
+      "sha256": "586531535da38b7a45f825b20f5f57985df0c9dd0ec6f26c15ad8a38cec67ec5",
+      "source": {
+        "bytes": 211200,
+        "ctime_ns": 1792347185510114954,
+        "dev": 66306,
+        "gid": 1000,
+        "inode": 47872033,
+        "mode": 420,
+        "mtime_ns": 1792347185510114954,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "sha256": "586531535da38b7a45f825b20f5f57985df0c9dd0ec6f26c15ad8a38cec67ec5",
+        "uid": 1000
+      }
+    }
+  },
+  "checks": {
+    "actual_full_GCC14_selected_syscall_and_real_native_Rust_crate_image": "PASS",
+    "same_production_flags_full_CPU_process_ABI_assertions": "PASS",
+    "all_ten_image_C_assembly_and_72_Rust_source_bindings": "PASS",
+    "actual_syscall_Rust_CPU_and_existing_policy_selectors": "PASS",
+    "selected_full_syscall_object_has_no_C_clear_definition": "PASS",
+    "unique_full_Rust_object_and_linked_clear_definition": "PASS",
+    "standalone_and_inlined_clear_exact_six_DR_writes_order_values": "PASS",
+    "no_DR4_DR5_FP_or_SIMD_in_clear": "PASS",
+    "live_default_process_to_Rust_scheduler_consumer_and_inlined_clear": "PASS",
+    "scheduler_prev_save_next_null_clear_reread_restore_invariants": "PASS",
+    "unchanged_process_object_and_eleven_prior_Rust_bodies": "PASS",
+    "four_exact_private_artifact_retention_and_15_observer_joins": "PASS",
+    "positive_guard_owner_physical_client_retirement": "PASS"
+  },
+  "source_pins": {
+    "arch/x86_64/kernel/cpu.c": "1834e76aff9e8dcd9e1f70d80d6b4586a502ad69d3c5e6444d5278fa59e68e18",
+    "arch/x86_64/kernel/syscall.c": "dee40ef3ebfa237eb182124b3ac617a01a4cfffcfa3eaba29695e9adcee9de90",
+    "kernel/process.c": "d190ada53817aca4cc44e916e884e99bad430049393874b649806458b706f3de",
+    "kernel/include/process.h": "907391bd99a38b48be54ff6700f1ca12143e5a9bfabf4826b6f09ab2b842bc6c",
+    "kernel/rust/sched_helpers.rs": "d0845b55842ffb3f265d6585ecdd1d5821f107cd54949ef1d3d8a299ea0f45bb",
+    "kernel/rust/x86_cpu_helpers.rs": "60308ba5b471250aec4f0b67cfccddc014a94014e5fee5925130d3f8720eae01",
+    "kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "kernel/rust/lib.rs": "efe5379e2e81dc15995bca9fb243b9d1cf5ac9074fd7b869dda696a1bc9de723",
+    "kernel/CMakeLists.txt": "dc265d048afefeccaba550a3174b7fe39908bb3552c66cd05e67f64194928789"
+  },
+  "linked_symbols": {
+    "arch_native_signal_reset_fp_bridge": {
+      "address": "fffffffffe81d9d0",
+      "kind": "T"
+    },
+    "sched_schedule_prepare_body_result": {
+      "address": "fffffffffe8959c0",
+      "kind": "T"
+    },
+    "save_fp_regs": {
+      "address": "fffffffffe81d870",
+      "kind": "T"
+    },
+    "native_xrstor_checked": {
+      "address": "fffffffffe825e30",
+      "kind": "T"
+    },
+    "schedule": {
+      "address": "fffffffffe819f90",
+      "kind": "T"
+    },
+    "sched_schedule_exit_cleanup": {
+      "address": "fffffffffe895790",
+      "kind": "T"
+    },
+    "sched_schedule_debug_handoff": {
+      "address": "fffffffffe895710",
+      "kind": "T"
+    },
+    "rust_x86_clear_fp_regs": {
+      "address": "fffffffffe8938b0",
+      "kind": "T"
+    },
+    "arch_native_signal_mxcsr_mask_bridge": {
+      "address": "fffffffffe81d9b0",
+      "kind": "T"
+    },
+    "save_debugreg": {
+      "address": "fffffffffe822410",
+      "kind": "T"
+    },
+    "restore_debugreg": {
+      "address": "fffffffffe822450",
+      "kind": "T"
+    },
+    "restore_fp_regs": {
+      "address": "fffffffffe81d8e0",
+      "kind": "T"
+    },
+    "clear_fp_regs": {
+      "address": "fffffffffe81d930",
+      "kind": "T"
+    },
+    "rust_x86_save_fp_regs": {
+      "address": "fffffffffe893e40",
+      "kind": "T"
+    },
+    "rust_x86_restore_default_fp_regs": {
+      "address": "fffffffffe893c30",
+      "kind": "T"
+    },
+    "rust_x86_native_signal_mxcsr_mask": {
+      "address": "fffffffffe893af0",
+      "kind": "T"
+    },
+    "rust_x86_restore_fp_regs": {
+      "address": "fffffffffe893d20",
+      "kind": "T"
+    },
+    "clear_debugreg": {
+      "address": "fffffffffe84bde0",
+      "kind": "T"
+    },
+    "rust_x86_native_signal_reset_fp": {
+      "address": "fffffffffe893b30",
+      "kind": "T"
+    },
+    "sched_schedule_fp_admit": {
+      "address": "fffffffffe8958e0",
+      "kind": "T"
+    },
+    "copy_fp_regs": {
+      "address": "fffffffffe81d8b0",
+      "kind": "T"
+    },
+    "arch_switch_context": {
+      "address": "fffffffffe81d4c0",
+      "kind": "T"
+    },
+    "rust_x86_copy_fp_regs": {
+      "address": "fffffffffe8939e0",
+      "kind": "T"
+    }
+  },
+  "production_ABI": {
+    "compiler": "actual pinned GCC14.3.1",
+    "Thread_ptrace_debugreg_offset": 5016,
+    "Thread_size": 5568,
+    "Thread_alignment": 64,
+    "actual_checks": [
+      {
+        "argv": [
+          "/usr/bin/cc",
+          "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+          "-DIHK_OS_MANYCORE",
+          "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+          "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+          "-DMCKERNEL_NATIVE_CLONE3",
+          "-DMCKERNEL_NATIVE_CLONE_TID",
+          "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+          "-DMCKERNEL_NATIVE_FUTEX",
+          "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+          "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+          "-DMCKERNEL_RUST_BITOPS",
+          "-DMCKERNEL_RUST_LIST_HELPERS",
+          "-DMCKERNEL_RUST_LOCK_HELPERS",
+          "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+          "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+          "-DMCKERNEL_RUST_PTE_HELPERS",
+          "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+          "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+          "-DPROFILE_ENABLE",
+          "-D__KERNEL__",
+          "-DMCKERNEL_RUST_X86_CPU_HELPERS",
+          "-I/work/output/build/kernel/include",
+          "-I/src/kernel/include",
+          "-I/work/output/build/kernel",
+          "-I/work/output/build",
+          "-I/src/ihk/cokernel/smp/x86_64/include",
+          "-I/src/ihk/cokernel/smp/x86_64",
+          "-I/src/ihk/ikc/include",
+          "-I/src/ihk/linux/include",
+          "-I/src/lib/include",
+          "-I/src/arch/x86_64/kernel/include",
+          "-g",
+          "-Wall",
+          "-Wextra",
+          "-Wno-unused-parameter",
+          "-Wno-sign-compare",
+          "-Wno-unused-function",
+          "-Wno-implicit-fallthrough",
+          "-Wno-stringop-truncation",
+          "-ffreestanding",
+          "-O2",
+          "-nostdinc",
+          "-isystem",
+          "/usr/lib/gcc/x86_64-redhat-linux/14/include",
+          "-fno-omit-frame-pointer",
+          "-mcmodel=large",
+          "-mno-red-zone",
+          "-mno-sse",
+          "-fsyntax-only",
+          "/work/output/build/production-abi-cpu.c"
+        ],
+        "cwd": "/work/output/build/kernel",
+        "exit_code": 0,
+        "fixture_sha256": "8e31891a24714475b3ed39e8edf66ed6f732c5e06ad74b344df33e93fc894741",
+        "phase": "production-abi-cpu",
+        "source_sha256": "1834e76aff9e8dcd9e1f70d80d6b4586a502ad69d3c5e6444d5278fa59e68e18",
+        "fixture_host_path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/owner-work/output/build/production-abi-cpu.c",
+        "same_production_flags": true,
+        "full_production_source_method": "exact include",
+        "assertions": "#include \"/src/arch/x86_64/kernel/cpu.c\"\n\n#ifndef MCKERNEL_RUST_X86_CPU_HELPERS\n#error production Rust CPU helper selection missing\n#endif\n#ifndef MCKERNEL_NATIVE_SIGNAL_STACK\n#error production native signal selection missing\n#endif\n_Static_assert(sizeof(struct i387_fxsave_struct) == 512, \"FXSAVE size\");\n_Static_assert(_Alignof(struct i387_fxsave_struct) == 16, \"FXSAVE alignment\");\n_Static_assert(__builtin_offsetof(struct i387_fxsave_struct, mxcsr_mask) == 28, \"FXSAVE mask offset\");\n_Static_assert(__builtin_types_compatible_p(__typeof__(&rust_x86_restore_fp_regs), void (*)(struct thread *, int, int, const void *, uint64_t, int)), \"restore prototype\");\n_Static_assert(__builtin_types_compatible_p(__typeof__(&rust_x86_clear_fp_regs), void (*)(struct thread *, int, int, const void *, uint64_t, int)), \"clear prototype\");\n_Static_assert(__builtin_types_compatible_p(__typeof__(&rust_x86_native_signal_mxcsr_mask), unsigned int (*)(int)), \"mask prototype\");\n_Static_assert(__builtin_types_compatible_p(__typeof__(&rust_x86_native_signal_reset_fp), long (*)(int, int, const void *, uint64_t, int)), \"reset prototype\");\n"
+      },
+      {
+        "argv": [
+          "/usr/bin/cc",
+          "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+          "-DIHK_OS_MANYCORE",
+          "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+          "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+          "-DMCKERNEL_NATIVE_CLONE3",
+          "-DMCKERNEL_NATIVE_CLONE_TID",
+          "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+          "-DMCKERNEL_NATIVE_FUTEX",
+          "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+          "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+          "-DMCKERNEL_RUST_BITOPS",
+          "-DMCKERNEL_RUST_LIST_HELPERS",
+          "-DMCKERNEL_RUST_LOCK_HELPERS",
+          "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+          "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+          "-DMCKERNEL_RUST_PTE_HELPERS",
+          "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+          "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+          "-DPROFILE_ENABLE",
+          "-D__KERNEL__",
+          "-DMCKERNEL_RUST_PROCESS_HELPERS",
+          "-I/work/output/build/kernel/include",
+          "-I/src/kernel/include",
+          "-I/work/output/build/kernel",
+          "-I/work/output/build",
+          "-I/src/ihk/cokernel/smp/x86_64/include",
+          "-I/src/ihk/cokernel/smp/x86_64",
+          "-I/src/ihk/ikc/include",
+          "-I/src/ihk/linux/include",
+          "-I/src/lib/include",
+          "-I/src/arch/x86_64/kernel/include",
+          "-g",
+          "-Wall",
+          "-Wextra",
+          "-Wno-unused-parameter",
+          "-Wno-sign-compare",
+          "-Wno-unused-function",
+          "-Wno-implicit-fallthrough",
+          "-Wno-stringop-truncation",
+          "-ffreestanding",
+          "-O2",
+          "-nostdinc",
+          "-isystem",
+          "/usr/lib/gcc/x86_64-redhat-linux/14/include",
+          "-fno-omit-frame-pointer",
+          "-mcmodel=large",
+          "-mno-red-zone",
+          "-mno-sse",
+          "-fsyntax-only",
+          "/work/output/build/production-abi-process.c"
+        ],
+        "cwd": "/work/output/build/kernel",
+        "exit_code": 0,
+        "fixture_sha256": "34443e8df89f500f0a61c3381d6263d930c154fefaae8a2de2103e88fff86691",
+        "phase": "production-abi-process",
+        "source_sha256": "d190ada53817aca4cc44e916e884e99bad430049393874b649806458b706f3de",
+        "fixture_host_path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/owner-work/output/build/production-abi-process.c",
+        "same_production_flags": true,
+        "full_production_source_method": "full source prefix",
+        "assertions": "\n#ifndef MCKERNEL_RUST_PROCESS_HELPERS\n#error production Rust scheduler helper selection missing\n#endif\n_Static_assert(sizeof(struct sched_exit_debug) == 40, \"SchedExitDebug size\");\n_Static_assert(_Alignof(struct sched_exit_debug) == 8, \"SchedExitDebug alignment\");\n_Static_assert(__builtin_offsetof(struct sched_exit_debug, num_threads) == 0, \"SchedExitDebug threads\");\n_Static_assert(__builtin_offsetof(struct sched_exit_debug, total_memory_usage) == 8, \"SchedExitDebug memory\");\n_Static_assert(__builtin_offsetof(struct sched_exit_debug, memory_stat_rss) == 16, \"SchedExitDebug rss\");\n_Static_assert(__builtin_offsetof(struct sched_exit_debug, memory_stat_mapped_file) == 24, \"SchedExitDebug mapped\");\n_Static_assert(__builtin_offsetof(struct sched_exit_debug, page_sizes) == 32, \"SchedExitDebug pages\");\n_Static_assert(__builtin_offsetof(struct thread, ptrace_debugreg) == 5016, \"Thread debug pointer offset\");\n_Static_assert(sizeof(struct thread) == 5568, \"Thread size\");\n_Static_assert(_Alignof(struct thread) == 64, \"Thread alignment\");\n_Static_assert(__builtin_types_compatible_p(__typeof__(&sched_schedule_debug_handoff), void (*)(struct thread *, struct thread *)), \"debug handoff prototype\");\n\n"
+      }
+    ],
+    "full_image_C_assembly_source_bindings": 10,
+    "full_declared_Rust_source_bindings": 72,
+    "new_clear_ABI": "extern C no-argument unit-return Rust definition matches existing void clear_debugreg(void); no new layout or ABI type introduced."
+  },
+  "emitted_clear_writes": [
+    [
+      0,
+      0
+    ],
+    [
+      1,
+      0
+    ],
+    [
+      2,
+      0
+    ],
+    [
+      3,
+      0
+    ],
+    [
+      6,
+      4294905840
+    ],
+    [
+      7,
+      1024
+    ]
+  ],
+  "prior_body_preservation": [
+    {
+      "symbol": "rust_x86_copy_fp_regs",
+      "identical_accepted_object_disassembly_sha256": "865df34a664c891425ff18c40f81225f0b36cdff6ee50fae38056e201d0b4dc3"
+    },
+    {
+      "symbol": "sched_schedule_fp_admit",
+      "identical_accepted_object_disassembly_sha256": "8f2e4ae5c5fd8a2d6aa7cafdfef83fe60be549574fc2a8e685b8f5d8cde66fe4"
+    },
+    {
+      "symbol": "sched_schedule_prepare_body_result",
+      "identical_accepted_object_disassembly_sha256": "fdd7e2988fd12a0ccfd1bef9b0176d6dbcfaccc84e84470b8665b458b5083556"
+    },
+    {
+      "symbol": "rust_x86_save_fp_regs",
+      "identical_accepted_object_disassembly_sha256": "be2f3249f9088a3b125f852b74c6e3acf40b7621adee2e84694a4b20cdfb9342"
+    },
+    {
+      "symbol": "rust_x86_restore_fp_regs",
+      "identical_accepted_object_disassembly_sha256": "5aea44d21f280acf2e329397b556b5a5e4ea2cffc7c41b0246ec5a4d426a1d31"
+    },
+    {
+      "symbol": "sched_schedule_exit_cleanup",
+      "identical_accepted_object_disassembly_sha256": "91f4de88a3657429357315ddd4b777dd2e69d4db9ff9ecfbd9ad1d97629b34fd"
+    },
+    {
+      "symbol": "rust_x86_clear_fp_regs",
+      "identical_accepted_object_disassembly_sha256": "c0b3cc041e9eb0dd044b5fca225b63abf08eb3140084d86d2fd4910ec93e0997"
+    },
+    {
+      "symbol": "rust_x86_native_signal_mxcsr_mask",
+      "identical_accepted_object_disassembly_sha256": "d87d84bab77907592f4038b1f04e6845623b871781ce6223df14f9a13e63b944"
+    },
+    {
+      "symbol": "rust_x86_native_signal_reset_fp",
+      "identical_accepted_object_disassembly_sha256": "40a777d24364354b34c01689005a5d126c17ad959b751e63e88e803ccc162a2b"
+    },
+    {
+      "symbol": "rust_x86_restore_default_fp_regs",
+      "identical_accepted_object_disassembly_sha256": "334570639c7f9c611ae8ef2d0a20f5e28aa5bd32d7a589e0c001e34224a24752"
+    },
+    {
+      "symbol": "native_xrstor_checked",
+      "identical_accepted_object_disassembly_sha256": "d20f74fb19650725f86bb7d571cc21f010246bdf183913f28446ec640ea929d4"
+    }
+  ],
+  "compiler_observation": {
+    "expected_form": "Scheduler Rust body relocation to clear_debugreg.",
+    "actual_form": "LLVM inlined Rust clear body into sched_schedule_debug_handoff; standalone clear_debugreg remains unique exported Rust definition. No clear relocation exists in emitted Rust handoff.",
+    "accepted_consumer_evidence": "Unchanged full process object has two relocations to unique Rust handoff; final schedule resolves those addresses; actual handoff contains exact six clear writes after save/next-null check and before next-reread/restore. Standalone and inline emitted instructions agree.",
+    "effect": "Actual default Rust producer/body proof established by inline instructions. No relocation invented, no rebuild or hardware execution inferred; root acknowledged this compiler observation."
+  },
+  "guard_retirement": {
+    "owner_receipt_sha256": "1c93b0dd2d4e3bd8cfc30700a8ef9911b77bd3a56b8092a97783988ca7e1a953",
+    "guard_result_sha256": "3c87616ee633388dca45a78f32b55b2f6abe9b93f6e8a79a303ef171698528cc",
+    "container_id": "10c33a4066452a753193bffe1bf8e744a6eb6580ca305c3218147194e05353a7",
+    "retired": true,
+    "physical_client_terminal_count": 8,
+    "common_shared_cleanup": false,
+    "terminal_container_retained": true
+  },
+  "counts": {
+    "current_candidate_image_builds": 1,
+    "new_native_apps": 0,
+    "new_hardware_debug_behavior": 0,
+    "new_production_Rust_path": 1,
+    "production_Rust_paths_total": 10
+  },
+  "per_path": {
+    "clear_debugreg": "PASS_SOURCE_ACTUAL_DEFAULT_COMPILE_LINK; privileged hardware/native execution OPEN; full language retirement not accepted.",
+    "nine_prior_Rust_paths": "Eleven unchanged object bodies plus unchanged full process object. Scheduler-debug body preserves all invariants with exact inline Rust clear sequence replacing external call.",
+    "save_debugreg_and_restore_debugreg": "Remain live C in actual syscall object; private Rust save candidate absent from this frozen image."
+  },
+  "validation": {
+    "actual_build_commands_zero": 4,
+    "observer_direct_join_zero_stages": 15,
+    "observer_elapsed_seconds": 4.844048976898193,
+    "stream_bytes": 27444024,
+    "artifact_copy_bytes": 21099896,
+    "aggregate_bytes": 48543920,
+    "output_ceiling_bytes": 255852544,
+    "observation_statuses": [
+      {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/copy.status.json",
+        "sha256": "40e89085c6fc3928051aabe0abcf86abdeaf7f7d1ef501f48f0acd4f0702aa61",
+        "bytes": 3803
+      },
+      {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/captures/image-disassembly.txt.status.json",
+        "sha256": "e9370a02f6427b4a66eb5223117583267fb0771fa35781381b545c002338545d",
+        "bytes": 1243
+      },
+      {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/captures/image-elf.txt.status.json",
+        "sha256": "68020d444df25de063f6df12d325dc5c1cc50fe6e08217bbf42663ef867b6934",
+        "bytes": 1225
+      },
+      {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/captures/image-nm.txt.status.json",
+        "sha256": "5f1f24b44508f875be859d1db6f24e24597850a23c08c34d41a84ae5e17306b2",
+        "bytes": 1217
+      },
+      {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/captures/process-disassembly.txt.status.json",
+        "sha256": "9ab2bbe5a0ba0be9c0c840608ceeb30e16d7c6307d779914a190b1097c1e0c20",
+        "bytes": 1271
+      },
+      {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/captures/process-dwarf-info.txt.status.json",
+        "sha256": "b458ecb60f4cf2928bd44841d8b7ff5743fe71882cf283dcf0b0b4114a966b94",
+        "bytes": 1286
+      },
+      {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/captures/process-elf.txt.status.json",
+        "sha256": "8a3cdb3707011e8169e0bc518c4dfcc55f275954975b58091516f4770aa8b5fa",
+        "bytes": 1256
+      },
+      {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/captures/process-nm.txt.status.json",
+        "sha256": "165616c67cfd53e95e9e581f71ab9c46db5fdf0cfc744cfc02db22917cd90049",
+        "bytes": 1247
+      },
+      {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/captures/rust-disassembly.txt.status.json",
+        "sha256": "42a021e8d196ea0ff0b97d2872d8ba30ad86113ddf6c640b21e41bb482f94d20",
+        "bytes": 1244
+      },
+      {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/captures/rust-elf.txt.status.json",
+        "sha256": "a663568f17cb2492aa092f0a8c54827b3f6e5c770be2e1d6cab437d357a280c1",
+        "bytes": 1231
+      },
+      {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/captures/rust-nm.txt.status.json",
+        "sha256": "32945802d240d0a5d4d864dd9c262df37ff3f7cdc2b9399e7a15002bd7fb66de",
+        "bytes": 1222
+      },
+      {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/captures/syscall-disassembly.txt.status.json",
+        "sha256": "7a72840c07c0196bc2ab1c568e8b3f7f62233daf4a9d37716aefee01540fb028",
+        "bytes": 1292
+      },
+      {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/captures/syscall-dwarf-info.txt.status.json",
+        "sha256": "fb5c6815c9effa3f654ba85bc49d6e2d169a9b8456810cf14e957b55790f8ede",
+        "bytes": 1307
+      },
+      {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/captures/syscall-elf.txt.status.json",
+        "sha256": "81146636161c9a70e634c2bf32947d4fc81d7a255edd47cedba4eb6d1f29d025",
+        "bytes": 1277
+      },
+      {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/captures/syscall-nm.txt.status.json",
+        "sha256": "0d6eadd984f40f9394a9057754127a84577fed6fae83f6fe4603ed12721fe6a7",
+        "bytes": 1269
+      }
+    ],
+    "captured_streams": [
+      {
+        "bytes": 40,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/copy.stdout",
+        "sha256": "04987ab7a8f2617f6bf9d3b8ed69e01c1efa743de992d1bfccaa33ac21436641"
+      },
+      {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/copy.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "bytes": 13995036,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/captures/image-disassembly.txt",
+        "sha256": "d4dffa2c796ad591e5f1c66fa5c67e02b551e0a8f919b6786943a6a9953a6853"
+      },
+      {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/captures/image-disassembly.txt.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "bytes": 425700,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/captures/image-elf.txt",
+        "sha256": "1551069867de3aa44303de3da87d5925c0a23df7532a3f3da73b94173d7f7e89"
+      },
+      {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/captures/image-elf.txt.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "bytes": 224633,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/captures/image-nm.txt",
+        "sha256": "52f436b3f732059d8f54b7d0867e6448777acdb849decd705dfc7739e9fdf843"
+      },
+      {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/captures/image-nm.txt.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "bytes": 327456,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/captures/process-disassembly.txt",
+        "sha256": "98fa5a6f91e7169ce6cc44c8582f74f870f14112592c067eaab8f006e45b4788"
+      },
+      {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/captures/process-disassembly.txt.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "bytes": 1218199,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/captures/process-dwarf-info.txt",
+        "sha256": "91c9e3124d7d5114b936a439918e10db3e7388c0501d2fcd83175c7504823105"
+      },
+      {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/captures/process-dwarf-info.txt.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "bytes": 42388,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/captures/process-elf.txt",
+        "sha256": "e57422cd2e8156b3d97ba19c305f1de49376e9701f9fb228f6469a56e3f968f9"
+      },
+      {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/captures/process-elf.txt.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "bytes": 21407,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/captures/process-nm.txt",
+        "sha256": "1540a8d9d416b590d9bc5111ff28a1e747c9d7e869db4676ac3a9ed88be3d1f3"
+      },
+      {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/captures/process-nm.txt.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "bytes": 9242911,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/captures/rust-disassembly.txt",
+        "sha256": "a01e183fd8c501b9ddc87c9f1d1c0f331ae177eb2e39e96f72f493b319016ef5"
+      },
+      {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/captures/rust-disassembly.txt.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "bytes": 506178,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/captures/rust-elf.txt",
+        "sha256": "9d6189e1f3761f8906a772f031392115000f43dec6cffcca8d2fab7d34ed458c"
+      },
+      {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/captures/rust-elf.txt.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "bytes": 338858,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/captures/rust-nm.txt",
+        "sha256": "442b98740bdbe8575f1a3ce5a2447176aebc50fc487961704c4eccc4ba7964cf"
+      },
+      {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/captures/rust-nm.txt.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "bytes": 237037,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/captures/syscall-disassembly.txt",
+        "sha256": "03afcb67f80a08ffe7b946b415e2c6aedfb0e20e0ed2e734562886738089b773"
+      },
+      {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/captures/syscall-disassembly.txt.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "bytes": 831231,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/captures/syscall-dwarf-info.txt",
+        "sha256": "7104d181cb53439a4f3f8339a9514c8a5d94619b2cd12526634fc09859c7d55a"
+      },
+      {
+        "bytes": 108,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/captures/syscall-dwarf-info.txt.stderr",
+        "sha256": "d77de674eeef9523bd3149a8912d408449a6236b0a5e558af9dba82e6e13a182"
+      },
+      {
+        "bytes": 22283,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/captures/syscall-elf.txt",
+        "sha256": "e82a03e8d398de31bca291aa4d648c0e7bad75378541f5628b59adffb64b7bcc"
+      },
+      {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/captures/syscall-elf.txt.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "bytes": 10559,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/captures/syscall-nm.txt",
+        "sha256": "64932f7a73980166652316dfd95d3ce79dbcae25a0a0c0fc008df5b0753689ce"
+      },
+      {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/captures/syscall-nm.txt.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ]
+  },
+  "evidence": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-actual-review-20261018-1/actual-metadata-review.json",
+      "sha256": "bd5a29f944cc1655004970709eea5bedd8a6abfeac53679b30a2208efa66f146",
+      "bytes": 24541
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-actual-review-20261018-1/physical-client-retirement-review.json",
+      "sha256": "83a56298e3437f05afa2ef013021779f3bfaec71e7f0da98d69024d499359fff",
+      "bytes": 8428
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-actual-review-20261018-1/ordinary-observation-review.json",
+      "sha256": "efa8893832b4aa02876f1c97358b08a7f4589ec2c8e398a7047044d9a7e08bf0",
+      "bytes": 1820
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-actual-review-20261018-1/late-binding-structural-check.json",
+      "sha256": "7ab6e01ecc253eab995b22c44d7c86ca6600ec99855eed1522389246acf12543",
+      "bytes": 159
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/root-observation-result.json",
+      "sha256": "1fc6fc093e46cc2955706a6eac4ce6fa99bbf09efa58a3d733726f66eb58da2a",
+      "bytes": 3142
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/actual-artifacts.json",
+      "sha256": "c00f547577184d355f1c5bd626adc21893e8ec35a496f0faebe5ea2bfc6e9ad9",
+      "bytes": 1845
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/retained-artifacts/retention-result.json",
+      "sha256": "7ac7b7e0c64854df63312e52e9330cfb14e51402b939e93d743b9f3213e495e7",
+      "bytes": 3651
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/review-request.json",
+      "sha256": "35d7836605ec7e26c510c36c3765d42d9f60a63d825002fa858351d496e63cee",
+      "bytes": 2345
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/postbuild-readonly-1/profile.json",
+      "sha256": "b74ab7f468490e6e8d68714e96c4e00b7c4901599b63c34b84ddfe74846e5420",
+      "bytes": 6921
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/owner-work/evidence/receipt.json",
+      "sha256": "bb593070c5d25d2d4fa65be424396083fe54de8e744f5e90d653123bbbc684d7",
+      "bytes": 13944
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/owner-evidence/owner-receipt.json",
+      "sha256": "1c93b0dd2d4e3bd8cfc30700a8ef9911b77bd3a56b8092a97783988ca7e1a953",
+      "bytes": 19087
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/image-guard-postjoin-readback.json",
+      "sha256": "752d0381aa7569000185e521ace1aff8f861ed0d0374bff7a464053844656068",
+      "bytes": 542
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/heavy-proposal-1/image-execution-release.json",
+      "sha256": "aad6f8e55fbeec470f046c48a17b66ce477bf7fd07267c70104cd57d309d05ff",
+      "bytes": 55060
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-image-actual-review-20261018-1/actual-review.json",
+      "sha256": "671a0fa2050c6518ba90b233964c6be19c097bf91fff14d4151e365ee64da96b",
+      "bytes": 34413
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-materialization-final-20261018-1/heavy-proposal-1/postbuild-readonly-1/captures/rust-disassembly.txt.status.json",
+      "sha256": "5247e1f039fb0e5e22e374162312f99044908ab593a704f58c6019d522404be7",
+      "bytes": 1306
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-materialization-final-20261018-1/heavy-proposal-1/postbuild-readonly-1/captures/rust-disassembly.txt",
+      "sha256": "831e2118c9dcd849c8cfdd83c81fab32e3311e45203afb12a7d62128e73a5ef3",
+      "bytes": 9241980
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-actual-review-20261018-1/Rust-clear-body.txt",
+      "sha256": "110b7c0c3ff58673522f361761b424934e76532b627b70484957f95e0a2a5be1",
+      "bytes": 607
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-actual-review-20261018-1/linked-clear-body.txt",
+      "sha256": "a38359e7409cc19d28d6694ff54a293f54eb4372f6bca289077d6599cfe28cb6",
+      "bytes": 917
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-actual-review-20261018-1/Rust-scheduler-inline-clear-body.txt",
+      "sha256": "81c32d829b0f4ab1e54a23d41db363d7589dd24a50aec8caf22ee5df2f8c5ba9",
+      "bytes": 1829
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-actual-review-20261018-1/linked-scheduler-inline-clear-body.txt",
+      "sha256": "54488ecc3393cdab49223907433c717d8d9d11bef0294362fafdf6effeb96479",
+      "bytes": 2455
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-actual-review-20261018-1/selected-process-schedule-body.txt",
+      "sha256": "64b1256bfa9ec84c0fb71ae4ffd76176e201ec044c4d5aac7c5f6a1e6fe84821",
+      "bytes": 14355
+    }
+  ],
+  "failure_preservation": [
+    "Original source-copy observer failure/UNKNOWN wait remains preserved; completed-tree and remaining-driver acceptance reused without recopy/replay.",
+    "Expected clear-relocation form differs because actual compiler inlined the same writes; recorded as compiler observation with live default body evidence, not silently reported as a relocation."
+  ],
+  "acceptance_limits": [
+    "No native application or privileged debug-register execution in this review. Null-debug AVX/threads cannot prove clear hardware behavior.",
+    "Rust-disabled full syscall, legacy real crate/image and separately released hardware/native proof remain OPEN.",
+    "No terminal cleanup or common/shared release; stopped exact container and records remain for separately released cleanup.",
+    "Architecture save/restore C remains live; private save candidate is not this image. Deferred original qualification remains OPEN."
+  ],
+  "next_executable_observation": "Bind exact retained artifact authority into separately reviewed terminal cleanup; separately prepare/review current-image native/targeted debug execution with unchanged assertions."
+}

@@ -1,0 +1,95 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_FOCUSED_LEAF_NOT_KERNEL",
+  "whole_join": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/actual-leaf-owned-capture-1/whole-join.json",
+    "sha256": "924d7f7a93e70768d877c282638bc5782651cd7ea8e0dbb96385da371bf67043",
+    "bytes": 1514
+  },
+  "fixture_receipt": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/leaf-output-1/receipt.json",
+    "sha256": "c5ebd1218d38362dcbbdee76208ad588af4dd2f7b136a8a0615be946b2effb0d",
+    "bytes": 7121
+  },
+  "source_bindings": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/SOURCE-BINDINGS.json",
+    "sha256": "ef584ac0f1a96f819591da0bb97e7625ebf32a287ce7d90d2bf4e7125076188e",
+    "bytes": 2880
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/PRIVATE-PRODUCTION.patch",
+    "sha256": "420092fe681cfb587b49fe362aff1c42db72abbc5a56a954e6c05487aef571a8",
+    "bytes": 7324
+  },
+  "source_selection": {
+    "all_accepted_process_fixes_and_other_bytes_unchanged": true,
+    "only_C_changes": "existing PUBLIC linkage for immutable descriptor+4 unchanged callbacks; exact original set_timer body gated !PUBLIC",
+    "original_C_body": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/ORIGINAL-set_timer.c",
+      "sha256": "0ed12b6c0860ff219f52fd712da8d93600d8183349503f21818a4b313bc0b0be",
+      "bytes": 349
+    }
+  },
+  "actual_artifacts": {
+    "actual.o": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/leaf-output-1/actual.o",
+      "sha256": "4259d4d43ca30c86569a21978f6f9da81754dce58c3ce0c041a4cd486d60e6ea",
+      "bytes": 2352
+    },
+    "abi.o": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/leaf-output-1/abi.o",
+      "sha256": "0197df85e29da28aa9f1deda2b99bd74f1e4e52a3c2f4b352fcd6c82c443a33c",
+      "bytes": 976
+    },
+    "equivalence": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/leaf-output-1/equivalence",
+      "sha256": "b9c786b3cd5249b59cf74fdec50d277c277333dca901fc516889faa1ec863679",
+      "bytes": 17048
+    },
+    "02.stdout": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/leaf-output-1/02.stdout",
+      "sha256": "06266bfd9ee2881c29cbde999f982e1059a2d4f51d334c3f826784a91b334410",
+      "bytes": 144
+    },
+    "03.stdout": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/leaf-output-1/03.stdout",
+      "sha256": "53b2c96cd39f20514b22588ed081e90be24904e4d90b6dd673cd4f7486410388",
+      "bytes": 460
+    }
+  },
+  "actual_header_closure": {
+    "kernel/include/sched_helpers.h": {
+      "path": "/home/holden/mckernel/kernel/include/sched_helpers.h",
+      "sha256": "9712a3df59eb0251f517ce01254e4576119868924b35f7da6fbee294bff966ae",
+      "bytes": 34428
+    },
+    "kernel/include/process.h": {
+      "path": "/home/holden/mckernel/kernel/include/process.h",
+      "sha256": "8848d536f2fa847a59af72d573ec9c55838c27cea664d46438ab4e038bf83649",
+      "bytes": 26602
+    },
+    "lib/include/types.h": {
+      "path": "/home/holden/mckernel/lib/include/types.h",
+      "sha256": "72179c1e931fdfdfa700d2ecfe745e344027ac0b4af299e8a9ec17957fc9a399",
+      "bytes": 515
+    },
+    "arch/x86_64/kernel/include/ihk/types.h": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/ihk/types.h",
+      "sha256": "c37a7c748f2439ddfd847725a4d559c008f2aca09c45114fb07e73337013f449",
+      "bytes": 1074
+    }
+  },
+  "observation": "25750 exact wrapper pairs; underlying existing Rust timer body; real15offset/120byte header ABI/64bit ulong/int32; leaf oneTset_timer/noUset_timer; captured CPU/descriptor/callback identities and ordering; signed return ignored",
+  "leaf_note": "U timer_set_timer_body_result is intentional capture shim in focused fixture only; actual same-module production helper remains unchanged",
+  "CPU6_released": true,
+  "compiler_or_fixture_failures": 0,
+  "corrections": 0,
+  "next_production_recipe_NOT_EXECUTED": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/NEXT-PRODUCTION-RUST-RECIPE.NOT-EXECUTED.json",
+    "sha256": "295d258e7c22789993770d6b155c21dfc16863179d992d92405aa6792b4790d3",
+    "bytes": 47964
+  },
+  "whole_C_TU_default_kernel_native": "OPEN",
+  "broad_harness_execution": "NOT_EXECUTED",
+  "independent_source_ABI_review": "REQUIRED_BEFORE_CANONICAL"
+}

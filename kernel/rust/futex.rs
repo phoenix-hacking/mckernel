@@ -71,12 +71,56 @@ pub extern "C" fn FUTEX_OP(op: CInt, oparg: CInt, cmp: CInt, cmparg: CInt) -> CI
 
 #[no_mangle]
 pub unsafe extern "C" fn get_futex_value_locked(dest: *mut u32, from: *mut u32) -> CInt {
+    #[cfg(native_linux_irq_work_v6_12)]
+    {
+        if dest.is_null() {
+            return -EFAULT;
+        }
+        if let Err(error) = unsafe { native_futex_word_range(from) } {
+            return error;
+        }
+        // The hash-bucket lock is held. The root-owned whitelist contains
+        // only this read instruction; no allocator/page fault retry occurs
+        // in this critical section, and output is published only on success.
+        return unsafe { native_user_read_u32_checked(from, dest) as CInt };
+    }
+    #[cfg(not(native_linux_irq_work_v6_12))]
+    {
     unsafe {
         let value = read_volatile(from);
         write_volatile(dest, value);
     }
 
     0
+    }
+}
+
+#[cfg(native_linux_irq_work_v6_12)]
+unsafe fn native_futex_word_range(from: *const u32) -> Result<(), CInt> {
+    let thread = unsafe { current_thread() };
+    if thread.is_null() || unsafe { (*thread).vm.is_null() } {
+        return Err(-EFAULT);
+    }
+    let vm = unsafe { (*thread).vm };
+    crate::native_futex::word_range(from as u64, unsafe { (*vm).region.user_start }, unsafe {
+        (*vm).region.user_end
+    })
+}
+
+#[cfg(native_linux_irq_work_v6_12)]
+unsafe fn native_futex_prefault_read(from: *const u32) -> Result<(), CInt> {
+    unsafe { native_futex_word_range(from)? };
+    let mut ignored = 0u32;
+    if unsafe {
+        crate::x86_memory_helpers::copy_from_user(
+            (&mut ignored as *mut u32).cast(),
+            from.cast(),
+            size_of::<u32>(),
+        )
+    } != 0 {
+        return Err(-EFAULT);
+    }
+    Ok(())
 }
 
 #[no_mangle]
@@ -131,6 +175,8 @@ pub unsafe extern "C" fn futex_atomic_op_inuser(encoded_op: CInt, uaddr: *mut CI
 }
 
 unsafe extern "C" {
+    #[cfg(native_linux_irq_work_v6_12)]
+    fn native_user_read_u32_checked(from: *const u32, to: *mut u32) -> i64;
     static mut idle_halt: CInt;
     static mut ikc2linuxs: *mut *mut c_void;
 
@@ -320,6 +366,10 @@ unsafe extern "C" fn futex_get_key_log_bridge(event: CInt) {
 }
 
 unsafe fn get_futex_key(uaddr: *mut u32, fshared: CInt, key: *mut FutexKey) -> CInt {
+    #[cfg(native_linux_irq_work_v6_12)]
+    if let Err(error) = unsafe { native_futex_word_range(uaddr) } {
+        return error;
+    }
     let thread = unsafe { current_thread() };
     if thread.is_null() {
         return -EINVAL;
@@ -573,6 +623,14 @@ unsafe fn futex_requeue(
     cmpval: *mut u32,
     requeue_pi: CInt,
 ) -> CInt {
+    #[cfg(native_linux_irq_work_v6_12)]
+    if !cmpval.is_null() {
+        // The comparison's authoritative load occurs later under both hash
+        // locks. Populate/check a valid demand page before acquiring either.
+        if let Err(error) = unsafe { native_futex_prefault_read(uaddr1) } {
+            return error;
+        }
+    }
     let mut key1 = FutexKey { opaque: [0; 3] };
     let mut key2 = FutexKey { opaque: [0; 3] };
     let mut requeue_ctx = FutexRequeueScanContext {
@@ -799,6 +857,16 @@ unsafe fn futex_wait_setup(
     q: *mut FutexQ,
     hb: *mut *mut FutexHashBucket,
 ) -> CInt {
+    #[cfg(native_linux_irq_work_v6_12)]
+    {
+        // Fault valid demand pages and check ordinary read permissions before
+        // acquiring the futex hash lock. The later nofault read under that
+        // lock is the value used for the wait comparison. A concurrent unmap
+        // after this preflight returns EFAULT through that nofault read.
+        if let Err(error) = unsafe { native_futex_prefault_read(uaddr) } {
+            return error;
+        }
+    }
     let mut hb_addr = 0usize;
     let ret = unsafe {
         crate::sched_helpers::futex_wait_setup_result(

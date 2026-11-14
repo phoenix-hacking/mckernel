@@ -1,0 +1,31 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "match": true,
+  "inputs": {
+    "fixture_source": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/m15-mm-parallel-implementation-1/unlock_actual_body.rs",
+      "bytes": 10847,
+      "sha256": "51a1ba42e9662c43684cae0a44e53d7d245a97be036539c07dbb21453fc09686"
+    },
+    "fixture_abi": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-13/m15-mm-finish/batch-1/fixture_bindings.rs",
+      "bytes": 1324,
+      "sha256": "4aba1f4c1c6267fe1a6083b0cb1a3e01ea66a180f8c8ee633c2d38bf4537deaa"
+    },
+    "actual_body": {
+      "path": "/home/holden/mckernel/host-kernel/native-rust/mcctrl_mm_write.rs",
+      "bytes": 8335,
+      "sha256": "6e1d6d65fcad10aa673bd546646b96f28fd7280250ad05a6ca560a0dc2877107"
+    },
+    "rustc": {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "bytes": 654904,
+      "sha256": "028fd60b0e0add5505c661cd3ccde91393d615c8729bd95d94ab1e91409b36a1"
+    },
+    "static_check": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/m15-mm-parallel-implementation-1/static_check.py",
+      "bytes": 2197,
+      "sha256": "452239cb0363df2ea954ceb45cce14431f15b4a5a261a7c60e0e4bb4c6cc7dbd"
+    }
+  }
+}

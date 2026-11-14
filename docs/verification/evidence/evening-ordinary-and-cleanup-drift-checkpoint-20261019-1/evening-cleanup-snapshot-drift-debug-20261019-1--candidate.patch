@@ -1,0 +1,39 @@
+--- frozen-source0c134/exact120.py
++++ candidate/exact120.py
+@@ -289,7 +289,10 @@
+             require(source, 'container mount source missing')
+             source = canonical_path(source, initial['view'])
+             require(not exposes(source, PARENTS), 'container exposes candidate ancestry: ' + cid + ' ' + source)
+-        rows.append({'id': cid, 'mounts': item['Mounts'], 'state': item['State']['Status']})
++        # Mounts is a Docker API collection; compare complete rows as a multiset.
++        # Preserve every field and duplicate; source ancestry checks above remain exact.
++        mounts = sorted(item['Mounts'], key=lambda row: json.dumps(row, sort_keys=True, separators=(',', ':')))
++        rows.append({'id': cid, 'mounts': mounts, 'state': item['State']['Status']})
+     require(run(['/usr/bin/docker', 'ps', '-aq', '--no-trunc']).decode().splitlines() == ids, 'container set raced')
+     require(task_view(task) == initial, 'container-reader namespace/mountinfo raced')
+     return rows
+@@ -574,6 +577,15 @@
+     os.fsync(stream.fileno())
+ 
+ 
++def snapshot_drift_detail(actual, expected):
++    # Bounded evidence only: original full equality remains the release oracle.
++    changed = [key for key in sorted(set(actual) | set(expected)) if key != 'processes' and
++               (key not in actual or key not in expected or actual[key] != expected[key])]
++    encoded = lambda value: digest(json.dumps(value, sort_keys=True, separators=(',', ':')).encode())
++    return {'changed_nonprocess_keys': changed, 'actual_projection_sha256': encoded({k: v for k, v in actual.items() if k != 'processes'}),
++            'expected_projection_sha256': encoded({k: v for k, v in expected.items() if k != 'processes'})}
++
++
+ def main():
+     parser = argparse.ArgumentParser()
+     parser.add_argument('--mode', choices=('SOURCE_ONLY', 'observe', 'execute'), default='SOURCE_ONLY')
+@@ -615,7 +627,7 @@
+         # with the previous observer PID. All other bindings must match exactly.
+         previous = release['observation']
+         require(0 <= time.time() - release['observed_unix'] <= 120, 'stale observation')
+-        require({k: v for k, v in observation.items() if k != 'processes'} == {k: v for k, v in previous.items() if k != 'processes'}, 'fresh observation drift')
++        require({k: v for k, v in observation.items() if k != 'processes'} == {k: v for k, v in previous.items() if k != 'processes'}, 'fresh observation drift ' + json.dumps(snapshot_drift_detail(observation, previous), sort_keys=True))
+         journal = Path(release['journal'])
+         require(journal.parent == BASE and journal.name.startswith('actual-') and journal.suffix == '.jsonl', 'new private journal path')
+         jdir, _ = safe_directory(BASE)

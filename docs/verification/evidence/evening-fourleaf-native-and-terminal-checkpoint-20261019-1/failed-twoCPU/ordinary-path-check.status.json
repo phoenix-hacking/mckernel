@@ -1,0 +1,44 @@
+{
+  "argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--core=0",
+    "--nofile=256",
+    "--fsize=33554432",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/native-owner-short-2/prepare_parent_and_check.py"
+  ],
+  "environment": {
+    "PATH": "/usr/bin:/bin",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "TZ": "UTC",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "HOME": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/native-owner-short-2",
+    "TMPDIR": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/native-owner-short-2"
+  },
+  "cwd": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/native-owner-short-2",
+  "pid": 1430361,
+  "started_unix_ns": 1792397033239361158,
+  "finished_unix_ns": 1792397034396733181,
+  "elapsed_ns": 1157371829,
+  "returncode": 0,
+  "direct_join": true,
+  "capacity": {
+    "host": 50312212480,
+    "scratch": 13757534208
+  },
+  "pins_checked": 18,
+  "runtime_release": false
+}

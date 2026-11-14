@@ -1,0 +1,121 @@
+{
+  "C_patch": {
+    "bytes": 1918,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-ptrace-report-signal-source-1/patch/syscall.c.diff",
+    "sha256": "bdc551cd6b53fbcfd9a4b864819ce2192f0ece8e4035da2ba49e8455f5117b03"
+  },
+  "C_provider_still_retained": "do_kill exact existing public ABI; private Rust alias preserves unsigned-return bits before signed cast",
+  "Rust_append_patch": {
+    "bytes": 6093,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-ptrace-report-signal-source-1/patch/syscall_policy.ptrace_report_signal.APPEND.diff",
+    "sha256": "a7eff7c4fb4a0798a4d8270c762a61aeb7a2960c273eefd9210540e46649f361"
+  },
+  "Rust_fragment": {
+    "bytes": 5854,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-ptrace-report-signal-source-1/candidate/syscall_policy.ptrace_report_signal.FRAGMENT.rs",
+    "sha256": "a2cbfbf3596973167a1b2e7f5be41122c36810d73953922913e7c584c10837b7"
+  },
+  "Rust_preimage": {
+    "bytes": 711734,
+    "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+    "sha256": "f1f7866c0f2ccc8e1b0024dfb632ec7359dd2a0a4bcd8e22deb957d48ef6d770"
+  },
+  "actual_callers": [
+    "arch/x86_64/kernel/syscall.c:check_signal pending/ptrace path",
+    "kernel/syscall.c:ptrace_report_exec_signal_bridge",
+    "kernel/syscall.c:ptrace_report_exec",
+    "kernel/syscall.c:ptrace_syscall_event"
+  ],
+  "actual_fixture": null,
+  "candidate_C": {
+    "bytes": 112502,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-ptrace-report-signal-source-1/candidate/syscall.c",
+    "sha256": "ac12f8f82fe2f2c6571eda1b08ec386f46737487a77af3c87bb55fb6c45626d1"
+  },
+  "canonical_writes": 0,
+  "compiler_jobs": 0,
+  "default_consumer": null,
+  "existing_Rust_providers": [
+    "ptrace_report_signal_body_result",
+    "cls::get_this_cpu_local_var",
+    "lock_helpers::__mcs_rwlock_writer_lock/unlock",
+    "x86_cpu_helpers::save_debugreg",
+    "waitq::waitq_wakeup",
+    "existing schedule extern"
+  ],
+  "fullcrate": null,
+  "invariants": [
+    "all14 offset_of from actual Thread/Process ABI; no new getters",
+    "same stack node type/alignment and lifetime through synchronous callbacks/scheduler return",
+    "same current owner read before body; never replace current with reported thread",
+    "main parent wake AFTER unlock; non-main report wake under lock, unchanged body",
+    "same stop-signal flags/traced state/debugsave ordering/SIGCHLD info/one schedule",
+    "same3 dynamicdebug strings/flags descriptors via existing Ddebug reprC; no unconditional logs",
+    "existing body status ignored for void entry as before; no new null-pointer policy",
+    "C fallback byte-identical; delete only7 adapters whose only selected consumer movesRust"
+  ],
+  "native": null,
+  "providers": [
+    {
+      "bytes": 76151,
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    {
+      "bytes": 12202,
+      "path": "/home/holden/mckernel/kernel/rust/lock_helpers.rs",
+      "sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3"
+    },
+    {
+      "bytes": 7877,
+      "path": "/home/holden/mckernel/kernel/rust/cls.rs",
+      "sha256": "c0260e7634d53fcc0873746af8bd16b6691ee0a4b7f394ca18896aef070f6bba"
+    },
+    {
+      "bytes": 91270,
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "26180e00c1d6673aa600f0ec9afed5d100ca6e0c39af803c3328e58f8cc88fb9"
+    },
+    {
+      "bytes": 10868,
+      "path": "/home/holden/mckernel/kernel/rust/waitq.rs",
+      "sha256": "246a850a7e305d69d55de5903273e35ba62cc204167cc95acc90973c8f0aaefc"
+    },
+    {
+      "bytes": 13020,
+      "path": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "sha256": "fed7537d21f5d5fe0fc3ffdb1fe44783f5f9ac13937b3bdbbcc452cc2fa5eb16"
+    },
+    {
+      "bytes": 843071,
+      "path": "/home/holden/mckernel/kernel/syscall.c",
+      "sha256": "1035622a96a5441a85d60a9db15d3ac452b60266d1f8123eb807ce3849c41081"
+    }
+  ],
+  "public_ABI": "void; exact original void wrapper intentionally ignores existing Rust body CInt status",
+  "retirement_scope": "selected C public entry+seven single-use C adapters; existing ptrace signal algorithm already Rust and unchanged",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "selected_C_preimage": {
+    "bytes": 113534,
+    "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+    "sha256": "57fb0080088276317e531982769cfe56c44a7467db220be0b0060a5ae5c6162f"
+  },
+  "selected_live_body": "ptrace_report_signal(struct thread*,int)",
+  "shared_fragment_merge": "append only; no full syscall_policy.rs replacement; F03signalfd/pendingmask/sigsuspend and prior F06ptrace/VDSO unaffected",
+  "source_checks": {
+    "Rust_shared_original_unchanged": true,
+    "compiler_or_runtime_check": false,
+    "default_preprocess_still_required": true,
+    "fallback_fullbody_byte_identical": true,
+    "new_selected_C_behavior": false,
+    "original_full_entry_retained_once": true,
+    "retained_observer_failure": {
+      "bytes": 745,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-ptrace-report-signal-source-1/sourcehandoff/SOURCE-CHECK-FIRST-FAILURE.RETAINED.json",
+      "sha256": "5e8daf8d8a3c029ae2d54adb91e06cb4b9b465d7a3614cc5700014a6f517e5f5"
+    },
+    "seven_C_adapters_absent_outside_retained_fullbody": true
+  },
+  "status": "NEXT_BOUNDARY_IMPLEMENTED_SOURCE_ONLY_NO_SECOND_READY_FIXTURE",
+  "test_plan": "SOURCE ONLY future actual C selected wrapper vs public Rust using real ABI offsets/stack node/typed effects, main/nonmain/not-traced/stop signals and callback schedule mutation, debugflags; default preprocess+whole TU/fullcrate/relocation later"
+}

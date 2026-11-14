@@ -1,0 +1,172 @@
+{
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0,2-7",
+    "/home/holden/anaconda3/bin/python3",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/bootstrap/finite_launcher.py",
+    "--deadline-utc",
+    "2026-11-04T06:35:33+00:00",
+    "--boot-deadline",
+    "1571568.6959155537",
+    "--monotonic-deadline",
+    "1556230.5688700147",
+    "--packet-sha256",
+    "ce5bb8cc47774fc56f96ec30d50fc35bb9c40773bc73a4cb1c8d07cc9732f1de",
+    "--publish-initial-clock",
+    "--",
+    "--codex",
+    "/home/holden/.local/bin/codex",
+    "--model",
+    "gpt-6.1-sol",
+    "--effort",
+    "max",
+    "--profile",
+    "aggressive",
+    "--max-agents",
+    "10",
+    "--build-jobs",
+    "7",
+    "--agent-windows",
+    "off",
+    "--stall-seconds",
+    "1800",
+    "--watchdog-seconds",
+    "180",
+    "--quiet",
+    "--grace-seconds",
+    "30",
+    "--startup-instruction-file",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/bootstrap/CURRENT-INVOCATION.txt",
+    "--startup-instruction-sha256",
+    "b1ada0fc9dd0b8fee56da3fd8949d90211d9f762ddd91dc67bae23f1adb23bf7"
+  ],
+  "bootstrap_sha256": "ce5bb8cc47774fc56f96ec30d50fc35bb9c40773bc73a4cb1c8d07cc9732f1de",
+  "canonical": {
+    "os_goal_credits.py": "adf5187240ed8199746eef3b59b79d4d38c4ae8ac5821c8d8324833926b21ec3",
+    "os_goal_handoff.py": "10fa66c254660b413fa05552625734d19814f6b9e0728bfe007d3114bb9280f1",
+    "os_goal_transport.py": "ad2eb154f2b278194878483ea3d3114e2d25642aaf0a74ea8f42f5a3a5ba8a5c",
+    "run_os_goal.py": "95bf2fd22559100b0cedf92f96c7077cf6cd7c844483e09d44c7b33f7002b17b",
+    "watch_os_goal.py": "b909ab9a7c014b94bf8c92e48ea4bfaa1ee7a630a6fe4f220af8a8086b7138a4"
+  },
+  "canonical_support": {
+    "os_goal_instructions.py": "fc56ba5d15e5462c32ed6462ceb469af833e282a03eeb874da1a576e096a72f7",
+    "os_goal_output.py": "078d34aba711bf11846220904dfc0492396110bc3e5e2433c79fb43e88fd1fbe",
+    "os_goal_resources.py": "c4761334c67461717bb5f606c7d4d5355a1c80f42709770ab206803e597c5157",
+    "os_goal_sessions.py": "fcd642340c4f2cdbfa04011a6451ca122b9cff657d14a42cad8b14d528992aeb",
+    "os_goal_sudo_askpass.py": "cfbb844c340f05acd3dbf899f11df8ec57aec97971c2acff883121fe81740fca",
+    "os_goal_windows.py": "5f35b4ff3f7aa0291885b045b375b5488c90c41864d288ac8bcd7a194606c916"
+  },
+  "caps": {
+    "boot_deadline": 1571568.6959155537,
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "deadline": 1793774133,
+    "monotonic_deadline": 1556230.5688700147
+  },
+  "initial_agent_settings": {
+    "default_subagent_model": "gpt-6.1-sol",
+    "default_subagent_reasoning_effort": "medium",
+    "enabled": true,
+    "max_concurrent_threads_per_session": 10,
+    "max_depth": 1
+  },
+  "initial_routing": {
+    "auditor": {
+      "effort": "low",
+      "model": "gpt-6.1-sol"
+    },
+    "complex_worker": {
+      "effort": "high",
+      "model": "gpt-6.1-sol"
+    },
+    "default_worker": {
+      "effort": "medium",
+      "model": "gpt-6.1-sol"
+    },
+    "dispatcher": {
+      "effort": "max",
+      "model": "gpt-6.1-sol"
+    },
+    "reviewer": {
+      "effort": "high",
+      "model": "gpt-6.1-sol"
+    }
+  },
+  "note_sha256": "b1ada0fc9dd0b8fee56da3fd8949d90211d9f762ddd91dc67bae23f1adb23bf7",
+  "prior_config": {
+    "allow_prepaid_fallback": false,
+    "api_key_billing": false,
+    "automatic_credit_purchase": false,
+    "billing_mode": "included_only",
+    "capacity_fallback_authorized": true,
+    "caps": {
+      "boot_deadline": 1571569.6959267766,
+      "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+      "deadline": 1793774133,
+      "monotonic_deadline": 1556231.5688797957
+    },
+    "codex": "/home/holden/.local/bin/codex",
+    "credit_ceiling": "57774.852125",
+    "credit_run_id": "7f4af94a83b14cc08f97401f5891d965",
+    "credit_spent_floor": "22812.3311000000",
+    "historical_credit_metadata_only": true,
+    "included_first": true,
+    "initial_envelope": {
+      "binding": {
+        "guardian": {
+          "pid": 2727507,
+          "ppid": 2727313,
+          "start": "113108156",
+          "state": "R"
+        },
+        "monitor": {
+          "pid": 2727509,
+          "ppid": 2727313,
+          "start": "113108266",
+          "state": "R"
+        },
+        "server": {
+          "pid": 2727360,
+          "ppid": 2727358,
+          "start": "113107784",
+          "state": "S"
+        },
+        "watcher": {
+          "pid": 2727356,
+          "ppid": 2727313,
+          "start": "113107752",
+          "state": "S"
+        },
+        "worker": {
+          "pid": 2727358,
+          "ppid": 2727356,
+          "start": "113107768",
+          "state": "S"
+        }
+      },
+      "directory": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1",
+      "guardian_dir": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/armed-controller",
+      "guardian_packet_sha256": "0fc3b6cf53fcee437b3967e201347e7fa0ecaf94eff20375fda4b57f7ba99568",
+      "model": "gpt-6.1-sol",
+      "monitor_arm_sha256": "e9efa95502a9028a5734c300b4d9dedc0e62282768a6fe1c84ccf5059adc6aae",
+      "monitor_dir": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/twenty-minute-steering",
+      "thread_id": "01a18a76-4f1e-7900-8ed6-127394e93689"
+    },
+    "initial_model": "gpt-6.1-sol",
+    "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+    "status": "FINALIZED_FOR_EXPLICIT_CAPACITY_FALLBACK_ARM",
+    "user_authorization": "Explicit same-Root user resume; rejected generic_c request remains held; typed capacity fallback only.",
+    "user_stop_files": [],
+    "weekly_authorization_path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/USER-WEEKLY-ONLY-AUTHORIZATION.json",
+    "weekly_authorization_sha256": "234367690e532f77670374986be31fbe2ce66e9bdf3dd302da9af38f62a93c68",
+    "window_path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/ACTUAL-WINDOW.json",
+    "window_sha256": "c19b84c10175b49f5db8129ef17b5041ceab3ee41ac1a7688e8ff706ceb3f596"
+  },
+  "root": "01a18bc3-e072-7810-9426-75101b0856c0",
+  "runtime_started": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "selection_capability_exclusions": [],
+  "target_effort": "max",
+  "target_model": "gpt-6.1-sol"
+}

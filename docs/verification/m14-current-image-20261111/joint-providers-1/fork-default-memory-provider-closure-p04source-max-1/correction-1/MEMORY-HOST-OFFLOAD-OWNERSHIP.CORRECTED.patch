@@ -1,0 +1,278 @@
+--- a/kernel/CMakeLists.txt
++++ b/kernel/CMakeLists.txt
+@@ -102,6 +102,7 @@
+ set(MCKERNEL_DO_SYSCALL_OUTER_SELECTED OFF)
+ set(MCKERNEL_DO_MMAP_SELECTED OFF)
+ set(MCKERNEL_DO_FORK_SELECTED OFF)
++set(MCKERNEL_MEMORY_HOST_OFFLOAD_SELECTED OFF)
+ set(MCKERNEL_DO_SYSCALL_C_FILE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c")
+ set(MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS 0)
+ set(RUST_KERNEL_ENABLED OFF)
+@@ -596,6 +597,17 @@
+ 			    "${MCKERNEL_DO_SYSCALL_C_FILE}"
+ 			    "${PROJECT_SOURCE_DIR}/lib/include/ihk/debug.h")
+ 		endif()
++        # Close only the actual memory-host/three-argument provider frontier.
++        # Broad forwarding/owned transaction options keep their existing scope.
++        if (MCKERNEL_RUST_F06_WHOLE_DEFAULT AND NOT ENABLE_NATIVE_FORK_OWNED_TRANSACTION)
++            set(MCKERNEL_MEMORY_HOST_OFFLOAD_SELECTED ON)
++            list(APPEND RUST_KERNEL_CFG "--cfg" "f03_memory_host_offload_candidate")
++            list(APPEND RUST_KERNEL_SRCS
++                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_memory_host_offload.rs"
++                "${CMAKE_CURRENT_SOURCE_DIR}/include/syscall.h"
++                "${CMAKE_CURRENT_SOURCE_DIR}/include/process.h"
++                "${IHK_FULL_SOURCE_DIR}/cokernel/smp/x86_64/include/ihk/memconst.h")
++        endif()
+ 		add_custom_command(
+ 		OUTPUT "${RUST_KERNEL_OBJ}"
+ 		COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/rust"
+@@ -1022,6 +1034,10 @@
+     set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+         COMPILE_DEFINITIONS MCKERNEL_RUST_F03_DO_FORK)
+ endif()
++if (MCKERNEL_MEMORY_HOST_OFFLOAD_SELECTED)
++    set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
++        COMPILE_DEFINITIONS MCKERNEL_RUST_F03_MEMORY_HOST_OFFLOAD)
++endif()
+ if (MCKERNEL_DO_MMAP_SELECTED)
+     set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+         COMPILE_DEFINITIONS MCKERNEL_RUST_F03_DO_MMAP)
+--- a/kernel/rust/lib.rs
++++ b/kernel/rust/lib.rs
+@@ -64,6 +64,8 @@
+ mod f03_do_mmap;
+ #[cfg(f03_do_fork_candidate)]
+ mod f03_do_fork;
++#[cfg(f03_memory_host_offload_candidate)]
++mod f03_memory_host_offload;
+ #[cfg(f03_do_syscall_outer_candidate)]
+ mod syscall_offload_entry;
+ #[cfg(any(f06_rt_sigreturn_xrstor_candidate, f06_debug_constants_candidate))]
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -1076,20 +1076,20 @@
+ long syscall_copy_to_user_bridge(unsigned long dst_addr,
+ 		const void *src, size_t bytes);
+ #if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_FORWARD_ADAPTERS)
+-extern long syscall_do_syscall2_bridge(int syscall_nr, unsigned long arg0,
+-		unsigned long arg1);
+-extern long syscall_do_syscall3_bridge(int syscall_nr, unsigned long arg0,
+-		unsigned long arg1, unsigned long arg2);
+-extern long syscall_policy_do_syscall2_bridge(int syscall_nr, unsigned long arg0,
+-		unsigned long arg1);
+-#else
+-static long syscall_do_syscall2_bridge(int syscall_nr, unsigned long arg0,
+-		unsigned long arg1);
+-static long syscall_do_syscall3_bridge(int syscall_nr, unsigned long arg0,
+-		unsigned long arg1, unsigned long arg2);
+-#endif
+-long syscall_policy_do_syscall3_bridge(int syscall_nr, unsigned long arg0,
+-		unsigned long arg1, unsigned long arg2);
++extern long syscall_do_syscall2_bridge(int syscall_nr, unsigned long arg0, unsigned long arg1);
++extern long syscall_policy_do_syscall2_bridge(int syscall_nr, unsigned long arg0, unsigned long arg1);
++#else
++static long syscall_do_syscall2_bridge(int syscall_nr, unsigned long arg0, unsigned long arg1);
++#endif
++#if (defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_FORWARD_ADAPTERS)) || defined(MCKERNEL_RUST_F03_MEMORY_HOST_OFFLOAD)
++extern long syscall_do_syscall3_bridge(int syscall_nr, unsigned long arg0, unsigned long arg1, unsigned long arg2); _Static_assert(__builtin_types_compatible_p(__typeof__(&syscall_do_syscall3_bridge), syscall_do_syscall3_fn_t), "three-argument offload ABI"); _Static_assert(sizeof(struct syscall_request)==72 && __alignof__(struct syscall_request)==8, "current request ABI");
++#else
++static long syscall_do_syscall3_bridge(int syscall_nr, unsigned long arg0, unsigned long arg1, unsigned long arg2);
++#endif
++long syscall_policy_do_syscall3_bridge(int syscall_nr, unsigned long arg0, unsigned long arg1, unsigned long arg2);
++
++
++
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ extern long syscall_do_syscall_request_bridge(struct syscall_request *request,
+ 		int cpu);
+@@ -5941,11 +5941,11 @@
+ }
+ #endif
+ 
+-static void
+-clear_host_pte_log_bridge(long error)
+-{
+-	kprintf("clear_host_pte failed. %ld\n", error);
+-}
++#ifdef MCKERNEL_RUST_F03_MEMORY_HOST_OFFLOAD
++void clear_host_pte_log_bridge(long error); _Static_assert(__builtin_types_compatible_p(__typeof__(&clear_host_pte_log_bridge), clear_host_pte_log_fn_t), "memory-host callback ABI");
++#else
++static void clear_host_pte_log_bridge(long error) { kprintf("clear_host_pte failed. %ld\n", error); }
++#endif
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ /* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
+@@ -6054,18 +6054,18 @@
+ }
+ #endif
+ 
+-static long
+-do_munmap_clear_host_bridge(unsigned long addr, size_t len, int holding_lock)
+-{
+-	return clear_host_pte(addr, len, holding_lock);
+-}
+-
+-static int
+-do_munmap_set_host_bridge(unsigned long addr, size_t len, int prot,
+-		int holding_lock)
+-{
+-	return set_host_vma(addr, len, prot, holding_lock);
+-}
++#ifdef MCKERNEL_RUST_F03_MEMORY_HOST_OFFLOAD
++long do_munmap_clear_host_bridge(unsigned long addr, size_t len, int holding_lock); _Static_assert(__builtin_types_compatible_p(__typeof__(&do_munmap_clear_host_bridge), do_munmap_clear_host_fn_t), "memory-host callback ABI");
++#else
++static long do_munmap_clear_host_bridge(unsigned long addr, size_t len, int holding_lock) { return clear_host_pte(addr, len, holding_lock); }
++#endif
++
++#ifdef MCKERNEL_RUST_F03_MEMORY_HOST_OFFLOAD
++int do_munmap_set_host_bridge(unsigned long addr, size_t len, int prot, int holding_lock); _Static_assert(__builtin_types_compatible_p(__typeof__(&do_munmap_set_host_bridge), mprotect_set_host_vma_fn_t), "memory-host callback ABI");
++#else
++static int do_munmap_set_host_bridge(unsigned long addr, size_t len, int prot, int holding_lock) { return set_host_vma(addr, len, prot, holding_lock); }
++#endif
++
+ 
+ #if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_UNMAP_FINISH)
+ extern void f03_unmap_finish(void);
+@@ -27468,19 +27468,18 @@
+ }
+ #endif
+ 
++#ifndef MCKERNEL_RUST_F03_MEMORY_HOST_OFFLOAD
+ static long
+ syscall_do_syscall3_bridge(int syscall_nr, unsigned long arg0,
+ 		unsigned long arg1, unsigned long arg2)
+ {
+ 	struct syscall_request request IHK_DMA_ALIGN;
+-
+ 	request.number = syscall_nr;
+ 	request.args[0] = arg0;
+ 	request.args[1] = arg1;
+ 	request.args[2] = arg2;
+ 	return do_syscall(&request, ihk_mc_get_processor_id());
+ }
+-
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ long
+ syscall_policy_do_syscall3_bridge(int syscall_nr, unsigned long arg0,
+@@ -27488,6 +27487,7 @@
+ {
+ 	return syscall_do_syscall3_bridge(syscall_nr, arg0, arg1, arg2);
+ }
++#endif
+ #endif
+ #endif /* C forwarding adapters; Rust owns the explicit candidate selection. */
+ 
+--- /dev/null
++++ b/kernel/rust/f03_memory_host_offload.rs
+@@ -0,0 +1,111 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Genuine current memory-host callbacks and three-argument offload adapters.
++use core::mem::{align_of, offset_of, size_of, MaybeUninit};
++use crate::abi::{CInt, CLong, CULong, SizeT, SyscallRequest, X86UserContext};
++
++#[cfg(any(not(target_arch = "x86_64"), not(native_linux_irq_work_v6_12),
++    not(enable_profile), not(enable_perf), not(enable_rusage), enable_tofu,
++    enable_fugaku_hacks, f03_forward_adapters_candidate))]
++compile_error!("memory-host offload requires its paired qualified ordinary profile");
++
++unsafe extern "C" {
++    fn do_syscall(request: *mut SyscallRequest, cpu: CInt) -> CLong;
++    // This is the already selected complete Rust entry in syscall_policy, whose
++    // immutable genuine-header binding now resolves forward/log to this module.
++    fn clear_host_pte(addr: CULong, len: SizeT, holding_lock: CInt) -> CLong;
++}
++
++/// Preserve the actual three-argument synchronous request and signed long result.
++///
++/// # Safety
++/// Original live current-thread/CPU/offload contracts apply through the blocking
++/// provider. Its actual consumers are munmap and setitimer and consume at most
++/// args0..2. The original upper argument/TID/valid bytes were unspecified here;
++/// zero defines the complete private72-byte storage before the genuine existing
++/// builder writes number/all six arguments. The real do_syscall still owns TIDs,
++/// publication, monitor/accounting, preemption, nested work and response handling.
++/// No reference or request pointer is retained across this function's return.
++#[no_mangle]
++pub unsafe extern "C" fn syscall_do_syscall3_bridge(
++    number: CInt, arg0: CULong, arg1: CULong, arg2: CULong,
++) -> CLong {
++    let mut request = MaybeUninit::<SyscallRequest>::zeroed();
++    let cpu = unsafe { crate::x86_local::ihk_mc_get_processor_id() };
++    unsafe {
++        crate::syscall_policy::syscall_generic_forwarding_body_result(
++            request.as_mut_ptr(), number, arg0, arg1, arg2, 0, 0, 0, cpu,
++            Some(do_syscall),
++        )
++    }
++}
++
++/// Preserve the actual public policy ABI with one genuine offload transaction.
++/// # Safety
++/// Same live three-argument consumer and synchronous ownership contract above.
++#[no_mangle]
++pub unsafe extern "C" fn syscall_policy_do_syscall3_bridge(
++    number: CInt, arg0: CULong, arg1: CULong, arg2: CULong,
++) -> CLong {
++    unsafe { syscall_do_syscall3_bridge(number, arg0, arg1, arg2) }
++}
++
++/// Preserve the original nonzero-result error diagnostic, including signed long.
++#[no_mangle]
++pub unsafe extern "C" fn clear_host_pte_log_bridge(error: CLong) {
++    unsafe { crate::debug::kprintf(b"clear_host_pte failed. %ld\n\0".as_ptr().cast(), error) };
++}
++
++/// Call the real complete Rust clear-host entry through the original callback ABI.
++/// # Safety
++/// The original process/VM is borrowed for the full synchronous operation. The
++/// caller retains the original range-lock contract when holding_lock is nonzero.
++/// Existing clear_host_pte_body_result publishes current CPU before forwarding,
++/// restores -1 before error logging, and returns the unmodified signed long.
++/// This entry acquires/releases no lock or reference and fabricates no reply.
++#[no_mangle]
++pub unsafe extern "C" fn do_munmap_clear_host_bridge(
++    addr: CULong, len: SizeT, holding_lock: CInt,
++) -> CLong {
++    unsafe { clear_host_pte(addr, len, holding_lock) }
++}
++
++/// Preserve the actual reachable set_host_vma body and its signed-int result.
++/// # Safety
++/// Original current-thread/VM/range-lock/offload contract applies. As in C, the
++/// three argument setters target a disjoint private all-integer context. Zero
++/// initializes it before the real setters form references to its u64 GPR fields.
++/// The context is not forwarded/read as a whole; preserve all three typed calls
++/// and the initial CPU/current lookup. The real helpers perform volatile writes
++/// through initialized field references; retain all three calls and their order.
++/// No returned/offloaded argument is changed.
++/// The C function returns set_host_vma_body_result unconditionally; its later
++/// mprotect/debug block is unreachable. The selected existing native body keeps
++/// host mirror protection, forwards munmap for PFN invalidation, restores the
++/// borrowed lock-state flag and deliberately has no error log at this edge.
++#[no_mangle]
++pub unsafe extern "C" fn do_munmap_set_host_bridge(
++    addr: CULong, len: SizeT, prot: CInt, holding_lock: CInt,
++) -> CInt {
++    let mut context = MaybeUninit::<X86UserContext>::zeroed();
++    let _thread = unsafe { (*crate::cls::get_this_cpu_local_var()).current };
++    unsafe {
++        crate::x86_cpu_helpers::ihk_mc_syscall_set_arg0(context.as_mut_ptr(), addr);
++        crate::x86_cpu_helpers::ihk_mc_syscall_set_arg1(context.as_mut_ptr(), len as CULong);
++        crate::x86_cpu_helpers::ihk_mc_syscall_set_arg2(context.as_mut_ptr(), prot as CULong);
++    }
++    crate::syscall_policy::set_host_vma_body_result(addr, len, prot, holding_lock)
++}
++
++const _: unsafe extern "C" fn(CInt,CULong,CULong,CULong)->CLong = syscall_do_syscall3_bridge;
++const _: unsafe extern "C" fn(CInt,CULong,CULong,CULong)->CLong = syscall_policy_do_syscall3_bridge;
++const _: unsafe extern "C" fn(CLong) = clear_host_pte_log_bridge;
++const _: unsafe extern "C" fn(CULong,SizeT,CInt)->CLong = do_munmap_clear_host_bridge;
++const _: unsafe extern "C" fn(CULong,SizeT,CInt,CInt)->CInt = do_munmap_set_host_bridge;
++const _: () = {
++    assert!(size_of::<CInt>() == 4 && size_of::<CLong>() == 8);
++    assert!(size_of::<CULong>() == 8 && size_of::<SizeT>() == 8);
++    assert!(size_of::<SyscallRequest>() == 72 && align_of::<SyscallRequest>() == 8);
++    assert!(offset_of!(SyscallRequest, rtid) == 0 && offset_of!(SyscallRequest, ttid) == 4);
++    assert!(offset_of!(SyscallRequest, valid) == 8 && offset_of!(SyscallRequest, number) == 16);
++    assert!(offset_of!(SyscallRequest, args) == 24);
++};

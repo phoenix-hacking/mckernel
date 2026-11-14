@@ -1,0 +1,80 @@
+#define _GNU_SOURCE
+#include <assert.h>
+#include <dirent.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <stddef.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <ihk/ihklib_private.h>
+/* Matching existing selected_target_stat_dirent_ABI.c contract; no new ABI suite. */
+_Static_assert(sizeof(struct dirent)==280 && offsetof(struct dirent,d_name)==19,"selected genuine dirent ABI");
+/* Only root/readability/path and deterministic readdir error seams are local.
+ * Every DIR, returned nonerror entry and closed descriptor is genuine HOST libc. */
+static const char *directory;
+static DIR *active;
+static int active_fd,scans,closes,readability_calls,uid_calls,checks;
+static int failed_scan,fail_after,injected,matches[2],order[2][2],read_calls[2];
+static int stale_entry_errno_seen;
+unsigned int observation_geteuid(void){++uid_calls;return 0;}
+int observation_access(const char *path,int mode){assert(!strcmp(path,"/dev/mcd17")&&mode==R_OK&&scans==0);++readability_calls;return 0;}
+DIR *observation_opendir(const char *path){
+ assert(!strcmp(path,"/dev")&&!active&&scans<2);active=opendir(directory);assert(active);active_fd=dirfd(active);assert(active_fd>=0);++scans;return active;
+}
+struct dirent *observation_readdir(DIR *stream){
+ assert(stream==active&&scans>0);int scan=scans-1;++read_calls[scan];
+ if(errno!=0)++stale_entry_errno_seen;
+ if(scans==failed_scan&&matches[scan]==fail_after){assert(!injected);injected=1;errno=EIO;return NULL;}
+ struct dirent *entry=readdir(stream);
+ if(entry){
+  if(!strncmp(entry->d_name,"mcos",4)){assert(matches[scan]<2);int index=atoi(entry->d_name+4);assert(index==1||index==3);order[scan][matches[scan]++]=index;}
+  /* A successful entry/its processing may leave stale errno. Clean EOF must
+   * still be distinguished by clearing errno before EACH following read. */
+  errno=EAGAIN;
+ }
+ return entry;
+}
+int observation_closedir(DIR *stream){
+ assert(stream==active&&scans==closes+1);int fd=active_fd;int result=closedir(stream);assert(result==0);active=NULL;active_fd=-1;++closes;
+ errno=0;assert(fcntl(fd,F_GETFD)==-1&&errno==EBADF);errno=EDOM;return result;
+}
+static void reset(int fault_scan,int match_count){
+ assert(!active);scans=closes=readability_calls=uid_calls=injected=stale_entry_errno_seen=0;memset(matches,0,sizeof(matches));memset(order,0,sizeof(order));memset(read_calls,0,sizeof(read_calls));failed_scan=fault_scan;fail_after=match_count;errno=ERANGE;
+}
+typedef int (*Count)(int);
+typedef int (*List)(int,int *,int);
+static void check_count(Count count,int baseline,int failure){
+ reset(failure<0?0:1,failure);int result=count(17);
+ assert(!active&&scans==1&&closes==1&&readability_calls==0&&uid_calls==1);
+ if(failure<0){assert(result==2&&!injected&&matches[0]==2&&order[0][0]!=order[0][1]);}
+ else{assert(injected&&matches[0]==failure&&result==(baseline?failure:-EIO));}
+ if(!baseline)assert(stale_entry_errno_seen==0);
+ printf("COUNT fault-after=%d result=%d matches=%d scan-opens=%d closes=%d order=%d,%d\n",failure,result,matches[0],scans,closes,order[0][0],order[0][1]);++checks;
+}
+static void check_list(List list,int baseline,int failure,int prerequisite){
+ reset(prerequisite?1:failure<0?0:2,prerequisite?0:failure);int indices[2]={-12345,-23456};int result=list(17,indices,2);
+ assert(!active&&readability_calls==1&&uid_calls==1&&scans==closes);
+ if(prerequisite){assert(scans==1&&injected&&matches[0]==0&&indices[0]==-12345&&indices[1]==-23456&&result==(baseline?-EINVAL:-EIO));}
+ else{
+  assert(scans==2&&matches[0]==2);
+  if(failure<0){assert(result==0&&!injected&&matches[1]==2&&indices[0]==order[1][0]&&indices[1]==order[1][1]&&indices[0]!=indices[1]);}
+  else{
+   assert(injected&&matches[1]==failure&&result==(baseline?0:-EIO));
+   if(failure==0)assert(indices[0]==-12345);else assert(indices[0]==order[1][0]);
+   assert(indices[1]==-23456); /* Valid partial output is permitted on error. */
+  }
+ }
+ if(!baseline)assert(stale_entry_errno_seen==0);
+ printf("LIST fault-after=%d prerequisite=%d result=%d slots=%d,%d scan-opens=%d closes=%d observed-second-order=%d,%d\n",failure,prerequisite,result,indices[0],indices[1],scans,closes,order[1][0],order[1][1]);++checks;
+}
+int observation_run(int baseline,Count count,List list,const char *private_directory){
+ assert(getuid()==1000&&geteuid()==1000);directory=private_directory;assert(directory&&*directory);
+ check_count(count,baseline,-1);check_count(count,baseline,0);check_count(count,baseline,1);
+ check_list(list,baseline,-1,0);check_list(list,baseline,0,0);check_list(list,baseline,1,0);check_list(list,baseline,0,1);
+ assert(checks==7&&!active);
+ if(baseline)puts("baseline directory cases=7 false-success-counts=2 false-success-lists=2 safe-partial-slots normal-order-preserved genuine-DIR-close-once");
+ else puts("candidate directory cases=7 read-errors-EIO=5 normal-EOF-order=2 partial-slots-permitted each-read-errno-cleared genuine-DIR-close-once");
+ return 0;
+}

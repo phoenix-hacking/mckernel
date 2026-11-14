@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "memory.protect-none-write",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/memory.protect-none-write"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "canonical-record-with-relations", "fields": ["trapped", "si_code"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["trapped=1", "si_code=SEGV_ACCERR", "The PROT_NONE page is retired after the check"],
+  "unresolved_expectations": ["Bind pinned guest SEGV_ACCERR numeric value and canonical output/input hashes before execution."],
+  "max_question_for_reviewer": "Confirm a PROT_NONE write delivers SEGV_ACCERR and the mapping can be restored and unmapped."
+}

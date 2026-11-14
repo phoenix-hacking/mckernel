@@ -1,0 +1,118 @@
+{
+  "C_object": {
+    "bytes": 209248,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/page-unmap-body-1/production-consumer-1/build/mem.c.o",
+    "sha256": "d53cf2a1135ab74fcfc67a811ac5abecb5b0f20582537b5bfee6a5e1b2deaab1"
+  },
+  "C_public_callbacks": [
+    "page_hash_lock_bridge",
+    "page_hash_unlock_bridge",
+    "page_unmap_log_bridge"
+  ],
+  "C_readonly_geometry_sizes": {
+    "page_unmap_hash_mask": 8,
+    "page_unmap_hash_shift": 4,
+    "page_unmap_lock_stride": 8
+  },
+  "C_source": "kernel/mem.c",
+  "Rust_object": {
+    "bytes": 13640056,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/page-unmap-body-1/production-consumer-1/build/mckernel_rust.o",
+    "sha256": "2dd241e13d7d4293660eaf5d5f23ee0af5166a2265ca543c20e8e150c27a57d9"
+  },
+  "Rust_relocations_to_C": [
+    "page_hash_locks",
+    "page_unmap_hash_shift",
+    "page_unmap_hash_mask",
+    "page_unmap_lock_stride",
+    "page_hash_lock_bridge",
+    "page_hash_unlock_bridge",
+    "page_unmap_log_bridge"
+  ],
+  "accepted_actual_result": {
+    "bytes": 7482,
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-unmap-body-1/production-consumer-1/correction1/RESULT.json",
+    "sha256": "a9fa7bb140d3a5269ae27a92ed666453b2e3431a7b674c47d4224efaebe4c483"
+  },
+  "actual_process_commands": 8,
+  "all_direct_joined_group_absent_streams_closed": true,
+  "bounded_correction": {
+    "bytes": 810,
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-unmap-body-1/production-consumer-1/correction1/PREPARED-CORRECTION.json",
+    "sha256": "1831ac112176a4c43177d75361cb41626f02c2cf799420b8ed2290108e570f3f"
+  },
+  "default_GCC14_image": false,
+  "exact_commands": {
+    "bytes": 12494,
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-unmap-body-1/production-consumer-1/PREPARED-COMMANDS.json",
+    "sha256": "eee05a3cc909c6f1cd723db57622d51e139cd104ef4bad5a18b09ab085c03b39"
+  },
+  "failure_family_history": "One failed observerBSS-only assumption, one bounded correction accepting unique COMMON/BSS data provider. No compiler failure or compiler replay. Further same-family failure requires expert escalation.",
+  "full_Rust_source_count": 82,
+  "initial_failed_observer": {
+    "bytes": 9978,
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-unmap-body-1/production-consumer-1/RESULT.json",
+    "sha256": "d66596620181b7f966812395bfbe84b47e6a249326726d3555b1c9d09d630bd8"
+  },
+  "native": false,
+  "ordinary_C_compiler": "GCC9 using exact production kernel/mem.c compile row with previously accepted compiler/builtin include substitutions; not pinned defaultGCC14 acceptance.",
+  "page_hash_locks_storage": "C(COMMON) from GCC9 uninitialized tentative definition, unique after partial link; no C flag change. BSS also admitted by corrected observer for other reviewed compiler defaults.",
+  "partial_object": {
+    "bytes": 14004416,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/page-unmap-body-1/production-consumer-1/build/partial.o",
+    "sha256": "845c1d679db4acc8302e3d0abe6e1afc9ccbc8740c63efe3d187e9fb2126191b"
+  },
+  "production_Rust_flags_unchanged": true,
+  "retirement_credit": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_bindings": {
+    "bytes": 32635,
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-unmap-body-1/production-consumer-1/SOURCE-BINDINGS.json",
+    "sha256": "f4622dc805b88889dd758b7d50208a276565eb1d8d256721c319064d9c5d3c0d"
+  },
+  "source_changed": false,
+  "status": "PASS_ACTUAL_PRODUCTION_CONSUMER_ONLY_PENDING_INDEPENDENT_ACCEPTANCE",
+  "total_combined_CPU_seconds": 20.927826,
+  "total_wall_seconds": 20.933103453950025,
+  "unique_full_Rust_exports": {
+    "get_cpu_local_var": [
+      "T"
+    ],
+    "ihk_mc_get_processor_id": [
+      "T"
+    ],
+    "page_unmap": [
+      "T"
+    ],
+    "process_sched_cpu_local_bridge": [
+      "T"
+    ],
+    "sched_idle_begin_body_result": [
+      "T"
+    ],
+    "sched_idle_current_cpu_bridge": [
+      "T"
+    ],
+    "sched_idle_iteration_body_result": [
+      "T"
+    ],
+    "sched_idle_loop_body_result": [
+      "T"
+    ],
+    "sched_idle_runqueue_has_running_result": [
+      "T"
+    ],
+    "x86_clear_free_pages_user_bridge": [
+      "T"
+    ],
+    "x86_clear_old_action_bridge": [
+      "T"
+    ],
+    "x86_clear_page_unmap_bridge": [
+      "T"
+    ],
+    "x86_clear_phys_to_virt_bridge": [
+      "T"
+    ]
+  }
+}

@@ -1,0 +1,579 @@
+{
+  "status": "PASS_JOINT7231_AFFECTED48_PASSIVE_READS45_OUTPUTS_PENDING_WHOLE_PROVIDER_ABI_OWNERSHIP_QUALIFICATION",
+  "started_at": "2026-11-11T04:41:22.098924+00:00",
+  "finished_at": "2026-11-11T04:42:53.112832+00:00",
+  "source_commit": "7231ce6d17af39e9556ee815980a97f180b70eb1",
+  "request_sha256": "17fd8f95af324998223aa7a0a35fdd8c7cb128299b08c51b4300a8c15006c2c7",
+  "review_sha256": "c3c44c6b496500d34a1da6f40c8cfcb90fa35c6ad0ae097e35064e4f891527d7",
+  "phases": [
+    {
+      "phase": "metadata",
+      "CID": "0bfdf6cefcfae8bf14073d8f675822fec2ac6144d99b5cd2b51dd3ea9e86f6a0",
+      "exit": 0,
+      "OOMKilled": false,
+      "owned_container_removed": true,
+      "client_wait_joined": true,
+      "cgroup_samples": 179
+    }
+  ],
+  "clients": [
+    {
+      "attempt_id": 0,
+      "label": "source-commit.before",
+      "argv": [
+        "/usr/bin/git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "creation_attempted": true,
+      "popen_returned": true,
+      "pid": 1249471,
+      "birth": "45834816",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true,
+      "primary_error": null,
+      "secondary_errors": [],
+      "lifecycle_UNKNOWN": false,
+      "resource_charge_retained": false,
+      "receipt_persisted": true
+    },
+    {
+      "attempt_id": 1,
+      "label": "IHK-commit.before",
+      "argv": [
+        "/usr/bin/git",
+        "-C",
+        "/home/holden/mckernel/ihk",
+        "rev-parse",
+        "HEAD"
+      ],
+      "creation_attempted": true,
+      "popen_returned": true,
+      "pid": 1249472,
+      "birth": "45834817",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true,
+      "primary_error": null,
+      "secondary_errors": [],
+      "lifecycle_UNKNOWN": false,
+      "resource_charge_retained": false,
+      "receipt_persisted": true
+    },
+    {
+      "attempt_id": 2,
+      "label": "running-preflight",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "ps",
+        "-q"
+      ],
+      "creation_attempted": true,
+      "popen_returned": true,
+      "pid": 1249473,
+      "birth": "45834821",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true,
+      "primary_error": null,
+      "secondary_errors": [],
+      "lifecycle_UNKNOWN": false,
+      "resource_charge_retained": false,
+      "receipt_persisted": true
+    },
+    {
+      "attempt_id": 3,
+      "label": "names-preflight",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "ps",
+        "-a",
+        "--format",
+        "{{.Names}}"
+      ],
+      "creation_attempted": true,
+      "popen_returned": true,
+      "pid": 1249481,
+      "birth": "45834832",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true,
+      "primary_error": null,
+      "secondary_errors": [],
+      "lifecycle_UNKNOWN": false,
+      "resource_charge_retained": false,
+      "receipt_persisted": true
+    },
+    {
+      "attempt_id": 4,
+      "label": "metadata-create",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "create",
+        "--name",
+        "mck-m14-joint13-metadata-20261111-1",
+        "--label",
+        "mckernel.preparation-owner=m14-joint13-metadata-1",
+        "--init",
+        "--pull=never",
+        "--network=none",
+        "--ipc=private",
+        "--cpus=1",
+        "--cpuset-cpus=6",
+        "--memory=512m",
+        "--memory-swap=512m",
+        "--pids-limit=64",
+        "--ulimit",
+        "core=0:0",
+        "--ulimit",
+        "fsize=1073741824:1073741824",
+        "--ulimit",
+        "cpu=120:120",
+        "--user",
+        "1000:1000",
+        "--read-only",
+        "--cap-drop=ALL",
+        "--security-opt=no-new-privileges",
+        "--tmpfs",
+        "/tmp:rw,nodev,nosuid,noexec,size=16m,mode=1777",
+        "--workdir",
+        "/work/output",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output,dst=/work/output,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/input,dst=/producer,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1,dst=/evidence",
+        "--entrypoint",
+        "/usr/bin/env",
+        "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+        "-i",
+        "BASH_ENV=",
+        "ENV=",
+        "LANG=C",
+        "LC_ALL=C",
+        "PATH=/usr/bin:/bin",
+        "TZ=UTC",
+        "LD_LIBRARY_PATH=",
+        "LD_PRELOAD=",
+        "/usr/bin/bash",
+        "--noprofile",
+        "--norc",
+        "/producer/read_joint_provider_metadata.sh"
+      ],
+      "creation_attempted": true,
+      "popen_returned": true,
+      "pid": 1249489,
+      "birth": "45834846",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true,
+      "primary_error": null,
+      "secondary_errors": [],
+      "lifecycle_UNKNOWN": false,
+      "resource_charge_retained": false,
+      "receipt_persisted": true
+    },
+    {
+      "attempt_id": 5,
+      "label": "metadata-profile",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "inspect",
+        "0bfdf6cefcfae8bf14073d8f675822fec2ac6144d99b5cd2b51dd3ea9e86f6a0"
+      ],
+      "creation_attempted": true,
+      "popen_returned": true,
+      "pid": 1249497,
+      "birth": "45834858",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true,
+      "primary_error": null,
+      "secondary_errors": [],
+      "lifecycle_UNKNOWN": false,
+      "resource_charge_retained": false,
+      "receipt_persisted": true
+    },
+    {
+      "attempt_id": 6,
+      "label": "metadata-running-inspect",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "inspect",
+        "0bfdf6cefcfae8bf14073d8f675822fec2ac6144d99b5cd2b51dd3ea9e86f6a0"
+      ],
+      "creation_attempted": true,
+      "popen_returned": true,
+      "pid": 1249506,
+      "birth": "45834870",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true,
+      "primary_error": null,
+      "secondary_errors": [],
+      "lifecycle_UNKNOWN": false,
+      "resource_charge_retained": false,
+      "receipt_persisted": true
+    },
+    {
+      "label": "metadata-payload",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "start",
+        "-a",
+        "0bfdf6cefcfae8bf14073d8f675822fec2ac6144d99b5cd2b51dd3ea9e86f6a0"
+      ],
+      "pid": 1249505,
+      "birth": "45834870",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true,
+      "primary_error": null,
+      "secondary_errors": []
+    },
+    {
+      "attempt_id": 8,
+      "label": "metadata-terminal",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "inspect",
+        "0bfdf6cefcfae8bf14073d8f675822fec2ac6144d99b5cd2b51dd3ea9e86f6a0"
+      ],
+      "creation_attempted": true,
+      "popen_returned": true,
+      "pid": 1249901,
+      "birth": "45843876",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true,
+      "primary_error": null,
+      "secondary_errors": [],
+      "lifecycle_UNKNOWN": false,
+      "resource_charge_retained": false,
+      "receipt_persisted": true
+    },
+    {
+      "attempt_id": 9,
+      "label": "metadata-container-wait",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "wait",
+        "0bfdf6cefcfae8bf14073d8f675822fec2ac6144d99b5cd2b51dd3ea9e86f6a0"
+      ],
+      "creation_attempted": true,
+      "popen_returned": true,
+      "pid": 1249909,
+      "birth": "45843888",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true,
+      "primary_error": null,
+      "secondary_errors": [],
+      "lifecycle_UNKNOWN": false,
+      "resource_charge_retained": false,
+      "receipt_persisted": true
+    },
+    {
+      "attempt_id": 10,
+      "label": "metadata-owned-remove",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "rm",
+        "0bfdf6cefcfae8bf14073d8f675822fec2ac6144d99b5cd2b51dd3ea9e86f6a0"
+      ],
+      "creation_attempted": true,
+      "popen_returned": true,
+      "pid": 1249917,
+      "birth": "45843900",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true,
+      "primary_error": null,
+      "secondary_errors": [],
+      "lifecycle_UNKNOWN": false,
+      "resource_charge_retained": false,
+      "receipt_persisted": true
+    },
+    {
+      "attempt_id": 11,
+      "label": "source-commit.after",
+      "argv": [
+        "/usr/bin/git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "creation_attempted": true,
+      "popen_returned": true,
+      "pid": 1249925,
+      "birth": "45843913",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true,
+      "primary_error": null,
+      "secondary_errors": [],
+      "lifecycle_UNKNOWN": false,
+      "resource_charge_retained": false,
+      "receipt_persisted": true
+    }
+  ],
+  "all_waits_streams_joined": true,
+  "remaining_owned_children": [],
+  "producer_binding_sha256": "75738f83c39f684c52660ab82972eb3aca2825ef0845d4bb50e4110c9888ed61",
+  "metadata": [
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/image-elf.stdout",
+      "bytes": 47026,
+      "sha256": "3548af8d5cb945a29bf7376778e2525f9a45e84d9a0c505155ece534472ab1ea"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/image-symbols-relocations.stdout",
+      "bytes": 438310,
+      "sha256": "2fb5d42dd6c0e173303b37cbf9eb26ec306e1f0b0cdf321efbbf054797b99557"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/affected-constituent-symbols-relocations.stdout",
+      "bytes": 38578651,
+      "sha256": "ed4466c28f70df8a3d1d4c04b0e04d60683767df5b3b45f16142912928023f7a"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/image-nm.stdout",
+      "bytes": 240497,
+      "sha256": "c1812b369dac353821a63f5ca700c5b89cffa09e2a85aa241a29b81024358528"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/image-map.stdout",
+      "bytes": 993489,
+      "sha256": "8168218f25952a6973a5686ed5123ff022ac8c8bb84255ca36f244058c9bebcb"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/artifact-identities.sha256",
+      "bytes": 2205,
+      "sha256": "99e3eaeb430074c09c11b81cc2ce406cc0da17e6480dbff745a097b42370cd94"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/artifact-modes.stdout",
+      "bytes": 1249,
+      "sha256": "69800ea9d7d6d3809ff60fb1eee040424cd314fd60dd0621fe17bff440653e50"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/regenerated-CMakeCache.txt",
+      "bytes": 30235,
+      "sha256": "4370c59a693599c441178bf55018a0146096fbee28a4978e2feed3787b0c1533"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/regenerated-compile_commands.json",
+      "bytes": 74100,
+      "sha256": "a389156693a899dd1e8e49dcded86ead66c6d78c82a3a6c20baa0f9f253d52cc"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/regenerated-flags.make",
+      "bytes": 7148,
+      "sha256": "56417435b4ea585081fcea2df7fb27137b146ee27c11a8a9c1428ef8a9a7bb25"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/regenerated-build.make",
+      "bytes": 49676,
+      "sha256": "756054c4229652baf43b539ee379e398dcf24668895c560212383974228c4cd0"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/regenerated-link.txt",
+      "bytes": 759,
+      "sha256": "d9d50ed84770a8bff5af2371e19245200d99d61fe3cda28e880bd88e6669e428"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/regenerated-link.d",
+      "bytes": 1290,
+      "sha256": "a10ae257f2d0672f5ce8048b889fd83ee656e715aa87561d769d848f79f53a28"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/regenerated-mckernel_rust.d",
+      "bytes": 11356,
+      "sha256": "baa2b8618f2f186c613240a5ebad22e8df9415a559bc857ca2840415c7be92b6"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/regenerated-mckernel_rust.raw.d",
+      "bytes": 12144,
+      "sha256": "4462eced7dc38378f647dd6d1bc99e3f9541b91b64e3ca8bab5511faa9eed892"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/regenerated-Rust-build.make",
+      "bytes": 19122,
+      "sha256": "04e99de5d099a372b42d6ac9e89450a03640635d50d47e529056f4330e1b83df"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/C-tables-and-ABI-rodata.stdout",
+      "bytes": 12403,
+      "sha256": "cd24f9989c4e9abb9a5f43867ee2f0a90f7b49056537d3d5ac129f20f5d90c2c"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/Rust-ABI104-rodata.stdout",
+      "bytes": 3493,
+      "sha256": "5cf0ff94aa51ca969326fd7a596457e0eeb90fb86e8aac156de3c39aef6344db"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/image-tables-and-ABI-rodata.stdout",
+      "bytes": 58567,
+      "sha256": "5dea8c96b90bb414ed1080998e0ecf2fa21e9b84d60bcb2e93022aa947b0a1a1"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/new-syscall_do_syscall3_bridge-Rust-disassembly.stdout",
+      "bytes": 223734,
+      "sha256": "f315f51883be2901fd7ac620a705dcf083f300131722e182c48c5dd8c7f6a5ad"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/new-syscall_do_syscall3_bridge-final-disassembly.stdout",
+      "bytes": 2663,
+      "sha256": "b19491d82062dea295e45347d41dc17e9f2e100a59be4144653fd9bcf877fafc"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/new-syscall_policy_do_syscall3_bridge-Rust-disassembly.stdout",
+      "bytes": 221700,
+      "sha256": "5d7236fcb6e944f889cce77cd627de039b0a9fa3c3c9115c21629b06a61ee087"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/new-syscall_policy_do_syscall3_bridge-final-disassembly.stdout",
+      "bytes": 169,
+      "sha256": "bcec9d4de28a0c3c48f8d30c5e4fd61daf63bf8567393b6f79a89cb86e050837"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/new-clear_host_pte_log_bridge-Rust-disassembly.stdout",
+      "bytes": 222173,
+      "sha256": "115e7ec960612673a839f23bff38c4f99fe2a1fe05352a237d2d6349d878ebe4"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/new-clear_host_pte_log_bridge-final-disassembly.stdout",
+      "bytes": 706,
+      "sha256": "903dab907590a902f55364b9f53905f6cb450d6ec8bbf3eabd2c52f1c9b9c07f"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/new-do_munmap_clear_host_bridge-Rust-disassembly.stdout",
+      "bytes": 221999,
+      "sha256": "02a3c9d98d9963ed054fbf1dbf08c421b0e54624ea8d06bc1dcfc584364be86c"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/new-do_munmap_clear_host_bridge-final-disassembly.stdout",
+      "bytes": 513,
+      "sha256": "320b5389d0ee48f04a4ca55452550ce1d60b06fb1858153c7d89333c4d7f8dcb"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/new-do_munmap_set_host_bridge-Rust-disassembly.stdout",
+      "bytes": 223286,
+      "sha256": "1f8531c4f2927572d19b5e44e5f99a03bd61d78bd38d09c7739addf1cb1b5ade"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/new-do_munmap_set_host_bridge-final-disassembly.stdout",
+      "bytes": 2093,
+      "sha256": "8972a0c7780e508814c9aae97e98de72b6fc5679e637d44a629113cbf4c70c4d"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/new-ptrace_wakeup_sig-Rust-disassembly.stdout",
+      "bytes": 239989,
+      "sha256": "2345434f5a14706cec61b65ce0a35c7bac4fa5e9cc51f4090cfdc4d7d882b170"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/new-ptrace_wakeup_sig-final-disassembly.stdout",
+      "bytes": 22347,
+      "sha256": "5268884f0a17964f7bdb5acf3c4f32f46068853c0f0917ca12930ef2f559505e"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/new-ptrace_wakeup_update_lock_bridge-Rust-disassembly.stdout",
+      "bytes": 221700,
+      "sha256": "5d7236fcb6e944f889cce77cd627de039b0a9fa3c3c9115c21629b06a61ee087"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/new-ptrace_wakeup_update_lock_bridge-final-disassembly.stdout",
+      "bytes": 169,
+      "sha256": "bcec9d4de28a0c3c48f8d30c5e4fd61daf63bf8567393b6f79a89cb86e050837"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/new-ptrace_wakeup_update_unlock_bridge-Rust-disassembly.stdout",
+      "bytes": 221700,
+      "sha256": "5d7236fcb6e944f889cce77cd627de039b0a9fa3c3c9115c21629b06a61ee087"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/new-ptrace_wakeup_update_unlock_bridge-final-disassembly.stdout",
+      "bytes": 169,
+      "sha256": "bcec9d4de28a0c3c48f8d30c5e4fd61daf63bf8567393b6f79a89cb86e050837"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/new-ptrace_detach_kfree_bridge-Rust-disassembly.stdout",
+      "bytes": 222130,
+      "sha256": "6ed1d3dd6b3580aacb353e7cd46daa74bf2565f773df5dca287d22d2b9827912"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/new-ptrace_detach_kfree_bridge-final-disassembly.stdout",
+      "bytes": 653,
+      "sha256": "7d7f6f69bc5d5e116b2d732021bd29a2a026ee6a2fc0f45204f4b84efa7eca70"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/new-ptrace_detach_do_kill_bridge-Rust-disassembly.stdout",
+      "bytes": 221993,
+      "sha256": "f2c7df722b1302c94e1b1ff8a60e2f42b145efad448a686194f0c1d34f51d278"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/new-ptrace_detach_do_kill_bridge-final-disassembly.stdout",
+      "bytes": 514,
+      "sha256": "ebbc75320c7e62e4395ac43b530edde34f6b4a0006a4939fa0136ef0e2467d98"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/new-ptrace_detach_wakeup_bridge-Rust-disassembly.stdout",
+      "bytes": 222051,
+      "sha256": "4da25ba285a68f5cf80b30c5b20db211a57488e80d849ce8a9e4af1747cd9848"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/new-ptrace_detach_wakeup_bridge-final-disassembly.stdout",
+      "bytes": 570,
+      "sha256": "269bd510eff26d6f1e745fe2a861d449f737add99776907a83e18dbe1145233d"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/new-ptrace_wakeup_log_bridge-Rust-disassembly.stdout",
+      "bytes": 222661,
+      "sha256": "e0c347ce882c599ce2e356854ca60870d28f9b153677d1cd3b1ad2468050ea8b"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/new-ptrace_wakeup_log_bridge-final-disassembly.stdout",
+      "bytes": 1196,
+      "sha256": "978cf2f2ab5497387b12257eb1094dae4a27cef2855a81d61323ebced20c5e94"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/new-syscall_policy_forward_context_bridge-Rust-disassembly.stdout",
+      "bytes": 221700,
+      "sha256": "5d7236fcb6e944f889cce77cd627de039b0a9fa3c3c9115c21629b06a61ee087"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/new-syscall_policy_forward_context_bridge-final-disassembly.stdout",
+      "bytes": 169,
+      "sha256": "bcec9d4de28a0c3c48f8d30c5e4fd61daf63bf8567393b6f79a89cb86e050837"
+    }
+  ],
+  "original_acceptance": false
+}

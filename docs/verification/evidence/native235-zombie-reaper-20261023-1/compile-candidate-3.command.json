@@ -1,0 +1,16 @@
+{
+  "purpose": "Functional OS only; no security testing. Compile exact ownership/cancellation bodies with bounded one-codegen-unit resource correction, CPU6 512MiB.",
+  "argv": [
+    "taskset",
+    "-c",
+    "6",
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+    "--edition=2021",
+    "--test",
+    "-Ccodegen-units=1",
+    "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/candidate-actual.rs",
+    "-o",
+    "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/candidate-actual"
+  ],
+  "RUST_MIN_STACK": "1048576"
+}

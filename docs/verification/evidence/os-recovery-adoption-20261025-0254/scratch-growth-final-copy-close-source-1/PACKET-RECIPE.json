@@ -1,0 +1,181 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_NO_EXECUTABLE_RELEASE",
+  "output": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-SCRATCH-GROWTH-FINAL-COPY-CLOSE-1",
+  "root_output_required": "new root:root directory mode0700; no replacing old output",
+  "argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/scratch-growth-final-copy-close-source-1/recover_growth_custody.py",
+    "--packet-ref",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-SCRATCH-GROWTH-FINAL-COPY-CLOSE-1/PACKET-REF.json"
+  ],
+  "reviewed_process_profile": {
+    "affinity_subset_of": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "address_space_hard_max": 2147483648,
+    "core": 0,
+    "no_child": true
+  },
+  "copy_packet_base": {
+    "phase": "COPY_ONLY",
+    "target": {
+      "pid": 1289073,
+      "birth": 85353159,
+      "parent": 1289070,
+      "pgid": 1289064,
+      "fd": 4,
+      "origin": 1281419
+    },
+    "output": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-SCRATCH-GROWTH-FINAL-COPY-CLOSE-1",
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "fixed_cutoffs": [
+      1793100290.0,
+      882395.5689528405,
+      897734.6960034363
+    ],
+    "command_hex": "2f686f6d652f686f6c64656e2f616e61636f6e6461332f62696e2f707974686f6e33002d49002d42002f686f6d652f686f6c64656e2f6d636b65726e656c2f646f63732f766572696669636174696f6e2f65766964656e63652f6f732d7265636f766572792d61646f7074696f6e2d32303236313032352d303235342f736372617463682d67726f7774682d66696e616c2d636f70792d636c6f73652d736f757263652d312f7265636f7665725f67726f7774685f637573746f64792e7079002d2d7061636b65742d726566002f686f6d652f686f6c64656e2f6d636b65726e656c2f646f63732f766572696669636174696f6e2f65766964656e63652f6f732d7265636f766572792d61646f7074696f6e2d32303236313032352d303235342f524f4f542d534352415443482d47524f5754482d46494e414c2d434f50592d434c4f53452d312f5041434b45542d5245462e6a736f6e00",
+    "sources": {
+      "recover_growth_custody.py": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/scratch-growth-final-copy-close-source-1/recover_growth_custody.py",
+        "bytes": 20587,
+        "sha256": "04b5c6af885baca472e99e590bf07ae360dacad95487709477cf3d2bf8d6c90a"
+      },
+      "ofd_primitives.py": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/scratch-growth-final-copy-close-source-1/ofd_primitives.py",
+        "bytes": 4830,
+        "sha256": "d8061516ada688a956ebb134a977ae4cb69e4a1b36aaaeefaa0126323f12e818"
+      },
+      "ACTUAL-TARGET-PINS.json": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/scratch-growth-final-copy-close-source-1/ACTUAL-TARGET-PINS.json",
+        "bytes": 5199,
+        "sha256": "66cfa6a5487440a517be3aa3cce6f5b232268a6f1f87eed4001a8ef64f43467c"
+      },
+      "canonical_os_goal_credits.py": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/scratch-growth-final-copy-close-source-1/canonical_os_goal_credits.py",
+        "bytes": 5178,
+        "sha256": "adf5187240ed8199746eef3b59b79d4d38c4ae8ac5821c8d8324833926b21ec3"
+      }
+    },
+    "actual_target_pins": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/scratch-growth-final-copy-close-source-1/ACTUAL-TARGET-PINS.json",
+      "bytes": 5199,
+      "sha256": "66cfa6a5487440a517be3aa3cce6f5b232268a6f1f87eed4001a8ef64f43467c"
+    },
+    "qualified_postconditions": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-SCRATCH-GROWTH-SDK7-ADMISSION-1/INDEPENDENT-QUALIFIED-ONLINE-POSTCONDITIONS.json",
+      "bytes": 1046,
+      "sha256": "f1d8868f057fcb8b85cb8b1a12ddd65d86c3032bc461f30ed861713f7346b57b"
+    }
+  },
+  "copy_completion": {
+    "add_field": "copy_review",
+    "decision": "PASS_COPY_ONLY",
+    "binding": "SHA256 canonical copy_packet_base; reviewer independent, implementation_ownership false; exact root-owned review ref"
+  },
+  "packet_ref_file": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-SCRATCH-GROWTH-FINAL-COPY-CLOSE-1/PACKET-REF.json",
+    "content": "exact path/bytes/sha256 reference to root-owned COPY-PACKET.json after adding copy_review"
+  },
+  "retire_mailbox": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-SCRATCH-GROWTH-FINAL-COPY-CLOSE-1/RETIRE.json",
+    "envelope_keys": [
+      "payload",
+      "review"
+    ],
+    "payload_base": {
+      "action": "RETIRE",
+      "author": "/root",
+      "target": {
+        "pid": 1289073,
+        "birth": 85353159,
+        "parent": 1289070,
+        "pgid": 1289064,
+        "fd": 4,
+        "origin": 1281419
+      },
+      "qualified_postconditions": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-SCRATCH-GROWTH-SDK7-ADMISSION-1/INDEPENDENT-QUALIFIED-ONLINE-POSTCONDITIONS.json",
+        "bytes": 1046,
+        "sha256": "f1d8868f057fcb8b85cb8b1a12ddd65d86c3032bc461f30ed861713f7346b57b"
+      },
+      "signal": 9,
+      "target_pidfd_signal_count": 1
+    },
+    "required_actual_refs": [
+      "ready=new RAWREADY ref",
+      "source_packet=actual new COPY-PACKET ref"
+    ],
+    "fresh_fields": [
+      "nonce32hex",
+      "expires_wall within fixed cutoff"
+    ],
+    "review": "PASS_RETIRE_ONLY + exact canonical payload_sha256"
+  },
+  "close_mailbox": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-SCRATCH-GROWTH-FINAL-COPY-CLOSE-1/CLOSE.json",
+    "envelope_keys": [
+      "payload",
+      "review"
+    ],
+    "payload_base": {
+      "action": "CLOSE",
+      "author": "/root",
+      "target": {
+        "pid": 1289073,
+        "birth": 85353159,
+        "parent": 1289070,
+        "pgid": 1289064,
+        "fd": 4,
+        "origin": 1281419
+      },
+      "qualified_postconditions": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-SCRATCH-GROWTH-SDK7-ADMISSION-1/INDEPENDENT-QUALIFIED-ONLINE-POSTCONDITIONS.json",
+        "bytes": 1046,
+        "sha256": "f1d8868f057fcb8b85cb8b1a12ddd65d86c3032bc461f30ed861713f7346b57b"
+      }
+    },
+    "required_actual_refs": [
+      "ready=new RAWREADY ref",
+      "source_packet=actual new COPY-PACKET ref",
+      "pidfd_exit=new PIDFD-EXIT ref",
+      "old_actual_joins=actual parent1289070/birth85353151/tool44584 joins",
+      "current_fs_acceptance=separate independent current physical acceptance while final copy held"
+    ],
+    "fresh_fields": [
+      "nonce32hex",
+      "expires_wall within fixed cutoff"
+    ],
+    "old_actual_joins": {
+      "decision": "PASS_ACTUAL_OLD_GROWTH_CALLER_TOOL_JOIN",
+      "old_target": {
+        "pid": 1289073,
+        "birth": 85353159,
+        "parent": 1289070,
+        "pgid": 1289064,
+        "fd": 4,
+        "origin": 1281419
+      },
+      "caller": {
+        "pid": 1289070,
+        "birth": 85353151
+      },
+      "tool_cell_id": "44584",
+      "required_true": [
+        "caller_positive_wait",
+        "tool_positive_join",
+        "group_absent",
+        "closed_streams"
+      ],
+      "required_actual_evidence_min": 2,
+      "pidfd_exit": "exact new PIDFD-EXIT ref"
+    },
+    "review": "PASS_CLOSE_ONLY + exact canonical payload_sha256"
+  },
+  "after_normal_close": "Root genuinely joins this new helper parent and tool; typed final closure binds real NORMAL-CLOSE and new_actual_joins; first helper and original growth normal-close claims remain false."
+}

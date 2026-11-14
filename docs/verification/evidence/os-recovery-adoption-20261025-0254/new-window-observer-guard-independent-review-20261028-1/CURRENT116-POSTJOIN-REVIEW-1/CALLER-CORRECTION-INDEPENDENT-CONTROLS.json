@@ -1,0 +1,24 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_INDEPENDENT_CPU0_CALLER_REAL_CHILD_TESTS",
+  "source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/profile-caller-correction-source-1/owned_capture.py",
+    "bytes": 4901,
+    "sha256": "8bdb6ed7f0a3d001116608fcfb1f20451a9d25fb987312e5708e9e3936b0341e"
+  },
+  "test": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/profile-caller-correction-source-1/test_owned_capture.py",
+    "bytes": 2091,
+    "sha256": "e3d8804f2c680aca885cf775e3386fe8206ce4c80d8925dc60dd59c7be616b2a"
+  },
+  "test_methods": 2,
+  "output": "test_failed_child_retains_return_and_error (independent_caller_correction_tests.CaptureTests) ... ok\ntest_real_child_affinity_and_join (independent_caller_correction_tests.CaptureTests) ... ok\n\n----------------------------------------------------------------------\nRan 2 tests in 0.188s\n\nOK\n",
+  "actual_real_fixture_children": 2,
+  "actual_observer_or_Docker_or_guard_or_capture_calls": 0,
+  "CPU0_affinity_proven_in_actual_child_stdout": true,
+  "PID_birth_start_join_match": true,
+  "failed_child_rc7_stderr_retained": true,
+  "repeat_once_claim_refused": true,
+  "temporary_fixture_outputs_confined": true,
+  "runtime_authority": null
+}

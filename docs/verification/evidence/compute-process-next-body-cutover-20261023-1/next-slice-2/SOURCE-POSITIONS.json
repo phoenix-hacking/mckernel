@@ -1,0 +1,157 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ACTUAL_SOURCE_POSITIONS_FOR_FOCUSED_PRIVATE_LEAF",
+  "rows": [
+    {
+      "label": "original selected C body preserved exactly as fallback",
+      "source": {
+        "path": "/home/holden/mckernel/kernel/process.c",
+        "sha256": "9e3cdea2027618ce954b80f2436ed44ef16e2df448c83a5b3734d77ffb161798",
+        "bytes": 161155
+      },
+      "line": 4918,
+      "marker": "void sched_request_migrate(int cpu_id, struct thread *thread)",
+      "scope": "actual current canonical"
+    },
+    {
+      "label": "original existing C request type",
+      "source": {
+        "path": "/home/holden/mckernel/kernel/process.c",
+        "sha256": "9e3cdea2027618ce954b80f2436ed44ef16e2df448c83a5b3734d77ffb161798",
+        "bytes": 161155
+      },
+      "line": 4090,
+      "marker": "struct migrate_request {",
+      "scope": "actual current canonical"
+    },
+    {
+      "label": "existing C logging callback; private change linkage only",
+      "source": {
+        "path": "/home/holden/mckernel/kernel/process.c",
+        "sha256": "9e3cdea2027618ce954b80f2436ed44ef16e2df448c83a5b3734d77ffb161798",
+        "bytes": 161155
+      },
+      "line": 418,
+      "marker": "static void process_sched_migrate_log_bridge(",
+      "scope": "actual current canonical"
+    },
+    {
+      "label": "unchanged existing Rust queue/lock/schedule body",
+      "source": {
+        "path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+        "sha256": "5a09c8420d33027483d302ce9f94c350ed2dfdad450a3834214cd224023ab4f8",
+        "bytes": 181991
+      },
+      "line": 2182,
+      "marker": "pub unsafe extern \"C\" fn sched_request_migrate_body_result(",
+      "scope": "actual current canonical"
+    },
+    {
+      "label": "existing reviewed Rust request type",
+      "source": {
+        "path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+        "sha256": "5a09c8420d33027483d302ce9f94c350ed2dfdad450a3834214cd224023ab4f8",
+        "bytes": 181991
+      },
+      "line": 288,
+      "marker": "struct SchedMigrateRequest {",
+      "scope": "actual current canonical"
+    },
+    {
+      "label": "private new Rust wrapper",
+      "source": {
+        "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-2/source/kernel/rust/sched_helpers.rs",
+        "sha256": "75cdf5430eb6ecec8d0cd0c7c10192d678e656427589fda79dd68990fa3d09bd",
+        "bytes": 184886
+      },
+      "line": 2195,
+      "marker": "pub unsafe extern \"C\" fn sched_request_migrate(cpu_id:",
+      "scope": "private proposed production"
+    },
+    {
+      "label": "existing exact Rust entry storage type",
+      "source": {
+        "path": "/home/holden/mckernel/kernel/rust/waitq.rs",
+        "sha256": "246a850a7e305d69d55de5903273e35ba62cc204167cc95acc90973c8f0aaefc",
+        "bytes": 10868
+      },
+      "line": 34,
+      "marker": "pub(crate) struct WaitqEntry {",
+      "scope": "actual current canonical"
+    },
+    {
+      "label": "existing exact Rust initializer used directly",
+      "source": {
+        "path": "/home/holden/mckernel/kernel/rust/waitq.rs",
+        "sha256": "246a850a7e305d69d55de5903273e35ba62cc204167cc95acc90973c8f0aaefc",
+        "bytes": 10868
+      },
+      "line": 201,
+      "marker": "pub unsafe extern \"C\" fn waitq_init_locked_entry(",
+      "scope": "actual current canonical"
+    },
+    {
+      "label": "existing target CPU callback provider",
+      "source": {
+        "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+        "sha256": "526baf9363a0845ad50aade7e9b2296d27c8840527f3510d95a1105fc626d8d3",
+        "bytes": 351847
+      },
+      "line": 5817,
+      "marker": "pub unsafe extern \"C\" fn process_sched_cpu_local_bridge(",
+      "scope": "actual current canonical"
+    },
+    {
+      "label": "existing callback forwards to actual waitq provider",
+      "source": {
+        "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+        "sha256": "526baf9363a0845ad50aade7e9b2296d27c8840527f3510d95a1105fc626d8d3",
+        "bytes": 351847
+      },
+      "line": 5832,
+      "marker": "pub unsafe extern \"C\" fn process_sched_waitq_prepare_bridge(",
+      "scope": "actual current canonical"
+    },
+    {
+      "label": "actual public C declaration",
+      "source": {
+        "path": "/home/holden/mckernel/kernel/include/process.h",
+        "sha256": "8848d536f2fa847a59af72d573ec9c55838c27cea664d46438ab4e038bf83649",
+        "bytes": 26602
+      },
+      "line": 892,
+      "marker": "void sched_request_migrate(int cpu_id, struct thread *thread);",
+      "scope": "actual current canonical"
+    },
+    {
+      "label": "actual C caller bridge extracted unchanged into fixture",
+      "source": {
+        "path": "/home/holden/mckernel/kernel/syscall.c",
+        "sha256": "ebcafd68cc98f31553bdb1674e1be80c2eac26f6a8436ee73978fe2288bb5c61",
+        "bytes": 842954
+      },
+      "line": 24895,
+      "marker": "sched_request_migrate_bridge(int cpu_id, unsigned long thread_addr)",
+      "scope": "actual current canonical"
+    },
+    {
+      "label": "actual Rust affinity callback consumer",
+      "source": {
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "sha256": "4edf51b9c391ddca12fd4505ac1c6b51f6a73e3919f3f1cd49b3ebcb87a38a69",
+        "bytes": 709680
+      },
+      "line": 12141,
+      "marker": "Some(sched_request_migrate_bridge),",
+      "scope": "actual current canonical"
+    }
+  ],
+  "layout": "18 actual C-header/Rust-type words in fixture/fixture.c check_layout versus LEAF_REQUEST_LAYOUT and LEAF_ENTRY_LAYOUT. Existing full actual abi.rs types, existing exact waitq.rs entry types; no model struct layout.",
+  "ownership": "Existing body unchanged: acquire migq lock before runq lock, notify target before migq unlock, schedule then waitq_finish before stack storage expires. Fixture models primitive callbacks and completion; no production migration execution.",
+  "whole_C_TU_default_link_native": "OPEN",
+  "source_position_observer_correction": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-2/SOURCE-POSITIONS-EXPORT-FAILURE-1.json",
+    "sha256": "9647153b99d9e9dac9cfc57c4ecade8bee30ff81cf8f6e137741c0c194770ad6",
+    "bytes": 491
+  }
+}

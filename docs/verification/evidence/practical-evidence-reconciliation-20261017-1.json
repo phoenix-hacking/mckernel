@@ -1,0 +1,111 @@
+{
+  "schema": "mckernel.practical-evidence-reconciliation.v1",
+  "task_id": "practical-evidence-reconciliation-20261017-1",
+  "status": "READY_FOR_INDEPENDENT_SCOPE_REVIEW",
+  "authority": "Dispatcher-authorized one-time mapping of existing accepted evidence to practical-kernel-apps-v1-20261017; PRACTICAL-GOAL.md controls.",
+  "changed_paths": [
+    "docs/verification/os-milestones-20260914/practical-milestones.json",
+    "docs/verification/evidence/practical-evidence-reconciliation-20261017-1.json"
+  ],
+  "worklist": {
+    "path": "/home/holden/mckernel/docs/verification/os-milestones-20260914/practical-milestones.json",
+    "before_sha256": "988c0ddc7bec6b597239d858da72ca27c7605b4f3173a1f9c093de6077277f0c",
+    "after_sha256": "630098c329aead5ca1728a6f175ec2efeb34aa98d3ae795dabdb507951f722d2",
+    "size": 66737
+  },
+  "selected_existing_records": {
+    "signal": {
+      "path": "docs/verification/evidence/signal-mask-restore-current942-result-review-20261017-2.json",
+      "sha256": "cdf22b79380225f43758a1fb6bc51353a8ee95678b94f3c23c91c9f9e950e469",
+      "size": 10751
+    },
+    "calloc": {
+      "path": "docs/verification/evidence/memory-calloc-zero-current942-result-review-20261017-1.json",
+      "sha256": "3e1c5304a48e8f3115cc16c62bcd97d0aac833e6de2c3474c4452ab8b954e6aa",
+      "size": 12255
+    },
+    "file": {
+      "path": "docs/verification/evidence/file-write-read-current942-result-review-20261017-1.json",
+      "sha256": "fc1f8f837c08bd607e00cb2f3799c5ffab1e8e9463889528fc5884407273b0df",
+      "size": 12925
+    },
+    "tls": {
+      "path": "docs/verification/evidence/thread-tls-isolation-current942-result-review-20261017-2.json",
+      "sha256": "94fc8a4b403f69cb5557679fb831104b36e72720b6fac9c964f23326b30aedbd",
+      "size": 12788
+    },
+    "mutex": {
+      "path": "docs/verification/evidence/thread-mutex-counter-bounded-stacks-current942-result-review-20261017-1.json",
+      "sha256": "6941b971ee06faeb2df1c1edd92ff32b769bcb498f4bdbb7bc8f2d4df44d91d7",
+      "size": 17406
+    },
+    "alternate": {
+      "path": "docs/verification/evidence/signal-alternate-repeat-current942-result-review-20261017-1.json",
+      "sha256": "3e6cc72dec97c327d8ad3b4313dcf0c7f293708e2e80bce77686a22d1907d4fa",
+      "size": 49179
+    },
+    "lifecycle_failure": {
+      "path": "docs/verification/evidence/native-lifecycle-current942-failure-review-20261017-1.json",
+      "sha256": "7c53515fc55152f419172e81bb6f0abb72c81a0e64c2cc35f0cd4c9f3e49d4da",
+      "size": 17317
+    },
+    "tls_failure": {
+      "path": "docs/verification/evidence/thread-tls-isolation-current942-failure-review-20261017-1.json",
+      "sha256": "04fee569980a34f5e29f4d7a3396266643ddd78cc63b00fb47c8fb799e8fd17a",
+      "size": 12226
+    },
+    "running_source": {
+      "path": "docs/verification/evidence/native-running-publication-independent-review-20261017-1.json",
+      "sha256": "de20c89c2ed5c27d09a6f6b856b1d0f3f71cf5ad5480d359236bc1a5db39552f",
+      "size": 1133
+    },
+    "baseline_admission": {
+      "path": "docs/verification/evidence/scratch22-authority3-artifact-revalidation-independent-review-20261017.json",
+      "sha256": "f7820e8507f4df666b04f16094e35b027da79a925d121b07df477daebe3efd76",
+      "size": 5608
+    }
+  },
+  "closed_checks": [
+    {
+      "id": "P-M02-03",
+      "scope": "Owner/client/container/QEMU/application-procfs retirement for exactly six accepted current942 diagnostic runs. No native OS restoration claim; changed final-profile runs still require retirement proof."
+    }
+  ],
+  "status_counts": {
+    "complete": 1,
+    "open": 32,
+    "unassessed": 2
+  },
+  "milestone_row_status": "All14rows OPEN until all checks are met. M07checks remain unassessed, not0% engineering.",
+  "engineering_states": "Preserved every existing factual engineering_state; no percentages or legacy gates/counters rescaled.",
+  "summary_updates": [
+    "Five\u2192six accepted current942 diagnostics in runner/integrated summaries.",
+    "Useful-suite, genuine concurrency, native restoration, final artifact validation and bounded session budgets remain open.",
+    "Candidate176 new module build-profile review is next; no new module compile credited.",
+    "Existing baseline artifact bindings are reused from accepted run records; supplied artifact-revalidation independent record is admission-only, not a fresh build."
+  ],
+  "original_failures_preserved": [
+    "native lifecycle failure7c53515f remainsFAIL/no shutdown/restoration/cycle credit.",
+    "Original TLS failure remains retained; accepted retry gets only its documented narrow behavior."
+  ],
+  "limits": [
+    "No tests/builds/guest/root/Git actions or broad evidence audit.",
+    "Six selected launches are not all historical launches, worker vectors,100launch completion or final-profile credit.",
+    "No useful C+Ruststd suite, main-stack restoration, native cycles, CPU/memory restoration,60minute run or final practical completion inferred.",
+    "Practical closure awaits independent review of this update; no automatic application acceptance."
+  ],
+  "read_note": "Initial read requested PRACTICAL-GOAL.md at repository root; file is in supplied milestone directory. Corrected the read path only; no validation failure or source change.",
+  "environment": {
+    "python_executable": "/home/holden/anaconda3/bin/python3",
+    "cpu_affinity": [
+      6
+    ],
+    "address_space_bytes": 1073741824,
+    "cpu_seconds": 90,
+    "wall_seconds": 120,
+    "private_HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/home",
+    "private_TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/tmp"
+  },
+  "blocker": null,
+  "next_task": "Dispatcher independent scope/closure review, then normal checkpoint; continue candidate176 reviewed build and real lifecycle repair."
+}

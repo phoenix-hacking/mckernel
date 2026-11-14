@@ -1,0 +1,67 @@
+{
+  "actual_request_sha256": "590086796ab34e9e4cccdba33e2c43abcecfadc4281eeabe9a27096a8d211954",
+  "baseline": {
+    "path": "/home/holden/mckernel/scripts/native_fpu_copy_image_terminal_cleanup.py",
+    "sha256": "da47b674d6a849750ecb829319b3053734c14437535f74a41e049ec6966f088b"
+  },
+  "baseline_tests": {
+    "path": "/home/holden/mckernel/scripts/tests/test_native_fpu_copy_image_terminal_cleanup.py",
+    "sha256": "bcfc1dedb94fa1b4306dcc76677762b48d885373cd269426345be8bc9cd4c144"
+  },
+  "blocking_findings": [],
+  "changed_top_level_constants": [
+    "PUBLISHED_SCRIPT",
+    "PUBLISHED_TESTS",
+    "NAMESPACE",
+    "NAMESPACE_ANCESTRY",
+    "NAMESPACE_BINDING",
+    "PREFIX",
+    "ATTEMPT",
+    "REQUEST",
+    "LEASE",
+    "OUTPUT",
+    "EVIDENCE",
+    "KNOWN_TARGET",
+    "REQUEST_SHA"
+  ],
+  "checks": [
+    "All source request roots and selected thin materialization pins match current actual candidate.",
+    "All42 function ASTs unchanged except exact reviewed source/guard literal rebinding; entire nonfunction AST unchanged outside13named top-level constants.",
+    "Git commit/tree and published source/test blob verification gates unchanged; source publication required before future cleanup release.",
+    "Existing accepted16-test suite not replayed; changes are source binding literals only."
+  ],
+  "cleanup": false,
+  "contract_sha256": "a6732eb0c454aff0bb9f256f5d689592f59a1ae653ba7e6b484ccc64de6190ff",
+  "decision": "PASS_EXACT_TWO_FILE_SOURCE_PUBLICATION_ONLY",
+  "docker": false,
+  "execution_released": false,
+  "function_ast_count": 42,
+  "functions_equal_after_exact_candidate_literal_normalization": true,
+  "git": false,
+  "implementation_ownership": false,
+  "live_namespace_ancestry_matched": true,
+  "publication_allowlist": [
+    {
+      "private": "/home/holden/mckernel-work/scratch/rust-image-terminal-preparation-20261018-1/publication/scripts/native_rust_cutover_image_terminal_cleanup.py",
+      "published": "/home/holden/mckernel/scripts/native_rust_cutover_image_terminal_cleanup.py",
+      "sha256": "5b52d698e88d51e9d38c39f274f3ca31705c3b5b47b987231adf8f94e25ccf25"
+    },
+    {
+      "private": "/home/holden/mckernel-work/scratch/rust-image-terminal-preparation-20261018-1/publication/scripts/tests/test_native_rust_cutover_image_terminal_cleanup.py",
+      "published": "/home/holden/mckernel/scripts/tests/test_native_rust_cutover_image_terminal_cleanup.py",
+      "sha256": "605c9372f75bac6770ac6e804b7d222c0324a6d9cb62884a9b78beb7c8ffa73a"
+    }
+  ],
+  "reviewer": "/root/rust_image_terminal_review",
+  "root": false,
+  "schema": "mckernel.rust-image.terminal-engine-publication-source-review.v1",
+  "scope": "Functional kernel/apps and actual Rust compute retirement; terminal archival only",
+  "source_pins": {
+    "/home/holden/mckernel-work/scratch/rust-cutover-image-preparation-20261018-1/materialization-receipt.json": "ebbb262ac54c99210bfd92528d6efb1796b416954c1005df3c39eb4dbb1fe2f1",
+    "/home/holden/mckernel-work/scratch/rust-cutover-image-preparation-20261018-1/thin-inputs.json": "a9d573a089623e001723d102df5eccec994b924a540e992b294cb88b4955465c"
+  },
+  "source_root_inode": 493960,
+  "status": "PASS",
+  "test_change": "Only three source filename literals changed, including normal default layout; full test source otherwise byte-for-byte equal after substitution.",
+  "typed_source_consumer_executed_without_effect": true
+}

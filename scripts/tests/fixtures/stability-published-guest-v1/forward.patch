@@ -1,0 +1,233 @@
+--- a/prepare_stability_guest.py
++++ b/prepare_stability_guest.py
+@@ -2 +2,6 @@
+-"""Prepare an isolated transport-fault root; never starts QEMU or a payload."""
++"""Prepare ONLY mode2's isolated acknowledged-publication guest root.
++
++Derived from the retained original fault stager; no compiler or process launch.
++The prepared root remains blocked on a separate compiled-stack readiness review.
++This helper never grants guest release, transport credit or application acceptance.
++"""
+@@ -12,0 +18,9 @@
++
++ORIGINAL_STAGER_SHA256 = '0b45f00a6ed72b8b55b25f27261650e14b32e43e398ee2005ffeb5a16ac78d82'
++MODULE_RECORD_SHA256 = '3bded4f7bfc206b4e64b03a58243d0e3a7783a5a493dd4095be5916a07e7ed48'
++PREPARATION_RECORD_SHA256 = 'e7e2e6b8caa8e7c4deaffcbfd87f7d53bbb9b04b19dd7c574e9ace670520c0b2'
++CONTROLLER_RECORD_SHA256 = '561090585ba7316ad7b03716e5e430586fc13180bad0f0fe448a133ea1f4546c'
++CONTROLLER_SOURCES = {
++    'controller.c': 'b8360dc502d53ee537e462815657d85510488a1820c10501c38cb49150b52d3c',
++    'phase_client.h': '929f9fd03793f6006056219bc6d75451ed9c2e6a856a938997bbf8663b8a6e6d',
++}
+@@ -86,3 +100,2 @@
+-    assert args.mode in ('prepublish-hard', 'permanent-backpressure')
+-    if args.mode == 'permanent-backpressure':
+-        assert args.controller_profile == 'owner-phase-v2' and args.payload_profile == 'runnable-thread-v1'
++    assert args.mode == 'postpublish-notify', 'mode3 requires separate eight-HELLO composition'
++    assert args.controller_profile == 'owner-published-hold-v1' and args.payload_profile == 'runnable-thread-v1'
+@@ -89,0 +103 @@
++    assert args.output.parent == work and args.output == args.output.resolve(), 'fresh canonical direct child of /work required'
+@@ -95,0 +110 @@
++                  controller_protocol='STF2', phase_ioctl_version=2, phase_ioctl_command='0xc100f502',
+@@ -97 +112,4 @@
+-                  transport_acceptance=False, production_gate_credit=False)
++                  transport_acceptance=False, production_gate_credit=False,
++                  guest_release_ready=False, compiled_stack_readiness=dict(status='PENDING_ACTUAL_REVIEW'),
++                  verified_read_only_inputs=[])
++    observed_inputs = {}
+@@ -102 +120,13 @@
+-    def load(directory, expected):
++    def verify(row):
++        path = Path(row['path'])
++        assert path.is_absolute()
++        data = path.read_bytes()
++        assert dict(path=str(path), size=len(data), sha256=hashlib.sha256(data).hexdigest()) == row, path
++        if path in observed_inputs:
++            assert observed_inputs[path] == row, path
++        else:
++            observed_inputs[path] = row
++            record['verified_read_only_inputs'].append(row)
++        return data
++
++    def load(directory, expected, expected_sha256=None):
+@@ -104 +134,5 @@
+-        data = json.loads(path.read_text())
++        raw = path.read_bytes()
++        row = dict(path=str(path), size=len(raw), sha256=hashlib.sha256(raw).hexdigest())
++        if expected_sha256 is not None:
++            assert row['sha256'] == expected_sha256, path
++        data = json.loads(raw)
+@@ -106 +140,5 @@
+-        record['inputs'].append(identity(path))
++        target = args.output / 'input-records' / str(path).lstrip('/')
++        target.parent.mkdir(parents=True, exist_ok=True)
++        target.write_bytes(raw)
++        assert verify(row) == raw
++        record['inputs'].append(row)
+@@ -108,0 +147,8 @@
++    def completed(command):
++        collected = command['collection']
++        assert collected['status'] == 'COMPLETED' and collected['raw_wait_status'] == 0 and collected['cleanup_complete']
++        for stream in collected['streams'].values():
++            assert stream['eof'] and not stream['truncated'] and stream['discarded_observed_bytes'] == 0
++            assert stream['bytes_observed'] == stream['bytes_retained'] == stream['artifact']['size']
++            verify(stream['artifact'])
++
+@@ -110,3 +156,4 @@
+-        expected = next(row for row in rows if row['path'] == str(source))
+-        data = source.read_bytes()
+-        assert dict(path=str(source), size=len(data), sha256=hashlib.sha256(data).hexdigest()) == expected, source
++        matches = [row for row in rows if row['path'] == str(source)]
++        assert len(matches) == 1, source
++        expected = matches[0]
++        data = verify(expected)
+@@ -119,0 +167,5 @@
++        original_stager = Path(__file__).parent / 'fixtures/stability-published-guest-v1/prepare_stability_fault_guest.py.original'
++        original = original_stager.read_bytes()
++        assert hashlib.sha256(original).hexdigest() == ORIGINAL_STAGER_SHA256
++        (args.output / 'prepare_stability_fault_guest.py.original').write_bytes(original)
++        record['derived_original_stager'] = identity(original_stager)
+@@ -122 +174,2 @@
+-        module_record = load(args.module, 'PASS_BUILD_ONLY')
++        assert args.module == work / 'stability-published-hold-module-20260913-postpublish-notify-1'
++        module_record = load(args.module, 'PASS_BUILD_ONLY', MODULE_RECORD_SHA256)
+@@ -124,0 +178,38 @@
++        assert module_record['phase_wiring'] == 'PRIVATE_VERSION2_ACKNOWLEDGED_PUBLISHED_HOLD'
++        assert module_record['actual_stack_frames_verified'] is False
++        preparation_path = Path(module_record['preparation_record']['path'])
++        assert preparation_path == work / 'stability-published-source-20260913-postpublish-notify-2/record.json'
++        verify(module_record['preparation_record'])
++        preparation = load(preparation_path.parent, 'PREPARED_PUBLISHED_HOLD_NO_BUILD_NO_EXECUTION', PREPARATION_RECORD_SHA256)
++        assert verify(module_record['preparation_record']) == (args.module / 'preparation-record.json').read_bytes()
++        assert preparation['mode'] == args.mode and preparation['phase_wiring'] == module_record['phase_wiring']
++        assert preparation['shared_production_trees_restored'] and preparation['verification_only']
++        assert module_record['prepared_source_before_format'] == preparation['complete_published_source']
++        assert inventory(args.module / 'combined-source') == preparation['complete_published_source']
++        assert module_record['held_stage_record'] == preparation['held_stage_record']
++        held_path = Path(module_record['held_stage_record']['path'])
++        verify(module_record['held_stage_record'])
++        held = load(held_path.parent, 'PREPARED_NOT_COMPILED_NOT_EXECUTED')
++        assert held['mode'] == args.mode and held['version'] == 2 and held['command'] == '0xc100f502'
++        assert verify(module_record['held_stage_record']) == (args.module / 'held-stage-record.json').read_bytes()
++        assert module_record['published_fixture_inputs'] == preparation['published_fixture_inputs']
++        for row in preparation['fixture_inputs'] + preparation['published_fixture_inputs']:
++            verify(row)
++        compiler_inputs = {row['path']: row for row in module_record['compiler_inputs']}
++        compiler_bindings = module_record['retained_compiler_bindings']
++        assert len(compiler_inputs) == len(module_record['compiler_inputs']) == len(compiler_bindings) == 63
++        assert {row['historical_compile_path'] for row in compiler_bindings} == set(compiler_inputs)
++        for binding in compiler_bindings:
++            retained = binding['retained']
++            verify(retained)
++            original = compiler_inputs[binding['historical_compile_path']]
++            assert (retained['size'], retained['sha256']) == (original['size'], original['sha256'])
++        for command in module_record['commands']:
++            completed(command)
++        for row in module_record['compiled_modules']:
++            verify(row)
++        record['module_compiler_bindings'] = compiler_bindings
++        record['compiled_stack_readiness'] = dict(
++            status='PENDING_ACTUAL_REVIEW', module_record=identity(args.module / 'record.json'),
++            compiled_modules=module_record['compiled_modules'], actual_stack_frames_verified=False,
++            required='Separate independently reviewed actual compiled frame/chain readiness bound to these module bytes; runner must join before guest release.')
+@@ -126,0 +218 @@
++            assert reuse == preparation['reused_owner_parser_tests']
+@@ -135,5 +227 @@
+-            collected = checks[0]['collection']
+-            assert collected['status'] == 'COMPLETED' and collected['raw_wait_status'] == 0 and collected['cleanup_complete']
+-            for stream in collected['streams'].values():
+-                assert stream['eof'] and not stream['truncated'] and stream['discarded_observed_bytes'] == 0
+-                assert identity(Path(stream['artifact']['path'])) == stream['artifact']
++            completed(checks[0])
+@@ -142 +230,3 @@
+-                for proof in (prior, module_record):
++                # The new build has published_fixture_inputs, not the original
++                # observer/parser fixtures. They belong to its exact preparation.
++                for proof in (prior, preparation):
+@@ -144 +234,2 @@
+-                    assert len(matches) == 1 and identity(Path(matches[0]['path'])) == matches[0]
++                    assert len(matches) == 1
++                    verify(matches[0])
+@@ -147 +238,2 @@
+-            record['reused_owner_parser_validation'] = dict(reference=identity(prior_path), passed_cases=19, rerun=False)
++            record['reused_owner_parser_validation'] = dict(reference=identity(prior_path),
++                preparation_record=identity(preparation_path), passed_cases=19, rerun=False)
+@@ -149 +241 @@
+-            assert module_record['owner_parser_tests'] == 19
++            raise AssertionError('exact original19 owner-parser reuse proof required')
+@@ -156,21 +248,28 @@
+-        controller, controller_record = utility1, first
+-        if args.controller_profile == 'owner-phase-v2':
+-            controller = work / 'stability-owner-terminal-controller-build-20260913-1'
+-            controller_record = load(controller, 'PASS_BUILD_ONLY')
+-            assert controller_record['controller_profile'] == args.controller_profile
+-            assert controller_record['controller_source']['sha256'] == '7b1115f4c744d32bb085f23b515e35bcfab4cf0efa6f2e3cb5827742876511e2'
+-            for row in controller_record['compiler_dependencies'] + controller_record['compiled_outputs']:
+-                assert identity(Path(row['path'])) == row
+-        else:
+-            assert args.controller_profile == 'owner-phase-v1'
+-        if args.payload_profile == 'single-thread-v1':
+-            payload = work / 'stability-transport-infrastructure-20260913-1'
+-            payload_record = load(payload, 'FAIL')
+-        else:
+-            assert args.payload_profile == 'runnable-thread-v1'
+-            payload = work / 'stability-runnable-thread-payload-build-20260913-1'
+-            payload_record = load(payload, 'PASS_BUILD_ONLY')
+-            assert payload_record['payload_profile'] == args.payload_profile
+-            assert payload_record['payload_source']['sha256'] == 'dbc68dc4e981c0ed3433491747b4dcd7a031548fbd84bddbd8e98361d4681491'
+-            for row in payload_record['compiler_dependencies'] + payload_record['compiled_outputs']:
+-                assert identity(Path(row['path'])) == row
++        controller = work / 'stability-published-client-tests-20260913-1'
++        controller_record = load(controller, 'PASS_PUBLISHED_CONTROLLER_BUILD_AND_CLIENT_METADATA_ONLY', CONTROLLER_RECORD_SHA256)
++        assert controller_record['passed_cases'] == 81 and controller_record['guest_execution'] is False
++        for name, expected_hash in CONTROLLER_SOURCES.items():
++            pairs = [row for row in controller_record['inputs'] if row['retained']['path'] == str(controller / name)]
++            assert len(pairs) == 1
++            pair = pairs[0]
++            assert pair['original']['sha256'] == pair['retained']['sha256'] == expected_hash
++            assert pair['original']['size'] == pair['retained']['size']
++            verify(pair['retained'])
++            compiled = [row for row in controller_record['compiler_dependencies'] if row['original']['path'] == str(controller / name)]
++            assert len(compiled) == 1 and compiled[0]['original'] == pair['retained']
++        for pair in controller_record['compiler_dependencies']:
++            verify(pair['retained'])
++            assert (pair['retained']['size'], pair['retained']['sha256']) == (pair['original']['size'], pair['original']['sha256'])
++        for row in controller_record['compiled_outputs']:
++            verify(row)
++        for command in controller_record['commands']:
++            completed(command)
++        record['controller_compiler_bindings'] = controller_record['compiler_dependencies']
++        record['controller_source_bindings'] = [row for row in controller_record['inputs']
++            if row['retained']['path'] in [str(controller / name) for name in CONTROLLER_SOURCES]]
++        payload = work / 'stability-runnable-thread-payload-build-20260913-1'
++        payload_record = load(payload, 'PASS_BUILD_ONLY')
++        assert payload_record['payload_profile'] == args.payload_profile
++        assert payload_record['payload_source']['sha256'] == 'dbc68dc4e981c0ed3433491747b4dcd7a031548fbd84bddbd8e98361d4681491'
++        for row in payload_record['compiler_dependencies'] + payload_record['compiled_outputs']:
++            verify(row)
+@@ -195 +294 @@
+-                (controller / 'owner-controller.elf', root / 'bin/fault-controller', controller_record['compiled_outputs']),
++                (controller / 'controller.elf', root / 'bin/fault-controller', controller_record['compiled_outputs']),
+@@ -205 +304 @@
+-            assert identity(source) == row
++            data = verify(row)
+@@ -208 +307 @@
+-                assert identity(target)['sha256'] == row['sha256'], target
++                assert target.read_bytes() == data, target
+@@ -211 +310 @@
+-                shutil.copyfile(source, target)
++                target.write_bytes(data)
+@@ -312 +411,5 @@
+-        record.update(status='PREPARED_NOT_EXECUTED', root=str(root), root_inventory=inventory(root),
++        for path, row in list(observed_inputs.items()):
++            assert identity(path) == row, 'bound input changed during preparation: ' + str(path)
++        assert original_stager.read_bytes() == (args.output / 'prepare_stability_fault_guest.py.original').read_bytes()
++        assert Path(__file__).read_bytes() == (args.output / 'helper.py').read_bytes()
++        record.update(status='PREPARED_REQUIRES_COMPILED_STACK_REVIEW', root=str(root), root_inventory=inventory(root),
+@@ -327 +430 @@
+-    parser.add_argument('--mode', choices=['prepublish-hard', 'permanent-backpressure'], required=True)
++    parser.add_argument('--mode', choices=['postpublish-notify'], required=True)
+@@ -329,2 +432,2 @@
+-    parser.add_argument('--payload-profile', choices=['single-thread-v1', 'runnable-thread-v1'], default='single-thread-v1')
+-    parser.add_argument('--controller-profile', choices=['owner-phase-v1', 'owner-phase-v2'], default='owner-phase-v1')
++    parser.add_argument('--payload-profile', choices=['runnable-thread-v1'], default='runnable-thread-v1')
++    parser.add_argument('--controller-profile', choices=['owner-published-hold-v1'], default='owner-published-hold-v1')

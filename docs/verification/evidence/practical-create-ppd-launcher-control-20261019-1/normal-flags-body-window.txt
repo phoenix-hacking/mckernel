@@ -1,0 +1,21 @@
+
+    0
+}
+
+#[no_mangle]
+pub extern "C" fn clone_host_parent_flags_result(clone_flags: CInt, ppid_parent_pid: CInt) -> CInt {
+    if (clone_flags & CLONE_PARENT) != 0 && ppid_parent_pid != 1 {
+        clone_flags
+    } else {
+        0
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn clone_report_thread_result(clone_flags: CInt, termsig: CInt) -> CInt {
+    if (clone_flags & CLONE_VM) != 0 && termsig != 0 && termsig != SIGCHLD {
+        1
+    } else {
+        0
+    }
+}

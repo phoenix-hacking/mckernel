@@ -1,0 +1,240 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root/recovery_receipts",
+  "recorded_epoch": 1793306564.204714,
+  "status": "ACTUAL_CURRENT119_FULL_ARTIFACT_EVIDENCE_READY_FOR_INDEPENDENT_REVIEW",
+  "actual_image": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CURRENT119-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/mckernel.img",
+    "bytes": 10298648,
+    "sha256": "759fe1cb2dda4a87ab521b79b17e771514c4da042cbfcd3344b6c5d670b17a31"
+  },
+  "tuple": {
+    "Rust": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CURRENT119-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o",
+      "bytes": 18461712,
+      "sha256": "c2052d7a44969720a54ea93f2fface3180eeeb1ead940072e456c66c9f125dfb"
+    },
+    "generic_C": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CURRENT119-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+      "bytes": 336736,
+      "sha256": "b4260267b1cacde54057f823364fe880462924e85a12883d60df31a0971ec7c0"
+    },
+    "arch_C": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CURRENT119-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+      "bytes": 77736,
+      "sha256": "30bddb4cf0e8083fcce83fe691410b6d4a0e8eabec3cb6ce3b6ab190be8ab3da"
+    },
+    "process_C": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+      "bytes": 2864,
+      "sha256": "3717ed77bd1761c734e93a72d4e5a0b770698f17760470286019f6ec6a6973dd"
+    },
+    "image": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CURRENT119-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/mckernel.img",
+      "bytes": 10298648,
+      "sha256": "759fe1cb2dda4a87ab521b79b17e771514c4da042cbfcd3344b6c5d670b17a31"
+    }
+  },
+  "actual_profile": {
+    "bytes": 129458,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/current119/PROFILE.SOURCE-ONLY.json",
+    "sha256": "b60b342ca18fe438cfa9d342972ac73cafa83f65ee19a32d88c915c9b5d9b0d5"
+  },
+  "worker": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CURRENT119-BUILD-ADMISSION-1/OUTPUT/work/evidence/worker-result.json",
+    "bytes": 16300,
+    "sha256": "ccab55a1a48d244508237195d3b140c0a1aa44c27ba238d6ff830ff0797125f5"
+  },
+  "producer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CURRENT119-BUILD-ADMISSION-1/OUTPUT/work/evidence/producer-contract.json",
+    "bytes": 25354,
+    "sha256": "841e846876eb5597a3554ac70988b4f00f1a8a0de16ee0ea0624e73b50fc4521"
+  },
+  "counts_observed": {
+    "generic_C": {
+      "FUNC": 42,
+      "OBJECT": 150
+    },
+    "arch_C": {
+      "FUNC": 5,
+      "OBJECT": 10
+    },
+    "process_C": {
+      "FUNC": 0,
+      "OBJECT": 0
+    },
+    "selected_C_functions": 47,
+    "qualified_new_Rust_functions_observed": 20,
+    "process_nonNOTE_ALLOC_bytes": 0,
+    "process_GNU_property_NOTE_bytes": 48
+  },
+  "C_function_deselections_vs_accepted116": {
+    "generic": {
+      "removed": [
+        "clear_host_pte",
+        "do_munmap",
+        "do_munmap_log_bridge",
+        "do_wait_log_bridge",
+        "perf_event_open_alloc_event_bridge",
+        "perf_event_open_attr_freq_bridge",
+        "perf_event_open_counter_alloc_bridge",
+        "perf_mmap",
+        "syscall_util_register_desc_log_bridge",
+        "syscall_vm_policy_insert_log_bridge",
+        "util_show_syscall_profile",
+        "wait_zombie_log_bridge"
+      ],
+      "added": []
+    },
+    "arch": {
+      "removed": [
+        "arch_native_signal_restore_fp_bridge",
+        "arch_prctl_log_bridge",
+        "arch_ptrace_read_gpregs_bridge",
+        "arch_ptrace_read_user_bridge",
+        "arch_ptrace_write_gpregs_bridge",
+        "arch_ptrace_write_user_bridge",
+        "arch_ptrace_xstate_copy_from_bridge",
+        "arch_ptrace_xstate_copy_to_bridge",
+        "arch_vdso_map_log_bridge",
+        "arch_vdso_setup_log_bridge",
+        "arch_vdso_state_bridge",
+        "vdso_get_vdso_info"
+      ],
+      "added": []
+    }
+  },
+  "observed_C_function_delta": 24,
+  "new_actual_Rust_function_providers": 24,
+  "M14_or_wholefile_credit_claimed": false,
+  "evidence": {
+    "FIRST-ACTUAL119-ORIGINAL389.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CURRENT119-ACTUAL-ARTIFACT-QUALIFICATION-1/FIRST-ACTUAL119-ORIGINAL389.json",
+      "bytes": 2048,
+      "sha256": "0194743215bb3fe8b3fb2fa7e13197a41080bde09458f86c3433df820ea082b4"
+    },
+    "ACTUAL119-ARTIFACT-FACTS.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CURRENT119-ACTUAL-ARTIFACT-QUALIFICATION-1/ACTUAL119-ARTIFACT-FACTS.json",
+      "bytes": 103723,
+      "sha256": "21b7192f5e39bd526db2dce450f6bf236f843caf3a463f84b3fff75d2f7c5f4d"
+    },
+    "FOUR-READER-LIMIT-SUPPLEMENT.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CURRENT119-ACTUAL-ARTIFACT-QUALIFICATION-1/FOUR-READER-LIMIT-SUPPLEMENT.json",
+      "bytes": 25575,
+      "sha256": "50eaaf4c2ce3a45ae53d41939d5f42d592c93d5023ed3f8188ab4a279c612582"
+    },
+    "INHERITED-SOURCE-WARNING-SUPPLEMENT.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CURRENT119-ACTUAL-ARTIFACT-QUALIFICATION-1/INHERITED-SOURCE-WARNING-SUPPLEMENT.json",
+      "bytes": 21927,
+      "sha256": "83e21a7cf3f6f815276ce211763441dd645e8ee5159972ce3f6547a8c11a8faf"
+    },
+    "QUALIFIED-BODY5-ACTUAL119-READBACK.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CURRENT119-ACTUAL-ARTIFACT-QUALIFICATION-1/QUALIFIED-BODY5-ACTUAL119-READBACK.json",
+      "bytes": 3666,
+      "sha256": "3a8636cdc97380344759e0c467b44acd013cccb8b9e52e12f19be6e698b82cfb"
+    },
+    "ACTUAL-ARTIFACT-INPUTS.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CURRENT119-ACTUAL-ARTIFACT-QUALIFICATION-1/ACTUAL-ARTIFACT-INPUTS.json",
+      "bytes": 10241,
+      "sha256": "aa686b77a9ede5223754ac04659a393273d3771c513f6685fa9bf62f7f398c09"
+    }
+  },
+  "qualification_groups": [
+    {
+      "id": "four_command_source_profile_link_inputs",
+      "status": "ACTUAL_PASS",
+      "evidence": [
+        "FIRST-ACTUAL119-ORIGINAL389.json",
+        "ACTUAL119-ARTIFACT-FACTS.json",
+        "INHERITED-SOURCE-WARNING-SUPPLEMENT.json"
+      ],
+      "facts": "4genuineproducercommands0/3new+8retainedexactlinkobjects; readonly133/122sourcecohort+18canonicalpaths+4nonRustpostimages/authenticorigin/config; noSDKrecompile."
+    },
+    {
+      "id": "unique_providers_function_instructions_relocations",
+      "status": "ACTUAL_PASS_WITH_FOUR_EXPLICIT_READER_LIMIT_SUPPLEMENTS_PENDING_INDEPENDENT_DISPOSITION",
+      "evidence": [
+        "ACTUAL119-ARTIFACT-FACTS.json",
+        "FOUR-READER-LIMIT-SUPPLEMENT.json"
+      ],
+      "facts": "24declarednewfunctionproviders uniqueRustGLOBAL/nonduplicated and completeinput\u2192finalinstructions/relocations reconstructed.20viafrozenreader;3newselfjump tables40/32/40B and1exactR_X86_64_64mod2^64 wrap supplemented without changingoriginalreader."
+    },
+    {
+      "id": "storage_ABI_layout_constants_provider_relocations",
+      "status": "ACTUAL_STORAGE_BINDING_READBACK_PASS_REUSING_SOURCE_QUALIFIED_ABI_SCOPE",
+      "evidence": [
+        "ACTUAL119-ARTIFACT-FACTS.json",
+        "INHERITED-SOURCE-WARNING-SUPPLEMENT.json",
+        "QUALIFIED-BODY5-ACTUAL119-READBACK.json"
+      ],
+      "facts": "6newRuststorageowners(32+32+8+32+8+88B) uniqueandfinalbyte/RELAproof;5Creadonlybindings136/40/48/24/16B finalbyte/RELAproof;8newRustimportsuniquelyresolved toactualCdata; existingbankedrealheader/HOSTABI/type/layoutcontracts reused at theirscope. NofreshABIwitnesscompilesorallkernelABIclaim."
+    },
+    {
+      "id": "inherited_consumer_table_timer_idle_runqueue",
+      "status": "ACTUAL_PASS_WITH_DECLARED_SOURCE_CHANGE_DISPOSITION_PENDING_INDEPENDENT_REVIEW",
+      "evidence": [
+        "ACTUAL119-ARTIFACT-FACTS.json",
+        "INHERITED-SOURCE-WARNING-SUPPLEMENT.json",
+        "QUALIFIED-BODY5-ACTUAL119-READBACK.json"
+      ],
+      "facts": "187inheritedfunctions+71inheriteddata equal116instruction/data/targetprovenance andfull119finalreadback; originalspecializedprlimit/logger pass;7extraexec/SHM/currentconsumercomparisons pass. BODY5expectedchangedsource matchesbankedtestedtokensand1152pair+4nullABI52behavior; actualcurrentproductionfunctionfullfinalreadbackpasses. No old116unchangedclaimforchangedBODY5."
+    },
+    {
+      "id": "original389_identity_multiset",
+      "status": "ACTUAL_PASS_UNCHANGED_ORIGINAL_ORACLE",
+      "evidence": [
+        "FIRST-ACTUAL119-ORIGINAL389.json",
+        "ACTUAL119-ARTIFACT-FACTS.json"
+      ],
+      "facts": "Actual389/389 exactfullCounter(file,function,fmt,line,flags,padding/multiplicity). Originalaf46oracle/failure27e8 preserved. No normalization, expectedrewrites orELFpatch."
+    },
+    {
+      "id": "actual_warning_and_import_disposition",
+      "status": "ACTUAL_FACTS_COMPLETE_PENDING_INDEPENDENT_WARNING_DISPOSITION",
+      "evidence": [
+        "ACTUAL119-ARTIFACT-FACTS.json",
+        "INHERITED-SOURCE-WARNING-SUPPLEMENT.json"
+      ],
+      "facts": "Rust143\u2192145 nonfatalwarnings:unusedCLong/SizeT andunnecessaryunsafe; genericCwarningmessage setunchanged; archstderr0; ldwarningbytesexact116; everynewRustimportuniquelyresolved; finalGLOBALundefined0; ELFentryarch_start."
+    }
+  ],
+  "Root_postbuild_join": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CURRENT119-BUILD-ADMISSION-1/ROOT-HOLDER-TOOL-JOIN.ACTUAL.json",
+    "bytes": 2500,
+    "sha256": "9377b165cd8f10af07a94f2f0d7417b3558e0aeaace0a3d954595e0d4220b709"
+  },
+  "container_retirement_pending": true,
+  "current_free": false,
+  "prebuild8104_used_as_postbuild_clearance": false,
+  "preserved_reader_failures": [
+    "ACTUAL119-ARTIFACT-FACTS.json four limits retained; separateexactreadback supplement",
+    "SOURCE-POSTIMAGE-SCHEMA-FAILURE.json KeyError:path",
+    "SOURCE-POSTIMAGE-SCHEMA-CORRECTION-FAILURE.json KeyError:source; Rootexpert-directed postimagecorrection completed",
+    "INHERITED-SOURCE-WARNING-SUPPLEMENT.json BODY5different116 retained; qualifiedsource/actualreadback disposition separate"
+  ],
+  "remaining_exact_roles": [
+    {
+      "owner": "/root/recovery_review",
+      "role": "Independentactualfullartifactdecision using sixgroups, exact4readerlimits/R64wrap andBODY5sourcechange/nonfatalwarningdispositions; mayrequestspecificadditionalABIwitnessonlyiforiginalcontractrequires it. No missingnewcompilerjob asserted bythispacket."
+    },
+    {
+      "owner": "/root",
+      "role": "Actualstopped119container/holder/custody retirement andindependentfreshpostjoin/currentfree typedledger continuation. ArtifactPASS alone grants nonativeorcleanup release."
+    },
+    {
+      "owner": "/root",
+      "role": "Afteractualindependentartifactacceptance/adoption, dispatchnextsupportedF03/F06debt ormatchingnative app/lifecycle viaexistingcontrols; M14filecount4/6 andpractical35/35 unchanged untilapplicableproof."
+    }
+  ],
+  "scope_limits": [
+    "Thisisactualbuild/artifactevidence, notwholefile/M14/nativeacceptance.",
+    "C47functions remain; Cdata/headers/callbackownershipdebt retained. No wholeimageC0claim.",
+    "Banked HOSTbehavior and realheaderABI evidence reused, no newHOSTpayload executed; source/tests alone do not provefinalnativebehavior.",
+    "ModuleSDK/exportsource/artifacts retained unchanged; nocompiler/Docker/native/cleanup/leaseoperation byreviewworker."
+  ],
+  "artifact_acceptance": false,
+  "native_acceptance": false,
+  "wholefile_acceptance": false,
+  "runtime_authority": null,
+  "owned_live_resources": []
+}

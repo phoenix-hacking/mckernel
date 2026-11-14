@@ -1,0 +1,48 @@
+{
+  "status": "SOURCE_READY_NOT_EXECUTED",
+  "at": "2026-11-11T05:06:46.178356+00:00",
+  "owner": "/root/p04_source_max",
+  "original_check": "M14-03-03-DEFAULT",
+  "canonical_base_source_commit": "7231ce6d17af39e9556ee815980a97f180b70eb1",
+  "private_owned_directory": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-host-provider-1",
+  "patch": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-host-provider-1/MPROTECT-HOST-PROVIDER.patch",
+    "bytes": 4650,
+    "sha256": "8da5962ce948c5b4ba77b28b955a8754f09f53da6f824c820ebcbea4e6f6201d"
+  },
+  "bindings": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-host-provider-1/SOURCE-BINDINGS.json",
+    "bytes": 5624,
+    "sha256": "ecedf158be0a7537c570e22fe72660a8fb8ee1cbe7b23a1682fdea1ab1017ea1"
+  },
+  "contract": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-host-provider-1/CONTRACT.json",
+    "bytes": 7064,
+    "sha256": "ef6ef8c73708f396dcbfdbfe5078ff252e93ae2f401052ea65ade6a2a946cfd0"
+  },
+  "changed_path_recipe": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-host-provider-1/CHANGED-PATH-TEST-RECIPE.json",
+    "bytes": 2739,
+    "sha256": "cd182126555c016f2b086aba5382cc18ec7aebd9f2b431f825a962a5b0c172d7"
+  },
+  "new_Rust_source": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-host-provider-1/candidate/kernel/rust/f03_mprotect_host_provider.rs",
+    "bytes": 1919,
+    "sha256": "9b09bf0fa3241421335b4209a3d1e832b85cbf2696326243d8f8856931f099db"
+  },
+  "changed_paths": [
+    "kernel/CMakeLists.txt",
+    "kernel/rust/lib.rs",
+    "kernel/syscall.c",
+    "kernel/rust/f03_mprotect_host_provider.rs"
+  ],
+  "actual_gap": "Current147B C endpoint supplies the common synchronous host-PFN invalidation callback for sys_mprotect and sys_shmat; its ABI/semantics exactly match the already qualified genuine Rust do_munmap_set_host_bridge.",
+  "implementation": "One genuine Rust pass-through endpoint, narrow paired C exclusion/module cfg/dependency, unchanged complete Rust provider. Root applies focused patch hunks only.",
+  "old5_memory_implementation_unchanged": true,
+  "C_line_count_and_tables_unchanged": true,
+  "source_only_not_original_acceptance": true,
+  "executions_by_preparer": [],
+  "canonical_or_cache_or_index_mutations": false,
+  "independent_material_review_required": true,
+  "next_actual_operation": "Root-reviewed normal incremental named image plus only affected compile/owner/two-table/provider readback. No repeated behavior suite or native action."
+}

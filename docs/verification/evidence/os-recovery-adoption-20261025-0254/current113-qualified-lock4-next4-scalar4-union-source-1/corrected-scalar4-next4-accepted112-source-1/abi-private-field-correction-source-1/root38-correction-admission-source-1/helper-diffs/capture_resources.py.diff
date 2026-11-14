@@ -1,0 +1,24 @@
+--- Root37/capture_resources.py
++++ Root38/capture_resources.py
+@@ -7,8 +7,8 @@
+ D=Path(__file__).resolve().parent;E=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254')
+ GUARD=E/'operation-account-window-new12h-source-1/actual-guardian-clamp-successor-1/actual_account_window_v2.py'
+ GUARD_SHA='1f152e3f18384643cd35d203fcc2a4292950a1c90758734859bdb980cf45fda0'
+-OBSERVER=D/'observe_root37_current.py'
+-OBSERVER_SHA='8cbc47cdfb9c0fdcfdc82093a4a99fa506c791683aee5dc7725fcaa367c1ddbf'
++OBSERVER=D/'observe_root38_current.py'
++OBSERVER_SHA='eb7a8d45a065ab88d94afd905c68c18d8eb04b069eac00ccd641e6b3977d0238'
+ AGGREGATE=23259332608
+ SCOPE='Functional McKernel OS/apps and Rust/assembly migration only; no security testing.'
+ def read(path):return json.loads(Path(path).read_bytes())
+@@ -52,8 +52,8 @@
+  profile=read(auth(inputs['profile']));assert profile['runtime_authority'] is None and profile['request_sha256']==inputs['request_sha256']
+  request=read(auth(inputs['request']));assert request['nonce']==inputs['nonce'] and request['request_sha256']==inputs['request_sha256']
+  ledger=read(auth(inputs['nonce_ledger']))
+- assert inputs['nonce_ledger']=={'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER37.json', 'bytes': 4591, 'sha256': 'b6ed7c321b348e90e13a51607d88af09893ab760e3decdd4d16d000a130155e8'}
+- assert inputs['native_custody_clearance']=={'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT113-CORRECTED-SCALAR4-NEXT4-BUILD-ADMISSION-1/independent-failed-build-review-1/CURRENT-FREE.json', 'bytes': 92521, 'sha256': '070e0f2c4f367da3444f30300bfbeb193af6d1bb7cc6cda663a1cb154bfe9f13'}
++ assert inputs['nonce_ledger']=={'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER38.json', 'bytes': 4390, 'sha256': '9b3d64ab84d59b6abbc7b1df05cf4034a9d53a2dd1cfb4d76013f554f0b7e282'}
++ assert inputs['native_custody_clearance']=={'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-root37-1/independent-actual-native-review-1/REVIEW.json', 'bytes': 63017, 'sha256': '9d3aa7ff83c3bec493a575a8035ce59963e92fb2a82d549febd89ab34c8ce066'}
+  assert ledger['complete_within_declared_current_boundary'] is True and ledger['root_attests_no_unlisted_post_boundary_execution_or_custody_operation'] is True
+  assert inputs['nonce'] not in ledger['consumed_nonces']
+  publication=read(auth(inputs['source_publication']));assert publication['runtime_authority'] is None

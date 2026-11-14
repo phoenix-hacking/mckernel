@@ -1,0 +1,60 @@
+{
+  "archive": {
+    "comparable_inventory_sha256": "74758565a5c6e4fc18381e23eeba61f7d279a986f4a9014465e30cbc4c0c4b77",
+    "entry_count": 25,
+    "file_bytes": 10826817,
+    "file_count": 24,
+    "path": "/home/holden/mckernel-work/scratch/native-exact-candidate-retirement-76ae20b5-1-failed-evidence-20260930-1.tar",
+    "sha256": "9ecab3772c9b8a6e3a4b0257bce3136734e0bac0becf4b79157b35bb78ce9abe",
+    "size": 10874880,
+    "source_full_identity_inventory_sha256": "e98cf2d252150c5afba4725995b550cca67352a771f7dda67f5995793e386008",
+    "verification": "PASS_ARCHIVE"
+  },
+  "artifacts": {
+    "baseline_sha256": "bc5296ee81956659420df058c5975931bcb836ebe3416ed98214c1167f8a046b",
+    "evidence_sha256": "fc6b61bf76363df72240f746c087685cb9778b0ccf2c71f602b56bee4ae938b8",
+    "journal_rows": 21510,
+    "journal_sha256": "de54a05ffaaa8c090e4408d455f3b2ba2e82683de2d1822b6f3d7af67f75a598",
+    "packet_failure_sha256": "e1e629b6f43a9661fcfe255b7b0607be365acb0812b028de6f99075837c36ec1",
+    "post_delete_scan_1_sha256": "18c8c505b79307195906e4fc2faf1f521178bf4f3ca0f069e2b89e2ef5c52778",
+    "source_directory": "/dev/shm/.mckernel-retirement-evidence-76ae20b5-1",
+    "source_directory_identity": "26:69508"
+  },
+  "execution": {
+    "command": "/usr/bin/sudo -A /usr/bin/python3 -E -s -B /home/holden/mckernel/docs/verification/evidence/native-exact-candidate-retirement-76ae20b5-1.py --release /home/holden/mckernel/docs/verification/evidence/stability-native-exact-candidate-retirement-76ae20b5-1.release.json",
+    "fetched_commit": "99fd0558dfce14c8f53c3fb2c0253129ccb25c60",
+    "packet_sha256": "91ed39cb0ce6c75172c83eb64632ceebab7f0781d1433d18fe173fa7709526e4",
+    "release_sha256": "d725b00db634fe553fc2029ff5c83bf1b03630b80d062520a60a5b688f61c9ce",
+    "result": "FAIL CLOSED: closure-1 callback failed",
+    "review": "PASS_EXECUTION"
+  },
+  "failure_analysis": {
+    "entry_churn_count": 819,
+    "entry_churn_reason": "per-entry-procfs-absence for task-level map_files",
+    "incomplete_count": 0,
+    "observer_defect": "The observer did not fall back to process-level /proc/PID/map_files when task-level map_files was absent.",
+    "permission_denial_count": 0,
+    "reference_count": 0,
+    "replacement_count": 0,
+    "task_census_sizes": [818, 819, 819]
+  },
+  "postflight": {
+    "corrected_observer_commit": "6e5de06ac8dddf4a7e20bf5ccc8fb8ab84335450",
+    "corrected_observer_sha256": "23936865f6125e6f9ca4be9ac49eb75a4139cc669646720d016a48d7f98edb11",
+    "corrected_observer_test_sha256": "d67d532b758ed22523b9662ad0e7cb31dee89cfd0411fd1208266b3936aa92d7",
+    "required": true,
+    "status": "PENDING_SEPARATE_RELEASE"
+  },
+  "result": {
+    "helper_terminal_result": "PASS",
+    "original_paths_absent": true,
+    "post_delete_observer": "FAIL",
+    "quarantine_paths_absent": true,
+    "retirement_processes_absent": true,
+    "tombstones_retained": 5,
+    "tmpfs_available_bytes_after": 16567324672
+  },
+  "schema": "mckernel.native-exact-candidate-retirement-failure.v1",
+  "status": "FAIL_POST_DELETE_OBSERVER",
+  "whole_os_acceptance": false
+}

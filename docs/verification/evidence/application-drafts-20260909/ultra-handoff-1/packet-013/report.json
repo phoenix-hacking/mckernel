@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-013",
+  "packet_version": 1,
+  "context_sha256": "ea73c365d4a4f56be44e44c6fd0aff551bf498455a359117f1fba26ec7e8b315",
+  "started_utc": "2026-09-09T10:40:00Z",
+  "finished_utc": "2026-09-09T10:40:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {"case_id": "memory.protect-readonly", "status": "DRAFTED_WITH_UNRESOLVED", "fixture": "scripts/application-tests/cases/memory/memory.protect-readonly.c", "oracle": "scripts/application-tests/oracles/memory.protect-readonly.json", "changed_files": ["scripts/application-tests/cases/memory/memory.protect-readonly.c", "scripts/application-tests/oracles/memory.protect-readonly.json"], "parameter_vectors": {}, "unresolved_oracle_notes": ["Pinned signal numeric binding and canonical output require review."], "max_reviewer_question": "Confirm SEGV_ACCERR at offset zero and preserved byte after the protected write."},
+    {"case_id": "memory.protect-none-read", "status": "DRAFTED_WITH_UNRESOLVED", "fixture": "scripts/application-tests/cases/memory/memory.protect-none-read.c", "oracle": "scripts/application-tests/oracles/memory.protect-none-read.json", "changed_files": ["scripts/application-tests/cases/memory/memory.protect-none-read.c", "scripts/application-tests/oracles/memory.protect-none-read.json"], "parameter_vectors": {}, "unresolved_oracle_notes": ["Pinned signal numeric binding and canonical output require review."], "max_reviewer_question": "Confirm PROT_NONE read delivers SEGV_ACCERR and permits cleanup."},
+    {"case_id": "memory.protect-none-write", "status": "DRAFTED_WITH_UNRESOLVED", "fixture": "scripts/application-tests/cases/memory/memory.protect-none-write.c", "oracle": "scripts/application-tests/oracles/memory.protect-none-write.json", "changed_files": ["scripts/application-tests/cases/memory/memory.protect-none-write.c", "scripts/application-tests/oracles/memory.protect-none-write.json"], "parameter_vectors": {}, "unresolved_oracle_notes": ["Pinned signal numeric binding and canonical output require review."], "max_reviewer_question": "Confirm PROT_NONE write delivers SEGV_ACCERR and permits cleanup."}
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/memory/memory.protect-readonly.c", "sha256": "5917bc5579497199d02fa555e722ec744fb89611d229ae8f5f8c272092b723d6"},
+    {"path": "scripts/application-tests/oracles/memory.protect-readonly.json", "sha256": "89d6e94ce68a9edb88814803f488b164c66160b7958cc0ac8bb6439d698a5085"},
+    {"path": "scripts/application-tests/cases/memory/memory.protect-none-read.c", "sha256": "d21e06c86ae8ade71859045714fd5c4d951ced857c696ed4b1ebe04157d86f7d"},
+    {"path": "scripts/application-tests/oracles/memory.protect-none-read.json", "sha256": "9485e352f9e6d6617dcaec7f36595257d380410af57a9af92296d641ef14bf31"},
+    {"path": "scripts/application-tests/cases/memory/memory.protect-none-write.c", "sha256": "7f67e6ae6f2aa3e0d803824ffd402d8545fdb47386162b7967834b108d289525"},
+    {"path": "scripts/application-tests/oracles/memory.protect-none-write.json", "sha256": "1bbe0c27bb1c5f846182e7a652caeeb07fa120522e8425201919965377db16ac"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-013.json --emit-context /tmp/application-packet-013-context.json", "outcome": "PASS; metadata only"},
+    {"command": "python3 -m json.tool report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Three protection cases need final signal numeric and canonical record review."],
+  "blocked_execution_capabilities": ["current-inputs", "runtime-transport-fault-injection", "runner-contract"],
+  "first_failure_event": null,
+  "max_escalation": ["Review exact SIGSEGV/SEGV_ACCERR delivery and protected-byte invariants before execution."],
+  "next_packet_id": "packet-014"
+}

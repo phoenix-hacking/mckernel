@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "ipc.pipe-nonblock",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/ipc.pipe-nonblock"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["first=-1 errno=11 eagain=1 unchanged=1 later=2 data=OK exact=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["An empty nonblocking read with an open writer returns EAGAIN and leaves the sentinel unchanged", "A later fixed write/read succeeds while the writer remains open"],
+  "unresolved_expectations": ["Nonblocking flag and endpoint lifetime evidence require Max review."],
+  "max_question_for_reviewer": "Confirm empty O_NONBLOCK read returns EAGAIN without buffer mutation and later data remains readable."
+}

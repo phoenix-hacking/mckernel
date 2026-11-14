@@ -1,0 +1,848 @@
+{
+  "schema": "mckernel.m14-process-pair-readonly-source-abi-ownership-contract.v1",
+  "status": "SOURCE_CONTRACT_FROZEN_EXISTING_IMPLEMENTATIONS_READONLY_ONLY_EXECUTABLE_ELIGIBILITY_UNRESOLVED",
+  "at_utc": "2026-11-10T17:08:20.584763+00:00",
+  "owner": "public_abi_join_max, existing gpt-6.1-sol/MAX; Root sole canonical compositor/executor; independent P03 read-only review next",
+  "scope": {
+    "exact_names": [
+      "syscall_find_process_bridge",
+      "syscall_process_unlock_bridge"
+    ],
+    "original_condition": "Actual remaining process-provider ownership/ABI prerequisite of the original M14 matching Rust kernel image and caller chain. No original file/image/default/native/C-retirement condition is accepted by this source audit.",
+    "authorized_now": "Read actual existing process-pair/callee/lock/type/caller/build-selection source and supplied user/provenance records; write this private factual contract only.",
+    "not_authorized_by_this_record": "No implementation, body extraction, fixture, code generation, compiler/link/test command, selector change, rejected/equivalent replay, full-image preparation, program/native/hardware operation or local hold release."
+  },
+  "inputs": {
+    "user_process_contract": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/USER-PROCESS-CONTRACT.json",
+      "bytes": 1799,
+      "sha256": "0e11126ac65180eebafed764ee3ce35445406c50006d4214dfef25f95708beb4"
+    },
+    "selection_readonly": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/m14-blocker-resolution-20261110/selection-1/SELECTION.json",
+      "bytes": 14063,
+      "sha256": "3e7f2eac2dd97bbc7b91d3425d6a44b91995c7dacaf5e8dae36bc773a33cc221"
+    },
+    "rejection_provenance": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/provenance-1/RESULT.json",
+      "bytes": 24945,
+      "sha256": "f833c4aa110c86daac27981c4b03992b4c00e03a5087140fa6b14ff34aa5f946"
+    },
+    "prior_exact_pair_unknown": {
+      "path": "/home/holden/mckernel/docs/verification/m14-remaining-process-bridge-eligibility-20261110.json",
+      "bytes": 5716,
+      "sha256": "49aec98563d52622f0bc711682ad9dc12d13004f9ece905c02ee074523e798f8"
+    },
+    "current_partial_result": {
+      "path": "/home/holden/mckernel/docs/verification/m14-current-provider-chain-results-20261110.json",
+      "bytes": 2931,
+      "sha256": "72b693c5fa3e313b9658fb41af73a5827d4b75837b403fd97ab9265d238ecace"
+    },
+    "actual_partial_symbol_readback": {
+      "path": "/home/holden/mckernel/docs/verification/m14-callback-provider-chain-20261110/scheduler-callback-complete-provider-join-1/ACTUAL-JOINED-METADATA.json",
+      "bytes": 324350,
+      "sha256": "ddb12a1e5d32740ddf497cc394bae44d3ab58d89280f5213354f0d0a58cdf3fa"
+    },
+    "actual_partial_postjoin": {
+      "path": "/home/holden/mckernel/docs/verification/m14-callback-provider-chain-20261110/scheduler-callback-complete-provider-join-1/POSTJOIN-CHECK.json",
+      "bytes": 127250,
+      "sha256": "09950c8c68e18fc3457cbf6e9ab75224fbb3a94d1a022fa974768be98c2209d3"
+    }
+  },
+  "source_evidence": [
+    {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "bytes": 1240574,
+      "sha256": "11df0a7dbaeedcb009f5275e422f17eed444f4b513e7322e14f19e88566a2f1e",
+      "inspected_contract_ranges": [
+        [
+          3238,
+          3292
+        ],
+        [
+          11314,
+          11343
+        ],
+        [
+          30041,
+          30070
+        ]
+      ]
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "bytes": 618027,
+      "sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "inspected_contract_ranges": [
+        [
+          611,
+          614
+        ],
+        [
+          716,
+          716
+        ],
+        [
+          910,
+          914
+        ],
+        [
+          10014,
+          10068
+        ],
+        [
+          10431,
+          10493
+        ],
+        [
+          11306,
+          11312
+        ],
+        [
+          11376,
+          11432
+        ],
+        [
+          15080,
+          15168
+        ]
+      ]
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/lock_helpers.rs",
+      "bytes": 12202,
+      "sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3",
+      "inspected_contract_ranges": [
+        [
+          31,
+          40
+        ],
+        [
+          47,
+          67
+        ],
+        [
+          356,
+          371
+        ]
+      ]
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs",
+      "bytes": 3105,
+      "sha256": "7b6c1e87f521eaf4674128afd7bff71785bead4ff7c9eb3c9a668d6a0cb0cbe7",
+      "inspected_contract_ranges": [
+        [
+          1,
+          44
+        ],
+        [
+          90,
+          125
+        ]
+      ]
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/cls.rs",
+      "bytes": 7877,
+      "sha256": "c0260e7634d53fcc0873746af8bd16b6691ee0a4b7f394ca18896aef070f6bba",
+      "inspected_contract_ranges": [
+        [
+          68,
+          73
+        ],
+        [
+          119,
+          122
+        ],
+        [
+          167,
+          191
+        ]
+      ]
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_local.rs",
+      "bytes": 4525,
+      "sha256": "9f102654a22895615da854b08ea8e043a6c17b9157e4b77e5b58783e70abeb3f",
+      "inspected_contract_ranges": [
+        [
+          15,
+          25
+        ],
+        [
+          39,
+          52
+        ],
+        [
+          146,
+          161
+        ]
+      ]
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "bytes": 256003,
+      "sha256": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde",
+      "inspected_contract_ranges": [
+        [
+          837,
+          863
+        ]
+      ]
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "inspected_contract_ranges": [
+        [
+          1,
+          8
+        ],
+        [
+          22,
+          22
+        ],
+        [
+          611,
+          616
+        ],
+        [
+          633,
+          648
+        ],
+        [
+          673,
+          677
+        ],
+        [
+          1348,
+          1365
+        ],
+        [
+          1458,
+          1481
+        ],
+        [
+          1785,
+          1816
+        ],
+        [
+          2240,
+          2252
+        ],
+        [
+          2324,
+          2337
+        ],
+        [
+          2453,
+          2470
+        ]
+      ]
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/abi_checks.c",
+      "bytes": 65125,
+      "sha256": "f8deda08de0eccda152a6416a01bec00e6984c1cf4c998e9ca877b1bbe31c23a",
+      "inspected_contract_ranges": [
+        [
+          731,
+          750
+        ],
+        [
+          860,
+          884
+        ]
+      ]
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch-lock.h",
+      "bytes": 4603,
+      "sha256": "ca8baa66ed77634cd6319a918211b3eb8fe80fc7dcb2ac0110ab6bfbd0c1b81b",
+      "inspected_contract_ranges": [
+        [
+          23,
+          50
+        ],
+        [
+          70,
+          97
+        ]
+      ]
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/process.h",
+      "bytes": 26602,
+      "sha256": "8848d536f2fa847a59af72d573ec9c55838c27cea664d46438ab4e038bf83649",
+      "inspected_contract_ranges": [
+        [
+          904,
+          905
+        ]
+      ]
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/process.c",
+      "bytes": 231146,
+      "sha256": "12a8396d729e342d2d43130be73acf7960409cf4d2e432a415fb303a031fa055",
+      "inspected_contract_ranges": [
+        [
+          7410,
+          7436
+        ]
+      ]
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/syscall.c",
+      "bytes": 932911,
+      "sha256": "f313b9f1dada0ed99b86951a1427ef24518d48a5c58faa3f45b6fe764c2f28f2",
+      "inspected_contract_ranges": [
+        [
+          1109,
+          1110
+        ],
+        [
+          5686,
+          5738
+        ],
+        [
+          20064,
+          20077
+        ],
+        [
+          20156,
+          20178
+        ],
+        [
+          21435,
+          21455
+        ]
+      ]
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/f03_host_cleanup.rs",
+      "bytes": 2543,
+      "sha256": "b4fe7b06e1685bf679a309eedb6378e3839beb0d1d32a57228d8a6207470395d",
+      "inspected_contract_ranges": [
+        [
+          1,
+          48
+        ]
+      ]
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/lib.rs",
+      "bytes": 3911,
+      "sha256": "e6e8f0203ea587789977c7dd23a1e7bbd8f89a9f6c84b8aeaa874b2f0880fe0b",
+      "inspected_contract_ranges": [
+        [
+          16,
+          16
+        ],
+        [
+          36,
+          36
+        ],
+        [
+          45,
+          45
+        ],
+        [
+          60,
+          62
+        ],
+        [
+          94,
+          94
+        ]
+      ]
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "bytes": 50067,
+      "sha256": "1254c624f883166d3eaefb5e795571afcaf962ff10b0991524b317be71bec057",
+      "inspected_contract_ranges": [
+        [
+          585,
+          604
+        ],
+        [
+          667,
+          670
+        ],
+        [
+          690,
+          711
+        ],
+        [
+          729,
+          730
+        ]
+      ]
+    },
+    {
+      "path": "/home/holden/mckernel/CMakeLists.txt",
+      "bytes": 14215,
+      "sha256": "eb47132388de4fec0f50b4e25d7633da87dec3c9b251a93ac1a3bc2201f642fc",
+      "inspected_contract_ranges": [
+        [
+          211,
+          211
+        ]
+      ]
+    }
+  ],
+  "findings": {
+    "prior_UNKNOWN_meaning": "Prior exact-name record stopped at declarations and did not inspect definitions, pointees or genuine callees. Its absence of an affirmative prior record establishes neither missing/held code nor a source defect.",
+    "implementations_present": true,
+    "selected_source_is_stub_or_test_provider": false,
+    "code_change_required_for_the_supplied_default_lock_contract": "NONE established. No invented zero-initialization, process-reference increment/decrement or missing-provider-body repair is justified.",
+    "actual_missing_match": "The qualified e1a partial still has the two wrapper imports unresolved. These existing source providers and their absent lower process/MCS members have not been admitted/code-generated/joined to that partial under an affirmative exact scope and matching current selection. Source existence is not matching artifact or runtime evidence.",
+    "incompatible_alternate_profile": "ENABLE_UBSAN=ON removes C lock/node aligned64 in arch-lock.h, while these Rust types/assertions remain unconditional64. This audit is bound to the selected x86_64/SPINLOCK_IN_MCS_RWLOCK/UBSAN-OFF contract; it neither changes UBSAN nor qualifies another profile."
+  },
+  "abi": {
+    "machine": "x86_64 LP64 C ABI: int=i32, unsigned long=u64, pointers64; actual matched compiler/header validation still separately required for these not-yet-produced members.",
+    "entrypoints": [
+      {
+        "name": "syscall_find_process_bridge",
+        "C": "void * (int pid, void *lock_arg)",
+        "Rust": "unsafe extern C fn(CInt,*mut c_void)->*mut c_void",
+        "forwarding": "Same pid and address cast to *mut lock_helpers::McsRwlockNodeIrqsave; return Process pointer cast back without a new reference."
+      },
+      {
+        "name": "syscall_process_unlock_bridge",
+        "C": "void (void *proc, void *lock_arg)",
+        "Rust": "unsafe extern C fn(*mut c_void,*mut c_void)",
+        "forwarding": "Same addresses cast to *mut abi::Process and *mut lock_helpers::McsRwlockNodeIrqsave; void return unchanged."
+      }
+    ],
+    "genuine_helpers": [
+      {
+        "name": "find_process",
+        "signature": "unsafe extern C fn(CInt,*mut McsRwlockNodeIrqsave)->*mut Process"
+      },
+      {
+        "name": "process_unlock",
+        "signature": "unsafe extern C fn(*mut Process,*mut McsRwlockNodeIrqsave)"
+      },
+      {
+        "names": [
+          "process_mcs_reader_lock_bridge",
+          "process_mcs_reader_unlock_bridge"
+        ],
+        "signature": "unsafe extern C fn(CULong,*mut c_void)",
+        "actual_target": "lock_helpers::__mcs_rwlock_reader_lock / __mcs_rwlock_reader_unlock"
+      },
+      {
+        "type": "ProcessFindProcessOffsets",
+        "representation": "repr(C), two CULong offsets computed with offset_of!(Process,hash_list/pid); selected source expects LP64 size16/align8, not newly compiled here."
+      }
+    ],
+    "selected_layouts": [
+      {
+        "type": "mcs_rwlock_node_irqsave / lock_helpers::McsRwlockNodeIrqsave",
+        "C_selected_members": "unsigned long irqsave only",
+        "Rust": "repr(C,align(64)); irqsave:CULong",
+        "size": 64,
+        "alignment": 64,
+        "irqsave_offset": 0,
+        "padding": "Remaining padding need not be initialized or read. Acquisition writes irqsave before a valid matching unlock."
+      },
+      {
+        "type": "mcs_rwlock_lock / abi::McsRwlockLock / lock_helpers::McsRwlockLock",
+        "size": 64,
+        "alignment": 64,
+        "slock_offset": 0,
+        "payload": "4-byte ticket-spinlock; Rust source asserts payload size4/align4/head_tail0."
+      },
+      {
+        "type": "ProcessHash",
+        "source_asserted_size": 5888,
+        "alignment": 64,
+        "list_offset": 0,
+        "lock_offset": 1216,
+        "buckets": 73
+      },
+      {
+        "type": "ResourceSet",
+        "source_asserted_size": 384,
+        "alignment": 64,
+        "process_hash_offset": 24
+      },
+      {
+        "type": "Process",
+        "repr": "C",
+        "hash_list_offset": "0, first field; computed by real offset_of! in find_process",
+        "pid_offset": 456,
+        "alignment": 64,
+        "source_asserted_size_no_tofu": 1728,
+        "source_asserted_size_enable_tofu": 18112
+      },
+      {
+        "type": "CpuLocalVar",
+        "fields_needed": [
+          "resource_set",
+          "no_preempt"
+        ],
+        "binding": "Actual ABIff48 source and matching enable_tofu/profile are required. No guessed numerical resource_set/no_preempt offsets or all-configuration parity is supplied."
+      }
+    ],
+    "layout_evidence_limit": "Numerical source assertions and selected header derivation only. No new C/Rust compile/layout probe or assertion-selected object was produced here. Existing e1a lower-provider receipt is reused at its unchanged exact scope."
+  },
+  "ownership_protocol": [
+    {
+      "phase": "before lookup",
+      "required": "Boot/current CPU state yields a valid current-CPU ID; clv allocation/resource_set/process_hash and all73 initialized list heads/locks remain live. CInt pid must be positive for a search. Node points to caller-exclusive writable64-byte/64-aligned storage; no prior zero initialization required. CPU/resource-set identity cannot be swapped during the paired protocol."
+    },
+    {
+      "phase": "early invalid input",
+      "actual": "find_process returns null for pid<=0/null node, and for null CPU/resource-set/phash or invalid bucket before the reader lock. These checks do not make uninitialized GS/locals/clv safe: get_this_cpu_local_var itself relies on initialized valid current CPU state."
+    },
+    {
+      "phase": "acquire",
+      "actual": "Real reader adapter -> lock_helpers writes node.irqsave from real spinlock acquire. CPU interrupt flags are saved and CLI executes before ticket acquire; preempt_disable increments actual current CPU no_preempt when initialized. Ticket uses SeqCst fetch_add2<<16 and Acquire wait load/pause."
+    },
+    {
+      "phase": "search",
+      "actual": "Under the acquired hash lock, traverse actual AbiListHead next pointers until head/null; derive Process by hash_list offset and compare actual CInt pid. The list and its entries must be valid under this synchronization; null terminator defensive behavior does not prove corrupted-list recovery."
+    },
+    {
+      "phase": "success",
+      "actual": "Return borrowed Process pointer while retaining the same hash reader lock, node saved flags and preemption/IRQ ownership. No process refcount increment, allocation, reference-return transfer, or later release_process call occurs in this pair."
+    },
+    {
+      "phase": "miss",
+      "actual": "Exactly one reader unlock with the original bucket/node occurs before returning null; caller must not unlock a miss as if it carried a successful acquisition."
+    },
+    {
+      "phase": "successful borrow lifetime",
+      "required": "Process allocation and pid/hash membership remain valid and stable until matching unlock; all removal/final-free paths must honor the same bucket writer exclusion. Current chain_process uses real writer lock callbacks and unpublish_waited_process removes hash discovery under that writer lock; this audit does not qualify wait-release/refcount/final-free bodies or grant a process lifetime after unlock."
+    },
+    {
+      "phase": "matching unlock",
+      "actual": "Same live Process/PID/current-resource-set determines the same hash bucket; same live exclusive node is passed to real reader unlock. Exactly once per hit, before node reuse/end-of-storage. Nullproc/nullnode are no-op guards; stale changed CPU/resource-set/null state after a hit would violate this protocol and can return before releasing, not provide recovery."
+    },
+    {
+      "phase": "release and flags",
+      "actual": "Ticket head increments2 SeqCst, then preempt_enable decrements actual current CPU no_preempt, then cpu_restore_interrupt executes popfq using the exact saved node.irqsave. Current preempt_enable is an atomic counter adjustment and does not call schedule. Node is reusable after matching unlock returns."
+    },
+    {
+      "phase": "lock semantics",
+      "actual": "SPINLOCK_IN_MCS_RWLOCK selects one exclusive ticket spinlock for both reader and writer entry names. Do not assume concurrent-reader MCS algorithm, heap guard token, implicit process hold or arbitrary cross-CPU unlock."
+    }
+  ],
+  "source_callee_and_data_closure": [
+    {
+      "edge": "syscall pair -> process_helpers::find_process/process_unlock",
+      "implementation": "Current direct Rust forwarding, no cfg/test substitution; no other process/refcount/release operation introduced."
+    },
+    {
+      "edge": "find_process -> get_this_cpu_local_var + process_hash + process_find_process_body_result",
+      "data": "CpuLocalVar.resource_set -> ResourceSet.process_hash -> ProcessHash list[pid%73]/lock[pid%73]; actual Process.hash_list/pid offsets."
+    },
+    {
+      "edge": "process_find_process_body_result -> process_list_container + process_mcs_reader_lock_bridge/unlock",
+      "data": "AbiListHead next, actual Process pid; concrete Some callbacks from genuine provider, no runtime dummy callback."
+    },
+    {
+      "edge": "process_unlock -> get_this_cpu_local_var + process_hash + process_unlock_found_process_result -> process_mcs_reader_unlock_bridge",
+      "data": "Exact same Process.pid, resource-set/bucket and node required; no ownership repair on mismatched/stale arguments."
+    },
+    {
+      "edge": "reader adapters -> lock_helpers::__mcs_rwlock_reader_lock/unlock -> spinlock_helpers::__ihk_mc_spinlock_lock/unlock",
+      "data": "64-aligned lock.slock, node.irqsave. Adapters module is unconditional current source with explicit ABI/lock_helpers size/alignment assertions."
+    },
+    {
+      "edge": "spinlock lock/unlock -> lock_noirq/unlock_noirq + CPU IRQ save/restore + preempt_disable/enable + cpu_pause",
+      "data": "AtomicU32/AtomicU16 ticket payload; native CPU flag asm; actual CpuLocalVar.no_preempt atomic. Compiler atomics/inlining/helper/relocation closure cannot be proved without an eligible actual object; no presumed C/libatomic waiver."
+    },
+    {
+      "edge": "cls get_this_cpu_local_var -> this_cpu_local_var -> get_cpu_local_var + ihk_mc_get_processor_id",
+      "data": "clv pointer plus actual current ID; CPU-local no_preempt and resource_set allocations require genuine initialized boot ownership."
+    },
+    {
+      "edge": "native ihk_mc_get_processor_id -> rdmsr(MSR_GS_BASE) and gs:0",
+      "data": "locals, num_processors, live GS base; source selects cfg(not(mckernel_equivalence)). Stored zero/null declarations in retained objects are not usable initialized HOST kernel state."
+    },
+    {
+      "edge": "native IRQ provider",
+      "implementation": "x86_cpu_helpers cfg(not(mckernel_equivalence)): pushfq/pop/CLI save, popfq restore, pause; no privileged instruction is run here."
+    },
+    {
+      "edge": "lifetime writer exclusion",
+      "implementation": "Existing real chain_process and unpublish_waited_process use the actual writer adapter/lock. Pair contract requires all process owners preserve exclusion/lifetime; final wait/kill/refcount/termination bodies remain assigned to other owners and unaccepted."
+    }
+  ],
+  "current_build_and_callers": {
+    "crate": "lib.rs unconditionally selects process_helpers, lock_helpers, spinlock_helpers, cls, syscall_policy and x86_cpu_helpers. Rust genuine process reader adapters and wrapper exports have no per-name selection guard in current source.",
+    "C_selection": "RUST_KERNEL_ENABLED adds MCKERNEL_RUST_MCS_RWLOCK_HELPERS/SPINLOCK_HELPERS and removes replaced helper C sources. process.c/process_helpers.c receive MCKERNEL_RUST_PROCESS_HELPERS, excluding C find_process/process_unlock and C adapters; syscall.c receives MCKERNEL_RUST_SYSCALL_POLICY_HELPERS, excluding the matching C opaque wrappers. arch/x86_64/kernel/cpu.c receives MCKERNEL_RUST_X86_CPU_HELPERS. This is source selection, not a new actual configured/linked image.",
+    "supported_profile": "x86_64, SPINLOCK_IN_MCS_RWLOCK, UBSAN OFF; supported linux-6.12 Rust selection as explicit chosen profile, not assumed source default IRQ ABI (which is legacy). Match enable_tofu/current generated config for actual Process/CpuLocalVar layout.",
+    "selection_conflict": "The same supported linux-6.12/x86_64/!UBSAN source branch currently selects MCKERNEL_RUST_F03_EXEC_DEFINED_TAIL with18 other C macros; syscall_policy is monolithic and unconditional. The read-only3e7f selection plan supplies no eligible alternate cohort. Whole crate/generic C configure/codegen is not authorized by this pair audit.",
+    "callers": [
+      {
+        "path": "kernel/syscall.c:5686/5700",
+        "entry": "process_cleanup_fd / process_cleanup_before_terminate",
+        "node": "C stack mcs_rwlock_node_irqsave, correct selected64 alignment",
+        "selection": "C fallback only when !MCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+        "limit": "Paired callback declaration/handoff only; complete cleanup body behavior is outside this pair qualification."
+      },
+      {
+        "path": "kernel/syscall.c:5720 and kernel/rust/f03_host_cleanup.rs:33",
+        "entry": "terminate_host",
+        "node": "C original stack node or Rust MaybeUninit<McsRwlockNodeIrqsave>; Rust exact pair callback addresses",
+        "selection": "Rust f03 adapter is opt-in ENABLE_RUST_M14_SYSCALL_ADAPTERS; default source option OFF",
+        "limit": "Detached-process/refcount/wait/kill/body lifetime belongs to separate remaining-ten audit; no transitive acceptance."
+      },
+      {
+        "path": "kernel/syscall.c:20164 and kernel/rust/syscall_policy.rs:11314",
+        "entry": "sys_setpgid",
+        "node": "Original C aligned node or Rust MaybeUninit typed/aligned node",
+        "protocol": "Existing body unlocks every successful target lookup before forward; post-forward second hit is unlocked once. First-check error unlock also occurs; a miss does not receive external unlock. No callback runtime executed."
+      },
+      {
+        "path": "kernel/syscall.c:21435",
+        "entry": "perf_ioctl",
+        "node": "C original stack mcs_rwlock_node_irqsave, same exact pair callbacks",
+        "limit": "Default ENABLE_PERF ON source fact; perf/provider/runtime body is not qualified here."
+      }
+    ],
+    "separate_aliases": "Other typed process-lookup adapters, such as ptrace IO at syscall_policy26056/26062, are distinct existing names. Their presence does not silently add this pair to an actual partial or release another scope."
+  },
+  "retained_artifact_join": {
+    "actual_partial_sha256": "e1a2469706723545483f74be15ad0bcc8ef01c9171159991b7a367adf87d2fd9",
+    "scope": "Actual129 strong global owners/104functions25data,12 genuine U; source/codegen/ELF/ld-r prerequisite only, no runtime/image/default/C-retirement acceptance.",
+    "unchanged_lower_provider_rows": {
+      "get_this_cpu_local_var": [
+        {
+          "name": "get_this_cpu_local_var",
+          "bind": 1,
+          "type": 2,
+          "other": 0,
+          "section": 78,
+          "value": 0,
+          "size": 99
+        }
+      ],
+      "get_cpu_local_var": [
+        {
+          "name": "get_cpu_local_var",
+          "bind": 1,
+          "type": 2,
+          "other": 0,
+          "section": 76,
+          "value": 0,
+          "size": 24
+        }
+      ],
+      "ihk_mc_get_processor_id": [
+        {
+          "name": "ihk_mc_get_processor_id",
+          "bind": 1,
+          "type": 2,
+          "other": 0,
+          "section": 80,
+          "value": 0,
+          "size": 77
+        }
+      ],
+      "preempt_disable": [
+        {
+          "name": "preempt_disable",
+          "bind": 1,
+          "type": 2,
+          "other": 0,
+          "section": 49,
+          "value": 0,
+          "size": 54
+        }
+      ],
+      "preempt_enable": [
+        {
+          "name": "preempt_enable",
+          "bind": 1,
+          "type": 2,
+          "other": 0,
+          "section": 51,
+          "value": 0,
+          "size": 54
+        }
+      ],
+      "clv": [
+        {
+          "name": "clv",
+          "bind": 1,
+          "type": 1,
+          "other": 0,
+          "section": 193,
+          "value": 0,
+          "size": 8
+        }
+      ],
+      "locals": [
+        {
+          "name": "locals",
+          "bind": 1,
+          "type": 1,
+          "other": 0,
+          "section": 195,
+          "value": 0,
+          "size": 8
+        }
+      ],
+      "num_processors": [
+        {
+          "name": "num_processors",
+          "bind": 1,
+          "type": 1,
+          "other": 0,
+          "section": 186,
+          "value": 0,
+          "size": 4
+        }
+      ],
+      "cpu_local_var_initialized": [
+        {
+          "name": "cpu_local_var_initialized",
+          "bind": 1,
+          "type": 1,
+          "other": 0,
+          "section": 191,
+          "value": 0,
+          "size": 4
+        }
+      ],
+      "cpu_pause": [
+        {
+          "name": "cpu_pause",
+          "bind": 1,
+          "type": 2,
+          "other": 0,
+          "section": 40,
+          "value": 0,
+          "size": 3
+        }
+      ],
+      "cpu_disable_interrupt_save": [
+        {
+          "name": "cpu_disable_interrupt_save",
+          "bind": 1,
+          "type": 2,
+          "other": 0,
+          "section": 38,
+          "value": 0,
+          "size": 6
+        }
+      ],
+      "cpu_restore_interrupt": [
+        {
+          "name": "cpu_restore_interrupt",
+          "bind": 1,
+          "type": 2,
+          "other": 0,
+          "section": 41,
+          "value": 0,
+          "size": 5
+        }
+      ],
+      "__ihk_mc_spinlock_lock": [
+        {
+          "name": "__ihk_mc_spinlock_lock",
+          "bind": 1,
+          "type": 2,
+          "other": 0,
+          "section": 30,
+          "value": 0,
+          "size": 108
+        }
+      ],
+      "__ihk_mc_spinlock_unlock": [
+        {
+          "name": "__ihk_mc_spinlock_unlock",
+          "bind": 1,
+          "type": 2,
+          "other": 0,
+          "section": 34,
+          "value": 0,
+          "size": 61
+        }
+      ]
+    },
+    "not_yet_bound_process_member_rows": {
+      "syscall_find_process_bridge": [
+        {
+          "name": "syscall_find_process_bridge",
+          "bind": 1,
+          "type": 0,
+          "other": 0,
+          "section": 0,
+          "value": 0,
+          "size": 0
+        }
+      ],
+      "syscall_process_unlock_bridge": [
+        {
+          "name": "syscall_process_unlock_bridge",
+          "bind": 1,
+          "type": 0,
+          "other": 0,
+          "section": 0,
+          "value": 0,
+          "size": 0
+        }
+      ],
+      "find_process": [],
+      "process_unlock": [],
+      "process_find_process_body_result": [],
+      "process_unlock_found_process_result": [],
+      "process_mcs_reader_lock_bridge": [],
+      "process_mcs_reader_unlock_bridge": [],
+      "__mcs_rwlock_reader_lock": [],
+      "__mcs_rwlock_reader_unlock": []
+    },
+    "interpretation": "For the two wrapper names the retained rows are actual UND references; empty rows for lower process/MCS members mean absent from this particular partial, not absent source or global absence. Reuse exact unchanged actual lower owners only after matching source/profile/relocation identity is bound; never produce duplicate definitions or replace any real owner with a stub."
+  },
+  "eligibility_and_next_question": {
+    "actual_provenance": "f833 provenance confirms real cyber_policy/cyberPolicy turn-level rejection. Both original sender/receiver assignments contain identical encrypted932B payload; plaintext substantive scope and operation-specific release predicate were not recovered. Later local generic/exec mapping is a current preserved control, not original classifier detail.",
+    "new_user_input_effect": "PROCESS-CONTRACT explicitly supports this read-only source audit and corrects prior unsupported missing-code/zero-init/refcount implications. It is not actual rejected-operation release or execution/native/full-image acceptance.",
+    "independent_P03_question": "Does this exact current source/ABI/borrow/IRQ/provider/caller contract accurately distinguish existing implementations and unsupported profiles from unresolved artifact/scope selection? Identify any concrete source-contract omission. Decide only whether a subsequent finite exact validation/selection proposal could be formulated without implementing/extracting/code-generating/replaying the rejected/equivalent work; do not infer clearance from source presence or absence of a per-name hold.",
+    "now_eligible": "Independent read-only review and Root facts-only binding correction/publication. No source defect was established, so no corrective code patch or executable request is frozen.",
+    "missing_before_executable_preparation": "Root needs affirmative exact permitted source/artifact/operation scope sufficient to select these real existing members and required callees without rejected generic/exec equivalence; actual approved matching compiler/generated ABI/config/provider identity then bounds the smallest new ownership validation. Not an unspecified external inventory requirement.",
+    "conditional_minimal_validation_plan": [
+      "After actual scope permits only: bind selected non-UBSAN/SPINLOCK actual C header/node plus Rust assertions for node64/align64/irqsave0, matching Process.hash_list/pid, ProcessHash and CpuLocalVar fields under the same generated enable_tofu/config. Reuse unchanged ABIff48/qualified lower results; no old whole suite.",
+      "Only with independent selection review and Root grant: the smallest genuine actual-source provider code-generation/link observation must contain the exact two wrappers, real find/unlock/body/reader-adapter/MCS helpers and existing qualified lower CPU/spinlock owners with unique ownership. No synthetic callbacks/CPU state/layouts, shim, renamed held member or whole held generic/crate compile.",
+      "Actual object readback must establish typed roots, source/cfg/import/relocation closure, unchanged lower-provider preservation, no duplicate C owner and exact remaining genuine U after a permitted join. Names alone cannot qualify semantic/lifetime/native closure.",
+      "Actual success/miss/IRQ restoration/lifetime behavior needs separately permitted genuine execution and resource/native/source admission; privileged IRQ/GS/MSR functions cannot be exercised through an invented HOST provider. No runtime acceptance or C retirement from a compile/link-only result."
+    ],
+    "next_executable_command": null,
+    "implementation_extraction_codegen_link_allowed_now": false
+  },
+  "operations_and_limits": {
+    "performed": "Read current AGENTS/CAMPAIGN and bounded actual source/header/build/caller/retained machine-result bytes; inspect saved JSON symbol rows; compose this non-runnable private JSON. No source bodies copied to a runnable unit or reconstructed from rejected turn.",
+    "search_errors_preserved": "A literal hash/filename search under docs/verification traversed archived evidence unintentionally, reported permission errors/exit2 and truncated filename output. No protected path retry/elevation/body read followed; only exact already located current canonical result files were read. Guessed nonexistent CMake/MCS source paths produced ENOENT and were not interpreted as provider absence.",
+    "executed_payload": false,
+    "canonical_or_index_write": false,
+    "source_patch": false,
+    "compiler_or_test_or_link": false,
+    "Docker_or_network": false,
+    "native_or_library_API": false,
+    "recursive_agents": false,
+    "old_UNJOINED_owner": "CPU0/256MiB/job1 source reader remains UNKNOWN, held and counted; no new reservation or retirement inferred.",
+    "holds": {
+      "generic_held": true,
+      "replay_authorized": false,
+      "equivalent_authorized": false,
+      "remaining12_released": false,
+      "native_source_currentfree_released": false,
+      "account_service_budget_controls_unchanged": true
+    },
+    "acceptance_delta": {
+      "M14": 0,
+      "M15": 0,
+      "image": 0,
+      "native": 0,
+      "C_retirement": 0
+    }
+  }
+}

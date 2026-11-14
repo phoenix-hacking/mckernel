@@ -1,0 +1,120 @@
+--- qualified-shared9f27/PROBE.py
++++ libzstd-provider-read-1/PROBE.py
+@@ -1,5 +1,5 @@
+ #!/usr/bin/python3
+-"""Read only two caller-selected provider ELFs; no target program or API call."""
++"""Read only actual libelf-selected libzstd runtime metadata; no API/loader call."""
+ import hashlib
+ import json
+ import os
+@@ -10,7 +10,7 @@
+ import sys
+ 
+ OUT = Path('/output')
+-report = {'schema':'mckernel.two-diagnostic-provider-passive-result.v1',
++report = {'schema':'mckernel.mcinspect-libelf-zstd-five-passive-result.v1',
+           'status':'RUNNING','providers':[], 'original_leaves_accepted':False,
+           'runtime_or_API_executed':False}
+ 
+@@ -133,6 +133,7 @@
+             'version_definition_names':definitions,
+             'scope':'Exact caller-selected definitions/versions, no target loader/API invocation'}
+ 
++
+ try:
+     spec = json.loads(Path('/input/INPUTS.json').read_text())
+     helper = Path('/input/owned_process.py')
+@@ -159,53 +160,55 @@
+             raise ValueError('passive command failed: '+label)
+         return completed.stdout.decode('utf-8','strict')
+     qformat = '%{NAME}|%{EPOCHNUM}|%{VERSION}|%{RELEASE}|%{ARCH}|%{SOURCERPM}\n'
+-    for expected in spec['providers']:
+-        key = expected['id']
+-        entry = {'id':key}
+-        report['providers'].append(entry)
+-        runtime = identity(expected['runtime_anchor'],spec['file_size_limit_bytes'])
+-        link = identity(expected['link_input'],spec['file_size_limit_bytes'])
+-        entry['runtime'] = runtime
+-        entry['link_input'] = link
+-        if runtime.get('ELF') != {'class':64,'little_endian':True,'type':3,'machine':62}:
+-            raise ValueError('runtime provider ELF role differs')
+-        if runtime['resolved_path'] != link['resolved_path'] or runtime['sha256'] != link['sha256']:
+-            raise ValueError('selected development and runtime provider files differ')
+-        entry['runtime_link_same_file'] = True
+-        rpms = []
+-        for role,path in [('runtime',expected['runtime_anchor']),('devel',expected['link_input'])]:
+-            text = run(['/usr/bin/rpm','-qf','--qf',qformat,path],key+'-'+role+'-rpm')
+-            fields = text.strip().split('|')
+-            if len(fields) != 6 or '\n' in text.strip() or not fields[5].endswith('.src.rpm'):
+-                raise ValueError('RPM source/header row shape differs')
+-            prior = expected['prior_runtime_package'] if role == 'runtime' else expected['prior_devel_package']
+-            if prior is not None and fields[:5] != prior:
+-                raise ValueError('actual installed provider package differs from saved consumer profile')
+-            rpms.append({'role':role,'argv_path':path,'raw':text,'fields':fields})
+-        entry['package_headers'] = rpms
+-        if rpms[0]['fields'][1:] != rpms[1]['fields'][1:]:
+-            raise ValueError('runtime and development EVR/arch/source header relation differs')
+-        entry['same_runtime_devel_EVR_arch_source'] = True
+-        text = run(['/usr/bin/readelf','--wide','--file-header','--section-headers','--dynamic','--dyn-syms','--version-info',expected['runtime_anchor']],key+'-ELF')
+-        entry['ELF_join'] = parse_selected(text,expected)
+-        after = identity(expected['runtime_anchor'],spec['file_size_limit_bytes'])
+-        if after != runtime:
+-            raise ValueError('immutable provider identity changed during passive read')
+-        entry['identity_stable_after_metadata'] = True
+-        entry['caller_rows'] = expected['caller_rows']
++    if len(spec['providers']) != 1:
++        raise ValueError('exact one runtime provider required')
++    expected = spec['providers'][0]
++    if expected['id'] != 'zstd' or expected['runtime_anchor'] != '/usr/lib64/libzstd.so.1':
++        raise ValueError('runtime provider scope differs')
++    if expected['required_unique'] != [
++        {'name':name,'required_version':None} for name in
++        ['ZSTD_compressStream2','ZSTD_createCCtx','ZSTD_decompress','ZSTD_freeCCtx','ZSTD_isError']
++    ]:
++        raise ValueError('exact five actual unversioned callers required')
++    key = expected['id']
++    entry = {'id':key}
++    report['providers'].append(entry)
++    runtime = identity(expected['runtime_anchor'],spec['file_size_limit_bytes'])
++    entry['runtime'] = runtime
++    if runtime.get('ELF') != {'class':64,'little_endian':True,'type':3,'machine':62}:
++        raise ValueError('runtime provider ELF role differs')
++    text = run(['/usr/bin/rpm','-qf','--qf',qformat,expected['runtime_anchor']],key+'-runtime-rpm')
++    fields = text.strip().split('|')
++    if len(fields) != 6 or '\n' in text.strip() or not all(fields) or fields[4] != 'x86_64' or not fields[5].endswith('.src.rpm'):
++        raise ValueError('actual runtime RPM source/header row shape differs')
++    prior = expected['prior_runtime_package']
++    if prior is not None and fields[:5] != prior:
++        raise ValueError('actual runtime package differs from retained profile')
++    entry['package_headers'] = [{'role':'runtime','argv_path':expected['runtime_anchor'],'raw':text,'fields':fields}]
++    text = run(['/usr/bin/readelf','--wide','--file-header','--section-headers','--dynamic','--dyn-syms','--version-info',expected['runtime_anchor']],key+'-ELF')
++    entry['ELF_join'] = parse_selected(text,expected)
++    for selected in entry['ELF_join']['selected_definitions']:
++        definition = selected['definition']
++        if definition['bytes'] <= 0 or int(definition['value'],16) == 0:
++            raise ValueError('selected callable has no nonempty definition')
++    after = identity(expected['runtime_anchor'],spec['file_size_limit_bytes'])
++    if after != runtime:
++        raise ValueError('immutable runtime identity changed during passive read')
++    entry['identity_stable_after_metadata'] = True
++    entry['caller_rows'] = expected['caller_rows']
+     report['owned_records'] = owner.records
+-    if len(owner.records) != 6:
+-        raise ValueError('exact six passive child commands not recorded')
++    if len(owner.records) != 2:
++        raise ValueError('exact two passive child commands not recorded')
+     for item in owner.records:
+         if not (int(item['leader_birth']) > 0 and item['status'] == 0 and item['leader_parent_joined'] and item['whole_descendants_joined'] and item['streams_closed']):
+             raise ValueError('positive child ownership/exit/stream facts missing')
+         if item.get('adopted_reaps') or item.get('adopted_kills') or item.get('remaining_direct_children') or item.get('error') or item.get('timed_out') or item.get('leader_group_signalled'):
+             raise ValueError('unresolved or destructive child cleanup')
+-    report['status'] = 'PASS_EXACT_TWO_PROVIDER_ELF_VERSION_FILE_PACKAGE_JOINS_PENDING_ORIGINAL_LEAF_REVIEW'
++    report['status'] = 'PASS_EXACT_ZSTD_FIVE_RUNTIME_DEFINITION_VERSION_FILE_PACKAGE_JOINS_PENDING_ORIGINAL_LEAF_REVIEW'
+     persist()
+     print(report['status'])
+ except BaseException as primary:
+-    report['status'] = 'FAIL_PASSIVE_PROVIDER_CAPTURE_OR_JOIN'
++    report['status'] = 'FAIL_PASSIVE_ZSTD_RUNTIME_CAPTURE_OR_JOIN'
+     report['error'] = type(primary).__name__+': '+str(primary)
+     try:
+         persist()

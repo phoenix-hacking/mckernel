@@ -1,0 +1,50 @@
+{
+  "status": "STATIC_CALLER_CORRECTION_APPROVED_NOT_EXECUTION_RELEASE",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "original_descriptor": {
+    "bytes": 3979,
+    "path": "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/provider-opt-in-1/combined-host-output-opt-in-1/ACTUAL-CANONICAL-RUNTIME-INPUT-MAP.json",
+    "sha256": "244a5f8649de55acb17f3edc53bdc40669b35b5223948c2ca6f88f4372f71a7c"
+  },
+  "original_owner_argv_shape": [
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/scripts/native_running_external_modules_owner.py",
+    "--request",
+    "<FRESH_EXACT_REQUEST>",
+    "--request-sha256",
+    "<ACTUAL_REQUEST_SHA256>",
+    "--release",
+    "<FRESH_REVIEWED_RELEASE>",
+    "--release-sha256",
+    "<ACTUAL_RELEASE_SHA256>"
+  ],
+  "only_argv_delta": "Remove outer /usr/bin/sudo -A only. Preserve canonical owner path and remaining order/arguments.",
+  "corrected_owner_argv_template": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/scripts/native_running_external_modules_owner.py",
+    "--request",
+    null,
+    "--request-sha256",
+    null,
+    "--release",
+    null,
+    "--release-sha256",
+    null
+  ],
+  "dispatcher_instruction": "Dispatcher explicitly approved this mechanical caller correction. Do not mutate/relabel original244a runtimeinputmap; new boundrelease review consumes this correctedshape.",
+  "source_invariant": "Canonical4f530 owner guarded_execute requires UID/EUID/GID/EGID1000. Existing Docker and historical observer use sudo-A internally. Canonicalsource11 guard and all ownerfunctionbodies remain unchanged.",
+  "required_caller_identity": {
+    "uid": 1000,
+    "euid": 1000,
+    "gid": 1000,
+    "egid": 1000
+  },
+  "actual_caller_identity": null,
+  "actual_runtime_release": null
+}

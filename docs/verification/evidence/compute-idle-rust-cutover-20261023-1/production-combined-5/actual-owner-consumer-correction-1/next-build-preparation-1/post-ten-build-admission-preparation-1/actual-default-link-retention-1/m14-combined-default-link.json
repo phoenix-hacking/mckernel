@@ -1,0 +1,116 @@
+{
+  "idle_imports": [
+    "sched_idle_loop_body_result",
+    "sched_idle_current_cpu_bridge"
+  ],
+  "memory_imports": [
+    "x86_clear_old_action_bridge",
+    "x86_clear_phys_to_virt_bridge",
+    "x86_clear_page_unmap_bridge",
+    "x86_clear_free_pages_user_bridge"
+  ],
+  "native": false,
+  "objects": {
+    "arch/x86_64/kernel/memory.c": {
+      "ctime_ns": 1792762577892220686,
+      "device": 66306,
+      "inode": 48908883,
+      "mode": 420,
+      "mtime_ns": 1792762577892220686,
+      "path": "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o",
+      "sha256": "b1a380c76505e09c2f41284e52ae80c51ee2f7f58741fc26712dd1e5ac378f38",
+      "size": 205768
+    },
+    "kernel/mckernel.img": {
+      "ctime_ns": 1792762578872252290,
+      "device": 66306,
+      "inode": 48908889,
+      "mode": 493,
+      "mtime_ns": 1792762578872252290,
+      "path": "/work/output/build/kernel/mckernel.img",
+      "sha256": "c13f405e7f1065270aa6b0adb21dc8b8eb68fcaa64dc5be43feeeef5ea0dd711",
+      "size": 8460424
+    },
+    "kernel/mem.c": {
+      "ctime_ns": 1792762577544209463,
+      "device": 66306,
+      "inode": 48908876,
+      "mode": 420,
+      "mtime_ns": 1792762577544209463,
+      "path": "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/mem.c.o",
+      "sha256": "1256c9821b17bf24db09cc24f5e6f2786a7cfb89a02ef046ebf393643bde8bb9",
+      "size": 262528
+    },
+    "kernel/process.c": {
+      "ctime_ns": 1792762577592211011,
+      "device": 66306,
+      "inode": 48908878,
+      "mode": 420,
+      "mtime_ns": 1792762577592211011,
+      "path": "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+      "sha256": "33ad7dd81ebcbfd219866500b1de7d75faa35aa242504c2af23bf343b8b63ae3",
+      "size": 305208
+    },
+    "kernel/rust/mckernel_rust.o": {
+      "ctime_ns": 1792762574944125608,
+      "device": 66306,
+      "inode": 48908844,
+      "mode": 420,
+      "mtime_ns": 1792762574944125608,
+      "path": "/work/output/build/kernel/rust/mckernel_rust.o",
+      "sha256": "e5c260900152b6325d4f2f29076fafb2802fb8b5bd40ad838e606fbc7496567a",
+      "size": 13637208
+    }
+  },
+  "page_unmap_public_contract": {
+    "C_wrapper_excluded": true,
+    "callbacks": [
+      "page_hash_lock_bridge",
+      "page_hash_unlock_bridge",
+      "page_unmap_log_bridge"
+    ],
+    "default_mem_object": {
+      "ctime_ns": 1792762577544209463,
+      "device": 66306,
+      "inode": 48908876,
+      "mode": 420,
+      "mtime_ns": 1792762577544209463,
+      "path": "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/mem.c.o",
+      "sha256": "1256c9821b17bf24db09cc24f5e6f2786a7cfb89a02ef046ebf393643bde8bb9",
+      "size": 262528
+    },
+    "immutable_geometry_widths": {
+      "page_unmap_hash_mask": 8,
+      "page_unmap_hash_shift": 4,
+      "page_unmap_lock_stride": 8
+    },
+    "native": false,
+    "public_Rust_provider": "page_unmap"
+  },
+  "source_pins": {
+    "arch/x86_64/kernel/memory.c": "25c13c856dff0a1219a316ac3cf38cbe40f79c16561813b98a408f8cb62c24ed",
+    "kernel/include/sched_helpers.h": "9712a3df59eb0251f517ce01254e4576119868924b35f7da6fbee294bff966ae",
+    "kernel/mem.c": "bac5d4fb766b5cb80e036457465e215743a1cb31622ff11c5b5b605749f3d7fe",
+    "kernel/process.c": "7203019d2ba8143f9240a03d11bc8c5cfcd495d89183aa7ab643c6159a6bd02d",
+    "kernel/rust/page_helpers.rs": "cfc64f72bf9b94c65417bc8f4e29d65b81f98239fe52ab2a7dd0352ebdfc3f70",
+    "kernel/rust/sched_helpers.rs": "449df570965855f992a0fe024fca7cd6527b20622b4b8e3b33af04900b02e923",
+    "kernel/rust/x86_memory_helpers.rs": "35664d46edaa3674d633b3c1ff96e85723fd21e5daf517d53c2438de35d5c4a3"
+  },
+  "status": "PASS_PINNED_FULLCRATE_DEFAULT_C_CONSUMERS_AND_FINAL_LINK_ONLY",
+  "unique_Rust_and_image_exports": [
+    "sched_idle_loop_body_result",
+    "sched_idle_current_cpu_bridge",
+    "x86_clear_old_action_bridge",
+    "x86_clear_phys_to_virt_bridge",
+    "x86_clear_page_unmap_bridge",
+    "x86_clear_free_pages_user_bridge",
+    "page_unmap",
+    "sched_idle_begin_body_result",
+    "sched_idle_iteration_body_result",
+    "sched_idle_runqueue_has_running_result",
+    "process_sched_cpu_local_bridge",
+    "get_cpu_local_var",
+    "ihk_mc_get_processor_id"
+  ],
+  "whole_M14_area_retired": false
+}

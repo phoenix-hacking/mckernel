@@ -1,0 +1,141 @@
+{
+  "task_id": "native-resource-release-parser-correction-20261017-1",
+  "status": "PASS_FOCUSED_REFERENCE_READY_FOR_INDEPENDENT_REVIEW",
+  "supersedes_parser_only": {
+    "path": "/home/holden/mckernel-work/scratch/native-resource-release-parser-correction-20261017-1/original/native_resource_release_capture.py",
+    "sha256": "7dac92fad805ebe12c6c86a4c5030d3ac384eb528c75857c49d7dfe0f128eadb",
+    "size": 3810
+  },
+  "original_source_evidence_unchanged": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-resource-release-probe-source-20261017-1.json",
+    "sha256": "c200d776761a81244ab3ce22458ebf14e61ee776b779725517abfb77cfa59174",
+    "size": 77293
+  },
+  "corrected_parser": {
+    "path": "/home/holden/mckernel/scripts/application-tests/native_resource_release_capture.py",
+    "sha256": "c1722019f27946a0c4a84018dd2eb50b0bd30de5081356f9debd77ece8339589",
+    "size": 5087
+  },
+  "focused_tests": {
+    "path": "/home/holden/mckernel/scripts/tests/test_native_resource_release_probe.py",
+    "sha256": "2740ec3f2ea70baeb49c1280d036dc0e0d74e2abfd8e1c504944b56cf4a89a80",
+    "size": 10417
+  },
+  "retained_actual_C_positive": {
+    "path": "/home/holden/mckernel-work/scratch/native-resource-release-probe-20261017-1/compiled-2/scenario-00.stdout",
+    "sha256": "19f7fd3b2169230fc106a9cad4e096b6b88e195c7b27409f2c362adc8c07dc5b",
+    "size": 2400
+  },
+  "static_probe_unchanged": {
+    "path": "/home/holden/mckernel-work/scratch/native-resource-release-probe-20261017-1/static-2/native-resource-release-probe",
+    "sha256": "80bbfbb69b73935b38e1eb946d9246ccfa9f4c22084291703d2a4a51d1566e7e",
+    "size": 876600
+  },
+  "C_source_unchanged": {
+    "path": "/home/holden/mckernel/scripts/application-tests/native_resource_release_probe.c",
+    "sha256": "84d1f218301d59954d92ac32eb0d856e628f1680907b795f3c27db30a70cbcb1",
+    "size": 7283
+  },
+  "checks": {
+    "selected_class": "ParserOnly",
+    "test_methods": 7,
+    "actual_C_positive_bytes": 2400,
+    "duplicate_key_negatives": 4,
+    "LF_framing_negatives": 5,
+    "outer_capture_type_negatives": 14,
+    "every_numeric_scalar_float_bool_negatives": 188,
+    "scope_wrong_type_value_negatives": 15,
+    "chunk_type_nonfinite_negatives": 4,
+    "result": "PASS",
+    "no_C_compiler_helper_or_guest_replay": true
+  },
+  "semantics": "Same existing public release trace and pool/status oracle; parser rejects duplicate keys/nonfinite numbers; exact bytes stdout/stderr and integer returncode0; ASCII LF framing without CR; exact numeric types and boolean-false scope flags. No new wire or framework.",
+  "command": {
+    "argv": [
+      "/usr/bin/timeout",
+      "-k",
+      "5s",
+      "120s",
+      "/usr/bin/taskset",
+      "-c",
+      "6",
+      "/usr/bin/prlimit",
+      "--as=1073741824",
+      "--cpu=90",
+      "--fsize=67108864",
+      "--nofile=256",
+      "--core=0",
+      "/home/holden/anaconda3/bin/python3",
+      "-B",
+      "/home/holden/mckernel/scripts/tests/test_native_resource_release_probe.py",
+      "ParserOnly",
+      "-v"
+    ],
+    "env": {
+      "PATH": "/usr/bin:/bin",
+      "HOME": "/home/holden/mckernel-work/scratch/native-resource-release-parser-correction-20261017-1/home",
+      "TMPDIR": "/home/holden/mckernel-work/scratch/native-resource-release-parser-correction-20261017-1/tmp",
+      "LANG": "C",
+      "LC_ALL": "C"
+    },
+    "cwd": "/home/holden/mckernel"
+  },
+  "result": {
+    "returncode": 0,
+    "elapsed_seconds": 0.10406020200025523
+  },
+  "retention": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-release-parser-correction-20261017-1/command.json",
+      "sha256": "25038c190bdc679b3cd979dcb7815a801548f7456da6ee3c4df69c2f900d678a",
+      "size": 733
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-release-parser-correction-20261017-1/native_resource_release_capture.py",
+      "sha256": "c1722019f27946a0c4a84018dd2eb50b0bd30de5081356f9debd77ece8339589",
+      "size": 5087
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-release-parser-correction-20261017-1/observe.py",
+      "sha256": "b7f95e0b9ecef86060b7396d3419371456b9f6b58ab655468133da15b8d3a25b",
+      "size": 1034
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-release-parser-correction-20261017-1/original/native_resource_release_capture.py",
+      "sha256": "7dac92fad805ebe12c6c86a4c5030d3ac384eb528c75857c49d7dfe0f128eadb",
+      "size": 3810
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-release-parser-correction-20261017-1/original/test_native_resource_release_probe.py",
+      "sha256": "5a6e11fce1eb562d7ea1accf6835c5a2ae740624d040875781838218d3f08917",
+      "size": 6489
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-release-parser-correction-20261017-1/result.json",
+      "sha256": "5f410a5b8fad1e088ecace1d2c545f72e7e4514648be1ff1c2d475344c9bede1",
+      "size": 58
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-release-parser-correction-20261017-1/stderr",
+      "sha256": "56ee02270744ee76aa0abc790af02ace603eb1052043fbe57c1c17db016cc01e",
+      "size": 507
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-release-parser-correction-20261017-1/stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-release-parser-correction-20261017-1/test_native_resource_release_probe.py",
+      "sha256": "2740ec3f2ea70baeb49c1280d036dc0e0d74e2abfd8e1c504944b56cf4a89a80",
+      "size": 10417
+    }
+  ],
+  "historical_capture_caveat": "Original source record c200 retains prior four outer-summary overwrite caveat; this correction uses exclusive creates and preserves original parser/tests without reconstructing lost captures.",
+  "limits": [
+    "Reference parser checks only; no native runtime/resource-restoration acceptance",
+    "Current strict5 actual success reported by dispatcher is separate evidence, not supplied by these parser tests",
+    "Complete one-cycle collector integration and independent review remain required; ten cycles/100launches/60min remain open"
+  ],
+  "next": "Independent review exact parser pin; collectorwriter may test retained actual C body through separate resource-only4096-byte supervisor/serializer pipeline. Keep existing payload/lifecycle1024 limits unchanged."
+}

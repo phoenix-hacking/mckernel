@@ -1,0 +1,94 @@
+{
+  "actual_default_link": null,
+  "actual_native": null,
+  "actual_private_Rust_receipt": {
+    "bytes": 7144,
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/ACTUAL-PRODUCTION-FULLCRATE-RECEIPT.json",
+    "sha256": "f601ae2bbfa15238390ff6ca36738f1486badac668373bd5076b5b37f0a76497"
+  },
+  "actual_pure_consumer": null,
+  "actual_request": null,
+  "actual_source_manifest": null,
+  "actual_whole_C_TU": null,
+  "base_frozen_pure_request": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-6/default-image-preparation-1/next-build-preparation-1/image-request.PREPARED.json",
+    "sha256": "095b20a82a3477519ba933babe21fe256fa73c2b69613b7d12f97e95cf58b39e"
+  },
+  "base_manifest": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-6/default-image-preparation-1/source-materialization-attempt-1/source-inputs.json",
+    "sha256": "2c937f9311f1ff43da4cf6df3d26e03e759ab73d96b0d22fceee0fb23464f1e9"
+  },
+  "canonical_integration": {
+    "bytes": 1503,
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/CANONICAL-TEXTMAP-BRIDGE-INTEGRATION.json",
+    "sha256": "08f1dddf049a40469a1b5eb2054c592a34b92b946829897b2a17be86dcde4fbf"
+  },
+  "changed_source_files": [
+    {
+      "after_sha256": "935dce935e814974a85729fafde9b3912e9fbff816d9074f6044fa63102370cb",
+      "before_sha256": "d17a62c07102a6f015c05dff88b5594805ae4b2b871bffeddd7b1286802f8503",
+      "path": "arch/x86_64/kernel/memory.c"
+    },
+    {
+      "after_sha256": "19919d35402c84540336b1983e7ac031397bc5f2d7855a7ae901a35dcedbf3f9",
+      "before_sha256": "5a9b4effe230fb4a322441950fa7f6588f2165c7ee2a33f62c273089466e65d6",
+      "path": "kernel/rust/x86_memory_helpers.rs"
+    },
+    {
+      "after_sha256": "2e1aa8e4299480ce31282f85e303a463034a475abbf20fb21fae95990230ed23",
+      "before_sha256": "7bebd850bc4f2262cbac2cf0eefcaad932a9b66aabd089dee7cbea7026b93224",
+      "path": "kernel/rust/tests/run_equivalence.sh"
+    }
+  ],
+  "driver": {
+    "bytes": 152377,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/native_rust_exact_mckernel_image_offline.py",
+    "sha256": "6c600601097aa9ee053a8c6cb7350a5d11b17613e07bf1bf2cc9dad0d9178d0a"
+  },
+  "driver_expectations": [
+    "Preserve accepted13exports+normal-large bridge and four realCimports; never require normal-large C U/reloc",
+    "Actual selected whole memory.c GCC14PUBLIC compile excludes both bridge Cbodies",
+    "New textmap getter one Rust/finalT; noCgetter; exactimmutablegeometry8byteR inwholeC/final, RustobjectUgeometry; existing final allundefinedempty",
+    "Accepted Rust source getter consumes imported geometry and preservesbuildresolvedvalue; no invented numericMAP_KERNEL_START constant",
+    "15uniqueRust/finalexports: original13+normal-large+textmap; exactleafABI reviewed5bac and actual78inputRustf601 retained"
+  ],
+  "execution_authorized": false,
+  "failure_history": [
+    "Originalcandidate6prepared995b fictional newbridge C-U expectation rejected before execution; corrected7b9 source retained and usedasbase; no newfailure/retry"
+  ],
+  "gitlink_manifest": null,
+  "predicted_manifest_bytes": 10195479,
+  "predicted_manifest_sha256": "1ff94d6e48bb3b694d09ac467fc1dd630d471983fcc24335b2cd5c3c85aaf48b",
+  "preserved_all_other_source_modes_kinds_metadata": true,
+  "preserved_source_entries": 6959,
+  "preserved_tracked_symlinks": 49,
+  "producer": {
+    "bytes": 10408,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/materialize_source.py",
+    "sha256": "bbd3c6730edaf6a2db66d4d647c1ba10432432ca1e08b40931360198e77de971"
+  },
+  "provenance": {
+    "bytes": 41116,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/native_rust_exact_build_offline.py",
+    "sha256": "dbe2a604df56b4e90eaa11716ba290c5d23d3eaaf7da017be52620f29687bb7a"
+  },
+  "request_named_fields": {
+    "driver_path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/native_rust_exact_mckernel_image_offline.py",
+    "driver_sha256": "6c600601097aa9ee053a8c6cb7350a5d11b17613e07bf1bf2cc9dad0d9178d0a",
+    "materialization_sha256": "930fe5942983c5252742161868a65a3e09e84d975ab45336afca6113d5365108",
+    "provenance_path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/native_rust_exact_build_offline.py",
+    "provenance_sha256": "dbe2a604df56b4e90eaa11716ba290c5d23d3eaaf7da017be52620f29687bb7a",
+    "source_derivative_sha256": "387201c75e5c67d3eafdf6b7cfbf5908afa2f2ee3030ef0749cee59d19819a2e",
+    "source_manifest": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/source-materialization-attempt-1/source-inputs.json",
+    "source_manifest_sha256": "1ff94d6e48bb3b694d09ac467fc1dd630d471983fcc24335b2cd5c3c85aaf48b",
+    "source_root": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/source-materialization-attempt-1/materialized-source"
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\nSource/metadata preparation only. No materializer, compiler or validator execution.\n",
+  "source_ABI_review": {
+    "bytes": 1573,
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/INDEPENDENT-SOURCE-ABI-AND-PRIVATE-RUST-ACCEPTANCE.json",
+    "sha256": "5bac4bddf7ee428358bcc6856ccb9b83f89c45231329e714292251f529d19b75"
+  },
+  "source_identity": null,
+  "status": "SOURCE_AND_METADATA_ONLY_NOT_MATERIALIZED"
+}

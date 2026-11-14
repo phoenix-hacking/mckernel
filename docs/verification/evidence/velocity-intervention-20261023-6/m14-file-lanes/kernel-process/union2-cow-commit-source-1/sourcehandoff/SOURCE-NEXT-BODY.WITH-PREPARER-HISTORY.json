@@ -1,0 +1,126 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "COW_POST_COPY_RSS_UNMAP_PUBLICATION_SOURCE_ONLY",
+  "base": {
+    "C": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-extend-region-source-1/candidate/kernel/process.SOURCE-CONTEXT-CORRECTED.c",
+      "sha256": "42ee6f390724da418d0cc0ac6573200615c1ed2a52cf0f7a10602d6eb9729ef1",
+      "bytes": 167788
+    },
+    "Rust": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-extend-region-source-1/candidate/kernel/rust/process_helpers.rs",
+      "sha256": "2e74d8131170630a1930d8f972e2918b8519e929635c5754fafd935009865da1",
+      "bytes": 371962
+    }
+  },
+  "postimages": {
+    "kernel/process.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-cow-commit-source-1/candidate/kernel/process.c",
+      "sha256": "71ce38ff7097717a83d3acf3fab351f44f65a7716ee25f95a5f538c218f20487",
+      "bytes": 168680
+    },
+    "kernel/rust/process_helpers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-cow-commit-source-1/candidate/kernel/rust/process_helpers.rs",
+      "sha256": "e3bf9d977e05eb6f4c4ef8e91cbdf36c25d6f52ec06589d3c480bd7fdb6fa509",
+      "bytes": 374112
+    }
+  },
+  "original": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-cow-commit-source-1/fixture/original_cow_commit.ACTUAL-C.inc",
+    "sha256": "ba10afe480e30c8bbfe0990dea72202758b20fbd0d06f616e2984a1b000d08f5",
+    "bytes": 773
+  },
+  "new_Rust": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-cow-commit-source-1/fixture/cow_commit.ACTUAL-RUST.inc",
+    "sha256": "11e90a3b8efbdfb05ede97aafba0970c27bbfc67001f95390981f69f178ae449",
+    "bytes": 2075
+  },
+  "fixture": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-cow-commit-source-1/fixture/FIXTURE-PROPOSAL.json",
+    "sha256": "ff014b1616fdcf4ed6672b403687238f3782b81f360978b2f00906347253f420",
+    "bytes": 2269
+  },
+  "actual_provider_references": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-cow-commit-source-1/fixture/existing_providers.ACTUAL-RUST.REFERENCE-ONLY.inc",
+    "sha256": "11856e426af9fc3752a965a16c4f267e258d2b376ee4b95952506312ada915b8",
+    "bytes": 1436
+  },
+  "lock_lifetime_invariant": "Caller retains page_table_lock and owns copied allocation before/after helper; unchanged existing Page-unmap is the sole old-Page consumption. No allocation/free/new ref/zeroobj operation/lock/release is added. Original caller retains PTE installation and stray-page out cleanup.",
+  "exact_order": "RSS-add -> optional add log -> optional old Page-unmap -> optional sub log -> RSS-sub reading current range.memobj -> new virt_to_phys -> publish phys -> existing phys_to_page -> publish new Page. Original whole C fallback retained. size to CULong and page-size to CInt exactly match original implicit ABI conversions.",
+  "selected_actual_provider_debt": [
+    "phys_to_page existing C provider remains; no new getter",
+    "Page-unmap C geometry/lock/log bridges remain existing provider debt",
+    "COW allocation/copy log/memcpy and PTE install/error/out orchestration remain C"
+  ],
+  "copy_log_order_hold": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-cow-commit-source-1/fixture/copy_log_and_memcpy.EVALUATION-ORDER-HOLD.ACTUAL-C.inc",
+    "sha256": "cce230156b2fd277cdd6cf0adc8f305b8dd2b5a6fd70523a109e06df5bbad982",
+    "bytes": 199
+  },
+  "Page_count_provider_hold": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-cow-commit-source-1/fixture/post_install_Page_count.TYPED-PROVIDER-HOLD.ACTUAL-C.inc",
+    "sha256": "aa28d923d98e77f3076024f60b483e91fa8ef1ad14cdcce0af9af314992144ed",
+    "bytes": 177
+  },
+  "zeroobj_ownership_hold_unchanged": true,
+  "anonymous_ownership_not_imported": true,
+  "source_provider_pins": {
+    "kernel/rust/mem_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+      "sha256": "be693dec5e53b20f06f7963b7418a7c0dff68cbecaaa2360e291d8542784e045",
+      "bytes": 209297
+    },
+    "kernel/rust/page_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/page_helpers.rs",
+      "sha256": "cfc64f72bf9b94c65417bc8f4e29d65b81f98239fe52ab2a7dd0352ebdfc3f70",
+      "bytes": 17367
+    },
+    "kernel/rust/x86_memory_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/x86_memory_helpers.rs",
+      "sha256": "087240006b3f1b99c844c77c1c645118710bf34f53546637eb12d54215822092",
+      "bytes": 204359
+    },
+    "kernel/include/rusage_private.h": {
+      "path": "/home/holden/mckernel/kernel/include/rusage_private.h",
+      "sha256": "9cc30af76f445517a70fbbaa2bc6d2a48dee12bc8fd08bc0e1c37d571693d972",
+      "bytes": 3262
+    }
+  },
+  "source_context": {
+    "C_preimage": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-extend-region-source-1/candidate/kernel/process.SOURCE-CONTEXT-CORRECTED.c",
+      "sha256": "42ee6f390724da418d0cc0ac6573200615c1ed2a52cf0f7a10602d6eb9729ef1",
+      "bytes": 167788
+    },
+    "rss_add_debug_line": 3071,
+    "rss_sub_debug_line": 3076
+  },
+  "sole_executable_queue_unchanged": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/extend-cow-fixture-preparation-1/preexec-fixture-context-1/sourcehandoff/EXECUTABLE-READY.EXTEND-COW4480.NOT-GRANTED.json",
+    "sha256": "da1989b1a337e2b945030e00674eeb43de015baad8bd2f51d139092e9c811240",
+    "bytes": 3949
+  },
+  "all_prior_failures_retained": true,
+  "compiler_jobs": 0,
+  "actual_tests": 0,
+  "CPU_reservations": 0,
+  "new_executable_queues": 0,
+  "canonical_mutations": 0,
+  "fullcrate_default_native_credit": false,
+  "original_source_handoff": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-cow-commit-source-1/sourcehandoff/SOURCE-NEXT-BODY.json",
+    "sha256": "e2c72e290d69030951e3434f1092efdff3ed457245e4d52b9c31593567403d51",
+    "bytes": 6415
+  },
+  "source_preparation_failure_history": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-cow-commit-source-1/sourcehandoff/SOURCE-PREPARER-FIRST-FAILURE-1.json",
+    "sha256": "e16e08638f63f8d9b75c9e3480b784d509d770d3c75b47f8bbba1c3828e0d432",
+    "bytes": 1313
+  },
+  "sole_bounded_source_extraction_correction": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-cow-commit-source-1/prepare_source.BOUNDED-EXTRACTION-CORRECTION-1.py",
+    "sha256": "54ba922b21721e89f1ab2af7d40230e3b464e117816d866bc40de1ba96207d1a",
+    "bytes": 13041
+  },
+  "source_extraction_disposition": "Raw selected/fallback braces cannot be counted as one active C translation. Exact known next top-level definition delimiters used for this held page-fault function only. Original failed preparer remains immutable. Corrected preparation succeeded; no compilation, test, retry of source semantics or family reset."
+}

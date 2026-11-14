@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "record_kind": "native_collector_lifecycle_raw_preflight_aggregate_byte_source_checkpoint",
+  "task_id": "M02-C-lifecycle-raw-preflight-aggregate-byte-source",
+  "attempt": 1,
+  "status": "PASS_RAW_PREFLIGHT_AGGREGATE_BYTE_SOURCE_CHECKPOINT_ONLY",
+  "recorded_utc": "2026-09-15T13:15:00Z",
+  "base_commit": "417338a834b72713badbda6cf21ff6ecca30b492",
+  "reviews": {
+    "packet": "PASS_RAW_PREFLIGHT_AGGREGATE_BYTE_PACKET_ONLY",
+    "source": "PASS_RAW_PREFLIGHT_AGGREGATE_BYTE_SOURCE_ONLY",
+    "preliminary_evidence": "PASS_RAW_PREFLIGHT_AGGREGATE_BYTE_SOURCE_PRELIM_ONLY",
+    "evidence": "PASS_RAW_PREFLIGHT_AGGREGATE_BYTE_EVIDENCE_ONLY"
+  },
+  "source": {
+    "harness_sha256": "21da6d3c0e074a1884d6287963a4c4df983933b79a1ca1fa4223866eb5d202f7",
+    "vectors_sha256": "22407468c316ca79a8eec0a3aba8b9d2e3aae54dafd685c50832b3b0f605e9ae",
+    "vectors_size": 488540,
+    "expected_sha256": "86473f7b4027b9a06e064788d7ed41115b28705a62edc199879990310323a7f7",
+    "test_sha256": "3057d721fd41958349a17cb45409c852b75a58fa3de0b331c5b8375717af9caf"
+  },
+  "artifact": {
+    "path": "scripts/tests/fixtures/native-lifecycle-model-v1/raw-invalid/oversized-document.json",
+    "sha256": "9a6384d7058b15fa74ef39f6bd6e5745a1fbec565abb06491714704d3d88e07c",
+    "size": 1048577
+  },
+  "archive": {
+    "path": "docs/verification/evidence/stability-native-collector-lifecycle-raw-preflight-aggregate-byte-source-checkpoint-20260915-1.tar.gz",
+    "sha256": "3ec4c17c9645346845f0db0894e2a6ff39d18e15662f4eb8939ac730fa8db47e",
+    "members": 10
+  },
+  "checks": {
+    "python_3_9_12": {"tests_passed": 15, "tests_failed": 0},
+    "python_3_8_10": {"tests_passed": 15, "tests_failed": 0},
+    "positive_input_bytes": 175022,
+    "negative_input_bytes": 175023,
+    "first_134_lexical_sha256": "bc3f41f0c386c36b9a3ebd69283c619b7b070c9053fe6df00a10a0234c26b2e5",
+    "new_raw_cases": 1,
+    "cumulative_raw_cases": 135,
+    "scope": "RAW_PREFLIGHT_AGGREGATE_BYTE_SOURCE_ONLY"
+  },
+  "raw_full_matrix_frozen": false,
+  "corpus_complete": false,
+  "compiler_execution": false,
+  "model_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

@@ -1,0 +1,11 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/compare_existing_full_body.c
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/reset-builtin-memset-suffix-source-1/compare_existing_full_body.c
+@@ -54,7 +54,7 @@
+ extern struct ddebug __start___verbose[],__stop___verbose[];
+ static void reset(void)
+ {
+- memset(&obs,0,sizeof obs);memset(cpus,0,sizeof cpus);outer_held=0;inner_held=0;
++ __builtin_memset(&obs,0,sizeof obs);__builtin_memset(cpus,0,sizeof cpus);outer_held=0;inner_held=0;
+  for(int i=0;i<8;i++){
+   cpus[i].status=i%4;
+   switch(pattern){

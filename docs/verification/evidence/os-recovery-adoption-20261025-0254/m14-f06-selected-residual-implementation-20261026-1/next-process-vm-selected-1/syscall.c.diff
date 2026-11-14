@@ -1,0 +1,17 @@
+--- arch/x86_64/kernel/syscall.c
++++ arch/x86_64/kernel/syscall.c
+@@ -650,11 +650,14 @@
+ 	thread_unlock((struct thread *)thread_addr);
+ }
+ 
++#ifndef MCKERNEL_RUST_F06_PRCTL_SET_REGISTER
+ int
+ arch_prctl_set_register_bridge(int type, unsigned long value)
+ {
+ 	return ihk_mc_arch_set_special_register(type, value);
+ }
++
++#endif
+ 
+ int
+ arch_prctl_get_register_bridge(int type, unsigned long *addr)

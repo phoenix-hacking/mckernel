@@ -1,0 +1,55 @@
+{
+  "schema": "stability-native-exact-candidate-retention-preparation-success-v1",
+  "status": "PASS_PREPARATION",
+  "date_utc": "2026-09-29",
+  "source_commit": "f5db92dfbdd76c06335177d09a350154c727f08e",
+  "release_sha256": "0dad43e96598491fe8f7607758a2c9fa52a7b9501c07edfc6a57a15b97cec167",
+  "execution": {
+    "command": "taskset -c 6 timeout --signal=TERM --kill-after=30s 5400s /usr/bin/python3 -I -B docs/verification/evidence/native-exact-candidate-retention-preparation-76ae20b5-2.py --release-hash 0dad43e96598491fe8f7607758a2c9fa52a7b9501c07edfc6a57a15b97cec167",
+    "result": "PASS",
+    "uid": 1000,
+    "wrapper_pid": 4142687,
+    "owner_pid": 4142688,
+    "children_absent": true,
+    "operational_exclusions_released": true
+  },
+  "artifacts": {
+    "docs/verification/evidence/stability-native-exact-candidate-retention-76ae20b5-20260929-2.inventory.json": {
+      "sha256": "585fc0f5a4bca638d9684592fe61e52a3929490260fe0ad0c34d8df1ba3504fd",
+      "entries": 10749,
+      "capsule_required": 922
+    },
+    "docs/verification/evidence/stability-native-exact-candidate-retention-76ae20b5-20260929-2.tar": {
+      "sha256": "fd26f227fef7a850e013494600e32c51108375cb4137119b205136b24b41e3d7",
+      "size": 52039680,
+      "members": 937
+    },
+    "/home/holden/mckernel-work/scratch/native-exact-candidate-retention-76ae20b5-2/receipt.json": {
+      "sha256": "cfd7b5d54918d59dde074476ef2475a739bfdcc0aabb5c39347242a7e413565b"
+    },
+    "docs/verification/evidence/stability-native-exact-candidate-retention-preparation-success-raw-76ae20b5-20260929-2.tar.gz": {
+      "sha256": "2374d9ea5db7b580114cb5f74037690aa878b06b32af56853dca75f6fb1aebcf",
+      "members": 18
+    }
+  },
+  "verified_state": {
+    "tmpfs_inventory_sha256": "375e025ce48892555382759f6f65508ead7655052e6a06f09192ee5b26b9f30d",
+    "tmpfs_rows": 10751,
+    "disk_inventory_sha256": "842f4522c0ff318aee68cb3387eca604e435f06aef334e125c7d2c6897d526ae",
+    "candidate_identity": "26:58679",
+    "backup_identity": "26:69465",
+    "disk_candidate_identity": "1831:4194306",
+    "disk_backup_identity": "1831:4204970",
+    "corruption_seal_identity": "1831:4849667",
+    "corruption_seal_sha256": "192f8fe161ee0e486b0c0532f64bc34bb0684da2b113d01d13dc4f4ba7bb1c2c",
+    "corrupt_member_classification": "capsule-required"
+  },
+  "scope": {
+    "retirement": false,
+    "build": false,
+    "boot": false,
+    "application_acceptance": false,
+    "whole_os_acceptance": false
+  },
+  "next_action": "Commit and fetch this retained evidence, independently review the source-bound retirement packet, then retire only the two tmpfs identities."
+}

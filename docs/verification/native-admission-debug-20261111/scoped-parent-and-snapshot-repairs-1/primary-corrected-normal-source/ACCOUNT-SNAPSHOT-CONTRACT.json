@@ -1,0 +1,56 @@
+{
+  "actual_helper": {
+    "function": "current_account_snapshot()",
+    "genuine_credit_functions": {
+      "bytes": 1051,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/a2f-fixed30-normal-operation-proposal-1/correction-1/account-snapshot-correction-1/primary-guard-correction-1/GENUINE-CREDIT-HELPER-PROVENANCE.json",
+      "sha256": "c12232534635e3b12a0dd8003b2bcfea24e3c1eeeb51b06100524e4ff9ff72f5"
+    },
+    "globals": [
+      "REPO",
+      "json",
+      "datetime",
+      "time",
+      "amount",
+      "available_balance",
+      "math"
+    ],
+    "wrapper": {
+      "bytes": 20163,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/a2f-fixed30-normal-operation-proposal-1/correction-1/account-snapshot-correction-1/primary-guard-correction-1/ROOT-ISSUE-AND-EXECUTE-ONCE.py",
+      "sha256": "9daec4d582c13e58ca2ac467e1a0566440f17497eaad621c07df6ef6987695c3"
+    }
+  },
+  "bounded_mismatch": "At most3 immediate local read attempts for consistency mismatch only. No sleep/network/account query, no older-event fallback, no unknown/hold retry.",
+  "diagnosis": {
+    "bytes": 6048,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/a2f-fixed30-normal-operation-proposal-1/correction-1/account-snapshot-correction-1/DIAGNOSIS.json",
+    "sha256": "cd31a52f6727a17101eafeb6141d81a56687b490ef2ec076af1248802fce8d34"
+  },
+  "diagnostics": "Persistent mismatch contains only fixed controlled field names, timestamps and equality booleans; no actual primary/credit/cap/balance/account values.",
+  "invalid_or_hold": "Any malformed/invalid/exhausted/unknown account or credit state, auth/service/policy/billing stop or stale event raises before another attempt.",
+  "main_delta": "Only replace unpaired old protocol+state/credit acquisition with actual helper return; all original final primary/freshness/auth/positive finite credit/window assertions remain before first write/nonce.",
+  "primary_guard_correction": {
+    "bytes": 2544,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/a2f-fixed30-normal-operation-proposal-1/correction-1/account-snapshot-correction-1/primary-guard-correction-1/PRIMARY-GUARD-CORRECTION.json",
+    "sha256": "ac39937a412b67943bf6ccb36d32840f925433dd616388a3d07702013ca3315c"
+  },
+  "same_snapshot_acceptance": [
+    "Both fresh controller bookends pass running/stop/weekly/auth/explicit holds/credit validity, exact same-run logdir/resume instruction and original worker/server PID+birth state guards.",
+    "Before any retryable comparison, BOTH controller bookends and the selected latest event pass the same actual-controller numeric/nonbool/finite/range primary guard and supported weekly window.",
+    "Select ONLY latest account/rateLimits/updated in same fixed current-run4MiB tail; require <25s and no rate/spend hold, weekly window and positive finite available credits.",
+    "Preserve entire primary object equality and exact scope metadata; selected credits object must equal controller last_rate_limits.credits.",
+    "Original durable ledger must exactly equal controller credit_budget, with same original id/budget and positive finite remaining/spent guards.",
+    "Selected event balance must equal BOTH ledger.last_balance and controller credit_budget.last_balance, rejecting new-event/old-mutually-equal-credit transitional state.",
+    "Account-relevant controller fields must be equal across the two snapshots. Recheck <25s immediately before accept."
+  ],
+  "schema": 1,
+  "status": "SOURCE_CORRECTION_UNEXECUTED_NO_ACCOUNT_AUTHORITY",
+  "unchanged": [
+    "all issuer/parent/installer/phase0/WAIT algorithms",
+    "all caller and future observer function/class ASTs",
+    "fixed30/d42/a2f admission and all previous passing HOST scopes",
+    "original credit-run id/budget and cumulative ledger contents",
+    "every native/Scratch/service/account/UNKNOWN scope"
+  ]
+}

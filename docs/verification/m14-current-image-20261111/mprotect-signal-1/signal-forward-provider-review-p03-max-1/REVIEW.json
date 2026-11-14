@@ -1,0 +1,589 @@
+{
+  "schema": "mckernel-focused-signal-context-material-source-review-v1",
+  "at": "2026-11-11T05:22:26.524906+00:00",
+  "reviewer": "/root/p03_cutover_source_max existing same-Root Sol/MAX independent reviewer; no recursion",
+  "verdict": "GO",
+  "decision": "GO_SOURCE_ONLY_EXACT_THREE_CURRENT_SIGNAL_CONTEXT_PROVIDERS",
+  "original_check": "M14-03-04-DEFAULT",
+  "scope": "Exact four-path485e78b4 patch/new337f496e source only. Genuine current C context12/mask80/action132 endpoint ownership on the narrow ordinary supported profile; not a source/behavior/default/native whole-condition verdict.",
+  "source_ready": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/signal-forward-provider-1/SOURCE-READY.NOT-EXECUTED.json",
+    "bytes": 2172,
+    "sha256": "90cf64881001016753648632817bb58f7340e2a7b01d317f1a6238b1d1d370c9"
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/signal-forward-provider-1/SIGNAL-FORWARD-PROVIDER.patch",
+    "bytes": 10387,
+    "sha256": "485e78b408f517e6169f54632e828ae7453ca0adbca1f9f51a36ac34a6d93e23"
+  },
+  "new_module": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/signal-forward-provider-1/candidate/kernel/rust/f03_signal_forward_provider.rs",
+    "bytes": 4336,
+    "sha256": "337f496e3e7acdd76a694b97cc735adad57f6e6ed880390a1cd2b866f9bae467"
+  },
+  "contract": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/signal-forward-provider-1/CONTRACT.json",
+    "bytes": 7085,
+    "sha256": "78ab0a7e10e63b8b79addcd37c63477d79df319ef5ac48e5c6a995cf546fc04c"
+  },
+  "bindings": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/signal-forward-provider-1/SOURCE-BINDINGS.json",
+    "bytes": 15050,
+    "sha256": "0fa58409ec51e7399fa07634a56fd95da4ee0d5da8dae8bcff7a77abb7790db2"
+  },
+  "source_checks": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/signal-forward-provider-1/SOURCE-CHECKS.json",
+    "bytes": 1150,
+    "sha256": "60d623cdec0b3c63e5b0049bce5da74d891246a02412561bc874873b726352ad"
+  },
+  "proposed_advisory_recipe": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/signal-forward-provider-1/NEXT-VALIDATION.json",
+    "bytes": 4146,
+    "sha256": "e8665084ee1275321b31e04af4c1a34cdf5241310af7958a3e71ab40cabb03b2"
+  },
+  "actual_source_base": "7231ce6d17af39e9556ee815980a97f180b70eb1",
+  "canonical_preimages": [
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "bytes": 61222,
+      "sha256": "59fb96abd8bf18ca48f788376503495e8baba0ca39e9e02f7ee72b7121c5e685"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/lib.rs",
+      "bytes": 4655,
+      "sha256": "2b2cef5a65dd303ddf923bda67c7ebfe3ccc5360dfefac8910fe67c8e95477be"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/syscall.c",
+      "bytes": 962259,
+      "sha256": "9681968de471da4c6051b4b0faa1b402201f6e78ad1a659052042b60be8fed9a"
+    }
+  ],
+  "candidate_postimages": [
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/signal-forward-provider-1/candidate/kernel/CMakeLists.txt",
+      "bytes": 62390,
+      "sha256": "e1b43964f89cb3228eff87eb628d41a953577619d7553ead6ef29b038571b4e0"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/signal-forward-provider-1/candidate/kernel/rust/lib.rs",
+      "bytes": 4734,
+      "sha256": "274f3a10a961fa90ab29755482fca8ca3935de0555a96dd7c4e47bb6d38bbaff"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/signal-forward-provider-1/candidate/kernel/syscall.c",
+      "bytes": 964089,
+      "sha256": "babd8d99530cda2737eba1e2259cf98330b18751bd0709026f83d61b54a9e627"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/signal-forward-provider-1/candidate/kernel/rust/f03_signal_forward_provider.rs",
+      "bytes": 4336,
+      "sha256": "337f496e3e7acdd76a694b97cc735adad57f6e6ed880390a1cd2b866f9bae467"
+    }
+  ],
+  "unchanged_exact_source_dependencies": [
+    {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "bytes": 1240794,
+      "sha256": "76ce6016d6ddd1cfa6c41070c0cf35e87b94ddc31e67c805adbe3b94b3f17469"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "bytes": 256003,
+      "sha256": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/f03_policy_forward_context_bridge.rs",
+      "bytes": 1495,
+      "sha256": "10208bd7fb8539e1313a13c861bdaf84a54df7ce39ab4a714e1726e6729b5377"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/f03_signal_forward_defined_candidate.rs",
+      "bytes": 2932,
+      "sha256": "df163e6947b063a3bd3db891c1c809a16ef57f9fec203a54864faae8a300a0de"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/ihk/context.h",
+      "bytes": 2286,
+      "sha256": "13a67bcf26c512ac27ece4ab801e5e96976b88ec505d9f549e53755b431171f8"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/registers.h",
+      "bytes": 5778,
+      "sha256": "43fd6d2e278953684574224927fe65bc514a88c5529d97f688e1e21b1864a6fc"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/signal.h",
+      "bytes": 7474,
+      "sha256": "3cea81b9b2f723fbff2cafa634761d50316a397d06df2c12f94fe5f0dae03752"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/syscall.h",
+      "bytes": 20836,
+      "sha256": "459e6d0faec3f1b8366a0d329571ef5ea813042706be11f9423b0399bbba6ffa"
+    }
+  ],
+  "current_qualified_cohort": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/qualification-1/record-field-correction-1/QUALIFICATION.json",
+    "bytes": 178642,
+    "sha256": "0b57b8b60bd91be764e74915c0dba11140e2e9a2e101ccaae088c0f0f76b28c4"
+  },
+  "current_real_selected_provider_rows": {
+    "receipt": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/qualification-1/OWNER-PROVIDER-JOINS.json",
+      "bytes": 5785461,
+      "sha256": "1fe0303cb3a0be09f43b417356f1e059c574da3443c0cb16f0b13fe5a81b3d67"
+    },
+    "rows": [
+      {
+        "name": "do_sigaction",
+        "final": {
+          "index": 563,
+          "name": "do_sigaction",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1,
+          "value": 18446744073684699184,
+          "bytes": 580
+        },
+        "owner": {
+          "object": "rust/mckernel_rust.o",
+          "input": {
+            "index": 5014,
+            "name": "do_sigaction",
+            "binding": "GLOBAL",
+            "type": "FUNC",
+            "visibility": 0,
+            "section_index": 1218,
+            "value": 0,
+            "bytes": 580
+          },
+          "section": ".ltext.do_sigaction",
+          "placement": {
+            "address": 18446744073684699184,
+            "bytes": 580
+          }
+        }
+      },
+      {
+        "name": "sys_rt_sigprocmask",
+        "final": {
+          "index": 740,
+          "name": "sys_rt_sigprocmask",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1,
+          "value": 18446744073685215552,
+          "bytes": 399
+        },
+        "owner": {
+          "object": "rust/mckernel_rust.o",
+          "input": {
+            "index": 7145,
+            "name": "sys_rt_sigprocmask",
+            "binding": "GLOBAL",
+            "type": "FUNC",
+            "visibility": 0,
+            "section_index": 4377,
+            "value": 0,
+            "bytes": 399
+          },
+          "section": ".ltext.sys_rt_sigprocmask",
+          "placement": {
+            "address": 18446744073685215552,
+            "bytes": 399
+          }
+        }
+      },
+      {
+        "name": "syscall_generic_forwarding",
+        "final": {
+          "index": 1539,
+          "name": "syscall_generic_forwarding",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1,
+          "value": 18446744073685240432,
+          "bytes": 448
+        },
+        "owner": {
+          "object": "rust/mckernel_rust.o",
+          "input": {
+            "index": 4309,
+            "name": "syscall_generic_forwarding",
+            "binding": "GLOBAL",
+            "type": "FUNC",
+            "visibility": 0,
+            "section_index": 4500,
+            "value": 0,
+            "bytes": 448
+          },
+          "section": ".ltext.syscall_generic_forwarding",
+          "placement": {
+            "address": 18446744073685240432,
+            "bytes": 448
+          }
+        }
+      },
+      {
+        "name": "do_sigaction_body_result",
+        "final": {
+          "index": 1605,
+          "name": "do_sigaction_body_result",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1,
+          "value": 18446744073684699776,
+          "bytes": 297
+        },
+        "owner": {
+          "object": "rust/mckernel_rust.o",
+          "input": {
+            "index": 5016,
+            "name": "do_sigaction_body_result",
+            "binding": "GLOBAL",
+            "type": "FUNC",
+            "visibility": 0,
+            "section_index": 1220,
+            "value": 0,
+            "bytes": 297
+          },
+          "section": ".ltext.do_sigaction_body_result",
+          "placement": {
+            "address": 18446744073684699776,
+            "bytes": 297
+          }
+        }
+      },
+      {
+        "name": "rt_sigprocmask_body_result",
+        "final": {
+          "index": 2607,
+          "name": "rt_sigprocmask_body_result",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1,
+          "value": 18446744073685118544,
+          "bytes": 296
+        },
+        "owner": {
+          "object": "rust/mckernel_rust.o",
+          "input": {
+            "index": 6858,
+            "name": "rt_sigprocmask_body_result",
+            "binding": "GLOBAL",
+            "type": "FUNC",
+            "visibility": 0,
+            "section_index": 3923,
+            "value": 0,
+            "bytes": 296
+          },
+          "section": ".ltext.rt_sigprocmask_body_result",
+          "placement": {
+            "address": 18446744073685118544,
+            "bytes": 296
+          }
+        }
+      },
+      {
+        "name": "ihk_mc_syscall_set_arg1",
+        "final": {
+          "index": 3079,
+          "name": "ihk_mc_syscall_set_arg1",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1,
+          "value": 18446744073684846336,
+          "bytes": 18
+        },
+        "owner": {
+          "object": "rust/mckernel_rust.o",
+          "input": {
+            "index": 5672,
+            "name": "ihk_mc_syscall_set_arg1",
+            "binding": "GLOBAL",
+            "type": "FUNC",
+            "visibility": 0,
+            "section_index": 2186,
+            "value": 0,
+            "bytes": 18
+          },
+          "section": ".ltext.ihk_mc_syscall_set_arg1",
+          "placement": {
+            "address": 18446744073684846336,
+            "bytes": 18
+          }
+        }
+      },
+      {
+        "name": "ihk_mc_syscall_set_arg2",
+        "final": {
+          "index": 3087,
+          "name": "ihk_mc_syscall_set_arg2",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1,
+          "value": 18446744073684846368,
+          "bytes": 18
+        },
+        "owner": {
+          "object": "rust/mckernel_rust.o",
+          "input": {
+            "index": 5673,
+            "name": "ihk_mc_syscall_set_arg2",
+            "binding": "GLOBAL",
+            "type": "FUNC",
+            "visibility": 0,
+            "section_index": 2187,
+            "value": 0,
+            "bytes": 18
+          },
+          "section": ".ltext.ihk_mc_syscall_set_arg2",
+          "placement": {
+            "address": 18446744073684846368,
+            "bytes": 18
+          }
+        }
+      },
+      {
+        "name": "ihk_mc_syscall_set_arg0",
+        "final": {
+          "index": 3112,
+          "name": "ihk_mc_syscall_set_arg0",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1,
+          "value": 18446744073684846304,
+          "bytes": 18
+        },
+        "owner": {
+          "object": "rust/mckernel_rust.o",
+          "input": {
+            "index": 5671,
+            "name": "ihk_mc_syscall_set_arg0",
+            "binding": "GLOBAL",
+            "type": "FUNC",
+            "visibility": 0,
+            "section_index": 2185,
+            "value": 0,
+            "bytes": 18
+          },
+          "section": ".ltext.ihk_mc_syscall_set_arg0",
+          "placement": {
+            "address": 18446744073684846304,
+            "bytes": 18
+          }
+        }
+      },
+      {
+        "name": "syscall_policy_forward_context_bridge",
+        "final": {
+          "index": 4024,
+          "name": "syscall_policy_forward_context_bridge",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1,
+          "value": 18446744073684627056,
+          "bytes": 17
+        },
+        "owner": {
+          "object": "rust/mckernel_rust.o",
+          "input": {
+            "index": 8273,
+            "name": "syscall_policy_forward_context_bridge",
+            "binding": "GLOBAL",
+            "type": "FUNC",
+            "visibility": 0,
+            "section_index": 973,
+            "value": 0,
+            "bytes": 17
+          },
+          "section": ".ltext.arch_syscall_forward_context_bridge",
+          "placement": {
+            "address": 18446744073684627056,
+            "bytes": 17
+          }
+        }
+      },
+      {
+        "name": "arch_syscall_forward_context_bridge",
+        "final": {
+          "index": 4895,
+          "name": "arch_syscall_forward_context_bridge",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1,
+          "value": 18446744073684627056,
+          "bytes": 17
+        },
+        "owner": {
+          "object": "rust/mckernel_rust.o",
+          "input": {
+            "index": 4785,
+            "name": "arch_syscall_forward_context_bridge",
+            "binding": "GLOBAL",
+            "type": "FUNC",
+            "visibility": 0,
+            "section_index": 973,
+            "value": 0,
+            "bytes": 17
+          },
+          "section": ".ltext.arch_syscall_forward_context_bridge",
+          "placement": {
+            "address": 18446744073684627056,
+            "bytes": 17
+          }
+        }
+      }
+    ]
+  },
+  "existing_selected_C_table_and_Rust_caller_edges": {
+    "receipt": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/affected-constituent-symbols-relocations.stdout",
+      "bytes": 38578651,
+      "sha256": "ed4466c28f70df8a3d1d4c04b0e04d60683767df5b3b45f16142912928023f7a"
+    },
+    "rows": [
+      {
+        "file": "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "section": ".rela.rodata",
+        "row": "00000000000004e0  0000000200000001 R_X86_64_64            0000000000000000 .text + 780"
+      },
+      {
+        "file": "/work/output/build/kernel/rust/mckernel_rust.o",
+        "section": ".rela.ltext.do_sigaction",
+        "row": "00000000000000b4  0000139700000001 R_X86_64_64            0000000000000000 syscall_forward_sigaction_update_bridge + 0"
+      },
+      {
+        "file": "/work/output/build/kernel/rust/mckernel_rust.o",
+        "section": ".rela.ltext.sys_rt_sigprocmask",
+        "row": "0000000000000168  00001bea00000001 R_X86_64_64            0000000000000000 syscall_forward_rt_sigprocmask_bridge + 0"
+      }
+    ],
+    "C_context_local_definition": {
+      "section": ".text",
+      "value": "0x780",
+      "bytes": 12,
+      "typed_table": "f03_perf_descriptor_layout_v1",
+      "table_bytes": 40,
+      "table_input_rodata_offset": "0x4c0",
+      "forward_offset": 32,
+      "relocation_input_rodata_offset": "0x4e0"
+    },
+    "not_new_perf_scope": "Existing selected read-only table target only; no perf source/body/mode/test is changed."
+  },
+  "independent_material_findings": [
+    {
+      "result": "PASS",
+      "check": "All six frozen SOURCE-READY linked records and the3 canonical7231 committed/current preimages,4 private postimages and9 unchanged dependency identities match their exact size/SHA. Text-only reconstruction of9 unified hunks yields all4 exact candidate files. CMake has3 addition hunks/19 lines, lib.rs adds2 lines, C has4 hunks/+30/-2 lines, new module84 lines; no other source body changes."
+    },
+    {
+      "result": "PASS",
+      "check": "Original3 C function fallback byte spans, including declared terminal newline, remain exact155/214/375B with d2b3fff9/396967b6/c22e37f3 hashes. Independent matched-line/numeric-#line comparison finds all30349 unchanged source rows at the same logical line, including28004 non-directive rows. New code changes no C filename and adds no debug object/origin."
+    },
+    {
+      "result": "PASS",
+      "check": "Three actual C typedefs match current Rust aliases and new unsafe extern C signatures: context CInt/raw mutable void pointer\u2192CLong; mask CULong\u2192CLong; action CInt/const void pointer\u2192CLong. Qualified x86 CInt4/CLong8/CULong8/pointer8, X86UserContext224/align8/gpr56 and KSigAction32/align8/sa0/handler0/flags8 are consistent with actual C headers/full ABIff48. Paired C _Static_assert and Rust const checks are meaningful future compile checks, not falsely reported as already run."
+    },
+    {
+      "result": "PASS",
+      "check": "Both fresh stack contexts use MaybeUninit<X86UserContext>::zeroed, never uninit. Actual context consists entirely of u64/u8 integer fields and has the validated224-byte representation, so zero values are valid before existing helper field references. The pointer remains naturally aligned/exclusive/live through the complete synchronous forward; there is no reference escaping, pointer retention, allocation, lock/refcount/signal/device call or hidden static state."
+    },
+    {
+      "result": "PASS",
+      "check": "Opaque-context wrapper passes exact number/raw address once to unchanged genuine Rust syscall_generic_forwarding and returns its signed CLong unchanged. It forms no reference/dereference or new null/error policy. Existing forwarder null -EINVAL/CPU/logging/six-GPR/request/offload behavior is inherited, not reimplemented. This new symbol is syscall_forward_context_bridge, distinct from unchanged policy10208 and arch context entries."
+    },
+    {
+      "result": "PASS",
+      "check": "Mask wrapper preserves the actual custom forwarding protocol: zero224, real setter0(mask), forward number14 once, exact CLong return. It does not reinterpret arg0 as the raw Linux how argument, sanitize another mask, set additional slots or duplicate caller validation/copy/update orchestration. All unused fields/args remain initialized zero, as in C {0}."
+    },
+    {
+      "result": "PASS",
+      "check": "Action wrapper preserves zero224, real setter0(signal as CULong), then handler address-bit read, setter1, flags read, setter2, forward number13 and exact signed return. CInt\u2192CULong conversion preserves C modulo2^64 semantics, including the representational negative boundary. Handler bits are never invoked/dereferenced; flags are full64-bit. It reads the original borrowed action pointer, not a newly chosen stored-action slot, and mutates neither action nor restorer/mask."
+    },
+    {
+      "result": "PASS",
+      "check": "Read actual current sys_rt_sigprocmask/body_result and do_sigaction/body_result: mask validates before copies, copies old before new, retains existing apply/SIGKILL-SIGSTOP filtering and ignored-forward-result/return0. Action validates, copies old/new under the real writer+same IRQsave node, unlocks/restores before forwarding only a nonnull initialized action, ignores provider return and returns0. New providers leave original -EINVAL/-EFAULT/no-forward paths, action lifetime, caller lock boundaries and stored-action behavior unchanged."
+    },
+    {
+      "result": "PASS",
+      "check": "The3 existing setter providers are actual selected Rust functions, not new fake endpoints; their current zero/null-safe x86_syscall_write performs the same required volatile RDI/RSI/RDX stores. No CPU lookup, action mutation or callback side effect is introduced by selecting these existing setter bodies. All10 bound current real provider rows match current1fe0303 physical owners at19c5."
+    },
+    {
+      "result": "PASS",
+      "check": "Internal selected flag initializes OFF and pairs sole guarded Rustcfg/module/header dependency registration with C exclusion macro appended after existing source-property replacement points. Predicate remains qualified MCKERNEL_RUST_F06_WHOLE_DEFAULT AND wholeF06ON AND !ownedfork AND !DCFA. Existing predicate retains x86/native6.12/!UBSAN/PROFILE/PERF/RUSAGE/workIRQ/!TOFU/!Fugaku/!broad/!experimental. No option/default/FORCE, old hold or runtime authority changes."
+    },
+    {
+      "result": "PASS",
+      "check": "Outside the new predicate, original C providers/fallback selection remain. Existing experimental/broad choices retain their old semantics; new source compile_error rejects simultaneous broad/experimental cfg. Existing df163 experimental module and its old option remain byte-identical and unselected in the new ordinary path. New exported names cannot collide under this paired supported selection."
+    }
+  ],
+  "eligibility_and_actual_holds": {
+    "affirmative_current_source_scope": "Root explicitly authorized this finite current C/Rust body/caller/type/selector review. Current CAMPAIGN explicitly records the same two signal forwarding bodies as previously eligible canonical implementation/ABI/wire work. No exact source restriction on this new source-only three-provider proposal was identified from the current rules and frozen inputs.",
+    "existing_scoped_wire_record": {
+      "path": "/home/holden/mckernel/docs/verification/m14-signal-forward-canonical-results-20261106.json",
+      "bytes": 8964,
+      "sha256": "2bd3d128b07c1510d9c079e83e7b85988d228fd6a416e611b87bec3d5cc45c94"
+    },
+    "not_a_release": "This does not reinterpret encrypted original classifier scope or release generic_c cyber_policy, replay=false/equivalent=false, exec/ACK/TID/XPMEM/notification/wait/kill/owned/perf/util/credential restrictions, native/currentfree/account/source/resource/UNKNOWN holds. No rejected operation, old fixture, native request or experimental/broad mode is run/selected.",
+    "future_operations": "Each actual producer/read/test operation still needs its concrete source/ownership/profile admission and independent review. A source-only GO does not authorize a held equivalent execution or native path."
+  },
+  "reused_prior_wire_and_ABI_proof": {
+    "canonical_receipt": {
+      "path": "/home/holden/mckernel/docs/verification/m14-signal-forward-canonical-results-20261106.json",
+      "bytes": 8964,
+      "sha256": "2bd3d128b07c1510d9c079e83e7b85988d228fd6a416e611b87bec3d5cc45c94"
+    },
+    "immutable_original_wire_inputs_results": [
+      {
+        "path": "/home/holden/mckernel-work/m14-resume-20261105-1/signal-forward-private-1/CHECK-MANIFEST.json",
+        "bytes": 2441,
+        "sha256": "b283601335bb54029b5000e91bbc88ddd060b0d7925de8ed297cd5f23c4423fa"
+      },
+      {
+        "path": "/home/holden/mckernel-work/m14-resume-20261105-1/signal-forward-private-1/run-1/RESULT.json",
+        "bytes": 9883,
+        "sha256": "95448f6234e6e1a01e58c48cd4cacd8c86768aec282b47b6543c14a613041048"
+      }
+    ],
+    "scope": "The existing actual7 payload vectors/14 C-Rust calls and real14-field ABI witness remain valid scoped wire proof. Canonical evidence2bd3 confirms format-only source change, exact ABIff48 and df163 current source identities. It is an opt-in relocatable/HOST result with108 remainingUND at that old cohort, not a default/current image or native acceptance.",
+    "applicability": "Old signal bodies express the same zero224/signed signal/handler bits/flags/six-slot result contract using direct volatile field writes. New source mechanically delegates those stores to the current genuine selected setter implementations with the same field semantics and explicit C source order. This static equivalence/type/lifetime review plus new current paired production compile/image proof is sufficient; no fresh encoding behavior is introduced to justify rerunning the7 old vectors."
+  },
+  "smallest_necessary_changed_validation": {
+    "source_GO_only": true,
+    "new_HOST_mirror_or_wire_fixture_required": false,
+    "proposed_six_case_recipe_disposition": "NEXT-VALIDATION is advisory/unadmitted, not a runnable test packet. Its2 context-identity cases only mirror a branchless already-reviewed pass-through; its mask/action payload cases repeat the existing scoped wire obligations. Do not run these solely to create another green quota. Reuse the exact prior7-vector/14-field proof; if a later concrete new header/body discrepancy is established, freeze only that actually changed contract for independent review.",
+    "required_current_production_boundary": [
+      "Root composes only exact4 focused changes with any separately reviewed mprotect source, retains current19c5/25-file baseline, freezes actual resulting source/header/config/compiler/provider identities and obtains fresh independent normal image-operation review/admission.",
+      "One genuine normal named mckernel.img build with legitimate regeneration compiles both real C ABI assertions and exact full Rust module/const types on the actual supported profile. No old partial object, broad flag, fixture callback or held body is injected.",
+      "Saved affected reader must prove3 actual unique Rust source definitions/nonempty code or legitimate existing Rust aliases and matching C exclusions; actual C f03_perf_descriptor_layout_v1.forward offset32/40B now targets the real new context Rust owner, and existing do_sigaction/sys_rt_sigprocmask refs target the actual new action/mask owners.",
+      "Bind actual input/final code/register/provider lowering for zeroed contexts/real setter0 or0/1/2/forward nr14 or13, unchanged signed-return/caller ABI/borrow/source origins; retain current prior owners/default/4x104/debug96/archC0/MAP/entry/LOAD/full physical typed provider/noUND and actual remaining C ledger. No standalone old SDK/compiler/green suite or native run is needed for this source cut.",
+      "Root positive exact PID/birth/direct+family/streams/terminal0nonOOMPid0/owned removal/current resource release and full outer tool completion remain required before any actual whole-condition result review."
+    ]
+  },
+  "code_data_and_ownership_limits": {
+    "new_mutable_or_readonly_static_data": false,
+    "new_debug_objects": false,
+    "canonical_index_source_control_edits_by_reviewer": false,
+    "compiler_test_helper_ELFtool_CMake_Docker_network_main_native_signal_executed": false,
+    "new_lease_release_or_children": false,
+    "C_retirement_or_whole_DEFAULT_FUNCTIONAL_parent_M14_M15_accepted": false
+  },
+  "reviewer_method_notes": "First filename read used an incorrect patch label and failed without mutation; corrected to the frozen SOURCE-READY path. First offline fallback-span hash comparison omitted the declared terminal newline; normalized only that extraction boundary and confirmed all3 exact hashes. Neither was a compiler/SUT/source failure or retry. No old proof/helper/executable was invoked.",
+  "root_next_action": "Exact source485e/337f is GO for focused integration. Reuse existing scoped wire evidence, freeze the actually needed current normal image operation and affected ownership/ABI/provider readback with fresh admission; do not infer original04 DEFAULT or native acceptance from source alone."
+}

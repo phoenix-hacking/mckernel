@@ -1,0 +1,463 @@
+{
+  "schema": "m14-wait-host-provider-tests-focused-independent-operation-review-v1",
+  "at": "2026-11-11T07:50:05.451927+00:00",
+  "owner": "/root/p03_cutover_source_max, existing direct Sol/MAX independent operation reviewer; source author SDK/test author P04Tests/Root sole executor and compositor",
+  "decision": "GO_EXACT_TWO_HOST_COMMANDS_SIX_CHANGED_WAIT_PROVIDER_VECTORS_AFTER_FRESH_ROOT_ADMISSION",
+  "request": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/REQUEST.json",
+    "bytes": 13121,
+    "sha256": "aafb382b428c09dc5780ef84aca16d904f056fb0ccd0e546954249a042f0afab"
+  },
+  "runner": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/run_root_once.py",
+    "bytes": 5261,
+    "sha256": "caa77c8e74521017ae3d7c7385f275e54f45b7303e460bc941f0371b4e3d7aea"
+  },
+  "inputs": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/INPUTS.json",
+    "bytes": 4097,
+    "sha256": "5d210f43dbcc5bf388a7770d9055a2c74735f65c3f5479837ce84ac466eed0af"
+  },
+  "fixture": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/wait_host_regression.rs",
+    "bytes": 5847,
+    "sha256": "8650c51627e2bdd592948d1d98d46c9e75c1c221c7a8fc8a321983983f6c2651"
+  },
+  "external_expected": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/EXPECTED.json",
+    "bytes": 3860,
+    "sha256": "deaa24ccde96c5a7bebbc6f8cb27dd4a13840564cb64b09983ddb6733f90ca9d"
+  },
+  "ready": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/SOURCE-READY.NOT-EXECUTED.json",
+    "bytes": 2353,
+    "sha256": "3c2c5a09d632824449a737f1eefc3db3a3f128e36614cd8bb0a4d669ea9aa378"
+  },
+  "source_material_reused": {
+    "bytes": 20015,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-review-sourceacq-max-1/candidate-1/REVIEW.json",
+    "sha256": "4a6cfc793f878a6836bd4952b0090ac5796937258e5a81bae7fc4fc8f645204e"
+  },
+  "consumer_contract_reused": {
+    "bytes": 27521,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-1/CONSUMER-CONTRACT.json",
+    "sha256": "a9f7d2f7981246f6cf7bf078f41adcaa3eb717ead4bf4ff229d838edb180c32f"
+  },
+  "actual_source": {
+    "bytes": 2788,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-1/candidate/kernel/rust/f03_wait_host_provider.rs",
+    "sha256": "400ad42def827a0516dbe3a5a918802b929fae1c8861a6589f48f80bff4b0753"
+  },
+  "all_declared14_input_and_compiler_pins_match": true,
+  "reviewed_scope": {
+    "whole_module": "Exact complete400ad Rust module is included by actual absolute path, no source splice/function rewrite. Full realff48 ABI is included with its existing dead_code allowance; real uprotool72B C header and unchanged four104-word C/Rust producer proof are reused, no fresh fake C layout.",
+    "only_controlled_lower_effects": [
+      "crate::x86_local::ihk_mc_get_processor_id returns configured0/6/7 only; no actual CPU/GS access",
+      "crate::syscall_offload_entry::do_syscall captures/mutates one live local request, returns configured CLong only; no real offload/wait/host/provider/ACK"
+    ],
+    "production_type_guards": "Actual candidate and fixture both enforce CInt4/CLong8/wholeRequest72align8 and offsets0,4,8,16,24; no-cast unsafe externC entry/lower function types. No third unchanged C ABI command is necessary for this scoped test.",
+    "selection": "Compile cfg explicitly binds native_linux_irq_work_v6_12/enable_profile/enable_perf/enable_rusage/f03_do_syscall_outer_candidate/f03_wait_host_provider_candidate; broad adapters absent. Actual production C macro exclusion and48B table target remain the necessary next real image proof, not inferred from HOST fixture."
+  },
+  "independent_oracle_checks": {
+    "external_expected_equals_request_embedded_expected": true,
+    "fixture_and_external_case_inputs_match": 6,
+    "wire_derivation": "Independently recomputed struct.pack(<ii8Q,rtid0,ttid0,valid0,61,pid modulo2^64,0,options modulo2^64,0,0,0); all six exact144hex characters match. No candidate or test was run to derive expected bytes.",
+    "signed_return_derivation": "Independently reduced each configured signed64 reply modulo2^32 then interpreted signed32:1,-10,-4,0,1,-1. Includes both positive and negative high-bit narrowing cases.",
+    "cases": [
+      {
+        "configured_cpu": 0,
+        "cpu_lookups": 1,
+        "events": [
+          "cpu",
+          "send",
+          "send-return"
+        ],
+        "id": "pid-one-success",
+        "natural_alignment": true,
+        "options": 0,
+        "pid": 1,
+        "reply": 1,
+        "request_hex": "000000000000000000000000000000003d00000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "return": 1,
+        "sent_cpu": 0,
+        "snapshot_within_call_only": true,
+        "syscall_calls": 1,
+        "writable_during_callback": true
+      },
+      {
+        "configured_cpu": 6,
+        "cpu_lookups": 1,
+        "events": [
+          "cpu",
+          "send",
+          "send-return"
+        ],
+        "id": "max-pid-option-bit-error",
+        "natural_alignment": true,
+        "options": 16777216,
+        "pid": 2147483647,
+        "reply": -10,
+        "request_hex": "000000000000000000000000000000003d00000000000000ffffff7f0000000000000000000000000000000100000000000000000000000000000000000000000000000000000000",
+        "return": -10,
+        "sent_cpu": 6,
+        "snapshot_within_call_only": true,
+        "syscall_calls": 1,
+        "writable_during_callback": true
+      },
+      {
+        "configured_cpu": 7,
+        "cpu_lookups": 1,
+        "events": [
+          "cpu",
+          "send",
+          "send-return"
+        ],
+        "id": "min-pid-sign-options-interrupted",
+        "natural_alignment": true,
+        "options": -2147483648,
+        "pid": -2147483648,
+        "reply": -4,
+        "request_hex": "000000000000000000000000000000003d0000000000000000000080ffffffff000000000000000000000080ffffffff000000000000000000000000000000000000000000000000",
+        "return": -4,
+        "sent_cpu": 7,
+        "snapshot_within_call_only": true,
+        "syscall_calls": 1,
+        "writable_during_callback": true
+      },
+      {
+        "configured_cpu": 6,
+        "cpu_lookups": 1,
+        "events": [
+          "cpu",
+          "send",
+          "send-return"
+        ],
+        "id": "negative-pid-all-option-bits",
+        "natural_alignment": true,
+        "options": -1,
+        "pid": -1,
+        "reply": 0,
+        "request_hex": "000000000000000000000000000000003d00000000000000ffffffffffffffff0000000000000000ffffffffffffffff000000000000000000000000000000000000000000000000",
+        "return": 0,
+        "sent_cpu": 6,
+        "snapshot_within_call_only": true,
+        "syscall_calls": 1,
+        "writable_during_callback": true
+      },
+      {
+        "configured_cpu": 0,
+        "cpu_lookups": 1,
+        "events": [
+          "cpu",
+          "send",
+          "send-return"
+        ],
+        "id": "wide-positive-return-narrows",
+        "natural_alignment": true,
+        "options": 16777218,
+        "pid": 123,
+        "reply": 4294967297,
+        "request_hex": "000000000000000000000000000000003d000000000000007b0000000000000000000000000000000200000100000000000000000000000000000000000000000000000000000000",
+        "return": 1,
+        "sent_cpu": 0,
+        "snapshot_within_call_only": true,
+        "syscall_calls": 1,
+        "writable_during_callback": true
+      },
+      {
+        "configured_cpu": 7,
+        "cpu_lookups": 1,
+        "events": [
+          "cpu",
+          "send",
+          "send-return"
+        ],
+        "id": "wide-negative-return-narrows",
+        "natural_alignment": true,
+        "options": 2,
+        "pid": 456,
+        "reply": -4294967297,
+        "request_hex": "000000000000000000000000000000003d00000000000000c80100000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000",
+        "return": -1,
+        "sent_cpu": 7,
+        "snapshot_within_call_only": true,
+        "syscall_calls": 1,
+        "writable_during_callback": true
+      }
+    ],
+    "once_order_CPU": "Controlled State asserts active phase0\u2192CPUlookup phase1\u2192exactlyone do_syscall with identical configured CPU\u2192phase2; final exact counts/events asserted and emitted. CPU fixture values do not widen actualCPU6 affinity.",
+    "lifetime": "Full initialized72B copy is made inside synchronous callback; actual natural alignment checked. All request fields are writable in callback, readback verified; only owned byte snapshot retained and no pointer/address escapes. Same function then returns actual configured CLong through CInt narrowing. This is source-bound local borrow evidence, not production scheduler/native lifetime acceptance.",
+    "stdout_integrity": "PASS prefix alone is insufficient. Driver requires exit0/empty stderr and complete parsedJSON equal external EXPECTED/request; a partial failed row cannot qualify. Hardcoded reported alignment/order flags are backed by actual fixture assertions."
+  },
+  "literal_commands": [
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648",
+        "--cpu=60",
+        "--fsize=16777216",
+        "--nofile=64",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TZ=UTC",
+        "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/output-1/tmp",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+        "--crate-name",
+        "wait_host_changed_provider",
+        "--edition=2021",
+        "-Dwarnings",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "debuginfo=1",
+        "-C",
+        "force-unwind-tables=no",
+        "--cfg",
+        "native_linux_irq_work_v6_12",
+        "--cfg",
+        "enable_profile",
+        "--cfg",
+        "enable_perf",
+        "--cfg",
+        "enable_rusage",
+        "--cfg",
+        "f03_do_syscall_outer_candidate",
+        "--cfg",
+        "f03_wait_host_provider_candidate",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/wait_host_regression.rs",
+        "-o",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/output-1/wait-host-regression"
+      ],
+      "expected_exit": 0,
+      "id": "compile-entire-genuine-wait-module-and-real-ABI-controlled-boundary",
+      "required_output": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/output-1/wait-host-regression",
+      "required_stderr": "empty",
+      "required_stdout": "empty",
+      "wall_seconds": 60
+    },
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648",
+        "--cpu=60",
+        "--fsize=16777216",
+        "--nofile=64",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TZ=UTC",
+        "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/output-1/tmp",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/output-1/wait-host-regression"
+      ],
+      "expected_exit": 0,
+      "id": "six-new-wait-request-CPU-return-lifetime-vectors",
+      "required_stderr": "empty",
+      "required_stdout_json": {
+        "actual_CPU_or_do_syscall_or_waitid_executed": false,
+        "case_count": 6,
+        "cases": [
+          {
+            "configured_cpu": 0,
+            "cpu_lookups": 1,
+            "events": [
+              "cpu",
+              "send",
+              "send-return"
+            ],
+            "id": "pid-one-success",
+            "natural_alignment": true,
+            "options": 0,
+            "pid": 1,
+            "reply": 1,
+            "request_hex": "000000000000000000000000000000003d00000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            "return": 1,
+            "sent_cpu": 0,
+            "snapshot_within_call_only": true,
+            "syscall_calls": 1,
+            "writable_during_callback": true
+          },
+          {
+            "configured_cpu": 6,
+            "cpu_lookups": 1,
+            "events": [
+              "cpu",
+              "send",
+              "send-return"
+            ],
+            "id": "max-pid-option-bit-error",
+            "natural_alignment": true,
+            "options": 16777216,
+            "pid": 2147483647,
+            "reply": -10,
+            "request_hex": "000000000000000000000000000000003d00000000000000ffffff7f0000000000000000000000000000000100000000000000000000000000000000000000000000000000000000",
+            "return": -10,
+            "sent_cpu": 6,
+            "snapshot_within_call_only": true,
+            "syscall_calls": 1,
+            "writable_during_callback": true
+          },
+          {
+            "configured_cpu": 7,
+            "cpu_lookups": 1,
+            "events": [
+              "cpu",
+              "send",
+              "send-return"
+            ],
+            "id": "min-pid-sign-options-interrupted",
+            "natural_alignment": true,
+            "options": -2147483648,
+            "pid": -2147483648,
+            "reply": -4,
+            "request_hex": "000000000000000000000000000000003d0000000000000000000080ffffffff000000000000000000000080ffffffff000000000000000000000000000000000000000000000000",
+            "return": -4,
+            "sent_cpu": 7,
+            "snapshot_within_call_only": true,
+            "syscall_calls": 1,
+            "writable_during_callback": true
+          },
+          {
+            "configured_cpu": 6,
+            "cpu_lookups": 1,
+            "events": [
+              "cpu",
+              "send",
+              "send-return"
+            ],
+            "id": "negative-pid-all-option-bits",
+            "natural_alignment": true,
+            "options": -1,
+            "pid": -1,
+            "reply": 0,
+            "request_hex": "000000000000000000000000000000003d00000000000000ffffffffffffffff0000000000000000ffffffffffffffff000000000000000000000000000000000000000000000000",
+            "return": 0,
+            "sent_cpu": 6,
+            "snapshot_within_call_only": true,
+            "syscall_calls": 1,
+            "writable_during_callback": true
+          },
+          {
+            "configured_cpu": 0,
+            "cpu_lookups": 1,
+            "events": [
+              "cpu",
+              "send",
+              "send-return"
+            ],
+            "id": "wide-positive-return-narrows",
+            "natural_alignment": true,
+            "options": 16777218,
+            "pid": 123,
+            "reply": 4294967297,
+            "request_hex": "000000000000000000000000000000003d000000000000007b0000000000000000000000000000000200000100000000000000000000000000000000000000000000000000000000",
+            "return": 1,
+            "sent_cpu": 0,
+            "snapshot_within_call_only": true,
+            "syscall_calls": 1,
+            "writable_during_callback": true
+          },
+          {
+            "configured_cpu": 7,
+            "cpu_lookups": 1,
+            "events": [
+              "cpu",
+              "send",
+              "send-return"
+            ],
+            "id": "wide-negative-return-narrows",
+            "natural_alignment": true,
+            "options": 2,
+            "pid": 456,
+            "reply": -4294967297,
+            "request_hex": "000000000000000000000000000000003d00000000000000c80100000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000",
+            "return": -1,
+            "sent_cpu": 7,
+            "snapshot_within_call_only": true,
+            "syscall_calls": 1,
+            "writable_during_callback": true
+          }
+        ],
+        "native_execution": false,
+        "original_acceptance": false,
+        "scope": "new-whole-wait-host-provider-with-explicit-controlled-lower-effects",
+        "status": "PASS"
+      },
+      "wall_seconds": 5
+    }
+  ],
+  "Root_execution_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/home/holden/anaconda3/bin/python3",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/run_root_once.py",
+    "<exactP03REVIEW.json>",
+    "<sameSHA256>"
+  ],
+  "profile": {
+    "batch_wall_seconds": 90,
+    "cpu": 6,
+    "current_accounting": "Only540/a41 oldcurrentHOST releases at exact scope. All actual otherpayload/currentowners/Native12/Scratch/retained18GiB/UNKNOWN/account remain asRootfreshguard measures; thispacket releasesnone.",
+    "fresh_MemAvailable_floor_GiB": 26,
+    "host_disk_floor_GiB": 16,
+    "jobs": 1,
+    "kind": "Same qualified HOST195 compiler/sysroot/standardlink profile, existing2GiB inheritedAS familyplanned reservation (notcgroup/exactpeak), CPU6/lightserial inside actualshared4GiB withallcontroller/worker overhead. No newlane or nativeCPU borrowing.",
+    "max_address_space_bytes": 2147483648,
+    "max_aggregate_HOST_bytes": 4294967296,
+    "max_aggregate_jobs": 3,
+    "output_disk_reservation_bytes": 33554432,
+    "output_max_file_bytes": 16777216,
+    "runtime_processes": 1,
+    "runtime_threads": 1,
+    "scratch_disk_floor_GiB": 12
+  },
+  "resource_review": {
+    "literal_affinity": "Both commands and actual Root driver are CPU6; this GO does not silently rebindCPU7 or borrow native2\u20135/CPU1.",
+    "memory": "Inherited RLIMIT_AS2GiB/CPU60/FSIZE16MiB/NOFILE64 for both literal commands. One serial HOST compile\u2192runtime family uses the existing2GiB planning reservation within all-current measured4GiB, not a new cgroup/observed peak/2GiB-per-owner allowance.",
+    "wall": "Compile60s and runtime5s, existing Owner six-second retirement envelope each; batch90s planning and Root capture bound required. No retries/parallelism.",
+    "disk": "Fresh private output/tmp/capture and32MiB planned output reservation with16/12GiB floors and26GiB MemAvailable retained; individual child regular-file FSIZE is not an aggregate output or exact compiler temporary-peak claim. Root keeps actual floors/capture headroom and preserves any failure.",
+    "admission": "Root must make other_current_payloads=[] truthful with actual positive prior release; all current overhead+2GiB<=4GiB, max3jobs/fresh26, same finite account/stop/holdguard, source/tool pins. Reviewer grants no release/currentfree/native permission."
+  },
+  "runner_and_failure_review": {
+    "static_Python38_parse_only": true,
+    "qualified_guard": "Only exact guard/overhead functions from pinned983b8c reader are extracted; required globals are supplied by runner imports/ROOT. No helper or guard function was invoked during review.",
+    "preconditions": "Request/review hash+GO and exact all14 bound inputs before payload; fresh roots refuse collisions; env-i removes inherited payload options and supplies fixed PATH/LANG/LC_ALL/TZ/privateTMP/PYTHONDONTWRITEBYTECODE. Qualified realHOST195 compiler70eb/e27 tree reused, no library/tool probe.",
+    "ownership": "Exact Ownerafe740 subreaper helper. After each returned record driver requires positive PID/birth, exact status0, parent/wholefamily/streams joined, no timeout/groupsignal/adoptedreaps/adoptedkills/residual/error. Immediately stop before next child if any predicate fails. Final exactly2records and no direct children required.",
+    "failure_receipt": "Current phase/argv, primary traceback, admitted flag, prior results and available ownership saved on failure; raw phase stdout/stderr and ownership retained. No automatic retry or release.",
+    "Root_outer_completion": "INNER-CLOSURE explicitly defers resource release until actual Root full tool/directwait completion; this GO does not convert inner PASS into Root whole-family proof."
+  },
+  "review_actions": "Read exact source/contract/review/fixture/runner/JSON/pins. Stdlib-only SHA/size, Python AST syntax parse and independent wire/sign arithmetic. No compile, fixture/test/runner/Owner/guard/SUT import or execution, native or canonical/control write.",
+  "review_path_lookup": "Initial cat guessed run_once.py (absent) before locating actual pinned run_root_once.py via scoped rg; no missing frozen input, no payload or packet change.",
+  "findings": [],
+  "required_actual_result_conditions": [
+    "Both exact compiler and runtime exit0 with required empty streams; runtime complete JSON deep equality for all six vectors.",
+    "Two immediate positive ownership records plus Root full initial/final tool metadata/directwait/family/stream closure before actual current job release.",
+    "Retain actual executable bytes/hash/mode and exact source/profile/cmd/raw outputs; use saved qualification only, no automatic old suite replay."
+  ],
+  "not_proved": [
+    "actualCPU/GS/offload/hostwaitid/ACK/driver/native/functionallifecycle",
+    "actualdefaultCexclusion/waittable48slot0 Rustowner untilnormalnewproductionimage withrealtypedguards",
+    "unchangedterminationtransaction/bodycases do not needmirrorfixture; exportedvoidABI/selector/Cexclusion validated by realnewproductionC/Rustguard+normalimage/read under independent source review"
+  ],
+  "termination_source_review": "Excluded: own terminationf010 source is independently reviewed by P04Tests; this review does not certify it or add mirrored old transaction cases.",
+  "original_condition_or_score_mutated": false,
+  "native_or_hold_release": false,
+  "canonical_changes": false
+}

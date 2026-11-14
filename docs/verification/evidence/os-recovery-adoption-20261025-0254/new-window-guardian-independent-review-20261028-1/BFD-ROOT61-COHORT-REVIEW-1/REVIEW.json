@@ -1,0 +1,268 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/independent",
+  "independent": true,
+  "implementation_ownership": false,
+  "recorded_at": "2026-10-28T07:02:48.637485+00:00",
+  "decision": "PASS_EXACT_BFD_ROOT61_SOURCE_ADMISSION_AND_READONLY_EXPORT_PROFILE_ONLY",
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-default-next-integration-source-20261028-1/new-window-producer-cohort-source-1/latest-root61-consumer-successor-source-1/SOURCE-READY.json",
+    "bytes": 9825,
+    "sha256": "e788bf8f34c31b55047631af48a568db64ddb42a8eac0b8cc5e97f29d4cb4680"
+  },
+  "ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-default-next-integration-source-20261028-1/new-window-producer-cohort-source-1/latest-root61-consumer-successor-source-1/READY.json",
+    "bytes": 1527,
+    "sha256": "77fc4ee16ae64ef10efe903229c8dec0e01be05dc3aae89e7db2a44e6f60d995"
+  },
+  "profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-default-next-integration-source-20261028-1/new-window-producer-cohort-source-1/latest-root61-consumer-successor-source-1/PROFILE.SOURCE-ONLY.json",
+    "bytes": 15935,
+    "sha256": "8bb4ed7ed8c369236aaa27061bfbc249ce822fd8173e8a67f563b8885594d26d"
+  },
+  "contract": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-default-next-integration-source-20261028-1/new-window-producer-cohort-source-1/latest-root61-consumer-successor-source-1/CONTRACT.json",
+    "bytes": 3531,
+    "sha256": "af791b621d5a4a71cac4d7901d7a0d8bc1a1c508cbf1e83288aee4d2c648eadd"
+  },
+  "request": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-default-next-integration-source-20261028-1/new-window-producer-cohort-source-1/latest-root61-consumer-successor-source-1/REQUEST.SOURCE-ONLY.json",
+    "bytes": 3421,
+    "sha256": "60c094b7815dffd3c98c3665bc26dffccc9eba6e04057b97fe10130f57113247"
+  },
+  "source_code": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-default-next-integration-source-20261028-1/new-window-producer-cohort-source-1/latest-root61-consumer-successor-source-1/build_only_worker.py",
+      "bytes": 4555,
+      "sha256": "77143a055d35b490962d7a4672dd5b3edd5c6033cdaa3e78f45b280f150db1ff"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-default-next-integration-source-20261028-1/new-window-producer-cohort-source-1/latest-root61-consumer-successor-source-1/hold_and_run_build_only.py",
+      "bytes": 7010,
+      "sha256": "d17bd70e3e3e6ef7febe48b6f0f892ab6f1a94c74e89d43808bbea8b5dc21551"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-default-next-integration-source-20261028-1/new-window-producer-cohort-source-1/latest-root61-consumer-successor-source-1/make_operation_request.py",
+      "bytes": 1749,
+      "sha256": "25cdfb74e165621e825885f21b0a0f224ca9abeae3f7d45bc4d1c8b01b92d37f"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-default-next-integration-source-20261028-1/new-window-producer-cohort-source-1/latest-root61-consumer-successor-source-1/materialize_admission.py",
+      "bytes": 6381,
+      "sha256": "90a4ea25a13525261b3e5716d83ee5ba1c8e532c8c7ce30482af61fdf82cc7ae"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-default-next-integration-source-20261028-1/new-window-producer-cohort-source-1/latest-root61-consumer-successor-source-1/materialize_current_source.py",
+      "bytes": 3522,
+      "sha256": "c7ed71753a0da0ebd39b4e0641a81ac615baa94e4a06e6ae28f2891a01b1ead0"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-default-next-integration-source-20261028-1/new-window-producer-cohort-source-1/latest-root61-consumer-successor-source-1/operation_window_guard.py",
+      "bytes": 9018,
+      "sha256": "51cd8b9510d8b6ea01e434d68d7932c506e84a099b88291733c4afe576ca620d"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-default-next-integration-source-20261028-1/new-window-producer-cohort-source-1/latest-root61-consumer-successor-source-1/run_build_only.py",
+      "bytes": 17973,
+      "sha256": "4035f7774cafbfb7e2c76ae123481db8eef5c637417eb9cec5170a61acf31276"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-default-next-integration-source-20261028-1/new-window-producer-cohort-source-1/latest-root61-consumer-successor-source-1/runtime_guard.py",
+      "bytes": 1989,
+      "sha256": "da47547459c7c7807e41238948b7212a573ea906d07803fec59c62358c7a6fb5"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-default-next-integration-source-20261028-1/new-window-producer-cohort-source-1/latest-root61-consumer-successor-source-1/test_materialized_pipeline.py",
+      "bytes": 7313,
+      "sha256": "3f344e6a2a2c1cef63d47d636259167f4eec6c6a75894d1184839fe1ba8e6516"
+    }
+  ],
+  "source_export_plan": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-default-next-integration-source-20261028-1/new-window-producer-cohort-source-1/latest-root61-consumer-successor-source-1/CURRENT-SOURCE-EXPORT-PLAN.NOT-AUTHORITY.json",
+    "bytes": 1160894,
+    "sha256": "39f55b06146174f626952edcf0b6d3fad2bf9612a6b9381554d74ed0568baa66"
+  },
+  "actual_four_path_adoption": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-resume-20261028-1/BFD-ROOT-SOURCE-ADOPTION.json",
+    "bytes": 1400,
+    "sha256": "c1860ea2eca751b654c48e8a36cda4e5818b464c162e2680da71d6b7e468f76b"
+  },
+  "previous_four_path_review": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/BFD-SELECTIVE.SOURCE-ADOPTION-REVIEW.json",
+  "tests": {
+    "original_all_nine": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-default-next-integration-source-20261028-1/new-window-producer-cohort-source-1/latest-root61-consumer-successor-source-1/TEST_ONLY-MATERIALIZED-PIPELINE.json",
+      "bytes": 1488,
+      "sha256": "b4b773876369d4444e4c6b7646713212648d2e4a2be0c295014c9686136303a6"
+    },
+    "independent_focused_eight": "ACTUAL-MATERIALIZER-FOCUSED-CONTROLS.txt",
+    "focused_failures": 0,
+    "actual_emitted_worker_constants_overridden": false,
+    "emitted_profile_request_worker_limits_equal": [
+      1793253600.0,
+      1035705.5689454618,
+      1051043.6959931096
+    ],
+    "old_BOOT_old_free_original227_alias_and_missing_attestation": "REFUSED",
+    "3103_subject_bytes_and_metadata_match_historical_with_only_four_truthful_canonical_path_rebindings": [
+      "executer/user/CMakeLists.txt",
+      "executer/user/cmake/BfdRustAccessors.cmake",
+      "executer/user/cmake/bfd_layout_witness.c",
+      "executer/user/rust/bfd_accessors.rs"
+    ],
+    "four_current_canonical_BFD_source_bytes": "PASS",
+    "exact_three_commands_and_command_hashes": "PASS",
+    "ninth_test_not_repeated": "Retained9PASS includes2794-file byte inventory; independent review compares exact authenticated3103-record map and verifies four adopted changed subjects, avoiding unchanged full-prefix rehash."
+  },
+  "current_boundary": {
+    "fragment": {
+      "current_ledger": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER61.json",
+        "bytes": 24665,
+        "sha256": "20e2470a6f7f81b188350af1374611801f68eacbf80ee8916814bd48962f4fa2"
+      },
+      "latest_free": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/CURRENT116-POSTJOIN-REVIEW-1/CURRENT-FREE.json",
+        "bytes": 12188,
+        "sha256": "6c83eee41b7e90d0f055034b9bbd30cfc9e32efac9e8285a90fc8948f7b82e7d"
+      },
+      "current_observer_source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/current61-after116-consumer-source-1/consumer-physical-shape-correction-source-1/observe_current61_original227.py",
+        "bytes": 10855,
+        "sha256": "35d5b4a5b21008fbc44f0bd55dc10542294925f06f5d3c445fcee43485316930"
+      },
+      "current_observer_source_review": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/ORIGINAL227-ROOT61-REVIEW-1/OBSERVER-SOURCE-REVIEW.json",
+        "bytes": 5124,
+        "sha256": "5d3d07799663b95205a1a1dcb8c63f5a4131ea633a9870144cc4eafa0bb298e9"
+      },
+      "current_observer_schema": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/current61-after116-consumer-source-1/consumer-physical-shape-correction-source-1/OBSERVER-SCHEMA.ROOT61.SOURCE-ONLY.json",
+        "bytes": 681,
+        "sha256": "4eae9989ad3edbd43291edf241580fcff33f12dda5a1eeaf181376cba9268bd8"
+      },
+      "current_observer_schema_review": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/ORIGINAL227-ROOT61-REVIEW-1/SCHEMA-SOURCE-REVIEW.json",
+        "bytes": 1125,
+        "sha256": "c0db1b6e3d99610aba5178aebde835d4acd51648191582178c1bfa61c11c8f30"
+      }
+    },
+    "fragment_source": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/ORIGINAL227-ROOT61-REVIEW-1/REVIEWED-OBSERVER-SCHEMA-FRAGMENT.json",
+      "bytes": 2142,
+      "sha256": "2ade332e39b255d5754995422e07d82fee92e37ee658006910a82c1e16992eaa"
+    },
+    "ledger_count": 70,
+    "pending": false,
+    "actor_rows": 61,
+    "scope": "Only pure accepted35d5 validate_current(CURRENT) is reused. Native4d1c lifecycle and ordinary116 build remain distinct typed history. Original227 observe() is neither invoked nor released as BFD physical authority."
+  },
+  "window_credit": {
+    "UTC": 1793253600.0,
+    "MONO": 1035705.5689454618,
+    "BOOT": 1051043.6959931096,
+    "all_controls_minimum": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/new-run-until-20261028-2300-pacific-1/new-guardian-binding-preparation-1/actual-all-controls-cutoff-binding-1/ACTUAL-CONTROLS-MINIMUM-BINDING.json",
+      "bytes": 12566,
+      "sha256": "f0bd571de17ec0abe75fa1fcc39924f7284241eb3379c8b0486a0bc593458036"
+    },
+    "guardian": "Exact e8a117df read-only adapter bound to genuine parent369",
+    "credit_run": "7f4af94a83b14cc08f97401f5891d965",
+    "cumulative_ceiling": "57774.852125",
+    "included_first": true,
+    "new_purchase_or_API_key_billing": false,
+    "old_account_semantics": "Pinned unchanged predecessor accounting plus actual new thread; real holds/credit floors preserved."
+  },
+  "source_profile_findings": [
+    "Materializer consumes exact real all-controls minimum binding; contract/profile/literal worker cutoffs agree before emitted output. Genuine Root61/free6c83/70nonces/pendingfalse/61actors are validated by the pinned reviewed data parser.",
+    "Source-only materializer requires Root author, exact selective four-path adoption and actual canonical postimage bytes; validates fixed relative source map before copying, readbacks exact closed3103 records and seals files/directories readonly. It contains no guard/account/compiler/resource call.",
+    "Admission materializer requires genuine export receipt bound to plan/adoption/root and latest/no-intervening attestation. It copies exact five runtime Python sources to fresh cohort, joins emitted profile/worker/request caps and current facts, and emits NULL-author/NULL-decision operation request with no grant/nonce authority.",
+    "BFD runtime adapter fixes operation bfd-current-default-two-tools and exact consumer byte subjects. Explicit Root operation successor plus matching independent review are mandatory; original227 alias and stale f76 are rejected.",
+    "Source/archive/accepted SDK prefix and BFD body evidence are reused. Only selected two-tool configure, mcinspect/eclair --parallel1, then actual project-object/Rust/bridge259B/twoPIE readback are selected. No SDK21/eightCLI-equivalence/70-library rebuild prefix is requested.",
+    "Existing fourCPU2-5/12GiB/noSwap/512tasks/noNet/UID1000/jobs1 profile, soleheavy/permanent27:4, aggregate reservations,4GiB host reserve and16/12GiB floors remain. Holder/grants/execution/resource authority are absent from this source decision."
+  ],
+  "source_closure_counts": {
+    "records": 3103,
+    "files": 2794,
+    "directories": 237,
+    "symlinks": 72,
+    "changed_canonical_paths": 4
+  },
+  "minimum_Root_preparation": [
+    {
+      "step": 1,
+      "action": "Fill ROOT-ACTUAL-SOURCE-MATERIALIZATION-BINDINGS.json from exact template with Root author, actual c186 four-path adoption and literal source-export-1 root. Run source-copy materializer exactly once.",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-default-next-integration-source-20261028-1/new-window-producer-cohort-source-1/latest-root61-consumer-successor-source-1/materialize_current_source.py",
+        "--root-bindings",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-default-next-integration-source-20261028-1/new-window-producer-cohort-source-1/latest-root61-consumer-successor-source-1/ROOT-ACTUAL-SOURCE-MATERIALIZATION-BINDINGS.json",
+        "--root-bindings-sha256",
+        "ACTUAL_ROOT_SOURCE_BINDINGS_SHA256"
+      ],
+      "output": "Genuine ROOT-ACTUAL-CURRENT-SOURCE-EXPORT.json and readonly source tree only."
+    },
+    {
+      "step": 2,
+      "action": "Fill ROOT-ACTUAL-BINDINGS.json with genuine source-export receipt, Root61/free6c83 and true latest/no-intervening attestation. Execute metadata materializer into fresh root-adopted-dispatch-1.",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-default-next-integration-source-20261028-1/new-window-producer-cohort-source-1/latest-root61-consumer-successor-source-1/materialize_admission.py",
+        "--root-bindings",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-default-next-integration-source-20261028-1/new-window-producer-cohort-source-1/latest-root61-consumer-successor-source-1/ROOT-ACTUAL-BINDINGS.json",
+        "--root-bindings-sha256",
+        "ACTUAL_ROOT_BINDINGS_SHA256",
+        "--output",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-default-next-integration-source-20261028-1/new-window-producer-cohort-source-1/latest-root61-consumer-successor-source-1/root-adopted-dispatch-1"
+      ],
+      "output": "Emitted profile/worker/runner/holder/export descriptor and NULL-author explicit BFD operation request."
+    },
+    {
+      "step": 3,
+      "action": "Root supplies exact BFD operation successor, independent PASS_EXPLICIT_OPERATION_WINDOW_SUCCESSOR and emitted ROOT-OPERATION-BINDINGS.json matching expected byte subjects. These supply no heavy resource authority."
+    },
+    {
+      "step": 4,
+      "action": "Publish/fetch-verify actual emitted cohort. Designated independent reviewer must actually wait with verified PID/birth before fresh clocks. Obtain fresh BFD physical/current/resource admission, unchanged120s checks, soleheavy27:4 reservation, independent exact execution release and prewritten one-use grants."
+    },
+    {
+      "step": 5,
+      "action": "Only after every gate, invoke exact one holder; it invokes one reviewed runner/grant. Afterwards require actual artifact and normal retirement/currentfree review.",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-default-next-integration-source-20261028-1/new-window-producer-cohort-source-1/latest-root61-consumer-successor-source-1/root-adopted-dispatch-1/hold_and_run_build_only.py",
+        "--bootstrap-grant",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-default-next-integration-source-20261028-1/new-window-producer-cohort-source-1/latest-root61-consumer-successor-source-1/root-adopted-dispatch-1/ROOT-HOLDER-BOOTSTRAP-GRANT.json"
+      ]
+    }
+  ],
+  "conditions": [
+    "This decision permits exact source-only adoption/data preparation by Root; reviewer performed no actual source-tree export/stage. Root remains sole canonical/Git/ledger/grant/runtime/controller owner.",
+    "Root61/free is historical fact, not future reservation. If any operation intervenes before actual BFD admission, use its genuine latest typed successor and no-intervening attestation; never reuse a spent nonce or substitute old free/observer metadata.",
+    "If fresh controls tighten, actual operation/profile/worker/contract must be coherently rebound to true earliest caps before execution. No manual worker constant override, recovery window renewal, debit reset or hold clearing.",
+    "Actual BFD physical capture/reviewer prewarm/resource/grants and once-entry release remain mandatory. Reusing original227 pure validator does not grant its operation-specific observe/native authority.",
+    "Source/profile review supplies no new HOST/default/native/file acceptance. Preserve M15-F03/F04 OPEN until actual matching linked/default and applicable separately released native diagnostic evidence."
+  ],
+  "blocking_source_findings": [],
+  "actual_actions": {
+    "guard_account": 0,
+    "real_source_export_or_stage": 0,
+    "compiler_Docker_root_guest": 0,
+    "nonce_grant_controller": 0,
+    "canonical_mutations": 0,
+    "evidence_writes_only": true
+  },
+  "runtime_authority": null,
+  "acceptance_deltas": {
+    "source_cohort_review": 1,
+    "HOST": 0,
+    "default": 0,
+    "native": 0,
+    "files": 0
+  }
+}

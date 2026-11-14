@@ -1,0 +1,19 @@
+[
+  "/usr/bin/taskset",
+  "--cpu-list",
+  "6",
+  "/usr/bin/prlimit",
+  "--as=536870912",
+  "--cpu=30",
+  "--core=0",
+  "--fsize=8388608",
+  "--nofile=256",
+  "--",
+  "/usr/bin/python3",
+  "-I",
+  "-B",
+  "-c",
+  "from pathlib import Path\nimport importlib.util,json,hashlib,os\nB=Path(__import__('sys').argv[1]);P=json.loads(Path(__import__('sys').argv[2]).read_text())\ndef load(n,path):\n s=importlib.util.spec_from_file_location(n,path);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);return m\no=load('actual_owner',B/'native_diagnostic_container_owner.py');d=load('actual_diagnostic',B/'native_diagnostic.py');parent=Path(P['new_owner_parent']);manifest=Path(P['new_manifest']);need='148de42fca185ffd90c5347642f7825871e0ffc411af7d41834a252b48864386'\nassert hashlib.sha256((B/'native_diagnostic_container_owner.py').read_bytes()).hexdigest()=='4d7ae097cae866389ed044a6247e01f1bc78ff8744fc8d72f39fb294b55bb298'\nassert hashlib.sha256(manifest.read_bytes()).hexdigest()==need\no.private_parent(str(parent));o._manifest_identity(str(manifest),need);o._manifest_outside_writable_parent(str(manifest),parent)\nattempt=parent/('attempt-'+P['fresh_nonce']);assert not os.path.lexists(attempt)\na=d.expected_qemu_argv(json.loads(manifest.read_text()),attempt);q=P['qmp_socket'];assert a[a.index('-qmp')+1]=='unix:'+q+',server=on,wait=off';assert len(os.fsencode(q))==93\nprint('PASS actual source4d7 parent/scratch manifest/outside-writable guards and actual expected_qemu_argv with93byte QMP socket')\nold=Path('/home/holden/mckernel-work/scratch/p-m06-native199-261022-1/owner-parent')/('attempt-'+P['fresh_nonce'])\ntry:d._qmp_socket_path(old)\nexcept d.DiagnosticError as e:assert type(e)is d.DiagnosticError and str(e)=='QMP socket pathname exceeds Linux AF_UNIX 107-byte limit';print('PASS overlong actual QMP path guard rejects exact107byte predicate')\nelse:raise AssertionError('overlong path accepted')\nprint('PASS DATA-only corrected invocation; no directory/socket/process/guest created')\n",
+  "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1",
+  "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/short-path-correction-1/SHORT-PATH-CORRECTION-PUBLICATION-AND-OPERATION.json"
+]

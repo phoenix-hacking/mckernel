@@ -1,0 +1,146 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_EIGHT_TRACKED_PROVIDERS_CURRENT_OBJECT_STRICT_PARTIAL_TRACE_BYTES",
+  "result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-object-first-1/ACTUAL-TRACKED-OBJECT-FIRST-RESULT.json",
+    "sha256": "edca3a0290130b6a0d2096898f4116a01120b01eae1fceb07bc6cabfbcf5a3ec",
+    "bytes": 74525
+  },
+  "accepted_previous_current_object": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-4/ACTUAL-CURRENT-OBJECT-FIRST-RESULT.json",
+    "sha256": "0cf5fb4dd65f8335ad151abf235d519aa602538cc57281bf85d528ee42f12a0d",
+    "bytes": 71805
+  },
+  "actual_commands": 8,
+  "fixture_prefix_replayed": false,
+  "all_eight_C_selected_definitions_absent": true,
+  "all_eight_Rust_and_partial_definitions_once": true,
+  "all_eight_fallback_C_definitions_once": true,
+  "all_nine_metadata_symbols_uniquely_resolved_in_partial": true,
+  "trace_metadata": {
+    "process_mckfd_free_bridge_source_line": {
+      "value": 171,
+      "bytes_hex": "ab000000",
+      "section": ".rodata",
+      "section_flags": 2
+    },
+    "process_policy_free_bridge_source_line": {
+      "value": 253,
+      "bytes_hex": "fd000000",
+      "section": ".rodata",
+      "section_flags": 2
+    },
+    "process_optional_free_bridge_source_line": {
+      "value": 258,
+      "bytes_hex": "02010000",
+      "section": ".rodata",
+      "section_flags": 2
+    },
+    "process_alloc_bridge_source_line": {
+      "value": 340,
+      "bytes_hex": "54010000",
+      "section": ".rodata",
+      "section_flags": 2
+    },
+    "process_free_vm_bridge_source_line": {
+      "value": 561,
+      "bytes_hex": "31020000",
+      "section": ".rodata",
+      "section_flags": 2
+    },
+    "process_range_kfree_bridge_source_line": {
+      "value": 1817,
+      "bytes_hex": "19070000",
+      "section": ".rodata",
+      "section_flags": 2
+    },
+    "process_add_range_alloc_bridge_source_line": {
+      "value": 2256,
+      "bytes_hex": "d0080000",
+      "section": ".rodata",
+      "section_flags": 2
+    },
+    "process_add_range_free_bridge_source_line": {
+      "value": 2261,
+      "bytes_hex": "d5080000",
+      "section": ".rodata",
+      "section_flags": 2
+    },
+    "process_tracked_allocator_source_file": {
+      "file_bytes_hex": "2f686f6d652f686f6c64656e2f6d636b65726e656c2f646f63732f766572696669636174696f6e2f65766964656e63652f76656c6f636974792d696e74657276656e74696f6e2d32303236313032332d362f6d31342d66696c652d6c616e65732f6b65726e656c2d70726f636573732f6e65772d77696e646f772d736f757263652d352f61637475616c2d666f7277617264696e672d66697273742d312f736f757263652f6b65726e656c2f70726f636573732e6300",
+      "file": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/process.c",
+      "pointer_section": ".data.rel.ro.local",
+      "section_flags": 3,
+      "target_section": ".rodata.str1.8",
+      "relocation_type": 1,
+      "raw_pointer_bytes": "0000000000000000",
+      "final_image_readonly_mapping_proven": false
+    }
+  },
+  "broader_unresolved_provider_delta": {
+    "before_count": 226,
+    "after_count": 226,
+    "added": [],
+    "removed": []
+  },
+  "objects": {
+    "process.c.o": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-object-first-1/output-object-first-1/process.c.o",
+      "sha256": "08edaaeb27ff49670ea7f2e4fbab057c050f4e2471d2e9735928b786010d1588",
+      "device": 66306,
+      "inode": 59399559,
+      "uid": 1000,
+      "gid": 1000,
+      "mode": "0o600",
+      "nlink": 1,
+      "size": 169544,
+      "mtime_ns": 1792899714830301053,
+      "ctime_ns": 1792899714830301053
+    },
+    "mckernel_rust.o": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-object-first-1/output-object-first-1/mckernel_rust.o",
+      "sha256": "9642e0e34d2dd957916d0741092fd062c46b48406687aac02bbd4c3f0f8c5511",
+      "device": 66306,
+      "inode": 59399582,
+      "uid": 1000,
+      "gid": 1000,
+      "mode": "0o600",
+      "nlink": 1,
+      "size": 17052800,
+      "mtime_ns": 1792899733926908696,
+      "ctime_ns": 1792899733926908696
+    },
+    "process-rust-partial.o": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-object-first-1/output-object-first-1/process-rust-partial.o",
+      "sha256": "443c211af3f283eef9861064c62f1f3411cc04d80e217ee213570bdde0c87c81",
+      "device": 66306,
+      "inode": 59399596,
+      "uid": 1000,
+      "gid": 1000,
+      "mode": "0o600",
+      "nlink": 1,
+      "size": 17365248,
+      "mtime_ns": 1792899734142914095,
+      "ctime_ns": 1792899734142914095
+    },
+    "process.fallback.c.o": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-object-first-1/output-object-first-1/process.fallback.c.o",
+      "sha256": "1ad05cc6efe4ca8c1947cc7bf665ebb487d72b603834710d6cbeb67df1da0922",
+      "device": 66306,
+      "inode": 59399613,
+      "uid": 1000,
+      "gid": 1000,
+      "mode": "0o600",
+      "nlink": 1,
+      "size": 356944,
+      "mtime_ns": 1792899735310943300,
+      "ctime_ns": 1792899735310943300
+    }
+  },
+  "all_children_joined": true,
+  "CPU0_released": true,
+  "canonical_mutations": 0,
+  "production_default_image": false,
+  "native": false,
+  "remaining": "Independent source/ownership+matching evidence review before canonical integration; final image readonly mapping of relocation-readonly file pointer and changed current default image/native proofs remain open."
+}

@@ -1,0 +1,1910 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_PUSHED_FETCHED_EXACT_BLOBS",
+  "commit": "d1e6ab6cd6d553e429f26df0c6149c75abe85dd5",
+  "recorded_utc": "2026-10-23T15:09:07.012840+00:00",
+  "blobs": [
+    {
+      "path": "arch/x86_64/kernel/memory.c",
+      "sha256": "3dccbb04986c7fb4c1c47bad1a382372c19cd270861501cf064ce95f36d46c32",
+      "bytes": 84761
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/ACTUAL-FULLCRATE-PROFILE.json",
+      "sha256": "b585f4641c830833fe3585950f18ffefdf420eb1722aebe9bdd7cd85112ea14a",
+      "bytes": 1528
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/ACTUAL-FULLCRATE-RESULT.json",
+      "sha256": "0de3ee3527ad87243c502a60c5c2f3ed4c7ce336a648d5c641e6d1f5a777ad15",
+      "bytes": 5383
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/ACTUAL-LEAF-COMMANDS.json",
+      "sha256": "faa43a1255471233a44913fc9e479674c231e469109969e75cd1a6929db64343",
+      "bytes": 6713
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/ACTUAL-LEAF-PROFILE.json",
+      "sha256": "fa0ae2dc091d78379c9556e2361e982bbf66baaff54e85f3b960d4397d5ded12",
+      "bytes": 994
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/ACTUAL-LEAF-RECEIPT.json",
+      "sha256": "101ed5f4d4422148b6b9d59f66146d2f0773ab68bbca8fc137e734977e7e1ed4",
+      "bytes": 18797
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/ACTUAL-LEAF-RESULT.json",
+      "sha256": "019ac13148afaec38d73dbd85a0bab8aea83e08d44a36209f863edbecd3941f9",
+      "bytes": 25090
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/ACTUAL-PRODUCTION-FULLCRATE-RECEIPT.json",
+      "sha256": "0997088697285bce8a5cf30512a9f6eed91a472b7153271198159f6a4e32e261",
+      "bytes": 7302
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/CANONICAL-INTEGRATION.json",
+      "sha256": "c07d47d1cf2eaf12ab14354fa92584e0d202d08898a75c2a6e46326ccf5d68e5",
+      "bytes": 1762
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/COMPILE-OBJECT-RECEIPT.json",
+      "sha256": "70366e93acb43f48ef9be125db453e6a4d32bc2c7bbc1685a8300fc08118148c",
+      "bytes": 3629
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/INDEPENDENT-SOURCE-ABI-ACCEPTANCE.ROOT-RECORD.json",
+      "sha256": "bf1f3b9000bdef6c0e9c9e679bf66e1fb6cc18dacc99155d49d00f43c0b1046a",
+      "bytes": 1563
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/NEXT-PRODUCTION-RUST-RECIPE.NOT-EXECUTED.json",
+      "sha256": "77952aa032e2c88ff04a3c9e0c937f2a86f610c67d0e8b51c6ab485ab5a1af9a",
+      "bytes": 50505
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/actual-fullcrate-compiler-capture-1/command.json",
+      "sha256": "d2849a0a15529d9cb3246def22c02ba3fcbb58b0ec3ec7a4c18ca91e599482dc",
+      "bytes": 3196
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/actual-fullcrate-compiler-capture-1/direct-join.json",
+      "sha256": "4d65ba83edd3832a5a5931aae845a6ee5f76ba2a19a880583fc084d8b968d8bb",
+      "bytes": 259
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/actual-fullcrate-compiler-capture-1/direct-wait.json",
+      "sha256": "3650a1780d059c372615802f06075ee4580f1e327a29714ff5436a04031ff3e1",
+      "bytes": 82
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/actual-fullcrate-compiler-capture-1/started.json",
+      "sha256": "ef6ed9220d4fb5b133ac8fc6d967a6348b121b7d5560a71e95263122e2e0b9bf",
+      "bytes": 36
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/actual-fullcrate-compiler-capture-1/stderr",
+      "sha256": "0d8d3c803163246b374ca2403a129bdd872f48d9983358f3a3d594982d025832",
+      "bytes": 30879
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/actual-fullcrate-compiler-capture-1/stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/actual-fullcrate-compiler-capture-1/whole-join.json",
+      "sha256": "eab26eb057e74953505b4059603205ad8fbae9af71df15d3300409390048a270",
+      "bytes": 1243
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/actual-fullcrate-nm-capture-1/command.json",
+      "sha256": "b66eb7175cbfff6b7bc8bd53ad60865205b3cf9b11c1d79ec8a68825d5343da7",
+      "bytes": 527
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/actual-fullcrate-nm-capture-1/direct-join.json",
+      "sha256": "60555d73e6b4bd9cbd8043722a6142b68d49c747a38580e653cacdf578e86b10",
+      "bytes": 260
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/actual-fullcrate-nm-capture-1/direct-wait.json",
+      "sha256": "857aaa8f5b4de64b41116206113115ae4263ca11327ab5cc0fa2ad455732b392",
+      "bytes": 82
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/actual-fullcrate-nm-capture-1/started.json",
+      "sha256": "7cff48650f2cb1dfaeae5e798d81c0b760d70395d8b90882d98540cea459cb99",
+      "bytes": 36
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/actual-fullcrate-nm-capture-1/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/actual-fullcrate-nm-capture-1/stdout",
+      "sha256": "b95d0246fc4d0b6cb9a0d8a7ca3da5a8fb45385b085a5da30c3e7cdcbbda9018",
+      "bytes": 165050
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/actual-fullcrate-nm-capture-1/whole-join.json",
+      "sha256": "213db303a65095df8687fe7c4218923cd3fe3be110930830bbeca4906710ec9a",
+      "bytes": 1147
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/consumer.c",
+      "sha256": "b5f35521b680c4d9b1a8fd363043d53a75561d3a29b8563c959e8b247846b09b",
+      "bytes": 559
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/fixture.c",
+      "sha256": "6364831f5ccf50cd208d49979e367f1a048e2d2368f5e77977b865d0750a6119",
+      "bytes": 1150
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/fixture.rs",
+      "sha256": "ca7cd6e389b8da83cf85bc20dbd617944522557cdabc16ba2d740bb6e46b8857",
+      "bytes": 282
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/harness_check.c.inc",
+      "sha256": "d19d90a2db596a3682756255dd5fb278f6762eed7b4839880e678d33093543b5",
+      "bytes": 93
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/harness_declaration.c.inc",
+      "sha256": "e8a30fadbb476efc0969ab9839d0e8af229763a5d3fe1b47159a14ebc6232562",
+      "bytes": 96
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-1/command.json",
+      "sha256": "0c545828e221661c160413e2cea1a3d924c1c49eaa40e9e6d5d2cbe57b6917ed",
+      "bytes": 779
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-1/direct-join.json",
+      "sha256": "ebf54487b3710e9e1cdda51d1459c1a084b925bfb3e0d31fb1d5c0c1d7ec13d7",
+      "bytes": 260
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-1/direct-wait.json",
+      "sha256": "6dcc31c43920fbf810e0865ff39d4cad3696518b5c78690a348b8047cf6ef6dc",
+      "bytes": 82
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-1/started.json",
+      "sha256": "b7d54e423b97783348be3054cc50633ea5884bc1e30557acf4de959e8e3cf11f",
+      "bytes": 36
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-1/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-1/stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-1/whole-join.json",
+      "sha256": "12180a3fc62cae82ec51d9433559f1673616f7eca56125cf681576fe53fc3b22",
+      "bytes": 1126
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-10/command.json",
+      "sha256": "c3d31a189416625071cd8bef628d2dcc28fff3ad47a89179d521c93a1aac318d",
+      "bytes": 465
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-10/direct-join.json",
+      "sha256": "68f9046a98f8d1e971fbeb5b17ae1fb15fef84174d9e9d668a7e659bae6416ee",
+      "bytes": 260
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-10/direct-wait.json",
+      "sha256": "6a9d031d6245544b25f7903e2155a07ebd0af1ae720804f3a1142fded4c9ed88",
+      "bytes": 82
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-10/started.json",
+      "sha256": "2d52079ecca7f8d758bb0d3df173ef8d93a312a1f224a4ec1271207515619747",
+      "bytes": 36
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-10/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-10/stdout",
+      "sha256": "53b0366849acae0ee6d95673c17975e77eee3c3d2e676d8231be53442dfe9712",
+      "bytes": 81
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-10/whole-join.json",
+      "sha256": "9d159a615f690f2380dfa7db49245d4f8a0d3fdc0f278e355f30ab0c9e221af6",
+      "bytes": 1129
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-11/command.json",
+      "sha256": "6f1c163208bfd0d7e19c9bf6b6e44d9d1c92a9d4f21b378794659750e997fcb7",
+      "bytes": 469
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-11/direct-join.json",
+      "sha256": "8dfd34a3049b08b66f51fc0784a085995cab0974e459994b64b4b0f565866c49",
+      "bytes": 260
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-11/direct-wait.json",
+      "sha256": "c75748d8a7591371fb3ac87cc90c5df296e6192f3ee6fc370be8cfb5e93ba6d1",
+      "bytes": 82
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-11/started.json",
+      "sha256": "8c3d16c6209d66ff653c2e6ac73f9e174bd4cfd6049d7128b1d00889d488a392",
+      "bytes": 36
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-11/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-11/stdout",
+      "sha256": "f2d13d88625d254502842a6d96eb477e7fb0a711766bd71ee6294396dcf921a9",
+      "bytes": 105
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-11/whole-join.json",
+      "sha256": "2001f4739ac032feae2c006fb5a7807119ecf5404fa4027ba71f77a446f66566",
+      "bytes": 1130
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-12/command.json",
+      "sha256": "534790d36a95533b6b6cfbaecb055d4a40452a29a822205a3869d598248eaa1b",
+      "bytes": 464
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-12/direct-join.json",
+      "sha256": "499947ef81973281fb5901ff02520ab2a0f75437843370fcf4d88fce67e64fc9",
+      "bytes": 260
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-12/direct-wait.json",
+      "sha256": "490cdfe51f7bd7cdbf1f02ecac40341e3802ace70422b98205dfe9ef598d47e7",
+      "bytes": 82
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-12/started.json",
+      "sha256": "10493238083e6baf0aa120956876e4d2638f7142e6f3ba8115bd94a235b09025",
+      "bytes": 36
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-12/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-12/stdout",
+      "sha256": "2a3cee3a9675b008befb794f19e9877b29e84734e24b72b6d16158a126fa9587",
+      "bytes": 105
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-12/whole-join.json",
+      "sha256": "1ee734c8dee6cdc8938bbf677be5b6eb3f19c9b40d8ec376584f7f89529db0d0",
+      "bytes": 1130
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-13/command.json",
+      "sha256": "0cbde34b47d1fe25ea4b8b28c9e836da6ab38a96bd52adfb1b903e184bb3742f",
+      "bytes": 481
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-13/direct-join.json",
+      "sha256": "1d1f1a0d392b01befffaa8ff94954576b65bf1c1b214fb093a9d2840c6968996",
+      "bytes": 261
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-13/direct-wait.json",
+      "sha256": "0be89e84ed345dbb99cb2613f9ac9a1db07ef8cf3acd22dfb54612b1bb0ac613",
+      "bytes": 82
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-13/started.json",
+      "sha256": "45cbce13e76687788aab02b9e91de2ac2b0c2765f353e96bebecead32237b6d3",
+      "bytes": 36
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-13/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-13/stdout",
+      "sha256": "81ad373a2d73b8836c73ded4357c16e81db7433af8c5d475750ae466f70194a7",
+      "bytes": 555
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-13/whole-join.json",
+      "sha256": "85eab6cb013cf45bf376880e28c7445b19c8174c4f16ddcc37330aac912f11f1",
+      "bytes": 1131
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-14/command.json",
+      "sha256": "60c05be28f59d80d8b7dcca7393da68bb386ab3e007cad59fc571095ea87ad04",
+      "bytes": 535
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-14/direct-join.json",
+      "sha256": "36e7937e936297b6975b502347544a766bcdccd90401e946e554bf61773345e9",
+      "bytes": 260
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-14/direct-wait.json",
+      "sha256": "d26f91ffbc9738c2c41d9e43e328e6149d173b1d2dbeab8e9f276369da3cd3ca",
+      "bytes": 82
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-14/started.json",
+      "sha256": "92e042ce406f0ebee5cd432ebcc49e1a19b193b22dac28c9643f6c3aa3a16ea0",
+      "bytes": 36
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-14/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-14/stdout",
+      "sha256": "e3eb817f748f6a9061b8a2bc753291bae3a9fe3f3f1ea41d815ec440ec1e96f8",
+      "bytes": 270
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-14/whole-join.json",
+      "sha256": "01174b2c233554c7857d2a7b0e907458702d93ed0f3e0b98da11d2cdbda8b3be",
+      "bytes": 1130
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-15/command.json",
+      "sha256": "fac1d4a43fe67ae1f9a6b5add45794114adf13b54bb9ad316641507c4e3478ff",
+      "bytes": 471
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-15/direct-join.json",
+      "sha256": "fbcda4502d62ea60128b491b1fa2e6149de8fd59b58fd1455416fde2bead5844",
+      "bytes": 260
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-15/direct-wait.json",
+      "sha256": "7403d5a8ebf6112a7165151d25fdec2b79184fc4e29f4ff2aa10f166c278317d",
+      "bytes": 82
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-15/started.json",
+      "sha256": "be07864adb673976b957d1656a0d0d14e7bbf5c3502a432e917dfd06085a96ca",
+      "bytes": 36
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-15/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-15/stdout",
+      "sha256": "48fbc3539f65bf0b2a69bb2b1c67d8cda6b38757b54eb39a85338efda00d7be3",
+      "bytes": 1228
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-15/whole-join.json",
+      "sha256": "77bd3fd950170f1847cde6b98e29a0b26f56d4a05e6f8b6c7ba764de41253de2",
+      "bytes": 1131
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-16/command.json",
+      "sha256": "beea5039ffc6f03174d596ffeda18851a9b32daa2618eff8a5ad32024e8ce4ec",
+      "bytes": 516
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-16/direct-join.json",
+      "sha256": "93ce7687fff85f64e000e8055ca2411c39386f6666e63bf7776038fca84756b7",
+      "bytes": 260
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-16/direct-wait.json",
+      "sha256": "5b2b424121c795c285136f54e6d2d9865478800ca1aec0c910314e6e27aa09a8",
+      "bytes": 82
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-16/started.json",
+      "sha256": "bec4b1afac5671146d5afed67e4d19714b2e35712fe852293cb4c5c8f73f9656",
+      "bytes": 36
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-16/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-16/stdout",
+      "sha256": "3977b76831e029fe61a91def1e50d1a38ecce902832d1f84cb508452096766e4",
+      "bytes": 152
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-16/whole-join.json",
+      "sha256": "557b29c6bc84f685522e37f98e3e3b11558b2d3b2bfb7aeb3d33b729e3e4bd96",
+      "bytes": 1130
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-17/command.json",
+      "sha256": "63395faf29dc064779f4737d943b0947889d091cd1f50787ef19650a7b935db2",
+      "bytes": 506
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-17/direct-join.json",
+      "sha256": "5dca0818f7b1e05265ffb34eed65fe89438a6cffef0aaf56b3eedab4a8c73ed8",
+      "bytes": 260
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-17/direct-wait.json",
+      "sha256": "9b40d8592c55dff7a065aa33538eac8f2e8edda375254c1ba370c86020b32f82",
+      "bytes": 82
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-17/started.json",
+      "sha256": "fbc2ac21c84dcc08e33ca4dd2a01c824be9de868843191a7add6fa90806ca951",
+      "bytes": 36
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-17/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-17/stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-17/whole-join.json",
+      "sha256": "534a79d897d0b4d80729be684c91809f4d5644a1bc75443b827e75c9e2094d46",
+      "bytes": 1128
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-2/command.json",
+      "sha256": "bf8ff7201b2622248fb67335548a8235f1879d3a89dbd43e58c201a60f002eee",
+      "bytes": 712
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-2/direct-join.json",
+      "sha256": "564574d6dc524334ef2b729880c3fb7cc5ee3e92708767c5972ee404a054f80a",
+      "bytes": 260
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-2/direct-wait.json",
+      "sha256": "0405ae869cb4b3b5fa850edb2d8383f61118d74fa6d4c10cf3380b086aa960c9",
+      "bytes": 82
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-2/started.json",
+      "sha256": "ee83d75af27167dae52ddc723c43a534f36311b1a48981734acfbde4437ad4b7",
+      "bytes": 36
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-2/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-2/stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-2/whole-join.json",
+      "sha256": "93caaa354452eebc0660c899504edb9cfaa6437da4cfc472c134246173898326",
+      "bytes": 1126
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-3/command.json",
+      "sha256": "fce250c40c31740c4df1355b0fe4dd3496580920a9c965412c8fab17c6c34bc2",
+      "bytes": 587
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-3/direct-join.json",
+      "sha256": "c02e0c820839f53c7a819da2f3fa738f9a3f4294fb83dee739504247214d4672",
+      "bytes": 260
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-3/direct-wait.json",
+      "sha256": "d117161482846d32ed6b63756f849a028fd82849185d91a9138364f5c867267a",
+      "bytes": 82
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-3/started.json",
+      "sha256": "8d5cf96910d75cd12789b9a6fa70c249c5211add321ebacdea660ba098d97f2c",
+      "bytes": 36
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-3/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-3/stdout",
+      "sha256": "05d8b796f2ee245f645a55b4ea8000cfd8d59d2db1892ce80422d4a3375f2e63",
+      "bytes": 97
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-3/whole-join.json",
+      "sha256": "c41bff9e94cf71b53cc4b3352986ee6ccb4c9ab8eacd0a83b24bc49a9ddb374e",
+      "bytes": 1127
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-4/command.json",
+      "sha256": "e6755db47fe1cf9282d61457b678660022a0165e7e26262a1a070bc87db947a2",
+      "bytes": 651
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-4/direct-join.json",
+      "sha256": "f0741fb5a0bae59877ce68bd5f081de903120c29893ddd51bbfc081feb65f646",
+      "bytes": 261
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-4/direct-wait.json",
+      "sha256": "84b7af49a661bb28781db63d524a264614f00360afe643ea015a062aa8b39f55",
+      "bytes": 82
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-4/started.json",
+      "sha256": "57cc65873e1acc8be6bc40a390ce07257ba69ffa6a53cd6a245e52f6d3d370b3",
+      "bytes": 36
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-4/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-4/stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-4/whole-join.json",
+      "sha256": "9243ca3bfab32cac21c5a403c82a62e7b4910a569098696e19815ae3b558ddda",
+      "bytes": 1127
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-5/command.json",
+      "sha256": "88a6191bb84b0d08b754469f1617653a3fdac45fbf4cb8929b4aa6f636da8da7",
+      "bytes": 581
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-5/direct-join.json",
+      "sha256": "c4fe196f543c4a3c300a09522e52db45d8a8aed6e6476b03fa82cc3bf929dc16",
+      "bytes": 261
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-5/direct-wait.json",
+      "sha256": "3d5ded2ecfa31d4df556158d98c1035dd136350d4f5ffa6ab6b108d7b0101119",
+      "bytes": 82
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-5/started.json",
+      "sha256": "8bcf917c0bce6cfeb8b9047c79feaa18b2b8cfccc7947fe4698a13744ff58da5",
+      "bytes": 36
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-5/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-5/stdout",
+      "sha256": "db39f68ff553da7454ce7c987bf9e7221e41c775a1656adcaed6c4c90a07e654",
+      "bytes": 97
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-5/whole-join.json",
+      "sha256": "433c6dcd18e9b20888d164043d8d2cbbe89c50bc63a46ad3d1f3fe21ebe2c1be",
+      "bytes": 1128
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-6/command.json",
+      "sha256": "2224a120f352cfd995c40753e8dc8a5fd945f6d424599f0ca9f5fc30a66f229e",
+      "bytes": 695
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-6/direct-join.json",
+      "sha256": "6ad9cb0dd7784eefab15d425eac7d0be2508f2d9cb4ac12b449d5965a2eb666f",
+      "bytes": 260
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-6/direct-wait.json",
+      "sha256": "55102e5e414e745e57a918af2224aab6c581f9cb491e5787ccf69cb79018e886",
+      "bytes": 82
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-6/started.json",
+      "sha256": "695ed87878e6f8943c8e032fe530d4a37bb39077fd4b37f5ed9c26ec40f91ca1",
+      "bytes": 36
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-6/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-6/stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-6/whole-join.json",
+      "sha256": "70ddcd11d74591faf4dc5b9fc72130a90d676f9517ed19a6e56f64d60e441c1e",
+      "bytes": 1126
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-7/command.json",
+      "sha256": "e89c0a237624b13e8588789179fa901df900866186e76b1b79272924e8d8d469",
+      "bytes": 664
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-7/direct-join.json",
+      "sha256": "51e563293681935fa85f05ba9f8adf939e2a0f2a4ce60be4643106892a092b30",
+      "bytes": 260
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-7/direct-wait.json",
+      "sha256": "a85c767e127a677454d1c5714d8287ccabfcb5aa4945dd72b76045d40551e3cc",
+      "bytes": 82
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-7/started.json",
+      "sha256": "1ec3651b5f70297d24bb7e14f0f69b0acf24d28727a1aff97cab75e2ca9a320b",
+      "bytes": 36
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-7/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-7/stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-7/whole-join.json",
+      "sha256": "7216d94d78d47d4cf2af5523fda7f87662bbe299c635e88d85b7fd80a887158b",
+      "bytes": 1126
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-8/command.json",
+      "sha256": "5eb20d94dfd257f3aa3fffb61f38ee8edb10674d05978ed1da5edcd19135ccfe",
+      "bytes": 544
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-8/direct-join.json",
+      "sha256": "078e860469fc7a6d65dd3d3fed5fc28bd098db334f4d149054436d7ba7d55cbf",
+      "bytes": 261
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-8/direct-wait.json",
+      "sha256": "72a1e54e4504e45e51e2bbd83b83600b92f92538f0a86b04c488b537ab453b1b",
+      "bytes": 82
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-8/started.json",
+      "sha256": "0f5d2f2a0cbd5921d97dbfadee8f9b3349f1a0770d47a7e24ef53e4977e32c02",
+      "bytes": 36
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-8/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-8/stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-8/whole-join.json",
+      "sha256": "b82db03eb0f479e89761f56fe347b1803ae4c9a8752024d4c8588ee809c367c6",
+      "bytes": 1127
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-9/command.json",
+      "sha256": "63492f838699c4a4ad13ccb2e7127332680a51451b0ae621d73afcaa238b7350",
+      "bytes": 458
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-9/direct-join.json",
+      "sha256": "a706fa68b951f39f69d4e70652305b1e63450dea0b8ef0f72d02fb5be7ced666",
+      "bytes": 260
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-9/direct-wait.json",
+      "sha256": "01a85744cf627f7073950a57972b992e4236ec952461996e6eeb9bd057fc5f74",
+      "bytes": 82
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-9/started.json",
+      "sha256": "4603754f2a679c2932723070e0da12578a4cf60e595357b039f98d937bf923ea",
+      "bytes": 36
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-9/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-9/stdout",
+      "sha256": "183e2b751d7a0d2b2dd0ef095eb036207d71efe24d04865088f485f9a38bd315",
+      "bytes": 68
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-9/whole-join.json",
+      "sha256": "471fe50309dc517483165189b3d8c16ef64a599c3a675ff41943f6b7433ca7f3",
+      "bytes": 1127
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/original_bridge.c.inc",
+      "sha256": "8d541c35fec796ee8728acd97ac2924abe4fdcedc51fcfe881fb778ebf48e8ee",
+      "bytes": 103
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/postimage/arch/x86_64/kernel/memory.c",
+      "sha256": "3dccbb04986c7fb4c1c47bad1a382372c19cd270861501cf064ce95f36d46c32",
+      "bytes": 84761
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/postimage/kernel/rust/x86_memory_helpers.rs",
+      "sha256": "f88ca6d45b1395b74c0c86565b5a391d01124fa3fb30486a7e4eb31c85d9eff8",
+      "bytes": 191401
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/preimage/arch/x86_64/kernel/include/arch-memory.h",
+      "sha256": "1704ac32bf55f421c802df661c844b496a1660b8b89e5d12cc2d994d835b5b49",
+      "bytes": 8996
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/preimage/arch/x86_64/kernel/include/errno.h",
+      "sha256": "79e1671f269b7dab1f2e1ea672c402bc03738b85029b6f3b3031efe22dde9157",
+      "bytes": 5167
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/preimage/arch/x86_64/kernel/include/ihk/types.h",
+      "sha256": "c37a7c748f2439ddfd847725a4d559c008f2aca09c45114fb07e73337013f449",
+      "bytes": 1074
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/preimage/arch/x86_64/kernel/memory.c",
+      "sha256": "935dce935e814974a85729fafde9b3912e9fbff816d9074f6044fa63102370cb",
+      "bytes": 84714
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/preimage/kernel/CMakeLists.txt",
+      "sha256": "b141d09ad4d717171d9fca51b8ffefec65573f266652bc0d93129bd2a03ec40e",
+      "bytes": 23076
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/preimage/kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "bytes": 76151
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/preimage/kernel/rust/lib.rs",
+      "sha256": "4e8d34dc3173aa1c9402ffd437738c6074fcec8a354dc91b6aa8f79d5348ba9c",
+      "bytes": 2012
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/preimage/kernel/rust/x86_memory_helpers.rs",
+      "sha256": "19919d35402c84540336b1983e7ac031397bc5f2d7855a7ae901a35dcedbf3f9",
+      "bytes": 191195
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/preimage/lib/include/generic-errno.h",
+      "sha256": "7dca1a209f95dbc287627f3b590621762063acc080b65709aea88d3f48c8bfe4",
+      "bytes": 2497
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/production.patch",
+      "sha256": "5682493f1717b80bbd61399b33601e27e110147da9d12a05505bb6af61cfc2ee",
+      "bytes": 3326
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/run_actual_fullcrate.py",
+      "sha256": "4b8fa079501e97c93aaed9b336173cf4a2555d2f9861f48796c3d1d3cdf65fb0",
+      "bytes": 6162
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/run_leaf.py",
+      "sha256": "afba5cb46e22703d0be7f6d824506b772b13b354899442307a61cb8e9bcea6e5",
+      "bytes": 6594
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/selected_bridge.c.inc",
+      "sha256": "829675234872f800cb2a9a98383f7d655243f59c6c7f537bae748ed75723f338",
+      "bytes": 150
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/source-pins.json",
+      "sha256": "ebb56a9384f0221eb4a3d097a761b2b46a697634a746c7ded7555a09586efecd",
+      "bytes": 4169
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/verify_source_delta.py",
+      "sha256": "9e609abc0c90db01f559cecbc1212eff0e329a2af7eba4858e4fb436bd8278fc",
+      "bytes": 2096
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/ACTUAL-COMBINED-LAUNCH.json",
+      "sha256": "d28306c34eb45a867ad6f113a78366572f9ca7904f3c2a75a8f7b189da2391ad",
+      "bytes": 811
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/CANDIDATE7-SOURCE-CONSUMER-JOIN.PREPARED.json",
+      "sha256": "f77142eed921408fdbe56271354191ffeb3c4e74fd06b24fc3eafb36c1bea647",
+      "bytes": 6188
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/FINITE-SOURCE-BINDINGS.json",
+      "sha256": "79056b6197223fbcf6d5a90c7d6f067f232f8cfdc2cf2a923d618d3ed83bf9da",
+      "bytes": 1437
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/MATERIALIZATION-RESULT.json",
+      "sha256": "ec40a354b5e08b22b1b2c1d79504fb2332090b354d8b9afba9c768a3ab63e006",
+      "bytes": 1779
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/NEXT-OBSERVATIONS.NOT-EXECUTED.json",
+      "sha256": "ca336bf0ae61605062fd66b46f38e3f785fa2608fe1e90bc06a25963c3dc9e03",
+      "bytes": 2223
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/admission.json",
+      "sha256": "9f34d2e3b231173d8e778fae6292f432accefec66fe69bbd6a7f3d1f137d7900",
+      "bytes": 163
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/materialization-and-pure-capture-1/1/command.json",
+      "sha256": "e71f8776a3a4b5d6ed71939fe5c5882566ef904c2f5dfcc020b9f3aa6b414df0",
+      "bytes": 373
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/materialization-and-pure-capture-1/1/direct-join.json",
+      "sha256": "718eac55bc5db46b1e1daffacf2da9de6fd1d208fa1fd20bf383aab2a8218a88",
+      "bytes": 258
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/materialization-and-pure-capture-1/1/direct-wait.json",
+      "sha256": "f57c435ee7ac44b4fd820789237af26e1fa37203445066f25ed1e9f5de9b77b2",
+      "bytes": 82
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/materialization-and-pure-capture-1/1/started.json",
+      "sha256": "0163df283f88b3f295112772042634c2a459811b390c6b0f88d43d9d93e00cad",
+      "bytes": 36
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/materialization-and-pure-capture-1/1/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/materialization-and-pure-capture-1/1/stdout",
+      "sha256": "e98cac201845290dbeaa740ba7395042ada5d7a9d00d11e0faf482c706439935",
+      "bytes": 1833
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/materialization-and-pure-capture-1/1/whole-join.json",
+      "sha256": "6dec2ae80a0316f10f45dda549c63452d04694521a2a9ab2119f39d349009c73",
+      "bytes": 1187
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/materialization-and-pure-capture-1/2/command.json",
+      "sha256": "285d81a4b6de706b4726ddd9ab3e8d19b48fe09ffe08cb42fcd414308bbd688d",
+      "bytes": 470
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/materialization-and-pure-capture-1/2/direct-join.json",
+      "sha256": "9d2864c1f06673d421870c2bdcb2c0953ff09da173d8715079f95c50404c28a9",
+      "bytes": 258
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/materialization-and-pure-capture-1/2/direct-wait.json",
+      "sha256": "3cc8d079b54be6538814a40877b76148a0d03cf7ddfcb93a6e3cae8744df83e4",
+      "bytes": 82
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/materialization-and-pure-capture-1/2/started.json",
+      "sha256": "ce1b72733a303064ee1b02e5015bfae9f0c78c0d5be546488d3a3d63ecf25863",
+      "bytes": 36
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/materialization-and-pure-capture-1/2/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/materialization-and-pure-capture-1/2/stdout",
+      "sha256": "1a77723a4be95e9623a7332ea96fd7e62b9a659ffa83510dfd1c5fccf74f9809",
+      "bytes": 7457
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/materialization-and-pure-capture-1/2/whole-join.json",
+      "sha256": "4231273fa88f73a7e92a315ee2f5b69d18a98d8bfc6898de17d1f0faf7dce870",
+      "bytes": 1187
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/materialization-and-pure-capture-1/ACTUAL-PRE-CAPACITY.json",
+      "sha256": "ad649252c643f8d3627c491ddbb53aeae8b97dba2e4d8aa8455b106ee9a1f00a",
+      "bytes": 468
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/materialization-and-pure-capture-1/ACTUAL-WHOLE-JOIN.json",
+      "sha256": "ea1b6e85f7cc912af6375d2cfb05c41107365455bff18aca4e147063be7b1fdd",
+      "bytes": 2658
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/materialization-and-pure-capture-1/commands.json",
+      "sha256": "8b0bfade4c58c74d5949a049608a007341aa991a3908aa6d72de0ae95ff21392",
+      "bytes": 1039
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/materialize_source.py",
+      "sha256": "bbd3c6730edaf6a2db66d4d647c1ba10432432ca1e08b40931360198e77de971",
+      "bytes": 10408
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/materialize_source.py.diff",
+      "sha256": "67b0ec22c8094b7d91d89529688c4ec5b25bad358c9370fb02728565da5ca66b",
+      "bytes": 2955
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/native_rust_exact_build_offline.py",
+      "sha256": "dbe2a604df56b4e90eaa11716ba290c5d23d3eaaf7da017be52620f29687bb7a",
+      "bytes": 41116
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/native_rust_exact_build_offline.py.diff",
+      "sha256": "0dded603cdc272b3a29aab2f77bc70e73a7e2e065079ff77dcf32da8c7435a6a",
+      "bytes": 817
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/native_rust_exact_mckernel_image_offline.py",
+      "sha256": "6c600601097aa9ee053a8c6cb7350a5d11b17613e07bf1bf2cc9dad0d9178d0a",
+      "bytes": 152377
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/native_rust_exact_mckernel_image_offline.py.diff",
+      "sha256": "b28c8a85a137906b491915bad6b470026f8dfe9b68a54bde3b465908ccd1ebc1",
+      "bytes": 6383
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/next-build-preparation-1/ACTUAL-MATERIALIZATION-AND-PURE-RECEIPT.json",
+      "sha256": "49ab75322db024280d4a7eda005f1d9ffd664f0d14bb6bb4f8e797e2e307bfb5",
+      "bytes": 9975
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/next-build-preparation-1/ACTUAL-NAMESPACE-AND-REQUEST.json",
+      "sha256": "9364a9c4c7f00ae8a3b7d2d71529c30b39105a8b60feef4fd9ebfbf77e11beb3",
+      "bytes": 3295
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/next-build-preparation-1/ACTUAL-PREPARATION-CAPACITY.json",
+      "sha256": "0aa60a825d10cb2ed7fdf492cf53dd1b9064eec6ac1613aeaca9762f184d0692",
+      "bytes": 508
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/next-build-preparation-1/ACTUAL-PURE-CONSUMER-RESULT.json",
+      "sha256": "bfc44dc9be0a1d347d4ac2ecd3ad4d2011e16ebc0ddadcdd8ed1d27c82728304",
+      "bytes": 8559
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/next-build-preparation-1/INDEPENDENT-CANDIDATE7-SOURCE-PROFILE-PURE-ACCEPTANCE.ROOT-RECORD.json",
+      "sha256": "5d36eba5c4b01c9fbb4ebbdfe6af8fc91e9caa57fb482887a71f363567d93d5a",
+      "bytes": 1609
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/next-build-preparation-1/NEXT-BUILD-OPERATION.READY-FOR-REVIEW.json",
+      "sha256": "fbb4055ef69ff6dfd92576bc29d5816a7b39ed26e6d750d1fafa6a53e2cb051d",
+      "bytes": 5893
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/next-build-preparation-1/NEXT-CAPTURE-ARGV.READY.json",
+      "sha256": "eb434a0e59be6f3623bc5b53573dc7d6039765703b8e4d2728f426b0dc569b53",
+      "bytes": 2006
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/next-build-preparation-1/WHOLE-CANDIDATE7-HANDOFF.json",
+      "sha256": "1797c0837af7663359335d5ea882a06d5527a1b26b31f688440a99fff8ff595e",
+      "bytes": 4121
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/next-build-preparation-1/gitlink-inputs.json",
+      "sha256": "3379babe23b7720911570c0059bca49bb1acf9075c3e7322b4b424b0eae0b7c0",
+      "bytes": 96783
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/next-build-preparation-1/native_rust_exact_mckernel_image_container_owner.py",
+      "sha256": "5d3224a0d01e3517af6bc4beee5e9a4bb77d697294d2dd4f4e980b08fc7d057b",
+      "bytes": 91087
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/next-build-preparation-1/owner.diff",
+      "sha256": "b9a896de12701c48c95db8339fac4074aaea4e6af0690442deb11270289a18af",
+      "bytes": 3369
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/next-build-preparation-1/prepare_and_validate.py",
+      "sha256": "771d4b1b1c26702ecb4c906bdaf32e09cca6c6d4ee8fb7ec93492655c72473e4",
+      "bytes": 6784
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/prepare_source_packet.py",
+      "sha256": "36a9e6f7ea9705b5e2a6147bc59da7502df38c05f1fbedc3ef5fcbf15d7dd7c3",
+      "bytes": 10611
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/run_materialization_and_pure.py",
+      "sha256": "5baf9a927639e8a7e047456a652660b251d9b4f2d0c7c488ea3572edc4b93a6a",
+      "bytes": 4873
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/ACTUAL-RENEWAL-LONG-CONSUMER-RESULT.json",
+      "sha256": "4159dcc32df689d0f27129f2884181b660e45cd3b33d8420c2ba497de94f027f",
+      "bytes": 10156
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/CAPTURE-REQUEST.PROTOTYPE.NOT-EXECUTABLE.json",
+      "sha256": "c43e9bc4f82be73d55de3f1224452d62a293d9bd0c774673ef17983824b191fb",
+      "bytes": 2460
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/COHORT-BINDINGS.json",
+      "sha256": "0e93e853516898434b507ec29dae1897e3000a896699e3c62a89477722d73bdf",
+      "bytes": 4399
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/EXACT-IMMUTABLE-EXPIRY-RENEWAL.NOT-RELEASED.json",
+      "sha256": "a3da6421927bc74a50c6666d1f9c9bb42781c5f712fb4f11b2951da6b8dd2ca1",
+      "bytes": 7168
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/FINAL-ACTUAL-IMMUTABLE-RENEWAL-RESULT.json",
+      "sha256": "dca7199f99e99596e8830c9e5de6ca66a33e69497056a1d9663e3db7a78d1042",
+      "bytes": 11994
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/HANDOFF.md",
+      "sha256": "0edd7fdd47effada0443263dda8c7169a702b6e4d07aeba65195824de42001bc",
+      "bytes": 1978
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/INDEPENDENT-RENEWAL-SOURCE-CONSUMER-AND-QUERY-RELEASE.ROOT-RECORD.json",
+      "sha256": "8e77793c674e910948330c36b73b5e20de9baa3d9346035911d22a2dd45561d4",
+      "bytes": 1432
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/LITERAL-RENEWAL-SOURCE-PROOF.json",
+      "sha256": "67607a689b18a178eea19d29bfc6c3b1652bda533b809d6578041f00fe056dfc",
+      "bytes": 2680
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/LONG-RELEASE.PROTOTYPE.NOT-EXECUTABLE.json",
+      "sha256": "1ae181f7be742c72b5b5297830e97341608e2d729869b14f7b68724118e6e1e9",
+      "bytes": 2987
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/QUERY-INPUTS.json",
+      "sha256": "d69bf52dc4f0a782de47edd9756057b545420e2015c8ae12bda55a0d5ae8ac56",
+      "bytes": 27801
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/ROOT-ARGV.PROTOTYPE.NOT-EXECUTABLE.json",
+      "sha256": "f5c3257ecf93a88d7385b2d94aca5ab9448ba6a45803e36f9efbc3d185f59d5f",
+      "bytes": 866
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/ROOT-FRESH-OBSERVER-ARGV.NOT-RELEASED.json",
+      "sha256": "8537675111dc91d6b729512e8bb6959c91805a311ed7805f0b97599c32ff879f",
+      "bytes": 935
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/ROOT-FRESH-QUERY-PROFILE.NOT-RELEASED.json",
+      "sha256": "881dbb9e9063e673b282135056bd2a3e774663a75b54c36e7166b052696b9789",
+      "bytes": 3172
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/SOURCE-CHECKPOINT-FETCHED.ROOT-RECORD.json",
+      "sha256": "f6de8e472b93990fcbdaba7499bda5afab0f9587937b49a705cfe71176040781",
+      "bytes": 45882
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/TESTONLY-RENEWAL-SCRATCH-RETENTION.json",
+      "sha256": "6dd5da0dc8a0e91746b7bea8970aab0e905ef60df5e6bf99c56a94eabff57e85",
+      "bytes": 15010
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/actual-renewal-consumer-fixture-1/RESULT.json",
+      "sha256": "8e32fe693c68ef13b2dd2c2ccc73e334005d807d5cc1e4642dd22fd659439205",
+      "bytes": 1426
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/actual-renewal-consumer-fixture-1/command.json",
+      "sha256": "8e0c2ac7e65c2bc38230f9138647bb8fd9bfba703a158ab65a5aab3d48ec581f",
+      "bytes": 4876
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/actual-renewal-consumer-fixture-1/direct-join.json",
+      "sha256": "cf6889d23c2c7208a073f49c97199faa411b7425ca7361bcc3e93a652bd20ff6",
+      "bytes": 259
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/actual-renewal-consumer-fixture-1/direct-wait.json",
+      "sha256": "0e40c18d41f1af61a10b0578243b7bda3e5009dbaeb344c737f07fd42d838025",
+      "bytes": 82
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/actual-renewal-consumer-fixture-1/started.json",
+      "sha256": "14539e85621d1b55d6c9a5984b03570469197e7de73e8ed125e8166b0cde2fb6",
+      "bytes": 36
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/actual-renewal-consumer-fixture-1/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/actual-renewal-consumer-fixture-1/stdout",
+      "sha256": "f66c9dfd7b9b7a742e050dc009ecdd888559aad8f946223e988f4c511c6534ea",
+      "bytes": 8306
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/actual-root-observer-capture-1/ACTUAL-CLOSED-CAPTURE.json",
+      "sha256": "619b32a3fe85578136120e2d25ac123abf02aa4b400f94191b56f87822f790b8",
+      "bytes": 1454
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/actual-root-observer-capture-1/command.json",
+      "sha256": "7376b30331da2893ca20251a3fd52e1aa563cd418df02aff2d650d49c6f05c6e",
+      "bytes": 1002
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/actual-root-observer-capture-1/direct-join.json",
+      "sha256": "e6ead7c480e1d573282ff5f5ad11ad66d72e30ac2fd05b216da694d6273861c3",
+      "bytes": 259
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/actual-root-observer-capture-1/direct-wait.json",
+      "sha256": "8d327a012fa6a667cefa906add203d1ca25b6d9760a9842cd86eaf43c12dddac",
+      "bytes": 82
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/actual-root-observer-capture-1/started.json",
+      "sha256": "cab06d1f748f94dc261349ec80f62b840bdfc1b8a853d689bc2a060255f63ac5",
+      "bytes": 36
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/actual-root-observer-capture-1/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/actual-root-observer-capture-1/stdout",
+      "sha256": "5ab96f5cad82ef8272a28cb706a0517aaafae6d07df4159ffd39932183c7bf65",
+      "bytes": 1874
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/assemble_renewal.py",
+      "sha256": "ea0bb06cb9b6f45372de53cf07673866b9afc0d03419818ae2035a21eebe6131",
+      "bytes": 12203
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/authenticated-failed-owner-results-1/ACTUAL-THREE-READS-CLOSED.json",
+      "sha256": "091a505fef9944aba446f5401588920b7c1c39f7a08bab1b31fcf2e7d84070e7",
+      "bytes": 5350
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/authenticated-failed-owner-results-1/inner-closed.json",
+      "sha256": "2e9a1991c7ae0500e6080d97b8450580a3581096322f31c40e4a8feb70530e4d",
+      "bytes": 1045
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/authenticated-failed-owner-results-1/inner-closed.json.capture.json",
+      "sha256": "131f4d5150012c561b6a2bd37b1463152d7a76585d5962ff8f64f6b9a292f4af",
+      "bytes": 1734
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/authenticated-failed-owner-results-1/inner-closed.json.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/authenticated-failed-owner-results-1/owner.stderr",
+      "sha256": "26095b877b2a4f0dc2d209d594941016a5c6cbff7da8c9bad1e6549a0abac8d7",
+      "bytes": 3151
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/authenticated-failed-owner-results-1/owner.stderr.capture.json",
+      "sha256": "114e30597a85395db385b0bb8a342093cc3feaf44a807046bd8b518f464f7e29",
+      "bytes": 1711
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/authenticated-failed-owner-results-1/owner.stderr.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/authenticated-failed-owner-results-1/owner.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/authenticated-failed-owner-results-1/owner.stdout.capture.json",
+      "sha256": "275c64329bbf711ff6b1491c6c69bf28dfc4d8d0fdb83b4e53579b7fd0d1faad",
+      "bytes": 1708
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/authenticated-failed-owner-results-1/owner.stdout.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/authenticated-readonly-results-1/ACTUAL-TWO-READS-CLOSED.json",
+      "sha256": "214fcda419af064cf59d0fc90b4ad17dd613f58a2200144a73b1b1cf92f6022b",
+      "bytes": 3643
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/authenticated-readonly-results-1/closed.json",
+      "sha256": "03555f0de2ec4c0286654eaee6d82890a46c88e36b8c36ce8bcf75ff25491ec9",
+      "bytes": 1408
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/authenticated-readonly-results-1/closed.json.capture.json",
+      "sha256": "f84abda92748d73a2d7ae21b66bc16e61cc2e8ffe0d0ea939c44264e9e8b3855",
+      "bytes": 1734
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/authenticated-readonly-results-1/closed.json.started.json",
+      "sha256": "50a7f21366ca7b01be0687b46227387dc0035fd3868f03caed683e8d5f9a9f43",
+      "bytes": 400
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/authenticated-readonly-results-1/closed.json.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/authenticated-readonly-results-1/query.json",
+      "sha256": "2b325cbb8d6108081ff27f9e89e40b58ae7eaa61d8471e0d34819e0c5ec64446",
+      "bytes": 89172
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/authenticated-readonly-results-1/query.json.capture.json",
+      "sha256": "d4df31b8c6faa3cbd79fcab4d7ddb7545b961f96ee2b26360b553b7fc2008203",
+      "bytes": 1713
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/authenticated-readonly-results-1/query.json.started.json",
+      "sha256": "e7a24d524f309ea02ef21dcbc60e50ac7ca5d97891a9ca3dead6c7168a3e068d",
+      "bytes": 380
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/authenticated-readonly-results-1/query.json.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/capture_root_LONG.NOT-RELEASED.py",
+      "sha256": "f354cfcdd05d24c2e2c8013b211b8647c2d2bd8a817ccdf287f5799ab25ec8be",
+      "bytes": 7844
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/controller.literal.diff",
+      "sha256": "3d9afd43cc5213f4ebf000115a5b71ff2edaff8b7a2ac9247ac8463be89c4d1f",
+      "bytes": 1004
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/final-execution-release-1/ACTUAL-FAILED-CAPTURE-REQUEST.serialized.json",
+      "sha256": "ceef230a09899b22f89a2c706e61bf0fea473cbe90af087a76187f29062cd96b",
+      "bytes": 2584
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/final-execution-release-1/ACTUAL-FAILED-LONG-REASON-AND-FAMILY.json",
+      "sha256": "7477e1b64c440190487688ca3e84e72fd97ff9f41986e5960053d22d50bd4de1",
+      "bytes": 1575
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/final-execution-release-1/ACTUAL-FAILED-RELEASE.serialized.json",
+      "sha256": "293fc5c64fb2fbc1891ce8fdab1fd0c41bd627a23bc0c63ab22a9abc8c710030",
+      "bytes": 3254
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/final-execution-release-1/FINAL-ROOT-ARGV.RELEASED.json",
+      "sha256": "24f0d971d7aaff2998205e5466691bd38c798c36f5186af13d0ed43e93be0a54",
+      "bytes": 928
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/final-execution-release-1/LONG-RELEASE.ROOT-CANDIDATE.json",
+      "sha256": "1f411f5e548c47b108d7b29d866feb9164a01f272a5e0fbdc63c49f25de322b4",
+      "bytes": 3058
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/final-execution-release-1/ROOT-FINAL-LONG-EXECUTION-RELEASE.json",
+      "sha256": "97242b69689152f10058e0b0b1370fa9ba909c74920783cfc3f74487fd9b0d3a",
+      "bytes": 1783
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/final-execution-release-1/ROOT-FINAL-SESSION-EXECUTION-FACTS.CANDIDATE.json",
+      "sha256": "cefa8373a946d42d4f4344baf54d6dda6b0391a3ba293557a63509098106af3c",
+      "bytes": 9732
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/final-execution-release-1/ROOT-FINAL-SESSION-EXECUTION-FACTS.CORRECTED.json",
+      "sha256": "db297568c49ed7999ec39c284f6ec7c27bff96aa16da12d06b6f75892f9f786f",
+      "bytes": 11387
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/final-execution-release-1/actual-root-controller-capture-1/ACTUAL-CLOSED-CAPTURE.json",
+      "sha256": "fd5a9ca49ae927e30c15c8a4e6b63a40c1c0640ca2bdb90fe6b32c1314f15ee5",
+      "bytes": 1459
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/final-execution-release-1/actual-root-controller-capture-1/command.json",
+      "sha256": "7bacc08020745cfeb64df0e2f9329a8e2c9d978eb60a623fb376f9258e6515e2",
+      "bytes": 1681
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/final-execution-release-1/actual-root-controller-capture-1/started.json",
+      "sha256": "db45f9f439806b432eee652814ca3578fd9eb3c8c9516081d716198e641dd6ea",
+      "bytes": 244
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/final-execution-release-1/actual-root-controller-capture-1/stderr",
+      "sha256": "6a53129d37fd75db3a45f4ec72adf5cc1e1bb5498e369a1a07e35b316f248d54",
+      "bytes": 1239
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/final-execution-release-1/actual-root-controller-capture-1/stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/fixture-data-1/TESTONLY-controller-1.json",
+      "sha256": "13a1d4dd8a060aac3c1763e032cb1949c64c2d6be241e86a6d59807fb28915bc",
+      "bytes": 2404
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/fixture-data-1/TESTONLY-controller-10.json",
+      "sha256": "062a233134c196d2a8853aa40dd8127a6881e6e332a4fb14013cfe0c78d97dbf",
+      "bytes": 2404
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/fixture-data-1/TESTONLY-controller-11.json",
+      "sha256": "922dc34b412d2332391414327c4f9d7b30eb0a320e36ff03f3ec928af69b2478",
+      "bytes": 2389
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/fixture-data-1/TESTONLY-controller-12.json",
+      "sha256": "bf8d86e752167c6748ee93ab53f6502a7ca8656d5c70131d77853031bcf312eb",
+      "bytes": 2395
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/fixture-data-1/TESTONLY-controller-13.json",
+      "sha256": "0ef08e4982dd3435b381a7baa1c5220834767d881ae11d9b385fde81cab823eb",
+      "bytes": 2404
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/fixture-data-1/TESTONLY-controller-2.json",
+      "sha256": "a0b9c6972f6f8c65751e566f5dcd563f567bbb7c58591cee0a85fa7f43369c03",
+      "bytes": 2402
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/fixture-data-1/TESTONLY-controller-3.json",
+      "sha256": "1d94290ef4826fd9e9205f5bd0d655c44cf9511986b037af2cf9b972024082de",
+      "bytes": 2386
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/fixture-data-1/TESTONLY-controller-4.json",
+      "sha256": "ae2ba841f8b8a5765cfbcdc471ffc14a54c15515b4a2602647fe982cfcd0d054",
+      "bytes": 2404
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/fixture-data-1/TESTONLY-controller-5.json",
+      "sha256": "348347ce256a101c4a763e04985c517e6856a0ae9c387ce8dffe2881d839c3f2",
+      "bytes": 2395
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/fixture-data-1/TESTONLY-controller-6.json",
+      "sha256": "7a27fd1d527f865edd5ddfc5544f697cdb87c130556daced6f8298da83ab70ad",
+      "bytes": 2363
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/fixture-data-1/TESTONLY-controller-7.json",
+      "sha256": "7ab5ed8931577c15f0038f0693bde1abf0b594c4b20e7781ffcd550b4dde0517",
+      "bytes": 2404
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/fixture-data-1/TESTONLY-controller-8.json",
+      "sha256": "ed3c49f9fc87b9673dd5054f8fc1e3c948aa9c76cc950389386e701ffaac8c97",
+      "bytes": 2379
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/fixture-data-1/TESTONLY-controller-9.json",
+      "sha256": "2b85332b5fe92ff54cce5d2b96a4d7d68ab99d18130e7af3d739e627eb13fe47",
+      "bytes": 2353
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/fixture_LONG_consumers.py",
+      "sha256": "f0125ee30cda641cce43241ce2aa1f1e70bde9e72c8be4cfecaa384595e0cac2",
+      "bytes": 12827
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/live-counter-observation-preparation-1/ONE-RENEWAL-LIVE-READ-OPERATION.NOT-GRANTED.json",
+      "sha256": "c968daf696aeb4b1c78e3a693a161da32ccbc58022b5839eea11315394514800",
+      "bytes": 8539
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/live-counter-observation-preparation-1/ORDINARY-CPU0-READ-ARGV.PID-PENDING.json",
+      "sha256": "eaf1a6e76086cc926b57681fb9fef2d9a4a583e2a265119bc7c4a05d8c54f97c",
+      "bytes": 582
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/live-counter-observation-preparation-1/ORDINARY-CPU0-READ-PROFILE.NOT-GRANTED.json",
+      "sha256": "74bca26593d7ec3c5d15a9855a074003adc7e3145a4e389dfe1ec8274441ed78",
+      "bytes": 1254
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/live-counter-observation-preparation-1/RESULT.json",
+      "sha256": "b3b6b9a4334e9cd8ccaff8398fd4aaa6848602b3b53a54e449499b1ffd810279",
+      "bytes": 3009
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/live-counter-observation-preparation-1/read_live_LONG_prefix.py",
+      "sha256": "b82d0b90ba7f3dd3bd938ec45eeaef07c891d8dd5eafe64da103f94979958f2d",
+      "bytes": 7095
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/owner.literal.diff",
+      "sha256": "610811a52c63a7fd9e39fcbd99aebcd12d1004047d6b3f02eafc29db5dbac586",
+      "bytes": 83484
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/read_only_LONG_HOST_admission.py",
+      "sha256": "129acbabfeaf030c3d6c9bbce35359930e138b6e03909063b2b06743edb62239",
+      "bytes": 13281
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/retained-TESTONLY-scratch-data/TESTONLY-release-1.json",
+      "sha256": "00bbd8b45c5c95773bf60890a825b918bf9bef1656b9f4e8e053a4575988a748",
+      "bytes": 2880
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/retained-TESTONLY-scratch-data/TESTONLY-release-10.json",
+      "sha256": "35ddc85acdc19dd4b327b38203384794a6a99208d39b20314d885e207e027bab",
+      "bytes": 2870
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/retained-TESTONLY-scratch-data/TESTONLY-release-11.json",
+      "sha256": "c45b4273a526c73e1a12cede01f3f2964bd5b3189ca2f7f5a5d85d6576fbe863",
+      "bytes": 2879
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/retained-TESTONLY-scratch-data/TESTONLY-release-12.json",
+      "sha256": "29f70f7cc085c128833f4bf713cc0710dacb5882b973987e7e778dd817c6ae53",
+      "bytes": 2880
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/retained-TESTONLY-scratch-data/TESTONLY-release-13.json",
+      "sha256": "23b2c6f8647e2076bb5f6045e6de4683c465ffb46e249a95d3c16e50fdc67693",
+      "bytes": 2880
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/retained-TESTONLY-scratch-data/TESTONLY-release-14.json",
+      "sha256": "90e95cbbf2c1c20e90af334c0bc37d397d6ab674ae736a312114b4152088abe2",
+      "bytes": 2894
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/retained-TESTONLY-scratch-data/TESTONLY-release-15.json",
+      "sha256": "4b6f7061b4296ca8d5b8d4dee98d2e21c890bdff2be0ad349adc82e56e792987",
+      "bytes": 2880
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/retained-TESTONLY-scratch-data/TESTONLY-release-16.json",
+      "sha256": "00bbd8b45c5c95773bf60890a825b918bf9bef1656b9f4e8e053a4575988a748",
+      "bytes": 2880
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/retained-TESTONLY-scratch-data/TESTONLY-release-2.json",
+      "sha256": "d832ac4e5b83227f9a05d3f65a60402baf94335623414a6f5e03666264181e97",
+      "bytes": 2872
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/retained-TESTONLY-scratch-data/TESTONLY-release-3.json",
+      "sha256": "ce5b98308831cb26bf2e7bec575f44b80592dd0ee89b2005ff5f63638d04fc6a",
+      "bytes": 2872
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/retained-TESTONLY-scratch-data/TESTONLY-release-4.json",
+      "sha256": "8f54d3ad8336015a27e32d02b15c5872cbb82ffe9b1a169192eb40fecca72abd",
+      "bytes": 2840
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/retained-TESTONLY-scratch-data/TESTONLY-release-5.json",
+      "sha256": "df1f8bf7240a430bf64a0e6921fc8f6a787513f584c5419f50278e07b0c85dfc",
+      "bytes": 2879
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/retained-TESTONLY-scratch-data/TESTONLY-release-6.json",
+      "sha256": "34795abb9722b47279de39c02727c63c330bba22809e452a06afc2cc8db8774f",
+      "bytes": 2880
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/retained-TESTONLY-scratch-data/TESTONLY-release-7.json",
+      "sha256": "8dd2652d48c61e5a71126190f41b87fd2a9a1df70c14dc8f92edc80fb84a4294",
+      "bytes": 2880
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/retained-TESTONLY-scratch-data/TESTONLY-release-8.json",
+      "sha256": "13b6b03fb028d090b83ee871f0cf5dbe0d0806b239756cd65027823e0077b7eb",
+      "bytes": 2880
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/retained-TESTONLY-scratch-data/TESTONLY-release-9.json",
+      "sha256": "5fa29243c4d074f5702cc32fcba7f5f8fcb251b235a3296fda4ef43210b4831a",
+      "bytes": 2886
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/retained-TESTONLY-scratch-data/TESTONLY-wrong-nonce-17.json",
+      "sha256": "59aef49acf103ec5e521d0314cfee71fad4eba07516f45373b3e1129d6bbd361",
+      "bytes": 2860
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/run_LONG_fixture_owned.py",
+      "sha256": "51fd4908be4c520e0a770f882009562b8db3253b3c1036afacc84ba54f6043c6",
+      "bytes": 2245
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/run_root_LONG_admission_capture.py",
+      "sha256": "522ef331dba4e84f45b2f2bc0965c0bb58490127154eb169f469da98619528bf",
+      "bytes": 3789
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/ACTUAL-SERIALIZED-CONSUMER-RESULT.json",
+      "sha256": "8c6e045a22a0a3b60eecb81ee5438d72d30e6f897dfa3fd24c0b19532cf694b7",
+      "bytes": 1348
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/CAPTURE-REQUEST.PROTOTYPE.NOT-EXECUTABLE.json",
+      "sha256": "47306787e92c2bf7b63bb9460cc7c745fd0bc27a113bec3bedce03f486189cf7",
+      "bytes": 2553
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/COHORT-BINDINGS.json",
+      "sha256": "3b2ac5898593cb0b50f12a443859882e3b5e96ca9f2646c626a172d43d5c7b9a",
+      "bytes": 4709
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/FINAL-ACTUAL-SERIALIZED-RELEASE-RESULT.json",
+      "sha256": "fa43908fa02b1cf6ea44278548a512db35314066364e88b9a05314ff843b83f8",
+      "bytes": 1975
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/FINAL-REAL-CLOCK-CONSUMER-PROFILE.NOT-RELEASED.json",
+      "sha256": "0f1ca4c5d0647b11f03ceb1b7e0c55f7570042c7199005d23ce1a9c2159fba22",
+      "bytes": 2513
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/HANDOFF.md",
+      "sha256": "d84a2cd850e6584723829c7cb4903ee40ba8c1536303a137076d96021fa1a633",
+      "bytes": 2163
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/INDEPENDENT-SOURCE-REGRESSION-QUERY-RELEASE.ROOT-RECORD.json",
+      "sha256": "43de44b615fa8a975d1d91cb6e41bec93e23a680fda562a793de78b87aab2cc3",
+      "bytes": 2030
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/LITERAL-SUCCESSOR-PROOF.json",
+      "sha256": "6eaa620f458675e6df765d4f1f9834596a1ba22c700a39ef6ca8e925b80e3978",
+      "bytes": 969
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/LONG-RELEASE.PROTOTYPE.NOT-EXECUTABLE.json",
+      "sha256": "3df44ada84de64978748b80dd5f15500e071fc3d18274f3f879cf7e4fd63566f",
+      "bytes": 2987
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/QUERY-INPUTS.json",
+      "sha256": "62f6482caedf4cf5ced17661fafd7c136a552977982e7dfdf96c9f08f3471890",
+      "bytes": 29591
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/ROOT-ARGV.PROTOTYPE.NOT-EXECUTABLE.json",
+      "sha256": "bf43dd1949d47d347570b4ab4bd6a8de04e9ad358c8f40bc54082fa5f0a090db",
+      "bytes": 928
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/ROOT-FRESH-OBSERVER-ARGV.NOT-RELEASED.json",
+      "sha256": "2156093d4c22391876214521d9dee669fb8bfd1dcdcf73251e5545301b9dbb4d",
+      "bytes": 997
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/ROOT-FRESH-QUERY-PROFILE.NOT-RELEASED.json",
+      "sha256": "68e80aab81238f179c2c152652ba697c3a04851a28a8f6d16b1b26361955a63c",
+      "bytes": 3327
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/actual-serialized-consumer-fixture-1/RESULT.json",
+      "sha256": "27d69e606e2ad588449587197403fa6cf53e843bc640906c51c0ec41997b7578",
+      "bytes": 1494
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/actual-serialized-consumer-fixture-1/command.json",
+      "sha256": "a7ce806b7a1018607120dccf5c062d6db3f40174ffb117247a52aabd9a40bc8c",
+      "bytes": 5293
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/actual-serialized-consumer-fixture-1/direct-join.json",
+      "sha256": "d74f2dd7005a18a0d78bbc2afdd9785ae1c383744ee325c9415865757c19d6b9",
+      "bytes": 259
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/actual-serialized-consumer-fixture-1/direct-wait.json",
+      "sha256": "42046ed3f8faba5dda196aeb29480597bedbddcd35faf33125a9ea1d62896094",
+      "bytes": 82
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/actual-serialized-consumer-fixture-1/started.json",
+      "sha256": "54ba5bdf1b5622a773e6b340edb173c2924b69b07b18d6fad81e4b33c6732912",
+      "bytes": 36
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/actual-serialized-consumer-fixture-1/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/actual-serialized-consumer-fixture-1/stdout",
+      "sha256": "a1278b2829b3ef1ef0ceae5340bd14350322e058b24fef5b3aca635513c7ec5c",
+      "bytes": 1302
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/actual-serialized-fixture-data-1/TESTONLY-serialization-corrected-original.json",
+      "sha256": "62900648ccf0fc12c6dbd4e550c81396221d2a470a0775481fbf13db4e554d0d",
+      "bytes": 3254
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/actual-serialized-fixture-data-1/TESTONLY-serialization-new-cohort-bad-no-LF.json",
+      "sha256": "4afce45aa4ccb17e4b2906403d8965b1832bf05d78880307a5e3eb6fb6c6d0c7",
+      "bytes": 3243
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/actual-serialized-fixture-data-1/TESTONLY-serialization-new-cohort.json",
+      "sha256": "d31376234ac8378d0167a0269816202b4e3fd495b8446b99cdb9f27322aaf0f5",
+      "bytes": 3243
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/actual-serialized-fixture-data-1/actual-failed-payload.canonical",
+      "sha256": "bb6a505ac4b666b1fa48cf03084b66d224d25215cfb096b39d7cffceb23c94f0",
+      "bytes": 2559
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/actual-serialized-fixture-data-1/actual-failed-release.json",
+      "sha256": "293fc5c64fb2fbc1891ce8fdab1fd0c41bd627a23bc0c63ab22a9abc8c710030",
+      "bytes": 3254
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/assemble_successor.py",
+      "sha256": "1fd21e85982ee1ff125ab5bed984b0b2c19d9c4eac50a07206fda5ef270c748e",
+      "bytes": 9163
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/capture_root_LONG.NOT-RELEASED.py",
+      "sha256": "639f1b7eeb24d140b052dbadb7ceff67b9d9c91fb2dfc84a007a6e218da613ac",
+      "bytes": 7877
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/controller.literal.diff",
+      "sha256": "f10ada5865ee80dcb67410a37b0fe9cb76b145f7b0c72fa07f05ded8e0835c76",
+      "bytes": 1494
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/fixture_serialized_release.py",
+      "sha256": "aa2cc69c20b1fadddba4fbe5e7dc398fc71fddd0d17f0138b31731468e7519ef",
+      "bytes": 4700
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/owner.literal.diff",
+      "sha256": "713f1f2eb0bd13cd3002d4e677be74fd3e33e1e0ffdd97087cbe3bafde38e612",
+      "bytes": 85117
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/query.literal.diff",
+      "sha256": "da6a6c008d62c6d91e0ebd5938c438463bfdf66b0eea98a5873c9175fb6fb017",
+      "bytes": 3142
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/read_only_LONG_HOST_admission.py",
+      "sha256": "83d846d4f1fc430011f7f9de32fe286afcad5644d1592404437899963b62d4cb",
+      "bytes": 13423
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/run_final_release_consumer_owned.py",
+      "sha256": "c05f2a8c61c603a7cc1fd02b006d19b9a74f86c8304e78eefc1bc2b64ee44edd",
+      "bytes": 2451
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/run_root_LONG_admission_capture.py",
+      "sha256": "522ef331dba4e84f45b2f2bc0965c0bb58490127154eb169f469da98619528bf",
+      "bytes": 3789
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/run_serialized_fixture_owned.py",
+      "sha256": "733cc42125d3a6f11d0beb38225e22a54e522d441653bca90bcda3bfde9fbe69",
+      "bytes": 2256
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/source/CURRENT68-SDK5-AUTHORITY-LINKS.json",
+      "sha256": "14bc2034e4f11fe679ebef354b367dc61d5133321d0718a236f7e92aa1776d02",
+      "bytes": 2336
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/source/composite_module_binding.py",
+      "sha256": "eb44f800926479e31a7a423b5d4ba5bde0f8941ed44bf0f881adbe18a21040c4",
+      "bytes": 3871
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/source/long_transport.py",
+      "sha256": "08f6c62afb7aa6d5e89a6066f4c6af191b4b3989a38218f5e3284f91e89c4de0",
+      "bytes": 17600
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/source/native_diagnostic.py",
+      "sha256": "88a07d6224f388805552d57b16a671007a1b21ecf099ba1e7b00938a2512ca23",
+      "bytes": 88446
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/source/native_diagnostic_backend.py",
+      "sha256": "3f01a73dbd7664a12a514163561790fc56edf46114018f13781ab62387cccd52",
+      "bytes": 26316
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/source/native_diagnostic_container_owner.py",
+      "sha256": "401657d55cd24609d81a98f00efdb6141185ccfd2766092aa69f2be30d7ca70c",
+      "bytes": 106645
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/source/native_diagnostic_runner.py",
+      "sha256": "d3cbf307b619e347c994503e2765da9d1962d0affe42baf54482529a4f372094",
+      "bytes": 7500
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/source/p12_long_session.py",
+      "sha256": "bff717d885afdda0d82cd0ab05a0930a3e66b242c6200b1295f2173bb4cdc5d3",
+      "bytes": 10930
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/source/qmp_capture.py",
+      "sha256": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741",
+      "bytes": 9913
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/source/repaired_image_authority.py",
+      "sha256": "63db0419d0a6866d223f288d007a3c202f22fa5bf9d0d5d00b6fe4f098743e38",
+      "bytes": 3432
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/transport.literal.diff",
+      "sha256": "295436ba5f1074a5b47474cd80a696bfbf2f4b026f707590e47f71a8cae6da1b",
+      "bytes": 4736
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/validate_final_serialized_release.py",
+      "sha256": "9995127c3999f258f63bc3b638a1c2638b113a74bb06573d6eea2cf0fde396aa",
+      "bytes": 1846
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/source/CURRENT68-SDK5-AUTHORITY-LINKS.json",
+      "sha256": "14bc2034e4f11fe679ebef354b367dc61d5133321d0718a236f7e92aa1776d02",
+      "bytes": 2336
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/source/composite_module_binding.py",
+      "sha256": "eb44f800926479e31a7a423b5d4ba5bde0f8941ed44bf0f881adbe18a21040c4",
+      "bytes": 3871
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/source/long_transport.py",
+      "sha256": "8e3e1de602a40bddebd4058405aa927d1cdb851bbbcd2541002c0ba3b775c4e2",
+      "bytes": 17476
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/source/native_diagnostic.py",
+      "sha256": "88a07d6224f388805552d57b16a671007a1b21ecf099ba1e7b00938a2512ca23",
+      "bytes": 88446
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/source/native_diagnostic_backend.py",
+      "sha256": "3f01a73dbd7664a12a514163561790fc56edf46114018f13781ab62387cccd52",
+      "bytes": 26316
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/source/native_diagnostic_container_owner.py",
+      "sha256": "edd5986dd88f07ee4ec8fa3e3ea01ee0af12a6838287a5b41d860246c93c0137",
+      "bytes": 106242
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/source/native_diagnostic_runner.py",
+      "sha256": "d3cbf307b619e347c994503e2765da9d1962d0affe42baf54482529a4f372094",
+      "bytes": 7500
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/source/p12_long_session.py",
+      "sha256": "bff717d885afdda0d82cd0ab05a0930a3e66b242c6200b1295f2173bb4cdc5d3",
+      "bytes": 10930
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/source/qmp_capture.py",
+      "sha256": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741",
+      "bytes": 9913
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/source/repaired_image_authority.py",
+      "sha256": "63db0419d0a6866d223f288d007a3c202f22fa5bf9d0d5d00b6fe4f098743e38",
+      "bytes": 3432
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/transport.literal.diff",
+      "sha256": "73c81b431c9994c6d2ef56908955d4217b5b530623c979f949e8e0335130618f",
+      "bytes": 4228
+    },
+    {
+      "path": "docs/verification/os-milestones-20260914/CURRENT.md",
+      "sha256": "4f297471d56243f2bedfaa0b9d151c9d844594e40d5fe70529a7ac5557b654b5",
+      "bytes": 1658563
+    },
+    {
+      "path": "docs/verification/os-milestones-20260914/HANDOFF.md",
+      "sha256": "ad80933bb6ae6d3774f75fb80a2b2d44e18e447e9313d9b48c4119290d744a36",
+      "bytes": 824476
+    },
+    {
+      "path": "docs/verification/os-milestones-20260914/RUST-CUTOVER-M14.md",
+      "sha256": "43e7d5af146e224fdffdfdf42cde623b4b57d94f4bc2e6c2577e5d0eae1bb5be",
+      "bytes": 27108
+    },
+    {
+      "path": "docs/verification/os-milestones-20260914/SESSION-HANDOFF.md",
+      "sha256": "af174595966820735d459d0eb910adcf54970ae9e6613cb7ee50975ea57dad38",
+      "bytes": 589383
+    },
+    {
+      "path": "docs/verification/os-milestones-20260914/rust-cutover-m14.json",
+      "sha256": "b2ebbc00449eaa908cfab8a717afb5c05a0dbe9e8d7ac8826b14db7e122fad14",
+      "bytes": 90071
+    },
+    {
+      "path": "kernel/rust/tests/run_equivalence.sh",
+      "sha256": "fce1f3b9a5606eedb245996d4b88b5e93022ae56145729592c9d675ecb267386",
+      "bytes": 5008672
+    },
+    {
+      "path": "kernel/rust/x86_memory_helpers.rs",
+      "sha256": "f88ca6d45b1395b74c0c86565b5a391d01124fa3fb30486a7e4eb31c85d9eff8",
+      "bytes": 191401
+    }
+  ],
+  "new_runtime_started": false,
+  "new_expiry_minted": false
+}

@@ -1,0 +1,57 @@
+{
+  "command": [
+    "taskset",
+    "-c",
+    "0",
+    "prlimit",
+    "--as=2147483648:2147483648",
+    "--core=0:0",
+    "--",
+    "python3",
+    "-B",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/keeper-capture-shared-mutator-source-1",
+    "-p",
+    "test_capture_entry.py",
+    "-v"
+  ],
+  "cutoffs": [
+    1793100290.0,
+    882395.5689528405,
+    897734.6960034363
+  ],
+  "exit_code": 0,
+  "files": {
+    "CAPTURE-FIXTURES-FINAL.stderr": {
+      "bytes": 1645,
+      "sha256": "08ab9752d0a4054d00ba9180e676f10b4ac86ba67fcaad3c01101cd2c898703e"
+    },
+    "CAPTURE-FIXTURES-FINAL.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "capture_entry.py": {
+      "bytes": 11236,
+      "sha256": "58c80704920fec383a2ec19bf1594a6b24a57688be681232d140dbaa55d26497"
+    },
+    "capture_outer.py": {
+      "bytes": 9167,
+      "sha256": "3d3e46527400d7142a9c98dfa63f665d9973057526dce66b39417ac2e71800c4"
+    },
+    "test_capture_entry.py": {
+      "bytes": 10836,
+      "sha256": "91ec519646f42ce657d2cbc026983dabebbc05a27acc5a1f3dbd17fdf7f8482e"
+    }
+  },
+  "privileged_operations": false,
+  "production_launch": false,
+  "production_root_reads": false,
+  "retained_keeper_touched": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_PRIVATE_FIXTURES_SOURCE_ONLY",
+  "tests_run": 18,
+  "window_id": "new18h-20261026-bf8b8eb1832f4c94a0166f20a95642ea"
+}

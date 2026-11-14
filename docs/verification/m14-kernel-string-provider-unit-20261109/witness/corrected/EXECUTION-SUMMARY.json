@@ -1,0 +1,71 @@
+{
+  "status": "PASS_ONCE_11_VALID_DOMAIN_ORDINARY_HOST_C_ABI_OBSERVATIONS",
+  "result_path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kernel-string-provider-unit-1/witness-1/correction-2/RESULT.json",
+  "result_sha256": "5a4f761381201d94dade19eef92276e89268b60dfd89e48524de56f39bb1f1a5",
+  "observations": {
+    "strnlen": 8,
+    "memset": 3,
+    "total": 11
+  },
+  "actual_gates": {
+    "caller_before_link": true,
+    "final_ELF_before_runtime": true
+  },
+  "all6_children_and_driver_direct_wait_joined": true,
+  "CPU7_released": true,
+  "outer_wall_seconds": 0.12326460699841846,
+  "summed_user_plus_system_seconds": 0.03,
+  "maximum_child_RSS_KiB": 55532.0,
+  "per_command_time_v": [
+    {
+      "user_seconds": 0.02,
+      "system_seconds": 0.0,
+      "maximum_RSS_KiB": 26340.0,
+      "time_v_wall": "0:00.03",
+      "label": "caller-compile"
+    },
+    {
+      "user_seconds": 0.0,
+      "system_seconds": 0.01,
+      "maximum_RSS_KiB": 55532.0,
+      "time_v_wall": "0:00.01",
+      "label": "caller-symbols"
+    },
+    {
+      "user_seconds": 0.0,
+      "system_seconds": 0.0,
+      "maximum_RSS_KiB": 4304.0,
+      "time_v_wall": "0:00.00",
+      "label": "caller-disassembly"
+    },
+    {
+      "user_seconds": 0.0,
+      "system_seconds": 0.0,
+      "maximum_RSS_KiB": 8408.0,
+      "time_v_wall": "0:00.01",
+      "label": "witness-link"
+    },
+    {
+      "user_seconds": 0.0,
+      "system_seconds": 0.0,
+      "maximum_RSS_KiB": 2592.0,
+      "time_v_wall": "0:00.00",
+      "label": "witness-elf"
+    },
+    {
+      "user_seconds": 0.0,
+      "system_seconds": 0.0,
+      "maximum_RSS_KiB": 1508.0,
+      "time_v_wall": "0:00.00",
+      "label": "witness-run"
+    }
+  ],
+  "preserved_original_failure": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kernel-string-provider-unit-1/witness-1/correction-1/FIRST-FAILURE.json",
+    "sha256": "b6e33f69804ffbbce3b6cfecca9eaaba420815e8e9e703bbe23c96d98980929d",
+    "old_commands": 3,
+    "old_link_runtime_started": false,
+    "old_behavior_credit": 0
+  },
+  "claim": "Only actual qualified kernel memset/strnlen object and genuine ordinary HOST C ABI caller/CRT with valid readable NUL strings and owned16B buffer; no kernel state, privileged, native, original acceptance or score claim."
+}

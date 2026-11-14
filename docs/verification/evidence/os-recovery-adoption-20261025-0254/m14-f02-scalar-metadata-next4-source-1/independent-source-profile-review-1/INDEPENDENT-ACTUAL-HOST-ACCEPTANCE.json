@@ -1,0 +1,673 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/current110_execution_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "recorded_at": "2026-10-27T20:42:06.793273+00:00",
+  "decision": "PASS_ACTUAL_TEN_HOST_COMMANDS_FOUR_SIGNED_SCALARS_PROFILE_ON_OFF_ABI_DATA_ORIGIN_AND_C_BEHAVIOR_ONLY",
+  "runtime_authority": null,
+  "blocking_findings": [],
+  "source_profile_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/independent-source-profile-review-1/INDEPENDENT-SOURCE-PROFILE-REVIEW.json",
+    "bytes": 11036,
+    "sha256": "a7468a9b39c074d80466e5b3c4eaf44f5fb8d6630e075809aaba76c9c03c8119"
+  },
+  "profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/PROFILE.NOT-GRANTED.json",
+    "bytes": 87224,
+    "sha256": "76e542f23a976a39a8cf26ccf939cbbbf9bbab795e810a10c563c6f66efe559f"
+  },
+  "actual_grant": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/ROOT-GRANT.ACTUAL.json",
+    "bytes": 1275,
+    "sha256": "452ae9967ee271f81e6bf42ccd371538980a2a80d48fe3cc0d55d6d7b45b031b"
+  },
+  "consumed_grant": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/future-capture-1/CONSUMED-GRANT.json",
+    "bytes": 1931,
+    "sha256": "60de7270162a708469408b1302ebfaedbef3d05d45138b7be5979093cee40db9"
+  },
+  "actual_results": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/future-capture-1/RESULTS.json",
+    "bytes": 16577,
+    "sha256": "d9460a0e9c4b80444295f71a247e17936fe250a3852ab4e82b087f9049370fa3"
+  },
+  "outer_tool_result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/ROOT-ACTUAL-TOOL-RESULT.json",
+    "bytes": 955,
+    "sha256": "23a216d35f9b327375ed5c3a17544de1a83eecce95768aa4ce147d5ece023ac6"
+  },
+  "ownership_report": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/HOST-output-proposed-1/OWNERSHIP.json",
+    "bytes": 5208,
+    "sha256": "2ae5063abbdd48dd51a44c2ee549854fcf897257f079d0501a95c7a4aef39e9f"
+  },
+  "commands": [
+    {
+      "index": 0,
+      "name": "00-genuine-scalar-ABI-and-supported-constants",
+      "command": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/future-capture-1/step0/command.json",
+        "bytes": 2528,
+        "sha256": "7fad19582ae21503671cffc63295ee6e5b16868b76f72cd8427f6f47305e811f"
+      },
+      "join": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/future-capture-1/step0/whole-join.json",
+        "bytes": 1142,
+        "sha256": "11589deab0b97bdd8d6ce8afc38b8ddc69e49fec6e6caddb5082517b1f722afe"
+      },
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/future-capture-1/step0/stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/future-capture-1/step0/stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "pid": 1678509,
+      "birth": 92983346,
+      "returncode": 0,
+      "current_numeric_PID_absent": true
+    },
+    {
+      "index": 1,
+      "name": "01-Rust-profile-enabled",
+      "command": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/future-capture-1/step1/command.json",
+        "bytes": 1235,
+        "sha256": "ead31d8a1dc42e3b09c90eda82fc38dd2d73d742b3c61badbd26fbbea0f88e8e"
+      },
+      "join": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/future-capture-1/step1/whole-join.json",
+        "bytes": 1142,
+        "sha256": "7aed16c25f84f47d330ec9210fbb8b4f4840be3fb0429ed355539d118fe99212"
+      },
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/future-capture-1/step1/stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/future-capture-1/step1/stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "pid": 1678511,
+      "birth": 92983405,
+      "returncode": 0,
+      "current_numeric_PID_absent": true
+    },
+    {
+      "index": 2,
+      "name": "02-Rust-profile-disabled",
+      "command": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/future-capture-1/step2/command.json",
+        "bytes": 1211,
+        "sha256": "884dece710b116d92ecd8a608dcdbc09f325e26c0edffe0363ad1caec492affa"
+      },
+      "join": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/future-capture-1/step2/whole-join.json",
+        "bytes": 1142,
+        "sha256": "059b771aff9a4824b2d6cfa910713cf6dda24f205bef490a85d3f95d283676aa"
+      },
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/future-capture-1/step2/stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/future-capture-1/step2/stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "pid": 1678518,
+      "birth": 92983463,
+      "returncode": 0,
+      "current_numeric_PID_absent": true
+    },
+    {
+      "index": 3,
+      "name": "03-original-C-fallback",
+      "command": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/future-capture-1/step3/command.json",
+        "bytes": 2633,
+        "sha256": "fbb9e34de656477508c427cd845238f4c58af05632cfe5a79531f43a98770db3"
+      },
+      "join": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/future-capture-1/step3/whole-join.json",
+        "bytes": 1142,
+        "sha256": "dbe73e6ec8db913d9a5c000ea0161d1a6c7fe197ad5fa6edd5d7a7b8826d7a98"
+      },
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/future-capture-1/step3/stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/future-capture-1/step3/stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "pid": 1678525,
+      "birth": 92983522,
+      "returncode": 0,
+      "current_numeric_PID_absent": true
+    },
+    {
+      "index": 4,
+      "name": "04-selected-C-extern",
+      "command": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/future-capture-1/step4/command.json",
+        "bytes": 2671,
+        "sha256": "5a5b9db91ff9e8f5d072c3962d6bc3ec33a03e6404b475e9848e0f4b1f6e9b8e"
+      },
+      "join": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/future-capture-1/step4/whole-join.json",
+        "bytes": 1142,
+        "sha256": "83f1a320bd873235628674bed69a6fbf1dd80f464ac32dea4bf755633b10e575"
+      },
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/future-capture-1/step4/stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/future-capture-1/step4/stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "pid": 1678528,
+      "birth": 92983582,
+      "returncode": 0,
+      "current_numeric_PID_absent": true
+    },
+    {
+      "index": 5,
+      "name": "05-link-on",
+      "command": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/future-capture-1/step5/command.json",
+        "bytes": 3130,
+        "sha256": "efa7c6f1aad51afe5ed0e0b080bff2fbb6b1c74e344954e1b2add1338c93d0ef"
+      },
+      "join": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/future-capture-1/step5/whole-join.json",
+        "bytes": 1142,
+        "sha256": "f8b2eb6bca01728d3fe63cad0ff0f453dd50579daa062f4ab5d8223b254ccfa6"
+      },
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/future-capture-1/step5/stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/future-capture-1/step5/stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "pid": 1678531,
+      "birth": 92983644,
+      "returncode": 0,
+      "current_numeric_PID_absent": true
+    },
+    {
+      "index": 6,
+      "name": "05-link-off",
+      "command": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/future-capture-1/step6/command.json",
+        "bytes": 3155,
+        "sha256": "af63488fee3e761670e4d70cef8004df6a68832a0b4e2d8f0b382be0d69be55c"
+      },
+      "join": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/future-capture-1/step6/whole-join.json",
+        "bytes": 1142,
+        "sha256": "eab5ef2344053730503431db0359ea01f7ad01df13e19043404ebd0c7549a963"
+      },
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/future-capture-1/step6/stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/future-capture-1/step6/stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "pid": 1678537,
+      "birth": 92983706,
+      "returncode": 0,
+      "current_numeric_PID_absent": true
+    },
+    {
+      "index": 7,
+      "name": "07-readonly-four-owners-both-profile-origins",
+      "command": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/future-capture-1/step7/command.json",
+        "bytes": 2215,
+        "sha256": "78980d1b59c4079482710ec263ca379bace541e774a41ff3c75b0aa733315557"
+      },
+      "join": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/future-capture-1/step7/whole-join.json",
+        "bytes": 1142,
+        "sha256": "002a530d943dec5d4a910c9329dc2a40cfb9bc5f68c06b1cb2f6b55ae9eb1aeb"
+      },
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/future-capture-1/step7/stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/future-capture-1/step7/stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "pid": 1678557,
+      "birth": 92983769,
+      "returncode": 0,
+      "current_numeric_PID_absent": true
+    },
+    {
+      "index": 8,
+      "name": "08-original-C-Rust-profile-enabled",
+      "command": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/future-capture-1/step8/command.json",
+        "bytes": 728,
+        "sha256": "59ceb76015cec1698da4a17601c0c73d42a203b43d537c78703f1749cb760b03"
+      },
+      "join": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/future-capture-1/step8/whole-join.json",
+        "bytes": 1144,
+        "sha256": "094c815510212acf202d26b2df6a49f47973725ea685870b2913c943a321c40d"
+      },
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/future-capture-1/step8/stdout",
+        "bytes": 57,
+        "sha256": "7b89cabdf5d5c9cffa26ae48d42ce3fe497e2ee807727433c1bb28905c82cc79"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/future-capture-1/step8/stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "pid": 1678558,
+      "birth": 92983830,
+      "returncode": 0,
+      "current_numeric_PID_absent": true
+    },
+    {
+      "index": 9,
+      "name": "09-original-C-Rust-profile-disabled",
+      "command": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/future-capture-1/step9/command.json",
+        "bytes": 731,
+        "sha256": "0323d3520f9b012fdff7d0813c31b777a70117d27187c5997123ac4b8d7b1f0d"
+      },
+      "join": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/future-capture-1/step9/whole-join.json",
+        "bytes": 1144,
+        "sha256": "6f519f765445c3e978b8dca7c3a96dac48bf4226003ed116026419df3c6fb5b4"
+      },
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/future-capture-1/step9/stdout",
+        "bytes": 57,
+        "sha256": "7b89cabdf5d5c9cffa26ae48d42ce3fe497e2ee807727433c1bb28905c82cc79"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/future-capture-1/step9/stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "pid": 1678574,
+      "birth": 92983886,
+      "returncode": 0,
+      "current_numeric_PID_absent": true
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/HOST-output-proposed-1/OWNERSHIP.json",
+      "bytes": 5208,
+      "sha256": "2ae5063abbdd48dd51a44c2ee549854fcf897257f079d0501a95c7a4aef39e9f"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/HOST-output-proposed-1/fallback.o",
+      "bytes": 38712,
+      "sha256": "53bd77959b7f161a30cb96803c390ce402034f04f8d6bc194ac9efbb784fde8e"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/HOST-output-proposed-1/profile-off",
+      "bytes": 50136,
+      "sha256": "1630590234e1b77df4d6d4f8845c0d8d85d1c9027da8b7882bf42521408e1b9b"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/HOST-output-proposed-1/profile-off.map",
+      "bytes": 27330,
+      "sha256": "b3501a314a5e5ed8108f5ba9b972266519a1c93e29d7c7e98b0f0f151c521354"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/HOST-output-proposed-1/profile-off.o",
+      "bytes": 1184,
+      "sha256": "d48d7d2df24ab511d8a220d7c11d88d0e410cfff4e806df32fe3713514ee9e76"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/HOST-output-proposed-1/profile-on",
+      "bytes": 50592,
+      "sha256": "c6678cc2b03083fcb9ae20ef9a5dd2b5a239a9bec242e64f48c9b58d53190c40"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/HOST-output-proposed-1/profile-on.map",
+      "bytes": 27320,
+      "sha256": "0f79df3281e888919a2daaab82af21fdcb772d6bba0543cc13ba2c4bed7ba585"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/HOST-output-proposed-1/profile-on.o",
+      "bytes": 1184,
+      "sha256": "471672cac4c7cabe30b3c9756796749f181109feb4e3babf39214658dabbc3eb"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-scalar-metadata-next4-source-1/HOST-output-proposed-1/selected.o",
+      "bytes": 38456,
+      "sha256": "efe8476873eb2449160d380ba1a234e5b686b3a1fdfb212259efc8f409eff4ca"
+    }
+  ],
+  "accepted_actual_obligations": [
+    "Exact reviewed profile76e542/sourceprofilea746/runner6e98 and fresh actualgrant452ae996 match consumed tuple. Root used absolute metadata paths. OuterPID1678507 has positivewait/return0; tenactualargv equal the reviewed profile. No prior HOST or production build command was replayed.",
+    "Genuine C ABI syntax compilation passed signedCInt size4/alignment4 plus actual111 USER1/profileevent4002 and supported ARCH_FAST_MEMSET/debug-disabled gates. Both Rust profile objects compiled; originalC fallback and selectedC extern objects compiled; both independentC-oracle links completed.",
+    "All10returns0,started/directwait/directjoin/wholejoin agree. Every directchild joined,groupabsent,streamclosed; no unexpected/remainingmembers,timeouts,errors,retirementerrors. All20 streamhashes/sizes/device/inodes/nlink match actual files. Allstderr and first8stdout empty; both actualprofile executions produce exact57B SCALAR16 oracle and exit0.",
+    "Independent ELF/data checks reproduce all28ownershiprecords: four uniqueglobal4Breadonly/nonexec/min4aligned owners in Ruston/Cfallback/finalon/Rustoff/finaloff,zero hidden table relocations,exact bitpatterns. Values are1/4002/1/0 on and1/0/1/0 off. Zero-valued statics remain readonly allocated data,not writable BSS.",
+    "Selected C owns none of the four scalars and has exactly oneR_X86_64_64 addressreference per scalar. Exact map origins tie each final owner to its ownprofile Rust object; all8actual final C fixtureconsumer pointers equal those final Rust addresses. Both links use true matching profile flags,including later-UPROFILE_ENABLE for C offoracle.",
+    "ActualC-oracle executions compared allfour full signedfields against original enum/macro/conditional initializer behavior. No live allocator/logger/memset/lock/IRQ/guest path executes; this proves HOST data/ABI/constant-gate ownership only.",
+    "Per-command admissions retain CPU6/currentgoal/runningaccount/samecreditrun/spentfloor,strict23357213694Bmemory/HOST18GiBincludinggrowth/scratch12GiB and full90s before actual inheritedclamps. Root ordinaryallocation/resource ownership controls remain separate from native custody."
+  ],
+  "actual_data_origin_details": [
+    {
+      "name": "process_init_stack_user_category",
+      "on_signed": 1,
+      "off_signed": 1,
+      "data": [
+        {
+          "name": "process_init_stack_user_category",
+          "section": ".rodata.process_init_stack_user_category",
+          "flags": 2,
+          "size": 4,
+          "bytes_hex": "01000000"
+        },
+        {
+          "name": "process_init_stack_user_category",
+          "section": ".rodata",
+          "flags": 2,
+          "size": 4,
+          "bytes_hex": "01000000"
+        },
+        {
+          "name": "process_init_stack_user_category",
+          "section": ".rodata",
+          "flags": 2,
+          "size": 4,
+          "bytes_hex": "01000000"
+        },
+        {
+          "name": "process_init_stack_user_category",
+          "section": ".rodata.process_init_stack_user_category",
+          "flags": 2,
+          "size": 4,
+          "bytes_hex": "01000000"
+        },
+        {
+          "name": "process_init_stack_user_category",
+          "section": ".rodata",
+          "flags": 2,
+          "size": 4,
+          "bytes_hex": "01000000"
+        }
+      ],
+      "selected_reference": {
+        "section": ".data.rel.ro",
+        "offset": 24,
+        "relocation_type": 1,
+        "addend": 0
+      },
+      "exact_Rust_origins": [
+        {
+          "name": "process_init_stack_user_category",
+          "input_section": ".rodata.process_init_stack_user_category",
+          "address": "0x402058",
+          "exact_Rust_origin": true
+        },
+        {
+          "name": "process_init_stack_user_category",
+          "input_section": ".rodata.process_init_stack_user_category",
+          "address": "0x402058",
+          "exact_Rust_origin": true
+        }
+      ],
+      "final_C_consumer_pointers_match": true
+    },
+    {
+      "name": "process_page_fault_anon_clear_profile_event",
+      "on_signed": 4002,
+      "off_signed": 0,
+      "data": [
+        {
+          "name": "process_page_fault_anon_clear_profile_event",
+          "section": ".rodata.process_page_fault_anon_clear_profile_event",
+          "flags": 2,
+          "size": 4,
+          "bytes_hex": "a20f0000"
+        },
+        {
+          "name": "process_page_fault_anon_clear_profile_event",
+          "section": ".rodata",
+          "flags": 2,
+          "size": 4,
+          "bytes_hex": "a20f0000"
+        },
+        {
+          "name": "process_page_fault_anon_clear_profile_event",
+          "section": ".rodata",
+          "flags": 2,
+          "size": 4,
+          "bytes_hex": "a20f0000"
+        },
+        {
+          "name": "process_page_fault_anon_clear_profile_event",
+          "section": ".rodata.process_page_fault_anon_clear_profile_event",
+          "flags": 2,
+          "size": 4,
+          "bytes_hex": "00000000"
+        },
+        {
+          "name": "process_page_fault_anon_clear_profile_event",
+          "section": ".rodata",
+          "flags": 2,
+          "size": 4,
+          "bytes_hex": "00000000"
+        }
+      ],
+      "selected_reference": {
+        "section": ".data.rel.ro",
+        "offset": 16,
+        "relocation_type": 1,
+        "addend": 0
+      },
+      "exact_Rust_origins": [
+        {
+          "name": "process_page_fault_anon_clear_profile_event",
+          "input_section": ".rodata.process_page_fault_anon_clear_profile_event",
+          "address": "0x402060",
+          "exact_Rust_origin": true
+        },
+        {
+          "name": "process_page_fault_anon_clear_profile_event",
+          "input_section": ".rodata.process_page_fault_anon_clear_profile_event",
+          "address": "0x402060",
+          "exact_Rust_origin": true
+        }
+      ],
+      "final_C_consumer_pointers_match": true
+    },
+    {
+      "name": "process_memset_smp_fast_word_pattern",
+      "on_signed": 1,
+      "off_signed": 1,
+      "data": [
+        {
+          "name": "process_memset_smp_fast_word_pattern",
+          "section": ".rodata.process_memset_smp_fast_word_pattern",
+          "flags": 2,
+          "size": 4,
+          "bytes_hex": "01000000"
+        },
+        {
+          "name": "process_memset_smp_fast_word_pattern",
+          "section": ".rodata",
+          "flags": 2,
+          "size": 4,
+          "bytes_hex": "01000000"
+        },
+        {
+          "name": "process_memset_smp_fast_word_pattern",
+          "section": ".rodata",
+          "flags": 2,
+          "size": 4,
+          "bytes_hex": "01000000"
+        },
+        {
+          "name": "process_memset_smp_fast_word_pattern",
+          "section": ".rodata.process_memset_smp_fast_word_pattern",
+          "flags": 2,
+          "size": 4,
+          "bytes_hex": "01000000"
+        },
+        {
+          "name": "process_memset_smp_fast_word_pattern",
+          "section": ".rodata",
+          "flags": 2,
+          "size": 4,
+          "bytes_hex": "01000000"
+        }
+      ],
+      "selected_reference": {
+        "section": ".data.rel.ro",
+        "offset": 8,
+        "relocation_type": 1,
+        "addend": 0
+      },
+      "exact_Rust_origins": [
+        {
+          "name": "process_memset_smp_fast_word_pattern",
+          "input_section": ".rodata.process_memset_smp_fast_word_pattern",
+          "address": "0x40205c",
+          "exact_Rust_origin": true
+        },
+        {
+          "name": "process_memset_smp_fast_word_pattern",
+          "input_section": ".rodata.process_memset_smp_fast_word_pattern",
+          "address": "0x40205c",
+          "exact_Rust_origin": true
+        }
+      ],
+      "final_C_consumer_pointers_match": true
+    },
+    {
+      "name": "process_dump_tree_enabled",
+      "on_signed": 0,
+      "off_signed": 0,
+      "data": [
+        {
+          "name": "process_dump_tree_enabled",
+          "section": ".rodata.process_dump_tree_enabled",
+          "flags": 2,
+          "size": 4,
+          "bytes_hex": "00000000"
+        },
+        {
+          "name": "process_dump_tree_enabled",
+          "section": ".rodata",
+          "flags": 2,
+          "size": 4,
+          "bytes_hex": "00000000"
+        },
+        {
+          "name": "process_dump_tree_enabled",
+          "section": ".rodata",
+          "flags": 2,
+          "size": 4,
+          "bytes_hex": "00000000"
+        },
+        {
+          "name": "process_dump_tree_enabled",
+          "section": ".rodata.process_dump_tree_enabled",
+          "flags": 2,
+          "size": 4,
+          "bytes_hex": "00000000"
+        },
+        {
+          "name": "process_dump_tree_enabled",
+          "section": ".rodata",
+          "flags": 2,
+          "size": 4,
+          "bytes_hex": "00000000"
+        }
+      ],
+      "selected_reference": {
+        "section": ".data.rel.ro",
+        "offset": 0,
+        "relocation_type": 1,
+        "addend": 0
+      },
+      "exact_Rust_origins": [
+        {
+          "name": "process_dump_tree_enabled",
+          "input_section": ".rodata.process_dump_tree_enabled",
+          "address": "0x402054",
+          "exact_Rust_origin": true
+        },
+        {
+          "name": "process_dump_tree_enabled",
+          "input_section": ".rodata.process_dump_tree_enabled",
+          "address": "0x402054",
+          "exact_Rust_origin": true
+        }
+      ],
+      "final_C_consumer_pointers_match": true
+    }
+  ],
+  "measured_latency": {
+    "outer_tool_wall_seconds": 7.081847429275513,
+    "sum_owned_child_capture_seconds": 0.5366946229478344,
+    "start_wall": 1793132387.1184576,
+    "finish_wall": 1793132394.200305,
+    "first_command_admission_wall": 1793132388.7572234,
+    "minimum_MemAvailable_bytes": 27218022400,
+    "source_ready_queue_latency": "UNMEASURED"
+  },
+  "normal_join_acceptance": {
+    "directchildren": 10,
+    "all_groups_absent": true,
+    "closed_hashed_streams": 20,
+    "all_current_numeric_creators_absent": true,
+    "outer_positive_wait": true,
+    "outer_returncode": 0
+  },
+  "forward_disposition": {
+    "status": "HOST_QUALIFIED_PRIVATE_FOUR_SCALAR_SOURCE_MAY_ENTER_ROOT_SELECTIVE_INTEGRATION_QUEUE",
+    "production_C_objects_current": 67,
+    "next_artifact_expected_if_independently_proved": 63,
+    "actual_selected_production_acceptance": false,
+    "native_acceptance": false,
+    "whole_file_credit_delta": 0,
+    "new_kernel_candidate_builds": 0,
+    "new_McKernel_guest_apps": 0,
+    "next": "Root selectively merges exactsmallC/Rustdiffs into latestsources; matching coherent Rust/processC/defaultlink and real9consumer finalorigin/gates/tracking proof remain required. Preserve all originaldebug/retention/lifetime/Source38 obligations and failures.",
+    "M14_M15": "OPEN"
+  },
+  "review_actions": {
+    "actualcaptures_hashes_and_pureELF_map_recheck": true,
+    "no_checkerwriter_or_fixture_orcompiler_reexecution": true,
+    "no_workload_Docker_root_guest_cleanup_lease_agents": true,
+    "no_canonical_or_implementation_changes": true,
+    "only_this_review_directory_written": true
+  }
+}

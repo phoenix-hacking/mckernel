@@ -1,0 +1,181 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_ACTUAL_ROLE_INVENTORY_EXPLICIT_MODEL_ONLY",
+  "records": [
+    {
+      "step": 0,
+      "command": {
+        "argv": [
+          "/usr/bin/python3",
+          "-I",
+          "-B",
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/equivalence-oracle-correction-source-7/selected-bootstrap-correction-source-8/role-inventory-source-1/test_role_inventory.EXPLICIT-MODEL.NOT-EXECUTED.py",
+          "--check-once",
+          "ea83b20a695cfad81d893f1119bf5ad2bf71de6c396f2e5a11c25a09cb45728d"
+        ],
+        "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Granted pure3053path72alias role model3positive15negative, no owner/root/SDK/compiler."
+      },
+      "join": {
+        "pid": 649087,
+        "start": 71874163,
+        "returncode": 0,
+        "direct_child_joined": true,
+        "group_absent": true,
+        "remaining_group_members": [],
+        "unexpected_group_members": [],
+        "timed_out": false,
+        "error": null,
+        "retirement_error": null,
+        "seconds": 1.7008071469608694,
+        "closed_streams": true,
+        "captures": {
+          "stdout": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/equivalence-oracle-correction-source-7/selected-bootstrap-correction-source-8/role-inventory-source-1/actual-role-model-h990-CPU0-1/step0/stdout",
+            "sha256": "9bce2f0703e408f36e5245245aa9849fdc4be4be60ab72244afaf60a745834e5",
+            "device": 66306,
+            "inode": 59542770,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 2697,
+            "mtime_ns": 1792921298582923277,
+            "ctime_ns": 1792921298582923277
+          },
+          "stderr": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/equivalence-oracle-correction-source-7/selected-bootstrap-correction-source-8/role-inventory-source-1/actual-role-model-h990-CPU0-1/step0/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 59542771,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1792921296938871875,
+            "ctime_ns": 1792921296938871875
+          }
+        }
+      }
+    }
+  ],
+  "checks": {
+    "status": "PASS_EXPLICIT_FILESYSTEM_MODEL_ONLY",
+    "source_paths": 3053,
+    "aliases": 72,
+    "records": [
+      {
+        "case": "exact3053-path72-alias-complete-model",
+        "status": "PASS",
+        "inventory": {
+          "source_entries": 3053,
+          "generated_entries": 3,
+          "logical_bytes": 2466,
+          "allocated_bytes": 974848
+        }
+      },
+      {
+        "case": "declared-partial-model",
+        "status": "PASS",
+        "inventory": {
+          "source_entries": 3053,
+          "generated_entries": 3,
+          "logical_bytes": 2466,
+          "allocated_bytes": 974848
+        }
+      },
+      {
+        "case": "file-size",
+        "status": "EXPECTED_REFUSAL",
+        "error": "source file type/size changed"
+      },
+      {
+        "case": "file-hash",
+        "status": "EXPECTED_REFUSAL",
+        "error": "source file hash changed"
+      },
+      {
+        "case": "file-mode",
+        "status": "EXPECTED_REFUSAL",
+        "error": "source mode changed"
+      },
+      {
+        "case": "missing-complete-path",
+        "status": "EXPECTED_REFUSAL",
+        "error": "completed source closure incomplete"
+      },
+      {
+        "case": "undeclared-source",
+        "status": "EXPECTED_REFUSAL",
+        "error": "undeclared source entry"
+      },
+      {
+        "case": "alias-escape",
+        "status": "EXPECTED_REFUSAL",
+        "error": "undeclared or changed alias"
+      },
+      {
+        "case": "generated-alias",
+        "status": "EXPECTED_REFUSAL",
+        "error": "undeclared or changed alias"
+      },
+      {
+        "case": "special-fifo",
+        "status": "EXPECTED_REFUSAL",
+        "error": "special output file"
+      },
+      {
+        "case": "hardlink",
+        "status": "EXPECTED_REFUSAL",
+        "error": "unexpected output hardlink"
+      },
+      {
+        "case": "source-cap",
+        "status": "EXPECTED_REFUSAL",
+        "error": "source entry bound"
+      },
+      {
+        "case": "generated-cap",
+        "status": "EXPECTED_REFUSAL",
+        "error": "generated entry bound"
+      },
+      {
+        "case": "allocated-cap",
+        "status": "EXPECTED_REFUSAL",
+        "error": "allocated byte bound"
+      },
+      {
+        "case": "logical-cap",
+        "status": "EXPECTED_REFUSAL",
+        "error": "logical byte bound"
+      },
+      {
+        "case": "real-generated4097-cap",
+        "status": "EXPECTED_REFUSAL",
+        "error": "generated entry bound"
+      },
+      {
+        "case": "root-identity-change",
+        "status": "EXPECTED_REFUSAL",
+        "error": "role root identity changed"
+      },
+      {
+        "case": "restored-full-model",
+        "status": "PASS",
+        "inventory": {
+          "source_entries": 3053,
+          "generated_entries": 3,
+          "logical_bytes": 2466,
+          "allocated_bytes": 974848
+        }
+      }
+    ],
+    "SDK_or_native_acceptance": false
+  },
+  "input_identities_unchanged": true,
+  "seconds": 1.7208397350041196,
+  "CPU_seconds": 1.7090199999999998,
+  "CPU0_released": true,
+  "SDK_query_root_native": false,
+  "execution_release": false
+}

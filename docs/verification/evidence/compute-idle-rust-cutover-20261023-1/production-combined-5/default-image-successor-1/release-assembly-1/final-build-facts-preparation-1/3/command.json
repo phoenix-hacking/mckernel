@@ -1,0 +1,10 @@
+{
+  "argv": [
+    "/usr/bin/stat",
+    "--printf=%n size=%s blocks=%b block_unit=512 dev=%d inode=%i mode=%a uid=%u gid=%g\n",
+    "/home/holden/mckernel-work/scratch.ext4",
+    "/run/lock/mckernel-development.lock"
+  ],
+  "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Read-only backing-file full size and allocated blocks; sparse gap=max(0,size-512*blocks).",
+  "shell": false
+}

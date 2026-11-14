@@ -1,0 +1,25 @@
+--- a/kernel/CMakeLists.txt
++++ b/kernel/CMakeLists.txt
+@@ -57,14 +57,18 @@
+ endif()
+ set(MCKERNEL_HOST_IRQ_ABI "legacy" CACHE STRING "Linux control-kernel IRQ-work ABI")
+ set_property(CACHE MCKERNEL_HOST_IRQ_ABI PROPERTY STRINGS legacy linux-6.12)
+-# Complete F06 candidate is opt-in until matched image/native qualification.
+-# The supported profile is checked below; no new runtime authority is granted.
++# Complete F06 default promotion requires matched image/native qualification.
++# Only the qualified ordinary profile changes default; no runtime authority is granted.
+ set(MCKERNEL_RUST_F06_WHOLE_DEFAULT OFF)
+ if (ENABLE_RUST_KERNEL AND ARCH STREQUAL "x86_64" AND
+-    MCKERNEL_HOST_IRQ_ABI STREQUAL "linux-6.12" AND NOT ENABLE_UBSAN)
++    MCKERNEL_HOST_IRQ_ABI STREQUAL "linux-6.12" AND NOT ENABLE_UBSAN AND
++    PROFILE_ENABLE AND ENABLE_PERF AND ENABLE_RUSAGE AND
++    ENABLE_LINUX_WORK_IRQ_FOR_IKC AND NOT ENABLE_TOFU AND
++    NOT ENABLE_FUGAKU_HACKS AND NOT ENABLE_RUST_M14_SYSCALL_ADAPTERS AND
++    NOT MCKERNEL_F03_SIGNAL_FORWARD_EXPERIMENTAL)
+     set(MCKERNEL_RUST_F06_WHOLE_DEFAULT ON)
+ endif()
+-option(ENABLE_RUST_F06_SYSCALL_WHOLE "Build the complete F06 ownership candidate; production qualification pending" OFF)
++option(ENABLE_RUST_F06_SYSCALL_WHOLE "Build the complete F06 ownership candidate; production qualification pending" "${MCKERNEL_RUST_F06_WHOLE_DEFAULT}")
+ if (ENABLE_RUST_F06_SYSCALL_WHOLE AND
+     (NOT ENABLE_RUST_KERNEL OR NOT ARCH STREQUAL "x86_64" OR
+      NOT MCKERNEL_HOST_IRQ_ABI STREQUAL "linux-6.12" OR ENABLE_UBSAN))

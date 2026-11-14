@@ -4393,6 +4393,10 @@ static ssize_t find_libdir(char *libdir, size_t len)
 	char path[PATH_MAX];
 	char cmd[PATH_MAX];
 
+	if (!libdir || !len) {
+		return -EINVAL;
+	}
+
 	rc = readlink("/proc/self/exe", path, sizeof(path));
 	if (rc < 0) {
 		rc = -errno;
@@ -4404,10 +4408,12 @@ static ssize_t find_libdir(char *libdir, size_t len)
 		path[rc] = '\0';
 	}
 
+	/* A literal library directory can contain whitespace after its tag. */
 	rc = snprintf(cmd, sizeof(cmd),
-		      "objdump -x %s | awk '/RPATH/ { print $2 }'",
+		      "objdump -x %s | awk '$1 ~ /^(RPATH|RUNPATH)$/ { "
+		      "sub(/^[[:space:]]*(RPATH|RUNPATH)[[:space:]]+/, \"\"); print }'",
 		      path);
-	if (rc >= sizeof(cmd)) {
+	if (rc < 0 || rc >= sizeof(cmd)) {
 		rc = -ERANGE;
 		goto out;
 	}
@@ -4419,13 +4425,17 @@ static ssize_t find_libdir(char *libdir, size_t len)
 		goto out;
 	}
 
+	/* EOF need not set errno; do not report success or a stale error. */
+	errno = 0;
 	rc = getline(&line, &linelen, filep);
 	if (rc <= 0) {
-		rc = -errno;
+		rc = -(errno ? errno : ENOENT);
 		fprintf(stderr, "RPATH not found: %ld\n", -rc);
 		goto out;
 	}
-	line[rc - 1] = 0;
+	if (line[rc - 1] == '\n') {
+		line[rc - 1] = 0;
+	}
 
 	slash = strchr(line, '/');
 	if (!slash) {
@@ -4433,12 +4443,12 @@ static ssize_t find_libdir(char *libdir, size_t len)
 		goto out;
 	}
 
-	rc = snprintf(libdir, len, "%s", line);
-
-	if (rc > len) {
+	rc = strlen(line);
+	if ((size_t)rc >= len) {
 		rc = -ERANGE;
 		goto out;
 	}
+	memcpy(libdir, line, rc + 1);
 
 out:
 	if (filep) {
@@ -4555,10 +4565,29 @@ static void ld_preload_init()
 {
 	char envbuf[PATH_MAX];
 	char *ld_preload_str;
+	int source_enable_uti = enable_uti;
+	int source_disable_sched_yield = disable_sched_yield;
+	int source_existing = 0;
+#ifdef ENABLE_QLMPI
+	int source_enable_qlmpi = 1;
+#else
+	int source_enable_qlmpi = 0;
+#endif
 	size_t remainder = PATH_MAX;
 	int nelem = 0;
 	char elembuf[PATH_MAX];
 	char libdir[PATH_MAX];
+
+	/* Capture every preload source before attempting the executable lookup. */
+	ld_preload_str = getenv(ld_preload_envname);
+	source_existing = ld_preload_str != NULL;
+	if (!source_enable_uti && !source_disable_sched_yield &&
+	    !source_enable_qlmpi && !source_existing) {
+		if (getenv("ld_preload_envname")) {
+			unsetenv(ld_preload_envname);
+		}
+		return;
+	}
 
 	if (find_libdir(libdir, sizeof(libdir)) < 0) {
 		fprintf(stderr, "warning: did not set LD_PRELOAD\n");
@@ -4567,23 +4596,24 @@ static void ld_preload_init()
 
 	memset(envbuf, 0, PATH_MAX);
 
-	if (enable_uti) {
+	if (source_enable_uti) {
 		LD_PRELOAD_PREPARE("libmck_syscall_intercept.so");
 		LD_PRELOAD_APPEND;
 	}
 
-	if (disable_sched_yield) {
+	if (source_disable_sched_yield) {
 		LD_PRELOAD_PREPARE("libsched_yield.so.1.0.0");
 		LD_PRELOAD_APPEND;
 	}
 
 #ifdef ENABLE_QLMPI
-	LD_PRELOAD_PREPARE("libqlfort.so");
-	LD_PRELOAD_APPEND;
+	if (source_enable_qlmpi) {
+		LD_PRELOAD_PREPARE("libqlfort.so");
+		LD_PRELOAD_APPEND;
+	}
 #endif
 
 	/* Set LD_PRELOAD to McKernel specific value */
-	ld_preload_str = getenv(ld_preload_envname);
 	if (ld_preload_str) {
 		sprintf(elembuf, "%s%s", nelem > 0 ? ":" : "", ld_preload_str);
 		LD_PRELOAD_APPEND;

@@ -1,0 +1,36 @@
+{
+  "schema": "mckernel.independent-source-review.v1",
+  "reviewer": "/root/image_retirement_review",
+  "implementation_ownership": false,
+  "decision": "BLOCKED_SOURCE",
+  "frozen_source_closure": "3b858cb10151398f5580cef5eb87c6697f9e980a8311c81a0c68796818b35254",
+  "frozen_source_receipt_sha256": "e222e33ef34e8f11ed6f5af745c1f8e34397a302b0ad746c05440957b9b6d7ff",
+  "verified_files": 63,
+  "verified_bytes": 1453121,
+  "authenticated_base": "09f438751c28df0f497ed45a6bf6a4c6e0821d7b",
+  "integration_target": "d99edf2f58ee44b1a7e9aa726cbb49eee7850248",
+  "blocking_findings": [
+    {
+      "path": "os_runtime.rs",
+      "boundary": "New v7/v8/v9 factories",
+      "problem": "Required d99 success_status missing from BootV3 initializers; factories reject ABI2 selected by native v9 caller.",
+      "required_correction": "Carry existing v6 ABI1 Ready / ABI2 Running / unknown rejection into v7-v9; compile and test actual bodies."
+    },
+    {
+      "path": "sysfs_memory.rs",
+      "boundary": "shutdown_quiescent",
+      "problem": "Fork payload transient ledger omitted from merged busy predicate.",
+      "required_correction": "A retained fork_payloads claim returns EBUSY; clearing it restores quiescence when other ledgers empty."
+    }
+  ],
+  "verified_preserved": [
+    "Accepted d99 CPU356853 and shutdown changes.",
+    "Authenticated original-base seventeen files and all sixty accepted d99 inputs.",
+    "Only import conflict resolved to retain used ptr/NonNull; other merged bodies conflict free.",
+    "Real three Kbuild targets and all three new nested imports included; require actual compiler dep-info later.",
+    "CREATE_PPD -95/default NULL/final Complete closed."
+  ],
+  "new_compiles": 0,
+  "runtime_authority": false,
+  "next": "Fresh isolated corrected candidate and focused actual-body regression, then affected independent review before real Kbuild release."
+}

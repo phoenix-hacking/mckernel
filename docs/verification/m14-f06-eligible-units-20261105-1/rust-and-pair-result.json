@@ -1,0 +1,623 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_F06_NATIVE_PROVIDER_PARTIAL_LINK_ONLY",
+  "stages": [
+    {
+      "name": "f06-compile",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--foreground",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/m14-resume-20261105-1/f06-linkage-private-1/run-1/f06-compile.time",
+        "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--crate-type=lib",
+        "-Awarnings",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "code-model=large",
+        "-C",
+        "relocation-model=static",
+        "-C",
+        "no-redzone=yes",
+        "-C",
+        "no-vectorize-loops",
+        "-C",
+        "no-vectorize-slp",
+        "-C",
+        "target-feature=-sse,-sse2,-avx,-avx2",
+        "--emit=obj=/home/holden/mckernel-work/m14-resume-20261105-1/f06-linkage-private-1/run-1/f06.o,dep-info=/home/holden/mckernel-work/m14-resume-20261105-1/f06-linkage-private-1/run-1/f06.d",
+        "/home/holden/mckernel-work/m14-resume-20261105-1/f06-linkage-private-1/unit/f06.rs",
+        "--cfg",
+        "f06_signal_context_candidate",
+        "--cfg",
+        "f06_do_signal_whole_candidate",
+        "--cfg",
+        "f06_do_signal_reuse_qualified_context",
+        "--cfg",
+        "f06_signal_trap_info_candidate",
+        "--cfg",
+        "f06_rt_sigreturn_xrstor_candidate",
+        "--cfg",
+        "f06_debug_constants_candidate",
+        "--cfg",
+        "native_linux_irq_work_v6_12"
+      ],
+      "environment": {
+        "PATH": "/usr/bin:/bin",
+        "LANG": "C",
+        "LC_ALL": "C",
+        "MCKERNEL_F06_SIGNAL_METADATA_RS": "/home/holden/mckernel-work/m14-resume-20261105-1/f06-linkage-private-1/unit/metadata/f06_signal_metadata.rs"
+      },
+      "status": "PASS",
+      "started": 1793919032.889352,
+      "pid": 35937,
+      "pgid": 35937,
+      "exit_status": 0,
+      "group_empty": true,
+      "finished": 1793919033.0791025,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "time_sha256": "dbbbd2e23a830540d35f97988c368ad69d72672d3ba56fb86ac041749c8de0bd"
+    },
+    {
+      "name": "native-provider-compile",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--foreground",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/m14-resume-20261105-1/f06-linkage-private-1/run-1/native-provider-compile.time",
+        "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--crate-type=lib",
+        "-Awarnings",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "code-model=large",
+        "-C",
+        "relocation-model=static",
+        "-C",
+        "no-redzone=yes",
+        "-C",
+        "no-vectorize-loops",
+        "-C",
+        "no-vectorize-slp",
+        "-C",
+        "target-feature=-sse,-sse2,-avx,-avx2",
+        "--emit=obj=/home/holden/mckernel-work/m14-resume-20261105-1/f06-linkage-private-1/run-1/native-provider.o,dep-info=/home/holden/mckernel-work/m14-resume-20261105-1/f06-linkage-private-1/run-1/native-provider.d",
+        "/home/holden/mckernel-work/m14-resume-20261105-1/f06-linkage-private-1/unit/native-provider.rs"
+      ],
+      "environment": {
+        "PATH": "/usr/bin:/bin",
+        "LANG": "C",
+        "LC_ALL": "C"
+      },
+      "status": "PASS",
+      "started": 1793919033.0796988,
+      "pid": 35947,
+      "pgid": 35947,
+      "exit_status": 0,
+      "group_empty": true,
+      "finished": 1793919033.1672955,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "time_sha256": "e34bf6a0e894baa26fd1fcfa93beb3896b10c038a569c983eb06c6c96c36602d"
+    },
+    {
+      "name": "f06-definitions",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--foreground",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/m14-resume-20261105-1/f06-linkage-private-1/run-1/f06-definitions.time",
+        "/usr/bin/nm",
+        "-g",
+        "--defined-only",
+        "--format=posix",
+        "/home/holden/mckernel-work/m14-resume-20261105-1/f06-linkage-private-1/run-1/f06.o"
+      ],
+      "environment": {
+        "PATH": "/usr/bin:/bin",
+        "LANG": "C",
+        "LC_ALL": "C"
+      },
+      "status": "PASS",
+      "started": 1793919033.1678236,
+      "pid": 35956,
+      "pgid": 35956,
+      "exit_status": 0,
+      "group_empty": true,
+      "finished": 1793919033.180488,
+      "stdout_sha256": "f02e054789348502fda4e700afeff0bbc66f7a9b3111fcfcfc4cab61c0613b18",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "time_sha256": "667bf70fc13ce1638424fd87111bee787deb3680ebc03b51a5e14fe4fbd070b3"
+    },
+    {
+      "name": "native-definitions",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--foreground",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/m14-resume-20261105-1/f06-linkage-private-1/run-1/native-definitions.time",
+        "/usr/bin/nm",
+        "-g",
+        "--defined-only",
+        "--format=posix",
+        "/home/holden/mckernel-work/m14-resume-20261105-1/f06-linkage-private-1/run-1/native-provider.o"
+      ],
+      "environment": {
+        "PATH": "/usr/bin:/bin",
+        "LANG": "C",
+        "LC_ALL": "C"
+      },
+      "status": "PASS",
+      "started": 1793919033.1810093,
+      "pid": 35959,
+      "pgid": 35959,
+      "exit_status": 0,
+      "group_empty": true,
+      "finished": 1793919033.1938846,
+      "stdout_sha256": "589077c750a8fc8823e4921e11585ae8f46a48ef0caf0c663d98a06138adfa46",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "time_sha256": "8859869fb93aaed4f1614aed39a85e809626624cac73f8f01baf8760dded2f28"
+    },
+    {
+      "name": "partial-link",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--foreground",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/m14-resume-20261105-1/f06-linkage-private-1/run-1/partial-link.time",
+        "/usr/bin/ld",
+        "-r",
+        "-o",
+        "/home/holden/mckernel-work/m14-resume-20261105-1/f06-linkage-private-1/run-1/f06-native-partial.o",
+        "/home/holden/mckernel-work/m14-resume-20261105-1/f06-linkage-private-1/run-1/f06.o",
+        "/home/holden/mckernel-work/m14-resume-20261105-1/f06-linkage-private-1/run-1/native-provider.o"
+      ],
+      "environment": {
+        "PATH": "/usr/bin:/bin",
+        "LANG": "C",
+        "LC_ALL": "C"
+      },
+      "status": "PASS",
+      "started": 1793919033.1945705,
+      "pid": 35962,
+      "pgid": 35962,
+      "exit_status": 0,
+      "group_empty": true,
+      "finished": 1793919033.2010384,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "time_sha256": "9f042f931ff89cdad0b23a43ef1891ae27ecec18b8899635f4c2604aeb54a04f"
+    },
+    {
+      "name": "partial-definitions",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--foreground",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/m14-resume-20261105-1/f06-linkage-private-1/run-1/partial-definitions.time",
+        "/usr/bin/nm",
+        "-g",
+        "--defined-only",
+        "--format=posix",
+        "/home/holden/mckernel-work/m14-resume-20261105-1/f06-linkage-private-1/run-1/f06-native-partial.o"
+      ],
+      "environment": {
+        "PATH": "/usr/bin:/bin",
+        "LANG": "C",
+        "LC_ALL": "C"
+      },
+      "status": "PASS",
+      "started": 1793919033.20155,
+      "pid": 35965,
+      "pgid": 35965,
+      "exit_status": 0,
+      "group_empty": true,
+      "finished": 1793919033.2146835,
+      "stdout_sha256": "38065a6709d60e2a2a568e746ea51ee5e52c531fdd0bdfc5dc492519e278dc61",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "time_sha256": "c4ab18916c8c4de5acdc1b118648cd8c5c3a6550d284bb16ea6313d3b9287646"
+    },
+    {
+      "name": "partial-undefined",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--foreground",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/m14-resume-20261105-1/f06-linkage-private-1/run-1/partial-undefined.time",
+        "/usr/bin/nm",
+        "-g",
+        "--undefined-only",
+        "--format=posix",
+        "/home/holden/mckernel-work/m14-resume-20261105-1/f06-linkage-private-1/run-1/f06-native-partial.o"
+      ],
+      "environment": {
+        "PATH": "/usr/bin:/bin",
+        "LANG": "C",
+        "LC_ALL": "C"
+      },
+      "status": "PASS",
+      "started": 1793919033.215389,
+      "pid": 35968,
+      "pgid": 35968,
+      "exit_status": 0,
+      "group_empty": true,
+      "finished": 1793919033.2280796,
+      "stdout_sha256": "f7d19fabc3cee539f6caa76773f2ae15ff9a095933ecd5654619913d3e7813db",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "time_sha256": "0cb3e47e1c9fb1de35f62489b2ae695250c729078c6018608c31320fd41e92d9"
+    }
+  ],
+  "source_identity_before": [
+    {
+      "path": "/home/holden/mckernel/scripts/tests/test_m14_f06_tail_codegen.py",
+      "sha256": "dfa3520654151c0aa14a62113c37f314885afc5f0242a24dbffc0a7ca04323db",
+      "bytes": 9074
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/derive_f06_signal_metadata.py",
+      "sha256": "e16933f24378ddc7ab936924b3679cda189ed227a498b9e70e8027123954d937",
+      "bytes": 4561
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+      "sha256": "4f6ea41af837748aae2d9581c7c45963c5cd5367093c8aebb1e62b12f75994ca",
+      "bytes": 123719
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "bytes": 76151
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "sha256": "b2247f46fdfe72c6b4f3eec2d3162f3c91c9e7d82413f01ed0038b19ea2f19ed",
+      "bytes": 1240331
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/cls.rs",
+      "sha256": "c0260e7634d53fcc0873746af8bd16b6691ee0a4b7f394ca18896aef070f6bba",
+      "bytes": 7877
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+      "sha256": "f544c5177156ad5de8544bb95c46bbc8e2ac870a25c4895ca4cefb7c8cc79680",
+      "bytes": 444772
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "sha256": "c4e6153bef33ec018d2efc88c93854a4dc351f78c901ed3cb25f73524d7c0020",
+      "bytes": 186213
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/string.rs",
+      "sha256": "579d8c06bb766a270548399a8820733516a167bb8af5d1fea46d8a51f7e8fbf3",
+      "bytes": 13172
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/lock_helpers.rs",
+      "sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3",
+      "bytes": 12202
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/waitq.rs",
+      "sha256": "246a850a7e305d69d55de5903273e35ba62cc204167cc95acc90973c8f0aaefc",
+      "bytes": 10868
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "sha256": "fed7537d21f5d5fe0fc3ffdb1fe44783f5f9ac13937b3bdbbcc452cc2fa5eb16",
+      "bytes": 13020
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde",
+      "bytes": 256003
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/native_signal.rs",
+      "sha256": "aea4bf00889641d831f4cebf5c452924947e0255cf1f5d47437e804bcbadb250",
+      "bytes": 12106
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/f06_signal_trap_info.rs",
+      "sha256": "5de3c390c2b3883e173aa694bd9d925dc6bc8fa5903bb5eea35215403b0d6440",
+      "bytes": 2124
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/f06_rt_sigreturn_xrstor.rs",
+      "sha256": "a10a52d734bb494c1f0f6a84585d8f028ea44c386e3eaf10e8da12060a11134f",
+      "bytes": 2153
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/f06_signal_tail.rs",
+      "sha256": "988cbe82d0db23fb8702990da1a758005aeba5bd19a2c3630d10e647983c7ae0",
+      "bytes": 66891
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/f06_signal_ptrace_diagnostics.rs",
+      "sha256": "950fdacc026cabbe5a19f3780aa4331cc7977e91ff65f38b0f4bc792619effb1",
+      "bytes": 1597
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-resume-20261105-1/f06-linkage-private-1/unit/f06.rs",
+      "sha256": "21dd4c6771b9e97ca8d466e91b709fc090cbce6dd544d003530ff88cecd7b08b",
+      "bytes": 6381
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-resume-20261105-1/f06-linkage-private-1/unit/metadata/f06_signal_metadata.rs",
+      "sha256": "0da870f9f48a4500f57d593a776a5f7d38b03d37cd1abd78baf4a27f8520fd58",
+      "bytes": 1248
+    }
+  ],
+  "source_identity_after": [
+    {
+      "path": "/home/holden/mckernel/scripts/tests/test_m14_f06_tail_codegen.py",
+      "sha256": "dfa3520654151c0aa14a62113c37f314885afc5f0242a24dbffc0a7ca04323db",
+      "bytes": 9074
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/derive_f06_signal_metadata.py",
+      "sha256": "e16933f24378ddc7ab936924b3679cda189ed227a498b9e70e8027123954d937",
+      "bytes": 4561
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+      "sha256": "4f6ea41af837748aae2d9581c7c45963c5cd5367093c8aebb1e62b12f75994ca",
+      "bytes": 123719
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "bytes": 76151
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "sha256": "b2247f46fdfe72c6b4f3eec2d3162f3c91c9e7d82413f01ed0038b19ea2f19ed",
+      "bytes": 1240331
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/cls.rs",
+      "sha256": "c0260e7634d53fcc0873746af8bd16b6691ee0a4b7f394ca18896aef070f6bba",
+      "bytes": 7877
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+      "sha256": "f544c5177156ad5de8544bb95c46bbc8e2ac870a25c4895ca4cefb7c8cc79680",
+      "bytes": 444772
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "sha256": "c4e6153bef33ec018d2efc88c93854a4dc351f78c901ed3cb25f73524d7c0020",
+      "bytes": 186213
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/string.rs",
+      "sha256": "579d8c06bb766a270548399a8820733516a167bb8af5d1fea46d8a51f7e8fbf3",
+      "bytes": 13172
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/lock_helpers.rs",
+      "sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3",
+      "bytes": 12202
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/waitq.rs",
+      "sha256": "246a850a7e305d69d55de5903273e35ba62cc204167cc95acc90973c8f0aaefc",
+      "bytes": 10868
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "sha256": "fed7537d21f5d5fe0fc3ffdb1fe44783f5f9ac13937b3bdbbcc452cc2fa5eb16",
+      "bytes": 13020
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde",
+      "bytes": 256003
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/native_signal.rs",
+      "sha256": "aea4bf00889641d831f4cebf5c452924947e0255cf1f5d47437e804bcbadb250",
+      "bytes": 12106
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/f06_signal_trap_info.rs",
+      "sha256": "5de3c390c2b3883e173aa694bd9d925dc6bc8fa5903bb5eea35215403b0d6440",
+      "bytes": 2124
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/f06_rt_sigreturn_xrstor.rs",
+      "sha256": "a10a52d734bb494c1f0f6a84585d8f028ea44c386e3eaf10e8da12060a11134f",
+      "bytes": 2153
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/f06_signal_tail.rs",
+      "sha256": "988cbe82d0db23fb8702990da1a758005aeba5bd19a2c3630d10e647983c7ae0",
+      "bytes": 66891
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/f06_signal_ptrace_diagnostics.rs",
+      "sha256": "950fdacc026cabbe5a19f3780aa4331cc7977e91ff65f38b0f4bc792619effb1",
+      "bytes": 1597
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-resume-20261105-1/f06-linkage-private-1/unit/f06.rs",
+      "sha256": "21dd4c6771b9e97ca8d466e91b709fc090cbce6dd544d003530ff88cecd7b08b",
+      "bytes": 6381
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-resume-20261105-1/f06-linkage-private-1/unit/metadata/f06_signal_metadata.rs",
+      "sha256": "0da870f9f48a4500f57d593a776a5f7d38b03d37cd1abd78baf4a27f8520fd58",
+      "bytes": 1248
+    }
+  ],
+  "production_acceptance": false,
+  "resources": {
+    "mem_available_bytes": 30334967808,
+    "host_available_bytes": 136100585472,
+    "readonly_scratch_available_bytes": 47613485056,
+    "time_epoch": 1793919032.8842716
+  },
+  "artifacts": [
+    {
+      "path": "/home/holden/mckernel-work/m14-resume-20261105-1/f06-linkage-private-1/run-1/f06.o",
+      "bytes": 23896,
+      "sha256": "b4a454a0b6ad31809651bd0c650246b57ce72f11fff583abdb436cbbd115a812"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-resume-20261105-1/f06-linkage-private-1/run-1/native-provider.o",
+      "bytes": 3440,
+      "sha256": "9e7c1ed0cd35f48d3e7f466ac202fbc734ea940dff78a2332700665bb07a7ebc"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-resume-20261105-1/f06-linkage-private-1/run-1/f06-native-partial.o",
+      "bytes": 27200,
+      "sha256": "f76b95e0fe3e58851ec7c9ce90da9dcd044c9235f35c44b59a9e40987be746f9"
+    }
+  ],
+  "entry_sizes": {
+    "do_signal": 1967,
+    "arch_rt_sigreturn_context_bridge": 91,
+    "arch_rt_sigreturn_xrstor_bridge": 28,
+    "arch_native_signal_bad_frame_bridge": 56,
+    "arch_ptrace_regset_log_bridge": 47
+  },
+  "provider_sizes": {
+    "native_signal_entry_targets_result": 69,
+    "native_signal_context_prepare_result": 764,
+    "native_signal_action_mask_result": 48,
+    "native_signal_stack_prepare_result": 399,
+    "native_signal_stack_publish_result": 156
+  },
+  "remaining_undefined": [
+    "__inline_memset U         ",
+    "__mcs_rwlock_writer_lock U         ",
+    "__mcs_rwlock_writer_unlock U         ",
+    "arch_copy_from_user_bridge U         ",
+    "arch_copy_to_user_bridge U         ",
+    "check_need_resched U         ",
+    "check_signal U         ",
+    "copy_to_user U         ",
+    "coredump U         ",
+    "do_kill U         ",
+    "get_this_cpu_local_var U         ",
+    "get_xsave_mask U         ",
+    "get_xsave_size U         ",
+    "kfree_tracked U         ",
+    "kmalloc_tracked U         ",
+    "kprintf U         ",
+    "memcpy U         ",
+    "ptrace_report_signal U         ",
+    "schedule U         ",
+    "set_signal U         ",
+    "terminate U         ",
+    "waitq_wakeup U         "
+  ]
+}

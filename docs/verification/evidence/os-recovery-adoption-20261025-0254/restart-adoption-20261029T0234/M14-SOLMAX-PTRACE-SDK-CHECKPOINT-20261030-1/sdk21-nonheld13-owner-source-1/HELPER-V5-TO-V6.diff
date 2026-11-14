@@ -1,0 +1,16 @@
+--- v5/sdk13_compile_host_helper.v5.py
++++ v6/sdk13_compile_host_helper.v6.py
+@@ -769,7 +769,12 @@
+                 environment = docker_env()
+                 if not callable(self.effect_gate):
+                     raise RuntimeError('SDK13 Docker pre-effect gate missing')
+-                status['effect_boundary'] = self.effect_gate(args[0])
++                status['effect_boundary'] = self.effect_gate(tuple(args))
++                bound=status['effect_boundary'].get('max_call_seconds')
++                if bound is not None:
++                    if not isinstance(bound,(int,float)) or not 0<bound<=30:
++                        raise RuntimeError('SDK13 bounded containment time invalid')
++                    timeout=min(timeout,bound)
+                 process = subprocess.Popen(command, env=environment, stdout=stdout,
+                                            stderr=stderr, start_new_session=True)
+                 # Bind actual direct client birth and session immediately after spawn.

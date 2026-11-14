@@ -1,0 +1,69 @@
+--- /home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/stage_m07_current.RUNTIME-VISIBLE-BOOT.py
++++ /home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/boot-collector-profile-correction-1/init-only-stage-preparation-1/stage_m07_init_failure_context.py
+@@ -1,4 +1,4 @@
+-"""One existing two-member M07 stage derivative with accepted053d/sentinel33f. No native execution.
++"""One existing init-only M07 failure-visibility stage derivative with accepted053d/sentinel33f. No native execution.
+ Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+ Requires dispatcher ordinary source/profile release; preserves accepted metadata route.
+ """
+@@ -20,6 +20,12 @@
+  spec=importlib.util.spec_from_file_location(n,p);m=importlib.util.module_from_spec(spec);sys.modules[n]=m;spec.loader.exec_module(m);return m
+ def private(p):
+  s=p.lstat();need(p.resolve()==p and stat.S_ISDIR(s.st_mode)and s.st_uid==1000 and stat.S_IMODE(s.st_mode)==0o700,'private canonical directory '+str(p))
++def verify_init_only_delta(old,final):
++ need(len(final)==len(old)==60 and set(final)==set(old),'exact full60 final members')
++ deltas={n:{k:[old[n][k],final[n][k]] for k in old[n] if old[n][k]!=final[n][k]} for n in final if final[n]!=old[n]}
++ need(set(deltas)=={'init'} and all(set(v)<={'sha256','size'} for v in deltas.values()),'exact init-only content delta')
++ need(all(final[n]==old[n] for n in ('images/mckernel.img','bin/mcexec','apps/app','bin/native-boot')) and sum(final[n]==old[n] for n in final)==59,'exact59 unchanged; kernel/launcher/app/boot explicitly equal')
++ return deltas
+ def main():
+  ap=argparse.ArgumentParser(allow_abbrev=False);ap.add_argument('--case',choices=['numa'],required=True);ap.add_argument('--binding',required=True);ap.add_argument('--binding-sha256',required=True);ap.add_argument('--preflight-only',action='store_true');a=ap.parse_args()
+  need(os.sched_getaffinity(0)=={7}and resource.getrlimit(resource.RLIMIT_AS)[0]<=1073741824,'CPU7/1GiB')
+@@ -41,7 +47,7 @@
+  need(dep['schema']=='mckernel.launcher-only-dependency-join-review.v1' and dep['status']=='PASS_ACTUAL_LAUNCHER_ONLY_DEPENDENCY_JOIN' and dep['implementation_ownership'] is False and dep['reviewer'],'independent actual new launcher dependency join')
+  need(dep['launcher']==launcher_fact and dep['baseline_dependency_acceptance']==b['dynamic_closure_observation'] and dep['actual_elf_needed_provider_join'] is True,'actual new ELF/needed/provider join to unchanged dependency ancestry')
+  exact(b['consumer_contract']);exact(b['accepted_actual_app_review']);exact(b['accepted_threads_stage']);exact(b['dynamic_closure_observation'])
+- stage=json.loads(Path(b['accepted_threads_stage']['path']).read_bytes());need(b['accepted_threads_stage']['sha256']=='51ec8964e4501264430b5dc98fd2494f58cdebdaf9f37913137518b968c67337','accepted actual053d original116 baseline stage')
++ stage=json.loads(Path(b['accepted_threads_stage']['path']).read_bytes());need(b['accepted_threads_stage']['sha256']=='4b01ae242456e9d338e724951d9fba51ed6d819c3779d823e3abdced7539847a','accepted actual current M07 two-member baseline stage');need(stage['status']=='PASS_ACTUAL_OFFLINE_STAGE_AND_STRICT_MANIFEST_ONLY' and stage['implementation_ownership'] is False and stage['reviewer'],'genuine current stage descriptor projection')
+  need(c['old_manifest']==stage['manifest'] and c['old_base']==stage['base'] and c['old_overlay']==stage['overlay'] and c['old_overlay_manifest']==stage['overlay_manifest'],'exact actual current threads baseline')
+  need(stage['mcexec']['sha256']==new_launcher['sha256']=='33f88082a995857c17ca07dab698e51d78064632462b4069b3c2396e0d29a131' and stage['mcexec']['size']==new_launcher['size']==394656,'separately accepted sentinel launcher equals current baseline')
+  need(b['dynamic_closure_observation']['sha256']=='338f6eafeefce26cf4fb826c58d17762c7c204806e146b09ec480facd4452314','reuse genuine unchanged dependency ancestry; new launcher join independently bound above')
+@@ -64,29 +70,22 @@
+   print(json.dumps(dict(status='PASS_EXACT_REVIEWED_IMAGE_STAGE_PREFLIGHT',case=a.case,archives=0,runtime_release=False)));return
+  need(not assets.exists()and not manifests.exists(),'fresh roots');assets.mkdir(mode=0o700);manifests.mkdir(mode=0o700)
+  private(assets);private(manifests);out.mkdir(mode=0o700);mp.mkdir(mode=0o700)
+- visible=assets/'image.artifact';write(visible,Path(b['image_source']['path']).read_bytes());visible.chmod(0o755)
+- launcher=assets/'mcexec';write(launcher,Path(b['mcexec_source']['path']).read_bytes());launcher.chmod(0o755);launcher_ref=ref(launcher)
+- payload_visible=assets/'m07.app';write(payload_visible,Path(c['payload']['path']).read_bytes());payload_visible.chmod(0o755);payload_ref=ref(payload_visible);need(payload_ref['sha256']==c['payload']['sha256'] and payload_ref['size']==c['payload']['size'],'exact runtime-visible M07 payload copy')
+- boot_visible=assets/'native-boot-two';write(boot_visible,Path(b['two_cpu_native_boot']['path']).read_bytes());boot_visible.chmod(0o755);boot_ref=ref(boot_visible);need(boot_ref['sha256']==b['two_cpu_native_boot']['sha256'] and boot_ref['size']==b['two_cpu_native_boot']['size'],'exact runtime-visible twoCPU bootstrap copy')
+- image=ref(visible);m=json.loads(Path(c['old_manifest']['path']).read_text());ov=mod('scheduler_stage_overlay',b['overlay_source']['path']);nd=mod('scheduler_stage_nd',b['diagnostic_source']['path']);raw=gzip.decompress(Path(c['old_base']['path']).read_bytes());records,_=ov.parse_newc(raw)
+- need(stage['image']['sha256']==image['sha256']=='053d59b533665eef9d56fe1b348e699d97159e954fbc1fbff973bbe46113f485' and stage['image']['size']==image['size']==8435496,'accepted kernel bytes unchanged for app-only case')
+- producer=mod('accepted_retained_header_producer',b['header_producer']['path'])
+- oldbase=ov._manifest(ov._replay_records(records));oldboot=oldbase['bin/native-boot']['sha256']
+- patched,proof=producer.derive_base_payloads(ov,raw,{'bin/native-boot':(Path(b['two_cpu_native_boot']['path']).read_bytes(),oldboot)})
+- need(len(proof)==1 and proof[0]['name']=='bin/native-boot','exact one native bootstrap record replacement')
+- base=out/'base.cpio.gz';write(base,ov._gzip(patched));need(gzip.decompress(base.read_bytes())==patched,'derived base raw bytes reread');overlay=out/'lifecycle.cpio.gz'
++ visible=Path(stage['image']['path']);launcher=Path(c['mcexec']['path']);launcher_ref=c['mcexec'];payload_visible=Path(c['payload']['path']);payload_ref=c['payload'];boot_ref=stage['native_boot']
++ image=stage['image'];m=json.loads(Path(c['old_manifest']['path']).read_text());ov=mod('scheduler_stage_overlay',b['overlay_source']['path']);nd=mod('scheduler_stage_nd',b['diagnostic_source']['path']);base_bytes=Path(c['old_base']['path']).read_bytes();raw=gzip.decompress(base_bytes)
++ need(image['sha256']=='053d59b533665eef9d56fe1b348e699d97159e954fbc1fbff973bbe46113f485' and image['size']==8435496,'accepted kernel bytes reused unchanged')
++ patched=raw;proof=[]
++ base=out/'base.cpio.gz';write(base,base_bytes);need(base.read_bytes()==base_bytes,'accepted compressed base copied byte-exact, no header mutation');overlay=out/'lifecycle.cpio.gz'
+  om=ov.build_overlay(str(base),str(payload_visible),c['collector']['path'],str(launcher),str(overlay),collector_sha256=c['collector']['sha256'],mcexec_sha256=c['mcexec']['sha256'],payload_sha256=c['payload']['sha256'],base_sha256=ref(base)['sha256'],base_size=base.stat().st_size,base_cpio_sha256=sha(patched),base_cpio_size=len(patched));js(out/'overlay-manifest.json',om)
+  old=json.loads(Path(c['old_overlay_manifest']['path']).read_text())['final_map'];full=ov._replay_records(ov.parse_newc(gzip.decompress(overlay.read_bytes()))[0]);final=ov._manifest(full);need(final==om['final_map']and len(final)==len(old)==60 and set(final)==set(old),'full60 concatenated replay')
+- deltas={n:{k:[old[n][k],final[n][k]]for k in old[n]if old[n][k]!=final[n][k]}for n in final if final[n]!=old[n]};need(set(deltas)=={'apps/app','bin/native-boot'}and all(set(v)<={'sha256','size'}for v in deltas.values()),'exact M07 app and accepted twoCPU native-bootstrap content delta')
+- need(all(final[n]==old[n] for n in ('images/mckernel.img','bin/mcexec','init')) and sum(final[n]==old[n] for n in final)==58,'exact58 unchanged; kernel/launcher/init explicitly equal')
++ deltas=verify_init_only_delta(old,final)
+  oldfull=ov._replay_records(ov.parse_newc(gzip.decompress(Path(c['old_overlay']['path']).read_bytes()))[0])
+  for n in full:
+   for k in full[n]:
+    if k not in {'data','size','sha256'}:need(full[n][k]==oldfull[n][k],'all final metadata '+n+' '+k)
+  m['case_id']='vector.enabled-avx-preservation';m['payload']=b['payload_contract'];m['artifacts']['payload']=payload_ref;m['artifacts']['mckernel_image']=image;m['artifacts']['mcexec']=launcher_ref;m['artifacts']['native_boot']=boot_ref
+  for k in ['initramfs','root_base']:m['artifacts'][k]=ref(base)
+- m['staging'].update(base_initramfs=ref(base),derived_initramfs=ref(overlay),overlay_manifest=ref(out/'overlay-manifest.json'));js(mp/'manifest.json',m);nd.load_manifest(str(mp/'manifest.json'))
++ m['staging'].update(collector=c['collector'],base_initramfs=ref(base),derived_initramfs=ref(overlay),overlay_manifest=ref(out/'overlay-manifest.json'));js(mp/'manifest.json',m);nd.load_manifest(str(mp/'manifest.json'))
+  used=sum(p.stat().st_size for p in assets.rglob('*')if p.is_file());need(used<=64*1024**2,'64MiB aggregate stage output')
+- js(out/'stage-result.json',dict(status='PASS_M07_TWO_MEMBER_STAGE_PENDING_ACTUAL_CONSUMER_BINDING_AND_REVIEW',manifest=ref(mp/'manifest.json'),image=image,mcexec=launcher_ref,payload=payload_ref,artifact_review=review,launcher_artifact_review=launcher_review,launcher_dependency_join=b['launcher_dependency_join'],base=ref(base),overlay=ref(overlay),deltas=deltas,raw_header_proof=proof,final_map=final,accepted_base_only_native_boot_changed=True,all_other_final_metadata_equal=True,aggregate_stage_bytes=used,runtime_release=False))
+- print(json.dumps(dict(status='PASS_SINGLE_M07_TWO_MEMBER_STAGE',case=a.case,image_sha256=image['sha256'],image_bytes=image['size'],aggregate_stage_bytes=used,guests=0,runtime_release=False)))
++ js(out/'stage-result.json',dict(status='PASS_M07_INIT_ONLY_STAGE_PENDING_ACTUAL_CONSUMER_BINDING_AND_REVIEW',manifest=ref(mp/'manifest.json'),image=image,mcexec=launcher_ref,payload=payload_ref,artifact_review=review,launcher_artifact_review=launcher_review,launcher_dependency_join=b['launcher_dependency_join'],base=ref(base),overlay=ref(overlay),deltas=deltas,raw_header_proof=proof,final_map=final,accepted_base_byte_exact=True,all_other_final_metadata_equal=True,aggregate_stage_bytes=used,runtime_release=False))
++ print(json.dumps(dict(status='PASS_SINGLE_M07_INIT_ONLY_STAGE',case=a.case,image_sha256=image['sha256'],image_bytes=image['size'],aggregate_stage_bytes=used,guests=0,runtime_release=False)))
+ if __name__=='__main__':main()

@@ -1,0 +1,148 @@
+{
+  "schema": "mckernel.scheduler-current-whole-consumer-source-and-ordinary-eligibility-review.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/m06_first_failure_diagnosis",
+  "decision": "PASS_FROZEN_TWO_ROW_SOURCE_RECIPE_AND_CONDITIONAL_ORDINARY_MATERIALIZATION_ELIGIBILITY; SIX_STAGE_CONTRACT_READY_NOT_RELEASED",
+  "review_boundary": "Exactly two changed source rows;158 reused literal row dictionaries;six compiler commands/new export-import data;policy-off-U;unchanged engines. Prior scheduler union07c68085 and actual7+16tests reused, no source semantics reassessment.",
+  "frozen_authority": {
+    "path": "/home/holden/mckernel-work/host-preparation/scheduler-current-whole-consumer-compile-preparation-20261021-1/FROZEN-FILES.json",
+    "sha256": "b2a7e45d2a90d02b901f0cafe59e5596ddf8a31d9252bc3a3300c52a0fd72f5a",
+    "all15_pinned_files_match": true
+  },
+  "source_recipe": {
+    "manifest_sha256": "b0e012d8a2796c1822894685faca39fe85c55d8fe8dac2ab5aba318165dc70e7",
+    "source_identity": "25999bf8b2d57ccc64e8c1d7da9107a8e4972179b2d802a9bcb8db0df4c66814",
+    "rows": 160,
+    "bytes": 4872184,
+    "exact_changed_rows": [
+      {
+        "relative": "kernel/syscall.c",
+        "bytes": 839266,
+        "sha256": "55e04a1e152d17c83d61280ea436012d8c073c78cb3c62bf9689c670b4021d34"
+      },
+      {
+        "relative": "kernel/rust/sched_helpers.rs",
+        "bytes": 170508,
+        "sha256": "a5b8ed0f048adcfa6908094f7b8b5d459b9b14aa0ed4b75e5250abe6f8387c57"
+      }
+    ],
+    "unchanged_literal_dictionaries": 158,
+    "accepted160_manifest_sha256": "d7ea4edf7257d68f241cd0366c4589fd5ecfa8bcc2632263b4f20d3f2becb39e",
+    "reused_inputs_not_recopied_or_rehashed_by_reviewer": true,
+    "prior_union_review_sha256": "07c6808517ac9200e9f4b902eeadbe2539c12d4714c26accec0a1a581faf7989"
+  },
+  "engine_reuse": {
+    "materializer_sha256": "29f26418aa11a89a4247fa69b84fdd4c8d0ed5d649c8ae8f3300f5703d21fc25",
+    "owner_sha256": "ff9f79d5c9a11b3643e9868c80f008c25c6ce86165b658052e3fc636adc3fddb",
+    "FAM_assertion_sha256": "dfcceac5ea50734419ae79423e5fc20fd0cac36fc8a53e4989c813bd5bb216b9",
+    "all_three_byte_identical_to_accepted_packet": true,
+    "driver_sha256": "6cac119dfcfcad368dfeec48621791ab4304af6c45f5ecc138139c1f9835b8e6",
+    "driver_AST_identical_except": [
+      "RUST_DEFINITIONS",
+      "RULES"
+    ],
+    "no_lifecycle_or_capacity_or_ELF_or_FAM_algorithm_change": true
+  },
+  "six_stage_contract": {
+    "command_manifest_sha256": "c3d46a4259283fa6af54b12b5e0f686f9f25da3c84f1335b4b706d5db3729f70",
+    "count": 6,
+    "commands_dictionary_metadata_identical": true,
+    "command_deltas": [
+      "native/legacy Rust change only MCKERNEL_RUST_BUILDID to scheduler-current-source-25999bf8b2d5",
+      "selected-owned-syscall/fallback-owned-syscall/constructor-process argv unchanged",
+      "sixth C command adds -UMCKERNEL_RUST_SCHED_POLICY_HELPERS after its earlier-D,retaining -UMCKERNEL_RUST_SYSCALL_POLICY_HELPERS"
+    ],
+    "policy_off_effect": "Frozen generated config1055B da78d6a8 contains no selector redefinition. The new Chelper is guarded at24724-24739, so late-U selects preserved C mutation fallback as intended. No default selector changed.",
+    "required_Rust_definitions_once_each": [
+      "setscheduler_body_result",
+      "sched_setscheduler_body_result"
+    ],
+    "required_selected_C_import_once_each": {
+      "selected-owned-syscall.o": "setscheduler_body_result",
+      "fallback-owned-syscall.o": "setscheduler_body_result"
+    },
+    "sixth_C_forbidden_global_or_weak_symbols": [
+      "setscheduler_body_result",
+      "syscall_settid_body_result"
+    ],
+    "inherited_fork_settid_constructor_FAM_oracles_preserved": true,
+    "per_object_only": "No combined/final link, unresolvedreference closure, production default/native or computeC-retirement credit."
+  },
+  "ordinary_materialization": {
+    "eligible_for_dispatcher_grant": true,
+    "command": [
+      "/usr/bin/taskset",
+      "-c",
+      "6",
+      "/usr/bin/prlimit",
+      "--as=2147483648",
+      "--core=0",
+      "--nofile=256",
+      "--fsize=33554432",
+      "--",
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/scheduler-current-whole-consumer-compile-preparation-20261021-1/materialize_sources.py"
+    ],
+    "script_itself_validates": "Reads frozenrecipe; normalizedunique160relativepaths; eachselected input exactsize/hash; appendedlib suffix checked; everydestination finalsize/hash; fresh target and exclusive resultfile. No compiler, owner, container orroot call.",
+    "reused_ordinary_review_sha256": "37e0c3fa07d8d7734a7c0e12a261bd67eacfa6991368ff2f22e1856797671484",
+    "profile_conditions": [
+      "Fresh disjoint CPU6 ordinary grant and existing reviewed ownedcapture; no overlapping census/LAST window. Root serializes grants.",
+      "Preserve inherited finite30CPU seconds/35-second wait plusaccepted retirementgrace,2GiBAS,32MiB per-file,256nofile,core0,deterministic environment. Dispatcher supplies wrapperlimits withoutediting pinnedmaterializer.",
+      "At least128MiB admitted hostgrowth beyond16GiB host and12GiBscratch floors; fresh full aggregateCPU/RAM/storage usage/service/tool/sourcepin checks. Sourcefile recipe totals4,872,184B; existinggrowth also covers closedcapture/partialoutput.",
+      "Confirm materialized-source and materialization-result.json absent includingdanglingentries; fresh exclusivecapture; revalidate frozen source/input/materializer pins. No forced deletion/reuse after failure.",
+      "Capture exactargv/start/status/closedstablestreams and positive directchild/groupretirement. Independently bind actual160destinations/transformedlib/result/sourceinode beforeheavyuse."
+    ],
+    "independent_of_heavy_physical_clearance": true,
+    "physical_note": "May run while model-only terminal preparation continues if root grants ordinaryprofile andbudgets. No heavy compiler/guest/root activation is permitted by that.",
+    "execution_grant_issued_by_reviewer": false,
+    "materializer_executed_by_reviewer": false
+  },
+  "future_heavy_contract": {
+    "status": "NOT_RELEASED",
+    "request_sha256": "dcf1bd0f5d1b10ccdb0cd12b22e73edfcd8e5ba6c42b284e3ba84110c84c6946",
+    "profile_sha256": "8c3d9a054f875b3e0f5d6762bbf535342ca7adf4e07fa4b8b6fc035c48a6086d",
+    "actual_source_inode_binding": null,
+    "source_materialization_receipt": null,
+    "latest_positive_physical": null,
+    "fetched_Git_publication": null,
+    "outer_owner_capture_binding": null,
+    "independent_execution_release": null,
+    "root_authorization": null,
+    "required_before_compile": "Positive newestimage/predecessor physical clearance, actualmaterialization+inodeacceptance, fetchedpublication, freshaggregateheadroom/tool/lease/servicechecks and genuine release bound to unchangedowner. Do not borrow prior6stage release.",
+    "profile": "Oneheavy CPUs2-5/4CPU/12GiB/no-swap/512tasks/nonet;1compilerjob;1750swork/1800swait;640MiBworkcap;12x32MiBstreams.",
+    "minimums_bytes": {
+      "MemAvailable_bytes": 19327352832,
+      "capture_bytes": 402653184,
+      "compiler_work_seconds": 1750,
+      "host_free_bytes": 18790481920,
+      "host_growth_bytes": 1610612736,
+      "owner_wait_seconds": 1800,
+      "scratch_free_bytes": 13656653824,
+      "scratch_growth_bytes": 771751936,
+      "work_cap_bytes": 671088640
+    },
+    "current_image_lane_unchanged": true
+  },
+  "review_actions": {
+    "static_file_pin_dictionary_AST_and_command_comparisons": true,
+    "candidate_imports": 0,
+    "materializers": 0,
+    "tests": 0,
+    "compilers": 0,
+    "containers": 0,
+    "root": 0,
+    "leases": 0,
+    "shared_edits": 0,
+    "source_extraction_note": "One initial read-only JSON comparison helper had an unmatched-parenthesis SyntaxError before reading orwriting inputs; corrected helper then completed. No candidate/compiler/runtime failure was hidden or retried."
+  },
+  "failure_history": "Prior mutation fixture compilefailure/corrected16 and retained-reference7 preserved. New packet has zeroexecuted attempts; carry prior compiler/capturefamilies and onefailedcandidate+oneboundedcorrection rule.",
+  "blocking_source_contract_defects": [],
+  "acceptance_limits": [
+    "Source recipe and conditional ordinary eligibility only",
+    "No actual new materialization or sixstage result",
+    "No currentimage/root/guest/runtime release",
+    "No native schedulerstate/concurrency/default/Rustretirement acceptance"
+  ]
+}

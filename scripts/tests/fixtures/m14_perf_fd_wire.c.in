@@ -1,0 +1,90 @@
+/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+ * The real request declaration, provider type and both actual C functions are
+ * inserted by the runner. The callback observes a defined seeded HOST payload.
+ */
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <string.h>
+#include <errno.h>
+@REAL_DECLARATION@
+@REAL_PROVIDER_TYPE@
+#define PERF_NUMBER @REAL_NUMBER@
+#define SYSCALL_POLICY_HELPER_SCOPE static
+_Static_assert(sizeof(struct syscall_request) == 72, "real request size changed");
+_Static_assert(_Alignof(struct syscall_request) == 8, "real request alignment changed");
+struct addressed_map { unsigned long guard, map; };
+static struct addressed_map object;
+static struct syscall_request request;
+static int calls, cases, wire_errors, other_errors, expected_cpu;
+static long response;
+static const unsigned long initial_map = 0x1020UL;
+
+@ACTUAL_BIT_HELPER@
+@ACTUAL_FD_HELPER@
+
+static long observe(struct syscall_request *req, int cpu)
+{
+    ++calls;
+    if (req != &request || cpu != expected_cpu || req->number != PERF_NUMBER)
+        ++other_errors;
+    if (req->rtid != 123 || req->ttid != 456 || req->valid != 0xabcdefUL)
+        ++other_errors;
+    if (object.guard != 0x12345678UL || object.map != initial_map)
+        ++other_errors;
+    for (int i = 0; i != 6; ++i)
+        if (req->args[i] != 0) ++wire_errors;
+    return response;
+}
+
+static void prepare(unsigned long seed)
+{
+    memset(&request, 0xa5, sizeof(request));
+    request.rtid = 123;
+    request.ttid = 456;
+    request.valid = 0xabcdefUL;
+    for (int i = 0; i != 6; ++i) request.args[i] = seed;
+    object.guard = 0x12345678UL;
+    object.map = initial_map;
+    calls = 0;
+}
+
+int main(void)
+{
+    const struct { int counter, cpu; long reply; unsigned long seed; } inputs[] = {
+        {0, 0, 17, ~0UL}, {5, 7, 0, 0xa55aa55aUL},
+        {63, -1, 9, 0x0102030405060708UL},
+        {-1, 2, 19, ~0UL}, {64, 5, 21, 0x55UL},
+        {6, 3, -EBADF, ~0UL}, {6, 4, -EINTR, 0xabUL},
+        {6, 9, (long)(1UL << 35), 0xfedcbaUL},
+        {4, 6, 23, 0UL},
+    };
+    for (unsigned int i = 0; i != sizeof(inputs) / sizeof(inputs[0]); ++i) {
+        prepare(inputs[i].seed);
+        expected_cpu = inputs[i].cpu;
+        response = inputs[i].reply;
+        long result = perf_event_open_linux_fd_body_result(
+            &request, &object, inputs[i].counter, PERF_NUMBER, expected_cpu,
+            offsetof(struct addressed_map, map), observe);
+        unsigned long expected = initial_map;
+        if (response >= 0 && inputs[i].counter >= 0 && inputs[i].counter < 64)
+            expected |= 1UL << inputs[i].counter;
+        if (result != response || calls != 1 || object.map != expected ||
+            object.guard != 0x12345678UL) ++other_errors;
+        ++cases;
+    }
+    for (int invalid = 0; invalid != 3; ++invalid) {
+        prepare(~0UL);
+        struct syscall_request before = request;
+        long result = perf_event_open_linux_fd_body_result(
+            invalid == 0 ? NULL : &request, invalid == 1 ? NULL : &object,
+            5, PERF_NUMBER, 1, offsetof(struct addressed_map, map),
+            invalid == 2 ? NULL : observe);
+        if (result != -EINVAL || calls || object.map != initial_map ||
+            memcmp(&before, &request, sizeof(request))) ++other_errors;
+        ++cases;
+    }
+    printf("{\"cases\":%d,\"wire_errors\":%d,\"other_errors\":%d}\n",
+           cases, wire_errors, other_errors);
+    return 0;
+}

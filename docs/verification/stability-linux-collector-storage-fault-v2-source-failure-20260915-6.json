@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_failure",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "attempt": 6,
+  "status": "FAIL_SOURCE_TEST",
+  "recorded_utc": "2026-09-15T15:51:05Z",
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-failure-20260915-6.tar.gz",
+    "sha256": "8f15e28137938e69ab6e0f18ecb2c08e4132b326cb438c24655962f36245e55a",
+    "size": 33818,
+    "members": 11
+  },
+  "failure": "selector 4 referenced the post-fork fixture invariant after the report-absent branch skipped its local assignment",
+  "correction": "compute the selector phase invariant before either report-present or report-absent fixture construction",
+  "original_test_stream_retained": true,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

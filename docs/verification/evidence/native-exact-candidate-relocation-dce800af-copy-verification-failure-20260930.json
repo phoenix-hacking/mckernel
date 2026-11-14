@@ -1,0 +1,77 @@
+{
+  "schema": "mckernel.native-exact-candidate-relocation-failure.v1",
+  "status": "FAIL_COPY_VERIFICATION_BEFORE_RENAME_OR_DELETE",
+  "acceptance_credit": false,
+  "released_packet": {
+    "commit": "2be39cb22d10d4d179d07df52c5bbee0dd619998",
+    "path": "docs/verification/evidence/native-exact-candidate-relocation-dce800af-20260930.sh",
+    "sha256": "3103b947607b1d6aa6c5fe66a86289ea21852737137f51d4dfa440bc7fa88838",
+    "test_sha256": "0c9a6da91d73c0632aa653fd08556b8562c134c65d21d47c0fe431afe0834baa",
+    "independent_execution_review": "PASS_EXECUTION"
+  },
+  "execution": {
+    "exit_status": 1,
+    "exception": "RuntimeError: copy-verification",
+    "source_deleted": false,
+    "final_destination_created": false,
+    "deletion_intent_created": false,
+    "terminal_created": false
+  },
+  "preserved_source": {
+    "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-dce800af-scratch-5",
+    "identity": "1831:5242884",
+    "entry_count": 10725,
+    "symlink_count": 49,
+    "independent_inventory_sha256": "e646037b3734e3997d0f45b23bc4c08cf1692d12776d84b18afed26e9e90c07f"
+  },
+  "preserved_temporary_copy": {
+    "path": "/home/holden/mckernel-work/retained-exact-candidates/.mckernel-exact-candidate-dce800af-scratch-5.tmp-557425",
+    "identity": "66306:47736554",
+    "allocated_bytes": 9243828224,
+    "entry_count": 10725,
+    "rsync_checksum_verify_command": "/usr/bin/rsync -acHAXni --delete -- SOURCE/ TEMP/",
+    "rsync_checksum_verify_exit_status": 0,
+    "rsync_checksum_verify_stdout_bytes": 0,
+    "rsync_checksum_verify_stderr_bytes": 0
+  },
+  "preserved_attempt_records": {
+    "intent": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-candidate-relocation-dce800af-20260930-intent.json",
+      "identity": "1831:57586",
+      "sha256": "6e3a0e0513f12fb1041f82bd65944e60ddcaaaca8fb4fcf41717a109e87b8318"
+    },
+    "exclusion": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-relocation-dce800af-12.json",
+      "identity": "1831:57585",
+      "sha256": "b280e78e0a663ef63c5ef7e082faea3c3c77b56d700bf00a8cce19bd1b08ceb1"
+    },
+    "log": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-candidate-relocation-dce800af-20260930.log",
+      "identity": "1831:57584",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "root_cause": {
+    "family": "cross-filesystem-directory-size-inventory-normalization",
+    "detail": "The source and verified copy had identical paths and all compared metadata except filesystem-specific st_size for two directories. Directory byte size is not portable across the scratch and host filesystems and must not participate in tree equality.",
+    "differences": [
+      {
+        "path": "docs/verification",
+        "source_directory_size": 102400,
+        "temporary_copy_directory_size": 106496
+      },
+      {
+        "path": "docs/verification/evidence",
+        "source_directory_size": 229376,
+        "temporary_copy_directory_size": 217088
+      }
+    ]
+  },
+  "bounded_correction": "Use a fresh resume packet that binds and preserves this attempt, ignores st_size only for directories, re-verifies complete regular-file hashes, symlink targets, hardlink topology and rsync checksum equality, then renames the existing temporary copy without replacement and deletes the source only after another live guard pass.",
+  "preserved_other_evidence": [
+    "/home/holden/mckernel-work/scratch/native-exact-build-output-dce800af-scratch-5",
+    "/home/holden/mckernel-work/scratch/native-exact-build-evidence-dce800af-scratch-5",
+    "/home/holden/mckernel-work/scratch/native-exact-build-failure-dce800af-scratch-5-20260930-1.tar",
+    "docker:6efd149e8b8c4333ff62080ea7031f1dc1c47c718e1222bed3b6c4dbdeb85870"
+  ]
+}

@@ -1,0 +1,35 @@
+"""Fill finite DATA once from genuine full actual acceptance and publisher proof.
+No owner, backend, snapshot, root helper or subprocess is invoked.
+"""
+from pathlib import Path
+import hashlib,json,os,sys,ast
+D=Path(__file__).resolve().parent;Q=D/'native-control-packet-1';S=D/'non-temporal-source-1';N=D/'normalization-source-1'
+def load(p):return json.loads(Path(p).read_bytes())
+def ref(p):
+ p=Path(p);b=p.read_bytes();return dict(path=str(p),sha256=hashlib.sha256(b).hexdigest(),bytes=len(b))
+def write(p,v):
+ with p.open('x') as f:os.fchmod(f.fileno(),0o600);json.dump(v,f,indent=2,sort_keys=True);f.write('\n')
+ return ref(p)
+assert len(sys.argv)==5,'ACTUAL_NORMALIZATION_REVIEW SHA256 COMPLETE_FETCHED_PROOF SHA256'
+a=ref(sys.argv[1]);assert a['sha256']==sys.argv[2]
+proof=ref(sys.argv[3]);assert proof['sha256']==sys.argv[4]
+accept=load(a['path']);assert accept['schema']=='mckernel.independent-actual-exit7-native-preparation-acceptance.v1' and accept['status']=='PASS' and accept['decision']=='PASS_ACTUAL_EXIT7_BYTE_EXACT_NORMALIZATION_FRESH_PARENT_AND_FULL_OWNER_CREATE_INSIDE_QEMU_ARGV_ONLY'
+assert accept['actual_normalized_manifest_fresh_parent_and_full_argv_acceptance'] is True and accept['actual_ordinary_preparation_acceptance'] is True and accept['runtime_release'] is None and accept['native_execution_authorized'] is False
+# Require full authoritative descriptors, never a two-field projection.
+for key in ['actual_full_preflight','actual_binding_result']:
+ assert accept[key]==ref(accept[key]['path'])
+pre=load(accept['actual_full_preflight']['path']);binding=load(accept['actual_binding_result']['path']);cfg=load(N/'SETTINGS.json');facts=accept['facts']
+assert binding==pre['binding'] and binding['attempt_parent']==cfg['attempt_parent'] and binding['nonce']==cfg['nonce']
+assert binding['manifest']==accept['actual_normalized_manifest'] and binding['manifest']['sha256']==cfg['source_manifest']['sha256']
+parent=Path(binding['attempt_parent']);ps=parent.lstat();assert not list(parent.iterdir()) and not Path(pre['paths']['attempt']).exists()
+assert all(getattr(ps,k)==v for k,v in facts['parent_nine_field_identity'].items())
+c=load(Q/'STATIC-M03-NONTEMPORAL-INPUTS.SCHEMA-CORRECTED.PENDING.json');c.update(actual_binding_result=accept['actual_binding_result'],actual_full_preflight=accept['actual_full_preflight'],actual_preparation_acceptance=a,binding=binding,consumed_paths=pre['consumed_paths'],fetched_runtime_proof=proof,whole_manifest=binding['manifest'],parent_identity=pre['parent_identity'],parent_nine_field_identity=facts['parent_nine_field_identity'],root_owner_argv=['/usr/bin/sudo','-A','/home/holden/anaconda3/bin/python3']+pre['owner_argv'][1:],accepted_owner_argv=pre['owner_argv'],inside_argv=pre['inside_owner_argv'],container_create_argv=pre['container_create_argv'],qemu_argv=pre['qemu_argv'],AF_UNIX=[dict(option='-qmp',path=pre['paths']['qmp_socket'],encoded_bytes=pre['paths']['qmp_socket_bytes'])],readonly_roots=pre['readonly_roots'],whole_boundary_freeze=ref(D/'NORMALIZATION-SOURCE-FREEZE.json'),latest_exclusive_physical=c['latest_physical'],current_native_predecessor_contract=dict(status='PASS_PHYSICAL_RETIREMENT_ONLY',scope='M03_NATIVE_OWNER_PHYSICAL_RETIREMENT_ONLY',new_native_persistent_owned_record_files=0,ref=c['latest_physical']),final_guard=ref(S/'review_final_205_release.py'),criterion='P-M02-02 nonzero exit and dual streams slice only',status='GENUINE_NON_TEMPORAL_EXIT7_INPUTS_FETCHED_SOURCE_PROOF_BOUND_PENDING_FINAL_MAPPING_REVIEW')
+c['runtime_source_refs']=[ref(row['path']) for row in c['runtime_source_refs']]
+c['source_only_adapter']=ref(S/'root_manual_snapshot_m03.py')
+assert len(c['runtime_source_hashes'])==193 and pre['paths']['qmp_socket_bytes']<=107
+# Retained nine-field descriptors are inline unchanged; fresh temporal identities remain future.
+cref=write(Q/'STATIC-M03-NONTEMPORAL-INPUTS.SCHEMA-CORRECTED.json',c)
+command=load(S/'FINAL19-CHILD-COMMAND.PENDING.json');command['argv'][4:6]=[a['path'],a['sha256']];write(S/'FINAL19-CHILD-COMMAND.REVIEW-PENDING.json',command)
+p=load(D/'FINITE-FINAL19-ORDINARY-PROPOSAL.PENDING.json');p.update(status='FROZEN_FINITE_FINAL19_PENDING_WHOLE_MAPPING_REVIEW_AND_ROOT_GRANT',actual_normalization_acceptance=a,fetched_source_proof=proof,child_command_template=command,source_pins=[ref(q) for q in sorted(S.glob('*.py'))]+[ref(S/'FINAL19-CHILD-COMMAND.REVIEW-PENDING.json'),cref,ref(Q/'FINAL-SEVEN-ROOT-CALL-DATA.PENDING.json'),ref(Q/'MANUAL-READBACK-CONTRACT.json')],static_decision=None,root_grant=None,execution_review=None)
+pr=write(D/'FINITE-FINAL19-ORDINARY-PROPOSAL.json',p)
+print(json.dumps(dict(proposal=pr,static_inputs=cref,steps=7,capture_paths=49,expected_outputs=19,executions=0)))

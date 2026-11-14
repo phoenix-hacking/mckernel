@@ -1,0 +1,18 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_METADATA_PATH_FAILURE_NO_COMPILER_OR_FIXTURE",
+  "cause": "FileNotFoundError for /home/holden/mckernel/kernel/include/types.h while binding source manifest; actual header is /home/holden/mckernel/lib/include/types.h.",
+  "original_source_sha256": "245e50869e55831c578bbde00c646c69f415467f6fad15f93952e60bf2851b91",
+  "original_argv": [
+    "taskset",
+    "-c",
+    "6",
+    "python3",
+    "-B",
+    "docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body4-restart-20261028-1/prepare_source.py"
+  ],
+  "compiler_runs": 0,
+  "fixture_runs": 0,
+  "guard_calls": 0,
+  "bounded_correction": "Change only the manifest header path to genuine lib/include/types.h, retaining original source and error."
+}

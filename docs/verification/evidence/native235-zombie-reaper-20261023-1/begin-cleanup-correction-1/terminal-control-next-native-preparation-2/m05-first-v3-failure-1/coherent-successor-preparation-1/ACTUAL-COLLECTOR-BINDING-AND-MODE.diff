@@ -1,0 +1,31 @@
+--- f064-one-init
++++ actual-c591-source0700-guest0755-binding
+@@ -9,7 +9,7 @@
+ import argparse, copy, gc, hashlib, importlib.util, json, os, resource, shutil
+ 
+ HERE = Path(__file__).resolve().parent
+-BINDING_SHA256 = '9812ec51d837d75ec6bbaf41d5f7fe047d9f7c4b14f52408e708941c89f55a73'
++BINDING_SHA256 = 'a0c17f4c93e388b354e31ff7c27f2771068b1f3e3950d075425530135970a2e3'
+ MEMBERS = {'init'}
+ 
+ 
+@@ -123,8 +123,8 @@
+          'strict existing signal-mask workload oracle')
+     final = copy.deepcopy(old)
+     for name, row in selection.items():
+-        need(old[name]['mode'] == row['mode'] and old[name]['nlink'] == 1,
+-             'replacement preserves exact regular-member metadata')
++        need(old[name]['mode'] == 0o100755 and row['mode'] == 0o100700 and old[name]['nlink'] == 1,
++             'init guest0755 metadata preserved; authenticated compiler source0700')
+         final[name].update(sha256=row['sha256'], size=row['size'])
+     verify_delta(old, final, binding)
+     return final
+@@ -206,7 +206,7 @@
+     old = authorities(binding)
+     validate_selection({'init': binding['collector']}, old, binding)
+     out = Path(binding['output'])
+-    need(out == HERE / 'actual-stage-1' and not os.path.lexists(out), 'fresh exact owned output')
++    need(out == HERE / 'actual-stage-successor-1' and not os.path.lexists(out), 'fresh exact owned output')
+     need(not any(path.is_symlink() for path in (HERE, *HERE.parents)), 'canonical output parents')
+     need(shutil.disk_usage(HERE).free >= binding['host_floor_bytes'] +
+          binding['max_output_aggregate_bytes'] + binding['capture_growth_bytes'], 'host floor/full growth')

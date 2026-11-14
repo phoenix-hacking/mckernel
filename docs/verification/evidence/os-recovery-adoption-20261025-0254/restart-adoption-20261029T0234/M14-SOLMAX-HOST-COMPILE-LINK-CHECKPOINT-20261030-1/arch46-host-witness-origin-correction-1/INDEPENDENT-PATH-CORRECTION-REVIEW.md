@@ -1,0 +1,15 @@
+# Independent ARCH46 HOST origin-path correction review
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+Decision: **CONDITIONAL SOURCE PASS** for one bounded compiler-argument correction to the same paired HOST diagnostic. No new source/ABI defect or oracle weakening was identified by this inspection. This does not release execution or establish the actual macro expansion, 46 ABI values, link or native acceptance. No compiler, preprocessor, test, checker, linker or physical workload was run for this review.
+
+The reviewed `CORRECTED-PAIR.PROPOSED.json` SHA-256 is `592709e6907d4235f04b24e757f286c05517f8d45d830a71f572d1ab89e4320a`. The retained first C compile failed with the recorded `c.stderr` SHA-256 `0dc27a70286acfe434e75c0b17f01f6eb2934a660a4bd91ca00e1f3def196ce4`; Rust did not run. Preserve that failure and its group-closure evidence.
+
+Compared with `arch46-host-witness-preparation-1/HOST-WITNESS-PROPOSED.json`, the corrected C argument vector changes only the proposed output/depfile paths and adds one `-fmacro-prefix-map`. Its left-hand value exactly equals the literal staged C source operand; its right-hand value is `/src/arch/x86_64/kernel/syscall.c`. The Rust vector changes only proposed object/depfile paths and retains the original flags and inherited environment description. The staged C/Rust source, real headers, witness inputs, 46-entry oracle and native cfg selection are unchanged by this argument proposal.
+
+The actual selected C source retains the generated origin-header include and `_Static_assert(__builtin_strcmp(__FILE__, MCKERNEL_F06_RT_SIGRETURN_ORIGIN) == 0, ...)`. The retained header SHA-256 `aeece54c3b6f01c326fff3eb925b89b88acd3b198b0047393c8c9c0d78f74ded` defines the same logical filename. The selected debug header matches `7315ef758c56c4888242295ed9340b44f649d772b1315502acc49eb6105048dc`. The proposal does not redefine `__FILE__`, remove or weaken the assertion, introduce a quoted C filename directive, fabricate an origin receipt or change witness expressions. It intentionally affects macro filename expansions for paths beginning with the full staged C filename, including other `__FILE__` uses in that source; it does not assert GCC's actual result without the bounded compile.
+
+This is a narrow path-binding correction suitable for exact changed-argv review within the paired ordinary diagnostic workflow. The operation owner must bind fresh disjoint output roots, current toolchain and limits, and obtain the applicable finite admission before running it. A repeated failure in this family requires the documented escalation rather than an unchanged retry. Both gate-enabled witness objects remain excluded from diagnostic and production links by actual identity.
+
+The prior full-source receipt remains bound only to the original `b5e9…` bytes, not the staged appended `e293…` source. The mapping does not establish a new origin receipt, original 389/debug metadata, HOST-to-SDK21 equivalence, actual 46-value equality or native proof. Root70, original ceilings and retained service holds remain unchanged.

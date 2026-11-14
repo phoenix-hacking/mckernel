@@ -1,0 +1,101 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "selected_lookup": {
+    "path": "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/CURRENT-COMPUTE-C-ACCOUNTING-20261023-1.md",
+    "sha256": "75a07bc8c12f207e72a722e29e3156e0ba64d4505facd83934d00f70c2e0f8f6",
+    "bytes": 10835,
+    "stat": {
+      "dev": 66306,
+      "inode": 48674117,
+      "mode": 33204
+    }
+  },
+  "prior_actual_result_in_selected_report": false,
+  "new_actual_output_was_absent": true,
+  "tool_and_lookup_pins": [
+    {
+      "path": "/home/holden/mckernel/scripts/mckernel_text_ownership.py",
+      "sha256": "a6418f32b83d27af2321d67afbb72dfce1a72bf83cd488a93df1d42815291c1c",
+      "bytes": 8111,
+      "stat": {
+        "dev": 66306,
+        "inode": 47460929,
+        "mode": 33188
+      }
+    },
+    {
+      "path": "/usr/bin/x86_64-linux-gnu-nm",
+      "sha256": "5fb0dd8acc18e3f348ed0acbcada0580dbdddd1eb5de3c8323613af13580032b",
+      "bytes": 52664,
+      "stat": {
+        "dev": 66306,
+        "inode": 1087045,
+        "mode": 33261
+      }
+    },
+    {
+      "path": "/usr/bin/x86_64-linux-gnu-addr2line",
+      "sha256": "6a987dbf2b8223f6cce43bb4f3a8c803053dcfe451f2f0740fd272bfcc3b6b3f",
+      "bytes": 35536,
+      "stat": {
+        "dev": 66306,
+        "inode": 1051136,
+        "mode": 33261
+      }
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/CURRENT-COMPUTE-C-ACCOUNTING-20261023-1.md",
+      "sha256": "75a07bc8c12f207e72a722e29e3156e0ba64d4505facd83934d00f70c2e0f8f6",
+      "bytes": 10835,
+      "stat": {
+        "dev": 66306,
+        "inode": 48674117,
+        "mode": 33204
+      }
+    }
+  ],
+  "argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/scripts/mckernel_text_ownership.py",
+    "--image",
+    "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/mckernel.img",
+    "--repo",
+    "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/source-materialization-1/materialized-source",
+    "--nm",
+    "/usr/bin/nm",
+    "--addr2line",
+    "/usr/bin/addr2line",
+    "--output",
+    "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/CURRENT-COMPUTE-C-ACCOUNTING-ACTUAL-20261023-1/symbol-language.json"
+  ],
+  "image": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/mckernel.img",
+    "expected_actual_tool_sha256": "10972f87277e8429e2badd238d3ac53e451b8a2351a8ebf013941e1dfb95e1e2",
+    "bytes": 8439816,
+    "dev": 66306,
+    "inode": 48667436,
+    "not_separately_hashed": true
+  },
+  "source_derivative": {
+    "root": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/source-materialization-1/materialized-source",
+    "base_commit": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+    "source_manifest": "28a6c1dededda19d2da07279f9a59d542996ae77bd96d176567cc86f0c5a8459",
+    "source_derivative": "5cffcc1b23dc5ca377baa055aab0417b0daac7ddcac0e2281903260f0ebd79e3",
+    "materialization": "d7e24b4c0d3174b3479e33796d712d439444bae82902482448890b9d8142d43d"
+  },
+  "grant": {
+    "ordinary_cpu": 0,
+    "jobs": 1,
+    "AS_bytes": 1073741824,
+    "CPU_seconds": 60,
+    "wall_seconds": 120,
+    "retirement_grace_seconds": 6,
+    "FSIZE_bytes": 33554432,
+    "NOFILE": 256,
+    "core": 0,
+    "intrinsic_input_hash_exception": "Parent explicitly authorizes exact existing tool intrinsic image hash once; no separate/sharedartifact hash, no tool modification.",
+    "scope": "Only selected symbol-source tool + toolversion binds. Optional linked executable tool not needed for requested C/per-source values."
+  }
+}

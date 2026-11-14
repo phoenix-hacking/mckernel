@@ -1,0 +1,90 @@
+{
+  "Root_artifact_adoption": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CURRENT119-BUILD-ADMISSION-1/ROOT-CURRENT119-ARTIFACT-ADOPTION.ACTUAL.json",
+    "sha256": "6edb28eaa44ec0df4ee385a8d3d689d5a2738406fa285ee773d5de76e78cb5b8",
+    "size": 2847
+  },
+  "argv": [
+    "/usr/bin/python3",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CURRENT119-MATCHING-NATIVE-PREPARATION-1/compose_matching235_current119.py",
+    "--plan-sha256",
+    "4ccae9fca4abce8f4a2f83105fbb0a6e8130977d7e290687cd07539c66b7e78a"
+  ],
+  "artifact_acceptance": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CURRENT119-ACTUAL-ARTIFACT-QUALIFICATION-1/independent-review-1/INDEPENDENT-ACTUAL-CURRENT119-ARTIFACT-ACCEPTANCE.json",
+    "sha256": "3324128344411d3e8c0c87ce970b3fc851edc87507613b2186944f7be1158c6c",
+    "size": 31084
+  },
+  "checks": {
+    "235_stdout_bytes": 235,
+    "all_ready_file_refs": "PASS",
+    "composer_full_map_assertions_before_and_after_overlay": true,
+    "expected_changed_final_map_records": [
+      "images/mckernel.img"
+    ],
+    "fresh_output_absent": true,
+    "input_source_open_and_final_verify": true,
+    "no_process_or_guard_or_compiler_or_lease_operations": true,
+    "prior115_composer_exact_except119_names_and_artifact_checks": "PASS",
+    "pure_check_preparation": "PASS actual execution; no composition performed",
+    "same_base_payload_modules_mcexec_collector_profile_cleanup_oracle": "PASS"
+  },
+  "decision": "PASS_SOURCE_AND_ONE_EXACT_ORDINARY_OFFLINE_COMPOSITION",
+  "execution_profile": {
+    "affinity": [
+      0
+    ],
+    "gid": 1000,
+    "hard_and_soft_rlimits": {
+      "AS": 2147483648,
+      "CORE": 0,
+      "FSIZE": 268435456,
+      "NOFILE": 256
+    },
+    "jobs": 1,
+    "uid": 1000
+  },
+  "guest_execution_authorized": false,
+  "implementation_ownership": false,
+  "independent": true,
+  "limitations": [
+    "Only read/hash/decompress/parse/rebuild/compress the exact accepted archive inputs and write the fresh planned output root. Root must apply the exact bounded ordinary profile.",
+    "Actual full map equality and composed archive/manifest hashes remain to be accepted from the actual result. This review did not compose.",
+    "No staging, module operation, guest/native execution, heavy lease, capability, nonce, or new current-free authority. Fresh post119 current-free and separately reviewed native operation/release remain required.",
+    "Preserve original235 oracle, payload, runtime modules and all historical failures/UNKNOWN."
+  ],
+  "maximum_invocations": 1,
+  "native_acceptance": false,
+  "native_release": null,
+  "ordinary_composition_authorized": true,
+  "output_parent": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CURRENT119-MATCHING-NATIVE-PREPARATION-1/root-actual-compose-1",
+  "plan": {
+    "bytes": 9296,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CURRENT119-MATCHING-NATIVE-PREPARATION-1/MATCHING235-CURRENT119-PLAN.NOT-RELEASED.json",
+    "sha256": "4ccae9fca4abce8f4a2f83105fbb0a6e8130977d7e290687cd07539c66b7e78a"
+  },
+  "post119_current_free": null,
+  "ready": {
+    "bytes": 3254,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CURRENT119-MATCHING-NATIVE-PREPARATION-1/SOURCE-READY.json",
+    "sha256": "7992e0e724f5015e476ab089f28122625e4441575091b67e712f03da77884f6c"
+  },
+  "recorded_utc": "2026-10-29T21:14:10.769252+00:00",
+  "reused_accepted235_fullmap_review": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-stage-preparation-source-1/root-actual-qualified-input-plan-source-1/independent-actual-stage-review-1/FINAL-MAP-VERIFIED.json",
+    "sha256": "add1856f21904fc7b19cf9d2e103bc776cbf2e69e9ca2a5887df8bc6ab7f66ad",
+    "size": 20251
+  },
+  "reviewer": "/root/recovery_review",
+  "schema": "mckernel.independent-current119-offline-composition-review.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source": {
+    "bytes": 4794,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CURRENT119-MATCHING-NATIVE-PREPARATION-1/compose_matching235_current119.py",
+    "sha256": "e46c67851ea8c4879a54828f62865dbecc0f1f28cb3cb0f7a565dcf9dd4d7d27"
+  }
+}

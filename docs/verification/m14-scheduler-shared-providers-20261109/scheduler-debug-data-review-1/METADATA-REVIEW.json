@@ -1,0 +1,53 @@
+{
+  "schema": "mckernel.scheduler-debug18.independent-metadata-packet-review.v1",
+  "decision": "GO_EXACT_TWO_METADATA_READS_AND_CALLED_OBJECT_GATE_ONLY_WITH_EXPLICIT_CPU6_OUTER_AND_ROOT_FRESH_ADMISSION",
+  "reviewer": "/root/scheduler_debug_data_review_high",
+  "reused_source_config_review": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-review-1/FINAL-REVIEW.json",
+    "sha256": "e0691796e9dae07b593f1ba219689526f5346e3e24d47357e99d8fefe89b4827"
+  },
+  "frozen_packet": {
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-metadata-1/REQUEST.json": "6b614b4275991b2f15b8678ca48592941fe77d932b694af91d5df0059e0c9b09",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-metadata-1/SOURCE-EMISSION-CONTRACT.json": "138993976bc81d7935ec9b69c1ebb5b3301fa60994dd1ef57f5945da94dd4a67",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-metadata-1/debug_data_metadata_checks.py": "7e99cd60a9624edee9b8fdbafe8d28d5b3c6c578f4532cc6a2a4b6e51d00ebc9",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-metadata-1/run_metadata.py": "a5f215f00c5bcb132b7b3991eee2dd5688e03cdd1332ca4f81e88cc02eff9dd9"
+  },
+  "all_declared_input_hashes_independently_match": true,
+  "actual_compiled_input": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-unit-1/output/scheduler_debug_data.o",
+    "sha256": "4bb40a5e0f7165c6e4d5e3f55a93b3ca11cf21d08ae75cb53516f7a548cf2159",
+    "bytes": 2544,
+    "actual_compile_RESULT": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/shared-provider-batch-1/RESULT.json",
+    "actual_compile_RESULT_sha256": "a554f5725e5d151e36819d5aa93195294a7e4363b8cc2898b7b8fcf186a6867a",
+    "compile_already_joined_CPU6_released": true,
+    "no_compiler_replay": true
+  },
+  "material_predicate_or_payload_defects": [],
+  "resolved_execution_profile_clarification": {
+    "fact": "Original REQUEST controller.literal_argv has plain python, while payloads explicitly bind CPU6. Root confirmed on this review turn that actual outer will explicitly taskset6; this condition is required for GO and records concrete exact command. Prior Root admin affinity0 stays valid HOST, and no native-affinity escape or metadata execution occurred.",
+    "required_actual_outer_argv": [
+      "/usr/bin/taskset",
+      "-c",
+      "6",
+      "/usr/bin/python3",
+      "-B",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-metadata-1/run_metadata.py",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-metadata-1/REQUEST.json"
+    ],
+    "all_overhead_in_aggregate_4GiB": true,
+    "no_payload_predicate_or_producer_change": true
+  },
+  "review_findings": [
+    "Two literal serial payloads are nm -S --format=posix and readelf -h -SW -Ws -Wr against exact existing4bb40a5e/2544B object, with retained CPU6/time/prlimit bounds and explicit restricted environment; no compiler/link/runtime command.",
+    "Controller checks every frozen input before Popen, records childPID/birth before direct wait, joins in finally, retains raw outputs/hash/status, stops on firstunexpectedfailure, and explicitly imports/calls actual_object_gate after both reads. No future base/join selected.",
+    "Emission contract independently matches all18original ordered function/line/line_flags records and canonicalfilenameNUL, with flags1 from accepted e069/config4b1e review; no repeated source/rejection/codegen proof.",
+    "Gate uses qualified Image/pointer_target/parse_nm APIs and captures sections/symbols/relocations/allocatedbytes before owner assertions. It binds objecthash/size and nm/ELFglobalowner agreement.",
+    "Gate requires soleGLOBALDEFAULTOBJECT576B at offset0 in exact576B alignment8 __verbose PROGBITS flagsWA, no imports, no emitted public/private functions, no executablecontent or unrelated writable state.",
+    "All36relocations must be exact18file+18func offsets and R_X86_64_64 in __verbose; each localreadonlytarget resolves exactfilename/functionNULbytes, with fmtNULL and original18line|1<<24 fields checked individually.",
+    "Readonlyallocatedsections/privateOBJECTs are recorded and constrained to genuineoriginal literal/suffix storage; stringpoolcount and trailingABIpaddingvalues are recorded without guessed semantic requirements.",
+    "Original sourceattributes/compile-timeconfiguration are frozen by reusedreview and gatebinding; data visibility/section ownership are checked after actual emission. Sourceused attr retention does not claim final linker/default/native acceptance."
+  ],
+  "operations": "Read frozen source/JSON/controller/predicate and exact qualifiedreader API source; verify narrow hashes/contract/AST only. No metadata parser or predicate/controller/readback execution, compiler/test/link/runtime/account/native/canonical/index/otherowner writes.",
+  "next_required": "Root bind exact fresh resources/usage/ownership and outerCPU6 invocation, execute two new readbacks once and directly join actualwait. Any unexpected emission stops before futurejoin. Actualpassingobject evidence and separately reviewed currentbase/collision/prejoin/postjoin remain required.",
+  "no_acceptance_or_score_delta": true
+}

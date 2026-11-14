@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "memory.map-unmap-hole",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/memory.map-unmap-hole"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "canonical-record-with-relations", "fields": ["first", "third", "faulted", "si_code", "fault_offset"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["first is 0x11 and third is 0x33 after the middle page is unmapped", "faulted equals 1", "si_code equals SEGV_MAPERR", "fault_offset equals 0", "All three page resources are retired"],
+  "unresolved_expectations": ["Bind the pinned guest SEGV_MAPERR numeric value and freeze canonical output/input hashes before execution."],
+  "max_question_for_reviewer": "Confirm that an access to the unmapped middle page must deliver SEGV_MAPERR at its first byte."
+}

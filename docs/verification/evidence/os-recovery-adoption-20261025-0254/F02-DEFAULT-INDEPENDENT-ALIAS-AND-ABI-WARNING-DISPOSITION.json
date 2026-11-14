@@ -1,0 +1,49 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_NARROW_F02_ALIAS_AND_ABI_WARNING_DISPOSITION",
+  "reviewer": "/root/custody_release_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "at": 1793063772.227649,
+  "object_sha256": "f9bb089630647c37476d8ba729250c3a2d8ae375a9bd3174bea4fcc77c0582b7",
+  "image_sha256": "2ed7ef68530ff625772684af500c8b97e471b2b3a4e877c69792568507f1cd0f",
+  "alias_observation": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-default-actual-qualification-1/EXACT-NAME-RELOCATION-FAILURE-ALIAS-OBSERVATION.json",
+    "bytes": 2329,
+    "sha256": "c3fd45ae86c1e91a9090c5d55aeea6cde2db0d92b7f28ac67bb5952d674e5793"
+  },
+  "allowed_alias_pairs": [
+    {
+      "offset": 8,
+      "expected": "process_spin_lock_bridge",
+      "actual": "mem_kmalloc_remote_lock_bridge",
+      "object_section": 2338,
+      "object_value": 0,
+      "function_size": 171
+    },
+    {
+      "offset": 16,
+      "expected": "process_spin_unlock_bridge",
+      "actual": "mem_kmalloc_remote_unlock_bridge",
+      "object_section": 2340,
+      "object_value": 0,
+      "function_size": 132
+    }
+  ],
+  "requirements": [
+    "GLOBAL/FUNC pair identical objectsection/value/size/code and finaladdress/code",
+    "all10relocations R_X86_64_64/addend0 offsets0through72",
+    "all10 finalpointers equal original namedtargets"
+  ],
+  "strict_name_failure_retained": true,
+  "general_relocation_name_waiver": false,
+  "warnings": {
+    "predecessor": 135,
+    "current": 137,
+    "new": 2,
+    "scope": "Only unsigned64 usize/CULong declarations, sameCABI/returntypes/80Btable layout pinnedx86LP64; retaindebt, no suppression/portabilityclaim"
+  },
+  "unchanged_mapping": "ELFreadonlysection classification only; predecessor RWE PT_LOAD preserved; no runtimepageprotection claim",
+  "native_acceptance": false,
+  "full_artifact_acceptance": false
+}

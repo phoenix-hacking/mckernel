@@ -1,0 +1,32 @@
+From: McKernel native Rust integration
+Subject: [PATCH] x86 SMP: export a preempt-protected secondary reset wrapper
+
+Expose a narrow GPL entry point for the existing secondary INIT reset attempt.
+The raw helper remains private and byte-identical; this wrapper only brackets
+that reset attempt with preemption exclusion.  SIPI/startup remains owned by
+the existing caller.
+
+--- a/arch/x86/include/asm/smp.h
++++ b/arch/x86/include/asm/smp.h
+@@ -108,4 +108,5 @@
+ int wakeup_secondary_cpu_via_init(u32 phys_apicid, unsigned long start_eip, unsigned int cpu);
++void native_reset_secondary_cpu_via_init(u32 phys_apicid);
+ int native_kick_ap(unsigned int cpu, struct task_struct *tidle);
+ int native_cpu_disable(void);
+ void __noreturn hlt_play_dead(void);
+--- a/arch/x86/kernel/smpboot.c
++++ b/arch/x86/kernel/smpboot.c
+@@ -710,4 +710,12 @@
+ 	safe_apic_wait_icr_idle();
+ }
++
++void native_reset_secondary_cpu_via_init(u32 phys_apicid)
++{
++	preempt_disable();
++	send_init_sequence(phys_apicid);
++	preempt_enable();
++}
++EXPORT_SYMBOL_GPL(native_reset_secondary_cpu_via_init);
+ 
+ /*
+  * Wake up AP by INIT, INIT, STARTUP sequence.

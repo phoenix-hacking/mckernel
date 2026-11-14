@@ -1,0 +1,88 @@
+{
+  "decision": "GO_FOR_EXACT_FOUR_COMMANDS_ONLY_AFTER_ROOT_ADMISSION",
+  "request": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/diagnostic-abi-tests-1/REQUEST.json",
+    "sha256": "50f4c66a69f987293c73a94339af13f4becd2fc841320df44f0f7e2526610b17"
+  },
+  "independently_verified_input_pins": [
+    {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/diagnostic-abi-tests-1/actual_header_probe.c",
+      "sha256": "8005fd310872a838d8a2e1ce6ede1e88d750eeaeaa0e60b0e7e23551d5877cc1",
+      "bytes": 3986
+    },
+    {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/diagnostic-abi-tests-1/baseline.rs",
+      "sha256": "eecd15b0176eec83302173a94997826380f8df087eb45af491dc6c10b359868e",
+      "bytes": 5362
+    },
+    {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/diagnostic-abi-tests-1/candidate.rs",
+      "sha256": "921a789f0ab76e99ef246b6b48f5c13272f8b229f6729c26c3d1f3ff437cd47c",
+      "bytes": 5386
+    },
+    {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/diagnostic-abi-tests-1/SOURCE-REVIEW.json",
+      "sha256": "4f0e2c2ef0de983d9cda1754cab2e23b244d02d1cb3c30191586d44d0f5b65a8",
+      "bytes": 2405
+    },
+    {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/diagnostic-abi-tests-1/SOURCE-SLICES.json",
+      "sha256": "6f893b69260aa0f0f78e78702b2fc79f33ceb4bdc760428b8234a748dc3bc60a",
+      "bytes": 6132
+    },
+    {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/abi-next-1/two-line/SOURCE-CONTRACT.json",
+      "sha256": "91686f75cb8cba977056a4ac95157d2f3814d121f2f250988b413d38902736c3",
+      "bytes": 3486
+    },
+    {
+      "path": "/home/holden/mckernel/executer/user/rust/mcinspect_helpers.rs",
+      "sha256": "6168be9d060280ef993240b06cecb3b794888174a3aac412097541fb7fe98ab4",
+      "bytes": 100916
+    },
+    {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/abi-next-1/two-line/candidate/executer/user/rust/mcinspect_helpers.rs",
+      "sha256": "e9a9a648035e71c430742ac3f505cc5f9cbaeadb344b4727792721682da5db88",
+      "bytes": 100940
+    },
+    {
+      "path": "/home/holden/mckernel/executer/user/lib/libdwarf/libdwarf/libdwarf/libdwarf.h.in",
+      "sha256": "727cd79fecf8f9b469eb20fd0d1cf4bd3102b1d96a77b3320a99d323763f527c",
+      "bytes": 171097
+    },
+    {
+      "path": "/home/holden/mckernel/executer/user/lib/libdwarf/CMakeLists.txt",
+      "sha256": "17760833ef598cc7f6add3bd66f8fd0cd6c266b17e977680105e9671da2c4599",
+      "bytes": 4975
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/m15-focused-host-links-20261101/mcinspect-link.json",
+      "sha256": "50f61c0ec5da7db516b96a65356aa8c188ba592a1a6e2aa27fdfb1b20c03265a",
+      "bytes": 44529
+    },
+    {
+      "path": "/usr/bin/x86_64-linux-gnu-gcc-9",
+      "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f",
+      "bytes": 1158288
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+      "sha256": "70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09",
+      "bytes": 645792
+    }
+  ],
+  "source_extraction": "All 14 baseline/candidate slices byte-exact and unique in both actual source and finite witness. Candidate differs only TAG declaration/cast c_int to actual c_uint.",
+  "C_witness": "Actual bundled COPYONLY header included directly; no mirrored C structs. Three typed prototypes TAG/CUheader_c/loclist_n checked with actual opaque nominal types. Forty-one unique sizeof/alignof/offsetof/field-width facts emitted from actual header, exactly consumed by actual extracted Rust repr(C) layout checks. Null member expressions occur only in unevaluated sizeof/typeof/offsetof. Probe calls printf only, not any project/libdwarf/BFD function.",
+  "Rust_witness": "Exact source structs/three declarations/sole tag call expression; c_uint function-pointer const exposes actual baseline i32/u32 mismatch. Candidate typed declaration/cast and unchanged layouts compile only; no link/runtime. Char[8]/u8[8] proof limited to byte layout; opaque pointers preserve pointer depth, not a new nominal identity claim.",
+  "mandatory_execution_predicates": [
+    "Fresh Root admission and existing shared CPU7/one-job/4GiB TOTAL/fresh26GiB grant; do not multiply grant or touch native CPUs.",
+    "Validate frozen inputs before any compiler; create only declared private output directory.",
+    "C compile returns0, empty stdout/stderr; layout probe returns0, empty stderr and 41 declared constant facts. Retain exact generated c_layout.rs bytes/SHA before either Rust compile.",
+    "Baseline Rust returns1 with E0308 mismatched types at TAG const expected u32/c_uint versus i32/c_int; preserve actual diagnostic and require no unrelated errors. No baseline object or runtime execution.",
+    "Candidate Rust returns0 with empty stdout/stderr and new private object. No source/provider/BFD/tool rebuild or project function execution.",
+    "Serial four commands exactly as frozen; preserve raw argv/env, PID/birth before wait, direct waits/stdio/metrics; first unexpected failure STOP, no retry. Release shared slot after all waits joined."
+  ],
+  "profile": "Pinned genuine gcc9 and retained Rust1.95; CPU7, AS1GiB hard, CPU45s, wall58+2s, FSIZE64MiB, core0; no program main except pure HOST layout printf probe. -Dwarnings/--check-cfg explicitly rejects unrelated Rust diagnostics.",
+  "reuse": "Retained actual bundled-provider link and BFD72/public52 remain closed at original scope. No defaultSDK/native/full-tool/delivered-complete-ABI acceptance inferred.",
+  "review_execution": "Read/hash/source comparison only; no compiler/test/probe/library/controller executed."
+}

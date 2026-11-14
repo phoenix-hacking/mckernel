@@ -1,0 +1,68 @@
+{
+  "schema": "mckernel.native-exact-candidate-preparation-result.v1",
+  "status": "PASS_PREPARATION_VALIDATE_ONLY",
+  "scope": "candidate preparation only; no build, boot, guest, application, or acceptance credit",
+  "candidate_commit": "f021bdee206944fc9c68a3f1f2e0f6683a849435",
+  "release_commit": "5829a9e2694bf28c5c74f26e7aba9017e432f48f",
+  "ihk_commit": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+  "packet": {
+    "path": "docs/verification/evidence/native-exact-candidate-preparation-scratch-20260930-8.sh",
+    "sha256": "af5d3c95e5725a04d798eb6b7e2af2f94ea75bcadb9fa86ad471d2ea9e530d40"
+  },
+  "test": {
+    "path": "scripts/tests/test_native_exact_candidate_preparation_scratch_20260930_8.py",
+    "sha256": "f68690f2481553746b7ca47a0f46c1b4fb3e2ac9deaafb44a2a357636765b4d9",
+    "result": "40 passed"
+  },
+  "candidate": {
+    "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-f021bdee-scratch-8",
+    "identity": "1831:5242921",
+    "allocated_bytes": 9237291008
+  },
+  "metadata_backup": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-metadata-backup-f021bdee-scratch-8",
+    "identity": "1831:6684719",
+    "allocated_bytes": 1540096
+  },
+  "metadata_evidence": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-metadata-evidence-f021bdee-scratch-8",
+    "identity": "1831:6553685",
+    "receipt_sha256": "7fcc0a585b73592be5f5ef0cb9a3244bf2a6e7f94b54073e1cc751f21f670c97"
+  },
+  "manifest": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-inputs-f021bdee-scratch-8.json",
+    "identity": "1831:57632",
+    "size": 1195018,
+    "sha256": "595382ec869d6be32f2b476d79ffafab56f91b8a04a4d4a4a145e9a834af40af"
+  },
+  "request": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-build-request-f021bdee-scratch-8.json",
+    "identity": "1831:57633",
+    "size": 2909,
+    "sha256": "afa27486e1aa6419e407d90d42d09ec05beb81568b4b26c17cb3c50b60e637e9",
+    "limits": {"cpus": "2-5", "memory_bytes": 12884901888, "memory_swap_bytes": 12884901888, "pids": 512, "network": "none"}
+  },
+  "output_root": {"identity": "1831:6684756", "empty": true},
+  "evidence_root": {"identity": "1831:6684763", "empty": true},
+  "terminal": {
+    "identity": "1831:57634",
+    "sha256": "0b6c1112f068bda03f3216ffae0868ff1e69f00f6e61e7e86b8546b9fcdd69bc",
+    "pid": 719558,
+    "starttime": "97695444",
+    "boot_id": "c733d83b-a5ae-4f91-9ce6-9f8ccf119afd",
+    "returncode": 0
+  },
+  "log": {
+    "identity": "1831:57631",
+    "size": 46931,
+    "sha256": "0d431898d008884d187bd1ca9432def435df7c2b03bf2577f1a86b8b02eac854"
+  },
+  "lease_absent": true,
+  "operational_exclusion_absent": true,
+  "resources_after": {
+    "host_available_bytes": 25351069696,
+    "scratch_available_bytes": 19853746176,
+    "memory_available_bytes_observed_in_validation": 29325033472
+  },
+  "next": "obtain an independent execution release and run the exact heavy build once"
+}

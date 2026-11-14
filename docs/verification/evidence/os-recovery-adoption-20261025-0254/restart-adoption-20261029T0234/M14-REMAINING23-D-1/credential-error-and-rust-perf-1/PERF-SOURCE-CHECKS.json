@@ -1,0 +1,39 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_RUST_OWNED_PERF_BINDING_SOURCE_ONLY_DEFAULT_OFF",
+  "delta": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-D-1/credential-error-and-rust-perf-1/PERF-RUST-OWNED-BINDING.DELTA.patch",
+    "bytes": 8265,
+    "sha256": "f2679aef8dd3eb518f637e8e96f181c5fe6f624f09c7e6579487a994bf38bfdb"
+  },
+  "whole": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-D-1/credential-error-and-rust-perf-1/PERF-RUST-OWNED-BINDING.ON-FIRST20.patch",
+    "bytes": 16327,
+    "sha256": "5722dc619072c6a9e69844d188fec71984af4c44148f5495be66a4a86ffcfc0f"
+  },
+  "leaf": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-D-1/credential-error-and-rust-perf-1/perf/postimage/kernel/rust/f03_perf_entry_candidate.rs",
+    "bytes": 9227,
+    "sha256": "a4d5450852b27bee664c7bf60ed5633c8dc463ed2ee91e0ca9c9856ca6383de1"
+  },
+  "host_source": {
+    "path": "/home/holden/mckernel/kernel/include/process.h",
+    "bytes": 26602,
+    "sha256": "8848d536f2fa847a59af72d573ec9c55838c27cea664d46438ab4e038bf83649"
+  },
+  "perf_header": {
+    "path": "/home/holden/mckernel/lib/include/mc_perf_event.h",
+    "bytes": 8775,
+    "sha256": "8a9978dcab179a63b3aff3b66641a4814bacaf86cf4631ecdf39e32df45ea5dd"
+  },
+  "checks": [
+    "C runtime binding object replaced by extern declaration; Rust repr-C typed static owns original 31 scalars and 13 provider addresses",
+    "original callback body, stack storage and order unchanged",
+    "constant values sourced from selected headers, Rust offset_of current qualified layouts",
+    "C sig_no maps to Rust Mckfd.padding slot; exact cross-language offset/type witness and actual compilation mandatory",
+    "original C/Rust size104/8, request72/8 and binding352/8 assertions retained"
+  ],
+  "limits": "Actual selected Rust provider symbols, all 31 native C/Rust offsets and 13 function pointer ABIs require independent emitted/compiled proof; current default selection OFF.",
+  "actual_compile_link_native": false,
+  "runtime_authority": null
+}

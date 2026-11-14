@@ -1,0 +1,43 @@
+{
+  "reviewer": "/root/numa_clear_range_review",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "ACCEPT_EXACT_TWO_CPU_BOOT_CONTRACT_SOURCE_AND_HOST_MODEL_ONLY",
+  "blockers_within_reviewed_scope": [],
+  "packet": "/home/holden/mckernel-work/host-preparation/native-second-stop-case-preparation-20261021-1/current053d-stage-runtime-preparation-1/two-cpu-boot-contract-correction-1",
+  "source_findings": [
+    "Selected boot artifact 4312f9a8f53d8db7b2b6be4c7d5e409f5c0f82cf8215728209be0f6ff4a5d5c5 is bound to the two-CPU source emitting read_checks=67.",
+    "Collector SECOND_BOOT_STDOUT and strict sequence BOOT_STDOUT change only the expected counter from 66 to 67. The 392-byte length, complete byte equality, collector memcmp, stream completion and error checks remain strict.",
+    "Remaining private consumer changes couple exact paths and hashes to the corrected strict sequence; lifecycle and resource-v2 contracts are retained.",
+    "Original 66 sources, evidence and failures remain preserved."
+  ],
+  "source_hashes": {
+    "collector": "a673c54b59efc57b71086468044665b635ba2c67416640c6d69924dddad6a8bb",
+    "strict_sequence": "312bb2d53042f97a74a0e31cb97231d6e483e331dead825b19afddd17ab16d0c",
+    "second_stop_consumer": "da0e7b6413d0a3a59e9032d534fc67f73f6c5f43cf3b28eb5af36319883aba3f",
+    "manifest": "79377ed2f297258e3ad0319f18c640095c5e4fcfdb996425ff006bb3a364ef47"
+  },
+  "actual_evidence": {
+    "result": "actual-model-comparison-1/result.json",
+    "result_sha256": "7748633de43d3d326feba17622486f8409218eb6098c0e8de70c79e66eb37c70",
+    "supervisor": "actual-two-cpu-model-supervisor-capture-1/owned-result.json",
+    "supervisor_sha256": "9c0bddc5a19da359ff30f54cef6ce088c8747e3e6519cc1c4106da2369de4ac2",
+    "observed": "Exit 0; PID 2857524/start 42193625; direct child joined, group absent, streams closed, no timeout or capture/retirement error.",
+    "coverage": [
+      "One changed collector-harness compilation; empty compiler stderr.",
+      "Seven actual collector-body model modes: positive and six refusal paths.",
+      "Actual collector gate rejects both stale 66 and altered 68 with second_attempted=0 and rc=-1.",
+      "Coupled strict decoder accepts the 67 model observation and rejects duplicate, missing, ordering and timestamp-frontier mutations.",
+      "Previously verified lifecycle and resource-v2 artifacts reused."
+    ]
+  },
+  "limitations": {
+    "full_new_evaluate_positive": false,
+    "selected_4312_boot_executed_here": false,
+    "static_target_artifact_accepted": false,
+    "native_execution_verified": false,
+    "complete_restoration_verified": false,
+    "quota_credit": false,
+    "remaining_prerequisite": "Corrected static collector artifact and exact matching runtime/consumer bindings remain open before separately authorized native execution."
+  },
+  "provenance": "Independent read-only source and retained raw-evidence review. No edits, executions, replay, census or counters. Dispatcher may mechanically record this decision with original reviewer attribution."
+}

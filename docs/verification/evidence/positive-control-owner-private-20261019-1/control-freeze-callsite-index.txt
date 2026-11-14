@@ -1,0 +1,11 @@
+117:struct ChildFork {
+317:    slots[child_index].as_mut().unwrap().fork = Some(ChildFork {
+356:fn fork_publication_frozen(slots: &[Option<Entry>], parent: Token, cpu: i32) -> bool {
+357:    if fork_ingress::publication_frozen(slots, parent, cpu) { return true; }
+368:fn authorize_fork_return(slots: &[Option<Entry>], parent: Token, worker: u64, serial: u64, cpu: i64, value: i64) -> Result {
+383:fn record_fork_return(slots: &mut [Option<Entry>], parent: Token, worker: u64, serial: u64, value: i64) {
+407:fn fork_ack_publication_frozen(slots: &mut [Option<Entry>], parent: Token, cpu: i32) -> bool {
+1017:        if fork_publication_frozen(&slots, token, cpu)
+1018:            || fork_link::publication_frozen(&mut slots, token, cpu)
+1019:            || fork_ack_publication_frozen(&mut slots, token, cpu)
+1453:        authorize_fork_return(&slots, token, worker, serial, cpu, value)?;

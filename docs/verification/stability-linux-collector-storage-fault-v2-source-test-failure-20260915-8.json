@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_test_failure",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "attempt": 24,
+  "status": "FAIL_SOURCE_TEST",
+  "recorded_utc": "2026-09-16T02:25:00Z",
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-failure-20260915-24.tar.gz",
+    "sha256": "743c6675da74b4437d8032d3f8273e027d34bd62b1f06413f69ca3e5a4f50ac0",
+    "size": 97754,
+    "members": 23
+  },
+  "failing_source_sha256": {
+    "supervise.py": "9725513afc2f9b44a5b2fd1fdf925a01d7ef9dcb792f7c9e4e73d414d25eb267",
+    "oracle.py": "3de6a00eea3ec798538a4d1aa584f99fe5d67b4f5a2e405395e89f3d2f464f07",
+    "test_collector_storage_fault_packet.py": "b35a01f4c823a9ee112b62d43594f4a4a8a9524a64edb3932d28b1d122309916"
+  },
+  "failures": [
+    "The late owner-start failure backdated cleanup_trigger_ns to sentinel wait time 105 instead of the actual rejected sample 5000000101.",
+    "The sentinel path accepted a positive direct reap after a null-birth timeout with no pair, wrong parent, wrong birth, wrong phase or no birth proof."
+  ],
+  "corrected_source_sha256": {
+    "supervise.py": "306a4982bd4d04721bc0478a5cfec553ac751dd0b5e9379cb9ba519bf4c92ce1",
+    "oracle.py": "fb232daed1759baeefbf2c4c88a6c8fcc629d98f58294f50a5f0a1709c7e5172",
+    "test_collector_storage_fault_packet.py": "d9b9698f4376816187bbdb680fa93a9caea0c0995175dc0cf26e05156291e2e1"
+  },
+  "corrected_checks": {
+    "python3.9.12": "94/94 PASS",
+    "python3.8.10": "94/94 PASS",
+    "pycompile": "PASS on both interpreters"
+  },
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

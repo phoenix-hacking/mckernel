@@ -1,0 +1,33 @@
+ORIGINAL FAILURE
+command: /usr/bin/python3 -B scripts/tests/test_native_rust_exact_build_container_owner.py
+result: ERROR (65 tests, one error)
+case: test_memory_allocation_unknown_and_backup_walk_failure_precede_lease_or_docker
+error: TypeError: denied_backup_walk() takes from 1 to 3 positional arguments but 4 were given
+scope: test fixture only; no Docker client, build lease, build, module, guest or application
+
+CORRECTION
+file: scripts/tests/test_native_rust_exact_build_container_owner.py
+change: accept and forward os.walk(path, topdown, onerror, followlinks)
+production owner changed: no
+denial oracle changed: no
+
+PYTHON 3.8 REGRESSION
+command: /usr/bin/python3 -B -m unittest scripts.tests.test_native_rust_exact_build_container_owner
+.................................................................
+----------------------------------------------------------------------
+Ran 65 tests in 4.647s
+
+OK
+
+PYTHON 3.9 REGRESSION
+command: python3 -B -m unittest scripts.tests.test_native_rust_exact_build_container_owner
+.................................................................
+----------------------------------------------------------------------
+Ran 65 tests in 4.507s
+
+OK
+
+ADDITIONAL CHECKS
+/usr/bin/python3 temporary-output py_compile: PASS
+python3 temporary-output py_compile: PASS
+git diff --check for the test file: PASS

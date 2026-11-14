@@ -1,0 +1,38 @@
+{
+  "argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=30:30",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--nofile=256:256",
+    "--",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "-c",
+    "import runpy,json; from pathlib import Path; p=Path('/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/postbuild-numa-stage-runtime-data-preparation-1/runtime-current-image-preparation-1/postmutation-recovery-data-preparation-1/whole-consumer-contract-correction-1/bound-runtime-source-1'); m=runpy.run_path(str(p/\"root_manual_snapshot_threads.py\")); b=json.loads((p/\"fresh-snapshot-bindings.json\").read_bytes()); m[\"static_joins\"](b); print(\"PASS_ACTUAL_FINAL_STATIC_JOINS_ONLY\")"
+  ],
+  "direct_child_joined": true,
+  "elapsed_seconds": 0.176580537983682,
+  "process_group_absent": true,
+  "returncode": 0,
+  "stderr": {
+    "bytes": 0,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/postbuild-numa-stage-runtime-data-preparation-1/runtime-current-image-preparation-1/postmutation-recovery-data-preparation-1/whole-consumer-contract-correction-1/actual-final-static-joins-capture-1/stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "stdout": {
+    "bytes": 36,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/postbuild-numa-stage-runtime-data-preparation-1/runtime-current-image-preparation-1/postmutation-recovery-data-preparation-1/whole-consumer-contract-correction-1/actual-final-static-joins-capture-1/stdout",
+    "sha256": "9cfe0d14ff68059fa0b46073b00215025e0e98b5d2dd933defd1f3862cbcf159"
+  },
+  "streams_closed": true
+}

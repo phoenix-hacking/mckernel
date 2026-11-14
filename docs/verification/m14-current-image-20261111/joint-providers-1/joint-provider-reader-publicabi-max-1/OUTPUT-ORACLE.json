@@ -1,0 +1,292 @@
+{
+  "schema": "m14-joint13-actual-metadata-oracle-v1",
+  "status": "CONDITIONAL_ACTUAL_NEW_PRODUCER_READBACK_NOT_A_RESULT",
+  "source_binding": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/SOURCE-BINDINGS.json",
+    "bytes": 8108,
+    "sha256": "180c2a3dceef7178237e60e0ec27584dbd8bc94958c7da4f6dc09d87219d30f0"
+  },
+  "source_commit": "7231ce6d17af39e9556ee815980a97f180b70eb1",
+  "original_checks": [
+    "M14-06-01-DEFAULT",
+    "M14-06-03-DEFAULT",
+    "same original F03 context provider ownership; no added criterion"
+  ],
+  "new13_roots": {
+    "names": [
+      "syscall_do_syscall3_bridge",
+      "syscall_policy_do_syscall3_bridge",
+      "clear_host_pte_log_bridge",
+      "do_munmap_clear_host_bridge",
+      "do_munmap_set_host_bridge",
+      "ptrace_wakeup_sig",
+      "ptrace_wakeup_update_lock_bridge",
+      "ptrace_wakeup_update_unlock_bridge",
+      "ptrace_detach_kfree_bridge",
+      "ptrace_detach_do_kill_bridge",
+      "ptrace_detach_wakeup_bridge",
+      "ptrace_wakeup_log_bridge",
+      "syscall_policy_forward_context_bridge"
+    ],
+    "each_required": "Exactly one named nonempty actual FUNC definition/owner in rust/mckernel_rust.o and same physical final image placement/bytes/relocations; no required definition in selected C. Genuine source bodies1020/f181/2a00/091c, real compiled cfg/macro and full linked provider closure, not name presence alone.",
+    "aliases": "Legitimate compiler-shared code may have same addresses/sections/bytes. Require unique named ownership and prove actual alias equivalence from emitted symbol/section/byte/reloc facts, never distinct-address quota. A targeted objdump may choose an alias display name; resolve actual readelf range/bytes rather than treating that spelling as an absent provider."
+  },
+  "actual_ptrace_table": {
+    "symbol": "f03_ptrace_entry_ops_v1",
+    "type": "PtraceSyscallOps",
+    "bytes": 152,
+    "slots": 19,
+    "slot_width": 8,
+    "wakeup_offset": 8,
+    "expected_source_slots": [
+      [
+        "traceme_fn",
+        "ptrace_traceme"
+      ],
+      [
+        "wakeup_fn",
+        "ptrace_wakeup_sig"
+      ],
+      [
+        "getregs_fn",
+        "ptrace_getregs"
+      ],
+      [
+        "setregs_fn",
+        "ptrace_setregs"
+      ],
+      [
+        "getfpregs_fn",
+        "ptrace_getfpregs"
+      ],
+      [
+        "setfpregs_fn",
+        "ptrace_setfpregs"
+      ],
+      [
+        "peekuser_fn",
+        "ptrace_peekuser"
+      ],
+      [
+        "pokeuser_fn",
+        "ptrace_pokeuser"
+      ],
+      [
+        "peektext_fn",
+        "ptrace_peektext"
+      ],
+      [
+        "poketext_fn",
+        "ptrace_poketext"
+      ],
+      [
+        "setoptions_fn",
+        "ptrace_setoptions"
+      ],
+      [
+        "attach_fn",
+        "ptrace_attach"
+      ],
+      [
+        "detach_fn",
+        "ptrace_detach"
+      ],
+      [
+        "getsiginfo_fn",
+        "ptrace_getsiginfo"
+      ],
+      [
+        "setsiginfo_fn",
+        "ptrace_setsiginfo"
+      ],
+      [
+        "getregset_fn",
+        "ptrace_getregset"
+      ],
+      [
+        "setregset_fn",
+        "ptrace_setregset"
+      ],
+      [
+        "geteventmsg_fn",
+        "ptrace_geteventmsg"
+      ],
+      [
+        "arch_fn",
+        "arch_ptrace"
+      ]
+    ],
+    "proof": "Read real C input symbol/readonly bytes+relocations and real finalimage values. All19 entries must resolve original expected functions or actual proven aliases, unique actual allowed Rust/ASM owners with correct source/header function-pointer ABIs. New wakeup target must be real ptrace_wakeup_sig in Rust; check required lower callbacks, do_kill/sched/provider ownership, actual current/borrow/IRQ node types and mutable debug. Do not use the passing HOST fixture19 size/layout as production pointer proof."
+  },
+  "actual_unmap_tables": {
+    "f03_do_munmap_binding_v1": {
+      "bytes": 48,
+      "slots": [
+        {
+          "offset": 0,
+          "source_field": "begin",
+          "expected_target": "f03_unmap_begin"
+        },
+        {
+          "offset": 8,
+          "source_field": "remove_range",
+          "expected_target": "f03_unmap_remove"
+        },
+        {
+          "offset": 16,
+          "source_field": "clear_host",
+          "expected_target": "do_munmap_clear_host_bridge"
+        },
+        {
+          "offset": 24,
+          "source_field": "set_host",
+          "expected_target": "do_munmap_set_host_bridge"
+        },
+        {
+          "offset": 32,
+          "source_field": "finish",
+          "expected_target": "f03_unmap_finish"
+        },
+        {
+          "offset": 40,
+          "source_field": "log",
+          "expected_target": "f03_do_munmap_log_v1"
+        }
+      ],
+      "required": "Actual current C relocation/final pointers -> genuine typed Rust targets and complete corresponding begin/remove/clear/set/finish/log providers; readonly C table data stays explicit metadata, not runtime C retirement debt."
+    },
+    "f03_clear_host_pte_binding_v1": {
+      "bytes": 24,
+      "munmap_nr_offset": 0,
+      "munmap_nr": 11,
+      "forward_offset": 8,
+      "forward_target": "syscall_do_syscall3_bridge",
+      "log_offset": 16,
+      "log_target": "clear_host_pte_log_bridge",
+      "required": "Current object+final bytes/relocs, actual source typedefs, real Rust providers; proper code signatures and error/holding-flag restore/log order retained from source and passed changed9case proof, not reexecuted."
+    },
+    "native_set_host": "Existing real set_host_vma_body_result -> actual new syscall_policy_do_syscall3_bridge -> actual builder/do_syscall. Keep logNone, CInt truncation, original host protection/PFN invalidation and borrowed flag semantics; no C callback substitute."
+  },
+  "context19_edges": {
+    "source_contract": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f03-context-settimeofday-ownership-p04source-max-1/ACTUAL-CALLERS-AND-OWNER-DECISION.json",
+      "bytes": 23574,
+      "sha256": "60a484b16911ef8a0bbcfcee5c5484b6a0213ef36ace076dd89b9cee9c5df27d"
+    },
+    "callers": [
+      "sys_setpgid",
+      "sys_settimeofday",
+      "sys_epoll_pwait",
+      "sys_ppoll",
+      "sys_pselect6",
+      "sys_setresuid",
+      "sys_setreuid",
+      "sys_setuid",
+      "sys_setresgid",
+      "sys_setregid",
+      "sys_setgid",
+      "sys_linux_spawn",
+      "sys_swapout",
+      "sys_read",
+      "sys_ioctl",
+      "sys_open",
+      "sys_openat",
+      "sys_close",
+      "sys_fcntl"
+    ],
+    "target": "syscall_policy_forward_context_bridge",
+    "new_direct_provider": "syscall_generic_forwarding",
+    "required": "Each source/current actual caller remains genuine Rust/allowed owner with original SyscallForwardContextFn(CInt,void*)->CLong and actual compiled current graph. Resolve retained/emitted direct or function-pointer references/relocs to new genuine Rust bridge/forwarder; preserve complete source/compiler origin if ordinary optimization inlines or aliases an edge. No invented19 emitted relocation-count quota, no labels-only proof, no held generic body/fixture execution. sys_settimeofday is already Rust and its real edge must stay bound; no extra rewrite/test."
+  },
+  "current_four_ABI104_copies": {
+    "reuse_contract": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/qualification-1/ACTUAL-ABI104-AND-REQUEST72.json",
+      "bytes": 10364,
+      "sha256": "d8affe78a8190333ff16630edc9c4099614a9fd191194d8c457d498a1fe88b6e"
+    },
+    "symbols": [
+      "f03_do_fork_c_abi_words",
+      "f03_do_fork_rust_abi_words"
+    ],
+    "word_count_each": 104,
+    "bytes_each": 832,
+    "expected_data_sha256": "1621f582b410fac0ab07cb34ea7ac2197e979fcfb2e49697b44a55186b5b0853",
+    "required": "Decode current Cobject, Rustobject and both final image arrays at actual symbol/section/file offsets and compare all104 literal words to retained qualified vector. No relocation overlaps; no stale fork RESULT, regenerated layout witness or ABI compiler/helper run. C/Rust guards and table/source ff48 geometry also bound to current compile. The new metadata dumps supplement real hash-bound raw artifact bytes, not synthetic arrays."
+  },
+  "compiled_selection_and_source": {
+    "new_Rust_cfg": [
+      "f03_memory_host_offload_candidate",
+      "f06_ptrace_resume_callbacks_candidate",
+      "f03_policy_forward_context_bridge_candidate"
+    ],
+    "new_C_macros": [
+      "MCKERNEL_RUST_F03_MEMORY_HOST_OFFLOAD",
+      "MCKERNEL_RUST_F06_PTRACE_RESUME_CALLBACKS",
+      "MCKERNEL_RUST_F03_POLICY_FORWARD_CONTEXT_BRIDGE"
+    ],
+    "required": "Actual regenerated Rust/C command/env/dependencies contain exact source7231 new modules, unchanged existing adapter2, existing whole-F06/defaultON/profile scope and all retained selections. Cguards truly exclude13 bodies and include real ABI/default/filename assertions; broad adapters/ownedfork/experimental flags remainOFF. MAP and linker script from actual generated profile. Preserve source-derived initial debug file/function/fmtNULL/24429/flags and trackedfree4657; no fixed old symbol index/address assumption."
+  },
+  "inherited_actual_contracts": {
+    "retained_Rust_roots": [
+      "do_syscall",
+      "interrupt_syscall",
+      "terminate_host",
+      "arch_rt_sigreturn_context_bridge",
+      "do_setresuid",
+      "do_setresgid",
+      "do_signal",
+      "arch_ptrace_regset_log_bridge",
+      "arch_native_signal_bad_frame_bridge",
+      "arch_rt_sigreturn_xrstor_bridge",
+      "terminate",
+      "exit_group_log_bridge",
+      "exit_group_terminate_bridge",
+      "exit_group_current_pid_bridge",
+      "do_mmap",
+      "do_fork",
+      "syscall_policy_do_syscall2_bridge"
+    ],
+    "current_fork104": true,
+    "debug": "Preserve prior true writableDdebug objects/source origins and actual96B debug_constants/align32, no assumed section merging/binding. New ptrace32B descriptor actual input/final payload, file/function pointer relocations, fmtNULL, logical24429 and same actual C default flags.",
+    "arch_C": "Only unchanged hashes permit reuse of prior archC executable0/ASM/ABI evidence. The actual current4archC objects remainbyteequal old882f proof; otherwise report exact changed input, not false reuse or unreviewed new inventory.",
+    "global_link": "Current all11 input-object ownership including9 unchanged actual identities +2 changed, actual map/allocated bytes/strong+weak imports and every typed project/provider edge resolve uniquely; zero named UND. No forced old4557/271 counts: report actual counts. Final ET_EXEC x86_64, entry matches actual Rust arch_start/linker origin, unchanged script; all allocated sections are LOAD-covered with inherited real segments/NOTE and no INTERP/DYNAMIC or runtime relocations.",
+    "default": "Actual genuine whole-F06 default/cacheON, supported profile, generatedMAP and guards retained; no declaration of native/default original acceptance solely from reading metadata."
+  },
+  "exact_C_ledger": {
+    "previous_actual_source": "14d3 timeimage bcfe/a70,26 C FUNC rows",
+    "new13_excluded_names": [
+      "syscall_do_syscall3_bridge",
+      "syscall_policy_do_syscall3_bridge",
+      "clear_host_pte_log_bridge",
+      "do_munmap_clear_host_bridge",
+      "do_munmap_set_host_bridge",
+      "ptrace_wakeup_sig",
+      "ptrace_wakeup_update_lock_bridge",
+      "ptrace_wakeup_update_unlock_bridge",
+      "ptrace_detach_kfree_bridge",
+      "ptrace_detach_do_kill_bridge",
+      "ptrace_detach_wakeup_bridge",
+      "ptrace_wakeup_log_bridge",
+      "syscall_policy_forward_context_bridge"
+    ],
+    "predicted_remaining_names_if_only_this_joint_delta": [
+      "wait_host_wait4_bridge",
+      "terminate_mcexec_do_syscall_bridge",
+      "do_execveat",
+      "syscall_forward_context_bridge",
+      "mprotect_set_host_vma_bridge",
+      "perf_event_open_do_syscall_bridge",
+      "terminate_mcexec",
+      "syscall_execveat_bridge",
+      "syscall_forward_rt_sigprocmask_bridge",
+      "syscall_forward_sigaction_update_bridge",
+      "sys_perf_event_open",
+      "util_thread",
+      "syscall_util_indicate_clone_disabled_bridge"
+    ],
+    "required": "Enumerate actual remaining emitted C functions, exact owners and source counterparts. Expected isolated C26->13 is supporting prediction only; never accept from count. Any extra removal/addition must be explained by actual emitted/source/optimization/provider facts. Keep remaining C honestly classified and original source scope; no zero-wholefile condition is added."
+  },
+  "no_replay": "No old time12/memory9/ptrace12 tests, prior104 witness/compiler/module/runtime/SDK provider query or green disassembly rerun. New targeted13 lowerings and actual changed image/2object data only; unchanged9 objects merely current identity-checked to reuse qualified facts.",
+  "raw_artifact_requirement": "Root/P04Source preserve current produced image/map/twoobjects/config at identities captured by these reads before any later mutation; qualifier uses existing saved-only physical parser on their actual bytes. No new ELF parser/inspection framework or binary publication.",
+  "acceptance_limits": "Reader never executes mckernel/driver/target entry/helper under test. Actual new metadata and independent full required source/provider/default review still needed before original checks; no native/currentfree/restoration/parent acceptance or hold release."
+}

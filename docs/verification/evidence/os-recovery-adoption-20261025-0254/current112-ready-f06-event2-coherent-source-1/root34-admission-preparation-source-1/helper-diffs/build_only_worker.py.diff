@@ -1,0 +1,20 @@
+--- Root34-CURRENT113/build_only_worker.py
++++ Root34-CURRENT112/build_only_worker.py
+@@ -25,7 +25,7 @@
+     require(os.getuid()==os.geteuid()==1000,'UID1000 required')
+     require(os.sched_getaffinity(0)=={2,3,4,5},'exact reserved CPU2-5')
+     require(plan['runtime_authority'] is None,'input plan must not act as runtime authority')
+-    require(len(plan['commands'])==5,'exact five selected build commands')
++    require(len(plan['commands'])==4,'exact four selected build commands')
+     require(plan['deadline_epoch']==1793165769,'fixed actual campaign deadline')
+     seconds=min(19800,int(window_remaining()))
+     require(seconds>0,'before fixed deadline');signal.signal(signal.SIGALRM,alarm_handler);signal.alarm(seconds)
+@@ -48,7 +48,7 @@
+             require(returncode==0,'first failed compiler/link stops suffix')
+             require(target.is_file() and not target.is_symlink() and target.stat().st_size>0,'new ordinary output required')
+             row['output']=reference(target)
+-        (out/'producer-contract.json').write_text(json.dumps(dict(status='ACTUAL_BUILD_ONLY_FIVE_COMMAND_PRODUCER',source_profile=plan['source_profile'],contract=plan['producer_contract'],commands=records,configuration_reuse_not_fresh_configure=True,default_native_retirement_acceptance=False),indent=2)+'\n')
++        (out/'producer-contract.json').write_text(json.dumps(dict(status='ACTUAL_BUILD_ONLY_FOUR_COMMAND_PRODUCER',source_profile=plan['source_profile'],contract=plan['producer_contract'],commands=records,configuration_reuse_not_fresh_configure=True,default_native_retirement_acceptance=False),indent=2)+'\n')
+         status='PASS_BUILD_ONLY_PENDING_CURRENT_DEFAULT_AND_NATIVE_VALIDATORS'
+     except BaseException as error:
+         status='FAIL_PRESERVE_CAPTURE_NO_AUTOMATIC_RETRY'

@@ -1,0 +1,86 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_CALLER_TRACE_PARTIAL_GLOBAL_SELECTION_BLOCKED",
+  "source2_C": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-LARGE-COMPOSITION-2/postimage/kernel/syscall.c",
+    "bytes": 935691,
+    "sha256": "fe852e4a9b2d5d58ca38cf51181a5291719d1eadfd7cab0d7621272bda29d93c"
+  },
+  "source2_Rust": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-LARGE-COMPOSITION-2/postimage/kernel/rust/syscall_policy.rs",
+    "bytes": 1328583,
+    "sha256": "c3daed2f58bf070b1ca98a493ae5b1faad85996a2e0d6f8e327a423744e1bac2"
+  },
+  "snapshot_mem_helpers": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-ACTUAL-SNAPSHOT-1/rust-subtree/mem_helpers.rs",
+    "bytes": 444772,
+    "sha256": "f544c5177156ad5de8544bb95c46bbc8e2ac870a25c4895ca4cefb7c8cc79680"
+  },
+  "host_dispatcher": {
+    "path": "/home/holden/mckernel/executer/kernel/mcctrl/rust/mcctrl_helpers.rs",
+    "bytes": 403227,
+    "sha256": "abc99c0e160d3a8aa1aa182f37f297cf3827f86faaac559117ae4df3197e9d14"
+  },
+  "defined_named_caller_contract": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-DEFINED-CALLER-CONTRACT-1/ROOT-CONTRACTS.APPROVED.json",
+    "bytes": 4007,
+    "sha256": "534c4df211bcf940f19191607d8d3d26d426e2f82d3bfaa7f392c41fe06df19e"
+  },
+  "interrupt_private": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-C-1/defined-callers-correction-1/SOURCE-PREPARATION.json",
+    "bytes": 3367,
+    "sha256": "13e84c079a127810cf08f022fbe913f9c5ea31d9f6b2f63abf074ce0d1331220"
+  },
+  "signal_private": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-D-1/defined-callers-correction-1/SOURCE-READY.json",
+    "bytes": 4982,
+    "sha256": "2978f40ade182c0e5ebfec209df6a7df9db4c38197771515f66a7bc300979372"
+  },
+  "rows": [
+    {
+      "path": "do_syscall Rust entry",
+      "initialization": "number and six args are caller-defined; offload_prepare writes rtid/ttid and response req_thread_status/pde_data; send_prepare writes request valid and response status; sender copies all72 request bytes and release-publishes valid; response ret read only after wait returns on completed status.",
+      "lifetime": "request/stack response, current thread/process, monitor, IKC and host mapping must remain valid through real wait and host completion; no independent ACK inferred."
+    },
+    {
+      "path": "named 2/3 argument constructors and wait4",
+      "initialization": "number plus all six named approved argument values, with only named unused slots zero; helper retains ID/valid ownership. Natural x86 request alignment and 72-byte source shape.",
+      "status": "private existing full constructor selector; independent review, selected-call-number and actual ABI remain open"
+    },
+    {
+      "path": "exec phase1/phase2 C fallback",
+      "initialization": "phase1 writes args0..4, lacks arg5; phase2 rewrites args0..2 and retains earlier 3..5. Root 534c authorizes precisely arg5=0 and retained phase2 values; actual source correction assigned to fork owner and not yet integrated.",
+      "status": "unresolved until that private fix is composed and reviewed"
+    },
+    {
+      "path": "clone fallback request1",
+      "initialization": "clone phase0 writes args0..3 with args4/5 undefined; clone phase1 rewrites 0/1, retaining 2/3 and missing 4/5; cleanup kill rewrites 0/1, retaining 2/3 and missing 4/5.",
+      "status": "source2 whole-fork selector off, fallback remains applicable. Needs explicit phase-specific Root values/semantics or reviewed selected replacement that removes reachability; no generic zero authorized."
+    },
+    {
+      "path": "Rust coredump mem_helpers",
+      "initialization": "MaybeUninit request number+args0..3 only, args4/5 undefined before mem_core_syscall(do_syscall). Rust mem.c coredump selector is set in source2 CMake.",
+      "status": "host mcctrl dispatcher copies all six words into args before NR_COREDUMP uses 0..3. Needs narrow args4/5 Root wire contract and private Rust correction; no guessed slots."
+    },
+    {
+      "path": "settid/getcred/signalfd/time/perf/terminate",
+      "initialization": "selected prior getcred/signalfd/settid paths use existing initialization, perf and terminate explicitly write all six args; time delegates to 2-arg constructor; C fallback getcred/time/clock remain partial but are gated off by selected profile.",
+      "status": "specific provider and caller-number/source profile remain subject to independent composition and ABI review; existing old aggregate initialization is not generalized."
+    },
+    {
+      "path": "generic forwarding context callers",
+      "initialization": "generic forwarding reads six context register slots. Existing selected pager/fileobj/devobj direct contexts are initialized by their existing code. 534c successor defines interrupt/sigmask/sigaction raw six slots; their private source is not yet integrated. XPMEM and other externally borrowed contexts require a caller-by-caller initialized-register/lifetime review.",
+      "status": "global full-callgraph closure still open; no general assumption about pointers or registers."
+    },
+    {
+      "path": "util_thread",
+      "initialization": "raw request number + args0..4 preserve original sequence; arg5=0 is the separate approved UTI correction, sender owns valid and IDs. Its Kattr and request live on the function stack until offload returns; context and uti_info allocations are freed only after response/refill.",
+      "status": "UTI partial-info two-writer, borrowed Kattr/descriptor, mappings, and any host uses after return require actual selected host lifetime evidence; completion return is not invented ACK."
+    }
+  ],
+  "actual_abi29": false,
+  "actual_abi23": false,
+  "actual_selected_source_composition": false,
+  "native_execution": false,
+  "runtime_authority": null
+}

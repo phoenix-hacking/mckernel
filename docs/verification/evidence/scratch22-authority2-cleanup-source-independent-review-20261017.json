@@ -1,0 +1,49 @@
+{
+  "schema": "scratch22-authority2.cleanup-source-independent-review.v1",
+  "decision": "PASS_SOURCE",
+  "reviewer": "/root/cheap_profile_review",
+  "model": "gpt-6.1-sol",
+  "implementation_ownership": false,
+  "author_record": {
+    "path": "docs/verification/evidence/scratch22-authority2-cleanup-source-20261017.json",
+    "sha256": "8762bb4868041c6680239442fcb550574d157c5aadc2b1fc6ae7f9c1d209f5ce",
+    "actual_status": "NOT_RELEASED"
+  },
+  "files_sha256": {
+    "scripts/native_exact_scratch22_authority2_terminal_cleanup.py": "802d2e7934d8177cabb6338039f831e11f1ca63be4eb3ac9b9d70c23a0f1f484",
+    "scripts/tests/test_native_exact_scratch22_authority2_terminal_cleanup.py": "bb4a5ff367065599a1bd166278e0d7f50b31d09d8254e0b1910f886d45bddae1"
+  },
+  "accepted_baseline_reused": {
+    "source_path": "scripts/native_exact_scratch22_authority1_terminal_cleanup.py",
+    "source_sha256": "15b7f9241741ccaff065819ea6847323d6ce47ac1fc69a3ea87fbdbad9b01098",
+    "source_review_sha256": "6073c68102ec1fbbfb63726961b9b48aa39b9e2d1aae97fdd6e1e05581b34841",
+    "actual_postflight_pointer_correction_sha256": "a54b8f2971b4a541e2af9a3bd5eb9df407fb3314d55a5b63398990f5a2f6f2ed",
+    "fault_test_path": "scripts/tests/test_native_exact_scratch21_terminal_cleanup.py",
+    "fault_test_sha256": "e1467625cfcc848c7834e23c6bff26a535b40115a0d85bb512f488bf8fcb7d90"
+  },
+  "reviewed_delta": [
+    "Complete source diff is namespace/path/schema adaptation plus exact known-attempt predicate, fixed request digest, retired-guard absence and mandatory root-terminal selected bytes. Shared exclusion paths intentionally unchanged. No runtime identity fallback.",
+    "Known container63c2d2570315c693bc06befaa37d1408ded53896b35d13d80bc4d7b9ecdba9cb, owner244086/start1324045/nonce51e1e7d8a9c14b2eb0ea63e4f15dd77b/exit1 and requestc38fdd289b8f688a92449b0d68c2216412f10c3bc7ceedf563246ef8086cb565 are additional constraints, not inherited execution authority. Canonical comparison distinguishes bool from integer and string from numeric identity.",
+    "Retired guard243497 joins existing full-process absent set through WAITER_PIDS. Root terminal is mandatory selected protected input; future execution release must bind its exact raw bytes and actual retirement semantics. Source-only review does not infer those actual facts.",
+    "Transaction/recover/quarantine_wait and all named ownership, census, exchange, capture, stream and inventory guards are AST-identical after namespace normalization. Four-signal deferral, exclusive root flock, uncertainty quarantine, original-inode archival and full protected-inventory checks are unchanged.",
+    "Finite128MiB selected/log streams,256MiB documents and400000entries per root remain unchanged. Source/output/evidence are preserved; no raw unlink of ownership files and no container removal outside existing exact stopped profile/census gates."
+  ],
+  "independent_test": {
+    "command": "/usr/bin/env -i PATH=/usr/bin:/bin LANG=C LC_ALL=C PYTHONDONTWRITEBYTECODE=1 /usr/bin/timeout 120s /usr/bin/taskset -c 2 /usr/bin/prlimit --as=2147483648 --nofile=256 --core=0 -- /usr/bin/python3 -B -m unittest -v scripts.tests.test_native_exact_scratch22_authority2_terminal_cleanup",
+    "exit_code": 0,
+    "tests": 16,
+    "reported_seconds": 1.040,
+    "result": "PASS",
+    "scope": "Reviewed transitive baseline tests use fresh TemporaryDirectory files/flocks, mocked census/Docker/mount/quarantine, no subprocess invocation. Tests perform real disposable rename-exchange/crash-frontier/replay and bounded sparse stream checks. No live root lock, Docker, root, compiler, guest, network, Git write or child process."
+  },
+  "future_execution_requirements": [
+    "Separately reviewed exact fresh release with source/test commit/tree and fetched bindings, complete integer-preserving observation, current boot/mount/device/root lock, exact stopped container/owner/request/terminal and positively retired guard proof. No scratch21/authority1 release transfers authority.",
+    "Reuse accepted CPU0/4GiB one-root-job/no-outer-timeout transaction profile only after independent authority2 execution review binds the exact payload excluding solely execution_review. Fresh lock/process/container checks precede mutation.",
+    "Postflight schema scratch22-authority2.cleanup-postflight-review.v1, decision PASS_TERMINAL_CLEANUP_POSTFLIGHT. result/release/plan/journal/capture/terminal/receipt pointers must each be EXACT objects with only path and sha256; put annotations in observed_metadata. Preserve archives full identity rows and canonical release digest; container_absent and exclusions_absent must be true only after actual verification. Reuse prior pointer-contract failure history rather than reset it."
+  ],
+  "blocking_findings": [],
+  "execution_authority": false,
+  "cleanup_complete_claimed": false,
+  "build_or_application_credit": false,
+  "acceptance_credit": false
+}

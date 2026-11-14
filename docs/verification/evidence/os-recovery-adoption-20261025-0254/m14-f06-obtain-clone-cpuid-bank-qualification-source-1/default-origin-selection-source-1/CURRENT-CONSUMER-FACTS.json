@@ -1,0 +1,72 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "consumers": [
+    {
+      "source": {
+        "path": "/home/holden/mckernel/kernel/syscall.c",
+        "sha256": "d6e9c595364f72018b96ccba50e97ebc71ff438b8e91315982e287d63ff8bafb",
+        "bytes": 918715
+      },
+      "lines": [
+        {
+          "line": 7976,
+          "text": "            cpuid = obtain_clone_cpuid(&clone_cpu_set, 0);"
+        },
+        {
+          "line": 7979,
+          "text": "        cpuid = obtain_clone_cpuid(&oldproc->cpu_set,"
+        }
+      ],
+      "changed": false
+    },
+    {
+      "source": {
+        "path": "/home/holden/mckernel/kernel/host.c",
+        "sha256": "3a1ed8ab20ef12a48cb5f9b578f33c83d465c637cf0ecf66a6c597a4cef066b3",
+        "bytes": 43550
+      },
+      "lines": [
+        {
+          "line": 1054,
+          "text": "\treturn obtain_clone_cpuid(&((struct thread *)thread)->cpu_set, 0);"
+        }
+      ],
+      "changed": false
+    },
+    {
+      "source": {
+        "path": "/home/holden/mckernel/kernel/rust/host_helpers.rs",
+        "sha256": "79ec492e531d9793206cd9ebc84482ab695fcfdc284675492d81ee5a072eeaac",
+        "bytes": 180826
+      },
+      "lines": [
+        {
+          "line": 223,
+          "text": "    fn obtain_clone_cpuid(cpu_set: *mut crate::abi::CpuSet, use_last: CInt) -> CInt;"
+        },
+        {
+          "line": 5478,
+          "text": "    obtain_clone_cpuid(&raw mut (*thread.cast::<Thread>()).cpu_set, 0)"
+        }
+      ],
+      "changed": false
+    },
+    {
+      "source": {
+        "path": "/home/holden/mckernel/kernel/include/syscall.h",
+        "sha256": "459e6d0faec3f1b8366a0d329571ef5ea813042706be11f9423b0399bbba6ffa",
+        "bytes": 20836
+      },
+      "lines": [
+        {
+          "line": 365,
+          "text": "int obtain_clone_cpuid(cpu_set_t *cpu_set, int use_last);"
+        }
+      ],
+      "changed": false
+    }
+  ],
+  "selected_symbol": "obtain_clone_cpuid",
+  "caller_qualification": null,
+  "note": "Existing clone and host migration callers retain the same symbol/prototype; future actual default object/link caller edges are required. No native or lifecycle equivalence inferred from source selection."
+}

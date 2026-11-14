@@ -1,0 +1,156 @@
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -19980,14 +19980,14 @@
+ }
+ #endif
+ 
+-long
+-syscall_forward_rt_sigprocmask_bridge(unsigned long sigmask)
+-{
+-	ihk_mc_user_context_t ctx0;
+-
+-	ihk_mc_syscall_set_arg0(&ctx0, sigmask);
+-	return syscall_generic_forwarding(__NR_rt_sigprocmask, &ctx0);
+-}
++#if defined(MCKERNEL_RUST_F03_SIGNAL_FORWARD_EXPERIMENTAL)
++extern long syscall_forward_rt_sigprocmask_bridge(unsigned long sigmask);
++#else
++long syscall_forward_rt_sigprocmask_bridge(unsigned long sigmask) { ihk_mc_user_context_t ctx0;  ihk_mc_syscall_set_arg0(&ctx0, sigmask); return syscall_generic_forwarding(__NR_rt_sigprocmask, &ctx0); }
++#endif
++
++
++
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ long sys_getresuid(int n, ihk_mc_user_context_t *ctx);
+@@ -20091,18 +20091,18 @@
+ #endif
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+-long
+-syscall_forward_sigaction_update_bridge(int sig, const void *actp)
+-{
+-	const struct k_sigaction *act = actp;
+-	ihk_mc_user_context_t ctx0;
+-
+-	ihk_mc_syscall_set_arg0(&ctx0, sig);
+-	ihk_mc_syscall_set_arg1(&ctx0,
+-			(unsigned long)act->sa.sa_handler);
+-	ihk_mc_syscall_set_arg2(&ctx0, act->sa.sa_flags);
+-	return syscall_generic_forwarding(__NR_rt_sigaction, &ctx0);
+-}
++#if defined(MCKERNEL_RUST_F03_SIGNAL_FORWARD_EXPERIMENTAL)
++extern long syscall_forward_sigaction_update_bridge(int sig, const void *actp);
++#else
++long syscall_forward_sigaction_update_bridge(int sig, const void *actp) { const struct k_sigaction *act = actp; ihk_mc_user_context_t ctx0;  ihk_mc_syscall_set_arg0(&ctx0, sig); ihk_mc_syscall_set_arg1(&ctx0, (unsigned long)act->sa.sa_handler); ihk_mc_syscall_set_arg2(&ctx0, act->sa.sa_flags); return syscall_generic_forwarding(__NR_rt_sigaction, &ctx0); }
++#endif
++
++
++
++
++
++
++
+ 
+ int do_sigaction(int sig, struct k_sigaction *act, struct k_sigaction *oact);
+ #else
+--- a/kernel/CMakeLists.txt
++++ b/kernel/CMakeLists.txt
+@@ -143,6 +143,7 @@
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/smp_ikc.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/sysfs.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_policy.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_signal_forward_defined_candidate.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_perf_open_forward.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_terminate_mcexec_forward.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_ptrace_detach_wakeup.rs"
+@@ -231,6 +232,9 @@
+ 			list(APPEND RUST_KERNEL_CFG "--cfg" "f03_syscall_table_clone3")
+ 			# Qualified next cohort: current native x86_64 Linux6.12, no UBSAN.
+ 			if (ARCH STREQUAL "x86_64" AND NOT ENABLE_UBSAN)
++				if (MCKERNEL_F03_SIGNAL_FORWARD_EXPERIMENTAL)
++					list(APPEND RUST_KERNEL_CFG "--cfg" "f03_signal_forward_defined_candidate")
++				endif()
+ 				list(APPEND RUST_KERNEL_CFG "--cfg" "f03_wakeup_writer_pair_candidate")
+ 				list(APPEND RUST_KERNEL_CFG "--cfg" "f03_context_forward_pair_candidate")
+ 				list(APPEND RUST_KERNEL_CFG "--cfg" "f03_ptrace_clone_noirq_candidate")
+@@ -616,6 +620,9 @@
+ 		set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/process.c" APPEND PROPERTY
+ 			COMPILE_DEFINITIONS MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE)
+ 		if (ARCH STREQUAL "x86_64" AND NOT ENABLE_UBSAN)
++			if (MCKERNEL_F03_SIGNAL_FORWARD_EXPERIMENTAL)
++				set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY COMPILE_DEFINITIONS MCKERNEL_RUST_F03_SIGNAL_FORWARD_EXPERIMENTAL)
++			endif()
+ 			set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+ 				COMPILE_DEFINITIONS "MCKERNEL_RUST_F03_WAKEUP_WRITER_PAIR;MCKERNEL_RUST_F03_CONTEXT_FORWARD_PAIR;MCKERNEL_RUST_F03_PTRACE_CLONE_NOIRQ;MCKERNEL_RUST_F03_PERF_ATTR_CALLBACKS;MCKERNEL_RUST_F03_PRLIMIT_BODY;MCKERNEL_RUST_F03_EXEC_DEFINED_TAIL;MCKERNEL_RUST_F03_DO_EXIT_V2;MCKERNEL_RUST_F03_UNMAP_BEGIN;MCKERNEL_RUST_F03_UNMAP_REMOVE;MCKERNEL_RUST_F03_UNMAP_FINISH;MCKERNEL_RUST_F03_MMAP_PAGE_CALLBACK;MCKERNEL_RUST_F03_WAIT_RELEASE;MCKERNEL_RUST_F03_WAIT_PROCESS_RELEASE;MCKERNEL_RUST_F03_TERMINATE_REFCOUNT;MCKERNEL_RUST_F03_TERMINATE_CMPXCHG;MCKERNEL_RUST_F03_PTRACE_IO_FIND;MCKERNEL_RUST_F03_PTRACE_IO_UNLOCK;MCKERNEL_RUST_F03_PTRACE_IO_COPY_FROM;MCKERNEL_RUST_F03_SYNC_CHILD_EVENT;MCKERNEL_RUST_F03_WAKEUP_FIND;MCKERNEL_RUST_F03_WAKEUP_UNLOCK;MCKERNEL_RUST_F03_EXIT_WAITQ_WAKE")
+ 			if (ENABLE_PERF)
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -36896,3 +36896,8 @@
+ #[cfg(all(f03_leaf_callbacks_candidate, target_arch = "x86_64", enable_perf))]
+ #[path = "syscall_perf_open_forward.rs"]
+ mod syscall_perf_open_forward;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(all(f03_signal_forward_defined_candidate, target_arch = "x86_64"))]
++#[path = "f03_signal_forward_defined_candidate.rs"]
++mod f03_signal_forward_defined_candidate;
+--- /dev/null
++++ b/kernel/rust/f03_signal_forward_defined_candidate.rs
+@@ -0,0 +1,56 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Signal-forwarding six-slot wire contract; selector is default OFF.
++use core::{ffi::c_void, mem::MaybeUninit, ptr::{addr_of, addr_of_mut}};
++use crate::abi::{CInt, CLong, CULong, KSigAction, X86UserContext};
++
++/// Forward the existing custom signal-mask payload with approved unused zeroes.
++///
++/// # Safety
++/// Original current-thread, endpoint and synchronous transport contracts apply.
++/// Only the six argument fields are initialized; no whole-context reference is
++/// valid, and the context remains live until generic forwarding completes.
++#[no_mangle]
++pub unsafe extern "C" fn syscall_forward_rt_sigprocmask_bridge(sigmask: CULong) -> CLong {
++    let mut storage = MaybeUninit::<X86UserContext>::uninit();
++    let ctx = storage.as_mut_ptr();
++    // SAFETY: Each pointer addresses the naturally aligned live raw field. The
++    // first volatile write exactly retains original setter0; remaining fields
++    // implement the explicitly approved transmitted zero slots.
++    unsafe {
++        addr_of_mut!((*ctx).gpr.rdi).write_volatile(sigmask);
++        addr_of_mut!((*ctx).gpr.rsi).write(0);
++        addr_of_mut!((*ctx).gpr.rdx).write(0);
++        addr_of_mut!((*ctx).gpr.r10).write(0);
++        addr_of_mut!((*ctx).gpr.r8).write(0);
++        addr_of_mut!((*ctx).gpr.r9).write(0);
++        super::syscall_generic_forwarding(14, ctx)
++    }
++}
++
++/// Forward original ordered action fields with approved unused zeroes.
++///
++/// # Safety
++/// The action points to the original live aligned initialized action for the
++/// original handler/flags reads; caller retains validation, update ordering and
++/// endpoint/lifetime contracts. No whole-context reference or zero is formed.
++#[no_mangle]
++pub unsafe extern "C" fn syscall_forward_sigaction_update_bridge(sig: CInt, action: *const c_void) -> CLong {
++    let mut storage = MaybeUninit::<X86UserContext>::uninit();
++    let ctx = storage.as_mut_ptr();
++    let action = action.cast::<KSigAction>();
++    // SAFETY: Match original volatile setter order, including reading handler
++    // after arg0 and flags after arg1. Signed sig converts modulo 2^64, as C.
++    unsafe {
++        addr_of_mut!((*ctx).gpr.rdi).write_volatile(sig as CULong);
++        let handler = addr_of!((*action).sa.sa_handler).read() as CULong;
++        addr_of_mut!((*ctx).gpr.rsi).write_volatile(handler);
++        let flags = addr_of!((*action).sa.sa_flags).read();
++        addr_of_mut!((*ctx).gpr.rdx).write_volatile(flags);
++        addr_of_mut!((*ctx).gpr.r10).write(0);
++        addr_of_mut!((*ctx).gpr.r8).write(0);
++        addr_of_mut!((*ctx).gpr.r9).write(0);
++        super::syscall_generic_forwarding(13, ctx)
++    }
++}
++const _: unsafe extern "C" fn(CULong) -> CLong = syscall_forward_rt_sigprocmask_bridge;
++const _: unsafe extern "C" fn(CInt, *const c_void) -> CLong = syscall_forward_sigaction_update_bridge;

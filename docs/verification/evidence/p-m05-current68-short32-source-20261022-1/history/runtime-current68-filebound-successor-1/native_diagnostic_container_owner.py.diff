@@ -1,0 +1,79 @@
+--- /home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/runtime-current68-successor-1/native_diagnostic_container_owner.py
++++ /home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/runtime-current68-filebound-successor-1/native_diagnostic_container_owner.py
+@@ -14,6 +14,7 @@
+ import os
+ from pathlib import Path
+ import re
++import resource
+ import selectors
+ import signal
+ import stat
+@@ -26,8 +27,8 @@
+ SCRATCH = "/home/holden/mckernel-work/scratch"
+ IMAGE_RECORD = "/home/holden/mckernel-work/logs/image-native.json"
+ IMAGE_RECORD_SHA256 = "c881faf78539b1698aa9cfe24e0b82562442a58de18666bf59a447b72607e95a"
+-RUNNER = '/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/runtime-current68-successor-1/native_diagnostic_runner.py'
+-SELF = '/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/runtime-current68-successor-1/native_diagnostic_container_owner.py'
++RUNNER = '/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/runtime-current68-filebound-successor-1/native_diagnostic_runner.py'
++SELF = '/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/runtime-current68-filebound-successor-1/native_diagnostic_container_owner.py'
+ LOCK = "/run/lock/mckernel-development.lock"
+ QEMU = "/usr/libexec/qemu-kvm"
+ QEMU_SHA256 = "5c1985041a27c64829d9ca18dd54c6ede039eafdef00c3abcd70479b03aca7d0"
+@@ -38,7 +39,7 @@
+     b"QEMU emulator version 10.1.0 (qemu-kvm-10.1.0-16.el10_2.5)\n"
+     b"Copyright (c) 2003-2025 Fabrice Bellard and the QEMU Project developers\n"
+ )
+-SOURCE_HASHES = {'/home/holden/mckernel-work/host-preparation/native-second-stop-case-preparation-20261021-1/current053d-normalization-runtime-preparation-1/runtime-source-1/native_resource_reboot_sequence.py': '312bb2d53042f97a74a0e31cb97231d6e483e331dead825b19afddd17ab16d0c', '/home/holden/mckernel-work/host-preparation/native-second-stop-case-preparation-20261021-1/current053d-normalization-runtime-preparation-1/runtime-source-1/two-generation-namespace-4/reboot_capture.py': '856ba88df4539307dd8574ab520652a3bc669e72aebd13fcb1683a39dbdc0a85', '/home/holden/mckernel-work/host-preparation/native-second-stop-case-preparation-20261021-1/current053d-normalization-runtime-preparation-1/runtime-source-1/two-generation-namespace-4/reboot_workload_capture.py': '67b8af6b76e92aeaad831756934dec41dd35906a88e41de3c11972f222aba3ba', '/home/holden/mckernel-work/host-preparation/native-second-stop-case-preparation-20261021-1/current053d-normalization-runtime-preparation-1/runtime-source-1/two-generation-namespace-4/second_stop_capture.py': 'e7529b22c268e627cce5385428d68b779089514dd0f40761b26a20bf691b20b7', '/home/holden/mckernel-work/host-preparation/native-second-stop-case-preparation-20261021-1/current053d-normalization-runtime-preparation-1/runtime-source-1/two-generation-namespace-4/native_diagnostic.py': '1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e', '/home/holden/mckernel-work/host-preparation/native-second-stop-case-preparation-20261021-1/current053d-normalization-runtime-preparation-1/runtime-source-1/two-generation-namespace-4/native_diagnostic_backend.py': 'cd0759c926876483665065cb320b9daf7d7c6b32f56e561805b4b0343f60d614', '/home/holden/mckernel-work/host-preparation/native-second-stop-case-preparation-20261021-1/current053d-normalization-runtime-preparation-1/runtime-source-1/two-generation-namespace-4/qmp_capture.py': '5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741', '/home/holden/mckernel-work/scratch/native-resource-release-collector-20261017-1/transport-correction1/resource_capture.py': 'e66e014f4b67854f05457770a42250fb5e0929e0da304bdbc2b7366b6bde9240', '/home/holden/mckernel/scripts/application-tests/native_diagnostic.py': '1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e', '/home/holden/mckernel/scripts/application-tests/native_diagnostic_backend.py': 'cd0759c926876483665065cb320b9daf7d7c6b32f56e561805b4b0343f60d614', '/home/holden/mckernel/scripts/application-tests/native_diagnostic_lifecycle_capture.py': '0585f78b80e603c010316418ce307794d59e1d92581b845ec6b2e74e22c8954b', '/home/holden/mckernel/scripts/application-tests/native_resource_release_capture.py': '9c628074de9ae897e82f15c2f4438d2558c2a10fde6a0d5a288b8964eddfcc76', '/home/holden/mckernel/scripts/application-tests/qmp_capture.py': '5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741', '/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/runtime-current68-successor-1/case_evaluator.py': 'fe00a5808880d980df4b6df34a0a3b068fa49417fbd58edef721174957ca2e43', '/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/runtime-current68-successor-1/native_diagnostic_runner.py': 'c590ed2e9f57379a1cda2ff11456311ce50e679cdd15d02f4c8b6ac8a43dc628'}
++SOURCE_HASHES = {'/home/holden/mckernel-work/host-preparation/native-second-stop-case-preparation-20261021-1/current053d-normalization-runtime-preparation-1/runtime-source-1/native_resource_reboot_sequence.py': '312bb2d53042f97a74a0e31cb97231d6e483e331dead825b19afddd17ab16d0c', '/home/holden/mckernel-work/host-preparation/native-second-stop-case-preparation-20261021-1/current053d-normalization-runtime-preparation-1/runtime-source-1/two-generation-namespace-4/reboot_capture.py': '856ba88df4539307dd8574ab520652a3bc669e72aebd13fcb1683a39dbdc0a85', '/home/holden/mckernel-work/host-preparation/native-second-stop-case-preparation-20261021-1/current053d-normalization-runtime-preparation-1/runtime-source-1/two-generation-namespace-4/reboot_workload_capture.py': '67b8af6b76e92aeaad831756934dec41dd35906a88e41de3c11972f222aba3ba', '/home/holden/mckernel-work/host-preparation/native-second-stop-case-preparation-20261021-1/current053d-normalization-runtime-preparation-1/runtime-source-1/two-generation-namespace-4/second_stop_capture.py': 'e7529b22c268e627cce5385428d68b779089514dd0f40761b26a20bf691b20b7', '/home/holden/mckernel-work/host-preparation/native-second-stop-case-preparation-20261021-1/current053d-normalization-runtime-preparation-1/runtime-source-1/two-generation-namespace-4/qmp_capture.py': '5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741', '/home/holden/mckernel-work/scratch/native-resource-release-collector-20261017-1/transport-correction1/resource_capture.py': 'e66e014f4b67854f05457770a42250fb5e0929e0da304bdbc2b7366b6bde9240', '/home/holden/mckernel/scripts/application-tests/native_diagnostic.py': '1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e', '/home/holden/mckernel/scripts/application-tests/native_diagnostic_backend.py': 'cd0759c926876483665065cb320b9daf7d7c6b32f56e561805b4b0343f60d614', '/home/holden/mckernel/scripts/application-tests/native_diagnostic_lifecycle_capture.py': '0585f78b80e603c010316418ce307794d59e1d92581b845ec6b2e74e22c8954b', '/home/holden/mckernel/scripts/application-tests/native_resource_release_capture.py': '9c628074de9ae897e82f15c2f4438d2558c2a10fde6a0d5a288b8964eddfcc76', '/home/holden/mckernel/scripts/application-tests/qmp_capture.py': '5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741', '/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/runtime-current68-successor-1/case_evaluator.py': 'fe00a5808880d980df4b6df34a0a3b068fa49417fbd58edef721174957ca2e43', '/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/runtime-current68-filebound-successor-1/native_diagnostic_runner.py': '49dba552cee10260e3c4cc3bf8cab8242b8b7d4124060b98fbdfd9760ee15794', '/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/runtime-current68-filebound-successor-1/native_diagnostic_backend.py': '956ff9436940d97671a82df7c024a10d59835f07bdc980f2002741e4860ae5d5', '/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/runtime-current68-filebound-successor-1/native_diagnostic.py': '250a4d16d67f733331b0242cb62e55ecfadef702f2607caa546144197cf74422'}
+ EXTRA_READONLY = ['/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1', '/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-20352dabb9c94403a03c224ec2826ff2/modules', '/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/mckernel.img', '/home/holden/mckernel-work/host-preparation/p-m06-01-pinned-launcher-process-inputs-20261022-1/pinned-launcher-attempt-1/owner-work/evidence/artifacts/mcexec', '/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/native_diagnostic_overlay.py']
+ CGROUP = {
+     "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_period_us": "100000",
+@@ -570,7 +571,7 @@
+     _manifest_identity(path, digest)
+     for source, expected in SOURCE_HASHES.items():
+         need(_digest(source) == expected, "source identity drift: " + source)
+-    source = REPO + "/scripts/application-tests/native_diagnostic.py"
++    source = '/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/runtime-current68-filebound-successor-1/native_diagnostic.py'
+     spec = importlib.util.spec_from_file_location("owner_bound_diagnostic", source)
+     module = importlib.util.module_from_spec(spec)
+     spec.loader.exec_module(module)
+@@ -794,7 +795,7 @@
+                 "--cpus=4", "--cpuset-cpus=2-5", "--cgroup-parent=/mckernel-dev",
+                 "--memory=12g", "--memory-swap=12g", "--pids-limit=512", "--cap-drop=ALL",
+                 "--security-opt=no-new-privileges", "--read-only", "--network=none",
+-                "--user=1000:1000", "--ulimit", "core=0", "--ulimit", "nofile=4096:4096",
++                "--user=1000:1000", "--ulimit", "core=0", "--ulimit", "nofile=4096:4096", "--ulimit", "fsize=33554432:33554432",
+                 "--tmpfs", "/tmp:rw,nodev,nosuid,size=256m",
+                 "--mount", "type=bind,src=" + REPO + ",dst=" + REPO + ",readonly",
+                 "--mount", "type=bind,src=" + SCRATCH + ",dst=" + SCRATCH + ",readonly",
+@@ -860,7 +861,7 @@
+              any(same(h.get("MemorySwappiness"), x) for x in (None, -1)), "namespace/OOM defaults")
+         need(h.get("LogConfig") in ({"Type": "json-file", "Config": {}}, {"Type": "local", "Config": {}}), "local log sink")
+         need(same(sorted(h.get("Ulimits", []), key=lambda x: x["Name"]),
+-             [{"Hard": 0, "Name": "core", "Soft": 0}, {"Hard": 4096, "Name": "nofile", "Soft": 4096}]), "ulimits")
++             [{"Hard": 0, "Name": "core", "Soft": 0}, {"Hard": 33554432, "Name": "fsize", "Soft": 33554432}, {"Hard": 4096, "Name": "nofile", "Soft": 4096}]), "ulimits")
+         for key, minimum in (("MaskedPaths", {"/proc/kcore", "/proc/keys", "/proc/latency_stats", "/proc/timer_list", "/proc/scsi", "/sys/firmware"}),
+                              ("ReadonlyPaths", {"/proc/bus", "/proc/fs", "/proc/irq", "/proc/sys", "/proc/sysrq-trigger"})):
+             paths = h.get(key)
+@@ -894,6 +895,7 @@
+              row["NetworkSettings"].get("Ports") in (None, {}), "no network endpoint")
+ 
+     def _preflight(self):
++        require_short_fsize()
+         self.parent_identity = private_parent(str(self.parent))
+         need(not os.path.lexists(self.attempt), "inner attempt already exists")
+         self.diagnostic, self.manifest = bound_manifest(self.manifest_path, self.manifest_sha256)
+@@ -1120,7 +1122,13 @@
+         return {"status": "PROTOCOL_PASS", "container": self.container, "application_acceptance": False}
+ 
+ 
++
++def require_short_fsize():
++    need(resource.getrlimit(resource.RLIMIT_FSIZE) == (33554432, 33554432),
++         "exact inherited SHORT32 FSIZE required")
++
+ def _inside(parent, nonce, owner_sha, manifest, manifest_sha256):
++    require_short_fsize()
+     need(os.getuid() == os.geteuid() == 1000, "inside uid1000 required")
+     need(HEX.fullmatch(owner_sha) and _digest(SELF) == owner_sha, "inside owner hash drift")
+     need(re.fullmatch(r"[0-9a-f]{32}", nonce), "inside nonce")

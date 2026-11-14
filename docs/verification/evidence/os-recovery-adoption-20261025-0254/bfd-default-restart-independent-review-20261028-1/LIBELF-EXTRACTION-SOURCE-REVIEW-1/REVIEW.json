@@ -1,0 +1,88 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_EXACT_LIBELF_CREATED_ONLY_ADAPTER_SOURCE_PROFILE_AND_OWNER_API_ONLY",
+  "independent": true,
+  "implementation_ownership": false,
+  "reviewer": "/root/bfd_review",
+  "runtime_authority": null,
+  "source_correctness_blockers": [],
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-valid-matched-diagnostic-preparation-20261028-1/newlibelf-collector-root63-preparation-1/libelf-extraction-prep-1/SOURCE-READY.json",
+    "bytes": 8932,
+    "sha256": "ed980a278fa78e24c7fb1978ea282c0e97673fc6e08d1e0bdacfdbc6ca8dab7c"
+  },
+  "adapter": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-valid-matched-diagnostic-preparation-20261028-1/newlibelf-collector-root63-preparation-1/libelf-extraction-prep-1/created_only_libelf_adapter.py",
+    "bytes": 8436,
+    "sha256": "5bc1f45ff057511a84927bba8c5d68b401d6a8cf158c9f5aa11fe598f040d346"
+  },
+  "bindings": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-valid-matched-diagnostic-preparation-20261028-1/newlibelf-collector-root63-preparation-1/libelf-extraction-prep-1/BINDINGS.json",
+    "bytes": 3811,
+    "sha256": "f6670b8f41e08b20a4a9161b5ed6d780df6f8fc498285d5f057e5859437a2975"
+  },
+  "reviewed_historical_profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-valid-matched-diagnostic-preparation-20261028-1/newlibelf-collector-root63-preparation-1/libelf-extraction-prep-1/reviewed-image-owner-133af.py",
+    "bytes": 17814,
+    "sha256": "9634b56f251857141c67b70ce7a0c058470d6ef000a5f041898a91e3a71f6679"
+  },
+  "historical_source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-exact-scratch18-tool-image-rebind-probe-source-20261001.json",
+    "bytes": 2215,
+    "sha256": "904d237a0dad30e2b65721b53bf53799306a10485bcb3f9d1cc2b765dae41e8b"
+  },
+  "historical_execution_preparation_not_current_authority": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-exact-scratch18-tool-image-rebind-probe-execution-release-20261001.json",
+    "bytes": 4921,
+    "sha256": "4adc1d73ebbedd2e16e375510f0d84be264aa8a3e86414cbc0831fcb627987da"
+  },
+  "root_owner_interface": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-valid-matched-diagnostic-preparation-20261028-1/newlibelf-collector-root63-preparation-1/libelf-extraction-prep-1/ROOT-OWNER-INTERFACE-AND-EXACT-ARGV.json",
+    "bytes": 5615,
+    "sha256": "3ee0148abdf7b06b736c00cebf0373250afc626afc83551b1fbd560fbffb26cf"
+  },
+  "profile_delta": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-valid-matched-diagnostic-preparation-20261028-1/newlibelf-collector-root63-preparation-1/libelf-extraction-prep-1/PROFILE-REUSE-AND-DELTA.json",
+    "bytes": 2488,
+    "sha256": "42f97d3d79ec3b9f3bc39e5115a3ec3cb784032608d36359f0b84fd9c4f55cc3"
+  },
+  "independent_checks": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-restart-independent-review-20261028-1/LIBELF-EXTRACTION-SOURCE-REVIEW-1/INDEPENDENT-CHECKS.json",
+    "bytes": 3306,
+    "sha256": "b3160d4498fdb7433dcf1403364098f1a1cde368fe69d5ebcf591533c73e0475"
+  },
+  "retained_pure_check_result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-valid-matched-diagnostic-preparation-20261028-1/newlibelf-collector-root63-preparation-1/libelf-extraction-prep-1/PURE-CHECK-RESULT.json",
+    "bytes": 1099,
+    "sha256": "68345ca2605756b61bbc9a46611a19ea92e9de5312fe2f443e0f0246d0b421be"
+  },
+  "assessment": [
+    "Exact reviewed historical9634b56f snapshot and review904d237a bind image41778/linux-amd64. Three extracted create_args/validate_image_inspect/validate_container AST units match current owner source exactly. Full historical execute/start/exec/rebind behavior is never imported or called. The original archive was not read or rehashed.",
+    "Ordinary backend check_profile/LIMITS/RESOURCE_ARGS are extracted from exact96d17547 bytes. Create argv is the reviewed4CPU2-5/12GiB/equal-swap/512/noNet/privateIPC/read-only/noMounts/dropALL/no-new-privileges/tmpfs profile, UID/GID of ordinary owner, fixed sleep entrypoint/infinity configured but never started. Derived current1000:1000 argv exactly matches the interface record.",
+    "New request fixes immutable image/source and confines fresh output to one namespace/target under the packet. Root supplies fresh32hex nonce/name and maximum1 request; no native/build authority. Retired CID2460 is explicitly refused before inspect/copy/removal.",
+    "The eight-command path is exactly image inspect, create, created-container inspect, cp-L fixed libelf path, same created-container inspect, rm--exactnewCID, ID absence, name absence. Both inspections bind exact returned CID/name/image/fresh owner label, all inherited labels/env, resource/namespace settings and statuscreated/RunningFalse/Pid0/no paused/restarting/dead/OOM. No start/exec/run/stop/kill/force path exists.",
+    "Image metadata is the retained pinned map; fresh --label explicitly replaces the inherited c56 owner with the new extraction nonce. All other labels and Env must remain exact. Same-image provenance and created-state recheck are kept distinct from library ABI/dependency acceptance.",
+    "Commands must expose final before_popen hook and existing no-signal positive-wait4 exact transport. Each command re-enters Root admit callback and requires client_retirement_unprovenFalse after transport returns. The pinned5f95df84 transport retains successful raw spawns/unknown child custody before wrapper work, closes uncertainty only after durable complete JOIN, rejects subsequent uncertain children and never sends signals. Actual Root bridge must instantiate and bind it.",
+    "Copy destination must be absent before effects; exported file is non-symlink regular, stable dev/inode/size/mtime/ctime bytes, single-link, readable, bounded32MiB and initial ELF64LE ET_DYN/EM_X86_64. UID0/1000 and actual GID/mode are recorded without chown, accommodating sudo Docker cp. Canonical ancestor/output ownership enforcement belongs to mandatory Root admit bridge; no bypass via this source result.",
+    "Failure catches preserve exact CID/create-attempt/confirmed-create/removal/completed-command uncertainty through Root retain_uncertainty; there is no automatic rm, signal, retry or ownership release. Successful result still requires separate owner parentjoin and fresh current proof. Real copied-file hash/image/CID/request/eight raw receipts must be authenticated after actual operation.",
+    "Eight retained substituted-effect pure tests PASS: exact8-command success, bad request/image, profile/state/owner/env refusals, cp failure retaining owner, forbidden retiredCID, post-copy running-state retention, early pre-create failure, and Root-owned file provenance. They model effects and do not prove actual extraction or a Root bridge. No pure test, Docker or runtime command was repeated in this review."
+  ],
+  "actual_Root_bridge_requirements": [
+    "Bind exact new source/fetched publication/independent execution release, fresh request/nonce/name and ordinary caller UID/GID1000, current ledger/free/caps/account/thread/exclusions, genuine27:4 ownership and one-heavy lease/resource/floor reservation.",
+    "Create and pin non-symlink canonical output ancestry/inode/ownership, enforce fresh empty namespace/absent target and one-use request. Supply existing durable no-replace publish writer and custody-retaining failure callback.",
+    "Instantiate exact reviewed5f95 no-signal wait4 transport; install actual before_popen hook after all admission/profile/protected/log/fsync IO with final earliest clock/stop check immediately before spawn. Authenticate exact granted argv on each admit call.",
+    "On success retain all eight actual raw command/stdout/stderr/status/JOIN/PID-birth/group/session/resource records and actual copied-file bytes; positively join owner/normal own custody release, then obtain fresh independent physical/current acceptance.",
+    "Before staging/diagnostic use, independently validate actual libelf SONAME libelf.so.1, GNU versions and full recursive NEEDED closure versus guest loader/libc/zlib and both mcinspect artifacts. Existing accepted collector is reused without compiler/PID1 replay; current110 diagnostic scope and separate eclair/current116-118 obligations remain."
+  ],
+  "next_concrete_Root_operation": "Implement/bind the existing ordinary owner bridge using the exact interface callbacks and current admission/publication, then obtain its independent source/execution review. Only after that release is the first exact image41778 inspect argv eligible; this source review authorizes no actual command.",
+  "credit": {
+    "actual_Docker_commands": 0,
+    "actual_guard_resource_calls": 0,
+    "actual_extractions": 0,
+    "actual_compilers": 0,
+    "actual_native_cases": 0,
+    "default_artifact_acceptance": 0,
+    "files_closed": 0,
+    "producer_replays": 0
+  }
+}

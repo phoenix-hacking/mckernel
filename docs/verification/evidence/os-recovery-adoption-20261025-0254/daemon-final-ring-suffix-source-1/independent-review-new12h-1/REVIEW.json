@@ -1,0 +1,167 @@
+{
+  "schema": "mckernel.source31.independent-source-and-execution-preparation-review.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/daemon_execution_review",
+  "implementation_ownership": false,
+  "at": "2026-10-27T17:41:30.488378+00:00",
+  "decision": "PASS_SOURCE_PREPARATION_ONLY_PENDING_NEW_OPERATION_BINDINGS",
+  "runtime_authority": null,
+  "exact_execution_release": false,
+  "reviewed_inputs": {
+    "PREPARATION.SOURCE-ONLY.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/PREPARATION.SOURCE-ONLY.json",
+      "bytes": 10681,
+      "sha256": "0ac4c5ce031188ce83be921992b955ed90d4ad29e6475c52837aaee828eaa58c"
+    },
+    "run_final_suffix.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/run_final_suffix.py",
+      "bytes": 7748,
+      "sha256": "55796322349a2242dec9de2d157344babaa0415874441592a9cd9ef11d26efa6"
+    },
+    "retained_current.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/retained_current.py",
+      "bytes": 3550,
+      "sha256": "39c04266f1d8fb387a0e81bf717559890b2bc14e44f1e5a6f953820e976ddb81"
+    },
+    "RETAINED-INPUTS.SOURCE-ONLY.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/RETAINED-INPUTS.SOURCE-ONLY.json",
+      "bytes": 155722,
+      "sha256": "f2c801ef04343a9bd9521db3a2974f40d18be28496847a0ba8ddf88dea6bcfae"
+    },
+    "SOURCE-CHECKS.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/SOURCE-CHECKS.json",
+      "bytes": 924,
+      "sha256": "ac82507f23795c05790f47091ad96cd9aa8b69c62f8ed9d4e0b0bed3d058982e"
+    }
+  },
+  "root_bootstrap": {
+    "ROOT-CURRENT-NONCE-LEDGER25.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER25.json",
+      "bytes": 2863,
+      "sha256": "26912150bf8f9d995209ac2198909a7eda9d74416056d0471d82418ab9066062"
+    },
+    "BOOTSTRAP-OBSERVATION.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/BOOTSTRAP-OBSERVATION.json",
+      "bytes": 4009,
+      "sha256": "48a4e941e9827a14e9ae63eb047936ec3cf5f654eef8b70016728a7fbf9c7402"
+    }
+  },
+  "actual_window": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/ACTUAL-WINDOW.json",
+    "bytes": 815,
+    "sha256": "91bdfb1de3955a684d0766ffa85a5e18deda8f5f49c6ce1d85fcdbf2df6e3d86"
+  },
+  "fixed_ordered_cutoffs_epoch_monotonic_boottime": [
+    1793165769,
+    947875.677502648,
+    963213.804550928
+  ],
+  "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+  "checks": {
+    "independent_readonly_retained_current_validate": "PASS: 26 actual historical cases reconstructed without running old binaries",
+    "verified_current_retained_files": 217,
+    "verified_exact_source_and_helper_references": 13,
+    "python_syntax_files": 2,
+    "helper_closure": "prefix/audit/rustio literal verified-file imports preserve actual file/spec context; unchanged owned_process adapter deliberately extracts pinned h990 closure and wraps only work-time monitoring",
+    "capture_closure": "h990 keeps direct child unreaped while signalling known group; positive wait, group absence, closed streams and stream hashes required; no signalling after reap",
+    "observer": "real pthread create/join return and birth witnesses preserved; exact joined task directory ENOENT and literal final singleton required;8s outer invocation timeout remains",
+    "collision": "ring-C-helper executable differs from ring-C capture directory; ring-Rust/oversize-Rust capture paths never precreated",
+    "scope": "exactly C-ring/Rust-ring/Rust-oversize; zero compiler and no cases0-25 replay; retained source30 failure preserved",
+    "oracles": "C/Rust status0/syslog equality/current kmsg0 byte equality/resource closure; oversize0/syslog_bytes1048592/resource closure unchanged",
+    "resources": "fixture CPU2, AS2GiB, CPU60s, file32MiB, FD256, core0, stack2MiB/RUST_MIN_STACK2097152;90s work and64MiB output accounting; existing container CPUs2-5/12GiB/noSwap/pids64/noNet retained",
+    "workload_invocations": 0,
+    "compilers": 0,
+    "Docker_commands": 0,
+    "root_commands": 0
+  },
+  "remaining_blockers": [
+    "No fresh Source31 operation preparation/request/source-map/owner-driver contract currently exists; source-only packet is not an execution release.",
+    "Source30 contract is incompatible with new output and runtime preparation inventory and carries expired cutoffs; it must remain immutable.",
+    "Fresh Root nonce and current ledger25 attestation must be bound to staged operation, preserving consumed1f97 and abandoned640 exclusions.",
+    "Fresh current physical/account/source/native ownership admission, actual guardian binding, independently reviewed exact proposal and one-use Root release remain required."
+  ],
+  "minimal_successor_recipe": [
+    "Reuse Source30 owner lifecycle and accepted h990/profile64/kernel_pids64 helpers in one private Source31 successor. Keep mutex27:4, scratch21 and all native leases/exclusions, resource floors, client custody/archive/quarantine and remove-owned-terminal behavior unchanged.",
+    "Create fresh operation namespace/nonce and preparation derived from Source30 accepted source map with two exact source31 overlays. Bind Source31 retained manifest and source30 preparation as readonly runtime inputs. Stage readonly source at original container_source_parent; precreate fresh UID/GID1000 mode0700 output and bind exact device/inode plus nonce.",
+    "Extend exact runtime preparation inventory to include RETAINED-INPUTS.SOURCE-ONLY.json. Bind /retained-current readonly in addition to retained-prefix and retained-mock-build. Existing repo readonly mount exposes literal prefix/audit/rustio and source30 preparation paths; keep capture/census helper pins exact.",
+    "Change only narrow successor contract/data and validating consumers: command uses run_final_suffix.py --execute with no compiler arguments; validate new summary with retained26,newcases0,compilers0,invocations3; output joins exactly ring-C,ring-Rust,oversize-Rust; allow invocation symlink targets only ring-C-helper/ihkmond-Rust. Validate both copied executables against retained-current, both new Rust audit proofs, all three stream captures and unchanged ring/oversize oracles.",
+    "Adapt driver and owner receipt checks to same retained26/exactthree scope and keep kernel pids64 actual before/after proofs. Remove requirements for a new compiler output, object or rust-output preflight; retain validation of the historical compiler receipt inside retained_current.validate. Preserve original source30 failure and all historical files.",
+    "Bind actual-window91bdfb1d clocks in epoch,MONOTONIC,BOOTTIME order [1793165769,947875.677502648,963213.804550928] and exact boot. Keep canonical account guard, run7f4af94a83b14cc08f97401f5891d965/ceiling57774.852125/spent>=22812.3311 and all real holds. Bind actual guardian metadata; bootstrap observation alone supplies no runtime authority.",
+    "Perform static successor regression/source review first. Root then captures fresh ownership/resources/account and current nonce disposition, emits bounded fresh admission/request/proposal; independent reviewer binds exact source map, request, resource observation, release payload and live guardian; Root publishes once and enters promptly under the existing owner. No historical release or consumed nonce reuse.",
+    "After actual entry retain positive outer-owner/tool/container/client joins, exact three leaf results, current terminal/custody/archive/exclusion observations and independent acceptance. Mock pass adds no native/production/M15 file retirement credit."
+  ],
+  "owner_source_references": {
+    "adopt_contract.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/joined-task-observer-correction-source-1/rust-output-temp-correction-source-1/pinned-helper-import-correction-source-1/adopt_contract.py",
+      "bytes": 13525,
+      "sha256": "3ac70a2af89d30c3000cf4ae696ca835d8ba9951e28094f0f85c5cc64d9103c3"
+    },
+    "adopt_driver.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/joined-task-observer-correction-source-1/rust-output-temp-correction-source-1/pinned-helper-import-correction-source-1/adopt_driver.py",
+      "bytes": 5932,
+      "sha256": "407c99066aa9bff1115f6fed859aad8ba359f3793580c8aa04383a8c662229ad"
+    },
+    "adopt_owner.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/joined-task-observer-correction-source-1/rust-output-temp-correction-source-1/pinned-helper-import-correction-source-1/adopt_owner.py",
+      "bytes": 82130,
+      "sha256": "f17e8326a36b1a8fcf3bb2b2c35a1b7241b60843291ae26593ad64c20c8c2792"
+    },
+    "run_adopt_owned_capture.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/joined-task-observer-correction-source-1/rust-output-temp-correction-source-1/pinned-helper-import-correction-source-1/run_adopt_owned_capture.py",
+      "bytes": 2195,
+      "sha256": "9e5f1408043359ace6be04ecc0feae7d4360446bfb0e18049cffa244b733e9d7"
+    },
+    "prepare_adopt_inputs.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/joined-task-observer-correction-source-1/rust-output-temp-correction-source-1/pinned-helper-import-correction-source-1/prepare_adopt_inputs.py",
+      "bytes": 4978,
+      "sha256": "63160ff15446069e7042b4fc20caa31ca38278f91813fd291c0a69401f14c153"
+    },
+    "prepare_adopt_release.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/joined-task-observer-correction-source-1/rust-output-temp-correction-source-1/pinned-helper-import-correction-source-1/prepare_adopt_release.py",
+      "bytes": 3187,
+      "sha256": "1ea748e1c8e0b51fec89c12e6978a69abf9540b8022469823958691b1e66b158"
+    }
+  },
+  "accepted_helpers": {
+    "pinned_import_loader": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/joined-task-observer-correction-source-1/rust-output-temp-correction-source-1/pinned-helper-import-correction-source-1/pinned_helpers.py",
+      "bytes": 3064,
+      "sha256": "b68817e48c48ff35361ed4eefb2324d819a7ac3d5aedc5bc706dc92aee9cff5c"
+    },
+    "literal_helper_sources": {
+      "audit": {
+        "bytes": 6275,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/joined-task-observer-correction-source-1/joined_audit.py",
+        "sha256": "25552f721ff2f16c9a3c17b390087f3799182337b5685073129f2058d0add57c"
+      },
+      "prefix": {
+        "bytes": 3584,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/joined-task-observer-correction-source-1/prefix_evidence.py",
+        "sha256": "28cf958ed755fc8ec3dc052fde0484f9770d2be9bcb45cb222dcfc20e3a9f039"
+      },
+      "rustio": {
+        "bytes": 6177,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/joined-task-observer-correction-source-1/rust-output-temp-correction-source-1/rust_output_contract.py",
+        "sha256": "473b6f2e76b96ada032d42865cd12e24bb866d464f006c573d68c0a85405c357"
+      }
+    },
+    "capture_adapter": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-daemon-validation/read-errors-successor-1/fixture/owned_process.py",
+      "bytes": 5750,
+      "sha256": "a5ada59ee8090f6c72668bd43ac0a03dc69a08aa40f040cfe178f1d5571f3906"
+    },
+    "capture_helper": {
+      "bytes": 14753,
+      "path": "/home/holden/mckernel/docs/verification/evidence/phase5-m03-handshake-runtime-checkpoint-20261020-1/sdk-physical-source/run_two_commands_source_bound_corrected.py",
+      "sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8"
+    },
+    "census_helper": {
+      "bytes": 51420,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-20261019-1/capsule/scripts/native_rust_exact_build_container_owner.py",
+      "sha256": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1"
+    }
+  },
+  "native_acceptance": false,
+  "production_acceptance": false,
+  "M15_file_closure": false
+}

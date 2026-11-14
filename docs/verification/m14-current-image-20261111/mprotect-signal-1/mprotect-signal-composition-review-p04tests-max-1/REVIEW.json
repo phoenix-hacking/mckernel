@@ -1,0 +1,186 @@
+{
+  "acceptance_delta": 0,
+  "at": "2026-11-11T05:35:10.596627+00:00",
+  "bindings": {
+    "Root_precomposition": {
+      "bytes": 1161,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-signal-composition-1/ROOT-PRECOMPOSITION-CHECK.json",
+      "sha256": "f2e1010294980ede9b938c2857685dbb82dc912ace6e65e384740c1f4c5f37ce"
+    },
+    "actual_parent": "70435ce27b7673101c7cc955f97038357763c9cc",
+    "candidate_rows": [
+      {
+        "bytes": 62796,
+        "path": "kernel/CMakeLists.txt",
+        "sha256": "06e818515cb5a79e9e8355b1f10db1dd44c70d67312a238855a4df8c640dc7c8"
+      },
+      {
+        "bytes": 1919,
+        "path": "kernel/rust/f03_mprotect_host_provider.rs",
+        "sha256": "9b09bf0fa3241421335b4209a3d1e832b85cbf2696326243d8f8856931f099db"
+      },
+      {
+        "bytes": 4336,
+        "path": "kernel/rust/f03_signal_forward_provider.rs",
+        "sha256": "337f496e3e7acdd76a694b97cc735adad57f6e6ed880390a1cd2b866f9bae467"
+      },
+      {
+        "bytes": 4811,
+        "path": "kernel/rust/lib.rs",
+        "sha256": "fd4f23799012916658fa690bffb19116606b4c01dd23b6a14ef32879b58778b9"
+      },
+      {
+        "bytes": 964476,
+        "path": "kernel/syscall.c",
+        "sha256": "e2bb3e910dcaecf23a8e131b347b401d7baf372f3d749a073e03458c429f1947"
+      }
+    ],
+    "composition": {
+      "bytes": 2427,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-signal-composition-1/COMPOSITION.proposed.json",
+      "sha256": "d45e2dcdf542031d44dd46cfd7bd118e58eafe5d97675cac574b17e2b494ee2a"
+    },
+    "exact_new_modules": [
+      {
+        "bytes": 1919,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-signal-composition-1/candidate/kernel/rust/f03_mprotect_host_provider.rs",
+        "sha256": "9b09bf0fa3241421335b4209a3d1e832b85cbf2696326243d8f8856931f099db"
+      },
+      {
+        "bytes": 4336,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-signal-composition-1/candidate/kernel/rust/f03_signal_forward_provider.rs",
+        "sha256": "337f496e3e7acdd76a694b97cc735adad57f6e6ed880390a1cd2b866f9bae467"
+      }
+    ],
+    "joint_patch": {
+      "bytes": 14443,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-signal-composition-1/MPROTECT-SIGNAL-OWNERSHIP.patch",
+      "sha256": "63b44f36d106fb7111ab050e980f75d8257b7988b516c1255cf42e8195c1713e"
+    },
+    "original_packets": [
+      {
+        "base": "7231ce6d17af39e9556ee815980a97f180b70eb1",
+        "name": "mprotect",
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-host-provider-1/MPROTECT-HOST-PROVIDER.patch",
+        "sha256": "8da5962ce948c5b4ba77b28b955a8754f09f53da6f824c820ebcbea4e6f6201d"
+      },
+      {
+        "base": "7231ce6d17af39e9556ee815980a97f180b70eb1",
+        "name": "signal",
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/signal-forward-provider-1/SIGNAL-FORWARD-PROVIDER.patch",
+        "sha256": "485e78b408f517e6169f54632e828ae7453ca0adbca1f9f51a36ac34a6d93e23"
+      }
+    ],
+    "reused_source_GOs": [
+      {
+        "bytes": 14395,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-host-provider-review-p04tests-max-1/REVIEW.json",
+        "sha256": "979864e3eacdcdc475a05bbf8144e7c818f5a30e369d7b327df704e074fd0896"
+      },
+      {
+        "bytes": 28455,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/signal-forward-provider-review-p03-max-1/REVIEW.json",
+        "sha256": "b2de3296b33de51a23f13f51fddc13def04b97a20b8d0d09747a25610130d7f0"
+      }
+    ],
+    "source_parent": "7231ce6d17af39e9556ee815980a97f180b70eb1"
+  },
+  "canonical_credit_mutated": false,
+  "decision": "GO_EXACT_FIVE_PATH_COMBINED_SOURCE_SELECTION_ONLY",
+  "four_exports": [
+    "mprotect_set_host_vma_bridge",
+    "syscall_forward_context_bridge",
+    "syscall_forward_rt_sigprocmask_bridge",
+    "syscall_forward_sigaction_update_bridge"
+  ],
+  "independent_composition_proof": {
+    "C": "Exact signal approved postimage with only the already-reviewed six-line mprotect replacement applied produces the combined C byte-for-byte. Total physical lines equal signal approved postimage; mprotect adds no additional line shift. Signal #line origins remain exactly as sourceGOb2de.",
+    "CMake": "Exact signal approved postimage with only the six-line mprotect sibling block inserted before the thirteen-line signal block and the original approved memory compile-definition extension produces the combined CMake byte-for-byte.",
+    "Rust_lib": "Exact signal approved postimage with only two approved mprotect cfg/module lines produces the combined lib byte-for-byte.",
+    "conflict": {
+      "base_lines": 0,
+      "current_lines": 6,
+      "incoming_lines": 13,
+      "packet": "signal",
+      "path": "kernel/CMakeLists.txt",
+      "type": "additions-only conflict; exact base retained once, current and incoming additions preserved"
+    },
+    "conflict_result": "One zero-base additions-only CMake conflict; exact current6 and incoming13 blocks retained once, no markers/unintended lines. Root reports normal git apply --check PASS against actual704; reviewer did not rerun git/apply/merge.",
+    "new_modules": "Both complete new module bytes equal original reviewed author candidates; all four exports unchanged."
+  },
+  "material_findings": [
+    {
+      "facts": "Mprotect cfg/module/source dependency remains under existing MCKERNEL_MEMORY_HOST_OFFLOAD_SELECTED; its paired C macro is appended in that same existing selected property block. Signal selector is initializedOFF and selected only by the exact approved whole-default+wholeF06ON+ownedOFF+DCFAOFF branch. Signal cfg/module/header dependencies and paired C macro share that selector; they are siblings rather than accidentally nested together. Ordinary x86/Linux6.12/nonUBSAN/profile/perf/rusage/workIRQ/TofuOFF/FugakuOFF/broadOFF/experimentalOFF contract stays inherited unchanged.",
+      "predicate": "Independent selector scope and paired definitions",
+      "result": "PASS_SOURCE"
+    },
+    {
+      "facts": "Both module declarations/cfg/source dependency entries occur once. Signal actual syscall/context/register/signal header dependencies remain intact. Both new C macro assignments use APPEND after the existing source properties, preserving ptrace/fork/memory/mmap/outer/time/context macro assignments. The following context selection/property is unchanged and is not overwritten or swallowed.",
+      "predicate": "Dependency and source-property ordering",
+      "result": "PASS_SOURCE"
+    },
+    {
+      "facts": "Exactly the reviewed mprotect export and three signal/context exports are added. Original scalar/prototype/context/action guards remain at the approved C sites. Old signal opt-in guards keep their OR paths; new context C fallback exclusion is scoped to helpers+new signal provider. Original unsupported-profile C fallbacks and logical #line1082/1083/20167/20173 anchors remain as approved. No broad or experimental module is enabled, and no simultaneous old/new definition is introduced in the supported selection.",
+      "predicate": "Four real exports and C guard placement",
+      "result": "PASS_SOURCE"
+    },
+    {
+      "facts": "The two real mprotect/shmat table initializers remain the original exact source; new composition makes no further table edits. Signal source-approved real40B perf descriptor forward+32 and the two genuine do_sigaction/sys_rt_sigprocmask caller edges remain exact, as do the action/224B-context/typed C boundaries. Source equivalence follows the exact approved afterimage union, not a copied fixture or symbol-only wire.",
+      "predicate": "Actual immutable table and caller bindings",
+      "result": "PASS_PRESERVED_SOURCE"
+    },
+    {
+      "facts": "Root precheck and independent hashes retain f181 memory5,10208 policy context,2a00 ptrace,7de212 fork and872a time modules. Actual ff48 ABI/76ce caller policy and selected headers/setters also match reused signal sourceGO dependencies. No old body, initializer, compiler recipe, cache/default, held/broad/experimental/owned flag or native/resource authority is changed beyond the two approved source deltas.",
+      "predicate": "Preserve qualified providers and previous accepted scope",
+      "result": "PASS_SOURCE_IDENTITIES"
+    }
+  ],
+  "next_actual_boundary": {
+    "Root_source_action": "Canonical apply only this exact five-path reviewed patch, preserving all other dirty/peer work; read back exact integrated postimages and new commit before SDK freezes operation.",
+    "execution_admission": "Separate SDK exact committed-source operation review and Root fresh shared HOST/resource/ownership/capture admission remain required; this GO grants no compiler/container/native action.",
+    "necessary_changed_validation": [
+      "Normal named current production build with actual paired cfg/C macros and new typed scalar/context/action guards; no clean/old passing suites or extra witness-only compile.",
+      "Four genuine nonempty unique Rust-owned definitions and exact old C exclusions, allowing actual compatible source/map-proven aliases to existing genuine providers.",
+      "Real two mprotect/shmat table target pointers; real40B perf table forward+32 target; both actual signal caller edges and typed lowerings/provider closure; prior13+fork+clock+ptrace/default/current104/entry/LOAD/noUND and positive lifecycle preserved."
+    ],
+    "new_test_fixture_required": false
+  },
+  "preserved_old_module_pins": {
+    "kernel/rust/f03_do_fork.rs": "7de2126064794969f03b0d780679816e095e27733742b7684f29abe01979489b",
+    "kernel/rust/f03_do_syscall2_bridge.rs": "872a99877d33a1f25814fe801bbc51104225cbc1dc8904cfe38acd3c0f524685",
+    "kernel/rust/f03_memory_host_offload.rs": "f181d7308fcc3ecc81343f38788c9a9f1a1f7b024b3a24586a057f3ff2c17d33",
+    "kernel/rust/f03_policy_forward_context_bridge.rs": "10208bd7fb8539e1313a13c861bdaf84a54df7ce39ab4a714e1726e6729b5377",
+    "kernel/rust/f06_ptrace_resume_callbacks.rs": "2a00e7d12f25b6e738df786fe2511c4ef4d425335e9e2f663434982e1fb02ae0"
+  },
+  "remaining_changed_hunk_defect": null,
+  "reused_no_replay": {
+    "current_cohort": "Actual7231/Q0b57/19c5 and previously accepted default/provider/ABI evidence retained at their exact scope; new image selection still requires actual qualification.",
+    "mprotect_source_and_actual9": "SourceGO979864 and actual9/independent4b33 retained; no mirrored runtime fixture needed for direct typed forwarding.",
+    "signal_wire_and_ABI": {
+      "applicability": "Old signal bodies express the same zero224/signed signal/handler bits/flags/six-slot result contract using direct volatile field writes. New source mechanically delegates those stores to the current genuine selected setter implementations with the same field semantics and explicit C source order. This static equivalence/type/lifetime review plus new current paired production compile/image proof is sufficient; no fresh encoding behavior is introduced to justify rerunning the7 old vectors.",
+      "canonical_receipt": {
+        "bytes": 8964,
+        "path": "/home/holden/mckernel/docs/verification/m14-signal-forward-canonical-results-20261106.json",
+        "sha256": "2bd3d128b07c1510d9c079e83e7b85988d228fd6a416e611b87bec3d5cc45c94"
+      },
+      "immutable_original_wire_inputs_results": [
+        {
+          "bytes": 2441,
+          "path": "/home/holden/mckernel-work/m14-resume-20261105-1/signal-forward-private-1/CHECK-MANIFEST.json",
+          "sha256": "b283601335bb54029b5000e91bbc88ddd060b0d7925de8ed297cd5f23c4423fa"
+        },
+        {
+          "bytes": 9883,
+          "path": "/home/holden/mckernel-work/m14-resume-20261105-1/signal-forward-private-1/run-1/RESULT.json",
+          "sha256": "95448f6234e6e1a01e58c48cd4cacd8c86768aec282b47b6543c14a613041048"
+        }
+      ],
+      "scope": "The existing actual7 payload vectors/14 C-Rust calls and real14-field ABI witness remain valid scoped wire proof. Canonical evidence2bd3 confirms format-only source change, exact ABIff48 and df163 current source identities. It is an opt-in relocatable/HOST result with108 remainingUND at that old cohort, not a default/current image or native acceptance."
+    }
+  },
+  "reviewer": "/root/p04_tests_max actual Sol/MAX independent composition review; Root sole compositor/executor",
+  "reviewer_actions": "Only frozen source/manifest/patch/hash/delta reads and this private review write. No compiler/preprocessor/helper/test/Docker/network/model/kernel/native command, git merge/apply, canonical/cache/goal/launcher/credit or index mutation.",
+  "schema": "m14-mprotect-signal-combined-selector-source-review-v1",
+  "scope": "Only the composition of previously reviewed mprotect8da596 and signal485e78 source onto704 docs-only descendant of7231; no body/ABI/test review replay or new original-condition acceptance.",
+  "whole_original_or_runtime_native_parent_ACCEPT": false
+}

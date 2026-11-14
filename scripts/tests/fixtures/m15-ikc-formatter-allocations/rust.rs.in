@@ -1,0 +1,29 @@
+// Actual selected IKC formatter, shared append and logger; no project backend.
+use core::ffi::{c_char,c_int,c_ulong,c_void};
+use core::ptr::null_mut;
+macro_rules! c {($s:literal)=>{concat!($s,"\0").as_ptr().cast::<c_char>()};}
+__REQUEST_TYPE__
+unsafe extern "C"{
+ static mut loglevel:c_int;
+__ERRNO_DECL__
+ #[link_name="observation_malloc"]fn malloc(size:usize)->*mut c_void;
+ #[link_name="observation_calloc"]fn calloc(n:usize,size:usize)->*mut c_void;
+ #[link_name="observation_free"]fn free(pointer:*mut c_void);
+ #[link_name="observation_realloc"]fn realloc(pointer:*mut c_void,size:usize)->*mut c_void;
+ fn memset(pointer:*mut c_void,byte:c_int,size:usize)->*mut c_void;
+ #[link_name="observation_snprintf"]fn snprintf(out:*mut c_char,size:usize,format:*const c_char,...)->c_int;
+ fn geteuid()->u32;
+ fn open(path:*const c_char,flags:c_int,...)->c_int;
+ fn close(fd:c_int)->c_int;
+ fn strnlen(text:*const c_char,maximum:usize)->usize;
+ fn write(fd:c_int,text:*const c_void,size:usize)->isize;
+ fn observation_run(baseline:c_int,formatter:unsafe extern "C" fn(*mut IhkIkcReq)->*mut c_char)->c_int;
+}
+mod actual {
+ use super::*;
+__APPEND__
+__LOG__
+__ALLOCATION_ERROR__
+__FORMATTER__
+}
+fn main(){std::process::exit(unsafe{observation_run(0,actual::ikc_req2str)});}

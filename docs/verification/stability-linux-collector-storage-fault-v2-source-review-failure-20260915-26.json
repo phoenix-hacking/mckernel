@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_review_failure",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "review_attempt": 30,
+  "status": "FAIL_SOURCE",
+  "recorded_utc": "2026-09-16T06:06:57Z",
+  "review_input": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260915-33.tar.gz",
+    "sha256": "e2ae06d94cd0e532691221462a931112f7d6fb1a5b7fd8f0cd51622101b0495e",
+    "size": 37155456,
+    "members": 30,
+    "safe_unique_members": true
+  },
+  "reviewed_source_sha256": {
+    "oracle.py": "a0f09c2a21a868e9f566dbb5c87f52aa0a17c4e0b244953926d1c278fffbd598",
+    "test_collector_storage_fault_packet.py": "aefdc5c6df70b3558f18dc56d9d986d2d43f220e00174fa5a42dcad292cbdd64"
+  },
+  "verified_inputs": {
+    "python_3_9_12": "118/118 PASS",
+    "python_3_8_10": "118/118 PASS",
+    "pycompile_both": "PASS",
+    "nested_archive32_and_review29_bindings": true,
+    "failure33_log_and_nonreconstructable_limit": true
+  },
+  "findings": [
+    "Generic source-shape validation is not joined to selector state: a verified executable can be fabricated for selector 2 and a verified sealed stdin can be fabricated on selector 0's DEVNULL branch; pre-fork devnull_identity is also unconstrained.",
+    "Selector-0 request sink may claim failed creation while retaining successful counters and artifact binding, and a successful request sink may retain a nonzero fd relocation error.",
+    "The review-28 regression test asserts hashes but never invokes its loaded archive31 oracle and omits valid empty and 254-byte sample controls."
+  ],
+  "representative_accepted_canonical_sha256": {
+    "selector_2_verified_executable": "d3445cb8c69aeab5ef06ad162fee9bd5ce984e0f8157d556dae0468a695efd18",
+    "selector_0_verified_stdin": "1243a1f4a7e1ba8ac4fe73f8304f4b11c1de60c56b3f5f39ef6c484b9e56db51",
+    "selector_0_request_creation_failure": "365d518a81f692255bdb7788fa4d05e0447b975dc64315031155769977a5c412",
+    "selector_0_request_fd_errno": "6a1131af1fd9df4eac1639871b03a6537227f0bc443268560bb24a8ca2e308f5"
+  },
+  "required_next": [
+    "Join exact absent executable/stdin and devnull state to pre/post selector paths while retaining producer flags equal to 3.",
+    "Require reached successful sinks to retain created/fd/path/hash state and zero creation/fd errors while preserving the exact selector-1 create and selector-2/6 write failures.",
+    "Exercise archive31 acceptance and current rejection for all five review-28 canonical fixtures and retain empty/254-byte positive samples.",
+    "Rerun both pinned suites and pycompile, freeze a fresh archive and obtain fresh independent review."
+  ],
+  "review_scope_complete": false,
+  "source_accepted": false,
+  "compiler_packet_released": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

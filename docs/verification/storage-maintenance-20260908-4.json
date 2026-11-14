@@ -1,0 +1,83 @@
+{
+  "artifacts": [
+    {
+      "path": "docs/verification/evidence/cleanup-image-evidence-copies-20260908.py.gz",
+      "sha256": "4146979f3b24d314a1812beb16fde67c43ccbb4403b809d0000aa78b61575727",
+      "size": 2484,
+      "source": "/home/holden/mckernel-work/scratch/cleanup-image-evidence-copies-20260908.py"
+    },
+    {
+      "path": "docs/verification/evidence/trim-scratch-storage-20260908-4.py.gz",
+      "sha256": "08a424c80de65da3d9bdc6325eaad1e046bf852cc9583a2ca1c4a03708648bb5",
+      "size": 706,
+      "source": "/home/holden/mckernel-work/scratch/trim-scratch-storage-20260908-4.py"
+    },
+    {
+      "path": "docs/verification/evidence/storage-image-evidence-copies-20260908-plan.json.gz",
+      "sha256": "04a55632098b612c0bb5fa7b861b2564428814d8c9cecbb8c0706895291ed3a6",
+      "size": 247091,
+      "source": "/home/holden/mckernel-work/scratch/storage-image-evidence-copies-20260908-plan.json"
+    },
+    {
+      "path": "docs/verification/evidence/storage-image-evidence-copies-20260908-report.json.gz",
+      "sha256": "433bf33dace7127116e1d77a22af7b52e37e1c75956dc3a67fe3c740b60bfc53",
+      "size": 26431,
+      "source": "/home/holden/mckernel-work/scratch/storage-image-evidence-copies-20260908-report.json"
+    },
+    {
+      "path": "docs/verification/evidence/storage-image-evidence-copies-after-trim-20260908.json.gz",
+      "sha256": "f80c7ef5b9c260ebd5ddf98988e58c5531eda6abb7016a739a8175d8a810d50e",
+      "size": 399,
+      "source": "/home/holden/mckernel-work/scratch/storage-image-evidence-copies-after-trim-20260908.json"
+    },
+    {
+      "path": "docs/verification/evidence/storage-scratch-trim-20260908-4.json.gz",
+      "sha256": "381d51aee8cef73ec89c9e6417f0eb08a41dfd383df505d79a181bd516826d9e",
+      "size": 379,
+      "source": "/home/holden/mckernel-work/scratch/storage-scratch-trim-20260908-4.json"
+    }
+  ],
+  "checks": [
+    "Every deleted file matched the retained committed Git object and SHA-256 before deletion; HEAD matched the remote branch.",
+    "The allowlist includes only mapped evidence copies beneath the two new image-source checkouts and 22 duplicate archives in the completed retention directory.",
+    "Visible descriptor, working-directory and mapping checks include container aliases; snapshots are rechecked immediately before deletion.",
+    "All 2,016 checked current files remain byte-identical after deletion and targeted fstrim, and all 25 protected directories remain present.",
+    "The mounted sparse image retains its original 60-GiB logical size; recovered host allocation is the measured backing-file block reduction."
+  ],
+  "current_root_available_bytes": 152405348352,
+  "current_scratch_available_bytes": 32316743680,
+  "evidence_checked_at_pushed_head": "5e8de490e7b9cc147162a0726061d88c88478eb5",
+  "finished_utc": "2026-09-08T10:35:27.382990+00:00",
+  "kind": "Requested ongoing cleanup of verified redundant image-source evidence and retention archives",
+  "limitations": [
+    "No source, compiler object, boot image, guest result, original failed-attempt evidence, installed environment, personal file or other project workspace was removed. Historical source checkouts now omit redundant evidence until restored from the recorded Git blobs.",
+    "Open-file checks cover visible processes; inaccessible descriptor counts are retained in the plan and report.",
+    "Concurrent activity can change overall free space. Advertised fstrim discard bytes are not treated as recovered physical allocation.",
+    "This maintenance pass adds no kernel/application acceptance credit; the separately retained actual-guest checkpoint preserves the verified progress and full remaining goal."
+  ],
+  "preserved_current_files": 2016,
+  "protected_directories": 25,
+  "reclaimed_host_allocated_bytes": 5730791424,
+  "references": [
+    {
+      "path": "docs/verification/native-guest-sysfs-checkpoint-20260908.json",
+      "sha256": "190f9a09dbd5462844bd635807524c6f4ad27d6565fc70a980a8bfa2b70a64ba",
+      "size": 1108046
+    },
+    {
+      "path": "docs/verification/storage-maintenance-20260908-3.json",
+      "sha256": "fdc0bf7adf6efd45b2507a19c34e0cbe58ab162447a098f639e0de14d25d87b4",
+      "size": 6388
+    }
+  ],
+  "removed_image_evidence_copies": 2112,
+  "removed_retention_archive_copies": 22,
+  "removed_scratch_allocated_bytes": 5702189056,
+  "restoration": [
+    "Restore removed image-source evidence files using archive_exclusions in native-guest-sysfs-checkpoint-20260908.json: copy the recorded committed Git blob into its relative_capture path and restore its recorded mode and timestamp.",
+    "The compressed cleanup report maps the removed retention copies to their canonical committed archive paths. Restore historical captures before replay and always use fresh attempt names for new work."
+  ],
+  "status": "PASS",
+  "total_reclaimed_across_seven_cleanups_bytes": 67931201536,
+  "verified_retained_files": 1079
+}

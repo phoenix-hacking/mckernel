@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "record_kind": "stability_selected_retention_actual_method_source_failure",
+  "task_id": "M01-B",
+  "attempt": 1,
+  "created_utc": "2026-09-16T07:12:00Z",
+  "status": "FAIL_SOURCE",
+  "source_map": {
+    "path": "docs/verification/stability-selected-retention-actual-method-source-map-20260916-1.json",
+    "sha256": "a09978ce5d6bd8f3cdb43bbeba25af7ba287b5d6143d72e039b781df8abd4131",
+    "review_status": "PASS_SOURCE_MAP_ONLY"
+  },
+  "candidate_files": [
+    {
+      "path": "scripts/tests/prepare_stability_selected_retention_methods_v2.py",
+      "sha256": "bcad086872addd50ff6b4f6dd35104da48a1a48a9daaf24c35acb1f1e76b3469"
+    },
+    {
+      "path": "scripts/tests/test_stability_selected_retention_methods_v2.py",
+      "sha256": "3892fc299df88d16ef3ea35180a4cd0250909b40612e780cf4a9021815042183"
+    },
+    {
+      "path": "scripts/tests/fixtures/stability-selected-retention-methods-v2/actual_methods_adapter.rs",
+      "sha256": "aa8c79db9c904209e247e86ca620314f01b27dd23d85fafb3c5b7eb5802d767d"
+    }
+  ],
+  "archive": {
+    "path": "docs/verification/evidence/stability-selected-retention-actual-method-source-failure-20260916-1.tar.gz",
+    "sha256": "4fee427b35ca4f84fb4e7dd966274b9203502b49cf9893a8b7629df4fd8b5c16",
+    "safe_unique_files": 3
+  },
+  "cheap_checks": {
+    "python3_9": "4/4 PASS",
+    "python3_8": "4/4 PASS",
+    "diff_check": "PASS",
+    "limitation": "Raw check streams were not retained; passing envelope tests are non-probative because the independent source review rejected their coverage."
+  },
+  "independent_review": {
+    "status": "FAIL_SOURCE",
+    "findings": [
+      "TestResponseMemory does not implement the exact unsafe ResponseMemory signatures, omits physical ownership and verification Claim binding, and does not establish the backing extent or consuming release lifetime.",
+      "The adapter calls nonexistent Call::from_response and Mailbox test_* methods, misuses nongeneric Worker/open_worker and conflicts with the production Result alias.",
+      "Inner module documentation is appended after existing items, and std::sync::Arc has no reviewed kernel/no_std allocator integration.",
+      "Rows and negative categories are declarations only; no runner iterates them, production clock and second-CAS controls are absent, and wake=None coverage is incomplete.",
+      "Tests use substring checks and a tautological self-hash assertion; the generator records rather than enforces pinned stager/template identities and lacks exact adapter-only output-diff proof."
+    ]
+  },
+  "required_correction": [
+    "Implement exact unsafe ResponseMemory behavior with owned aligned backing, physical/Claim identity, explicit unfinished ownership and consuming release.",
+    "Add reviewed private test helpers that construct actual Mailbox/Call/Worker state and invoke unchanged admission, return, cancellation and publication paths.",
+    "Supply an executable row/negative runner and exact parser with deterministic production clock and CAS hooks.",
+    "Replace structural tests with independent pinned membership/hash, input-preservation, exact output-diff and mutation controls."
+  ],
+  "task_envelope_limitation": "The dispatched expected generator hash contained a one-character transcription error; reviewer and dispatcher corrected it to the observed authoritative hash before semantic review.",
+  "source_packet_accepted": false,
+  "compiled": false,
+  "runtime_execution": false,
+  "guest_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}

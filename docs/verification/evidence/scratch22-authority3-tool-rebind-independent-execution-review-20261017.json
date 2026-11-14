@@ -1,0 +1,62 @@
+{
+  "schema": "scratch22-authority3.tool-rebind-request-independent-review.v1",
+  "decision": "PASS_EXECUTION_CONDITIONAL",
+  "reviewer": "/root/scratch21_source_review",
+  "implementation_author": "/root/scratch22_adapter",
+  "implementation_ownership": false,
+  "scope": "Exact new-request binding only; no execution or authority to overlap the active native build.",
+  "reused_review": {
+    "path": "docs/verification/evidence/scratch22-authority2-tool-rebind-independent-execution-review-20261017.json",
+    "sha256": "d650086ada75ab747e8143ca204265acd2e34c6e5d2dc05f07ac6510a585409c"
+  },
+  "reused_ancestor": {
+    "path": "docs/verification/evidence/scratch22-authority1-tool-rebind-independent-execution-review-20261017.json",
+    "sha256": "a86c4bd247faf892e8e66cc257d7c08dd6160dcce1081c08ee30655a2e958535",
+    "nine_source_import_and_test_hashes_rechecked_unchanged": true,
+    "probe_sha256": "412d46de7e078746a7ec979a13ccb25753d6fa34708610932e35be8f02a89635"
+  },
+  "old_request": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-build-image-rebind-d37d2216-scratch22-authority2-image1-20261017.json",
+    "sha256": "aea8d97927177b58d86cfb5243755e398963f323052ce929e02302f5ad803f01"
+  },
+  "request": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-build-image-rebind-942c927b-scratch22-authority3-image1-20261017.json",
+    "sha256": "fa3a2da8898604d9cd2b7d34e4b8da0dc5e667e0bbeb1ca292f423b91ef58c39",
+    "target_candidate_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+    "target_evidence_root": "/home/holden/mckernel-exact-image-evidence-942c927b-scratch22-authority3-image1-20261017",
+    "target_receipt": "/home/holden/mckernel-exact-image-evidence-942c927b-scratch22-authority3-image1-20261017/image-receipt.json"
+  },
+  "independent_checks": {
+    "result": "PASS_NEW_REQUEST_BINDING",
+    "exact_changes_only": [
+      "target_candidate_sha",
+      "target_evidence_root",
+      "target_receipt",
+      "probe.target_receipt_candidate_sha",
+      "probe.target_receipt_evidence_root"
+    ],
+    "all_other_request_fields_identical": true,
+    "unchanged_source_evidence_rows": 92,
+    "source_provenance_corpus_rehashed": false,
+    "unchanged_test_suites_repeated": false,
+    "target_root_receipt_lease_and_request_quarantine_absent": true,
+    "live_build_touched": false,
+    "blocking_findings": []
+  },
+  "activation_prerequisites": [
+    "Actual exact942c927b native build PASS and independently accepted exact terminal cleanup, with owner/container/leases/exclusions retired. No overlap with the active build, another heavy operation or guest.",
+    "Dispatcher exact fetched execution sources/release bind this review and request digest. All reviewed source/import hashes remain unchanged.",
+    "Immediately before invocation revalidate fresh boot, scratch UUID2a5768c8-718d-4914-bdc0-6b32c5a92a52, mount/device, process/container/lease identities and resource census. Preserved development lock27:4 must be free for the guarded CLI; target root/receipt/lease, request quarantine and shared heavy token must remain absent.",
+    "Retain16-GiB host/12-GiB scratch and16-GiB available-RAM floors plus capture/emergency headroom, aggregate7-job/24-GiB budget, and all activation/retirement/quarantine/failure-preservation requirements in the reused ancestor. Honor any new stop or97% included-usage guard."
+  ],
+  "command_once_after_activation": [
+    "python3", "-B", "scripts/native_rust_exact_build_image_rebind_probe.py",
+    "--request", "/home/holden/mckernel-work/scratch/native-exact-build-image-rebind-942c927b-scratch22-authority3-image1-20261017.json",
+    "--expected-request-sha256", "fa3a2da8898604d9cd2b7d34e4b8da0dc5e667e0bbeb1ca292f423b91ef58c39"
+  ],
+  "execution_profile": "Unchanged guarded CLI/profile: exact root-owned development lock27:4 held through positive postflight or uncertainty quarantine; one current-user container on CPUs2-5/four CPUs,12GiB/no additional swap,512tasks, network none, no mounts, read-only root, cap-drop ALL/no-new-privileges and256MiB tmpfs. No outer timeout or external unlock wrapper.",
+  "required_result": "PASS exact942c927b receipt for immutable image41778f1f; fresh observation equals authenticated source; owned container positively retired/removed/absent, target lease/shared token absent, complete retained captures. Preserve any failure and quarantine; no unchanged replay.",
+  "execution_released_now": false,
+  "reviewer_execution": false,
+  "acceptance_credit": false
+}

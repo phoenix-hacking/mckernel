@@ -1,0 +1,101 @@
+{
+  "Root": "01a18bc3-e072-7810-9426-75101b0856c0",
+  "acceptance_delta": {
+    "C_retirements": 0,
+    "M14_files": 0,
+    "M15_files": 0,
+    "native_qualified_cohorts": 0,
+    "production_images": 0
+  },
+  "actual_final_library": {
+    "CPU_seconds_rounded": 0.86,
+    "all8_waits_joined": true,
+    "archive_sha256": "b16ac362204f9bd582af5f4aa4d2527639acd5a6dde0276a812dbf99646a3a21",
+    "max_RSS_KiB": 136164,
+    "receipt": "early-error-producer-1/RESULT.json",
+    "receipt_sha256": "940ac8c174b66d6df543850d3f02aae125108b5021af1adf11a3f3f487707729",
+    "shared_sha256": "ba95ce6c0c95b53b4a8553b94da28f28d298774d576f52edb77680d8b0d21601",
+    "six_commands_and_two_metadata_reads_passed": true,
+    "strict7warnings_native_order_and_70function_6data_roots_passed": true,
+    "unchanged_qualified_ABI_providers_reused": true,
+    "wall_seconds": 0.937343
+  },
+  "change": "Paired C/Rust frees each owned buffer once before the existing fclose, preserving errno across only each new free. C capacity is initialized. Existing output, error, log and close ordering is retained.",
+  "durable_regressions": [
+    "scripts/tests/test_m15_memory_query_integrated.py",
+    "scripts/tests/test_m15_memory_query_early_error.py"
+  ],
+  "functional_results": {
+    "EOF": {
+      "Rust_baseline_owned_buffers_observed_and_reclaimed": 4,
+      "all_waits_joined": true,
+      "candidate_terminal_frees": 8,
+      "initialized_genuine_libc_probe": 1,
+      "max_single_process_RSS_KiB": 113292,
+      "observed_concurrent_rustc_samples": 11,
+      "observed_overlap_ms": 63.873715,
+      "receipt": "eof-functional-parallel-1/qualification-1/RESULT.json",
+      "receipt_sha256": "5256ebfbfe907e806122676a338005d565e6646b21968967139ce4586aa8ef89",
+      "source_queries": 12,
+      "wall_seconds": 0.344877
+    },
+    "private_error": {
+      "C_and_Rust_candidate_frees": 2,
+      "Rust_baseline_leak_observed_and_reclaimed": 1,
+      "all_return_minus1_output_zero128_and_single_fclose": true,
+      "defined_argument": "1007-byte alphabetic NUL-terminated field label, generated format length1024, intended rejection before sscanf",
+      "free_entry_errno_preserved": true,
+      "public_reachability_claimed": false,
+      "receipt": "memory-error-cleanup-witness-1/qualification-1/RESULT.json",
+      "receipt_sha256": "1fac86eec4a5f0737112d86b48127aef5105682fe9d5b64ce4bdcf7b6010753d"
+    },
+    "public_query_interaction": {
+      "APIs": [
+        "ihk_os_query_total_mem",
+        "ihk_os_query_free_mem"
+      ],
+      "cases": 12,
+      "languages": [
+        "C",
+        "Rust"
+      ],
+      "ownership": "All getline generations, parser allocations, FILEs and one genuine anonymous HOST descriptor per call released; descriptorEBADF verified.",
+      "receipt": "memory-query-integrated-cpu6-1/correction-1/RESULT.json",
+      "receipt_sha256": "aeb6da326cd5f46cf9c5e7e8727a3f2feb19f5934c4e3a70695c5d8ab30eef0f",
+      "scope": "Frozen EOF candidate bodies; later private overlength-only cleanup cannot be reached by these fixed MemTotal/MemFree labels.",
+      "vectors": [
+        "success publishes8192/2048 bytes",
+        "no matching field returns-EINVAL without output publication",
+        "converter allocation failure after EOF returns-ENOMEM without publication"
+      ]
+    }
+  },
+  "invocation": "20261106T103153Z-e5bed1f2",
+  "problem": "The shared C/Rust memory-stat reader dropped caller-owned getline buffers on terminal EOF and on the defined private format-length rejection.",
+  "remaining": "Generic/exec full-image hold, original SDK/source-view/native admission and diagnostic outer mapping unchanged. This HOST batch does not accept a file/image/native gate.",
+  "retained_failures": [
+    {
+      "correction": "One function-like alias; observer object reused, four remaining checks passed. Original failed driver/captures retained.",
+      "failure": "Integrated fixture object-like stat macro renamed struct stat; C compile storage-size error.",
+      "receipt": "memory-query-integrated-cpu6-1/FIRST-FAILURE.json"
+    },
+    {
+      "correction": "Read existing flat request_sha256 field; six producer commands then ran once, unchanged.",
+      "failure": "Final producer admission parser evaluated .get on a string before any Popen.",
+      "receipt": "early-error-producer-1/PRELAUNCH-FAILURE.json"
+    }
+  ],
+  "retention_scope": "Source-only default wiring and unchanged behavior vectors retained; old frozen operation receipts remain exact. No passing behavior suite rerun for packaging. Real libc/FILE/getline/allocator/eventfd operations use local source-bound stat/path/open seams, not real IHK backend/native providers.",
+  "source": {
+    "C_function": "ihklib_os_query_mem_sysfs",
+    "IHK_commit": "b7293d23da2140a3a77438d258912476baa7429c",
+    "IHK_tree": "8d457964ae0fbc63f84b6efccb58bdd15ebd5764",
+    "Rust_function": "ihklib_os_query_mem_sysfs",
+    "bundle_blob": "4a3d304e6c3b4badd267b188268c694d20a77f21",
+    "bundle_sha256": "640da083329f217266dce0c39421cdaf52487b2199742ab40ac23878c7245d8e",
+    "paths": [
+      "ihk/linux/user/ihklib.c",
+      "ihk/linux/user/rust/whole70/ihklib_mcstat_memory_shared_parser.rs"
+    ]
+  }
+}

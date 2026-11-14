@@ -1,0 +1,174 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "FROZEN_EXACT_INPUTS_FOR_ROOT_ASSIGNED_PROVIDER_LINK_EXPERT",
+  "parent_failure_handoff": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/ACTUAL-HOST-FIRST-AND-ONE-CORRECTION-FAILURE-HANDOFF.json",
+    "bytes": 4692,
+    "sha256": "205aad6601e6e8a4e10d8b0fbe6f88203136fdc795726e4f165ac61a59c2f6e7"
+  },
+  "source_binding": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/SOURCE-IMPLEMENTATION-AND-CURRENT120B-ABI.json",
+    "bytes": 7227,
+    "sha256": "0f6b83e8d93397dfd7276accffb03a095dca068677aeab984e180ded3b7d11bb"
+  },
+  "fixture_binding": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/fixture/BINDING.json",
+    "bytes": 5688,
+    "sha256": "5cb3ac898289f245ec370fcf3ac09a2ba3e86ea951f3fd03783defeba7552b84"
+  },
+  "corrected_fixture": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/table-name-alias-correction-1/fixture/main.c",
+    "bytes": 7360,
+    "sha256": "9f59ed6c91fd9a277c273983da86a341ec753b7058b88fde29b54ecdb647fc58"
+  },
+  "corrected_reference_C_wrapper": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/table-name-alias-correction-1/fixture/original.c",
+    "bytes": 358,
+    "sha256": "c5daa569c057bec90c8e02026bdf6bb5ebb969ed0350f4597b5883fc4e9ded6d"
+  },
+  "corrected_fixture_diff": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/table-name-alias-correction-1/fixture-alias-order.diff",
+    "bytes": 907,
+    "sha256": "61b5735367b5ab55e2839aa1ddde77a98469e0a0b74b3ef9858b9d0cbc392129"
+  },
+  "last_attempt": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/table-name-alias-correction-1/actual-suffix-1/RESULTS.json",
+    "bytes": 10251,
+    "sha256": "045bffbb1ebc0e7b1510dbfc8715c4437119ec252866e9e9c58fd6a62f767614"
+  },
+  "last_command_argv": [
+    "/usr/bin/gcc-9",
+    "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+    "-DIHK_OS_MANYCORE",
+    "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+    "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+    "-DMCKERNEL_NATIVE_CLONE3",
+    "-DMCKERNEL_NATIVE_CLONE_TID",
+    "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+    "-DMCKERNEL_NATIVE_FUTEX",
+    "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+    "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+    "-DMCKERNEL_RUST_BITOPS",
+    "-DMCKERNEL_RUST_LIST_HELPERS",
+    "-DMCKERNEL_RUST_LOCK_HELPERS",
+    "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+    "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+    "-DMCKERNEL_RUST_PTE_HELPERS",
+    "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+    "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+    "-DPROFILE_ENABLE",
+    "-D__KERNEL__",
+    "-DMCKERNEL_RUST_PROCESS_HELPERS",
+    "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/include",
+    "-I/home/holden/mckernel/kernel/include",
+    "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel",
+    "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build",
+    "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64/include",
+    "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64",
+    "-I/home/holden/mckernel/ihk/ikc/include",
+    "-I/home/holden/mckernel/ihk/linux/include",
+    "-I/home/holden/mckernel/lib/include",
+    "-I/home/holden/mckernel/arch/x86_64/kernel/include",
+    "-g",
+    "-Wall",
+    "-Wextra",
+    "-Wno-unused-parameter",
+    "-Wno-sign-compare",
+    "-Wno-unused-function",
+    "-Wno-implicit-fallthrough",
+    "-Wno-stringop-truncation",
+    "-ffreestanding",
+    "-O2",
+    "-nostdinc",
+    "-isystem",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+    "-fno-omit-frame-pointer",
+    "-mcmodel=large",
+    "-mno-red-zone",
+    "-mno-sse",
+    "-ffunction-sections",
+    "-fdata-sections",
+    "-no-pie",
+    "-Wl,--no-undefined",
+    "-Wl,-Map=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/table-name-alias-correction-1/actual-suffix-1/timer.map",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/table-name-alias-correction-1/fixture/main.c",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/HOST-output-proposed-1/timer.o",
+    "-o",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/table-name-alias-correction-1/actual-suffix-1/timer"
+  ],
+  "last_command_stderr": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/table-name-alias-correction-1/actual-suffix-1/0.stderr",
+    "bytes": 314,
+    "sha256": "172492b68117925b347ba94d650a7c84e46936839aad3afbb130f910d9fee30b"
+  },
+  "last_command_stdout": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/table-name-alias-correction-1/actual-suffix-1/0.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "reuse_objects": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/HOST-output-proposed-1/timer.o",
+      "bytes": 2640,
+      "sha256": "dae24d2258ccc1a5488869ad993871b61409656b1aa01e5938fe88aa8c9bc6b0"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/HOST-output-proposed-1/fallback.o",
+      "bytes": 38448,
+      "sha256": "e9cee1fe464e130e1a990b692491149f1304aafc568691daa59060168e8db198"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/HOST-output-proposed-1/selected.o",
+      "bytes": 36480,
+      "sha256": "54e0aa163274e61ba5899c48c38d3ecb6ef7a07e764b9caa6cfa61617b106337"
+    }
+  ],
+  "current_selected_C_baseline": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-SYNC-PROCESSVM-HOST13-FIVE-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+    "bytes": 71144,
+    "sha256": "055c157831118f4b434a92e03725a05bd9ff8c3071235b8c79ab6019c94a9c40"
+  },
+  "current_Rust_memset_provider": {
+    "path": "/home/holden/mckernel/kernel/rust/string.rs",
+    "bytes": 13172,
+    "sha256": "579d8c06bb766a270548399a8820733516a167bb8af5d1fea46d8a51f7e8fbf3"
+  },
+  "existing_postcompile_checker": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/check_table_ownership.py",
+    "bytes": 4979,
+    "sha256": "a2266b037d9ed0770592c997bcb4e6518f0d9fa921e801af11f5afb54a6f7fd8"
+  },
+  "original_seven_command_plan": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/EXACT-SEVEN-COMMAND-HOST-RECIPE.NOT-ADMITTED.json",
+    "bytes": 38046,
+    "sha256": "11db518fe601fd3e54350a6fba3b5bd71400814d7e8e6b20b26b199cde3bc904"
+  },
+  "remaining_original_actions": [
+    "Corrected C fixture link using retained timer.o plus independently prepared exact Rust memset provider object",
+    "Existing ownership/origin checker with retained fallback.o/selected.o and matching new executable/map",
+    "Execute retained 25750 assertions"
+  ],
+  "constraints": [
+    "No timer.o, fallback.o, selected.o recompilation.",
+    "No changed assertions, offsets, ABI, production static/table code, GCC flags or compiler profile.",
+    "No ignored undefined imports, new C stub or libc replacement.",
+    "No __verbose/GNU_RETAIN policy change.",
+    "No compiler/executable admission comes from this handoff."
+  ],
+  "metrics": {
+    "actual_commands": 6,
+    "all_directly_joined": true,
+    "all_groups_absent": true,
+    "all_streams_closed": true,
+    "CPU6_released": true,
+    "total_CPU_seconds": 0.312878,
+    "total_command_wall_seconds": 0.34109594917390496,
+    "peak_RSS_KiB": 100732,
+    "first_compiler_UTC": "2026-10-27T06:18:30.185856+00:00",
+    "first_failure_end_UTC": "2026-10-27T06:18:30.440143+00:00",
+    "correction_compiler_UTC": "2026-10-27T06:20:25.271758+00:00",
+    "correction_end_UTC": "2026-10-27T06:20:25.415005+00:00",
+    "failure_to_correction_start_seconds": 114.8169059753418,
+    "earlier_task_blocked_timestamp": null
+  }
+}

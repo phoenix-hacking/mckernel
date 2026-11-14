@@ -1,0 +1,15 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-perf-realgraph-failclosed-1/test_selectors.py", line 33, in <module>
+    try:v._mount_graph(nested)
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-perf-realgraph-failclosed-1/validator.py", line 124, in _mount_graph
+    _require(RUST_TARGET in targets and host == PERF_OVERLAY_SOURCE and readonly, 'perf child binding/order')
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-perf-realgraph-failclosed-1/validator.py", line 28, in _require
+    raise ValueError(why)
+ValueError: perf child binding/order
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-perf-realgraph-failclosed-1/test_selectors.py", line 34, in <module>
+    except ValueError as e:assert 'unsupported overlap' in str(e);results.append({'case':'legacy_graph_still_rejects','outcome':'rejected','error':str(e)})
+AssertionError

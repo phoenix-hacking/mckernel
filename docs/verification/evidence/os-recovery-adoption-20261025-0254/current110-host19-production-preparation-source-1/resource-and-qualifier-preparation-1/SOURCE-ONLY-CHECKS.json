@@ -1,0 +1,29 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_LITERAL_CLI_AND_PURE_CONTROLS",
+  "literal_preflight": {
+    "command": [
+      "python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/resource-and-qualifier-preparation-1/qualify_produced_cohort.py",
+      "--preflight-only"
+    ],
+    "artifact_gates_executed": false,
+    "templates": 7
+  },
+  "pure_controls": {
+    "command": [
+      "python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/resource-and-qualifier-preparation-1/test_pure_controls.py"
+    ],
+    "resource_cases": 7,
+    "final_relocation_patch_cases": 5
+  },
+  "actual_compilers": 0,
+  "live_guard": false,
+  "physical_observer": false,
+  "kernel_source_copies": 0
+}

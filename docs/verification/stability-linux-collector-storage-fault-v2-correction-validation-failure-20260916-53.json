@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_correction_validation_failure",
+  "task_id": "M02-B-storage-fault-v2-source-correction",
+  "correction_attempt": 53,
+  "recorded_utc": "2026-09-16T11:36:17Z",
+  "status": "FAIL_SYNTAX",
+  "authority": {
+    "review_input_sha256": "f5de5ac40efdbafe780500aeb81aa0e5b2dbd6b63e850ee0bf835b8d5074d456",
+    "review_failure_sha256": "23cf40bec561751b27d5f70645da9cafc1cbbdb35fff179cfc8fb6f3812c0046",
+    "correction52_failure_sha256": "396fa0855ab30710b4ab2a02cf56d40ecf1b895cff0f67986886c23a8ac1e325"
+  },
+  "candidate": {
+    "oracle_sha256": "67a6ed5bd04a65e91a72a6cfb8621221363542302da3d810729fcfb6195d258a",
+    "witness_owner_sha256": "d7084b98d7639279c5095a599529de22421eb6c2e213ffb0bf48cc26287e9760",
+    "test_sha256": "7bb72df2f4fdc02d90a0db0f7d067124fd61088a618a6844a02648f16f13dbac",
+    "git_diff_check": "PASS",
+    "focused_python3_9": "FAIL_SYNTAX_WITH_ZERO_TESTS",
+    "full_python3_9": "NOT_RUN_AFTER_FOCUSED_FAILURE",
+    "python3_8": "NOT_RUN_AFTER_FOCUSED_FAILURE"
+  },
+  "evidence": {
+    "focused_log_path": "/home/holden/mckernel-work/scratch/storage-fault-v2-attempt53-validation-20260916-1/focused-python39.log",
+    "focused_log_sha256": "223e1b9fec641eeef0e802a8de986bccb3b7e78f30f88effa12aae3745b6717a",
+    "archive_path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-correction-validation-failure-20260916-53.tar.gz",
+    "archive_sha256": "d6595d5045425e5288ae2a8cbd2e3880b46200d684bd346051ccceabb35ed7c4",
+    "archive_size": 52215,
+    "preserved_test_sha256": "7bb72df2f4fdc02d90a0db0f7d067124fd61088a618a6844a02648f16f13dbac"
+  },
+  "blocking_finding": "The first bracket correction leaves an unmatched extra closing parenthesis immediately before the EOF packet __setitem__ call at test line 4353. Import stops before executing any test.",
+  "next": "Use the independently escalated exact-expression diagnosis, make only the balanced syntax correction, and then run the focused case followed by complete Python 3.9/3.8, pycompile and diff lanes before freezing any new review archive.",
+  "source_accepted": false,
+  "compiler_packet_released": false,
+  "compiler_execution": false,
+  "runtime_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}

@@ -1,0 +1,20 @@
+--- a/vm_drain_family.rs
++++ b/vm_drain_family.rs
+@@ -144,7 +144,7 @@
+     let process = unsafe { (*actor).proc };
+     assert!(!process.is_null() && configuration.thread == actor.cast() && configuration.proc == process.cast());
+     let vm = unsafe { (*process).vm };
+-    assert!(!vm.is_null() && unsafe { (*actor).vm == vm && (*vm).proc == process });
++    assert!(!vm.is_null() && unsafe { (*actor).vm == vm && (*vm).proc == process.cast::<c_void>() });
+     assert!(unsafe { (*process).refcount.counter > 0 && (*vm).refcount.counter > 0 });
+     assert!(unsafe { (*process).mckfd.is_null() && bitmap(actor) == 0 });
+     assert_eq!(configuration.group_fd, -1);
+@@ -256,7 +256,7 @@
+             && unsafe { super::descriptors::unresolved_host_closes() } == initial_debt + 2,
+         actual_schedule_calls: if schedule_before == 0 { schedule_after } else { usize::MAX },
+         positive_actor_vm_links_preserved: unsafe { (*actor).vm == vm && (*process).vm == vm
+-            && (*vm).proc == process && (*process).refcount.counter > 0 && (*vm).refcount.counter > 0 },
++            && (*vm).proc == process.cast::<c_void>() && (*process).refcount.counter > 0 && (*vm).refcount.counter > 0 },
+         blocked_wait_or_native_behavior_proven: false,
+     }
+ }

@@ -1,0 +1,16 @@
+{
+  "schema": "mckernel.stability.design-review.v1",
+  "date": "2026-09-28",
+  "status": "BLOCK",
+  "base_commit": "5af634ce1e71248d7bbe144a49d689443993f449",
+  "scope": "per-generation guest IRQ-work identity, failed-delivery recovery and reclamation",
+  "findings": [
+    "the fixed boot header cannot grow in place because cpu_table immediately follows it; a native-revision-gated extension must follow all variable boot tables and carry magic, version, size and generation",
+    "guest work slots are a contiguous 64-byte-per-source-CPU retained allocation; raised_list contains the exact guest slot pointer and a failed IPI leaves the node linked and BUSY",
+    "the descriptor must publish retained physical identity, exact count/stride and release-ready state; the host must validate retained range, disjointness, alignment and checked geometry before translating through the reviewed direct map",
+    "a generation gate/sender lease must span BUSY acquisition, list insertion, IPI result and final slot access; close waits for zero senders before draining",
+    "irq_work_sync only waits and cannot repair a failed initial delivery; recovery must retry the exact IRQ_WORK_VECTOR to the retained target, and an offline target requires quarantine/retention rather than unlink or reuse"
+  ],
+  "smallest_next_fixture": "two source slots and two targets; suppress the first vector, prove linked BUSY state, retry and prove one callback/list empty/BUSY clear, quarantine an offline target, and reject stale-generation completion against a newer generation",
+  "acceptance": "Design review only. No descriptor, retry path, drain, build, guest, reclamation or lifecycle acceptance exists."
+}

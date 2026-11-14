@@ -1,0 +1,481 @@
+{
+  "accepted_scope": "Current native and legacy whole Rust crate objects and actual whole syscall.c selected/fork-fallback/policy-helper-OFF plus process.c provider objects. Exact independent12case body parity remains separately accepted.",
+  "all_compiler_stderr_empty": false,
+  "artifacts": [
+    {
+      "ELF": "ELF64_LITTLE_X86_64_ET_REL",
+      "FAM": {
+        "bytes": 40,
+        "section": ".mckernel_fam_layout",
+        "symbol": "mckernel_phase5_rust_fam_layout",
+        "unique_global_STT_OBJECT": true,
+        "words": [
+          164,
+          168,
+          4,
+          4,
+          8
+        ]
+      },
+      "bytes": 13558408,
+      "exact_boundary_symbols": {
+        "clone_thread": {
+          "defined_functions": 0,
+          "undefined": 1
+        },
+        "process_fork_cancel_constructed_current_v1": {
+          "defined_functions": 1,
+          "undefined": 0
+        },
+        "process_fork_construct_current_v1": {
+          "defined_functions": 1,
+          "undefined": 0
+        },
+        "process_fork_guest_carrier_begin_current_v1": {
+          "defined_functions": 1,
+          "undefined": 0
+        },
+        "process_fork_guest_carrier_cancel_current_v1": {
+          "defined_functions": 1,
+          "undefined": 0
+        },
+        "process_fork_guest_carrier_create_current_v1": {
+          "defined_functions": 1,
+          "undefined": 0
+        },
+        "process_fork_guest_carrier_retain_current_v1": {
+          "defined_functions": 1,
+          "undefined": 0
+        },
+        "process_fork_guest_control_submit_current_v1": {
+          "defined_functions": 1,
+          "undefined": 0
+        },
+        "process_fork_owned_caller_current_v1": {
+          "defined_functions": 1,
+          "undefined": 0
+        },
+        "process_fork_owned_caller_current_v2": {
+          "defined_functions": 1,
+          "undefined": 0
+        },
+        "process_fork_owned_caller_runnable_current_v2": {
+          "defined_functions": 1,
+          "undefined": 0
+        },
+        "process_fork_runtime_drain_current_v1": {
+          "defined_functions": 1,
+          "undefined": 0
+        },
+        "process_release_vm_checked_body_result": {
+          "defined_functions": 1,
+          "undefined": 0
+        },
+        "release_cpuid": {
+          "defined_functions": 1,
+          "undefined": 0
+        },
+        "release_process_checked": {
+          "defined_functions": 1,
+          "undefined": 0
+        },
+        "release_process_vm_checked": {
+          "defined_functions": 1,
+          "undefined": 0
+        },
+        "release_thread_checked": {
+          "defined_functions": 1,
+          "undefined": 0
+        },
+        "sched_schedule_exit_cleanup": {
+          "defined_functions": 1,
+          "undefined": 0
+        },
+        "syscall_settid_body_result": {
+          "defined_functions": 1,
+          "undefined": 0
+        }
+      },
+      "name": "native-mckernel_rust.o",
+      "sha256": "5030d027df6e702671b9ccec29ba8ddee8f6ad80314ffbf93694dadca6e8f614"
+    },
+    {
+      "ELF": "ELF64_LITTLE_X86_64_ET_REL",
+      "FAM": {
+        "bytes": 40,
+        "section": ".mckernel_fam_layout",
+        "symbol": "mckernel_phase5_rust_fam_layout",
+        "unique_global_STT_OBJECT": true,
+        "words": [
+          164,
+          168,
+          4,
+          4,
+          8
+        ]
+      },
+      "bytes": 13343152,
+      "exact_boundary_symbols": {
+        "clone_thread": {
+          "defined_functions": 0,
+          "undefined": 1
+        },
+        "process_fork_cancel_constructed_current_v1": {
+          "defined_functions": 1,
+          "undefined": 0
+        },
+        "process_fork_construct_current_v1": {
+          "defined_functions": 1,
+          "undefined": 0
+        },
+        "process_fork_guest_carrier_begin_current_v1": {
+          "defined_functions": 1,
+          "undefined": 0
+        },
+        "process_fork_guest_carrier_cancel_current_v1": {
+          "defined_functions": 1,
+          "undefined": 0
+        },
+        "process_fork_guest_carrier_create_current_v1": {
+          "defined_functions": 1,
+          "undefined": 0
+        },
+        "process_fork_guest_carrier_retain_current_v1": {
+          "defined_functions": 1,
+          "undefined": 0
+        },
+        "process_fork_guest_control_submit_current_v1": {
+          "defined_functions": 1,
+          "undefined": 0
+        },
+        "process_fork_owned_caller_current_v1": {
+          "defined_functions": 1,
+          "undefined": 0
+        },
+        "process_fork_owned_caller_current_v2": {
+          "defined_functions": 1,
+          "undefined": 0
+        },
+        "process_fork_owned_caller_runnable_current_v2": {
+          "defined_functions": 1,
+          "undefined": 0
+        },
+        "process_fork_runtime_drain_current_v1": {
+          "defined_functions": 1,
+          "undefined": 0
+        },
+        "process_release_vm_checked_body_result": {
+          "defined_functions": 1,
+          "undefined": 0
+        },
+        "release_cpuid": {
+          "defined_functions": 1,
+          "undefined": 0
+        },
+        "release_process_checked": {
+          "defined_functions": 1,
+          "undefined": 0
+        },
+        "release_process_vm_checked": {
+          "defined_functions": 1,
+          "undefined": 0
+        },
+        "release_thread_checked": {
+          "defined_functions": 1,
+          "undefined": 0
+        },
+        "sched_schedule_exit_cleanup": {
+          "defined_functions": 1,
+          "undefined": 0
+        },
+        "syscall_settid_body_result": {
+          "defined_functions": 1,
+          "undefined": 0
+        }
+      },
+      "name": "legacy-mckernel_rust.o",
+      "sha256": "613ab3f1e1b8a1693f735a126142da669811d3284fa4fcf9e6246d4320aece37"
+    },
+    {
+      "ELF": "ELF64_LITTLE_X86_64_ET_REL",
+      "FAM": {
+        "bytes": 40,
+        "section": ".mckernel_fam_layout",
+        "symbol": "mckernel_phase5_c_fam_layout",
+        "unique_global_STT_OBJECT": true,
+        "words": [
+          164,
+          168,
+          4,
+          4,
+          8
+        ]
+      },
+      "bytes": 829736,
+      "exact_boundary_symbols": {
+        "do_fork": {
+          "defined_functions": 1,
+          "undefined": 0
+        },
+        "process_fork_cancel_constructed_current_v1": {
+          "defined_functions": 0,
+          "undefined": 1
+        },
+        "process_fork_construct_current_v1": {
+          "defined_functions": 0,
+          "undefined": 1
+        },
+        "process_fork_owned_caller_runnable_current_v2": {
+          "defined_functions": 0,
+          "undefined": 1
+        },
+        "process_fork_runtime_drain_current_v1": {
+          "defined_functions": 0,
+          "undefined": 1
+        },
+        "syscall_settid_body_result": {
+          "defined_functions": 0,
+          "undefined": 1
+        }
+      },
+      "name": "selected-owned-syscall.o",
+      "sha256": "73b447b3c423dcd3685db016c3be5121668d5b9b046789e0754c16daec7b5c28"
+    },
+    {
+      "ELF": "ELF64_LITTLE_X86_64_ET_REL",
+      "FAM": {
+        "bytes": 40,
+        "section": ".mckernel_fam_layout",
+        "symbol": "mckernel_phase5_c_fam_layout",
+        "unique_global_STT_OBJECT": true,
+        "words": [
+          164,
+          168,
+          4,
+          4,
+          8
+        ]
+      },
+      "bytes": 832096,
+      "exact_boundary_symbols": {
+        "do_fork": {
+          "defined_functions": 1,
+          "undefined": 0
+        },
+        "process_fork_cancel_constructed_current_v1": {
+          "defined_functions": 0,
+          "undefined": 0
+        },
+        "process_fork_construct_current_v1": {
+          "defined_functions": 0,
+          "undefined": 0
+        },
+        "process_fork_owned_caller_runnable_current_v2": {
+          "defined_functions": 0,
+          "undefined": 0
+        },
+        "process_fork_runtime_drain_current_v1": {
+          "defined_functions": 0,
+          "undefined": 0
+        },
+        "syscall_settid_body_result": {
+          "defined_functions": 0,
+          "undefined": 1
+        }
+      },
+      "name": "fallback-owned-syscall.o",
+      "sha256": "e24a9f39b86d4c76290a7c6dd1a5a532da810aa719c2e27e7ef10e550670a137"
+    },
+    {
+      "ELF": "ELF64_LITTLE_X86_64_ET_REL",
+      "FAM": null,
+      "bytes": 304392,
+      "exact_boundary_symbols": {
+        "clone_thread": {
+          "defined_functions": 1,
+          "undefined": 0
+        },
+        "release_cpuid": {
+          "defined_functions": 0,
+          "undefined": 0
+        }
+      },
+      "name": "constructor-process.o",
+      "sha256": "3aaa288a2726fa3dc956d99c2e86482bfada69ec40db59ca67e4b33ffb0e9dac"
+    },
+    {
+      "ELF": "ELF64_LITTLE_X86_64_ET_REL",
+      "FAM": {
+        "bytes": 40,
+        "section": ".mckernel_fam_layout",
+        "symbol": "mckernel_phase5_c_fam_layout",
+        "unique_global_STT_OBJECT": true,
+        "words": [
+          164,
+          168,
+          4,
+          4,
+          8
+        ]
+      },
+      "bytes": 1801472,
+      "exact_boundary_symbols": {
+        "do_fork": {
+          "defined_functions": 1,
+          "undefined": 0
+        },
+        "process_fork_cancel_constructed_current_v1": {
+          "defined_functions": 0,
+          "undefined": 1
+        },
+        "process_fork_construct_current_v1": {
+          "defined_functions": 0,
+          "undefined": 1
+        },
+        "process_fork_owned_caller_runnable_current_v2": {
+          "defined_functions": 0,
+          "undefined": 1
+        },
+        "process_fork_runtime_drain_current_v1": {
+          "defined_functions": 0,
+          "undefined": 1
+        },
+        "syscall_settid_body_result": {
+          "defined_functions": 0,
+          "undefined": 0
+        }
+      },
+      "name": "settid-c-fallback-syscall.o",
+      "sha256": "4a279b72d0f89232db8a068b920edd2dd3e7d2850fb7968f3d9a5c14689a640d"
+    }
+  ],
+  "decision": "PASS_SIX_EXACT_CURRENT_WHOLE_CRATE_AND_C_CONSUMER_COMPILATIONS_WITH_PER_OBJECT_SETTID_AND_FAM_EVIDENCE",
+  "method": "Read-only independent standard-library ELF64 section/symbol parsing and byte hashes; no driver/helper imports, compiler reruns, native execution or source inventory repeat. Each global/weak boundary definition/import/absence count and each FAM section plus unique40-byte STT_OBJECT was checked against the closed artifact witness and explicit settid per-object obligations. All12 stream hashes/lengths/stable9 fields and six exact argv/cwd/creator-start/direct/group closures were checked. Container namespace PIDs are not interpreted as host PIDs.",
+  "no_combined_or_final_link_performed": true,
+  "no_current_image_or_native_default_activation_acceptance": true,
+  "no_whole_image_unresolved_closure_claim": true,
+  "owner_receipt_sha256": "dcaad2852fc552daf40e0c1637891049d226a1f929fbb38e1b34fe4c4769ad53",
+  "physical_review": "actual-six-stage-physical-retirement-acceptance.json",
+  "production_compute_C_retirement": false,
+  "result_sha256": "d287a16a0e19d2ebfcbde5e3e638f2ba1c19b6f9bd721e520bc895c1918ddbc8",
+  "reviewer_source_runtime_root_Git_actions": 0,
+  "schema": "mckernel.settid.actual-six-stage-artifact-acceptance.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_identity": "2f090543b68750b1579e9974f2d723cfafee22a4195679aeb66ee80431731b6b",
+  "stages": [
+    {
+      "closed_stable_streams": {
+        "stderr": {
+          "bytes": 20529,
+          "sha256": "4545d81308600fc24454e7c503e16fc8454f432318afb5c24e733f53c89dc5c6"
+        },
+        "stdout": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "direct_join": true,
+      "exit_code": 0,
+      "group_absent": true,
+      "pid_in_container_namespace": 8,
+      "seconds": 16.169472120003775,
+      "selection": "native",
+      "starttime": 34724812
+    },
+    {
+      "closed_stable_streams": {
+        "stderr": {
+          "bytes": 21349,
+          "sha256": "493a94dd1713c2a898145e8127a5f983e62a7877f9cc314bbfca5a85c0ca4311"
+        },
+        "stdout": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "direct_join": true,
+      "exit_code": 0,
+      "group_absent": true,
+      "pid_in_container_namespace": 16,
+      "seconds": 15.532160309026949,
+      "selection": "legacy",
+      "starttime": 34726433
+    },
+    {
+      "closed_stable_streams": {
+        "stderr": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "direct_join": true,
+      "exit_code": 0,
+      "group_absent": true,
+      "pid_in_container_namespace": 24,
+      "seconds": 1.7638977440074086,
+      "selection": "caller-selected",
+      "starttime": 34727989
+    },
+    {
+      "closed_stable_streams": {
+        "stderr": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "direct_join": true,
+      "exit_code": 0,
+      "group_absent": true,
+      "pid_in_container_namespace": 27,
+      "seconds": 1.6449167520040646,
+      "selection": "caller-fallback",
+      "starttime": 34728166
+    },
+    {
+      "closed_stable_streams": {
+        "stderr": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "direct_join": true,
+      "exit_code": 0,
+      "group_absent": true,
+      "pid_in_container_namespace": 30,
+      "seconds": 0.6464306880370714,
+      "selection": "constructor-provider",
+      "starttime": 34728331
+    },
+    {
+      "closed_stable_streams": {
+        "stderr": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "direct_join": true,
+      "exit_code": 0,
+      "group_absent": true,
+      "pid_in_container_namespace": 33,
+      "seconds": 4.162925843964331,
+      "selection": "settid-policy-fallback",
+      "starttime": 34728396
+    }
+  ]
+}

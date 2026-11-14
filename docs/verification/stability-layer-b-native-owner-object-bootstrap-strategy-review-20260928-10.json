@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "record_kind": "layer_b_native_owner_object_bootstrap_strategy_review",
+  "recorded_utc": "2026-09-28T09:20:00Z",
+  "status": "PASS_STRATEGY_FOR_PACKET_DRAFT",
+  "failure_family": "Layer-B native-owner bootstrap compile ownership and provenance",
+  "prior_failures": [
+    "docs/verification/stability-layer-b-native-owner-bootstrap-packet-review-failure-20260928-8.json",
+    "docs/verification/stability-layer-b-native-owner-bootstrap-packet-review-failure-20260928-9.json"
+  ],
+  "selected_strategy": "Compile one reviewed translation unit to an ELF relocatable object with -c and -save-temps=obj; retain preprocessed, assembly, dependency and object outputs. Link and owner execution remain separate future packets.",
+  "why_changed": [
+    "No collect2, linker, startup object, target libc/pthread library or linker-map provenance is present in this scope.",
+    "The preprocessor, compiler and assembler intermediates are persistent named outputs rather than vanished driver temporaries.",
+    "The unit still has identity-safe systemd ownership, a sanitized environment, per-process limits, an observation deadline and an independent cleanup budget."
+  ],
+  "required_supervision": [
+    "Capture active/exited success and stable InvocationID before immediate stop.",
+    "Use a separate 30-second cleanup budget after the compile observation deadline.",
+    "A stop timeout, error or ambiguous state triggers a separate manager-side SIGKILL of the unit control group.",
+    "Accept either loaded/inactive or unloaded/not-found only after successful stop and empty or absent original cgroup membership.",
+    "Uncertain submission, inaccessible ownership evidence or residual membership is FAIL_UNRESOLVED and is never retried."
+  ],
+  "provenance_scope": "Bind source, source-model test, selected controller/compiler tools, three explicit system-header roots, actual .d prerequisites and the cc1/assembler chain from -v. Generated .i/.s/.o/.d files are outputs; private disappearing scratch entries are recorded as ephemeral, not fabricated persistent inputs.",
+  "limitations": [
+    "This is not a hermetic full compiler runtime-library/file-open trace.",
+    "It does not establish link success, owner execution, network isolation, aggregate resource limits or OS acceptance."
+  ],
+  "packet_drafting_released": true,
+  "compilation_released": false,
+  "owner_execution_released": false,
+  "acceptance_credit": false
+}

@@ -1,0 +1,18 @@
+[
+  "/usr/bin/timeout",
+  "--signal=TERM",
+  "--kill-after=3",
+  "45",
+  "/usr/bin/taskset",
+  "-c",
+  "7",
+  "/usr/bin/prlimit",
+  "--as=1073741824:1073741824",
+  "--cpu=45:45",
+  "--fsize=33554432:33554432",
+  "--core=0:0",
+  "/home/holden/anaconda3/bin/python3",
+  "-I",
+  "-B",
+  "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/source-correction-1/stage_current_six_launch.py"
+]

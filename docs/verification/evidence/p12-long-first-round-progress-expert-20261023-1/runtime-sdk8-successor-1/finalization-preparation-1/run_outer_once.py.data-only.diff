@@ -1,0 +1,11 @@
+--- acceptedsettlement/run_outer_once.py
++++ SDK8/run_outer_once.py
+@@ -1,7 +1,7 @@
+ # Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+ from pathlib import Path
+ import importlib.util,json,subprocess,time,os
+-D=Path('/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1')
++D=Path('/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1')
+ H=Path('/home/holden/mckernel/docs/verification/evidence/phase5-m03-handshake-runtime-checkpoint-20261020-1/sdk-physical-source/run_two_commands_source_bound_corrected.py')
+ s=importlib.util.spec_from_file_location('accepted_capture',H);h=importlib.util.module_from_spec(s);s.loader.exec_module(h)
+ assert h.hashed(H,65536)['sha256']=='990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8'

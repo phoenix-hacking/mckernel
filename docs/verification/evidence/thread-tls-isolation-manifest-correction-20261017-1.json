@@ -1,0 +1,314 @@
+{
+  "changes": {
+    "after": 4096,
+    "all_other_manifest_values_equal": true,
+    "artifact_source_and_oracle_references_unchanged": true,
+    "before": 1024,
+    "only_json_fields": [
+      "payload.stdout_limit_bytes",
+      "payload.stderr_limit_bytes"
+    ]
+  },
+  "checks": [
+    {
+      "scope": "Actual existing collector C, renamed PID1 main, default and -DND_FUTEX; strict -std=c11 -Wall -Wextra -Werror -O2 single compiler commands; only wrapper constants and serializer execute",
+      "status": "PASS"
+    },
+    {
+      "scope": "Default signal and corrected TLS full argv/env/cwd/stream limits join actual collector profiles; original TLS limit negative; actual supervise cwd checked against serializer",
+      "status": "PASS"
+    },
+    {
+      "caveat": "Host monotonic start/finish/deadline bounds reconstructed from retained QMP times; this replay is not an original runtime pass or new guest acceptance.",
+      "replay": {
+        "path": "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/compile-captures-final/retained-tls-evaluator-replay.json",
+        "sha256": "b67ac90d421a99c76179179526c88b708ae4723e5fb428bbf19eb700601d781f"
+      },
+      "scope": "Actual retained TLS producer serial/debugcon plus exact QEMU identity to frozen native_diagnostic.evaluate: original1024 fails exact stream accounting; corrected4096 PROTOCOL_PASS; actual guest-originated QMP shutdown and shutdown status precede host quit",
+      "status": "PASS_REPLAY_ONLY"
+    }
+  ],
+  "collector_source": {
+    "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_guest_collector.c",
+    "sha256": "82825cf128689ba8f8a74d9528c1acffb724a9356a2c6192c67c8abe4a74965e"
+  },
+  "corrected_manifest": {
+    "path": "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/manifest.json",
+    "sha256": "d6f73eca708864eb61e9ca23ffba56d73f44e57693fb093abc11317fa723aaca"
+  },
+  "default_signal_manifest": {
+    "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-manifest-20261017-1.json",
+    "sha256": "47eb95897b0a4f2d8b2cb2673c2ed3b3feff11895654ac160c854710cc7582da"
+  },
+  "environment": {
+    "address_space_bytes": 1073741824,
+    "clean_environment": true,
+    "compile_jobs": 1,
+    "cpu": 7,
+    "git_actions": false,
+    "guest_actions": false,
+    "root_actions": false,
+    "timeout_seconds": 120
+  },
+  "files": {
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/collector-source.c": {
+      "sha256": "82825cf128689ba8f8a74d9528c1acffb724a9356a2c6192c67c8abe4a74965e",
+      "size": 22952
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/compile-captures-final/default-compile.json": {
+      "sha256": "d118ad09d4fa3623cfa9a5e3f0a58ad145da4b4c4452e7d3d6f01782d9ba00cc",
+      "size": 785
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/compile-captures-final/default-compile.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/compile-captures-final/default-compile.stdout": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/compile-captures-final/default-constants.json": {
+      "sha256": "3a68c417f2a4bd1b14e171c72d06ea427c892e2d1f83706d0b39b1f1b1f83277",
+      "size": 551
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/compile-captures-final/default-constants.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/compile-captures-final/default-constants.stdout": {
+      "sha256": "3418a90f69f5a504ff193ffa121bad59b8c2393df28419f482d318a1d505fbcf",
+      "size": 557
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/compile-captures-final/default-wrapper": {
+      "sha256": "79e12f1525e60ec860cf67deaa7872e78afaa6c40e02ebe645a723b490c992bf",
+      "size": 31512
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/compile-captures-final/default-wrapper.c": {
+      "sha256": "f7a413e021f0c3d580e0c7dbfcc6004e69a9c3f47433021896e7694cc2b45ed6",
+      "size": 683
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/compile-captures-final/futex-compile.json": {
+      "sha256": "5ef4d66605c41d5300a04a31b5259c52290c16dbc22eb99492af1145fe74cd24",
+      "size": 799
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/compile-captures-final/futex-compile.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/compile-captures-final/futex-compile.stdout": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/compile-captures-final/futex-constants.json": {
+      "sha256": "45b9298afe122af2124c77a260db9bfdbae5cce33bac10d3f489ab314bc17458",
+      "size": 549
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/compile-captures-final/futex-constants.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/compile-captures-final/futex-constants.stdout": {
+      "sha256": "7e5634d365fae6def145cb307820c1f18c01bc5ec6ec01a7be19a50cf2b7ea3b",
+      "size": 553
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/compile-captures-final/futex-wrapper": {
+      "sha256": "435979ca7247f0ea09c111c4edfc8491b2d0271faee3352e6ee6dc832029c60d",
+      "size": 31592
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/compile-captures-final/futex-wrapper.c": {
+      "sha256": "f7a413e021f0c3d580e0c7dbfcc6004e69a9c3f47433021896e7694cc2b45ed6",
+      "size": 683
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/compile-captures-final/retained-tls-evaluator-replay.json": {
+      "sha256": "b67ac90d421a99c76179179526c88b708ae4723e5fb428bbf19eb700601d781f",
+      "size": 80166
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/compile-captures/default-compile.json": {
+      "sha256": "e76ad2a3a58aec01430cfa023ceaf121e3209e2cbbc9c5a075930e2cba6c0f09",
+      "size": 767
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/compile-captures/default-compile.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/compile-captures/default-compile.stdout": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/compile-captures/default-constants.json": {
+      "sha256": "b9d19793f16fb209cfbdc3d24507296c6b41f8ba474d69bed94115a402bfe014",
+      "size": 539
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/compile-captures/default-constants.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/compile-captures/default-constants.stdout": {
+      "sha256": "3418a90f69f5a504ff193ffa121bad59b8c2393df28419f482d318a1d505fbcf",
+      "size": 557
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/compile-captures/default-wrapper": {
+      "sha256": "79e12f1525e60ec860cf67deaa7872e78afaa6c40e02ebe645a723b490c992bf",
+      "size": 31512
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/compile-captures/default-wrapper.c": {
+      "sha256": "f7a413e021f0c3d580e0c7dbfcc6004e69a9c3f47433021896e7694cc2b45ed6",
+      "size": 683
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/compile-captures/futex-compile.json": {
+      "sha256": "39b98c29046fa6166a1a5a118d9eea9e551e49fd821afd29b8744f9d769285ba",
+      "size": 781
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/compile-captures/futex-compile.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/compile-captures/futex-compile.stdout": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/compile-captures/futex-constants.json": {
+      "sha256": "267a847da6a0f7d90c7b38f4930ea5c6f64a8229a173a9c6173f3ac77ad25ca8",
+      "size": 537
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/compile-captures/futex-constants.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/compile-captures/futex-constants.stdout": {
+      "sha256": "7e5634d365fae6def145cb307820c1f18c01bc5ec6ec01a7be19a50cf2b7ea3b",
+      "size": 553
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/compile-captures/futex-wrapper": {
+      "sha256": "435979ca7247f0ea09c111c4edfc8491b2d0271faee3352e6ee6dc832029c60d",
+      "size": 31592
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/compile-captures/futex-wrapper.c": {
+      "sha256": "f7a413e021f0c3d580e0c7dbfcc6004e69a9c3f47433021896e7694cc2b45ed6",
+      "size": 683
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/compile-captures/retained-tls-evaluator-replay.json": {
+      "sha256": "e686fed3c1a20327ad51996320ff5066554be99e3da617ecd0743030e434bf91",
+      "size": 80073
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/evaluator-source.py": {
+      "sha256": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e",
+      "size": 53440
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/manifest.json": {
+      "sha256": "d6f73eca708864eb61e9ca23ffba56d73f44e57693fb093abc11317fa723aaca",
+      "size": 5462
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/original-manifest.json": {
+      "sha256": "15bbc7c6a3a6b3bccaad4c6be08f3804a4916641715a69817105dd4889f917ce",
+      "size": 5462
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/selected-manifests.json": {
+      "sha256": "527c199c1fdc9845d1c6e40ad1953921b32c12bc216de2c02784f33eb03ef8ff",
+      "size": 1076
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/syntax.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/syntax.stdout": {
+      "sha256": "8d13d82d2bda431be26ffd0b1d7d7449e03ebcd149bac20c94d44186c01b9214",
+      "size": 52
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/tests-final-command.json": {
+      "sha256": "a17d27953f32ac729920f8f7dbda70cfb933dc3bcd5405cbf06e8c1552b999ba",
+      "size": 811
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/tests-final-result.json": {
+      "sha256": "5787d09ee669a0e74d4a38e7f80a95352406c05725503c35b9717ec1d3e02778",
+      "size": 223
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/tests-final.stderr": {
+      "sha256": "fb6129aad22c56f5c994a943bf23f8f067268bf3b4937d74a34259c93b98a7e5",
+      "size": 706
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/tests-final.stdout": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/tests.stderr": {
+      "sha256": "fb6129aad22c56f5c994a943bf23f8f067268bf3b4937d74a34259c93b98a7e5",
+      "size": 706
+    },
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/tests.stdout": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    }
+  },
+  "frozen_evaluator": {
+    "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic.py",
+    "sha256": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e"
+  },
+  "independent_source_review_pending": true,
+  "next_invariant_check": "Independent source/execution review and fresh one-shot TLS2 release using this exact corrected manifest; first actual runtime attempt with corrected limits must satisfy unchanged collector/evaluator/oracle and complete retirement. No runtime credit from replay.",
+  "original_manifest": {
+    "path": "/home/holden/mckernel-work/scratch/thread-tls-isolation-current942-20261017-1/manifest.json",
+    "sha256": "15bbc7c6a3a6b3bccaad4c6be08f3804a4916641715a69817105dd4889f917ce"
+  },
+  "preserved_failure": {
+    "archive_path": "/home/holden/mckernel/docs/verification/evidence/thread-tls-isolation-current942-failure-review-20261017-1.tar.gz",
+    "archive_sha256": "4e25c63effcdaa343b1c56505479cc8441ab9239e2295ddd5e45ced81f0ec959",
+    "decision": "FAIL_HARNESS_CONTRACT; PASS_RETIREMENT; original failure and raw flags preserved",
+    "path": "/home/holden/mckernel/docs/verification/evidence/thread-tls-isolation-current942-failure-review-20261017-1.json",
+    "sha256": "04fee569980a34f5e29f4d7a3396266643ddd78cc63b00fb47c8fb799e8fd17a"
+  },
+  "record_author": "/root/image_reconciliation_impl",
+  "regression_source": {
+    "path": "/home/holden/mckernel/scripts/tests/test_native_diagnostic_collector_manifest_limits.py",
+    "sha256": "069ca83563798044ae2b69be183cdb8665bac86d79db8b35dd540e66f033d1c2"
+  },
+  "schema": "mckernel.thread-tls-isolation-manifest-correction.v1",
+  "scope": {
+    "accepted_diagnostic_count_unchanged": 3,
+    "actual_guest_diagnostic_pass_credit": 0,
+    "application_acceptance": false,
+    "formal_acceptance_credit": 0,
+    "guest_execution": false,
+    "production_source_changes": false
+  },
+  "status": "PASS_MANIFEST_CONTRACT_CORRECTION_AND_REPLAY_SOURCE",
+  "task_id": "thread-tls-isolation-manifest-correction-20261017-1",
+  "test_execution": {
+    "command": {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=90",
+        "--nofile=256",
+        "--core=0",
+        "/usr/bin/timeout",
+        "-k",
+        "5s",
+        "120s",
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "unittest",
+        "-v",
+        "scripts.tests.test_native_diagnostic_collector_manifest_limits"
+      ],
+      "cwd": "/home/holden/mckernel",
+      "env": {
+        "LANG": "C",
+        "LC_ALL": "C",
+        "ND_COLLECTOR_MANIFEST_EVIDENCE": "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/compile-captures-final",
+        "ND_COLLECTOR_MANIFEST_SELECTION": "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/selected-manifests.json",
+        "PATH": "/usr/bin:/bin",
+        "PYTHONDONTWRITEBYTECODE": "1"
+      }
+    },
+    "exit_code": 0,
+    "skips": 0,
+    "stderr": "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/tests-final.stderr",
+    "stdout": "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/tests-final.stdout",
+    "tests": 4
+  }
+}

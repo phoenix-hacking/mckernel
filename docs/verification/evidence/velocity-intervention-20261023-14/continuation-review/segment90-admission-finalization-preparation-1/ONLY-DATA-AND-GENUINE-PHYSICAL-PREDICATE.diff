@@ -1,0 +1,40 @@
+--- accepted-QMP10-query
++++ segment90-query
+@@ -5,7 +5,7 @@
+ import ast,fcntl,hashlib,importlib.util,json,os,resource,stat,subprocess,sys,time
+ from pathlib import Path
+ D=Path(__file__).resolve().parent
+-CONFIG_SHA = 'aced237590bb25cc1bfddb491dc7adf3db476321a1aa9c14f2c8d99d932b4268'
++CONFIG_SHA = 'aff71edd0187f99e5889d73924daa420afaa9bc28e17bf003bd40bfa1c7d8817'
+ ENGINE=Path('/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/bound-matched-image-terminal-source-2/cleanup_pass_image.py')
+ ENGINE_SHA='59efab0bc29fa5784dc855743cec397237552821bc150b60ea1d6c2e5f7ac00d'
+ def need(v,m):
+@@ -32,7 +32,7 @@
+     finally:os.close(fd)
+ 
+ def inputs():
+- raw=(D/'QUERY-INPUTS.QMP10.POSTJOIN.json').read_bytes();need(hashlib.sha256(raw).hexdigest()==CONFIG_SHA,'exact query input binding')
++ raw=(D/'QUERY-INPUTS.SEGMENT90.POSTJOIN.json').read_bytes();need(hashlib.sha256(raw).hexdigest()==CONFIG_SHA,'exact query input binding')
+  return json.loads(raw)
+ 
+ def parent_fact(path):
+@@ -48,8 +48,8 @@
+  need(f['uid']==f['euid']==0 and f['affinity']==[7],'root query CPU7')
+  need(f['proc']['status']=='COMPLETE' and f['proc']['failure'] is None and f['proc']['publishers']==[] and len(f['proc']['snapshots'])==2,'complete publisher-free census')
+  ph=f['physical'];pj=f['current_live_postjoin']
+- need(ph['status']=='PASS_POSITIVE_PHYSICAL_RETIREMENT' and ph['nonce']=='63bdc7731c34491eb430ddb34b094d5b' and ph['independent_reviewer']=='/root/native235_release_review' and ph['permanent_mutex']==[27,4] and ph['exact_reaped_client_count']==23 and ph['positive_identity_count']==26 and ph['cleanup_replayed'] is False and ph['native_outcome']=='FAIL_QMP_CAPTURE_CAPACITY' and ph['formal_hour_credit']==0,'genuine accepted63bd normal positive physical retirement')
+- need(pj['status']=='PASS_CURRENT_LIVE_POSTJOIN_FAILED_P12_PHYSICALLY_RETIRED' and pj['physical_acceptance']==c['physical'] and pj['current_live_postjoin']['status']=='PASS' and pj['current_live_postjoin']['strict_PROC_join']==ph['strict_PROC_join'] and pj['current_live_postjoin']['mutex_join']==ph['mutex_join'],'genuine63bd current postjoin joins exact physical authority')
++ need(ph['status']=='PASS_ACTUAL_CURRENT_PHYSICAL_RESOURCE_RETIREMENT_4A76' and ph['nonce']=='4a76457e33f34ba9a6805115bd121eb0' and ph['independent_reviewer']=='/root/m14_callback_review' and ph['known_owner_and_23_clients_absent'] is True and ph['complete_two_process_sweeps'] is True and ph['current_exact_argv_publishers']==[] and ph['mutex_identity']=={'dev':27,'inode':4,'available':True} and ph['eight_exclusion_paths_absent'] is True and ph['normal_owner_absence_verified'] is True and ph['normal_owner_lease_retained'] is False and ph['application_result']=='FAIL' and ph['new_workload_release'] is False,'genuine accepted4a76 current positive physical retirement; historical unknown ancestor birth remains qualified')
++ need(pj['status']=='COMPLETE' and pj['current_attempt_nonce']==ph['nonce'] and pj['physical_acceptance']==c['physical'] and pj['actual_proc']==ph['actual_references']['actual-current-PROC-1'] and pj['actual_mutex']==ph['actual_references']['actual-current-mutex-1'] and pj['authenticated_closed_facts']==ph['closed_facts'] and pj['independent_reviewer']==ph['independent_reviewer'] and pj['new_execution_authorized'] is False,'genuine4a76 current postjoin joins exact physical authority')
+  need(growth.TRANSPORT==json.loads(Path(c['selected_profile']['path']).read_bytes()) and growth.TRANSPORT['qmp_bytes']==136*2**20 and growth.TRANSPORT['shared_capture_bytes']==640*2**20 and growth.TRANSPORT['logical_growth_bytes']==4224*2**20 and growth.TRANSPORT['file_bytes']==384*2**20,'exact reviewed QMP10 transport profile')
+  p=f['parent'];need(p['directory'] and p['uid']==p['gid']==1000 and p['mode']==0o700 and p['children']==[] and p['dev']==c['operation']['HOST_identity']['dev'] and p['ino']==c['operation']['HOST_identity']['inode'],'fresh exact private HOST LONG parent exists empty UID1000 mode700')
+  need(not any(f['output_paths_exist'].values()),'fresh LONG capture owner attempt and unpublished release/request paths absent')
+@@ -79,7 +79,7 @@
+  raw=ENGINE.read_bytes();need(hashlib.sha256(raw).hexdigest()==ENGINE_SHA,'accepted census source')
+  code=next(ast.literal_eval(n.value) for n in ast.parse(raw).body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='PROC_CODE' for t in n.targets))
+  start=Path('/proc/self/stat').read_text().rpartition(') ')[2].split()[19]
+- proc=json.loads(run(['/usr/bin/python3','-I','-B','-c',code,'p12-QMP10-current-live-admission-20261024-1',str(os.getpid()),start]))
++ proc=json.loads(run(['/usr/bin/python3','-I','-B','-c',code,'p12-segment90-current-live-admission-20261024-1',str(os.getpid()),start]))
+  sd=Path(c['operation']['controller']['path']).parent;parent=Path(c['operation']['HOST_parent'])
+  g_parent=growth.output_parent(str(parent),fresh=True)
+  parent_info=parent_fact(parent)

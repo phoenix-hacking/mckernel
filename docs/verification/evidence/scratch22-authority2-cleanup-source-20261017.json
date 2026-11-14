@@ -1,0 +1,57 @@
+{
+  "schema": "scratch22-authority2.cleanup-source.v1",
+  "status": "NOT_RELEASED",
+  "author": "/root/scratch21_transaction",
+  "implementation_ownership": true,
+  "files_sha256": {
+    "scripts/native_exact_scratch22_authority2_terminal_cleanup.py": "802d2e7934d8177cabb6338039f831e11f1ca63be4eb3ac9b9d70c23a0f1f484",
+    "scripts/tests/test_native_exact_scratch22_authority2_terminal_cleanup.py": "bb4a5ff367065599a1bd166278e0d7f50b31d09d8254e0b1910f886d45bddae1"
+  },
+  "baseline": {
+    "source_path": "scripts/native_exact_scratch22_authority1_terminal_cleanup.py",
+    "source_sha256": "15b7f9241741ccaff065819ea6847323d6ce47ac1fc69a3ea87fbdbad9b01098",
+    "tests_path": "scripts/tests/test_native_exact_scratch22_authority1_terminal_cleanup.py",
+    "tests_sha256": "6ff24e9b6139aa7a0d71d69194f6e9be63396756fbf7a65bfc572ca87442339c",
+    "original_core_source_sha256": "6606af40114eb5b6019438c4127948081d80bbe65144d841e906a7cba84aabed",
+    "original_fault_tests_sha256": "e1467625cfcc848c7834e23c6bff26a535b40115a0d85bb512f488bf8fcb7d90",
+    "preservation": "All authority1/scratch21 originals, reviews, failed captures and completed cleanup releases remain unchanged. Their reviews are baseline evidence, not an authority2 execution release."
+  },
+  "attempt": {
+    "namespace": "scratch-22-authority2",
+    "container_id": "63c2d2570315c693bc06befaa37d1408ded53896b35d13d80bc4d7b9ecdba9cb",
+    "owner_pid": 244086,
+    "owner_starttime": "1324045",
+    "owner_nonce": "51e1e7d8a9c14b2eb0ea63e4f15dd77b",
+    "exit_code": 1,
+    "retired_guard_pid_required_absent": 243497,
+    "request": "/home/holden/mckernel-work/scratch/native-exact-build-request-scratch-22-authority2.execution.json",
+    "request_sha256": "c38fdd289b8f688a92449b0d68c2216412f10c3bc7ceedf563246ef8086cb565",
+    "root_terminal": "/home/holden/mckernel-work/scratch/native-exact-scratch-22-authority2-heavy-build.terminal.json",
+    "source_root": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority2",
+    "output_root": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority2-output",
+    "evidence_root": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority2-evidence",
+    "shared_exclusions": ["mckernel-heavy-operation.lock", "native-exact-candidate-operational-exclusion-scratch18.json"],
+    "runtime_binding": "Known attempt fields above must exactly match the future release, including integer-not-bool owner/exit values. Runtime defaults remain None; image/name/boot/live device/inode/root-lock/evidence observations are supplied only by a future independently reviewed release."
+  },
+  "changes": [
+    "Mechanically replace authority1 namespace/schema/source-test paths with authority2 and use fresh cleanup transaction paths.",
+    "Add a pure exact known-attempt predicate and fixed request SHA256; include root terminal in mandatory selected protected byte joins and retired guard in full process absence census.",
+    "Keep shared heavy/operational18 exclusion paths, complete output/evidence inventories, 128MiB selected/log cap, 256MiB document cap and 400000-entry per-root inventory bound unchanged.",
+    "AST regression verifies Transaction, recover, quarantine_wait, metadata_inventory, protected_files, capture_logs, observe_identity, validate_process_report, validate_container_profile, census, rename_exchange, read_bounded and read_at are unchanged after namespace normalization."
+  ],
+  "checks": {
+    "status": "PASS",
+    "command": "timeout 120s taskset -c 7 bash -c 'ulimit -v 2097152; exec python3 -B -m unittest -v scripts.tests.test_native_exact_scratch22_authority2_terminal_cleanup'",
+    "exit_code": 0,
+    "tests": 16,
+    "duration_seconds": 1.050,
+    "scope": "Disposable files/flocks and mocked privileged observations only; no child processes, live root lock, root execution, Docker, network, compiler or Git operations.",
+    "coverage": ["namespace and unreleased refusal", "exact attempt/request and integer identity negatives", "nonempty output preservation and terminal replay", "complete inventory/source/selected-artifact drift", "symlink metadata without following", "reviewed durable exchange/release crash frontiers", "root-lock/quarantine evidence-writer ownership", "actual-size streaming and finite cap boundaries", "mechanically unchanged transaction AST"]
+  },
+  "inherited_failure_history": [
+    "Scratch21 original BrokenPipe/evidence-writer/ordinary-signal root-lock gaps remain preserved; the reviewed four-signal nonreturning quarantine repair is copied unchanged, not reset.",
+    "Authority1 observer capture-size failure and complete actual-size correction remain preserved; their measured finite bounds are copied unchanged.",
+    "Authority2 build failed before compiler on a stale module digest. This helper grants no build retry, image/source mutation, recovery signalling or acceptance credit."
+  ],
+  "next_executable_check": "Independent authority2-specific source review, then dispatcher-fetched source binding plus fresh read-only mount/process/container/root-lock/request/evidence observations and separately reviewed one-shot execution release. No cleanup execution is authorized by this record."
+}

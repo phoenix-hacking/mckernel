@@ -25,11 +25,14 @@ if (ENABLE_RUST_IHK_MODULE_HELPERS AND "${ARCH}" STREQUAL "x86_64")
 	if (RUSTC)
 		set(MCCTRL_RUST_OBJ "${CMAKE_CURRENT_BINARY_DIR}/rust/mcctrl_helpers.o")
 		set(MCCTRL_RUST_CMD "${CMAKE_CURRENT_BINARY_DIR}/rust/.mcctrl_helpers.o.cmd")
+		set(MCCTRL_RUST_ARGV "${MCCTRL_RUST_CMD}.argv.json")
 		set(MCCTRL_RUST_SRC "${CMAKE_CURRENT_SOURCE_DIR}/rust/mcctrl_helpers.rs")
 		add_custom_command(
-			OUTPUT "${MCCTRL_RUST_OBJ}" "${MCCTRL_RUST_CMD}"
+			OUTPUT "${MCCTRL_RUST_OBJ}" "${MCCTRL_RUST_CMD}" "${MCCTRL_RUST_ARGV}"
 			COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/rust"
-			COMMAND ${CMAKE_COMMAND} -E env MAKEFLAGS= ${RUSTC}
+			COMMAND ${CMAKE_COMMAND} -E env MAKEFLAGS=
+				python3 ${CMAKE_SOURCE_DIR}/scripts/record_compiler_argv.py
+				--output ${MCCTRL_RUST_ARGV} -- ${RUSTC}
 				--crate-name mcctrl_helpers
 				--crate-type lib
 				--edition=2021
@@ -54,11 +57,12 @@ if (ENABLE_RUST_IHK_MODULE_HELPERS AND "${ARCH}" STREQUAL "x86_64")
 				-DRUSTC=${RUSTC}
 				-P ${CMAKE_SOURCE_DIR}/cmake/modules/WriteKbuildPrebuiltCmd.cmake
 			DEPENDS "${MCCTRL_RUST_SRC}"
+				"${CMAKE_SOURCE_DIR}/scripts/record_compiler_argv.py"
 			COMMENT "Building Rust mcctrl helpers"
 			VERBATIM
 		)
 		add_custom_target(mcctrl_rust_helpers
-			DEPENDS "${MCCTRL_RUST_OBJ}" "${MCCTRL_RUST_CMD}")
+			DEPENDS "${MCCTRL_RUST_OBJ}" "${MCCTRL_RUST_CMD}" "${MCCTRL_RUST_ARGV}")
 		list(APPEND MCCTRL_RUST_KBUILD_OBJECTS rust/mcctrl_helpers.o)
 		list(APPEND MCCTRL_RUST_C_FLAGS -DMCCTRL_RUST_HELPERS)
 		list(APPEND MCCTRL_RUST_DEPENDS mcctrl_rust_helpers)

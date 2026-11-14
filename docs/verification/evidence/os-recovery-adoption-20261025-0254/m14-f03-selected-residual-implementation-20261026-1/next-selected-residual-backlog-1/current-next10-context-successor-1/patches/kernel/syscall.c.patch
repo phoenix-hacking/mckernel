@@ -1,0 +1,23 @@
+--- kernel/syscall.c
++++ kernel/syscall.c
+@@ -5239,6 +5239,12 @@
+ }
+ #endif
+ 
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_SYNC_CHILD_EVENT)
++#if !defined(__x86_64__) || __BYTE_ORDER__ != __ORDER_LITTLE_ENDIAN__ || defined(__GENKSYMS__)
++#error "sync child event requires qualified x86_64 little-endian runtime perf ABI"
++#endif
++extern void sync_child_event(struct mc_perf_event *);
++#else
+ void sync_child_event(struct mc_perf_event *event)
+ {
+ 	(void)sync_child_event_body_result(event,
+@@ -5254,6 +5260,7 @@
+ 			sync_child_perf_read_bridge,
+ 			sync_child_count_set_bridge);
+ }
++#endif
+ 
+ void terminate(int rc, int sig)
+ {

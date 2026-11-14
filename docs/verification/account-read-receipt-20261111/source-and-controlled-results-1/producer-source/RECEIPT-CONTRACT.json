@@ -1,0 +1,83 @@
+{
+  "api": {
+    "effects": "no I/O, API, refresh, state write, issuer or process effects",
+    "name": "accepted_account_observation",
+    "refusal": "ValueError; original genuine amount/available_balance may also refuse malformed finite accounting",
+    "returns": "copy of newest accepted metadata",
+    "signature": "(state, ledger, owner, now_utc_ns, now_mono_ns, max_age_seconds=25)"
+  },
+  "chronology": "max(received_mono_ns, sequence) across actual read/notification/last observation; pending/rejected newer item vetoes older success; no older-event fallback",
+  "durability": "real unchanged CreditBudget.observe -> existing ledger atomic_json fsync; unchanged accounting saves limits+matching credit via Campaign.save/atomic_json; read original actual disk pair and validate before final receipt save; no receipt from request/heartbeat/mtime",
+  "finite_new_test_obligations": [
+    "actual no-notification read publishes only after original ledger+matching state persistence",
+    "failed ledger/state/receipt persistence and actual holds do not grant success",
+    "freshness/wrong owner/goal/boot/run/credit mismatch refuses",
+    "read response before newer notification and reverse ordering; valid newest wins; newer hold/unknown/spend vetoes",
+    "request/heartbeat/ledger mtime are not observations",
+    "original notification-only transport fallback unchanged"
+  ],
+  "freshness": "both 0 <= now - actual receive <25s; same boot/owner required",
+  "hold_semantics": "original accounting and notification-only transport fallback byte/AST retained; stopped/nonrunning/nonactive owner never grants new acceptance",
+  "late_read": "retain genuine older read conservative accounting; restore and re-observe genuine newer limits through SAME ledger without refund/new freshness; no synthetic notification and no cleared hold",
+  "native_scope": "none; no native/controller transition or new publication authority from this source",
+  "new_instance": "new observation fields removed only from new Campaign in-memory state; original budget/goal/state ownership unchanged",
+  "owner_fields": [
+    "boot_id",
+    "repo",
+    "guardian_run_id",
+    "log_dir",
+    "thread_id",
+    "goal_objective_sha256",
+    "worker_pid",
+    "worker_start",
+    "server_pid",
+    "server_start",
+    "credit_run_id",
+    "credit_budget",
+    "credit_ledger_path"
+  ],
+  "owner_required_source": "consumer must independently validate current boot/repo/guardian run/Root thread/goal and exact worker/server pid births, same original credit guard id/budget/path; never take expected owner from the receipt itself",
+  "pending_proofs": [
+    "independent material source review",
+    "new focused real-source fake-lower tests",
+    "actual Root consumer source adapter",
+    "normal reviewed sameRoot controller load/stop/start and actual new invocation owner binding"
+  ],
+  "receipt_fields_added": [
+    "status",
+    "owner",
+    "credit_record_sha256",
+    "state_limits_and_credit_persisted"
+  ],
+  "schema_version": 1,
+  "source": {
+    "bytes": 155857,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-source-sdk-max-1/candidate/scripts/run_os_goal.py",
+    "sha256": "39a03dd8bb33ea943cad02897dee9b6b113187eee30d33ed22a89886b944d870"
+  },
+  "state_fields": [
+    "last_account_observation",
+    "last_account_notification",
+    "successful_account_read"
+  ],
+  "status": "IMPLEMENTED_SOURCE_ONLY_CORRECTNESS_UNPROVED",
+  "transport": {
+    "completion": "RPC.last_account_read_completion",
+    "fields": [
+      "schema_version",
+      "source",
+      "method",
+      "request_id",
+      "received_at",
+      "received_utc_ns",
+      "received_mono_ns",
+      "sequence",
+      "server_pid",
+      "rate_limits_sha256"
+    ],
+    "notification": "RPC.last_account_notification",
+    "read_extra_field": "response_error",
+    "receive_origin": "RPC.pump decoded actual same-server record; not request time or later call return",
+    "return_interface": "RPC.call result unchanged"
+  }
+}

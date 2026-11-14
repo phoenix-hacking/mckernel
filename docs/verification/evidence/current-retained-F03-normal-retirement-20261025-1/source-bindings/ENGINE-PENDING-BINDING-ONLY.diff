@@ -1,0 +1,11 @@
+--- parent-ENGINE
++++ final-ENGINE
+@@ -1555,7 +1555,7 @@
+         if previous_mask is not None:
+             signal.pthread_sigmask(signal.SIG_SETMASK, previous_mask)
+ 
+-PENDING_CURRENT_RELEASE_BINDINGS=('fresh-current-receipt-fixture-result','published-fetched-current-source','independent-readonly-observation-release','independent-cleanup-release')
++PENDING_CURRENT_RELEASE_BINDINGS=()
+ 
+ def main(argv=None):
+     if PENDING_CURRENT_RELEASE_BINDINGS:raise Refusal("current-source-preparation-not-released:"+repr(PENDING_CURRENT_RELEASE_BINDINGS))

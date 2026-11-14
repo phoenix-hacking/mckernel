@@ -1,0 +1,29 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "owner": "background case227_stage",
+  "required_exports": [
+    "int ihklib_device_open(int index);",
+    "int ihk_os_get_eventfd(int index,int type);"
+  ],
+  "ownership": "both success results are owned file descriptors, caller closes; negative results are negative errno/library failure; no duplicate provider body",
+  "event_types": {
+    "status": 2,
+    "kmsg": 101
+  },
+  "UAPI": {
+    "IHK_DEVICE_DETECT_HUNGUP": "0x11290f",
+    "IHK_DEVICE_GET_KMSG_BUF": "0x112908",
+    "IHK_DEVICE_READ_KMSG_BUF": "0x112909",
+    "IHK_DEVICE_RELEASE_KMSG_BUF": "0x11290a"
+  },
+  "types": {
+    "get_kmsg_buf_desc": "int os_index; void*handle; x86_64 size16,handle offset8",
+    "read_kmsg_buf_desc": "void*handle;int shift;char*buf; size24,buf offset16",
+    "epoll_event": "Linux x86_64 packed events:u32,data:u64; size12,data offset4",
+    "sigset_t": "Linux x86_64 128 bytes,align8",
+    "stat_output": "unused opaque aligned256-byte buffer; fixture asserts sizeof(struct stat)<=256 and alignment<=8"
+  },
+  "buffer_capacity": 4190208,
+  "provider_Rust_link_closure": "unknown until root/library owner verifies",
+  "canonical_changes": false
+}

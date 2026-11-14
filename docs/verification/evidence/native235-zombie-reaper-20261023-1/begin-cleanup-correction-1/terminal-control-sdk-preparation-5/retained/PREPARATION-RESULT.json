@@ -1,0 +1,125 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "HOST_SOURCE_AND_DERIVED_RUNTIME_PREPARED_NO_BUILD_NO_RELEASE",
+  "host_root": "/home/holden/mckernel-work/host-preparation/native235-procfs-delete-sdk-preparation-20261023-5/prepared-sdk",
+  "source_identity": "ba0e1be79e6cd6b06fe0b7cbd1c2c3c689e86579439e13deea9b3f3776069120",
+  "predecessor_identity": "14eddf4a3718442d35dfe738c2ffae84814665597d2f75f6c398de675884d491",
+  "source_files": 68,
+  "source_bytes": 1359089,
+  "deltas": [
+    {
+      "relative": "smp_application.rs",
+      "old": "3dcfeb5fb00b1aeffcef784d600566c3553f74cf7bc1ccb4109ab3ececcee73f",
+      "new": "f5c56d83a13f10a712a4555849f52078c2d410254080150d34408011daf527a5",
+      "bytes": 72744
+    },
+    {
+      "relative": "smp_service.rs",
+      "old": "dae95a5e91577134e00d38050db1605ef568b11eaa829270bb47a257885188e5",
+      "new": "ffefabadb349f55ecc4d474f6463e73e0c6b432aea6c41eb973a91f115ded0f7",
+      "bytes": 47957
+    }
+  ],
+  "nonce_reserved_not_executed": "9c96ba665d8d4ef19f81420e9fe33814",
+  "preparation": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-procfs-delete-sdk-preparation-20261023-5/prepared-sdk/preparation.json",
+    "sha256": "b04df1ec9d82ea0b5eff91ba1570ab1abf5d2035fbe3be9962c893eac37936d5",
+    "bytes": 49728
+  },
+  "derived_driver": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-procfs-delete-sdk-preparation-20261023-5/prepared-sdk/derived-runtime/native_running_external_modules_offline.py",
+    "sha256": "bdcdd52cceb789778ab1c1b6ceedc743d030e64241f8a32dc674f60eb5230f1f",
+    "bytes": 37676
+  },
+  "derived_owner": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-procfs-delete-sdk-preparation-20261023-5/prepared-sdk/derived-runtime/native_running_external_modules_owner.py",
+    "sha256": "67aa07243f6f7e07afdc988b28c5de383cb2da07151886e67b1f6c7e8480f72b",
+    "bytes": 54812
+  },
+  "runtime_cohort": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-procfs-delete-sdk-preparation-20261023-5/prepared-sdk/RUNTIME-COHORT.json",
+    "sha256": "53fcbb4b5d57e600270d122eebbfd6741c3e3558778a942187cbc2f98ce3d02f",
+    "bytes": 2967
+  },
+  "request_template": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-procfs-delete-sdk-preparation-20261023-5/prepared-sdk/REQUEST.TEMPLATE.PENDING-LIVE-IDENTITIES.json",
+    "sha256": "a54063def7631367ef32427b9c730a3d68ad37c1344e0a338eb8f1dadecd0719",
+    "bytes": 1957
+  },
+  "materializer": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-procfs-delete-sdk-preparation-20261023-5/metadata/stage_bound_successor.py",
+    "sha256": "711d6e2e7f676600dfcc175f833b843f634cd57efc66ba298c58b197c0dc188b",
+    "bytes": 5526
+  },
+  "external_command": [
+    "/usr/bin/env",
+    "-i",
+    "KBUILD_BUILD_HOST=rocky-10.2-x86_64",
+    "KBUILD_BUILD_TIMESTAMP=Tue, 11 Aug 2026 07:40:34 +0000",
+    "KBUILD_BUILD_USER=mckernel",
+    "KBUILD_BUILD_VERSION=1",
+    "SOURCE_DATE_EPOCH=1786434034",
+    "PATH=/usr/bin:/bin",
+    "LANG=C",
+    "LC_ALL=C",
+    "TZ=UTC",
+    "BASH_ENV=",
+    "ENV=",
+    "GNUMAKEFLAGS=",
+    "MAKEFILES=",
+    "MAKEFLAGS=",
+    "MAKEOVERRIDES=",
+    "MFLAGS=",
+    "LD_LIBRARY_PATH=",
+    "LD_PRELOAD=",
+    "HOME=/candidate/home",
+    "TMPDIR=/candidate/tmp",
+    "/usr/bin/make",
+    "-C",
+    "/out/source/linux-6.12.0-211.44.1.el10_2",
+    "O=/out/build",
+    "M=/candidate/modules",
+    "ARCH=x86_64",
+    "LLVM=1",
+    "LOCALVERSION=-211.44.1.el10_2.mckernel1.x86_64",
+    "KBUILD_BUILD_HOST=rocky-10.2-x86_64",
+    "KBUILD_BUILD_TIMESTAMP=Tue, 11 Aug 2026 07:40:34 +0000",
+    "KBUILD_BUILD_USER=mckernel",
+    "KBUILD_BUILD_VERSION=1",
+    "SOURCE_DATE_EPOCH=1786434034",
+    "MCKERNEL_CURRENT_FORK_ADOPTION_OPT_IN=1",
+    "--jobserver-style=pipe",
+    "-j2",
+    "modules"
+  ],
+  "source_acceptance": null,
+  "source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-lifecycle-epipe-repair-1/INDEPENDENT-SOURCE-REVIEW.json",
+    "sha256": "08d302809885e6e5d7a19a7010dcc574387f6d2760cfa1f5f19042a96f59ac5e"
+  },
+  "execution_release": null,
+  "compiler_runs": 0,
+  "root_operations": 0,
+  "Docker_operations": 0,
+  "scratch_writes": 0,
+  "profile_unchanged": {
+    "container_CPUs": "2-5",
+    "container_memory_bytes": 12884901888,
+    "container_swap": 0,
+    "container_tasks": 512,
+    "make_jobs": 2,
+    "network": "none",
+    "backing_GiB": 110
+  },
+  "expected_binary_delta": {
+    "ihk": "stable expected; verify actual build",
+    "ihk_smp_x86_64": "change expected iff accepted smp_application.rs/smp_service.rs/procfs_objects.rs provider delta; actual artifact proof required",
+    "mcctrl": "stable06e8 expected; actual artifact proof required"
+  },
+  "required_next": [
+    "independent coherent SDK preparation review",
+    "root source/input staging and fresh live identities/capacity/leases",
+    "independent exact execution release",
+    "actual module build and artifact/physical review"
+  ]
+}

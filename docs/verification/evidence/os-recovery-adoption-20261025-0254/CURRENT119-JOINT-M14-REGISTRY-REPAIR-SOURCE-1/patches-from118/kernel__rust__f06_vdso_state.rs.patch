@@ -1,0 +1,46 @@
+--- /dev/null
++++ b/kernel/rust/f06_vdso_state.rs
+@@ -0,0 +1,43 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Reuse the real VDSO type; existing three C storage owners remain explicit debt.
++use crate::abi::SizeT;
++use crate::syscall_policy::ArchVdso;
++use core::ptr::{addr_of_mut, write};
++
++unsafe extern "C" {
++    #[link_name = "mckernel_f06_vdso_state"]
++    static mut VDSO_STATE: ArchVdso;
++    #[link_name = "mckernel_f06_vdso_container_size"]
++    static mut CONTAINER_SIZE: SizeT;
++    #[link_name = "mckernel_f06_vdso_offset"]
++    static mut VDSO_OFFSET: isize;
++}
++
++/// Publish the same optional borrowed storage addresses in original order.
++///
++/// # Safety
++/// Each nonnull output names a live, aligned, writable slot of its exact pointer
++/// type. The original caller owns exclusion over output slots and VDSO state.
++/// Returned pointers borrow the same three static C objects for image lifetime;
++/// this function neither reads nor changes their contents or ownership. No Rust
++/// reference, allocation, refcount or lock is introduced. Null outputs are valid.
++#[no_mangle]
++pub unsafe extern "C" fn arch_vdso_state_bridge(
++    vdso: *mut *mut ArchVdso,
++    container_size: *mut *mut SizeT,
++    vdso_offset: *mut *mut isize,
++) {
++    // SAFETY: optional writable slots and externally defined image-lifetime
++    // storage retain the original C contract; only raw addresses are formed.
++    unsafe {
++        if !vdso.is_null() {
++            write(vdso, addr_of_mut!(VDSO_STATE));
++        }
++        if !container_size.is_null() {
++            write(container_size, addr_of_mut!(CONTAINER_SIZE));
++        }
++        if !vdso_offset.is_null() {
++            write(vdso_offset, addr_of_mut!(VDSO_OFFSET));
++        }
++    }
++}

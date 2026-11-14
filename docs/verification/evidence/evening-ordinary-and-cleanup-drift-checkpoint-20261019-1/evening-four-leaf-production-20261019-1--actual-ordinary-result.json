@@ -1,0 +1,186 @@
+{
+  "status": "PASS_ACTUAL_ORDINARY_PREPARATION_WITH_REVIEWED_CONSUMER_RESOURCE_CORRECTION",
+  "stages": [
+    {
+      "stage": "materialize",
+      "result": {
+        "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/ordinary-execution-correction-1/materialize-result.json",
+        "sha256": "9cbbcd59953a1d40a4f9d5fdd32a6b4c8ce121193bd1417a2fa1e68c8b2d6358",
+        "bytes": 214
+      },
+      "command": {
+        "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/ordinary-execution-correction-1/materialize-command.json",
+        "sha256": "d41dfec6f5052245dc821c72aa93acd5513ea682cbfb12e32cdb26c187468980",
+        "bytes": 483
+      },
+      "exit_code": 0,
+      "direct_child_joined": true,
+      "elapsed_seconds": 9.280636
+    },
+    {
+      "stage": "mkdir",
+      "result": {
+        "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/ordinary-execution-correction-1/mkdir-result.json",
+        "sha256": "d6934daff490e16591751ce166fb9e5205a23d07bad452ef17536cd92d45ad9d",
+        "bytes": 208
+      },
+      "command": {
+        "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/ordinary-execution-correction-1/mkdir-command.json",
+        "sha256": "4a4c2ef251e0c720d983b68b5c19d02f1d4afc70d967cfc71942270cf8b5e372",
+        "bytes": 270
+      },
+      "exit_code": 0,
+      "direct_child_joined": true,
+      "elapsed_seconds": 0.002169
+    },
+    {
+      "stage": "prepare",
+      "result": {
+        "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/ordinary-execution-correction-1/prepare-result.json",
+        "sha256": "16fa78c75cfdc993b202a651d8f97c95a93a3efdbb90e74799d7c7db6d87c950",
+        "bytes": 211
+      },
+      "command": {
+        "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/ordinary-execution-correction-1/prepare-command.json",
+        "sha256": "901f1492b7d93761c4492fc28a05429dfc601d9c2f800a345643aa87043ed0ad",
+        "bytes": 772
+      },
+      "exit_code": 0,
+      "direct_child_joined": true,
+      "elapsed_seconds": 103.22648
+    },
+    {
+      "stage": "consume",
+      "result": {
+        "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/outer-consumer-correction-1/unchanged-consumer-resource-correction.status.json",
+        "sha256": "57e5284a074d0fb52f04758a9906e89a6e3ad516dad6b9c57482de615c34bafd",
+        "bytes": 1221
+      },
+      "stdout": {
+        "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/outer-consumer-correction-1/unchanged-consumer-resource-correction.stdout",
+        "sha256": "2ca8d72a0ff1d5ce1100470d8146325bc366e8cbbed6b06f6accf405377fabae",
+        "bytes": 839
+      },
+      "argv": [
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LC_ALL=C",
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "150s",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=120",
+        "--fsize=33554432",
+        "--",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/post-prep-consumer.py",
+        "bc98516d19e79ac3cc4a0fd89ca4f9de7e60ee7b64c77ead65e808d44c61dba9"
+      ],
+      "exit_code": 0,
+      "direct_child_joined": true,
+      "elapsed_seconds": 33.53141055197921,
+      "resource_amendment": {
+        "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-ordinary-review-20261019-1/CONSUMER-RESOURCE-AMENDMENT.json",
+        "sha256": "17a6f70bc36683226029f23e80a597a2a4159e2571fb04f899dfde7128f077b5",
+        "bytes": 1872
+      }
+    }
+  ],
+  "bindings": {
+    "image-request.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/image-request.json",
+      "sha256": "bc98516d19e79ac3cc4a0fd89ca4f9de7e60ee7b64c77ead65e808d44c61dba9",
+      "bytes": 35945239
+    },
+    "image-toolchain.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/image-toolchain.json",
+      "sha256": "a68e02b3b66b8bfbae96bf742dc8702b6e81dd97b92189b87437c3d08fccdf72",
+      "bytes": 72685013
+    },
+    "materialization-receipt.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/materialization-receipt.json",
+      "sha256": "4a4cdb6b3228b357f811be19056c3c1994e57b67fc670a3928a82113e749d64b",
+      "bytes": 471
+    }
+  },
+  "receipt": {
+    "status": "PASS_SOURCE_MATERIALIZATION_ONLY",
+    "source": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/materialized-source",
+    "source_derivative_sha256": "8ca6e79ff41ee3a90b2dc5d85f020a65efebb35c5cffd24acd37da6fe17d4cfc",
+    "materialization_sha256": "8fbf585c1b151801663ee0a1346505fdc50663191a0cd09349227fb7386499b5",
+    "source_entries": 6948,
+    "regular_files": 6899,
+    "tracked_symlinks": 49,
+    "builds": 0,
+    "guests": 0
+  },
+  "source_identity": {
+    "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/materialized-source",
+    "device": 66306,
+    "inode": 47992786
+  },
+  "source_publication_commit": "35a497b2e5813ed935500ac192c26c02c67b136f",
+  "base_candidate_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+  "ihk_sha": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+  "metadata_joins": {
+    "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/actual-binding-metadata-joins.json",
+    "sha256": "29cb65350eb1e8dea711f54d78a604e06526ce55db293476a8bb38e7c6193e64",
+    "bytes": 1542
+  },
+  "consumer_result": {
+    "status": "PASS_ACTUAL_DRIVER_AND_OWNER_REQUEST_CONSUMERS",
+    "request_sha256": "bc98516d19e79ac3cc4a0fd89ca4f9de7e60ee7b64c77ead65e808d44c61dba9",
+    "manifest_sha256": "83e047abf793f2de3bf1a6f260c1493bf9ba600609b547c0665033dd90e88954",
+    "toolchain_sha256": "a68e02b3b66b8bfbae96bf742dc8702b6e81dd97b92189b87437c3d08fccdf72",
+    "common_exclusion_path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/common-exclusion.json",
+    "elapsed_seconds": 33.368,
+    "builds": 0,
+    "guests": 0,
+    "limits": "Read-only source/request admission; no execution release or runtime acceptance"
+  },
+  "original_failures_preserved": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/ordinary-execution/failure.json",
+      "sha256": "c5d79de82dbbaa3916beb074ead3f7729592ef386e0cc3cec254c344b0159400",
+      "bytes": 106
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/ordinary-execution-correction-1/failure.json",
+      "sha256": "63ff6046c4977c688e057db9ae7a9e3d5acc9961b2f76172efee6859bd0cedbf",
+      "bytes": 140
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/ordinary-execution-correction-1/consume-result.json",
+      "sha256": "b01fbcdc230124241d2723c75e56297d4004b2a876652f10a9606f5128482139",
+      "bytes": 214
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/ordinary-execution-correction-1/consume.stdout",
+      "sha256": "ad389a642ddbdc1c22c12288dcc526968a6b0867939a07f86338c7dc87c53666",
+      "bytes": 238
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/ordinary-execution-correction-1/consume.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    }
+  ],
+  "source_or_prepare_replays": 0,
+  "consumer_resource_corrections": 1,
+  "compiler_invocations": 0,
+  "containers": 0,
+  "root_operations": 0,
+  "image_builds": 0,
+  "guests": 0,
+  "heavy_execution_authority": false,
+  "production_acceptance": false,
+  "next": "Independent consolidated actual source/request/consumer review, then root owns fresh heavy execution proposal/admission."
+}

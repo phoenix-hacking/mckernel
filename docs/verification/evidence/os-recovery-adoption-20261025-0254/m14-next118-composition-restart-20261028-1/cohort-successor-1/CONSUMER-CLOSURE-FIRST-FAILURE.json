@@ -1,0 +1,21 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "command": [
+    "taskset",
+    "-c",
+    "0",
+    "python3",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/test118_pipeline.py"
+  ],
+  "returncode": 1,
+  "tests": 2,
+  "errors": 1,
+  "error": "ValueError: closed122Rust",
+  "cause": "Actual copied Cold verifier retained the117closed122 assertion after the real118 producer emitted123.",
+  "correction": "Update exact source closure assertion to123; preserve sameCold/Hot/resource contracts. Include exact3external inputs consistently through readonly export validation/publication.",
+  "actual_liveguard": 0,
+  "actual_export": 0,
+  "actual_materialization": 0,
+  "actual_compiler": 0
+}

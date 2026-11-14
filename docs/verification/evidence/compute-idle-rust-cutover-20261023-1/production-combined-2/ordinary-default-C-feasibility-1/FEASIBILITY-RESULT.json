@@ -1,0 +1,101 @@
+{
+  "accepted_host_mounts": [
+    {
+      "container": "/out",
+      "host": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output"
+    },
+    {
+      "container": "/nightly",
+      "host": "/home/holden/mckernel-work/scratch/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu"
+    }
+  ],
+  "compiler_or_test_executed": false,
+  "existing_pinned_next_owner_argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-2/correction1/native_rust_exact_mckernel_image_container_owner.py",
+    "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-2/correction1/image-request.FINAL.json"
+  ],
+  "existing_pinned_operation": {
+    "bytes": 8817,
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-2/correction1/EXACT-PRODUCTION-OPERATION.CORRECTION1.PROPOSED.json",
+    "sha256": "e8b207bb781cefabb295ca012695760bc36136980c0a907c17e6fd1b0d251b74"
+  },
+  "expected_compiler": {
+    "executable_version": "cc (GCC) 14.3.1 20251022 (Red Hat 14.3.1-4)\nCopyright (C) 2024 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+    "owner": "gcc",
+    "path": "/usr/bin/cc",
+    "rpm_nevra": "gcc-0:14.3.1-4.4.el10.x86_64",
+    "sha256": "2092e32fa9abee9ccbf777a5f893b9cc608582b660c93e742a17c3eb7da109c2",
+    "target": "/usr/bin/gcc",
+    "version": "cc (GCC) 14.3.1 20251022 (Red Hat 14.3.1-4)\nCopyright (C) 2024 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
+  },
+  "finite_blockers": [
+    "Pinned GCC14.3.1 driver SHA2092e32fa9abee9ccbf777a5f893b9cc608582b660c93e742a17c3eb7da109c2 is authenticated as image-only; reviewed HOST /usr/bin/cc is GCC9 SHA6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f, not matching. /usr/bin/gcc-14 is absent.",
+    "The exact recipe builtin-header root /usr/lib/gcc/x86_64-redhat-linux/14/include is absent; no accepted host path map for the full GCC14 backend/assembler/loader/runtime closure exists. No install/extraction/remap is authorized in this task."
+  ],
+  "host_ready": false,
+  "known_host_paths": [
+    {
+      "actual_file": {
+        "bytes": 1158288,
+        "path": "/usr/bin/cc",
+        "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f"
+      },
+      "lexists": true,
+      "path": "/usr/bin/cc",
+      "resolved": "/usr/bin/x86_64-linux-gnu-gcc-9"
+    },
+    {
+      "actual_file": {
+        "bytes": 1158288,
+        "path": "/usr/bin/gcc",
+        "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f"
+      },
+      "lexists": true,
+      "path": "/usr/bin/gcc",
+      "resolved": "/usr/bin/x86_64-linux-gnu-gcc-9"
+    },
+    {
+      "lexists": false,
+      "path": "/usr/bin/gcc-14",
+      "resolved": null
+    },
+    {
+      "lexists": false,
+      "path": "/usr/lib/gcc/x86_64-redhat-linux/14",
+      "resolved": null
+    },
+    {
+      "lexists": false,
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/14",
+      "resolved": null
+    }
+  ],
+  "lookup_failure_history": {
+    "all_failures_preserved": true,
+    "first_metadata_lookup": "KeyError container_path: toolchain document root rows differ from request mount rows; occurred before host path lookup and without compiler execution.",
+    "one_bounded_metadata_correction": "Used exact request toolchain_roots container_path/host_path fields; no retry of any compiler/probe."
+  },
+  "prior_GCC9_complete_TU_evidence": {
+    "bytes": 3849,
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/memory-combined-preparation-1/PREPARATION-RECEIPT.json",
+    "sha256": "43af35df9360525368fb78ff0d828ae8a8913646ba49d982663962c518dad319"
+  },
+  "ready_argv": null,
+  "recipe_inputs": {
+    "bytes": 20324,
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-2/ordinary-default-C-feasibility-1/EXACT-SELECTED-TU-RECIPES.json",
+    "sha256": "6df13c5961e7d7f978381668f5475a3c2c979c3e8f9d79b0d4d477cc7fd5bf19"
+  },
+  "release_rule": "Use existing exact pinned container operation after root fresh admission/independent release at free heavy boundary; no ordinary host GCC9 substitution, compiler flags/header stubs/install or new wrapper. Source-only metadata does not grant execution.",
+  "root_Docker_heavy_executed": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "selected_input_closure": {
+    "bytes": 59392,
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-2/ordinary-default-C-feasibility-1/SELECTED-INPUT-CLOSURE.json",
+    "sha256": "2a190351ca276807f4341ff2e5e73715505f7fe5fcf3823399ba34fbd177e276"
+  },
+  "status": "BLOCKED_EXACT_HOST_GCC14_NOT_AVAILABLE_IN_REVIEWED_CLOSURE"
+}

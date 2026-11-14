@@ -1,0 +1,11 @@
+--- accepted-B5/capture_first_four.py
++++ capture_sdk_owner.py
+@@ -5,7 +5,7 @@
+ BASE_SHA='a6ce818b1eabea2d13ed811487b88b2b811a4abbdb7dbb6b2cd43058b400e2d1'
+ p=argparse.ArgumentParser();p.add_argument('--operation',required=True);p.add_argument('--sha256',required=True);a=p.parse_args()
+ raw=Path(a.operation).read_bytes();assert hashlib.sha256(raw).hexdigest()==a.sha256;op=json.loads(raw)
+-assert op['role'] in ('observer','summary','original-five-FD-metadata','raw-five-export') and op['cpu']==7 and op['stream_cap_bytes']==33554432
++assert op['role'] in ('observer','summary','original-five-FD-metadata','raw-five-export','current-sdk-owner') and op['cpu']==7 and op['stream_cap_bytes']==33554432
+ argv=op['argv'];assert isinstance(argv,list) and all(isinstance(x,str) for x in argv)
+ assert argv[argv.index('-c')+1]=='7' and '--fsize=33554432' in argv
+ run=Path(op['capture_directory']);assert run.is_absolute() and '..' not in run.parts and not run.exists()

@@ -1,0 +1,96 @@
+{
+  "schema": "mckernel.native-exact-export25-heavy-build-attempt2-bcmp-failure.v1",
+  "recorded_at": "2026-09-30T20:20:54-07:00",
+  "checkpoint_commit": "b42c7018b3cd5c5d732e54cc361a797dedd0a603",
+  "candidate_commit": "6fed3a1022db0b4f9828dd42a8bd8f88fc052053",
+  "ihk_commit": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+  "request_sha256": "9923b51f8765040b7a4ea4b66669e5adb412e8f675196b9cc17499fba313461d",
+  "owner_sha256": "a6d6ffaaa84fd5fd5090875b7ec7829c136b55af81104cf630ecc273ed9df7f0",
+  "released_command": "/usr/bin/python3 -I -B /home/holden/mckernel/scripts/native_rust_exact_mckernel_image_container_owner.py /home/holden/mckernel-work/scratch/native-exact-mckernel-image-request-6fed3a10-exportset-25.json",
+  "execution_release": "PASS_EXECUTION_EXPORT25_ABSOLUTE_HEAVY_BUILD",
+  "admission": {
+    "status": "PASS",
+    "host_free_bytes": 28588077056,
+    "scratch_free_bytes": 16797904896,
+    "memory_available_bytes": 27924201472,
+    "docker_containers_total": 41,
+    "docker_containers_running": [
+      "kasper-results_web-interface_1",
+      "kasper-results_db_1"
+    ],
+    "competing_heavy_processes": [],
+    "output_evidence_attempt_lease_exclusion_absent": true
+  },
+  "live_identity": {
+    "owner_pid": 2298732,
+    "owner_pgid": 2298732,
+    "owner_sid": 2298732,
+    "container_id": "aef5164c5209f62b5f1be6d545f34001779d2ed78008235114890f981635708b",
+    "container_name": "mckernel-image-bc0df6c9bd6d4234a1ec686df14ec493",
+    "owner_nonce": "5630f734cf3249d38945489942d03fad"
+  },
+  "result": {
+    "owner_status": "FAIL",
+    "owner_exit_code": 1,
+    "driver_status": "FAIL",
+    "driver_phase": "build",
+    "configure_exit_code": 0,
+    "build_exit_code": 2,
+    "error": "offline image driver failed",
+    "fatal": "/nightly/lib/rustlib/src/rust/library/core/src/array/equality.rs:157:(.ltext.ihk_mc_interrupt_host+0x2a2): undefined reference to `bcmp'",
+    "sole_observed_fatal": true
+  },
+  "retained_evidence": {
+    "owner_receipt": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-owner-evidence-6fed3a10-exportset-25/owner-receipt.json",
+      "sha256": "df80c9c506e47bb3b5905cd5970e077dfa8744e9cd60422bb9c0c2f927c98785"
+    },
+    "driver_receipt": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-work-6fed3a10-exportset-25/evidence/receipt.json",
+      "sha256": "7b69305655bd071b77ae79d6b3173bb8ffb03a46be03b6b84317978d7cf4e467"
+    },
+    "progress_sha256": "3b6bf891863c7f6755faf39be02758e135fa3628aa301147b3b1302a218ebbfc",
+    "build_stderr_sha256": "07bf8c4e06c0c15fc29f4ed085c9cbd006a95ce8fdc1e8b641d3425007cd88c7",
+    "build_stdout_sha256": "8bbab1a1b22d62ba792f1ddfac2af3932247e7d0c7e618e374dfaa31c5f0bb85",
+    "failed_rust_object_sha256": "c32ff593dc6a11d490eb3d65ae4c72887e0fceb27e50fc0139d64c2dc48c23e2",
+    "partial_output_files": 396,
+    "partial_output_bytes": 17854181
+  },
+  "causality": {
+    "source": "kernel/rust/smp_ikc.rs:81 self.reserved == [0; 6]",
+    "compiler_lowering": "The exact nightly lowers the 24-byte array equality to bcmp in ihk_mc_interrupt_host.",
+    "object_observation": "mckernel_rust.o defines Rust memcmp but has an undefined bcmp relocation from ihk_mc_interrupt_host+0x2a2.",
+    "bounded_correction": "Provide a Rust-owned freestanding bcmp in kernel/rust/string.rs with a zero-length-safe bounded volatile-u8 equality loop; do not alias the existing zero-length-unsafe memcmp and do not rewrite only this descriptor comparison to evade the compiler runtime contract."
+  },
+  "postflight": {
+    "owner_and_seven_docker_client_pids_absent": true,
+    "lease_absent": true,
+    "common_exclusion": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-25.json",
+      "inode": 90679,
+      "sha256": "2eeed65d24ff927cee2421ff49dc3ee0351f682cf96e71517afa375a3f3d7c18",
+      "retained": true
+    },
+    "terminal_container": {
+      "status": "exited",
+      "exit_code": 1,
+      "running": false,
+      "pid": 0,
+      "oom_killed": false,
+      "retained": true
+    },
+    "host_free_bytes": 28520361984,
+    "scratch_free_bytes": 16775974912,
+    "mem_available_kib": 27579244
+  },
+  "independent_audit": {
+    "result": "PASS_FAILURE_AUDIT",
+    "source_manifest_members": 9384,
+    "regular_files_matching": 9335,
+    "symlinks_matching_link_bytes": 49,
+    "backup_inventory_entries_matching": 86,
+    "driver_evidence_files_validated": 6,
+    "note": "An initial read-only observer followed the 49 symlinks; corrected comparison used the production readlink-byte contract and found no source drift."
+  },
+  "scope": "A failed diagnostic image build only. No linked image, guest, application, production, language, or OS acceptance is established, and no acceptance counter changes. The retained exclusion/container/failure roots must not be removed or reused without separate reviewed retention and cleanup authority."
+}

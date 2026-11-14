@@ -1,0 +1,37 @@
+--- /home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-local-metadata-1/metadata_checks.py
++++ /home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-local-metadata-1/correction-1/combined/metadata_checks.py
+@@ -164,7 +164,14 @@
+         for rel in funcs[function]['actual_relocations']:
+             symbol = rel['symbol']
+             if symbol['bind'] == 1:
+-                assert symbol['name'] in allowed_globals and rel['addend'] == 0
++                assert symbol['name'] in allowed_globals
++                if symbol['name'] == 'x86_interrupt_log_debug':
++                    # Exact original addr_of!(Ddebug.line_flags), not the object base.
++                    assert function == 'x86_interrupt_log_bridge' and symbol == data
++                    assert rel['addend'] == contract['data_fields']['line_flags'] == 24
++                else:
++                    # Genuine function/slot providers are still exact base addresses.
++                    assert symbol['section'] == 0 and rel['addend'] == 0
+                 globals_seen.add(symbol['name'])
+             else:
+                 assert function == 'x86_interrupt_log_bridge' and symbol['bind'] == 0
+@@ -201,7 +208,8 @@
+     slot = image.defined[name]
+     section = image.sections[slot['section']]
+     assert slot['type'] == 1 and image.kind(slot) == 'B' and slot['size'] == 8 and slot['value'] == 0
+-    assert section['name'] == '.bss.x86_issue_ipi' and section['type'] == 8 and section['flags'] == 3
++    # Exact actual large-model None slot declaration; no byte materialization.
++    assert section['name'] == '.lbss.x86_issue_ipi' and section['type'] == 8 and section['flags'] == 0x10000003
+     assert section['align'] == 8 and section['size'] == 8
+     assert not [r for r in image.relocations if r['section'] == section['index']], 'Original None slot has no target relocation'
+     name = 'get_x86_cpu_local_variable'
+@@ -217,7 +225,7 @@
+     assert all(r['section'] in accounted for r in image.relocations)
+     return dict(status='PASS_CALLED_ACTUAL_LOCAL_ACCESSOR_AND_ORIGINAL_NONE_SLOT',
+                 object_sha256=evidence['object_sha256'], actual_T=['get_x86_cpu_local_variable'], genuine_U=['locals'],
+-                actual_slot=dict(name=item['expected_data_name'], bytes=8, alignment=8, section='.bss.x86_issue_ipi',
++                actual_slot=dict(name=item['expected_data_name'], bytes=8, alignment=8, section='.lbss.x86_issue_ipi',
+                                  NOBITS_declaration_only=True, target_relocations=0, original_None_preboot_only=True),
+                 actual_function_evidence=funcs, actual_unwind=eh, capture=item['capture'], actual_private_FUNC_OBJECT=[],
+                 original_inline_local_addr_inlined_no_other_owner=True,

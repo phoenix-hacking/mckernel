@@ -1,0 +1,185 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/guardian_execution_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "recorded_at": "2026-10-27T22:35:04.815930+00:00",
+  "decision": "PASS_SOURCE",
+  "blocking_findings": [],
+  "execution_release": false,
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1/SOURCE-READY.json",
+    "bytes": 2229,
+    "sha256": "de0ae50626651421707c9f968ecc1424412563a609d7f85526332fe9d8fe9281"
+  },
+  "profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1/PROFILE.NOT-GRANTED.json",
+    "bytes": 109794,
+    "sha256": "951358f4543dba05aa17ab910c2d734ccfd8db96b0d68d324bdeb56793cb8dff"
+  },
+  "recipe": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1/SUFFIX-RECIPE.NOT-ADMITTED.json",
+    "bytes": 4061,
+    "sha256": "c6cb4421c362fcf15dd8c925c2a946494459934a41554c8e5582f776bd71c7b8"
+  },
+  "unchanged_guard_qualifier_successor": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1/qualify_retained_metadata.py",
+    "bytes": 5267,
+    "sha256": "3df982a8c79411fad27dd27cd7559619e0f2b9973d7a5dfb33c4089ca987de8a"
+  },
+  "negative_plan": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1/NEGATIVE-CONTROLS.NOT-ADMITTED.json",
+    "bytes": 12631,
+    "sha256": "c68453a5135a3385a1ad6042a5ee4edf0233185789a6d53bd42e84b17a194e5f"
+  },
+  "original_first_failure_independent_disposition": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/independent-source-profile-review-1/ACTUAL-FIRST-FAILURE.json",
+    "bytes": 32974,
+    "sha256": "e4987f7c6e8172ddd4f29864857c4212cfaa7e785735e0be2c1796f3f28b5114"
+  },
+  "original_source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/independent-source-profile-review-1/REVIEW.json",
+    "bytes": 12357,
+    "sha256": "699f6eca95f63039e781d44eb66c28f3753fb53ca9c5e1cda2c2cbfc12e342b7"
+  },
+  "retained_prefix": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1/RETAINED-PREFIX-AND-FAILURE.json",
+    "bytes": 26318,
+    "sha256": "ed0fd71b3c64d320afba5e62728877ab7a7030296485583cf6981ecbc6215f9f"
+  },
+  "linker_diagnosis": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1/RETAINED-LINKER-DIAGNOSIS.json",
+    "bytes": 13181,
+    "sha256": "8b2531335af7e768f1af365a8dfb25bac471ba92834b85b21414b4a55093cae7"
+  },
+  "runner": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ordinary-host-new12h-runner-source-1/run_new12h_host.py",
+    "bytes": 7521,
+    "sha256": "6e98a1fbcbce2e822a815a05516287e7122cbd8e06d43277134b27b70cf3ad34"
+  },
+  "new_linker": {
+    "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/bin/rust-lld",
+    "bytes": 11412256,
+    "sha256": "5cd8306e6589847a21f0430ea0842f3305fb6ec83fefa6ce8a42e83a63576c82"
+  },
+  "input_pins": 452,
+  "unchanged_original_input_pins": 338,
+  "new_partial_link_commands": 2,
+  "new_successful_prefix_compiler_commands": 0,
+  "unrun_negative_controls": 7,
+  "commands": [
+    {
+      "id": "00-new-qualified-LLVM21-partial-link-flags0",
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/bin/rust-lld",
+        "-flavor",
+        "gnu",
+        "-r",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/HOST-output-proposed-1/selected0.o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/HOST-output-proposed-1/rust0.o",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1/HOST-output-proposed-2/joint0.o"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 00-new-qualified-LLVM21-partial-link-flags0",
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1",
+      "timeout_seconds": 90,
+      "stdout_limit_bytes": 16384,
+      "stderr_limit_bytes": 16384,
+      "requires_fresh_Root_ordinary_grant": true,
+      "leaf": "F02verbose32retainSuffix",
+      "argv_compact_json_LF_sha256": "5b2c6ec6380496be2c53128381fd5f6fd27c9fa938b0435a103e656867182cab"
+    },
+    {
+      "id": "01-new-qualified-LLVM21-partial-link-flags1",
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/bin/rust-lld",
+        "-flavor",
+        "gnu",
+        "-r",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/HOST-output-proposed-1/selected1.o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/HOST-output-proposed-1/rust1.o",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1/HOST-output-proposed-2/joint1.o"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 01-new-qualified-LLVM21-partial-link-flags1",
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1",
+      "timeout_seconds": 90,
+      "stdout_limit_bytes": 16384,
+      "stderr_limit_bytes": 16384,
+      "requires_fresh_Root_ordinary_grant": true,
+      "leaf": "F02verbose32retainSuffix",
+      "argv_compact_json_LF_sha256": "68379d33e6169b072b0767442bac339a8b9744064ec14e5985e2237edb22ca7e"
+    },
+    {
+      "id": "02-unchanged-retain-qualifier-retained-prefix-new-joints",
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1/qualify_retained_metadata.py",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/HOST-output-proposed-1",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1/HOST-output-proposed-2"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 02-unchanged-retain-qualifier-retained-prefix-new-joints",
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1",
+      "timeout_seconds": 90,
+      "stdout_limit_bytes": 16384,
+      "stderr_limit_bytes": 16384,
+      "requires_fresh_Root_ordinary_grant": true,
+      "leaf": "F02verbose32retainSuffix",
+      "argv_compact_json_LF_sha256": "08c21896362b802fec906b82b174776085f58e7506dff3e07a8ee6e8f7a191c7"
+    },
+    {
+      "id": "03-original-unrun-negative7-output-successor",
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/negative_controls.py",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1/NEGATIVE-CONTROLS.NOT-ADMITTED.json"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 03-original-unrun-negative7-output-successor",
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1",
+      "timeout_seconds": 90,
+      "stdout_limit_bytes": 16384,
+      "stderr_limit_bytes": 16384,
+      "requires_fresh_Root_ordinary_grant": true,
+      "leaf": "F02verbose32retainSuffix",
+      "argv_compact_json_LF_sha256": "4169415e5d3b61ba932043fb4d03badf7c3f05420621a5c2ad3e9c05771a8c1c"
+    }
+  ],
+  "verified_delta": [
+    "READYde0ae506/profile951358f4/recipe c6cb4421 and all452inputrows+leafplan hash-match; all338predecessor rows unchanged. Originale498firstfailure/all8passedproduceroutputs/oldfailedjoints/captures retained exactly. No oldcompilerprefix replay is proposed.",
+    "Two exactnewcommands use existingRust1.92distribution rust-lld5cd8306e with -flavor gnu -r on retained selected0/rust0 andselected1/rust1 pairs, writing freshseparatejoint0/1. No objcopy,ELFflagpatch,sourcechange,alternatefallbacklinker or ignoreundefined.",
+    "Newqualifier3df982a8 reverses to original58751c96 byteexact after ONLY5allowedbindings: parentroot,secondjointoutputargv,newjointinputpath,retainedconsumerparentpath,resultoutputpath. All ABI/FILE/FUNC/LINE/FMT/flags/padding/reloc/LOCAL-GLOBAL/count/GNU_RETAIN guards unchanged.",
+    "Original7unrunnegativecontrols plan byteexact after only outputroot inversion. Existingnegativehelper59f61a59 unchanged,exactdiagnostic/nonzero/noobject predicates intact. Freshnegativeoutputs are separate fromfailedprefix.",
+    "Linkerbytes/componentmanifest/embeddedLLD21.1.3 provenance match. Read-only ELFDT_NEEDED names libpthread,libz,libLLVM21.1Rust1.92,libm,libgcc_s,libc,ld-linux allpresent inexplicitpins; additionalLLVMdependencies/source/provenance pinned. PriorRustcompilerqualification9b5433a8 does not claim directpartiallinkretain acceptance.",
+    "OldHostGNUld2.34 provenance/actualinputR0x200003\u2192joint0x3 transition retained. Productiontoolmanifest GNUld2.41 is explicitdistinctcontext. No unverifiedgeneralversionfix/sourcecause or productionlinkerdefect is claimed.",
+    "Resources/fixedclocks/account/runner6e98 unchanged fromoriginalprofile. Fouroutercaptures512MiB+2newjointobjects128MiB+14negative streams896MiB+5forbiddenfailedRustoutputpaths320MiB+results128MiB+temporary128MiB=2112MiB; retained4GiBfullreserve includesallinternalfiles. Existingadmission requiresHOST20GiB/scratch12GiB/currentmemoryfloors,CPU6job1AS2GiB60CPU90wall/shared7jobs21.6619GiB/oneheavy.",
+    "Freshsuffixoutput/capture paths absent. This is the oneboundedmatchedlinker correction ofthisfailurefamily; ifactualnewoperationfails unchangedguard,retainfailureandescalate ratherthanwaiveortrysuccessiveunreviewedtools."
+  ],
+  "retained_first_failure_remains_FAIL": true,
+  "new_linked_GNU_RETAIN_acceptance": false,
+  "native_default_data_C_retirement": false,
+  "actual_compiler_linker_guard_resource_account_queries": 0,
+  "Root_literal_command": [
+    "/usr/bin/python3",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ordinary-host-new12h-runner-source-1/run_new12h_host.py",
+    "--profile",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1/PROFILE.NOT-GRANTED.json",
+    "--profile-sha256",
+    "951358f4543dba05aa17ab910c2d734ccfd8db96b0d68d324bdeb56793cb8dff",
+    "--grant",
+    "ABSOLUTE_FRESH_ROOT_GRANT.json",
+    "--grant-sha256",
+    "ACTUAL_GRANT_SHA256"
+  ],
+  "required_Root_admission": "Fresh Root grant binds profile951358f4/runner6e98/newunusedHOSTnonce/currentCPU6exclusion/account+realholds/sharedreservations/fixedwindow/sourcepins/actualHOST20GiBscratch12GiB headroom. Do not reuse consumed4b058 or initial10commandrelease. No physicalnativeclearance supplied bythissource review.",
+  "next_acceptance": "Actualnew2links must preserve GNU_RETAIN ineachselectedGLOBAL andalloriginalmetadata gates; thenoriginal7unrunnegativecontrols and all4positivejoins/groupsabsent/closedstreams. ActualHOST acceptance remainsfuture; productiondefault/fullregistry/native/wholefile/dataretirement remainOPEN.",
+  "review_actions": {
+    "delta_only_data_byte_AST_hashchecks": true,
+    "no_execution_grant_compiler_linker_versiontool_guard_resource_native_query": true,
+    "no_canonical_Git_writes": true,
+    "only_new_private_review_directory_written": true
+  },
+  "persistent_controls": "Fixed2026-10-28T05:36:09Z/v2earlierclamps/boot7bfc5687,creditrun7f/cap57774.852125/spent>=22812.3311/allrealholds/oneheavy/permanentnativeownership unchanged. Rootalone canonical/actualgrant authority,parentexclusiveoutercontrols. NativeM15startup independent."
+}

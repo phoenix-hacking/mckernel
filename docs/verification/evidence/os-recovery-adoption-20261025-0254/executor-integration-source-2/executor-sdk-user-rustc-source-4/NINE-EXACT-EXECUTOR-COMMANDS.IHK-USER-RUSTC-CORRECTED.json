@@ -1,0 +1,122 @@
+{
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/cmake",
+        "-E",
+        "make_directory",
+        "/work/output/m15-executor-sdk-default-1"
+      ],
+      "index": 0,
+      "label": "fresh-output-directory",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Selected SDK compiler/consumer qualification only; no executor app launch."
+    },
+    {
+      "argv": [
+        "/usr/bin/cc",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-c",
+        "/src/executer/user/rust/m15_selected_platform_ABI.c",
+        "-o",
+        "/work/output/m15-executor-sdk-default-1/selected-platform-ABI.o"
+      ],
+      "index": 1,
+      "label": "actual-selected-platform-header-ABI",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Selected SDK compiler/consumer qualification only; no executor app launch."
+    },
+    {
+      "argv": [
+        "/usr/bin/readelf",
+        "-SWs",
+        "/work/output/m15-executor-sdk-default-1/selected-platform-ABI.o"
+      ],
+      "index": 2,
+      "label": "actual-selected-platform-ABI-object",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Selected SDK compiler/consumer qualification only; no executor app launch."
+    },
+    {
+      "argv": [
+        "/usr/bin/cmake",
+        "-C",
+        "/src/executer/user/rust/m15_selected_sdk_cache.cmake",
+        "-S",
+        "/src",
+        "-B",
+        "/work/output/m15-executor-sdk-default-1/build",
+        "-DENABLE_RUST_USER_TOOLS=ON",
+        "-DRUSTC:FILEPATH=/nightly/bin/rustc",
+        "-DMCKERNEL_RUNTIME_TOOL_RUSTC:FILEPATH=/nightly/bin/rustc",
+        "-DIHKLIB_USE_QUALIFIED_EXTERNAL_ARCHIVE=OFF",
+        "-DENABLE_QLMPI=OFF",
+        "-DENABLE_TOFU=OFF",
+        "-DENABLE_UTI=OFF",
+        "-DIHK_USER_RUSTC:FILEPATH=/nightly/bin/rustc"
+      ],
+      "index": 3,
+      "label": "production-default-source-configure",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Selected SDK compiler/consumer qualification only; no executor app launch."
+    },
+    {
+      "argv": [
+        "/usr/bin/cmake",
+        "--build",
+        "/work/output/m15-executor-sdk-default-1/build",
+        "--target",
+        "mcexec",
+        "--",
+        "-j1",
+        "VERBOSE=1"
+      ],
+      "index": 4,
+      "label": "production-default-mcexec-target",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Selected SDK compiler/consumer qualification only; no executor app launch."
+    },
+    {
+      "argv": [
+        "/usr/bin/nm",
+        "-g",
+        "-S",
+        "/work/output/m15-executor-sdk-default-1/build/executer/user/rust/mcexec_helpers.o"
+      ],
+      "index": 5,
+      "label": "actual-default-Rust-symbols",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Selected SDK compiler/consumer qualification only; no executor app launch."
+    },
+    {
+      "argv": [
+        "/usr/bin/ar",
+        "t",
+        "/work/output/m15-executor-sdk-default-1/build/executer/user/libmcexec.a"
+      ],
+      "index": 6,
+      "label": "actual-default-ASM-archive",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Selected SDK compiler/consumer qualification only; no executor app launch."
+    },
+    {
+      "argv": [
+        "/usr/bin/readelf",
+        "-hSWs",
+        "/work/output/m15-executor-sdk-default-1/build/executer/user/mcexec"
+      ],
+      "index": 7,
+      "label": "actual-default-PIE-symbol-sections",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Selected SDK compiler/consumer qualification only; no executor app launch."
+    },
+    {
+      "argv": [
+        "/usr/bin/readelf",
+        "-dW",
+        "/work/output/m15-executor-sdk-default-1/build/executer/user/mcexec"
+      ],
+      "index": 8,
+      "label": "actual-default-PIE-dynamic-closure",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Selected SDK compiler/consumer qualification only; no executor app launch."
+    }
+  ],
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_BOUNDED_IHK_USER_RUSTC_CORRECTION_NO_EXECUTION"
+}

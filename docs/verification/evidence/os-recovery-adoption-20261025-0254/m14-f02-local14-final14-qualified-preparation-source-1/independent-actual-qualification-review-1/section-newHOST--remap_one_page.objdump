@@ -1,0 +1,189 @@
+
+/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/relative-module-context-correction-source-1/HOST-output-proposed-1/rust-selected.o:     file format elf64-x86-64
+
+
+Disassembly of section .ltext.remap_one_page:
+
+0000000000000000 <remap_one_page>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	41 57                	push   %r15
+   6:	41 56                	push   %r14
+   8:	41 55                	push   %r13
+   a:	41 54                	push   %r12
+   c:	53                   	push   %rbx
+   d:	48 83 ec 28          	sub    $0x28,%rsp
+  11:	49 89 ce             	mov    %rcx,%r14
+  14:	49 89 d7             	mov    %rdx,%r15
+  17:	48 89 75 c0          	mov    %rsi,-0x40(%rbp)
+  1b:	49 89 fd             	mov    %rdi,%r13
+  1e:	4c 89 45 b8          	mov    %r8,-0x48(%rbp)
+  22:	44 89 c3             	mov    %r8d,%ebx
+  25:	83 e3 3f             	and    $0x3f,%ebx
+  28:	41 bc 01 00 00 00    	mov    $0x1,%r12d
+  2e:	89 d9                	mov    %ebx,%ecx
+  30:	49 d3 e4             	shl    %cl,%r12
+  33:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	35: R_X86_64_64	process_remap_one_page_entry_debug+0x18
+  3d:	8b 00                	mov    (%rax),%eax
+  3f:	3d 00 00 00 01       	cmp    $0x1000000,%eax
+  44:	72 34                	jb     7a <remap_one_page+0x7a>
+  46:	4d 8b 07             	mov    (%r15),%r8
+  49:	48 83 ec 08          	sub    $0x8,%rsp
+  4d:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	4f: R_X86_64_64	.lrodata.str1.1+0x8467
+  57:	4c 89 ee             	mov    %r13,%rsi
+  5a:	48 8b 55 c0          	mov    -0x40(%rbp),%rdx
+  5e:	4c 89 f9             	mov    %r15,%rcx
+  61:	4d 89 f1             	mov    %r14,%r9
+  64:	31 c0                	xor    %eax,%eax
+  66:	ff 75 b8             	push   -0x48(%rbp)
+  69:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	6b: R_X86_64_64	kprintf
+  73:	41 ff d2             	call   *%r10
+  76:	48 83 c4 10          	add    $0x10,%rsp
+  7a:	49 8b 45 00          	mov    0x0(%r13),%rax
+  7e:	4c 01 f0             	add    %r14,%rax
+  81:	49 2b 45 08          	sub    0x8(%r13),%rax
+  85:	31 c9                	xor    %ecx,%ecx
+  87:	83 fb 15             	cmp    $0x15,%ebx
+  8a:	0f 94 c1             	sete   %cl
+  8d:	c1 e1 07             	shl    $0x7,%ecx
+  90:	48 81 c9 00 08 00 00 	or     $0x800,%rcx
+  97:	83 fb 1e             	cmp    $0x1e,%ebx
+  9a:	ba 80 08 00 00       	mov    $0x880,%edx
+  9f:	48 0f 45 d1          	cmovne %rcx,%rdx
+  a3:	48 25 00 f0 ff ff    	and    $0xfffffffffffff000,%rax
+  a9:	48 09 d0             	or     %rdx,%rax
+  ac:	48 89 45 d0          	mov    %rax,-0x30(%rbp)
+  b0:	48 8b 45 d0          	mov    -0x30(%rbp),%rax
+  b4:	49 87 07             	xchg   %rax,(%r15)
+  b7:	48 89 45 d0          	mov    %rax,-0x30(%rbp)
+  bb:	41 0f 01 3e          	invlpg (%r14)
+  bf:	48 83 7d d0 00       	cmpq   $0x0,-0x30(%rbp)
+  c4:	0f 84 1a 02 00 00    	je     2e4 <remap_one_page+0x2e4>
+  ca:	48 f7 45 d0 00 08 00 00 	testq  $0x800,-0x30(%rbp)
+  d2:	0f 85 0c 02 00 00    	jne    2e4 <remap_one_page+0x2e4>
+  d8:	48 b9 00 f0 ff ff ff ff 0f 00 	movabs $0xffffffffff000,%rcx
+  e2:	48 23 4d d0          	and    -0x30(%rbp),%rcx
+  e6:	48 f7 45 d0 40 00 00 00 	testq  $0x40,-0x30(%rbp)
+  ee:	48 89 4d c8          	mov    %rcx,-0x38(%rbp)
+  f2:	74 1d                	je     111 <remap_one_page+0x111>
+  f4:	49 8b 7d 10          	mov    0x10(%r13),%rdi
+  f8:	48 8b 07             	mov    (%rdi),%rax
+  fb:	48 8b 40 18          	mov    0x18(%rax),%rax
+  ff:	48 85 c0             	test   %rax,%rax
+ 102:	74 0d                	je     111 <remap_one_page+0x111>
+ 104:	48 8b 75 c8          	mov    -0x38(%rbp),%rsi
+ 108:	4c 89 e2             	mov    %r12,%rdx
+ 10b:	ff d0                	call   *%rax
+ 10d:	48 8b 4d c8          	mov    -0x38(%rbp),%rcx
+ 111:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	113: R_X86_64_64	phys_to_page
+ 11b:	48 89 cf             	mov    %rcx,%rdi
+ 11e:	ff d0                	call   *%rax
+ 120:	48 85 c0             	test   %rax,%rax
+ 123:	0f 84 bb 01 00 00    	je     2e4 <remap_one_page+0x2e4>
+ 129:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	12b: R_X86_64_64	page_unmap
+ 133:	48 89 c7             	mov    %rax,%rdi
+ 136:	ff d1                	call   *%rcx
+ 138:	85 c0                	test   %eax,%eax
+ 13a:	0f 84 a4 01 00 00    	je     2e4 <remap_one_page+0x2e4>
+ 140:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	142: R_X86_64_64	_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data20OWNED_INIT_PT_LOADED
+ 14a:	83 38 00             	cmpl   $0x0,(%rax)
+ 14d:	74 0f                	je     15e <remap_one_page+0x15e>
+ 14f:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	151: R_X86_64_64	linux_page_offset_base
+ 159:	48 8b 38             	mov    (%rax),%rdi
+ 15c:	eb 0a                	jmp    168 <remap_one_page+0x168>
+ 15e:	48 bf 00 00 00 00 00 80 ff ff 	movabs $0xffff800000000000,%rdi
+ 168:	48 8b 45 c8          	mov    -0x38(%rbp),%rax
+ 16c:	48 01 c7             	add    %rax,%rdi
+ 16f:	4c 89 e6             	mov    %r12,%rsi
+ 172:	48 c1 ee 0c          	shr    $0xc,%rsi
+ 176:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	178: R_X86_64_64	memdebug
+ 180:	4c 8b 08             	mov    (%rax),%r9
+ 183:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	185: R_X86_64_64	pagealloc_track_initialized
+ 18d:	8b 00                	mov    (%rax),%eax
+ 18f:	48 83 ec 08          	sub    $0x8,%rsp
+ 193:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	195: R_X86_64_64	mem_pagealloc_track_log_bridge
+ 19d:	49 bb 00 00 00 00 00 00 00 00 	movabs $0x0,%r11	19f: R_X86_64_64	mem_pagealloc_invalid_size_bridge
+ 1a7:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	1a9: R_X86_64_64	.lrodata.str1.1+0x64af
+ 1b1:	ba 01 00 00 00       	mov    $0x1,%edx
+ 1b6:	41 b8 a5 09 00 00    	mov    $0x9a5,%r8d
+ 1bc:	41 52                	push   %r10
+ 1be:	41 53                	push   %r11
+ 1c0:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	1c2: R_X86_64_64	mem_pagealloc_invalid_free_bridge
+ 1ca:	41 52                	push   %r10
+ 1cc:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	1ce: R_X86_64_64	mem_pagealloc_track_noirq_unlock_bridge
+ 1d6:	41 52                	push   %r10
+ 1d8:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	1da: R_X86_64_64	mem_pagealloc_track_noirq_lock_bridge
+ 1e2:	41 52                	push   %r10
+ 1e4:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	1e6: R_X86_64_64	mem_kmalloc_remote_unlock_bridge
+ 1ee:	41 52                	push   %r10
+ 1f0:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	1f2: R_X86_64_64	mem_kmalloc_remote_lock_bridge
+ 1fa:	41 52                	push   %r10
+ 1fc:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	1fe: R_X86_64_64	___kfree
+ 206:	41 52                	push   %r10
+ 208:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	20a: R_X86_64_64	mem_pagealloc_track_meta_alloc_bridge
+ 212:	41 52                	push   %r10
+ 214:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	216: R_X86_64_64	___ihk_mc_free_pages
+ 21e:	41 52                	push   %r10
+ 220:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	222: R_X86_64_64	pagealloc_addr_hash_locks
+ 22a:	41 52                	push   %r10
+ 22c:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	22e: R_X86_64_64	pagealloc_addr_hash
+ 236:	41 52                	push   %r10
+ 238:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	23a: R_X86_64_64	pagealloc_track_hash_locks
+ 242:	41 52                	push   %r10
+ 244:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	246: R_X86_64_64	pagealloc_track_hash
+ 24e:	41 52                	push   %r10
+ 250:	50                   	push   %rax
+ 251:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	253: R_X86_64_64	pagealloc_track_free_result
+ 25b:	ff d0                	call   *%rax
+ 25d:	48 81 c4 80 00 00 00 	add    $0x80,%rsp
+ 264:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	266: R_X86_64_64	process_remap_one_page_rss_debug+0x18
+ 26e:	8b 00                	mov    (%rax),%eax
+ 270:	3d 00 00 00 01       	cmp    $0x1000000,%eax
+ 275:	72 2d                	jb     2a4 <remap_one_page+0x2a4>
+ 277:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	279: R_X86_64_64	.lrodata.str1.1+0x848c
+ 281:	48 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%rdx	283: R_X86_64_64	.lrodata.str1.1+0x77bc
+ 28b:	48 8b 75 c8          	mov    -0x38(%rbp),%rsi
+ 28f:	4c 89 e1             	mov    %r12,%rcx
+ 292:	4d 89 e0             	mov    %r12,%r8
+ 295:	31 c0                	xor    %eax,%eax
+ 297:	49 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%r9	299: R_X86_64_64	kprintf
+ 2a1:	41 ff d1             	call   *%r9
+ 2a4:	31 c0                	xor    %eax,%eax
+ 2a6:	83 fb 15             	cmp    $0x15,%ebx
+ 2a9:	0f 94 c0             	sete   %al
+ 2ac:	49 8b 4d 10          	mov    0x10(%r13),%rcx
+ 2b0:	01 c0                	add    %eax,%eax
+ 2b2:	49 f7 dc             	neg    %r12
+ 2b5:	f7 41 08 00 00 04 00 	testl  $0x40000,0x8(%rcx)
+ 2bc:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	2be: R_X86_64_64	rusage
+ 2c6:	48 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%rdx	2c8: R_X86_64_64	rusage+0x40
+ 2d0:	48 0f 45 d1          	cmovne %rcx,%rdx
+ 2d4:	83 fb 1e             	cmp    $0x1e,%ebx
+ 2d7:	b9 04 00 00 00       	mov    $0x4,%ecx
+ 2dc:	0f 45 c8             	cmovne %eax,%ecx
+ 2df:	f0 4c 01 24 ca       	lock add %r12,(%rdx,%rcx,8)
+ 2e4:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	2e6: R_X86_64_64	process_remap_one_page_exit_debug+0x18
+ 2ee:	8b 00                	mov    (%rax),%eax
+ 2f0:	3d 00 00 00 01       	cmp    $0x1000000,%eax
+ 2f5:	72 32                	jb     329 <remap_one_page+0x329>
+ 2f7:	4d 8b 07             	mov    (%r15),%r8
+ 2fa:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	2fc: R_X86_64_64	.lrodata.str1.1+0x84c8
+ 304:	4c 89 ee             	mov    %r13,%rsi
+ 307:	48 8b 55 c0          	mov    -0x40(%rbp),%rdx
+ 30b:	4c 89 f9             	mov    %r15,%rcx
+ 30e:	4d 89 f1             	mov    %r14,%r9
+ 311:	31 c0                	xor    %eax,%eax
+ 313:	6a 00                	push   $0x0
+ 315:	ff 75 b8             	push   -0x48(%rbp)
+ 318:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	31a: R_X86_64_64	kprintf
+ 322:	41 ff d2             	call   *%r10
+ 325:	48 83 c4 10          	add    $0x10,%rsp
+ 329:	31 c0                	xor    %eax,%eax
+ 32b:	48 83 c4 28          	add    $0x28,%rsp
+ 32f:	5b                   	pop    %rbx
+ 330:	41 5c                	pop    %r12
+ 332:	41 5d                	pop    %r13
+ 334:	41 5e                	pop    %r14
+ 336:	41 5f                	pop    %r15
+ 338:	5d                   	pop    %rbp
+ 339:	c3                   	ret    

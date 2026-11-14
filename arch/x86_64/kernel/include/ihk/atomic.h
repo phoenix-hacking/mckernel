@@ -67,6 +67,14 @@ int atomic_cmpxchg_int(int *addr, int oldval, int newval);
 unsigned long atomic_cmpxchg_ulong(unsigned long *addr,
 		unsigned long oldval, unsigned long newval);
 void *atomic_cmpxchg_ptr(void **addr, void *oldval, void *newval);
+
+#ifdef MCKERNEL_IHK_QUEUE_ATOMICS
+/* The retained IHK queue has 64-bit offsets; reuse the existing primitive. */
+#define cmpxchg(addr, oldval, newval) ({ \
+	_Static_assert(sizeof(*(addr)) == 8, "IHK queue cmpxchg needs a 64-bit offset"); \
+	(typeof(*(addr)))atomic_cmpxchg8((unsigned long *)(addr), \
+		(unsigned long)(oldval), (unsigned long)(newval)); })
+#endif
 void ihk_atomic_add_long(long i, long *v);
 void ihk_atomic_add_ulong(long i, unsigned long *v);
 unsigned long ihk_atomic_add_long_return(long i, long *v);

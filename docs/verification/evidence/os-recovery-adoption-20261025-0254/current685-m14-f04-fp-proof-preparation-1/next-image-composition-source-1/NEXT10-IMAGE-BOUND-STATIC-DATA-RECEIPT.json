@@ -1,0 +1,50 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "task": "NEXT10-FP-image-bound-static-data",
+  "status": "EXACT_NEXT10_IMAGE_AND_QUALIFICATION_BOUND_STAGE_REVIEW_NULL_AUTHORITY_NOT_GRANTED",
+  "source_unbound_packet": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current685-m14-f04-fp-proof-preparation-1/next-image-composition-source-1/NEXT10-FP-STAGING-INPUTS.SOURCE-ONLY.json",
+    "sha256": "3801b96e606daa1645c7e523b5e2e5df03e4a673cb05d3a037e5e5636e362834"
+  },
+  "new_image_bound_packet": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current685-m14-f04-fp-proof-preparation-1/next-image-composition-source-1/NEXT10-FP-STAGING-INPUTS.IMAGE-BOUND-SOURCE-ONLY.json",
+    "size": 13075,
+    "sha256": "f1017b710ac933fed6c7ec16d2acbd980bb1921fdb90616da018a1e6e2d709b1"
+  },
+  "changed_fields_only": [
+    "NEXT10_image",
+    "image_qualification"
+  ],
+  "actual_image": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEXT10-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/mckernel.img",
+    "size": 10241736,
+    "sha256": "f42a871d83fcd1f30c9ee66734a8ba760a8587797c4e076079da0e37bfbcb908",
+    "mode": 33261
+  },
+  "actual_artifact_qualification": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/NEXT10-DEFAULT-INDEPENDENT-ARTIFACT-AND-POSTJOIN-ACCEPTANCE.json",
+    "size": 3615,
+    "sha256": "b9edb7a5c8cf9355cab4defa1fc1fbd8713f22ee91e77cd91c021e273d24d483",
+    "mode": 33152
+  },
+  "qualification_decision": "PASS_SUPPORTED_PROFILE_NEXT10_ARTIFACT_AND_RETAINED_POSTJOIN",
+  "all_frozen_modules_payload_oracle_argv_paths_profile_capability_cleanup_refs_unchanged": true,
+  "module_sha256": [
+    "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c",
+    "887dc3567e6035c921588e61b45b41a8ef32a972d142fe2ba82ec48442353b12",
+    "57546af5110c0674b307e5ac5a328228abbe784f890f69521db5f594f21f6ae8"
+  ],
+  "payload_sha256": "3488648514aa2d8d5eacfdbdd111ad33f17c2abccfff4755f3ebcefef45ec583",
+  "frozen_oracle_sha256": "4146e26ab601b59e0301aaff37ef448a2305650063cc7791c99b78b52f6b4dfa",
+  "validated_adapter_sha256_retained": "abf729d458d79fe2b7901746dfd19c3448cad355022298b2cc702f67eac1a0d5",
+  "stage_review": null,
+  "nonce": null,
+  "admission": null,
+  "runtime_authority": null,
+  "authority": "NOT_GRANTED",
+  "literal_next_binding": "Root supplies actual focused staging-review reference in stage_review by creating a new FINAL-BOUND-1 packet; bind its exact byteSHA in existing literal argv. Until then validated adapter intentionally refuses materialization. Do not change adapter or frozen protected data.",
+  "source_codegen_reuse_join_delta": "Only new target image/qualification binding supplied here. Historical provider/context comparison remains prior bounded evidence; no source/codegen audit replay or assertion of current native FP values.",
+  "daemon_priority": "Short daemon reproducer/repair owns the slot; this static data reserves no resource and starts no action.",
+  "materialization_stage_compile_guest_Docker_nonce_capture_actions": 0,
+  "native_FP_value_acceptance": false
+}

@@ -1,0 +1,2361 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ADMITTED_ONE_BOUNDED_ARCH46_PATH_CORRECTION",
+  "at": "2026-10-30T05:02:12.133734+00:00",
+  "epoch": 1793336532.1337464,
+  "owner": "/root",
+  "source_closure": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/arch/x86_64/kernel/include/sigreturn-extra-abi.inc",
+      "bytes": 4001,
+      "sha256": "5c560e42682c7e6bb180908b3bfde6dddd2a6288a936e38b5c5f257835e0af64"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/arch/x86_64/kernel/syscall.c",
+      "bytes": 121431,
+      "sha256": "e2938d25e9db64c06735b8229d9d24f9deaa322589fbeecf61a27e79c8829bbe"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/host-kernel/native-rust/abi/vdso.rs",
+      "bytes": 17839,
+      "sha256": "d796e3a0723d6a21096a1455c35a7820437dfc2b99e5bb0e1c1f4db79f1c7d7d"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/host-kernel/native-rust/zero_pages.rs",
+      "bytes": 4354,
+      "sha256": "47a4e27b63f50366229af4045d79dc5dee6ace179307cc19c08cc338c68b1def"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/abi_checks.c",
+      "bytes": 65125,
+      "sha256": "f8deda08de0eccda152a6416a01bec00e6984c1cf4c998e9ca877b1bbe31c23a"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/abort.rs",
+      "bytes": 1554,
+      "sha256": "443c480129b1191c0cd2b7ccf3663e185f5cb7cb386512854286404e11236d2a"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/affinity.rs",
+      "bytes": 1909,
+      "sha256": "99ccbc64101e6c551c8bc033016a616dbcd709ec0c6b46067bffe92e3839ef7e"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/ap.rs",
+      "bytes": 16148,
+      "sha256": "274823af8fcdf10462e9d1c2dff532b251754b63971778f8b412f698093d1137"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/arch_copy_from_user_bridge.rs",
+      "bytes": 779,
+      "sha256": "062516036d0aa91d8a1db80b652dc9b7f7c4388c8ca99d180d871160d2699610"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/arch_copy_to_user_bridge.rs",
+      "bytes": 851,
+      "sha256": "d774aa618e354ae4de6e16f9293fb86f1458a2a29a4e03672c5e026072ff35c3"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/arch_rt_sigreturn_check_signal_bridge.rs",
+      "bytes": 768,
+      "sha256": "964cdb4cc60d83e6d0762901d4e70e27d0e533b2deb8b3f88d7a2557b56099b9"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/arch_rt_sigreturn_set_signal_bridge.rs",
+      "bytes": 837,
+      "sha256": "9c1059f9c814739336d1b68ff18f14768b73d6cc477f13be531b0ccb577639c8"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/arch_rt_sigreturn_syscall_bridge.rs",
+      "bytes": 748,
+      "sha256": "c2b972091d99383f52baabf74a17ce15a55d7e51b3e74a88d41e6d7330f5597d"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/arch_syscall_forward_context_bridge.rs",
+      "bytes": 604,
+      "sha256": "3f14c1b94b1a071910623ec25551381b846ed36f3c2cefbf501cf33eb036314a"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/atomic_helpers.rs",
+      "bytes": 6207,
+      "sha256": "8acf10a907cede816da8300d36bf967d938cc672dd75dbb3ecc8f3992ec42941"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/bitmap.rs",
+      "bytes": 28875,
+      "sha256": "9ac9a8be0b412844451ff65fd6a3b519e0372c73b8f920a72c59f528f1786a17"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/bitops.rs",
+      "bytes": 8469,
+      "sha256": "ee6c09e24ecf0d98b49e0608d5cf1f1d75ce20b6c2c9131a5ce1827233dd8f0f"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/builtin_dma.rs",
+      "bytes": 4397,
+      "sha256": "d8f210ea795836bb372a80b1d778aa409f00412f105de6f22e9ddc09d356c2b5"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/clone3.rs",
+      "bytes": 4013,
+      "sha256": "3f7433685512e989f2a82ca213ced344fb5dd5a113733485fcfd724ffe2c9094"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/cls.rs",
+      "bytes": 7877,
+      "sha256": "c0260e7634d53fcc0873746af8bd16b6691ee0a4b7f394ca18896aef070f6bba"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/cls_helpers.rs",
+      "bytes": 2679,
+      "sha256": "ab25e420794160eff18989a7e240c602aa9cad2f9836cc87cdfff544bb3e5e0c"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/debug.rs",
+      "bytes": 13020,
+      "sha256": "fed7537d21f5d5fe0fc3ffdb1fe44783f5f9ac13937b3bdbbcc452cc2fa5eb16"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/devobj.rs",
+      "bytes": 11862,
+      "sha256": "037942094e57b06c3620d885aeb2816bd0f82c436512b383e852a8041f4163a5"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/f03_context_forward_pair.rs",
+      "bytes": 1543,
+      "sha256": "f9592e3e6fd7c63d4ae7fdebb8a8595565dff3ee368a00b9bc7bdaac38f771eb"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/f03_perf_attr_callbacks.rs",
+      "bytes": 1638,
+      "sha256": "116a1b3561009f530817c96341a8d1b58e1ab1ea275856f7582168c126ca2017"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/f03_perf_entry_candidate.rs",
+      "bytes": 9979,
+      "sha256": "d542c9f0a1793c8140f38c3d4439a9176742c420f94f792f76eafeb3981f82a5"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/f03_perf_event_attr_abi.rs",
+      "bytes": 1722,
+      "sha256": "8eec931271fd3829c6fffbadf3f2ae1da13796cc1929f3685145d0cd65c8d285"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/f03_perf_group_cleanup.rs",
+      "bytes": 8325,
+      "sha256": "0dc2c777c39a9b2f31bc5e3d80badd2d3de8db35bcd0adba205776bb58517293"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/f03_prlimit.rs",
+      "bytes": 10668,
+      "sha256": "dff579f83b624f601ab9379b7e2287000501f9ce0ee705fd2e3b0c9969981e43"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/f03_request_constructors.rs",
+      "bytes": 3917,
+      "sha256": "759818c4bbf907f988b0e6a349221ec8356e8b2b6863ce36071d2fa8ca9b35a1"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/f03_signal_forward_defined_candidate.rs",
+      "bytes": 2907,
+      "sha256": "fa55a0ca4436c8b330221865db8ebe0a8481886a88a4212c817a197199b0c392"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/f03_wakeup_writer_pair.rs",
+      "bytes": 2109,
+      "sha256": "2aa6a13ed432a5edfb03bb8af6ff25b847eaddf9502a994147af6bfe08df9dc2"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/f06_clone_ptrace_provider_abi.rs",
+      "bytes": 1788,
+      "sha256": "cac59960063f7d66b66808a30d6b8fbbbfb61a0da49393167e97920fbadf8f07"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/f06_clone_reader_lock.rs",
+      "bytes": 707,
+      "sha256": "9689ea37321108ce6d8fd7ce186bfc1aa027e412132885e2cc7eaa1ef10f2027"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/f06_clone_reader_unlock.rs",
+      "bytes": 647,
+      "sha256": "b70c27ddecbdce81fa0d95264be5ae50277b83f905a1fae1790c33be3cbe3aba"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/f06_mmap_dispatch_bridge.rs",
+      "bytes": 1006,
+      "sha256": "f49062df4a7ed65eb68a70735981a348c8e892b48320bab73e59f1bb5d430084"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/f06_mmap_flags.rs",
+      "bytes": 1411,
+      "sha256": "862a9af87abfeb269fac4196564475ebb3dcf5a04ea89937b367c45c333d63b9"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/f06_native_signal_restore_fp.rs",
+      "bytes": 5179,
+      "sha256": "126c0aff5baa9a9fd97d910ec46fd7af50ea2a15c49bf7269d0e6c33e510e712"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/f06_obtain_clone_cpuid.rs",
+      "bytes": 5524,
+      "sha256": "b04605181a7446ca8a9119ef32ab223d40921a6a98c37679051042aa87e349b2"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/f06_prctl_get_register.rs",
+      "bytes": 645,
+      "sha256": "54a14ed47775362b4bb2a3644cb37b5669357edeb185130c1b84441d35df568d"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/f06_prctl_log.rs",
+      "bytes": 1348,
+      "sha256": "d3e2e4c974fa9f2b3d15d8f49ffad8d08ea90e3be488e519460aa5e91af81a8e"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/f06_prctl_log_storage.rs",
+      "bytes": 904,
+      "sha256": "c20113faa7526cf49a896f73e8072aa2d4132f93bbdcb21efae8f056b2098474"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/f06_prctl_set_register.rs",
+      "bytes": 659,
+      "sha256": "7cfbad6524e5ca293b22d5efaa7572492a95bfd2953ba8b01ee09113a287c3a2"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/f06_process_vm_entry.rs",
+      "bytes": 5428,
+      "sha256": "0e9d9d23db1a376f38757fba98c6b34d0aed4f4b6c45398b0b9372d7624c3d2e"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/f06_ptrace_alloc.rs",
+      "bytes": 773,
+      "sha256": "bcb605d9ae7d117b7ce87b51d1bb3468e4dd62a46606cc9d0bde6972ca57b9b0"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/f06_ptrace_context.rs",
+      "bytes": 828,
+      "sha256": "5c24cfbe6519b8e2a449c1240fb9015baf401fd40814a02cca9237a5adae4dc8"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/f06_ptrace_find_thread.rs",
+      "bytes": 623,
+      "sha256": "aa31e203fd50cab109860b532e52b3e6087f20e2d9dcc6544d81d7d0c1c7a37b"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/f06_ptrace_gpregs_bridges.rs",
+      "bytes": 1512,
+      "sha256": "9aac9bf94a1490c4b584f473e6939fe7f1da13b06d4f29128a38e6bac4ebdd12"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/f06_ptrace_thread_unlock.rs",
+      "bytes": 637,
+      "sha256": "0f70edd6f7fd6328d3dc16cb58bddd6739e97ad94432cc75a152707c4d4a4192"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/f06_ptrace_user_bridges.rs",
+      "bytes": 1443,
+      "sha256": "da4a5bf6cd0e72b6ec252e4c79ee8ed9e48350ca9c742bf17dce6d6533be114c"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/f06_ptrace_xstate_copy_from.rs",
+      "bytes": 1720,
+      "sha256": "6a6e89f1e956ca599cee4dd9c851125acada5565aa2c3835d3e5184fbfb6dde5"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/f06_ptrace_xstate_copy_to.rs",
+      "bytes": 1714,
+      "sha256": "c2a01b19c1434a13b6adf24607490b35ea8771c17824b8cebf10e7d5ae19618a"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/f06_rt_sigreturn_alloc_free.rs",
+      "bytes": 1707,
+      "sha256": "e65cd47a047b631168cea48403ad8c877a05a660384a13da180ac5df1c17fa7d"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/f06_shmget_dispatch.rs",
+      "bytes": 752,
+      "sha256": "6069b676a090b703d0b8b91ff701223857a7371524a05c5f94bd932982b97c4b"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/f06_vdso_add_range.rs",
+      "bytes": 1074,
+      "sha256": "89462d17ffe853d5dd4980c960bce9e62c64be799474a9e56cb085bd3c7c6805"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/f06_vdso_info.rs",
+      "bytes": 5945,
+      "sha256": "20e5a3c758e177725433b5a211e419e07ac551945b0f95752a4fb08605af9095"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/f06_vdso_map_log.rs",
+      "bytes": 3879,
+      "sha256": "72ba6caf872579d865ea6ad271b032532de68cae51d0f8c01915f5e7f4bcd659"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/f06_vdso_set_range.rs",
+      "bytes": 1408,
+      "sha256": "78ac29d3e81b388994cfab31eb732716a5c1980a8dd9944dffc6a873af44eeea"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/f06_vdso_setup_log.rs",
+      "bytes": 1564,
+      "sha256": "c39c89399990db0beb111ccd917b1cdef42ef10c06d1b251723dbdfdf44f743f"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/f06_vdso_state.rs",
+      "bytes": 1696,
+      "sha256": "0b3fe45b768f58ddc813ebc5e088316b2c50adb5ef14bd620832c295de2fa160"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/f06_vdso_storage.rs",
+      "bytes": 934,
+      "sha256": "622eb07989c097aaeca8cadca8151088a1d71dbbee0a2e51e6cd787d508182ad"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/fileobj.rs",
+      "bytes": 32461,
+      "sha256": "52836335742d3df2088d87c6454111f3094358b9ba604ea5c32d2f92243681bb"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/fork_child_credits.rs",
+      "bytes": 28612,
+      "sha256": "63b82c97cc6e1204585cfaf2b89ef378b88c1d207a8e82c2f1400bc352f9c98d"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/fork_constructed_credits.rs",
+      "bytes": 10534,
+      "sha256": "4c1e96ef4fbf5cb66acc54d900d37fcd68fb4d50dd1337c4428b3f5e2ecd1972"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/fork_control_guest.rs",
+      "bytes": 18671,
+      "sha256": "26797f574fa1ba7006eb27ff3a1a7750ec04b83f71a2e90b8c35c4c536b33acd"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/fork_control_registry.rs",
+      "bytes": 14785,
+      "sha256": "a2f92bb11cba42fef0d95e1f1e1a4c526351ff90860baed7913fa26c91137ba5"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/fork_final_ack.rs",
+      "bytes": 5506,
+      "sha256": "093f742dfe4969d78b2ca6b8b643df94042945e890d26003dec9d1818c34826b"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/fork_runnable_child.rs",
+      "bytes": 12855,
+      "sha256": "a9387ae13b85785176b95fc6ddc79b08bd31dd7960b0730307b41b5a05b5d137"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/freeze.rs",
+      "bytes": 2046,
+      "sha256": "825144fe47b7f0409e4830c5349c14389d84b48fad0aa464ea09c3f2bd186ae0"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/futex.rs",
+      "bytes": 34480,
+      "sha256": "ecfafb1d08247eec584c429c0bc9cd4fbd75d1bd8f01e10847e5dad796a6b4d7"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/gencore.rs",
+      "bytes": 12884,
+      "sha256": "67754cacf5f7567a526bde5790bbd2114df81d8ddadbd3abc641123729742bdb"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/hash.rs",
+      "bytes": 872,
+      "sha256": "9dd27922476ed87117500dc130fdce75f389347beb32df8d47b34b014ffe0a03"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/host_helpers.rs",
+      "bytes": 180826,
+      "sha256": "79ec492e531d9793206cd9ebc84482ab695fcfdc284675492d81ee5a072eeaac"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/hugefileobj.rs",
+      "bytes": 14364,
+      "sha256": "164579599f8651d0588a35b8951ee5b0d2174bb9da5e9a4c59be9f71dfbfb9a9"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/ikc_manycore.rs",
+      "bytes": 10469,
+      "sha256": "e3f3f3ffee3bc8ac892748123ad7fe40b85c5705969d4204dab15ba37c6de137"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/ikc_master.rs",
+      "bytes": 15978,
+      "sha256": "800a8846a4a58657b4fbef61b5cab9f0319992be96a0011f64bcbf6db7f372be"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/ikc_queue.rs",
+      "bytes": 27590,
+      "sha256": "99d7dbb864955fc43b698a74ae3acaa654ba82daf6e8ff638f5d73371cf59af3"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/init.rs",
+      "bytes": 17659,
+      "sha256": "42ca08af0f1087b3914a58e9c445fff6ae27e3b76da2ee2ee3255181bb4b8886"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/lib.rs",
+      "bytes": 3865,
+      "sha256": "cd135c430ba11cd7e605b18b010163ab358394a352b2d6ed030c100185244e96"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/list_helpers.rs",
+      "bytes": 5770,
+      "sha256": "dac9c2f37c64967eebd8c466426fcdf1bf8d201b5c5ee5f1f466893517feb66a"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/listeners.rs",
+      "bytes": 4517,
+      "sha256": "da1e4d66e7dd5e5d11aa479d18d108f72ef201b1d7014c7670f30e70747a1cef"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/llist.rs",
+      "bytes": 2753,
+      "sha256": "246764fe6b346d78bb3cac84b1773469106dc99ae394cefe0c9317d08b7305f8"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/lock_helpers.rs",
+      "bytes": 12202,
+      "sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/mem_helpers.rs",
+      "bytes": 444772,
+      "sha256": "f544c5177156ad5de8544bb95c46bbc8e2ac870a25c4895ca4cefb7c8cc79680"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/mikc.rs",
+      "bytes": 6093,
+      "sha256": "2907fa6d7ca49a15b737435bd61b2c1f372618ec2396aea570a8d76fd8342024"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/native_fault.rs",
+      "bytes": 2089,
+      "sha256": "771c46717169d52685bea87386dd15afd7f193fc5c9eefbce1544d67788a6025"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/native_futex.rs",
+      "bytes": 5413,
+      "sha256": "62680e8304363c77e287a1ab6bc61dc469a86217e64316e003057b5f126607ad"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/native_signal.rs",
+      "bytes": 12106,
+      "sha256": "aea4bf00889641d831f4cebf5c452924947e0255cf1f5d47437e804bcbadb250"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/native_vdso.rs",
+      "bytes": 3914,
+      "sha256": "c04188e452afb4e597bdf2b1fe63544f85d0fbbe5f8879300d48091311b9667e"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/native_xstate.rs",
+      "bytes": 2237,
+      "sha256": "b0b39e0df8298740f53a6b76c5ce6905dfdd9092328578df18225c4a57e8100e"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/numparse.rs",
+      "bytes": 46665,
+      "sha256": "2d0aa19a78c86a6ea9a7a25d95aea484f981f6219a215314ddbeaee6d89a46ab"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/object_helpers.rs",
+      "bytes": 235965,
+      "sha256": "7444ec38a30cdb2b0505b939f02eacb5018d3732a97fcd12b3eba189133f0f06"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/page_alloc.rs",
+      "bytes": 96482,
+      "sha256": "d0df730f3bbca8f307fb7fe72397c5c8d2a3431f36685a5579503b081e93f1ec"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/page_helpers.rs",
+      "bytes": 22774,
+      "sha256": "f2f61bd6889f05c29f1531e4c6ade16a0698ac9f03b712caadfefd76cc35e56c"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/pager.rs",
+      "bytes": 35974,
+      "sha256": "d0e498292ce0e2ad8c68f7c4e2bdffb3d2f6fa99962ae3340e74bede0cdfb30f"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/plist.rs",
+      "bytes": 5274,
+      "sha256": "27e3cef715e399f28035ba62240e4a9b6c73948e37cfb8578e0614e4ee3141ca"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/process_helpers.rs",
+      "bytes": 618027,
+      "sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/process_verbose_data.rs",
+      "bytes": 11354,
+      "sha256": "aa26573589d6db2678e60892b834b8b3c34838b1e53d8439e3b9d920fd292bfb"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/procfs.rs",
+      "bytes": 36968,
+      "sha256": "6a3609c3ced73cafdffec032e3f2876e08eee5628ba2470137729ca7a804c90e"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/profile.rs",
+      "bytes": 20253,
+      "sha256": "2eacbb02e1988ac524e94b1c7824629cfa97bf5a18ddef5c046f0c60106ce543"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/pte_helpers.rs",
+      "bytes": 7855,
+      "sha256": "d6117286cc222c27ae6f76773796efd77d9f87b969644555e0a6286721653e62"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/ptrace_clone_noirq.rs",
+      "bytes": 1184,
+      "sha256": "a3466b4decd926036048c70f56ca8de3ef206bab6e26dd4db75d0f9af4d39dbe"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/rbtree.rs",
+      "bytes": 22536,
+      "sha256": "114e8dbd0b48abc156879bfd2f019071c30174019e97904c028ccee911840256"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/refcount_helpers.rs",
+      "bytes": 3105,
+      "sha256": "07430d9fe1529bb81a4b76c7a998546b8e54219f1d7c2d91f398ea7c28b618ba"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/rlimit_helpers.rs",
+      "bytes": 2512,
+      "sha256": "7310af0b90bd37d146f7741c4f93fc75e37d00691c6f72ced645879fe21d1c30"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/sched_helpers.rs",
+      "bytes": 186213,
+      "sha256": "c4e6153bef33ec018d2efc88c93854a4dc351f78c901ed3cb25f73524d7c0020"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/shmid_helpers.rs",
+      "bytes": 6666,
+      "sha256": "03961aa8192d7b6dd3958c2dcbf4994c005a158bd932dfd37e1666ba4a96b912"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/shmobj.rs",
+      "bytes": 21670,
+      "sha256": "bfb452f3e28a6e5b649f7128a8f18d17bbc6e04d3c978feca8ef27db82e8e0b5"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/sigreturn_extra_abi.rs",
+      "bytes": 4330,
+      "sha256": "5fa1e835f4c937993323bd6490f1c805fd3ce6f874f73f01c8397dd171860ccc"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/smp_ikc.rs",
+      "bytes": 21408,
+      "sha256": "ef29938daeccad4487971157d61b33f0db61d6a5714a4d11e7e78c62c9c9f289"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/spinlock_helpers.rs",
+      "bytes": 3105,
+      "sha256": "7b6c1e87f521eaf4674128afd7bff71785bead4ff7c9eb3c9a668d6a0cb0cbe7"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/string.rs",
+      "bytes": 13172,
+      "sha256": "579d8c06bb766a270548399a8820733516a167bb8af5d1fea46d8a51f7e8fbf3"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/syscall_clear_host_pte_logger.rs",
+      "bytes": 772,
+      "sha256": "1982650efce731c33d02084b809b10fa9f2e44ceee69ef755325e253f5bf33f5"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/syscall_exit_group_current_pid.rs",
+      "bytes": 1221,
+      "sha256": "6e2ac4f0635147bef0776f694213638f6a6ec580df7db7ab920137a148e50112"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/syscall_exit_group_logger.rs",
+      "bytes": 1719,
+      "sha256": "2f88ddd3dc2957d589abb61f0e1f23412039753bad5c5d2719d17d33bdd79f09"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/syscall_exit_group_terminate.rs",
+      "bytes": 866,
+      "sha256": "a093c7cd6f36a35d9602a16297045aedf86f9ee50446300a7f39bc8c8aa1fc7a"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/syscall_mprotect_host_vma.rs",
+      "bytes": 2745,
+      "sha256": "11a6131f8f8e826912602bf89fdd32bad7675d184f4e43c16b6375f54d17b881"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/syscall_munmap_clear_host_forward.rs",
+      "bytes": 1417,
+      "sha256": "8c0f771b28c76551f387b4936064b05ef8c646d22045ad296b98cd4abd7c6ec1"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/syscall_perf_open_forward.rs",
+      "bytes": 705,
+      "sha256": "173f53168ce6e746b7251499ee99177852908b2a4f58edc226d51b332d0c7606"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/syscall_policy.rs",
+      "bytes": 1306367,
+      "sha256": "8827684e4f78e8bdecb4cd6a9ff03a96363809b76e1f625fd1d0015e38664902"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/syscall_ptrace_clone_logger.rs",
+      "bytes": 3003,
+      "sha256": "049cb248d35af6f8f6362c4a3caeafe78ec50a5e6b0432ee2934a09cf9b6d4e9"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/syscall_ptrace_detach_kfree.rs",
+      "bytes": 1181,
+      "sha256": "b5793ef0ee2b837e356917c070a8931de5f893463190deea469641dd1e38e0f0"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/syscall_ptrace_detach_wakeup.rs",
+      "bytes": 720,
+      "sha256": "ead6502fdf1009f0916d7857a5c6fddec6ba0265cc900d2fbb3e27429d3fabcd"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/syscall_settid_logger.rs",
+      "bytes": 768,
+      "sha256": "895f6a205232e503f6f737ce363425c3d9571faaf99c517ced9ed95723c22a29"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/syscall_terminate_mcexec_forward.rs",
+      "bytes": 706,
+      "sha256": "d18362b696388d532a332e87d646e0c0de769480b5c89eebd06f158bde854d05"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/syscall_util_clone_disabled_logger.rs",
+      "bytes": 870,
+      "sha256": "b74a4c390c6baf1a52becf03275725b49944678b4907e4848db19f365fae44fd"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/sysfs.rs",
+      "bytes": 25143,
+      "sha256": "b01664e416e5bab418fb2f8b2d4de6cf061c7f638c1fbce6a04c08d4667ae4f7"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/tests/do_munmap_host_clear_actual_harness.py",
+      "bytes": 15609,
+      "sha256": "5bc4f912d6e5ebe70c606cecb7e83f9bcad551323892d0206506202eef3d3767"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/tests/ihk_module_helpers_smoke.c",
+      "bytes": 201624,
+      "sha256": "34f004c090cbaf2dbc92142f2073d1c0a6585ebdda765fdc987e51296c601b0d"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/tests/pending_free_batch_actual_harness.py",
+      "bytes": 31241,
+      "sha256": "980f0c33b3867a20767e42937545db1f16cc574e2edf73c434ff4301d5a6e5df"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/tests/pending_free_batch_vectors.c",
+      "bytes": 7331,
+      "sha256": "e383220db41f5f73243de264798f78e0d299621e6c3161002a9fee16366741a5"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/tests/pending_free_batch_vectors.rs",
+      "bytes": 26823,
+      "sha256": "b0142ecf00f2d67eaa2ac949f75bd8fcf24dc8d05817a1c2a0ce7019428fec25"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/tests/pending_free_c_actual_harness.py",
+      "bytes": 14732,
+      "sha256": "75c85b8721a4da9413370d707602bf96259689b92926a7eb9b92093af9e6b9d9"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/tests/pending_free_inventory_harness_v1.py",
+      "bytes": 9794,
+      "sha256": "95098a30d43596b3a80be9f0e56ecd4bb13e0514254d60207953be313fca89f1"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/tests/pending_free_inventory_reference_v1.c",
+      "bytes": 8355,
+      "sha256": "2755ba19e0d7083895daf82f815aca84090a0231d46c119bab93248467490aa6"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/tests/pending_free_inventory_v1.rs",
+      "bytes": 9943,
+      "sha256": "26d1528f296979683850a846bb7a600a451a75a51db50f4d0900e9bdddc6b742"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/tests/pending_free_inventory_vectors_v1.rs",
+      "bytes": 1619,
+      "sha256": "bf966b1226f4134609f565bb4e27d89ceff41a79fc842aeac7c8a05999668664"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/tests/run_equivalence.sh",
+      "bytes": 5010284,
+      "sha256": "b6e5926d39edcdc9b65f00877e74564af4b363ad20034ab5ccccbb9c919ab737"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/tests/run_memory_equivalence.py",
+      "bytes": 4198,
+      "sha256": "bb72e9c3899c56cecc6b4fe3b2bf1292b2a59d48fc876aeb2501b6bea455cb93"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/tests/string_bcmp.rs",
+      "bytes": 2959,
+      "sha256": "2b9971c05894f2dc2c3b5fa6612df172ff17d9df083cf2623160dd753b2e79d6"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/tests/string_bcmp_harness.py",
+      "bytes": 2786,
+      "sha256": "08d5fcd0c0382e2cb15dc877afafe268a72acc4f3224ca4ceea6bdf21be6fe8d"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/timer.rs",
+      "bytes": 8090,
+      "sha256": "6f1b4789d52cd402b4707d66a929bdac25fc6235dcf3c5fd34b9f17a33e22d5a"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/tofu_uapi.rs",
+      "bytes": 83617,
+      "sha256": "1fa2b20f7d59e963c4c9cc0c1f5be777f791a1d77f3071e9a1a81e2000d72bbe"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/ubsan.rs",
+      "bytes": 9830,
+      "sha256": "b60d0e76924877f961ea001c501fc3bcfc2fd88f31180db018543cd882b3f501"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/waitq.rs",
+      "bytes": 10868,
+      "sha256": "246a850a7e305d69d55de5903273e35ba62cc204167cc95acc90973c8f0aaefc"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/x86_coredump.rs",
+      "bytes": 3426,
+      "sha256": "ad0b5a20a61f54247b05af1b6d62d8c77e6d060705357bde188d1762635cb631"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/x86_cpu_helpers.rs",
+      "bytes": 255992,
+      "sha256": "8db479fbea9493ee498bf5d78aef71589b49d9f065e13a8617b5765cd681c194"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/x86_cpu_log_providers.rs",
+      "bytes": 3237,
+      "sha256": "42daf55b7e94b026e1a5567c01f5d91ebf69316a3eaa532477852e364cdd431a"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/x86_local.rs",
+      "bytes": 4525,
+      "sha256": "9f102654a22895615da854b08ea8e043a6c17b9157e4b77e5b58783e70abeb3f"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/x86_memory_helpers.rs",
+      "bytes": 311375,
+      "sha256": "5c60055053656751ea490be95c09d7343b0391797c21d5e6c97de97cb8d34c68"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/x86_memory_logger_bridges.rs",
+      "bytes": 9235,
+      "sha256": "ada5c28856267259c7215c13ee57e1b4602a62b4815513b7cf5961c53a4813ce"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/x86_memory_loggers.rs",
+      "bytes": 3172,
+      "sha256": "1ce031eb323776480cca1b717f776989340413a71d4123b8ef99689e83bc9708"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/x86_perfctr.rs",
+      "bytes": 16091,
+      "sha256": "9cabce0fb4295d421a3f5194b7ebb854bdfa93c4126573a643ab2a08e9d11af7"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/x86_setup.rs",
+      "bytes": 29158,
+      "sha256": "1bf9b326873b22034dfba47165c95bdcc599d41533a112c64de72950e99589fe"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/x86_vsyscall.rs",
+      "bytes": 2556,
+      "sha256": "87a888402b181da0bf9c94c6675b85f20cb21480041bb18c7ea42f0bf12f90d7"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/xpmem_helpers.rs",
+      "bytes": 236058,
+      "sha256": "e8c7970b672c724f14da2eb0a12fdbcd11df62f824422a5f8a98da4364328255"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/zeroobj.rs",
+      "bytes": 6442,
+      "sha256": "eed90e36aceaaa44936a7c9513c0768278cfdd61882eb9327941f0751c9e9b5b"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/meta/f06_clone_cpuid_metadata.rs",
+      "bytes": 201,
+      "sha256": "71e4b0ab7f5ca612e4cd06bf2150e2e6b7b5e3e39717e466cfb626b1ce249a48"
+    }
+  ],
+  "header_inputs": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/arch/x86_64/kernel/syscall.c",
+      "historical_spelling": "/src/arch/x86_64/kernel/syscall.c",
+      "bytes": 121431,
+      "sha256": "e2938d25e9db64c06735b8229d9d24f9deaa322589fbeecf61a27e79c8829bbe"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/lib/include/ihk/cpu.h",
+      "historical_spelling": "/src/lib/include/ihk/cpu.h",
+      "bytes": 5479,
+      "sha256": "a25efd9095efe3f357efb2a2d7d810e2a6d1ed0aea3c6e1d4fac2c0ee8a83c81"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/lib/include/list.h",
+      "historical_spelling": "/src/lib/include/list.h",
+      "bytes": 2870,
+      "sha256": "4ddb20f524e073fb69b6fcb1268121c76c653c4007d914437555a4d17af48440"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/arch/x86_64/kernel/include/ihk/context.h",
+      "historical_spelling": "/src/arch/x86_64/kernel/include/ihk/context.h",
+      "bytes": 2286,
+      "sha256": "13a67bcf26c512ac27ece4ab801e5e96976b88ec505d9f549e53755b431171f8"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/arch/x86_64/kernel/include/registers.h",
+      "historical_spelling": "/src/arch/x86_64/kernel/include/registers.h",
+      "bytes": 5778,
+      "sha256": "43fd6d2e278953684574224927fe65bc514a88c5529d97f688e1e21b1864a6fc"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/lib/include/types.h",
+      "historical_spelling": "/src/lib/include/types.h",
+      "bytes": 515,
+      "sha256": "72179c1e931fdfdfa700d2ecfe745e344027ac0b4af299e8a9ec17957fc9a399"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/arch/x86_64/kernel/include/ihk/types.h",
+      "historical_spelling": "/src/arch/x86_64/kernel/include/ihk/types.h",
+      "bytes": 1074,
+      "sha256": "c37a7c748f2439ddfd847725a4d559c008f2aca09c45114fb07e73337013f449"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/arch/x86_64/kernel/include/arch/cpu.h",
+      "historical_spelling": "/src/arch/x86_64/kernel/include/arch/cpu.h",
+      "bytes": 913,
+      "sha256": "2130ac820f72c6349cab63f6d456cd0ff23fb00a99a745681e56a7ec4eb9b187"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/lib/include/mc_perf_event.h",
+      "historical_spelling": "/src/lib/include/mc_perf_event.h",
+      "bytes": 8775,
+      "sha256": "8a9978dcab179a63b3aff3b66641a4814bacaf86cf4631ecdf39e32df45ea5dd"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/cokernel/smp/x86_64/include/march.h",
+      "historical_spelling": "/src/ihk/cokernel/smp/x86_64/include/march.h",
+      "bytes": 1174,
+      "sha256": "32984f29c20133f89b2410c922fc291cd675f2942b6128cea55d0e0ff3826f49"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/arch/x86_64/kernel/include/ihk/atomic.h",
+      "historical_spelling": "/src/arch/x86_64/kernel/include/ihk/atomic.h",
+      "bytes": 2680,
+      "sha256": "829c76b8e61efd50e6cbc968c6eac56fc7b151c9da4143fd40bde176117ef78d"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/kernel/include/lwk/compiler.h",
+      "historical_spelling": "/src/kernel/include/lwk/compiler.h",
+      "bytes": 17894,
+      "sha256": "eeb3c5b9d47dc32d73908c9048002a34ef77e5d6bdc03346b27b494ded5b49dd"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/kernel/include/lwk/compiler-gcc.h",
+      "historical_spelling": "/src/kernel/include/lwk/compiler-gcc.h",
+      "bytes": 11651,
+      "sha256": "1a2693ab50b3768ca2ca362bb0e6773bdabc12425ad4061802b3aca20dbe47a2"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/kernel/include/cls.h",
+      "historical_spelling": "/src/kernel/include/cls.h",
+      "bytes": 2984,
+      "sha256": "19719fe663c33bc3aec62875baa7f1b8d4a0e0042b5a8aae94fe7b6c9799a4c1"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/kernel/include/process.h",
+      "historical_spelling": "/src/kernel/include/process.h",
+      "bytes": 26602,
+      "sha256": "8848d536f2fa847a59af72d573ec9c55838c27cea664d46438ab4e038bf83649"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/lib/include/ihk/mm.h",
+      "historical_spelling": "/src/lib/include/ihk/mm.h",
+      "bytes": 9548,
+      "sha256": "a1b412608df7512a1b7295c6f19b3ec5a77e6364e8f24b208ab1a29e7556e5b1"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/lib/include/memory.h",
+      "historical_spelling": "/src/lib/include/memory.h",
+      "bytes": 1377,
+      "sha256": "42c0c943511a9eb26133c9f1ca132ade5eb10606ae43c96f6d81d59a69ffeca2"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/arch/x86_64/kernel/include/arch-memory.h",
+      "historical_spelling": "/src/arch/x86_64/kernel/include/arch-memory.h",
+      "bytes": 8996,
+      "sha256": "1704ac32bf55f421c802df661c844b496a1660b8b89e5d12cc2d994d835b5b49"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/arch/x86_64/kernel/include/errno.h",
+      "historical_spelling": "/src/arch/x86_64/kernel/include/errno.h",
+      "bytes": 5167,
+      "sha256": "79e1671f269b7dab1f2e1ea672c402bc03738b85029b6f3b3031efe22dde9157"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/lib/include/generic-errno.h",
+      "historical_spelling": "/src/lib/include/generic-errno.h",
+      "bytes": 2497,
+      "sha256": "7dca1a209f95dbc287627f3b590621762063acc080b65709aea88d3f48c8bfe4"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/lib/include/ihk/lock.h",
+      "historical_spelling": "/src/lib/include/ihk/lock.h",
+      "bytes": 2907,
+      "sha256": "fd34fe3adae00d309fc48e4a8f8c4170edfdfc6bfffd5b37db13f5391ed84f6f"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/arch/x86_64/kernel/include/arch-lock.h",
+      "historical_spelling": "/src/arch/x86_64/kernel/include/arch-lock.h",
+      "bytes": 4603,
+      "sha256": "ca8baa66ed77634cd6319a918211b3eb8fe80fc7dcb2ac0110ab6bfbd0c1b81b"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/config.h",
+      "historical_spelling": "/work/output/build/config.h",
+      "bytes": 1055,
+      "sha256": "da78d6a8c94b274adad3159b1cc373b00e5de7fea6cc2ae7955a700078db6b2f"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/arch/x86_64/kernel/include/arch/mm.h",
+      "historical_spelling": "/src/arch/x86_64/kernel/include/arch/mm.h",
+      "bytes": 141,
+      "sha256": "9d8faad8307f160b596b51cd482bcc6dd5c38a62b848ec6bc6c09dd714d4cdfe"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/kernel/include/page.h",
+      "historical_spelling": "/src/kernel/include/page.h",
+      "bytes": 1647,
+      "sha256": "c8f3f5e7804c71430c814395ea14a1ee93267180713caeb39880b662cc9cd0dc"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/lib/include/ihk/debug.h",
+      "historical_spelling": "/src/lib/include/ihk/debug.h",
+      "bytes": 1294,
+      "sha256": "7315ef758c56c4888242295ed9340b44f649d772b1315502acc49eb6105048dc"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/kernel/include/rbtree.h",
+      "historical_spelling": "/src/kernel/include/rbtree.h",
+      "bytes": 3107,
+      "sha256": "86022fb1a246c7ba43bb66913ca4c6a6e9a7d896607c6364ea941b5304ae5332"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/kernel/include/lwk/stddef.h",
+      "historical_spelling": "/src/kernel/include/lwk/stddef.h",
+      "bytes": 358,
+      "sha256": "2e915a7ca2a67b2c57690836bcf2bc37639ae657f5e294ee3309cb13652a4b3b"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/arch/x86_64/kernel/include/signal.h",
+      "historical_spelling": "/src/arch/x86_64/kernel/include/signal.h",
+      "bytes": 7474,
+      "sha256": "3cea81b9b2f723fbff2cafa634761d50316a397d06df2c12f94fe5f0dae03752"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/kernel/include/memobj.h",
+      "historical_spelling": "/src/kernel/include/memobj.h",
+      "bytes": 3957,
+      "sha256": "7d587411f1b6957c6fcc6f61d8f03b052d875cfd774f602aefe05ff99f536bb9"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/kernel/include/pager.h",
+      "historical_spelling": "/src/kernel/include/pager.h",
+      "bytes": 1223,
+      "sha256": "24460cdc45191c6ad0905f10a8e2cb89d4fd4b347cffc1ec3914ce51104bed7f"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/lib/include/limits.h",
+      "historical_spelling": "/src/lib/include/limits.h",
+      "bytes": 1358,
+      "sha256": "b71fc4ae02cfb82c474b61012bd55375ec7e0b0826a3280755ddb3631cc0a6ee"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/kernel/include/object_helpers.h",
+      "historical_spelling": "/src/kernel/include/object_helpers.h",
+      "bytes": 61009,
+      "sha256": "0131700fc9f5bfdae8e1210664befb8a20f7655ba96b55a7d64abbe7703f517a"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/kernel/include/affinity.h",
+      "historical_spelling": "/src/kernel/include/affinity.h",
+      "bytes": 1801,
+      "sha256": "9f7dbbeebedd2f74961bfe6833c75ebb2306e9eb072d69ee8ce3486f0a0f82c7"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/kernel/include/syscall.h",
+      "historical_spelling": "/src/kernel/include/syscall.h",
+      "bytes": 20836,
+      "sha256": "459e6d0faec3f1b8366a0d329571ef5ea813042706be11f9423b0399bbba6ffa"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/cokernel/smp/x86_64/include/ihk/memconst.h",
+      "historical_spelling": "/src/ihk/cokernel/smp/x86_64/include/ihk/memconst.h",
+      "bytes": 198,
+      "sha256": "38b25a9fedbcf50d9eae799681aff60705d6e2e5e3559bcb721b0541ce98dc61"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/linux/include/ihk/ikc.h",
+      "historical_spelling": "/src/ihk/linux/include/ihk/ikc.h",
+      "bytes": 312,
+      "sha256": "a7a03e3f661eac44cbef67fa41bf398adda43fc37df1c0d9fa88427d6c69127b"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/ikc/include/ikc/ihk.h",
+      "historical_spelling": "/src/ihk/ikc/include/ikc/ihk.h",
+      "bytes": 4138,
+      "sha256": "0ddad6947192b527be6a6f9560718c98fb70b50cb2cbb838094d0ca6ce199e3e"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/lib/include/string.h",
+      "historical_spelling": "/src/lib/include/string.h",
+      "bytes": 1588,
+      "sha256": "f612dad80dd16ff0d4d6232f155cc879522de6203ce015afa3ef0c36c3dd5636"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/arch/x86_64/kernel/include/arch-string.h",
+      "historical_spelling": "/src/arch/x86_64/kernel/include/arch-string.h",
+      "bytes": 238,
+      "sha256": "98fe2c9021167e9b08d75dbe5ffc6b25bc84d708a8baeaf60d16fcb88e5b3831"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/ikc/include/ikc/queue.h",
+      "historical_spelling": "/src/ihk/ikc/include/ikc/queue.h",
+      "bytes": 4501,
+      "sha256": "0acb85aee2d3b0b7620a0b222461815c6c96c530c5b7182fe60e8ae52ec4e461"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/arch/x86_64/kernel/include/rlimit.h",
+      "historical_spelling": "/src/arch/x86_64/kernel/include/rlimit.h",
+      "bytes": 2508,
+      "sha256": "c5c9b7255c09d56766d2c2bec72b6261579e51e2925457fcc8c098fe08cd907a"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/kernel/include/generic-rlimit.h",
+      "historical_spelling": "/src/kernel/include/generic-rlimit.h",
+      "bytes": 445,
+      "sha256": "94bca7ac86e30806385aea32eeba1c6a39dea32a6d8f5c79167c3473bc3dffbb"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/kernel/include/time.h",
+      "historical_spelling": "/src/kernel/include/time.h",
+      "bytes": 1780,
+      "sha256": "6d5ec6fd43f6632b5772fbdd99c96957d842951052034a3e355aa63c13ba56d7"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/kernel/include/profile.h",
+      "historical_spelling": "/src/kernel/include/profile.h",
+      "bytes": 3241,
+      "sha256": "a3185194bca3733304a30c08b70de466ecdcf1da223ab5053687d4cd125171ec"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/lib/include/bitops.h",
+      "historical_spelling": "/src/lib/include/bitops.h",
+      "bytes": 1149,
+      "sha256": "85c1781bb49918a97d8e04c48b3723927377e6d157824f4bd79e38243d6809ff"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/lib/include/bitops-test_bit.h",
+      "historical_spelling": "/src/lib/include/bitops-test_bit.h",
+      "bytes": 117,
+      "sha256": "1f2fdb9a3a7d2b22d897df29955ea9c8c94fe0a78d3262aa762a7990f47ce635"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/arch/x86_64/kernel/include/arch-bitops.h",
+      "historical_spelling": "/src/arch/x86_64/kernel/include/arch-bitops.h",
+      "bytes": 598,
+      "sha256": "c4a9e5067fb84742e5bb411b1a373bed1a4917abb17dc618e8d2630bd6f2d79a"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/kernel/include/waitq.h",
+      "historical_spelling": "/src/kernel/include/waitq.h",
+      "bytes": 1847,
+      "sha256": "f3fc8247a033a77efa407f6fe365a2b1bcad404e96de2cbf845f407a2e5946ff"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/kernel/include/futex.h",
+      "historical_spelling": "/src/kernel/include/futex.h",
+      "bytes": 6087,
+      "sha256": "75acd5b0a0e542777c9fb86c5f75ab9e4a1f9d4df5e59fd516cf854614725407"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/kernel/include/plist.h",
+      "historical_spelling": "/src/kernel/include/plist.h",
+      "bytes": 4349,
+      "sha256": "d66b1a000f5226a06ef28f3ba75f34a0acea9cd4cd5a93c8113ca5764d9b2a29"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/arch/x86_64/kernel/include/arch-futex.h",
+      "historical_spelling": "/src/arch/x86_64/kernel/include/arch-futex.h",
+      "bytes": 424,
+      "sha256": "1229adc72ebf596abc31ee9daad76ee005072ebb0aa29b3d71835ccfe95feb55"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/arch/x86_64/kernel/include/cpulocal.h",
+      "historical_spelling": "/src/arch/x86_64/kernel/include/cpulocal.h",
+      "bytes": 1299,
+      "sha256": "9c717afdbf8c77744c8f1ca9a8c00e4ffa2eb623f310905799b9c1b07bd685b2"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/kernel/include/kmalloc.h",
+      "historical_spelling": "/src/kernel/include/kmalloc.h",
+      "bytes": 1171,
+      "sha256": "fff00b6875c3f87a0d9c4bdfeadf3c3d3eb731d843dc0650f6364352ac2b1144"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/kernel/include/cls.h",
+      "historical_spelling": "/src/kernel/include/cls.h",
+      "bytes": 2984,
+      "sha256": "19719fe663c33bc3aec62875baa7f1b8d4a0e0042b5a8aae94fe7b6c9799a4c1"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/kernel/include/uio.h",
+      "historical_spelling": "/src/kernel/include/uio.h",
+      "bytes": 486,
+      "sha256": "f1f1e29cec39675214291cfe435b6fb80b423ce13ced0b54727659df486e9991"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/kernel/include/mman.h",
+      "historical_spelling": "/src/kernel/include/mman.h",
+      "bytes": 1781,
+      "sha256": "99faf3bbb639ab4eca2c5444dcc95cff0e7046c91fc3fa1a97c88375ee6107e8"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/arch/x86_64/kernel/include/arch/mman.h",
+      "historical_spelling": "/src/arch/x86_64/kernel/include/arch/mman.h",
+      "bytes": 839,
+      "sha256": "8e3844987296722aceac782975db7889b37889afdcab23d6c2d24bb3df33f9ec"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/kernel/include/shm.h",
+      "historical_spelling": "/src/kernel/include/shm.h",
+      "bytes": 1948,
+      "sha256": "014fdc724bc42d1245776a4b161463c0df35040f0a5c961144023989ff6f5761"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/arch/x86_64/kernel/include/arch/shm.h",
+      "historical_spelling": "/src/arch/x86_64/kernel/include/arch/shm.h",
+      "bytes": 866,
+      "sha256": "a1183834da90fb674307d65ebb0ffabe19315dd88353c46815921f6e88090366"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/arch/x86_64/kernel/include/prctl.h",
+      "historical_spelling": "/src/arch/x86_64/kernel/include/prctl.h",
+      "bytes": 319,
+      "sha256": "e8aa2802f0ea3948242f335513f22c6741f3028b67228298d9c14df8ce242a70"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/kernel/include/rusage_private.h",
+      "historical_spelling": "/src/kernel/include/rusage_private.h",
+      "bytes": 3262,
+      "sha256": "9cc30af76f445517a70fbbaa2bc6d2a48dee12bc8fd08bc0e1c37d571693d972"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/kernel/include/rusage.h",
+      "historical_spelling": "/src/kernel/include/rusage.h",
+      "bytes": 1167,
+      "sha256": "f548ed5eeded34cd0d6a7a89d56c9beff6c31afbd9df7d725888f7eaf641541e"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/linux/include/ihk/ihk_rusage.h",
+      "historical_spelling": "/src/ihk/linux/include/ihk/ihk_rusage.h",
+      "bytes": 1404,
+      "sha256": "afc786f096e70bd9b89834b5b0af81ee0e1cfe3f3cd2e73ef5f88db4d63d5d01"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/linux/include/ihk/ihk_monitor.h",
+      "historical_spelling": "/src/ihk/linux/include/ihk/ihk_monitor.h",
+      "bytes": 1575,
+      "sha256": "6fb530c99848036f8c71f946c01d2f7189e15c3e8a42b9962be980eaf29e3b60"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/arch/x86_64/kernel/include/arch-memory-helpers.h",
+      "historical_spelling": "/src/arch/x86_64/kernel/include/arch-memory-helpers.h",
+      "bytes": 39581,
+      "sha256": "e76daf9493fdd20505af19f52f32ed83a7864c29cbbbfb05c4605557d2b27957"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/kernel/include/elfcore.h",
+      "historical_spelling": "/src/kernel/include/elfcore.h",
+      "bytes": 2535,
+      "sha256": "2cae06fb07488ee4787ebc2f5679a6c0a19e9c7a9bce24964e8ea04d27d2b8d8"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/kernel/include/elfcoregpl.h",
+      "historical_spelling": "/src/kernel/include/elfcoregpl.h",
+      "bytes": 1235,
+      "sha256": "1a0bf361c1e98971148bd7240a17091f2b78c009fcad22e09a277fb606d82c96"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/arch/x86_64/kernel/include/elf.h",
+      "historical_spelling": "/src/arch/x86_64/kernel/include/elf.h",
+      "bytes": 1271,
+      "sha256": "96a1889d8bc9597efaed3260d4bcc57ef86dd2380c2a09b53a2525c87cce50ac"
+    }
+  ],
+  "config": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/config.h",
+    "sha256": "da78d6a8c94b274adad3159b1cc373b00e5de7fea6cc2ae7955a700078db6b2f",
+    "bytes": 1055,
+    "selected_C_native_macro": "MCKERNEL_NATIVE_SIGNAL_STACK",
+    "selected_Rust_native_cfg": "native_linux_irq_work_v6_12",
+    "effective_preprocessing": "UNMEASURED"
+  },
+  "source_prefix": {
+    "status": "DIAGNOSTIC_SOURCE_PREFIX_BINDING_ONLY_NOT_NEW_ORIGIN_RECEIPT",
+    "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+    "original_sha256": "b5e9a382491d0f6dc4b71a55f54f76f3d4ca610fa9f81adc60e70ec97a194669",
+    "original_bytes": 121256,
+    "witness_source_sha256": "e2938d25e9db64c06735b8229d9d24f9deaa322589fbeecf61a27e79c8829bbe",
+    "prefix_exact": true,
+    "appended_bytes": 175,
+    "suffix_sha256": "4aa73b20688a0d47aebe669309f9c84b50f0e3090d1a01e5519c9f299fce30f4",
+    "clone_body_sha256": "ea8468b0bb065c689557ef76cb6178b08aecbc0ff9e450234c03d53cedd904a4",
+    "clone_body_matches_pinned_contract": true,
+    "logical_dkprintf_lines": [
+      898,
+      908
+    ],
+    "metadata_sha256": "71e4b0ab7f5ca612e4cd06bf2150e2e6b7b5e3e39717e466cfb626b1ce249a48",
+    "old_origin_receipt": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/m14-exclusive-producer-binding-1/ROOT-ACTUAL-ORIGIN119-1/ORIGIN-BINDING.json",
+    "old_receipt_sha256": "ac57fc154e6f1ac50b97c91c85b7dd915c66861f018287f99f223c6b5a2789d6",
+    "old_receipt_only_binds_original_full_hash": true,
+    "debug_header": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/lib/include/ihk/debug.h",
+    "debug_header_sha256": "7315ef758c56c4888242295ed9340b44f649d772b1315502acc49eb6105048dc",
+    "diagnostic_origin_env": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/arch/x86_64/kernel/syscall.c",
+    "historical_origin_string": "/src/arch/x86_64/kernel/syscall.c",
+    "new_origin_receipt": null,
+    "preprocessed_code_or_emitted_metadata_evidence": null
+  },
+  "reused_tool_support_with_unchanged_device_inode_size_mtime": [
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+      "device": 66306,
+      "inode": 47471313,
+      "size": 121256,
+      "mtime_ns": 1793241965154464038,
+      "sha256": "b5e9a382491d0f6dc4b71a55f54f76f3d4ca610fa9f81adc60e70ec97a194669"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/arch/x86_64/kernel/cpu.c",
+      "device": 66306,
+      "inode": 59644289,
+      "size": 115646,
+      "mtime_ns": 1792964798695711844,
+      "sha256": "9adb2435e75a1b27cd9511f4b69739fe25d2bb95dc0fc80eb73d2abd60c34813"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next115-f02-local31-f06-cpuid-source-integration-preparation-1/candidate/kernel/process.c",
+      "device": 66306,
+      "inode": 59801510,
+      "size": 231146,
+      "mtime_ns": 1793152956983376237,
+      "sha256": "12a8396d729e342d2d43130be73acf7960409cf4d2e432a415fb303a031fa055"
+    },
+    {
+      "path": "/usr/bin/env",
+      "device": 66306,
+      "inode": 1048858,
+      "size": 43352,
+      "mtime_ns": 1567679920000000000,
+      "sha256": "5f7c7882898e9e280e93579b459e22b339c4f38cfd54a05b46b81dfb60c557cc"
+    },
+    {
+      "path": "/usr/bin/taskset",
+      "device": 66306,
+      "inode": 1052691,
+      "size": 35048,
+      "mtime_ns": 1712676853000000000,
+      "sha256": "28f2dd426247d7d1d794c0fb8a723efc6a1ae3c56393a238b180fe9a0dc32f1c"
+    },
+    {
+      "path": "/usr/bin/prlimit",
+      "device": 66306,
+      "inode": 1052683,
+      "size": 39672,
+      "mtime_ns": 1712676853000000000,
+      "sha256": "06a57e4767f1bdfcc8c5a39b4b58decb9366447b007a8bdd9d6b12d1e6698d8c"
+    },
+    {
+      "path": "/usr/bin/timeout",
+      "device": 66306,
+      "inode": 1049784,
+      "size": 43800,
+      "mtime_ns": 1567679920000000000,
+      "sha256": "91db1e64064f0bf5ee99abda3a054cc6f05748dad2af5a145f890c9172d28d73"
+    },
+    {
+      "path": "/usr/bin/bash",
+      "device": 66306,
+      "inode": 1050121,
+      "size": 1183448,
+      "mtime_ns": 1650273286000000000,
+      "sha256": "025cf78cd9d276019e916b97b0decd10cacb14902db8eb9f28233019babfb331"
+    },
+    {
+      "path": "/usr/bin/time",
+      "device": 66306,
+      "inode": 1049782,
+      "size": 14720,
+      "mtime_ns": 1492808223000000000,
+      "sha256": "f3c4104d963b00e1b3a3dcf80722fea57f15f67b57a512cc30adc434b60e6e03"
+    },
+    {
+      "path": "/usr/bin/cat",
+      "device": 66306,
+      "inode": 1048728,
+      "size": 43416,
+      "mtime_ns": 1567679920000000000,
+      "sha256": "87e5bd81850e11eeec2d3bb696b626b2a7f45673241cbbd64769c83580432869"
+    },
+    {
+      "path": "/usr/bin/ps",
+      "device": 66306,
+      "inode": 1049442,
+      "size": 137688,
+      "mtime_ns": 1698752156000000000,
+      "sha256": "a8cf81f3a1137c999c3cf336507ce120b3065e633ade01db6280d427b7d986ca"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/bin/rustc",
+      "device": 66306,
+      "inode": 49188231,
+      "size": 645792,
+      "mtime_ns": 1788751246839978563,
+      "sha256": "70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libc-2.31.so",
+      "device": 66306,
+      "inode": 1052513,
+      "size": 2029592,
+      "mtime_ns": 1748246977000000000,
+      "sha256": "53b909551f8e581120ddc2d24cfb5df76c52e3c2e2a5dac0d202b25638b3e902"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/ld-2.31.so",
+      "device": 66306,
+      "inode": 1052509,
+      "size": 191504,
+      "mtime_ns": 1748246977000000000,
+      "sha256": "cfd44e4341767033532d1483c8250d200ad4cdf535d0abc19064ae34cdc51ca0"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libsmartcols.so.1.1.0",
+      "device": 66306,
+      "inode": 1050954,
+      "size": 243992,
+      "mtime_ns": 1712676853000000000,
+      "sha256": "97aa9f48b2534234256eaca902c632796846b4ad1fc519ed108bc9d4ef020e00"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/librt-2.31.so",
+      "device": 66306,
+      "inode": 1052535,
+      "size": 35960,
+      "mtime_ns": 1748246977000000000,
+      "sha256": "fd90f6cc09dda34e0fefeaba5bc60533773c4240f9e7ef672c508b1d610c425e"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libpthread-2.31.so",
+      "device": 66306,
+      "inode": 1052529,
+      "size": 157224,
+      "mtime_ns": 1748246977000000000,
+      "sha256": "af27ed906f6185e0143b9c0d0da287788efa7eb6b2639e44d48fb2939415fdc5"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libtinfo.so.6.2",
+      "device": 66306,
+      "inode": 1056210,
+      "size": 192032,
+      "mtime_ns": 1684262868000000000,
+      "sha256": "3d79a61fb19fd7597c1ba90e85e4e25310f885c82f8b91f04fb62658de126f58"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libdl-2.31.so",
+      "device": 66306,
+      "inode": 1052514,
+      "size": 18848,
+      "mtime_ns": 1748246977000000000,
+      "sha256": "e0d0cace80b627e50ca3f7b621b64917677c27c74077080854d57cf4e548edc6"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libprocps.so.8.0.2",
+      "device": 66306,
+      "inode": 1050668,
+      "size": 80072,
+      "mtime_ns": 1698752156000000000,
+      "sha256": "4dce97caab0adf5d1e57c43d3a13430f0a1aa1c0b4bdb077a6427ad1f57fa729"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libsystemd.so.0.28.0",
+      "device": 66306,
+      "inode": 1049864,
+      "size": 709496,
+      "mtime_ns": 1718656179000000000,
+      "sha256": "4d12bf8dfcd3a7ab3cc414981ecb1dbd9a4eb51b4e1fd5b8a61a136626a2b9f9"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/liblzma.so.5.2.4",
+      "device": 66306,
+      "inode": 1051546,
+      "size": 162264,
+      "mtime_ns": 1649422570000000000,
+      "sha256": "79a1dbc7cc49eaa96d0326c7d979fc41d8db1f748e517858a5cc024a6554b073"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/liblz4.so.1.9.2",
+      "device": 66306,
+      "inode": 1049280,
+      "size": 129248,
+      "mtime_ns": 1621528737000000000,
+      "sha256": "d6574e34006e27cfb5d00dc75018cc06832d0bbc9e1b35316b9c03148355f0a0"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libgcrypt.so.20.2.5",
+      "device": 66306,
+      "inode": 1049050,
+      "size": 1168056,
+      "mtime_ns": 1631644584000000000,
+      "sha256": "f648d4ed0fe1fe7645992d10a5cbc84679d298ce8561a1aeafa780fee67b3036"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libgpg-error.so.0.28.0",
+      "device": 66306,
+      "inode": 1056341,
+      "size": 137584,
+      "mtime_ns": 1581549243000000000,
+      "sha256": "df95914ef7aeaadcafa4acdd614068836a0014ed3001ddb8390f7ef44d3c5248"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/librustc_driver-63b8deb6c23747dd.so",
+      "device": 66306,
+      "inode": 49188251,
+      "size": 154029632,
+      "mtime_ns": 1788751250155914406,
+      "sha256": "9f00b9316db6d42fee821fa4e86601a6ec853c004569d644fd9c30b892f9c7d0"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/libLLVM.so.22.1-rust-1.95.0-nightly",
+      "device": 66306,
+      "inode": 49188268,
+      "size": 201649376,
+      "mtime_ns": 1788751253547868073,
+      "sha256": "a7fe29550a088de8770838e923ca8600077f4b6912c80e4a3daeadd0fb05d227"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+      "device": 66306,
+      "inode": 1051087,
+      "size": 146000,
+      "mtime_ns": 1689065418000000000,
+      "sha256": "1785fc8cd9a2ba72f773b0b60b20e58ff79bf30ce2fd8e241c8b31303dcea17e"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libm-2.31.so",
+      "device": 66306,
+      "inode": 1052515,
+      "size": 1369384,
+      "mtime_ns": 1748246977000000000,
+      "sha256": "a0e70f48f02a399e8dd37f861a99e226c285a9daf50a25d19fff7ccf18b97f9c"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libz.so.1.2.11",
+      "device": 66306,
+      "inode": 1049218,
+      "size": 108936,
+      "mtime_ns": 1665778963000000000,
+      "sha256": "ccfda8d7e0d2f77c8a4feb2febbae057edab668d7d7ee6410e2c517724c056c8"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libaddr2line-4be6a113f783ae81.rlib",
+      "device": 66306,
+      "inode": 49188185,
+      "size": 27560,
+      "mtime_ns": 1788751227248793420,
+      "sha256": "ce1e27aaf5b41d92944550f9e2e99c5e43a93b1804a08184ed92122f9b979412"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libaddr2line-4be6a113f783ae81.rmeta",
+      "device": 66306,
+      "inode": 49188158,
+      "size": 468005,
+      "mtime_ns": 1788751225772853756,
+      "sha256": "32ba92089a9baa1a6f4f71088154165be1bb135944ed2062dcf183987a827e4d"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libadler2-ee74045716a880d4.rlib",
+      "device": 66306,
+      "inode": 49188191,
+      "size": 9328,
+      "mtime_ns": 1788751227408783432,
+      "sha256": "52182fbc457928c8f7895b8920d69b398cf48b1ac1768f0fecc2bb62ed14f517"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libadler2-ee74045716a880d4.rmeta",
+      "device": 66306,
+      "inode": 49188164,
+      "size": 20358,
+      "mtime_ns": 1788751225980871529,
+      "sha256": "648c76d1154d448245187642922e31e97e987c09f1eae5c27ba9407c6e315b7b"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/liballoc-02e2119f9d7c9585.rlib",
+      "device": 66306,
+      "inode": 49188193,
+      "size": 855280,
+      "mtime_ns": 1788751227424782434,
+      "sha256": "e37a078e117297c9d3e828cad2f53ab093cf2b9cce5a26d0762d6a0c6095886c"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/liballoc-02e2119f9d7c9585.rmeta",
+      "device": 66306,
+      "inode": 49188166,
+      "size": 7319044,
+      "mtime_ns": 1788751226120865974,
+      "sha256": "ac05833c6c4f3b1bff1a94bbe9103b6ec8bb4d3f6c909855fe9c98a4de681a38"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libcfg_if-ed99a26b153c40a9.rlib",
+      "device": 66306,
+      "inode": 49188201,
+      "size": 4198,
+      "mtime_ns": 1788751227508777191,
+      "sha256": "a2cf3c68705533e466fd7c57ef8524ed3de2cadccabfc165f5c57c04dac73c55"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libcfg_if-ed99a26b153c40a9.rmeta",
+      "device": 66306,
+      "inode": 49188174,
+      "size": 5510,
+      "mtime_ns": 1788751226956811761,
+      "sha256": "d2db63ea44fc75e190e8b9dd162ee62980cc4b41bf6becefc936147516fbc780"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libcompiler_builtins-bbfdd99d24659dd7.rlib",
+      "device": 66306,
+      "inode": 49188197,
+      "size": 4351706,
+      "mtime_ns": 1788751227464779937,
+      "sha256": "664ab9539ec3e1a7d5a54f3b4677ac2dd56152c3a01784709563459a7e68c62d"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libcompiler_builtins-bbfdd99d24659dd7.rmeta",
+      "device": 66306,
+      "inode": 49188170,
+      "size": 2036177,
+      "mtime_ns": 1788751226164863121,
+      "sha256": "52cdadd46947d6b0ed1af185a0b2c4458cd8a325b18cefd9a11de947ee66372e"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libcore-5202d9b43b836218.rlib",
+      "device": 66306,
+      "inode": 49188198,
+      "size": 2935902,
+      "mtime_ns": 1788751227508777191,
+      "sha256": "39987bd26679bef50d9fdf6b3ad752baacc1a0a7e9524476c6e158315c666202"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libcore-5202d9b43b836218.rmeta",
+      "device": 66306,
+      "inode": 49188171,
+      "size": 62375808,
+      "mtime_ns": 1788751226952812020,
+      "sha256": "84ee56efc5484640a744ab9bf83ff1bdb4de1836d8000408cf49bbeeb9521cca"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libgetopts-a9644b14bfb2cca7.rlib",
+      "device": 66306,
+      "inode": 49188196,
+      "size": 740096,
+      "mtime_ns": 1788751227432781935,
+      "sha256": "88983138fb2bd9952c8073d191f0f411a475bb0ef8854800ac968f08eee3db6c"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libgetopts-a9644b14bfb2cca7.rmeta",
+      "device": 66306,
+      "inode": 49188169,
+      "size": 215653,
+      "mtime_ns": 1788751226128865455,
+      "sha256": "61a203ea9b7910d15b8ae23e92b393f4e62ad47fad34a8afdcac7081622d1517"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libgimli-b980ebe42ae7566e.rlib",
+      "device": 66306,
+      "inode": 49188206,
+      "size": 915690,
+      "mtime_ns": 1788751227572773196,
+      "sha256": "bf6f2ca78076674c2663d7d46e8daaea11cabefd575b5e7e18c53713e6904e39"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libgimli-b980ebe42ae7566e.rmeta",
+      "device": 66306,
+      "inode": 49188179,
+      "size": 5299983,
+      "mtime_ns": 1788751227220795167,
+      "sha256": "930814b2b9e86d07d7e1a8169b94ba5f24e0f5eeba51e1e0a0dcd6f81bc8fd6d"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libhashbrown-a24163845a89d284.rlib",
+      "device": 66306,
+      "inode": 49188190,
+      "size": 36140,
+      "mtime_ns": 1788751227408783432,
+      "sha256": "d1734f2b9f1360f1601b295936370243455b5ec493345d531f615925b0d3ef26"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libhashbrown-a24163845a89d284.rmeta",
+      "device": 66306,
+      "inode": 49188163,
+      "size": 1587589,
+      "mtime_ns": 1788751225980871529,
+      "sha256": "8c75ea226e6cdb48a0ec0f2f53c8f0b6a51ca73e18a09546d7930d648efaa3ac"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/liblibc-97d1bde3afd30030.rlib",
+      "device": 66306,
+      "inode": 49188183,
+      "size": 30036,
+      "mtime_ns": 1788751227248793420,
+      "sha256": "51c8dd84eea7a865ae16079dc5dfabf2831a50f77e5a5a717de32c435ea332cb"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/liblibc-97d1bde3afd30030.rmeta",
+      "device": 66306,
+      "inode": 49188156,
+      "size": 4131457,
+      "mtime_ns": 1788751225760852731,
+      "sha256": "22040648f887c995896f24340b7bab6677ae97aa32bb4a52e066b956cfb01c12"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libmemchr-16850f2f05dea042.rlib",
+      "device": 66306,
+      "inode": 49188187,
+      "size": 413862,
+      "mtime_ns": 1788751227256792920,
+      "sha256": "ea5e050da24a0d584b5c3f5a7cbd7a17f1de1bd8981985150a15100963fa683d"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libmemchr-16850f2f05dea042.rmeta",
+      "device": 66306,
+      "inode": 49188160,
+      "size": 1388296,
+      "mtime_ns": 1788751225796855807,
+      "sha256": "ca47704461051792581c62e3497782ee1cb95e11f1afb7cbfddbc91d08f41bf2"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libminiz_oxide-05059da09a45561c.rlib",
+      "device": 66306,
+      "inode": 49188203,
+      "size": 101364,
+      "mtime_ns": 1788751227552774444,
+      "sha256": "22ac85c5aafb928c8cab540b756357418a1b06d16b5bde5b240d0e52ed6e092b"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libminiz_oxide-05059da09a45561c.rmeta",
+      "device": 66306,
+      "inode": 49188176,
+      "size": 125582,
+      "mtime_ns": 1788751226980810205,
+      "sha256": "06b4c59183362d344e0cabcae74eb5c8a027302d1a26731ac2084776a0dc7642"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libobject-c6ca25b1f8621ced.rlib",
+      "device": 66306,
+      "inode": 49188204,
+      "size": 166740,
+      "mtime_ns": 1788751227556774195,
+      "sha256": "bbaadbb3d7c626f2a914a6343924df99079044990ab3daefc00ab1e9db34df0c"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libobject-c6ca25b1f8621ced.rmeta",
+      "device": 66306,
+      "inode": 49188178,
+      "size": 8459235,
+      "mtime_ns": 1788751227120801409,
+      "sha256": "1ce87f9ddfff098ba391f7965545f888b0747e5cef08cab844a560ec06344cb9"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libpanic_abort-ccd645b88c8c9573.rlib",
+      "device": 66306,
+      "inode": 49188189,
+      "size": 10144,
+      "mtime_ns": 1788751227408783432,
+      "sha256": "9ccfcc0703184a98fc34e740fcd937130f427927ad0fba8d960c643220cb9988"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libpanic_abort-ccd645b88c8c9573.rmeta",
+      "device": 66306,
+      "inode": 49188162,
+      "size": 2914,
+      "mtime_ns": 1788751225948868794,
+      "sha256": "f563e9cafd05f8aa5f8622aa8b5684b939e0af443efe6d2f7b5736241ac0d198"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libpanic_unwind-5d075b8625bac4b1.rlib",
+      "device": 66306,
+      "inode": 49188186,
+      "size": 33994,
+      "mtime_ns": 1788751227248793420,
+      "sha256": "3b1bb4a548332832863f59e4304aabaaa9b98542d319c5bb4fc8f790e7ed5c2c"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libpanic_unwind-5d075b8625bac4b1.rmeta",
+      "device": 66306,
+      "inode": 49188159,
+      "size": 7159,
+      "mtime_ns": 1788751225772853756,
+      "sha256": "edafcc61081e9c74c6a1f96703ee5a7cfe5aaa395bc707df379fd3b20f64119d"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libproc_macro-203619aaf50e95ca.rlib",
+      "device": 66306,
+      "inode": 49188202,
+      "size": 3612434,
+      "mtime_ns": 1788751227548774694,
+      "sha256": "68fad17113ba75ef48abaad73072afadac1d40377a7ad97885e35cb7793f425c"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libproc_macro-203619aaf50e95ca.rmeta",
+      "device": 66306,
+      "inode": 49188175,
+      "size": 1102217,
+      "mtime_ns": 1788751226976810465,
+      "sha256": "99d554901f86cfee53888b4b438c9c59ff68040cc3695f2e353a1c505a686d90"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libprofiler_builtins-e3caa38c6c7c7e4e.rlib",
+      "device": 66306,
+      "inode": 49188205,
+      "size": 494620,
+      "mtime_ns": 1788751227560773945,
+      "sha256": "071c8c89fbe65fa4e65a6bcfdc4bf459148830be4f7eeafe75e918228ede45ee"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libprofiler_builtins-e3caa38c6c7c7e4e.rmeta",
+      "device": 66306,
+      "inode": 49188177,
+      "size": 1332,
+      "mtime_ns": 1788751227120801409,
+      "sha256": "132eac5c33fd390d7e6815de4a6bec0068ee6ae650aebc7bada1e9fe7d6ed98c"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/librustc-nightly_rt.asan.a",
+      "device": 66306,
+      "inode": 49188150,
+      "size": 6099644,
+      "mtime_ns": 1788751225612838307,
+      "sha256": "b4ac6f58c10506dd7eba54e773a36a87d668af611b78e25c613488e1600d5df4"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/librustc-nightly_rt.dfsan.a",
+      "device": 66306,
+      "inode": 49188151,
+      "size": 1985248,
+      "mtime_ns": 1788751225620839146,
+      "sha256": "517d035fbb240c15e98906c9b2252a995d90b181599c31ed0f1de5cdcc94f3b7"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/librustc-nightly_rt.lsan.a",
+      "device": 66306,
+      "inode": 49188152,
+      "size": 2079826,
+      "mtime_ns": 1788751225624839565,
+      "sha256": "044afdec9167d86a9a26ee9ca4c6c06142d559048d86a95e176d76705fa4de36"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/librustc-nightly_rt.msan.a",
+      "device": 66306,
+      "inode": 49188153,
+      "size": 4678316,
+      "mtime_ns": 1788751225648842082,
+      "sha256": "24a7f566bca345bedd21181b1edb5097be1aa9b6634b337a2267883f125be2c6"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/librustc-nightly_rt.rtsan.a",
+      "device": 66306,
+      "inode": 49188155,
+      "size": 1860052,
+      "mtime_ns": 1788751225692846697,
+      "sha256": "cf21742145ea85c4b0dc21639b9e210d82a46ce5f1906de73133729004222c7b"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/librustc-nightly_rt.safestack.a",
+      "device": 66306,
+      "inode": 49188149,
+      "size": 29744,
+      "mtime_ns": 1788751225612838307,
+      "sha256": "845118a6e81883548552677c197b09d3e3c04b18d1ee20b2f52a977947afaae9"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/librustc-nightly_rt.tsan.a",
+      "device": 66306,
+      "inode": 49188154,
+      "size": 5662488,
+      "mtime_ns": 1788751225688846278,
+      "sha256": "4ab3201a21abb8b345d18fda5210ca31689cb34bf1b7839c834667ef20953c76"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/librustc_demangle-ecdd4665c3413bd4.rlib",
+      "device": 66306,
+      "inode": 49188192,
+      "size": 228440,
+      "mtime_ns": 1788751227412783183,
+      "sha256": "e4bab4acb580f7aa475f418defa52c5a717f10701d2fc8e2a870f51f1b6de6c3"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/librustc_demangle-ecdd4665c3413bd4.rmeta",
+      "device": 66306,
+      "inode": 49188165,
+      "size": 91336,
+      "mtime_ns": 1788751225984871870,
+      "sha256": "38f9422aeca76a9d891ae02f412ad027a905bef2cdf43a98d1ce8916772d7ed7"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/librustc_literal_escaper-39005883ee969eb5.rlib",
+      "device": 66306,
+      "inode": 49188194,
+      "size": 4340,
+      "mtime_ns": 1788751227424782434,
+      "sha256": "7b73e72596b50c2b2d369e68ced696796a73be35fe32fe08ad6f24c088d90f3f"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/librustc_literal_escaper-39005883ee969eb5.rmeta",
+      "device": 66306,
+      "inode": 49188167,
+      "size": 122102,
+      "mtime_ns": 1788751226124865715,
+      "sha256": "4eb5ae709e0232e6806a0b61f1cd968bffa9e4a1f9583d0fe334c805443ff56c"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/librustc_std_workspace_alloc-e0899976ced27b19.rlib",
+      "device": 66306,
+      "inode": 49188199,
+      "size": 4410,
+      "mtime_ns": 1788751227508777191,
+      "sha256": "6ac66434d55045ca5e0dfad90ec66ba34bddf4fd73241c5998a1fe23a35eb39f"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/librustc_std_workspace_alloc-e0899976ced27b19.rmeta",
+      "device": 66306,
+      "inode": 49188172,
+      "size": 2153,
+      "mtime_ns": 1788751226956811761,
+      "sha256": "e68c17dad75256cf2337d810c9b32a062a99b8c3047683d356825743693d4d95"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/librustc_std_workspace_core-98022199d76dbd30.rlib",
+      "device": 66306,
+      "inode": 49188184,
+      "size": 4418,
+      "mtime_ns": 1788751227248793420,
+      "sha256": "dc85a966ad44bce03ff9b12ba54086416d30526e71e369b2757b659b13939823"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/librustc_std_workspace_core-98022199d76dbd30.rmeta",
+      "device": 66306,
+      "inode": 49188157,
+      "size": 5804,
+      "mtime_ns": 1788751225760852731,
+      "sha256": "fca5ad684295be82a2e3f27120be02b4fa70b9338d18b523466e63467a0365e3"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/librustc_std_workspace_std-3e80ce3820a786fe.rlib",
+      "device": 66306,
+      "inode": 49188207,
+      "size": 4400,
+      "mtime_ns": 1788751227572773196,
+      "sha256": "3ba57d5432a184c686bfe8431d5ee2360c0f04ea6100030f619fd8d0da653e6e"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/librustc_std_workspace_std-3e80ce3820a786fe.rmeta",
+      "device": 66306,
+      "inode": 49188180,
+      "size": 6984,
+      "mtime_ns": 1788751227220795167,
+      "sha256": "1caab2a08a0fafc409da7161559505b01d60eccb1f173f5ca377158e675d086a"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libstd-957b1fe07cf96b13.rlib",
+      "device": 66306,
+      "inode": 49188188,
+      "size": 11687432,
+      "mtime_ns": 1788751227408783432,
+      "sha256": "9c06e17c1496b95b08cd845dbe67696d32cc4798e567012dbf3ee37dc0dbcd75"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libstd-957b1fe07cf96b13.rmeta",
+      "device": 66306,
+      "inode": 49188161,
+      "size": 8686097,
+      "mtime_ns": 1788751225948868794,
+      "sha256": "5b7ff3e951e1877a847831df1a828926a8b245824c98de719d6a57553cc37a1e"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libstd-957b1fe07cf96b13.so",
+      "device": 66306,
+      "inode": 49188218,
+      "size": 5414808,
+      "mtime_ns": 1788751227684766206,
+      "sha256": "2fbc6468087e3409d12c41d9703f9e0870de656a1c9a588d56b4889b2d34aa1f"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libstd_detect-2b11eee15f93fb2f.rlib",
+      "device": 66306,
+      "inode": 49188208,
+      "size": 62350,
+      "mtime_ns": 1788751227572773196,
+      "sha256": "c4c60dad92157a6ca21610bb7d8cabe13fae6e18d40c475f99f8fe9f4f32c134"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libstd_detect-2b11eee15f93fb2f.rmeta",
+      "device": 66306,
+      "inode": 49188181,
+      "size": 578429,
+      "mtime_ns": 1788751227228794668,
+      "sha256": "b2f9c1e6783d9ded0650549176f9fb092f7b3f200d7624d3c08659d60d51ed1e"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libsysroot-e53b04f841184349.rlib",
+      "device": 66306,
+      "inode": 49188200,
+      "size": 4280,
+      "mtime_ns": 1788751227508777191,
+      "sha256": "e4f15a05180d23d0f4c9c9a5c156913257d9f73ad7fde65770e3cbf1f6ca1bda"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libsysroot-e53b04f841184349.rmeta",
+      "device": 66306,
+      "inode": 49188173,
+      "size": 2235,
+      "mtime_ns": 1788751226956811761,
+      "sha256": "23e2bbff5d96887386b7942a52de8e17721a8ec5b4bef23792c49537850cdcab"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libtest-d9ab01d4d3ddbcef.rlib",
+      "device": 66306,
+      "inode": 49188209,
+      "size": 6891720,
+      "mtime_ns": 1788751227652768202,
+      "sha256": "a05113e1d967eec78f365a1d39827a4d76e27b71664a132eb46064881ee777ec"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libtest-d9ab01d4d3ddbcef.rmeta",
+      "device": 66306,
+      "inode": 49188182,
+      "size": 1001316,
+      "mtime_ns": 1788751227248793420,
+      "sha256": "e4ed0fdcd834d9d840e0f1f8bd208431aa9bb075f721652f563d113234a8ee11"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libunwind-16e11c925e779fb5.rlib",
+      "device": 66306,
+      "inode": 49188195,
+      "size": 4262,
+      "mtime_ns": 1788751227424782434,
+      "sha256": "80679c2a19d41466b371669fe99800e02ed924e8051891026e09769ae44fc3c8"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libunwind-16e11c925e779fb5.rmeta",
+      "device": 66306,
+      "inode": 49188168,
+      "size": 20285,
+      "mtime_ns": 1788751226124865715,
+      "sha256": "acdafe8f4783333b80d132ffbca26147ad6ef4f50b01735656d8e08924676493"
+    }
+  ],
+  "C_tool_admission": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/nonheld-host-generic-c-compile-preparation-1/ADMISSION.ACTUAL.json",
+  "proposal_sha256": "b3d44dce79b00dcf6afcbc69100a70451c2dc70f108e15c5001c570544aa4c6d",
+  "review_sha256": "bf62bc7c327f06ecdfd1bdbdd37bc2d7ab0c01e4075f0a911c6034b8fbd27226",
+  "argv": [
+    "/usr/bin/env",
+    "-i",
+    "PATH=/usr/bin:/bin",
+    "LANG=C",
+    "LC_ALL=C",
+    "HOME=/home/holden/mckernel-work/scratch/native-cheap-20261017-dq82fjgc/home",
+    "TMPDIR=/home/holden/mckernel-work/scratch/native-cheap-20261017-dq82fjgc/tmp",
+    "MAKEFLAGS=",
+    "MCKERNEL_RUST_VERSION=1.8.0",
+    "MCKERNEL_RUST_BUILDID=3114d9e",
+    "MCKERNEL_X86_ENABLE_SSE=1",
+    "MCKERNEL_CPU_C_FILE=/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/arch/x86_64/kernel/cpu.c",
+    "MCKERNEL_F06_RT_SIGRETURN_ORIGIN=/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/arch/x86_64/kernel/syscall.c",
+    "MCKERNEL_PROCESS_C_FILE=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next115-f02-local31-f06-cpuid-source-integration-preparation-1/candidate/kernel/process.c",
+    "MCKERNEL_PROCESS_DDEBUG_FLAGS=0",
+    "MCKERNEL_F06_CLONE_CPUID_METADATA_RS=/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/meta/f06_clone_cpuid_metadata.rs",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=4294967296",
+    "--cpu=150",
+    "--nofile=256",
+    "--fsize=67108864",
+    "--core=0",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "180s",
+    "/bin/bash",
+    "--noprofile",
+    "--norc",
+    "/home/holden/mckernel-work/scratch/native-cheap-20261017-dq82fjgc/run.sh",
+    "/home/holden/mckernel-work/scratch/native-cheap-20261017-dq82fjgc"
+  ],
+  "output_root": "/home/holden/mckernel-work/scratch/native-cheap-20261017-dq82fjgc",
+  "weekly": {
+    "at": "2026-10-30T05:02:05.890516+00:00",
+    "primary": {
+      "resetsAt": 1793774133,
+      "usedPercent": 62,
+      "windowDurationMins": 10080
+    }
+  },
+  "caps": {
+    "boot_deadline": 1571569.6959267766,
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "deadline": 1793774133,
+    "monotonic_deadline": 1556231.5688797957
+  },
+  "resources": {
+    "cpu": [
+      6
+    ],
+    "planning_ram_bytes": 4294967296,
+    "aggregate_jobs_max": 7,
+    "aggregate_ram_gib_conservative_max": 22.3811,
+    "MemAvailable": 28513906688,
+    "free_bytes": {
+      "/home/holden/mckernel": 144435466240,
+      "/home/holden/mckernel-work/scratch": 47803428864
+    },
+    "conflicting_compiler_sample": [],
+    "prior_link_group_members": [],
+    "prior_failed_group_members": []
+  },
+  "no_link": "All produced C/Rust witness objects categorically excluded by actual object identity from every kernel link; existing diagnostic image unmodified.",
+  "old_origin_receipt_scope": "Original b5e9 full source only; exact new source-prefix relation recorded, not a new SDK/origin/389 receipt.",
+  "native_or_retirement_credit": false,
+  "Root70_UNKNOWN_retained": true,
+  "C_argv": [
+    "/usr/bin/cc",
+    "-DMCKERNEL_RUST_F06_PRCTL_LOG",
+    "-DMCKERNEL_RUST_F06_PRCTL_LOG_STORAGE",
+    "-DMCKERNEL_RUST_F06_VDSO_MAP_LOG",
+    "-DMCKERNEL_RUST_F06_PTRACE_XSTATE_COPY_TO",
+    "-DMCKERNEL_RUST_F06_PTRACE_XSTATE_COPY_FROM",
+    "-DMCKERNEL_RUST_F06_VDSO_SETUP_LOG",
+    "-DMCKERNEL_RUST_F06_VDSO_STATE",
+    "-DMCKERNEL_RUST_F06_VDSO_STORAGE",
+    "-DMCKERNEL_RUST_F06_PTRACE_USER_BRIDGES",
+    "-DMCKERNEL_RUST_F06_PTRACE_GPREGS_BRIDGES",
+    "-DMCKERNEL_RUST_F06_NATIVE_SIGNAL_RESTORE_FP",
+    "-DMCKERNEL_RUST_F06_VDSO_INFO",
+    "-DMCKERNEL_RUST_F06_SHMGET_DISPATCH",
+    "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+    "-DIHK_OS_MANYCORE",
+    "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+    "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+    "-DMCKERNEL_NATIVE_CLONE3",
+    "-DMCKERNEL_NATIVE_CLONE_TID",
+    "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+    "-DMCKERNEL_NATIVE_FUTEX",
+    "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+    "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+    "-DMCKERNEL_RUST_BITOPS",
+    "-DMCKERNEL_RUST_LIST_HELPERS",
+    "-DMCKERNEL_RUST_LOCK_HELPERS",
+    "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+    "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+    "-DMCKERNEL_RUST_PTE_HELPERS",
+    "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+    "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+    "-DPROFILE_ENABLE",
+    "-D__KERNEL__",
+    "-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+    "-DMCKERNEL_RUST_X86_CPU_HELPERS",
+    "-DMCKERNEL_RUST_F06_MMAP_FLAG_PROVIDERS",
+    "-DMCKERNEL_RUST_F06_PRCTL_SET_REGISTER",
+    "-DMCKERNEL_RUST_F06_PRCTL_GET_REGISTER",
+    "-DMCKERNEL_RUST_F06_MMAP_DISPATCH_BRIDGE",
+    "-DMCKERNEL_RUST_F06_PTRACE_CONTEXT",
+    "-DMCKERNEL_RUST_F06_PTRACE_ALLOC",
+    "-DMCKERNEL_RUST_F06_VDSO_ADD_RANGE",
+    "-DMCKERNEL_RUST_F06_VDSO_SET_RANGE",
+    "-DMCKERNEL_RUST_F06_PROCESS_VM_ENTRY",
+    "-DMCKERNEL_RUST_F06_COPY_TO_USER",
+    "-DMCKERNEL_RUST_F06_COPY_FROM_USER",
+    "-DMCKERNEL_RUST_F06_FORWARD_CONTEXT",
+    "-DMCKERNEL_RUST_F06_RT_SIGRETURN_SYSCALL",
+    "-DMCKERNEL_RUST_F06_RT_SIGRETURN_SET_SIGNAL",
+    "-DMCKERNEL_RUST_F06_RT_SIGRETURN_CHECK_SIGNAL",
+    "-DMCKERNEL_RUST_F06_RT_SIGRETURN_ALLOC",
+    "-DMCKERNEL_RUST_F06_RT_SIGRETURN_FREE",
+    "-DMCKERNEL_RUST_F06_CLONE_READER_LOCK",
+    "-DMCKERNEL_RUST_F06_CLONE_READER_UNLOCK",
+    "-DMCKERNEL_RUST_F06_PTRACE_FIND_THREAD",
+    "-DMCKERNEL_RUST_F06_PTRACE_THREAD_UNLOCK",
+    "-DMCKERNEL_RUST_F06_OBTAIN_CLONE_CPUID",
+    "-I/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/m14-exclusive-producer-binding-1/ROOT-ACTUAL-ORIGIN119-1",
+    "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/include",
+    "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/kernel/include",
+    "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel",
+    "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build",
+    "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/cokernel/smp/x86_64/include",
+    "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/cokernel/smp/x86_64",
+    "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/ikc/include",
+    "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/linux/include",
+    "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/lib/include",
+    "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/arch/x86_64/kernel/include",
+    "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/arch/x86_64/kernel/include",
+    "-g",
+    "-Wall",
+    "-Wextra",
+    "-Wno-unused-parameter",
+    "-Wno-sign-compare",
+    "-Wno-unused-function",
+    "-Wno-implicit-fallthrough",
+    "-Wno-stringop-truncation",
+    "-ffreestanding",
+    "-O2",
+    "-nostdinc",
+    "-isystem",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+    "-fno-omit-frame-pointer",
+    "-mcmodel=large",
+    "-mno-red-zone",
+    "-mno-sse",
+    "-o",
+    "/home/holden/mckernel-work/scratch/native-cheap-20261017-dq82fjgc/c/arch46-witness.o",
+    "-fmacro-prefix-map=/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/arch/x86_64/kernel/syscall.c=/src/arch/x86_64/kernel/syscall.c",
+    "-c",
+    "-DMCKERNEL_SIGRETURN_ABI_WITNESS_ONLY",
+    "-MD",
+    "-MF",
+    "/home/holden/mckernel-work/scratch/native-cheap-20261017-dq82fjgc/c/arch46-witness.d",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/arch/x86_64/kernel/syscall.c"
+  ],
+  "Rust_argv": [
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/bin/rustc",
+    "--crate-name",
+    "mckernel_rust",
+    "--crate-type",
+    "lib",
+    "--edition=2021",
+    "-C",
+    "panic=abort",
+    "-C",
+    "opt-level=2",
+    "-C",
+    "debuginfo=2",
+    "-C",
+    "code-model=large",
+    "-C",
+    "relocation-model=static",
+    "-C",
+    "no-redzone=yes",
+    "-C",
+    "force-frame-pointers=yes",
+    "-C",
+    "overflow-checks=off",
+    "-C",
+    "force-unwind-tables=no",
+    "-C",
+    "no-vectorize-loops",
+    "-C",
+    "no-vectorize-slp",
+    "-C",
+    "target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma",
+    "--cfg",
+    "f03_io_diagnostic_callbacks_candidate",
+    "--cfg",
+    "f03_mincore_candidate",
+    "--cfg",
+    "f03_move_pages_candidate",
+    "--cfg",
+    "f03_sched_bridges_candidate",
+    "--cfg",
+    "f03_signal_process_bridges_candidate",
+    "--cfg",
+    "f03_dispatch_context_candidate",
+    "--cfg",
+    "f03_leaf_callbacks_candidate",
+    "--cfg",
+    "native_linux_irq_work_v6_12",
+    "--cfg",
+    "f03_syscall_entry_candidate",
+    "--cfg",
+    "f03_futex_atomic_candidate",
+    "--cfg",
+    "f03_futex_no_uaccess_candidate",
+    "--cfg",
+    "process_global_storage_candidate",
+    "--cfg",
+    "f03_syscall_table_candidate",
+    "--cfg",
+    "f03_ptrace_entry_candidate",
+    "--cfg",
+    "f03_syscall_table_clone3",
+    "--cfg",
+    "enable_profile",
+    "--cfg",
+    "enable_perf",
+    "--cfg",
+    "enable_rusage",
+    "--cfg",
+    "f03_prlimit_body_candidate",
+    "--cfg",
+    "f03_do_exit_supported_candidate",
+    "--cfg",
+    "f03_unmap_begin_selected_candidate",
+    "--cfg",
+    "f03_unmap_remove_selected_candidate",
+    "--cfg",
+    "f03_unmap_finish_selected_candidate",
+    "--cfg",
+    "f03_mmap_page_callback_candidate",
+    "--cfg",
+    "f03_wait_release_selected_candidate",
+    "--cfg",
+    "f06_mmap_flag_providers",
+    "--cfg",
+    "f06_prctl_set_register_candidate",
+    "--cfg",
+    "f06_prctl_get_register_candidate",
+    "--cfg",
+    "f06_mmap_dispatch_bridge_candidate",
+    "--cfg",
+    "f03_wait_process_release_selected_candidate",
+    "--cfg",
+    "f03_terminate_refcount_selected_candidate",
+    "--cfg",
+    "f03_ptrace_io_find_selected_candidate",
+    "--cfg",
+    "f03_ptrace_io_unlock_selected_candidate",
+    "--cfg",
+    "f06_ptrace_context_candidate",
+    "--cfg",
+    "f06_ptrace_alloc_candidate",
+    "--cfg",
+    "f06_vdso_add_range_candidate",
+    "--cfg",
+    "f06_vdso_set_range_candidate",
+    "--cfg",
+    "f03_sync_child_event_candidate",
+    "--cfg",
+    "f06_process_vm_entry_candidate",
+    "--cfg",
+    "f03_exit_waitq_wake_selected_candidate",
+    "--cfg",
+    "f06_copy_to_user_candidate",
+    "--cfg",
+    "f06_copy_from_user_candidate",
+    "--cfg",
+    "f06_forward_context_candidate",
+    "--cfg",
+    "f03_perf_alloc_bridges_selected_candidate",
+    "--cfg",
+    "f06_rt_sigreturn_syscall_candidate",
+    "--cfg",
+    "f06_rt_sigreturn_set_signal_candidate",
+    "--cfg",
+    "f06_rt_sigreturn_check_signal_candidate",
+    "--cfg",
+    "f03_perf_counter_control_bridges_selected_candidate",
+    "--cfg",
+    "f03_perf_event_provider_bridges_selected_candidate",
+    "--cfg",
+    "f06_rt_sigreturn_alloc_candidate",
+    "--cfg",
+    "f06_rt_sigreturn_free_candidate",
+    "--cfg",
+    "f06_clone_reader_lock_candidate",
+    "--cfg",
+    "f06_clone_reader_unlock_candidate",
+    "--cfg",
+    "f06_ptrace_find_thread_candidate",
+    "--cfg",
+    "f06_ptrace_thread_unlock_candidate",
+    "--cfg",
+    "f03_perf_provider_next3_bridges_selected_candidate",
+    "--emit=obj=/home/holden/mckernel-work/scratch/native-cheap-20261017-dq82fjgc/rust/mckernel-arch46-witness.o,dep-info=/home/holden/mckernel-work/scratch/native-cheap-20261017-dq82fjgc/rust/mckernel-arch46-witness.d",
+    "--cfg",
+    "process_verbose_data",
+    "--cfg",
+    "process_verbose_local_companions",
+    "--cfg",
+    "f06_obtain_clone_cpuid_candidate",
+    "--cfg",
+    "f06_shmget_dispatch_candidate",
+    "--cfg",
+    "f06_vdso_info_candidate",
+    "--cfg",
+    "f06_native_signal_restore_fp_candidate",
+    "--cfg",
+    "f06_ptrace_xstate_copy_to_candidate",
+    "--cfg",
+    "f06_ptrace_xstate_copy_from_candidate",
+    "--cfg",
+    "f06_vdso_setup_log_candidate",
+    "--cfg",
+    "f06_vdso_state_candidate",
+    "--cfg",
+    "f06_vdso_storage_candidate",
+    "--cfg",
+    "f06_ptrace_user_bridges_candidate",
+    "--cfg",
+    "f06_ptrace_gpregs_bridges_candidate",
+    "--cfg",
+    "f06_prctl_log_candidate",
+    "--cfg",
+    "f06_prctl_log_storage_candidate",
+    "--cfg",
+    "f06_vdso_map_log_candidate",
+    "--cfg",
+    "f03_ptrace_clone_noirq_candidate",
+    "--cfg",
+    "f03_context_forward_pair_candidate",
+    "--cfg",
+    "f03_wakeup_writer_pair_candidate",
+    "--cfg",
+    "f03_perf_entry_candidate",
+    "--cfg",
+    "f03_signal_forward_defined_candidate",
+    "--cfg",
+    "f03_request_constructors_candidate",
+    "--cfg",
+    "sigreturn_abi_witness_only",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/src/kernel/rust/lib.rs"
+  ],
+  "run_script_sha256": "4490c4e7d9927fcc15961043b591c38b216f2eaae7286dc6dc1bd0af8e52948e",
+  "first_failure_sha256": "e1c57183c42733c57cd773edefd8dd58de1df5f30e2b0309470a86bd73bc6ed7",
+  "correction_source_sha256": "592709e6907d4235f04b24e757f286c05517f8d45d830a71f572d1ab89e4320a",
+  "path_review_sha256": "da54a8442886d345c63a8b40a5fa612f6579e4d1eec93386b1d0c20325e3263f",
+  "allowed_change": "One exact-file macro-prefix map plus fresh output; same paired compiler family under independently reviewed bounded header/path correction, no source/header/assert/oracle/ABI or selector changes."
+}

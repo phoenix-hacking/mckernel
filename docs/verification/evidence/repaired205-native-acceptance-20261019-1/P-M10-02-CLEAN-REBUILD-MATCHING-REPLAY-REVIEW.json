@@ -1,0 +1,59 @@
+{
+  "basis": {
+    "all16_build_commands_zero": true,
+    "build_execution_performed": true,
+    "exact_existing_rust_oracles_bytes": [
+      387,
+      254
+    ],
+    "fresh_full205_graph": true,
+    "full6948_source_sha256": "d3495242284b653ef10de9f4f70706fc0ea118696189aa957305ce8bf5df8098",
+    "image_bytes": 7988768,
+    "image_make_commands": 1,
+    "image_sha256": "ff4fca457e9ffe50dc4eca930c5f91faf317eeee15bf0c2907067cffa77b23bb",
+    "matching_actual_guest": 1,
+    "old_compiled_inputs_adopted": false,
+    "two_actual_mckernel_cpus_and_strict_initial_cpu1": true,
+    "unchanged_valid_linux_dependencies_reused": true
+  },
+  "criterion_id": "P-M10-02",
+  "criterion_literal": "Perform one clean rebuild/replay before final delivery; reuse unchanged Linux dependencies where valid.",
+  "criterion_satisfied": true,
+  "decision": "P_M10_02_CRITERION_SUPPORTED_WITHOUT_DUPLICATE_BUILD",
+  "does_not_close": [
+    "Whole M10",
+    "Any of the fourteen whole milestones",
+    "P-M00-02 recoverable checkpoint/exact current next command",
+    "Full syscall DWARF/profile completion",
+    "Whole kernel Rust/C retirement",
+    "Deferred original external qualification"
+  ],
+  "evidence": {
+    "genuine_fresh_full_build": {
+      "bytes": 18372,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-BUILD-AND-CLIENT-RETIREMENT-REVIEW.json",
+      "sha256": "f7352de9e6aaf2ed6de5928cbb94c55c7b2a2ca6a7598c9d79d2bc933e6dbf98"
+    },
+    "matching_actual_native_replay": {
+      "bytes": 8583,
+      "path": "/home/holden/mckernel-work/host-preparation/repaired-affinity-n3-fresh8b-independent-review-20261019-1/ACTUAL-REPAIRED205-TWOCPU-APPLICATION-REVIEW.json",
+      "sha256": "f55c5600e4da70f0e36df234e8cf0ca1ce7e77fcc928a1f4dcd3c13ba3635467"
+    },
+    "positive_native_retirement": {
+      "bytes": 6276,
+      "path": "/home/holden/mckernel-work/host-preparation/repaired-affinity-n3-fresh8b-independent-review-20261019-1/ACTUAL-REPAIRED205-TWOCPU-PHYSICAL-RETIREMENT-REVIEW.json",
+      "sha256": "5f83f3ca420f6ca8e2aa97917ca71521aea6e420d81502781a46107cc56125db"
+    },
+    "selected_artifact_semantics": {
+      "bytes": 189111,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-ACTUAL-PRODUCTION-ARTIFACT-REVIEW.json",
+      "sha256": "fa39824773f75a0e44303afcdcaf52a26fa8249bd7d0fe1d066c3dd2b6dd9813"
+    }
+  },
+  "historical_admission_only_note": "Historical f7820e85 admission/execution_performed=false is preserved and alone does not satisfy the criterion; current f735 actual completed build plus fa398 actual selected artifact and f55c actual replay supply the missing executed evidence.",
+  "implementation_or_ledger_writes_by_reviewer": false,
+  "new_build_required_for_this_recording_criterion": false,
+  "reviewer": "two_cpu_end_to_end_review",
+  "schema": "mckernel.independent-practical-clean-rebuild-replay-criterion-review.v1",
+  "status": "PASS_LITERAL_P_M10_02_CLEAN_REBUILD_AND_MATCHING_NATIVE_REPLAY"
+}

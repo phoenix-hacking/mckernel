@@ -192,12 +192,18 @@ pub unsafe extern "C" fn ihk_ikc_send(
     loop {
         if ikc_channel_enabled(channel) {
             let rc = ihk_ikc_write_queue((*channel).send.queue, packet, opt);
-            if rc != 0 {
+            // write_queue documents -16 only for an unreserved full queue.
+            // Fatal geometry/argument errors cannot become successful on retry.
+            if rc == -16 {
                 kprintf(
                     c"%s: couldn't append packet -> retrying\n".as_ptr().cast(),
                     c"ihk_ikc_send".as_ptr(),
                 );
                 continue;
+            }
+            if rc != 0 {
+                ret = rc;
+                break;
             }
             if opt & IKC_NO_NOTIFY == 0 {
                 ihk_ikc_notify_remote_write(channel);

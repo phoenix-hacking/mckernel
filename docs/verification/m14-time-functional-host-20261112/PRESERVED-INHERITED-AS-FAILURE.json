@@ -1,0 +1,200 @@
+{
+  "Root_exit": 1,
+  "Root_session_absent": true,
+  "actual_RESULT": {
+    "bytes": 3158,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/M14-time-functional-host-affinity-p04tests-max-1/collector-cpu7-1/execution-1/RESULT.json",
+    "sha256": "c3eb8b89b14875528abd81a1f5ac589c33023a9ed31e477276de4c1e409b8c12"
+  },
+  "actual_clients": {
+    "bytes": 1529,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/M14-time-functional-host-affinity-p04tests-max-1/collector-cpu7-1/execution-1/CLIENTS.json",
+    "sha256": "60e7336da8f2a3470c112c2ac675ce152b9b46f30a79f2061033bbc2ba3b0929"
+  },
+  "actual_closure": {
+    "Root_full_terminal_completion_proven": true,
+    "all_two_exact_actual_Popen_PID_birth_direct_wait_stream_receipts_positive": true,
+    "clients": [
+      {
+        "argv": [
+          "/usr/bin/env",
+          "-i",
+          "PATH=/usr/bin:/bin",
+          "LANG=C",
+          "LC_ALL=C",
+          "TZ=UTC",
+          "/usr/bin/taskset",
+          "-c",
+          "0",
+          "/usr/bin/prlimit",
+          "--as=134217728:134217728",
+          "--cpu=10:10",
+          "--fsize=1048576:1048576",
+          "--core=0:0",
+          "--",
+          "/usr/bin/python3",
+          "-I",
+          "-B",
+          "/home/holden/mckernel-work/m14-blocker-resolution-20261110/M14-time-functional-closure-p04source-max-1/runnable-host-handoff-1/time_oracle_controls.py"
+        ],
+        "attempt_id": 0,
+        "birth": "53445809",
+        "creation_attempted": true,
+        "direct_wait_joined": true,
+        "exit": 0,
+        "label": "time-oracle-controls",
+        "lifecycle_UNKNOWN": false,
+        "pid": 1635858,
+        "popen_returned": true,
+        "primary_error": null,
+        "receipt_persisted": true,
+        "resource_charge_retained": false,
+        "secondary_errors": [],
+        "streams_closed": true
+      },
+      {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "--host=unix:///var/run/docker.sock",
+          "ps",
+          "-q"
+        ],
+        "attempt_id": 1,
+        "birth": "53445813",
+        "creation_attempted": true,
+        "direct_wait_joined": true,
+        "exit": 2,
+        "label": "running-preflight",
+        "lifecycle_UNKNOWN": false,
+        "pid": 1635859,
+        "popen_returned": true,
+        "primary_error": "AssertionError: ('running-preflight', 2)",
+        "receipt_persisted": true,
+        "resource_charge_retained": false,
+        "secondary_errors": [],
+        "streams_closed": true
+      }
+    ],
+    "container_create_not_attempted": true,
+    "container_ids_or_phases_exist": false,
+    "e088_primary_error_on_exit2_preserved_no_secondary_or_lifecycle_UNKNOWN": true,
+    "new_artifacts_or_outputs_issued": false,
+    "payload_or_collector_compile_not_attempted": true
+  },
+  "at": "2026-11-12T01:53:11.358110+00:00",
+  "decision": "QUALIFIED_FAILED_BEFORE_CONTAINER_OR_COMPILER_OR_COLLECTOR_PLUS_THREE_ORACLE_CONTROLS_PASS",
+  "exact_affected_profile": {
+    "Python_parent_runtime_assert_exact_tuple": true,
+    "e088_Popen_no_preexec_limit_override": "actual running-preflight sudo+DockerCLI inherits parent ASsoft256MiB/hard512MiB",
+    "failure_class": "virtual address space reservation before DockerCLI daemon preflight completion",
+    "fatal_site": "Go1.22 runtime.(*pageAlloc).sysInit / mpagealloc_64bit.go:81",
+    "not_evidence_of_payload_source_or_compiler_or_native_failure": true,
+    "outer_RLIMIT_AS_hard": 536870912,
+    "outer_RLIMIT_AS_soft": 268435456
+  },
+  "failed_DockerCLI_stderr": {
+    "bytes": 1087,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/M14-time-functional-host-affinity-p04tests-max-1/collector-cpu7-1/execution-1/running-preflight.stderr",
+    "sha256": "3047a7a00ac1cbf3a58924a57c4ab3e9d5eb6782e346fae01a71d4dc4ca71d41"
+  },
+  "failed_DockerCLI_stdout": {
+    "bytes": 0,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/M14-time-functional-host-affinity-p04tests-max-1/collector-cpu7-1/execution-1/running-preflight.stdout",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "failed_outer_argv": {
+    "bytes": 1266,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/M14-time-functional-host-affinity-p04tests-max-1/collector-cpu7-1/ROOT-ARGV.PROPOSED.json",
+    "sha256": "9a8cdec39038e0342aad36b9b1a3f0016466e07b149ed2fa6d46477adbc8859a"
+  },
+  "failed_parent": {
+    "bytes": 8964,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/M14-time-functional-host-affinity-p04tests-max-1/collector-cpu7-1/run_root_once.py",
+    "sha256": "d86b2113988ca2f178d686a1a06aa6f5aa7906cc4b3062cd58afda46efd12852"
+  },
+  "failed_request": {
+    "bytes": 17695,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/M14-time-functional-host-affinity-p04tests-max-1/collector-cpu7-1/REQUEST.json",
+    "sha256": "52bdf5540904d2daf5768dd40354b9e13512602f34c7745373853d2f2ffb7792"
+  },
+  "full_Root_final": {
+    "bytes": 870,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/M14-time-functional-host-affinity-p04tests-max-1/collector-cpu7-1/execution-1/ROOT-TOOL-FINAL.json",
+    "sha256": "9f9dd7b86d88c1e0b8fba70bae32011b18a43e681c69d0e41955f023aebdb612"
+  },
+  "full_Root_initial": {
+    "bytes": 870,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/M14-time-functional-host-affinity-p04tests-max-1/collector-cpu7-1/execution-1/ROOT-TOOL-INITIAL.json",
+    "sha256": "9f9dd7b86d88c1e0b8fba70bae32011b18a43e681c69d0e41955f023aebdb612"
+  },
+  "full_Root_initial_final_byte_equal": true,
+  "method": "Saved raw command/receipt/JSON/source-profile comparisons only; no CLI/payload/helper/compiler or fixture execution by qualifier.",
+  "next_meaningful_input": "One exact qualified DockerCLI virtual-AS profile successor for unstarted preflight/payload/collector only; fresh independent operation GO and Root shared admission required.",
+  "oracle_reuse": {
+    "actual_stderr": {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/M14-time-functional-host-affinity-p04tests-max-1/collector-cpu7-1/execution-1/time-oracle-controls.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual_stdout": {
+      "bytes": 328,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/M14-time-functional-host-affinity-p04tests-max-1/collector-cpu7-1/execution-1/time-oracle-controls.stdout",
+      "sha256": "a4285860066ed03e540443abbfc5e63790018e91bc7a5418815a025aa089d4a9"
+    },
+    "all_three_actual_rows_equal_external_oracle": true,
+    "controls_will_not_be_replayed_in_bounded_successor": true,
+    "external_expected_stdout": {
+      "bytes": 328,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/M14-time-functional-closure-p04source-max-1/runnable-host-handoff-1/ORACLE-CONTROLS.expected.stdout",
+      "sha256": "a4285860066ed03e540443abbfc5e63790018e91bc7a5418815a025aa089d4a9"
+    },
+    "rows": [
+      {
+        "accepted": true,
+        "case": "canonical-valid",
+        "error": null,
+        "error_type": null
+      },
+      {
+        "accepted": false,
+        "case": "invalid-nanoseconds",
+        "error": "time monotonic-libc stdout record",
+        "error_type": "DiagnosticError"
+      },
+      {
+        "accepted": false,
+        "case": "incomplete-count",
+        "error": "time monotonic-libc stdout record",
+        "error_type": "DiagnosticError"
+      }
+    ],
+    "saved_controls": {
+      "bytes": 532,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/M14-time-functional-host-affinity-p04tests-max-1/collector-cpu7-1/execution-1/TIME-ORACLE-CONTROLS.json",
+      "sha256": "fd9959dda29e38583db13fef7331da1bc2ab2b2d6fdd0d4a542c26cc5f110961"
+    }
+  },
+  "original_acceptance_or_native_claim": false,
+  "resource_disposition": {
+    "Root_admission": {
+      "bytes": 1552,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/M14-time-functional-host-affinity-p04tests-max-1/collector-cpu7-1/ROOT-CURRENT-ADMISSION.ACTUAL.json",
+      "sha256": "51a1d298ecd10567fa22d10f9d2a7f056653fe79064d96bdf37e86e06d6c67ba"
+    },
+    "all_other_native_source_Scratch_account_historical_UNKNOWN_reservations": "UNCHANGED_RETAINED",
+    "eligible_for_Root_scoped_retirement_only": {
+      "CPU": [
+        0,
+        7
+      ],
+      "jobs": 1,
+      "planning_bytes": 805306368
+    },
+    "original_native_session62718_provider1634459_birth53414308_and_1610612736_HOST_charge": "UNCHANGED_LIVE_RETAINED",
+    "resource_records_mutated_by_qualifier": false
+  },
+  "reviewer": "/root/p04_tests_max",
+  "schema": 1
+}

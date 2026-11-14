@@ -1,0 +1,36 @@
+--- a/arch/x86_64/kernel/syscall.c
++++ b/arch/x86_64/kernel/syscall.c
+@@ -424,18 +424,33 @@
+ #endif
+ #line 381
+ 
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && (defined(MCKERNEL_RUST_F06_RT_SIGRETURN_ALLOC) || defined(MCKERNEL_RUST_F06_RT_SIGRETURN_FREE))
++/* PROPOSAL: +1 C metadata object, pending explicit Root disposition. */
++const char f06_rt_sigreturn_source_file[] = __FILE__;
++#endif
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_RT_SIGRETURN_ALLOC)
++extern void *arch_rt_sigreturn_alloc_bridge(size_t size, unsigned long flags);
++#else
++#line 382
+ void *
+ arch_rt_sigreturn_alloc_bridge(size_t size, unsigned long flags)
+ {
+ 	return kmalloc_tracked(size, flags, __FILE__, __LINE__);
+ }
+ 
++#endif
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_RT_SIGRETURN_FREE)
++extern void arch_rt_sigreturn_free_bridge(void *ptr);
++#else
++#line 388
+ void
+ arch_rt_sigreturn_free_bridge(void *ptr)
+ {
+ 	kfree_tracked(ptr, __FILE__, __LINE__);
+ }
+ 
++#endif
++#line 394
+ void
+ arch_rt_sigreturn_xrstor_bridge(void *fpregs)
+ {

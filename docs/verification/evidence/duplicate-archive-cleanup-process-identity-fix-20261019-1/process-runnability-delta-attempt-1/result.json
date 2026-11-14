@@ -1,0 +1,123 @@
+{
+  "status": "PASS_AFFECTED_RUNNABILITY_CALLER_DELTA",
+  "cases": [
+    {
+      "status": "PASS",
+      "before": "D",
+      "after": "R",
+      "expected_refusal": "scan/skip state changed",
+      "error": "RuntimeError(\"process scan/skip state changed pid=1299503 before=(17121109, 4194304, 'D') after=(17121109, 4194304, 'R')\")",
+      "production_caller": "process_census",
+      "production_reader": "proc_identity",
+      "synthetic_stat": true,
+      "helper_mocks": false
+    },
+    {
+      "status": "PASS",
+      "before": "I",
+      "after": "R",
+      "expected_refusal": "scan/skip state changed",
+      "error": "RuntimeError(\"process scan/skip state changed pid=1299503 before=(17121109, 4194304, 'I') after=(17121109, 4194304, 'R')\")",
+      "production_caller": "process_census",
+      "production_reader": "proc_identity",
+      "synthetic_stat": true,
+      "helper_mocks": false
+    },
+    {
+      "status": "PASS",
+      "before": "D",
+      "after": "R",
+      "expected_refusal": null,
+      "error": null,
+      "production_caller": "process_census",
+      "production_reader": "proc_identity",
+      "synthetic_stat": true,
+      "helper_mocks": false
+    },
+    {
+      "status": "PASS",
+      "before": "R",
+      "after": "D",
+      "expected_refusal": null,
+      "error": null,
+      "production_caller": "process_census",
+      "production_reader": "proc_identity",
+      "synthetic_stat": true,
+      "helper_mocks": false
+    },
+    {
+      "status": "PASS",
+      "before": "I",
+      "after": "R",
+      "expected_refusal": null,
+      "error": null,
+      "production_caller": "process_census",
+      "production_reader": "proc_identity",
+      "synthetic_stat": true,
+      "helper_mocks": false
+    },
+    {
+      "status": "PASS",
+      "before": "R",
+      "after": "I",
+      "expected_refusal": null,
+      "error": null,
+      "production_caller": "process_census",
+      "production_reader": "proc_identity",
+      "synthetic_stat": true,
+      "helper_mocks": false
+    },
+    {
+      "status": "PASS",
+      "before": "R",
+      "after": "T",
+      "expected_refusal": "scan/skip state changed",
+      "error": "RuntimeError(\"process scan/skip state changed pid=1299503 before=(17121109, 4194304, 'R') after=(17121109, 4194304, 'T')\")",
+      "production_caller": "process_census",
+      "production_reader": "proc_identity",
+      "synthetic_stat": true,
+      "helper_mocks": false
+    },
+    {
+      "status": "PASS",
+      "before": "R",
+      "after": "t",
+      "expected_refusal": "scan/skip state changed",
+      "error": "RuntimeError(\"process scan/skip state changed pid=1299503 before=(17121109, 4194304, 'R') after=(17121109, 4194304, 't')\")",
+      "production_caller": "process_census",
+      "production_reader": "proc_identity",
+      "synthetic_stat": true,
+      "helper_mocks": false
+    },
+    {
+      "status": "PASS",
+      "before": "R",
+      "after": "P",
+      "expected_refusal": "scan/skip state changed",
+      "error": "RuntimeError(\"process scan/skip state changed pid=1299503 before=(17121109, 4194304, 'R') after=(17121109, 4194304, 'P')\")",
+      "production_caller": "process_census",
+      "production_reader": "proc_identity",
+      "synthetic_stat": true,
+      "helper_mocks": false
+    },
+    {
+      "status": "PASS",
+      "before": "R",
+      "after": "Z",
+      "expected_refusal": "terminal classification changed",
+      "error": "RuntimeError(\"process terminal classification changed pid=1299503 before=(17121109, 4194304, 'R') after=(17121109, 4194304, 'Z')\")",
+      "production_caller": "process_census",
+      "production_reader": "proc_identity",
+      "synthetic_stat": true,
+      "helper_mocks": false
+    }
+  ],
+  "source_sha256": "a75bfcb4ee860de2da520b700c40827a187b3bb12e66bf8f299c7a04fa67c526",
+  "interpreter": "/usr/bin/python3",
+  "version": "3.8.10 (default, Mar 18 2025, 20:04:55) \n[GCC 9.4.0]",
+  "limits": "D/I transitions are synthetic stat inputs only; actual live R/S evidence reused, no original12 or mount suite replay; no historical root4 cause inferred",
+  "root_observer_replayed": false,
+  "new_host_census": false,
+  "owned_child_returncode": -15,
+  "owned_child_joined": true
+}

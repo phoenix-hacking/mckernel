@@ -1,0 +1,45 @@
+--- a/kernel/rust/f03_perf_owner/callbacks.rs
++++ b/kernel/rust/f03_perf_owner/callbacks.rs
+@@ -190,5 +190,5 @@
+         unsafe{(*sfd).padding=argument as CInt;super::super::syscall_mckfd_unlock_bridge(lock,flags);}
+     }
+     let data=unsafe{&super::super::f03_perf_descriptor_entries_v1::f03_perf_descriptor_layout_v1};
+-    match data.forward{Some(forward)=>unsafe{forward(data.fcntl_nr,ctx.cast())} as CInt,None=>-EINVAL}
++    match data.forward{Some(forward)=>(unsafe{forward(data.fcntl_nr,ctx.cast())}) as CInt,None=>-EINVAL}
+ }
+--- a/kernel/rust/f03_perf_owner/groups.rs
++++ b/kernel/rust/f03_perf_owner/groups.rs
+@@ -454,7 +454,7 @@
+                             Ok(keep) => { selected = Some((keep, node, group_key, event_key)); break; }
+                             Err(_) => unsafe { (*node).mapping_claimed = false },
+                         }
+-                    }
++                    };
+                 }
+                 owner = unsafe { (*owner).next_registered };
+             }
+--- a/kernel/rust/f03_perf_owner/runtime.rs
++++ b/kernel/rust/f03_perf_owner/runtime.rs
+@@ -25,18 +25,18 @@
+         Self{state:addr_of!((*event).state).read(),cpu:addr_of!((*event).cpu_id).read(),counter:addr_of!((*event).counter_id).read(),
+             base_user:addr_of!((*event).base_user_tsc).read(),stopped_user:addr_of!((*event).stopped_user_tsc).read(),user_accum:addr_of!((*event).user_accum_count).read(),
+             base_system:addr_of!((*event).base_system_tsc).read(),stopped_system:addr_of!((*event).stopped_system_tsc).read(),system_accum:addr_of!((*event).system_accum_count).read(),
+-            previous:AtomicI64::from_ptr(addr_of_mut!((*event).hw.prev_count.counter)).load(Ordering::SeqCst),
++            previous:AtomicI64::from_ptr(addr_of_mut!((*event).hw.prev_count.counter64)).load(Ordering::SeqCst),
+             sample:addr_of!((*event).hw.sample_period).read(),last:addr_of!((*event).hw.last_period).read(),
+-            left:AtomicI64::from_ptr(addr_of_mut!((*event).hw.period_left.counter)).load(Ordering::SeqCst),
++            left:AtomicI64::from_ptr(addr_of_mut!((*event).hw.period_left.counter64)).load(Ordering::SeqCst),
+             extra_index:addr_of!((*event).extra_reg.idx).read(),extra_reg:addr_of!((*event).extra_reg.reg).read(),hardware:addr_of!((*event).hw_config).read()}
+     }}
+     unsafe fn write(self,event:*mut Event){unsafe{
+         addr_of_mut!((*event).state).write(self.state);addr_of_mut!((*event).cpu_id).write(self.cpu);addr_of_mut!((*event).counter_id).write(self.counter);
+         addr_of_mut!((*event).base_user_tsc).write(self.base_user);addr_of_mut!((*event).stopped_user_tsc).write(self.stopped_user);addr_of_mut!((*event).user_accum_count).write(self.user_accum);
+         addr_of_mut!((*event).base_system_tsc).write(self.base_system);addr_of_mut!((*event).stopped_system_tsc).write(self.stopped_system);addr_of_mut!((*event).system_accum_count).write(self.system_accum);
+-        AtomicI64::from_ptr(addr_of_mut!((*event).hw.prev_count.counter)).store(self.previous,Ordering::SeqCst);
++        AtomicI64::from_ptr(addr_of_mut!((*event).hw.prev_count.counter64)).store(self.previous,Ordering::SeqCst);
+         addr_of_mut!((*event).hw.sample_period).write(self.sample);addr_of_mut!((*event).hw.last_period).write(self.last);
+-        AtomicI64::from_ptr(addr_of_mut!((*event).hw.period_left.counter)).store(self.left,Ordering::SeqCst);
++        AtomicI64::from_ptr(addr_of_mut!((*event).hw.period_left.counter64)).store(self.left,Ordering::SeqCst);
+         addr_of_mut!((*event).extra_reg.idx).write(self.extra_index);addr_of_mut!((*event).extra_reg.reg).write(self.extra_reg);addr_of_mut!((*event).hw_config).write(self.hardware);
+     }}
+ }

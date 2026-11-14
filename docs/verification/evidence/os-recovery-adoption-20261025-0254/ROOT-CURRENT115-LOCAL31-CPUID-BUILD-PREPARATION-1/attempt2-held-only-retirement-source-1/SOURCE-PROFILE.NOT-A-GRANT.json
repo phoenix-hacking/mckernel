@@ -1,0 +1,138 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "SOURCE_PROFILE_EXACT_ONE_HOLDER_INTERRUPT_ONLY_NOT_GRANTED",
+  "source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/attempt2-held-only-retirement-source-1/interrupt_exact_attempt2_unlaunched_holder.py",
+    "bytes": 12035,
+    "sha256": "34d2fd44ece880594453911aef066124d987df095aa86d7d8a3faede3e9e739c"
+  },
+  "fixed": {
+    "admission": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-2",
+    "holder": {
+      "path": "/run/lock/mckernel-development.lock",
+      "pid": 1831939,
+      "starttime": 95475556,
+      "device": 27,
+      "inode": 4,
+      "fd": 3
+    },
+    "refs": {
+      "holder_ready": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-2/HOLDER/HOLDER.READY.json",
+        "bytes": 1415,
+        "sha256": "2816701a439bdceb75c425584ec4db0ec6d6cecbbb695f4bb31265871d11127a"
+      },
+      "bootstrap": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-2/ROOT-HOLDER-BOOTSTRAP-GRANT.json",
+        "bytes": 1968,
+        "sha256": "4ca7048221f50bbbc8e72fa6eaae9f174dd2b13f81156ed6555a4132973990ca"
+      },
+      "holder_source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-2/hold_and_run_build_only.py",
+        "bytes": 7010,
+        "sha256": "d17bd70e3e3e6ef7febe48b6f0f892ab6f1a94c74e89d43808bbea8b5dc21551"
+      },
+      "runner": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-2/run_build_only.py",
+        "bytes": 24465,
+        "sha256": "2471d24bcf8eaa5054c3d33b9ca9cc1cc77bd505e791b7ca6365e9ca0c854a6c"
+      },
+      "worker": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-2/build_only_worker.py",
+        "bytes": 4113,
+        "sha256": "0bdd40596f7d5a9fb056b9ff24c7033336af1305ce143391debd225a71d2b105"
+      },
+      "profile": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-2/PROFILE.SOURCE-ONLY.json",
+        "bytes": 112664,
+        "sha256": "c3ca1810dec2891331ad8b0ef49e369e493d77be0f0209c116b91b3cd9336c06"
+      },
+      "refused_review": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-2/independent-execution-review-1/REVIEW.json",
+        "bytes": 4174,
+        "sha256": "6e3ae7a52ef26e54e0d97d541b0f0a45568ba64ba855200a73bfae859398a5c7"
+      },
+      "expired_packet": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-2/ROOT-EXECUTION-INPUT.GRANT-PENDING-REVIEW.json",
+        "bytes": 2429,
+        "sha256": "48bc9df07086ebc30b9ee53eb3b0e853b379cbe4560f350d5106923f8090f1bd"
+      },
+      "expired_resource": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-2/ROOT-ACTUAL-BUILD-RESOURCE-AUTHORITY.json",
+        "bytes": 11883,
+        "sha256": "7567bd0239ae9a96f086e3d7c4bf2b3fd3bc550d5f612c72f2ef53f2d2076679"
+      }
+    },
+    "negative_paths": [
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-2/ACTUAL-INDEPENDENT-BUILD-EXECUTION-REVIEW.json",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-2/ROOT-ACTUAL-ONE-BUILD-ONLY-GRANT.json",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-2/HOLDER/ROOT-BUILD-GRANT.READY.json",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-2/HOLDER/RUNNER.STARTED.json",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-2/HOLDER/RUNNER.JOINED.json",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-2/HOLDER/runner.stdout",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-2/HOLDER/runner.stderr",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-2/HOLDER/BUILD-LOCAL-TERMINAL.json",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-2/HOLDER/QUARANTINE.json",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-2/OUTPUT"
+    ],
+    "nonce": "92e8d698cfe12176ddd0375937cbaeb1",
+    "root_tool_session": 78413
+  },
+  "signal": "SIGINT",
+  "maximum_signal_calls": 1,
+  "mechanism": "Exact typed ctypes libc.syscall pidfd_open434/pidfd_send_signal424; same fd; no native Python API/interpreter/numeric/group fallback",
+  "permanent_mutex_mutation": false,
+  "actual_compiler_guest_touched": false,
+  "Root_followup": "Positive join actualtool11857 then independent current-free and two closed mutex probes; signal receipt never claims retirement",
+  "runtime_authority": null,
+  "normal_holder_exit_path": "Exact SIGINT raises KeyboardInterrupt through exceptBaseException with child_startedFalse/can_releaseTrue, finally closes its ownFD; no helper unlock.",
+  "journal_durability": "First fsynced ENTERED content followed by parentdir fd fsync before live identity/pidfd/signal; failure aborts with no retry.",
+  "typed_backend": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/attempt2-held-only-retirement-source-1/pidfd_syscall_backend.py",
+    "bytes": 3017,
+    "sha256": "b9a48806133f306af1aa70ded237a85310abf17e29ddfeccc9291496df0fdb5a"
+  },
+  "genuine_ABI_inputs": {
+    "header": {
+      "path": "/usr/include/x86_64-linux-gnu/asm/unistd_64.h",
+      "bytes": 9286,
+      "sha256": "698d4666c969b0b4d0bed328b4a4f3cab765ec1a9948e0f14751f0ce56d91535"
+    },
+    "header_alias": "/usr/include/asm/unistd_64.h",
+    "libc": {
+      "path": "/usr/lib/x86_64-linux-gnu/libc-2.31.so",
+      "bytes": 2029592,
+      "sha256": "53b909551f8e581120ddc2d24cfb5df76c52e3c2e2a5dac0d202b25638b3e902"
+    }
+  },
+  "preserved_failed_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/interrupt_exact_unlaunched_holder.DIRECTORY-FSYNC-CORRECTED.py",
+    "bytes": 11252,
+    "sha256": "10772f6af24e47198a9917036d74a13a9e8059d6adee8f4137313b360f1fb822"
+  },
+  "preserved_failed_original_READY": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/READY.DIRECTORY-FSYNC-CORRECTED.json",
+    "bytes": 3083,
+    "sha256": "c654c3acf76be364caa31e75ece4ce22defcea52796b70aacc3cb360e2398c0d"
+  },
+  "reused_actual_API_precheck": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/pidfd-syscall-compatibility-source-1/ACTUAL-PRECHECK.stdout",
+    "bytes": 824,
+    "sha256": "a0548202f7bd3ba90257de02262cd55f39709c8a4921878b3f1ab88df8f29df5"
+  },
+  "reused_actual_backend_source_release": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/pidfd-syscall-compatibility-source-1/independent-source-review-1/REVIEW.json",
+    "bytes": 14113,
+    "sha256": "165a774a532b8b56dece98bc9031e266a600bc262339788089ca6ebcfaea4d87"
+  },
+  "reused_actual_one_signal_receipt": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/pidfd-syscall-compatibility-source-1/ACTUAL-COMPAT-ONE-HOLDER-INTERRUPT.ACTION.jsonl",
+    "bytes": 5775,
+    "sha256": "9bae79a78a445a3a75575d18bac5297bb8cc4a3610d3498be8adf6c9ee5755bd"
+  },
+  "preserved_A1_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/pidfd-syscall-compatibility-source-1/interrupt_exact_unlaunched_holder_compat.py",
+    "bytes": 11933,
+    "sha256": "b522399a853f84e40ae593781b7987c03fbd61864e086db05b80b452388c82d2"
+  }
+}

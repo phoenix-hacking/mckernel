@@ -1,0 +1,1426 @@
+{
+  "status": "PASS_SOURCE_BOUND_TWO_COMPLETE_CYCLE_STAGE_ONLY",
+  "input_refs": {
+    "parent": {
+      "path": "/home/holden/mckernel-work/scratch/cp205m-261019-1/manifest.json",
+      "sha256": "4aa72c2a5a759bda71c4a0e8e33499068261346113ec2c9fd19d4669b3f8e41d",
+      "bytes": 10501
+    },
+    "meta": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/n3-variant/stage205-current-pair-1/overlay-manifest.json",
+      "sha256": "7f2100333217f16612a7caaf52f0714d6e889a47a1abb1dc6b767b4e53b9edc8",
+      "bytes": 20039
+    },
+    "base": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/n3-variant/stage205-current-pair-1/base.cpio.gz",
+      "sha256": "605d5c27c38d3c5e68dba2483bd782939aba7fcea13feb47cab7c3e0a2bb7abd",
+      "bytes": 12770049
+    },
+    "overlay": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/n3-variant/stage205-current-pair-1/lifecycle.cpio.gz",
+      "sha256": "1fbb36cba32aaac2170ee451286b20a8adffaabd4bdad30296b4ccc626371afd",
+      "bytes": 18757459
+    },
+    "boot": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/ordinary-check-1/native-boot",
+      "sha256": "65ec0447c2e19e60e3bf29688ee0fc010d353b9d130f43d590b5d685d5cf17c1",
+      "bytes": 35672
+    },
+    "collector": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/pid-result-correction-1/ordinary-check-1/collector",
+      "sha256": "58d6788c0a72bbe11733c2bfa73f5f6d7e3ddf564ef6b658ba585f687efafc25",
+      "bytes": 1047784
+    },
+    "release": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/pid-result-correction-1/ordinary-check-1/resource-two",
+      "sha256": "14868dc7e6dddb2209095324f391f87f14a08933a16e1924e50a992c6e6561fc",
+      "bytes": 876048
+    },
+    "oracle": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/cycle_oracle.py",
+      "sha256": "05bba58841990cf01907a2b9dbc38cc95822dfb18cef1ee0e53906b4165c112e",
+      "bytes": 10190
+    },
+    "stager": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/stage-preparation-1/stage_cycles.py",
+      "sha256": "ed2815e21b9a044879401fec1661ffb197ee8e650137646a0bee1660ec86fab6",
+      "bytes": 8880
+    },
+    "original_nd": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/n3-variant/native_diagnostic.py",
+      "sha256": "8d29c650b74285d9d22435391059dfca7ae7605d0c1158a2a9cb850bd3aa0e20",
+      "bytes": 70246
+    },
+    "offline_review": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-independent-review-20261019-1/ACTUAL-TWO-COMPLETE-CYCLE-OFFLINE-REVIEW.json",
+      "sha256": "cb527bce8fae9f4f6aa810687b628f3c01e75415a7dd791a6b92eaaff201c14c",
+      "bytes": 26589
+    },
+    "generation_source": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/GENERATION-SOURCE-CONTRACT.json",
+      "sha256": "be9ba04f545916c8b415eed5d27fb1950dd0675fa8cc062c5c4462cf98d29e6d",
+      "bytes": 2898
+    }
+  },
+  "native_acceptance": false,
+  "changed_existing_members": [
+    "bin/native-boot",
+    "init"
+  ],
+  "added_members": [
+    "bin/native-resource-release-probe"
+  ],
+  "unchanged_modules": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/n3-variant/stage-matched-FP-modules-1/ihk.ko",
+      "sha256": "c396958bfdb0f22036b469ea2a64e0a6b188b9619ee4105c7879483bb3b9790d",
+      "size": 1475952,
+      "mode": 33188
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/n3-variant/stage-matched-FP-modules-1/ihk-smp-x86_64.ko",
+      "sha256": "af234fbcd09327a80e12396eebbfbcd30838f88a552fa13ba00a2728a761eeaa",
+      "size": 11632136,
+      "mode": 33188
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/n3-variant/stage-matched-FP-modules-1/mcctrl.ko",
+      "sha256": "6571ac7eca13559d8bab65125d54facbbc65e84f815d4ff3fc77ec6aa1104972",
+      "size": 1913904,
+      "mode": 33188
+    }
+  ],
+  "image": {
+    "mode": 33261,
+    "path": "/home/holden/mckernel-work/host-preparation/repaired-affinity-n3-variant-20261019-1/repaired-image-fresh8b-runtime-0755",
+    "sha256": "ff4fca457e9ffe50dc4eca930c5f91faf317eeee15bf0c2907067cffa77b23bb",
+    "size": 7988768
+  },
+  "boot_header_proof": [
+    {
+      "name": "bin/native-boot",
+      "old_header_hex": "3037303730313030303030303042303030303831454430303030303030303030303030303030303030303030303136414433414633363030303038626338303030303030303030303030303030303030303030303030303030303030303030303030303031303030303030303030",
+      "new_header_hex": "3037303730313030303030303042303030303831454430303030303030303030303030303030303030303030303136414433414633363030303038623538303030303030303030303030303030303030303030303030303030303030303030303030303031303030303030303030",
+      "old_payload_sha256": "4312f9a8f53d8db7b2b6be4c7d5e409f5c0f82cf8215728209be0f6ff4a5d5c5",
+      "new_payload_sha256": "65ec0447c2e19e60e3bf29688ee0fc010d353b9d130f43d590b5d685d5cf17c1",
+      "ordered_raw_spans": [
+        {
+          "kind": "record",
+          "name": "apps",
+          "old_offset": 0,
+          "new_offset": 0,
+          "old_bytes": 116,
+          "new_bytes": 116,
+          "old_sha256": "8aa42696162236cbd6afbca61f58fe2d7405af742d6d45fb9a3f04c3cc705e85",
+          "new_sha256": "8aa42696162236cbd6afbca61f58fe2d7405af742d6d45fb9a3f04c3cc705e85",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "apps/app",
+          "old_offset": 116,
+          "new_offset": 116,
+          "old_bytes": 20648,
+          "new_bytes": 20648,
+          "old_sha256": "99d41e940e9916569fd7e522a4698f6dd1623cbf4493130c2414326d409c4232",
+          "new_sha256": "99d41e940e9916569fd7e522a4698f6dd1623cbf4493130c2414326d409c4232",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "bin",
+          "old_offset": 20764,
+          "new_offset": 20764,
+          "old_bytes": 116,
+          "new_bytes": 116,
+          "old_sha256": "715a15bf004c4e7a17d763fef5a4428477fd3aff62db3554f999b617a4cf65b1",
+          "new_sha256": "715a15bf004c4e7a17d763fef5a4428477fd3aff62db3554f999b617a4cf65b1",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "bin/bash",
+          "old_offset": 20880,
+          "new_offset": 20880,
+          "old_bytes": 1410808,
+          "new_bytes": 1410808,
+          "old_sha256": "8d4c26f595a32ada21d402a1104659e429b87be0b241dfd6c793face0e793cb5",
+          "new_sha256": "8d4c26f595a32ada21d402a1104659e429b87be0b241dfd6c793face0e793cb5",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "bin/dmesg",
+          "old_offset": 1431688,
+          "new_offset": 1431688,
+          "old_bytes": 72208,
+          "new_bytes": 72208,
+          "old_sha256": "1b71344c8485d0a5fa977cb1cde9e8a78693f64fff9ffbbb9112ab47c5a08188",
+          "new_sha256": "1b71344c8485d0a5fa977cb1cde9e8a78693f64fff9ffbbb9112ab47c5a08188",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "bin/mcd0-ioctl-i386",
+          "old_offset": 1503896,
+          "new_offset": 1503896,
+          "old_bytes": 8548,
+          "new_bytes": 8548,
+          "old_sha256": "c2b91c77cd2afdcc91cbf8da0826c5dfce0a44b7b4b083981fa2a19b0f96e2e7",
+          "new_sha256": "c2b91c77cd2afdcc91cbf8da0826c5dfce0a44b7b4b083981fa2a19b0f96e2e7",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "bin/mcd0-ioctl-x86_64",
+          "old_offset": 1512444,
+          "new_offset": 1512444,
+          "old_bytes": 8644,
+          "new_bytes": 8644,
+          "old_sha256": "c0f96b5b15550457c960ee457b4262f4cdd5ebc9ec43fc5d6afed8694b77baa9",
+          "new_sha256": "c0f96b5b15550457c960ee457b4262f4cdd5ebc9ec43fc5d6afed8694b77baa9",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "bin/mcexec",
+          "old_offset": 1521088,
+          "new_offset": 1521088,
+          "old_bytes": 453476,
+          "new_bytes": 453476,
+          "old_sha256": "a176498d3faaa6732af3e5dd690345ef30e81e1214e389951300c79d36c00e9f",
+          "new_sha256": "a176498d3faaa6732af3e5dd690345ef30e81e1214e389951300c79d36c00e9f",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "bin/mount",
+          "old_offset": 1974564,
+          "new_offset": 1974564,
+          "old_bytes": 48984,
+          "new_bytes": 48984,
+          "old_sha256": "e45f9c77cf6b892e4da4f98ec331de77a83afa3b62e80e902661b1a5e2e6d4cc",
+          "new_sha256": "e45f9c77cf6b892e4da4f98ec331de77a83afa3b62e80e902661b1a5e2e6d4cc",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "bin/native-application-core",
+          "old_offset": 2023548,
+          "new_offset": 2023548,
+          "old_bytes": 39628,
+          "new_bytes": 39628,
+          "old_sha256": "591504eb057bfd6d51dc5cb4692b7c12dc129b6d756b5b3ea76cf9edd1c75ee0",
+          "new_sha256": "591504eb057bfd6d51dc5cb4692b7c12dc129b6d756b5b3ea76cf9edd1c75ee0",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "bin/native-application-hello",
+          "old_offset": 2063176,
+          "new_offset": 2063176,
+          "old_bytes": 1404,
+          "new_bytes": 1404,
+          "old_sha256": "8c60a9b649047b8dc1c3368651aea7b2e2a2905f4ca13e175036f0253dcbd0ee",
+          "new_sha256": "8c60a9b649047b8dc1c3368651aea7b2e2a2905f4ca13e175036f0253dcbd0ee",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "bin/native-boot",
+          "old_offset": 2064580,
+          "new_offset": 2064580,
+          "old_bytes": 35912,
+          "new_bytes": 35800,
+          "old_sha256": "acd8aa5c739d234bf4160512612e7b2dc845ff820c70c1f777d05671ee7889d1",
+          "new_sha256": "ba6f3b76f863611f5babc30ce87de1e9fee78b64cddfaedc41e4d4c78ad6f273",
+          "untouched": false
+        },
+        {
+          "kind": "record",
+          "name": "bin/native-lifecycle-probe",
+          "old_offset": 2100492,
+          "new_offset": 2100380,
+          "old_bytes": 872756,
+          "new_bytes": 872756,
+          "old_sha256": "04d0e5278542d8cddf28661403ff347ba4d7ef3938f7c08a48e09e497b3d1f06",
+          "new_sha256": "04d0e5278542d8cddf28661403ff347ba4d7ef3938f7c08a48e09e497b3d1f06",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "bin/native-os-buildid-i386",
+          "old_offset": 2973248,
+          "new_offset": 2973136,
+          "old_bytes": 29856,
+          "new_bytes": 29856,
+          "old_sha256": "ae10e058dd01cc94cb6cfabaa09364e8acc38c0334bf958ab21c63f9fd5a55ac",
+          "new_sha256": "ae10e058dd01cc94cb6cfabaa09364e8acc38c0334bf958ab21c63f9fd5a55ac",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "bin/native-os-buildid-x86_64",
+          "old_offset": 3003104,
+          "new_offset": 3002992,
+          "old_bytes": 30516,
+          "new_bytes": 30516,
+          "old_sha256": "391bd1d2b31554438baf1572817986fce4ad4c32b6a9ecf1cd8d92297e8388d2",
+          "new_sha256": "391bd1d2b31554438baf1572817986fce4ad4c32b6a9ecf1cd8d92297e8388d2",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "bin/native-string-i386",
+          "old_offset": 3033620,
+          "new_offset": 3033508,
+          "old_bytes": 38876,
+          "new_bytes": 38876,
+          "old_sha256": "d0494cdda9ae5d57b90d6ecd3607da9de17f7ee5358b93e0953b7aa2878d3a7e",
+          "new_sha256": "d0494cdda9ae5d57b90d6ecd3607da9de17f7ee5358b93e0953b7aa2878d3a7e",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "bin/native-string-x86_64",
+          "old_offset": 3072496,
+          "new_offset": 3072384,
+          "old_bytes": 39488,
+          "new_bytes": 39488,
+          "old_sha256": "4685920ef610a1f8e62e80825d30a45d9fbff565d33346f6ce6b0cbf0964eaec",
+          "new_sha256": "4685920ef610a1f8e62e80825d30a45d9fbff565d33346f6ce6b0cbf0964eaec",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "bin/stat",
+          "old_offset": 3111984,
+          "new_offset": 3111872,
+          "old_bytes": 172,
+          "new_bytes": 172,
+          "old_sha256": "feaa3d06dd274f20d969e41fe0c9a2261a285768b35ff0578c2601623ee14bef",
+          "new_sha256": "feaa3d06dd274f20d969e41fe0c9a2261a285768b35ff0578c2601623ee14bef",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "bin/uname",
+          "old_offset": 3112156,
+          "new_offset": 3112044,
+          "old_bytes": 172,
+          "new_bytes": 172,
+          "old_sha256": "f3378ddf0e7ce6ca514d3b21958245260cf986eec99d27c23ff843f5cf10b6b1",
+          "new_sha256": "f3378ddf0e7ce6ca514d3b21958245260cf986eec99d27c23ff843f5cf10b6b1",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "case",
+          "old_offset": 3112328,
+          "new_offset": 3112216,
+          "old_bytes": 116,
+          "new_bytes": 116,
+          "old_sha256": "72799b8360feccad126552be8222744d96954fa9dc743053128eeeafa1702ed6",
+          "new_sha256": "72799b8360feccad126552be8222744d96954fa9dc743053128eeeafa1702ed6",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "case/work",
+          "old_offset": 3112444,
+          "new_offset": 3112332,
+          "old_bytes": 120,
+          "new_bytes": 120,
+          "old_sha256": "4805c9e4bc9cef9d61555936de5bc15bbcc0323cb96576fc92ca43067fca6548",
+          "new_sha256": "4805c9e4bc9cef9d61555936de5bc15bbcc0323cb96576fc92ca43067fca6548",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "dev",
+          "old_offset": 3112564,
+          "new_offset": 3112452,
+          "old_bytes": 116,
+          "new_bytes": 116,
+          "old_sha256": "98fdbedae99f5bd3756029783f974fba7e0725c89794390ae724ef54589e0a3c",
+          "new_sha256": "98fdbedae99f5bd3756029783f974fba7e0725c89794390ae724ef54589e0a3c",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "images",
+          "old_offset": 3112680,
+          "new_offset": 3112568,
+          "old_bytes": 120,
+          "new_bytes": 120,
+          "old_sha256": "3324082e27697edf8b13c373b478dbf01132e8b5d914f56ea74889d3e393d6f5",
+          "new_sha256": "3324082e27697edf8b13c373b478dbf01132e8b5d914f56ea74889d3e393d6f5",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "images/mckernel.img",
+          "old_offset": 3112800,
+          "new_offset": 3112688,
+          "old_bytes": 7988900,
+          "new_bytes": 7988900,
+          "old_sha256": "6f0e3b49e668c1c692b348094a97a2d1a4569381a50e15c8621a6ae23a402bcd",
+          "new_sha256": "6f0e3b49e668c1c692b348094a97a2d1a4569381a50e15c8621a6ae23a402bcd",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "init",
+          "old_offset": 11101700,
+          "new_offset": 11101588,
+          "old_bytes": 1022108,
+          "new_bytes": 1022108,
+          "old_sha256": "b30749af32c2d6cd2dc0976bf160a2ac6f6c9ce743061b59cae58355969cf76e",
+          "new_sha256": "b30749af32c2d6cd2dc0976bf160a2ac6f6c9ce743061b59cae58355969cf76e",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "lib",
+          "old_offset": 12123808,
+          "new_offset": 12123696,
+          "old_bytes": 116,
+          "new_bytes": 116,
+          "old_sha256": "12a25a6a28993719c6ed90ae4bb76729eb7d13454609825ff4ed6c7f5e06d765",
+          "new_sha256": "12a25a6a28993719c6ed90ae4bb76729eb7d13454609825ff4ed6c7f5e06d765",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "lib64",
+          "old_offset": 12123924,
+          "new_offset": 12123812,
+          "old_bytes": 116,
+          "new_bytes": 116,
+          "old_sha256": "9d33ef41ab60a6ec7366dc831398b946c5df00b81d7f3016392c9e986ff16973",
+          "new_sha256": "9d33ef41ab60a6ec7366dc831398b946c5df00b81d7f3016392c9e986ff16973",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "lib64/ld-linux-x86-64.so.2",
+          "old_offset": 12124040,
+          "new_offset": 12123928,
+          "old_bytes": 930740,
+          "new_bytes": 930740,
+          "old_sha256": "8eb4538a4f76ffa9d48c85c2d715e2f7bafda12a5f2e4855250865b640b79cad",
+          "new_sha256": "8eb4538a4f76ffa9d48c85c2d715e2f7bafda12a5f2e4855250865b640b79cad",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "lib64/libacl.so.1",
+          "old_offset": 13054780,
+          "new_offset": 13054668,
+          "old_bytes": 41024,
+          "new_bytes": 41024,
+          "old_sha256": "4d97002bdf50f73bdb0a6262a5d959e670e4f666a8db2099efb6e67f3c0ad2d6",
+          "new_sha256": "4d97002bdf50f73bdb0a6262a5d959e670e4f666a8db2099efb6e67f3c0ad2d6",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "lib64/libattr.so.1",
+          "old_offset": 13095804,
+          "new_offset": 13095692,
+          "old_bytes": 28428,
+          "new_bytes": 28428,
+          "old_sha256": "0129e13b5afe6282e25d91866a490a6c5b8ba51d3eb9f60363d9ee68a4cf936d",
+          "new_sha256": "0129e13b5afe6282e25d91866a490a6c5b8ba51d3eb9f60363d9ee68a4cf936d",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "lib64/libblkid.so.1",
+          "old_offset": 13124232,
+          "new_offset": 13124120,
+          "old_bytes": 242260,
+          "new_bytes": 242260,
+          "old_sha256": "3a9682bc5a1e559bf14771aee9492115fd6f66dce730cc936626b3970b63b561",
+          "new_sha256": "3a9682bc5a1e559bf14771aee9492115fd6f66dce730cc936626b3970b63b561",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "lib64/libc.so.6",
+          "old_offset": 13366492,
+          "new_offset": 13366380,
+          "old_bytes": 2340024,
+          "new_bytes": 2340024,
+          "old_sha256": "d35a318736d0eed4860ff8a45fecaf391bad6a3da3e22d0e455507ea652fb958",
+          "new_sha256": "d35a318736d0eed4860ff8a45fecaf391bad6a3da3e22d0e455507ea652fb958",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "lib64/libcap.so.2",
+          "old_offset": 15706516,
+          "new_offset": 15706404,
+          "old_bytes": 53296,
+          "new_bytes": 53296,
+          "old_sha256": "12f0df4caa2b1cf1bccb9afecfc97e21a4adb5e8c77e93884ee7822108f8a09e",
+          "new_sha256": "12f0df4caa2b1cf1bccb9afecfc97e21a4adb5e8c77e93884ee7822108f8a09e",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "lib64/libcrypto.so.3",
+          "old_offset": 15759812,
+          "new_offset": 15759700,
+          "old_bytes": 5631284,
+          "new_bytes": 5631284,
+          "old_sha256": "d0cac62a01463f3d3c115ec4ccf4f46c925bd4008e2f90542c050751db8bc0c8",
+          "new_sha256": "d0cac62a01463f3d3c115ec4ccf4f46c925bd4008e2f90542c050751db8bc0c8",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "lib64/libgcc_s.so.1",
+          "old_offset": 21391096,
+          "new_offset": 21390984,
+          "old_bytes": 186660,
+          "new_bytes": 186660,
+          "old_sha256": "d52bf7878fd831ddfde4cd62c382f13191a9c3c3793b739c7e2c78b542e4f6c1",
+          "new_sha256": "d52bf7878fd831ddfde4cd62c382f13191a9c3c3793b739c7e2c78b542e4f6c1",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "lib64/liblzma.so.5",
+          "old_offset": 21577756,
+          "new_offset": 21577644,
+          "old_bytes": 215628,
+          "new_bytes": 215628,
+          "old_sha256": "ceb2b649be455045cad149a7049a0f9c8e942c538c929172ac2f347268eeaf9f",
+          "new_sha256": "ceb2b649be455045cad149a7049a0f9c8e942c538c929172ac2f347268eeaf9f",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "lib64/libmount.so.1",
+          "old_offset": 21793384,
+          "new_offset": 21793272,
+          "old_bytes": 333644,
+          "new_bytes": 333644,
+          "old_sha256": "16f5654b8829ed0c3347d2bd91c869e0ddf3d1a329bb39b5fe35cf91052c4f96",
+          "new_sha256": "16f5654b8829ed0c3347d2bd91c869e0ddf3d1a329bb39b5fe35cf91052c4f96",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "lib64/libnuma.so.1",
+          "old_offset": 22127028,
+          "new_offset": 22126916,
+          "old_bytes": 62460,
+          "new_bytes": 62460,
+          "old_sha256": "1c0d9b247210d1e2d996c0a212c19e69bb3ce929e5be81ae796c8c73b2103dfe",
+          "new_sha256": "1c0d9b247210d1e2d996c0a212c19e69bb3ce929e5be81ae796c8c73b2103dfe",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "lib64/libpcre2-8.so.0",
+          "old_offset": 22189488,
+          "new_offset": 22189376,
+          "old_bytes": 665796,
+          "new_bytes": 665796,
+          "old_sha256": "b544c540c690356bf37246eb3a731f076dc1f60454e8b548c06301459a390f02",
+          "new_sha256": "b544c540c690356bf37246eb3a731f076dc1f60454e8b548c06301459a390f02",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "lib64/libpthread.so.0",
+          "old_offset": 22855284,
+          "new_offset": 22855172,
+          "old_bytes": 15628,
+          "new_bytes": 15628,
+          "old_sha256": "c9b2358cdd5d644460920a24b2d635f8023447f18a209cdadb9fa8e0c50da077",
+          "new_sha256": "c9b2358cdd5d644460920a24b2d635f8023447f18a209cdadb9fa8e0c50da077",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "lib64/librt.so.1",
+          "old_offset": 22870912,
+          "new_offset": 22870800,
+          "old_bytes": 15760,
+          "new_bytes": 15760,
+          "old_sha256": "9cd50775c24ee1bf2b40ff488a5d83b2960befdec4e23d0a1333c70c0ea3f2f9",
+          "new_sha256": "9cd50775c24ee1bf2b40ff488a5d83b2960befdec4e23d0a1333c70c0ea3f2f9",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "lib64/libselinux.so.1",
+          "old_offset": 22886672,
+          "new_offset": 22886560,
+          "old_bytes": 200796,
+          "new_bytes": 200796,
+          "old_sha256": "20817df07293eec3600a127f98f496e938c83ceb47da2017d17ba46a45e39013",
+          "new_sha256": "20817df07293eec3600a127f98f496e938c83ceb47da2017d17ba46a45e39013",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "lib64/libtinfo.so.6",
+          "old_offset": 23087468,
+          "new_offset": 23087356,
+          "old_bytes": 187428,
+          "new_bytes": 187428,
+          "old_sha256": "efd3e99fbf1dd1c225105b2e8b113a011a14d2ec2bc9bca88b3de59d33be5634",
+          "new_sha256": "efd3e99fbf1dd1c225105b2e8b113a011a14d2ec2bc9bca88b3de59d33be5634",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "lib64/libz.so.1",
+          "old_offset": 23274896,
+          "new_offset": 23274784,
+          "old_bytes": 140952,
+          "new_bytes": 140952,
+          "old_sha256": "59e631cccc0ed2373eb07f749bbd44edafaafc6fdc47a3cfc1ed4958574501e2",
+          "new_sha256": "59e631cccc0ed2373eb07f749bbd44edafaafc6fdc47a3cfc1ed4958574501e2",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "lib64/libzstd.so.1",
+          "old_offset": 23415848,
+          "new_offset": 23415736,
+          "old_bytes": 729740,
+          "new_bytes": 729740,
+          "old_sha256": "24f6b70dad2c475a9d9bf640a880018aacf83e72ccd3b6ffa5c5fe2b7e226973",
+          "new_sha256": "24f6b70dad2c475a9d9bf640a880018aacf83e72ccd3b6ffa5c5fe2b7e226973",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "modules",
+          "old_offset": 24145588,
+          "new_offset": 24145476,
+          "old_bytes": 120,
+          "new_bytes": 120,
+          "old_sha256": "be44c4a857a49a5df4ad53f8d718ba36033246ac84531596b1b0062e5da67063",
+          "new_sha256": "be44c4a857a49a5df4ad53f8d718ba36033246ac84531596b1b0062e5da67063",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "modules/ihk-smp-x86_64.ko",
+          "old_offset": 24145708,
+          "new_offset": 24145596,
+          "old_bytes": 11632272,
+          "new_bytes": 11632272,
+          "old_sha256": "732644e00401b64dbf993f1e467e910e9375a2e451ea14dce1b9448a02946406",
+          "new_sha256": "732644e00401b64dbf993f1e467e910e9375a2e451ea14dce1b9448a02946406",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "modules/ihk.ko",
+          "old_offset": 35777980,
+          "new_offset": 35777868,
+          "old_bytes": 1476080,
+          "new_bytes": 1476080,
+          "old_sha256": "30a9969f10d578c40b7823a7ba42983a800f128aec60341c393c20674e7aa651",
+          "new_sha256": "30a9969f10d578c40b7823a7ba42983a800f128aec60341c393c20674e7aa651",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "modules/mcctrl.ko",
+          "old_offset": 37254060,
+          "new_offset": 37253948,
+          "old_bytes": 1914032,
+          "new_bytes": 1914032,
+          "old_sha256": "28094219448f2af1ab8f5dd8500761bacfc83a7ac2ce4a53f7901bd0530b5f68",
+          "new_sha256": "28094219448f2af1ab8f5dd8500761bacfc83a7ac2ce4a53f7901bd0530b5f68",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "poweroff",
+          "old_offset": 39168092,
+          "new_offset": 39167980,
+          "old_bytes": 4576,
+          "new_bytes": 4576,
+          "old_sha256": "35357387e98251936bf5a2699a2f4769ce5489ea538b00bd66a6e4405cdba51f",
+          "new_sha256": "35357387e98251936bf5a2699a2f4769ce5489ea538b00bd66a6e4405cdba51f",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "proc",
+          "old_offset": 39172668,
+          "new_offset": 39172556,
+          "old_bytes": 116,
+          "new_bytes": 116,
+          "old_sha256": "1eefefd143e86a70d664f925322100ce1598989b08ff50ca8846cffb067adfee",
+          "new_sha256": "1eefefd143e86a70d664f925322100ce1598989b08ff50ca8846cffb067adfee",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "sbin",
+          "old_offset": 39172784,
+          "new_offset": 39172672,
+          "old_bytes": 116,
+          "new_bytes": 116,
+          "old_sha256": "5bf6c2382b37f2334db1b7209656428ae57a5dea83a4994786684d2db80e0180",
+          "new_sha256": "5bf6c2382b37f2334db1b7209656428ae57a5dea83a4994786684d2db80e0180",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "sbin/insmod",
+          "old_offset": 39172900,
+          "new_offset": 39172788,
+          "old_bytes": 182212,
+          "new_bytes": 182212,
+          "old_sha256": "a137c6a0bbc118cc26465f3794cbeec47d3bcedc3b138369951877365d9ec6c9",
+          "new_sha256": "a137c6a0bbc118cc26465f3794cbeec47d3bcedc3b138369951877365d9ec6c9",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "sbin/rmmod",
+          "old_offset": 39355112,
+          "new_offset": 39355000,
+          "old_bytes": 182212,
+          "new_bytes": 182212,
+          "old_sha256": "2269bf0feb53b111521e4b357ce9e8cd53f6d08b7d1e6c70d4d285db4f8fb884",
+          "new_sha256": "2269bf0feb53b111521e4b357ce9e8cd53f6d08b7d1e6c70d4d285db4f8fb884",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "sys",
+          "old_offset": 39537324,
+          "new_offset": 39537212,
+          "old_bytes": 116,
+          "new_bytes": 116,
+          "old_sha256": "6b054c231793967fa892efe1953f7ba1e9c643178cb031e52acf0817a6d99226",
+          "new_sha256": "6b054c231793967fa892efe1953f7ba1e9c643178cb031e52acf0817a6d99226",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "tmp",
+          "old_offset": 39537440,
+          "new_offset": 39537328,
+          "old_bytes": 116,
+          "new_bytes": 116,
+          "old_sha256": "20355d6a47ea8a06be3dd0dfb5e3a1d5751b3c57650b9a04b960c8b751df289a",
+          "new_sha256": "20355d6a47ea8a06be3dd0dfb5e3a1d5751b3c57650b9a04b960c8b751df289a",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "usr",
+          "old_offset": 39537556,
+          "new_offset": 39537444,
+          "old_bytes": 116,
+          "new_bytes": 116,
+          "old_sha256": "a7fbf9d23df7b98d3d0d09510765323f6bbd0ab3802a114a4d5ac5945850efab",
+          "new_sha256": "a7fbf9d23df7b98d3d0d09510765323f6bbd0ab3802a114a4d5ac5945850efab",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "usr/bin",
+          "old_offset": 39537672,
+          "new_offset": 39537560,
+          "old_bytes": 120,
+          "new_bytes": 120,
+          "old_sha256": "eeb24c8f3a3ff2f610abbed0ee5182b3b4bbbfb76de4dd42944b39301e1b89c9",
+          "new_sha256": "eeb24c8f3a3ff2f610abbed0ee5182b3b4bbbfb76de4dd42944b39301e1b89c9",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "usr/bin/coreutils",
+          "old_offset": 39537792,
+          "new_offset": 39537680,
+          "old_bytes": 1347856,
+          "new_bytes": 1347856,
+          "old_sha256": "1115e4fd180bc1e6427a6842c4222f318244c044b7fc6ee232860a390898409f",
+          "new_sha256": "1115e4fd180bc1e6427a6842c4222f318244c044b7fc6ee232860a390898409f",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "usr/sbin",
+          "old_offset": 40885648,
+          "new_offset": 40885536,
+          "old_bytes": 120,
+          "new_bytes": 120,
+          "old_sha256": "d8091470dcab7fa3b94729af59416da40a8c97defbb3deaabcfe9edeb658a387",
+          "new_sha256": "d8091470dcab7fa3b94729af59416da40a8c97defbb3deaabcfe9edeb658a387",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "TRAILER!!!",
+          "old_offset": 40885768,
+          "new_offset": 40885656,
+          "old_bytes": 124,
+          "new_bytes": 124,
+          "old_sha256": "5096c083e1a504be55b70a56a6e5585adaafd9382547b916d5f081e2cf6e110d",
+          "new_sha256": "5096c083e1a504be55b70a56a6e5585adaafd9382547b916d5f081e2cf6e110d",
+          "untouched": true
+        },
+        {
+          "kind": "zero-span",
+          "name": null,
+          "old_offset": 40885892,
+          "new_offset": 40885780,
+          "old_bytes": 132,
+          "new_bytes": 132,
+          "old_sha256": "115bad14f1c9f2c027a84de21b107015722cb76be8d0abf3760ad8e00d6c24a5",
+          "new_sha256": "115bad14f1c9f2c027a84de21b107015722cb76be8d0abf3760ad8e00d6c24a5",
+          "untouched": true
+        }
+      ]
+    }
+  ],
+  "init_header_proof": [
+    {
+      "name": "init",
+      "old_header_hex": "3037303730313030303030303034303030303831656430303030303030303030303030303030303030303030303130303030303030303030306661393438303030303030303030303030303030303030303030303030303030303030303030303030303030353030303030303030",
+      "new_header_hex": "3037303730313030303030303034303030303831656430303030303030303030303030303030303030303030303130303030303030303030306666636538303030303030303030303030303030303030303030303030303030303030303030303030303030353030303030303030",
+      "old_payload_sha256": "7c54fd673691c3ce025bcf408e2cc960d2044f3ec5618086b2455665c913bc98",
+      "new_payload_sha256": "58d6788c0a72bbe11733c2bfa73f5f6d7e3ddf564ef6b658ba585f687efafc25",
+      "ordered_raw_spans": [
+        {
+          "kind": "record",
+          "name": "apps",
+          "old_offset": 0,
+          "new_offset": 0,
+          "old_bytes": 116,
+          "new_bytes": 116,
+          "old_sha256": "b5b4dd2647f728851ce0f323ca5951536dd9c0da9ed9dda0381e58a050b557c9",
+          "new_sha256": "b5b4dd2647f728851ce0f323ca5951536dd9c0da9ed9dda0381e58a050b557c9",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "case",
+          "old_offset": 116,
+          "new_offset": 116,
+          "old_bytes": 116,
+          "new_bytes": 116,
+          "old_sha256": "02f59e2b39ed894ba1cc70bdd50ab75c7af7fb1abb7a9fb6b4a94c4ed8fdf642",
+          "new_sha256": "02f59e2b39ed894ba1cc70bdd50ab75c7af7fb1abb7a9fb6b4a94c4ed8fdf642",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "case/work",
+          "old_offset": 232,
+          "new_offset": 232,
+          "old_bytes": 120,
+          "new_bytes": 120,
+          "old_sha256": "d9adf945b730fe196c8edb3f87f52c3db324b098f9870f5acdca5279595ba594",
+          "new_sha256": "d9adf945b730fe196c8edb3f87f52c3db324b098f9870f5acdca5279595ba594",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "init",
+          "old_offset": 352,
+          "new_offset": 352,
+          "old_bytes": 1026492,
+          "new_bytes": 1047900,
+          "old_sha256": "d51c148a74cb93b33f0dd84b66fa78cbbeef4488526935be4f25a301bd445946",
+          "new_sha256": "0b0c2e05b3c68cc35bfa1ef3100e00300bc1bf9a042eda1f7f04982644fb1031",
+          "untouched": false
+        },
+        {
+          "kind": "record",
+          "name": "apps/app",
+          "old_offset": 1026844,
+          "new_offset": 1048252,
+          "old_bytes": 5685672,
+          "new_bytes": 5685672,
+          "old_sha256": "201127fef63dd554a94bfc6a7cff113d56011b9aa327d26fe54e539cf9ef2b2e",
+          "new_sha256": "201127fef63dd554a94bfc6a7cff113d56011b9aa327d26fe54e539cf9ef2b2e",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "bin/mcexec",
+          "old_offset": 6712516,
+          "new_offset": 6733924,
+          "old_bytes": 453476,
+          "new_bytes": 453476,
+          "old_sha256": "f3c8aa6783c5b9019ad6eb1476ff9ee973623907604d40b34714d49b3b747a9f",
+          "new_sha256": "f3c8aa6783c5b9019ad6eb1476ff9ee973623907604d40b34714d49b3b747a9f",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "TRAILER!!!",
+          "old_offset": 7165992,
+          "new_offset": 7187400,
+          "old_bytes": 124,
+          "new_bytes": 124,
+          "old_sha256": "23d0422b4fea28f771e872741bb370790b3cd0538eafb461233e820b84b57a2e",
+          "new_sha256": "23d0422b4fea28f771e872741bb370790b3cd0538eafb461233e820b84b57a2e",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "apps/app0",
+          "old_offset": 7166116,
+          "new_offset": 7187524,
+          "old_bytes": 5685672,
+          "new_bytes": 5685672,
+          "old_sha256": "c2302da47a64fce44a27f8e65c19e168f646956dc54fff60ff25160bf3dfd686",
+          "new_sha256": "c2302da47a64fce44a27f8e65c19e168f646956dc54fff60ff25160bf3dfd686",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "apps/app1",
+          "old_offset": 12851788,
+          "new_offset": 12873196,
+          "old_bytes": 5666168,
+          "new_bytes": 5666168,
+          "old_sha256": "aa9cac328f3914adb2d47829947c8808c932a41e6abc69cbf9587ba1bf3208d3",
+          "new_sha256": "aa9cac328f3914adb2d47829947c8808c932a41e6abc69cbf9587ba1bf3208d3",
+          "untouched": true
+        },
+        {
+          "kind": "record",
+          "name": "TRAILER!!!",
+          "old_offset": 18517956,
+          "new_offset": 18539364,
+          "old_bytes": 124,
+          "new_bytes": 124,
+          "old_sha256": "23d0422b4fea28f771e872741bb370790b3cd0538eafb461233e820b84b57a2e",
+          "new_sha256": "23d0422b4fea28f771e872741bb370790b3cd0538eafb461233e820b84b57a2e",
+          "untouched": true
+        }
+      ]
+    }
+  ],
+  "old_raw_spans": [
+    {
+      "kind": "record",
+      "name": "apps",
+      "changed": false,
+      "old_sha256": "8aa42696162236cbd6afbca61f58fe2d7405af742d6d45fb9a3f04c3cc705e85",
+      "new_sha256": "8aa42696162236cbd6afbca61f58fe2d7405af742d6d45fb9a3f04c3cc705e85"
+    },
+    {
+      "kind": "record",
+      "name": "apps/app",
+      "changed": false,
+      "old_sha256": "99d41e940e9916569fd7e522a4698f6dd1623cbf4493130c2414326d409c4232",
+      "new_sha256": "99d41e940e9916569fd7e522a4698f6dd1623cbf4493130c2414326d409c4232"
+    },
+    {
+      "kind": "record",
+      "name": "bin",
+      "changed": false,
+      "old_sha256": "715a15bf004c4e7a17d763fef5a4428477fd3aff62db3554f999b617a4cf65b1",
+      "new_sha256": "715a15bf004c4e7a17d763fef5a4428477fd3aff62db3554f999b617a4cf65b1"
+    },
+    {
+      "kind": "record",
+      "name": "bin/bash",
+      "changed": false,
+      "old_sha256": "8d4c26f595a32ada21d402a1104659e429b87be0b241dfd6c793face0e793cb5",
+      "new_sha256": "8d4c26f595a32ada21d402a1104659e429b87be0b241dfd6c793face0e793cb5"
+    },
+    {
+      "kind": "record",
+      "name": "bin/dmesg",
+      "changed": false,
+      "old_sha256": "1b71344c8485d0a5fa977cb1cde9e8a78693f64fff9ffbbb9112ab47c5a08188",
+      "new_sha256": "1b71344c8485d0a5fa977cb1cde9e8a78693f64fff9ffbbb9112ab47c5a08188"
+    },
+    {
+      "kind": "record",
+      "name": "bin/mcd0-ioctl-i386",
+      "changed": false,
+      "old_sha256": "c2b91c77cd2afdcc91cbf8da0826c5dfce0a44b7b4b083981fa2a19b0f96e2e7",
+      "new_sha256": "c2b91c77cd2afdcc91cbf8da0826c5dfce0a44b7b4b083981fa2a19b0f96e2e7"
+    },
+    {
+      "kind": "record",
+      "name": "bin/mcd0-ioctl-x86_64",
+      "changed": false,
+      "old_sha256": "c0f96b5b15550457c960ee457b4262f4cdd5ebc9ec43fc5d6afed8694b77baa9",
+      "new_sha256": "c0f96b5b15550457c960ee457b4262f4cdd5ebc9ec43fc5d6afed8694b77baa9"
+    },
+    {
+      "kind": "record",
+      "name": "bin/mcexec",
+      "changed": false,
+      "old_sha256": "a176498d3faaa6732af3e5dd690345ef30e81e1214e389951300c79d36c00e9f",
+      "new_sha256": "a176498d3faaa6732af3e5dd690345ef30e81e1214e389951300c79d36c00e9f"
+    },
+    {
+      "kind": "record",
+      "name": "bin/mount",
+      "changed": false,
+      "old_sha256": "e45f9c77cf6b892e4da4f98ec331de77a83afa3b62e80e902661b1a5e2e6d4cc",
+      "new_sha256": "e45f9c77cf6b892e4da4f98ec331de77a83afa3b62e80e902661b1a5e2e6d4cc"
+    },
+    {
+      "kind": "record",
+      "name": "bin/native-application-core",
+      "changed": false,
+      "old_sha256": "591504eb057bfd6d51dc5cb4692b7c12dc129b6d756b5b3ea76cf9edd1c75ee0",
+      "new_sha256": "591504eb057bfd6d51dc5cb4692b7c12dc129b6d756b5b3ea76cf9edd1c75ee0"
+    },
+    {
+      "kind": "record",
+      "name": "bin/native-application-hello",
+      "changed": false,
+      "old_sha256": "8c60a9b649047b8dc1c3368651aea7b2e2a2905f4ca13e175036f0253dcbd0ee",
+      "new_sha256": "8c60a9b649047b8dc1c3368651aea7b2e2a2905f4ca13e175036f0253dcbd0ee"
+    },
+    {
+      "kind": "record",
+      "name": "bin/native-boot",
+      "changed": true,
+      "old_sha256": "acd8aa5c739d234bf4160512612e7b2dc845ff820c70c1f777d05671ee7889d1",
+      "new_sha256": "ba6f3b76f863611f5babc30ce87de1e9fee78b64cddfaedc41e4d4c78ad6f273"
+    },
+    {
+      "kind": "record",
+      "name": "bin/native-lifecycle-probe",
+      "changed": false,
+      "old_sha256": "04d0e5278542d8cddf28661403ff347ba4d7ef3938f7c08a48e09e497b3d1f06",
+      "new_sha256": "04d0e5278542d8cddf28661403ff347ba4d7ef3938f7c08a48e09e497b3d1f06"
+    },
+    {
+      "kind": "record",
+      "name": "bin/native-os-buildid-i386",
+      "changed": false,
+      "old_sha256": "ae10e058dd01cc94cb6cfabaa09364e8acc38c0334bf958ab21c63f9fd5a55ac",
+      "new_sha256": "ae10e058dd01cc94cb6cfabaa09364e8acc38c0334bf958ab21c63f9fd5a55ac"
+    },
+    {
+      "kind": "record",
+      "name": "bin/native-os-buildid-x86_64",
+      "changed": false,
+      "old_sha256": "391bd1d2b31554438baf1572817986fce4ad4c32b6a9ecf1cd8d92297e8388d2",
+      "new_sha256": "391bd1d2b31554438baf1572817986fce4ad4c32b6a9ecf1cd8d92297e8388d2"
+    },
+    {
+      "kind": "record",
+      "name": "bin/native-string-i386",
+      "changed": false,
+      "old_sha256": "d0494cdda9ae5d57b90d6ecd3607da9de17f7ee5358b93e0953b7aa2878d3a7e",
+      "new_sha256": "d0494cdda9ae5d57b90d6ecd3607da9de17f7ee5358b93e0953b7aa2878d3a7e"
+    },
+    {
+      "kind": "record",
+      "name": "bin/native-string-x86_64",
+      "changed": false,
+      "old_sha256": "4685920ef610a1f8e62e80825d30a45d9fbff565d33346f6ce6b0cbf0964eaec",
+      "new_sha256": "4685920ef610a1f8e62e80825d30a45d9fbff565d33346f6ce6b0cbf0964eaec"
+    },
+    {
+      "kind": "record",
+      "name": "bin/stat",
+      "changed": false,
+      "old_sha256": "feaa3d06dd274f20d969e41fe0c9a2261a285768b35ff0578c2601623ee14bef",
+      "new_sha256": "feaa3d06dd274f20d969e41fe0c9a2261a285768b35ff0578c2601623ee14bef"
+    },
+    {
+      "kind": "record",
+      "name": "bin/uname",
+      "changed": false,
+      "old_sha256": "f3378ddf0e7ce6ca514d3b21958245260cf986eec99d27c23ff843f5cf10b6b1",
+      "new_sha256": "f3378ddf0e7ce6ca514d3b21958245260cf986eec99d27c23ff843f5cf10b6b1"
+    },
+    {
+      "kind": "record",
+      "name": "case",
+      "changed": false,
+      "old_sha256": "72799b8360feccad126552be8222744d96954fa9dc743053128eeeafa1702ed6",
+      "new_sha256": "72799b8360feccad126552be8222744d96954fa9dc743053128eeeafa1702ed6"
+    },
+    {
+      "kind": "record",
+      "name": "case/work",
+      "changed": false,
+      "old_sha256": "4805c9e4bc9cef9d61555936de5bc15bbcc0323cb96576fc92ca43067fca6548",
+      "new_sha256": "4805c9e4bc9cef9d61555936de5bc15bbcc0323cb96576fc92ca43067fca6548"
+    },
+    {
+      "kind": "record",
+      "name": "dev",
+      "changed": false,
+      "old_sha256": "98fdbedae99f5bd3756029783f974fba7e0725c89794390ae724ef54589e0a3c",
+      "new_sha256": "98fdbedae99f5bd3756029783f974fba7e0725c89794390ae724ef54589e0a3c"
+    },
+    {
+      "kind": "record",
+      "name": "images",
+      "changed": false,
+      "old_sha256": "3324082e27697edf8b13c373b478dbf01132e8b5d914f56ea74889d3e393d6f5",
+      "new_sha256": "3324082e27697edf8b13c373b478dbf01132e8b5d914f56ea74889d3e393d6f5"
+    },
+    {
+      "kind": "record",
+      "name": "images/mckernel.img",
+      "changed": false,
+      "old_sha256": "6f0e3b49e668c1c692b348094a97a2d1a4569381a50e15c8621a6ae23a402bcd",
+      "new_sha256": "6f0e3b49e668c1c692b348094a97a2d1a4569381a50e15c8621a6ae23a402bcd"
+    },
+    {
+      "kind": "record",
+      "name": "init",
+      "changed": false,
+      "old_sha256": "b30749af32c2d6cd2dc0976bf160a2ac6f6c9ce743061b59cae58355969cf76e",
+      "new_sha256": "b30749af32c2d6cd2dc0976bf160a2ac6f6c9ce743061b59cae58355969cf76e"
+    },
+    {
+      "kind": "record",
+      "name": "lib",
+      "changed": false,
+      "old_sha256": "12a25a6a28993719c6ed90ae4bb76729eb7d13454609825ff4ed6c7f5e06d765",
+      "new_sha256": "12a25a6a28993719c6ed90ae4bb76729eb7d13454609825ff4ed6c7f5e06d765"
+    },
+    {
+      "kind": "record",
+      "name": "lib64",
+      "changed": false,
+      "old_sha256": "9d33ef41ab60a6ec7366dc831398b946c5df00b81d7f3016392c9e986ff16973",
+      "new_sha256": "9d33ef41ab60a6ec7366dc831398b946c5df00b81d7f3016392c9e986ff16973"
+    },
+    {
+      "kind": "record",
+      "name": "lib64/ld-linux-x86-64.so.2",
+      "changed": false,
+      "old_sha256": "8eb4538a4f76ffa9d48c85c2d715e2f7bafda12a5f2e4855250865b640b79cad",
+      "new_sha256": "8eb4538a4f76ffa9d48c85c2d715e2f7bafda12a5f2e4855250865b640b79cad"
+    },
+    {
+      "kind": "record",
+      "name": "lib64/libacl.so.1",
+      "changed": false,
+      "old_sha256": "4d97002bdf50f73bdb0a6262a5d959e670e4f666a8db2099efb6e67f3c0ad2d6",
+      "new_sha256": "4d97002bdf50f73bdb0a6262a5d959e670e4f666a8db2099efb6e67f3c0ad2d6"
+    },
+    {
+      "kind": "record",
+      "name": "lib64/libattr.so.1",
+      "changed": false,
+      "old_sha256": "0129e13b5afe6282e25d91866a490a6c5b8ba51d3eb9f60363d9ee68a4cf936d",
+      "new_sha256": "0129e13b5afe6282e25d91866a490a6c5b8ba51d3eb9f60363d9ee68a4cf936d"
+    },
+    {
+      "kind": "record",
+      "name": "lib64/libblkid.so.1",
+      "changed": false,
+      "old_sha256": "3a9682bc5a1e559bf14771aee9492115fd6f66dce730cc936626b3970b63b561",
+      "new_sha256": "3a9682bc5a1e559bf14771aee9492115fd6f66dce730cc936626b3970b63b561"
+    },
+    {
+      "kind": "record",
+      "name": "lib64/libc.so.6",
+      "changed": false,
+      "old_sha256": "d35a318736d0eed4860ff8a45fecaf391bad6a3da3e22d0e455507ea652fb958",
+      "new_sha256": "d35a318736d0eed4860ff8a45fecaf391bad6a3da3e22d0e455507ea652fb958"
+    },
+    {
+      "kind": "record",
+      "name": "lib64/libcap.so.2",
+      "changed": false,
+      "old_sha256": "12f0df4caa2b1cf1bccb9afecfc97e21a4adb5e8c77e93884ee7822108f8a09e",
+      "new_sha256": "12f0df4caa2b1cf1bccb9afecfc97e21a4adb5e8c77e93884ee7822108f8a09e"
+    },
+    {
+      "kind": "record",
+      "name": "lib64/libcrypto.so.3",
+      "changed": false,
+      "old_sha256": "d0cac62a01463f3d3c115ec4ccf4f46c925bd4008e2f90542c050751db8bc0c8",
+      "new_sha256": "d0cac62a01463f3d3c115ec4ccf4f46c925bd4008e2f90542c050751db8bc0c8"
+    },
+    {
+      "kind": "record",
+      "name": "lib64/libgcc_s.so.1",
+      "changed": false,
+      "old_sha256": "d52bf7878fd831ddfde4cd62c382f13191a9c3c3793b739c7e2c78b542e4f6c1",
+      "new_sha256": "d52bf7878fd831ddfde4cd62c382f13191a9c3c3793b739c7e2c78b542e4f6c1"
+    },
+    {
+      "kind": "record",
+      "name": "lib64/liblzma.so.5",
+      "changed": false,
+      "old_sha256": "ceb2b649be455045cad149a7049a0f9c8e942c538c929172ac2f347268eeaf9f",
+      "new_sha256": "ceb2b649be455045cad149a7049a0f9c8e942c538c929172ac2f347268eeaf9f"
+    },
+    {
+      "kind": "record",
+      "name": "lib64/libmount.so.1",
+      "changed": false,
+      "old_sha256": "16f5654b8829ed0c3347d2bd91c869e0ddf3d1a329bb39b5fe35cf91052c4f96",
+      "new_sha256": "16f5654b8829ed0c3347d2bd91c869e0ddf3d1a329bb39b5fe35cf91052c4f96"
+    },
+    {
+      "kind": "record",
+      "name": "lib64/libnuma.so.1",
+      "changed": false,
+      "old_sha256": "1c0d9b247210d1e2d996c0a212c19e69bb3ce929e5be81ae796c8c73b2103dfe",
+      "new_sha256": "1c0d9b247210d1e2d996c0a212c19e69bb3ce929e5be81ae796c8c73b2103dfe"
+    },
+    {
+      "kind": "record",
+      "name": "lib64/libpcre2-8.so.0",
+      "changed": false,
+      "old_sha256": "b544c540c690356bf37246eb3a731f076dc1f60454e8b548c06301459a390f02",
+      "new_sha256": "b544c540c690356bf37246eb3a731f076dc1f60454e8b548c06301459a390f02"
+    },
+    {
+      "kind": "record",
+      "name": "lib64/libpthread.so.0",
+      "changed": false,
+      "old_sha256": "c9b2358cdd5d644460920a24b2d635f8023447f18a209cdadb9fa8e0c50da077",
+      "new_sha256": "c9b2358cdd5d644460920a24b2d635f8023447f18a209cdadb9fa8e0c50da077"
+    },
+    {
+      "kind": "record",
+      "name": "lib64/librt.so.1",
+      "changed": false,
+      "old_sha256": "9cd50775c24ee1bf2b40ff488a5d83b2960befdec4e23d0a1333c70c0ea3f2f9",
+      "new_sha256": "9cd50775c24ee1bf2b40ff488a5d83b2960befdec4e23d0a1333c70c0ea3f2f9"
+    },
+    {
+      "kind": "record",
+      "name": "lib64/libselinux.so.1",
+      "changed": false,
+      "old_sha256": "20817df07293eec3600a127f98f496e938c83ceb47da2017d17ba46a45e39013",
+      "new_sha256": "20817df07293eec3600a127f98f496e938c83ceb47da2017d17ba46a45e39013"
+    },
+    {
+      "kind": "record",
+      "name": "lib64/libtinfo.so.6",
+      "changed": false,
+      "old_sha256": "efd3e99fbf1dd1c225105b2e8b113a011a14d2ec2bc9bca88b3de59d33be5634",
+      "new_sha256": "efd3e99fbf1dd1c225105b2e8b113a011a14d2ec2bc9bca88b3de59d33be5634"
+    },
+    {
+      "kind": "record",
+      "name": "lib64/libz.so.1",
+      "changed": false,
+      "old_sha256": "59e631cccc0ed2373eb07f749bbd44edafaafc6fdc47a3cfc1ed4958574501e2",
+      "new_sha256": "59e631cccc0ed2373eb07f749bbd44edafaafc6fdc47a3cfc1ed4958574501e2"
+    },
+    {
+      "kind": "record",
+      "name": "lib64/libzstd.so.1",
+      "changed": false,
+      "old_sha256": "24f6b70dad2c475a9d9bf640a880018aacf83e72ccd3b6ffa5c5fe2b7e226973",
+      "new_sha256": "24f6b70dad2c475a9d9bf640a880018aacf83e72ccd3b6ffa5c5fe2b7e226973"
+    },
+    {
+      "kind": "record",
+      "name": "modules",
+      "changed": false,
+      "old_sha256": "be44c4a857a49a5df4ad53f8d718ba36033246ac84531596b1b0062e5da67063",
+      "new_sha256": "be44c4a857a49a5df4ad53f8d718ba36033246ac84531596b1b0062e5da67063"
+    },
+    {
+      "kind": "record",
+      "name": "modules/ihk-smp-x86_64.ko",
+      "changed": false,
+      "old_sha256": "732644e00401b64dbf993f1e467e910e9375a2e451ea14dce1b9448a02946406",
+      "new_sha256": "732644e00401b64dbf993f1e467e910e9375a2e451ea14dce1b9448a02946406"
+    },
+    {
+      "kind": "record",
+      "name": "modules/ihk.ko",
+      "changed": false,
+      "old_sha256": "30a9969f10d578c40b7823a7ba42983a800f128aec60341c393c20674e7aa651",
+      "new_sha256": "30a9969f10d578c40b7823a7ba42983a800f128aec60341c393c20674e7aa651"
+    },
+    {
+      "kind": "record",
+      "name": "modules/mcctrl.ko",
+      "changed": false,
+      "old_sha256": "28094219448f2af1ab8f5dd8500761bacfc83a7ac2ce4a53f7901bd0530b5f68",
+      "new_sha256": "28094219448f2af1ab8f5dd8500761bacfc83a7ac2ce4a53f7901bd0530b5f68"
+    },
+    {
+      "kind": "record",
+      "name": "poweroff",
+      "changed": false,
+      "old_sha256": "35357387e98251936bf5a2699a2f4769ce5489ea538b00bd66a6e4405cdba51f",
+      "new_sha256": "35357387e98251936bf5a2699a2f4769ce5489ea538b00bd66a6e4405cdba51f"
+    },
+    {
+      "kind": "record",
+      "name": "proc",
+      "changed": false,
+      "old_sha256": "1eefefd143e86a70d664f925322100ce1598989b08ff50ca8846cffb067adfee",
+      "new_sha256": "1eefefd143e86a70d664f925322100ce1598989b08ff50ca8846cffb067adfee"
+    },
+    {
+      "kind": "record",
+      "name": "sbin",
+      "changed": false,
+      "old_sha256": "5bf6c2382b37f2334db1b7209656428ae57a5dea83a4994786684d2db80e0180",
+      "new_sha256": "5bf6c2382b37f2334db1b7209656428ae57a5dea83a4994786684d2db80e0180"
+    },
+    {
+      "kind": "record",
+      "name": "sbin/insmod",
+      "changed": false,
+      "old_sha256": "a137c6a0bbc118cc26465f3794cbeec47d3bcedc3b138369951877365d9ec6c9",
+      "new_sha256": "a137c6a0bbc118cc26465f3794cbeec47d3bcedc3b138369951877365d9ec6c9"
+    },
+    {
+      "kind": "record",
+      "name": "sbin/rmmod",
+      "changed": false,
+      "old_sha256": "2269bf0feb53b111521e4b357ce9e8cd53f6d08b7d1e6c70d4d285db4f8fb884",
+      "new_sha256": "2269bf0feb53b111521e4b357ce9e8cd53f6d08b7d1e6c70d4d285db4f8fb884"
+    },
+    {
+      "kind": "record",
+      "name": "sys",
+      "changed": false,
+      "old_sha256": "6b054c231793967fa892efe1953f7ba1e9c643178cb031e52acf0817a6d99226",
+      "new_sha256": "6b054c231793967fa892efe1953f7ba1e9c643178cb031e52acf0817a6d99226"
+    },
+    {
+      "kind": "record",
+      "name": "tmp",
+      "changed": false,
+      "old_sha256": "20355d6a47ea8a06be3dd0dfb5e3a1d5751b3c57650b9a04b960c8b751df289a",
+      "new_sha256": "20355d6a47ea8a06be3dd0dfb5e3a1d5751b3c57650b9a04b960c8b751df289a"
+    },
+    {
+      "kind": "record",
+      "name": "usr",
+      "changed": false,
+      "old_sha256": "a7fbf9d23df7b98d3d0d09510765323f6bbd0ab3802a114a4d5ac5945850efab",
+      "new_sha256": "a7fbf9d23df7b98d3d0d09510765323f6bbd0ab3802a114a4d5ac5945850efab"
+    },
+    {
+      "kind": "record",
+      "name": "usr/bin",
+      "changed": false,
+      "old_sha256": "eeb24c8f3a3ff2f610abbed0ee5182b3b4bbbfb76de4dd42944b39301e1b89c9",
+      "new_sha256": "eeb24c8f3a3ff2f610abbed0ee5182b3b4bbbfb76de4dd42944b39301e1b89c9"
+    },
+    {
+      "kind": "record",
+      "name": "usr/bin/coreutils",
+      "changed": false,
+      "old_sha256": "1115e4fd180bc1e6427a6842c4222f318244c044b7fc6ee232860a390898409f",
+      "new_sha256": "1115e4fd180bc1e6427a6842c4222f318244c044b7fc6ee232860a390898409f"
+    },
+    {
+      "kind": "record",
+      "name": "usr/sbin",
+      "changed": false,
+      "old_sha256": "d8091470dcab7fa3b94729af59416da40a8c97defbb3deaabcfe9edeb658a387",
+      "new_sha256": "d8091470dcab7fa3b94729af59416da40a8c97defbb3deaabcfe9edeb658a387"
+    },
+    {
+      "kind": "record",
+      "name": "TRAILER!!!",
+      "changed": false,
+      "old_sha256": "5096c083e1a504be55b70a56a6e5585adaafd9382547b916d5f081e2cf6e110d",
+      "new_sha256": "5096c083e1a504be55b70a56a6e5585adaafd9382547b916d5f081e2cf6e110d"
+    },
+    {
+      "kind": "zero-span",
+      "name": null,
+      "changed": false,
+      "old_sha256": "115bad14f1c9f2c027a84de21b107015722cb76be8d0abf3760ad8e00d6c24a5",
+      "new_sha256": "115bad14f1c9f2c027a84de21b107015722cb76be8d0abf3760ad8e00d6c24a5"
+    },
+    {
+      "kind": "record",
+      "name": "apps",
+      "changed": false,
+      "old_sha256": "b5b4dd2647f728851ce0f323ca5951536dd9c0da9ed9dda0381e58a050b557c9",
+      "new_sha256": "b5b4dd2647f728851ce0f323ca5951536dd9c0da9ed9dda0381e58a050b557c9"
+    },
+    {
+      "kind": "record",
+      "name": "case",
+      "changed": false,
+      "old_sha256": "02f59e2b39ed894ba1cc70bdd50ab75c7af7fb1abb7a9fb6b4a94c4ed8fdf642",
+      "new_sha256": "02f59e2b39ed894ba1cc70bdd50ab75c7af7fb1abb7a9fb6b4a94c4ed8fdf642"
+    },
+    {
+      "kind": "record",
+      "name": "case/work",
+      "changed": false,
+      "old_sha256": "d9adf945b730fe196c8edb3f87f52c3db324b098f9870f5acdca5279595ba594",
+      "new_sha256": "d9adf945b730fe196c8edb3f87f52c3db324b098f9870f5acdca5279595ba594"
+    },
+    {
+      "kind": "record",
+      "name": "init",
+      "changed": true,
+      "old_sha256": "d51c148a74cb93b33f0dd84b66fa78cbbeef4488526935be4f25a301bd445946",
+      "new_sha256": "0b0c2e05b3c68cc35bfa1ef3100e00300bc1bf9a042eda1f7f04982644fb1031"
+    },
+    {
+      "kind": "record",
+      "name": "apps/app",
+      "changed": false,
+      "old_sha256": "201127fef63dd554a94bfc6a7cff113d56011b9aa327d26fe54e539cf9ef2b2e",
+      "new_sha256": "201127fef63dd554a94bfc6a7cff113d56011b9aa327d26fe54e539cf9ef2b2e"
+    },
+    {
+      "kind": "record",
+      "name": "bin/mcexec",
+      "changed": false,
+      "old_sha256": "f3c8aa6783c5b9019ad6eb1476ff9ee973623907604d40b34714d49b3b747a9f",
+      "new_sha256": "f3c8aa6783c5b9019ad6eb1476ff9ee973623907604d40b34714d49b3b747a9f"
+    },
+    {
+      "kind": "record",
+      "name": "TRAILER!!!",
+      "changed": false,
+      "old_sha256": "23d0422b4fea28f771e872741bb370790b3cd0538eafb461233e820b84b57a2e",
+      "new_sha256": "23d0422b4fea28f771e872741bb370790b3cd0538eafb461233e820b84b57a2e"
+    },
+    {
+      "kind": "record",
+      "name": "apps/app0",
+      "changed": false,
+      "old_sha256": "c2302da47a64fce44a27f8e65c19e168f646956dc54fff60ff25160bf3dfd686",
+      "new_sha256": "c2302da47a64fce44a27f8e65c19e168f646956dc54fff60ff25160bf3dfd686"
+    },
+    {
+      "kind": "record",
+      "name": "apps/app1",
+      "changed": false,
+      "old_sha256": "aa9cac328f3914adb2d47829947c8808c932a41e6abc69cbf9587ba1bf3208d3",
+      "new_sha256": "aa9cac328f3914adb2d47829947c8808c932a41e6abc69cbf9587ba1bf3208d3"
+    },
+    {
+      "kind": "record",
+      "name": "TRAILER!!!",
+      "changed": false,
+      "old_sha256": "23d0422b4fea28f771e872741bb370790b3cd0538eafb461233e820b84b57a2e",
+      "new_sha256": "23d0422b4fea28f771e872741bb370790b3cd0538eafb461233e820b84b57a2e"
+    }
+  ],
+  "old_member_count": 62,
+  "new_member_count": 63,
+  "base_prefix_replaced_only_boot": true,
+  "original_compiled_modes_preserved": true,
+  "stage_bytes": 33900645,
+  "full_restoration_verified": false,
+  "guest_runs": 0
+}

@@ -1,0 +1,335 @@
+{
+  "original_checks": [
+    "M15-I03-complete-ABI",
+    "M15-I01-complete-selected"
+  ],
+  "installed_library_public_header": "ihk/linux/include/ihk/ihklib.h",
+  "installed_affinity_header": "ihk/linux/include/ihk/affinity.h",
+  "actual_public_functions": 52,
+  "existing_typed_witness_groups": {
+    "public_export_signatures_witness.c": 43,
+    "mem_map_public_abi_witness.c": 8,
+    "rusage_public_abi_witness.c": 1
+  },
+  "public_data": [
+    "loglevel:int"
+  ],
+  "functions": [
+    {
+      "name": "ihk_reserve_cpu",
+      "actual_header_arguments": "int index, int* cpus, int num_cpus",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/public_export_signatures_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_reserve_cpu_str",
+      "actual_header_arguments": "int dev_index, const char *envp, int num_env",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/public_export_signatures_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_get_num_reserved_cpus",
+      "actual_header_arguments": "int index",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/public_export_signatures_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_query_cpu",
+      "actual_header_arguments": "int index, int* cpus, int _num_cpus",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/public_export_signatures_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_release_cpu",
+      "actual_header_arguments": "int index, int* cpus, int num_cpus",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/public_export_signatures_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_reserve_mem_conf",
+      "actual_header_arguments": "int index, int key, void *value",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/public_export_signatures_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_reserve_mem_conf_str",
+      "actual_header_arguments": "int dev_index, const char *envp, int num_env",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/public_export_signatures_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_reserve_mem",
+      "actual_header_arguments": "int index, struct ihk_mem_chunk* mem_chunks, int num_mem_chunks",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/mem_map_public_abi_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_reserve_mem_str",
+      "actual_header_arguments": "int dev_index, const char *envp, int num_env",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/public_export_signatures_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_get_num_reserved_mem_chunks",
+      "actual_header_arguments": "int index",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/public_export_signatures_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_query_mem",
+      "actual_header_arguments": "int index, struct ihk_mem_chunk* mem_chunks, int _num_mem_chunks",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/mem_map_public_abi_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_release_mem",
+      "actual_header_arguments": "int index, struct ihk_mem_chunk* mem_chunks, int num_mem_chunks",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/mem_map_public_abi_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_create_os",
+      "actual_header_arguments": "int index",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/public_export_signatures_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_get_num_os_instances",
+      "actual_header_arguments": "int index",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/public_export_signatures_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_get_os_instances",
+      "actual_header_arguments": "int index, int *indices, int _num_os_instances",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/public_export_signatures_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_destroy_os",
+      "actual_header_arguments": "int dev_index, int os_index",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/public_export_signatures_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_os_assign_cpu",
+      "actual_header_arguments": "int index, int* cpus, int num_cpus",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/public_export_signatures_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_os_assign_cpu_str",
+      "actual_header_arguments": "int os_index, const char *envp, int num_env",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/public_export_signatures_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_os_get_num_assigned_cpus",
+      "actual_header_arguments": "int index",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/public_export_signatures_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_os_query_cpu",
+      "actual_header_arguments": "int index, int* cpus, int _num_cpus",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/public_export_signatures_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_os_release_cpu",
+      "actual_header_arguments": "int index, int* cpus, int num_cpus",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/public_export_signatures_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_os_set_ikc_map",
+      "actual_header_arguments": "int index, struct ihk_ikc_cpu_map *map, int num_cpus",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/mem_map_public_abi_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_os_set_ikc_map_str",
+      "actual_header_arguments": "int os_index, const char *envp, int num_env",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/public_export_signatures_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_os_get_ikc_map",
+      "actual_header_arguments": "int index, struct ihk_ikc_cpu_map *map, int num_cpus",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/mem_map_public_abi_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_os_assign_mem",
+      "actual_header_arguments": "int index, struct ihk_mem_chunk *mem_chunks, int num_mem_chunks",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/mem_map_public_abi_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_os_get_num_assigned_mem_chunks",
+      "actual_header_arguments": "int index",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/public_export_signatures_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_os_query_mem",
+      "actual_header_arguments": "int index, struct ihk_mem_chunk* mem_chunks, int _num_mem_chunks",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/mem_map_public_abi_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_os_release_mem",
+      "actual_header_arguments": "int index, struct ihk_mem_chunk* mem_chunks, int num_mem_chunks",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/mem_map_public_abi_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_os_get_eventfd",
+      "actual_header_arguments": "int index, int type",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/public_export_signatures_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_os_load",
+      "actual_header_arguments": "int index, char* fn",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/public_export_signatures_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_os_kargs",
+      "actual_header_arguments": "int index, char* kargs",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/public_export_signatures_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_os_kargs_str",
+      "actual_header_arguments": "int os_index, const char *envp, int num_env, const char *default_kargs",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/public_export_signatures_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_create_os_str",
+      "actual_header_arguments": "int dev_index, int *os_index, const char *envp, int num_env, const char *kernel_image, const char *default_kargs, char *err_msg",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/public_export_signatures_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_os_boot",
+      "actual_header_arguments": "int index",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/public_export_signatures_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_os_shutdown",
+      "actual_header_arguments": "int index",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/public_export_signatures_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_os_get_status",
+      "actual_header_arguments": "int index",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/public_export_signatures_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_os_get_kmsg_size",
+      "actual_header_arguments": "int index",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/public_export_signatures_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_os_kmsg",
+      "actual_header_arguments": "int index, char* kmsg, ssize_t sz_kmsg",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/public_export_signatures_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_os_clear_kmsg",
+      "actual_header_arguments": "int index",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/public_export_signatures_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_os_get_num_numa_nodes",
+      "actual_header_arguments": "int index",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/public_export_signatures_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_os_query_free_mem",
+      "actual_header_arguments": "int os_index, unsigned long *memfree, int num_numa_nodes",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/public_export_signatures_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_os_query_total_mem",
+      "actual_header_arguments": "int os_index, unsigned long *memtotal, int num_numa_nodes",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/public_export_signatures_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_os_get_num_pagesizes",
+      "actual_header_arguments": "int index",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/public_export_signatures_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_os_get_pagesizes",
+      "actual_header_arguments": "int index, long *pgsizes, int num_pgsizes",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/public_export_signatures_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_os_getrusage",
+      "actual_header_arguments": "int index, struct ihk_os_rusage *rusage, size_t size_rusage",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/rusage_public_abi_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_os_setperfevent",
+      "actual_header_arguments": "int index, ihk_perf_event_attr *attr, int n",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/public_export_signatures_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_os_perfctl",
+      "actual_header_arguments": "int index, int comm",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/public_export_signatures_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_os_getperfevent",
+      "actual_header_arguments": "int index, unsigned long *counter, int n",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/public_export_signatures_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_os_freeze",
+      "actual_header_arguments": "unsigned long *os_set, int n",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/public_export_signatures_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_os_thaw",
+      "actual_header_arguments": "unsigned long *os_set, int n",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/public_export_signatures_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_os_makedumpfile",
+      "actual_header_arguments": "int index, char *dump_file, int dump_level, int interactive",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/public_export_signatures_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    },
+    {
+      "name": "ihk_set_loglevel",
+      "actual_header_arguments": "enum IHKLIB_LOGLEVEL level",
+      "existing_canonical_typed_public_witness": "ihk/linux/user/rust/whole70/abi/public_export_signatures_witness.c",
+      "qualification": "RetainedpassingF05selectedC/RustABIproofreused;sourcejoinonly,no compiler/runtime replay or newintegrationacceptanceclaim"
+    }
+  ],
+  "private_export_scope": "Remaining18function+5dataownersin76rootsetareprivate/source-only perretainedclassification;sourceprovider/linkclosurestillreusegenuinequalified76roots.",
+  "existing70function6data_library_proofs_reused": true,
+  "new_qualification": "Actual public macro CPU_EQUAL/CPU_EQUAL_S consumer; no library/ABI suite replay",
+  "complete_original_I03_or_I01_accepted": false
+}

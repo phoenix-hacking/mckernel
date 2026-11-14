@@ -1,0 +1,51 @@
+{
+  "ABI": {
+    "bytes": 1546,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-do-kill-direct-target-gate-source-1/fixture-fragments/real-ABI-and-reference.FRAGMENT.c",
+    "sha256": "e28f9291f221422869839a43223824b94d5150db39d28b2d0796897a94a89d14"
+  },
+  "compiled": false,
+  "current_C": {
+    "bytes": 112634,
+    "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+    "sha256": "d876e0b24f789372e6747fee7c554a53a3deaa9cee7034d7096374c2dff34ad6"
+  },
+  "existing_Rust_reuse": "process_helpers::release_thread uses existing process_release_thread_body_result and actual reference atomic provider; existing syscall_policy cpu_restore_interrupt declaration and real ABI types.",
+  "fragment": {
+    "bytes": 2461,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-do-kill-direct-target-gate-source-1/candidate/syscall_policy.do_kill_direct_target_gate.FRAGMENT.rs",
+    "sha256": "3446fb2912f5357b5a188f0cb40081173bf894daeccb5f72eff238b79beb7c80"
+  },
+  "future_fixture": {
+    "bytes": 1577,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-do-kill-direct-target-gate-source-1/fixture-fragments/SMALLEST-FUTURE-GATE-FIXTURE.PROPOSAL.json",
+    "sha256": "e509bbcee099f35541917f91444556275c52342794a84726e3a2ca9ad4cae707"
+  },
+  "native": false,
+  "ownership": "Consumes only caller-held targetreference on original earlyreturns. Continuingpath holds reference/IRQ for existing C pendingqueue. No target/proc dereference after release. No new locking/allocation/ref acquisition.",
+  "patch": {
+    "bytes": 907,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-do-kill-direct-target-gate-source-1/patch/syscall.c.diff",
+    "sha256": "8100a0ffb4ffecee21f22dbcb2dd1e57121029b8c81fe55efc3670bd32ea4a45"
+  },
+  "policy_preimage": {
+    "bytes": 733513,
+    "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+    "sha256": "c5d6ddd9ce210ffd51f0e84c3feefddcf4d115044ced76018b9e946aad9cb6f5"
+  },
+  "preserved_baseline": "Linux UTI early-return branch contains no explicit IRQrestore; retained exactly, not silently repaired orclaimednativecorrect.",
+  "reference": {
+    "bytes": 678,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-do-kill-direct-target-gate-source-1/fixture-fragments/original-direct-target-gate.ACTUAL.inc",
+    "sha256": "633054d31217ff01ae402fe0711b48e481537b2f356e98fedc2ecc1e82cd6041"
+  },
+  "remaining_C": [
+    "target lookup/selection and held-reference acquisition",
+    "post-enqueue continuation/wakeup/SIGCONT parent notification/IPI",
+    "interrupt_syscall Linuxforwarding provider"
+  ],
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "second_queue": false,
+  "shared_or_canonical_edits": false,
+  "status": "ACTUAL_PRIVATE_RUST_IMPLEMENTATION_SOURCE_ONLY"
+}

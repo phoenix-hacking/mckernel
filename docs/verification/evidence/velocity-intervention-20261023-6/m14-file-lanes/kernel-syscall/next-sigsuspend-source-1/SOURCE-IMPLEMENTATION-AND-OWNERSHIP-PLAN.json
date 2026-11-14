@@ -1,0 +1,109 @@
+{
+  "ABI_or_shared_import_edits": false,
+  "CPU_reservation": null,
+  "C_selection_fragment": {
+    "bytes": 2705,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-sigsuspend-source-1/sigsuspend.C-SELECTION-FRAGMENT.inc",
+    "sha256": "6065f685211468cce2284a284a99b65f2c4823dc9b68084f12ea359b5b6b473f"
+  },
+  "F06_or_otherF03_symbols_changed": false,
+  "Rust_fragment": {
+    "bytes": 4214,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-sigsuspend-source-1/sigsuspend.RUST-FRAGMENT.rs.inc",
+    "sha256": "4b84dd8d08f96a5852d050c7540a8b894a67d1a14b5d3c1e6aa93d05216a899f"
+  },
+  "actual_result": null,
+  "canonical_changes": false,
+  "compiler_invocations": 0,
+  "current_C": {
+    "bytes": 843071,
+    "path": "/home/holden/mckernel/kernel/syscall.c",
+    "sha256": "1035622a96a5441a85d60a9db15d3ac452b60266d1f8123eb807ce3849c41081"
+  },
+  "current_policy": {
+    "bytes": 711734,
+    "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+    "sha256": "f1f7866c0f2ccc8e1b0024dfb632ec7359dd2a0a4bcd8e22deb957d48ef6d770"
+  },
+  "default_link": null,
+  "exact_old_extern_remove": "    fn syscall_sigsuspend_bridge(thread: *mut c_void, set: *mut c_void) -> CLong;\n",
+  "existing_Rust_reused": [
+    "sigsuspend_prepare_mask",
+    "sigsuspend_pending_matches",
+    "lock_helpers writerlock/unlock and existing64Birqsave node",
+    "spinlock_helpers noirqrunq lock/unlock",
+    "process_helpers::process_list_detach_result",
+    "ABI Thread/SigCommon/SigPending/CpuLocalVar/SigSet"
+  ],
+  "file_retired": false,
+  "full78_production_Rust": null,
+  "insert_before_anchor": "#[no_mangle]\npub unsafe extern \"C\" fn pause_body_result(",
+  "invariants": [
+    "monitorheavy before readingmask; monitor notrestoredasC",
+    "setmayaliasthread.sigmask: compute wset thenbset beforewrite",
+    "volatile sigevent loads/stores preserved",
+    "markINTERRUPTIBLE\u2192disableIRQs\u2192runqlock\u2192reschedflagreadclear\u2192unlock\u2192restoreIRQ\u2192scheduleelsepause",
+    "sharedpendingfirst; acquirethreadpendingonlyifsharednomatch",
+    "exactfirsteligiblepredicate existingRusthelper; nofilter/deadline/iterationcap added",
+    "selectedpendingdetachunderheldwriterlock\u2192unlock\u2192restorebset\u2192do_signal(-EINTRasunsignedlong,NULL,thread,pending,-1)",
+    "ignoredo_signalintreturn; pendingownershiptransferrednocallerread/freeaftercall; returnlong-EINTR",
+    "no additionalallocation/free/ACK/retirement behavior"
+  ],
+  "live_C_bodies": [
+    "static do_sigsuspend",
+    "syscall_sigsuspend_bridge"
+  ],
+  "native": false,
+  "one_ready_cohort_rule": "No newreadycohort created; accepted signalfd4005+8 proof remains previousslice; pendingmask/sigsuspend sourceonly waitingrootselection",
+  "original_C": {
+    "bytes": 2588,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-sigsuspend-source-1/original-do_sigsuspend-and-bridge.ACTUAL-C.inc",
+    "sha256": "c33b77a62f53afc72a2c603c28663a627ef7e534b6633c90c4841cd723ec43bb"
+  },
+  "root_central_merge_only": true,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "selected_consumers": [
+    "Rust sys_pause\u2192pause_body_result",
+    "Rust sys_rt_sigsuspend\u2192rt_sigsuspend_body_result"
+  ],
+  "shared_policy_full_copy_written": false,
+  "smallest_actual_consumer_plan": {
+    "commands": null,
+    "compare": "Actual originalCfullbody and exactRustpublicbody with controlled IRQ/runq/writerlock/schedule/pause/do_signal boundaries",
+    "compiler_grant": null,
+    "controls": [
+      "sharedeligiblewinsbeforethreadscan",
+      "sharedblockedthenthreadeligible",
+      "bothblocked\u2192unlock/retry\u2192schedulehookinjectsnode",
+      "pausepatharrival withoutresched",
+      "runqreschedflagotherbits/IRQstate exact preservation",
+      "volatile eventreset beforeprotectedscan",
+      "setaliasesoriginalsigmask",
+      "maskhighbits+unblockableSIGKILL/STOP actualhelper policy",
+      "firsteligiblelistnode stableorder; exactlyonenodedetached andhandedoff",
+      "do_signal variedintreturnignored, masksrestoredbeforecallback andnodeuntouchedafter"
+    ],
+    "fixture_files": null,
+    "required_realheader_ABI": [
+      "Thread.sigeventvolatile/status/sigmask/sigpending/locks",
+      "SigCommon/SigPendinglist/mask layout",
+      "CpuLocalVarflags/runqlock/monitor",
+      "do_signal fullsignature +64B MCSnode",
+      "selectedcompleteCbodyexclusion and newRustpublicownership"
+    ],
+    "status": "PLAN_ONLY_NOT_EXECUTABLE_READY"
+  },
+  "status": "NEXT_SUBSTANTIVE_SIGSUSPEND_IMPLEMENTED_SOURCE_ONLY_NO_FIXTURE_COHORT",
+  "tests_run": 0,
+  "unchanged_external_boundaries": [
+    "get_this_cpu_local_var",
+    "cpu_disable_interrupt_save/cpu_restore_interrupt",
+    "schedule/cpu_pause",
+    "do_signal(unsignedlong,void*,Thread*,SigPending*,int)->int (existingC; localRustlink_name alias only)"
+  ],
+  "zero_context_patch": {
+    "bytes": 4724,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-sigsuspend-source-1/sigsuspend.NONOVERLAPPING-FRAGMENT.patch",
+    "sha256": "ded214db23d12b33f19beb6cce3e6767d402072c82149f0da11d8622be58e44a"
+  }
+}

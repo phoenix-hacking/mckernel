@@ -1,0 +1,23 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current-f42-fp-native-execution-static-source-1/capture_fresh_fp_resource.py",
+    "bytes": 6112,
+    "sha256": "11a6a14396559774e1cb3de86dae26d05e9aea9f4d3f2567c4dcbc6f244f4c29"
+  },
+  "successor": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current-f42-fp-native-execution-static-source-1/resource-output-retention-correction-source-1/capture_fresh_fp_resource2.py",
+    "bytes": 7071,
+    "sha256": "8c1d829a95e05f60647173d41753a1e3464d23f287aa7b4a320af47dbac5c788"
+  },
+  "literal_substitutions": {
+    "import json,os,time,subprocess,hashlib,importlib.util": "import argparse,json,os,time,subprocess,hashlib,importlib.util",
+    "A=Path(__file__).resolve().parent;E=A.parent": "R=Path(__file__).resolve().parent;A=R.parent;E=A.parent\nparser=argparse.ArgumentParser(description=__doc__)\nparser.add_argument('--output-path',required=True,type=Path)\nargs=parser.parse_args();output=args.output_path\nassert output.is_absolute() and output.parent==R,'output must be in exact successor directory'\nintermediate_stdout_path=output.with_name(output.stem+'.POSTNATIVE.stdout')\nintermediate_stderr_path=output.with_name(output.stem+'.POSTNATIVE.stderr')\n# Complete output collision preflight BEFORE any account, clock or query.\nfor path in [output,intermediate_stdout_path,intermediate_stderr_path]:\n if os.path.lexists(path):raise FileExistsError(str(path))\noutput_stream=output.open('xb')\nintermediate_stdout=intermediate_stdout_path.open('xb')\nintermediate_stderr=intermediate_stderr_path.open('xb')",
+    "static=json.loads((A/'STATIC-NATIVE-BINDINGS.NOT-RELEASED.json').read_bytes())": "# BEGIN_UNCHANGED_OBSERVATION_BODY\nstatic=json.loads((R/'STATIC-NATIVE-BINDINGS.RESOURCE-2.NOT-RELEASED.json').read_bytes())",
+    "with (A/'FRESH-POSTNATIVE-READONLY.stdout').open('xb') as f:f.write(r.stdout)": "intermediate_stdout.write(r.stdout);intermediate_stdout.close()",
+    "with (A/'FRESH-POSTNATIVE-READONLY.stderr').open('xb') as f:f.write(r.stderr)": "intermediate_stderr.write(r.stderr);intermediate_stderr.close()",
+    "print(json.dumps(result,indent=2))": "# END_UNCHANGED_OBSERVATION_BODY\noutput_stream.write((json.dumps(result,indent=2)+'\\n').encode());output_stream.close()\nprint(json.dumps(dict(retained_resource=ref(output),runtime_authority=None)))"
+  },
+  "claim": "Reverse substitutions restore original source byte for byte. Changes are CLI/output-path parsing, preopening exclusive output-stem intermediate handles before observation, successor static-ref path, and final JSON persistence. All account/clock/observer/custody/resource predicates unchanged.",
+  "runtime_authority": null
+}

@@ -1,0 +1,31 @@
+{
+  "status": "GRANTED_V3_TWO_OPERATIONS_ONCE",
+  "at": "2026-10-22T23:51:22.930784+00:00",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "proposal_sha256": "baa90c9620c0c195c70946c13754830f6be78f639e10bb5ef5c7575e41e19e11",
+  "source_review": "matched_guest_build_review source426f/pins275c finds v2racecorrected; productionreviewstillseparate",
+  "profile": {
+    "affinity": [
+      6
+    ],
+    "jobs": 1,
+    "rlimit_as": 2147483648,
+    "rlimit_cpu": 30,
+    "rlimit_fsize": 8388608,
+    "rlimit_nofile": 4096,
+    "rlimit_nproc": "inherited unchanged",
+    "timeout_seconds": 24,
+    "cleanup_timeout_seconds": 6,
+    "whole_seconds": 30,
+    "output_growth_limit_bytes": 67108864,
+    "stdout_limit_bytes": 1048576,
+    "stderr_limit_bytes": 1048576,
+    "root": false,
+    "docker": false,
+    "network": false,
+    "heavy": false
+  },
+  "only_changed_start_fixture": true,
+  "unchanged_pool_dispatch_launcher_v2_results_reused": true,
+  "conditions": "ExactAnacondacaller8b870supervision,2ops sequential30whole24work6cleanup,source/executablepins,expected14starttests; preservefirstfailure/noautoretry. Existingcapturefamilycorrectionconsumed, furthercapturefailureexpert. No production/module/root/Docker/nativeacceptance."
+}

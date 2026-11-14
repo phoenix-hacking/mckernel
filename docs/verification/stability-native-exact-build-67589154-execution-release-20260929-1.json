@@ -1,0 +1,115 @@
+{
+  "schema": "mckernel.native-exact-build-execution-release.v1",
+  "date": "2026-09-29",
+  "status": "PASS_CONDITIONAL_ONE_SHOT",
+  "review_scope": "one exact unprivileged offline native build; no module load, guest, application, cleanup or retry",
+  "source_checkpoint": "675891545c881b8d625256ade56fe66ac69fe794",
+  "release_checkpoint_before_record": "4a25e8b683fd1ba4b723e1cbfe2cf4f84cb8c4c2",
+  "policy_sha256": {
+    "GOAL.md": "76c4f5d12e3f233c8dc4f8f1a77dd1f2eae9df2ff8fb9f4000ef5a2e94c0bcc3",
+    "START.md": "1698d3429e71083634584dea7f78d22ff9e2927858de0dc714f829f9b3d6216c",
+    "CONVERGENCE.md": "f6938bd207d6fa2c0898def482e9bb4bd0cf173937fe55c2111a369d3393e86a",
+    "HANDOFF.md": "2560f978862559dd58e8d9d727c8e66f5425f7905c97efcaaf38e2ea14965f57"
+  },
+  "inputs": {
+    "candidate": "/dev/shm/mckernel-exact-candidate-67589154-1",
+    "candidate_device": 26,
+    "candidate_inode": 25166,
+    "metadata_backup": "/dev/shm/mckernel-exact-metadata-backup-67589154-1",
+    "metadata_backup_device": 26,
+    "metadata_backup_inode": 35798,
+    "ihk_commit": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+    "request": "/home/holden/mckernel-work/scratch/native-exact-build-request-67589154-1.json",
+    "request_sha256": "a2c3795245e31dc6ca90885b7ece05be5ed101bcbba6c92c9e56704db66daa7c",
+    "manifest_sha256": "c5204af68852f6e95ac9307be47280c9c84c237718c01f591b302d9c7d3c6ef9",
+    "owner_sha256": "a8c4c9fc61fab312e3a6e48e93b417453ec12e6543d6adbb7038933f92e79155",
+    "driver_sha256": "1e522a60a265cbd54f50f8856f2c1a8b2f140bd11e655d875f6db431f08a962b",
+    "image_id": "sha256:0f8ad280e47d76b23554de4aec411752e1f779f9b2fc7fece6b0b3375dc9775d",
+    "image_receipt_sha256": "18225919a44e2c07e87a66711c8d1c9483d10e15da91fa5d7fcb7339ff888172",
+    "preparation_archive_sha256": "53003c8e81619aad2c279b8e16bc2e02392025a09301c5bb79f58c463b75a084"
+  },
+  "review": {
+    "status": "PASS",
+    "owner_validate_only": "PASS under /usr/bin/python3; no Docker client or lease",
+    "source_binding": "PASS",
+    "standalone_git_metadata": "PASS",
+    "owner_lifecycle": "terminal containers remain retained after creation, including late failure; the lease is retained when retirement is unproven, while proven retirement permits lease release after durable receipt publication",
+    "image_receipt_classification": "the d0947e0c candidate_sha records reusable source-free image construction provenance; the exact image ID is bound independently and current source is bound by request plus manifest",
+    "python38_fixture_correction_sha256": "b187b587bb5ae253bfba2e06f6c0cc81f5a5152b83eb5db48602890159329ae5",
+    "python38_fixture_scope": "test-only; preserves the denial oracle and does not require candidate regeneration"
+  },
+  "profile": {
+    "cpus": "2-5",
+    "cpu_count": 4,
+    "memory_bytes": 12884901888,
+    "memory_swap_bytes": 12884901888,
+    "pids_limit": 512,
+    "network": "none",
+    "root_filesystem": "read-only",
+    "tmpfs_tmp_bytes": 268435456,
+    "capabilities": "all dropped",
+    "no_new_privileges": true,
+    "container_user": "unprivileged",
+    "build_jobs": 2,
+    "timeout_seconds": 19800
+  },
+  "preflight": {
+    "fresh_checks_required": [
+      "candidate and metadata-backup device/inode/mode and exact input hashes",
+      "clean candidate and pinned IHK commits",
+      "empty output and evidence roots and absent exact lease",
+      "all relevant leases, process identities, locks and competing build/guest owners",
+      "launcher wrapper, worker and app-server PID/starttime identities",
+      "host and MemAvailable at least 16 GiB, scratch at least 12 GiB, tmpfs free at least 4 GiB",
+      "candidate plus backup plus 12-GiB container within the aggregate 24-GiB ceiling",
+      "all concurrent work remains within seven aggregate jobs and 24 GiB, with 4-GiB memory headroom and only one heavy build or guest owner",
+      "source exclusion remains true throughout execution"
+    ],
+    "privileged_read_only_commands": [
+      "/usr/bin/sudo -A /usr/bin/docker --host unix:///var/run/docker.sock ps --all --no-trunc --format '{{json .}}'",
+      "/usr/bin/sudo -A /usr/bin/docker --host unix:///var/run/docker.sock inspect <each exact container ID returned by the released ps observation>"
+    ],
+    "failure_rule": "permission denial, incomplete inventory, unresolved owner/mount conflict, changed input, failed capacity floor or nonempty fresh target blocks execution"
+  },
+  "execution": {
+    "command": "/usr/bin/python3 -E -s -B /dev/shm/mckernel-exact-candidate-67589154-1/scripts/native_rust_exact_build_container_owner.py /home/holden/mckernel-work/scratch/native-exact-build-request-67589154-1.json",
+    "invocations": 1,
+    "run_as": "ordinary user",
+    "outer_capture": "fresh exclusive stdout, stderr, start/end time, exact argv, exit status and final fsync evidence",
+    "unchanged_retry": false,
+    "automatic_cleanup": false
+  },
+  "retention": {
+    "always_keep": [
+      "owner and build receipts",
+      "phase status and logs",
+      "partial and final outputs",
+      "container inspect and terminal state",
+      "owner/client/descendant process identities and retirement observations",
+      "lease state and signal history",
+      "all original failures and preparation evidence"
+    ],
+    "success_outputs": [
+      "bzImage",
+      "ihk.ko",
+      "ihk-smp-x86_64.ko",
+      "mcctrl.ko",
+      "SHA256SUMS",
+      "stage-lock.json",
+      "secondary-reset-build-supplement.lock",
+      "kbuild-link-closure.json",
+      "kconfig-solver-matrix.json",
+      "resolved.config",
+      "kernel.release"
+    ]
+  },
+  "acceptance": {
+    "existing_build_success": false,
+    "runtime_acceptance": false,
+    "guest_application_acceptance": false,
+    "formal_counters_changed": false,
+    "cleanup_released": false
+  },
+  "next_on_success": "independently inspect exact artifacts and evidence, then seek a separate current-candidate diagnostic application execution release",
+  "next_diagnostic": "startup.argv-empty with exact expected stdout and exit 0; diagnostic only, not formal M04 acceptance"
+}

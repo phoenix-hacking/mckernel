@@ -1,0 +1,71 @@
+{
+  "schema": "mckernel.native-exact-scratch18-preparation-checkpoint.v1",
+  "captured_at": "2026-10-01T07:26:15-07:00",
+  "status": "PASS_PREPARED_ARTIFACTS_AND_SOURCE_BUILD_RELEASE_PENDING_PUBLICATION",
+  "source_target": {
+    "commit": "89ab5c555aac9177a789efc67ddc775dacb25d6d",
+    "parent": "50b084322610a9326b1b7b528edd4cd73b635632",
+    "tree": "e57e36cfefa874eb97eff87aca32794a3826b538",
+    "ihk": "3114d9e7101ad52030eb3effa849a5c108972a1f"
+  },
+  "preparation_source": {
+    "helper_sha256": "1ee2cb0a8f315e6b5dac3e155377a492f72c4f4d502edd2f65fb06da305f77e9",
+    "test_sha256": "6dcbe203a6f55a1faf710df23fee209333aa961938d1573e87ee0c640eea5ff2",
+    "tests": "PASS 21/21 on CPUs 6-7 under RLIMIT_AS 3 GiB",
+    "independent_review": "PASS_SOURCE_PREPARATION_BOUND"
+  },
+  "preserved_failure_history": [
+    "reversed fetched-ref ancestry comparison",
+    "scratch15 source-base identity incorrectly equated to the target parent",
+    "three-owner scratch15/scratch16/scratch17 hardlink chain incorrectly assumed to have two owners",
+    "two large post-source-base retention files incorrectly classified as shareable",
+    "first production Git inspection under a 3-GiB test cap could not map the 7.4-GiB pack; the same read-only admission passed under a bounded 12-GiB cap"
+  ],
+  "production_preparation": {
+    "validate_only": "PASS_VALIDATE_ONLY",
+    "execute": "PASS_PREPARE_ONLY",
+    "shared_files": 486,
+    "private_retention_exceptions": 2,
+    "candidate_root": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-18",
+    "manifest_sha256": "36e2ad1864bbec0641c88e097225c3aead887545b32882abbc288f8f41e4f71a",
+    "request_sha256": "52ee2c0bf89d917e829181ae2c518bd6f6d536f6e0e70d4feb35cd4d8afaeaae",
+    "log_sha256": "ac184748ca04e1bb1a98a546083a75824894307daab976ee5931758ea4e55716",
+    "terminal_sha256": "7895d3c68eb6f0754b95a72a3953a8758666c44f37f36c1f498bd6f42fb20376",
+    "terminal_pid": 3273470,
+    "terminal_pid_starttime": "107387543",
+    "lease": "absent",
+    "exclusion": "absent",
+    "shared_heavy_lock": "absent"
+  },
+  "prepared_artifact_review": {
+    "status": "PASS_PREPARED_ARTIFACTS",
+    "manifest_entries": 9479,
+    "assets": 4,
+    "shared_hash_audit": "all 486 scratch15/scratch16/scratch17/scratch18 copies match journal identity and target bytes; link count 4",
+    "private_exception_audit": "both exact files match pinned bytes/modes; scratch16/scratch17/scratch18 have distinct single-link inodes",
+    "wrapper_validate_only": "PASS_COMPATIBILITY_ONLY",
+    "normalized_request_sha256": "e6b75b6963299d167a1d0e2ab271438dd0907f9075123e9a06353595916a28a5"
+  },
+  "build_release_source": {
+    "packet_sha256": "072de9ddb8a9911a1183bdd086bdafdd50fbd2680065d17a66b64663adc8c185",
+    "test_sha256": "6c3982a4a4127fbc1db4ec19b538321f2aa1f503bfc5fca4743a59e3864e3a2d",
+    "tests": "PASS 19/19 on CPUs 6-7 under RLIMIT_AS 3 GiB",
+    "review": "PASS_SOURCE_BUILD_RELEASE_PENDING_PUBLICATION",
+    "derived_request": "/home/holden/mckernel-work/scratch/native-exact-build-request-scratch-18-execution.json",
+    "derived_request_state": "absent",
+    "execution": "NOT_RELEASED_PENDING_COMMIT_PUSH_FETCH_AND_UNMOCKED_VALIDATE_ONLY"
+  },
+  "capacity_at_checkpoint": {
+    "host_free_bytes": 23289737216,
+    "scratch_free_bytes": 15174590464,
+    "memory_available_bytes": 24184971264
+  },
+  "counters": {
+    "compiled_current_candidate": 1,
+    "diagnostic_guest_passes": 5,
+    "formal_application_acceptances": 0,
+    "production_gates": "6/130",
+    "language_gates": "0/7"
+  },
+  "next_action": "commit, push and fetch-verify these exact packet/test/helper bytes; run the unmocked build packet validate-only against that fetched commit; perform a fresh capacity/process/container/lease census; then consume the independently reviewed one-shot build release"
+}

@@ -1,0 +1,96 @@
+--- /dev/null
++++ b/kernel/rust/syscall_mprotect_host_vma.rs
+@@ -0,0 +1,53 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Full reachable set_host_vma prefix, then the existing qualified Rust body.
++
++use crate::abi::{CInt, CULong, SizeT, X86UserContext};
++use crate::x86_cpu_helpers::{
++    ihk_mc_syscall_set_arg0, ihk_mc_syscall_set_arg1, ihk_mc_syscall_set_arg2,
++};
++use super::{get_this_cpu_local_var, set_host_vma_body_result};
++use core::mem::{offset_of, size_of, MaybeUninit};
++
++type SetArgFn = unsafe extern "C" fn(*mut X86UserContext, CULong);
++type HostVmaFn = unsafe extern "C" fn(CULong, SizeT, CInt, CInt) -> CInt;
++const _: SetArgFn = ihk_mc_syscall_set_arg0;
++const _: SetArgFn = ihk_mc_syscall_set_arg1;
++const _: SetArgFn = ihk_mc_syscall_set_arg2;
++const _: HostVmaFn = set_host_vma_body_result;
++const _: HostVmaFn = mprotect_set_host_vma_bridge;
++const _: () = {
++    assert!(size_of::<X86UserContext>() == 224);
++    assert!(offset_of!(X86UserContext, gpr) == 56);
++    assert!(size_of::<CULong>() == 8 && size_of::<SizeT>() == 8);
++    assert!(size_of::<CInt>() == 4);
++};
++
++/// Preserve the original callback's complete reachable prefix and return.
++///
++/// # Safety
++/// The existing CPU-local pointer remains valid/readable for its current slot;
++/// the original body's current/thread/VM and borrowed lock/endpoint prerequisites
++/// are unchanged. The unused current-thread value may be null as before. No new
++/// lifetime, ownership, locking or null/errno policy is introduced here.
++#[no_mangle]
++pub(super) unsafe extern "C" fn mprotect_set_host_vma_bridge(
++    start: CULong, len: SizeT, prot: CInt, holding_lock: CInt,
++) -> CInt {
++    // Private scratch only. X86UserContext and its nested register structs contain
++    // only u64/u8 fields, so zero is valid. Initializing these otherwise unused
++    // local bytes prevents references to uninitialized fields in existing setters.
++    // The scratch pointer never escapes those setters; no context is read back.
++    let mut ctx = MaybeUninit::<X86UserContext>::zeroed();
++    // SAFETY: Exactly the original reachable current-slot read before setters.
++    let _thread = unsafe { (*get_this_cpu_local_var()).current };
++    // SAFETY: Naturally aligned, live, zero-initialized private224B scratch; each
++    // unchanged setter performs its original volatile register write in order.
++    // C size_t/unsigned long are64-bit here. C int prot converts to unsigned long
++    // modulo2^64; Rust's direct signed-i32→u64 cast has that exact defined value.
++    unsafe {
++        ihk_mc_syscall_set_arg0(ctx.as_mut_ptr(), start);
++        ihk_mc_syscall_set_arg1(ctx.as_mut_ptr(), len as CULong);
++        ihk_mc_syscall_set_arg2(ctx.as_mut_ptr(), prot as CULong);
++    }
++    set_host_vma_body_result(start, len, prot, holding_lock)
++}
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -6937,11 +6937,11 @@
+ }
+ #endif
+ 
+-static int mprotect_set_host_vma_bridge(unsigned long start, size_t len,
+-		int prot, int holding_lock)
+-{
+-	return set_host_vma(start, len, prot, holding_lock);
+-}
++#if defined(MCKERNEL_RUST_F03_LEAF_CALLBACKS) && defined(__x86_64__)
++extern int mprotect_set_host_vma_bridge(unsigned long start, size_t len, int prot, int holding_lock);
++#else
++static int mprotect_set_host_vma_bridge(unsigned long start, size_t len, int prot, int holding_lock) { return set_host_vma(start, len, prot, holding_lock); }
++#endif
+ 
+ #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ void mprotect_flush_nfo_bridge(void)
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -36831,3 +36831,8 @@
+ mod f06_vdso_info;
+ #[cfg(all(f06_vdso_info_candidate, not(native_linux_irq_work_v6_12)))]
+ use self::f06_vdso_info::vdso_get_vdso_info;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(all(f03_leaf_callbacks_candidate, target_arch = "x86_64"))]
++#[path = "syscall_mprotect_host_vma.rs"]
++mod syscall_mprotect_host_vma;
+--- a/kernel/CMakeLists.txt
++++ b/kernel/CMakeLists.txt
+@@ -142,6 +142,7 @@
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/smp_ikc.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/sysfs.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_policy.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_mprotect_host_vma.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/timer.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/tofu_uapi.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/ubsan.rs"

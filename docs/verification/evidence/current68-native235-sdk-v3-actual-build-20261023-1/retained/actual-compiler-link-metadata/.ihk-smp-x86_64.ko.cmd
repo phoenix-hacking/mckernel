@@ -1,0 +1,1 @@
+savedcmd_/candidate/modules/ihk-smp-x86_64.ko := ld.lld -r -m elf_x86_64 -z noexecstack --build-id=sha1  -T scripts/module.lds -o /candidate/modules/ihk-smp-x86_64.ko /candidate/modules/ihk-smp-x86_64.o /candidate/modules/ihk-smp-x86_64.mod.o /candidate/modules/.module-common.o

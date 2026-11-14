@@ -1,0 +1,168 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "READY_FOR_INDEPENDENT_SOURCE_REVIEW_AND_SDK7_SOURCE_PREPARATION_ONLY",
+  "source_binding": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/SOURCE-BINDINGS.json",
+    "sha256": "0fc72271dc63446af24a19d4ff50fa0e7122e7ff5f6a11b415cb890e857ee945",
+    "bytes": 9925
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/PRIVATE-DIAGNOSTIC.patch",
+    "sha256": "066beb443f08e9eb664e5a0ca0f3422773ba43aa1a84b0997ceabe959d54dd4f",
+    "bytes": 34832
+  },
+  "actual_fixture": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/ACTUAL-FIXTURE-RECEIPT.CORRECTION-1.json",
+    "sha256": "7f1a64908c3e3923a42868bc3195d5101b671b3c229d04da5636c297e9329220",
+    "bytes": 6112
+  },
+  "whole_join": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/ACTUAL-WHOLE-JOIN.json",
+    "sha256": "3e42f58f7f9a57003df2bf86a84a3d948d799948f5705c932d2b43266ebdbc10",
+    "bytes": 6260
+  },
+  "line_width_witness": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/DIAGNOSTIC-LINE-WIDTH-SOURCE-WITNESS.json",
+    "sha256": "1e1860763fad403c8cb24316267a28b325a826cf7add157389c9a789c579406d",
+    "bytes": 8646
+  },
+  "positions": {
+    "smp_service.rs": {
+      "enum FailureOrigin": 80,
+      "fn diagnostic_ticket": 107,
+      "fn failure_context": 199,
+      "self.fail(error, FailureOrigin::Packet": 558,
+      "self.fail(error, FailureOrigin::ControlPump": 629
+    },
+    "sysfs_memory.rs": {
+      "fn diagnostic_conflict(": 141,
+      "pub(super) fn procfs(": 300,
+      "fn diagnostic_conflict_failure(": 450,
+      "fn diagnostic_completion_failure(": 470,
+      "pub(super) fn syscall(": 479,
+      "wire::complete_observed": 702
+    },
+    "sysfs_zeroing.rs": {
+      "\"zero_control\"": 71,
+      "\"zero_header\"": 99,
+      "\"zero_chunk\"": 118,
+      "\"zeroed_head\"": 242
+    },
+    "sysfs_remote.rs": {
+      "pub(crate) fn reply(": 141
+    },
+    "sysfs_rpc.rs": {
+      "pub(crate) fn reply_failure_context(": 188
+    },
+    "abi/sysfs_request.rs": {
+      "pub(crate) struct CompletionBusy": 219,
+      "pub(crate) unsafe fn complete_observed(": 225
+    },
+    "smp_application.rs": {
+      "fn diagnostic_application_failure(": 538,
+      "\"procfs_backend\"": 567,
+      "\"prepare_cleanup\"": 675
+    }
+  },
+  "changed_keys": [
+    "smp_service.rs",
+    "sysfs_memory.rs",
+    "sysfs_zeroing.rs",
+    "sysfs_remote.rs",
+    "sysfs_rpc.rs",
+    "abi/sysfs_request.rs",
+    "smp_application.rs"
+  ],
+  "sourcepostimages": {
+    "smp_service.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/source/smp_service.rs",
+      "sha256": "f5e862cf7f833a4a63b27820b4a594f7ce2b64302f08ccfbba9c8bf66ef2b398",
+      "bytes": 52131
+    },
+    "sysfs_memory.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/source/sysfs_memory.rs",
+      "sha256": "aa98b251e973cee018cec6d69586d99a56c9ea1d208f69c4a645696254af2004",
+      "bytes": 44674
+    },
+    "sysfs_zeroing.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/source/sysfs_zeroing.rs",
+      "sha256": "6d35d46758ccf5092db91780bbc35f8e0cacc0e8a3201379d5af95e6bf97f94e",
+      "bytes": 12908
+    },
+    "sysfs_remote.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/source/sysfs_remote.rs",
+      "sha256": "b9bb72eb6c4986067e2557e15ac625d90cfddcb53f38c8b99cc3648e85f0d117",
+      "bytes": 13048
+    },
+    "sysfs_rpc.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/source/sysfs_rpc.rs",
+      "sha256": "39c5ff87b671c498afffcff9feb10833918d75207559462952803858fb218131",
+      "bytes": 8000
+    },
+    "abi/sysfs_request.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/source/abi/sysfs_request.rs",
+      "sha256": "1b89d1261d218c39d531cfe00181a30562d9953deae5ac0956641f407239df0f",
+      "bytes": 9521
+    },
+    "smp_application.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/source/smp_application.rs",
+      "sha256": "6adb4d11e7285caadd699bf22359bf21922f7dbfa4828b12b7a96fb7a1b07be0",
+      "bytes": 74960
+    }
+  },
+  "qualification": [
+    "Actual round48 EBUSY cause and faulting packet remain unknown. Adjacent valid delivery rows are not attributed.",
+    "Memory::claim EBUSY swallowed branch unchanged; syscall response claim is distinct.",
+    "Original predicates/errors/tag release/quarantine/ACK/deadline/order remain unchanged; diagnostic counters are separate bounded16 each.",
+    "ABI complete observes its original single busy load only while caller retains claim and ledger mutex; original Claim.finish removal/active=false sequencing unchanged.",
+    "Remote token uses actual initialized bytes24..32, not app token16..24. No packet padding dump.",
+    "Application snapshots cover only two authorized error returns under existing slots lock; actual Entry backend_ready/request_cleanup bodies unchanged.",
+    "Pure fixture models kernel Arc/Mutex/Vec, mapping, application receiver/state and notifier primitives. It is not full SDK7 source compile, module ABI, native runtime or semantic repair proof.",
+    "Original one missingconstant compile failure retained; sole bounded correction passed. No further fixture attempts authorized by this receipt."
+  ],
+  "next_operation": "Independent seven-source ABI/ownership/diagnostic-only review, then root-authorized coherent existing68source SDK7 staging/build under separate release; root owns canonical integration/runtime.",
+  "SDK7_module_compile": null,
+  "native_diagnostic_run": null,
+  "semantic_repair": null,
+  "CPU0_released": true,
+  "worker_canonical_mutations": 0,
+  "canonical_state_at_fixture_receipt": "PREIMAGES_UNCHANGED",
+  "canonical_state_now": "ALL_SEVEN_MATCH_PRIVATE_POSTIMAGES_ROOT_OWNED_INTEGRATION_OBSERVED",
+  "canonical_observation": {
+    "smp_service.rs": {
+      "path": "/home/holden/mckernel/host-kernel/native-rust/smp_service.rs",
+      "sha256": "f5e862cf7f833a4a63b27820b4a594f7ce2b64302f08ccfbba9c8bf66ef2b398",
+      "bytes": 52131
+    },
+    "sysfs_memory.rs": {
+      "path": "/home/holden/mckernel/host-kernel/native-rust/sysfs_memory.rs",
+      "sha256": "aa98b251e973cee018cec6d69586d99a56c9ea1d208f69c4a645696254af2004",
+      "bytes": 44674
+    },
+    "sysfs_zeroing.rs": {
+      "path": "/home/holden/mckernel/host-kernel/native-rust/sysfs_zeroing.rs",
+      "sha256": "6d35d46758ccf5092db91780bbc35f8e0cacc0e8a3201379d5af95e6bf97f94e",
+      "bytes": 12908
+    },
+    "sysfs_remote.rs": {
+      "path": "/home/holden/mckernel/host-kernel/native-rust/sysfs_remote.rs",
+      "sha256": "b9bb72eb6c4986067e2557e15ac625d90cfddcb53f38c8b99cc3648e85f0d117",
+      "bytes": 13048
+    },
+    "sysfs_rpc.rs": {
+      "path": "/home/holden/mckernel/host-kernel/native-rust/sysfs_rpc.rs",
+      "sha256": "39c5ff87b671c498afffcff9feb10833918d75207559462952803858fb218131",
+      "bytes": 8000
+    },
+    "abi/sysfs_request.rs": {
+      "path": "/home/holden/mckernel/host-kernel/native-rust/abi/sysfs_request.rs",
+      "sha256": "1b89d1261d218c39d531cfe00181a30562d9953deae5ac0956641f407239df0f",
+      "bytes": 9521
+    },
+    "smp_application.rs": {
+      "path": "/home/holden/mckernel/host-kernel/native-rust/smp_application.rs",
+      "sha256": "6adb4d11e7285caadd699bf22359bf21922f7dbfa4828b12b7a96fb7a1b07be0",
+      "bytes": 74960
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "schema": "mckernel.native-exact-export25-build-postlink-regression.v1",
+  "recorded_at": "2026-09-30T16:55:00-07:00",
+  "source_commit": "9a6eb5b4e26b1ade6c9b32d4789ffe23f9d37684",
+  "command": [
+    "python3",
+    "-m",
+    "unittest",
+    "-v",
+    "scripts.tests.test_native_rust_exact_mckernel_image_container_owner",
+    "scripts.tests.test_native_rust_current_image_postlink",
+    "scripts.tests.test_mckernel_linked_text_ownership"
+  ],
+  "result": {
+    "status": "PASS",
+    "tests": 215,
+    "elapsed_seconds": 31.925,
+    "exit_status": 0
+  },
+  "bindings": {
+    "image_owner": {"path": "scripts/native_rust_exact_mckernel_image_container_owner.py", "sha256": "a6d6ffaaa84fd5fd5090875b7ec7829c136b55af81104cf630ecc273ed9df7f0"},
+    "image_owner_tests": {"path": "scripts/tests/test_native_rust_exact_mckernel_image_container_owner.py", "sha256": "17481bea97268fee8e8d915824111f4ebd5fe5039a63f128b2f05bbf5a3b0aef"},
+    "postlink": {"path": "scripts/native_rust_current_image_postlink.py", "sha256": "c22255b2acddc40c0ad1435561984e1c8c4fe757545ccc323bcc393db8d92731"},
+    "postlink_tests": {"path": "scripts/tests/test_native_rust_current_image_postlink.py", "sha256": "cb15487324a14ca13b9e5e6d31148aad5279bb2a0aa0e368972eaf144e94c0c9"},
+    "ownership": {"path": "scripts/mckernel_linked_text_ownership.py", "sha256": "e44f414373169e1453a321922931a9f4fef579229eda3d2777f4922956797fcd"},
+    "ownership_tests": {"path": "scripts/tests/test_mckernel_linked_text_ownership.py", "sha256": "5c64cfbc9efa717fd082ef539e2a43ac15df9035c4f766f3ef4a626c0f75334c"}
+  },
+  "scope": "Cheap source-level regression of the fresh exportset-25 owner, postlink admission, and final linked-text ownership verifier.",
+  "limitations": [
+    "No scratch-13 preparation, Docker build, linked McKernel image, module load, guest, or diagnostic application was executed.",
+    "This result is build-preparation infrastructure evidence and grants no application or production acceptance."
+  ],
+  "next": "After exact candidate12 recovery and cleanup, release scratch-13 preparation and one serialized exportset-25 image build, then run these checks against the actual linked outputs."
+}

@@ -1,0 +1,193 @@
+{
+  "actual_checks": {
+    "C_header_copy_exact_current": {
+      "bytes": 9756,
+      "path": "/home/holden/mckernel/executer/include/uprotocol.h",
+      "sha256": "1770a59cf4486380eb5aa483d3634dc1e4c9c9c16d1bf09865d4ff8f71191e69"
+    },
+    "C_real_header_includes_LP64_rlimit_and_disabled_TOFU_guard": true,
+    "C_witness_exact": {
+      "bytes": 7229,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/f02-complete-abi-behavior-publicabi-max-1/proposal/input/descriptor_cpuset_abi.c",
+      "sha256": "2db2f411b069503cdd00fa608c3f38f1e0803a4e47cdcfb88f08e29a70090df4"
+    },
+    "Rust_real_reprC_types_and_disabled_TOFU_guard": true,
+    "Rust_witness_exact": {
+      "bytes": 9337,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/f02-complete-abi-behavior-publicabi-max-1/proposal/input/descriptor_cpuset_abi.rs",
+      "sha256": "839fbdc25447b12b55a542f36c8105e4db0402314a80d53458358474c9ed04af"
+    },
+    "actual_verbatim_spans": [
+      {
+        "full_span_in_witness_count": 1,
+        "line_end": 7,
+        "line_start": 6,
+        "source": {
+          "bytes": 14199,
+          "path": "/home/holden/mckernel/executer/user/rust/mcexec_load_descriptor.rs",
+          "sha256": "3e012767d9c88134cb2898f15a84d5851a2e97e0408aa34e98498e097ae41060"
+        },
+        "type": "Rlimit",
+        "verbatim_span_without_final_LF_sha256": "5b66b848b17325ccba85d807608a5f62d3cb9ebe82d09a045b790b7bc437f6fd"
+      },
+      {
+        "full_span_in_witness_count": 1,
+        "line_end": 19,
+        "line_start": 8,
+        "source": {
+          "bytes": 14199,
+          "path": "/home/holden/mckernel/executer/user/rust/mcexec_load_descriptor.rs",
+          "sha256": "3e012767d9c88134cb2898f15a84d5851a2e97e0408aa34e98498e097ae41060"
+        },
+        "type": "ImageSection",
+        "verbatim_span_without_final_LF_sha256": "0ed558bd4ec7dd9a500095b5ee587b550ffb17efea84530af0e8fc3c8b9f8cfd"
+      },
+      {
+        "full_span_in_witness_count": 1,
+        "line_end": 69,
+        "line_start": 20,
+        "source": {
+          "bytes": 14199,
+          "path": "/home/holden/mckernel/executer/user/rust/mcexec_load_descriptor.rs",
+          "sha256": "3e012767d9c88134cb2898f15a84d5851a2e97e0408aa34e98498e097ae41060"
+        },
+        "type": "ProgramLoadDesc",
+        "verbatim_span_without_final_LF_sha256": "e6dc4ffdeb557c8448f28603ba8b36c6bb1294df160f74102175968466dcfef3"
+      },
+      {
+        "full_span_in_witness_count": 1,
+        "line_end": 14,
+        "line_start": 8,
+        "source": {
+          "bytes": 7865,
+          "path": "/home/holden/mckernel/executer/user/rust/mcexec_cpu_topology.rs",
+          "sha256": "157185f338bb8f2a6ad4fbb6a3e655b0ab3f8957a5e6b6b00e6fa408b22b66d8"
+        },
+        "type": "GetCpuSetArg",
+        "verbatim_span_without_final_LF_sha256": "8a416ee9ab8365f52880d4d5cfc06efd47fb85a5c3cd375d09477e3509a52317"
+      }
+    ],
+    "all78_C_and_Rust_expression_label_indices_match_recipe": true,
+    "bytes_per_symbol": 624,
+    "compile_only_data_scope_no_target_execution": true,
+    "compiler_profile": "Actual matching46d/GCC2092/Rust19570eb/default userspace sysroot from retained dc0c/978a/abdd; no kernel rebuilt core or host SDK substitution",
+    "feature_profile": "Qualified ENABLE_TOFU=OFF/ENABLE_UTI=OFF; only declaration layout and readonly values, no feature/body behavior claim.",
+    "no_main_fn_callback_allocation_or_held_body_in_witness": true,
+    "word_indices_contiguous0_through77": true
+  },
+  "at_utc": "2026-11-11T20:38:44.024846+00:00",
+  "author_assessment": {
+    "bytes": 12526,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/f02-complete-abi-behavior-publicabi-max-1/correction-1/ASSESSMENT.json",
+    "sha256": "8544e06b4e0860854213993c2c8d656ea491827ef297f1b62c795b00e9ff5769"
+  },
+  "author_original_recipe_execution_gap": "No protected parent/current container name/admission/fullRoot capture selected; deliberately source-only. No source defect.",
+  "author_ready": {
+    "bytes": 2858,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/f02-complete-abi-behavior-publicabi-max-1/correction-1/READY.json",
+    "sha256": "3d7d5015531a51dc02e43d1a6a348894aa0a4659f841746f0a160fad6d065884"
+  },
+  "decision": "GO_BOUNDED_SOURCE_HEADER_TYPES_ORACLE_RECIPE_SCOPE_HOST_PACKET_REQUIRES_SEPARATE_OPERATION_REVIEW",
+  "literal_done_when_matches_current_ledger": true,
+  "literal_original_condition": {
+    "counted_in_requirement_rollup": true,
+    "definition_status": "closure condition stated; source-derived engineering qualification remains open; actual operation admission remains separate",
+    "dependencies": [
+      "HOLD-GENERIC",
+      "M14_ACCEPTANCE_ORDER",
+      "MATCHED_COHORT",
+      "NATIVE_OWNER_AND_CURRENT_FREE",
+      "SOURCE-SDK-NATIVE"
+    ],
+    "done_when": "Derive the complete supported executor entry/provider/behavior obligations from the existing implementation, public contracts and selected build; map every obligation to matching passing source/artifact/behavior evidence and resolve every unknown. This enumeration is campaign engineering, not a required externally authored inventory.",
+    "evidence": [
+      "CAMPAIGN.md"
+    ],
+    "execution_profile": "ordinary_HOST",
+    "id": "M15-F02-complete-ABI-behavior",
+    "owner": "Saved Root integration owner; original source/SDK/native authorities retain their admissions",
+    "parent": "M15-F02",
+    "percent_complete": 0,
+    "progress_metric": "binary verified completion at stated scope",
+    "required_inputs": {
+      "additional_input": "Derive scope/identity/ABI obligations from actual supported source/build recipes. Preserve genuine held-source exclusions and obtain real ownership/current-free/admission before native/device execution; escalate only an exact genuinely absent external artifact/access/approval.",
+      "dependency_ids": [
+        "SDK_ORIGINAL_ADMISSION",
+        "NATIVE_OWNER_AND_CURRENT_FREE",
+        "M14_ACCEPTANCE_ORDER",
+        "MATCHED_COHORT",
+        "GENERIC_EXEC_DISPOSITION"
+      ],
+      "original_requirement": "M15-F02",
+      "proof_references": [
+        "CAMPAIGN.md"
+      ],
+      "source_or_target": "executer/user/mcexec.c"
+    },
+    "scope_limit": "HOST/focused proof is credited only at stated scope, not as complete original SDK/deployed/native qualification.",
+    "status": "unverified_or_blocked",
+    "title": "Complete original executor behavior, ABI and provider ownership qualification",
+    "verification_method": "Derive the required obligations and source/profile/provider identities from the actual supported source, headers, build recipes and retained matching evidence. Reuse proven checks; qualify only genuinely unmatched changed contracts. Actual native/device operations still require their real ownership/current-free/admission bindings; no source review or HOST fixture substitutes for matching final acceptance."
+  },
+  "material_findings": [],
+  "new_minimal_packet": {
+    "bytes": 2249,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/f02-complete-abi-behavior-review-sdk-max-1/host-wire-witness-1/READY.NOT-EXECUTED.json",
+    "sha256": "59c1bc7e56c1fd0adb8a31fa79099a202eea74899d2ab6d067e6d4ff485461c5"
+  },
+  "new_packet_delta": [
+    "CPU0 author proposal -> Root requested CPU7 only; memory/AS512MiB/j1/four literal compiler+passive commands retained.",
+    "Readonly source/toolchain+freshRW output3mount; existing protectede088/7266 phase guard derived forCPU7; measured sharedHOST4/fresh26/floors+1GiB reserved output/capture.",
+    "Unprivileged1000:1000/readonly root/networknone/dropALL/no-new-privileges; no actual producer or admission."
+  ],
+  "new_packet_is_authored_here_not_self_granted_execution_GO": true,
+  "operations_not_performed": [
+    "compiler/test/target import/readelf/objdump/Docker/image/native/account/controller/issuer/Root/canonical/index action",
+    "any349-51/ASM/NUMA/libdir/platform green replay",
+    "capacity reservation or hold/UNKNOWN retirement"
+  ],
+  "original_score_or_acceptance_change": false,
+  "recipe": {
+    "bytes": 25597,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/f02-complete-abi-behavior-publicabi-max-1/proposal/RECIPE.SOURCE-ONLY.json",
+    "sha256": "d161729b524e4052ea7635ef4074aaeeea5c1056c60eab6ecb7cf648bd99fae3"
+  },
+  "remaining_whole_F02": [
+    {
+      "id": "wire_ABI",
+      "missing": "Actual header-vs-current executor records for complex ProgramLoadDesc/ImageSection/GetCpuSetArg are not included in the accepted prefix or dc0c. Source layout match is derived, not yet actual new compiler evidence. Remaining named copy/wait/return/signal/RPG/internal contracts require matching source/layout evidence joins, not invented absent providers.",
+      "next": {
+        "bytes": 25597,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/f02-complete-abi-behavior-publicabi-max-1/proposal/RECIPE.SOURCE-ONLY.json",
+        "sha256": "d161729b524e4052ea7635ef4074aaeeea5c1056c60eab6ecb7cf648bd99fae3"
+      },
+      "source": {
+        "bytes": 13747,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/f02-complete-abi-behavior-publicabi-max-1/WIRE-CONTRACTS.json",
+        "sha256": "ce56add29297fe2d1b52aec613c6540c6e6d305360d115baf2b8212d2b3f60dd"
+      }
+    },
+    {
+      "id": "complete_Cbaseline_Rust_behavior",
+      "missing": "For every source family and exact dispatch branch, compose real matching normal/error/ownership/lifetime evidence. No matching whole behavioral review/result is supplied by emitted member counts or all349/all51 false receipts. Names/scope are derived here; no external inventory is required.",
+      "source": {
+        "bytes": 75190,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/f02-complete-abi-behavior-publicabi-max-1/BEHAVIOR-OBLIGATIONS.json",
+        "sha256": "dc45910e832bc39a9c639aa6b3b36e040f8b7de650ba1ea8cff0ecbfc38ab3b4"
+      }
+    },
+    {
+      "id": "deployed_native_residuals",
+      "missing": "Actual installed/deployed current executor/provider cohort and admitted application/offload/process/exit/cleanup/restoration results remain open in separate original F02-deployed/native leaves. Native c664/1e64 signal operation preparation is distinct from this current8d build7e726/private-stageddf655 executor; join exact consumed artifacts, never relabel them equal. Existing source/held-generic/exec/native/owner/currentfree/Scratch/UNKNOWN and M14-before-M15 gates remain."
+    }
+  ],
+  "reused_without_rerun": [
+    "Accepted actual16 source/598 member/119 provider original-profile dc0c/a6f scope",
+    "Exact retained storage-prefix ABI assertions only",
+    "ASM/NUMA/libdir/platform and old349/51 limits"
+  ],
+  "reviewer": "/root/sdk_binding_source_max actual Sol/MAX; independent of PubABI source author; private writes only",
+  "schema": 1,
+  "scope": "Only actual declaration/header/78word witness/profile/recipe boundary. No whole behavior/member graph re-audit.",
+  "whole_F02_condition_GO": false
+}

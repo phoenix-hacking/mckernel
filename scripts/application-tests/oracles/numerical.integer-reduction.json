@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "case_id": "numerical.integer-reduction",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["scalar=499999500000 threads=1,2,4 expected=499999500000 equal=1 valid=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["The scalar arithmetic sum of 0..999999 is 499999500000", "Partitioned reductions with one, two, and four threads equal the independent scalar result"],
+  "unresolved_expectations": ["Thread scheduling provenance and reduction lifetime require Max review."],
+  "max_question_for_reviewer": "Confirm partition boundaries cover every integer exactly once and thread join/reduction ordering is observable."
+}

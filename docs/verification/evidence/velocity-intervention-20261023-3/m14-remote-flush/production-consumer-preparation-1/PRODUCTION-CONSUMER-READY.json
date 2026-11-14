@@ -1,0 +1,71 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_PROFILE_PREPARATION_READY_NO_COMPILER_TEST_GRANT",
+  "Rust_recipe": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-remote-flush/production-consumer-preparation-1/EXACT-PRODUCTION-RUST-RECIPE.NOT-EXECUTED.json",
+    "sha256": "242b848b41cad987645651844c2d4016884418f69f3f696f78a37d8179430029",
+    "bytes": 86947
+  },
+  "C_recipe": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-remote-flush/production-consumer-preparation-1/EXACT-SELECTED-GCC9-MEM-CONSUMER.NOT-EXECUTED.json",
+    "sha256": "eb727035db27bfb5364349e9a6a437ff95bc98f3cd65df034b91fb67bf8cc358",
+    "bytes": 68806
+  },
+  "source_count": 78,
+  "source_identity": "7d5368b40a19863cdff7e9c18bf382ef4809449039f3a0ac91d360c4deb9983c",
+  "only_private_override": "kernel/rust/mem_helpers.rs",
+  "current_other77_equal_accepted_toplog": true,
+  "all_actual_flags_unchanged_except_source_output_paths": true,
+  "expected_Rust_U_delta": {
+    "before": 560,
+    "after": 573,
+    "removed": [
+      "remote_flush_tlb_array_cpumask"
+    ],
+    "added": [
+      "mem_remote_tlb_geometry",
+      "mem_tlb_atomic_inc_bridge",
+      "mem_tlb_atomic_read_bridge",
+      "mem_tlb_atomic_set_bridge",
+      "mem_tlb_current_cpu_bridge",
+      "mem_tlb_flush_all_bridge",
+      "mem_tlb_flush_single_bridge",
+      "mem_tlb_get_vector_bridge",
+      "mem_tlb_interrupt_cpu_bridge",
+      "mem_tlb_noirq_lock_bridge",
+      "mem_tlb_noirq_unlock_bridge",
+      "mem_tlb_pause_bridge",
+      "mem_tlb_rdtsc_bridge",
+      "tlb_flush_vector"
+    ]
+  },
+  "C_header_closure_count": 67,
+  "Rust_profile": {
+    "pinnednightly": "1.95.0-2026-02-18",
+    "compiler_sha256": "70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09",
+    "cfg": 4,
+    "CGU": 1,
+    "externalmodules": 2
+  },
+  "ordinary_profile": {
+    "CPU": 6,
+    "jobs": 1,
+    "AS": 2147483648,
+    "CPU_seconds": 60,
+    "wall_seconds": 90,
+    "retirement_seconds": 6,
+    "FSIZE": 33554432,
+    "NOFILE": 256,
+    "core": 0,
+    "RUST_MIN_STACK": 2097152
+  },
+  "no_CMake_or_header_edits": true,
+  "compiler_jobs": 0,
+  "test_jobs": 0,
+  "canonical_writes": 0,
+  "CPU_slots_held": 0,
+  "remaining_C_callbacks_debt": 13,
+  "exact_GCC14_defaultkernel_link_native": "OPEN",
+  "next_operation": "Rootgrant one existingordinaryCPU6 productionRustcompileONCE/durableobjectbeforeNM+readelf; separately orcoherentlygrant completeGCC9memTU/ABI/reloc/partialld after actualRustobject. No executionauthorizedbythisrecord.",
+  "prior_capture_import_and_kernelmemset_failures_preserved": true
+}

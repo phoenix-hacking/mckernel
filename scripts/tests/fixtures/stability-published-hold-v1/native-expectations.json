@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "record_kind": "published_hold_native_interface_case_oracles",
+  "status": "SOURCE_DRAFT_NOT_EXECUTED",
+  "modes": [2, 3],
+  "application_acceptance": false,
+  "fresh_process_per_case": true,
+  "expected_raw_process_exit": 0,
+  "expected_terminal_marker": "HARNESS_CASE_PASS mode=MODE case=CASE application_acceptance=false",
+  "negative_failure_behavior": "Any assertion, unknown case, extra argument, missing exact source, unexpected positive ioctl result, overlong native line, retained-log overflow, or violated lock/copy contract fails the process. Root preserves original stdout/stderr/wait before correction.",
+  "cases": [
+    {"name": "decode", "oracle": "Exact version/op/identity/reserved-byte errors are -22; wrong-mode ops fail."},
+    {"name": "release_decode", "oracle": "Accepted/UART sequence2 and nonzero digest only; digest00..1f decodes as four independently specified LE words; all reserved mutations fail."},
+    {"name": "identity_sequence", "oracle": "Each valid-but-stale selected identity or sequence returns -116; SELECT reuse -16; replayed ioctl request remains unchanged."},
+    {"name": "pending_poll", "oracle": "Before Completion exists, consecutive op7 requests consume sequences2/3 and return -11 with stage1, presence0 and snapshot0."},
+    {"name": "timer_none", "oracle": "Actual end-pump method leaves state2/timerNone with no accepted snapshot; a separately stubbed ordinary timer initialization later permits one held snapshot."},
+    {"name": "timer_zero", "oracle": "Some(0) is represented as timer0 with presence1 and held state5, not absence."},
+    {"name": "deadline", "oracle": "35+5=40seconds; overflow -75; exact40s -110; mode3 exact38s lacks strictly more than2s reserve, while mode2 still permits preliminary release."},
+    {"name": "held_release", "oracle": "Full ioctl SELECT1, accepted snapshot2, status2 and release2; exact key/timer fields; stage5 then3; released status -116."},
+    {"name": "barrier_freeze", "oracle": "Actual send-gate source increments both old counters to3 before EMITTING; four later deferrals update only new host count4."},
+    {"name": "hold_cap", "oracle": "One million host deferrals remain bounded; the next retains count1,000,000 and invalidates -75 without release/timer mutation."},
+    {"name": "repeat_accepted", "oracle": "Repeated end-pump method after held emits no extra log; duplicate full accepted snapshot rejected -116."},
+    {"name": "snapshot_failure", "oracle": "Controlled owner-observer error leaves emitting4, latches -5, and emits no READY."},
+    {"name": "snapshot_deadline", "oracle": "Controlled native time advance during snapshot to original40s prevents held-ready and latches -110."},
+    {"name": "timer_recheck", "oracle": "Actual Remote recheck rejects changed timer36 with -116, keeping copied original35 and state4."},
+    {"name": "release_duplicate", "oracle": "First release commits state3; next-sequence duplicate returns -116 and cannot commit again."},
+    {"name": "release_failed_once", "oracle": "A first release with actual referenced Runtime error -5 consumes attempt; correcting the stub error cannot permit a second release."},
+    {"name": "release_expired", "oracle": "At original deadline40s release returns -110 and retains held5."},
+    {"name": "released_invalid", "oracle": "Later -75 observation invalidation does not re-arm the actual send-gate source after release."},
+    {"name": "copyout_ambiguity", "oracle": "Actual ioctl dispatch commits release before controlled UserSlice copyout error; request stays unchanged, replay is -116 and later query uses next sequence."},
+    {"name": "permit_busy", "oracle": "Actual ioctl returns pre-dispatch -11 without copyout/sequence consumption; complete nonzero release request remains unchanged."},
+    {"name": "copyin_failure", "oracle": "Controlled UserSlice read failure precedes dispatch; same next sequence remains available after that separate test condition clears."},
+    {"name": "local_health", "oracle": "Each Entry closed/needs_cleanup/quarantined and Mailbox closed/quarantined state independently rejects actual held-status helper despite global error0; restored control succeeds."},
+    {"name": "claim_recheck", "oracle": "Sixteen selected worker/request/completion-claim mutations fail actual helpers; fresh unchanged control succeeds after each independent vector."},
+    {"name": "phase_order", "oracle": "Actual snapshot method rejects duplicate/skipped/wrong-mode phases before incrementing sequence."}
+  ],
+  "explicit_uncovered_gates": [
+    "Real Linux kernel user access, kernel mutex scheduling, IRQ/preemption and ABI/provenance are not represented by the concrete host stubs.",
+    "Actual production request preparation, immutable delivery construction, timer advancement, real Completion publication, native ResponseMemory ownership and guest memory bytes need separately compiled/native/guest proof.",
+    "No C controller, host UART/QMP, ACK digest authenticity, after-eight-launch, physical-full-ring or application runtime acceptance is supplied.",
+    "Actual native build, Rust visibility/lints and compiled stack-chain measurement remain separate from this standard-library host harness."
+  ]
+}

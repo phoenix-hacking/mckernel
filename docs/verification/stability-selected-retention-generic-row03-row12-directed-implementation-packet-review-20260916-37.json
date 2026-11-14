@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "record_kind": "m01b_directed_implementation_packet_review",
+  "review_attempt": 37,
+  "recorded_utc": "2026-09-16T11:55:20Z",
+  "status": "PASS_PACKET",
+  "correction_path": "docs/verification/stability-selected-retention-generic-row03-row12-directed-implementation-packet-correction-20260916-36.md",
+  "correction_sha256": "bdbe9b0905eeac9d16bb7527098f16a7f2d63afd347a6bb9050ed215d4d2258a",
+  "correction34_sha256": "61dd037ef1363b63f35e7bd29c2bd3e3c6d2e594914f621cc90d6c7b399f451c",
+  "review35_sha256": "b61a5b4416c725dca11ed214961d3298a54491e8c19e3edaa08a63670e52d334",
+  "authenticated_checkpoint": "353dbeb56a5ca7590516d6d9662fe36b73cde68d",
+  "authentication": "Packet29, correction31, correction34, review35 and correction36 match their exact pins. All six correction34 direct SHA256 pins reauthenticate. HEAD and FETCH_HEAD match the previously authenticated checkpoint. No new candidate root has been selected or accepted.",
+  "findings": [],
+  "accepted_review_scope": [
+    "Review35 F2 is resolved: the sole schema addition is top-level root, equal to the canonical absolute fresh path selected before Phase I, included in sorted-key compact UTF-8 JSON with one trailing LF.",
+    "Review35 F1 is resolved: final manifest.json enumerates 347 paths, binding actual size and SHA256 for 346 ordinary files including phase-i-handoff.json. Only manifest.json has an externally_bound self-entry, without self-size or self-hash. Dispatcher evidence separately binds raw size and SHA256 of both manifests.",
+    "The success count is 327 Phase I files plus 20 Phase II files. Correction31 failure ownership, partial-root preservation and no-retry rules remain unchanged. All nonconflicting packet29/correction34 API, ownership, scenario, cfg-erasure, inverse, bytecode and evidence-separation requirements remain normative."
+  ],
+  "release_scope": "One fresh Phase I source-staging attempt under packet29 plus corrections31/34/36. Independent authentication and review of the complete raw handoff remain required before Phase II. This approves the combined packet only; no source implementation or execution result is accepted.",
+  "source_staging_released": true,
+  "phase_ii_requires_independent_handoff_review": true,
+  "compilation_authorized": false,
+  "compiled": false,
+  "runtime_execution": false,
+  "guest_execution": false,
+  "native_backing_accepted": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false,
+  "files_changed": false
+}

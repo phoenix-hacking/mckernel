@@ -1,0 +1,39 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "ACCEPT_HOST_SOURCE36_CONTROLLED48_ABI30_ONLY",
+  "reviewer": "/root/perf_review18h",
+  "result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-36-setaffinity-production-callbacks-source-1/fixture-cpuset-provider-correction-1/ACTUAL-SOURCE36-C-SUFFIX-FIRST-RESULT.json",
+    "sha256": "6463d46a8ad56865c208bd40f4690b57e792dfded04cf3b7d4b66be0f29439e1",
+    "bytes": 11260
+  },
+  "commands": 2,
+  "children": [
+    {
+      "pid": 980817,
+      "start": 78796983
+    },
+    {
+      "pid": 980822,
+      "start": 78797015
+    }
+  ],
+  "both_joined": true,
+  "groups_absent": true,
+  "streams_closed": true,
+  "stderr_empty": true,
+  "controlled_cases": 48,
+  "old_modeled_stale_placements": 1,
+  "new_modeled_stale_placements": 0,
+  "independently_compared_ABI_words": 30,
+  "stable_bindings": 119,
+  "retained_Rust_identity_unchanged": true,
+  "original_link_failure_preserved": "b391c465738e0e37cd8c94c5bd8dbcc53d6b88dfdac97286783f865d73629fd6",
+  "wall_seconds": 0.535007,
+  "cpu_seconds": 0.471988,
+  "peak_rss_kib": 36172,
+  "limits": [
+    "Controlled callback injection model only; not actual blocking concurrency",
+    "Actual IRQ/per-lock hardware state, global writers, Process/request lifetime, fullcrate/default/native/C retirement remain open"
+  ]
+}

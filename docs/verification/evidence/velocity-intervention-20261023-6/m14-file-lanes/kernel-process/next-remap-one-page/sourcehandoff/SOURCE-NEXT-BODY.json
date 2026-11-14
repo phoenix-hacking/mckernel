@@ -1,0 +1,152 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SUBSTANTIVE_ACTUAL_REMAP_BODY_SOURCE_IMPLEMENTED_NOT_EXECUTABLE_READY",
+  "chosen_body": "Complete actual remap_one_page PTE replacement/dirty flush/page-unmap/free/RSS visitor",
+  "predecessor": {
+    "kernel/process.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-sync-range-log/candidate/kernel/process.c",
+      "sha256": "225fa1d28cbb2d7d5d2e1fdab9ff7435362c0b21661a64188e09c02f3eba08af",
+      "bytes": 163322
+    },
+    "kernel/rust/process_helpers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-sync-range-log/candidate/kernel/rust/process_helpers.rs",
+      "sha256": "6ecdafee1c6d6817ca0242149f67983871d545768f4873fa19c47e7d5ad6f7f8",
+      "bytes": 357687
+    }
+  },
+  "postimages": {
+    "kernel/process.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-remap-one-page/candidate/kernel/process.c",
+      "sha256": "7ab29dad607ac06e9548065f4395c6e870359558a2777844c1052d67e046ca13",
+      "bytes": 164210
+    },
+    "kernel/rust/process_helpers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-remap-one-page/candidate/kernel/rust/process_helpers.rs",
+      "sha256": "49f61c90967bf2d79324cbec946b3c22931b79d54638abf8fb3c647bf679b9b2",
+      "bytes": 361670
+    }
+  },
+  "original_C": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-remap-one-page/fixture/original_remap.ACTUAL-C.inc",
+    "sha256": "48fdda46f59c02c45cde2eafabf1007a18744390b48ddc5607b1d4f4252f6bc3",
+    "bytes": 1244
+  },
+  "actual_Rust": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-remap-one-page/fixture/remap.ACTUAL-RUST.inc",
+    "sha256": "e4b345b22f01d35136bdf4678aa7b58ecd2ba63aeda5cc1e1d4bcdbfc99996a4",
+    "bytes": 3785
+  },
+  "C_metadata": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-remap-one-page/fixture/remap.ACTUAL-C-METADATA.inc",
+    "sha256": "415b1f85e9267a2b4751fb99db3ec1d9130aa3ae8e468ecee352331ce5ee1910",
+    "bytes": 838
+  },
+  "actual_caller": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-remap-one-page/fixture/unchanged_actual_Rust_caller.ACTUAL.inc",
+    "sha256": "cb7f81a14ec12d7773ff01933c95a78764fac105baac5958617f27ec90fb7665",
+    "bytes": 754
+  },
+  "actual_owner": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-remap-one-page/fixture/unchanged_actual_Rust_owner.ACTUAL.inc",
+    "sha256": "4d4afb2f3e08f4da9cb546ddfc802fcbfe56aec0da0c5bbe4002056b93f0c0bd",
+    "bytes": 2330
+  },
+  "provider_pins": {
+    "kernel/rust/pte_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/pte_helpers.rs",
+      "sha256": "d6117286cc222c27ae6f76773796efd77d9f87b969644555e0a6286721653e62",
+      "bytes": 7855
+    },
+    "kernel/rust/object_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/object_helpers.rs",
+      "sha256": "7444ec38a30cdb2b0505b939f02eacb5018d3732a97fcd12b3eba189133f0f06",
+      "bytes": 235965
+    },
+    "kernel/rust/page_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/page_helpers.rs",
+      "sha256": "cfc64f72bf9b94c65417bc8f4e29d65b81f98239fe52ab2a7dd0352ebdfc3f70",
+      "bytes": 17367
+    },
+    "kernel/rust/x86_memory_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/x86_memory_helpers.rs",
+      "sha256": "245faf1198d9b7715714d236238172330257f4291776aced4e7cee6c3c518ce2",
+      "bytes": 199322
+    },
+    "kernel/rust/mem_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+      "sha256": "4635a252332cd369e36384f04a414e2b4c2d79726a4f95caafcf1d3ed1a56b4d",
+      "bytes": 203495
+    },
+    "kernel/rust/abi.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "bytes": 76151
+    },
+    "kernel/include/page.h": {
+      "path": "/home/holden/mckernel/kernel/include/page.h",
+      "sha256": "c8f3f5e7804c71430c814395ea14a1ee93267180713caeb39880b662cc9cd0dc",
+      "bytes": 1647
+    },
+    "kernel/include/rusage_private.h": {
+      "path": "/home/holden/mckernel/kernel/include/rusage_private.h",
+      "sha256": "9cc30af76f445517a70fbbaa2bc6d2a48dee12bc8fd08bc0e1c37d571693d972",
+      "bytes": 3262
+    },
+    "lib/include/ihk/mm.h": {
+      "path": "/home/holden/mckernel/lib/include/ihk/mm.h",
+      "sha256": "a1b412608df7512a1b7295c6f19b3ec5a77e6364e8f24b208ab1a29e7556e5b1",
+      "bytes": 9548
+    },
+    "lib/include/ihk/debug.h": {
+      "path": "/home/holden/mckernel/lib/include/ihk/debug.h",
+      "sha256": "7315ef758c56c4888242295ed9340b44f649d772b1315502acc49eb6105048dc",
+      "bytes": 1294
+    }
+  },
+  "existing_C_provider_debt": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-remap-one-page/fixture/existing_phys_to_page_C_PROVIDER_DEBT.inc",
+    "sha256": "70e2e405cc7777cacc7c4a8af9612bd4e1637609674ea34fef4e4c62ee064930",
+    "bytes": 337
+  },
+  "metadata_lines": {
+    "entry": 2448,
+    "tracked_free": 2469,
+    "free_RSS_debug": 2470,
+    "exit": 2476
+  },
+  "existing_Rust_reused": [
+    "PTE fileoff encoding, atomic exchange and captured-PTE predicates",
+    "typed memobj_flush_page operation dispatch",
+    "existing reviewed x86 flush_tlb_single/phys_to_virt",
+    "page_helpers::page_unmap existing hash/mapped accounting",
+    "mem_helpers::_ihk_mc_free_pages tracking+free and rusage_memory_stat_sub"
+  ],
+  "precise_caller_invariant": "Actual Rust remap_process_memory_range constructs reprC ProcessRemapArgs and passes remap_one_page directly to existing Rust process_remap_memory_range_body_result. That owner acquires the same VM page_table_lock, retains memobj, atomically maps pgshift0 to12 and accepts12, rejects other nonzero shifts with -E2BIG before visit, synchronously visits, then unrefs and unlocks. No new lock/ref or ACK is introduced.",
+  "algorithm_invariant": "Entry log before args loads; exact wrapping uintptr_t/off_t calculation; encode fileoff then atomically exchange live PTE; TLB before captured-PTE tests. Snapshot null/fileoff skip remaining release work. Dirty snapshot flush result ignored. Lookup then page_unmap; only nonnull page and nonzero unmap trigger phys_to_virt/free, then optional debug, reload args.memobj and RSS subtraction. Exit logs current live PTE and returns0 always as original.",
+  "ABI": "Original five-argument callback and signed CInt return; existing reprC ProcessRemapArgs24B asserts reused; no Page field access. Exact UL varargs even for original %ld formats; pagecount/RSS provider CInt narrowing preserved. IHK_MC_PG_USER1 verified actual mm.h. kprintf declaration reused once.",
+  "lifetimes": "Caller-owned args, memobj and live PTE remain borrowed for synchronous visit; captured old PTE stack storage is not retained. No page access after unmap/free. Free source filename remains C-owned static __FILE__ string with recorded original __LINE__; Ddebug file/function/line/flags rows have static lifetime.",
+  "original_C_fallback_exact": true,
+  "remaining_C_debt": [
+    "Existing public phys_to_page C forwarding provider plus its existing C lock callbacks; Rust lookup reused underneath",
+    "Existing page_unmap lock/log callbacks and tracked-free backend callbacks retain their own debt",
+    "Three displaced diagnostic selector rows and two tracked-free identity data rows only for this body; no new C computation",
+    "Other process.c compute bodies"
+  ],
+  "future_fixture_contract": [
+    "Actual original C callback and actual Rust callback with real PTE fileoff/xchg helpers; explicit HOST TLB adapter only, never invlpg on host",
+    "Snapshot null/fileoff/clean/dirty; old/new physical values and PTE mutation at TLB/flush/lookup/page-unmap/free/debug/exit boundaries",
+    "Flush0/positive/negative ignored results; page absent and page-unmap0/nonzero; exact free/RSS/exit ordering and no duplicate release",
+    "Actual callback ABI, ProcessRemapArgs field layout, existing Page type/phys_to_page declaration and tracked-free source file/line static lifetime",
+    "Original three independent dynamic-debug gates, exact formats and pointer/UL/int varargs; free metadata identity and CInt narrowings",
+    "Original C fallback bytes and actual selected Rust remap_process_memory_range pointer relocation to this Rust entry"
+  ],
+  "failure_history": "All prior E0428/retained-GOT/source-extraction failures remain; this source-only family has no compiler/test attempt.",
+  "requires": "Private dump/sync/log predecessor acceptance and root coherent rebase; no source correctness/default/native credit from this preparation.",
+  "compiler_jobs": 0,
+  "test_jobs": 0,
+  "CPU_reservations": 0,
+  "executable_recipes": 0,
+  "canonical_or_shared_mutations": 0,
+  "source_correctness_claim": false,
+  "default_native_file_credit": false
+}

@@ -1,0 +1,119 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "CHANGES_REQUIRED_EXACT_HOT_SCHEMA_ADAPTER_AND_OFFLINE_FULL_PATH_EXERCISE",
+  "independent": true,
+  "reviewer": "/root/guardian_execution_review",
+  "implementation_ownership": false,
+  "execution_approval": false,
+  "maximum_invocations": 0,
+  "reviewed_failed_finite_verifier": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/finite-review-handoff-correction-source-1/strict-json-final-publication-correction-source-1/finite_review.py",
+    "bytes": 13743,
+    "sha256": "d4b0af90645080451ea7cc23e8465fc3c68ff040e53e3ca92187a478d24f44c1"
+  },
+  "reviewed_original_pure_predicates": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/independent-finite-verifier-spec-1/hot_predicates.py",
+    "bytes": 8840,
+    "sha256": "13c4efa0929bd2962de47434b7998b9a5acc84f25e157b4b1ce78fdaf25c7a5b"
+  },
+  "reviewed_actual_A2_refusal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-2/independent-execution-review-1/REVIEW.json",
+    "bytes": 4174,
+    "sha256": "6e3ae7a52ef26e54e0d97d541b0f0a45568ba64ba855200a73bfae859398a5c7"
+  },
+  "reviewed_actual_capture_marker": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-2/FINITE-REVIEW-HANDOFF/ROOT-HELD-CAPTURE.COMPLETE.json",
+    "bytes": 4211,
+    "sha256": "6371f21bb654f09cb81a8cf2498ec7baeb602adf3d2502755da9a3b90d25a221"
+  },
+  "reviewed_actual_pending": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-2/ROOT-EXECUTION-INPUT.GRANT-PENDING-REVIEW.json",
+    "bytes": 2429,
+    "sha256": "48bc9df07086ebc30b9ee53eb3b0e853b379cbe4560f350d5106923f8090f1bd"
+  },
+  "reviewed_actual_resource": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-2/ROOT-ACTUAL-BUILD-RESOURCE-AUTHORITY.json",
+    "bytes": 11883,
+    "sha256": "7567bd0239ae9a96f086e3d7c4bf2b3fd3bc550d5f612c72f2ef53f2d2076679"
+  },
+  "reviewed_actual_physical": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-2/ROOT-PREHOLDER-PHYSICAL-1.json",
+    "bytes": 2549059,
+    "sha256": "e3c7c856d24ca4b354cad415d8abe7610f53795b5cfe423230ae171253c01d82"
+  },
+  "reviewed_actual_Root_input": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-2/ROOT-ACTUAL-RESOURCE-INPUT-1.json",
+    "bytes": 3920,
+    "sha256": "75c5ae834c784c3e23f932404452809d089f30fb7e11e317d1498222f27824b4"
+  },
+  "complete_confirmed_schema_mismatches": [
+    {
+      "source": "finite_review.py d4b0, hot(): current captured physical exclusion/boot predicate",
+      "invalid_read": "physical_envelope[physical][aggregate_jobs_max]",
+      "actual_schema": "Key absent. Current49observer deliberately publishes Root49/current_boundary and forwards physical facts; aggregate jobs is a campaign policy/reservation declaration, not an observed kernel field.",
+      "required_correction": "Remove only this phantom observation access; preserve all other physical predicates. Add exact cold/static job-policy authentication and validation as specified below. No get(default7), no invented physical/resource field, no historical metadata fallback."
+    },
+    {
+      "source": "hot_predicates.py13c4, physical latest ledger/current free predicate",
+      "invalid_read": "physical_envelope[physical][root_ledger35]",
+      "actual_schema": "Key absent; exact current ledger is physical[Root49]. Current physical[current_boundary] and actual_latest_operation_postjoin_acceptance are present and genuine. Historical Root48 is explicitly nested.",
+      "required_correction": "Use an explicitly source-reviewed cold observer schema declaring exact ledger_key Root49 for retainedA2, exact expected status and observer ref; require current ledger ref==cold.nonce_ledger, current_boundary==cold.current_boundary, latest free==cold.native_custody_clearance. FutureA3RootN must declare its own exact reviewed key/status, never masquerade as Root49 or guess an alternative."
+    }
+  ],
+  "remaining_original_pure_predicate_diagnostic": {
+    "performed": "Actual original13c4 function AST was wrapped only to collect each independent need failure and continue, using complete retainedA2 JSON objects and exactcold mapping in memory. No producer module/real verifier/guard was called.",
+    "TEST_ONLY": true,
+    "simulated_now_clocks": [
+      1793157344.9873524,
+      939451.556309154,
+      954789.683359677
+    ],
+    "retained_payload_clocks_unchanged": true,
+    "successful_top_level_need_checks": 24,
+    "only_failure": "KeyError: 'root_ledger35' at physical latest ledger/current free",
+    "real_clocks_queried": 0,
+    "real_PASS_writer_calls": 0,
+    "test_is_not_admission": true
+  },
+  "genuine_static_job_policy": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/finite-review-handoff-correction-source-1/ROOT-AGGREGATE-JOB-POLICY-AND-RESERVATION.json",
+    "bytes": 1475,
+    "sha256": "33ac52e11cdfed587b7fe2e027857066c4c786e5f37ccd9c820c5f42ed3d9a1d"
+  },
+  "required_cold_job_checks": [
+    "Authenticate exact33ac52Rootpolicy, author/root, statusstaticnotobservation, physical_occupancy_claim false/runtimeauthorityNone and original4ccc invocation ref containing exact authorizing excerpt.",
+    "Require exact integer aggregate_build_jobs_max7, one_heavy_max1, aggregate_memory_bytes23259332608; booleans are not valid numeric counts.",
+    "Require heavy_compiler_jobs_reserved4, ordinary_CPU6_jobs_reserved1, other_build_jobs_reserved0; total_reserved_build_jobs=sum=5<=7. Heavyreservation4 equals original profile CPU2-5 count and the pinned single-container/sequential-worker contract.",
+    "Bind exact runner2471 and worker0bdd; worker executes four commands sequentially with one direct compiler/link child, preserving original compiler parallelism/default CGU. Do not recast four commands as four simultaneously observed jobs.",
+    "Policy heavy12GiB/512 and ordinary2GiB/64 must equal profile/resource/rootinput reservations; existing realheld memory/tasks/occupancy/custody/soleflock/guard/freshness still decide runtime.",
+    "No extra Rootinput job field is needed: Root33policy already declares reservations. Keep original retainedA2 bytes unmodified for offline positive test; policy is a separate authenticated static subject."
+  ],
+  "required_schema_binding": {
+    "binding_kind": "Explicit cold source-reviewed observer-schema data, not runtime fallback",
+    "required_fields": [
+      "exact observer source reference",
+      "exact ledger_key (Root49 for retainedA2)",
+      "exact expected physical status",
+      "exact current_boundary field and latestfree field names"
+    ],
+    "requirements": [
+      "Bind schema observer ref to cold staticrefs observer_source and exact reviewed source/API packet.",
+      "Source mismatch/missingkey/wrongcurrentledger/free/boundary rejects descriptively before any approval; do not chase historicalRoot48 aliases or accept absent/default values.",
+      "Actual held resource/resourceinput/envelope/pending/profile keys remain unchanged. All originalstrongchecks retained."
+    ]
+  },
+  "preserved_checks": [
+    "Exact Root pending one-shot decision/nonce/source/profile/worker/runner/export/custody/output/dockerprefix and complete positive capture marker chain.",
+    "Immutable cold request/adoption/publication/ledger/export and exact120Rust/8retained/3new/4commands closure; no hot static-source loop.",
+    "Same actual holderPID/birth/FD3device27inode4, bootstrap/ready refs and fullEOF sole WRITE flock; no-launch paths/claim/output absence.",
+    "Original oneheavy CPU2-5/12GiB/512tasks/no network/no swap and same conservative2GiB/64other reservation; shared memory23259332608, task/headroom and capacityfloors.",
+    "Exact actual cgroup dictionary and no running Docker; memorystrict24GiB and original host16/scratch14091616256 floors. Prefer exact key/value dictionary comparison to insertion-order dependency, never weaken values or occupancy.",
+    "Physical/input/held capture ordering; all three finite positiveclocks/mincutoffs/boot and final original120s freshness before and after fsyncedatomicPASS publication; exact account guard remains live only in real independent execution.",
+    "Root never runs approver; source/TEST_ONLY output is never PASS release; existing publisher only consumes actual independent one-shot approval."
+  ],
+  "mandatory_before_A3_clock": "Complete retainedA2 fullHOT offline exercise described in ADAPTER-AND-OFFLINE-CHECK-SPEC.md must pass before PREWARM/freshresource. One simulatedfresh clock only; no modification/redating of real snapshots, no realPASS writer, no guard/process/Docker call.",
+  "actual_queries_guards_signals_resources_by_reviewer": 0,
+  "actual_approval_or_grant": null,
+  "runtime_authority": null,
+  "scope_limit": "This diagnoses concrete review-code schema failure. It is not an OS/resource failure or permission to replayA1/A2, signal/retire A2holder, renew oldresource, compile or launch."
+}

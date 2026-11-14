@@ -1,0 +1,29 @@
+--- /home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-diagnostic-collector-successor-1/admission-preparation-1/read_only_LONG_HOST_admission.py
++++ /home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-snapshot-equality-successor-1/admission-preparation-1/read_only_LONG_HOST_admission.PENDING-M14-PHYSICAL.py
+@@ -5,7 +5,7 @@
+ import ast,fcntl,hashlib,importlib.util,json,os,resource,stat,subprocess,sys,time
+ from pathlib import Path
+ D=Path(__file__).resolve().parent
+-CONFIG_SHA = '3154b16f0746e1ae21099162b3b5ed39f991d60579b43075d5976b7f353792d9'
++CONFIG_SHA = '5dd1272833939aa1c6da67e70dac45ccf5e173fe8f959e213eb7c03686384221'
+ ENGINE=Path('/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/bound-matched-image-terminal-source-2/cleanup_pass_image.py')
+ ENGINE_SHA='59efab0bc29fa5784dc855743cec397237552821bc150b60ea1d6c2e5f7ac00d'
+ def need(v,m):
+@@ -32,7 +32,7 @@
+     finally:os.close(fd)
+ 
+ def inputs():
+- raw=(D/'QUERY-INPUTS.json').read_bytes();need(hashlib.sha256(raw).hexdigest()==CONFIG_SHA,'exact query input binding')
++ raw=(D/'QUERY-INPUTS.PENDING-M14-PHYSICAL.json').read_bytes();need(hashlib.sha256(raw).hexdigest()==CONFIG_SHA,'exact query input binding')
+  return json.loads(raw)
+ 
+ def parent_fact(path):
+@@ -47,7 +47,7 @@
+ def validate(f,c,growth):
+  need(f['uid']==f['euid']==0 and f['affinity']==[7],'root query CPU7')
+  need(f['proc']['status']=='COMPLETE' and f['proc']['failure'] is None and f['proc']['publishers']==[] and len(f['proc']['snapshots'])==2,'complete publisher-free census')
+- need(f['physical']['verdict']=='PASS_ACTUAL_FAILED_SDK8_LONG_599BD7_PHYSICAL_RETIREMENT_AND_CURRENT_POSTJOIN' and f['physical']['state']=='FAILED_SDK8_LONG_599BD7_POSITIVELY_RETIRED' and f['physical']['physical_clearance'] is True and f['physical']['current_live_postjoin']['sha256']=='4c10fe4b09f8a99f51a0f87f49c298da26ddc1cfe11453f2929cacddb0602920' and f['physical']['proc_sha256']=='9710013285f045ed411339ff127affdf490b80c480d4bcb22b8748ec679b0281' and f['physical']['mutex_sha256']=='5e8d2c1942ea3edf7ee6a623d19e2aea16bba50f1639c63fc1aff209b5641c20' and f['physical']['complete_publisher_free_snapshots']==2 and f['physical']['bound_client_identities']==23 and f['physical']['all_clients_outer_owner_absent'] is True and f['physical']['container_init']=={'pid':3925813,'start':None,'numerically_absent_both':True} and f['physical']['permanent_mutex']=='27:4' and f['physical']['eight_exclusion_paths_absent'] is True and f['physical']['normal_CID_removed_three_empty_queries_verified'] is True and f['physical']['native_acceptance'] is False,'actual failed SDK8 LONG599bd7 positivephysical/currentpostjoin')
++ need(False,'PENDING_GENUINE_M14CANDIDATE15_POSITIVE_PHYSICAL_PREDICATE_NO_EXECUTION')
+  p=f['parent'];need(p['directory'] and p['uid']==p['gid']==1000 and p['mode']==0o700 and p['children']==[] and p['dev']==c['operation']['HOST_identity']['dev'] and p['ino']==c['operation']['HOST_identity']['inode'],'fresh exact private HOST LONG parent exists empty UID1000 mode700')
+  need(not any(f['output_paths_exist'].values()),'fresh LONG capture owner attempt and unpublished release/request paths absent')
+  need(not any(f['ownership_paths_exist'].values()),'exact SDK image launcher ownership paths absent')

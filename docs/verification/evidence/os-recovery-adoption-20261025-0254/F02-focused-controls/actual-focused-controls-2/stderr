@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-2/m14-f02-contract-source-1/check_f02_contract_controls.py", line 471, in <module>
+    main(args.output)
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-2/m14-f02-contract-source-1/check_f02_contract_controls.py", line 385, in main
+    passed('final descriptor pointer value', lambda: final_byte(local_final['value']+local_refs[0]['offset']), True)
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-2/m14-f02-contract-source-1/check_f02_contract_controls.py", line 115, in passed
+    require(not negative, ('negative control unexpectedly accepted', name))
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-2/m14-f02-contract-source-1/check_f02_contract_controls.py", line 23, in require
+    raise AssertionError(message)
+AssertionError: ('negative control unexpectedly accepted', 'final descriptor pointer value')

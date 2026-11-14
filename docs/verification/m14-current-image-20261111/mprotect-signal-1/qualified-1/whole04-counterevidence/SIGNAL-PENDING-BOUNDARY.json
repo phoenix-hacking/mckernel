@@ -1,0 +1,139 @@
+{
+  "actions": "Bounded source and saved metadata/image byte read only. No source edits/compiler/helper/reader/cases/native.",
+  "actual_emitted_direct_edge": {
+    "actual_Rust_input_R64": "000000000000030c  000012f100000001 R_X86_64_64            0000000000000000 terminate_mcexec + 0",
+    "caller_address": "0xfffffffffe83e000",
+    "consumer": "Rust check_sig_pending",
+    "equals_current_C_terminate_mcexec": true,
+    "final_immediate_bytes": "f01680feffffffff",
+    "final_immediate_file_offset": 254732,
+    "final_immediate_value": "0xfffffffffe8016f0",
+    "function_relative_offset": 780
+  },
+  "actual_image": {
+    "bytes": 10663560,
+    "independent_inode": true,
+    "mode": "0o755",
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/stable-baselinef199-1/build/kernel/mckernel.img",
+    "producer_captured_identity_matches": true,
+    "same_as_prior7231": false,
+    "saved_device": 66306,
+    "saved_inode": 2243290,
+    "sha256": "1aee02d2fb387e08ab6a771aa2e7d9d01a6673ad364a06685e3bc3e926bdb690",
+    "source_device": 66306,
+    "source_inode": 2237771,
+    "source_path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/mckernel.img",
+    "source_stable_during_copy": true
+  },
+  "at": "2026-11-11T07:03:46.433156+00:00",
+  "bounded_source_basis": {
+    "C_current_do_syscall_bridge": {
+      "end_line": 5321,
+      "start_line": 5315,
+      "text": "#endif\nstatic long\nterminate_mcexec_do_syscall_bridge(struct syscall_request *request, int cpu)\n{\n\treturn do_syscall(request, cpu);\n}\n"
+    },
+    "C_current_wrapper": {
+      "end_line": 5373,
+      "start_line": 5361,
+      "text": "void terminate_mcexec(int rc, int sig)\n{\n\tstruct thread *mythread = get_this_cpu_local_var()->current;\n\tstruct process *proc = mythread->proc;\n\tstruct syscall_request request IHK_DMA_ALIGN;\n\n\tterminate_mcexec_body_result(proc, &request, rc, sig,\n\t\t\tihk_mc_get_processor_id(), __NR_exit_group,\n\t\t\t__builtin_offsetof(struct process, group_exit_status),\n\t\t\t__builtin_offsetof(struct process, nohost),\n\t\t\tterminate_mcexec_cmpxchg_bridge,\n\t\t\tterminate_mcexec_do_syscall_bridge);\n}"
+    },
+    "actual_pending_default_termination_predicate": {
+      "end_line": 24423,
+      "start_line": 24382,
+      "text": "            // SAFETY: Legal locked nodes retain the C indexing domain. Read\n            // next before the predicate exactly as the original safe iterator.\n            let next = unsafe { addr_of!((*entry).next).read() };\n            let mask = unsafe { addr_of!((*pending).sigmask.val[0]).read() };\n            sig = sigmask_to_signal_number(mask);\n            let action = unsafe {\n                addr_of!((*common).action).cast::<KSigAction>().add((sig - 1) as usize)\n            };\n            let handler = unsafe { addr_of!((*action).sa.sa_handler).read() as CULong };\n            let interrupted = unsafe { addr_of!((*pending).interrupted).read() };\n            // C overwrites found on every visited node; do not make it sticky.\n            found = signal_pending_interrupt_action_result(\n                sig, handler, mask, blocked, interrupted,\n            );\n            if found != 0 {\n                // SAFETY: Preserve C's raw reader-locked write without creating\n                // a broader Rust reference or claiming extra synchronization.\n                unsafe { addr_of_mut!((*pending).interrupted).write(1) };\n                if found == 2 {\n                    break;\n                }\n            }\n            entry = next;\n        }\n        // SAFETY: Release this reader lock before queue switches or effects.\n        unsafe { f03_pending_queue_unlock(lock, node.as_mut_ptr(), 0) };\n        if found == 2 || lock == private_lock {\n            break;\n        }\n        lock = private_lock;\n        head = unsafe { addr_of_mut!((*thread).sigpending) };\n    }\n\n    if found == 2 {\n        // SAFETY: Preserve the original post-unlock call and exact selected sig.\n        unsafe { f03_pending_terminate_mcexec(0, sig) };\n    } else if found == 1 {\n        // SAFETY: The caller retains the current thread. Its C endpoint's\n        // partial-context forwarding remains debt, not repaired here.\n        unsafe { f03_pending_interrupt_syscall(thread, 0) };\n    }\n}"
+    },
+    "already_selected_private_Rust_equivalent": {
+      "end_line": 68,
+      "start_line": 50,
+      "text": "\n// Preserve the real C terminate_mcexec transaction at this call boundary, rather\n// than calling the remaining project-C wrapper. Existing body/provider ABIs and\n// ignored long result remain unchanged. No new callback mechanism is introduced.\nunsafe fn notify_host_exit(rc: CInt, sig: CInt) {\n    let cpu = unsafe { crate::cls::get_this_cpu_local_var() };\n    let current = unsafe { addr_of!((*cpu).current).read() };\n    let proc = unsafe { addr_of!((*current).proc).read() };\n    let mut request = MaybeUninit::<SyscallRequest>::uninit();\n    let _ = unsafe {\n        policy::terminate_mcexec_body_result(\n            proc.cast(), request.as_mut_ptr(), rc, sig, ihk_mc_get_processor_id(), SYS_EXIT_GROUP,\n            offset_of!(Process, group_exit_status), offset_of!(Process, nohost),\n            Some(crate::atomic_helpers::atomic_cmpxchg_ulong), Some(do_syscall),\n        )\n    };\n}\n\n/// Preserve the original supported terminate transaction and void return ABI."
+    },
+    "current_pending_extern_and_existing_debt_note": {
+      "end_line": 24340,
+      "start_line": 24321,
+      "text": "\n// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\n\n// Existing C endpoints stay explicit debt: no request context is manufactured.\nextern \"C\" {\n    #[link_name = \"terminate_mcexec\"]\n    fn f03_pending_terminate_mcexec(rc: CInt, sig: CInt);\n    #[link_name = \"interrupt_syscall\"]\n    fn f03_pending_interrupt_syscall(thread: *mut Thread, sig: CInt);\n}\n\n/// Scan common/private queues for an offloaded syscall interruption action.\n///\n/// # Safety\n/// The original per-CPU entry context owns the live current-thread access. Thread,\n/// process, common state and legal nonzero-mask list nodes retain their original\n/// lifetimes and synchronization. C's interrupted write under a reader lock is\n/// preserved; this establishes no additional concurrency guarantee. Existing C\n/// termination/interrupt endpoints retain their contracts and forwarding HOLD.\n#[no_mangle]"
+    },
+    "predicate_definition": {
+      "end_line": 9772,
+      "start_line": 9751,
+      "text": "#[no_mangle]\npub extern \"C\" fn signal_pending_interrupt_action_result(\n    sig: CInt,\n    handler_addr: CULong,\n    pending_mask: CULong,\n    blocked_mask: CULong,\n    interrupted: CInt,\n) -> CInt {\n    if signal_pending_deliverable_result(0, sig, handler_addr, pending_mask, blocked_mask) == 0 {\n        return 0;\n    }\n    if interrupted != 0 {\n        return 0;\n    }\n    if !signal_is_default_ignored(sig) && handler_addr == 0 {\n        2\n    } else {\n        1\n    }\n}\n\n#[no_mangle]"
+    }
+  },
+  "current_C_owners": [
+    {
+      "address": "0xfffffffffe8016f0",
+      "binding": "GLOBAL",
+      "bytes": 136,
+      "final_code_file_offset": 5872,
+      "final_code_sha256": "58da53d85df09338be598bfefb90d94b7dea94d1dacc6de893751ce07d7ad126",
+      "name": "terminate_mcexec"
+    },
+    {
+      "address": "0xfffffffffe801050",
+      "binding": "LOCAL",
+      "bytes": 12,
+      "final_code_sha256": "d9a0a9caa3f68146759ed191f37834691f9b6bbf45a2119fe7c3d19333d7112c",
+      "name": "terminate_mcexec_do_syscall_bridge"
+    }
+  ],
+  "evidence": [
+    {
+      "bytes": 438310,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-signal-reader-p03-max-1/metadata-1/image-symbols-relocations.stdout",
+      "sha256": "845d63864a413ea21466f326388b8e9e563ca10aa1c696dc03a0a627e24d62c5"
+    },
+    {
+      "bytes": 38583414,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-signal-reader-p03-max-1/metadata-1/affected-constituent-symbols-relocations.stdout",
+      "sha256": "98465a10aa3bc3bfb155e8468b3274ce09fb77cebde08028be594c74dcfea7b8"
+    },
+    {
+      "bytes": 47026,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-signal-reader-p03-max-1/metadata-1/image-elf.stdout",
+      "sha256": "a0578d3fe3ac7ddf392e5095e0a97bceb8fcc1033d42a45262a15faa5d1922fa"
+    },
+    {
+      "bytes": 28388,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/stable-baselinef199-1/BASELINE.json",
+      "sha256": "0ddffc56414ab8c5fa8148e103703ea99c39c30c25308e7ef27ad2acc4956199"
+    }
+  ],
+  "existing_Rust_equivalent_disposition": "Selected f03_terminate::notify_host_exit already performs currentthread/process lookup, MaybeUninit request, realRust terminate_mcexec_body_result with genuinecmpxchg/do_syscall, sameoffsets/nohost/void-ignore semantics. It is private and currently reached by Rust terminate; it is not the selected public terminate_mcexec target of check_sig_pending. No indirectreroute or newexport/selector is authorized/implemented by this review. Existing source/code proof may supply a narrow future materialreview if Root scopes actual applicable forward/request hold; do not manufacture fields or treat a sourcecomment alone as authority release.",
+  "failed_literal_clause": "no required behavior is supplied by ... live project C",
+  "known_hold_scope": "Current policy source explicitly preserves termination/interrupt endpoint forwardingHOLD in this pending branch; Root latest instruction retains genuine known prohibited partialrequest/ACK/zero-fill equivalences. No new bodyport or execution follows from user urgency.",
+  "material_disposition": "SECOND_REQUIRED_LIVE_PROJECT_C_PENDING_SIGNAL_TERMINATION_EDGE",
+  "no_new_requirement": "No zero-wholefileC/nativequota/sourceinventory is added. New signal forwarding components and unrelated complete leaves retain their proof.",
+  "original_condition": "M14-03-04-DEFAULT",
+  "required_source_conditions": {
+    "effect": "After original matching IRQ reader unlock, check_sig_pending calls terminate_mcexec(0,selected_sig). found==1 uses current genuine Rust interrupt_syscall separately; no inference that its old C-debt comment is current implementation ownership.",
+    "entry": "Current initialized CPU-local current thread is nonnull/nonidle,in_syscall_offload!=0 and group exit not already claimed.",
+    "lifetime": "Current perCPU/thread/process and legal pending node masks remain originalborrow. C endpoint owns an aligned request during synchronous real terminate_mcexec_body_result; no added processreference or asynchronous authority.",
+    "predicate": "Under original common/private pending queue reader lock, deliverable nonignored signal with default handler and not already interrupted produces found==2; selected pending.interrupted set before unlocking.",
+    "return": "The actual C/Rust endpoint ABI is unsafe extern C fn(CInt,CInt)->void. Underlying CLong body/offload result is ignored exactly.",
+    "why_required": "Pending offload syscall interruption/default signal termination is within original04 signal/time/wait/restart area, not unrelated wholeimageC. Current direct emitted R64 and source branch require this exact provider."
+  },
+  "review_owner": "sdk_binding_source_max",
+  "saved_symbol_rows": {
+    "check_sig_pending": "  3928: fffffffffe83e000   859 FUNC    GLOBAL DEFAULT    1 check_sig_pending",
+    "terminate_mcexec": "  1487: fffffffffe8016f0   136 FUNC    GLOBAL DEFAULT    1 terminate_mcexec",
+    "terminate_mcexec_do_syscall_bridge": "     4: fffffffffe801050    12 FUNC    LOCAL  DEFAULT    1 terminate_mcexec_do_syscall_bridge"
+  },
+  "schema": 1,
+  "source_commit": "f1992ec2c5f18bb3a7f139647edde6818c34991b",
+  "source_identity": {
+    "C": {
+      "bytes": 964476,
+      "path": "/home/holden/mckernel/kernel/syscall.c",
+      "sha256": "e2bb3e910dcaecf23a8e131b347b401d7baf372f3d749a073e03458c429f1947"
+    },
+    "Rust_policy": {
+      "bytes": 1240794,
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "sha256": "76ce6016d6ddd1cfa6c41070c0cf35e87b94ddc31e67c805adbe3b94b3f17469"
+    },
+    "existing_qualified_Rust_termination": {
+      "bytes": 21974,
+      "path": "/home/holden/mckernel/kernel/rust/f03_terminate.rs",
+      "sha256": "c32cbef93b4441aa8adc12090b9d02d3c9bedbcc8fd99aa3a1b6111f0f3dd328"
+    }
+  }
+}

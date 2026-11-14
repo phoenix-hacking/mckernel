@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "loader.pie-startup",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/loader.pie-startup"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["argc=1 argv0_present=1 lang=C data=42 valid=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["The ET_DYN startup image resolves its interpreter and relocates data while preserving argv and LANG", "The fixed global value remains 42 after relocation"],
+  "unresolved_expectations": ["Actual PIE ELF and interpreter identities must be bound by the reviewed input manifest and Max review."],
+  "max_question_for_reviewer": "Confirm the selected PIE and interpreter identities, relocation evidence, and exact startup environment contract."
+}

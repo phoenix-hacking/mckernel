@@ -1,0 +1,33 @@
+{
+  "at": "2026-11-11T19:54:14.220016+00:00",
+  "status": "POSITIVE_FULL_ROOT_TOOL_COMPLETION",
+  "actual_tool_calls": [
+    {
+      "tool": "exec_command",
+      "arguments": {
+        "cmd": "/usr/bin/taskset -c 7 /usr/bin/prlimit --as=268435456 --core=0 --cpu=60 --fsize=8388608 /usr/bin/python3 -I -B /home/holden/mckernel-work/m14-blocker-resolution-20261110/scratch-scoped-parent-provision-p03-max-1/run_root_once.py /home/holden/mckernel-work/m14-blocker-resolution-20261110/scratch-scoped-parent-review-p04source-max-1/REVIEW.json acf6847d153d6a226120a98fdd88e1bc35bd282ccd2096b977ab96a91ee3f2c2",
+        "workdir": "/home/holden/mckernel",
+        "login": false,
+        "tty": false,
+        "yield_time_ms": 1000,
+        "max_output_tokens": 3000
+      },
+      "result": {
+        "chunk_id": "5bf528",
+        "wall_time_seconds": 0.022751486,
+        "exit_code": 0,
+        "original_token_count": 55,
+        "output": "{\"status\": \"PASS_EXACT_SCOPED_PARENT_ONLY\", \"target\": \"/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent\", \"new_created\": true, \"final_output_absent\": true, \"Root_qualification_pending\": true}\n"
+      }
+    }
+  ],
+  "tool_exit_code": 0,
+  "tool_session_id": null,
+  "all_owned_clients_and_streams_joined": true,
+  "remaining_owned_children": [],
+  "result_sha256": "672b588a6853651b1f7c5bdf486091b90f649a7f28e7aae8563a0f025060f817",
+  "receipt_sha256": "3a0a947dca78cd07374b01a307ee6c8f249f58c50a48d210e4c680813fc03d42",
+  "source_operator_authorization": "https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6805178926",
+  "scope_only_exact_parent": true,
+  "stage_native_historical_holds_released": false
+}

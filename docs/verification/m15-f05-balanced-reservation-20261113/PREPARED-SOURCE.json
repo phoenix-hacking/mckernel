@@ -1,0 +1,135 @@
+{
+  "schema": "mckernel.M15-F05-remaining-balanced-reservation-private-source-ready.v1",
+  "status": "READY_FOR_DISTINCT_INDEPENDENT_CHANGED_SOURCE_REVIEW_NOT_OPERATION_GO",
+  "owner": "/root/m15_installed_leaf_review; explicit gpt-6.1-sol/MAX; depth1",
+  "compositor_and_executor": "/root",
+  "functional_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "original_leaf": "M15-F05-original-behavior",
+  "sole_write_allowlist": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/remaining-balanced-reservation-1",
+  "preimage_module": {
+    "path": "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_memory_os_and_os_assigned.rs",
+    "bytes": 26038,
+    "sha256": "03e7b1b874eb60e71797b4a4dae63d44bc0a7e4e94fbed43729d50d3a50d3bb5"
+  },
+  "qualified_b7bc_producer_module": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihklib-matching-provider-build-1/source/linux/user/rust/whole70/ihklib_memory_os_and_os_assigned.rs",
+    "bytes": 26038,
+    "sha256": "03e7b1b874eb60e71797b4a4dae63d44bc0a7e4e94fbed43729d50d3a50d3bb5"
+  },
+  "canonical_and_qualified_preimages_equal": true,
+  "postimage": {
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/remaining-balanced-reservation-1/postimage/ihk/linux/user/rust/whole70/ihklib_memory_os_and_os_assigned.rs",
+    "resolved": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/remaining-balanced-reservation-1/postimage/ihk/linux/user/rust/whole70/ihklib_memory_os_and_os_assigned.rs",
+    "bytes": 26553,
+    "sha256": "02764df32417d29584c13baf6d3d943716cb4d2d67064902b3eabc53bb50eed1",
+    "dev": 66306,
+    "inode": 2258795,
+    "uid": 1000,
+    "gid": 1000,
+    "mode": "0o600"
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/remaining-balanced-reservation-1/BALANCED-ZERO-DIVISOR.patch",
+    "resolved": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/remaining-balanced-reservation-1/BALANCED-ZERO-DIVISOR.patch",
+    "bytes": 2826,
+    "sha256": "0a8b5bdbf061d3fd78e3ebf19baa6ea8b503bded29bb91cad2afe3ee7bd8698d",
+    "dev": 66306,
+    "inode": 2258796,
+    "uid": 1000,
+    "gid": 1000,
+    "mode": "0o600"
+  },
+  "exact_source_pins_and_inverse": {
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/remaining-balanced-reservation-1/SOURCE-PINS-AND-MINIMAL-DELTA.json",
+    "resolved": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/remaining-balanced-reservation-1/SOURCE-PINS-AND-MINIMAL-DELTA.json",
+    "bytes": 10225,
+    "sha256": "0a90cb0ba298e97a12622ea35e0fc55c65d8b1eff8120d92d3226e3b5d85140f",
+    "dev": 66306,
+    "inode": 2258797,
+    "uid": 1000,
+    "gid": 1000,
+    "mode": "0o600"
+  },
+  "ordered_arithmetic_and_backend_contract": {
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/remaining-balanced-reservation-1/BALANCED-RESERVATION-CONTRACT.json",
+    "bytes": 17459,
+    "sha256": "899fde84f62efd2316d87641a04723e3b1b986b6a3667081e5892541790ad9d8"
+  },
+  "necessary_changed_compile_and_use_proposal": {
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/remaining-balanced-reservation-1/BUILD-AND-USE-PROPOSAL.json",
+    "bytes": 15922,
+    "sha256": "06b4ac90a56d784af6a3bdb01ac13e7eabc0c1694a8f8b02548ff2bd4e7e3098",
+    "dev": 66306,
+    "inode": 2258810,
+    "uid": 1000,
+    "gid": 1000,
+    "mode": "0o600"
+  },
+  "necessary_finite_functional_case_contract": {
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/remaining-balanced-reservation-1/NECESSARY-FUNCTIONAL-CASES.json",
+    "bytes": 15038,
+    "sha256": "70a23fcc31c29d29a1268a5a97987d9fca1fa67ff136c2261adcb345f2dde671",
+    "dev": 66306,
+    "inode": 2258811,
+    "uid": 1000,
+    "gid": 1000,
+    "mode": "0o600"
+  },
+  "changed_function": "ihk_reserve_mem only",
+  "concrete_bug": "Three unchecked zero divisors in the actually selected b7bc-bound Rust reserve-memory path; normal equal queried capacities reach zero first/second donor counts after successful reserve and production panic=abort skips normal reset/cleanup. Empty capacity reaches nodes0. C has the same undefined divisions and is not trialed as an oracle.",
+  "exact_delta": [
+    "N0 -> -ENOMEM through existing one-shot reset and rollback/free/FD tail before divisions.",
+    "compensate_nodes0 -> compensation0, otherwise exact original expression.",
+    "release_nodes0 -> compensation2=0 even when missing2>0; otherwise exact original expression."
+  ],
+  "independent_static_author_checks": {
+    "whole_postimage_inverse_matches_entire_qualified_preimage": true,
+    "all_positive_denominator_formulas_verbatim_unchanged": true,
+    "cleanup_tail_and_every_other_function_source_bytes_exact": true,
+    "no_new_public_API_type_layout_export_selector_or_helper": true,
+    "no_C_caller_or_default_source_edits": true,
+    "selected_panic_abort_confirmed_from_qualified_compile_vector": true,
+    "exact_four_generated_metadata_inputs_identified_for_reuse_without_old_ABI_build": true,
+    "strict_diagnostic_qualifier_and_all_its_warning_source_files_unchanged": true,
+    "no_subject_import_compile_test_model_device_or_helper_execution": true
+  },
+  "required_independent_source_review_contract": {
+    "reviewer_prefix": "/root/functional_delta_review;",
+    "schema": "mckernel.M15-F05-balanced-zero-divisor-independent-source-review.v1",
+    "decision_if_valid": "GO_PRIVATE_F05_BALANCED_RESERVATION_ZERO_DIVISOR_SOURCE_ONLY",
+    "required_hashes": {
+      "postimage_sha256": "02764df32417d29584c13baf6d3d943716cb4d2d67064902b3eabc53bb50eed1",
+      "patch_sha256": "0a8b5bdbf061d3fd78e3ebf19baa6ea8b503bded29bb91cad2afe3ee7bd8698d",
+      "source_pins_and_inverse_sha256": "0a90cb0ba298e97a12622ea35e0fc55c65d8b1eff8120d92d3226e3b5d85140f",
+      "ordered_contract_sha256": "899fde84f62efd2316d87641a04723e3b1b986b6a3667081e5892541790ad9d8",
+      "changed_compile_use_proposal_sha256": "06b4ac90a56d784af6a3bdb01ac13e7eabc0c1694a8f8b02548ff2bd4e7e3098",
+      "finite_case_contract_sha256": "70a23fcc31c29d29a1268a5a97987d9fca1fa67ff136c2261adcb345f2dde671"
+    },
+    "review_scope": "Only the three changed guards/defined zero semantics, preserved positive arithmetic and unchanged cleanup/caller/type/source bindings, plus exact proposed changed emission/use and finite real-backend operand contracts. Reuse passing publiccreate/destroy/28-error/ABI/provider paths; no green rerun or original whole-F05 reassessment."
+  },
+  "exact_remaining_execution_boundary": {
+    "source_go": "UNISSUED",
+    "changed_compile_and_actual_new_material": "UNISSUED_UNEXECUTED",
+    "actual_real_backend_operands_and_observations": "UNISSUED_UNEXECUTED",
+    "actual_Root_admission_or_new_job": false,
+    "ordinary_compile": "A concrete minimal actual namespace/compiled-input/profile/capture/permission/account/all-owner/resource operation still needs independent review. Existing whole-production vectors are reference data for the changed module; no publiccreate/destroy consumer, old producer-main/ABI witness or old green path is requested.",
+    "real_backend": "Root's separately admitted native/device owner must provide actual module/config/cohort, exclusive GLOBAL reservation/assigned-memory lifetime and source-bounded ALL peak/ratio/order plus exact genuine R/query/request/returns/restoration. No fake backend/device action, default98% allocation assumption or physical-residual inference from planned arithmetic.",
+    "current_a2d_2GiB_exclusive_source_account_native12_globalUNKNOWN_still_held": true,
+    "no_original_acceptance_or_resource_retirement_from_preparation": true
+  },
+  "preserved": {
+    "Root_thread_id": "01a18bc3-e072-7810-9426-75101b0856c0",
+    "finite_run": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+    "same_limits_source_account_service_native_owner_and_UNKNOWNs": true,
+    "accepted_library_header_ABI_create_destroy_error_paths_reused_only_at_scope": true,
+    "installed_b7bc_current_repeat_c964_a2f_f133_canonical_files_unchanged": true,
+    "M14_before_M15_acceptance": true,
+    "held_exec_ACK_TID_XPMEM": true
+  },
+  "rejected_exclusion": {
+    "worker": "01a1c48d-4d96-7cc3-b733-73a97973152f",
+    "turn": "01a1ce01-20cf-7e03-9442-f6d521fb8b02",
+    "task": "Signal/frame/xstate collector and equivalents remain excluded from replay, rephrasing and reassignment."
+  },
+  "Root_next_action": "Assign the already-designated distinct Fdelta source review to these exact frozen bytes; retain this patch unselected and all execution/real-device holds. After meaningful reviewed integration, prepare only necessary changed emission/use and legitimate matching functional observations under separate genuine admission."
+}

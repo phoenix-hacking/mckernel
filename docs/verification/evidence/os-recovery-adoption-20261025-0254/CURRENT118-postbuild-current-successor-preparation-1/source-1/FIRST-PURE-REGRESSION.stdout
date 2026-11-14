@@ -1,0 +1,27 @@
+test_adoption_does_not_rewrite_native_or_add_nonce (__main__.Current64) ... ok
+test_drop_wrong_actor_incomplete_census_age_and_claims_rejected (__main__.Current64) ... ok
+test_every_live_current118_A2_cleanup_actor_and_known_group_rejected (__main__.Current64) ... ok
+test_failed_incomplete_and_wrong_retirement_join_rejected (__main__.Current64) ... ERROR
+test_full_history72_and_124_actor_future_adoption (__main__.Current64) ... ok
+test_guard_identity_and_real_uuid_property (__main__.Current64) ... ok
+test_old_free_and_generic_capture_parent_strictness (__main__.Current64) ... ok
+test_pending_replay_drop_native_history_and_wrong_free_rejected (__main__.Current64) ... ok
+
+======================================================================
+ERROR: test_failed_incomplete_and_wrong_retirement_join_rejected (__main__.Current64)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-postbuild-current-successor-preparation-1/source-1/test_current64.py", line 99, in test_failed_incomplete_and_wrong_retirement_join_rejected
+    with self.assertRaises(ValueError):m.validate_retirement(f['facts'],r,f['parentref'])
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-postbuild-current-successor-preparation-1/source-1/observe_current64_current118_postjoin.py", line 72, in validate_retirement
+    receipts=executor.validate_result(value,b)
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/retire_exact_current118_stopped_container.py", line 143, in validate_result
+    need(len(receipts)==len(roles),'complete exact executor command sequence')
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/retire_exact_current118_stopped_container.py", line 17, in need
+    if not ok:raise Refusal(why)
+CURRENT118_normal_retirement_pure_API.Refusal: complete exact executor command sequence
+
+----------------------------------------------------------------------
+Ran 8 tests in 6.576s
+
+FAILED (errors=1)

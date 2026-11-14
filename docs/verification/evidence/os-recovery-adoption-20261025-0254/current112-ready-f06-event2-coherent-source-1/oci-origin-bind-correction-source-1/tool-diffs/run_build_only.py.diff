@@ -1,0 +1,14 @@
+--- CURRENT112/run_build_only.py
++++ CURRENT112-OCI/run_build_only.py
+@@ -194,6 +194,11 @@
+     output.mkdir(mode=0o700);(output/'work').mkdir(mode=0o700)
+     (output/'work/evidence').mkdir(mode=0o700);(output/'work/output').mkdir(mode=0o700)
+     build=output/'work/output/build';(build/'kernel/rust').mkdir(mode=0o700,parents=True)
++    # Exact new header bind target lies under fresh writable /work, never /src.
++    origin_target=build/'kernel/rust/f06-origin/f06_rt_sigreturn_origin.h'
++    origin_target.parent.mkdir(mode=0o700)
++    require(not os.path.lexists(origin_target),'fresh exact origin header bind target')
++    origin_target.touch(mode=0o400,exist_ok=False)
+     for row in profile['inputs']['configuration']+[r for r in profile['inputs']['objects'] if not r['replace']]:
+         target=build/row['build_relative'];target.parent.mkdir(mode=0o700,parents=True,exist_ok=True);target.touch(mode=0o400,exist_ok=False)
+     (output/'plan.json').write_text(json.dumps(dict(runtime_authority=None,deadline_epoch=DEADLINE,commands=commands,tool_files=export['container_tool_files'],producer_contract=profile['producer_contract'],source_profile=reference(D/'PROFILE.SOURCE-ONLY.json')),indent=2)+'\n')

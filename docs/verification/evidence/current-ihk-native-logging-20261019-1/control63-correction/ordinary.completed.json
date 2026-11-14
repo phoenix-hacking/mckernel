@@ -1,0 +1,33 @@
+{
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--fsize=33554432",
+    "--nofile=256",
+    "--core=0",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "-c",
+    "import json,subprocess,time,os\nfrom pathlib import Path\nq=Path('/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/control-receipt-correction-1');d=json.loads((q/'ordinary-profile.json').read_bytes());end=time.monotonic()+28\nfor c in d['commands']:\n with (q/(c['label']+'.stdout')).open('xb') as o,(q/(c['label']+'.stderr')).open('xb') as e:\n  p=subprocess.run(c['argv'],stdout=o,stderr=e,timeout=min(20,max(.1,end-time.monotonic())))\n row=dict(label=c['label'],argv=c['argv'],returncode=p.returncode,direct_child_joined=True);(q/(c['label']+'.status.json')).write_text(json.dumps(row)+'\\n');assert p.returncode==0,c['label']\nprint(json.dumps(dict(status='PASS_ACTUAL_CONTROL_RECEIPT_CHAIN',commands=2)))\n"
+  ],
+  "pid": 1662172,
+  "starttime_ticks": "24372376",
+  "returncode": 1,
+  "direct_child_joined": true,
+  "process_group_absent": true,
+  "elapsed_seconds": 0.1163678230077494,
+  "streams_closed": true,
+  "ordinary.stdout": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "ordinary.stderr": {
+    "sha256": "d402359962618aceae7fbe5d1a00e754de387d1047709e267bf184ce983efd84",
+    "bytes": 118
+  }
+}

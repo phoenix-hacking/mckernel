@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "thread.detach",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/thread.detach"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["detached=1 started=1 completed=1 tid_recorded=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["A detached worker runs exactly once and reports completion without pthread_join", "The worker TID is recorded for runner-side retirement and procfs-node checks within 15 seconds"],
+  "unresolved_expectations": ["TID/procfs retirement must be supplied by runner evidence; fixture intentionally does not join the detached worker."],
+  "max_question_for_reviewer": "Confirm detached TID and procfs retirement evidence is required after the payload exits."
+}

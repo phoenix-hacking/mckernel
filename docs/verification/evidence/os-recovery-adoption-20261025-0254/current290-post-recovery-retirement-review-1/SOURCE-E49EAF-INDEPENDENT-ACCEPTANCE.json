@@ -1,0 +1,73 @@
+{
+  "actual_cleanup_execution": false,
+  "all_twelve_frozen_refs_match": true,
+  "closed_findings": [
+    "OBSERVER_CUMULATIVE_CAPTURE_EXHAUSTION: First full snapshot pair retained, every later check still reads/validates complete EOF and retains count/hash/bytes; raw failure pair retained. Same16MiB stored evidence cap;60rechecks of400-process pairs plus late failure pass pure regression.",
+    "MISSING_RECORDED_CHILD_GROUP_PROOF: Frozen refs now bind all four real five/prepare/finish/owner PROCESS/JOIN pairs; groups1043203/1043212/1043234/1043716 and roots are rejected on presence. Actual joins positive with expected0/0/0/1 and closed streams/null errors."
+  ],
+  "decision": "PASS_SOURCE_EXACT_DEAD_CALLER_NEW_OFD_BOUNDED_OBSERVER",
+  "execution_release": false,
+  "frozen_binding": {
+    "bytes": 20020,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/bounded-observer-correction-source-1/SOURCE-BINDING.json",
+    "sha256": "35b37418618cb49eebce8f662fa85f0c146dba8f29b0303b408996ad9dac5a4d"
+  },
+  "implementation_ownership": false,
+  "independent_test": {
+    "command": "taskset -c 0 bash -c 'ulimit -v 2097152; exec python3 -B docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/bounded-observer-correction-source-1/test_dead_caller.py'",
+    "exit_code": 0,
+    "full_kernel_or_root_execution": false,
+    "profile": "one unprivileged CPU0 job, address-space ceiling2GiB; AST/mock and exact file-reference reads only",
+    "reported_test_seconds": 2.503,
+    "tests": 16,
+    "tool_wall_seconds": 2.460805556
+  },
+  "native_or_retirement_acceptance": false,
+  "new_workload_authority": false,
+  "patch": {
+    "bytes": 40035,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/bounded-observer-correction-source-1/cleanup.patch",
+    "sha256": "2d25d35bc833158ac96699e5acbf7669f7501d0c294c2abae33bf0c10d22bbc9"
+  },
+  "prior_findings": {
+    "bytes": 3568,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-post-recovery-retirement-review-1/SOURCE-C72EFF-FINDINGS.json",
+    "sha256": "8aa66d743ec6ebe0630309315fb62c21b364683fe832899c6373af702591de73"
+  },
+  "prior_unknown_group_design": {
+    "bytes": 3140,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-post-recovery-retirement-review-1/UNKNOWN-CALLER-GROUP-PROOF-DESIGN-AMENDMENT.json",
+    "sha256": "68ec72ea67098b41e26b182b0a350b8fa53dff7a26de67686123e9318ffb550c"
+  },
+  "recorded_at": "2026-10-26T08:43:42.856876+00:00",
+  "remaining_blockers": [
+    "Root observation producer/profile must be adapted to exact e49 source; producer remains separate source work.",
+    "Exact21-key observation must retain genuine normal owner JOIN/receipt, request/candidate tree, complete seven-client ledger, inventories and current protocol.required_runtime_references closure; deadcaller adapter supplies current proof separately.",
+    "Independently review bounded root read-only profile/argv/output names and actual current physical observations.",
+    "Publish/fetch exact reviewed source/test bindings and obtain a separate exact cleanup execution release before any root cleanup mutation.",
+    "Final cleanup acceptance requires actual cleanup helper join, result/archives/container absence/current preserved selected sources and postreturn fresh physical lock proof. No old caller completion consumption claim."
+  ],
+  "reviewed_behavior": [
+    "New mode is explicit and mutually exclusive with inherited-root-lock stdin. No inherited OFD or old caller positive JOIN is fabricated. Original callerPGID remains UNKNOWN.",
+    "Any current caller1043200 PID presence including reused birth or zombie is refused. Exact original caller birth/boot/source and twelve historical evidence refs remain frozen.",
+    "Two complete proc snapshots validate stat birth/parent/group consistency, complete commandlines/executable observations, PID1 presence, caller/owner/waiter/child roots and descendants, recorded groups and frozen operation argv matches. Read/parse uncertainty refuses.",
+    "New transaction acquires read-only NOFOLLOW NONBLOCK permanent27:4 with LOCK_EX|LOCK_NB and exact named/FD identity checks. Deadcaller checks occur before acquisition, after acquisition, on pinned checks and process/container census. Existing uncertainty/quarantine/lifetime behavior retained.",
+    "AST comparison against N baseline: changed originals configure,census,Transaction,recover,main only; new deadcaller binding/snapshot/argv/observation helpers. Default live sameOFD binding remains selected unless explicit new flag.",
+    "Existing normal typed owner JOIN/source/static/runtime reference closure, parsed JSON receipt/stdout equality, complete client ledger, exact container/profile/namespace/ownership/inventories and archive/sentinel/preservation requirements remain.",
+    "Source preparation remains NOT_RELEASED; exact source Git/fetched binding and independent source/execution review prerequisites remain in configure."
+  ],
+  "reviewer": "/root/current_owner_retirement",
+  "root_observation_executed": false,
+  "schema": "mckernel.current290.dead-caller-successor.independent-source-acceptance.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source": {
+    "bytes": 128910,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/bounded-observer-correction-source-1/native_rust_cutover_image_terminal_cleanup.CURRENT290.EXACT-DEAD-CALLER.py",
+    "sha256": "e49eaf2a7bacc6a64523f9f6c91516b9a3abefc875cdc1d8941c4e6b55473de3"
+  },
+  "tests": {
+    "bytes": 8116,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/bounded-observer-correction-source-1/test_dead_caller.py",
+    "sha256": "ff76f0a2d9bfd3878b543417d26ea24defc472d46c4e441a313501718e3d0da7"
+  }
+}

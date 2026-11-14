@@ -1,0 +1,58 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/root-adopted-native-entry-1/run_native_f05_v2_capture.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/native-cutoff-tightening-successor-source-1/run_native_f05_v2_capture.py
+@@ -1,6 +1,35 @@
+ """Functional McKernel OS/apps and Rust/assembly migration only; no security testing."""
+ from pathlib import Path
+-import json,hashlib,subprocess,os,time,resource,datetime,decimal,importlib.util
++import json,hashlib,subprocess,os,time,resource,datetime,decimal,importlib.util,math
++AUTHORIZED_FIXED_LIMITS = (1793165769.0, 947874.5689514667, 963213.6960030915)
++
++def cutoff_triplet(values, label):
++ if type(values) not in (list, tuple) or len(values) != 3:
++  raise ValueError(label + ': three clock values required')
++ if any(type(value) not in (int, float) or not math.isfinite(value) or value <= 0 for value in values):
++  raise ValueError(label + ': finite positive numeric clocks required')
++ return tuple(values)
++
++def entry_clamps(clocks, observed_clocks, resource_cutoffs, packet_cutoffs, guardian_cutoffs):
++ now = cutoff_triplet(clocks, 'admission clocks')
++ observed = cutoff_triplet(observed_clocks, 'resource observation clocks')
++ resource = cutoff_triplet(resource_cutoffs, 'resource cutoffs')
++ packet = cutoff_triplet(packet_cutoffs, 'packet cutoffs')
++ guardian = cutoff_triplet(guardian_cutoffs, 'live guardian cutoffs')
++ if packet != resource:
++  raise ValueError('packet and resource cutoffs differ')
++ if not all(live <= recorded <= authorized for live, recorded, authorized in zip(guardian, resource, AUTHORIZED_FIXED_LIMITS)):
++  raise ValueError('guardian/resource cutoffs widen an inherited ceiling')
++ ages = [current - prior for current, prior in zip(now, observed)]
++ if not all(0 <= age < 120 for age in ages):
++  raise ValueError('resource observation expired or from the future')
++ effective = [min(live, recorded, released, authorized) for live, recorded, released, authorized in zip(guardian, resource, packet, AUTHORIZED_FIXED_LIMITS)]
++ if not all(current < deadline for current, deadline in zip(now, effective)):
++  raise ValueError('effective inherited deadline reached')
++ return dict(authorizedFixedLimits=list(AUTHORIZED_FIXED_LIMITS), resourceCutoffs=list(resource),
++             packetCutoffs=list(packet), liveGuardianCutoffs=list(guardian),
++             effectiveCutoffs=effective, resourceAgesSeconds=ages)
++
+ A=Path(__file__).resolve().parent
+ assert os.getuid()==os.geteuid()==os.getgid()==os.getegid()==1000
+ G=json.loads((A/'ROOT-ACTUAL-ONE-NATIVE-F05-V2-GRANT.json').read_bytes())
+@@ -15,15 +44,14 @@
+ spec=importlib.util.spec_from_file_location('f05v2_literal_actual_new12h_guard',policy);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+ assert m.__file__==str(policy) and m.__spec__.origin==str(policy)
+ clocks=m.guard();cutoffs=m.current_cutoffs()
+-R=json.loads(Path(G['fresh_resource_physical']['path']).read_bytes());assert all(0<=n-o<120 for n,o in zip(clocks,R['observed_clocks']))
+-assert R['fixed_cutoffs']==list(cutoffs) and P['fixed_cutoffs']==R['fixed_cutoffs']
+-assert all(n<e for n,e in zip(clocks,cutoffs))
++R=json.loads(Path(G['fresh_resource_physical']['path']).read_bytes())
++clampsUsed=entry_clamps(clocks,R['observed_clocks'],R['fixed_cutoffs'],P['fixed_cutoffs'],cutoffs)
+ assert P['decision']=='PENDING_ONE_EXACT_NATIVE_F05_V2_RELEASE' and P['expected_case']=='M14-05-05-owned-processvm-v2-204B'
+ assert P['expected_new_image_sha256']=='60e62f97ef48ecaf14174af1c5b75d7181969f439c1b45c618d6c16d4bc40d57'
+ assert P['owner_sha256']=='af2b1f57a19949e9867de2496b16063859c47298e9cf03b401e95de5bded5a10' and P['evaluator_sha256']=='529830adcd6fafa13979bf6036b2812c88630c5e0112ce4d80f9fc28cc30d4da'
+ C=A/'CAPTURE';assert C.is_dir() and not list(C.iterdir())
+ stat=Path('/proc/self/stat').read_text().rsplit(') ',1)[1].split();start=time.time()
+-(C/'STARTED.json').write_text(json.dumps(dict(argv=G['exact_argv'],caller_pid=os.getpid(),caller_starttime=stat[19],started_at=start,grant=G),indent=2)+'\n')
++(C/'STARTED.json').write_text(json.dumps(dict(argv=G['exact_argv'],caller_pid=os.getpid(),caller_starttime=stat[19],started_at=start,grant=G,clampsUsed=clampsUsed),indent=2)+'\n')
+ before=resource.getrusage(resource.RUSAGE_CHILDREN)
+ with (C/'stdout').open('xb') as out,(C/'stderr').open('xb') as err:
+  child=subprocess.Popen(G['exact_argv'],stdout=out,stderr=err);rc=child.wait()

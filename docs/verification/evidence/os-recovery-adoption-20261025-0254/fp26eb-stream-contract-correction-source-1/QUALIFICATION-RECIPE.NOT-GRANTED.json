@@ -1,0 +1,84 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PROPOSED_ORDINARY_QUALIFICATION_NOT_GRANTED",
+  "production_source_unchanged": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-helper-failure-export-1/errno-correction-1/native_diagnostic_guest_collector.helper-diagnostic.c",
+    "bytes": 25205,
+    "sha256": "b3fc4fe0d46ae95a0b428a3c2ff46a8836affc0d929da9a2809cbe3e15b5e2d6"
+  },
+  "selected_existing_profile": "ND_FUTEX",
+  "original_contract_limits4096": true,
+  "compiler": {
+    "path": "/usr/bin/x86_64-linux-gnu-gcc-9",
+    "bytes": 1158288,
+    "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f"
+  },
+  "commands": [
+    {
+      "index": 0,
+      "argv": [
+        "/usr/bin/x86_64-linux-gnu-gcc-9",
+        "-std=gnu11",
+        "-static",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-DND_FUTEX",
+        "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-helper-failure-export-1/errno-correction-1/native_diagnostic_guest_collector.helper-diagnostic.c",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/fp26eb-stream-contract-correction-source-1/output-PENDING-ROOT/collector-fp4096"
+      ],
+      "argv_sha256": "c365c3718e26081b3b71c4fe950e5de89c7289c37a4eef620290f81897f4314f"
+    },
+    {
+      "index": 1,
+      "argv": [
+        "/usr/bin/x86_64-linux-gnu-gcc-9",
+        "-std=gnu11",
+        "-static",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-DND_FUTEX",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/fp26eb-stream-contract-correction-source-1/actual_frame_fixture.c",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/fp26eb-stream-contract-correction-source-1/output-PENDING-ROOT/actual-frame-fixture"
+      ],
+      "argv_sha256": "fee8c43693087344008cb4fa563102a65ec1d7ad1fb0511374a0f03b7d1c890e"
+    },
+    {
+      "index": 2,
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/fp26eb-stream-contract-correction-source-1/check_compiled_fixture.py",
+        "--fixture",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/fp26eb-stream-contract-correction-source-1/output-PENDING-ROOT/actual-frame-fixture"
+      ],
+      "argv_sha256": "98d8d798fb83ba8424fb38e9fe58cba86ac7e2fb879fe88f38556005bfdd009e"
+    }
+  ],
+  "new_production_collector_compiles": 1,
+  "focused_fixture_compiles": 1,
+  "focused_inert_fixture_runs": 1,
+  "limits": {
+    "cpu": 6,
+    "jobs": 1,
+    "AS_bytes": 2147483648,
+    "CPU_seconds": 60,
+    "FSIZE_bytes": 67108864,
+    "core_bytes": 0,
+    "wall_seconds": 90
+  },
+  "fresh_output_directory": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/fp26eb-stream-contract-correction-source-1/output-PENDING-ROOT",
+  "output_directory_created": false,
+  "first_failure_stop": true,
+  "no_prefix_replay": true,
+  "actual_grant": null,
+  "actual_compiler_runs": 0,
+  "guest_calls": 0,
+  "runtime_authority": null
+}

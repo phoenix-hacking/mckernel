@@ -1,0 +1,36 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "profiles": [
+    {
+      "profile": "default",
+      "cases": 188,
+      "failed": [],
+      "passed": 188,
+      "defined_contracts": [
+        {
+          "name": "short-pread-zero-tail",
+          "passed": true,
+          "status": 0
+        },
+        {
+          "name": "unterminated-buildid-bounded",
+          "passed": true,
+          "status": 0
+        },
+        {
+          "name": "format-realloc-failure",
+          "passed": true,
+          "status": 255
+        }
+      ]
+    }
+  ],
+  "compiler_paths": {
+    "cc": "/usr/bin/cc",
+    "rustc": "/home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc"
+  },
+  "native_acceptance": false,
+  "full_c_free_acceptance": false,
+  "elapsed_seconds": 2.113,
+  "status": "PASS_HOST_ABI_STUB_ONLY"
+}

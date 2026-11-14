@@ -1,0 +1,31 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "C_retirement_count": 0,
+  "rows": [
+    {
+      "body": "snapshot_host_parent_flags",
+      "status": "new ready real-crate Rust body",
+      "behavior": "return actual CULong; CInt policy widens through CLong preserving original C signed-int-to-unsigned-long conversion; no narrowing"
+    },
+    {
+      "body": "fork_control_guest namespace reexports",
+      "status": "cfg-private source namespace repair only",
+      "behavior": "reexport exact real constructor/cancel and CallerForkOutcome/runnable symbols without exposing private constructed module or replacing implementation"
+    },
+    {
+      "body": "PreparedSharedChild::quarantine_after_releasing_added_refs",
+      "status": "ready normal error participation; original graph retained UNKNOWN",
+      "behavior": "consume only acquired extra Child and VM refs, each must report nonfinal0; unexpected/partial result stops with record and no retry; no original destructor/reset/free/CPU/TID release"
+    },
+    {
+      "body": "PreparedSharedChild::adopt",
+      "status": "existing accepted scope + explicit original constructor edge inventory",
+      "behavior": "record two constructor-issued Thread credits from existing unsafe caller provenance, never derive tokens from numeric refs"
+    },
+    {
+      "body": "full do_fork namespace-only fragment",
+      "status": "NOT WIRED; missing held TID providers/types",
+      "behavior": "correct nonexistent root module paths and host_flags width only; no helper port, TID implementation or wholefork claim"
+    }
+  ]
+}

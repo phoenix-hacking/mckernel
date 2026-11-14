@@ -1,0 +1,98 @@
+{
+  "artifacts": [
+    {
+      "path": "docs/verification/evidence/cleanup-archived-captures-20260907-2.py.gz",
+      "sha256": "b16e315ffd6ff5f8bca7975615776ca61bc71ff40bdb42a47836ad5c97a43f02",
+      "size": 3682,
+      "source": "/home/holden/mckernel-work/scratch/cleanup-archived-captures-20260907-2.py",
+      "unpacked_sha256": "e1245c253ce58d53aaad55f58dc1b2023e637c0a095774af27227c2a00a79398",
+      "unpacked_size": 11388
+    },
+    {
+      "path": "docs/verification/evidence/storage-cleanup-20260907-2-plan.json.gz",
+      "sha256": "92b8dd3cc9c947c52f45f8d04bf2ac6f878242e7bc40a98a363b5ede553dd9a6",
+      "size": 20179,
+      "source": "/home/holden/mckernel-work/scratch/storage-cleanup-20260907-2-plan.json",
+      "unpacked_sha256": "84f98b12bd2255786f1417b27ed9db02e59491c891badf4a49d4810bcfe8842e",
+      "unpacked_size": 229826
+    },
+    {
+      "path": "docs/verification/evidence/storage-cleanup-20260907-2-report.json.gz",
+      "sha256": "446fa873eab213cf07ac4b515938cf505b1f89c69240252a9572a17a90c60c0d",
+      "size": 3965,
+      "source": "/home/holden/mckernel-work/scratch/storage-cleanup-20260907-2-report.json",
+      "unpacked_sha256": "d7a3d178079870e51a0d9d46bf6a5b5bb0e76a46c56226ebaf78aa2529221de8",
+      "unpacked_size": 23366
+    },
+    {
+      "path": "docs/verification/evidence/storage-preserved-inputs-20260907-2.json.gz",
+      "sha256": "ec3130f7b0df12d799ef27b9fc54a4ae213d3662076efba68ecfa258e39ff3f3",
+      "size": 11014,
+      "source": "/home/holden/mckernel-work/scratch/storage-preserved-inputs-20260907-2.json",
+      "unpacked_sha256": "70233f8c738a05e740ce293f9d5023c2b71dbfe51db6a98ec47c5a193b4ae1ec",
+      "unpacked_size": 62366
+    },
+    {
+      "path": "docs/verification/evidence/storage-preserved-inputs-after-20260907-2.json.gz",
+      "sha256": "251cba6330b334e4599b46836d5a0c4d040a1a64a2aa9f7f0631f5cc42d1985c",
+      "size": 228,
+      "source": "/home/holden/mckernel-work/scratch/storage-preserved-inputs-after-20260907-2.json",
+      "unpacked_sha256": "da3fc190e0635cd6c5dc60e9099562e4b7221ab5989d01550823be127ef4e899",
+      "unpacked_size": 296
+    },
+    {
+      "path": "docs/verification/evidence/storage-scratch-trim-20260907-2.json.gz",
+      "sha256": "d6c48b737de364014f6b10d125c85b124a5e67fcaba0de383c58bc5b866d9d05",
+      "size": 406,
+      "source": "/home/holden/mckernel-work/scratch/storage-scratch-trim-20260907-2.json",
+      "unpacked_sha256": "fa10e67483802e85f669423535463d646804cd38f41ed0343c4da8e30875f7a7",
+      "unpacked_size": 808
+    }
+  ],
+  "checks": [
+    "Every retained archive and manifest used for removal matches its Git blob at the verified pushed commit, declared size and SHA-256, and passes complete gzip reading.",
+    "Every removed capture entry matches its retained archive for content, type, mode and symlink target. Source snapshots and archive hashes were rechecked before deletion.",
+    "All 263 current input/output files retain their exact sizes and SHA-256 values; all 17 protected dependency directories remain present.",
+    "Scratch image remains mounted at the same 60-GiB logical capacity. Targeted fstrim returned unused backing blocks to the host."
+  ],
+  "current_root_available_bytes": 141187878912,
+  "current_scratch_available_bytes": 33500295168,
+  "evidence_checked_at_pushed_head": "bacdad3837426d13bde180a476af3d7185b68b5c",
+  "finished_utc": "2026-09-08T04:53:19.447165+00:00",
+  "kind": "Storage maintenance; no new kernel build or runtime acceptance",
+  "limitations": [
+    "The fstrim byte count describes free ranges, not newly reclaimed storage; only the backing-file allocation decrease is credited.",
+    "Host free space can also change with unrelated activity.",
+    "No current source, module/kernel/image dependency, installed package, Git history or retained failure evidence was removed."
+  ],
+  "preserved_current_files": 263,
+  "protected_directories": [
+    "mckernel-native-irq-images-20260907-10",
+    "mckernel-native-irq-images-20260907-11",
+    "mckernel-native-irq-images-20260907-13",
+    "native-build-base-24a151fe",
+    "native-ikc-prototype-20260907-9",
+    "native-irq-transport-exact-stage-20260907-1",
+    "native-runtime-24a151fe",
+    "native-runtime-local-base-24a151fe",
+    "native-source",
+    "native-sysfs-objects-module-20260907-5",
+    "native-sysfs-os-module-20260907-2",
+    "native-sysfs-tree-module-20260907-2",
+    "native-topology-kernel-20260907-1",
+    "native-topology-module-20260907-1",
+    "native-trampoline-region-module-20260907-3",
+    "native-vdso-kernel-20260907-3",
+    "native-vdso-module-20260907-1"
+  ],
+  "reclaimed_host_allocated_bytes": 3156688896,
+  "removed_capture_directories": 8,
+  "removed_duplicate_archives": 38,
+  "removed_scratch_allocated_bytes": 659791872,
+  "restoration": [
+    "The compressed cleanup report maps every removed capture and duplicate archive to the committed evidence path and SHA-256.",
+    "Verify the recorded archive hash, then extract its top-level directory into scratch to replay historical evidence; use a fresh attempt name for new runs."
+  ],
+  "status": "PASS",
+  "total_reclaimed_across_both_cleanups_bytes": 42148425728
+}

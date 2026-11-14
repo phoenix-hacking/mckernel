@@ -1,0 +1,104 @@
+{
+  "author": "rust_next_teardown_leaf",
+  "capture_root": "/home/holden/mckernel-work/host-preparation/current-parent-pin-sdk-preparation-20261019-1/actual-source-preparation-1",
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/current-parent-pin-sdk-preparation-20261019-1/prepare_source_capsule.py"
+      ],
+      "source": {
+        "bytes": 6965,
+        "path": "/home/holden/mckernel-work/host-preparation/current-parent-pin-sdk-preparation-20261019-1/prepare_source_capsule.py",
+        "sha256": "eb9e0e1a50b1344ecfc13e2b425df6c39870865a86b17df4a66017bf572fd977"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/current-parent-pin-sdk-preparation-20261019-1/materialize_request.py",
+        "--materialize"
+      ],
+      "source": {
+        "bytes": 3359,
+        "path": "/home/holden/mckernel-work/host-preparation/current-parent-pin-sdk-preparation-20261019-1/materialize_request.py",
+        "sha256": "ae5d7ef3331ddd9ef26d1601dc7e8fe6710f22e32f30ed6b52dbe730832ee2f8"
+      }
+    }
+  ],
+  "effects": {
+    "stage1": "Only private finite60sources+14support+11engine snapshots and typedrequest metadata; no scratch/materialization/owner/container",
+    "stage2": "Exactly75source/input rows to freshcandidate/input and actualrequest; no lease/evidence/compiler/container/root/guest"
+  },
+  "functional_scope": "Functional OS/apps and Rust delivery: host SDK Arc/type/ABI compilation only; no compute C, image or userland expansion",
+  "future_identity": {
+    "actual_request_sha256": null,
+    "candidate": "/home/holden/mckernel-work/scratch/nsd-c-69ca1588db9e4cd89536e677f0130f36",
+    "evidence": "/home/holden/mckernel-work/scratch/nsd-o-69ca1588db9e4cd89536e677f0130f36",
+    "inputs": "/home/holden/mckernel-work/scratch/nsd-i-69ca1588db9e4cd89536e677f0130f36",
+    "nonce": "69ca1588db9e4cd89536e677f0130f36",
+    "request": "/home/holden/mckernel-work/host-preparation/current-parent-pin-sdk-preparation-20261019-1/request.json"
+  },
+  "later_gates": [
+    "Actual ordinary/source identity+genuine request consumers acceptance",
+    "Exact96row publication/fetch; independent compiler release",
+    "Latestphysical/soleheavy freshadmission; no moduleload/guestauthority"
+  ],
+  "ordinary_execution_started": false,
+  "profile_each": {
+    "address_space_bytes": 1073741824,
+    "cpu": 6,
+    "cpu_seconds": 30,
+    "existing_reserve_bytes": 738197504,
+    "finite_growth_allowance_bytes": 16777216,
+    "host_floor_bytes": 17179869184,
+    "included_usage_stop_percent": 97,
+    "jobs": 1,
+    "scratch_floor_bytes": 12884901888,
+    "stdout_stderr_each_bytes": 33554432,
+    "termination_grace_seconds": 2,
+    "wall_seconds": 35
+  },
+  "required_preflight": [
+    "Fresh root CPU6/aggregate admission, current boot/scratchUUID1828 and immutable942SDK basis identity",
+    "Actual host/scratch floors+existing704MiB reserve+16MiB finite growth; usage<97",
+    "Exact source/report pins and all target namespaces/captures absent",
+    "O_EXCL filecaptures; directjoin PID/start before stable9FD hashes; processgroupabsent"
+  ],
+  "schema": "mckernel.current-parent-pin-sdk.ordinary-chain-proposal.v1",
+  "sequence": "serial once/stop first failure/wholejoin; no per-command handoff",
+  "source_binding": {
+    "bytes": 3781,
+    "path": "/home/holden/mckernel-work/host-preparation/current-parent-pin-sdk-preparation-20261019-1/SOURCE-BINDING.json",
+    "sha256": "94b7143067510bba73a3b27de7ecd393b1ef1a3949c028a6c40e90e79a5de0bc"
+  },
+  "status": "PROPOSED_UNRUN_REVIEW_AND_ROOT_CPU6_GRANT_REQUIRED"
+}

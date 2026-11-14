@@ -1,0 +1,86 @@
+{
+  "schema": "mckernel.scheduler-primitives-debugdata.independent-join-review.v1",
+  "decision": "GO_EXACT_THREE_OPERAND_THREE_PAYLOAD_JOIN_PENDING_ROOT_FRESH_ADMISSION",
+  "reviewer": "/root/scheduler_debug_data_review_high",
+  "frozen_packet": {
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-primitives-debugdata-join-1/JOIN-REQUEST.json": "56ab7b29baa986f16cb73cf63069d0234e7366bd699610dbbe25443645fa1a98",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-primitives-debugdata-join-1/COMPOSITION-PROOF.json": "5c63f2608848ada10ed9659f7f873aceea1c923300ee865e11a00085bdd85f0c",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-primitives-debugdata-join-1/join_checks.py": "57d13cedbe79ed62f14da18052297d64f6f84fc91afa872951240bbfa1fc040b",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-primitives-debugdata-join-1/run_join.py": "2a270bb6fde7a429d901ca710ebb90491da93b707bcf977765fe626c73cd96a2"
+  },
+  "all_declared_input_hashes_match": true,
+  "declared_input_count": 51,
+  "exact_object_order": [
+    {
+      "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-join-1/output/scheduler_bridges_partial.o",
+      "sha256": "6fb8987df82078a290fdf25348079ef8775760c1a35942d6eb59370b25b3ec5b"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-unit-1/output/scheduler_lock_primitive_provider.o",
+      "sha256": "a22738e2afd4286b09781ca4ae1b53cd08ee54b2b9c0470c33dd93d24fd8d25d"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-unit-1/output/scheduler_debug_data.o",
+      "sha256": "4bb40a5e0f7165c6e4d5e3f55a93b3ca11cf21d08ae75cb53516f7a548cf2159"
+    }
+  ],
+  "source_ABI_profile_basis": "Reuse genuine qualified current6fb/primitivea227/data4bb source/config/metadata decisions and exactnightly1.95 ordinarypartialprofile. Canonicalabi.rs and actualprimitive source hashes bound. e069data-source/configGO,686dcorrectionGO and actualcorrectedPASS reused without replay; no heldbody/provider substitution.",
+  "independent_actual_nm_set_derivation": {
+    "prior_global": 76,
+    "prior_T": 65,
+    "prior_data": 11,
+    "prior_U": 19,
+    "new_primitive_T": 3,
+    "new_data_D_bytes": 576,
+    "duplicate_global_owners": [],
+    "union_global": 80,
+    "union_T": 68,
+    "union_data": 12,
+    "prospective_genuine_U": [
+      "do_kill",
+      "do_syscall",
+      "eventfd",
+      "f03_terminate_host_refcount_set_v1",
+      "f03_wait_release_process",
+      "f03_wait_release_thread",
+      "ihk_mc_get_vector",
+      "ihk_mc_interrupt_cpu",
+      "set_timer",
+      "syscall_do_kill_thread_bridge",
+      "syscall_do_syscall_request_bridge",
+      "syscall_find_process_bridge",
+      "syscall_generic_forwarding_body_result",
+      "syscall_process_unlock_bridge",
+      "terminate_host_body_result"
+    ],
+    "resolved_prior_imports": [
+      "__mcs_rwlock_writer_lock_noirq",
+      "__mcs_rwlock_writer_unlock_noirq",
+      "process_remaining_range_scheduler_debug",
+      "xchg4"
+    ],
+    "new_primitive_noirq_imports_bind_genuine_current_definitions": [
+      "__ihk_mc_spinlock_lock_noirq",
+      "__ihk_mc_spinlock_unlock_noirq"
+    ],
+    "interpretation": "Actualset union/difference only; no closurepercentage/finalacceptance inference."
+  },
+  "material_defects": [],
+  "reviewed_prejoin_controller_guarantees": [
+    "Driverrequires exactaffinity{6}; prejoinchecks all51inputhashes and everyactualobjecthash, qualified PASSreceipt, actualnmdefinitionkind/size/U set, disjointstrongowners, genuineprospective15U/80owner/68Tsets, originalformatterhelpers/privateKMSG/delayalias. No oldmetadata/codegengate replay.",
+    "prejoin(q) is actuallyCALLED; JOIN-PREJOIN-CHECK.json is closed/fsynced before outputdirectorycreation and beforeANYsubprocessPopen. Driverexplicitprejoin_passed+artifact check precedesld-r.",
+    "Exactly3literalserialpayloads: ld-r current6fb,a227,4bb inthatorder, thennewjoinednm/readelf only. No compiler/oldreadback/runtimecommand. Restrictedenv and retainedCPU6/AS1GiB/wall60/CPU45/fsize64MiB/core0 payloadbounds; outertaskset6/timeout200/prlimitbinds controlleroverhead. AggregateHOST4GiB and freshRootadmission remain separate.",
+    "EverystartedchildPID/birthisrecordedbefore directwait, waitrunsinfinally, receiptsfsynced; missingbirth/nonzero/unexpectedstderr stops with retainedfailure and noautomaticretry. OuteractualwaitremainsRootowner."
+  ],
+  "reviewed_postjoin_preservation_guarantees": [
+    "Postjoinrunsafterall3newreadbacks and captures actualELFsections/symbols/relocs/allocatedbytes before ownerassertions. Newglobals exactlyactualunion80=68T12data; U exactlyderived15.",
+    "Qualifiedcompare_owner preserves all76priorglobals+3newT+new576D bind/type/size/visibility, filebackedbytes or NOBITSdeclaration, exactsectiontype/flags and sufficientalignment. Qualifiedrelocationnormalization preserves eachglobal and actualprivateowner reference bysourceowner/stringcontents.",
+    "EveryinputLOCALFUNC/OBJECT must remainunique/exact; outputprivateFUNC/OBJECT name sets mustequalactualinputsets. Bothformatterhelpers/tables, logger88Btable, singleLOCAL4B KMSG_LOCK and delayalias sections/value/size are preserved, includingnormalizedtable/code/NOBITSrelocations.",
+    "Allactualnonunwindreadonlysections preserved with exacttype/flags/alignment; nonstringbytes/normalizedrelocs exact; originalNULstring/suffixcontents retained underpooling and eachfunction/datafieldtarget normalizes toactualoriginalcontents. No guessed physicalpoolcount.",
+    "Old64B andnew576B __verbose requireexact0x200003/PROGBITS/align8. Outputrequiresone640B __verbose sameexactflags/type/align, with alloldnamedbytes/relocs preserved. No mergeflagwaiver, retainbitremoval or maskacceptance. Unexpectedactualld-r variationSTOPs.",
+    "Newarraydata_fields uses joinedowner.value andsize toselectonlyits36R_X86_64_64file/funcfieldrelocations amidold4relocations. Exact18line|1<<24 fields/fmtNULL/readonlylocalcanonicalfilename+3functionNULcontents checked; allpaddingrecordedwithoutsemanticvalueassertion."
+  ],
+  "scope_boundary": "flags1 is deliberate finitearraypartial only. Original fullC debugON/globalstorage guard, generic/exec/notification/perf/mmap/SDK/source/native/current-free/UNKNOWN holds remain; no scheduling/lock/logger/IRQ/function/boot/runtime/default/native/Cretirement/score claim.",
+  "root_required_next": "Freshusage/resource/ownership+exact3payloadadmission; use exactdriverargv includingCPU6; persistactualprejoin beforeld-r and directjoinallactualwaits. Actualpostjoin result required; anyunexpectedvariationretained/stoppedforfocusedreview, no waiver.",
+  "operations": "Read frozenpacket/pred/controller, exactqualifiedhelper APIs and retainedactualproof/nm/ELFtext; comparehashes/staticAST and deriveactualnmsets. No Image/predicate/controller/link/newmetadata/compiler/test/function/runtime/native/account/monitor/canonical/index/otherownerexecution orwrites."
+}

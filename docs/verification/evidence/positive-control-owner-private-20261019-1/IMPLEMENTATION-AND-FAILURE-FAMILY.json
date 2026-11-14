@@ -1,0 +1,95 @@
+{
+  "status": "EXPERT_COHERENT_REMAINING_CHECK_AWAITS_ALLOCATION",
+  "scope": "First genuine post-positive control response parking; retained private provider branch only",
+  "references": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/base-pins.json",
+      "sha256": "2cfae542458d31d12d8354592f59673260411f7d94742c1138b9631f9e297ef4",
+      "bytes": 2478
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/source-pins.json",
+      "sha256": "a0090b102c2ecc271ae69992929f9ef3345106b6b09d6e8ae7604065c9962dda",
+      "bytes": 3156
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/positive-control-park.patch",
+      "sha256": "aab9404923e7f1db13df3deb6b74b252d87ac97f3d783459085fc5917a27f04b",
+      "bytes": 41054
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/actual-body-bindings-expert.json",
+      "sha256": "b49580ee3ca6aec03a3acce7c4fd7dfc3da15d2c1175b8dc3658b8fc92cdee6b",
+      "bytes": 3472
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/whole-check.status.json",
+      "sha256": "7c4b5c6a0c957496c2ff3591de220ce85ddf7ea80ea955af2271d15515693266",
+      "bytes": 1980
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/whole-check-correction.status.json",
+      "sha256": "77d0c6bd6454d66659f28d7efadcfa01dc699c973f34497b7a618bdf166bbe90",
+      "bytes": 4018
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-expert-proposal.json",
+      "sha256": "18fa7d39ee6ca1eba0f35ad09af8a10fa0f166baa36c9836ec2cf4bc344accdb",
+      "bytes": 3883
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/failure-family-diagnosis.json",
+      "sha256": "c17b9708c9c1599b6eb2afa18cee2c382a10891ca64ab4c81ad15e5acb14e81e",
+      "bytes": 1228
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/fixture-expert-delta.patch",
+      "sha256": "0d7e50eebaf33fb17b160b367ee2fc0e525b11c0367d650ae76ee498e6399e0b",
+      "bytes": 8828
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/new-four-delivery-setup-review.json",
+      "sha256": "a44cc5d967e4e6c3f37116823b5a6ac26885fa765f6b5b0de9bf799ec7bbdf7e",
+      "bytes": 1221
+    }
+  ],
+  "producer_to_owner_path": [
+    "Registration::return_syscall -> ihk_os_application_prepare_fork_control_v1 before existing LINK/ACK/RETURN",
+    "create_unbooted_v11 -> actual registered application_prepare_fork_control",
+    "Application::prepare_fork_control -> Remote::begin_fork_control immutable delivered snapshot",
+    "resolve_fork_control_scope -> ForkProviderClaim::acquire_control strict PENDING/BUSY",
+    "same trusted park callback -> PreparedControlTicket::park revalidation + actual mailbox Response move",
+    "ForkProviderClaim::restore_control -> exact PENDING restore or retained original owner uncertainty"
+  ],
+  "invariants": [
+    "Incoming scalar -95/0 never phase or ownership authority",
+    "No Slots lock spans IHK claim acquisition or callback; no table lock spans backend code",
+    "Same fresh Request/Response, exact fullkey/epoch/parentchildTokens/OSgeneration/request/worker/serial/cpu",
+    "Checked u32 parent refcount before actual Response move; no fallible operation after move",
+    "LINK/legacy RETURN/publication and both generic/ACK terminal removals refuse durable control",
+    "No original RET rewrite, freshpayloadSeed, mutablepayload/receipt/MM-revoke/ACK writer",
+    "Discard or restore uncertainty retains exact actualowners; no unauthenticated decrement/release"
+  ],
+  "test_status": {
+    "first_compile": "FAIL seven fixture-only rustc errors",
+    "one_bounded_correction_compile": "PASS no warnings",
+    "one_bounded_correction_test": "SIGABRT fixture concurrentworker collision; zero completed newtests",
+    "expert_prescribed_remaining": "READY unchanged production, distinctworker202/wireTID202/disjoint freshResponse, realadmission and assertions preserved",
+    "old51tests": "FILTERED_NOT_EXECUTED"
+  },
+  "independent_reviews": {
+    "interface": "0c4fc97cdaf491d0cf9734ef6f1386aa4bee5d1c5c6e6f7e499c5844a116ec71",
+    "expert_failure": "700be595546d8be09590dfb0b2d5d14a92cf3aff626918b3dfc03e815bb4cfef",
+    "expert_remaining_coherence": "02870bcf97634d24da934c99aee21f7c647f0b8d81095be719a859d0b8ad7381"
+  },
+  "authority_limits": [
+    "No guestselector2 producer",
+    "No fullv11/preRETURN/IHK/SMP crate compile or modulelink",
+    "No currentproductionChildFork provider overlay or default CREATE_PPD activation",
+    "NULL/-95/heldruntime remain",
+    "No MM aliasrevoke, terminalACK, native/guest/build/root or Ccompute expansion"
+  ],
+  "next_action": "Root-granted exact18fa two-command remaining compile+four checks once; closed-result independent review viafollowup_task; no retry onnewfailure",
+  "cpu6": "RELEASED_NO_CHILD",
+  "current_production_mutation": false
+}

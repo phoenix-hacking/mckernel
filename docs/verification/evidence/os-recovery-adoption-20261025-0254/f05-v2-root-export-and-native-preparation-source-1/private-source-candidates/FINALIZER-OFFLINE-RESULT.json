@@ -1,0 +1,60 @@
+{
+  "status": "PASS_OFFLINE_FINALIZER_CONTROLS_NOT_ACTUAL_BINDING",
+  "checks": [
+    {
+      "label": "old ca6f HOST cannot qualify new source",
+      "result": "reject",
+      "reason": "actual new v2 HOST PASS required"
+    },
+    {
+      "label": "HOST-preparation source cannot be a runtime export reference",
+      "result": "reject",
+      "reason": "runtime snapshots/captures must be in repository export"
+    },
+    {
+      "label": "old payload cannot pass exact new source binding",
+      "result": "reject",
+      "reason": "wrong v2 artifact"
+    },
+    {
+      "label": "duplicate receipt field",
+      "result": "reject",
+      "reason": "duplicate JSON key"
+    },
+    {
+      "label": "retained known static ELF parser control only",
+      "result": "parse",
+      "new_v2_credit": false
+    },
+    {
+      "label": "ET_DYN not static ET_EXEC",
+      "result": "reject",
+      "reason": "x86_64 static ET_EXEC required"
+    },
+    {
+      "label": "ELF32 rejected",
+      "result": "reject",
+      "reason": "ELF64 little endian required"
+    },
+    {
+      "label": "wrong architecture rejected",
+      "result": "reject",
+      "reason": "x86_64 static ET_EXEC required"
+    },
+    {
+      "label": "PT_INTERP rejected",
+      "result": "reject",
+      "reason": "PT_INTERP forbidden"
+    },
+    {
+      "label": "frozen source/oracle/template/stdout identity pins",
+      "result": "match"
+    }
+  ],
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "positive_actual_v2_qualify_and_write": "PENDING_ROOT_ACTUAL_NEW_HOST_RECEIPT_AND_EXPORTS",
+  "actual_payload_hash": null,
+  "actual_HOST_receipt_hash": null,
+  "generated_bound_tuple": false,
+  "compiler_or_reference_or_guest_run": false
+}

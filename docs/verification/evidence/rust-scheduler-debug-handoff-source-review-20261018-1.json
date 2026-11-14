@@ -1,0 +1,55 @@
+{
+  "decision": "PASS_SOURCE",
+  "implementation_ownership": false,
+  "reviewer": "/root/sched_debug_boundary_review_1345",
+  "recorded_by": "root dispatcher from completed independent review",
+  "scope": "Functional OS/apps and Rust scheduler-control cutover; no new compute C",
+  "reviewed_files": [
+    "kernel/process.c",
+    "kernel/rust/sched_helpers.rs",
+    "scripts/tests/test_rust_scheduler_debug_handoff_20261018.py",
+    "scripts/tests/fixtures/test_rust_scheduler_debug_handoff_20261018.rs"
+  ],
+  "evidence": {
+    "source-sha256.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-handoff-20261018-1/source-sha256.json",
+      "sha256": "fe433fb23859ef54ec5c1421e16360bc9c8dc2885e6dcfb7d8fbe4010dc5498f",
+      "bytes": 1059
+    },
+    "artifact-sha256.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-handoff-20261018-1/artifact-sha256.json",
+      "sha256": "19460d69ee82c2b7ff4e002e0bd2867c1150ec786d0d2ee9083062c37211a0b0",
+      "bytes": 7025
+    }
+  },
+  "verified_source_bindings": 10,
+  "verified_artifact_hashes": 73,
+  "recorded_zero_exit_statuses": 16,
+  "parity_cases_per_selection": 216,
+  "selections": [
+    "Rust-selected consumer",
+    "unchanged C fallback"
+  ],
+  "behavior_verified": [
+    "save prev debug state when present",
+    "clear only after prev state save and next state absent",
+    "restore next state when present",
+    "reread next state after callbacks; null prev allowed; next nonnull invariant",
+    "shared thread and debug-buffer alias cases; complete final state and call argument/order parity"
+  ],
+  "actual_consumer_nm": "selected U sched_schedule_debug_handoff; fallback no reference",
+  "ordering": "after successful schedule preparation with IRQ exclusion/runqueue lock, before FP restore and context switch",
+  "host_fixture_layout": {
+    "ptrace_debugreg_offset": 5016,
+    "Thread_size": 5568,
+    "C_layout_source": "Rust-derived reduced fixture, not production C proof"
+  },
+  "limitations": [
+    "Actual pinned-production C Thread layout assertion still required",
+    "No full production process.c build, linked image or native proof",
+    "save_debugreg/clear_debugreg/restore_debugreg architecture implementations remain live C"
+  ],
+  "kernel_runtime_authority": false,
+  "production_or_native_retirement": false,
+  "excluded_work": "Execve GO/NO-GO and fork/ACK remain excluded"
+}

@@ -1,0 +1,46 @@
+{
+  "schema": "mckernel.native-exact-retained-source-cleanup-result.v1",
+  "status": "APPLY_PASS",
+  "acceptance_credit": false,
+  "candidate": {
+    "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-74085185-scratch-3",
+    "identity": "1831:3932163",
+    "commit": "740851854b53036d4834dfb86a5fc7fb0f3954e6",
+    "allocated_bytes_after": 134406144
+  },
+  "plan": {
+    "path": "/home/holden/mckernel-work/retained-exact-candidates/native-exact-retained-candidate-74085185-source-evidence-cleanup-plan-20260930.json",
+    "identity": "66306:47496551",
+    "size": 1553583,
+    "mode": "0600",
+    "sha256": "fbfa4cc7ac31001d55db938b41b90ce8640ea7d95e3483abad9b387e95f461b0",
+    "targets": 2424,
+    "preserved_differences": 0,
+    "removed_allocated_bytes": 9100578816,
+    "remaining_targets": 0
+  },
+  "execution": {
+    "returncode": 0,
+    "command": "python3 docs/verification/evidence/native-exact-retained-candidate-74085185-source-evidence-cleanup-20260930.py --plan /home/holden/mckernel-work/retained-exact-candidates/native-exact-retained-candidate-74085185-source-evidence-cleanup-plan-20260930.json --apply"
+  },
+  "preserved": {
+    "candidate_identity_and_head": true,
+    "build_output": true,
+    "build_evidence": true,
+    "metadata_and_backup": true,
+    "request_and_manifest": true,
+    "preparation_log_and_terminal": true,
+    "failure_record_and_archive": true,
+    "operational_exclusion": true,
+    "stopped_container": true,
+    "lease_expected_absent": true
+  },
+  "trim": {
+    "mount": "/home/holden/mckernel-work/scratch",
+    "returned_bytes": 11894759424,
+    "host_available_bytes_after": 36231135232,
+    "scratch_available_bytes_after": 23646646272,
+    "memory_available_bytes_after": 29310828544
+  },
+  "preserved_failure": "native-exact-retained-candidate-74085185-source-evidence-cleanup-failure-20260930.json"
+}

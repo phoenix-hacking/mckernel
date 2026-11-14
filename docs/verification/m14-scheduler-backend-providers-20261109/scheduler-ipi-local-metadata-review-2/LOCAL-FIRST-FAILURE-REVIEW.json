@@ -1,0 +1,54 @@
+{
+  "schema": "mckernel.local-slot.first-actual-metadata-failure-review.v1",
+  "decision": "ELIGIBLE_ONE_EXACT_LARGE_MODEL_NOBITS_SECTION_PREDICATE_CORRECTION_WITH_PENDING_IPI_CORRECTION_NO_SOURCE_CHANGE",
+  "reviewer": "/root/memory_error_cleanup_witness_high",
+  "routing": "Actual Sol/HIGH, no recursion/source-only",
+  "actual_object": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-local-slot-unit-1/output/scheduler_local_slot_provider.o",
+    "sha256": "65499b6bfb5acccf886e6080d92c1fe524092f63749fdc49a79f630e66d67591",
+    "bytes": 1280
+  },
+  "reviewed_inputs_sha256": {
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-local-metadata-1/REQUEST.json": "8a15ffadc6408be34f3c509c4db8ddef33a37e702bd06151a5dd1a668b170374",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-local-metadata-1/metadata_checks.py": "900d116a00423b584ceab20089edfc2200174824a186825d7301bf3793118f67",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-local-metadata-1/LOCAL-ACTUAL-ELF-METADATA.json": "dcc0690053b6039b399459608b5d260b8ffc7c5099ac0c1e9764fcf7cd461967",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-local-metadata-1/local-symbols.stdout": "a5e1a40600e1b53a5d7e70324177d8ee15c47e212ad96a7f849d14e996f49d59",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-local-metadata-1/local-elf.stdout": "89c529f41c52050df92d0bbf375095ef37426cd8c7b350d5ce2c2f71df970c22",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/local-gate-and-timer-data-metadata-root-1/RESULT.json": "561b2ac98f1e2cfa611510769c63b586606c7e80fc3799444b01eb15b40bb01b"
+  },
+  "source_bindings_verified": {
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-local-slot-unit-1/scheduler_local_slot_unit.rs": "8fa3b8cd56b96b93c5ee7e459b5064e51938bd75da7f4a268c81aa9b42e0768e",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-local-slot-unit-1/local_accessor.rs": "c66384a24b4aa3db25a5c524a3603d8b5eb1aa6059e018d1a9589bc4ba766ac3",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-local-slot-unit-1/ipi_slot.rs": "44c3c07953eda4ae89e346682e662b513585ce8f2362ba8e7fd4012185fb673e",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-local-slot-unit-1/SOURCE-MANIFEST.json": "dba611d35b5e753a715939f0a13b819a105b6300aa3061fe0aa2eb2d19a43cf2",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-local-slot-unit-1/PROFILE-PROOF.json": "d5e132aa5af25f0eec86955a693ac11618322f20843082638bec79e854e0ba48",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-local-slot-unit-1/REQUEST.json": "1146f9aa071e72465a5c8e27d185e9eced4ccef67e248ec67374197af0b5ae84",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-local-slot-review-1/REVIEW.json": "3a20031387d5a1ea24155ea88bf1578b772f6bba2ef144bf46d52277555a3aab",
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+  },
+  "failure_scope": "Original four GNU reads were successful/joined. Root called previously unexecuted local gate once, exclusively captured LOCAL-ACTUAL-ELF-METADATA.json, then failed line204 expecting .bss.x86_issue_ipi flags3. No successful LOCAL gate receipt exists to reuse; no readback/Popen/compiler occurred in this first local gate call.",
+  "exact_actual_source_profile_binding": {
+    "source": "Original #[no_mangle] pub(crate) static mut x86_issue_ipi:Option<unsafe extern C fn(u32,u32)>=None with source size8/align8 assertions; original cfg-free source, no target/callback/default substitution.",
+    "profile": "Actual retained -Ccode-model=large/static/no_std partial flags unchanged. Compiler emitted large-model data section rather than small bss; immutable actual source/object/attrs remain as qualified producer.",
+    "actual_slot_section": {
+      "name": ".lbss.x86_issue_ipi",
+      "type": 8,
+      "type_name": "NOBITS",
+      "flags_hex": "0x10000003",
+      "align": 8,
+      "bytes": 8
+    },
+    "actual_slot_owner": "GLOBAL DEFAULT OBJECT x86_issue_ipi, value0/size8, nm kindB, no relocation target in slot. NOBITS declaration only; no reading file bytes as a live initialized callback, no ready callback claim."
+  },
+  "all_remaining_local_conditions_reviewed_on_retained_capture": [
+    "Sole GLOBAL DEFAULT T get_x86_cpu_local_variable21 in exact .ltext source section type1/flags0x10000006/align16/value0; complete section equals function extent.",
+    "Sole genuine U locals, no locals definition. Original inline local_addr was inlined; no private FUNC/OBJECT or helper/import surprises.",
+    "Exactly one code R_X86_64_64 relocation at getter+2 to GLOBAL UND locals+0. Original actual pointer load and signedCInt/wrapping4*4096 addressing source unchanged; no runtime execution.",
+    "Only readonly allocation is original .eh_frame56,type0x70000001/flags2/align8; single PC64 at32 to gettersection+0. Allocated set is only source getter, real slot and unwind; no extra data/readonly/code sections.",
+    "Exactly two total relocations, no slot relocation. Existing remaining exact-owner/function/reloc/unwind/allowed-allocation checks have no further concrete mismatch in retained capture; this read-only source review does not execute or qualify the corrected gate."
+  ],
+  "correction_boundary": "One frozen combined not-yet-executed correction may replace ONLY this exact local section/flags assumption and IPI exact source line_flags+24 edge. Preserve all other checks, original failure/captures/raw/source/object/profile. New exclusive corrected captures only; no wildcard section/mask, no source attrs, no GNU/compiler/controller/link replay.",
+  "next": "Final concrete frozen combined request/predicate/source-bindings review before Root fresh direct gate calls. Any further unexpected failure escalates; no automatic retry or second correction.",
+  "operations": "CPU0 read-existing JSON/source/hash inspection + private review write only; no parser/predicate/GNU/compiler/link/runtime/canonical/index/state execution or writes.",
+  "other_concrete_issues_identified": []
+}

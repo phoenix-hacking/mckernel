@@ -1,0 +1,17 @@
+/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
+#include <process.h>
+#include <process_helpers.h>
+extern int vm_range_insert(struct process_vm *,struct vm_range *);
+extern void vm_range_insert_log_bridge(int,struct process_vm *,struct vm_range *,struct vm_range *);
+extern void vm_range_insert_dump_bridge(struct process_vm *);
+typedef int (*entry_t)(struct process_vm *,struct vm_range *);
+typedef void (*log_t)(int,void *,struct vm_range *,struct vm_range *);
+typedef void (*dump_t)(void *);
+_Static_assert(sizeof(void *)==8 && sizeof(unsigned long)==8 && sizeof(int)==4,"supported LP64 ABI");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&vm_range_insert),entry_t),"full entry signature");
+_Static_assert(__builtin_offsetof(struct vm_range,vm_rb_node)==0,"Rust container conversion leading rb_node");
+_Static_assert(sizeof(((struct process_vm *)0)->vm_range_tree)==sizeof(struct rb_root),"actual root extent");
+_Static_assert(__alignof__(struct rb_root)==__alignof__(((struct process_vm *)0)->vm_range_tree),"actual root alignment");
+_Static_assert(__builtin_types_compatible_p(__typeof__(((struct vm_range *)0)->start),unsigned long),"range start unsigned long");
+_Static_assert(__builtin_types_compatible_p(__typeof__(((struct vm_range *)0)->end),unsigned long),"range end unsigned long");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&process_vm_range_insert_result),int (*)(struct rb_root *,struct vm_range *,void *,log_t,dump_t)),"existing Rust body helper ABI");

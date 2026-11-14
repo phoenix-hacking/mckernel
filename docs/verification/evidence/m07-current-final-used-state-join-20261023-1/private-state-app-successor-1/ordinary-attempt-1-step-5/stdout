@@ -1,0 +1,30 @@
+
+Elf file type is EXEC (Executable file)
+Entry point 0x23ea90
+There are 10 program headers, starting at offset 64
+
+Program Headers:
+  Type           Offset   VirtAddr           PhysAddr           FileSiz  MemSiz   Flg Align
+  PHDR           0x000040 0x0000000000200040 0x0000000000200040 0x000230 0x000230 R   0x8
+  LOAD           0x000000 0x0000000000200000 0x0000000000200000 0x03da90 0x03da90 R   0x1000
+  LOAD           0x03da90 0x000000000023ea90 0x000000000023ea90 0x106730 0x106730 R E 0x1000
+  LOAD           0x1441c0 0x00000000003461c0 0x00000000003461c0 0x005d60 0x005e40 RW  0x1000
+  LOAD           0x149f20 0x000000000034cf20 0x000000000034cf20 0x002c90 0x008df0 RW  0x1000
+  TLS            0x1441c0 0x00000000003461c0 0x00000000003461c0 0x000048 0x0000d0 R   0x8
+  GNU_RELRO      0x1441c0 0x00000000003461c0 0x00000000003461c0 0x005d60 0x005e40 R   0x1
+  GNU_EH_FRAME   0x027574 0x0000000000227574 0x0000000000227574 0x00375c 0x00375c R   0x4
+  GNU_STACK      0x000000 0x0000000000000000 0x0000000000000000 0x000000 0x000000 RW  0
+  NOTE           0x000270 0x0000000000200270 0x0000000000200270 0x000044 0x000044 R   0x4
+
+ Section to Segment mapping:
+  Segment Sections...
+   00     
+   01     .note.ABI-tag .note.gnu.build-id .rela.dyn .rodata .gcc_except_table .eh_frame_hdr .eh_frame 
+   02     .text .init .fini .iplt 
+   03     .tdata .fini_array .init_array .data.rel.ro .preinit_array .got .got.plt .relro_padding 
+   04     .data .tm_clone_table __libc_IO_vtables __libc_atexit .bss __libc_freeres_ptrs 
+   05     .tdata .tbss 
+   06     .tdata .fini_array .init_array .data.rel.ro .preinit_array .got .got.plt .relro_padding 
+   07     .eh_frame_hdr 
+   08     
+   09     .note.ABI-tag .note.gnu.build-id 

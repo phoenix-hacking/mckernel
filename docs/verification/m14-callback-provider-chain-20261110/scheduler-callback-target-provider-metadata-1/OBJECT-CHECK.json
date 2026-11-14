@@ -1,0 +1,277 @@
+{
+  "status": "PASS_CALLED_ACTUAL_FIVE_CALLBACK_TARGET_RDMSR_SOURCE_OWNER_CONTENT_RELOCATION_GATE",
+  "object_sha256": "e55e73a72edb30de6454989ee6d896fb55ca520791f628d514d690a18ba89cf4",
+  "object_bytes": 2408,
+  "actual_global_T": 5,
+  "actual_new_data": [],
+  "actual_private_FUNC_OBJECT": [],
+  "actual_genuine_U": [
+    "lapic_vp",
+    "wrmsr",
+    "x86_local_apic_base_msr"
+  ],
+  "actual_functions": {
+    "apic_read": {
+      "symbol": {
+        "name": "apic_read",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "section": 3,
+        "value": 0,
+        "size": 20
+      },
+      "section": {
+        "name_offset": 176,
+        "type": 1,
+        "flags": 268435462,
+        "address": 0,
+        "offset": 64,
+        "size": 20,
+        "link": 0,
+        "info": 0,
+        "align": 16,
+        "entry_size": 0,
+        "index": 3,
+        "name": ".ltext.apic_read"
+      },
+      "actual_code_hex": "48b80000000000000000488b004863cf8b0408c3",
+      "actual_code_sha256": "c778eb79a1b06cd3768f9b3948af0b6ee2b3caaf39324e5462edfe2f548692f3",
+      "actual_source_relocations": [
+        {
+          "offset": 2,
+          "type": 1,
+          "target": "lapic_vp",
+          "target_bind": 1,
+          "target_section": 0,
+          "addend": 0
+        }
+      ]
+    },
+    "apic_write": {
+      "symbol": {
+        "name": "apic_write",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "section": 5,
+        "value": 0,
+        "size": 20
+      },
+      "section": {
+        "name_offset": 114,
+        "type": 1,
+        "flags": 268435462,
+        "address": 0,
+        "offset": 96,
+        "size": 20,
+        "link": 0,
+        "info": 0,
+        "align": 16,
+        "entry_size": 0,
+        "index": 5,
+        "name": ".ltext.apic_write"
+      },
+      "actual_code_hex": "48b80000000000000000488b004863cf893408c3",
+      "actual_code_sha256": "904303e3811c1c4cf692b5a0e6639654f5495416722da768b0becadf2a223c20",
+      "actual_source_relocations": [
+        {
+          "offset": 2,
+          "type": 1,
+          "target": "lapic_vp",
+          "target_bind": 1,
+          "target_section": 0,
+          "addend": 0
+        }
+      ]
+    },
+    "rdmsr": {
+      "symbol": {
+        "name": "rdmsr",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "section": 7,
+        "value": 0,
+        "size": 14
+      },
+      "section": {
+        "name_offset": 22,
+        "type": 1,
+        "flags": 268435462,
+        "address": 0,
+        "offset": 128,
+        "size": 14,
+        "link": 0,
+        "info": 0,
+        "align": 16,
+        "entry_size": 0,
+        "index": 7,
+        "name": ".ltext.rdmsr"
+      },
+      "actual_code_hex": "89f90f3248c1e22089c04809d0c3",
+      "actual_code_sha256": "c8ac6acc8151384d576c12f13785a7506ad819871077be49086f114f83580f57",
+      "actual_source_relocations": []
+    },
+    "x2apic_read": {
+      "symbol": {
+        "name": "x2apic_read",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "section": 8,
+        "value": 0,
+        "size": 20
+      },
+      "section": {
+        "name_offset": 152,
+        "type": 1,
+        "flags": 268435462,
+        "address": 0,
+        "offset": 144,
+        "size": 20,
+        "link": 0,
+        "info": 0,
+        "align": 16,
+        "entry_size": 0,
+        "index": 8,
+        "name": ".ltext.x2apic_read"
+      },
+      "actual_code_hex": "89f9c1f90448b800000000000000000b080f32c3",
+      "actual_code_sha256": "4d214f8bbff9811005cfd4f905a6c4db81fe73cc61e2750b9f61c9a07a134138",
+      "actual_source_relocations": [
+        {
+          "offset": 7,
+          "type": 1,
+          "target": "x86_local_apic_base_msr",
+          "target_bind": 1,
+          "target_section": 0,
+          "addend": 0
+        }
+      ]
+    },
+    "x2apic_write": {
+      "symbol": {
+        "name": "x2apic_write",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "section": 10,
+        "value": 0,
+        "size": 29
+      },
+      "section": {
+        "name_offset": 89,
+        "type": 1,
+        "flags": 268435462,
+        "address": 0,
+        "offset": 176,
+        "size": 29,
+        "link": 0,
+        "info": 0,
+        "align": 16,
+        "entry_size": 0,
+        "index": 10,
+        "name": ".ltext.x2apic_write"
+      },
+      "actual_code_hex": "c1ff0448b800000000000000000b3889f648b80000000000000000ffe0",
+      "actual_code_sha256": "8530c44de6d6813574af5c2795b857ae756daddb7c236c033f6d593a6eceebe7",
+      "actual_source_relocations": [
+        {
+          "offset": 5,
+          "type": 1,
+          "target": "x86_local_apic_base_msr",
+          "target_bind": 1,
+          "target_section": 0,
+          "addend": 0
+        },
+        {
+          "offset": 19,
+          "type": 1,
+          "target": "wrmsr",
+          "target_bind": 1,
+          "target_section": 0,
+          "addend": 0
+        }
+      ]
+    }
+  },
+  "actual_unwind": {
+    "section": {
+      "name_offset": 137,
+      "type": 1879048193,
+      "flags": 2,
+      "address": 0,
+      "offset": 264,
+      "size": 184,
+      "link": 0,
+      "info": 0,
+      "align": 8,
+      "entry_size": 0,
+      "index": 14,
+      "name": ".eh_frame"
+    },
+    "source_relocations": [
+      {
+        "offset": 32,
+        "type": 24,
+        "target_section_name": ".ltext.apic_read",
+        "target_bind": 0,
+        "target_type": 3,
+        "target_value": 0,
+        "addend": 0
+      },
+      {
+        "offset": 64,
+        "type": 24,
+        "target_section_name": ".ltext.apic_write",
+        "target_bind": 0,
+        "target_type": 3,
+        "target_value": 0,
+        "addend": 0
+      },
+      {
+        "offset": 96,
+        "type": 24,
+        "target_section_name": ".ltext.rdmsr",
+        "target_bind": 0,
+        "target_type": 3,
+        "target_value": 0,
+        "addend": 0
+      },
+      {
+        "offset": 128,
+        "type": 24,
+        "target_section_name": ".ltext.x2apic_read",
+        "target_bind": 0,
+        "target_type": 3,
+        "target_value": 0,
+        "addend": 0
+      },
+      {
+        "offset": 160,
+        "type": 24,
+        "target_section_name": ".ltext.x2apic_write",
+        "target_bind": 0,
+        "target_type": 3,
+        "target_value": 0,
+        "addend": 0
+      }
+    ]
+  },
+  "source_MMIO_volatile_signed_offset_RDMSR_asm_and_casts_unchanged": true,
+  "actual_original_link_name_lapic_vp": true,
+  "public_RDMSR_and_inlined_x2_read_preserved": true,
+  "WRMSR_genuine_U_no_owner_copy_or_alias": true,
+  "actual_source_observations": {
+    "mapped_pair": "Retained20B apicread/write code loads actuallapic_vp slot through relocation, signextendsreg32to64byteoffset and retains respective32bitmappedload/store. Exact source read_volatile/write_volatile and onepointer-slotload unchanged in frozen source; no mockedbuffer/extraaccesspolicy.",
+    "rdmsr": "Actual14B publicRDMSR setsECXfromu32index, contains0f32, recombinesEDX:EAXto64bits; originalsource nomem/nostack/preserves_flags remainsnotWRMSRpolicy. No instructionexecuted bycapture/preparation.",
+    "x2_read": "Actual20B x2read contains signedSAR4/externalMSRbasedataOR theninlinedactualRDMSR/low32return. No assumedun-inlinedcall/rdmsrU or syntheticresultpolicy.",
+    "x2_write": "Actual29B x2write retains signedSAR4/externalMSRbaseOR/valueu32to64extension andrealwrmsrUtailcall. Externalwrmsr sourceABI bindingstaysgenuine, no copy/alias orinlineWRMSRbody.",
+    "policy": "Fullobservedcode/section/relocationfacts are pinned, not a new instructiondecoder/operation-countquota or runtime/hardwareproof. Anydifferentowner/content/intrinsic/asm/sectionvariationstopsforreview."
+  },
+  "actual_new_capture": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-metadata-1/ACTUAL-ELF-METADATA.json",
+  "retained_raw_capture_immutable": true,
+  "future_current_join_unbound": true,
+  "no_MMIO_MSR_function_fixture_publication_hardware_native_or_runtime_execution": true
+}

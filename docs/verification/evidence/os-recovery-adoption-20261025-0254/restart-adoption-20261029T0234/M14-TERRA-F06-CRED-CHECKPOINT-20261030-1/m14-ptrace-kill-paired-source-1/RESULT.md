@@ -1,0 +1,17 @@
+# M14 F03 ptrace detach signal bridge: paired private candidate
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+This patch selects the existing genuine `ptrace_detach_do_kill_bridge` Rust body from the retained C-1 candidate. It forwards all six original raw arguments once to the existing Rust `f06_ptrace_report_signal_kill`, whose underlying `do_kill` unsigned return is converted to the same-width signed long. The old C body remains byte-identical in the selector-off branch. The private patch adds the Rust module and source dependency and pairs its default-off C and Rust selectors under the same x86_64/Linux-6.12/non-UBSAN CMake profile. It does not alter held generic_c/direct-TID/terminate_host, do_mmap or execve transfer/ACK paths.
+
+Exact incremental preimages and output hashes are in `MANIFEST.json`: latest ptrace free/log source C SHA256 5880f20d84640b7afbdc6b14fbc86369d5ec2e68dde1a8d35f111ad28d65b0f4 and Rust policy 543c93628de9565bae3d202589f1155d841f854bcf9830f52bcb6430c9b02a66, CMake from the data32 source 812d1e5e016b9cde8fa71c211be93efdc5bfb49dd6b3685cded47d595f27dcf5. Reused body SHA256 6e6659fc62a3a2df73a4c40aeaaa57e77aaf30415eded759c9640128f6e67b54. The patch SHA256 is 23cfc24086653e651ab6626e684a502b038674a7014380d7fc59ee09f86f0477. This is a composite of source inputs, not an assertion that a complete newly built source tree has been validated.
+
+Checks performed:
+
+- `python3 prepare.py` and `git -C preimage apply --check --no-index ../PAIR.PRIVATE.patch`: PASS, exact preimage bindings and clean patch applicability.
+- `python3 check_pair.py`: PASS, isolated `cc -E -P` of the affected directive region. Original fallback start and following logical wakeup lines match for dispatch-on, helper-without-dispatch and fallback-only profiles; experimental selection appears only with the required C helper/leaf/architecture flags. The script checks matching CMake option-to-Rust cfg/C macro declarations. This is an extracted preprocessor window, not the full C TU or all configuration coverage.
+- The current baseline adapter matches byte-for-byte the previously tested adapter in `../m14-generic-detach-bridge-actual-body-1/adapter.rs`; that earlier actual-body mock fixture passed four C-call cases with exact pointer/argument forwarding, one provider call and signed-boundary return bits. It was not rerun or treated as real header/SDK/native evidence.
+
+`MCKERNEL_F03_PTRACE_DETACH_KILL_EXPERIMENTAL=ON` is the paired CMake option. Under the selected profile, emitted C must include `MCKERNEL_RUST_F03_PTRACE_DETACH_KILL_EXPERIMENTAL`, POLICY_HELPERS, LEAF_CALLBACKS and x86_64; Rust must include `f03_ptrace_detach_kill_candidate`, `f03_leaf_callbacks_candidate` and x86_64. Manual commands need both sides explicitly paired. The existing free/log baseline has its own raw-profile selector, debug environment and dynamic-debug concurrency obligations; this patch does not clear them or automatically bind the preceding raw-only logger profile in CMake.
+
+Next: independent source/ownership/ABI review of this exact patch and the four real callback sites; actual exact full-profile C preprocessing and Rust/C object compilation; genuine header ABI and descriptor/source389 preservation, unique strong provider/link and matching functional/native checks after the normal operation admission. No production/default selection, linked image, native behavior, C retirement or M14 file completion is claimed.

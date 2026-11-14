@@ -1,0 +1,487 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_POSITIVE_HELD_ONLY_CURRENT115_OWNER_RETIREMENT_AND_CURRENT_FREE_PERMANENT_MUTEX",
+  "independent": true,
+  "reviewer": "/root/guardian_execution_review",
+  "implementation_ownership": false,
+  "current_free": true,
+  "normal_owned_retirement": true,
+  "retirement_mechanism": "Released exact pidfd SIGINT to held-only owner followed by positive original tool join130 through KeyboardInterrupt/finally close; not a successful compiler exit.",
+  "holder": {
+    "path": "/run/lock/mckernel-development.lock",
+    "pid": 1815979,
+    "starttime": 95215128,
+    "device": 27,
+    "inode": 4,
+    "fd": 3
+  },
+  "actual_statuses": {
+    "compat_helper_exitcode": 0,
+    "signal_calls": 1,
+    "signal": "SIGINT via exact verified pidfd",
+    "original_holder_tool_session": 11857,
+    "original_holder_tool_exitcode": 130,
+    "positive_holder_tool_join": true,
+    "closed_holder_tool_streams": true,
+    "exception": "KeyboardInterrupt while unlaunched holder waited; can_release=True finally closes ownFD",
+    "builds_started": 0,
+    "compiler_commands": 0,
+    "Docker_or_guest_launches_from_abandoned_holder": 0
+  },
+  "source_release": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/pidfd-syscall-compatibility-source-1/independent-source-review-1/REVIEW.json",
+    "bytes": 14113,
+    "sha256": "165a774a532b8b56dece98bc9031e266a600bc262339788089ca6ebcfaea4d87"
+  },
+  "actual_Root_compat_grant": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/pidfd-syscall-compatibility-source-1/ROOT-ACTUAL-ONE-HOLDER-INTERRUPT-COMPAT-GRANT.json",
+    "bytes": 1797,
+    "sha256": "1906eb2e7d0bfb584cdfd65e47bdbc1d16dae5a412bbb52342ea2b56ba512428"
+  },
+  "actual_signal_action": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/pidfd-syscall-compatibility-source-1/ACTUAL-COMPAT-ONE-HOLDER-INTERRUPT.ACTION.jsonl",
+    "bytes": 5775,
+    "sha256": "9bae79a78a445a3a75575d18bac5297bb8cc4a3610d3498be8adf6c9ee5755bd"
+  },
+  "actual_holder_positive_tool_join": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/pidfd-syscall-compatibility-source-1/ROOT-ACTUAL-HOLDER-TOOL11857-POSITIVE-JOIN.json",
+    "bytes": 1135,
+    "sha256": "7346f1ef476450759ff0f0fbac18dca225df330b2af85322705d3215fde87ef8"
+  },
+  "actual_observer_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/current-boundary-observer-source-1/observe_root48_current115.py",
+    "bytes": 34582,
+    "sha256": "d9929d4abaa7032bb77580d9e73da5ba457a49f4b779941aa090063509285574"
+  },
+  "observer_source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/current-boundary-observer-source-1/independent-source-review-1/REVIEW.json",
+    "bytes": 14934,
+    "sha256": "e9169192cd09705d4bc173d87b91e1dde3966684473ea88c7d58ee1dc9c8a353"
+  },
+  "actual_full_observation": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/pidfd-syscall-compatibility-source-1/independent-current-free-review-1/ROOT48-REUSED-FULL-OBSERVATION.stdout",
+    "bytes": 2267827,
+    "sha256": "373e1c418ac4bc634411da8c4d2a58a77ebf6c9046eb23d62f85f7a6aa4e3733"
+  },
+  "actual_observer_stderr": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/pidfd-syscall-compatibility-source-1/independent-current-free-review-1/ROOT48-REUSED-FULL-OBSERVATION.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "actual_observer_join": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/pidfd-syscall-compatibility-source-1/independent-current-free-review-1/OBSERVER-ACTUAL-JOIN.json",
+    "bytes": 557,
+    "sha256": "4cb7d89d654aae1cea8afb754c780abed3c37f8de1f5d8c91c2faea58ff68e9e"
+  },
+  "actual_additive_observation": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/pidfd-syscall-compatibility-source-1/independent-current-free-review-1/ADDITIVE-ACTUAL-OBSERVATION.json",
+    "bytes": 7858,
+    "sha256": "87838cbe81e0559914e4e1c31fe718f944904558839635cfd08487ad73e54623"
+  },
+  "findings": [
+    {
+      "predicate": "Released one-shot actual effect and positive retirement",
+      "result": "PASS",
+      "evidence": "Actual COMPAT journal contains exactly ENTERED, ATTEMPTING and SIGNAL_SENT_NOT_RETIREMENT; exact source/grant refs agree and signal_calls1. First and second checks bind same1815979/95215128/UID1000/nochildren/FD3permanent27:4 and10negativepaths; actual signal clock lies within fresh grant<=60s. Root positive tool11857 receipt records exit130/closed streams/KeyboardInterrupt at waiting sleep and helperexit0. Existing reviewed holder source closes only its ownFD in that unlaunched state. No build READY/runner/output or claim was created."
+    },
+    {
+      "predicate": "Actual full unchanged ownership/resource observer",
+      "result": "PASS",
+      "evidence": "Ran exact d992 observer once as released read-only operation; actual child returned0 in1.767862s, streams closed and stderr0. Its guard/pinned producers validated full Root48 history:33new235actors/30clients/exactCID cf847, historical22a1/Root40/41/42/113/114/111/V3/failed113,37priorordinary joins, stopped retained containers, no running containers, records absence and two closed27:4exclusiveprobes. This is actual observation, not the source-ready result."
+    },
+    {
+      "predicate": "Exact new holder gone and permanent mutex free",
+      "result": "PASS",
+      "evidence": "Independently checked current /proc/1815979 and its fd3 path absent; full actual observer census has no PID1815979 or pgrp1815979. All10exact forbidden build grant/READY/RUNNER/streams/terminal/quarantine/OUTPUT paths remain absent. Permanent path is same device27/inode4; no kernel27:4lock row remains. Original two actual exclusive probes each acquired and closed only their ownFD; no inherited FD unlock, path replacement or deletion performed."
+    },
+    {
+      "predicate": "Additional F06 ordinary operation truthfully extends Root48",
+      "result": "PASS_OWNERSHIP_SCOPE_ONLY",
+      "evidence": "Root48 is a59consumed prefix and does not contain later nonce565026d079f0acc22e8e863c3deee226. Exact grant61b65/claim6bb904/results469ffe bind one command, child1821142/birth95311840 code0,positivejoin/groupgone/closedstreams/noerrors. Actual stdout/stderr bytes match captured hashes; stderr0. Root outer tool12590 positive terminal attestation38fa0617 records0/PASS1/streamsclosed and explicitly uncaptured outerPID/birth null. No invented outer identity or full-process birth assertion. Independently current child proc path and census PID/PGRP are absent."
+    },
+    {
+      "predicate": "Full boundary and count disposition",
+      "result": "PASS_ADDITIVE_BOUNDARY",
+      "evidence": "Accepted current-free boundary is Root48 exact59nonce historical prefix plus later F06nonce5650 and released/retired held-only attempt. Combined consumed count is60pendingRootledgeradoption. cf36b84313f404836ec6d80350e0e15a remains unused/abandoned; no compiler entered and no expired120s resource authority or old grant is revived. Parent explicitly declared no additional operations while review closed. Root alone records successor ledger; this review does not edit it."
+    },
+    {
+      "predicate": "Compatibility failure is preserved without OS failure or fallback",
+      "result": "PASS_SCOPE",
+      "evidence": "Earlier10772 native-Python hasattr failure was before guard/actionjournal/livequery/signal by source order, reported by Root; original actionjournal remains absent. Preserved original source/grant/review and expired build refusal remain immutable. Typed compatibility precheck did not claim kernel availability. Actual b522/da442 operation now completed one legitimate pidfd signal; no unchanged retry, interpreter switch, numeric/group signal, escalation or native cleanup was performed."
+    }
+  ],
+  "actual_physical": {
+    "prefix_observed_clocks": [
+      1793155998.2208867,
+      938104.789843647,
+      953442.916895064
+    ],
+    "prefix_last_observed_clocks": [
+      1793155999.8612967,
+      938106.430253208,
+      953444.557303724
+    ],
+    "additive_observed_clocks": [
+      1793156119.971408,
+      938226.540364566,
+      953564.667415024
+    ],
+    "fixed_cutoffs": [
+      1793165769.0,
+      947874.5689514667,
+      963213.695968197
+    ],
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "memory": {
+      "MemTotal": 33199697920,
+      "MemAvailable": 27327758336
+    },
+    "capacity": {
+      "/home/holden/mckernel": 148363730944,
+      "/home/holden/mckernel-work/scratch": 47863586816
+    },
+    "cgroup": {
+      "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_period_us": "100000",
+      "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_quota_us": "400000",
+      "/sys/fs/cgroup/memory/mckernel-dev/memory.limit_in_bytes": "12884901888",
+      "/sys/fs/cgroup/memory/mckernel-dev/memory.use_hierarchy": "1",
+      "/sys/fs/cgroup/pids/mckernel-dev/pids.max": "512"
+    },
+    "pids_current": 0,
+    "no_existing_heavy": true,
+    "active_shared_records_absent": true,
+    "running_container_observation": {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "ps",
+        "-q",
+        "--no-trunc"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "positive_wait": true
+    },
+    "two_closed_exclusive_mutex_probes": [
+      "58: FLOCK  ADVISORY  WRITE 1822953 00:1b:4 0 EOF",
+      "58: FLOCK  ADVISORY  WRITE 1822953 00:1b:4 0 EOF"
+    ],
+    "new_actor_absence": [
+      {
+        "actor": {
+          "pid": 1815979,
+          "start": 95215128,
+          "role": "retired_held_only_holder",
+          "group": 1815979
+        },
+        "proc_path_absent": true,
+        "fd3_path_absent": true,
+        "captured_census_PID_PGRP_matches": []
+      },
+      {
+        "actor": {
+          "pid": 1821142,
+          "start": 95311840,
+          "role": "new_post_Root48_F06_reader",
+          "group": 1821142
+        },
+        "proc_path_absent": true,
+        "fd3_path_absent": true,
+        "captured_census_PID_PGRP_matches": []
+      }
+    ],
+    "new_kernel_mutex_rows": [],
+    "ten_forbidden_paths_absent": true
+  },
+  "latest_native_custody_clearance_reused": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/root-adopted-process235-entry-1/independent-actual-native-review-1/CURRENT-FREE.json",
+    "bytes": 5497,
+    "sha256": "563d0ce4db6695fb78adfaae2d2d91ca02afa6fa9c1621704d071b883718b89e"
+  },
+  "Root48_ledger_prefix": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER48.json",
+    "bytes": 39102,
+    "sha256": "8dafffd053d7642695d7e0f28c3b68a14c4b0fb8ac9244699843368fed82f48a"
+  },
+  "latest235_exact": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/root-adopted-process235-entry-1/independent-actual-native-review-1/FRESH-EXACT-CONTAINER-AND-ACTORS.json",
+    "bytes": 58073,
+    "sha256": "5d562aab74781305a3193a2fbf7ecdd4d8a51bbac0b043ccf6e73b62002eefa0"
+  },
+  "latest235_33_actor_controls": [
+    {
+      "kind": "owner",
+      "pid": 1805542,
+      "start": 95052477,
+      "pgid": 1805537
+    },
+    {
+      "kind": "capture",
+      "pid": 1805538,
+      "start": 95052465,
+      "pgid": 1805537
+    },
+    {
+      "kind": "bridge",
+      "pid": 1805537,
+      "start": null,
+      "pgid": 1805537
+    },
+    {
+      "kind": "001-ps.json",
+      "pid": 1805544,
+      "start": 95052516,
+      "pgid": 1805544
+    },
+    {
+      "kind": "002-ps.json",
+      "pid": 1805550,
+      "start": 95052518,
+      "pgid": 1805550
+    },
+    {
+      "kind": "003-image.json",
+      "pid": 1805556,
+      "start": 95052519,
+      "pgid": 1805556
+    },
+    {
+      "kind": "004-create.json",
+      "pid": 1805562,
+      "start": 95052520,
+      "pgid": 1805562
+    },
+    {
+      "kind": "005-ps.json",
+      "pid": 1805568,
+      "start": 95052525,
+      "pgid": 1805568
+    },
+    {
+      "kind": "006-ps.json",
+      "pid": 1805574,
+      "start": 95052527,
+      "pgid": 1805574
+    },
+    {
+      "kind": "007-ps.json",
+      "pid": 1805580,
+      "start": 95052528,
+      "pgid": 1805580
+    },
+    {
+      "kind": "008-inspect.json",
+      "pid": 1805586,
+      "start": 95052530,
+      "pgid": 1805586
+    },
+    {
+      "kind": "009-start.json",
+      "pid": 1805592,
+      "start": 95052531,
+      "pgid": 1805592
+    },
+    {
+      "kind": "010-wait.json",
+      "pid": 1805769,
+      "start": 95056249,
+      "pgid": 1805769
+    },
+    {
+      "kind": "011-ps.json",
+      "pid": 1805775,
+      "start": 95056251,
+      "pgid": 1805775
+    },
+    {
+      "kind": "012-ps.json",
+      "pid": 1805781,
+      "start": 95056253,
+      "pgid": 1805781
+    },
+    {
+      "kind": "013-ps.json",
+      "pid": 1805787,
+      "start": 95056255,
+      "pgid": 1805787
+    },
+    {
+      "kind": "014-inspect.json",
+      "pid": 1805793,
+      "start": 95056256,
+      "pgid": 1805793
+    },
+    {
+      "kind": "015-wait.json",
+      "pid": 1805800,
+      "start": 95056258,
+      "pgid": 1805800
+    },
+    {
+      "kind": "016-logs.json",
+      "pid": 1805806,
+      "start": 95056260,
+      "pgid": 1805806
+    },
+    {
+      "kind": "017-inspect.json",
+      "pid": 1805812,
+      "start": 95056261,
+      "pgid": 1805812
+    },
+    {
+      "kind": "018-ps.json",
+      "pid": 1805820,
+      "start": 95056263,
+      "pgid": 1805820
+    },
+    {
+      "kind": "019-ps.json",
+      "pid": 1805827,
+      "start": 95056264,
+      "pgid": 1805827
+    },
+    {
+      "kind": "020-ps.json",
+      "pid": 1805833,
+      "start": 95056266,
+      "pgid": 1805833
+    },
+    {
+      "kind": "021-inspect.json",
+      "pid": 1805839,
+      "start": 95056267,
+      "pgid": 1805839
+    },
+    {
+      "kind": "022-stop.json",
+      "pid": 1805845,
+      "start": 95056269,
+      "pgid": 1805845
+    },
+    {
+      "kind": "023-kill.json",
+      "pid": 1805851,
+      "start": 95056271,
+      "pgid": 1805851
+    },
+    {
+      "kind": "024-wait.json",
+      "pid": 1805857,
+      "start": 95056272,
+      "pgid": 1805857
+    },
+    {
+      "kind": "025-logs.json",
+      "pid": 1805863,
+      "start": 95056274,
+      "pgid": 1805863
+    },
+    {
+      "kind": "026-inspect.json",
+      "pid": 1805869,
+      "start": 95056275,
+      "pgid": 1805869
+    },
+    {
+      "kind": "027-rm.json",
+      "pid": 1805875,
+      "start": 95056277,
+      "pgid": 1805875
+    },
+    {
+      "kind": "028-ps.json",
+      "pid": 1805881,
+      "start": 95056279,
+      "pgid": 1805881
+    },
+    {
+      "kind": "029-ps.json",
+      "pid": 1805887,
+      "start": 95056281,
+      "pgid": 1805887
+    },
+    {
+      "kind": "030-ps.json",
+      "pid": 1805893,
+      "start": 95056282,
+      "pgid": 1805893
+    }
+  ],
+  "latest235_actual30_clients_reaped": true,
+  "additional_F06": {
+    "grant": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/foreground-f06-shmget-current114-abi-source-1/local-target-identity-reader-correction-source-1/ROOT-ACTUAL-HOST-GRANT-1.json",
+      "bytes": 3840,
+      "sha256": "61b65efb15947109a7e75cf2c7c92d50fbebfdac9d22642480be254985a10644"
+    },
+    "claim": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/foreground-f06-shmget-current114-abi-source-1/local-target-identity-reader-correction-source-1/future-capture-1/CONSUMED-GRANT.json",
+      "bytes": 2047,
+      "sha256": "6bb9047605e4f787e57dca5fa7009d2fd2dff0a64dbbc3a86b5961b1102e05e8"
+    },
+    "results": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/foreground-f06-shmget-current114-abi-source-1/local-target-identity-reader-correction-source-1/future-capture-1/RESULTS.json",
+      "bytes": 1873,
+      "sha256": "469ffe8c85538ab55a83787c90f1e285226ff2b14687c3a16ac22f511317a09d"
+    },
+    "Root_outer_tool_terminal": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/foreground-f06-shmget-current114-abi-source-1/local-target-identity-reader-correction-source-1/ROOT-ACTUAL-TOOL-RESULT.json",
+      "bytes": 1703,
+      "sha256": "38fa0617d76b018b3cbce43ce6f82b47bb6eb72ef8e3b9b171279005fbbe612f"
+    },
+    "actual_child_pid": 1821142,
+    "actual_child_birth": 95311840,
+    "outer_PID": null,
+    "outer_birth": null,
+    "outer_identity_limit": "Outer CLI PID/birth were notcaptured; tool terminal result is positiveRootattestation, separately from retainedexact childbirth/ownedjoin.",
+    "native_or_holder_actions": false
+  },
+  "nonce_disposition": {
+    "Root48_consumed": 59,
+    "additional_consumed_nonce": "565026d079f0acc22e8e863c3deee226",
+    "proposed_successor_consumed": 60,
+    "abandoned_unconsumed_nonce": "cf36b84313f404836ec6d80350e0e15a",
+    "Root_adoption_required": true
+  },
+  "preserved_expired_refusal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-1/INDEPENDENT-ACTUAL-HELD-RESOURCE-EXECUTION-REVIEW.json",
+    "bytes": 5725,
+    "sha256": "91e5ad3309f97e4e5625eaabd246ac8db92351e3955f005762dd84b81d4b4e31"
+  },
+  "preserved_initial_source_blocker": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/independent-source-review-1/INITIAL-BLOCKER.json",
+    "bytes": 4435,
+    "sha256": "d8e6590cef1ecbf9f531cf0b0864e3c9106205e73ef4c89ef56883c15e86da0b"
+  },
+  "preserved_directory_corrected_source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/independent-source-review-1/DIRECTORY-FSYNC-CORRECTED-REVIEW.json",
+    "bytes": 10526,
+    "sha256": "22c6cfd5e5be160cc4ce60b2e641ccca563b8a05e3970a322b16174e7d969f9a"
+  },
+  "new_builds": 0,
+  "new_guests": 0,
+  "actual_signals_by_reviewer": 0,
+  "cleanup_or_removal_by_reviewer": 0,
+  "observer_readonly_execution_count": 1,
+  "canonical_or_ledger_edits": 0,
+  "scope_limits": [
+    "This is positive held-only retirement/current-free evidence at captured clocks, not a build/native admission. Fresh resource/source/account/ownership capture remains mandatory for later120s admission.",
+    "Actual current115 default compiler/link/artifact results remain pending; no build credit from expired held preparation.",
+    "Later F06 result is included for ownership/accounting only, no new native/whole-file/default claim.",
+    "Outer F06 toolPID/birth remains explicitly unknown; actual worker birth and Root positive terminal attestation are separate evidence."
+  ],
+  "persistent_controls": {
+    "fixed_UTC_cutoff": "2026-10-28T05:36:09Z",
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "credit_run": "7f4af94a83b14cc08f97401f5891d965",
+    "credit_ceiling": 57774.852125,
+    "cumulative_spent_floor": 22812.3311,
+    "real_holds_effective": true,
+    "oneheavy_and_original_floors_unchanged": true
+  },
+  "runtime_authority": null
+}

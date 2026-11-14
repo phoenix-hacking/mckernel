@@ -1,0 +1,50 @@
+{
+  "actual_request": null,
+  "actual_result": null,
+  "actual_source_manifest": null,
+  "affinity_successor_from_original_CPU0": {
+    "bytes": 1315,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-13/default-image-preparation-1/EXACT-COMBINED-LAUNCH.NOT-RELEASED.json",
+    "sha256": "94e6d263aec2fa3f78a46aaafa9d3b6b7d0c813602ba86b85acb6baef5d3c5e6"
+  },
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=60:60",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-13/default-image-preparation-1/run_materialization_and_pure.CPU6.py"
+  ],
+  "compiler_build_native": null,
+  "helper_sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8",
+  "materializer": {
+    "bytes": 10244,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-13/default-image-preparation-1/materialize_source.CPU6.py",
+    "sha256": "2c1c9258cf7ec2967d101a3acf35cdbf8fd5d92a8cc7efe4e68815d03c3c3a1c"
+  },
+  "no_CPU_reservation": false,
+  "ordinary_grant": "Root explicitCPU6exclusive2G/60CPU120+6/32M/nofile256/core0; CPU0reserveddiagnosticfixture; noheavy/compiler/root.",
+  "original_full19GiB_guard_both_stages": true,
+  "owner_sha256": "da78fc6bb5364f0980de569215cd9d01006f6122667713d4535a2b03ea364578",
+  "retirement_seconds": 6,
+  "reverse_literal_substitutions_equal_original_bytes": true,
+  "root_declared_aggregate_GiB": 19,
+  "runner_sha256": "e91c28787a50b3cc4af356629be82e1c67912d656aaa50fffdf656c0f0cb2e82",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "shared_wall_seconds": 120,
+  "status": "ROOT_GRANTED_ONE_CPU6_AFFINITY_SUCCESSOR_SOURCE_PLUS_COMPLETE_PURE_ONLY",
+  "validator": {
+    "bytes": 6788,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-13/default-image-preparation-1/next-build-preparation-1/prepare_and_validate.CPU6.py",
+    "sha256": "dc78e42131a3f0d6af7cf3cee7c52161f984e86526884f5a806b872d109618d0"
+  },
+  "validator_sha256": "dc78e42131a3f0d6af7cf3cee7c52161f984e86526884f5a806b872d109618d0"
+}

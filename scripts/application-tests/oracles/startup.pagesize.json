@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "case_id": "startup.pagesize",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {
+    "argv": ["/apps/startup.pagesize"],
+    "cwd": "/case/work",
+    "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}
+  },
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {
+    "kind": "exact-line-lines",
+    "lines": [
+      "sysconf_first=4096",
+      "sysconf_second=4096",
+      "auxv_pagesz=4096"
+    ]
+  },
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": [
+    "sysconf_first equals sysconf_second",
+    "sysconf_first equals auxv_pagesz",
+    "All three values equal the independent POSIX/Linux baseline 4096"
+  ],
+  "unresolved_expectations": [
+    "Freeze the canonical stdout record schema before execution and bind the exact input-manifest and oracle SHA256."
+  ],
+  "max_question_for_reviewer": "Confirm that the pinned guest baseline is 4096 bytes and approve the three-line record schema before runtime comparison."
+}

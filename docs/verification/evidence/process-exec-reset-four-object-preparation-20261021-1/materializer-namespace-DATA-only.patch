@@ -1,0 +1,22 @@
+--- a/materializer-namespace-DATA-only.patch
++++ b/materializer-namespace-DATA-only.patch
+@@ -9,15 +9,15 @@
+ import os
+ import stat
+ import sys
+-sys.path.insert(0,'/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1')
++sys.path.insert(0,'/home/holden/mckernel-work/host-preparation/process-owned-fork-rust-next-preparation-20261021-1/locking-correction-1/compiler-owner-preparation-1')
+ from thin_source_contract_lf import validate_thin_document,validate_thin_source,BASE_CANDIDATE,BASE_IHK,BASE_ROOT
+ from thin_source_contract_lf import _thin_check_tracked_link
+ 
+-HERE=Path('/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1')
++HERE=Path('/home/holden/mckernel-work/host-preparation/process-owned-fork-rust-next-preparation-20261021-1/locking-correction-1/compiler-owner-preparation-1')
+ OUTPUT_ROOT=Path(__file__).resolve().parent
+ DESTINATION=OUTPUT_ROOT/'materialized-source'
+-OVERLAYS={'kernel/rust/syscall_policy.rs':Path('/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1/syscall_policy.rs'),'kernel/syscall.c':Path('/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1/syscall.c'),'.compiler-generated/config.h':Path('/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1/owner-work/output/build/config.h')}
+-BASE_ROOT='/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/source-materialization-1/materialized-source'
++OVERLAYS={'kernel/rust/syscall_policy.rs':Path('/home/holden/mckernel-work/host-preparation/process-owned-fork-rust-next-preparation-20261021-1/locking-correction-1/compiler-owner-preparation-1/syscall_policy.rs'),'kernel/syscall.c':Path('/home/holden/mckernel-work/host-preparation/process-owned-fork-rust-next-preparation-20261021-1/locking-correction-1/compiler-owner-preparation-1/syscall.c'),'.compiler-generated/config.h':Path('/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1/owner-work/output/build/config.h')}
++BASE_ROOT='/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1/materialized-source'
+ 
+ 
+ def main():

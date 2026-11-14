@@ -1,0 +1,43 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "READY_FOR_INDEPENDENT_REVIEW_NO_EXECUTION_RELEASE",
+  "preparation": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/prepared-sdk/preparation.json",
+    "sha256": "57fce4d1aa9080016eea352a8a48725ef26a46ffca2c457318f95038081fe497",
+    "bytes": 53297
+  },
+  "result": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/metadata/PREPARATION-RESULT.json",
+    "sha256": "767a7d092703ae66006c623fa43dd65f43ff9434bec0f37e857468ea39d9f613",
+    "bytes": 6554
+  },
+  "validation": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/metadata/PURE-PREPARATION-VALIDATION.json",
+    "sha256": "1eb8421aa7c8d9c090bee5daa16795cc313e214d70a3943f6fc4abb4de61be16",
+    "bytes": 10450
+  },
+  "exact_next_staging_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=30:30",
+    "--fsize=134217728:134217728",
+    "--nofile=256:256",
+    "--core=0:0",
+    "--",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=3",
+    "35",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/metadata/stage_bound_successor.py",
+    "--execute"
+  ],
+  "staging_owner": "root dispatcher only; CPU slot must be coordinated",
+  "actual_build_requires": "fresh root identities and reviewed one-shot release; request template is not live authority",
+  "geometry": "110GiB frozen accepted profile; reconcile separately if scratch growth precedes build"
+}

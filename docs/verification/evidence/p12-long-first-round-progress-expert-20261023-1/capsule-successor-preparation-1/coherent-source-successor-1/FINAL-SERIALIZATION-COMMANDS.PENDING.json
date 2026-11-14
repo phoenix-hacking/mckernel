@@ -1,0 +1,48 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ROOT_FINALIZATION_TEMPLATE_NOT_EXECUTED",
+  "selected_transport_sha256": "ee02db41e8bde694548547b8c7d80b8896e763dce4fbbd0c6cdd7c477f8ae513",
+  "actual_admission_sha256": "98d98a9dc10a74a58ec9bb78018d1261123b1c2b17205f14ffbe7036aca7cb2a",
+  "sequence": [
+    "Root chooses genuine future expiry <=realnow+600 and runs pre_review command (no review field).",
+    "Send exact returned canonical payloadSHA includingLF to independent reviewer for conditionaloneshotdecision.",
+    "Only after genuine exactpayload approval, root supplies four-key independent_review JSONfile to publish_and_validate command.",
+    "That command exclusively publishes r.json, derivesrequest exactSHA, invokes fullproduction validate_release withoutclock/bootoverrides; root separately invokes finalargv only under actualconditionaloneshotrelease."
+  ],
+  "pre_review_argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport importlib.util,json,os,sys,time\nD=Path('/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/capsule-successor-preparation-1/coherent-source-successor-1')\nassert sys.version_info[:3]==(3,9,12) and os.getuid()==os.geteuid()==1000\ns=importlib.util.spec_from_file_location('actual_selected_production_transport',D/'source/long_transport.py');g=importlib.util.module_from_spec(s);s.loader.exec_module(g)\nassert g.digest(g.stable(D/'source/long_transport.py'))=='ee02db41e8bde694548547b8c7d80b8896e763dce4fbbd0c6cdd7c477f8ae513'\nquery=D/'admission-bounded-correction-1/authenticated-admission-readback-1/stdout';qraw=g.stable(query);assert g.digest(qraw)=='98d98a9dc10a74a58ec9bb78018d1261123b1c2b17205f14ffbe7036aca7cb2a';q=json.loads(qraw);assert q['status']=='PASS_FRESH_READ_ONLY_P12_LONG_ADMISSION'\ndef exclusive(p,raw):\n fd=os.open(p,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW|os.O_CLOEXEC,0o600)\n with os.fdopen(fd,'wb') as f:f.write(raw);f.flush();os.fsync(f.fileno())\nexpiry=float(sys.argv[1]);author=sys.argv[2];assert author=='/root' and time.time()<=expiry<=time.time()+600\nvalue=json.loads((D/'LONG-RELEASE.PROTOTYPE.NOT-EXECUTABLE.json').read_bytes());value.pop('independent_review');value.update(profile=g.TRANSPORT,storage_admission=q['observations']['admission'],status='PASS_EXECUTION_RELEASE',boot_id=Path('/proc/sys/kernel/random/boot_id').read_text().strip(),expires_unix=expiry,author=author)\nassert value['profile']['host_output']['parent']=='/home/holden/mckernel-work/native-runs/l12b1/p' and value['nonce']=='dfbb3adb1c7d45b689a899140f3afffc' and value['execution_count']==1\nassert value['manifest']=={'path':'/home/holden/mckernel-work/scratch/p12s5l2/m.json','sha256':'0c0c6e3bb3744665c5b4dddbfdd0977be39db25b78ca19392e5a380f7f0502f6'}\ng.validate_profile(value['profile']);g.growth_requirements(value['storage_admission'])\nfor name in g.FILES:assert g.digest(g.stable(D/'source'/name,2*2**20))==value['source_sha256'][name]\nraw=g.canonical(value);assert raw.endswith(b'\\n');exclusive(D/'LONG-RELEASE.PRE-REVIEW-PAYLOAD.canonical',raw)\nprint(json.dumps({'scope':'Functional OS/apps and Rust/assembly migration only; no security testing.','status':'ACTUAL_CANONICAL_PRE_REVIEW_PAYLOAD_ONLY','path':str(D/'LONG-RELEASE.PRE-REVIEW-PAYLOAD.canonical'),'payload_sha256':g.digest(raw),'bytes':len(raw),'terminal_LF':raw[-1],'expires_unix':expiry,'independent_review':None,'execution_authorized':False}))\n",
+    null,
+    "/root"
+  ],
+  "pre_review_NULL_field": "argv[5] is genuine root-chosen numeric expiry, no expiry minted by this worker.",
+  "publish_and_validate_argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport importlib.util,json,os,sys,time\nD=Path('/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/capsule-successor-preparation-1/coherent-source-successor-1')\nassert sys.version_info[:3]==(3,9,12) and os.getuid()==os.geteuid()==1000\ns=importlib.util.spec_from_file_location('actual_selected_production_transport',D/'source/long_transport.py');g=importlib.util.module_from_spec(s);s.loader.exec_module(g)\nassert g.digest(g.stable(D/'source/long_transport.py'))=='ee02db41e8bde694548547b8c7d80b8896e763dce4fbbd0c6cdd7c477f8ae513'\nquery=D/'admission-bounded-correction-1/authenticated-admission-readback-1/stdout';qraw=g.stable(query);assert g.digest(qraw)=='98d98a9dc10a74a58ec9bb78018d1261123b1c2b17205f14ffbe7036aca7cb2a';q=json.loads(qraw);assert q['status']=='PASS_FRESH_READ_ONLY_P12_LONG_ADMISSION'\ndef exclusive(p,raw):\n fd=os.open(p,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW|os.O_CLOEXEC,0o600)\n with os.fdopen(fd,'wb') as f:f.write(raw);f.flush();os.fsync(f.fileno())\npayloadraw=g.stable(D/'LONG-RELEASE.PRE-REVIEW-PAYLOAD.canonical');value=json.loads(payloadraw);assert g.canonical(value)==payloadraw\nreview=json.loads(Path(sys.argv[1]).read_bytes());assert set(review)=={'status','reviewer','implementation_ownership','payload_sha256'} and review['status']=='PASS' and review['implementation_ownership'] is False and review['reviewer']!=value['author'] and review['payload_sha256']==g.digest(payloadraw)\nassert value['profile']==g.TRANSPORT and value['storage_admission']==q['observations']['admission'] and value['boot_id']==Path('/proc/sys/kernel/random/boot_id').read_text().strip() and time.time()<=value['expires_unix']<=time.time()+600\nvalue['independent_review']=review;raw=g.canonical(value);release=Path('/home/holden/mckernel-work/scratch/p12s5l2/r.json');exclusive(release,raw);release_sha=g.digest(raw)\n# No clock or boot override: full unmodified production validation on published exact bytes.\nvalidated=g.validate_release(str(release),release_sha,value['manifest']['path'],value['nonce'],value['attempt_parent'])\nreq=json.loads((D/'CAPTURE-REQUEST.PROTOTYPE.NOT-EXECUTABLE.json').read_bytes());req['long_profile_release']={'path':str(release),'sha256':release_sha};req['argv'][req['argv'].index('--long-profile-release-sha256')+1]=release_sha;req['status']='EXACT_IMMUTABLE_REQUEST_CONDITIONED_ON_APPROVED_PAYLOAD_AND_REALCLOCK_CONSUMER';request_raw=g.canonical(req);exclusive(D/'CAPTURE-REQUEST.json',request_raw);request_sha=g.digest(request_raw)\nargv=json.loads((D/'ROOT-ARGV.PROTOTYPE.NOT-EXECUTABLE.json').read_bytes());argv[-1]=request_sha;exclusive(D/'ROOT-ARGV.FINAL.NOT-EXECUTED.json',g.canonical(argv))\nprint(json.dumps({'scope':'Functional OS/apps and Rust/assembly migration only; no security testing.','status':'PASS_PUBLISHED_FINAL_SERIALIZATION_AND_FULL_REALCLOCK_RELEASE_CONSUMER','payload_sha256':g.digest(payloadraw),'release_path':str(release),'release_sha256':release_sha,'request_path':str(D/'CAPTURE-REQUEST.json'),'request_sha256':request_sha,'root_argv_path':str(D/'ROOT-ARGV.FINAL.NOT-EXECUTED.json'),'expires_unix':validated['expires_unix'],'independent_review_source':sys.argv[1],'native_invoked':False}))\n",
+    null
+  ],
+  "publish_NULL_field": "argv[5] path to genuine reviewer-approved independent_review four-key object, never authored by worker.",
+  "additional_existing_full_realclock_command": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/capsule-successor-preparation-1/coherent-source-successor-1/validate_final_serialized_release.py",
+    "/home/holden/mckernel-work/scratch/p12s5l2/r.json",
+    null
+  ],
+  "additional_validator_NULL": "actual release digest returned by publishcommand; no monkeyclock/boot override",
+  "profile_from_selected_g_TRANSPORT": true,
+  "canonical_and_digest_from_production": true,
+  "actual_final_payload": null,
+  "actual_final_independent_review": null,
+  "actual_release": null,
+  "actual_request": null,
+  "actual_final_validator": null,
+  "native_execution": null
+}

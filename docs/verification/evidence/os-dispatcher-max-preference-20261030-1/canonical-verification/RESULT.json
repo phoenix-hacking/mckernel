@@ -1,0 +1,14 @@
+{
+  "at": 1793382387.1697884,
+  "campaign_started": false,
+  "canonical_sha256": "95bf2fd22559100b0cedf92f96c7077cf6cd7c844483e09d44c7b33f7002b17b",
+  "command": [
+    "/home/holden/anaconda3/bin/python3",
+    "-B",
+    "-c",
+    "import unittest,sys; loader=unittest.TestLoader(); suite=unittest.TestSuite(loader.discover(\"scripts/tests\",pattern=p) for p in (\"test_os_goal_launcher.py\",\"test_os_goal_*recovery.py\",\"test_os_goal_credit_timeout.py\")); result=unittest.TextTestRunner(verbosity=2).run(suite); sys.exit(not result.wasSuccessful())"
+  ],
+  "returncode": 0,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "test_output_sha256": "6fded0641172cc57483b5dd0e95006e03da9c7699a6b23c865ba95d9b8197397"
+}

@@ -1,0 +1,26 @@
+{
+  "argv": [
+    "taskset",
+    "-c",
+    "0",
+    "prlimit",
+    "--as=2147483648",
+    "--cpu=60",
+    "--core=0",
+    "--",
+    "timeout",
+    "90s",
+    "python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-SYNC-PROCESSVM-HOST13-FIVE-BUILD-ADMISSION-1/check_postbuild_current.py"
+  ],
+  "returncode": 0,
+  "positive_join": true,
+  "observed_epoch": 1793079128.073122,
+  "prior_unsaved_readonly_observation": {
+    "returncode": 0,
+    "tool_chunk": "a83d8e",
+    "reason_repeated": "required full output was printed but not persisted; no workload replay"
+  }
+}

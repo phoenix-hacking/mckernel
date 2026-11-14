@@ -1,0 +1,47 @@
+{
+  "status": "UNEXECUTED_SOURCE_ONLY_ROOT_CPU6_GRANT_REQUIRED",
+  "scope": "Functional supported-profile OS/apps plus compute-C to Rust/reviewed assembly",
+  "profile": "Reuse existing reviewed CPU6 unprivileged ordinary envelope, disjoint output only; fresh aggregate headroom/lease admission remains dispatcher-owned",
+  "commands": [
+    [
+      "/usr/bin/gcc",
+      "-std=c11",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-O2",
+      "/home/holden/mckernel-work/host-preparation/phase5-exit7-retirement-defect-20261020-1/test_retirement_window.c",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/phase5-exit7-retirement-defect-20261020-1/ordinary-check-1/test_retirement_window"
+    ],
+    [
+      "/home/holden/mckernel-work/host-preparation/phase5-exit7-retirement-defect-20261020-1/ordinary-check-1/test_retirement_window"
+    ],
+    [
+      "/usr/bin/gcc",
+      "-I",
+      "/home/holden/mckernel-work/host-preparation/phase5-m03-authenticated-boot-handshake-correction-20261020-1/candidate",
+      "-std=gnu11",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-fno-pie",
+      "-no-pie",
+      "-Wl,-z,noexecstack",
+      "-DND_M03_MPROTECT_UNALIGNED",
+      "-static",
+      "/home/holden/mckernel-work/host-preparation/phase5-exit7-retirement-defect-20261020-1/native_diagnostic_guest_collector.c",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/phase5-exit7-retirement-defect-20261020-1/ordinary-check-1/collector"
+    ]
+  ],
+  "output_root": "/home/holden/mckernel-work/host-preparation/phase5-exit7-retirement-defect-20261020-1/ordinary-check-1",
+  "output_must_be_absent": true,
+  "test_vectors": 7,
+  "test_invariant": "Real extracted production retirement loop, now_ns, bounded_deadline and retired_at bodies; mocks are clock/sleep and libc directory I/O only. No mock ACK or inferred native success.",
+  "original_early_break_negative_control": "Same test fixture with original early-break loop must fail first vector elapsed5s assertion; preserve its failure separately if dispatcher elects to run it.",
+  "execution_grant": null,
+  "stage_or_runtime_acceptance": false,
+  "guest_runs": 0
+}

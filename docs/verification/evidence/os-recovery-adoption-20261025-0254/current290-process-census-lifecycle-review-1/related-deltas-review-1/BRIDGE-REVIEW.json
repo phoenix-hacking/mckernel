@@ -1,0 +1,49 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/census_lifecycle_review",
+  "execution_authority": false,
+  "custody_or_phase_adoption_authority": false,
+  "no_runtime_or_root_queries": true,
+  "independent_checks": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-process-census-lifecycle-review-1/related-deltas-review-1/independent.status.json",
+    "bytes": 1615,
+    "sha256": "34a55e3079ac016c40df118d7fde8de57ece9dea7fe31e84f0fdccd6a882e47d"
+  },
+  "schema": "mckernel.current290.census-runtime-bridge.independent-source-review.v1",
+  "decision": "PASS_SOURCE_COMPATIBILITY_ONLY_NO_EXECUTION_AUTHORITY",
+  "bridge": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-process-census-lifecycle-correction-source-1/census-runtime-bridge-source-1/census_runtime_bridge.py",
+    "bytes": 8758,
+    "sha256": "c9af3506af824af58c599a2aa8d7a1aae30b680a25c4bcc5ca87b8bcd1d20a2a"
+  },
+  "worker_result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-process-census-lifecycle-correction-source-1/census-runtime-bridge-source-1/RESULT.json",
+    "bytes": 5032,
+    "sha256": "8a0133b49401121d495a9dbf6600121cd3707a5443772c0882864f8d8c797d05"
+  },
+  "worker_tests": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-process-census-lifecycle-correction-source-1/census-runtime-bridge-source-1/tests.status.json",
+    "bytes": 1478,
+    "sha256": "ff538b852659a94cec939ad322f161abf1642d894771c74eef270822b1f9a4b2"
+  },
+  "fourteen_genuine_bridged_fixtures": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-process-census-lifecycle-correction-source-1/census-runtime-bridge-source-1/FOURTEEN-BRIDGED-FIXTURE-RESULT.json",
+    "bytes": 3709,
+    "sha256": "70e4a0208cfafaa1e8fe63f38c583d968b96d96447ce2c2c544b1056a1210b43"
+  },
+  "verified": [
+    "Exact authenticated frozen olde49 source, corrected1eb source, source-review6d13 and oldrelease9c raw bytes are bound before installation.",
+    "Closed AST installation consists only of PROC_CODE/root_command/validate_process_report, with new actual corrected-source co_filename and original module globals.",
+    "Original __file__, PUBLISHED_SCRIPT, RELEASE identity/canonical57c and retained process_absent/run_privileged/canonical code remain unchanged; original owner/boot/client values are checked.",
+    "All preexisting globals retain identity except the three slots; precisely one versioned composition manifest is added; a post-install manifest failure restores original slots.",
+    "Actual NOT_GRANTED authorization template is rejected; required exact8field dictionary names newsource/review and originalrelease/plan.",
+    "Independent genuine original process_absent -> original run_privileged -> corrected root_command -> corrected lifecycle.v2 validator route succeeds with all process/child IO mocked.",
+    "Childfailure context preserves exactreturncode/lengths/hashes and4096Bstderrprefix/completeness without rawstdout."
+  ],
+  "limits": [
+    "Authorization equality is a closed-shape/source-binding check, not proof that Root granted runtime execution. Surrounding keeper must supply the distinct genuine grant and reviewed execution admission.",
+    "Old plan279b is pinned in authorization/manifest; bridge does not reopen or authenticate live plan/journal/FD/custody. Separate keeper review must verify actual original plan/phase bytes.",
+    "Bridge leaves olde49 recover logger unchanged; corrected root_command embeds details in exception string, but keeper must durably retain str(error) through its independently reviewed error path.",
+    "No fullnewmodule/fileidentity spoof, configure/recover/Transaction call or workload is part of this review."
+  ]
+}

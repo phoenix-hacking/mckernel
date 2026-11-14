@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "record_kind": "layer_b_native_owner_source_review",
+  "recorded_utc": "2026-09-28T08:47:00Z",
+  "status": "PASS_SOURCE",
+  "owner_path": "scripts/tests/layer_b_native_owner_v1.c",
+  "owner_sha256": "2c157335e88b2088c56fc40fd6c0d966dc653ea68b4726e51feb1d4b4e62eafc",
+  "static_test_path": "scripts/tests/test_layer_b_native_owner_source.py",
+  "static_test_sha256": "427f6133497ce0706fce39d9e52051542821bc6deab29d27322733c927efd63d",
+  "accepted_source_scope": [
+    "Actual BPF instructions allow ordinary native syscalls, deny connect and INET/INET6 sockets, and reject x32/non-x86-64 while preserving AF_UNIX socketpair.",
+    "SIGCHLD is normalized; pidfd acquisition and durable spawn record precede gate release; post-fork errors retain supervision.",
+    "Direct/adopted deduplication, finite pass errors, authoritative ECHILD reconciliation, durable terminal-before-reap and slot retirement are source-coherent.",
+    "Child signals/descriptors are restored/closed before absolute execve and payload status propagates.",
+    "False acknowledgment is removed; unresolved ownership retains the live synchronous subreaper and handles."
+  ],
+  "next_scope": "Prepare and independently review a bootstrap packet compiling only the exact owner translation unit with pinned GCC, headers/libc, warnings and a fresh disposable output.",
+  "compilation_released": false,
+  "owner_execution_released": false,
+  "layer_b_profile_released": false,
+  "acceptance_credit": false,
+  "limitations": [
+    "Source-model tests are not native execution evidence.",
+    "Unidentified live adopted children may require indefinite retained supervision.",
+    "Blocking filesystem operations, owner SIGKILL/host failure and hostile same-UID interference are outside demonstrated guarantees.",
+    "Resource limits remain per-process and the filter is not a general hostile-code sandbox."
+  ]
+}

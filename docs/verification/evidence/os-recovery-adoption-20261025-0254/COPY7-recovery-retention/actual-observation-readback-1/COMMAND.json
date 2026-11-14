@@ -1,0 +1,14 @@
+{
+  "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Exact bounded readback of COPY7 observation for independent retirement review.",
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "-c",
+    "import pathlib,json,hashlib,os,stat,sys\np=pathlib.Path(sys.argv[1]);extra=pathlib.Path(sys.argv[2]);s=p.stat();d={\"directory\":{\"path\":str(p),\"device\":s.st_dev,\"inode\":s.st_ino,\"mode\":s.st_mode,\"uid\":s.st_uid,\"gid\":s.st_gid},\"files\":[]}\npaths=[p/n for n in [\"observation.json\",\"cleanup-release-draft.json\",\"observer-result.json\",\"ownership.json\"]]+sorted(p.glob(\"process-*.json\"))+sorted(p.glob(\"readonly-command-*\"))+[extra]\nfor x in paths:\n s=x.lstat();assert stat.S_ISREG(s.st_mode) and s.st_size<16777216\n b=x.read_bytes();s2=x.lstat();assert (s.st_ino,s.st_size,s.st_mtime_ns)==(s2.st_ino,s2.st_size,s2.st_mtime_ns)\n d[\"files\"].append({\"path\":str(x),\"name\":x.name,\"bytes\":len(b),\"sha256\":hashlib.sha256(b).hexdigest(),\"device\":s.st_dev,\"inode\":s.st_ino,\"mode\":s.st_mode,\"uid\":s.st_uid,\"gid\":s.st_gid,\"content_hex\":b.hex()})\nprint(json.dumps(d,sort_keys=True))\n",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-qualified-source-integration-1/current81-default-image-preparation/next-normal-cfg-only-source-preparation-1/namespace-request-preparation-cfg-only-1/bounded-runtime-import-binding-correction-1/expert-current-process-TID-source-identity-correction-1/retained-normal-prefix-continuation-preparation-1/copy7-normal-image-retirement-preparation-1/root-observation-m14-copy7-normal-failed-observation-20261024-1",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-qualified-source-integration-1/current81-default-image-preparation/next-normal-cfg-only-source-preparation-1/namespace-request-preparation-cfg-only-1/bounded-runtime-import-binding-correction-1/expert-current-process-TID-source-identity-correction-1/retained-normal-prefix-continuation-preparation-1/copy7-normal-image-retirement-preparation-1/CLOSED-IMAGE-OWNER-CLI-PROOF.json"
+  ]
+}

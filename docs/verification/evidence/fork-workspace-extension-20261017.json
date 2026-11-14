@@ -1,0 +1,59 @@
+{
+  "schema": "mckernel-bounded-workspace-extension-v1",
+  "recorded_utc": "2026-10-17T03:30:38Z",
+  "status": "PASS_FIVE_EXACT_FILES_READY_WIP_AND_INDEX_PRESERVED",
+  "worktree": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1",
+  "worktree_head": "09f438751c28df0f497ed45a6bf6a4c6e0821d7b",
+  "main_head_before_and_after": "7f4faf87e94e23aff81f128e020cd3b98ee75774",
+  "frozen_boundary_review": "docs/verification/evidence/native-fork-final-destructor-boundary-review-20261017.json",
+  "method": "Read exact selected Git blob bytes in bounded 32768-byte chunks; validate chunk lengths and final sizes; materialize five files using apply_patch. Extend only isolated sparse-checkout patterns with apply_patch. Do not invoke sparse-checkout, read-tree, restore, reset, index mutation or full checkout.",
+  "materialized_sha256": {
+    "kernel/rust/process_helpers.rs": "b3a28ea8b0cd2594305644c224ae718eac384c0709305da315a6b8fd1285d00b",
+    "kernel/process_helpers.c": "c444c9c911b3dd231e6c8d8ae544c82f5d69893506f99bcff4be4ae3216a34f5",
+    "kernel/include/process_helpers.h": "2c01124eaf57635e9fb1c8ba1467a2d829767198d49fa5d3e49b9a9c71fc7ad7",
+    "kernel/process.c": "6480b1ab121acf17610495682cd9e58cba774427de9695b1ce8dd65a9bc07cb2",
+    "kernel/include/process.h": "907391bd99a38b48be54ff6700f1ca12143e5a9bfabf4826b6f09ab2b842bc6c"
+  },
+  "five_git_hash_object_equal_pinned_head_blob_checks": true,
+  "five_sha256_equal_frozen_review": true,
+  "preserved_wip_sha256_before_and_after": {
+    "host-kernel/native-rust/mcctrl_vm.rs": "f00a3d7b7ef547b8ef8c598f0f8b890086d4657a9ae19504d3a8d3ff855ea44e",
+    "host-kernel/native-rust/smp_application_image.rs": "a559bf426360940760907b8cf840ac60b3e56ab148235a8c0e88d50dc002492b",
+    "scripts/tests/fixtures/native_fork_ownership_20261017.rs": "49367dcd8ece7fe45419936604f631bcc9a7e00733facd93c6bf93f7ef4f9c22",
+    "scripts/tests/test_native_fork_ownership_20261017.py": "f1035bef192fc05e420985ad5d09438adff4fff5fab3195abb03369eaf6379b0",
+    "scripts/tests/fixtures/native_fork_adoption_transaction_20261017.rs": "6ecfcb36c425577492262c2241d773041f371c4b052ec70016a4bc3912c6990f",
+    "scripts/tests/test_native_fork_adoption_transaction_20261017.py": "df5ed6c6b550d6df9bec50a683d78626529c1566b0fbe6a2eeba70a1a225025e"
+  },
+  "isolated_index_sha256_before_and_after": "1ce07a6681675e232979cdadc8684454219c97776a533d67f13ac53d1502dcfc",
+  "status_preserved": "Exactly four preexisting tracked modifications plus two preexisting untracked test files. Five materialized files produce no new modifications. Status observed with GIT_OPTIONAL_LOCKS=0 to preserve exact index bytes.",
+  "sparse_patterns_after": [
+    "/host-kernel/native-rust/",
+    "/kernel/syscall.c",
+    "/scripts/tests/",
+    "/kernel/rust/process_helpers.rs",
+    "/kernel/process_helpers.c",
+    "/kernel/include/process_helpers.h",
+    "/kernel/process.c",
+    "/kernel/include/process.h"
+  ],
+  "failure_history": {
+    "inherited_dispatcher": [
+      "git sparse-checkout add --no-cone unsupported by installed Git 2.25.1; no mutation",
+      "bounded sparse-checkout set correction refused unstaged changes; no mutation"
+    ],
+    "read_only_blob_extraction": "Initial dd bs=32768 skip=N count=1 read from a pipe returned a short block (16384 bytes at chunk 65536). Length validation stopped before any file mutation. One bounded correction added iflag=fullblock; every chunk and reconstructed blob size then matched. Neither attempt modified source or index.",
+    "commands_and_outputs": "Retained in dispatcher and this worker tool history; no failed attempt replayed or discarded"
+  },
+  "capacity_observation": {
+    "scratch_available_bytes": 33231515648,
+    "host_available_bytes": 29278957568
+  },
+  "execution": {
+    "blob_reads_affinity_cpu": 7,
+    "compiler_build_root_docker_guest_network": false,
+    "main_semantic_source_or_configuration_edits": false,
+    "deletion_or_cleanup": false,
+    "runtime_or_acceptance_credit": false
+  },
+  "next_executable_observation": "Isolated author may implement the independently reviewed additive checked final-destructor APIs in these five files while preserving existing WIP. Compiler execution requires the dispatcher's applicable cheap profile."
+}

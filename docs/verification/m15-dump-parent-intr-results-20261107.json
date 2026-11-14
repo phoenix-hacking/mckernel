@@ -1,0 +1,419 @@
+{
+  "schema": "m15-dump-parent-intr-functional-results-v1",
+  "at": "2026-11-07T03:14:04.200170+00:00",
+  "invocation": "20261107T023815Z-216a194d",
+  "scope": "Original M15-F05 library root-parent correction and M15-F07 interrupt result propagation; ordinary HOST source/behavior/build proof only.",
+  "source_commit": {
+    "at": "2026-11-07T03:11:24.007242+00:00",
+    "parent": "b431d6f54ed492af405fc62043ca9bb389f490b3",
+    "HEAD": "6abba64bb569c89d2a660c957c8f3d58fe5374c6",
+    "tree": "1cba9022a1f74bcdb1b1234c33f8a0a2623d98ee",
+    "changed_files": [
+      "linux/user/ihklib.c",
+      "linux/user/rust/whole70/ihklib_dump.rs",
+      "linux/user/ihkosctl.c",
+      "linux/user/rust/ihkosctl.rs"
+    ],
+    "index_empty": true,
+    "source_clean": true,
+    "initial_commit_failure": "Missing git identity because replacement administration environment omitted inherited config; source/index preserved; one correction reuses existing inherited identity/config without global change."
+  },
+  "source_composition": {
+    "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/ROOT-COMPOSED-SOURCE.json",
+    "sha256": "c04e23e4dd6806075af290730989c3d6a6f3e048e7f6aedd452a4458e49b2ee1"
+  },
+  "reviewed_source_pairs": [
+    {
+      "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/dump-parent-pair-1/PAIR.PRIVATE.patch",
+      "sha256": "c6b57558452089cc8403c31603aa17135cce224efcda6e2d2fb1b38cd62c06b9"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/dump-parent-review-1/REVIEW.md",
+      "sha256": "4b54ad1a6fdb202cca7a268114bf6da61f75f1cdb29eda8556d8517a0817e9bf"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/intr-cli-pair-1/PAIR.PRIVATE.patch",
+      "sha256": "d5c53ab507c8f51b42a311f0fbc093c649219c0a0116c98a8e0f4b2ba5c1c4eb"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/intr-cli-review-1/SOURCE-REVIEW.json",
+      "sha256": "47832cec48d0730effa5be1c869a976d1311796523d55de565b3dbe1abe070c3"
+    }
+  ],
+  "receipts": {
+    "dump_behavior": {
+      "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/dump-parent-cases-1/qualification-1/RESULT.json",
+      "sha256": "d12d4ddd350652fd046b3a6ba5b20cfcf8456531ba15a551f76dfef182102a84"
+    },
+    "intr_behavior": {
+      "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/intr-cli-cases-1/correction-1/qualification-1/RESULT.json",
+      "sha256": "069eb0ffcc11fd4e577b27774d1bdf25b26acc4072781c7f8521238d3f07ad47"
+    },
+    "changed_library": {
+      "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/dump-parent-producer-1/RESULT.json",
+      "sha256": "a2c7b05998654732bd9b3a00d4da164b0cf19632cc4145ac48de9154029961fc"
+    },
+    "changed_tool": {
+      "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/intr-cli-producer-1/RESULT.json",
+      "sha256": "37cad18c0258982bc03073b9ba6a6cb47babc33760e06fbf8e38d36d924a25e4"
+    }
+  },
+  "dump_behavior": {
+    "status": "PASS_SCOPED_C_AND_FULL_RUST_DUMP_PARENT_PATHS",
+    "baseline_C_cases": 4,
+    "baseline_Rust_cases": 4,
+    "candidate_C_cases": 4,
+    "candidate_Rust_cases": 4,
+    "C_preexisting_retained_owners_observed_then_reclaimed": 16,
+    "Rust_survivors": 0,
+    "C_scope": "Actual production prefix through local failedbfd_fopen+actualout-tail, unreachable BFDsuccessregion excluded/bound; no wholeCbody claim",
+    "Rust_scope": "Full actual selected publicdumpmodule with explicitlocalproviderlinkseams",
+    "all_direct_waits_joined": true,
+    "real_BFD_or_dump_device_NMI_or_native_executed": false
+  },
+  "dump_contract": {
+    "baseline_cases": 8,
+    "candidate_cases": 8,
+    "paths": [
+      "/dumpfile permitted",
+      "/dumpfile EACCES",
+      "/owned-dir/dumpfile",
+      "dumpfile"
+    ],
+    "zero_chunks_only": true,
+    "C_claim": "Actual function prefix through local failed bfd_fopen and exact actual outtail; 6428-byte never-executed legacy BFD-success region source-bound/excluded. No legacy SDK/header adaptation.",
+    "Rust_claim": "Full actual selected Rust dump module under explicit synchronous local provider seams.",
+    "ownership": "Both allocations and real anonymous FD are live through final provider borrow; FD close once/EBADF. Existing C two-buffer retention is safely observed/reclaimed after return, not fixed by parent change. Rust actual finish releases both owners.",
+    "real_device_NMI_dump_file_BFD_object_native": false
+  },
+  "intr_behavior": {
+    "status": "PASS_TWENTYFOUR_CORRECTED_WHOLE_MAIN_FUNCTION_INTR_CASES",
+    "request_sha256": "c20ebb01f4e9f3c194d50242c9be06b3547e2034afccc96ed64c19afb8f40701",
+    "review_sha256": "ee70b073e794d408bba43dfd69f9624c8cf932859f59c41b8b0da74b63c12ce6",
+    "fresh_actual_called_validator_gates": {
+      "baseline": {
+        "status": "PASS",
+        "object": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/intr-cli-cases-1/correction-1/qualification-1/baseline-C.o",
+        "object_sha256": "263a43119798a99874953f245576b63862ed2c64489379e8bf3d6d4132826581",
+        "nm_stdout_sha256": "e346599809230957beb91daad967ba1d53040c9785cf3eb3c90c6ea6b08b324b",
+        "validator_sha256": "1bffdb223a5ddd16741dc602a82211f1b3682b9ac71b8e87cede174664143a31",
+        "called_function": "validate",
+        "decision": {
+          "required_undefined": [
+            "observation_close",
+            "observation_ioctl",
+            "observation_open"
+          ],
+          "forbidden_undefined": [],
+          "actual_main_export": "T"
+        }
+      },
+      "candidate": {
+        "status": "PASS",
+        "object": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/intr-cli-cases-1/correction-1/qualification-1/candidate-C.o",
+        "object_sha256": "143caddc73920debce0a2deeffb15407faad7ee3717420a212a19feaa7065654",
+        "nm_stdout_sha256": "e346599809230957beb91daad967ba1d53040c9785cf3eb3c90c6ea6b08b324b",
+        "validator_sha256": "1bffdb223a5ddd16741dc602a82211f1b3682b9ac71b8e87cede174664143a31",
+        "called_function": "validate",
+        "decision": {
+          "required_undefined": [
+            "observation_close",
+            "observation_ioctl",
+            "observation_open"
+          ],
+          "forbidden_undefined": [],
+          "actual_main_export": "T"
+        }
+      }
+    },
+    "both_gates_passed_before_any_link_runtime": true,
+    "all_direct_waits_joined": true,
+    "CPU0_released": true,
+    "wall_ns": 468322879,
+    "actual_function_cases_passed": 24,
+    "baseline_false_successes_observed": 6,
+    "candidate_raw_main_failure": -1,
+    "actual_CRT_process_exit_observed": false,
+    "old_failed_packet_preserved": {
+      "request": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/intr-cli-cases-1/REQUEST.json",
+      "request_sha256": "f870fcbcb17e2d9d979e115aba820e9b08e3d9d9fe9db140acf64484cb5f7e0a",
+      "result": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/intr-cli-cases-1/qualification-1/RESULT.json",
+      "result_sha256": "92be4e6be8e9c87e8ef1087869daf7ac217eeacf03845cd1c2eafc3bcd7c7fcb",
+      "accepted_case_credit": 0,
+      "scope_breach": "Actual read-only /dev/mcos0 open attempted by first failed Cfixture because selected fortifiedheader asmredirect bypassed -Dopen. OldbadC ELFs NEVER rerun; no no-device claim for oldpacket. No actual IRQ ioctl observed. All10startedouterwaitsjoined."
+    },
+    "oldbad_C_ELFs_rerun": false,
+    "unchanged_observer_Rust_compiler_link_replayed": false,
+    "new_device_IRQ_native_operation_claimed": false,
+    "resource_metrics": [
+      {
+        "label": "baseline-C-compile",
+        "user_seconds": 0.14,
+        "system_seconds": 0.01,
+        "elapsed": "0:00.15",
+        "max_RSS_KiB": 35680,
+        "exit_status": 0
+      },
+      {
+        "label": "candidate-C-compile",
+        "user_seconds": 0.17,
+        "system_seconds": 0.02,
+        "elapsed": "0:00.20",
+        "max_RSS_KiB": 35636,
+        "exit_status": 0
+      },
+      {
+        "label": "baseline-C-hooks",
+        "user_seconds": 0.0,
+        "system_seconds": 0.0,
+        "elapsed": "0:00.01",
+        "max_RSS_KiB": 55220,
+        "exit_status": 0
+      },
+      {
+        "label": "candidate-C-hooks",
+        "user_seconds": 0.01,
+        "system_seconds": 0.0,
+        "elapsed": "0:00.01",
+        "max_RSS_KiB": 55216,
+        "exit_status": 0
+      },
+      {
+        "label": "baseline-C-link",
+        "user_seconds": 0.01,
+        "system_seconds": 0.0,
+        "elapsed": "0:00.01",
+        "max_RSS_KiB": 9244,
+        "exit_status": 0
+      },
+      {
+        "label": "candidate-C-link",
+        "user_seconds": 0.01,
+        "system_seconds": 0.0,
+        "elapsed": "0:00.02",
+        "max_RSS_KiB": 9280,
+        "exit_status": 0
+      },
+      {
+        "label": "baseline-C-run",
+        "user_seconds": 0.0,
+        "system_seconds": 0.0,
+        "elapsed": "0:00.00",
+        "max_RSS_KiB": 3020,
+        "exit_status": 0
+      },
+      {
+        "label": "baseline-Rust-run",
+        "user_seconds": 0.0,
+        "system_seconds": 0.0,
+        "elapsed": "0:00.00",
+        "max_RSS_KiB": 2968,
+        "exit_status": 0
+      },
+      {
+        "label": "candidate-C-run",
+        "user_seconds": 0.0,
+        "system_seconds": 0.0,
+        "elapsed": "0:00.00",
+        "max_RSS_KiB": 2940,
+        "exit_status": 0
+      },
+      {
+        "label": "candidate-Rust-run",
+        "user_seconds": 0.0,
+        "system_seconds": 0.0,
+        "elapsed": "0:00.00",
+        "max_RSS_KiB": 2920,
+        "exit_status": 0
+      }
+    ],
+    "sum_CPU_seconds": 0.37000000000000005,
+    "peak_single_process_RSS_KiB": 55220,
+    "retained_artifacts": {
+      "candidate-C": "29e2c883497b45d5fc73c2d1020ef6239b78d58b19f366d1834b3eb017b5dccf",
+      "candidate-C.o": "143caddc73920debce0a2deeffb15407faad7ee3717420a212a19feaa7065654",
+      "baseline-C": "d4e29e85b68307583b07247f7ffa5dbf604fcee194f1d543b59029ec8390e8c6",
+      "baseline-C.o": "263a43119798a99874953f245576b63862ed2c64489379e8bf3d6d4132826581"
+    }
+  },
+  "intr_contract": {
+    "vectors_per_language_version": 6,
+    "baseline_total": 12,
+    "candidate_total": 12,
+    "forms": [
+      "intr",
+      "intr 242",
+      "intr 2 243"
+    ],
+    "request": "0x122a00",
+    "promoted_int_scalar": [
+      "0xf1",
+      "0xf2",
+      "0x2f3"
+    ],
+    "main_function_return": "ioctl0 gives0; failed ioctl-1/EIO baseline gives0, candidate gives captured-1 after close hook changes errno to EDOM.",
+    "stderr_failure_bytes": 19,
+    "real_anonymous_FD_once_close_EBADF": 24,
+    "CRT_exit_deployed_native_claim": false,
+    "genuine_import_library_reused": "4fe6bd5f6641d8118ded562125f68b1b931b3f7c0ae64ba3483236ee2e4308d8 at its qualified HOST scope; actual new tool separately links changed53079f library."
+  },
+  "changed_library": {
+    "status": "PASS_MINIMAL_DUMP_ROOT_PARENT_CHANGED_REAL_LIBRARY_PRODUCER",
+    "all5_pid_start_and_direct_waits_joined": true,
+    "CPU6_slot_released": true,
+    "checks": {
+      "actual_C_source_contracts_and_19_offsets": "PASS",
+      "checked_reuse_actual19_generated_origins": "PASS",
+      "unchanged_four_function_three_data_declaration_include": "PASS",
+      "unchanged_strict7warnings_sourcepins_native_order": "PASS",
+      "C_function_bodies_linked": false,
+      "function_roots": 70,
+      "data_roots": 6,
+      "six_data_widths_match_prior_actual": true,
+      "SONAME": "libihk.so"
+    },
+    "C_metadata_compile_or_emitter_execution": false,
+    "artifacts": {
+      "libihklib_whole70.a": {
+        "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/dump-parent-producer-1/output/libihklib_whole70.a",
+        "sha256": "79bb2889e19500572dfd487f6071da3b665ce710c6140ee3ee1686a8a3bf1e79",
+        "bytes": 21934106
+      },
+      "libihk.so": {
+        "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/dump-parent-producer-1/output/libihk.so",
+        "sha256": "53079f6306cb54c7d8f420f7db8bbe79e03fcd82ac9ae6cc744aeb2d49f8da0f",
+        "bytes": 5403760
+      },
+      "libihk.map": {
+        "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/dump-parent-producer-1/output/libihk.map",
+        "sha256": "fb2188c6d8ec9f6c30a908271c482f08dc8bace3732f4b7067c06eed6784b7e4",
+        "bytes": 2211159
+      },
+      "diagnostic-origin-source-contracts.json": {
+        "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/dump-parent-producer-1/output/diagnostic-origin-source-contracts.json",
+        "sha256": "8e04ed1617caf5e64c88a2e094ff8e23d64e0691612c9c8477dd610db935324e",
+        "bytes": 8277
+      },
+      "source_export_actual_contracts.inc": {
+        "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/dump-parent-producer-1/output/source_export_actual_contracts.inc",
+        "sha256": "6a27b701d4b7475125b56a99d9d73b3d0e29d76116f30fa51dec340617655eed",
+        "bytes": 920
+      },
+      "source-export-contracts.json": {
+        "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/dump-parent-producer-1/output/source-export-contracts.json",
+        "sha256": "db50ee0d7fb259c47cc34cb2668461fc596c15e29eea4386db2740b2b8f65ab6",
+        "bytes": 2097
+      },
+      "native-static-libs.rsp": {
+        "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/dump-parent-producer-1/output/native-static-libs.rsp",
+        "sha256": "d9cc2dae92fd59b9732e09c5b054f8616f6b3140faa8426746807fd9cd3d1f74",
+        "bytes": 43
+      },
+      "producer-receipt.json": {
+        "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/dump-parent-producer-1/output/producer-receipt.json",
+        "sha256": "a192c5653622624a63f2920b25218f3389047d90898c52d6b427a641f254935c",
+        "bytes": 27549
+      }
+    },
+    "actual_provider_map": {
+      "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/dump-parent-producer-1/output/libihk.map",
+      "sha256": "fb2188c6d8ec9f6c30a908271c482f08dc8bace3732f4b7067c06eed6784b7e4",
+      "bytes": 2211159
+    },
+    "artifact_comparison": {
+      "previous_archive_sha256": "e1669e15008b4964119e4ccc66fbeef7317785ef56d00b5b5dd652cdd8cc0e4c",
+      "current_archive_sha256": "79bb2889e19500572dfd487f6071da3b665ce710c6140ee3ee1686a8a3bf1e79",
+      "previous_shared_sha256": "4fe6bd5f6641d8118ded562125f68b1b931b3f7c0ae64ba3483236ee2e4308d8",
+      "current_shared_sha256": "53079f6306cb54c7d8f420f7db8bbe79e03fcd82ac9ae6cc744aeb2d49f8da0f",
+      "reason": "Actual Rust dump root-parent argument changes. All19 diagnostic origins reused after actual canonical source join; fallback C bodies not linked."
+    },
+    "sum_command_wall_seconds": 0.854883421,
+    "sum_command_user_system_CPU_seconds": 0.8000000000000002,
+    "maximum_reported_RSS_KiB": 136824
+  },
+  "changed_tool": {
+    "status": "HOST_OBJECT_AND_LINK_PASS_WITH_PRESERVED_FIRST_CONTROLLER_FAILURE_AND_UNKNOWN_FIRST_PID_METADATA",
+    "scope": "Changed actual Rust ihkosctl object and PIE relink against passed changed genuine libihk only. No CLI main, loader, ioctl/device, C comparison or native acceptance.",
+    "provider": {
+      "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/dump-parent-producer-1/output/libihk.so",
+      "sha256": "53079f6306cb54c7d8f420f7db8bbe79e03fcd82ac9ae6cc744aeb2d49f8da0f",
+      "size_bytes": 5403760,
+      "execution_joined": {
+        "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/dump-parent-producer-1/EXECUTION-JOINED.json",
+        "sha256": "45c8c6d2b32c0bf7e69f2544f888b1dc28311a9543d6a59fd2d02585ec0ece2c"
+      }
+    },
+    "configuration": {
+      "BUILDID": "c032c975",
+      "ENABLE_MEMDUMP": 1,
+      "adapter": "Use existing actual build_ihkosctl.py, preserving configured BUILDID/features and all emitted flags."
+    },
+    "all_known_child_handles_joined": true,
+    "CPU0_released_before_packaging": true,
+    "artifacts": {
+      "ihkosctl.o": {
+        "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/intr-cli-producer-1/ihkosctl.o",
+        "sha256": "7eefb9b1ed1be3b09367bb63fff649ab81c20511b610922bf44587d4d1f7216c",
+        "size_bytes": 46888
+      },
+      "ihkosctl": {
+        "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/intr-cli-producer-1/ihkosctl",
+        "sha256": "6ac515b424613bb035cde605ae76aa4069f075f826ef4cf94a7562e011c19147",
+        "size_bytes": 37656
+      }
+    },
+    "no_codegen_replay": true,
+    "no_main_loader_device_native_execution": true
+  },
+  "preserved_failures": [
+    {
+      "kind": "Original INTR fixture hook binding scope failure",
+      "receipt": {
+        "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/intr-cli-cases-1/qualification-1/RESULT.json",
+        "sha256": "92be4e6be8e9c87e8ef1087869daf7ac217eeacf03845cd1c2eafc3bcd7c7fcb"
+      },
+      "effect": "Fortified header assembler redirect bypassed -Dopen; actual read-only /dev/mcos0 open attempted. No actual IRQ ioctl observed. Zero case credit. All10 started commands joined; bad C ELFs never rerun. One focused correction requires actual hook validation before any link/runtime."
+    },
+    {
+      "kind": "Changed-tool first controller capture failure",
+      "receipt": {
+        "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/intr-cli-producer-1/CONTROLLER-FAILURE-1.json",
+        "sha256": "117e04763d4bb659f959d6a9f21e5037e3efceb401357f68df4f603099f54335"
+      },
+      "effect": "Codegen exit0/time/object are observed; os.wait4 returned before unsupported waitstatus_to_exitcode threw. First PID/birth/rawstatus not durably recorded and remain UNKNOWN. One corrected remaining-link-only operation passed and joined; no codegen replay or historical owner retirement."
+    }
+  ],
+  "unchanged_evidence_reused": [
+    "Actual19 diagnostic origins and generated metadata; no C metadata compile/emitter",
+    "Strict7 diagnostics/native link order/70function+6data roots/ABI widths",
+    "Accepted qualified configs/compiler/providers and prior green suites",
+    "Observer/Rust INTR objects and unstarted Rust ELFs reused in one bounded correction"
+  ],
+  "durable_regressions": {
+    "dump": [
+      "scripts/tests/test_m15_dump_root_parent.py",
+      "scripts/tests/fixtures/m15-dump-root-parent/observations.c.in"
+    ],
+    "dump_generation_proof": {
+      "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/dump-parent-cases-1/default-retention-1/SOURCE-GENERATION-PROOF.json",
+      "sha256": "7431d14a0c44186b8e87f1cce26c4d8ecf826fadb6081fb3ce06aaef5cd01123"
+    },
+    "intr": [
+      "scripts/tests/fixtures/m15-ihkosctl-intr/observer.c",
+      "scripts/tests/fixtures/m15-ihkosctl-intr/validate_hooks.py",
+      "scripts/tests/test_m15_ihkosctl_intr.py"
+    ],
+    "intr_generation_proof": {
+      "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/intr-cli-cases-1/default-retention-1/SOURCE-PROOF.json",
+      "sha256": "fa300d238c7ba4bf6f535c46a54f2c358b65c9cec41ea6ee2d84c254b91b55b7"
+    }
+  },
+  "acceptance": {
+    "M14_files": "4/6 unchanged",
+    "M14_integration": "0/3",
+    "M15_files": "1/8 unchanged",
+    "M15_integration": "0/4",
+    "new_native_image_C_retirement_or_file_acceptance": false
+  },
+  "retained_controls": "All generic/exec/TID/XPMEM/ACK/service/source/SDK/native holds, UNKNOWN owners,18GiB charges/scratch21/mutex27:4 remain. Full-image argv unset. Ordinary HOST CPUs0/6/7 aggregate3lightjobs/4GiB including overhead with26GiB admission/floors."
+}

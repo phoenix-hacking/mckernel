@@ -1,0 +1,237 @@
+{
+  "actual_executor": {
+    "bytes": 2228,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/foreground-normal-activation-custodian-20261111T2158Z.json",
+    "sha256": "7ed701444eadcc599f693da5ccc8873593c689fde328b9afa8841b65f766baf6"
+  },
+  "commands": {
+    "before_engine": {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "0",
+        "/usr/bin/systemctl",
+        "--user",
+        "show",
+        "mckernel-engine-4757c1121e29.service",
+        "--property=MainPID,ExecMainPID,ExecMainCode,ExecMainStatus,ExecMainExitTimestampMonotonic,ActiveState,SubState,Result,InvocationID,ControlGroup"
+      ],
+      "cwd": "/home/holden/mckernel",
+      "max_wall_seconds": 10,
+      "stderr_private": "capture-1/before_engine.stderr",
+      "stdout_private": "capture-1/before_engine.stdout"
+    },
+    "before_guardian": {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "0",
+        "/usr/bin/systemctl",
+        "--user",
+        "show",
+        "mckernel-guardian-4757c1121e29.service",
+        "--property=MainPID,ExecMainPID,ExecMainCode,ExecMainStatus,ExecMainExitTimestampMonotonic,ActiveState,SubState,Result,InvocationID,ControlGroup"
+      ],
+      "cwd": "/home/holden/mckernel",
+      "max_wall_seconds": 10,
+      "stderr_private": "capture-1/before_guardian.stderr",
+      "stdout_private": "capture-1/before_guardian.stdout"
+    },
+    "before_status": {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "0",
+        "/usr/bin/env",
+        "PATH=/home/holden/.local/bin:/home/holden/.codex/packages/app-server-daemon/releases/0.167.0-x86_64-unknown-linux-musl/codex-path:/home/holden/.codex/tmp/arg0-linux/codex-arg0ITeo0L:/home/holden/.codex/tmp/arg0-linux/codex-arg0D4Jif9:/home/holden/.codex/packages/app-server-daemon/releases/0.166.0-x86_64-unknown-linux-musl/codex-path:/home/holden/.codex/tmp/arg0-linux/codex-arg0fGlqW2:/home/holden/.codex/packages/standalone/releases/0.166.0-x86_64-unknown-linux-musl/codex-path:/home/holden/anaconda3/bin:/home/holden/anaconda3/condabin:/home/holden/.cargo/bin:/home/holden/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
+        "/home/holden/anaconda3/bin/python3",
+        "-B",
+        "/home/holden/mckernel/scripts/run_os_goal.py",
+        "--status"
+      ],
+      "cwd": "/home/holden/mckernel",
+      "max_wall_seconds": 30,
+      "stderr_private": "capture-1/before_status.stderr",
+      "stdout_private": "capture-1/before_status.stdout"
+    },
+    "new_engine": {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "0",
+        "/usr/bin/systemctl",
+        "--user",
+        "show",
+        "mckernel-engine-4757c1121e29.service",
+        "--property=MainPID,ExecMainPID,ExecMainCode,ExecMainStatus,ExecMainExitTimestampMonotonic,ActiveState,SubState,Result,InvocationID,ControlGroup"
+      ],
+      "cwd": "/home/holden/mckernel",
+      "max_wall_seconds": 10,
+      "stderr_private": "capture-1/new_engine.stderr",
+      "stdout_private": "capture-1/new_engine.stdout"
+    },
+    "new_guardian": {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "0",
+        "/usr/bin/systemctl",
+        "--user",
+        "show",
+        "mckernel-guardian-4757c1121e29.service",
+        "--property=MainPID,ExecMainPID,ExecMainCode,ExecMainStatus,ExecMainExitTimestampMonotonic,ActiveState,SubState,Result,InvocationID,ControlGroup"
+      ],
+      "cwd": "/home/holden/mckernel",
+      "max_wall_seconds": 10,
+      "stderr_private": "capture-1/new_guardian.stderr",
+      "stdout_private": "capture-1/new_guardian.stdout"
+    },
+    "new_status": {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "0",
+        "/usr/bin/env",
+        "PATH=/home/holden/.local/bin:/home/holden/.codex/packages/app-server-daemon/releases/0.167.0-x86_64-unknown-linux-musl/codex-path:/home/holden/.codex/tmp/arg0-linux/codex-arg0ITeo0L:/home/holden/.codex/tmp/arg0-linux/codex-arg0D4Jif9:/home/holden/.codex/packages/app-server-daemon/releases/0.166.0-x86_64-unknown-linux-musl/codex-path:/home/holden/.codex/tmp/arg0-linux/codex-arg0fGlqW2:/home/holden/.codex/packages/standalone/releases/0.166.0-x86_64-unknown-linux-musl/codex-path:/home/holden/anaconda3/bin:/home/holden/anaconda3/condabin:/home/holden/.cargo/bin:/home/holden/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
+        "/home/holden/anaconda3/bin/python3",
+        "-B",
+        "/home/holden/mckernel/scripts/run_os_goal.py",
+        "--status"
+      ],
+      "cwd": "/home/holden/mckernel",
+      "max_wall_seconds": 30,
+      "stderr_private": "capture-1/new_status.stderr",
+      "stdout_private": "capture-1/new_status.stdout"
+    },
+    "normal_start_once_after_positive_gate": {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "0",
+        "/usr/bin/env",
+        "PATH=/home/holden/.local/bin:/home/holden/.codex/packages/app-server-daemon/releases/0.167.0-x86_64-unknown-linux-musl/codex-path:/home/holden/.codex/tmp/arg0-linux/codex-arg0ITeo0L:/home/holden/.codex/tmp/arg0-linux/codex-arg0D4Jif9:/home/holden/.codex/packages/app-server-daemon/releases/0.166.0-x86_64-unknown-linux-musl/codex-path:/home/holden/.codex/tmp/arg0-linux/codex-arg0fGlqW2:/home/holden/.codex/packages/standalone/releases/0.166.0-x86_64-unknown-linux-musl/codex-path:/home/holden/anaconda3/bin:/home/holden/anaconda3/condabin:/home/holden/.cargo/bin:/home/holden/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
+        "/home/holden/anaconda3/bin/python3",
+        "-B",
+        "/home/holden/mckernel/scripts/run_os_goal.py",
+        "--model",
+        "gpt-6.1-sol",
+        "--effort",
+        "max",
+        "--profile",
+        "aggressive",
+        "--max-agents",
+        "6",
+        "--build-jobs",
+        "3",
+        "--memory-gib",
+        "12",
+        "--agent-windows",
+        "off",
+        "--hours",
+        "0",
+        "--max-restarts",
+        "3",
+        "--watchdog-seconds",
+        "180",
+        "--stall-seconds",
+        "1200",
+        "--repair-agent-failures",
+        "--stop-after-m14-m15",
+        "--credit-budget",
+        "PRIVATE_FINITE_CREDIT_CAP_REDACTED",
+        "--credit-run-id",
+        "7c6ef3604bfb4008a917bba8cfb6cfaa",
+        "--startup-instruction-file",
+        "/home/holden/mckernel-work/m14-m15-new-launch-20261110T0555Z/startup-instruction.txt",
+        "--startup-instruction-sha256",
+        "6ecc102bd2d6280e3009f940413438ec35a25b80a5789aef72360caf214eb30e"
+      ],
+      "cwd": "/home/holden/mckernel",
+      "max_wall_seconds": 60,
+      "stderr_private": "capture-1/normal_start_once_after_positive_gate.stderr",
+      "stdout_private": "capture-1/normal_start_once_after_positive_gate.stdout"
+    },
+    "normal_stop_once": {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "0",
+        "/usr/bin/env",
+        "PATH=/home/holden/.local/bin:/home/holden/.codex/packages/app-server-daemon/releases/0.167.0-x86_64-unknown-linux-musl/codex-path:/home/holden/.codex/tmp/arg0-linux/codex-arg0ITeo0L:/home/holden/.codex/tmp/arg0-linux/codex-arg0D4Jif9:/home/holden/.codex/packages/app-server-daemon/releases/0.166.0-x86_64-unknown-linux-musl/codex-path:/home/holden/.codex/tmp/arg0-linux/codex-arg0fGlqW2:/home/holden/.codex/packages/standalone/releases/0.166.0-x86_64-unknown-linux-musl/codex-path:/home/holden/anaconda3/bin:/home/holden/anaconda3/condabin:/home/holden/.cargo/bin:/home/holden/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
+        "/home/holden/anaconda3/bin/python3",
+        "-B",
+        "/home/holden/mckernel/scripts/start_os_overnight.py",
+        "stop"
+      ],
+      "cwd": "/home/holden/mckernel",
+      "max_wall_seconds": 60,
+      "stderr_private": "capture-1/normal_stop_once.stderr",
+      "stdout_private": "capture-1/normal_stop_once.stdout"
+    },
+    "poststart_existing_readonly_consumer_TEMPLATE": {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "0",
+        "/home/holden/anaconda3/bin/python3",
+        "-B",
+        "-c",
+        "import importlib.util,json,pathlib; p=pathlib.Path('/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-consumer-root-1/owner-liveness-correction-1/current_account_snapshot.py'); s=importlib.util.spec_from_file_location('qualified_current_account_snapshot',str(p)); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); o=json.loads(pathlib.Path('/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/foreground-custodian-handoff-1/capture-1/NEW-ACTUAL-OWNER.json').read_text()); a,u,c,t=m.current_account_snapshot(o); print(json.dumps({'status':'FRESH_SAME_ROOT_RECEIPT_ACCEPTED','source_kind':u['source_kind'],'source_event':u['source_event'],'worker_pid':o['worker_pid'],'server_pid':o['server_pid']}))"
+      ],
+      "cwd": "/home/holden/mckernel",
+      "max_wall_seconds": 30,
+      "only_pure_readonly_existing_consumer": "No Campaign/RPC/account/refresh/issuer/new owner grant; never invoke before actual new independently bound39a owner exists.",
+      "runtime_owner_file_unissued": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/foreground-custodian-handoff-1/capture-1/NEW-ACTUAL-OWNER.json",
+      "stderr_private": "capture-1/receipt-sanitized.stderr",
+      "stdout_private": "capture-1/receipt-sanitized.stdout"
+    },
+    "stopped_engine": {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "0",
+        "/usr/bin/systemctl",
+        "--user",
+        "show",
+        "mckernel-engine-4757c1121e29.service",
+        "--property=MainPID,ExecMainPID,ExecMainCode,ExecMainStatus,ExecMainExitTimestampMonotonic,ActiveState,SubState,Result,InvocationID,ControlGroup"
+      ],
+      "cwd": "/home/holden/mckernel",
+      "max_wall_seconds": 10,
+      "stderr_private": "capture-1/stopped_engine.stderr",
+      "stdout_private": "capture-1/stopped_engine.stdout"
+    },
+    "stopped_status": {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "0",
+        "/usr/bin/env",
+        "PATH=/home/holden/.local/bin:/home/holden/.codex/packages/app-server-daemon/releases/0.167.0-x86_64-unknown-linux-musl/codex-path:/home/holden/.codex/tmp/arg0-linux/codex-arg0ITeo0L:/home/holden/.codex/tmp/arg0-linux/codex-arg0D4Jif9:/home/holden/.codex/packages/app-server-daemon/releases/0.166.0-x86_64-unknown-linux-musl/codex-path:/home/holden/.codex/tmp/arg0-linux/codex-arg0fGlqW2:/home/holden/.codex/packages/standalone/releases/0.166.0-x86_64-unknown-linux-musl/codex-path:/home/holden/anaconda3/bin:/home/holden/anaconda3/condabin:/home/holden/.cargo/bin:/home/holden/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
+        "/home/holden/anaconda3/bin/python3",
+        "-B",
+        "/home/holden/mckernel/scripts/run_os_goal.py",
+        "--status"
+      ],
+      "cwd": "/home/holden/mckernel",
+      "max_wall_seconds": 30,
+      "stderr_private": "capture-1/stopped_status.stderr",
+      "stdout_private": "capture-1/stopped_status.stdout"
+    }
+  },
+  "interpreter": {
+    "bytes": 15880080,
+    "path": "/home/holden/anaconda3/bin/python3.9",
+    "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb"
+  },
+  "no_new_runner_controller_service_timer_or_detached_process": true,
+  "private_capture_contract": {
+    "capture_directory": "capture-1 created ONLY by admitted actual foreground, fresh0700; files exclusive0600",
+    "full_tool_capture": "Foreground preserves original exact argv/cwd/childPID+birth/directwait/closedstreams/actual exit and every full tool initial/yield/final completion/noSession. Submission markers alone are not closure.",
+    "network_and_profile": "Unchanged existing normal service/auth/mailbox/account frontdoor; HOST CPUs0/6/7/max3/shared4GiB incl all foreground/controller/worker/client overhead, fresh26GiB and host16/scratch12GiB floors plus capture growth; no native CPUs2\u20135/12GiB borrowing or profile expansion.",
+    "per_command_output_bound_bytes": 16777216,
+    "privacy": "Full start argv contains authorized private finite credit cap; keep private. Never publish raw budget/account/state/ledger values. Public relay only file hashes/refs and abbreviated normal command names."
+  },
+  "schema": "mckernel.existing-foreground-normal-transition-argv.v1",
+  "status": "REVIEW_HANDOFF_UNISSUED_NOT_A_STOP_REQUEST"
+}

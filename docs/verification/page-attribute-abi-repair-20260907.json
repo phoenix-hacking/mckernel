@@ -1,0 +1,351 @@
+{
+  "artifacts": [
+    {
+      "path": "/work/compat-build-pageattrs-20260907/kernel/mckernel.img",
+      "sha256": "e4a3bfcf4026fa4191d88c4c5ad3f1104612981fcb90599b190e0121b385f9ec",
+      "size": 7940528
+    },
+    {
+      "path": "/work/compat-build-pageattrs-20260907/kernel/rust/mckernel_rust.o",
+      "sha256": "c08f094f13061efa1e60b4152f78f6093ee59b88c29e13ee2e452c6299e6da5c",
+      "size": 12369496
+    }
+  ],
+  "build_directory": "/work/compat-build-pageattrs-20260907",
+  "build_source": "/work/compat-source-pageattrs-20260907",
+  "changed_build_inputs": [
+    {
+      "path": "kernel/mem.c",
+      "sha256": "167ad2b976bcdec048a625dedf68a9b7c1ef6db7c57f3ceddf3582d54887101a",
+      "size": 223368
+    },
+    {
+      "path": "kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "size": 76151
+    },
+    {
+      "path": "kernel/rust/abi_checks.c",
+      "sha256": "f8deda08de0eccda152a6416a01bec00e6984c1cf4c998e9ca877b1bbe31c23a",
+      "size": 65125
+    },
+    {
+      "path": "kernel/rust/mem_helpers.rs",
+      "sha256": "35b25b1d67c86ba07a84b308a049806b25eaca4c6e34f2f1a631b6271bce6322",
+      "size": 177560
+    },
+    {
+      "path": "kernel/rust/syscall_policy.rs",
+      "sha256": "17e656126a1ea34b9fd22dac08549893c5cb579ac6e4f347ada2051c4e9020c9",
+      "size": 681875
+    },
+    {
+      "path": "kernel/rust/xpmem_helpers.rs",
+      "sha256": "e8c7970b672c724f14da2eb0a12fdbcd11df62f824422a5f8a98da4364328255",
+      "size": 236058
+    },
+    {
+      "path": "kernel/rust/tests/run_equivalence.sh",
+      "sha256": "e6c51a0c45bc496666eab2cf7241332b480cc093383bc2434625929ca25b9435",
+      "size": 5002742
+    }
+  ],
+  "claims": {
+    "c_free_kernel": false,
+    "full_historical_equivalence_pass": false,
+    "hpc_workloads_proven": false,
+    "live_page_table_mutation_proven": false,
+    "native_mckernel_boot_proven": false,
+    "production_gate_credit": false
+  },
+  "corrected_build": {
+    "architecture": "x86_64",
+    "definition": {
+      "denominator": "all bytes in final ELF SHT_PROGBITS sections with SHF_ALLOC and SHF_EXECINSTR, including linker fill and padding",
+      "excluded_from_rust_numerator": "C, assembly, unknown-origin bytes, discarded input sections, and linker fill/padding",
+      "numerator": "GNU ld input-section contribution bytes attributed to the exact mckernel_rust.o path"
+    },
+    "executable_sections": [
+      {
+        "address": "0xfffffffffe801000",
+        "name": ".text",
+        "non_rust_or_padding_bytes": 165736,
+        "rust_input_bytes": 614003,
+        "rust_input_contributions": 2708,
+        "size_bytes": 779739
+      },
+      {
+        "address": "0xfffffffffe8bf5db",
+        "name": ".fixup",
+        "non_rust_or_padding_bytes": 60,
+        "rust_input_bytes": 0,
+        "rust_input_contributions": 0,
+        "size_bytes": 60
+      },
+      {
+        "address": "0xfffffffffe90d000",
+        "name": ".vsyscall",
+        "non_rust_or_padding_bytes": 3864,
+        "rust_input_bytes": 232,
+        "rust_input_contributions": 4,
+        "size_bytes": 4096
+      }
+    ],
+    "inputs": {
+      "image": {
+        "path": "/work/compat-build-pageattrs-20260907/kernel/mckernel.img",
+        "sha256": "e4a3bfcf4026fa4191d88c4c5ad3f1104612981fcb90599b190e0121b385f9ec"
+      },
+      "link_map": {
+        "path": "/work/compat-build-pageattrs-20260907/kernel/mckernel.img.map",
+        "sha256": "8736dbded2fe7281b701c5b43ef2364ab6c2c6d81130e2b2f33bc1dbca18a9dd"
+      },
+      "rust_object": {
+        "path": "/work/compat-build-pageattrs-20260907/kernel/rust/mckernel_rust.o",
+        "sha256": "c08f094f13061efa1e60b4152f78f6093ee59b88c29e13ee2e452c6299e6da5c"
+      }
+    },
+    "metric_scope": "final mckernel.img allocated executable PROGBITS bytes",
+    "non_rust_or_padding_executable_text_bytes": 169660,
+    "rust_executable_text_bytes": 614235,
+    "rust_executable_text_percent": "78.356795",
+    "rust_input_contribution_count": 2712,
+    "schema": "mckernel-link-map-executable-text-ownership-v1",
+    "source_commit": "496e2fc821d353c8cc45e862ee656ad26a0e7640",
+    "total_executable_text_bytes": 783895
+  },
+  "date_utc": "2026-09-07",
+  "equivalence_selection": {
+    "full_harness_pass": false,
+    "scope": "existing memory and XPMEM cases only",
+    "selected_script_sha256": "6f3c30cf3e09de507428e04e7a45af6e0deb5830f177da4a10118480b61f949d",
+    "source_harness": "/work/compat-source-pageattrs-20260907/kernel/rust/tests/run_equivalence.sh",
+    "source_harness_sha256": "e6c51a0c45bc496666eab2cf7241332b480cc093383bc2434625929ca25b9435"
+  },
+  "isolation": {
+    "container_image": "sha256:45c7b603e07d004a21214e025d9bcb31dde4bf16300c56d113189999b25be9fb",
+    "cpus": 4,
+    "cpuset": "2-5",
+    "memory_bytes": 12884901888,
+    "network": "none",
+    "privileged": false,
+    "uid": 1000
+  },
+  "logs": {
+    "compat-checkpoint-build-20260907.log": {
+      "gzip_sha256": "8eb0ecde8aedcf34aea0269d011351311a2c6fbabe9beccb6ae4725544fc6e30",
+      "gzip_size": 7863,
+      "path": "evidence/pageattrs-20260907-compat-checkpoint-build-20260907.log.txt.gz",
+      "sha256": "0dc719f8f28b6b47fd5856c16591baf59d68f2a16900bf6749c336fbdf489eec",
+      "size": 40525
+    },
+    "compat-pageattrs-build-20260907-resume.log": {
+      "gzip_sha256": "1394e63f8ec045b55e23c6c811554d2f99bf3387be5c2b0de8fafff3c6016019",
+      "gzip_size": 7769,
+      "path": "evidence/pageattrs-20260907-compat-pageattrs-build-20260907-resume.log.txt.gz",
+      "sha256": "de3506190f18f80b56bc638898337df17d4cfd4fc767346bb2e6dff649dcc8e5",
+      "size": 39597
+    },
+    "compat-pageattrs-build-20260907.log": {
+      "gzip_sha256": "d7c9909a111049179e055acb6808d1ada21fc2ea134978bfa18cf35839b5e8d1",
+      "gzip_size": 3386,
+      "path": "evidence/pageattrs-20260907-compat-pageattrs-build-20260907.log.txt.gz",
+      "sha256": "c9e2e6ddfd684521032c5bf438c3cfaef6b69d2569ab9c782c79e97b626afb9d",
+      "size": 10379
+    },
+    "memory-xpmem-equivalence-pageattrs-2.log": {
+      "gzip_sha256": "86eac9573c5c24d618499f5443ede71ad0180d908643bfe389d59b4ff97d138d",
+      "gzip_size": 6297,
+      "path": "evidence/pageattrs-20260907-memory-xpmem-equivalence-pageattrs-2.log.txt.gz",
+      "sha256": "0a4721367ca40fb294608c3f9e9a6f7d310b111bb43a7c690da6265088147d85",
+      "size": 43568
+    },
+    "memory-xpmem-equivalence-pageattrs.log": {
+      "gzip_sha256": "7cf522e7c4001e72547c4beacb7a961d01b8c9b5a526179d3bab882a247c95bf",
+      "gzip_size": 6419,
+      "path": "evidence/pageattrs-20260907-memory-xpmem-equivalence-pageattrs.log.txt.gz",
+      "sha256": "f97872ee852b9540f0493c1b22d7780e678c0225e0735589458fde3513f0cb39",
+      "size": 43055
+    },
+    "page-attribute-baseline-probe-2.log": {
+      "gzip_sha256": "7ec9084ff24dad512526f424451b42347536dc9d144b016336bb5c76a029df09",
+      "gzip_size": 56,
+      "path": "evidence/pageattrs-20260907-page-attribute-baseline-probe-2.log.txt.gz",
+      "sha256": "5fe829e13d4c6198912fd34533c07620c754350b0ccd240724e12fe6631de553",
+      "size": 55
+    },
+    "page-attribute-fixed-probe.log": {
+      "gzip_sha256": "e308cf30370e8726af328f90bfe8a9e13a12c81dd3cd27aa656964ee3c8f3b78",
+      "gzip_size": 56,
+      "path": "evidence/pageattrs-20260907-page-attribute-fixed-probe.log.txt.gz",
+      "sha256": "26b4c40fa941f1dd04747a79fc5445086ad888632fb6a52fdf1bee0bbeee8479",
+      "size": 55
+    },
+    "pageattrs-source-and-report-checks.log": {
+      "gzip_sha256": "47297c93172b738e700f173eb12ff51bcd9463a6c079734bae869ce20bc9131b",
+      "gzip_size": 55,
+      "path": "evidence/pageattrs-20260907-pageattrs-source-and-report-checks.log.txt.gz",
+      "sha256": "ed40dc38e4dbb9c9bab3c99be34127e662eb7ee7b1e30bde33eebb103e607641",
+      "size": 124
+    }
+  },
+  "original_build": {
+    "architecture": "x86_64",
+    "definition": {
+      "denominator": "all bytes in final ELF SHT_PROGBITS sections with SHF_ALLOC and SHF_EXECINSTR, including linker fill and padding",
+      "excluded_from_rust_numerator": "C, assembly, unknown-origin bytes, discarded input sections, and linker fill/padding",
+      "numerator": "GNU ld input-section contribution bytes attributed to the exact mckernel_rust.o path"
+    },
+    "executable_sections": [
+      {
+        "address": "0xfffffffffe801000",
+        "name": ".text",
+        "non_rust_or_padding_bytes": 165740,
+        "rust_input_bytes": 613951,
+        "rust_input_contributions": 2708,
+        "size_bytes": 779691
+      },
+      {
+        "address": "0xfffffffffe8bf5ab",
+        "name": ".fixup",
+        "non_rust_or_padding_bytes": 60,
+        "rust_input_bytes": 0,
+        "rust_input_contributions": 0,
+        "size_bytes": 60
+      },
+      {
+        "address": "0xfffffffffe90d000",
+        "name": ".vsyscall",
+        "non_rust_or_padding_bytes": 3864,
+        "rust_input_bytes": 232,
+        "rust_input_contributions": 4,
+        "size_bytes": 4096
+      }
+    ],
+    "inputs": {
+      "image": {
+        "path": "/work/compat-build-checkpoint-20260907/kernel/mckernel.img",
+        "sha256": "04ebb2ba7493571d64bd361af69a3d4f23fc880142993d4a029fca00117b11aa"
+      },
+      "link_map": {
+        "path": "/work/compat-build-checkpoint-20260907/kernel/mckernel.img.map",
+        "sha256": "5141c07a0c154baac4322db83a3740c8ac517ef372061a31306cffcfd9884c8f"
+      },
+      "rust_object": {
+        "path": "/work/compat-build-checkpoint-20260907/kernel/rust/mckernel_rust.o",
+        "sha256": "fd598fbc9e9cd3f06e19dd57636072f1a5c306cc339d286480e7f3dc87695c05"
+      }
+    },
+    "metric_scope": "final mckernel.img allocated executable PROGBITS bytes",
+    "non_rust_or_padding_executable_text_bytes": 169664,
+    "rust_executable_text_bytes": 614183,
+    "rust_executable_text_percent": "78.354960",
+    "rust_input_contribution_count": 2712,
+    "schema": "mckernel-link-map-executable-text-ownership-v1",
+    "source_commit": "496e2fc821d353c8cc45e862ee656ad26a0e7640",
+    "total_executable_text_bytes": 783847
+  },
+  "probe_inputs": [
+    {
+      "path": "scripts/mckernel_page_attribute_abi.py",
+      "sha256": "61b3401c9cfa950d75e7022eec7208b83d0a626d061ea96755e93f2a5429c974",
+      "size": 1910
+    },
+    {
+      "path": "scripts/tests/fixtures/mckernel-page-attribute-abi.c",
+      "sha256": "4dc8b8c335196633af6abbc6b5d093f006a5ec7914f3d05d95c99009b7f1b927",
+      "size": 4806
+    },
+    {
+      "path": "kernel/rust/tests/run_memory_equivalence.py",
+      "sha256": "bb72e9c3899c56cecc6b4fe3b2bf1292b2a59d48fc876aeb2501b6bea455cb93",
+      "size": 4198
+    }
+  ],
+  "reports": {
+    "CMakeCache.txt": {
+      "gzip_sha256": "45207f4928012b9baeff1aa5ecbfc0fda0f090388a6748e7b77f7afeaeb4bf05",
+      "gzip_size": 5279,
+      "path": "evidence/pageattrs-20260907-CMakeCache.txt.gz",
+      "sha256": "b3e06186228b3032235be83e9e00d817e1c5591ba7df1b041197b0a6382a7545",
+      "size": 26552
+    },
+    "compile_commands.json": {
+      "gzip_sha256": "45e6c3cbfb86fd43a4f8f4b4410fcb50e5a6207e33ef3489fd7de3137095095d",
+      "gzip_size": 3146,
+      "path": "evidence/pageattrs-20260907-compile_commands.json.gz",
+      "sha256": "25a16fd06558cde1323ae49691f18186306e6341e8f3ef0e7305a0481a1a597a",
+      "size": 98921
+    },
+    "mckernel-linked-text-ownership.json": {
+      "gzip_sha256": "7d7d970a49b7e1d5aaf6bcaf3aa6f37871fc5ddd990fa93d4f9c87531992c67e",
+      "gzip_size": 868,
+      "path": "evidence/pageattrs-20260907-mckernel-linked-text-ownership.json.gz",
+      "sha256": "e37546a1b02511547bc67c29d4d9470339a3ab4ba255c1e8e64f70d53ac426e5",
+      "size": 2088
+    },
+    "mckernel-symbol-source-attribution.json": {
+      "gzip_sha256": "86a563bc6012db285e04e0a19e06c5de7f3402dda161d2120c104cfe66324061",
+      "gzip_size": 2603,
+      "path": "evidence/pageattrs-20260907-mckernel-symbol-source-attribution.json.gz",
+      "sha256": "54751854280dac17d4cd860b90a9e28f6453ccbd196d45b545702a466c52dde5",
+      "size": 25925
+    },
+    "mckernel-syscall-offload-composition.json": {
+      "gzip_sha256": "01d9eefd25335f5f42a3f9b02652dfd915f75e0fd05823839e2f64b32082374a",
+      "gzip_size": 725,
+      "path": "evidence/pageattrs-20260907-mckernel-syscall-offload-composition.json.gz",
+      "sha256": "55f17e82b8062bbe2edc844b5f2393b6b13d369d9ce17248f1217217bb9ef541",
+      "size": 2614
+    },
+    "mckernel.img.map": {
+      "gzip_sha256": "06d0b641c7fbd1c5ad9cd02a2e22d79c50f56f99395ea5d68278c4437eacb285",
+      "gzip_size": 82510,
+      "path": "evidence/pageattrs-20260907-mckernel.img.map.gz",
+      "sha256": "8736dbded2fe7281b701c5b43ef2364ab6c2c6d81130e2b2f33bc1dbca18a9dd",
+      "size": 733728
+    }
+  },
+  "results": {
+    "compatibility_build": "PASS",
+    "corrected_page_map_probe": "PASS",
+    "corrected_xpmem_probe": "PASS",
+    "memory_init_equivalence": "00338ce95ffd5b5d",
+    "negative_control": "both probes fail as expected",
+    "source_and_report_unit_tests": 25,
+    "xpmem_equivalence": "6674c6cafec0e555"
+  },
+  "schema": "mckernel-local-page-attribute-abi-repair-v1",
+  "source_parent": "496e2fc821d353c8cc45e862ee656ad26a0e7640",
+  "source_records": {
+    "ihk-compat.diff": {
+      "gzip_sha256": "93c3e7b69fa29f579fc2a8e64245e069fe2e3f350f77639d7f1722c37eefa5da",
+      "gzip_size": 4136,
+      "path": "evidence/pageattrs-20260907-ihk-compat.diff.txt.gz",
+      "sha256": "bffde0e351ef9e9177845c716f810078b1576540f1962016e0d178ce152fdaa6",
+      "size": 15264
+    },
+    "source.diff": {
+      "gzip_sha256": "6de5acd5204f59fd464dee2ca0446ab28d42f21e01b8eb2ba6ae4ec478582e50",
+      "gzip_size": 3635,
+      "path": "evidence/pageattrs-20260907-source.diff.txt.gz",
+      "sha256": "58f43ee09a083e6511c753381b3f244dd9f29bd3f27f62acf3b0f2577ce1d047",
+      "size": 11642
+    },
+    "source.status": {
+      "gzip_sha256": "ef09dacfefa8b02f90a58a4f6636c204700ee93c20f20d2984dbcfd4e757acc5",
+      "gzip_size": 190,
+      "path": "evidence/pageattrs-20260907-source.status.txt.gz",
+      "sha256": "afd719acd7574e253c7ffae1ae205c3b88c00f6f136f2a46b2eac03e144de494",
+      "size": 370
+    },
+    "submodule-pins.txt": {
+      "gzip_sha256": "be271571a64af4814364a7d1b3c1fb42494093b8d722855bfbd7af2ca7ee2c9a",
+      "gzip_size": 291,
+      "path": "evidence/pageattrs-20260907-submodule-pins.txt.txt.gz",
+      "sha256": "f36f87210ee95cc0efa7a300f531c51a02dccb2d1fc9c5bf02387c81810242da",
+      "size": 455
+    }
+  },
+  "source_state": "parent plus bound ABI repair; build reports retain their parent commit field"
+}

@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "app.gzip-decompress",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"path": "/case/input.gz", "hex": "1f8b08000000000002fff34df64e2dca4bcd5148cecf2d284a2d2e4e4d5148cbac28292d4ae5f2a5811c0016143d8270000000"},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-bytes", "hex": "4d634b65726e656c20636f6d7072657373656420666978747572650a4d634b65726e656c20636f6d7072657373656420666978747572650a4d634b65726e656c20636f6d7072657373656420666978747572650a4d634b65726e656c20636f6d7072657373656420666978747572650a"},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["gzip -d -c output equals independent decompression of the frozen stream byte-for-byte"],
+  "unresolved_expectations": ["Pinned gzip binary identity and decompressor diagnostic closure require Max review."],
+  "max_question_for_reviewer": "Confirm the frozen gzip stream and exact 112-byte decompressed output."
+}

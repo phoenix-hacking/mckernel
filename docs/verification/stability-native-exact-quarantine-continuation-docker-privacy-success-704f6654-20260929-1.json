@@ -1,0 +1,43 @@
+{
+  "schema": "mckernel.native-exact-quarantine-continuation-docker-privacy.v1",
+  "date": "2026-09-29",
+  "status": "PASS_SOURCE_ONLY",
+  "parent_checkpoint": "1c90744f796967813cbe9d9f2c22df7a3df526fe",
+  "source_sha256": {
+    "packet": "a15395055c087b086369188162483a5aba64ef18108b20c2d1b885f83e9a3edf",
+    "wrapper": "7b41bb6f34c8b5fe3888b0663495fcff936ed8bd7e417520c588e4a52368e4ef",
+    "basis": "241feb5c98a330c348179019bd2b06990ef4f947cce0538c650ec3db8211ac1f",
+    "tests": "f9c38fbb2084cc3418844f277c37914176bc5af5e4207375c6b72e2f6a6d70e9"
+  },
+  "behavior": {
+    "release_binding": "17 container IDs map to SHA256 of complete canonical inspect records",
+    "canonicalization": "only Mounts array ordering is normalized; all other fields and array ordering remain exact",
+    "persisted_evidence": "explicit credential-safe summaries only",
+    "persisted_fields": ["id", "record_sha256", "selected terminal state", "restart policy", "protected mounts"],
+    "forbidden_persisted_fields": ["Config", "Config.Env", "labels", "state error text", "arbitrary inspect fields"],
+    "terminal_exceptions": 4
+  },
+  "verification": [
+    {"command": "/usr/bin/python3.8 -m unittest scripts.tests.test_native_exact_candidate_quarantine_recovery_704f6654", "result": "PASS", "tests": 28},
+    {"command": "python3 -m unittest scripts.tests.test_native_exact_candidate_quarantine_recovery_704f6654", "runtime": "Python 3.9.12", "result": "PASS", "tests": 28},
+    {"command": "python3 -m py_compile docs/verification/evidence/native-exact-candidate-quarantine-recover-704f6654-1.py scripts/tests/test_native_exact_candidate_quarantine_recovery_704f6654.py", "result": "PASS"},
+    {"command": "bash -n docs/verification/evidence/native-exact-candidate-quarantine-recovery-execution-704f6654-1.sh", "result": "PASS"},
+    {"command": "git diff --check", "result": "PASS"}
+  ],
+  "independent_review": {
+    "result": "PASS_SOURCE",
+    "secret_mutation_changes_digest": true,
+    "raw_inspect_persistence_found": false,
+    "prior_source_families_regressed": false,
+    "runtime_acceptance": false
+  },
+  "acceptance": {
+    "execution_release": false,
+    "retirement": false,
+    "kernel_build": false,
+    "guest": false,
+    "application": false,
+    "formal_counters_changed": false
+  },
+  "next": "Push and fetch-verify this corrected DRAFT template, then generate a four-path mechanical finalization whose external release contains record hashes and safe mount/state fields but no raw inspect objects."
+}

@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "record_kind": "stability_selected_retention_generic_actual_method_implementation_packet_review_failure",
+  "task_id": "M01-B-selected-retention-generic-actual-methods",
+  "review_attempt": 10,
+  "recorded_utc": "2026-09-16T08:36:00Z",
+  "status": "FAIL_PACKET",
+  "reviewed_packet": {
+    "path": "docs/verification/stability-selected-retention-generic-actual-method-implementation-packet-20260916-8.md",
+    "sha256": "600564b1707b33c7c82aee7b0bdf59157d76fc106161ea044063cfb444baa739"
+  },
+  "prior_review": {
+    "path": "docs/verification/stability-selected-retention-generic-actual-method-implementation-packet-review-failure-20260916-9.json",
+    "sha256": "10bbc15b9bf9aa68e5145d6722bdba22d242c6d91fc467448504abd9e4dfc4e2"
+  },
+  "authenticated_inputs": {
+    "source_members": 102,
+    "templates_stager_source_map_and_authority_hashes": "MATCH"
+  },
+  "closed_prior_findings": [
+    "exhaustive evidence and root creation allowlist",
+    "ordinary return_value Ok(()) distinguished from publish Ok(true) in row 18",
+    "row 27 post-publication cancellation Ok(())",
+    "positive mode-2 clock provider"
+  ],
+  "findings": [
+    {
+      "id": "impossible-preparation-results-and-phase-order",
+      "severity": "implementation-blocking",
+      "evidence": "The packet sets the tested phase before return_value and attributes phase/publication errors to preparation. Actual return_value prepares under ARMED and returns Ok(()); accepted_selected then transitions stage 1 to 2 or latches -71. The appended publication gate, not preparation, returns -11 for the held stages.",
+      "required": "Prepare under ARMED, record successful preparation, then set each tested publication stage/commit/invalid state. Specify preparation, phase query, publication, cancellation and first-invalid results separately for every row and subcase."
+    },
+    {
+      "id": "mode2-notification-signature-and-ownership",
+      "severity": "implementation-blocking",
+      "evidence": "The packet invents stability_fault_notify(cpu,tid,claim) and says the owner remains retained. The real signature is (os,generation,application,cpu,notify); matching first notification returns Err(-5) without invoking notify, after mailbox publication already stored status, released ownership and removed the call.",
+      "required": "Require publish Ok(true), one successful send, one status/release, exact notification arguments, zero callback invocations, and no rollback or second release."
+    },
+    {
+      "id": "negative-tid-teardown-violates-backing-contract",
+      "severity": "ownership-blocking",
+      "evidence": "Negative-TID preparation returns before final status publication. Response has no consuming release method, while ResponseMemory::release requires final publication. The packet also does not prove an exclusive direct-response construction route.",
+      "required": "Use unfinished Drop/quarantine with zero release and retained backing; specify an exclusive direct-response fixture or a permitted consuming extraction without duplicating an admitted response owner."
+    },
+    {
+      "id": "matrix-sequences-incomplete",
+      "severity": "implementation-blocking",
+      "evidence": "Fresh-process rows 14-16 do not replay the initial attempt that establishes STABILITY_FAULT_SINCE; rows 19/20/25/26 omit exact stage/commit setup; wake-None phase query differs before publication and after call removal; row 17 omits exact changed-key fields.",
+      "required": "Enumerate every fresh process's complete setup and exact outcomes, including recovery history, cancellation stage/commit, query timing and changed-key fields."
+    }
+  ],
+  "retained_acceptable_constraints": [
+    "generic/native scope separation",
+    "deferred backing reclamation",
+    "live-atomic second-CAS instrumentation",
+    "cfg(test) erasure",
+    "inverse restoration"
+  ],
+  "implementation_released": false,
+  "compiled": false,
+  "runtime_execution": false,
+  "guest_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}

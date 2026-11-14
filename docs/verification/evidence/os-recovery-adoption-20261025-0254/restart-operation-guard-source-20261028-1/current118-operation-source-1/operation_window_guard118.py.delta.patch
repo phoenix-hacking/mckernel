@@ -1,0 +1,50 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current117-next-default-cohort-source-20261028-1/operation_window_guard117.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/current118-operation-source-1/operation_window_guard118.py
+@@ -9,7 +9,7 @@
+ from pathlib import Path
+ 
+ HERE = Path(__file__).resolve().parent
+-E = HERE.parent
++E = HERE.parent.parent
+ PREDECESSOR = E / 'operation-account-window-new12h-source-1/actual_account_window.py'
+ PREDECESSOR_SHA256 = '8bf26bae56a019876c6a1463945733c85be5016d21ac5f6f955c29fd131a8cbe'
+ WINDOW = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/new-run-until-20261028-2300-pacific-1/ACTUAL-WINDOW.json')
+@@ -17,12 +17,13 @@
+ BOOT = '7bfc5687-6c04-4d15-84eb-b92ab9a55dcb'
+ RUN = '7f4af94a83b14cc08f97401f5891d965'
+ CEILING = '57774.852125'
+-THREAD = '01a18111-26a7-7ef2-bbd6-e33d1c8dc803'
++THREAD = '01a183ec-72e5-7400-8f48-b4efb8725520'
+ # Preserve legacy API clock order: epoch, MONOTONIC, BOOTTIME.
+ CUTOFFS = (1793253600.0, 1035706.5689547858, 1051044.6960026678)
+-OPERATION_CUTOFFS = (1793253600.0, 1035705.5689454618, 1051043.6959931096)
++OPERATION_CUTOFFS = (1793253600.0, 1035704.5689393478, 1051042.6959879305)
++GUARDIAN_SOURCE = {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/guardian_guard.py', 'bytes': 13388, 'sha256': '48893862bb3262a2c81d282215e4b9771b8f659e635a21856096c41233774f18'}
+ PREDECESSOR_CUTOFFS = {
+-    'current117-build': None,
++    'current118-build': None,
+ }
+ 
+ 
+@@ -99,9 +100,9 @@
+          and successor['window_sha256'] == WINDOW_SHA256
+          and successor['credit_run_id'] == RUN and successor['credit_ceiling'] == CEILING,
+          'explicit Root operation successor required')
+-    need(operation == 'current117-build' and successor['predecessor_cutoffs'] is None
++    need(operation == 'current118-build' and successor['predecessor_cutoffs'] is None
+          and successor['first_prepared_window_sha256'] == WINDOW_SHA256,
+-         'new117 operation has no fictitious expired predecessor grant')
++         'new118 operation has no fictitious expired predecessor grant')
+     limits = triplet(successor['operation_cutoffs'])
+     need(all(0 < limit <= maximum for limit, maximum in zip(limits, OPERATION_CUTOFFS)), 'operation only within NEW window')
+     need(all(now < limit for now, limit in zip(clocks, limits)), 'strict earliest operation cutoff')
+@@ -117,7 +118,8 @@
+     old = load_predecessor()
+     need(old.MIN_SPENT <= old.amount(successor['minimum_cumulative_spent']) < old.BUDGET,
+          'preserved cumulative debit floor')
+-    need(type(successor['guardian']) is dict and bool(successor['guardian']), 'fresh guardian binding required')
++    need(successor['guardian'] == {'source': GUARDIAN_SOURCE, 'entrypoint': 'guard'},
++         'exact reviewed restart guardian binding required')
+     return limits
+ 
+ 

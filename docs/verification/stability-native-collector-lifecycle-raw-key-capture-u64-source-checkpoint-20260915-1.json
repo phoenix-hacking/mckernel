@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "record_kind": "native_collector_lifecycle_raw_key_capture_u64_source_checkpoint",
+  "task_id": "M02-C-lifecycle-raw-key-capture-u64-source",
+  "attempt": 2,
+  "status": "PASS_RAW_KEY_CAPTURE_U64_SOURCE_CHECKPOINT_ONLY",
+  "recorded_utc": "2026-09-15T15:33:00Z",
+  "base_commit": "6cefcf3c4ae86a13e046c915f085a793d61e660f",
+  "reviews": {
+    "packet": "PASS_RAW_KEY_CAPTURE_U64_PACKET_ONLY",
+    "source": "PASS_RAW_KEY_CAPTURE_U64_SOURCE_ONLY",
+    "preliminary_evidence": "PASS_RAW_KEY_CAPTURE_U64_SOURCE_PRELIM_ONLY",
+    "evidence_attempt_1": "FAIL_FAILURE_FIDELITY_NOT_ESTABLISHED",
+    "evidence_attempt_2": "PASS_RAW_KEY_CAPTURE_U64_EVIDENCE_ONLY"
+  },
+  "source": {
+    "harness_sha256": "722b6b59b175090be518c55a655cd95024facaa3c539d0e9dabbc0ea2c3985d0",
+    "vectors_sha256": "1dfc7105093fe618f4bbb758af9bf92fc31795120ca4e70625a43272e8f69ae9",
+    "expected_sha256": "86473f7b4027b9a06e064788d7ed41115b28705a62edc199879990310323a7f7",
+    "test_sha256": "7c20c39de57fd0548737049700492dfd66de9d1b8aa5f471b60295a00ccf739b"
+  },
+  "failure_record": {
+    "path": "docs/verification/evidence/stability-native-collector-lifecycle-raw-key-capture-u64-source-failure-20260915-1.json",
+    "sha256": "93df26e8799e993f458640aa8c06904807d1d2a774ab103916d6e1d77e3498bd",
+    "status": "SUMMARY_ONLY",
+    "original_log_retained": false,
+    "exact_failing_source_hash_retained": false
+  },
+  "archive": {
+    "path": "docs/verification/evidence/stability-native-collector-lifecycle-raw-key-capture-u64-source-checkpoint-20260915-1.tar.gz",
+    "sha256": "cd5b8aefd7ac6bfd246c110d74315726fc559f41c709f763884a1a7d0a863437",
+    "members": 10
+  },
+  "checks": {
+    "python_3_9_12": {"tests_passed": 17, "tests_failed": 0},
+    "python_3_8_10": {"tests_passed": 17, "tests_failed": 0},
+    "fixture_bytes": 1014192,
+    "first_136_lexical_sha256": "f60081f55283820733933c6efba366385ddd3f557d76a6cd7353bd83845ac297",
+    "new_raw_cases": 1,
+    "cumulative_raw_cases": 137
+  },
+  "raw_full_matrix_frozen": false,
+  "corpus_complete": false,
+  "compiler_execution": false,
+  "model_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

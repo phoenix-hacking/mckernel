@@ -1,0 +1,537 @@
+{
+  "schema": "mckernel.native-second-stop-actual-result-review.v1",
+  "status": "PASS",
+  "decision": "PASS_ACTUAL_TWO_NATIVE_STOPS_SECOND_WORKLOAD_AND_PUBLIC_RELEASE_RETIREMENT",
+  "time_epoch": 1792297837.115831,
+  "functional_scope": "PRACTICAL-GOAL functional supported-profile kernel and useful applications; original comprehensive qualification deferred",
+  "reviewer": "/root/second_stop_actual_result_review",
+  "implementation_ownership": false,
+  "blocking_findings": [],
+  "reviewer_control_failure": {
+    "original": {
+      "path": "/home/holden/mckernel-work/scratch/native-second-stop-actual-result-review-20261018-1/review.py",
+      "size": 10712,
+      "sha256": "b331be9ab2f41aa3cd16ed1ce294066fa64d98168a96c42600502c7b7c16fc70"
+    },
+    "stderr": {
+      "path": "/home/holden/mckernel-work/scratch/native-second-stop-actual-result-review-20261018-1/review.stderr",
+      "size": 304,
+      "sha256": "770c930bc559f1e7141837b7e8a2311ad658dd693d58a50f6d4812ca6f2b3e76"
+    },
+    "classification": "Reviewer imposed empty stderr on tar archive; actual reviewed default tar legitimately reports ignored qmp.sock. Bounded correction permits only this exact diagnostic at return0; original retained. No runtime correction or guest retry."
+  },
+  "reviewer_api_failure": {
+    "source": {
+      "path": "/home/holden/mckernel-work/scratch/native-second-stop-actual-result-review-20261018-1/review-correction1.py",
+      "size": 11326,
+      "sha256": "d92e15c07fed83e303c9d0c7d43c4b0b5fc77900f79ec2e25c1fa8b31a9106ad"
+    },
+    "stderr": {
+      "path": "/home/holden/mckernel-work/scratch/native-second-stop-actual-result-review-20261018-1/review-correction1.stderr",
+      "size": 942,
+      "sha256": "33d51ab31c82a7f7855c65087b95aca86dd5c10fb90f218d8b5bf9548ad5f5eb"
+    },
+    "classification": "Reviewer passed plain JSON manifest to adapter requiring frozen manifest object. Bounded correction uses unchanged adapter.binding return, matching production API; no source/oracle/runtime change."
+  },
+  "readback_diagnostic": "/usr/bin/tar: ./qmp.sock: socket ignored; exact expected default non-dereferencing archive behavior, socket is not a captured evidence file",
+  "actual_runtime_accepted": true,
+  "retirement_accepted": true,
+  "full_cycle_verified": false,
+  "physical_identity_verified": false,
+  "callback_reference_restoration_verified": false,
+  "repeatability_quota_credit": false,
+  "distinct_real_app_count": 16,
+  "distinct_app_count_delta": 0,
+  "actual_observed_native_stops": 2,
+  "actual_observed_native_workload_launches": 2,
+  "actual_second_boot_workload_accepted": true,
+  "actual_second_stop_public_release_accepted": true,
+  "source_bindings_verified": 29,
+  "inputs": {
+    "execution-release.json": {
+      "path": "/home/holden/mckernel-work/scratch/native-second-stop-execution-assembly-20261018-1/execution-release.json",
+      "size": 6179,
+      "sha256": "db4b0377f882cdfd2938ce31953c1dbae967857f3fe93c618912915de762f3d2"
+    },
+    "fresh-live-preflight.json": {
+      "path": "/home/holden/mckernel-work/scratch/native-second-stop-execution-assembly-20261018-1/fresh-live-preflight.json",
+      "size": 7639,
+      "sha256": "fc2cee0dbca5612b2d5cc0561a42b1af99c893a0be1b874431b5716e60526885"
+    },
+    "owner-join.json": {
+      "path": "/home/holden/mckernel-work/scratch/native-second-stop-execution-assembly-20261018-1/owner-join.json",
+      "size": 844,
+      "sha256": "724e82ee45da4ae773701072335b08be2600a34c3f270bff9b5cbf1e8325ee1c"
+    },
+    "owner-result.stdout": {
+      "path": "/home/holden/mckernel-work/scratch/native-second-stop-execution-assembly-20261018-1/owner-result.stdout",
+      "size": 1143,
+      "sha256": "e8e1ef93f2458d93c5a780b23cdf62eb1a32b2939607a6554ba20327a675aa96"
+    },
+    "retirement-readback-gate.json": {
+      "path": "/home/holden/mckernel-work/scratch/native-second-stop-execution-assembly-20261018-1/retirement-readback-gate.json",
+      "size": 773,
+      "sha256": "bc58e7c15115c2a2a742baaa29f3d6fe569ae247e1e23b25cbca6ed76a4e453e"
+    },
+    "readback-1.stdout": {
+      "path": "/home/holden/mckernel-work/scratch/native-second-stop-execution-assembly-20261018-1/readback-1.stdout",
+      "size": 1136640,
+      "sha256": "858d0b2091c75bd1e3352e8fae9a94c23bce5530f9f3017a7848329a0fc55e81"
+    },
+    "readback-2.stdout": {
+      "path": "/home/holden/mckernel-work/scratch/native-second-stop-execution-assembly-20261018-1/readback-2.stdout",
+      "size": 983040,
+      "sha256": "c4c4206df83aba783946fac44e52169677f7786b4bac9491d88a73838c1e1aa1"
+    },
+    "readback-3.stdout": {
+      "path": "/home/holden/mckernel-work/scratch/native-second-stop-execution-assembly-20261018-1/readback-3.stdout",
+      "size": 300817,
+      "sha256": "6fc8b8c9b0bdbbd8cf9c1e41afb61bac1c948ab8d5ac86416d1713f02f73bbf5"
+    }
+  },
+  "manifest": {
+    "path": "/home/holden/mckernel-work/scratch/native-second-stop-stage-20261018-1/manifest.json",
+    "size": 5453,
+    "sha256": "4b101c140c9be17f06542cec08908c019d931e5b484e537d533f0ee2703c2c64"
+  },
+  "accepted_image_sha256": "08210bb23f137f845fdb94fc0e66ac97a0cbc2d68081d856cdfc92da2d6d3dbf",
+  "accepted_same_d99_modules": [
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-a7d84db0d8b54b9b94347fd0aff57594/modules/ihk.ko",
+      "sha256": "51b48a9e42eaa2411cab2a28edf9bb5db8b2d648675d083473e926f91dd0e038",
+      "size": 1440392
+    },
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-a7d84db0d8b54b9b94347fd0aff57594/modules/ihk-smp-x86_64.ko",
+      "sha256": "82c9021f7491fa8bc6d178fe99e7d4b7b6f90838474a9c91b62ddb8edb3d13f8",
+      "size": 11630064
+    },
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-a7d84db0d8b54b9b94347fd0aff57594/modules/mcctrl.ko",
+      "sha256": "6571ac7eca13559d8bab65125d54facbbc65e84f815d4ff3fc77ec6aa1104972",
+      "size": 1913904
+    }
+  ],
+  "oracle_replay": "Exact frozen case adapter equals actual result after excluding runner-only capture/cleanup/QEMU fields; strict prior workload, lifecycle, public-release, boot and distinct second lifecycle/resource consumers all pass",
+  "workloads": [
+    {
+      "argv": [
+        "/bin/mcexec",
+        "-t",
+        "1",
+        "0",
+        "app",
+        "A",
+        "",
+        "B"
+      ],
+      "cwd": "/case/work",
+      "env": {
+        "COKERNEL_PATH": "/apps",
+        "PATH": "/usr/bin:/bin"
+      },
+      "finished_ns": 55561427591,
+      "procfs_empty": true,
+      "raw_wait_status": 0,
+      "reaped_ns": 31112754089,
+      "started_ns": 29972380103,
+      "streams": {
+        "stderr": {
+          "discarded": 0,
+          "eof": true,
+          "eof_ns": 30251432329,
+          "hex": "",
+          "limit": 1024,
+          "observed": 0,
+          "retained": 0,
+          "truncated": false
+        },
+        "stdout": {
+          "discarded": 0,
+          "eof": true,
+          "eof_ns": 30251389586,
+          "hex": "68616e646c65643d31206f627365727665645f626c6f636b65643d3120726573746f7265643d310a",
+          "limit": 1024,
+          "observed": 40,
+          "retained": 40,
+          "truncated": false
+        }
+      }
+    },
+    {
+      "argv": [
+        "/bin/mcexec",
+        "-t",
+        "1",
+        "0",
+        "app",
+        "A",
+        "",
+        "B"
+      ],
+      "cwd": "/case/work",
+      "env": {
+        "COKERNEL_PATH": "/apps",
+        "PATH": "/usr/bin:/bin"
+      },
+      "finished_ns": 55114714112,
+      "procfs_empty": true,
+      "raw_wait_status": 0,
+      "reaped_ns": 55112759674,
+      "started_ns": 54674208964,
+      "streams": {
+        "stderr": {
+          "discarded": 0,
+          "eof": true,
+          "eof_ns": 54858681013,
+          "hex": "",
+          "limit": 1024,
+          "observed": 0,
+          "retained": 0,
+          "truncated": false
+        },
+        "stdout": {
+          "discarded": 0,
+          "eof": true,
+          "eof_ns": 54858635476,
+          "hex": "68616e646c65643d31206f627365727665645f626c6f636b65643d3120726573746f7265643d310a",
+          "limit": 1024,
+          "observed": 40,
+          "retained": 40,
+          "truncated": false
+        }
+      }
+    }
+  ],
+  "phase_metadata": {
+    "ND_LIFECYCLE": {
+      "argv": [
+        "/bin/native-lifecycle-probe",
+        "0"
+      ],
+      "helper_result": 0,
+      "raw_wait_status": 0,
+      "fault": 0,
+      "timeout": 0,
+      "clean": 1,
+      "child_stage": 0,
+      "child_errno": 0,
+      "started_ns": 31118414585,
+      "reaped_ns": 31291251636,
+      "finished_ns": 31291390480
+    },
+    "ND_RESOURCE": {
+      "argv": [
+        "/bin/native-resource-release-probe"
+      ],
+      "helper_result": 0,
+      "raw_wait_status": 0,
+      "fault": 0,
+      "timeout": 0,
+      "clean": 1,
+      "child_stage": 0,
+      "child_errno": 0,
+      "started_ns": 31295287065,
+      "reaped_ns": 31433475298,
+      "finished_ns": 31433567768
+    },
+    "ND_REBOOT": {
+      "argv": [
+        "/bin/native-boot"
+      ],
+      "result": 0,
+      "boot_attempted": 1,
+      "helper_result": 0,
+      "raw_wait_status": 0,
+      "fault": 0,
+      "timeout": 0,
+      "clean": 1,
+      "child_stage": 0,
+      "child_errno": 0,
+      "resource_finished_ns": 31433567768,
+      "started_ns": 31453951085,
+      "reaped_ns": 54663378537,
+      "finished_ns": 54663512912
+    },
+    "ND_SECOND_PAYLOAD": {
+      "argv": [
+        "/bin/mcexec",
+        "-t",
+        "1",
+        "0",
+        "app",
+        "A",
+        "",
+        "B"
+      ],
+      "cwd": "/case/work",
+      "env": {
+        "PATH": "/usr/bin:/bin",
+        "COKERNEL_PATH": "/apps"
+      },
+      "raw_wait_status": 0,
+      "started_ns": 54674208964,
+      "reaped_ns": 55112759674,
+      "finished_ns": 55114714112,
+      "streams": {
+        "stdout": {
+          "hex": "68616e646c65643d31206f627365727665645f626c6f636b65643d3120726573746f7265643d310a",
+          "eof": true,
+          "truncated": false,
+          "observed": 40,
+          "retained": 40,
+          "discarded": 0,
+          "limit": 1024,
+          "eof_ns": 54858635476
+        },
+        "stderr": {
+          "hex": "",
+          "eof": true,
+          "truncated": false,
+          "observed": 0,
+          "retained": 0,
+          "discarded": 0,
+          "limit": 1024,
+          "eof_ns": 54858681013
+        }
+      },
+      "procfs_empty": true
+    },
+    "ND_SECOND_LIFECYCLE": {
+      "argv": [
+        "/bin/native-lifecycle-probe",
+        "0"
+      ],
+      "helper_result": 0,
+      "raw_wait_status": 0,
+      "fault": 0,
+      "timeout": 0,
+      "clean": 1,
+      "child_stage": 0,
+      "child_errno": 0,
+      "started_ns": 55115547738,
+      "reaped_ns": 55268021586,
+      "finished_ns": 55268253179
+    },
+    "ND_SECOND_RESOURCE": {
+      "argv": [
+        "/bin/native-resource-release-probe"
+      ],
+      "helper_result": 0,
+      "raw_wait_status": 0,
+      "fault": 0,
+      "timeout": 0,
+      "clean": 1,
+      "child_stage": 0,
+      "child_errno": 0,
+      "started_ns": 55270024354,
+      "reaped_ns": 55384429676,
+      "finished_ns": 55384529410
+    },
+    "ND_PAYLOAD": {
+      "argv": [
+        "/bin/mcexec",
+        "-t",
+        "1",
+        "0",
+        "app",
+        "A",
+        "",
+        "B"
+      ],
+      "cwd": "/case/work",
+      "env": {
+        "PATH": "/usr/bin:/bin",
+        "COKERNEL_PATH": "/apps"
+      },
+      "raw_wait_status": 0,
+      "started_ns": 29972380103,
+      "reaped_ns": 31112754089,
+      "finished_ns": 55561427591,
+      "streams": {
+        "stdout": {
+          "hex": "68616e646c65643d31206f627365727665645f626c6f636b65643d3120726573746f7265643d310a",
+          "eof": true,
+          "truncated": false,
+          "observed": 40,
+          "retained": 40,
+          "discarded": 0,
+          "limit": 1024,
+          "eof_ns": 30251389586
+        },
+        "stderr": {
+          "hex": "",
+          "eof": true,
+          "truncated": false,
+          "observed": 0,
+          "retained": 0,
+          "discarded": 0,
+          "limit": 1024,
+          "eof_ns": 30251432329
+        }
+      },
+      "procfs_empty": true
+    }
+  },
+  "guest_evidence": {
+    "serial_sha256": "06eb0fcdf9e262c47bb482f1c0cf81a72bd83449729a14ffebb6e4b91493c9f7",
+    "serial_bytes": 288468,
+    "debugcon_sha256": "fc580a7baf51898bd23ce761d8bb85138d9e4efd48da72de589f0c28674491ac",
+    "qmp_sha256": "f2234c15a1dee3587c81ab5e972d821df034669d98ab1e9ede3f9320de00e337",
+    "qemu": {
+      "argv": [
+        "/usr/libexec/qemu-kvm",
+        "-machine",
+        "q35",
+        "-accel",
+        "tcg,thread=multi",
+        "-cpu",
+        "max,la57=off",
+        "-smp",
+        "4,sockets=2,cores=2,threads=1",
+        "-m",
+        "8192",
+        "-object",
+        "memory-backend-ram,size=4G,id=ram-node0",
+        "-object",
+        "memory-backend-ram,size=4G,id=ram-node1",
+        "-numa",
+        "node,nodeid=0,cpus=0-1,memdev=ram-node0",
+        "-numa",
+        "node,nodeid=1,cpus=2-3,memdev=ram-node1",
+        "-nic",
+        "none",
+        "-display",
+        "none",
+        "-no-reboot",
+        "-no-shutdown",
+        "-S",
+        "-monitor",
+        "none",
+        "-qmp",
+        "unix:/home/holden/mckernel-work/scratch/nsss-71bc8e42/run/attempt-71bc8e42000000000000000000000000/qmp.sock,server=on,wait=off",
+        "-serial",
+        "file:/home/holden/mckernel-work/scratch/nsss-71bc8e42/run/attempt-71bc8e42000000000000000000000000/serial.log",
+        "-debugcon",
+        "file:/home/holden/mckernel-work/scratch/nsss-71bc8e42/run/attempt-71bc8e42000000000000000000000000/debugcon.log",
+        "-global",
+        "isa-debugcon.iobase=0xe9",
+        "-kernel",
+        "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/bzImage",
+        "-initrd",
+        "/home/holden/mckernel-work/scratch/native-second-stop-stage-20261018-1/second-stop2.cpio.gz",
+        "-append",
+        "console=ttyS0,115200n8 rdinit=/init nokaslr panic=-1 memmap=4K%0x80000-1"
+      ],
+      "pgid": 10,
+      "pid": 10,
+      "returncode": -9,
+      "sid": 10,
+      "starttime_ticks": 9506876
+    },
+    "cleanup": {
+      "errors": [],
+      "reaped": true
+    },
+    "capture_errors": []
+  },
+  "retirement": {
+    "root_result": {
+      "absence_verified": true,
+      "application_acceptance": false,
+      "container": "fc7643ef2422b503dd891d7c210ea373eff049808212bc1940e7f51756fea4e3",
+      "failure": null,
+      "lease_retained": false,
+      "secondary": [],
+      "secondary_omitted": 0,
+      "signal_number": null,
+      "status": "PROTOCOL_PASS"
+    },
+    "owner": {
+      "application_acceptance": false,
+      "attempt": "/home/holden/mckernel-work/scratch/nsss-71bc8e42/run/attempt-71bc8e42000000000000000000000000",
+      "cgroup_profile": {
+        "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_period_us": "100000",
+        "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_quota_us": "400000",
+        "/sys/fs/cgroup/memory/mckernel-dev/memory.limit_in_bytes": "12884901888",
+        "/sys/fs/cgroup/memory/mckernel-dev/memory.use_hierarchy": "1",
+        "/sys/fs/cgroup/pids/mckernel-dev/pids.max": "512"
+      },
+      "lock": {
+        "dev": 27,
+        "gid": 0,
+        "ino": 4,
+        "mode": 420,
+        "nlink": 1,
+        "uid": 0
+      },
+      "name": "mckernel-native-diagnostic-71bc8e42000000000000000000000000",
+      "nonce": "71bc8e42000000000000000000000000",
+      "outer": {
+        "pgid": 833397,
+        "pid": 833401,
+        "proc_starttime": 9506727,
+        "sid": 833397
+      },
+      "owner_sha256": "d4d31583250199afaca0180fdc8e0c4ee82e8b387e906316dad163fb94cd296f"
+    },
+    "direct_owner_join": {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/home/holden/anaconda3/bin/python3.9",
+        "-B",
+        "/home/holden/mckernel-work/scratch/native-second-stop-stage-20261018-1/host/native_diagnostic_container_owner.py",
+        "--attempt-parent",
+        "/home/holden/mckernel-work/scratch/nsss-71bc8e42/run",
+        "--nonce",
+        "71bc8e42000000000000000000000000",
+        "--owner-sha256",
+        "d4d31583250199afaca0180fdc8e0c4ee82e8b387e906316dad163fb94cd296f",
+        "--manifest",
+        "/home/holden/mckernel-work/scratch/native-second-stop-stage-20261018-1/manifest.json",
+        "--manifest-sha256",
+        "4b101c140c9be17f06542cec08908c019d931e5b484e537d533f0ee2703c2c64"
+      ],
+      "returncode": 0,
+      "joined": true,
+      "elapsed_seconds": 60.101903385002515,
+      "scope": "Direct owner client joined; retirement determined only by protected source owner result"
+    },
+    "container_authenticated_removed": true,
+    "final_name_label_fullcid_absence_queries": [
+      28,
+      29,
+      30
+    ],
+    "all_30_docker_client_positive_reaps": true,
+    "all_client_group_checks_empty": true,
+    "current_procfs_veto_live_identities": [],
+    "current_procfs_unreadable_stats": [],
+    "root_mutex_identity": {
+      "dev": 27,
+      "ino": 4
+    },
+    "root_mutex_locks": [],
+    "root_mutex_release_source": "_release requires absent and drained pending/final-reap ledgers; _flush publishes protected result only after lock closed; actual exact source/result and archive joined",
+    "common_shared_predecessor": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-fork-conditional66-build-result-review-20261018-1.json",
+      "sha256": "efad866d3be902c4e4a9e79f893e65c70ba737f80bf7da38bdbd2558d7fba95c",
+      "size": 19911
+    },
+    "common_shared_release": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-fpu-copy-image-terminal-result-review-20261018-1.json",
+      "sha256": "36461074ce3898a7711bd1f6801d80d98983423fa4e11fe90ab31a7844fab90a",
+      "size": 11112
+    }
+  },
+  "limits": [
+    "Two literal native status5 -> shutdown0 -> query0 -> close0 transitions with two drained public destroy/resource-release helpers accepted.",
+    "Public CPU/memory release is accepted only to the unchanged public oracle; physical mapping identity and callback/reference restoration are not established.",
+    "No final ten-cycle quota, new distinct app, full practical milestone, original qualification or whole-OS acceptance credit."
+  ],
+  "next_step": "Dispatcher may perform the next independently released strict native build after its own fresh exclusive live admission; this review releases only this exact retired attempt."
+}

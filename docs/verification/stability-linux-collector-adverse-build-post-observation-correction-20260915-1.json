@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_adverse_build_post_observation_correction",
+  "task_id": "M02-B-adverse-v1-build",
+  "attempt": 1,
+  "observed_utc": "2026-09-15T07:23:00Z",
+  "corrects": "docs/verification/stability-linux-collector-adverse-build-post-observation-20260915-1.json",
+  "correction": "The earlier label org.mckernel.validation=linux-collector-adverse-v1 was unrelated to the actual attempt. Its zero-row result is preserved but supplies no attempt-specific absence evidence.",
+  "owned_identity": {
+    "nonce": "12c2b9d0f423b1934f04e81ec809877d",
+    "name": "mckernel-collector-12c2b9d0f423b1934f04e81ec809877d",
+    "full_container_id": "11f615ee0785c211cfba6b849c4cc187d4b07cdafc4093954e46506610118e04",
+    "label": "mckernel.collector.owner=12c2b9d0f423b1934f04e81ec809877d"
+  },
+  "exact_id_inspect": {
+    "exit_status": 1,
+    "stdout_bytes": 3,
+    "stdout_sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "stderr_bytes": 88,
+    "stderr_sha256": "55673e883575b2bd1e3acb8c701bf5f22c22339c2d557570d1419ec249ed21ad",
+    "diagnostic": "No such object for the exact full container ID"
+  },
+  "exact_owner_label_list": {
+    "exit_status": 0,
+    "matching_rows": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "development_lock_acquirable": true,
+  "runtime_acceptance": false
+}

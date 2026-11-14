@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/git-owner-debug.py", line 41, in <module>
+    if __name__=='__main__':main()
+  File "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/git-owner-debug.py", line 19, in main
+    check('ordinary-real-Git-two-object-headers-no-bodies',lambda:m.git_available(selected))
+  File "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/git-owner-debug.py", line 18, in check
+    results.append({'case':name,'status':'PASS' if ok else 'FAIL','error':error});assert ok,results[-1]
+AssertionError: {'case': 'ordinary-real-Git-two-object-headers-no-bodies', 'status': 'FAIL', 'error': 'RuntimeError("command failed: [\'/usr/bin/git\', \'-C\', \'/home/holden/mckernel\', \'cat-file\', \'--batch-check=%(objectname) %(objecttype) %(objectsize)\'] fatal: packfile .git/objects/pack/pack-60e4f5f092bbfb766490c13e676f957cac2adb1e.pack cannot be mapped: Cannot allocate memory\\n")'}

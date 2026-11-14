@@ -1,0 +1,343 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_ACTUAL_SELECTED_RUST_STATIC_CALLER_FOLDING_FOR_PUBLIC_EVENT_AND_SIGNAL_ADAPTER",
+  "artifacts": {
+    "rust-selected.o": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/HOST-output-proposed-1/rust-selected.o",
+      "bytes": 18335360,
+      "sha256": "4d2265b8d178fd44fe3f57ea76c92d3ed372cdda1205518d4d4a6505d4bb37c4"
+    },
+    "selected.o": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/HOST-output-proposed-1/selected.o",
+      "bytes": 375672,
+      "sha256": "e38590f82c505f4081faffb495b8826668cb97a6b5306aa06f6af72c257c7e39"
+    },
+    "selected-joint.o": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/HOST-output-proposed-1/selected-joint.o",
+      "bytes": 18838592,
+      "sha256": "8ddacc49ddf5afd2eb0a2d0dcac9daaaec28f43c2952669efef4d9a7d54d91f3"
+    }
+  },
+  "accepted_HOST_ABI_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/independent-actual-review-1/REVIEW.json",
+    "bytes": 5262,
+    "sha256": "93fb50b8e2127848efaacd3785579201edd439b39b34fde81d3ed9d65024cc13"
+  },
+  "accepted_ELF_facts": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/HOST-output-proposed-1/CHANGED-BOUNDARY-QUALIFICATION.json",
+    "bytes": 5439,
+    "sha256": "bb0921c0cda9203566f474ff5c271fa142982e3abea22903de3c2b91bc3241cb"
+  },
+  "exact_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/context-root/kernel/rust/syscall_policy.rs",
+    "bytes": 1272814,
+    "sha256": "5d5bc3d92195355b11455fa8c200acf495e8a8cac65136774bdf180f76d583f6"
+  },
+  "selected_compile_command": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/future-capture-1/step0/command.json",
+    "bytes": 4572,
+    "sha256": "970560b0869475ff9e13cfca135a16a8caf92b2927fbdf617590700fbc8e8a89"
+  },
+  "selected_functions": {
+    "syscall": {
+      "symbol": {
+        "name": "syscall",
+        "kind": 2,
+        "bind": 1,
+        "ndx": 4316,
+        "value": 0,
+        "size": 2935
+      },
+      "section": ".ltext.syscall",
+      "body_hex": "554889e54157415641554154534883ec484989f0b9010100c00f3248c1e22089c14809d148b80000000000000000488b1049ba000000000000000048c7c0ffffffff4839ca771949633248c1e60e4801f24839ca720a658b042500000000489848b900000000000000004c8b394c69f0c01f00004b8b8437a81e000041bcffffffff488945c84885c07417488b45c8488b80d01000004885c07407448ba0c801000048bb0000000000000000833b0048897dd04c8945c0740e48b800000000000000003b38742a48b800000000000000008b3848b80000000000000000ffd049ba00000000000000004c8b45c0488b7dd04d01f74c897d9049bf00000000ffffffff4c89659849c1e42048b90000000000000000488b014d8d742401eb096690f0480fb11174244889c64c21fe4c89f24c39e675eba980ffffff0f85d20000008d50010fb6d24c09e2ebd5b9010100c00f3248c1e22089c04809d048b90000000000000000488b11b9ffffffffbeffffffff4839c2771c49633248c1e60e4801f2beffffffff4839c27208658b34250000000048837dc8007407488b45c88b48144d85c074224d8b88b80000004d8b90d000000048837dc800741a488b45c8448b9858100000eb134531d24531c948837dc80075e641bbffffffff48bf000000000000000049bd0000000000000000488b55984c8b45d031c04153415241ffd5488b7dd04883c41049ba0000000000000000488b45c883b8bc12000000743a488b45c8488b88c81200004885c9742a0f3148c1e22089c04809d0488b75c8488b96d01200004829ca4801c2488996d0120000488986c8120000b9010100c00f3248c1e22089c04809d048b900000000000000004c8b0949633248c1e60e498d0c314939c10f97c24839c10f92c008d048c7c0ffffffff750a658b042500000000489848b90000000000000000488b094869c0c01f0000488b8401a81e0000488b80d010000083b8a401000010755c48b800000000000000003b38744e48b800000000000000003b38744048b8000000000000000049c7c5eaffffff48c7c7eaffffff31f6baffffffff31c9ffd048b800000000000000008b3848b80000000000000000ffd0e916080000fb48b80000000000000000488b004885c07420ffd048b800000000000000004c8b0848b8000000000000000048633048c1e60eb9010100c00f3248c1e22089c14809d14c01ce48c7c0ffffffff4939c977154839ce4c8b55c07210658b0425000000004898eb044c8b55c048b900000000000000004c8b014869c0c01f0000498b8400a81e000083b820110000000f8492000000b9010100c00f3248c1e22089c14809d148c7c0ffffffff4939c9770f4839ce720a658b04250000000048984d85d2745a4869c0c01f0000498bbc00a81e000049c78288000000daffffff4885ff74278bb720110000f7c600020000741983e601c1e60783ce0548b80000000000000000ffd04c8b55c0498b8288000000498b82b0000000488945d0eb0848c745d00000000048b800000000000000008b003dffffff000f864c010000b9010100c00f3248c1e22089c04809d048b90000000000000000488b3948b900000000000000004c630149c1e00e4901f84839c70f97c14939c00f92c008c8beffffffff7508658b342500000000b9010100c00f3248c1e22089c04809d04839c70f97c14939c00f92c008c848c7c000c0ffff750e658b042500000000489848c1e00e8b54070848b80000000000000000488b0048634dd04c8b04c84d85d274444d8b8aa8000000498b82a0000000488945a04d8baa98000000498b4270488945b8498b8280000000488945a84d8b5a78498b82b8000000488945b04d8b92d0000000eb2c48c745b00000000048c745a8000000004531ed4531c948c745a00000000048c745b8000000004531db4531d24883ec0848bf0000000000000000488b4dd031c04152ff75b04153ff75a8ff75b84155ff75a049ba000000000000000041ffd24883c4404c8b55c048b800000000000000008b003d000000017248498b82d0000000488b30498b82d0000000488b5008498b82d0000000488b4810498b82d00000004c8b401848bf000000000000000031c049b9000000000000000041ffd14c8b55c048b800000000000000008b003d00000001721c48bf000000000000000031c048b90000000000000000ffd14c8b55c0488b7dd085ff0f88a200000048b800000000000000003b380f8d9000000048b80000000000000000488b0089f9488b04c84885c074784c89d6ffd04989c548b800000000000000008b003d000000010f8207010000b9010100c00f3248c1e22089c04809d048b90000000000000000488b09beffffffff4839c10f879504000048ba000000000000000048631248c1e20e4801d14839c1488b55d00f8278040000658b342500000000e96b04000048b800000000000000008b003d000000010f82850000004d85d27430498b92a8000000498b8aa00000004d8b82980000004d8b4a704d8b9a80000000498b9ab80000004d8b92d0000000eb1231db4531c931c931d24531c04531db4531d24883ec0848bf00000000000000004c8b6dd04489ee31c0415253415349ba000000000000000041ffd24c89ef4883c42048bb00000000000000004c8b55c048b800000000000000004c89d6ffd04989c548b90000000000000000488b014c8b4dc049b80000000000000000eb11662e0f1f840000000000f0480fb11174244889c64c21fe4c89f24c39e675eba980ffffff0f85bf0000008d50010fb6d24c09e2ebd5b9010100c00f3248c1e22089c04809d048b90000000000000000488b11b9ffffffffbeffffffff4839c2771c49633048c1e60e4801f2beffffffff4839c27208658b34250000000048837dc800488b55984d89ee7407488b45c88b48144d85c974104d8b99b80000004d8b91d0000000eb064531d24531db4883ec0848bf00000000000000004c8b45d04d89f131c041524153415649ba000000000000000041ffd24883c4204c8b4dc049b80000000000000000b9010100c00f3248c1e22089c04809d048b90000000000000000488b3949633048c1e60e4801fe4839c70f97c14839c60f92c008c848c7c0ffffffff750a658b042500000000489848b900000000000000004c8b014869c0c01f0000498b8400a81e000083b820110000004c8b7d900f8488000000b9010100c00f3248c1e22089c04809d04839c70f97c14839c60f92c008c848c7c0ffffffff750a658b04250000000048984d85c9744b4869c0c01f0000498bbc00a81e00004d89a9880000004885ff74278bb720110000f7c600020000741983e601c1e60783ce0548b80000000000000000ffd04c8b4dc04d8ba988000000eb0749c7c5f2ffffff0f3189d148ba00000000000000008b124c8b45d04139d07d3b48c1e12089c64809ce4c8b75c8492bb6c812000048b800000000000000004489c7ffd04c8b45d00f3148c1e22089c04809d0498986c8120000eb4c48b80000000000000000443b00743d48b800000000000000008b003d00000001722a48bf000000000000000048be00000000000000004489c131c049b8000000000000000041ffd04c8b45d048b80000000000000000833800742d48b80000000000000000443b00744348b80000000000000000443b00743448b80000000000000000443b007425418b87081f000048b900000000000000008501741048b80000000000000000ffd04c8b45d0488b4dc8488d810013000048398100130000751b488b45c8488b80d8120000488d884808000048398848080000741a48b800000000000000004c89ef31f64489c231c9ffd04c8b45d0833b00740f48b80000000000000000443b00741848b800000000000000008b3848b80000000000000000ffd0488b45c8488b80d010000083b8f401000000741a48b800000000000000008b3048b8000000000000000031ffffd04c89e84883c4485b415c415d415e415f5dc3488b55d048bf00000000000000004c89e931c049b8000000000000000041ffd0e922fcffff",
+      "body_sha256": "489530191b8cb1b8be00c5c290fb2ce3941e6f7e57486765ba39718db5fb91ad",
+      "selected_joint_bytes_identical": true
+    },
+    "arch_ptrace_syscall_event": {
+      "symbol": {
+        "name": "arch_ptrace_syscall_event",
+        "kind": 2,
+        "bind": 1,
+        "ndx": 842,
+        "value": 0,
+        "size": 87
+      },
+      "section": ".ltext.arch_ptrace_syscall_event",
+      "body_hex": "4885f6744a488996880000004885ff74368b8720110000a9000200007429554889e5535083e001c1e00783c80548b900000000000000004889f389c6ffd14889de4883c4085b5d488b8688000000c348c7c0f2ffffffc3",
+      "body_sha256": "c3ce25986c04f405a9591bb723854bac2fad81fe4bbb0e54fe93a8419715153c",
+      "selected_joint_bytes_identical": true
+    },
+    "ptrace_syscall_event": {
+      "symbol": {
+        "name": "ptrace_syscall_event",
+        "kind": 2,
+        "bind": 1,
+        "ndx": 3643,
+        "value": 0,
+        "size": 47
+      },
+      "section": ".ltext.ptrace_syscall_event",
+      "body_hex": "554889e54885ff740e8bb720110000f7c60002000075025dc383e601c1e60783ce0548b800000000000000005dffe0",
+      "body_sha256": "c48a396c34a6eab1561b6b46ee505e3a64df9becbee98b6481a52a51a2aa49fa",
+      "selected_joint_bytes_identical": true
+    },
+    "f03_exec_report_signal_v1": {
+      "symbol": {
+        "name": "f03_exec_report_signal_v1",
+        "kind": 2,
+        "bind": 1,
+        "ndx": 1156,
+        "value": 0,
+        "size": 17
+      },
+      "section": ".ltext.f03_exec_report_signal_v1",
+      "body_hex": "554889e548b800000000000000005dffe0",
+      "body_sha256": "3349aeea60e6fb9a071bdf9a25ef594f9ca941fdf61f8b842b6df69abdd11e16",
+      "selected_joint_bytes_identical": true
+    },
+    "f03_execveat_ptrace_report_v1": {
+      "symbol": {
+        "name": "f03_execveat_ptrace_report_v1",
+        "kind": 2,
+        "bind": 1,
+        "ndx": 1166,
+        "value": 0,
+        "size": 761
+      },
+      "section": ".ltext.f03_execveat_ptrace_report_v1",
+      "body_hex": "b8eaffffff4885ff0f84ea0200004885f60f84e1020000554889e54157415641554154534883ec584889fbf78720110000100100000f846f01000031c00f1f000fb68c0370100000884c05800fb68c0371100000884c05810fb68c0372100000884c05820fb68c0373100000884c05834883c0044883f85875c64989f549be000000000000000041833e0049bc000000000000000048be000000000000000049bf0000000000000000744bb9010100c00f3248c1e22089c14809d1498b142448c7c0ffffffff4839ca771948633648c1e60e4801f24839ca720a658b0425000000004898498b0f4869c0c01f0000f0ff8c01281f000048b800000000000000004889dfbe05040000ffd041833e004c89ee7455b9010100c00f3248c1e22089c14809d1498b142448c7c0ffffffff4839ca772348bf000000000000000048633f48c1e70e4801fa4839ca720a658b0425000000004898498b0f4869c0c01f0000f0ff8401281f000031c0660f1f4400000fb64c0580888c03701000000fb64c0581888c03711000000fb64c0582888c03721000000fb64c0583888c03731000004883c0044883f85875c631c0f78320110000000200000f842e0100004c8bb3c810000031c066662e0f1f8400000000000fb68c0370100000884c05800fb68c0371100000884c05810fb68c0372100000884c05820fb68c0373100000884c05834883c0044883f85875c6488d833011000031c9666666662e0f1f8400000000000fb6140e88940b301100000fb6540e0188940b311100000fb6540e0288940b321100000fb6540e0388940b331100004883c1044881f9e000000075c4c7831012000001000000488983c810000048c783b8110000000000008bb320110000f7c600020000741883e601c1e60783ce0548b800000000000000004889dfffd0488b83b81100004c89b3c810000031c031c90fb6540d8088940b701000000fb6540d8188940b711000000fb6540d8288940b721000000fb6540d8388940b731000004883c1044883f95875c64883c4585b415c415d415e415f5dc3",
+      "body_sha256": "c953ec4302727c1e32565b6012e154cbead8dbcc8e6c61afba140e9d8d41cc09",
+      "selected_joint_bytes_identical": true
+    }
+  },
+  "public_event_and_signal_direct_symbol_relocations": {
+    "ptrace_syscall_event": [],
+    "f03_exec_report_signal_v1": []
+  },
+  "folded_public_event_sites": [
+    {
+      "site": "entry",
+      "caller": "syscall",
+      "section": ".ltext.syscall",
+      "thread_null_check_offset": 1032,
+      "ptrace_load_flag_test_offset": 1037,
+      "ptrace_load_flag_test_exact_hex": "8bb720110000f7c600020000",
+      "signal_selection_and_provider_load_offset": 1051,
+      "signal_selection_and_provider_load_exact_hex": "83e601c1e60783ce0548b80000000000000000",
+      "provider_relocation": {
+        "section": ".ltext.syscall",
+        "offset": 1062,
+        "relocation_type": 1,
+        "addend": 0
+      },
+      "call_offset": 1070,
+      "call_opcode": "ffd0",
+      "thread_arg": "RDI unchanged after load of actualcurrentThread; ESI selects SIGTRAP5 | ((ptrace&1)<<7)",
+      "context_store_offset": 1021
+    },
+    {
+      "site": "return",
+      "caller": "syscall",
+      "section": ".ltext.syscall",
+      "thread_null_check_offset": 2400,
+      "ptrace_load_flag_test_offset": 2405,
+      "ptrace_load_flag_test_exact_hex": "8bb720110000f7c600020000",
+      "signal_selection_and_provider_load_offset": 2419,
+      "signal_selection_and_provider_load_exact_hex": "83e601c1e60783ce0548b80000000000000000",
+      "provider_relocation": {
+        "section": ".ltext.syscall",
+        "offset": 2430,
+        "relocation_type": 1,
+        "addend": 0
+      },
+      "call_offset": 2438,
+      "call_opcode": "ffd0",
+      "thread_arg": "RDI unchanged after load of actualcurrentThread; ESI selects SIGTRAP5 | ((ptrace&1)<<7)",
+      "context_store_offset": 2393
+    }
+  ],
+  "context_dataflow": {
+    "Thread.ptrace_offset": 4384,
+    "X86UserContext.rax_offset": 136,
+    "syscall_entry": "ctx nonnull; ctx.RAX=-38 before callback; thread nonnull; PT_TRACE_SYSCALL0x200 gate; ESI=(ptrace&1)<<7|SIGTRAP5; call exactprovider; rereadctx.RAX before syscall-number reread.",
+    "syscall_return": "ctx nonnull; save result R13 to ctx.RAX; same thread/null/flag/signal path; call exactprovider; reread ctx.RAX intoR13.",
+    "provider": "ExactR_X86_64_64 target ptrace_report_signal, same as 17B signalforwarder and 47B publicevent export. No pointer/ABI change."
+  },
+  "existing_exec_signal_caller": {
+    "caller": "f03_execveat_ptrace_report_v1",
+    "actual_selected_C_caller": {
+      "function": {
+        "name": "do_execveat",
+        "kind": 2,
+        "bind": 0,
+        "ndx": 1,
+        "value": 10320,
+        "size": 1933
+      },
+      "relocation": {
+        "section": ".text",
+        "offset": 11233,
+        "relocation_type": 31,
+        "addend": 0
+      },
+      "offsets": "do_execveat .text2bd5 loads ctx->RSI/threadR14->RDI;2bdfR64PLTOFFloader;2bec call*RAX"
+    },
+    "thread_save": "offset28 RDI->RBX; restore100/299 RBX->RDI",
+    "exec_event_signal": "offset103 ESI0x405 =SIGTRAP5|(PTRACE_EVENT_EXEC4<<8); call108 exactprovider",
+    "folded_public_event_in_exec": "278loadthreadptrace/27e flagtest/286 signalcalc/28fproviderload/29c call; exactselectionbytes matchnewpublicexport",
+    "provider_relocations": [
+      {
+        "section": ".ltext.f03_execveat_ptrace_report_v1",
+        "offset": 248,
+        "relocation_type": 1,
+        "addend": 0
+      },
+      {
+        "section": ".ltext.f03_execveat_ptrace_report_v1",
+        "offset": 657,
+        "relocation_type": 1,
+        "addend": 0
+      }
+    ]
+  },
+  "source_ranges": {
+    "signal_select_and_event_helper": {
+      "first_line": 22080,
+      "last_line": 22114,
+      "fragment": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/actual-new-rust-folded-caller-proof-source-1/signal_select_and_event_helper.rs.fragment",
+        "bytes": 900,
+        "sha256": "4738b292429153d35b63b022e33a1aac405919d221dc38ca6efe60305e1817b6"
+      }
+    },
+    "arch_callback_and_entry": {
+      "first_line": 23464,
+      "last_line": 23493,
+      "fragment": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/actual-new-rust-folded-caller-proof-source-1/arch_callback_and_entry.rs.fragment",
+        "bytes": 1078,
+        "sha256": "a81d172d0f297588d875c46411f7c083f82240c46ae853eb09f7f9b3ec5a7b99"
+      }
+    },
+    "selected_syscall_entry_caller": {
+      "first_line": 34667,
+      "last_line": 34678,
+      "fragment": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/actual-new-rust-folded-caller-proof-source-1/selected_syscall_entry_caller.rs.fragment",
+        "bytes": 505,
+        "sha256": "268fec8e05d5136620906b4f507e853b8bbc401043e8dd403de73a55c4b65544"
+      }
+    },
+    "selected_syscall_return_caller": {
+      "first_line": 34735,
+      "last_line": 34745,
+      "fragment": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/actual-new-rust-folded-caller-proof-source-1/selected_syscall_return_caller.rs.fragment",
+        "bytes": 555,
+        "sha256": "9297905195020f683e2de96142a1e76cbe4055ddb66d8c15e03e3377f63361aa"
+      }
+    },
+    "signal_forwarder_and_exec_caller": {
+      "first_line": 35440,
+      "last_line": 35484,
+      "fragment": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/actual-new-rust-folded-caller-proof-source-1/signal_forwarder_and_exec_caller.rs.fragment",
+        "bytes": 2194,
+        "sha256": "2b4b97bbcbf57fddd1edc91c20563601e24edf98e2ef6f1c4e5e27568ce3d15b"
+      }
+    },
+    "new_public_event_entry": {
+      "first_line": 36177,
+      "last_line": 36207,
+      "fragment": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/actual-new-rust-folded-caller-proof-source-1/new_public_event_entry.rs.fragment",
+        "bytes": 1157,
+        "sha256": "0e242957419bc295e2765a72af4853264c4fab5dabd0f28cfda9abfb451ef9c7"
+      }
+    }
+  },
+  "objdump_captures": [
+    {
+      "argv": [
+        "/usr/bin/objdump",
+        "-drw",
+        "-j",
+        ".ltext.ptrace_syscall_event",
+        "-j",
+        ".ltext.f03_exec_report_signal_v1",
+        "-j",
+        ".ltext.arch_ptrace_syscall_event",
+        "-j",
+        ".ltext.f03_execveat_ptrace_report_v1",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/HOST-output-proposed-1/rust-selected.o"
+      ],
+      "returncode": 0,
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/actual-new-rust-folded-caller-proof-source-1/exports-and-real-Rust-callers.objdump",
+        "bytes": 11857,
+        "sha256": "8c92e9bbe650933596dca3fcbe28986270e140add2ebd651a48688d1ee21c173"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/objdump",
+        "-drw",
+        "-j",
+        ".ltext.syscall",
+        "--start-address=0x3e9",
+        "--stop-address=0x450",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/HOST-output-proposed-1/rust-selected.o"
+      ],
+      "returncode": 0,
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/actual-new-rust-folded-caller-proof-source-1/syscall-entry-fold.objdump",
+        "bytes": 1478,
+        "sha256": "f863e2805e1147f78efd8872a14eb893e295ecb34853ffc915fd8be634e400cb"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/objdump",
+        "-drw",
+        "-j",
+        ".ltext.syscall",
+        "--start-address=0x945",
+        "--stop-address=0x99c",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/HOST-output-proposed-1/rust-selected.o"
+      ],
+      "returncode": 0,
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/actual-new-rust-folded-caller-proof-source-1/syscall-return-fold.objdump",
+        "bytes": 1348,
+        "sha256": "17e222edd0e0783358e6f27824ace0d18737a6823611a69b98c72dde31ff39dc"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/objdump",
+        "-drw",
+        "-j",
+        ".text",
+        "--start-address=0x2bd5",
+        "--stop-address=0x2bee",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/HOST-output-proposed-1/selected.o"
+      ],
+      "returncode": 0,
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/actual-new-rust-folded-caller-proof-source-1/selected-C-existing-Rust-exec-caller.objdump",
+        "bytes": 648,
+        "sha256": "e1a009abc2f9357e41b88cc92cae42dd339be30c08f04428ec0739cf0dd6ed1d"
+      }
+    }
+  ],
+  "interpretation": "Compiled object proves folding through real existing syscall and exec Rust callers: source arch callback extern link_name ptrace_syscall_event resolves samecrate newpublicdefinition; that calls knownsignalforwarder; optimizer emits originalprovider directly. Exactexport/callersbytes+argregister/branch/context checks, not inference from emptyrelocations.",
+  "production_C_direct_signal_consumer": "SOURCE_ELIDED_NOT_CLAIMED; typedHOST_ABI_WITNESS remainsfixtureonly. Existingdo_execveat edge is to realexistingRustexec consumer, not invented directsignal edge.",
+  "limits": {
+    "proof_scope": "Exactpassed HOSTselectedRust and selectedjoint staticcaller/dataflow only.",
+    "final_production_selected_image_and_native": "OPEN; requires Root actualproductioncompile/link of samecandidate/syscall_policy +selectedcfg, exact finalkernel image/caller instruction or folding check and applicable native qualification.",
+    "no_new_compiler_or_workload": true,
+    "original_duplicate_failure_preserved": true,
+    "wholefile_native_credit": 0
+  },
+  "compiler_runtime_query_guard_grant_canonical_calls": 0
+}

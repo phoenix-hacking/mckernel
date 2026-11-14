@@ -1,0 +1,350 @@
+{
+  "accepted_baseline_facts": {
+    "control_architectures": [
+      "x86_64",
+      "i386"
+    ],
+    "core_modes": [
+      "memory",
+      "files",
+      "threads",
+      "signals"
+    ],
+    "core_replays": 6,
+    "external_signal_restart_verified": false,
+    "final_checkpoint": {
+      "path": "docs/verification/ultra-final-checkpoint-20260909.json",
+      "sha256": "d17d00597992954f569033412a97c235b0fced229afda0cb0093bdd0a204770d",
+      "size": 435332
+    },
+    "fork_cow_verified": false,
+    "hello_applications": 48,
+    "ordinary_futex_logical_cases": 16,
+    "ordinary_signal_guest_cases": 2,
+    "scope": "Facts about the exact retained pair; these do not satisfy broader execution release gates.",
+    "shared_vm_child_tid_cases": 1,
+    "transport_runtime_injection_verified": false,
+    "vector_runtime_verified": false
+  },
+  "capabilities": {
+    "clock-contract": {
+      "blocked_by": [
+        "current-inputs",
+        "runner-contract",
+        "runtime-transport-fault-injection"
+      ],
+      "contract": "A separate source-bound contract, required protocol checks and real guest evidence are required; a present syscall table is insufficient.",
+      "evidence_scope": "No broad execution capability is accepted by the drafting release.",
+      "planning_state": "blocked",
+      "state": "blocked"
+    },
+    "current-inputs": {
+      "blocked_by": [
+        "current-inputs",
+        "runner-contract",
+        "runtime-transport-fault-injection"
+      ],
+      "contract": "Full compiler source bindings, exact executable/DSO closure and current native module/image regression replay.",
+      "evidence_scope": "No broad execution capability is accepted by the drafting release.",
+      "planning_state": "blocked",
+      "state": "blocked"
+    },
+    "dynamic-etexec": {
+      "blocked_by": [
+        "current-inputs",
+        "runner-contract",
+        "runtime-transport-fault-injection"
+      ],
+      "contract": "Accepted only on retained signal module1/image2. New modified inputs require exact rebinding and current-pair replay.",
+      "evidence_scope": "No broad execution capability is accepted by the drafting release.",
+      "planning_state": "historical-baseline-only",
+      "state": "blocked"
+    },
+    "external-signals": {
+      "blocked_by": [
+        "current-inputs",
+        "runner-contract",
+        "runtime-transport-fault-injection"
+      ],
+      "contract": "Supervisor-to-McKernel handler forwarding, exact recipient identity and blocked-syscall semantics verified.",
+      "evidence_scope": "No broad execution capability is accepted by the drafting release.",
+      "planning_state": "blocked",
+      "state": "blocked"
+    },
+    "file-basic": {
+      "blocked_by": [
+        "current-inputs",
+        "runner-contract",
+        "runtime-transport-fault-injection"
+      ],
+      "contract": "Accepted only on retained signal module1/image2. New modified inputs require exact rebinding and current-pair replay.",
+      "evidence_scope": "No broad execution capability is accepted by the drafting release.",
+      "planning_state": "historical-baseline-only",
+      "state": "blocked"
+    },
+    "futex-timeout-hardening": {
+      "blocked_by": [
+        "current-inputs",
+        "runner-contract",
+        "runtime-transport-fault-injection"
+      ],
+      "contract": "A separate source-bound contract, required protocol checks and real guest evidence are required; a present syscall table is insufficient.",
+      "evidence_scope": "No broad execution capability is accepted by the drafting release.",
+      "planning_state": "blocked",
+      "state": "blocked"
+    },
+    "ipc-contract": {
+      "blocked_by": [
+        "current-inputs",
+        "runner-contract",
+        "runtime-transport-fault-injection"
+      ],
+      "contract": "A separate source-bound contract, required protocol checks and real guest evidence are required; a present syscall table is insufficient.",
+      "evidence_scope": "No broad execution capability is accepted by the drafting release.",
+      "planning_state": "blocked",
+      "state": "blocked"
+    },
+    "loader-extended": {
+      "blocked_by": [
+        "current-inputs",
+        "runner-contract",
+        "runtime-transport-fault-injection"
+      ],
+      "contract": "A separate source-bound contract, required protocol checks and real guest evidence are required; a present syscall table is insufficient.",
+      "evidence_scope": "No broad execution capability is accepted by the drafting release.",
+      "planning_state": "blocked",
+      "state": "blocked"
+    },
+    "memory-basic": {
+      "blocked_by": [
+        "current-inputs",
+        "runner-contract",
+        "runtime-transport-fault-injection"
+      ],
+      "contract": "Accepted only on retained signal module1/image2. New modified inputs require exact rebinding and current-pair replay.",
+      "evidence_scope": "No broad execution capability is accepted by the drafting release.",
+      "planning_state": "historical-baseline-only",
+      "state": "blocked"
+    },
+    "multicore-topology": {
+      "blocked_by": [
+        "current-inputs",
+        "runner-contract",
+        "runtime-transport-fault-injection"
+      ],
+      "contract": "Separate two-McKernel-CPU topology/resource/routing acceptance; baseline profile remains one CPU.",
+      "evidence_scope": "No broad execution capability is accepted by the drafting release.",
+      "planning_state": "blocked",
+      "state": "blocked"
+    },
+    "native-negative-contract": {
+      "blocked_by": [
+        "current-inputs",
+        "runner-contract",
+        "runtime-transport-fault-injection"
+      ],
+      "contract": "Reviewer freezes the exact current native unsupported-feature vector and errno; differences from pinned Linux are recorded separately and never treated as success-equivalence.",
+      "evidence_scope": "No broad execution capability is accepted by the drafting release.",
+      "planning_state": "blocked",
+      "state": "blocked"
+    },
+    "nonroot-profile": {
+      "blocked_by": [
+        "current-inputs",
+        "runner-contract",
+        "runtime-transport-fault-injection"
+      ],
+      "contract": "Matching uid/gid/groups/umask and device access accepted under both engines before EACCES assertions.",
+      "evidence_scope": "No broad execution capability is accepted by the drafting release.",
+      "planning_state": "blocked",
+      "state": "blocked"
+    },
+    "pinned-application-inventory": {
+      "blocked_by": [
+        "current-inputs",
+        "runner-contract",
+        "runtime-transport-fault-injection"
+      ],
+      "contract": "A separate source-bound contract, required protocol checks and real guest evidence are required; a present syscall table is insufficient.",
+      "evidence_scope": "No broad execution capability is accepted by the drafting release.",
+      "planning_state": "blocked",
+      "state": "blocked"
+    },
+    "process-fork": {
+      "blocked_by": [
+        "current-inputs",
+        "runner-contract",
+        "runtime-transport-fault-injection"
+      ],
+      "contract": "A separate source-bound contract, required protocol checks and real guest evidence are required; a present syscall table is insufficient.",
+      "evidence_scope": "No broad execution capability is accepted by the drafting release.",
+      "planning_state": "blocked",
+      "state": "blocked"
+    },
+    "resource-accounting": {
+      "blocked_by": [
+        "current-inputs",
+        "runner-contract",
+        "runtime-transport-fault-injection"
+      ],
+      "contract": "Read-only exact owner/call/claim/pager/quarantine/notification counters expose scope and loss; stable quiet-state comparison is independently verified.",
+      "evidence_scope": "No broad execution capability is accepted by the drafting release.",
+      "planning_state": "blocked",
+      "state": "blocked"
+    },
+    "runner-contract": {
+      "blocked_by": [
+        "current-inputs",
+        "runner-contract",
+        "runtime-transport-fault-injection"
+      ],
+      "contract": "Repository runner/supervisor implements argv-only execution, same-guest Linux reference, raw wait status, bounded dual-stream pumps, watchdog and evidence requirements.",
+      "evidence_scope": "No broad execution capability is accepted by the drafting release.",
+      "planning_state": "blocked",
+      "state": "blocked"
+    },
+    "runtime-transport-fault-injection": {
+      "blocked_by": [
+        "current-inputs",
+        "runner-contract",
+        "runtime-transport-fault-injection"
+      ],
+      "contract": "Real guest prepublication hard fault, postpublication notify fault, recovery before deadline and permanent pressure pass with exact phase/ownership assertions.44 protocol tests alone do not satisfy this gate.",
+      "evidence_scope": "No broad execution capability is accepted by the drafting release.",
+      "planning_state": "blocked",
+      "state": "blocked"
+    },
+    "signals-basic": {
+      "blocked_by": [
+        "current-inputs",
+        "runner-contract",
+        "runtime-transport-fault-injection"
+      ],
+      "contract": "Accepted only on retained signal module1/image2. New modified inputs require exact rebinding and current-pair replay.",
+      "evidence_scope": "No broad execution capability is accepted by the drafting release.",
+      "planning_state": "historical-baseline-only",
+      "state": "blocked"
+    },
+    "threads-basic": {
+      "blocked_by": [
+        "current-inputs",
+        "runner-contract",
+        "runtime-transport-fault-injection"
+      ],
+      "contract": "Accepted only on retained signal module1/image2. New modified inputs require exact rebinding and current-pair replay.",
+      "evidence_scope": "No broad execution capability is accepted by the drafting release.",
+      "planning_state": "historical-baseline-only",
+      "state": "blocked"
+    },
+    "vector-avx512-state": {
+      "blocked_by": [
+        "current-inputs",
+        "runner-contract",
+        "runtime-transport-fault-injection"
+      ],
+      "contract": "Both engines report required leaf7 feature bits, OSXSAVE and XCR0 contains0xE6, CPUID0xD permits/components fit reviewed allocation and signal/scheduler state sizes. HistoricalTCG0x21f does not enable this.",
+      "evidence_scope": "No broad execution capability is accepted by the drafting release.",
+      "planning_state": "blocked",
+      "state": "blocked"
+    },
+    "vector-context-observer": {
+      "blocked_by": [
+        "current-inputs",
+        "runner-contract",
+        "runtime-transport-fault-injection"
+      ],
+      "contract": "Assembly load-transition-store windows, matched real McKernel TIDs and proven intervening execution observe live architectural registers before any ABI-permitted library clobber.",
+      "evidence_scope": "No broad execution capability is accepted by the drafting release.",
+      "planning_state": "blocked",
+      "state": "blocked"
+    },
+    "vector-extended-signal-abi": {
+      "blocked_by": [
+        "current-inputs",
+        "runner-contract",
+        "runtime-transport-fault-injection"
+      ],
+      "contract": "Full selected Linux-compatible xstate signal-frame size/alignment/features/metadata and checked restore contract reviewed and guest-verified; larger CPUID state cannot be inferred from legacy FP signal smoke.",
+      "evidence_scope": "No broad execution capability is accepted by the drafting release.",
+      "planning_state": "blocked",
+      "state": "blocked"
+    },
+    "vector-first-entry-observer": {
+      "blocked_by": [
+        "current-inputs",
+        "runner-contract",
+        "runtime-transport-fault-injection"
+      ],
+      "contract": "Reviewed minimal static ELF reaches its custom _start before loader/libc FP use; controlled prior poison-owner retirement and first-instruction snapshot prove exec initialization without asserting zero state after pthread/libc startup.",
+      "evidence_scope": "No broad execution capability is accepted by the drafting release.",
+      "planning_state": "blocked",
+      "state": "blocked"
+    },
+    "vector-instruction-audit": {
+      "blocked_by": [
+        "current-inputs",
+        "runner-contract",
+        "runtime-transport-fault-injection"
+      ],
+      "contract": "Exact payload ELFs and scalar reference disassembly prove required opcodes/widths, preserved-register critical windows, no accidental optional instruction in dispatch and no auto-vectorization or contraction in independent scalar references.",
+      "evidence_scope": "No broad execution capability is accepted by the drafting release.",
+      "planning_state": "blocked",
+      "state": "blocked"
+    },
+    "vector-kernel-opcode-audit": {
+      "blocked_by": [
+        "current-inputs",
+        "runner-contract",
+        "runtime-transport-fault-injection"
+      ],
+      "contract": "Pinned disassembler decodes all selected McKernel executable sections and unchanged three host modules; unexpected vector/x87/MMX operations rejected, only exact reviewed FP-management instruction ranges allowed.",
+      "evidence_scope": "No broad execution capability is accepted by the drafting release.",
+      "planning_state": "blocked",
+      "state": "blocked"
+    },
+    "vector-local-signals": {
+      "blocked_by": [
+        "current-inputs",
+        "runner-contract",
+        "runtime-transport-fault-injection"
+      ],
+      "contract": "Real in-McKernel self/thread-directed delivery and locally nested handlers verified; handler clobber and interrupted-state restoration observed with raw assembly. External forwarding remains a separate blocked capability.",
+      "evidence_scope": "No broad execution capability is accepted by the drafting release.",
+      "planning_state": "blocked",
+      "state": "blocked"
+    },
+    "vector-runtime-discovery": {
+      "blocked_by": [
+        "current-inputs",
+        "runner-contract",
+        "runtime-transport-fault-injection"
+      ],
+      "contract": "Baseline-generic CPUID leaf0/1/7/0xD and guarded XGETBV(0) captured separately in pinned Linux guest and McKernel; feature masks and enabled xstate offsets/sizes independently checked. No optional instruction before both-engine gate.",
+      "evidence_scope": "No broad execution capability is accepted by the drafting release.",
+      "planning_state": "blocked",
+      "state": "blocked"
+    }
+  },
+  "drafting_only": true,
+  "execution_enabled": false,
+  "final_checkpoint": {
+    "path": "docs/verification/ultra-final-checkpoint-20260909.json",
+    "sha256": "d17d00597992954f569033412a97c235b0fced229afda0cb0093bdd0a204770d",
+    "size": 435332
+  },
+  "global_execution_gates": [
+    "current-inputs",
+    "runner-contract",
+    "runtime-transport-fault-injection"
+  ],
+  "input_manifest": {
+    "path": "docs/verification/ultra-draft-inputs-20260909.json",
+    "sha256": "76500ac10a0fc0936f793dd7a3a2c7e31be59bff96b8fe49002676f89347f220",
+    "size": 3586
+  },
+  "input_manifest_sha256": "76500ac10a0fc0936f793dd7a3a2c7e31be59bff96b8fe49002676f89347f220",
+  "mode": "draft-only",
+  "runtime_execution_authorized": false,
+  "schema_version": 1,
+  "status": "PREPARED_FOR_DRAFTING"
+}

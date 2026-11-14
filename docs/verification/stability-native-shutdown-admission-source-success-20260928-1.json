@@ -1,0 +1,54 @@
+{
+  "schema": "mckernel.stability.source-success.v1",
+  "date": "2026-09-28",
+  "status": "PASS_SOURCE_AND_LAYER_B_FIXTURE",
+  "scope": "native v5 shutdown dispatch and callback admission",
+  "base_commit": "8202d93a033d4d5da93e85a0150ac4d3621019c3",
+  "inputs": {
+    "source": {"path": "host-kernel/native-rust/os_runtime.rs", "sha256": "5b79ca8cb303cbb8df590daf1d2a9d31381b1f95978672dd1d7611b908d17144"},
+    "fixture": {"path": "scripts/tests/fixtures/ihk_os_runtime_compile.rs", "sha256": "3c380a7695ab5a5c48c9b74a3f5aee9b228ead6c51783b7b74256d00f15579b0"},
+    "test_driver": {"path": "scripts/tests/test_ihk_os_runtime.py", "sha256": "ad592a7dbc2629039ce02fcd9c3e6c77db18df1bcf7f3eb4714e4857f60d57d5"},
+    "predecessor_wip": "docs/verification/stability-native-shutdown-admission-wip-20260928-1.json"
+  },
+  "verification": {
+    "rustc": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+    "command": "MCKERNEL_RUSTC_1_92=/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc python3 -m unittest -v scripts.tests.test_ihk_os_runtime",
+    "coordinator_result": "PASS",
+    "compiled_rust_tests": 62,
+    "rustfmt": "PASS",
+    "git_diff_check": "PASS"
+  },
+  "verified_behaviors": [
+    "v5 shutdown closes admission before its registry transaction and provider callback",
+    "live ApplicationConnection and FileService owners make shutdown return EBUSY without invoking the shutdown provider",
+    "application and service provider Close callbacks run before their admission and OS lease owners drop",
+    "forced ApplicationConnection allocation failure closes the provider context exactly once and Close reenters production topology_query with result 73",
+    "pre-effect callback errors restore registry state and only reopen a gate closed by that attempt",
+    "successful shutdown retains a closed gate across NotBooted and failed reboot cleanup; successful boot reopens after Ready",
+    "v1 through v4 ABI signatures and exports remain present"
+  ],
+  "preserved_failure_families": [
+    "initial v5 dispatch lacked callback admission",
+    "failed reboot could strand a newly closed admission gate",
+    "application Open and topology callbacks temporarily lost legacy serialization",
+    "fallible ApplicationConnection allocation could invoke reentrant Close while holding the operation mutex"
+  ],
+  "independent_review": {
+    "result": "PASS",
+    "reviewed_hashes_match": true,
+    "remaining_nonblocking_layer_b_evidence": [
+      "deterministic concurrent admission-close races",
+      "overflow injection",
+      "shutdown overlapping callback Close"
+    ]
+  },
+  "excluded": [
+    "SMP provider wiring or production ABI build",
+    "guest CPU stop acknowledgement or parking",
+    "Linux IRQ-work and callback drain",
+    "worker, channel, mapping or resource retirement",
+    "kernel module, container, privileged or guest execution",
+    "bounded wall-clock shutdown",
+    "SC-LIFE-02 verification, production gate credit or whole-OS acceptance"
+  ]
+}

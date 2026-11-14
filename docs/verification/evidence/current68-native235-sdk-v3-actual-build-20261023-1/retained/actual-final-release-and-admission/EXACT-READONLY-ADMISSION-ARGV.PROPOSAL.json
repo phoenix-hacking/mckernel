@@ -1,0 +1,68 @@
+{
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=30:30",
+    "--fsize=8388608",
+    "--core=0:0",
+    "--nofile=256",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/final-actual-build-release-preparation-1/readonly_existing_owner_admission.py",
+    "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/final-actual-build-release-preparation-1/EXACT-READONLY-ADMISSION-DATA.json"
+  ],
+  "capture_directory": "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/final-actual-build-release-preparation-1/actual-readonly-admission-capture-1",
+  "compiler_or_heavy_operations": 0,
+  "data": {
+    "bytes": 4116,
+    "path": "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/final-actual-build-release-preparation-1/EXACT-READONLY-ADMISSION-DATA.json",
+    "sha256": "f5064c76857197fb3b019cd477d20d3bda52973d739217223812abbcf3b311b9"
+  },
+  "extra_standalone_historical_observer": false,
+  "output_result": "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/final-actual-build-release-preparation-1/ROOT-READONLY-ADMISSION-CAPTURE-RESULT.json",
+  "profile": {
+    "AS_bytes": 2147483648,
+    "CPU_seconds": 30,
+    "Docker": false,
+    "NPROC": "inherited",
+    "compiler": false,
+    "cpu": 7,
+    "guest": false,
+    "jobs": 1,
+    "root_required": false,
+    "stderr_cap_bytes": 8388608,
+    "stdout_FSIZE_bytes": 8388608,
+    "wall_seconds": 35
+  },
+  "request_original_preserved": true,
+  "root_persist_after_positive_whole_join": {
+    "admission": {
+      "path": "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/final-actual-build-release-preparation-1/ROOT-FRESH-SDK-V3-ADMISSION-1.json",
+      "stdout_key": "admission"
+    },
+    "current_live_postjoin": {
+      "path": "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/final-actual-build-release-preparation-1/ROOT-CURRENT-LIVE-POSTJOIN-1.json",
+      "stdout_key": "current_live_postjoin"
+    },
+    "required_capture_fields": [
+      "returncode0",
+      "direct_child_joined",
+      "closed_streams",
+      "group_absent",
+      "no_timeout",
+      "empty_stderr"
+    ]
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source": {
+    "bytes": 3891,
+    "path": "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/final-actual-build-release-preparation-1/readonly_existing_owner_admission.py",
+    "sha256": "f146a0b4fbaaf28fa895baa0bc4f7500bcf6f2c9be344599bc78f6d1b18f9769"
+  },
+  "status": "SOURCE_AND_DATA_ONLY_NOT_EXECUTED"
+}

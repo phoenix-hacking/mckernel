@@ -1,0 +1,11 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/m14-exclusive-producer-binding-1/root-sealer-predicate-correction-source-1/actual-guardian-schema-binding-source-1/seal_root_current119_inputs.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/m14-exclusive-producer-binding-1/root-sealer-predicate-correction-source-1/actual-guardian-schema-binding-source-1/expert-census-observer-binding-source-1/seal_root_current119_inputs.py
+@@ -7,7 +7,7 @@
+ import importlib.util
+ import accepted_bindings as accepted
+ HERE=Path(__file__).resolve().parent
+-TEMPLATES=HERE.parents[1]
++TEMPLATES=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/m14-exclusive-producer-binding-1')
+ base_path=TEMPLATES/'prepare_current119_binding.py'
+ spec=importlib.util.spec_from_file_location('frozen_current119_binding_data',base_path)
+ base=importlib.util.module_from_spec(spec);spec.loader.exec_module(base)

@@ -1,0 +1,8 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "routine_path_failures": [
+    "Initial rg/sed guessed arch/x86_64/kernel/CMakeLists.txt absent; actual confirmed kernel/CMakeLists.txt used after Root correction.",
+    "Later rg guessed arch/x86_64/kernel/include/syscall.h absent; confirmed kernel/include/syscall.h supplies terminate and process.h do_signal; no repeat guessed reads."
+  ],
+  "retained": "Exact original commands/outputs remain in conversation. Root explicitly authorized routine read-only known-path correction without parking."
+}

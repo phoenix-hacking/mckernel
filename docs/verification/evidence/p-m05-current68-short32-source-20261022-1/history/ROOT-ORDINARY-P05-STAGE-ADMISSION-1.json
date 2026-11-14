@@ -1,0 +1,79 @@
+{
+  "status": "GRANTED_ONE_ORDINARY_CPU0_STAGE",
+  "at": "2026-10-22T23:01:07.362575+00:00",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "argv": [
+    "/usr/bin/taskset",
+    "--cpu-list",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=536870912",
+    "--cpu=30",
+    "--core=0",
+    "--fsize=134217728",
+    "--nofile=256",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/run_actual_current68_m05_stage_once.py"
+  ],
+  "fresh_capacity": {
+    "host": {
+      "device": 66306,
+      "inode": 48668758,
+      "uid": 1000,
+      "gid": 1000,
+      "available_bytes": 176961372160
+    },
+    "scratch": {
+      "device": 1828,
+      "inode": 2,
+      "uid": 1000,
+      "gid": 1000,
+      "available_bytes": 14120730624
+    }
+  },
+  "source_review_sha256": "d012a12bf6168630ef7e92640dd57ded71ab71f34d23bb185f08e47bb01181c5",
+  "profile": {
+    "CPU_affinity": [
+      0
+    ],
+    "jobs": 1,
+    "child_AS_bytes": 536870912,
+    "caller_AS_bytes": 536870912,
+    "CPU_seconds": 30,
+    "payload_wall_seconds": 30,
+    "cleanup_seconds": 3,
+    "whole_wrapper_join_allowance_seconds": 35,
+    "nofile": 256,
+    "core": 0,
+    "perfile_fsize_bytes": 134217728,
+    "stdout_limit_bytes": 8388608,
+    "stderr_limit_bytes": 8388608,
+    "NPROC": "Inherit current hostUID soft/hard unchanged through caller/child; omit perUID512. No Docker/guest here.",
+    "no_profile_expansion": true
+  },
+  "finite_growth": {
+    "stage_output_aggregate_cap_bytes": 134217728,
+    "capture_stream_cap_total_bytes": 16777216,
+    "capture_control_metadata_allowance_bytes": 1048576,
+    "total_HOST_growth_conservative_bytes": 152043520,
+    "host_floor_bytes": 17179869184,
+    "HOST_free_required_conservative_bytes": 17331912704,
+    "source_guard_HOST_free_minimum_bytes": 17330864128,
+    "scratch_growth_bytes": 0,
+    "scratch_floor_bytes": 12884901888,
+    "source_inflated_base_cap_bytes": 67108864,
+    "patched_cpio_cap_bytes": 100663296,
+    "memory_limit_per_child_bytes": 536870912,
+    "note": "Existing frozen consumer caps aggregate stageoutputs128MiB. Existing two8MiB capturestreams add16MiB; conservative1MiB capturesmallmetadata =>145MiB total HOSTgrowth. This explicitly includes capture and does not claim128MiB covers all evidence. Input scratch/oldstage/canonical/shared artifacts read-only, no scratch expansion/reserve mutation."
+  },
+  "aggregate": "CPU0 one512MiB job; CPU6 one512MiB foreground compile only; MemAvailable>26GiB; no heavy workload. CPU0 released by previous author.",
+  "nproc": [
+    126258,
+    126258
+  ],
+  "fresh_names_absent": true,
+  "limits_policy": "Use exact supervised caller,35s whole join; preserve owned-child retirement. No automatic retry/overwrite, no root/compiler/Docker/guest/native authority."
+}

@@ -1,0 +1,108 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": "2026-10-28T21:37:50.310187+00:00",
+  "decision": "PASS_EXACT_CURRENT62_RETIREMENT_PARENT_ABI_SOURCE_CORRECTION",
+  "independent": true,
+  "implementation_ownership": false,
+  "reviewer": "/root/m14_review",
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current62-after-bfd-default-build-source-20261028-1/review-correction-source-1/attempt2-binding-successor-1/retirement-parent-abi-correction-source-1/SOURCE-READY.json",
+    "bytes": 4441,
+    "sha256": "3e635feb4c0e99fe151263e73a24f835b7e8ee418e298ac220bb89fc9443918a"
+  },
+  "observer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current62-after-bfd-default-build-source-20261028-1/review-correction-source-1/attempt2-binding-successor-1/retirement-parent-abi-correction-source-1/observe_current62_bfd_postjoin.py",
+    "bytes": 37436,
+    "sha256": "da5a628ca0248c30f78fe6617f50a33b7c469a1095ed4dd28a7d2f1257bd6935"
+  },
+  "source_subjects": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current62-after-bfd-default-build-source-20261028-1/review-correction-source-1/attempt2-binding-successor-1/retirement-parent-abi-correction-source-1/STATIC-SOURCE-SUBJECTS.json",
+    "bytes": 10364,
+    "sha256": "90eb689ea94061454e71f4913704e0e9ca87a55f069a14abf2cfd804b3cc6a03"
+  },
+  "subject_count": 23,
+  "exact_changes": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current62-after-bfd-default-build-source-20261028-1/review-correction-source-1/attempt2-binding-successor-1/retirement-parent-abi-correction-source-1/EXACT-CHANGES.json",
+    "bytes": 10704,
+    "sha256": "cd2fc771b54a3ba7f7eb202710a0b8cc3b1df82a9b09b63bd8c63fcf5d1d22fe"
+  },
+  "prior_review_reused": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/CURRENT62-ATTEMPT2-SOURCE-REVIEW-1/REVIEW.json",
+    "bytes": 8195,
+    "sha256": "856fd3924bad2ef9898a1a2ce1e6c3e38858a30819ae63cb75d2eae917951a5e"
+  },
+  "parent_source_preserved": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current62-after-bfd-default-build-source-20261028-1/review-correction-source-1/attempt2-binding-successor-1/SOURCE-READY.json",
+    "bytes": 7062,
+    "sha256": "4647b5a5d7713433765e6b6ac07a5e88298b5bf5caa59d61d2967d2dfd2dfe21"
+  },
+  "preserved_actual_preflight_gap": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current62-after-bfd-default-build-source-20261028-1/review-correction-source-1/attempt2-binding-successor-1/root-capture-data-preparation-1/ACTUAL-INTERFACE-PREFLIGHT.json",
+    "bytes": 10643,
+    "sha256": "83cb29d9d417d1389ed14ca89cc5f45ee8c4e789ce56611a3650b99da5f4026a"
+  },
+  "findings": [
+    {
+      "result": "PASS",
+      "finding": "Only validate_retirement semantic AST differs from accepted856fd source; other20 function ASTs unchanged, including full actual observe/census, strict final clocks and generic capture-parent validator. Existing history/failure71nonce findings reused."
+    },
+    {
+      "result": "PASS",
+      "finding": "Actual Root retirement-parent ABI is positive_direct_parent_wait with birth/returncode/parent_streams_closed and authenticated stdout/stderr. Exact actor2158579/b102053058 and rc0 bind genuine52fa parent join; empty stderr and parsed stdout require exact RETIREMENT_COMPLETE_PENDING_PARENT_JOIN_AND_FRESH_CURRENT plus fd477 RESULT BYTE ref. No synthetic generic group fields are required or invented."
+    },
+    {
+      "result": "PASS",
+      "finding": "Executor validates genuine fd477 RESULT with all14 exact raw command wait4/status/group/stream receipts and original normal27:4 mutex FD. Cleanup actor carries groupNone and inherited_parent_group_absence_not_claimedTrue. Historical parent group is never claimed absent; unchanged future complete census, direct proc PID absence and mutex FD4 absence remain mandatory."
+    },
+    {
+      "result": "PASS",
+      "finding": "Generic capture-parent validator retains real group absence, no members/errors and exact actor/direct wait/closed streams. New separate Root capture profile requires start_new_session=True, capture PGID=PID, measured birth, finite parent wall120 and fresh capture group absence. This source review does not itself release that actual parent or capture."
+    },
+    {
+      "result": "PASS",
+      "finding": "Independent focused3new pure groups passed0errors/0failures0.437950s onCPU0/AS2GiB. Genuine retirement+14clients succeeds; wrong identity/wait/streams/published RESULT rejects; generic capture-parent remains strict. No live guard/query/capture/cleanup calls."
+    },
+    {
+      "result": "PASS_RETAINED_RESULT",
+      "finding": "Frozen owner15puregroups PASS0errors/0failures17.393748s, full79inherited+5tracked effect chain/21sources/no whole-observe replacements. Retained result/source/stdout hashes authenticated; full suite not replayed by reviewer."
+    }
+  ],
+  "focused_independent_checks": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/CURRENT62-RETIREMENT-PARENT-ABI-REVIEW-1/CHECKS.json",
+    "bytes": 73762,
+    "sha256": "9be01b0f4ec814217b9b0721addcb42b2c74e964c5c9fc7ed637f8f5a5e8c367"
+  },
+  "focused_tests": 3,
+  "errors": 0,
+  "failures": 0,
+  "retained_15group_result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current62-after-bfd-default-build-source-20261028-1/review-correction-source-1/attempt2-binding-successor-1/retirement-parent-abi-correction-source-1/PURE-REGRESSION.json",
+    "bytes": 2124,
+    "sha256": "0f985672e726ecd6196b62f36023f6b3eae92c88a9d811b6137075d5a1d86dd2"
+  },
+  "seal_BYTE_refs_authenticated": 46,
+  "schema_source_reviews": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/CURRENT62-RETIREMENT-PARENT-ABI-REVIEW-1/OBSERVER-SCHEMA.ROOT62-CANDIDATE.REVIEW.json",
+      "bytes": 1459,
+      "sha256": "69736e8cb41779ff0c45cead7a3a35e18bb0ff60e6f27a4587d522c7a0a7948e"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/CURRENT62-RETIREMENT-PARENT-ABI-REVIEW-1/OBSERVER-SCHEMA.ROOT63-CURRENT.REVIEW.json",
+      "bytes": 1451,
+      "sha256": "ca304324370d71c019fab43ce3c07cffe9090e35e56890cefc4816650b734ea7"
+    }
+  ],
+  "runtime_requirements": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/CURRENT62-RETIREMENT-PARENT-ABI-REVIEW-1/RUNTIME-REQUIREMENTS-ADDENDUM.json",
+    "bytes": 5498,
+    "sha256": "a16c3036251d9498334cfce6f0916082bccaf3736cbcc17475bb83f710dfd80e"
+  },
+  "source_blockers": [],
+  "runtime_authority": null,
+  "current_free_acceptance": false,
+  "actual_guard_query_capture_cleanup_compiler_export_native_calls": 0,
+  "source_edits": 0,
+  "full_regression_replayed": false,
+  "obligations": "All prior failures/source/reviews preserved. Default116/canonical118 and original227 scope unchanged; all389registry/native/wholefile acceptance obligations remain. Actual new operation/config/DATA, released fresh capture+join/current-free/typed current adoption remain required."
+}

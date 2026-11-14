@@ -1,0 +1,93 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "OFFLINE_CURRENT109_F05_DATA_COMPOSITION_ONLY",
+  "image": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT109-NEXT-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/mckernel.img",
+    "size": 10253728,
+    "sha256": "e87f5155eb82c13ab268e8a35fb13bf1560ffd5a5f97c8fd2af78f0281fc3d78",
+    "mode": 33261
+  },
+  "manifest": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-final-native-preparation-new12h-1/offline-materialization-1/manifest.HOST-STATIC.json",
+    "sha256": "d1a611ca8b5741fa394eebc8f4942f413e37d6597be68069736ddb88e2fa466f",
+    "size": 9558,
+    "mode": 33152
+  },
+  "modules": [
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/module-runtime-snapshots-1/ihk.ko",
+      "sha256": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c",
+      "size": 1527808
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-final-native-preparation-new12h-1/offline-materialization-1/runtime-inputs/ihk-smp-x86_64.ko",
+      "sha256": "887dc3567e6035c921588e61b45b41a8ef32a972d142fe2ba82ec48442353b12",
+      "size": 13098896,
+      "mode": 33188
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-final-native-preparation-new12h-1/offline-materialization-1/runtime-inputs/mcctrl.ko",
+      "sha256": "57546af5110c0674b307e5ac5a328228abbe784f890f69521db5f594f21f6ae8",
+      "size": 2578512,
+      "mode": 33188
+    }
+  ],
+  "payload": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-native-preparation-1/payload.snapshot",
+    "size": 5624488,
+    "sha256": "be508daa7549a50312306bb1064d4df9fe738dc9d7ba6dd32d58e8a1d97258a2",
+    "mode": 33133
+  },
+  "frozen_oracle": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-native-preparation-1/primary-oracle.json",
+    "size": 1474,
+    "sha256": "de8c41a3a53a3cf823c9c6cfe242f363cb823dfa173be854f6d89188a20e7aae",
+    "mode": 33060
+  },
+  "base": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-final-native-preparation-new12h-1/offline-materialization-1/current109-f05-mm-base.cpio.gz",
+    "sha256": "bebb77351af1f0b626c73d3725b4c3febcc1469aabde537cf242b0937281fe2d",
+    "size": 13308007,
+    "mode": 33152
+  },
+  "raw_cpio_sha256": "47141f41e70200f770c7cc22fc0bdf220a04c20e889dee1c43463e0bf38ebbee",
+  "raw_header_proof": [
+    {
+      "name": "images/mckernel.img",
+      "old_header_hex": "3037303730313030303030303137303030303831454430303030303030303030303030303030303030303030303136414441393038443030383043383038303030303030303030303030303030303030303030303030303030303030303030303030303031343030303030303030",
+      "new_header_hex": "3037303730313030303030303137303030303831454430303030303030303030303030303030303030303030303136414441393038443030396337356130303030303030303030303030303030303030303030303030303030303030303030303030303031343030303030303030"
+    }
+  ],
+  "changed_base_records": [
+    "images/mckernel.img"
+  ],
+  "overlay": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-final-native-preparation-new12h-1/offline-materialization-1/owned-processvm-204B.cpio.gz",
+    "sha256": "59b7baa4ca10a376cae88a5cd5554df5b07940db170cf50b5c72b3c5e5516030",
+    "size": 15643318,
+    "mode": 33152
+  },
+  "guest_runs": 0,
+  "runtime_authority": null,
+  "nonce": null,
+  "native_value_acceptance": false,
+  "review_references": {
+    "image": {
+      "record": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT109-INDEPENDENT-DEFAULT-ARTIFACT-ACCEPTANCE.json",
+        "size": 1750,
+        "sha256": "b7b1c4415ee8b44a716ae50f369d124c0496ab9f3ed9965358afe5e42bc41f37",
+        "mode": 33152
+      },
+      "image_sha256": "e87f5155eb82c13ab268e8a35fb13bf1560ffd5a5f97c8fd2af78f0281fc3d78"
+    },
+    "stage": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-final-native-preparation-new12h-1/INDEPENDENT-STAGER-SOURCE-REVIEW.json",
+      "size": 9192,
+      "sha256": "cc4e89afb765928054761e2048f7cbbc03a64acdf0e452515f7c4e4f640376d8",
+      "mode": 33152
+    }
+  },
+  "do_not_replay_materialization": true
+}

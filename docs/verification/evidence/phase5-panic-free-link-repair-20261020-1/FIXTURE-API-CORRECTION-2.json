@@ -1,0 +1,42 @@
+{
+  "status": "ONE_BOUNDED_FIXTURE_ONLY_CORRECTION_UNRUN",
+  "first_failure": "New test used registry::insert; genuine actual signature is unsafe insert_private(NonNull<Carrier>)->Result<Handle,(i32,NonNull<Carrier>)>",
+  "original_fixture_case": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-kernel-panic-free-link-repair-20261020-1/fixture-1/panic-free-cases.inc",
+    "sha256": "311b0e234d8001b1c24632d68a04812c4a4a2d2d0165cf3a5a9f867ae5f4d515",
+    "size": 4053,
+    "mode": 33152
+  },
+  "corrected_fixture_case": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-kernel-panic-free-link-repair-20261020-1/fixture-2/panic-free-cases.inc",
+    "sha256": "8ac22be6d30f0ae1f6370313e3cda90e235fedbdf1af03aa1d029373562e83d9",
+    "size": 4082,
+    "mode": 33152
+  },
+  "correction": [
+    "Use actual insert_private API at both sites",
+    "Allocate initialized all-zero Carrier with None owners, not a smaller boxed-word address; honors actual unsafe unique/initialized/live-allocation contract; metadata-only and no MM/ACK rights"
+  ],
+  "sourcefreeze_unchanged": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-kernel-panic-free-link-repair-20261020-1/SOURCE-FREEZE.json",
+    "sha256": "869acddedb4aaa8af3cca892a49e9a97f4d6f1621174acb129bc2737781abae5",
+    "size": 2848,
+    "mode": 33152
+  },
+  "prior_four_syntax_passes_reused": true,
+  "commands": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-kernel-panic-free-link-repair-20261020-1/COMMANDS-2.json",
+    "sha256": "5ac30cdab690496bef729fe125fba6f029d85392a5c73da9dded7d263276f17c",
+    "size": 956,
+    "mode": 33152
+  },
+  "runner": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-kernel-panic-free-link-repair-20261020-1/run-panic-free-checks-2.py",
+    "sha256": "c55318a3a2d1dfb8ff391df07c07da693a26c24af5fd57a9d8411a926a9f556a",
+    "size": 3667,
+    "mode": 33152
+  },
+  "newtests": 4,
+  "oldtests_filtered": 17,
+  "root_granted_remaining_only": true
+}

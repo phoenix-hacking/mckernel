@@ -1,0 +1,39 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "ACCEPT_HOST_INTEGRATION60_ABI20_REUSED25_ONLY",
+  "reviewer": "/root/perf_review18h",
+  "recorded_by": "/root",
+  "at": "2026-10-25T23:53:00.618927+00:00",
+  "result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-21-pending-lifecycle-integration/ACTUAL-INTEGRATION-SUFFIX-FIRST-RESULT.json",
+    "bytes": 10603,
+    "sha256": "a8aa675c3ed4b7c5d4d4caa621749a949c6f17798e4682c4d1f7035404d291db"
+  },
+  "actual": {
+    "lookup_checks": 36,
+    "caller_checks": 6,
+    "resume_checks": 10,
+    "optional_cleanup_checks": 8,
+    "ABI_words": 20,
+    "reused_ABI_words": 25,
+    "commands_rc0": 2,
+    "both_joined_groups_absent_streams_closed": true,
+    "wall_seconds": 0.364541,
+    "CPU_seconds": 0.429999,
+    "max_child_RSS_KiB": 35476,
+    "CPU0_released": true,
+    "retained_objects": [
+      "d8012b72",
+      "d904db5d"
+    ],
+    "Rust_recompile_or_411_replay_in_suffix": false
+  },
+  "scope_limits": [
+    "Controlledpositive-reference/caller/resume/detachedoptionalcleanup only",
+    "genericdestructor compiled butunexecuted/linkGC",
+    "no exactly-once warning fallback coverage for everyrejectedmatch",
+    "realstatus/HELD/globalpositive-routing/finaldestructorrouting/alias/production/native held",
+    "defaultOFF selection has explicitunresolvedpolicy compile_errorguards, notbodycompilefailure",
+    "no ownershipclearance/Cretirement/integrationmetriccredit"
+  ]
+}

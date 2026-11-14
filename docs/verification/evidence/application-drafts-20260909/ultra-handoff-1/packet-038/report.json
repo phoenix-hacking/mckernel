@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-038",
+  "packet_version": 1,
+  "context_sha256": "679667a05519d58a5e1e4a7d6f0120782126c928cb190819d203630b252fe68e",
+  "started_utc": "2026-09-09T10:51:00Z",
+  "finished_utc": "2026-09-09T10:52:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "thread.recursive-mutex",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/thread/thread.recursive-mutex.c",
+      "oracle": "scripts/application-tests/oracles/thread.recursive-mutex.json",
+      "changed_files": ["scripts/application-tests/cases/thread/thread.recursive-mutex.c", "scripts/application-tests/oracles/thread.recursive-mutex.json"],
+      "parameter_vectors": {"recursion_depth": [2], "contending_threads": [1]},
+      "implemented_operations": ["recursive mutex attribute", "two owner locks", "competing acquisition after final unlock"],
+      "unresolved_oracle_notes": ["Recursive ownership depth and scheduling bracket require Max review."],
+      "max_reviewer_question": "Confirm competing acquisition cannot pass after only the first recursive unlock."
+    },
+    {
+      "case_id": "thread.errorcheck-mutex",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/thread/thread.errorcheck-mutex.c",
+      "oracle": "scripts/application-tests/oracles/thread.errorcheck-mutex.json",
+      "changed_files": ["scripts/application-tests/cases/thread/thread.errorcheck-mutex.c", "scripts/application-tests/oracles/thread.errorcheck-mutex.json"],
+      "parameter_vectors": {"mutex_type": ["PTHREAD_MUTEX_ERRORCHECK"], "owner_relock": [1], "post_unlock_relock": [1]},
+      "implemented_operations": ["error-checking mutex initialization", "owner relock", "unlock and subsequent successful lock"],
+      "unresolved_oracle_notes": ["EDEADLK numeric binding and implementation details require Max review."],
+      "max_reviewer_question": "Confirm direct EDEADLK owner-relock behavior and release after one unlock."
+    },
+    {
+      "case_id": "thread.condvar-order",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/thread/thread.condvar-order.c",
+      "oracle": "scripts/application-tests/oracles/thread.condvar-order.json",
+      "changed_files": ["scripts/application-tests/cases/thread/thread.condvar-order.c", "scripts/application-tests/oracles/thread.condvar-order.json"],
+      "parameter_vectors": {"ring_capacity": [16], "values": [0, 9999], "total_values": [10000], "expected_sum": [49995000]},
+      "implemented_operations": ["bounded producer/consumer ring", "predicate-loop not-empty/not-full waits", "ordered consumption and sum"],
+      "unresolved_oracle_notes": ["Condvar scheduling evidence and canonical output require Max review."],
+      "max_reviewer_question": "Confirm predicate-loop evidence is required for both condition variables."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/thread/thread.recursive-mutex.c", "sha256": "78c7a8b263ce80aa400927a9a6d67254de4b8943df073795c75fc95b6aa71022"},
+    {"path": "scripts/application-tests/oracles/thread.recursive-mutex.json", "sha256": "a5b454bff4aa670daedf35f59154bb0d07c62b528b820e52b8d561c4a09685c4"},
+    {"path": "scripts/application-tests/cases/thread/thread.errorcheck-mutex.c", "sha256": "afd9bb7d88cb7441728d83939e98caa472737815d662743e69cc144f30191902"},
+    {"path": "scripts/application-tests/oracles/thread.errorcheck-mutex.json", "sha256": "c217a55396ba74adcea27d556cbc8a177ab2ec3aa7afa81cc1fa6f62bee9d21e"},
+    {"path": "scripts/application-tests/cases/thread/thread.condvar-order.c", "sha256": "2c10af011aeea5396f267744c5427d5ac668d70d0f3b094f452866ca4ce2f7e3"},
+    {"path": "scripts/application-tests/oracles/thread.condvar-order.json", "sha256": "2f43f42b047b78affb50de3ee1f419685f0051a28ff5588b6a31f9c8f809b62a"},
+    {"path": "docs/verification/evidence/application-drafts-20260909/ultra-handoff-1/packet-038/context.json", "sha256": "679667a05519d58a5e1e4a7d6f0120782126c928cb190819d203630b252fe68e"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-038.json --emit-context /tmp/application-packet-038-context-20260909-1.json", "outcome": "PASS; planning metadata only; runtime_authorized=false"},
+    {"command": "python3 -m json.tool packet-038/report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Recursive/error-checking mutex and condition-variable ordering cases need final native ABI, scheduler, and canonical record review."],
+  "blocked_execution_capabilities": ["current-inputs", "runtime-transport-fault-injection", "runner-contract"],
+  "first_failure_event": null,
+  "max_escalation": ["Review recursive mutex depth and contention", "Confirm EDEADLK and release semantics", "Review predicate-loop condition-variable evidence"],
+  "next_packet_id": "packet-039"
+}

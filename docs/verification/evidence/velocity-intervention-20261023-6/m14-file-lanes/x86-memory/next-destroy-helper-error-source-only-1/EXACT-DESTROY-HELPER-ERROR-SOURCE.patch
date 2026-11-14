@@ -1,0 +1,56 @@
+--- a/arch/x86_64/kernel/memory.c
++++ b/arch/x86_64/kernel/memory.c
+@@ -838,10 +838,12 @@
+ }
+ #endif
+ 
++#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+ X86_MEMORY_PUBLIC_BRIDGE void x86_pt_destroy_helper_failed_panic_bridge(void)
+ {
+ 	panic("destroy_page_table: helper failed");
+ }
++#endif
+ 
+ #ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+ static void x86_pt_destroy_bridge(int level, void *pt)
+@@ -1442,7 +1444,7 @@
+ 	}
+ }
+ #endif
+-#line 1446
++#line 1448
+ 
+ #ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+ extern void x86_clear_range_top_log_bridge(int event, void *pt,
+@@ -1510,7 +1512,7 @@
+ 	}
+ }
+ #endif
+-#line 1514
++#line 1516
+ 
+ #ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+ /* Private clear-range layout consumed by the Rust old-entry callback. */
+--- a/kernel/rust/x86_memory_helpers.rs
++++ b/kernel/rust/x86_memory_helpers.rs
+@@ -242,7 +242,6 @@
+     // Exact existing C declaration; production symbol is the current Rust panic.
+     #[link_name = "panic"]
+     fn x86_memory_existing_panic(message: *const i8);
+-    fn x86_pt_destroy_helper_failed_panic_bridge();
+     fn x86_visit_pte_log_bridge(event: CInt, level_shift: CInt);
+     fn x86_check_available_page_size_bridge(event: CInt);
+     fn x86_init_page_table_alloc_bridge(nr_pages: CInt, flag: CInt) -> *mut c_void;
+@@ -7610,3 +7609,12 @@
+         }
+     }
+ }
++
++// Preserve the existing helper-failure diagnostic and the exact void C ABI.
++// x86_memory_existing_panic resolves to the already Rust-owned production panic.
++#[no_mangle]
++pub unsafe extern "C" fn x86_pt_destroy_helper_failed_panic_bridge() {
++    unsafe {
++        x86_memory_existing_panic(b"destroy_page_table: helper failed\0".as_ptr().cast());
++    }
++}

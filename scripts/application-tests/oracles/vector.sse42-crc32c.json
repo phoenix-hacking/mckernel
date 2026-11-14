@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "case_id": "vector.sse42-crc32c",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["bytes=9 expected=0xe3069283 hardware=0xe3069283 scalar=0xe3069283 chunked=1 valid=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["CRC32C of ASCII123456789 equals 0xe3069283 for hardware and reflected scalar polynomial0x82f63b78", "Byte-wise/chunked processing agrees without changing initial/final XOR"],
+  "unresolved_expectations": ["SSE4.2 CRC32 instruction forms, chunk boundaries, and feature evidence require Max review."],
+  "max_question_for_reviewer": "Confirm byte/word/dword/qword CRC32 forms and exact standard CRC32C seed/final-XOR contract before extending the fixture."
+}

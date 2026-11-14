@@ -1,0 +1,59 @@
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Private candidate: only the concrete Rust find_thread selects this helper.
+// Existing callback-based public helper and independently owned holds remain intact.
+pub(crate) unsafe fn process_try_hold_lookup_thread(thread: *mut Thread) -> bool {
+    // SAFETY: caller holds a lock that keeps the node allocated until a final
+    // destructor can take its matching writer lock (hash lock for find_thread).
+    let count = unsafe { core::sync::atomic::AtomicI32::from_ptr(core::ptr::addr_of_mut!((*thread).refcount.counter)) };
+    let mut old = count.load(core::sync::atomic::Ordering::SeqCst);
+    loop {
+        // Never resurrect zero/negative counts or overflow the signed counter.
+        if old <= 0 || old == i32::MAX { return false; }
+        match count.compare_exchange_weak(old, old + 1, core::sync::atomic::Ordering::SeqCst, core::sync::atomic::Ordering::SeqCst) {
+            Ok(_) => break,
+            Err(current) => old = current,
+        }
+    }
+    // Same warning as hold_thread for a successfully retained exited thread.
+    if process_hold_thread_warn_exited_result(unsafe { (*thread).status }) != 0 {
+        unsafe { process_hold_thread_warn_bridge(thread.cast()) };
+    }
+    true
+}
+
+unsafe fn process_find_thread_live_body_result(
+    hash_head: *mut AbiListHead, hash_lock_addr: CULong, lock_node: *mut c_void,
+    pid: CInt, tid: CInt, offsets: *const ProcessFindThreadOffsets,
+    lock_fn: Option<ProcessMcsRwlockFn>, unlock_fn: Option<ProcessMcsRwlockFn>,
+) -> *mut c_void {
+    if tid <= 0 || hash_head.is_null() || lock_node.is_null() || offsets.is_null() {
+        return null_mut();
+    }
+    let (Some(lock_fn), Some(unlock_fn)) = (lock_fn, unlock_fn) else { return null_mut(); };
+    let offsets = unsafe { &*offsets };
+    unsafe { lock_fn(hash_lock_addr, lock_node) };
+    let mut match_pid = pid;
+    loop {
+        let mut entry = unsafe { (*hash_head).next };
+        while !entry.is_null() && entry != hash_head {
+            let thread = unsafe { process_list_container(entry, offsets.thread_hash_list_offset) };
+            let base = thread.cast::<u8>();
+            let thread_tid = unsafe { *base.wrapping_add(offsets.thread_tid_offset as usize).cast::<CInt>() };
+            if thread_tid == tid {
+                let proc = unsafe { field_ptr(thread, offsets.thread_proc_offset) };
+                let proc_pid = if proc.is_null() { 0 } else {
+                    unsafe { *proc.cast::<u8>().wrapping_add(offsets.proc_pid_offset as usize).cast::<CInt>() }
+                };
+                if (match_pid <= 0 || proc_pid == match_pid) && unsafe { process_try_hold_lookup_thread(thread.cast()) } {
+                    unsafe { unlock_fn(hash_lock_addr, lock_node) };
+                    return thread;
+                }
+            }
+            entry = unsafe { (*entry).next };
+        }
+        if match_pid > 0 && match_pid == tid { match_pid = 0; continue; }
+        break;
+    }
+    unsafe { unlock_fn(hash_lock_addr, lock_node) };
+    null_mut()
+}

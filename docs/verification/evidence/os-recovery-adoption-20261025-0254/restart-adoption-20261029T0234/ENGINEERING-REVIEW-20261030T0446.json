@@ -1,0 +1,132 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": "2026-10-30T04:59:36.187682+00:00",
+  "request": "20261030T044645724300Z-7372662314964eb4a32e1846266f4484",
+  "interval": 1494446,
+  "thread": "01a18a76-4f1e-7900-8ed6-127394e93689",
+  "measurement_bucket": {
+    "start_epoch": 1793334389.8921316,
+    "end_epoch_exclusive": 1793335589.8921316,
+    "seconds": 1200,
+    "start_utc": "2026-10-30T04:26:29.892132+00:00",
+    "end_utc": "2026-10-30T04:46:29.892132+00:00",
+    "nonoverlap": "Starts exactly at previous bucket end; compare bounded snapshots without counting late events twice",
+    "current_snapshot_at": 1793335605.7171578,
+    "previous_snapshot_at": 1793334404.1043496,
+    "lag_after_bucket_seconds": 15.825026273727417
+  },
+  "source_inputs_read": {
+    "CURRENT.md": "## Sol/max M14 source and compiler checkpoint \u2014 2026-10-30T04:24Z",
+    "HANDOFF.md": "## Sol/max M14 source and compiler checkpoint \u2014 2026-10-30T04:24Z"
+  },
+  "bucket_delta": {
+    "Rust_metadata_compiler_passes": 1,
+    "Rust_object_compiler_passes": 1,
+    "C_object_compiler_passes": 1,
+    "host_diagnostic_link_attempts": 2,
+    "host_diagnostic_links_returned0": 1,
+    "behavior_tests": 0,
+    "production_links": 0,
+    "native_qualifications": 0,
+    "guest_apps": 0,
+    "accepted_C_retirements": 0,
+    "M14_file_closures": 0,
+    "practical_closures": 0
+  },
+  "actual_phase_metrics": {
+    "metadata": {
+      "wall": 2.8,
+      "CPU": 2.79,
+      "peakRSS_KiB": 462488
+    },
+    "Rust_object": {
+      "wall": 18.56,
+      "CPU": 18.55,
+      "peakRSS_KiB": 599100
+    },
+    "C_object": {
+      "wall": 0.46,
+      "CPU": 0.45,
+      "peakRSS_KiB": 48816
+    },
+    "successful_link": {
+      "wall": 0.1,
+      "CPU": 0.09,
+      "peakRSS_KiB": 26680
+    },
+    "first_compiler_exact_time": null,
+    "queue_to_compiler_exact": null,
+    "manual_resume_to_first_compiler_stream_proxy_seconds": 418.7782335281372,
+    "link_failure_observation_to_validated_fix_seconds": 194.1240315437317,
+    "physical_blocked_active_seconds": null,
+    "limits": "Proxy timestamps are not Popen times. Link providers/fullgroup validation completed after bucket cutoff; link command succeeded within bucket. No behavioral/compiler-speed or95% claim."
+  },
+  "counts": "M14 4/6; practical35/35 separate; selectedimage1cd7 unchanged23generic+5arch; M15 paused",
+  "source_and_current_state": "8Rust symbol names from7priorCnames plusonealias linked diagnostically with9retainedobjects; original19staticqualification preserved. ARCH46 firstCfailedafterbucket and Rustunrun; logicalpathcorrection pending.",
+  "Root70": {
+    "currentfree": null,
+    "pending": true,
+    "accepted_retirement": "69216 exact scope, preserves outer birthUNKNOWN",
+    "missing": "no_unlisted_physical_or_custody_operations_since_retirement unsupported",
+    "owner": "/root",
+    "next_physical_command": null,
+    "unchanged": "Do not replay cleanup/consumed4709nonce, erase heldOCI/mutex/scratch/UNKNOWN or infer native-free from models"
+  },
+  "largest_measured_avoidable_handoff": {
+    "owner": "/root",
+    "boundary": "successful link status marker to validation/share release",
+    "seconds_proxy": 181.04845690727234,
+    "limits": "Status file mtime proxy; compiler/link command CPU itself0.09s. It is scheduler/validation delay, not kernel execution."
+  },
+  "concrete_scheduling_change": "Immediate terminal join and validation before next-task preparation; pairedC/Rust underoneprofile. First ARCH46 failure validated/groupclosed0.0747s afterstatus marker; no target95% claim.",
+  "current_owners": {
+    "Root": "sole integration/compilers/ownedoperation/doc owner",
+    "composition": "completed coherentcandidate/linkinput work",
+    "arch_source": "completed onebounded filepath correction; no compiler executed",
+    "signal_review": "completed independent path/source review",
+    "custody_review": "completed paired execution profile; no workload active"
+  },
+  "next": {
+    "owner": "/root",
+    "deliverable": "fresh admission and one bounded C filename prefix mapping correction; preserve actualsourceguard/oracle; then pairedRustcompile and all46values after applicable data admission",
+    "profile": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-preparation-1/INDEPENDENT-EXECUTION-PROFILE-REVIEW.md"
+  },
+  "resources": {
+    "disks": {
+      "/home/holden/mckernel": {
+        "available_bytes": 144430702592,
+        "ismount": false,
+        "st_dev": 66306
+      },
+      "/home/holden/mckernel-work/scratch": {
+        "available_bytes": 47804010496,
+        "ismount": true,
+        "st_dev": 1828
+      }
+    },
+    "load_average": [
+      0.99,
+      0.85,
+      0.81
+    ],
+    "memory": {
+      "MemAvailable_kib": 27895356,
+      "MemTotal_kib": 32421580
+    }
+  },
+  "weekly": {
+    "credits": {
+      "balance": "52079.8011050000",
+      "hasCredits": "True",
+      "unlimited": "False"
+    },
+    "primary": {
+      "resetsAt": "1793774133",
+      "usedPercent": "62",
+      "windowDurationMins": "10080"
+    },
+    "spendControlReached": false
+  },
+  "policy": "Included-only100%stop originalUTC1793774133/tightercaps; no prepaid/API billing. Generic_c directTID/terminate_host and execve transferACK holds persist, FULL28off; original30minbaseline preserved.",
+  "checkpoint": "2981ace68 verified prior; new coherent checkpoint prepared from actual results"
+}

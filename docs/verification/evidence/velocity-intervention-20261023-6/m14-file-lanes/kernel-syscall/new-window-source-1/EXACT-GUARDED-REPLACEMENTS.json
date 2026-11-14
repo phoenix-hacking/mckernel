@@ -1,0 +1,12 @@
+[
+  {
+    "symbol": "syscall_swapout_log_bridge",
+    "original": "void\nsyscall_swapout_log_bridge(const void *fname, void *buf, size_t size, int flag)\n{\n\tdkprintf(\"[%d]swapout(%lx,%lx,%lx,%ld)\\n\",\n\t\t\tihk_mc_get_processor_id(), (unsigned long)fname,\n\t\t\t(unsigned long)buf, (unsigned long)size, (long)flag);\n}",
+    "replacement": "#ifdef MCKERNEL_RUST_F03_IO_DIAGNOSTICS\nstruct ddebug __attribute__((aligned(8),section(\"__verbose\"))) f03_swapout_callback_debug_v1 = {\n .file=__FILE__, .func=\"syscall_swapout_log_bridge\", .line=28275, .flags=DDEBUG_DEFAULT\n};\nextern void syscall_swapout_log_bridge(const void *fname, void *buf, size_t size, int flag);\n#else\nvoid\nsyscall_swapout_log_bridge(const void *fname, void *buf, size_t size, int flag)\n{\n\tdkprintf(\"[%d]swapout(%lx,%lx,%lx,%ld)\\n\",\n\t\t\tihk_mc_get_processor_id(), (unsigned long)fname,\n\t\t\t(unsigned long)buf, (unsigned long)size, (long)flag);\n}\n#endif /* MCKERNEL_RUST_F03_IO_DIAGNOSTICS */"
+  },
+  {
+    "symbol": "syscall_linux_mlock_log_bridge",
+    "original": "void\nsyscall_linux_mlock_log_bridge(unsigned long addr, unsigned long len)\n{\n\tkprintf(\"linux_mlock: %p %ld\\n\", (void *)addr, len);\n}",
+    "replacement": "#ifdef MCKERNEL_RUST_F03_IO_DIAGNOSTICS\nextern void syscall_linux_mlock_log_bridge(unsigned long addr, unsigned long len);\n#else\nvoid\nsyscall_linux_mlock_log_bridge(unsigned long addr, unsigned long len)\n{\n\tkprintf(\"linux_mlock: %p %ld\\n\", (void *)addr, len);\n}\n#endif /* MCKERNEL_RUST_F03_IO_DIAGNOSTICS */"
+  }
+]

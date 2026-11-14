@@ -1,0 +1,309 @@
+{
+  "acceptance": {
+    "C_or_original_acceptance_credit": false,
+    "application_HOST_main_executed": false,
+    "clocksource_vDSO_TSC_behavior_inferred": false,
+    "collector_main_executed": false,
+    "native_executed": false,
+    "original06_04_FUNCTIONAL_GO": false
+  },
+  "actual_outcome": {
+    "ELF_ABI": [
+      {
+        "DT_NEEDED": [
+          "libc.so.6"
+        ],
+        "ELFclass": 64,
+        "PT_INTERP": "/lib64/ld-linux-x86-64.so.2",
+        "bytes": 17960,
+        "endian": "little",
+        "entry": 4198672,
+        "executable_GNU_stack": false,
+        "machine": 62,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/M14-time-functional-host-affinity-p04tests-max-1/collector-cpu7-1/docker-cli-virtual-as-correction-1/payload-output-1/time.monotonic-libc",
+        "role": "payload",
+        "sha256": "a98d07468d38393ac0fa6f49d595c4a07fb5acef12d83d955a99c6de58e6338c",
+        "strong_dynamic_imports": [
+          "__libc_start_main",
+          "clock_gettime",
+          "printf"
+        ],
+        "type": "ET_EXEC",
+        "version_needs": [
+          "GLIBC_2.2.5",
+          "GLIBC_2.17",
+          "GLIBC_2.34"
+        ],
+        "writable_executable_LOAD": false
+      },
+      {
+        "DT_NEEDED": [],
+        "ELFclass": 64,
+        "PT_INTERP": null,
+        "bytes": 1029888,
+        "dynamic_UND": [],
+        "endian": "little",
+        "entry": 4203760,
+        "executable_GNU_stack": false,
+        "machine": 62,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/M14-time-functional-host-affinity-p04tests-max-1/collector-cpu7-1/docker-cli-virtual-as-correction-1/collector-output-1/collector",
+        "role": "collector",
+        "selected_case_string_present": "time.monotonic-libc",
+        "sha256": "dc0e050563e64c95576c36a23721381588efac1ec482c0fdf3e2ca72b3f165a9",
+        "type": "ET_EXEC",
+        "writable_executable_LOAD": false
+      }
+    ],
+    "RESULT_finished_at": "2026-11-12T02:02:51.661264+00:00",
+    "actual_artifacts_fullbytes_SHA_modes_verified": 10,
+    "controls_reused_not_rerun": [
+      {
+        "accepted": true,
+        "case": "canonical-valid",
+        "error": null,
+        "error_type": null
+      },
+      {
+        "accepted": false,
+        "case": "invalid-nanoseconds",
+        "error": "time monotonic-libc stdout record",
+        "error_type": "DiagnosticError"
+      },
+      {
+        "accepted": false,
+        "case": "incomplete-count",
+        "error": "time monotonic-libc stdout record",
+        "error_type": "DiagnosticError"
+      }
+    ],
+    "metadata_warning_retained": "readelf: Warning: Gap in build notes detected from 0x401137 to 0x401144\n",
+    "payload_and_collector_compile_status": 0,
+    "separate_printed_status_at": "2026-11-12T02:02:51.673509+00:00",
+    "warning_scope": "Passive readelf build-note gap warning, compiler/metadata clients0; not hidden or converted into native proof."
+  },
+  "actual_positive_ownership": {
+    "CID": "1f2689476555bca3329364ba6e71b99e80207184118bad238643c34c7ef3cef3",
+    "OOMKilled": false,
+    "actual_owned_removed_stdout_matches_CID": true,
+    "all_original_clients_directwaits_streams_positive": true,
+    "clients": [
+      {
+        "birth": "53523592",
+        "direct_wait_joined": true,
+        "exit": 0,
+        "label": "running-preflight",
+        "lifecycle_UNKNOWN": false,
+        "pid": 1641488,
+        "primary_error": null,
+        "secondary_errors": [],
+        "streams_closed": true
+      },
+      {
+        "birth": "53523599",
+        "direct_wait_joined": true,
+        "exit": 0,
+        "label": "names-preflight",
+        "lifecycle_UNKNOWN": false,
+        "pid": 1641496,
+        "primary_error": null,
+        "secondary_errors": [],
+        "streams_closed": true
+      },
+      {
+        "birth": "53523613",
+        "direct_wait_joined": true,
+        "exit": 0,
+        "label": "time-payload-create",
+        "lifecycle_UNKNOWN": false,
+        "pid": 1641504,
+        "primary_error": null,
+        "secondary_errors": [],
+        "streams_closed": true
+      },
+      {
+        "birth": "53523624",
+        "direct_wait_joined": true,
+        "exit": 0,
+        "label": "time-payload-profile",
+        "lifecycle_UNKNOWN": false,
+        "pid": 1641512,
+        "primary_error": null,
+        "secondary_errors": [],
+        "streams_closed": true
+      },
+      {
+        "birth": "53523636",
+        "direct_wait_joined": true,
+        "exit": 0,
+        "label": "time-payload-running-inspect",
+        "lifecycle_UNKNOWN": false,
+        "pid": 1641521,
+        "primary_error": null,
+        "secondary_errors": [],
+        "streams_closed": true
+      },
+      {
+        "birth": "53523636",
+        "direct_wait_joined": true,
+        "exit": 0,
+        "label": "time-payload-payload",
+        "pid": 1641520,
+        "primary_error": null,
+        "secondary_errors": [],
+        "streams_closed": true
+      },
+      {
+        "birth": "53523711",
+        "direct_wait_joined": true,
+        "exit": 0,
+        "label": "time-payload-terminal",
+        "lifecycle_UNKNOWN": false,
+        "pid": 1641616,
+        "primary_error": null,
+        "secondary_errors": [],
+        "streams_closed": true
+      },
+      {
+        "birth": "53523723",
+        "direct_wait_joined": true,
+        "exit": 0,
+        "label": "time-payload-container-wait",
+        "lifecycle_UNKNOWN": false,
+        "pid": 1641624,
+        "primary_error": null,
+        "secondary_errors": [],
+        "streams_closed": true
+      },
+      {
+        "birth": "53523735",
+        "direct_wait_joined": true,
+        "exit": 0,
+        "label": "time-payload-owned-remove",
+        "lifecycle_UNKNOWN": false,
+        "pid": 1641632,
+        "primary_error": null,
+        "secondary_errors": [],
+        "streams_closed": true
+      },
+      {
+        "birth": "53523749",
+        "direct_wait_joined": true,
+        "exit": 0,
+        "label": "collector-compile",
+        "lifecycle_UNKNOWN": false,
+        "pid": 1641640,
+        "primary_error": null,
+        "secondary_errors": [],
+        "streams_closed": true
+      },
+      {
+        "birth": "53523771",
+        "direct_wait_joined": true,
+        "exit": 0,
+        "label": "collector-metadata",
+        "lifecycle_UNKNOWN": false,
+        "pid": 1641645,
+        "primary_error": null,
+        "secondary_errors": [],
+        "streams_closed": true
+      }
+    ],
+    "container_exit": 0,
+    "distinct_legacy_payload_positive_record": 1,
+    "missing_legacy_lifecycle_key_not_defaulted": true,
+    "modern_positive_schema_records": 10,
+    "original_Root_initial": "63807f/session52179",
+    "original_Root_wait_final": "3b63d6/exit0/noSession",
+    "remaining_owned_children": [],
+    "terminalPid": 0
+  },
+  "created_utc": "2026-11-12T02:15:25.327706+00:00",
+  "decision": "GO_ACTUAL_COMPILE_PASSIVE_ELF_ARTIFACT_HANDOFF_ONLY",
+  "inputs": {
+    "CLIENTS": {
+      "bytes": 10081,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/M14-time-functional-host-affinity-p04tests-max-1/collector-cpu7-1/docker-cli-virtual-as-correction-1/execution-1/CLIENTS.json",
+      "sha256": "4f5f8191f6183153fb875fc299d16a52abf3d0f4ca70d5f217087df94120a01b"
+    },
+    "INPUTS": {
+      "bytes": 11445,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/M14-time-functional-host-affinity-p04tests-max-1/collector-cpu7-1/docker-cli-virtual-as-correction-1/INPUTS.json",
+      "sha256": "d985f64c3fe02878cdcf088ffc9d9c5231705fb6976951e9126e2e5e691f6d7c"
+    },
+    "REQUEST": {
+      "bytes": 21824,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/M14-time-functional-host-affinity-p04tests-max-1/collector-cpu7-1/docker-cli-virtual-as-correction-1/REQUEST.json",
+      "sha256": "e73be8d46e6cb3af8d98b3240e16ba513dc3dfd986551ef022f2b13c9e869de0"
+    },
+    "RESULT": {
+      "bytes": 16156,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/M14-time-functional-host-affinity-p04tests-max-1/collector-cpu7-1/docker-cli-virtual-as-correction-1/execution-1/RESULT.json",
+      "sha256": "abc77a1d5644a3b44b0e83ce43046601d40ad19d2dce5ddcda6079582961ccde"
+    },
+    "Root_actual_admission": {
+      "bytes": 1562,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/M14-time-functional-host-affinity-p04tests-max-1/collector-cpu7-1/docker-cli-virtual-as-correction-1/ROOT-CURRENT-ADMISSION.ACTUAL.json",
+      "sha256": "c4c5a808ee5478126f2e461838831a4fc802f380dd9aa514c7fe95521ff1581c"
+    },
+    "Root_current_retirement_already_recorded": {
+      "bytes": 1517,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/M14-time-functional-host-affinity-p04tests-max-1/collector-cpu7-1/docker-cli-virtual-as-correction-1/execution-1/ROOT-CURRENT-RETIREMENT.json",
+      "sha256": "0bb0f4cf0f2759d01ff1af2f589146343d0848fb6d41c9df50316e5d91460481"
+    },
+    "Root_final": {
+      "bytes": 298,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/M14-time-functional-host-affinity-p04tests-max-1/collector-cpu7-1/docker-cli-virtual-as-correction-1/execution-1/ROOT-TOOL-FINAL.json",
+      "sha256": "248acb71ec59d8bdef7e867300c3d3ffcbd3b83cd2ac6db3f3ecac366c4d595b"
+    },
+    "Root_initial": {
+      "bytes": 131,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/M14-time-functional-host-affinity-p04tests-max-1/collector-cpu7-1/docker-cli-virtual-as-correction-1/execution-1/ROOT-TOOL-INITIAL.json",
+      "sha256": "97b80da5d436557771c070c68de8a2f80fb985134d142a340ca6f73e4ca0f505"
+    },
+    "oldfailed_qualification": {
+      "bytes": 8825,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/M14-time-functional-host-affinity-p04tests-max-1/collector-cpu7-1/failed-result-1/QUALIFICATION.json",
+      "sha256": "3f67c5747922c035b05c9eba7d5f8928d8b80fe145be4288a8b646a6eeada7ab"
+    },
+    "oracle_reuse": {
+      "bytes": 2641,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/M14-time-functional-host-affinity-p04tests-max-1/collector-cpu7-1/docker-cli-virtual-as-correction-1/PASSED-ORACLE-REUSE.json",
+      "sha256": "5c75374d6980041f02a0049ead37c97af9b6024eb64e0b1e61ef00c2169afe4e"
+    },
+    "parent": {
+      "bytes": 9407,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/M14-time-functional-host-affinity-p04tests-max-1/collector-cpu7-1/docker-cli-virtual-as-correction-1/run_root_once.py",
+      "sha256": "3c5fba449c94cdc27f27c9960fd097fa978d7b8ef5057728daeb7208811b14aa"
+    },
+    "physical_artifact_handoff": {
+      "bytes": 6305,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/M14-time-functional-artifact-review-sourceacq-max-1/host-producer-1/PHYSICAL-ARTIFACT-HANDOFF.json",
+      "sha256": "02fd1d8ec1a0b7e7c0afd915e272d4603a20d2deaa02b94f03de6a9da78a1414"
+    }
+  },
+  "retirement_scope": {
+    "Root_already_retired_only_current": {
+      "CPUs": [
+        0,
+        7
+      ],
+      "bytes": 805306368,
+      "jobs": 1
+    },
+    "new_retirement_action_or_gate_by_reviewer": false,
+    "originalnative62718_provider1634459_b53414308_HOST1610612736_job1_runtimeI_native12_and_alloldUNKNOWNs_unchanged": true,
+    "whole_run_peak_or_global_resource_audit_inferred": false
+  },
+  "reviewer": "/root/source_acquisition_review_max",
+  "reviewer_actions": "Saved JSON/sourcepin/byte/structELF inspection and ownqualificationwrites only; no compiler/readelf/nm/target/helper/Docker/probe/Root/account/control/flag/sourceedit or originalOwner namespace retry.",
+  "schema": "mckernel.time-HOST-producer-saved-artifact-and-closure-qualification.v1",
+  "scope": "Saved actual e73b/8c029 compile+passivemetadata results and oldthreeoraclePASS reuse, no replay. Native/time functional acceptance remains open.",
+  "source_profile_reuse": {
+    "HOST_source_and_receipt_pin_records_verified": 41,
+    "actual_operation_GO": "8c0296f3fc78d9622446415e1ab73b22eb64eeabc2509f521a5dd3439c6312da",
+    "actual_request_review_sha_match": true,
+    "affinity_GO_prefix": "d948",
+    "image_tools_join": "Actual saved container hashes2092cc/b058libc/0853loader match previously qualified imageinterior entries, not HOST /usr/bin/cc paths.",
+    "original_GO": "8d9fea6ba05e23dbe557e266008a31ae4ce730c1b0acb8b5f9d619274e884436"
+  }
+}

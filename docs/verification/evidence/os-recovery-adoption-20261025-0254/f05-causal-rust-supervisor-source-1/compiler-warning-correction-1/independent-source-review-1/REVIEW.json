@@ -1,0 +1,64 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "independent": true,
+  "reviewer": "/root/custody_release_review",
+  "decision": "PASS_SOURCE_ONLY_EXACT_TWO_UNUSED_DUPLICATE_CONSTANT_REMOVALS",
+  "runtime_authority": null,
+  "at": "2026-10-27T22:01:29.255262+00:00",
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/compiler-warning-correction-1/READY.json",
+    "bytes": 6755,
+    "sha256": "81bb4eb14fa872f130fe3c92a7964713eb58115f10505d7845193e5053ec14f6"
+  },
+  "source_patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/compiler-warning-correction-1/COMPILER-WARNING-CORRECTION.patch",
+    "bytes": 477,
+    "sha256": "7ec4e178c78e7a8cbdef2aa6b6b2a324e5263e1aaa5468c53f3584d095083253"
+  },
+  "reused_source_ABI_ownership_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/independent-source-review-1/REVIEW.json",
+    "bytes": 13450,
+    "sha256": "c1d30c88c78eba362408804ce476423907dd852cd9552caf6f7c71e7cc205b56"
+  },
+  "interface": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/compiler-warning-correction-1/SUPERVISOR-INTERFACE.json",
+    "bytes": 4144,
+    "sha256": "f38fca58c41b81154a593f468e34dd3ae6f43b5c3df73ecc36cef2fdb71c7304"
+  },
+  "verified": {
+    "changed_Rust_files": [
+      "lifecycle.rs"
+    ],
+    "removed_exact_declarations": [
+      "pub const GATE_BASENAME: &str = \".f05-gate-31770ebb739fea402ded939617921dda\";\n",
+      "pub const CASE_ID: &str = \"M14-05-05-owned-processvm-v3-causal-204B\";\n"
+    ],
+    "added_Rust_lines": 0,
+    "other_six_Rust_modules_byte_identical": true,
+    "removed_names_had_no_source_uses": true,
+    "GATE_PATH_nonce31770_unchanged": true,
+    "basename_and_caseID_retained_in_exact_interface": true,
+    "ND_serializer_report_rs_byte_identical": true,
+    "original_limits_and_two_environment_entries_unchanged": true,
+    "four_closed_unsafe_ABI_observer_findings_unchanged": true,
+    "controls_prepared": {
+      "main.rs": 0,
+      "lifecycle.rs": 0,
+      "supervisor.rs": 2,
+      "report.rs": 0,
+      "tests.rs": 18,
+      "host_tests.rs": 6,
+      "observer_tests.rs": 10
+    },
+    "total_controls": 36,
+    "compiler_warning_allow_or_suppression_added": false
+  },
+  "first_compiler_failure": "Preserved Root attempt1 compile -Dwarnings returned1 on exactly two unused duplicate constants; no tests/production suffix executed. Removing declarations is a genuine source correction, not suppressing warnings or accepting failed compile.",
+  "remaining": "Root actual exact ordinary profile and fresh outputs bind this corrected main.rs+seven modules, then real test compile/all36 and production artifact/dependency closure. Native raw format/trace/full235/227 and runtime source/account/ownership/resource release remain OPEN. No prior-native-acceptance prerequisite introduced.",
+  "actions": {
+    "read_hash_literal_source_delta_only": true,
+    "compiler_test_runtime_guard_query_sudo_native_cleanup_canonical": 0,
+    "subagents": 0
+  },
+  "preservation": "Original1867, corrected2ecd, c1d30 review and original Root compile failure remain unchanged. No kernel/new C/unsafe logic/ABI/ND schema change."
+}

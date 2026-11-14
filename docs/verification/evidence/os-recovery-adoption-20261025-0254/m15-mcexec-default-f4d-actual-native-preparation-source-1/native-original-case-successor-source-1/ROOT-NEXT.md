@@ -1,0 +1,33 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+Separate native application successor; no foreground F05 mutation. Installed loader acceptance8417dbe4 and default/staged acceptance7908e5c0 establish exact e5d18169/396200B/BUILDID3114d9e input readiness at their original scopes. Both still say executor main/native/whole-file unexecuted. The next unmet obligations are actual Rust-main startup/argv transfer, original strict235 exec/wait/reap/error behavior, real guest BUILDID/module routing, output/waitstatus and lifecycle/procfs/compute-resource retirement. No loader/metadata observation proves those runtime behaviors.
+
+ORIGINAL-CASES-SUCCESSOR.NOT-RELEASED.json is a complete data proposal for two original cases, with exact generic-overlay CLI argv and incomplete manifest objects deliberately lacking actual derived-overlay refs. It selects the same actual supported image60e62f97 and module daced/887dc/57546 tuple already bound in F05's immutable current110 basea6377bfe. This is an explicit chosen cohort, not a claim it is the latest compiled image or native accepted for Rust mcexec. No image/SDK/kernel/module/body rebuild is needed. A Root decision to select another kernel requires a separately coherent image/base/capability successor.
+
+The base is read only. Existing generic native_diagnostic_overlay.py46d41bc0 appends fresh startup-overlay.cpio.gz and strict235-overlay.cpio.gz, selecting exact e5d source directly from its staged repository path for /bin/mcexec. It preserves base bytes, guest loader0853/libcb058/libnumabe20, modules, boothelper and other records. Neither the active F05 base/overlay/manifest nor its selected Cdca025 is rewritten. Original startup20,528B/ff227c and strict2355,628,568B/537cb payloads, argv/cwd/environment and byte oracles are immutable. Startup retains the empty argv item; strict235 retains all235 expected bytes including exit37 normal exec/wait/reap/EOF/ECHILD and ENOENT/exit42 error path.
+
+The current module tuple uses the already accepted BEGIN cleanup protocol and collectorc020. Both proposed manifests reuse the original strict235 begin-cleanup-real-ack-parent-clone-v2 schema and exact consumer/provider source proof; they do not inherit F05's v2-only cleanup/case_binding. The full canonical evaluator529830ad's original profile validator accepts this schema unchanged. Its original child-process trace predicate remains true for strict235 and false for startup; startup only changes the current lifecycle binding, not its argv/output oracle. This collector/profile/cohort delta is explicit for independent review. Do not call historical startup's collector784/legacy cleanup already tested under this new tuple.
+
+C baseline scope stays historical: original C launcher dca025 and retained C startup/235 proofs/oracles remain at their exact old image/module tuples. Current frozen F05's C60e run has a different payload and cannot be a paired startup/235 control. This proposal supplies no automatic C replay or paired-current-cohort parity claim. If later asserting a direct C-versus-Rust comparison at60e, bind matching retained evidence or a separately reviewed necessary current-cohort C control. Rust original-case passes can qualify only their actual chosen tuple and behavior; they do not establish all349 provider semantics, all51 ABI, allocation or whole-file/M15 retirement.
+
+Exact minimal next executable check now (source-only, already PASS8checks/0.027257s):
+
+```
+python3 -B PATH/check_source_plan.py
+```
+
+PATH is this directory. No composition, guest, resource/account/guard query or ledger/canonical/Git write is performed. Tests use the genuine existing evaluator payload/profile predicates, verify installed loader subject, immutable original bytes/args and absent output names, and confirm foreground F05 remains the C-selected case.
+
+After the current operation has independent positive retirement/current-free acceptance, Root may independently review/adopt this source proposal and grant exactly the startup overlay argv in the plan. This is the smallest next actual data operation; do not call the existing overlay CLI without that grant. Reuse ordinary composition profile proposal CPU6/onejob/2GiB-AS/CPU60/wall90/32MiB-file, aggregate23259332608 and7jobs, normal floors plus actual full growth/capture needs. It neither grants another heavy nor supplies runtime authority. Strict235 is queued after startup disposition; no completed prefix is replayed.
+
+Capture the original builder's printed receipt under a fresh name. Then the prepared data-only binder consumes that actual receipt and selected output, pins source/base/rawCPIO joins, runs the unchanged full canonical manifest validator plus the existing e5d/provider binding supplement, and writes a fresh complete manifest:
+
+```
+python3 -B PATH/bind_composed_case.py --case startup --overlay-receipt ACTUAL_STARTUP_OVERLAY_RECEIPT --overlay-receipt-sha256 RECEIPT_SHA --output FRESH_STARTUP_MANIFEST
+```
+
+No binder composition or guest launch exists. For strict235 use --case strict235 and its separately composed receipt/output. The actual manifests/overlays do not yet exist; only then can Root bind original native source/runner/backend/QMP, complete139 original predicates plus canonical additions, provider/loader acceptance, actual supported image capability and an independently reviewed current runtime release. Actual owner/admission/literal-source adoption remains Root's responsibility; this proposal does not change that owner or reuse an old nonce/release. Preserve actual stdout/stderr/exit/kernel log, source-hash/map joins, BUILDID handshake, normal/failed-owner cleanup, procfs/group and physical resource restoration evidence.
+
+Possible narrow future claim: exact installed Rust executor main ran the original startup (then strict235) application successfully on the explicitly bound60e/module/loader/libc/libnuma tuple, with original expected bytes and lifecycle retirement. That is application/native evidence, not production deployment, all349/all51/fullABI/allocation/full-file acceptance. Correct source census is354 deselected definitions(349bridges+main+util_thread+3inline); reuse accepted F4D bodies/SDK/static ABI at their scope, no re-port/recompile/inventory/new quota.
+
+Same fixed05:36Z/v2 earlierMONO/BOOT cutoffs, existing creditrun7f/57774.852125/cumulative debits, real holds, one-heavy4CPU12GiB512tasks, permanent27:4/scratch21 and HOST16/scratch12 floors persist. No current operation/holder was observed or altered. Original failures and the frozen F05 pipeline remain intact.

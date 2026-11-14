@@ -1,0 +1,106 @@
+{
+  "schema": "mckernel.stability.exact-build-failure.v1",
+  "recorded_at_utc": "2026-09-29T07:56:35Z",
+  "status": "FAIL",
+  "scope": "one independently released local exact-build attempt; no compilation, module, guest or application execution",
+  "source": {
+    "release_checkpoint": "4561e0243b1792557c317df67b618e4e70d12f8a",
+    "candidate_commit": "675891545c881b8d625256ade56fe66ac69fe794",
+    "ihk_commit": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+    "candidate": "/dev/shm/mckernel-exact-candidate-67589154-1",
+    "metadata_backup": "/dev/shm/mckernel-exact-metadata-backup-67589154-1",
+    "input_manifest": "/home/holden/mckernel-work/scratch/native-exact-inputs-67589154-1.json",
+    "input_manifest_sha256": "c5204af68852f6e95ac9307be47280c9c84c237718c01f591b302d9c7d3c6ef9",
+    "request": "/home/holden/mckernel-work/scratch/native-exact-build-request-67589154-1.json",
+    "request_sha256": "a2c3795245e31dc6ca90885b7ece05be5ed101bcbba6c92c9e56704db66daa7c",
+    "execution_release_sha256": "d657a75ea7dcec5e70e3dfe021dc0f847147b043d0e724d98340af60abe58869"
+  },
+  "preflight": {
+    "attempt_1": {
+      "status": "FAIL_OBSERVER_ONLY",
+      "receipt_sha256": "3c4af54329a851e08206bb5880e8ef1b09ae62c8a8c10e7cbff28d307f6142d5",
+      "diagnostic": "host procps-ng rejected trailing --ww; the empty process census could not admit a build",
+      "mutation": "none"
+    },
+    "attempt_2": {
+      "status": "PASS",
+      "receipt_sha256": "e76fd4e0899153fa866df50bb62bd976da53f13a187b89ca88eeaabb94614749",
+      "correction": "host-compatible trailing ww",
+      "docker_rows_inspected": 11,
+      "running_exact_owners": 0,
+      "current_bind_conflicts": 0,
+      "heavy_process_conflicts": 0,
+      "relevant_locks": 0,
+      "all_native_exact_leases": 0
+    }
+  },
+  "operation": {
+    "command": "/usr/bin/python3 -E -s -B /dev/shm/mckernel-exact-candidate-67589154-1/scripts/native_rust_exact_build_container_owner.py /home/holden/mckernel-work/scratch/native-exact-build-request-67589154-1.json",
+    "started_at_utc": "2026-09-29T07:55:57.998092998Z",
+    "ended_at_utc": "2026-09-29T07:56:35.170243257Z",
+    "outer_exit_code": 1,
+    "owner_pid": 3737477,
+    "owner_starttime": "87838268",
+    "owner_nonce": "3c5bfd2676854a2d8c91a84d57309329",
+    "owner_process_retired": true,
+    "docker_wait_processes_retired": true,
+    "lease": "/home/holden/mckernel-work/scratch/native-exact-build-lease-67589154-1.json",
+    "lease_absent_after_retirement": true,
+    "container": {
+      "id": "decd7cf92467e1214cc955d15a00b847587ada37016f206e9a82019cbb72c6b9",
+      "name": "mckernel-exact-0c9257c29ef748a5bd8dce68b94bcfef",
+      "running": false,
+      "pid": 0,
+      "exit_code": 1,
+      "oom_killed": false,
+      "terminal_container_retained": true,
+      "retention_state": "verified_owned_terminal_retained"
+    }
+  },
+  "result": {
+    "failed_phase": "Verify source-only contracts without claiming readiness",
+    "phase_script_sha256": "a1042bc7639515f0bdd38fd89e0335f043f86fc47fd753fe8b720df67fb41b7c",
+    "compile_started": false,
+    "output_root_empty": true,
+    "failure_family": "IHK native queue snapshot checker/source contract mismatch",
+    "diagnostic": "ihk-native-queue-check: FAIL: Rust source must define fn snapshot exactly once",
+    "unchanged_retry_forbidden": true,
+    "successful_current_candidate_builds": 0,
+    "real_guest_apps_this_attempt": 0
+  },
+  "evidence": {
+    "scratch_root": "/home/holden/mckernel-work/scratch/native-exact-build-evidence-67589154-1",
+    "owner_receipt_sha256": "73156e6d3954118b903f7db576942e4dfc875f982e3afd0c71756b7052bbae90",
+    "build_receipt_sha256": "4d0d927c250ce59f44082d38ace49651df7396d19aa9606cfe614fada4e263da",
+    "driver_log_sha256": "cd553c6ec69c4c2a4ed1aa0ae4c4aeb5a4b6fe2bd31b089396f6a845635a8430",
+    "container_log_sha256": "e80eb76256f1991aac2fcd6574095629bac5aa4d4091b5a100fb998c145a764e",
+    "terminal_inspect_sha256": "3c10b06cdc7819ff74328623f9369569b995bbafcdf5a15c83dec2e0341ed18a",
+    "outer_stdout_sha256": "813e779c8685f521c34f5713dcc95fb6f84e91be9f26946ad46aca7ebd783012",
+    "outer_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "raw_archive": "docs/verification/evidence/stability-native-exact-build-67589154-failure-raw-20260929-1.tar.gz",
+    "raw_archive_sha256": "a6e2fff0418854fb05eba01d6c547bd557cbd99e51bf083d2ca608d635c3b46d",
+    "raw_archive_bytes": 481415,
+    "raw_archive_members": 193,
+    "raw_archive_regular_members": 180,
+    "all_regular_members_match_live_originals": true
+  },
+  "next_tasks": [
+    "reproduce the exact snapshot-definition mismatch locally without Docker and determine whether the checker or production queue source is stale",
+    "apply at most one bounded correction for this failure family and run focused positive and mutation regressions",
+    "obtain independent source review and create a wholly fresh candidate/request/output/evidence/lease namespace before any later build",
+    "never retry, clean or reuse the consumed 67589154-1 request, outputs, evidence or terminal container"
+  ],
+  "acceptance": {
+    "native_build": false,
+    "runtime_acceptance": false,
+    "application_acceptance": false,
+    "formal_counters_changed": false
+  },
+  "formal_counters": {
+    "application_cases": "0/273",
+    "fault_modes": "2/4",
+    "gates": "6/130",
+    "stress_iterations": "350/10000",
+    "language_gates": "0/7"
+  }
+}

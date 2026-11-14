@@ -1,0 +1,49 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "OBSERVED_APP_ORACLE_POSITIVE_COLLECTOR_FAILED",
+  "source_serial_sha256": "9497725aea68edad506478f8d5da54bb4dc963cb667f2039c924d4fbd67be6ed",
+  "payload": {
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "/apps/app"
+    ],
+    "cwd": "/case/work",
+    "env": {
+      "PATH": "/usr/bin:/bin",
+      "COKERNEL_PATH": "/apps"
+    },
+    "raw_wait_status": 0,
+    "started_ns": 31490492830,
+    "reaped_ns": 32903446711,
+    "finished_ns": 33260484268,
+    "streams": {
+      "stdout": {
+        "hex": "7265636f7665727920706172656e742073746172740a706172656e742063616e63656c207369676e616c3d31352072656164793d3120707265726561703d3020656f663d31207265617065643d3120656368696c643d31206f776e65643d300a6368696c642065786563207375636365737320746f6b656e3d66697865642d76310a706172656e74207265636f76657279206578656320657869743d333720656f663d31207265617065643d3120656368696c643d310a706172656e74207265636f7665727920636f6d706c657465206368696c6472656e3d32206f776e65643d300a",
+        "eof": true,
+        "truncated": false,
+        "observed": 227,
+        "retained": 227,
+        "discarded": 0,
+        "limit": 1024,
+        "eof_ns": 32802770787
+      },
+      "stderr": {
+        "hex": "",
+        "eof": true,
+        "truncated": false,
+        "observed": 0,
+        "retained": 0,
+        "discarded": 0,
+        "limit": 1024,
+        "eof_ns": 32802728603
+      }
+    },
+    "procfs_empty": true
+  },
+  "application_acceptance": false,
+  "collector_failure": "child ordinary RET coverage",
+  "kernel_cause_proven": false
+}

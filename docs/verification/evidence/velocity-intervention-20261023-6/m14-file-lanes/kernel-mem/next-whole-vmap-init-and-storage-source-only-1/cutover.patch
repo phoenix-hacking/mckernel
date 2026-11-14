@@ -1,0 +1,86 @@
+--- a/kernel/mem.c
++++ b/kernel/mem.c
+@@ -5926,10 +5926,13 @@
+ static struct ihk_page_allocator_desc *vmap_allocator;
+ 
+ #ifdef MCKERNEL_RUST_MEM_HELPERS
+-void *mem_vmap_allocator_bridge(void)
+-{
+-	return vmap_allocator;
+-}
++/* Existing C-owned pointer slot; immutable address/configuration only. */
++struct ihk_page_allocator_desc **const mem_vmap_allocator_slot = &vmap_allocator;
++const unsigned long mem_vmap_init_start = MAP_VMAP_START;
++const unsigned long mem_vmap_init_size = MAP_VMAP_SIZE;
++const unsigned long mem_vmap_init_unit = PAGE_SIZE;
++const int mem_vmap_init_first_level = IHK_MC_PT_FIRST_LEVEL;
++extern void *mem_vmap_allocator_bridge(void);
+ 
+ extern void *mem_vmap_init_bridge(unsigned long start, unsigned long size,
+ 		unsigned long unit);
+@@ -5965,6 +5968,9 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_MEM_HELPERS
++extern void virtual_allocator_init(void);
++#else
+ static void virtual_allocator_init(void)
+ {
+ #ifdef MCKERNEL_RUST_MEM_HELPERS
+@@ -5980,6 +5986,7 @@
+ 	                      IHK_MC_PT_FIRST_LEVEL);
+ #endif
+ }
++#endif
+ 
+ #ifdef MCKERNEL_RUST_MEM_HELPERS
+ extern void *ihk_mc_map_virtual(unsigned long phys, int npages,
+--- a/kernel/rust/mem_helpers.rs
++++ b/kernel/rust/mem_helpers.rs
+@@ -175,7 +175,6 @@
+     fn mem_begin_free_pages_pending_panic_bridge();
+     fn mem_pending_free_bridge(phys: CULong, npages: CInt, is_user: CInt);
+     fn mem_finish_free_pages_pending_panic_bridge();
+-    fn mem_vmap_allocator_bridge() -> *mut c_void;
+     fn mem_pt_set_page_bridge(
+         pt: *mut c_void,
+         virt: *mut c_void,
+@@ -7008,3 +7007,37 @@
+ ) -> CInt {
+     unsafe { crate::x86_memory_helpers::ihk_mc_pt_prepare_map(pt, virt, size, flag) }
+ }
++
++// C retains its existing private vmap_allocator object. These data symbols
++// expose only its immutable address and exact configured geometry; no C getter.
++unsafe extern "C" {
++    static mem_vmap_allocator_slot: *mut *mut c_void;
++    static mem_vmap_init_start: CULong;
++    static mem_vmap_init_size: CULong;
++    static mem_vmap_init_unit: CULong;
++    static mem_vmap_init_first_level: CInt;
++}
++
++/// Plain read of the same C-owned allocator pointer, including null.
++/// No reference/exclusive borrow or allocator lifetime change is introduced.
++#[no_mangle]
++pub unsafe extern "C" fn mem_vmap_allocator_bridge() -> *mut c_void {
++    unsafe { core::ptr::read(mem_vmap_allocator_slot) }
++}
++
++/// Same init -> store descriptor -> prepare first-level mappings sequence.
++/// The original C void wrapper ignored the helper's status; preserve that.
++#[no_mangle]
++pub unsafe extern "C" fn virtual_allocator_init() {
++    unsafe {
++        let _ = mem_virtual_allocator_init_body_result(
++            mem_vmap_allocator_slot,
++            mem_vmap_init_start,
++            mem_vmap_init_size,
++            mem_vmap_init_unit,
++            mem_vmap_init_first_level,
++            Some(mem_vmap_init_bridge),
++            Some(mem_pt_prepare_map_bridge),
++        );
++    }
++}

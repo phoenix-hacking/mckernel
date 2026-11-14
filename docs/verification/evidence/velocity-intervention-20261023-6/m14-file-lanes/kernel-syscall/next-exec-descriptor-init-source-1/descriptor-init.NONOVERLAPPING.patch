@@ -1,0 +1,64 @@
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -7102,6 +7102,11 @@
+ extern void exec_reset_signal_state_current_v1(struct thread *thread);
+ #endif
+ 
++/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++extern void *f03_execveat_allocate_descriptor_v1(const char *file,
++        int source_line, int *error);
++#endif
+ static int do_execveat(ihk_mc_user_context_t *ctx, int dirfd,
+ 		const char *filename, char **argv, char **envp, int flags)
+ {
+@@ -7139,6 +7144,12 @@
+ 	
+ 	ihk_rwspinlock_read_unlock_noirq(&vm->memory_range_lock);
+ 
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++	desc = f03_execveat_allocate_descriptor_v1(__FILE__, 7142, &error);
++	if (!desc) {
++		return error;
++	}
++#else
+ 	desc = _ihk_mc_alloc_aligned_pages_node(4, PAGE_P2ALIGN, IHK_MC_AP_NOWAIT, -1, IHK_MC_PG_KERNEL, -1, __FILE__, __LINE__);
+ 	if (!desc) {
+ 		kprintf("execve(): ERROR: allocating program descriptor\n");
+@@ -7146,6 +7157,7 @@
+ 	}
+ 
+ 	memset((void*)desc, 0, 4 * PAGE_SIZE);
++#endif
+ 
+ 	/* Request host to open executable and load ELF section descriptions */
+ 	request.number = __NR_execve;  
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -23950,3 +23950,26 @@
+         );
+     }
+ }
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++/// # Safety
++/// file is the original static C source string; source_line identifies the bound
++/// allocation origin. error points to the live C local, written only on failure.
++/// Genuine tracked allocator owns initialization; on success the caller receives
++/// exactly four owned kernel pages, all zeroed before return. No context/request
++/// fields are touched and no ownership escapes on allocation failure.
++#[no_mangle]
++pub unsafe extern "C" fn f03_execveat_allocate_descriptor_v1(
++    file: *const i8, source_line: CInt, error: *mut CInt,
++) -> *mut c_void {
++    let descriptor = crate::mem_helpers::_ihk_mc_alloc_aligned_pages_node(
++        4, 0, 0x000002, -1, 0, CULong::MAX, file.cast_mut(), source_line,
++    );
++    if descriptor.is_null() {
++        kprintf(c"execve(): ERROR: allocating program descriptor\n".as_ptr().cast());
++        core::ptr::write(error, -ENOMEM);
++        return descriptor;
++    }
++    crate::string::memset(descriptor, 0, 4 * 4096);
++    descriptor
++}

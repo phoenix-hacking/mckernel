@@ -1,0 +1,91 @@
+{
+  "C_preimage": {
+    "bytes": 113504,
+    "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+    "sha256": "912fb97a58cc797407979ce835c422578949ff876ac519193d2ebc4855cce791"
+  },
+  "C_selection_patch": {
+    "bytes": 784,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-signal-restart-source-1/patch/syscall.c.diff",
+    "sha256": "8c3257d31eb2cc8f821007bf1921c213240b1944788610ef6a4331f2d251421d"
+  },
+  "Rust_append_patch": {
+    "bytes": 1953,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-signal-restart-source-1/patch/syscall_policy.signal_restart.APPEND.diff",
+    "sha256": "78220d5ec48f5b4cfea475bb5800d484ff99ccce03501e7fa924f590e6cf52fe"
+  },
+  "Rust_preimage": {
+    "bytes": 713471,
+    "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+    "sha256": "3ef8288617db7bcc26c56039491295d3f48c53d4f76d111b68dfcc3186546f7d"
+  },
+  "actual_NR_values": {
+    "clock_nanosleep": 230,
+    "epoll_pwait": 281,
+    "epoll_wait": 232,
+    "io_getevents": 208,
+    "msgrcv": 70,
+    "msgsnd": 69,
+    "nanosleep": 35,
+    "pause": 34,
+    "poll": 7,
+    "ppoll": 271,
+    "pselect6": 270,
+    "rt_sigreturn": 15,
+    "rt_sigsuspend": 130,
+    "rt_sigtimedwait": 128,
+    "select": 23,
+    "semop": 65,
+    "semtimedop": 220
+  },
+  "actual_result": null,
+  "actual_syscall_header": {
+    "bytes": 20836,
+    "path": "/home/holden/mckernel/kernel/include/syscall.h",
+    "sha256": "459e6d0faec3f1b8366a0d329571ef5ea813042706be11f9423b0399bbba6ffa"
+  },
+  "canonical_writes": 0,
+  "compiler_jobs": 0,
+  "default_consumer": null,
+  "existing_Rust_reuse": "Actual CInt/CLong/CULong ABI and existing EINTR/SIGKILL/SIGSTOP/SIGCHLD/SYS_EPOLL_WAIT/SYS_PPOLL/SYS_PSELECT6/SYS_NANOSLEEP constants; no preexisting Rust restart policy body found in selected syscall policy",
+  "fragment": {
+    "bytes": 1784,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-signal-restart-source-1/candidate/syscall_policy.signal_restart.FRAGMENT.rs",
+    "sha256": "2bf0f7353ba79dfa824803c365803038bc97c6089e5a95cf63ecb257c7939093"
+  },
+  "fullcrate": null,
+  "future_fixture": [
+    {
+      "bytes": 564,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-signal-restart-source-1/future-fixture-source-only/actual-Rust-policy.rs",
+      "sha256": "3e2fea123569441ca188efe3bf928c2cdc4e930beec9428ae9f0e519a164736a"
+    },
+    {
+      "bytes": 1830,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-signal-restart-source-1/future-fixture-source-only/compare_original_policy.c",
+      "sha256": "3b81dbbc5f2e8e4ef582227b6be217b81b957f511835bd0660390f4846647a32"
+    },
+    {
+      "bytes": 913,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-signal-restart-source-1/future-fixture-source-only/original-isrestart.ACTUAL.inc",
+      "sha256": "ac60f961828ae02aba5fdba31b329e01747bb2f7b6abeab0d352cfdce6c8ae7f"
+    }
+  ],
+  "future_vectors_planned": 248640,
+  "invariants": [
+    "native rt_sigreturn returns0 before anyother policy only when original native macro is selected",
+    "SIGKILL/SIGSTOP always0, negative syscall or unsigned rc != converted-EINTR always0",
+    "SIGCHLD shortcut precedes16never-restarted syscall cases exactly, native rt_sigreturn exception retained",
+    "any nonzero restart flag including signed extremes returns1 only after prior guards",
+    "C selection macro evaluates eachargument exactlyonce and passes literal originalprofile flag; no C behavior/getter added",
+    "no memory/ownership/IRQ/register/signal action changes, no inlineASM involved",
+    "original static C fallback byteidentical"
+  ],
+  "live_boundary": "arch syscall static isrestart policy consumed by both do_signal handler setup branches",
+  "native": null,
+  "ready_queue_unchanged": true,
+  "remaining_provider_ABI_blocker": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "selected_calls": 2,
+  "status": "COMPLETE_PURE_POLICY_SOURCE_ONLY_NOT_SECOND_READY_QUEUE"
+}

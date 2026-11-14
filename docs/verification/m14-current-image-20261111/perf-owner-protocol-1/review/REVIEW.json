@@ -1,0 +1,155 @@
+{
+  "Root_sole_compositor_executor_admission_and_credit": true,
+  "all_source_native_permission_resource_UNKNOWN_holds_preserved": true,
+  "basis": {
+    "image": "4b711cd9a361068d8c5b4e7e7fb6852e3124a0f7f97dc0401a77086c1897fc60",
+    "source": "6aae8273960583ec7fb194926292bd10ab1bc585"
+  },
+  "compiler_boundary": "This material NO_GO does not prohibit a separately reviewed faithful no-runtime whole-Rust1.95 compiler check. It can produce actual diagnostics while the owner corrects this lifecycle family. No compiler operation is approved by this document.",
+  "compiler_eligibility": {
+    "bytes": 3680,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-coherent-source-review-sourceacq-max-1/COMPILER-ELIGIBILITY.json",
+    "sha256": "9a66cc1c4aec1dcd6ec6ce0ce13adb93d164909312a5064c8833d811a1d13284"
+  },
+  "compiler_review_independent": true,
+  "created_utc": "2026-11-11T13:41:58.811812+00:00",
+  "decision": "NO_GO_COMMON_LIFECYCLE_ACTIVATION_ONE_SCHEDULER_EPOCH_FAMILY",
+  "full_finite_findings": [
+    {
+      "affected_source": [
+        {
+          "bytes": 7972,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/ownership-proposal-1/implementation-1/candidate/kernel/rust/f03_perf_owner/lifecycle.rs",
+          "sha256": "9e2ba022bd2cd2056fd86f07b3386ad4c595b6c504065088a7b4f55bb8d0d71d"
+        },
+        {
+          "bytes": 24344,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/ownership-proposal-1/implementation-1/candidate/kernel/rust/f03_perf_owner/maps.rs",
+          "sha256": "152c4b01994bd0745cd8e5c8303b412a380bfb342ad3cfa1817a08139a4debae"
+        }
+      ],
+      "author_answer_at_freeze": "Pending; no correction or actual execution consumed by this review.",
+      "author_question_sent": true,
+      "exclusion_check": "The first R guard is explicitly transferred and released by hardware capture. The per-Process opening/close gate is not acquired by scheduler/monitor clear and does not span this sequence. Descriptor G protects individual callback numeric forwarding, not concurrent other-descriptor group append. The actual scheduler IRQ/runqueue exclusion does not exclude another CPU in the same Process. No source-level exclusion for the above interleaving was found.",
+      "finding": "The sequence retains Operation leases for the first captured group epoch, then finishes that GroupRead and repeatedly reacquires newer epochs inside reset_locked/reset/start. Retaining old maps does not make a newly appended member mapped for the switching Thread after its monitor association has been cleared/replaced.",
+      "focused_regression_obligation": "Within the already-planned real group/Thread lifetime family, force monitor clear/replacement and a late group append between sequence steps; the admitted sequence must retain one coherent member set and its exact maps and finish original reset/reset/start without a missing-map status or foreign bit release. No extra whole suite or hardware/native execution is required by this source review.",
+      "id": "PERF-COMMON-01",
+      "minimum_correction": "Use a single retained group epoch with the corresponding complete actual Operation mapping leases through the entire original reset/reset/start sequence, or prove and implement an equivalent coherent publication exclusion that is valid in the actual no-allocation/no-sleep scheduler context. Do not silently ignore a missing new map or allocate/hold R over S/providers. Preserve the existing math, order and real lower functions.",
+      "owner": "/root/p03_cutover_source_max; coordinate hardware author for only a necessary API delta",
+      "severity": "material lifecycle correctness",
+      "sites": {
+        "append_only_live_current_monitor_maps": "maps.rs:206-210",
+        "clear_removes_monitor_edges": "lifecycle.rs::clear_current_monitor/maps.rs::reconcile_monitors_locked",
+        "first_snapshot_and_retained_maps": "lifecycle.rs:110-113",
+        "fresh_helper_captures_and_ignored_status": "lifecycle.rs:114-120; hardware.rs::capture/reset_locked/reset/start"
+      },
+      "valid_interleaving": [
+        "Thread T in switch_monitor captures group G and its actual mapping leases under R; its first reset captures that epoch and releases R before S/provider work.",
+        "Another CPU disables/replaces the same Process monitor under R. Its former Monitor bindings are reconciled away. First-epoch Operation leases still protect existing old members only.",
+        "An ordinary opener appends event E to retained group G. group_append_locked only prepares maps for live Purpose::Monitor bindings whose target still selects G, so it does not bind E for T.",
+        "The later reset or start takes a new G snapshot including E. HardwareLeases::capture_locked cannot retain a T/E lease and returns -EINVAL. The void caller ignores the result and leaves the original reset/reset/start sequence incomplete."
+      ]
+    }
+  ],
+  "inputs": {
+    "API": {
+      "bytes": 6874,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/ownership-proposal-1/implementation-1/API-HANDOFF.json",
+      "sha256": "8d57eef2850448efb8b7bd60e54e2c5fc071fcb35b78b4e181159c0de9bb7329"
+    },
+    "manifest": {
+      "bytes": 18552,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/ownership-proposal-1/implementation-1/SOURCE-MANIFEST.json",
+      "sha256": "d17f3ea54931735f9088d0697477261d93684ab1f4b58c0dfca5713086a22b45"
+    },
+    "patch": {
+      "bytes": 287943,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/ownership-proposal-1/implementation-1/PERF-OWNER-PROTOCOL.UNSELECTED.patch",
+      "sha256": "14fc35cc8712a49ad0587d9cededd4a3498e922e19af6d2a0765b30cf48fd8ff"
+    },
+    "source_ready": {
+      "bytes": 2070,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/ownership-proposal-1/implementation-1/SOURCE-READY.NOT-EXECUTED.json",
+      "sha256": "fb154ab61b167acf9a96febfe881b3472f5527473dd3f5ea321a2aa5818b643d"
+    }
+  },
+  "positive_common_findings": [
+    {
+      "area": "real source and selection",
+      "result": "All28 candidate sizes/SHA and bound existing preimages/unchanged consumers were checked in compiler eligibility9a66. The facade is under syscall_policy, root alias and cfg precondition use the actual x86/perf/sync-child provider profile. C guards pair only the genuine open entry and bridge plus typed data constants. kernelCMake is unchanged and cfg/Cmacro remain unselected."
+    },
+    {
+      "area": "descriptor caller lifetime",
+      "result": "Shared lookup takes actual P then R, retains the managed DescriptorPin before P unlock, returns a real pin error rather than an unowned raw fallback, and holds the pin across read/ioctl/fcntl/mmap. Descriptor G waits occur after P/R unlock; closing blocks stale queued numeric-FD users before host work."
+    },
+    {
+      "area": "Process transaction gate",
+      "result": "Ordinary close acquires existing ProcessG before either lookup/unlink, open holds the same gate through its real transaction/rollback, finite parent fork retains stable gate metadata through actual host clone, and terminal marks then waits outside P/R/hash/IRQ. OpeningOwner keeps the owning metadata until after guard destruction. This does not solve PERF-COMMON-01 scheduler epochs."
+    },
+    {
+      "area": "genuine open transaction",
+      "result": "Original attribute/entry validation remains the real entry helper. Actual typed80-byte Mckfd/72-byte request, real event allocation, checked counter reservation and group descriptor pin precede genuine host open; actual Mckfd allocation still follows host success. Publication/mapping commit share final P/R. Rollback issues the one real same-current-owner close outside locks and retains nonzero/unissued host debt. The NR/arg0=0 carrier with zeroed ignored words agrees with actual original perf_event_open_linux_fd_body_result; no missing host-open argument was found."
+    },
+    {
+      "area": "ordinary close and ACK",
+      "result": "Managed close unlinks once under P, waits descriptor G outside locks, checks actual current Process and Owned route, forwards complete actual user context/number exactly once, and records the genuine signed result. The real generic forwarding/do_syscall path sends the actual request and returns actual response, rather than a nohost zero-success shortcut. Terminal nohost/pending-child semantics remain covered by the unchanged terminal unit."
+    },
+    {
+      "area": "event/group ownership",
+      "result": "Explicit logical descriptor/storage/association/origin counts are separate from atomic measurements. EventRef does not own a GroupRef; publication to already-live chosen groups preserves acyclic ownership. Append-only generation epochs and captured tails stabilize member traversal, tombstones retain old readers, and (group,event) deferred retirement cannot consume another group or Operation token."
+    },
+    {
+      "area": "linear Thread maps",
+      "result": "CounterSlot reserves real executing-Thread bits privately and commits only validated tokens, uses the original lowest-free/no-free-counter result, and distinguishes Origin/Monitor/Call/Operation users. Preparation/commit paths keep their relevant final R; unpublished open-origin keys do not escape during host work. Actual pre-free hooks invalidate raw Thread before memory release; outstanding leases retire only metadata after that point."
+    },
+    {
+      "area": "remote Process and monitor",
+      "result": "with_remote_target obtains increment-unless-zero/overflow under the exact find/unlock hash borrow, unlocks before allocator/body and releases its single positive edge afterwards. Target and inherited Process slots are stable genuine registry objects; all weak target links detach before actual Process free, with no persistent Event->Process strong cycle. pid>0 populated behavior and pid0 replacement remain actual source behavior."
+    },
+    {
+      "area": "fork/copy/host table",
+      "result": "The real parent ProcessG and positive VM pin protect the full80-byte snapshot under parent P/R. Real managed event ownership or opaque CopyPin is acquired before unlock; original opaque dup gets actual child storage. Managed copies remain PendingChildRoute, and only actual positive Linux fork activates them. Host failure and prepublication cleanup release/queue only the real pending parent gate and never close the parent numeric FD as a child."
+    },
+    {
+      "area": "opaque copy close",
+      "result": "Ordinary opaque close marks under actual P, unlinks/unlocks, then waits on the genuine borrowed node before original callback/free. CopyPin releases reader before wake and metadata ownership last. Final-VM P-held path never waits or invokes managed host work; negative retained outcomes are propagated instead of freeing an active borrow."
+    },
+    {
+      "area": "real finalizers and drains",
+      "result": "Managed P-held VM close marks metadata only. Original actual free callbacks are delayed until last true pin at an IRQ-enabled, unlocked idle/syscall safe point. Process/Thread constructor failure and final hooks are present. Deferred host-close debt keeps explicit result/fd/route data and never retries idle offload. The duplicate idempotent destroy_thread retirement call is redundant but not a material ownership defect."
+    },
+    {
+      "area": "read and IRQ scalar boundaries",
+      "result": "Read validates original >=8 or (stable event_count+1)*8 before allocation and again under the SAME final R transferred to read_locked, before usercopy. PMI copies only actual signal/fd scalars under P and F_SETSIG writes use P; no descriptor dereference escapes that IRQ P window."
+    }
+  ],
+  "reviewer": "/root/source_acquisition_review_max",
+  "reviewer_actions": {
+    "children_spawned": false,
+    "compiler_tests_helpers_imports_or_SUT_execution": false,
+    "process_native_sudo_signal_or_control_action": false,
+    "source_candidate_or_canonical_edits": false,
+    "static_source_data_reads_only": true
+  },
+  "schema": "mckernel.perf-coherent-common-material-review.v1",
+  "scope": "Only unmatched coherent real module/caller/provider/lifetime composition of frozen28-file private candidate. Existing terminal/hardware math/unit findings reused. No compiler/runtime/image/native or default acceptance.",
+  "still_required_not_claimed": [
+    "A meaningful focused correction for PERF-COMMON-01 and independent delta review before lifecycle/activation GO.",
+    "Actual whole candidate Rust1.95 syntax/name/type/metadata compile with exact genuine config/provider inputs under separately reviewed operation.",
+    "Actual four real runtime families using all18 ownership units and genuine typed lifecycle adapters; no substitute ownership stubs.",
+    "Paired ordinary C/Rust whole named-image compile/ABI/provider/unique owner/C exclusion/cleanup proof before selected/default credit.",
+    "Original perf FUNCTIONAL/native/restoration/parent/file/milestone criteria at their literal scope."
+  ],
+  "unchanged_unit_GOs": {
+    "hardware": {
+      "bytes": 9216,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-units-review-sourceacq-max-1/hardware-1/REVIEW.json",
+      "sha256": "a821ddaa015e8a627302939ae9e41adb0407f78654914ef5b513896612eb879e"
+    },
+    "terminal": {
+      "bytes": 9068,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-units-review-sourceacq-max-1/terminal-1/REVIEW.json",
+      "sha256": "f7a4bf9f68d1f0b0ae10b1e51e075d1ea7581664aca26b1531bb3c7aeafe4a17"
+    }
+  }
+}

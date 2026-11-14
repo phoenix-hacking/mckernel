@@ -1,0 +1,87 @@
+{
+  "status": "PASS_CALLED_POSTJOIN_EXACT_31_STRONG_13_GENUINE_U",
+  "joined_sha256": "1faf0e7f6157983d86cf767f6fb4743dd65da148e63bf1dc2dc125e253285845",
+  "global_strong_definitions": 31,
+  "function_T": 22,
+  "global_data": 9,
+  "genuine_U": [
+    "do_kill",
+    "do_syscall",
+    "f03_terminate_host_refcount_set_v1",
+    "f03_wait_release_process",
+    "f03_wait_release_thread",
+    "kprintf",
+    "sched_wakeup_thread",
+    "syscall_do_kill_thread_bridge",
+    "syscall_do_syscall_request_bridge",
+    "syscall_find_process_bridge",
+    "syscall_generic_forwarding_body_result",
+    "syscall_process_unlock_bridge",
+    "terminate_host_body_result"
+  ],
+  "all21_predecessor_function_sizes_and_bytes_preserved": true,
+  "new_logger_bytes_preserved": true,
+  "storage_checks": {
+    "global_storage": {
+      "clv": {
+        "kind": "B",
+        "bytes": 8,
+        "section": ".lbss.clv"
+      },
+      "locals": {
+        "kind": "B",
+        "bytes": 8,
+        "section": ".lbss.locals"
+      },
+      "num_processors": {
+        "kind": "D",
+        "bytes": 4,
+        "section": ".ldata.num_processors"
+      },
+      "linux_page_offset_base": {
+        "kind": "B",
+        "bytes": 8,
+        "section": ".lbss.linux_page_offset_base"
+      },
+      "x86_kernel_phys_base": {
+        "kind": "B",
+        "bytes": 8,
+        "section": ".lbss.x86_kernel_phys_base"
+      },
+      "x86_map_kernel_start_geometry": {
+        "kind": "R",
+        "bytes": 8,
+        "section": ".lrodata.x86_map_kernel_start_geometry"
+      },
+      "x86_addr_log_straight_debug": {
+        "kind": "D",
+        "bytes": 32,
+        "section": "__verbose",
+        "line_flags": 3276,
+        "fmt_null": true,
+        "exact_original_file_bytes": 319,
+        "exact_original_function_string": true,
+        "data_pointer_relocations": "R_X86_64_64"
+      },
+      "x86_addr_log_kernel_debug": {
+        "kind": "D",
+        "bytes": 32,
+        "section": "__verbose",
+        "line_flags": 3272,
+        "fmt_null": true,
+        "exact_original_file_bytes": 319,
+        "exact_original_function_string": true,
+        "data_pointer_relocations": "R_X86_64_64"
+      },
+      "_RNvNtNtCs5mudLkas02F_21provider_storage_unit18x86_memory_helpers17owned_memory_data10TRACE_FILE": {
+        "kind": "R",
+        "bytes": 319,
+        "section": ".lrodata._RNvNtNtCs5mudLkas02F_21provider_storage_unit18x86_memory_helpers17owned_memory_data10TRACE_FILE"
+      }
+    },
+    "logger_bytes": 98,
+    "genuine_kprintf_undefined_and_referenced": true,
+    "no_runtime_initialization_claim": true
+  },
+  "no_runtime_or_native_init_claim": true
+}

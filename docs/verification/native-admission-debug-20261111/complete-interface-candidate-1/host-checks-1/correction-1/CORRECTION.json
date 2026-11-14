@@ -1,0 +1,124 @@
+{
+  "actual_failed_result": {
+    "bytes": 5251,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-four-contract-tests-p04source-max-1/execution-1/RESULT.json",
+    "sha256": "dcc37b2bc4ca01eeb2055600def07281e04293930aa1dc398504f9ed0fdc2697"
+  },
+  "actual_full_root_tool": {
+    "bytes": 418,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-four-contract-tests-p04source-max-1/execution-1/ROOT-EXEC-TOOL.json",
+    "sha256": "18d59a4037f007a421b32110754428da61ce5bd4975fee0a6ff2d28f1f979ada"
+  },
+  "actual_model_route": {
+    "bytes": 714,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-four-contract-tests-p04source-max-1/correction-1/MODEL-ROUTE.json",
+    "sha256": "077473d46ecc63220d93e27d4d0402a8e7aeef7138eb87211fb66bc7afd81a9e"
+  },
+  "actual_root_completion": {
+    "bytes": 382,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-four-contract-tests-p04source-max-1/execution-1/ROOT-EXEC-COMPLETION.json",
+    "sha256": "55ef442c02736550bb7eb4e36238dbf1eecaa74cfba93f02f8822067b331579f"
+  },
+  "actual_stderr": {
+    "bytes": 1614,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-four-contract-tests-p04source-max-1/execution-1/phase-3.stderr",
+    "sha256": "29b9ae4d8e41199fa8c666c6bdf9ba22663fd4a92210ef7b5731ccbe421d1fca"
+  },
+  "author_execution": false,
+  "canonical_changes": false,
+  "corrected_fixture": {
+    "bytes": 44981,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-four-contract-tests-p04source-max-1/correction-1/source-order-correction-1/native_contract_regression.py",
+    "sha256": "72855a7631a662dca5b5fa7810f6bad7138eda0eda4d49565df4beef707322be"
+  },
+  "diagnosis": "Fixture corruption, not production9b defect: pop(self.fds[adapter.py]) leaves its original source row present, so actual collect->verify->_verify_files raises KeyError before required<=fds. Do not broaden reject to swallow KeyError or change production behavior.",
+  "first_two_actual_PASS_reused": [
+    {
+      "bytes": 498,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-four-contract-tests-p04source-max-1/execution-1/phase-1.stdout",
+      "sha256": "9852e939dc7fdf9c8aec4ffb0f61ab456567e39f65a5305434e9972a1d8c3ed4"
+    },
+    {
+      "bytes": 351,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-four-contract-tests-p04source-max-1/execution-1/phase-2.stdout",
+      "sha256": "e9a4723f5d28e8727292ec89d755c3dbf06fdca1c887da2d5fde3bacd9f8a0e3"
+    },
+    {
+      "bytes": 2802,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-four-contract-tests-p04source-max-1/execution-1/PARTIAL.json",
+      "sha256": "c2052f6af2a68f95f7f19471cfea3e6ca76b4a8e17e736a54f9201ae0c00fc1c"
+    }
+  ],
+  "minimal_meaningful_input": "New test-only omit_from_cut argument removes actual adapter.py only from the required set used to construct the negative source manifest/first-flags plan/epoch. Validated admission.source_members remains full29. All held rows retain descriptors; actual collect.verify succeeds before its intended missing-consumed RuntimeError. Positive source object is not mutated.",
+  "new_commands_only": [
+    "effective-source",
+    "revocation-retirement"
+  ],
+  "not_rerun": [
+    "registered-context",
+    "capacity-claim",
+    "controller1961"
+  ],
+  "old_patch": null,
+  "original_fixture": {
+    "bytes": 44421,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-four-contract-tests-p04source-max-1/native_contract_regression.py",
+    "sha256": "82b90875939ee3cdbd6396a2b14f80aabafb301567c2472878a6b45cbcfb664f"
+  },
+  "original_request": {
+    "bytes": 12867,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-four-contract-tests-p04source-max-1/REQUEST.json",
+    "sha256": "40e309fe0718bbaf5ca59eeb9a33995cb82968a7bfe4b41c82453f9f7a07be51"
+  },
+  "original_runtime": {
+    "fourth": "never started",
+    "real_source_native_permission_change": false,
+    "third_failed": "preserved exactKeyError"
+  },
+  "patch": {
+    "bytes": 2884,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-four-contract-tests-p04source-max-1/correction-1/source-order-correction-1/COHERENT-OMISSION-SETUP.patch",
+    "sha256": "b15c8bd62377fe7efd81b9b50a4df7fa41cfe658d599a89393a2de1e51cd375e"
+  },
+  "prefreeze_order_refinement": {
+    "preserved_unexecuted_fixture": {
+      "bytes": 44981,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-four-contract-tests-p04source-max-1/correction-1/native_contract_regression.py",
+      "sha256": "fbdc1c759b2505963a734db059a653b4bc07dc4a6a0cf765915c62a1be15c75e"
+    },
+    "preserved_unexecuted_request": {
+      "bytes": 12463,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-four-contract-tests-p04source-max-1/correction-1/REQUEST.json",
+      "sha256": "9b374ce2b08f13cf99642a8c4d05bcf64a30b092fd9e7760099d1372e90c6489"
+    },
+    "reason": "Each Environment installs its controlled modules in sys.modules. Run the coherent omission check only after all positive original-object method uses; do not mix two virtual filesystem/module domains. Neither prior9b374 correction nor this successor executed by author.",
+    "source_order_only_delta": {
+      "bytes": 2143,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-four-contract-tests-p04source-max-1/correction-1/source-order-correction-1/SOURCE-ORDER-ONLY.patch",
+      "sha256": "50c1e45d9bc986bb6fcf1b2d2516209da5a6820ccf4bccb6f87138ad98c12b1a"
+    }
+  },
+  "retained_functions": {
+    "capacity_claim": "AST byte-structure equal, locations excluded",
+    "prepare_parent_records": "AST byte-structure equal, locations excluded",
+    "registered_context": "AST byte-structure equal, locations excluded",
+    "revocation_retirement": "AST byte-structure equal, locations excluded"
+  },
+  "schema": "named-native-source-cut-fixture-correction-v1",
+  "status": "FROZEN_NOT_EXECUTED",
+  "unchanged_external_all_four_oracles": {
+    "bytes": 2344,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-four-contract-tests-p04source-max-1/correction-1/source-order-correction-1/EXPECTED.json",
+    "sha256": "d2c2d1febcb27426103c8ce647fc602776042132c9d23d32237164e8472f57fa"
+  },
+  "unchanged_production_source": {
+    "bytes": 1656,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-real-binding-source-1/complete-interface-1/complete-candidate-2/correction-1/SOURCE-READY.NOT-EXECUTED.json",
+    "sha256": "9b422b4da1d39f48f28888fba7549f8b48f2069c35a8927d128df75bec16eea1"
+  },
+  "unchanged_source_GO": {
+    "bytes": 10345,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-complete-interface-review-sourceacq-max-1/complete-candidate-2/correction-1/REVIEW.json",
+    "sha256": "c14f528e1ee5b628a0b0eec073c58cee3c564bd33e07ffce468ee6c804962505"
+  }
+}

@@ -1,0 +1,168 @@
+{
+  "schema": "m15-unknown-action-functional-results-v1",
+  "at": "2026-11-09T16:04:03.484589+00:00",
+  "invocation": "20261109T155325Z-46b56314",
+  "original_requirements": [
+    "M15-F06",
+    "M15-F07"
+  ],
+  "source_commit": {
+    "at": "2026-11-09T16:01:40.387601+00:00",
+    "parent": "6abba64bb569c89d2a660c957c8f3d58fe5374c6",
+    "HEAD": "b7b7111cd17a3d835afc13f0dd79c0216c129991",
+    "tree": "9f14aabeef72ad998e7725788ceb69e2de6487ca",
+    "source_files": {
+      "linux/user/ihkconfig.c": "f6d2bd3f8940f9c313aa6b7856484b44b5446b1440ba12752cb0e15b0a8aec64",
+      "linux/user/ihkosctl.c": "f57e48559c856c76f6ced242f4b56118cea86164fb0f3f7ef4b310d2fabf92cb",
+      "linux/user/rust/ihkconfig.rs": "99cbb300e91d22337566cec62a28014e958e5c8408106277699eb118d277f983",
+      "linux/user/rust/ihkosctl.rs": "913bf0a6f8e57d6c53eb80c987f79eabea3d458937adea8468e5b8e8cef95fc5"
+    },
+    "index_empty": true,
+    "source_clean": true,
+    "bundle_sha256": "58f58445e484c9fac9a25bdd80c530a88fb60483da241568ce51bd7670dba894",
+    "bundle_blob": "56cf6fd45cdc1ecafdbb43efefa175b3859811dd"
+  },
+  "source_GO": {
+    "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/unknown-action-review-1/SOURCE-REVIEW.json",
+    "sha256": "1b460fdfeb22bb8145debe5f0faf8f0f19dafdffdbe930885450f549cf59b8c7"
+  },
+  "fixture_GO": {
+    "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/unknown-action-review-1/FIXTURE-REVIEW-20261109.json",
+    "sha256": "1b5ae007015cd4e0c74d7255af62fe907dee1b4592b891f6becd3f83f7d5c208"
+  },
+  "fresh_Nov9_admission": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/unknown-action-cases-1/ROOT-ADMISSION-1.json",
+    "sha256": "4dd5b1a9dbc8cb6a14cdeccf866f5e5eff2cfc84b41071fdbd2d797a21b37ce7"
+  },
+  "behavior_receipt": {
+    "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/unknown-action-cases-1/qualification-1/RESULT.json",
+    "sha256": "d52c605e44ad04cb46795cf936b9a04e8edecb3b6ab1adb17ce5bf4d38ed2aee"
+  },
+  "changed_tool_receipt_reused_without_rebuild": {
+    "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/unknown-action-producer-1/RESULT.json",
+    "sha256": "1a38bb52e340b645c778a94ae48a8af2b37cdf3e16d318719402731baa9122dd"
+  },
+  "changed_tool_execution_joins": {
+    "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/unknown-action-producer-1/EXECUTION-JOINED.json",
+    "sha256": "f6e1b96565aca110b8adfdf010499e4d5a463239118999531efb47b0ffd0a73e"
+  },
+  "behavior": {
+    "status": "PASS_FULL_MAIN_FUNCTION_UNKNOWN_ACTION_BASELINE_CANDIDATE",
+    "baseline_cases": 4,
+    "baseline_false_successes": 4,
+    "candidate_cases": 4,
+    "raw_baseline": 0,
+    "raw_candidate": 1,
+    "genuine_anonymous_FD_onceclose_EBADF": 8,
+    "ioctl_calls": 0,
+    "exact_raw_main_stdio_retained": true,
+    "all8_actual_object_called_gates_before_any_link_runtime": true,
+    "actual_reused_baseline_ihkosctl_objects": {
+      "ihkosctl-C-baseline": {
+        "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/intr-cli-cases-1/correction-1/qualification-1/candidate-C.o",
+        "sha256": "143caddc73920debce0a2deeffb15407faad7ee3717420a212a19feaa7065654",
+        "scope": "Read-onlyactualpassedINTRcandidateobject now usedforNEWunknown-actionbaseline; exacthookedgeneratedunitbyteidentityproven, samequalifiedconfig/ABIs, freshnmactualgatebeforelink/runtime"
+      },
+      "ihkosctl-Rust-baseline": {
+        "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/intr-cli-cases-1/qualification-1/candidate-Rust.o",
+        "sha256": "a4d3555d5bc8bcacd3d2be16b184629e40ffc0182479d1067baa0b31844a3828",
+        "scope": "Read-onlyactualpassedINTRcandidateobject now usedforNEWunknown-actionbaseline; exacthookedgeneratedunitbyteidentityproven, samequalifiedconfig/ABIs, freshnmactualgatebeforelink/runtime"
+      }
+    },
+    "all_direct_waits_joined": true,
+    "claim": "ActualwholemainFUNCTION/newqureycases only; no CRTprocessstatus/installedCLI/device/backend/native ornewproviderqualification"
+  },
+  "actual_scenario": {
+    "argv": [
+      "tool",
+      "0",
+      "qurey"
+    ],
+    "tools": [
+      "ihkconfig",
+      "ihkosctl"
+    ],
+    "languages": [
+      "C",
+      "Rust"
+    ],
+    "baseline_main_function_return": 0,
+    "candidate_main_function_return": 1,
+    "exact_stderr_bytes": {
+      "ihkconfig": 292,
+      "ihkosctl": 499
+    },
+    "stdout_bytes": 0,
+    "ioctl_calls": 0,
+    "genuine_eventfd_owners_once_closed_EBADF": 8,
+    "input_argv_and_open_FD_set_restored": true
+  },
+  "actual_bound_hook_gates": {
+    "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/unknown-action-cases-1/qualification-1/OBJECT-GATES.json",
+    "sha256": "d675ee494b2a247d98a7d2bcfe4c5edce76741a5e1f944480f6833caa263fd51"
+  },
+  "all24_command_births_and_direct_joins": true,
+  "changed_tool_artifacts": {
+    "ihkconfig.o": {
+      "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/unknown-action-producer-1/ihkconfig.o",
+      "sha256": "55824e7a27068e94a300404303e2627bb8bd78a148573e372386e5df09e719af",
+      "size_bytes": 54600
+    },
+    "ihkconfig": {
+      "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/unknown-action-producer-1/ihkconfig",
+      "sha256": "26be591441eb0c986919a983af31e51a8a9ca6f5fff3e73cb8d3e32e71674129",
+      "size_bytes": 40840
+    },
+    "ihkosctl.o": {
+      "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/unknown-action-producer-1/ihkosctl.o",
+      "sha256": "69eb9fba29d5e94c93b76bb19c7d39ffdacf3dffb16ebb486976687c84639d7a",
+      "size_bytes": 46888
+    },
+    "ihkosctl": {
+      "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/unknown-action-producer-1/ihkosctl",
+      "sha256": "57f3f051f5e083f928af02eda6b6314e5a2a408d7530871f5fddfaaf2338f241",
+      "size_bytes": 37664
+    }
+  },
+  "changed_tools_current_provider_config": {
+    "libihk_sha256": "53079f6306cb54c7d8f420f7db8bbe79e03fcd82ac9ae6cc744aeb2d49f8da0f",
+    "config_sha256": "19b2023f83028fc91b78d58f49a08e4176f99ebcd40e2d3bfffddaca630c6953",
+    "BUILDID": "c032c975",
+    "ENABLE_MEMDUMP": 1,
+    "KRM": 0
+  },
+  "reuse": [
+    "All4 genuine changedCLI codegen/linkcommands passedNov7 beforepause; no rebuild/relink.",
+    "Two already-passed ihkosctl baseline objects reused read-only with fresh actual called binding predicates.",
+    "Existing source/ABI/config/library/producer proofs and closed dump/intr suites retained."
+  ],
+  "scope_limit": "Actual whole-main FUNCTION with explicit typed synchronous local open/ioctl/close seams; genuine anonymousFD/pipe/libc and uncalled genuine project-library imports. No actual /dev/IRQ/ioctl/backend/native/CRT/installed-exit or full matched cohort qualification.",
+  "preserved_failed_scope": "Prior intrfortifiedheaderescape attemptedread-only/dev/mcos0,0credit andfailedrawcapturepreserved; no equivalentreplay.",
+  "acceptance_delta": {
+    "M14_files": 0,
+    "M14_integration": 0,
+    "M15_files": 0,
+    "M15_integration": 0
+  },
+  "retained_holds": "Generic/exec held/replay=false/equivalent=false, all SDK/source/current-free/native and UNKNOWN owners/18GiB/scratch21/mutex27:4 unchanged.",
+  "durable_regression": {
+    "files": [
+      "scripts/tests/test_m15_unknown_action_main.py",
+      "scripts/tests/fixtures/m15-unknown-action/observer.c"
+    ],
+    "generation_proof": {
+      "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/unknown-action-cases-1/default-retention-1/SOURCE-GENERATION-PROOF.json",
+      "sha256": "8465ca2edb2e36f0ab1905af0e6e510fd845fa141d82cc5ced3d00e58d036361"
+    },
+    "verification": "Candidateonly4caseunits match actualpassedsource by generation/AST; no compile/runtimegreenreplay."
+  },
+  "outer_join_receipt": {
+    "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/unknown-action-cases-1/OUTER-RECEIPT-20261109.json",
+    "sha256": "7fde29de46703efdfcd91ddc6dbf0347f177002c6a1a84a43ef93d5a65dddc56"
+  },
+  "resource_metrics": {
+    "behavior_wall_seconds": 1.1251,
+    "sum_command_CPU_seconds": 0.83,
+    "peak_RSS_KiB": 101532
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "commands": [
+    [
+      "/usr/bin/timeout",
+      "-k",
+      "2",
+      "35",
+      "/usr/bin/taskset",
+      "-c",
+      "6",
+      "/usr/bin/prlimit",
+      "--as=1073741824",
+      "--cpu=30",
+      "--fsize=33554432",
+      "--core=0",
+      "--nofile=256",
+      "--",
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/run_dependency_fixture_once.py"
+    ],
+    [
+      "/usr/bin/timeout",
+      "-k",
+      "2",
+      "35",
+      "/usr/bin/taskset",
+      "-c",
+      "6",
+      "/usr/bin/prlimit",
+      "--as=1073741824",
+      "--cpu=30",
+      "--fsize=33554432",
+      "--core=0",
+      "--nofile=256",
+      "--",
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/run_materialization_once.py"
+    ]
+  ],
+  "fixture": {
+    "bytes": 2476,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/check_actual_dependency_and_capacity.py",
+    "sha256": "62e58100387e250586461fd102053747e6725ba3412b6e6fc762d893fee80a08"
+  },
+  "fixture_runner": {
+    "bytes": 1759,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/run_dependency_fixture_once.py",
+    "sha256": "13b6562b9ba93f9c1dd853e3a771a53ff2ad7447204b79c5b6d797a4ae41edb7"
+  },
+  "materializer": {
+    "bytes": 2363,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/materialize_sources.py",
+    "sha256": "29f26418aa11a89a4247fa69b84fdd4c8d0ed5d649c8ae8f3300f5703d21fc25"
+  },
+  "materializer_runner": {
+    "bytes": 1737,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/run_materialization_once.py",
+    "sha256": "f807db8491d03a8b41ff44a421b0e6e32df4f590f0ec21ebed3a05f1fc94fc11"
+  },
+  "no_Docker_compiler_ownership": true,
+  "profile": "existingCPU6/1job/1GiBAS/30CPU/35+2wall/32MiB/core0/nofile256 each command; sequential stopfirstfailure",
+  "schema": "mckernel.real-mcexec-two-ordinary-source-command-proposal.v1",
+  "source": {
+    "bytes": 6849,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/source-manifest.json",
+    "sha256": "ce2e8049f27bb7839a88d927cf5446119bdf60914df14ce4b465f1870b1481c2"
+  },
+  "source_outputs": [
+    "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/dependency-and-capacity-helper-result.json",
+    "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/dependency-fixture-capture-1",
+    "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/materialized-source",
+    "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/materialization-result.json",
+    "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/source-materialization-capture-1"
+  ],
+  "status": "FROZEN_UNEXECUTED_PENDING_ROOT_CPU6_GRANT"
+}

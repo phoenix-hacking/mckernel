@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "case_id": "vector.ssse3-byte-shuffle",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["bytes=16 reversed=1 repeated=1 highbit_zero=1 valid=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Each PSHUFB output byte equals independently indexed source or zero for selector bit7", "Reversed, repeated, and high-bit-zeroing selectors cross the full 128-bit lane"],
+  "unresolved_expectations": ["SSSE3 target disassembly, exact selector/source arrays, and feature evidence require Max review."],
+  "max_question_for_reviewer": "Confirm PSHUFB lane boundaries and high-bit zero semantics with the pinned SSSE3 feature gate."
+}

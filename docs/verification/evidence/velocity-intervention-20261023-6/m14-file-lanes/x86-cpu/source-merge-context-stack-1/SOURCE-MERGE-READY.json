@@ -1,0 +1,307 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "COHERENT_PRIVATE_SOURCE_MERGE_ONLY_NOT_COMPILED_OR_EXECUTED",
+  "current_canonical_expected_base": {
+    "C": "2d29bca555936a213f0a7296a302ec57b55c575536c33a58285b07b203390eca",
+    "Rust": "26180e00c1d6673aa600f0ec9afed5d100ca6e0c39af803c3328e58f8cc88fb9"
+  },
+  "reports": {
+    "arch/x86_64/kernel/cpu.c": {
+      "canonical": {
+        "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+        "sha256": "2d29bca555936a213f0a7296a302ec57b55c575536c33a58285b07b203390eca",
+        "bytes": 95484
+      },
+      "context_candidate": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/candidate/arch/x86_64/kernel/cpu.c",
+        "sha256": "c779079fb6de66991c861c823dca06b2a9ceec16ac4c984995200b668d7e78ce",
+        "bytes": 95605
+      },
+      "stack_candidate": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-stack-formatter-source-only-1/candidate/arch/x86_64/kernel/cpu.c",
+        "sha256": "cbb8f143b51fdb17adc78fc280c1d2f95593b3a3745e9f280549ee76140757a3",
+        "bytes": 95595
+      },
+      "context_edits": [
+        {
+          "tag": "insert",
+          "start": 2809,
+          "end": 2809,
+          "replacement": [
+            "\t\tunsigned long b, unsigned long c, unsigned long d);\n",
+            "#else\n",
+            "void x86_context_line_log_bridge(int event, unsigned long a,\n"
+          ]
+        }
+      ],
+      "stack_edits": [
+        {
+          "tag": "insert",
+          "start": 2912,
+          "end": 2912,
+          "replacement": [
+            "#ifdef MCKERNEL_RUST_X86_CPU_HELPERS\n",
+            "void __print_stack(struct stack *rbp, unsigned long first);\n",
+            "#else\n"
+          ]
+        },
+        {
+          "tag": "insert",
+          "start": 2932,
+          "end": 2932,
+          "replacement": [
+            "\n",
+            "#endif\n"
+          ]
+        }
+      ],
+      "mechanical_overlap_resolutions": [],
+      "merged": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/source-merge-context-stack-1/candidate/arch/x86_64/kernel/cpu.c",
+        "sha256": "f3c7380f1ecd22e8c75386366be5d1a0cb413079e6ec0beb73e4a676622cc540",
+        "bytes": 95716
+      }
+    },
+    "kernel/rust/x86_cpu_helpers.rs": {
+      "canonical": {
+        "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+        "sha256": "26180e00c1d6673aa600f0ec9afed5d100ca6e0c39af803c3328e58f8cc88fb9",
+        "bytes": 91270
+      },
+      "context_candidate": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/candidate/kernel/rust/x86_cpu_helpers.rs",
+        "sha256": "98914e1ff4d50c2f42ccbdeb1f4f338024b7a9a2143fbad2f59ebd6f6b50dd0b",
+        "bytes": 93305
+      },
+      "stack_candidate": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-stack-formatter-source-only-1/candidate/kernel/rust/x86_cpu_helpers.rs",
+        "sha256": "76309e7d1de19e4bf8f9928974db733c76905288b5b5c556f736944bf6fd727b",
+        "bytes": 92954
+      },
+      "context_edits": [
+        {
+          "tag": "insert",
+          "start": 105,
+          "end": 105,
+          "replacement": [
+            "    fn __kprintf(format: *const i8, ...) -> CInt;\n"
+          ]
+        },
+        {
+          "tag": "delete",
+          "start": 137,
+          "end": 138,
+          "replacement": []
+        },
+        {
+          "tag": "insert",
+          "start": 3101,
+          "end": 3101,
+          "replacement": [
+            "\n",
+            "/// Preserve complete context diagnostics using the existing Rust print providers.\n",
+            "/// The caller owns any outer print lock. Events 1..6 use __kprintf without\n",
+            "/// acquiring that lock again; 20..22 retain the original kprintf calls. All\n",
+            "/// arguments are integer values, no context pointer or callback is retained.\n",
+            "#[no_mangle]\n",
+            "pub unsafe extern \"C\" fn x86_context_line_log_bridge(\n",
+            "    event: CInt, a: CULong, b: CULong, c: CULong, d: CULong,\n",
+            ") {\n",
+            "    match event {\n",
+            "        1 => unsafe {\n",
+            "            __kprintf(b\"CS:RIP = %4lx:%16lx\\n\\0\".as_ptr().cast(), a, b);\n",
+            "        },\n",
+            "        2 => unsafe {\n",
+            "            __kprintf(b\"             RAX              RBX              RCX              RDX\\n\\0\".as_ptr().cast());\n",
+            "            __kprintf(b\"%16lx %16lx %16lx %16lx\\n\\0\".as_ptr().cast(), a, b, c, d);\n",
+            "        },\n",
+            "        3 => unsafe {\n",
+            "            __kprintf(b\"             RSI              RDI              RSP              RBP\\n\\0\".as_ptr().cast());\n",
+            "            __kprintf(b\"%16lx %16lx %16lx %16lx\\n\\0\".as_ptr().cast(), a, b, c, d);\n",
+            "        },\n",
+            "        4 => unsafe {\n",
+            "            __kprintf(b\"              R8               R9              R10              R11\\n\\0\".as_ptr().cast());\n",
+            "            __kprintf(b\"%16lx %16lx %16lx %16lx\\n\\0\".as_ptr().cast(), a, b, c, d);\n",
+            "        },\n",
+            "        5 => unsafe {\n",
+            "            __kprintf(b\"             R12              R13              R14              R15\\n\\0\".as_ptr().cast());\n",
+            "            __kprintf(b\"%16lx %16lx %16lx %16lx\\n\\0\".as_ptr().cast(), a, b, c, d);\n",
+            "        },\n",
+            "        6 => unsafe {\n",
+            "            __kprintf(b\"              CS               SS           RFLAGS            ERROR\\n\\0\".as_ptr().cast());\n",
+            "            __kprintf(b\"%16lx %16lx %16lx %16lx\\n\\0\".as_ptr().cast(), a, b, c, d);\n",
+            "        },\n",
+            "        20 => unsafe {\n",
+            "            kprintf(b\"CS:RIP = %04lx:%16lx\\n\\0\".as_ptr().cast(), a, b);\n",
+            "        },\n",
+            "        21 => unsafe {\n",
+            "            kprintf(b\"%16lx %16lx %16lx %16lx\\n\\0\".as_ptr().cast(), a, b, c, d);\n",
+            "        },\n",
+            "        22 => unsafe {\n",
+            "            kprintf(b\"%16lx %16lx %16lx\\n\\0\".as_ptr().cast(), a, b, c);\n",
+            "        },\n",
+            "        _ => {},\n",
+            "    }\n",
+            "}\n"
+          ]
+        }
+      ],
+      "stack_edits": [
+        {
+          "tag": "insert",
+          "start": 105,
+          "end": 105,
+          "replacement": [
+            "    fn __kprintf(format: *const i8, ...) -> CInt;\n",
+            "    fn snprintf(buf: *mut i8, size: usize, format: *const i8, ...) -> CInt;\n"
+          ]
+        },
+        {
+          "tag": "insert",
+          "start": 3101,
+          "end": 3101,
+          "replacement": [
+            "\n",
+            "\n",
+            "/// Build the existing single addr2line stack diagnostic with existing Rust\n",
+            "/// snprintf and unlocked-print providers. The caller supplies the same live\n",
+            "/// two-word C stack frames; no frame/context or local-buffer pointer is retained.\n",
+            "/// Frame reads stay separated by snprintf as in C so a provider may affect the\n",
+            "/// next-link word before that word is read.\n",
+            "#[no_mangle]\n",
+            "pub unsafe extern \"C\" fn __print_stack(mut rbp: *mut CULong, first: CULong) {\n",
+            "    // Exact existing C STACK_BUF_LEN: 1024-sizeof(\"[  0]: \").\n",
+            "    const BUF_LEN: usize = 1024 - b\"[  0]: \\0\".len();\n",
+            "    let mut buf = [0i8; BUF_LEN];\n",
+            "    let out = buf.as_mut_ptr();\n",
+            "    let mut len = unsafe {\n",
+            "        snprintf(\n",
+            "            out, BUF_LEN,\n",
+            "            b\"addr2line -e smp-x86/kernel/mckernel.img -fpia\\0\".as_ptr().cast(),\n",
+            "        )\n",
+            "    } as usize;\n",
+            "    if first != 0 {\n",
+            "        len = len.wrapping_add(unsafe {\n",
+            "            snprintf(\n",
+            "                out.wrapping_add(len), BUF_LEN.wrapping_sub(len),\n",
+            "                b\" %#16lx\\0\".as_ptr().cast(), first,\n",
+            "            )\n",
+            "        } as usize);\n",
+            "    }\n",
+            "    while (rbp as CULong) > 0xffff880000000000\n",
+            "        && BUF_LEN.wrapping_sub(len) > b\" 0x0123456789abcdef\\0\".len()\n",
+            "    {\n",
+            "        let ip = unsafe { rbp.add(1).read() };\n",
+            "        len = len.wrapping_add(unsafe {\n",
+            "            snprintf(\n",
+            "                out.wrapping_add(len), BUF_LEN.wrapping_sub(len),\n",
+            "                b\" %#16lx\\0\".as_ptr().cast(), ip,\n",
+            "            )\n",
+            "        } as usize);\n",
+            "        rbp = unsafe { rbp.read() } as *mut CULong;\n",
+            "    }\n",
+            "    unsafe { __kprintf(b\"%s\\n\\0\".as_ptr().cast(), out); }\n",
+            "}\n"
+          ]
+        }
+      ],
+      "mechanical_overlap_resolutions": [
+        {
+          "base_line_interval_zero_based": [
+            105,
+            105
+          ],
+          "resolution": "shared __kprintf extern declaration deduplicated; snprintf retained"
+        },
+        {
+          "base_line_interval_zero_based": [
+            3101,
+            3101
+          ],
+          "resolution": "distinct complete Rust exports appended in context then stack order"
+        }
+      ],
+      "merged": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/source-merge-context-stack-1/candidate/kernel/rust/x86_cpu_helpers.rs",
+        "sha256": "f794162ea98b138641b7d08333596fc6c53f1f339fba289dcc6739e6c990bba9",
+        "bytes": 94939
+      }
+    }
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/source-merge-context-stack-1/COHERENT-CONTEXT-STACK-SOURCE-MERGE.patch",
+    "sha256": "d2bfd3f97a4c58a6a11af0ff3617b79f21b981300d035179f257b2e3ffdeb96a",
+    "bytes": 5621
+  },
+  "providers": {
+    "debug": {
+      "path": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "sha256": "fed7537d21f5d5fe0fc3ffdb1fe44783f5f9ac13937b3bdbbcc452cc2fa5eb16",
+      "bytes": 13020
+    },
+    "snprintf": {
+      "path": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "sha256": "2d0aa19a78c86a6ea9a7a25d95aea484f981f6219a215314ddbeaee6d89a46ab",
+      "bytes": 46665
+    },
+    "ABI": {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "bytes": 76151
+    }
+  },
+  "headers": {
+    "/home/holden/mckernel/lib/include/types.h": {
+      "path": "/home/holden/mckernel/lib/include/types.h",
+      "sha256": "72179c1e931fdfdfa700d2ecfe745e344027ac0b4af299e8a9ec17957fc9a399",
+      "bytes": 515
+    },
+    "/home/holden/mckernel/arch/x86_64/kernel/include/ihk/types.h": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/ihk/types.h",
+      "sha256": "c37a7c748f2439ddfd847725a4d559c008f2aca09c45114fb07e73337013f449",
+      "bytes": 1074
+    },
+    "/home/holden/mckernel/lib/include/ihk/debug.h": {
+      "path": "/home/holden/mckernel/lib/include/ihk/debug.h",
+      "sha256": "7315ef758c56c4888242295ed9340b44f649d772b1315502acc49eb6105048dc",
+      "bytes": 1294
+    },
+    "/home/holden/mckernel/kernel/include/lwk/compiler.h": {
+      "path": "/home/holden/mckernel/kernel/include/lwk/compiler.h",
+      "sha256": "eeb3c5b9d47dc32d73908c9048002a34ef77e5d6bdc03346b27b494ded5b49dd",
+      "bytes": 17894
+    },
+    "/home/holden/mckernel/kernel/include/lwk/compiler-gcc.h": {
+      "path": "/home/holden/mckernel/kernel/include/lwk/compiler-gcc.h",
+      "sha256": "1a2693ab50b3768ca2ca362bb0e6773bdabc12425ad4061802b3aca20dbe47a2",
+      "bytes": 11651
+    }
+  },
+  "standalone_candidates_and_patches_preserved": true,
+  "context_source_ready": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/SOURCE-READY-HANDOFF.json",
+    "sha256": "63c4f173481454290635ed92df6be19f41eef6e8a596ef0298404e571bd29dfb",
+    "bytes": 6775
+  },
+  "stack_source_ready": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-stack-formatter-source-only-1/SOURCE-IMPLEMENTATION-HANDOFF.json",
+    "sha256": "89de5703be16ede2169a469f33496a3cadabb9edddaf10b5cfe4c2e779229306",
+    "bytes": 5112
+  },
+  "context_actual_leaf_proof": null,
+  "stack_actual_leaf_proof": null,
+  "merged_actual_fullcrate_C_TU_link_proof": null,
+  "actual_native_proof": null,
+  "single_queued_executable_fixture": "Unchanged context31dc/63c4 only; merged source and stack have no second executable recipe.",
+  "source_integration_recipe": [
+    "Require currentcanonical2d29/26180 before root source integration.",
+    "Use staged candidate twofile hashes in reports; comparebothpreimages beforeatomicreplace; rootalone integrates afteractual requiredsource/ABI/consumer acceptance.",
+    "Shared Rust __kprintf declaration appears exactly once; snprintf declaration retained; old externcontext removed; each distinct exported function appears once.",
+    "This is an exact mechanical source union, never acceptance of unexecuted context/stack or a finalcombinedkernel."
+  ],
+  "compiler_jobs": 0,
+  "test_jobs": 0,
+  "CPU_slots_held": 0,
+  "canonical_sharedABI_P12_frozen15_mutations": 0,
+  "failure_history": "AllpriorCPUlogger55\u219256closurefailure/solecorrection and sourceprefix histories preserved; context andstack actualproof remainNULL."
+}

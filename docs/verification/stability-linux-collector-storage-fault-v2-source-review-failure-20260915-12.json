@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_review",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "review_attempt": 16,
+  "status": "FAIL_SOURCE",
+  "recorded_utc": "2026-09-16T01:46:03Z",
+  "review_input": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260915-18.tar.gz",
+    "sha256": "e52f1095d47d85b8a6640c57c9abd527d21680be37af8a2601c60f6997930343",
+    "size": 425062,
+    "members": 38
+  },
+  "source_sha256": {
+    "prepare.py": "1d09a2f4f143af79de7eb98e7cc6d5c6a01efa89e15fa925d2c7869c78ab2df4",
+    "witness_owner.py": "4554efcda371a395681ff7f7353e05d98adf6ab4aae656b40d524f128fdf4670",
+    "supervise.py": "8f7789b100067b41d0aff710feaaf2bcbea10bf83a869faa9bfd300593cedf5c",
+    "oracle.py": "b6725f1b10ea19b6ec98621b6c106936e34b3d7bff8a642ab3dd0e55f41bc967",
+    "test_collector_storage_fault_packet.py": "f7be74233ee1e4375ab29bf5f64cc1aa6d03fb0058e3fb6dce911a2ee0c28fa1"
+  },
+  "checks_before_review": {
+    "python3.9.12": "88/88 PASS",
+    "python3.8.10": "88/88 PASS",
+    "pycompile": "PASS on both interpreters",
+    "review_envelope": "PASS_REVIEW_ENVELOPE_ONLY"
+  },
+  "corrected_prior_findings": [
+    "First and second post-fork identity observation exceptions retain zero or one observations and continue through bounded cleanup, pipe retirement and OWNER_ERROR publication.",
+    "Duplicate direct wait-timeout records are rejected without conflating TERM or KILL stage timeouts."
+  ],
+  "findings": [
+    "A failed-preflight sentinel-wait record with no direct reap can omit its required direct timeout, while sentinel-fork and sigchld-default records can carry a fabricated direct timeout even though no sentinel was created."
+  ],
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

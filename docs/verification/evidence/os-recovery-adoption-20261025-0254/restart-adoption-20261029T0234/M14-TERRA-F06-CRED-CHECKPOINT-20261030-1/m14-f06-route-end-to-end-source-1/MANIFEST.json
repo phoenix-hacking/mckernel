@@ -1,0 +1,132 @@
+{
+  "scope": "source-only extracted actual route+producer, no full configure",
+  "route_sha256": "f34958844cf2a16d25244a3acc7c9610f262bc9cc64aba2db9706cc64a2a2655",
+  "cases": [
+    {
+      "case": "off_predecessor",
+      "argv": [
+        "/usr/bin/cmake",
+        "-DMCKERNEL_M14_NONHELD13_DATA32_EXPERIMENTAL=OFF",
+        "-P",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-f06-route-end-to-end-source-1/off_predecessor/run.cmake"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-f06-route-end-to-end-source-1/off_predecessor",
+      "exit": 0,
+      "expected_match": true,
+      "inputs": {
+        "source": {
+          "original": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/default-origin-selection-source-1/candidate/arch/x86_64/kernel/syscall.c",
+          "copy": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-f06-route-end-to-end-source-1/off_predecessor/src/arch/x86_64/kernel/syscall.c",
+          "sha256": "d060dbf5b83e29b1d5f16e7504972f05cb53d553fb754de1a67566d2c0f06b37"
+        },
+        "header": {
+          "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-f06-origin-guard-successor-1/postimage/lib/include/ihk/debug.h",
+          "copy": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-f06-route-end-to-end-source-1/off_predecessor/src/lib/include/ihk/debug.h",
+          "sha256": "7315ef758c56c4888242295ed9340b44f649d772b1315502acc49eb6105048dc"
+        },
+        "producer": {
+          "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-f06-origin-e6a-successor-1/predecessor/derive_f06_origin.py",
+          "copy": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-f06-route-end-to-end-source-1/off_predecessor/src/scripts/derive_f06_origin.py",
+          "sha256": "c5e34ad75d4685d1532f8a36d6fdd33b5b82faea5b5368830c3b5e84abed38d0"
+        },
+        "profile": {
+          "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-f06-origin-e6a-successor-1/predecessor/f06_origin_command_profile.json",
+          "copy": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-f06-route-end-to-end-source-1/off_predecessor/src/scripts/f06_origin_command_profile.json",
+          "sha256": "4306a26c60fd6904c0644087d7dcfb7481b985045e216b8bec5575aafab5d418"
+        }
+      },
+      "wrapper_sha256": "5ae77360b8dcbff9754aab4b72674f7d94064bd3e084e84cf1b2962ba709dee1",
+      "stdout_sha256": "c4d9fb914f28bc0f9fc2e7c458ec5ff8232908d5cf760d5f4209d00691833aba",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "outputs": {
+        "rust/f06-origin/ORIGIN-BINDING.json": "391888c21667535a18a6d0ff43d2463b7e94cf7b6466e08eb58dbd7062c9ad9a",
+        "rust/f06-origin/f06_clone_cpuid_metadata.rs": "71e4b0ab7f5ca612e4cd06bf2150e2e6b7b5e3e39717e466cfb626b1ce249a48",
+        "rust/f06-origin/f06_rt_sigreturn_origin.cmake": "bea7b6055c19b6d568252004f92d0e407237343d033b605e73a309359f6b1a7a",
+        "rust/f06-origin/f06_rt_sigreturn_origin.h": "aeece54c3b6f01c326fff3eb925b89b88acd3b198b0047393c8c9c0d78f74ded",
+        "rust/f06-origin/rust-environment.json": "97b0b5fe7f4794b2c60fe222f640f9601246568ed1262b942d23ea3f8a1fc9d5"
+      }
+    },
+    {
+      "case": "on_guarded",
+      "argv": [
+        "/usr/bin/cmake",
+        "-DMCKERNEL_M14_NONHELD13_DATA32_EXPERIMENTAL=ON",
+        "-P",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-f06-route-end-to-end-source-1/on_guarded/run.cmake"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-f06-route-end-to-end-source-1/on_guarded",
+      "exit": 0,
+      "expected_match": true,
+      "inputs": {
+        "source": {
+          "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-f06-origin-guard-successor-1/postimage/arch/x86_64/kernel/syscall.c",
+          "copy": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-f06-route-end-to-end-source-1/on_guarded/src/arch/x86_64/kernel/syscall.c",
+          "sha256": "9a356317ff621decba53a11fe0967ae9eee1bb5059d262e6b2402f90042a4a25"
+        },
+        "header": {
+          "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-f06-origin-guard-successor-1/postimage/lib/include/ihk/debug.h",
+          "copy": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-f06-route-end-to-end-source-1/on_guarded/src/lib/include/ihk/debug.h",
+          "sha256": "7315ef758c56c4888242295ed9340b44f649d772b1315502acc49eb6105048dc"
+        },
+        "producer": {
+          "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-f06-origin-route-successor-1/postimage/scripts/derive_f06_origin_e6a_guarded.py",
+          "copy": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-f06-route-end-to-end-source-1/on_guarded/src/scripts/derive_f06_origin_e6a_guarded.py",
+          "sha256": "0eecb12a434415523b744b73f1704f7cc68693ab3a28a328a3e354bf43c83f3c"
+        },
+        "profile": {
+          "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-f06-origin-route-successor-1/postimage/scripts/f06_origin_command_profile_e6a_guarded.json",
+          "copy": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-f06-route-end-to-end-source-1/on_guarded/src/scripts/f06_origin_command_profile_e6a_guarded.json",
+          "sha256": "7b60afe60f069bb863e7c38ca8c28abe8ea682814d0207e54663572adfde7dca"
+        }
+      },
+      "wrapper_sha256": "5d8902d6641c804ed04f4b7fc489c6c8d3c91a9f77ccb468d9b11c9cd11c438d",
+      "stdout_sha256": "c4d9fb914f28bc0f9fc2e7c458ec5ff8232908d5cf760d5f4209d00691833aba",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "outputs": {
+        "rust/f06-origin/ORIGIN-BINDING.json": "4e22b6f7c6370a6a9aace21555e3dfc8986085df50cb2f326eb9bf8c3e6b8ff0",
+        "rust/f06-origin/f06_clone_cpuid_metadata.rs": "71e4b0ab7f5ca612e4cd06bf2150e2e6b7b5e3e39717e466cfb626b1ce249a48",
+        "rust/f06-origin/f06_rt_sigreturn_origin.cmake": "241770bd6dda1d689686c302753f216cb0bcdff924eda7359d7e283d9b64be72",
+        "rust/f06-origin/f06_rt_sigreturn_origin.h": "aeece54c3b6f01c326fff3eb925b89b88acd3b198b0047393c8c9c0d78f74ded",
+        "rust/f06-origin/rust-environment.json": "1e3dfc8bcc2571b23a108fa769f9bb0b8bd8c165349c1045313c83268d3c7380"
+      }
+    },
+    {
+      "case": "on_predecessor_mismatch",
+      "argv": [
+        "/usr/bin/cmake",
+        "-DMCKERNEL_M14_NONHELD13_DATA32_EXPERIMENTAL=ON",
+        "-P",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-f06-route-end-to-end-source-1/on_predecessor_mismatch/run.cmake"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-f06-route-end-to-end-source-1/on_predecessor_mismatch",
+      "exit": 1,
+      "expected_match": true,
+      "inputs": {
+        "source": {
+          "original": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/default-origin-selection-source-1/candidate/arch/x86_64/kernel/syscall.c",
+          "copy": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-f06-route-end-to-end-source-1/on_predecessor_mismatch/src/arch/x86_64/kernel/syscall.c",
+          "sha256": "d060dbf5b83e29b1d5f16e7504972f05cb53d553fb754de1a67566d2c0f06b37"
+        },
+        "header": {
+          "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-f06-origin-guard-successor-1/postimage/lib/include/ihk/debug.h",
+          "copy": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-f06-route-end-to-end-source-1/on_predecessor_mismatch/src/lib/include/ihk/debug.h",
+          "sha256": "7315ef758c56c4888242295ed9340b44f649d772b1315502acc49eb6105048dc"
+        },
+        "producer": {
+          "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-f06-origin-route-successor-1/postimage/scripts/derive_f06_origin_e6a_guarded.py",
+          "copy": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-f06-route-end-to-end-source-1/on_predecessor_mismatch/src/scripts/derive_f06_origin_e6a_guarded.py",
+          "sha256": "0eecb12a434415523b744b73f1704f7cc68693ab3a28a328a3e354bf43c83f3c"
+        },
+        "profile": {
+          "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-f06-origin-route-successor-1/postimage/scripts/f06_origin_command_profile_e6a_guarded.json",
+          "copy": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-f06-route-end-to-end-source-1/on_predecessor_mismatch/src/scripts/f06_origin_command_profile_e6a_guarded.json",
+          "sha256": "7b60afe60f069bb863e7c38ca8c28abe8ea682814d0207e54663572adfde7dca"
+        }
+      },
+      "wrapper_sha256": "429679ad20afb58a02c0d268763a338166d522fdf49c027bf6d55f2be3560af3",
+      "stdout_sha256": "c4d9fb914f28bc0f9fc2e7c458ec5ff8232908d5cf760d5f4209d00691833aba",
+      "stderr_sha256": "b3eae4c60c0b55b87b5b5d111a5450599323d3529f8749899c6e8a4e27a4afee",
+      "outputs": {}
+    }
+  ]
+}

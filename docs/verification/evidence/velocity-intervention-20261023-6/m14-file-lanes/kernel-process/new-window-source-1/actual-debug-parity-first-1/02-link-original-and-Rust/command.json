@@ -1,0 +1,15 @@
+{
+  "name": "02-link-original-and-Rust",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 02-link-original-and-Rust; original C/Rust diagnostic behavior parity with controlled mock layouts only.",
+  "argv": [
+    "/usr/bin/gcc-9",
+    "-no-pie",
+    "-Wl,--no-undefined",
+    "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/output-debug-parity-first-1/actual_c.o",
+    "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/output-debug-parity-first-1/actual_rust.o",
+    "-o",
+    "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/output-debug-parity-first-1/actual_parity"
+  ],
+  "cwd": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/output-debug-parity-first-1"
+}

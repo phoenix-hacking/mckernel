@@ -1,0 +1,54 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_existing_packet": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/release-assembly-1/final-build-facts-preparation-1/PREPARED-THREE-READONLY.json",
+    "sha256": "96a3005220536feb902db834fae361701e294a1421afe3fd0bf1bc9cbfd73fab"
+  },
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "-c",
+        "from pathlib import Path;import os,stat,json,shutil;paths=['/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/source-materialization-attempt-1/materialized-source', '/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-metadata-backup', '/home/holden', '/home/holden/mckernel-work/scratch'];out={};\nfor p in paths:\n s=os.lstat(p);out[p]={'path':str(Path(p).resolve(strict=True)),'dev':s.st_dev,'inode':s.st_ino,'uid':s.st_uid,'gid':s.st_gid,'mode':stat.S_IMODE(s.st_mode),'file_type':stat.S_IFMT(s.st_mode)}\nprint(json.dumps({'scope':'Functional McKernel OS/apps and Rust/assembly migration only; no security testing.','identities':out,'space':{p:shutil.disk_usage(p)._asdict() for p in paths[-2:]},'memory':[l.strip() for l in Path('/proc/meminfo').read_text().splitlines() if l.startswith(('MemTotal:','MemAvailable:'))]},sort_keys=True))"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Read-only finite current source/backup/device identities, space and memory; does not grant admission.",
+      "shell": false
+    },
+    {
+      "argv": [
+        "/usr/bin/findmnt",
+        "--json",
+        "--target",
+        "/home/holden/mckernel-work/scratch",
+        "--output",
+        "SOURCE,TARGET,UUID,MAJ:MIN,FSTYPE,OPTIONS"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Read-only scratch mount/UUID/current loop source identity; root captures fresh output.",
+      "shell": false
+    },
+    {
+      "argv": [
+        "/usr/bin/stat",
+        "--printf=%n size=%s blocks=%b block_unit=512 dev=%d inode=%i mode=%a uid=%u gid=%g\n",
+        "/home/holden/mckernel-work/scratch.ext4",
+        "/run/lock/mckernel-development.lock"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Read-only backing-file full size and allocated blocks; sparse gap=max(0,size-512*blocks).",
+      "shell": false
+    }
+  ],
+  "profile": {
+    "as_bytes": 2147483648,
+    "core": 0,
+    "cpu": 6,
+    "cpu_seconds": 30,
+    "fsize_bytes": 33554432,
+    "jobs": 1,
+    "nofile": 256,
+    "wall_seconds": 60
+  },
+  "history": "Same exact three unprivileged read-only argv as prior accepted profile; new capture roots will be exclusive fresh-post-M05-readonly-1. Fresh observation only after independently positive efb431 physical retirement. No root/namespace/build/probe mutation.",
+  "execution_authorized": false
+}

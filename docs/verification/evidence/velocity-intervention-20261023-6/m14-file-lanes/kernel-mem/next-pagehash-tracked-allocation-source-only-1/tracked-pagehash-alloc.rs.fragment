@@ -1,0 +1,24 @@
+// C data-only diagnostic origin at the former callback callsite. This does
+// not acquire, allocate, dereference a Page or create another C provider.
+unsafe extern "C" {
+    static page_hash_alloc_file: [i8; 1];
+    static page_hash_alloc_line: CInt;
+}
+
+/// Exact page-hash allocation adapter to the existing tracked allocator.
+/// The C callback's unsigned-long -> int size conversion and signed-int ->
+/// unsigned-long allocation-flag conversion are intentional and unchanged.
+#[no_mangle]
+pub unsafe extern "C" fn page_hash_alloc_bridge(
+    size: CULong,
+    flag: CInt,
+) -> *mut crate::page_helpers::Page {
+    unsafe {
+        kmalloc_tracked(
+            size as CInt,
+            flag as CULong,
+            core::ptr::addr_of!(page_hash_alloc_file).cast::<i8>() as *mut i8,
+            page_hash_alloc_line,
+        ).cast::<crate::page_helpers::Page>()
+    }
+}

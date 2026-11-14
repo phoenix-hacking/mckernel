@@ -1,0 +1,327 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_ACTUAL_DEFAULT_WHOLE_RUST_HANDLER_NO_PANIC_AND_FOUR_LOCAL_LOGGERS",
+  "new_Rust_object": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT290-BUILD-ONLY-ADMISSION-3/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o",
+    "size": 18059664,
+    "mode": 420,
+    "device": 66306,
+    "inode": 59658629,
+    "mtime_ns": 1793043040391616840,
+    "ctime_ns": 1793043040391616840,
+    "sha256": "6284ac14dc120989b7575ff6e86e16f48426fc49d5bad86eee93328b6af1db2f"
+  },
+  "old_handler": {
+    "index": 5763,
+    "name": "move_pages_smp_handler",
+    "bind": 1,
+    "type": 2,
+    "shndx": 2579,
+    "value": 0,
+    "size": 4978
+  },
+  "new_handler": {
+    "index": 5770,
+    "name": "move_pages_smp_handler",
+    "bind": 1,
+    "type": 2,
+    "shndx": 2581,
+    "value": 0,
+    "size": 4858
+  },
+  "removed_original_panic_imports": [
+    "_RNvNtNtCskWZGD7wR08e_4core9panicking11panic_const23panic_const_div_by_zero",
+    "_RNvNtNtCskWZGD7wR08e_4core9panicking11panic_const24panic_const_div_overflow"
+  ],
+  "whole_undefined_set_exact_except_removed_panics": true,
+  "logger_callback": {
+    "index": 4473,
+    "name": "arch_process_vm_rw_log_bridge",
+    "bind": 1,
+    "type": 2,
+    "shndx": 799,
+    "value": 0,
+    "size": 337
+  },
+  "logger_proof": {
+    "F06_PROCESS_VM_IOV_LOCAL_DEBUG": {
+      "record": {
+        "symbol": {
+          "index": 712,
+          "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy30F06_PROCESS_VM_IOV_LOCAL_DEBUG",
+          "bind": 0,
+          "type": 1,
+          "shndx": 5435,
+          "value": 0,
+          "size": 32
+        },
+        "initial_hex": "0000000000000000000000000000000000000000000000001089000000000000",
+        "relocations": [
+          {
+            "offset": 0,
+            "type": 1,
+            "target": {
+              "index": 3834,
+              "name": "",
+              "bind": 0,
+              "type": 3,
+              "shndx": 5362,
+              "value": 0,
+              "size": 0
+            },
+            "addend": 0,
+            "owning_section": 5435
+          },
+          {
+            "offset": 8,
+            "type": 1,
+            "target": {
+              "index": 3834,
+              "name": "",
+              "bind": 0,
+              "type": 3,
+              "shndx": 5362,
+              "value": 0,
+              "size": 0
+            },
+            "addend": 3751,
+            "owning_section": 5435
+          }
+        ],
+        "filename": "/src/kernel/rust/syscall_policy.rs",
+        "function": "arch_process_vm_rw_log_bridge",
+        "line": 35088
+      },
+      "callback_consumer_relocations": [
+        {
+          "offset": 28,
+          "type": 1,
+          "target": {
+            "index": 3880,
+            "name": "",
+            "bind": 0,
+            "type": 3,
+            "shndx": 5435,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 24,
+          "owning_section": 799
+        }
+      ]
+    },
+    "F06_PROCESS_VM_IOV_REMOTE_DEBUG": {
+      "record": {
+        "symbol": {
+          "index": 715,
+          "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy31F06_PROCESS_VM_IOV_REMOTE_DEBUG",
+          "bind": 0,
+          "type": 1,
+          "shndx": 5437,
+          "value": 0,
+          "size": 32
+        },
+        "initial_hex": "0000000000000000000000000000000000000000000000001789000000000000",
+        "relocations": [
+          {
+            "offset": 0,
+            "type": 1,
+            "target": {
+              "index": 3834,
+              "name": "",
+              "bind": 0,
+              "type": 3,
+              "shndx": 5362,
+              "value": 0,
+              "size": 0
+            },
+            "addend": 0,
+            "owning_section": 5437
+          },
+          {
+            "offset": 8,
+            "type": 1,
+            "target": {
+              "index": 3834,
+              "name": "",
+              "bind": 0,
+              "type": 3,
+              "shndx": 5362,
+              "value": 0,
+              "size": 0
+            },
+            "addend": 3751,
+            "owning_section": 5437
+          }
+        ],
+        "filename": "/src/kernel/rust/syscall_policy.rs",
+        "function": "arch_process_vm_rw_log_bridge",
+        "line": 35095
+      },
+      "callback_consumer_relocations": [
+        {
+          "offset": 283,
+          "type": 1,
+          "target": {
+            "index": 3881,
+            "name": "",
+            "bind": 0,
+            "type": 3,
+            "shndx": 5437,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 24,
+          "owning_section": 799
+        }
+      ]
+    },
+    "F06_PROCESS_VM_FOUND_DEBUG": {
+      "record": {
+        "symbol": {
+          "index": 713,
+          "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy26F06_PROCESS_VM_FOUND_DEBUG",
+          "bind": 0,
+          "type": 1,
+          "shndx": 5427,
+          "value": 0,
+          "size": 32
+        },
+        "initial_hex": "0000000000000000000000000000000000000000000000001e89000000000000",
+        "relocations": [
+          {
+            "offset": 0,
+            "type": 1,
+            "target": {
+              "index": 3834,
+              "name": "",
+              "bind": 0,
+              "type": 3,
+              "shndx": 5362,
+              "value": 0,
+              "size": 0
+            },
+            "addend": 0,
+            "owning_section": 5427
+          },
+          {
+            "offset": 8,
+            "type": 1,
+            "target": {
+              "index": 3834,
+              "name": "",
+              "bind": 0,
+              "type": 3,
+              "shndx": 5362,
+              "value": 0,
+              "size": 0
+            },
+            "addend": 3751,
+            "owning_section": 5427
+          }
+        ],
+        "filename": "/src/kernel/rust/syscall_policy.rs",
+        "function": "arch_process_vm_rw_log_bridge",
+        "line": 35102
+      },
+      "callback_consumer_relocations": [
+        {
+          "offset": 77,
+          "type": 1,
+          "target": {
+            "index": 3879,
+            "name": "",
+            "bind": 0,
+            "type": 3,
+            "shndx": 5427,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 24,
+          "owning_section": 799
+        }
+      ]
+    },
+    "F06_PROCESS_VM_COPY_DEBUG": {
+      "record": {
+        "symbol": {
+          "index": 714,
+          "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy25F06_PROCESS_VM_COPY_DEBUG",
+          "bind": 0,
+          "type": 1,
+          "shndx": 5424,
+          "value": 0,
+          "size": 32
+        },
+        "initial_hex": "0000000000000000000000000000000000000000000000002589000000000000",
+        "relocations": [
+          {
+            "offset": 0,
+            "type": 1,
+            "target": {
+              "index": 3834,
+              "name": "",
+              "bind": 0,
+              "type": 3,
+              "shndx": 5362,
+              "value": 0,
+              "size": 0
+            },
+            "addend": 0,
+            "owning_section": 5424
+          },
+          {
+            "offset": 8,
+            "type": 1,
+            "target": {
+              "index": 3834,
+              "name": "",
+              "bind": 0,
+              "type": 3,
+              "shndx": 5362,
+              "value": 0,
+              "size": 0
+            },
+            "addend": 3751,
+            "owning_section": 5424
+          }
+        ],
+        "filename": "/src/kernel/rust/syscall_policy.rs",
+        "function": "arch_process_vm_rw_log_bridge",
+        "line": 35109
+      },
+      "callback_consumer_relocations": [
+        {
+          "offset": 164,
+          "type": 1,
+          "target": {
+            "index": 3877,
+            "name": "",
+            "bind": 0,
+            "type": 3,
+            "shndx": 5424,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 24,
+          "owning_section": 799
+        }
+      ]
+    }
+  },
+  "actual_default_flags_without_explicit_codegen_units": true,
+  "canonical_edits": 0,
+  "partial_or_final_link_validated": false,
+  "native": false,
+  "old_Rust_object": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/rust/mckernel_rust.o",
+    "size": 18045008,
+    "mode": 420,
+    "device": 66306,
+    "inode": 59654478,
+    "mtime_ns": 1792982413208195923,
+    "ctime_ns": 1792982413208195923,
+    "sha256": "5b70e620fbdc5467757f430c8a45328364abfdcca7dfeb91ec9aa4693d7e6506"
+  },
+  "mandatory_fresh_compiled_object_gate": true
+}

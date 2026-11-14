@@ -1,0 +1,109 @@
+{
+  "actual_case_join": {
+    "bytes": 1138,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/workspace/native-running-modules-candidate-1fff493f114662040e1147fdcbf5fa32/fixture-output/08-Rust/whole-join.json",
+    "sha256": "2c0f546f0d769ef1407926aeaacd38504200d8416cf15b702c13f143f54b9fae"
+  },
+  "actual_first_failure": {
+    "bytes": 481,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/workspace/native-running-modules-candidate-1fff493f114662040e1147fdcbf5fa32/fixture-output/first-failure.json",
+    "sha256": "040619075f2f0d3ce74c87435b3583b9668877c4c733e5874a5fa9140d949b0b"
+  },
+  "actual_kernel_pids64_before": {
+    "bytes": 10111,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/workspace/native-running-modules-candidate-1fff493f114662040e1147fdcbf5fa32/evidence/kernel-pids64-before.json",
+    "sha256": "0ac610d761bd4e749a5cc062a04d239a4b139ad2762fdba41e92ba5203d0dd40"
+  },
+  "actual_owner_join": {
+    "bytes": 1305,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/OWNER-WHOLE-JOIN.json",
+    "sha256": "3de2baada9c63eada2f50359a7655ab87e1389436900ca89815389268d2b6184"
+  },
+  "actual_rust_executable": {
+    "bytes": 4427552,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/workspace/native-running-modules-candidate-1fff493f114662040e1147fdcbf5fa32/fixture-output/ihkmond-Rust",
+    "sha256": "06ee4ebe7998f02505b36b147e18089bda66012b25dfdd65f61df81b186f69b1"
+  },
+  "bounded_correction_if_observation_established": {
+    "observer": "Controlled fixture pthread_create/join wrappers must retain actual worker TID/birth and successful real pthread_join. At summary, unknown/unjoined/reused IDs remain refusal. Only positively joined exact tasks may finish disappearing within unchanged existing8s owner deadline; no sleep or increased timeout. Retain initial and final literal task rows, never subtract a task from count.",
+    "oracle_threads_required": 1,
+    "prefix_policy": "Preserve all original passed compiler/case evidence. Reuse existing Rust source and unaffected C/reference objects. Mock observer change requires new mock object and executable relink; old fixture Rust binary statically contains old mock.o, so cannot honestly reuse it as corrected binary. Never replay completed old nonce or claim unchanged executable.",
+    "production_rust_body_change": false
+  },
+  "consumed_nonce": "1fff493f114662040e1147fdcbf5fa32",
+  "established": [
+    "Workers::finish invokes JoinHandle::join on every owned thread, including Drop paths; production Rust source remains unchanged.",
+    "Retained ELF std::sys::thread::unix::Thread::join invokes pthread_join@GLIBC_2.34 at 0x38ccb and checks return zero.",
+    "Mock summary counts /proc/self/task once in atexit and retains no task identities, births, states, or individual pthread_join receipts.",
+    "Actual full-lifecycle Rust exit0/counters closed, literal threads2; strict oracle correctly refused and original result remains FAILED.",
+    "pthread_join waits for child-TID clearing; Linux exit_mm precedes final exit_notify/release_task/proc_flush_pid. Joining and proc enumeration cessation are different observations."
+  ],
+  "metrics": {
+    "acceptance_target_180s": "NOT_PASS_FUNCTIONAL_CASE_FAILURE",
+    "join_to_failure_decision_seconds": null,
+    "original_source_ready_epoch": null
+  },
+  "not_established": [
+    "The historical extra task identity/state is UNKNOWN. It cannot be retroactively classified as an exiting joined worker.",
+    "Minimized same-image reproduction has not run. No repaired daemon mock execution or acceptance exists."
+  ],
+  "original_mock": {
+    "bytes": 13295,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-daemon-validation/read-errors-successor-1/fixture/mock.c",
+    "sha256": "0240f2df256c23e2b1f7f1d397e62e63bd0ceae207466a58dc036211f43067ef"
+  },
+  "original_oracle": {
+    "bytes": 10047,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/run_fixture_precreated.py",
+    "sha256": "542785cb1ba205bbd5be9512843541fc96691ed7d0ab42d8aac666864abcdeca"
+  },
+  "prepared_epoch": 1793072102.124105,
+  "primary_source_links": [
+    "https://github.com/bminor/glibc/blob/glibc-2.34/nptl/pthread_join_common.c#L85-L103",
+    "https://github.com/torvalds/linux/blob/v5.15/kernel/exit.c#L790-L819",
+    "https://github.com/torvalds/linux/blob/v5.15/kernel/exit.c#L169-L220"
+  ],
+  "reproducer": {
+    "bytes": 5570,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/thread-exit-observation-repair-source-1/join_procfs_reproducer.c",
+    "sha256": "290189d9d007ede5ba9d67b7b1fc06e05622aede89de342edccb976c23065820"
+  },
+  "schema": "daemon64-joined-thread-observation-diagnosis-v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "smallest_next_check": {
+    "compile_argv": [
+      "/usr/bin/cc",
+      "-std=gnu11",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pthread",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/thread-exit-observation-repair-source-1/join_procfs_reproducer.c",
+      "-o",
+      "/work/join-procfs-reproducer"
+    ],
+    "execute_argv": [
+      "/work/join-procfs-reproducer"
+    ],
+    "execute_owner_timeout_seconds": 8,
+    "fresh_output_target": null,
+    "non_reproduction": "exit2 retains NOT_REPRODUCED; do not infer harmless historical thread or replay daemon batch.",
+    "other_failure": "exit3 or owner timeout: preserve captures, no retry.",
+    "profile": "Reuse existing pinned image41778, kernel pids.max64 verified before compiler, one fixture CPU, AS2GiB and existing owned_process.Owner; no host RLIMIT_NPROC substitute.",
+    "requires_actual_root_admission": true,
+    "source_ro": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/thread-exit-observation-repair-source-1/join_procfs_reproducer.c",
+    "successful_observation": "exit0 means real pthread_join zero followed by >1 literal proc entries restricted to main and exact two joined TIDs, then exact joined TID directory ENOENT and final literal threads1. This proves a platform observation race, not historical-run acceptance."
+  },
+  "state": "SOURCE_ONLY_MINIMIZED_CHECK_NOT_EXECUTED",
+  "tests": {
+    "compiler_or_runtime_run": false,
+    "full_mock26_acceptance": false,
+    "static_artifact_reference_check": "PASS"
+  },
+  "unchanged_rust_source": {
+    "bytes": 23095,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-daemon-validation/read-errors-successor-1/ihkmond.rs",
+    "sha256": "0c0b4b6d286e9f0fdbdacf1d32c3cd33ec96d4d2420550771a0dc732dd84d86e"
+  }
+}

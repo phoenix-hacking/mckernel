@@ -1,0 +1,80 @@
+--- /home/holden/mckernel-work/host-preparation/m07-sigill-successor-native-data-preparation-20261022-1/actual-terminal-preparation-1/prepare_existing_current_terminal_sources.FRESH-CORRECTION-1.py
++++ /home/holden/mckernel-work/host-preparation/m07-observer-inventory-expert-cohort-20261022-1/prepare_existing_current_terminal_sources.FRESH-CORRECTION-1.py
+@@ -90,15 +90,51 @@
+     text=once(text,"acceptance['unchanged_members']==58 and set(acceptance['observed_delta'])=={'images/mckernel.img','apps/app'}","acceptance['unchanged_members']==59 and set(acceptance['observed_delta'])=={'images/mckernel.img'}")
+     p=outdir('bound-normalization-source-1'); source(p/'prepare_native.py',text); js(p/'SETTINGS.json',cfg); js(p/'INPUT-PINS.json',n['input_pins']); finish(p)
+ 
++def decode_finite_case(case):
++    """Reject scalar inventory schema; bind exact sorted role path union pre-mutation."""
++    need(type(case) is dict, 'finite-case: dictionary required')
++    roles=case.get('finite_roles'); paths=case.get('finite_unique_paths')
++    need(type(roles) is dict and roles and all(type(k) is str and k for k in roles),
++         'finite-case: named role dictionary required')
++    need(type(paths) is list, 'finite-case: path list required; scalar schema refused')
++    need(type(case.get('finite_role_count')) is int and case['finite_role_count']==len(roles),
++         'finite-case: role count differs')
++    need(type(case.get('finite_unique_path_count')) is int and case['finite_unique_path_count']==len(paths),
++         'finite-case: path count differs')
++    def path_name(value):
++        need(type(value) is str and value.startswith('/') and not value.startswith('//') and
++             '\x00' not in value and all(part not in ('','.','..') for part in value.split('/')[1:]),
++             'finite-case: canonical absolute path required')
++        p=Path(value)
++        need(str(p)==value and not any(q.is_symlink() for q in (p,*p.parents)),
++             'finite-case: nonsymlink canonical path required')
++        return value
++    bypath={}
++    for role,row in roles.items():
++        need(type(row) is dict and set(row)=={'path','sha256','bytes'},
++             'finite-case: exact descriptor shape required:'+role)
++        path=path_name(row['path']); digest=row['sha256']; size=row['bytes']
++        need(type(digest) is str and len(digest)==64 and all(c in '0123456789abcdef' for c in digest) and
++             type(size) is int and size>=0, 'finite-case: descriptor hash/byte shape differs:'+role)
++        need(path not in bypath or bypath[path]==row, 'finite-case: conflicting aliases:'+role)
++        bypath[path]=row
++    need(all(type(p) is str for p in paths), 'finite-case: string paths required')
++    for p in paths:path_name(p)
++    need(paths==sorted(bypath), 'finite-case: exact sorted distinct role path union required')
++    return tuple(paths)
++
++
+ def terminal(b):
+     t=b['terminal']; case=json.loads(checked(t['case'])); retirement=json.loads(checked(t['retained_review'])); artifact=json.loads(checked(t['artifact_acceptance']))
++    decode_finite_case(case)
++    need(type(case.get('current_live_postjoin')) is dict and case['current_live_postjoin']==case['finite_roles']['guard_postjoin'], 'exact genuine predecessor guard postjoin reference required; future cleanup is separate')
+     need(case['artifact_acceptance']==t['artifact_acceptance'] and case['physical']==t['retained_review'],'four-document exact current report refs')
+     need(artifact['producer_receipt']==case['finite_roles']['driver_receipt'],'driver belongs to artifact report, never invented retirement field')
+     need(case['source_identity']['source_derivative_sha256']==artifact['source_derivative_sha256'] and case['source_identity']['materialization_sha256']==artifact['materialization_sha256'],'terminal source fingerprints')
+     pins=load(C/'SOURCE-PINS.json')['files']; texts={}
+     for name,row in pins.items():
+         if name.endswith('.py'): texts[name]=checked(row).decode()
+-    p=outdir('bound-terminal-source-correction-1'); write(p/'PASS-CASE-STATIC.json',checked(t['case']))
++    p=outdir('bound-terminal-expert-source-1'); write(p/'PASS-CASE-STATIC.json',checked(t['case']))
+     # Bind the finite top-level DATA and two exact guard-directory literals only.
+     # Transaction/census/recovery/ownership algorithms and profiles are preserved.
+     bindings=t['source_bindings']; need(type(bindings) is dict and bindings['current_typed_request']==case['source_identity'] and bindings['target']==case['target'],'complete current terminal source/target DATA')
+@@ -115,6 +151,10 @@
+     need(engine.count(oldguard)==2,'exact two guard directory literal slots'); engine=engine.replace(oldguard,newguard)
+     source(p/'cleanup_pass_image.py',engine); engine_ref=ref(p/'cleanup_pass_image.py')
+     observer=texts.pop('observe_current_pass_image_retirement.py').replace(str(C),str(p))
++    observer=once(observer,'def main(argv=None):','def decode_finite_case(case):\n    """Reject scalar inventory schema; bind exact sorted role path union pre-mutation."""\n    need(type(case) is dict, \'finite-case: dictionary required\')\n    roles=case.get(\'finite_roles\'); paths=case.get(\'finite_unique_paths\')\n    need(type(roles) is dict and roles and all(type(k) is str and k for k in roles),\n         \'finite-case: named role dictionary required\')\n    need(type(paths) is list, \'finite-case: path list required; scalar schema refused\')\n    need(type(case.get(\'finite_role_count\')) is int and case[\'finite_role_count\']==len(roles),\n         \'finite-case: role count differs\')\n    need(type(case.get(\'finite_unique_path_count\')) is int and case[\'finite_unique_path_count\']==len(paths),\n         \'finite-case: path count differs\')\n    def path_name(value):\n        need(type(value) is str and value.startswith(\'/\') and not value.startswith(\'//\') and\n             \'\\x00\' not in value and all(part not in (\'\',\'.\',\'..\') for part in value.split(\'/\')[1:]),\n             \'finite-case: canonical absolute path required\')\n        p=Path(value)\n        need(str(p)==value and not any(q.is_symlink() for q in (p,*p.parents)),\n             \'finite-case: nonsymlink canonical path required\')\n        return value\n    bypath={}\n    for role,row in roles.items():\n        need(type(row) is dict and set(row)=={\'path\',\'sha256\',\'bytes\'},\n             \'finite-case: exact descriptor shape required:\'+role)\n        path=path_name(row[\'path\']); digest=row[\'sha256\']; size=row[\'bytes\']\n        need(type(digest) is str and len(digest)==64 and all(c in \'0123456789abcdef\' for c in digest) and\n             type(size) is int and size>=0, \'finite-case: descriptor hash/byte shape differs:\'+role)\n        need(path not in bypath or bypath[path]==row, \'finite-case: conflicting aliases:\'+role)\n        bypath[path]=row\n    need(all(type(p) is str for p in paths), \'finite-case: string paths required\')\n    for p in paths:path_name(p)\n    need(paths==sorted(bypath), \'finite-case: exact sorted distinct role path union required\')\n    return tuple(paths)\n\n\n'+'def main(argv=None):')
++    observer=once(observer,'case=m.parse(stable_bytes(FAILURE_CASE,FAILURE_CASE_SHA,4<<20))','case=m.parse(stable_bytes(FAILURE_CASE,FAILURE_CASE_SHA,4<<20))\n    finite_paths=decode_finite_case(case)')
++    observer=observer.replace("case['finite_unique_paths']",'finite_paths')
++    observer=once(observer,"    root_join=json.loads(stable_bytes(Path(case['current_live_postjoin']['path']),case['current_live_postjoin']['sha256']))","    postjoin_ref=case.get('current_live_postjoin')\n    need(isinstance(postjoin_ref,dict) and postjoin_ref==case['finite_roles']['guard_postjoin'],\n         'exact genuine predecessor guard postjoin reference required; future cleanup is separate')\n    root_join=json.loads(stable_bytes(Path(postjoin_ref['path']),postjoin_ref['sha256']))")
+     records=case['full_original_record_authority']
+     need(len(records)==2 and {row['role'] for row in records}=={'common','shared'},'two genuine original record authorities')
+     boots=set()
+@@ -137,7 +177,12 @@
+             text=global_value(text,'PINS',repr(cpins))
+         if name=='check_current_pass_bodies.py': text=once(text,oldguard,newguard)
+         if name=='check_current_pass_bodies.py': text=once(text," obs=read('observer').decode();engine=read('engine').decode()\n"," obs=read('observer').decode();engine=read('engine').decode()\n proc=ast.literal_eval(next(n.value for n in ast.parse(engine).body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='PROC_CODE' for t in n.targets)))\n assert sha(proc.encode())=='24e27a493a84a1ab6c3d22a5248ae456288fa590fc93e31b3fb5a0a29d8659af' and sha(proc.encode())!='986e64c50fd8d78bbe3c23e86a690e67b51255ab03c9f03f29db30ee50891532','generated engine must retain accepted current PROC authority'\n")
+-        if name=='postjoin_readback.py': text=global_value(global_value(text,'OBSERVER_SHA',repr(observer_ref['sha256'])),'ENGINE_SHA',repr(engine_ref['sha256']))
++        if name=='postjoin_readback.py':
++            text=global_value(global_value(text,'OBSERVER_SHA',repr(observer_ref['sha256'])),'ENGINE_SHA',repr(engine_ref['sha256']))
++            start=text.index("        selected={x['path']:x for x in obs['selected_files']};side=")
++            end=text.index('        request=m.parse',start)
++            text=text[:start]+'        actual,objects=finite_metadata_consumer(m,o,obs)\n'+text[end:]
++            text=once(text,'def main():',"def finite_metadata_consumer(m,o,obs):\n    selected={x['path']:x for x in obs['selected_files']};side=selected[str(o.OUTPUT/'new-object-metadata.json')]\n    meta=json.loads(o.stable_bytes(Path(side['path']),side['sha256']))\n    authority=json.loads(o.stable_bytes(o.FAILURE_CASE,o.FAILURE_CASE_SHA,4<<20))\n    finite_paths=o.decode_finite_case(authority)\n    def objects():return [m.observe_identity(Path(p)) for p in finite_paths]\n    actual=objects();need(len(actual)==len(finite_paths) and actual==meta['objects'],'all finite current PASS descriptors differ')\n    return actual,objects\n\n"+'\ndef main():')
+         if name=='check_actual_fresh_preflight.py': text=global_value(text,'SOURCE_SHA',repr(engine_ref['sha256']))
+         if name in ('read_original_five_metadata.py','export_raw_five.py'): text=global_value(text,'SUMMARY_SHA',repr(ref(p/'readback_observer.py')['sha256']))
+         source(p/name,text)

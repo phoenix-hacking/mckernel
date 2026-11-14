@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "reviewed_commit": "d84ee20ae834626ac62eaaae9233f4a12500a3d7",
+  "parent_commit": "bca25e0dd2a298c9e397acc62eeea79882f3152b",
+  "decision": "GO_CONCRETE_HARNESS_FAILURE_FIX_AND_CURRENT_PROFILE_COMPATIBILITY_ONLY",
+  "scope": "Read-only pinned GitHub source review; no controller, model, test, build, runtime or goal action. Private report is the only write.",
+  "inputs": [
+    "/home/holden/mckernel/AGENTS.md",
+    "/home/holden/mckernel/CAMPAIGN.md updated 2026-11-10T03:13Z",
+    "Pinned scripts/start_os_overnight.py (281 lines)",
+    "Pinned scripts/m14-m15-overnight-instruction.txt",
+    "Pinned scripts/tests/test_os_goal_overnight.py (305 lines)",
+    "Pinned CAMPAIGN.md overnight section",
+    "Current scripts/run_os_goal.py, scripts/watch_os_goal.py and scripts/os_goal_resources.py bounded launch/identity/signal/profile sections"
+  ],
+  "confirmed_issue": {
+    "title": "Proven pre-spawn log-open failure leaves durable ambiguous startup and prevents ordinary retry",
+    "source": [
+      "scripts/start_os_overnight.py:192-200",
+      "scripts/start_os_overnight.py:123-126",
+      "scripts/start_os_overnight.py:186-188",
+      "scripts/start_os_overnight.py:274-277"
+    ],
+    "trigger": "No existing campaign leases or prior unresolved attempt; initial receipt persistence succeeds; os.open of the per-attempt log at line198 raises an ordinary recoverable OSError, for example transient EMFILE. No subprocess.Popen is attempted.",
+    "observed_by_source": "STARTING/null-PID receipt is persisted at196. Log open198/fdopen199 are outside inner handler200-232. Exception reaches main, which reports FAILED but leaves durable receipt STARTING. status123-126 returns UNKNOWN for null PID unless durable status is FAILED. Subsequent start187-188 refuses EXISTING_OWNER even after resource pressure clears.",
+    "expected": "A caught failure positively known to precede any spawn must durably identify a failed, unspawned attempt and permit a later explicit retry once existing leases and identity checks are clear.",
+    "smallest_fix": "Include log acquisition/ownership in guarded pre-spawn failure handling; persist a FAILED receipt for proven no-spawn errors without depending on a usable log. Keep diagnostic logging best effort. Close any acquired log FD if fdopen fails.",
+    "uncertainty_boundary": "Do not blanket-convert existing STARTING/UNKNOWN/null-PID receipts to FAILED. A crash across Popen can leave a child whose identity was not persisted. Preserve fail-closed UNKNOWN and identity reconciliation for ambiguous delivery or a possibly live child; no blind retry, automatic resume or pid/group kill.",
+    "meaningful_verification": "Focused fake-process unit test injects log os.open failure after successful initial receipt persistence, asserts Popen never called and durable FAILED/statusFAILED, then restores log acquisition and verifies a later explicit start can make exactly one mocked spawn. A separate fdopen failure can check descriptor ownership. Retain existing uncertain-crash and live-receipt duplicate prevention assertions. No tests executed by this review.",
+    "test_evidence": "Read incoming test source: it covers missing inhibitor, immediate child exits, simultaneous/live receipt prevention, unresolved around-Popen crash and pidfd stop; it contains no injected log-open/fdopen failure test."
+  },
+  "compatibility": {
+    "source": "scripts/start_os_overnight.py:105-112 and overnight instruction lines3,7",
+    "actual_recipe": "hours0, max-restarts-1, repair-agent-failures and stop-after-m14-m15 enabled, max-agents2/build-jobs3/memory-gib4, default watchdog180 and omitted stall -> default0.",
+    "current_direct_contract": "Six direct Sol/HIGH owners maximum, depth1/one compositor; HOST CPUs0,6,7/max3 aggregate light jobs/4GiB TOTAL including controller and workers, fresh26GiB plus retained reservations/floors; existing planner ceiling12 is not extra execution RAM; watchdog180/stall1200/maxrestarts3; neither new repair nor stop-after flag is enabled for this run.",
+    "required_action": "Adoption, repair and any future explicit launch must preserve the latest actual direct contract. Do not run the remote overnight recipe unchanged or let its instruction override that contract. Use the existing validated ordinary guarded same-Root launch only if separately proceeding on this confirmed new harness task.",
+    "planner_limit": "Current resolve_resources derives max_agents from memory//2, so mechanically changing only max-agents2 to6 while retaining planner memory4 fails validation. Reuse existing validated planner12/actual HOST4 startup binding; this is a compatibility limitation, not a new RAM grant.",
+    "not_a_defect_claim": "The incoming two-child/unlimited-restart recipe is internally declared for its opt-in context; disagreement with current direct user limits is a local adoption compatibility task, not evidence that these options are inherently defective."
+  },
+  "ownership_stop_usage": {
+    "startup": "No outer retry. Start acquires overnight-start lock, checks watcher/worker leases and rejects live/unresolved prior receipt before spawn. Starts detached session with DEVNULL input, log output and close_fds. systemd-inhibit required with no fallback.",
+    "identity": "Status requires launcher birth/session identity, watcher birth and same launcher session, worker birth and watcher parent plus matching watcher worker PID. ACTIVE/WAITING additionally require both campaign leases and matching phase/goal. Popen acknowledgement alone is not ACTIVE.",
+    "stop": "Stop refuses without verified watcher; pidfd_open plus post-open birth/session revalidation precedes one SIGTERM to that watcher. Current watcher forwards normal signal to current worker/checkpoint path. No process-group signal or outsider ownership transfer.",
+    "usage": "Helper adds no account/model fallback or new inference for status/dry-run; actual start enters existing launcher account/resource/usage and uncertainty guards. Hard-stop and usage exits receive no helper outer retry. Saved BLOCKED remains a normal stop; a new actual start is an explicit resume operation, not passive observation.",
+    "limitations": "Source review is not a workstation inhibitor capability test or detached live identity proof. No new independent stop/usage defect was confirmed in this bounded review."
+  },
+  "original_campaign": {
+    "credit": 0,
+    "no_new_kernel_native_input": true,
+    "blocked_root_not_resumed": true,
+    "preserved": "Original source/service/account/native/SDK/UNKNOWN holds, generic/exec replay/equivalent=false and notification/wait/process NO_GO remain unchanged. Harness repair does not release original remaining12 provider or integration inputs."
+  }
+}

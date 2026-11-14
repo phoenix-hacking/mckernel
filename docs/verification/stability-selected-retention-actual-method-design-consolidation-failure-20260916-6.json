@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "record_kind": "stability_selected_retention_actual_method_design_consolidation_failure",
+  "task_id": "M01-B-selected-retention-actual-methods",
+  "review_attempt": 6,
+  "recorded_utc": "2026-09-16T08:07:48Z",
+  "status": "FAIL_DESIGN",
+  "authenticated_inputs": {
+    "implementation_packet": {
+      "path": "docs/verification/stability-selected-retention-actual-method-implementation-packet-20260916-3.md",
+      "sha256": "71867164f0b8d59c51bd0786ea1af3f76cb1395b0592c87fa8e192f929f81bf7"
+    },
+    "source_map": {
+      "path": "docs/verification/stability-selected-retention-actual-method-source-map-20260916-1.json",
+      "sha256": "a09978ce5d6bd8f3cdb43bbeba25af7ba287b5d6143d72e039b781df8abd4131"
+    },
+    "attempt5_failure": {
+      "path": "docs/verification/stability-selected-retention-actual-method-implementation-packet-review-failure-20260916-5.json",
+      "sha256": "89537e15bd14ae60511dac2a818f0c163791f0fb19ed49f181ea631a3fa8e29a"
+    },
+    "stager_sha256": "c2b8b256bc4ee0997fed3c210f9d6aef1878a6dc507d3fd96fe66ea011b843b0",
+    "source_manifest_sha256": "d9d439bff0a90bddcc3920f36b8fac81d6e1515fd83f035e18a34464cc8498d0",
+    "mode_member_hashes_verified": 102,
+    "send_gate_template_sha256": "dac2855ca19e587c33f7bd5a36c30c9090a6ea846f6dca90081abf0543228267"
+  },
+  "resolved_generic_method_design": [
+    "Preserve both consuming prepare methods and the selected-error Response restoration; add only cfg(test) instrumentation.",
+    "Use the real Mailbox new/open_worker/admit/reserve/copied chain; admit already constructs the private Call, so no insertion or Call constructor API is authorized.",
+    "Row 18 uses mismatched-PID Ok(None), pre-RET publish Ok(false), ordinary return_value, then wake-None publish Ok(true) with one release.",
+    "Rows 20 and 27 complete mode-3 recovery at exactly t+2000000000 before their respective post-RET or post-publication cancellation conclusions; mode-2 notification failure is separate and follows publication/release.",
+    "Rows 25 and 26 use serialized fresh-process cancel-before-RET and RET-before-precommit-cancel cases and never reenter one mutable Mailbox or owner lock.",
+    "Stages 0, 1, 6 and 255 and stage-3 commits 0 or 2 publish -11 and latch -71; stages 2, 4 and 5 publish -11 with invalid zero; hold baselines follow successful preparation.",
+    "The second-CAS one-shot test hook receives only the live AtomicU64 reference inside Err(2), retains no reference, forces the second CAS mismatch and preserves the written prefix.",
+    "The test-owned generic backing may use an aligned 56-byte allocation with 8-byte guards around the 40-byte response, deferred deallocation and distinct released versus unfinished Drop ledger events.",
+    "The stager creates 161 files per mode plus the root and four subdirectories; fresh parent/mode creation authority, every evidence path and both inverse-restoration stages must be named explicitly."
+  ],
+  "blocking_native_ownership_gap": {
+    "source_path": "/home/holden/mckernel-work/scratch/stability-published-held-source-20260915-recoverable-backpressure-3/held/source/sysfs_memory.rs",
+    "source_sha256": "a06db09b3e823636405888cd636e1a6fbf79ca7a0400bb0355899384638d629a",
+    "source_regions": ["Memory::new:109", "Memory::syscall:322-354", "release:623-650"],
+    "finding": "A runner-owned allocation plus copied stability_observer::Claim metadata cannot prove native SyscallResponse ownership. Memory::new requires retained OS-generation, extent and BootStorage authority, and release consumes the private production ledger entry.",
+    "required": "Specify and independently review a production-owned Memory/BootStorage/OS-generation/extent construction and lifetime path with an expanded source/write boundary before claiming the native ownership contract."
+  },
+  "disposition": "A separately labelled generic actual-method prerequisite may be drafted from the resolved design, but it cannot replace or satisfy native ownership acceptance. Do not issue another complete implementation packet until the production-owned backing mechanism is specified and reviewed.",
+  "files_changed_by_reviewer": false,
+  "compiler_execution": false,
+  "runtime_execution": false,
+  "root_execution": false,
+  "guest_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}

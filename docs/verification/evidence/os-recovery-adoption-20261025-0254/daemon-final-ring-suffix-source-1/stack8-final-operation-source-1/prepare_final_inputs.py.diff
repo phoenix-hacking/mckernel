@@ -1,0 +1,11 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/prepare_final_inputs.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/prepare_final_inputs.py
+@@ -25,7 +25,7 @@
+  p=argparse.ArgumentParser(description=__doc__);p.add_argument('--nonce',required=True);args=p.parse_args();nonce=args.nonce
+  mc.need(os.getuid()==os.geteuid()==os.getgid()==os.getegid()==1000,'ordinary UID1000 preparation')
+  mc.need(re.fullmatch('[0-9a-f]{32}',nonce) is not None,'Root fresh32hex nonce')
+- ledger=json.loads(Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER25.json').read_bytes())
++ ledger=json.loads(Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER26.json').read_bytes())
+  mc.need(nonce not in ledger['consumed_nonces']+ledger['reserved_abandoned_unconsumed_nonces'],'fresh nonce excludes consumed/abandoned namespaces')
+  mc.need(not mc.MIRROR.exists(),'source mirror already prepared; preserve and do not overwrite')
+  for name in ['ADOPT-REQUEST.json','STATIC-INPUTS-PREPARED.NOT-RELEASED.json','OWNER-CAPTURE']:

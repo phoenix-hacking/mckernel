@@ -1,0 +1,22 @@
+--- /home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/next-reconciliation-preparation-1/read_two_retirement_receipts.py
++++ /home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/cleanup-quarantine-reconciliation-preparation-1/source/physical-reconciliation-1/read_two_current_retirement_receipts.py
+@@ -4,8 +4,8 @@
+ """
+ import base64,hashlib,json,os,stat
+ from pathlib import Path
+-BASE=Path('/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/cleanup-quarantine-recovery-preparation-2/actual-root-retirement-1')
+-COMPLETE_SHA='db6926c8b12cc70aa8b35289048043ddb5ad8eb8da973b51447743c10633af08'
++BASE=Path('/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/cleanup-quarantine-reconciliation-preparation-1/records/actual-root-retirement-1')
++COMPLETE_SHA='2dc61852874e32c0c3bd706e2175e150abcbb35a4cbdb63a70ce3a8cd7be9067'
+ CAP=1<<20
+ 
+ def full9(s):return dict(device=s.st_dev,inode=s.st_ino,mode=s.st_mode,nlink=s.st_nlink,uid=s.st_uid,gid=s.st_gid,size=s.st_size,mtime_ns=s.st_mtime_ns,ctime_ns=s.st_ctime_ns)
+@@ -45,7 +45,7 @@
+   parent=full9(os.fstat(fd));need(parent['uid']==parent['gid']==0 and stat.S_IMODE(parent['mode'])==0o700,'root0700 receipt directory')
+   complete,c=snapshot(fd,'complete.json',COMPLETE_SHA);prepared=None;p=None
+   if c is not None:
+-   need(c.get('status')=='COMPLETE_IDLE_HOLDER_RETIREMENT_ONLY' and c.get('target',{}).get('pid')==2575750 and c['target'].get('starttime')=='37684618','current complete scope/birth')
++   need(c.get('status')=='COMPLETE_IDLE_HOLDER_RETIREMENT_ONLY' and c.get('target',{}).get('pid')==2761636 and c['target'].get('starttime')=='40670236','current complete scope/birth')
+    prepared,p=snapshot(fd,'prepared.json',c['prepared_sha256'])
+    if p is not None:need(p.get('status')=='PREPARED_EXACT_PROCESS_RETIREMENT_ONLY' and p.get('target')==c['target'],'prepared/currenttarget scope')
+   print(json.dumps(dict(schema='mckernel.exact-two-root-retirement-receipt-export.v1',status='PASS_READ_ONLY_TWO_RECEIPTS' if c is not None and p is not None else 'REFUSED_READ_ONLY',directory=parent,complete=complete,prepared=prepared,root_lock_acquired=False,signals_sent=False,mutation=False,census=False,cleanup_authority=False),sort_keys=True))

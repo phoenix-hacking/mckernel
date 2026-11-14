@@ -1,0 +1,70 @@
+
+/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/relative-module-context-correction-source-1/HOST-output-proposed-1/rust-selected.o:     file format elf64-x86-64
+
+
+Disassembly of section .ltext.process_page_fault_cow_allocate_body_result:
+
+0000000000000000 <process_page_fault_cow_allocate_body_result>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	41 57                	push   %r15
+   6:	41 56                	push   %r14
+   8:	41 55                	push   %r13
+   a:	41 54                	push   %r12
+   c:	53                   	push   %rbx
+   d:	50                   	push   %rax
+   e:	4c 89 cb             	mov    %r9,%rbx
+  11:	45 89 c4             	mov    %r8d,%r12d
+  14:	49 89 cd             	mov    %rcx,%r13
+  17:	49 89 f7             	mov    %rsi,%r15
+  1a:	49 89 fe             	mov    %rdi,%r14
+  1d:	48 85 d2             	test   %rdx,%rdx
+  20:	75 22                	jne    44 <process_page_fault_cow_allocate_body_result+0x44>
+  22:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	24: R_X86_64_64	.lrodata.str1.1+0x6ed9
+  2c:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	2e: R_X86_64_64	.lrodata.str1.1+0x614c
+  36:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	38: R_X86_64_64	kprintf
+  40:	31 c0                	xor    %eax,%eax
+  42:	ff d1                	call   *%rcx
+  44:	49 c1 ed 0c          	shr    $0xc,%r13
+  48:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	4a: R_X86_64_64	.lrodata.str1.1+0x64af
+  52:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	54: R_X86_64_64	_ihk_mc_alloc_aligned_pages_node
+  5c:	ba 02 00 00 00       	mov    $0x2,%edx
+  61:	44 89 ef             	mov    %r13d,%edi
+  64:	44 89 e6             	mov    %r12d,%esi
+  67:	b9 ff ff ff ff       	mov    $0xffffffff,%ecx
+  6c:	41 b8 01 00 00 00    	mov    $0x1,%r8d
+  72:	49 89 d9             	mov    %rbx,%r9
+  75:	68 49 0c 00 00       	push   $0xc49
+  7a:	50                   	push   %rax
+  7b:	41 ff d2             	call   *%r10
+  7e:	48 83 c4 10          	add    $0x10,%rsp
+  82:	48 89 c1             	mov    %rax,%rcx
+  85:	48 8b 45 18          	mov    0x18(%rbp),%rax
+  89:	48 89 08             	mov    %rcx,(%rax)
+  8c:	31 c0                	xor    %eax,%eax
+  8e:	48 85 c9             	test   %rcx,%rcx
+  91:	75 46                	jne    d9 <process_page_fault_cow_allocate_body_result+0xd9>
+  93:	48 8b 45 20          	mov    0x20(%rbp),%rax
+  97:	4c 8b 55 10          	mov    0x10(%rbp),%r10
+  9b:	c7 00 f4 ff ff ff    	movl   $0xfffffff4,(%rax)
+  a1:	49 8b 57 18          	mov    0x18(%r15),%rdx
+  a5:	49 8b 4f 20          	mov    0x20(%r15),%rcx
+  a9:	4d 8b 47 28          	mov    0x28(%r15),%r8
+  ad:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	af: R_X86_64_64	.lrodata.str1.1+0x6f0b
+  b7:	49 bb 00 00 00 00 00 00 00 00 	movabs $0x0,%r11	b9: R_X86_64_64	kprintf
+  c1:	4c 89 f6             	mov    %r14,%rsi
+  c4:	49 89 d9             	mov    %rbx,%r9
+  c7:	31 c0                	xor    %eax,%eax
+  c9:	6a f4                	push   $0xfffffffffffffff4
+  cb:	41 52                	push   %r10
+  cd:	41 ff d3             	call   *%r11
+  d0:	48 83 c4 10          	add    $0x10,%rsp
+  d4:	b8 01 00 00 00       	mov    $0x1,%eax
+  d9:	48 83 c4 08          	add    $0x8,%rsp
+  dd:	5b                   	pop    %rbx
+  de:	41 5c                	pop    %r12
+  e0:	41 5d                	pop    %r13
+  e2:	41 5e                	pop    %r14
+  e4:	41 5f                	pop    %r15
+  e6:	5d                   	pop    %rbp
+  e7:	c3                   	ret    

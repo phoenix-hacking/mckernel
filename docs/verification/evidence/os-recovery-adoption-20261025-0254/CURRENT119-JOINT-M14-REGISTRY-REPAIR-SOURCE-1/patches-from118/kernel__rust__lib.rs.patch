@@ -1,0 +1,30 @@
+--- a/kernel/rust/lib.rs
++++ b/kernel/rust/lib.rs
+@@ -124,3 +124,27 @@
+ 
+ #[cfg(f06_native_signal_restore_fp_candidate)]
+ mod f06_native_signal_restore_fp;
++
++// Exact existing F06 BODY3-9 implementations, selected together by supported CMake profile.
++#[cfg(f06_ptrace_xstate_copy_to_candidate)]
++mod f06_ptrace_xstate_copy_to;
++#[cfg(f06_ptrace_xstate_copy_from_candidate)]
++mod f06_ptrace_xstate_copy_from;
++#[cfg(f06_vdso_setup_log_candidate)]
++mod f06_vdso_setup_log;
++#[cfg(f06_vdso_state_candidate)]
++mod f06_vdso_state;
++#[cfg(f06_vdso_storage_candidate)]
++mod f06_vdso_storage;
++#[cfg(f06_ptrace_user_bridges_candidate)]
++mod f06_ptrace_user_bridges;
++#[cfg(f06_ptrace_gpregs_bridges_candidate)]
++mod f06_ptrace_gpregs_bridges;
++
++// Exact subsequent F06 BODY10-12; storage and diagnostic identities retained.
++#[cfg(f06_prctl_log_candidate)]
++mod f06_prctl_log;
++#[cfg(f06_prctl_log_storage_candidate)]
++mod f06_prctl_log_storage;
++#[cfg(f06_vdso_map_log_candidate)]
++mod f06_vdso_map_log;

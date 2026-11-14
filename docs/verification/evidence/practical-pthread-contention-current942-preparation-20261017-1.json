@@ -1,0 +1,196 @@
+{
+  "app_compiles": 0,
+  "author": "/root/native_shutdown_drain_helpers",
+  "boot_argv": [
+    "/bin/native-boot",
+    "hidos",
+    "allow_oversubscribe"
+  ],
+  "capacity": {
+    "/home/holden/mckernel": {
+      "free": 19299606528,
+      "total": 1006450962432
+    },
+    "/home/holden/mckernel-work/scratch/practical-pthread-contention-current942-20261017-1": {
+      "free": 18147012608,
+      "total": 115926994944
+    }
+  },
+  "collector": {
+    "mode": 33216,
+    "path": "/home/holden/mckernel-work/scratch/thread-tls-isolation-static-20261017-1/init",
+    "sha256": "ead247cdf56556c7491bd5d8f746c6c668c0c944414ce51392f7caaed895a63a",
+    "size": 1021968
+  },
+  "collector_profile": "ND_FUTEX4096",
+  "contract": {
+    "constants_source": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/scratch/practical-rust-std-app-static-20261017-2/contract/futex-constants.stdout",
+      "sha256": "ca0c0042665e9ec8f7b742828dc0940ee2dda8a9245e085c6e8194ef6eb1b2da",
+      "size": 845
+    },
+    "evaluator": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic.py",
+      "sha256": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e",
+      "size": 53440
+    },
+    "helper": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel/scripts/tests/test_native_diagnostic_collector_manifest_limits.py",
+      "sha256": "069ca83563798044ae2b69be183cdb8665bac86d79db8b35dd540e66f033d1c2",
+      "size": 10462
+    },
+    "negative_bytes": "REJECTED wrong payload bytes",
+    "negative_limit": "REJECTED collector/manifest stream accounting",
+    "no_compiler_or_reference_rerun": true,
+    "positive": "PROTOCOL_PASS",
+    "runtime": false,
+    "status": "PASS_PROTOCOL_ONLY",
+    "transport_source": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/scratch/practical-rust-std-app-static-20261017-2/contract/retained-transport-observation.json",
+      "sha256": "e6b561d3b0b17c32329e7e84563b2c3c518dbcff751f2c5ca50f62215f19bf48",
+      "size": 76641
+    }
+  },
+  "environment": {
+    "HOME": "/home/holden/mckernel-work/scratch/practical-pthread-contention-current942-20261017-1/home",
+    "PATH": "/usr/bin:/bin",
+    "TMPDIR": "/home/holden/mckernel-work/scratch/practical-pthread-contention-current942-20261017-1/tmp",
+    "address_space_limit_bytes": 1073741824,
+    "cpu_affinity": [
+      6
+    ],
+    "inheritance": "env -i"
+  },
+  "independent_source_review": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel/docs/verification/evidence/practical-pthread-contention-source-review-message-20261017-1.json",
+    "sha256": "fa897514474131c530d3e3f4981de11006ec14b099e282443996420366e1700f",
+    "size": 1567
+  },
+  "linux_reference_reruns": 0,
+  "manifest": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/scratch/practical-pthread-contention-current942-20261017-1/staging/manifest.json",
+    "sha256": "5284d293ca731b5df79d723f895bb395a6edf9fd7cc36140eb67bf21d5b59a35",
+    "size": 5489
+  },
+  "metadata_join": {
+    "basis": "Actual authenticated base map, preserve all non-overlay metadata; exact canonical six-member overlay metadata built independently.",
+    "fields": [
+      "mode",
+      "uid",
+      "gid",
+      "nlink",
+      "mtime",
+      "size",
+      "sha256",
+      "rdevmajor",
+      "rdevminor"
+    ],
+    "members": 59,
+    "nonzero_mtime_count": 40,
+    "status": "PASS"
+  },
+  "new_guest_runs": 0,
+  "oracle": {
+    "exit_code": 0,
+    "stderr_hex": "",
+    "stdout_hex": "7472795f627573793d312074696d65645f6f75743d312068616e646f66663d31206a6f696e65643d3120746c733d310a"
+  },
+  "overlay": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/scratch/practical-pthread-contention-current942-20261017-1/staging/initramfs.cpio.gz",
+    "sha256": "2f7da1cf527b77bf4372f38de7d996ea6721328b464e42e66c3c5344487fc1bb",
+    "size": 13590438
+  },
+  "overlay_command": {
+    "argv": [
+      "/home/holden/anaconda3/bin/python3",
+      "-B",
+      "/home/holden/mckernel/scripts/application-tests/native_diagnostic_overlay.py",
+      "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-20261017-1/initramfs.cpio.gz",
+      "/home/holden/mckernel-work/scratch/practical-pthread-contention-20261017-1/app",
+      "/home/holden/mckernel-work/scratch/thread-tls-isolation-static-20261017-1/init",
+      "/home/holden/mckernel-work/scratch/mcexec-preload-fastpath-build-20260928-1/rust/executer/user/mcexec",
+      "/home/holden/mckernel-work/scratch/practical-pthread-contention-current942-20261017-1/staging/initramfs.cpio.gz",
+      "--collector-sha256",
+      "ead247cdf56556c7491bd5d8f746c6c668c0c944414ce51392f7caaed895a63a",
+      "--mcexec-sha256",
+      "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b",
+      "--payload-sha256",
+      "15a61053ac8e31dc8acf903c18555d637567f3c7b830b70c4dcb1516e2375015",
+      "--base-sha256",
+      "bd503adcd1d45b437eb91902a50b09b9eeb094368ca4085546ef682fd1a5a694",
+      "--base-size",
+      "12347108",
+      "--base-cpio-sha256",
+      "7e69601b68dafb44c945d2998b10ec024a73518303bb505f275490d83e4c6767",
+      "--base-cpio-size",
+      "39677952"
+    ],
+    "elapsed_seconds": 8.828265026000736,
+    "status": 0
+  },
+  "overlay_manifest": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/scratch/practical-pthread-contention-current942-20261017-1/staging/overlay-result.json",
+    "sha256": "ea601201a0c611967bf9a9a92e6ccfec9430963b5a779d855e4e442318ca4bff",
+    "size": 19097
+  },
+  "pattern": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel/docs/verification/evidence/practical-rust-std-current942-execution-proposal-20261017-1.json",
+    "sha256": "06e02724c0d72d8e546c7a5f3a4643a5272b25e956dac860faa03831ccc31195",
+    "size": 10236
+  },
+  "payload": {
+    "mode": 33216,
+    "path": "/home/holden/mckernel-work/scratch/practical-pthread-contention-20261017-1/app",
+    "sha256": "15a61053ac8e31dc8acf903c18555d637567f3c7b830b70c4dcb1516e2375015",
+    "size": 1747288
+  },
+  "payload_contract": {
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "/apps/app"
+    ],
+    "cwd": "/case/work",
+    "env": {
+      "COKERNEL_PATH": "/apps",
+      "PATH": "/usr/bin:/bin"
+    },
+    "oracle": {
+      "exit_code": 0,
+      "stderr_hex": "",
+      "stdout_hex": "7472795f627573793d312074696d65645f6f75743d312068616e646f66663d31206a6f696e65643d3120746c733d310a"
+    },
+    "stderr_limit_bytes": 4096,
+    "stdout_limit_bytes": 4096
+  },
+  "raw_root": "/home/holden/mckernel-work/scratch/practical-pthread-contention-current942-20261017-1",
+  "retirement": "PENDING immediate-predecessor accepted retirement reference; no predecessor PASS inference",
+  "root_called": false,
+  "runtime_release": false,
+  "schema": "mckernel.practical-pthread-contention-current942-preparation.v1",
+  "source": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel/scripts/application-tests/practical_pthread_contention.c",
+    "sha256": "a2618fdfbb66be21140edba1836df37789ae2af646b85d4eeb49491c16383a79",
+    "size": 4274
+  },
+  "source_manifest": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/scratch/practical-rust-std-app-static-20261017-2/staging/manifest.json",
+    "sha256": "364191b167b9b63f038f955c5c5d1f29778474f08ea8d03d3748017baa93480c",
+    "size": 5663
+  },
+  "status": "PASS_STAGED_PENDING_INDEPENDENT_EXECUTION_REVIEW",
+  "stdout_bytes": 48
+}

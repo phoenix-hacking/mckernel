@@ -1,0 +1,142 @@
+// Appended to unchanged actual Life/Workers/redirect_kmsg bodies. Local seams
+// cannot supply eventfd, epoll, read/write, close, thread or ring-file successes.
+use std::collections::BTreeSet;
+use std::os::fd::{FromRawFd,IntoRawFd,OwnedFd,AsRawFd};
+use std::sync::OnceLock;
+extern "C"{fn dup(fd:c_int)->c_int;fn getuid()->u32;}
+#[derive(Debug)]struct Registration{kind:i32,original:i32,identity:u64,producer:Option<OwnedFd>}
+#[derive(Debug)]struct Generation{handle:usize,reads:usize,releases:usize,regs:Vec<Registration>,failed:Option<(i32,u64)>,events:Vec<String>}
+#[derive(Default)]struct Observation{partial:bool,generations:Vec<Generation>,lines:Vec<Vec<u8>>,opens:usize,closes:usize}
+static OBS:OnceLock<(Mutex<Observation>,Condvar)>=OnceLock::new();
+fn control()->&'static (Mutex<Observation>,Condvar){OBS.get_or_init(||(Mutex::new(Observation::default()),Condvar::new()))}
+fn state()->std::sync::MutexGuard<'static,Observation>{control().0.lock().unwrap()}
+fn changed(){control().1.notify_all();}
+fn fd_identity(fd:i32)->Option<u64>{
+ let text=fs::read_to_string(format!("/proc/self/fdinfo/{fd}")).ok()?;
+ text.lines().find_map(|line|line.strip_prefix("eventfd-id:").map(|v|v.trim().parse().unwrap()))
+}
+fn eventpolls()->Vec<(i32,String)>{
+ let mut result=Vec::new();
+ for entry in fs::read_dir("/proc/self/fd").unwrap(){let entry=entry.unwrap();let fd:i32=entry.file_name().to_string_lossy().parse().unwrap();
+  if fs::read_link(entry.path()).ok().is_some_and(|p|p.as_os_str().as_bytes()==b"anon_inode:[eventpoll]"){
+   if let Ok(info)=fs::read_to_string(format!("/proc/self/fdinfo/{fd}")){result.push((fd,info));}
+  }
+ }result
+}
+fn registered(ep:i32,fd:i32)->bool{
+ fs::read_to_string(format!("/proc/self/fdinfo/{ep}")).unwrap().lines().any(|line|line.strip_prefix("tfd:").and_then(|s|s.split_whitespace().next()).is_some_and(|s|s.parse::<i32>().unwrap()==fd))
+}
+fn fd_set()->BTreeSet<i32>{
+ let scanner=std::path::PathBuf::from(format!("/proc/{}/fd",std::process::id()));
+ fs::read_dir("/proc/self/fd").unwrap().map(|entry|entry.unwrap()).filter(|entry|fs::read_link(entry.path()).ok().as_ref()!=Some(&scanner)).map(|entry|entry.file_name().to_string_lossy().parse().unwrap()).collect()
+}
+fn task_set()->BTreeSet<u32>{fs::read_dir("/proc/self/task").unwrap().map(|entry|entry.unwrap().file_name().to_string_lossy().parse().unwrap()).collect()}
+fn snapshot(label:&str)->(BTreeSet<i32>,BTreeSet<u32>){let fds=fd_set();let tasks=task_set();println!("SNAPSHOT {label} fds={fds:?} tasks={tasks:?}");(fds,tasks)}
+fn until(label:&str,mut condition:impl FnMut()->bool){
+ let deadline=Instant::now()+Duration::from_secs(4);
+ loop{if condition(){return}assert!(Instant::now()<deadline,"bounded handshake: {label}");
+  // Timed condition polling only prompts another actual fdinfo/state observation;
+  // elapsed time never substitutes for registration, closure or readiness.
+  let guard=state();drop(control().1.wait_timeout(guard,Duration::from_millis(2)).unwrap());
+ }
+}
+fn seam_path(kind:&str)->std::path::PathBuf{Path::new(TMP).parent().unwrap().join(format!("local-{kind}"))}
+fn require_fd(fd:i32,kind:&str){assert_eq!(fs::read_link(format!("/proc/self/fd/{fd}")).unwrap(),seam_path(kind));}
+fn local_open(index:i32,kind:&str)->i32{
+ assert_eq!(index,0);OpenOptions::new().read(true).write(true).create(true).truncate(false).open(seam_path(kind)).unwrap().into_raw_fd()
+}
+#[export_name="ihklib_device_open"]pub extern "C" fn fixture_device_open(index:i32)->i32{local_open(index,"device")}
+#[export_name="ihklib_os_open"]pub extern "C" fn fixture_os_open(index:i32)->i32{local_open(index,"os")}
+fn payload(generation:usize)->&'static [u8]{match generation{1=>b"g1 alpha\n\none\0ignored\n",2=>b"g2 beta\ng2 gamma\n",_=>panic!("unexpected generation")}}
+#[no_mangle]pub unsafe extern "C" fn fixture_get(fd:i32,os:i32,out:*mut *mut c_void)->i32{
+ require_fd(fd,"device");assert_eq!(os,0);assert!(!out.is_null());let mut obs=state();
+ let generation=obs.generations.len()+1;assert!(generation<=2);let handle=0x410000+generation*0x100;
+ unsafe{*out=handle as *mut c_void;}
+ obs.generations.push(Generation{handle,reads:0,releases:0,regs:Vec::new(),failed:None,events:vec![format!("GET:{generation}")]});drop(obs);changed();0
+}
+#[no_mangle]pub unsafe extern "C" fn fixture_read(fd:i32,handle:*mut c_void,shift:i32,out:*mut c_char)->i32{
+ require_fd(fd,"device");assert_eq!(shift,1);assert!(!out.is_null());let mut obs=state();assert!(!obs.partial);
+ let generation=obs.generations.len();let item=obs.generations.last_mut().unwrap();assert_eq!(item.handle,handle as usize);assert_eq!(item.releases,0);
+ item.reads+=1;assert!(item.reads<=3);let bytes=if item.reads==1{payload(generation)}else{b""};
+ unsafe{std::ptr::copy_nonoverlapping(bytes.as_ptr(),out.cast(),bytes.len());}
+ item.events.push(format!("READ:{generation}:{}:{}",item.reads,bytes.len()));drop(obs);changed();bytes.len() as i32
+}
+#[no_mangle]pub unsafe extern "C" fn fixture_register(fd:i32,event:i32,kind:i32)->i32{
+ require_fd(fd,"os");assert!(kind==101||kind==2);let identity=fd_identity(event).expect("genuine eventfd");
+ let mut obs=state();let partial=obs.partial;let generation=obs.generations.len();let item=obs.generations.last_mut().unwrap();assert_eq!(item.releases,0);
+ assert_eq!(kind,if item.regs.is_empty(){101}else{2});
+ if partial&&kind==2{assert_eq!(item.regs.len(),1);let eps=eventpolls();assert_eq!(eps.len(),1);assert!(registered(eps[0].0,item.regs[0].original));println!("FDINFO partial-first-registration ep={}\n{}",eps[0].0,eps[0].1);item.failed=Some((event,identity));item.events.push("REGISTER_FAIL:2".into());drop(obs);changed();unsafe{*__errno_location()=5;}return -1}
+ let producer=unsafe{dup(event)};assert!(producer>=0);let producer=unsafe{OwnedFd::from_raw_fd(producer)};assert_eq!(fd_identity(producer.as_raw_fd()),Some(identity));
+ println!("REGISTER generation={generation} kind={kind} original-fd={event} eventfd-id={identity} producer-fd={} os-open-fd={fd}",producer.as_raw_fd());item.regs.push(Registration{kind,original:event,identity,producer:Some(producer)});item.events.push(format!("REGISTER:{generation}:{kind}"));drop(obs);changed();0
+}
+#[no_mangle]pub extern "C" fn fixture_release(fd:i32,handle:*mut c_void)->i32{
+ require_fd(fd,"device");let mut obs=state();let partial=obs.partial;let generation=obs.generations.len();let item=obs.generations.last_mut().unwrap();
+ assert_eq!(item.handle,handle as usize);assert_eq!(item.releases,0);item.releases=1;
+ if partial{
+  assert_eq!(item.reads,0);assert_eq!(item.regs.len(),1);let kmsg=&item.regs[0];assert_ne!(fd_identity(kmsg.original),Some(kmsg.identity));
+  let (failed,identity)=item.failed.unwrap();assert_ne!(fd_identity(failed),Some(identity));item.events.push("UNWIND:kmsg-and-failed-status-closed-before-release".into());
+ }else{
+  assert_eq!(item.reads,3);assert_eq!(item.regs.len(),2);let eps=eventpolls();assert_eq!(eps.len(),1);
+  for reg in &item.regs{assert_eq!(fd_identity(reg.original),Some(reg.identity));assert!(registered(eps[0].0,reg.original));}
+  item.events.push("SUCCESS:release-before-del-and-close".into());
+ }
+ item.events.push(format!("RELEASE:{generation}"));drop(obs);changed();0
+}
+#[no_mangle]pub unsafe extern "C" fn fixture_log_open(id:*const c_char,option:i32,facility:i32){
+ assert_eq!(unsafe{CStr::from_ptr(id)}.to_bytes(),b"active-host");assert_eq!(option,1);assert_eq!(facility,176);let mut obs=state();obs.opens+=1;assert_eq!(obs.opens,1);drop(obs);changed();
+}
+#[no_mangle]pub extern "C" fn fixture_log_close(){let mut obs=state();obs.closes+=1;assert_eq!(obs.closes,1);drop(obs);changed();}
+#[no_mangle]pub unsafe extern "C" fn fixture_log_line(priority:i32,format:*const c_char,text:*const c_char){
+ assert_eq!(priority,6);assert_eq!(unsafe{CStr::from_ptr(format)}.to_bytes(),b"%s");let bytes=unsafe{CStr::from_ptr(text)}.to_bytes().to_vec();
+ let mut obs=state();assert!(!obs.partial);obs.lines.push(bytes);drop(obs);changed();
+}
+fn reset(partial:bool){let mut obs=state();*obs=Observation{partial,..Observation::default()};}
+fn spawn()->Workers{let mut workers=Workers::new().unwrap();workers.spawn(false,176,Arc::new(CString::new("active-host").unwrap()),-1).unwrap();workers}
+fn ready(workers:&Workers,generation:usize)->i32{
+ until("both real notification registrations",||{
+  assert_eq!(workers.failure(),None);let obs=state();if obs.generations.len()!=generation{return false}let item=obs.generations.last().unwrap();
+  if item.regs.len()!=2{return false}let eps=eventpolls();eps.len()==1&&item.regs.iter().all(|reg|registered(eps[0].0,reg.original))
+ });
+ let eps=eventpolls();assert_eq!(eps.len(),1);println!("FDINFO ready-generation={generation} ep={}\n{}",eps[0].0,eps[0].1);eps[0].0
+}
+fn signal(kind:i32,generation:usize){let obs=state();let item=&obs.generations[generation-1];let fd=item.regs.iter().find(|r|r.kind==kind).unwrap().producer.as_ref().unwrap().as_raw_fd();notify(fd).unwrap();}
+fn drive(workers:&Workers,generation:usize){
+ signal(101,generation);
+ until("real Ring append bytes",||{assert_eq!(workers.failure(),None);let obs=state();obs.generations[generation-1].reads==1&&fs::read(Path::new(TMP).join("mcos0/kmsg0")).ok().as_deref()==Some(payload(generation))});
+ signal(2,generation);
+ until("status READ and exact syslog lines",||{assert_eq!(workers.failure(),None);let obs=state();obs.generations[generation-1].reads==2&&obs.lines.len()==2*generation});
+ let obs=state();let expected:Vec<Vec<u8>>=if generation==1{vec![b"g1 alpha".to_vec(),b"one".to_vec()]}else{vec![b"g1 alpha".to_vec(),b"one".to_vec(),b"g2 beta".to_vec(),b"g2 gamma".to_vec()]};assert_eq!(obs.lines,expected);
+}
+fn closed_before_rearm(ep:i32,generation:usize){
+ until("release plus actual DEL and owned close before rearm",||{
+  let obs=state();let item=&obs.generations[generation-1];item.releases==1&&item.regs.iter().all(|reg|!registered(ep,reg.original)&&fd_identity(reg.original)!=Some(reg.identity))
+ });
+ let info=fs::read_to_string(format!("/proc/self/fdinfo/{ep}")).unwrap();println!("FDINFO cleaned-generation={generation} ep={ep}\n{info}");
+ let mut obs=state();for reg in &mut obs.generations[generation-1].regs{drop(reg.producer.take());}
+}
+fn verify_generation(item:&Generation,generation:usize,partial:bool){
+ assert_eq!(item.releases,1);let expected=if partial{vec!["GET:1".to_string(),"REGISTER:1:101".into(),"REGISTER_FAIL:2".into(),"UNWIND:kmsg-and-failed-status-closed-before-release".into(),"RELEASE:1".into()]}else{vec![format!("GET:{generation}"),format!("REGISTER:{generation}:101"),format!("REGISTER:{generation}:2"),format!("READ:{generation}:1:{}",payload(generation).len()),format!("READ:{generation}:2:0"),format!("READ:{generation}:3:0"),"SUCCESS:release-before-del-and-close".into(),format!("RELEASE:{generation}")]};
+ assert_eq!(item.events,expected);println!("ORDER generation={generation} partial={partial} events={:?}",item.events);
+}
+fn success_case(){
+ reset(false);let baseline=snapshot("success-before");let mut workers=spawn();
+ until("one actual active worker thread",||task_set().len()==baseline.1.len()+1);
+ workers.add();let ep=ready(&workers,1);let _=snapshot("success-active-g1");drive(&workers,1);workers.remove().unwrap();closed_before_rearm(ep,1);assert_eq!(workers.failure(),None);
+ workers.add();assert_eq!(ready(&workers,2),ep);drive(&workers,2);assert_eq!(workers.finish(),0);
+ assert_eq!(workers.items[0].life.status.load(Ordering::Acquire),0);assert!(workers.items[0].life.finished.load(Ordering::Acquire));
+ {let mut obs=state();assert_eq!(obs.generations.len(),2);assert_ne!(obs.generations[0].handle,obs.generations[1].handle);for (i,item) in obs.generations.iter_mut().enumerate(){verify_generation(item,i+1,false);for reg in &mut item.regs{assert_ne!(fd_identity(reg.original),Some(reg.identity));drop(reg.producer.take());}}assert_eq!((obs.opens,obs.closes),(1,1));}
+ drop(workers);until("success exact fd/task retirement",||fd_set()==baseline.0&&task_set()==baseline.1);assert_eq!(snapshot("success-after"),baseline);println!("CASE active-two-generation-stop status=0 generations=2 reads=6 releases=2 exact-lines=4 restored-fds-tasks=1");
+}
+fn partial_case(){
+ reset(true);let baseline=snapshot("partial-before");let mut workers=spawn();workers.add();
+ until("partial second REGISTER finishes worker",||workers.failure()==Some(-22));assert_eq!(workers.finish(),-22);
+ assert_eq!(workers.items[0].life.status.load(Ordering::Acquire),-22);assert!(workers.items[0].life.finished.load(Ordering::Acquire));
+ {let mut obs=state();assert_eq!(obs.generations.len(),1);let item=&mut obs.generations[0];verify_generation(item,1,true);for reg in &mut item.regs{assert_ne!(fd_identity(reg.original),Some(reg.identity));drop(reg.producer.take());}assert!(obs.lines.is_empty());assert_eq!((obs.opens,obs.closes),(1,1));}
+ assert!(eventpolls().is_empty());drop(workers);until("partial exact fd/task retirement",||fd_set()==baseline.0&&task_set()==baseline.1);assert_eq!(snapshot("partial-after"),baseline);println!("CASE partial-second-register status=-22 first-registration-real=1 reads=0 releases=1 restored-fds-tasks=1");
+}
+fn main(){
+ assert_eq!(unsafe{getuid()},1000);assert_eq!(unsafe{geteuid()},1000);let _=control();
+ assert!(!Path::new(TMP).exists(),"fresh ring directory required");success_case();partial_case();
+ fs::remove_dir_all(TMP).unwrap();for kind in ["device","os"]{fs::remove_file(seam_path(kind)).unwrap();}
+ println!("active-supervisor cases=2 genuine-threads-eventfd-epoll-ring=1 all-owned-fds-tasks-restored=1 local-IHK-syslog-seams-only=1");
+}

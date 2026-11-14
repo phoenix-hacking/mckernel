@@ -1,0 +1,301 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "EXACT_FUTURE_THREE_COMMAND_HOST_PLAN_NO_GRANT",
+  "runtime_authority": null,
+  "source_slices": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/THREE-SOURCE-SLICES.json",
+    "bytes": 7820,
+    "sha256": "f65137a4c6ab4f64e06512336456a716c68513ec4b44bf0eb23d60cabbd28471"
+  },
+  "tool_refs": {
+    "stable_Rust": {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "bytes": 654904,
+      "sha256": "028fd60b0e0add5505c661cd3ccde91393d615c8729bd95d94ab1e91409b36a1"
+    },
+    "gcc9": {
+      "path": "/usr/bin/gcc-9",
+      "bytes": 1158288,
+      "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f"
+    }
+  },
+  "profile_reuse": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-ptrace-io-provider-backlog-1/SOURCE-HANDOFF.NOT-GRANTED.json",
+    "bytes": 29310,
+    "sha256": "35e950edcf1044c2e280f9dbc26438ef7ccd951aa285518863e121531d722b62"
+  },
+  "commands": [
+    {
+      "label": "00-existing-Rust-three-callback-object",
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--crate-name",
+        "f03_current26eb_three_callbacks",
+        "--crate-type",
+        "lib",
+        "--edition=2021",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "--cfg",
+        "enable_profile",
+        "--cfg",
+        "enable_perf",
+        "--cfg",
+        "f03_ptrace_io_find_selected_candidate",
+        "--cfg",
+        "f03_ptrace_io_unlock_selected_candidate",
+        "--cfg",
+        "f03_exit_waitq_wake_selected_candidate",
+        "--emit=obj=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/future-host-output-1/providers.o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/lib.fixture.rs"
+      ],
+      "cwd": "/home/holden/mckernel",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Original-C/selected-Rust callback forwarding with genuine headers; find/unlock/waitq are inert HOST identity/scalar endpoints. No real lookup, thread lock, wait list, wake, scheduler, refcount, current stack, kernel, syscall, IRQ or native effect.",
+      "argv_compact_json_LF_sha256": "b380c3702e210a6cf590014cbfc625cbf97379d471cac29064b3fb221888de43"
+    },
+    {
+      "label": "01-genuine-header-original-C-and-three-selected-aliases-link",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-Werror=incompatible-pointer-types",
+        "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+        "-DIHK_OS_MANYCORE",
+        "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+        "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+        "-DMCKERNEL_NATIVE_CLONE3",
+        "-DMCKERNEL_NATIVE_CLONE_TID",
+        "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+        "-DMCKERNEL_NATIVE_FUTEX",
+        "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+        "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+        "-DMCKERNEL_RUST_BITOPS",
+        "-DMCKERNEL_RUST_LIST_HELPERS",
+        "-DMCKERNEL_RUST_LOCK_HELPERS",
+        "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_PTE_HELPERS",
+        "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+        "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+        "-DPROFILE_ENABLE",
+        "-D__KERNEL__",
+        "-DMCKERNEL_NATIVE_FORK_OWNED_TRANSACTION",
+        "-DMCKERNEL_RUST_RLIMIT_HELPERS",
+        "-DMCKERNEL_RUST_SCHED_POLICY_HELPERS",
+        "-DMCKERNEL_RUST_SCHED_PRIO_HELPERS",
+        "-DMCKERNEL_RUST_SHMID_HELPERS",
+        "-DMCKERNEL_RUST_SHM_PERM_HELPERS",
+        "-DMCKERNEL_RUST_SIGNAL_HELPERS",
+        "-DMCKERNEL_RUST_SYSCALL_OFFLOAD",
+        "-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/current-composition10-compiler-preparation-1/bounded-storage-nominal-correction-current80-1/expert-conditional-projection-correction-1/generated-build/kernel/include",
+        "-I/home/holden/mckernel/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/current-composition10-compiler-preparation-1/bounded-storage-nominal-correction-current80-1/expert-conditional-projection-correction-1/generated-build/kernel",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/current-composition10-compiler-preparation-1/bounded-storage-nominal-correction-current80-1/expert-conditional-projection-correction-1/generated-build",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64/include",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64",
+        "-I/home/holden/mckernel/ihk/ikc/include",
+        "-I/home/holden/mckernel/ihk/linux/include",
+        "-I/home/holden/mckernel/lib/include",
+        "-I/home/holden/mckernel/arch/x86_64/kernel/include",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Wno-unused-parameter",
+        "-Wno-sign-compare",
+        "-Wno-unused-function",
+        "-Wno-implicit-fallthrough",
+        "-Wno-stringop-truncation",
+        "-ffreestanding",
+        "-O2",
+        "-nostdinc",
+        "-isystem",
+        "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+        "-fno-omit-frame-pointer",
+        "-mcmodel=large",
+        "-mno-red-zone",
+        "-mno-sse",
+        "-DMCKERNEL_RUST_X86_CPU_HELPERS",
+        "-DMCKERNEL_RUST_F03_WAKEUP_FIND",
+        "-DMCKERNEL_RUST_F03_WAKEUP_UNLOCK",
+        "-DMCKERNEL_RUST_F03_EXIT_WAITQ_WAKE",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/driver.c",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/future-host-output-1/providers.o",
+        "-no-pie",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/future-host-output-1/parity"
+      ],
+      "cwd": "/home/holden/mckernel",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Original-C/selected-Rust callback forwarding with genuine headers; find/unlock/waitq are inert HOST identity/scalar endpoints. No real lookup, thread lock, wait list, wake, scheduler, refcount, current stack, kernel, syscall, IRQ or native effect.",
+      "argv_compact_json_LF_sha256": "856ca0c412d1e7ee13dd3b37b63b8048c39bdd1ab76d70713ef9fbc9e85fdd8e"
+    },
+    {
+      "label": "02-find90-unlock3-waitq3-and-genuineABI19",
+      "argv": [
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/future-host-output-1/parity"
+      ],
+      "cwd": "/home/holden/mckernel",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Original-C/selected-Rust callback forwarding with genuine headers; find/unlock/waitq are inert HOST identity/scalar endpoints. No real lookup, thread lock, wait list, wake, scheduler, refcount, current stack, kernel, syscall, IRQ or native effect.",
+      "argv_compact_json_LF_sha256": "2c9f4d9a6d48ea79009dfc8de23771bef8904ab7385b340ae15b752f7c04d373"
+    }
+  ],
+  "fresh_output": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/future-host-output-1",
+  "output_must_be_created_once_by_Root_after_grant": true,
+  "input_refs": {
+    "THREE-SOURCE-SLICES.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/THREE-SOURCE-SLICES.json",
+      "bytes": 7820,
+      "sha256": "f65137a4c6ab4f64e06512336456a716c68513ec4b44bf0eb23d60cabbd28471"
+    },
+    "retained-abi.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/retained-abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    "driver.c": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/driver.c",
+      "bytes": 5834,
+      "sha256": "424bcfb562a2ec7544de98aadbf2dfa0d8cebc00f94aa8e859a676c517099fd4"
+    },
+    "retained-waitq-layout.Rust.inc": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/retained-waitq-layout.Rust.inc",
+      "bytes": 244,
+      "sha256": "2d57c89c468d5aa19a93bb5650100ccbe96c93b10376004825e80ef0303cd848"
+    },
+    "lib.fixture.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/lib.fixture.rs",
+      "bytes": 1934,
+      "sha256": "19194a421f226308444890d6f2476a4d4b50a9ac7c90d58c56839a2447dee5cd"
+    },
+    "candidate/kernel/syscall.c": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/candidate/kernel/syscall.c",
+      "bytes": 915683,
+      "sha256": "eb3ec7202a3f6b6a0a13ae14d008ddfb6ff717f413e5b2e287c3eabba40243d1"
+    },
+    "candidate/kernel/rust/syscall_policy.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/candidate/kernel/rust/syscall_policy.rs",
+      "bytes": 1259465,
+      "sha256": "488a2da40042cd577e503007aed43d818939026cacf831a3dd66e36ba77254ab"
+    },
+    "02-ptrace_wakeup_thread_unlock_bridge/selected.Rust.inc": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/02-ptrace_wakeup_thread_unlock_bridge/selected.Rust.inc",
+      "bytes": 206,
+      "sha256": "8a5bce5ac8c26f862ca01aaafc7e28f10098d0c680c6c3601f2c0aadc3e177ea"
+    },
+    "02-ptrace_wakeup_thread_unlock_bridge/original.C.inc": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/02-ptrace_wakeup_thread_unlock_bridge/original.C.inc",
+      "bytes": 124,
+      "sha256": "1bf0736959c0af9105c6851403fde02b0a0ac1c67da88d7053337a61c79da8cc"
+    },
+    "02-ptrace_wakeup_thread_unlock_bridge/reused.Rust.inc": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/02-ptrace_wakeup_thread_unlock_bridge/reused.Rust.inc",
+      "bytes": 143,
+      "sha256": "5d14eb0b87f81a82385c8c85412472f9fd9ce3ec57fe5a9760ccdc4887c0ebb8"
+    },
+    "02-ptrace_wakeup_thread_unlock_bridge/paired-selector.C.inc": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/02-ptrace_wakeup_thread_unlock_bridge/paired-selector.C.inc",
+      "bytes": 356,
+      "sha256": "d75472f400cd1eaf3eaef9b1016debb2125c534dab3e2708cfef0d3daaeceeeb"
+    },
+    "03-thread_exit_waitq_wake_bridge/selected.Rust.inc": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/03-thread_exit_waitq_wake_bridge/selected.Rust.inc",
+      "bytes": 266,
+      "sha256": "37b23eb62a81340fdd9eba4246fb23db38c1e0ef0af776912f30186c0e021103"
+    },
+    "03-thread_exit_waitq_wake_bridge/original.C.inc": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/03-thread_exit_waitq_wake_bridge/original.C.inc",
+      "bytes": 92,
+      "sha256": "939bc076afb6ba22e3a427b87cd9622f295f762dc31a58aa93ebddab4282f5f1"
+    },
+    "03-thread_exit_waitq_wake_bridge/reused.Rust.inc": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/03-thread_exit_waitq_wake_bridge/reused.Rust.inc",
+      "bytes": 204,
+      "sha256": "9148a6840c2f7794326a33378a89d9870f82ebbc67aa4b5e41e706704b9f1de2"
+    },
+    "03-thread_exit_waitq_wake_bridge/paired-selector.C.inc": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/03-thread_exit_waitq_wake_bridge/paired-selector.C.inc",
+      "bytes": 476,
+      "sha256": "f4a8850d899be6d5501fd7de69a5bf44d9430c06e21e09b1b42f055b64332045"
+    },
+    "01-ptrace_wakeup_find_thread_bridge/selected.Rust.inc": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/01-ptrace_wakeup_find_thread_bridge/selected.Rust.inc",
+      "bytes": 214,
+      "sha256": "0e3c1417845d40fbf6ecdd16f89eea80238d1e68062cf8decb9dc181f8ce3e53"
+    },
+    "01-ptrace_wakeup_find_thread_bridge/original.C.inc": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/01-ptrace_wakeup_find_thread_bridge/original.C.inc",
+      "bytes": 124,
+      "sha256": "076a60bc58af1f9a10a7cfc8137b7f9a8d96525e3e9ce98feacc8e30e4027f1e"
+    },
+    "01-ptrace_wakeup_find_thread_bridge/reused.Rust.inc": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/01-ptrace_wakeup_find_thread_bridge/reused.Rust.inc",
+      "bytes": 153,
+      "sha256": "d09cc9d508584b9ac10ac27c224fa52e310471d37e87f4693be420520505d661"
+    },
+    "01-ptrace_wakeup_find_thread_bridge/paired-selector.C.inc": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/01-ptrace_wakeup_find_thread_bridge/paired-selector.C.inc",
+      "bytes": 352,
+      "sha256": "7286ae41aacee8d13e6b71af882fe4b91bcc9c487fe79659b1259803632cd811"
+    }
+  },
+  "current_header_refs": {
+    "kernel/include/process.h": {
+      "path": "/home/holden/mckernel/kernel/include/process.h",
+      "bytes": 26602,
+      "sha256": "8848d536f2fa847a59af72d573ec9c55838c27cea664d46438ab4e038bf83649"
+    },
+    "kernel/include/waitq.h": {
+      "path": "/home/holden/mckernel/kernel/include/waitq.h",
+      "bytes": 1847,
+      "sha256": "f3fc8247a033a77efa407f6fe365a2b1bcad404e96de2cbf845f407a2e5946ff"
+    },
+    "lib/include/list.h": {
+      "path": "/home/holden/mckernel/lib/include/list.h",
+      "bytes": 2870,
+      "sha256": "4ddb20f524e073fb69b6fcb1268121c76c653c4007d914437555a4d17af48440"
+    },
+    "kernel/rust/abi.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    "kernel/rust/waitq.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/waitq.rs",
+      "bytes": 10868,
+      "sha256": "246a850a7e305d69d55de5903273e35ba62cc204167cc95acc90973c8f0aaefc"
+    }
+  },
+  "expected": {
+    "find_original_selected_pairs": 90,
+    "unlock_valid_pointer_pairs": 3,
+    "waitq_valid_pointer_pairs": 3,
+    "genuine_ABI_words": 19,
+    "stdout": "PASS three reused callbacks:90 find +3 unlock +3 waitq pointer-forwarding pairs +19 genuine ABI words; explicit HOST mocks only; real lookup/lock/wake/lifetime ownership OPEN\n"
+  },
+  "resources": {
+    "CPU": [
+      6
+    ],
+    "jobs": 1,
+    "AS_bytes": 2147483648,
+    "CPU_seconds_per_command": 60,
+    "FSIZE_bytes": 67108864,
+    "core": 0,
+    "wall_seconds_per_command": 90,
+    "aggregate_budget_unchanged": true
+  },
+  "actual_grant": null,
+  "actual_first_compiler_timestamp": null,
+  "actual_result": null,
+  "default_acceptance": false,
+  "native_acceptance": false,
+  "whole_file_retired": false,
+  "held_invariants": [
+    "find_thread retained lookup/thread lock ownership and matching thread_unlock",
+    "live thread pointer provenance through existing synchronous callback",
+    "live waitq graph and lock/wakeup/scheduler contract",
+    "no new reference/lock/IRQ/cleanup semantics",
+    "fixed existing Linux6.12/x86_64 non-UBSAN/non-DCFA scope; no NOCACHE expansion"
+  ]
+}

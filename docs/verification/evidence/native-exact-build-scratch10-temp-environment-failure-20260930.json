@@ -1,0 +1,63 @@
+{
+  "status": "FAIL_HARNESS_CORRECTED_LIGHT",
+  "acceptance": "No build, boot, guest, or application acceptance is claimed.",
+  "candidate": {
+    "commit": "e8bece7fd55a862599facb6c5e81e7597a4a5c0d",
+    "request_sha256": "2f02bce2d57a473abda942518e4e8ed99bc0d1cbfec37c1d1441f2bfc0ad8f9c",
+    "manifest_sha256": "61500ea99308925a80ab0e76c1804c276b8bca2966059ec73ff6977524d124ec"
+  },
+  "retained_attempt": {
+    "evidence_root": "/home/holden/mckernel-work/scratch/native-exact-build-evidence-e8bece7f-scratch-10",
+    "evidence_identity": "1831:4457329",
+    "output_root": "/home/holden/mckernel-work/scratch/native-exact-build-output-e8bece7f-scratch-10",
+    "output_identity": "1831:4457328",
+    "container_id": "8c56b1377fc66808ed85b348d2c09df82222d1a8c246a056f154c620b5cb401a",
+    "container_name": "mckernel-exact-4c0bc3419f8447f1a060f4edaef6ad8d",
+    "container_state": "exited",
+    "container_exit_code": 1,
+    "container_oom_killed": false,
+    "driver_log_sha256": "0f5f1bf0bbe25f0a53e694fbec909113afb3cfefe6684632a18b48f48daa1da1",
+    "executed_phase4_sha256": "5b6f14b5f8908d34c35714dbbc39d08b1e446a2b35683312920b13f0aa930150",
+    "inspect_terminal_sha256": "1313a211cc05ad45d5dbeb23f7c317d6b19dd61458cacba94003519629a8e476"
+  },
+  "compiled_modules": {
+    "ihk.ko": "b4dbf04c47c8b8175462982cfee6e833bd40a2b7d6cadd947d68d4612c97dc9f",
+    "ihk-smp-x86_64.ko": "268d6d3b36fd33f9650c5b7b3ae5233e606d07c992e1e0c4be64493527f84bbb",
+    "mcctrl.ko": "d927bc4460d23c175660f0a23ad8d9dec79b9e5c144e4ae0c898091bcc98a019"
+  },
+  "failure": {
+    "test": "scripts.tests.test_ihk_os_registry_check.IhkOsRegistryContractTests.test_exact_rust_1_92_fixture_when_configured",
+    "observed": "PermissionError: [Errno 13] Permission denied: /tmp/ihk-os-registry-rust-*/registry-tests",
+    "python_suite_result": "11 run; 10 pass; 1 error",
+    "root_cause": "The phase-4 kbuild_environment rebuilt the environment with env -i and omitted RUNNER_TEMP, TMPDIR, TMP, and TEMP, so Python selected the deliberately noexec /tmp mount.",
+    "classification": "offline postcheck environment adapter defect; not a Rust registry or kernel compiler failure"
+  },
+  "correction": {
+    "source": "scripts/native_rust_exact_build_offline.py",
+    "behavior": "The strict phase-4 adapter now requires one exact kbuild_environment anchor and carries all four reviewed temporary-directory variables through env -i.",
+    "oracle_preserved": true,
+    "tmp_noexec_preserved": true,
+    "registry_fixture_unchanged": true
+  },
+  "checks": {
+    "offline_driver_suite": "21/21 PASS",
+    "registry_host_suite": "10 PASS, 1 pinned-compiler skip",
+    "configured_container_suite": "11/11 PASS; nested Rust fixture 15/15 PASS",
+    "configured_container_output_sha256": "e6effb01d23958245a59d781ed5818fb6d73a9ec53b01d6ee01d9843ba607a07",
+    "configured_container_output_identity": "1831:4063239",
+    "configured_container_profile": "image sha256:0f8ad280e47d76b23554de4aec411752e1f779f9b2fc7fece6b0b3375dc9775d; CPU 2; 1 GiB memory/swap; 128 PIDs; no network; read-only /src; noexec /tmp; executable /evidence"
+  },
+  "preserved_probe_failures": [
+    {
+      "cause": "image sleep entrypoint was not overridden",
+      "output_identity": "1831:4063235",
+      "output_sha256": "f5dbc5730b413e83fae75b9ebf463373c5e6b502c77076103c580461fa2582fb"
+    },
+    {
+      "cause": "read-only IHK bind required process-local safe.directory",
+      "output_identity": "1831:4063237",
+      "output_sha256": "9ab0099b6592d2e046fefbafe5c8d19cf5a2cc9210dfb3d35f6e37bfb1787aba"
+    }
+  ],
+  "next": "Commit and push the correction, prepare a fresh source-bound candidate/request, obtain fresh execution review, and run one exact build. Scratch-10 remains immutable failure evidence."
+}

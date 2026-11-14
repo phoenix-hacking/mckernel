@@ -1,0 +1,119 @@
+{
+  "SDK8_artifact_acceptance": null,
+  "accounting": {
+    "compiler": 0,
+    "jobs": 0,
+    "reservations": 0,
+    "root": 0,
+    "sourcecopy": 0,
+    "stage": 0
+  },
+  "actual_tests": null,
+  "baseline_source_identity": "2093e464dd2dfb976016a71197a120929e16bfd830f4d643126b96ea1ea0a2e8",
+  "basis_qualification": "SDK6 accepted source68/2093 and actualartifact9159 remain original basis. SDK7 failedE0061 supplies preserved failure history only; no SDK7 artifact acceptance.",
+  "candidate_patch": {
+    "bytes": 1770,
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/sdk7-first-caller-correction-1/PRIVATE-OMITTED-CALLER-CORRECTION.patch",
+    "sha256": "955a8e11b92a250f81b95d86a96202cb0ae9d64a67c0c9c850b0e581b9db8f33"
+  },
+  "candidate_source_binding": {
+    "bytes": 6556,
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/sdk7-first-caller-correction-1/CURRENT-SOURCE-BINDINGS.json",
+    "sha256": "dcddcff2cae4efdb08fc0e2395090740509094dd4f6246807448d2f6f90866f4"
+  },
+  "candidates": {
+    "abi/sysfs_request.rs": {
+      "bytes": 9521,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/source/abi/sysfs_request.rs",
+      "sha256": "1b89d1261d218c39d531cfe00181a30562d9953deae5ac0956641f407239df0f"
+    },
+    "smp_application.rs": {
+      "bytes": 74960,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/source/smp_application.rs",
+      "sha256": "6adb4d11e7285caadd699bf22359bf21922f7dbfa4828b12b7a96fb7a1b07be0"
+    },
+    "smp_service.rs": {
+      "bytes": 52577,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/sdk7-first-caller-correction-1/source/smp_service.rs",
+      "sha256": "7d4948d7b0a5139048cf8085863ffcca43cbfff53024c34b5fd4281caed6f639"
+    },
+    "sysfs_memory.rs": {
+      "bytes": 44674,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/source/sysfs_memory.rs",
+      "sha256": "aa98b251e973cee018cec6d69586d99a56c9ea1d208f69c4a645696254af2004"
+    },
+    "sysfs_remote.rs": {
+      "bytes": 13048,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/source/sysfs_remote.rs",
+      "sha256": "b9bb72eb6c4986067e2557e15ac625d90cfddcb53f38c8b99cc3648e85f0d117"
+    },
+    "sysfs_rpc.rs": {
+      "bytes": 8000,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/source/sysfs_rpc.rs",
+      "sha256": "39c5ff87b671c498afffcff9feb10833918d75207559462952803858fb218131"
+    },
+    "sysfs_zeroing.rs": {
+      "bytes": 12908,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/source/sysfs_zeroing.rs",
+      "sha256": "6d35d46758ccf5092db91780bbc35f8e0cacc0e8a3201379d5af95e6bf97f94e"
+    }
+  },
+  "canonical_corrected_service": null,
+  "changed_candidate_rows_against_SDK7": [
+    "smp_service.rs"
+  ],
+  "changed_rows_against_SDK6": [
+    "abi/sysfs_request.rs",
+    "smp_application.rs",
+    "smp_service.rs",
+    "sysfs_memory.rs",
+    "sysfs_remote.rs",
+    "sysfs_rpc.rs",
+    "sysfs_zeroing.rs"
+  ],
+  "current_live_postjoin": null,
+  "execution_ready": false,
+  "expected_unchanged_rows_against_SDK6": 61,
+  "failure_history": "Preserve SDK7actual E0061 and original observer failures. Single caller correction is source-only accepted; corrected actual fixture and full modulebuild are not yet proven here.",
+  "fresh_nonce": null,
+  "future_source_identity": null,
+  "helper_function_AST_byte_structure_unchanged": true,
+  "known_assignment_changes": [
+    "H:SDK8freshprivatepreparedroot",
+    "FROZEN_CANDIDATES.smp_service.rs:sole7d494callerfix",
+    "ACTUAL_TESTS:NULL until actual corrected fixture"
+  ],
+  "new_helper_sha256": "8814cdc35ac6996db511c3a1e735960a6e5aa7a948b9f2ffe9af37a7db786d17",
+  "next_prepare_argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/prepare.py"
+  ],
+  "ordinary_profile": {
+    "AS": 2147483648,
+    "CPU": 0,
+    "CPU_seconds": 30,
+    "FSIZE": 134217728,
+    "NOFILE": 256,
+    "capture_source_sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8",
+    "core": 0,
+    "headroom": "fresh19GiB aggregate, adopted HOST/scratchfloors and fullgrowth required",
+    "interpreter": "/home/holden/anaconda3/bin/python3",
+    "one_job": true,
+    "retirement_seconds": 3,
+    "wall_seconds": 35
+  },
+  "original_total_rows": 68,
+  "predecessor_helper": {
+    "bytes": 20038,
+    "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-7/prepare.py",
+    "sha256": "f0ba7faf957b7a3f2fe0cde8c72808ffee56eef143c776f6c2cb955dfda50139"
+  },
+  "remaining_binding": "After genuine corrected fixture+root record arrive: retain this pending helper, bind ACTUAL_TESTS exact path/sha256 in additive ready postimage, normalize genuine exact-seven review, materialize SOURCE-ACCEPTANCE.INPUT.json; then root ordinary prepare grant and profile required.",
+  "root_preparation_grant": null,
+  "root_source_acceptance": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_publication": null,
+  "status": "SDK8_HELPER_AND_SEVEN_SOURCE_GATE_PENDING_ACTUAL_CORRECTED_FIXTURE_ROOT_ACCEPTANCE"
+}

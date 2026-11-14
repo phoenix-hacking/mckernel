@@ -1,0 +1,112 @@
+{
+  "task_id": "sdk7-postgrowth-final-static-1-independent-source-composition",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_SOURCE_COMPOSITION_NOT_EXECUTION_RELEASE",
+  "reviewer": "/root/default_witness_gate",
+  "implementation_ownership": false,
+  "execution_authority": false,
+  "SDK_execution_released": false,
+  "actual_execution_or_postjoin_acceptance": false,
+  "sole_actual_execution_postjoin_reviewer": "/root/custody_release_review",
+  "frozen_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sdk7-postgrowth-final-static-1/READY.SOURCE-ONLY.NOT-RELEASED.json",
+    "bytes": 6619,
+    "sha256": "5c8d049f9546dd033ccf13871f62be8242d602ed2911892e994ced2251d877c5"
+  },
+  "reviewed_sources": {
+    "growth_chain_validator.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sdk7-postgrowth-final-static-1/growth_chain_validator.py",
+      "bytes": 17846,
+      "sha256": "9ccf43436ac5e2aefe6fc03f748a5aee26b6625c91d278c01cdab6bde1fb49a2"
+    },
+    "sdk7_authority_adapter.POSTGROWTH-CHAIN.SOURCE-ONLY.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sdk7-postgrowth-final-static-1/sdk7_authority_adapter.POSTGROWTH-CHAIN.SOURCE-ONLY.py",
+      "bytes": 25062,
+      "sha256": "7cf2f884f2c4eaa5f509bad259e364d72a79d72b9bcdb340e42487c02b6832df"
+    },
+    "finalize_sdk7_static.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sdk7-postgrowth-final-static-1/finalize_sdk7_static.py",
+      "bytes": 9361,
+      "sha256": "3552db3886415e0058f8e26b7c435f0fc4793984abbf7c7d745f510a3de4fbe5"
+    },
+    "test_growth_chain_validator.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sdk7-postgrowth-final-static-1/test_growth_chain_validator.py",
+      "bytes": 13416,
+      "sha256": "24ad0bc9a43e343a776ecd54bc046c88702eff4a095724b0103c120bed61de06"
+    },
+    "test_finalization.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sdk7-postgrowth-final-static-1/test_finalization.py",
+      "bytes": 3129,
+      "sha256": "4f6fc2427f517f7d452023d8af204efe15f407b5ba993a81f42ca1cfe0610e33"
+    }
+  },
+  "reviewed_schema": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sdk7-postgrowth-final-static-1/SCHEMA-AND-NEXT-PREPARATION.md",
+    "bytes": 4610,
+    "sha256": "ae1ea500356bd6429d991173098c6c2121d650393b9f7cd654c10888e6c893f2"
+  },
+  "unchanged_pins": {
+    "growth_successor.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sdk7-142g-consumer-successor-source-1/growth_successor.py",
+      "bytes": 7611,
+      "sha256": "696cab2d2f09be636650bc3aa7b590a8f4bee3ff730da3cf8abeea0deede61f7"
+    },
+    "daemon_sdk_owner.142G-SOURCE-ONLY.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sdk7-142g-consumer-successor-source-1/daemon_sdk_owner.142G-SOURCE-ONLY.py",
+      "bytes": 74224,
+      "sha256": "999713a7b4dafa034232d997872132642358aa80029244ad27e571efbf1664ee"
+    },
+    "CURRENT-CONSUMER-SOURCE-MAP.NOT-REVIEWED.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sdk7-142g-consumer-successor-source-1/CURRENT-CONSUMER-SOURCE-MAP.NOT-REVIEWED.json",
+      "bytes": 7202,
+      "sha256": "9576ac1e48fe163b883e2f22666341c4e9ade5a1bdbc09694c1a8d7480ff4aa4"
+    }
+  },
+  "findings": [
+    "Exact source4976 to source04b5 two-hop contract binds source packets, independent canonical payload reviews, consumed copy/retire/final-close phases, positive pidfd exits, corresponding actual caller/tool joins and monotonic custody ordering.",
+    "Original postcheck and first helper quarantine remain failures with both original/predecessor normal-close claims false. First actual_normal_close and consumed_close must be null; exact04b5 source checks prior CONSUMED-CLOSE absence. Only final successor1294129/parent1294126/tool68172 can supply actual normal close and final joins.",
+    "Raw join parser requires retained completed-tool exit0 and positive parent wait; final helper requires parent return0. Genuine killed predecessor returncodes remain preserved. This is a metadata parser contract, not verification that actual processes retired.",
+    "Exact parent696 runs unchanged against explicitly historical accepted growth-stage native2/head/live references. Current v3 head separately admits zero or one exact independently accepted postgrowth container, rejects unsupported/unlisted operations, and retains a complete consumed-nonce relation.",
+    "Adapter diff preserves context, window1793100290, current owner9997/map9576, request/provider/seven command vectors, CPU2-5/jobs1/12GiB profile, UID and ordinary identity/resource/mutex/query guards. Only validator import and accepted_growth_stage bindings extend the prior adapter.",
+    "New adapter and chain require their own exact current fetched source publication and independent source review; parent696 remains the current_growth_validator binding. Finalizer retains null live fields and source-review decisions and emits source-only templates.",
+    "Ordinary root-directory nlink/size observations are separate from pinned backing inode/UUID/142GiB invariants; no false preserved-root identity is introduced."
+  ],
+  "checks": [
+    {
+      "argv": [
+        "taskset",
+        "-c",
+        "0",
+        "prlimit",
+        "--as=2147483648",
+        "--cpu=60",
+        "--",
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "-v",
+        "test_growth_chain_validator",
+        "test_finalization"
+      ],
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sdk7-postgrowth-final-static-1",
+      "returncode": 0,
+      "seconds_reported": 0.131,
+      "tests_passed": 8,
+      "custody_negative_subcases": 15,
+      "current_head_negative_subcases": 8,
+      "static_negative_checks": 2,
+      "scope": "pure synthetic metadata/source checks; no workload or live owner/query calls"
+    },
+    {
+      "scope": "read-only exact frozen READY/source/schema/patch and parent/owner/map identity checks",
+      "status": "PASS"
+    }
+  ],
+  "initial_packet_superseded_source": "Initial f515/17231B chain replaced by owner-frozen9ccf/17846B raw-join tightening before review; no failed candidate check.",
+  "changed_paths": [
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sdk7-postgrowth-final-static-1/INDEPENDENT-SOURCE-REVIEW.json"
+  ],
+  "blocker": null,
+  "next_task": "Dispatcher obtains accepted actual custody/closure inputs and fetched publication/current source review, then uses ordinary static finalizer. Fresh admission/query/execution controls and actual postjoin acceptance remain separately required; custody_release_review owns actual execution/postjoin review."
+}

@@ -1,0 +1,209 @@
+{
+  "actual_case_stdout": {
+    "bytes": 297,
+    "path": "/home/holden/mckernel-work/host-preparation/collector-gate-failure-export-correction-20261020-1/check-2/actual-body-fixture/stdout",
+    "sha256": "e81e8d3731e43a54025a67f63cd2bc24d83a2a3237effe4c218c7806906d2cf5"
+  },
+  "actual_cases": {
+    "CPU_seconds": 1.127685,
+    "actual_commands": 3,
+    "actual_included_body_comparison": "Generatedbaselineexporter exactlymatchesacceptedbase exceptfunctionrename; baseline/currentfinishbodies exactlymatchactualsource blocks exceptfixturePAIR_ROOTmapping andbaselineexportername. Correctedfixtureonlyadds klogctlmacroaroundexactgeneratedbodyinclude.",
+    "all_closed_streams": true,
+    "all_direct_children_joined": true,
+    "all_groups_absent": true,
+    "all_returncodes_zero": true,
+    "all_stderr_bytes_zero": true,
+    "baseline_missing_and_empty": "Bothsuppressraw/contextwhilepreservingfailuremarker.",
+    "corrected_missing_and_empty": "Bothtransportexact79295retainedbyteswithmatchingoffset/hex/END andfailurecontext; savedgate.raw byteexact; no ROUND_END/ROUNDS_COMPLETE.",
+    "elapsed_seconds": 1.1201186149846762,
+    "focused_cases": [
+      "missing_main PASS baseline_suppressed_corrected_exact_retained_raw_and_failure_context",
+      "empty_main PASS baseline_suppressed_corrected_exact_retained_raw_and_failure_context",
+      "missing_without_gate PASS no_fabricated_raw",
+      "empty_without_gate PASS no_fabricated_raw",
+      "unsafe_handoff PASS no_raw_publication"
+    ],
+    "transport_capture_sizes": {
+      "corrected_empty": 165075,
+      "corrected_missing": 165075
+    },
+    "unsafe_owner": "Validgatewithunsafehandoffsuppressesrawandcontext.",
+    "without_saved_gate": "Missingandemptymaincapturebothrefuserecordfabrication."
+  },
+  "actual_finish_body": {
+    "bytes": 3582,
+    "path": "/home/holden/mckernel-work/host-preparation/collector-gate-failure-export-correction-20261020-1/actual_finish_bodies.inc",
+    "sha256": "ee89e4b03332c5ee1a4aeb414a61f509181d32bee24e403e55f4b2fc884868a5"
+  },
+  "actual_fixture": {
+    "bytes": 4501,
+    "path": "/home/holden/mckernel-work/host-preparation/collector-gate-failure-export-correction-20261020-1/test_failure_export_corrected.c",
+    "sha256": "42ca09a8f375a9d3f87d19064e5396128ec9be56970f416888f71b9dc27a0c84"
+  },
+  "actual_focused_cases_acceptance": true,
+  "actual_handoff": {
+    "bytes": 6304,
+    "path": "/home/holden/mckernel-work/host-preparation/collector-gate-failure-export-correction-20261020-1/ACTUAL-FAILURE-EXPORT-CORRECTION-HANDOFF.json",
+    "sha256": "e392414de056d99c4af9fd58ca53833c23f7207d17fec4085cde067b8d5ddb87"
+  },
+  "actual_runner": {
+    "bytes": 3106,
+    "path": "/home/holden/mckernel-work/host-preparation/collector-gate-failure-export-correction-20261020-1/run_checks_corrected_once.py",
+    "sha256": "5ec998e6d8cb2840287e79e9f496cc155aec2015a29847771b7d64c4ad87d101"
+  },
+  "actual_static_collector": {
+    "bytes": 1043696,
+    "path": "/home/holden/mckernel-work/host-preparation/collector-gate-failure-export-correction-20261020-1/check-2/collector",
+    "sha256": "f672d2872f2bbbfbf3c8a686ec2932494b090ed35d9fd973df92cf4769262b10"
+  },
+  "actual_static_collector_mode": "0o700",
+  "actual_static_compile_acceptance": true,
+  "actual_whole": {
+    "bytes": 3486,
+    "path": "/home/holden/mckernel-work/host-preparation/collector-gate-failure-export-correction-20261020-1/check-2/whole.json",
+    "sha256": "de468bc32cefe8f1f6030b85105925b8b0af74d62fd9e3cd5f6037c4b6788a1b"
+  },
+  "application_acceptance": false,
+  "base_source_acceptance": {
+    "bytes": 12404,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-independent-review-20261020-1/COLLECTOR-DRAIN-CORRECTION1-SOURCE-AND-ACTUAL-ELEVEN-CASES-REVIEW.json",
+    "sha256": "5d6179cb58df4928dcf5061ec7a21712085c3798e16b73bbf33a109a18f0d042"
+  },
+  "changed_sources": [
+    {
+      "base": {
+        "bytes": 24161,
+        "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/candidate/pair_collector.c",
+        "sha256": "b4c019d216ab12d41559fcdb9ea3c9f9380201e8f9d4434847ec254118731431"
+      },
+      "candidate": {
+        "bytes": 24489,
+        "path": "/home/holden/mckernel-work/host-preparation/collector-gate-failure-export-correction-20261020-1/candidate/pair_collector.c",
+        "sha256": "fa044ae1994e6da4b20766d9b133acebb8881528dd718b268b2cf53984a883ed"
+      }
+    },
+    {
+      "base": {
+        "bytes": 12059,
+        "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/candidate/pair_trace_retention.inc",
+        "sha256": "acb8163419236147da3c330f26e8dabb67c0e4802d9bdcd2c247d1cded40a468"
+      },
+      "candidate": {
+        "bytes": 12080,
+        "path": "/home/holden/mckernel-work/host-preparation/collector-gate-failure-export-correction-20261020-1/candidate/pair_trace_retention.inc",
+        "sha256": "56fbc60937a4be373a42a44670df573add73cf2b5b5e12e2fec653262507c2e9"
+      }
+    }
+  ],
+  "decision": "PASS_EXACT_TWO_FILE_FAILURE_EXPORT_ORDERING_AND_ACTUAL_FIVE_FOCUSED_CASES_STATIC_COMPILE",
+  "fixture_provenance": {
+    "meaning": "Actualretainedpostfailure79295B snapshot exercisesbyte-exactexporttransport, nothistoricalgate/realPIDreconstruction ornewguest/ABIproof.",
+    "original_failed64_PID_mapping": "UNKNOWN,fixtureexplicitPID0/0",
+    "original_failed64_gate_input": "UNKNOWN,notcaptured",
+    "retained_input": {
+      "bytes": 79295,
+      "meaning": "Actual retained postfailure snapshot from closed composite64 failure; original gate input and actual PID mapping were not captured, and are not invented by this fixture",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/failure-classification-1/trace-reproducer-1/current-raw.bin",
+      "sha256": "a11eddb148e2a9d34281d3e239b56b4081e1f2bf75696c121e405bed467eb721"
+    }
+  },
+  "functional_scope": "Functional OS/apps plus active Rust/reviewed assembly compute-C cutover; permitted Linux userland collector failure transport only",
+  "implementation_ownership": false,
+  "module_load_acceptance": false,
+  "native_acceptance": false,
+  "next": "RootmayintegratetheexactreviewedLinuxuserlandsource/binaryandpin itforalaterindependentlyreviewedaffectedstagewhenneeded. ExistingacceptedHOST66nativebinary/reportremainunchanged; nonewguestauthorityfromofflineacceptance.",
+  "patch": {
+    "bytes": 2767,
+    "path": "/home/holden/mckernel-work/host-preparation/collector-gate-failure-export-correction-20261020-1/failure-export-order.patch",
+    "sha256": "74d3a0a5b7c876489277ad49bfd0517f7b544a767a69af6ae6804cbc0a9e35df"
+  },
+  "positive_CREATE_PPD_or_parent_RETURN_acceptance": false,
+  "preserved_failure_family": {
+    "bounded_correction": "Onlyfixtureklogctlmacroaroundgeneratedfinishinclude; freshcheck-2runner/outputnamespace. No Werrorrelaxation orproductionchangeafterinitialfailure.",
+    "old_eleven_passed_cases_replayed": false,
+    "old_native_capture_replayed": false,
+    "original_compile_failure": {
+      "bytes": 1245,
+      "path": "/home/holden/mckernel-work/host-preparation/collector-gate-failure-export-correction-20261020-1/check-1/whole.json",
+      "sha256": "cb3e33577a2c1f2fbdb0dc30447b8ae2517e389fe93b85de1b6e4a955056df27"
+    },
+    "original_failed_fixture": {
+      "bytes": 4454,
+      "path": "/home/holden/mckernel-work/host-preparation/collector-gate-failure-export-correction-20261020-1/test_failure_export.c",
+      "sha256": "287b79f6e2108458169691ff2a2730f9b0f42841bc431afc05aed117cea4c792"
+    },
+    "original_proposal": {
+      "bytes": 5014,
+      "path": "/home/holden/mckernel-work/host-preparation/collector-gate-failure-export-correction-20261020-1/SOURCE-AND-CHECK-PROPOSAL.json",
+      "sha256": "c6852e6fec4fef6af9dbf461f9cf20adf20a0904cdbf465a471153b373bc4658"
+    }
+  },
+  "production_default_activation": false,
+  "profile": {
+    "AS_bytes": 1073741824,
+    "CPU_seconds": 30,
+    "commands": 3,
+    "core": 0,
+    "cpu": 6,
+    "guest_runs": 0,
+    "jobs": 1,
+    "kill_after_seconds": 2,
+    "nofile": 256,
+    "old_eleven_cases_replayed": false,
+    "per_stream_bytes": 33554432,
+    "wall_seconds": 35
+  },
+  "reviewed_at": "2026-10-20T08:53:33.117429+00:00",
+  "reviewer": "/root/resume20_physical",
+  "reviewer_actions": {
+    "guest_runs": 0,
+    "implementation_edits": 0,
+    "new_tests": 0,
+    "root_commands": 0
+  },
+  "revoke_or_final_ACK_acceptance": false,
+  "runtime_release": false,
+  "schema": "mckernel.independent-collector-gate-failure-export-ordering-review.v1",
+  "source_boundary_acceptance": true,
+  "source_findings": {
+    "budget_unchanged": "Chosenraw<1MiB,retainedprefix<=2MiB,existinghexframing,8MiBdiagnosticreserve/32MiBstreams/4MiBevaluatorlimit unchanged. Independent priorloosebound7,152,256B stillapplies; no newpayload/frametype.",
+    "exact_production_changed_files": [
+      "pair_trace_retention.inc",
+      "pair_collector.c"
+    ],
+    "export_ordering": "Validnonemptybounded same-active-roundsavedgate isselectedbefore optionalmainpointer/length validation. Withoutvalidgate, NULL/empty/full optionalcapture stillrefuses. Onechosenraw source replaceslatercapture; no doublesnapshot transport.",
+    "main_ordering": "Failure-onlyexportisoutsideoptionalmaincapture/save-successbranch. main_log_saved avoidsnegative/fullreadlengthcast andpassesNULL/0 whenunavailable. goodremainsfalse onfailure; no diagnosticpath canpromote round/application success.",
+    "ownership_guards": "Safeownerhandoff/console>=0/initializedround checksretained; sameO_EXCLgatefile andwholeFDauthenticationbeforefirstoutputbyte. Actualpairresultscontext separatefromtracebytes. No inventedtrace/completion/retirement/ACK.",
+    "remaining_limits": "Exportstillneedsvalidsame-roundgate andsuccessfulgatefile/FDauthentication/outputwrite. No blanketdiskfull/failedconsole/unsafeownerqualification. PositiveHOST66native041eeusedprevious9c5collector; newf672binary has source+offlinecompile/controlproof only.",
+    "success_oracles_unchanged": "Originalsuccessparser/tenround/appCPU/identity/order/exit/output/retirementpredicates and5s/15s/120s deadlines unchanged. Non-launch-expansion sourcebranch semanticallyunchanged."
+  },
+  "stage_acceptance": false,
+  "status": "PASS",
+  "witnesses": [
+    {
+      "bytes": 6304,
+      "path": "/home/holden/mckernel-work/host-preparation/collector-gate-failure-export-correction-20261020-1/ACTUAL-FAILURE-EXPORT-CORRECTION-HANDOFF.json",
+      "sha256": "e392414de056d99c4af9fd58ca53833c23f7207d17fec4085cde067b8d5ddb87"
+    },
+    {
+      "bytes": 2767,
+      "path": "/home/holden/mckernel-work/host-preparation/collector-gate-failure-export-correction-20261020-1/failure-export-order.patch",
+      "sha256": "74d3a0a5b7c876489277ad49bfd0517f7b544a767a69af6ae6804cbc0a9e35df"
+    },
+    {
+      "bytes": 3486,
+      "path": "/home/holden/mckernel-work/host-preparation/collector-gate-failure-export-correction-20261020-1/check-2/whole.json",
+      "sha256": "de468bc32cefe8f1f6030b85105925b8b0af74d62fd9e3cd5f6037c4b6788a1b"
+    },
+    {
+      "bytes": 297,
+      "path": "/home/holden/mckernel-work/host-preparation/collector-gate-failure-export-correction-20261020-1/check-2/actual-body-fixture/stdout",
+      "sha256": "e81e8d3731e43a54025a67f63cd2bc24d83a2a3237effe4c218c7806906d2cf5"
+    },
+    {
+      "bytes": 1043696,
+      "path": "/home/holden/mckernel-work/host-preparation/collector-gate-failure-export-correction-20261020-1/check-2/collector",
+      "sha256": "f672d2872f2bbbfbf3c8a686ec2932494b090ed35d9fd973df92cf4769262b10"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "process.fork-exit",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/process.fork-exit"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "relation", "records": ["child_pid_positive=1 reaped_match=1 exited=1 code=23"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["fork creates one real child PID", "waitpid reaps that exact child with WIFEXITED and status 23", "Both parent and child scheduling/retirement are retained by the supervisor evidence"],
+  "unresolved_expectations": ["Guest PID identity and dual-schedule retirement evidence require runtime review."],
+  "max_question_for_reviewer": "Confirm raw wait status and both guest process retirement records are required."
+}

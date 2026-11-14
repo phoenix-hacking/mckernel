@@ -1,0 +1,744 @@
+{
+  "bytes_per_symbol": 624,
+  "comparison_symbol": "m15_f02_descriptor_cpuset_abi",
+  "compiler_profile_reuse": {
+    "bytes": 44796,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/production-packet-1/qualification-1/QUALIFICATION.json",
+    "sha256": "dc0c975c362caba38100e13b5ca951cb864fc8ecba698096f24e72edf0115296"
+  },
+  "immutable_image": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+  "input_C": {
+    "bytes": 7229,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/f02-complete-abi-behavior-publicabi-max-1/proposal/input/descriptor_cpuset_abi.c",
+    "sha256": "2db2f411b069503cdd00fa608c3f38f1e0803a4e47cdcfb88f08e29a70090df4"
+  },
+  "input_Rust": {
+    "bytes": 9337,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/f02-complete-abi-behavior-publicabi-max-1/proposal/input/descriptor_cpuset_abi.rs",
+    "sha256": "839fbdc25447b12b55a542f36c8105e4db0402314a80d53458358474c9ed04af"
+  },
+  "literal_serial_commands": [
+    {
+      "argv": [
+        "/usr/bin/cc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fno-common",
+        "-fPIC",
+        "-I/input",
+        "-c",
+        "/input/descriptor_cpuset_abi.c",
+        "-o",
+        "/output/C-descriptor-abi.o"
+      ],
+      "id": "compile_real_C_header_data_only"
+    },
+    {
+      "argv": [
+        "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+        "--crate-name",
+        "m15_f02_descriptor_abi",
+        "--crate-type",
+        "lib",
+        "--edition=2021",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "debuginfo=1",
+        "-C",
+        "force-unwind-tables=no",
+        "--emit=obj=/output/Rust-descriptor-abi.o",
+        "/input/descriptor_cpuset_abi.rs"
+      ],
+      "id": "compile_verbatim_Rust_declarations_data_only"
+    },
+    {
+      "argv": [
+        "/usr/bin/readelf",
+        "-W",
+        "-h",
+        "-S",
+        "-s",
+        "-r",
+        "/output/C-descriptor-abi.o"
+      ],
+      "id": "read_C_object_metadata",
+      "stdout": "C-descriptor-abi.elf.txt"
+    },
+    {
+      "argv": [
+        "/usr/bin/readelf",
+        "-W",
+        "-h",
+        "-S",
+        "-s",
+        "-r",
+        "/output/Rust-descriptor-abi.o"
+      ],
+      "id": "read_Rust_object_metadata",
+      "stdout": "Rust-descriptor-abi.elf.txt"
+    }
+  ],
+  "mounts": [
+    {
+      "host": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/f02-complete-abi-behavior-publicabi-max-1/proposal/input",
+      "readonly": true,
+      "target": "/input"
+    },
+    {
+      "host": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu",
+      "readonly": true,
+      "target": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu"
+    },
+    {
+      "host": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/f02-complete-abi-behavior-publicabi-max-1/proposal/output-1",
+      "readonly": false,
+      "target": "/output"
+    }
+  ],
+  "not_proved": [
+    "C-to-Rust algorithm/normal/error/lifetime parity",
+    "all remaining public or internal executor ABI contracts",
+    "deployed executable/provider cohort",
+    "mcexec main/device/native behavior, currentfree, claim, restoration",
+    "original F02/file/M15 acceptance"
+  ],
+  "owner": "Root sole future executor after independent material/operation review and fresh shared HOST admission",
+  "proposed_profile": {
+    "address_space_bytes": 536870912,
+    "capabilities": "all dropped",
+    "capture_and_owning_parent": "Root must select the existing qualified positive-family/capture/terminal/cleanup frontdoor and freeze its final operation; no new executor is authored here",
+    "cpu_seconds": 60,
+    "cpus": "0",
+    "gid": 1000,
+    "memory_bytes": 536870912,
+    "network": "none",
+    "new_privileges": false,
+    "one_serial_job": true,
+    "output_bound_bytes": 33554432,
+    "pids_max": 64,
+    "rootfs": "readonly",
+    "shared_grant": "actual HOST4GiB total, max3 jobs/all overhead/fresh26GiB/floors; no native borrowing",
+    "swap_total_bytes": 536870912,
+    "uid": 1000,
+    "wall_seconds": 90
+  },
+  "public_header_copy": {
+    "bytes": 9756,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/f02-complete-abi-behavior-publicabi-max-1/proposal/input/uprotocol.h",
+    "sha256": "1770a59cf4486380eb5aa483d3634dc1e4c9c9c16d1bf09865d4ff8f71191e69"
+  },
+  "records": [
+    {
+      "C": "1UL",
+      "Rust": "1",
+      "label": "witness_version",
+      "word_index": 0
+    },
+    {
+      "C": "sizeof(unsigned long)",
+      "Rust": "core::mem::size_of::<c_ulong>() as u64",
+      "label": "sizeof(unsigned long)",
+      "word_index": 1
+    },
+    {
+      "C": "sizeof(int)",
+      "Rust": "core::mem::size_of::<c_int>() as u64",
+      "label": "sizeof(int)",
+      "word_index": 2
+    },
+    {
+      "C": "sizeof(pid_t)",
+      "Rust": "core::mem::size_of::<c_int>() as u64",
+      "label": "sizeof(pid_t)",
+      "word_index": 3
+    },
+    {
+      "C": "sizeof(size_t)",
+      "Rust": "core::mem::size_of::<usize>() as u64",
+      "label": "sizeof(size_t)",
+      "word_index": 4
+    },
+    {
+      "C": "sizeof(void*)",
+      "Rust": "core::mem::size_of::<*mut c_void>() as u64",
+      "label": "sizeof(void*)",
+      "word_index": 5
+    },
+    {
+      "C": "sizeof(struct program_load_desc)",
+      "Rust": "core::mem::size_of::<ProgramLoadDesc>() as u64",
+      "label": "sizeof(program_load_desc)",
+      "word_index": 6
+    },
+    {
+      "C": "_Alignof(struct program_load_desc)",
+      "Rust": "core::mem::align_of::<ProgramLoadDesc>() as u64",
+      "label": "alignof(program_load_desc)",
+      "word_index": 7
+    },
+    {
+      "C": "offsetof(struct program_load_desc, magic)",
+      "Rust": "core::mem::offset_of!(ProgramLoadDesc, magic) as u64",
+      "label": "program_load_desc::magic",
+      "word_index": 8
+    },
+    {
+      "C": "offsetof(struct program_load_desc, num_sections)",
+      "Rust": "core::mem::offset_of!(ProgramLoadDesc, num_sections) as u64",
+      "label": "program_load_desc::num_sections",
+      "word_index": 9
+    },
+    {
+      "C": "offsetof(struct program_load_desc, cpu)",
+      "Rust": "core::mem::offset_of!(ProgramLoadDesc, cpu) as u64",
+      "label": "program_load_desc::cpu",
+      "word_index": 10
+    },
+    {
+      "C": "offsetof(struct program_load_desc, pid)",
+      "Rust": "core::mem::offset_of!(ProgramLoadDesc, pid) as u64",
+      "label": "program_load_desc::pid",
+      "word_index": 11
+    },
+    {
+      "C": "offsetof(struct program_load_desc, stack_prot)",
+      "Rust": "core::mem::offset_of!(ProgramLoadDesc, stack_prot) as u64",
+      "label": "program_load_desc::stack_prot",
+      "word_index": 12
+    },
+    {
+      "C": "offsetof(struct program_load_desc, pgid)",
+      "Rust": "core::mem::offset_of!(ProgramLoadDesc, pgid) as u64",
+      "label": "program_load_desc::pgid",
+      "word_index": 13
+    },
+    {
+      "C": "offsetof(struct program_load_desc, cred)",
+      "Rust": "core::mem::offset_of!(ProgramLoadDesc, cred) as u64",
+      "label": "program_load_desc::cred",
+      "word_index": 14
+    },
+    {
+      "C": "offsetof(struct program_load_desc, reloc)",
+      "Rust": "core::mem::offset_of!(ProgramLoadDesc, reloc) as u64",
+      "label": "program_load_desc::reloc",
+      "word_index": 15
+    },
+    {
+      "C": "offsetof(struct program_load_desc, enable_vdso)",
+      "Rust": "core::mem::offset_of!(ProgramLoadDesc, enable_vdso) as u64",
+      "label": "program_load_desc::enable_vdso",
+      "word_index": 16
+    },
+    {
+      "C": "offsetof(struct program_load_desc, padding)",
+      "Rust": "core::mem::offset_of!(ProgramLoadDesc, padding) as u64",
+      "label": "program_load_desc::padding",
+      "word_index": 17
+    },
+    {
+      "C": "offsetof(struct program_load_desc, entry)",
+      "Rust": "core::mem::offset_of!(ProgramLoadDesc, entry) as u64",
+      "label": "program_load_desc::entry",
+      "word_index": 18
+    },
+    {
+      "C": "offsetof(struct program_load_desc, user_start)",
+      "Rust": "core::mem::offset_of!(ProgramLoadDesc, user_start) as u64",
+      "label": "program_load_desc::user_start",
+      "word_index": 19
+    },
+    {
+      "C": "offsetof(struct program_load_desc, user_end)",
+      "Rust": "core::mem::offset_of!(ProgramLoadDesc, user_end) as u64",
+      "label": "program_load_desc::user_end",
+      "word_index": 20
+    },
+    {
+      "C": "offsetof(struct program_load_desc, rprocess)",
+      "Rust": "core::mem::offset_of!(ProgramLoadDesc, rprocess) as u64",
+      "label": "program_load_desc::rprocess",
+      "word_index": 21
+    },
+    {
+      "C": "offsetof(struct program_load_desc, rpgtable)",
+      "Rust": "core::mem::offset_of!(ProgramLoadDesc, rpgtable) as u64",
+      "label": "program_load_desc::rpgtable",
+      "word_index": 22
+    },
+    {
+      "C": "offsetof(struct program_load_desc, at_phdr)",
+      "Rust": "core::mem::offset_of!(ProgramLoadDesc, at_phdr) as u64",
+      "label": "program_load_desc::at_phdr",
+      "word_index": 23
+    },
+    {
+      "C": "offsetof(struct program_load_desc, at_phent)",
+      "Rust": "core::mem::offset_of!(ProgramLoadDesc, at_phent) as u64",
+      "label": "program_load_desc::at_phent",
+      "word_index": 24
+    },
+    {
+      "C": "offsetof(struct program_load_desc, at_phnum)",
+      "Rust": "core::mem::offset_of!(ProgramLoadDesc, at_phnum) as u64",
+      "label": "program_load_desc::at_phnum",
+      "word_index": 25
+    },
+    {
+      "C": "offsetof(struct program_load_desc, at_entry)",
+      "Rust": "core::mem::offset_of!(ProgramLoadDesc, at_entry) as u64",
+      "label": "program_load_desc::at_entry",
+      "word_index": 26
+    },
+    {
+      "C": "offsetof(struct program_load_desc, at_clktck)",
+      "Rust": "core::mem::offset_of!(ProgramLoadDesc, at_clktck) as u64",
+      "label": "program_load_desc::at_clktck",
+      "word_index": 27
+    },
+    {
+      "C": "offsetof(struct program_load_desc, args)",
+      "Rust": "core::mem::offset_of!(ProgramLoadDesc, args) as u64",
+      "label": "program_load_desc::args",
+      "word_index": 28
+    },
+    {
+      "C": "offsetof(struct program_load_desc, args_len)",
+      "Rust": "core::mem::offset_of!(ProgramLoadDesc, args_len) as u64",
+      "label": "program_load_desc::args_len",
+      "word_index": 29
+    },
+    {
+      "C": "offsetof(struct program_load_desc, envs)",
+      "Rust": "core::mem::offset_of!(ProgramLoadDesc, envs) as u64",
+      "label": "program_load_desc::envs",
+      "word_index": 30
+    },
+    {
+      "C": "offsetof(struct program_load_desc, envs_len)",
+      "Rust": "core::mem::offset_of!(ProgramLoadDesc, envs_len) as u64",
+      "label": "program_load_desc::envs_len",
+      "word_index": 31
+    },
+    {
+      "C": "offsetof(struct program_load_desc, rlimit)",
+      "Rust": "core::mem::offset_of!(ProgramLoadDesc, rlimit) as u64",
+      "label": "program_load_desc::rlimit",
+      "word_index": 32
+    },
+    {
+      "C": "offsetof(struct program_load_desc, interp_align)",
+      "Rust": "core::mem::offset_of!(ProgramLoadDesc, interp_align) as u64",
+      "label": "program_load_desc::interp_align",
+      "word_index": 33
+    },
+    {
+      "C": "offsetof(struct program_load_desc, mpol_flags)",
+      "Rust": "core::mem::offset_of!(ProgramLoadDesc, mpol_flags) as u64",
+      "label": "program_load_desc::mpol_flags",
+      "word_index": 34
+    },
+    {
+      "C": "offsetof(struct program_load_desc, mpol_threshold)",
+      "Rust": "core::mem::offset_of!(ProgramLoadDesc, mpol_threshold) as u64",
+      "label": "program_load_desc::mpol_threshold",
+      "word_index": 35
+    },
+    {
+      "C": "offsetof(struct program_load_desc, heap_extension)",
+      "Rust": "core::mem::offset_of!(ProgramLoadDesc, heap_extension) as u64",
+      "label": "program_load_desc::heap_extension",
+      "word_index": 36
+    },
+    {
+      "C": "offsetof(struct program_load_desc, stack_premap)",
+      "Rust": "core::mem::offset_of!(ProgramLoadDesc, stack_premap) as u64",
+      "label": "program_load_desc::stack_premap",
+      "word_index": 37
+    },
+    {
+      "C": "offsetof(struct program_load_desc, mpol_bind_mask)",
+      "Rust": "core::mem::offset_of!(ProgramLoadDesc, mpol_bind_mask) as u64",
+      "label": "program_load_desc::mpol_bind_mask",
+      "word_index": 38
+    },
+    {
+      "C": "offsetof(struct program_load_desc, mpol_mode)",
+      "Rust": "core::mem::offset_of!(ProgramLoadDesc, mpol_mode) as u64",
+      "label": "program_load_desc::mpol_mode",
+      "word_index": 39
+    },
+    {
+      "C": "offsetof(struct program_load_desc, mpol_nodemask)",
+      "Rust": "core::mem::offset_of!(ProgramLoadDesc, mpol_nodemask) as u64",
+      "label": "program_load_desc::mpol_nodemask",
+      "word_index": 40
+    },
+    {
+      "C": "offsetof(struct program_load_desc, thp_disable)",
+      "Rust": "core::mem::offset_of!(ProgramLoadDesc, thp_disable) as u64",
+      "label": "program_load_desc::thp_disable",
+      "word_index": 41
+    },
+    {
+      "C": "offsetof(struct program_load_desc, enable_uti)",
+      "Rust": "core::mem::offset_of!(ProgramLoadDesc, enable_uti) as u64",
+      "label": "program_load_desc::enable_uti",
+      "word_index": 42
+    },
+    {
+      "C": "offsetof(struct program_load_desc, uti_thread_rank)",
+      "Rust": "core::mem::offset_of!(ProgramLoadDesc, uti_thread_rank) as u64",
+      "label": "program_load_desc::uti_thread_rank",
+      "word_index": 43
+    },
+    {
+      "C": "offsetof(struct program_load_desc, uti_use_last_cpu)",
+      "Rust": "core::mem::offset_of!(ProgramLoadDesc, uti_use_last_cpu) as u64",
+      "label": "program_load_desc::uti_use_last_cpu",
+      "word_index": 44
+    },
+    {
+      "C": "offsetof(struct program_load_desc, straight_map)",
+      "Rust": "core::mem::offset_of!(ProgramLoadDesc, straight_map) as u64",
+      "label": "program_load_desc::straight_map",
+      "word_index": 45
+    },
+    {
+      "C": "offsetof(struct program_load_desc, straight_map_threshold)",
+      "Rust": "core::mem::offset_of!(ProgramLoadDesc, straight_map_threshold) as u64",
+      "label": "program_load_desc::straight_map_threshold",
+      "word_index": 46
+    },
+    {
+      "C": "offsetof(struct program_load_desc, mcexec_flags)",
+      "Rust": "core::mem::offset_of!(ProgramLoadDesc, mcexec_flags) as u64",
+      "label": "program_load_desc::mcexec_flags",
+      "word_index": 47
+    },
+    {
+      "C": "offsetof(struct program_load_desc, nr_processes)",
+      "Rust": "core::mem::offset_of!(ProgramLoadDesc, nr_processes) as u64",
+      "label": "program_load_desc::nr_processes",
+      "word_index": 48
+    },
+    {
+      "C": "offsetof(struct program_load_desc, process_rank)",
+      "Rust": "core::mem::offset_of!(ProgramLoadDesc, process_rank) as u64",
+      "label": "program_load_desc::process_rank",
+      "word_index": 49
+    },
+    {
+      "C": "offsetof(struct program_load_desc, cpu_set)",
+      "Rust": "core::mem::offset_of!(ProgramLoadDesc, cpu_set) as u64",
+      "label": "program_load_desc::cpu_set",
+      "word_index": 50
+    },
+    {
+      "C": "offsetof(struct program_load_desc, profile)",
+      "Rust": "core::mem::offset_of!(ProgramLoadDesc, profile) as u64",
+      "label": "program_load_desc::profile",
+      "word_index": 51
+    },
+    {
+      "C": "offsetof(struct program_load_desc, sections)",
+      "Rust": "core::mem::offset_of!(ProgramLoadDesc, sections) as u64",
+      "label": "program_load_desc::sections",
+      "word_index": 52
+    },
+    {
+      "C": "sizeof(struct program_image_section)",
+      "Rust": "core::mem::size_of::<ImageSection>() as u64",
+      "label": "sizeof(program_image_section)",
+      "word_index": 53
+    },
+    {
+      "C": "_Alignof(struct program_image_section)",
+      "Rust": "core::mem::align_of::<ImageSection>() as u64",
+      "label": "alignof(program_image_section)",
+      "word_index": 54
+    },
+    {
+      "C": "offsetof(struct program_image_section, vaddr)",
+      "Rust": "core::mem::offset_of!(ImageSection, vaddr) as u64",
+      "label": "program_image_section::vaddr",
+      "word_index": 55
+    },
+    {
+      "C": "offsetof(struct program_image_section, len)",
+      "Rust": "core::mem::offset_of!(ImageSection, len) as u64",
+      "label": "program_image_section::len",
+      "word_index": 56
+    },
+    {
+      "C": "offsetof(struct program_image_section, remote_pa)",
+      "Rust": "core::mem::offset_of!(ImageSection, remote_pa) as u64",
+      "label": "program_image_section::remote_pa",
+      "word_index": 57
+    },
+    {
+      "C": "offsetof(struct program_image_section, filesz)",
+      "Rust": "core::mem::offset_of!(ImageSection, filesz) as u64",
+      "label": "program_image_section::filesz",
+      "word_index": 58
+    },
+    {
+      "C": "offsetof(struct program_image_section, offset)",
+      "Rust": "core::mem::offset_of!(ImageSection, offset) as u64",
+      "label": "program_image_section::offset",
+      "word_index": 59
+    },
+    {
+      "C": "offsetof(struct program_image_section, prot)",
+      "Rust": "core::mem::offset_of!(ImageSection, prot) as u64",
+      "label": "program_image_section::prot",
+      "word_index": 60
+    },
+    {
+      "C": "offsetof(struct program_image_section, interp)",
+      "Rust": "core::mem::offset_of!(ImageSection, interp) as u64",
+      "label": "program_image_section::interp",
+      "word_index": 61
+    },
+    {
+      "C": "offsetof(struct program_image_section, padding)",
+      "Rust": "core::mem::offset_of!(ImageSection, padding) as u64",
+      "label": "program_image_section::padding",
+      "word_index": 62
+    },
+    {
+      "C": "offsetof(struct program_image_section, fp)",
+      "Rust": "core::mem::offset_of!(ImageSection, fp) as u64",
+      "label": "program_image_section::fp",
+      "word_index": 63
+    },
+    {
+      "C": "sizeof(struct get_cpu_set_arg)",
+      "Rust": "core::mem::size_of::<GetCpuSetArg>() as u64",
+      "label": "sizeof(get_cpu_set_arg)",
+      "word_index": 64
+    },
+    {
+      "C": "_Alignof(struct get_cpu_set_arg)",
+      "Rust": "core::mem::align_of::<GetCpuSetArg>() as u64",
+      "label": "alignof(get_cpu_set_arg)",
+      "word_index": 65
+    },
+    {
+      "C": "offsetof(struct get_cpu_set_arg, nr_processes)",
+      "Rust": "core::mem::offset_of!(GetCpuSetArg, nr_processes) as u64",
+      "label": "get_cpu_set_arg::nr_processes",
+      "word_index": 66
+    },
+    {
+      "C": "offsetof(struct get_cpu_set_arg, req_cpu_list)",
+      "Rust": "core::mem::offset_of!(GetCpuSetArg, req_cpu_list) as u64",
+      "label": "get_cpu_set_arg::req_cpu_list",
+      "word_index": 67
+    },
+    {
+      "C": "offsetof(struct get_cpu_set_arg, req_cpu_list_len)",
+      "Rust": "core::mem::offset_of!(GetCpuSetArg, req_cpu_list_len) as u64",
+      "label": "get_cpu_set_arg::req_cpu_list_len",
+      "word_index": 68
+    },
+    {
+      "C": "offsetof(struct get_cpu_set_arg, process_rank)",
+      "Rust": "core::mem::offset_of!(GetCpuSetArg, process_rank) as u64",
+      "label": "get_cpu_set_arg::process_rank",
+      "word_index": 69
+    },
+    {
+      "C": "offsetof(struct get_cpu_set_arg, ppid)",
+      "Rust": "core::mem::offset_of!(GetCpuSetArg, ppid) as u64",
+      "label": "get_cpu_set_arg::ppid",
+      "word_index": 70
+    },
+    {
+      "C": "offsetof(struct get_cpu_set_arg, cpu_set)",
+      "Rust": "core::mem::offset_of!(GetCpuSetArg, cpu_set) as u64",
+      "label": "get_cpu_set_arg::cpu_set",
+      "word_index": 71
+    },
+    {
+      "C": "offsetof(struct get_cpu_set_arg, cpu_set_size)",
+      "Rust": "core::mem::offset_of!(GetCpuSetArg, cpu_set_size) as u64",
+      "label": "get_cpu_set_arg::cpu_set_size",
+      "word_index": 72
+    },
+    {
+      "C": "offsetof(struct get_cpu_set_arg, target_core)",
+      "Rust": "core::mem::offset_of!(GetCpuSetArg, target_core) as u64",
+      "label": "get_cpu_set_arg::target_core",
+      "word_index": 73
+    },
+    {
+      "C": "offsetof(struct get_cpu_set_arg, mcexec_linux_numa)",
+      "Rust": "core::mem::offset_of!(GetCpuSetArg, mcexec_linux_numa) as u64",
+      "label": "get_cpu_set_arg::mcexec_linux_numa",
+      "word_index": 74
+    },
+    {
+      "C": "offsetof(struct get_cpu_set_arg, mcexec_cpu_set)",
+      "Rust": "core::mem::offset_of!(GetCpuSetArg, mcexec_cpu_set) as u64",
+      "label": "get_cpu_set_arg::mcexec_cpu_set",
+      "word_index": 75
+    },
+    {
+      "C": "offsetof(struct get_cpu_set_arg, mcexec_cpu_set_size)",
+      "Rust": "core::mem::offset_of!(GetCpuSetArg, mcexec_cpu_set_size) as u64",
+      "label": "get_cpu_set_arg::mcexec_cpu_set_size",
+      "word_index": 76
+    },
+    {
+      "C": "offsetof(struct get_cpu_set_arg, ikc_mapped)",
+      "Rust": "core::mem::offset_of!(GetCpuSetArg, ikc_mapped) as u64",
+      "label": "get_cpu_set_arg::ikc_mapped",
+      "word_index": 77
+    }
+  ],
+  "saved_byte_oracle": [
+    "ELF64 little-endian x86_64 REL in both outputs",
+    "one nonempty GLOBAL OBJECT named m15_f02_descriptor_cpuset_abi of exact 624B in each object; allocated readonly nonexecuting storage; no relocation targets within the record range",
+    "decode both actual symbol byte vectors as unsigned64; every labeled word must agree, with C header/machine ABI as independent producer",
+    "source hashes and exact source-span extraction must match; no enabling TOFU/UTI or fixture body callbacks",
+    "retain all actual diagnostics/failed candidate and positive direct+wholefamily/stream/Root/container closure; no replay of old349/51/platform/ASM/NUMA/libdir greens"
+  ],
+  "schema": "mckernel.executor-wire-ABI-data-only-proposal.v1",
+  "status": "SOURCE_PROPOSAL_NOT_ADMITTED_NOT_EXECUTED",
+  "unissued_fields": [
+    "actual Root admission and protected-parent/capture request",
+    "container name/CID/current output directory creation",
+    "actual compiler statuses/metadata/physical object bytes",
+    "actual resources/cleanup/result/independent review"
+  ],
+  "verbatim_actual_Rust_type_spans": [
+    {
+      "end_line": 7,
+      "fields": [
+        "rlim_cur",
+        "rlim_max"
+      ],
+      "source": {
+        "bytes": 14199,
+        "path": "/home/holden/mckernel/executer/user/rust/mcexec_load_descriptor.rs",
+        "sha256": "3e012767d9c88134cb2898f15a84d5851a2e97e0408aa34e98498e097ae41060"
+      },
+      "start_line": 6,
+      "type": "Rlimit",
+      "verbatim_declaration_sha256": "5b66b848b17325ccba85d807608a5f62d3cb9ebe82d09a045b790b7bc437f6fd"
+    },
+    {
+      "end_line": 19,
+      "fields": [
+        "vaddr",
+        "len",
+        "remote_pa",
+        "filesz",
+        "offset",
+        "prot",
+        "interp",
+        "padding",
+        "fp"
+      ],
+      "source": {
+        "bytes": 14199,
+        "path": "/home/holden/mckernel/executer/user/rust/mcexec_load_descriptor.rs",
+        "sha256": "3e012767d9c88134cb2898f15a84d5851a2e97e0408aa34e98498e097ae41060"
+      },
+      "start_line": 8,
+      "type": "ImageSection",
+      "verbatim_declaration_sha256": "0ed558bd4ec7dd9a500095b5ee587b550ffb17efea84530af0e8fc3c8b9f8cfd"
+    },
+    {
+      "end_line": 69,
+      "fields": [
+        "magic",
+        "num_sections",
+        "cpu",
+        "pid",
+        "stack_prot",
+        "pgid",
+        "cred",
+        "reloc",
+        "enable_vdso",
+        "padding",
+        "entry",
+        "user_start",
+        "user_end",
+        "rprocess",
+        "rpgtable",
+        "at_phdr",
+        "at_phent",
+        "at_phnum",
+        "at_entry",
+        "at_clktck",
+        "args",
+        "args_len",
+        "envs",
+        "envs_len",
+        "rlimit",
+        "interp_align",
+        "mpol_flags",
+        "mpol_threshold",
+        "heap_extension",
+        "stack_premap",
+        "mpol_bind_mask",
+        "mpol_mode",
+        "mpol_nodemask",
+        "thp_disable",
+        "enable_uti",
+        "uti_thread_rank",
+        "uti_use_last_cpu",
+        "straight_map",
+        "straight_map_threshold",
+        "enable_tofu",
+        "mcexec_flags",
+        "nr_processes",
+        "process_rank",
+        "cpu_set",
+        "profile",
+        "sections"
+      ],
+      "source": {
+        "bytes": 14199,
+        "path": "/home/holden/mckernel/executer/user/rust/mcexec_load_descriptor.rs",
+        "sha256": "3e012767d9c88134cb2898f15a84d5851a2e97e0408aa34e98498e097ae41060"
+      },
+      "start_line": 20,
+      "type": "ProgramLoadDesc",
+      "verbatim_declaration_sha256": "e6dc4ffdeb557c8448f28603ba8b36c6bb1294df160f74102175968466dcfef3"
+    },
+    {
+      "end_line": 14,
+      "fields": [
+        "nr_processes",
+        "req_cpu_list",
+        "req_cpu_list_len",
+        "process_rank",
+        "ppid",
+        "cpu_set",
+        "cpu_set_size",
+        "target_core",
+        "mcexec_linux_numa",
+        "mcexec_cpu_set",
+        "mcexec_cpu_set_size",
+        "ikc_mapped"
+      ],
+      "source": {
+        "bytes": 7865,
+        "path": "/home/holden/mckernel/executer/user/rust/mcexec_cpu_topology.rs",
+        "sha256": "157185f338bb8f2a6ad4fbb6a3e655b0ab3f8957a5e6b6b00e6fa408b22b66d8"
+      },
+      "start_line": 8,
+      "type": "GetCpuSetArg",
+      "verbatim_declaration_sha256": "8a416ee9ab8365f52880d4d5cfc06efd47fb85a5c3cd375d09477e3509a52317"
+    }
+  ],
+  "word_count": 78
+}

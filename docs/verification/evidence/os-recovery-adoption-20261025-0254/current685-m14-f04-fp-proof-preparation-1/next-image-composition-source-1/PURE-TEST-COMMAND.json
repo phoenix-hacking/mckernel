@@ -1,0 +1,26 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Pure FP staging data/unchanged existing trace and BEGIN validator controls only.",
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=536870912",
+    "--cpu=15",
+    "--fsize=33554432",
+    "--core=0",
+    "--",
+    "/usr/bin/python3",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current685-m14-f04-fp-proof-preparation-1/next-image-composition-source-1/test_fp_composition_pure.py"
+  ],
+  "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current685-m14-f04-fp-proof-preparation-1/next-image-composition-source-1",
+  "inputs": {
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current685-m14-f04-fp-proof-preparation-1/next-image-composition-source-1/FROZEN-FP-COMPOSITION.json": "e44384e0e76c3bf17659180065147ece7769403d5090952c07ab8980fc01fb61",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current685-m14-f04-fp-proof-preparation-1/next-image-composition-source-1/NEXT10-FP-STAGING-INPUTS.SOURCE-ONLY.json": "3801b96e606daa1645c7e523b5e2e5df03e4a673cb05d3a037e5e5636e362834",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current685-m14-f04-fp-proof-preparation-1/next-image-composition-source-1/stage_next10_fp_specific.py": "abf729d458d79fe2b7901746dfd19c3448cad355022298b2cc702f67eac1a0d5",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current685-m14-f04-fp-proof-preparation-1/next-image-composition-source-1/test_fp_composition_pure.py": "3318b801c994bddd2943a1ddb7439b69b41565ded1a9cbad1ab4ed0ca4d1c71a"
+  },
+  "materialization_or_runtime_actions": 0,
+  "clock_actions": 0
+}

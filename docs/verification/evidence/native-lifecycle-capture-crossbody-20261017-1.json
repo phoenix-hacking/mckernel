@@ -1,0 +1,70 @@
+{
+  "task_id": "native-lifecycle-capture-crossbody-20261017-1",
+  "status": "BLOCKED_CONTRACT_MISMATCH",
+  "scope": "Read-only inspection before crossbody test implementation or compilation. No focused test, compiler, probe, guest, or device execution.",
+  "finding": {
+    "actual_retained_probe_status_before": 5,
+    "frozen_parser_required_status_before": 3,
+    "pinned_enum": "NOT_BOOTED=0, LOADING=1, BOOTING=2, BOOTED=3, READY=4, RUNNING=5",
+    "retained_probe_command": [
+      "compiled-3/harness",
+      "running",
+      "12"
+    ],
+    "retained_probe_returncode": 0,
+    "impact": "Actual frozen probe Running success output cannot pass frozen parser. Existing synthetic parser Running3 tests describe BOOTED under pinned public IHK enum, not RUNNING.",
+    "authorization_boundary": "Frozen parser may not be changed under this task; synthetic replacement for actual probe stdout would invalidate crossbody positive coverage."
+  },
+  "evidence": [
+    {
+      "source": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/002.stdout",
+      "retained": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-crossbody-20261017-1/probe-running.stdout",
+      "sha256": "77cbf584af48c02267c6071dde26f780023b44bfbb00a520038ab971bd32bce5",
+      "size": 480
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/002.json",
+      "retained": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-crossbody-20261017-1/probe-running-result.json",
+      "sha256": "b7e1dd2b5c9ad88a814a1935b2d78ad03c68cf9027ddb114bdd81e26849af597",
+      "size": 339
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/002.command.json",
+      "retained": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-crossbody-20261017-1/probe-running-command.json",
+      "sha256": "13de699548d2a1293991b1e59050cfea4319ed5986c854a32074b64be6a8868a",
+      "size": 427
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/include/ihk/status.h",
+      "retained": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-crossbody-20261017-1/pinned-status.h",
+      "sha256": "fef81cf170da96d41500a572c22e44c272f7110eff815cf43944de0e429d81e7",
+      "size": 995
+    }
+  ],
+  "unchanged_sources": [
+    {
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_lifecycle_capture.py",
+      "sha256": "49b8382495ab1f0a2bc7d42abfd8379a2c9071283acdc6979f460c516cb6958a"
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/tests/test_native_diagnostic_lifecycle_capture.py",
+      "sha256": "009272a0b17f7aee6013239faa557a75605a9901e06168cf2162231ac01f758a"
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_lifecycle_collector.c",
+      "sha256": "36fa0d55a30f5e943de0b28c6f54e033cf84ff8cc83cdc54c59688e993c44383"
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_lifecycle_probe.c",
+      "sha256": "18444a0917ed850690cca41be1b9a6090a3ab533c94a0f1ad66892df0625ca44"
+    }
+  ],
+  "checks": {
+    "retained_json_and_stdout_readback": "PASS",
+    "compiled_crossbody": "NOT_RUN",
+    "unit_tests": "NOT_RUN",
+    "prior_failures": "No new command or test failure; semantic mismatch found during preflight."
+  },
+  "blocker": "Dispatcher must resolve Running enum contract before parser correction and actual serializer integration.",
+  "next_task": "Authorize bounded parser/test correction Running3 -> pinned Running5, then implement and run retained actual probe -> actual collector serializer -> strict parser positive and mutations."
+}

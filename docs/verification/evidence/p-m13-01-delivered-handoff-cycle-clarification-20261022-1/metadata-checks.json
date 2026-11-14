@@ -1,0 +1,40 @@
+{
+  "status": "PASS_BOUNDED_JSON_CONSUMER_AND_SOURCE_MAPPING_CHECK",
+  "command": "timeout 30s taskset -c 6 python3 -B /home/holden/mckernel-work/host-preparation/p-m13-01-cycle-clarification-20261022-1/prepare_and_check.py",
+  "limits": {
+    "cpu": 6,
+    "jobs": 1,
+    "address_space_bytes": 536870912,
+    "cpu_seconds": 20,
+    "wall_seconds": 30
+  },
+  "checks": [
+    "Exact two retained decision descriptors match original source-map pins",
+    "Corrected manifest parsed by actual JSON consumer",
+    "Only original-manifest semantic delta is native_lifecycle_cycles 1 -> 0",
+    "Original manifest bytes unchanged",
+    "App argv/env/cwd/CPU/oracle byte hashes and output sizes match native decision",
+    "P205 image pin matches native decision",
+    "Whole native acceptance false and QEMU -9 retained",
+    "Physical retirement decision remains accepted",
+    "Historical one-public-cycle source uses distinct SMP profile and contributes zero P205 cycles",
+    "Current delivery pointer resolves corrected manifest and all delivery references"
+  ],
+  "elapsed_seconds": 0.0033839200041256845,
+  "original_manifest": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/p-m13-01-delivered-handoff-20261022-1/tested-artifact-identities.json",
+    "sha256": "955cf56da6aa80156279f0c883c06e655379ec39724d448cd9273867d3b4f1aa",
+    "bytes": 16374
+  },
+  "corrected_manifest": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/p-m13-01-delivered-handoff-cycle-clarification-20261022-1/tested-artifact-identities.json",
+    "sha256": "8c64e14dde1fb6f15599784f177ce69525adb1542fa6ea23ea0929839e9b05d2",
+    "bytes": 16374
+  },
+  "source_mapping": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/p-m13-01-delivered-handoff-cycle-clarification-20261022-1/claim-source-mapping.json",
+    "sha256": "206ccb1bd465be3c8416519705e0bec2be553664459faed83c2dab1b1667e4df",
+    "bytes": 4224
+  },
+  "new_runtime_or_acceptance": false
+}

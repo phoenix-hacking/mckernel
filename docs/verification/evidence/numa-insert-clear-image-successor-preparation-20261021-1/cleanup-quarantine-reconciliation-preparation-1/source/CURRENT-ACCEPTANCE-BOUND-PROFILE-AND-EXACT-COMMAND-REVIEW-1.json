@@ -1,0 +1,104 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "READY_CURRENT_EXACT_PROFILE_AND_COMMAND_REVIEW_NO_EXECUTION",
+  "source": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/cleanup-quarantine-reconciliation-preparation-1/source/retire_current_postmutation_holder.py",
+    "sha256": "76abafb1b25675a8aa3c93b9464c8d3419c996c2b86037ca1cb31e5d68a92357",
+    "bytes": 9586
+  },
+  "profile_source": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/cleanup-quarantine-reconciliation-preparation-1/source/CURRENT-EXACT-PROFILE.CURRENT-ACCEPTANCE-BOUND.json",
+    "sha256": "b16daea9310d9917b8cb8cf928885817c6fc547b7f33ab683a3d138af5c29ebf",
+    "bytes": 10438
+  },
+  "root_installed_profile_expected": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/cleanup-quarantine-reconciliation-preparation-1/records/CURRENT-EXACT-PROFILE.json",
+    "sha256": "b16daea9310d9917b8cb8cf928885817c6fc547b7f33ab683a3d138af5c29ebf",
+    "bytes": 10438
+  },
+  "independent_prestate_and_source_acceptance": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/cleanup-quarantine-reconciliation-preparation-1/records/INDEPENDENT-ACTUAL-POSTMUTATION-PRESTATE-AND-RETIREMENT-SOURCE-REVIEW-1.json",
+    "sha256": "31ab908248e7f4bc9a03080b2bd0ed6771a37636dfc3e1bc8b5a872514076ca4",
+    "bytes": 3988
+  },
+  "mechanical_actual_projection": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/cleanup-quarantine-reconciliation-preparation-1/records/ROOT-MECHANICAL-ACTUAL-POSTMUTATION-PRESTATE-PROJECTION-1.json",
+    "sha256": "ed46dafa8b2e084c42003d8396b12d89a135ee56ef8d76898e9704fa642bd5e1",
+    "bytes": 12842
+  },
+  "root_owned_profile_install_once_argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=268435456:268435456",
+    "--cpu=10:10",
+    "--fsize=1048576:1048576",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "-c",
+    "import os,sys,hashlib\nfrom pathlib import Path\nraw=Path(sys.argv[1]).read_bytes()\nassert hashlib.sha256(raw).hexdigest()==sys.argv[2]\ndst=Path(sys.argv[3])\nfd=os.open(dst,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW,0o600)\ntry:\n view=memoryview(raw)\n while view:\n  n=os.write(fd,view)\n  assert n>0\n  view=view[n:]\n os.fsync(fd)\nfinally:os.close(fd)\npfd=os.open(dst.parent,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW)\ntry:os.fsync(pfd)\nfinally:os.close(pfd)\nprint(hashlib.sha256(raw).hexdigest())\n",
+    "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/cleanup-quarantine-reconciliation-preparation-1/source/CURRENT-EXACT-PROFILE.CURRENT-ACCEPTANCE-BOUND.json",
+    "b16daea9310d9917b8cb8cf928885817c6fc547b7f33ab683a3d138af5c29ebf",
+    "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/cleanup-quarantine-reconciliation-preparation-1/records/CURRENT-EXACT-PROFILE.json"
+  ],
+  "one_helper_invocation_argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=unlimited:unlimited",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/cleanup-quarantine-reconciliation-preparation-1/source/retire_current_postmutation_holder.py",
+    "--release",
+    "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/cleanup-quarantine-reconciliation-preparation-1/records/retirement-execution-release.json",
+    "--release-sha256",
+    "FINAL_ACTUAL_RELEASE_FILE_SHA256",
+    "--execute"
+  ],
+  "release_data_proposal": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/cleanup-quarantine-reconciliation-preparation-1/source/RETIREMENT-RELEASE-DATA.CURRENT-PRESTATE-BOUND-EXECUTION-PENDING.json",
+    "sha256": "8cfafb9adc6e21a8d0612aba546bc198e7f9a1a3285c601eceea6656ec754850",
+    "bytes": 1360
+  },
+  "source_unchanged": true,
+  "preserved_regular_count": 9,
+  "active_capture_nonfinal_evidence_only": "Do not include stdout/stderr/status in preserved_regulars: original collector may append legitimate completion; retain pre/post completion evidence separately.",
+  "actual_observed_target": {
+    "pid": 2761636,
+    "starttime": "40670236",
+    "parent": 2761633,
+    "pgrp": 2761633,
+    "uid": 0,
+    "gid": 0,
+    "threads": 1,
+    "root_lock_fd": 3,
+    "mutex_fd": 5,
+    "exe": "/home/holden/anaconda3/bin/python3.9"
+  },
+  "authority_scope": "31ab accepts actualprestate and frozen76ab source ONLY. Exact canonical current retirement release executionreview/freshcriticalgrant/sourcepublication/finalfileSHA stillrequired; no signals or physicalclearance yet.",
+  "remaining_genuine_refs": {
+    "exact_retirement_execution_review": null,
+    "fresh_retirement_resource_grant": null,
+    "fetched_current_source_proof": null,
+    "final_retirement_release": null,
+    "actual_root_profile_installation": null,
+    "actual_retirement": null,
+    "original_capture_positive_join": null,
+    "physical_clearance": null
+  },
+  "strict_future_failure_rule": "No unchanged retry, numeric/group signal fallback, quarantine archival, ordinarycleanup replay, or speculative record repair. After attempted signal any uncertainty retains ownership per immutablehelper."
+}

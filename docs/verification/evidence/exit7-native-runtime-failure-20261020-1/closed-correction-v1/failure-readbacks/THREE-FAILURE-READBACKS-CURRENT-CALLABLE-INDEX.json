@@ -1,0 +1,191 @@
+{
+  "schema": "mckernel.m03-helper-retry-manual-failure-readback-actual-materialization.v1",
+  "status": "MATERIALIZED_DATA_ONLY_NO_READS_EXECUTED",
+  "contract": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-native-data-20261020-1/native-control-packet-2/MANUAL-READBACK-CONTRACT.json",
+    "sha256": "fcd174218c017bc77268fee6e757b79768764aac6f873256f3d9db6c11c64d69",
+    "bytes": 1326
+  },
+  "closed_owner_status": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-native-data-20261020-1/native-control-packet-2/captures/03-native-owner/status.json",
+    "sha256": "98095081f2f4d7de7745b0280d954ab04f4b32be4f057de2a261f6586b88a67e",
+    "bytes": 1568
+  },
+  "static_release": {
+    "bytes": 16231,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/EXIT7-FINAL19-NAMESPACE-CORRECTION-SOURCE-DATA-AND-ORDINARY-RELEASE.json",
+    "sha256": "817fa7e48839abe596d032ec4edd5b4269df53f5f4004f57e15bffbe56920198"
+  },
+  "atomic_callable_index": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-native-data-20261020-1/native-control-packet-2/failure-readback-preparation-1/ATOMIC-CORRECTED-READBACK-CALLABLE-INDEX.json",
+    "sha256": "272bfe2266bde11e27c0cf048b1089efb256b0cf35fdfb6df7e20923c4d13af6",
+    "bytes": 7724
+  },
+  "rows": [
+    {
+      "kind": "archive",
+      "source": {
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-native-data-20261020-1/native-control-packet-2/capture-templates/04-readback-1.json",
+        "sha256": "3c758a66274618823fd1d97004a1b32edd470f45a8864330c32b6065751f206f",
+        "bytes": 2372
+      },
+      "data": {
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-native-data-20261020-1/native-control-packet-2/failure-readback-preparation-1/FAILURE-READBACK-1-DATA.json",
+        "sha256": "8303a4d574f0e71ceb1c4867d0ec35c752117e2d0972541ca6d2687407ac7efa",
+        "bytes": 2456
+      },
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-preparation-1/native-packet-1/posteffects-quarantine-variant-1/native-packet-1/root-run-exact-readonly-stage.py",
+        "--commands-file",
+        "/home/holden/mckernel-work/host-preparation/phase5-exit7-native-data-20261020-1/native-control-packet-2/failure-readback-preparation-1/FAILURE-READBACK-1-DATA.json",
+        "--commands-sha256",
+        "8303a4d574f0e71ceb1c4867d0ec35c752117e2d0972541ca6d2687407ac7efa",
+        "--index",
+        "1"
+      ],
+      "operation": {
+        "argv_template": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/taskset",
+          "--cpu-list",
+          "6",
+          "/usr/bin/prlimit",
+          "--as=1073741824",
+          "--cpu=30",
+          "--fsize=33554432",
+          "--core=0",
+          "--nofile=256",
+          "/usr/bin/timeout",
+          "--signal=TERM",
+          "--kill-after=2s",
+          "30s",
+          "/usr/bin/tar",
+          "--create",
+          "--file=-",
+          "--directory=/home/holden/mckernel-work/scratch/e7s-261020-1/p.owner-7d7dc8220e24aa11d9eb5df926873ffe",
+          "."
+        ],
+        "profile": "reader",
+        "role": "readback-1",
+        "status_path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-native-data-20261020-1/native-control-packet-2/failure-readback-preparation-1/archive-1-capture-1/status.json",
+        "stderr_path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-native-data-20261020-1/native-control-packet-2/failure-readback-preparation-1/archive-1-capture-1/stderr",
+        "stdout_path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-native-data-20261020-1/native-control-packet-2/failure-readback-preparation-1/archive-1-capture-1/stdout"
+      },
+      "gate": "genuine positive atomic absence/leasefalse AND independent readonly review/admission"
+    },
+    {
+      "kind": "archive",
+      "source": {
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-native-data-20261020-1/native-control-packet-2/capture-templates/05-readback-2.json",
+        "sha256": "05f80109425c95fe95164b43e448ccb27973b142325f5f34c0292a280d6ba68a",
+        "bytes": 2321
+      },
+      "data": {
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-native-data-20261020-1/native-control-packet-2/failure-readback-preparation-1/FAILURE-READBACK-2-DATA.json",
+        "sha256": "da0040f381fd9607aaffb4abbe03aa9775173685e286e0b90e36e98da7ecf4c0",
+        "bytes": 2405
+      },
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-preparation-1/native-packet-1/posteffects-quarantine-variant-1/native-packet-1/root-run-exact-readonly-stage.py",
+        "--commands-file",
+        "/home/holden/mckernel-work/host-preparation/phase5-exit7-native-data-20261020-1/native-control-packet-2/failure-readback-preparation-1/FAILURE-READBACK-2-DATA.json",
+        "--commands-sha256",
+        "da0040f381fd9607aaffb4abbe03aa9775173685e286e0b90e36e98da7ecf4c0",
+        "--index",
+        "1"
+      ],
+      "operation": {
+        "argv_template": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/taskset",
+          "--cpu-list",
+          "6",
+          "/usr/bin/prlimit",
+          "--as=1073741824",
+          "--cpu=30",
+          "--fsize=33554432",
+          "--core=0",
+          "--nofile=256",
+          "/usr/bin/timeout",
+          "--signal=TERM",
+          "--kill-after=2s",
+          "30s",
+          "/usr/bin/cat",
+          "/home/holden/mckernel-work/scratch/e7s-261020-1/p/attempt-7d7dc8220e24aa11d9eb5df926873ffe/result.json"
+        ],
+        "profile": "reader",
+        "role": "readback-2",
+        "status_path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-native-data-20261020-1/native-control-packet-2/failure-readback-preparation-1/archive-2-capture-1/status.json",
+        "stderr_path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-native-data-20261020-1/native-control-packet-2/failure-readback-preparation-1/archive-2-capture-1/stderr",
+        "stdout_path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-native-data-20261020-1/native-control-packet-2/failure-readback-preparation-1/archive-2-capture-1/stdout"
+      },
+      "gate": "genuine positive atomic absence/leasefalse AND independent readonly review/admission"
+    },
+    {
+      "kind": "archive",
+      "source": {
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-native-data-20261020-1/native-control-packet-2/capture-templates/06-readback-3.json",
+        "sha256": "3147ee176c5881fa7fdc81bdd84e9cf3ac891a188e7e2afe824847d49d1326a5",
+        "bytes": 2406
+      },
+      "data": {
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-native-data-20261020-1/native-control-packet-2/failure-readback-preparation-1/FAILURE-READBACK-3-DATA.json",
+        "sha256": "57776f51e09ece29dd03637fd3c732aceebdf3f1ade740861898e62ef1ecdb9f",
+        "bytes": 2490
+      },
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-preparation-1/native-packet-1/posteffects-quarantine-variant-1/native-packet-1/root-run-exact-readonly-stage.py",
+        "--commands-file",
+        "/home/holden/mckernel-work/host-preparation/phase5-exit7-native-data-20261020-1/native-control-packet-2/failure-readback-preparation-1/FAILURE-READBACK-3-DATA.json",
+        "--commands-sha256",
+        "57776f51e09ece29dd03637fd3c732aceebdf3f1ade740861898e62ef1ecdb9f",
+        "--index",
+        "1"
+      ],
+      "operation": {
+        "argv_template": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/taskset",
+          "--cpu-list",
+          "6",
+          "/usr/bin/prlimit",
+          "--as=1073741824",
+          "--cpu=30",
+          "--fsize=33554432",
+          "--core=0",
+          "--nofile=256",
+          "/usr/bin/timeout",
+          "--signal=TERM",
+          "--kill-after=2s",
+          "30s",
+          "/usr/bin/tar",
+          "--create",
+          "--file=-",
+          "--directory=/home/holden/mckernel-work/scratch/e7s-261020-1/p/attempt-7d7dc8220e24aa11d9eb5df926873ffe",
+          "--exclude=./qmp.sock",
+          "."
+        ],
+        "profile": "reader",
+        "role": "readback-3",
+        "status_path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-native-data-20261020-1/native-control-packet-2/failure-readback-preparation-1/archive-3-capture-1/status.json",
+        "stderr_path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-native-data-20261020-1/native-control-packet-2/failure-readback-preparation-1/archive-3-capture-1/stderr",
+        "stdout_path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-native-data-20261020-1/native-control-packet-2/failure-readback-preparation-1/archive-3-capture-1/stdout"
+      },
+      "gate": "genuine positive atomic absence/leasefalse AND independent readonly review/admission"
+    }
+  ],
+  "root_operations": 0,
+  "guest_runs": 0
+}

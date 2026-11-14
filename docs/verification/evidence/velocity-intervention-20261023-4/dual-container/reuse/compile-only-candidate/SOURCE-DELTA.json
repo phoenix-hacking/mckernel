@@ -1,0 +1,79 @@
+{
+  "host_helper": {
+    "added_functions": [],
+    "changed_functions": [
+      "Docker.call"
+    ],
+    "original": {
+      "bytes": 51420,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/adapters/native_rust_exact_build_container_owner.py",
+      "sha256": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1"
+    },
+    "private": {
+      "bytes": 39351,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/compile_host_helper.py",
+      "sha256": "8ffc9a09e2f2e9e9c9cc09af559d707bf6c4b989fc4f9d3ad51fe88a8e5b6083"
+    },
+    "removed_functions": [
+      "BuildOwner.__init__",
+      "BuildOwner.run",
+      "BuildOwner.validate",
+      "main"
+    ],
+    "unchanged_function_count": 45
+  },
+  "image_owner": {
+    "added_functions": [
+      "CompileLease.__init__",
+      "CompileLease.acquire",
+      "CompileLease.load_owned",
+      "CompileLease.release_accepted",
+      "_assert_owned_container",
+      "_boottime_ns",
+      "_canonical_hash",
+      "_check_live_p12",
+      "_cleanup_owned_compile",
+      "_compile_command",
+      "_compile_create_args",
+      "_compile_mounts",
+      "_fresh_compile_resources",
+      "_mem_available",
+      "_own_absence",
+      "_own_inspect",
+      "_read_root_document",
+      "_request_core_hash",
+      "_validate_compile_domain",
+      "_validate_launch_admission",
+      "release_accepted_compile_lease"
+    ],
+    "changed_functions": [
+      "_validate_request",
+      "main",
+      "ImageOwner.run",
+      "_check_profile"
+    ],
+    "original": {
+      "bytes": 93046,
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-14/default-image-preparation-1/next-build-preparation-1/native_rust_exact_mckernel_image_container_owner.py",
+      "sha256": "172d38fd9e04125aa8f1ba9d6e8b4f1b8a5e7970058c25c941e6feb1908ef3fe"
+    },
+    "private": {
+      "bytes": 111651,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/compile_image_owner.py",
+      "sha256": "8cd5a1948fc973461e15c17cdea604932b723f839f00646ec7df35c31647d555"
+    },
+    "removed_functions": [
+      "CommonExclusion.__init__",
+      "CommonExclusion.acquire",
+      "_load_heavy_entry_contract"
+    ],
+    "unchanged_function_count": 38
+  },
+  "original_sources_unchanged": true,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "unchanged_driver": {
+    "actual_sha256": "7d30085edda4d1272f923b19e8632e9ab8b259874623974c2da53dbe4c3c5be0",
+    "expected_sha256": "7d30085edda4d1272f923b19e8632e9ab8b259874623974c2da53dbe4c3c5be0",
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-14/default-image-preparation-1/native_rust_exact_mckernel_image_offline.py"
+  }
+}

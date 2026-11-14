@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "baseline_id": "engineering-estimate-20261017T025932Z",
+  "created_at_utc": "2026-10-17T03:00:17.546101+00:00",
+  "comparison_anchor_utc": "2026-10-17T02:59:32Z",
+  "user_request": "Preserve the engineering-completion estimate table from this conversation and regenerate it with delta improvement when the user returns after several hours.",
+  "estimate_kind": "subjective engineering-completion ranges",
+  "confidence": "low",
+  "measured_completion": false,
+  "percentage_definition": "Rough judgment about implementation, targeted tests and integration already accomplished, not formal acceptance, time remaining, executable-byte ownership or a weighted whole-OS score.",
+  "scope": "Existing M00-M13 McKernel roadmap. The supported configuration includes the separate Linux control kernel; these estimates do not establish independent operation without Linux.",
+  "provenance": {
+    "source": "Exact ranges presented in chat and accepted by the user as the comparison baseline.",
+    "head_observed": "09f438751c28df0f497ed45a6bf6a4c6e0821d7b",
+    "head_is_tested_final_candidate": false,
+    "worktree_was_dirty": true,
+    "campaign_thread_id": "01a0a312-8c59-7c80-93de-0b64adde646b",
+    "campaign_phase_observed": "running",
+    "campaign_heartbeat_observed": "2026-10-17T03:00:08.480936+00:00",
+    "engineering_snapshot_file": "docs/verification/os-milestones-20260914/stable-core.json",
+    "engineering_snapshot_as_of": "2026-09-28",
+    "newer_evidence_cursor": "docs/verification/os-milestones-20260914/CURRENT.md"
+  },
+  "milestones": [
+    {
+      "id": "M00",
+      "title": "Preservation, automation and dispatch",
+      "estimated_complete_percent_range": [
+        85,
+        95
+      ]
+    },
+    {
+      "id": "M01",
+      "title": "Response ownership and fault handling",
+      "estimated_complete_percent_range": [
+        40,
+        60
+      ]
+    },
+    {
+      "id": "M02",
+      "title": "Execution and comparison infrastructure",
+      "estimated_complete_percent_range": [
+        50,
+        70
+      ]
+    },
+    {
+      "id": "M03",
+      "title": "Memory ownership and invalidation",
+      "estimated_complete_percent_range": [
+        25,
+        45
+      ]
+    },
+    {
+      "id": "M04",
+      "title": "Basic application functionality/testing",
+      "estimated_complete_percent_range": [
+        30,
+        50
+      ]
+    },
+    {
+      "id": "M05",
+      "title": "Shutdown and resource restoration",
+      "estimated_complete_percent_range": [
+        35,
+        55
+      ]
+    },
+    {
+      "id": "M06",
+      "title": "Advanced processes and syscalls",
+      "estimated_complete_percent_range": [
+        20,
+        40
+      ]
+    },
+    {
+      "id": "M07",
+      "title": "Vector state and HPC features",
+      "estimated_complete_percent_range": [
+        25,
+        45
+      ]
+    },
+    {
+      "id": "M08",
+      "title": "Native Rust modules and interfaces",
+      "estimated_complete_percent_range": [
+        50,
+        70
+      ]
+    },
+    {
+      "id": "M09",
+      "title": "Rust/assembly executable closure",
+      "estimated_complete_percent_range": [
+        60,
+        80
+      ]
+    },
+    {
+      "id": "M10",
+      "title": "Reproducible platform and packaging",
+      "estimated_complete_percent_range": [
+        20,
+        40
+      ]
+    },
+    {
+      "id": "M11",
+      "title": "Integration, security and debugging",
+      "estimated_complete_percent_range": [
+        15,
+        30
+      ]
+    },
+    {
+      "id": "M12",
+      "title": "Hardware, performance and endurance",
+      "estimated_complete_percent_range": [
+        0,
+        10
+      ]
+    },
+    {
+      "id": "M13",
+      "title": "Final independent release",
+      "estimated_complete_percent_range": [
+        0,
+        10
+      ]
+    }
+  ],
+  "observed_evidence_counts": {
+    "candidate_builds": 3,
+    "bounded_diagnostic_passes": 12,
+    "formal_application_cases_accepted": 0,
+    "formal_application_cases_total": 273,
+    "production_gates_accepted": 6,
+    "production_gates_total": 130,
+    "language_gates_accepted": 0,
+    "language_gates_total": 7,
+    "narrow_fault_modes_accepted": 2,
+    "narrow_fault_modes_total": 4
+  },
+  "comparison_policy": [
+    "Preserve this baseline unchanged; record later comparisons in new records.",
+    "When the user returns, show M00-M13 with baseline estimate, current estimate, delta in percentage points and concrete newly implemented/tested/integrated behavior with source/evidence references.",
+    "Keep current estimates and deltas explicitly subjective and low confidence. This is not a formal acceptance score.",
+    "For a single numerical delta, explicitly use the change between the baseline and current range midpoints; label it estimated percentage points, not measured improvement.",
+    "Do not infer a percentage increase from elapsed time, tokens, agent activity, commits, code volume or unchanged historical evidence.",
+    "If the engineering evidence does not justify revising the estimate, retain it and separately describe useful prerequisite work or unresolved measurement.",
+    "Allow unchanged or negative deltas when integration failures or newly discovered defects warrant them. Do not promise that every row will improve.",
+    "Milestones overlap, share dependencies and differ in size; never average or sum the row percentages into a whole-OS completion claim.",
+    "Formal gate/case/language acceptance remains governed by the original contracts and is reported separately.",
+    "Continue the existing image-first autonomous campaign; capturing this baseline is not a checkpoint stop, restart, workload release or goal-completion instruction."
+  ]
+}

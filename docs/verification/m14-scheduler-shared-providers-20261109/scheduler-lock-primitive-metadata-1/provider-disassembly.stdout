@@ -1,0 +1,24 @@
+
+/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-unit-1/output/scheduler_lock_primitive_provider.o:     file format elf64-x86-64
+
+
+Disassembly of section .ltext.__mcs_rwlock_writer_lock_noirq:
+
+0000000000000000 <__mcs_rwlock_writer_lock_noirq>:
+   0:	movabs rax,0x0
+			2: R_X86_64_64	__ihk_mc_spinlock_lock_noirq
+   a:	jmp    rax
+
+Disassembly of section .ltext.__mcs_rwlock_writer_unlock_noirq:
+
+0000000000000000 <__mcs_rwlock_writer_unlock_noirq>:
+   0:	movabs rax,0x0
+			2: R_X86_64_64	__ihk_mc_spinlock_unlock_noirq
+   a:	jmp    rax
+
+Disassembly of section .ltext.xchg4:
+
+0000000000000000 <xchg4>:
+   0:	mov    eax,esi
+   2:	xchg   DWORD PTR [rdi],eax
+   4:	ret    

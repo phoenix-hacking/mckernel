@@ -1,0 +1,14 @@
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -29903,6 +29903,11 @@
+ _Static_assert(sizeof(struct f03_perf_entry_binding_v1_type) == 352 && _Alignof(struct f03_perf_entry_binding_v1_type) == 8, "binding layout ABI");
+ extern const struct f03_perf_entry_binding_v1_type f03_perf_entry_binding_v1;
+ _Static_assert(__builtin_offsetof(struct mckfd, sig_no) == 12, "mckfd sig_no slot ABI");
++_Static_assert(sizeof(struct mckfd) == 80 && _Alignof(struct mckfd) == 8, "perf mckfd size ABI");
++_Static_assert(__builtin_offsetof(struct mckfd, opt) == 24, "perf mckfd opt ABI");
++_Static_assert(__builtin_offsetof(struct mckfd, dup_cb) == 72, "perf mckfd dup ABI");
++_Static_assert(__builtin_types_compatible_p(__typeof__(((struct mckfd *)0)->opt), void *), "perf mckfd opt type ABI");
++_Static_assert(__builtin_types_compatible_p(__typeof__(((struct mckfd *)0)->dup_cb), int (*)(struct mckfd *, ihk_mc_user_context_t *)), "perf mckfd dup type ABI");
+ #endif
+ 
+ #if defined(ENABLE_PERF) && defined(MCKERNEL_RUST_F03_PERF_ENTRY_EXPERIMENTAL) && defined(MCKERNEL_F03_PERF_ENTRY_ABI_WITNESS)

@@ -1,0 +1,69 @@
+// Source-slice ownership witness only: genuine libc allocations/string parsing;
+// explicit local observations stand in for synchronous IHK callbacks. No backend proof.
+use core::ffi::{c_char,c_int,c_ulong,c_void};
+use core::ptr::null_mut;
+use std::ffi::{CStr,CString};
+use std::sync::Mutex;
+#[derive(Default)]struct Observation{count:c_int,list_error:c_int,alloc_fail:bool,owned:Vec<usize>,events:Vec<String>,parsed:Vec<(String,String)>,parser_errno:c_int}
+static OBS:Mutex<Observation>=Mutex::new(Observation{count:0,list_error:0,alloc_fail:false,owned:Vec::new(),events:Vec::new(),parsed:Vec::new(),parser_errno:0});
+unsafe extern "C"{
+ #[link_name="calloc"]fn real_calloc(n:usize,size:usize)->*mut c_void;
+ #[link_name="free"]fn real_free(p:*mut c_void);
+ #[link_name="strndup"]fn real_strndup(p:*const c_char,n:usize)->*mut c_char;
+ #[link_name="strdup"]fn real_strdup(p:*const c_char)->*mut c_char;
+ fn strsep(p:*mut *mut c_char,delimiter:*const c_char)->*mut c_char;
+ fn __errno_location()->*mut c_int;
+}
+fn event(value:String){OBS.lock().unwrap().events.push(value);}
+unsafe fn tracked(p:*mut c_void)->*mut c_void{assert!(!p.is_null(),"unexpected genuine libc allocation failure");OBS.lock().unwrap().owned.push(p as usize);p}
+unsafe fn calloc(n:usize,size:usize)->*mut c_void{event("calloc".into());if OBS.lock().unwrap().alloc_fail{unsafe{*__errno_location()=12};null_mut()}else{unsafe{tracked(real_calloc(n,size))}}}
+unsafe fn strndup(p:*const c_char,n:usize)->*mut c_char{unsafe{tracked(real_strndup(p,n).cast()).cast()}}
+unsafe fn strdup(p:*const c_char)->*mut c_char{unsafe{tracked(real_strdup(p).cast()).cast()}}
+unsafe fn free(p:*mut c_void){if !p.is_null(){let mut o=OBS.lock().unwrap();let i=o.owned.iter().position(|value|*value==p as usize).expect("free must use exact live allocation base");o.owned.remove(i);o.events.push("free".into());}unsafe{real_free(p);*__errno_location()=77;}}
+fn reset(count:c_int,list_error:c_int,alloc_fail:bool){let mut o=OBS.lock().unwrap();assert!(o.owned.is_empty());*o=Observation{count,list_error,alloc_fail,..Observation::default()};unsafe{*__errno_location()=11};}
+fn reclaim()->usize{let mut o=OBS.lock().unwrap();let n=o.owned.len();for p in o.owned.drain(..){unsafe{real_free(p as *mut c_void)};}n}
+mod accepted_cpu_memory{pub mod ihklib_memory_os{
+ use super::super::*;
+ #[repr(C)]pub struct IhkMemChunk{pub size:c_ulong,pub numa_node_number:c_int}
+ pub unsafe fn ihk_os_release_mem(index:c_int,p:*mut IhkMemChunk,n:c_int)->c_int{assert_eq!(n,1);assert_eq!(unsafe{(*p).size},c_ulong::MAX);assert_eq!(unsafe{(*p).numa_node_number},0);event(format!("mem:{index}"));unsafe{*__errno_location()=32};-72}
+}}
+use accepted_cpu_memory::ihklib_memory_os::IhkMemChunk;
+unsafe fn ihk_get_num_os_instances(_:c_int)->c_int{event("count".into());OBS.lock().unwrap().count}
+unsafe fn ihk_get_os_instances(_:c_int,list:*mut c_int,n:c_int)->c_int{event("list".into());let error=OBS.lock().unwrap().list_error;if error==0{for i in 0..n as usize{unsafe{list.add(i).write(7+(i as c_int)*2)};}}unsafe{*__errno_location()=23};error}
+unsafe fn release_assigned_cpu(index:c_int)->c_int{event(format!("cpu:{index}"));unsafe{*__errno_location()=31};-71}
+unsafe fn ihk_destroy_os(_:c_int,index:c_int)->c_int{event(format!("destroy:{index}"));unsafe{*__errno_location()=33};-73}
+unsafe fn cpu_all(device:c_int,output:*mut c_char,assign_to:Option<c_int>)->c_int{assert!(output.is_null()&&assign_to.is_none());event(format!("device_cpu:{device}:{}",unsafe{*__errno_location()}));unsafe{*__errno_location()=44};-74}
+unsafe fn ihk_release_mem(index:c_int,p:*mut IhkMemChunk,n:c_int)->c_int{unsafe{accepted_cpu_memory::ihklib_memory_os::ihk_os_release_mem(index,p,n)}}
+mod actual {
+use super::*;
+pub unsafe fn rollback_slice(device:c_int,result:c_int)->c_int{
+ let mut all_memory=IhkMemChunk{size:c_ulong::MAX,numa_node_number:0};
+__ROLLBACK__
+pub unsafe fn parser_slice(envp:*const c_char,count:c_int)->c_int{
+ let mut names:*mut *mut c_char=null_mut();let mut values:*mut *mut c_char=null_mut();
+ let result=(||{
+__PARSER__
+  0
+ })();
+ let parser_errno=unsafe{*__errno_location()};let mut parsed=Vec::new();
+ if result==0{for i in 0..count as usize{parsed.push((unsafe{CStr::from_ptr(names.add(i).read())}.to_str().unwrap().to_owned(),unsafe{CStr::from_ptr(values.add(i).read())}.to_str().unwrap().to_owned()));}}
+ {let mut o=OBS.lock().unwrap();o.parser_errno=parser_errno;o.parsed=parsed;}
+__ARRAY_CLEANUP__
+ result
+}
+}
+fn check_rollback(result:c_int,count:c_int,list_error:c_int,alloc_fail:bool,baseline:bool){
+ reset(count,list_error,alloc_fail);let returned=unsafe{actual::rollback_slice(3,result)};assert_eq!(returned,result);
+ let o=OBS.lock().unwrap();let allocated=result!=0&&count>0&&!alloc_fail;assert_eq!(o.owned.len(),usize::from(baseline&&allocated));
+ let mut expected=Vec::<String>::new();if result!=0{expected.push("count".into());let entry_errno=if count>0{expected.push("calloc".into());if alloc_fail{12}else{expected.push("list".into());let consume_list=baseline||list_error==0;if consume_list{for i in 0..count{let index=if list_error==0{7+i*2}else{0};expected.extend([format!("cpu:{index}"),format!("mem:{index}"),format!("destroy:{index}")]);}}if !baseline{expected.push("free".into());}if consume_list{33}else{23}}}else{11};expected.extend([format!("device_cpu:3:{entry_errno}"),"mem:3".into()]);}
+ assert_eq!(o.events,expected);drop(o);assert_eq!(reclaim(),usize::from(baseline&&allocated));
+}
+fn check_parser(input:&str,expected:Result<(&str,&str),c_int>,baseline:bool){
+ reset(0,0,false);unsafe{*__errno_location()=11};let text=CString::new(input).unwrap();let result=unsafe{actual::parser_slice(text.as_ptr(),1)};let o=OBS.lock().unwrap();assert_eq!(o.parser_errno,if expected.is_ok(){77}else{11},"preserve existing success free effect; only the new empty-error free preserves entry errno");
+ match expected{Ok((name,value))=>{assert_eq!(result,0);assert_eq!(o.parsed,[(name.to_owned(),value.to_owned())]);assert!(o.owned.is_empty());},Err(error)=>{assert_eq!(result,error);assert_eq!(o.owned.len(),usize::from(baseline));assert!(o.parsed.is_empty());}}
+ drop(o);assert_eq!(reclaim(),usize::from(baseline));
+}
+fn main(){let baseline=std::env::var("M15_CREATE_OS_BASELINE_ONLY").as_deref()==Ok("1");
+ if baseline{check_rollback(-5,2,0,false,true);check_parser("",Err(-22),true);println!("baseline checks=2 expected-owned-leaks=2 reclaimed=2");}
+ else{for args in [(-5,2,0,false),(-5,0,0,false),(-5,-17,0,false),(-5,2,0,true),(-5,2,-6,false),(0,2,0,false)]{check_rollback(args.0,args.1,args.2,args.3,false);}check_parser("",Err(-22),false);for(input,name,value)in[("BARE","",""),("=value","","value"),("A=x=y","A","x=y"),("A=","A","")]{check_parser(input,Ok((name,value)),false);}println!("candidate checks=11 live-owned=0 primary-result-and-errno-order-preserved");}
+}

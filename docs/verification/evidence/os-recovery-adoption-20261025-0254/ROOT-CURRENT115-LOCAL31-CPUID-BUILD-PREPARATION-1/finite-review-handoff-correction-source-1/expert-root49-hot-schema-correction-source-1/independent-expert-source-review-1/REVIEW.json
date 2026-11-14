@@ -1,0 +1,127 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_SOURCE_AND_OFFLINE_FULL_HOT_REGRESSION",
+  "independent": true,
+  "reviewer": "/root/guardian_execution_review",
+  "implementation_ownership": false,
+  "execution_approval": false,
+  "runtime_authority": null,
+  "reviewed_source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/finite-review-handoff-correction-source-1/expert-root49-hot-schema-correction-source-1/SOURCE-READY.json",
+    "bytes": 4066,
+    "sha256": "149119c893b2ceeba0ddb10318b9dc0a7b53e8badcbafadb2de3d4157f75a4ac"
+  },
+  "reviewed_verifier": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/finite-review-handoff-correction-source-1/expert-root49-hot-schema-correction-source-1/finite_review.py",
+    "bytes": 17407,
+    "sha256": "d937f0ca5fd343ec9c81f19b253f0cc83b6a209e593e5361b10d1977fabaee13"
+  },
+  "reviewed_pure_predicates": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/finite-review-handoff-correction-source-1/expert-root49-hot-schema-correction-source-1/hot_predicates.py",
+    "bytes": 10652,
+    "sha256": "74d3e18dfde95a837eb2f54d76697e1e47468e97ad1492b01fd1e26628e172be"
+  },
+  "reviewed_manifest": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/finite-review-handoff-correction-source-1/expert-root49-hot-schema-correction-source-1/SOURCE-MANIFEST.json",
+    "bytes": 9300,
+    "sha256": "0b537b2a25cb84e333840a7d0c34ac05d6e04830d32e9d3eb440db5fcf044272"
+  },
+  "reviewed_full_regression": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/finite-review-handoff-correction-source-1/expert-root49-hot-schema-correction-source-1/TEST_ONLY-ENTIRE-HOT-RESULT-FINAL.json",
+    "bytes": 15908,
+    "sha256": "597ad62a682fe422cc480ae5af6a834b4a9774922ea9982b659b9cdc23cff1c5"
+  },
+  "reviewed_test_execution": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/finite-review-handoff-correction-source-1/expert-root49-hot-schema-correction-source-1/TEST-EXECUTION.SOURCE-ONLY.json",
+    "bytes": 1862,
+    "sha256": "e760b0438cdd0183bcd4fe98ccf8356f186e9292353430c3eafb89970f22f513"
+  },
+  "reviewed_test_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/finite-review-handoff-correction-source-1/expert-root49-hot-schema-correction-source-1/test_only_retained_a2_hot.py",
+    "bytes": 13734,
+    "sha256": "9ebb441bbd3c1cc43a0a92b9885097a7a7e20a36df1041d69753522f45168987"
+  },
+  "reviewed_raw_fixture_hashes": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/finite-review-handoff-correction-source-1/expert-root49-hot-schema-correction-source-1/RETAINED-A2-FIXTURE-BYTE-HASHES.json",
+    "bytes": 12348,
+    "sha256": "eed9f4961215b1b9abe228e24959e6297827572bbef146c2da94d7cf67cdde3d"
+  },
+  "reused_expert_audit": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/independent-hot-schema-expert-review-1/SCHEMA-AUDIT.json",
+    "bytes": 9718,
+    "sha256": "ce3fd19011797d763d66a6c83795481a6baa114a966c8fe7458065d03658821d"
+  },
+  "reused_expert_spec": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/independent-hot-schema-expert-review-1/ADAPTER-AND-OFFLINE-CHECK-SPEC.md",
+    "bytes": 7749,
+    "sha256": "8bf5d8e20542eabf4b0099754c22499e8aad8206b21cf2f7a8047a1e53d27492"
+  },
+  "genuine_static_job_policy": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/finite-review-handoff-correction-source-1/ROOT-AGGREGATE-JOB-POLICY-AND-RESERVATION.json",
+    "bytes": 1475,
+    "sha256": "33ac52e11cdfed587b7fe2e027857066c4c786e5f37ccd9c820c5f42ed3d9a1d"
+  },
+  "findings": [
+    {
+      "predicate": "Two complete concrete schema corrections",
+      "result": "PASS_SOURCE",
+      "evidence": "Removed nonexistent physical.aggregate_jobs_max access; physical runtime checks unchanged. Purepredicate uses the exact cold source-reviewed ledger_key/status/current_boundary/latestfree fields, no historical root_ledger35 or key/default fallback. Cold requires schema observer==actualobserverref and independent source schema receipt decisionPASS_EXACT_OBSERVER_SCHEMA_SOURCE_BINDING/reviewed_observer_schema exactref. FutureRootN must declare matching actual schema rather than relabel historicalRoot49."
+    },
+    {
+      "predicate": "Genuine aggregate policy with unchanged actual resource facts",
+      "result": "PASS_SOURCE",
+      "evidence": "Cold authenticates Root33policy/originalauthorization/excerpt and exact static status, no occupancy claim/runtimeauthority, typed7job/4heavy+1ordinary+0other/5total, oneheavy and original23259332608 memory. Pinned worker0bdd remains sequential with original4CPU contract. HOT/fullpure bind jobpolicy ordinary2GiB64pids and heavy12GiB512 to existing actualRootinput/resource/profile. No fake observed fields, default7, new Rootinput field, jobbudget expansion or compiler parallelism change."
+    },
+    {
+      "predicate": "All original strong checks and publication mechanics retained",
+      "result": "PASS_SOURCE",
+      "evidence": "Complete diffs show original nonce/source/export/adoption/publication/ledger joins, holderbirth/FD3permanent27:4/solelock, no-launch paths, resourcecaps/headroom/floors, actualguard/clamps and120s checks retained. Exact cgroup dictionary comparison preserves all five keys/values without order dependency. main and its final postfsync callback have exact unchanged AST. handoff_common9bc7/rootcapture/publisheradapter are byte-identical to prior reviewed mechanical correction; no approver/publisher authority changed."
+    },
+    {
+      "predicate": "Mandatory entire retained-A2 offline regression",
+      "result": "PASS_RETAINED_TEST_ONLY",
+      "evidence": "Inspected complete testsource9ebb and recorded execution under Python3.9.12. It imports utility without main, invokes entireproductionhot, exactAST-extracted originalrunner.resource_guards, complete adaptedpurepredicates and exactproductionpostfsync callback. VirtualProc/birth/fd/absence and guardclock sources are explicit TEST_ONLY recorded A2 values; positive clock is resourceclocks+1, expirynegative+121. No realguard/process/Docker/workload/publisher call or actualPASS writer is reachable in this harness."
+    },
+    {
+      "predicate": "Negative controls and immutable retained evidence",
+      "result": "PASS_RETAINED_TEST_ONLY",
+      "evidence": "Result597a records33rejected controls covering currentledger/status/boundary/observer/history substitution, jobtypes/sums/authority/resource joins, CPU/floor/cgroup/custody/flock/birth/FD/pending/reservation, invalidclocks/cutoffs/refhashes, blockedapproval and postfsyncexpiry. Test-only no-approval writer calls callback but never publishes. Independently verified all29listed raw payload hashes still match before/after values, including original expired A2 resource/physical/markers; no snapshot clock or field was redated or inserted."
+    },
+    {
+      "predicate": "Future actual authority remains open",
+      "result": "PASS_SCOPE",
+      "evidence": "READY/bindings/schema templates keep futureadmission/nonce/ledger/currentfree/physical/grant/realPREWARM null. This receipt accepts source implementation and mandatory regression only. A2 refusal6e3 and all successful prefixes/failures remain preserved; no OS/resource fault or consumed admission is relabeled. Original4argv/120Rust/8retained/3new source/build scope unchanged."
+    }
+  ],
+  "offline_evidence": {
+    "TEST_ONLY": true,
+    "whole_hot_body_exercised": true,
+    "original_resource_guards_exercised": true,
+    "full_pure_predicates_exercised": true,
+    "production_postfsync_callback_exercised": true,
+    "negative_controls": 33,
+    "retained_payloads_unchanged": 29,
+    "real_PASS_writes": 0,
+    "raw_A2_JSON_or_refs_modified": false
+  },
+  "downstream_conditions": [
+    "Root binds genuine latest ledger/currentfree/observer source and exact independently reviewed observer-schema contract; historicalRoot49 test schema is not future authority.",
+    "Root supplies exact updated static publication/bindings for new helper refs and unchanged actualsource/profile context; independent assigned reviewer alone runs actualcoldPREWARM.",
+    "Only after actualreviewer waiting does Root capturefresh physical/held/account/resources; realHOT approval/final120s/currentguard remain mandatory before publisher/READY.",
+    "No oldA1/A2 resource or nonce release revival, source-only approval substitution, compiler/native/workload grant from this receipt."
+  ],
+  "actual_verifier_main_or_guard_queries_by_reviewer": 0,
+  "actual_approval_writes_by_reviewer": 0,
+  "actual_resource_queries_or_signals_by_reviewer": 0,
+  "canonical_mutations": 0,
+  "review_method": "Read-only sealed refs, complete verifier/pure diffs, testsource and actualTEST_ONLY result; AST main/need/triplet comparisons, unchangedmechanicalhelper byte checks and bounded29fixturehash verification. No testreplay or verifier/guard/livequery execution.",
+  "persistent_controls": {
+    "fixed_UTC_cutoff": "2026-10-28T05:36:09Z",
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "credit_run": "7f4af94a83b14cc08f97401f5891d965",
+    "credit_ceiling": 57774.852125,
+    "cumulative_spent_floor": 22812.3311,
+    "real_holds_effective": true,
+    "Root_owns_actual_grants_and_canonical_state": true
+  }
+}

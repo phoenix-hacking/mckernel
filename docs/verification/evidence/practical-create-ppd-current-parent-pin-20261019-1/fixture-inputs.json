@@ -1,0 +1,50 @@
+{
+  "rows": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/current-source-integration-1/base-smp_application.rs",
+      "sha256": "127829f3dd35b3d44c2b098279b7439dccb31a53508055e3cdd1fd9e450682e2",
+      "bytes": 46152
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/current-source-integration-1/smp_application.rs",
+      "sha256": "fd375f11a43dbd205c08decdff10d94c2bb82935ae2ddfeaf1ea7142a5c70146",
+      "bytes": 48311
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/current-source-integration-1/application_rpc.rs",
+      "sha256": "9f811c86c4e996294a6cd3be6b83315dabd20a3fb375419e091f4b9dedcfad39",
+      "bytes": 10080
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/current-source-integration-1/actual-current-parent-pin.rs",
+      "sha256": "ffa2fac4db91b57605f83f0d6895f32dc4381a7c93b62358fda7da8498a8c2d1",
+      "bytes": 20980
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/current-source-integration-1/prepare_current_fixture.py",
+      "sha256": "c8a446075be4881483481483c3c11fea774d0abe0b49241326f61fdd39332a2a",
+      "bytes": 8491
+    }
+  ],
+  "actual_methods": [
+    "Entry::release_ready",
+    "Entry::request_cleanup",
+    "Remote::pin_parent_slot",
+    "Remote::reserve",
+    "Remote::reply",
+    "Remote::close_inner",
+    "Remote::close",
+    "Remote::cleanup",
+    "Remote::transport_health"
+  ],
+  "services_adapted": [
+    "syscall mailbox drain/close",
+    "procfs rundown",
+    "prepared-image finish",
+    "clock/msleep",
+    "Rust allocation/Arc/mutex/error representation"
+  ],
+  "actual_exchange": "current application_rpc.rs",
+  "new_tests": 3,
+  "native_authority": false
+}

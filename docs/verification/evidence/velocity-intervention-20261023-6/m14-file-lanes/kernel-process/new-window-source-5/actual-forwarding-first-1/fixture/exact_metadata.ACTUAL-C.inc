@@ -1,0 +1,9 @@
+const char *const process_tracked_allocator_source_file = "/home/holden/mckernel/kernel/process.c";
+const int process_mckfd_free_bridge_source_line = 171;
+const int process_policy_free_bridge_source_line = 253;
+const int process_optional_free_bridge_source_line = 258;
+const int process_alloc_bridge_source_line = 340;
+const int process_free_vm_bridge_source_line = 561;
+const int process_range_kfree_bridge_source_line = 1817;
+const int process_add_range_alloc_bridge_source_line = 2256;
+const int process_add_range_free_bridge_source_line = 2261;

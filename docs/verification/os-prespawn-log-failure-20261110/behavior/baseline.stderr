@@ -1,0 +1,93 @@
+test_log_open_failure_is_failed_and_explicit_retry_spawns_once (scripts.tests.test_os_goal_overnight.OvernightTests) ... ERROR
+test_log_fdopen_failure_closes_acquired_fd_and_persists_failure (scripts.tests.test_os_goal_overnight.OvernightTests) ... ERROR
+test_failure_log_write_is_best_effort_after_durable_receipt (scripts.tests.test_os_goal_overnight.OvernightTests) ... FAIL
+test_attempted_popen_exception_is_unknown_and_prevents_second_spawn (scripts.tests.test_os_goal_overnight.OvernightTests) ... FAIL
+test_failure_receipt_storage_unavailable_keeps_unknown_and_blocks_spawn (scripts.tests.test_os_goal_overnight.OvernightTests) ... FAIL
+test_unresolved_crash_around_popen_prevents_blind_second_start (scripts.tests.test_os_goal_overnight.OvernightTests) ... ok
+test_live_receipt_prevents_second_detached_start_before_watcher_lease (scripts.tests.test_os_goal_overnight.OvernightTests) ... ok
+
+======================================================================
+ERROR: test_log_open_failure_is_failed_and_explicit_retry_spawns_once (scripts.tests.test_os_goal_overnight.OvernightTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/scripts/tests/test_os_goal_overnight.py", line 207, in test_log_open_failure_is_failed_and_explicit_retry_spawns_once
+    first = overnight.start(self.repo, self.directory, wait_seconds=0)
+  File "/home/holden/mckernel/scripts/start_os_overnight.py", line 198, in start
+    log_fd = os.open(receipt["log_path"], os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600)
+  File "/usr/lib/python3.8/unittest/mock.py", line 1081, in __call__
+    return self._mock_call(*args, **kwargs)
+  File "/usr/lib/python3.8/unittest/mock.py", line 1085, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+  File "/usr/lib/python3.8/unittest/mock.py", line 1146, in _execute_mock_call
+    result = effect(*args, **kwargs)
+  File "/home/holden/mckernel/scripts/tests/test_os_goal_overnight.py", line 198, in open_log
+    raise PermissionError(errno.EACCES, "test log open denied")
+PermissionError: [Errno 13] test log open denied
+
+======================================================================
+ERROR: test_log_fdopen_failure_closes_acquired_fd_and_persists_failure (scripts.tests.test_os_goal_overnight.OvernightTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/scripts/tests/test_os_goal_overnight.py", line 256, in test_log_fdopen_failure_closes_acquired_fd_and_persists_failure
+    result = overnight.start(self.repo, self.directory, wait_seconds=0)
+  File "/home/holden/mckernel/scripts/start_os_overnight.py", line 199, in start
+    with os.fdopen(log_fd, "ab", buffering=0) as log:
+  File "/usr/lib/python3.8/unittest/mock.py", line 1081, in __call__
+    return self._mock_call(*args, **kwargs)
+  File "/usr/lib/python3.8/unittest/mock.py", line 1085, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+  File "/usr/lib/python3.8/unittest/mock.py", line 1146, in _execute_mock_call
+    result = effect(*args, **kwargs)
+  File "/home/holden/mckernel/scripts/tests/test_os_goal_overnight.py", line 235, in fdopen_log
+    raise OSError(errno.EIO, "test log fdopen failed")
+OSError: [Errno 5] test log fdopen failed
+
+======================================================================
+FAIL: test_failure_log_write_is_best_effort_after_durable_receipt (scripts.tests.test_os_goal_overnight.OvernightTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/scripts/start_os_overnight.py", line 201, in start
+    receipt["command"] = build_command(repo)
+  File "/usr/lib/python3.8/unittest/mock.py", line 1081, in __call__
+    return self._mock_call(*args, **kwargs)
+  File "/usr/lib/python3.8/unittest/mock.py", line 1085, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+RuntimeError: test command preparation failed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/holden/mckernel/scripts/tests/test_os_goal_overnight.py", line 298, in test_failure_log_write_is_best_effort_after_durable_receipt
+    result = overnight.start(self.repo, self.directory, wait_seconds=0)
+  File "/home/holden/mckernel/scripts/start_os_overnight.py", line 224, in start
+    log.write(("Overnight start: " + str(error) + "\n").encode())
+  File "/home/holden/mckernel/scripts/tests/test_os_goal_overnight.py", line 286, in write
+    self.assertEqual(saved["status"], "FAILED")
+AssertionError: 'STARTING' != 'FAILED'
+- STARTING
++ FAILED
+
+
+======================================================================
+FAIL: test_attempted_popen_exception_is_unknown_and_prevents_second_spawn (scripts.tests.test_os_goal_overnight.OvernightTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/scripts/tests/test_os_goal_overnight.py", line 309, in test_attempted_popen_exception_is_unknown_and_prevents_second_spawn
+    self.assertEqual(first["status"], "UNKNOWN")
+AssertionError: 'FAILED' != 'UNKNOWN'
+- FAILED
++ UNKNOWN
+
+
+======================================================================
+FAIL: test_failure_receipt_storage_unavailable_keeps_unknown_and_blocks_spawn (scripts.tests.test_os_goal_overnight.OvernightTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/scripts/tests/test_os_goal_overnight.py", line 348, in test_failure_receipt_storage_unavailable_keeps_unknown_and_blocks_spawn
+    self.assertEqual(failed.exception.errno, errno.EIO)
+AssertionError: 13 != 5
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.071s
+
+FAILED (failures=3, errors=2)

@@ -1,0 +1,163 @@
+{
+  "status": "PASS",
+  "definitions": [
+    {
+      "name": "do_setresgid",
+      "type": "T",
+      "value_hex": "0",
+      "bytes": 173
+    },
+    {
+      "name": "do_setresuid",
+      "type": "T",
+      "value_hex": "0",
+      "bytes": 173
+    },
+    {
+      "name": "get_cpu_local_var",
+      "type": "T",
+      "value_hex": "0",
+      "bytes": 24
+    },
+    {
+      "name": "get_this_cpu_local_var",
+      "type": "T",
+      "value_hex": "0",
+      "bytes": 99
+    },
+    {
+      "name": "getcred",
+      "type": "T",
+      "value_hex": "0",
+      "bytes": 259
+    },
+    {
+      "name": "getcred_body_result",
+      "type": "T",
+      "value_hex": "0",
+      "bytes": 272
+    },
+    {
+      "name": "ihk_mc_get_processor_id",
+      "type": "T",
+      "value_hex": "0",
+      "bytes": 77
+    },
+    {
+      "name": "ptrace_detach_do_kill_bridge",
+      "type": "T",
+      "value_hex": "0",
+      "bytes": 12
+    },
+    {
+      "name": "ptrace_detach_wakeup_bridge",
+      "type": "T",
+      "value_hex": "0",
+      "bytes": 12
+    },
+    {
+      "name": "syscall_do_syscall2_bridge",
+      "type": "T",
+      "value_hex": "0",
+      "bytes": 167
+    },
+    {
+      "name": "syscall_do_syscall3_bridge",
+      "type": "T",
+      "value_hex": "0",
+      "bytes": 171
+    },
+    {
+      "name": "syscall_get_processor_id_bridge",
+      "type": "T",
+      "value_hex": "0",
+      "bytes": 77
+    },
+    {
+      "name": "syscall_policy_do_syscall2_bridge",
+      "type": "T",
+      "value_hex": "0",
+      "bytes": 167
+    },
+    {
+      "name": "syscall_policy_do_syscall3_bridge",
+      "type": "T",
+      "value_hex": "0",
+      "bytes": 171
+    },
+    {
+      "name": "syscall_refresh_cred_fields_body_result",
+      "type": "T",
+      "value_hex": "0",
+      "bytes": 163
+    },
+    {
+      "name": "syscall_virt_to_phys_bridge",
+      "type": "T",
+      "value_hex": "0",
+      "bytes": 165
+    },
+    {
+      "name": "terminate_host",
+      "type": "T",
+      "value_hex": "0",
+      "bytes": 183
+    },
+    {
+      "name": "virt_to_phys",
+      "type": "T",
+      "value_hex": "0",
+      "bytes": 165
+    },
+    {
+      "name": "wait_host_wait4_bridge",
+      "type": "T",
+      "value_hex": "0",
+      "bytes": 166
+    },
+    {
+      "name": "x86_user_map_kernel_start_bridge",
+      "type": "T",
+      "value_hex": "0",
+      "bytes": 14
+    },
+    {
+      "name": "x86_virt_to_phys_body_result",
+      "type": "T",
+      "value_hex": "0",
+      "bytes": 105
+    }
+  ],
+  "definition_count": 21,
+  "unique_strong_owners": true,
+  "genuine_unresolved": [
+    "clv",
+    "do_kill",
+    "do_syscall",
+    "f03_terminate_host_refcount_set_v1",
+    "f03_wait_release_process",
+    "f03_wait_release_thread",
+    "linux_page_offset_base",
+    "locals",
+    "num_processors",
+    "sched_wakeup_thread",
+    "syscall_do_kill_thread_bridge",
+    "syscall_do_syscall_request_bridge",
+    "syscall_find_process_bridge",
+    "syscall_generic_forwarding_body_result",
+    "syscall_process_unlock_bridge",
+    "terminate_host_body_result",
+    "x86_addr_log_bridge",
+    "x86_kernel_phys_base",
+    "x86_map_kernel_start_geometry"
+  ],
+  "unresolved_count": 19,
+  "four_original_lower_imports_resolved": [
+    "get_this_cpu_local_var",
+    "ihk_mc_get_processor_id",
+    "syscall_get_processor_id_bridge",
+    "syscall_virt_to_phys_bridge"
+  ],
+  "prior13_symbol_sizes_preserved": true,
+  "global_data_definitions": []
+}

@@ -1,0 +1,256 @@
+{
+  "clients": [
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TZ=UTC",
+        "/usr/bin/taskset",
+        "-c",
+        "0",
+        "/usr/bin/prlimit",
+        "--as=134217728:134217728",
+        "--cpu=10:10",
+        "--fsize=8388608:8388608",
+        "--nofile=64:64",
+        "--core=0:0",
+        "--",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "-c",
+        "import base64,datetime,errno,fcntl,hashlib,json,os,pathlib,stat,struct,sys,traceback,types\nGETFLAGS=0x80086601\nEXPECTED={'provider_pid':1634459,'provider_birth':'53414308','sudo_pid':1634456,'sudo_birth':'53414302','boot_id':'3ba4f2ca-4323-433d-bfb8-7859268121b6','runtime_path':'/usr/bin/python3.8','runtime_device':66306,'runtime_inode':1048651,'runtime_bytes':5490456,'runtime_sha256':'298a9e830ed52f36c299427565485d717d1ce0179c0597cc16560513eb780b06','old_flags':524288,'current_flags':524304,'driver_sha256':'0ca054d1b097b16d699dd2ac9be843e6a2a6901ad0aab5c44bb1eb19168dd511','core_sha256':'e9243a348b3d3da681982f17703bd7e1325f4f7097a9c9d69b20b5eaff999838'}\nROOT_PATH='/var/lib/mckernel-native-initial-data-1634459-53414308'\nJOURNAL_NAME='RUNTIME-FLAGS-1634459-53414308.jsonl'\nINPUT_NAME='ROOT-ADMISSION-INPUT.json'\nRAW_OUTPUT='/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-current-provider-custody-read-p04tests-max-1/collection-1/ROOT-PRIVATE-RECORD-1'\nOWNED=[]\nRAW_CLOSE_ERRORS=[]\ndef stable(st): return st.st_dev, st.st_ino, st.st_mode, st.st_nlink, st.st_size, st.st_mtime_ns, st.st_ctime_ns\n\n\ndef check(ok,message):\n    if not ok:raise ValueError(message)\n\n\ndef flags(fd):\n    value=bytearray(4);fcntl.ioctl(fd,GETFLAGS,value,True)\n    return struct.unpack('I',value)[0]\n\n\ndef unique(pairs):\n    result={}\n    for key,value in pairs:\n        check(key not in result,'duplicate manifest key');result[key]=value\n    return result\n\n\ndef write_all(fd,raw):\n    position=0\n    while position<len(raw):\n        n=os.write(fd,raw[position:]);check(n>0,'short durable write');position+=n\n\n\ndef root_private(fd):\n    st=os.fstat(fd)\n    check(stat.S_ISDIR(st.st_mode) and st.st_uid==0 and stat.S_IMODE(st.st_mode)==0o700,'root-private operation directory')\n    try:os.getxattr(fd,'system.posix_acl_access')\n    except OSError as e:\n        if e.errno==errno.ENODATA:return\n        raise\n    raise ValueError('extended ACL on private operation root')\n\n\ndef open_exact(path):\n    \"\"\"Pin actual host path, refusing symlink components and noncanonical names.\"\"\"\n    check(type(path) is str and path.startswith('/') and '//' not in path,'absolute host path')\n    parts=path.split('/')[1:]\n    check(parts and all(x not in ('','.','..') for x in parts),'host path')\n    fd=os.open('/',os.O_RDONLY|os.O_DIRECTORY|os.O_CLOEXEC)\n    try:\n        for i,part in enumerate(parts):\n            st=os.stat(part,dir_fd=fd,follow_symlinks=False)\n            check(stat.S_ISDIR(st.st_mode) or stat.S_ISREG(st.st_mode),'symlink or special source path')\n            opts=os.O_RDONLY|os.O_NOFOLLOW|os.O_CLOEXEC\n            if i<len(parts)-1:opts|=os.O_DIRECTORY\n            child=os.open(part,opts,dir_fd=fd)\n            check(obs.stable(os.fstat(child))==obs.stable(st),'host identity changed while opening')\n            os.close(fd);fd=child\n        return fd\n    except BaseException:\n        os.close(fd);raise\n\n\nobs=types.SimpleNamespace(stable=stable)\ndef now():return datetime.datetime.now(datetime.timezone.utc).isoformat()\ndef own(fd,label):\n    row={'fd':fd,'historical_fd':fd,'label':label,'state':'HELD'};OWNED.append(row);return row\ndef drain(rows):\n    for row in reversed(rows):\n        if row['state']!='HELD':continue\n        fd=row['fd'];row['fd']=None;row['state']='CLOSE_ATTEMPTED_UNKNOWN'\n        try:os.close(fd)\n        except BaseException as error:RAW_CLOSE_ERRORS.append((row['label'],error,error.__traceback__))\n        else:row['state']='CLOSED'\ndef read_path(path,limit):\n    with open(path,'rb') as stream:raw=stream.read(limit+1)\n    check(len(raw)<=limit,'read bound');return raw\ndef proc(pid,birth):\n    raw=read_path('/proc/%d/stat'%pid,8192);tail=raw.rsplit(b')',1)[1].split()\n    check(len(tail)>=20 and tail[0] not in (b'Z',b'X',b'x') and tail[19].decode()==birth,'exact live PID/birth required')\n    status=read_path('/proc/%d/status'%pid,32768).decode('ascii')\n    uid=next(x for x in status.splitlines() if x.startswith('Uid:')).split()[1:]\n    check(uid==['0','0','0','0'],'actual original Root identity required')\n    return {'pid':pid,'birth':birth,'state':tail[0].decode(),'ppid':int(tail[1]),'pgrp':int(tail[2]),'session':int(tail[3]),'uid':[int(x) for x in uid]}\ndef identity(st):\n    return {'device':st.st_dev,'inode':st.st_ino,'uid':st.st_uid,'gid':st.st_gid,'mode':stat.S_IMODE(st.st_mode),'nlink':st.st_nlink,'bytes':st.st_size,'mtime_ns':st.st_mtime_ns,'ctime_ns':st.st_ctime_ns}\ndef read_owned(row,limit):\n    before=os.fstat(row['fd']);check(stat.S_ISREG(before.st_mode) and 0<before.st_size<=limit,'exact bounded regular input')\n    raw=os.pread(row['fd'],before.st_size+1,0);after=os.fstat(row['fd'])\n    check(len(raw)==before.st_size and stable(before)==stable(after),'stable complete input read')\n    return before,raw\n# Same field interpretation as the provider's actual verify_runtime_lock, with\n# the recorded original owner PID instead of this independent reader's PID.\ndef lock_key(line):\n    fields=line.split()\n    if fields and fields[0]=='lock:':fields=fields[1:]\n    if len(fields)<8 or fields[1:4]!=['FLOCK','ADVISORY','WRITE']:return None\n    major,minor,inode=fields[5].split(':')\n    key=(int(fields[4]),int(major,16),int(minor,16),int(inode))\n    if key!=(EXPECTED['provider_pid'],os.major(EXPECTED['runtime_device']),os.minor(EXPECTED['runtime_device']),EXPECTED['runtime_inode']):return None\n    check(fields[6:8]==['0','EOF'],'whole original runtime FLOCK range required')\n    return list(key)+fields[6:8]\ndef runtime_locks():\n    raw=read_path('/proc/locks',1024*1024).decode('ascii');rows=[x for x in raw.splitlines() if lock_key(x) is not None]\n    check(len(rows)==1,'exact original provider runtime FLOCK required');return {'keys':[lock_key(x) for x in rows],'raw_matching_rows':rows}\ndef fd_bindings(wanted):\n    prefix='/proc/%d'%EXPECTED['provider_pid'];names=sorted(os.listdir(prefix+'/fd'),key=int)\n    check(0<len(names)<=512 and all(x.isdecimal() for x in names),'bounded exact original descriptor table')\n    selected=[]\n    for name in names:\n        path=prefix+'/fd/'+name;st=os.stat(path)\n        labels=[label for label,key in wanted.items() if (st.st_dev,st.st_ino)==key]\n        if not labels:continue\n        text=read_path(prefix+'/fdinfo/'+name,32768).decode('ascii');fields={}\n        for line in text.splitlines():\n            if ':' in line and not line.startswith('lock:'):\n                k,v=line.split(':',1);check(k not in fields,'duplicate fdinfo field');fields[k]=v.strip()\n        check('flags' in fields and 'ino' in fields and int(fields['ino'])==st.st_ino,'actual matching FD info inode')\n        values={'fd':int(name),'labels':labels,'target':os.readlink(path),'device':st.st_dev,'inode':st.st_ino,'flags':int(fields['flags'],8),'pos':int(fields['pos']),'mnt_id':int(fields['mnt_id']),'locks':[lock_key(line) for line in text.splitlines() if lock_key(line) is not None]}\n        if 'runtime' in labels:check(values['flags']&os.O_ACCMODE==os.O_RDONLY,'original runtime FD read-only')\n        if 'journal' in labels:check(values['flags']&os.O_ACCMODE==os.O_RDWR and values['flags']&os.O_APPEND,'original journal FD append/read-write')\n        selected.append({'binding':values,'raw_fdinfo':text})\n    for label in wanted:check(any(label in x['binding']['labels'] for x in selected),'actual original FD missing: '+label)\n    runtime=[x for x in selected if 'runtime' in x['binding']['labels']];journal=[x for x in selected if 'journal' in x['binding']['labels']]\n    check(len(runtime)==len(journal)==1 and len(runtime[0]['binding']['locks'])==1,'unique original runtime lock FD and journal FD required')\n    return {'descriptor_numbers':names,'selected':selected}\ndef comparable_fds(value):return {'descriptor_numbers':value['descriptor_numbers'],'selected':[x['binding'] for x in value['selected']]}\ndef collect(raw):\n    check(os.getuid()==os.geteuid()==0 and os.sched_getaffinity(0)=={0},'admitted read-only Root/CPU0 only')\n    check(pathlib.Path('/proc/sys/kernel/random/boot_id').read_text().strip()==EXPECTED['boot_id'],'same actual boot')\n    before={'provider':proc(EXPECTED['provider_pid'],EXPECTED['provider_birth']),'sudo':proc(EXPECTED['sudo_pid'],EXPECTED['sudo_birth'])};raw['process_before']=before\n    check(before['provider']['ppid']==EXPECTED['sudo_pid'],'actual original provider/sudo relation')\n    root=own(open_exact(ROOT_PATH),'reader:Root-private-operation-directory');root_private(root['fd']);root_st=os.fstat(root['fd'])\n    journal=own(os.open(JOURNAL_NAME,os.O_RDONLY|os.O_NOFOLLOW|os.O_CLOEXEC,dir_fd=root['fd']),'reader:original-journal');jst,jraw=read_owned(journal,4096)\n    check(jst.st_uid==jst.st_gid==0 and stat.S_IMODE(jst.st_mode)==0o600 and jst.st_nlink==1,'actual private Root-owned journal')\n    rows=[json.loads(line,object_pairs_hook=unique) for line in jraw.splitlines()]\n    expected={'path':EXPECTED['runtime_path'],'device':EXPECTED['runtime_device'],'inode':EXPECTED['runtime_inode'],'old_flags':EXPECTED['old_flags']}\n    check(len(rows)==2 and rows[0]==expected,'actual exact first prior row and sole later HELD row required')\n    held=rows[1];check(set(held)=={'status','pid','birth','runtime','native_driver_sha256','actualRoot_input_sha256','native_permission_from_provider'} and held['status']=='RUNTIME_HELD' and held['pid']==EXPECTED['provider_pid'] and held['birth']==EXPECTED['provider_birth'] and held['native_driver_sha256']==EXPECTED['driver_sha256'] and held['native_permission_from_provider'] is False,'actual fsynced RUNTIME_HELD original owner record')\n    check(held['runtime']=={'path':EXPECTED['runtime_path'],'device':EXPECTED['runtime_device'],'inode':EXPECTED['runtime_inode'],'uid':0,'gid':0,'mode':0o755,'nlink':1,'bytes':EXPECTED['runtime_bytes'],'sha256':EXPECTED['runtime_sha256'],'original_flags':EXPECTED['old_flags']},'actual HELD runtime tuple')\n    raw['journal']={'path':ROOT_PATH+'/'+JOURNAL_NAME,'identity':identity(jst),'raw_base64':base64.b64encode(jraw).decode(),'sha256':hashlib.sha256(jraw).hexdigest(),'rows':rows}\n    root_input=own(os.open(INPUT_NAME,os.O_RDONLY|os.O_NOFOLLOW|os.O_CLOEXEC,dir_fd=root['fd']),'reader:original-Root-admission-input');ist,iraw=read_owned(root_input,65536)\n    check(ist.st_uid==ist.st_gid==0 and ist.st_nlink==1 and not stat.S_IMODE(ist.st_mode)&0o022 and flags(root_input['fd'])&0x10,'actual immutable Root-owned input')\n    actual_input=json.loads(iraw,object_pairs_hook=unique)\n    check(set(actual_input)=={'kind','source_contract_sha256','caps','host_admission_ref'} and actual_input['kind']=='mckernel-native-signal-root-input-v1' and actual_input['source_contract_sha256']==EXPECTED['core_sha256'] and hashlib.sha256(iraw).hexdigest()==held['actualRoot_input_sha256'],'actual original admission input bound by HELD row')\n    raw['Root_input']={'identity':identity(ist),'raw_base64':base64.b64encode(iraw).decode(),'sha256':hashlib.sha256(iraw).hexdigest()}\n    runtime=own(open_exact(EXPECTED['runtime_path']),'reader:runtime-inode-read-only');rst=os.fstat(runtime['fd']);runtime_flags=flags(runtime['fd'])\n    check((rst.st_dev,rst.st_ino,rst.st_uid,rst.st_gid,stat.S_IMODE(rst.st_mode),rst.st_nlink,rst.st_size)==(EXPECTED['runtime_device'],EXPECTED['runtime_inode'],0,0,0o755,1,EXPECTED['runtime_bytes']),'exact current runtime identity')\n    h=hashlib.sha256();position=0\n    while position<rst.st_size:\n        chunk=os.pread(runtime['fd'],min(1024*1024,rst.st_size-position),position);check(bool(chunk),'complete runtime bytes');h.update(chunk);position+=len(chunk)\n    check(h.hexdigest()==EXPECTED['runtime_sha256'] and runtime_flags==EXPECTED['current_flags'],'exact runtime bytes and retained old|I')\n    wanted={'runtime':(rst.st_dev,rst.st_ino),'journal':(jst.st_dev,jst.st_ino),'operation_root':(root_st.st_dev,root_st.st_ino),'Root_input':(ist.st_dev,ist.st_ino)}\n    lock_before=runtime_locks();fds_before=fd_bindings(wanted);lock_after=runtime_locks();fds_after=fd_bindings(wanted)\n    check(lock_before['keys']==lock_after['keys'] and comparable_fds(fds_before)==comparable_fds(fds_after),'original FLOCK/FD bindings changed during read')\n    check(os.pread(journal['fd'],jst.st_size+1,0)==jraw and stable(os.fstat(journal['fd']))==stable(jst),'journal bytes/identity changed')\n    check(stable(os.fstat(runtime['fd']))==stable(rst) and flags(runtime['fd'])==runtime_flags and stable(os.stat(EXPECTED['runtime_path'],follow_symlinks=False))==stable(rst),'runtime identity/path/flags changed')\n    check(stable(os.fstat(root_input['fd']))==stable(ist) and os.pread(root_input['fd'],ist.st_size+1,0)==iraw and flags(root_input['fd'])&0x10,'Root input changed')\n    root_private(root['fd']);check((os.stat(ROOT_PATH,follow_symlinks=False).st_dev,os.stat(ROOT_PATH,follow_symlinks=False).st_ino)==(root_st.st_dev,root_st.st_ino),'operation directory path changed')\n    after={'provider':proc(EXPECTED['provider_pid'],EXPECTED['provider_birth']),'sudo':proc(EXPECTED['sudo_pid'],EXPECTED['sudo_birth'])};raw['process_after']=after\n    check([(before[k]['pid'],before[k]['birth'],before[k]['ppid'],before[k]['uid']) for k in before]==[(after[k]['pid'],after[k]['birth'],after[k]['ppid'],after[k]['uid']) for k in after],'original owner identity changed')\n    check(pathlib.Path('/proc/sys/kernel/random/boot_id').read_text().strip()==EXPECTED['boot_id'],'boot changed during collection')\n    raw.update({'runtime':{'identity':identity(rst),'sha256':h.hexdigest(),'flags_before':runtime_flags,'flags_after':flags(runtime['fd'])},'operation_root_identity':identity(root_st),'locks_before':lock_before,'locks_after':lock_after,'fds_before':fds_before,'fds_after':fds_after,'source_proves_first_row_fsync_before_sole_old_or_I_set':True})\n    return {'status':'READ_ONLY_CURRENT_OWNER_RECORD_COLLECTED_NO_HANDOFF_OR_RESTORATION','original_provider':before['provider'],'original_sudo':before['sudo'],'boot_id':EXPECTED['boot_id'],'journal':{'path':ROOT_PATH+'/'+JOURNAL_NAME,'identity':identity(jst),'sha256':hashlib.sha256(jraw).hexdigest(),'first_prior_row':rows[0],'rows':len(rows),'second_row_status':'RUNTIME_HELD','actual_owner_and_input_digest_bound':True},'runtime':{'path':EXPECTED['runtime_path'],'device':rst.st_dev,'inode':rst.st_ino,'sha256':h.hexdigest(),'flags_before':runtime_flags,'flags_after':runtime_flags},'original_FD_bindings':[x['binding'] for x in fds_before['selected']],'original_FLOCK_keys':lock_before['keys'],'same_original_PID_birth_FD_FLOCK_journal_runtime_bookends':True,'raw_financial_admission_data_only_in_Root_private_record':True,'no_signal_SETFLAGS_FLOCK_acquire_peerFDclose_native_account_or_namespace_read':True,'restoration_or_ownership_transfer_or_retirement':False,'original_native_session62718_and_1610612736_charge_retained':True}\ndef raw_error(label,error,tb):\n    return {'label':label,'type':type(error).__name__,'message':str(error)[:1024],'traceback':''.join(traceback.format_exception(type(error),error,tb))[-16384:]}\ndef persist_raw(value):\n    start=len(OWNED);primary=None;result=None\n    try:\n        parent=own(open_exact(str(pathlib.Path(RAW_OUTPUT).parent)),'evidence:parent-directory');name=pathlib.Path(RAW_OUTPUT).name\n        os.mkdir(name,0o700,dir_fd=parent['fd']);directory=own(os.open(name,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW|os.O_CLOEXEC,dir_fd=parent['fd']),'evidence:Root-private-directory');root_private(directory['fd'])\n        record=own(os.open('OWNER-RECORD.PRIVATE.json',os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW|os.O_CLOEXEC,0o600,dir_fd=directory['fd']),'evidence:private-writer');data=json.dumps(value,sort_keys=True,separators=(',',':')).encode()+b'\\n';check(len(data)<=1024*1024,'bounded private output');write_all(record['fd'],data);os.fsync(record['fd']);os.fsync(directory['fd']);os.fsync(parent['fd']);st=os.fstat(record['fd']);check(st.st_uid==st.st_gid==0 and stat.S_IMODE(st.st_mode)==0o600 and st.st_nlink==1,'Root-private output identity')\n        result={'path':RAW_OUTPUT+'/OWNER-RECORD.PRIVATE.json','bytes':len(data),'sha256':hashlib.sha256(data).hexdigest(),'identity':identity(st),'Root_uid0_mode0600_and_directory0700':True}\n    except BaseException as error:primary=(error,error.__traceback__)\n    finally:drain(OWNED[start:])\n    if primary is not None:raise BaseException.with_traceback(primary[0],primary[1])\n    check(not RAW_CLOSE_ERRORS,'own evidence close uncertain');return result\ndef main():\n    raw={'schema':1,'at':now(),'scope':'READ_ONLY_ORIGINAL_PROVIDER_JOURNAL_FD_FLOCK_RECORD_ONLY','collector_pid':os.getpid(),'collector_birth':read_path('/proc/self/stat',8192).rsplit(b')',1)[1].split()[19].decode(),'target':EXPECTED};primary=None;summary=None\n    try:summary=collect(raw)\n    except BaseException as error:primary=(error,error.__traceback__)\n    finally:drain(OWNED)\n    raw['own_read_FDs']=[{k:v for k,v in row.items() if k!='fd'} for row in OWNED]\n    if primary is not None:raw['primary']=raw_error('collection',primary[0],primary[1])\n    raw['own_close_errors']=[raw_error(*x) for x in RAW_CLOSE_ERRORS]\n    output=None;output_error=None\n    try:output=persist_raw(raw)\n    except BaseException as error:output_error=(error,error.__traceback__)\n    if primary is not None or RAW_CLOSE_ERRORS or output_error is not None:\n        print(json.dumps({'status':'READ_ONLY_COLLECTION_FAILED_NO_DISPOSITION','collector_pid':os.getpid(),'error_type':type(primary[0]).__name__ if primary else type(output_error[0]).__name__ if output_error else 'OwnCloseUnknown','raw_private_record':output,'original_owner_runtime_flags_native_and_charges_retained':True},sort_keys=True),flush=True)\n        if primary is not None:raise BaseException.with_traceback(primary[0],primary[1])\n        if output_error is not None:raise BaseException.with_traceback(output_error[0],output_error[1])\n        raise RAW_CLOSE_ERRORS[0][1]\n    summary.update({'collector_pid':raw['collector_pid'],'collector_birth':raw['collector_birth'],'all_collector_own_FDs_closed':all(x['state']=='CLOSED' for x in OWNED),'collector_close_errors':len(RAW_CLOSE_ERRORS),'raw_private_record':output,'remaining_collector_direct_children':pathlib.Path('/proc/self/task/%d/children'%os.getpid()).read_text().split()})\n    check(summary['all_collector_own_FDs_closed'] and not summary['remaining_collector_direct_children'],'collector own closure');print(json.dumps(summary,sort_keys=True),flush=True);return 0\nif __name__=='__main__':raise SystemExit(main())\n"
+      ],
+      "attempt_id": 0,
+      "birth": "53739304",
+      "creation_attempted": true,
+      "direct_wait_joined": true,
+      "exit": 0,
+      "label": "read-only-current-original-provider-record",
+      "lifecycle_UNKNOWN": false,
+      "pid": 1652375,
+      "popen_returned": true,
+      "primary_error": null,
+      "receipt_persisted": true,
+      "resource_charge_retained": false,
+      "secondary_errors": [],
+      "streams_closed": true
+    }
+  ],
+  "finished_at": "2026-11-12T02:38:47.151271+00:00",
+  "native_or_Root_disposition": false,
+  "new_reader_current_only_retirement_eligible_after_fullRoot": true,
+  "original_native_owner_flags_charge_and_all_UNKNOWN_retained": true,
+  "redacted_record": {
+    "all_collector_own_FDs_closed": true,
+    "boot_id": "3ba4f2ca-4323-433d-bfb8-7859268121b6",
+    "collector_birth": "53739310",
+    "collector_close_errors": 0,
+    "collector_pid": 1652378,
+    "journal": {
+      "actual_owner_and_input_digest_bound": true,
+      "first_prior_row": {
+        "device": 66306,
+        "inode": 1048651,
+        "old_flags": 524288,
+        "path": "/usr/bin/python3.8"
+      },
+      "identity": {
+        "bytes": 586,
+        "ctime_ns": 1794447877159081258,
+        "device": 66306,
+        "gid": 0,
+        "inode": 53524941,
+        "mode": 384,
+        "mtime_ns": 1794447877159081258,
+        "nlink": 1,
+        "uid": 0
+      },
+      "path": "/var/lib/mckernel-native-initial-data-1634459-53414308/RUNTIME-FLAGS-1634459-53414308.jsonl",
+      "rows": 2,
+      "second_row_status": "RUNTIME_HELD",
+      "sha256": "81be68156404e79b05c89505b541d7bf9d7f53c312e98a93d48031696745f6b4"
+    },
+    "no_signal_SETFLAGS_FLOCK_acquire_peerFDclose_native_account_or_namespace_read": true,
+    "original_FD_bindings": [
+      {
+        "device": 66306,
+        "fd": 8,
+        "flags": 753664,
+        "inode": 53524936,
+        "labels": [
+          "operation_root"
+        ],
+        "locks": [],
+        "mnt_id": 29,
+        "pos": 0,
+        "target": "/var/lib/mckernel-native-initial-data-1634459-53414308"
+      },
+      {
+        "device": 66306,
+        "fd": 12,
+        "flags": 688128,
+        "inode": 53524939,
+        "labels": [
+          "Root_input"
+        ],
+        "locks": [],
+        "mnt_id": 29,
+        "pos": 0,
+        "target": "/var/lib/mckernel-native-initial-data-1634459-53414308/ROOT-ADMISSION-INPUT.json"
+      },
+      {
+        "device": 66306,
+        "fd": 13,
+        "flags": 688128,
+        "inode": 53524939,
+        "labels": [
+          "Root_input"
+        ],
+        "locks": [],
+        "mnt_id": 29,
+        "pos": 458,
+        "target": "/var/lib/mckernel-native-initial-data-1634459-53414308/ROOT-ADMISSION-INPUT.json"
+      },
+      {
+        "device": 66306,
+        "fd": 16,
+        "flags": 688128,
+        "inode": 53524939,
+        "labels": [
+          "Root_input"
+        ],
+        "locks": [],
+        "mnt_id": 29,
+        "pos": 458,
+        "target": "/var/lib/mckernel-native-initial-data-1634459-53414308/ROOT-ADMISSION-INPUT.json"
+      },
+      {
+        "device": 66306,
+        "fd": 22,
+        "flags": 689154,
+        "inode": 53524941,
+        "labels": [
+          "journal"
+        ],
+        "locks": [],
+        "mnt_id": 29,
+        "pos": 586,
+        "target": "/var/lib/mckernel-native-initial-data-1634459-53414308/RUNTIME-FLAGS-1634459-53414308.jsonl"
+      },
+      {
+        "device": 66306,
+        "fd": 23,
+        "flags": 688128,
+        "inode": 53524936,
+        "labels": [
+          "operation_root"
+        ],
+        "locks": [],
+        "mnt_id": 29,
+        "pos": 0,
+        "target": "/var/lib/mckernel-native-initial-data-1634459-53414308"
+      },
+      {
+        "device": 66306,
+        "fd": 24,
+        "flags": 688128,
+        "inode": 1048651,
+        "labels": [
+          "runtime"
+        ],
+        "locks": [
+          [
+            1634459,
+            259,
+            2,
+            1048651,
+            "0",
+            "EOF"
+          ]
+        ],
+        "mnt_id": 29,
+        "pos": 0,
+        "target": "/usr/bin/python3.8"
+      }
+    ],
+    "original_FLOCK_keys": [
+      [
+        1634459,
+        259,
+        2,
+        1048651,
+        "0",
+        "EOF"
+      ]
+    ],
+    "original_native_session62718_and_1610612736_charge_retained": true,
+    "original_provider": {
+      "birth": "53414308",
+      "pgrp": 1634456,
+      "pid": 1634459,
+      "ppid": 1634456,
+      "session": 1634456,
+      "state": "S",
+      "uid": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "original_sudo": {
+      "birth": "53414302",
+      "pgrp": 1634456,
+      "pid": 1634456,
+      "ppid": 1634455,
+      "session": 1634456,
+      "state": "S",
+      "uid": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "raw_financial_admission_data_only_in_Root_private_record": true,
+    "raw_private_record": {
+      "Root_uid0_mode0600_and_directory0700": true,
+      "bytes": 9389,
+      "identity": {
+        "bytes": 9389,
+        "ctime_ns": 1794451127108126576,
+        "device": 66306,
+        "gid": 0,
+        "inode": 2250247,
+        "mode": 384,
+        "mtime_ns": 1794451127108126576,
+        "nlink": 1,
+        "uid": 0
+      },
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-current-provider-custody-read-p04tests-max-1/collection-1/ROOT-PRIVATE-RECORD-1/OWNER-RECORD.PRIVATE.json",
+      "sha256": "67e1daa7a9d2db755859f95584cdc412ce42f66fd5d3c60f1bfedaef63207100"
+    },
+    "remaining_collector_direct_children": [],
+    "restoration_or_ownership_transfer_or_retirement": false,
+    "runtime": {
+      "device": 66306,
+      "flags_after": 524304,
+      "flags_before": 524304,
+      "inode": 1048651,
+      "path": "/usr/bin/python3.8",
+      "sha256": "298a9e830ed52f36c299427565485d717d1ce0179c0597cc16560513eb780b06"
+    },
+    "same_original_PID_birth_FD_FLOCK_journal_runtime_bookends": true,
+    "status": "READ_ONLY_CURRENT_OWNER_RECORD_COLLECTED_NO_HANDOFF_OR_RESTORATION"
+  },
+  "remaining_direct_children": [],
+  "request_sha256": "2debffd34a45020e4b69dcb36c50d88570fede337aae001c6e101d633d433bde",
+  "review_sha256": "1956259e579601354f7f1eba37626df48e7e9652fd41e2194588bbeef66cfc9a",
+  "status": "PASS_READ_ONLY_ORIGINAL_PROVIDER_RECORD_PENDING_SAVED_QUALIFICATION"
+}

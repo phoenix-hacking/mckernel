@@ -1,0 +1,48 @@
+{
+  "schema": "mckernel.independent-attempt0001-postjoin-corrected-source-review.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_BOUNDED_CORRECTED_SOURCE_REVIEW_ONLY",
+  "reviewer": "/root/retirement_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "recorded_utc": "2026-10-30T01:50:18.321648+00:00",
+  "source_manifest": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ATTEMPT-0001-POSTJOIN-FRESH-CONTROLS-SOURCE-1/SOURCE-MANIFEST.json",
+    "bytes": 5348,
+    "sha256": "7f9810d22035f0ac33affeb3665af88454013762d51b9ef27b2f74d87a3249f8"
+  },
+  "manifest_rows_checked": 16,
+  "prior_findings_and_disposition": [
+    "Stale guardian or monitor with a held lease: corrected source checks same-FD guardian/supervisor activity freshness under 30 seconds, monitor freshness under 45 seconds, guardian last_clock and current identity/lease bindings.",
+    "Supervisor retained caps omitted: corrected source checks current supervisor envelope, actors, journal status and uncertain operations and includes persisted supervisor, guardian, monitor and weekly ceilings in effective clock minima.",
+    "Phone status read/stat replacement race: corrected source reads regular O_NOFOLLOW activity files by one descriptor, compares before/after fstat and path identity, and rejects stale, future, mutated or replaced files."
+  ],
+  "closure_assessment": "Observer retains predecessor functional algorithms with changed Q source reference and tighter limits; physical adapter binds the new exact Q guard; direct parent is byte-identical and HERE-relative. Historical custody and UNKNOWN values remain preserved. Synthetic binding checks do not establish real physical-query behavior.",
+  "tests": [
+    {
+      "command": "/usr/bin/taskset -c 0 /usr/bin/python3 -B test_freshness.py",
+      "working_directory": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ATTEMPT-0001-POSTJOIN-FRESH-CONTROLS-SOURCE-1",
+      "result": "PASS",
+      "tests": 3,
+      "runtime_scope": "synthetic file and journal fixtures; no guard or capture"
+    },
+    {
+      "command": "/usr/bin/taskset -c 0 /usr/bin/python3 -B test_binding_closure.py",
+      "working_directory": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ATTEMPT-0001-POSTJOIN-FRESH-CONTROLS-SOURCE-1",
+      "result": "PASS",
+      "tests": 5,
+      "runtime_scope": "synthetic binding and predicates; no live guard or capture"
+    }
+  ],
+  "findings": "No new concrete blocking source defect identified in this bounded rereview.",
+  "limitations": [
+    "No live controller health, physical-query execution, current-free state, native or application acceptance is established.",
+    "Publication and fetched-byte verification, truthful Root custody and fresh unused nonce, independent operation/physical/observer binding reviews, fresh control and resource admission, and independent exact one-shot execution release remain prerequisites.",
+    "This source review is not execution approval or runtime authority."
+  ],
+  "runtime_authority": null,
+  "execution_approval": false,
+  "current_free": false,
+  "native_acceptance": false,
+  "C_retirement": false
+}

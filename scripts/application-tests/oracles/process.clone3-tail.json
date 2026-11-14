@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "process.clone3-tail",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/process.clone3-tail"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "relation", "records": ["rc=-1 errno=7 e2big=1 child_created=0 tail=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["A nonzero byte immediately beyond the supported clone_args layout returns E2BIG", "Original memory and process/thread counts remain unchanged and no child is accepted"],
+  "unresolved_expectations": ["Supported-layout size and tail-validation ordering require native runtime review."],
+  "max_question_for_reviewer": "Confirm nonzero clone3 trailing bytes reject with E2BIG before process creation."
+}

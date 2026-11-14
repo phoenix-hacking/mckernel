@@ -1,0 +1,34 @@
+{
+  "inputs": {
+    "caller_contract": "3c566338aa985b1af0d169231f5aa5fba7be328e1409a106411cff5ef2148ddd",
+    "caller_patch": "51c38db1f09be3921d6145c5d079ff0ef4054b2956ee152adfd18844491cd1f8",
+    "traversal_patch": "471b1988100d8b87f2b79f18ff0afd2ebd886f94bf4ecc0fcf1d7edf32038330"
+  },
+  "limitations": [
+    "No execution/build/native/default/link/C-retirement proof.",
+    "Separate22case traversal parity supplies no caller-lifetime proof.",
+    "Existing validtree/callerlock/liveVM contracts remain; VM-wide fallback synchronization outside correction.",
+    "No integration authorized by this record alone."
+  ],
+  "recorded_by": "root dispatcher",
+  "recorded_epoch": 1792557793.8542714,
+  "recording_basis": "Independent reviewer returned source decision through collaboration final answer; reviewer role forbids file edits. This dispatcher record preserves that returned decision, not a reviewer-authored file.",
+  "review_findings": [
+    "Both patches reconstruct full candidate snapshots exactly and touch disjoint bodies.",
+    "Matched policy mode and requested mask bytes captured while memory_range_lock read-held; after unlock matched path uses only stack snapshots.",
+    "Validator bounds copy to32bytes; aligned live nonnull disjoint source/destination, including zero length; intrinsic introduces no usercopy callback under lock.",
+    "Normal and invalid-range paths unlock exactly once; missing callbacks return before acquisition.",
+    "Mode-copy precedes mask-copy; mode failure suppresses mask-copy. Zero-destination suppression, zero-byte callback behavior, default-policy mask suppression, validation/clamp order, NODE|ADDR, MEMS_ALLOWED, null-policy VM fallback and wrapping lookup end preserved.",
+    "Traversal unsigned halfopen comparisons, branchorder, actual container pointers/nulltermination and Cselector/fallback coherent.",
+    "Actual mbind writerlock covers search,clear/free,policyupdate. Old readerunlock/writerremove-free/readerdereference gap source-demonstrated, not runtime occurrence.",
+    "Overwrite-after-unlock and overwrite-during-mode-copy fixtures eligible; keep allocations alive, assert lock/callbackorder/exactbytes/guards/independent expectederrors."
+  ],
+  "reviewer": "/root/numa_union_review",
+  "reviewer_files_written": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_SOURCE_UNION_ONLY",
+  "union_identities": {
+    "kernel/rust/syscall_policy.rs": "75b89149aa031076ae547248e0aab64eda5a7b75162952a954489e86067f0b2d",
+    "kernel/syscall.c": "ae7134ce02521d4c71e5e33858e0d81bdc093abdc431e93e0c61bfb4c83c56c3"
+  }
+}

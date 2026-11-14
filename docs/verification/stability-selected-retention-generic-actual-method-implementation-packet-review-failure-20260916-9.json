@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "record_kind": "stability_selected_retention_generic_actual_method_implementation_packet_review_failure",
+  "task_id": "M01-B-selected-retention-actual-methods",
+  "review_attempt": 9,
+  "recorded_utc": "2026-09-16T08:23:18Z",
+  "status": "FAIL_PACKET",
+  "packet": {
+    "path": "docs/verification/stability-selected-retention-generic-actual-method-implementation-packet-20260916-8.md",
+    "sha256": "624a7182330e941ee03cd7b9fdc07554b8033710ffe29e88d00033e4917afe5b"
+  },
+  "authenticated_inputs": {
+    "attempts_5_through_7": true,
+    "source_map": true,
+    "stager_and_six_templates": true,
+    "authority_records": true,
+    "source_members": 102
+  },
+  "findings": [
+    {
+      "id": "contradictory_creation_allowlist",
+      "source": "packet lines 54-57 and 134-138",
+      "finding": "The exhaustive additional-file allowlist excludes nine evidence files per mode that the evidence section requires, including stager-pre.json and failure.txt.",
+      "required": "Put the fresh packet root, mode roots, all stager-created directories/files and every runner/evidence file in one authoritative exact creation allowlist."
+    },
+    {
+      "id": "row18_result_type",
+      "source": "packet line 105; smp_application_syscall.rs:465",
+      "finding": "The packet says ordinary return_value and publication return Ok(true), but return_value returns Result<()> and ends in Ok(()); only publish returns Ok(true).",
+      "required": "Specify each call and result separately."
+    },
+    {
+      "id": "negative_tid_route",
+      "source": "packet line 67; application_syscall.rs:166",
+      "finding": "Worker::new rejects nonpositive TIDs before admission, so the prescribed construction chain proves worker validation rather than verification_prepare_retained's negative-TID path.",
+      "required": "Specify a bounded direct consuming-Response negative test, returned-Response retention and teardown without inventing a private Call constructor."
+    },
+    {
+      "id": "runner_matrix_incomplete",
+      "source": "packet line 70; smp_application_syscall.rs:853",
+      "finding": "verification_phase_completion rejects prepared wake-None completions, and the packet delegates rows 01-27 to attempt 6 even though attempt 6 has no complete matrix.",
+      "required": "Supply the complete row/subcase matrix, preparation and phase-setting order, exact results, cancellation results and first-invalid values; omit or state the exact phase-completion rejection for wake-None. Row 27 cancellation is Ok(()) after publication removes the call."
+    },
+    {
+      "id": "mode2_wiring_incomplete",
+      "source": "mode2 smp_application_syscall.rs:563 and 1040",
+      "finding": "Mode-2 publish succeeds and releases; the separate -5 comes from stability_fault_notify, whose matching identity arguments and callback observations are not prescribed. The selected send path also requires a positive ktime_get provider, but the packet defines a clock provider only for mode 3.",
+      "required": "Specify the separate mode-2 notification call and observations plus a positive mode-2 clock provider."
+    }
+  ],
+  "accepted_packet_components": [
+    "generic versus native scope separation",
+    "both consuming preparation signatures and selected-error restoration",
+    "live-reference one-shot second-CAS hook",
+    "aligned guarded allocation and deferred release/quarantine ledger",
+    "cfg(test) erasure",
+    "two inverse-restoration stages"
+  ],
+  "disposition": "One bounded packet correction may address only these source-bound findings. No implementation is released. Native backing and lease ownership remain blocked by review 7.",
+  "files_changed_by_reviewer": false,
+  "compiler_execution": false,
+  "runtime_execution": false,
+  "root_execution": false,
+  "guest_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}

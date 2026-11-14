@@ -1,0 +1,82 @@
+{
+  "status": "PASS_ACTUAL_SCHEDULER_OBJECT_METADATA_AND_PREJOIN_NO_LINK",
+  "request_sha256": "479365c501cbcb899b88a9fcbebf2d9bd670eba55dc6e521f0de3f6819121228",
+  "compiled_input": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-provider-execution-1/output/scheduler_provider.o",
+    "sha256": "29bb80dcedd1babc2ebb950fef88c656d38bcf7a2d9126c83c3511f830f4eb1f",
+    "bytes": 4064,
+    "producer_result_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-provider-producer-1/RESULT.json",
+    "producer_result_sha256": "f93f6f4621c3da9f5c7aba9f181dc498182f7d0f9c3b94de51f382694b832e1f",
+    "actual_compile_once_root_pid": 616152,
+    "actual_birth": "34612550",
+    "actual_wait_joined": true,
+    "compile_replay": false
+  },
+  "actual_object_and_prejoin_called_persisted": true,
+  "all2_direct_waits_joined": true,
+  "commands": [
+    {
+      "label": "provider-symbols",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-provider-execution-1/provider-symbols.metrics",
+        "/usr/bin/nm",
+        "-S",
+        "--format=posix",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-provider-execution-1/output/scheduler_provider.o"
+      ],
+      "pid": 617408,
+      "proc_start_ticks": "34637303",
+      "returncode": 0,
+      "direct_wait_joined": true
+    },
+    {
+      "label": "provider-elf",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-provider-execution-1/provider-elf.metrics",
+        "/usr/bin/readelf",
+        "-h",
+        "-SW",
+        "-Ws",
+        "-Wr",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-provider-execution-1/output/scheduler_provider.o"
+      ],
+      "pid": 617411,
+      "proc_start_ticks": "34637305",
+      "returncode": 0,
+      "direct_wait_joined": true
+    }
+  ],
+  "no_compile_replay_link_or_function_runtime": true
+}

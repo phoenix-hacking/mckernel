@@ -1,0 +1,142 @@
+--- retained-e64f-HOLD
++++ owned-logs-only-successor
+@@ -31,11 +31,11 @@
+ import signal
+ import time
+ 
+-SOURCE_REFS = {'materialization': {'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-union2-default-image-preparation-1/source-materialization-CPU0-1/MATERIALIZATION-RESULT.json', 'sha256': 'fc3d7d6d020de06779bf0f80f650c7a253c0f0a7e0f69b08d144f9c80bf0fda7', 'bytes': 3352}, 'source_manifest': {'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-union2-default-image-preparation-1/source-materialization-CPU0-1/source-inputs.json', 'sha256': '6c14e905e7eda40cb90a4cf28265021afbde718b23985b61671ae1e0a5f4ed0e', 'bytes': 10197070}, 'toolchain_manifest': {'path': '/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/image-toolchain.json', 'sha256': 'a68e02b3b66b8bfbae96bf742dc8702b6e81dd97b92189b87437c3d08fccdf72', 'bytes': 72685013}, 'gitlink_manifest': {'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-union2-default-image-preparation-1/normal-heavy-build-preparation-1/provenance-authority-correction-1/gitlink-inputs.json', 'sha256': '5e14419d2615fb3944be31e45bd268c1aec3c101099c24ef377defed8b5e8061', 'bytes': 72854}, 'original_compiled_driver_receipt': {'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-union2-default-image-preparation-1/normal-heavy-build-preparation-1/provenance-authority-correction-1/pinned-full-image-attempt-1/owner-work/evidence/receipt.json', 'sha256': '89e00c744143fea8fad6dbb1279b1e6213d3ee1fa4b10a587adee08758e46de9', 'bytes': 38374}, 'host_owner_path': {'path': '/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/adapters/native_rust_exact_build_container_owner.py', 'sha256': '96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1', 'bytes': 51420}, 'image_owner': {'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/copy6-common-namespace-correction-1/actual-copy6-publication-inputs-1/bound-publication-data-1/native_rust_exact_image_owner.COPY6.STRICT49.BOUND.py', 'bytes': 95846, 'sha256': '414f62546cf763e3285579bc0d1799fff0dc76bd0a60d904bc6c18e76f947a44'}, 'driver_path': {'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/copy6-common-namespace-correction-1/actual-copy6-publication-inputs-1/bound-publication-data-1/retained_artifact_validator.COPY6.STRICT49.BOUND.py', 'bytes': 282662, 'sha256': '47234c2c50f4e9976c2a3436bb88d039235b2fef57b275a7d6fb576ee9567e20'}, 'provenance_path': {'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/copy6-common-namespace-correction-1/actual-copy6-publication-inputs-1/bound-publication-data-1/native_rust_exact_build_offline.py', 'bytes': 41116, 'sha256': '68e1c97a16d849ab7d8d1b87fd6ffaf104f632e87f8e0d7a9fd21ca77d75460b'}, 'owner_receipt': {'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/retained-validation-attempt-6/owner-evidence/owner-receipt.json', 'bytes': 21937, 'sha256': '62a2ea9f75badc0167478573642d1d43c0276a2da420ab75a0fde215e56c29da'}, 'container_log': {'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/retained-validation-attempt-6/owner-evidence/attempt/container.log', 'bytes': 537, 'sha256': '9def506bc7847489a95dff9b6d0094fc6d3f4d838762d76ae4bf0f2d553b257e'}, 'owner_stdout': {'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/copy6-common-namespace-correction-1/fresh-actual-COPY6-admission-preparation-1/actual-copy6-owner-1/stdout', 'bytes': 17849, 'sha256': 'f53b48f5bdb564e6fa6d6d373833677307a1d7107dcf9ba3452dc3f0d14cd9d9'}, 'current_cli_terminal': {'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/copy6-normal-retirement-preparation-1/ROOT-PROVIDED-TOOL81525-TERMINAL.RECORD.json', 'bytes': 884, 'sha256': 'd5bb689ba9fadadfd2521164768736b12b66bda58b4860b6fdbedb2d664cc6e0'}, 'request': {'bytes': 26525809, 'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/copy6-common-namespace-correction-1/actual-copy6-publication-inputs-1/bound-publication-data-1/image-request.COPY6.STRICT49.COMPACT.NOT-RELEASED.json', 'sha256': 'a5bb9a9f05280a731ece45c6fc65b769b770de8de9206c894db3d6b6c5cbe77a'}, 'retained_copy_binding': {'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/retained-validation-attempt-6/owner-work/output/retained-copy-binding.POSTBOUND.json', 'bytes': 918037, 'sha256': '0f818f54898ff1112923feac468afecc93212a8913b76cdfefd594256d758e7b'}, 'raw_copy_binding': {'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/retained-validation-attempt-6/owner-work/output/retained-copy-binding.json', 'bytes': 916314, 'sha256': '881a6e03c2ad8c91912858a52bdcea102af38a154624fd673ac9c07616750a36'}, 'retained_prefix49_authority': {'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/retained-validation-attempt-6/owner-work/output/retained-prefix49.AUTHORITY.json', 'bytes': 87603, 'sha256': 'e83b3b526eea1fc7298db108470e9785d053a3934abe9a1f21d1a138eeb56239'}}
++SOURCE_REFS = {'materialization': {'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-union2-default-image-preparation-1/source-materialization-CPU0-1/MATERIALIZATION-RESULT.json', 'sha256': 'fc3d7d6d020de06779bf0f80f650c7a253c0f0a7e0f69b08d144f9c80bf0fda7', 'bytes': 3352}, 'source_manifest': {'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-union2-default-image-preparation-1/source-materialization-CPU0-1/source-inputs.json', 'sha256': '6c14e905e7eda40cb90a4cf28265021afbde718b23985b61671ae1e0a5f4ed0e', 'bytes': 10197070}, 'toolchain_manifest': {'path': '/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/image-toolchain.json', 'sha256': 'a68e02b3b66b8bfbae96bf742dc8702b6e81dd97b92189b87437c3d08fccdf72', 'bytes': 72685013}, 'gitlink_manifest': {'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-union2-default-image-preparation-1/normal-heavy-build-preparation-1/provenance-authority-correction-1/gitlink-inputs.json', 'sha256': '5e14419d2615fb3944be31e45bd268c1aec3c101099c24ef377defed8b5e8061', 'bytes': 72854}, 'original_compiled_driver_receipt': {'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-union2-default-image-preparation-1/normal-heavy-build-preparation-1/provenance-authority-correction-1/pinned-full-image-attempt-1/owner-work/evidence/receipt.json', 'sha256': '89e00c744143fea8fad6dbb1279b1e6213d3ee1fa4b10a587adee08758e46de9', 'bytes': 38374}, 'host_owner_path': {'path': '/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/adapters/native_rust_exact_build_container_owner.py', 'sha256': '96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1', 'bytes': 51420}, 'image_owner': {'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/copy6-common-namespace-correction-1/actual-copy6-publication-inputs-1/bound-publication-data-1/native_rust_exact_image_owner.COPY6.STRICT49.BOUND.py', 'bytes': 95846, 'sha256': '414f62546cf763e3285579bc0d1799fff0dc76bd0a60d904bc6c18e76f947a44'}, 'driver_path': {'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/copy6-common-namespace-correction-1/actual-copy6-publication-inputs-1/bound-publication-data-1/retained_artifact_validator.COPY6.STRICT49.BOUND.py', 'bytes': 282662, 'sha256': '47234c2c50f4e9976c2a3436bb88d039235b2fef57b275a7d6fb576ee9567e20'}, 'provenance_path': {'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/copy6-common-namespace-correction-1/actual-copy6-publication-inputs-1/bound-publication-data-1/native_rust_exact_build_offline.py', 'bytes': 41116, 'sha256': '68e1c97a16d849ab7d8d1b87fd6ffaf104f632e87f8e0d7a9fd21ca77d75460b'}, 'owner_receipt': {'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/retained-validation-attempt-6/owner-evidence/owner-receipt.json', 'bytes': 21937, 'sha256': '62a2ea9f75badc0167478573642d1d43c0276a2da420ab75a0fde215e56c29da'}, 'container_log': {'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/retained-validation-attempt-6/owner-evidence/attempt/container.log', 'bytes': 537, 'sha256': '9def506bc7847489a95dff9b6d0094fc6d3f4d838762d76ae4bf0f2d553b257e'}, 'owner_stdout': {'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/copy6-common-namespace-correction-1/fresh-actual-COPY6-admission-preparation-1/actual-copy6-owner-1/stdout', 'bytes': 17849, 'sha256': 'f53b48f5bdb564e6fa6d6d373833677307a1d7107dcf9ba3452dc3f0d14cd9d9'}, 'current_cli_terminal': {'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/copy6-normal-retirement-preparation-1/bounded-owned-logs-capture-correction-1/ROOT-PROVIDED-TOOL81525-TERMINAL.RECORD.json', 'bytes': 884, 'sha256': 'd5bb689ba9fadadfd2521164768736b12b66bda58b4860b6fdbedb2d664cc6e0'}, 'request': {'bytes': 26525809, 'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/copy6-common-namespace-correction-1/actual-copy6-publication-inputs-1/bound-publication-data-1/image-request.COPY6.STRICT49.COMPACT.NOT-RELEASED.json', 'sha256': 'a5bb9a9f05280a731ece45c6fc65b769b770de8de9206c894db3d6b6c5cbe77a'}, 'retained_copy_binding': {'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/retained-validation-attempt-6/owner-work/output/retained-copy-binding.POSTBOUND.json', 'bytes': 918037, 'sha256': '0f818f54898ff1112923feac468afecc93212a8913b76cdfefd594256d758e7b'}, 'raw_copy_binding': {'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/retained-validation-attempt-6/owner-work/output/retained-copy-binding.json', 'bytes': 916314, 'sha256': '881a6e03c2ad8c91912858a52bdcea102af38a154624fd673ac9c07616750a36'}, 'retained_prefix49_authority': {'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/retained-validation-attempt-6/owner-work/output/retained-prefix49.AUTHORITY.json', 'bytes': 87603, 'sha256': 'e83b3b526eea1fc7298db108470e9785d053a3934abe9a1f21d1a138eeb56239'}, 'owned_log_capture_helper': {'path': '/home/holden/mckernel/docs/verification/evidence/phase5-m03-handshake-runtime-checkpoint-20261020-1/sdk-physical-source/run_two_commands_source_bound_corrected.py', 'bytes': 14753, 'sha256': '990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8'}}
+ CURRENT_TYPED_REQUEST = {'candidate_identity_scope': 'base_git_commit_only', 'candidate_sha': '942c927b1ec93cc31284ff498455909d9bb2d0fc', 'materialization_sha256': 'a57d2d9f8f71fc026aceae8a64f3c34f5314e8d04031e63c262f0fdc036cbef8', 'source_derivative_sha256': '2b12d740e25b0dd3c2dbb17031d59d2f47fd4c9569a8820be869411da4aa97c1', 'source_identity': {'dev': 66306, 'file_type': 16384, 'gid': 1000, 'inode': 56250160, 'mode': 448, 'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-union2-default-image-preparation-1/source-materialization-CPU0-1/materialized-source', 'uid': 1000}, 'source_root': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-union2-default-image-preparation-1/source-materialization-CPU0-1/materialized-source'}
+ REPO = Path('/home/holden/mckernel')
+-PUBLISHED_SCRIPT = 'docs/verification/evidence/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/copy6-normal-retirement-preparation-1/cleanup_failed_retained_validator.py'
+-PUBLISHED_TESTS = 'docs/verification/evidence/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/copy6-normal-retirement-preparation-1/test_retained_validator_receipt.py'
++PUBLISHED_SCRIPT = 'docs/verification/evidence/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/copy6-normal-retirement-preparation-1/bounded-owned-logs-capture-correction-1/cleanup_failed_retained_validator.py'
++PUBLISHED_TESTS = 'docs/verification/evidence/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/copy6-normal-retirement-preparation-1/bounded-owned-logs-capture-correction-1/test_retained_validator_receipt.py'
+ SELFTEST = REPO / PUBLISHED_TESTS
+ NAMESPACE = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/retained-validation-attempt-6')
+ NAMESPACE_ANCESTRY = [{'path': '/', 'device': 66306, 'inode': 2, 'mode': 16877, 'uid': 0, 'gid': 0}, {'path': '/home', 'device': 66306, 'inode': 45481985, 'mode': 16877, 'uid': 0, 'gid': 0}, {'path': '/home/holden', 'device': 66306, 'inode': 45481986, 'mode': 16877, 'uid': 1000, 'gid': 1000}, {'path': '/home/holden/mckernel-work', 'device': 66306, 'inode': 47459822, 'mode': 16893, 'uid': 1000, 'gid': 1000}, {'path': '/home/holden/mckernel-work/host-preparation', 'device': 66306, 'inode': 47848559, 'mode': 16832, 'uid': 1000, 'gid': 1000}, {'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15', 'device': 66306, 'inode': 56363377, 'mode': 16893, 'uid': 1000, 'gid': 1000}, {'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1', 'device': 66306, 'inode': 56366767, 'mode': 16832, 'uid': 1000, 'gid': 1000}, {'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/retained-validation-attempt-6', 'device': 66306, 'inode': 56503385, 'mode': 16832, 'uid': 1000, 'gid': 1000}]
+@@ -155,7 +155,75 @@
+     return stdout + stderr
+ 
+ 
++OWNED_LOG_SOURCE = Path('/home/holden/mckernel/docs/verification/evidence/phase5-m03-handshake-runtime-checkpoint-20261020-1/sdk-physical-source/run_two_commands_source_bound_corrected.py')
++OWNED_LOG_SOURCE_SHA = '990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8'
++OWNED_LOG_CAPTURE_ROOT = Path(__file__).resolve().parent / 'owned-logs-client-capture-1'
++_OWNED_LOG_SEQUENCE = 0
++
++
++def owned_log_transport(command, path, wall_seconds=30):
++    """Reuse exact h990 ownership; caller supplies exclusive fixed capture directory.
++
++    Production calls only the bound stopped-container logs argv. Ordinary tests
++    pass controlled Python children through this same transport, never Docker.
++    Parent cancellation remains an error after direct join and closed streams.
++    """
++    import ast
++    import resource
++    if not (0 < wall_seconds <= 30):
++        raise Refusal('owned-log-wall-bound')
++    raw = read_bounded(OWNED_LOG_SOURCE)
++    if digest(raw) != OWNED_LOG_SOURCE_SHA:
++        raise Refusal('owned-log-source-binding')
++    functions = {'need', 'write', 'hashed', 'stop', 'cpu_used', 'members',
++                 'process_start', 'terminal_unreaped', 'wait_terminal', 'owned_capture'}
++    assignments = {'FIELDS', 'stopping', 'CENSUS_SOURCE', 'CENSUS_SHA', '_CENSUS', 'STOP_SIGNALS'}
++    body = []
++    for node in ast.parse(raw, str(OWNED_LOG_SOURCE)).body:
++        if (isinstance(node, (ast.Import, ast.ImportFrom)) or
++                isinstance(node, ast.FunctionDef) and node.name in functions or
++                isinstance(node, ast.Assign) and any(isinstance(t, ast.Name) and t.id in assignments
++                                                    for t in node.targets)):
++            body.append(node)
++    namespace = {'__file__': str(OWNED_LOG_SOURCE)}
++    exec(compile(ast.Module(body=body, type_ignores=[]), str(OWNED_LOG_SOURCE), 'exec'), namespace)
++    signals = namespace['STOP_SIGNALS']
++    previous_mask = signal.pthread_sigmask(signal.SIG_BLOCK, signals)
++    previous_handlers = {number: signal.getsignal(number) for number in signals}
++    if signal.getitimer(signal.ITIMER_REAL) != (0.0, 0.0):
++        signal.pthread_sigmask(signal.SIG_SETMASK, previous_mask)
++        raise Refusal('owned-log-inherited-alarm-refused')
++    try:
++        for number in signals:
++            signal.signal(number, namespace['stop'])
++        # A transaction defers TERM globally. During this owned child it must be
++        # delivered to h990, which joins the child before propagating refusal.
++        signal.pthread_sigmask(signal.SIG_SETMASK, set(previous_mask) - signals)
++        def limits():
++            resource.setrlimit(resource.RLIMIT_AS, (2147483648, 2147483648))
++            resource.setrlimit(resource.RLIMIT_FSIZE, (1048576, 1048576))
++            resource.setrlimit(resource.RLIMIT_NOFILE, (256, 256))
++            resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
++        result = namespace['owned_capture']({'argv': command}, path, wall_seconds, limits)
++        namespace['write'](path / 'WHOLE-JOIN.json', result)
++    finally:
++        signal.pthread_sigmask(signal.SIG_BLOCK, signals)
++        for number, handler in previous_handlers.items():
++            signal.signal(number, handler)
++        signal.pthread_sigmask(signal.SIG_SETMASK, previous_mask)
++    return result
++
++
++def owned_log_join_succeeded(result):
++    return (result.get('returncode') == 0 and result.get('direct_child_joined') is True and
++            result.get('group_absent') is True and result.get('closed_streams') is True and
++            result.get('error') is None and result.get('retirement_error') is None and
++            result.get('timed_out') is False and result.get('remaining_group_members') == [] and
++            result.get('unexpected_group_members') == [])
++
++
+ def capture_logs(present, execute=False, transaction=None):
++    global _OWNED_LOG_SEQUENCE
+     for role, row in PASS_LOG_CHANNELS.items():
+         raw_channel = read_bounded(Path(row['path']), maximum=PROTECTED_LIMIT)
+         if len(raw_channel) != row['bytes'] or digest(raw_channel) != row['sha256']:
+@@ -169,14 +237,31 @@
+         raise Refusal('docker-log-capture-missing')
+     if os.geteuid() != 0:
+         raise Refusal('root-execution-required-use-sudo-A')
+-    # Only this exact exited container's log transport permits its pinned stderr.
+-    # All other Docker/process commands retain the original empty-stderr oracle.
+-    result = subprocess.run(['/usr/bin/docker', '--host=unix:///var/run/docker.sock',
+-                             'logs', '--', CONTAINER],
+-                            env={'PATH': '/usr/bin:/bin', 'LANG': 'C', 'LC_ALL': 'C'},
+-                            stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+-                            stderr=subprocess.PIPE, timeout=30, check=False)
+-    raw = validate_log_channels(result.returncode, result.stdout, result.stderr)
++    command = ['/usr/bin/docker', '--host=unix:///var/run/docker.sock', 'logs', '--', CONTAINER]
++    if CONTAINER != KNOWN_TARGET['container_id']:
++        raise Refusal('exact-bound-logs-command-required')
++    if _OWNED_LOG_SEQUENCE == 0:
++        OWNED_LOG_CAPTURE_ROOT.mkdir(mode=0o700)
++        if transaction is not None:
++            transaction.mutation_started = True
++        parent, _ = directory(OWNED_LOG_CAPTURE_ROOT.parent)
++        try:
++            os.fsync(parent)
++        finally:
++            os.close(parent)
++    capture = OWNED_LOG_CAPTURE_ROOT / ('%02d' % _OWNED_LOG_SEQUENCE)
++    capture.mkdir(mode=0o700)
++    _OWNED_LOG_SEQUENCE += 1
++    if _OWNED_LOG_SEQUENCE > 8:
++        raise Refusal('owned-log-capture-count-bound')
++    result = owned_log_transport(command, capture, 30)
++    if not owned_log_join_succeeded(result):
++        raise Refusal('owned-log-client-retirement-or-exit')
++    # No reads of stdout/stderr until h990 persisted direct wait, joined the
++    # creator, proved group absence and closed both file streams.
++    stdout = read_bounded(capture / 'stdout', maximum=1048576)
++    stderr = read_bounded(capture / 'stderr', maximum=1048576)
++    raw = validate_log_channels(result['returncode'], stdout, stderr)
+     if raw != expected:
+         raise Refusal('docker-log-mismatch')
+     if execute:
+@@ -620,7 +705,7 @@
+     if len(selected_map) != len(selected):
+         raise Refusal('duplicate-selected-file')
+     ROOT_TERMINAL = Path(obs[proof_key]['path'])
+-    if proof_key == 'guard_proof' and ROOT_TERMINAL != Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/copy6-normal-retirement-preparation-1/CLOSED-IMAGE-OWNER-CLI-PROOF.json'):
++    if proof_key == 'guard_proof' and ROOT_TERMINAL != Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/copy6-normal-retirement-preparation-1/bounded-owned-logs-capture-correction-1/CLOSED-IMAGE-OWNER-CLI-PROOF.json'):
+         raise Refusal('image-guard-proof-path')
+     joins = {'driver_path': 'driver_sha256', 'provenance_path': 'provenance_sha256',
+              'host_owner_path': 'host_owner_sha256', 'source_manifest': 'source_manifest_sha256',

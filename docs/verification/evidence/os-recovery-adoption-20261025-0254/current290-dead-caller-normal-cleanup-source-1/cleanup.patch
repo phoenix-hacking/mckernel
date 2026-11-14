@@ -1,0 +1,255 @@
+--- /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/attempt3-coherent-entry-preparation-source-1/genuine-newbe87-physical-binding-preparation-source-1/actual7553-namespace6294-final-source-1/memory-floor-correction1-source-1/query-packet-pin-correction1-source-1/default290-link-data-selector-correction1-source-1/minimal-selected-default-readonly-overlay-and-seed-plan-1/implementation-source-1/exact-consumed-gitlink-view-correction1-source-1/fresh-compiled-object-ownership-gate-source-1/attempt4-request-and-namespace-plan-source-1/attempt4-frontend-source-1/owner213-frontend-preparation-source-1/initializer-owner-role-join-correction1-source-1/bootstrap-local-path-correction1-source-1/current-physical-recovery-binding-source-1/fresh-clock-successor1-source-1/native_rust_cutover_image_terminal_cleanup.CURRENT290.ATTEMPT4.READONLY-SEED.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/native_rust_cutover_image_terminal_cleanup.CURRENT290.EXACT-DEAD-CALLER.py
+@@ -42,7 +42,7 @@
+     return module
+ 
+ REPO = Path('/home/holden/mckernel')
+-PUBLISHED_SCRIPT = 'docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/attempt3-coherent-entry-preparation-source-1/genuine-newbe87-physical-binding-preparation-source-1/actual7553-namespace6294-final-source-1/memory-floor-correction1-source-1/query-packet-pin-correction1-source-1/default290-link-data-selector-correction1-source-1/minimal-selected-default-readonly-overlay-and-seed-plan-1/implementation-source-1/exact-consumed-gitlink-view-correction1-source-1/fresh-compiled-object-ownership-gate-source-1/attempt4-request-and-namespace-plan-source-1/attempt4-frontend-source-1/runtime-owner-argv-request-cap-correction1-source-1/native_rust_cutover_image_terminal_cleanup.CURRENT290.ATTEMPT4.READONLY-SEED.py'
++PUBLISHED_SCRIPT = 'docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/native_rust_cutover_image_terminal_cleanup.CURRENT290.EXACT-DEAD-CALLER.py'
+ PUBLISHED_TESTS = 'scripts/tests/test_native_rust_cutover_image_terminal_cleanup.py'
+ SELFTEST = REPO / PUBLISHED_TESTS
+ NAMESPACE = Path('/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/attempt3-coherent-entry-preparation-source-1/genuine-newbe87-physical-binding-preparation-source-1/actual7553-namespace6294-final-source-1/memory-floor-correction1-source-1/query-packet-pin-correction1-source-1/default290-link-data-selector-correction1-source-1/minimal-selected-default-readonly-overlay-and-seed-plan-1/implementation-source-1/exact-consumed-gitlink-view-correction1-source-1/fresh-compiled-object-ownership-gate-source-1/attempt4-request-and-namespace-plan-source-1/actual-current290-default-image-attempt-4')
+@@ -218,6 +218,123 @@
+     return module
+ 
+ 
++# Separate recovery mode; original same-OFD transport remains the default.
++DEAD_CALLER_MODE = 'EXACT_DEAD_CALLER_NEW_OFD'
++DEAD_CALLER_BINDING = None
++DEAD_CALLER_FROZEN = json.loads('{"boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb", "caller_pgid": "UNKNOWN_NOT_RECONSTRUCTED", "caller_pid": 1043200, "caller_starttime": "80013658", "group_ids": [1043716], "operation_argv_paths": ["/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/attempt3-coherent-entry-preparation-source-1/genuine-newbe87-physical-binding-preparation-source-1/actual7553-namespace6294-final-source-1/memory-floor-correction1-source-1/query-packet-pin-correction1-source-1/default290-link-data-selector-correction1-source-1/minimal-selected-default-readonly-overlay-and-seed-plan-1/implementation-source-1/exact-consumed-gitlink-view-correction1-source-1/fresh-compiled-object-ownership-gate-source-1/attempt4-request-and-namespace-plan-source-1/actual-current290-default-image-attempt-4", "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/attempt3-coherent-entry-preparation-source-1/genuine-newbe87-physical-binding-preparation-source-1/actual7553-namespace6294-final-source-1/memory-floor-correction1-source-1/query-packet-pin-correction1-source-1/default290-link-data-selector-correction1-source-1/minimal-selected-default-readonly-overlay-and-seed-plan-1/implementation-source-1/exact-consumed-gitlink-view-correction1-source-1/fresh-compiled-object-ownership-gate-source-1/attempt4-request-and-namespace-plan-source-1/attempt4-frontend-source-1/owner213-frontend-preparation-source-1/initializer-owner-role-join-correction1-source-1/bootstrap-local-path-correction1-source-1/current-physical-recovery-binding-source-1/fresh-clock-successor1-source-1/run_frozen_current290_image_entry.ATTEMPT4.READONLY-SEED.py", "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/attempt3-coherent-entry-preparation-source-1/genuine-newbe87-physical-binding-preparation-source-1/actual7553-namespace6294-final-source-1/memory-floor-correction1-source-1/query-packet-pin-correction1-source-1/default290-link-data-selector-correction1-source-1/minimal-selected-default-readonly-overlay-and-seed-plan-1/implementation-source-1/exact-consumed-gitlink-view-correction1-source-1/fresh-compiled-object-ownership-gate-source-1/attempt4-request-and-namespace-plan-source-1/image-request.CURRENT290.ATTEMPT4.READONLY-SEED.NAMESPACE-ABSENT.NOT-GRANTED.json", "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/attempt3-coherent-entry-preparation-source-1/genuine-newbe87-physical-binding-preparation-source-1/actual7553-namespace6294-final-source-1/memory-floor-correction1-source-1/query-packet-pin-correction1-source-1/default290-link-data-selector-correction1-source-1/minimal-selected-default-readonly-overlay-and-seed-plan-1/implementation-source-1/exact-consumed-gitlink-view-correction1-source-1/fresh-compiled-object-ownership-gate-source-1/attempt4-request-and-namespace-plan-source-1/owner-namespace-constant-reconciliation-source-1/native_rust_exact_mckernel_image_container_owner.CURRENT290.NAMESPACE4-COMMON-BOUND.py"], "owner_pid": 1043716, "owner_starttime": "80020161", "references": {"ACTUAL-OWNER-ENTRY.json": {"bytes": 4432, "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/attempt3-coherent-entry-preparation-source-1/genuine-newbe87-physical-binding-preparation-source-1/actual7553-namespace6294-final-source-1/memory-floor-correction1-source-1/query-packet-pin-correction1-source-1/default290-link-data-selector-correction1-source-1/minimal-selected-default-readonly-overlay-and-seed-plan-1/implementation-source-1/exact-consumed-gitlink-view-correction1-source-1/fresh-compiled-object-ownership-gate-source-1/attempt4-request-and-namespace-plan-source-1/attempt4-frontend-source-1/owner213-frontend-preparation-source-1/initializer-owner-role-join-correction1-source-1/bootstrap-local-path-correction1-source-1/current-physical-recovery-binding-source-1/fresh-clock-successor1-source-1/actual-entry-1/ACTUAL-OWNER-ENTRY.json", "sha256": "0d2f48f62a8907f3636525e64a290033afe5f0c547bf0a6f6ce424fc5dc9c471"}, "ROOT-NORMAL-CLEANUP-COMPLETION-READY.json": {"bytes": 9134, "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/attempt3-coherent-entry-preparation-source-1/genuine-newbe87-physical-binding-preparation-source-1/actual7553-namespace6294-final-source-1/memory-floor-correction1-source-1/query-packet-pin-correction1-source-1/default290-link-data-selector-correction1-source-1/minimal-selected-default-readonly-overlay-and-seed-plan-1/implementation-source-1/exact-consumed-gitlink-view-correction1-source-1/fresh-compiled-object-ownership-gate-source-1/attempt4-request-and-namespace-plan-source-1/attempt4-frontend-source-1/owner213-frontend-preparation-source-1/initializer-owner-role-join-correction1-source-1/bootstrap-local-path-correction1-source-1/current-physical-recovery-binding-source-1/fresh-clock-successor1-source-1/actual-entry-1/ROOT-NORMAL-CLEANUP-COMPLETION-READY.json", "sha256": "f95323788f1315d1f8aab364754f7dc8d032c71987144fc1f99acf104f382c41"}, "caller_source": {"bytes": 35403, "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/attempt3-coherent-entry-preparation-source-1/genuine-newbe87-physical-binding-preparation-source-1/actual7553-namespace6294-final-source-1/memory-floor-correction1-source-1/query-packet-pin-correction1-source-1/default290-link-data-selector-correction1-source-1/minimal-selected-default-readonly-overlay-and-seed-plan-1/implementation-source-1/exact-consumed-gitlink-view-correction1-source-1/fresh-compiled-object-ownership-gate-source-1/attempt4-request-and-namespace-plan-source-1/attempt4-frontend-source-1/owner213-frontend-preparation-source-1/initializer-owner-role-join-correction1-source-1/bootstrap-local-path-correction1-source-1/current-physical-recovery-binding-source-1/fresh-clock-successor1-source-1/run_frozen_current290_image_entry.ATTEMPT4.READONLY-SEED.py", "sha256": "13af5011ffc4ccaa7510b0e720ba1b79ab34c444a7a3aa32f14a503a39a4d3b4"}, "owner.JOIN.json": {"bytes": 7033, "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/attempt3-coherent-entry-preparation-source-1/genuine-newbe87-physical-binding-preparation-source-1/actual7553-namespace6294-final-source-1/memory-floor-correction1-source-1/query-packet-pin-correction1-source-1/default290-link-data-selector-correction1-source-1/minimal-selected-default-readonly-overlay-and-seed-plan-1/implementation-source-1/exact-consumed-gitlink-view-correction1-source-1/fresh-compiled-object-ownership-gate-source-1/attempt4-request-and-namespace-plan-source-1/attempt4-frontend-source-1/owner213-frontend-preparation-source-1/initializer-owner-role-join-correction1-source-1/bootstrap-local-path-correction1-source-1/current-physical-recovery-binding-source-1/fresh-clock-successor1-source-1/actual-entry-1/owner.JOIN.json", "sha256": "93c18cb9a5029ceb1da2277e83f446e0ccfc29c4098b5bfb1c6a5f3b5a7576b7"}, "owner.PROCESS.json": {"bytes": 2221, "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/attempt3-coherent-entry-preparation-source-1/genuine-newbe87-physical-binding-preparation-source-1/actual7553-namespace6294-final-source-1/memory-floor-correction1-source-1/query-packet-pin-correction1-source-1/default290-link-data-selector-correction1-source-1/minimal-selected-default-readonly-overlay-and-seed-plan-1/implementation-source-1/exact-consumed-gitlink-view-correction1-source-1/fresh-compiled-object-ownership-gate-source-1/attempt4-request-and-namespace-plan-source-1/attempt4-frontend-source-1/owner213-frontend-preparation-source-1/initializer-owner-role-join-correction1-source-1/bootstrap-local-path-correction1-source-1/current-physical-recovery-binding-source-1/fresh-clock-successor1-source-1/actual-entry-1/owner.PROCESS.json", "sha256": "026837b4eb908457dcf5bf3a186eb569c8a91fe1d1dee840d052c847b75b9103"}, "owner_receipt": {"bytes": 37704, "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/attempt3-coherent-entry-preparation-source-1/genuine-newbe87-physical-binding-preparation-source-1/actual7553-namespace6294-final-source-1/memory-floor-correction1-source-1/query-packet-pin-correction1-source-1/default290-link-data-selector-correction1-source-1/minimal-selected-default-readonly-overlay-and-seed-plan-1/implementation-source-1/exact-consumed-gitlink-view-correction1-source-1/fresh-compiled-object-ownership-gate-source-1/attempt4-request-and-namespace-plan-source-1/actual-current290-default-image-attempt-4/owner-evidence/owner-receipt.json", "sha256": "af5934cce5e375f4d3c49f3aca01b66f20361f0b78857a0cfe06d781ddfd9389"}}, "schema": "mckernel.current290.cleanup.exact-dead-caller-new-ofd.v1"}')
++DEAD_CALLER_OBSERVATIONS = []
++DEAD_CALLER_CAPTURE_BYTES = 0
++
++def validate_dead_caller_binding(value):
++    if value.get('cleanup_mode') != DEAD_CALLER_MODE or value.get('inherited_root_lock') is not None:
++        raise Refusal('dead-caller-mode-cannot-inherit-or-waive-lock')
++    binding = value.get('dead_caller_new_ofd')
++    if binding != DEAD_CALLER_FROZEN:
++        raise Refusal('dead-caller-exact-frozen-binding-required')
++    for ref in binding['references'].values():
++        raw = read_bounded(Path(ref['path']))
++        if len(raw) != ref['bytes'] or digest(raw) != ref['sha256']:
++            raise Refusal('dead-caller-original-evidence-changed:' + ref['path'])
++    # configure() separately retains the full normal typed join/readiness/source
++    # validation. This check does not replace or waive any original predicate.
++    entry = parse(read_bounded(Path(binding['references']['ACTUAL-OWNER-ENTRY.json']['path'])))
++    if (entry['caller_pid'] != binding['caller_pid'] or
++            entry['caller_starttime'] != binding['caller_starttime'] or
++            entry['holder']['boot_id'] != binding['boot_id'] or
++            entry['holder']['identity'] != dict(device=27, inode=4, uid=0, gid=0, mode=0o644, nlink=1)):
++        raise Refusal('dead-caller-original-birth-and-mutex-binding')
++    return binding
++
++def validate_dead_caller_snapshots(snapshots, binding, boot_id):
++    if boot_id != binding['boot_id'] or len(snapshots) != 2:
++        raise Refusal('dead-caller-boot-or-snapshot-count')
++    if not isinstance(binding.get('group_ids'), list) or not binding['group_ids'] or any(type(x) is not int or x <= 0 for x in binding['group_ids']):
++        raise Refusal('dead-caller-original-group-proof-required')
++    combined = {}
++    groups = set(binding['group_ids'])
++    roots = {binding['caller_pid'], binding['owner_pid'], *WAITER_PIDS}
++    for rows in snapshots:
++        seen = set()
++        for row in rows:
++            if (not isinstance(row, list) or len(row) != 4 or
++                    any(type(x) is not int or x < 0 for x in (row[0],row[1],row[3])) or
++                    row[0] <= 0 or row[0] in seen or not isinstance(row[2], str) or not row[2].isdigit()):
++                raise Refusal('dead-caller-process-row')
++            seen.add(row[0])
++            combined.setdefault(row[0], set()).add(row[1])
++            if row[3] in groups:
++                raise Refusal('dead-caller-or-owner-group-present')
++        if 1 not in seen:
++            raise Refusal('dead-caller-incomplete-snapshot')
++    related = set(roots)
++    while True:
++        expanded = related | {pid for pid, parents in combined.items() if parents & related}
++        if expanded == related:
++            break
++        related = expanded
++    # Any PID presence, including a reused birth or zombie, is refused.
++    if related & set(combined):
++        raise Refusal('dead-caller-owner-waiter-or-descendant-present')
++    return True
++
++def validate_dead_operation_argv(pid, argv, binding, observer_pid):
++    if pid == observer_pid:
++        return
++    for word in argv:
++        if any(word == path or word.startswith(path + '/') for path in binding['operation_argv_paths']):
++            raise Refusal('dead-caller-unknown-operation-process-present')
++
++def dead_caller_absent():
++    if DEAD_CALLER_BINDING is None:
++        return
++    if os.getuid() != 0 or os.geteuid() != 0:
++        raise Refusal('dead-caller-root-observation-required')
++    boot_path = Path('/proc/sys/kernel/random/boot_id')
++    before = boot_path.read_text().strip()
++    snapshots = []
++    raw_snapshots = []
++    observation = dict(boot_id=before, observed_epoch=time.time(), observer_pid=os.getpid(), raw_full_eof_snapshots=raw_snapshots)
++    DEAD_CALLER_OBSERVATIONS.append(observation)
++    global DEAD_CALLER_CAPTURE_BYTES
++    for _ in range(2):
++        rows = []
++        raw_rows = []
++        raw_snapshots.append(raw_rows)
++        entries = list(Path('/proc').iterdir())
++        if len(entries) > 4096:
++            raise Refusal('dead-caller-process-count')
++        for path in entries:
++            if not path.name.isdigit():
++                continue
++            raw = same_ofd_read(str(path / 'stat'), 65536)
++            left, separator, right = raw.rpartition(b') ')
++            fields = right.split()
++            if not separator or not left.startswith(path.name.encode() + b' (') or len(fields) < 50:
++                raise Refusal('dead-caller-process-stat')
++            row = [int(path.name), int(fields[1]), fields[19].decode('ascii'), int(fields[2])]
++            check_raw = same_ofd_read(str(path / 'stat'), 65536)
++            check = check_raw.rpartition(b') ')[2].split()
++            if len(check) < 50 or (check[1], check[2], check[19]) != (fields[1], fields[2], fields[19]):
++                raise Refusal('dead-caller-process-raced')
++            command = same_ofd_read(str(path / 'cmdline'), 65536)
++            if command and not command.endswith(b'\0'):
++                raise Refusal('dead-caller-cmdline-not-full-eof')
++            argv = [word.decode('utf-8', 'strict') for word in command[:-1].split(b'\0')] if command else []
++            if not argv and fields[0] not in (b'Z', b'X', b'x') and not (int(fields[6]) & 0x200000):
++                raise Refusal('dead-caller-live-command-unknown')
++            executable = os.readlink(path / 'exe') if argv else ''
++            capture = dict(pid=row[0], stat_hex=raw.hex(), stat_after_hex=check_raw.hex(), cmdline_hex=command.hex(), executable=executable)
++            DEAD_CALLER_CAPTURE_BYTES += len(canonical(capture))
++            if DEAD_CALLER_CAPTURE_BYTES > 16 << 20:
++                raise Refusal('dead-caller-capture-total-bound')
++            raw_rows.append(capture)
++            validate_dead_operation_argv(row[0], argv, DEAD_CALLER_BINDING, os.getpid())
++            rows.append(row)
++        snapshots.append(rows)
++    if boot_path.read_text().strip() != before:
++        raise Refusal('dead-caller-boot-raced')
++    validate_dead_caller_snapshots(snapshots, DEAD_CALLER_BINDING, before)
++
+ def inherited_root_binding(value):
+     binding = value.get('inherited_root_lock')
+     if (not isinstance(binding, dict) or set(binding) != {'schema', 'holder', 'caller_source'} or
+@@ -606,12 +723,14 @@
+     return current230_contract().typed_source_binding(request, obs, selected_map)
+ 
+ 
+-def configure(value, execute=False):
++def configure(value, execute=False, dead_caller=False):
+     """Future release only. No runtime identity is inherited from scratch21."""
+     global RELEASE, DEVICE, BOOT_ID, ROOT_LOCK_BINDING, EXPECTED_CONTAINER, EXPECTED_EXIT
+     global CONTAINER, CONTAINER_NAME, OWNER_NONCE, OWNER_PID, OWNER_START
+     global RECORDS, PROTECTED, DIRS, TERMINAL_SHA, TERMINAL_INODE, TERMINAL_SIZE
+     global CANDIDATE, ROOT_TERMINAL, WAITER_PIDS, INHERITED_ROOT_LOCK, OWNERSHIP_CASE
++    global DEAD_CALLER_BINDING
++    DEAD_CALLER_BINDING = None
+     RELEASE = None
+     INHERITED_ROOT_LOCK = None
+     OWNERSHIP_CASE = None
+@@ -797,7 +916,13 @@
+             raise Refusal('inventory-root-binding')
+     if value.get('transaction_paths') != transaction_paths():
+         raise Refusal('transaction-path-binding')
+-    inheritance = inherited_root_binding(value)
++    if dead_caller:
++        DEAD_CALLER_BINDING = validate_dead_caller_binding(value)
++        inheritance = None
++    else:
++        if value.get('cleanup_mode') is not None or value.get('dead_caller_new_ofd') is not None:
++            raise Refusal('dead-caller-explicit-mode-required')
++        inheritance = inherited_root_binding(value)
+     RELEASE, DEVICE, BOOT_ID = value, device, obs['boot_id']
+     INHERITED_ROOT_LOCK = inheritance
+     ROOT_LOCK_BINDING, EXPECTED_CONTAINER, EXPECTED_EXIT = lock, item, target['exit_code']
+@@ -1059,6 +1184,7 @@
+     return run_privileged(['/usr/bin/docker', '--host=unix:///var/run/docker.sock', *args])
+ 
+ def census():
++    dead_caller_absent()
+     process_absent()
+     raw = docker(['ps', '-a', '--no-trunc', '--format', '{{json .}}'])
+     candidates = []
+@@ -1104,6 +1230,8 @@
+         if RELEASE is None:
+             raise Refusal('release-not-configured')
+         if INHERITED_ROOT_LOCK is None:
++            if DEAD_CALLER_BINDING is not None:
++                dead_caller_absent()
+             self.rfd = os.open(ROOT_LOCK, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+         else:
+             self.rfd = duplicate_inherited_root_lock()
+@@ -1115,6 +1243,8 @@
+                 validate_transaction_inherited_lock(self.rfd)
+             else:
+                 fcntl.flock(self.rfd, fcntl.LOCK_EX | fcntl.LOCK_NB)
++                if DEAD_CALLER_BINDING is not None:
++                    dead_caller_absent()
+             self.root_locked = True
+             if identity(os.fstat(self.rfd)) != (ROOT_LOCK_BINDING['device'], ROOT_LOCK_BINDING['inode']):
+                 raise Refusal('root-lock-replaced')
+@@ -1149,6 +1279,7 @@
+         self.root_locked = False
+ 
+     def pinned(self):
++        dead_caller_absent()
+         require_unowned_shared_absent()
+         if self.root_lock_inherited:
+             validate_transaction_inherited_lock(self.rfd)
+@@ -1511,7 +1642,8 @@
+             try:
+                 print(json.dumps({'status': 'QUARANTINED_ROOT_LOCK_HELD',
+                                   'error_type': type(error).__name__,
+-                                  'requires': 'independent-exact-state-reconciliation'}), flush=True)
++                                  'requires': 'independent-exact-state-reconciliation',
++                                  'dead_caller_observations': DEAD_CALLER_OBSERVATIONS}), flush=True)
+             except BaseException:
+                 pass
+             quarantine_wait()
+@@ -1533,6 +1665,7 @@
+     parser.add_argument('--git-tree')
+     parser.add_argument('--execute', action='store_true')
+     parser.add_argument('--inherited-root-lock-stdin', action='store_true')
++    parser.add_argument('--exact-dead-caller-new-ofd', action='store_true')
+     args = parser.parse_args(argv)
+     try:
+         if args.prepare_observation:
+@@ -1541,22 +1674,32 @@
+             raw = read_bounded(args.prepare_observation)
+             if digest(raw) != args.observation_sha256:
+                 raise Refusal('observation-file-digest')
+-            print(json.dumps(prepare_release(parse(raw), args.git_commit, args.git_tree), sort_keys=True))
++            if args.exact_dead_caller_new_ofd and args.inherited_root_lock_stdin:
++                raise Refusal('dead-caller-and-same-ofd-mutually-exclusive')
++            draft = prepare_release(parse(raw), args.git_commit, args.git_tree)
++            if args.exact_dead_caller_new_ofd:
++                draft.update(cleanup_mode=DEAD_CALLER_MODE, dead_caller_new_ofd=DEAD_CALLER_FROZEN)
++            print(json.dumps(draft, sort_keys=True))
+             return 0
+         if not args.release or not args.release_sha256:
+             raise Refusal('exact-release-required')
+         raw = read_bounded(args.release)
+         if digest(raw) != args.release_sha256:
+             raise Refusal('release-file-digest')
+-        if not args.inherited_root_lock_stdin:
++        if args.exact_dead_caller_new_ofd and args.inherited_root_lock_stdin:
++            raise Refusal('dead-caller-and-same-ofd-mutually-exclusive')
++        if not args.exact_dead_caller_new_ofd and not args.inherited_root_lock_stdin:
+             raise Refusal('current230-requires-same-ofd-stdin-transport')
+-        configure(parse(raw), execute=args.execute)
++        configure(parse(raw), execute=args.execute, dead_caller=args.exact_dead_caller_new_ofd)
+         if os.geteuid() != 0:
+             raise Refusal('root-execution-required-use-sudo-A')
+         result = recover(args.execute)
+     except (Refusal, OSError, ValueError, subprocess.SubprocessError) as exc:
+-        print(json.dumps({'status': 'REFUSED', 'reason': str(exc)}, sort_keys=True))
++        print(json.dumps({'status': 'REFUSED', 'reason': str(exc),
++                          'dead_caller_observations': DEAD_CALLER_OBSERVATIONS}, sort_keys=True))
+         return 1
++    if DEAD_CALLER_BINDING is not None:
++        result['dead_caller_observations'] = DEAD_CALLER_OBSERVATIONS
+     print(json.dumps(result, sort_keys=True))
+     return 0
+ 

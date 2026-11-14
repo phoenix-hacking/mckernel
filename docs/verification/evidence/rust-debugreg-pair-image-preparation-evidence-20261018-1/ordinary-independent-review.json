@@ -1,0 +1,286 @@
+{
+  "implementation_ownership": false,
+  "ordinary_authorization": {
+    "materialize_argv": [
+      "/usr/bin/env",
+      "-i",
+      "PATH=/usr/bin:/bin",
+      "LC_ALL=C",
+      "/usr/bin/taskset",
+      "-c",
+      "6",
+      "/usr/bin/timeout",
+      "--signal=TERM",
+      "--kill-after=2s",
+      "35s",
+      "/usr/bin/prlimit",
+      "--as=1073741824",
+      "--cpu=30",
+      "--fsize=33554432",
+      "--",
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/materialize_thin.py"
+    ],
+    "mkdir_request_roots_argv": [
+      "/usr/bin/mkdir",
+      "-m",
+      "700",
+      "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/owner-work",
+      "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/owner-evidence"
+    ],
+    "post_prepare_consumer_argv_template": [
+      "/usr/bin/env",
+      "-i",
+      "PATH=/usr/bin:/bin",
+      "LC_ALL=C",
+      "/usr/bin/taskset",
+      "-c",
+      "6",
+      "/usr/bin/timeout",
+      "--signal=TERM",
+      "--kill-after=2s",
+      "35s",
+      "/usr/bin/prlimit",
+      "--as=1073741824",
+      "--cpu=30",
+      "--fsize=33554432",
+      "--",
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/post-prep-consumer.py",
+      "REQUEST_SHA256_FROM_ACTUAL_PREPARATION"
+    ],
+    "prepare_request_argv": [
+      "/usr/bin/env",
+      "-i",
+      "PATH=/usr/bin:/bin",
+      "LC_ALL=C",
+      "/usr/bin/taskset",
+      "-c",
+      "6",
+      "/usr/bin/timeout",
+      "--signal=TERM",
+      "--kill-after=2s",
+      "150s",
+      "/usr/bin/prlimit",
+      "--as=1073741824",
+      "--cpu=120",
+      "--fsize=134217728",
+      "--",
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/adapters/native_rust_exact_mckernel_image_request_prepare.py",
+      "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/future-prepare-inputs.json",
+      "--request",
+      "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/image-request.json"
+    ]
+  },
+  "ordinary_execution_authority": true,
+  "reviewer": "/root/debugreg_pair_ordinary_review_1931",
+  "scope": "Reviewed concrete four-stage ordinary preparation only; no heavy/compiler/root/guest/runtime authority. Fresh dispatcher reconciliation required. Additive heavy corrections and heavy proposal execution excluded.",
+  "source_packet": {
+    "RESULT.md": {
+      "bytes": 5195,
+      "path": "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/RESULT.md",
+      "sha256": "7de04b3408eda27de696ca394eb3bb739e994e14f37bf8de5978117332ae6bbc"
+    },
+    "adapters/native_rust_exact_build_container_owner.py": {
+      "bytes": 51420,
+      "path": "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/adapters/native_rust_exact_build_container_owner.py",
+      "sha256": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1"
+    },
+    "adapters/native_rust_exact_build_image_prepare.py": {
+      "bytes": 22959,
+      "path": "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/adapters/native_rust_exact_build_image_prepare.py",
+      "sha256": "45cb12e0fd58d164468badfb99a3ed922e65e06046bf38b4a50e27e18595a27b"
+    },
+    "adapters/native_rust_exact_build_image_rebind.py": {
+      "bytes": 11193,
+      "path": "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/adapters/native_rust_exact_build_image_rebind.py",
+      "sha256": "f10ab116e55a24e8db7a8157d71efdd01198ba3453a8141bc8bbf596eda6b61e"
+    },
+    "adapters/native_rust_exact_build_image_rebind_probe.py": {
+      "bytes": 24966,
+      "path": "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/adapters/native_rust_exact_build_image_rebind_probe.py",
+      "sha256": "412d46de7e078746a7ec979a13ccb25753d6fa34708610932e35be8f02a89635"
+    },
+    "adapters/native_rust_exact_build_offline.py": {
+      "bytes": 41115,
+      "path": "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/adapters/native_rust_exact_build_offline.py",
+      "sha256": "cd4c409c6304a35e8537f7a2e9aa6664c42c884fb3836917af06480030d82d3e"
+    },
+    "adapters/native_rust_exact_disk_build_wrapper.py": {
+      "bytes": 57015,
+      "path": "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/adapters/native_rust_exact_disk_build_wrapper.py",
+      "sha256": "c252ee341eb61752704f8b818503c0a5dc97400845494707ca3110f5f23df6d1"
+    },
+    "adapters/native_rust_exact_mckernel_image_container_owner.py": {
+      "bytes": 84198,
+      "path": "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/adapters/native_rust_exact_mckernel_image_container_owner.py",
+      "sha256": "63e5ae87bf82dc03a28c66dcc979d5c9e1e06b9b19a6c6427c266edc46351cc4"
+    },
+    "adapters/native_rust_exact_mckernel_image_offline.py": {
+      "bytes": 85788,
+      "path": "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/adapters/native_rust_exact_mckernel_image_offline.py",
+      "sha256": "1617e26b3fbf65974a6d1783c6c603d079e326c91983f7a6ea3850a6891b0fbd"
+    },
+    "adapters/native_rust_exact_mckernel_image_request_prepare.py": {
+      "bytes": 18120,
+      "path": "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/adapters/native_rust_exact_mckernel_image_request_prepare.py",
+      "sha256": "4094322fbb3784d288cc29b52e1a96292dbaaf12ca3cf05b6b68dbc256ca9365"
+    },
+    "add_heavy_sources.py": {
+      "bytes": 5260,
+      "path": "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/add_heavy_sources.py",
+      "sha256": "5aba0bcd0ce3dd4ea8cc18f761f7e5199a4de9493cac03a4caa2473fbc013e47"
+    },
+    "bind_actual_ordinary.py": {
+      "bytes": 2130,
+      "path": "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/bind_actual_ordinary.py",
+      "sha256": "421fde1408d72e682a485bb84f2d92bfd708bde18885457beb396886de631f75"
+    },
+    "cheap-checks.json": {
+      "bytes": 534,
+      "path": "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/cheap-checks.json",
+      "sha256": "440efdd613f21053ff1fe4f8ca65f3f5ceae8dafcf63ed3991346c5815559c54"
+    },
+    "consumed-inputs.json": {
+      "bytes": 4868,
+      "path": "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/consumed-inputs.json",
+      "sha256": "6440de60142c3bc81edcf685361d158b97d39f978145e2b62140c910d2880092"
+    },
+    "create_packet.py": {
+      "bytes": 12966,
+      "path": "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/create_packet.py",
+      "sha256": "6e36240332f75a1b64603044c41e03cc6a8ba709a058496f41a5d0113df0f77f"
+    },
+    "execute_ordinary_once.py": {
+      "bytes": 6167,
+      "path": "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/execute_ordinary_once.py",
+      "sha256": "2416373aa912646fbe9e8f187f382f754ff5441700c311e68a3be1c9c6511a85"
+    },
+    "frozen/arch/x86_64/kernel/syscall.c": {
+      "bytes": 113482,
+      "path": "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/frozen/arch/x86_64/kernel/syscall.c",
+      "sha256": "2abee2d3c4813e7fb9769719e6bb07daf944490a3ac199f2762a7015a97d54f1"
+    },
+    "frozen/kernel/CMakeLists.txt": {
+      "bytes": 22705,
+      "path": "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/frozen/kernel/CMakeLists.txt",
+      "sha256": "dc265d048afefeccaba550a3174b7fe39908bb3552c66cd05e67f64194928789"
+    },
+    "frozen/kernel/rust/x86_cpu_helpers.rs": {
+      "bytes": 87475,
+      "path": "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/frozen/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "233e1ca36f662d7a9e1126747dbc17ccd0323e27f7750667cf059ac93465ca10"
+    },
+    "future-prepare-inputs.json": {
+      "bytes": 153775,
+      "path": "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/future-prepare-inputs.json",
+      "sha256": "c74df9705ee3a4694836572a03b3b7a34cf336fdced52896de4341996c151359"
+    },
+    "generation-status.json": {
+      "bytes": 136,
+      "path": "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/generation-status.json",
+      "sha256": "9bbc25f5a2ff4f3f569ff10ccce59d3c91468c3eae786c5b202f9b05edef720a"
+    },
+    "gitlink-inputs.json": {
+      "bytes": 96783,
+      "path": "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/gitlink-inputs.json",
+      "sha256": "28f06e46933925b042073cf585b70e831eb19e30f7a3195481fa939a2b152f02"
+    },
+    "heavy-source-generation-status.json": {
+      "bytes": 137,
+      "path": "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/heavy-source-generation-status.json",
+      "sha256": "c74ee781e27b78039ebd34f4574d8d7fd17ec8b4123caf7c8576d2cc9d46a6da"
+    },
+    "independent_review_pin_artifact-sha256.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/artifact-sha256.json",
+      "sha256": "be12b14c5eb46c4f970e6d9b25bc2fc0e55c03d96360a4dd55b50f93f9b0082b"
+    },
+    "independent_review_pin_ordinary-review-inputs.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/ordinary-review-inputs.json",
+      "sha256": "def4bfb9ec7003f0165af1e0ee3ee68d7c427dac24614c92c60934e7d21a935a"
+    },
+    "materialize_thin.py": {
+      "bytes": 4615,
+      "path": "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/materialize_thin.py",
+      "sha256": "e6cc211e405c988dc4b292be5567fd5c2293da089e7a8f7a5dd96c7f361da8fd"
+    },
+    "ordinary-commands.json": {
+      "bytes": 6080,
+      "path": "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/ordinary-commands.json",
+      "sha256": "91128c93c4a3b0a553113358840c701ac81091438db36b1bdc123a6f0c2900e9"
+    },
+    "ordinary_child_join.py": {
+      "bytes": 1191,
+      "path": "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/ordinary_child_join.py",
+      "sha256": "113b769643057a1009fc76ae25d7df2a4f6119c244a6924ccb1db3091e344446"
+    },
+    "post-prep-consumer.py": {
+      "bytes": 2808,
+      "path": "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/post-prep-consumer.py",
+      "sha256": "7c46c1fe160af4eba600a2560c1f4fa5868daed66c6237bdbac298d8a5410d96"
+    },
+    "postbuild-14-inputs-NOT-RELEASE.json": {
+      "bytes": 9017,
+      "path": "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/postbuild-14-inputs-NOT-RELEASE.json",
+      "sha256": "7600695f6ae37d0fc01c41562f618b22b939fe7f2e87558b5437e595bd863091"
+    },
+    "production-inputs-NOT-RELEASE.json": {
+      "bytes": 12750,
+      "path": "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/production-inputs-NOT-RELEASE.json",
+      "sha256": "64dd0ef02d0ffdcb553b187d3d4495c81e43ce456b00210467f0234fdbe4ecd6"
+    },
+    "thin-inputs.json": {
+      "bytes": 6693955,
+      "path": "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/thin-inputs.json",
+      "sha256": "8b66eee475243487636e28da3c4d7be87c6929bc568fb5d3ec58ff429fb27051"
+    },
+    "thin_source_contract.py": {
+      "bytes": 13304,
+      "path": "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/thin_source_contract.py",
+      "sha256": "7448893a18e9b39f0a40bba4dd6fa6c242b5f7cfa778f99c298d8748f54eaa8d"
+    },
+    "unchanged-cmake-fetched-binding.json": {
+      "bytes": 1100,
+      "path": "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/unchanged-cmake-fetched-binding.json",
+      "sha256": "b98b44c56c0458c72b6925043e5848826d0807366d4f3cf114b925dcc94d178c"
+    }
+  },
+  "source_pins": {
+    "frozen_source": {
+      "arch/x86_64/kernel/syscall.c": {
+        "bytes": 113482,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/frozen/arch/x86_64/kernel/syscall.c",
+        "sha256": "2abee2d3c4813e7fb9769719e6bb07daf944490a3ac199f2762a7015a97d54f1"
+      },
+      "kernel/CMakeLists.txt": {
+        "bytes": 22705,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/frozen/kernel/CMakeLists.txt",
+        "sha256": "dc265d048afefeccaba550a3174b7fe39908bb3552c66cd05e67f64194928789"
+      },
+      "kernel/rust/x86_cpu_helpers.rs": {
+        "bytes": 87475,
+        "path": "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/frozen/kernel/rust/x86_cpu_helpers.rs",
+        "sha256": "233e1ca36f662d7a9e1126747dbc17ccd0323e27f7750667cf059ac93465ca10"
+      }
+    },
+    "publication_commit": "3c5434ef57ce82ebbe6a270133fd449718954d8c",
+    "publication_proof": {
+      "bytes": 8926,
+      "path": "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-integration-20261018-1/source-checkpoint-fetched-proof.json",
+      "sha256": "d089fe2c56f0319a4ead2275ebe3cf99e3c77a3cb382000b7671789623a2f650"
+    },
+    "unchanged_cmake_fetched_binding": {
+      "bytes": 1100,
+      "path": "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/unchanged-cmake-fetched-binding.json",
+      "sha256": "b98b44c56c0458c72b6925043e5848826d0807366d4f3cf114b925dcc94d178c"
+    }
+  },
+  "status": "PASS_ORDINARY_PREPARATION_PROFILE_ONLY"
+}

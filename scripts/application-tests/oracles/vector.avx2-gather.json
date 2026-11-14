@@ -1,0 +1,7 @@
+{
+  "schema_version":1,"case_id":"vector.avx2-gather","case_version":1,"artifact_version":"20260909.1",
+  "wait_status":{"kind":"exited","code":0},"stdout":{"kind":"exact-line-lines","lines":["table=16 lanes=8 scale=4 repeated=1 negative=1 masked_seed=1 valid=1"]},"stderr":{"kind":"exact-bytes","hex":""},
+  "relational_assertions":["Active lanes equal table[index*scale/4] under the fixed 32-bit element scale and valid signed indices","Masked lanes retain the seed; repeated and negative indices resolve to distinct checked elements inside the owned 16-element mapping"],
+  "unresolved_expectations":["AVX2 CPUID/XCR0 evidence, exact vpgatherdd disassembly, page ownership and masked-fault behavior require Max review."],
+  "max_question_for_reviewer":"Confirm the gather base/index/scale contract and that all active addresses remain within the owned mapping before enabling fault-sensitive variants."
+}

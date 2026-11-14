@@ -1,0 +1,159 @@
+{
+  "kind": "PINNED_REMOTE_HARNESS_ADOPTION_SOURCE_REVIEW",
+  "decision": "GO_CONCRETE_LOCAL_CODE_ADOPTION_AND_CURRENT_LIMIT_RECONCILIATION_TASK_NOT_LAUNCH_OR_HELD_OS_RESUME",
+  "remote_input": {
+    "repository": "phoenix-hacking/mckernel",
+    "base_supplied": "3e63ff8f0d47642caa126903ec5ca9ae22bcb339",
+    "reviewed_commit": "8fa22bdc77da30d19f7c802fe520d3aa887c81f9",
+    "transport": "GitHub connector commit/file reads pinned to exact SHA; no gitfetch/checkout/remote write",
+    "changed_files": 13,
+    "local_state_basis": "Parent supplies local3e63 with unrelated dirty historical files and savedRoot01a18bc3 stoppedBLOCKED/exit20 after actual3turnaudit; retired612487/612499/612501. No new live observation or state mutation claimed."
+  },
+  "useful_changed_input": "Concrete new controller source exists: opt-in bounded sameRoot diagnosis/monitored blocked waiting, durable stop provenance, queued instruction delivery while blocked, original-gate completion check and final-push exactIHK bundle restoration. This is authorized ordinary harness adoption/reconciliation work, not a new kernel/native source input or permission to replay held work.",
+  "exact_changed_function_scope": {
+    "scripts/run_os_goal.py": [
+      "new m14_m15_closed",
+      "new Campaign.record_stop_diagnostic",
+      "new Campaign.remember_started_turn",
+      "new Campaign.review_blocked_goal",
+      "changed deliver_instruction",
+      "changed remember_goal",
+      "changed record_failure",
+      "changed instructions",
+      "changed begin",
+      "changed request_checkpoint",
+      "changed run",
+      "changed arguments",
+      "changed main status/dry-run fields"
+    ],
+    "scripts/os_goal_repair.py": [
+      "new _text/_historical_error",
+      "blocked_repair_key",
+      "repair_instruction",
+      "blocked_repair_instruction"
+    ],
+    "scripts/os_goal_stop_log.py": [
+      "new bounded field/error/provenance/classification helpers",
+      "write_stop_record durable append+atomic latest"
+    ],
+    "scripts/watch_os_goal.py": [
+      "supervise nested record adds stop-journal provenance at worker_exit/heldclassification/watcherstop/failure; actual should_restart classifier remains unchanged"
+    ],
+    "scripts/os_goal_handoff.py": [
+      "context_record includes stop journal/review/waiting fields"
+    ],
+    ".github/workflows/final-push-tracker.yml": [
+      "replace upstream-only submodule initialization with existing restore_ihk_source.py --repo --destination"
+    ],
+    "documentation_and_tests": [
+      "CAMPAIGN83addedlines",
+      "new scripts/m14-m15-continuous-instruction.txt",
+      "focused continuous/repair/stoplog/handoff/workflow tests; no kernel source change"
+    ]
+  },
+  "source_findings": [
+    {
+      "id": "BLOCKED_WAIT_AND_DIAGNOSTIC",
+      "classification": "USEFUL_BOUNDED_NEW_BEHAVIOR",
+      "evidence": [
+        "https://github.com/phoenix-hacking/mckernel/blob/8fa22bdc77da30d19f7c802fe520d3aa887c81f9/scripts/os_goal_repair.py#L35",
+        "https://github.com/phoenix-hacking/mckernel/blob/8fa22bdc77da30d19f7c802fe520d3aa887c81f9/scripts/run_os_goal.py#L719",
+        "https://github.com/phoenix-hacking/mckernel/blob/8fa22bdc77da30d19f7c802fe520d3aa887c81f9/scripts/run_os_goal.py#L1766"
+      ],
+      "finding": "blocked_repair_key requires sameRoot blocked objective, no active/unknown work,pending/uncertain delivery,current stop/checkpoint,credit error or explicit binding hold. It rejects unknown/current errors unless positively different invocation provenance proves historical. Key ignores heartbeat/token/timestamp fields. review_blocked_goal persists sending receipt before turn/start, remembers startedturn identity, records uncertain delivery and does not resend a stored unchanged key. It never calls goal/set active. No eligiblekey produces waiting_for_input rather than repeated model diagnosis. Wait heartbeat/account monitoring persists; watcher progress_marker returnsNone for blocked waiting, so agent-silence watchdog does not misclassify it as active progressstall."
+    },
+    {
+      "id": "FRESH_RUN_IS_MANUAL_RESUME",
+      "classification": "IMPORTANT_EXISTING_STARTUP_SEMANTICS_NOT_DIAGNOSTIC_ONLY",
+      "evidence": [
+        "https://github.com/phoenix-hacking/mckernel/blob/8fa22bdc77da30d19f7c802fe520d3aa887c81f9/scripts/run_os_goal.py#L1524",
+        "https://github.com/phoenix-hacking/mckernel/blob/8fa22bdc77da30d19f7c802fe520d3aa887c81f9/scripts/run_os_goal.py#L1530",
+        "https://github.com/phoenix-hacking/mckernel/blob/8fa22bdc77da30d19f7c802fe520d3aa887c81f9/scripts/run_os_goal.py#L1584"
+      ],
+      "finding": "Recovered blocked begin preserves BLOCKED at1524-1529. Ordinary fresh --run, even with repair-agent-failures, enters manual resume1530-1583: sends an explicit resume turn then may goal/set active1584-1603 if original blocked snapshot remains. Thus adopting source is inert, but running the documented ordinary command is a goal-resume operation, not a monitoring/read-only check. The opt-in repair flag does not alone provide fresh blocked-monitor-only startup. Do not misuse hidden recovered flags or edited state to simulate authorization."
+    },
+    {
+      "id": "STOPS_USAGE_AND_UNCERTAINTY",
+      "classification": "CONTROL_BOUNDARIES_RETAINED",
+      "evidence": [
+        "https://github.com/phoenix-hacking/mckernel/blob/8fa22bdc77da30d19f7c802fe520d3aa887c81f9/scripts/os_goal_repair.py#L46",
+        "https://github.com/phoenix-hacking/mckernel/blob/8fa22bdc77da30d19f7c802fe520d3aa887c81f9/scripts/run_os_goal.py#L1406",
+        "https://github.com/phoenix-hacking/mckernel/blob/8fa22bdc77da30d19f7c802fe520d3aa887c81f9/scripts/run_os_goal.py#L1780",
+        "https://github.com/phoenix-hacking/mckernel/blob/8fa22bdc77da30d19f7c802fe520d3aa887c81f9/scripts/watch_os_goal.py#L209"
+      ],
+      "finding": "Diagnosis accepts only blocked, not paused/complete/usageLimited. New stops and active state are rechecked before diagnostic mutation; delivery receipts persist first. begin rejects uncertain request state. Normal ChatGPT account/included-usage guards run before source work and refresh in loop; no new credits/API fallback. Current user stop/checkpoint/quota/auth/uncertain delivery remains authoritative. Watcher should_restart rejects blocked normalexit and hard service/usage/uncertain controls; no change makes an exit20 technicalcrash. Fresh explicit manual run retains its preexisting deliberate resume semantics, while automatic recovery is not fresh authorization."
+    },
+    {
+      "id": "EXISTING_SOURCE_NATIVE_HOLDS",
+      "classification": "NO_RELEASE_OR_KERNEL_INPUT",
+      "evidence": [
+        "https://github.com/phoenix-hacking/mckernel/blob/8fa22bdc77da30d19f7c802fe520d3aa887c81f9/scripts/os_goal_repair.py#L80",
+        "https://github.com/phoenix-hacking/mckernel/blob/8fa22bdc77da30d19f7c802fe520d3aa887c81f9/scripts/os_goal_repair.py#L112"
+      ],
+      "finding": "Repair prompt limits action to established ordinary engineering on alreadyauthorized source after changedinput/admission. It explicitly preserves source/native/resource/UNKNOWN/service restrictions and forbids rejected-task reassignment. Plan-encoded source holds remain binding even if not represented by an explicit launcher holdfield; one bounded diagnostic does not make their scope eligible."
+    },
+    {
+      "id": "LATEST_DIRECT_LIMITS_SUPERSEDE_REMOTE_NOTES",
+      "classification": "RECONCILIATION_REQUIRED_BEFORE_FUTURE_LAUNCH",
+      "evidence": [
+        "https://github.com/phoenix-hacking/mckernel/blob/8fa22bdc77da30d19f7c802fe520d3aa887c81f9/CAMPAIGN.md#L25",
+        "https://github.com/phoenix-hacking/mckernel/blob/8fa22bdc77da30d19f7c802fe520d3aa887c81f9/scripts/m14-m15-continuous-instruction.txt",
+        "https://github.com/phoenix-hacking/mckernel/blob/8fa22bdc77da30d19f7c802fe520d3aa887c81f9/scripts/run_os_goal.py#L1940",
+        "https://github.com/phoenix-hacking/mckernel/blob/8fa22bdc77da30d19f7c802fe520d3aa887c81f9/scripts/os_goal_resources.py#L43"
+      ],
+      "finding": "Remote launch/instruction prose says2children and unlimited(-1)restarts, and says userwillstart. Those statements do not override latest actual direct instructions:6directSolHIGH/depth1/onecompositor, stall1200, maxrestarts3. Future reviewed invocation must explicitly preserve current bounds and existing4GiBtotal/max3lightjobs/CPUs0,6,7 plus original reservations/floors. Do not copy remote command/instruction file verbatim or assume latest direct user delegates launch to a future manual user action."
+    },
+    {
+      "id": "SIX_CHILD_PLANNER_CONFLICT",
+      "classification": "COMPATIBILITY_LIMITATION_NOT_NEW_RESOURCE_GRANT_OR_MANDATORY_PLANNER_REWRITE",
+      "evidence": [
+        "https://github.com/phoenix-hacking/mckernel/blob/8fa22bdc77da30d19f7c802fe520d3aa887c81f9/scripts/os_goal_resources.py#L14",
+        "https://github.com/phoenix-hacking/mckernel/blob/8fa22bdc77da30d19f7c802fe520d3aa887c81f9/scripts/os_goal_resources.py#L79"
+      ],
+      "finding": "Resource resolver uses AGENT_MEMORY_GIB=2 and agent_limit=min(cpu_count*2,int(memory//2));82-85 reject larger overrides. Thus maxagents6 with CLI memorygib4 is rejected at ceiling2. Root supplies an alreadyvalidated distinct contract: existing planner/profile ceiling12 accommodates6direct source owners while actual aggregate HOST execution remains4GiB TOTAL by explicit startup/admission contract. Preserve that distinction;12planning is not a12GiB execution grant, no native borrowing, and no silent downgrade to2. The remote2/4command cannot be copied as the six-owner launch contract. No planner rewrite or extra resource authorization is required merely by this static limitation if the existing validated separation is used."
+    },
+    {
+      "id": "STOP_RECORD_AND_ACCEPTANCE",
+      "classification": "USEFUL_NO_ACCEPTANCE_INFLATION",
+      "evidence": [
+        "https://github.com/phoenix-hacking/mckernel/blob/8fa22bdc77da30d19f7c802fe520d3aa887c81f9/scripts/os_goal_stop_log.py#L157",
+        "https://github.com/phoenix-hacking/mckernel/blob/8fa22bdc77da30d19f7c802fe520d3aa887c81f9/scripts/run_os_goal.py#L117"
+      ],
+      "finding": "Stop journal appends bounded allowlisted records with current-invocation attribution and preserves other/unknown diagnostic history; watcher logging does not change restart classification. m14_m15_closed requires original criteria unchanged, exact9/12gate sets without duplicates, both summary milestoneacceptances and every original acceptedflag; percentages alone cannot stop. Completion checkpoint pauses larger active goal rather than declaring the whole-system goal complete."
+    },
+    {
+      "id": "IHK_RESTORE_WORKFLOW",
+      "classification": "SOURCE_ONLY_WORKFLOW_ADOPTION_VALID",
+      "evidence": [
+        "https://github.com/phoenix-hacking/mckernel/blob/8fa22bdc77da30d19f7c802fe520d3aa887c81f9/.github/workflows/final-push-tracker.yml#L35",
+        "https://github.com/phoenix-hacking/mckernel/blob/8fa22bdc77da30d19f7c802fe520d3aa887c81f9/scripts/restore_ihk_source.py#L165"
+      ],
+      "finding": "Workflow now uses existing Git-only pinned-bundle restoration; pinned helper actually supports --repo and --destination and validates committed manifest/gitlink, refusing mismatched/dirty destination. It does not admit builds/native/sourceSDK actions. No restore or CIexecution was performed here."
+    }
+  ],
+  "safe_concrete_adoption": [
+    "Prepare reviewable isolated adoption of pinned8fa harness/workflow changes, reconciling exact changed paths with localdirty historical files. Preserve savedRoot/cursor/budget/receipts/holds; no blanket reset/clean/stash or new session.",
+    "Correct adoption/startup precedence so latest direct6SolHIGH/depth1/onecompositor and1200stall/3restart instructions prevail over remote2/unlimited/userwillstart prose. Retain existing12GiB planner/profile ceiling only as validated source-planning capacity; explicit aggregate HOST execution remains4GiB TOTAL/max3lightjobs/CPUs0,6,7 with original floors/reservations/nativehold.",
+    "Root can use its existing validated ordinary manual resume for the genuine newlyconfirmed harness precedence defect and this code adoption, under the actual savedgoal controls. This is an intentional manual resume, not a claim ordinary --run is diagnostic-only. Do not use --recovered or new repair/continuous/stop-after flags for this adoption. This reviewer launches nothing.",
+    "Reuse reported pinned remote66test proof at its exact scope without rerunning publishedgreenchecks. Any genuinely changed local precedence reconciliation can receive only necessary affected validation under a separate concrete Root task/admission; no code/test action occurred in this review.",
+    "Root alone composes/integrates/reviews normal source/index/publication and any later actual launch, preserving dirtywork and all original held OS source/cohort/native inputs. No mechanical resumption/reassignment of held M14/M15 work follows from source adoption."
+  ],
+  "remaining_risks_and_limits": [
+    "Localdirty compatibility not exercised; no checkout/merge/index mutation performed.",
+    "Reported66passing remote checks and broader130 baseline/candidate equal failures were not rerun or independently treated as a green local production run.",
+    "Original held generic/exec/notification,12remainingproviders,sourceSDK/native/currentfree/cohort/backend gaps remain unchanged; this remote change does not close original M14/M15 acceptance.",
+    "Continuous supervisor does not survive workstationpoweroff without a real later start, and unlimited-restart doc claims remain superseded by actual3restart bound.",
+    "Fresh ordinary-run activation is intentional manual resume; use the existing validated launcher path rather than hidden recovered or new continuous flags. maxagents6/memorygib4 CLI mismatch remains a documented limitation; existing planner12/actualHOST4 contract must stay explicit and must not widen execution grants."
+  ],
+  "actions": {
+    "pinned_GitHub_connector_code_reads": true,
+    "local_readonly_controller_or_source_execution": false,
+    "launcher_or_goal_resume": false,
+    "canonical_repo_index_or_launcher_state_edit": false,
+    "tests_or_published_green_replay": false,
+    "remote_messages_or_writes": false,
+    "sole_local_write": "/home/holden/mckernel-work/m14-m15-scheduler-resume-20261109T211802Z/remote-harness-adoption-review-20261110T0242.json"
+  },
+  "original_acceptance_or_score_credit": 0,
+  "latest_Root_adoption_constraint": "Root may use the already validated ordinary manual launcher resume for the genuine confirmed harness precedence defect and pinned8fa adoption. Do not use --recovered or new continuous/repair/stop-after flags. Preserve6directSolHIGH, existing12GiB planner/profile ceiling versus actual4GiB TOTAL HOST startup execution contract, stall1200/maxrestarts3. Planner ceiling is not an added execution/native resource grant."
+}

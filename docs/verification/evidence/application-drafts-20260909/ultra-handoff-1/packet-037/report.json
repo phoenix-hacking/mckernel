@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-037",
+  "packet_version": 1,
+  "context_sha256": "6e3df6a27cf28b0aecbe4f09748e77dab3199a4bb06a0a8c5379e741fa5a396a",
+  "started_utc": "2026-09-09T10:47:00Z",
+  "finished_utc": "2026-09-09T10:48:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "thread.join-values",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/thread/thread.join-values.c",
+      "oracle": "scripts/application-tests/oracles/thread.join-values.json",
+      "changed_files": ["scripts/application-tests/cases/thread/thread.join-values.c", "scripts/application-tests/oracles/thread.join-values.json"],
+      "parameter_vectors": {"threads": [2, 4, 8], "return_tags": ["0x100 + index"]},
+      "implemented_operations": ["thread creation", "pointer-sized distinct return tags", "exact pthread_join value checks"],
+      "unresolved_oracle_notes": ["Pointer-width ABI and canonical vector output require Max review."],
+      "max_reviewer_question": "Confirm exact pointer-sized return tags and join ordering are part of the native ABI contract."
+    },
+    {
+      "case_id": "thread.create-join-reuse",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/thread/thread.create-join-reuse.c",
+      "oracle": "scripts/application-tests/oracles/thread.create-join-reuse.json",
+      "changed_files": ["scripts/application-tests/cases/thread/thread.create-join-reuse.c", "scripts/application-tests/oracles/thread.create-join-reuse.json"],
+      "parameter_vectors": {"sequential_jobs": [32]},
+      "implemented_operations": ["32 sequential create/join operations", "per-job logical completion", "join-before-next-create ordering"],
+      "unresolved_oracle_notes": ["Guest TID retirement and owner-count evidence must come from runner traces; fixture records logical completion."],
+      "max_reviewer_question": "Confirm runner-side TID retirement evidence in addition to 32 logical completions."
+    },
+    {
+      "case_id": "thread.mutex-trylock",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/thread/thread.mutex-trylock.c",
+      "oracle": "scripts/application-tests/oracles/thread.mutex-trylock.json",
+      "changed_files": ["scripts/application-tests/cases/thread/thread.mutex-trylock.c", "scripts/application-tests/oracles/thread.mutex-trylock.json"],
+      "parameter_vectors": {"mutex_state": ["held", "released"], "operation": ["pthread_mutex_trylock", "pthread_mutex_lock"]},
+      "implemented_operations": ["held mutex trylock", "direct EBUSY return capture", "post-release lock/unlock"],
+      "unresolved_oracle_notes": ["Mutex error-number ABI and scheduler bracket require Max review."],
+      "max_reviewer_question": "Confirm EBUSY is returned directly by trylock and errno is irrelevant."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/thread/thread.join-values.c", "sha256": "bfefa9bf8150d5d7bdfce6eeda011cd070a9f50e23d774c42748c87596743f12"},
+    {"path": "scripts/application-tests/oracles/thread.join-values.json", "sha256": "799ce416ea7eee8bef8264e722dc63b4ba7bc9a990127922811286c779c12f96"},
+    {"path": "scripts/application-tests/cases/thread/thread.create-join-reuse.c", "sha256": "4f8a170d6e650cde2441ceda6392b14360d2627048eecc625839f47d8ff0053c"},
+    {"path": "scripts/application-tests/oracles/thread.create-join-reuse.json", "sha256": "05d95163904347d83749c890bc33676ceb73f2de8aa324c0f4379bfa0e4ece51"},
+    {"path": "scripts/application-tests/cases/thread/thread.mutex-trylock.c", "sha256": "70a976c908af77aea0a5b0a939cfc6f74f3645502cb60d65766877acdf54e11c"},
+    {"path": "scripts/application-tests/oracles/thread.mutex-trylock.json", "sha256": "9d715c2e940804556e4eddf1e4110f3c282e2b799074ef8c16d6f8de66a06345"},
+    {"path": "docs/verification/evidence/application-drafts-20260909/ultra-handoff-1/packet-037/context.json", "sha256": "6e3df6a27cf28b0aecbe4f09748e77dab3199a4bb06a0a8c5379e741fa5a396a"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-037.json --emit-context /tmp/application-packet-037-context-20260909-1.json", "outcome": "PASS; planning metadata only; runtime_authorized=false"},
+    {"command": "python3 -m json.tool packet-037/report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Join values, sequential retirement, and trylock behavior need final native ABI, runner-trace, and scheduler review."],
+  "blocked_execution_capabilities": ["current-inputs", "runtime-transport-fault-injection", "runner-contract"],
+  "first_failure_event": null,
+  "max_escalation": ["Review pointer-sized join values", "Require guest TID retirement traces", "Review direct EBUSY trylock semantics"],
+  "next_packet_id": "packet-038"
+}

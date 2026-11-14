@@ -1,0 +1,32 @@
+test_assembly_component_source_ownership_is_strict (m15_mcctrl_contract_tests.McctrlCompositeKbuildTests) ... test_changed_dependencies_and_owners_remain_required (m15_mcctrl_contract_tests.McctrlCompositeKbuildTests) ... ok
+test_current_stage_and_three_object_graph (m15_mcctrl_contract_tests.McctrlCompositeKbuildTests) ... ok
+test_workflow_collects_all_current_component_records (m15_mcctrl_contract_tests.McctrlCompositeKbuildTests) ... ok
+
+======================================================================
+ERROR: test_assembly_component_source_ownership_is_strict (m15_mcctrl_contract_tests.McctrlCompositeKbuildTests) (component='m15_mmap_trace_gates.o')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/module-tests-1/test_native_rust_mcctrl_composite.py", line 122, in test_assembly_component_source_ownership_is_strict
+    result = closure._parse_assembly_record(name, target, command, text, self.module, SOURCE_ROOT)
+  File "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/module-source-1/candidate/scripts/native_rust_kbuild_link_closure.py", line 1328, in _parse_assembly_record
+    tokens = _shell_tokens(pieces[0], name + " assembly command", allowed_quotes=quote_flags)
+  File "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/module-source-1/candidate/scripts/native_rust_kbuild_link_closure.py", line 744, in _shell_tokens
+    raise LinkClosureError("{0} required quoted argument differs".format(label))
+scripts.native_rust_kbuild_link_closure.LinkClosureError: .m15_mmap_trace_gates.o.cmd assembly command required quoted argument differs
+
+======================================================================
+ERROR: test_assembly_component_source_ownership_is_strict (m15_mcctrl_contract_tests.McctrlCompositeKbuildTests) (component='m15_mm_write_warning.o')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/module-tests-1/test_native_rust_mcctrl_composite.py", line 122, in test_assembly_component_source_ownership_is_strict
+    result = closure._parse_assembly_record(name, target, command, text, self.module, SOURCE_ROOT)
+  File "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/module-source-1/candidate/scripts/native_rust_kbuild_link_closure.py", line 1328, in _parse_assembly_record
+    tokens = _shell_tokens(pieces[0], name + " assembly command", allowed_quotes=quote_flags)
+  File "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/module-source-1/candidate/scripts/native_rust_kbuild_link_closure.py", line 744, in _shell_tokens
+    raise LinkClosureError("{0} required quoted argument differs".format(label))
+scripts.native_rust_kbuild_link_closure.LinkClosureError: .m15_mm_write_warning.o.cmd assembly command required quoted argument differs
+
+----------------------------------------------------------------------
+Ran 4 tests in 4.782s
+
+FAILED (errors=2)

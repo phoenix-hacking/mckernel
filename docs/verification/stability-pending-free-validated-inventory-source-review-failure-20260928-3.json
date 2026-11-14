@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "record_kind": "pending_free_validated_inventory_source_review",
+  "recorded_utc": "2026-09-28T09:41:00Z",
+  "status": "FAIL_VALIDATED_INVENTORY_SOURCE",
+  "sources": {
+    "kernel/rust/mem_helpers.rs": "72cb38aec0a39975ec4fb094ba5a36ac08d719116653d7f3c51e13465f6bbb32",
+    "kernel/rust/tests/pending_free_batch_actual_harness.py": "c10f92c33457488c9b80a7cf874abcbacaee2f5a49c21beafc6b63708f71487c",
+    "kernel/rust/tests/pending_free_batch_vectors.rs": "4cdc5a57fe64135071ac71c872e663d5676396b386236430ac42e2e0131d64cd",
+    "kernel/rust/tests/pending_free_partial_release_controls.c": "c9aaa91c5639170e30b123639fce2b0b3813574c4b563d520c340a06a80b78b7",
+    "kernel/mem.c": "167ad2b976bcdec048a625dedf68a9b7c1ef6db7c57f3ceddf3582d54887101a"
+  },
+  "blocking_findings": [
+    "Drain casts unrestricted usize count to CInt after mutation/callbacks; oversized cardinality must reject during preflight.",
+    "Extracted Rust fixture omits PAGE_SHIFT/PAGE_SIZE used by the validator.",
+    "C partial-release controls are handwritten/uncalled and neither exact C result nor fallback body is compiled/invoked by the future harness.",
+    "Foreign/link/missing vectors reject on an unrelated NULL inventory entry before reaching their target invariant.",
+    "Exact callback order/arguments, reuse preservation, new-helper independent heads, capacity/count/overflow/nonmutation and free-dispatch fallback controls are incomplete."
+  ],
+  "verified_source_scope": "The private helper receives inventory independently of links, bounds checks to known descriptors, consumes validation into retained ownership, resets the source and captures callback arguments before release without later descriptor reads. Exported production callers remain unwired.",
+  "next": "Apply one bounded coherent correction to implementation and extracted controls, then independently re-review before Layer-B preparation.",
+  "compilation_or_execution_released": false,
+  "production_integration_released": false,
+  "acceptance_credit": false
+}

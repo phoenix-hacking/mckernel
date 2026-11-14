@@ -1,0 +1,22 @@
+--- /home/holden/mckernel-work/host-preparation/native-second-stop-case-preparation-20261021-1/current053d-normalization-runtime-preparation-1/runtime-source-1/two-generation-namespace-4/native_diagnostic_runner.py
++++ /home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/runtime-current68-successor-1/native_diagnostic_runner.py
+@@ -17,7 +17,7 @@
+ import sys
+ 
+ 
+-_HERE = Path(__file__).resolve().parent
++_HERE = Path('/home/holden/mckernel-work/host-preparation/native-second-stop-case-preparation-20261021-1/current053d-normalization-runtime-preparation-1/runtime-source-1/two-generation-namespace-4')  # Exact unchanged qualified diagnostic/backend/QMP siblings.
+ _SAFE_NAME = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,63}\Z")
+ 
+ 
+@@ -57,8 +57,8 @@
+     if (Path(diagnostic.__file__).resolve() != source or
+             hashlib.sha256(source.read_bytes()).hexdigest() != '1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e'):
+         raise ValueError('M05 private diagnostic binding only')
+-    adapter_path = _HERE / 'case_evaluator.py'
+-    if hashlib.sha256(adapter_path.read_bytes()).hexdigest() != '8e6953e40d7ade681c72454da97f992299ef1e4b38ee48380a8b38ce17f6546c':
++    adapter_path = Path('/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/runtime-current68-successor-1/case_evaluator.py')
++    if hashlib.sha256(adapter_path.read_bytes()).hexdigest() != 'fe00a5808880d980df4b6df34a0a3b068fa49417fbd58edef721174957ca2e43':
+         raise ValueError('M05 adapter source identity drift')
+     adapter = _module('m05_runner_case', adapter_path)
+     _, _, frozen = adapter.binding(str(manifest_path), adapter.MANIFEST_SHA)

@@ -1,0 +1,81 @@
+{
+  "schema": "mckernel.native-shared-heavy-scratch18-source-checkpoint.v1",
+  "captured_at": "2026-10-01T06:44:40-07:00",
+  "base_checkpoint": "1145042339afbc086c9c11e816c6dd97081be393",
+  "status": "PASS_SOURCE_SUCCESSOR_COMPOSITION_AND_PREPARATION_HELPER",
+  "policy_sha256": {
+    "GOAL.md": "76c4f5d12e3f233c8dc4f8f1a77dd1f2eae9df2ff8fb9f4000ef5a2e94c0bcc3",
+    "START.md": "1698d3429e71083634584dea7f78d22ff9e2927858de0dc714f829f9b3d6216c",
+    "CONVERGENCE.md": "f6938bd207d6fa2c0898def482e9bb4bd0cf173937fe55c2111a369d3393e86a",
+    "HANDOFF.md_live": "331d548049fc8313d59fbe8f3cdc98680e5884f4e0eff1483aca24807792ab32",
+    "HANDOFF.md_launcher_predecessor": "bdc946109f96d5681a02c43542efa2036af5cb842c1d21e1f82e642c110af8c5"
+  },
+  "review_history": [
+    "PASS_SOURCE_SHARED_HEAVY for the common build/image/guest lock mechanism",
+    "BLOCK_SCRATCH18_RELEASE because active build and image exclusions still used the terminal scratch17 namespace",
+    "bounded correction advanced active namespaces to scratch18 and retained scratch17 as rejected history",
+    "first rereview stopped after 252 passing tests and one stale-fixture retired-exclusion error",
+    "bounded fixture correction passed independent rereview with 263 tests"
+  ],
+  "selective_target": {
+    "parent": "50b084322610a9326b1b7b528edd4cd73b635632",
+    "expected_status_counts": {"A": 5, "M": 9},
+    "files": {
+      "scripts/native_exact_historical_lease_observer.py": "fad2dd08fdc098c1dcda1d2fa8eaf9fc885f64d4054c9ca85ad71f7a5000fed0",
+      "scripts/native_rust_exact_build_container_owner.py": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1",
+      "scripts/native_rust_exact_build_image_prepare.py": "45cb12e0fd58d164468badfb99a3ed922e65e06046bf38b4a50e27e18595a27b",
+      "scripts/native_rust_exact_disk_build_wrapper.py": "788be3f5d31620d0aff0bd4e480d7bbbbde2f8f1dc5dcf671ad2ebf114107894",
+      "scripts/native_rust_exact_mckernel_image_container_owner.py": "97e666ee8fbde3fa34f6341dce87581c1c948832f9d84c7a8ffb137056fbdf0a",
+      "scripts/qemu-mckernel-guest.sh": "7e84063a1536addeb8c50f18002853aea1fd817f0b0be96d7f6b3b402bfd00d5",
+      "scripts/qemu_guest_heavy_v1.py": "23a052475522808ff5c7b02214b15e011cc317f681fc772f7cfaace0f2aef44b",
+      "scripts/tests/test_native_exact_historical_lease_observer.py": "7420e76cfcf43057e51e679c25346ce60e081fd34b9f38ea5c43fcf966bb3b4a",
+      "scripts/tests/test_native_rust_exact_build_container_owner.py": "e3a8a821048d78281a0edaff13cf8cbc01c174ba4592911578d8bace6327c224",
+      "scripts/tests/test_native_rust_exact_build_image_prepare.py": "7931bcb899a4dd13cc1f747ba29ffb55d4d57766045ed15fdd6b61d0c698dec3",
+      "scripts/tests/test_native_rust_exact_disk_build_wrapper.py": "07f920ca57eb2eb2cf2db1a4f7f00048000f1223cefaa92155f386db20c2119b",
+      "scripts/tests/test_native_rust_exact_mckernel_image_container_owner.py": "f78b2641c1090eade3435471a62e470e731e43d1347e0862647b248c88934c48",
+      "scripts/tests/test_qemu_guest_heavy_v1.py": "f9c76862bc33a6fb61e041d13493e966d258c67b8d94c3a4e9d59e1f05db2365",
+      "scripts/tests/test_native_shared_heavy_entry_contract_20261001.py": "6d8acd271ea0def83512235cab26c44686051dd785a6c436bc7f831e9d611e65"
+    }
+  },
+  "dispatcher_side": {
+    "scratch17_terminal_packet_sha256": "078c34b27d72acdbfce0c8d97f63c453687e43fc15b48ee2e50311e4f3e2c573",
+    "scratch17_terminal_test_sha256": "94ddd5f40440fed82f6467d4063f0348de2ac737397f8d26ed6878b828541b14",
+    "scratch18_preparation_sha256": "15b64960af2f0783451fa4f2414fcbb7848440b28913b099a8d2d2733759c1b0",
+    "scratch18_preparation_test_sha256": "da433055c05f07cd04dd681a8368030c71ff0cc67bef111fdc7161a4bd17495a",
+    "scratch18_futex_packet_sha256": "7f63651f61b541d33333c956cc3e3d924bc028ce83eb21c8655ea6edcb6a4bdb",
+    "scratch18_futex_packet_test_sha256": "0c4c053249ea9e3d5f6981f1b05dcb680510dc9ebcf69f18c699c0f5fae9e56e"
+  },
+  "independent_tests": {
+    "shared_successor": "PASS 263/263; CPUs 6-7; RLIMIT_AS 3 GiB",
+    "scratch18_preparation": "PASS 13/13 after preserving initial 11-pass/1-error/1-failure fixture result",
+    "scratch18_futex_packet": "PASS 5/5 after correcting invented case names and terminal syscall count",
+    "guest_and_cpu_policy": "PASS 63/63; 60 guest-heavy plus 3 CPU-policy cases",
+    "shell_syntax_and_diff": "PASS"
+  },
+  "live_reconciliation": {
+    "boot_id": "c733d83b-a5ae-4f91-9ce6-9f8ccf119afd",
+    "historical_observer": "PASS_READ_ONLY",
+    "historical_tombstones_authenticated": 7,
+    "shared_heavy_lock": "absent",
+    "live_campaign_heavy_processes": 0,
+    "live_campaign_containers": 0,
+    "host_free_bytes": 23610621952,
+    "scratch_free_bytes": 15452831744,
+    "memory_available_bytes": 24400297984
+  },
+  "limitations": [
+    "source and helper review is not a build, guest or execution release",
+    "the concrete selective target must still be created, pushed, fetched and verified against all 14 paths",
+    "the preparation helper checks local target availability; fetched-origin authority remains an external prerequisite",
+    "expected_delta is optional and not exposed through the CLI; the concrete execution packet must bind the verified target file/hash allowlist",
+    "scratch17 remains terminal non-releasable and must never be mutated or rerun"
+  ],
+  "counters": {
+    "compiled_current_candidate": 1,
+    "diagnostic_guest_passes": 5,
+    "formal_application_acceptances": 0,
+    "production_gates": "6/130",
+    "language_gates": "0/7"
+  },
+  "next_action": "checkpoint these exact source blobs, create and fetch-verify the 14-path side target with parent 50b, then bind that exact target and allowlist into a fresh reviewed scratch18 preparation invocation"
+}

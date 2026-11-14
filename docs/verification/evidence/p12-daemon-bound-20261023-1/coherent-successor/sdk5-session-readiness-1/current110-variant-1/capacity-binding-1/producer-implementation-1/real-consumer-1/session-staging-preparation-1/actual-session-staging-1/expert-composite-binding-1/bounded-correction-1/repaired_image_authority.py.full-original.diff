@@ -1,0 +1,295 @@
+--- frozen-current110/repaired_image_authority.py
++++ private-correction/repaired_image_authority.py
+@@ -1,251 +1,45 @@
+-"""Case-specific NEW205 source/retention joins; never an execution release.
+-
+-The independent NEW205 report interface is source-fixed below. Unknown actual
+-artifacts remain refused before effects. A binding cannot choose a PASS schema
+-or status; old03a/fixed-FP artifact decisions are never substituted.
++"""Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++Private current68 authority successor. Inherited205 context is immutable input,
++while genuine current68 source/build/formal receipts authorize the new image.
++No current acceptance is fabricated by this link record or this validator.
+ """
+ from pathlib import Path
+-import hashlib,json,os,stat,struct
+-REQUEST=Path('/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/image-request.json')
+-REQUEST_SHA='8b7b34ede927594675ad8cd303c24c233f4dcdaaa414c5a4c1171adc1139cbe1'
+-SOURCE_MANIFEST_SHA='d3495242284b653ef10de9f4f70706fc0ea118696189aa957305ce8bf5df8098'
+-ROLE_PATHS=Path('/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retention-role-paths.json')
+-ROLE_PATHS_SHA='5eba2c210466f9415a5cc4d80692cde57eb4a715505394c033a419bb8654a8f8'
+-REPORT_ROOT=Path('/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1')
+-BASE_CONTRACT={'path':str(REPORT_ROOT/'NEW205-CANONICAL-REPORT-FIXED-CONTRACT.json'),'sha256':'2585003998fbbeed875158abc7dad9177302c336549dfb13bad54c735ea0d788','bytes':30353}
+-TYPES_CONTRACT={'path':str(REPORT_ROOT/'NEW205-CANONICAL-REPORT-FIXED-CONTRACT-v2.json'),'sha256':'56a54c83f7049188650a4afc37ef66ad1ee172f67b709fefe6037c449abd64a8','bytes':32997}
+-CONTRACT={'path': '/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/NEW205-FRESH8B-CANONICAL-CONTRACT-PROPOSAL-v4.json', 'sha256': '4ed45a1ed2ec5c827dc3df8c98a12a42b5e3b4c160c57cbbf1c686d370d3013a', 'bytes': 33275}
+-REPORT=REPORT_ROOT/'NEW205-ACTUAL-PRODUCTION-ARTIFACT-REVIEW.json'
+-PHASES={'guard_retirement':'PASS_POSITIVE_CLIENT_OWNER_GUARD_RETIREMENT','postbuild_facts':'PASS_ACTUAL_NEW205_OPTIMIZED_DEFAULT_CONSUMERS_AND_DESCRIPTORS','production_compilers':'PASS_FULL_FRESH_C110_SYSCALL_C10_C8_LAYOUT27_TWO_CRATES','production_image':'PASS_ACTUAL_NEW205_SUPPORTED_IMAGE_BUILD','retention':'PASS_ACTUAL_ACTION_SPECIFIC_37_ROLES_33COPY_4REUSE','runtime':'NOT_GRANTED','source':'BOUND_ACTUAL_NEW205_REQUEST_AND_MATERIALIZATION'}
+-ENGINE_FIELDS={'path','device','inode','uid','gid','mode','size','mtime_ns','ctime_ns','nlink','sha256'}
+-class PendingCanonical205(ValueError):pass
++import hashlib,json,stat
++D=Path(__file__).resolve().parent
++LINKS_SHA='14bc2034e4f11fe679ebef354b367dc61d5133321d0718a236f7e92aa1776d02'
+ def need(ok,message):
+     if not ok:raise ValueError(message)
+-def pairs(rows):
+-    out={}
+-    for key,value in rows:
+-        need(key not in out,'duplicate authority JSON key');out[key]=value
+-    return out
+-def checked(row,maximum=4*1024**2):
+-    need(type(row) is dict and {'path','sha256'}<=set(row),'missing genuine authority reference')
+-    path=Path(row['path']);need(path.is_absolute() and not path.is_symlink() and path.resolve(strict=True)==path,'canonical authority reference')
+-    fd=os.open(path,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK)
+-    with os.fdopen(fd,'rb') as stream:
+-        before=os.fstat(stream.fileno());need(stat.S_ISREG(before.st_mode) and before.st_nlink==1 and before.st_size<=maximum,'bounded authority JSON file')
+-        raw=stream.read(maximum+1);after=os.fstat(stream.fileno())
+-        stable=lambda value:tuple(getattr(value,key) for key in ('st_dev','st_ino','st_uid','st_gid','st_mode','st_size','st_nlink','st_mtime_ns','st_ctime_ns'))
+-        need(stable(before)==stable(after)==stable(os.lstat(path)) and len(raw)==after.st_size,'authority JSON FD changed')
+-    need(len(raw)<=maximum and hashlib.sha256(raw).hexdigest()==row['sha256'],'authority reference hash')
+-    return json.loads(raw,object_pairs_hook=pairs)
+-def observe(path):
+-    """Same held-FD eleven-field shape as actual205 postbuild binder.
+-
+-    Source-vs-copy metadata are not equated: each side joins its own engine FD.
+-    Only retained bytes need remain live after accepted physical cleanup.
+-    """
+-    fd=os.open(path,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK)
+-    try:
+-        before=os.fstat(fd);need(stat.S_ISREG(before.st_mode) and before.st_nlink==1,'retained regular single-link file')
+-        digest=hashlib.sha256();size=0
+-        while True:
+-            block=os.read(fd,65536)
+-            if not block:break
+-            size+=len(block);need(size<=before.st_size,'retained bytes grew');digest.update(block)
+-        after=os.fstat(fd)
+-        stable=lambda value:tuple(getattr(value,key) for key in ('st_dev','st_ino','st_uid','st_gid','st_mode','st_size','st_nlink','st_mtime_ns','st_ctime_ns'))
+-        need(stable(before)==stable(after)==stable(os.lstat(path)) and size==after.st_size,'retained FD metadata changed')
+-        return dict(path=str(path),device=after.st_dev,inode=after.st_ino,uid=after.st_uid,gid=after.st_gid,mode=oct(stat.S_IMODE(after.st_mode)),size=size,mtime_ns=after.st_mtime_ns,ctime_ns=after.st_ctime_ns,nlink=after.st_nlink,sha256=digest.hexdigest())
+-    finally:os.close(fd)
+-def engine_metadata(metadata,expected_path):
+-    need(type(metadata) is dict and set(metadata)==ENGINE_FIELDS and metadata['path']==expected_path,'eleven-field205 engine descriptor')
+-    need(all(type(metadata[key]) is int and metadata[key]>=0 for key in ('device','inode','uid','gid','size','mtime_ns','ctime_ns','nlink')),'engine FD integer fields')
+-    need(type(metadata['sha256']) is str and len(metadata['sha256'])==64 and all(c in '0123456789abcdef' for c in metadata['sha256']),'engine FD hash field')
+-    need(type(metadata['mode']) is str and metadata['mode']==oct(int(metadata['mode'],8)) and metadata['nlink']==1,'engine FD mode/link type')
+-def validate_retention_rows(authority,objects,roles):
+-    """The actual retainer stores37 pairs, each with two full FD records.
+-
+-    Canonical role/action projection joins that exact raw engine list. Reuse
+-    keeps this build's four retained authorities; source and copy metadata are
+-    each checked against their own captured descriptor, never against each other.
+-    """
+-    need(len(roles)==37 and sum(r['action']=='copy' for r in roles)==33 and sum(r['action']=='reuse' for r in roles)==4,'exact37/33copy/4reuse roles')
+-    need(authority['role_count']==37 and authority['copy_count']==33 and authority['reuse_count']==4 and authority['metadata_rows']==74,'canonical37/33/4/74 counts')
+-    need(type(objects) is list and len(objects)==37 and len(authority['pairs'])==37 and len(authority['original_authorities'])==37,'exact37 actual engine pairs/authorities')
+-    raw={row['original']['path']:row for row in objects}
+-    canonical={row['kind']:row for row in authority['pairs']}
+-    originals={row['kind']:row for row in authority['original_authorities']}
+-    need(len(raw)==len(canonical)==len(originals)==37,'duplicate retention identity')
+-    selected=None
+-    for role in roles:
+-        kind=role['role'];row=canonical[kind];original=originals[kind];captured=raw[role['original_path']]
+-        need(set(row)=={'kind','action','original','retained'} and row['action']==role['action'],'canonical role/action pair')
+-        expected_keys={'kind','action','original','retained'}|({'retained_authority'} if role['action']=='reuse' else set())
+-        need(set(original)==expected_keys and original['action']==role['action'] and original['retained']==role['retained_path'],'release role/action authority')
+-        need(set(captured)=={'original','retained','outside_generic_receipt_inventory'} and captured['outside_generic_receipt_inventory'] is True,'actual engine retained-objects row')
+-        for side,path in (('original',role['original_path']),('retained',role['retained_path'])):
+-            engine_metadata(row[side],path)
+-            need(row[side]==captured[side],'same complete captured engineFD '+side)
+-        need(original['original']==row['original'],'release original eleven-field authority')
+-        need(row['original']['size']==row['retained']['size'] and row['original']['sha256']==row['retained']['sha256'],'retention byte identity')
+-        need(observe(role['retained_path'])==row['retained'],'current retained eleven-field FD join')
+-        if role['action']=='reuse':
+-            need(kind in {'cpu.c.o','process.c.o','mckernel_rust.o','mckernel.img'} and original['retained_authority']==row['retained'],'exact THIS205 primary reuse authority')
+-        if kind=='mckernel.img':selected=row
+-    need(selected is not None,'one actual205 image role')
+-    return selected
+-def validate_primary_reuse(retention,primary,copies,roles):
+-    """Typed canonical primary pairs join this build's real copier receipt."""
+-    names={'cpu.c.o':'cpu','process.c.o':'process','mckernel_rust.o':'rust','mckernel.img':'image'}
+-    need(primary['count']==4 and len(primary['pairs'])==4,'exact four typed primary pairs')
+-    need(copies['status']=='PASS_EXACT_FOUR_ARTIFACT_RETENTION_ONLY' and set(copies['artifacts'])==set(names.values()),'actual four primary copy receipt')
+-    by_kind={row['kind']:row for row in retention['pairs']}
+-    typed={row['role']:row for row in primary['pairs']}
+-    need(set(typed)==set(names.values()),'unique typed primary roles')
+-    for role in roles:
+-        if role['action']!='reuse':continue
+-        row=by_kind[role['role']];original=row['original'];retained=row['retained'];name=names[role['role']]
+-        need(typed[name]==dict(role=name,original=original,retained=retained),'typed primary full11 descriptors')
+-        copied=copies['artifacts'][name]
+-        source=dict(original);source['dev']=source.pop('device');source['bytes']=source.pop('size');source['mode']=int(source['mode'],8);source.pop('nlink')
+-        need(copied['source']==source and copied['retained_path']==retained['path'] and copied['retained_dev']==retained['device'] and copied['retained_inode']==retained['inode'] and copied['bytes']==retained['size'] and copied['sha256']==retained['sha256'],'action-specific actual205 reuse source/retained joins')
+-def ref3(row):
+-    need(type(row) is dict and set(row)=={'path','sha256','bytes'},'canonical reference exact path/sha256/bytes')
+-    need(type(row['path']) is str and Path(row['path']).is_absolute(),'canonical reference absolute path')
+-    need(type(row['bytes']) is int and row['bytes']>=0,'canonical reference integer bytes')
+-    need(type(row['sha256']) is str and len(row['sha256'])==64 and all(c in '0123456789abcdef' for c in row['sha256']),'canonical reference lowercase sha256')
+-    return row
+-def read_ref(row,maximum=4*1024**2):
+-    ref3(row);need(Path(row['path']).stat().st_size==row['bytes'],'canonical reference byte size')
+-    return checked(row,maximum)
+-def complete_tree(value):
+-    """Actual canonical reports cannot carry the draft's null/placeholders."""
+-    need(value is not None,'null actual NEW205 report field')
+-    if isinstance(value,dict):
+-        if {'path','sha256','bytes'}<=set(value):ref3(value)
+-        for item in value.values():complete_tree(item)
+-    elif isinstance(value,list):
+-        for item in value:complete_tree(item)
+-    elif isinstance(value,str):need(value!='PENDING' and not value.startswith('PENDING_'),'pending actual NEW205 report field')
+-def validated_artifact(authority):
+-    """Consume the one source-fixed independent NEW205 production report.
+-
+-    Its genuine selected hash is late data; its schema/decision/phase and
+-    source/retention obligations are not selected by that data. Machine facts
+-    are accepted only through the independent report, not re-inferred from
+-    export names or old machine bytes by this runtime consumer.
+-    """
+-    need(type(authority) is dict and set(authority)=={'request','whole_source_manifest','materialization_receipt','retention_roles','canonical205_facts_review','runtime_image_source_pair'},'repaired205 authority input keys')
+-    contract=read_ref(CONTRACT);base_contract=read_ref(BASE_CONTRACT);types_contract=read_ref(TYPES_CONTRACT)
+-    need(all(types_contract[key]==value for key,value in base_contract.items()),'v2 preserves original fixed report contract')
+-    # Only these source-fixed reference slots differ for the genuine fresh8b
+-    # operation. The entire amended contract is independently hash-bound above;
+-    # binding data cannot choose replacements, predicates or acceptance bits.
+-    expected=json.loads(json.dumps(types_contract))
+-    for section,key in (('source_authority','request'),('source11','authority'),('source11','publication'),('source_request_bindings','value_type'),('retained_authority','role_manifest'),('postbuild_facts','capture_contract'),('postbuild_facts','facts_producer_contract')):
+-        expected[section][key]=contract[section][key]
+-    need(expected==contract,'only seven source-fixed fresh8b reference/text amendments')
+-    need(contract['source_authority']['request']['path']==str(REQUEST) and contract['source_authority']['request']['sha256']==REQUEST_SHA,'exact fresh FULL8b operation request')
+-    need(contract['retained_authority']['role_manifest']['path']==str(ROLE_PATHS) and contract['retained_authority']['role_manifest']['sha256']==ROLE_PATHS_SHA,'exact fresh37 role plan')
+-    need(authority['request']==contract['source_authority']['request'],'fixed fresh FULL8b NEW205 request reference')
+-    request=read_ref(authority['request'],64*1024**2)
+-    need(authority['whole_source_manifest']==contract['source_authority']['manifest'],'whole6948 source reference')
+-    manifest=read_ref(authority['whole_source_manifest'],8*1024**2)
+-    need(authority['materialization_receipt']==contract['source_authority']['materialization_receipt'],'fixed materialization receipt')
+-    receipt=read_ref(authority['materialization_receipt'])
+-    need(len(manifest['materialized_kinds'])==6948 and receipt['source_entries']==6948,'whole6948 source closure')
+-    need(request['source_root']==receipt['source'] and request['source_derivative_sha256']==receipt['source_derivative_sha256'] and request['materialization_sha256']==receipt['materialization_sha256'],'actual205 source materialization join')
+-    need(authority['retention_roles']==contract['retained_authority']['role_manifest'],'fixed37 action-specific role plan')
+-    roles=read_ref(authority['retention_roles'])['roles']
+-    if authority['canonical205_facts_review'] is None:
+-        raise PendingCanonical205('PENDING genuine NEW205 production report/image/15facts/37roles; source contract is not artifact acceptance')
+-    need(authority['canonical205_facts_review']['path']==str(REPORT),'fixed independent NEW205 actual report path')
+-    report=read_ref(authority['canonical205_facts_review']);complete_tree(report)
+-    need(set(report)==set(contract['required_top_level_fields']),'fixed canonical NEW205 report fields')
+-    need(report['schema']=='mckernel.independent-four-callback-affinity-image-actual-review.v1' and report['status']=='PASS' and report['decision']=='PASS_ACTUAL_NEW205_PRODUCTION_IMAGE_ARTIFACT_AND_GUARD_RETIREMENT','fixed canonical NEW205 acceptance literals')
+-    need(report['reviewer']=='/root/next_replace_tid_review' and report['phase_status']==PHASES,'fixed independent reviewer/phase statuses')
+-    for key,value in contract['acceptance_bits'].items():need(report[key] is value,'production-only acceptance bit '+key)
+-    source=report['source_authority'];fixed=contract['source_authority']
+-    need(set(source)==set(fixed['required_fields']),'fixed full source authority fields')
+-    for key in fixed['required_fields']:need(source[key]==fixed[key],'actual205 source authority '+key)
+-    need(report['source_request_bindings']=={key:source[key] for key in ('request','manifest','materialization_receipt')},'same actual source request refs')
+-    source11=report['source11'];spec=contract['source11']
+-    need(set(source11)==set(spec['required_fields']) and source11['count']==11,'actual11 consumed control sources')
+-    need(source11['authority']==spec['authority'] and source11['publication']==spec['publication'],'source11 fixed authority/publication refs')
+-    control=read_ref(source11['authority'])
+-    need(source11['source_sha256']==control['source_sha256'] and len(source11['source_sha256'])==11,'exact11 guard source closure')
+-    for key in ('guard','executed_image_owner','declared_host_owner'):
+-        value=ref3(source11[key]);need(source11['source_sha256'].get(value['path'])==value['sha256'],'consumed control source '+key)
+-    compiler=report['compiler_proofs']
+-    need(set(compiler)==set(contract['compiler_proofs']['required_fields']) and compiler['no_old_compiled_artifacts_adopted'] is True,'fresh full C110/C10/C8/layout27/two-crate/image proof fields')
+-    for key in set(compiler)-{'layout27','no_old_compiled_artifacts_adopted'}:ref3(compiler[key])
+-    layout=compiler['layout27']
+-    need(set(layout)=={'cell_count','encoding','cells','vectors','common_sha256','affinity_receipt'} and layout['cell_count']==27 and layout['encoding']=='27_u64_le','actual layout27 typed authority')
+-    need(type(layout['cells']) is list and len(layout['cells'])==27 and all(type(value) is int and 0<=value<2**64 for value in layout['cells']),'actual27 uint64 cells')
+-    need(hashlib.sha256(struct.pack('<27Q',*layout['cells'])).hexdigest()==layout['common_sha256'],'actual layout cells/raw byte hash')
+-    need(set(layout['vectors'])=={'selected_C','fallback_C','actual_Rust'},'actual three layout vector roles')
+-    for vector in layout['vectors'].values():
+-        engine_metadata(vector,vector['path']);need(vector['size']==216 and vector['sha256']==layout['common_sha256'],'actual compiler vector byte identity')
+-    ref3(layout['affinity_receipt'])
+-    affinity=report['affinity_default_witnesses'];spec=contract['affinity_default_witnesses']
+-    need(set(affinity)==set(spec['required_fields']) and affinity['source_files']==spec['source_files'],'actual changed affinity source/default witness fields')
+-    need(type(affinity['callers']) is dict and set(affinity['callers'])==set(spec['required_caller_roles']) and all(type(value) is dict and bool(value) for value in affinity['callers'].values()),'exact four typed actual affinity caller roles')
+-    need(type(affinity['export_matrix']) is dict and set(affinity['export_matrix'])==set(spec['required_exports']) and all(type(value) is dict and bool(value) for value in affinity['export_matrix'].values()),'exact four typed default affinity export witnesses')
+-    need(type(report['four_callback_witnesses']) is dict and bool(report['four_callback_witnesses']),'actual four release callback witness block')
+-    postbuild=report['postbuild_facts'];spec=contract['postbuild_facts']
+-    need(set(postbuild)==set(spec['required_fields']) and postbuild['operation_count']==15,'actual15 postbuild completion fields')
+-    need(postbuild['capture_contract']==spec['capture_contract'],'source-fixed actual15 capture contract')
+-    for key in contract['report_value_types']['postbuild_ref3_roles']:ref3(postbuild[key])
+-    facts=read_ref(postbuild['facts_output'])
+-    need(facts['schema']=='mckernel.new205.actual-fifteen-mechanical-facts.v1' and facts['status']=='PASS_NEW205_FIFTEEN_COMPLETION_AND_MECHANICAL_FACTS_ONLY' and facts['phase']=='complete_mechanical_postbuild','actual NEW205 mechanical facts literals')
+-    producer_contract=read_ref(spec['facts_producer_contract'])
+-    need(postbuild['facts_source']==producer_contract['producer'],'source-fixed new205 mechanical producer')
+-    boundary=read_ref(producer_contract['source_boundary'])
+-    need(facts['request']==authority['request'] and facts['completion']==postbuild['completion'] and facts['actual_source_pins']==boundary['actual_source_pins'],'mechanical facts source/completion joins')
+-    need({key:value['sha256'] for key,value in facts['actual_source_pins'].items()}==fixed['actual_file_pins'],'exact actual source hash projection, no liveREPO equality gate')
+-    for key in ('production_artifact_acceptance','native_acceptance','compute_C_retirement'):need(facts[key] is False,'mechanical facts grant no independent acceptance')
+-    guard=report['guard_retirement']
+-    need(set(guard)==set(contract['guard_retirement']['required_fields']) and guard['retired'] is True,'positive actual owner/guard retirement fields')
+-    need(guard['physical_cleanup_state'] in ('REQUIRES_SEPARATE_ACCEPTED_CLEANUP','ACTUAL_PHYSICAL_RELEASE_SEPARATELY_ACCEPTED'),'artifact report separate physical cleanup state')
+-    retention=report['retained_authority']
+-    need(set(retention)==set(contract['retained_authority']['exact_fields']),'fixed action-specific retained authority fields')
+-    engine=read_ref(retention['engine_result']);objects=read_ref(retention['objects_manifest'])
+-    need(engine['status']=='PASS_FINITE_EXACT_RETENTION_ONLY' and engine['pairs']==37 and type(engine['total_bytes']) is int and 0<=engine['total_bytes']<=117440512,'finite actual37 engine result')
+-    for key in ('cleanup_authorized','artifact_acceptance','root','docker'):need(engine[key] is False,'retention engine has no extra authority')
+-    selected=validate_retention_rows(retention,objects,roles)
+-    retained_by_kind={row['kind']:row for row in retention['pairs']}
+-    vector_roles={'selected_C':'affinity-selected-syscall.bin','fallback_C':'affinity-fallback-syscall.bin','actual_Rust':'affinity-actual-rust-layout.bin'}
+-    for name,kind in vector_roles.items():
+-        row=retained_by_kind[kind];need(layout['vectors'][name] in (row['original'],row['retained']),'actual compiler vector/retained fullFD authority')
+-    receipt_pair=retained_by_kind['clone-affinity-production-checks.json'];receipt_ref=layout['affinity_receipt']
+-    need(any(receipt_ref==dict(path=side['path'],sha256=side['sha256'],bytes=side['size']) for side in (receipt_pair['original'],receipt_pair['retained'])),'layout receipt actual retained authority')
+-    retained_receipt=receipt_pair['retained'];affinity_receipt=read_ref(dict(path=retained_receipt['path'],sha256=retained_receipt['sha256'],bytes=retained_receipt['size']))
+-    need(affinity_receipt['layout_bytes_sha256']==layout['common_sha256'],'actual affinity receipt/layout vector bytes join')
+-    primary=report['existing_primary_pairs']
+-    need(set(primary)=={'count','copier_receipt','pairs'},'typed primary pair fields')
+-    validate_primary_reuse(retention,primary,read_ref(primary['copier_receipt']),roles)
+-    need(len({row['original']['path'] for row in primary['pairs']})==len({row['retained']['path'] for row in primary['pairs']})==4,'unique primary source and copy paths')
+-    need(set(report['actual_artifacts'])=={'cpu','process','rust','image'},'actual4 supported production artifacts')
+-    for row in primary['pairs']:
+-        need(report['actual_artifacts'][row['role']]==row['original'],'actual artifact/primary full FD join')
+-        need(all(row['original'][key]==row['retained'][key] for key in ('uid','gid','mode','size','sha256')),'primary copier preserved properties')
+-        need((row['original']['device'],row['original']['inode'])!=(row['retained']['device'],row['retained']['inode']),'primary distinct source/copy inode identities')
+-    return selected
+-def validate(authority,runtime_image):
+-    selected=validated_artifact(authority)
+-    # Never chmod a retained production artifact.
+-    normalized=authority['runtime_image_source_pair']
+-    need(normalized['source']==selected['retained'],'normalized runtime image source is the actual205 retained image')
+-    actual=observe(runtime_image['path'])
+-    need(normalized['retained']==actual and actual['mode']=='0o755' and actual['sha256']==selected['retained']['sha256'] and actual['size']==selected['retained']['size'],'byteidentical private0755 runtime image')
+-    need(runtime_image['sha256']==actual['sha256'] and runtime_image['size']==actual['size'] and runtime_image['mode']==stat.S_IFREG|0o755,'runtime image reference and metadata')
+-    return selected
+-
+-def consumed_paths(authority):
+-    """Only inputs actually opened here, not historical compiler/source paths."""
+-    paths=[BASE_CONTRACT['path'],TYPES_CONTRACT['path'],CONTRACT['path'],authority['request']['path'],authority['whole_source_manifest']['path'],authority['materialization_receipt']['path'],authority['retention_roles']['path']]
+-    report=read_ref(authority['canonical205_facts_review']);retention=report['retained_authority'];postbuild=report['postbuild_facts']
+-    producer_contract=read_ref(read_ref(CONTRACT)['postbuild_facts']['facts_producer_contract'])
+-    paths.extend([authority['canonical205_facts_review']['path'],report['source11']['authority']['path'],postbuild['facts_output']['path'],retention['engine_result']['path'],retention['objects_manifest']['path'],report['existing_primary_pairs']['copier_receipt']['path'],read_ref(CONTRACT)['postbuild_facts']['facts_producer_contract']['path'],producer_contract['source_boundary']['path']])
+-    paths.extend(row['retained']['path'] for row in retention['pairs'])
+-    paths.extend(row['path'] for row in authority['runtime_image_source_pair'].values())
+-    return sorted(set(paths))
++def read(reference):
++    need(set(reference)=={'path','sha256','bytes'},'authoritative proof descriptor keys')
++    path=Path(reference['path']);raw=path.read_bytes()
++    need(path.is_absolute() and len(raw)==reference['bytes'] and hashlib.sha256(raw).hexdigest()==reference['sha256'],'genuine authoritative proof drift')
++    return json.loads(raw)
++def links():
++    raw=(D/'CURRENT68-SDK5-AUTHORITY-LINKS.json').read_bytes()
++    need(hashlib.sha256(raw).hexdigest()==LINKS_SHA,'private source authority link identity')
++    value=json.loads(raw)
++    need(value['kind']=='private-current68-SDK5-source-authority-successor-links','private authority link kind')
++    return value
++def artifact(reference,expected):
++    need(set(reference)=={'path','sha256','size','mode'},'actual artifact descriptor keys')
++    path=Path(reference['path']);s=path.stat();raw=path.read_bytes()
++    need(path.is_absolute() and stat.S_ISREG(s.st_mode) and s.st_mode==reference['mode'] and s.st_size==reference['size']==expected['bytes'] and reference['sha256']==expected['sha256']==hashlib.sha256(raw).hexdigest(),'current accepted artifact byte/size/mode identity')
++def native_proof(value):
++    proof=read(value['proofs']['current235_acceptance'])
++    need(proof['status']=='PASS' and proof['decision']=='PASS_FORMAL_STRICT235_APPLICATION_ACCEPTANCE' and proof['application_acceptance'] is True and proof['all_original_assertions_pass'] is True,'genuine current235 formal acceptance')
++    physical=read(proof['physical_acceptance'])
++    need(physical['status']=='PASS' and physical['decision']=='PASS_ACTUAL_PHYSICAL_RETIREMENT' and physical['physical_acceptance'] is True,'genuine current235 physical acceptance')
++    return proof
++def validate(binding,image):
++    value=links()
++    # The existing manifest remains byte-identical. Its old authority pointer
++    # is checked only as inherited context, never as proof of this current image.
++    need(binding==read(value['proofs']['inherited205_context']),'inherited source authority mutation')
++    build=read(value['proofs']['image_build_acceptance'])
++    need(build['status']=='PASS_CURRENT_IMAGE_BUILD_LINK_AND_NAMED_BOUNDARIES_NO_NATIVE_ACCEPTANCE' and build['decision']=='PASS_ACTUAL_CURRENT_NUMA_SCHEDULER_IMAGE_AND_REAL_MCEEXEC_LINK_ARTIFACTS_ONLY','genuine image build acceptance')
++    receipt=read(build['producer_receipt'])
++    need(receipt['status']=='PASS' and receipt['source_derivative_sha256']==build['source_derivative_sha256']==value['image_source_derivative'] and receipt['materialization_sha256']==build['materialization_sha256'],'actual image source/build receipt join')
++    produced=receipt['artifacts']['mckernel.img'];accepted=build['artifacts']['mckernel.img']
++    need(produced['sha256']==accepted['sha256'] and produced['size']==accepted['bytes'],'actual produced image artifact join')
++    artifact(image,accepted)
++    native_proof(value)

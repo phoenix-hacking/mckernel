@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-035",
+  "packet_version": 1,
+  "context_sha256": "e0561eacfa819fb0d4d4bf3c0e31a7cd2c4cdd18cadc7e09319706b3ff514bd8",
+  "started_utc": "2026-09-09T10:42:00Z",
+  "finished_utc": "2026-09-09T10:42:43Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "futex.requeue",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/futex/futex.requeue.c",
+      "oracle": "scripts/application-tests/oracles/futex.requeue.json",
+      "changed_files": ["scripts/application-tests/cases/futex/futex.requeue.c", "scripts/application-tests/oracles/futex.requeue.json"],
+      "parameter_vectors": {"source_waiters": [2], "wake_count": [0, 1], "requeue_count": [1], "target_queues": ["A", "B"]},
+      "implemented_operations": ["two FUTEX_WAIT waiters on A", "FUTEX_CMP_REQUEUE one waiter A to B", "one wake on each queue"],
+      "unresolved_oracle_notes": ["Queue-order, scheduler evidence, and exact ownership transfer require Max review."],
+      "max_reviewer_question": "Confirm the native requeue count and ownership transfer semantics before accepting wake counts."
+    },
+    {
+      "case_id": "futex.unsupported-command",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/futex/futex.unsupported-command.c",
+      "oracle": "scripts/application-tests/oracles/futex.unsupported-command.json",
+      "changed_files": ["scripts/application-tests/cases/futex/futex.unsupported-command.c", "scripts/application-tests/oracles/futex.unsupported-command.json"],
+      "parameter_vectors": {"command": ["0x7f unknown futex command"]},
+      "implemented_operations": ["valid futex word", "unknown command dispatch", "word immutability check"],
+      "unresolved_oracle_notes": ["Target command decoding and exact unsupported errno require Max review."],
+      "max_reviewer_question": "Confirm exact unsupported-command errno and ensure no delegated operation is accepted."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/futex/futex.requeue.c", "sha256": "df1906a95a44d4a0b9a6093c9c071c4df488fa365fa6cc67a0537d01aef848da"},
+    {"path": "scripts/application-tests/oracles/futex.requeue.json", "sha256": "730d7645767b0906b7a4bef3f5655d878d0648e4ddc1f8b1e2cd19ac2c67149a"},
+    {"path": "scripts/application-tests/cases/futex/futex.unsupported-command.c", "sha256": "680ceda4caa16bffda01a758a27036bf4419527e8f46085bd85cd4fb4b890277"},
+    {"path": "scripts/application-tests/oracles/futex.unsupported-command.json", "sha256": "5705c3d488d3bd1c6fc9e128e6fadcee475f5eb428e03e1a161ef6131239d5d5"},
+    {"path": "docs/verification/evidence/application-drafts-20260909/ultra-handoff-1/packet-035/context.json", "sha256": "e0561eacfa819fb0d4d4bf3c0e31a7cd2c4cdd18cadc7e09319706b3ff514bd8"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-035.json --emit-context /tmp/application-packet-035-context-20260909-1.json", "outcome": "PASS; planning metadata only; runtime_authorized=false"},
+    {"command": "python3 -m json.tool packet-035/report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Requeue ownership/count semantics and unsupported-command errno require native ABI and runtime review."],
+  "blocked_execution_capabilities": ["current-inputs", "runtime-transport-fault-injection", "runner-contract"],
+  "first_failure_event": null,
+  "max_escalation": ["Review CMP_REQUEUE queue transfer and wake counts", "Confirm unknown futex command errno and no side effects"],
+  "next_packet_id": "packet-036"
+}

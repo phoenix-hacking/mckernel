@@ -1,0 +1,17 @@
+--- /home/holden/mckernel-work/host-preparation/numa-current-image-native-app-preparation-20261021-1/runtime-preparation-1/current-physical-bound-1/bind_numa_native_packet.py
++++ /home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/postbuild-numa-stage-runtime-data-preparation-1/runtime-current-image-preparation-1/postmutation-recovery-data-preparation-1/whole-consumer-contract-correction-1/templates/bind_numa_native_packet.py
+@@ -81,8 +81,12 @@
+ need(c['actual_preparation_acceptance']['sha256']=='809e2828fa78d9a1cced662e832bc4269316c267eff07641d2181db6b6653d3d' and accept['schema']=='mckernel.numa-native-app.actual-normalization-review.v1' and accept['status']=='PASS_ACTUAL_NORMALIZATION_PARENT_AND_NO_EFFECT_ARGV_ONLY' and accept['implementation_ownership'] is False and accept['runtime_release'] is False and accept['reviewer'],'current accepted no-effect NUMA preparation')
+ pre=load(c['actual_full_preflight']['path']);binding=load(c['actual_binding_result']['path'])
+ need(ref(c['actual_full_preflight']['path'])==c['actual_full_preflight'] and ref(c['actual_binding_result']['path'])==c['actual_binding_result'],'full actual preflight and binding')
+-accepted_manifest=dict(path=accept['normalized_manifest']['path'],sha256=accept['normalized_manifest']['sha256'],size=accept['normalized_manifest']['bytes'],mode=accept['normalized_manifest']['mode'])
+-need(binding['manifest']==accepted_manifest==c['normalized_manifest'] and c['actual_full_preflight']==accept['preflight'] and c['actual_binding_result']==accept['binding'],'actual normalized manifest and full result references')
++need(set(accept['normalized_manifest'])=={'path','sha256','size','mode'},'actual typed normalized manifest descriptor')
++accepted_manifest=dict(accept['normalized_manifest'])
++need(binding['manifest']==accepted_manifest==c['normalized_manifest'],'actual normalized manifest typed references')
++for key,current in [('preflight',c['actual_full_preflight']),('binding',c['actual_binding_result'])]:
++ typed=accept[key];need(set(typed)=={'path','sha256','size','mode'},'actual typed '+key+' descriptor')
++ need(current==dict(path=typed['path'],sha256=typed['sha256'],bytes=typed['size']) and ref(typed['path'])==current and Path(typed['path']).stat().st_mode==typed['mode'],'actual complete typed '+key+' reference')
+ nonce=binding['nonce'];parent=Path(binding['attempt_parent']);attempt=parent/('attempt-'+nonce);evidence=Path(str(parent)+'.owner-'+nonce);stage=Path(c['stage_manifest']['path']).parent
+ facts=dict(parent_identity=pre['parent_identity'],parent_nine_field_identity=pre['parent_nine_field_identity'])
+ consumer=dict(normalized_manifest=binding['manifest'])

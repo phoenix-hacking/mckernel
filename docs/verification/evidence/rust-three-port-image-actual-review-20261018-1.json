@@ -1,0 +1,737 @@
+{
+  "schema": "mckernel.independent-three-port-rust-image-actual-review.v1",
+  "reviewer": "/root/three_port_image_actual_review_0706",
+  "implementation_ownership": false,
+  "created_utc": "2026-10-18T07:30:33.853433+00:00",
+  "scope": "Functional PRACTICAL-GOAL kernel/apps AND active compute C retirement into Rust plus reviewed assembly. Exact production image/header/ABI/default-link and positive guard-owner-client retirement review; original qualification remains deferred.",
+  "decision": "PASS_ACTUAL_PRODUCTION_IMAGE_ARTIFACT_AND_GUARD_RETIREMENT",
+  "actual_artifacts": {
+    "cpu": {
+      "path": "/home/holden/mckernel-work/scratch/rust-next-three-port-image-preparation-20261018-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+      "sha256": "96580bceaf4fb342de5f64dc787798e92b359c4a75164937ba94eed6efa11f2f",
+      "bytes": 172872,
+      "dev": 1828,
+      "inode": 626113,
+      "uid": 1000,
+      "mode": 33188
+    },
+    "image": {
+      "path": "/home/holden/mckernel-work/scratch/rust-next-three-port-image-preparation-20261018-1/owner-work/output/build/kernel/mckernel.img",
+      "sha256": "da0f1bf760d5472693ed1d24f0bee717d8bf4c0880d4eb92d98203cd737e814f",
+      "bytes": 7920368,
+      "dev": 1828,
+      "inode": 626131,
+      "uid": 1000,
+      "mode": 33261
+    },
+    "process": {
+      "path": "/home/holden/mckernel-work/scratch/rust-next-three-port-image-preparation-20261018-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+      "sha256": "646b6bec051a616a921fa5fabed10d2370e039b8f4c4720e3056280a06cb9897",
+      "bytes": 319184,
+      "dev": 1828,
+      "inode": 626121,
+      "uid": 1000,
+      "mode": 33188
+    },
+    "rust": {
+      "path": "/home/holden/mckernel-work/scratch/rust-next-three-port-image-preparation-20261018-1/owner-work/output/build/kernel/rust/mckernel_rust.o",
+      "sha256": "d4920a03e039da00a29e2a95412acfc3a8a0ddc5cd8d30a594e35e6d82e72cb8",
+      "bytes": 12624168,
+      "dev": 1828,
+      "inode": 626104,
+      "uid": 1000,
+      "mode": 33188
+    }
+  },
+  "metadata": {
+    "0-compile_commands.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-next-three-port-image-preparation-20261018-1/owner-work/output/build/compile_commands.json",
+      "bytes": 74300,
+      "sha256": "64abc0b58258b2319290ca86c91c04136fe3afec920099719b677601176b8d52"
+    },
+    "1-CMakeCache.txt": {
+      "path": "/home/holden/mckernel-work/scratch/rust-next-three-port-image-preparation-20261018-1/owner-work/output/build/CMakeCache.txt",
+      "bytes": 26282,
+      "sha256": "2dc15e5e36780c4e5869d16b1a62a94557a61dfc8cf3e2dd732f7e78c183ae36"
+    },
+    "2-link.txt": {
+      "path": "/home/holden/mckernel-work/scratch/rust-next-three-port-image-preparation-20261018-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/link.txt",
+      "bytes": 759,
+      "sha256": "d9d50ed84770a8bff5af2371e19245200d99d61fe3cda28e880bd88e6669e428"
+    },
+    "3-build.make": {
+      "path": "/home/holden/mckernel-work/scratch/rust-next-three-port-image-preparation-20261018-1/owner-work/output/build/kernel/CMakeFiles/mckernel_rust_obj.dir/build.make",
+      "bytes": 7967,
+      "sha256": "6266a07d0a839c0175e5ca451678d69f78fe413f8a534348f5290f8133a58613"
+    },
+    "4-receipt.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-next-three-port-image-preparation-20261018-1/owner-work/evidence/receipt.json",
+      "bytes": 9558,
+      "sha256": "2cf8416bf71d04c4e5c7e069a335264b40d611b06e99f17a117ea3539535639b"
+    },
+    "5-mckernel.img.map": {
+      "path": "/home/holden/mckernel-work/scratch/rust-next-three-port-image-preparation-20261018-1/owner-work/output/build/kernel/mckernel.img.map",
+      "bytes": 740047,
+      "sha256": "11088f59978b074facae4127da58a9ec30fb9eb3a92ad071ab460e8e950bf027"
+    }
+  },
+  "checks": {
+    "source_freeze_and_unchanged_ABI_recipe": "PASS",
+    "production_C_default_selectors": "PASS",
+    "full_production_Rust_recipe_no_SIMD": "PASS",
+    "unique_final_exports_no_undefined": "PASS",
+    "default_save_restore_copy_idle_signal_consumers": "PASS",
+    "selected_helpers_no_generated_FP_SIMD_registers": "PASS",
+    "XSAVE_XRSTOR_full_mask_and_default_FINIT_SSE": "PASS",
+    "cleanup_direct_compiled_layout_operands": "PASS",
+    "map_selected_helpers_owned_by_full_Rust_object": "PASS",
+    "strict_actual_build_receipt_binding": "PASS",
+    "existing_production_DWARF_inspector": "PASS",
+    "actual_full_production_Rust_DWARF_all_affected_types_members_alignments": "PASS",
+    "actual_production_C_descriptor_alignment8_fullheader_sameflags_GCC14_assertion": "PASS",
+    "actual_postswitch_default_call_order_and_arguments": "PASS_MANUAL_EXPERT_PROOF; checker assumptions escalated, no oracle weakening",
+    "exact_finite_ABI_probe_owner_CLI_terminal_removal_and_old_record_preservation": "PASS"
+  },
+  "production_ABI": {
+    "status": "PASS_ACTUAL_PRODUCTION_C_AND_FULL_RUST_LAYOUT",
+    "C": "Actual production cpu/process DWARF proves Thread5568/align64 tid20/status4184/proc4304/fp_regs4784; Process1728/align64 pid456; Cpu8128/align64 idle64/current7848/no_preempt7976/prevpid7864. Descriptor actual DWARF size40/types/offsets0/8/16/24/32; missing C DW_AT_alignment resolved by exact productionGCC14/full-header same-flags syntax-only TU asserting alignment8 plus size/member/type/signature contracts.",
+    "Rust": "Actual full production Rust object DWARF independently confirms matching Thread/Process/CpuLocalVar types, affected offsets and alignments; SchedExitDebug size40/align8 and five members/types/offsets/alignments. Actual emitted field operands agree. Rust abi.rs const assertions compile in the full production crate; generated DWARF supplies fields absent explicit const asserts.",
+    "C_assertion_proof": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-image-actual-review-20261018-1/actual-C-alignment-review.json",
+      "sha256": "2b056054889533cd9beb455e0a9e1448194c5f246668e859d4a65fb269c03dfc"
+    },
+    "Rust_proof": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-image-actual-review-20261018-1/rust-affected-ABI.json",
+      "sha256": "c525e0d873056d6c80de9cd69e3a91b5126087f475e1c5fc87380d9c5cd06bf0"
+    },
+    "unresolved": []
+  },
+  "linked_symbols": {
+    "copy_fp_regs": [
+      {
+        "address": "fffffffffe81d970",
+        "kind": "T"
+      }
+    ],
+    "rust_x86_copy_fp_regs": [
+      {
+        "address": "fffffffffe893a00",
+        "kind": "T"
+      }
+    ],
+    "schedule": [
+      {
+        "address": "fffffffffe819f90",
+        "kind": "T"
+      }
+    ],
+    "sched_schedule_fp_admit": [
+      {
+        "address": "fffffffffe895740",
+        "kind": "T"
+      }
+    ],
+    "sched_schedule_prepare_body_result": [
+      {
+        "address": "fffffffffe895820",
+        "kind": "T"
+      }
+    ],
+    "save_fp_regs": [
+      {
+        "address": "fffffffffe81d930",
+        "kind": "T"
+      }
+    ],
+    "rust_x86_save_fp_regs": [
+      {
+        "address": "fffffffffe893d20",
+        "kind": "T"
+      }
+    ],
+    "restore_fp_regs": [
+      {
+        "address": "fffffffffe81d9a0",
+        "kind": "T"
+      }
+    ],
+    "rust_x86_restore_fp_regs": [
+      {
+        "address": "fffffffffe893c00",
+        "kind": "T"
+      }
+    ],
+    "rust_x86_restore_default_fp_regs": [
+      {
+        "address": "fffffffffe893b10",
+        "kind": "T"
+      }
+    ],
+    "sched_schedule_exit_cleanup": [
+      {
+        "address": "fffffffffe8955f0",
+        "kind": "T"
+      }
+    ]
+  },
+  "source_pins": {
+    "arch/x86_64/kernel/cpu.c": "00ef027750366cb46074c8c536728bac0f9b9f65631d744be71e4c949df76ccb",
+    "kernel/process.c": "d87e1f7d73b8f634bc715efbd84ff9d2b5b267231cceabc7aa5cf1562dbfb37b",
+    "kernel/rust/sched_helpers.rs": "59fde97704260b75cf03e7db476ea8cba537c2805476c86981f3f7816f2aa26e",
+    "kernel/rust/x86_cpu_helpers.rs": "1dd390b7268a2c57903c32c52b14b22dcfc93127644933b0c9519060032c5ab4",
+    "kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "kernel/CMakeLists.txt": "0fb8528175443a0cab4b1b12e62a2b9851b918b416f9a235f598cb143f616e35"
+  },
+  "guard_retirement": {
+    "image-guard.status.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-next-three-port-image-preparation-20261018-1/execution-proposal/image-guard.status.json",
+      "sha256": "768e8d72f77c4b917950baaa5b0d540e867a3e7edd6c10c50645b97452027fc0",
+      "data": {
+        "argv": [
+          "/home/holden/anaconda3/bin/python3",
+          "-B",
+          "/home/holden/mckernel-work/scratch/rust-next-three-port-image-preparation-20261018-1/execution-proposal/native_exact_scratch22_authority3_image_guard.py",
+          "--request",
+          "/home/holden/mckernel-work/scratch/rust-next-three-port-image-preparation-20261018-1/image-request.json",
+          "--request-sha256",
+          "2a20c1a4a4438c4611b0d04f803805b1191dba1fec4c9e93ec096533559a4578",
+          "--release",
+          "/home/holden/mckernel-work/scratch/rust-next-three-port-image-preparation-20261018-1/execution-proposal/image-execution-release.json",
+          "--release-sha256",
+          "24b5c2face3f2baf829873c73acc73f1b80ec423d253b9120a871952b7b9e8e9"
+        ],
+        "returncode": 0,
+        "direct_child_joined": true,
+        "no_automatic_retry": true,
+        "elapsed_seconds": 201.3798406119895,
+        "utc": "2026-10-18T07:09:06.637020+00:00"
+      }
+    },
+    "image-guard-postjoin-readback.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-next-three-port-image-preparation-20261018-1/execution-proposal/image-guard-postjoin-readback.json",
+      "sha256": "0b5f1db60376fcb15b7774d355033a2d898c04bb7148edd34eed9105f02d5b77",
+      "data": {
+        "application_acceptance": false,
+        "cleanup_authorized": false,
+        "common_shared_and_container_retained_for_separate_cleanup": true,
+        "container_id": "1305fc5a226aed2b4d495723282ce4ed009ad84d4ee7ffc439db7a12a3e7bf4a",
+        "guard_direct_joined": true,
+        "guard_result_sha256": "ac4679728f5b3a094422dc2aceb1e80f2eb1e924cdcd8f7788493789ac2ac958",
+        "owner_receipt_sha256": "2b961080406eabc92c546a2d1a92f366012b497a24432b5c053da6542ce0ad11",
+        "root27_4_reacquired_after_join": true,
+        "status": "PASS_ORDINARY_GUARD_POSTJOIN_READBACK_ONLY"
+      }
+    },
+    "guard-result.json": {
+      "path": "/home/holden/mckernel-work/scratch/native-rust-next-three-port-image-guard-20261018-5b15453e29954a8d8b2d9ce1754dcaa2/guard-result.json",
+      "sha256": "ac4679728f5b3a094422dc2aceb1e80f2eb1e924cdcd8f7788493789ac2ac958",
+      "data": {
+        "container_id": "1305fc5a226aed2b4d495723282ce4ed009ad84d4ee7ffc439db7a12a3e7bf4a",
+        "interrupted_signal": null,
+        "owner_receipt_sha256": "2b961080406eabc92c546a2d1a92f366012b497a24432b5c053da6542ce0ad11",
+        "owner_status": "PASS",
+        "retained_for_separate_cleanup": true,
+        "retired": true
+      }
+    },
+    "inspect-terminal-fresh.json": {
+      "path": "/home/holden/mckernel-work/scratch/native-rust-next-three-port-image-guard-20261018-5b15453e29954a8d8b2d9ce1754dcaa2/inspect-terminal-fresh.json",
+      "sha256": "107dcfb443b82d8495bcc31a876405d4b17c124536e31319d3b7abf2f1669fd2"
+    },
+    "owner": {
+      "receipt_sha256": "2b961080406eabc92c546a2d1a92f366012b497a24432b5c053da6542ce0ad11",
+      "owner_nonce": "a358cbe63ec54a80975cce93b7040f9a",
+      "container_id": "1305fc5a226aed2b4d495723282ce4ed009ad84d4ee7ffc439db7a12a3e7bf4a",
+      "container_name": "mckernel-image-de70ec145bcb4491998c09ff9b44858c",
+      "retired": true,
+      "common_shared_container_retained": true,
+      "cleanup_accepted": false
+    }
+  },
+  "boundary_reasoning": [
+    "Actual production default selectors tail-forward save/restore/copy into one full Rust object. Final map owns each new helper and accepted predecessor helper at .ltext.<name> in rust/mckernel_rust.o. Static C restore_default shim is optimized into actual idle/signal default consumers; no unused-symbol cutover claim.",
+    "XSAVE uses full low/high mask. Positive runtime extent rounds to pages, allocator error returns-12 before XSAVE, memory zero precedes slot publication. Restore checks absent thread/state, preserves buffered no-XSAVE no-op, uses full mask XRSTOR, FINIT and SSE-gated MXCSR1f80. No allocation/free or slot mutation in restore.",
+    "Actual Rust cleanup checks last/status, writes old_cpu.prevpid7864, performs existing inlined release_thread and decrements accounting; subsequent debug reads use independent descriptor, with no last reads after release. The x86 instruction-cache flush is the existing no-op.",
+    "Manual final-image schedule path: arch_switch_context callfe81a1a0, CURRENT runqueue unlockfe81a1b8, CURRENT saved IRQ restorefe81a1cd, oldCPU cleanupfe81a1e6. r13 retains oldCPU,r12 last,ecx0 debug,edx16 PS_EXITED. Corresponding source and production relocations agree.",
+    "The two selected production C commands use -mno-sse; the actual full Rust crate disables vectorization and SSE/AVX features. Selected newly emitted helper bodies use GPR code plus explicitly reviewed state instructions. Unchanged compiler/allocator/formatter/IRQ ABI decisions reuse accepted predecessor. No whole-kernel C retirement claim.",
+    "Guard exact source036ef99e proves owner receipt equality, retired=true/no unproven Docker CLI, lease absence, exact common/shared identities, fresh stopped exact CID/nonce/profile. Guard0/directjoin and root27:4 postjoin reacquisition agree with actual receipt2b961080 and guardac467972. Stopped container/common/shared remain retained and terminal cleanup is unaccepted.",
+    "Independent manual expert binds actual switched control flow and all call arguments. The checker first selected a movabs address load of process_sched_irq_restore_bridge passed to preparation as a callback, not an IRQ-restore call. The real switched interval is linear: arch_switch_context, CURRENT runqueue unlock, CURRENT saved IRQ restore, oldCPU cleanup; oldCPU remains in callee-saved r13. Separate non-switch IRQ restore remains valid.",
+    "Actual finite alignment probe checks production GCC14 SHA2092e32f and executes the real-header TU syntax-only with wait0/terminalExit0, noOOM, ccOK stdout and empty stderr. All ten exact sudo/Docker client records exit0 and are positively joined by accepted transport. Only newly created CID7eb020fe... is retired/removed with exact absence; old build CID/profile/mounts and both common/shared record inodes/hashes remain preserved. No image rebuild was needed."
+  ],
+  "reviewer_failure_history": [
+    "Wrong conventional kernel/rust/src read paths corrected to actual kernel/rust; no candidate mutation.",
+    "Map checker expected .text.<helper>; actual production large-code-model section is .ltext.<helper>. Original failure preserved, one bounded correction passes.",
+    "Schedule checker single-alias assumption failed; one alias-preserving correction then mistook lexical first address load for a call in the required path. Both failures and checker preserved. Independent expert3f755021 proves actual post-switch flow/arguments and explains first restore alias is preparation callback address load; dispatcher accepted escalation. No third automatic correction.",
+    "Finite ABI companion45a441 source review found safe set before final rootlock/signal postchecks. One bounded correction373e52 moves only the assignment; two targeted guarded negatives and all8 mocksPASS. Original source and review failure preserved.",
+    "Interim finite companion report hash raced author freeze; exact hash check failed closed. Final report97c4af/source373e52/request6f8572 verified before release; no actual attempt occurred on interim bytes.",
+    "Final actual-C review initially compared Docker Mounts raw list order. Every full row matched canonically; one bounded semantic-order correction passed with no ignored fields or rows. Original diagnostic preserved."
+  ],
+  "evidence": {
+    "source-expectations.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-image-actual-review-20261018-1/source-expectations.json",
+      "bytes": 3725,
+      "sha256": "b8f69e3c8484a289f18425a3a77ae9cd0723f98c81381e1df126c4bfaa9381e1"
+    },
+    "collect_artifacts.py": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-image-actual-review-20261018-1/collect_artifacts.py",
+      "bytes": 4428,
+      "sha256": "353af4be42f99272c2f5b6be30c92692a543e6516219a790889d2cc5f632904a"
+    },
+    "extract_affected_dwarf.py": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-image-actual-review-20261018-1/extract_affected_dwarf.py",
+      "bytes": 4717,
+      "sha256": "93da958b5790803c865abfa841460c263c51426ee63e740dadd5a022f7ea844b"
+    },
+    "interpret_artifacts.py": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-image-actual-review-20261018-1/interpret_artifacts.py",
+      "bytes": 6714,
+      "sha256": "2feda6c8011b87e53041a80d43c4121b5e4580ddcad730f37d7bbd9d79d79be9"
+    },
+    "resolve_schedule.py": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-image-actual-review-20261018-1/resolve_schedule.py",
+      "bytes": 1543,
+      "sha256": "a91c94cdc324c31ae40e7ce4c6743684f28e787b1e07e376e28b85b0426fd802"
+    },
+    "actual-capture-1/capture.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-image-actual-review-20261018-1/actual-capture-1/capture.json",
+      "bytes": 16544,
+      "sha256": "6386f39a333706ab8e261fd730e4f3bedfe8b23b3266ec8c92e5810259759747"
+    },
+    "interpretation-checks.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-image-actual-review-20261018-1/interpretation-checks.json",
+      "bytes": 4142,
+      "sha256": "babc7b95f80974d249637f6137c94f149608769a10a75441f34d60acfef822b8"
+    },
+    "process-affected-dwarf.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-image-actual-review-20261018-1/process-affected-dwarf.json",
+      "bytes": 646091,
+      "sha256": "b2ddd8a8126dd210a54bd3a9ca41031a7bb2518a1ac27cdbde2898b448bcf220"
+    },
+    "cpu-affected-dwarf.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-image-actual-review-20261018-1/cpu-affected-dwarf.json",
+      "bytes": 640175,
+      "sha256": "e045bdae8f89f0be87a05bafb66070552d2aec2ff9813df0e54fdfcbfd329c7a"
+    },
+    "rust-affected-ABI.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-image-actual-review-20261018-1/rust-affected-ABI.json",
+      "bytes": 15963,
+      "sha256": "c525e0d873056d6c80de9cd69e3a91b5126087f475e1c5fc87380d9c5cd06bf0"
+    },
+    "rust-dwarf-info.status.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-image-actual-review-20261018-1/rust-dwarf-info.status.json",
+      "bytes": 580,
+      "sha256": "f4aa93bea437df3d8a4db96be5dacb054421a3c2b93a5dc561acbfd471161ba9"
+    },
+    "rust-dwarf-info.stdout": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-image-actual-review-20261018-1/rust-dwarf-info.stdout",
+      "bytes": 41247934,
+      "sha256": "7444fee76535174196eb4c9e9463996c17eb9f1e68544f027bb0b1bf3dac7ad4"
+    },
+    "rust-dwarf-info.stderr": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-image-actual-review-20261018-1/rust-dwarf-info.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "rust-dwarf-capacity.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-image-actual-review-20261018-1/rust-dwarf-capacity.json",
+      "bytes": 146,
+      "sha256": "845bebe98b8abc6b3136c2bbb4f2b0159fcec81a64afd83cdbe12626b06b65e7"
+    },
+    "predecessor-ABI-inspector.stdout": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-image-actual-review-20261018-1/predecessor-ABI-inspector.stdout",
+      "bytes": 712,
+      "sha256": "e84198b87d1924784310b7ea31945a35b68aa3a594c6727cbca49ac45a0b6fbc"
+    },
+    "predecessor-ABI-inspector.stderr": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-image-actual-review-20261018-1/predecessor-ABI-inspector.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "retirement-checks.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-image-actual-review-20261018-1/retirement-checks.json",
+      "bytes": 3405,
+      "sha256": "23638a768c70dbd46a1dc9bc0514bb19e0ebfe36d3b1d8de03042c0d466eef21"
+    },
+    "schedule-ordered-selected.txt": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-image-actual-review-20261018-1/schedule-ordered-selected.txt",
+      "bytes": 1457,
+      "sha256": "fe48e1c69cb37326f1a374e88e843dba3c6b55ff46680a7a3c05727c908f763f"
+    },
+    "alignment-proposal-review.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-image-actual-review-20261018-1/alignment-proposal-review.json",
+      "bytes": 1962,
+      "sha256": "1898af8b4212ff528d72c7e1e46015f4658b922f172ccc77ddebc0c3a7d7b6b1"
+    },
+    "interpretation-attempt-1-failure.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-image-actual-review-20261018-1/interpretation-attempt-1-failure.json",
+      "bytes": 602,
+      "sha256": "121b47e044ecf4a34db7006f3684a445c4bb010c6a198ad0fa9987f9293c17bb"
+    },
+    "schedule-order-attempt-1-failure.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-image-actual-review-20261018-1/schedule-order-attempt-1-failure.json",
+      "bytes": 699,
+      "sha256": "aad91e1e672506471b02ba9354c3dca52e79e70d21082582b9f7523686bfac4b"
+    },
+    "schedule-order-attempt-2-failure.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-image-actual-review-20261018-1/schedule-order-attempt-2-failure.json",
+      "bytes": 1064,
+      "sha256": "315b349fead604ffd3c5d840136a17e28fd5edd13ec6194340f70eb2cd7881ff"
+    },
+    "schedule-order-expert-correction.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-image-actual-review-20261018-1/schedule-order-expert-correction.json",
+      "bytes": 881,
+      "sha256": "b04e9a31b0c3a1e0ecb4c67919720ef3577f08d97b22a1c93cac6f8f8d624796"
+    },
+    "schedule-escalation-disposition.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-image-actual-review-20261018-1/schedule-escalation-disposition.json",
+      "bytes": 670,
+      "sha256": "d293547bfd682504f1feaf79adaaaceea9a0634afd2e354d54472fbe914026ac"
+    },
+    "finite-probe-review-1.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-image-actual-review-20261018-1/finite-probe-review-1.json",
+      "bytes": 1263,
+      "sha256": "6602b14a55375870191a739a48c6a2f690db54379ecd18890c8159c03e3f179a"
+    },
+    "finite-probe-safe-correction.diff": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-image-actual-review-20261018-1/finite-probe-safe-correction.diff",
+      "bytes": 777,
+      "sha256": "faab450d381810d402737d85fd164e33902690c5860acebe48892150249f16a0"
+    },
+    "finite-probe-execution-review.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-image-actual-review-20261018-1/finite-probe-execution-review.json",
+      "bytes": 5253,
+      "sha256": "4f59b8c18d756da419bd443056351281e4d92354813a036fca5c4b6ea85e48e0"
+    },
+    "finite-review-freeze-race.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-image-actual-review-20261018-1/finite-review-freeze-race.json",
+      "bytes": 513,
+      "sha256": "4ac225e8a58e01d2420aea80c995fdd3cb30888b57b65e4ff5eb5d0f285106d4"
+    },
+    "actual-C-review-attempt-1-diagnostic.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-image-actual-review-20261018-1/actual-C-review-attempt-1-diagnostic.json",
+      "bytes": 5959,
+      "sha256": "8d7d8c292855ea029d413d4c7e085f16faff451e39cdad19d000555d4f57257c"
+    },
+    "actual-C-alignment-review.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-image-actual-review-20261018-1/actual-C-alignment-review.json",
+      "bytes": 11994,
+      "sha256": "2b056054889533cd9beb455e0a9e1448194c5f246668e859d4a65fb269c03dfc"
+    },
+    "finite_probe-original-45a441.py": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-image-actual-review-20261018-1/finite_probe-original-45a441.py",
+      "bytes": 15060,
+      "sha256": "45a441aaabb4c36652dd6bb14c417a609c2637ac5b36c09d3c931a0ec32f3cec"
+    },
+    "original_pending_review": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-image-actual-review-20261018-1/review-pending.json",
+      "bytes": 20612,
+      "sha256": "a23a545e789b8b16753991d098557ba7e5c9c893fd76199397bd9769ebd95a9a"
+    }
+  },
+  "validation": {
+    "actual_command_count": 15,
+    "all_actual_artifact_commands_exit0": true,
+    "actual_stderr_bytes": 0,
+    "source_or_mock_suite_replayed": false,
+    "profile": "Unprivileged CPU6/onejob/1GiB/30CPU35wall; only exact ordinary-readable artifacts and selected evidence. Additional fullRust DWARF explicitly root-approved,128MiB cap, capacity floors+512MiB+128MiB remeasured. No root/Docker/compiler/build/guest/cleanup/Git by reviewer.",
+    "additional_C_probe_commands": 10,
+    "C_probe_actual_compilation": "PASS one syntax-only full real-production process TU, no image build"
+  },
+  "counts": {
+    "new_current_candidate_full_image_builds": 1,
+    "new_native_apps": 0,
+    "new_practical_behaviors": 0,
+    "production_path_language_retirement": 0,
+    "original_qualification": 0
+  },
+  "acceptance_limits": [
+    "This proves one new full production current-candidate image, real C/fullRust ABI, default linked Rust ownership and accepted build guard/client retirement.",
+    "No new exact-image native application/vector/FPU/thread/fork/signal/default/cleanup execution or original qualification acceptance.",
+    "Three new path language-retirement credits remain pending separately released exact-image native proof; linked/source proof alone earns zero retirement.",
+    "Stopped build container/common/shared remain retained. Artifact retention/publication/observation and terminalcleanup are independently owned gates; this review does not grant them. Root reports finite retention completed under its separate accepted release; terminalcleanup remains unaccepted here.",
+    "Preserve accepted predecessor image686215, compatible d99 modules, prior AVX/threads native baseline, all objects and every failure."
+  ],
+  "next_executable_observation": "After the independently owned exact terminal artifact publication/retention/observation gates and accepted terminalcleanup, release applicable native AVX/FPU, pthread/fork, signal/default and exit/shutdown observations using exact image da0f1bf760d5472693ed1d24f0bee717d8bf4c0880d4eb92d98203cd737e814f and compatible d99 host baseline. Preserve bytes/status/logs and positive teardown.",
+  "manual_schedule_expert": {
+    "path": "/home/holden/mckernel-work/scratch/rust-three-port-schedule-order-review-20261018-1/review.json",
+    "sha256": "3f7550216558b817eff4e538f35c0c42b0a9739a61b76b99eb67bc8617ca1f71",
+    "decision": "PASS_MANUAL_EXPERT_PROOF",
+    "dispatcher_accepted": true,
+    "automatic_checker_replayed_after_escalation": false
+  },
+  "actual_C_assertion": {
+    "schema": "mckernel.independent-actual-production-C-alignment-probe-review.v1",
+    "decision": "PASS_ACTUAL_PRODUCTION_C_ALIGNMENT_AND_POSITIVE_FINITE_PROBE_RETIREMENT",
+    "reviewer": "/root/three_port_image_actual_review_0706",
+    "implementation_ownership": false,
+    "fixture": "Exact GCC14 checksum checked; included actual production process.c/fullheaders with same production flags. Syntax-only wait0/terminalExit0/noOOM/stdout ccOK/stderr0 proves staticasserts including descriptor C alignment8/size40/all offsets/types.",
+    "C_descriptor": {
+      "size": 40,
+      "alignment": 8,
+      "member_offsets": {
+        "num_threads": 0,
+        "total_memory_usage": 8,
+        "memory_stat_rss": 16,
+        "memory_stat_mapped_file": 24,
+        "page_sizes": 32
+      }
+    },
+    "new_container": {
+      "cleanup_separately_required": false,
+      "client_retirement_unproven": false,
+      "container_id": "7eb020fef181eb3425bc2c4d1cb8dea993efb7b68f1da415adc918c07895d577",
+      "container_name": "rust-three-port-abi-65ac5c520cda492bbe9642e86adb72e8",
+      "nonce": "65ac5c520cda492bbe9642e86adb72e8",
+      "removed": true,
+      "retired": true,
+      "status": "PASS"
+    },
+    "direct_owner_join": {
+      "returncode": 0,
+      "joined": true,
+      "elapsed_seconds": 1.4367938699870137,
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/home/holden/anaconda3/bin/python3",
+        "-B",
+        "/home/holden/mckernel-work/scratch/rust-three-port-alignment-abi-20261018-1/finite_probe.py",
+        "--request",
+        "/home/holden/mckernel-work/scratch/rust-three-port-alignment-abi-20261018-1/finite-request.json",
+        "--request-sha256",
+        "6f8572cb8397050fe7c7ebdf32541dc1f8c05f606daa5e5edea431b53a9752ba",
+        "--release",
+        "/home/holden/mckernel-work/scratch/rust-three-port-alignment-abi-20261018-1/finite-release-APPROVED.json",
+        "--release-sha256",
+        "83fd84a2643d8bb3464a047840ee70926268f8fdeaeb658c0b6515b3abcf7d6e"
+      ],
+      "release_sha256": "83fd84a2643d8bb3464a047840ee70926268f8fdeaeb658c0b6515b3abcf7d6e"
+    },
+    "positive_CLI_records": [
+      {
+        "path": "/home/holden/mckernel-work/scratch/rust-three-port-alignment-abi-20261018-1/probe-65ac5c520cda492bbe9642e86adb72e8/command-a630f24a57454ab690204933a2ef1634/status.json",
+        "sha256": "eebf879ce4607a151fb3a310ba3f9176ed7b5cebd383f7882bd2e62852fd5345",
+        "argv": [
+          "ps",
+          "-aq",
+          "--no-trunc",
+          "--filter",
+          "id=7eb020fef181eb3425bc2c4d1cb8dea993efb7b68f1da415adc918c07895d577"
+        ],
+        "state": "exited",
+        "exit_code": 0,
+        "pid": 904034
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/rust-three-port-alignment-abi-20261018-1/probe-65ac5c520cda492bbe9642e86adb72e8/command-dc3a252f104546a1bd0e43bc5114309f/status.json",
+        "sha256": "7fcedcac20767fe322abc7bd8c30a0cce8dc2edc7abc882f81086af926244411",
+        "argv": [
+          "inspect",
+          "rust-three-port-abi-65ac5c520cda492bbe9642e86adb72e8"
+        ],
+        "state": "exited",
+        "exit_code": 0,
+        "pid": 904015
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/rust-three-port-alignment-abi-20261018-1/probe-65ac5c520cda492bbe9642e86adb72e8/command-5751d30e65fa4e33918c1a43ec748af6/status.json",
+        "sha256": "5aed9e2002386a3d31a170925195425f6773e3b5a2de022cee8d218cbda43385",
+        "argv": [
+          "rm",
+          "7eb020fef181eb3425bc2c4d1cb8dea993efb7b68f1da415adc918c07895d577"
+        ],
+        "state": "exited",
+        "exit_code": 0,
+        "pid": 904026
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/rust-three-port-alignment-abi-20261018-1/probe-65ac5c520cda492bbe9642e86adb72e8/command-d3d87980de5144bdb5f6070f531f5838/status.json",
+        "sha256": "f9d44bc449254660c67ad864673fd391a40d1c194d411dd29b01837d90b1db21",
+        "argv": [
+          "wait",
+          "rust-three-port-abi-65ac5c520cda492bbe9642e86adb72e8"
+        ],
+        "state": "exited",
+        "exit_code": 0,
+        "pid": 903970
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/rust-three-port-alignment-abi-20261018-1/probe-65ac5c520cda492bbe9642e86adb72e8/command-b60fca44ef7347f1a503848db126dcef/status.json",
+        "sha256": "2856c48fa640e3872facaa70f37bd6f7559763f6a550db45b1b4e8047491bf63",
+        "argv": [
+          "inspect",
+          "rust-three-port-abi-65ac5c520cda492bbe9642e86adb72e8"
+        ],
+        "state": "exited",
+        "exit_code": 0,
+        "pid": 903901
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/rust-three-port-alignment-abi-20261018-1/probe-65ac5c520cda492bbe9642e86adb72e8/command-6afd84eb76044620aefa460e5e956b3e/status.json",
+        "sha256": "e6954b11802a83d404b1700198d55aabb1f448facd63d821ca58e128c6052336",
+        "argv": [
+          "start",
+          "rust-three-port-abi-65ac5c520cda492bbe9642e86adb72e8"
+        ],
+        "state": "exited",
+        "exit_code": 0,
+        "pid": 903909
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/rust-three-port-alignment-abi-20261018-1/probe-65ac5c520cda492bbe9642e86adb72e8/command-0abd2700f2ee4afa8b1ac1de7043749b/status.json",
+        "sha256": "f1db23c223722a93e4a7265204285b15c5bdc71a830249fbc28b98bab43fc0a4",
+        "argv": [
+          "inspect",
+          "rust-three-port-abi-65ac5c520cda492bbe9642e86adb72e8"
+        ],
+        "state": "exited",
+        "exit_code": 0,
+        "pid": 904007
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/rust-three-port-alignment-abi-20261018-1/probe-65ac5c520cda492bbe9642e86adb72e8/command-5dec1bcc39fa4dce839b3af3064ec93b/status.json",
+        "sha256": "75a468775fbf799fc75bac682a1b946c2b9fdef102ed0d647fd2b3214d47a10b",
+        "argv": [
+          "create",
+          "--pull=never",
+          "--name",
+          "rust-three-port-abi-65ac5c520cda492bbe9642e86adb72e8",
+          "--label",
+          "mckernel.owner=65ac5c520cda492bbe9642e86adb72e8",
+          "--init",
+          "--network=none",
+          "--read-only",
+          "--cap-drop=ALL",
+          "--security-opt=no-new-privileges",
+          "--cpuset-cpus=6",
+          "--cpus=1",
+          "--memory=1g",
+          "--memory-swap=1g",
+          "--pids-limit=64",
+          "--user=1000:1000",
+          "--tmpfs",
+          "/tmp:rw,noexec,nosuid,nodev,size=16m,mode=1777",
+          "--workdir",
+          "/work/output/build/kernel",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/scratch/rust-next-three-port-image-preparation-20261018-1/materialized-source,dst=/src,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/scratch/rust-next-three-port-image-preparation-20261018-1/owner-work/output/build,dst=/work/output/build,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/scratch/rust-three-port-alignment-abi-20261018-1,dst=/fixture,readonly",
+          "--entrypoint=/bin/sh",
+          "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5",
+          "/fixture/run-check.sh"
+        ],
+        "state": "exited",
+        "exit_code": 0,
+        "pid": 903893
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/rust-three-port-alignment-abi-20261018-1/probe-65ac5c520cda492bbe9642e86adb72e8/command-0f5ebbcd3ca346398e4397b168d43905/status.json",
+        "sha256": "fa77b276a771dbd2ddb24aa14d2d98bee450d69cdfc9248e58f6b78981d7967c",
+        "argv": [
+          "logs",
+          "rust-three-port-abi-65ac5c520cda492bbe9642e86adb72e8"
+        ],
+        "state": "exited",
+        "exit_code": 0,
+        "pid": 903998
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/rust-three-port-alignment-abi-20261018-1/probe-65ac5c520cda492bbe9642e86adb72e8/command-b71b988a4c134439935fe69257bc5ad0/status.json",
+        "sha256": "a691afa622c9e4f7da78d8d31f2a03654a27f76f5c6ed4a0eee733a4cb64ace5",
+        "argv": [
+          "inspect",
+          "mckernel-image-de70ec145bcb4491998c09ff9b44858c"
+        ],
+        "state": "exited",
+        "exit_code": 0,
+        "pid": 903885
+      }
+    ],
+    "old_container_unchanged": true,
+    "old_common_shared_records_unchanged": {
+      "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock": {
+        "device": 1828,
+        "inode": 114413,
+        "sha256": "01581a593da9a2621a34f9a2d7d484536c6f299fd4744a19ca05acb368f4647c"
+      },
+      "/home/holden/mckernel-work/scratch/rust-next-three-port-image-preparation-20261018-1/common-exclusion.json": {
+        "device": 1828,
+        "inode": 114414,
+        "sha256": "9d5420ce1b86ed3f814d73782b52034839ff45b75fa6c808aef2d4a78f4bbc2b"
+      }
+    },
+    "four_original_artifacts_rehashed_stable": true,
+    "files": {
+      "/home/holden/mckernel-work/scratch/rust-three-port-alignment-abi-20261018-1/dispatcher-probe.status.json": {
+        "bytes": 820,
+        "sha256": "88f38d17ea5f7644d8a05ff7e816b1ab084c53f9a1375389e8f1214e6ab7a86d"
+      },
+      "/home/holden/mckernel-work/scratch/rust-three-port-alignment-abi-20261018-1/dispatcher-probe.stdout": {
+        "bytes": 53,
+        "sha256": "aa5ee961720491592e101acd1a597ac1836b76f233fe37ea98a1b5d15cf0a326"
+      },
+      "/home/holden/mckernel-work/scratch/rust-three-port-alignment-abi-20261018-1/dispatcher-probe.stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "/home/holden/mckernel-work/scratch/rust-three-port-alignment-abi-20261018-1/finite-release-APPROVED.json": {
+        "bytes": 323,
+        "sha256": "83fd84a2643d8bb3464a047840ee70926268f8fdeaeb658c0b6515b3abcf7d6e"
+      },
+      "/home/holden/mckernel-work/scratch/rust-three-port-alignment-abi-20261018-1/dispatcher-admission-1.json": {
+        "bytes": 1213,
+        "sha256": "700b44d5b2aef3a9e90aaa9378e14f7000324a1d22d43af867f4bc262702aa4b"
+      },
+      "/home/holden/mckernel-work/scratch/rust-three-port-alignment-abi-20261018-1/probe-65ac5c520cda492bbe9642e86adb72e8/wait.json": {
+        "bytes": 56,
+        "sha256": "a33be9406c9bcb53a8e815a032e7cea8b2d89445832d2dcaca9262cad6f78da3"
+      },
+      "/home/holden/mckernel-work/scratch/rust-three-port-alignment-abi-20261018-1/probe-65ac5c520cda492bbe9642e86adb72e8/result.json": {
+        "bytes": 349,
+        "sha256": "e882ed606b2adc3a9153f9e48b6204b101dda0bbdc5edb436ad2db6913c6c8b8"
+      },
+      "/home/holden/mckernel-work/scratch/rust-three-port-alignment-abi-20261018-1/probe-65ac5c520cda492bbe9642e86adb72e8/created.json": {
+        "bytes": 7420,
+        "sha256": "025771777a123175060491d72537196116b2d1f33e5546fa5b3a4b8f51eede5f"
+      },
+      "/home/holden/mckernel-work/scratch/rust-three-port-alignment-abi-20261018-1/probe-65ac5c520cda492bbe9642e86adb72e8/terminal.json": {
+        "bytes": 8080,
+        "sha256": "200eb2cdc573cedd2f6eaee061486e8a785953537ebde469322ca1ada78cd2e2"
+      },
+      "/home/holden/mckernel-work/scratch/rust-three-port-alignment-abi-20261018-1/probe-65ac5c520cda492bbe9642e86adb72e8/predecessor-live-terminal.json": {
+        "bytes": 12644,
+        "sha256": "4c1f3099d09ed523721148d37bc4ae49b39b5b5f36711c4635c5b52e496c1ca3"
+      },
+      "/home/holden/mckernel-work/scratch/rust-three-port-alignment-abi-20261018-1/probe-65ac5c520cda492bbe9642e86adb72e8/absence.json": {
+        "bytes": 121,
+        "sha256": "71a4bc3bb4ab17ee14c675712168c76814aedcc0fba2933e3222910790119818"
+      },
+      "/home/holden/mckernel-work/scratch/rust-three-port-alignment-abi-20261018-1/probe-65ac5c520cda492bbe9642e86adb72e8/late-head-admission.json": {
+        "bytes": 210,
+        "sha256": "f26ecc9baad88c37ac3cc4f612cd5dd82a3f85f52b0bbcc83fc4e59271723e7f"
+      },
+      "/home/holden/mckernel-work/scratch/rust-three-port-alignment-abi-20261018-1/probe-65ac5c520cda492bbe9642e86adb72e8/fixture-streams.json": {
+        "bytes": 52,
+        "sha256": "2c043fc95333ac37b383e34d10417ff1362ef71d59d918d68a80441776c04653"
+      }
+    },
+    "native_acceptance": false,
+    "reviewer_failure": "Raw Docker Mounts list order differs; one bounded correction compares canonical full rows, matching accepted guard semantics. Original diagnostic retained; no field or row was ignored.",
+    "counts": {
+      "new_image_builds": 0,
+      "new_native_apps": 0,
+      "production_language_retirement": 0,
+      "original_qualification": 0
+    }
+  },
+  "per_path": {
+    "save_fp_regs": "Production default Rust forwarding, actual linked full Rust XSAVE body and fullheader ABI PASS; exact-image native proof pending.",
+    "schedule_postswitch_exit_cleanup": "Production default call after CURRENT unlock/IRQrestore, actual linked Rust body and descriptor ABI PASS; exact-image native proof pending.",
+    "restore_fp_regs_and_default": "Production Rust forwarding including real idle/signal fallback consumers, actual full-mask XRSTOR/FINIT/SSE default and ABI PASS; exact-image native proof pending.",
+    "preserved_copy_and_admission": "Actual new image keeps default linked Rust copy/admission and reviewed error/ownership contracts. Prior native baseline preserved; exact new-image native regression pending."
+  }
+}

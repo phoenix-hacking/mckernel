@@ -1,0 +1,18 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "actual_compiler_or_workload_replays": 0,
+  "notes": [
+    {
+      "draft": "Initial offline reader accessed a nonexistent _ReuseElf.path convenience attribute.",
+      "correction": "Attach the existing exact artifact Path to the local reader object; ELF/source/artifact bytes unchanged."
+    },
+    {
+      "draft": "Unrestricted objdump --disassemble traversed every object section; the reviewer interrupted only that offline inspection via its own tool session.",
+      "correction": "Read the exact owning ELF section; section-* dumps are the bounded proofs. Legacy draft dumps remain retained. No campaign watcher, guard, compiler, guest or native process was signaled."
+    },
+    {
+      "draft": "TRACKED33-FILENAME-LITERAL-EDGES.json compared against a repository-relative expected filename from a draft orchestration variable; this mismatched the real absolute argv/environment source context.",
+      "correction": "TRACKED33-FILENAME-LITERAL-EDGES.CORRECTED.json uses exact existing absolute candidate path from the pinned compile/profile environment. All33 actual MOVABS/R64 filename literals positively match. Original draft result preserved; no actual oracle, artifact, profile or prior failure was changed."
+    }
+  ]
+}

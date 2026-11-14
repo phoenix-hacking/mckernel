@@ -1,0 +1,181 @@
+{
+  "actual_status": {
+    "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-collector-20261017-1/status.json",
+    "sha256": "1bbfb1e7a0cced7ad2fb2477885dda699d948e1ac131a532703556d1fdda38cf",
+    "size": 63
+  },
+  "application_acceptance": false,
+  "checks": {
+    "actual_main_pipeline": "Actual d87d resource main and6a398 strict5 boot main in separate real supervisor children/privatepipes; authoritative0/-16/-16 mocked admission fixture input; same private040-byte MAP_SHARED state file records resource child destroys/releases before boot child reserves/creates/assigns/loads/boots. Actual kernelPTY ONLCR output\u2192new strict transport\u2192unchanged9c62+dfa2 consumer; raw snapshots and helper bytes retained.",
+    "methods": 6,
+    "negatives": [
+      "stale snapshot",
+      "wrapped kernel log",
+      "failed public release prevents second boot",
+      "failed memory reacquisition",
+      "status4 second helper",
+      "262144-byte truncation prevents boot",
+      "snapshot read failure prevents boot",
+      "publication failure poisons ordinary payload"
+    ],
+    "returncode": 0
+  },
+  "collector": {
+    "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-collector-20261017-1/native-resource-reboot-cycle-collector",
+    "sha256": "41c39c1a8b3aa8c4d8d0522085674e9799cb539e0ffa01edc1911a3f90a893f5",
+    "size": 1030488
+  },
+  "collector_diff": {
+    "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-collector-20261017-1/source/collector.diff",
+    "sha256": "ad0931218b142be597156fce61ebd633755d575acc37ee23f2236838e387db07",
+    "size": 7159
+  },
+  "command": {
+    "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-collector-20261017-1/command.json",
+    "sha256": "a475073bea90ed2a350de36f646fbf4a33c69d7514a8f30e183b2fdeb459db77",
+    "size": 703
+  },
+  "consumer_reference": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-resource-reboot-sequence-source-20261017-2.json",
+    "sha256": "8c5a458fac1e24b3b0df6faefe35abff225c5a7ca39df53d709a33d71b7397d4",
+    "size": 22814
+  },
+  "existing_sources_or_default_oracles_changed": false,
+  "full_cycle_verified": false,
+  "limits": {
+    "chunk_bytes": 512,
+    "ordinary_stream": 1024,
+    "outer_collector_seconds": 120,
+    "profile": "CPU6 one job AS1GiB CPU150 wall180, explicitAnaconda/minimalenv/privatehome/tmp",
+    "resource_stream": 4096,
+    "second_boot_stream": 1024,
+    "second_boot_timeout_ms": 60000,
+    "snapshot_bytes": 262144
+  },
+  "native_execution_verified": false,
+  "parent_collector": {
+    "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-collector-20261017-1/source/collector.original.c",
+    "sha256": "7da1e4628e28e772aab82e9b54cdaf30b31fbd690d0e311397f57816fbedc1f2",
+    "size": 32703
+  },
+  "positive": {
+    "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-collector-20261017-1/positive-protocol-result.json",
+    "sha256": "5d6afe8d390585f330058b6d494137cc9201fafd8a9dcaa023bf352f2bdfa613",
+    "size": 455
+  },
+  "production_acceptance": false,
+  "runtime_release": false,
+  "second_boot_scope": "Exactly oneboot/workload/stop/destroy/release/boot attempt; second OS/resources retained until ordinary disposable guest shutdown. No second stop or cycle2.",
+  "snapshot_contract": "Before snapshot immediately before second helper; after immediately after including failed helper. Exact frozen consumer requires bounded append-prefix snapshots, one fresh status5 in delta; full snapshot BAD_MARKERS checked independently.",
+  "source": {
+    "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-collector-20261017-1/source/native-resource-reboot-cycle-collector.c",
+    "sha256": "702f16edc4f3dd3dfb2f15e47a2b37e30aedbbbf4514b6dede8de75d417f4495",
+    "size": 38106
+  },
+  "sources": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-collector-20261017-1/source/adapter/actual-helper.c",
+      "sha256": "121bd98bcb11f3068295accadde873570fe29456a03e196bd976ef3373cec48b",
+      "size": 12374
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-collector-20261017-1/source/adapter/harness.c",
+      "sha256": "b2adbf126a808424321133867caa960ff22e74d7c1fbfcc80861665ccaa5f692",
+      "size": 10939
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-collector-20261017-1/source/adapter/harness.original.c",
+      "sha256": "514a842ebc5cb70b9ff275b11a40d08834b78716cc2889d983facec0e3684697",
+      "size": 9925
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-collector-20261017-1/source/adapter/native-cpu-reservation.c",
+      "sha256": "93b3bc690e203754d83bea2a295d421c24aa9bfc7017c884e05b215ee0d17d3d",
+      "size": 7928
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-collector-20261017-1/source/adapter/native-memory-reservation.c",
+      "sha256": "a42f4ec7394c74934a3e3832ae9872c6bc2098e38d834b06f652ab678256f5fb",
+      "size": 14223
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-collector-20261017-1/source/adapter/native-os-resource-assignment.c",
+      "sha256": "57eb965f63e8aff5ff0e1e9ed72e29b0dedb01772236d6556268d4d157213ae5",
+      "size": 9829
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-collector-20261017-1/source/adapter/probe.c",
+      "sha256": "d87df88114863cc439e8a3931c80e369f77e4e4ffc6aee48cb9efe6afb7e91c2",
+      "size": 8093
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-collector-20261017-1/source/adapter/resource-unit.c",
+      "sha256": "86080069edbf0baa55ca0c2ea61700c046ae6918f44021bef816309c5cfd1839",
+      "size": 371
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-collector-20261017-1/source/collector-harness.c",
+      "sha256": "3e9a47c31f5c724b3ac2d1e4561abc784bdfa4632b03994140f20fb0eb9fef98",
+      "size": 6832
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-collector-20261017-1/source/collector-harness.original.c",
+      "sha256": "ef8b749f6d6653a790be458bcec02a094144b7f002a79ec697c55948d13cde6c",
+      "size": 4596
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-collector-20261017-1/source/collector.diff",
+      "sha256": "ad0931218b142be597156fce61ebd633755d575acc37ee23f2236838e387db07",
+      "size": 7159
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-collector-20261017-1/source/collector.original.c",
+      "sha256": "7da1e4628e28e772aab82e9b54cdaf30b31fbd690d0e311397f57816fbedc1f2",
+      "size": 32703
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-collector-20261017-1/source/diff-adapter-main.patch",
+      "sha256": "4ee52e848a72993113161903cf135a21932248fca35ab149aec2c3e01bc81176",
+      "size": 4417
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-collector-20261017-1/source/diff-supervisor-fixture.patch",
+      "sha256": "7cbeaa672283b1260fa49299212ec7e38f3ff1b1381de56b0af9dacbee8fea8f",
+      "size": 5143
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-collector-20261017-1/source/native-resource-reboot-cycle-collector.c",
+      "sha256": "702f16edc4f3dd3dfb2f15e47a2b37e30aedbbbf4514b6dede8de75d417f4495",
+      "size": 38106
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-collector-20261017-1/source/reboot-extension.c",
+      "sha256": "21971607d314c3a106574930ef038c1d20b35b0268cdde3dc5bea7fda56bb315",
+      "size": 5025
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-collector-20261017-1/source/reboot_capture.py",
+      "sha256": "9ce5380fa50243ea9f865e45c0432b733f7373385c8e70a1ac13ed0f636fc558",
+      "size": 7120
+    }
+  ],
+  "state_model_scope": "Private ordinary-file test adapter model only; no kernel ownership/restoration credit. Original source bodies preserved; no host device calls.",
+  "static_second_helper_unchanged": "6b9f753e34d12da474c701ca64ce62825788295646b60f67482ef9ec8690c417",
+  "status": "PASS_SOURCE_PROTOCOL_PENDING_INDEPENDENT_REVIEW",
+  "stderr": {
+    "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-collector-20261017-1/stderr",
+    "sha256": "05091fd271950e986117d1d8ba969d17978ebc6f7a94cfe4a13d3046d5c1ada7",
+    "size": 525
+  },
+  "task_id": "native-resource-reboot-cycle-collector-source-20261017-1",
+  "test": {
+    "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-collector-20261017-1/test_cycle.py",
+    "sha256": "10d2706b2b66e70baf4c1b8df668b8b4097ec9496a5d9f1df26d9ef2a1671527",
+    "size": 7211
+  },
+  "transport": {
+    "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-collector-20261017-1/source/reboot_capture.py",
+    "sha256": "9ce5380fa50243ea9f865e45c0432b733f7373385c8e70a1ac13ed0f636fc558",
+    "size": 7120
+  }
+}

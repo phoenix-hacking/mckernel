@@ -1,0 +1,59 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_PRIVATE_NATURAL_REQUEST_ALIGNMENT_SOURCE_ONLY",
+  "correction_contract": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-F03-REQUEST-CONSTRUCTOR-CONTRACT-1/ROOT-ALIGNMENT-CORRECTION.APPROVED.json",
+    "bytes": 1240,
+    "sha256": "f8479b1667b67cca136322427b5999f1aaebff2c95ee1dfd430157103facb1d9"
+  },
+  "parent_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-REQUEST-CONSTRUCTORS-1/SOURCE-READY.json",
+    "bytes": 2087,
+    "sha256": "6df2c45b3df5060d7315fcb5b701d88cb5cba0ba627d4867c577e6967190dd11"
+  },
+  "original_leaf": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-REQUEST-CONSTRUCTORS-1/postimage/kernel/rust/f03_request_constructors.rs",
+    "bytes": 3733,
+    "sha256": "84187a9657e96c43362ab3f80ccefda0c530a1bc3210b431c949625e9741d476"
+  },
+  "corrected_leaf": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-REQUEST-CONSTRUCTORS-1/natural-alignment-correction-1/postimage/kernel/rust/f03_request_constructors.rs",
+    "bytes": 3673,
+    "sha256": "d1e40575145b827d7a48cbdc874aee3c3cc510d623d3eecb0c974073b1c3d070"
+  },
+  "x86_alignment_header": {
+    "path": "/home/holden/mckernel/ihk/cokernel/smp/x86_64/include/ihk/memconst.h",
+    "bytes": 198,
+    "sha256": "38b25a9fedbcf50d9eae799681aff60705d6e2e5e3559bcb721b0541ce98dc61"
+  },
+  "selected_source6153_header": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/cokernel/smp/x86_64/include/ihk/memconst.h",
+    "bytes": 198,
+    "sha256": "38b25a9fedbcf50d9eae799681aff60705d6e2e5e3559bcb721b0541ce98dc61"
+  },
+  "rust_abi": {
+    "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+    "bytes": 76151,
+    "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+  },
+  "delta_patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-REQUEST-CONSTRUCTORS-1/natural-alignment-correction-1/ALIGNMENT-CORRECTION.PRIVATE-NOT-APPLIED.patch",
+    "bytes": 1490,
+    "sha256": "466915d5338acb14a5f8dfbe0f4db2adc08631ec47d7686e730a705d8bcf4028"
+  },
+  "whole_patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-REQUEST-CONSTRUCTORS-1/natural-alignment-correction-1/REQUEST-CONSTRUCTORS-NATURAL.ON-TEN.PRIVATE-NOT-APPLIED.patch",
+    "bytes": 11104,
+    "sha256": "a10ba0a3a1634fee91afd0e2eb7f53468c2b0b239eab840ad3050b7f15ee0e16"
+  },
+  "checks": [
+    "only storage representation and corresponding alignment assertion changed",
+    "existing raw number and six slot writes, call, all named arity/callback bodies byte-exact",
+    "selected x86 IHK_DMA_ALIGN empty; repr C request 72B align8 and offsets source assertions unchanged",
+    "C fallback, paired experimental selector default OFF and original postimage non-leaf bytes unchanged"
+  ],
+  "actual_abi29_codegen": false,
+  "default_selection_authorized": false,
+  "actual_compile_link_native": false,
+  "runtime_authority": null
+}

@@ -1,0 +1,33 @@
+{
+  "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Root-approved exact source actual-body regression, ordinary unprivileged CPU6 onejob.",
+  "argv": [
+    "taskset",
+    "-c",
+    "6",
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+    "--edition=2021",
+    "--test",
+    "-Ccodegen-units=1",
+    "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/candidate-liveness.rs",
+    "-o",
+    "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/candidate-liveness-1"
+  ],
+  "source": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/candidate-liveness.rs",
+  "source_sha256": "10d4b8b0b8ff768d87e1de3978ebd0489b7af78954f0484dfa7638132c8fb28a",
+  "rustc_sha256": "028fd60b0e0add5505c661cd3ccde91393d615c8729bd95d94ab1e91409b36a1",
+  "profile": {
+    "AS": 2147483648,
+    "CPU_seconds": 60,
+    "wall_seconds": 90,
+    "kill_grace_seconds": 6,
+    "FSIZE": 33554432,
+    "CORE": 0,
+    "NOFILE": 256,
+    "NPROC": "inherited",
+    "output_each": 8388608,
+    "RUST_MIN_STACK": "2097152"
+  },
+  "fresh_memory": {
+    "MemAvailable": "27335692 kB"
+  }
+}

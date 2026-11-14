@@ -1,0 +1,54 @@
+{
+  "CPU0_released": true,
+  "actual_cancel": null,
+  "actual_fixture_closed": {
+    "bytes": 1112,
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-long-normal-cancel-20261023-1/pidfd-syscall-provider-2/actual-api-child-fixture-1/RESULT.json",
+    "sha256": "915aa5730de7771a3f73bae6ab7ff3ed198c6860293156e043e893952a0591a6"
+  },
+  "actual_fixture_stderr": {
+    "bytes": 362,
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-long-normal-cancel-20261023-1/pidfd-syscall-provider-2/actual-api-child-fixture-1/stderr",
+    "sha256": "dc14392d8bc0d2c011700d0363326a224b4c42267f2b3c19ebd0f6b6672d5305"
+  },
+  "all_joined": true,
+  "closed": true,
+  "failed_child_fixture_result": null,
+  "fixture_Docker": 0,
+  "fixture_root": 0,
+  "fixture_workload": 0,
+  "group_absent": true,
+  "header_derived_ABI": {
+    "bytes": 1503,
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-long-normal-cancel-20261023-1/pidfd-syscall-provider-2/HEADER-DERIVED-ABI.json",
+    "sha256": "92623a7c651b26ace315ff6278d0d8dcc5414f14d6638287084b8ff4c6b45058"
+  },
+  "header_extraction": {
+    "bytes": 1114,
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-long-normal-cancel-20261023-1/pidfd-syscall-provider-2/actual-header-extraction-1/RESULT.json",
+    "sha256": "14639467746e1a657c657faf9122bc66323530b7ffb06d6731bf68bd7c2b0012"
+  },
+  "history": {
+    "candidate1": {
+      "bytes": 2324,
+      "path": "/home/holden/mckernel/docs/verification/evidence/p12-long-normal-cancel-20261023-1/RESULT.json",
+      "sha256": "4e19e5323097073e21439138c3b4f6ab1be762a423a2e1ba334bbb2f3e1634f0"
+    },
+    "candidate1_missing_both_nativePython_APIs": true
+  },
+  "missing_fact": "Fixture omitted actual child returncode/stdout/stderr before assertion. Child was joined by communicate and ownedfixture group is absent; exact failing subclause unknown.",
+  "new_test_or_source_change_requires_expert": true,
+  "physical_clearance": false,
+  "reached_assertion": "fixture_cancel_child.py:30 child returncode42/empty stderr/exactjson(oneSIGTERM,nonce) compound assertion",
+  "reached_before_failure": "Actual typed syscall errno EINVAL/EBADF, allnine identity negatives with no pidfd leaks, cancel result ONE_SIGTERM_SENT_TO_EXACT_OWNER_ONLY signal_calls1 all asserted beforeline30",
+  "root_release": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source": {
+    "bytes": 8549,
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-long-normal-cancel-20261023-1/pidfd-syscall-provider-2/cancel_exact_owner_once.py",
+    "sha256": "950b8b162e13cf547b05993f1e1ca7e92aa501ceb4ec539ffa815fc372077b21"
+  },
+  "status": "EXPERT_ESCALATION_AFTER_BOUNDED_PROVIDER_CANDIDATE_FIXTURE_FAILURE",
+  "target_expected_literal_identical": true,
+  "target_live_process_read_or_signal": false
+}

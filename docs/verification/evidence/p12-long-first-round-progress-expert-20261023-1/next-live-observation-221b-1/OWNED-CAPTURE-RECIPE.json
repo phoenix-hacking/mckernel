@@ -1,0 +1,39 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "EXISTING_RECIPE_NOT_EXECUTION_RELEASE",
+  "capture_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/phase5-m03-handshake-runtime-checkpoint-20261020-1/sdk-physical-source/run_two_commands_source_bound_corrected.py",
+    "sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8"
+  },
+  "functions": "Reuse existing accepted owned_capture and registered TERM/INT/ALRM stop handlers; do not run helper main or introduce wrapper/monitor.",
+  "command_file": "ORDINARY-CPU0-READ-ARGV.PENDING-LIVE-ANCHOR.json",
+  "profile": {
+    "uid": 1000,
+    "cpu": [
+      0
+    ],
+    "AS": 2147483648,
+    "CPU": 10,
+    "wall": 20,
+    "grace": 6,
+    "FSIZE": 33554432,
+    "NOFILE": 256,
+    "core": 0,
+    "prefix_cap": 8388608,
+    "max_prefix_lines": 262144,
+    "interpreter": "/home/holden/anaconda3/bin/python3",
+    "capture_source_sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8"
+  },
+  "first_output": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/actual-read-1",
+  "second_output": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/actual-read-2",
+  "output_contract": "Fresh O_EXCL namespace; retain command/source/profile before execution and actual raw stdout/stderr, returncode and positive direct child join/group absence/closed streams after execution. Root owns final authentication/grant and any actual invocation.",
+  "first_start_after_authenticated_runtime_seconds": [
+    30,
+    60
+  ],
+  "second_read_minimum_separation_seconds": 60,
+  "owner_anchor": null,
+  "outer_anchor": null,
+  "execution_grant": null,
+  "actual_result": null
+}

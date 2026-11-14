@@ -1,0 +1,181 @@
+{
+  "schema": "mckernel.callback-target-provider.metadata-request.v1",
+  "status": "FROZEN_TWO_NEW_READBACKS_AND_SOURCE_ACTUAL_CAPTURE_BOUND_GATE_PENDING_C_INDEPENDENT_GO_ROOT_FRESH_ADMISSION",
+  "owner": "Rootsoleactualadmission/execution; Dprivatewriter, Cindependentreviewer",
+  "cwd": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-metadata-1",
+  "commands": [
+    {
+      "label": "provider-symbols",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-metadata-1/provider-symbols.metrics",
+        "/usr/bin/nm",
+        "-S",
+        "--format=posix",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-unit-1/output/scheduler_callback_target_provider.o"
+      ],
+      "stdout_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-metadata-1/provider-symbols.stdout",
+      "stderr_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-metadata-1/provider-symbols.stderr"
+    },
+    {
+      "label": "provider-elf",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-metadata-1/provider-elf.metrics",
+        "/usr/bin/readelf",
+        "-h",
+        "-SW",
+        "-Ws",
+        "-Wr",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-unit-1/output/scheduler_callback_target_provider.o"
+      ],
+      "stdout_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-metadata-1/provider-elf.stdout",
+      "stderr_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-metadata-1/provider-elf.stderr"
+    }
+  ],
+  "environment_replace": {
+    "PATH": "/usr/bin:/bin",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "inputs": {
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-unit-1/scheduler_callback_target_provider_unit.rs": "912b9e5617caa3eda781984b640be991c69b1f50ea5b5ba9abb0ac9ac645d676",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-unit-1/rdmsr.rs": "c326d9c97e0ceed5be24f2eac7376a4f6de680fee29695e119bcdc7f228cf617",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-unit-1/local_apic_io.rs": "a5d12fd29ef23a2f9f02d198c51ec1b8008fc2a1b1bdc14c0b48d46e1b09efe9",
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-unit-1/output/scheduler_callback_target_provider.o": "e55e73a72edb30de6454989ee6d896fb55ca520791f628d514d690a18ba89cf4",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-unit-1/SOURCE-MANIFEST.json": "3c51dd5ea051220664a15305e3d3eb53a1b61679622b90b36ff21503de6c48e3",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-unit-1/PROFILE-PROOF.json": "ae68ad1d09a0d094c54e4f71fa22c9560687a950d17e9984393e84cf66857136",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-unit-1/REQUEST.json": "7d7230dee529bdea3585404461b06acab62dcfc5ffa3796186c8519972948131",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-review-1/REVIEW.json": "6dec3b2bea7777c779007d6630eca20bc5a8dcfabef028f4be1f3240d9b2375a",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/callback-target-producer-root-1/ADMISSION.json": "e880d88a1c6f1c4237d2ba2f06f3f8bae8a9a63b08139cf1e2e6001fea5353d3",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/callback-target-producer-root-1/RESULT.json": "b597271d3f51921f99618cf87c008fb85a2b2a12416d4b7028cb3a72ee35cb8d",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-metadata-1/ACTUAL-CAPTURE-BEFORE-GATE.json": "0d431bc9514928e2f76a43f2b42882921063dbc1929568c8a4463d921f670418",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/storage_predicate.py": "a4df81bb2b86d97f4199ae816dab7965213ceba05dca17945f9eae861dc31892",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/REQUEST.json": "fa8166319eed657c68c83efca2537c30c93a89b5a5e0325abe0d5ecf953c2783",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-metadata-1/SOURCE-EMISSION-CONTRACT.json": "2d9582745fe2b5266d7218273e5db716e0c659c4d62efa3bca7b16f01dad7e45",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-metadata-1/metadata_checks.py": "6c0d739c4117264333ab0a12004a61cbffe0df439476f4b8e1eb8210a664a44d",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-metadata-1/run_metadata.py": "bf4a8ddf6d794e336397ac5b63017870c0aea9a4eea19414b6fa277a541b3ec5",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-concrete-provider-metadata-1/run_metadata.py": "6e66fa22a4b3604569bc858a75ee541ffc7fe7ed758ca492068bea7db71e64aa",
+    "/usr/bin/nm": "5fb0dd8acc18e3f348ed0acbcada0580dbdddd1eb5de3c8323613af13580032b",
+    "/usr/bin/readelf": "41a813335a74480f145fba9400aa7fb5c0ec7ffcaa7af7f33e832dc75eb90ffb"
+  },
+  "compiled_input": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-unit-1/output/scheduler_callback_target_provider.o",
+    "sha256": "e55e73a72edb30de6454989ee6d896fb55ca520791f628d514d690a18ba89cf4",
+    "bytes": 2408,
+    "producer_PID": 669018,
+    "producer_birth": "35643944",
+    "producer_joined_returncode": 0,
+    "exact_warning": "52aa"
+  },
+  "source_request": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-unit-1/REQUEST.json",
+  "source_manifest": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-unit-1/SOURCE-MANIFEST.json",
+  "source_review": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-review-1/REVIEW.json",
+  "producer_result": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/callback-target-producer-root-1/RESULT.json",
+  "retained_actual_capture": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-metadata-1/ACTUAL-CAPTURE-BEFORE-GATE.json",
+  "source_emission_contract": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-metadata-1/SOURCE-EMISSION-CONTRACT.json",
+  "actual_nm": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-metadata-1/provider-symbols.stdout",
+  "actual_elf": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-metadata-1/provider-elf.stdout",
+  "actual_metadata_capture": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-metadata-1/ACTUAL-ELF-METADATA.json",
+  "qualified_ELF_reader": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/storage_predicate.py",
+    "sha256": "a4df81bb2b86d97f4199ae816dab7965213ceba05dca17945f9eae861dc31892",
+    "qualification_receipt": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/RESULT.json",
+    "scope": "Reuse exact Image/parse_nm only; no newELFparser/loader oroldpredicateexecution"
+  },
+  "object_predicate": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-metadata-1/metadata_checks.py",
+    "sha256": "6c0d739c4117264333ab0a12004a61cbffe0df439476f4b8e1eb8210a664a44d",
+    "callable": "actual_object_gate(q)",
+    "must_IMPORT_and_CALL_after_two_new_readbacks_before_any_link": true,
+    "allactualemission_retained_before_ownerassertions": true
+  },
+  "controller": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-metadata-1/run_metadata.py",
+    "sha256": "bf4a8ddf6d794e336397ac5b63017870c0aea9a4eea19414b6fa277a541b3ec5",
+    "driver_argv": [
+      "/usr/bin/taskset",
+      "-c",
+      "6",
+      "/usr/bin/timeout",
+      "--signal=TERM",
+      "--kill-after=5s",
+      "140s",
+      "/usr/bin/prlimit",
+      "--as=1073741824:1073741824",
+      "--cpu=45:45",
+      "--fsize=67108864:67108864",
+      "--core=0:0",
+      "--",
+      "/usr/bin/python3",
+      "-B",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-metadata-1/run_metadata.py",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-metadata-1/REQUEST.json"
+    ],
+    "source_reused_controller": {
+      "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-concrete-provider-metadata-1/run_metadata.py",
+      "sha256": "6e66fa22a4b3604569bc858a75ee541ffc7fe7ed758ca492068bea7db71e64aa",
+      "difference": "Onlydocstring/phase/resultlabelstrings; sameactualbirth/directfinallywait/fsync/STOPlogic."
+    },
+    "only_two_new_GNU_payloads_no_compiler_link_runtime": true
+  },
+  "profile": {
+    "CPU": [
+      6
+    ],
+    "local_serial_jobs": 1,
+    "AS_bytes": 1073741824,
+    "CPU_seconds": 45,
+    "wall_seconds": 60,
+    "kill_after_seconds": 5,
+    "FSIZE_bytes": 67108864,
+    "core_bytes": 0,
+    "aggregate_HOST_CPUs": [
+      0,
+      6,
+      7
+    ],
+    "aggregate_jobs_max": 3,
+    "aggregate_HOST_total_bytes_all_overhead": 4294967296,
+    "retained_prior_bytes": 19327352832,
+    "host_floor_bytes": 4294967296,
+    "fresh_MemAvailable_minimum_bytes": 27917287424
+  },
+  "real_external_wrmsr_boundary": "Rootcurrentrealtypedsourceowner63f2 remainsgenuinewrmsrU; no backendobjectoperand, noWRMSRbodycopy/alias, no stale8ecohrtselection. Actualfullcurrentownerbinding andfuturecompositionbelongRootseparately. Source7d72/6dec unchanged.",
+  "actual_emission_scope": "Useactual0d431bc9fullcapture5T20/20/14/20/29,3realU,0data/private,5codeglobal+5PC64EH184relocs/actualflags. Matchfullactualcontent/relocs; preserveactualpublicRDMSR/inliningandgenuineMMIOsignedoffset/dataimportdirection. No defaultsize/flagguess/additionalfieldorcallquota. Capture isNOT ownerPASS untilnewcalledgate.",
+  "future_actual_current_partial_and_join": "UNBOUND. Actualpassedobject+independentlatestmatchingcurrentowners/typedbinding/collision/prejoin/postjoinreview/admission separatelyrequired.",
+  "excluded": "Optionalpublisherobservation027f CLOSED/NO_GO; nofixturepreparation/execution. No MMIO/MSR/WRMSR/RDMSR/function/CPU/IRQ/boot/init/mapping/targetpublication/hardware/native/default/Cretirement/scoreclaim. f03waitreleaseUNKNOWN/NO_GOs retained.",
+  "preparer_operations": "ReadretainedcaptureJSON/sourceEreview/producereceipt, writeonlyprivatemetadatapacket. NoGNU/ELFparser/gate/compiler/link/fixture/function/runtime invoked; sourceunits/reviews andrawcaptureimmutable."
+}

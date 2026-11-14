@@ -1,0 +1,30 @@
+--- native_diagnostic.e1b.preimage.py
++++ native_diagnostic.py
+@@ -1416,14 +1416,15 @@
+             _audit_cancelled_begin_child(serial, prefix, child, children, groups, cancelled, terminals)
+         _need(len(terminals)<=1 and set(returned)==set(delivered)-terminals-cancelled,"child ordinary RET coverage")
+         terminal=delivered[next(iter(terminals))][1] if terminals else None
+-        workers={}
++        workers={};worker_returns={}
+         for key,((cpu,number),begin) in delivered.items():
+             _need(cpu==0 and begin>publication[0],"child CPU/publication order")
+             if key in terminals:continue
+             if key in cancelled:
+-                # Slot0 has no return_route. Require its earlier completed rows
+-                # to establish this SAME worker's slot before terminal closure.
+-                _need(workers.get(key[0])==0, "cancelled worker route history")
++                # The canceled poll has no RET/route row. Require earlier
++                # completed rows to establish this SAME worker's valid slot,
++                # with their actual RETs preceding the canceled delivery.
++                _need(workers.get(key[0]) in (0,1) and worker_returns.get(key[0],begin)<begin, "cancelled worker route history")
+                 continue
+             (retcpu,_),end=returned[key]
+             _need(retcpu==0 and begin<end and (terminal is None or end<terminal),"child syscall/terminal order")
+@@ -1433,6 +1434,7 @@
+                 _need(launcher==1 and guest==0 and begin<where<end,"child route identity/order")
+                 slot=launcher
+             _need(workers.setdefault(key[0],slot)==slot,"child worker route changed")
++            worker_returns[key[0]]=max(worker_returns.get(key[0],-1),end)
+     parent_view=[line for position,line in enumerate(serial.splitlines()) if position not in row_pids or row_pids[position]==parent]
+     return "\n".join(parent_view), sorted(children)
+ 

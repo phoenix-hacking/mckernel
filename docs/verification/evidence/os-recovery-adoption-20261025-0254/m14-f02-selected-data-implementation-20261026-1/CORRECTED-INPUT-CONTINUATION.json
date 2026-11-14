@@ -1,0 +1,17 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "authority": "Root followup_task exact correction to kernel/rust/process_helpers.rs and private kernel-process root; initial discovery blocker retained unchanged.",
+  "additional_original_discovery_diagnostics": [
+    {
+      "command": "rg -n '\\b(idle_halt|time_sharing|allow_oversubscribe)\\b' kernel include arch/x86_64 | head -n 130",
+      "pipeline_rc": 0,
+      "diagnostic": "rg: include: No such file or directory (os error 2)"
+    },
+    {
+      "command": "rg -n 'process_global_storage_candidate|MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE|process_helpers' kernel/CMakeLists.txt kernel/rust/CMakeLists.txt CMakeLists.txt kernel/rust/syscall_policy.rs kernel/rust/abi.rs",
+      "rc": 2,
+      "diagnostic": "rg: kernel/rust/CMakeLists.txt: No such file or directory (os error 2)"
+    }
+  ],
+  "disposition": "Stopped optional path discovery and escalated to root. Continued private implementation using successfully read exact kernel/CMakeLists.txt, kernel/include/process.h and corrected Rust source; no candidate compiler failure or retry."
+}

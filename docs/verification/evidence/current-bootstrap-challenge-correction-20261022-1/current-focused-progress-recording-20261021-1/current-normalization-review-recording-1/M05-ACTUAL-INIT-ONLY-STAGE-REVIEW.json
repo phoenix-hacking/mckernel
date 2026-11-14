@@ -1,0 +1,45 @@
+{
+  "schema": "mckernel.m05-native-stage.actual-consumer-projection.v1",
+  "status": "PASS_ACTUAL_M05_INIT_ONLY_OFFLINE_STAGE_ONLY",
+  "decision": "ACCEPT_ACTUAL_FINITE_STAGE_FOR_DOWNSTREAM_NORMALIZATION_PREPARATION",
+  "reviewer": "/root/numa_clear_range_review",
+  "implementation_ownership": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "actual_stage_result": {
+    "path": "/home/holden/mckernel/scratch/m05c-261021-1/m05/stage-result.json",
+    "sha256": "848d83945c5c1dd6f4a4b371666bdd2630f02fd29bba7ab26a43ecd4ae8b8b71",
+    "bytes": 24300
+  },
+  "manifest": {
+    "path": "/home/holden/mckernel-work/scratch/m05cm-261021-1/m05/manifest.json",
+    "sha256": "7227a35c5ef2db81c193a1bdb0628cc80712f79e0aee8f555940334f70346be0",
+    "size": 5040,
+    "mode": 33152
+  },
+  "actual_evidence": {
+    "record_sha256": "10b3a4bf78a2693ec2e9101c6ff1c8c30ad47fe3dcfae0b753fe2f1b0ab4f48f",
+    "capture_sha256": "28d911f3c76d31c4e530b12cd8ad3cb0f1a255bba39eedad2dd0e0c794a5d8f3",
+    "observed": "Exact reviewed command exited 0 in 11.070303602 seconds; PID 2894700/start 42763534; directly joined, group absent, streams closed, empty stderr, no timeout or capture/retirement error."
+  },
+  "accepted_stage_facts": {
+    "archive_members": 61,
+    "unchanged_members": 60,
+    "changed_final_members": ["init"],
+    "collector_sha256": "f6ef8e3cc1ec50a871339f0550f1f1ba53f5bcf3b44e950059825a73d7cc4850",
+    "collector_size": 1034408,
+    "collector_mode": 33261,
+    "strict_loader_passed": true,
+    "base_prefix_verified": true,
+    "all_metadata_equal": true,
+    "aggregate_stage_bytes": 28388083,
+    "unique_consumed_paths": 32,
+    "read_only_roots": 3
+  },
+  "verification_basis": "Qualified actual stager completed its full replay/base/metadata/strict-loader checks. Retained producer fields exactly match stage-result; overlay final map matches its 61-member map. Manifest, collector and overlay metadata are coupled; all 32 unique consumed paths lie within the three accepted roots. Prior source/component/execution reviews reused without archive re-audit.",
+  "mechanical_recording": "Permit complete copying of genuine stage producer fields and exact descriptors with original reviewer/recorder attribution; preserve original stage, aliases and failures.",
+  "normalization_release": false,
+  "runtime_release": false,
+  "native_or_M05_credit": false,
+  "limits": "Eligible for fresh normalization preparation only. No guest execution, boot-cause diagnosis, restoration or cycle acceptance.",
+  "provenance": "Independent read-only retained-result review; no execution, root action, census or edits. Reviewer quiescent."
+}

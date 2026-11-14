@@ -1,0 +1,35 @@
+--- a/core_boundary_consumer.rs
++++ b/core_boundary_consumer.rs
+@@ -86,16 +86,32 @@
+ #[inline(never)]
+ fn checked_index(index:usize)->u8{let values=[5u8,7u8,11u8];values[index]}
+ 
++// Actual primitive u128 division: the compiler owns the __udivti3 ABI/lowering.
++// Never declare/export/copy that intrinsic and never exercise divisor zero.
++#[inline(never)]
++fn unsigned_quotient(numerator:u128,denominator:u128)->u128{
++    black_box(numerator)/black_box(denominator)
++}
++fn words(value:u128)->(u64,u64){((value>>64) as u64,value as u64)}
++
+ fn normal()->c_int{
+     let option=option_unwrap(black_box(Some(7)));
+     let option_expected=option_expect(black_box(Some(11)));
+     let result=result_expect(black_box(Ok(9)));
+     let bound=checked_index(black_box(1));
++    let maximum=u128::MAX;
++    let quotient_zero=words(unsigned_quotient(0,maximum));
++    let quotient_maximum=words(unsigned_quotient(maximum,1));
++    let quotient_one=words(unsigned_quotient(maximum,maximum));
++    let quotient_crossing=words(unsigned_quotient(maximum,u64::MAX as u128));
+     let mut formatted=Buffer::new();
+     if write!(&mut formatted,"d={};x={:x};X={:X}",black_box(i32::MIN),black_box(-42i32),black_box(i32::MAX)).is_err(){return 107;}
+     let mut record=Buffer::new();
+     if write!(&mut record,"{{\"case\":\"normal\",\"option\":{},\"option_expect\":{},\"result\":{},\"bound\":{},\"fmt\":",option,option_expected,result,bound).is_err()
+         || json_string(&mut record,text_or_terminal(&formatted)).is_err()
++        || write!(&mut record,",\"u128_quotients\":[[{},{}],[{},{}],[{},{}],[{},{}]]",
++            quotient_zero.0,quotient_zero.1,quotient_maximum.0,quotient_maximum.1,
++            quotient_one.0,quotient_one.1,quotient_crossing.0,quotient_crossing.1).is_err()
+         || record.write_str("}\n").is_err(){return 108;}
+     output(record.bytes());0
+ }

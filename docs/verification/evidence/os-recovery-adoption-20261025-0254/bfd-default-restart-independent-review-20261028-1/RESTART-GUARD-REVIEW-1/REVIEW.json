@@ -1,0 +1,140 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_EXACT_RESTART_GUARDIAN_OPERATION_SOURCE_ONLY",
+  "reviewer": "/root/bfd_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "recorded_at": "2026-10-28T19:22:10.177737+00:00",
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/SOURCE-READY.json",
+    "bytes": 4091,
+    "sha256": "f6abfa49541ab893d58030d067d318acceae54d2cf54ab685def315822f8d842"
+  },
+  "reviewed_sources": {
+    "bfd_guard_adapter.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/bfd_guard_adapter.py",
+      "bytes": 3022,
+      "sha256": "e148b1c9bf038a76a40b3dbd5282ab80dfc2a78d80aae02aa27c27b925fb1934"
+    },
+    "current116_guard_adapter.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/current116_guard_adapter.py",
+      "bytes": 3003,
+      "sha256": "af2f25cb88bc3853789df9eef85ae2b9e209e637fa2a7e553055894a9ed8b32c"
+    },
+    "guardian_guard.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/guardian_guard.py",
+      "bytes": 13388,
+      "sha256": "48893862bb3262a2c81d282215e4b9771b8f659e635a21856096c41233774f18"
+    },
+    "operation_guard_adapter.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/operation_guard_adapter.py",
+      "bytes": 2995,
+      "sha256": "38c2742016f10c089d4203e14cf9971e8dad9aa274412008ebeeb3ed1a62065a"
+    },
+    "operation_window_guard.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/operation_window_guard.py",
+      "bytes": 8622,
+      "sha256": "0947dc484d8071dfab53d2ddadd652f7a9746c394bce79faf31b7cbe85eac058"
+    },
+    "original227_guard_adapter.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/original227_guard_adapter.py",
+      "bytes": 3004,
+      "sha256": "307993c2dfdc44982386e5c3f8c411b3546e16ba0ecc87447ef12551101cba9f"
+    },
+    "test_guardian_guard.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/test_guardian_guard.py",
+      "bytes": 5200,
+      "sha256": "c8e72665904ce2d983007c80b1c3327e69f30f73e55b03718a0b68064646f28e"
+    },
+    "test_operation_window_guard.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/test_operation_window_guard.py",
+      "bytes": 8907,
+      "sha256": "d370a9f724cf3818d2a70f47b0bc8203b0743104614cc29150f49fdb208017a5"
+    },
+    "test_restart_bindings.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/test_restart_bindings.py",
+      "bytes": 6232,
+      "sha256": "6bd94a833c4ba3cdeb299322e4aee2fa60a4584cf9d9836c8d71504f96027fc7"
+    }
+  },
+  "actual_controls_receipt": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/new-run-until-20261028-2300-pacific-1/restart-20261028-1200-pacific-1/ACTUAL-CONTROLS-ARMED.json",
+    "bytes": 3171,
+    "sha256": "fe3c2193600ce06c98f769d4659faaf52d3035437a98c5fa8d33ab43a7ed8202"
+  },
+  "actual_earliest_caps": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/new-run-until-20261028-2300-pacific-1/restart-20261028-1200-pacific-1/EARLIEST-CONTROL-CAPS.json",
+    "bytes": 858,
+    "sha256": "a28da98b506a4e51a0f42985f346cc0e4036836731d682dbdeae2423ba236eb0"
+  },
+  "controller_config": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/new-run-until-20261028-2300-pacific-1/restart-20261028-1200-pacific-1/armed-controller/CONFIG.json",
+    "bytes": 2457,
+    "sha256": "b8a15af2a6272bf67c73d0c7f097c4a737eea62c1716c1e9a254a48746156b5a"
+  },
+  "identity_mapping": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/ADAPTER-IDENTITY-MAPPING.SOURCE-ONLY.json",
+    "bytes": 2851,
+    "sha256": "a114e6686364eb148add11421beb74515606e99fc3535565263055e76b37fb2c"
+  },
+  "checks": [
+    {
+      "record": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-restart-independent-review-20261028-1/RESTART-GUARD-REVIEW-1/PURE-REGRESSION.json",
+        "bytes": 677,
+        "sha256": "26c3ea3df57232c0bf3419014bae9008acae78f24a49d826e98f8ac53d0befef"
+      },
+      "methods": 22,
+      "result": "PASS"
+    },
+    {
+      "record": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-restart-independent-review-20261028-1/RESTART-GUARD-REVIEW-1/PURE-WRAPPER.json",
+        "bytes": 668,
+        "sha256": "bd893aad67657cbd35d3d56da0a9c590ba6ce7cba3c1307bcf9397b65ff6f050"
+      },
+      "methods": 1,
+      "result": "PASS",
+      "actual_guard_wrapper_invoked_with_all_live_effects_substituted": true
+    }
+  ],
+  "findings": [
+    "Exact guardian48893862, shared operation0947dc48 and selected no-argument adapters retain their declared source-ready hashes. Actual controller CONFIG, frozen packet/private/canonical source bytes and armed receipt pins passed the pure wrapper source-input checks.",
+    "Immutable ACTUAL-WINDOW remains hash0bfb54bf with original window epoch/MONO/BOOT values1793253600/1035706.5689547858/1051044.6960026678. Execution ceilings are separately stricter1793253600/1035704.5689393478/1051042.6959879305. The guardian permits only further tightening of live journal caps and rejects a reached clock; no time renewal is introduced.",
+    "Actual launcher thread01a183ec, watcher2109395/start101211669, worker2109397/start101211677 and server2109399/start101211685 are exact. The guardian retains the typed live PID/start/PPID chain, active goal/phase, heartbeat age<120s, stop/checkpoint, service/policy/auth/billing/error and uncertain-instruction refusal predicates.",
+    "Guardian bridge-start parent2111551 is explicitly historical; armed guardian2111552/start101236067 and live guardian must use measured supervisor1311/start596/comm systemd/PPID1. Armed monitor2111966/start101243270 may be recorded under shell2111963 but live parent must be that same supervisor. Phone1894242/start96505809 remains under1311. No arbitrary parent, PID, starttime, zombie or missing-supervisor tolerance exists.",
+    "Cumulative account run7f4af94a83b14cc08f97401f5891d965, ceiling57774.852125 and minimum spent22812.3311 remain. Included-first/no-purchase/no-API-billing controller semantics and resident account-wide prepaid balance guard remain exact. Shared operation checker reuses byte-pinned predecessor account rules with only the actual thread identity rebound; floor rollback, expired heartbeat, genuine holds and billing changes refuse.",
+    "Shared operation API remains guard(operation, successor_ref, review_ref, subjects), validate_operation(...), strict decode/authenticated and unchanged predecessor-cutoff table for original227/current116/BFD. Exact new guardian reference is mandatory for all three. Per-operation adapters retain configure(ref), guard(), current_cutoffs(), OPERATION and BOOT; configuration is one-time and exact immutable data, not a default release. Generic OPERATION=None adapter is only a source template.",
+    "Original227 final external facade binding can select exact new adapter/config, but recursive current60/common/physical guard edges require explicit routed successors. BFD current prepare_entry_inputs/facade/adjacent runtime guard has hardcoded old routing; new shared source alone does not update those consumers. Existing private BFD route owner and original227 dependency preparation must propagate exact references without mutating accepted historical files or rebuilding SDK/export prefixes.",
+    "The shared module E=HERE.parent is correct only at this retained location under the evidence root. Copying it into a deeper private cohort requires a reviewed exact E predecessor-path binding; no silent path alias or source-hash bypass is permitted."
+  ],
+  "source_blockers": [],
+  "integration_conditions": [
+    "Root may perform the single fresh read-only guardian guard check requested by the parent only against exact reviewed48893862 bytes. Capture actual stdout/status/failure; this review itself supplies no actual live clearance.",
+    "Before each operation, Root must bind actual final runtime subjects, explicit new operation successor and independent exact successor review, exact adapter/config refs and transitive source/config publication. No old operation review, retired guardian, original227 alias or plan-only subject set supplies that authority.",
+    "Further actual watcher/control tightening must remain effective; operation/profile/consumer constants must never exceed the true actual minima. Source-only review does not prove reservations, soleheavy ownership, CPU/resource floors, native custody or nonce availability.",
+    "All prior failures, consumed prefixes/nonces, reserved original227 nonce, stopped scratch21, exclusions and permanent27:4 remain retained. No automatic retry, cleanup, controller arm, compiler or native action follows from this PASS."
+  ],
+  "next_Root_operation": {
+    "owner": "/root",
+    "kind": "ONE_FRESH_READONLY_GUARD_CHECK_ONLY",
+    "source": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/guardian_guard.py",
+      "bytes": 13388,
+      "sha256": "48893862bb3262a2c81d282215e4b9771b8f659e635a21856096c41233774f18"
+    },
+    "entrypoint": "guard",
+    "hash_before_import_required": true,
+    "record_actual_returned_clock_triplet_and_status": true,
+    "heavy_native_release": false
+  },
+  "actual_actions": {
+    "live_guard_account_calls": 0,
+    "substituted_guard_wrapper_calls": 1,
+    "compiler_Docker_native_calls": 0,
+    "controller_mutations": 0,
+    "nonce_or_execution_grants": 0,
+    "evidence_writes_only": true
+  },
+  "runtime_authority": null
+}

@@ -1,0 +1,219 @@
+{
+  "application_readiness_complete": false,
+  "artifacts": [
+    {
+      "path": "docs/verification/evidence/native-application-signals-protocol-20260909-1.tar.gz",
+      "sha256": "dbae509394930cdf087c3957a19f0c2ba07cd0ef66eeaa632fdce1dece714e73",
+      "size": 927881,
+      "source": "/work/native-application-signals-protocol-20260909-1"
+    },
+    {
+      "path": "docs/verification/evidence/native-application-signals-protocol-20260909-2.tar.gz",
+      "sha256": "cf71ab323b67eae6b32becfe9a39dcf834ee2381652f5c880cb8c4b31817e741",
+      "size": 7673911,
+      "source": "/work/native-application-signals-protocol-20260909-2"
+    },
+    {
+      "path": "docs/verification/evidence/native-application-committed-return-20260909-1.tar.gz",
+      "sha256": "f0c048eaef05c40501350d803958f5078da4fa54b0d8c469e56d1ef3e3a932e8",
+      "size": 704513,
+      "source": "/work/native-application-committed-return-20260909-1"
+    },
+    {
+      "path": "docs/verification/evidence/native-application-committed-return-20260909-2.tar.gz",
+      "sha256": "c6b96b70386cb5a9eb6342b49774e152f4ae565fcdfd92843d7a922301052305",
+      "size": 4341818,
+      "source": "/work/native-application-committed-return-20260909-2"
+    },
+    {
+      "path": "docs/verification/evidence/native-application-signals-protocol-20260909-retention-helper.gz",
+      "sha256": "1d05511e309629c93254e91787e173e6d2da254c0b5d9c473726e8a369181163",
+      "size": 2928,
+      "source": "/work/native-application-signals-protocol-retained-20260909-1/helper.py"
+    }
+  ],
+  "captures": [
+    {
+      "name": "native-application-signals-protocol-20260909-1",
+      "original_status": "FAIL",
+      "record": {
+        "path": "/work/native-application-signals-protocol-20260909-1/record.json",
+        "sha256": "f843231da2e98bc669f044ecaed36ef919fa98121b6fca9da13f5cab90ae6968",
+        "size": 11313
+      },
+      "summary": null
+    },
+    {
+      "name": "native-application-signals-protocol-20260909-2",
+      "original_status": "PASS",
+      "record": {
+        "path": "/work/native-application-signals-protocol-20260909-2/record.json",
+        "sha256": "a2412d0f6786272f54a0099541d1910264c14cb74e2e35564fa7eb02a70d165b",
+        "size": 14276
+      },
+      "summary": {
+        "legacy": [
+          "test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s"
+        ],
+        "native": [
+          "test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s"
+        ]
+      }
+    },
+    {
+      "name": "native-application-committed-return-20260909-1",
+      "original_status": "FAIL",
+      "record": {
+        "path": "/work/native-application-committed-return-20260909-1/record.json",
+        "sha256": "c036370ee6d07095816541c6295593366dec7ac470ab47a5a6add9ffdd9b7952",
+        "size": 15137
+      },
+      "summary": null
+    },
+    {
+      "name": "native-application-committed-return-20260909-2",
+      "original_status": "PASS",
+      "record": {
+        "path": "/work/native-application-committed-return-20260909-2/record.json",
+        "sha256": "438c57cb25b435c652dd755eb8ac2ac476c864e02e9e71a451c399fc1b30a1bb",
+        "size": 21073
+      },
+      "summary": [
+        "test result: ok. 37 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s"
+      ]
+    }
+  ],
+  "finished_utc": "2026-09-09T04:26:45.178682+00:00",
+  "legacy_signal_tests": 5,
+  "mailbox_and_return_tests": 37,
+  "native_signal_tests": 6,
+  "original_failures": 2,
+  "references": [
+    {
+      "path": "docs/verification/native-application-threads-checkpoint-20260909.json",
+      "sha256": "ac7f4f59abcc05f847813e64e807a74cd33caa4074698e57a3ade0612d93e0f3",
+      "size": 44267
+    },
+    {
+      "path": "docs/verification/native-application-clone3-images-checkpoint-20260909.json",
+      "sha256": "c82e49490ecd416dd7426617bb6c9ea485332d0c614726c1d5e653f1ccda57cb",
+      "size": 45508
+    }
+  ],
+  "scope": "Native signal frame/state and committed host return. Exact Linux reference, complete native/legacy bodies and mailbox; all original fixture failures retained. New images/modules/runtime pending.",
+  "signal_guest_pass": false,
+  "signal_reference_vectors": 3780,
+  "source_bindings": [
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-signals-protocol-20260909-2/original-inputs/arch/x86_64/kernel/include/signal.h",
+      "path": "arch/x86_64/kernel/include/signal.h",
+      "sha256": "3cea81b9b2f723fbff2cafa634761d50316a397d06df2c12f94fe5f0dae03752",
+      "size": 7474
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-signals-protocol-20260909-2/original-inputs/arch/x86_64/kernel/syscall.c",
+      "path": "arch/x86_64/kernel/syscall.c",
+      "sha256": "609306dbfe832c70db85349646d6fab4883c6d2bb188be1f2dcebd26c6f7244b",
+      "size": 109645
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-signals-protocol-20260909-2/original-inputs/kernel/CMakeLists.txt",
+      "path": "kernel/CMakeLists.txt",
+      "sha256": "94435d0ee77fea3bfdf4960fa2e8ba3b1883c61953fb7f443d8ae6d0fa579642",
+      "size": 22292
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-signals-protocol-20260909-2/original-inputs/kernel/rust/abi.rs",
+      "path": "kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "size": 76151
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-signals-protocol-20260909-2/original-inputs/kernel/rust/lib.rs",
+      "path": "kernel/rust/lib.rs",
+      "sha256": "7cd2922f2f7aa28b0f70e0c15fe4987201cbf22eee5d4b771d2de84025db1396",
+      "size": 1798
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-signals-protocol-20260909-2/native_signal.rs",
+      "formatter_original": {
+        "path": "/work/native-application-signals-protocol-20260909-2/original-inputs/kernel/rust/native_signal.rs",
+        "sha256": "9033f5a8eee6fbf9e8c8fa5f7c6a56ec8b98224e03347547589c7224bf7213c6",
+        "size": 5424
+      },
+      "path": "kernel/rust/native_signal.rs",
+      "sha256": "c59b13750ea4127f27280c793929d6c9984d339c2f9994ec271a4e96b152528f",
+      "size": 5559
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-signals-protocol-20260909-2/original-inputs/kernel/rust/syscall_policy.rs",
+      "path": "kernel/rust/syscall_policy.rs",
+      "sha256": "7e3a362cdc1704e6c5359655db0226c90e17ce9ee8ce57ae8e65e251dd219b56",
+      "size": 692750
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-signals-protocol-20260909-2/original-inputs/kernel/rust/tests/run_equivalence.sh",
+      "path": "kernel/rust/tests/run_equivalence.sh",
+      "sha256": "e6c51a0c45bc496666eab2cf7241332b480cc093383bc2434625929ca25b9435",
+      "size": 5002742
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-signals-protocol-20260909-2/original-inputs/scripts/tests/fixtures/native-application-signals.c",
+      "path": "scripts/tests/fixtures/native-application-signals.c",
+      "sha256": "fe06019d0fdb731a01b7d5cbe8ae738a7ddaabe8b672e275c0e59ee109dffa31",
+      "size": 1497
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-signals-protocol-20260909-2/native-application-signals.rs",
+      "formatter_original": {
+        "path": "/work/native-application-signals-protocol-20260909-2/original-inputs/scripts/tests/fixtures/native-application-signals.rs",
+        "sha256": "0b2c90c4c7bf6dd49e130f3416d66c909e82ae0cee8a0ca1b51f4bbc79d8cdd0",
+        "size": 10506
+      },
+      "path": "scripts/tests/fixtures/native-application-signals.rs",
+      "sha256": "01982376e091a4c0565c91dd59a8d26263a0d2b542d909f8e24ec9a3be4c02bb",
+      "size": 13501
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-committed-return-20260909-2/original-inputs/host-kernel/native-rust/smp_application.rs",
+      "path": "host-kernel/native-rust/smp_application.rs",
+      "sha256": "4376507c0f7ea86fc69898b410a94c338fa29f98829c16a8b982a235a6df64e8",
+      "size": 38509
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-committed-return-20260909-2/original-inputs/host-kernel/native-rust/smp_application_syscall.rs",
+      "path": "host-kernel/native-rust/smp_application_syscall.rs",
+      "sha256": "a2a18d660a5cbc3882b9f2dbc6190d78e3b2614b8888a3bec2be5193ea145d39",
+      "size": 19536
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-committed-return-20260909-2/source/scripts/tests/fixtures/native-application-committed-return.rs",
+      "path": "scripts/tests/fixtures/native-application-committed-return.rs",
+      "sha256": "c8f6fc0668a7d740f6193fa2edc39af49b18d603bd5f2332ca25cf8c4bce1829",
+      "size": 4877
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-application-committed-return-20260909-2/original-inputs/scripts/tests/fixtures/native-application-syscall.rs",
+      "path": "scripts/tests/fixtures/native-application-syscall.rs",
+      "sha256": "a83d42e0613d87df862b2d34649e05cee4c7595847951402ae9410a8ccacf981",
+      "size": 54160
+    }
+  ],
+  "source_parent": "fc87592dd5190668fc1d34df1a49aa287d9eaf4f",
+  "started_utc": "2026-09-09T04:26:42.008073+00:00",
+  "status": "PASS"
+}

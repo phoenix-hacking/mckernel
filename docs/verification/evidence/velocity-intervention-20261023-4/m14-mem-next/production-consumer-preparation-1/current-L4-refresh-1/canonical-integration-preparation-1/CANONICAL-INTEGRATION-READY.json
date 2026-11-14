@@ -1,0 +1,126 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "EXACT_INTEGRATION_PROPOSAL_READY_ROOT_REVIEW_PASS_SELECTION_REQUIRED",
+  "copies": [
+    {
+      "target": "/home/holden/mckernel/kernel/mem.c",
+      "preimage": {
+        "path": "/home/holden/mckernel/kernel/mem.c",
+        "sha256": "7498e7c930a55bdcde5ecd12f4498c47c5573d690355c8f09a7b9f957ffe00a2",
+        "bytes": 226712
+      },
+      "staged_postimage": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-mem-next/production-consumer-preparation-1/current-L4-refresh-1/canonical-integration-preparation-1/staged/kernel/mem.c",
+        "sha256": "638788c79fb96c1edb229d016fa678a02c0fcde6e1b56c7fa45d33b5490354d4",
+        "bytes": 226806
+      },
+      "accepted_private_postimage": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-mem-next/candidate/kernel/mem.c",
+        "sha256": "638788c79fb96c1edb229d016fa678a02c0fcde6e1b56c7fa45d33b5490354d4",
+        "bytes": 226806
+      },
+      "rollback_preimage": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-mem-next/production-consumer-preparation-1/current-L4-refresh-1/canonical-integration-preparation-1/preimages/kernel/mem.c",
+        "sha256": "7498e7c930a55bdcde5ecd12f4498c47c5573d690355c8f09a7b9f957ffe00a2",
+        "bytes": 226712
+      },
+      "mode": 420,
+      "uid": 1000,
+      "gid": 1000,
+      "observed_old_inode": {
+        "device": 66306,
+        "inode": 47475811,
+        "nlink": 1
+      }
+    },
+    {
+      "target": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+      "preimage": {
+        "path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+        "sha256": "c0e7f8bd0b117c9b4e0a4e3690ef5ed5cb01bdc6b16f7225de973eba039d72d5",
+        "bytes": 202708
+      },
+      "staged_postimage": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-mem-next/production-consumer-preparation-1/current-L4-refresh-1/canonical-integration-preparation-1/staged/kernel/rust/mem_helpers.rs",
+        "sha256": "4635a252332cd369e36384f04a414e2b4c2d79726a4f95caafcf1d3ed1a56b4d",
+        "bytes": 203495
+      },
+      "accepted_private_postimage": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-mem-next/candidate/kernel/rust/mem_helpers.rs",
+        "sha256": "4635a252332cd369e36384f04a414e2b4c2d79726a4f95caafcf1d3ed1a56b4d",
+        "bytes": 203495
+      },
+      "rollback_preimage": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-mem-next/production-consumer-preparation-1/current-L4-refresh-1/canonical-integration-preparation-1/preimages/kernel/rust/mem_helpers.rs",
+        "sha256": "c0e7f8bd0b117c9b4e0a4e3690ef5ed5cb01bdc6b16f7225de973eba039d72d5",
+        "bytes": 202708
+      },
+      "mode": 420,
+      "uid": 1000,
+      "gid": 1000,
+      "observed_old_inode": {
+        "device": 66306,
+        "inode": 47484784,
+        "nlink": 1
+      }
+    }
+  ],
+  "active_consumer_exclusion": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-mem-next/production-consumer-preparation-1/current-L4-refresh-1/canonical-integration-preparation-1/ACTIVE-CONSUMER-EXCLUSION.json",
+    "sha256": "6005c1d12ca69a08805650dff2d467950ec2bf4e664e32b6a9c1a468c26b34d9",
+    "bytes": 2340
+  },
+  "root_command": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-mem-next/production-consumer-preparation-1/current-L4-refresh-1/canonical-integration-preparation-1/ROOT-ATOMIC-INTEGRATE.py"
+  ],
+  "root_script": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-mem-next/production-consumer-preparation-1/current-L4-refresh-1/canonical-integration-preparation-1/ROOT-ATOMIC-INTEGRATE.py",
+    "sha256": "27c048688e65a2ed7aefb549ad6440c734826e7da25536a45f3396d341b16864",
+    "bytes": 6858
+  },
+  "execution_performed": false,
+  "canonical_writes": 0,
+  "candidate15_writes": 0,
+  "CPU_slots_held": 0,
+  "source_hunks": [
+    {
+      "file": "kernel/mem.c",
+      "change": "Only place exact original scalar wrapper under #ifndef MCKERNEL_RUST_MEM_HELPERS; C fallback body unchanged; accepted Rust array selection and all13Ccallbacks unchanged."
+    },
+    {
+      "file": "kernel/rust/mem_helpers.rs",
+      "change": "Add exact three-argument no_mangle unsafe extern C scalar export; initialize local unsigned-long-compatible address then call existing Rust array entry synchronously with local pointer/count1/cpu; no new C getter/layout/header/CMake changes."
+    }
+  ],
+  "durable_proofs": {
+    "actual_leaf": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-mem-next/ACTUAL-SCALAR-READY-HANDOFF.json",
+      "sha256": "16e9f58e9ec5365238a311e4daadd576db05d7c093dd292593291d2137a6b7a3",
+      "bytes": 3386
+    },
+    "actual_production": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-mem-next/production-consumer-preparation-1/current-L4-refresh-1/FINAL-ACTUAL-PRODUCTION-HANDOFF.json",
+      "sha256": "fbbd1dd9b607177c703ae0604b87759701ce9037a28beb641a0cea1c561fe06a",
+      "bytes": 9407
+    },
+    "actual_whole_join": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-mem-next/production-consumer-preparation-1/current-L4-refresh-1/ACTUAL-PRODUCTION-WHOLE-JOIN.json",
+      "sha256": "8fa8c1c621eb100638e2ad1e5ccb776bffdfd375487fa732d66149f71a2df516",
+      "bytes": 17826
+    },
+    "actual_production_Rust_symbols": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-mem-next/production-consumer-preparation-1/current-L4-refresh-1/ACTUAL-RUST-SYMBOL-RECEIPT.json",
+      "sha256": "635577367cb2e73129745c37bb0dd0deba6da276c8707b3a9dc342ec8ea6cdaf",
+      "bytes": 723
+    }
+  },
+  "independent_review": "Parent assigned/reports m14_callback_review; root alone binds final PASS record before executing. No review duplicated here.",
+  "strictness": "Both originals and both staged postimages compared before any write; sibling temporary files fsynced then os.replace each target, directory fsync; originals rechecked immediately before each replacement and both postimages checked after. Existing hardlinks preserve old bytes.",
+  "rollback": "On exception rollback only targets still on our exact published inode AND exact expected postimage. Otherwise HOLD, retain intervening edit and report; never blindly restore/revert others. Two files are coordinated but not one filesystem-wide atomic transaction.",
+  "remaining_C_callback_debt": 13,
+  "exactGCC14_defaultkernel_link_native": "OPEN",
+  "all_original_source_prep_and_observer_failures_retained": true
+}

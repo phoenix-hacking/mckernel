@@ -1,0 +1,63 @@
+{
+  "child_argv": [
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-nonheld13-input-validation-source-1/test_sdk13_data32_input_validation.py"
+  ],
+  "child_environment": {
+    "LANG": "C",
+    "LC_ALL": "C",
+    "PATH": "/usr/bin:/bin",
+    "PYTHONNOUSERSITE": "1",
+    "TMPDIR": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-nonheld13-data32-pure-checks-1/validator/tmp"
+  },
+  "converter": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-nonheld13-ledger-converter-source-1/sdk13_data32_ledger_converter.py",
+    "sha256": "36280257a6faf3d2ce99b3c018f16bca092d1ed124838ab99dda2edf94cefe3f"
+  },
+  "limits": "CPU0; AS512MiB; CPU20; nofile128; fsize16MiB; core0; wall30 TERM+5 KILL",
+  "matcher": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/MANUAL-RESUME-M14-20261030-2/perf-counter-runner-successor-1/serial_supervised.py",
+    "sha256": "7d8e744c755b37213abb81e9ce8b2220edc2b982fdfcbd9b61b3b45815e1dbfd"
+  },
+  "owner_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=536870912:536870912",
+    "--cpu=20:20",
+    "--nofile=128:128",
+    "--fsize=16777216:16777216",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-nonheld13-data32-pure-checks-1/supervise_pure.py",
+    "validator"
+  ],
+  "prlimit_sha256": "06a57e4767f1bdfcc8c5a39b4b58decb9366447b007a8bdd9d6b12d1e6698d8c",
+  "python": {
+    "path": "/home/holden/anaconda3/bin/python3.9",
+    "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb"
+  },
+  "snapshot_fixture": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-nonheld13-input-validation-source-1/test_sdk13_data32_input_snapshot.py",
+    "sha256": "73643532ec27a5275d8c74aea1eaa48c233fd542382a9e4a98e70946d5530527"
+  },
+  "supervisor": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-nonheld13-data32-pure-checks-1/supervise_pure.py",
+    "sha256": "c00624ba00d337663e8b5be9d478a56180b6412c4a8872c7a98f436402329c76"
+  },
+  "taskset_sha256": "28f2dd426247d7d1d794c0fb8a723efc6a1ae3c56393a238b180fe9a0dc32f1c",
+  "validator_fixture": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-nonheld13-input-validation-source-1/test_sdk13_data32_input_validation.py",
+    "sha256": "0241619c42dd0858950fe3a1e5dfd6dcc386c7959c57b33fccacad5c37019a3a"
+  },
+  "worker": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-nonheld13-data32-pure-checks-1/normalize_evidence_only.py",
+    "sha256": "c39e08cfb872c2e789571d3e558667cf9fc3bce7b1acecf029afcdb0bef565fc"
+  }
+}

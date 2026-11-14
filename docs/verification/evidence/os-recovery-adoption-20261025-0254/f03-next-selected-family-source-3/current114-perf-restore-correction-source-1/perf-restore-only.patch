@@ -1,0 +1,14 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/candidate/kernel/syscall.c
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/candidate/kernel/syscall.c
+@@ -21289,6 +21289,11 @@
+ 	return do_syscall(request, cpu);
+ }
+ #endif /*ENABLE_PERF*/
++#ifdef ENABLE_PERF
++#line 21118
++#else
++#line 21150
++#endif
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ extern struct vm_range_numa_policy *

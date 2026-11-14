@@ -1,0 +1,67 @@
+{
+  "schema": "mckernel.scratch22-authority2-source-activation-independent-review.v1",
+  "decision": "PASS_SOURCE_ACTIVATION",
+  "reviewer": "/root/fork_adoption_boundary_review",
+  "implementation_author": "/root",
+  "implementation_ownership": false,
+  "model": "gpt-6.1-sol",
+  "scope": "Acknowledge the fulfilled source-activation prerequisites and review only the exact preapproved wrapper flag plus two focused activation-test edits. No preparation/build execution release, live observation, recovery replay or full source re-audit.",
+  "conditional_review": {"path": "docs/verification/evidence/scratch22-authority2-retirement-wiring-independent-review-20261017.json", "sha256": "1969eb4de931258f7be1021be186f9fe7eeaa056c4ccef8586e96d5748430078"},
+  "activation_record": {"path": "docs/verification/evidence/scratch22-authority2-source-activation-20261017.json", "sha256": "711b4063f0e029e0c61b4c7dddfc79fe343b876755ee3910624be00660a062b0"},
+  "reviewed_inputs_sha256": {
+    "scripts/prepare_native_exact_scratch22_authority2.py": "dbdc8c6711f4502328b37cec4b200d999c102af53f87aa183debbe160379dc0f",
+    "scripts/tests/test_prepare_native_exact_scratch22_authority2.py": "8afa9a23f102595bd7c7d97bed2be6e578e9b16325b8cfecf0ebafd05da06f6c",
+    "scripts/native_exact_scratch22_authority2_build_wrapper.py": "7fab2909b65599e644a4541c691fc141dc96bebbea97d89b3764379778244659",
+    "scripts/tests/test_native_exact_scratch22_authority2_build_wrapper.py": "30af2e041de08754c3a1ef2bf3fa3ac38e7d3f5ebfc8f2f0db222a4fcffc8a36"
+  },
+  "activation_conditions": {
+    "actual_cleanup": {
+      "result": {"path": "/home/holden/mckernel-work/scratch/native-exact-scratch22-authority1-cleanup-20261017.execute.stdout", "sha256": "af4c3f45ff0c276c110251fd4f9c8cb88c5e8606bfc3cf6f6a0ea48bb7688d29"},
+      "independent_postflight": {"path": "docs/verification/evidence/scratch22-authority1-cleanup-postflight-pointer-correction-20261017.json", "sha256": "a54b8f2971b4a541e2af9a3bd5eb9df407fb3314d55a5b63398990f5a2f6f2ed"},
+      "decision": "PASS_TERMINAL_CLEANUP_POSTFLIGHT",
+      "original_postflight_sha256": "1373becd5394b7f7f5d95d919a3310a7c4f2bd41bd2968e6e24f00f7d508b471",
+      "check": "The accepted additive postflight binds exact actual PASS_EXECUTED result and preserves original cleanup proofs. It moves only extra pointer annotations to observed_metadata so the unchanged strict consumer receives exact path/SHA pointers. No root cleanup or large capture hashing was repeated by this reviewer."
+    },
+    "real_complete_retirement_validator": {
+      "stdout": "/home/holden/mckernel-work/scratch/authority2-retirement-actual-validator-correction1-20261017.stdout",
+      "sha256": "2e0f0c1901f64bf3cafb6cdb86a75297ac08abd79e0c27f7a9326214a3d4ace5",
+      "exact_stdout": "PASS_ACTUAL_AUTHORITY1_RETIREMENT COMPLETE_PROCESS_RECOVERY PASS_EXECUTED\n",
+      "reported_exit_code": 0,
+      "check": "Actual recovery and cleanup receipts now pass the unchanged adapter validator. This result closes the prior missing-cleanup boundary; no synthetic accepted receipt or consumer source change was used."
+    },
+    "disabled_source_checkpoint": {
+      "commit": "dcb53e5c05d79760a40faeb3e44163389211fcb6",
+      "proof": {"path": "docs/verification/evidence/scratch22-authority2-disabled-source-fetched-proof-20261017.json", "sha256": "d97fb480140c270901036ca90f6f24f4054a149dc4ec0d6723664a95ae3d7f1d"},
+      "fetched_checkpoint": "ec200ae2e02443cbbaa6654920438bf5bac018b4",
+      "four_fetched_blobs_equal": true,
+      "check": "Read the exact dispatcher fetched-source proof and checked its four disabled-source hashes against the accepted source review. Its ancestor proof is PASS. Reviewer did not issue Git commands."
+    }
+  },
+  "exact_source_delta": {
+    "disabled_wrapper_sha256": "564f52cc3f75562646a2cc2185d2e7325f423904ddef098ba8265b1ff542ed01",
+    "enabled_wrapper_sha256": "7fab2909b65599e644a4541c691fc141dc96bebbea97d89b3764379778244659",
+    "check": "Replacing the sole ADAPTER_RELEASED = True back to False in the current wrapper reproduces the complete frozen disabled wrapper SHA exactly. The enabled hash equals the prior independently precomputed conditional hash. ADAPTER_SHA256, release validation, readiness joins, locks, quarantine, captures, resources and execution behavior have no other change."
+  },
+  "exact_test_delta": {
+    "baseline_tests_sha256": "38f7d797523306892c4cdffc9146e2e85bdd2b7c8c90a10e76afab12ab502400",
+    "activated_tests_sha256": "30af2e041de08754c3a1ef2bf3fa3ac38e7d3f5ebfc8f2f0db222a4fcffc8a36",
+    "check": "Reconstructing only the original disabled-test body and removing only the new enabled-source test reproduces the complete frozen baseline test SHA. No other test/helper/assertion changes occurred.",
+    "preserved_negative": "All original disabled-gate assertions now run under explicit ADAPTER_RELEASED=False: exact adapter hash, NOT_RELEASED refusal, no bind_release and no development-lock acquisition. The test is retained and applicable after source activation.",
+    "new_positive_boundary": "The enabled-source test asserts True but makes bind_release fail with missing exact release; it requires that call exactly once and no development-lock acquisition. Source activation therefore cannot substitute for the independent execution release.",
+    "dispatcher_focused_result": {"cases": 2, "exit_code": 0, "seconds": 0.001, "profile": "CPU0/2GiB/60s; ordinary mocks only"},
+    "reviewer_reran_tests": false,
+    "read_only_reconstruction_note": "The first in-memory baseline reconstruction omitted one method-ending newline and failed its SHA assertion. Correcting only that reconstruction newline reproduced the frozen baseline exactly. No source file or oracle was edited by either probe; this is not a candidate failure or change to campaign failure history."
+  },
+  "history_preservation": {
+    "original_validator_failure": {"path": "/home/holden/mckernel-work/scratch/authority2-retirement-actual-validator-20261017.stderr", "sha256": "f543eef013679135c12f165f4262c5ad065c97fd81911b3c6a96afdb57e23a6e"},
+    "rule": "Original cleanup postflight, actual cleanup result, failed validator capture and original failed native build remain preserved. Pointer correction is additive and changes no adapter code. No reset, replay or new acceptance score."
+  },
+  "conclusion": "The source-readiness flag is accepted for the exact enabled wrapper and reviewed activation tests. Proceed with dispatcher commit/push/fetch of these enabled sources, then exact new preparation controller/release and independent preparation review. No further broad source review is needed for these exact bytes.",
+  "remaining_execution_requirements": "Enabled-source checkpoint and fetched exact blobs are still required. Final independently reviewed hash-bound one-shot preparation and build releases, fresh live identities/capacity and the original heavy profile remain mandatory before workload execution. Minimal native source target d37d2216 and its f0a565 source-repair authority remain unchanged.",
+  "blocking_findings": [],
+  "execution_authority": false,
+  "preparation_or_build_performed": false,
+  "native_build_or_guest_credit": false,
+  "acceptance_credit": false,
+  "reviewer_actions": "Read-only CPU6/2-GiB source/receipt/proof/hash inspection and this one additive JSON write. No child, live proc, root, lock, signal, Docker, compiler, Git or network operation."
+}

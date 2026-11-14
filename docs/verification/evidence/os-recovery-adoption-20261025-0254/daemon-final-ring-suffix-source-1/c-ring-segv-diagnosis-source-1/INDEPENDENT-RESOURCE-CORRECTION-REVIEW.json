@@ -1,0 +1,105 @@
+{
+  "schema": "mckernel.source32.stack-resource-correction.independent-source-review.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/daemon_execution_review",
+  "implementation_ownership": false,
+  "decision": "PASS_SOURCE",
+  "resource_profile_review": "PASS_BOUNDED_C_STACK_CORRECTION_SOURCE_ONLY",
+  "at": "2026-10-27T17:59:38.282360+00:00",
+  "diagnosis": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/c-ring-segv-diagnosis-source-1/DIAGNOSIS.SOURCE-ONLY.json",
+    "bytes": 10098,
+    "sha256": "78c8581cfd00e8da53dae0e6123e212a5c22e5920ca3f131f73b2486076e2ff8"
+  },
+  "source_sha256": {
+    "owned_process_stack8.py": "a3d4c2cc044e3d7187d2c5b038777e567d088d41a166a18d574cac8d3a445796",
+    "final_driver_stack8.py": "892332b2ef5e10e104148e86c11a8dc9d6de7020fd56db7e15a7ba8111d97915"
+  },
+  "sources": {
+    "owned_process_stack8.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/c-ring-segv-diagnosis-source-1/owned_process_stack8.py",
+      "bytes": 6465,
+      "sha256": "a3d4c2cc044e3d7187d2c5b038777e567d088d41a166a18d574cac8d3a445796"
+    },
+    "final_driver_stack8.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/c-ring-segv-diagnosis-source-1/final_driver_stack8.py",
+      "bytes": 6072,
+      "sha256": "892332b2ef5e10e104148e86c11a8dc9d6de7020fd56db7e15a7ba8111d97915"
+    },
+    "FIXTURE-COMMAND.RESOURCE-PROPOSAL.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/c-ring-segv-diagnosis-source-1/FIXTURE-COMMAND.RESOURCE-PROPOSAL.json",
+      "bytes": 2564,
+      "sha256": "7639c9cfacc2265713e9579203eaab8f4af03c9b0252e9ee444331701429671d"
+    },
+    "test_stack_resource_proposal.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/c-ring-segv-diagnosis-source-1/test_stack_resource_proposal.py",
+      "bytes": 3186,
+      "sha256": "f41acf4f12e4a37508415e4ee1fdaf2b927ba3be4fb4aa09ed266add67ad3f2b"
+    }
+  },
+  "retained_failure": {
+    "workload_capture": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/workspace/native-running-modules-candidate-d27509b612927d235adf7f07748f3f82/fixture-output/ring-C/whole-join.json",
+      "bytes": 1136,
+      "sha256": "0976565d5a2a4d74caf85dda69447cca448bcf5be9f4ada979f8ffd513238afc"
+    },
+    "first_failure": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/workspace/native-running-modules-candidate-d27509b612927d235adf7f07748f3f82/fixture-output/first-failure.json",
+      "bytes": 128,
+      "sha256": "10d3b65ee1455132f0dbd43e83caf40d6159dde8b32b746b46f3c6763a908e98"
+    },
+    "trace": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/workspace/native-running-modules-candidate-d27509b612927d235adf7f07748f3f82/fixture-output/ring-C.trace",
+      "bytes": 94,
+      "sha256": "63ce590d1391c5cf1268a612d4957d67214b1307b71cc6338aa9876f9d8938d4"
+    },
+    "actual_binary": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/workspace/native-running-modules-candidate-d27509b612927d235adf7f07748f3f82/fixture-output/ring-C-helper",
+      "bytes": 43328,
+      "sha256": "8e4b86498b1659246e21fc01ec36e3a47b10397b0444ee1d3372d75cdbe08c05"
+    }
+  },
+  "mechanism": {
+    "independent_primary_ELF_mapping": "PASS: directly mapped PT_LOAD file bytes at0x402486 confirm call to0x4027f0;0x402806 is4881ec48f13f00 subrsp0x3ff148;0x402815 is89542418 first lowstackwrite.",
+    "frame_bytes": 4190536,
+    "old_hard_and_soft_stack": 2097152,
+    "proposed_C_hard_and_soft_stack": 8388608,
+    "inference": "Retained frame exceeds entire oldstack before next provider call, consistent with observed trace andSIGSEGV-11/missingterminalreceipt. Corrected execution remains unproved.",
+    "exact_fault_RIP_observed": false,
+    "reference_C_source_or_binary_changed": false
+  },
+  "stack_inheritance": [
+    "Driver h990 preexec callback sets fixture controller hard/soft8MiB;fixture command prlimit also names8MiB;privateOwner constructor requires8MiB and cannot run under old2MiB profile.",
+    "Owner.run admits only ring-C/ring-Rust/oversize-Rust labels. h990 owned_capture still invokes limits callback in directchild preexec after restoring signal mask and before exec. Cchild receives8MiB;each Rustchild lowers hard/soft to2MiB and verifies actuallimits. These childchanges cannot alter controller8MiB.",
+    "RUST_MIN_STACK remains2097152 for actualRustworkers. AllotherRLIMITS,affinity,pids64,8s leaf/90s controller deadline,64MiB aggregate output accounting and originaloracles remain unchanged."
+  ],
+  "preservation_checks": [
+    "All20 diagnosis/proposal/disassembly/source/failure references independently matched exactbytes/size/SHA256.",
+    "Driver successor differs only in resource.RLIMIT_STACK,2<<20 becoming8<<20. No compiler/body/oracle/receipt/consumer semantics changed in this proposal.",
+    "Adapter retains exacth990 pinnedfile/function/constants extraction and monitored_wait/error-retirement behavior. Newchild callback onlysets/verifies permitted stack;accounting method is independently AST-identical. Positive directjoin/groupabsence/closedstreams/capturehashes/boundedretirement remain mandatory.",
+    "This is one bounded resource correction for the first actual retainedCring stack mismatch;originald275 failure remainsFAIL and immutable. It supplies no acceptance for the new8MiB profile and no authority to reuse consumedd275."
+  ],
+  "pure_validation": {
+    "checks_passed": 7,
+    "test_execution": "Executed test module main with pathlib.Path.write_text mocked to suppress existing PURE-TEST-RESULT rewrite;resource object already stubbed. No actualhelper/resource/process/compiler/container invocation.",
+    "primary_ELF_checks": 3,
+    "accounting_AST_identical": true,
+    "actual_helpers": 0,
+    "actual_resource_mutations": 0,
+    "workload_calls": 0,
+    "compiler_calls": 0,
+    "Docker_calls": 0,
+    "root_commands": 0
+  },
+  "approved_preparation_scope": "Prepare fresh Source32 operation successor binding exact reviewed adapter/driver/proposedcommand and retained sameCring/Rust binaries. Keep Root26/newnonce/freshnamespace/currentownership/resourceadmission/exact independent execution release separate.",
+  "remaining_execution_predicates": [
+    "Source32 exactnew owner/contract/preparation/sourceinventory/driverpaths and command must bind this8MiB correction;proposaldriver still names priorcontract paths until fresh operation adaptation.",
+    "CurrentfreeSource31 acceptance andRoot26 currentnonce ledger must be bound;freshnonce/namespace required.",
+    "Fresh liveguard/account/physical/resource/ownership admission and exact one-use independently reviewed execution release required.",
+    "Actual correctedCring status0/resourceclosure/log+byteparity and still-unrun Rustring/oversize at2MiB remainOPEN. If same bounded correction fails, preservefailure/escalate rather than unchangedreplay."
+  ],
+  "runtime_release": false,
+  "native_acceptance": false,
+  "production_acceptance": false,
+  "M15_file_closure": false
+}

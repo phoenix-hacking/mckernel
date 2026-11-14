@@ -1,0 +1,62 @@
+{
+  "decision": "PASS_ACTUAL_FINITE_SOURCE_COPY_AND_RETIREMENT",
+  "prefix": "/home/holden/mckernel-work/host-preparation/m02-actual-timeout-result-publication-20261020-1",
+  "independent_output_acceptance": {
+    "selected_source_and_destination_full_identity_hash_pairs": 79,
+    "selected_bytes": 181418,
+    "complete_repository_inventory_files": 81,
+    "repository_bytes": 273810,
+    "manifest_equals_receipt": true,
+    "allowlist_hashes_sizes_modes_verified": true,
+    "exact_nul_paths_verified": true,
+    "concrete_blockers": []
+  },
+  "outer_retirement": {
+    "started_receipt": "ROOT-COPY-OUTER-STARTED-1.json",
+    "closed_receipt": "ROOT-COPY-OUTER-CLOSED-1.json",
+    "pid": 2280769,
+    "start": 33145068,
+    "pgid_observed_before_wait": 2280769,
+    "birth_and_exact_argv_match": true,
+    "returncode": 0,
+    "direct_child_joined": true,
+    "process_group_absent": true,
+    "streams_closed": true,
+    "stderr_bytes": 0
+  },
+  "inner_retirement": {
+    "receipt": "m02-actual-timeout-result-publication-capture-1/whole.json",
+    "pid": 2280772,
+    "start": 33145072,
+    "returncode": 0,
+    "direct_wait_and_join_identity_match": true,
+    "group_absent": true,
+    "streams_closed": true,
+    "raw_stream_hashes_and_stable_metadata_match": true,
+    "timed_out": false,
+    "errors": null,
+    "unexpected_or_remaining_members": []
+  },
+  "observed_child": {
+    "affinity": [
+      7
+    ],
+    "AS_limit_bytes": 1073741824,
+    "CPU_limit_seconds": 10,
+    "usage_percent": 45
+  },
+  "output_pins": {
+    "COPY-RECEIPT.json": "7c47b24937d5ab1a7d59c141a391fd1564eededbceaed74a590b912d0575e2ce",
+    "ROOT-PUBLICATION-ALLOWLIST.json": "127a46db0b27556707674454a45d45338b95be5c7a9a2c8a543441e7e59eff5b",
+    "ROOT-GIT-PATHS.nul": "b79211a76e0382bc3f8e9d61d4a7f9f7cd404326fd3fad3059bda6363d8356b1",
+    "ROOT-COPY-OUTER-CLOSED-1.json": "f789f608e0039a9e0150dfcf11edd584cba1178a74563f2db17219b08b1ff870"
+  },
+  "CPU7_release_evidence_sufficient": true,
+  "limitations": [
+    "Acceptance covers this publication and attributable process retirement.",
+    "Protected archive payloads and the root snapshot were not opened or rehashed.",
+    "Physical, semantic and final-outcome acceptance remain separate; frozen NULL references gain no authority from this review.",
+    "No native, Git, fetched-source or subsequent execution acceptance is added."
+  ],
+  "reviewer_imports_tests_writes_copies_or_CPU_leases": 0
+}

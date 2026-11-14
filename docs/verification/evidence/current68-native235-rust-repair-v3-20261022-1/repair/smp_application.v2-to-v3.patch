@@ -1,0 +1,35 @@
+--- candidate/smp_application.rs
++++ candidate-v3/smp_application.rs
+@@ -831,6 +831,19 @@
+         // mutex as RET completion. Its error must never retry that publication.
+         let published = self.finish_publication(&mut slots, result, notify)?;
+         if published {
++            // Record the original positive response at its real publication
++            // boundary, under the same slots guard as every later selector1
++            // admission. The sleeping RET waiter need not run first.
++            for index in 0..slots.len() {
++                let route=slots[index].as_ref().and_then(|entry|entry.fork_ingress.as_ref())
++                    .filter(|owner|owner.parent==token&&owner.first_return_committed
++                        &&!owner.first_return_published).map(|owner|owner.response.route());
++                let Some((worker,serial))=route else{continue;};
++                let parent=slots.iter().flatten().find(|entry|entry.key()==token).ok_or(ENOENT)?;
++                if parent.syscalls.returned(worker,serial).map_err(errno)? {
++                    slots[index].as_mut().unwrap().fork_ingress.as_mut().unwrap().first_return_published=true;
++                }
++            }
+             for index in 0..slots.len() {
+                 let route=slots[index].as_ref().and_then(|entry|entry.fork_ingress.as_ref())
+                     .filter(|owner|owner.parent==token).and_then(|owner|owner.host_start_return);
+@@ -1401,7 +1414,11 @@
+             }
+             if entry.syscalls.returned(worker, serial).map_err(errno)? {
+                 if let Some(child)=owned_child {
+-                    slots[child].as_mut().unwrap().fork_ingress.as_mut().unwrap().first_return_published=true;
++                    // Only the continuing publisher records this observation.
++                    // The waiter validates it; it cannot publish it late.
++                    if !slots[child].as_ref().unwrap().fork_ingress.as_ref().unwrap().first_return_published {
++                        return Err(errno(-71));
++                    }
+                 }
+                 // A real first positive return is still not a runnable,
+                 // revoke/final-ACK, terminal release or scheduled-task receipt.

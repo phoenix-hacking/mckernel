@@ -1,0 +1,19 @@
+--- kernel/syscall.c
++++ kernel/syscall.c
+@@ -24659,11 +24659,16 @@
+ 	return (unsigned long)find_thread(tgid, tid);
+ }
+ 
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PTRACE_IO_UNLOCK)
++extern void f03_ptrace_io_unlock(unsigned long);
++#define ptrace_thread_unlock_bridge f03_ptrace_io_unlock
++#else
+ static void
+ ptrace_thread_unlock_bridge(unsigned long thread_addr)
+ {
+ 	thread_unlock((struct thread *)thread_addr);
+ }
++#endif
+ 
+ #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ static void

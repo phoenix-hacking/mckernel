@@ -1,0 +1,77 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "BOUNDED_SOURCE_CORRECTION_NOT_GRANTED_NOT_EXECUTED",
+  "failure_family": "fixture snapshot consumed before producer",
+  "original_failure": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-15-perf-entry-abi/entry-behavior-source-1/ACTUAL-PERF-ENTRY-FIRST-RESULT.json",
+    "bytes": 11960,
+    "sha256": "1f3afc99301f09b519c9ba86c610c36c58aec7ae70c3d26a1382e7d5e8fd9661"
+  },
+  "original_grant_consumed": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-15-perf-entry-abi/entry-behavior-source-1/ROOT-NEW18H-ORDINARY-CPU0-GRANT.json",
+    "bytes": 1617,
+    "sha256": "cc6e099060be3b2e13993c5a975dd9b5ae6cf5e2d279086af68f3be00cc24ef0"
+  },
+  "recipe": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-15-perf-entry-abi/entry-behavior-source-1/snapshot-before-oracle-correction-source-1/EXACT-PERF-ENTRY-SNAPSHOT-CORRECTION.NOT-GRANTED.json",
+    "bytes": 25738,
+    "sha256": "3ac7311bc0baa8b0a052503c1069f0b1f8bf64845f8317f3eaa5ded953c8f6fa"
+  },
+  "runner": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-15-perf-entry-abi/entry-behavior-source-1/snapshot-before-oracle-correction-source-1/run_snapshot_correction_once.NOT-GRANTED.py",
+    "bytes": 9685,
+    "sha256": "17ffd2a7abd74d301304ec2c2b21538d8fa06c5dd72bb9f1784d357c53ddf6b6"
+  },
+  "driver": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-15-perf-entry-abi/entry-behavior-source-1/snapshot-before-oracle-correction-source-1/driver.c",
+    "bytes": 12876,
+    "sha256": "14b0b5203742bf2e36cd1ab30daa5c3b5bde921e4c3541edc55f62b753a35b8d"
+  },
+  "diff": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-15-perf-entry-abi/entry-behavior-source-1/snapshot-before-oracle-correction-source-1/FIXTURE-ONLY.diff",
+    "bytes": 2202,
+    "sha256": "cdbd9cade1cb0a312f20aa02b59fc1e9c22aa769205cd7e7deae16581ea45a8b"
+  },
+  "retained_Rust_object": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-15-perf-entry-abi/entry-behavior-source-1/output-1/candidate.o",
+    "bytes": 8640,
+    "sha256": "54c8396e9fc40a450f6121dbdb2347b73be73dd24992a70724aa55fe3c010f66",
+    "device": 66306,
+    "inode": 59650897,
+    "uid": 1000,
+    "gid": 1000,
+    "mode": "0o600",
+    "nlink": 1,
+    "mtime_ns": 1792965811244782814,
+    "ctime_ns": 1792965811244782814
+  },
+  "launch_argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "-c",
+    "import os,sys,hashlib; p=sys.argv[1]; fd=os.open(p,os.O_RDONLY|os.O_CLOEXEC); raw=os.read(fd,1048576); st=os.fstat(fd); assert len(raw)==st.st_size and hashlib.sha256(raw).hexdigest()==sys.argv[2], 'source FD binding mismatch'; ns={'__name__':'__main__','__file__':p}; exec(compile(raw,p,'exec'),ns)",
+    "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-15-perf-entry-abi/entry-behavior-source-1/snapshot-before-oracle-correction-source-1/run_snapshot_correction_once.NOT-GRANTED.py",
+    "17ffd2a7abd74d301304ec2c2b21538d8fa06c5dd72bb9f1784d357c53ddf6b6"
+  ],
+  "profile": {
+    "cpu": 0,
+    "jobs": 1,
+    "as_bytes": 2147483648,
+    "cpu_seconds_shared": 60,
+    "wall_seconds": 90,
+    "cleanup_grace": 6,
+    "file_bytes": 33554432,
+    "fd": 256,
+    "stack_bytes": 2097152,
+    "core": 0,
+    "capture": "existing h990 owned_capture; first failure stop; all children joined/groups absent/streams closed"
+  },
+  "commands": 2,
+  "controlled_pairs": 3600,
+  "ABI_words": 56,
+  "providers": 13,
+  "compiler_executions": 0,
+  "fixture_executions": 0,
+  "runtime_body_mutations": 0,
+  "canonical_mutations": 0,
+  "required": "Independent bounded correction review and fresh exact ordinary CPU0 grant. Original successful Rust compile reused; no unchanged replay."
+}

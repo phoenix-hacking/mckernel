@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_failure",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "attempt": 13,
+  "status": "FAIL_SOURCE_TEST",
+  "recorded_utc": "2026-09-15T23:08:03Z",
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-failure-20260915-13.tar.gz",
+    "sha256": "8700aad19eed401b5d7ad858dd92d7eae1bb4591be6d8435797b6986e5672293",
+    "size": 62904,
+    "members": 16
+  },
+  "source_sha256": {
+    "supervise.py": "ec6664545883f714557abb048c238e9192f1b62cd08ce879863b70d74edfd579",
+    "witness_owner.py": "a73edf9fe2f77cf35a2cd1cd638ad6f5f66a5cb4e7a684660606696402f164b1",
+    "oracle.py": "9f66a85f557cd9f88101da103276307be02984d3b14f8c5a2e5fb0fa9cf672ae",
+    "test_collector_storage_fault_packet.py": "2fe26129eb0a16817c88896d273064fa1e42aa825ced1c060b0386fed0428c06"
+  },
+  "checks": {
+    "python3.9.12": {"status": 1, "stderr_sha256": "8b6e495863183c9e73960c28016a270006cc62d8c7dad6b2ca511b248257eb5e"},
+    "python3.8.10": {"status": 1, "stderr_sha256": "d9bb69cd5ea77357196a65a3c705543515f0423fff655dfaf25aab717fd72416"}
+  },
+  "failure": "the new packet-15 stage matrix referenced errno.EIO without importing errno",
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

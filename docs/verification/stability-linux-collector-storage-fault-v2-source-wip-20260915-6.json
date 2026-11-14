@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_wip",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "attempt": 6,
+  "status": "WINDOW_PAUSED_SOURCE_WIP",
+  "recorded_utc": "2026-09-15T19:16:11Z",
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-wip-20260915-6.tar.gz",
+    "sha256": "9afef9611bed413a4dd23bf4621239e6f776b4cee8154dcb7407cbc988318f9b",
+    "size": 55114,
+    "members": 13
+  },
+  "source_sha256": {
+    "witness_owner.py": "f2bdcea010e471bd5967e6635ad72addcdf09291378f55a8643e400bd45b3a78",
+    "oracle.py": "f43e5b97bca42d2644f60d82f608b0304c4f80f7c8f61d959f59ca6ca1222154",
+    "supervise.py": "77bec9d23beefdbe787ce3d2c2cb266a91dc7e067a85b06a24745476ac5bd7b0",
+    "test_collector_storage_fault_packet.py": "37076adb12b8b698e16ecd4e45b48084c80915f597127e03a130541c09ba3aa5"
+  },
+  "checks": {
+    "python3.9.12": "29/29 PASS",
+    "python3.8.10": "29/29 PASS",
+    "python-py_compile": "PASS",
+    "python3.9_log_sha256": "1e92f9ad077ffb1726827d805a47c2759752c092e1147acab3ebf9c7b3eaa018",
+    "python3.8_log_sha256": "bfa497a06b8fdff0a8c4bb3d047d6043c585773bcb0ced9905cd0a9b9401868d"
+  },
+  "partial_supervisor": "supervise.py contains source helpers but main deliberately returns 125 after input validation; no runnable or accepted supervisor is claimed",
+  "remaining": [
+    "add real mocked bounded_cleanup transition coverage",
+    "complete packet-15 supervisor orchestration and failure cleanup",
+    "integrate exact supervisor source bindings into prepare.py and packet.json",
+    "require and validate supervisor-result.json in oracle fixtures",
+    "obtain fresh full independent review of stable current bytes"
+  ],
+  "active_processes": [
+    {"pid": 1492539, "role": "launcher", "started": "2026-09-15T11:38:17-07:00"},
+    {"pid": 1492541, "role": "launcher-worker", "started": "2026-09-15T11:38:17-07:00"},
+    {"pid": 1492543, "role": "codex-app-server", "started": "2026-09-15T11:38:18-07:00"}
+  ],
+  "build_or_guest_processes": [],
+  "child_agents_joined": true,
+  "future_goal_continuations_paused_by_user": true,
+  "goal_complete": false,
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

@@ -1,0 +1,101 @@
+{
+  "at": "2026-11-09T23:06:05.534164+00:00",
+  "requests": {
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-local-metadata-1/REQUEST.json": "8a15ffadc6408be34f3c509c4db8ddef33a37e702bd06151a5dd1a668b170374",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-metadata-1/REQUEST.json": "5871ef8fe176b78391eb255230dac208d77c6f0c332b53dbe009f9943a06fcb6"
+  },
+  "reviews": {
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-local-metadata-review-1/REVIEW.json": "9fbf77cd6fe367921ec32e99e789efccfa29b7e8d30e4a0c41be290013e27a5f",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-metadata-review-1/REVIEW.json": "bd442acc82d4353b254ebd74641fa63c154c455467ccf93734684eb520f8d790"
+  },
+  "MemAvailable": 29754560512,
+  "disk_free": {
+    "/home/holden/mckernel": 132099960832,
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba": 132099960832
+  },
+  "usage": {
+    "at": "2026-11-09T23:02:51.533266+00:00",
+    "used_percent": 38,
+    "remaining_percent": 62,
+    "normal_guard_passed": true,
+    "rateLimitReachedType": null,
+    "spendControlReached": false,
+    "included_only": true
+  },
+  "controller": {
+    "pid": 645718,
+    "birth": "35183156"
+  },
+  "direct_call": "UNCHANGED actual_local_slot_object_gate once; retained successful local2GNUreads, IPIgate not called",
+  "new_payloads": [
+    {
+      "label": "provider-symbols",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-metadata-1/provider-symbols.metrics",
+        "/usr/bin/nm",
+        "-S",
+        "--format=posix",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-unit-1/output/scheduler_timer_data.o"
+      ],
+      "stdout_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-metadata-1/provider-symbols.stdout",
+      "stderr_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-metadata-1/provider-symbols.stderr"
+    },
+    {
+      "label": "provider-elf",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-metadata-1/provider-elf.metrics",
+        "/usr/bin/readelf",
+        "-h",
+        "-SW",
+        "-Ws",
+        "-Wr",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-unit-1/output/scheduler_timer_data.o"
+      ],
+      "stdout_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-metadata-1/provider-elf.stdout",
+      "stderr_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-metadata-1/provider-elf.stderr"
+    }
+  ],
+  "actual_outer_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/python3",
+    "-B",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-metadata-1/run_metadata.py",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-metadata-1/REQUEST.json"
+  ],
+  "HOST": "CPU6directgate+serial2GNU reads undershared0/6/7,max3lightjobs,4GiBTOTALalloverhead",
+  "scope": "IPIgate remains failed/unqualified; no replay of any old GNU/compiler/gate/link/runtime, original holds unchanged"
+}

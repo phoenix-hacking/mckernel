@@ -1,0 +1,48 @@
+"""Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Exact A2 unlaunched-holder source and conditional one-operation release; no live calls.
+"""
+from pathlib import Path
+import ast,datetime,hashlib,json
+D=Path(__file__).resolve().parent;P=D.parent
+read=lambda p:json.loads(Path(p).read_text())
+def ref(p):
+ p=Path(p);b=p.read_bytes();return dict(path=str(p),bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+r=read(P/'READY.json');profile=read(P/'SOURCE-PROFILE.NOT-A-GRANT.json');proof=read(P/'REBASE-AST-AND-REUSED-API-PROOF.json');template=read(P/'ROOT-GRANT.TEMPLATE.NOT-A-GRANT.json')
+assert ref(P/'READY.json')['sha256'].startswith('e702fad9')
+for key in ['source','backend','profile','Root_grant_template','AST_and_API_proof','Root_next','preserved_refusal']:assert ref(r[key]['path'])==r[key]
+for key in ['retained_working_A1_source','retained_working_backend','API_precheck_reused']:assert ref(proof[key]['path'])==proof[key]
+for key in ['reused_actual_backend_source_release','reused_actual_one_signal_receipt','reused_actual_API_precheck']:assert ref(profile[key]['path'])==profile[key]
+oldsrc=Path(proof['retained_working_A1_source']['path']).read_text();newsrc=Path(r['source']['path']).read_text();ot=ast.parse(oldsrc);nt=ast.parse(newsrc)
+def assignment(tree,name):return next(n for n in tree.body if isinstance(n,ast.Assign) and isinstance(n.targets[0],ast.Name) and n.targets[0].id==name)
+oldfixed=ast.literal_eval(assignment(ot,'FIXED').value);fixed=ast.literal_eval(assignment(nt,'FIXED').value)
+assert fixed==profile['fixed'] and fixed['holder']==r['holder']==dict(path='/run/lock/mckernel-development.lock',pid=1831939,starttime=95475556,device=27,inode=4,fd=3)
+assert fixed['root_tool_session']==r['Root_positive_join_tool']==78413 and fixed['nonce']=='92e8d698cfe12176ddd0375937cbaeb1'
+for row in fixed['refs'].values():assert ref(row['path'])==row
+refusal=read(fixed['refs']['refused_review']['path']);assert refusal['decision']=='REFUSED_NO_EXECUTION_APPROVAL_ACTUAL_VERIFIER_SCHEMA_FAILURE' and refusal['maximum_invocations']==0 and refusal['approved_input_sha256'] is None
+assert all(refusal[k] is False for k in ['actual_PASS_path_exists','Root_attestation_exists','Root_grant_exists','Root_READY_exists','OUTPUT_exists'])
+ready=read(fixed['refs']['holder_ready']['path']);bootstrap=read(fixed['refs']['bootstrap']['path']);assert ready['holder']==fixed['holder'] and ready['nonce']==bootstrap['nonce']==fixed['nonce']
+expected=oldsrc.replace(ast.get_source_segment(oldsrc,assignment(ot,'FIXED')),ast.get_source_segment(newsrc,assignment(nt,'FIXED')))
+for before,after in [('1815979','1831939'),('95215128','95475556'),('11857','78413'),('ROOT-ACTUAL-ONE-HOLDER-INTERRUPT-COMPAT-GRANT.json','ROOT-ACTUAL-ONE-A2-HOLDER-INTERRUPT-COMPAT-GRANT.json'),('ACTUAL-COMPAT-ONE-HOLDER-INTERRUPT.ACTION.jsonl','ACTUAL-A2-ONE-HOLDER-INTERRUPT.ACTION.jsonl'),(str(proof['retained_working_backend']),str(r['backend']))]:expected=expected.replace(before,after)
+oldrefusal=" assert refusal['decision']=='REFUSED_EXPIRED_RESOURCE_SNAPSHOT_NO_BUILD_EXECUTION_APPROVAL' and refusal['execution_approval'] is False and refusal['maximum_invocations']==0"
+newrefusal=" assert refusal['decision']=='REFUSED_NO_EXECUTION_APPROVAL_ACTUAL_VERIFIER_SCHEMA_FAILURE' and refusal['maximum_invocations']==0\n assert refusal['approved_input_sha256'] is None and all(refusal[k] is False for k in ('actual_PASS_path_exists','Root_attestation_exists','Root_grant_exists','Root_READY_exists','OUTPUT_exists'))"
+assert expected.count(oldrefusal)==1;expected=expected.replace(oldrefusal,newrefusal);assert ast.dump(ast.parse(expected),include_attributes=False)==ast.dump(nt,include_attributes=False)
+oldbackend=Path(proof['retained_working_backend']['path']).read_text();newbackend=Path(r['backend']['path']).read_text();assert oldbackend.replace('EXPECTED_PID=1815979','EXPECTED_PID=1831939')==newbackend
+assert 'NR_PIDFD_OPEN=434' in newbackend and 'NR_PIDFD_SEND_SIGNAL=424' in newbackend and newbackend.count('self._send(')==1
+assert newsrc.count('backend.send_sigint(pidfd)')==1 and newsrc.count('verify_live()')==3
+assert 'os.fsync(directory_fd)' in newsrc and "with journal.open('x')" in newsrc and 'O_NOFOLLOW' in newsrc and 'guard.guard()' in newsrc
+assert 'grant[\'issued_epoch\']+60' in newsrc and "if pidfd is not None:os.close(pidfd)" in newsrc
+for disallowed in ['os.kill(', 'os.killpg(', 'signal.pidfd_send_signal(', 'SIGKILL', 'SIGTERM', 'subprocess.', 'flock(', '.unlink(', '.rmdir(']:assert disallowed not in newsrc and disallowed not in newbackend
+assert template['author'] is template['decision'] is template['independent_source_review'] is template['issued_epoch'] is template['expires_epoch'] is None and template['maximum_invocations']==1
+assert profile['reused_actual_backend_source_release']['sha256']=='165a774a532b8b56dece98bc9031e266a600bc262339788089ca6ebcfaea4d87'
+a1events=[json.loads(line) for line in Path(profile['reused_actual_one_signal_receipt']['path']).read_text().splitlines()];assert a1events[-1]['status']=='SIGNAL_SENT_NOT_RETIREMENT' and a1events[-1]['signal_calls']==1
+report=dict(scope=__doc__.splitlines()[0],decision='PASS_SOURCE_AND_CONDITIONAL_ONE_EXACT_A2_UNLAUNCHED_HOLDER_PIDFD_SIGINT',independent=True,reviewer='/root/current110_execution_review',recorded_at=datetime.datetime.now(datetime.timezone.utc).isoformat(),ready=ref(P/'READY.json'),source=r['source'],backend=r['backend'],source_profile=r['profile'],Root_grant_template=r['Root_grant_template'],AST_rebase_proof=r['AST_and_API_proof'],actual_A1_source_release=profile['reused_actual_backend_source_release'],actual_A1_typed_API_precheck=profile['reused_actual_API_precheck'],actual_A1_one_signal_receipt=profile['reused_actual_one_signal_receipt'],holder=fixed['holder'],Root_positive_join_tool=78413,nonce=fixed['nonce'],preserved_A2_refusal=fixed['refs']['refused_review'],conditional_operation_review=True,runtime_authority=None,
+findings=['A2 helper AST equals actually working b522 A1 helper after only exact FIXED metadata, PID/birth/tool/grant/journal/backend-pin literals and exact A2 refusal-schema adaptation. Backend source equals da442 except EXPECTED_PID. No new ABI/ctypes algorithm or live test replay is introduced.',
+'Genuine reused Linux x86_64 LP64 header/libc/type proof binds434 pidfd_open and424 pidfd_send_signal. Fixed CFUNCTYPE c_long/c_int/c_uint/c_void_p signatures remain unchanged, errno/-1 raises without retry. Root must use same reviewed interpreter/path with -I -B and assertions enabled; source-only reviewer did not import/load backend or execute a syscall.',
+'Only exact UID1000 holder1831939/birth95475556/task-only/nochildren/caught-unblocked SIGINT/FD3=27:4/full-EOF-flock and exact script/bootstrap argv qualify. Both live checks, pidfd fdinfo PID check and final v2 guard remain mandatory within fresh Root60s grant and all earlier fixedclocks/account/boot/realholds.',
+'Exact stored A2 ready/bootstrap/profile/pending/resource/refusal authenticate before any live action. The refusal is zero-approval verifier schema failure with all recorded PASS/attestation/grant/READY/OUTPUT booleans false. Stored records are not asserted as fresh live observations by this review; helper double-live checks must reprove negative paths and no child/runner transition.',
+'O_EXCL fresh action journal, fsynced ENTERED content and parent directory fsync precede pidfd/signal; durable ATTEMPTING is written before one send. Failure never escalates/retries. Helper closes only its own pidfd; it never unlocks/deletes the permanent mutex or signals a PID/group fallback, native owner, watcher or server.',
+'Root must freeze all publisher/grant/READY writes until positive holder join and attest no build runner/Docker started. ExactSIGINT follows existing unlaunched holder KeyboardInterrupt/exceptBaseException/finally path to close its own permanent lock fd; no compiler/guest/container cleanup authority is granted.'],
+conditional_release=dict(maximum_invocations=1,maximum_signal_attempts=1,signal='SIGINT',mechanism='Exact kernel pidfd reference only',permitted_subject=fixed['holder'],permitted_grant_path=str(P/'ROOT-ACTUAL-ONE-A2-HOLDER-INTERRUPT-COMPAT-GRANT.json'),maximum_Root_grant_lifetime_seconds=60,required_Root_attestations=['No publisher/actual build grant/READY creation until holder positive join.','No build runner, Docker, compiler, OUTPUT or child started.','Exact source/profile/backend and this independent receipt bound in fresh Root grant.'],required_helper_checks=['Existing v2 guard passes account/credit/boot/earliest UTC/MONO/BOOT cutoff before entry and immediately before send.','Both exact live identity/mutex/no-child/no-READY checks pass and opened pidfd reports exact PID.','Fresh O_EXCL journal and directory fsync succeed; no prior action journal reuse.'],after_send=['Signal sent is not retirement/current-free. Root must positively join existing tool78413 and preserve actual result.','Independent exact postjoin current-free proof is required before Root advances ledger/releases next build.','Any uncertainty/error retains ownership; no repeat signal, PID/group fallback, escalation or cleanup.']),blocking_findings=[],actual_queries=0,actual_guard_calls=0,actual_pidfd_syscalls=0,actual_signals=0,actual_positive_join=None,actual_current_free=None,tests_replayed=0,compiler_or_guest_actions=0,canonical_mutations=0)
+out=D/'REVIEW.json'
+with out.open('x') as f:json.dump(report,f,indent=2);f.write('\n')
+print(json.dumps(dict(decision=report['decision'],receipt=ref(out),maximum_signals=1,live_operations=0,blocking_findings=0)))

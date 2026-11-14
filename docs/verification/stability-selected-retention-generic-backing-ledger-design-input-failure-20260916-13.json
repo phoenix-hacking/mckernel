@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "record_kind": "stability_selected_retention_generic_backing_ledger_design_input_review",
+  "task_id": "M01-B-selected-retention-generic-backing-ledger",
+  "review_attempt": 13,
+  "recorded_utc": "2026-09-16T09:13:30Z",
+  "status": "FAIL_DESIGN_INPUT",
+  "authenticated_inputs": [
+    {
+      "path": "docs/verification/stability-selected-retention-generic-actual-method-design-matrix-failure-20260916-12.json",
+      "sha256": "6cd2e5f52b163a536b32e6473ed3f9eccfe179ff89ceba776f9dfc6a60d9e0ab"
+    },
+    {
+      "path": "docs/verification/stability-selected-retention-generic-actual-method-implementation-packet-20260916-8.md",
+      "sha256": "8071bd38119ecc11e58e5e68c5b41ae5bee89a760d461350509442ec7af5744c"
+    },
+    {
+      "path": "docs/verification/stability-selected-retention-actual-method-source-map-20260916-1.json",
+      "sha256": "a09978ce5d6bd8f3cdb43bbeba25af7ba287b5d6143d72e039b781df8abd4131"
+    }
+  ],
+  "authenticated_authorities": {
+    "mode_2_record_sha256": "3bded4f7bfc206b4e64b03a58243d0e3a7783a5a493dd4095be5916a07e7ed48",
+    "mode_3_held_record_sha256": "a5cee2ec4397bd37f1abe75a313f6de6a96fbd8983cc49c6f1e9437681fe435d"
+  },
+  "source_anchors": [
+    "application_syscall.rs:316-328 ResponseMemory physical/address/release",
+    "application_syscall.rs:385-397 Response constructor validation",
+    "application_syscall.rs:402-434 response preparation",
+    "application_syscall.rs:446-465 consuming completion publish/status/release",
+    "smp_application_syscall.rs:563-615 mailbox publication and removal"
+  ],
+  "source_derived_rows": {
+    "row03": {
+      "publish": "Err(-11)",
+      "send_delta": 0,
+      "status_delta": 0,
+      "release_delta": 0,
+      "owner": "held"
+    },
+    "row12": {
+      "publish": "Ok(true)",
+      "send_delta": 0,
+      "status_delta": 1,
+      "release_delta": 1,
+      "call_after_publish": "absent"
+    }
+  },
+  "blocking_finding": {
+    "summary": "The production generic source supplies no Drop, quarantine, deferred-deallocation or backing-teardown ledger and no authoritative observation boundary for those events.",
+    "undecidable_values": [
+      "finished backing Drop count",
+      "unfinished backing Drop count",
+      "quarantine count",
+      "deferred-free event count",
+      "terminal snapshot timing"
+    ],
+    "required_dispatcher_choice": "Freeze one explicit test-owned consuming teardown and ledger taxonomy, its observation boundary and exact terminal counts for row03 and row12. Mark those values as fixture semantics rather than production-source facts."
+  },
+  "excluded_scope": [
+    "negative preparation",
+    "identity and key cancellation",
+    "clock and notification behavior",
+    "native backing authority"
+  ],
+  "implementation_released": false,
+  "compiled": false,
+  "native_execution": false,
+  "guest_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false,
+  "next": "Define the test-owned teardown ledger and exact row03/row12 terminal snapshot semantics before drafting another narrow implementation packet."
+}

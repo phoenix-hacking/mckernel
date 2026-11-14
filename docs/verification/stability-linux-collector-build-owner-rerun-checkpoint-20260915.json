@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "record_kind": "collector_build_owner_rerun_checkpoint",
+  "task_id": "M02-B-rebuild-owner",
+  "candidate": 9,
+  "status": "PASS_RERUN_PACKET",
+  "recorded_utc": "2026-09-15T05:41:21Z",
+  "prior_source_commit": "2b2d8831da417a3654489eb7bf338d7c59f1fe26",
+  "prior_failure_record": "docs/verification/stability-linux-collector-build-owner-runtime-failure-20260915-1.json",
+  "prior_failure_archive_sha256": "b81e64cd1ae35152f9649f645151f158d4b6b34a3c37b9ce9b9b6d6b357e4a0d",
+  "prior_raw_record_sha256": "abbba2467da7b67283eb48a55bef046263104b1782bc39ca72b79a68727c3ab9",
+  "correction": {
+    "owner_change": "exact compiler dependency count 176 to 179",
+    "test_change": "complete synthetic dependency membership 176 to 179",
+    "new_dependencies": [
+      "/usr/include/bits/resource.h",
+      "/usr/include/bits/types/struct_rusage.h",
+      "/usr/include/sys/resource.h"
+    ],
+    "removed_dependencies": [],
+    "owner_sha256": "e78c8855177d873182d284a87159f36d26c2e0d03fe4f37350bfcdb29d754115",
+    "tests_sha256": "2fe82e1207f019bdbdda8be54ace5ec77d491e8518fa621bf489dce90a867f13"
+  },
+  "verification": {
+    "python3": "8/8 PASS",
+    "python3_8": "8/8 PASS",
+    "actual_dependency_membership": "179 unique and exact .d provenance",
+    "corrected_verifier_against_preserved_raw_record": "PASS with publication suppressed",
+    "independent_astra_review": "PASS_RERUN_PACKET"
+  },
+  "next_attempt": 2,
+  "application_acceptance": false,
+  "transport_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}

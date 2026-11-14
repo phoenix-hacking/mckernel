@@ -1,0 +1,33 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "review_ready_sha256": "c58f762b9d27d74c49b90f979b97902f60cd4b009a5de64acfde893bf2748ac0",
+  "actual_accepted_three_boundary_source": "native-vector-enabled-state.c + native-vector-enabled-state.S",
+  "Rust_reference_limit": "app1.rs/fp_state.S covers paired yield switching, not signal/futex; new Rust driver below reuses exact accepted raw three-boundary sequence",
+  "references": [
+    {
+      "path": "/home/holden/mckernel/scripts/application-tests/native-vector-enabled-state.c",
+      "sha256": "0b57c08d617eeb853b8d4d88d536738b7a9d27de88c9a14fbd24be56a6771250",
+      "bytes": 5725
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/application-tests/native-vector-enabled-state.S",
+      "sha256": "5285071018695f44b48ed68075ffdf834baa31eb3a49d31f8dbfcddc56af9c93",
+      "bytes": 16244
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/app1.rs",
+      "sha256": "756a645a1415572d2246ea7ddc03125ff3bed7ec063513072a6f86b010f876df",
+      "bytes": 6885
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/fp_state.S",
+      "sha256": "99191c5de5f137d14754cd6baab3d2cf4f2d9146d9fe014b7489045e118e5fa0",
+      "bytes": 4121
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/compile1.status.json",
+      "sha256": "b4827b7de3599170204addcf598f1cb76c7599251465941995c385fd0b29146c",
+      "bytes": 807
+    }
+  ]
+}

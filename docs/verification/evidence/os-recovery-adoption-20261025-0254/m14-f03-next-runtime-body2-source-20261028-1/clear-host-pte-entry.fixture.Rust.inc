@@ -1,0 +1,61 @@
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+mod f03_clear_host_pte_entry_v1 {
+    use core::mem::offset_of;
+    use crate::abi::{CInt, CLong, CULong, ProcessVm, SizeT};
+    use super::{clear_host_pte_body_result, syscall_get_processor_id_bridge,
+                ClearHostPteLogFn, SyscallDoSyscall3Fn};
+
+    #[repr(C)]
+    struct ClearHostBinding {
+        munmap_nr: CInt,
+        forward: Option<SyscallDoSyscall3Fn>,
+        log: Option<ClearHostPteLogFn>,
+    }
+    unsafe extern "C" {
+        static f03_clear_host_pte_binding_v1: ClearHostBinding;
+    }
+
+    /// Preserve the existing host-PTE request and borrowed VM lock-state protocol.
+    ///
+    /// # Safety
+    /// The current CPU/thread/VM remain live throughout the original synchronous
+    /// forwarding operation. The caller retains the original range-lock ownership
+    /// when `holding_lock` is nonzero. No range is acquired, released or remapped
+    /// by this wrapper; the genuine existing forwarding provider retains its own
+    /// complete context/request and endpoint contracts, including existing holds.
+    #[no_mangle]
+    pub unsafe extern "C" fn clear_host_pte(
+        addr: CULong, len: SizeT, holding_lock: CInt,
+    ) -> CLong {
+        // SAFETY: Same original CPU-local/thread lookup and borrowed VM.
+        let cpu = unsafe { crate::cls::get_this_cpu_local_var() };
+        let thread = unsafe { (*cpu).current };
+        let vm = unsafe { (*thread).vm };
+        let processor = unsafe { syscall_get_processor_id_bridge() };
+        // SAFETY: Immutable header-derived syscall number and genuine existing
+        // providers. The exact complete Rust body publishes CPU before forward,
+        // restores -1 before logging, and returns the original signed result.
+        unsafe {
+            let binding = &f03_clear_host_pte_binding_v1;
+            clear_host_pte_body_result(
+                vm.cast(), addr, len, holding_lock,
+                offset_of!(ProcessVm, is_memory_range_lock_taken),
+                processor, binding.munmap_nr, binding.forward, binding.log,
+            )
+        }
+    }
+
+    #[no_mangle]
+    pub static F03_CLEAR_HOST_PTE_ABI:[CULong;18]=[
+        core::mem::size_of::<crate::abi::Thread>() as _,core::mem::align_of::<crate::abi::Thread>() as _,
+        core::mem::size_of::<ProcessVm>() as _,core::mem::align_of::<ProcessVm>() as _,
+        core::mem::size_of::<crate::abi::CpuLocalVar>() as _,core::mem::align_of::<crate::abi::CpuLocalVar>() as _,
+        core::mem::offset_of!(crate::abi::CpuLocalVar,current) as _,
+        core::mem::offset_of!(crate::abi::Thread,vm) as _,core::mem::offset_of!(ProcessVm,is_memory_range_lock_taken) as _,
+        core::mem::size_of::<ClearHostBinding>() as _,core::mem::align_of::<ClearHostBinding>() as _,
+        core::mem::offset_of!(ClearHostBinding,munmap_nr) as _,core::mem::offset_of!(ClearHostBinding,forward) as _,
+        core::mem::offset_of!(ClearHostBinding,log) as _,core::mem::size_of::<CInt>() as _,
+        core::mem::size_of::<SyscallDoSyscall3Fn>() as _,core::mem::size_of::<ClearHostPteLogFn>() as _,
+        core::mem::size_of::<CULong>() as _,
+    ];
+}

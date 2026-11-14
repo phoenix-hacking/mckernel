@@ -1,0 +1,74 @@
+--- root-install-parent-successor-2/root_parent.py
++++ root-install-caller-data-output-1/root_parent.proposal.py
+@@ -5,6 +5,8 @@
+ in the admitted source closure; a hash supplied as data is not admission.
+ """
+ import hashlib
++import json
++import data_output
+ import fcntl
+ import contextlib
+ import os
+@@ -245,7 +247,10 @@
+         # The fixed verifier proves the keeper's direct successful installer wait
+         # and durable result/captures; pidfd terminal is independently checked.
+         if not direct_completion.verify_terminal_result(result,installer_pid,installer_birth,status):raise Unknown('terminal proof')
+-        return {'status':'INSTALL_ONLY_COMPLETE_PENDING_UID1000_READ','nonce':nonce,'authority':None,'native_release':False,'native_currentfree':None,'proof':result,'independent_verification':independent,'lease_disposition':'HELD'},latch,lease_fd,go_fds[0]
++        terminal_evidence={'keeper':{'pid':keeper_pid,'birth':keeper_birth,'direct_wait_status':status},
++                           'installer':{'pid':installer_pid,'birth':installer_birth,'pidfd_terminal':True,
++                                        'keeper_direct_wait_status':result['installer_wait_status']}}
++        return {'status':'INSTALL_ONLY_COMPLETE_PENDING_UID1000_READ','nonce':nonce,'authority':None,'native_release':False,'native_currentfree':None,'proof':result,'independent_verification':independent,'lease_disposition':'HELD','terminal_evidence':terminal_evidence},latch,lease_fd,go_fds[0]
+     except BaseException as error:
+         signal.setitimer(signal.ITIMER_REAL,0)
+         latch.fail(error)
+@@ -281,11 +286,12 @@
+     All exceptions retain ownership; no close is retried after ambiguity.
+     """
+     result,latch,lease_fd,root_fd=run(admission_raw,admission_sha,review_raw,review_sha,nonce,caps,actor_pids)
+-    journal_fd=None;close_state='HELD'
++    journal_fd=None;close_state='HELD';full_sha=None;disposition_attempted=False
+     try:
+-        if not direct_completion.verify_parent_retirement_authority(result['proof'],admission_raw,review_raw):
+-            while True:time.sleep(1)
+-        if ipc.remaining(caps)<=0:raise Unknown('no retirement time remains')
++        request=json.loads(admission_raw,object_pairs_hook=ipc.unique)
++        profile_sha=request['profile_sha256']
++        if type(request['retire_operation_only']) is not bool:raise ValueError('retirement intent')
++        if ipc.remaining(caps)<=0:raise Unknown('no handoff time remains')
+         name='PARENT-RETIRE-'+nonce+'.jsonl'
+         journal_record={'state':'PENDING_OPEN','fd':None};latch.retain(journal_record)
+         with alarm_deferred():
+@@ -301,6 +307,13 @@
+                 offset+=count
+             os.fsync(journal_fd)
+         publish({'state':'COMPLETE_PROOF_BEFORE_LEASE_CLOSE','nonce':nonce,'result':result,'lease':lease_identity(lease_fd)})
++        full_sha=data_output.publish_full(nonce,profile_sha,result,caps)
++        if request['retire_operation_only'] is False:
++            disposition_attempted=True
++            data_output.publish_disposition(nonce,profile_sha,full_sha,'HELD','UNKNOWN',caps)
++            while True:time.sleep(1)
++        if not direct_completion.verify_parent_retirement_authority(result['proof'],admission_raw,review_raw):
++            raise Unknown('retirement authority absent')
+         if ipc.remaining(caps)<=0:raise Unknown('retirement cap expired')
+         # Record disposition before the single close. An interrupted close is
+         # possibly closed and may never be reused or retried.
+@@ -317,11 +330,18 @@
+                 close_state='VERIFIED_CLOSED';owner.state='VERIFIED_CLOSED';lease_fd=None
+         publish({'state':'LEASE_FD_CLOSED','nonce':nonce,'lease_disposition':close_state})
+         os.fsync(root_fd)
++        disposition_attempted=True
++        data_output.publish_disposition(nonce,profile_sha,full_sha,'VERIFIED_CLOSED','COMPLETE',caps)
+         signal.setitimer(signal.ITIMER_REAL,0)
+         return {'status':'INSTALL_ONLY_COMPLETE_PENDING_UID1000_READ','nonce':nonce,'authority':None,'native_release':False,'native_currentfree':None,'lease_disposition':close_state}
+     except BaseException as error:
+-        signal.setitimer(signal.ITIMER_REAL,0)
+         latch.fail(error)
++        if full_sha is not None and not disposition_attempted:
++            disposition_attempted=True
++            report_state=close_state if close_state in ('HELD','CLOSURE_UNKNOWN','VERIFIED_CLOSED') else 'CLOSURE_UNKNOWN'
++            try:data_output.publish_disposition(nonce,profile_sha,full_sha,report_state,'UNKNOWN',caps)
++            except BaseException:pass
++        signal.setitimer(signal.ITIMER_REAL,0)
+         # If the close may have happened the historical number is never reused.
+         # External Root retains the operation resource/uncertainty reservation.
+         while True:time.sleep(1)

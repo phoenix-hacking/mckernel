@@ -1,0 +1,31 @@
+{
+  "actual_source_evidence": "kernel/syscall.c8087 actual preserved declaration includes IHK_DMA_ALIGN and = { 0 }; Root compile/C ABI/image allPASS unchanged",
+  "actual_tool_receipt": {
+    "chunk_id": "ca40b1",
+    "exit_code": 1,
+    "wall_time_seconds": 0.346194385
+  },
+  "corrected_source": {
+    "bytes": 27408,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/four-selection-incremental-1/qualification-1/qualify_saved_image.py",
+    "sha256": "5a0423d27969919639c908993f8aeb90eb2819d1ad08e8ec010c007e6747d066"
+  },
+  "diagnostic": "AssertionError at line92: missing IHK_DMA_ALIGN in qualifier expected declaration",
+  "failed_command": [
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/four-selection-incremental-1/qualification-1/qualify_saved_image.py"
+  ],
+  "failed_source": {
+    "bytes": 27394,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/four-selection-incremental-1/qualification-1/qualify_saved_image.failed-1.py",
+    "sha256": "4554967ac298348908039d7cacdca11f5d776d2c94035d170b7cc81da30ea0e2"
+  },
+  "producer_or_ELF_tool_retry": false,
+  "single_delta": {
+    "after": "assert 'struct syscall_request request1 IHK_DMA_ALIGN = { 0 };' in generic_source",
+    "before": "assert 'struct syscall_request request1 = { 0 };' in generic_source"
+  },
+  "status": "DATA_QUALIFIER_ONLY_EXACT_SOURCE_LITERAL_CORRECTION_NOT_SUT_FAILURE"
+}

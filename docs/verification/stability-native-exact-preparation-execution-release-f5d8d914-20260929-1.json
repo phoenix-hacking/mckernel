@@ -1,0 +1,73 @@
+{
+  "schema": "mckernel.native-exact-preparation-execution-release.v1",
+  "status": "PENDING_INDEPENDENT_EXECUTION_REVIEW",
+  "one_shot": true,
+  "maximum_invocations": 1,
+  "retry": false,
+  "source_commit": "f5d8d914f816d4a677990719854f7b4d312a430b",
+  "ihk_commit": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+  "nonce": "f5d8d914-1",
+  "template": {
+    "path": "docs/verification/evidence/native-exact-candidate-preparation-704f6654-1.sh",
+    "sha256": "7502c748b46766379db480cd51a48c7a107ef8c4315db7ba5d09432f5bfb3a0a",
+    "normalization": "replace source commit and nonce only"
+  },
+  "source_bindings": {
+    "packet": {"path": "docs/verification/evidence/native-exact-candidate-preparation-f5d8d914-1.sh", "sha256": "7e3c48970bf3ff1b4a339ff09d645f4a44bea1533691d7608331b2e1d49a0010"},
+    "test": {"path": "scripts/tests/test_native_exact_candidate_preparation_f5d8d914.py", "sha256": "f47d3ee79e3d3d8970cbc714f671ba3f6421609194448d158675f42e4111176b"},
+    "candidate_metadata_sha256": "b68a8b5d18a6642ef0043b791984e7a4ea2503a61b8d9153a781827a2277a10a",
+    "input_manifest_sha256": "28112e13a9932796080d8183e66e493b1bf0655631413b42775af865798c1d3f",
+    "offline_driver_sha256": "1e522a60a265cbd54f50f8856f2c1a8b2f140bd11e655d875f6db431f08a962b",
+    "owner_sha256": "a8c4c9fc61fab312e3a6e48e93b417453ec12e6543d6adbb7038933f92e79155",
+    "placement_observer_sha256": "4fe5b7717a7ddc8694edaecc63d07f97a56460f8e692d3ebe2d682024dadbe8a",
+    "closure_observer_sha256": "079482060e5d0b461d15a5d1ffeb7f5d96719d70b877125665df8df7c4bcd7f1",
+    "image_receipt_sha256": "18225919a44e2c07e87a66711c8d1c9483d10e15da91fa5d7fcb7339ff888172"
+  },
+  "exact_command_argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=10s",
+    "600s",
+    "/bin/bash",
+    "/home/holden/mckernel/docs/verification/evidence/native-exact-candidate-preparation-f5d8d914-1.sh"
+  ],
+  "targets": [
+    "/dev/shm/mckernel-exact-candidate-f5d8d914-1",
+    "/dev/shm/mckernel-exact-metadata-backup-f5d8d914-1",
+    "/home/holden/mckernel-work/scratch/native-exact-metadata-evidence-f5d8d914-1",
+    "/home/holden/mckernel-work/scratch/native-exact-candidate-preparation-f5d8d914-1.log",
+    "/home/holden/mckernel-work/scratch/native-exact-inputs-f5d8d914-1.json",
+    "/home/holden/mckernel-work/scratch/native-exact-build-request-f5d8d914-1.json",
+    "/home/holden/mckernel-work/scratch/native-exact-build-output-f5d8d914-1",
+    "/home/holden/mckernel-work/scratch/native-exact-build-evidence-f5d8d914-1",
+    "/home/holden/mckernel-work/scratch/native-exact-build-lease-f5d8d914-1.json"
+  ],
+  "scope": {
+    "allowed": "ordinary-user preparation of immutable clean candidate, standalone metadata, manifest, request, empty output/evidence roots and durable log",
+    "forbidden": ["sudo", "Docker", "build", "module", "guest", "network", "reuse", "retry", "cleanup of prior evidence"]
+  },
+  "required_before_execution": [
+    "packet, test and this release are committed, pushed and fetched byte-identically",
+    "fresh independent reviewer returns PASS_EXECUTION_RELEASE for this exact preparation",
+    "source and IHK commits plus all source/tool bindings match",
+    "all nine target names are absent, including dangling symlinks",
+    "boot and three launcher PID/starttime identities remain stable",
+    "no active McKernel build, guest, owner or new-nonce lease exists",
+    "read-only Docker census shows no running mount of any target",
+    "host, scratch, tmpfs and memory capacity satisfy the packet floors and the aggregate 24-GiB planning ceiling"
+  ],
+  "required_after_execution": [
+    "preserve exact outer exit and streams",
+    "review the durable log, source commits, metadata receipt, closure, manifest, request and owner validate-only result",
+    "verify no preparation descendants survive and the new build lease remains absent",
+    "archive and independently review preparation evidence before any build release"
+  ],
+  "acceptance": {
+    "preparation_only": true,
+    "build_authorization": false,
+    "guest_authorization": false,
+    "production_gate_credit": false,
+    "application_acceptance": false,
+    "os_complete": false
+  }
+}

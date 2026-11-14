@@ -1,0 +1,105 @@
+{
+  "actual_launcher_acceptance": null,
+  "actual_resource_grant": null,
+  "actual_stage": null,
+  "artifact_record_contract": {
+    "artifact_descriptors_verified": {
+      "artifacts/mcexec": null
+    },
+    "implementation_ownership": false,
+    "kernel_rebuilt": false,
+    "launcher_source_sha256": "da71f31656ccfc58a79c4dcca01f9c6742135c292b213b7d86113ebddc4cae0a",
+    "reviewer": null,
+    "schema": "mckernel.launcher-only-production-artifact-review.v1",
+    "source_change": "PLD_MPOL_MAX4\u21925 only",
+    "status": "PASS_ACTUAL_LAUNCHER_ONLY_PRODUCTION_TARGET_ARTIFACT",
+    "target": "mcexec"
+  },
+  "binding_template": {
+    "bytes": 9209,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-stage-preparation-1/contract-correction-1/BINDING.PENDING-LAUNCHER.json",
+    "sha256": "32256f4e192325d6b5122afa68e552b1c0b5d4f4892506c32fa7828ca67bafff"
+  },
+  "command": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=30:30",
+    "--fsize=67108864:67108864",
+    "--core=0:0",
+    "--nofile=256:256",
+    "--",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-stage-preparation-1/contract-correction-1/stage_launcher.py",
+    "--case",
+    "numa",
+    "--binding",
+    null,
+    "--binding-sha256",
+    null
+  ],
+  "consumer_contract_template": {
+    "bytes": 3478,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-stage-preparation-1/contract-correction-1/CONSUMER-CONTRACT.PENDING-LAUNCHER.json",
+    "sha256": "2fd07b4272e302d43e169161664ca89713a4c98547aae74c65ae8f60a72dbd22"
+  },
+  "contract_notice": "PASS strings are existing agreed decoder literals, not issued acceptance. No artifact/dependency ref is fabricated.",
+  "dependency_record_contract": {
+    "actual_elf_needed_provider_join": null,
+    "baseline_dependency_acceptance": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/settid-current-image-native-app-preparation-20261021-1/independent-review-1/actual-static-dependency-closure-acceptance.json",
+      "sha256": "338f6eafeefce26cf4fb826c58d17762c7c204806e146b09ec480facd4452314",
+      "size": 8372
+    },
+    "implementation_ownership": false,
+    "launcher": null,
+    "reviewer": null,
+    "schema": "mckernel.launcher-only-dependency-join-review.v1",
+    "status": "PASS_ACTUAL_LAUNCHER_ONLY_DEPENDENCY_JOIN"
+  },
+  "diff": {
+    "bytes": 10818,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-stage-preparation-1/contract-correction-1/stage-launcher-contract.patch",
+    "sha256": "a93f22539d9ea9786d15bcf158ff1b1054510df3eca1cb4aea3df0eb2a8d0e13"
+  },
+  "expected": "Actualonlybin/mcexecdata delta;1d8kernel+58others unchanged=59/60. Exactsamebase4ad bytes, header metadata/order/padding and explicitimage/appsapp/init equality; same strict116empty37, no modelednative.",
+  "finite_actual_DATA_updates": [
+    "b.launcher_artifact_review := genuine accepted launcher-only record fullpath/sha256/size/mode",
+    "b.launcher_dependency_join := genuine accepted current ELFneeded/provider record full descriptor",
+    "b.mcexec_source and c.mcexec := identical actual accepted newlauncher descriptor",
+    "b.consumer_contract := actual completed truthful component contract descriptor; newlauncher/dependency refs allgenuine",
+    "Pass exact final bindingfileSHA via existing --binding-sha256; sourcefile staysimmutable."
+  ],
+  "profile": {
+    "Docker": false,
+    "additional_reserve_bytes": 671088640,
+    "as_bytes": 1073741824,
+    "cpu": 6,
+    "cpu_seconds": 30,
+    "grace_seconds": 2,
+    "host_floor_bytes": 17179869184,
+    "jobs": 1,
+    "network": false,
+    "root": false,
+    "scratch_floor_bytes": 12884901888,
+    "stage_cap_bytes": 67108864,
+    "stream_fsize": 67108864,
+    "wall_seconds": 35
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source": {
+    "bytes": 12920,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-stage-preparation-1/contract-correction-1/stage_launcher.py",
+    "sha256": "ba505cb219057f8cb19d2a19657d5ae464122dc870d046dd8f99dc0e218bbbf7"
+  },
+  "status": "SOURCE_REVIEW_AND_GENUINE_LAUNCHER_DATA_AND_FRESH_GRANT_PENDING"
+}

@@ -1,0 +1,92 @@
+{
+  "C_retirement_delta": 0,
+  "compiler_or_native_operation": false,
+  "current_abi_answer": {
+    "C_struct_layout_extension_proved_unavoidable": false,
+    "existing_mckfd_lock_alone_supplies_safe_typed_group_reference": false,
+    "layout_distinction": "A separately reviewed Rust-owned owner/sidecar can potentially keep existing C structure sizes unchanged. That still introduces a NEW defined kind/ref/closing/group-membership protocol and interfaces; it is not an existing pin in the present ABI. No such record/token/interface is implemented here.",
+    "new_defined_semantic_kind_and_refcount_or_equivalent_owner_contract_unavoidable": true,
+    "reason": "It can serialize a short list lookup/mutation only while held. Current APIs return raw pointers after unlock, provide no transferable event pin, and permit close to free the event. A persistent event.group_leader pointer outlives any short lookup lock."
+  },
+  "existing_event_pin_or_refcount": {
+    "count_is_not_a_refcount": "mc_perf_event.count is ihk_atomic64_t explicitly commented counter_value, with child_counter_value separately recorded. It is hardware measurement state, not an ownership token.",
+    "exists_in_reviewed_representation_or_paths": false,
+    "opt_is_not_a_free_existing_owner_slot": "mckfd.opt is void* with no perf owner semantics in the participating publisher; publisher does not initialize opt or dup_cb. It cannot be silently reinterpreted as an established typed owner.",
+    "raw_links_are_not_pins": "group_leader/parent and list membership do not stop perf_close_body_result from freeing the event.",
+    "real_mc_perf_event_fields": "attr/extra_reg/hardware configuration, measurement count, child_count_total, pmc_status, sample_freq, raw parent/group_leader links, sibling/group lists, counters/timestamps/hardware fields; no lifetime refcount or closing/pin token.",
+    "real_mckfd_fields": "next,fd,sig_no,data,opt,read_cb,ioctl_cb,mmap_cb,close_cb,fcntl_cb,dup_cb; no reference count, closing state or kind field."
+  },
+  "file_acceptance_delta": 0,
+  "first_missing_contract": {
+    "branch": "group_fd != -1",
+    "close_participation": "The actual perf_close_body_result invokes free(event); the group helper has no ownership edge excluding concurrent close. The entry final-publication lock_fn/unlock_fn applies later and does not guard this lookup/mutation.",
+    "exact_approved_replacement_provider_name_and_prototype": "UNKNOWN / not supplied by current entry or helper; this review does not invent one.",
+    "exact_field": "matching proc.mckfd entry: mckfd_data_offset / real Mckfd.data: CLong",
+    "existing_signature_lacks": [
+      "descriptor-kind/callback identity predicate or actual matching-field offset",
+      "reference/pin acquisition and release provider",
+      "group/list reservation ownership or compatible lookup/teardown lock callbacks"
+    ],
+    "function": "perf_event_open_group_body_result",
+    "observed_behavior": [
+      "Walks proc.mckfd via raw next/fd/data offsets without an acquired lookup lock.",
+      "Treats data as an event pointer solely because fd equals group_fd; no descriptor-kind or expected callback check occurs.",
+      "Writes event.group_leader then leader sibling/group links, nr_siblings and pmc_status without a retained event reference or group reservation."
+    ],
+    "required_existing_provider_contract": "A reviewed genuine provider must establish that this exact group_fd owns a live perf event, retain the descriptor/event and serialize group membership through success and all failure/close paths. No such provider is passed or consumed by this actual helper.",
+    "restriction": "Forwarding group_fd unchanged into this unsupported pointer/lifetime contract would enter the excluded undefined/ownership domain. Restricting to group_fd=-1 would reduce original supported scope, so no such projection is prepared.",
+    "why_necessarily_reached": "A valid supported sys_perf_event_open request may specify an existing group_fd. Current validation does not establish descriptor type/lifetime, and the complete body calls this helper unconditionally before host-FD request."
+  },
+  "first_missing_existing_interface": "No current provider has the contract: resolve group_fd to a verified live perf owner under lookup exclusion and retain/release it across group mutation, host-FD work, publication failure and close/teardown. Exact approved prototype is absent; this review invents none.",
+  "kind_discriminator_established": false,
+  "lock_participation": [
+    {
+      "participation": "No mckfd lock acquisition and no lock callback in signature. Non-standalone branch follows raw proc.mckfd and uses fd match then data as event; writes leader/group lists and counters.",
+      "path_function": "kernel/rust/syscall_policy.rs::perf_event_open_group_body_result"
+    },
+    {
+      "participation": "Event/counter allocation and group mutation happen before host-FD callback. lock_fn/unlock_fn are passed onward only to final descriptor publication, not used to protect earlier group resolution.",
+      "path_function": "kernel/rust/syscall_policy.rs::perf_event_open_body_result"
+    },
+    {
+      "participation": "Initializes fd/sig_no/data/read/ioctl/mmap/close/fcntl fields before taking process mckfd_lock. Lock protects insertion at head; unlock occurs before return. It does not acquire a group/event lifetime ref.",
+      "path_function": "kernel/rust/syscall_policy.rs::perf_event_open_mckfd_publish_body_result"
+    },
+    {
+      "participation": "Takes mckfd_lock, finds raw descriptor, unlocks, returns pointer; no pin/reference is acquired. Its name does not mean returned storage stays locked.",
+      "path_function": "kernel/rust/syscall_policy.rs::syscall_mckfd_find_locked"
+    },
+    {
+      "participation": "Takes mckfd_lock, unlinks descriptor and clears next, UNLOCKS, invokes descriptor close_cb, frees descriptor, then forwards Linux close. Thus lookup lock released before callback cannot prevent event/desriptor destruction.",
+      "path_function": "kernel/rust/syscall_policy.rs::syscall_close_body_result; matching C body in kernel/syscall.c"
+    },
+    {
+      "participation": "Reads event from sfd.data, clears current thread counter allocation maps, then directly free(event). No event reference release/defer protocol or group-member unlink/reparent is performed here.",
+      "path_function": "kernel/rust/syscall_policy.rs::f03_perf_close_v1 / perf_close_body_result; matching C perf_close"
+    },
+    {
+      "participation": "On final VM path, process mckfd_lock is HELD while calling every close_cb. close_all neither unlinks entries nor acquires event refs; descriptor nodes are freed by later process drain. A new close callback that blindly reacquires mckfd_lock would self-deadlock on this path.",
+      "path_function": "kernel/rust/process_helpers.rs::process_release_vm_body_result and process_release_vm_checked_inner -> process_mckfd_close_all_result"
+    },
+    {
+      "participation": "Existing IRQ-save ticket spinlock and paired IRQ/preemption restoration. It is not a blocking reference lease and must not be held across the host-FD do_syscall transaction.",
+      "path_function": "kernel/rust/syscall_policy.rs::syscall_mckfd_lock_bridge/unlock_bridge"
+    }
+  ],
+  "new_abi_or_entry_implementation": false,
+  "repair_decision": "NEW_DEFINED_KIND_AND_LIFETIME_CONTRACT_REQUIRED; NO_EXISTING_TYPED_GROUP_PIN",
+  "scope": "PERF_ENTRY_OWNERSHIP_ABI_DECISION_ONLY",
+  "selector_changes": false,
+  "source_and_service_holds_unchanged": true,
+  "source_bindings": [
+    {
+      "path": "/home/holden/mckernel-work/m14-resume-20261105-1/perf-entry-private-1/PERF-ENTRY-ELIGIBILITY.json",
+      "sha256": "49ab35e2e255cd2cc72f77ee734bfe0e683bf3373473f5f1325535c7b8f93613"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-resume-20261105-1/perf-entry-private-1/PERF-GROUP-REPAIR-DECISION.json",
+      "sha256": "8bd6421e7c13feb34dc7bed504a334a7ab72ab134ab8256be82045a1cf0f6843"
+    }
+  ],
+  "status": "NO_GO_COMPLETE_PERF_ENTRY_GROUP_DESCRIPTOR_OWNERSHIP_CONTRACT"
+}

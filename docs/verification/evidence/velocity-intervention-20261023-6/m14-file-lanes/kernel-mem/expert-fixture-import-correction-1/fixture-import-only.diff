@@ -1,0 +1,10 @@
+--- original9a48
++++ expertbc3b
+@@ -1,6 +1,7 @@
+ #![no_std]
+ #![allow(dead_code)]
+ #[path="actual_abi.rs"] mod abi;
++use core::ffi::c_void;
+ use abi::{CInt,CULong,ProcessVm,AddressSpace,TlbFlushEntry,CPU_SET_WORDS};
+ 
+ type MemRdtscFn=unsafe extern "C" fn()->CULong;

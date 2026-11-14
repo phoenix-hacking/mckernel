@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "record_kind": "collector_root_infrastructure_success",
+  "task_id": "M02-B-root-positive",
+  "attempt": 2,
+  "status": "PASS_ROOT_COLLECTOR_INPUT",
+  "recorded_utc": "2026-09-15T05:55:22Z",
+  "source_commit": "e1b483c503df10ff5693d8e99fdcad907535647a",
+  "orchestrator_sha256": "b794fc74a668f9f41caceb99e299381652fe02caa002c06d8b43c287b75599a3",
+  "build_record_sha256": "fa12fe8df3092f64fbe757bbd3ccad62bd8a672cbda39fb4153ffd54c6d917ed",
+  "collector_sha256": "e0e8e30e89b003ba51092f571d622e007ca2d9067561bfc06a2854cb8d29cc9d",
+  "results": {
+    "host": {
+      "status": "PASS_ROOT_COLLECTOR_INFRASTRUCTURE_ONLY",
+      "sha256": "2a1cdbf793e2b9d6cfe7f9ab2dec237cf337c0ba3d20b24ababe00686cf368df"
+    },
+    "root_profile": {
+      "status": "PASS_LINUX_INFRASTRUCTURE_ONLY",
+      "sha256": "a5c6192eead51506bedf97137982af289df738d1dd1651415ef8ac3d6a47cf6f",
+      "uid": 0,
+      "euid": 0,
+      "gid": 0,
+      "groups": [0]
+    },
+    "cases": {
+      "status": "PASS_INFRASTRUCTURE_ONLY",
+      "sha256": "2ede81fe8709f69e154702f7c77b50e5e0d75be844df09b15e9321b5e7a52131",
+      "count": 25,
+      "actual_payload_lifecycles": 13,
+      "preparation_role_mode_rejections_without_child": 11,
+      "existing_attempt_preservations": 1
+    },
+    "observed_profile": {
+      "sha256": "1771427ae91d040fb7e326d641c1e52e1f619d4b5e873323201f3ea760695ef1",
+      "status": "FAIL",
+      "interpretation": "conservative pre-test snapshot; root-result status changes to PASS only after SHA9, all 25 cases and input revalidation"
+    }
+  },
+  "lifecycle": {
+    "supervisor_collections_verified": 58,
+    "container_exit_zero": true,
+    "container_oom_killed": false,
+    "container_absence_verified": true,
+    "cleanup_evidence_complete": true,
+    "cleanup_first_failure": null,
+    "watchdog_status": "DISARMED_AFTER_VERIFIED_ABSENCE",
+    "watchdog_result_sha256": "610b8bc499fb27dac256aa9fb0e8619f5b7ff73db645589c653bbcbea8af249b",
+    "watchdog_raw_wait_status": 0,
+    "development_lock_free_after_run": true,
+    "first_failure_present": false,
+    "diagnostic_errors": []
+  },
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-root-success-20260915-2.tar.gz",
+    "size": 718152,
+    "sha256": "ad7c670311f6756cf64610e1d3e0dbdcdb026f86857c8461c3295cc34c17a721",
+    "members": 991,
+    "unique_members": true,
+    "inventory_entries_verified": 989,
+    "later_documented_members": ["original-tree-inventory.json", "result.json"]
+  },
+  "independent_reviews": [
+    {"role": "Luna evidence auditor", "status": "PASS_ROOT_EVIDENCE"},
+    {"role": "Astra/high OS ownership and runtime-acceptance reviewer", "status": "PASS_ROOT_COLLECTOR_INPUT"}
+  ],
+  "remaining_m02_b": [
+    "adverse storage and retained-prefix failures",
+    "late completed-wait and report-fsync interruption",
+    "missing and partial setup records",
+    "stopped collector/external rescue",
+    "ownership overflow and source-bound loader closure"
+  ],
+  "application_acceptance": false,
+  "transport_acceptance": false,
+  "mckernel_execution": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false,
+  "next": "Implement and independently review a bounded three-case setup-missing/setup-partial/late-wait adverse packet; continue M02-C native collector design independently."
+}

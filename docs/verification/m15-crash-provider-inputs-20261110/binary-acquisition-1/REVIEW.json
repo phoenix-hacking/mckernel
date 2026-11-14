@@ -1,0 +1,203 @@
+{
+  "actual_trigger": {
+    "absence_execution": {
+      "bytes": 1439,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/execution-1/RESULT.json",
+      "sha256": "d320167b94e198787b3f61f9e587f25863d8f8d86f821c4ffdd02cb4fa16096d"
+    },
+    "actual_rows": {
+      "bytes": 8547,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/next-inputs-1/rows/CANDIDATES.json",
+      "sha256": "2ee72ba31cb4393f78752a3ef2c0a45745c03799e5a892200ed55004787264ec"
+    },
+    "literal_absent_report": {
+      "bytes": 360,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/metadata/REPORT.json",
+      "sha256": "0ae9170ad73badcc015855d3a55e82bd439312d087bf69539d064c300fb92f6b"
+    },
+    "positive_new_target_query": {
+      "bytes": 902,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/next-inputs-1/format-file-correction-1/execution-1/RESULT.json",
+      "sha256": "0eaed7eb3fb2a8c92a780d6ff50f886877199d1c5436672da9898787d74afafd"
+    },
+    "query_review": {
+      "bytes": 15605,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-review-source-acquisition-max-1/next-inputs-1/format-file-correction-1/REVIEW.json",
+      "sha256": "41711ebc613f42c1065f76988a9d7b46f745b6840a85a63a477c957836d6aa87"
+    }
+  },
+  "decision": "One ordinary pinned HTTPS curl GET is supported by the actual corrected target metadata. Root may execute only the frozen6cb68 acquisition after fresh operation admission/ownership. This delivers untrusted package data for later signature/header/payload/source/ELF qualification and accepts no host-provider ABI/runtime behavior.",
+  "exact_approved_GET": {
+    "argv": [
+      "/usr/bin/taskset",
+      "-c",
+      "7",
+      "/usr/bin/timeout",
+      "--signal=TERM",
+      "--kill-after=2s",
+      "58s",
+      "/usr/bin/prlimit",
+      "--as=268435456:268435456",
+      "--cpu=30:30",
+      "--fsize=8388608:8388608",
+      "--core=0:0",
+      "--",
+      "/usr/bin/curl",
+      "--disable",
+      "--proto",
+      "=https",
+      "--proto-redir",
+      "=https",
+      "--max-redirs",
+      "0",
+      "--retry",
+      "0",
+      "--fail",
+      "--show-error",
+      "--silent",
+      "--tlsv1.2",
+      "--connect-timeout",
+      "15",
+      "--max-time",
+      "56",
+      "--max-filesize",
+      "5254636",
+      "--dump-header",
+      "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/binary-acquisition-1/downloads/crash.headers",
+      "--write-out",
+      "http_code=%{http_code}\nurl=%{url_effective}\nbytes=%{size_download}\n",
+      "--output",
+      "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/binary-acquisition-1/downloads/crash-9.0.1-1.el10.x86_64.rpm",
+      "https://download.rockylinux.org/pub/rocky/10.2/AppStream/x86_64/os/Packages/c/crash-9.0.1-1.el10.x86_64.rpm"
+    ],
+    "curl_flags_review": "--disable is first curl argument, so no curlrc overrides. HTTPS-only protocol/TLS verification remains enabled; no insecure flag, credentials, redirect following or alternate URL. Redirectmax0 and retry0 retain exactly one transfer. --max-filesize5254636 and inherited FSIZE8MiB bound payload writes; curl writes fixed headers/body files and only structured HTTP/url/byte receipt to stdout.",
+    "destination": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/binary-acquisition-1/downloads/crash-9.0.1-1.el10.x86_64.rpm",
+    "environment_replace": {
+      "LANG": "C",
+      "LC_ALL": "C",
+      "PATH": "/usr/bin:/bin",
+      "TZ": "UTC"
+    },
+    "expected_HTTP": 200,
+    "expected_bytes": 5254636,
+    "expected_returncode": 0,
+    "expected_sha256": "46980f6743755ef57fe82ff09bd04fc2088039fb8e983a02500ef537922830c7",
+    "header_output": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/binary-acquisition-1/downloads/crash.headers",
+    "postgate": "Root requires curl0, HTTP200, exact effective URL with no redirects, exact5254636B and full expectedSHA. Save exact actual header/write-out/bytes/hash/ownership result. Any mismatch/transport error preserves raw failed artifact/diagnostic and stops dependent use; no unchanged retry, fallback version/source or refetch of a successful artifact.",
+    "stderr": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/binary-acquisition-1/fetch.stderr",
+    "stdout": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/binary-acquisition-1/fetch.stdout",
+    "time_bounds": "curl connect15s/max56s, owned timeout58s with2s kill-after grace, CPU30/AS256MiB/core0. Root keeps resources charged through bounded cleanup and positive wait/stream closure; timeout/unknown is never treated as release or successful acquisition.",
+    "url": "https://download.rockylinux.org/pub/rocky/10.2/AppStream/x86_64/os/Packages/c/crash-9.0.1-1.el10.x86_64.rpm"
+  },
+  "fresh_Root_admission_and_ownership": {
+    "capture": "Use the existing positively owned HOST capture; retain complete returned exec metadata/session handle, exact direct PID/birth/status/wait, stdout/stderr and whole descendants/stream closure. Only this new owned family may be retired. Old lost-handle CPU0 writer/output/leases stay untouched and charged regardless of new success.",
+    "failure": "Positive join/closed streams and no unknown residuals are mandatory before next use/release. Any unknown ownership/account/service/spend/permission/source outcome stops dependent work and remains held; no other image/heavy/native owner is implicitly admitted.",
+    "fresh_output": "Root verifies exact real empty writable private download/capture directories and nonsymlink parents; body/header/stdout/stderr must not exist or be symlinks. Review observed all four paths absent. Do not overwrite retained old query/failed/custody evidence.",
+    "required": "Fresh account/stop/source/permission/resource/controller reconciliation, exact argv/source URL logged and new positive PID/birth before waits. One CPU7/job with AS256MiB plus oldUNJOINED CPU0/256MiB/job1 and ALL other controller/worker/container overhead stays within HOST4GiB/max3; combined retained+new parser/network slices are at least512MiB/2jobs. Fresh26GiB MemAvailable, prior18GiB/native2-5/12GiB/CPU1 exclusion/UNKNOWN reservations and host16/scratch12GiB floors plus16MiB capture margin remain.",
+    "resource_profile": {
+      "AS_bytes": 268435456,
+      "CPU": [
+        7
+      ],
+      "CPU_seconds": 30,
+      "FSIZE_bytes": 8388608,
+      "additional_disk_bytes": 16777216,
+      "curl_seconds": 56,
+      "fresh_MemAvailable_min_GiB": 26,
+      "host_free_floor_GiB": 16,
+      "jobs": 1,
+      "native_CPUs2_to5_and12GiB_remain_held": true,
+      "network_body_bytes": 5254636,
+      "old_UNJOINED_CPU0_jobs": 1,
+      "old_UNJOINED_CPU0_reservation_bytes": 268435456,
+      "old_UNJOINED_released": false,
+      "overlap": "Only after Root actual fresh measured grant accounting old UNKNOWN CPU0 slice/job and every controller/worker/live operation within shared4GiB/max3. No competing heavy/image/native owner or multiplied grant.",
+      "scratch_free_floor_GiB": 12,
+      "shared_HOST_jobs_max": 3,
+      "shared_HOST_total_bytes": 4294967296,
+      "wall_seconds": 58
+    }
+  },
+  "holds_and_acceptance": "No I03/I01/P04/M15/original milestone, fullSDK/provider/header/BFD/runtime/native/C-retirement acceptance or generic/exec/replay/equivalentfalse/remaining12/source/native/currentfree/UNKNOWN/service/account/finite-credit hold release. M14 original acceptance still precedes M15. Root alone executes/integrates/publishes actual reviewed results.",
+  "metadata_authority_review": {
+    "actual_fields_match": "Compared every selected preserved field to the one actual row, including name, epoch0/version9.0.1/release1.el10/archx86_64, actual exact/usr/bin/crash file entry, AppStream10.2 base+relative path,5254636B, sha256 and exactSOURCERPM filename. One binary/zero development counts and source relation match the actual query; no count/version ranking was imposed.",
+    "actual_query": "Hash/byte-bound corrected82aa/3a301 query result and CANDIDATES2ee72 match. The actual receipt has exit0, positive leader980606/birth41006802/parent and whole-descendant joins, closed streams, no timeout/error/adopted reap/kill/residual. OldUNJOINED source reservation is explicitly not released.",
+    "no_replay": "Reuse actual exactliteral absence0 and joined corrected package query; no source XML/parser/descriptor/checksum suite/libuv/ELF/libc/build query is repeated by this review.",
+    "scope_of_absence": "Zero crash-devel rows applies only to these exact two primaries. Source filename crash-9.0.1-1.el10.src.rpm has no source URL/hash. No source path is invented from the binary repository path."
+  },
+  "request": {
+    "bytes": 14565,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/binary-acquisition-1/REQUEST.json",
+    "sha256": "6cb68e92791524e2d0bf11abbc059f61855f27b0b0189dc07526ebe5fea7a7ff"
+  },
+  "reviewed_at_utc": "2026-11-10T15:29:56.810788+00:00",
+  "reviewer": "/root/source_acquisition_review_max",
+  "reviewer_actions": "Only frozen packet/actual saved query and absence receipts reads, metadata/argv/hash/field comparisons and this private REVIEW write. No curl/network/ELF/RPM/parser/query/Docker/compiler/test/crash/main/native execution, canonical/source/packet mutation or recursive agents.",
+  "selected_actual_row": {
+    "arch": "x86_64",
+    "bytes": 5254636,
+    "checksum": "46980f6743755ef57fe82ff09bd04fc2088039fb8e983a02500ef537922830c7",
+    "checksum_type": "sha256",
+    "declared_RPM_URL": "https://download.rockylinux.org/pub/rocky/10.2/AppStream/x86_64/os/Packages/c/crash-9.0.1-1.el10.x86_64.rpm",
+    "epoch": "0",
+    "location": "Packages/c/crash-9.0.1-1.el10.x86_64.rpm",
+    "match_reasons": [
+      "actual requested package-family name",
+      "exact selected literal present in primary file entries"
+    ],
+    "name": "crash",
+    "nevra": "crash-0:9.0.1-1.el10.x86_64",
+    "primary_file_entries": [
+      "/usr/bin/crash"
+    ],
+    "primary_sha256_already_qualified": "3d01e7cc642a19e832f02e8a790a044e1c79a89c2ed6efa717db51f51291df32",
+    "release": "1.el10",
+    "repository": "appstream",
+    "repository_base": "https://download.rockylinux.org/pub/rocky/10.2/AppStream/x86_64/os/",
+    "source_RPM_declared_filename": "crash-9.0.1-1.el10.src.rpm",
+    "version": "9.0.1"
+  },
+  "status": "GO_EXACT_ONE_METADATA_BOUND_CRASH_BINARY_GET_AFTER_ROOT_FRESH_ADMISSION",
+  "trust_and_original_conditions_retained": {
+    "BFD_limit": "Metadata bundled(gdb)=16.2 and bundled(libiberty) do not identify BFD2.41 ABI. Actual crash host exports or genuine dependency providers and producer source/header/consumed section layout must satisfy all eleven retained BFD contracts. Existing binutils2.41 archive/header and mcinspect success are not crash-host export/source compatibility proof.",
+    "consumer_contract": {
+      "bytes": 14125,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/provider-closure-1/CONTRACT.json",
+      "sha256": "d63cab4e7007bcebfcdf12e588ee512b9594e62ef6707e6c9f91f78350550760"
+    },
+    "crash_types": "Actual seven host exports must match the retained data widths/prototypes and actual producer-header consumed machdep flags/kvbase prefix offsets0/8 plus command_table_entry32B/align8/offsets0,8,16,24 and callback ABI. Full machdep520 equivalence is neither inferred nor imposed as a substitute.",
+    "eleven_BFD": [
+      "bfd_close",
+      "bfd_close_all_done",
+      "bfd_fopen",
+      "bfd_get_section_by_name",
+      "bfd_init",
+      "bfd_make_section_anyway",
+      "bfd_perror",
+      "bfd_set_format",
+      "bfd_set_section_contents",
+      "bfd_set_section_flags",
+      "bfd_set_section_size"
+    ],
+    "runtime": "No RPM/ELF/compiler/CMake/program main/crash-v/extension load/init/fini/dump/API/service/device/native execution follows from this GET. Five libc and prior production converter/layout proofs are reused at exact scopes, without replay.",
+    "seven_crash": [
+      "argcnt",
+      "args",
+      "fp",
+      "machdep",
+      "readmem",
+      "register_extension",
+      "symbol_value"
+    ],
+    "source_and_development_next": {
+      "actual_declared_source_filename": "crash-9.0.1-1.el10.src.rpm",
+      "next_genuine_input": "Acquire real official source-repository descriptor/primary needed to derive EXACT declared crash-9.0.1-1.el10.src.rpm, under separate bounded review/admission. No binary-primary Package/c path is reused or invented for source RPM. Source URL/hash remain unbound until that actual source metadata.",
+      "no_development_row_scope": "Only these exact BaseOS+AppStream binary primaries; no global crash-devel absence claim, guessed package/version or devel GET. The matching source RPM can supply actual producer/header/BFD lineage once its official source metadata binds exact filename/location/size/SHA and signature.",
+      "owner": "Same Root ordinary source engineering with this source owner; not external inventory authority.",
+      "source_artifact_URL": null,
+      "source_artifact_sha256": null,
+      "status": "EXACT_SOURCE_FILENAME_ONLY_NO_SOURCE_RPM_URL_OR_HASH_BOUND"
+    },
+    "untrusted_data": "HTTPS/metadata size/hash matching is acquisition/custody only. Separate exact same-image trusted full Rocky key/signature/rpmkeys, header NEVRA/Provides/Requires/SOURCERPM, passive extraction and ELF/provider lineage review/admission remain required. No install, system/image modification or package/script execution is authorized."
+  }
+}

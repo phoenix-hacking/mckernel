@@ -1,0 +1,17 @@
+--- frozen-cohort03/mcexec_load_descriptor.rs
++++ bounded-lp64/mcexec_load_descriptor.rs
+@@ -1,4 +1,5 @@
+ // Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++const _:()={assert!(core::mem::size_of::<core::ffi::c_ulong>()==8);assert!(core::mem::size_of::<usize>()==8);};
+ // Exact uprotocol.h selected Linux x86_64 ABI; fixture compares every field offset.
+ use super::{c_int,c_long,c_ulong,c_void};
+ use core::ptr::addr_of_mut;
+@@ -255,7 +256,7 @@
+ #[no_mangle]
+ pub unsafe extern "C" fn mcexec_desc_publish_runtime_flags_bridge(desc:*mut ProgramLoadDesc,enable_uti:c_int,uti_thread_rank:c_int,uti_use_last_cpu:c_int,thp_disable:c_int,straight_map:c_int,straight_map_threshold:c_ulong,enable_tofu:c_int,mcexec_flags:c_ulong) {
+  (*desc).enable_uti=enable_uti;(*desc).uti_thread_rank=uti_thread_rank;(*desc).uti_use_last_cpu=uti_use_last_cpu;(*desc).thp_disable=thp_disable;
+- (*desc).straight_map=straight_map;(*desc).straight_map_threshold=straight_map_threshold;
++ (*desc).straight_map=straight_map;(*desc).straight_map_threshold=straight_map_threshold as usize;
+  #[cfg(mcexec_enable_tofu)] { (*desc).enable_tofu=enable_tofu; }
+  #[cfg(not(mcexec_enable_tofu))] { let _=enable_tofu; }
+  if mcexec_flags!=0 { (*desc).mcexec_flags=mcexec_flags; }

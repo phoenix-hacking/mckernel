@@ -1,0 +1,36 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "independent_reviewer": "/root/m14_callback_review",
+  "verdict": "CONDITIONAL_PASS_SOURCE_AND_PREPARATORY_OPERATIONS",
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=30:30",
+    "--core=0:0",
+    "--fsize=8388608:8388608",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/runtime-cohort-1/next-native-preparation-1/read_only_m05_admission.py"
+  ],
+  "pid": 3643519,
+  "returncode": 0,
+  "elapsed_seconds": 0.30974030098877847,
+  "direct_child_joined": true,
+  "streams_closed": true,
+  "native_execution": false,
+  "stdout": {
+    "bytes": 41857,
+    "sha256": "7626cac0ec24f9234e7e4046425abe11d5837445f7fa7b356f8e9dd672add866"
+  },
+  "stderr": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

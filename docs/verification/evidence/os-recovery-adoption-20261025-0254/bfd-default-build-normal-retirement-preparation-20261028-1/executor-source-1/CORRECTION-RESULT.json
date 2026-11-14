@@ -1,0 +1,62 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ONE_BOUNDED_TWO_FAMILY_CORRECTION_PURE_PASS_NEEDS_INDEPENDENT_REREVIEW",
+  "original_preservation": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/REVIEW-FAILURE-PRESERVED-1/PRESERVATION.json",
+    "bytes": 7923,
+    "sha256": "6f4d9442c92424b42e6d5b1acac11845f27b0de9554ef2e8ec56c4d9213d6f5a"
+  },
+  "diff": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/TWO-FAMILY-CORRECTION.diff",
+    "bytes": 11643,
+    "sha256": "da179a669520fcb39ac22f2995111a8f06f2844926bee8394be874defad0caf3"
+  },
+  "executor": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/retire_exact_bfd_stopped_container.py",
+    "bytes": 41769,
+    "sha256": "0a262aa55a6da2165d98093b9c3583f2fa1efa77799cd4bb20a627e0da9b193c"
+  },
+  "checks": [
+    {
+      "command_argv": [
+        "taskset",
+        "-c",
+        "6",
+        "python3",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/test_review_correction.py"
+      ],
+      "returncode": 0,
+      "tests": 5,
+      "evidence": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/TWO-FAMILY-CORRECTION-TESTS.log",
+        "bytes": 593,
+        "sha256": "7f78736385f7eb181a61a3702b346bb6f37539b207845167e77cfcb4d82890fd"
+      }
+    },
+    {
+      "command_argv": [
+        "taskset",
+        "-c",
+        "6",
+        "python3",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/test_retirement_executor.py"
+      ],
+      "returncode": 0,
+      "tests": 16,
+      "evidence": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/PURE-TESTS.CORRECTED.log",
+        "bytes": 1487,
+        "sha256": "f9513b9b245fa2664a7e9e7f34d22b2caba70b965a7f54b4b2f03b2595de349b"
+      }
+    }
+  ],
+  "actual_queries": 0,
+  "actual_guard_calls": 0,
+  "actual_locks": 0,
+  "actual_spawns": 0,
+  "actual_cleanup": 0,
+  "correction_attempt_number": 1,
+  "runtime_authority": null
+}

@@ -1,0 +1,20 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "purpose": "Read-only HOST filesystem identity and allocation-granularity observation for finite log bound.",
+  "requested": "/home/holden/mckernel-work/native-runs/l12a1",
+  "existing_ancestor": "/home/holden/mckernel-work",
+  "statvfs": {
+    "f_bsize": 4096,
+    "f_frsize": 4096,
+    "f_blocks": 245715567,
+    "f_bfree": 45496563,
+    "f_bavail": 42993269,
+    "f_files": 62480384,
+    "f_ffree": 56049065,
+    "f_favail": 56049065,
+    "f_flag": 4096,
+    "f_namemax": 255
+  },
+  "deepest_mountinfo": "29 1 259:2 / / rw,relatime shared:1 - ext4 /dev/nvme0n1p2 rw,errors=remount-ro",
+  "qualification": "No files created. statvfs does not establish allocation/preallocation maximum."
+}

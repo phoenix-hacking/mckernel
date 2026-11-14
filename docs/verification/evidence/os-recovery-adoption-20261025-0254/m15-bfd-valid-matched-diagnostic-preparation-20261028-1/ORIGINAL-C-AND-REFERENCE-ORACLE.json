@@ -1,0 +1,123 @@
+{
+  "eclair": {
+    "additional_bindings_required": [
+      "Pinned real GDB executable and recursive runtime closure are absent from retained capsule/root; obtain from reviewed supporting environment.",
+      "Separate owner review for NMI paused state, bounded prompt I/O/child reaping and ordinary owned teardown or explicitly source-proven resume.",
+      "No automatic second NMI/reference replay on the same paused OS."
+    ],
+    "argv": [
+      "/case/tools/eclair",
+      "-k",
+      "/images/mckernel.img",
+      "-i",
+      "-o",
+      "0",
+      "-l"
+    ],
+    "effects": [
+      "DUMP_SET_LEVEL ALL",
+      "DUMP_NMI pauses this disposable OS",
+      "DUMP_QUERY_NUM_MEM_AREAS and DUMP_QUERY_MEM_AREAS",
+      "GDB local TCP/remote memory and thread inspection"
+    ],
+    "expected_GDB_thread_count": 1,
+    "expected_remote_qfThreadInfo": "m77359400",
+    "expected_remote_qsThreadInfo": "l",
+    "expected_remote_thread_extra_hex": "50494420312c2069646c652072756e6e696e67206f6e204350552030",
+    "expected_remote_thread_extra_text": "PID 1, idle running on CPU 0",
+    "input_protocol": [
+      "Wait for genuine (eclair) GDB prompt within same inherited finite deadline.",
+      "Send set confirm off\\ninfo threads\\nquit\\n, close stdin, retain transcript and positively reap eclair/GDB descendants."
+    ],
+    "offline_alternative": "Only a genuine matched same-instance dump with physchunks/allphysmemN and independent CPU/thread facts; none is bound here.",
+    "original_C_idle_tid_formula": "2000000000 + actual kernel idle tid (CPU0 tid0 => 2000000000 / hex77359400)",
+    "pseudo_pid_note": "eclair C setup_threads deliberately assigns idle pseudo-process PID1; this is not an observed user process PID and differs from mcinspect actual idle PID0."
+  },
+  "independent_reference_scope": "Retained SDK21 reference executables use original C BFD shims with the same already-qualified Rust frontend/vendor objects. They isolate the replaced BFD boundary. Original retained C frontend formatting/state formulas below provide a separate source oracle; no new reference executable was compiled.",
+  "mcinspect": {
+    "argv": [
+      "/case/tools/mcinspect",
+      "--kernel=/images/mckernel.img",
+      "--ps"
+    ],
+    "diagnostic_stream_limit_bytes": 65536,
+    "expected_header": "CPU     TID    PID             Thread ST exe\n-----------------------------------------------\n",
+    "expected_raw_wait_status": 0,
+    "expected_rows": [
+      {
+        "active_marker": ">",
+        "command": "(idle)",
+        "logical_cpu": 0,
+        "pid": 0,
+        "status": "R",
+        "thread_pointer": "Actual nonnull canonical kernel address; exact complete stream must equal retained reference on same idle OS.",
+        "tid": 0
+      }
+    ],
+    "expected_stderr_hex": "",
+    "independent_facts_required": "Actual owner boot/module/kernel transcript and one assigned logical McKernel CPU, readable empty /proc/mcos0 before/between/after, actual state running before/after. Source expectation alone is insufficient.",
+    "minimal_resolution_trace_example": "dwarf_global_var_addr: inspecting mck_num_processors\ndwarf_get_address: DW_AT_location\ndwarf_global_var_addr: inspecting clv\ndwarf_get_address: DW_AT_location\n",
+    "no_header_or_exit_only_acceptance": true,
+    "pre_header_trace_contract": [
+      "In mck_num_processors then clv order, original C prints an inspecting line for each matching DIE.",
+      "An ordinary declaration may emit the exact same-variable DW_DLV_NO_ENTRY continuation and continue; all such bytes are retained and must match the reference.",
+      "Each variable must finally resolve through DW_AT_location. Both resolutions, exact original PS header and genuine idle row are mandatory; undeclared/unresolved/help/error-only paths fail."
+    ],
+    "reference_argv": [
+      "/case/tools/mcinspect-reference",
+      "--kernel=/images/mckernel.img",
+      "--ps"
+    ],
+    "row_source_format": "%3d %s%6d %6d 0x%16lx %2s %s\\n",
+    "stream_budget_note": "Fixed new diagnostic profile only; original235/227 1024-byte app protocols remain unchanged. Any overflow is a failure; complete bytes are never reconstructed."
+  },
+  "reference_eclair": {
+    "bytes": 6805368,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/equivalence-oracle-correction-source-7/selected-bootstrap-correction-source-8/coherent-cxx-bound-retained11-suffix10-source-2/workspace/native-running-modules-candidate-a482f1c238884fa59bf8db97663925b8/qualification-1/eclair-original",
+    "sha256": "7e2775109eac71fec1454526dc1db2554aa984b741ad6db9654724443b19dd37"
+  },
+  "reference_mcinspect": {
+    "bytes": 7162008,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/equivalence-oracle-correction-source-7/selected-bootstrap-correction-source-8/coherent-cxx-bound-retained11-suffix10-source-2/workspace/native-running-modules-candidate-a482f1c238884fa59bf8db97663925b8/qualification-1/mcinspect-original",
+    "sha256": "0b753618f2bf3d77a18847967d0fbba1017c69c0c9b712051cb40a493c04802b"
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_refs": {
+    "executer/user/eclair.c": {
+      "bytes": 45424,
+      "path": "/home/holden/mckernel/executer/user/eclair.c",
+      "sha256": "1358e16aa98b3d2cbd5fcff073fbe34efa9125009ac18c5137c019f9eb91da7d"
+    },
+    "executer/user/eclair_bfd_shim.c": {
+      "bytes": 297,
+      "path": "/home/holden/mckernel/executer/user/eclair_bfd_shim.c",
+      "sha256": "e2317b32f6fde2d2998e7ccbc69a2a903cdf881b08d19b08eb5d5c9ac86a5e1e"
+    },
+    "executer/user/mcinspect.c": {
+      "bytes": 44837,
+      "path": "/home/holden/mckernel/executer/user/mcinspect.c",
+      "sha256": "e6ba6a6612214f5b41d9f4897caf277ab782bb16830eaa2eec4d7f77e7dde1e9"
+    },
+    "executer/user/mcinspect_bfd_shim.c": {
+      "bytes": 306,
+      "path": "/home/holden/mckernel/executer/user/mcinspect_bfd_shim.c",
+      "sha256": "4bc272746c75f53d563b5f557fc20bdede364cb7ca532cc8b407e62cf256835d"
+    },
+    "executer/user/rust/arch_eclair_x86_64.rs": {
+      "bytes": 7574,
+      "path": "/home/holden/mckernel/executer/user/rust/arch_eclair_x86_64.rs",
+      "sha256": "48e1af9fa7ec6c026a7a3c7657e147e04c905573ee5c08a7bcca4f5a57c634dd"
+    },
+    "executer/user/rust/eclair_helpers.rs": {
+      "bytes": 90194,
+      "path": "/home/holden/mckernel/executer/user/rust/eclair_helpers.rs",
+      "sha256": "9f1f3b1bd2e496f9e4485535af4f3dd73bfcf975887ba9cdfed6a33d64940d0e"
+    },
+    "executer/user/rust/mcinspect_helpers.rs": {
+      "bytes": 98836,
+      "path": "/home/holden/mckernel/executer/user/rust/mcinspect_helpers.rs",
+      "sha256": "7449e7856d6699ee9fa245a75f3e63488fb42603b0e19c574bf148c9d84a9590"
+    }
+  },
+  "status": "SOURCE_DERIVED_EXPECTATIONS_NOT_OBSERVED_RUNTIME_OUTPUT"
+}

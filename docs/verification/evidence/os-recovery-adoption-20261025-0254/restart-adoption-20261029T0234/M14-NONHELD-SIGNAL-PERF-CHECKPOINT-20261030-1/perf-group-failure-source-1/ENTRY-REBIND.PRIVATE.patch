@@ -1,0 +1,11 @@
+--- a/kernel/rust/f03_perf_entry_candidate.rs
++++ b/kernel/rust/f03_perf_entry_candidate.rs
+@@ -164,7 +164,7 @@
+     // SAFETY: Read-only C binding captures the original values and exact provider
+     // addresses. The existing body retains all initialisation and ownership rules.
+     let b = unsafe { &f03_perf_entry_binding_v1 };
+-    unsafe { super::perf_event_open_entry_body_result(
++    unsafe { super::f03_perf_group_cleanup::perf_entry_with_group_cleanup(
+         request.as_mut_ptr(), thread.cast::<c_void>(), proc.cast::<c_void>(),
+         attr.as_mut_ptr().cast::<c_void>(), arg0,
+         b.attr_size as usize, b.attr_type as usize, b.attr_read_format as usize,

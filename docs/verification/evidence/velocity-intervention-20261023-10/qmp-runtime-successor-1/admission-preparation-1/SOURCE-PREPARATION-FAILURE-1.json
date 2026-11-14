@@ -1,0 +1,10 @@
+{
+  "command": "python3 source-only generator on stdin; no workload",
+  "correction": "Remove both walrus assignments; source only, no retry of any runtime/query",
+  "diagnostic": "File <stdin>, line 28: replacements[cold:=old[controller][path]]; SyntaxError: invalid syntax",
+  "failure_family": "host-python-pre38-walrus-syntax",
+  "query_executed": false,
+  "returncode": 1,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_GENERATOR_SYNTAX_FAILURE_BEFORE_ANY_MUTATION"
+}

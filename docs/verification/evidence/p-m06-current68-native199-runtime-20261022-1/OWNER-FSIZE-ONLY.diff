@@ -1,0 +1,20 @@
+--- /home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/native_diagnostic_container_owner.before-fsize.py
++++ /home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/native_diagnostic_container_owner.py
+@@ -788,7 +788,7 @@
+                 "--cpus=4", "--cpuset-cpus=2-5", "--cgroup-parent=/mckernel-dev",
+                 "--memory=12g", "--memory-swap=12g", "--pids-limit=512", "--cap-drop=ALL",
+                 "--security-opt=no-new-privileges", "--read-only", "--network=none",
+-                "--user=1000:1000", "--ulimit", "core=0", "--ulimit", "nofile=4096:4096",
++                "--user=1000:1000", "--ulimit", "core=0", "--ulimit", "nofile=4096:4096", "--ulimit", "fsize=33554432:33554432",
+                 "--tmpfs", "/tmp:rw,nodev,nosuid,size=256m",
+                 "--mount", "type=bind,src=" + REPO + ",dst=" + REPO + ",readonly",
+                 "--mount", "type=bind,src=" + SCRATCH + ",dst=" + SCRATCH + ",readonly",
+@@ -853,7 +853,7 @@
+              any(same(h.get("MemorySwappiness"), x) for x in (None, -1)), "namespace/OOM defaults")
+         need(h.get("LogConfig") in ({"Type": "json-file", "Config": {}}, {"Type": "local", "Config": {}}), "local log sink")
+         need(same(sorted(h.get("Ulimits", []), key=lambda x: x["Name"]),
+-             [{"Hard": 0, "Name": "core", "Soft": 0}, {"Hard": 4096, "Name": "nofile", "Soft": 4096}]), "ulimits")
++             [{"Hard": 0, "Name": "core", "Soft": 0}, {"Hard": 33554432, "Name": "fsize", "Soft": 33554432}, {"Hard": 4096, "Name": "nofile", "Soft": 4096}]), "ulimits")
+         for key, minimum in (("MaskedPaths", {"/proc/kcore", "/proc/keys", "/proc/latency_stats", "/proc/timer_list", "/proc/scsi", "/sys/firmware"}),
+                              ("ReadonlyPaths", {"/proc/bus", "/proc/fs", "/proc/irq", "/proc/sys", "/proc/sysrq-trigger"})):
+             paths = h.get(key)

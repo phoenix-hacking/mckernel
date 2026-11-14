@@ -1,0 +1,57 @@
+{
+  "actual_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ACTUAL-BFD21-EXECUTION-REVIEW.json",
+    "sha256": "c3d4d248b276c90815256a0cda40a912f0f09c496d72fa983e48689a4400dea7"
+  },
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/runtime-path-correction-source-4/native_running_external_modules_owner.INSTALLED-OWNER-CORRECTED.py",
+    "--request",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/runtime-path-correction-source-4/REQUEST.BFD.UNUSED-NONCE.PENDING-RELEASE.json",
+    "--request-sha256",
+    "44e2572636ddd678759abb854e601c145dfc99183d356b06228572d7ae11954e",
+    "--release",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/runtime-path-correction-source-4/corrected-preclock-source-1/RELEASE.ROOT.FINAL.json",
+    "--release-sha256",
+    "f633e642ed3f1e62f1242803fa95c89adfd980acd13d37e7182aaf1f637a17f6"
+  ],
+  "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+  "nonce": "0ccec66ed738427296d4e7b6bff0b4c5",
+  "outer_CPU_rlimit": null,
+  "outer_timeout": null,
+  "owner_not_yet_executed_at_record": true,
+  "pgid": 598507,
+  "pid": 598507,
+  "query_age_seconds": 30.59191370010376,
+  "release": {
+    "bytes": 6429,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/runtime-path-correction-source-4/corrected-preclock-source-1/RELEASE.ROOT.FINAL.json",
+    "sha256": "f633e642ed3f1e62f1242803fa95c89adfd980acd13d37e7182aaf1f637a17f6"
+  },
+  "request": {
+    "bytes": 4270,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/runtime-path-correction-source-4/REQUEST.BFD.UNUSED-NONCE.PENDING-RELEASE.json",
+    "sha256": "44e2572636ddd678759abb854e601c145dfc99183d356b06228572d7ae11954e"
+  },
+  "resources": {
+    "full_sparse_growth_bytes": 15838507008,
+    "host_free": 155356663808,
+    "host_minimum_bytes": 42287788032,
+    "memory_available": 28046295040,
+    "scratch_free": 14100418560,
+    "scratch_minimum_bytes": 14091616256
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\nOne separately root-granted reviewed metadata publish -> ordinary samePID owner exec.\nNo outer timeout/CPU watchdog, retry, kill controller or implicit execution authority.\n",
+  "starttime": "71107266"
+}

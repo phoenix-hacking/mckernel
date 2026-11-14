@@ -1,0 +1,39 @@
+test_original_configure_refusal_restores_readers (__main__.ArchiveAliasTests) ... ok
+test_partial_state_mutations_refuse_alias (__main__.ArchiveAliasTests) ... ok
+test_real_archive_alias_only_common_and_restores_readers (__main__.ArchiveAliasTests) ... ok
+test_held_bootstrap_original_plan_and_protected_files (__main__.BootstrapRealFileTests) ... ERROR
+test_absent_positive_exit_blocks_bootstrap (__main__.KeeperTests) ... ok
+test_after_configure_deadline_prevents_signal (__main__.KeeperTests) ... ok
+test_bootstrap_failure_keeps_copy (__main__.KeeperTests) ... ok
+test_configure_failure_preserves_actor_and_copy (__main__.KeeperTests) ... ok
+test_custody_and_configure_precede_budget_then_signal (__main__.KeeperTests) ... ok
+test_deadline_closes_only_new_copy_with_live_old_actor (__main__.KeeperTests) ... ok
+test_deadline_unknown_old_actor_retains_copy (__main__.KeeperTests) ... ok
+test_durable_intent_failure_consumes_budget_and_keeps_copy (__main__.KeeperTests) ... ok
+test_fixed_window_outer_birth_and_unbound_collector (__main__.KeeperTests) ... ok
+test_immediate_signal_deadline_failure_keeps_copy_without_signal (__main__.KeeperTests) ... ok
+test_missing_original_join_blocks_bootstrap_and_keeps_copy (__main__.KeeperTests) ... ok
+test_original_process_collector_preserved_but_never_called_by_bootstrap (__main__.KeeperTests) ... ok
+test_positive_original_joins_unlock_only_bootstrap (__main__.KeeperTests) ... ok
+test_real_frozen_identities_exact_credential_domains (__main__.KeeperTests) ... ok
+test_separate_auth_required_before_configure_and_signal (__main__.KeeperTests) ... ok
+test_standby_capture_precedes_getfd (__main__.KeeperTests) ... ok
+test_stopped_or_traced_exact_actor_refused_from_retained_stat (__main__.KeeperTests) ... ok
+test_uncertain_signal_no_retry_or_close (__main__.KeeperTests) ... ok
+
+======================================================================
+ERROR: test_held_bootstrap_original_plan_and_protected_files (__main__.BootstrapRealFileTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/keeper-phase-adoption-source-1/test_keeper_phase_adoption.py", line 421, in test_held_bootstrap_original_plan_and_protected_files
+    tx=phase.bootstrap_held_transaction(p,m,configured,custody,receipt(),packet(),archive)
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/keeper-phase-adoption-source-1/phase_bootstrap.SOURCE-ONLY.py", line 195, in bootstrap_held_transaction
+    tx.lock(False)  # Original generation-bound mutex validation/acquisition.
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/bounded-observer-correction-source-1/native_rust_cutover_image_terminal_cleanup.CURRENT290.EXACT-DEAD-CALLER.py", line 1372, in lock
+    fcntl.flock(self.mfd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+NameError: name 'fcntl' is not defined
+
+----------------------------------------------------------------------
+Ran 22 tests in 0.209s
+
+FAILED (errors=1)

@@ -1,0 +1,18 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "command": [
+    "taskset",
+    "-c",
+    "0",
+    "python3",
+    "-B",
+    "docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/compose118.py"
+  ],
+  "returncode": 1,
+  "failure": "ValueError: patch already applied in inverse source patch check",
+  "cause": "The newly added generic duplicate-application check also rejected inverse removal hunks when their shorter postimage context occurs elsewhere in the large source.",
+  "correction": "Restrict the postimage duplicate check to nonshrinking hunks. Continue requiring unique full preimage for every forward and inverse hunk.",
+  "actual_compilers": 0,
+  "actual_native": 0,
+  "canonical_writes": 0
+}

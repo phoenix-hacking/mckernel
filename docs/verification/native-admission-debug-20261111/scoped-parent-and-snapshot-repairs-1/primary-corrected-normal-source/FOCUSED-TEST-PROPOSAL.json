@@ -1,0 +1,46 @@
+{
+  "execution_profile_and_owner": "Root assigns existing separate test owner and independent review; no author execution or new framework.",
+  "external_oracles_required": true,
+  "families": [
+    {
+      "name": "coherent_accept",
+      "obligation": "Latest fresh same-scope event, paired controller records and exact original ledger return unchanged full primary/credit; no write/nonce/exec endpoint."
+    },
+    {
+      "name": "interleaving_stabilizes",
+      "obligation": "SAME primary/new credit event with stable new-rate controller bookends but old mutually equal state credit+ledger MUST refuse that attempt; only later real fake-ledger/state update matching new event may accept. Also preserve changed-primary coherence."
+    },
+    {
+      "name": "persistent_mismatch_refuses",
+      "obligation": "Exactly3 maximum local attempts; mismatched full primary/credit never accepted; bounded final diagnostic contains only controlled field names/time/booleans."
+    },
+    {
+      "name": "hold_unknown_stale_veto",
+      "obligation": "Real helper immediately refuses selected event or EITHER bookend auth/service/stop/credit invalid/exhausted/unknown states, ledger wrong identity/budget/nonfinite, or event>=25s including expiry at acceptance; no further attempt/account query. Exact original run/root state mismatch also vetoes immediately.",
+      "primary_guard_affected_vectors": [
+        "Coherent boolean usedPercent must reject immediately.",
+        "Missing/invalid first-bookend primary must reject without protocol/ledger reads or a later attempt.",
+        "Apply the same finite numeric/range/window predicate on second bookend and selected latest event; preserve all existing fourth-family veto oracles."
+      ]
+    }
+  ],
+  "no_main_or_issuer_or_controller_or_real_account_records": true,
+  "only_changed_family": "hold_unknown_stale_veto",
+  "rejected_unexecuted_parent_test_proposal": {
+    "bytes": 1993,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/a2f-fixed30-normal-operation-proposal-1/correction-1/account-snapshot-correction-1/FOCUSED-TEST-PROPOSAL.json",
+    "sha256": "04932de49c66981624aecd7d450c3bddcb4f3b5e623f0103db3337b59ff85051"
+  },
+  "schema": 1,
+  "scope": "ACTUAL_ACQUISITION_FUNCTION_ONLY_CONTROLLED_LOCAL_RECORD_EFFECTS",
+  "selected_definitions": [
+    "amount",
+    "available_balance",
+    "current_account_snapshot"
+  ],
+  "selected_wrapper": {
+    "bytes": 20163,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/a2f-fixed30-normal-operation-proposal-1/correction-1/account-snapshot-correction-1/primary-guard-correction-1/ROOT-ISSUE-AND-EXECUTE-ONCE.py",
+    "sha256": "9daec4d582c13e58ca2ac467e1a0566440f17497eaad621c07df6ef6987695c3"
+  }
+}

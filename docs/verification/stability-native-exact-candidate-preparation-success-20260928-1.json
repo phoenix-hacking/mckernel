@@ -1,0 +1,88 @@
+{
+  "schema": "mckernel.native-exact-candidate-preparation.v1",
+  "recorded_at_utc": "2026-09-29T01:51:07Z",
+  "status": "PASS_PREPARATION_VALIDATE_ONLY",
+  "source_checkpoint": "80b8c492be5fdaf227c5559f637a4473de6b7d0a",
+  "candidate": {
+    "root": "/dev/shm/mckernel-exact-candidate-80b8c492-1",
+    "main_head": "80b8c492be5fdaf227c5559f637a4473de6b7d0a",
+    "ihk_head": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+    "tracked_regular_tmpfs_files": 8896,
+    "status": "clean",
+    "source_inode_overlap": 0
+  },
+  "metadata_conversion": {
+    "status": "PASS",
+    "rollback": "not-needed",
+    "backup": "/dev/shm/mckernel-exact-metadata-backup-80b8c492-1",
+    "durable_evidence": "/home/holden/mckernel-work/scratch/native-exact-metadata-evidence-80b8c492-1",
+    "receipt_sha256": "c16a1a2890a412eec33af1f12250b386f7a6214f9d8462b411de41ccee2b25fd",
+    "main_metadata_files": 554,
+    "main_metadata_sha256": "e37bfe3a585882d9db1cb63f55e746972ec9727626997e1606ff0aa011c568f5",
+    "ihk_metadata_files": 21,
+    "ihk_metadata_sha256": "98ddbd7c82ee880e90fcfa89eb6094363f42da0e1506e2d66f5b3d49d44e28b9",
+    "staging_removed": true
+  },
+  "installed_only_consumers": {
+    "current_main_and_ihk_identity": "PASS",
+    "clean_status": "PASS",
+    "historical_main_locked_blobs": "PASS",
+    "pinned_ihk_commit": "PASS",
+    "x86_64_shared_abi": "PASS: 163 constants, 28 layouts; RS-003 remains TODO",
+    "external_git_indirection_absent": true
+  },
+  "source_closure": {
+    "scope": "objects, refs, HEAD, config and packed-refs; launcher-owned .git/os-autopilot records intentionally excluded",
+    "main_files": 1783,
+    "main_before_after_sha256": "d267d0515e56a3663fff0f3a26318792b51fa2a58996a89512997c614f04c67f",
+    "ihk_files": 17,
+    "ihk_before_after_sha256": "1538fd9965d068b16604834ae14d526c2f5ddacf953b72c5f827ab9ff84f7f78"
+  },
+  "manifest": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-inputs-80b8c492-1.json",
+    "sha256": "a95019f3fb160ec99f48bc6ff20d7474a73de1f73ffd29a261ef9aea1173826a",
+    "generator": "PASS",
+    "separate_verify_inputs": "PASS"
+  },
+  "owner_validate_only": {
+    "request": "/home/holden/mckernel-work/scratch/native-exact-build-request-80b8c492-1.json",
+    "request_sha256": "5733dfbebc354392135e7dac479c4a6e602e21bd5100798f84e5a90109195759",
+    "status": "PASS_VALIDATE_ONLY",
+    "candidate_allocated_bytes": 9065619456,
+    "backup_allocated_bytes": 1327104,
+    "memory_backed_bytes": 9066946560,
+    "container_reservation_bytes": 12884901888,
+    "aggregate_required_bytes": 21951848448,
+    "aggregate_limit_bytes": 25769803776,
+    "lease_created": false,
+    "docker_invoked": false
+  },
+  "resource_snapshot_after_conversion": {
+    "host_available_bytes": 25037213696,
+    "scratch_available_bytes": 21611376640,
+    "dev_shm_available_bytes": 7530528768,
+    "mem_available_kib": 20660172,
+    "four_gib_headroom_preserved": true
+  },
+  "retained_evidence": {
+    "raw_log": "/home/holden/mckernel-work/scratch/native-exact-candidate-preparation-80b8c492-1.log",
+    "raw_log_sha256": "f12231f99b7a11be41015e2825cbd1fa843a440e0b6ec9cf45d70adb906a56c7",
+    "compressed_log": "docs/verification/evidence/stability-native-exact-candidate-preparation-80b8c492-20260928-1.log.gz",
+    "compressed_log_sha256": "53618acac9f5143efb11dd3db28139ea268879f1d8c601454214c7c3a5017b14",
+    "placement_observer_sha256": "4fe5b7717a7ddc8694edaecc63d07f97a56460f8e692d3ebe2d682024dadbe8a",
+    "source_closure_observer_sha256": "079482060e5d0b461d15a5d1ffeb7f5d96719d70b877125665df8df7c4bcd7f1"
+  },
+  "preserved_failures": [
+    "The first placement observer combined main and IHK paths incorrectly; its inline correction had a quoting syntax error. A self-tested standalone read-only observer replaced it.",
+    "The first source metadata fingerprint included live launcher records and changed as designed; a self-tested closure observer narrowed the invariant to actual Git object/ref/config inputs.",
+    "An inline closure observer had a quoting syntax error before the tested standalone observer was used.",
+    "The first manifest invocation omitted Python -B, created one untracked native_rust_exact_build_offline.cpython-38.pyc with SHA-256 38dfebd9d853b04125cad8722a9c5d5644b688ca5e1ba88f9b08c20f3bf305c6, and was rejected. Only that generated untracked file was removed; the tracked Python-3.6 bytecode was preserved. The bounded -B correction passed."
+  ],
+  "retained_failed_container": "110dfe01e3fb5dea16c30911f3589dc49137dcaaff905a66dd4c0a6f731799b0",
+  "execution": {
+    "source_phase_container": false,
+    "heavy_build": false,
+    "guest": false
+  },
+  "acceptance_credit": false
+}

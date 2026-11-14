@@ -1,0 +1,39 @@
+{
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--fsize=33554432",
+    "--cpu=30",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/m07-proc-acquisition-repair-20261022-1/retention-correction-1/coupled/bound-terminal-proc-v2-source-4/readback_observer.py"
+  ],
+  "capture_directory": "/home/holden/mckernel-work/host-preparation/m07-proc-acquisition-repair-20261022-1/retention-correction-1/coupled/bound-terminal-proc-v2-source-4/actual-summary-capture-1",
+  "cpu": 7,
+  "profile": {
+    "as_soft_hard": [
+      1073741824,
+      1073741824
+    ],
+    "child_cpu_seconds": 30,
+    "cpu": 7,
+    "jobs": 1,
+    "outer_grace_kill": null,
+    "outer_wall_kill": null,
+    "required_inherited_cpu_limits": [
+      -1,
+      -1
+    ],
+    "stream_fsize": 33554432
+  },
+  "role": "summary",
+  "stream_cap_bytes": 33554432
+}

@@ -1,0 +1,169 @@
+{
+  "decision": "PRIVATE_HOST66_ONLY; root mcctrl_process lacks six accepted phase4 additions; no blind shared replacement",
+  "default_gate_stays_OFF_in_shared_source": true,
+  "root_Kbuild_difference": "Only blank/comment omission; composite rule identical",
+  "root_writes": 0,
+  "rows": [
+    {
+      "accepted_HOST66": {
+        "bytes": 496,
+        "path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/Kbuild",
+        "sha256": "78c9888657da5e889548f06777600b122d780b9c8674aefdf86852e59b6dd0b0"
+      },
+      "current_root": {
+        "bytes": 422,
+        "path": "/home/holden/mckernel/host-kernel/kbuild/Kbuild.in",
+        "sha256": "21594ad6b3830ddd688420abebd94893e07078a9db03c0ccb03c50b7a1ae2d1b"
+      },
+      "private_final": {
+        "bytes": 1017,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-host-fork-adoption-opt-in-20261020-1/source/host-kernel/kbuild/Kbuild.in",
+        "sha256": "9e6cc559401d1fc7a95e5e5f699f4021131312f5af7422bf1a345d41254a7697"
+      },
+      "relative": "host-kernel/kbuild/Kbuild.in",
+      "root_equals_accepted": false,
+      "root_to_accepted_blocks": [
+        {
+          "accepted_first": [
+            ""
+          ],
+          "accepted_lines": [
+            10,
+            11
+          ],
+          "current_first": [
+            "mcctrl-y := mcctrl_rust.o mcctrl_vm_write_compat.o"
+          ],
+          "current_lines": [
+            10,
+            9
+          ],
+          "kind": "delete"
+        }
+      ]
+    },
+    {
+      "accepted_HOST66": {
+        "bytes": 48054,
+        "path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/mcctrl_process.rs",
+        "sha256": "e93c487a9fbe978275991954a50039aabd82f71da7bcc91df0300cfa97a08a35"
+      },
+      "current_root": {
+        "bytes": 47175,
+        "path": "/home/holden/mckernel/host-kernel/native-rust/mcctrl_process.rs",
+        "sha256": "018fd57974dbc5fc9f16cfcd021370b8c9cec058aeec139e926282d32e5b437e"
+      },
+      "private_final": {
+        "bytes": 48100,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-host-fork-adoption-opt-in-20261020-1/source/host-kernel/native-rust/mcctrl_process.rs",
+        "sha256": "b1b3a7f5fe0e70ff614edc51e5aa22559c0efd827aa5353a7da3c00d0a3c53a5"
+      },
+      "relative": "host-kernel/native-rust/mcctrl_process.rs",
+      "root_equals_accepted": false,
+      "root_to_accepted_blocks": [
+        {
+          "accepted_first": [
+            "#[path=\"current_fork_host.rs\"]"
+          ],
+          "accepted_lines": [
+            17,
+            18
+          ],
+          "current_first": [
+            ""
+          ],
+          "current_lines": [
+            17,
+            16
+          ],
+          "kind": "delete"
+        },
+        {
+          "accepted_first": [
+            "    fn ihk_os_application_fork_control_current_v1(parent:*mut c_void,child:*mut c_void,"
+          ],
+          "accepted_lines": [
+            40,
+            41
+          ],
+          "current_first": [
+            "}"
+          ],
+          "current_lines": [
+            38,
+            37
+          ],
+          "kind": "delete"
+        },
+        {
+          "accepted_first": [
+            "    // Preallocated parent-owned routing references span worker handoff. Keys"
+          ],
+          "accepted_lines": [
+            97,
+            99
+          ],
+          "current_first": [
+            "    // Mirror files can outlive all mcos file bindings and their Process owner."
+          ],
+          "current_lines": [
+            93,
+            92
+          ],
+          "kind": "delete"
+        },
+        {
+          "accepted_first": [
+            "        let control_children=Box::pin_init(new_mutex!(Vec::with_capacity(64,GFP_KERNEL)?),GFP_KERNEL)?;"
+          ],
+          "accepted_lines": [
+            126,
+            126
+          ],
+          "current_first": [
+            "        let mut context = ptr::null_mut();"
+          ],
+          "current_lines": [
+            119,
+            118
+          ],
+          "kind": "delete"
+        },
+        {
+          "accepted_first": [
+            "                control_children,"
+          ],
+          "accepted_lines": [
+            151,
+            151
+          ],
+          "current_first": [
+            "                _pid: identity,"
+          ],
+          "current_lines": [
+            143,
+            142
+          ],
+          "kind": "delete"
+        },
+        {
+          "accepted_first": [
+            "            }"
+          ],
+          "accepted_lines": [
+            283,
+            288
+          ],
+          "current_first": [
+            "            }"
+          ],
+          "current_lines": [
+            274,
+            273
+          ],
+          "kind": "delete"
+        }
+      ]
+    }
+  ]
+}

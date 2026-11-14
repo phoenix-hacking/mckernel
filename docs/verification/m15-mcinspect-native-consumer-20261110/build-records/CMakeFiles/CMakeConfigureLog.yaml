@@ -1,0 +1,1317 @@
+
+---
+events:
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeDetermineSystem.cmake:205 (message)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      The system is: Linux - 5.15.0-139-generic - x86_64
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCCompiler.cmake:123 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+      Compiler: /usr/bin/cc 
+      Build flags: 
+      Id flags:  
+      
+      The output was:
+      0
+      
+      
+      Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.out"
+      
+      The C compiler identification is GNU, found in:
+        /output/CMakeFiles/3.31.8/CompilerIdC/a.out
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:126 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+      Compiler: /usr/bin/clang 
+      Build flags: 
+      Id flags:  
+      
+      The output was:
+      0
+      
+      
+      Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.out"
+      
+      The CXX compiler identification is Clang, found in:
+        /output/CMakeFiles/3.31.8/CompilerIdCXX/a.out
+      
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:74 (try_compile)"
+      - "/usr/share/cmake/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:3 (project)"
+    checks:
+      - "Detecting C compiler ABI info"
+    directories:
+      source: "/output/CMakeFiles/CMakeScratch/TryCompile-vMuTKu"
+      binary: "/output/CMakeFiles/CMakeScratch/TryCompile-vMuTKu"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-21"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "CMAKE_C_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: '/output/CMakeFiles/CMakeScratch/TryCompile-vMuTKu'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_08443/fast
+        /usr/bin/make  -f CMakeFiles/cmTC_08443.dir/build.make CMakeFiles/cmTC_08443.dir/build
+        make[1]: Entering directory '/output/CMakeFiles/CMakeScratch/TryCompile-vMuTKu'
+        Building C object CMakeFiles/cmTC_08443.dir/CMakeCCompilerABI.c.o
+        /usr/bin/cc   -v -o CMakeFiles/cmTC_08443.dir/CMakeCCompilerABI.c.o -c /usr/share/cmake/Modules/CMakeCCompilerABI.c
+        Using built-in specs.
+        COLLECT_GCC=/usr/bin/cc
+        OFFLOAD_TARGET_NAMES=nvptx-none:amdgcn-amdhsa
+        OFFLOAD_TARGET_DEFAULT=1
+        Target: x86_64-redhat-linux
+        Configured with: ../configure --enable-bootstrap --enable-languages=c,c++,fortran,lto --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=https://bugs.rockylinux.org --enable-shared --enable-threads=posix --enable-checking=release --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --enable-plugin --enable-initfini-array --enable-libstdcxx-backtrace --with-libstdcxx-zoneinfo=/usr/share/zoneinfo --without-isl --enable-host-pie --enable-host-bind-now --enable-multilib --with-linker-hash-style=gnu --enable-offload-targets=nvptx-none,amdgcn-amdhsa --enable-offload-defaulted --without-cuda-driver --enable-gnu-indirect-function --enable-cet --with-tune=generic --with-arch_64=x86-64-v3 --with-arch_32=x86-64 --build=x86_64-redhat-linux --with-build-config=bootstrap-lto --enable-link-serialization=1
+        Thread model: posix
+        Supported LTO compression algorithms: zlib zstd
+        gcc version 14.3.1 20251022 (Red Hat 14.3.1-4) (GCC) 
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_08443.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64-v3' '-dumpdir' 'CMakeFiles/cmTC_08443.dir/'
+         /usr/libexec/gcc/x86_64-redhat-linux/14/cc1 -quiet -v /usr/share/cmake/Modules/CMakeCCompilerABI.c -quiet -dumpdir CMakeFiles/cmTC_08443.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -mtune=generic -march=x86-64-v3 -version -o /tmp/ccwoqJbW.s
+        GNU C17 (GCC) version 14.3.1 20251022 (Red Hat 14.3.1-4) (x86_64-redhat-linux)
+        	compiled by GNU C version 14.3.1 20251022 (Red Hat 14.3.1-4), GMP version 6.2.1, MPFR version 4.2.1, MPC version 1.3.1, isl version none
+        GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+        ignoring nonexistent directory "/usr/lib/gcc/x86_64-redhat-linux/14/include-fixed"
+        ignoring nonexistent directory "/usr/lib/gcc/x86_64-redhat-linux/14/../../../../x86_64-redhat-linux/include"
+        #include "..." search starts here:
+        #include <...> search starts here:
+         /usr/lib/gcc/x86_64-redhat-linux/14/include
+         /usr/local/include
+         /usr/include
+        End of search list.
+        Compiler executable checksum: e7e74dcffac3dd326c1fdacc202bf84f
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_08443.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64-v3' '-dumpdir' 'CMakeFiles/cmTC_08443.dir/'
+         as -v --64 -o CMakeFiles/cmTC_08443.dir/CMakeCCompilerABI.c.o /tmp/ccwoqJbW.s
+        GNU assembler version 2.41 (x86_64-redhat-linux) using BFD version version 2.41-63.el10
+        COMPILER_PATH=/usr/libexec/gcc/x86_64-redhat-linux/14/:/usr/libexec/gcc/x86_64-redhat-linux/14/:/usr/libexec/gcc/x86_64-redhat-linux/:/usr/lib/gcc/x86_64-redhat-linux/14/:/usr/lib/gcc/x86_64-redhat-linux/
+        LIBRARY_PATH=/usr/lib/gcc/x86_64-redhat-linux/14/:/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/usr/lib/gcc/x86_64-redhat-linux/14/../../../:/lib/:/usr/lib/
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_08443.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64-v3' '-dumpdir' 'CMakeFiles/cmTC_08443.dir/CMakeCCompilerABI.c.'
+        Linking C executable cmTC_08443
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_08443.dir/link.txt --verbose=1
+        Using built-in specs.
+        COLLECT_GCC=/usr/bin/cc
+        COLLECT_LTO_WRAPPER=/usr/libexec/gcc/x86_64-redhat-linux/14/lto-wrapper
+        OFFLOAD_TARGET_NAMES=nvptx-none:amdgcn-amdhsa
+        OFFLOAD_TARGET_DEFAULT=1
+        Target: x86_64-redhat-linux
+        Configured with: ../configure --enable-bootstrap --enable-languages=c,c++,fortran,lto --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=https://bugs.rockylinux.org --enable-shared --enable-threads=posix --enable-checking=release --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --enable-plugin --enable-initfini-array --enable-libstdcxx-backtrace --with-libstdcxx-zoneinfo=/usr/share/zoneinfo --without-isl --enable-host-pie --enable-host-bind-now --enable-multilib --with-linker-hash-style=gnu --enable-offload-targets=nvptx-none,amdgcn-amdhsa --enable-offload-defaulted --without-cuda-driver --enable-gnu-indirect-function --enable-cet --with-tune=generic --with-arch_64=x86-64-v3 --with-arch_32=x86-64 --build=x86_64-redhat-linux --with-build-config=bootstrap-lto --enable-link-serialization=1
+        Thread model: posix
+        Supported LTO compression algorithms: zlib zstd
+        gcc version 14.3.1 20251022 (Red Hat 14.3.1-4) (GCC) 
+        COMPILER_PATH=/usr/libexec/gcc/x86_64-redhat-linux/14/:/usr/libexec/gcc/x86_64-redhat-linux/14/:/usr/libexec/gcc/x86_64-redhat-linux/:/usr/lib/gcc/x86_64-redhat-linux/14/:/usr/lib/gcc/x86_64-redhat-linux/
+        LIBRARY_PATH=/usr/lib/gcc/x86_64-redhat-linux/14/:/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/usr/lib/gcc/x86_64-redhat-linux/14/../../../:/lib/:/usr/lib/
+        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_08443' '-mtune=generic' '-march=x86-64-v3' '-dumpdir' 'cmTC_08443.'
+         /usr/libexec/gcc/x86_64-redhat-linux/14/collect2 -plugin /usr/libexec/gcc/x86_64-redhat-linux/14/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/x86_64-redhat-linux/14/lto-wrapper -plugin-opt=-fresolution=/tmp/cchvbDDE.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_08443 /usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crt1.o /usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crti.o /usr/lib/gcc/x86_64-redhat-linux/14/crtbegin.o -L/usr/lib/gcc/x86_64-redhat-linux/14 -L/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib/gcc/x86_64-redhat-linux/14/../../.. -v CMakeFiles/cmTC_08443.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-redhat-linux/14/crtend.o /usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crtn.o
+        collect2 version 14.3.1 20251022 (Red Hat 14.3.1-4)
+        /usr/bin/ld -plugin /usr/libexec/gcc/x86_64-redhat-linux/14/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/x86_64-redhat-linux/14/lto-wrapper -plugin-opt=-fresolution=/tmp/cchvbDDE.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_08443 /usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crt1.o /usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crti.o /usr/lib/gcc/x86_64-redhat-linux/14/crtbegin.o -L/usr/lib/gcc/x86_64-redhat-linux/14 -L/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib/gcc/x86_64-redhat-linux/14/../../.. -v CMakeFiles/cmTC_08443.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-redhat-linux/14/crtend.o /usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crtn.o
+        GNU ld version 2.41-63.el10
+        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_08443' '-mtune=generic' '-march=x86-64-v3' '-dumpdir' 'cmTC_08443.'
+        /usr/bin/cc  -v -Wl,-v CMakeFiles/cmTC_08443.dir/CMakeCCompilerABI.c.o -o cmTC_08443
+        make[1]: Leaving directory '/output/CMakeFiles/CMakeScratch/TryCompile-vMuTKu'
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:182 (message)"
+      - "/usr/share/cmake/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      Parsed C implicit include dir info: rv=done
+        found start of include info
+        found start of implicit include info
+          add: [/usr/lib/gcc/x86_64-redhat-linux/14/include]
+          add: [/usr/local/include]
+          add: [/usr/include]
+        end of search list found
+        collapse include dir [/usr/lib/gcc/x86_64-redhat-linux/14/include] ==> [/usr/lib/gcc/x86_64-redhat-linux/14/include]
+        collapse include dir [/usr/local/include] ==> [/usr/local/include]
+        collapse include dir [/usr/include] ==> [/usr/include]
+        implicit include dirs: [/usr/lib/gcc/x86_64-redhat-linux/14/include;/usr/local/include;/usr/include]
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:218 (message)"
+      - "/usr/share/cmake/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      Parsed C implicit link information:
+        link line regex: [^( *|.*[/\\])(ld[0-9]*(\\.[a-z]+)?|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        linker tool regex: [^[ 	]*(->|")?[ 	]*(([^"]*[/\\])?(ld[0-9]*(\\.[a-z]+)?))("|,| |$)]
+        ignore line: [Change Dir: '/output/CMakeFiles/CMakeScratch/TryCompile-vMuTKu']
+        ignore line: []
+        ignore line: [Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_08443/fast]
+        ignore line: [/usr/bin/make  -f CMakeFiles/cmTC_08443.dir/build.make CMakeFiles/cmTC_08443.dir/build]
+        ignore line: [make[1]: Entering directory '/output/CMakeFiles/CMakeScratch/TryCompile-vMuTKu']
+        ignore line: [Building C object CMakeFiles/cmTC_08443.dir/CMakeCCompilerABI.c.o]
+        ignore line: [/usr/bin/cc   -v -o CMakeFiles/cmTC_08443.dir/CMakeCCompilerABI.c.o -c /usr/share/cmake/Modules/CMakeCCompilerABI.c]
+        ignore line: [Using built-in specs.]
+        ignore line: [COLLECT_GCC=/usr/bin/cc]
+        ignore line: [OFFLOAD_TARGET_NAMES=nvptx-none:amdgcn-amdhsa]
+        ignore line: [OFFLOAD_TARGET_DEFAULT=1]
+        ignore line: [Target: x86_64-redhat-linux]
+        ignore line: [Configured with: ../configure --enable-bootstrap --enable-languages=c c++ fortran lto --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=https://bugs.rockylinux.org --enable-shared --enable-threads=posix --enable-checking=release --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --enable-plugin --enable-initfini-array --enable-libstdcxx-backtrace --with-libstdcxx-zoneinfo=/usr/share/zoneinfo --without-isl --enable-host-pie --enable-host-bind-now --enable-multilib --with-linker-hash-style=gnu --enable-offload-targets=nvptx-none amdgcn-amdhsa --enable-offload-defaulted --without-cuda-driver --enable-gnu-indirect-function --enable-cet --with-tune=generic --with-arch_64=x86-64-v3 --with-arch_32=x86-64 --build=x86_64-redhat-linux --with-build-config=bootstrap-lto --enable-link-serialization=1]
+        ignore line: [Thread model: posix]
+        ignore line: [Supported LTO compression algorithms: zlib zstd]
+        ignore line: [gcc version 14.3.1 20251022 (Red Hat 14.3.1-4) (GCC) ]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_08443.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64-v3' '-dumpdir' 'CMakeFiles/cmTC_08443.dir/']
+        ignore line: [ /usr/libexec/gcc/x86_64-redhat-linux/14/cc1 -quiet -v /usr/share/cmake/Modules/CMakeCCompilerABI.c -quiet -dumpdir CMakeFiles/cmTC_08443.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -mtune=generic -march=x86-64-v3 -version -o /tmp/ccwoqJbW.s]
+        ignore line: [GNU C17 (GCC) version 14.3.1 20251022 (Red Hat 14.3.1-4) (x86_64-redhat-linux)]
+        ignore line: [	compiled by GNU C version 14.3.1 20251022 (Red Hat 14.3.1-4)  GMP version 6.2.1  MPFR version 4.2.1  MPC version 1.3.1  isl version none]
+        ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+        ignore line: [ignoring nonexistent directory "/usr/lib/gcc/x86_64-redhat-linux/14/include-fixed"]
+        ignore line: [ignoring nonexistent directory "/usr/lib/gcc/x86_64-redhat-linux/14/../../../../x86_64-redhat-linux/include"]
+        ignore line: [#include "..." search starts here:]
+        ignore line: [#include <...> search starts here:]
+        ignore line: [ /usr/lib/gcc/x86_64-redhat-linux/14/include]
+        ignore line: [ /usr/local/include]
+        ignore line: [ /usr/include]
+        ignore line: [End of search list.]
+        ignore line: [Compiler executable checksum: e7e74dcffac3dd326c1fdacc202bf84f]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_08443.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64-v3' '-dumpdir' 'CMakeFiles/cmTC_08443.dir/']
+        ignore line: [ as -v --64 -o CMakeFiles/cmTC_08443.dir/CMakeCCompilerABI.c.o /tmp/ccwoqJbW.s]
+        ignore line: [GNU assembler version 2.41 (x86_64-redhat-linux) using BFD version version 2.41-63.el10]
+        ignore line: [COMPILER_PATH=/usr/libexec/gcc/x86_64-redhat-linux/14/:/usr/libexec/gcc/x86_64-redhat-linux/14/:/usr/libexec/gcc/x86_64-redhat-linux/:/usr/lib/gcc/x86_64-redhat-linux/14/:/usr/lib/gcc/x86_64-redhat-linux/]
+        ignore line: [LIBRARY_PATH=/usr/lib/gcc/x86_64-redhat-linux/14/:/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/usr/lib/gcc/x86_64-redhat-linux/14/../../../:/lib/:/usr/lib/]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_08443.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64-v3' '-dumpdir' 'CMakeFiles/cmTC_08443.dir/CMakeCCompilerABI.c.']
+        ignore line: [Linking C executable cmTC_08443]
+        ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_08443.dir/link.txt --verbose=1]
+        ignore line: [Using built-in specs.]
+        ignore line: [COLLECT_GCC=/usr/bin/cc]
+        ignore line: [COLLECT_LTO_WRAPPER=/usr/libexec/gcc/x86_64-redhat-linux/14/lto-wrapper]
+        ignore line: [OFFLOAD_TARGET_NAMES=nvptx-none:amdgcn-amdhsa]
+        ignore line: [OFFLOAD_TARGET_DEFAULT=1]
+        ignore line: [Target: x86_64-redhat-linux]
+        ignore line: [Configured with: ../configure --enable-bootstrap --enable-languages=c c++ fortran lto --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=https://bugs.rockylinux.org --enable-shared --enable-threads=posix --enable-checking=release --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --enable-plugin --enable-initfini-array --enable-libstdcxx-backtrace --with-libstdcxx-zoneinfo=/usr/share/zoneinfo --without-isl --enable-host-pie --enable-host-bind-now --enable-multilib --with-linker-hash-style=gnu --enable-offload-targets=nvptx-none amdgcn-amdhsa --enable-offload-defaulted --without-cuda-driver --enable-gnu-indirect-function --enable-cet --with-tune=generic --with-arch_64=x86-64-v3 --with-arch_32=x86-64 --build=x86_64-redhat-linux --with-build-config=bootstrap-lto --enable-link-serialization=1]
+        ignore line: [Thread model: posix]
+        ignore line: [Supported LTO compression algorithms: zlib zstd]
+        ignore line: [gcc version 14.3.1 20251022 (Red Hat 14.3.1-4) (GCC) ]
+        ignore line: [COMPILER_PATH=/usr/libexec/gcc/x86_64-redhat-linux/14/:/usr/libexec/gcc/x86_64-redhat-linux/14/:/usr/libexec/gcc/x86_64-redhat-linux/:/usr/lib/gcc/x86_64-redhat-linux/14/:/usr/lib/gcc/x86_64-redhat-linux/]
+        ignore line: [LIBRARY_PATH=/usr/lib/gcc/x86_64-redhat-linux/14/:/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/usr/lib/gcc/x86_64-redhat-linux/14/../../../:/lib/:/usr/lib/]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_08443' '-mtune=generic' '-march=x86-64-v3' '-dumpdir' 'cmTC_08443.']
+        link line: [ /usr/libexec/gcc/x86_64-redhat-linux/14/collect2 -plugin /usr/libexec/gcc/x86_64-redhat-linux/14/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/x86_64-redhat-linux/14/lto-wrapper -plugin-opt=-fresolution=/tmp/cchvbDDE.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_08443 /usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crt1.o /usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crti.o /usr/lib/gcc/x86_64-redhat-linux/14/crtbegin.o -L/usr/lib/gcc/x86_64-redhat-linux/14 -L/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib/gcc/x86_64-redhat-linux/14/../../.. -v CMakeFiles/cmTC_08443.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-redhat-linux/14/crtend.o /usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crtn.o]
+          arg [/usr/libexec/gcc/x86_64-redhat-linux/14/collect2] ==> ignore
+          arg [-plugin] ==> ignore
+          arg [/usr/libexec/gcc/x86_64-redhat-linux/14/liblto_plugin.so] ==> ignore
+          arg [-plugin-opt=/usr/libexec/gcc/x86_64-redhat-linux/14/lto-wrapper] ==> ignore
+          arg [-plugin-opt=-fresolution=/tmp/cchvbDDE.res] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+          arg [-plugin-opt=-pass-through=-lc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+          arg [--build-id] ==> ignore
+          arg [--no-add-needed] ==> ignore
+          arg [--eh-frame-hdr] ==> ignore
+          arg [--hash-style=gnu] ==> ignore
+          arg [-m] ==> ignore
+          arg [elf_x86_64] ==> ignore
+          arg [-dynamic-linker] ==> ignore
+          arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
+          arg [-o] ==> ignore
+          arg [cmTC_08443] ==> ignore
+          arg [/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crt1.o] ==> obj [/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crt1.o]
+          arg [/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crti.o] ==> obj [/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crti.o]
+          arg [/usr/lib/gcc/x86_64-redhat-linux/14/crtbegin.o] ==> obj [/usr/lib/gcc/x86_64-redhat-linux/14/crtbegin.o]
+          arg [-L/usr/lib/gcc/x86_64-redhat-linux/14] ==> dir [/usr/lib/gcc/x86_64-redhat-linux/14]
+          arg [-L/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64] ==> dir [/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64]
+          arg [-L/lib/../lib64] ==> dir [/lib/../lib64]
+          arg [-L/usr/lib/../lib64] ==> dir [/usr/lib/../lib64]
+          arg [-L/usr/lib/gcc/x86_64-redhat-linux/14/../../..] ==> dir [/usr/lib/gcc/x86_64-redhat-linux/14/../../..]
+          arg [-v] ==> ignore
+          arg [CMakeFiles/cmTC_08443.dir/CMakeCCompilerABI.c.o] ==> ignore
+          arg [-lgcc] ==> lib [gcc]
+          arg [--push-state] ==> ignore
+          arg [--as-needed] ==> ignore
+          arg [-lgcc_s] ==> lib [gcc_s]
+          arg [--pop-state] ==> ignore
+          arg [-lc] ==> lib [c]
+          arg [-lgcc] ==> lib [gcc]
+          arg [--push-state] ==> ignore
+          arg [--as-needed] ==> ignore
+          arg [-lgcc_s] ==> lib [gcc_s]
+          arg [--pop-state] ==> ignore
+          arg [/usr/lib/gcc/x86_64-redhat-linux/14/crtend.o] ==> obj [/usr/lib/gcc/x86_64-redhat-linux/14/crtend.o]
+          arg [/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crtn.o] ==> obj [/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crtn.o]
+        ignore line: [collect2 version 14.3.1 20251022 (Red Hat 14.3.1-4)]
+        ignore line: [/usr/bin/ld -plugin /usr/libexec/gcc/x86_64-redhat-linux/14/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/x86_64-redhat-linux/14/lto-wrapper -plugin-opt=-fresolution=/tmp/cchvbDDE.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_08443 /usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crt1.o /usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crti.o /usr/lib/gcc/x86_64-redhat-linux/14/crtbegin.o -L/usr/lib/gcc/x86_64-redhat-linux/14 -L/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib/gcc/x86_64-redhat-linux/14/../../.. -v CMakeFiles/cmTC_08443.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-redhat-linux/14/crtend.o /usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crtn.o]
+        linker tool for 'C': /usr/bin/ld
+        collapse obj [/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crt1.o] ==> [/usr/lib64/crt1.o]
+        collapse obj [/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crti.o] ==> [/usr/lib64/crti.o]
+        collapse obj [/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crtn.o] ==> [/usr/lib64/crtn.o]
+        collapse library dir [/usr/lib/gcc/x86_64-redhat-linux/14] ==> [/usr/lib/gcc/x86_64-redhat-linux/14]
+        collapse library dir [/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64] ==> [/usr/lib64]
+        collapse library dir [/lib/../lib64] ==> [/lib64]
+        collapse library dir [/usr/lib/../lib64] ==> [/usr/lib64]
+        collapse library dir [/usr/lib/gcc/x86_64-redhat-linux/14/../../..] ==> [/usr/lib]
+        implicit libs: [gcc;gcc_s;c;gcc;gcc_s]
+        implicit objs: [/usr/lib64/crt1.o;/usr/lib64/crti.o;/usr/lib/gcc/x86_64-redhat-linux/14/crtbegin.o;/usr/lib/gcc/x86_64-redhat-linux/14/crtend.o;/usr/lib64/crtn.o]
+        implicit dirs: [/usr/lib/gcc/x86_64-redhat-linux/14;/usr/lib64;/lib64;/usr/lib]
+        implicit fwks: []
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/Internal/CMakeDetermineLinkerId.cmake:40 (message)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:255 (cmake_determine_linker_id)"
+      - "/usr/share/cmake/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      Running the C compiler's linker: "/usr/bin/ld" "-v"
+      GNU ld version 2.41-63.el10
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:74 (try_compile)"
+      - "/usr/share/cmake/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:3 (project)"
+    checks:
+      - "Detecting CXX compiler ABI info"
+    directories:
+      source: "/output/CMakeFiles/CMakeScratch/TryCompile-4IRo5E"
+      binary: "/output/CMakeFiles/CMakeScratch/TryCompile-4IRo5E"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-21"
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_CXX_SCAN_FOR_MODULES: "OFF"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "CMAKE_CXX_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: '/output/CMakeFiles/CMakeScratch/TryCompile-4IRo5E'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_222e4/fast
+        /usr/bin/make  -f CMakeFiles/cmTC_222e4.dir/build.make CMakeFiles/cmTC_222e4.dir/build
+        make[1]: Entering directory '/output/CMakeFiles/CMakeScratch/TryCompile-4IRo5E'
+        Building CXX object CMakeFiles/cmTC_222e4.dir/CMakeCXXCompilerABI.cpp.o
+        /usr/bin/clang   -v -MD -MT CMakeFiles/cmTC_222e4.dir/CMakeCXXCompilerABI.cpp.o -MF CMakeFiles/cmTC_222e4.dir/CMakeCXXCompilerABI.cpp.o.d -o CMakeFiles/cmTC_222e4.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp
+        clang version 21.1.8 (RESF 21.1.8-1.el10)
+        Target: x86_64-redhat-linux-gnu
+        Thread model: posix
+        InstalledDir: /usr/bin
+        Configuration file: /etc/clang/x86_64-redhat-linux-gnu-clang.cfg
+        System configuration file directory: /etc/clang/
+        Selected GCC installation: /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15
+        Candidate multilib: .;@m64
+        Candidate multilib: 32;@m32
+        Selected multilib: .;@m64
+         (in-process)
+         "/usr/bin/clang-21" -cc1 -triple x86_64-redhat-linux-gnu -emit-obj -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model static -mframe-pointer=all -fmath-errno -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=2 -target-cpu x86-64 -tune-cpu generic -debugger-tuning=gdb -fdebug-compilation-dir=/output/CMakeFiles/CMakeScratch/TryCompile-4IRo5E -v -fcoverage-compilation-dir=/output/CMakeFiles/CMakeScratch/TryCompile-4IRo5E -resource-dir /usr/bin/../lib/clang/21 -dependency-file CMakeFiles/cmTC_222e4.dir/CMakeCXXCompilerABI.cpp.o.d -MT CMakeFiles/cmTC_222e4.dir/CMakeCXXCompilerABI.cpp.o -sys-header-deps -internal-isystem /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15 -internal-isystem /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux -internal-isystem /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/backward -internal-isystem /usr/bin/../lib/clang/21/include -internal-isystem /usr/local/include -internal-isystem /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../x86_64-redhat-linux/include -internal-externc-isystem /include -internal-externc-isystem /usr/include -fdeprecated-macro -ferror-limit 19 -fgnuc-version=4.2.1 -fskip-odr-check-in-gmf -fcxx-exceptions -fexceptions -faddrsig -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_222e4.dir/CMakeCXXCompilerABI.cpp.o -x c++ /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp
+        clang -cc1 version 21.1.8 based upon LLVM 21.1.8 default target x86_64-redhat-linux-gnu
+        ignoring nonexistent directory "/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../x86_64-redhat-linux/include"
+        ignoring nonexistent directory "/include"
+        #include "..." search starts here:
+        #include <...> search starts here:
+         /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15
+         /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux
+         /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/backward
+         /usr/bin/../lib/clang/21/include
+         /usr/local/include
+         /usr/include
+        End of search list.
+        Linking CXX executable cmTC_222e4
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_222e4.dir/link.txt --verbose=1
+        clang version 21.1.8 (RESF 21.1.8-1.el10)
+        Target: x86_64-redhat-linux-gnu
+        Thread model: posix
+        InstalledDir: /usr/bin
+        Configuration file: /etc/clang/x86_64-redhat-linux-gnu-clang.cfg
+        System configuration file directory: /etc/clang/
+        Selected GCC installation: /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15
+        Candidate multilib: .;@m64
+        Candidate multilib: 32;@m32
+        Selected multilib: .;@m64
+         "/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../bin/ld" --hash-style=gnu --build-id --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_222e4 /lib/../lib64/crt1.o /lib/../lib64/crti.o /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/crtbegin.o -L/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15 -L/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../lib64 -L/lib/../lib64 -L/usr/lib64 -L/lib -L/usr/lib -v CMakeFiles/cmTC_222e4.dir/CMakeCXXCompilerABI.cpp.o -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/crtend.o /lib/../lib64/crtn.o
+        GNU ld version 2.44-8.el10
+        /usr/bin/clang  -v -Wl,-v CMakeFiles/cmTC_222e4.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_222e4
+        make[1]: Leaving directory '/output/CMakeFiles/CMakeScratch/TryCompile-4IRo5E'
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:182 (message)"
+      - "/usr/share/cmake/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      Parsed CXX implicit include dir info: rv=done
+        found start of include info
+        found start of implicit include info
+          add: [/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15]
+          add: [/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux]
+          add: [/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/backward]
+          add: [/usr/bin/../lib/clang/21/include]
+          add: [/usr/local/include]
+          add: [/usr/include]
+        end of search list found
+        collapse include dir [/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15] ==> [/opt/rh/gcc-toolset-15/root/usr/include/c++/15]
+        collapse include dir [/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux] ==> [/opt/rh/gcc-toolset-15/root/usr/include/c++/15/x86_64-redhat-linux]
+        collapse include dir [/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/backward] ==> [/opt/rh/gcc-toolset-15/root/usr/include/c++/15/backward]
+        collapse include dir [/usr/bin/../lib/clang/21/include] ==> [/usr/lib/clang/21/include]
+        collapse include dir [/usr/local/include] ==> [/usr/local/include]
+        collapse include dir [/usr/include] ==> [/usr/include]
+        implicit include dirs: [/opt/rh/gcc-toolset-15/root/usr/include/c++/15;/opt/rh/gcc-toolset-15/root/usr/include/c++/15/x86_64-redhat-linux;/opt/rh/gcc-toolset-15/root/usr/include/c++/15/backward;/usr/lib/clang/21/include;/usr/local/include;/usr/include]
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:218 (message)"
+      - "/usr/share/cmake/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      Parsed CXX implicit link information:
+        link line regex: [^( *|.*[/\\])(ld[0-9]*(\\.[a-z]+)?|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        linker tool regex: [^[ 	]*(->|")?[ 	]*(([^"]*[/\\])?(ld[0-9]*(\\.[a-z]+)?))("|,| |$)]
+        ignore line: [Change Dir: '/output/CMakeFiles/CMakeScratch/TryCompile-4IRo5E']
+        ignore line: []
+        ignore line: [Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_222e4/fast]
+        ignore line: [/usr/bin/make  -f CMakeFiles/cmTC_222e4.dir/build.make CMakeFiles/cmTC_222e4.dir/build]
+        ignore line: [make[1]: Entering directory '/output/CMakeFiles/CMakeScratch/TryCompile-4IRo5E']
+        ignore line: [Building CXX object CMakeFiles/cmTC_222e4.dir/CMakeCXXCompilerABI.cpp.o]
+        ignore line: [/usr/bin/clang   -v -MD -MT CMakeFiles/cmTC_222e4.dir/CMakeCXXCompilerABI.cpp.o -MF CMakeFiles/cmTC_222e4.dir/CMakeCXXCompilerABI.cpp.o.d -o CMakeFiles/cmTC_222e4.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp]
+        ignore line: [clang version 21.1.8 (RESF 21.1.8-1.el10)]
+        ignore line: [Target: x86_64-redhat-linux-gnu]
+        ignore line: [Thread model: posix]
+        ignore line: [InstalledDir: /usr/bin]
+        ignore line: [Configuration file: /etc/clang/x86_64-redhat-linux-gnu-clang.cfg]
+        ignore line: [System configuration file directory: /etc/clang/]
+        ignore line: [Selected GCC installation: /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15]
+        ignore line: [Candidate multilib: .]
+        ignore line: [@m64]
+        ignore line: [Candidate multilib: 32]
+        ignore line: [@m32]
+        ignore line: [Selected multilib: .]
+        ignore line: [@m64]
+        ignore line: [ (in-process)]
+        ignore line: [ "/usr/bin/clang-21" -cc1 -triple x86_64-redhat-linux-gnu -emit-obj -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model static -mframe-pointer=all -fmath-errno -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=2 -target-cpu x86-64 -tune-cpu generic -debugger-tuning=gdb -fdebug-compilation-dir=/output/CMakeFiles/CMakeScratch/TryCompile-4IRo5E -v -fcoverage-compilation-dir=/output/CMakeFiles/CMakeScratch/TryCompile-4IRo5E -resource-dir /usr/bin/../lib/clang/21 -dependency-file CMakeFiles/cmTC_222e4.dir/CMakeCXXCompilerABI.cpp.o.d -MT CMakeFiles/cmTC_222e4.dir/CMakeCXXCompilerABI.cpp.o -sys-header-deps -internal-isystem /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15 -internal-isystem /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux -internal-isystem /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/backward -internal-isystem /usr/bin/../lib/clang/21/include -internal-isystem /usr/local/include -internal-isystem /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../x86_64-redhat-linux/include -internal-externc-isystem /include -internal-externc-isystem /usr/include -fdeprecated-macro -ferror-limit 19 -fgnuc-version=4.2.1 -fskip-odr-check-in-gmf -fcxx-exceptions -fexceptions -faddrsig -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_222e4.dir/CMakeCXXCompilerABI.cpp.o -x c++ /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp]
+        ignore line: [clang -cc1 version 21.1.8 based upon LLVM 21.1.8 default target x86_64-redhat-linux-gnu]
+        ignore line: [ignoring nonexistent directory "/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../x86_64-redhat-linux/include"]
+        ignore line: [ignoring nonexistent directory "/include"]
+        ignore line: [#include "..." search starts here:]
+        ignore line: [#include <...> search starts here:]
+        ignore line: [ /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15]
+        ignore line: [ /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux]
+        ignore line: [ /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/backward]
+        ignore line: [ /usr/bin/../lib/clang/21/include]
+        ignore line: [ /usr/local/include]
+        ignore line: [ /usr/include]
+        ignore line: [End of search list.]
+        ignore line: [Linking CXX executable cmTC_222e4]
+        ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_222e4.dir/link.txt --verbose=1]
+        ignore line: [clang version 21.1.8 (RESF 21.1.8-1.el10)]
+        ignore line: [Target: x86_64-redhat-linux-gnu]
+        ignore line: [Thread model: posix]
+        ignore line: [InstalledDir: /usr/bin]
+        ignore line: [Configuration file: /etc/clang/x86_64-redhat-linux-gnu-clang.cfg]
+        ignore line: [System configuration file directory: /etc/clang/]
+        ignore line: [Selected GCC installation: /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15]
+        ignore line: [Candidate multilib: .]
+        ignore line: [@m64]
+        ignore line: [Candidate multilib: 32]
+        ignore line: [@m32]
+        ignore line: [Selected multilib: .]
+        ignore line: [@m64]
+        link line: [ "/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../bin/ld" --hash-style=gnu --build-id --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_222e4 /lib/../lib64/crt1.o /lib/../lib64/crti.o /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/crtbegin.o -L/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15 -L/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../lib64 -L/lib/../lib64 -L/usr/lib64 -L/lib -L/usr/lib -v CMakeFiles/cmTC_222e4.dir/CMakeCXXCompilerABI.cpp.o -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/crtend.o /lib/../lib64/crtn.o]
+          arg [/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../bin/ld] ==> ignore
+          arg [--hash-style=gnu] ==> ignore
+          arg [--build-id] ==> ignore
+          arg [--eh-frame-hdr] ==> ignore
+          arg [-m] ==> ignore
+          arg [elf_x86_64] ==> ignore
+          arg [-dynamic-linker] ==> ignore
+          arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
+          arg [-o] ==> ignore
+          arg [cmTC_222e4] ==> ignore
+          arg [/lib/../lib64/crt1.o] ==> obj [/lib/../lib64/crt1.o]
+          arg [/lib/../lib64/crti.o] ==> obj [/lib/../lib64/crti.o]
+          arg [/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/crtbegin.o] ==> obj [/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/crtbegin.o]
+          arg [-L/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15] ==> dir [/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15]
+          arg [-L/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../lib64] ==> dir [/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../lib64]
+          arg [-L/lib/../lib64] ==> dir [/lib/../lib64]
+          arg [-L/usr/lib64] ==> dir [/usr/lib64]
+          arg [-L/lib] ==> dir [/lib]
+          arg [-L/usr/lib] ==> dir [/usr/lib]
+          arg [-v] ==> ignore
+          arg [CMakeFiles/cmTC_222e4.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+          arg [-lgcc] ==> lib [gcc]
+          arg [--as-needed] ==> ignore
+          arg [-lgcc_s] ==> lib [gcc_s]
+          arg [--no-as-needed] ==> ignore
+          arg [-lc] ==> lib [c]
+          arg [-lgcc] ==> lib [gcc]
+          arg [--as-needed] ==> ignore
+          arg [-lgcc_s] ==> lib [gcc_s]
+          arg [--no-as-needed] ==> ignore
+          arg [/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/crtend.o] ==> obj [/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/crtend.o]
+          arg [/lib/../lib64/crtn.o] ==> obj [/lib/../lib64/crtn.o]
+        linker tool for 'CXX': /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../bin/ld
+        collapse obj [/lib/../lib64/crt1.o] ==> [/lib64/crt1.o]
+        collapse obj [/lib/../lib64/crti.o] ==> [/lib64/crti.o]
+        collapse obj [/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/crtbegin.o] ==> [/opt/rh/gcc-toolset-15/root/usr/lib/gcc/x86_64-redhat-linux/15/crtbegin.o]
+        collapse obj [/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/crtend.o] ==> [/opt/rh/gcc-toolset-15/root/usr/lib/gcc/x86_64-redhat-linux/15/crtend.o]
+        collapse obj [/lib/../lib64/crtn.o] ==> [/lib64/crtn.o]
+        collapse library dir [/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15] ==> [/opt/rh/gcc-toolset-15/root/usr/lib/gcc/x86_64-redhat-linux/15]
+        collapse library dir [/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../lib64] ==> [/opt/rh/gcc-toolset-15/root/usr/lib64]
+        collapse library dir [/lib/../lib64] ==> [/lib64]
+        collapse library dir [/usr/lib64] ==> [/usr/lib64]
+        collapse library dir [/lib] ==> [/lib]
+        collapse library dir [/usr/lib] ==> [/usr/lib]
+        implicit libs: [gcc;gcc_s;c;gcc;gcc_s]
+        implicit objs: [/lib64/crt1.o;/lib64/crti.o;/opt/rh/gcc-toolset-15/root/usr/lib/gcc/x86_64-redhat-linux/15/crtbegin.o;/opt/rh/gcc-toolset-15/root/usr/lib/gcc/x86_64-redhat-linux/15/crtend.o;/lib64/crtn.o]
+        implicit dirs: [/opt/rh/gcc-toolset-15/root/usr/lib/gcc/x86_64-redhat-linux/15;/opt/rh/gcc-toolset-15/root/usr/lib64;/lib64;/usr/lib64;/lib;/usr/lib]
+        implicit fwks: []
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/Internal/CMakeDetermineLinkerId.cmake:40 (message)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:255 (cmake_determine_linker_id)"
+      - "/usr/share/cmake/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      Running the CXX compiler's linker: "/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../bin/ld" "-v"
+      GNU ld version 2.44-8.el10
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/usr/share/cmake/Modules/CheckCXXSourceCompiles.cmake:58 (cmake_check_source_compiles)"
+      - "cmake/modules/FindLibElf.cmake:55 (check_cxx_source_compiles)"
+      - "lib/libdwarf/CMakeLists.txt:8 (find_package)"
+    checks:
+      - "Performing Test ELF_GETSHDRSTRNDX"
+    directories:
+      source: "/output/CMakeFiles/CMakeScratch/TryCompile-u7L8Ju"
+      binary: "/output/CMakeFiles/CMakeScratch/TryCompile-u7L8Ju"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-21"
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/source/cmake/modules"
+    buildResult:
+      variable: "ELF_GETSHDRSTRNDX"
+      cached: true
+      stdout: |
+        Change Dir: '/output/CMakeFiles/CMakeScratch/TryCompile-u7L8Ju'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_5185b/fast
+        /usr/bin/make  -f CMakeFiles/cmTC_5185b.dir/build.make CMakeFiles/cmTC_5185b.dir/build
+        make[1]: Entering directory '/output/CMakeFiles/CMakeScratch/TryCompile-u7L8Ju'
+        Building CXX object CMakeFiles/cmTC_5185b.dir/src.cxx.o
+        /usr/bin/clang -DELF_GETSHDRSTRNDX   -MD -MT CMakeFiles/cmTC_5185b.dir/src.cxx.o -MF CMakeFiles/cmTC_5185b.dir/src.cxx.o.d -o CMakeFiles/cmTC_5185b.dir/src.cxx.o -c /output/CMakeFiles/CMakeScratch/TryCompile-u7L8Ju/src.cxx
+        Linking CXX executable cmTC_5185b
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5185b.dir/link.txt --verbose=1
+        /usr/bin/clang CMakeFiles/cmTC_5185b.dir/src.cxx.o -o cmTC_5185b  -lelf
+        make[1]: Leaving directory '/output/CMakeFiles/CMakeScratch/TryCompile-u7L8Ju'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CheckIncludeFile.cmake:99 (try_compile)"
+      - "cmake/modules/AutoconfHelper.cmake:57 (check_include_file)"
+      - "lib/libdwarf/CMakeLists.txt:14 (ac_check_headers)"
+    checks:
+      - "Looking for sys/types.h"
+    directories:
+      source: "/output/CMakeFiles/CMakeScratch/TryCompile-oUnMbn"
+      binary: "/output/CMakeFiles/CMakeScratch/TryCompile-oUnMbn"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-21"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/source/cmake/modules"
+    buildResult:
+      variable: "HAVE_SYS_TYPES_H"
+      cached: true
+      stdout: |
+        Change Dir: '/output/CMakeFiles/CMakeScratch/TryCompile-oUnMbn'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_465d7/fast
+        /usr/bin/make  -f CMakeFiles/cmTC_465d7.dir/build.make CMakeFiles/cmTC_465d7.dir/build
+        make[1]: Entering directory '/output/CMakeFiles/CMakeScratch/TryCompile-oUnMbn'
+        Building C object CMakeFiles/cmTC_465d7.dir/CheckIncludeFile.c.o
+        /usr/bin/cc    -o CMakeFiles/cmTC_465d7.dir/CheckIncludeFile.c.o -c /output/CMakeFiles/CMakeScratch/TryCompile-oUnMbn/CheckIncludeFile.c
+        Linking C executable cmTC_465d7
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_465d7.dir/link.txt --verbose=1
+        /usr/bin/cc CMakeFiles/cmTC_465d7.dir/CheckIncludeFile.c.o -o cmTC_465d7
+        make[1]: Leaving directory '/output/CMakeFiles/CMakeScratch/TryCompile-oUnMbn'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CheckIncludeFile.cmake:99 (try_compile)"
+      - "cmake/modules/AutoconfHelper.cmake:57 (check_include_file)"
+      - "lib/libdwarf/CMakeLists.txt:14 (ac_check_headers)"
+    checks:
+      - "Looking for sys/stat.h"
+    directories:
+      source: "/output/CMakeFiles/CMakeScratch/TryCompile-27eX66"
+      binary: "/output/CMakeFiles/CMakeScratch/TryCompile-27eX66"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-21"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/source/cmake/modules"
+    buildResult:
+      variable: "HAVE_SYS_STAT_H"
+      cached: true
+      stdout: |
+        Change Dir: '/output/CMakeFiles/CMakeScratch/TryCompile-27eX66'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_5020a/fast
+        /usr/bin/make  -f CMakeFiles/cmTC_5020a.dir/build.make CMakeFiles/cmTC_5020a.dir/build
+        make[1]: Entering directory '/output/CMakeFiles/CMakeScratch/TryCompile-27eX66'
+        Building C object CMakeFiles/cmTC_5020a.dir/CheckIncludeFile.c.o
+        /usr/bin/cc    -o CMakeFiles/cmTC_5020a.dir/CheckIncludeFile.c.o -c /output/CMakeFiles/CMakeScratch/TryCompile-27eX66/CheckIncludeFile.c
+        Linking C executable cmTC_5020a
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5020a.dir/link.txt --verbose=1
+        /usr/bin/cc CMakeFiles/cmTC_5020a.dir/CheckIncludeFile.c.o -o cmTC_5020a
+        make[1]: Leaving directory '/output/CMakeFiles/CMakeScratch/TryCompile-27eX66'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CheckIncludeFile.cmake:99 (try_compile)"
+      - "cmake/modules/AutoconfHelper.cmake:57 (check_include_file)"
+      - "lib/libdwarf/CMakeLists.txt:14 (ac_check_headers)"
+    checks:
+      - "Looking for stdlib.h"
+    directories:
+      source: "/output/CMakeFiles/CMakeScratch/TryCompile-pYd9Wu"
+      binary: "/output/CMakeFiles/CMakeScratch/TryCompile-pYd9Wu"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-21"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/source/cmake/modules"
+    buildResult:
+      variable: "HAVE_STDLIB_H"
+      cached: true
+      stdout: |
+        Change Dir: '/output/CMakeFiles/CMakeScratch/TryCompile-pYd9Wu'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_fd0ed/fast
+        /usr/bin/make  -f CMakeFiles/cmTC_fd0ed.dir/build.make CMakeFiles/cmTC_fd0ed.dir/build
+        make[1]: Entering directory '/output/CMakeFiles/CMakeScratch/TryCompile-pYd9Wu'
+        Building C object CMakeFiles/cmTC_fd0ed.dir/CheckIncludeFile.c.o
+        /usr/bin/cc    -o CMakeFiles/cmTC_fd0ed.dir/CheckIncludeFile.c.o -c /output/CMakeFiles/CMakeScratch/TryCompile-pYd9Wu/CheckIncludeFile.c
+        Linking C executable cmTC_fd0ed
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_fd0ed.dir/link.txt --verbose=1
+        /usr/bin/cc CMakeFiles/cmTC_fd0ed.dir/CheckIncludeFile.c.o -o cmTC_fd0ed
+        make[1]: Leaving directory '/output/CMakeFiles/CMakeScratch/TryCompile-pYd9Wu'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CheckIncludeFile.cmake:99 (try_compile)"
+      - "cmake/modules/AutoconfHelper.cmake:57 (check_include_file)"
+      - "lib/libdwarf/CMakeLists.txt:14 (ac_check_headers)"
+    checks:
+      - "Looking for string.h"
+    directories:
+      source: "/output/CMakeFiles/CMakeScratch/TryCompile-XgaYaj"
+      binary: "/output/CMakeFiles/CMakeScratch/TryCompile-XgaYaj"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-21"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/source/cmake/modules"
+    buildResult:
+      variable: "HAVE_STRING_H"
+      cached: true
+      stdout: |
+        Change Dir: '/output/CMakeFiles/CMakeScratch/TryCompile-XgaYaj'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_cd1f8/fast
+        /usr/bin/make  -f CMakeFiles/cmTC_cd1f8.dir/build.make CMakeFiles/cmTC_cd1f8.dir/build
+        make[1]: Entering directory '/output/CMakeFiles/CMakeScratch/TryCompile-XgaYaj'
+        Building C object CMakeFiles/cmTC_cd1f8.dir/CheckIncludeFile.c.o
+        /usr/bin/cc    -o CMakeFiles/cmTC_cd1f8.dir/CheckIncludeFile.c.o -c /output/CMakeFiles/CMakeScratch/TryCompile-XgaYaj/CheckIncludeFile.c
+        Linking C executable cmTC_cd1f8
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_cd1f8.dir/link.txt --verbose=1
+        /usr/bin/cc CMakeFiles/cmTC_cd1f8.dir/CheckIncludeFile.c.o -o cmTC_cd1f8
+        make[1]: Leaving directory '/output/CMakeFiles/CMakeScratch/TryCompile-XgaYaj'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CheckIncludeFile.cmake:99 (try_compile)"
+      - "cmake/modules/AutoconfHelper.cmake:57 (check_include_file)"
+      - "lib/libdwarf/CMakeLists.txt:14 (ac_check_headers)"
+    checks:
+      - "Looking for memory.h"
+    directories:
+      source: "/output/CMakeFiles/CMakeScratch/TryCompile-Gz8b98"
+      binary: "/output/CMakeFiles/CMakeScratch/TryCompile-Gz8b98"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-21"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/source/cmake/modules"
+    buildResult:
+      variable: "HAVE_MEMORY_H"
+      cached: true
+      stdout: |
+        Change Dir: '/output/CMakeFiles/CMakeScratch/TryCompile-Gz8b98'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_1ee79/fast
+        /usr/bin/make  -f CMakeFiles/cmTC_1ee79.dir/build.make CMakeFiles/cmTC_1ee79.dir/build
+        make[1]: Entering directory '/output/CMakeFiles/CMakeScratch/TryCompile-Gz8b98'
+        Building C object CMakeFiles/cmTC_1ee79.dir/CheckIncludeFile.c.o
+        /usr/bin/cc    -o CMakeFiles/cmTC_1ee79.dir/CheckIncludeFile.c.o -c /output/CMakeFiles/CMakeScratch/TryCompile-Gz8b98/CheckIncludeFile.c
+        Linking C executable cmTC_1ee79
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_1ee79.dir/link.txt --verbose=1
+        /usr/bin/cc CMakeFiles/cmTC_1ee79.dir/CheckIncludeFile.c.o -o cmTC_1ee79
+        make[1]: Leaving directory '/output/CMakeFiles/CMakeScratch/TryCompile-Gz8b98'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CheckIncludeFile.cmake:99 (try_compile)"
+      - "cmake/modules/AutoconfHelper.cmake:57 (check_include_file)"
+      - "lib/libdwarf/CMakeLists.txt:14 (ac_check_headers)"
+    checks:
+      - "Looking for strings.h"
+    directories:
+      source: "/output/CMakeFiles/CMakeScratch/TryCompile-YIWzv4"
+      binary: "/output/CMakeFiles/CMakeScratch/TryCompile-YIWzv4"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-21"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/source/cmake/modules"
+    buildResult:
+      variable: "HAVE_STRINGS_H"
+      cached: true
+      stdout: |
+        Change Dir: '/output/CMakeFiles/CMakeScratch/TryCompile-YIWzv4'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_8df00/fast
+        /usr/bin/make  -f CMakeFiles/cmTC_8df00.dir/build.make CMakeFiles/cmTC_8df00.dir/build
+        make[1]: Entering directory '/output/CMakeFiles/CMakeScratch/TryCompile-YIWzv4'
+        Building C object CMakeFiles/cmTC_8df00.dir/CheckIncludeFile.c.o
+        /usr/bin/cc    -o CMakeFiles/cmTC_8df00.dir/CheckIncludeFile.c.o -c /output/CMakeFiles/CMakeScratch/TryCompile-YIWzv4/CheckIncludeFile.c
+        Linking C executable cmTC_8df00
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8df00.dir/link.txt --verbose=1
+        /usr/bin/cc CMakeFiles/cmTC_8df00.dir/CheckIncludeFile.c.o -o cmTC_8df00
+        make[1]: Leaving directory '/output/CMakeFiles/CMakeScratch/TryCompile-YIWzv4'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CheckIncludeFile.cmake:99 (try_compile)"
+      - "cmake/modules/AutoconfHelper.cmake:57 (check_include_file)"
+      - "lib/libdwarf/CMakeLists.txt:14 (ac_check_headers)"
+    checks:
+      - "Looking for inttypes.h"
+    directories:
+      source: "/output/CMakeFiles/CMakeScratch/TryCompile-DO46Ri"
+      binary: "/output/CMakeFiles/CMakeScratch/TryCompile-DO46Ri"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-21"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/source/cmake/modules"
+    buildResult:
+      variable: "HAVE_INTTYPES_H"
+      cached: true
+      stdout: |
+        Change Dir: '/output/CMakeFiles/CMakeScratch/TryCompile-DO46Ri'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_bbb90/fast
+        /usr/bin/make  -f CMakeFiles/cmTC_bbb90.dir/build.make CMakeFiles/cmTC_bbb90.dir/build
+        make[1]: Entering directory '/output/CMakeFiles/CMakeScratch/TryCompile-DO46Ri'
+        Building C object CMakeFiles/cmTC_bbb90.dir/CheckIncludeFile.c.o
+        /usr/bin/cc    -o CMakeFiles/cmTC_bbb90.dir/CheckIncludeFile.c.o -c /output/CMakeFiles/CMakeScratch/TryCompile-DO46Ri/CheckIncludeFile.c
+        Linking C executable cmTC_bbb90
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_bbb90.dir/link.txt --verbose=1
+        /usr/bin/cc CMakeFiles/cmTC_bbb90.dir/CheckIncludeFile.c.o -o cmTC_bbb90
+        make[1]: Leaving directory '/output/CMakeFiles/CMakeScratch/TryCompile-DO46Ri'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CheckIncludeFile.cmake:99 (try_compile)"
+      - "cmake/modules/AutoconfHelper.cmake:57 (check_include_file)"
+      - "lib/libdwarf/CMakeLists.txt:14 (ac_check_headers)"
+    checks:
+      - "Looking for stdint.h"
+    directories:
+      source: "/output/CMakeFiles/CMakeScratch/TryCompile-IRnRdE"
+      binary: "/output/CMakeFiles/CMakeScratch/TryCompile-IRnRdE"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-21"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/source/cmake/modules"
+    buildResult:
+      variable: "HAVE_STDINT_H"
+      cached: true
+      stdout: |
+        Change Dir: '/output/CMakeFiles/CMakeScratch/TryCompile-IRnRdE'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_f118a/fast
+        /usr/bin/make  -f CMakeFiles/cmTC_f118a.dir/build.make CMakeFiles/cmTC_f118a.dir/build
+        make[1]: Entering directory '/output/CMakeFiles/CMakeScratch/TryCompile-IRnRdE'
+        Building C object CMakeFiles/cmTC_f118a.dir/CheckIncludeFile.c.o
+        /usr/bin/cc    -o CMakeFiles/cmTC_f118a.dir/CheckIncludeFile.c.o -c /output/CMakeFiles/CMakeScratch/TryCompile-IRnRdE/CheckIncludeFile.c
+        Linking C executable cmTC_f118a
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_f118a.dir/link.txt --verbose=1
+        /usr/bin/cc CMakeFiles/cmTC_f118a.dir/CheckIncludeFile.c.o -o cmTC_f118a
+        make[1]: Leaving directory '/output/CMakeFiles/CMakeScratch/TryCompile-IRnRdE'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CheckIncludeFile.cmake:99 (try_compile)"
+      - "cmake/modules/AutoconfHelper.cmake:57 (check_include_file)"
+      - "lib/libdwarf/CMakeLists.txt:14 (ac_check_headers)"
+    checks:
+      - "Looking for unistd.h"
+    directories:
+      source: "/output/CMakeFiles/CMakeScratch/TryCompile-aLuRFA"
+      binary: "/output/CMakeFiles/CMakeScratch/TryCompile-aLuRFA"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-21"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/source/cmake/modules"
+    buildResult:
+      variable: "HAVE_UNISTD_H"
+      cached: true
+      stdout: |
+        Change Dir: '/output/CMakeFiles/CMakeScratch/TryCompile-aLuRFA'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_49636/fast
+        /usr/bin/make  -f CMakeFiles/cmTC_49636.dir/build.make CMakeFiles/cmTC_49636.dir/build
+        make[1]: Entering directory '/output/CMakeFiles/CMakeScratch/TryCompile-aLuRFA'
+        Building C object CMakeFiles/cmTC_49636.dir/CheckIncludeFile.c.o
+        /usr/bin/cc    -o CMakeFiles/cmTC_49636.dir/CheckIncludeFile.c.o -c /output/CMakeFiles/CMakeScratch/TryCompile-aLuRFA/CheckIncludeFile.c
+        Linking C executable cmTC_49636
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_49636.dir/link.txt --verbose=1
+        /usr/bin/cc CMakeFiles/cmTC_49636.dir/CheckIncludeFile.c.o -o cmTC_49636
+        make[1]: Leaving directory '/output/CMakeFiles/CMakeScratch/TryCompile-aLuRFA'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CheckIncludeFile.cmake:99 (try_compile)"
+      - "cmake/modules/AutoconfHelper.cmake:57 (check_include_file)"
+      - "lib/libdwarf/CMakeLists.txt:15 (ac_check_headers)"
+    checks:
+      - "Looking for alloca.h"
+    directories:
+      source: "/output/CMakeFiles/CMakeScratch/TryCompile-MSiOTu"
+      binary: "/output/CMakeFiles/CMakeScratch/TryCompile-MSiOTu"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-21"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/source/cmake/modules"
+    buildResult:
+      variable: "HAVE_ALLOCA_H"
+      cached: true
+      stdout: |
+        Change Dir: '/output/CMakeFiles/CMakeScratch/TryCompile-MSiOTu'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_5c111/fast
+        /usr/bin/make  -f CMakeFiles/cmTC_5c111.dir/build.make CMakeFiles/cmTC_5c111.dir/build
+        make[1]: Entering directory '/output/CMakeFiles/CMakeScratch/TryCompile-MSiOTu'
+        Building C object CMakeFiles/cmTC_5c111.dir/CheckIncludeFile.c.o
+        /usr/bin/cc    -o CMakeFiles/cmTC_5c111.dir/CheckIncludeFile.c.o -c /output/CMakeFiles/CMakeScratch/TryCompile-MSiOTu/CheckIncludeFile.c
+        Linking C executable cmTC_5c111
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5c111.dir/link.txt --verbose=1
+        /usr/bin/cc CMakeFiles/cmTC_5c111.dir/CheckIncludeFile.c.o -o cmTC_5c111
+        make[1]: Leaving directory '/output/CMakeFiles/CMakeScratch/TryCompile-MSiOTu'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CheckIncludeFile.cmake:99 (try_compile)"
+      - "cmake/modules/AutoconfHelper.cmake:57 (check_include_file)"
+      - "lib/libdwarf/CMakeLists.txt:15 (ac_check_headers)"
+    checks:
+      - "Looking for elf.h"
+    directories:
+      source: "/output/CMakeFiles/CMakeScratch/TryCompile-9ZlGK7"
+      binary: "/output/CMakeFiles/CMakeScratch/TryCompile-9ZlGK7"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-21"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/source/cmake/modules"
+    buildResult:
+      variable: "HAVE_ELF_H"
+      cached: true
+      stdout: |
+        Change Dir: '/output/CMakeFiles/CMakeScratch/TryCompile-9ZlGK7'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_8957a/fast
+        /usr/bin/make  -f CMakeFiles/cmTC_8957a.dir/build.make CMakeFiles/cmTC_8957a.dir/build
+        make[1]: Entering directory '/output/CMakeFiles/CMakeScratch/TryCompile-9ZlGK7'
+        Building C object CMakeFiles/cmTC_8957a.dir/CheckIncludeFile.c.o
+        /usr/bin/cc    -o CMakeFiles/cmTC_8957a.dir/CheckIncludeFile.c.o -c /output/CMakeFiles/CMakeScratch/TryCompile-9ZlGK7/CheckIncludeFile.c
+        Linking C executable cmTC_8957a
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8957a.dir/link.txt --verbose=1
+        /usr/bin/cc CMakeFiles/cmTC_8957a.dir/CheckIncludeFile.c.o -o cmTC_8957a
+        make[1]: Leaving directory '/output/CMakeFiles/CMakeScratch/TryCompile-9ZlGK7'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CheckIncludeFile.cmake:99 (try_compile)"
+      - "cmake/modules/AutoconfHelper.cmake:57 (check_include_file)"
+      - "lib/libdwarf/CMakeLists.txt:15 (ac_check_headers)"
+    checks:
+      - "Looking for elfaccess.h"
+    directories:
+      source: "/output/CMakeFiles/CMakeScratch/TryCompile-0YMCwc"
+      binary: "/output/CMakeFiles/CMakeScratch/TryCompile-0YMCwc"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-21"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/source/cmake/modules"
+    buildResult:
+      variable: "HAVE_ELFACCESS_H"
+      cached: true
+      stdout: |
+        Change Dir: '/output/CMakeFiles/CMakeScratch/TryCompile-0YMCwc'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_e8a5a/fast
+        /usr/bin/make  -f CMakeFiles/cmTC_e8a5a.dir/build.make CMakeFiles/cmTC_e8a5a.dir/build
+        make[1]: Entering directory '/output/CMakeFiles/CMakeScratch/TryCompile-0YMCwc'
+        Building C object CMakeFiles/cmTC_e8a5a.dir/CheckIncludeFile.c.o
+        /usr/bin/cc    -o CMakeFiles/cmTC_e8a5a.dir/CheckIncludeFile.c.o -c /output/CMakeFiles/CMakeScratch/TryCompile-0YMCwc/CheckIncludeFile.c
+        /output/CMakeFiles/CMakeScratch/TryCompile-0YMCwc/CheckIncludeFile.c:1:10: fatal error: elfaccess.h: No such file or directory
+            1 | #include <elfaccess.h>
+              |          ^~~~~~~~~~~~~
+        compilation terminated.
+        make[1]: *** [CMakeFiles/cmTC_e8a5a.dir/build.make:81: CMakeFiles/cmTC_e8a5a.dir/CheckIncludeFile.c.o] Error 1
+        make[1]: Leaving directory '/output/CMakeFiles/CMakeScratch/TryCompile-0YMCwc'
+        make: *** [Makefile:134: cmTC_e8a5a/fast] Error 2
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CheckIncludeFile.cmake:99 (try_compile)"
+      - "cmake/modules/AutoconfHelper.cmake:57 (check_include_file)"
+      - "lib/libdwarf/CMakeLists.txt:15 (ac_check_headers)"
+    checks:
+      - "Looking for libelf.h"
+    directories:
+      source: "/output/CMakeFiles/CMakeScratch/TryCompile-XlKIXS"
+      binary: "/output/CMakeFiles/CMakeScratch/TryCompile-XlKIXS"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-21"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/source/cmake/modules"
+    buildResult:
+      variable: "HAVE_LIBELF_H"
+      cached: true
+      stdout: |
+        Change Dir: '/output/CMakeFiles/CMakeScratch/TryCompile-XlKIXS'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_55f24/fast
+        /usr/bin/make  -f CMakeFiles/cmTC_55f24.dir/build.make CMakeFiles/cmTC_55f24.dir/build
+        make[1]: Entering directory '/output/CMakeFiles/CMakeScratch/TryCompile-XlKIXS'
+        Building C object CMakeFiles/cmTC_55f24.dir/CheckIncludeFile.c.o
+        /usr/bin/cc    -o CMakeFiles/cmTC_55f24.dir/CheckIncludeFile.c.o -c /output/CMakeFiles/CMakeScratch/TryCompile-XlKIXS/CheckIncludeFile.c
+        Linking C executable cmTC_55f24
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_55f24.dir/link.txt --verbose=1
+        /usr/bin/cc CMakeFiles/cmTC_55f24.dir/CheckIncludeFile.c.o -o cmTC_55f24
+        make[1]: Leaving directory '/output/CMakeFiles/CMakeScratch/TryCompile-XlKIXS'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CheckIncludeFile.cmake:99 (try_compile)"
+      - "cmake/modules/AutoconfHelper.cmake:57 (check_include_file)"
+      - "lib/libdwarf/CMakeLists.txt:15 (ac_check_headers)"
+    checks:
+      - "Looking for libelf/libelf.h"
+    directories:
+      source: "/output/CMakeFiles/CMakeScratch/TryCompile-DAFUbq"
+      binary: "/output/CMakeFiles/CMakeScratch/TryCompile-DAFUbq"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-21"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/source/cmake/modules"
+    buildResult:
+      variable: "HAVE_LIBELF_LIBELF_H"
+      cached: true
+      stdout: |
+        Change Dir: '/output/CMakeFiles/CMakeScratch/TryCompile-DAFUbq'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_01dfe/fast
+        /usr/bin/make  -f CMakeFiles/cmTC_01dfe.dir/build.make CMakeFiles/cmTC_01dfe.dir/build
+        make[1]: Entering directory '/output/CMakeFiles/CMakeScratch/TryCompile-DAFUbq'
+        Building C object CMakeFiles/cmTC_01dfe.dir/CheckIncludeFile.c.o
+        /usr/bin/cc    -o CMakeFiles/cmTC_01dfe.dir/CheckIncludeFile.c.o -c /output/CMakeFiles/CMakeScratch/TryCompile-DAFUbq/CheckIncludeFile.c
+        /output/CMakeFiles/CMakeScratch/TryCompile-DAFUbq/CheckIncludeFile.c:1:10: fatal error: libelf/libelf.h: No such file or directory
+            1 | #include <libelf/libelf.h>
+              |          ^~~~~~~~~~~~~~~~~
+        compilation terminated.
+        make[1]: *** [CMakeFiles/cmTC_01dfe.dir/build.make:81: CMakeFiles/cmTC_01dfe.dir/CheckIncludeFile.c.o] Error 1
+        make[1]: Leaving directory '/output/CMakeFiles/CMakeScratch/TryCompile-DAFUbq'
+        make: *** [Makefile:134: cmTC_01dfe/fast] Error 2
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CheckIncludeFile.cmake:99 (try_compile)"
+      - "cmake/modules/AutoconfHelper.cmake:57 (check_include_file)"
+      - "lib/libdwarf/CMakeLists.txt:15 (ac_check_headers)"
+    checks:
+      - "Looking for sys/elf_386.h"
+    directories:
+      source: "/output/CMakeFiles/CMakeScratch/TryCompile-KsBXAQ"
+      binary: "/output/CMakeFiles/CMakeScratch/TryCompile-KsBXAQ"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-21"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/source/cmake/modules"
+    buildResult:
+      variable: "HAVE_SYS_ELF_386_H"
+      cached: true
+      stdout: |
+        Change Dir: '/output/CMakeFiles/CMakeScratch/TryCompile-KsBXAQ'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_28899/fast
+        /usr/bin/make  -f CMakeFiles/cmTC_28899.dir/build.make CMakeFiles/cmTC_28899.dir/build
+        make[1]: Entering directory '/output/CMakeFiles/CMakeScratch/TryCompile-KsBXAQ'
+        Building C object CMakeFiles/cmTC_28899.dir/CheckIncludeFile.c.o
+        /usr/bin/cc    -o CMakeFiles/cmTC_28899.dir/CheckIncludeFile.c.o -c /output/CMakeFiles/CMakeScratch/TryCompile-KsBXAQ/CheckIncludeFile.c
+        /output/CMakeFiles/CMakeScratch/TryCompile-KsBXAQ/CheckIncludeFile.c:1:10: fatal error: sys/elf_386.h: No such file or directory
+            1 | #include <sys/elf_386.h>
+              |          ^~~~~~~~~~~~~~~
+        compilation terminated.
+        make[1]: *** [CMakeFiles/cmTC_28899.dir/build.make:81: CMakeFiles/cmTC_28899.dir/CheckIncludeFile.c.o] Error 1
+        make[1]: Leaving directory '/output/CMakeFiles/CMakeScratch/TryCompile-KsBXAQ'
+        make: *** [Makefile:134: cmTC_28899/fast] Error 2
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CheckIncludeFile.cmake:99 (try_compile)"
+      - "cmake/modules/AutoconfHelper.cmake:57 (check_include_file)"
+      - "lib/libdwarf/CMakeLists.txt:15 (ac_check_headers)"
+    checks:
+      - "Looking for sys/elf_amd64.h"
+    directories:
+      source: "/output/CMakeFiles/CMakeScratch/TryCompile-z9yjrO"
+      binary: "/output/CMakeFiles/CMakeScratch/TryCompile-z9yjrO"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-21"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/source/cmake/modules"
+    buildResult:
+      variable: "HAVE_SYS_ELF_AMD64_H"
+      cached: true
+      stdout: |
+        Change Dir: '/output/CMakeFiles/CMakeScratch/TryCompile-z9yjrO'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_b7881/fast
+        /usr/bin/make  -f CMakeFiles/cmTC_b7881.dir/build.make CMakeFiles/cmTC_b7881.dir/build
+        make[1]: Entering directory '/output/CMakeFiles/CMakeScratch/TryCompile-z9yjrO'
+        Building C object CMakeFiles/cmTC_b7881.dir/CheckIncludeFile.c.o
+        /usr/bin/cc    -o CMakeFiles/cmTC_b7881.dir/CheckIncludeFile.c.o -c /output/CMakeFiles/CMakeScratch/TryCompile-z9yjrO/CheckIncludeFile.c
+        /output/CMakeFiles/CMakeScratch/TryCompile-z9yjrO/CheckIncludeFile.c:1:10: fatal error: sys/elf_amd64.h: No such file or directory
+            1 | #include <sys/elf_amd64.h>
+              |          ^~~~~~~~~~~~~~~~~
+        compilation terminated.
+        make[1]: *** [CMakeFiles/cmTC_b7881.dir/build.make:81: CMakeFiles/cmTC_b7881.dir/CheckIncludeFile.c.o] Error 1
+        make[1]: Leaving directory '/output/CMakeFiles/CMakeScratch/TryCompile-z9yjrO'
+        make: *** [Makefile:134: cmTC_b7881/fast] Error 2
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CheckIncludeFile.cmake:99 (try_compile)"
+      - "cmake/modules/AutoconfHelper.cmake:57 (check_include_file)"
+      - "lib/libdwarf/CMakeLists.txt:15 (ac_check_headers)"
+    checks:
+      - "Looking for sys/elf_sparc.h"
+    directories:
+      source: "/output/CMakeFiles/CMakeScratch/TryCompile-WQlsTa"
+      binary: "/output/CMakeFiles/CMakeScratch/TryCompile-WQlsTa"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-21"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/source/cmake/modules"
+    buildResult:
+      variable: "HAVE_SYS_ELF_SPARC_H"
+      cached: true
+      stdout: |
+        Change Dir: '/output/CMakeFiles/CMakeScratch/TryCompile-WQlsTa'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_5bcf7/fast
+        /usr/bin/make  -f CMakeFiles/cmTC_5bcf7.dir/build.make CMakeFiles/cmTC_5bcf7.dir/build
+        make[1]: Entering directory '/output/CMakeFiles/CMakeScratch/TryCompile-WQlsTa'
+        Building C object CMakeFiles/cmTC_5bcf7.dir/CheckIncludeFile.c.o
+        /usr/bin/cc    -o CMakeFiles/cmTC_5bcf7.dir/CheckIncludeFile.c.o -c /output/CMakeFiles/CMakeScratch/TryCompile-WQlsTa/CheckIncludeFile.c
+        /output/CMakeFiles/CMakeScratch/TryCompile-WQlsTa/CheckIncludeFile.c:1:10: fatal error: sys/elf_sparc.h: No such file or directory
+            1 | #include <sys/elf_sparc.h>
+              |          ^~~~~~~~~~~~~~~~~
+        compilation terminated.
+        make[1]: *** [CMakeFiles/cmTC_5bcf7.dir/build.make:81: CMakeFiles/cmTC_5bcf7.dir/CheckIncludeFile.c.o] Error 1
+        make[1]: Leaving directory '/output/CMakeFiles/CMakeScratch/TryCompile-WQlsTa'
+        make: *** [Makefile:134: cmTC_5bcf7/fast] Error 2
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CheckIncludeFile.cmake:99 (try_compile)"
+      - "cmake/modules/AutoconfHelper.cmake:57 (check_include_file)"
+      - "lib/libdwarf/CMakeLists.txt:15 (ac_check_headers)"
+    checks:
+      - "Looking for sys/ia64/elf.h"
+    directories:
+      source: "/output/CMakeFiles/CMakeScratch/TryCompile-XOIbmK"
+      binary: "/output/CMakeFiles/CMakeScratch/TryCompile-XOIbmK"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-21"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/source/cmake/modules"
+    buildResult:
+      variable: "HAVE_SYS_IA64_ELF_H"
+      cached: true
+      stdout: |
+        Change Dir: '/output/CMakeFiles/CMakeScratch/TryCompile-XOIbmK'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_95d4d/fast
+        /usr/bin/make  -f CMakeFiles/cmTC_95d4d.dir/build.make CMakeFiles/cmTC_95d4d.dir/build
+        make[1]: Entering directory '/output/CMakeFiles/CMakeScratch/TryCompile-XOIbmK'
+        Building C object CMakeFiles/cmTC_95d4d.dir/CheckIncludeFile.c.o
+        /usr/bin/cc    -o CMakeFiles/cmTC_95d4d.dir/CheckIncludeFile.c.o -c /output/CMakeFiles/CMakeScratch/TryCompile-XOIbmK/CheckIncludeFile.c
+        /output/CMakeFiles/CMakeScratch/TryCompile-XOIbmK/CheckIncludeFile.c:1:10: fatal error: sys/ia64/elf.h: No such file or directory
+            1 | #include <sys/ia64/elf.h>
+              |          ^~~~~~~~~~~~~~~~
+        compilation terminated.
+        make[1]: *** [CMakeFiles/cmTC_95d4d.dir/build.make:81: CMakeFiles/cmTC_95d4d.dir/CheckIncludeFile.c.o] Error 1
+        make[1]: Leaving directory '/output/CMakeFiles/CMakeScratch/TryCompile-XOIbmK'
+        make: *** [Makefile:134: cmTC_95d4d/fast] Error 2
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CheckFunctionExists.cmake:93 (try_compile)"
+      - "cmake/modules/AutoconfHelper.cmake:325 (check_function_exists)"
+      - "lib/libdwarf/CMakeLists.txt:29 (ac_check_lib)"
+    checks:
+      - "Looking for elf64_getehdr"
+    directories:
+      source: "/output/CMakeFiles/CMakeScratch/TryCompile-Sk83Je"
+      binary: "/output/CMakeFiles/CMakeScratch/TryCompile-Sk83Je"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-21"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/source/cmake/modules"
+    buildResult:
+      variable: "HAVE_ELF64_GETEHDR"
+      cached: true
+      stdout: |
+        Change Dir: '/output/CMakeFiles/CMakeScratch/TryCompile-Sk83Je'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_0c327/fast
+        /usr/bin/make  -f CMakeFiles/cmTC_0c327.dir/build.make CMakeFiles/cmTC_0c327.dir/build
+        make[1]: Entering directory '/output/CMakeFiles/CMakeScratch/TryCompile-Sk83Je'
+        Building C object CMakeFiles/cmTC_0c327.dir/CheckFunctionExists.c.o
+        /usr/bin/cc   -DCHECK_FUNCTION_EXISTS=elf64_getehdr -o CMakeFiles/cmTC_0c327.dir/CheckFunctionExists.c.o -c /output/CMakeFiles/CMakeScratch/TryCompile-Sk83Je/CheckFunctionExists.c
+        Linking C executable cmTC_0c327
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0c327.dir/link.txt --verbose=1
+        /usr/bin/cc  -DCHECK_FUNCTION_EXISTS=elf64_getehdr CMakeFiles/cmTC_0c327.dir/CheckFunctionExists.c.o -o cmTC_0c327  /usr/lib64/libelf.so
+        make[1]: Leaving directory '/output/CMakeFiles/CMakeScratch/TryCompile-Sk83Je'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CheckFunctionExists.cmake:93 (try_compile)"
+      - "cmake/modules/AutoconfHelper.cmake:325 (check_function_exists)"
+      - "lib/libdwarf/CMakeLists.txt:30 (ac_check_lib)"
+    checks:
+      - "Looking for elf64_getshdr"
+    directories:
+      source: "/output/CMakeFiles/CMakeScratch/TryCompile-1b4EkK"
+      binary: "/output/CMakeFiles/CMakeScratch/TryCompile-1b4EkK"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-21"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/source/cmake/modules"
+    buildResult:
+      variable: "HAVE_ELF64_GETSHDR"
+      cached: true
+      stdout: |
+        Change Dir: '/output/CMakeFiles/CMakeScratch/TryCompile-1b4EkK'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_94545/fast
+        /usr/bin/make  -f CMakeFiles/cmTC_94545.dir/build.make CMakeFiles/cmTC_94545.dir/build
+        make[1]: Entering directory '/output/CMakeFiles/CMakeScratch/TryCompile-1b4EkK'
+        Building C object CMakeFiles/cmTC_94545.dir/CheckFunctionExists.c.o
+        /usr/bin/cc   -DCHECK_FUNCTION_EXISTS=elf64_getshdr -o CMakeFiles/cmTC_94545.dir/CheckFunctionExists.c.o -c /output/CMakeFiles/CMakeScratch/TryCompile-1b4EkK/CheckFunctionExists.c
+        Linking C executable cmTC_94545
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_94545.dir/link.txt --verbose=1
+        /usr/bin/cc  -DCHECK_FUNCTION_EXISTS=elf64_getshdr CMakeFiles/cmTC_94545.dir/CheckFunctionExists.c.o -o cmTC_94545  /usr/lib64/libelf.so
+        make[1]: Leaving directory '/output/CMakeFiles/CMakeScratch/TryCompile-1b4EkK'
+        
+      exitCode: 0
+  -
+    kind: "try_run-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/Internal/CheckSourceRuns.cmake:99 (try_run)"
+      - "/usr/share/cmake/Modules/CheckCSourceRuns.cmake:52 (cmake_check_source_runs)"
+      - "lib/libdwarf/CMakeLists.txt:70 (check_c_source_runs)"
+    checks:
+      - "Performing Test HAVE_UNUSED_ATTRIBUTE"
+    directories:
+      source: "/output/CMakeFiles/CMakeScratch/TryCompile-UywhUw"
+      binary: "/output/CMakeFiles/CMakeScratch/TryCompile-UywhUw"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-21"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/source/cmake/modules"
+    buildResult:
+      variable: "HAVE_UNUSED_ATTRIBUTE_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: '/output/CMakeFiles/CMakeScratch/TryCompile-UywhUw'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_15ac8/fast
+        /usr/bin/make  -f CMakeFiles/cmTC_15ac8.dir/build.make CMakeFiles/cmTC_15ac8.dir/build
+        make[1]: Entering directory '/output/CMakeFiles/CMakeScratch/TryCompile-UywhUw'
+        Building C object CMakeFiles/cmTC_15ac8.dir/src.c.o
+        /usr/bin/cc -DHAVE_UNUSED_ATTRIBUTE   -o CMakeFiles/cmTC_15ac8.dir/src.c.o -c /output/CMakeFiles/CMakeScratch/TryCompile-UywhUw/src.c
+        Linking C executable cmTC_15ac8
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_15ac8.dir/link.txt --verbose=1
+        /usr/bin/cc CMakeFiles/cmTC_15ac8.dir/src.c.o -o cmTC_15ac8
+        make[1]: Leaving directory '/output/CMakeFiles/CMakeScratch/TryCompile-UywhUw'
+        
+      exitCode: 0
+    runResult:
+      variable: "HAVE_UNUSED_ATTRIBUTE_EXITCODE"
+      cached: true
+      stdout: |
+      stderr: |
+      exitCode: 0
+  -
+    kind: "try_run-v1"
+    backtrace:
+      - "cmake/BfdRustAccessors.cmake:65 (try_run)"
+      - "CMakeLists.txt:15 (include)"
+    directories:
+      source: "/output/bfd-layout-probe/CMakeFiles/CMakeTmp"
+      binary: "/output/bfd-layout-probe/CMakeFiles/CMakeTmp"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-21"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_RELEASE: "-O3 -DNDEBUG"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/source/cmake/modules"
+    buildResult:
+      variable: "_bfd_compile"
+      cached: true
+      stdout: |
+        Change Dir: '/output/bfd-layout-probe/CMakeFiles/CMakeTmp'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_0e719/fast
+        /usr/bin/make  -f CMakeFiles/cmTC_0e719.dir/build.make CMakeFiles/cmTC_0e719.dir/build
+        make[1]: Entering directory '/output/bfd-layout-probe/CMakeFiles/CMakeTmp'
+        Building C object CMakeFiles/cmTC_0e719.dir/bfd_layout_witness.c.o
+        /usr/bin/cc   -O3 -DNDEBUG -std=gnu11 -o CMakeFiles/cmTC_0e719.dir/bfd_layout_witness.c.o -c /source/cmake/bfd_layout_witness.c
+        Linking C executable cmTC_0e719
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0e719.dir/link.txt --verbose=1
+        /usr/bin/cc -O3 -DNDEBUG CMakeFiles/cmTC_0e719.dir/bfd_layout_witness.c.o -o cmTC_0e719  -lbfd
+        make[1]: Leaving directory '/output/bfd-layout-probe/CMakeFiles/CMakeTmp'
+        
+      exitCode: 0
+    runResult:
+      variable: "_bfd_run"
+      cached: true
+      stdout: |
+        // Generated from selected pinned BFD header; not a portable BFD layout.
+        pub const BFD_XVEC_OFFSET: usize = 8;
+        pub const BFD_UPPER_OFFSET: usize = 504;
+        pub const BFD_CANONICALIZE_OFFSET: usize = 512;
+        // sizeof(bfd)=304 align=8; sizeof(bfd_target)=904 align=8
+      exitCode: 0
+...

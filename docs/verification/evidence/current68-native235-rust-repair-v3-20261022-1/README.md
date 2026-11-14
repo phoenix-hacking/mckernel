@@ -1,0 +1,11 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+This capsule retains the exact five-source native235 Rust repair integrated by the dispatcher and independently accepted as READY_FOR_PRODUCTION_COMPILE. It preserves19 focused Rust body tests and the separate modeled terminal-WAIT subprocess exit1. Actual SDK1.92 production compilation, new full-crate acceptance and native235/227 application acceptance remain open.
+
+Start with repair/INDEPENDENT-V3-PRODUCTION-READY-REVIEW-1.json, repair/ROOT-EXACT-V3-INTEGRATION-1.json and repair/HANDOFF-V3.md. The final source cohort is repair/candidate-v3/; tested preimages are in tested-preimages/. repair/SOURCE-PINS-V3.json binds both. Four original problems are addressed: missing native pool-query handling, exact paired-child admission after its genuine successful selector1 response, the delayed first-publication observation race, and discarded terminal WAIT worker failures.
+
+repair/ACTUALBODY-RESULT-4.json contains the14 changed start/mailbox/publication tests; unchanged pool2 and dispatch3 and modeled launcher exit1 are in repair/ACTUALBODY-RESULT-2.json. Complete bounded reports, requests, raw streams, grants and source extraction fixtures are retained. These are isolated body tests with real process collection, not kernel application acceptance.
+
+All failures remain preserved: the real native235 failure (13-byte parent stdout,35-byte thread-pool stderr, launcher rawwait0, continuing-service EINVAL and retained owners), the original Python3.8 supervisor API failure after compile exit0, the review-discovered publication-order race, and the first V3 fixture E0599 followed by its sole fixture-only correction. The complete original failed native owner export and accepted physical-retirement authority are under original-native235/; physical retirement is separate from successful guest application restoration.
+
+RESTORATION-MAP.json maps every copied byte to its private source path, mode, size and SHA256 and maps omitted binaries to exact retained hash authorities and reproducible commands. MANIFEST.json and VERIFICATION.json record the bounded capsule checks. No binary was deleted or rehashed; this capsule authorizes no build or runtime replay. The dispatcher owns the next separate production build and fresh strict native release.

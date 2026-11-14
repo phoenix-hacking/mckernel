@@ -1,0 +1,111 @@
+{
+  "status": "GO_SOURCE_PREPARATION_EXACT_THREE_FUNCTION_DELAY_CUT_ONLY",
+  "owner": "/root/create_empty_entry_parity_high",
+  "created_utc": "2026-11-09T18:15:50.071372+00:00",
+  "source_bindings": {
+    "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde",
+    "/home/holden/mckernel/kernel/rust/x86_setup.rs": "1bf9b326873b22034dfba47165c95bdcc599d41533a112c64de72950e99589fe",
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "/home/holden/mckernel/kernel/rust/debug.rs": "fed7537d21f5d5fe0fc3ffdb1fe44783f5f9ac13937b3bdbbcc452cc2fa5eb16",
+    "/home/holden/mckernel/kernel/rust/lib.rs": "e6e8f0203ea587789977c7dd23a1e7bbd8f89a9f6c84b8aeaa874b2f0880fe0b",
+    "/home/holden/mckernel/kernel/CMakeLists.txt": "1254c624f883166d3eaefb5e795571afcaf962ff10b0991524b317be71bec057",
+    "/home/holden/mckernel/arch/x86_64/kernel/include/registers.h": "43fd6d2e278953684574224927fe65bc514a88c5529d97f688e1e21b1864a6fc"
+  },
+  "prior_boundary_contract": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-init-provider-contract-1/CONTRACT.json",
+    "sha256": "f24c6101d139158fc8bc09df285e3a03b408608fb163e520ccb1d7c471431cd1",
+    "scope": "Reusefiniteoptionalwrapper/clocksourcefacts; no oldspinlock/source/metadata/runtime review replay."
+  },
+  "exact_selected_function_count": 3,
+  "exact_selected_definitions": {
+    "ihk_mc_delay_us": {
+      "source": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "definition_start_line": 964,
+      "function_line": 965,
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn ihk_mc_delay_us(us: CInt) {\n    unsafe {\n        arch_delay(us);\n    }\n}",
+      "sha256": "c5f50310e8fc8de23ba3963dcebf51f62283e83a654081aad8b21fef31f7770a"
+    },
+    "arch_delay": {
+      "source": "/home/holden/mckernel/kernel/rust/x86_setup.rs",
+      "definition_start_line": 749,
+      "function_line": 750,
+      "exact_definition": "#[cfg_attr(not(mckernel_equivalence), no_mangle)]\npub unsafe extern \"C\" fn arch_delay(us: CInt) {\n    let tsc = crate::x86_cpu_helpers::rdtsc().wrapping_add(333u64.wrapping_mul(us as CULong));\n    while crate::x86_cpu_helpers::rdtsc() < tsc {\n        cpu_pause();\n    }\n}",
+      "sha256": "e4223e530b91982b7fa60cfc46882af3fc7786a3f8e6e5c3474397d53523dbdc"
+    },
+    "rdtsc": {
+      "source": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "definition_start_line": 183,
+      "function_line": 184,
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn rdtsc() -> CULong {\n    let high: u32;\n    let low: u32;\n\n    core::arch::asm!(\n        \"rdtsc\",\n        lateout(\"edx\") high,\n        lateout(\"eax\") low,\n        options(nomem, nostack, preserves_flags),\n    );\n\n    ((high as CULong) << 32) | (low as CULong)\n}",
+      "sha256": "1e7212a59e84d7cf6e318f8d075033ca8c6e34282678343f2463e29f7e2ec943"
+    }
+  },
+  "existing_C_ABI": {
+    "ihk_mc_delay_us": "OriginalNoMangle unsafeexternC fn(us:CInt)->void. RealcurrentCreference arch/x86_64/kernel/cpu.c3118 takesint/callsarch_delay; no declarednewbehavior.",
+    "arch_delay": "Original #[cfg_attr(not(mckernel_equivalence),no_mangle)] pubunsafeexternC fn(us:CInt)->void; body itself isnotcfg-disabled. Inselecteddefaultnativeprofile no mckernel_equivalence, retainsoriginalCexport. Do notconvertcfg_attrtoalternatefunction/body or addmckernel_equivalence.",
+    "rdtsc": "OriginalNoMangle unsafeexternC fn()->CULong; Cregisters.h86 declaresunsignedlongrdtsc(void). RealCULong=u64/CInt=i32 fromdirectunchangedabi.",
+    "cpu_pause": "Onlygenuineprojectimport CABI fn()->void, actual82579Tsize3alreadyqualified; do notcopyitsdefinition/no-op orimportHostclock/sleep."
+  },
+  "literal_closure": {
+    "ihk_mc_delay_us_to_arch_delay": "Retainactualunsafe callthroughsamegenuineCABI arch_delay. AfiniteunitmaydeclaretheexistinggenuineCABIarch_delay functionwithinoriginalx86_cpu_helpersscope,withactualbodydefinedinitsx86_setup module; no finalproviderfabricated.",
+    "arch_delay_to_rdtsc": "Retainactualcrate::x86_cpu_helpers::rdtsc directpath byincludingtheexactrdtscbodylocallyinthatmodule. No externRust/privateABI/asmrenaming orwholex86module.",
+    "only_remaining_U": [
+      "cpu_pause"
+    ],
+    "source_owned_runtime_data": [],
+    "extra_private_helper_roots": [],
+    "core_assembly": "Actualrdtsc asmuseslateout edx/eax andoptionsnomem/nostack/preserves_flags; combines(highasCULong)<<32|(lowasCULong). No serialization/fence/counterprovider invented.",
+    "arithmetic_and_loop": "Exacttsc=currentrdtsc().wrapping_add(333u64.wrapping_mul(us asCULong));whilerdtsc()<tsc callgenuinecpu_pause. Preserveliteral333, i32tou64cast, wrappingmul/add andunsignedless-than comparison/order. No validation/clamp/signchange or arithmeticrewrite.",
+    "required_source_features": "Actualcorearchasm/no_std/scalars only; no nightlyfeature/callback/allocator/SDKinterface/globalstate required bythissourceclosure. Anycompiler-support/private/dataemission mustbeobservedandreviewed,notguessed."
+  },
+  "default_source_selection": {
+    "Rust": "kernel/rust/lib.rs94 modx86_cpu_helpers and101 modx86_setup areactualselectedmoduleowners. KernelCMake34defaultENABLE_RUST_KERNELON/x86_64branch listsactualsources187/194 andbuildsno_stdRustobject; no independentdelayobjectqualification asserted.",
+    "Cselection": "CurrentkernelCMake637removesIHKcokernel/smp/${ARCH}/setup.c inRustselection. CMake729-730appliesMCKERNEL_RUST_X86_CPU_HELPERS toarchCPUreferenceCsource, preservingacceptedF04selectionfacts. No copied/referenceCendpoint is supplied.",
+    "scope": "AcceptedF04staysclosed/exactunchanged. These source-selectionfacts do not implynewmatchedobject/providerclosure/native/defaultacceptance; no wholecrate/c205/old8/oldcohort/symbolrewrite."
+  },
+  "actual_unique_owner_binding": [
+    {
+      "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kernel-string-provider-unit-1/join-1/output/kernel_string_kprintf_partial.o",
+      "sha256": "f6db3c4f06bd4a7733dfb7638a3f756cf0d3211076c726a1df3c08cf174a0e21",
+      "bytes": 32640,
+      "raw_nm": {
+        "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kernel-string-provider-unit-1/join-1/joined-symbols.stdout",
+        "sha256": "949bf4da6043888a6c74420d7f8a5814835257a9d641a6b139a1e219ad8611fb"
+      },
+      "globalowners": 44,
+      "new3root_intersection": []
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-provider-unit-1/expanded-1/output/kmsg_lock_provider.o",
+      "sha256": "82579b770c4b857bf695b4ae8ca4f52e3ddfe6e64f7322eb222a478b4dd742b8",
+      "bytes": 6128,
+      "raw_nm": {
+        "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-provider-unit-1/expanded-1/provider-symbols.stdout",
+        "sha256": "bb6735ba2019dac0f0e7ff353ff5c8bcee81626d66d18a4b63a0b426518e9250"
+      },
+      "globalowners": 16,
+      "new3root_intersection": []
+    }
+  ],
+  "existing_cpu_pause_owner": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-provider-unit-1/expanded-1/output/kmsg_lock_provider.o",
+    "sha256": "82579b770c4b857bf695b4ae8ca4f52e3ddfe6e64f7322eb222a478b4dd742b8",
+    "name": "cpu_pause",
+    "kind": "T",
+    "bytes": 3,
+    "fact": "Alreadyqualifiedoneactual82579provider; remainsrealimportintheisolated3functionunit, resolvesonlyinafutureexactqualifiedcohortjoin."
+  },
+  "actual_consumer": "Currentloggingdebug.rs169callsihk_mc_delay_us(IHK_KMSG_NOTIFY_DELAY400) afteractualkernel-eventfdnotification. Existingf6dbcohortstillhasgenuineihk_mc_delay_usU; resolvingcodegenedgealonequalifiesnoneofnotificationdelivery/timing.",
+  "timing_boot_and_native_limits": [
+    "Original333factor ispreservedliteral, not calibratedmicrosecondsproof. Currentbodydoesnotreadboot_param.ns_per_tsc, a declaredclockprovider, orHOSTwalltime; do notinferconversionaccuracy/frequencyagreement.",
+    "RealRDTSCavailability/privilege/virtualizationpolicy, counterprogress/frequency/skew/wrap/crossCPUconditions, interruptcontext andactuallyelapsedtiming remainunqualified. No RDTSC/CPU/hardware/functionruntime isauthorizedorperformed.",
+    "Nativeboot/sourcecustody/SDK/current-free/generic-offloadholds remain. Sourcepreparation/ordinaryobjectcodegen ornonexecutedpartialjoin cannotestablishdelaycompletion/boot/native/default/providerclosureacceptance.",
+    "No Hostsleep/fakecounter/constanttimestamp/no-opcpu_pause/namespace/equivalence/callbacksubstitute; no change toeventfd/buffer/preempt/heldsourcebody."
+  ],
+  "decision": "GO_SOURCE_PREPARATION: exact3actualfunctions, no originaldata or privatehelper roots, onegenuinealreadyqualifiedcpu_pauseimport; no source/type/ownerblocker inthisfinitecut. Rootmustexplicitlyselectunitpreparationandexecutionreviews; no implementation/compile/hardware/runtime action implied.",
+  "smallest_next_proof": "Aprepareprivateexact3body/nativeattrs/directactualabi unitwithoriginalmodulepathsandonegenuinecpu_pauseCABIimport, frozenproof/exactcompilerprofile+metadatarequest. IndependentconcreteGO+Rootfreshadmission beforecompiler. Observeallactual3Cexports/imports/private/data/relocs; reusethequalifiedCPUprovider/currentcohort, no oldgreens.",
+  "compiler_link_RDTSC_hardware_function_native_runtime_operations": false,
+  "canonical_index_sourceimplementation_writes": false,
+  "Root_execution_admission": false,
+  "new_quota_gate_score_C_retirement_or_acceptance": false
+}

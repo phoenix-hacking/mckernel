@@ -1,0 +1,21 @@
+{
+  "status": "PASS_PURE_CONTROLS_ONLY",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "checks": [
+    "entire observation/probe/census/postcondition body AST unchanged after admission prefix",
+    "all preexisting helper functions AST unchanged",
+    "original cutoff deterministically expires before observation",
+    "current guard failure propagates before observation",
+    "passing current guard reaches observation barrier exactly once",
+    "ordinary UID requirement retained before guard",
+    "observer HERE/EVIDENCE preserve original retained roots",
+    "resource writer A preserves existing staged request/output namespace"
+  ],
+  "checks_count": 8,
+  "observe_calls": 0,
+  "process_calls": 0,
+  "flock_calls": 0,
+  "Docker_calls": 0,
+  "compiler_calls": 0,
+  "workload_calls": 0
+}

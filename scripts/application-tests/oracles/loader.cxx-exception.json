@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "loader.cxx-exception",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/loader.cxx-exception"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["caught=1 message=fixture inner_destructor=1 valid=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Typed runtime_error crosses the function boundary and is caught with exact message", "The stack guard in the throwing function is destroyed during unwinding"],
+  "unresolved_expectations": ["C++ exception ABI and destructor ordering require Max review."],
+  "max_question_for_reviewer": "Confirm exception unwind preserves the typed catch and exact RAII destruction ordering under the pinned C++ ABI."
+}

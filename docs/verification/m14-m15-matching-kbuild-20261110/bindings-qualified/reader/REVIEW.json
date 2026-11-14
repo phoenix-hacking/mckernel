@@ -1,0 +1,394 @@
+{
+  "approved_exact_operation": {
+    "command_argv": [
+      "/usr/bin/sudo",
+      "-A",
+      "/usr/bin/docker",
+      "--host=unix:///var/run/docker.sock",
+      "create",
+      "--name",
+      "mckernel-module-artifact-qualification-20261110-0708-3",
+      "--pull=never",
+      "--init",
+      "--network=none",
+      "--ipc=private",
+      "--cpus=1",
+      "--cpuset-cpus=6",
+      "--memory=512m",
+      "--memory-swap=512m",
+      "--pids-limit=64",
+      "--ulimit",
+      "fsize=1073741824:1073741824",
+      "--ulimit",
+      "cpu=300:300",
+      "--ulimit",
+      "core=0:0",
+      "--user",
+      "1000:1000",
+      "--read-only",
+      "--cap-drop=ALL",
+      "--security-opt=no-new-privileges",
+      "--tmpfs",
+      "/tmp:rw,nodev,nosuid,noexec,size=32m",
+      "--workdir",
+      "/capture",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2,dst=/source,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/output-2,dst=/output,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/evidence-1,dst=/producer,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/helpers-qualified,dst=/helpers,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/collect-and-qualify.sh,dst=/input/collect-and-qualify.sh,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/artifact-functions-only.py,dst=/input/artifact-functions-only.py,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/helpers.sha256,dst=/input/helpers.sha256,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3,dst=/capture",
+      "--entrypoint",
+      "/usr/bin/env",
+      "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+      "-i",
+      "LANG=C",
+      "LC_ALL=C",
+      "PATH=/usr/sbin:/usr/bin:/sbin:/bin",
+      "TZ=UTC",
+      "PYTHONDONTWRITEBYTECODE=1",
+      "/usr/bin/bash",
+      "--noprofile",
+      "--norc",
+      "-p",
+      "-e",
+      "-o",
+      "pipefail",
+      "/input/collect-and-qualify.sh"
+    ],
+    "expected_outputs": [
+      "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/records/kbuild-link-closure.json",
+      "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/artifact-contract-functions.json",
+      "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/QUALIFIED-INPUTS.sha256",
+      "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/Module.symvers",
+      "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/vmlinux.symvers",
+      "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/resolved.config",
+      "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/kernel.release",
+      "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/bzImage",
+      "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/provider-export-owner-namespace.tsv",
+      "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/component-objects.sha256"
+    ],
+    "mounts": [
+      {
+        "destination": "/source",
+        "read_only": true,
+        "source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2"
+      },
+      {
+        "destination": "/output",
+        "read_only": true,
+        "source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/output-2"
+      },
+      {
+        "destination": "/producer",
+        "read_only": true,
+        "source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/evidence-1"
+      },
+      {
+        "destination": "/helpers",
+        "read_only": true,
+        "source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/helpers-qualified"
+      },
+      {
+        "destination": "/input/collect-and-qualify.sh",
+        "read_only": true,
+        "source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/collect-and-qualify.sh"
+      },
+      {
+        "destination": "/input/artifact-functions-only.py",
+        "read_only": true,
+        "source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/artifact-functions-only.py"
+      },
+      {
+        "destination": "/input/helpers.sha256",
+        "read_only": true,
+        "source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/helpers.sha256"
+      },
+      {
+        "destination": "/capture",
+        "read_only": false,
+        "source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3"
+      }
+    ],
+    "pass_predicate": "Existing link validator produces exact canonical closure and rechecks it; artifact-only semantic functions pass on the same actual3KO; required raw emitted/codegen/provider files and exact hashes are preserved; Root then reviews complete owner/type/import obligations and unresolved rows. Script success alone grants no original acceptance.",
+    "resource_proposal": {
+      "admission": "Only after builder retires, under same actual grant and Root fresh shared resource/owner evidence; no native2-5/12GiB or retained18GiB/UNKNOWN reallocation.",
+      "aggregate_jobs_max": 3,
+      "cpu_set": [
+        6
+      ],
+      "extra_disk_planning_bytes": 1073741824,
+      "host_disk_floor_GiB": 16,
+      "jobs": 1,
+      "max_per_capture_file_bytes": 1073741824,
+      "memory_bytes_including_tmpfs": 536870912,
+      "memory_swap_total_bytes": 536870912,
+      "min_fresh_MemAvailable_GiB": 26,
+      "pids": 64,
+      "scratch_disk_floor_GiB": 12,
+      "sharedHOST_total_all_overhead_bytes": 4294967296,
+      "wall_seconds": 600
+    }
+  },
+  "checkpoint_binding": {
+    "Root_PUSHED_FETCHED_at": "2026-11-10T13:39:54Z",
+    "all_eight_rows": [
+      {
+        "git_blob_sha1": "5be20eaf47ad3b3efaeb407f6f379a5c55f78345",
+        "path": "scripts/native_rust_kbuild_link_closure.py",
+        "sha256": "33d7bd01c5291a4f94c12f6636a5d90e11b12fe8c5c8be3afc88bf097b177833",
+        "size": 70920
+      },
+      {
+        "git_blob_sha1": "29aa23f482da7359b4633c7d9cddbbbe9e54ff6c",
+        "path": "scripts/ihk_native_lifecycle_check.py",
+        "sha256": "1fe24f5c1855c9ce97858f3541cf70e5311e49fb1b9ddb3ccf0535ca8e273748",
+        "size": 65866
+      },
+      {
+        "git_blob_sha1": "350ca6964a099bb339babe08d5fe8d6b4059625a",
+        "path": "scripts/ihk_smp_native_lifecycle_check.py",
+        "sha256": "9133a587e9a11fec6c2dbab48268ed6dd245fe69d3b4f37c66119a890e74d084",
+        "size": 111339
+      },
+      {
+        "git_blob_sha1": "a63fc17f4143a0530cfec170ab4a17cbeab13987",
+        "path": "scripts/mcctrl_native_lifecycle_check.py",
+        "sha256": "26c1f4dfff1918e5d2e97825b9aeb624247678f5edd9634098f2d3caaed48504",
+        "size": 56322
+      },
+      {
+        "git_blob_sha1": "3aef58352c314776230a247463c50a16edb79101",
+        "path": "host-kernel/native-rust/ihk-lifecycle-contract-v1.json",
+        "sha256": "de6a8f4121ed992abba680026c5c23c4324ef5c7cdd5ddb92ed1d31889826fd5",
+        "size": 7024
+      },
+      {
+        "git_blob_sha1": "6f079546539bbd722428d3ec29924f3807e52ed3",
+        "path": "host-kernel/native-rust/ihk-smp-lifecycle-contract-v1.json",
+        "sha256": "a5b9818be9ccfb36516bb62d1f0114196651a83c41befee4f0fffd39770b4185",
+        "size": 14966
+      },
+      {
+        "git_blob_sha1": "cd7fdd60572fcf768a110012780473f58f167066",
+        "path": "host-kernel/native-rust/mcctrl-lifecycle-contract-v1.json",
+        "sha256": "99a007d78106c22f82ec1a928be8a5bd468ef2197eed19235ccaa9a34805b34f",
+        "size": 5458
+      },
+      {
+        "git_blob_sha1": "c28c7e4dc1c85941002f61f15803bea3e9c270c6",
+        "path": "scripts/native_rust_kconfig_policy.py",
+        "sha256": "3e3e73a3ea0ef090dba1a7e79ff250e3ff3cb80377d51d5398edb7b74ee6467b",
+        "size": 8623
+      }
+    ],
+    "checksum_join": "Exactly eight absolute /helpers rows, one per manifest entry, with exact matching SHA256 and no extra/missing/duplicate row. The unchanged e08 script consumes that same readonly checksum destination.",
+    "commit": "8f7d0dc7a814569ad55195860aa4aa48761018a8",
+    "exact_paths": [
+      "scripts/native_rust_kbuild_link_closure.py",
+      "scripts/ihk_native_lifecycle_check.py",
+      "scripts/ihk_smp_native_lifecycle_check.py",
+      "scripts/mcctrl_native_lifecycle_check.py",
+      "host-kernel/native-rust/ihk-lifecycle-contract-v1.json",
+      "host-kernel/native-rust/ihk-smp-lifecycle-contract-v1.json",
+      "host-kernel/native-rust/mcctrl-lifecycle-contract-v1.json",
+      "scripts/native_rust_kconfig_policy.py"
+    ],
+    "independent_local_object_read": "Read exactly the eight requested commit paths with git ls-tree/cat-file as source data. All8 commit path/blob IDs, content sizes and SHA256 values match the manifest. No fetch, archive materialization, helper import or payload was performed.",
+    "materialization": "Root alone archives only these eight actual8f7 commit paths into the fresh helpers-qualified root, verifies manifest/checksums and real/nonsymlink output paths, and admits the operation. No full-repository/evidence/source copy is authorized.",
+    "only_changed_row": {
+      "new": {
+        "git_blob_sha1": "29aa23f482da7359b4633c7d9cddbbbe9e54ff6c",
+        "path": "scripts/ihk_native_lifecycle_check.py",
+        "sha256": "1fe24f5c1855c9ce97858f3541cf70e5311e49fb1b9ddb3ccf0535ca8e273748",
+        "size": 65866
+      },
+      "old": {
+        "git_blob_sha1": "0db90b3271e3acfcbd3f95e8e3ffc818ed0e4044",
+        "path": "scripts/ihk_native_lifecycle_check.py",
+        "sha256": "89e11f815960ba0159190c398e8292947b2491bcafdbf1713525a824e28ee437",
+        "size": 65765
+      }
+    },
+    "unchanged_seven": "Compared to5fb/19e manifest: validator33d7 and the other six rows are byte/hash/blob-identical. Only IHK helper89e11->qualified1fe24 changes."
+  },
+  "checksums": {
+    "bytes": 974,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/helpers.sha256",
+    "sha256": "4c8e58da0d74b0e52e39bcd19a3d74adb529f9953440c323ecf5ea9e5f961f93"
+  },
+  "created_at_utc": "2026-11-10T13:44:18.091610+00:00",
+  "exact_delta": {
+    "all_other_argv_identical": true,
+    "argv_delta_indices": [
+      6,
+      38,
+      44,
+      46
+    ],
+    "base_request": {
+      "bytes": 22742,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/qualified-validator-reader-1/REQUEST.json",
+      "sha256": "19e72277a707c7d94c966635612f590201f543002a7815d1c104a0108280449d"
+    },
+    "changes": {
+      "38": "new readonly eight-helper root",
+      "44": "new readonly checksum source, same container destination",
+      "46": "fresh capture-3 writable root",
+      "6": "new container name"
+    },
+    "expected_outputs": "All same ten expected outputs under new capture-3 only; exact prefix substitution reproduces the successor output list.",
+    "failure_preserved": {
+      "failed_execution": {
+        "bytes": 1047,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/qualified-validator-reader-1/execution-1/RESULT.json",
+        "sha256": "c4d65665bac252dcd8a247f028945275436dd4bcc8d078d07918cd68503708f7"
+      },
+      "old_request": {
+        "bytes": 22742,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/qualified-validator-reader-1/REQUEST.json",
+        "sha256": "19e72277a707c7d94c966635612f590201f543002a7815d1c104a0108280449d"
+      },
+      "raw_diagnostic": {
+        "bytes": 830,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/qualified-validator-reader-1/execution-1/payload.stderr",
+        "sha256": "c4ec7d05faf4d007a023fb394f1e383c0b2141280d727379cc7462fef98b2e25"
+      }
+    },
+    "unchanged_fields_independently_compared": [
+      "production099",
+      "IHK8d",
+      "config106055",
+      "resource_proposal",
+      "consumed_records",
+      "script e08",
+      "adapter4f",
+      "producer_precondition",
+      "original_check_ids",
+      "scope",
+      "pass_predicate",
+      "prohibited",
+      "remaining original checks",
+      "patched provider review input"
+    ],
+    "unchanged_producer": {
+      "actual_artifact_pin_manifest": {
+        "bytes": 812,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/evidence-1/artifacts.sha256",
+        "sha256": "b2dce9418a2dab3a32473a965d74ed520e0518e84023e2a8bdbb3e0b69c2ad6c"
+      },
+      "final_result_sha256": "1e8994e6f0c160f81ce7f466e06251d16a8a93bdc2eba0ca497a27c990d67450",
+      "live_result_path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/resource-2g-1/execution-1/RESULT.json",
+      "positive_owned_retirement_recorded": true,
+      "predicted_artifacts_are_conditional": false,
+      "required": "Root must freshly reconcile operation-specific CPU6/512MiB ownership/resources before this single reader; actual producer0/three matchingKO/all8pins and positive producer retirement are recorded, but full artifact qualification remains pending. No overlapping builder or second lane.",
+      "technical_status": "PASS_TECHNICAL_MATCHING_BUILD_PENDING_ARTIFACT_QUALIFICATION"
+    },
+    "unchanged_scripts_hashed": {
+      "artifact_adapter": {
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/artifact-functions-only.py",
+        "scope": "Calls only existing artifact functions on actual module bytes and previously qualified exact contract-derived summaries; no validate_repository/source-suite or compiler/config revalidation.",
+        "sha256": "4f201c32769ed91141f0763c5b02397b6772387c4b6c771b37f1310140af0192"
+      },
+      "collector": {
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/collect-and-qualify.sh",
+        "sha256": "e08f72fc36df51aab7757ba88a732117de0985af6698be3c0c409c958f9159fd"
+      }
+    }
+  },
+  "fresh_Root_conditions": [
+    "Reconcile actual current owners/account/stop/source/permission and exact name absence; no overlapping builder or second Docker lane. Prior producer0 and positive retirement are reused but never imply current-free resources.",
+    "CPU6/onejob/container512MiB including tmpfs and512MiB total swap must fit sharedHOST4GiB including ALL controller/worker overhead/max3jobs, fresh26GiB MemAvailable, host16/scratch12GiB floors plus1GiB capture planning. Preserve prior18GiB/native2-5/12GiB/CPU1 exclusion and UNKNOWN reservations.",
+    "Root creates the exact fresh helper root and capture-3, correct1000 ownership, real/nonsymlink paths and writable fresh capture; neither root existed at review readback. No old failed captures or producer/source/output bytes are overwritten.",
+    "Inspect the actual created immutable-ID profile, then enforce the unchanged600s whole-operation daemon-ID deadline and exact-owned stop/kill/join/terminal inspection/removal. Save direct PID/birth waits, stream closure, exit/OOM/metrics and cleanup; UNKNOWN retains owner/resource and stops dependent work.",
+    "Run only this corrected reader. No new build/config/rustavailable/tool census, matrix/source suite, prior five/eight tests, module insertion/native/signature acceptance or held graph is admitted."
+  ],
+  "holds_unchanged": [
+    "Current/adoption runtime opt-in remainsOFF",
+    "Heldv12/prepare/control-receipt and remaining12 APIs",
+    "HOLD-GENERIC and generic/exec/replay/equivalent=false",
+    "Native/currentfree/source/resource UNKNOWN owners",
+    "Service/account/spend/permission/stop holds",
+    "M14-before-M15 acceptance"
+  ],
+  "manifest": {
+    "bytes": 2478,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/HELPER-INPUTS.json",
+    "sha256": "2a5210f13900721adfd585429d662efa76e8b715965dbb64975e44d3e839586a"
+  },
+  "no_acceptance_credit": "Reader success supplies actual emitted owner/type/provider inputs for focused independent qualification. It does not automatically classify every vmlinux symbol as unchanged platform, accept full ABI/image/module-load/native behavior, retire C or change M14/M15 acceptance/percentages.",
+  "qualified_fix_receipt_binding": {
+    "actual_execution": {
+      "bytes": 3641,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/export-contract-tests-1/execution-1/RESULT.json",
+      "sha256": "c1a1a4b6684291cd0b9700cb53c7c5c7cd5f785ba3f30723c0d52431ed7ffc0c"
+    },
+    "actual_result": {
+      "bytes": 2755,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/export-contract-tests-1/output-1/results.json",
+      "sha256": "173f3a5ca84d8a2810a86c19fec5a9e63e7df3574afd71a9d001e82e1c739ed5"
+    },
+    "actual_result_count": 5,
+    "actual_result_status": "PASS_ACTUAL_EXPORT_GUARD_AND_FOUR_STRICT_REJECTIONS",
+    "independent_actual_result_GO": {
+      "bytes": 10349,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/export-result-review-p03-max-1/REVIEW.json",
+      "sha256": "451cebdc0baefde3637c9d2d6f97c581efe90dd869025552ec82485be38f133d"
+    },
+    "material_source_GO": {
+      "bytes": 28821,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/kernel-modules-review-source-acquisition-max-1/artifact-qualification-1/module-export-contract-reconciliation-1/REVIEW.json",
+      "sha256": "a6fbacaded22eb593e81ef60692f5026bf57affe5babd00866518fa92523f110"
+    },
+    "receipt_exit": 0,
+    "receipt_ownership": [
+      {
+        "adopted_kills": [],
+        "adopted_reaps": [],
+        "error": null,
+        "label": "export-guard",
+        "leader": 948420,
+        "leader_birth": "40390909",
+        "leader_group_signalled": false,
+        "leader_parent_joined": true,
+        "remaining_direct_children": [],
+        "status": 0,
+        "streams_closed": true,
+        "timed_out": false,
+        "whole_descendants_joined": true
+      }
+    ],
+    "receipt_status": "PASS_ACTUAL_EXPORT_GUARD_AND_FOUR_STRICT_REJECTIONS",
+    "result_reuse": "Bound receipts have exact declared bytes/hashes. Actual saved-nm positive plus unknown/v12/prepare/receipt strict rejections are PASS and independently reviewed by P03/451c. Reuse those results without another five-case or eight-validator replay. Qualified candidate1fe24 equals the committed changed blob.",
+    "source_and_test_profile_GO": {
+      "bytes": 16102,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/export-contract-tests-review-source-acquisition-max-1/REVIEW.json",
+      "sha256": "9d59dbe39656c18d1467b70ec74f6172550a3685c88291de2ccd385a6569151b"
+    }
+  },
+  "remaining_original_conditions": "Independent focused emitted ownership/ABI/provider review over new actual evidence; resolve every required unknown owner/type/import obligation, preserving full original conditions. Do not automatically classify allvmlinux exports as unchangedplatform.",
+  "request": {
+    "bytes": 25941,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/REQUEST.json",
+    "sha256": "bfac9cf1c6a245ce884d05df1a4fb595d6d7438fc5f4be11e1ec01af71f4e8be"
+  },
+  "reviewer": "/root/source_acquisition_review_max",
+  "reviewer_actions": "Exact packet/saved-receipt reads, source Git-object reads, data-only hash/manifest/argv comparison and this private REVIEW write. No source/test/SUT import, compiler/probe/Docker/network/native execution, canonical mutation or recursive agents.",
+  "scope": "Delta-only binding review of the qualified two-literal IHK helper, checkpoint/manifest/checksum, actual strict-PASS receipts and fresh output. Source/ABI/lifetime, test semantics, unchanged seven helpers, collector/adapter/profile and producer reviews are reused, not repeated.",
+  "source_preparation_result": {
+    "bytes": 5351,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/RESULT.json",
+    "sha256": "23af2c1c110b6c7cd8f2f25ea31b18320fcbddd7acacd242f249f6de76bc9aca"
+  },
+  "status": "GO_EXACT_CHANGED_HELPER_RECEIPT_FRESH_READER_BINDING_AFTER_ROOT_FRESH_ADMISSION"
+}

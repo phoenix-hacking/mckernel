@@ -1,0 +1,64 @@
+{
+  "schema": "mckernel.native-exact-export25-heavy-build-attempt1-failure.v1",
+  "recorded_at": "2026-09-30T20:06:15-07:00",
+  "source_commit": "85d254decff25994c3140a9dc5ecc9a3944ccfbd",
+  "candidate_commit": "6fed3a1022db0b4f9828dd42a8bd8f88fc052053",
+  "request": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-request-6fed3a10-exportset-25.json",
+    "sha256": "9923b51f8765040b7a4ea4b66669e5adb412e8f675196b9cc17499fba313461d"
+  },
+  "owner": {
+    "path": "scripts/native_rust_exact_mckernel_image_container_owner.py",
+    "sha256": "a6d6ffaaa84fd5fd5090875b7ec7829c136b55af81104cf630ecc273ed9df7f0"
+  },
+  "released_command": "/usr/bin/python3 -I -B scripts/native_rust_exact_mckernel_image_container_owner.py /home/holden/mckernel-work/scratch/native-exact-mckernel-image-request-6fed3a10-exportset-25.json",
+  "attempt": {
+    "invocations": 1,
+    "returncode": 1,
+    "stdout": "",
+    "stderr_tail": [
+      "Traceback (most recent call last):",
+      "  File \"scripts/native_rust_exact_mckernel_image_container_owner.py\", line 151, in <module>",
+      "    _HOST_OWNER = _load_reviewed_host_owner(",
+      "  File \"scripts/native_rust_exact_mckernel_image_container_owner.py\", line 123, in _load_reviewed_host_owner",
+      "    host_bytes = source_bytes(path, host_sha256, \"host owner\")",
+      "  File \"scripts/native_rust_exact_mckernel_image_container_owner.py\", line 106, in source_bytes",
+      "    raise RuntimeError(label + \" is not a regular source file\")",
+      "RuntimeError: host owner is not a regular source file"
+    ],
+    "release_consumed": true,
+    "retry_authorized": false
+  },
+  "diagnosis": {
+    "failure_family": "relative-entrypoint-authenticated-import",
+    "observed_source": "_HOST_OWNER_PATH = Path(__file__).with_name(...) followed by a source_bytes() requirement that candidate.is_absolute()",
+    "cause": "The reviewed command used a relative script entry point, so Python supplied a relative __file__; the import-time authenticated loader rejected the derived relative host-owner path before request parsing or owner execution.",
+    "bounded_next_correction": "Add a disposable regression proving relative-entrypoint rejection and absolute-entrypoint import, then obtain independent review for an exact absolute-path owner command. Do not reuse this consumed release."
+  },
+  "preflight": {
+    "host_free_bytes": 28661276672,
+    "scratch_free_bytes": 16797904896,
+    "mem_available_kib": 27858200,
+    "docker_containers_total": 41,
+    "docker_containers_running": 2,
+    "competing_heavy_process": false
+  },
+  "postflight": {
+    "recorded_at": "2026-09-30T20:06:15-07:00",
+    "host_free_bytes": 28658655232,
+    "scratch_free_bytes": 16797904896,
+    "mem_available_kib": 27858896,
+    "matching_owner_driver_guest_processes": [],
+    "docker_containers_total": 41,
+    "docker_containers_running": 2,
+    "new_matching_container": false,
+    "work_root_entries": 0,
+    "owner_evidence_root_entries": 0,
+    "output_root_present": false,
+    "evidence_root_present": false,
+    "attempt_root_present": false,
+    "lease_present": false,
+    "common_exclusion_present": false
+  },
+  "scope": "Original failed heavy-build invocation and read-only postflight only. No image was compiled, no Docker container was created, no guest or application ran, and no acceptance counter changes."
+}

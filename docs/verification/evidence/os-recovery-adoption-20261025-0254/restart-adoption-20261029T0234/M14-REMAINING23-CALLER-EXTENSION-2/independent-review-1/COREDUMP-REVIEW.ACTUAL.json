@@ -1,0 +1,93 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/recovery_receipts",
+  "independent": true,
+  "implementation_ownership": false,
+  "approved_intent": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-CALLER-EXTENSION-2/ROOT-CONTRACTS.APPROVED-INTENT.json",
+    "bytes": 1767,
+    "sha256": "adf6bbb7c1ae16bf8f8edae8d24a7a221a8d34f3c4ae059c167e6267e4b5a1e4"
+  },
+  "trace": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-B-1/whole-abi-and-callers-2/CALLER-AND-LIFETIME-TRACE.json",
+    "bytes": 6441,
+    "sha256": "662e1fdb7170b4d882f353d2817f5efa50824f4e078bfb8f2eab3686c3482667"
+  },
+  "trace_subjects": {
+    "source2_C": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-LARGE-COMPOSITION-2/postimage/kernel/syscall.c",
+      "bytes": 935691,
+      "sha256": "fe852e4a9b2d5d58ca38cf51181a5291719d1eadfd7cab0d7621272bda29d93c"
+    },
+    "source2_Rust": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-LARGE-COMPOSITION-2/postimage/kernel/rust/syscall_policy.rs",
+      "bytes": 1328583,
+      "sha256": "c3daed2f58bf070b1ca98a493ae5b1faad85996a2e0d6f8e327a423744e1bac2"
+    },
+    "snapshot_mem_helpers": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-ACTUAL-SNAPSHOT-1/rust-subtree/mem_helpers.rs",
+      "bytes": 444772,
+      "sha256": "f544c5177156ad5de8544bb95c46bbc8e2ac870a25c4895ca4cefb7c8cc79680"
+    },
+    "host_dispatcher": {
+      "path": "/home/holden/mckernel/executer/kernel/mcctrl/rust/mcctrl_helpers.rs",
+      "bytes": 403227,
+      "sha256": "abc99c0e160d3a8aa1aa182f37f297cf3827f86faaac559117ae4df3197e9d14"
+    }
+  },
+  "source_bindings": {
+    "kernel/rust/abi.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    "kernel/rust/syscall_policy.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "bytes": 1301841,
+      "sha256": "07cb4bff5a0a9a0d582ebc18e344e5cf06ccd6fc37005292c757ef0501ea50eb"
+    },
+    "executer/user/mcexec.c": {
+      "path": "/home/holden/mckernel/executer/user/mcexec.c",
+      "bytes": 221546,
+      "sha256": "310301305e41bab4eda63026849ee6f166bb6e5d4d6f2c789aa8003e94745056"
+    },
+    "executer/user/rust/mcexec_helpers.rs": {
+      "path": "/home/holden/mckernel/executer/user/rust/mcexec_helpers.rs",
+      "bytes": 255596,
+      "sha256": "d786abc498f5951c65b28246071fcbbe8023392f2cf7a372902fa76b259ed73d"
+    },
+    "executer/kernel/mcctrl/rust/mcctrl_helpers.rs": {
+      "path": "/home/holden/mckernel/executer/kernel/mcctrl/rust/mcctrl_helpers.rs",
+      "bytes": 403227,
+      "sha256": "abc99c0e160d3a8aa1aa182f37f297cf3827f86faaac559117ae4df3197e9d14"
+    },
+    "executer/kernel/mcctrl/syscall.c": {
+      "path": "/home/holden/mckernel/executer/kernel/mcctrl/syscall.c",
+      "bytes": 88788,
+      "sha256": "6b769f9433be6c03dea41e5962d8ac44ce7c0903fe417d43eff7581ab2591450"
+    },
+    "executer/user/CMakeLists.txt": {
+      "path": "/home/holden/mckernel/executer/user/CMakeLists.txt",
+      "bytes": 28027,
+      "sha256": "a77da8f2ccaf54997c043cf30c22c8e67fedd3b7b318b54709df2820f29f5e4b"
+    }
+  },
+  "compiler": 0,
+  "native": 0,
+  "guard": 0,
+  "proc": 0,
+  "runtime_authority": null,
+  "implementation_review": null,
+  "case": "COREDUMP-UNUSED4-5",
+  "decision": "PASS_NARROW_DEFINED_UNUSED_SLOT_CONTRACT_WITH_EXISTING_LIFETIME_OBLIGATIONS_OPEN",
+  "findings": [
+    "Actual selected snapshot mem_helpers coredump uses MaybeUninitSyscallRequest; writes metadata.syscall_number and args0=chunks(CInt\u2192CULong),1=tablephysical,2=saved_cmdlinephysical,3=saved_cmdline_len(CULong), then mem_core_syscall. Defining only4/5=0 immediately before that call preserves every original source/conversion.",
+    "Selected mcctrl Rust dispatcher copies full6args, then NR_COREDUMP999 invokes writecore(os,args1,args0 as c_int,args2,args3) and existing return/release helper. Selected C ops binds writecore existing provider;4/5 are not forwarded to this semantic consumer. Zeroing them defines copied transmittedwords without changing selectedwritecoreinputs.",
+    "Preserve result mem_core_syscall(...,thread.cpu_id) asCInt and original error/log/freecore order. After call returns freecore frees base table via existinggencore ownership; no new completion/ACK claim or earlier/laterfree."
+  ],
+  "implementation_conditions": [
+    "Private Rustpatch writes only args.add(4).write(0) and args.add(5).write(0) before mem_core_syscall after original0..3 writes. Do not whole-request zero, altermetadata syscallnumber, or write helper-ownedrtid/ttid/valid.",
+    "Chunks must be initialized by successful gencore before assume_init; table and allchunkextents, savedcmdline and VM mappings, stackrequest and descriptors must remain valid through real offload/read/writecore completion. Existing barrier/currentthread/process ownership and gencorefreecore lifetime obligations remain open.",
+    "Actual selectedABI23/29 and provider/link/profile bindings remain future; preserve allfile/line macros/metadata389, follower/result/error conventions and original undefined-domain evidence. No general zero/lifetime/native/service clearance."
+  ]
+}

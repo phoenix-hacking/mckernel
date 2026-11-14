@@ -1,0 +1,104 @@
+{
+  "status": "PASS_CALLED_ACTUAL_LOCAL_ACCESSOR_AND_ORIGINAL_NONE_SLOT",
+  "object_sha256": "65499b6bfb5acccf886e6080d92c1fe524092f63749fdc49a79f630e66d67591",
+  "actual_T": [
+    "get_x86_cpu_local_variable"
+  ],
+  "genuine_U": [
+    "locals"
+  ],
+  "actual_slot": {
+    "name": "x86_issue_ipi",
+    "bytes": 8,
+    "alignment": 8,
+    "section": ".lbss.x86_issue_ipi",
+    "NOBITS_declaration_only": true,
+    "target_relocations": 0,
+    "original_None_preboot_only": true
+  },
+  "actual_function_evidence": {
+    "get_x86_cpu_local_variable": {
+      "symbol": {
+        "name": "get_x86_cpu_local_variable",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "section": 3,
+        "value": 0,
+        "size": 21
+      },
+      "section": {
+        "name_offset": 79,
+        "type": 1,
+        "flags": 268435462,
+        "address": 0,
+        "offset": 64,
+        "size": 21,
+        "link": 0,
+        "info": 0,
+        "align": 16,
+        "entry_size": 0,
+        "index": 3,
+        "name": ".ltext.get_x86_cpu_local_variable"
+      },
+      "actual_bytes_hex": "48b900000000000000004863c748c1e00e480301c3",
+      "actual_bytes_sha256": "faf8a3352b91f23d84c7de10f163c9fd802f110bf94bb90468a48c8c02dabb81",
+      "actual_relocations": [
+        {
+          "section": 3,
+          "offset": 2,
+          "type": 1,
+          "symbol": {
+            "name": "locals",
+            "bind": 1,
+            "type": 0,
+            "other": 0,
+            "section": 0,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 0
+        }
+      ]
+    }
+  },
+  "actual_unwind": {
+    "section": {
+      "name_offset": 64,
+      "type": 1879048193,
+      "flags": 2,
+      "address": 0,
+      "offset": 144,
+      "size": 56,
+      "link": 0,
+      "info": 0,
+      "align": 8,
+      "entry_size": 0,
+      "index": 8,
+      "name": ".eh_frame"
+    },
+    "actual_bytes_sha256": "1336f3255fd1c4a08dcd89f404af8de0f5f6a4eeb7d7aae9d4bc915cf1ef8321",
+    "actual_relocations": [
+      {
+        "section": 8,
+        "offset": 32,
+        "type": 24,
+        "symbol": {
+          "name": "",
+          "bind": 0,
+          "type": 3,
+          "other": 0,
+          "section": 3,
+          "value": 0,
+          "size": 0
+        },
+        "addend": 0
+      }
+    ]
+  },
+  "capture": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-local-metadata-1/correction-1/combined/LOCAL-ACTUAL-ELF-METADATA.json",
+  "actual_private_FUNC_OBJECT": [],
+  "original_inline_local_addr_inlined_no_other_owner": true,
+  "no_locals_redefinition_fake_mapping_or_runtime_callback_readiness": true,
+  "no_function_slot_read_call_init_publication_CPUlocal_hardware_or_native_execution": true
+}

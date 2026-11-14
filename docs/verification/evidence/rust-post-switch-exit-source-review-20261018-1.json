@@ -1,0 +1,53 @@
+{
+  "schema": "mckernel-independent-source-review-v1",
+  "reviewer": "/root/rust_post_switch_exit_review",
+  "author": "/root/rust_post_switch_exit_cutover",
+  "scope": "Functioning supported-profile kernel/apps per PRACTICAL-GOAL plus active live compute C retirement into Rust/reviewed assembly; original qualification remains deferred.",
+  "decision": "PASS_SOURCE_AND_FOCUSED_ABI_REVIEW",
+  "candidate_sha256": {
+    "kernel/process.c": "d87e1f7d73b8f634bc715efbd84ff9d2b5b267231cceabc7aa5cf1562dbfb37b",
+    "kernel/rust/sched_helpers.rs": "59fde97704260b75cf03e7db476ea8cba537c2805476c86981f3f7816f2aa26e"
+  },
+  "packet_sha256": "6700e61c4c615f73ac37b0e96d1e438aefc2169d0246eeac63b1108bd7890649",
+  "patch_sha256": "d69db6044e593089993870ae7fb5a6fedbb4d336d1525cfaecff96c274a14277",
+  "frozen_baseline": "98384c9bf1c267f5815cbc6dc71ffccf740cc9f2",
+  "blocking_findings": [],
+  "reviewed_invariants": [
+    "The exact old selected C branch is present in the hash-bound baseline and is removed only from the selected Rust continuation; legacy fallback bytes remain identical.",
+    "Original current-CPU runqueue unlock and runq_irqstate restoration precede helper invocation, retaining migration and IRQ entry semantics.",
+    "NULL or non-exited last returns before old_cpu or optional descriptor data are read; equality against forwarded PS_EXITED retains original exact-status decision.",
+    "Exited path writes original pre-switch old_cpu.prevpid=0, flushes instruction cache, releases last, decrements thread accounting, then evaluates optional debug output.",
+    "No last field/address is dereferenced after release; protected-mapping mutation control faults as intended. Descriptor points to independent static/global data.",
+    "C forwards only types, field addresses and IHK_MAX_NUM_PGSIZES under existing #ifdef; no new C compute implementation. Rust owns branch, ordering, decrement call and debug loops/output.",
+    "repr(C) descriptor types match const unsigned long*, const long*, int and x86_64 field offsets 0/8/16/24/32, alignment8,size40. Existing real abi.rs supplies Thread/CpuLocalVar fields.",
+    "RUSAGE_DEBUG absent yields NULL; defined, including =0, retains original enabled output. Post-decrement zero guard, formatting, long widths, RSS-before-mapped order and bounds match original C.",
+    "Existing default ENABLE_RUST_KERNEL ON and process.c MCKERNEL_RUST_PROCESS_HELPERS route selected schedule to the Rust export; existing sched_helpers module is included. Extracted selected objects have a real unresolved consumer reference, fallback does not.",
+    "arch_flush_icache_all/release_thread/rusage_num_threads_dec/kprintf are existing compatible exported ABI endpoints; no new allocator ownership or global layout assumption."
+  ],
+  "validation": {
+    "result": "PASS",
+    "packet_sha256": "6700e61c4c615f73ac37b0e96d1e438aefc2169d0246eeac63b1108bd7890649",
+    "verified_author_artifacts": 790,
+    "verified_author_statuses": 254,
+    "author_negative_statuses": {
+      "read-after-free-negative.status": -11,
+      "release-before-flush-negative.status": -6,
+      "wrong-cpu-negative.status": -6,
+      "account-before-release-negative.status": -6,
+      "wrong-unlock-order-negative.status": -6
+    },
+    "independent_checks": [
+      "Actual C/Rust descriptor size/alignment and all five field offsets match on x86_64.",
+      "RUSAGE_DEBUG defined as 0 retains original #ifdef-enabled output semantics.",
+      "Actual candidate Rust object versus original C continuation: NULL and exited, migrated CPU, IRQ enabled; four children agree."
+    ]
+  },
+  "limitations": [
+    "Extracted production-body fixture and descriptor checks are source/ABI evidence only; not full target compilation or production linked-image/native acceptance.",
+    "Actual current frozen combined image remains untouched. No additional native apps or current-candidate production image builds.",
+    "Existing rusage concurrency semantics are preserved; this patch does not introduce an atomic accounting redesign or retire release_thread internals/whole scheduler."
+  ],
+  "next_actual_production_observation": "After current image freeze completes, integrate exact reviewed patch into the next candidate; compile process.c against actual production headers plus full Rust target, prove linked default schedule references this export and C selected branch is absent, then obtain separately released native scheduler/thread lifecycle evidence before claiming this path retired.",
+  "ownership": "Reviewer wrote only its private evidence directory; no implementation files, root/Docker/build/guest/Git/subagents/service transport actions.",
+  "failure_history": "No independent check failures; all five author intentional mutation failures preserved. No real production execution attempted."
+}

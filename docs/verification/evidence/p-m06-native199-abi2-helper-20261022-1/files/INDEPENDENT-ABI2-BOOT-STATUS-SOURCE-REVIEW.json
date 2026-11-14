@@ -1,0 +1,80 @@
+{
+  "actual_gate": {
+    "bytes": 430,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/actual-status-gate.inc",
+    "sha256": "3f2bdfa551ce8baacafc3749bfa58110663f6082ba728044209a0ba70a71b58f"
+  },
+  "actual_helper_artifact_acceptance": null,
+  "actual_stage": null,
+  "base": {
+    "bytes": 10760,
+    "path": "/home/holden/mckernel-work/scratch/native-ultra-futex-guest-20260909-2026091302/boot-probe-source/native-boot.c",
+    "sha256": "f9f6a0b266ef4a3da40dfe454cf511b7862b5457e42f92361b6a67aed7bb64b0"
+  },
+  "canonical_edits": 0,
+  "compiler_runs": 0,
+  "created_utc": "2026-10-22T22:55:39.910405+00:00",
+  "decision": "PASS_SOURCE",
+  "established_consumer_provenance": {
+    "contract": "Read raw status,retain signed observation,log expected5,strict require5.",
+    "lines": [
+      282,
+      289
+    ],
+    "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/two-cpu-running-query-correction-1/native-boot-two.c"
+  },
+  "execution_release": null,
+  "findings": [],
+  "fixture": {
+    "bytes": 1537,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/actual-status-gate-fixture.c",
+    "sha256": "cf99fa7466e22e2ad347d5ce036620652d1f31fb009c2f3d32e12833b60294d5"
+  },
+  "guest_runs": 0,
+  "header": {
+    "bytes": 284,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/native-boot-status-contract.h",
+    "sha256": "f9e6e105d3f8b17a5d8b119f732ac1e47f79e51267a2e9c3151f8170960da44b"
+  },
+  "milestone_credit": null,
+  "native_acceptance": null,
+  "original_compile_record": {
+    "bytes": 125262,
+    "path": "/home/holden/mckernel-work/scratch/native-ultra-futex-guest-20260909-2026091302/record.json",
+    "sha256": "1a334354c1a93f35c740092de82dc512265c69d9960af3590c2883d399ef5dec"
+  },
+  "patch": {
+    "bytes": 1107,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/native-boot.patch",
+    "sha256": "832ebaacecfea6df07b6afafcbc24216762ca693ae88c6ec662f109986658168"
+  },
+  "proposal": {
+    "bytes": 19888,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/EXECUTABLE-VALIDATION-PROPOSAL.json",
+    "sha256": "4a88ab1a1bd67dff9808975ce99c8e53b30990b6872bd1fc2dc0a967c8958f49"
+  },
+  "reviewer": "/root/remaining_request_check",
+  "root_operations": 0,
+  "runner": {
+    "bytes": 4227,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/run_checks_once.py",
+    "sha256": "13d89e6c8b975d132d80da6db1ef52eb3634ac28e8393613c5205a84be88329c"
+  },
+  "schema": "mckernel.native199.independent-abi2-boot-status-source-review.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Narrow explicit ABI2 helper status profile and actual predicate/diagnostic fixture source review.",
+  "source": {
+    "bytes": 11178,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/native-boot.c",
+    "sha256": "541fb393492eeda72be26046f0e42389a50f1960a6a70b4667c658126d62ab0e"
+  },
+  "tests_run": 0,
+  "verified": [
+    "Reversing only new header include and exact conditional status block reproduces original helper source byte-for-byte. Other boot/resource/sysfs/MCCTRL/VDSO checks,capture pauses,ownership and failure paths unchanged.",
+    "Boolean NATIVE_BOOT_CALLBACK_ABI2 defaults0 and rejects nonboolean numeric values. Explicit1 requires literal rawstatus5 exactly; default retains literal4. No arbitrary expected-status override,polling,provider modification or acceptance of intermediate states.",
+    "ABI2 queries raw OS_STATUS once,prints signed raw_status plus expected5/callback_abi2 before asserting. Unsigned magnitude conversion preserves negative values without signed overflow. Diagnostic bounded by fixed literals and at most20decimal digits; existing helper supervision stillbounds IO.",
+    "Selected source contract: canonical status enum/selected RustReady4,Running5; v6callbackABI2 success publishesRunning synchronously beforeBOOTreturn0. Generic library polling is a separate compatibility path. Separate ihklib remapped status enum is not used by this raw ioctl.",
+    "Located original record.json boot-probe-oversubscribe successful compile command equals proposal original argv. New production command retains all original flags in order; sole feature addition -DNATIVE_BOOT_CALLBACK_ABI2=1,with compiler/source/output paths rebound explicitly.",
+    "Source includes and sibling file pins coherent. Fixture .inc is verbatim production conditional gate; same header used. Adapters only supply ioctl result and captureoutput/assertion outcome. Runner verifies exact12result rows and signeddiagnostic bytes for5,4,0,9,-5,2 underdefault/explicit; default emits no new diagnostic.",
+    "Declared oneCPU6/onejob/512MiBAS/30CPU,24saggregatework+6scleanup,30wall/1MiBFSIZE before writes. Five sequential commands reuse accepted directlyjoined/groupclosure capture. Output count39*1MiB=40894464B within64MiB hostretained reserve; compiler/model only."
+  ]
+}

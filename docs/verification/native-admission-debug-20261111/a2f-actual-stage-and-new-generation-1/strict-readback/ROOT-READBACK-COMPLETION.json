@@ -1,0 +1,33 @@
+{
+  "at": "2026-11-11T20:41:47.048008+00:00",
+  "scope": "NEW_GENERATION_PHYSICAL30_CODE_ONLY_READBACK",
+  "status": "POSITIVE_FULL_READBACK_TOOL_COMPLETION",
+  "tool_calls": [
+    {
+      "tool": "exec_command",
+      "arguments": {
+        "cmd": "/usr/bin/taskset -c 0 /usr/bin/prlimit --as=134217728 --cpu=20 --fsize=16777216 --nofile=96:96 --core=0 /usr/bin/env -i PATH=/usr/bin:/bin LANG=C LC_ALL=C TZ=UTC PYTHONDONTWRITEBYTECODE=1 /usr/bin/python3 -I -B /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-future-readback-publicabi-max-1/primary-guard-source-binding-1/readback_code.py --root-capture /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/a2f-fixed30-normal-operation-proposal-1/correction-1/account-snapshot-correction-1/primary-guard-correction-1/ROOT-EXEC-COMPLETION.ACTUAL.json --root-capture-sha256 a8b999a6c991f234316f4b489d3a6c2e3915755fad0d772d49d01e66e03a4837 --output /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-future-readback-publicabi-max-1/primary-guard-source-binding-1/output-1/RESULT.json",
+        "workdir": "/home/holden/mckernel",
+        "login": false,
+        "tty": false,
+        "yield_time_ms": 1000,
+        "max_output_tokens": 10000
+      },
+      "result": {
+        "chunk_id": "b17c88",
+        "wall_time_seconds": 1.9486e-05,
+        "exit_code": 0,
+        "original_token_count": 29,
+        "output": "{\"bytes\":401674,\"files\":30,\"native_runtime_ready\":false,\"status\":\"FIXED30_ORDINARY_READBACK_VERIFIED_CODE_ONLY\"}\n"
+      }
+    }
+  ],
+  "tool_exit_code": 0,
+  "tool_session_id": null,
+  "actual_result_path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-future-readback-publicabi-max-1/primary-guard-source-binding-1/output-1/RESULT.json",
+  "actual_result_sha256": "1cf8433c1ae5f404997cf1d6350485fd8208678625f70d90e3a7ba87df1aa53f",
+  "reader_source_sha256": "eebdd9c991039970b9c05c5b0bd596bdf70649c16d870d0408f2d025d94b36c5",
+  "actual_Root_producer_capture_sha256": "a8b999a6c991f234316f4b489d3a6c2e3915755fad0d772d49d01e66e03a4837",
+  "native_ready": false,
+  "all_other_holds_unchanged": true
+}

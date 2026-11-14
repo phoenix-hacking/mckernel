@@ -1,0 +1,88 @@
+{
+  "schema": "mckernel.native-exact-scratch17-prepared-candidate-checkpoint.v1",
+  "recorded_at_utc": "2026-10-01T12:18:41Z",
+  "status": "PASS_PREPARED_CANDIDATE",
+  "source_checkpoint_commit": "844dd6aa652fe285897749060069fffd34c28344",
+  "source_checkpoint_fetched_and_exact": true,
+  "target_commit": "50b084322610a9326b1b7b528edd4cd73b635632",
+  "target_tree": "d28aaf4fa3df195e7ea36c4fa51b9392bfcb5620",
+  "base_commit": "1e95abdc2b124c19f16b88cdb21600c768a10c2d",
+  "target_delta": {
+    "additions": 21,
+    "modifications": 13
+  },
+  "preparation": {
+    "owner_pid": 3107111,
+    "owner_starttime": "106635860",
+    "owner_retired": true,
+    "returncode": 0,
+    "candidate_root": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-50b08432-scratch-17",
+    "candidate_identity": "1831:3172898",
+    "metadata_backup_identity": "1831:3570261",
+    "shared_evidence_files": 486,
+    "shared_link_count": 3,
+    "source_entries": 9474,
+    "assets": 4,
+    "build_artifacts_present": false,
+    "output_directory_empty": true,
+    "evidence_directory_empty": true,
+    "lease_present": false,
+    "operational_exclusion_present": false
+  },
+  "evidence": {
+    "manifest": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-inputs-50b08432-scratch-17.json",
+      "sha256": "cbdfac7bc5b9e3c03e112335d12eeca3420835f630c134c269fbf7ca7f0a92bc"
+    },
+    "request": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-delta-request-50b08432-scratch-17.json",
+      "sha256": "852f7d8f652079828cd30377de30d7d810e7747e8e0703a1efb65ae09cedb852",
+      "execution_released": false,
+      "executable": false
+    },
+    "journal": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-candidate-delta-preparation-50b08432-scratch-17.log",
+      "sha256": "0f02a34a77d132b425a6e3f58eaa9a90b177b6599e37359d05ce97c30adcb1a8"
+    },
+    "terminal": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-candidate-delta-preparation-50b08432-scratch-17-terminal.json",
+      "sha256": "e5d7b5bc58b2584d811978a68f885ca6db6bd312935d7607096d1c0dc2080bee"
+    }
+  },
+  "resource_measurement_after_review": {
+    "host_free_bytes": 23854137344,
+    "scratch_free_bytes": 15452831744,
+    "memory_available_bytes": 24822206464,
+    "fresh_execution_measurement_required": true
+  },
+  "review": {
+    "decision": "PASS_PREPARED_CANDIDATE",
+    "all_shared_triples_exact": true,
+    "private_metadata": true,
+    "git_index_note": "backup and live index bytes differ only through refreshed stat-cache data; staged path, mode and object entries are identical",
+    "canonical_build_owner_validate": "PASS",
+    "canonical_verify_inputs": "PASS"
+  },
+  "bounded_harness_correction": {
+    "first_validate_only_result": "REFUSED_BEFORE_ADMISSION",
+    "reason": "coordinator-added 3 GiB address-space limit prevented Git packfile mapping",
+    "artifacts_created": false,
+    "corrected_validate_only_result": "PASS",
+    "production_packet_changed": false
+  },
+  "next_gate": {
+    "build_packet_sha256": "cda832d2d77558fcb9d9db28df84d96a233fffb89918b670b9663a62ddc9a621",
+    "build_packet_source_only": true,
+    "execution_released": false,
+    "blocker": "build owner still binds immutable scratch16 operational exclusion; update, test, independently review and rebind before execution"
+  },
+  "acceptance": {
+    "prepared_candidate": true,
+    "compiled_candidate_count": 1,
+    "diagnostic_guest_pass_count": 5,
+    "formal_application_acceptance_count": 0,
+    "build_executed_in_this_checkpoint": false,
+    "guest_executed_in_this_checkpoint": false,
+    "os_complete": false
+  }
+}

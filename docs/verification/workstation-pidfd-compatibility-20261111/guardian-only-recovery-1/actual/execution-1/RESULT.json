@@ -1,0 +1,57 @@
+{
+  "actual_kernel_CPU_offload_hostwait_native_executed": false,
+  "all_waits_streams_joined": true,
+  "finished_at": "2026-11-11T21:45:51.231124+00:00",
+  "original_acceptance": false,
+  "remaining_direct_children": [],
+  "request_sha256": "1c10a7bf6e5ed42503d5dab24feb32ad29c63cd1d4e6c20db01b1d123444518c",
+  "results": [
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "0",
+        "/usr/bin/prlimit",
+        "--as=268435456",
+        "--cpu=30",
+        "--fsize=16777216",
+        "--nofile=128:128",
+        "--core=0",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TZ=UTC",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "XDG_RUNTIME_DIR=/run/user/1000",
+        "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus",
+        "/home/holden/anaconda3/bin/python3",
+        "-B",
+        "-c",
+        "import runpy; runpy.run_path('/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/recover_exact_guardian.py', run_name='__main__')"
+      ],
+      "cwd": "/home/holden/mckernel/scripts",
+      "exit": 0,
+      "id": "guardian-only-recovery",
+      "ownership": {
+        "adopted_kills": [],
+        "adopted_reaps": [],
+        "error": null,
+        "label": "guardian-only-recovery",
+        "leader": 1561194,
+        "leader_birth": "51981184",
+        "leader_group_signalled": false,
+        "leader_parent_joined": true,
+        "remaining_direct_children": [],
+        "status": 0,
+        "streams_closed": true,
+        "timed_out": false,
+        "whole_descendants_joined": true
+      }
+    }
+  ],
+  "review_sha256": "8a44f1f1cde525815252ce88a9e38dbb29a3421346c73a3e48362611eceec096",
+  "started_at": "2026-11-11T21:45:45.744665+00:00",
+  "status": "PASS_GUARDIAN_ONLY_RECOVERY_PENDING_SAVED_QUALIFICATION"
+}

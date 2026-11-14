@@ -1,0 +1,100 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "STATIC_PREPARATION_ONLY_NO_ACTUAL_STAGE_NONCE_CLOCK_OR_RELEASE",
+  "runtime_authority": null,
+  "nonce": null,
+  "actual_stage": null,
+  "fresh_clock": null,
+  "resource_proof": null,
+  "execution_review": null,
+  "actual_Root_grant": null,
+  "offline_manifest": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-default-rust-mm-strict235-preparation-1/offline-preparation-1/manifest.HOST-STATIC.json",
+    "bytes": 8669,
+    "sha256": "bc1e08b4356fd0b02ef62c392ec2b7d3688029e1955c66a2e01126611c61fef5"
+  },
+  "oracle": {
+    "exit_code": 0,
+    "stderr_hex": "",
+    "stdout_hex": "706172656e742073746172740a6368696c642065786563207375636365737320746f6b656e3d66697865642d76310a706172656e742077616974207375636365737320657869743d333720656f663d31207265617065643d3120656368696c643d310a6368696c642065786563206572726f72206572726e6f3d454e4f454e542073746174653d333720756e6368616e6765643d310a706172656e742077616974206572726f7220657869743d343220656f663d31207265617065643d3120656368696c643d310a706172656e7420636f6d706c657465206368696c6472656e3d32206f776e65643d300a"
+  },
+  "scripts": {
+    "run_native_strict235_capture.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-RUSTMM-STRICT235-NATIVE-ADMISSION-1/run_native_strict235_capture.py",
+      "bytes": 2822,
+      "sha256": "5f670b628de96dd78c50d4320ecd771cd84acc5363bdae582b865af6cbb23594"
+    },
+    "prepare_strict235_bindings.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-RUSTMM-STRICT235-NATIVE-ADMISSION-1/prepare_strict235_bindings.py",
+      "bytes": 6760,
+      "sha256": "9757e84412ce6ae4ae4df1052bd14035eb8a623c447d19b4372200d74bb286a3"
+    },
+    "capture_fresh_strict235_resource.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-RUSTMM-STRICT235-NATIVE-ADMISSION-1/capture_fresh_strict235_resource.py",
+      "bytes": 4774,
+      "sha256": "c6d4e96965e325060fcdbfd3f57f290ed49e8072628643bb1ca4a14b9c0122f8"
+    },
+    "stage_strict235_manifest.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-RUSTMM-STRICT235-NATIVE-ADMISSION-1/stage_strict235_manifest.py",
+      "bytes": 2950,
+      "sha256": "28eb559090aef458968962e81b63c743b5939f5aa0d59db4e63b3079b7465cd3"
+    }
+  },
+  "next_Root_commands": [
+    [
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-RUSTMM-STRICT235-NATIVE-ADMISSION-1/stage_strict235_manifest.py",
+      "--stage-root",
+      "ROOT_CHOSEN_SHORT_FRESH_SCRATCH_CHILD"
+    ],
+    [
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-RUSTMM-STRICT235-NATIVE-ADMISSION-1/prepare_strict235_bindings.py",
+      "--nonce",
+      "ROOT_CHOSEN_FRESH_32_HEX_NONCE"
+    ]
+  ],
+  "before_fresh_clock": "Root executes ordinary stage/real path guards, nonce binds and publishes exact source refs. No native operation occurs in those steps.",
+  "fresh_command": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-RUSTMM-STRICT235-NATIVE-ADMISSION-1/capture_fresh_strict235_resource.py"
+  ],
+  "fresh_stdout_to": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-RUSTMM-STRICT235-NATIVE-ADMISSION-1/ROOT-FRESH-NATIVE-RESOURCE-PHYSICAL-1.json",
+  "after_fresh_binding_command": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-RUSTMM-STRICT235-NATIVE-ADMISSION-1/prepare_strict235_bindings.py",
+    "--bind-fresh"
+  ],
+  "actual_UID1000_entry_capture_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--fsize=33554432",
+    "--as=2147483648:2147483648",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-RUSTMM-STRICT235-NATIVE-ADMISSION-1/run_native_strict235_capture.py"
+  ],
+  "entry_requires": "New independent PASS_EXECUTION exact pending bytes and Root GRANTED_ONE_EXACT_NATIVE_STRICT235 exact one-use grant; same actual120s/account/fixed-cutoff/current physical/module/source controls. All decisions/references remain unfilled here.",
+  "static_checks": {
+    "real_API_import_and_manifest_validation_exit0": true,
+    "source_AST_parse": true,
+    "guest_calls": 0,
+    "staging_calls": 0,
+    "compiler_calls": 0
+  },
+  "suggested_short_path_only": "/home/holden/mckernel-work/scratch/f02mm1",
+  "actual_path_choice": null
+}

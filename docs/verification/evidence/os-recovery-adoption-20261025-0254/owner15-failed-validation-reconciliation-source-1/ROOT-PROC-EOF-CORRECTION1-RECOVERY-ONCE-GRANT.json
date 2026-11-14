@@ -1,0 +1,75 @@
+{
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=unlimited:unlimited",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--stack=2097152:2097152",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/owner15-failed-validation-reconciliation-source-1/failed_validation_recovery.proc-eof-correction1.py",
+    "--packet",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/owner15-failed-validation-reconciliation-source-1/FAILED-VALIDATION-RECOVERY.PROC-EOF-CORRECTION1.PACKET.NOT-GRANTED.json",
+    "--packet-sha256",
+    "300a647bde91b68d09f4463ff30299a0a22fc103a87d2147851b68a623ebadd7",
+    "--root-grant",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/owner15-failed-validation-reconciliation-source-1/ROOT-PROC-EOF-CORRECTION1-RECOVERY-ONCE-GRANT.json",
+    "--root-grant-sha256",
+    "SELF_SHA256",
+    "--execution-review",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/owner15-failed-validation-reconciliation-source-1/INDEPENDENT-PROC-EOF-CORRECTION1-EXECUTION-REVIEW.json",
+    "--execution-review-sha256",
+    "7e26311081b3fe248a7a4c4601113a3d53973bef27dcb47f0f48f51dbffcb391",
+    "--execute"
+  ],
+  "at": "2026-10-26T06:36:54.280806+00:00",
+  "authority": "/root",
+  "creator_join_tool": 10088,
+  "deadline": [
+    1793030133,
+    812240.493656513,
+    827578.62070498
+  ],
+  "decision": "GRANT_FAILED_VALIDATION_RECOVERY_ONCE",
+  "execution_count": 1,
+  "new_heavy_admission": false,
+  "normal_cleanup_credit": false,
+  "packet_sha256": "300a647bde91b68d09f4463ff30299a0a22fc103a87d2147851b68a623ebadd7",
+  "prior_attempt": "Original8d628grant consumed; helperjoined1 before claim/archive/unlink/signal; EOF observer-only correction independently reviewed.",
+  "profile": {
+    "cpus": [
+      7
+    ],
+    "outer_wall_or_cpu_kill": false,
+    "pidfd_exit_poll_max_seconds": 30,
+    "processes": 1,
+    "rlimits_hard_and_soft": {
+      "AS": 2147483648,
+      "CORE": 0,
+      "CPU": "unlimited",
+      "FSIZE": 33554432,
+      "NOFILE": 256,
+      "STACK": 2097152
+    },
+    "subprocesses": 0,
+    "threads_added": 0,
+    "uid_euid_gid_egid": 1000
+  },
+  "review_sha256": "7e26311081b3fe248a7a4c4601113a3d53973bef27dcb47f0f48f51dbffcb391",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "self_hash_binding": "Replace only SELF_SHA256 with SHA256 of exact immutable grant bytes; all other argv exact.",
+  "source_sha256": "95adb255159c7ef496c1d9af73aa6af0d5f7d33122bef46aab7775b6e53ee984",
+  "target": {
+    "fd": 3,
+    "parent": 842942,
+    "pid": 997661,
+    "starttime": "79134158"
+  }
+}

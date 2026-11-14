@@ -1,0 +1,53 @@
+--- 
++++ 
+@@ -57,7 +57,7 @@
+ def same_ref(a, b, label):
+     need(a == b, label)
+ 
+-def terminal_joins(t, b):
++def native_ancestor_joins(t, b):
+     # Current native owner retirement and earlier released build records have
+     # distinct genuine schemas. No native lease file is invented here.
+     need(t == checked(b['physical_review']), 'exact independent latest native physical report')
+@@ -110,6 +110,41 @@
+     need(set(c) == set(released) == {'boot_id', 'filesystem_uuid', 'container_id', 'owner_nonce', 'lease_path', 'common_exclusion', 'shared_heavy'}, 'exact seven-field native predecessor interface')
+     need(all(c[key] == released[key] for key in ('boot_id', 'filesystem_uuid', 'lease_path', 'common_exclusion', 'shared_heavy')), 'same boot/UUID and earlier released build record paths')
+     need(all(not os.path.lexists(c[key]) for key in ('lease_path', 'common_exclusion', 'shared_heavy')), 'earlier released build records remain absent')
++
++def compiler_producer_join(receipt, proof, status, archive, child, joined, filesystem_uuid):
++    need(receipt['schema']=='mckernel.current-guest-fullcrate-owner-receipt.v1' and receipt['status']=='PASS' and receipt['retired'] is True and receipt['cleanup_status']=='PASS_OWNED_REMOVAL_AND_RECORD_RELEASE','actual compiler owner retirement')
++    need(receipt['cleanup_separately_required'] is False and receipt['client_retirement_unproven'] is False and receipt['terminal_container_retained'] is False and receipt['terminal_container_info_current'] is True and receipt['terminal_container_info'] is None and receipt['wait_exit_code']==0,'compiler no retained or uncertain ownership')
++    need(proof==receipt['postflight']==archive['postflight'] and proof['schema']=='mckernel.current-guest-fullcrate.postflight.v1' and proof['compiler_status']=='PASS' and proof['all_clients_reaped'] is True and proof['container_absent'] is True,'complete actual compiler postflight')
++    absence=proof['absence'];need(absence['absent'] is True and absence['container_id']==receipt['container_id'] and absence['name']==receipt['container_name'] and absence['nonce']==receipt['owner_nonce'] and absence['queries']==['name','label','id'],'exact compiler absence target')
++    groups=receipt['client_group_checks'];need(len(groups)==29 and groups==proof['client_group_checks'] and all(row['empty'] is True and row['surviving_members']==[] and type(row['pid']) is int and row['pid']>0 for row in groups),'all actual compiler client group checks')
++    need(receipt['client_count']==11 and receipt['client_count_before_cleanup']==7,'actual eleven owned compiler Docker clients')
++    need(status['returncode']==joined['returncode']==0 and status['direct_child_joined'] is joined['direct_child_joined'] is True and status['process_group_absent'] is joined['process_group_absent'] is True and status['observer_error'] is joined['observer_error'] is None,'actual compiler owner direct join and absent group')
++    need(status['pid']==child['pid']==joined['pid'] and status['start']==child['start']==joined['start'] and status['argv']==child['argv']==joined['argv'],'exact compiler owned OS child birth/argv')
++    need(len(archive['records'])==3 and archive['nonce']==receipt['owner_nonce'],'actual compiler three record archive')
++    pairs=[receipt[k] for k in ('lease','common_exclusion','shared_heavy_operation')]
++    for pair,row in zip(pairs,archive['records']):
++        need(pair['path']==row['path'] and pair['record']==row['record'] and row['record']['pid']==status['pid'] and int(row['record']['starttime'])==status['start'],'exact archived ownership record and owner birth')
++    common=receipt['common_exclusion']['record'];shared=receipt['shared_heavy_operation']['record'];need(common['boot_id']==shared['boot_id'] and shared['kind']=='build','compiler same-boot build ownership')
++    return dict(boot_id=common['boot_id'],filesystem_uuid=filesystem_uuid,container_id=receipt['container_id'],owner_nonce=receipt['owner_nonce'],lease_path=receipt['lease']['path'],common_exclusion=receipt['common_exclusion']['path'],shared_heavy=receipt['shared_heavy_operation']['path'])
++
++def terminal_joins(t,b):
++    need(t==checked(b['physical_review'])==checked(b['compiler_physical_review']),'exact latest independent compiler retirement review')
++    need(t['decision']=='ACCEPT_ACTUAL_COMPILER_OWNER_RETIREMENT_ONLY' and t['producer_kind']=='four-object-compiler' and t['blocking_findings']==[],'genuine compiler-only physical acceptance, no invented schema or native facts')
++    raw=checked(b['compiler_review_raw']);item=raw['event']['params']['item'];need(raw['event']['method']=='item/completed' and item['type']=='agentMessage','retained actual independent review message')
++    text=item['text'].strip();need(text.startswith('```json\n') and text.endswith('```') and json.loads(text[len('```json\n'):-3])==t,'actual raw independent decision exact semantic bytes')
++    c=b['compiler_producer_refs'];objects={k:checked(c[k]) for k in ('receipt','postflight','status','archive','child','direct_join')}
++    for key,name in [('receipt','owner-evidence/owner-receipt.json'),('postflight','owner-evidence/postflight-proof.json'),('status','actual-root-owner-1/status.json'),('archive','owner-evidence/ownership-archive.json')]:need(c[key]['sha256']==t['raw_refs'][name],'genuine reviewed compiler source identity '+key)
++    value=compiler_producer_join(objects['receipt'],objects['postflight'],objects['status'],objects['archive'],objects['child'],objects['direct_join'],b['native_ancestor_binding']['physical_predecessor']['filesystem_uuid'])
++    need(value==b['physical_predecessor'],'complete current compiler seven-field predecessor')
++    birth=t['owned_OS_child'];status=objects['status'];need((birth['pid'],birth['starttime'],birth['exit_code'],birth['direct_child_joined'],birth['process_group_absent'],birth['observer_error'])==(status['pid'],status['start'],0,True,True,None),'genuine reviewed owner birth; no tool-handle OS PID')
++    for role in ('stdout','stderr'):
++        row=status['streams'][role];data=Path(row['path']).read_bytes();need(data==b'' and row['bytes']==0 and hashlib.sha256(data).hexdigest()==row['sha256'],'actual empty compiler owner '+role)
++    pair=checked(b['compiler_controller_pair']);need(b['compiler_controller_pair']['sha256']==t['tool_controller']['evidence_sha256'] and pair['role']=='four-object-compiler-once-chain','genuine typed compiler controller pair')
++    first=checked(pair['started']);last=checked(pair['completed']);fi=first['event']['params']['item'];li=last['event']['params']['item'];control=t['tool_controller']
++    need(first['event']['method']=='item/started' and last['event']['method']=='item/completed' and fi['type']==li['type']=='commandExecution' and fi['id']==li['id']==control['item'] and fi['command']==li['command'] and li['processId']==control['handle'] and li['status']=='completed' and li['exitCode']==control['completed_exit_code']==0 and control['outer_OS_identity'] is None,'actual tool-owned compiler terminal; no outer OS birth invented')
++    ancestor=b['native_ancestor_binding'];native_ancestor_joins(checked(ancestor['physical_review']),ancestor)
++    need(value['boot_id']==ancestor['physical_predecessor']['boot_id'] and all(not os.path.lexists(value[k]) for k in ('lease_path','common_exclusion','shared_heavy')),'same boot and current compiler ownership paths absent')
++
+ 
+ def collect_live(b,proposal,owner):
+     parent=Path(proposal['parent']['path']);scratch=Path(owner.SCRATCH);lock=Path(owner.LOCK)

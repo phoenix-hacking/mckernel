@@ -1,0 +1,17 @@
+[
+  "/usr/bin/taskset",
+  "-c",
+  "7",
+  "/usr/bin/sudo",
+  "-A",
+  "/usr/bin/prlimit",
+  "--as=2147483648:2147483648",
+  "--cpu=30:30",
+  "--core=0:0",
+  "--fsize=8388608:8388608",
+  "--",
+  "/usr/bin/python3",
+  "-I",
+  "-B",
+  "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-235/final-runtime-ready-1/root-live-admission-1/read_only_native235_admission.py"
+]

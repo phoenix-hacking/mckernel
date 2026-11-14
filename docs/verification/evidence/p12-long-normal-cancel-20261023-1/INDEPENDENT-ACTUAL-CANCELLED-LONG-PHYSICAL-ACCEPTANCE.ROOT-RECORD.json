@@ -1,0 +1,61 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "verdict": "PASS_ACTUAL_CANCELLED_LONG_PHYSICAL_RETIREMENT_AND_CURRENT_POSTJOIN",
+  "reviewer": "/root/native235_release_review",
+  "at": "2026-10-23T16:14:06.083387+00:00",
+  "inputs": [
+    {
+      "path": "docs/verification/evidence/p12-long-normal-cancel-20261023-1/actual-final-proc-1/ACTUAL-CLOSED-CAPTURE.json",
+      "sha256": "3088e1ef6227344c7ad56ba8a2347670c19dda2e92bc7966d2ed5def206c705b"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-normal-cancel-20261023-1/actual-final-proc-1/stdout",
+      "sha256": "c4bf0a920714a149b30bdd0fc9b995b83c142879ed3c47504a44de3391bf7f64"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-normal-cancel-20261023-1/actual-final-mutex-1/ACTUAL-CLOSED-CAPTURE.json",
+      "sha256": "69e8c4bb6288aa3fccc0fef3c35c34d09e0a80a909519746ba193845a6a54472"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-normal-cancel-20261023-1/actual-final-mutex-1/stdout",
+      "sha256": "5e8d2c1942ea3edf7ee6a623d19e2aea16bba50f1639c63fc1aff209b5641c20"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-normal-cancel-20261023-1/actual-retired-owner-export-1/ACTUAL-CLOSED-CAPTURE.json",
+      "sha256": "47a08ac5a8faade1894de7c20e32d0e252d9c81895542b9134d8f88eab656b85"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-normal-cancel-20261023-1/authenticated-retired-owner-results-1/ACTUAL-SIX-READS-CLOSED.json",
+      "sha256": "b3f8e3a4959153cd1d02abb03e0ebcc31e3169bff7d6bc665c8cd97960720bdd"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-normal-cancel-20261023-1/actual-root-cancel-capture-1/ACTUAL-CLOSED-CAPTURE.json",
+      "sha256": "7dbcaab3e6ff53616ecfc3081a012c78bf93f1d4e3b21af8bfdefb80317ef35b"
+    }
+  ],
+  "current_live_postjoin": {
+    "state": "CANCELLED_LONG_POSITIVELY_RETIRED",
+    "nonce": "110f473a34f14ca58d88e080e273be2c",
+    "owner_pid": 3769329,
+    "owner_start": 56612906,
+    "outer_pid": 3769325,
+    "outer_start": 56612895,
+    "complete_proc_snapshots": 2,
+    "bound_owner_client_identities_absent": 25,
+    "container_init_absent": 3769415,
+    "client_reaps": 23,
+    "container_absent": true,
+    "owner_lease_retained": false,
+    "permanent_mutex_device_inode": [
+      27,
+      4
+    ],
+    "mutex_free": true,
+    "shared_paths_absent": 8
+  },
+  "original_runtime_result": "FAIL OwnerSignal15; secondaryCommandError; all evidence preserved",
+  "application_credit": 0,
+  "mixed_minutes_credit": 0,
+  "restoration_credit": 0,
+  "next_authority": "Fresh admission and separate exact release required; no old release reuse."
+}

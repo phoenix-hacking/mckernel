@@ -1,0 +1,79 @@
+{
+  "schema": "mckernel.stability.source-candidates-shutdown-checkpoint.v1",
+  "recorded_at_utc": "2026-09-28T07:33:55Z",
+  "base_revision": "2288d88fe26de007d958c0ac6a2b3e49f98a076a",
+  "status": "WIP_SHUTDOWN",
+  "acceptance_credit": false,
+  "launcher": {
+    "run_directory": "/home/holden/mckernel/.git/os-autopilot/runs/20260928T072108Z-7569fb1b",
+    "launcher_pid": 3033800,
+    "worker_pid": 3033802,
+    "app_server_pid": 3033804,
+    "launcher_started": "2026-09-28T00:21:07-07:00",
+    "future_continuations_paused": true
+  },
+  "resource_snapshot": {
+    "host_free_gib": 44,
+    "scratch_free_gib": 21,
+    "heavy_build_or_guest_active": false
+  },
+  "m01_attempt_44": {
+    "status": "FAIL_PHASE_I",
+    "root": "/home/holden/mckernel-work/scratch/m01b-generic-row03-row12-directed-implementation-packet-20260916-44",
+    "failure_sha256": "f3cdf239225b053ac42d058a4abb0357216708fc5a019d3f7000aae1ed04181b",
+    "archive": "docs/verification/evidence/stability-selected-retention-generic-row03-row12-phase-i-failure-20260928-44.tar.gz",
+    "archive_sha256": "de032f2e45e8defefdbdeafe04d469bdd9f544fd51fb00696a7c8b5d4d47b697",
+    "archive_size_bytes": 11962,
+    "archive_members": 15,
+    "blocker": "The supplied mode-2 source path was absent.",
+    "independent_restore_review": "FAIL_RESTORE",
+    "restore_review_finding": "The proposed eight-file restore contained two mode-3 hashes and could not satisfy the exact 51-member mode-2 source contract.",
+    "next": "Issue an additive independently reviewed path correction identifying the existing complete mode-2 authority tree, reauthenticate all 51 members, and use a fresh attempt root.",
+    "compilation_or_runtime": false
+  },
+  "m02_source_candidate": {
+    "status": "STATIC_ONLY_UNREVIEWED",
+    "files": {
+      "scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/storage-fault-v1/witness_owner.py": "cd415301375a214e7f450b787c4832037e0fa046bbe17e4e6da8b7bc8f892232",
+      "scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/storage-fault-v1/supervise.py": "521a4d51225447424503446abdf8b4f11bb29380b618b8c3ff7a83c4e6c32e56",
+      "scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/storage-fault-v1/oracle.py": "7363f5a5401f32c1eb8efcd33acef8f1edc60a8d9a53d16e251fed0ba443f135",
+      "scripts/tests/test_collector_storage_fault_packet.py": "b259ad30e1704580d14ff898dfdf9d70d7307f6c0eae51e1b95d157c72a58644"
+    },
+    "implemented_scope": "Alias-safe descriptor remapping and inherited-descriptor closure, successful acquisition sequencing, and live cross-role device/inode ownership checks with focused regressions.",
+    "checks": [
+      "Python AST parse passed for the four changed Python files.",
+      "git diff --check passed."
+    ],
+    "not_run": "The real descriptor regression and complete storage validation await a separately reviewed Layer-B profile.",
+    "next": "Draft and independently review the exact Layer-B profile, run only after PASS_LAYER_B, then obtain independent source review."
+  },
+  "m03_source_candidate": {
+    "status": "STATIC_ONLY_UNREVIEWED",
+    "files": {
+      "kernel/rust/tests/pending_free_inventory_harness_v1.py": "50c8d0b72b0c65733e2b7b1326c0baf73430601910247770528430019f713766",
+      "kernel/rust/tests/pending_free_inventory_reference_v1.c": "98011d27f8493614d31d2c141b851b5f1dab533f7f855a996490a5ca557543ce",
+      "kernel/rust/tests/pending_free_inventory_vectors_v1.rs": "bf966b1226f4134609f565bb4e27d89ceff41a79fc842aeac7c8a05999668664",
+      "kernel/rust/tests/pending_free_inventory_v1.rs": "746dc81ea27a45bdbb9ad00c37d2ad74a5d1f9e254943e4df34866a4274837fc"
+    },
+    "implemented_scope": "Independent C and Rust pending-free inventory candidates with 23 explicit boundary, identity, link, generation, range, overlap, arithmetic, mutation, and valid selectors.",
+    "checks": [
+      "Python harness AST parse passed.",
+      "git diff --check passed."
+    ],
+    "not_run": "No compiler or candidate binary was executed because Layer-B review is still required.",
+    "next": "Include exact compiler and per-selector argv in the Layer-B profile, obtain PASS_LAYER_B, execute in a fresh bounded root, then obtain independent source review."
+  },
+  "preservation": {
+    "attempt_41_preserved": true,
+    "attempt_44_preserved": true,
+    "preexisting_user_owned_pycache_deletion_excluded_from_checkpoint": true,
+    "child_agents_terminal": true
+  },
+  "official_counters": {
+    "application_cases": "0/273",
+    "narrow_fault_modes": "2/4",
+    "production_gates": "6/130",
+    "contractual_points": "350/10000",
+    "language_gates": "0/7"
+  }
+}

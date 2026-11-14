@@ -1,0 +1,2148 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_EXACT_CURRENT115_PRLIMIT_DATA31_INHERITED_DATA_AND_FOLDED16_CURRENT_INSTRUCTIONS",
+  "independent": true,
+  "reviewer": "/root/current110_execution_review",
+  "actual_Rust": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o",
+    "bytes": 18335928,
+    "sha256": "91aa747b114e3b1990ef2ce057a12f8efc52247657516d610f83edb011f4bd9c"
+  },
+  "actual_image": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/OUTPUT/work/output/build/kernel/mckernel.img",
+    "bytes": 10257496,
+    "sha256": "de9fdd13b55a5a17158fa8247cc9351c1d9b1944a72c45bac9e4774473dca024"
+  },
+  "prlimit16_table_and_body": {
+    "name": "f03_prlimit_body_result",
+    "existing_reader": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT112-EVENT2-ALLOC2-BUILD-ADMISSION-1/independent-postbuild-review-1/check_selected_edges.py",
+      "bytes": 9067,
+      "sha256": "67bac25b163cc2efcb6cc115ef2a9ec7ebf00187491a19b3e2bc168d593760e4"
+    },
+    "nonrelocated_complete_code_equal114": true,
+    "complete_final_code_reproduced": true,
+    "actual_targets": [
+      {
+        "offset": 141,
+        "type": 1,
+        "addend": 0,
+        "kind": "EXACT_PRLIMIT_16_ENTRY_TABLE",
+        "target": ".lrodata.f03_prlimit_body_result",
+        "actual_final_address": "0xfffffffffe905408",
+        "section": ".lrodata.f03_prlimit_body_result",
+        "bytes": 128,
+        "full_final_bytes_reproduced": true,
+        "targets": [
+          {
+            "offset": 0,
+            "target": "f03_prlimit_body_result",
+            "addend": 582,
+            "positive_final_address": "0xfffffffffe84f2a6"
+          },
+          {
+            "offset": 8,
+            "target": "f03_prlimit_body_result",
+            "addend": 152,
+            "positive_final_address": "0xfffffffffe84f0f8"
+          },
+          {
+            "offset": 16,
+            "target": "f03_prlimit_body_result",
+            "addend": 622,
+            "positive_final_address": "0xfffffffffe84f2ce"
+          },
+          {
+            "offset": 24,
+            "target": "f03_prlimit_body_result",
+            "addend": 602,
+            "positive_final_address": "0xfffffffffe84f2ba"
+          },
+          {
+            "offset": 32,
+            "target": "f03_prlimit_body_result",
+            "addend": 642,
+            "positive_final_address": "0xfffffffffe84f2e2"
+          },
+          {
+            "offset": 40,
+            "target": "f03_prlimit_body_result",
+            "addend": 572,
+            "positive_final_address": "0xfffffffffe84f29c"
+          },
+          {
+            "offset": 48,
+            "target": "f03_prlimit_body_result",
+            "addend": 632,
+            "positive_final_address": "0xfffffffffe84f2d8"
+          },
+          {
+            "offset": 56,
+            "target": "f03_prlimit_body_result",
+            "addend": 152,
+            "positive_final_address": "0xfffffffffe84f0f8"
+          },
+          {
+            "offset": 64,
+            "target": "f03_prlimit_body_result",
+            "addend": 552,
+            "positive_final_address": "0xfffffffffe84f288"
+          },
+          {
+            "offset": 72,
+            "target": "f03_prlimit_body_result",
+            "addend": 193,
+            "positive_final_address": "0xfffffffffe84f121"
+          },
+          {
+            "offset": 80,
+            "target": "f03_prlimit_body_result",
+            "addend": 152,
+            "positive_final_address": "0xfffffffffe84f0f8"
+          },
+          {
+            "offset": 88,
+            "target": "f03_prlimit_body_result",
+            "addend": 562,
+            "positive_final_address": "0xfffffffffe84f292"
+          },
+          {
+            "offset": 96,
+            "target": "f03_prlimit_body_result",
+            "addend": 152,
+            "positive_final_address": "0xfffffffffe84f0f8"
+          },
+          {
+            "offset": 104,
+            "target": "f03_prlimit_body_result",
+            "addend": 612,
+            "positive_final_address": "0xfffffffffe84f2c4"
+          },
+          {
+            "offset": 112,
+            "target": "f03_prlimit_body_result",
+            "addend": 542,
+            "positive_final_address": "0xfffffffffe84f27e"
+          },
+          {
+            "offset": 120,
+            "target": "f03_prlimit_body_result",
+            "addend": 592,
+            "positive_final_address": "0xfffffffffe84f2b0"
+          }
+        ],
+        "raw_hex": "a6f284fefffffffff8f084feffffffffcef284feffffffffbaf284feffffffffe2f284feffffffff9cf284feffffffffd8f284fefffffffff8f084feffffffff88f284feffffffff21f184fefffffffff8f084feffffffff92f284fefffffffff8f084feffffffffc4f284feffffffff7ef284feffffffffb0f284feffffffff"
+      },
+      {
+        "offset": 181,
+        "type": 1,
+        "addend": 0,
+        "kind": "EXACT_PRLIMIT_16_ENTRY_TABLE",
+        "target": ".lrodata..Lswitch.table.f03_prlimit_body_result",
+        "actual_final_address": "0xfffffffffe91ad00",
+        "section": ".lrodata..Lswitch.table.f03_prlimit_body_result",
+        "bytes": 128,
+        "full_final_bytes_reproduced": true,
+        "targets": [],
+        "raw_hex": "0200000000000000040000000000000003000000000000000f0000000000000001000000000000000b000000000000000a0000000000000009000000000000000600000000000000000000000000000005000000000000000e00000000000000070000000000000008000000000000000c000000000000000d00000000000000"
+      }
+    ]
+  },
+  "qualified31_storage_and_pointer_targets": [
+    {
+      "name": "process_clone_vm_debug",
+      "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+      "all_pointer_targets_equal_FILE_context_only": true,
+      "complete_current_final_bytes_reproduced": true,
+      "current_R64": [
+        {
+          "offset": 0,
+          "type": 1,
+          "input_addend": 24943,
+          "actual_final_address": "0xfffffffffe90dbe0",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 8,
+          "type": 1,
+          "input_addend": 24965,
+          "actual_final_address": "0xfffffffffe90dbf6",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "636c6f6e655f74687265616400",
+          "canonical_FILE_context_only": false
+        }
+      ]
+    },
+    {
+      "name": "process_clone_ranges_debug",
+      "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+      "all_pointer_targets_equal_FILE_context_only": true,
+      "complete_current_final_bytes_reproduced": true,
+      "current_R64": [
+        {
+          "offset": 0,
+          "type": 1,
+          "input_addend": 24943,
+          "actual_final_address": "0xfffffffffe90dbe0",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 8,
+          "type": 1,
+          "input_addend": 24965,
+          "actual_final_address": "0xfffffffffe90dbf6",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "636c6f6e655f74687265616400",
+          "canonical_FILE_context_only": false
+        }
+      ]
+    },
+    {
+      "name": "process_clone_ranges_ok_debug",
+      "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+      "all_pointer_targets_equal_FILE_context_only": true,
+      "complete_current_final_bytes_reproduced": true,
+      "current_R64": [
+        {
+          "offset": 0,
+          "type": 1,
+          "input_addend": 24943,
+          "actual_final_address": "0xfffffffffe90dbe0",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 8,
+          "type": 1,
+          "input_addend": 24965,
+          "actual_final_address": "0xfffffffffe90dbf6",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "636c6f6e655f74687265616400",
+          "canonical_FILE_context_only": false
+        }
+      ]
+    },
+    {
+      "name": "process_clone_sigcommon_debug",
+      "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+      "all_pointer_targets_equal_FILE_context_only": true,
+      "complete_current_final_bytes_reproduced": true,
+      "current_R64": [
+        {
+          "offset": 0,
+          "type": 1,
+          "input_addend": 24943,
+          "actual_final_address": "0xfffffffffe90dbe0",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 8,
+          "type": 1,
+          "input_addend": 24965,
+          "actual_final_address": "0xfffffffffe90dbf6",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "636c6f6e655f74687265616400",
+          "canonical_FILE_context_only": false
+        }
+      ]
+    },
+    {
+      "name": "process_clone_sigshared_debug",
+      "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+      "all_pointer_targets_equal_FILE_context_only": true,
+      "complete_current_final_bytes_reproduced": true,
+      "current_R64": [
+        {
+          "offset": 0,
+          "type": 1,
+          "input_addend": 24943,
+          "actual_final_address": "0xfffffffffe90dbe0",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 8,
+          "type": 1,
+          "input_addend": 24965,
+          "actual_final_address": "0xfffffffffe90dbf6",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "636c6f6e655f74687265616400",
+          "canonical_FILE_context_only": false
+        }
+      ]
+    },
+    {
+      "name": "process_copy_pte_found_debug",
+      "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+      "all_pointer_targets_equal_FILE_context_only": true,
+      "complete_current_final_bytes_reproduced": true,
+      "current_R64": [
+        {
+          "offset": 0,
+          "type": 1,
+          "input_addend": 24943,
+          "actual_final_address": "0xfffffffffe90dbe0",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 8,
+          "type": 1,
+          "input_addend": 25102,
+          "actual_final_address": "0xfffffffffe90dc7f",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "636f70795f757365725f70746500",
+          "canonical_FILE_context_only": false
+        }
+      ]
+    },
+    {
+      "name": "process_copy_pte_size_debug",
+      "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+      "all_pointer_targets_equal_FILE_context_only": true,
+      "complete_current_final_bytes_reproduced": true,
+      "current_R64": [
+        {
+          "offset": 0,
+          "type": 1,
+          "input_addend": 24943,
+          "actual_final_address": "0xfffffffffe90dbe0",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 8,
+          "type": 1,
+          "input_addend": 25102,
+          "actual_final_address": "0xfffffffffe90dc7f",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "636f70795f757365725f70746500",
+          "canonical_FILE_context_only": false
+        }
+      ]
+    },
+    {
+      "name": "process_copy_pte_allocated_debug",
+      "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+      "all_pointer_targets_equal_FILE_context_only": true,
+      "complete_current_final_bytes_reproduced": true,
+      "current_R64": [
+        {
+          "offset": 0,
+          "type": 1,
+          "input_addend": 24943,
+          "actual_final_address": "0xfffffffffe90dbe0",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 8,
+          "type": 1,
+          "input_addend": 25102,
+          "actual_final_address": "0xfffffffffe90dc7f",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "636f70795f757365725f70746500",
+          "canonical_FILE_context_only": false
+        }
+      ]
+    },
+    {
+      "name": "process_copy_pte_zeroed_debug",
+      "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+      "all_pointer_targets_equal_FILE_context_only": true,
+      "complete_current_final_bytes_reproduced": true,
+      "current_R64": [
+        {
+          "offset": 0,
+          "type": 1,
+          "input_addend": 24943,
+          "actual_final_address": "0xfffffffffe90dbe0",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 8,
+          "type": 1,
+          "input_addend": 25102,
+          "actual_final_address": "0xfffffffffe90dc7f",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "636f70795f757365725f70746500",
+          "canonical_FILE_context_only": false
+        }
+      ]
+    },
+    {
+      "name": "process_copy_pte_copied_debug",
+      "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+      "all_pointer_targets_equal_FILE_context_only": true,
+      "complete_current_final_bytes_reproduced": true,
+      "current_R64": [
+        {
+          "offset": 0,
+          "type": 1,
+          "input_addend": 24943,
+          "actual_final_address": "0xfffffffffe90dbe0",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 8,
+          "type": 1,
+          "input_addend": 25102,
+          "actual_final_address": "0xfffffffffe90dc7f",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "636f70795f757365725f70746500",
+          "canonical_FILE_context_only": false
+        }
+      ]
+    },
+    {
+      "name": "process_copy_pte_installed_debug",
+      "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+      "all_pointer_targets_equal_FILE_context_only": true,
+      "complete_current_final_bytes_reproduced": true,
+      "current_R64": [
+        {
+          "offset": 0,
+          "type": 1,
+          "input_addend": 24943,
+          "actual_final_address": "0xfffffffffe90dbe0",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 8,
+          "type": 1,
+          "input_addend": 25102,
+          "actual_final_address": "0xfffffffffe90dc7f",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "636f70795f757365725f70746500",
+          "canonical_FILE_context_only": false
+        }
+      ]
+    },
+    {
+      "name": "process_extend_region_exists_debug",
+      "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+      "all_pointer_targets_equal_FILE_context_only": true,
+      "complete_current_final_bytes_reproduced": true,
+      "current_R64": [
+        {
+          "offset": 0,
+          "type": 1,
+          "input_addend": 24943,
+          "actual_final_address": "0xfffffffffe90dbe0",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 8,
+          "type": 1,
+          "input_addend": 25506,
+          "actual_final_address": "0xfffffffffe90de13",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "657874656e645f70726f636573735f726567696f6e00",
+          "canonical_FILE_context_only": false
+        }
+      ]
+    },
+    {
+      "name": "process_extend_region_alloc_debug",
+      "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+      "all_pointer_targets_equal_FILE_context_only": true,
+      "complete_current_final_bytes_reproduced": true,
+      "current_R64": [
+        {
+          "offset": 0,
+          "type": 1,
+          "input_addend": 24943,
+          "actual_final_address": "0xfffffffffe90dbe0",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 8,
+          "type": 1,
+          "input_addend": 25506,
+          "actual_final_address": "0xfffffffffe90de13",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "657874656e645f70726f636573735f726567696f6e00",
+          "canonical_FILE_context_only": false
+        }
+      ]
+    },
+    {
+      "name": "process_extend_region_success_debug",
+      "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+      "all_pointer_targets_equal_FILE_context_only": true,
+      "complete_current_final_bytes_reproduced": true,
+      "current_R64": [
+        {
+          "offset": 0,
+          "type": 1,
+          "input_addend": 24943,
+          "actual_final_address": "0xfffffffffe90dbe0",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 8,
+          "type": 1,
+          "input_addend": 25506,
+          "actual_final_address": "0xfffffffffe90de13",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "657874656e645f70726f636573735f726567696f6e00",
+          "canonical_FILE_context_only": false
+        }
+      ]
+    },
+    {
+      "name": "process_clone_config",
+      "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+      "all_pointer_targets_equal_FILE_context_only": true,
+      "complete_current_final_bytes_reproduced": true,
+      "current_R64": [
+        {
+          "offset": 48,
+          "type": 1,
+          "input_addend": 24943,
+          "actual_final_address": "0xfffffffffe90dbe0",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 80,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8fe660",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "process_clone_vm_debug"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 88,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8fe5e0",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "process_clone_ranges_debug"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 96,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8fe600",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "process_clone_ranges_ok_debug"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 104,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8fe620",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "process_clone_sigcommon_debug"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 112,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8fe640",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "process_clone_sigshared_debug"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 120,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe86a7b0",
+          "kind": "NAMED",
+          "target": "ihk_mc_modify_user_context",
+          "addend": 0
+        },
+        {
+          "offset": 128,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe842cb0",
+          "kind": "NAMED",
+          "target": "copy_user_ranges",
+          "addend": 0
+        }
+      ]
+    },
+    {
+      "name": "process_copy_entry_config",
+      "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+      "all_pointer_targets_equal_FILE_context_only": true,
+      "complete_current_final_bytes_reproduced": true,
+      "current_R64": [
+        {
+          "offset": 40,
+          "type": 1,
+          "input_addend": 24943,
+          "actual_final_address": "0xfffffffffe90dbe0",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 64,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8fe6c0",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "process_copy_pte_found_debug"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 72,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8fe700",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "process_copy_pte_size_debug"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 80,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8fe680",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "process_copy_pte_allocated_debug"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 88,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8fe720",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "process_copy_pte_zeroed_debug"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 96,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8fe6a0",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "process_copy_pte_copied_debug"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 104,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8fe6e0",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "process_copy_pte_installed_debug"
+          ],
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "name": "process_extend_region_entry_config",
+      "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+      "all_pointer_targets_equal_FILE_context_only": true,
+      "complete_current_final_bytes_reproduced": true,
+      "current_R64": [
+        {
+          "offset": 96,
+          "type": 1,
+          "input_addend": 24943,
+          "actual_final_address": "0xfffffffffe90dbe0",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 112,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8fe780",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "process_extend_region_exists_debug"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 120,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8fe760",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "process_extend_region_alloc_debug"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 128,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8fe7a0",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "process_extend_region_success_debug"
+          ],
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "name": "process_schedule_exit_debug_input",
+      "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+      "all_pointer_targets_equal_FILE_context_only": true,
+      "complete_current_final_bytes_reproduced": true,
+      "current_R64": []
+    },
+    {
+      "name": "process_sched_timer_configuration",
+      "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+      "all_pointer_targets_equal_FILE_context_only": true,
+      "complete_current_final_bytes_reproduced": true,
+      "current_R64": []
+    },
+    {
+      "name": "process_init_stack_entry_config",
+      "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+      "all_pointer_targets_equal_FILE_context_only": true,
+      "complete_current_final_bytes_reproduced": true,
+      "current_R64": [
+        {
+          "offset": 96,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe897c40",
+          "kind": "NAMED",
+          "target": "process_init_stack_alloc_aligned_bridge",
+          "addend": 0
+        },
+        {
+          "offset": 104,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe898c00",
+          "kind": "NAMED",
+          "target": "process_init_stack_free_pages_bridge",
+          "addend": 0
+        },
+        {
+          "offset": 112,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe897bf0",
+          "kind": "NAMED",
+          "target": "process_init_stack_add_range_bridge",
+          "addend": 0
+        },
+        {
+          "offset": 120,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe87d490",
+          "kind": "NAMED",
+          "target": "mem_virt_to_phys_bridge",
+          "addend": 0
+        },
+        {
+          "offset": 128,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe897ca0",
+          "kind": "NAMED",
+          "target": "process_init_stack_attr_bridge",
+          "addend": 0
+        },
+        {
+          "offset": 136,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe898fa0",
+          "kind": "NAMED",
+          "target": "process_init_stack_pt_set_range_bridge",
+          "addend": 0
+        },
+        {
+          "offset": 144,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe85da60",
+          "kind": "NAMED",
+          "target": "get_system_body_result",
+          "addend": 0
+        },
+        {
+          "offset": 152,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe86a7b0",
+          "kind": "NAMED",
+          "target": "ihk_mc_modify_user_context",
+          "addend": 0
+        },
+        {
+          "offset": 160,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe898d10",
+          "kind": "NAMED",
+          "target": "process_init_stack_log_bridge",
+          "addend": 0
+        }
+      ]
+    },
+    {
+      "name": "process_init_stack_free_line",
+      "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+      "all_pointer_targets_equal_FILE_context_only": true,
+      "complete_current_final_bytes_reproduced": true,
+      "current_R64": []
+    },
+    {
+      "name": "process_init_stack_free_file",
+      "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+      "all_pointer_targets_equal_FILE_context_only": true,
+      "complete_current_final_bytes_reproduced": true,
+      "current_R64": [
+        {
+          "offset": 0,
+          "type": 1,
+          "input_addend": 24943,
+          "actual_final_address": "0xfffffffffe90dbe0",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+          "canonical_FILE_context_only": false
+        }
+      ]
+    },
+    {
+      "name": "process_init_stack_alloc_line",
+      "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+      "all_pointer_targets_equal_FILE_context_only": true,
+      "complete_current_final_bytes_reproduced": true,
+      "current_R64": []
+    },
+    {
+      "name": "process_init_stack_alloc_file",
+      "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+      "all_pointer_targets_equal_FILE_context_only": true,
+      "complete_current_final_bytes_reproduced": true,
+      "current_R64": [
+        {
+          "offset": 0,
+          "type": 1,
+          "input_addend": 24943,
+          "actual_final_address": "0xfffffffffe90dbe0",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+          "canonical_FILE_context_only": false
+        }
+      ]
+    },
+    {
+      "name": "process_page_fault_anon_alloc_file",
+      "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+      "all_pointer_targets_equal_FILE_context_only": true,
+      "complete_current_final_bytes_reproduced": true,
+      "current_R64": [
+        {
+          "offset": 0,
+          "type": 1,
+          "input_addend": 24943,
+          "actual_final_address": "0xfffffffffe90dbe0",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+          "canonical_FILE_context_only": false
+        }
+      ]
+    },
+    {
+      "name": "process_page_fault_cow_alloc_line",
+      "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+      "all_pointer_targets_equal_FILE_context_only": true,
+      "complete_current_final_bytes_reproduced": true,
+      "current_R64": []
+    },
+    {
+      "name": "process_page_fault_cow_alloc_file",
+      "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+      "all_pointer_targets_equal_FILE_context_only": true,
+      "complete_current_final_bytes_reproduced": true,
+      "current_R64": [
+        {
+          "offset": 0,
+          "type": 1,
+          "input_addend": 24943,
+          "actual_final_address": "0xfffffffffe90dbe0",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+          "canonical_FILE_context_only": false
+        }
+      ]
+    },
+    {
+      "name": "process_remap_free_line",
+      "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+      "all_pointer_targets_equal_FILE_context_only": true,
+      "complete_current_final_bytes_reproduced": true,
+      "current_R64": []
+    },
+    {
+      "name": "process_remap_free_file",
+      "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+      "all_pointer_targets_equal_FILE_context_only": true,
+      "complete_current_final_bytes_reproduced": true,
+      "current_R64": [
+        {
+          "offset": 0,
+          "type": 1,
+          "input_addend": 24943,
+          "actual_final_address": "0xfffffffffe90dbe0",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+          "canonical_FILE_context_only": false
+        }
+      ]
+    },
+    {
+      "name": "process_add_range_arch_memclear_callback",
+      "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+      "all_pointer_targets_equal_FILE_context_only": true,
+      "complete_current_final_bytes_reproduced": true,
+      "current_R64": []
+    },
+    {
+      "name": "process_tracked_allocator_source_file",
+      "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+      "all_pointer_targets_equal_FILE_context_only": true,
+      "complete_current_final_bytes_reproduced": true,
+      "current_R64": [
+        {
+          "offset": 0,
+          "type": 1,
+          "input_addend": 24943,
+          "actual_final_address": "0xfffffffffe90dbe0",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+          "canonical_FILE_context_only": false
+        }
+      ]
+    }
+  ],
+  "inherited_readonly_tables_and_scalars": [
+    {
+      "name": "process_idle_offsets",
+      "bytes": 80,
+      "raw_data_and_RELA_equal114": true,
+      "full_current_final_bytes_reproduced": true
+    },
+    {
+      "name": "process_idle_values",
+      "bytes": 36,
+      "raw_data_and_RELA_equal114": true,
+      "full_current_final_bytes_reproduced": true
+    },
+    {
+      "name": "process_timer_runtime_offsets",
+      "bytes": 120,
+      "raw_data_and_RELA_equal114": true,
+      "full_current_final_bytes_reproduced": true
+    },
+    {
+      "name": "process_sched_runqueue_offsets",
+      "bytes": 208,
+      "raw_data_and_RELA_equal114": true,
+      "full_current_final_bytes_reproduced": true
+    },
+    {
+      "name": "process_init_stack_user_category",
+      "bytes": 4,
+      "raw_data_and_RELA_equal114": true,
+      "full_current_final_bytes_reproduced": true
+    },
+    {
+      "name": "process_page_fault_anon_clear_profile_event",
+      "bytes": 4,
+      "raw_data_and_RELA_equal114": true,
+      "full_current_final_bytes_reproduced": true
+    },
+    {
+      "name": "process_memset_smp_fast_word_pattern",
+      "bytes": 4,
+      "raw_data_and_RELA_equal114": true,
+      "full_current_final_bytes_reproduced": true
+    },
+    {
+      "name": "process_dump_tree_enabled",
+      "bytes": 4,
+      "raw_data_and_RELA_equal114": true,
+      "full_current_final_bytes_reproduced": true
+    }
+  ],
+  "folded_consumer_transfer": {
+    "qualified16_predicates": {
+      "process_copy_entry_config": "Three-config ABI proof15 fields; extra visit_flags1 and nowait2 actual visitor-context/allocation lowering.",
+      "process_extend_region_entry_config": "Three-config ABI proof18 scalar/pointer fields forwarded to genuine complete body.",
+      "process_init_stack_entry_config": "Three-config ABI proof21 scalar/callback fields forwarded to genuine complete body;168B/align8 preserved.",
+      "process_schedule_exit_debug_input": "Eight-byte readonly NULL; explicit rusage frame+RET and schedule RCX=0 tailargument4 to genuine sched_schedule_exit_cleanup.",
+      "process_sched_timer_configuration": "Readonly [CInt;2]=[0,0],size8/align4; complete actual timer bridge frame+RET.",
+      "process_init_stack_free_line": "Actual3364 immediate in R8D argument5 to pagealloc_track_free_result.",
+      "process_init_stack_free_file": "Exact candidate C filename NUL string R64/MOVABS in RCX argument4 to pagealloc_track_free_result, no intervening branch/overwrite.",
+      "process_init_stack_alloc_line": "Actual3359 stack eighth argument to _ihk_mc_alloc_aligned_pages_node.",
+      "process_init_stack_alloc_file": "Exact candidate C filename NUL string R64/MOVABS pushed as seventh argument to _ihk_mc_alloc_aligned_pages_node.",
+      "process_page_fault_anon_alloc_file": "Exact candidate C filename NUL string pushed as seventh aligned-page allocator argument; existing3058 line retained.",
+      "process_page_fault_cow_alloc_line": "Actual3145 stack eighth argument to _ihk_mc_alloc_aligned_pages_node.",
+      "process_page_fault_cow_alloc_file": "Exact candidate C filename NUL string pushed as seventh aligned-page allocator argument.",
+      "process_remap_free_line": "Actual2469 immediate in R8D argument5 to pagealloc_track_free_result.",
+      "process_remap_free_file": "Exact candidate C filename NUL string in RCX argument4 to pagealloc_track_free_result.",
+      "process_add_range_arch_memclear_callback": "Readonly eight-byte None/NULL; actual complete zeroing loop equals old default NULL-path loop under finite register rename/branch relocation/noops, same genuine physical-view selector/base.",
+      "process_tracked_allocator_source_file": "Actual process_alloc_bridge FILE literal RDX argument3 to _kmalloc; all33 original compiled cell users also carry positive exact NUL literal R64/MOVABS operands."
+    },
+    "qualified_three_config54_fields": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/independent-actual-qualification-review-1/THREE-CONFIG-FOLDED-ABI-ARGUMENTS.json",
+      "bytes": 39665,
+      "sha256": "43696e52fdf98f9aad8de67137075abcae9626773645a0bb941a1e92c8f392bc"
+    },
+    "qualified_remaining_predicates": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/independent-actual-qualification-review-1/FINAL-CELL-FOLDED-CONSUMER-SUPPLEMENT.json",
+      "bytes": 11456,
+      "sha256": "aafee1e9483efecae3386fa407675ce70427dd096798d005ecd7e996a2a3a7a9"
+    },
+    "qualified33_filename_operands": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/independent-actual-qualification-review-1/TRACKED33-FILENAME-LITERAL-EDGES.CORRECTED.json",
+      "bytes": 30398,
+      "sha256": "93d27c51b58f9dbf146ddc7d4a781a6296685428eb65732ba7f1efebbe9beb44"
+    },
+    "current_31_config_and_cell_fields_exact_HOST": [
+      {
+        "name": "process_clone_vm_debug",
+        "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+        "all_pointer_targets_equal_FILE_context_only": true,
+        "complete_current_final_bytes_reproduced": true,
+        "current_R64": [
+          {
+            "offset": 0,
+            "type": 1,
+            "input_addend": 24943,
+            "actual_final_address": "0xfffffffffe90dbe0",
+            "kind": "EXACT_INPUT_NUL_STRING",
+            "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+            "canonical_FILE_context_only": false
+          },
+          {
+            "offset": 8,
+            "type": 1,
+            "input_addend": 24965,
+            "actual_final_address": "0xfffffffffe90dbf6",
+            "kind": "EXACT_INPUT_NUL_STRING",
+            "literal_hex": "636c6f6e655f74687265616400",
+            "canonical_FILE_context_only": false
+          }
+        ]
+      },
+      {
+        "name": "process_clone_ranges_debug",
+        "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+        "all_pointer_targets_equal_FILE_context_only": true,
+        "complete_current_final_bytes_reproduced": true,
+        "current_R64": [
+          {
+            "offset": 0,
+            "type": 1,
+            "input_addend": 24943,
+            "actual_final_address": "0xfffffffffe90dbe0",
+            "kind": "EXACT_INPUT_NUL_STRING",
+            "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+            "canonical_FILE_context_only": false
+          },
+          {
+            "offset": 8,
+            "type": 1,
+            "input_addend": 24965,
+            "actual_final_address": "0xfffffffffe90dbf6",
+            "kind": "EXACT_INPUT_NUL_STRING",
+            "literal_hex": "636c6f6e655f74687265616400",
+            "canonical_FILE_context_only": false
+          }
+        ]
+      },
+      {
+        "name": "process_clone_ranges_ok_debug",
+        "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+        "all_pointer_targets_equal_FILE_context_only": true,
+        "complete_current_final_bytes_reproduced": true,
+        "current_R64": [
+          {
+            "offset": 0,
+            "type": 1,
+            "input_addend": 24943,
+            "actual_final_address": "0xfffffffffe90dbe0",
+            "kind": "EXACT_INPUT_NUL_STRING",
+            "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+            "canonical_FILE_context_only": false
+          },
+          {
+            "offset": 8,
+            "type": 1,
+            "input_addend": 24965,
+            "actual_final_address": "0xfffffffffe90dbf6",
+            "kind": "EXACT_INPUT_NUL_STRING",
+            "literal_hex": "636c6f6e655f74687265616400",
+            "canonical_FILE_context_only": false
+          }
+        ]
+      },
+      {
+        "name": "process_clone_sigcommon_debug",
+        "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+        "all_pointer_targets_equal_FILE_context_only": true,
+        "complete_current_final_bytes_reproduced": true,
+        "current_R64": [
+          {
+            "offset": 0,
+            "type": 1,
+            "input_addend": 24943,
+            "actual_final_address": "0xfffffffffe90dbe0",
+            "kind": "EXACT_INPUT_NUL_STRING",
+            "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+            "canonical_FILE_context_only": false
+          },
+          {
+            "offset": 8,
+            "type": 1,
+            "input_addend": 24965,
+            "actual_final_address": "0xfffffffffe90dbf6",
+            "kind": "EXACT_INPUT_NUL_STRING",
+            "literal_hex": "636c6f6e655f74687265616400",
+            "canonical_FILE_context_only": false
+          }
+        ]
+      },
+      {
+        "name": "process_clone_sigshared_debug",
+        "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+        "all_pointer_targets_equal_FILE_context_only": true,
+        "complete_current_final_bytes_reproduced": true,
+        "current_R64": [
+          {
+            "offset": 0,
+            "type": 1,
+            "input_addend": 24943,
+            "actual_final_address": "0xfffffffffe90dbe0",
+            "kind": "EXACT_INPUT_NUL_STRING",
+            "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+            "canonical_FILE_context_only": false
+          },
+          {
+            "offset": 8,
+            "type": 1,
+            "input_addend": 24965,
+            "actual_final_address": "0xfffffffffe90dbf6",
+            "kind": "EXACT_INPUT_NUL_STRING",
+            "literal_hex": "636c6f6e655f74687265616400",
+            "canonical_FILE_context_only": false
+          }
+        ]
+      },
+      {
+        "name": "process_copy_pte_found_debug",
+        "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+        "all_pointer_targets_equal_FILE_context_only": true,
+        "complete_current_final_bytes_reproduced": true,
+        "current_R64": [
+          {
+            "offset": 0,
+            "type": 1,
+            "input_addend": 24943,
+            "actual_final_address": "0xfffffffffe90dbe0",
+            "kind": "EXACT_INPUT_NUL_STRING",
+            "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+            "canonical_FILE_context_only": false
+          },
+          {
+            "offset": 8,
+            "type": 1,
+            "input_addend": 25102,
+            "actual_final_address": "0xfffffffffe90dc7f",
+            "kind": "EXACT_INPUT_NUL_STRING",
+            "literal_hex": "636f70795f757365725f70746500",
+            "canonical_FILE_context_only": false
+          }
+        ]
+      },
+      {
+        "name": "process_copy_pte_size_debug",
+        "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+        "all_pointer_targets_equal_FILE_context_only": true,
+        "complete_current_final_bytes_reproduced": true,
+        "current_R64": [
+          {
+            "offset": 0,
+            "type": 1,
+            "input_addend": 24943,
+            "actual_final_address": "0xfffffffffe90dbe0",
+            "kind": "EXACT_INPUT_NUL_STRING",
+            "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+            "canonical_FILE_context_only": false
+          },
+          {
+            "offset": 8,
+            "type": 1,
+            "input_addend": 25102,
+            "actual_final_address": "0xfffffffffe90dc7f",
+            "kind": "EXACT_INPUT_NUL_STRING",
+            "literal_hex": "636f70795f757365725f70746500",
+            "canonical_FILE_context_only": false
+          }
+        ]
+      },
+      {
+        "name": "process_copy_pte_allocated_debug",
+        "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+        "all_pointer_targets_equal_FILE_context_only": true,
+        "complete_current_final_bytes_reproduced": true,
+        "current_R64": [
+          {
+            "offset": 0,
+            "type": 1,
+            "input_addend": 24943,
+            "actual_final_address": "0xfffffffffe90dbe0",
+            "kind": "EXACT_INPUT_NUL_STRING",
+            "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+            "canonical_FILE_context_only": false
+          },
+          {
+            "offset": 8,
+            "type": 1,
+            "input_addend": 25102,
+            "actual_final_address": "0xfffffffffe90dc7f",
+            "kind": "EXACT_INPUT_NUL_STRING",
+            "literal_hex": "636f70795f757365725f70746500",
+            "canonical_FILE_context_only": false
+          }
+        ]
+      },
+      {
+        "name": "process_copy_pte_zeroed_debug",
+        "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+        "all_pointer_targets_equal_FILE_context_only": true,
+        "complete_current_final_bytes_reproduced": true,
+        "current_R64": [
+          {
+            "offset": 0,
+            "type": 1,
+            "input_addend": 24943,
+            "actual_final_address": "0xfffffffffe90dbe0",
+            "kind": "EXACT_INPUT_NUL_STRING",
+            "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+            "canonical_FILE_context_only": false
+          },
+          {
+            "offset": 8,
+            "type": 1,
+            "input_addend": 25102,
+            "actual_final_address": "0xfffffffffe90dc7f",
+            "kind": "EXACT_INPUT_NUL_STRING",
+            "literal_hex": "636f70795f757365725f70746500",
+            "canonical_FILE_context_only": false
+          }
+        ]
+      },
+      {
+        "name": "process_copy_pte_copied_debug",
+        "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+        "all_pointer_targets_equal_FILE_context_only": true,
+        "complete_current_final_bytes_reproduced": true,
+        "current_R64": [
+          {
+            "offset": 0,
+            "type": 1,
+            "input_addend": 24943,
+            "actual_final_address": "0xfffffffffe90dbe0",
+            "kind": "EXACT_INPUT_NUL_STRING",
+            "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+            "canonical_FILE_context_only": false
+          },
+          {
+            "offset": 8,
+            "type": 1,
+            "input_addend": 25102,
+            "actual_final_address": "0xfffffffffe90dc7f",
+            "kind": "EXACT_INPUT_NUL_STRING",
+            "literal_hex": "636f70795f757365725f70746500",
+            "canonical_FILE_context_only": false
+          }
+        ]
+      },
+      {
+        "name": "process_copy_pte_installed_debug",
+        "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+        "all_pointer_targets_equal_FILE_context_only": true,
+        "complete_current_final_bytes_reproduced": true,
+        "current_R64": [
+          {
+            "offset": 0,
+            "type": 1,
+            "input_addend": 24943,
+            "actual_final_address": "0xfffffffffe90dbe0",
+            "kind": "EXACT_INPUT_NUL_STRING",
+            "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+            "canonical_FILE_context_only": false
+          },
+          {
+            "offset": 8,
+            "type": 1,
+            "input_addend": 25102,
+            "actual_final_address": "0xfffffffffe90dc7f",
+            "kind": "EXACT_INPUT_NUL_STRING",
+            "literal_hex": "636f70795f757365725f70746500",
+            "canonical_FILE_context_only": false
+          }
+        ]
+      },
+      {
+        "name": "process_extend_region_exists_debug",
+        "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+        "all_pointer_targets_equal_FILE_context_only": true,
+        "complete_current_final_bytes_reproduced": true,
+        "current_R64": [
+          {
+            "offset": 0,
+            "type": 1,
+            "input_addend": 24943,
+            "actual_final_address": "0xfffffffffe90dbe0",
+            "kind": "EXACT_INPUT_NUL_STRING",
+            "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+            "canonical_FILE_context_only": false
+          },
+          {
+            "offset": 8,
+            "type": 1,
+            "input_addend": 25506,
+            "actual_final_address": "0xfffffffffe90de13",
+            "kind": "EXACT_INPUT_NUL_STRING",
+            "literal_hex": "657874656e645f70726f636573735f726567696f6e00",
+            "canonical_FILE_context_only": false
+          }
+        ]
+      },
+      {
+        "name": "process_extend_region_alloc_debug",
+        "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+        "all_pointer_targets_equal_FILE_context_only": true,
+        "complete_current_final_bytes_reproduced": true,
+        "current_R64": [
+          {
+            "offset": 0,
+            "type": 1,
+            "input_addend": 24943,
+            "actual_final_address": "0xfffffffffe90dbe0",
+            "kind": "EXACT_INPUT_NUL_STRING",
+            "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+            "canonical_FILE_context_only": false
+          },
+          {
+            "offset": 8,
+            "type": 1,
+            "input_addend": 25506,
+            "actual_final_address": "0xfffffffffe90de13",
+            "kind": "EXACT_INPUT_NUL_STRING",
+            "literal_hex": "657874656e645f70726f636573735f726567696f6e00",
+            "canonical_FILE_context_only": false
+          }
+        ]
+      },
+      {
+        "name": "process_extend_region_success_debug",
+        "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+        "all_pointer_targets_equal_FILE_context_only": true,
+        "complete_current_final_bytes_reproduced": true,
+        "current_R64": [
+          {
+            "offset": 0,
+            "type": 1,
+            "input_addend": 24943,
+            "actual_final_address": "0xfffffffffe90dbe0",
+            "kind": "EXACT_INPUT_NUL_STRING",
+            "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+            "canonical_FILE_context_only": false
+          },
+          {
+            "offset": 8,
+            "type": 1,
+            "input_addend": 25506,
+            "actual_final_address": "0xfffffffffe90de13",
+            "kind": "EXACT_INPUT_NUL_STRING",
+            "literal_hex": "657874656e645f70726f636573735f726567696f6e00",
+            "canonical_FILE_context_only": false
+          }
+        ]
+      },
+      {
+        "name": "process_clone_config",
+        "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+        "all_pointer_targets_equal_FILE_context_only": true,
+        "complete_current_final_bytes_reproduced": true,
+        "current_R64": [
+          {
+            "offset": 48,
+            "type": 1,
+            "input_addend": 24943,
+            "actual_final_address": "0xfffffffffe90dbe0",
+            "kind": "EXACT_INPUT_NUL_STRING",
+            "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+            "canonical_FILE_context_only": false
+          },
+          {
+            "offset": 80,
+            "type": 1,
+            "input_addend": 0,
+            "actual_final_address": "0xfffffffffe8fe660",
+            "kind": "EXACT_INPUT_SECTION_OWNER",
+            "owners": [
+              "process_clone_vm_debug"
+            ],
+            "delta": 0
+          },
+          {
+            "offset": 88,
+            "type": 1,
+            "input_addend": 0,
+            "actual_final_address": "0xfffffffffe8fe5e0",
+            "kind": "EXACT_INPUT_SECTION_OWNER",
+            "owners": [
+              "process_clone_ranges_debug"
+            ],
+            "delta": 0
+          },
+          {
+            "offset": 96,
+            "type": 1,
+            "input_addend": 0,
+            "actual_final_address": "0xfffffffffe8fe600",
+            "kind": "EXACT_INPUT_SECTION_OWNER",
+            "owners": [
+              "process_clone_ranges_ok_debug"
+            ],
+            "delta": 0
+          },
+          {
+            "offset": 104,
+            "type": 1,
+            "input_addend": 0,
+            "actual_final_address": "0xfffffffffe8fe620",
+            "kind": "EXACT_INPUT_SECTION_OWNER",
+            "owners": [
+              "process_clone_sigcommon_debug"
+            ],
+            "delta": 0
+          },
+          {
+            "offset": 112,
+            "type": 1,
+            "input_addend": 0,
+            "actual_final_address": "0xfffffffffe8fe640",
+            "kind": "EXACT_INPUT_SECTION_OWNER",
+            "owners": [
+              "process_clone_sigshared_debug"
+            ],
+            "delta": 0
+          },
+          {
+            "offset": 120,
+            "type": 1,
+            "input_addend": 0,
+            "actual_final_address": "0xfffffffffe86a7b0",
+            "kind": "NAMED",
+            "target": "ihk_mc_modify_user_context",
+            "addend": 0
+          },
+          {
+            "offset": 128,
+            "type": 1,
+            "input_addend": 0,
+            "actual_final_address": "0xfffffffffe842cb0",
+            "kind": "NAMED",
+            "target": "copy_user_ranges",
+            "addend": 0
+          }
+        ]
+      },
+      {
+        "name": "process_copy_entry_config",
+        "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+        "all_pointer_targets_equal_FILE_context_only": true,
+        "complete_current_final_bytes_reproduced": true,
+        "current_R64": [
+          {
+            "offset": 40,
+            "type": 1,
+            "input_addend": 24943,
+            "actual_final_address": "0xfffffffffe90dbe0",
+            "kind": "EXACT_INPUT_NUL_STRING",
+            "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+            "canonical_FILE_context_only": false
+          },
+          {
+            "offset": 64,
+            "type": 1,
+            "input_addend": 0,
+            "actual_final_address": "0xfffffffffe8fe6c0",
+            "kind": "EXACT_INPUT_SECTION_OWNER",
+            "owners": [
+              "process_copy_pte_found_debug"
+            ],
+            "delta": 0
+          },
+          {
+            "offset": 72,
+            "type": 1,
+            "input_addend": 0,
+            "actual_final_address": "0xfffffffffe8fe700",
+            "kind": "EXACT_INPUT_SECTION_OWNER",
+            "owners": [
+              "process_copy_pte_size_debug"
+            ],
+            "delta": 0
+          },
+          {
+            "offset": 80,
+            "type": 1,
+            "input_addend": 0,
+            "actual_final_address": "0xfffffffffe8fe680",
+            "kind": "EXACT_INPUT_SECTION_OWNER",
+            "owners": [
+              "process_copy_pte_allocated_debug"
+            ],
+            "delta": 0
+          },
+          {
+            "offset": 88,
+            "type": 1,
+            "input_addend": 0,
+            "actual_final_address": "0xfffffffffe8fe720",
+            "kind": "EXACT_INPUT_SECTION_OWNER",
+            "owners": [
+              "process_copy_pte_zeroed_debug"
+            ],
+            "delta": 0
+          },
+          {
+            "offset": 96,
+            "type": 1,
+            "input_addend": 0,
+            "actual_final_address": "0xfffffffffe8fe6a0",
+            "kind": "EXACT_INPUT_SECTION_OWNER",
+            "owners": [
+              "process_copy_pte_copied_debug"
+            ],
+            "delta": 0
+          },
+          {
+            "offset": 104,
+            "type": 1,
+            "input_addend": 0,
+            "actual_final_address": "0xfffffffffe8fe6e0",
+            "kind": "EXACT_INPUT_SECTION_OWNER",
+            "owners": [
+              "process_copy_pte_installed_debug"
+            ],
+            "delta": 0
+          }
+        ]
+      },
+      {
+        "name": "process_extend_region_entry_config",
+        "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+        "all_pointer_targets_equal_FILE_context_only": true,
+        "complete_current_final_bytes_reproduced": true,
+        "current_R64": [
+          {
+            "offset": 96,
+            "type": 1,
+            "input_addend": 24943,
+            "actual_final_address": "0xfffffffffe90dbe0",
+            "kind": "EXACT_INPUT_NUL_STRING",
+            "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+            "canonical_FILE_context_only": false
+          },
+          {
+            "offset": 112,
+            "type": 1,
+            "input_addend": 0,
+            "actual_final_address": "0xfffffffffe8fe780",
+            "kind": "EXACT_INPUT_SECTION_OWNER",
+            "owners": [
+              "process_extend_region_exists_debug"
+            ],
+            "delta": 0
+          },
+          {
+            "offset": 120,
+            "type": 1,
+            "input_addend": 0,
+            "actual_final_address": "0xfffffffffe8fe760",
+            "kind": "EXACT_INPUT_SECTION_OWNER",
+            "owners": [
+              "process_extend_region_alloc_debug"
+            ],
+            "delta": 0
+          },
+          {
+            "offset": 128,
+            "type": 1,
+            "input_addend": 0,
+            "actual_final_address": "0xfffffffffe8fe7a0",
+            "kind": "EXACT_INPUT_SECTION_OWNER",
+            "owners": [
+              "process_extend_region_success_debug"
+            ],
+            "delta": 0
+          }
+        ]
+      },
+      {
+        "name": "process_schedule_exit_debug_input",
+        "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+        "all_pointer_targets_equal_FILE_context_only": true,
+        "complete_current_final_bytes_reproduced": true,
+        "current_R64": []
+      },
+      {
+        "name": "process_sched_timer_configuration",
+        "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+        "all_pointer_targets_equal_FILE_context_only": true,
+        "complete_current_final_bytes_reproduced": true,
+        "current_R64": []
+      },
+      {
+        "name": "process_init_stack_entry_config",
+        "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+        "all_pointer_targets_equal_FILE_context_only": true,
+        "complete_current_final_bytes_reproduced": true,
+        "current_R64": [
+          {
+            "offset": 96,
+            "type": 1,
+            "input_addend": 0,
+            "actual_final_address": "0xfffffffffe897c40",
+            "kind": "NAMED",
+            "target": "process_init_stack_alloc_aligned_bridge",
+            "addend": 0
+          },
+          {
+            "offset": 104,
+            "type": 1,
+            "input_addend": 0,
+            "actual_final_address": "0xfffffffffe898c00",
+            "kind": "NAMED",
+            "target": "process_init_stack_free_pages_bridge",
+            "addend": 0
+          },
+          {
+            "offset": 112,
+            "type": 1,
+            "input_addend": 0,
+            "actual_final_address": "0xfffffffffe897bf0",
+            "kind": "NAMED",
+            "target": "process_init_stack_add_range_bridge",
+            "addend": 0
+          },
+          {
+            "offset": 120,
+            "type": 1,
+            "input_addend": 0,
+            "actual_final_address": "0xfffffffffe87d490",
+            "kind": "NAMED",
+            "target": "mem_virt_to_phys_bridge",
+            "addend": 0
+          },
+          {
+            "offset": 128,
+            "type": 1,
+            "input_addend": 0,
+            "actual_final_address": "0xfffffffffe897ca0",
+            "kind": "NAMED",
+            "target": "process_init_stack_attr_bridge",
+            "addend": 0
+          },
+          {
+            "offset": 136,
+            "type": 1,
+            "input_addend": 0,
+            "actual_final_address": "0xfffffffffe898fa0",
+            "kind": "NAMED",
+            "target": "process_init_stack_pt_set_range_bridge",
+            "addend": 0
+          },
+          {
+            "offset": 144,
+            "type": 1,
+            "input_addend": 0,
+            "actual_final_address": "0xfffffffffe85da60",
+            "kind": "NAMED",
+            "target": "get_system_body_result",
+            "addend": 0
+          },
+          {
+            "offset": 152,
+            "type": 1,
+            "input_addend": 0,
+            "actual_final_address": "0xfffffffffe86a7b0",
+            "kind": "NAMED",
+            "target": "ihk_mc_modify_user_context",
+            "addend": 0
+          },
+          {
+            "offset": 160,
+            "type": 1,
+            "input_addend": 0,
+            "actual_final_address": "0xfffffffffe898d10",
+            "kind": "NAMED",
+            "target": "process_init_stack_log_bridge",
+            "addend": 0
+          }
+        ]
+      },
+      {
+        "name": "process_init_stack_free_line",
+        "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+        "all_pointer_targets_equal_FILE_context_only": true,
+        "complete_current_final_bytes_reproduced": true,
+        "current_R64": []
+      },
+      {
+        "name": "process_init_stack_free_file",
+        "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+        "all_pointer_targets_equal_FILE_context_only": true,
+        "complete_current_final_bytes_reproduced": true,
+        "current_R64": [
+          {
+            "offset": 0,
+            "type": 1,
+            "input_addend": 24943,
+            "actual_final_address": "0xfffffffffe90dbe0",
+            "kind": "EXACT_INPUT_NUL_STRING",
+            "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+            "canonical_FILE_context_only": false
+          }
+        ]
+      },
+      {
+        "name": "process_init_stack_alloc_line",
+        "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+        "all_pointer_targets_equal_FILE_context_only": true,
+        "complete_current_final_bytes_reproduced": true,
+        "current_R64": []
+      },
+      {
+        "name": "process_init_stack_alloc_file",
+        "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+        "all_pointer_targets_equal_FILE_context_only": true,
+        "complete_current_final_bytes_reproduced": true,
+        "current_R64": [
+          {
+            "offset": 0,
+            "type": 1,
+            "input_addend": 24943,
+            "actual_final_address": "0xfffffffffe90dbe0",
+            "kind": "EXACT_INPUT_NUL_STRING",
+            "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+            "canonical_FILE_context_only": false
+          }
+        ]
+      },
+      {
+        "name": "process_page_fault_anon_alloc_file",
+        "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+        "all_pointer_targets_equal_FILE_context_only": true,
+        "complete_current_final_bytes_reproduced": true,
+        "current_R64": [
+          {
+            "offset": 0,
+            "type": 1,
+            "input_addend": 24943,
+            "actual_final_address": "0xfffffffffe90dbe0",
+            "kind": "EXACT_INPUT_NUL_STRING",
+            "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+            "canonical_FILE_context_only": false
+          }
+        ]
+      },
+      {
+        "name": "process_page_fault_cow_alloc_line",
+        "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+        "all_pointer_targets_equal_FILE_context_only": true,
+        "complete_current_final_bytes_reproduced": true,
+        "current_R64": []
+      },
+      {
+        "name": "process_page_fault_cow_alloc_file",
+        "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+        "all_pointer_targets_equal_FILE_context_only": true,
+        "complete_current_final_bytes_reproduced": true,
+        "current_R64": [
+          {
+            "offset": 0,
+            "type": 1,
+            "input_addend": 24943,
+            "actual_final_address": "0xfffffffffe90dbe0",
+            "kind": "EXACT_INPUT_NUL_STRING",
+            "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+            "canonical_FILE_context_only": false
+          }
+        ]
+      },
+      {
+        "name": "process_remap_free_line",
+        "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+        "all_pointer_targets_equal_FILE_context_only": true,
+        "complete_current_final_bytes_reproduced": true,
+        "current_R64": []
+      },
+      {
+        "name": "process_remap_free_file",
+        "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+        "all_pointer_targets_equal_FILE_context_only": true,
+        "complete_current_final_bytes_reproduced": true,
+        "current_R64": [
+          {
+            "offset": 0,
+            "type": 1,
+            "input_addend": 24943,
+            "actual_final_address": "0xfffffffffe90dbe0",
+            "kind": "EXACT_INPUT_NUL_STRING",
+            "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+            "canonical_FILE_context_only": false
+          }
+        ]
+      },
+      {
+        "name": "process_add_range_arch_memclear_callback",
+        "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+        "all_pointer_targets_equal_FILE_context_only": true,
+        "complete_current_final_bytes_reproduced": true,
+        "current_R64": []
+      },
+      {
+        "name": "process_tracked_allocator_source_file",
+        "all_nonpointer_initializer_bytes_equal_qualified_HOST": true,
+        "all_pointer_targets_equal_FILE_context_only": true,
+        "complete_current_final_bytes_reproduced": true,
+        "current_R64": [
+          {
+            "offset": 0,
+            "type": 1,
+            "input_addend": 24943,
+            "actual_final_address": "0xfffffffffe90dbe0",
+            "kind": "EXACT_INPUT_NUL_STRING",
+            "literal_hex": "2f7372632f6b65726e656c2f70726f636573732e6300",
+            "canonical_FILE_context_only": false
+          }
+        ]
+      }
+    ],
+    "all_current_predicate_functions_complete_code_equal_HOST": [
+      "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current",
+      "add_process_memory_range",
+      "copy_user_pte",
+      "copy_user_ranges",
+      "create_address_space",
+      "create_thread",
+      "destroy_thread",
+      "detach_address_space",
+      "extend_process_region",
+      "init_process_stack",
+      "join_process_memory_range",
+      "new_resource_set",
+      "proc_init",
+      "process_add_range_alloc_bridge",
+      "process_add_range_free_bridge",
+      "process_add_range_memclear_bridge",
+      "process_alloc_bridge",
+      "process_clone_thread_body_result",
+      "process_create_thread_alloc_pages_bridge",
+      "process_create_thread_release_address_space_bridge",
+      "process_free_thread_pages_bridge",
+      "process_free_vm_bridge",
+      "process_init_stack_alloc_aligned_bridge",
+      "process_init_stack_free_pages_bridge",
+      "process_mckfd_free_bridge",
+      "process_memory_range_free_bridge",
+      "process_optional_free_bridge",
+      "process_page_fault_anon_allocate_body_result",
+      "process_page_fault_cow_allocate_body_result",
+      "process_policy_free_bridge",
+      "process_range_kfree_bridge",
+      "process_release_address_space_action_bridge",
+      "process_release_sigcommon_bridge",
+      "process_sched_rusage_debug_bridge",
+      "process_sched_timer_init_bridge",
+      "process_split_range_alloc_bridge",
+      "release_address_space",
+      "release_process",
+      "release_process_checked",
+      "release_process_vm",
+      "release_process_vm_checked",
+      "release_sigcommon",
+      "remap_one_page",
+      "schedule",
+      "split_process_memory_range"
+    ],
+    "complete_new_final_code_and_all_positive_R64_proven": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/independent-artifact-review-preparation-1/ACTUAL-CURRENT-CONSUMER-READBACK.CORRECTED.json",
+      "bytes": 900572,
+      "sha256": "47fc81e6ee7ccec0d7dd7d2c9f135b58e7c3a967330383e437e843b2d836c97c"
+    },
+    "only_FILE_literal_context_changes": [
+      {
+        "HOST": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/candidate/kernel/process.c",
+        "production": "/src/kernel/process.c"
+      },
+      {
+        "HOST": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/relative-module-context-correction-source-1/context-root/kernel/rust/x86_cpu_helpers.rs",
+        "production": "/src/kernel/rust/x86_cpu_helpers.rs"
+      }
+    ],
+    "no_predicate_weakened_or_native_claim": true
+  },
+  "warnings": [
+    {
+      "index": 0,
+      "stream": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/OUTPUT/work/evidence/00.stderr",
+        "bytes": 56443,
+        "sha256": "ae71a93a865c49bc5b90c6cdb4b2053c25b165f9ea8287afcc34943c34660276"
+      },
+      "messages": [
+        "target feature `sse2` must be enabled to ensure that the ABI of the current target can be implemented correctly",
+        "the feature `core_intrinsics` is internal to the compiler or standard library",
+        "unused import: `IhkSpinlock`",
+        "unused import: `MaybeUninit`",
+        "unused imports: `null_mut` and `read_volatile`",
+        "unused import: `MovePagesSmpReq`",
+        "unused imports: `EFAULT`, `ENODEV`, `ENOMEM`, `MPOL_MF_MOVE_ALL`, `MovePagesGetNrNodesFn`, `MovePagesLogFn`, `MovePagesSmpCallFn`, `MovePagesVerifyFn`, `SyscallCopyFromUserFn`, `SyscallCopyToUserFn`, `SyscallMckfdFreeFn`, `SyscallPolicyAllocFn`, `SyscallRdtscFn`, `SyscallRwlockFn`, `move_pages_free_arrays`, `move_pages_log_delta`, `move_pages_policy_result`, and `move_pages_smp_req_prepare_result`",
+        "unused import: `super::*`",
+        "unused import: `super::*`",
+        "unused import: `super::*`",
+        "unused imports: `align_of` and `size_of`",
+        "unused import: `addr_of_mut`",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "unnecessary `unsafe` block",
+        "type `ProcessCloneConfig` is more private than the item `process_clone_thread_body_result`",
+        "struct `CallerCredits` is never constructed",
+        "associated items `acquire` and `cancel_unpublished` are never used",
+        "struct `PrivateFork` is never constructed",
+        "struct `CreateFailure` is never constructed",
+        "struct `PrivateFailure` is never constructed",
+        "enum `BeginFailure` is never used",
+        "associated items `create`, `create_owned`, `create_raw`, `validate`, `cancel`, and `begin` are never used",
+        "field `child_pid` is never read",
+        "field `actual` is never read",
+        "method `handle` is never used",
+        "method `caller_cleanup_allowed` is never used",
+        "constant `NATIVE_QUEUE_ABI_VERSION` is never used",
+        "enum `PendingFreeBatchState` is never used",
+        "struct `PendingPhysicalBounds` is never constructed",
+        "struct `PendingFreeCallbackArgs` is never constructed",
+        "struct `PendingInventoryLease` is never constructed",
+        "associated items `new`, `descriptor`, `descriptor_node`, and `descriptor_index` are never used",
+        "struct `ValidatedPendingInventory` is never constructed",
+        "struct `PendingFreeBatch` is never constructed",
+        "associated function `new` is never used",
+        "function `validate_pending_inventory_metadata` is never used",
+        "function `validate_pending_inventory_ring` is never used",
+        "function `validate_pending_inventory` is never used",
+        "methods `try_reanchor_into` and `reanchor_into` are never used",
+        "function `drain_validated_pending_inventory` is never used",
+        "function `detach_pending_free_batch` is never used",
+        "function `drain_pending_free_batch` is never used",
+        "associated function `unpublished` is never used",
+        "function `native_irq_work_descriptor_offset` is never used",
+        "associated items `new` and `can_drain` are never used",
+        "module `selected_APboot_storage` should have a snake case name",
+        "static variable `no_execute` should have an upper case name",
+        "static variable `selected_mode` should have an upper case name",
+        "direct cast of function item into an integer",
+        "direct cast of function item into an integer",
+        "direct cast of function item into an integer",
+        "`ihk_ikc_send` redeclared with a different signature",
+        "`page_fault_process_vm` redeclared with a different signature",
+        "`sched_wakeup_thread` redeclared with a different signature",
+        "`ihk_mc_map_virtual` redeclared with a different signature",
+        "`ihk_mc_unmap_virtual` redeclared with a different signature",
+        "`ihk_mc_map_virtual` redeclared with a different signature",
+        "`ihk_mc_unmap_virtual` redeclared with a different signature",
+        "`page_fault_process_vm` redeclared with a different signature",
+        "`mem_kmalloc_panic` redeclares `panic` with a different signature",
+        "`mem_register_interrupt_handler_provider` redeclares `ihk_mc_register_interrupt_handler` with a different signature",
+        "`mem_get_vector_provider` redeclares `ihk_mc_get_vector` with a different signature",
+        "`ORIGINAL_CPU_INFO` redeclares `ihk_mc_get_cpu_info` with a different signature",
+        "`ORIGINAL_PROFILE_EVENT_ADD` redeclares `profile_event_add` with a different signature",
+        "`mem_reserve_panic_provider` redeclares `panic` with a different signature",
+        "`phys_to_page` redeclared with a different signature",
+        "`process_copy_set_range_public` redeclares `ihk_mc_pt_set_range` with a different signature",
+        "`ihk_mc_map_virtual` redeclared with a different signature",
+        "`ihk_mc_unmap_virtual` redeclared with a different signature",
+        "`release_thread` redeclared with a different signature",
+        "`process_spin_lock_bridge_c` redeclares `process_spin_lock_bridge` with a different signature",
+        "`process_spin_unlock_bridge_c` redeclares `process_spin_unlock_bridge` with a different signature",
+        "`ihk_mc_pt_lookup_pte` redeclared with a different signature",
+        "`f06_set_signal_kernel_panic` redeclares `panic` with a different signature",
+        "`set_cputime` redeclared with a different signature",
+        "`f06_vdso_pt_set_range` redeclares `ihk_mc_pt_set_range` with a different signature",
+        "`f06_signal_adapter_syscall` redeclares `syscall` with a different signature",
+        "`c_map_fixed_area` redeclares `map_fixed_area` with a different signature",
+        "`c_cpu_info` redeclares `ihk_mc_get_cpu_info` with a different signature",
+        "`x86_memory_existing_panic` redeclares `panic` with a different signature",
+        "`page_unmap` redeclared with a different signature",
+        "`phys_to_page` redeclared with a different signature",
+        "`memory_find_command_line` redeclares `find_command_line` with a different signature",
+        "`syscall_generic_forwarding` redeclared with a different signature",
+        "`memobj_unref` redeclared with a different signature",
+        "`ihk_mc_pt_lookup_pte` redeclared with a different signature",
+        "`ihk_mc_pt_set_range` redeclared with a different signature",
+        "143 warnings emitted"
+      ]
+    },
+    {
+      "index": 1,
+      "stream": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/OUTPUT/work/evidence/01.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "messages": []
+    },
+    {
+      "index": 2,
+      "stream": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/OUTPUT/work/evidence/02.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "messages": []
+    },
+    {
+      "index": 3,
+      "stream": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/OUTPUT/work/evidence/03.stderr",
+        "bytes": 75,
+        "sha256": "12809099aa45e66d7b33bf89517b78afdca620d7fab03922318e6758282b2f69"
+      },
+      "messages": []
+    }
+  ],
+  "Rust_warning_messages_added": [],
+  "Rust_warning_messages_removed": [],
+  "Rust_warning_stream_byte_equal114": false,
+  "both_C_stderr_empty": true,
+  "link_stderr_byte_equal114": true,
+  "link_warning_preserved": "/usr/bin/ld: warning: mckernel.img has a LOAD segment with RWX permissions",
+  "actual_native_acceptance": false,
+  "wholefile_acceptance": false
+}

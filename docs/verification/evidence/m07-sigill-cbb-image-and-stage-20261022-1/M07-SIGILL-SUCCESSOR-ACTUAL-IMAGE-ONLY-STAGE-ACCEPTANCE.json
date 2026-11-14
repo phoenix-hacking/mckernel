@@ -1,0 +1,52 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/m07_remaining_stager_consumer_review",
+  "implementation_ownership": false,
+  "decision": "PASS_ACTUAL_CBB_IMAGE_ONLY_OFFLINE_STAGE_AND_MANIFEST_ONLY",
+  "findings": [],
+  "producer": {
+    "path": "/home/holden/mckernel/scratch/m07si-261022-1/numa/stage-result.json",
+    "sha256": "10649b1407f3689e5c2ffd8180d8dd687fb23cf3c3636934044e04c028194944",
+    "bytes": 18749
+  },
+  "manifest": {
+    "path": "/home/holden/mckernel-work/scratch/m07sim-261022-1/numa/manifest.json",
+    "sha256": "af6e35ced369213175433aeb2fb209344fe8fe1751bb74051d706a02a5ec15fe",
+    "bytes": 5190
+  },
+  "accepted_boundary": {
+    "members": 60,
+    "unchanged_members": 59,
+    "sole_changed_member": "images/mckernel.img",
+    "changed_fields": ["size", "sha256"],
+    "image_sha256": "cbb04b9ecc9b808d8545e847fad8a16d3223c2c172961bcea40da44e87511dd9",
+    "image_bytes": 8435448,
+    "raw_header": "Exactly one110-byte header; only filesize bytes59/60 differ,8435496→8435448.",
+    "all_other_metadata_preserved": true,
+    "producer_overlay_manifest_maps_equal": true,
+    "manifest_image_base_overlay_joins_match": true,
+    "preserved": "Diagnostic7430 payload, launcher33f, modules, profile and strict payload oracle.",
+    "aggregate_stage_bytes": 35376373
+  },
+  "actual_capture": {
+    "owned_result_sha256": "01c4e122b4536ca9a5c9109e2dd30ba3ad454c27ca4d9942d54c35aeba50ae0d",
+    "command_equals_root_grant": true,
+    "pid": 3024725,
+    "starttime": 44789515,
+    "returncode": 0,
+    "seconds": 19.125368931971025,
+    "child_joined": true,
+    "group_absent": true,
+    "streams_closed": true,
+    "stderr_bytes": 0,
+    "stream_hashes_match": true,
+    "errors": null
+  },
+  "review_basis": "Receipt/header proof and all60 reported final-map entries compared against accepted diagnostic baseline. Full raw-record metadata/order preservation uses the qualified stager's successful actual postconditions; no archive or image hash replay.",
+  "projection_permission": "Root may record this genuine exact offline-stage acceptance and use its manifest for separately reviewed normalization.",
+  "limitations": "No normalization, guest execution, native behavior or physical clearance established.",
+  "native_credit_delta": 0,
+  "physical_acceptance": null,
+  "execution_release": null,
+  "quiescent": true
+}

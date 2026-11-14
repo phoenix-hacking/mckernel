@@ -1,0 +1,413 @@
+{
+  "index": 8,
+  "local_index": 2,
+  "symbol": "arch_syscall_forward_context_bridge",
+  "argv": [
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-three-26eb-bridges-source-1/forward-context/future-output-1/driver"
+  ],
+  "actual_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=2147483648",
+    "--cpu=60",
+    "--fsize=67108864",
+    "--core=0",
+    "--",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-three-26eb-bridges-source-1/forward-context/future-output-1/driver"
+  ],
+  "admission": {
+    "wall": 1793081319.695429,
+    "monotonic": 863426.264385889,
+    "boottime": 878764.391436325,
+    "fixed_cutoff_ref": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW18H-20261026-FIXED-CUTOFF-BINDING.json",
+      "bytes": 952,
+      "sha256": "2e1d3fa8338e51973cf0af5677e7e256259aff539adb164be0fb53240d834b35"
+    },
+    "memory_available_bytes": 27212689408,
+    "aggregate_reserved_bytes": 21474836480,
+    "budget": {
+      "schema_version": 2,
+      "id": "7f4af94a83b14cc08f97401f5891d965",
+      "budget": "57774.852125",
+      "initial_balance": "57774.8521250000",
+      "minimum_balance": "52079.8011050000",
+      "last_balance": "52079.8011050000",
+      "spent": "22812.3311000000",
+      "remaining": "34962.5210250000",
+      "scope": "Cumulative account-wide observed balance decreases; increases never restore allowance; stale snapshots may count conservatively; in-flight charges can settle later"
+    },
+    "heartbeat_at": "2026-10-27T06:08:27.993193+00:00",
+    "phase": "running",
+    "account_wall": 1793081319.6957204,
+    "heartbeat_age_seconds": 11.702527523040771,
+    "available_prepaid_balance": "52079.8011050000",
+    "spendControlReached": null,
+    "loadavg": [
+      0.87,
+      0.91,
+      0.97
+    ],
+    "CPU_affinity": [
+      0,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ]
+  },
+  "purpose": "Functional selected C/Rust adapter ABI parity at one controlled external provider; no actual usercopy or kernel dispatch.",
+  "authenticated_headers": [
+    {
+      "path": "/home/holden/mckernel/lib/include/ihk/cpu.h",
+      "bytes": 5479,
+      "sha256": "a25efd9095efe3f357efb2a2d7d810e2a6d1ed0aea3c6e1d4fac2c0ee8a83c81"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/list.h",
+      "bytes": 2870,
+      "sha256": "4ddb20f524e073fb69b6fcb1268121c76c653c4007d914437555a4d17af48440"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/ihk/context.h",
+      "bytes": 2286,
+      "sha256": "13a67bcf26c512ac27ece4ab801e5e96976b88ec505d9f549e53755b431171f8"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/registers.h",
+      "bytes": 5778,
+      "sha256": "43fd6d2e278953684574224927fe65bc514a88c5529d97f688e1e21b1864a6fc"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/types.h",
+      "bytes": 515,
+      "sha256": "72179c1e931fdfdfa700d2ecfe745e344027ac0b4af299e8a9ec17957fc9a399"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/ihk/types.h",
+      "bytes": 1074,
+      "sha256": "c37a7c748f2439ddfd847725a4d559c008f2aca09c45114fb07e73337013f449"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch/cpu.h",
+      "bytes": 913,
+      "sha256": "2130ac820f72c6349cab63f6d456cd0ff23fb00a99a745681e56a7ec4eb9b187"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/mc_perf_event.h",
+      "bytes": 8775,
+      "sha256": "8a9978dcab179a63b3aff3b66641a4814bacaf86cf4631ecdf39e32df45ea5dd"
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/cokernel/smp/x86_64/include/march.h",
+      "bytes": 1174,
+      "sha256": "32984f29c20133f89b2410c922fc291cd675f2942b6128cea55d0e0ff3826f49"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/ihk/atomic.h",
+      "bytes": 2680,
+      "sha256": "829c76b8e61efd50e6cbc968c6eac56fc7b151c9da4143fd40bde176117ef78d"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/lwk/compiler.h",
+      "bytes": 17894,
+      "sha256": "eeb3c5b9d47dc32d73908c9048002a34ef77e5d6bdc03346b27b494ded5b49dd"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/lwk/compiler-gcc.h",
+      "bytes": 11651,
+      "sha256": "1a2693ab50b3768ca2ca362bb0e6773bdabc12425ad4061802b3aca20dbe47a2"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/cls.h",
+      "bytes": 2984,
+      "sha256": "19719fe663c33bc3aec62875baa7f1b8d4a0e0042b5a8aae94fe7b6c9799a4c1"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/process.h",
+      "bytes": 26602,
+      "sha256": "8848d536f2fa847a59af72d573ec9c55838c27cea664d46438ab4e038bf83649"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/ihk/mm.h",
+      "bytes": 9548,
+      "sha256": "a1b412608df7512a1b7295c6f19b3ec5a77e6364e8f24b208ab1a29e7556e5b1"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/memory.h",
+      "bytes": 1377,
+      "sha256": "42c0c943511a9eb26133c9f1ca132ade5eb10606ae43c96f6d81d59a69ffeca2"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch-memory.h",
+      "bytes": 8996,
+      "sha256": "1704ac32bf55f421c802df661c844b496a1660b8b89e5d12cc2d994d835b5b49"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/errno.h",
+      "bytes": 5167,
+      "sha256": "79e1671f269b7dab1f2e1ea672c402bc03738b85029b6f3b3031efe22dde9157"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/generic-errno.h",
+      "bytes": 2497,
+      "sha256": "7dca1a209f95dbc287627f3b590621762063acc080b65709aea88d3f48c8bfe4"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/ihk/lock.h",
+      "bytes": 2907,
+      "sha256": "fd34fe3adae00d309fc48e4a8f8c4170edfdfc6bfffd5b37db13f5391ed84f6f"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch-lock.h",
+      "bytes": 4603,
+      "sha256": "ca8baa66ed77634cd6319a918211b3eb8fe80fc7dcb2ac0110ab6bfbd0c1b81b"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/config.h",
+      "bytes": 1055,
+      "sha256": "da78d6a8c94b274adad3159b1cc373b00e5de7fea6cc2ae7955a700078db6b2f"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch/mm.h",
+      "bytes": 141,
+      "sha256": "9d8faad8307f160b596b51cd482bcc6dd5c38a62b848ec6bc6c09dd714d4cdfe"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/page.h",
+      "bytes": 1647,
+      "sha256": "c8f3f5e7804c71430c814395ea14a1ee93267180713caeb39880b662cc9cd0dc"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/ihk/debug.h",
+      "bytes": 1294,
+      "sha256": "7315ef758c56c4888242295ed9340b44f649d772b1315502acc49eb6105048dc"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/rbtree.h",
+      "bytes": 3107,
+      "sha256": "86022fb1a246c7ba43bb66913ca4c6a6e9a7d896607c6364ea941b5304ae5332"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/lwk/stddef.h",
+      "bytes": 358,
+      "sha256": "2e915a7ca2a67b2c57690836bcf2bc37639ae657f5e294ee3309cb13652a4b3b"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/signal.h",
+      "bytes": 7474,
+      "sha256": "3cea81b9b2f723fbff2cafa634761d50316a397d06df2c12f94fe5f0dae03752"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/memobj.h",
+      "bytes": 3957,
+      "sha256": "7d587411f1b6957c6fcc6f61d8f03b052d875cfd774f602aefe05ff99f536bb9"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/pager.h",
+      "bytes": 1223,
+      "sha256": "24460cdc45191c6ad0905f10a8e2cb89d4fd4b347cffc1ec3914ce51104bed7f"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/limits.h",
+      "bytes": 1358,
+      "sha256": "b71fc4ae02cfb82c474b61012bd55375ec7e0b0826a3280755ddb3631cc0a6ee"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/object_helpers.h",
+      "bytes": 61009,
+      "sha256": "0131700fc9f5bfdae8e1210664befb8a20f7655ba96b55a7d64abbe7703f517a"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/affinity.h",
+      "bytes": 1801,
+      "sha256": "9f7dbbeebedd2f74961bfe6833c75ebb2306e9eb072d69ee8ce3486f0a0f82c7"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/syscall.h",
+      "bytes": 20836,
+      "sha256": "459e6d0faec3f1b8366a0d329571ef5ea813042706be11f9423b0399bbba6ffa"
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/cokernel/smp/x86_64/include/ihk/memconst.h",
+      "bytes": 198,
+      "sha256": "38b25a9fedbcf50d9eae799681aff60705d6e2e5e3559bcb721b0541ce98dc61"
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/include/ihk/ikc.h",
+      "bytes": 312,
+      "sha256": "a7a03e3f661eac44cbef67fa41bf398adda43fc37df1c0d9fa88427d6c69127b"
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/ikc/include/ikc/ihk.h",
+      "bytes": 4138,
+      "sha256": "0ddad6947192b527be6a6f9560718c98fb70b50cb2cbb838094d0ca6ce199e3e"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/string.h",
+      "bytes": 1588,
+      "sha256": "f612dad80dd16ff0d4d6232f155cc879522de6203ce015afa3ef0c36c3dd5636"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch-string.h",
+      "bytes": 238,
+      "sha256": "98fe2c9021167e9b08d75dbe5ffc6b25bc84d708a8baeaf60d16fcb88e5b3831"
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/ikc/include/ikc/queue.h",
+      "bytes": 4501,
+      "sha256": "0acb85aee2d3b0b7620a0b222461815c6c96c530c5b7182fe60e8ae52ec4e461"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/rlimit.h",
+      "bytes": 2508,
+      "sha256": "c5c9b7255c09d56766d2c2bec72b6261579e51e2925457fcc8c098fe08cd907a"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/generic-rlimit.h",
+      "bytes": 445,
+      "sha256": "94bca7ac86e30806385aea32eeba1c6a39dea32a6d8f5c79167c3473bc3dffbb"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/time.h",
+      "bytes": 1780,
+      "sha256": "6d5ec6fd43f6632b5772fbdd99c96957d842951052034a3e355aa63c13ba56d7"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/profile.h",
+      "bytes": 3241,
+      "sha256": "a3185194bca3733304a30c08b70de466ecdcf1da223ab5053687d4cd125171ec"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/bitops.h",
+      "bytes": 1149,
+      "sha256": "85c1781bb49918a97d8e04c48b3723927377e6d157824f4bd79e38243d6809ff"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/bitops-test_bit.h",
+      "bytes": 117,
+      "sha256": "1f2fdb9a3a7d2b22d897df29955ea9c8c94fe0a78d3262aa762a7990f47ce635"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch-bitops.h",
+      "bytes": 598,
+      "sha256": "c4a9e5067fb84742e5bb411b1a373bed1a4917abb17dc618e8d2630bd6f2d79a"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/waitq.h",
+      "bytes": 1847,
+      "sha256": "f3fc8247a033a77efa407f6fe365a2b1bcad404e96de2cbf845f407a2e5946ff"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/futex.h",
+      "bytes": 6087,
+      "sha256": "75acd5b0a0e542777c9fb86c5f75ab9e4a1f9d4df5e59fd516cf854614725407"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/plist.h",
+      "bytes": 4349,
+      "sha256": "d66b1a000f5226a06ef28f3ba75f34a0acea9cd4cd5a93c8113ca5764d9b2a29"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch-futex.h",
+      "bytes": 424,
+      "sha256": "1229adc72ebf596abc31ee9daad76ee005072ebb0aa29b3d71835ccfe95feb55"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/cpulocal.h",
+      "bytes": 1299,
+      "sha256": "9c717afdbf8c77744c8f1ca9a8c00e4ffa2eb623f310905799b9c1b07bd685b2"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/kmalloc.h",
+      "bytes": 1171,
+      "sha256": "fff00b6875c3f87a0d9c4bdfeadf3c3d3eb731d843dc0650f6364352ac2b1144"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/uio.h",
+      "bytes": 486,
+      "sha256": "f1f1e29cec39675214291cfe435b6fb80b423ce13ced0b54727659df486e9991"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/mman.h",
+      "bytes": 1781,
+      "sha256": "99faf3bbb639ab4eca2c5444dcc95cff0e7046c91fc3fa1a97c88375ee6107e8"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch/mman.h",
+      "bytes": 839,
+      "sha256": "8e3844987296722aceac782975db7889b37889afdcab23d6c2d24bb3df33f9ec"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/shm.h",
+      "bytes": 1948,
+      "sha256": "014fdc724bc42d1245776a4b161463c0df35040f0a5c961144023989ff6f5761"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch/shm.h",
+      "bytes": 866,
+      "sha256": "a1183834da90fb674307d65ebb0ffabe19315dd88353c46815921f6e88090366"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/prctl.h",
+      "bytes": 319,
+      "sha256": "e8aa2802f0ea3948242f335513f22c6741f3028b67228298d9c14df8ce242a70"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/rusage_private.h",
+      "bytes": 3262,
+      "sha256": "9cc30af76f445517a70fbbaa2bc6d2a48dee12bc8fd08bc0e1c37d571693d972"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/rusage.h",
+      "bytes": 1167,
+      "sha256": "f548ed5eeded34cd0d6a7a89d56c9beff6c31afbd9df7d725888f7eaf641541e"
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/include/ihk/ihk_rusage.h",
+      "bytes": 1404,
+      "sha256": "afc786f096e70bd9b89834b5b0af81ee0e1cfe3f3cd2e73ef5f88db4d63d5d01"
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/include/ihk/ihk_monitor.h",
+      "bytes": 1575,
+      "sha256": "6fb530c99848036f8c71f946c01d2f7189e15c3e8a42b9962be980eaf29e3b60"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch-memory-helpers.h",
+      "bytes": 39581,
+      "sha256": "e76daf9493fdd20505af19f52f32ed83a7864c29cbbbfb05c4605557d2b27957"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/elfcore.h",
+      "bytes": 2535,
+      "sha256": "2cae06fb07488ee4787ebc2f5679a6c0a19e9c7a9bce24964e8ea04d27d2b8d8"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/elfcoregpl.h",
+      "bytes": 1235,
+      "sha256": "1a0bf361c1e98971148bd7240a17091f2b78c009fcad22e09a277fb606d82c96"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/elf.h",
+      "bytes": 1271,
+      "sha256": "96a1889d8bc9597efaed3260d4bcc57ef86dd2380c2a09b53a2525c87cce50ac"
+    }
+  ],
+  "capacity": {
+    "/home/holden/mckernel": 150259146752,
+    "/home/holden/mckernel-work/scratch": 47870644224
+  },
+  "uid": 1000,
+  "child_started": false,
+  "environment": {
+    "PATH": "/usr/bin:/bin",
+    "LC_ALL": "C"
+  },
+  "started_wall": 1793081319.695931,
+  "started_monotonic": 863426.264887136
+}

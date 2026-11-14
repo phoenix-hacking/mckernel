@@ -1,0 +1,67 @@
+{
+  "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+  "build_status": "FAIL",
+  "effects": "read-only stableFD records; same mutex temporarily held; no unlink/delete/signal",
+  "holder_pid": 2006117,
+  "mutex_acquired": true,
+  "mutex_identity": [
+    27,
+    4
+  ],
+  "observed_at": 1792494671.4948015,
+  "original_guard_absent": true,
+  "record_release_complete": false,
+  "records": [
+    {
+      "identity": [
+        1828,
+        116133,
+        1000,
+        1000,
+        33152,
+        269,
+        1,
+        1792493949154669239,
+        1792493949154669239
+      ],
+      "path": "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock",
+      "record": {
+        "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+        "device": 1828,
+        "inode": 116133,
+        "kind": "image",
+        "pid": 1998116,
+        "request_sha256": "6225259ec4b0c39448805d49f4376c7610c1752920f3bcfe2ce8574890f13f2a",
+        "schema": "mckernel.heavy-operation.v1",
+        "starttime": "29139229"
+      },
+      "role": "shared",
+      "sha256": "652ba6cefdbc619f6c227677d402af7858a9b627d962102792716903396613b8"
+    },
+    {
+      "identity": [
+        66306,
+        48369405,
+        1000,
+        1000,
+        33152,
+        272,
+        1,
+        1792494011344635391,
+        1792494011344635391
+      ],
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/gitlink-nine-copy-observer-correction-1/full-image-attempt-1/common-exclusion.json",
+      "record": {
+        "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+        "dev": 66306,
+        "inode": 48369405,
+        "pid": 1998116,
+        "request_sha256": "08813d52f955003b780ccb4df3788204f9a50e464e82f3248ebc91560dcd0c0d",
+        "schema": "mckernel.native-exact-operational-exclusion.v1",
+        "starttime": "29139229"
+      },
+      "role": "common",
+      "sha256": "b5533798e2fc01f04a42a4eadf84230c88003b21ad4a4f464881202bf9e81955"
+    }
+  ]
+}

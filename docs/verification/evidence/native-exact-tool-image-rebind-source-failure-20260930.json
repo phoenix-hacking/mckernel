@@ -1,0 +1,17 @@
+{
+  "schema": "mckernel.native-exact-tool-image-rebind-source-failure.v1",
+  "recorded_at": "2026-09-30T19:05:00-07:00",
+  "status": "BLOCK_SOURCE",
+  "source_sha256": "691130faeaf1b68388941506e21fb32d00a3c543a4e500681328262e7d45dafc",
+  "test_sha256": "ec9b7c0f9502fe7edae16b824604a6817c97a387ec8078fe0ee1ced88e407009",
+  "tests": "7 PASS against synthetic inputs",
+  "findings": [
+    "The implementation requires the old receipt candidate to equal the target candidate, so it cannot perform a cross-candidate rebind.",
+    "It requires invented profile and immutable-image fields absent from the retained real receipt.",
+    "It publishes only an unconsumed READY_FOR_REVIEWED_EXECUTION document and has no offline probe, retirement or compatible final PASS receipt path.",
+    "Evidence membership and path confinement are incomplete; destination-parent substitution and post-link fsync reconciliation remain unsafe."
+  ],
+  "disposition": "REJECTED_NOT_EXECUTABLE; the reviewed existing tool-image producer was rerun once under a fresh release instead.",
+  "execution": false,
+  "acceptance": false
+}

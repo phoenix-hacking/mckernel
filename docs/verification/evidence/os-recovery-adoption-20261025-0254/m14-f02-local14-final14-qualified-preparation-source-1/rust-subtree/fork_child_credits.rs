@@ -1,0 +1,571 @@
+//! Private normal-fork credits. No task/MM permit or terminal release exists.
+//!
+//! The unsafe constructor transfers the caller's existing private-child cleanup
+//! obligation; pointer values/refcounts do not manufacture that ownership.
+//! A checked extra parent Thread reference pins storage only. Dropping any
+//! owner deliberately retains its obligations, without locking or freeing.
+use core::marker::PhantomData;
+use core::mem::size_of;
+use core::ptr::{addr_of_mut, NonNull};
+use core::sync::atomic::{AtomicI32, Ordering};
+use crate::abi::{Process, ProcessVm, SyscallRequest, Thread};
+use super::{registry, Carrier, Handle, EACCES, EBUSY, EINVAL, EIO, NR_CLONE};
+
+const EOVERFLOW: i32 = -75;
+#[path="fork_constructed_credits.rs"]
+pub(super) mod constructed;
+
+#[must_use = "private child/VM/CPU credits must be cancelled or retained"]
+pub(crate) struct ChildCredits {
+    parent: NonNull<Thread>,
+    child: NonNull<Thread>,
+    process: NonNull<Process>,
+    vm: NonNull<ProcessVm>,
+    reserved_cpu: i32,
+    private_child_cpu: i32,
+    constructor:Option<NonNull<constructed::ConstructedFork>>,
+}
+
+/// Exactly the original caller's cleanup obligation, returned once. No new
+/// child/process/VM reference or CPU reservation was acquired by this module.
+#[must_use]
+pub(crate) struct CallerCredits {
+    pub(crate) child: NonNull<Thread>,
+    pub(crate) process: NonNull<Process>,
+    pub(crate) vm: NonNull<ProcessVm>,
+    pub(crate) reserved_cpu: i32,
+}
+
+impl ChildCredits {
+    pub(super) unsafe fn runtime_processes_match(&self,parent:*mut Process,child:*mut Process)->bool {
+        self.process.as_ptr()==child&&(*self.parent.as_ptr()).proc==parent
+    }
+    pub(super) unsafe fn prepare_runtime(&mut self)->Result<constructed::RuntimePermit,i32> {
+        if !self.still_private(){return Err(EACCES);}
+        let mut graph=self.constructor.ok_or(EACCES)?;
+        if !graph.as_ref().matches(self.parent.as_ptr(),self.child.as_ptr(),self.reserved_cpu){return Err(EACCES);}
+        graph.as_mut().prepare_runtime()
+    }
+    unsafe fn acquire_constructed(parent:*mut Thread,child:*mut Thread,cpu:i32,token:*mut core::ffi::c_void)->Result<Self,i32> {
+        let graph=NonNull::new(token.cast::<constructed::ConstructedFork>()).ok_or(EINVAL)?;
+        if !graph.as_ref().matches(parent,child,cpu){return Err(EACCES);}
+        let mut credits=Self::acquire_from_caller(parent,child,cpu)?;
+        credits.constructor=Some(graph);Ok(credits)
+    }
+
+    pub(super) unsafe fn prepare_revoked_destruction(&mut self)->Result<constructed::DestructionPermit,i32> {
+        if !self.still_private(){return Err(EACCES);}
+        let mut graph=self.constructor.ok_or(EACCES)?;
+        graph.as_mut().permit()
+    }
+    pub(super) fn destruction_complete(&self)->bool {
+        self.constructor.is_some_and(|graph|unsafe {graph.as_ref().destroyed()})
+    }
+    pub(super) unsafe fn prepare_runtime_retirement(&mut self)->Result<constructed::RuntimeRetirementPermit,i32>{
+        self.constructor.ok_or(EACCES)?.as_mut().prepare_runtime_retirement()
+    }
+    pub(super) fn retirement_complete(&self,runtime:bool)->bool{
+        self.constructor.is_some_and(|graph|unsafe {
+            if runtime{graph.as_ref().runtime_destroyed()}else{graph.as_ref().destroyed()}
+        })
+    }
+    pub(super) unsafe fn release_runtime_after_ack(self)->Result<(),Self>{
+        if !self.retirement_complete(true){return Err(self);}
+        // runq_add already consumed the reservation. There is no CPU release
+        // here and no second release of any original constructor edge.
+        let Some(graph)=self.constructor else{return Err(self);};
+        crate::process_helpers::release_thread(self.parent.as_ptr());
+        crate::mem_helpers::kfree(graph.as_ptr().cast());Ok(())
+    }
+    pub(super) unsafe fn release_after_ack(self)->Result<(),Self> {
+        if !self.destruction_complete(){return Err(self);}
+        // No child/VM/Process pointer is used after checked final destruction.
+        let Some(graph)=self.constructor else{return Err(self);};
+        constructed::release_cpuid(self.reserved_cpu);
+        crate::process_helpers::release_thread(self.parent.as_ptr());
+        crate::mem_helpers::kfree(graph.as_ptr().cast());Ok(())
+    }
+    /// # Safety
+    /// Caller exclusively owns the successful non-CLONE_VM constructor's
+    /// unpublished child/process/VM and exact reserved CPU cleanup credits.
+    /// Transfer means it must not reset/release those credits while this owner
+    /// exists. Parent is the already-live current Thread; no pin is inferred
+    /// from a numeric counter or host ParentSlotPin.
+    pub(crate) unsafe fn acquire(
+        parent: *mut Thread, child: *mut Thread, reserved_cpu: i32,
+    ) -> Result<Self, i32> {
+        Self::acquire_with_private_cpu(parent, child, reserved_cpu, reserved_cpu)
+    }
+
+    /// Actual do_fork boundary: clone_thread initializes child.cpu_id to zero;
+    /// only runq publication assigns the separately reserved CPU. This unsafe
+    /// transfer takes the exact caller-owned reservation, never inferring it
+    /// from the unpublished child's numeric cpu_id or acquiring another CPU.
+    pub(crate) unsafe fn acquire_from_caller(
+        parent: *mut Thread, child: *mut Thread, reserved_cpu: i32,
+    ) -> Result<Self, i32> {
+        Self::acquire_with_private_cpu(parent, child, reserved_cpu, 0)
+    }
+
+    unsafe fn acquire_with_private_cpu(
+        parent: *mut Thread, child: *mut Thread, reserved_cpu: i32, private_child_cpu: i32,
+    ) -> Result<Self, i32> {
+        let parent = NonNull::new(parent).ok_or(EINVAL)?;
+        let child = NonNull::new(child).ok_or(EINVAL)?;
+        if parent == child || reserved_cpu < 0 { return Err(EINVAL); }
+        let current = crate::cls::get_this_cpu_local_var();
+        if current.is_null() || (*current).current != parent.as_ptr() { return Err(EACCES); }
+        let process = NonNull::new((*child.as_ptr()).proc).ok_or(EINVAL)?;
+        let vm = NonNull::new((*child.as_ptr()).vm).ok_or(EINVAL)?;
+        if (*parent.as_ptr()).proc.is_null() || process.as_ptr() == (*parent.as_ptr()).proc
+            || vm.as_ptr() == (*parent.as_ptr()).vm
+            || (*process.as_ptr()).parent != (*parent.as_ptr()).proc
+            || (*process.as_ptr()).main_thread != child.as_ptr()
+            || (*process.as_ptr()).vm != vm.as_ptr()
+            || (*vm.as_ptr()).proc != process.as_ptr().cast()
+            || (*child.as_ptr()).cpu_id != private_child_cpu
+            || !(*child.as_ptr()).sched_list.next.is_null()
+            || !(*child.as_ptr()).sched_list.prev.is_null()
+        { return Err(EACCES); }
+        // This is the actual production IhkAtomic counter, not a shadow count.
+        // SeqCst matches existing ref helpers. The live-current premise keeps
+        // storage valid before the successful CAS obtains our additional pin.
+        let counter = AtomicI32::from_ptr(addr_of_mut!((*parent.as_ptr()).refcount.counter));
+        let mut old = counter.load(Ordering::SeqCst);
+        loop {
+            if old <= 0 { return Err(EBUSY); }
+            if old == i32::MAX { return Err(EOVERFLOW); }
+            match counter.compare_exchange_weak(old, old + 1, Ordering::SeqCst, Ordering::SeqCst) {
+                Ok(_) => break,
+                Err(actual) => old = actual,
+            }
+        }
+        Ok(Self { parent, child, process, vm, reserved_cpu, private_child_cpu,constructor:None })
+    }
+
+    unsafe fn still_private(&self) -> bool {
+        let current = crate::cls::get_this_cpu_local_var();
+        !current.is_null() && (*current).current == self.parent.as_ptr()
+            && (*self.child.as_ptr()).proc == self.process.as_ptr()
+            && (*self.child.as_ptr()).vm == self.vm.as_ptr()
+            && (*self.child.as_ptr()).cpu_id == self.private_child_cpu
+            && (*self.process.as_ptr()).main_thread == self.child.as_ptr()
+            && (*self.process.as_ptr()).vm == self.vm.as_ptr()
+            && (*self.vm.as_ptr()).proc == self.process.as_ptr().cast()
+            && (*self.child.as_ptr()).sched_list.next.is_null()
+            && (*self.child.as_ptr()).sched_list.prev.is_null()
+    }
+
+    /// Only a credit owner that has never entered Carrier can call this.
+    /// The actual parent reference release runs outside every registry guard.
+    pub(crate) unsafe fn cancel_unpublished(self) -> Result<CallerCredits, Self> {
+        if self.constructor.is_some(){return Err(self);}
+        if !self.still_private() { return Err(self); }
+        let returned = CallerCredits { child: self.child, process: self.process,
+            vm: self.vm, reserved_cpu: self.reserved_cpu };
+        crate::process_helpers::release_thread(self.parent.as_ptr());
+        Ok(returned)
+    }
+}
+
+/// Owns the storage of the exact initial request, independently of the C
+/// caller's stack or the parent Thread pin. No implicit Drop frees this slot.
+/// It is either freed after private cancellation, or retained in the Carrier.
+pub(crate) struct ForkRequestSlot { request: NonNull<SyscallRequest> }
+impl ForkRequestSlot {
+    pub(super) unsafe fn free_completed(self){crate::mem_helpers::kfree(self.request.as_ptr().cast());}
+    unsafe fn allocate(flags: u64, start: u64, length: u64, root: u64) -> Result<Self, i32> {
+        if matches!(flags, 1 | 2 | 3) || !super::geometry(root, start, length) {
+            return Err(EINVAL);
+        }
+        let raw = crate::mem_helpers::kmalloc(size_of::<SyscallRequest>() as i32, 0)
+            .cast::<SyscallRequest>();
+        let request = NonNull::new(raw).ok_or(super::ENOMEM)?;
+        // This is the original request, initialized in its retained allocation;
+        // no existing/borrowed request is copied or later replaced for offload.
+        core::ptr::write(raw, SyscallRequest { rtid: 0, ttid: 0, valid: 0,
+            number: NR_CLONE, args: [flags, start, length, root, 0, 0] });
+        Ok(Self { request })
+    }
+    unsafe fn free_private(self) { crate::mem_helpers::kfree(self.request.as_ptr().cast()); }
+}
+
+#[must_use]
+pub(crate) struct PrivateFork<'request> {
+    handle: Handle,
+    request: NonNull<SyscallRequest>,
+    original_args: [u64; 6],
+    credits: Option<ChildCredits>,
+    request_storage: Option<ForkRequestSlot>,
+    retained: bool,
+    request_lifetime: PhantomData<&'request mut SyscallRequest>,
+}
+
+#[must_use]
+pub(crate) struct EscapedFork<'request> {
+    handle: Handle,
+    request: NonNull<SyscallRequest>,
+    request_lifetime: PhantomData<&'request mut SyscallRequest>,
+}
+
+#[must_use]
+pub(crate) struct RetainedFork { handle: Handle, pub(crate) error: i32 }
+
+pub(crate) struct CreateFailure { pub(crate) error: i32, pub(crate) credits: ChildCredits }
+pub(crate) struct PrivateFailure<'request> { pub(crate) error: i32, pub(crate) owner: PrivateFork<'request> }
+pub(crate) enum BeginFailure<'request> {
+    Private(PrivateFailure<'request>),
+    Retained(RetainedFork),
+}
+
+impl<'request> PrivateFork<'request> {
+    /// Uses the actual current carrier constructor and fixed registry. No
+    /// external request publication occurs here. On refusal the same credit
+    /// owner returns to the caller, with request/child/VM/CPU unchanged.
+    pub(crate) unsafe fn create(
+        request: &'request mut SyscallRequest, credits: ChildCredits,
+    ) -> Result<Self, CreateFailure> {
+        Self::create_raw(NonNull::from(request), credits, None)
+    }
+
+    /// Normal-fork caller preparation: request bytes originate in owned heap
+    /// storage, which follows the SAME request into the Carrier before begin.
+    /// The lifetime parameter borrows no caller storage and no reference escapes.
+    /// All child-credit constructor premises of `create` still apply.
+    pub(crate) unsafe fn create_owned(
+        credits: ChildCredits, flags: u64, start: u64, length: u64, root: u64,
+    ) -> Result<Self, CreateFailure> {
+        let slot = match ForkRequestSlot::allocate(flags, start, length, root) {
+            Ok(slot) => slot, Err(error) => return Err(CreateFailure { error, credits }),
+        };
+        Self::create_raw(slot.request, credits, Some(slot))
+    }
+
+    unsafe fn create_raw(
+        request: NonNull<SyscallRequest>, credits: ChildCredits,
+        request_storage: Option<ForkRequestSlot>,
+    ) -> Result<Self, CreateFailure> {
+        let original_args = request.as_ref().args;
+        let mut handle = Handle::EMPTY;
+        let error = super::process_fork_guest_carrier_create_current_v1(
+            request.as_ptr(), credits.parent.as_ptr(), credits.child.as_ptr(), &mut handle);
+        if error != 0 {
+            if let Some(slot) = request_storage { slot.free_private(); }
+            return Err(CreateFailure { error, credits });
+        }
+        Ok(Self { handle, request, original_args, credits: Some(credits), request_storage,
+            retained: false, request_lifetime: PhantomData })
+    }
+
+    unsafe fn validate(&self, carrier: &Carrier) -> bool {
+        let Some(credits) = self.credits.as_ref() else { return false; };
+        let request = self.request.as_ref();
+        !self.retained && credits.still_private() && carrier.handle == self.handle
+            && carrier.parent == credits.parent.as_ptr() as usize
+            && carrier.child == credits.child.as_ptr() as usize
+            && carrier.request == self.request.as_ptr() as usize
+            && carrier.owned_credits.is_none() && carrier.owned_request.is_none()
+            && self.request_storage.as_ref().is_none_or(|slot| slot.request == self.request)
+            && request.number == NR_CLONE
+            && request.args == carrier.initial_args
+    }
+
+    /// Restores args4/5 before detaching the still-private registry allocation.
+    /// Only this non-Copy ticket can name its private handle. Failed detach is
+    /// conservatively retained and never returns caller cleanup authority.
+    pub(crate) unsafe fn cancel(mut self) -> Result<CallerCredits, PrivateFailure<'request>> {
+        let rc = registry::visit(self.handle, |pointer| {
+            if !self.validate(pointer.as_ref()) { return EACCES; }
+            let request = self.request.as_mut();
+            request.args[4] = self.original_args[4];
+            request.args[5] = self.original_args[5];
+            0
+        });
+        if rc != 0 { return Err(PrivateFailure { error: rc, owner: self }); }
+        let credits = match self.credits.take() {
+            Some(credits) => credits,
+            None => {
+                self.retained = true;
+                let _ = registry::retain(self.handle);
+                return Err(PrivateFailure { error: EIO, owner: self });
+            }
+        };
+        let pointer = match registry::cancel(self.handle) {
+            Ok(pointer) => pointer,
+            Err(error) => {
+                self.credits = Some(credits);
+                self.retained = true;
+                let _ = registry::retain(self.handle);
+                return Err(PrivateFailure { error, owner: self });
+            }
+        };
+        // Cancel returned this allocation only after releasing registry lock.
+        crate::mem_helpers::kfree(pointer.as_ptr().cast());
+        // The validation above proves this current-parent release cannot be a
+        // last-reference destructor; no child/process/VM/CPU credit is changed.
+        match credits.cancel_unpublished() {
+            Ok(returned) => {
+                if let Some(slot) = self.request_storage.take() { slot.free_private(); }
+                Ok(returned)
+            },
+            Err(credits) => {
+                self.credits = Some(credits);
+                self.retained = true;
+                Err(PrivateFailure { error: EBUSY, owner: self })
+            }
+        }
+    }
+
+    /// Moves all credits into the actual immovable Carrier before registry
+    /// begin makes it discoverable. After this move no cancellation API can
+    /// recover credits: existing Escaped/Retained guards reject registry.cancel.
+    pub(crate) unsafe fn begin(mut self) -> Result<EscapedFork<'request>, BeginFailure<'request>> {
+        let rc = registry::visit(self.handle, |mut pointer| {
+            if !self.validate(pointer.as_ref()) { return EACCES; }
+            pointer.as_mut().owned_credits = self.credits.take();
+            pointer.as_mut().owned_request = self.request_storage.take();
+            0
+        });
+        if rc != 0 {
+            if self.credits.is_some() {
+                return Err(BeginFailure::Private(PrivateFailure { error: rc, owner: self }));
+            }
+            let _ = registry::retain(self.handle);
+            return Err(BeginFailure::Retained(RetainedFork { handle: self.handle, error: rc }));
+        }
+        match registry::begin(self.handle) {
+            Ok(_) => Ok(EscapedFork { handle: self.handle, request: self.request,
+                request_lifetime: PhantomData }),
+            Err(error) => {
+                let _ = registry::retain(self.handle);
+                Err(BeginFailure::Retained(RetainedFork { handle: self.handle, error }))
+            }
+        }
+    }
+}
+
+/// Every post-begin outcome retains the original child, VM and reserved CPU
+/// credits in the Carrier. A positive receipt is host observation only; neither
+/// branch grants the C caller destroy_thread/refcount-reset/release_cpuid rights.
+#[must_use = "the retained child/VM/CPU owner must survive this offload outcome"]
+pub(crate) enum OwnedOffloadReturn {
+    ReceiptObserved { child_pid: i32, owner: RetainedFork },
+    Uncertain { actual: Option<i64>, owner: RetainedFork },
+}
+
+impl EscapedFork<'_> {
+    pub(crate) fn handle(&self) -> Handle { self.handle }
+
+    /// # Safety
+    /// Original constructor/current-parent exclusivity continues to hold. No
+    /// raw-handle API or other producer may submit/mutate this transaction.
+    /// Consumes this owner and submits the SAME borrowed request exactly once;
+    /// no stack copy or registry guard survives into the actual synchronous FFI.
+    /// Any post-begin refusal, missing receipt, or transport result retains all
+    /// credits. The stack request borrow ends only when this method returns.
+    pub(crate) unsafe fn offload(self) -> OwnedOffloadReturn {
+        let mut cpu = -1;
+        let prepared = registry::visit(self.handle, |pointer| {
+            let c = pointer.as_ref();
+            let Some(credits) = c.owned_credits.as_ref() else { return EACCES; };
+            let local = crate::cls::get_this_cpu_local_var();
+            if c.handle != self.handle || c.request != self.request.as_ptr() as usize
+                || local.is_null() || (*local).current != credits.parent.as_ptr()
+                || c.parent != credits.parent.as_ptr() as usize
+                || c.child != credits.child.as_ptr() as usize
+                || c.owned_request.as_ref().is_some_and(|slot| slot.request != self.request)
+                || c.cpu < 0 || (*credits.parent.as_ptr()).cpu_id != c.cpu
+                || !credits.still_private() || c.phase != super::SUBMITTED
+                || c.error != 0 || self.request.as_ref().number != NR_CLONE
+                || self.request.as_ref().args != c.initial_args
+            { return EACCES; }
+            cpu = c.cpu;
+            0
+        });
+        if prepared != 0 {
+            return OwnedOffloadReturn::Uncertain { actual: None,
+                owner: self.retain(prepared) };
+        }
+        let actual = super::do_syscall(self.request.as_ptr(), cpu);
+        // The existing actual return hook must already have accepted the exact
+        // response. A positive scalar alone never authenticates a first receipt.
+        let mut child_pid = 0;
+        let observed = registry::visit(self.handle, |pointer| {
+            let c = pointer.as_ref();
+            if c.handle != self.handle || c.request != self.request.as_ptr() as usize
+                || c.owned_credits.is_none() || c.phase != super::FIRST_POSITIVE
+                || c.error != 0 || actual <= 0 || i64::from(c.identity.child_pid) != actual
+                || !super::carrier_geometry(c, &c.identity)
+            { return if c.error != 0 { c.error } else if actual <= 0 {
+                    super::transport_error(actual)
+                } else { super::EPROTO }; }
+            child_pid = c.identity.child_pid;
+            0
+        });
+        let owner = self.retain(observed);
+        if observed == 0 { OwnedOffloadReturn::ReceiptObserved { child_pid, owner } }
+        else { OwnedOffloadReturn::Uncertain { actual: Some(actual), owner } }
+    }
+
+    // Private: external callers cannot assert that the offload already returned.
+    unsafe fn retain(self, error: i32) -> RetainedFork {
+        let _ = registry::retain(self.handle);
+        RetainedFork { handle: self.handle, error }
+    }
+}
+
+impl RetainedFork {
+    pub(crate) fn handle(&self) -> Handle { self.handle }
+    pub(crate) fn caller_cleanup_allowed(&self) -> bool { false }
+}
+
+
+/// C glue receives disposition metadata only. Actual post-transfer owners stay
+/// in the existing durable Carrier registry; no pointer into a C stack is kept.
+#[repr(C)]
+pub(crate) struct CallerForkOutcome {
+    pub(crate) disposition: u32,
+    pub(crate) error: i32,
+    pub(crate) handle: Handle,
+}
+const _: () = {
+    assert!(size_of::<CallerForkOutcome>() == 24);
+    assert!(core::mem::offset_of!(CallerForkOutcome, disposition) == 0);
+    assert!(core::mem::offset_of!(CallerForkOutcome, error) == 4);
+    assert!(core::mem::offset_of!(CallerForkOutcome, handle) == 8);
+};
+const CALLER_KEEPS_CREDITS: u32 = 0;
+const RUST_RETAINS_CREDITS: u32 = 1;
+
+/// # Safety
+/// The exact current do_fork caller exclusively owns the successful unpublished
+/// non-CLONE_VM constructor and reserved CPU cleanup credits. `out` is writable
+/// metadata storage. This boundary never grants runnable-child or host task/MM
+/// authority: even an observed positive receipt returns a retained error.
+/// C must use disposition to bypass all destroy/refcount-reset/CPU cleanup when
+/// Rust owns credits. The macro-gated C proposal remains disabled by default.
+#[no_mangle]
+pub(crate) unsafe extern "C" fn process_fork_owned_caller_current_v1(
+    parent: *mut Thread, child: *mut Thread, reserved_cpu: i32, host_flags: u64,
+    out: *mut CallerForkOutcome,
+) -> i32 {
+    owned_caller_current(parent,child,reserved_cpu,host_flags,core::ptr::null_mut(),out,None)
+}
+/// Exact constructor-issued opaque token, consumed only when disposition1
+/// transfers all obligations to the durable Carrier. C never sees its fields.
+#[no_mangle]
+pub(crate) unsafe extern "C" fn process_fork_owned_caller_current_v2(
+    parent:*mut Thread,child:*mut Thread,reserved_cpu:i32,host_flags:u64,
+    constructor:*mut core::ffi::c_void,out:*mut CallerForkOutcome,
+) ->i32 {
+    if constructor.is_null(){return EINVAL;}
+    owned_caller_current(parent,child,reserved_cpu,host_flags,constructor,out,None)
+}
+/// Disabled callsite's vanilla-fork runtime route. Existing v1/v2 keep their
+/// safe-abort behavior; this route cannot treat a first receipt as run credit.
+#[no_mangle]
+pub(crate) unsafe extern "C" fn process_fork_owned_caller_runnable_current_v1(
+    parent:*mut Thread,child:*mut Thread,reserved_cpu:i32,host_flags:u64,
+    constructor:*mut core::ffi::c_void,flags:i32,parent_cpu:i32,out:*mut CallerForkOutcome,
+)->i32 {
+    if flags!=17 {
+        if out.is_null(){return EINVAL;}
+        core::ptr::write(out,CallerForkOutcome{disposition:CALLER_KEEPS_CREDITS,error:EINVAL,handle:Handle::EMPTY});
+        return 0;
+    }
+    owned_caller_current(parent,child,reserved_cpu,host_flags,constructor,out,
+        Some(super::runnable::RunOptions{flags,parent_cpu,child_tid:0}))
+}
+/// Current libc's child-TID pointer is the original syscall argument, borrowed
+/// only while the constructor graph owns the unpublished child's exact VM.
+#[no_mangle]
+pub(crate) unsafe extern "C" fn process_fork_owned_caller_runnable_current_v2(
+    parent:*mut Thread,child:*mut Thread,reserved_cpu:i32,host_flags:u64,
+    constructor:*mut core::ffi::c_void,flags:i32,parent_cpu:i32,child_tid:u64,out:*mut CallerForkOutcome,
+)->i32 {
+    owned_caller_current(parent,child,reserved_cpu,host_flags,constructor,out,
+        Some(super::runnable::RunOptions{flags,parent_cpu,child_tid}))
+}
+unsafe fn owned_caller_current(
+    parent:*mut Thread,child:*mut Thread,reserved_cpu:i32,host_flags:u64,
+    constructor:*mut core::ffi::c_void,out:*mut CallerForkOutcome,run:Option<super::runnable::RunOptions>,
+) -> i32 {
+    if out.is_null() { return EINVAL; }
+    core::ptr::write(out, CallerForkOutcome { disposition: CALLER_KEEPS_CREDITS,
+        error: EINVAL, handle: Handle::EMPTY });
+    if let Some(options)=run {
+        let admitted=super::runnable::admit(parent,child,options);
+        if admitted!=0||constructor.is_null(){(*out).error=if admitted!=0{admitted}else{EACCES};return 0;}
+    }
+    if parent.is_null() || child.is_null() || reserved_cpu < 0 || (*child).vm.is_null() {
+        return 0;
+    }
+    let vm = &*(*child).vm;
+    if vm.address_space.is_null() { return 0; }
+    let Some(length) = vm.region.user_end.checked_sub(vm.region.user_start) else { return 0; };
+    let root = crate::x86_memory_helpers::virt_to_phys((*vm.address_space).page_table) as u64;
+    // Every allocation happens while C still owns cleanup. The exact request
+    // originates in retained storage; this is never a copy of request1.
+    let slot = match ForkRequestSlot::allocate(host_flags, vm.region.user_start, length, root) {
+        Ok(slot) => slot, Err(error) => { (*out).error = error; return 0; },
+    };
+    let request = slot.request;
+    let mut pointer = match super::create_private_carrier_current(slot.request.as_ptr(), parent, child) {
+        Ok(pointer) => pointer,
+        Err(error) => { slot.free_private(); (*out).error = error; return 0; },
+    };
+    let handle = pointer.as_ref().handle;
+    pointer.as_mut().owned_request = Some(slot);
+    let credits = match if constructor.is_null(){ChildCredits::acquire_from_caller(parent, child, reserved_cpu)}
+        else{ChildCredits::acquire_constructed(parent,child,reserved_cpu,constructor)} {
+        Ok(credits) => credits,
+        Err(error) => {
+            // This private handle has never escaped this producer, and private
+            // entries cannot be discovered by observers. No credit transferred.
+            match registry::cancel(handle) {
+                Ok(mut pointer) => {
+                    let slot = pointer.as_mut().owned_request.take();
+                    crate::mem_helpers::kfree(pointer.as_ptr().cast());
+                    if let Some(slot) = slot { slot.free_private(); }
+                },
+                Err(_) => {
+                    // Request ownership is already durable. On unexpected
+                    // busy/refusal, do not dereference a possibly busy Carrier.
+                    // C still owns all child/VM/CPU cleanup; none transferred.
+                    let _ = registry::retain(handle); (*out).handle = handle;
+                },
+            }
+            (*out).error = error; return 0;
+        },
+    };
+    // The private-producer exclusion above is still intact: finish ownership
+    // initialization directly, just like the actual carrier constructor does.
+    pointer.as_mut().owned_credits = Some(credits);
+    (*out).disposition = RUST_RETAINS_CREDITS; (*out).handle = handle;
+    if let Err(error) = registry::begin(handle) {
+        let _ = registry::retain(handle); (*out).error = error; return 0;
+    }
+    let escaped = EscapedFork { handle, request,
+        request_lifetime: PhantomData };
+    (*out).error = match escaped.offload() {
+        OwnedOffloadReturn::ReceiptObserved { owner, .. } => {
+            if let Some(options)=run {
+                let result=super::runnable::start_and_publish(owner.handle(),options);
+                drop(owner);
+                if result>0{(*out).disposition=3;}
+                result
+            } else {
+            // Consume the actual next selector2 producer with its separately
+            // owned request. This remains observation, never terminal handoff.
+            let mut observation=super::ControlObservation::ZERO;
+            let error=super::process_fork_guest_control_submit_current_v1(owner.handle(),&mut observation);
+            if error!=0{drop(owner);error}else if constructor.is_null(){drop(owner);EBUSY}else{
+                let terminal=super::destroy_and_ack_current(owner.handle());drop(owner);
+                if terminal==0{(*out).disposition=2;-11}else{terminal}
+            }
+            }
+        },
+        OwnedOffloadReturn::Uncertain { owner, .. } => owner.error,
+    };
+    0
+}

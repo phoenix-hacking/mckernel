@@ -1,0 +1,107 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": "2026-10-27T20:57:30.126652+00:00",
+  "thread": "01a17e6f-112f-7660-8771-85d15e07a26c",
+  "goal_status": "active",
+  "review_cadence_minutes": 20,
+  "review_itself_launches_workloads": false,
+  "measurement_baseline": "2026-10-27T17:36:09Z",
+  "current_nonoverlapping_bucket": {
+    "start": "2026-10-27T20:36:09Z",
+    "end": "2026-10-27T21:06:09Z",
+    "status": "PARTIAL_UNTIL_FIXED_BUCKET_END",
+    "observation_cutoff": "2026-10-27T20:56:29Z"
+  },
+  "actual_deltas_in_partial_bucket": {
+    "ordinary_HOST_commands": 10,
+    "canonical_source_bodies_adopted": 4,
+    "canonical_source_files_adopted": 7,
+    "production_compiler_commands": 0,
+    "production_linked": 0,
+    "native_owner_entry_attempts": 1,
+    "guest_apps": 0,
+    "native_qualified": 0,
+    "whole_file_closures": 0,
+    "retired_C_boundaries": 0
+  },
+  "accepted_production": {
+    "artifact": "0bbe8259",
+    "C_functions": 91,
+    "Rust_exports": 48,
+    "process_objects": 67
+  },
+  "metrics": {
+    "F06": {
+      "commands": 3,
+      "tool_wall_s": 3.7900102138519287,
+      "captured_child_wall_s": 1.3514687810093164,
+      "cpu_seconds": null,
+      "peak_RSS_KiB": null,
+      "resource_note": "CPU/peak not captured by inherited ordinary capture; unknown, not inferred"
+    },
+    "LOCK4": {
+      "commands": 7,
+      "tool_wall_s": 6.190091848373413,
+      "captured_child_wall_s": 0.39370098803192377,
+      "cpu_seconds": null,
+      "peak_RSS_KiB": null,
+      "resource_note": "CPU/peak not captured by inherited ordinary capture; unknown, not inferred"
+    }
+  },
+  "latencies": {
+    "first_production_compiler_since_activation_s": 2608.941661,
+    "CURRENT111_resource_to_compiler_s": 116.5913474,
+    "F05_v2_ready_to_HOST_compiler_s": 480.655572,
+    "Root3_resource_to_actual_owner_entry_s": 37.97926163673401,
+    "Root3_PASS_to_claim_approx_s": 0.203,
+    "Root3_PASS_to_actual_owner_entry_approx_s": 0.252,
+    "Root3_owner_failure_wall_s": 0.5569686889648438,
+    "Root3_owner_CPU_s": 0.505552,
+    "Root3_owner_peak_RSS_KiB": 53124,
+    "QMP_failure_blocked_s_at_review": 646.1016182899475,
+    "failure_to_validated_runtime_fix_s": null
+  },
+  "largest_avoidable_handoff": "Root handoff expiry repaired by prewritten one-shot; remaining blocker is exact source/context publication for shorter QMP attempt path, not CPU/disk",
+  "concrete_scheduling_adjustment": "Keep immutable exact-entry command prearmed before fresh resource; reuse existing independent143source/map proof and atomic PASS\u2192mechanical singleentry. Prepare genuinelyHOSTqualified F06/scalar batch independently; hold knownincorrectLOCK4/WAKE3 selectors only.",
+  "source_correction": {
+    "LOCK4": "Originale384selectors HOLD: conditional #line+7/offbranch restoration error; ABI/mock HOST461b retained at exactscope, not FILELINE proof. No canonicaladoption.",
+    "WAKE3": "Originala947unadopted; foregroundexclusive correction",
+    "debug46": "32GLOBAL/64slots independentlyselectable;14LOCAL require companionclone5/copy6/extend3 Rustconfigs, no illegalCglobalization. Coordinate aftercurrentnativeentry."
+  },
+  "owners": {
+    "Root": "canonical/admission/Root33/source112",
+    "f05_adapter_export": "Root4exactshortpath/sourcecontext",
+    "daemon_execution_review": "Root4focusedsource/exactexecutionreview",
+    "current111_build_prepare": "private113F06next4/scalar4 union;incorrectLOCK4excluded",
+    "host19_source_review": "existingperf3ordinaryprofile",
+    "foreground": "LOCK4/WAKE3linecorrection andtypeddebug32+deferred14"
+  },
+  "resources": {
+    "disks": {
+      "/home/holden/mckernel": {
+        "available_bytes": 149451390976,
+        "ismount": false,
+        "st_dev": 66306
+      },
+      "/home/holden/mckernel-work/scratch": {
+        "available_bytes": 47870619648,
+        "ismount": true,
+        "st_dev": 1828
+      }
+    },
+    "load_average": [
+      1.55,
+      1.15,
+      1.1
+    ],
+    "memory": {
+      "MemAvailable_kib": 26906852,
+      "MemTotal_kib": 32421580
+    }
+  },
+  "next_command_owner": "/root: adopt/publish reviewedRoot4source then freshcapture+prebuiltbridge, exactunused6e8068nonce only",
+  "target_95_percent_achieved": false,
+  "retained_builds": "CURRENT109/HOST19/110/111/SDK21 accepted; no replay. HistoricalBUILD3/CID5487 superseded by retained111 acceptance/free lineage, not new work.",
+  "account": "Same7f4 cumulative57774.852125ceiling/includedfirst/realholds unchanged",
+  "stop": "2026-10-28T05:36:09Z plus earlierMONO/BOOT"
+}

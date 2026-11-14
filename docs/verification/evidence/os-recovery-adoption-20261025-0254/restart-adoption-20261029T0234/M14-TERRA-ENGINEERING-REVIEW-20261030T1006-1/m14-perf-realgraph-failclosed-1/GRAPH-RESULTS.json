@@ -1,0 +1,90 @@
+[
+  {
+    "case": "exact_graph_and_source_proposal",
+    "outcome": "pass_source_only"
+  },
+  {
+    "case": "wrong_host",
+    "outcome": "rejected",
+    "error": "perf child binding/order"
+  },
+  {
+    "case": "writable_child",
+    "outcome": "rejected",
+    "error": "perf child binding/order"
+  },
+  {
+    "case": "child_before_parent",
+    "outcome": "rejected",
+    "error": "perf child binding/order"
+  },
+  {
+    "case": "other_child",
+    "outcome": "rejected",
+    "error": "unsupported overlap"
+  },
+  {
+    "case": "child_submount",
+    "outcome": "rejected",
+    "error": "unsupported overlap"
+  },
+  {
+    "case": "duplicate_child",
+    "outcome": "rejected",
+    "error": "duplicate mount target"
+  },
+  {
+    "case": "wrong_parent_hash",
+    "outcome": "rejected",
+    "error": "perf source hash mismatch"
+  },
+  {
+    "case": "wrong_child_hash",
+    "outcome": "rejected",
+    "error": "perf source hash mismatch"
+  },
+  {
+    "case": "same_inode",
+    "outcome": "rejected",
+    "error": "perf source inode alias"
+  },
+  {
+    "case": "synthetic_exact_mountinfo",
+    "outcome": "parser_pass_only"
+  },
+  {
+    "case": "unapproved_expected",
+    "outcome": "rejected",
+    "error": "unapproved or writable Rust nested mount"
+  },
+  {
+    "case": "writable_expected",
+    "outcome": "rejected",
+    "error": "unapproved or writable Rust nested mount"
+  },
+  {
+    "case": "unexpected_actual",
+    "outcome": "rejected",
+    "error": "unexpected nested mount: /src/kernel/rust/other.rs"
+  },
+  {
+    "case": "wrong_effective_mode",
+    "outcome": "rejected",
+    "error": "missing or wrong effective mount: /src/kernel/rust/f03_perf_group_cleanup.rs"
+  },
+  {
+    "case": "parent_snapshot_gate",
+    "outcome": "rejected",
+    "error": "SOURCE_ONLY: authenticated pre-shadow Rust parent inventory is unbound"
+  },
+  {
+    "case": "effective_view_gate",
+    "outcome": "rejected",
+    "error": "SOURCE_ONLY: authenticated pre-shadow parent and effective mount identities are unbound"
+  },
+  {
+    "case": "collector_gate",
+    "outcome": "rejected",
+    "error": "SOURCE_ONLY: configure source closure and live bindings are unbound"
+  }
+]

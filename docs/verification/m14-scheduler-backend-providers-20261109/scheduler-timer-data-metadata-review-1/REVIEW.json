@@ -1,0 +1,70 @@
+{
+  "schema": "mckernel.timer-two-data.independent-metadata-review.v1",
+  "decision": "GO_EXACT_TWO_METADATA_READS_AND_CALLED_CONTENT_OWNER_GATE_SUBJECT_TO_FRESH_ROOT_ADMISSION",
+  "reviewer": "/root/memory_error_cleanup_witness_high",
+  "routing": "Actual Sol/HIGH confirmed; never/danger-full-access; no recursion",
+  "reviewed_files_sha256": {
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-metadata-1/REQUEST.json": "5871ef8fe176b78391eb255230dac208d77c6f0c332b53dbe009f9943a06fcb6",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-metadata-1/timer_data_checks.py": "237a4221d6891b848a7fb72c5cdd7e75629ff4699201720230c765bf3dcb6acc",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-metadata-1/run_metadata.py": "83bea729e5b313d84b657c6ddb08b80222a1ec088541e3724bcda01eb851e537",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-metadata-1/OFFSET-SOURCE-CONTRACT.json": "59931f40dcabd7984b4459debe7d2a2fbbba7cb89b73047a4ae5362010c449ff"
+  },
+  "all17_input_pins_checked": true,
+  "source_profile_GO_reused": "a8cdaa6636d323952ccdc1e3566b034a8bd0356a12645ed0358a8d058b0f8d49",
+  "compiled_input": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-unit-1/output/scheduler_timer_data.o",
+    "sha256": "05be11507024eb5de4c1d368245f8382e1f49c5966222def22d633d08c8957bb",
+    "bytes": 1016,
+    "actual_producer_RESULT": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/timer-data-producer-root-1/RESULT.json",
+    "actual_producer_RESULT_sha256": "8ad17b00a8a95308dd6ccc0277d1453c2bd6e12f76afb44f3f6f20c0e439dda9",
+    "actual_compile_pid": 641757,
+    "actual_compile_birth": "35113683",
+    "actual_compile_wait_joined": true,
+    "compile_replay": false
+  },
+  "source_offset_contract_review": {
+    "all15_original_descriptor_field_expression_and_order_pairs_match_source_unit": true,
+    "all24_source_evidence_fragments_match_actual_line_text_hash": true,
+    "direct_selected_ABI_assertions": 11,
+    "ordered_expected_values": [
+      4184,
+      4328,
+      4352,
+      4356,
+      5072,
+      7832,
+      7872,
+      7888,
+      7848,
+      7980,
+      8056,
+      0,
+      8,
+      32,
+      48
+    ],
+    "four_finite_relationships": {
+      "Thread.spin_sleep": "asserted spin_sleep_lock4352 + actual IhkSpinlock size4; actual adjacent CInt align4 ->4356",
+      "Thread.itimer_enabled": "actual repr(C) field walk from asserted sigpending4864: AbiListHead16/8; McsRwlockLock64/64 gives4928; CInt4/4 then five8/8 pointers, threeCULong8/8, threeCInt4/4 ->5072. Every intervening field and selected LP64 primitive type checked; no optional extra field in this span.",
+      "CpuLocalVar.timer_enabled": "selected not(enable_tofu) no_preempt7976 + actual IhkAtomic4; adjacent CInt align4 ->7980",
+      "Timer.timeout": "Actual repr(C) Timer first CULong member ->0, not zero-fill/default guess"
+    },
+    "selected_cfg": "Only original process_global_storage_candidate; no enable_tofu. Cpu selected assertions checked with their actual cfg(not(enable_tofu)) guards.",
+    "no_replacement_layout_or_synthetic_descriptor": "Unit remains exact original15 offset_of! expressions over actual ABIff48; the review contract only describes expected emitted integer bytes."
+  },
+  "actual_gate_review": [
+    "Existing qualified Image/parse_nm only; exact source bindings checked. Exclusive capture retains object hash/bytes, all symbols/sections/relocations and allocated file bytes BEFORE strict content assertions.",
+    "Requires exactly time_sharing D4 and process_timer_runtime_offsets R120; GLOBAL DEFAULT OBJECT, alignment >=4/8 with aligned owner values, correct writable/immutable section attributes; actual nm/ELF agreement.",
+    "Requires original plain CInt little-endian1 bytes; all15 integer offset slots at index*8 checked against source contract. No function owner, imports, relocation, private object or additional allocated data/readonly accepted.",
+    "Every nonempty allocated section must be PROGBITS/nonexecutable and completely covered by the two intended objects; uncovered extra storage rejected. No invented initializer/hardware instance/provider."
+  ],
+  "controller_profile_review": {
+    "commands": "Exactly provider-symbols nm -S --format=posix and provider-elf readelf -h -SW -Ws -Wr on existing05be object; no compiler/link/runtime command.",
+    "call_order": "All request pins and compiled identity checked before readback Popen; actual_object_gate CALLED after two successful reads, OBJECT-CHECK persisted, execution receipt records called status. Any first unexpected failure STOP; direct waits in finally and PID/birth persistence retained.",
+    "resource_scope": "CPU6 payloads, one local serial job, AS1GiB/CPU45/wall60/KILL5/FSIZE64MiB/core0; Root must bind outer controller/overhead to CPU6 within existing CPUs0,6,7/max3jobs/4GiB TOTAL and fresh capacity/usage admission.",
+    "no_replay": "Actual producer05be/1016B and joined receipt reused; no compiler/source/oldmetadata replay."
+  },
+  "unresolved_original_obligations": "Finite Linux6.12 Rust data-only profile. Full selected C guards/header/offset witness, complete global-storage ownership/Cduplicate exclusion, actual matching future cohort, SDK/source/native/currentfree/boot/lifecycle remain pending. No function/native/default/C-retirement/score acceptance.",
+  "reviewer_operations": "CPU0 read-only source/hash/AST/field arithmetic inspection and private REVIEW write only; no parser/predicate imports/calls or GNU/compiler/link/runtime execution, canonical/index/state edits or recursion.",
+  "defects": []
+}

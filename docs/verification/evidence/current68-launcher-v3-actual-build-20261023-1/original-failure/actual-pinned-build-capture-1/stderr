@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/bound-reviewed-source-1/launcher_only_container_owner.py", line 1624, in <module>
+    raise SystemExit(main())
+  File "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/bound-reviewed-source-1/launcher_only_container_owner.py", line 1618, in main
+    result = ImageOwner(json.loads(args.request.read_text()), signals=signals).run()
+  File "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/bound-reviewed-source-1/launcher_only_container_owner.py", line 1457, in run
+    bound = self.validate()
+  File "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/bound-reviewed-source-1/launcher_only_container_owner.py", line 1446, in validate
+    self.bound = _validate_request(self.request)
+  File "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/bound-reviewed-source-1/launcher_only_container_owner.py", line 1436, in _validate_request
+    return _validate_launcher_additions(_validate_request_image_base(request),request)
+  File "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/bound-reviewed-source-1/launcher_only_container_owner.py", line 1028, in _validate_request
+    _fail(request.get("driver_sha256") == EXPECTED_DRIVER_SHA256, "offline driver release hash")
+  File "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/bound-reviewed-source-1/launcher_only_container_owner.py", line 316, in _fail
+    raise OwnerError(message)
+__main__.OwnerError: offline driver release hash

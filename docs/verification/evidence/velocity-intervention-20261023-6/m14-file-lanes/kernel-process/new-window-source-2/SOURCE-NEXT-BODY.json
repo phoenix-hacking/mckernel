@@ -1,0 +1,115 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "THREE_PROVIDER_FULLCRATE_PROFILE_ON_OFF_AND_REAL_ABI_36_PASS_PRIVATE_NOT_INTEGRATED",
+  "base": {
+    "C": {
+      "path": "/home/holden/mckernel/kernel/process.c",
+      "sha256": "5eed915e655b124b0a5f682e4e7ba6c713eff21b3bbdf6930717328367ab5114",
+      "bytes": 189938
+    },
+    "Rust": {
+      "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "sha256": "1049cc79c9cbb2579ed5cded8e1c6dd320e69025dd2768a632e9e95b62bfc901",
+      "bytes": 470864
+    }
+  },
+  "postimages": {
+    "C": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-2/candidate/kernel/process.c",
+      "sha256": "92507b0549a92e4697dc28ed2354cf6263cfed06ecef97809bf0370eb961cd35",
+      "bytes": 190313
+    },
+    "Rust": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-2/candidate/kernel/rust/process_helpers.rs",
+      "sha256": "f2e69c7eadb843300861fa7deb2f95b1611d234ffe2de30d2accd1d0bc3da8e6",
+      "bytes": 475099
+    }
+  },
+  "body": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-2/fixture/profile_and_cpu_providers.ACTUAL-RUST.inc",
+    "sha256": "ba3eb6e0e62e197fa0e60ccf4358aaefea191a541d0513fea704f32eb7763ee4",
+    "bytes": 4234
+  },
+  "originals": {
+    "default_ncpus": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-2/fixture/original_default_ncpus.ACTUAL-C.inc",
+      "sha256": "6e5e8217ff6aba91ed8540b3e76ef420614db5c344eebc55191e85e25a714833",
+      "bytes": 140
+    },
+    "release_thread_profile": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-2/fixture/original_release_thread_profile.ACTUAL-C.inc",
+      "sha256": "48ee30954eaf9861faa9277879b502be21ee09ff19ebb41677e23603be9c0a2e",
+      "bytes": 218
+    },
+    "release_profile": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-2/fixture/original_release_profile.ACTUAL-C.inc",
+      "sha256": "b33b624022f9cad0fd5dfe06ba75dc576e9c02fc3cf1adb750c406865404a4ed",
+      "bytes": 334
+    }
+  },
+  "providers": {
+    "kernel/rust/profile.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/profile.rs",
+      "sha256": "f7a614cee0c4f301bc8bc21be0782e6912b944992cf06a87673e68694c3c1389",
+      "bytes": 20105
+    },
+    "kernel/rust/ap.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/ap.rs",
+      "sha256": "274823af8fcdf10462e9d1c2dff532b251754b63971778f8b412f698093d1137",
+      "bytes": 16148
+    },
+    "kernel/rust/x86_setup.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/x86_setup.rs",
+      "sha256": "1bf9b326873b22034dfba47165c95bdcc599d41533a112c64de72950e99589fe",
+      "bytes": 29158
+    },
+    "kernel/rust/abi.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "bytes": 76151
+    },
+    "kernel/include/profile.h": {
+      "path": "/home/holden/mckernel/kernel/include/profile.h",
+      "sha256": "a3185194bca3733304a30c08b70de466ecdcf1da223ab5053687d4cd125171ec",
+      "bytes": 3241
+    },
+    "kernel/include/process.h": {
+      "path": "/home/holden/mckernel/kernel/include/process.h",
+      "sha256": "8848d536f2fa847a59af72d573ec9c55838c27cea664d46438ab4e038bf83649",
+      "bytes": 26602
+    }
+  },
+  "reused_actual_Rust": [
+    "profile_accumulate_events",
+    "profile_dealloc_thread_events",
+    "profile_accumulate_and_print_job_events",
+    "profile_print_proc_stats",
+    "profile_dealloc_proc_events",
+    "ihk_mc_get_cpu_info exported actual platform getter, existing ap::IhkMcCpuInfo layout"
+  ],
+  "semantics": [
+    "Null CPU-info returns -EINVAL, all signed counts unchanged",
+    "PROFILE_ENABLE corresponds to existing enable_profile selected build; disabled callbacks access neither pointer",
+    "Thread accumulation precedes sole event deallocation",
+    "Process profile/nonzero nr_processes selects job accumulation or process print; event deallocation occurs even when profile false",
+    "No lock/ref/reset/free change; reuse all existing profile provider ownership and null handling",
+    "Original C fallbacks retained; #line restores every downstream original logical trace location",
+    "Canonical CPU-local layout7912 is retained; B7 CPU-local7976 is a distinct candidate not imported"
+  ],
+  "compiler_jobs": 1,
+  "actual_tests": 0,
+  "canonical_mutations": 0,
+  "new_executable_queues": 0,
+  "fullcrate_default_native_credit": false,
+  "next_check": "Root grant: current fullcrate metadata with enable_profile on and off (real provider types), actual header/abi geometry for IhkMcCpuInfo.ncpus and Process.profile/nr_processes, then actual selected/fallback C object and one Rust definition per retired provider; exact callback ordering and same ownership by independent review; root integrates only matching proof.",
+  "actual_fullcrate_ABI_result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-2/actual-real-provider-1/ACTUAL-REAL-ABI-FIRST-RESULT.json",
+    "sha256": "9038729bdbcf01d8a03610ee6ae4c52a17ba4e7c446827876cbb4e44f401b2b8",
+    "bytes": 25592
+  },
+  "actual_metadata_compiles": 2,
+  "actual_ABI_rows": 36,
+  "actual_commands": 7,
+  "CPU0_released": true,
+  "all_children_joined": true
+}

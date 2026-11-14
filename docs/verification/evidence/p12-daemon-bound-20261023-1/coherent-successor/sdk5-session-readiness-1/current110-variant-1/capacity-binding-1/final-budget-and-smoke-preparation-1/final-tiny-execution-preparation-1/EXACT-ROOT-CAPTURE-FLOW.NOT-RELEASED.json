@@ -1,0 +1,131 @@
+{
+  "capture_bound": {
+    "controller_rootstdout_and_stderr_files_per_stream_bytes": 402653184,
+    "existing_external_payload_bytes": 805306368,
+    "no_extra_copies": true,
+    "outer_root_retention_charged_to_existing_HOST_reservation": true,
+    "retained_copies": 1,
+    "scratch_output_bytes": 0,
+    "stream_slots": 2,
+    "whole_HOST_reservation_bytes": 4294967296
+  },
+  "controller_capture_namespace": {
+    "command": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/python38-controller-successor-1/actual-capture-1/command.json",
+    "directory": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/python38-controller-successor-1/actual-capture-1",
+    "result": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/python38-controller-successor-1/actual-capture-1/CAPTURE-RESULT.json",
+    "started": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/python38-controller-successor-1/actual-capture-1/started.json",
+    "stderr": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/python38-controller-successor-1/actual-capture-1/stderr",
+    "stdout": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/python38-controller-successor-1/actual-capture-1/stdout",
+    "termination_request_if_needed": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/python38-controller-successor-1/actual-capture-1/termination-request.json"
+  },
+  "controller_request": {
+    "bytes": 1448,
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/python38-controller-successor-1/CAPTURE-REQUEST.NOT-RELEASED.json",
+    "sha256": "b73b8e8ee9f33e55548a99a5d66e82b0a13ce41b9d112c063a114acb3838828e"
+  },
+  "controller_spawned_owner_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=unlimited:unlimited",
+    "--fsize=402653184:402653184",
+    "--core=0:0",
+    "--nofile=4096:4096",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/python38-controller-successor-1/smoke.NOT-RELEASED.py",
+    "df938a0f5275c62b83d0624180a36ec9df961b1aca11fac3595e77bea5a987d8"
+  ],
+  "exact_root_argv": {
+    "bytes": 708,
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/NEXT-TINY-NONE-ARGV.json",
+    "sha256": "aa8a26dc65fe26ab8169597a26a2a1a88f6b6b5b4848d5eda2869059a3fdaee0"
+  },
+  "flow": [
+    "Dispatcher root invokes the exact one-shot argv; retain direct top controller identity and stdout/stderr until actual termination. Root final release owns cancellation and persistent wait.",
+    "Exact controller authenticates request/source/helper and fresh actual-capture-1, creates stdout/stderr filesO_EXCL, then directly spawns root smoke in its own session.",
+    "Controller blocks stop signals across Popen, retains child unreaped, requests TERM at most once on softwall/cancel, never KILL, and waits for real owner cleanup.",
+    "Unchanged owner executes one no-guest NONE create/profile/start--attach/wait/exited/profile/authenticated cleanup/release; original command ledger reaps each real child using Python3.8 wait consumer.",
+    "Controller checks group before directwait, directly joins, closes streams and writes CAPTURE-RESULT.json with source-bound capture hashes; signalerrors/TERM/unexpectedmembers/remaininggroup refuse success.",
+    "Dispatcher root records final actual topcontroller join/groupabsence/closedstreams and independently reviews physical cleanup; no ordinary timeout wrapper may kill rootcontroller or descendants."
+  ],
+  "interpreter": {
+    "actual_fixture_version": "3.8.10 (default, Mar 18 2025, 20:04:55) \n[GCC 9.4.0]",
+    "actual_wait_fixture": {
+      "bytes": 2846,
+      "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/python38-controller-successor-1/DIRECT-CONSUMER-RESULT.json",
+      "sha256": "f44286e9988863c8ce9740ebb7061b1208388c5047ee66bbd110a1ae00104fdb"
+    },
+    "binary_digest": "Not part of frozen original operation; no new digest invented",
+    "flags": [
+      "-I",
+      "-B"
+    ],
+    "interpreter_switch": false,
+    "root_and_owner_exact_argv_path": "/usr/bin/python3"
+  },
+  "no_force_kill": true,
+  "outer_capture_namespace": {
+    "actual": null,
+    "closed_capture": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/actual-root-tiny-execution-1/ACTUAL-CLOSED-CAPTURE.json",
+    "directory": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/actual-root-tiny-execution-1",
+    "publication_owner": "/root",
+    "qualification": "Exact proposed root retention destination; source publication and independent execution release remain NULL. No capture directory created by this preparation.",
+    "stderr": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/actual-root-tiny-execution-1/stderr",
+    "stdout": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/actual-root-tiny-execution-1/stdout"
+  },
+  "owner_source": {
+    "bytes": 96406,
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/python38-controller-successor-1/source/native_diagnostic_container_owner.py",
+    "sha256": "2525d2524a74de6d4443e2eb54fbc9d8d01be9ab124674da9c4d38858da154c7"
+  },
+  "persistent_anchor_wait": true,
+  "profile": {
+    "FSIZE_bytes": 402653184,
+    "container_cpus": "2-5",
+    "container_memory_bytes": 12884901888,
+    "container_memory_swap_bytes": 12884901888,
+    "container_pids": 512,
+    "controller_and_owner_CPU_limit": [
+      -1,
+      -1
+    ],
+    "controller_as_bytes": 536870912,
+    "controller_cpu": [
+      7
+    ],
+    "controller_uid": 0,
+    "core": 0,
+    "logging": {
+      "Config": {},
+      "Type": "none"
+    },
+    "network": "none",
+    "no_forcekill": true,
+    "nofile": 4096,
+    "owner_as_bytes": 2147483648,
+    "owner_cpu": [
+      7
+    ],
+    "persistent_retirement_wait": true,
+    "soft_wall_seconds": 60
+  },
+  "root_controller": {
+    "bytes": 6711,
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/python38-controller-successor-1/capture_root.NOT-RELEASED.py",
+    "sha256": "7e83cdc3a6714a8000ca8e89eacbc30f1116d967be9a97b191ce31f797bf4e59"
+  },
+  "smoke_owner_namespace": {
+    "attempt": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/python38-controller-successor-1/p/attempt-089abb30162c46c4b42b86db06235ecf",
+    "label": "mckernel.native-diagnostic.owner=089abb30162c46c4b42b86db06235ecf",
+    "name": "mckernel-native-diagnostic-089abb30162c46c4b42b86db06235ecf",
+    "nonce": "089abb30162c46c4b42b86db06235ecf",
+    "owner_evidence": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/python38-controller-successor-1/p.owner-089abb30162c46c4b42b86db06235ecf",
+    "prepared_parent": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/python38-controller-successor-1/p"
+  },
+  "soft_wall_seconds": 60
+}

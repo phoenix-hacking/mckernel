@@ -1,0 +1,190 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SDK6_SOURCE_PREPARATION_HELPER_READY_NOT_EXECUTED",
+  "helper": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/prepare.py",
+    "sha256": "fce5df7d63429018a3246d306492041ae7b926c6c4f92f02d7a4a74f9deb45fc",
+    "bytes": 17400
+  },
+  "base_helper": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-procfs-delete-sdk-preparation-20261023-5/prepare.py",
+    "sha256": "26eaa1941958ce9dcb138105094bc46df9ef52e7dd20679be6173c5c9875a298",
+    "bytes": 17427
+  },
+  "baseline_preparation": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-procfs-delete-sdk-preparation-20261023-5/prepared-sdk/preparation.json",
+    "sha256": "b04df1ec9d82ea0b5eff91ba1570ab1abf5d2035fbe3be9962c893eac37936d5",
+    "bytes": 49728
+  },
+  "baseline_source_identity": "ba0e1be79e6cd6b06fe0b7cbd1c2c3c689e86579439e13deea9b3f3776069120",
+  "actual_closure_rows": 68,
+  "actual_baseline_source_bytes": 1359089,
+  "input_delta": {
+    "relative": "smp_service.rs",
+    "preimage": {
+      "baseline_sha256": "bd0a109fe6c402e21b702b0fa96d99c2d9edbd5179877aa61f9f27bd595fe0e4",
+      "bytes": 47957,
+      "origin": "/home/holden/mckernel-work/host-preparation/native235-procfs-delete-sdk-preparation-20261023-5/prepared-sdk/source-modules/smp_service.rs",
+      "origin_kind": "CURRENT_LIVE_SOURCE",
+      "path": "smp_service.rs",
+      "reviewed_replacement": true,
+      "sha256": "ffefabadb349f55ecc4d474f6463e73e0c6b432aea6c41eb973a91f115ded0f7"
+    },
+    "candidate": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/expert-controller-binding-repair-1/failed91c-diagnosis-1/smp_service.rs",
+      "sha256": "f439e780dd179f03813736f1526be0ecddb3b905b106bbcb6b9f9b8be9ce5bb7",
+      "bytes": 49492
+    },
+    "unchanged_rows": 67,
+    "affected_dependency_sets": [
+      "ihk_smp_x86_64"
+    ]
+  },
+  "source_gate": {
+    "template": {
+      "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/SOURCE-ACCEPTANCE.INPUT.TEMPLATE.PENDING.json",
+      "sha256": "39016b2112835a2e52cc8423e2356645160192d4cc6d33524e188afc771cc6f0",
+      "bytes": 421
+    },
+    "required_status": "ACCEPTED_FROZEN_SOURCE_READY_FOR_SDK_PREPARATION",
+    "required_review_schema": "Genuine independent PASS/PASS_SOURCE, implementation_ownership false, candidate_sha256_by_relative exactly smp_service f439e780; genuine actual_tests ref. Root source/canonical acceptance before publishing SOURCE-ACCEPTANCE.INPUT.json."
+  },
+  "next_prepare_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=30:30",
+    "--fsize=134217728:134217728",
+    "--nofile=256:256",
+    "--core=0:0",
+    "--",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=3",
+    "35",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/prepare.py"
+  ],
+  "future_staging_operation": {
+    "existing_source": {
+      "path": "/home/holden/mckernel-work/host-preparation/native235-procfs-delete-sdk-preparation-20261023-5/metadata/stage_bound_successor.py",
+      "sha256": "711d6e2e7f676600dfcc175f833b843f634cd57efc66ba298c58b197c0dc188b",
+      "bytes": 5526
+    },
+    "derived_path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/metadata/stage_bound_successor.py",
+    "argv_prefix": [
+      "/usr/bin/taskset",
+      "-c",
+      "0",
+      "/usr/bin/prlimit",
+      "--as=2147483648:2147483648",
+      "--cpu=30:30",
+      "--fsize=134217728:134217728",
+      "--nofile=256:256",
+      "--core=0:0",
+      "--",
+      "/usr/bin/timeout",
+      "--signal=TERM",
+      "--kill-after=3",
+      "35",
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B"
+    ],
+    "argv_tail": [
+      "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/metadata/stage_bound_successor.py",
+      "--execute"
+    ],
+    "new_preparation_sha256": null,
+    "new_request_sha256": null,
+    "staging_result": null
+  },
+  "exact_reviewed_external_make_argv": [
+    "/usr/bin/env",
+    "-i",
+    "KBUILD_BUILD_HOST=rocky-10.2-x86_64",
+    "KBUILD_BUILD_TIMESTAMP=Tue, 11 Aug 2026 07:40:34 +0000",
+    "KBUILD_BUILD_USER=mckernel",
+    "KBUILD_BUILD_VERSION=1",
+    "SOURCE_DATE_EPOCH=1786434034",
+    "PATH=/usr/bin:/bin",
+    "LANG=C",
+    "LC_ALL=C",
+    "TZ=UTC",
+    "BASH_ENV=",
+    "ENV=",
+    "GNUMAKEFLAGS=",
+    "MAKEFILES=",
+    "MAKEFLAGS=",
+    "MAKEOVERRIDES=",
+    "MFLAGS=",
+    "LD_LIBRARY_PATH=",
+    "LD_PRELOAD=",
+    "HOME=/candidate/home",
+    "TMPDIR=/candidate/tmp",
+    "/usr/bin/make",
+    "-C",
+    "/out/source/linux-6.12.0-211.44.1.el10_2",
+    "O=/out/build",
+    "M=/candidate/modules",
+    "ARCH=x86_64",
+    "LLVM=1",
+    "LOCALVERSION=-211.44.1.el10_2.mckernel1.x86_64",
+    "KBUILD_BUILD_HOST=rocky-10.2-x86_64",
+    "KBUILD_BUILD_TIMESTAMP=Tue, 11 Aug 2026 07:40:34 +0000",
+    "KBUILD_BUILD_USER=mckernel",
+    "KBUILD_BUILD_VERSION=1",
+    "SOURCE_DATE_EPOCH=1786434034",
+    "MCKERNEL_CURRENT_FORK_ADOPTION_OPT_IN=1",
+    "--jobserver-style=pipe",
+    "-j2",
+    "modules"
+  ],
+  "build_route": "Reuse existing SDK5 external-module driver/owner and accepted Linux6.12 basis; exact make -j2 modules target. This is the fastest existing reviewed route; only ihk_smp_x86_64 dependency set contains smp_service. No new target/flags or kernel/image/launcher rebuild. Three produced modules require actual artifact comparison; cannot assume unchanged two modules PASS.",
+  "profile": {
+    "heavy_jobs": 1,
+    "container_affinity": "2-5",
+    "container_memory_bytes": 12884901888,
+    "swap_extra": 0,
+    "tasks": 512,
+    "network": "none",
+    "make_jobs": 2,
+    "scratch_geometry_bytes": 118111600640,
+    "timeout_seconds": 1800
+  },
+  "preserve_sources": [
+    "All67 other closure rows",
+    "SDK5LinuxMM C wrapper/header providers",
+    "mcctrl/mcctrl_rust aliases",
+    "smp_application f5c56d83",
+    "current_fork_control/mcctrl_vm/mcctrl_process accepted fixes"
+  ],
+  "expected_stable_artifacts": {
+    "ihk.ko": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c",
+    "mcctrl.ko": "06e8b9b571f21b41821aa03a32ebf4ae20ae19cf4b110c3af2c81b491b92ef86"
+  },
+  "single_current_blocker": "Independent EVENTFD source PASS + root canonical/source acceptance and preparation grant are pending; helper is failclosed without genuine accepted SOURCE-ACCEPTANCE.INPUT.json. No materialization/build permitted yet.",
+  "unknown": {
+    "new_source_identity": null,
+    "new_preparation": null,
+    "new_runtime_cohort": null,
+    "new_request": null,
+    "execution_review": null,
+    "build_release": null,
+    "new_ihk_smp_artifact_sha256": null,
+    "actual_artifact_comparison": null,
+    "physical_acceptance": null
+  },
+  "executed": {
+    "preparation": 0,
+    "staging": 0,
+    "compiler": 0,
+    "Docker": 0,
+    "root": 0
+  },
+  "read_scope": "SDK5 finite68-row manifest and driver/helper/stager metadata, single candidate file; no fullkernel source census or artifact rehash."
+}

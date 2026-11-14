@@ -1,0 +1,641 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/recovery_review",
+  "decision": "PASS_EXACT_CURRENT118_FAILED_HELPER_RETIREMENT",
+  "independent": true,
+  "implementation_ownership": false,
+  "checks": [
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-postbuild-current-successor-preparation-1/source-2/RECOVERY-ACCEPTANCE-FIELDS.TEMPLATE.NOT-A-PASS.json",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-FAILED-GUARD-RETIREMENT-RELEASE-2/ROOT-RELEASE.ACTUAL.json",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/CURRENT118-FAILED-GUARD-RETIREMENT-REVIEW-1/PROTECTED-IDENTITY-CORRECTION-REVIEW-1/REVIEW.json",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/CURRENT118-FAILED-GUARD-RETIREMENT-REVIEW-1/PROTECTED-IDENTITY-CORRECTION-REVIEW-1/EXECUTION-REVIEW.json",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-FAILED-GUARD-RETIREMENT-RELEASE-2/SOURCE-PUBLICATION.ACTUAL.json",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-FAILED-GUARD-RETIREMENT-RELEASE-2/CURRENT-OWNER-RETIREMENT-OPERATION.ACTUAL.json",
+    "one consumed exact helper operation; zero container mutations or record release",
+    "independent source approval binds exact released files",
+    "independent execution approval binds actual canonical release excluding only execution_review",
+    "actual fetched seventeen-file source publication and checkpoint",
+    "published runtime dependency: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/retire_exact_failed_guard.py",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/retire_exact_failed_guard.py",
+    "published runtime dependency: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/BINDINGS.json",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/BINDINGS.json",
+    "published runtime dependency: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/PROFILE.SOURCE-ONLY.json",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/PROFILE.SOURCE-ONLY.json",
+    "published runtime dependency: /home/holden/mckernel/scripts/native_exact_scratch22_authority1_quarantine_recovery.py",
+    "exact retained bytes: /home/holden/mckernel/scripts/native_exact_scratch22_authority1_quarantine_recovery.py",
+    "published runtime dependency: /home/holden/mckernel/docs/verification/evidence/scratch22-authority1-root-quarantine-recovery-independent-review-20261017.json",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/scratch22-authority1-root-quarantine-recovery-independent-review-20261017.json",
+    "published runtime dependency: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/compatibility-source-1/retire_exact_current118_stopped_container.py",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/compatibility-source-1/retire_exact_current118_stopped_container.py",
+    "published runtime dependency: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/compatibility-source-1/BINDINGS.json",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/compatibility-source-1/BINDINGS.json",
+    "published runtime dependency: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/compatibility-source-1/wait_status_compat.py",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/compatibility-source-1/wait_status_compat.py",
+    "published runtime dependency: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/guardian_guard.py",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/guardian_guard.py",
+    "published runtime dependency: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/CURRENT118-FAILED-RETIREMENT-OWNER-RECONCILIATION-1/FACTS.json",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/CURRENT118-FAILED-RETIREMENT-OWNER-RECONCILIATION-1/FACTS.json",
+    "published runtime dependency: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/CURRENT118-FAILED-RETIREMENT-OWNER-RECONCILIATION-1/REVIEW.json",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/CURRENT118-FAILED-RETIREMENT-OWNER-RECONCILIATION-1/REVIEW.json",
+    "published runtime dependency: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/retire_exact_failed_guard.py",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/retire_exact_failed_guard.py",
+    "published runtime dependency: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/FAILED-REBIND-ATTEMPT-1.json",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/FAILED-REBIND-ATTEMPT-1.json",
+    "published runtime dependency: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/EXACT-PUBLISHER-ALIAS-CONTRACT.json",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/EXACT-PUBLISHER-ALIAS-CONTRACT.json",
+    "published runtime dependency: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/retire_exact_failed_guard.py",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/retire_exact_failed_guard.py",
+    "published runtime dependency: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/ACTUAL-CID-LEAF-READ-1.json",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/ACTUAL-CID-LEAF-READ-1.json",
+    "published runtime dependency: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/ACTUAL-FULL-CALLBACK-REFUSAL-1.json",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/ACTUAL-FULL-CALLBACK-REFUSAL-1.json",
+    "seventeen runtime dependencies and exact current operation target",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-FAILED-GUARD-RETIREMENT-RELEASE-2/POST-RECOVERY-CUSTODY.ACTUAL.json",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/guard-retirement-root1.complete.json",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-FAILED-GUARD-RETIREMENT-RELEASE-2/TARGET-PARENT-JOIN.ACTUAL.json",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-FAILED-GUARD-RETIREMENT-RELEASE-2/EXECUTOR.PARENT-JOIN.ACTUAL.json",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/RECOVERY-OPERATOR-PARENT-JOIN.NORMALIZED.ACTUAL.json",
+    "normalized operator receipt preserves exact immutable actual parent evidence1380b2d5",
+    "canonical decimal original operator field: birth",
+    "canonical decimal original operator field: parent_birth",
+    "normalization changes only the two known decimal birth field types; no join/argv/status/stream alterations",
+    "actual completion binds current consumed release",
+    "sole exact pidfd signal, positive exit and same permanent lock inode",
+    "exact failed helper identity, parent and FD4",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/retire_exact_failed_guard.py",
+    "exact Root actual parent/target join",
+    "actual positive parent wait/closed streams/tool completion",
+    "old client status remains unknown after owner retirement",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-NORMAL-RETIREMENT-RELEASE-1/EXECUTOR.PARENT-JOIN.ACTUAL.json",
+    "actual direct parent join, closed streams and absent group for 2232651",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-NORMAL-RETIREMENT-RELEASE-1/EXECUTOR.stdout",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-NORMAL-RETIREMENT-RELEASE-1/EXECUTOR.stderr",
+    "empty retained parent stderr for 2232651",
+    "actual direct parent join, closed streams and absent group for 2256247",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-FAILED-GUARD-RETIREMENT-RELEASE-2/EXECUTOR.stdout",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-FAILED-GUARD-RETIREMENT-RELEASE-2/EXECUTOR.stderr",
+    "empty retained parent stderr for 2256247",
+    "original target direct parent result is minus nine, tool90401 complete",
+    "recovery operator exact direct parent wait zero",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-FAILED-GUARD-RETIREMENT-RELEASE-2/EXECUTOR.stdout",
+    "actual operator stdout binds exact complete result",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/guard-retirement-root1.prepared.json",
+    "durable prepared hash and identical two-before/after protected identities",
+    "all sixty-two original protected digests retained across exact operation",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-ba431ac3eef54c628995b6b5d467f124/JOIN-WAIT4.json",
+    "actual positive wait4/stream/group receipt for recovery query 2256249",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-ba431ac3eef54c628995b6b5d467f124/status.json",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-ba431ac3eef54c628995b6b5d467f124/stderr",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-ba431ac3eef54c628995b6b5d467f124/stdout",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-41799c956312419dacf877b46c98a8e9/JOIN-WAIT4.json",
+    "actual positive wait4/stream/group receipt for recovery query 2256253",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-41799c956312419dacf877b46c98a8e9/status.json",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-41799c956312419dacf877b46c98a8e9/stderr",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-41799c956312419dacf877b46c98a8e9/stdout",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-0e1a434999f54709a0198da57273cea2/JOIN-WAIT4.json",
+    "actual positive wait4/stream/group receipt for recovery query 2256261",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-0e1a434999f54709a0198da57273cea2/status.json",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-0e1a434999f54709a0198da57273cea2/stderr",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-0e1a434999f54709a0198da57273cea2/stdout",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-2ee7e8651e8f44dbbb91db22309d1b1e/JOIN-WAIT4.json",
+    "actual positive wait4/stream/group receipt for recovery query 2256269",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-2ee7e8651e8f44dbbb91db22309d1b1e/status.json",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-2ee7e8651e8f44dbbb91db22309d1b1e/stderr",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-2ee7e8651e8f44dbbb91db22309d1b1e/stdout",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-bb8ce19b3a0947fea6481fae91c35979/JOIN-WAIT4.json",
+    "actual positive wait4/stream/group receipt for recovery query 2256280",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-bb8ce19b3a0947fea6481fae91c35979/status.json",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-bb8ce19b3a0947fea6481fae91c35979/stderr",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-bb8ce19b3a0947fea6481fae91c35979/stdout",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-88962fedf56043e9ace94a1c373e2098/JOIN-WAIT4.json",
+    "actual positive wait4/stream/group receipt for recovery query 2256284",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-88962fedf56043e9ace94a1c373e2098/status.json",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-88962fedf56043e9ace94a1c373e2098/stderr",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-88962fedf56043e9ace94a1c373e2098/stdout",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-7c3476e8b43845c682a83ea66e10bf4f/JOIN-WAIT4.json",
+    "actual positive wait4/stream/group receipt for recovery query 2256292",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-7c3476e8b43845c682a83ea66e10bf4f/status.json",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-7c3476e8b43845c682a83ea66e10bf4f/stderr",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-7c3476e8b43845c682a83ea66e10bf4f/stdout",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-f2f619be5af140f8b68fe59f9b21f871/JOIN-WAIT4.json",
+    "actual positive wait4/stream/group receipt for recovery query 2256301",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-f2f619be5af140f8b68fe59f9b21f871/status.json",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-f2f619be5af140f8b68fe59f9b21f871/stderr",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-f2f619be5af140f8b68fe59f9b21f871/stdout",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-2537426674da42e4bd289f7156239b77/JOIN-WAIT4.json",
+    "actual positive wait4/stream/group receipt for recovery query 2256309",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-2537426674da42e4bd289f7156239b77/status.json",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-2537426674da42e4bd289f7156239b77/stderr",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-2537426674da42e4bd289f7156239b77/stdout",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-04e492b2a9f74a889f92c95b1994c81c/JOIN-WAIT4.json",
+    "actual positive wait4/stream/group receipt for recovery query 2256313",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-04e492b2a9f74a889f92c95b1994c81c/status.json",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-04e492b2a9f74a889f92c95b1994c81c/stderr",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-04e492b2a9f74a889f92c95b1994c81c/stdout",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-c301f3aee1e14a82bff8c35d7248fc99/JOIN-WAIT4.json",
+    "actual positive wait4/stream/group receipt for recovery query 2256321",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-c301f3aee1e14a82bff8c35d7248fc99/status.json",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-c301f3aee1e14a82bff8c35d7248fc99/stderr",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-c301f3aee1e14a82bff8c35d7248fc99/stdout",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-5cd4d1b82b3f4766acc391100a46d5f4/JOIN-WAIT4.json",
+    "actual positive wait4/stream/group receipt for recovery query 2256329",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-5cd4d1b82b3f4766acc391100a46d5f4/status.json",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-5cd4d1b82b3f4766acc391100a46d5f4/stderr",
+    "exact retained bytes: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-5cd4d1b82b3f4766acc391100a46d5f4/stdout",
+    "all twelve distinct recovery query clients positively joined",
+    "retained post-join target/parent absence and unchanged unlocked permanent inode",
+    "original UNKNOWN preserved; stopped container, current-free and OS/native acceptance remain open",
+    "CURRENT118 stopped container remains present and requires separate ordinary retirement",
+    "exact existing RECOVERY-ACCEPTANCE-FIELDS template schema"
+  ],
+  "input_refs": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-postbuild-current-successor-preparation-1/source-2/RECOVERY-ACCEPTANCE-FIELDS.TEMPLATE.NOT-A-PASS.json",
+      "bytes": 684,
+      "sha256": "8b16f49028fe3761143a999be9510672be6328c17b6beba51de8cbd64be76dcc"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-FAILED-GUARD-RETIREMENT-RELEASE-2/ROOT-RELEASE.ACTUAL.json",
+      "bytes": 31414,
+      "sha256": "12e6832a5de6c389826004e53375fed4d148b3c7d5819b0dff70a4c20ada0626"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/CURRENT118-FAILED-GUARD-RETIREMENT-REVIEW-1/PROTECTED-IDENTITY-CORRECTION-REVIEW-1/REVIEW.json",
+      "bytes": 16878,
+      "sha256": "d82a541846e73346ba01ec3715174072976bc1267f6918516fef7942d1342011"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/CURRENT118-FAILED-GUARD-RETIREMENT-REVIEW-1/PROTECTED-IDENTITY-CORRECTION-REVIEW-1/EXECUTION-REVIEW.json",
+      "bytes": 13752,
+      "sha256": "470c10eb64e2c47ceaa61b2d4de580de77fe55220eb3aa0e2c34a9d00d9c32c3"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-FAILED-GUARD-RETIREMENT-RELEASE-2/SOURCE-PUBLICATION.ACTUAL.json",
+      "bytes": 10636,
+      "sha256": "313419615414e5c666c4507928c5bd2c85203101f1ef5260d6cabf08759da3bd"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-FAILED-GUARD-RETIREMENT-RELEASE-2/CURRENT-OWNER-RETIREMENT-OPERATION.ACTUAL.json",
+      "bytes": 5085,
+      "sha256": "88dd62e93ee2602601974ca3fc9e82fd3e0ee21c1d76efc550cc89f155dc8338"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/retire_exact_failed_guard.py",
+      "bytes": 22908,
+      "sha256": "acec84e784cda9919b1ed3185f631c162bcc58c84b9c8609c9e1f6001a5e14ce"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/BINDINGS.json",
+      "bytes": 39240,
+      "sha256": "0b54c1729651ca01ca51be63eeec84c798f562ce061af6fadaf3f9208e65fb15"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/PROFILE.SOURCE-ONLY.json",
+      "bytes": 2415,
+      "sha256": "c124bd7d3895b3e7165b476a58def4fc1f062fb4fa018fb974e787c4c4370a03"
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/native_exact_scratch22_authority1_quarantine_recovery.py",
+      "bytes": 28680,
+      "sha256": "3fdb4dde4dbbd5d07d85d68c02e68d4aee3acca45dce12be3479f3252765abd6"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/scratch22-authority1-root-quarantine-recovery-independent-review-20261017.json",
+      "bytes": 11131,
+      "sha256": "be4ea78f63872e69f9f1463d0587a9d6ebe6eeab5fbec923588101c5c89e4a19"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/compatibility-source-1/retire_exact_current118_stopped_container.py",
+      "bytes": 42041,
+      "sha256": "44fd69ba6d2a10282a73fd00c48a5cbdd420b30597538753347039cc9ffd36aa"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/compatibility-source-1/BINDINGS.json",
+      "bytes": 26640,
+      "sha256": "49c0deaafbe38894335577b5b1d0512aed6e5e297477d45c0b96295df6b554f8"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/compatibility-source-1/wait_status_compat.py",
+      "bytes": 552,
+      "sha256": "c895898a0a0162d78e521f4ded5ea7c75b46bd47d7764003f31c09d2d2f31d0a"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/guardian_guard.py",
+      "bytes": 13388,
+      "sha256": "48893862bb3262a2c81d282215e4b9771b8f659e635a21856096c41233774f18"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/CURRENT118-FAILED-RETIREMENT-OWNER-RECONCILIATION-1/FACTS.json",
+      "bytes": 6105,
+      "sha256": "503496d7f29d0fe3ac4028160de66218272d80bc02fb01aa13e9cf2b5ae3b7c0"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/CURRENT118-FAILED-RETIREMENT-OWNER-RECONCILIATION-1/REVIEW.json",
+      "bytes": 9162,
+      "sha256": "156735f9f21165d1b0a869e6cdf2ba5cc235cc9ecd053a30e542935fd4466221"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/retire_exact_failed_guard.py",
+      "bytes": 18395,
+      "sha256": "4ed5a02f1d64dbd1ed9280fbe039e3700e0e0ead321af2def0c4cf3e16b4c300"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/FAILED-REBIND-ATTEMPT-1.json",
+      "bytes": 2391,
+      "sha256": "4d092cf260e896cb75fba629264f706ad070be4c60b08d656e8781f73d50f8d8"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/EXACT-PUBLISHER-ALIAS-CONTRACT.json",
+      "bytes": 7633,
+      "sha256": "1aab97062121ec0fcc92631c55512224337a796bd21be75878d095596080996c"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/retire_exact_failed_guard.py",
+      "bytes": 19823,
+      "sha256": "5cc6900c98abbe1640259aad1f44555e15dd85796e2c417f80cbfbd6184d1f4f"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/ACTUAL-CID-LEAF-READ-1.json",
+      "bytes": 2238,
+      "sha256": "26b6a6fb9f2112775b697d19df34510620296adf28de1fddd7e14151102540c0"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/ACTUAL-FULL-CALLBACK-REFUSAL-1.json",
+      "bytes": 2736,
+      "sha256": "1de751a24a7f50ae11a24577ed21c1ed086c3437bf77eb46cd163b2fce03efcd"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-FAILED-GUARD-RETIREMENT-RELEASE-2/POST-RECOVERY-CUSTODY.ACTUAL.json",
+      "bytes": 1671,
+      "sha256": "c27b3dfc3d2eeb8e58570d41f6dfdb2f094e32ac3edaa40ea0224146af162924"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/guard-retirement-root1.complete.json",
+      "bytes": 510261,
+      "sha256": "5e634f8015d7a8abfc025d40112f9c348bc98987867d5ecfce1dbd14e661e712"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-FAILED-GUARD-RETIREMENT-RELEASE-2/TARGET-PARENT-JOIN.ACTUAL.json",
+      "bytes": 874,
+      "sha256": "08dec5df27565b2b2511d7b4e1311cff2620132d3ad26923b3ad2628c91db374"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-FAILED-GUARD-RETIREMENT-RELEASE-2/EXECUTOR.PARENT-JOIN.ACTUAL.json",
+      "bytes": 2205,
+      "sha256": "1380b2d5b2e41fc329b5557a9b26b83b7f673ff2f28679942d1f90589835bc93"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/RECOVERY-OPERATOR-PARENT-JOIN.NORMALIZED.ACTUAL.json",
+      "bytes": 2701,
+      "sha256": "d96fa3941c13ab161505e62eba83996a8194930dd7dab2bcbd0daa43f1ea29e9"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/retire_exact_failed_guard.py",
+      "bytes": 22908,
+      "sha256": "acec84e784cda9919b1ed3185f631c162bcc58c84b9c8609c9e1f6001a5e14ce"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-NORMAL-RETIREMENT-RELEASE-1/EXECUTOR.PARENT-JOIN.ACTUAL.json",
+      "bytes": 2057,
+      "sha256": "60bc3ffd4d2fb56b6f1b484a2ea5e6716e9c0205baf3735bb3af02736c3c2df0"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-NORMAL-RETIREMENT-RELEASE-1/EXECUTOR.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-NORMAL-RETIREMENT-RELEASE-1/EXECUTOR.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-FAILED-GUARD-RETIREMENT-RELEASE-2/EXECUTOR.stdout",
+      "bytes": 531,
+      "sha256": "8abf14d59ea78ad0489a5f7e697d385a9a4f052047d211b723e33e486b573cd8"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-FAILED-GUARD-RETIREMENT-RELEASE-2/EXECUTOR.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-FAILED-GUARD-RETIREMENT-RELEASE-2/EXECUTOR.stdout",
+      "bytes": 531,
+      "sha256": "8abf14d59ea78ad0489a5f7e697d385a9a4f052047d211b723e33e486b573cd8"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/guard-retirement-root1.prepared.json",
+      "bytes": 999243,
+      "sha256": "b1461d102e90485ecc1602b359f3279b16d27b416e51453363ab82db6020999e"
+    },
+    {
+      "bytes": 6695,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-ba431ac3eef54c628995b6b5d467f124/JOIN-WAIT4.json",
+      "sha256": "e57537dd85befbf31dceb16f05c8b23666607e0955829151d0d35bc4e518070e"
+    },
+    {
+      "bytes": 4810,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-ba431ac3eef54c628995b6b5d467f124/status.json",
+      "sha256": "eed951a8e5f1942cb4452ab50824414b6298dde09ffc4beef44c362ee45da4c4"
+    },
+    {
+      "bytes": 0,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-ba431ac3eef54c628995b6b5d467f124/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 35697,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-ba431ac3eef54c628995b6b5d467f124/stdout",
+      "sha256": "463e37a55a60e285c8efa7dcbd39ed978bedd30dee8f29d179fb00396b63fb90"
+    },
+    {
+      "bytes": 2202,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-41799c956312419dacf877b46c98a8e9/JOIN-WAIT4.json",
+      "sha256": "df97cbf204ef89e72750f9e00c9ae34e642b4a4d66eceb9415c81e56cb30f9c4"
+    },
+    {
+      "bytes": 307,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-41799c956312419dacf877b46c98a8e9/status.json",
+      "sha256": "a5dc031e14c0007363bf63365406dca818293a37d10a04516833d7497224108b"
+    },
+    {
+      "bytes": 0,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-41799c956312419dacf877b46c98a8e9/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 70376,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-41799c956312419dacf877b46c98a8e9/stdout",
+      "sha256": "2d5f6d17b18bccb0491e2b807784316ab86be02827c3260e7685ca7870e57068"
+    },
+    {
+      "bytes": 2179,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-0e1a434999f54709a0198da57273cea2/JOIN-WAIT4.json",
+      "sha256": "4c78bff8740c7c0aadbbaab7864f3db606f249550a2a1b8d11505b00089105fb"
+    },
+    {
+      "bytes": 296,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-0e1a434999f54709a0198da57273cea2/status.json",
+      "sha256": "54e652130e589b0af3fbeabc0830ba179487ced0c3731e762312631a9cdf4b12"
+    },
+    {
+      "bytes": 0,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-0e1a434999f54709a0198da57273cea2/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 3033,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-0e1a434999f54709a0198da57273cea2/stdout",
+      "sha256": "ec329466befdb28861175d2a70be0eed867b2a295f36f5d94e33b738dc70cb9b"
+    },
+    {
+      "bytes": 2142,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-2ee7e8651e8f44dbbb91db22309d1b1e/JOIN-WAIT4.json",
+      "sha256": "3b860a07bfedaad50e28191d075b504e695730ffe7cfc23443dfdeb58e91eb11"
+    },
+    {
+      "bytes": 261,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-2ee7e8651e8f44dbbb91db22309d1b1e/status.json",
+      "sha256": "e8d3b198eae5b04636f33552d5fdb67d5b6d558970055e94567f7302a2d28d5d"
+    },
+    {
+      "bytes": 0,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-2ee7e8651e8f44dbbb91db22309d1b1e/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 369573,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-2ee7e8651e8f44dbbb91db22309d1b1e/stdout",
+      "sha256": "e70bd85b59b521529910cbdaac384b9e5fe9d704648c1cc874f8114a53bd81f3"
+    },
+    {
+      "bytes": 6696,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-bb8ce19b3a0947fea6481fae91c35979/JOIN-WAIT4.json",
+      "sha256": "d0bef964aaa487c357cfdcb081824a8ba025e9f107bacf92a80a41f12fa1bb19"
+    },
+    {
+      "bytes": 4810,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-bb8ce19b3a0947fea6481fae91c35979/status.json",
+      "sha256": "818f4a5bfb2666073e49e8e69ff42f8cfb46b8aaca3c09d3a2af30a4683b9d3b"
+    },
+    {
+      "bytes": 0,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-bb8ce19b3a0947fea6481fae91c35979/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 35697,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-bb8ce19b3a0947fea6481fae91c35979/stdout",
+      "sha256": "07938f7d6d88d3edaae69e53f1153d9536fe3eb0e499ec90bb755102b13eaffe"
+    },
+    {
+      "bytes": 2204,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-88962fedf56043e9ace94a1c373e2098/JOIN-WAIT4.json",
+      "sha256": "b6894039d1654e1f56d2f1d9c00c8f53c0725d5da67d63443b1e55639c574f73"
+    },
+    {
+      "bytes": 307,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-88962fedf56043e9ace94a1c373e2098/status.json",
+      "sha256": "151ae963fe942c9faa44ee8b6aba647c49283913e43be32900cad81cd296c722"
+    },
+    {
+      "bytes": 0,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-88962fedf56043e9ace94a1c373e2098/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 70376,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-88962fedf56043e9ace94a1c373e2098/stdout",
+      "sha256": "29393afaf4fc303a1fb16c9ee0c173ab63759669b148d5a6a06ec0c6a8beb969"
+    },
+    {
+      "bytes": 2178,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-7c3476e8b43845c682a83ea66e10bf4f/JOIN-WAIT4.json",
+      "sha256": "6ca914a8983e1bdb4406e3732320ee2d4bf42de4e99e5c402f4cfe18e4987150"
+    },
+    {
+      "bytes": 296,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-7c3476e8b43845c682a83ea66e10bf4f/status.json",
+      "sha256": "da35cd906670e3d1b7293fbac0931819b478c3de6cebb03dfaf5673dad076424"
+    },
+    {
+      "bytes": 0,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-7c3476e8b43845c682a83ea66e10bf4f/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 3033,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-7c3476e8b43845c682a83ea66e10bf4f/stdout",
+      "sha256": "ec329466befdb28861175d2a70be0eed867b2a295f36f5d94e33b738dc70cb9b"
+    },
+    {
+      "bytes": 2147,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-f2f619be5af140f8b68fe59f9b21f871/JOIN-WAIT4.json",
+      "sha256": "6075fa34c3806faceec71e07b2b1a3ff7de57b5e98e11f357e004e0193d147b3"
+    },
+    {
+      "bytes": 261,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-f2f619be5af140f8b68fe59f9b21f871/status.json",
+      "sha256": "72d9a6f2a540d53091499968f78c8acd4920a918306a026fda19a1565bec9b4d"
+    },
+    {
+      "bytes": 0,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-f2f619be5af140f8b68fe59f9b21f871/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 369573,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-f2f619be5af140f8b68fe59f9b21f871/stdout",
+      "sha256": "103d83faaebdbcac314daf03c619359ef149022b1e53809fd77369e92327c85b"
+    },
+    {
+      "bytes": 6694,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-2537426674da42e4bd289f7156239b77/JOIN-WAIT4.json",
+      "sha256": "5cd984aaf989d90d44b6bede79e99ef8c1e0d849e8bccd9031960fcf7cb44737"
+    },
+    {
+      "bytes": 4810,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-2537426674da42e4bd289f7156239b77/status.json",
+      "sha256": "d9a57e61d7b41236e2217c95fdb66968f29d1a45754ebb06753861929e4210ba"
+    },
+    {
+      "bytes": 0,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-2537426674da42e4bd289f7156239b77/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 35239,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-2537426674da42e4bd289f7156239b77/stdout",
+      "sha256": "009cc06157d9baae0dca53a6c89c7817e676e2f1fe782e110ee0338a8bb22cea"
+    },
+    {
+      "bytes": 2191,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-04e492b2a9f74a889f92c95b1994c81c/JOIN-WAIT4.json",
+      "sha256": "73cb7a667c6b42a7c2ab12ad24c0e4810eed566077697c7467b7317cd10b12c6"
+    },
+    {
+      "bytes": 307,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-04e492b2a9f74a889f92c95b1994c81c/status.json",
+      "sha256": "e7f7580083aeb0f3b959cb561c9799660b387833cd96343c33357b17c1999216"
+    },
+    {
+      "bytes": 0,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-04e492b2a9f74a889f92c95b1994c81c/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 70376,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-04e492b2a9f74a889f92c95b1994c81c/stdout",
+      "sha256": "741f9053dde82014ea308261cfe0615bd92c924dbde2610f27dfc2a145e13593"
+    },
+    {
+      "bytes": 2178,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-c301f3aee1e14a82bff8c35d7248fc99/JOIN-WAIT4.json",
+      "sha256": "eb88758a005a87137f9951385ea477db21d1b7219f4fd29c06731c2d688e2c88"
+    },
+    {
+      "bytes": 296,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-c301f3aee1e14a82bff8c35d7248fc99/status.json",
+      "sha256": "af99fb3ec520646d26523e77af9e3d360f1181c56777eddeefc924d151001e4f"
+    },
+    {
+      "bytes": 0,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-c301f3aee1e14a82bff8c35d7248fc99/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 3033,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-c301f3aee1e14a82bff8c35d7248fc99/stdout",
+      "sha256": "ec329466befdb28861175d2a70be0eed867b2a295f36f5d94e33b738dc70cb9b"
+    },
+    {
+      "bytes": 2146,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-5cd4d1b82b3f4766acc391100a46d5f4/JOIN-WAIT4.json",
+      "sha256": "e7d78d232ffdb705544df9502c0cdf48dd523465db27094f88896ac4857fc017"
+    },
+    {
+      "bytes": 261,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-5cd4d1b82b3f4766acc391100a46d5f4/status.json",
+      "sha256": "7a1be5f47ae1d60f36e212e1b4071d0ddcbb02a386d0d69e6054b39e06151882"
+    },
+    {
+      "bytes": 0,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-5cd4d1b82b3f4766acc391100a46d5f4/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 369573,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/actual-guard-retirement-root2/command-5cd4d1b82b3f4766acc391100a46d5f4/stdout",
+      "sha256": "d14a0b83be13be1d2906fbe303abc391892945bc5c11d3dde25057876df0b480"
+    }
+  ],
+  "query_clients": [
+    {
+      "pid": 2256249,
+      "birth": 103808365
+    },
+    {
+      "pid": 2256253,
+      "birth": 103808420
+    },
+    {
+      "pid": 2256261,
+      "birth": 103808468
+    },
+    {
+      "pid": 2256269,
+      "birth": 103808516
+    },
+    {
+      "pid": 2256280,
+      "birth": 103808667
+    },
+    {
+      "pid": 2256284,
+      "birth": 103808723
+    },
+    {
+      "pid": 2256292,
+      "birth": 103808770
+    },
+    {
+      "pid": 2256301,
+      "birth": 103808817
+    },
+    {
+      "pid": 2256309,
+      "birth": 103808998
+    },
+    {
+      "pid": 2256313,
+      "birth": 103809055
+    },
+    {
+      "pid": 2256321,
+      "birth": 103809103
+    },
+    {
+      "pid": 2256329,
+      "birth": 103809155
+    }
+  ],
+  "acceptance": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/INDEPENDENT-RECOVERY-REVIEW/RECOVERY-ACCEPTANCE-FIELDS.ACTUAL.json",
+    "bytes": 1717,
+    "sha256": "702e9c7b2c8accb8bfaf7a19bdbbb128f16eb4620abce898c31286fb94e18101"
+  },
+  "post_recovery_custody": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-FAILED-GUARD-RETIREMENT-RELEASE-2/POST-RECOVERY-CUSTODY.ACTUAL.json",
+    "bytes": 1671,
+    "sha256": "c27b3dfc3d2eeb8e58570d41f6dfdb2f094e32ac3edaa40ea0224146af162924"
+  },
+  "reviewer_runtime_actions": 0,
+  "runtime_authority": null,
+  "current_free": false,
+  "old_readonly_client_status": "UNKNOWN",
+  "container_retired": false,
+  "native_acceptance": false,
+  "operator_parent_normalization": "Root d96fa394 normalized only two canonical decimal birth strings to integers; original1380b2d5 retained unchanged and independently checked against every original field. This is data normalization, no new wait or replay.",
+  "downstream_compatibility_issue": null
+}

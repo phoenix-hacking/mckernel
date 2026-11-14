@@ -1,0 +1,21 @@
+do_kill U         
+do_syscall U         
+f03_terminate_host_refcount_set_v1 U         
+f03_wait_release_process U         
+f03_wait_release_thread U         
+get_this_cpu_local_var U         
+ihk_mc_get_processor_id U         
+ptrace_detach_do_kill_bridge T 0 c
+ptrace_detach_wakeup_bridge T 0 c
+sched_wakeup_thread U         
+syscall_do_kill_thread_bridge U         
+syscall_do_syscall2_bridge T 0 a7
+syscall_do_syscall3_bridge T 0 ab
+syscall_find_process_bridge U         
+syscall_generic_forwarding_body_result U         
+syscall_policy_do_syscall2_bridge T 0 a7
+syscall_policy_do_syscall3_bridge T 0 ab
+syscall_process_unlock_bridge U         
+terminate_host T 0 b7
+terminate_host_body_result U         
+wait_host_wait4_bridge T 0 a6

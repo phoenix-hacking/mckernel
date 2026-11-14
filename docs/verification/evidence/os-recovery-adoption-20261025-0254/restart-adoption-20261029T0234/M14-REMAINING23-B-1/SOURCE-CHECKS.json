@@ -1,0 +1,13 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_SOURCE_ONLY",
+  "source_checks": "check_queue.py: five constructor exports, exact named 6-slot vectors, 72/8 request and 128 packet declarations, helper-owned fields and prepare-copy-publish ordering, exact two reused bodies, paired opt-in cfg/defines and all-callers gate",
+  "patch_apply": "git apply --check --no-index on isolated private source2 CMake preimage: exit 0",
+  "retained_test_history": [
+    "First check_queue.py invocation failed due to an incorrect test expectation of 14 added diff lines; actual diff adds 16. The assertion was corrected to 16; production source did not change.",
+    "The first patch-check process was not created because the chosen private working directory had not yet been created. Directory was then created and the exact patch check exited 0."
+  ],
+  "actual_compiler": false,
+  "actual_runtime": false,
+  "runtime_authority": null
+}

@@ -1,0 +1,90 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ROOT_AUTHORIZED_SOLE_BOUNDED_E0308_SOURCE_CORRECTION_NO_EXECUTION",
+  "original_ready": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/production-batch-preparation-1/EXECUTABLE-READY.OBSERVER-SUCCESSOR.NOT-GRANTED.json",
+    "sha256": "01fbc1acba56489e91f8198865a348379a7aac6518979696465c65dfdfbcea15",
+    "bytes": 11662
+  },
+  "original_driver": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/production-batch-preparation-1/run_production_batch_observer_successor_once.py",
+    "sha256": "21ed6aaa1b2a41aef0aecc6f2544ed8261fa64451eb6df764defab528ac102f2",
+    "bytes": 19577
+  },
+  "failure": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/production-batch-preparation-1/PRODUCTION-OBSERVER-SUCCESSOR-FAILURE-1.json",
+    "sha256": "245ae843edc0240568b4a22ba06ee706a284beece4ca1319a127a2b6bc5a0efb",
+    "bytes": 3158
+  },
+  "stderr": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/production-batch-preparation-1/actual-production-capture-1/00-current78-production-Rust-compile/stderr",
+    "sha256": "519ec3b999a9271335fd43a4213ea306f8bfca4c8139e0446360f163b4993867",
+    "bytes": 2192
+  },
+  "provider": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/production-batch-preparation-1/source/kernel/rust/mem_helpers.rs",
+    "sha256": "6a527f7a55930d72d6d72c775ee0261c3550e2bd0094fe01031f3aa3238aefd6",
+    "bytes": 206768
+  },
+  "actual_provider_signature": "pub unsafe extern \"C\" fn rusage_memory_stat_sub(memobj: *mut Memobj, size: CULong, pgsize: CInt)",
+  "actual_ABI": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/production-batch-preparation-1/source/kernel/rust/abi.rs",
+    "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "bytes": 76151
+  },
+  "actual_types": "CULong=u64; SizeT=usize. Supported x86_64 LP64 ABI has usize64/u6464, so explicit as CULong preserves every size bit.",
+  "canonical_inputs_unchanged": true,
+  "old_source": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/production-batch-preparation-1/source/kernel/rust/process_helpers.rs",
+    "sha256": "908aa07b957d5ff7cc96edfaff4d6324b8e9f12059e5d0d68538c4eba9145cca",
+    "bytes": 361665
+  },
+  "new_source": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/production-batch-preparation-1/bounded-source-correction-1/source/kernel/rust/process_helpers.rs",
+    "sha256": "5bf085bfa3f60217abacbda380e80d35d2fd56922c0e82f82dbab1d5fe09d4d1",
+    "bytes": 361675
+  },
+  "exact_product_delta": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/production-batch-preparation-1/bounded-source-correction-1/patch/ONLY-AUTHORIZED-LOSSLESS-RSS-SIZE-CAST.diff",
+    "sha256": "3447b58764fa8a91db8e093e588a7a8c1b59c40e6487e8a77ae40bb66d4ab077",
+    "bytes": 551
+  },
+  "original_C_unchanged": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/production-batch-preparation-1/bounded-source-correction-1/source/kernel/process.c",
+    "sha256": "7ab29dad607ac06e9548065f4395c6e870359558a2777844c1052d67e046ca13",
+    "bytes": 164210
+  },
+  "previous_source_identity": "e61b3f0a63a879f9013ccb51c933945cf650a3e8631043b398ee0c319ce6a279",
+  "new_source_identity": "76f653009711d584bd506efb9f1bb57166a394e3f55e6eb0cdfc1786ac1da4cc",
+  "leaf_scaffold": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/batch-source-preparation-1/fixture-extension/remaining_provider.rs",
+    "sha256": "eb8df82e2e4b5d664184fb5601a23d5ae3fb979bef50a08c06aade48e737dcff",
+    "bytes": 7645
+  },
+  "leaf_signature": "pub unsafe fn rusage_memory_stat_sub(obj:*mut Memobj,size:CULong,pgsize:CInt)",
+  "leaf_witness_already_actual_CULong": true,
+  "corrected_unrun_leaf_source": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/production-batch-preparation-1/bounded-source-correction-1/fixture/remaining_provider.CORRECTED-SOURCE-ONLY.rs",
+    "sha256": "3540017ce8d3fef5b9811f5dd27fa251964f942cd6fc1c0136462ab0e0c900e0",
+    "bytes": 7652
+  },
+  "leaf_derivation_delta": "Same lossless argument cast plus the three previously authorized analogous unsupported addr_of trailing commas; original unrun404 source preserved.",
+  "known_macro_grammar_fixes": [
+    "process_remap_one_page_entry_debug.line_flags,",
+    "process_remap_one_page_rss_debug.line_flags,",
+    "process_remap_one_page_exit_debug.line_flags,"
+  ],
+  "accepted795_evidence": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-sync-one-page/bounded-source-correction-1/sourcehandoff/ACTUAL-FIRST-CANDIDATE-WHOLE-JOIN.json",
+    "sha256": "4e2d6368b15099b7c0b643b0051dfee419c6696840608793e52872953308e0d3",
+    "bytes": 35919
+  },
+  "accepted795_replayed": false,
+  "all14_commands_same_except_source_and_output_namespace": true,
+  "expected_T_U_unchanged": true,
+  "allocated_caller_oracles_unchanged": true,
+  "compiler_jobs": 0,
+  "CPU_reservations": 0,
+  "remap_log404_unrun": true,
+  "next_unexpected": "STOP_EXPERT_ESCALATION_NO_FURTHER_AUTHOR_CORRECTION_OR_RETRY"
+}

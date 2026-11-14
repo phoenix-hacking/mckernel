@@ -1,0 +1,53 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_PREPARED_EXACT_EXECUTION_GRANT_REQUIRED",
+  "target": "kernel/process.c:vm_range_insert",
+  "proposed_profile": {
+    "unprivileged_uid": 1000,
+    "affinity": "one root-granted CPU6 or CPU7",
+    "jobs": 1,
+    "network": false,
+    "max_seconds_per_command": 35,
+    "heavy_operations": 0,
+    "root_operations": 0,
+    "guest_operations": 0
+  },
+  "purpose": "Functional real-original-C/Rust entry/body parity, actual production-header ABI witnesses, unchanged default/fallback caller compilation and uniquely defined selected partial leaf link; no security testing.",
+  "command_template": [
+    "/usr/bin/taskset",
+    "-c",
+    "ROOT_GRANTED_CPU",
+    "/usr/bin/python3",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-process-next/sourcehandoff/run_once.py",
+    "--root-grant",
+    "ROOT_CREATED_EXACT_GRANT_JSON",
+    "--attempt",
+    "ordinary-attempt-1"
+  ],
+  "root_grant_required_fields": {
+    "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+    "ready_sha256": "SHA256_OF_THIS_FILE",
+    "ordinary_cpu": "6 or 7"
+  },
+  "next_observation": "1088 original-C/Rust comparisons and independent interval/tree/callback/errno checks; selected leaf uniquely defines Rust vm_range_insert and leaves only two existing C diagnostic callbacks unresolved",
+  "failure_family_history": [],
+  "stop_condition": "Stop and preserve every failed compiler/test/capture; no unchanged replay, one bounded correction after explicit root grant, then expert escalation. No canonical/fullcrate/default-image/native acceptance.",
+  "input_sha256": {
+    "candidate/process_helpers.rs": "3f2c3dc03445147addee47d77e3ad2b31207fb3bfaa591ad99b6d0d9c897932e",
+    "candidate/process.c": "64af918855ea361bd850d6ad7480d304634c28814e04127fe3dec8c013f21044",
+    "fixture/parity_fixture.c.inc": "54b2f4b326d2fe83e1af6d2236a3b792847f987039429c0db126408fa4efde9a",
+    "fixture/vm_range_insert.ACTUAL-RUST-ENTRY.inc": "1334003a452013e1673a07def25f1d740deeaff148ac6c9435d2d326c998bb04",
+    "fixture/original_vm_range_insert.ACTUAL-C-BODY.inc": "1245ddf65b8e0f26e8893de50192241b858a47f64c05555436b09dd48d5530a3",
+    "fixture/abi.ACTUAL.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "fixture/actual_default_and_fallback_consumers.c": "4ed386699c911740b01cc60d0e9ee3955d17c34c2384c7de2d0fece6e3b1d7e9",
+    "fixture/rbtree.ACTUAL.rs": "114e8dbd0b48abc156879bfd2f019071c30174019e97904c028ccee911840256",
+    "fixture/actual_provider.rs": "933c4398cc782c8d34b40eaba8fd056b7121066b05975fbf02141dd822dbc580",
+    "patch/process.c.diff": "8c295b51fdcd92f021c4e9df29de853ddf6aae93bc4e61e30159ac3035abfc30",
+    "patch/process_helpers.rs.diff": "63db3aa593af2c9df8d1447589eee20dd5e0aecffdd527889e93e51669540c1c",
+    "sourcehandoff/process_helpers.rs.PREIMAGE": "526baf9363a0845ad50aade7e9b2296d27c8840527f3510d95a1105fc626d8d3",
+    "sourcehandoff/run_once.py": "d8d007fb7d3f944afde8d42d2e72907c94344672db809b9642f084e01b6c8052",
+    "sourcehandoff/stage_private.py": "364715549bb63dfefd38c4404f27d7b05b2aad21bab362cbde77fdf78102d1ca",
+    "sourcehandoff/process.c.PREIMAGE": "e2f2562b32ec462d9ee78c74dee4222485a69c4a3e2a81a332663fcef7e2b52d",
+    "sourcehandoff/SOURCE-CANDIDATE-AND-ABI.json": "23eaf95cc77727fdfe4056afe6d88be61f4c226d8c810ee4c0506935727bbb3a"
+  }
+}

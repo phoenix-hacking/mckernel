@@ -1,0 +1,144 @@
+{
+  "schema_version": 1,
+  "record_kind": "stability_pending_free_authority_source_map",
+  "task_id": "M03-A/M03-B",
+  "attempt": 4,
+  "created_utc": "2026-09-16T06:44:41Z",
+  "status": "SOURCE_MAP_ONLY_AUTHORITIES_MISSING",
+  "scope": "Read-only map of the concrete production seams required before a private pending-free authority packet can be implemented or reviewed.",
+  "sources": [
+    {
+      "path": "kernel/mem.c",
+      "sha256": "167ad2b976bcdec048a625dedf68a9b7c1ef6db7c57f3ceddf3582d54887101a",
+      "anchors": [
+        "3827-3889 mckernel_free_pages and CPU pending list",
+        "4303-4345 remote_flush_tlb_cpumask and remote_flush_tlb_array_cpumask",
+        "5167-5261 page-hash lookup and phys_to_page",
+        "5261-5686 page-hash insertion wrappers"
+      ]
+    },
+    {
+      "path": "kernel/include/page.h",
+      "sha256": "c8f3f5e7804c71430c814395ea14a1ee93267180713caeb39880b662cc9cd0dc",
+      "anchors": [
+        "18-39 page descriptor fields list/hash/mode/phys/count/mapped/offset/pgshift"
+      ]
+    },
+    {
+      "path": "kernel/rust/mem_helpers.rs",
+      "sha256": "647825d8c51a9f584d1229a2389fbb81105e4bbf94bfcf95a12d172c5dde112b",
+      "working_tree_state": "preexisting dirty file with 252 inserted lines; preserve untouched",
+      "anchors": [
+        "3995-4248 mem_begin_free_pages_pending_*, mem_free_pages_pending_enqueue_result, mem_finish_free_pages_pending_*",
+        "4815-4872 allocator free",
+        "5121-5260 mem_remote_flush_tlb_array_body_result",
+        "5261-5307 mem_tlb_flush_handler_body_result raw-address dereference and pending acknowledgement"
+      ]
+    },
+    {
+      "path": "kernel/rust/xpmem_helpers.rs",
+      "sha256": "e8c7970b672c724f14da2eb0a12fdbcd11df62f824422a5f8a98da4364328255",
+      "anchors": [
+        "1575-1605 xpmem_remove_process_range_bridge and xpmem_vm_munmap_bridge",
+        "1657-1733 PTE clear/free bridges",
+        "5470-5504 clear, unref, erase and free path"
+      ]
+    },
+    {
+      "path": "kernel/xpmem.c",
+      "sha256": "d3399be775f86dbabb4feca6238dc45add64559b45a6091726c588acf8c24a89",
+      "anchors": [
+        "8513-8580 xpmem_detach lock, unpin and munmap sequence"
+      ]
+    },
+    {
+      "path": "kernel/process.c",
+      "sha256": "6480b1ab121acf17610495682cd9e58cba774427de9695b1ce8dd65a9bc07cb2",
+      "anchors": [
+        "3513-3537 release_process_vm"
+      ]
+    }
+  ],
+  "retained_inputs": [
+    {
+      "path": "docs/verification/stability-pending-free-lifecycle-clear-source-map-failure-20260915-1.json",
+      "sha256": "fc666a230537a40848c81675b0477059556acde30a9c2b6fca4ef5b0e75f9ce1"
+    },
+    {
+      "path": "docs/verification/stability-pending-free-inventory-production-authority-audit-20260915-1.json",
+      "sha256": "94445654a9a6aa1bb08b5243bfbd1250708ce1d6f42ec22e7aa15fb28e7b3faa"
+    },
+    {
+      "path": "docs/verification/stability-pending-free-inventory-production-authority-review-20260915-1.json",
+      "sha256": "825868636a822696f21a82648237931a1e61c7aedc8322fc6bd8e40f58ecb2b6"
+    },
+    {
+      "path": "docs/verification/stability-pending-free-durable-owner-review-20260915-1.md",
+      "sha256": "028368fa089d4f7e5889b3f21609d3f9cfd61c7adc078f099006df902a7b7219"
+    },
+    {
+      "path": "docs/verification/stability-pending-free-invalidation-policy-audit-20260915-1.md",
+      "sha256": "0b8f34c355a664314a5a371b97afa05db091e329e70382c856bf93f0c9b4171a"
+    }
+  ],
+  "current_ownership_graph": [
+    "A CPU-local raw pending list points to unpinned page descriptors and then to memobj/range/backing state.",
+    "The current clear and remote-TLB paths rely on caller lifetime and counters; neither carries a durable transaction generation.",
+    "VM final release can outlive or race a late completion because there is no surviving transaction owner.",
+    "The current XPMEM clear path reports non-ENOENT errors but still unreferences, erases and frees, so clear failure does not retain backing ownership.",
+    "There is no global quarantine/recovery owner or persisted drain cursor."
+  ],
+  "proposed_private_packet": {
+    "new_file": "kernel/rust/pending_free_authority.rs",
+    "types": [
+      "OsEpoch(u64)",
+      "VmEpoch(u64)",
+      "DescriptorGeneration(u64)",
+      "PendingTxnId { os, vm, serial }",
+      "PendingTxn { snapshot, backing, pin, cursor, state }"
+    ],
+    "functions": [
+      "register(...) -> Result<PendingTxnId, Error>",
+      "acquire_page_pin(id, phys) -> Result<PagePermit, Error>",
+      "begin_clear(id, range) -> Result<ClearPermit, Error>",
+      "complete_tlb(id, ack) -> Result<(), Error>",
+      "quarantine(id, reason)",
+      "recover(id, budget) -> Result<(), Error>"
+    ],
+    "narrow_existing_call_sites": [
+      "kernel/mem.c enqueue/begin/finish bridges only",
+      "kernel/rust/xpmem_helpers.rs munmap/remove-range clear result propagation",
+      "kernel/process.c VM final-release handoff"
+    ],
+    "public_abi_change": false
+  },
+  "required_invariants": [
+    "Registry ownership precedes VM/range/hash ownership, which precedes only a short IRQ-safe pending lease; all are released before shootdown waits.",
+    "A clear failure or missing/late TLB acknowledgement retains PM_PENDING_FREE, descriptor pins and backing ownership.",
+    "OS/VM/descriptor generations and a nonreused transaction serial reject every stale completion.",
+    "Terminally unrecoverable transactions move to a durable quarantine owner rather than being freed or forgotten.",
+    "Recovery is bounded, resumes from persisted progress and cannot dereference an unproven raw page descriptor."
+  ],
+  "required_tests_before_integration": [
+    "generation exhaustion and nonreuse",
+    "descriptor pin/remove races",
+    "partial clear, timeout and late IRQ acknowledgement",
+    "stale CPU-head and stale VM completion",
+    "rollback, requeue, quarantine and bounded recovery",
+    "lock-order and reentry negatives"
+  ],
+  "missing_authorities": [
+    "authoritative OS/restart epoch",
+    "authoritative VM epoch and final-release handoff",
+    "descriptor-arena pin and generation owner",
+    "pending IRQ lease and typed TLB acknowledgement",
+    "durable quarantine and recovery owner"
+  ],
+  "implementation_released": false,
+  "production_source_edited": false,
+  "compiled": false,
+  "guest_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}

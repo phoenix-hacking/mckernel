@@ -1,0 +1,187 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "invocation": "invocation20261112T094452Z-12a4bea0",
+  "Root_thread_id": "01a18bc3-e072-7810-9426-75101b0856c0",
+  "owner": "/root/time_functional_source",
+  "excluded_rejected_task": {
+    "worker": "01a1c48d-4d96-7cc3-b733-73a97973152f",
+    "turn": "01a1ce01-20cf-7e03-9442-f6d521fb8b02",
+    "request": "signal/frame/xstate collector",
+    "disposition": "Excluded from replay, rephrasing and reassignment."
+  },
+  "status": "SOURCE_PROPOSAL_UNEXECUTED_ROOT_ADMISSION_REQUIRED",
+  "schema": "mckernel.m15.f08.actual-readiness-diagnosis.v1",
+  "failed_request": {
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/correction-1/REQUEST.json",
+    "bytes": 10768,
+    "sha256": "38083843445d78df554d1e3036c7602f097135cfa141b39683b56318400306f5"
+  },
+  "saved_failure": {
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/correction-1/execution-1/container-output/ihkmond-main-k0-i-1.UNKNOWN.json",
+    "bytes": 12943,
+    "sha256": "9e6d45ff388d207ebe6d89c4af6f2f98fe2358a27312ecd4d947e663fc3bebbb"
+  },
+  "saved_readiness": {
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/correction-1/execution-1/container-output/ihkmond-main-k0-i-1.readiness.jsonl",
+    "bytes": 1708910,
+    "sha256": "7b3956dcb7162f7e8989b8d73635360d69ae7bddbf59c14a2db3253c3dc4f057"
+  },
+  "saved_before": {
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/correction-1/execution-1/container-output/OWNER-BEFORE.json",
+    "bytes": 12612,
+    "sha256": "32b35a99c36bebdf31cc611729edc99fd2a712c6abb918e4930680845f73257f"
+  },
+  "failed_family": {
+    "CID": "94db26876ae5c049816c4e5e8efbd5967b94f4dab5d0a4f100110d7af25509ae",
+    "container_name": "/mck-m15-f08-owned-main-20261112-1",
+    "container_created": "2026-11-12T14:00:30.463398221Z",
+    "image": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+    "inner_owner": {
+      "pid": 7,
+      "birth": "57829688",
+      "retained_pidfd": 3
+    },
+    "daemon": {
+      "pid": 9,
+      "birth": "57829697",
+      "ppid": 7
+    },
+    "joined_launcher": {
+      "pid": 8,
+      "birth": "57829697",
+      "exit": 0
+    },
+    "HOST_parent": {
+      "pid": 1907220,
+      "birth": "57829625"
+    },
+    "original_attached_client": {
+      "pid": 1907246,
+      "birth": "57829671",
+      "attempt": 3
+    },
+    "original_Root_session": 47250,
+    "planning_bytes": 805306368,
+    "jobs": 1,
+    "retired": false
+  },
+  "actual_command_context": {
+    "HOST_outer": "run_root_once.py correction1 under original Root session47250",
+    "inside_argv": [
+      "/usr/local/sbin/ihkmond",
+      "-k",
+      "0",
+      "-i",
+      "-1"
+    ],
+    "image": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+    "owner_source": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-owned-main-implementation-1/owned_process.py",
+      "bytes": 34920,
+      "sha256": "c87fb96d7c6df9dc1e301f74b3115536a5c4ffec1897f185e94a15bb3bafe4dc"
+    },
+    "caller_source": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-owned-main-implementation-1/f08_owned_main.py",
+      "bytes": 11570,
+      "sha256": "42977e7dcabee2ab4b2425cd3237b5313b9b0fd9adcc4b2b902ffcae2a9f7bf6"
+    },
+    "HOST_attached_argv": [
+      "/usr/bin/sudo",
+      "-A",
+      "/usr/bin/docker",
+      "--host=unix:///var/run/docker.sock",
+      "start",
+      "-a",
+      "94db26876ae5c049816c4e5e8efbd5967b94f4dab5d0a4f100110d7af25509ae"
+    ]
+  },
+  "actual_error": {
+    "type": "TimeoutError",
+    "message": "issued F08 deadline expired; custody retained",
+    "trace_site": "/input/owned_process.py:504 readiness loop -> remaining at275",
+    "HOST_followon": "attached DockerCLI timeout45s+6s; exact original Popen/CID/charge retained, then outer nominal timeout150s under original keeper",
+    "no_normal_stop_attempted": true
+  },
+  "exact_failing_predicates": [
+    {
+      "source": {
+        "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-owned-main-implementation-1/owned_process.py",
+        "bytes": 34920,
+        "sha256": "c87fb96d7c6df9dc1e301f74b3115536a5c4ffec1897f185e94a15bb3bafe4dc"
+      },
+      "line": 435,
+      "predicate": "matching[0]['groups'] == 0 -> return sample, False"
+    },
+    {
+      "source": {
+        "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/correction-1/capture_f08.py",
+        "bytes": 33737,
+        "sha256": "025d948aca5102ba08654aa15caed9d6f170f52feecf332f012c95437f01e83b"
+      },
+      "line": 464,
+      "predicate": "ready['monitor_netlink'][0]['groups'] > 0"
+    }
+  ],
+  "offline_saved_observation_analysis_only": {
+    "complete_rows_in_pinned_file": 388,
+    "initial_partial_startup_rows": 1,
+    "stable_rows": 387,
+    "ready_true_rows": 0,
+    "stable_other_observable_predicates_matching": 387,
+    "monitor_socket_fd": 5,
+    "monitor_socket_inode": 6915675,
+    "protocol": 15,
+    "port_id": 9,
+    "groups": 0,
+    "epoll_fd": 6,
+    "watched_fds": [
+      3,
+      4,
+      5
+    ],
+    "full_events_decimal": 25,
+    "full_events_hex": "0x19",
+    "signalfd_mask": "0x4002",
+    "done_eventfd_count": 0,
+    "one_task": "9",
+    "actual_syscall": {
+      "number": 232,
+      "epfd": 6,
+      "maxevents": 3,
+      "timeout_ms": 250
+    },
+    "meaning": "Saved bytes analyzed; not a rerun of the observer/oracle and not new runtime readiness evidence."
+  },
+  "provider_and_API_scope": {
+    "actual_daemon_exe_sha256": "b9cf237dbd3d6156f050418945d6fd60fd9738d6604f399013761865f6830447",
+    "provider_namespace_inputs": "Four selected prehashed file identities only, saved OWNER-BEFORE; no actual provider mapping join was collected.",
+    "daemon_provider_mappings": "UNREACHED: source calls it only after ready=true.",
+    "pidfd_open_and_identity": "Actually observed originalOwner7 pidfd3 fdinfoPid9 and nonterminal poll.",
+    "pidfd_send_signal": "UNEXERCISED in failed normal run; stop_attempted=false."
+  },
+  "primary_upstream_context_only": [
+    {
+      "url": "https://raw.githubusercontent.com/systemd/systemd/v257/src/libsystemd/sd-device/device-monitor.c",
+      "lines": "146-163,165-188",
+      "summary": "Version257 selects no multicast group when the udev control endpoint is absent and the device filesystem check is nonpositive; monitor construction can still succeed with a real netlink socket."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/systemd/systemd/v257/src/libudev/libudev-monitor.c",
+      "lines": "67-84,101-109,173-176",
+      "summary": "The udev source name selects the udev group; enable_receiving aliases filter_update, and get_fd returns the real monitor socket."
+    }
+  ],
+  "selected_provider_provenance": {
+    "installed_NEVRA": "systemd-libs-0:257-23.el10_2.1.rocky.0.1.x86_64",
+    "source_RPM_name": "systemd-257-23.el10_2.1.rocky.0.1.src.rpm",
+    "saved_selection": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihkmond-matching-provider-build-1/libudev-development-provider-1/SELECTION-QUALIFICATION.json",
+      "bytes": 8611,
+      "sha256": "5906a98546f31c505763d3f78a758cf21a1c2e9cdf33a46d50ff128f04b56445"
+    },
+    "runtime_sha256": "034fd62bb884d5ee2244966e96db2a40970de1a423f75057380fae67ea9d0cce"
+  },
+  "inference_boundary": "Group0 and saved /dev tmpfs are consistent with the upstream no-service branch. Exact patched Rocky source closure and /run/udev/control absence were not collected by the failed case; do not claim exact downstream semantic/source proof or infer event delivery. Recovery actor only records the real control-path/mount facts when actually executed.",
+  "smallest_next_action": "Independently review and admit the exact failed-family disposition; preserve failure and charge. The subscribed real-udev criterion remains open and requires a genuine provider/service profile, not group0 acceptance.",
+  "original_acceptance_credit": 0
+}

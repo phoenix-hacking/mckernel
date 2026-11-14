@@ -1,0 +1,73 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "index": 0,
+  "label": "00-reused-layout-allocator-new-Rust-entry",
+  "argv": [
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+    "--cfg",
+    "f03_sync_child_event_candidate",
+    "--crate-name",
+    "f03_perf_allocation_entry",
+    "--crate-type",
+    "lib",
+    "--edition=2021",
+    "-C",
+    "panic=abort",
+    "-C",
+    "opt-level=2",
+    "--emit=obj=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body5-restart-20261028-1/output-STANDING-1/callbacks.o",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body5-restart-20261028-1/lib.fixture.rs"
+  ],
+  "cwd": "/home/holden/mckernel",
+  "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. All allocation/atomic/event-map/hardware callbacks are local HOST mocks; no actual MM/syscall/IKC/hardware/root/native/Docker/guest effects.",
+  "actor": {
+    "pid": 2136370,
+    "start": "101634490",
+    "ppid": 2136369,
+    "pgrp": 2136370,
+    "session": 2136370,
+    "state": "S"
+  },
+  "affinity": [
+    6
+  ],
+  "preentry_clocks_epoch_MONO_BOOT": [
+    1793218900.209138,
+    1001006.778094414,
+    1016344.905144771
+  ],
+  "started_epoch": 1793218900.2103946,
+  "limits": {
+    "AS_bytes": 2147483648,
+    "CPU_seconds": 60,
+    "wall_seconds": 90,
+    "jobs": 1
+  },
+  "stdout": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body5-restart-20261028-1/output-STANDING-1/actual-three-command-capture-1/00-reused-layout-allocator-new-Rust-entry/stdout",
+  "stderr": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body5-restart-20261028-1/output-STANDING-1/actual-three-command-capture-1/00-reused-layout-allocator-new-Rust-entry/stderr",
+  "wall_seconds": 0.10386672103777528,
+  "finished_epoch": 1793218900.3142815,
+  "stdout_record": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body5-restart-20261028-1/output-STANDING-1/actual-three-command-capture-1/00-reused-layout-allocator-new-Rust-entry/stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "stderr_record": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body5-restart-20261028-1/output-STANDING-1/actual-three-command-capture-1/00-reused-layout-allocator-new-Rust-entry/stderr",
+    "bytes": 1167,
+    "sha256": "f28c4cb47428cf59440dc82730314e6583bb3ef59d955b28b4666251d7371b82"
+  },
+  "parent_streams_closed": true,
+  "status": "JOINED",
+  "returncode": 0,
+  "wait_status": 0,
+  "positive_wait4_join": true,
+  "wait4_pid": 2136370,
+  "CPU_seconds": 0.09099199999999999,
+  "user_seconds": 0.068244,
+  "system_seconds": 0.022747999999999997,
+  "peak_RSS_KiB": 102244,
+  "process_group_members": [],
+  "process_group_absent": true,
+  "child_proc_absent": true
+}

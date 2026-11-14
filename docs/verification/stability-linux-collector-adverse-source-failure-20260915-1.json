@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_adverse_source_failure",
+  "task_id": "M02-B-adverse-v1-source",
+  "attempt": 1,
+  "status": "FAIL_FIRST_FOCUSED_TEST_INVOCATION",
+  "base_commit": "f579708d006cf594099bee3b232739d140a4f8c4",
+  "scope": "new source packet and cheap tests only",
+  "command": "python3 -I -B -m unittest scripts.tests.test_collector_adverse_packet && git diff --check",
+  "first_failure": {
+    "type": "ModuleNotFoundError",
+    "message": "No module named 'scripts'",
+    "cause": "isolated Python module invocation removed the repository package path",
+    "tests_executed": 0,
+    "diff_check_executed": false
+  },
+  "candidate_file_sha256": {
+    "build_owner.py": "fa4e3fc580205d3e73b629e3eb11d2a18a05c60cd00df9b6753940986967a491",
+    "collector.patch": "8e7f15d581d51bd4763a6b98a3b5ff924e18cf34b8059fcbe9165318d0b89725",
+    "inject.h": "1d66fbcc110cde8c81d079ab717e3484eb27ef1fae433e30c16e3f4c2f36e302",
+    "oracle.py": "bc82e7f78c619365d75afe5f9e2a1586035e7d3d703f69e72786ce2afc2c67ff",
+    "packet.json": "34cd2af6f4e20d85dbd3b873a64b0297e2fb4a000938d5d5177e5a732f71b5b5",
+    "prepare.py": "fd503ad1fda8e9bf207b58fb2abe9864c1af25c1c602f4dda78fe55882c0e7c2",
+    "root_inside.py": "18bb4052a6ee16f8d36c887a7ab59c7b5510f7a859b8f3311307c13883694c67",
+    "root_orchestrator.py": "c1de397a02d00134de1ed833e8840cae8d84f402061bc20a3244045a40a21df4",
+    "root_profile.py": "2dd438fbe6124d60e7cdaf01d03f64064d766b27a77ee4a8daca6832997a4d31",
+    "run.py": "01bcffbff3e17049ff18e02016efc2dcebf00ba3a6924f01217bc62948305bb7",
+    "tests.md": "654fd004b7930ead5b412c0faaafe8249a74609cfcb26a62b70dd186e97457fa",
+    "scripts/tests/test_collector_adverse_packet.py": "c4edbc92ff07526816bbb8fc2bac5d2ed15a513206b28eeb9dd6a5ea856b4702"
+  },
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-adverse-source-failure-20260915-1.tar.gz",
+    "size": 5578,
+    "sha256": "af991accaa635b5babd6221dea378f189d6aa4d527d441c0a6868a2f4ae6131e",
+    "members": 13
+  },
+  "stop_rule": "Stopped before correcting or rerunning after the first unexpected failure.",
+  "independent_review": {
+    "role": "Astra/high collector ownership reviewer",
+    "status": "FAIL_SOURCE_PACKET",
+    "findings": [
+      "The completed-wait hook replaces the production signal handler, so real SIGTERM does not set the production interrupted latch.",
+      "The injected header is included before required setup constants, the guard is auto-defined instead of compiler-supplied, and byte/string counting fails after partial output creation.",
+      "Missing-setup ignores diagnostic write failure and the partial case does not bind the actual 383 retained bytes.",
+      "The oracle consumes invented flat fields rather than the retained production report/artifact/raw-wait schema and expects wrong READY state for the completed-wait case.",
+      "Packet, patch and header identities and exact generated-diff boundaries are not frozen.",
+      "Build, run and root ownership paths are plans or disabled placeholders and cannot satisfy the reviewed isolation/evidence contract."
+    ],
+    "archive_limitation": "The archive contains the candidate source but not raw stderr from the zero-test Python invocation; that invocation outcome is dispatcher-recorded rather than archive-proven."
+  },
+  "collector_compiled": false,
+  "docker_or_root_execution": false,
+  "runtime_acceptance": false,
+  "production_gate_credit": false
+}

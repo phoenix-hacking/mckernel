@@ -1,0 +1,78 @@
+{
+  "task": "F06-next-process-vm-consumer-source-1",
+  "status": "PASS_PROCESS_VM_CONSUMER_SOURCE_QUALIFICATION_OPEN",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "checks": {
+    "source_composition": "PASS",
+    "fallback_byte_exact": "PASS",
+    "negative_source_cases": 3,
+    "selected_allocated_functions": 14
+  },
+  "actual_compile": null,
+  "actual_link": null,
+  "actual_native": null,
+  "blocker": "Direct VMlock192/ABI6 receipt unresolved; public-entry runtime driver and exact ABI/current-capture qualification not present. Real MM/usercopy/fault/lifetime proofs remain separate.",
+  "next": "Dispatcher review paired selector; grant retained ABI-caller compile-only recipe if useful; prepare controlled public-entry driver before any link/run plan.",
+  "files": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/BASE.syscall.c",
+      "bytes": 114150,
+      "sha256": "affa9b6d2fdc2514c6d7414f4f7854410ae18ebea02db738665065a5179db893"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/BASE.syscall_policy.rs",
+      "bytes": 1249379,
+      "sha256": "f4ed7080659863662e1de75c432b89fd94aadf312efb5e924b1d0e60ef93dbd6"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/NEXT-ABI-FACTS-COMMAND.json",
+      "bytes": 5685,
+      "sha256": "0bdc60c15087fa18a14272e942bc9c19d39fb87832e38f86071149b38da6ac39"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/OWNERSHIP-AND-NEXT.md",
+      "bytes": 3988,
+      "sha256": "041fa2c721dcb25a8d95329222eeaa7b0987fd7e5188a725841811d79595e323"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/SELECTED-SYMBOL-PROOF.json",
+      "bytes": 2998,
+      "sha256": "b0082ea3fc5d661a723cca6ec81956ea0a2b6a57b563c06d789b9953aacc869c"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/SOURCE-BINDINGS.json",
+      "bytes": 2589,
+      "sha256": "f9c7dec12947c74493ce92038ff27128d38a60abe362c2e9b3d104f670613f9a"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/check_source.py",
+      "bytes": 3874,
+      "sha256": "2263fd5d5954594944b4fb063a2498067bbd4757f64afd0dff33d41743ecf50d"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/f06_process_vm_entry.rs",
+      "bytes": 5428,
+      "sha256": "0e9d9d23db1a376f38757fba98c6b34d0aed4f4b6c45398b0b9372d7624c3d2e"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/syscall.c",
+      "bytes": 114563,
+      "sha256": "ba1098aad821365d6fbcfe8b9b9aca53af051914c9d53ab0c529bfc83c2069ee"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/syscall.c.diff",
+      "bytes": 1042,
+      "sha256": "dc83586850e6488518b00b2f5b74810d389a2c22b59ad6307fb8191f4c648846"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/syscall_policy.rs",
+      "bytes": 1249652,
+      "sha256": "9bbb5a6416156bcf73229fd7f89f4fc1caece37df78bb9df418f286bbbe6a9b7"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/syscall_policy.rs.diff",
+      "bytes": 463,
+      "sha256": "f76fb68b9925fdfcecd430f3bf377f453e108c81b754aca60109293856ac7bd6"
+    }
+  ]
+}

@@ -1,0 +1,201 @@
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -19790,6 +19790,10 @@
+ }
+ #endif
+ 
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_CREDENTIAL_REFRESH_EXPERIMENTAL) && defined(__x86_64__)
++extern void do_setresuid(void); extern void do_setresgid(void);
++#else
++#line 19539
+ void
+ do_setresuid()
+ {
+@@ -19845,6 +19849,9 @@
+ 	proc->fsgid = buf[7];
+ #endif
+ }
++
++#endif
++#line 19594
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ long sys_setresuid(int n, ihk_mc_user_context_t *ctx);
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -2229,7 +2229,11 @@
+     (*requestp).number = syscall_nr as CULong;
+     (*requestp).args[0] = virt_to_phys(selected_buf.cast::<c_void>());
+     (*requestp).args[1] = 1;
+-    do_syscall(requestp, processor_id());
++    let result = do_syscall(requestp, processor_id());
++    #[cfg(f03_credential_refresh_candidate)]
++    if result != 0 { return null_mut(); }
++    #[cfg(not(f03_credential_refresh_candidate))]
++    let _ = result;
+ 
+     selected_buf
+ }
+@@ -31972,14 +31976,14 @@
+ /// raw_buf, when non-null, provides the original writable sixteen-CInt scratch
+ /// allocation and physical-map/synchronous-offload lifetime. The helper does not
+ /// read credential values. Its callers MUST separately establish that the genuine
+-/// response producer initialized every consumed value. This entry cannot supply
+-/// that missing authority, turn an ignored endpoint error into success, or justify
+-/// reading failed/uninitialized output. No new zero-fill or ACK is introduced.
++/// response producer initialized every consumed value. The experimental credential
++/// profile returns NULL on nonzero endpoint status; the fallback retains the
++/// original ignored result. Neither profile supplies producer lifetime proof.
+ #[no_mangle]
+ pub unsafe extern "C" fn getcred(raw_buf: *mut CInt) -> *mut CInt {
+     // SAFETY: Reuse the exact existing selected algorithm, including its full
+-    // zeroed REQUEST (not response buffer), page-span choice and ignored syscall
+-    // result. Three source18 adapters resolve to genuine mapping/CPU/do_syscall.
++    // zeroed REQUEST (not response buffer), page-span choice and profile-dependent
++    // error handling. Three source18 adapters resolve to genuine mapping/CPU/do_syscall.
+     unsafe {
+         getcred_body_result(
+             raw_buf, PAGE_MASK, SYS_SETFSUID,
+@@ -36991,3 +36995,8 @@
+ #[cfg(all(f03_leaf_callbacks_candidate, f03_ptrace_wakeup_log_candidate, target_arch = "x86_64"))]
+ #[path = "syscall_ptrace_wakeup_logger.rs"]
+ mod syscall_ptrace_wakeup_logger;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(all(f03_credential_refresh_candidate, target_arch = "x86_64"))]
++#[path = "f03_credential_refresh_candidate.rs"]
++mod f03_credential_refresh_candidate;
+--- a/kernel/CMakeLists.txt
++++ b/kernel/CMakeLists.txt
+@@ -150,6 +150,7 @@
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_signal_leaf_adapters.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_signal_log_budget.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_request_constructors.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_credential_refresh_candidate.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_perf_open_forward.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_terminate_mcexec_forward.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_ptrace_detach_wakeup.rs"
+@@ -240,6 +241,9 @@
+ 			if (ARCH STREQUAL "x86_64" AND NOT ENABLE_UBSAN)
+ 				if (MCKERNEL_F03_REQUEST_CONSTRUCTORS_EXPERIMENTAL)
+ 					list(APPEND RUST_KERNEL_CFG "--cfg" "f03_request_constructors_candidate")
++				endif()
++				if (MCKERNEL_F03_CREDENTIAL_REFRESH_EXPERIMENTAL)
++					list(APPEND RUST_KERNEL_CFG "--cfg" "f03_credential_refresh_candidate")
+ 				endif()
+ 				if (MCKERNEL_F03_SIGNAL_FORWARD_EXPERIMENTAL)
+ 					list(APPEND RUST_KERNEL_CFG "--cfg" "f03_signal_forward_defined_candidate")
+@@ -632,6 +636,9 @@
+ 			if (MCKERNEL_F03_REQUEST_CONSTRUCTORS_EXPERIMENTAL)
+ 				set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY COMPILE_DEFINITIONS MCKERNEL_RUST_F03_REQUEST_CONSTRUCTORS)
+ 			endif()
++			if (MCKERNEL_F03_CREDENTIAL_REFRESH_EXPERIMENTAL)
++				set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY COMPILE_DEFINITIONS MCKERNEL_RUST_F03_CREDENTIAL_REFRESH_EXPERIMENTAL)
++			endif()
+ 
+ 			if (MCKERNEL_F03_SIGNAL_FORWARD_EXPERIMENTAL)
+ 				set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY COMPILE_DEFINITIONS MCKERNEL_RUST_F03_SIGNAL_FORWARD_EXPERIMENTAL)
+--- a/executer/user/rust/mcexec_platform_syscalls.rs
++++ b/executer/user/rust/mcexec_platform_syscalls.rs
+@@ -96,8 +96,8 @@
+ }
+ 
+ #[no_mangle]
+-pub unsafe extern "C" fn mcexec_cred_get_bridge(fd:c_int,arg:c_ulong) {
+- super::ioctl(fd,0x30a0290a as c_ulong,arg);
++pub unsafe extern "C" fn mcexec_cred_get_bridge(fd:c_int,arg:c_ulong) -> c_long {
++ converted(super::ioctl(fd,0x30a0290a as c_ulong,arg) as c_long)
+ }
+ 
+ #[no_mangle]
+--- a/executer/user/rust/mcexec_helpers.rs
++++ b/executer/user/rust/mcexec_helpers.rs
+@@ -608,7 +608,7 @@
+         mode: c_ulong,
+     ) -> c_long;
+     fn mcexec_path_open_bridge(path: *const u8, flags: c_ulong, mode: c_ulong) -> c_long;
+-    fn mcexec_cred_get_bridge(fd: c_int, arg: c_ulong);
++    fn mcexec_cred_get_bridge(fd: c_int, arg: c_ulong) -> c_long;
+     fn mcexec_cred_setfsuid_bridge(uid: c_ulong) -> c_long;
+     fn mcexec_cred_setresuid_bridge(ruid: c_ulong, euid: c_ulong, suid: c_ulong) -> c_long;
+     fn mcexec_cred_setreuid_bridge(ruid: c_ulong, euid: c_ulong) -> c_long;
+@@ -1460,8 +1460,7 @@
+ #[no_mangle]
+ pub unsafe extern "C" fn act_setfsuid(w: *const McexecSyscallWaitDesc, fd: c_int, cpu: c_int) {
+     let ret = if mcexec_setfsuid_needs_cred_result(unsafe { (*w).sr.args[1] }) != 0 {
+-        unsafe { mcexec_cred_get_bridge(fd, (*w).sr.args[0]) };
+-        0
++        unsafe { mcexec_cred_get_bridge(fd, (*w).sr.args[0]) }
+     } else {
+         unsafe { mcexec_cred_setfsuid_bridge((*w).sr.args[0]) }
+     };
+--- a/executer/user/mcexec.c
++++ b/executer/user/mcexec.c
+@@ -2779,9 +2779,11 @@
+ 	return ret;
+ }
+ 
+-void mcexec_cred_get_bridge(int mcos_fd, unsigned long arg)
+-{
+-	ioctl(mcos_fd, MCEXEC_UP_GET_CRED, arg);
++long mcexec_cred_get_bridge(int mcos_fd, unsigned long arg)
++{
++	long ret = ioctl(mcos_fd, MCEXEC_UP_GET_CRED, arg);
++	SET_ERR(ret);
++	return ret;
+ }
+ 
+ long mcexec_cred_setfsuid_bridge(unsigned long uid)
+@@ -8569,8 +8571,8 @@
+ 			act_setfsuid(&w, fd, cpu);
+ #else
+ 			if (MCEXEC_SETFSUID_NEEDS_CRED(w.sr.args[1])) {
+-				ioctl(fd, MCEXEC_UP_GET_CRED, w.sr.args[0]);
+-				ret = 0;
++				ret = ioctl(fd, MCEXEC_UP_GET_CRED, w.sr.args[0]);
++				SET_ERR(ret);
+ 			}
+ 			else{
+ 				ret = setfsuid(w.sr.args[0]);
+--- /dev/null
++++ b/kernel/rust/f03_credential_refresh_candidate.rs
+@@ -0,0 +1,39 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Default-off credential field entry wrappers, reusing the existing refresh body.
++use core::{ffi::c_void, mem::{offset_of, MaybeUninit}};
++use crate::abi::{CInt, Process, Thread};
++
++/// # Safety
++/// The current CPU, thread, process, borrowed scratch and existing getcred
++/// synchronous endpoint remain live. The response producer must initialize all
++/// four selected fields before the existing refresh helper reads them. Caller
++/// retains original field exclusion/validation; no failed response is repaired.
++#[no_mangle]
++pub unsafe extern "C" fn do_setresuid() {
++    let mut scratch = MaybeUninit::<[CInt; 16]>::uninit();
++    let thread = unsafe { (*super::get_this_cpu_local_var()).current };
++    // SAFETY: Same current thread, stack allocation, indices and getcred provider;
++    // no reference to the uninitialized scratch or added null/error policy.
++    let _ = unsafe { super::syscall_refresh_cred_fields_body_result(
++        thread.cast::<c_void>(), scratch.as_mut_ptr().cast::<CInt>(),
++        offset_of!(Thread, proc), offset_of!(Process, ruid), offset_of!(Process, euid),
++        offset_of!(Process, suid), offset_of!(Process, fsuid), 0, 1, 2, 3, Some(super::getcred),
++    ) };
++}
++
++/// # Safety
++/// Same current/endpoint and scratch ownership as the uid entry, but the producer
++/// must initialize credential slots four through seven before their consumption.
++#[no_mangle]
++pub unsafe extern "C" fn do_setresgid() {
++    let mut scratch = MaybeUninit::<[CInt; 16]>::uninit();
++    let thread = unsafe { (*super::get_this_cpu_local_var()).current };
++    // SAFETY: Exact existing helper, original field order and gid value indices.
++    let _ = unsafe { super::syscall_refresh_cred_fields_body_result(
++        thread.cast::<c_void>(), scratch.as_mut_ptr().cast::<CInt>(),
++        offset_of!(Thread, proc), offset_of!(Process, rgid), offset_of!(Process, egid),
++        offset_of!(Process, sgid), offset_of!(Process, fsgid), 4, 5, 6, 7, Some(super::getcred),
++    ) };
++}
++const _: unsafe extern "C" fn() = do_setresuid;
++const _: unsafe extern "C" fn() = do_setresgid;

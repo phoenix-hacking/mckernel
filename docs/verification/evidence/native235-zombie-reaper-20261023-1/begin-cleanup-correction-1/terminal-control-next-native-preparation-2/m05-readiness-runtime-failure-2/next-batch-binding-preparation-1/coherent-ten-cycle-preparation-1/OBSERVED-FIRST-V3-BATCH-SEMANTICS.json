@@ -1,0 +1,130 @@
+{
+  "automatic_native_acceptance": false,
+  "automatic_quota_credit": false,
+  "expected_epochs": [
+    [
+      0,
+      1,
+      1
+    ],
+    [
+      0,
+      2,
+      2
+    ]
+  ],
+  "original_protocol": {
+    "complete_restoration_verified": false,
+    "first_workload_protocol": "PROTOCOL_PASS",
+    "full_cycle_verified": false,
+    "native_execution_verified": false,
+    "public_release_then_strict5_boot_protocol": "PASS",
+    "quota_credit": false,
+    "rebooted_os_workload_protocol": "PASS",
+    "second_boot_resources_retained": true,
+    "second_lifecycle_protocol": {
+      "os_destroyed": false,
+      "payload_validation_required": true,
+      "resource_restoration_verified": false,
+      "status": "LIFECYCLE_DIAGNOSTIC_PASS",
+      "status_after": 0,
+      "status_before": 5,
+      "transition_observed": true
+    },
+    "second_public_release_protocol": {
+      "native_execution_verified": false,
+      "public_release_protocol": "PASS",
+      "resource_restoration_verified": false
+    },
+    "second_public_release_verified": true,
+    "second_stop_verified": true,
+    "second_workload": {
+      "argv": [
+        "/bin/mcexec",
+        "-t",
+        "1",
+        "0",
+        "app",
+        "A",
+        "",
+        "B"
+      ],
+      "cwd": "/case/work",
+      "env": {
+        "COKERNEL_PATH": "/apps",
+        "PATH": "/usr/bin:/bin"
+      },
+      "finished_ns": 57008367455,
+      "procfs_empty": true,
+      "raw_wait_status": 0,
+      "reaped_ns": 56295287161,
+      "started_ns": 55975948809,
+      "streams": {
+        "stderr": {
+          "discarded": 0,
+          "eof": true,
+          "eof_ns": 56194978323,
+          "hex": "",
+          "limit": 1024,
+          "observed": 0,
+          "retained": 0,
+          "truncated": false
+        },
+        "stdout": {
+          "discarded": 0,
+          "eof": true,
+          "eof_ns": 56194893675,
+          "hex": "68616e646c65643d31206f627365727665645f626c6f636b65643d3120726573746f7265643d310a",
+          "limit": 1024,
+          "observed": 40,
+          "retained": 40,
+          "truncated": false
+        }
+      }
+    },
+    "snapshot_bytes": {
+      "after": 53478,
+      "before": 46234
+    },
+    "snapshot_sha256": {
+      "after": "059a7498ce05e3c40c376a697081f1ab8332d8d0391cb4e5916d762f42498a54",
+      "before": "93f9c3c1479135bfabd8acbe173cf12ba4b172f83a59d9bff1d38cc1eb088411"
+    }
+  },
+  "protocol_status": "PROTOCOL_PASS",
+  "qualifies_first_restore_reboot": true,
+  "resource_policy": {
+    "boot_epoch": 1,
+    "complete_cycle_verified": false,
+    "cpu_identities": [
+      [
+        1,
+        1,
+        0
+      ],
+      [
+        2,
+        2,
+        1
+      ]
+    ],
+    "linux_page_release_verified": false,
+    "mapping_callback_reference_frame_retirement_verified": false,
+    "owner": [
+      0,
+      1
+    ],
+    "resource_policy_return_verified": true,
+    "returned_memory_bytes": 134217728,
+    "returned_memory_extents": [
+      [
+        4324327424,
+        134217728,
+        0
+      ]
+    ],
+    "schema": "native-resource-policy-observation-v1"
+  },
+  "restored_reboot_observations": 1,
+  "source_enforced_release_sha256": "8213d12dbe1bebc22f185a145f0805e1458c8f5ff3bbaad8ebb79d270204cebd"
+}

@@ -1,0 +1,29 @@
+--- /home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/next-build-preparation-1/native_rust_exact_mckernel_image_container_owner.py
++++ /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-default-image-preparation-1/next-build-preparation-1/native_rust_exact_mckernel_image_container_owner.py
+@@ -30,7 +30,7 @@
+ REQUEST_SCHEMA = "mckernel.native-exact-mckernel-image-container-request.v1"
+ RECEIPT_SCHEMA = "mckernel.native-exact-mckernel-image-container-receipt.v1"
+ OWNER_RECEIPT_NAME = "owner-receipt.json"
+-EXPECTED_DRIVER_SHA256 = '776b478b6f4f7a9e3ec502ac2a23c6a03fbd407c6b599760206b1bf8bfdb0ff7'
++EXPECTED_DRIVER_SHA256 = '3483fbc17d1093b3dcb626a5a87aa42febea651d5c193f015545229a8b0ced40'
+ EXPECTED_PROVENANCE_SHA256 = 'c5868d8a336795b5c3d76215bba8bcb3e56a804e00f1014d8b4eeaf6ddb76a69'
+ EXPECTED_HOST_OWNER_SHA256 = "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1"
+ EXPECTED_HEAVY_ENTRY_CONTRACT_SHA256 = "c252ee341eb61752704f8b818503c0a5dc97400845494707ca3110f5f23df6d1"
+@@ -38,7 +38,7 @@
+ # exclusions explicit: accepting one of these would allow a request to race a
+ # retired build candidate.  Tests may replace COMMON_EXCLUSION with a private
+ # fixture, so the rejection list remains separate from the active value.
+-COMMON_EXCLUSION = '/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/next-build-preparation-1/pinned-full-image-attempt-1/common-exclusion.json'
++COMMON_EXCLUSION = '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-default-image-preparation-1/next-build-preparation-1/pinned-full-image-attempt-1/common-exclusion.json'
+ RETIRED_COMMON_EXCLUSIONS = frozenset(
+     "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-" + suffix + ".json"
+     for suffix in (
+@@ -88,6 +88,8 @@
+     "Memory": 12 * 2**30, "MemorySwap": 12 * 2**30,
+     "PidsLimit": 512, "NetworkMode": "none",
+ }
++RETIRED_COMMON_EXCLUSIONS = RETIRED_COMMON_EXCLUSIONS | frozenset(('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/next-build-preparation-1/pinned-full-image-attempt-1/common-exclusion.json',))
++
+ RESOURCE_ARGS = ("--cpus=4", "--cpuset-cpus=2-5", "--memory=12g",
+                  "--memory-swap=12g", "--pids-limit=512")
+ MAX_TIMEOUT = 19_800

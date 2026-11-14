@@ -1,0 +1,46 @@
+{
+  "status": "PASS_SHARED_SOURCE_INTEGRATION_OFFLINE_ONLY",
+  "shared_before_sha256": "8b146b2efb94a71f84ddcd36dc71c82cc797f5d24e4adfc6cea2cd4a0bdba67d",
+  "shared_after_sha256": "e6c68ae7dce1ea5b9daf398f21145d58ca7fe88602a6ed4126d42473c036131c",
+  "patch_sha256": "5a7e959d619be5f13ab6ea0235c5cb6c514536e3393b7b6146cbc41ba7ad10af",
+  "independent_review_sha256": "8e5efa789bc3eb51d13b331c50ea6fb97e6e3a03ddeda8006b0b4ebcfbfb695e",
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "60s",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=55:55",
+    "--fsize=16777216:16777216",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-B",
+    "scripts/tests/test_os_child_capacity_isolation.py"
+  ],
+  "pid": 1280465,
+  "returncode": 0,
+  "direct_child_joined": true,
+  "owned_group_absent": true,
+  "seconds": 0.12104392051696777,
+  "streams": {
+    "stdout": {
+      "path": "/home/holden/mckernel-work/host-preparation/supervisor-child-capacity-isolation-20261019-1/root-integration-1/offline-shared-test.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "path": "/home/holden/mckernel-work/host-preparation/supervisor-child-capacity-isolation-20261019-1/root-integration-1/offline-shared-test.stderr",
+      "bytes": 1104,
+      "sha256": "c786176d6532cb740ea4a6e4eb7237934680b617688e582cc2319bc0514650a6"
+    }
+  },
+  "new_live_launches": 0,
+  "launcher_state_edits": 0,
+  "restarts_or_signals": 0,
+  "scope": "Only reviewed exact direct-child serverOverloaded/turn provenance isolation; other stops unchanged; active worker not restarted; original preexisting shared WIP preserved verbatim backup."
+}

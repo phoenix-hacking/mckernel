@@ -1,0 +1,154 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_ACTUAL_CURRENT68_M05_STAGE_AND_OWNED_PROCESS_WHOLE_JOIN_ONLY",
+  "actual_capture": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/ACTUAL-CURRENT68-M05-STAGE-CAPTURE-RESULT-1.json",
+    "bytes": 3534,
+    "sha256": "a09eee087ca8dbd9a9de1345cc9a773486e94e284eb0e078e76ae0459b97d0cb"
+  },
+  "actual_stage_result": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/actual-stage-1/stage-result.json",
+    "bytes": 18661,
+    "sha256": "1686bee24cc21b05c32de14ffaf977a0a3395a8900e62da94e3c9dbc1126a3eb"
+  },
+  "actual_manifest": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/actual-stage-1/manifest.json",
+    "bytes": 5913,
+    "sha256": "b8366ba7b8b7878bd3743858816be96d34877429967cc9a3aea911d67726a257"
+  },
+  "actual_overlay_manifest": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/actual-stage-1/overlay-manifest.json",
+    "bytes": 20050,
+    "sha256": "9c103cfca54fd50262e739c02babbab6750de39de5e0d8b7c29a4845a727007a"
+  },
+  "actual_archives": {
+    "base": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/actual-stage-1/base.cpio.gz",
+      "sha256": "6fb95449bf42836917d98600028761a3dcba9cf747c99ee5b4cab21d4628ed27",
+      "size": 14507317,
+      "mode": 33152
+    },
+    "overlay": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/actual-stage-1/lifecycle.cpio.gz",
+      "sha256": "04401424bb31d3df7dec281ca741a4d28d9811397c14f818a3566178bfc073a5",
+      "size": 15421242,
+      "mode": 33152
+    }
+  },
+  "whole_join": {
+    "outer_tool_execution_session": 63867,
+    "outer_tool_direct_join_exit_code": 0,
+    "stage_wait_status": {
+      "code": 0,
+      "kind": "exited"
+    },
+    "elapsed_seconds": 22.169300127017777,
+    "direct_child_identity": {
+      "pgid": 3368008,
+      "pid": 3368008,
+      "ppid": 3368007,
+      "session": 3368008,
+      "starttime_ticks": 50752896,
+      "state": "R"
+    },
+    "cleanup_complete": true,
+    "owned_group_absent": true,
+    "owned_group_absence_method": "os.killpg(exact admitted owned pgid,0) returned ESRCH after directjoined caller; no signal delivered.",
+    "owned_pid_absent": true,
+    "descendants": [],
+    "streams": {
+      "stderr": {
+        "artifact": {
+          "path": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/actual-current68-m05-stage-capture-1/stderr.bin",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        "bytes_observed": 0,
+        "bytes_retained": 0,
+        "discarded_observed_bytes": 0,
+        "eof": true,
+        "limit_bytes": 8388608,
+        "truncated": false
+      },
+      "stdout": {
+        "artifact": {
+          "path": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/actual-current68-m05-stage-capture-1/stdout.bin",
+          "sha256": "da983c815f17dcfdb30a1f397bff873985c79554a1a0ff30cfacf4d2d2a521fa",
+          "size": 221
+        },
+        "bytes_observed": 221,
+        "bytes_retained": 221,
+        "discarded_observed_bytes": 0,
+        "eof": true,
+        "limit_bytes": 8388608,
+        "truncated": false
+      }
+    }
+  },
+  "actual_map": {
+    "members": 62,
+    "changed_members": [
+      "bin/mcexec",
+      "images/mckernel.img",
+      "modules/ihk-smp-x86_64.ko",
+      "modules/ihk.ko",
+      "modules/mcctrl.ko"
+    ],
+    "unchanged_members": 57,
+    "M05_init_payload_two_boot_helpers_unchanged": true,
+    "selected_tuple": {
+      "modules/ihk-smp-x86_64.ko": {
+        "path": "/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-20352dabb9c94403a03c224ec2826ff2/modules/ihk-smp-x86_64.ko",
+        "sha256": "50f6e2bc822dcff45b99aa2fc8da2c00e1469c3d0d10f1ec510ae82aea80e581",
+        "size": 12799928,
+        "mode": 33188
+      },
+      "modules/ihk.ko": {
+        "path": "/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-20352dabb9c94403a03c224ec2826ff2/modules/ihk.ko",
+        "sha256": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c",
+        "size": 1527808,
+        "mode": 33188
+      },
+      "modules/mcctrl.ko": {
+        "path": "/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-20352dabb9c94403a03c224ec2826ff2/modules/mcctrl.ko",
+        "sha256": "bff603a5d7ff1a9a3498bf0fe32b2c017170764d17d0d42103e82539576824af",
+        "size": 2637656,
+        "mode": 33188
+      },
+      "images/mckernel.img": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/mckernel.img",
+        "sha256": "10972f87277e8429e2badd238d3ac53e451b8a2351a8ebf013941e1dfb95e1e2",
+        "size": 8439816,
+        "mode": 33261
+      },
+      "bin/mcexec": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-01-pinned-launcher-process-inputs-20261022-1/pinned-launcher-attempt-1/owner-work/evidence/artifacts/mcexec",
+        "sha256": "0d774a14c08bdd4abcd0368060ca8eafba18bf44244dafba5459f895c5d78a7a",
+        "size": 394640,
+        "mode": 33261
+      }
+    }
+  },
+  "actual_manifest_consumer": "Production stage called pinned accepted diagnostic69d.load_manifest(actual manifest) successfully before PASS; exact current member/source/artifact joins and accepted overlay manifest validated, no extra suite repeated.",
+  "actual_output_bytes": 29973183,
+  "actual_output_allocated_bytes": 29978624,
+  "frozen_input_binding": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/BINDING.json",
+    "bytes": 8066,
+    "sha256": "57ca4a0466c3002b15f922fbddf418b4deac5ccb9e190e8f3ebfeb7952c49480"
+  },
+  "root_admission": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/ROOT-ORDINARY-P05-STAGE-ADMISSION-1.json",
+    "bytes": 2933,
+    "sha256": "9e8d4c009666bc830331451e519531ce5b9247c7b6b381c7ad677f1cd31dacde"
+  },
+  "conditional_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/INDEPENDENT-ORDINARY-P05-STAGE-REVIEW-1.json",
+    "bytes": 1470,
+    "sha256": "1a5df7c3ddfd61667211ce8df39b5f3d094ea78196f86eac4cc82bb3e4604794"
+  },
+  "native_execution": false,
+  "runtime_release": false,
+  "goal_or_check_credit": false,
+  "next": "Prepare actual-stage-bound existing M05 strict two-generation runtime/decoder/publication joins; root owns separate source/runtime acceptance/live native release."
+}

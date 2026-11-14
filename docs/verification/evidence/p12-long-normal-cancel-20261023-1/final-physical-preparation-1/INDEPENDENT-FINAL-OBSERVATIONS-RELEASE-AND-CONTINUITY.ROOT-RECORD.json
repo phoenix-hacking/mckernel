@@ -1,0 +1,38 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_EXACT_ONCE_FINAL_PROC_AND_MUTEX",
+  "reviewer": "/root/native235_release_review",
+  "recorded_at": "2026-10-23T16:13:16.391779+00:00",
+  "inputs": [
+    {
+      "path": "docs/verification/evidence/p12-long-normal-cancel-20261023-1/final-physical-preparation-1/EXACT-FINAL-PHYSICAL-OPERATIONS.NOT-RELEASED.json",
+      "sha256": "92fa3ba183418f71ee6f02912bd9cfc2999ddb3b7f9405b3803188fe86ca845a"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-normal-cancel-20261023-1/final-physical-preparation-1/ROOT-FINAL-PROC-ARGV.NOT-RELEASED.json",
+      "sha256": "e5077ee7d3d087670e5a1f96ecd125f2bb8a125e0ef26069958cd7c73186d10f"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-normal-cancel-20261023-1/final-physical-preparation-1/ROOT-FINAL-MUTEX-ARGV.NOT-RELEASED.json",
+      "sha256": "fe409e2486e0c656f29bca058ed8ce731c9aec8f55bffe520d299ba8dc0a79f2"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-normal-cancel-20261023-1/final-physical-preparation-1/readonly_exact_retired_LONG_proc.py",
+      "sha256": "6232f718c56dfb1c7b6c3b4d3e703c24a051744201d45daac0a28d36115ac0cc"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-normal-cancel-20261023-1/final-physical-preparation-1/readonly_current_mutex_paths_positive.py",
+      "sha256": "ca4485c55220a240a1b49f6857927c7001297f142fd46ff8c7aabc3cef7e6e06"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-normal-cancel-20261023-1/final-physical-preparation-1/ACTUAL-23-CLIENT-IDENTITIES.json",
+      "sha256": "1677a7b569d529485332d25b442940dc0e192162e68dd892baf018b058cc758f"
+    }
+  ],
+  "continuity": "Dispatcher retained sole heavy authority continuously after old owner cleanup; no competing heavy/root workload or cleanup/signal between actual normal cleanup and fresh final probes. Only exact independently released evidence reads/final readonly observations; disjoint ordinary source/capsule tasks overlapped.",
+  "actual_captures": [
+    "../actual-final-proc-1/ACTUAL-CLOSED-CAPTURE.json",
+    "../actual-final-mutex-1/ACTUAL-CLOSED-CAPTURE.json"
+  ],
+  "physical_acceptance_pending": true
+}

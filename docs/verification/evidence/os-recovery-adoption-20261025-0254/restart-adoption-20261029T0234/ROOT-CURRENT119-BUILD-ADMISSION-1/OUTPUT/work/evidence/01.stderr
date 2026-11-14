@@ -1,0 +1,26 @@
+/src/kernel/syscall.c: In function ‘do_execveat’:
+/src/kernel/syscall.c:7546:26: warning: unused variable ‘range’ [-Wunused-variable]
+ 7546 |         clear_single_step(thread);
+      |                          ^~~~~
+/src/kernel/syscall.c: At top level:
+/src/kernel/syscall.c:26376:65: warning: ‘syscall_itimer_offsets’ defined but not used [-Wunused-const-variable=]
+26376 |                         param_size);
+      |                                                                 ^                     
+/src/kernel/syscall.c:26058:43: warning: ‘sched_syscall_offsets’ defined but not used [-Wunused-const-variable=]
+26058 | extern int sched_policy_is_valid(int policy);
+      |                                           ^~~                  
+/src/kernel/syscall.c:24599:39: warning: ‘ptrace_io_kernel_offsets’ defined but not used [-Wunused-const-variable=]
+24599 | 
+      |                                       ^                       
+/src/kernel/syscall.c:24297:52: warning: ‘syscall_cputime_offsets’ defined but not used [-Wunused-const-variable=]
+24297 |         do_futex_syscall_time_fn_t syscall_time;
+      |                                                    ^                      
+/src/kernel/syscall.c:4910:46: warning: ‘wait_scan_kernel_offsets’ defined but not used [-Wunused-const-variable=]
+ 4910 |         case WAIT_ZOMBIE_LOG_STATUS:
+      |                                              ^                       
+/src/kernel/syscall.c:4877:41: warning: ‘wait_zombie_kernel_offsets’ defined but not used [-Wunused-const-variable=]
+ 4877 | }
+      |                                         ^                         
+/src/kernel/syscall.c:4720:43: warning: ‘ptrace_detach_kernel_offsets’ defined but not used [-Wunused-const-variable=]
+ 4720 | }
+      |                                           ^                           

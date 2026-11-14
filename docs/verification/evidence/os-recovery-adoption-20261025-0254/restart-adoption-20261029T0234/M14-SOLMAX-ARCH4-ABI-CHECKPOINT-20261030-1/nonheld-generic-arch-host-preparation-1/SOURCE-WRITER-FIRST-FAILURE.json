@@ -1,0 +1,15 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "tool_chunk": "b7b145",
+  "error": "TypeError: can only concatenate list (not dict) to list",
+  "cause": "environment_assignments is a structured dict; writer assumed list",
+  "correction": "Preserve exact key/value environment as explicit assignments; no source/compiler/limit changes",
+  "retained_unused_scripts": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-cheap-20261017-y85v002n/run.sh",
+      "sha256": "0431e703461e7bdef9cc55dd6be2d7b549c22c5ea0a4673891eb69d5108a495f",
+      "bytes": 16315,
+      "meaning": "unused source script only; no compiler dispatched by failed writer"
+    }
+  ]
+}

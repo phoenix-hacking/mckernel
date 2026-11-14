@@ -1,0 +1,57 @@
+There are 28 section headers, starting at offset 0x10d8:
+
+Section Headers:
+  [Nr] Name              Type            Address          Off    Size   ES Flg Lk Inf Al
+  [ 0]                   NULL            0000000000000000 000000 000000 00      0   0  0
+  [ 1] .text             PROGBITS        0000000000000000 000040 00003f 00  AX  0   0 16
+  [ 2] .rela.text        RELA            0000000000000000 0009f0 000060 18   I 25   1  8
+  [ 3] .data             PROGBITS        0000000000000000 00007f 000000 00  WA  0   0  1
+  [ 4] .bss              NOBITS          0000000000000000 00007f 000000 00  WA  0   0  1
+  [ 5] .rodata.str1.1    PROGBITS        0000000000000000 00007f 00002e 01 AMS  0   0  1
+  [ 6] .rodata           PROGBITS        0000000000000000 0000c0 000030 00   A  0   0 32
+  [ 7] .rela.rodata      RELA            0000000000000000 000a50 000018 18   I 25   6  8
+  [ 8] .rodata.str1.8    PROGBITS        0000000000000000 0000f0 000082 01 AMS  0   0  8
+  [ 9] __verbose         PROGBITS        0000000000000000 000178 000020 00  WA  0   0  8
+  [10] .rela__verbose    RELA            0000000000000000 000a68 000030 18   I 25   9  8
+  [11] .debug_info       PROGBITS        0000000000000000 000198 000134 00   C  0   0  8
+  [12] .rela.debug_info  RELA            0000000000000000 000a98 0004e0 18   I 25  11  8
+  [13] .debug_abbrev     PROGBITS        0000000000000000 0002d0 000111 00   C  0   0  8
+  [14] .debug_loc        PROGBITS        0000000000000000 0003e8 000066 00   C  0   0  8
+  [15] .debug_aranges    PROGBITS        0000000000000000 000450 00002f 00   C  0   0  8
+  [16] .rela.debug_aranges RELA            0000000000000000 000f78 000030 18   I 25  15  8
+  [17] .debug_line       PROGBITS        0000000000000000 000480 000127 00   C  0   0  8
+  [18] .rela.debug_line  RELA            0000000000000000 000fa8 000018 18   I 25  17  8
+  [19] .debug_str        PROGBITS        0000000000000000 0005a8 000192 01 MSC  0   0  8
+  [20] .comment          PROGBITS        0000000000000000 00073a 00002c 01  MS  0   0  1
+  [21] .note.GNU-stack   PROGBITS        0000000000000000 000766 000000 00      0   0  1
+  [22] .note.gnu.property NOTE            0000000000000000 000768 000050 00   A  0   0  8
+  [23] .eh_frame         PROGBITS        0000000000000000 0007b8 000030 00   A  0   0  8
+  [24] .rela.eh_frame    RELA            0000000000000000 000fc0 000018 18   I 25  23  8
+  [25] .symtab           SYMTAB          0000000000000000 0007e8 000198 18     26  15  8
+  [26] .strtab           STRTAB          0000000000000000 000980 00006f 00      0   0  1
+  [27] .shstrtab         STRTAB          0000000000000000 000fd8 000100 00      0   0  1
+Key to Flags:
+  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
+  L (link order), O (extra OS processing required), G (group), T (TLS),
+  C (compressed), x (unknown), o (OS specific), E (exclude),
+  l (large), p (processor specific)
+
+Symbol table '.symtab' contains 17 entries:
+   Num:    Value          Size Type    Bind   Vis      Ndx Name
+     0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND 
+     1: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS selected-fragment.c
+     2: 0000000000000000     0 SECTION LOCAL  DEFAULT    1 
+     3: 0000000000000000     0 SECTION LOCAL  DEFAULT    5 
+     4: 0000000000000000    63 FUNC    LOCAL  DEFAULT    1 process_sched_migrate_log_bridge
+     5: 0000000000000000    32 OBJECT  LOCAL  DEFAULT    9 ddebug.1227
+     6: 0000000000000000     0 SECTION LOCAL  DEFAULT    6 
+     7: 0000000000000000    33 OBJECT  LOCAL  DEFAULT    6 __func__.1228
+     8: 0000000000000000     0 SECTION LOCAL  DEFAULT    8 
+     9: 0000000000000000     0 SECTION LOCAL  DEFAULT    9 
+    10: 0000000000000000     0 SECTION LOCAL  DEFAULT   11 
+    11: 0000000000000000     0 SECTION LOCAL  DEFAULT   13 
+    12: 0000000000000000     0 SECTION LOCAL  DEFAULT   14 
+    13: 0000000000000000     0 SECTION LOCAL  DEFAULT   17 
+    14: 0000000000000000     0 SECTION LOCAL  DEFAULT   19 
+    15: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND kprintf
+    16: 0000000000000028     8 OBJECT  GLOBAL DEFAULT    6 leaf_fallback_consumer

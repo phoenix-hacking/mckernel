@@ -1,0 +1,54 @@
+{
+  "schema": "mckernel.current-owner-interrupt-priority-source-delta-review.v1",
+  "at": "2026-11-11T07:41:21.225846+00:00",
+  "reviewer": "source_acquisition_review_max",
+  "decision": "GO_BOUNDED_COMPONENT_SOURCE_CORRECTION_PENDING_FOCUSED_FAKE_TESTS_AND_FULL_NATIVE_INTERFACE_REVIEW",
+  "source_metadata": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-real-binding-source-1/complete-interface-1/controller-correction-1/interrupt-priority-correction-1/CORRECTION.json",
+    "bytes": 2383,
+    "sha256": "561e6dace7aa815f60067f925711ff780f91825f82bfa9c657566ba43ec61f8a"
+  },
+  "controller": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-real-binding-source-1/complete-interface-1/controller-correction-1/interrupt-priority-correction-1/candidate/controller/run_os_goal.py",
+    "bytes": 139343,
+    "sha256": "6fe65a95407c54cf01a220a333453fa76146653df926b97627f6a79d9f8e2e0b"
+  },
+  "unchanged_component_and_compat": [
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-real-binding-source-1/complete-interface-1/controller-correction-1/interrupt-priority-correction-1/candidate/controller/native_current_owner.py",
+      "bytes": 16267,
+      "sha256": "7207a8b68feaf4dc00bcb10cf25f32ef13073e1eeae060e86038c6f855080622"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-real-binding-source-1/complete-interface-1/controller-correction-1/interrupt-priority-correction-1/candidate/controller/pidfd_compat.py",
+      "bytes": 3875,
+      "sha256": "068e8316ef03a03d1977d05ce755dfa8133c13bd4dfa56254c27b0066be2575c"
+    }
+  ],
+  "patch": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-real-binding-source-1/complete-interface-1/controller-correction-1/interrupt-priority-correction-1/INTERRUPT-PRIORITY-ONLY.patch",
+    "bytes": 8753,
+    "sha256": "feb86e0c75e45cbf5531a35a21e3c21e803c8e4b687362643a43b092779c6357"
+  },
+  "prior_NO_GO": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-complete-interface-review-sourceacq-max-1/controller-component-1/correction-1/REVIEW.json",
+    "bytes": 7627,
+    "sha256": "e3e2b565eecbd30c3ce9f8b2fb36be5fae7faab8288e85fb6b0106f07fd10765"
+  },
+  "exact_delta": "Only actual poll_native_owner_control and run method ASTs change. Patch equals literal before/after diff. Genuine module7207/compat068e/deadline API are byte-identical, and begin/record_rate_limits/refresh_credit_budget ASTs remain unchanged.",
+  "finding_closure": {
+    "poll": "Actual close results are scanned for pending nested KeyboardInterrupt/SystemExit before fallible save. Receipt-error handler now sees that pending interruption and rethrows the same object with close+receipt secondary errors; subsequent normal branch also preserves it.",
+    "run": "At finally entry actual already-propagating exception is captured. Native close pending interruption is retained. Entire original stop/RPC/save/diagnostic/output-close body is inside a final priority block, so a later failure cannot bypass rethrowing the original/pending interruption. Secondary actual exception objects are retained before formatting; context chains preserve simultaneous nested cleanup errors.",
+    "ordinary_cleanup": "All own-channel close attempts and sticky UNKNOWN_RETAINED semantics from7207 remain; no ambiguous numeric retry or Native/source/resource lease release.",
+    "original_other_families": "Genuine Python3.8 compat/.fd custody and one absolute header/body/send deadline were source-qualified in prior review; unchanged here."
+  },
+  "test_author_next": "SourceAcq prepares one exact CPU7/256MiB HOST pure/fake packet through actual revised component/compat and complete Campaign class AST. Three original families only, including one targeted close-KeyboardInterrupt plus subsequent receipt/stop/output-close failure oracle and ordinary shutdown control. No test run by author.",
+  "scope": {
+    "full_native_interface_or_selected18_READY": false,
+    "native_permission_or_resource_release": false,
+    "account_model_service_ledger_or_launcher_state_calls": false,
+    "source_or_test_execution_by_reviewer": false,
+    "canonical_or_peer_edits": false,
+    "Root_only_integration_execution_and_admission": true
+  }
+}

@@ -1,0 +1,442 @@
+{
+  "actual_ASM_saved_evidence": {
+    "actual_result": {
+      "bytes": 2685,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/assembly-emission-qualification-1/execution-1/RESULT.json",
+      "sha256": "1690539400a21dc998fd2b9ff914651d10d3490b9c395bf3b96a5cb67907cf62"
+    },
+    "exact_objtool_transform_source": {
+      "binding": {
+        "bytes": 117273,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2/tools/objtool/check.c",
+        "sha256": "c4222ae4a6aa50c01994efa04bce7d9e73cb9031e929f6bb8416cb76dbad9617"
+      },
+      "lines": "1900-1921",
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2/tools/objtool/check.c",
+      "rule": "opts.hack_jump_label && key_addend&2 writes arch_nop_insn at original offset and exact original length; selected2B jump therefore becomes2B defaultNOP."
+    },
+    "next_passive_packet": {
+      "bytes": 10219,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/assembly-emission-qualification-1/REQUEST.json",
+      "sha256": "04c153c0ed429403f560be3fbf8c8d28fa926609c6d44710880791f00c479ff5"
+    },
+    "precise_new_actual_qualification": {
+      "bytes": 14184,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/qualification-1/ASM-QUALIFICATION.json",
+      "sha256": "472b0f8ef5c1ecd1e0ec0f7b2ba45cdb0e810c5ca6ce1071561434c1b16f1cbd"
+    },
+    "selected_two_leaf_object_ELF": [
+      {
+        "bytes": 6782,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/object-metadata/m15_mmap_trace_gates.o.readelf",
+        "sha256": "4be0867e8e7e6f3100f83f6a85a32a59d3107c52ea573ebea301f5e9f1edc4d2"
+      },
+      {
+        "bytes": 5796,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/object-metadata/m15_mm_write_warning.o.readelf",
+        "sha256": "5d5816dccf5d5918e6dee31f1fb2de4cd4bf3bc4aa72009be6aebc2b3813da57"
+      }
+    ],
+    "source_macro": {
+      "binding": {
+        "bytes": 1529,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2/arch/x86/include/asm/jump_label.h",
+        "sha256": "06f57f0d6d2e68f4d7c45bafc079a7c18cc50e65e51a1c850b66b4f087c75371"
+      },
+      "lines": "25-28",
+      "rule": "CONFIG_HAVE_JUMP_LABEL_HACK macro emitsjmp plus key+2, explicitly objtoolNOPs it; no static_key/JUMP_TYPE speculative interpretation."
+    },
+    "source_profile_review": {
+      "bytes": 30325,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/assembly-includes-correction-1/source-review-max-1/REVIEW.json",
+      "sha256": "3d98dfa8873f60dce70fd99f01d606336ebfa32874df613e5095eacecfd47816"
+    },
+    "trace_jump_table": "48B align8,three16B entries; PC32code/PC32target/PC64 key to start/acquire/release tracepoint+0xa;6return-thunk PLT32 references.",
+    "warning_bug_table": "Actual12B relative bugentry has verified UD2 at0x9594, line24,flags0x0901 and returnthunk. All4 entries ENDBR and7return-thunks; exact same-length NOP2 transform actual."
+  },
+  "actual_closed_three_module_ownership_maps": [
+    {
+      "artifact": {
+        "bytes": 1521480,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/modules/ihk.ko",
+        "sha256": "04f5d3e0dbf0c70b7ff5aeb281fabda310751bc45c4916cb582575cf3f81155e"
+      },
+      "final_link": {
+        "bytes": 228,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/records/.ihk.ko.cmd",
+        "sha256": "6739f4d1e9141d321835a6a607d735113def24054abf2d3b1ab5fed8843e23db"
+      },
+      "generated_module_metadata_object": {
+        "actual_C_command": {
+          "bytes": 50613,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/records/.ihk.mod.o.cmd",
+          "sha256": "d2287d3571eabb0a17c8a8d455dc4162e0b27c59a09e8376eaa04e774ffe1817"
+        },
+        "actual_ELF": {
+          "bytes": 254917,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/object-metadata/ihk.mod.o.readelf",
+          "sha256": "a4851a59e53f32be5ceed080a430b3a891d3a71cbab8df5762605908294d7f76"
+        },
+        "actual_generated_source": {
+          "bytes": 2088,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/output-2/build/drivers/misc/mckernel/ihk.mod.c",
+          "sha256": "7edc08654b210ad693e9049073c00129c44746a753ad12ceeaaa9e6156ecda8e"
+        },
+        "classification": "Kbuild/modpost generated module descriptor, dependency/version/export metadata; no McKernel C implementation body.",
+        "object": "ihk.mod.o",
+        "sha256": "d21699fed9781446446bea7e99979622e604a16ff4759eb6e12b84783292c913"
+      },
+      "module": "ihk",
+      "no_unreviewed_project_C_object_or_prebuilt_input_in_actual_strict_chain": true,
+      "project_components": [
+        {
+          "actual_ELF_header_sections_relocations": {
+            "bytes": 2391620,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/object-metadata/ihk.o.readelf",
+            "sha256": "a3e83ca5b00ba5f7bdbd93724ef6e696e36747858a869e0bcc09d32bc4deddf7"
+          },
+          "actual_compiler_cmd": {
+            "bytes": 2797,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/records/.ihk.o.cmd",
+            "sha256": "a1c51459835fdec89766d38f7d2fb9e56f87cf02bf1deeb9d52658fed8352c88"
+          },
+          "language": "Rust",
+          "object": "drivers/misc/mckernel/ihk.o",
+          "sha256": "38e2be08dfbe3eef3c62c8465ea1462e5ec5daf0bd97b962874dee7d124dd325"
+        }
+      ],
+      "raw_closed_response": {
+        "bytes": 28,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/records/ihk.mod",
+        "sha256": "21d023987a6249e8918fe9c01cbffc42346c3bee9c55feeca64f57eed18877ad"
+      }
+    },
+    {
+      "artifact": {
+        "bytes": 13092960,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/modules/ihk-smp-x86_64.ko",
+        "sha256": "ae67f463920ae6267710624139c56ef5dcfa8d1c60f4fc1a42f0e52604066696"
+      },
+      "final_link": {
+        "bytes": 272,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/records/.ihk-smp-x86_64.ko.cmd",
+        "sha256": "2e608ceeeab99a11ff07135f014be4b0e87209cb864165fc41fdfeb6c0b87cd7"
+      },
+      "generated_module_metadata_object": {
+        "actual_C_command": {
+          "bytes": 50756,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/records/.ihk-smp-x86_64.mod.o.cmd",
+          "sha256": "74766babf52da1c7109a153a021585c63e82395c1902daa2749ed8262c8b0507"
+        },
+        "actual_ELF": {
+          "bytes": 237767,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/object-metadata/ihk-smp-x86_64.mod.o.readelf",
+          "sha256": "bd985580bd51405bb2e3f2be8b1e6118c3d936937e3a4030b62e9339f9c021fa"
+        },
+        "actual_generated_source": {
+          "bytes": 490,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/output-2/build/drivers/misc/mckernel/ihk-smp-x86_64.mod.c",
+          "sha256": "6ae858d30164ed4793308f4c7d092b4418c942c67a2cd4bf8b15d6a8b1ab8eee"
+        },
+        "classification": "Kbuild/modpost generated module descriptor, dependency/version/export metadata; no McKernel C implementation body.",
+        "object": "ihk-smp-x86_64.mod.o",
+        "sha256": "d709f3898d282ed1240881377f3c339c4998006a9220037bf7026fcc8d389f5b"
+      },
+      "module": "ihk-smp-x86_64",
+      "no_unreviewed_project_C_object_or_prebuilt_input_in_actual_strict_chain": true,
+      "project_components": [
+        {
+          "actual_ELF_header_sections_relocations": {
+            "bytes": 18867634,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/object-metadata/ihk_smp_x86_64.o.readelf",
+            "sha256": "e61fd01308ebb3a40bfd06bc675e36cd3c3f9566f359445fa555862661a5ccc9"
+          },
+          "actual_compiler_cmd": {
+            "bytes": 4861,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/records/.ihk_smp_x86_64.o.cmd",
+            "sha256": "f7630d72fbcef6284fdd635d272aab91d5218f284e8c8eda803eb7b85cdd35e5"
+          },
+          "language": "Rust",
+          "object": "drivers/misc/mckernel/ihk_smp_x86_64.o",
+          "sha256": "d0b6d14991375e57fa744bac0eadb1ebfb93b58aa1efe3852f1f14ff358dc956"
+        }
+      ],
+      "raw_closed_response": {
+        "bytes": 39,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/records/ihk-smp-x86_64.mod",
+        "sha256": "a3bceeb424df30f067f00f5916875522d7dd6d4becdaa5afe543b6e1582f60ea"
+      }
+    },
+    {
+      "artifact": {
+        "bytes": 2374656,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/modules/mcctrl.ko",
+        "sha256": "dc46a4f552776d6f9200cbdc8127882ea3f5d69d119f3e5b00672dce234eabcc"
+      },
+      "final_link": {
+        "bytes": 240,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/records/.mcctrl.ko.cmd",
+        "sha256": "dce809d695b2e46a132460f3719f5f1d1e1952b284a6f275290e1b04dcf9e9a4"
+      },
+      "generated_module_metadata_object": {
+        "actual_C_command": {
+          "bytes": 50652,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/records/.mcctrl.mod.o.cmd",
+          "sha256": "5525687b05264a9c352136a494480a6b8e220107f41a3d32d1298475c675359a"
+        },
+        "actual_ELF": {
+          "bytes": 237764,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/object-metadata/mcctrl.mod.o.readelf",
+          "sha256": "619c1c20093fea04fae6d5ebe190739e7e968ad6cef6ff2c7011520afbb62b9c"
+        },
+        "actual_generated_source": {
+          "bytes": 490,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/output-2/build/drivers/misc/mckernel/mcctrl.mod.c",
+          "sha256": "d6e82912afe90f01dd3a2abf171c284a8265c4231e2a8607bdd61e2fcca22a2b"
+        },
+        "classification": "Kbuild/modpost generated module descriptor, dependency/version/export metadata; no McKernel C implementation body.",
+        "object": "mcctrl.mod.o",
+        "sha256": "490f2a3b7ea289f2a6ddc4a76200f0d9b564104054c7a0920f391711fe8b7389"
+      },
+      "module": "mcctrl",
+      "no_unreviewed_project_C_object_or_prebuilt_input_in_actual_strict_chain": true,
+      "project_components": [
+        {
+          "actual_ELF_header_sections_relocations": {
+            "bytes": 3362747,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/object-metadata/mcctrl_rust.o.readelf",
+            "sha256": "725b8ad6ecb94195d16f52e7020a67b00f1a9f65b362d1fb96fd72f4b92a42b4"
+          },
+          "actual_compiler_cmd": {
+            "bytes": 3857,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/records/.mcctrl_rust.o.cmd",
+            "sha256": "e45404fa0c2cdbb9cd7d9bd281f63dec678f14c6e5330970c1750e9c0f21e329"
+          },
+          "language": "Rust",
+          "object": "drivers/misc/mckernel/mcctrl_rust.o",
+          "sha256": "3bb2b21a4dfa5340c2364125d4f20d3fc37a2af135dd4d491721e1908eca273d"
+        },
+        {
+          "actual_ELF_header_sections_relocations": {
+            "bytes": 6782,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/object-metadata/m15_mmap_trace_gates.o.readelf",
+            "sha256": "4be0867e8e7e6f3100f83f6a85a32a59d3107c52ea573ebea301f5e9f1edc4d2"
+          },
+          "actual_compiler_cmd": {
+            "bytes": 4162,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/records/.m15_mmap_trace_gates.o.cmd",
+            "sha256": "566a7e920e1429abc61eab69c56b86ac176bc68ab934bc397e766f8396b9a181"
+          },
+          "language": "reviewed selected assembly",
+          "object": "drivers/misc/mckernel/m15_mmap_trace_gates.o",
+          "sha256": "6fa26dd1b9306095441d7039e20f1597572e6365de0042bfa87d6face2166677"
+        },
+        {
+          "actual_ELF_header_sections_relocations": {
+            "bytes": 5796,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/object-metadata/m15_mm_write_warning.o.readelf",
+            "sha256": "5d5816dccf5d5918e6dee31f1fb2de4cd4bf3bc4aa72009be6aebc2b3813da57"
+          },
+          "actual_compiler_cmd": {
+            "bytes": 4305,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/records/.m15_mm_write_warning.o.cmd",
+            "sha256": "5d92c6c821f8facadb288cb9b61de8f698536a637ff9c2440b1f47a3629b4876"
+          },
+          "language": "reviewed selected assembly",
+          "object": "drivers/misc/mckernel/m15_mm_write_warning.o",
+          "sha256": "ebeaeb0c367e9b7631d462af53c6ee216a310030a66ddc2c8d9d0224fc59c656"
+        }
+      ],
+      "raw_closed_response": {
+        "bytes": 126,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/records/mcctrl.mod",
+        "sha256": "2ca72ca8fbb1e6f7f5fa4077aa7ada1dd273dbff4c588c51f6889b057a9f12fb"
+      }
+    }
+  ],
+  "actual_modpost_and_generated_metadata": {
+    "MODVERSIONS": "CONFIG_MODVERSIONS is not set; actual0x00000000 CRC rows are not used as an ABI-CRC proof. Types are joined by same configured generated declarations and explicit manual interfaces.",
+    "actual_generated_binding_fixdep_evidence": [
+      {
+        "bytes": 13776,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/generated/scripts/basic/fixdep",
+        "sha256": "01506178f2868bd3fcff88d54a7ffe94dee924bb0aa995a9935a98ac7723d5e4"
+      },
+      {
+        "bytes": 604,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/generated/scripts/basic/.fixdep.cmd",
+        "sha256": "557116820d7368091ba68fe390250e80f6a96332c6f00e6b0fe3531d202cfcf7"
+      },
+      {
+        "bytes": 315138,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/generated/include/generated/rustc_cfg",
+        "sha256": "e2799dd37996a64ab04e0548be1bd7f4e22a375c74e77e19c09098cdb6bc3939"
+      },
+      {
+        "bytes": 188928,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/generated/include/generated/autoconf.h",
+        "sha256": "99d4fc58db2ad5a515e8af210b9b5fd2be624039dcffd1fa0f2e9fca320c2ca3"
+      },
+      {
+        "bytes": 62,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/generated/include/generated/utsrelease.h",
+        "sha256": "46ec981be727b5e16bad989d768363964e8d4362fecb7661ee0bacdead15bbf0"
+      },
+      {
+        "bytes": 3166089,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/generated/rust/bindings/bindings_generated.rs",
+        "sha256": "470679fcb04150e22f13cecdc8aa20ae30d84c77bf455433f5ea2780290b8d6e"
+      },
+      {
+        "bytes": 4455,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/generated/rust/bindings/bindings_helpers_generated.rs",
+        "sha256": "8e5d0035a389d3562eb742d54a489a9cdc02d55af9d8a2f6c2b061594b422ed5"
+      },
+      {
+        "bytes": 2901712,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/generated/rust/uapi/uapi_generated.rs",
+        "sha256": "11b06a2bd80e48b8bc2f6c4525e68651252e57dd2cd18e81cb966c94ad642237"
+      }
+    ],
+    "actual_successful_producer": {
+      "bytes": 1229,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/resource-2g-1/execution-1/RESULT.json",
+      "sha256": "1e8994e6f0c160f81ce7f466e06251d16a8a93bdc2eba0ca497a27c990d67450"
+    },
+    "all_actual_artifact_functions": {
+      "artifact_functions": {
+        "ihk": true,
+        "ihk-smp-x86_64": true,
+        "mcctrl": true
+      },
+      "claims": {
+        "complete_ABI_acceptance": false,
+        "loadability_proven": false,
+        "native_runtime_proven": false,
+        "original_acceptance": false,
+        "project_C_retired": false,
+        "signature_acceptance": false
+      },
+      "scope": "Existing artifact-only metadata/parameter/provider relocation checks combined with separately collected real Kbuild/source/object/binding/modpost proof. Unchanged source validate_repository and suites were not replayed."
+    },
+    "canonical_recheck": {
+      "bytes": 14845,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/records/kbuild-link-closure.json",
+      "sha256": "d5c6871a624ab3abfe74e6b697695944f1e042b3b4463b791a7166cb84e2162f"
+    },
+    "exact_build_commands": {
+      "bytes": 2217,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/producer-build.commands",
+      "sha256": "e77c24c30606f13c6cc5ade6726404468fde8fd38fdd97d8d954bec5f55583c7"
+    },
+    "no_KBUILD_MODPOST_WARN": "Actual env-i commands do not set KBUILD_MODPOST_WARN/NOFINAL or a waiver; three finalKO build target succeeds with real matching Module.symvers.",
+    "strict_modpost_recipe": {
+      "bytes": 4854,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2/scripts/Makefile.modpost",
+      "sha256": "c4863ea111f798f9adf5a0ea17db63a398a9ba819ebf4475bbd59209a9d7229a"
+    }
+  },
+  "actual_selected_ASM_emission_qualification": {
+    "bytes": 14184,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/qualification-1/ASM-QUALIFICATION.json",
+    "sha256": "472b0f8ef5c1ecd1e0ec0f7b2ba45cdb0e810c5ca6ce1071561434c1b16f1cbd"
+  },
+  "common_Linux_metadata_component": {
+    "actual_C_source": {
+      "bytes": 480,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2/scripts/module-common.c",
+      "sha256": "d4ecad66cf21c3b3bd5355203bffb212e0a5a86fb5be6d7e0f3691cbf1b600eb"
+    },
+    "actual_common_C_command": {
+      "bytes": 51879,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/output-2/build/..module-common.o.cmd",
+      "sha256": "0dab728f5d3fbd5c89820e7da7a504c358432acfaa4cbbe77729f74b0f833164"
+    },
+    "actual_common_object": {
+      "bytes": 4680,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/output-2/build/.module-common.o",
+      "sha256": "8e9b0c5812a55dc713f678db6760cc2cae834fb1857974e4f8fc5c3ba100b6b5"
+    },
+    "classification": "Pinned Linux source emits only buildsalt/LTO/ORC/vermagic/retpoline metadata; permitted Linux generated/build metadata, not McKernel implementation."
+  },
+  "explicit_added_C_platform_adapter_classification": {
+    "bytes": 4338,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/qualification-1/PLATFORM-ADAPTER-CLASSIFICATION.json",
+    "sha256": "e6712fce24bec682f60e5caf374bac4f9abcde0d5cb247ca7fa64263f0424936"
+  },
+  "next_owner": "Root routes independent whole original M15-I02-module-ownership and ABI-modpost review of these complete technical results and exact platform-adapter classification. Separately ready bindings0781/e90 stays unchanged. Matched-artifacts/ACCEPT/native/M14-order stay separately open.",
+  "no_new_percent_tracker_source_canonical_or_original_acceptance_change": true,
+  "original_ledger": {
+    "bytes": 846092,
+    "path": "/home/holden/mckernel/docs/verification/m14-m15-closure-progress.json",
+    "sha256": "3495c6aae974ab0ffea1115485e7c1add6bc5763bd141758730af6c09ec408ef"
+  },
+  "original_remaining_gate_conditions": [
+    {
+      "done_when": "The three delivered Linux-loadable artifacts match the reviewed kernel/image/runtime cohort and original I02 review accepts them. Derive their names/selection from Kbuild; do not substitute an old differently sourced artifact.",
+      "id": "M15-I02-matched-artifacts",
+      "reason": "Matching installed/deployed/full McKernel compute-image/runtime cohort, actual native/currentfree/cleanup admissions and explicit original gate acceptance remain. M14 original acceptance precedes M15 final acceptance.",
+      "status": "OPEN_NOT_SATISFIED_BY_HOST_ARTIFACT_READER"
+    },
+    {
+      "done_when": "Every applicable original child condition is demonstrated on the required matching supported cohort and the original gate is explicitly accepted. M15 final acceptance follows M14. Existing accepted scopes stay closed.",
+      "id": "M15-I02-ACCEPT",
+      "reason": "Matching installed/deployed/full McKernel compute-image/runtime cohort, actual native/currentfree/cleanup admissions and explicit original gate acceptance remain. M14 original acceptance precedes M15 final acceptance.",
+      "status": "OPEN_NOT_SATISFIED_BY_HOST_ARTIFACT_READER"
+    }
+  ],
+  "other_two_original_leafs": [
+    {
+      "assessment": "The whole technical condition is now evidenced for the exact matching HOST three-module cohort: real closed Rust/ASM/generated object maps, source-faithful actual ASM byte/table/relocation/hardening/caller/final-owner proof, complete same-provider typed import/namespace/modpost/generated-metadata join, and explicit exact added-platform-adapter classification. Ready for independent original-leaf review; no compiler/parser flag or source-name/count alone is used.",
+      "id": "M15-I02-module-ownership",
+      "no_missing_external_artifact_access_or_approval_invented": true,
+      "remaining_approval": "Independent original-condition reviewer decides this complete material result and explicit platform classification before Root credits the technical leaf. No new external artifact, compiler/test/build/reader/probe or native operation is required for this assessment.",
+      "required_current_inputs": [],
+      "whole_original_condition": {
+        "dependencies": [
+          "M14_ACCEPTANCE_ORDER",
+          "MATCHED_COHORT",
+          "NATIVE_OWNER_AND_CURRENT_FREE",
+          "SOURCE-SDK-NATIVE"
+        ],
+        "done_when": "Actual delivered-module ownership maps demonstrate Rust/reviewed assembly for project implementations in all three named artifacts while classifying allowed Linux/third-party/generated code.",
+        "scope_limit": "HOST/focused proof is credited only at stated scope, not as complete original SDK/deployed/native qualification.",
+        "verification_method": "Derive the required obligations and source/profile/provider identities from the actual supported source, headers, build recipes and retained matching evidence. Reuse proven checks; qualify only genuinely unmatched changed contracts. Actual native/device operations still require their real ownership/current-free/admission bindings; no source review or HOST fixture substitutes for matching final acceptance."
+      }
+    },
+    {
+      "assessment": "The whole technical condition is now evidenced for the exact matching HOST three-module cohort: real closed Rust/ASM/generated object maps, source-faithful actual ASM byte/table/relocation/hardening/caller/final-owner proof, complete same-provider typed import/namespace/modpost/generated-metadata join, and explicit exact added-platform-adapter classification. Ready for independent original-leaf review; no compiler/parser flag or source-name/count alone is used.",
+      "id": "M15-I02-ABI-modpost",
+      "no_missing_external_artifact_access_or_approval_invented": true,
+      "remaining_approval": "Independent original-condition reviewer decides this complete material result and explicit platform classification before Root credits the technical leaf. No new external artifact, compiler/test/build/reader/probe or native operation is required for this assessment.",
+      "required_current_inputs": [],
+      "whole_original_condition": {
+        "dependencies": [
+          "M14_ACCEPTANCE_ORDER",
+          "MATCHED_COHORT",
+          "NATIVE_OWNER_AND_CURRENT_FREE",
+          "SOURCE-SDK-NATIVE"
+        ],
+        "done_when": "Derive every required exact-kernel ABI/import/modpost/generated-metadata obligation from actual Kbuild/module contracts and demonstrate passing results for the same three exact artifact identities.",
+        "scope_limit": "HOST/focused proof is credited only at stated scope, not as complete original SDK/deployed/native qualification.",
+        "verification_method": "Derive the required obligations and source/profile/provider identities from the actual supported source, headers, build recipes and retained matching evidence. Reuse proven checks; qualify only genuinely unmatched changed contracts. Actual native/device operations still require their real ownership/current-free/admission bindings; no source review or HOST fixture substitutes for matching final acceptance."
+      }
+    }
+  ],
+  "preserved_pre_emission_assessment": {
+    "bytes": 31785,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/qualification-1/OTHER-LEAVES.json",
+    "sha256": "98beafc7478339c76b435c7e5682ab77032205f6c9ace44eaa23b12484475b97"
+  },
+  "separate_ready_bindings_row": {
+    "bytes": 30444,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/qualification-1/BINDINGS.json",
+    "sha256": "0781087478376977da68666ee6ae257846d53dc5501cfa6b9b3ca170597f26be"
+  },
+  "status": "OTHER_TWO_WHOLE_TECHNICAL_CONDITIONS_EVIDENCED_READY_FOR_INDEPENDENT_ORIGINAL_LEAF_REVIEW",
+  "typed_import_provider_join": {
+    "bytes": 333887,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/qualification-1/IMPORT-PROVIDER-ABI.json",
+    "sha256": "c9cbb5349820ff6795c8be22031682daee9d2647bf7eefe13b86d0f7c1d84c41"
+  }
+}

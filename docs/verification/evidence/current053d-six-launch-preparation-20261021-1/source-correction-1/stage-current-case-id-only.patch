@@ -1,0 +1,11 @@
+--- /home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/current-image-six-launch-regression-plan-1/source-correction-1/stage_current_six_launch.result-field-correction-1.py
++++ /home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/source-correction-1/stage_current_six_launch.py
+@@ -58,7 +58,7 @@
+  overlay['sources']['collector']={'path':str(collector),'sha256':producer.sha(raw_collector),'identity':ov._identity(collector.stat())}
+  overlay['sources']['mcexec']={'path':b['current_launcher']['path'],'sha256':b['current_launcher']['sha256'],'identity':ov._identity(Path(b['current_launcher']['path']).stat())}
+  js(out/'overlay-manifest.json',overlay)
+- m=copy.deepcopy(parent);m['case_id']='practical.rust.fixed-three-rounds.current1d8-launcher33f';m['pair_rounds']=3
++ m=copy.deepcopy(parent);m['case_id']='practical.rust.fixed-three-rounds.current053d-launcher33f';m['pair_rounds']=3
+  m['artifacts']['mckernel_image']=b['current_image'];m['artifacts']['mcexec']=b['current_launcher'];m['modules']=b['current_modules']
+  m['pair']['source_authority']=b['sources']['current_authority'];m['pair']['inherited_overlay_manifest']=parent['staging']['overlay_manifest']
+  m['staging'].update(collector=ref(collector),derived_initramfs=ref(output),overlay_manifest=ref(out/'overlay-manifest.json'),overlay_source=ref(Path(__file__)))

@@ -1,0 +1,57 @@
+{
+  "actual_authenticate": "NOT_RUN; corrected genuine execution review required. Root will call complete actual authenticate after recording corrected PASS_EXECUTION.",
+  "actual_consumer_checks": [
+    "actual owner.bound(real request)",
+    "actual owner.bound(corrected canonical payload)",
+    "actual owner.bound(real source_review)",
+    "actual validate_runtime_source_bindings(all11 unchanged realfiles)",
+    "request/source_review/previous execution_review have exact path+sha256 keys"
+  ],
+  "capture_argv_template": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-begin-cleanup-sdk-successor-20261023-2/release-assembly/correction2/OUTER-CAPTURE-ARGV.TEMPLATE.json",
+    "sha256": "87c1f3dac54c90e29c6d28207633c7eb648d5f1bf8ade4a63d4efde32ec9a258"
+  },
+  "consumed_ref_shapes": {
+    "execution_review": "root records genuine corrected review as path+sha256 before actual authenticate",
+    "request": [
+      "path",
+      "sha256"
+    ],
+    "source_review": [
+      "path",
+      "sha256"
+    ]
+  },
+  "corrected_payload": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-begin-cleanup-sdk-successor-20261023-2/release-assembly/correction2/FINAL-PAYLOAD.CANONICAL.json",
+    "sha256": "467a4660bf8b1a16cb3c9e7e1cfd8ad6e764d5d8be6ab63f29a256819fc1e05a"
+  },
+  "elapsed_seconds": 0.04714633000548929,
+  "elapsed_seconds_coherent_template_binding": 0.041134400002192706,
+  "launch": false,
+  "old_payload": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-begin-cleanup-sdk-successor-20261023-2/release-assembly/FINAL-PAYLOAD.CANONICAL.json",
+    "sha256": "720b1fcee25f577769650c32cf2c1dd5fd27e11fd89db0ab95a98fe10751b6b6"
+  },
+  "only_payload_change": "Removed source_review.bytes and bound matching correction2 operation template (new release path/fresh owner-capture-2); every other payload field identical.",
+  "operation_changes": [
+    "actual_release path to correction2/release.json",
+    "argv --release path to correction2/release.json",
+    "capture_directory owner-capture-2"
+  ],
+  "operation_template": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-begin-cleanup-sdk-successor-20261023-2/release-assembly/correction2/OPERATION-EXACT-REQUEST.TEMPLATE.json",
+    "sha256": "1152b03c6eef6e4635936d496d8c3eb2ccf194ae56dd5bd29b4ed489a236ae34"
+  },
+  "owner": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-begin-cleanup-sdk-successor-20261023-2/derived-runtime/native_running_external_modules_owner.py",
+    "sha256": "bd1ba541307151e164c91a7e251af6aa71c43ac6bab86d9d578dc396c14e64f9"
+  },
+  "request_unchanged": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-begin-cleanup-sdk-successor-20261023-2/request.json",
+    "sha256": "92aec46808cd40fa5d468e01f4b9b8f657dc8c14792444c4834030889fa2ac08"
+  },
+  "root_runtime_operations": 0,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_MINIMAL_CORRECTION_AND_ACTUAL_BOUND_READS_PENDING_GENUINE_CORRECTED_EXECUTION_REVIEW"
+}

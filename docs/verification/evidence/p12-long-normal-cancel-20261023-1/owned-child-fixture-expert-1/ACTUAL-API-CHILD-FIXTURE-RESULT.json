@@ -1,0 +1,150 @@
+{
+  "Docker": 0,
+  "actual_live_cancel": null,
+  "checks": [
+    {
+      "errno": 22,
+      "name": "actual_typed_errno_EINVAL_open",
+      "status": "PASS"
+    },
+    {
+      "errno": 9,
+      "name": "actual_typed_errno_EBADF_send",
+      "status": "PASS"
+    },
+    {
+      "error": "exact owner birth",
+      "name": "wrongbirth",
+      "status": "PASS_REFUSE"
+    },
+    {
+      "error": "exact owner PGID/SID",
+      "name": "wrongPGID",
+      "status": "PASS_REFUSE"
+    },
+    {
+      "error": "exact owner PGID/SID",
+      "name": "wrongSID",
+      "status": "PASS_REFUSE"
+    },
+    {
+      "error": "exact owner UID/GID",
+      "name": "wrongUID",
+      "status": "PASS_REFUSE"
+    },
+    {
+      "error": "exact owner UID/GID",
+      "name": "wrongGID",
+      "status": "PASS_REFUSE"
+    },
+    {
+      "error": "exact owner cmdline",
+      "name": "wrongcmdline",
+      "status": "PASS_REFUSE"
+    },
+    {
+      "error": "exact selected owner source",
+      "name": "wrongsourcehash",
+      "status": "PASS_REFUSE"
+    },
+    {
+      "error": "exact current boot",
+      "name": "wrongboot",
+      "status": "PASS_REFUSE"
+    },
+    {
+      "error": "exact controller UID",
+      "name": "wrongcontrollerUID",
+      "status": "PASS_REFUSE"
+    }
+  ],
+  "child": {
+    "identity": {
+      "actual": {
+        "cmdline_base64": "L2hvbWUvaG9sZGVuL2FuYWNvbmRhMy9iaW4vcHl0aG9uMwAtSQAtQgAvaG9tZS9ob2xkZW4vbWNrZXJuZWwtd29yay9ob3N0LXByZXBhcmF0aW9uL3AxMi1sb25nLW5vcm1hbC1jYW5jZWwtMjAyNjEwMjMtMS9vd25lZC1jaGlsZC1maXh0dXJlLWV4cGVydC0xL3Rlc3RfY2hpbGQucHkAVEVTVE9OTFktbmV2ZXItbGl2ZS1vd25lcgA=",
+        "gids": [
+          1000,
+          1000,
+          1000,
+          1000
+        ],
+        "pgid": 3780571,
+        "pid": 3780572,
+        "sid": 3780571,
+        "start": 56787516,
+        "state": "R",
+        "uids": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "expected": {
+        "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+        "cmdline": [
+          "/home/holden/anaconda3/bin/python3",
+          "-I",
+          "-B",
+          "/home/holden/mckernel-work/host-preparation/p12-long-normal-cancel-20261023-1/owned-child-fixture-expert-1/test_child.py",
+          "TESTONLY-never-live-owner"
+        ],
+        "controller_uid": 1000,
+        "gid": 1000,
+        "nonce": "TESTONLY-never-live-owner",
+        "pgid": 3780571,
+        "pid": 3780572,
+        "sid": 3780571,
+        "source_path": "/home/holden/mckernel-work/host-preparation/p12-long-normal-cancel-20261023-1/owned-child-fixture-expert-1/test_child.py",
+        "source_sha256": "d8609802f2c636eb1e924da3d3e79199da01ff20addb7fca39dd99f2f918be5b",
+        "start": 56787516,
+        "uid": 1000
+      }
+    },
+    "pid": 3780572,
+    "ready_base64": "VEVTVE9OTFlfQ0hJTERfUkVBRFkK",
+    "returncode": 1,
+    "stderr_base64": "VHJhY2ViYWNrIChtb3N0IHJlY2VudCBjYWxsIGxhc3QpOgogIEZpbGUgIi9ob21lL2hvbGRlbi9tY2tlcm5lbC13b3JrL2hvc3QtcHJlcGFyYXRpb24vcDEyLWxvbmctbm9ybWFsLWNhbmNlbC0yMDI2MTAyMy0xL293bmVkLWNoaWxkLWZpeHR1cmUtZXhwZXJ0LTEvdGVzdF9jaGlsZC5weSIsIGxpbmUgMTAsIGluIDxtb2R1bGU+CiAgICBwcmludCgnVEVTVE9OTFlfQ0hJTERfUkVBRFknLGZsdXNoPVRydWUpCiAgRmlsZSAiL2hvbWUvaG9sZGVuL21ja2VybmVsLXdvcmsvaG9zdC1wcmVwYXJhdGlvbi9wMTItbG9uZy1ub3JtYWwtY2FuY2VsLTIwMjYxMDIzLTEvb3duZWQtY2hpbGQtZml4dHVyZS1leHBlcnQtMS90ZXN0X2NoaWxkLnB5IiwgbGluZSA3LCBpbiB0ZXJtCiAgICBwcmludChqc29uLmR1bXBzKGRpY3QocmVjZWl2ZWRfU0lHVEVSTT1yZWNlaXZlZCxub25jZT1zeXMuYXJndlsxXSkpLGZsdXNoPVRydWUpClJ1bnRpbWVFcnJvcjogcmVlbnRyYW50IGNhbGwgaW5zaWRlIDxfaW8uQnVmZmVyZWRXcml0ZXIgbmFtZT0nPHN0ZG91dD4nPgo=",
+    "stdout_base64": ""
+  },
+  "child_reaped_ECHILD": false,
+  "error": {
+    "message": "{'expected': 42, 'actual': 1}",
+    "traceback": "Traceback (most recent call last):\n  File \"/home/holden/mckernel-work/host-preparation/p12-long-normal-cancel-20261023-1/owned-child-fixture-expert-1/fixture_cancel_child.py\", line 57, in <module>\n    assert p.returncode==42,dict(expected=42,actual=p.returncode)\nAssertionError: {'expected': 42, 'actual': 1}\n",
+    "type": "AssertionError"
+  },
+  "fd_count_after": 4,
+  "fd_count_before": 4,
+  "interpreter": "/home/holden/anaconda3/bin/python3",
+  "live_owner_not_read_or_signaled": true,
+  "no_FD_leak": true,
+  "physical_clearance": false,
+  "root": 0,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\nOne owned TESTONLY child, unchanged actual helper and child. Retain all outcomes before asserting.\n",
+  "signal_receipt": {
+    "application_acceptance": false,
+    "expected_start": 56787516,
+    "fdinfo_pid": 3780572,
+    "matched_pgid": 3780571,
+    "matched_sid": 3780571,
+    "matched_uid": [
+      1000,
+      1000,
+      1000,
+      1000
+    ],
+    "nonce": "TESTONLY-never-live-owner",
+    "owner_cleanup_observed": false,
+    "physical_clearance": false,
+    "pid": 3780572,
+    "provider": "explicit ctypes libc.syscall pidfd only",
+    "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\nExplicitly selected Linux x86_64 LP64 pidfd syscall provider. No Python API or numeric-signal fallback.\n",
+    "signal": "SIGTERM",
+    "signal_calls": 1,
+    "source_sha256": "d8609802f2c636eb1e924da3d3e79199da01ff20addb7fca39dd99f2f918be5b",
+    "status": "ONE_SIGTERM_SENT_TO_EXACT_OWNER_ONLY"
+  },
+  "status": "FAIL_RETAINED_ACTUAL_CHILD_OUTCOME",
+  "version": "3.9.12 (main, Apr  5 2022, 06:56:58) \n[GCC 7.5.0]",
+  "workload": 0
+}

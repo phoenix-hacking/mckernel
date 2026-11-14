@@ -1,0 +1,155 @@
+{
+  "canonical_document": {
+    "actual_mutator_child_pids": [
+      1281421,
+      1281422,
+      1281424
+    ],
+    "all_five_children_positively_waited": true,
+    "argv": [
+      [
+        "/usr/bin/truncate",
+        "--no-create",
+        "--size=152471339008",
+        "/home/holden/mckernel-work/scratch.ext4"
+      ],
+      [
+        "/usr/sbin/losetup",
+        "--set-capacity",
+        "/dev/loop36"
+      ],
+      [
+        "/usr/sbin/resize2fs",
+        "/dev/loop36"
+      ]
+    ],
+    "geometry_query_returncodes": [
+      0,
+      0
+    ],
+    "grant": {
+      "bytes": 2040,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-SCRATCH-GROWTH-SDK7-ADMISSION-1/ROOT-GROWTH-GRANT.PENDING-INDEPENDENT-REVIEW.json",
+      "sha256": "eae858ccbcd513ac68df8afea9b47dc008e9c1ba1588ac59e710a8b0ad4be1e6"
+    },
+    "original_contract": {
+      "bytes": 3957,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-SCRATCH-GROWTH-SDK7-ADMISSION-1/ROOT-ACTUAL-GROWTH-CONTRACT.json",
+      "sha256": "24168f96cb54d476ad448dc85ee28501264b41071f79ffc9d8e238b22edf4482"
+    },
+    "original_journal": {
+      "bytes": 23169,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-SCRATCH-GROWTH-SDK7-ADMISSION-1/QUARANTINE-RAW/journal.jsonl",
+      "sha256": "112dd5b4e870f4972d03608f5e0f1922931d80e6a56b787ce1ee860f10b97f56"
+    },
+    "original_overall_postcheck_result": "FAIL",
+    "original_postcheck_quarantine_preserved": true,
+    "original_quarantine_event": {
+      "data": {
+        "child_pid": null,
+        "children": [
+          {
+            "argv": [
+              "/usr/sbin/dumpe2fs",
+              "-h",
+              "/dev/loop36"
+            ],
+            "observed_wall": 1793054604.2745147,
+            "pid": 1281420,
+            "positive_wait": true,
+            "proc_stat_raw": "1281420 (dumpe2fs) R 1281419 1281414 1281414 0 -1 4194304 53 0 0 0 0 0 0 0 20 0 1 0 85204897 1388544 119 18446744073709551615 93872753360896 93872753373093 140735109861024 0 0 0 16391 0 0 0 0 0 17 3 0 0 0 0 0 93872753384112 93872753385496 93873754681344 140735109869474 140735109869508 140735109869508 140735109869541 0\n",
+            "returncode": 0,
+            "starttime_ticks": 85204897,
+            "waited_wall": 1793054604.2768314
+          },
+          {
+            "argv": [
+              "/usr/bin/truncate",
+              "--no-create",
+              "--size=152471339008",
+              "/home/holden/mckernel-work/scratch.ext4"
+            ],
+            "observed_wall": 1793054604.328366,
+            "pid": 1281421,
+            "positive_wait": true,
+            "proc_stat_raw": "1281421 (truncate) R 1281419 1281414 1281414 0 -1 4194304 60 0 0 0 0 0 0 0 20 0 1 0 85204902 2424832 129 18446744073709551615 94674438135808 94674438154609 140736112071552 0 0 0 16391 0 0 0 0 0 17 4 0 0 0 0 0 94674438171408 94674438172800 94675126366208 140736112078699 140736112078789 140736112078789 140736112078822 0\n",
+            "returncode": 0,
+            "starttime_ticks": 85204902,
+            "waited_wall": 1793054604.329536
+          },
+          {
+            "argv": [
+              "/usr/sbin/losetup",
+              "--set-capacity",
+              "/dev/loop36"
+            ],
+            "observed_wall": 1793054604.332868,
+            "pid": 1281422,
+            "positive_wait": true,
+            "proc_stat_raw": "1281422 (losetup) R 1281419 1281414 1281414 0 -1 4194304 59 0 0 0 0 0 0 0 20 0 1 0 85204902 2932736 107 18446744073709551615 94855832997888 94855833066049 140734528507568 0 0 0 16391 0 0 0 0 0 17 4 0 0 0 0 0 94855833097392 94855833100424 94856110661632 140734528515992 140734528516037 140734528516037 140734528516070 0\n",
+            "returncode": 0,
+            "starttime_ticks": 85204902,
+            "waited_wall": 1793054604.3340437
+          },
+          {
+            "argv": [
+              "/usr/sbin/resize2fs",
+              "/dev/loop36"
+            ],
+            "observed_wall": 1793054604.3373106,
+            "pid": 1281424,
+            "positive_wait": true,
+            "proc_stat_raw": "1281424 (resize2fs) R 1281419 1281414 1281414 0 -1 4194304 58 0 0 0 0 0 0 0 20 0 1 0 85204903 3252224 156 18446744073709551615 94357528043520 94357528081397 140727122495104 0 0 0 16391 0 0 0 0 0 17 2 0 0 0 0 0 94357528099056 94357528100880 94358486077440 140727122501539 140727122501571 140727122501571 140727122501604 0\n",
+            "returncode": 0,
+            "starttime_ticks": 85204903,
+            "waited_wall": 1793054604.3700695
+          },
+          {
+            "argv": [
+              "/usr/sbin/dumpe2fs",
+              "-h",
+              "/dev/loop36"
+            ],
+            "observed_wall": 1793054604.373563,
+            "pid": 1281428,
+            "positive_wait": true,
+            "proc_stat_raw": "1281428 (dumpe2fs) R 1281419 1281414 1281414 0 -1 4194304 54 0 0 0 0 0 0 0 20 0 1 0 85204906 1388544 110 18446744073709551615 93909024792576 93909024804773 140724916097936 0 0 0 16391 0 0 0 0 0 17 3 0 0 0 0 0 93909024815792 93909024817176 93909261246464 140724916105122 140724916105156 140724916105156 140724916105189 0\n",
+            "returncode": 0,
+            "starttime_ticks": 85204906,
+            "waited_wall": 1793054604.3758912
+          }
+        ],
+        "error": "ValueError('automatic ext4 reserve ratio differs')",
+        "external_postjoin_required": false,
+        "fd": 4,
+        "fd_closed": false,
+        "holder_pid": 1281419,
+        "mutation_may_have_effect": true,
+        "spawn_acquisition_pending": false,
+        "unjoined_child": false
+      },
+      "event": "QUARANTINE",
+      "pid": 1281419,
+      "wall": 1793054604.3770661
+    },
+    "projection_adds_no_execution_or_independent_acceptance": true,
+    "returncodes": [
+      0,
+      0,
+      0
+    ],
+    "scope": "Exactly three successful mutation children, not an overall postcheck PASS",
+    "status": "PASS_ACTUAL_SCRATCH_GROWTH_COMMANDS"
+  },
+  "canonical_path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-SCRATCH-GROWTH-SDK7-ADMISSION-1/SDK7-CANONICAL-GROWTH-PROJECTIONS-1/ACTUAL-THREE-GROWTH-COMMANDS.PROJECTION.json",
+  "canonical_publisher": "/root",
+  "canonical_reference_if_literal_bytes_published": {
+    "bytes": 5768,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-SCRATCH-GROWTH-SDK7-ADMISSION-1/SDK7-CANONICAL-GROWTH-PROJECTIONS-1/ACTUAL-THREE-GROWTH-COMMANDS.PROJECTION.json",
+    "sha256": "7e34f3b2ba85bdd9de356c05169a1abc31c0768ba9ac90c7bcc3e8481f25b9d0"
+  },
+  "fields_requiring_Root": [],
+  "new_independent_decisions_asserted": false,
+  "no_query_or_admission": true,
+  "status": "PRIVATE_LITERAL_PROPOSAL_PENDING_ROOT_PUBLICATION_NOT_AUTHORITY"
+}

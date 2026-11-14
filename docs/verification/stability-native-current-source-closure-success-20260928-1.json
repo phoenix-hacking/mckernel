@@ -1,0 +1,121 @@
+{
+  "schema": "mckernel.stability.source-closure.v1",
+  "date": "2026-09-28",
+  "status": "SOURCE_AND_LAYER_B_PASS",
+  "base_commit": "4a18a62dc595acee0bf8971b1edf361f88a7ec71",
+  "scope": "current native Rust host escape boundaries, Rocky staging integrity, ihk-smp and mcctrl lifecycle source contracts, and secondary-reset exact-build workflow admission",
+  "original_failures": [
+    {
+      "command": "python3 scripts/native_rust_host_audit.py",
+      "result": "exit 1: unreviewed Rust escape hatch in host-kernel/native-rust/smp_memory.rs: extern; subsequent exact corrections exposed os_runtime extern/export boundaries"
+    },
+    {
+      "command": "python3 scripts/rocky_rust_staging.py --check",
+      "result": "exit 1: inputs[12] lacked the current ManuallyDrop<StartupTables> owner boundary; subsequent exact corrections exposed the SMP v4 and mcctrl service ABI boundaries"
+    },
+    {
+      "command": "python3 -B -m unittest -v scripts.tests.test_mcctrl_native_lifecycle_check",
+      "result": "50 tests: 34 failures and 4 errors, all short-circuited by the historical checker's rejection of the additive mcctrl C service boundary"
+    }
+  ],
+  "repairs": [
+    "The host audit now binds exact complete current smp_memory Linux/RDTSC and os_runtime ABI/export blocks, with top-level and contiguous safety-prefix checks and focused mutation rejection.",
+    "Rocky staging now binds the complete LoadedImage ManuallyDrop owner/release/retention shape, field-bearing OsDeviceFamily service owner, exact SMP create-v4 imports/callback prefixes and exact mcctrl Rust-anchor plus C service/callback boundaries.",
+    "The mcctrl lifecycle contract preserves its historical provider-lease object and adds a distinct noncrediting, runtime-unproven, loadable-module-only service boundary. Null module owner and CONFIG=y readiness overclaims reject.",
+    "The host-audit source-order initialization closes every file handle; the ResourceWarning observed in the first integrated run is removed and the 17-test suite passes with ResourceWarning promoted to an error."
+  ],
+  "corrections_after_initial_independent_review": [
+    "Memory boot Linux imports are explicitly classified as an outer depth-zero block; cfg-hidden and nested-module mutations reject.",
+    "Every reviewed Rust escape-block order is now a literal canonical label sequence independent of candidate source bytes; a fresh checker process rejects swapped complete application export records.",
+    "Rocky staging binds the exact complete LoadedImage::started and Drop bodies; always-false state, duplicate drop and unconditional live-table drop mutations reject.",
+    "The initial independent closure review returned BLOCK on these three gaps. A corrected independent rereview remains required before build execution release."
+  ],
+  "independent_abi_reviews": [
+    {
+      "boundary": "SMP create-v4 staging import",
+      "result": "PASS_SOURCE_LAYER_B",
+      "exact_block_sha256": "fb55e3d28d653eb8ad2253fd30b9bd984e45d7b25ecb4e8028702dbc4313d2c7",
+      "limitations": "v4 selects no shutdown callback; no v5, build or runtime claim"
+    },
+    {
+      "boundary": "mcctrl loadable-module service import and callbacks",
+      "result": "PASS_SOURCE_LAYER_B",
+      "exact_block_sha256": "7a370b26baff8a6e1e1dc4304a924df0ad8be45501c861fff7f46ddebee90475",
+      "limitations": "nonnull module owner required; built-in initialization, build and runtime remain unaccepted"
+    }
+  ],
+  "raw_evidence": [
+    {
+      "path": "docs/verification/evidence/stability-native-current-source-mcctrl-original-failure-20260928-1.log.gz",
+      "sha256": "dd611d7935ebb4bc40ab8eddcb33088e1f21f8f03a616e923e65ed80fb4a4208",
+      "contents": "exact launcher command/output for the original 50-test mcctrl lifecycle failure, including 34 failures, four errors and exit 1"
+    },
+    {
+      "path": "docs/verification/evidence/stability-native-current-source-integrated-success-20260928-1.log.gz",
+      "sha256": "be65c4532a99e6b69f9bd598b57c4a1c171a3fc0829eceee2fabb6b275f4a0ab",
+      "contents": "exact launcher command/output for the source CLIs, 195-test integrated run, first observed ResourceWarnings, and 48-test workflow run"
+    },
+    {
+      "path": "docs/verification/evidence/stability-native-current-source-resourcewarning-correction-success-20260928-1.log.gz",
+      "sha256": "ce8a28f66a55f1d4e5e3edf4aa5ecdba97358644db7596163240955712f7297e",
+      "contents": "exact launcher command/output for the corrected 17-test host-audit run with ResourceWarning promoted to an error"
+    },
+    {
+      "path": "docs/verification/evidence/stability-native-current-source-integrated-corrected-success-20260928-1.log.gz",
+      "sha256": "bf2686a9f6b6ba5e09333d4102ae7f77f08ee460592fc46e39073ccaa5a267c3",
+      "contents": "corrected source CLI and 196-test integrated run with ResourceWarning promoted to an error after all three independent-review findings were repaired"
+    }
+  ],
+  "verification": [
+    {
+      "command": "python3 scripts/native_rust_host_audit.py; python3 scripts/rocky_rust_staging.py --check; python3 scripts/ihk_smp_native_lifecycle_check.py; python3 scripts/mcctrl_native_lifecycle_check.py; python3 scripts/native_rust_build_surface_audit.py",
+      "result": "PASS; staging manifest integrity passes and honestly retains four pre-build readiness blockers"
+    },
+    {
+      "command": "PATH=<pinned-rust-1.92> MCKERNEL_RUSTC_1_92=<pinned-rustc> python3 -B -m unittest -v scripts.tests.test_native_rust_host_audit scripts.tests.test_rocky_rust_staging scripts.tests.test_ihk_smp_native_lifecycle_check scripts.tests.test_mcctrl_native_lifecycle_check scripts.tests.test_ihk_os_runtime",
+      "result": "superseded first integrated run: 195 tests passed in 51.696 seconds but exposed ResourceWarnings and preceded the three independent-review oracle corrections"
+    },
+    {
+      "command": "PYTHONWARNINGS=error::ResourceWarning PATH=<pinned-rust-1.92> MCKERNEL_RUSTC_1_92=<pinned-rustc> <source CLIs>; python3 -B -m unittest -v scripts.tests.test_native_rust_host_audit scripts.tests.test_rocky_rust_staging scripts.tests.test_ihk_smp_native_lifecycle_check scripts.tests.test_mcctrl_native_lifecycle_check scripts.tests.test_ihk_os_runtime",
+      "result": "196 tests passed in 49.128 seconds: 18 host-audit, 61 staging, 60 ihk-smp lifecycle, 56 mcctrl lifecycle and 1 OS-runtime ownership test; all source CLIs passed within their stated noncrediting scope"
+    },
+    {
+      "command": "/home/holden/verilator-work/toolchain/bin/python3.12 -E -s -m unittest -v scripts.tests.test_secondary_reset_build_supplement scripts.tests.test_rocky_kernel_rk006_full_source_build_capture scripts.tests.test_native_rust_exact_build_workflow.NativeRustExactBuildWorkflowTests.test_secondary_reset_supplement_is_exactly_staged_and_lock_verified scripts.tests.test_native_rust_exact_build_workflow.NativeRustExactBuildWorkflowTests.test_every_shell_block_parses",
+      "result": "48 tests passed in 24.411 seconds"
+    },
+    {
+      "command": "PYTHONWARNINGS=error::ResourceWarning python3 -B -m unittest -v scripts.tests.test_native_rust_host_audit",
+      "result": "17 tests passed in 14.954 seconds with no ResourceWarning"
+    },
+    {
+      "command": "python3 -m py_compile <changed Python files>; git diff --check -- <changed campaign files>",
+      "result": "PASS"
+    }
+  ],
+  "artifact_sha256": {
+    "host-kernel/kbuild/stage-manifest.json": "136f597b8702732da160831244ffe64d5db10483badb4e53abb92299889e1f84",
+    "host-kernel/native-rust/ihk-smp-lifecycle-contract-v1.json": "8244c9a397b8967231d93374361f557947baada400ef7401387f974c8f08f9a6",
+    "host-kernel/native-rust/mcctrl-lifecycle-contract-v1.json": "99a007d78106c22f82ec1a928be8a5bd468ef2197eed19235ccaa9a34805b34f",
+    "scripts/ihk_smp_native_lifecycle_check.py": "ad9e6395206c124e3a2049536ec88f4bf8929011090ea794d7c8063b8bb4a70c",
+    "scripts/mcctrl_native_lifecycle_check.py": "26c1f4dfff1918e5d2e97825b9aeb624247678f5edd9634098f2d3caaed48504",
+    "scripts/native_rust_host_audit.py": "11237051234984d9394f686f9a95ce4c399f5c4e54d2ee9c974e937cc097282b",
+    "scripts/rocky_rust_staging.py": "c3bd48ae851a7db950881b795b1a83b21050805a8d8a4519b99ef4d46cf49f6b",
+    "scripts/tests/test_mcctrl_native_lifecycle_check.py": "d50db59346f1eef28fb8bea90680b33bbab9093c8102583c8b72e141578af21c",
+    "scripts/tests/test_native_rust_host_audit.py": "c0862324c2bb0e6e5055445f4ab086abab4817d7bae20bd5ac458b6e483f0769",
+    "scripts/tests/test_rocky_rust_staging.py": "204027f5e5895f760dcd63b238b7ee9ca2d7e58dc6413495ac89619b6ad8f271",
+    ".github/workflows/native-rust-host-modules-exact-build.yml": "e9cfb14d45c57c4832816c3ec038722bdab4ce51f47b615585c5369127091831",
+    "host-kernel/kbuild/secondary-reset-build-supplement-v1.json": "dbb0f8aeb9758158961f3d33a86c36d63b95ef8146990220750c196547102ec9"
+  },
+  "source_sha256": {
+    "host-kernel/native-rust/ihk_smp_x86_64.rs": "f29f751b62884534a754c903c6a9a763f82af61235552074924ccc91a59395e1",
+    "host-kernel/native-rust/mcctrl.rs": "b3898d1a4d08ba5512ee9b12e66224409f6aed4db3adc293b47631aa16fa8030",
+    "host-kernel/native-rust/os_runtime.rs": "5b79ca8cb303cbb8df590daf1d2a9d31381b1f95978672dd1d7611b908d17144",
+    "host-kernel/native-rust/smp_memory.rs": "686c8d30e7955b1051ba41d44650a924d196837cbd6918bffde08b1ff227e215"
+  },
+  "remaining_blockers": [
+    "No configured Rocky kernel/module build has consumed this closure.",
+    "The four staging readiness blockers require exact build outputs, namespace/import metadata and zero-project-C link manifests.",
+    "An independent execution review must release the exact pinned container command/profile and current source closure before the sole heavy lease starts.",
+    "No module load, privileged reset, guest shutdown, application acceptance, production-gate credit or whole-OS acceptance is claimed."
+  ]
+}

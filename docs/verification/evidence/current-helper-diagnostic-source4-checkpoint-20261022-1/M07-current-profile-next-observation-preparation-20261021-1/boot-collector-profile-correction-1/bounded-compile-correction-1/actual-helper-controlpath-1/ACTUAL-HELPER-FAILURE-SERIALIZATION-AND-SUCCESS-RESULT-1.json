@@ -1,0 +1,127 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_ACTUAL_HELPER_SUPERVISOR_SERIALIZER_FAILURE_AND_UNCHANGED_SUCCESS",
+  "rows": [
+    {
+      "name": "original-compile",
+      "argv": [
+        "/usr/bin/gcc",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-static",
+        "-fno-pie",
+        "-no-pie",
+        "-Wl,-z,noexecstack",
+        "-DND_CORE_THREADS",
+        "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/boot-collector-profile-correction-1/bounded-compile-correction-1/actual-helper-controlpath-1/original.c",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/boot-collector-profile-correction-1/bounded-compile-correction-1/actual-helper-controlpath-1/original"
+      ],
+      "pid": 2887273,
+      "start_ticks": 42643386,
+      "returncode": 0,
+      "elapsed_seconds": 0.25618747901171446,
+      "direct_joined": true,
+      "group_absent": true,
+      "streams_closed": true
+    },
+    {
+      "name": "original-failure",
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/boot-collector-profile-correction-1/bounded-compile-correction-1/actual-helper-controlpath-1/original",
+        "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/boot-collector-profile-correction-1/bounded-compile-correction-1/actual-helper-controlpath-1/original-failure-evidence",
+        "failure"
+      ],
+      "pid": 2887278,
+      "start_ticks": 42643412,
+      "returncode": 0,
+      "elapsed_seconds": 0.11663184501230717,
+      "direct_joined": true,
+      "group_absent": true,
+      "streams_closed": true
+    },
+    {
+      "name": "original-success",
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/boot-collector-profile-correction-1/bounded-compile-correction-1/actual-helper-controlpath-1/original",
+        "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/boot-collector-profile-correction-1/bounded-compile-correction-1/actual-helper-controlpath-1/original-success-evidence",
+        "success"
+      ],
+      "pid": 2887280,
+      "start_ticks": 42643424,
+      "returncode": 0,
+      "elapsed_seconds": 0.11564179399283603,
+      "direct_joined": true,
+      "group_absent": true,
+      "streams_closed": true
+    },
+    {
+      "name": "corrected-compile",
+      "argv": [
+        "/usr/bin/gcc",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-static",
+        "-fno-pie",
+        "-no-pie",
+        "-Wl,-z,noexecstack",
+        "-DND_CORE_THREADS",
+        "-DCORRECTED",
+        "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/boot-collector-profile-correction-1/bounded-compile-correction-1/actual-helper-controlpath-1/corrected.c",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/boot-collector-profile-correction-1/bounded-compile-correction-1/actual-helper-controlpath-1/corrected"
+      ],
+      "pid": 2887282,
+      "start_ticks": 42643435,
+      "returncode": 0,
+      "elapsed_seconds": 0.25868784298654646,
+      "direct_joined": true,
+      "group_absent": true,
+      "streams_closed": true
+    },
+    {
+      "name": "corrected-failure",
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/boot-collector-profile-correction-1/bounded-compile-correction-1/actual-helper-controlpath-1/corrected",
+        "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/boot-collector-profile-correction-1/bounded-compile-correction-1/actual-helper-controlpath-1/corrected-failure-evidence",
+        "failure"
+      ],
+      "pid": 2887287,
+      "start_ticks": 42643461,
+      "returncode": 0,
+      "elapsed_seconds": 0.11699330899864435,
+      "direct_joined": true,
+      "group_absent": true,
+      "streams_closed": true
+    },
+    {
+      "name": "corrected-success",
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/boot-collector-profile-correction-1/bounded-compile-correction-1/actual-helper-controlpath-1/corrected",
+        "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/boot-collector-profile-correction-1/bounded-compile-correction-1/actual-helper-controlpath-1/corrected-success-evidence",
+        "success"
+      ],
+      "pid": 2887289,
+      "start_ticks": 42643473,
+      "returncode": 0,
+      "elapsed_seconds": 0.11593670700676739,
+      "direct_joined": true,
+      "group_absent": true,
+      "streams_closed": true
+    }
+  ],
+  "only_fixture_substitutions": [
+    "open /case/evidence exact-prefix redirected to owned directory",
+    "fork wrapper records exact controlled child PID; syscall unchanged"
+  ],
+  "actual_main_powerdown_not_called": true,
+  "original_failure_missing_context_reproduced": true,
+  "corrected_failure_exact_context": true,
+  "success_emits_no_failure_record": true
+}

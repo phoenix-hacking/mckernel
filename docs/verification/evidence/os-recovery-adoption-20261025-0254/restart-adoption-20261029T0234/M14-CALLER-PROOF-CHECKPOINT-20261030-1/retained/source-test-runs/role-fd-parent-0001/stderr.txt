@@ -1,0 +1,13 @@
+{"close_unknown":[],"error":"code ancestry not traversable","error_type":"ValueError","fixture":"/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fd-parent-0001/fixtures/m14-fd-budget-vrbfa941","full_operation_fd_peak":"UNKNOWN","native_currentfree":null,"native_release":false,"nofile_hard":256,"nofile_soft":256,"observer_temporary_fds":1,"peak_live_fds_before_failure":52,"pending_open_fds":[],"preoccupied_fds":16,"role":"parent","scope":"MOCKED_ROLE_FD_EXERCISE_NOT_PRODUCTION_PEAK","status":"FAILED_UNKNOWN"}
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-role-fd-budget-1/role_fd_budget.py", line 236, in <module>
+    try:main()
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-role-fd-budget-1/role_fd_budget.py", line 173, in main
+    walk_three(install,root,code,source,2)
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-role-fd-budget-1/role_fd_budget.py", line 145, in walk_three
+    install.open_exact(str(code),ancestors(code),True,True)
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-child-successor-4/install_source_closure.py", line 119, in open_exact
+    if other_traverse and not stat.S_IMODE(os.fstat(current).st_mode)&0o001:fail('code ancestry not traversable')
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-child-successor-4/install_source_closure.py", line 28, in fail
+    def fail(message):raise ValueError(message)
+ValueError: code ancestry not traversable

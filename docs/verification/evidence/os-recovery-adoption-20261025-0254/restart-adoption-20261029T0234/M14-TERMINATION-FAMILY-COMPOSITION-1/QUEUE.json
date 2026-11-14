@@ -1,0 +1,62 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "UNSELECTED_PRIVATE_SOURCE_ONLY",
+  "symbols": [
+    {
+      "symbol": "terminate",
+      "compiled": false,
+      "linked": false,
+      "native": false,
+      "selected_by_default": false,
+      "owner": "private termination-family composition",
+      "next": "Independent source/ownership review; C/Rust source/profile macro binding, actual preprocessing/59-word ABI and 389 metadata; then released compiler/link/native checks.",
+      "open": "Current executing stack and scheduler edge; Process lock after PID1 finalize; distinct Thread/VM releases; report-list progress; hash/PID1 parent lock ownership; bounded peer allocation domain; exact file/line profile."
+    },
+    {
+      "symbol": "terminate_mcexec",
+      "compiled": false,
+      "linked": false,
+      "native": false,
+      "selected_by_default": false,
+      "owner": "private termination-family composition",
+      "next": "Independent review of initialized request bytes through actual preparation/copy, synchronous lifetime, C/Rust layout and selected atomic/do_syscall providers, then released compiler/link/native checks.",
+      "open": "C do_syscall body and publication remain open, as do provider/link/ABI checks."
+    },
+    {
+      "symbol": "terminate_host",
+      "compiled": false,
+      "linked": false,
+      "native": false,
+      "selected_by_default": false,
+      "owner": "private termination-family composition",
+      "next": "Independent detached-thread exclusive ownership and Process lifetime review, exact find/unlock and kill/refcount provider bindings, then released compiler/link/native checks.",
+      "open": "Exceptional reset-to-one authority and post-thread-release Process lifetime."
+    },
+    {
+      "symbol": "interrupt_syscall",
+      "compiled": false,
+      "linked": false,
+      "native": false,
+      "selected_by_default": false,
+      "owner": "Root-defined context/forwarding contract",
+      "next": "Define selected unused args 3\u20135 behavior and prove corresponding context/forwarding ABI before any source conversion.",
+      "open": "C initializes args 0\u20132 only while selected forwarding reads args 0\u20135; no new zeroing or code conversion proposed."
+    }
+  ],
+  "patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-TERMINATION-FAMILY-COMPOSITION-1/TERMINATION-FAMILY.PRIVATE-NOT-APPLIED.patch",
+    "bytes": 34219,
+    "sha256": "878cebb343e9beac287a8e2781064a47a4259c81c12f670515f38fb183b70399"
+  },
+  "source_checks": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-TERMINATION-FAMILY-COMPOSITION-1/SOURCE-CHECKS.json",
+    "bytes": 4989,
+    "sha256": "71b150b44895c25b6fce17d8e93594827f246e63b2472df74291ae24ea314e37"
+  },
+  "applicability": {
+    "command": "git apply --check --directory=docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-NINE-LEAF-BATCH-1/postimage docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-TERMINATION-FAMILY-COMPOSITION-1/TERMINATION-FAMILY.PRIVATE-NOT-APPLIED.patch",
+    "exit_code": 0,
+    "output": "",
+    "meaning": "Patch applies to the nine-leaf private postimage, not a compile, selected build, or runtime grant."
+  }
+}

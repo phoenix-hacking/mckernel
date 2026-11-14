@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "record_kind": "layer_b_native_owner_object_bootstrap_attempt",
+  "recorded_utc": "2026-09-28T09:34:00Z",
+  "status": "FAIL_IDENTITY",
+  "packet_path": "docs/verification/stability-layer-b-native-owner-direct-object-packet-20260928-15.md",
+  "packet_sha256": "73ed242336988f5f66bb65db7fc81f85e742ff197552047f74b7ec9b3ac4f100",
+  "root": "/home/holden/mckernel-work/scratch/stability-layer-b-native-owner-bootstrap-20260928-10",
+  "unit": "layer-b-native-owner-bootstrap-20260928-10-add22700a2081690.service",
+  "submission_count": 1,
+  "submission_exit_code": 0,
+  "first_terminal_observation": {
+    "load_state": "loaded",
+    "active_state": "active",
+    "sub_state": "exited",
+    "result": "success",
+    "exec_main_code": 1,
+    "exec_main_status": 0,
+    "exec_main_exit_timestamp_monotonic": 797749463748,
+    "invocation_id": "c5e4584b95e8472fb444c0ba6bb2acde",
+    "control_group": ""
+  },
+  "first_failure": "The first terminal observation had an empty ControlGroup, so it did not satisfy the reviewed stable unit/InvocationID/ControlGroup identity predicate.",
+  "cleanup": {
+    "stop_count": 1,
+    "stop_exit_code": 0,
+    "post_stop_state": "not-found/inactive/dead",
+    "matching_unit_name_under_all_mounted_cgroup_hierarchies": false,
+    "matching_process": false,
+    "dispatcher_disposition": "CURRENT_QUIESCENCE_ACCEPTED_BY_INDEPENDENT_REVIEW"
+  },
+  "productive_followup_stopped": true,
+  "dependency_parse_performed": false,
+  "object_static_inspection_performed": false,
+  "link_or_owner_execution_performed": false,
+  "archive_path": "docs/verification/evidence/stability-layer-b-native-owner-bootstrap-failure-20260928-10.tar.gz",
+  "archive_sha256": "036e05c62f7993fc5787be794f74d38d40c79d97f391e48ac1c59cbede153eff",
+  "archive_size": 1715570,
+  "archive_members": 23,
+  "retry_permitted": false,
+  "heavy_lease_released": true,
+  "cleanup_review": {
+    "historical_retention_status": "FAIL_FAILURE_RETENTION",
+    "historical_review_path": "docs/verification/stability-layer-b-native-owner-bootstrap-failure-review-20260928-16.json",
+    "current_quiescence_status": "PASS_CURRENT_QUIESCENCE",
+    "current_recheck_path": "docs/verification/stability-layer-b-native-owner-bootstrap-cleanup-recheck-20260928-17.json",
+    "scope": "Present-state lease release only; no retroactive attempt acceptance, artifact credit or retry."
+  },
+  "acceptance_credit": false
+}

@@ -1,0 +1,37 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "ACCEPT_HOST_WAKEUP_OUTER_INITIALIZED_PENDING_ONLY",
+  "reviewer": "/root/perf_review18h",
+  "recorded_by": "/root",
+  "at": "2026-10-25T23:01:59.483056+00:00",
+  "actual_result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-17-ptrace-wakeup-outer/genuine-memset-link-correction-1/ACTUAL-WAKEUP-OUTER-FIRST-RESULT.json",
+    "bytes": 9767,
+    "sha256": "8045da5296f9bbf505a2e040af77340600d64fdc3d494c803e70f0b6cfd22b29"
+  },
+  "actual": {
+    "controlled_pairs": 4032,
+    "ABI_words": 23,
+    "providers": 12,
+    "wall_seconds": 0.395692,
+    "CPU_seconds": 0.422246,
+    "max_child_RSS_KiB": 34664,
+    "direct_children_joined": 2,
+    "groups_absent": true,
+    "streams_closed": true,
+    "CPU0_released": true
+  },
+  "correction": "Only includes: original unchanged C reference plus exact374-byte __inline_memset architecture definition730d16e6. Calls, oracles, nonzero31/72 fills and retained Rust object8627dc5d unchanged. No Rust recompile.",
+  "original_failure": "Successful Rust compile followed by unresolved __inline_memset Cdriver link, preserved in actual-parity-capture-first-1.",
+  "exclusions": [
+    "copy-failure publication",
+    "real caller serialization/ABA",
+    "production lock and pending lifetime",
+    "whole-callback selection",
+    "whole-crate/default/native acceptance",
+    "C retirement"
+  ],
+  "default_selection": false,
+  "native": false,
+  "integration_metric_credit": false
+}

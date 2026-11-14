@@ -1,0 +1,73 @@
+{
+  "operations": [
+    {
+      "argv_template": [],
+      "profile": "metadata",
+      "role": "UNUSED_INDEX_ZERO_DO_NOT_EXECUTE"
+    },
+    {
+      "argv_template": [
+        "/usr/bin/taskset",
+        "--cpu-list",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--core=0",
+        "--nofile=256",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/m07-current-native-schema-binding-20261022-1/cli-order-bounded-correction-1/bound-runtime-source-expert-correction-1/native-packet-1/review_final_threads_release.py",
+        "--config-sha256",
+        "8490515b18765817f4024eed7c0f1bc00e570ab9c7c27cbf3282e766883be963",
+        "--machine-sha256",
+        null,
+        "--snapshot-sha256",
+        null
+      ],
+      "profile": "metadata",
+      "role": "final-guard",
+      "status_path": "/home/holden/mckernel-work/host-preparation/m07-current-native-schema-binding-20261022-1/cli-order-bounded-correction-1/bound-runtime-source-expert-correction-1/native-packet-1/captures/02-final-guard/status.json",
+      "stderr_path": "/home/holden/mckernel-work/host-preparation/m07-current-native-schema-binding-20261022-1/cli-order-bounded-correction-1/bound-runtime-source-expert-correction-1/native-packet-1/captures/02-final-guard/stderr",
+      "stdout_path": "/home/holden/mckernel-work/host-preparation/m07-current-native-schema-binding-20261022-1/cli-order-bounded-correction-1/bound-runtime-source-expert-correction-1/native-packet-1/captures/02-final-guard/stdout"
+    }
+  ],
+  "profiles": {
+    "metadata": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 40,
+      "stream_fsize": 33554432
+    },
+    "native": {
+      "cpu": 7,
+      "parent_kill_grace_seconds": null,
+      "parent_wall_seconds": null,
+      "stream_fsize": 33554432
+    },
+    "reader": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 35,
+      "stream_fsize": 33554432
+    },
+    "snapshot": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 40,
+      "stream_fsize": 33554432
+    }
+  },
+  "release": {
+    "bytes": null,
+    "path": null,
+    "sha256": null
+  },
+  "root_installed_release_path": null
+}

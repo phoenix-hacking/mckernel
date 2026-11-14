@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "decision": "GO_EXACT_AUTHORIZED_SCOPED_PARENT_SOURCE_AND_OPERATION",
+  "at_utc": "2026-11-11T19:51:03.228580+00:00",
+  "reviewer": "/root/p04_source_max",
+  "author": "/root/p03_cutover_source_max",
+  "scope": "Independent finite source/FD/namespace/one-inode/profile/capture review. Only Root may execute this exact authorized parent provisioning after fresh admission. No provisioning/staging/helper or privilege action by author/reviewer.",
+  "actual_reviewer_model_effort": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/scratch-scoped-parent-review-p04source-max-1/MODEL-EFFORT-READBACK.json",
+    "bytes": 671,
+    "sha256": "9d1a1aaaad38a70b574a885680e378baa71388c47ec2a07620bf06a7efbb03ea"
+  },
+  "inputs": {
+    "SOURCE-READY.NOT-EXECUTED.json": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/scratch-scoped-parent-provision-p03-max-1/SOURCE-READY.NOT-EXECUTED.json",
+      "bytes": 2116,
+      "sha256": "27a52e51cd54d7be31022b16be1f33be647e82e7d0fb44e32f548cb081b5d5c4"
+    },
+    "REQUEST.json": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/scratch-scoped-parent-provision-p03-max-1/REQUEST.json",
+      "bytes": 11912,
+      "sha256": "3048f317a6fc3ecaaa35451e7742ff87f17b6ed9aa0d0b1f242d58ec7b748dcb"
+    },
+    "provision_scoped_parent.py": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/scratch-scoped-parent-provision-p03-max-1/provision_scoped_parent.py",
+      "bytes": 11680,
+      "sha256": "0218d5a616f6a65c6104562bbbb7ee3a6573044a4b4f1eff8402cafaf1197233"
+    },
+    "FD-SOURCE-BOOTSTRAP.py": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/scratch-scoped-parent-provision-p03-max-1/FD-SOURCE-BOOTSTRAP.py",
+      "bytes": 565,
+      "sha256": "3d172e9d184d52933951c13c06d71087455d2d4dd7d8e290ee914291333f59c8"
+    },
+    "run_root_once.py": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/scratch-scoped-parent-provision-p03-max-1/run_root_once.py",
+      "bytes": 7258,
+      "sha256": "a6b75eea1fac1d1b9c161d7d2a6acaad3e46303e93375b616f5134acd66ce9a9"
+    },
+    "CONTRACT.json": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/scratch-scoped-parent-provision-p03-max-1/CONTRACT.json",
+      "bytes": 1707,
+      "sha256": "71fe673cbb58a4c7e7758b990a664bb04cb79746c6cf8d74c615f5a2a63764c8"
+    },
+    "EXECUTOR-READBACK.json": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/scratch-scoped-parent-provision-p03-max-1/EXECUTOR-READBACK.json",
+      "bytes": 856,
+      "sha256": "f240d0fea16bae928cd8234e09a70dc0794935c182920e5c4e1c78c96e07fe9d"
+    }
+  },
+  "authorization": {
+    "source": "SourcePR6805178926",
+    "scope": "Only exact /home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent UID1000:GID1000 mode0700; no old object/ancestor/mount/native release",
+    "supersedes": "Only this new exact target overrides earlier source-only no-sudo/no-write disposition; all other holds remain"
+  },
+  "only_authorized_target": {
+    "ancestor": "/home/holden/mckernel-work/scratch",
+    "ancestor_identity": {
+      "device": 66306,
+      "inode": 49551073,
+      "uid": 0,
+      "gid": 0,
+      "mode": 493
+    },
+    "executor_mount_namespace": "mnt:[4026531841]",
+    "containing_mount_row": "29 1 259:2 / / rw,relatime shared:1 - ext4 /dev/nvme0n1p2 rw,errors=remount-ro",
+    "basename": "m14-native-c964-a2f00a61-staging-parent",
+    "target": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent",
+    "uid": 1000,
+    "gid": 1000,
+    "mode": 448,
+    "final_output_must_remain_absent": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1"
+  },
+  "source_checks": {
+    "literal_privileged_argv_exact": [
+      "/usr/bin/sudo",
+      "-A",
+      "/usr/bin/taskset",
+      "-c",
+      "7",
+      "/usr/bin/prlimit",
+      "--as=268435456",
+      "--core=0",
+      "--cpu=30",
+      "--fsize=8388608",
+      "/usr/bin/python3",
+      "-I",
+      "-B",
+      "-c",
+      "import hashlib,os,stat,sys\np,h=sys.argv[1:];f=os.open(p,os.O_RDONLY|os.O_NOFOLLOW|os.O_CLOEXEC)\ntry:\n b=os.fstat(f);assert stat.S_ISREG(b.st_mode) and b.st_nlink==1 and b.st_size<=65536\n r=b''\n while len(r)<b.st_size:\n  x=os.read(f,min(65536,b.st_size-len(r)));assert x;r+=x\n a=os.fstat(f);assert (a.st_dev,a.st_ino,a.st_size,a.st_mtime_ns,a.st_mode)==(b.st_dev,b.st_ino,b.st_size,b.st_mtime_ns,b.st_mode)\n assert hashlib.sha256(r).hexdigest()==h\nfinally:os.close(f)\nsys.argv=[p];exec(compile(r,p,'exec'),{'__name__':'__main__','__file__':p,'__source_sha256__':h})\n",
+      "/home/holden/mckernel-work/m14-blocker-resolution-20261110/scratch-scoped-parent-provision-p03-max-1/provision_scoped_parent.py",
+      "0218d5a616f6a65c6104562bbbb7ee3a6573044a4b4f1eff8402cafaf1197233"
+    ],
+    "only_sudo_A_existing_askpass": true,
+    "helper_only_lstat_and_executable_access_not_read_or_direct_call": true,
+    "verified_source_FD_before_exec": "Bootstrap opens exact pinned regular/nlink1/nosymlink source, bounded full read, before/after devinode/size/mode/mtime and actualSHA, closes it before compile/exec. No target mutation occurs before verified bootstrap executes.",
+    "ancestor_namespace_mount": "No-follow directory-FD walk from / through home/holden/mckernel-work/scratch; exact66306:49551073 UID0:GID0/0755, visible and held identities, mnt:[4026531841], exact rootRW mount and protectedROloop44/dev1836/inode2/mount974 checked before each target mutation and after. No mount operation or permission change outside target.",
+    "exact_mutations": [
+      {
+        "name": "mkdir",
+        "line": 101,
+        "source": "os.mkdir(BASENAME,0o700,dir_fd=ancestor_fd)"
+      },
+      {
+        "name": "fchown",
+        "line": 106,
+        "source": "os.fchown(target_fd,1000,1000)"
+      },
+      {
+        "name": "fchmod",
+        "line": 108,
+        "source": "os.fchmod(target_fd,0o700)"
+      }
+    ],
+    "only_new_inode": "mkdir one literal basename below verified ancestorFD, open new directory nofollow, require samefs/root-owned0700/empty and visibleinode equality. fchown1000:1000 and fchmod0700 apply only to that held newFD. No recursive/path chmod or cleanup/unlink/rename/fallback.",
+    "existing_target_branch": "Does not mkdir/chown/chmod; opens nofollow and accepts only samefs1000:1000/0700/empty/finalabsent, reports actual existing identity and distinct existing-reconciled status. Any mismatch refuses without repair.",
+    "durability": "fsync held child and its verified parent, compare actual target identity/permissions and parent namespace again. Parent timestamps/linkcount may legitimately change from the authorized mkdir; no other object mutation is asserted.",
+    "actual_unprivileged_access": "After mutations complete, permanent real/effective/saved UID/GID1000 with supplementary1000; permitted+effective caps0; actual UID1000 access checks held+visible targetRWX and all visible ancestorX. No probe file allocated, stage final child stays absent.",
+    "FD_and_partial_failure": "Every returned directoryFD enters held list, closes once in reverse order, close errors retained and every subsequent heldFD attempted. No numeric retry/fallback/rollback/delete after ambiguous close or partial FS operation. Failure outputs retain created/partial state and nonzero status; Root must reconcile that actual inode before any new attempt.",
+    "Root_owned_capture": "Existing e088 protected Popen/birth/directwait/wholefamily/streams capture and existing guard/overhead/pins helpers reused by exactsource hashes. Actual sudo original leader + provisioner receipt/nochildren and no Root pending/directchildren required; Root retains complete raw tool completion separately. No new executor/controller framework.",
+    "capacity": "Actual fstatvfs checks>=17GiB host/>=13GiB scratch before/after:1GiB reserve above16/12 floors. This allocates no staging assets or capacity lease.",
+    "Python3_8_source_parse_only_passed": true
+  },
+  "resources": {
+    "CPU": [
+      7
+    ],
+    "family_planning_reservation_bytes": 268435456,
+    "AS_limit_each_interpreter_bytes": 268435456,
+    "aggregate_AS_cgroup_limit_claimed": false,
+    "jobs": 1,
+    "privileged_CPU_seconds": 30,
+    "privileged_FSIZE_bytes": 8388608,
+    "Root_parent_CPU_seconds": 60,
+    "Root_parent_FSIZE_bytes": 8388608,
+    "call_wall_timeout_seconds": 60,
+    "existing_call_bounded_direct_join_seconds": 6,
+    "overall_planned_wall_seconds": 90,
+    "output_capture_planning_reserve_bytes": 8388608,
+    "staging_output_reserve_not_allocated_bytes": 1073741824,
+    "scope": "One short source-only authorized metadata/provisioning family; actual RSS/family/current-job accounting is Root-owned and inside sharedHOST4GiB/max3/all overhead, fresh26GiB/floors. No native grant. Provisioner has no fork/subprocess and asserts no direct children."
+  },
+  "Root_fresh_conditions": [
+    "Exact SourcePR6805178926 permission is only for this one target. No earlier rejected request, native grant, old source/lease/Scratch object or stage operation is revived.",
+    "Use exact3048 request/a6b7 parent/0218 source/3d17 bootstrap and this review; no shell reinterpretation, credential read/helper direct call, other sudo action or fallback.",
+    "Fresh actual service/auth/account/stop/cumulative credit and sharedHOST4GiB/max3/alloverhead/26GiB/CPU7/floors admission; Root reconciles actual current job0. The256MiB family value is planning, each interpreterAS is limited separately; no aggregate cgroup cap is claimed.",
+    "Retain original tool handle/full untruncated Root terminal and streams plus positive exact client and FD proof before actual current process-charge retirement. Parent RESOURCE-RELEASE.json is only a payload-join advisory: it is not proof of outer Root tool completion or authority to release any historical/global/native owner.",
+    "Any partial or failed provision/FD/tool outcome is retained without chmod/delete/remount or another-actor retry. Any actual next correction needs its meaningful new source/input and review."
+  ],
+  "only_success_scope": "Actual provisioned or read-only reconciled exact staging parent and UID1000 access, with final stage child absent. Later a2f stager-parent/output pin delta requires actual receipt and separate reviewed staging operation. No stage/native/controller/Rootpackage installation/source-currentfree/account or original M14/M15 acceptance.",
+  "findings": [],
+  "reviewer_actions": {
+    "metadata_source_AST_and_private_review_only": true,
+    "provisioning_staging_source_import_helper_sudo_native_or_canonical_execution": false
+  },
+  "all_other_permissions_holds_UNKNOWNs_and_dirtywork_preserved": true
+}

@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "file.dup-shared-offset",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/file.dup-shared-offset"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["read_total=8 bad_index=8 shared_offset=8"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Interleaved reads through fd and dup consume one shared open-file offset", "All eight bytes equal the independent source vector", "Final shared offset equals 8"],
+  "unresolved_expectations": ["Freeze canonical output and reviewed input/oracle SHA256 before execution."],
+  "max_question_for_reviewer": "Confirm dup descriptors share file offset and alternating reads consume bytes in order."
+}

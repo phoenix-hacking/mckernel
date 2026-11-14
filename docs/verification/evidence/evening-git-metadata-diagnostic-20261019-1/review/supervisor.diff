@@ -1,0 +1,83 @@
+--- /home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/observe-root-identity-debug.py
++++ supervise-git-metadata-only.py
+@@ -1,8 +1,6 @@
+ #!/usr/bin/python3
+-"""Dedicated finite ROOT_OBSERVE producer, no effect-mode option.
+-Reuses reviewed regular capture/limited child/direct-wait pattern; adds owned
+-session retirement proof required for complete root proc/Docker census timeout.
+-No deletion/trim/container mutation/build/guest authority.
++"""Finite ROOT-GIT-METADATA-ONLY supervisor; accepted bounded owned-group
++retirement/capture mechanics retained. No cleanup observation or deletion.
+ """
+ import argparse
+ import hashlib
+@@ -17,8 +15,10 @@
+ import time
+ import types
+ 
+-BASE = Path('/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1')
+-SOURCE = BASE / 'exact120.py'
++BASE = Path('/home/holden/mckernel-work/host-preparation/evening-git-metadata-diagnostic-20261019-1')
++SOURCE = Path('/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/exact120.py')
++DIAGNOSTIC = BASE / 'git-metadata-only.py'
++SOURCE_PIN = '0c134ee778b273610ead1ecc507caa038642459c0a065c956b4431c35c755917'
+ CAP = 33554432
+ 
+ 
+@@ -86,8 +86,9 @@
+     source_raw = fixed_small(SOURCE)
+     source_sha = hashlib.sha256(source_raw).hexdigest()
+     own_sha = hashlib.sha256(fixed_small(Path(__file__).resolve())).hexdigest()
+-    if (release['status'] != 'OBSERVATION_RELEASE' or release['source_sha256'] != source_sha or
+-            release['observation_wrapper_sha256'] != own_sha):
++    if (release['status'] != 'ROOT_GIT_METADATA_ONLY_RELEASE' or source_sha != SOURCE_PIN or
++            release['source_sha256'] != source_sha or release['wrapper_sha256'] != own_sha or
++            release['diagnostic_sha256'] != hashlib.sha256(fixed_small(DIAGNOSTIC)).hexdigest()):
+         raise RuntimeError('observation source/release gate')
+     # Execute already pinned source definitions in memory, without import writes.
+     contract = types.ModuleType('exact120_observation_contract')
+@@ -95,7 +96,7 @@
+     exec(compile(source_raw, str(SOURCE), 'exec'), contract.__dict__)
+     directory, ancestry = contract.safe_directory(BASE)
+     opened = []
+-    report = {'status': 'STARTING', 'argv': ['/usr/bin/python3', '-I', str(SOURCE), '--mode', 'observe', '--release', a.release],
++    report = {'status': 'STARTING', 'argv': ['/usr/bin/python3', '-I', str(DIAGNOSTIC), '--release', a.release, '--release-sha256', a.release_sha256],
+               'source_sha256': source_sha, 'wrapper_sha256': own_sha, 'release_sha256': a.release_sha256,
+               'boot_id': Path('/proc/sys/kernel/random/boot_id').read_text().strip(),
+               'limits': {'affinity': '6', 'jobs': 1, 'as_bytes': 4294967296, 'cpu_seconds': 60, 'wall_seconds': 90,
+@@ -104,7 +105,7 @@
+     child = None
+     began = time.monotonic()
+     try:
+-        for name in ('actual-observation-5.stdout', 'actual-observation-5.stderr', 'actual-observation-5.supervisor.jsonl'):
++        for name in ('git-metadata-only-1.stdout', 'git-metadata-only-1.stderr', 'git-metadata-only-1.supervisor.jsonl'):
+             fd = os.open(name, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600, dir_fd=directory)
+             opened.append(fd)
+         os.fsync(directory)
+@@ -162,7 +163,7 @@
+                 report['mutex_identity_preserved_and_available'] = True
+             finally:
+                 os.close(checkfd)
+-            report['status'] = 'OBSERVATION_JOINED' if report['returncode'] == 0 and not report.get('timed_out') else 'OBSERVATION_FAILED_RETIRED'
++            report['status'] = 'GIT_METADATA_DIAGNOSTIC_JOINED' if report['returncode'] == 0 and not report.get('timed_out') else 'GIT_METADATA_DIAGNOSTIC_FAILED_RETIRED'
+         except BaseException as exc:
+             report['error'] = repr(exc)
+             report['status'] = 'STOP_UNCERTAIN'
+@@ -185,7 +186,7 @@
+         report['elapsed_seconds'] = time.monotonic() - began
+         report['capture_metadata'] = [contract.meta(os.fstat(fd)) for fd in (out, err)]
+         report['capture_sha256'] = []
+-        for index, name in enumerate(('actual-observation-5.stdout', 'actual-observation-5.stderr')):
++        for index, name in enumerate(('git-metadata-only-1.stdout', 'git-metadata-only-1.stderr')):
+             readfd = os.open(name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, dir_fd=directory)
+             try:
+                 if contract.meta(os.fstat(readfd)) != report['capture_metadata'][index] or os.fstat(readfd).st_size > CAP:
+@@ -203,7 +204,7 @@
+                 os.close(readfd)
+         emit(report)
+         print(json.dumps({'status': report['status'], 'direct_joined': report['direct_joined'], 'whole_group_retired': report['whole_group_retired']}))
+-        if report['status'] != 'OBSERVATION_JOINED':
++        if report['status'] != 'GIT_METADATA_DIAGNOSTIC_JOINED':
+             raise SystemExit(1)
+     finally:
+         for fd in opened:

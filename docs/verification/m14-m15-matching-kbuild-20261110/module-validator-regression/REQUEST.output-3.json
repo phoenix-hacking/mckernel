@@ -1,0 +1,387 @@
+{
+  "status": "FROZEN_DISTINCT_ASM_INCLUDE_PROFILE_SUCCESSOR_OUTPUT3_PENDING_P03_COMBINED_GO_AND_ROOT_FRESH_ADMISSION",
+  "owner": "/root/p04_tests_max private test preparation; Root sole actual executor/compositor/publisher",
+  "original_checks": [
+    "M14-I02 matching image/module compiler provenance at actual scope",
+    "M15-I02 three project Rust/ASM module ownership"
+  ],
+  "inputs": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/validator-tests-1/INPUTS.output-3.json",
+    "bytes": 26513,
+    "sha256": "cd7b659070093e4d9816ce577cdbe92ece0dbfaae4bc7e2bcc193b862ea0546b"
+  },
+  "candidate": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/assembly-includes-correction-1/candidate/scripts/native_rust_kbuild_link_closure.py",
+    "bytes": 70920,
+    "sha256": "33d7bd01c5291a4f94c12f6636a5d90e11b12fe8c5c8be3afc88bf097b177833"
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/assembly-includes-correction-1/ASM-EXACT-KBUILD-INPUTS.patch",
+    "bytes": 2147,
+    "sha256": "1a8c9c63988c933cc7b28635f5a3b4f3d92711e165562f2a3805bfdef0759d2c"
+  },
+  "source_contract": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/assembly-includes-correction-1/CONTRACT-GAP.json",
+    "bytes": 49554,
+    "sha256": "8467eef2155fe68bfcbaaa5ff3bafc6d5c776bb2c505f71341f3d6d74e90d1da"
+  },
+  "baseline": {
+    "source": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/validator-correction-1/preimage/scripts/native_rust_kbuild_link_closure.py",
+      "bytes": 69374,
+      "sha256": "dcf60a94f46a8312cf60a67cba0a28d3dc27654083d1d0c5d25bf3ccad6c0523"
+    },
+    "retained_actual_failure": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/correction-1/execution-1/RESULT.json",
+      "bytes": 1047,
+      "sha256": "2c35425467c1a98663e4270454dc02e4bb3f3a203c4010f889614388d1abb068"
+    },
+    "retained_stderr": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/correction-1/execution-1/payload.stderr",
+      "bytes": 269,
+      "sha256": "8e18748dccb293a25b839e8eff28332d72b5c58e57455f716db3e42f499ae3f8"
+    },
+    "actual_message": "native Rust Kbuild link closure: .ihk_smp_x86_64.o.cmd compiler dependency closure differs at entry 47: expected='/source/drivers/misc/mckernel/smp_application_syscall.rs', actual='/source/drivers/misc/mckernel/current_fork_task_mm.rs' (expected 63 entries, actual 65)",
+    "execute": false,
+    "reason": "Actual11:29 failure on these same19records is preserved and reused. Parent explicitly forbids rerunning unchanged failedcollector; no baseline or build replay.",
+    "actual_container_command_binding": "Existing collect-and-qualify payload invoked /usr/bin/python3-I-B /helpers/scripts/native_rust_kbuild_link_closure.py with /capture/records and exact /capture/records/stage-lock.json. The baseline preimage equals that retained helpers-099 source."
+  },
+  "commands": [
+    {
+      "name": "candidate-actual",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=536870912:536870912",
+        "--core=0:0",
+        "--fsize=67108864:67108864",
+        "--",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/assembly-includes-correction-1/candidate/scripts/native_rust_kbuild_link_closure.py",
+        "--records-dir",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/capture-1/records",
+        "--stage-lock",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/capture-1/records/stage-lock.json",
+        "--output",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/validator-tests-1/output-3/candidate-actual.json"
+      ],
+      "expected_exit": 0,
+      "output": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/validator-tests-1/output-3/candidate-actual.json",
+      "required": "Actual complete three-module raw compiler/link/source/assembly/stage/generated-metadata closure, not a source-count assertion."
+    },
+    {
+      "name": "missing-dependency",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=536870912:536870912",
+        "--core=0:0",
+        "--fsize=67108864:67108864",
+        "--",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/assembly-includes-correction-1/candidate/scripts/native_rust_kbuild_link_closure.py",
+        "--records-dir",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/validator-tests-1/controls/missing-dependency",
+        "--stage-lock",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/capture-1/records/stage-lock.json",
+        "--output",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/validator-tests-1/output-3/missing-dependency.json"
+      ],
+      "expected_exit": 1,
+      "expected_stderr_fragment": "compiler dependency closure differs",
+      "output_must_not_exist": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/validator-tests-1/output-3/missing-dependency.json"
+    },
+    {
+      "name": "reordered-dependencies",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=536870912:536870912",
+        "--core=0:0",
+        "--fsize=67108864:67108864",
+        "--",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/assembly-includes-correction-1/candidate/scripts/native_rust_kbuild_link_closure.py",
+        "--records-dir",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/validator-tests-1/controls/reordered-dependencies",
+        "--stage-lock",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/capture-1/records/stage-lock.json",
+        "--output",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/validator-tests-1/output-3/reordered-dependencies.json"
+      ],
+      "expected_exit": 1,
+      "expected_stderr_fragment": "compiler dependency closure differs",
+      "output_must_not_exist": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/validator-tests-1/output-3/reordered-dependencies.json"
+    },
+    {
+      "name": "extra-dependency",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=536870912:536870912",
+        "--core=0:0",
+        "--fsize=67108864:67108864",
+        "--",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/assembly-includes-correction-1/candidate/scripts/native_rust_kbuild_link_closure.py",
+        "--records-dir",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/validator-tests-1/controls/extra-dependency",
+        "--stage-lock",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/capture-1/records/stage-lock.json",
+        "--output",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/validator-tests-1/output-3/extra-dependency.json"
+      ],
+      "expected_exit": 1,
+      "expected_stderr_fragment": "compiler dependency closure differs",
+      "output_must_not_exist": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/validator-tests-1/output-3/extra-dependency.json"
+    },
+    {
+      "name": "extra-compiler-option",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=536870912:536870912",
+        "--core=0:0",
+        "--fsize=67108864:67108864",
+        "--",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/assembly-includes-correction-1/candidate/scripts/native_rust_kbuild_link_closure.py",
+        "--records-dir",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/validator-tests-1/controls/extra-compiler-option",
+        "--stage-lock",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/capture-1/records/stage-lock.json",
+        "--output",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/validator-tests-1/output-3/extra-compiler-option.json"
+      ],
+      "expected_exit": 1,
+      "expected_stderr_fragment": "contains an extra Rust dependency search input",
+      "output_must_not_exist": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/validator-tests-1/output-3/extra-compiler-option.json"
+    },
+    {
+      "name": "cross-module-owner",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=536870912:536870912",
+        "--core=0:0",
+        "--fsize=67108864:67108864",
+        "--",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/assembly-includes-correction-1/candidate/scripts/native_rust_kbuild_link_closure.py",
+        "--records-dir",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/validator-tests-1/controls/cross-module-owner",
+        "--stage-lock",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/capture-1/records/stage-lock.json",
+        "--output",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/validator-tests-1/output-3/cross-module-owner.json"
+      ],
+      "expected_exit": 1,
+      "expected_stderr_fragment": "mcctrl.mod raw object-list response differs",
+      "output_must_not_exist": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/validator-tests-1/output-3/cross-module-owner.json"
+    },
+    {
+      "name": "undeclared-config",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=536870912:536870912",
+        "--core=0:0",
+        "--fsize=67108864:67108864",
+        "--",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/assembly-includes-correction-1/candidate/scripts/native_rust_kbuild_link_closure.py",
+        "--records-dir",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/validator-tests-1/controls/undeclared-config",
+        "--stage-lock",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/capture-1/records/stage-lock.json",
+        "--output",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/validator-tests-1/output-3/undeclared-config.json"
+      ],
+      "expected_exit": 1,
+      "expected_stderr_fragment": ".mcctrl_rust.o.cmd dependency entry is not one path or the exact module configuration record: '    $(wildcard include/config/UNDECLARED_MCCTRL_CONFIG)",
+      "output_must_not_exist": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/validator-tests-1/output-3/undeclared-config.json"
+    },
+    {
+      "name": "asm-unknown-include",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=536870912:536870912",
+        "--core=0:0",
+        "--fsize=67108864:67108864",
+        "--",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/assembly-includes-correction-1/candidate/scripts/native_rust_kbuild_link_closure.py",
+        "--records-dir",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/validator-tests-1/controls/asm-unknown-include",
+        "--stage-lock",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/capture-1/records/stage-lock.json",
+        "--output",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/validator-tests-1/output-3/asm-unknown-include.json"
+      ],
+      "expected_exit": 1,
+      "expected_stderr_fragment": ".m15_mmap_trace_gates.o.cmd assembly include closure differs",
+      "output_must_not_exist": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/validator-tests-1/output-3/asm-unknown-include.json"
+    }
+  ],
+  "ordering": "Candidate33 actual complete three-module closure first, then SAME SIX UNSTARTED controls, then the new one-record ASM include control. Stop first unexpected result. Old baseline,40d7 and49 actual failures remain retained and are not replayed; no kernel/compiler/config/green-suite replay.",
+  "cwd": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/validator-tests-1",
+  "clean_environment": {
+    "PATH": "/usr/bin:/bin",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "CMAKE_BUILD_PARALLEL_LEVEL": "1",
+    "MAKEFLAGS": "-j1",
+    "OMP_NUM_THREADS": "1"
+  },
+  "interpreter": {
+    "path": "/usr/bin/python3",
+    "actual_bound_version_reused": "3.8.10",
+    "resolved_binding_reused": "/usr/bin/python3.8; existing program-behavior-1/PYTHON-BINDING.json",
+    "source_compatibility": "Standalone future-print validator uses only Python3.8-supported stdlib/syntax (argparse/hashlib/json/os/re/shlex/stat/sys/tempfile, os.fspath/O_NOFOLLOW/lstat/fstat/replace). No >=3.10 claim, PyYAML import, Anaconda/native interpreter assumption or tool/version probe. Actual native3.12/PyYAML qualification is retained but unnecessary for this source-supported HOST reader."
+  },
+  "profile": {
+    "CPU": [
+      6
+    ],
+    "jobs": 1,
+    "AS_bytes": 536870912,
+    "FSIZE_bytes": 67108864,
+    "CORE_bytes": 0,
+    "per_command_wall_seconds_max": 15,
+    "complete_serial_batch_wall_seconds_max": 60,
+    "owned_retirement_seconds": 6,
+    "disk_allowance_bytes": 16777216,
+    "shared_HOST_bytes_total_including_controllers_workers": 4294967296,
+    "aggregate_HOST_jobs_max": 3,
+    "HOST_CPUs": [
+      0,
+      6,
+      7
+    ],
+    "fresh_MemAvailable_bytes_minimum": 27917287424,
+    "host_disk_free_floor_bytes": 17179869184,
+    "scratch_disk_free_floor_bytes": 12884901888,
+    "native_CPUs2_5_12GiB_and_all18GiB_UNKNOWN_reservations_untouched": true
+  },
+  "Root_preparation": "Require a fresh real empty private output-3 owned currentUID1000 with nonsymlink parents; do not overwrite retained capture/failed collector/source/config/kernel/module or control records. Root provides existing bounded exact-birth direct-child capture with positive waits/closed streams and no residualUNKNOWN for all eight commands; all processes share this one light HOST grant. Eight raw argv/PID/birth/status/stdout/stderr/ownership/resource records and actual JSON outcome are retained. Any unexpected failure stops before the next command and receives at most bounded reviewed correction after meaningful changed input.",
+  "positive_output_assertions": [
+    "Complete candidate command exits0 and writes its canonical closureJSON after reading the exact actual19records and stage-lock; three module identities exactly ihk,ihk-smp-x86_64,mcctrl.",
+    "raw_record_names/raw_records hashes match these actual19files; stage_lock.sha256 matches captured f0f7cf6f. No captured file is changed by any command.",
+    "Both current_fork_task_mm.rs and current_fork_control.rs appear in actual SMP source_dependencies and source_closure with their captured stage digests e2e124e84030aa6be957af6ff9c2a03116ac1b20118e28c974d24e05048b6dfe and81228204d50bd5e95bcad7671d4c6bb272ef9c516d0163b2b39a0f6a5c23a126. Successful exact order is enforced by the candidate parser; same-count reorder MUST independently fail.",
+    "All provenance-only claims remain false: complete_external_build_input_closure,credit_eligible,load_proven,production_ready,runtime_proven. No source-count-only pass, extra-dependency allowance or module acceptance is inferred.",
+    "The exact actual MCCTRL37-entry body is now accepted with nineteen explicit config wildcard records in source/fixdep order only after mcctrl_mm_write.rs; IHK/SMP/flags/owners and all non-table logic retain their reviewed behavior.",
+    "Candidate33 preserves previously accepted exact SMP65 andMCCTRL19config models. BOTH actual ASM records now pass explicit ten-path include order and the eight exact source/config/Clang21-supported tokens; no generic prefix/count/token or unrelated C/Rust option waiver. Actual JSON must still bind exact records/stage/owners/all final links."
+  ],
+  "negative_output_assertions": [
+    "Every negative directory is byte-identical to actual records/stage-lock except its one declared record delta; actual base is used directly for positive result.",
+    "Missing/reordered/extra dependency each exits1 with compiler dependency closure differs; these controls distinguish identities/order from counts and reject an extra already-staged but unimported input.",
+    "Extra compiler input-search option exits1 with the declared extra Rust dependency search input diagnostic; cross-module object owner exits1 with mcctrl.mod raw object-list response differs.",
+    "No negative --output target exists after rejection; no fallback success or ignored diagnostic qualifies.",
+    "Undeclared-config changes only one real MCCTRL wildcard at its real position, preserving count and other bytes. It must exit1 at exact-module-configuration guard with UNDECLARED_MCCTRL_CONFIG in the diagnostic and create no output.",
+    "ASM include negative retains ten include count and replaces only an exact root with an undeclared child path inside the same apparent namespace. It must exit1 with assembly include closure differs and create no output; exact identities, not namespace/count, are required."
+  ],
+  "scope_limits": "Source-supported one-line exact SMP dependency tuple correction only. Reuse unchanged actual kernel/threeKO/config/generated/symvers/source099/IHK8d and3module metadata. No Docker, compiler, module load, native runtime, original SDK test suite, full build or failedcollector replay. Project C retirement/image/module runtime/original acceptance and percentages remain unchanged; all generic/exec/replay/UNKNOWN/source/native/account holds persist.",
+  "next_owner": "Existing P03MAX combined material source/test-binding review. Root alone executes eight exact metadata-reader commands after source/operationGO and fresh CPU6/512MiB/all-work admission, then integrates/publishes only qualified changed consumer and separately reviews failedreader helperbinding successor. No separateSourceAcq duplication, Docker/compiler/kernel/config/native/oldgreen replay.",
+  "executed": false,
+  "tests_or_validator_imports_by_preparation_owner": 0,
+  "acceptance_delta": 0,
+  "successor_failure_family": {
+    "name": "Distinct actual ASM exact include/profile data omission",
+    "prior_request": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/validator-tests-1/REQUEST.output-2.json",
+      "bytes": 23213,
+      "sha256": "308a9bc9ce94d9576d791bd9c09582c0aee187843782fac2376c161337f78a7a"
+    },
+    "retained_candidate49_result": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/validator-tests-1/execution-2/RESULT.json",
+      "bytes": 848,
+      "sha256": "d417f4aa732144fb2a04f8b36c4b00d039295ef468bf077aa4d0f54aca7519bf"
+    },
+    "retained_candidate49_stderr": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/validator-tests-1/execution-2/candidate-actual.stderr",
+      "bytes": 94,
+      "sha256": "3c8d32c2da96e74ccbb353a9c622d30b684fcaca3fbcf47155ba081fd07d533f"
+    },
+    "retained_candidate49_ownership": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/validator-tests-1/execution-2/ownership.json",
+      "bytes": 382,
+      "sha256": "ceb282d67f6c8cf662624e256fdb27cf899ef82eb7c46374a0217d77d6cc1fde"
+    },
+    "actual_failure": "12:03:18 candidate49 progressed past SMP65 andMCCTRL19configuration then failed at .m15_mmap_trace_gates.o.cmd assembly include closure. One child917506/birth39846447 joined/noresidual; all six negatives UNSTARTED.",
+    "meaningful_changed_input": "Candidate33 adds exact source/object module include paths and eight literal/profile-derived ASM-only tokens for both actual Clang21 leaves. Prior source/dependency/config/owner/mandatory grammar checks remain.",
+    "new_private_output": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/validator-tests-1/output-3",
+    "prior_outputs_and_controls_unchanged": true,
+    "new_control": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/validator-tests-1/controls/asm-unknown-include.patch",
+      "bytes": 2135,
+      "sha256": "03e8c6c346d94d7b6938ecd4b97f5d644b8ef843406972caa03c8fcbc46d445d"
+    },
+    "source_review": "ExistingP03MAX independently reviews changed source and this concrete test-binding delta together, reusing unchanged28e operation profile; no duplicateSourceAcq review."
+  },
+  "previous_MCCTRL_failure_family": {
+    "name": "Distinct actual MCCTRL fixdep configuration data omission",
+    "prior_request": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/validator-tests-1/REQUEST.json",
+      "bytes": 18158,
+      "sha256": "02f7d19e06ad2efcd4c5d73f5a5e96a5bdd0c032e53b8492af67a952616db26d"
+    },
+    "retained_failed40d7_result": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/validator-tests-1/execution-1/RESULT.json",
+      "bytes": 926,
+      "sha256": "3174dd6109e39a7a0907ed2c74836a77f15c7ca58b0f8d83e20689876d33ee90"
+    },
+    "retained_failed40d7_stderr": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/validator-tests-1/execution-1/candidate-actual.stderr",
+      "bytes": 170,
+      "sha256": "1f19ae85311fb2b1542cf9e35ae0368ae7a866a928ae9a7254360cb2f7339eed"
+    },
+    "retained_failed40d7_ownership": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/validator-tests-1/execution-1/ownership.json",
+      "bytes": 382,
+      "sha256": "5b5fbf0087186ee34a578da7a2cf119744953820b2e8c944d9236e55808998da"
+    },
+    "actual_failure": "11:46 candidate40d7 accepted corrected SMP rows then failed on the first actual MCCTRL four-space X86_64 wildcard; one child911360/birth39745509 joined, no residual. All five negatives were unstarted.",
+    "meaningful_changed_input": "Candidate49 only populates exact nineteen MCCTRL literal configuration dependencies and their after-mcctrl_mm_write.rs position. No wildcard/grammar waiver, source expansion, compiler/config/build change or SMP rollback.",
+    "new_private_output": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/validator-tests-1/output-2",
+    "prior_outputs_and_controls_unchanged": true,
+    "new_control": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/validator-tests-1/controls/undeclared-config.patch",
+      "bytes": 472,
+      "sha256": "1f762bc781995292b658c61ce14b111c912712c5ad588688400907ba336ec771"
+    },
+    "source_review": "P03MAX independently reviews source delta; separate sourceAcqMAX operation/profile delta GO required before Root execution."
+  }
+}

@@ -1,0 +1,262 @@
+{
+  "scope": "Packaging-time passive hash inspection only; no build, retest or target execution.",
+  "producer_archive": {
+    "path": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/whole70/libihklib_whole70.a",
+    "bytes": 21932666,
+    "sha256": "c7b894200495dec4b1dbe193f840548d44d298950e33a796d5df2935390b440e"
+  },
+  "native_static_libs_response": {
+    "path": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/whole70/native-static-libs.rsp",
+    "bytes": 43,
+    "sha256": "736d4bb02335f153ad2eaa134371d085e70599f3538014b37714d7453305f29b"
+  },
+  "native_static_libs": "-lgcc_s\n-lutil\n-lrt\n-lpthread\n-lm\n-ldl\n-lc\n",
+  "cli_objects": [
+    {
+      "path": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/ihkconfig.o",
+      "bytes": 53128,
+      "sha256": "eed5266148ab5d8df49827d896bbacc8e466f3468c47209de3e27a8d3f8900c2"
+    },
+    {
+      "path": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/ihkosctl.o",
+      "bytes": 45120,
+      "sha256": "8fb1b6ba4262b17a5884ca254147800e497837aadd169d2d5453423674187f6f"
+    }
+  ],
+  "parser_consumer_binary": {
+    "path": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/parser-abi-consumer",
+    "bytes": 12648,
+    "sha256": "579efae21f87b844cc8f9feab048cca5d642695c7feef930ec4240f49a484ee9"
+  },
+  "parser_result_stdout": "Actual formatter provider: /workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/libihk.so\nPASS actual libihk exported C ABI: 255 nonempty CPU subsets, explicit CPU0-gap, empty output, and sparse buffer growth; 257 parser/formatter round trips; no device APIs\n",
+  "small_cli_preflight_outputs": {
+    "ihkconfig-no-arguments": {
+      "stdout": "",
+      "stderr": "Usage: ihkconfig (dev #) (action)\naction:\n    create\n    destroy\n    scratch\n    sbox\n    read\n    mmap\n    ioctl\n    clear_kmsg\n    clear_kmsg_write\n    reserve cpu|mem [resources]\n    release cpu|mem [resources]\n    query cpu|mem\n    get os_instances\n    get buildid\n"
+    },
+    "ihkosctl-no-arguments": {
+      "stdout": "",
+      "stderr": "Usage: ihkosctl (dev #) (action)\naction:\n    load (kernel.img)\n    boot\n    shutdown\n    assign cpu|mem \n           cpu (cpu_list) \n           mem (size@NUMA) \n    release cpu|mem \n            cpu (cpu_list) \n            mem (size@NUMA) \n    set ikc_map (cpu_list:cpu+cpu_list:cpu+..) \n    get ikc_map\n    query [cpu|mem]\n    query_free_mem\n    kargs (kernel arg)\n    get status\n    kmsg\n    clear_kmsg\n    intr cpu irq_vector\n    ioctl (req) (arg)\n    dump [-d level] [file]\n"
+    },
+    "ihkmond-help-short": {
+      "stdout": "ihkmond [--help|-?] [-f <facility_name>] [-k <redirect_kmsg>] [-n <detect_hungup>]\n--help            \tShow usage\n-f <facility_name>\tUse <facility_name> when redirecting kmsg by using syslog()\n-k <redirect_kmsg>\t1: Redirect kmsg\n                  \t0: Otherwise\n-i <monitor_interval>\t!=-1: Polling interval (in second) for detecting hungup\n                  \t-1: Don't detect hungup\n",
+      "stderr": ""
+    },
+    "ihkmond-help-long": {
+      "stdout": "ihkmond [--help|-?] [-f <facility_name>] [-k <redirect_kmsg>] [-n <detect_hungup>]\n--help            \tShow usage\n-f <facility_name>\tUse <facility_name> when redirecting kmsg by using syslog()\n-k <redirect_kmsg>\t1: Redirect kmsg\n                  \t0: Otherwise\n-i <monitor_interval>\t!=-1: Polling interval (in second) for detecting hungup\n                  \t-1: Don't detect hungup\n",
+      "stderr": ""
+    }
+  },
+  "maps_hashes": [
+    {
+      "path": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/libihk.map",
+      "bytes": 2260826,
+      "sha256": "2480e5c527e6d1e89d7b0f9543ce0f262aeefbf2e198ea15c32b22ad8c70eee1"
+    },
+    {
+      "path": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/ihkconfig.map",
+      "bytes": 10788,
+      "sha256": "eff23b7e4309cefbf2f59268c1c237fa6f5d12e0973ae9a1715e4a42cdac47b9"
+    },
+    {
+      "path": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/ihkosctl.map",
+      "bytes": 10594,
+      "sha256": "7b5aac472dd2d3752fcc2f76f5405128bc9548e7585916a4eb1e14f02d4c17c1"
+    },
+    {
+      "path": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/ihkmond.map",
+      "bytes": 2256672,
+      "sha256": "a5fcf24badde79b937202f7d2f4ecf1fb63bc5c1be83bec434cc027a690fab95"
+    },
+    {
+      "path": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/parser-abi-consumer.map",
+      "bytes": 8352,
+      "sha256": "caf54357cc44bcd4dbf70f210000e63a0158aff0caf16fd52f679ee33b15db1c"
+    }
+  ],
+  "actual_exports_dump": {
+    "path": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/libihk-exports.stdout",
+    "bytes": 189660,
+    "sha256": "e9b231cfbc1b2ec4d28b2be99d3d679cb20649472c22c41003c6cdaf804bd9cf"
+  },
+  "source_input_hashes_observed_at_packaging": [
+    {
+      "path": "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/user/rust/build_ihkconfig.py",
+      "bytes": 1341,
+      "sha256": "5ad48fb3de1349061fddd0c2a561028a35798336693ff1fc1db0086dc90807bc"
+    },
+    {
+      "path": "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/user/rust/build_ihkosctl.py",
+      "bytes": 1105,
+      "sha256": "54327b9972cefa0a98e78ad6dcf549a8f154b0323a8e314f372744bd09ba428e"
+    },
+    {
+      "path": "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/user/rust/ihkconfig.rs",
+      "bytes": 23636,
+      "sha256": "c6cd70556eb8dc43edb461708a4a9d4940ac24e5ba22e62297a9be2da3568c2d"
+    },
+    {
+      "path": "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/user/rust/ihkmond.rs",
+      "bytes": 23108,
+      "sha256": "d6aca3a1433222148e04448100cfba20280cb8576c5aa6dfae22ec3e06b19cdf"
+    },
+    {
+      "path": "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/user/rust/ihkosctl.rs",
+      "bytes": 17910,
+      "sha256": "137743900f68985a3c9d07b9517e5d6fbdfbf1d1eba0cc511b48427f5f5fbba7"
+    },
+    {
+      "path": "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/user/rust/whole70/abi/combined_selected_SDK_actual_header_ABI.c",
+      "bytes": 1743,
+      "sha256": "df92feb1f21ae49ce9d8a5c2e5a1fc89ffee61e2aa0c5c6c5c17013e492b3acc"
+    },
+    {
+      "path": "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/user/rust/whole70/abi/diagnostic_origins.selected_target_C_witness.c",
+      "bytes": 3783,
+      "sha256": "ba54b173d3e2efec723e8e6b6dec505a97070e1944b8fd03dd1a12a7a9e565c6"
+    },
+    {
+      "path": "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/user/rust/whole70/abi/dump_abi_witness.c",
+      "bytes": 5380,
+      "sha256": "e50f855bc3dc7594b852d23255b2daeec338832769cc20f0de74f6176bcbef38"
+    },
+    {
+      "path": "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/user/rust/whole70/abi/perf_pages_abi_witness.c",
+      "bytes": 2209,
+      "sha256": "d5a83d0b6560f063cfa963bbd28dede8a4efc3fc8624142e8795935b02473f08"
+    },
+    {
+      "path": "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/user/rust/whole70/accepted_host_root.assigned_memory_dependency_join.rs",
+      "bytes": 5325,
+      "sha256": "f1b515fa9eceb75b2b912a9630641e663f21fa3ad06ab79b12d917492a9b22a2"
+    },
+    {
+      "path": "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/user/rust/whole70/build_whole70_qualified.py",
+      "bytes": 5180,
+      "sha256": "5dd07dddecc790d69f218c4dd124a7fb0fd494d36362a4d702f25c9ae8edb7c6"
+    },
+    {
+      "path": "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/user/rust/whole70/ihklib_cli_parsers_ikc_shared.rs",
+      "bytes": 9033,
+      "sha256": "931ee13f27a7ecaf057b0bd494ced56411931b7e50b7aa8a97846d46c8479d39"
+    },
+    {
+      "path": "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/user/rust/whole70/ihklib_configuration_report.rs",
+      "bytes": 3780,
+      "sha256": "54190163b43304a54c8656c5621727c966760725ecdd8ab204092e057d7a6984"
+    },
+    {
+      "path": "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/user/rust/whole70/ihklib_create_os_environment.rs",
+      "bytes": 19387,
+      "sha256": "fbb3c645ac23dadfb766c845506e93678a7c3de11a3a931a1d57c4449ae54b91"
+    },
+    {
+      "path": "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/user/rust/whole70/ihklib_dump.rs",
+      "bytes": 20305,
+      "sha256": "79ff3f621fd20b76665d98f8fc47677f106fcc4de483aa8b9a218d29cbb4aa42"
+    },
+    {
+      "path": "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/user/rust/whole70/ihklib_environment.rs",
+      "bytes": 10591,
+      "sha256": "0f97af3fe014193641686278e0e1e7d9b64b38f0a855a00792dfe0dc232f0577"
+    },
+    {
+      "path": "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/user/rust/whole70/ihklib_eventfd.rs",
+      "bytes": 4411,
+      "sha256": "77a7a43a2288f5393bf472d353521ca23192df0c2fa886b3018ef879e55b6862"
+    },
+    {
+      "path": "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/user/rust/whole70/ihklib_ikc.rs",
+      "bytes": 5936,
+      "sha256": "3f3317143cd576328d3757d81ef2a0d4148109321fc79f17fcfe3eabaff93dbf"
+    },
+    {
+      "path": "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/user/rust/whole70/ihklib_ikc_map.rs",
+      "bytes": 5927,
+      "sha256": "03feca1e0e717d243031decd821e3fb5777865aa5d508fe40253e65d423ddbed"
+    },
+    {
+      "path": "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/user/rust/whole70/ihklib_kmsg_control.rs",
+      "bytes": 2890,
+      "sha256": "9b9eef3f88d68543c9638f1190498c2740ec6121d841d23b335ad2bc1939aabe"
+    },
+    {
+      "path": "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/user/rust/whole70/ihklib_legacy_data.rs",
+      "bytes": 1874,
+      "sha256": "4d7ba9a97520ab1fef8f2ff00f7c32fe5a8c8d7015f6384c4168f886923c988b"
+    },
+    {
+      "path": "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/user/rust/whole70/ihklib_mcstat_memory_shared_parser.rs",
+      "bytes": 8009,
+      "sha256": "75d8fa2c77104a2f119aff0c5ee60da23089e06003b56f67b7fd79d2469e6601"
+    },
+    {
+      "path": "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/user/rust/whole70/ihklib_mcstat_shared_readable.rs",
+      "bytes": 4101,
+      "sha256": "8233bceea0acd9179cc2bfd822d6c97a613a4b808c81aa128e76a114c8f7942e"
+    },
+    {
+      "path": "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/user/rust/whole70/ihklib_memory_os_and_os_assigned.rs",
+      "bytes": 24330,
+      "sha256": "2daedcdf8c1a42e7d23ae83ae8e3f38adae83c785ba9b6d08e2a2b5928650ab7"
+    },
+    {
+      "path": "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/user/rust/whole70/ihklib_os_cpu.rs",
+      "bytes": 3373,
+      "sha256": "5cc4a2a96c0018368284ee38e4338cfce763ca6d5dcd45c58e06affe21fb37ed"
+    },
+    {
+      "path": "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/user/rust/whole70/ihklib_os_instance_lifecycle.rs",
+      "bytes": 1573,
+      "sha256": "2818b2c0f1385555ac75c4e7ecd84c49165320a9607f3d6a064c332969d59441"
+    },
+    {
+      "path": "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/user/rust/whole70/ihklib_os_kargs.rs",
+      "bytes": 4104,
+      "sha256": "05e7885b80fb5e62e8666fa1405836de3886613f43bfe5cda3319ad6d3e6950f"
+    },
+    {
+      "path": "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/user/rust/whole70/ihklib_os_load_boot.rs",
+      "bytes": 4081,
+      "sha256": "ff2cfce6c1080bfbebef90909c1430f7fa5aebf1c371df4c3acef827576eb40c"
+    },
+    {
+      "path": "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/user/rust/whole70/ihklib_perf.rs",
+      "bytes": 5872,
+      "sha256": "cae5525c2c8fe02d31c25e46e41f12cfce6dd742d6fd0c0c69ffaa98a32df204"
+    },
+    {
+      "path": "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/user/rust/whole70/ihklib_raw_strings.rs",
+      "bytes": 10763,
+      "sha256": "6edffa3721d54876c26ad277584cdb9f571ec8c72da891511d2faf250366dea8"
+    },
+    {
+      "path": "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/user/rust/whole70/ihklib_runtime_state.rs",
+      "bytes": 3535,
+      "sha256": "0fd576ceb1ee4f66faeb8688f04da2117975746fd70a5a2df0b8ca1b00516e12"
+    },
+    {
+      "path": "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/user/rust/whole70/ihklib_shutdown_freeze.rs",
+      "bytes": 4636,
+      "sha256": "e9a3b6d0d35d7344845d8030c4a675290d3f400ff72af3f617456ff2a23de72a"
+    },
+    {
+      "path": "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/user/rust/whole70/ihklib_status_kmsg.rs",
+      "bytes": 1372,
+      "sha256": "358c8a9bf5548745265f69bee1528be7cb1136d7df61747476959f3dd8baa440"
+    },
+    {
+      "path": "/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/user/rust/whole70/libihklib_whole70.rs",
+      "bytes": 1662,
+      "sha256": "06d61a8a66568dda04b691f5c26b666df3289e92e3cb4f26e28a28e3250c7232"
+    }
+  ],
+  "source_identity_limit": "These added source hashes are packaging-time observations; original producer/link command and receipt remain the execution records. Original artifact hashes are validated separately.",
+  "supplemental_host_udev_runtime": {
+    "path": "/usr/lib/x86_64-linux-gnu/libudev.so.1",
+    "resolved": "/usr/lib/x86_64-linux-gnu/libudev.so.1.7.8",
+    "bytes": 207288,
+    "sha256": "4298228175fa62a36af88b1afd4406cdd8b1bf166621f957d0dbbde45a698fe5",
+    "identity_scope": "Packaging-time passive hash; actual selected link command retained in ihk-link-commands.json."
+  }
+}

@@ -1,0 +1,13 @@
+--- a/run_root_once.py
++++ b/run_root_once.py
+@@ -91,8 +91,8 @@
+  return dict(path=expected['path'],identity=identity(fd),namespace=os.readlink('/proc/self/ns/mnt'),mount=mounts_for(expected['path']),protected_RO_identity=identity(rfd),protected_RO_mount=mounts_for(ro),actual_UID1000_RWX=True,available_bytes=available,final_absent_before_command=require_absent)
+ try:
+  assert os.getuid()==os.geteuid()==1000 and os.sched_getaffinity(0)=={0}
+- assert resource.getrlimit(resource.RLIMIT_AS)==(268435456,268435456) and resource.getrlimit(resource.RLIMIT_CPU)==(330,330) and resource.getrlimit(resource.RLIMIT_FSIZE)==(8388608,8388608)
+- assert sha(qpath)=='1b06530e9b09a2a7530e9753cf71db37059306c247094a3962b657c087fb972a';review=pathlib.Path(sys.argv[1]);assert sha(review)==sys.argv[2] and json.loads(review.read_text())['decision'].startswith('GO');q=json.loads(qpath.read_text());pins(q['immutable_inputs']);pins(q['inputs']);ENV=dict(q['environment'])
++ assert resource.getrlimit(resource.RLIMIT_AS)==(268435456,1073741824) and resource.getrlimit(resource.RLIMIT_CPU)==(330,330) and resource.getrlimit(resource.RLIMIT_FSIZE)==(8388608,268435456)
++ assert sha(qpath)=='eb7c682caab1c2d64508f8c4d8274dc499683e11f63c53e337c1683b75b754f5';review=pathlib.Path(sys.argv[1]);assert sha(review)==sys.argv[2] and json.loads(review.read_text())['decision'].startswith('GO');q=json.loads(qpath.read_text());pins(q['immutable_inputs']);pins(q['inputs']);ENV=dict(q['environment'])
+  assert json.loads(pathlib.Path(q['actual_parent_independent_qualification']['path']).read_text())['decision'].startswith('GO')
+  proofs=q['actual_parent_provisioning_proof'];p=json.loads(pathlib.Path(proofs['actual_provisioning_result']['path']).read_text());r=json.loads(pathlib.Path(proofs['actual_provisioning_receipt']['path']).read_text());full=json.loads(pathlib.Path(proofs['full_Root_completion']['path']).read_text());retired=json.loads(pathlib.Path(proofs['Root_current_process_retirement']['path']).read_text())
+  assert p['status']=='PASS_EXACT_SCOPED_PARENT_PROVISION_AND_REAL_UID1000_READBACK_PENDING_INDEPENDENT_RESULT_QUALIFICATION' and p['all_waits_streams_joined'] and p['remaining_direct_children']==[] and p['receipt_sha256']==proofs['actual_provisioning_receipt']['sha256']

@@ -1,0 +1,8 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "stage": "source-position export after successful wholejoin, no compiler",
+  "status": "PRESERVED_SOURCE_POSITION_OBSERVER_ASSERTION",
+  "error": "substring 'struct migrate_request {' appears twice: actual type and existing comment",
+  "correction": "Use line-start definition anchors, excluding comment text. No implementation/test/artifact changes.",
+  "runtime_credit_affected": false
+}

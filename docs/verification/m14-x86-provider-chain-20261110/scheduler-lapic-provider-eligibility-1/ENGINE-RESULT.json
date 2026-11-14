@@ -1,0 +1,245 @@
+{
+  "schema": "mckernel.scheduler-lapic-engine.eligibility.v1",
+  "invocation": "20261109T211917Z-488788ba",
+  "owner": "SavedRootsolecompositor; /root/scheduler_debug_data_review_high distinctreadonlyenginecontractwriter",
+  "decision": "GO_DISTINCT_EXACT_TWO_EXISTING_PUBLIC_F04_TIMER_ENGINES_WITH_ORIGINAL_CONSTANTS_AND_PARAMETER_CALLBACK_ONLY",
+  "authority": "Root explicitly requested DISTINCT finite engine assessment after wrappercontractfreeze; engine permission established independently by direct originalacceptedF04Cimplementation/source/selector mapping, not inferred from wrapperGO.",
+  "wrapper_contract_reuse": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-eligibility-1/RESULT.json",
+    "sha256": "38107c2acc60908d4d110a51bb673a70bffd60e601f3d991a650d256052f35f4",
+    "preserved_unchanged": true,
+    "scope": "Separateexacttwo-namedwrappercontract remainsvalid; thisadditionalcontract closesonlytheir genuinepublicenginebody sourceboundary, no backendpermission."
+  },
+  "independent_positive_membership": {
+    "active_human_plan": "CAMPAIGN M14-F04 explicitly names arch/x86_64/kernel/cpu.c accepted for primitives/startup/interrupts/context/TLS/FPU/xstate/diagnostics. Acceptance staysclosedatits originalscope.",
+    "exact_engine_basis": "Direct original F04cpu.c1279\u20131290 enable and1292\u20131296 disable implement exactgeneralLAPICtimercallbacktransactions: sameinitial/divide/periodicvector sequence or singlezero write. ActualRust1858\u20131871/1878\u20131888 implement preciselythosewrites plus their alreadyexisting typedoptionalcallback/returncontract, insideactualselectedx86_cpu_helpers source. These are not packet/syscallnotification/generic/exec/ACK/TID/XPMEM bodies.",
+    "build_selector_basis": "Actual lib.rs94 unconditionallyselectsx86_cpu_helpers; CMake187 includes actualRustfile;729\u2013730 applies MCKERNEL_RUST_X86_CPU_HELPERS to the named CPUC file, whose1273\u20131278 branch declares matching timerAPIs. Directengine definitions have no localcfg/equivalence/backendvariant.",
+    "no_hardware_scope_inference": "Engines contain scalar calculations and indirectcalls through actual caller-supplied X86LapicWriteFn only; no instruction/slotread/dataownership/bootbackend/init/publication body is needed. The runtime callback may perform hardwaretransactions, but thissource-onlyGO grants no callback/function/hardwareexecution."
+  },
+  "exact_engines": [
+    {
+      "name": "x86_lapic_timer_enable_body_result",
+      "ABI": "unsafe extern C fn(CUInt,Option<X86LapicWriteFn>)->CInt",
+      "source": {
+        "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+        "first_line": 1858,
+        "last_line": 1871,
+        "segment_sha256": "512b1e2a6163b67f78637b9b88f358d08eb91702a5ab4a2b7cf06de350a8a9ef",
+        "role": "Exactcompletepublicenableengine"
+      },
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn x86_lapic_timer_enable_body_result(\n    clocks: CUInt,\n    write_fn: Option<X86LapicWriteFn>,\n) -> CInt {\n    let Some(write) = write_fn else {\n        return -EINVAL;\n    };\n\n    write(LAPIC_TIMER_INITIAL, clocks / APIC_DIVISOR);\n    write(LAPIC_TIMER_DIVIDE, 3);\n    write(LAPIC_TIMER, LOCAL_TIMER_VECTOR | APIC_LVT_TIMER_PERIODIC);\n    0\n}\n",
+      "return_and_effect_contract": "Original None returns -EINVAL22 without callback; Some(write) callswrite in exactordered sequence (LAPIC_TIMER_INITIAL,clocks/APIC_DIVISOR16),(LAPIC_TIMER_DIVIDE,3),(LAPIC_TIMER,LOCAL_TIMER_VECTOR|APIC_LVT_TIMER_PERIODIC) then0. clocks staysu32; divisionbyactualconstant16, no invented range/rounding/zero-div policy or testinput."
+    },
+    {
+      "name": "x86_lapic_timer_disable_body_result",
+      "ABI": "unsafe extern C fn(Option<X86LapicWriteFn>)->CInt",
+      "source": {
+        "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+        "first_line": 1878,
+        "last_line": 1888,
+        "segment_sha256": "47e8be151101ec1f4d35c3aaad7a46dad15f17ce07ebb41ba6d25590c2b017f5",
+        "role": "Exactcompletepublicdisableengine"
+      },
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn x86_lapic_timer_disable_body_result(\n    write_fn: Option<X86LapicWriteFn>,\n) -> CInt {\n    let Some(write) = write_fn else {\n        return -EINVAL;\n    };\n\n    write(LAPIC_TIMER_INITIAL, 0);\n    0\n}\n",
+      "return_and_effect_contract": "Original None returns -EINVAL22 without callback; Some(write) callswrite(LAPIC_TIMER_INITIAL,0) once then0. Do not add mask/ack/barrier/IRQ/register policy."
+    }
+  ],
+  "strict_required_closure": {
+    "types": [
+      {
+        "source": {
+          "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+          "first_line": 5,
+          "last_line": 5,
+          "segment_sha256": "b09cd972ccaa959019e419236b46df2f11a8eebbae2cbcf8380be1a3c45e7ad6",
+          "role": "ActualCInt32"
+        },
+        "definition": "pub type CInt=i32; actualABI module reused, no new structure/layout"
+      },
+      {
+        "source": {
+          "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+          "first_line": 9,
+          "last_line": 9,
+          "segment_sha256": "c805374cb64cd23693fd085ad2b8826126eb2efd01b8e083c7686ec006e7f358",
+          "role": "ActualCUInt32"
+        },
+        "definition": "type CUInt=u32;"
+      },
+      {
+        "source": {
+          "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+          "first_line": 69,
+          "last_line": 69,
+          "segment_sha256": "a3644f3493daf9d3fe90a693caa33431ada9dbb7f11af2046b7802f24e7a625b",
+          "role": "Exactgenuinecallbacktype"
+        },
+        "definition": "type X86LapicWriteFn=unsafe extern C fn(CInt,CUInt); Option uses the originalnullabletypedCfunctionparameter, not a newbackend/slot owner."
+      }
+    ],
+    "constants": [
+      {
+        "name": "EINVAL",
+        "type": "CInt",
+        "value": "22",
+        "actual_Rust_definition": "const EINVAL: CInt = 22;",
+        "Rust_source_line": 11,
+        "Rust_segment_sha256": "859c14c67e6dfbcf569b7cbcb7fe17386c68ea474ce4af9925b4efed549a5345",
+        "scope": "ExistingRust engine None-error constant only; originalCAPIvalidcallback path has no newNone policy added. Preserve actualsource22/-EINVAL, do not invent or execute NULL vector."
+      },
+      {
+        "name": "LAPIC_TIMER",
+        "type": "CInt",
+        "value": "0x320",
+        "actual_Rust_definition": "const LAPIC_TIMER: CInt = 0x320;",
+        "Rust_source_line": 13,
+        "Rust_segment_sha256": "af8fdf07accf46b5fe7b2a400fc8694cb35889ab540a4221ee3154475486452e",
+        "actual_C_definition": "#define LAPIC_TIMER         0x320",
+        "C_source_line": 301,
+        "C_segment_sha256": "e26148101626b70412120eb474de526162983eeeceb237fcfd0a21e48515f80a"
+      },
+      {
+        "name": "LAPIC_TIMER_INITIAL",
+        "type": "CInt",
+        "value": "0x380",
+        "actual_Rust_definition": "const LAPIC_TIMER_INITIAL: CInt = 0x380;",
+        "Rust_source_line": 15,
+        "Rust_segment_sha256": "7d27605da7a38781f39b6852fbcd4dff0ea3fe486f4426de19ead8a802e6c995",
+        "actual_C_definition": "#define LAPIC_TIMER_INITIAL 0x380",
+        "C_source_line": 303,
+        "C_segment_sha256": "3446a9aed1baf85621dffaec000d634d9e9153cdf9c548cc812c7b6875eeeea3"
+      },
+      {
+        "name": "LAPIC_TIMER_DIVIDE",
+        "type": "CInt",
+        "value": "0x3e0",
+        "actual_Rust_definition": "const LAPIC_TIMER_DIVIDE: CInt = 0x3e0;",
+        "Rust_source_line": 16,
+        "Rust_segment_sha256": "cfd631b9bb5b0ce1385403a4da0f69ad5891214f7af07e190de5c62aa8295530",
+        "actual_C_definition": "#define LAPIC_TIMER_DIVIDE  0x3e0",
+        "C_source_line": 305,
+        "C_segment_sha256": "2f4337c2212fbbe1ff702074e0373107144fc70f5c3275091645c764632d208f"
+      },
+      {
+        "name": "LOCAL_TIMER_VECTOR",
+        "type": "CUInt",
+        "value": "0xef",
+        "actual_Rust_definition": "const LOCAL_TIMER_VECTOR: CUInt = 0xef;",
+        "Rust_source_line": 25,
+        "Rust_segment_sha256": "6c841406430062dbcfe0cb0d1a3b1743a758e4d9cf14abe2e64ba62297ef0d9d",
+        "actual_C_definition": "#define LOCAL_TIMER_VECTOR  0xef",
+        "C_source_line": 311,
+        "C_segment_sha256": "ca9b5eb74651cc8b8df5dbd15c9ddc4b0ee5bdb58db54b1cc6f1670a70ae7d70"
+      },
+      {
+        "name": "APIC_DIVISOR",
+        "type": "CUInt",
+        "value": "16",
+        "actual_Rust_definition": "const APIC_DIVISOR: CUInt = 16;",
+        "Rust_source_line": 35,
+        "Rust_segment_sha256": "986ce904b5652a92434e697c57aa45e3b7c34bbc0486398a2cb577df4f7e3382",
+        "actual_C_definition": "#define APIC_DIVISOR            16",
+        "C_source_line": 323,
+        "C_segment_sha256": "9c2537b8d3e83a35cc71052df78a9811497024f825a1e23461aa1b96c5b5b68f"
+      },
+      {
+        "name": "APIC_LVT_TIMER_PERIODIC",
+        "type": "CUInt",
+        "value": "1 << 17",
+        "actual_Rust_definition": "const APIC_LVT_TIMER_PERIODIC: CUInt = 1 << 17;",
+        "Rust_source_line": 36,
+        "Rust_segment_sha256": "26e32b020c0a73a0182bc32970e629a8db6946967c61137cba2c582999fb9c8c",
+        "actual_C_definition": "#define APIC_LVT_TIMER_PERIODIC (1 << 17)",
+        "C_source_line": 324,
+        "C_segment_sha256": "42cc481ca0f2ee379e2dedf51e7f8fd4d3d6046e6fe35e0998b02638f2c30811"
+      }
+    ],
+    "private_runtime_helpers": [],
+    "data_owners": [],
+    "external_imports_engine_only": [],
+    "callback_parameter": "Only originalwrite_fn Option<X86LapicWriteFn> functionparameter. No fakecallback, pointer default, named backendglobal or constructor is supplied. Noengine invocation or callback publication occurs.",
+    "expected_engine_only_object": "Two genuinepublicT symbols,0data,0genuineexternalU. Actualsymbol/private/intrinsic/relocation/unwindemission remainslaterobjectgate evidence, not guessedsize or actualreadiness."
+  },
+  "compatible_future_batch": {
+    "permitted_source_functions": [
+      "lapic_timer_enable",
+      "lapic_timer_disable",
+      "x86_lapic_timer_enable_body_result",
+      "x86_lapic_timer_disable_body_result"
+    ],
+    "expected_combined_source_globals": "4publicT/0data",
+    "expected_combined_genuine_U": [
+      {
+        "symbol": "x86_lapic_write_bridge",
+        "ABI": "unsafe extern C fn(CInt,CUInt)->()",
+        "declaration": {
+          "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+          "first_line": 117,
+          "last_line": 117,
+          "segment_sha256": "99f2d3e244ffa7f2172006b145d613a4acffbda230398c876bbbf679ef16718f",
+          "role": "Genuinebridge declarationonly"
+        },
+        "treatment": "Keepactualexternalfunctionaddress passedviaoriginalSome. Thiscontract neitherinspects norprepares the bridge/backendbody, slotowner, selectedtarget, publication or init."
+      }
+    ],
+    "why_batch_is_finite": "Onlytwoactualwrapperdefinitions fromunchangedseparateGO plus twopublicengines affirmativelyestablishedhere, exact3types/7scalarconstants/no privatehelper/data/runtimeclosure. Compiler mayinlineengines into wrappercode while retainingpublicexports; lateractualemission mustbe reviewed without replacing source with handwritten transaction code.",
+    "profile": "Exactcurrentqualifiednightly1.95no_std nativepartial/noequivalencecfg and originalwarnings. No filename/debug/SSE/registerprofileguess or native/fullSDK/defaultclaim.",
+    "future_current_partial": "UNBOUND; actuallatestmatchingobject/cohort/source/ownership collisions and allpriorbytes/aliases/relocs mustbe freshlybound byRootbefore anypartialjoin.",
+    "before_codegen": "Separateconcreteunit/source/ABI/profileindependentreview and freshactualHOSTadmission. Thisreadonlycontractdoesnotselectaunit/command or executeanything."
+  },
+  "explicit_exclusions": [
+    "Actualx86_lapic_write_bridge implementation",
+    "lapic_write function-pointer storage or selectedcallback targets",
+    "APIC/x2APIC/MMIO/MSR accessbackend/bootmode/initializer/publication",
+    "lapic_ack/interruptacknotification endpoints or adjacentfunctions",
+    "wholeCPUmodule/otherregisterconstants/arrays/debugorbootstorage",
+    "fake registers/callbacks/stubs/newreturnorvalidationpolicy",
+    "any compile/GNUmetadata/predicate/link/function/timer/IRQ/hardware/runtime/native execution"
+  ],
+  "source_evidence": [
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+      "first_line": 1279,
+      "last_line": 1290,
+      "segment_sha256": "ee693cea5bdfa18c65c208d881ac31a763ec77867e1f2c8764fbdb0d7e9b5b22",
+      "role": "ExactoriginalenableCimplementation"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+      "first_line": 1292,
+      "last_line": 1296,
+      "segment_sha256": "450bcbd01fe5c30e743596ec88dcc856365a77a2807a2d6a6f54aaa368b6201b",
+      "role": "ExactoriginaldisableCimplementation"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+      "first_line": 1273,
+      "last_line": 1278,
+      "segment_sha256": "f555a2334dd6675ed9805c2f22194e85a7d818bbe04fd5d0cad67ea167f30706",
+      "role": "ActualRustselectedCAPIbranch"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/lib.rs",
+      "first_line": 94,
+      "last_line": 94,
+      "segment_sha256": "4fefcc69e0dc6f48051ca4ae83e2a725ccefc386861463a2e76508354c5bdbbc",
+      "role": "SelectedactualRustmodule"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "first_line": 187,
+      "last_line": 187,
+      "segment_sha256": "cce0758db812ec01f3ec037f576e8e612ca1ebc38bbd17bcf64ebc10284766cd",
+      "role": "ActualRustsourcebuildinput"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "first_line": 729,
+      "last_line": 730,
+      "segment_sha256": "4256c5202df3cad22f53ced67131586dced0f7179e081c1740b6d95039cf352e",
+      "role": "PairedRustCPU Cownership selector"
+    }
+  ],
+  "preserved_controls": "AcceptedF04scope remainsclosed; no acceptance/Cretirement/score/native/hardware/readinesscredit. All original generic/exec/notification/perf/mmap/SDK/source/service/native/currentfree/UNKNOWN controls and reservations unchanged. No inferred bridge/backend sourcepermission.",
+  "operations": "After newexplicitRootengineassignment, read onlytwoexactRustenginebodies/signatures, namedscalarconstants/typealiases, exactoriginalCtimerimplementations/constants, activeF04mapping and actualmodule/buildselector references. Wrote onlythisENGINE-RESULT.json, leavingwrapperRESULTandIPI/localmetadatafiles immutable. No unitgeneration/compiler/preprocessor/GNUmetadata/ELFparser/predicate/link/test/function/callback/slot/hardware/native/account/monitor/goal/state/canonical/index operation orrecursiveagent."
+}

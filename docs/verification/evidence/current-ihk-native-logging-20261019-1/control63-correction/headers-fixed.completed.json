@@ -1,0 +1,33 @@
+{
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--fsize=33554432",
+    "--nofile=256",
+    "--core=0",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "-c",
+    "import json,subprocess,time;from pathlib import Path;q=Path('/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/control-receipt-correction-1');d=json.loads((q/'ordinary-profile-headers-fixed.json').read_bytes());end=time.monotonic()+28\nfor c in d['commands']:\n with (q/(c['label']+'.stdout')).open('xb') as o,(q/(c['label']+'.stderr')).open('xb') as e:p=subprocess.run(c['argv'],stdout=o,stderr=e,timeout=min(20,max(.1,end-time.monotonic())))\n (q/(c['label']+'.status.json')).write_text(json.dumps(dict(argv=c['argv'],returncode=p.returncode,direct_child_joined=True))+'\\n');assert p.returncode==0,c['label']\nprint('PASS_ACTUAL_BODY_CHAIN')"
+  ],
+  "pid": 1662705,
+  "starttime_ticks": "24377172",
+  "returncode": 0,
+  "direct_child_joined": true,
+  "process_group_absent": true,
+  "streams_closed": true,
+  "elapsed_seconds": 0.4168296850111801,
+  "headers-fixed.stdout": {
+    "sha256": "5c4eaa71649203d99509d84d7d0aa17e377a3550ff1dce7882ff399ee8b14c1c",
+    "bytes": 23
+  },
+  "headers-fixed.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  }
+}

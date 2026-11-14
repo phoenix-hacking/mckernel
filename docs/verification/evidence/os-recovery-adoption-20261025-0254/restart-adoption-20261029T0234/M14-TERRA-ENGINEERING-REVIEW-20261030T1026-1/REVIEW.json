@@ -1,0 +1,28 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "thread": "01a18bc3-e072-7810-9426-75101b0856c0",
+  "bucket": {
+    "start_utc": "2026-10-30T10:06:29.892132+00:00",
+    "end_exclusive_utc": "2026-10-30T10:26:29.892132+00:00",
+    "seconds": 1200,
+    "previous": "M14-TERRA-ENGINEERING-REVIEW-20261030T1006-1/REVIEW.json"
+  },
+  "actual_delta": {
+    "current_candidate_kernel_builds": 0,
+    "production_links": 0,
+    "native_qualified": 0,
+    "guest_apps": 0,
+    "retired_c_boundaries": 0,
+    "file_closures": 0,
+    "behavior": "No new real McKernel behavior or perf fixture execution. Pure source mount-model/selector checks only; independent light profile for actual fixture still unavailable.",
+    "source": "Private Rust perf descriptor init patch ad7bba95 on 7b13 preimage initializes opt and dup_cb before publication with C/Rust ABI witnesses; poisoned actual-body fixture prepared but uncompiled/unrun, candidate unselected. Null dup does not solve shallow event sharing or generic pinning."
+  },
+  "findings": "Source review establishes conditional mckfd lookup/close lifetime race, perf group raw links/rollback and monitoring_event unpinned scheduler/exit references. F_SETSIG writes actual descriptor; a temporary snapshot alone loses it. XPMEM publishes descriptor before open count; TG ref protects storage but not hash/partition or rollback; created tag alone cannot authorize unlink after publication. These are source findings, not native reproductions.",
+  "root_reconciliation": "Root70 bc2df accepted only at exact scope; current-free/no-unlisted/v2birth and physical clearance UNKNOWN. BUILD3/CID5487 and consumed nonces not replayed; native attempt3 expired before claim.",
+  "critical_path": "M14 descriptor/event/group/monitor/clone/teardown shared ownership, lock order and actual reviewed local-light process owner for real-body tests; separate Root current health and operation-specific SDK admission. No physical command released.",
+  "scheduling_adjustment": "Stop searching alternate small perf selectors: address real descriptor and XPMEM ownership interface first, in private Rust, while leaving unsafe source unselected and retaining F06 composite. Do not treat lightweight source models as link/native proof.",
+  "measurement": "Exact candidate first compiler/queue, blocked duration, overlap, CPU/peak and failure-to-validated-kernel-fix unmeasured. Prior 418.7782335s first-stream proxy and 491.317312s handoff historical; original 30-minute baseline unchanged, no 95 percent claim.",
+  "capacity": "10:27:33Z host available 143325257728 bytes, scratch 47613485056 bytes; snapshot MemAvailable 27740584 KiB load .72/.70/.72. Not admission.",
+  "weekly": "82 percent used at snapshot; weekly only, no prepaid fallback.",
+  "baseline": "M14 4/6, practical 35/35, M15 queued; selected 1cd7 retains 23 generic and 5 arch C names."
+}

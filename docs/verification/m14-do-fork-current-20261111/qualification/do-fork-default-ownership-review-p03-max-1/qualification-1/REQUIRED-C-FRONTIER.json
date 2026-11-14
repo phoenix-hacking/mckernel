@@ -1,0 +1,185 @@
+{
+  "actual_C_providers": [
+    {
+      "C_kind": "LOCAL FUNC",
+      "C_rodata_relocation_offset_hex": "0xb70",
+      "actual_required_path": "sys_mmap -> arch_mmap_body_result -> arch_do_mmap_bridge -> do_mmap MAP_FIXED -> do_munmap -> do_munmap_body_result -> clear_host callback",
+      "binding": "f03_do_munmap_binding_v1.clear_host",
+      "bytes": 12,
+      "input_section": ".text",
+      "input_value_hex": "0xc0",
+      "name": "do_munmap_clear_host_bridge",
+      "relocation": "R_X86_64_64 .text+c0",
+      "source": "kernel/syscall.c:6058"
+    },
+    {
+      "C_kind": "LOCAL FUNC",
+      "C_rodata_relocation_offset_hex": "0xb78",
+      "actual_required_path": "Same MAP_FIXED unmap path; remove_range success with ro_freed!=0 requires set_host_vma callback outside straight mapping",
+      "binding": "f03_do_munmap_binding_v1.set_host",
+      "bytes": 147,
+      "input_section": ".text",
+      "input_value_hex": "0x9b0",
+      "name": "do_munmap_set_host_bridge",
+      "relocation": "R_X86_64_64 .text+9b0",
+      "source": "kernel/syscall.c:6064"
+    },
+    {
+      "C_kind": "LOCAL FUNC",
+      "C_rodata_relocation_offset_hex": "0xb98",
+      "actual_required_path": "do_munmap.clear_host -> Rust clear_host_pte -> clear_host_pte_body_result -> real host request through this C bridge",
+      "binding": "f03_clear_host_pte_binding_v1.forward",
+      "bytes": 59,
+      "input_section": ".text",
+      "input_value_hex": "0x60",
+      "name": "syscall_do_syscall3_bridge",
+      "relocation": "R_X86_64_64 .text+60",
+      "source": "kernel/syscall.c two/three-argument bridge block"
+    },
+    {
+      "C_kind": "LOCAL FUNC",
+      "C_rodata_relocation_offset_hex": "0xba0",
+      "actual_required_path": "Same required error path: nonzero host result calls the real log callback",
+      "binding": "f03_clear_host_pte_binding_v1.log",
+      "bytes": 27,
+      "input_section": ".text",
+      "input_value_hex": "0xa0",
+      "name": "clear_host_pte_log_bridge",
+      "relocation": "R_X86_64_64 .text+a0",
+      "source": "kernel/syscall.c clear_host_pte log adapter"
+    },
+    {
+      "C_kind": "GLOBAL FUNC",
+      "actual_final_owner": {
+        "final": {
+          "binding": "GLOBAL",
+          "bytes": 59,
+          "index": 1489,
+          "name": "syscall_policy_do_syscall3_bridge",
+          "section_index": 1,
+          "type": "FUNC",
+          "value": 18446744073684393488,
+          "visibility": 0
+        },
+        "name": "syscall_policy_do_syscall3_bridge",
+        "owner": {
+          "input": {
+            "binding": "GLOBAL",
+            "bytes": 59,
+            "index": 109,
+            "name": "syscall_policy_do_syscall3_bridge",
+            "section_index": 1,
+            "type": "FUNC",
+            "value": 3600,
+            "visibility": 0
+          },
+          "object": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+          "placement": {
+            "address": 18446744073684389888,
+            "bytes": 4962
+          },
+          "section": ".text"
+        }
+      },
+      "actual_required_path": "do_mmap host-mirror/rollback branches -> selected native set_host_vma_body_result -> Some(syscall_policy_do_syscall3_bridge); direct required C path independently of indirect bindings",
+      "bytes": 59,
+      "name": "syscall_policy_do_syscall3_bridge",
+      "source": "kernel/syscall.c policy three-arg wrapper; kernel/rust/syscall_policy.rs5550"
+    }
+  ],
+  "actual_bindings": {
+    "f03_clear_host_pte_binding_v1": {
+      "actual_final_value_hex": "0xfffffffffe908490",
+      "bytes": 24,
+      "forward_slot_offset": 8,
+      "input_object": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+      "input_section": ".rodata",
+      "input_value_hex": "0xb90",
+      "log_slot_offset": 16
+    },
+    "f03_do_munmap_binding_v1": {
+      "actual_final_value_hex": "0xfffffffffe908460",
+      "bytes": 48,
+      "clear_host_slot_offset": 16,
+      "input_object": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+      "input_section": ".rodata",
+      "input_value_hex": "0xb60",
+      "set_host_slot_offset": 24
+    }
+  },
+  "at": "2026-11-11T02:26:48.129154+00:00",
+  "image": {
+    "bytes": 10630536,
+    "mode": "755",
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-fork-default-ownership-p04source-max-1/abi-witness-1/stable-baselinef839-1/build/kernel/mckernel.img",
+    "sha256": "12638a644d11b1e14dec5df9b891f0bdf2c874c0bf53098a041f4b2932d4d283"
+  },
+  "literal_unmet_clause": "no required behavior is supplied by a held object, guessed provider, live project C or compiler-elided placeholder",
+  "map": {
+    "bytes": 991051,
+    "mode": "644",
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-fork-default-ownership-p04source-max-1/abi-witness-1/stable-baselinef839-1/build/kernel/mckernel.img.map",
+    "sha256": "1c77d1b8a8f877f74fe1f79fc69c6904793dea3ea67cd3bb9d295abeefb62a2b"
+  },
+  "metadata": [
+    {
+      "bytes": 438371,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-fork-default-ownership-p04source-max-1/abi-witness-1/metadata/image-symbols-relocations.stdout",
+      "sha256": "f02330f5248ffb3dc369a5698d27647d8d759f0bb1675f493dea86e8709e0a24"
+    },
+    {
+      "bytes": 38533107,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-fork-default-ownership-p04source-max-1/abi-witness-1/metadata/constituent-symbols-relocations.stdout",
+      "sha256": "9c3fa13ebd7e0012b587d9b1a769d7698a0439951972fca97964bce651233aa9"
+    },
+    {
+      "bytes": 991051,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-fork-default-ownership-p04source-max-1/abi-witness-1/metadata/image-map.stdout",
+      "sha256": "1c77d1b8a8f877f74fe1f79fc69c6904793dea3ea67cd3bb9d295abeefb62a2b"
+    }
+  ],
+  "original_id": "M14-06-01-DEFAULT",
+  "owner": "/root/p03_cutover_source_max independent whole-condition review; Root/P04Source own repairs",
+  "required_scope": [
+    "sys_mmap",
+    "arch_mmap_body_result",
+    "arch_do_mmap_bridge",
+    "do_mmap"
+  ],
+  "review_actions": "Saved JSON/text/source-only comparisons; no ELF parser/tool/helper/build/test/native/canonical execution or edits.",
+  "schema": "m14-06-01-required-memory-host-project-C-frontier-v1",
+  "smallest_next_engineering_input": "P04Source under Root assignment prepares the existing genuine three-argument/request and memory-host callback implementations as a narrowly paired ordinary-profile Rust selection/C exclusion, reusing real builder/ABI/provider/current wrappers. Recover genuine existing adapters, no broad flags or held fixture/partial object injection. Bind typed callback table entries and normal/error request/return/lock-state/log behavior; independent source/test/operation review before one necessary changed normal image. No external inventory prerequisite or native grant.",
+  "source_commit": "f83960460f4fa883cfc6550f0ed8809a561bbb64",
+  "source_refs": {
+    "kernel/rust/f03_do_mmap.rs": {
+      "bytes": 30921,
+      "path": "/home/holden/mckernel/kernel/rust/f03_do_mmap.rs",
+      "sha256": "75a1f11b33af4e663f857d54190ec0b14c4193fb944d20ed0d7a7b54c5e1298e"
+    },
+    "kernel/rust/f03_forward_adapters.rs": {
+      "bytes": 3543,
+      "path": "/home/holden/mckernel/kernel/rust/f03_forward_adapters.rs",
+      "sha256": "f4644c6f36fd07f482fdddd4a4e1f1d16725ee2617551abec1200d5cb758ba4b"
+    },
+    "kernel/rust/syscall_policy.rs": {
+      "bytes": 1240596,
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "sha256": "3c91a22fdae204240201969957036a175fa207cb1d076ff5723650ce5a9adb8f"
+    },
+    "kernel/syscall.c": {
+      "bytes": 955657,
+      "path": "/home/holden/mckernel/kernel/syscall.c",
+      "sha256": "6928ebdc14aa988be5b9fb8ff2a59a56e81e0bf56b5a3559272f69858dbc3e24"
+    }
+  },
+  "status": "ACTUAL_REQUIRED_LIVE_C_PROVIDER_FRONTIER_WHOLE_DEFAULT_NOT_YET",
+  "supported_normal_error_reachability": [
+    "MAP_FIXED remains in original supported mmap semantics. f03_do_mmap.rs282 invokes real do_munmap(addr,len,1) rather than rejecting the supported operation.",
+    "Real Rust do_munmap entry35060 reads f03_do_munmap_binding_v1 and passes its clear_host/set_host fields into do_munmap_body_result4263. Outside straight mappings, error!=0 or ro_freed==0 invokes clear_host; successful ro_freed invokes set_host.",
+    "Rust clear_host_pte34955 reads f03_clear_host_pte_binding_v1.forward/log; body4326 calls forward then logs a nonzero result.",
+    "Selected native set_host_vma_body_result5550 directly calls Some(syscall_policy_do_syscall3_bridge) for host invalidation, which do_mmap reaches in host-mirror/rollback paths."
+  ],
+  "unchanged_other_work": "Fork body/ABI/default config/build ownership qualification is positive. PublicABI seven ptrace callback port and time2-argument lane are disjoint. do_kill is already Rust in this image; no kill patch. Root sole integration/admission/acceptance; all holds stay.",
+  "why_all_global_names_are_insufficient": "All4557+5 physical name/type/address joins and zeroUND prove which implementations link. They do not turn an actual project-C callback into Rust. Runtime function-pointer tables must also join to allowed implementation owners for this literal DEFAULT condition.",
+  "why_this_is_in_scope": "The claimed scoped20 explicitly include sys_mmap/do_mmap. The source call graph and saved runtime-binding relocations connect those roots to these five emitted project-C functions. They are required normal/error host-mapping behavior, not inert ABI metadata or a different optional workload. This finding adds no whole-file zero-C/native/from-scratch criterion."
+}

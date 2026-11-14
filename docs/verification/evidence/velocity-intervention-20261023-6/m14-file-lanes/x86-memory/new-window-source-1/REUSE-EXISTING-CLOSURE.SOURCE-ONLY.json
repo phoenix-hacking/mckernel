@@ -1,0 +1,114 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "REUSE_EXISTING_CANONICAL_SOURCE_CLOSURE_NO_DUPLICATE_PORT",
+  "sources": [
+    {
+      "path": "arch/x86_64/kernel/memory.c",
+      "sha256": "d017514e056abdd216b999cead679dc700341b9c1aa85f6d79cc4351e850f880",
+      "bytes": 168454
+    },
+    {
+      "path": "kernel/rust/x86_memory_helpers.rs",
+      "sha256": "5c60055053656751ea490be95c09d7343b0391797c21d5e6c97de97cb8d34c68",
+      "bytes": 311375
+    },
+    {
+      "path": "kernel/rust/x86_memory_loggers.rs",
+      "sha256": "1ce031eb323776480cca1b717f776989340413a71d4123b8ef99689e83bc9708",
+      "bytes": 3172
+    },
+    {
+      "path": "kernel/rust/x86_memory_logger_bridges.rs",
+      "sha256": "ada5c28856267259c7215c13ee57e1b4602a62b4815513b7cf5961c53a4813ce",
+      "bytes": 9235
+    }
+  ],
+  "existing_bodies": [
+    {
+      "symbol": "x86_split_alloc_new_pt_bridge",
+      "line": 7624,
+      "bytes": 263,
+      "sha256": "35b8be0456498680a4640a5e07ce22eab64ac55f9ab080f09783c8c02eb95d82"
+    },
+    {
+      "symbol": "x86_split_phys_to_page_bridge",
+      "line": 7757,
+      "bytes": 139,
+      "sha256": "9d72c71f2661108b3b915b25abc3e83567933837c57150e082baeeb7b77584a6"
+    },
+    {
+      "symbol": "x86_split_page_map_bridge",
+      "line": 7634,
+      "bytes": 140,
+      "sha256": "7261f14a3f791cd888eb8464965e3d5453d3a6f95f2cc47d3b659af26e7ff078"
+    },
+    {
+      "symbol": "x86_split_page_unmap_bridge",
+      "line": 7639,
+      "bytes": 152,
+      "sha256": "2a0b622fedfdcc08a1e853763b249ee04e0c0990856884c987889b3772aac6df"
+    },
+    {
+      "symbol": "x86_split_rss_add_bridge",
+      "line": 7589,
+      "bytes": 169,
+      "sha256": "eb5312569b6b9e56382d6ff806063d5b35d37499b7dcb816e03b7a7b101ebc7d"
+    },
+    {
+      "symbol": "x86_split_rss_sub_bridge",
+      "line": 7593,
+      "bytes": 169,
+      "sha256": "54a67226634a3f90d50cf0722c8406b891b1982aa5f0ea802d5c76353917e73e"
+    },
+    {
+      "symbol": "x86_split_log_bridge",
+      "line": 7547,
+      "bytes": 1608,
+      "sha256": "3897cc25d95e53ca453826eb5f9ed5a9bffa2c8786b38f89355d7dbd2c305b0f"
+    },
+    {
+      "symbol": "x86_split_panic_bridge",
+      "line": 7582,
+      "bytes": 160,
+      "sha256": "91cd8bd36cdce96daea6f4c18cc59a4e97792d32aaa5f15a9cccf589ccf846ca"
+    },
+    {
+      "symbol": "x86_pt_split_large_bridge",
+      "line": 7719,
+      "bytes": 577,
+      "sha256": "c35ca2887f83ecb345b46ec4f06608abb8dd7a48635e806381f69584a55976ca"
+    },
+    {
+      "symbol": "x86_pt_set_page_log_bridge",
+      "line": 7541,
+      "bytes": 187,
+      "sha256": "9af6f2cfcdedec521c44d147959bdea7856c94ffd36d8c3f9481e32ecd77ab6c"
+    },
+    {
+      "symbol": "x86_pt_set_page_bridge",
+      "line": 7598,
+      "bytes": 1027,
+      "sha256": "74cc88cc92c8656a7c7978e1551217fc6887713de8eab40ee3018bad90b69793"
+    },
+    {
+      "symbol": "ihk_mc_pt_split",
+      "line": 7737,
+      "bytes": 698,
+      "sha256": "0bd9fafdd87903a78ab4160dce35627e2ea002846f28e63b9bcd1ce9663aace8"
+    }
+  ],
+  "supersedes_requested_predecessor_scope": [
+    "next-split-phys-page-source-only-1",
+    "next-set-page-log-source-only-1",
+    "next-set-page-orchestration-source-only-1",
+    "next-split-alloc-source-only-1"
+  ],
+  "reason": "Canonical Rust already contains all predecessor slices plus split log/panic/orchestration and Rust-owned storage. Reimplementing these slices would duplicate source and discard later accepted integration. No canonical mutation performed.",
+  "actual_new_tests": null,
+  "actual_new_builds": 0,
+  "actual_new_guest_apps": 0,
+  "admission": "Recovery-only source preparation; no compiler, test, Docker, root or guest command executed.",
+  "current_blocker": "SESSION-HANDOFF current entry records COPY7 F02 allocated_C_OBJECT validation failure; compiler-profile COMMON/BSS/local descriptors require exact-contract correction, plus normal COPY7 retirement and fresh positive physical acceptance before workload admission.",
+  "next_executable_check": "After coordinator retirement/current physical acceptance and ordinary grant, run the existing corrected COPY7 allocated-object observer against retained image and ABI captures; preserve exact immutable source/profile bindings and negative controls. Do not rebuild unchanged sources.",
+  "downstream_unlock": "Current candidate exact selected-object proof, then kernel integration/native checks. No whole-file native/default retirement claim."
+}

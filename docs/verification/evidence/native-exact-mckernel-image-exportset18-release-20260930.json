@@ -1,0 +1,57 @@
+{
+  "schema": "mckernel.native-exact-mckernel-image-correction-release.v1",
+  "recorded_at": "2026-09-30T12:54:15-07:00",
+  "head": "c4d29ab6c795fe2c6eb9217ffad734edc13aebfc",
+  "status": "PASS_EXECUTION_CORRECTION",
+  "failure_family": "v2 image-tool lookup spelling versus canonical target during exact version observation",
+  "original_failure": "docs/verification/evidence/native-exact-mckernel-image-exportset17-failure-20260930.json",
+  "packet": {
+    "toolchain": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-toolchain-4e99a82c-exportset-18.json",
+      "sha256": "471ed7e365a1a676713292691bdf5501efa10036cab7b41b0fd89d7aaece9d72",
+      "size": 80765577,
+      "identity": "1831:1712448",
+      "mode": "0600"
+    },
+    "request": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-request-4e99a82c-exportset-18.json",
+      "sha256": "ee41103c4b9b49cfaaca31aff3b6af39404b18935a89feed0bf35bbd6b63643a",
+      "size": 43891119,
+      "identity": "1831:1712450",
+      "mode": "0600"
+    },
+    "driver_sha256": "c7d8956f0e6a00a82dc234756b705f9c665addf341fb3906894a0f3ca5a304fa",
+    "owner_sha256": "08e336b38d41b8f2194b7c964ae7f32eb2aef43e3abd65a228d35eb47ccdbe33",
+    "candidate_sha": "4e99a82c9b87a7cf3d6002b75ec380fef37af7a1",
+    "image_id": "sha256:5315d34307c6658907d3e74997b8e0b0637d237a26c070fe5dc5b03ee7667080",
+    "inventory_entries": {"out": 140053, "nightly": 35973, "kernel": 18924, "backup": 86}
+  },
+  "roots": {
+    "work": {"identity": "1831:1712445", "mode": "0700", "empty": true},
+    "owner_evidence": {"identity": "1831:1712446", "mode": "0700", "empty": true},
+    "output_evidence_attempt_lease_exclusion_absent": true,
+    "exportset17_preserved": true
+  },
+  "reviews": {
+    "source": {"reviewer": "/root/image_request_source_review_233", "result": "PASS_SOURCE_CORRECTION"},
+    "packet": {"reviewer": "/root/actual_image_packet_audit_235", "result": "PASS_PACKET", "owner_validate": "PASS"},
+    "execution": {"reviewer": "/root/actual_image_packet_execution_review_235", "result": "PASS_EXECUTION_CORRECTION"},
+    "capacity": {"reviewer": "/root/actual_image_capacity_235", "result": "GO"}
+  },
+  "resources": {
+    "host_free_bytes": 19717570560,
+    "scratch_free_bytes": 15246770176,
+    "memory_available_kib": 30018060,
+    "host_floor_bytes": 17179869184,
+    "scratch_floor_bytes": 12884901888,
+    "heavy_owner_absent": true
+  },
+  "released_command": [
+    "python3", "-I", "-B",
+    "scripts/native_rust_exact_mckernel_image_container_owner.py",
+    "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-request-4e99a82c-exportset-18.json"
+  ],
+  "profile": "one serialized owner; CPUs2-5/four CPUs; 12GiB memory and equal swap; 512 PIDs; network none; private IPC; caller uid/gid; cap-drop ALL; no-new-privileges; read-only root; sole writable bind /work; 256MiB /tmp tmpfs",
+  "conditions": "remeasure floors immediately before start; preserve all failures and terminal identities; no unchanged or automatic retry",
+  "acceptance": "One corrected image-build attempt only. No build, guest, application or OS acceptance is established."
+}

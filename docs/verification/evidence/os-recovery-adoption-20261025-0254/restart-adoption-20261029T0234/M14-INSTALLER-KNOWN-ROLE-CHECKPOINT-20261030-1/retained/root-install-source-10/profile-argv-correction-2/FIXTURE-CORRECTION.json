@@ -1,0 +1,11 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ONE_BOUNDED_FIXTURE_CORRECTION",
+  "original_test_sha256": "a4112885c5a07db562c6c0426d0658ae8c509f16aaade8239c16638bc1a28f09",
+  "corrected_test_sha256": "523e5bc07c6a001e4efd32eb66d8feb9482eb484d841f7138f5f9be2b562e7b8",
+  "profile_sha256": "fcf1713be0f08e4f51425e4989a0fe5b75879ae0d07a48e6fbaaab9b9c542687",
+  "production_sources_changed": false,
+  "fix": "Capture outer test subject POLLERR before nested Poll class instead of lookup on Poll instance; exact oracle wait_not_called and IssuerUnknown unchanged",
+  "next_test": "test_profile_and_monitor.MonitorCases.test_pidfd_poll_error_never_performs_wait",
+  "failed_run": "source-test-runs/install-v10-regression-0001/RESULT.json"
+}

@@ -1,0 +1,76 @@
+{
+  "status": "CORRECTED_PROPOSAL_NOT_RELEASED_NOT_EXECUTED",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "execution_owner": "root dispatcher, using already reviewed reusable ordinary profile; this proposal is not independent execution authority",
+  "profile_basis": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/postpositive-revoke-1/run_control_check.py",
+  "affinity": [
+    6
+  ],
+  "jobs": 1,
+  "address_space_bytes": 1073741824,
+  "cpu_seconds": 30,
+  "driver_wall_seconds": 28,
+  "outer_owner_wall_seconds": 35,
+  "stream_file_limit_bytes": 33554432,
+  "output_growth_cap_bytes": 134217728,
+  "nofile": 256,
+  "core_bytes": 0,
+  "uid": 1000,
+  "gid": 1000,
+  "memory_available_minimum_bytes": 2147483648,
+  "host_floor_plus_growth_bytes": 17314086912,
+  "scratch_floor_plus_growth_bytes": 13019119616,
+  "pinned_rustc": "/home/holden/mckernel-work/scratch/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+  "pinned_cc": "/usr/bin/x86_64-linux-gnu-gcc-9",
+  "candidate_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=30:30",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--core=0:0",
+    "--",
+    "/usr/bin/python3",
+    "/home/holden/mckernel-work/host-preparation/guest-settid-rust-candidate-20261021-1/fixture-capture-correction-1/run_fixture_once.py"
+  ],
+  "outer_requirements": [
+    "root owns CPU6 grant, aggregate headroom and launcher/service checks; no worker lease while authoring",
+    "use existing reviewed outer capture/owner with finite35s wall and positive direct-child/outer-group joins; retain raw stdout/stderr/status and identities",
+    "corrected driver runs the unchanged5 sequential commands through pinned990807 owned_capture under one28s child deadline and30CPU inherited limit; no next command after any capture failure",
+    "fresh correction-1/check-1 only; original frozen files/proposal/runner untouched; no root/module/guest/network or source integration"
+  ],
+  "expected_stdout": "PASS: 12 complete actual-C/actual-Rust settid cases; bytes/order/return/log/carrier\\n",
+  "expected_result": "fixture-capture-correction-1/check-1/result.json PASS_FINITE_ACTUAL_C_RUST_SETTID_PARITY,5complete closed per-command rows and12cases",
+  "failure_family": {
+    "name": "settid-port",
+    "executed_candidates": 0,
+    "bounded_corrections_used": 0,
+    "policy": "one failed candidate plus one bounded correction then focused escalation; preserve each original"
+  },
+  "not_claimed": [
+    "fullcrate compilation",
+    "production syscall.c compilation",
+    "native/default activation",
+    "final image/module link",
+    "current image/native pthread proof",
+    "C retirement"
+  ],
+  "predecessor_runner_sha256": "b05bcc6bd6bf8cc6739fa5263b442cc17c55c03798fcf125575ef25c2f06fa50",
+  "owned_capture_helper": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1/stage-preparation-1/run_two_commands_source_bound_corrected.py",
+    "sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8",
+    "bytes": 14753
+  },
+  "owned_capture_census": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-20261019-1/capsule/scripts/native_rust_exact_build_container_owner.py",
+    "sha256": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1",
+    "bytes": 51420
+  },
+  "output_root": "/home/holden/mckernel-work/host-preparation/guest-settid-rust-candidate-20261021-1/fixture-capture-correction-1/check-1",
+  "fixture_scope": "Exact complete original settid/selected adapter/log/Rust bodies plus behavior-equivalent existing transport glue; no literal whole production transport proof",
+  "capture_lifecycle": "Unchanged pinned990807 owned_capture per command: masked fork-to-owner; child mask restore; WNOWAIT creator anchor through any TERM/KILL; direct join before final group census; no signal after reap; closed-stream stable-FD hashes; persisted per-command whole records",
+  "source_correction_only": true
+}

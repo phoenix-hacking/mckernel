@@ -1,0 +1,133 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_SOURCE",
+  "decision": "PASS_SOURCE_ONE_ORDINARY_MATCHING_CURRENT115_ORIGINAL235_COMPOSE_AND_FUTURE_LITERAL_SCRATCH_BINDER",
+  "independent": true,
+  "reviewer": "/root/guardian_execution_review",
+  "implementation_ownership": false,
+  "runtime_authority": null,
+  "reviewed_source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/ordinary-compose-profile-accepted115-source-1/SOURCE-READY.json",
+    "bytes": 3481,
+    "sha256": "cb3edb7b0f1569116d1395e371dbcf9c2ded47cd0ae7122abdd783bfe7fe572c"
+  },
+  "reviewed_profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/ordinary-compose-profile-accepted115-source-1/PROFILE.NOT-GRANTED.json",
+    "bytes": 10949,
+    "sha256": "146cca524ff21f8f4d04613b9d58ee75fe9bc96bb81760da41f5cb94f90e8cef"
+  },
+  "reviewed_runner": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/ordinary-compose-profile-accepted115-source-1/run_one_compose.py",
+    "bytes": 6267,
+    "sha256": "942abad9cb1f607b369f861c57b22cc695e02c59921878aff6442dc33b2d1901"
+  },
+  "reviewed_composer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/compose_matching235_current115.py",
+    "bytes": 4163,
+    "sha256": "6e09ee0d1b5ad23291338d2084b88eeea99fb3297373b0fd0322ca898f180027"
+  },
+  "reviewed_plan": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/MATCHING235-CURRENT115-PLAN.NOT-RELEASED.json",
+    "bytes": 8779,
+    "sha256": "944cd190ee73c79231618b7ec16585203707f03099d735284c634e55a4bb7411"
+  },
+  "reviewed_binder": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/ordinary-compose-profile-accepted115-source-1/check_actual_scratch_binding.py",
+    "bytes": 1862,
+    "sha256": "d2db4c9a719d927040965e4ff0a80197564183a0907b59763ce797ebbbe60513"
+  },
+  "root_metadata_interface": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/ordinary-compose-profile-accepted115-source-1/ROOT-NEXT.EXECUTABLE-COMMANDS.NOT-GRANTED.json",
+    "bytes": 4321,
+    "sha256": "62d40275a21da9cb586d38c8ef5138094dc44c2689c68be7565ffaab0d7dbd99"
+  },
+  "accepted_current115": {
+    "Root": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT115-INDEPENDENT-DEFAULT-ARTIFACT-ACCEPTANCE.json",
+      "bytes": 2866,
+      "sha256": "aae76fa20b438828b55662a196fc9266a4c0098262b7effb766f5063ad38b6f9"
+    },
+    "independent": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/independent-artifact-review-preparation-1/INDEPENDENT-ACTUAL-CURRENT115-ARTIFACT-ACCEPTANCE.json",
+      "bytes": 22424,
+      "sha256": "b9ed6b2e14546fa2e372c11c5e5d73601a41b48172394bd38c17ab9b7fc37a3b"
+    },
+    "image": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/OUTPUT/work/output/build/kernel/mckernel.img",
+      "size": 10257496,
+      "sha256": "de9fdd13b55a5a17158fa8247cc9351c1d9b1944a72c45bac9e4774473dca024",
+      "mode": 33261
+    },
+    "native_acceptance": null
+  },
+  "read_only_checks": {
+    "source_ready_files_verified": 7,
+    "profile_input_refs_verified": 17,
+    "parsed_without_import_or_main": 3,
+    "payload_modules_cleanup_equal_accepted235": true,
+    "runner_guard_AST_identical_to_exact_3c29": true,
+    "runner_limits_AST_identical_to_exact_3c29": true,
+    "frozen_original227_source_not_modified": true
+  },
+  "composition_predicates": [
+    "Exact unchanged80ac record deriver and46d overlay producer are pinned and loaded; all source data consumed through original46d stableFD bounded regular-file reads with before/after identity/content checks.",
+    "Base gzip digest/raw size/raw digest match accepted source. derive_base_payloads preserves original record order/header metadata except necessary selected image size/checksum/payload; exactly one original images/mckernel.img old60e digest must match.",
+    "Complete before/after base map has identical keys and exactly images/mckernel.img changes. New image is accepted115 de9fdd13/10257496B.",
+    "Original46d overlay is constructed with unchanged payload537cb, collectorab3e, installedRustexecutore5d. Complete resulting final map has exactly the same keys as accepted235 final_map and only images/mckernel.img differs.",
+    "Manifest is copied from accepted235; only image/base/derived overlay/receipt artifact bindings update. Original case, argv, cwd, env,235B oracle,1024 streams, profile, modules and c020 BEGIN cleanup remain unchanged.",
+    "Exclusive fresh output creation, full real stdout/empty stderr, original46d fullmap receipt, artifact size/hash/mode, complete result equality and overlay digest are checked; no fabricated constant stdout success.",
+    "Source composition is finite offline archive work and requires neither prior current115 native acceptance nor a new native quota. It does not compile, execute payloads, stage, release native or overwrite original227/old235."
+  ],
+  "ordinary_profile_and_grant": {
+    "retained_runner": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ordinary-host-new12h-runner-source-1/run_new12h_host.py",
+      "bytes": 7521,
+      "sha256": "6e98a1fbcbce2e822a815a05516287e7122cbd8e06d43277134b27b70cf3ad34"
+    },
+    "same_admission_guard": "Pinned retained admission imports exact v2guard1f152; account/real holds and earliest fixed-clock90s allowance remain effective.",
+    "effective_limits": {
+      "cpu": 6,
+      "jobs": 1,
+      "AS_bytes": 2147483648,
+      "CPU_seconds": 60,
+      "FSIZE_bytes": 33554432,
+      "CORE_bytes": 0,
+      "wall_seconds": 90,
+      "reserved_pids": 64
+    },
+    "growth_reserve_bytes": 536870912,
+    "growth_review": "512MiB covers the bounded derived base+overlay archives, bounded outer stdout/stderr capture and small finite manifests/receipts; no additional helper capture trees or compiler outputs.",
+    "floors": "HOST16GiB plus full512MiB growth; scratch12GiB; retained ordinary memory floor unchanged.",
+    "fresh_Root_required": [
+      "task_id/profile_sha256/runner_sha256/goal/fixed_deadline_UTC/fixed_cutoffs/resources exactly matching profile",
+      "authorized=true,authorized_by=Root,cpu6_exclusive=true,other_cpu6_jobs=0",
+      "new32hexnonce and current_nonce_ledger/current_native_free exact authenticated refs; nonce absent from consumed and abandoned lists; ledger latestfree equals grantfree; complete boundary/no-unlisted-operation attestations",
+      "fresh issued_wall/expires_wall and CPU6 exclusion observation; aggregate otherjobs/memory/heavy/pids reservations within retained caps; reserved_pids_ordinary=64;runtime_native_authority=null"
+    ],
+    "cwd": "Absolute actual packet directory set before owned_capture; environment cleared to pinned finite values.",
+    "joins": "One sequential command,90s capture, positive directchild join/groupabsence/closedstreams/no retirement error required. First failure retained; no automatic retry."
+  },
+  "future_scratch_and_entry_integrity": [
+    "All actual grant/current/nonce/scratch stage/source capability/case capability/release slots remain NULL in source interface. Normal owner argv is a template, not released authority.",
+    "After actual compose and a separately authorized scratch manifest copy, binder requires raw manifest bytes identical to actual HOST-STATIC result, actual115 image and original payload; exact owneraf2b is pinned.",
+    "Original owner _manifest_identity requires canonical manifest under actual scratch and exact digest; _manifest_outside_writable_parent excludes manifest from writable attempt parent. bound_manifest imports pinned original diagnostic and strict loader, joining all sources, inode identities, final-map payload/collector/mcexec/image/modules/directories and output digest.",
+    "No binder, stage, native oncewrapper or original235 evaluator has run in this review. Fresh actual scratch/attempt-parent/current-account/resources/nonce/capability/independent release are separate Root work.",
+    "Current115 matching original235 native behavior and final F02 wholefile retirement remain OPEN until actual matching native protocol and normal retirement pass. Historical60e native acceptance is reused only for unchanged case/oracle/context."
+  ],
+  "execution_by_reviewer": {
+    "compose": 0,
+    "compiler": 0,
+    "guard_or_account": 0,
+    "resource_or_proc_query": 0,
+    "binder_main": 0,
+    "Docker": 0,
+    "native": 0,
+    "canonical_mutations": 0
+  },
+  "open_predicates": [
+    "Fresh Root ordinary authority and current ownership before one compose",
+    "Actual compose/fullmap result, actual scratch literal API binding, exact source/case capabilities and separate native execution release",
+    "Actual matching current115 original235 functional native result and positive normal retirement; no wholefile closure from this source review"
+  ],
+  "blockers": []
+}

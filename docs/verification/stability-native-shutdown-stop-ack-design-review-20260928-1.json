@@ -1,0 +1,30 @@
+{
+  "schema": "mckernel.stability.design-review.v1",
+  "date": "2026-09-28",
+  "status": "BLOCK_ABI_FREEZE",
+  "scope": "native per-CPU STOP request, acknowledgement and teardown ownership",
+  "base_commit": "8202d93a033d4d5da93e85a0150ac4d3621019c3",
+  "observed_transport": {
+    "master_queue": "56-byte packets consumed only by guest CPU0",
+    "regular_queue": "128-byte IkcScdPacket per-CPU channels are the only existing per-rank delivery route",
+    "current_stop_opcode": false,
+    "current_boot_session_identity": false
+  },
+  "blocking_prerequisites": [
+    "independently retained parking storage and a terminal CPU transition before reclaiming guest code, stack or page tables",
+    "deferred stop after packet release and interrupted-context rundown; the packet handler itself cannot park",
+    "per-generation inventory and drain for guest-allocated Linux IRQ-work nodes, including publication followed by failed IPI",
+    "a started BootIrqRoute unpublish and callback-drain path before slot generation reuse",
+    "immutable boot-session identity and explicit STOP capability established before ordinary service admission"
+  ],
+  "provisional_encoding_not_reserved": {
+    "packet_bytes": 128,
+    "request_opcode_candidate": "0x70",
+    "ack_opcode_candidate": "0x71",
+    "fields": "MSTP magic, version/length, OS slot, guest CPU rank, OS generation, stop sequence, 16-byte boot session, channel cookie, phase, zero reserved bytes",
+    "route": "port 501 request per assigned CPU; port 503 ACK echoing exact identity tuple"
+  },
+  "required_order": ["Running", "AdmissionClosed", "Draining", "StopPublishedPerCpu", "SenderQuiescedPerCpu", "HostCallbacksDrained", "CpuReclaimed", "Released"],
+  "failure_rule": "timeout or any stale/malformed/missing ACK retains CPU assignments, RAM, mappings, queues, module pins and request ledger",
+  "excluded": ["wire reservation authority", "implementation", "build or runtime execution", "guest CPU or lifecycle acceptance"]
+}

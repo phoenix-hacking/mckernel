@@ -1,0 +1,66 @@
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -4728,11 +4728,25 @@
+ 			(struct siginfo *)info, ptracecont);
+ }
+ 
++#if defined(MCKERNEL_RUST_F03_LEAF_CALLBACKS) && defined(__x86_64__)
++extern void ptrace_detach_wakeup_bridge(void *thread, int valid_states);
++#else
++#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
++#line 4695
++#else
++#line 4704
++#endif
+ static void
+ ptrace_detach_wakeup_bridge(void *thread, int valid_states)
+ {
+ 	sched_wakeup_thread((struct thread *)thread, valid_states);
+ }
++#endif
++#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
++#line 4700
++#else
++#line 4709
++#endif
+ 
+ #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ static void
+--- a/kernel/CMakeLists.txt
++++ b/kernel/CMakeLists.txt
+@@ -144,6 +144,7 @@
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/sysfs.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_policy.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_mprotect_host_vma.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_ptrace_detach_wakeup.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_munmap_clear_host_forward.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_exit_group_current_pid.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_util_clone_disabled_logger.rs"
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -36866,3 +36866,8 @@
+ #[cfg(all(f03_leaf_callbacks_candidate, target_arch = "x86_64"))]
+ #[path = "syscall_mprotect_host_vma.rs"]
+ mod syscall_mprotect_host_vma;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(all(f03_leaf_callbacks_candidate, target_arch = "x86_64"))]
++#[path = "syscall_ptrace_detach_wakeup.rs"]
++mod syscall_ptrace_detach_wakeup;
+--- /dev/null
++++ b/kernel/rust/syscall_ptrace_detach_wakeup.rs
+@@ -0,0 +1,14 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++use core::ffi::{c_int, c_void};
++
++/// Forward the callback to the qualified existing scheduler provider.
++///
++/// # Safety
++/// The thread and its lifetime must meet the original callback and scheduler
++/// provider contracts; this callback does not acquire or release ownership.
++#[no_mangle]
++pub unsafe extern "C" fn ptrace_detach_wakeup_bridge(thread: *mut c_void, valid_states: c_int) {
++    // SAFETY: The caller supplies the same live thread and states as the C
++    // callback. The original callback also discards the scheduler result.
++    let _ = unsafe { crate::sched_helpers::sched_wakeup_thread(thread.cast(), valid_states) };
++}

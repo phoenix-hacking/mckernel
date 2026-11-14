@@ -1,0 +1,90 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/current110_execution_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "recorded_at": "2026-10-27T18:03:45.666549+00:00",
+  "decision": "PASS_EXACT_CURRENT110_STATIC_MATERIALIZATION_AND_HOLDER_ONLY_PREPARATION_SOURCE",
+  "runtime_authority": null,
+  "actual_holder_or_build_release": false,
+  "blocking_findings": [],
+  "preparation_manifest": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/resource-and-qualifier-preparation-1/PREPARATION-MANIFEST.json",
+    "bytes": 14481,
+    "sha256": "99839d4f01d9a643d1860c6a06cba256aeb41c4690d8705f799c6e821a4ccb86"
+  },
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/resource-and-qualifier-preparation-1/SOURCE-READY.json",
+    "bytes": 3119,
+    "sha256": "25a1c1cf8e56d59956edfbd2a96fa1bd372319c698decb13a38ab96bd6416ce9"
+  },
+  "materializer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/resource-and-qualifier-preparation-1/materialize_admission.py",
+    "bytes": 5792,
+    "sha256": "63d4ca6be30618f60aa648ce87fa95015e6f7c9df0571261ab353c44279f38ce"
+  },
+  "v2_runner": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/resource-and-qualifier-preparation-1/run_build_only.py",
+    "bytes": 23976,
+    "sha256": "d467d00ecbfedcdc39bd53664e8e40140a76bb9742389f5bfd29db77ba301eea"
+  },
+  "resource_capture": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/resource-and-qualifier-preparation-1/capture_resources.py",
+    "bytes": 10364,
+    "sha256": "1b206989e8739bb212e212bbbe6df52e9d363f4f11c75f3ca4ad1a62ddde0774"
+  },
+  "preserved_frozen_source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/independent-review-1/INDEPENDENT-REVIEW.json",
+    "bytes": 9065,
+    "sha256": "40b86b7f1f7d9c91561f4a4af5f0d517a98332ab5e23ad0c9c0ea907404f6ee1"
+  },
+  "verified": [
+    "Final manifest99839d4f matches exact35 declared files and7 external refs. Materializer63d4ca6b and v2runnerd467 match. All selected helper ASTs parse. Original40b86b7f source/five-command review is preserved and incorporated at its exact scope.",
+    "All9 canonical HOST19 destinations still equal Root adopted candidate hashes; all112 canonical original and private snapshot references match. Materializer repeats these checks before staging; it copies no kernel source, compiler outputs, old image or native payload.",
+    "Materializer requires explicit Root author/decision/one invocation/export attestation, new32hex nonce excluding consumed ea92, complete current ledger with no-unlisted-operation attestation and absence of nonce from consumed set. Current custody/source-adoption/review references are hash-authenticated, and exact preparation manifest/external closure is rechecked.",
+    "Exact reviewed v2 guard1f152 is now runner binding. AST comparison proves only current_operation_guard changed from prior frozen runner; worker/holder/publisher are byte-identical to original preparation. v2 preserves dynamic guardian birth/journal/holds and inherited UTC/MONO/BOOT clamp/account semantics.",
+    "Static writes are confined to a fresh ROOT-* admission directly under canonical evidence root with exclusive file creation. Four helper bytecopies, exact static request, finalized profile, exact readonly export, source/request adoption receipt and holder-only bootstrap are the entire materializer effects. It writes no build READY, resource authority or actual compiler grant.",
+    "Profile starts with null request and receives exact static-request digest/new nonce/current custody. Existing exact source/configuration/seven-object/postimage/Rust112 closure and five argv remain bound. Export attestation checks exact qualified input hashes/readability and traversable source/seed roots; all input mounts remain readonly.",
+    "Holder-only bootstrap names exact current helper/profile hashes, same nonce/current custody, permanent /run/lock/mckernel-development.lock and fresh admission/HOLDER. Existing holder independently verifies27:4/birth/flock, waits for separate build grant, positively joins exact runner and preserves quarantine for uncertain container custody.",
+    "Resource capturer source pins v2guard1f152 and shared observer2b736. Held mode binds explicit Root resource input, same nonce/request/profile/ledger/current custody, actual holder PID/birth/27:4/flock,112 source/export closure, cgroups, no-running-container observation and actual memory/storage/PID headroom before producing resource facts plus pending-review input.",
+    "Actual resource floor remains host16GiB and stronger scratch14091616256B, aggregate23259332608B, oneheavyCPU2-5/12GiB/no-swap/512tasks. Seven independent AST-only resource boundary checks pass. No guard, observer, holder, resource query or materializer was invoked in this review.",
+    "Five production commands stay ordinary build-only. Seven acceptance qualifiers can run after actual command completion; this first-entry source review does not block compiler preparation on final acceptance polishing or grant any expected94/68/45 result."
+  ],
+  "precise_binding_notes": [
+    "Root held-resource input request must name ROOT-REQUEST-ADOPTION.json, which contains nonce and request_sha256. STATIC-REQUEST-PAYLOAD.SOURCE-ONLY.json is hashed by profile and intentionally has no self-hash field; it does not satisfy capturer request schema.",
+    "The shared observer observe() still examines historical strict235 HERE/CID/NONCE/30-command retirement while gathering current free-mutex/global process/mount facts. Treat that as supplemental known-state observation only, never as matching current110 postbuild/native proof or as replacement for latest independently accepted custody/current-free evidence. Root must bind actual latest clearance and truthful no-intervening-operation attestation.",
+    "Root must bind this corrected first-entry approval alongside preserved original40b source review in actual admission/publication evidence. Historical source-only records or placeholder NULL fields do not authorize invocation.",
+    "Source publication must prove actual exact newly materialized sources/metadata fetched from the engineering checkpoint. Publication descriptor runtime_authority None alone is insufficient proof and remains a required exact independent build-review check."
+  ],
+  "authorized_scope_of_source_approval": [
+    "Root may use reviewed materializer63d4ca6b once with fresh actual explicit bindings to create ordinary static metadata and holder-only bootstrap. Root remains the sole execution/integration owner; this review itself invokes nothing.",
+    "Actual holder entry follows Root current account/source/ownership/ledger/nonce clearance and source publication. Actual held resources and independent exact5-command release still follow live HOLDER.READY.",
+    "Actual compiler entry requires fresh<=120s held resource data, exact independent pending-input SHA approval and separate Root one-use grant/READY. Preserve first failures and completed prefixes; no old109 replay or ea92 reuse."
+  ],
+  "postbuild_scope": {
+    "qualifiers_not_run": true,
+    "artifact_default_acceptance": false,
+    "native_acceptance": false,
+    "whole_file_acceptance": false,
+    "expected_counts_are_predictions": {
+      "selected_C_functions": 94,
+      "process_OBJECT_records": 68,
+      "cohort_Rust_function_exports": 45
+    },
+    "M14_M15": "OPEN",
+    "original_whole_FP4096_1024_failure_preserved": true
+  },
+  "review_actions": {
+    "read_hash_stat_AST_only": true,
+    "pure_resource_cases": 7,
+    "materialization": false,
+    "kernel_source_copy": false,
+    "live_guard_or_observer": false,
+    "Docker_compiler_root_guest_or_workload": false,
+    "holder_or_lease_operations": false,
+    "cleanup": false,
+    "agents": false,
+    "canonical_changes": false,
+    "only_this_review_file_written": true
+  }
+}

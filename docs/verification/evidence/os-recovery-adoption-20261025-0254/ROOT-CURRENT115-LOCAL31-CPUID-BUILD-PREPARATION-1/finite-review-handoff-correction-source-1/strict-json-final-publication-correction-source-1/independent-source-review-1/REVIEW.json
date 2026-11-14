@@ -1,0 +1,95 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_FINITE_INDEPENDENT_VERIFIER_SOURCE_AND_HANDOFF_ONLY",
+  "independent": true,
+  "implementation_ownership": false,
+  "reviewer": "/root/custody_release_review",
+  "runtime_authority": null,
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/finite-review-handoff-correction-source-1/strict-json-final-publication-correction-source-1/SOURCE-READY.json",
+    "bytes": 3664,
+    "sha256": "37380ed087eb5cf6348c9bbe95b23fb186bdc69fbcb9638bdb0028019f411696"
+  },
+  "reviewed_manifest": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/finite-review-handoff-correction-source-1/strict-json-final-publication-correction-source-1/PREPARATION-MANIFEST.json",
+    "bytes": 23497,
+    "sha256": "cc241243adda83a8e3a5bd19b8a1b1d1d2e831295f6a2f8d7867eac669287a69"
+  },
+  "reviewed_verifier": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/finite-review-handoff-correction-source-1/strict-json-final-publication-correction-source-1/finite_review.py",
+    "bytes": 13743,
+    "sha256": "d4b0af90645080451ea7cc23e8465fc3c68ff040e53e3ca92187a478d24f44c1"
+  },
+  "reviewed_common": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/finite-review-handoff-correction-source-1/strict-json-final-publication-correction-source-1/handoff_common.py",
+    "bytes": 3562,
+    "sha256": "9bc7fd1cae92a0366e5e87311e75d309a737774af85ca481392c4a65804e67ed"
+  },
+  "reviewed_Root_capture": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/finite-review-handoff-correction-source-1/strict-json-final-publication-correction-source-1/root_capture_once.py",
+    "bytes": 3424,
+    "sha256": "e04f0511809bd46ecfeff2d01128f6d431e1c11418420b3a765e996b230af00e"
+  },
+  "reviewed_Root_publisher_adapter": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/finite-review-handoff-correction-source-1/strict-json-final-publication-correction-source-1/publish_after_independent_pass_once.py",
+    "bytes": 2656,
+    "sha256": "b18f4a331ebc4cf719882b1ca6841ddbe739e0ced162fc0c4d8d1b2964b73b0d"
+  },
+  "reused_original_focused_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/finite-review-handoff-correction-source-1/independent-source-review-1/REVIEW.json",
+    "bytes": 5244,
+    "sha256": "e2ca50843ef6f7dd9d8764e69d269758c144dff25631718b15200f49cad4a801"
+  },
+  "closed_findings": [
+    {
+      "id": "receipt-contract",
+      "evidence": "Real receipt includes implementation_ownership false, maximum_invocations 1 and payload_sha256 identical to actual pending SHA; separate Root adapter checks these fields before its once publication claim."
+    },
+    {
+      "id": "atomic-freshness",
+      "evidence": "Real verifier final callback authenticates exact pending/resource refs, checks no-launch paths and original account/window guard, then fresh three-clock minima and original age<=120 immediately after temp fsync and before atomic final link. Any failure leaves final receipt absent. Receipt identifies its serialized clock sample as pre-serialization."
+    },
+    {
+      "id": "same-authenticated-json-bytes",
+      "evidence": "read_json_ref decodes verified_raw return buffer; strict UTF-8, duplicate keys, nonfinite constants/overflow, malformed/trailing data and non-object roots rejected. Python refs remain bytes-only."
+    },
+    {
+      "id": "source-current-context-joins",
+      "evidence": "Cold checks join actual source adoption across request/adoption/profile/chosen ref and match profile current-context ledger/free/boundary to the authenticated cold refs."
+    }
+  ],
+  "independent_pure_controls": {
+    "strict_JSON_invalid_classes_rejected": 9,
+    "valid_UTF8_object": true,
+    "mock_postfsync_callback_order": [
+      "fsync",
+      "callback-pass",
+      "link",
+      "fsync"
+    ],
+    "failed_callback_no_final_link": true,
+    "executed_bodies": "Only selected parser and atomic metadata functions with mocked OS operations; no utility main/account guard/query/resource/approver/workload."
+  },
+  "retained_contract": {
+    "four_exact_commands": 4,
+    "new_objects": 3,
+    "retained_objects": 8,
+    "Rust_source_closure": 120,
+    "hot_predicates_sha256": "13c4efa0929bd2962de47434b7998b9a5acc84f25e157b4b1ce78fdaf25c7a5b",
+    "Root_capture_algorithm_byteexact_original": true,
+    "unchanged_guarded_materializer_sha256": "fb206290bdae80e348c28aa1d774283c9af3e2c6270be9f1f3132b69f5f1ece0",
+    "fixed_earliest_clamps": [
+      1793165769.0,
+      947874.5689514667,
+      963213.695968197
+    ],
+    "resource_freshness_max_seconds": 120,
+    "expired_cf36_approval_revived": false
+  },
+  "next_authorized_sequence": "After genuine old-holder retirement/current-free and Root source adoption/publication of exact future admission/newnonce/current boundary: independent reviewer alone invokes adopted verifier and confirms live PREWARM_READY before Root starts physical/resource capture. Root alone publishes following real exact approved SHA.",
+  "actual_PREWARM_READY": null,
+  "actual_resource": null,
+  "actual_independent_execution_PASS": null,
+  "actual_grant": null,
+  "limitations": "Source and pure parser/metadata-function review only. No actual verifier main, account guard, ownership query, compiler, workload, holder, signal, grant, publisher, Git or canonical mutation. Future actual bindings remain unreviewed until supplied. Original expired91e5 and original source blocker e2ca remain immutable."
+}

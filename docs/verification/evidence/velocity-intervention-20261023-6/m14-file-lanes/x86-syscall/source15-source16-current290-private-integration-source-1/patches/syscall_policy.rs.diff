@@ -1,0 +1,53 @@
+--- /home/holden/mckernel/kernel/rust/syscall_policy.rs
++++ /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/source15-source16-current290-private-integration-source-1/runtime/kernel/rust/syscall_policy.rs
+@@ -35238,3 +35238,50 @@
+         )
+     }
+ }
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Reuse existing private adapters and genuine lock/preemption owners.
++/// Borrow the process-VM memory-range lock through the existing noIRQ helper.
++///
++/// # Safety
++/// `vm` must identify a live, aligned ProcessVm whose caller-held lifetime spans
++/// the matching lock/unlock pair. The caller must preserve the original lock
++/// discipline, balanced nesting and execution context. No reference is retained.
++#[no_mangle]
++pub unsafe extern "C" fn arch_process_vm_rw_read_lock_bridge(vm: *mut c_void) {
++    unsafe {
++        crate::lock_helpers::ihk_rwspinlock_read_lock_noirq(
++            addr_of_mut!((*vm.cast::<ProcessVm>()).memory_range_lock).cast(),
++        );
++    }
++}
++
++/// Borrow the process-VM memory-range lock through the existing noIRQ helper.
++///
++/// # Safety
++/// `vm` must identify a live, aligned ProcessVm whose caller-held lifetime spans
++/// the matching lock/unlock pair. The caller must preserve the original lock
++/// discipline, balanced nesting and execution context. No reference is retained.
++#[no_mangle]
++pub unsafe extern "C" fn arch_process_vm_rw_read_unlock_bridge(vm: *mut c_void) {
++    unsafe {
++        crate::lock_helpers::ihk_rwspinlock_read_unlock_noirq(
++            addr_of_mut!((*vm.cast::<ProcessVm>()).memory_range_lock).cast(),
++        );
++    }
++}
++
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++/// The caller keeps vm and returned range live under the qualified VM read-lock pair.
++/// No ownership, allocation, retained reference or cache algorithm changes.
++unsafe extern "C" fn f06_process_vm_rw_lookup(vm: *mut c_void, start: CULong, end: CULong) -> *mut c_void {
++    unsafe { crate::process_helpers::lookup_process_memory_range(vm.cast(), start, end).cast() }
++}
++
++/// # Safety
++/// vm is aligned/live; caller holds memory_range_lock through all returned-range uses.
++#[no_mangle]
++pub unsafe extern "C" fn arch_process_vm_rw_lookup_range_bridge(vm:*mut c_void,start:CULong,end:CULong)->*mut VmRange {
++    unsafe { f06_process_vm_rw_lookup(vm,start,end).cast() }
++}

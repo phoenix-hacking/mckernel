@@ -1,0 +1,567 @@
+{
+  "status": "PASS_FORK_NORMAL_IMAGE_AND104_ABI_PENDING_BODY_PROVIDER_OWNERSHIP_QUALIFICATION",
+  "started_at": "2026-11-11T02:05:23.718202+00:00",
+  "finished_at": "2026-11-11T02:05:56.301290+00:00",
+  "source_commit": "f83960460f4fa883cfc6550f0ed8809a561bbb64",
+  "request_sha256": "db0d0e96830b39e15f142278dff9d5f21beb02c522d07ed9cbb22c11634fb784",
+  "review_sha256": "e1c6b759e4f6071eb8b29c20c09271e07e5860c96393534265fd12610b3f27bb",
+  "phases": [
+    {
+      "phase": "build",
+      "CID": "b0ec658575486f1c2b298afafe7096839eda5d5d3535e636ae73d0d20be7b06a",
+      "exit": 0,
+      "OOMKilled": false,
+      "owned_container_removed": true,
+      "client_wait_joined": true,
+      "cgroup_samples": 44
+    },
+    {
+      "phase": "metadata",
+      "CID": "9397998866ed3a52b8031103eacf0c2f6e2b40e2ca26ccef1de15658353843ce",
+      "exit": 0,
+      "OOMKilled": false,
+      "owned_container_removed": true,
+      "client_wait_joined": true,
+      "cgroup_samples": 17
+    }
+  ],
+  "clients": [
+    {
+      "label": "source-commit",
+      "argv": [
+        "/usr/bin/git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "pid": 1199687,
+      "birth": "44898978",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true
+    },
+    {
+      "label": "IHK-commit",
+      "argv": [
+        "/usr/bin/git",
+        "-C",
+        "/home/holden/mckernel/ihk",
+        "rev-parse",
+        "HEAD"
+      ],
+      "pid": 1199688,
+      "birth": "44898978",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true
+    },
+    {
+      "label": "running-preflight",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "ps",
+        "-q"
+      ],
+      "pid": 1199689,
+      "birth": "44898979",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true
+    },
+    {
+      "label": "names-preflight",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "ps",
+        "-a",
+        "--format",
+        "{{.Names}}"
+      ],
+      "pid": 1199697,
+      "birth": "44898990",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true
+    },
+    {
+      "label": "build-create",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "create",
+        "--name",
+        "mck-m14-fork-image-20261111-1",
+        "--label",
+        "mckernel.preparation-owner=m14-do-fork-image-1",
+        "--init",
+        "--pull=never",
+        "--network=none",
+        "--ipc=private",
+        "--cpus=1",
+        "--cpuset-cpus=6",
+        "--memory=2g",
+        "--memory-swap=2g",
+        "--pids-limit=256",
+        "--ulimit",
+        "core=0:0",
+        "--ulimit",
+        "fsize=4294967296:4294967296",
+        "--ulimit",
+        "cpu=3600:3600",
+        "--user",
+        "1000:1000",
+        "--read-only",
+        "--cap-drop=ALL",
+        "--security-opt=no-new-privileges",
+        "--tmpfs",
+        "/tmp:rw,nodev,nosuid,noexec,size=64m,mode=1777",
+        "--workdir",
+        "/work/output",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel,dst=/src,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2,dst=/source,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/output-2,dst=/output,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output,dst=/work/output",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu,dst=/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/cmake/usr/bin/cmake,dst=/usr/bin/cmake,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/cmake-data/usr/share/cmake,dst=/usr/share/cmake,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/consumer-native46d-1/libuv-provider-acquisition-1/libuv-passive-extraction-1/extracted/libuv/usr/lib64/libuv.so.1.0.0,dst=/usr/lib64/libuv.so.1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/include/bfd.h,dst=/usr/include/bfd.h,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/include/ansidecl.h,dst=/usr/include/ansidecl.h,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/include/symcat.h,dst=/usr/include/symcat.h,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/include/diagnostics.h,dst=/usr/include/diagnostics.h,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/lib64/libbfd.so,dst=/usr/lib64/libbfd.so,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/lib64/libbfd.a,dst=/usr/lib64/libbfd.a,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/lib64/libsframe.a,dst=/usr/lib64/libsframe.a,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/lib64/libiberty.a,dst=/usr/lib64/libiberty.a,readonly",
+        "--entrypoint",
+        "/usr/bin/env",
+        "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+        "-i",
+        "BASH_ENV=",
+        "ENV=",
+        "GNUMAKEFLAGS=",
+        "LANG=C",
+        "LC_ALL=C",
+        "PATH=/usr/bin:/bin",
+        "TZ=UTC",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "LD_LIBRARY_PATH=",
+        "LD_PRELOAD=",
+        "MAKEFILES=",
+        "MAKEFLAGS=",
+        "MAKEOVERRIDES=",
+        "MFLAGS=",
+        "CMAKE_BUILD_PARALLEL_LEVEL=1",
+        "SOURCE_DATE_EPOCH=1786434034",
+        "KBUILD_BUILD_HOST=rocky-10.2-x86_64",
+        "KBUILD_BUILD_TIMESTAMP=Tue, 11 Aug 2026 07:40:34 +0000",
+        "KBUILD_BUILD_USER=mckernel",
+        "KBUILD_BUILD_VERSION=1",
+        "TMPDIR=/tmp",
+        "TMP=/tmp",
+        "TEMP=/tmp",
+        "/usr/bin/cmake",
+        "--build",
+        "/work/output/build",
+        "--target",
+        "mckernel.img",
+        "--parallel",
+        "1",
+        "--verbose"
+      ],
+      "pid": 1199705,
+      "birth": "44899004",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true
+    },
+    {
+      "label": "build-profile",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "inspect",
+        "b0ec658575486f1c2b298afafe7096839eda5d5d3535e636ae73d0d20be7b06a"
+      ],
+      "pid": 1199713,
+      "birth": "44899016",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true
+    },
+    {
+      "label": "build-running-inspect",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "inspect",
+        "b0ec658575486f1c2b298afafe7096839eda5d5d3535e636ae73d0d20be7b06a"
+      ],
+      "pid": 1199722,
+      "birth": "44899028",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true
+    },
+    {
+      "label": "build-payload",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "start",
+        "-a",
+        "b0ec658575486f1c2b298afafe7096839eda5d5d3535e636ae73d0d20be7b06a"
+      ],
+      "pid": 1199721,
+      "birth": "44899028",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true,
+      "primary_error": null,
+      "secondary_errors": []
+    },
+    {
+      "label": "build-terminal",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "inspect",
+        "b0ec658575486f1c2b298afafe7096839eda5d5d3535e636ae73d0d20be7b06a"
+      ],
+      "pid": 1200159,
+      "birth": "44901257",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true
+    },
+    {
+      "label": "build-container-wait",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "wait",
+        "b0ec658575486f1c2b298afafe7096839eda5d5d3535e636ae73d0d20be7b06a"
+      ],
+      "pid": 1200167,
+      "birth": "44901269",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true
+    },
+    {
+      "label": "build-owned-remove",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "rm",
+        "b0ec658575486f1c2b298afafe7096839eda5d5d3535e636ae73d0d20be7b06a"
+      ],
+      "pid": 1200175,
+      "birth": "44901281",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true
+    },
+    {
+      "label": "metadata-create",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "create",
+        "--name",
+        "mck-m14-fork-abi-metadata-20261111-1",
+        "--label",
+        "mckernel.preparation-owner=m14-do-fork-abi104-1",
+        "--init",
+        "--pull=never",
+        "--network=none",
+        "--ipc=private",
+        "--cpus=1",
+        "--cpuset-cpus=6",
+        "--memory=512m",
+        "--memory-swap=512m",
+        "--pids-limit=64",
+        "--ulimit",
+        "core=0:0",
+        "--ulimit",
+        "fsize=1073741824:1073741824",
+        "--ulimit",
+        "cpu=120:120",
+        "--user",
+        "1000:1000",
+        "--read-only",
+        "--cap-drop=ALL",
+        "--security-opt=no-new-privileges",
+        "--tmpfs",
+        "/tmp:rw,nodev,nosuid,noexec,size=16m,mode=1777",
+        "--workdir",
+        "/work/output",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output,dst=/work/output,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-fork-default-ownership-p04source-max-1/abi-witness-1/input,dst=/producer,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-fork-default-ownership-p04source-max-1/abi-witness-1/metadata,dst=/evidence",
+        "--entrypoint",
+        "/usr/bin/env",
+        "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+        "-i",
+        "BASH_ENV=",
+        "ENV=",
+        "LANG=C",
+        "LC_ALL=C",
+        "PATH=/usr/bin:/bin",
+        "TZ=UTC",
+        "LD_LIBRARY_PATH=",
+        "LD_PRELOAD=",
+        "/usr/bin/bash",
+        "--noprofile",
+        "--norc",
+        "/producer/read_image_metadata.sh"
+      ],
+      "pid": 1200183,
+      "birth": "44901295",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true
+    },
+    {
+      "label": "metadata-profile",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "inspect",
+        "9397998866ed3a52b8031103eacf0c2f6e2b40e2ca26ccef1de15658353843ce"
+      ],
+      "pid": 1200191,
+      "birth": "44901307",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true
+    },
+    {
+      "label": "metadata-running-inspect",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "inspect",
+        "9397998866ed3a52b8031103eacf0c2f6e2b40e2ca26ccef1de15658353843ce"
+      ],
+      "pid": 1200200,
+      "birth": "44901319",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true
+    },
+    {
+      "label": "metadata-payload",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "start",
+        "-a",
+        "9397998866ed3a52b8031103eacf0c2f6e2b40e2ca26ccef1de15658353843ce"
+      ],
+      "pid": 1200199,
+      "birth": "44901319",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true,
+      "primary_error": null,
+      "secondary_errors": []
+    },
+    {
+      "label": "metadata-terminal",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "inspect",
+        "9397998866ed3a52b8031103eacf0c2f6e2b40e2ca26ccef1de15658353843ce"
+      ],
+      "pid": 1200320,
+      "birth": "44902200",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true
+    },
+    {
+      "label": "metadata-container-wait",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "wait",
+        "9397998866ed3a52b8031103eacf0c2f6e2b40e2ca26ccef1de15658353843ce"
+      ],
+      "pid": 1200328,
+      "birth": "44902212",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true
+    },
+    {
+      "label": "metadata-owned-remove",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "rm",
+        "9397998866ed3a52b8031103eacf0c2f6e2b40e2ca26ccef1de15658353843ce"
+      ],
+      "pid": 1200336,
+      "birth": "44902224",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true
+    }
+  ],
+  "all_waits_streams_joined": true,
+  "remaining_owned_children": [],
+  "actual_ABI_words": 104,
+  "actual_ABI_artifacts": 3,
+  "metadata": [
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-fork-default-ownership-p04source-max-1/abi-witness-1/metadata/image-elf.stdout",
+      "bytes": 46900,
+      "sha256": "eab10c03c3328befa717a2654feab7a41f1ca51018c3590b5d8414fc4110b760"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-fork-default-ownership-p04source-max-1/abi-witness-1/metadata/image-symbols-relocations.stdout",
+      "bytes": 438371,
+      "sha256": "f02330f5248ffb3dc369a5698d27647d8d759f0bb1675f493dea86e8709e0a24"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-fork-default-ownership-p04source-max-1/abi-witness-1/metadata/constituent-symbols-relocations.stdout",
+      "bytes": 38533107,
+      "sha256": "9c3fa13ebd7e0012b587d9b1a769d7698a0439951972fca97964bce651233aa9"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-fork-default-ownership-p04source-max-1/abi-witness-1/metadata/image-nm.stdout",
+      "bytes": 240478,
+      "sha256": "ca0b12d3beacbb59c6ad8b7ff02328ff478ec3d2f8280435e213b0a79b6d6d6d"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-fork-default-ownership-p04source-max-1/abi-witness-1/metadata/image-map.stdout",
+      "bytes": 991051,
+      "sha256": "1c77d1b8a8f877f74fe1f79fc69c6904793dea3ea67cd3bb9d295abeefb62a2b"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-fork-default-ownership-p04source-max-1/abi-witness-1/metadata/artifact-identities.sha256",
+      "bytes": 2086,
+      "sha256": "97b401742cb5678fb450e630f6a5a56dc39f14c451acceb8bab031bb5708d21c"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-fork-default-ownership-p04source-max-1/abi-witness-1/metadata/artifact-modes.stdout",
+      "bytes": 1185,
+      "sha256": "e9ced3d47daf95fcfead843ad18bb527644f3bd34232c36d5be72e93258ffda5"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-fork-default-ownership-p04source-max-1/abi-witness-1/metadata/regenerated-CMakeCache.txt",
+      "bytes": 30123,
+      "sha256": "e720c6a793e586ff0a4702a2312cb1712cb09c7dce6ca1667ce9e2689024261a"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-fork-default-ownership-p04source-max-1/abi-witness-1/metadata/regenerated-compile_commands.json",
+      "bytes": 73098,
+      "sha256": "b9dc75e7b20237c867b73dfc4dc9a7b49983adde6df4b1ec24092394b7e533dd"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-fork-default-ownership-p04source-max-1/abi-witness-1/metadata/regenerated-flags.make",
+      "bytes": 6983,
+      "sha256": "8b3896597127747d43e6c65713b25a8e220f596d5fba164f510732f8006126cd"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-fork-default-ownership-p04source-max-1/abi-witness-1/metadata/regenerated-build.make",
+      "bytes": 48162,
+      "sha256": "5fdf07f8d241189e10f54d18be09b426a37f4c443f4413dbd669ac310a624211"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-fork-default-ownership-p04source-max-1/abi-witness-1/metadata/regenerated-link.txt",
+      "bytes": 759,
+      "sha256": "d9d50ed84770a8bff5af2371e19245200d99d61fe3cda28e880bd88e6669e428"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-fork-default-ownership-p04source-max-1/abi-witness-1/metadata/regenerated-link.d",
+      "bytes": 1290,
+      "sha256": "a10ae257f2d0672f5ce8048b889fd83ee656e715aa87561d769d848f79f53a28"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-fork-default-ownership-p04source-max-1/abi-witness-1/metadata/regenerated-mckernel_rust.d",
+      "bytes": 10893,
+      "sha256": "5b2a6a5e0354a8ea7e2050a18720a8c2b0a2b15f8315e1a4040e8e2932ee80e3"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-fork-default-ownership-p04source-max-1/abi-witness-1/metadata/regenerated-mckernel_rust.raw.d",
+      "bytes": 11681,
+      "sha256": "42a9244ab2a98f53f8a64237ed9c9d1c4e715a7c79186b7bf8e17a11dbbd965a"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-fork-default-ownership-p04source-max-1/abi-witness-1/metadata/do-fork-disassembly.stdout",
+      "bytes": 296210,
+      "sha256": "ebd804be296013c73bf65b1b48230bfd5e2b3dbfac670d44e491494683e4eb1e"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-fork-default-ownership-p04source-max-1/abi-witness-1/metadata/regenerated-Rust-build.make",
+      "bytes": 18127,
+      "sha256": "71e1e47a4f07977b14f39470d47a170261d70d34ddad77bbaeb10a33b648a58a"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-fork-default-ownership-p04source-max-1/abi-witness-1/metadata/fork-abi.stdout",
+      "bytes": 73,
+      "sha256": "a08670b52fa6b6223d20a43372b62552a6b83d901cd36c12710ffb51bfab8a07"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-fork-default-ownership-p04source-max-1/abi-witness-1/metadata/RESULT.json",
+      "bytes": 30208,
+      "sha256": "8a1892bdc924f7159a67ecd5d1e4bb179329389de52ada8ebd8a1ea0d6ed48ef"
+    }
+  ],
+  "original_acceptance": false
+}

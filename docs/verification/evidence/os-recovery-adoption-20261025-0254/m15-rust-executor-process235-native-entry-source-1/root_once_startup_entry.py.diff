@@ -1,0 +1,24 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-native-entry-source-1/publication-files-correction-source-1/templates/root_once_startup_entry.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/templates/root_once_startup_entry.py
+@@ -14,8 +14,8 @@
+ import subprocess
+ import time
+ 
+-BASE = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-native-entry-source-1/publication-files-correction-source-1')
+-STARTUP = BASE/'root-adopted-retirement-entry-1'
++BASE = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1')
++STARTUP = BASE/'root-adopted-process235-entry-1'
+ AUTH = STARTUP/'ROOT-CONDITIONAL-ONCE-ENTRY-AUTHORIZATION.json'
+ STATIC = STARTUP/'STATIC-NATIVE-BINDINGS.NOT-RELEASED.json'
+ PENDING = STARTUP/'ROOT-EXECUTION-GRANT.PENDING-REVIEW.json'
+@@ -35,8 +35,8 @@
+ HELPER_SHA = '32354b7717eb63e100ad04309c7cfcb4bcd75badf5d05704617e2e6487a6de68'
+ GUARD_SHA = '1f152e3f18384643cd35d203fcc2a4292950a1c90758734859bdb980cf45fda0'
+ PROFILE_SHA = 'e5584b2c6fecbec0660dfeda3193468cf78af6a9dee0f4cc849e64abbdca1081'
+-NONCE = '22a1d92ed402f4d333bf527185e792b2'
+-CASE = 'startup.argv-empty'
++NONCE = 'd21f4e17faf1b0b806419b1860bd0598'
++CASE = 'P-M06-01-process-exec-wait-235B'
+ REVIEWER = '/root/daemon_execution_review'
+ HELPER_ARGV = ['/home/holden/anaconda3/bin/python3','-I','-B',str(HELPER)]
+ _guard = None

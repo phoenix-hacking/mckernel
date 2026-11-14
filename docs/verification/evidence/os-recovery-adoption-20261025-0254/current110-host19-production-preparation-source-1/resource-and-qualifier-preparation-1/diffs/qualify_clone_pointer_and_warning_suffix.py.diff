@@ -1,0 +1,11 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-current26eb-next-default-source-1/validator-templates/qualify_clone_pointer_and_warning_suffix.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/resource-and-qualifier-preparation-1/validator-templates/qualify_clone_pointer_and_warning_suffix.py
+@@ -5,7 +5,7 @@
+ from collections import Counter
+ from pathlib import Path
+ D=Path(__file__).resolve().parent;E=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254');B=E/'__ACTUAL_ADMISSION_BASENAME__/OUTPUT/work/output/build';A=E/'__ACTUAL_ADMISSION_BASENAME__/OUTPUT/work/evidence';P=json.loads((E/'__ACTUAL_ADMISSION_BASENAME__/PROFILE.SOURCE-ONLY.json').read_text());SRC=Path(P['inputs']['source6153'])
+-EXPECTED=json.loads(Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-current26eb-next-default-source-1/ACCEPTANCE-INPUTS.SOURCE-ONLY.json').read_text())
++EXPECTED=json.loads(Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/resource-and-qualifier-preparation-1/ACCEPTANCE-INPUTS.SOURCE-ONLY.json').read_text())
+ DRIVER=E/'current290-driver-identity-repair-source-1/native_rust_exact_mckernel_image_offline.CURRENT290.VIEW-AND-FRESH-OBJECT-GATE.py';source=DRIVER.read_bytes();assert hashlib.sha256(source).hexdigest()=='9d2d39a0f4a28dc15638fe2c1a01052e64886078d39c3b1e7bf57eccf68bbdfd'
+ names={'_reuse_elf_function','_reuse_elf_owning_relocations','_reuse_elf_object_bytes'}
+ nodes=[n for n in ast.parse(source).body if isinstance(n,ast.ClassDef) and n.name=='_ReuseElf' or isinstance(n,ast.FunctionDef) and n.name in names];ns=dict(Path=Path,struct=struct);exec(compile(ast.Module(body=nodes,type_ignores=[]),str(DRIVER)+':UNCHANGED_REL_POINTER_HELPERS','exec'),ns)

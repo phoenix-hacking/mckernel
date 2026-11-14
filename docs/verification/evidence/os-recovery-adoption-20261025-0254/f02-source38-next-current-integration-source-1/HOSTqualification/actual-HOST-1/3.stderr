@@ -1,0 +1,8 @@
+/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-source38-next-current-integration-source-1/HOSTqualification/fixture/five_extra.c:22:7: error: conflicting types for '_ihk_mc_alloc_aligned_pages_node'
+   22 | void *_ihk_mc_alloc_aligned_pages_node(int n,int a,unsigned long f,int node,int k,unsigned long v,char *file,int line) {
+      |       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/holden/mckernel/kernel/include/process.h:19,
+                 from /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-source38-next-current-integration-source-1/HOSTqualification/fixture/five_extra.c:4:
+/home/holden/mckernel/lib/include/ihk/mm.h:122:7: note: previous declaration of '_ihk_mc_alloc_aligned_pages_node' was here
+  122 | void *_ihk_mc_alloc_aligned_pages_node(int npages, int p2align,
+      |       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

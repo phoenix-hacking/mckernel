@@ -1,0 +1,165 @@
+{
+  "schema": "m14-wait-termination-source-table-ABI-physical-oracle-v1",
+  "status": "PREPARED_NOT_RUN_WAIT_BOTH_PRODUCER_AND_READER_POSITIVE_ROOT_CLOSURE",
+  "source_commit": "6aae8273960583ec7fb194926292bd10ab1bc585",
+  "adopted_reader": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-reader-p03-max-1/READER-ADOPTION.json",
+    "bytes": 3129,
+    "sha256": "11eb0a75a62dac10cd12d21397acfe31a2f0a6328f1fc6dfa6b4443315f0abb1"
+  },
+  "SDK_oracle": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-image-operation-sdk-max-1/reader-1/OUTPUT-ORACLE.json",
+    "bytes": 7656,
+    "sha256": "acf9ee2838613df430f407f9e202493ee6e9278fedbd93c5e7486250bde78916"
+  },
+  "prior_actual_qualification": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-signal-reader-p03-max-1/qualification-1/QUALIFICATION.json",
+    "bytes": 69046,
+    "sha256": "82c82622b0fa53ec24222f0f129ecf62292f83e9227200b5dc24b0007132d729"
+  },
+  "prior_physical_joins": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-signal-reader-p03-max-1/qualification-1/OWNER-PROVIDER-JOINS.json",
+    "bytes": 5775587,
+    "sha256": "f917b8a1098beb83bb3ce771a341a0a829093d47ffbb7e7fe6028e3a16a79a26"
+  },
+  "prior_commands": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-signal-reader-p03-max-1/qualification-1/ACTUAL-RUST-AND-C-COMMANDS.json",
+    "bytes": 20999,
+    "sha256": "6c9e110274bec92096c4169ada85fa70786330711eee7c12bd6e93a6068f0a53"
+  },
+  "new_roots": [
+    "wait_host_wait4_bridge",
+    "terminate_mcexec"
+  ],
+  "C_exclusions": [
+    "wait_host_wait4_bridge",
+    "terminate_mcexec",
+    "terminate_mcexec_do_syscall_bridge"
+  ],
+  "prior34": [
+    "do_syscall",
+    "interrupt_syscall",
+    "terminate_host",
+    "arch_rt_sigreturn_context_bridge",
+    "do_setresuid",
+    "do_setresgid",
+    "do_signal",
+    "arch_ptrace_regset_log_bridge",
+    "arch_native_signal_bad_frame_bridge",
+    "arch_rt_sigreturn_xrstor_bridge",
+    "terminate",
+    "exit_group_log_bridge",
+    "exit_group_terminate_bridge",
+    "exit_group_current_pid_bridge",
+    "do_mmap",
+    "do_fork",
+    "syscall_policy_do_syscall2_bridge",
+    "syscall_do_syscall3_bridge",
+    "syscall_policy_do_syscall3_bridge",
+    "clear_host_pte_log_bridge",
+    "do_munmap_clear_host_bridge",
+    "do_munmap_set_host_bridge",
+    "ptrace_wakeup_sig",
+    "ptrace_wakeup_update_lock_bridge",
+    "ptrace_wakeup_update_unlock_bridge",
+    "ptrace_detach_kfree_bridge",
+    "ptrace_detach_do_kill_bridge",
+    "ptrace_detach_wakeup_bridge",
+    "ptrace_wakeup_log_bridge",
+    "syscall_policy_forward_context_bridge",
+    "mprotect_set_host_vma_bridge",
+    "syscall_forward_context_bridge",
+    "syscall_forward_rt_sigprocmask_bridge",
+    "syscall_forward_sigaction_update_bridge"
+  ],
+  "wait_table": {
+    "name": "f03_wait_c_dependencies",
+    "bytes": 48,
+    "readonly": true,
+    "fields": [
+      {
+        "name": "host_wait4",
+        "offset": 0,
+        "source_target": "wait_host_wait4_bridge"
+      },
+      {
+        "name": "stopped",
+        "offset": 8,
+        "source_target": "wait_stopped_bridge"
+      },
+      {
+        "name": "continued",
+        "offset": 16,
+        "source_target": "wait_continued_bridge"
+      },
+      {
+        "name": "ptrace_detach",
+        "offset": 24,
+        "source_target": "wait_thread_ptrace_detach_bridge"
+      },
+      {
+        "name": "zombie_log",
+        "offset": 32,
+        "source_target": "wait_zombie_log_bridge"
+      },
+      {
+        "name": "wait_log",
+        "offset": 40,
+        "source_target": "do_wait_log_bridge"
+      }
+    ],
+    "new_slot": 0,
+    "types": "Actual reprC F03WaitCDependencies and exact current C6pointer table; first callback unsafe externC fn(CInt,CInt)->CInt. Other5 pointer targets must remain real typed Rust owners."
+  },
+  "callers": [
+    {
+      "name": "wait4_do_wait_bridge",
+      "source_edge": "Actual6aae current wait transaction references declarative48B wait table and uses host_wait4 slot0 in original non-skip child reap path; no hardcoded0x356 or old address equality."
+    },
+    {
+      "name": "check_sig_pending",
+      "source_edge": "Original found2 default nonignored pending branch after matching readerIRQunlock calls terminate_mcexec(0,sig), void result; new target/body must be realRust. No hardcoded0x30c/oldCaddress/859B size."
+    }
+  ],
+  "actual_codegen_rules": {
+    "new_owner": "Each actual nonempty GLOBAL FUNC uniquely owned by current rust/mckernel_rust.o; C fallback/global/local counterparts absent. Exact source/type/profile+physical map/code range and normalized current relocations required.",
+    "alias_or_inlining": "Empty named objdump header/absence alone proves nothing. Direct current relocations and actual final targets qualify; genuine inlining requires source-bound actual caller bytes/relocations and real lower providers. Any unresolved inline lowering is an explicit component boundary, never an automatic name waiver.",
+    "all_current_globals": "Physically join every actual inputglobal to finaladdress/size/type via actual objecthash+GNUld sectionplacement+offset, and exact5 linker assignments. No old4571 numerical quota; current counts/removed/added providers are measured.",
+    "all_current_imports": "Every current required import must resolve to actual unique physical provider; final namedUND/weak/unexplainedowners forbidden at this supported profile.",
+    "four104": "All4 actual832B C/Rust arrays match104 unchanged words1621f5 and matching genuineff48 fields; request72align8 and scalar/public types are independently compiled by current real production guards, not invented test layout."
+  },
+  "semantic_proofs_reused": {
+    "new_wait_actual_qualification": {
+      "bytes": 16397,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/qualification-1/QUALIFICATION.json",
+      "sha256": "d61a355e24c7060efcf795b12717f7162ac8bf04051a5b12e230404eaef06997"
+    },
+    "new_wait_actual_result": {
+      "bytes": 843,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/qualification-1/RESULT.json",
+      "sha256": "f5435e392258f0ffe9db8439ae68fb752db6082f38b05b49bce8ac9b17c80b04"
+    },
+    "new_wait_operation": {
+      "bytes": 22261,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-review-p03-max-1/REVIEW.json",
+      "sha256": "9122741eafeefdad3e36c9b8d692e5f1cdbabedfac8fd0d3e988927990a0ccd1"
+    },
+    "termination_source": {
+      "bytes": 22934,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/signal-termination-host-provider-review-p04tests-max-1/REVIEW.json",
+      "sha256": "e9a6ab39e77462ce042e7908d96f36b76f4b7c92852ad975e2911c5dd485ba53"
+    },
+    "wait_source": {
+      "bytes": 20015,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-review-sourceacq-max-1/candidate-1/REVIEW.json",
+      "sha256": "4a6cfc793f878a6836bd4952b0090ac5796937258e5a81bae7fc4fc8f645204e"
+    }
+  },
+  "new_contracts": {
+    "wait": "All72B initialized: localrouting/valid0,number61,pid/options exact signedint\u2192unsignedlong bit conversion, otherargs0; one actual currentCPU+one synchronous do_syscall; signedlong\u2192signedint narrowing. Controlled6HOST vectors qualify only this boundary; actual production typed/lifetime semantics remain source-bound and new owner/table proof required.",
+    "termination": "Complete existing notify_host_exit body is byte-identical and now real publicvoid ABI. SamecurrentThread/Process offsets/SeqCstCAS/groupstatus/nohost/request initialization/currentCPU/real body and syscall provider; CLong ignored. No new zero-fill, callback stub, ownership, request publication, lock/IRQ/reference operation."
+  },
+  "retained_image": "All prior34 realRust owners/current four104/debug96/archC0/noINTERP/DYNAMIC/runtime relocs/real2LOAD+NOTE/MAP/source/config/compiler/provider unchanged contract. Actual newentry maymove; bind realRustarch_start rather than oldaddress.",
+  "C_ledger": "Observe actual C9\u21926 if source matches, recording each realname/range; require exactly new3 C names excluded, no unexpected additions. No zero-wholegeneric condition or source-only retirement claim.",
+  "after_pass": "Freeze actual component Q first, then independent whole original03-04 clause decision using exact map; no author score/native/hold release."
+}

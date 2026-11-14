@@ -1,0 +1,145 @@
+{
+  "argv_template": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=unlimited:unlimited",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--nofile=256:256",
+    "--",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/cleanup-quarantine-reconciliation-preparation-1/source/physical-reconciliation-1/read_current_eight_event_physical_state.paired-correction-1.py",
+    "--release",
+    "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/cleanup-quarantine-reconciliation-preparation-1/records/eight-event-physical-execution-release.json",
+    "--release-sha256",
+    "FINAL_ACTUAL_RELEASE_FILE_SHA256"
+  ],
+  "bindings": {
+    "bytes": 4278,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/cleanup-quarantine-reconciliation-preparation-1/source/physical-reconciliation-1/ACTUAL-EIGHT-EVENT-PHYSICAL-PRODUCER-BINDINGS-1.json",
+    "sha256": "0dfe00be976d2c5eae1ff7c5bc99572a59369c152b08bd686b7287be4c8a6bde"
+  },
+  "canonical_review_contract": {
+    "draft_canonical_sha256": "b58e932e9d4ff650ebbe6cf70863285e292a3148078fc46ca64b5c478f5f551c",
+    "draft_is_release": false,
+    "file_sha256": "Distinct SHA256 of actual serialized final release, supplied in sole argv SHA operand",
+    "payload": "All final release keys except execution_review",
+    "review_required_fields": [
+      "decision=PASS_EXECUTION",
+      "implementation_ownership=false",
+      "reviewer nonempty and distinct from author",
+      "reviewed_release_payload_sha256=SHA256(canonical final payload)"
+    ],
+    "serialization": "json.dumps(payload,sort_keys=True,separators=(comma,colon),allow_nan=False).encode()+LF"
+  },
+  "capture_contract": {
+    "child_start_json": [
+      "pid",
+      "start_ticks",
+      "process_group",
+      "argv"
+    ],
+    "command_json": [
+      "argv",
+      "final_release",
+      "review",
+      "grant",
+      "fresh_mem_available",
+      "fresh_free_bytes",
+      "observed_at",
+      "no_outer_timeout_or_kill"
+    ],
+    "inner_identity": "Only actual child-start PID/start_ticks; root helper identity only actual result.root_actor, never sudo/tool handle inference.",
+    "original_failure": "Original failed cleanup -9 retained separately; never rewritten as successful physical role.",
+    "outer_identity": "Tool-owned started/completed pair copied verbatim; processId/session/chunk are tool identifiers, outer OS PID/group remain null unless actually observed.",
+    "raw_pair_future": {
+      "completed": null,
+      "role": "physical-reconciliation",
+      "started": null
+    },
+    "status_json": [
+      "status",
+      "returncode",
+      "elapsed_seconds",
+      "direct_child_joined",
+      "streams_closed",
+      "group_absent",
+      "stdout_bytes",
+      "stderr_bytes",
+      "physical_clearance"
+    ],
+    "status_success": "returncode0 and empty stderr and positive joined/group_absent/closed streams; physical_clearance remains false until independent actual acceptance"
+  },
+  "capture_directory": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/cleanup-quarantine-reconciliation-preparation-1/records/actual-eight-event-physical-producer-capture-1",
+  "controller_reuse": "Reuse exact actual retirement invocation/capture pattern; replace only role, argv, release/grant/review refs and fresh capture path. No capture wrapper variant.",
+  "no_execution": true,
+  "producer": {
+    "bytes": 18786,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/cleanup-quarantine-reconciliation-preparation-1/source/physical-reconciliation-1/read_current_eight_event_physical_state.paired-correction-1.py",
+    "sha256": "dd7b6415a6fc5c571ae33fa7395148d37c168e20701aeda9859c2a161429de5c"
+  },
+  "producer_output_directory": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/cleanup-quarantine-reconciliation-preparation-1/records/actual-eight-event-physical-reconciliation-1",
+  "qualified_controller_pair_ancestry": {
+    "bytes": 726,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/cleanup-quarantine-reconciliation-preparation-1/records/ACTUAL-HOLDER-RETIREMENT-TYPED-TOOL-CONTROLLER-PAIR-1.json",
+    "sha256": "6cdee595d4613da305e086f88a9c88e5f5d9eb139cb99ca9e7145a38ce99c733"
+  },
+  "release_data": {
+    "bytes": 1603,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/cleanup-quarantine-reconciliation-preparation-1/source/physical-reconciliation-1/CURRENT-EIGHT-EVENT-FINAL-RELEASE-DATA-PROPOSAL-1.json",
+    "sha256": "41eda531378346107f38ae8c224345f13264e7fee95f36efde26c4e31f72ee46"
+  },
+  "release_output_path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/cleanup-quarantine-reconciliation-preparation-1/records/eight-event-physical-execution-release.json",
+  "remaining_real_prerequisites": {
+    "actual_closed_capture": null,
+    "current_fetched_source_proof": null,
+    "decoder_source_review": null,
+    "exact_execution_review": null,
+    "fresh_root_grant": null,
+    "independent_actual_physical_acceptance": null,
+    "paired_actual_body_check": null,
+    "source_checkpoint": null
+  },
+  "resource_profile": {
+    "address_space_bytes": 2147483648,
+    "core": 0,
+    "cpu": 7,
+    "exclusive_census_quiescence_required": true,
+    "file_size_bytes": 33554432,
+    "inherited_cpu": [
+      -1,
+      -1
+    ],
+    "jobs": 1,
+    "nofile": 256,
+    "outer_grace_kill": null,
+    "outer_wall_kill": null
+  },
+  "role": "physical-reconciliation",
+  "root_final_binding_actions": [
+    "Bind exact current fetched source proof/source_checkpoint; set fetched_source_verified true only after actual verified publication.",
+    "Bind genuine final decoder review and corrected actual paired-body-check receipt.",
+    "Bind fresh root grant and final status PASS_EXECUTION_RELEASE only after exact admission.",
+    "Compute final canonical payload excluding execution_review, obtain independent exact execution review, insert exact review descriptor without changing any reviewed payload field.",
+    "Write final release O_EXCL, hash actual file, replace sole FINAL_ACTUAL_RELEASE_FILE_SHA256 argv operand."
+  ],
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_review": {
+    "bytes": 4038,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/cleanup-quarantine-reconciliation-preparation-1/records/INDEPENDENT-PAIRED-PHYSICAL-PRODUCER-SOURCE-REVIEW-1.json",
+    "sha256": "68d6ca547e56ebfa442c2b93187a5c30bc95e820e7017117db1ec20aed5d44a9"
+  },
+  "status": "DATA_PROPOSAL_NOT_EXECUTION_AUTHORITY",
+  "unreleased_payload": {
+    "bytes": 1575,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/cleanup-quarantine-reconciliation-preparation-1/source/physical-reconciliation-1/CURRENT-EIGHT-EVENT-UNRELEASED-PAYLOAD-DATA-1.json",
+    "sha256": "2787378e1e8e2cef354c730b2fb3305a09031a08146dd1efc824898b27ef611d"
+  }
+}

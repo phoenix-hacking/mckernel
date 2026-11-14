@@ -1,0 +1,66 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "FINITE_SHORT32_WITH_EXACT_PER_CONTAINER_ROTATION_FOR_ADMISSION",
+  "per_regularfile_kernel_bound_bytes": 33554432,
+  "live_enforcement": "Docker --ulimit fsize32/32 +exactinspect; insideowner/runner/diagnostic/backend getrlimit soft+hard equality before attempts/files/exec/Popen. Kernel inherited limit bounds QEMU regularfilewrites. Postreadacceptancecaps do not substitute forlive FSIZE.",
+  "scratch_writable_sinks": {
+    "attempt": "/home/holden/mckernel-work/scratch/nm05a1/p/attempt-be5b3a70eeb641df92878acfe335735c",
+    "seven_fixed_file_slots": [
+      "serial.log",
+      "debugcon.log",
+      "qemu.stdout",
+      "qemu.stderr",
+      "qmp.transcript.json",
+      "result.json",
+      "first-failure.jsonl"
+    ],
+    "attempt_slot_cap_bytes": 234881024,
+    "result_temporary": "Existing .result.* and finalresult are samehardlinked inode, nottwopayloadcopies; metadataallowance covers directory/inode/publication state.",
+    "qmp_socket": "AF_UNIX socket metadata only; no regularfilepayload.",
+    "owner_evidence_sibling": "/home/holden/mckernel-work/scratch/nm05a1/p.owner-be5b3a70eeb641df92878acfe335735c",
+    "retained_copies": "inner-result.json +5rawcapturecopies +bounded Dockercommand stdout/stderr/status/retirement records all go through existing shared pendingqueue128MiB/4096records before one postretirementflush; retained rawdata are NOT free or omitted.",
+    "owner_shared_queue_limit_bytes": 134217728,
+    "metadata_and_owner_terminal_status_allowance_bytes": 33554432,
+    "manifest_copy_bytes": 5913,
+    "total_scratch_growth_conservative_bytes": 402659097
+  },
+  "HOST_writable_sinks": {
+    "outer_capture": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/runtime-current68-filebound-successor-1/logging-revision-1/actual-M05-SHORT32-native-owner-capture-1",
+    "outer_stdout_stderr_max_each_bytes": 33554432,
+    "capture_and_control_allowance_bytes": 100663296,
+    "Docker_daemon_logs_allowance_bytes": 134217728,
+    "Dockerlog_scope": "Separateper-container enforcedretention settings: create --log-driver=json-file --log-opt=max-size=16m --log-opt=max-file=2; completeinspect requires exactsameType/options andrefusesmissing/unknown options. No hostdaemonconfigchanges. ChildFSIZE explicitlydoesNOTbounddaemon logs.",
+    "host_direct_growth_conservative_bytes": 234881024,
+    "sparse_backing": "All scratchgrowth can allocate newHOSTblocks. Rootmust add full current sparsebacking growth/reservations per campaign; conservatively account scratch402659097B as well, even if full-gap termalreadycoversit.",
+    "HOST_total_newblocks_conservative_excluding_fullbackinggap_bytes": 637540121
+  },
+  "unchanged_readonly_inputs": "All actualstagearchives/module/image/launcher/helpers/sources remainreadonly. No artifactcopies or archivegeneration.",
+  "not_disk_sinks": "Guest8GiBRAM and /tmp256MiBtmpfs are within12GiBcontainer memory; no diskimage, snapshot/vmcore orVMdisk added. Corelimit0.",
+  "floors": {
+    "HOST": 17179869184,
+    "scratch": 12884901888
+  },
+  "fresh_capacity_fields": {
+    "HOST_current_free": null,
+    "scratch_current_free": null,
+    "full_sparse_backing_gap": null,
+    "existing_campaign_reservations": null,
+    "root_independent_admission": null
+  },
+  "placement": "Existing reviewed scratchparent boundary retained; no HOSTparent expansion/reserve/resize/delete needed or authorized.",
+  "Docker_log_rotation_bound": {
+    "driver": "json-file",
+    "max_size_bytes_per_retained_file": 16777216,
+    "max_files_including_current": 2,
+    "nominal_retained_log_bytes": 33554432,
+    "HOST_conservative_log_allowance_bytes": 134217728,
+    "format_rotation_overshoot_metadata_allowance_bytes": 100663296,
+    "assumptions": [
+      "Actual Dockerdaemon is reviewed standard json-file implementation with recordframing/splitting androtate-before/aroundwrite semantics; max-size is retention/rotation threshold, not RLIMIT byte trap.",
+      "Exact fixed M05runner prints one bounded final JSON/result or bounded exception; Docker framing and atmostrecord-sized rotationovershoot plusmetadata fit additional96MiB.",
+      "Exactinspected Config has onlymax-size16m/max-file2: extra compress/unknown options refused, no sidecar or hostdaemondefault logger substitution.",
+      "Rootnative admission retains actualDockerdaemon/version/defaultprofile identity checks and confirms requested/inspect equality before any VM; sourcefixture is not actualdaemon observation."
+    ],
+    "not_claimed": "No stdout/childRLIMIT inheritance to daemon, nohostdaemonmutation, no mathematicalnoovershoot assertion on16MiB threshold."
+  }
+}

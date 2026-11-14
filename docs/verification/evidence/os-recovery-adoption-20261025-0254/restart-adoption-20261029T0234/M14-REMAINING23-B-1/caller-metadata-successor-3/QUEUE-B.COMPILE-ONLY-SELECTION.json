@@ -1,0 +1,28 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "EXPLICIT_PRIVATE_COMPILE_ONLY_SELECTION_NOT_RUNTIME_AUTHORITY",
+  "cmake_options": {
+    "MCKERNEL_F03_REQUEST_CONSTRUCTORS_EXPERIMENTAL": true,
+    "MCKERNEL_F03_DO_SYSCALL_SUPPORTED_EXPERIMENTAL": true,
+    "MCKERNEL_F03_UTIL_THREAD_WHOLE_EXPERIMENTAL": true,
+    "MCKERNEL_F03_CLONE_REQUEST_DEFINED_EXPERIMENTAL": true,
+    "MCKERNEL_F03_EXPERIMENTAL_COMPILE_ONLY": true
+  },
+  "rust_cfg": [
+    "f03_request_constructors_candidate",
+    "f03_do_syscall_supported_candidate",
+    "f03_util_thread_whole_candidate",
+    "f03_util_thread_arg5_zero_candidate",
+    "f03_clone_request_defined_candidate"
+  ],
+  "C_syscall_defines": [
+    "MCKERNEL_RUST_F03_REQUEST_CONSTRUCTORS",
+    "MCKERNEL_RUST_F03_DO_SYSCALL_SUPPORTED",
+    "MCKERNEL_RUST_F03_UTIL_THREAD_WHOLE",
+    "MCKERNEL_RUST_F03_UTIL_REQUEST_ARG5_ZERO",
+    "MCKERNEL_RUST_F03_CLONE_REQUEST_DEFINED"
+  ],
+  "dependent_selection": "Root compositor must add other queues A/C/D and the immutable reviewed selected first19 profile; this file does not assert full23+5 composition.",
+  "restriction": "Compile-only for C/Rust integration feedback. Unresolved caller semantic, ABI, borrow and host lifetime reviews prohibit interpreting selection as runtime/native authority. No syscall/cleanup/guest is run.",
+  "runtime_authority": null
+}

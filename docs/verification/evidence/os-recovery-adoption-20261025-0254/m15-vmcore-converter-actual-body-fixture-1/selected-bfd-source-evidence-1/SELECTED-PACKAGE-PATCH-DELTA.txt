@@ -1,0 +1,61 @@
+PACKAGE PATCH: binutils-Intel-APX-part-1-extra-relocs.patch
+--- binutils.orig/bfd/bfd-in2.h	2025-01-20 11:17:44.321569792 +0000
++++ binutils-2.41/bfd/bfd-in2.h	2025-01-20 11:18:09.561642108 +0000
+@@ -3840,6 +3840,12 @@ instruction.  */
+   BFD_RELOC_X86_64_CODE_4_GOTPCRELX,
+   BFD_RELOC_X86_64_CODE_4_GOTTPOFF,
+   BFD_RELOC_X86_64_CODE_4_GOTPC32_TLSDESC,
++  BFD_RELOC_X86_64_CODE_5_GOTPCRELX,
++  BFD_RELOC_X86_64_CODE_5_GOTTPOFF,
++  BFD_RELOC_X86_64_CODE_5_GOTPC32_TLSDESC,
++  BFD_RELOC_X86_64_CODE_6_GOTPCRELX,
++  BFD_RELOC_X86_64_CODE_6_GOTTPOFF,
++  BFD_RELOC_X86_64_CODE_6_GOTPC32_TLSDESC,
+ 
+ /* ns32k relocations  */
+   BFD_RELOC_NS32K_IMM_8,
+diff -rup binutils.orig/bfd/elf64-x86-64.c binutils-2.41/bfd/elf64-x86-64.c
+
+PACKAGE PATCH: binutils-Intel-APX-part-1.patch
+--- binutils.orig/bfd/bfd-in2.h	2024-01-18 12:12:23.308945724 +0000
++++ binutils-2.41/bfd/bfd-in2.h	2024-01-18 12:33:22.150468315 +0000
+@@ -3837,6 +3837,9 @@ instruction.  */
+   BFD_RELOC_X86_64_PLT32_BND,
+   BFD_RELOC_X86_64_GOTPCRELX,
+   BFD_RELOC_X86_64_REX_GOTPCRELX,
++  BFD_RELOC_X86_64_CODE_4_GOTPCRELX,
++  BFD_RELOC_X86_64_CODE_4_GOTTPOFF,
++  BFD_RELOC_X86_64_CODE_4_GOTPC32_TLSDESC,
+ 
+ /* ns32k relocations  */
+   BFD_RELOC_NS32K_IMM_8,
+diff -rupN binutils.orig/bfd/elf64-x86-64.c binutils-2.41/bfd/elf64-x86-64.c
+
+PACKAGE PATCH: binutils-no-config-h-check.patch
+--- a/bfd/bfd-in2.h	2012-08-02 10:56:34.349769680 +0100
++++ b/bfd/bfd-in2.h	2012-08-02 11:13:40.015798113 +0100
+@@ -32,11 +32,6 @@
+ #ifndef __BFD_H_SEEN__
+ #define __BFD_H_SEEN__
+ 
+-/* PR 14072: Ensure that config.h is included first.  */
+-#if !defined PACKAGE && !defined PACKAGE_VERSION
+-#error config.h must be included before this header
+-#endif
+-
+ #ifdef __cplusplus
+ extern "C" {
+ #endif
+
+PACKAGE PATCH: binutils-riscv-efi.patch
+--- binutils-2.41.orig/bfd/bfd.c	2023-07-03 01:00:00.000000000 +0200
++++ binutils-2.41/bfd/bfd.c	2025-04-21 01:55:55.730967442 +0200
+@@ -1948,6 +1948,7 @@
+       || strcmp (name, "pe-arm-wince-little") == 0
+       || strcmp (name, "pei-arm-wince-little") == 0
+       || strcmp (name, "pei-loongarch64") == 0
++      || strcmp (name, "pei-riscv64-little") == 0
+       || strcmp (name, "aixcoff-rs6000") == 0
+       || strcmp (name, "aix5coff64-rs6000") == 0)
+     return 1;
+diff -Naru binutils-2.41.orig/bfd/coffcode.h binutils-2.41/bfd/coffcode.h

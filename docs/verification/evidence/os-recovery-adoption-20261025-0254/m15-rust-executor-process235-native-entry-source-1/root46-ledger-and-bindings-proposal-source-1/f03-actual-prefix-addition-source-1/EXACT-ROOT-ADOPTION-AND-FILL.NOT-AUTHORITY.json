@@ -1,0 +1,66 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "runtime_authority": null,
+  "actual_rootledger_target": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER46.json",
+  "ledger_proposal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/root46-ledger-and-bindings-proposal-source-1/f03-actual-prefix-addition-source-1/ROOT46-LEDGER.PROPOSAL.NOT-ACTUAL.json",
+    "bytes": 34106,
+    "sha256": "9976ca556c7b10692da31d41b02e72f228c520637d7635d48c29c258d40e4dd8"
+  },
+  "proposed_count": 56,
+  "Root_ledger_fill": {
+    "author": "/root",
+    "status": "Root actual status chosen by Root",
+    "complete_within_declared_current_boundary": true,
+    "root_attests_no_unlisted_post_boundary_execution_or_custody_operation": true,
+    "recorded_epoch": "Root actual source-write timestamp; not a captured admission clock",
+    "runtime_authority": null
+  },
+  "authority_schema_templates": {
+    "case_capability": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/root46-ledger-and-bindings-proposal-source-1/CASE-CAPABILITY.PROPOSAL.NOT-AUTHORITY.json",
+      "bytes": 8007,
+      "sha256": "9b618384af94b3ed31c2eb44e7f83ccb292fe788b6b048741e06e8aa8f45160d"
+    },
+    "source_authority": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/root46-ledger-and-bindings-proposal-source-1/ROOT-SOURCE-AUTHORITY.PROPOSAL.NOT-AUTHORITY.json",
+      "bytes": 5826,
+      "sha256": "14e2ef03cae9a57a6642a3de58163ecb0626bba2d78bdd6798909b9480f08bd0"
+    },
+    "final_fill": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/root46-ledger-and-bindings-proposal-source-1/f03-actual-prefix-addition-source-1/ROOT-ACTUAL-FINAL-FILL.INPUT.TEMPLATE.NOT-AUTHORIZED.json",
+      "bytes": 1812,
+      "sha256": "fbed3b7b76ac66a78f79b0f9c5aafbeb4d4fff3a73d4d2e1e977bc358f7f5357"
+    }
+  },
+  "Root_actual_targets": {
+    "case_capability": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/CASE-CAPABILITY.ACTUAL.json",
+    "source_authority": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/ROOT-SOURCE-AUTHORITY.ACTUAL.json",
+    "nonce_reservation": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/ROOT-RESERVED-UNUSED-NONCE.json",
+    "final_fill": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/ROOT-ACTUAL-FINAL-FILL.INPUT.json"
+  },
+  "exact_first_finalizer_argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/finalize_context_corrected.py",
+    "--bind-current-capture",
+    "--root-inputs",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/ROOT-ACTUAL-FINAL-FILL.INPUT.json",
+    "--root-inputs-sha256",
+    "ROOT_ACTUAL_FINAL_FILL_SHA256"
+  ],
+  "required_first_finalfill": {
+    "author": "/root",
+    "nonce": "d21f4e17faf1b0b806419b1860bd0598",
+    "root_ledger": "actual path/bytes/sha256 Root46 ref",
+    "latest_free": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-native-entry-source-1/publication-files-correction-source-1/root-adopted-retirement-entry-1/independent-actual-native-review-1/CURRENT-FREE.json",
+      "bytes": 3836,
+      "sha256": "0ae5bc9786d46e957d46df5dddc7849aa06c60ed1081fb3a345798d888501fb1"
+    },
+    "actual_release_ledger_is_latest": true,
+    "Root_attests_no_intervening_operation_since_boundary": true
+  },
+  "then": "Independent exact CURRENT-BOUND-CAPTURE.SOURCE-ONLY.py review; Rootwrites sourceauthority and exact finalfillrefs; correctedfinalizer --seal-source-context with new finalfillSHA. Existing staticAPI/nonce/bindbridge/publicationFILES/rc0-beforebridge controls unchanged. No composition/rebuild required."
+}

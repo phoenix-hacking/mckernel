@@ -1,0 +1,82 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_SDK5_CASE227_OVERLAY_AND_STRICT_JOIN_ONLY",
+  "steps": [
+    {
+      "name": "original227overlay",
+      "report": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/case-227/ACTUAL-V3-OVERLAY-CAPTURE-RESULT.json",
+        "sha256": "dedf9f75aec488ea548c50f6250ba8dca37fe5d0481807d94ada1a9321f61f3d",
+        "bytes": 5319
+      },
+      "elapsed_seconds": 10.752443536068313,
+      "status": "COMPLETED",
+      "wait_status": {
+        "code": 0,
+        "kind": "exited"
+      }
+    },
+    {
+      "name": "strict227join",
+      "report": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/case-227/ACTUAL-V3-STRICT-CONSUMER-CAPTURE-RESULT.json",
+        "sha256": "58df2e8e23b6ca597f749035f26d74d67187cdbddcec7a8f60b98244ff0257c2",
+        "bytes": 3890
+      },
+      "elapsed_seconds": 0.21148157306015491,
+      "status": "COMPLETED",
+      "wait_status": {
+        "code": 0,
+        "kind": "exited"
+      }
+    }
+  ],
+  "elapsed_seconds": 11.104801730951294,
+  "actual_manifest": {
+    "bytes": 8791,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/case-227/ACTUAL-V3-NATIVE227-MANIFEST.json",
+    "sha256": "ff1a136b16eed54d40c886be3b48e6508b9c9ad96cc5dd43028657ea0cd2a777"
+  },
+  "actual_overlay": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/case-227/sdk5-native227-overlay-1.cpio.gz",
+    "sha256": "db3c2f264dbec11ce3c65dc85f4c272998572c34e2527dddae8ed665e6cf11ee",
+    "size": 15249648
+  },
+  "production_consumer": {
+    "bytes": 85837,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/runtime-provider-rebind-1/native/native_diagnostic.py",
+    "sha256": "f368324242bfdfb0ad1f3f524a906dcf51730ef0beb311315e6b66f5d585748c"
+  },
+  "strict_oracle": {
+    "exit_code": 0,
+    "stderr": {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-recovery-batch-prerequisite-20261022-1/expected.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr_bytes_hex": "",
+    "stdout": {
+      "bytes": 227,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-recovery-batch-prerequisite-20261022-1/expected.stdout",
+      "sha256": "4eba8ea20e13ebe307fe67b771c200de36305e787ec31590b05e92dcb67ac9d6"
+    },
+    "stdout_bytes_hex": "7265636f7665727920706172656e742073746172740a706172656e742063616e63656c207369676e616c3d31352072656164793d3120707265726561703d3020656f663d31207265617065643d3120656368696c643d31206f776e65643d300a6368696c642065786563207375636365737320746f6b656e3d66697865642d76310a706172656e74207265636f76657279206578656320657869743d333720656f663d31207265617065643d3120656368696c643d310a706172656e74207265636f7665727920636f6d706c657465206368696c6472656e3d32206f776e65643d300a"
+  },
+  "source_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/ROOT-DELIVERED-ORDINARY-SOURCE-REVIEW.json",
+    "sha256": "ffe216fe6da88494e643d33e5951fda8dc604f53485ac0ec35be1ba98d584bd3",
+    "bytes": 1646
+  },
+  "execution_grant": "Rootdirect ordinary case227 overlay+strict join only; reusableCPU6one512MiBjob/30+3profile",
+  "native_execution_authorized": false,
+  "strict235_acceptance": null,
+  "strict235_physical_retirement": null,
+  "native227_release": null,
+  "native227_result": null,
+  "native227_physical_acceptance": null,
+  "root_operations": 0,
+  "Docker_operations": 0,
+  "compiler_operations": 0,
+  "guest_runs": 0
+}

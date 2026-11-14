@@ -1,0 +1,145 @@
+{
+  "ABI": "actual current full arch-memory.h plus original ihk/types.h; GCC9 staticasserts enum unsigned-long-compatible size8 alignment8, bit63, all-bit cast; existing Rust abi.rs CULong=u64/CInt=i32/IhkMcPtAttribute alias reused; no new layouts",
+  "Rust_ownership": "existing kernel/rust/x86_memory_helpers.rs: remove external bridge import; same-name no_mangle unsafe extern C export forwards directly to existing Rust set_pt_large_page provider; callbacks and return semantics retained",
+  "bounded_history": [
+    {
+      "failure": "wrong errno.h source path; no workload",
+      "family": "source preparation",
+      "retained": {
+        "bytes": 206,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/init-large-page-bridge-rust-20261023-1/preparation-failure-1.txt",
+        "sha256": "f10b02c9198ae288e256ebc81fb8cfd24dd11375a9121fc879534b1c984f3588"
+      }
+    },
+    {
+      "failure": "runner cfg index assertion before any compiler/capture; corrected exact tail indexing",
+      "family": "fullcrate preflight",
+      "retained": {
+        "bytes": 305,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/init-large-page-bridge-rust-20261023-1/fullcrate-preflight-failure-1.txt",
+        "sha256": "82b620839b96d03ab9720e355122824d16f54938115784b0c693f9dacc102be2"
+      }
+    },
+    {
+      "bounded_correction": "same anchored positive-U extraction; no product/source patch change",
+      "corrected_result": {
+        "bytes": 3563,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/init-large-page-bridge-rust-20261023-1/source-check-results.json",
+        "sha256": "09b45d1da596a4c1575d3fe6756aeabf04490050e89f76aab9dcd2ae52a85b82"
+      },
+      "failure": "unanchored old-U regex versus anchored new positive-U regex counted historical negative assertions on old side",
+      "family": "finite source verifier",
+      "original_capture": {
+        "bytes": 1122,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/init-large-page-bridge-rust-20261023-1/source-check-1/whole-join.json",
+        "sha256": "5fbe2200a40555cffb0c86050cffb7a2a309b711cd9099c8156b70eaa27dc1ac"
+      },
+      "original_stderr": {
+        "bytes": 307,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/init-large-page-bridge-rust-20261023-1/source-check-1/stderr",
+        "sha256": "c3cc8adeb94df617ca96efff2a8f72b834812aafceb415cc9fa7a1c8a5a37352"
+      }
+    }
+  ],
+  "compiler_failures": 0,
+  "default_consumer_source_facts": "unchanged canonical CMake enables MCKERNEL_RUST_X86_MEMORY_PUBLIC and lib.rs includes same Rust ownership module; selected fragment proof is not full memory.c/kernel default link",
+  "displaced_live_C": {
+    "exact_body": "X86_MEMORY_PUBLIC_BRIDGE int x86_init_normal_set_large_bridge(void *pt, unsigned long virt,\n\t\tunsigned long phys, unsigned long attr)\n{\n\treturn set_pt_large_page(pt, (void *)virt, phys,\n\t\t\t(enum ihk_mc_pt_attribute)attr);\n}",
+    "fallback": "exact original function body preserved under !MCKERNEL_RUST_X86_MEMORY_PUBLIC",
+    "line": 2344,
+    "path": "arch/x86_64/kernel/memory.c"
+  },
+  "extracted_original_and_actual_fixtures": {
+    "boundary_inputs": "NULL/low/32bit boundary/bit63/max pointer+virt+phys; every real PTATTR enumerator plus arbitrary high bits; zero/positive/negative/INT_MIN/INT_MAX returns",
+    "call_return_observations_per_mode": 61740,
+    "fixture_results": {
+      "bytes": 16244,
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/init-large-page-bridge-rust-20261023-1/attempt-1-results.json",
+      "sha256": "d52d25dc2bb1995c9326bfc6ae2e312b45e8ef5b9a8f9c474d50f53658ba77c0"
+    },
+    "modes": [
+      "wrapper versus common controlled set_pt_large_page",
+      "actual existing Rust set_pt_large_page provider chain versus controlled x86_pt_set_page_bridge"
+    ],
+    "total_observations": 123480,
+    "vector_count_per_mode": 30870
+  },
+  "fullcrate": {
+    "bridge_symbol_rows": [
+      [
+        "0000000000000000",
+        "T",
+        "x86_init_normal_set_large_bridge"
+      ]
+    ],
+    "input_bindings": {
+      "bytes": 36811,
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/init-large-page-bridge-rust-20261023-1/fullcrate-input-bindings.json",
+      "sha256": "5b2b948237f1a38353de2e4ece7c3c03e16f3101139e6972d912a27ad0f185f8"
+    },
+    "object": {
+      "ctime_ns": 1792759810535215813,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 48905946,
+      "mode": "0o600",
+      "mtime_ns": 1792759810535215813,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/init-large-page-bridge-rust-20261023-1/mckernel_rust.o",
+      "sha256": "305148f88ad4dffb70c82f8962e37d15076bd7bb57fe74188d159e583bc00800",
+      "size": 13641832,
+      "uid": 1000
+    },
+    "only_command_delta": "private source/output paths plus explicitly granted CGU1 tightening; same pinned nightly1.95, native_irq/profile/perf/rusage cfg and two unchanged external modules; no bootstrap/feature deletion/stubs",
+    "profile_authority": {
+      "bytes": 1729,
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/init-large-page-bridge-rust-20261023-1/FULLCRATE-PROFILE-AUTHORITY.json",
+      "sha256": "af71a74173e7a201007bd3f3fddaf3774da2a28f21af34bd084020541ace8946"
+    },
+    "result": {
+      "bytes": 5005,
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/init-large-page-bridge-rust-20261023-1/fullcrate-result.json",
+      "sha256": "142ab0d6898ef6e05badf79efa51b64851b5c6e2bd4dfa1c63ded96b5e420570"
+    },
+    "seconds": 14.124327872064896,
+    "source_inputs": 78,
+    "status": "PASS_CURRENT_PRIVATE_PRODUCTION_FULLCRATE",
+    "whole_join": {
+      "bytes": 1247,
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/init-large-page-bridge-rust-20261023-1/fullcrate-compiler-capture-1/whole-join.json",
+      "sha256": "868d50d0934d0b9871bd268f6546a0899ba3f761d698fc228586b41e8f51fbe4"
+    }
+  },
+  "functional_scope": "functional OS 35-check progress plus independent active M14 Rust/reviewed-assembly cutover",
+  "harness_coherence": "private run_equivalence.sh removes duplicate bridge stub, declares weak bridge, checks real provider arg/return forwarding including bit63 and -5, changes bridge U to T and undefined594 to593; finite reverse check proves all other source/test/ledger bytes unchanged; bash -n passes; monolithic harness not executed",
+  "native": false,
+  "next_prerequisites": [
+    "independent concrete review of bridge ABI/unsafe forwarding/Cselection/harness diff",
+    "dispatcher integration using source hashes; combine with new production candidate under separate binding, never mutate frozen candidate5/build2",
+    "actual default kernel linked image proving unique Rust export/C body excluded",
+    "reviewed native boot/apps exercising init mapping consumers; no whole-file/whole-memory area retirement claim"
+  ],
+  "production_default_kernel_link": false,
+  "production_patch": {
+    "bytes": 4549,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/init-large-page-bridge-rust-20261023-1/production.patch",
+    "sha256": "6a311794e300e44687a5d5b54b9b7fd34d2b95a36517a618ef1e762cf87384ca"
+  },
+  "resource_retirement": "all admitted captures directjoined/groupabsent/closed; no retained ordinary child; CPU6 released",
+  "retention_archive": {
+    "bytes": 4815635,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/init-large-page-bridge-rust-20261023-1/source-and-object-snapshots.tar.gz",
+    "sha256": "6ece00fd02a1d1b2e9ba58b7d53f1eeeb9905f21553c432d3c933c348ce178fe"
+  },
+  "schema": "mckernel.init-large-page-bridge-rust-private.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "selection": "PUBLIC C selected fragment has U bridge and no definition; actual Rust provider chain has exactly one T bridge and one T set_pt_large_page; ld-r result has no unresolved bridge; fallback has local t bridge",
+  "source_pins": {
+    "bytes": 3151,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/init-large-page-bridge-rust-20261023-1/source-pins.json",
+    "sha256": "1e54432ef21c01347a543d76e746a933cd458db13f3cf868a69e75dd95b3c830"
+  },
+  "status": "PASS_PRIVATE_BODY_EQUIVALENCE_SELECTION_AND_CURRENT_FULLCRATE",
+  "whole_file_or_area_retirement": false,
+  "write_scope": "new private packet and matching evidence only; canonical/frozen candidate5/build2/image10972 unchanged"
+}

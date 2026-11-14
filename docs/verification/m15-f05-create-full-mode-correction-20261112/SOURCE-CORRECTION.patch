@@ -1,0 +1,32 @@
+--- preserved-parent/run_root_once.py
++++ full-mode-correction-1/run_root_once.py
+@@ -2,7 +2,7 @@
+ # Existing qualified Docker Owner/profile/capture methods; new create observer only.
+ import ast,datetime,hashlib,importlib.util,json,os,pathlib,re,shutil,sys,time,traceback
+ ROOT=pathlib.Path('/home/holden/mckernel');HERE=pathlib.Path(__file__).resolve().parent;OUT=HERE/'execution-1'
+-REQUEST_SHA256='d4c56f7717f2a3d1bde302c7c5a2bf238a838cc0ed72584278066b90819dba66';GiB=2**30
++REQUEST_SHA256='53942068f24fc8879f8208d4772f1fbb4d7d3c30d9a2b373c1daa4f680054b04';GiB=2**30
+ 
+ def sha(path):
+     h = hashlib.sha256()
+@@ -34,7 +34,7 @@
+     st = p.stat()
+     assert p.is_file() and str(p.resolve()) == item['resolved'], str(p)
+     assert (st.st_size, sha(p)) == (item['bytes'], item['sha256']), str(p)
+-    assert (st.st_dev, st.st_ino, st.st_uid, st.st_gid, oct(st.st_mode & 0o777)) == (
++    assert (st.st_dev, st.st_ino, st.st_uid, st.st_gid, oct(st.st_mode & 0o7777)) == (
+         item['dev'], item['inode'], item['uid'], item['gid'], item['mode']), str(p)
+ 
+ def cli(label, argv, expected_exit=0, timeout=20):
+
+--- preserved-parent/capture_root_once.py
++++ full-mode-correction-1/capture_root_once.py
+@@ -2,7 +2,7 @@
+ # One qualified e088 parent capture plus existing same-Popen uncertainty retention.
+ import ast,datetime,hashlib,json,os,pathlib,signal,subprocess,sys,traceback
+ ROOT=pathlib.Path('/home/holden/mckernel');HERE=pathlib.Path(__file__).resolve().parent;OUT=HERE/'root-capture-1'
+-REQUEST_SHA256='d4c56f7717f2a3d1bde302c7c5a2bf238a838cc0ed72584278066b90819dba66'
++REQUEST_SHA256='53942068f24fc8879f8208d4772f1fbb4d7d3c30d9a2b373c1daa4f680054b04'
+ clients=[];pending_calls={};keeper_capture_errors=[];OUTER_RETENTION_ERRORS=[];OUTER_ORIGINAL_WAITS=[]
+ def now():return datetime.datetime.now(datetime.timezone.utc).isoformat()
+ def sha(p):return hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()

@@ -1,0 +1,467 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "basis": "Retained accepted113 complement and exact pending LOCAL14 source preimage",
+  "objects": [
+    {
+      "name": "process_schedule_exit_debug_input",
+      "bytes": 8,
+      "original_binding": "GLOBAL",
+      "original_cell": "const/readonly",
+      "Rust_type": "ReadonlyPointerCell<crate::sched_helpers::SchedExitDebug> (C const struct pointer cell)",
+      "selected_value": null,
+      "consumers": [
+        "schedule",
+        "process_sched_rusage_debug_bridge"
+      ],
+      "bounded_Rust_source_uses": [
+        {
+          "line": 16373,
+          "source": "static process_schedule_exit_debug_input: *const SchedExitDebug;",
+          "kind": "foreign declaration"
+        },
+        {
+          "line": 16519,
+          "source": "old_cpu, last, super::PS_EXITED, process_schedule_exit_debug_input,",
+          "kind": "existing read/address use"
+        },
+        {
+          "line": 17219,
+          "source": "static process_schedule_exit_debug_input: *const SchedExitDebug;",
+          "kind": "foreign declaration"
+        },
+        {
+          "line": 17260,
+          "source": "let debug = process_schedule_exit_debug_input;",
+          "kind": "existing read/address use"
+        }
+      ],
+      "cell_write_found": false,
+      "consumer_body_modified": false,
+      "original_C_type": "const struct sched_exit_debug *const"
+    },
+    {
+      "name": "process_sched_timer_configuration",
+      "bytes": 8,
+      "original_binding": "GLOBAL",
+      "original_cell": "const/readonly",
+      "Rust_type": "[CInt; 2]",
+      "selected_value": [
+        0,
+        0
+      ],
+      "consumers": [
+        "process_sched_timer_init_bridge"
+      ],
+      "bounded_Rust_source_uses": [
+        {
+          "line": 17218,
+          "source": "static process_sched_timer_configuration: [CInt; 2];",
+          "kind": "foreign declaration"
+        },
+        {
+          "line": 17237,
+          "source": "if process_sched_timer_configuration[0] != 0",
+          "kind": "existing read/address use"
+        },
+        {
+          "line": 17238,
+          "source": "&& cpu == process_sched_timer_configuration[1]",
+          "kind": "existing read/address use"
+        }
+      ],
+      "cell_write_found": false,
+      "consumer_body_modified": false,
+      "original_C_type": "const int[2]"
+    },
+    {
+      "name": "process_init_stack_entry_config",
+      "bytes": 168,
+      "original_binding": "GLOBAL",
+      "original_cell": "const/readonly",
+      "Rust_type": "existing ProcessInitStackEntryConfig",
+      "selected_value": "existing typed stack config; see fragment",
+      "consumers": [
+        "init_process_stack"
+      ],
+      "bounded_Rust_source_uses": [
+        {
+          "line": 13255,
+          "source": "static process_init_stack_entry_config: ProcessInitStackEntryConfig;",
+          "kind": "foreign declaration"
+        },
+        {
+          "line": 13277,
+          "source": "let config = core::ptr::addr_of!(process_init_stack_entry_config);",
+          "kind": "existing read/address use"
+        }
+      ],
+      "cell_write_found": false,
+      "consumer_body_modified": false,
+      "original_C_type": "const struct process_init_stack_entry_config"
+    },
+    {
+      "name": "process_init_stack_free_line",
+      "bytes": 4,
+      "original_binding": "GLOBAL",
+      "original_cell": "const/readonly",
+      "Rust_type": "CInt",
+      "selected_value": 3364,
+      "consumers": [
+        "process_init_stack_free_pages_bridge"
+      ],
+      "bounded_Rust_source_uses": [
+        {
+          "line": 14093,
+          "source": "static process_init_stack_free_line: CInt;",
+          "kind": "foreign declaration"
+        },
+        {
+          "line": 14131,
+          "source": "process_init_stack_free_file.cast_mut(), process_init_stack_free_line,",
+          "kind": "existing read/address use"
+        }
+      ],
+      "cell_write_found": false,
+      "consumer_body_modified": false,
+      "original_C_type": "const int"
+    },
+    {
+      "name": "process_init_stack_free_file",
+      "bytes": 8,
+      "original_binding": "GLOBAL",
+      "original_cell": "const/readonly",
+      "Rust_type": "ReadonlyPointerCell<i8>",
+      "selected_value": "env!(MCKERNEL_PROCESS_C_FILE) NUL-terminated pointer",
+      "consumers": [
+        "process_init_stack_free_pages_bridge"
+      ],
+      "bounded_Rust_source_uses": [
+        {
+          "line": 14092,
+          "source": "static process_init_stack_free_file: *const i8;",
+          "kind": "foreign declaration"
+        },
+        {
+          "line": 14131,
+          "source": "process_init_stack_free_file.cast_mut(), process_init_stack_free_line,",
+          "kind": "existing read/address use"
+        }
+      ],
+      "cell_write_found": false,
+      "consumer_body_modified": false,
+      "original_C_type": "const char *const"
+    },
+    {
+      "name": "process_init_stack_alloc_line",
+      "bytes": 4,
+      "original_binding": "GLOBAL",
+      "original_cell": "const/readonly",
+      "Rust_type": "CInt",
+      "selected_value": 3359,
+      "consumers": [
+        "process_init_stack_alloc_aligned_bridge"
+      ],
+      "bounded_Rust_source_uses": [
+        {
+          "line": 14091,
+          "source": "static process_init_stack_alloc_line: CInt;",
+          "kind": "foreign declaration"
+        },
+        {
+          "line": 14114,
+          "source": "process_init_stack_alloc_file.cast_mut(), process_init_stack_alloc_line,",
+          "kind": "existing read/address use"
+        }
+      ],
+      "cell_write_found": false,
+      "consumer_body_modified": false,
+      "original_C_type": "const int"
+    },
+    {
+      "name": "process_init_stack_alloc_file",
+      "bytes": 8,
+      "original_binding": "GLOBAL",
+      "original_cell": "const/readonly",
+      "Rust_type": "ReadonlyPointerCell<i8>",
+      "selected_value": "env!(MCKERNEL_PROCESS_C_FILE) NUL-terminated pointer",
+      "consumers": [
+        "process_init_stack_alloc_aligned_bridge"
+      ],
+      "bounded_Rust_source_uses": [
+        {
+          "line": 14090,
+          "source": "static process_init_stack_alloc_file: *const i8;",
+          "kind": "foreign declaration"
+        },
+        {
+          "line": 14114,
+          "source": "process_init_stack_alloc_file.cast_mut(), process_init_stack_alloc_line,",
+          "kind": "existing read/address use"
+        }
+      ],
+      "cell_write_found": false,
+      "consumer_body_modified": false,
+      "original_C_type": "const char *const"
+    },
+    {
+      "name": "process_page_fault_anon_alloc_file",
+      "bytes": 8,
+      "original_binding": "GLOBAL",
+      "original_cell": "const/readonly",
+      "Rust_type": "ReadonlyPointerCell<i8>",
+      "selected_value": "env!(MCKERNEL_PROCESS_C_FILE) NUL-terminated pointer",
+      "consumers": [
+        "process_page_fault_anon_allocate_body_result"
+      ],
+      "bounded_Rust_source_uses": [
+        {
+          "line": 12849,
+          "source": "static process_page_fault_anon_alloc_file: *const i8;",
+          "kind": "foreign declaration"
+        },
+        {
+          "line": 12883,
+          "source": "process_page_fault_anon_alloc_file as *mut i8,",
+          "kind": "existing read/address use"
+        }
+      ],
+      "cell_write_found": false,
+      "consumer_body_modified": false,
+      "original_C_type": "const char *const"
+    },
+    {
+      "name": "process_page_fault_cow_alloc_line",
+      "bytes": 4,
+      "original_binding": "GLOBAL",
+      "original_cell": "const/readonly",
+      "Rust_type": "CInt",
+      "selected_value": 3145,
+      "consumers": [
+        "process_page_fault_cow_allocate_body_result"
+      ],
+      "bounded_Rust_source_uses": [
+        {
+          "line": 12921,
+          "source": "static process_page_fault_cow_alloc_line: CInt;",
+          "kind": "foreign declaration"
+        },
+        {
+          "line": 12969,
+          "source": "process_page_fault_cow_alloc_line,",
+          "kind": "existing read/address use"
+        }
+      ],
+      "cell_write_found": false,
+      "consumer_body_modified": false,
+      "original_C_type": "const int"
+    },
+    {
+      "name": "process_page_fault_cow_alloc_file",
+      "bytes": 8,
+      "original_binding": "GLOBAL",
+      "original_cell": "const/readonly",
+      "Rust_type": "ReadonlyPointerCell<i8>",
+      "selected_value": "env!(MCKERNEL_PROCESS_C_FILE) NUL-terminated pointer",
+      "consumers": [
+        "process_page_fault_cow_allocate_body_result"
+      ],
+      "bounded_Rust_source_uses": [
+        {
+          "line": 12920,
+          "source": "static process_page_fault_cow_alloc_file: *const i8;",
+          "kind": "foreign declaration"
+        },
+        {
+          "line": 12968,
+          "source": "process_page_fault_cow_alloc_file as *mut i8,",
+          "kind": "existing read/address use"
+        }
+      ],
+      "cell_write_found": false,
+      "consumer_body_modified": false,
+      "original_C_type": "const char *const"
+    },
+    {
+      "name": "process_remap_free_line",
+      "bytes": 4,
+      "original_binding": "GLOBAL",
+      "original_cell": "const/readonly",
+      "Rust_type": "CInt",
+      "selected_value": 2469,
+      "consumers": [
+        "remap_one_page"
+      ],
+      "bounded_Rust_source_uses": [
+        {
+          "line": 190,
+          "source": "static process_remap_free_line: CInt;",
+          "kind": "foreign declaration"
+        },
+        {
+          "line": 4321,
+          "source": "process_remap_free_line,",
+          "kind": "existing read/address use"
+        }
+      ],
+      "cell_write_found": false,
+      "consumer_body_modified": false,
+      "original_C_type": "const int"
+    },
+    {
+      "name": "process_remap_free_file",
+      "bytes": 8,
+      "original_binding": "GLOBAL",
+      "original_cell": "const/readonly",
+      "Rust_type": "ReadonlyPointerCell<i8>",
+      "selected_value": "env!(MCKERNEL_PROCESS_C_FILE) NUL-terminated pointer",
+      "consumers": [
+        "remap_one_page"
+      ],
+      "bounded_Rust_source_uses": [
+        {
+          "line": 189,
+          "source": "static process_remap_free_file: *const i8;",
+          "kind": "foreign declaration"
+        },
+        {
+          "line": 4320,
+          "source": "process_remap_free_file as *mut i8,",
+          "kind": "existing read/address use"
+        }
+      ],
+      "cell_write_found": false,
+      "consumer_body_modified": false,
+      "original_C_type": "const char *const"
+    },
+    {
+      "name": "process_add_range_arch_memclear_callback",
+      "bytes": 8,
+      "original_binding": "GLOBAL",
+      "original_cell": "const/readonly",
+      "Rust_type": "Option<existing ArchMemclear alias>",
+      "selected_value": null,
+      "consumers": [
+        "process_add_range_memclear_bridge"
+      ],
+      "bounded_Rust_source_uses": [
+        {
+          "line": 17186,
+          "source": "static process_add_range_arch_memclear_callback: Option<ArchMemclear>;",
+          "kind": "foreign declaration"
+        },
+        {
+          "line": 17202,
+          "source": "if let Some(clear) = process_add_range_arch_memclear_callback {",
+          "kind": "existing read/address use"
+        }
+      ],
+      "cell_write_found": false,
+      "consumer_body_modified": false,
+      "original_C_type": "void (*const)(void *, unsigned long)"
+    },
+    {
+      "name": "process_tracked_allocator_source_file",
+      "bytes": 8,
+      "original_binding": "GLOBAL",
+      "original_cell": "const/readonly",
+      "Rust_type": "ReadonlyPointerCell<i8>",
+      "selected_value": "env!(MCKERNEL_PROCESS_C_FILE) NUL-terminated pointer",
+      "consumers": [
+        "existing tracked allocation/free adapters"
+      ],
+      "bounded_Rust_source_uses": [
+        {
+          "line": 14732,
+          "source": "static process_tracked_allocator_source_file: *const i8;",
+          "kind": "foreign declaration"
+        },
+        {
+          "line": 14758,
+          "source": "process_tracked_allocator_source_file as *mut i8,",
+          "kind": "existing read/address use"
+        },
+        {
+          "line": 14778,
+          "source": "process_tracked_allocator_source_file as *mut i8,",
+          "kind": "existing read/address use"
+        },
+        {
+          "line": 14798,
+          "source": "process_tracked_allocator_source_file as *mut i8,",
+          "kind": "existing read/address use"
+        },
+        {
+          "line": 14815,
+          "source": "process_tracked_allocator_source_file as *mut i8,",
+          "kind": "existing read/address use"
+        },
+        {
+          "line": 14832,
+          "source": "process_tracked_allocator_source_file as *mut i8,",
+          "kind": "existing read/address use"
+        },
+        {
+          "line": 14849,
+          "source": "process_tracked_allocator_source_file as *mut i8,",
+          "kind": "existing read/address use"
+        },
+        {
+          "line": 14866,
+          "source": "process_tracked_allocator_source_file as *mut i8,",
+          "kind": "existing read/address use"
+        },
+        {
+          "line": 14883,
+          "source": "process_tracked_allocator_source_file as *mut i8,",
+          "kind": "existing read/address use"
+        },
+        {
+          "line": 15351,
+          "source": "static process_tracked_allocator_source_file: *const i8;",
+          "kind": "foreign declaration"
+        },
+        {
+          "line": 15372,
+          "source": "process_tracked_allocator_source_file.cast_mut(),",
+          "kind": "existing read/address use"
+        },
+        {
+          "line": 15422,
+          "source": "static process_tracked_allocator_source_file: *const i8;",
+          "kind": "foreign declaration"
+        },
+        {
+          "line": 15439,
+          "source": "process_tracked_allocator_source_file.cast_mut(),",
+          "kind": "existing read/address use"
+        },
+        {
+          "line": 16013,
+          "source": "static process_tracked_allocator_source_file: *const i8;",
+          "kind": "foreign declaration"
+        },
+        {
+          "line": 16032,
+          "source": "process_tracked_allocator_source_file.cast_mut(),",
+          "kind": "existing read/address use"
+        },
+        {
+          "line": 16260,
+          "source": "static process_tracked_allocator_source_file: *const i8;",
+          "kind": "foreign declaration"
+        },
+        {
+          "line": 16274,
+          "source": "size as CInt, flags, process_tracked_allocator_source_file.cast_mut(),",
+          "kind": "existing read/address use"
+        }
+      ],
+      "cell_write_found": false,
+      "consumer_body_modified": false,
+      "original_C_type": "const char *const"
+    }
+  ],
+  "objects_count": 14,
+  "bytes": 256,
+  "write_check_scope": "Existing direct named source uses only; actual compiled consumers remain unrun."
+}

@@ -1,0 +1,29 @@
+--- v4/sdk13_compile_host_helper.v3.py
++++ v5/sdk13_compile_host_helper.v5.py
+@@ -670,11 +670,12 @@
+ 
+ 
+ class Docker:
+-    def __init__(self, log, signals=None, sudo=False):
++    def __init__(self, log, signals=None, sudo=False, effect_gate=None):
+         self.log = Path(log)
+         self.signals = signals
+         self.client_retirement_unproven = False
+         self.command_prefix = SUDO_DOCKER_PREFIX if sudo else ('docker',)
++        self.effect_gate = effect_gate
+ 
+     def _surviving_group_members(self, pgid):
+         members = []
+@@ -765,7 +766,11 @@
+             with stdout_path.open('xb', buffering=0) as stdout, stderr_path.open('xb', buffering=0) as stderr:
+                 # A separate client process group permits exact client rundown;
+                 # container retirement remains the owner's independent duty.
+-                process = subprocess.Popen(command, env=docker_env(), stdout=stdout,
++                environment = docker_env()
++                if not callable(self.effect_gate):
++                    raise RuntimeError('SDK13 Docker pre-effect gate missing')
++                status['effect_boundary'] = self.effect_gate(args[0])
++                process = subprocess.Popen(command, env=environment, stdout=stdout,
+                                            stderr=stderr, start_new_session=True)
+                 # Bind actual direct client birth and session immediately after spawn.
+                 # An exited or unreadable child is UNKNOWN; existing exception

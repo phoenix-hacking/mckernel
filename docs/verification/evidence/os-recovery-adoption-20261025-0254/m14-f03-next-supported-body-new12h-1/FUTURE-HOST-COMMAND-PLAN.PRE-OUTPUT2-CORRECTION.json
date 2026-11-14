@@ -1,0 +1,182 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_NOT_GRANTED",
+  "sequential": true,
+  "compiler_jobs": 1,
+  "commands": [
+    {
+      "id": "rust-host-object",
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--crate-name",
+        "f03_counter_control_fixture",
+        "--crate-type",
+        "lib",
+        "--emit=obj",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "--cfg",
+        "enable_perf",
+        "--cfg",
+        "f03_perf_counter_control_bridges_selected_candidate",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-supported-body-new12h-1/lib.fixture.rs",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-supported-body-new12h-1/future-host-output-1/providers.o"
+      ],
+      "expected": "exit0;3 genuine Rust wrapper exports; no actual PMU provider",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. rust-host-object",
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-supported-body-new12h-1",
+      "timeout_seconds": 30,
+      "stdout_limit_bytes": 16384,
+      "stderr_limit_bytes": 16384,
+      "requires_fresh_Root_ordinary_grant": true
+    },
+    {
+      "id": "selected-witness",
+      "argv": [
+        "/usr/bin/cc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-O2",
+        "-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+        "-DMCKERNEL_RUST_F03_PERF_COUNTER_CONTROL_BRIDGES",
+        "-c",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-supported-body-new12h-1/selector-witness.c",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-supported-body-new12h-1/future-host-output-1/selected.o"
+      ],
+      "expected": "exit0; paired selector C ABI and static fallback compile",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. selected-witness",
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-supported-body-new12h-1",
+      "timeout_seconds": 30,
+      "stdout_limit_bytes": 16384,
+      "stderr_limit_bytes": 16384,
+      "requires_fresh_Root_ordinary_grant": true
+    },
+    {
+      "id": "fallback-none-witness",
+      "argv": [
+        "/usr/bin/cc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-O2",
+        "-c",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-supported-body-new12h-1/selector-witness.c",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-supported-body-new12h-1/future-host-output-1/fallback-none.o"
+      ],
+      "expected": "exit0; paired selector C ABI and static fallback compile",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. fallback-none-witness",
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-supported-body-new12h-1",
+      "timeout_seconds": 30,
+      "stdout_limit_bytes": 16384,
+      "stderr_limit_bytes": 16384,
+      "requires_fresh_Root_ordinary_grant": true
+    },
+    {
+      "id": "fallback-helper-witness",
+      "argv": [
+        "/usr/bin/cc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-O2",
+        "-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+        "-c",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-supported-body-new12h-1/selector-witness.c",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-supported-body-new12h-1/future-host-output-1/fallback-helper.o"
+      ],
+      "expected": "exit0; paired selector C ABI and static fallback compile",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. fallback-helper-witness",
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-supported-body-new12h-1",
+      "timeout_seconds": 30,
+      "stdout_limit_bytes": 16384,
+      "stderr_limit_bytes": 16384,
+      "requires_fresh_Root_ordinary_grant": true
+    },
+    {
+      "id": "fallback-callback-witness",
+      "argv": [
+        "/usr/bin/cc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-O2",
+        "-DMCKERNEL_RUST_F03_PERF_COUNTER_CONTROL_BRIDGES",
+        "-c",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-supported-body-new12h-1/selector-witness.c",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-supported-body-new12h-1/future-host-output-1/fallback-callback.o"
+      ],
+      "expected": "exit0; paired selector C ABI and static fallback compile",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. fallback-callback-witness",
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-supported-body-new12h-1",
+      "timeout_seconds": 30,
+      "stdout_limit_bytes": 16384,
+      "stderr_limit_bytes": 16384,
+      "requires_fresh_Root_ordinary_grant": true
+    },
+    {
+      "id": "host-parity-link",
+      "argv": [
+        "/usr/bin/cc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-O2",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-supported-body-new12h-1/driver.c",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-supported-body-new12h-1/future-host-output-1/selected.o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-supported-body-new12h-1/future-host-output-1/providers.o",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-supported-body-new12h-1/future-host-output-1/parity"
+      ],
+      "expected": "exit0; no actual architecture provider object",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. host-parity-link",
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-supported-body-new12h-1",
+      "timeout_seconds": 30,
+      "stdout_limit_bytes": 16384,
+      "stderr_limit_bytes": 16384,
+      "requires_fresh_Root_ordinary_grant": true
+    },
+    {
+      "id": "host-parity-run",
+      "argv": [
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-supported-body-new12h-1/future-host-output-1/parity"
+      ],
+      "expected": "exit0; stdout exactly PASS counter-control 432 C/Rust pairs; 864 exact single-call traces; ABI6; selected3\n",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. host-parity-run",
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-supported-body-new12h-1",
+      "timeout_seconds": 30,
+      "stdout_limit_bytes": 16384,
+      "stderr_limit_bytes": 16384,
+      "requires_fresh_Root_ordinary_grant": true
+    }
+  ],
+  "requires": "Fresh Root current account/source/ownership ordinary admission and exact grant; no old nonce/lease reuse",
+  "no_actual_commands_run": true,
+  "original_file_predicate": "F03 supported default McKernel runtime has no selected project-owned C implementation, matching complete Rust/C default artifacts and native proof",
+  "tool_refs": {
+    "stable_Rust": {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "bytes": 654904,
+      "sha256": "028fd60b0e0add5505c661cd3ccde91393d615c8729bd95d94ab1e91409b36a1"
+    },
+    "retained_HOST19_F03_source_plan": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-perf-alloc-three-bridges-1/FUTURE-HOST-COMMAND-PLAN.NOT-GRANTED.json",
+      "bytes": 11466,
+      "sha256": "46fd2971d3d6989ee31d490e2e3ce97803a5281c7fc0b0c334791af61cc9bc58"
+    }
+  },
+  "tool_correction": "Pinned retained actual Rust1.92 executable instead of rustup shim; runner environment may be empty. No compiler/version invocation and no failed workload."
+}

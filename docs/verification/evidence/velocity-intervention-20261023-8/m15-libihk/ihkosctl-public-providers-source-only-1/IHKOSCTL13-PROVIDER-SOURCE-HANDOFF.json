@@ -1,0 +1,118 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_IHKOSCTL13_PROVIDER_SOURCE_AND_ACTUAL_EXISTING_C_EXPORT_MAP_NO_EXECUTION",
+  "CLI_parser_origin": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-7/m15-ihkconfig/ihkconfig.rs",
+    "sha256": "b4d9a08416b32b07ee57539bc6a292501b2e9569adc918e66a69a2b206e3dc4e",
+    "bytes": 22886
+  },
+  "selected_C_contract": {
+    "path": "/home/holden/mckernel/ihk/linux/user/ihklib.c",
+    "sha256": "6f2c7321667f405b3dc483c089eb5119db0d0a758c8e17a86460f9aad8dcdeab",
+    "bytes": 103430
+  },
+  "files": {
+    "IKC-ABI-AND-MISSING-PROVIDERS.SOURCE-FRAGMENT.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/ihkosctl-public-providers-source-only-1/IKC-ABI-AND-MISSING-PROVIDERS.SOURCE-FRAGMENT.rs",
+      "sha256": "d32de64d36f45db3fe39cb6984d06a932bf9d409316a6c56f3b3e19ec2af3ca2",
+      "bytes": 533
+    },
+    "ihklib_cli_parsers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/ihkosctl-public-providers-source-only-1/ihklib_cli_parsers.rs",
+      "sha256": "aac52991229d6a9c4b0ef7db8cdb086e3433b3881b90fe9fc73a3ad1482382c7",
+      "bytes": 8906
+    },
+    "ihklib_status_kmsg.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/ihkosctl-public-providers-source-only-1/ihklib_status_kmsg.rs",
+      "sha256": "358c8a9bf5548745265f69bee1528be7cb1136d7df61747476959f3dd8baa440",
+      "bytes": 1372
+    },
+    "ihklib_mcstat_memory_shared_parser.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/ihkosctl-public-providers-source-only-1/ihklib_mcstat_memory_shared_parser.rs",
+      "sha256": "75d8fa2c77104a2f119aff0c5ee60da23089e06003b56f67b7fd79d2469e6601",
+      "bytes": 8009
+    }
+  },
+  "reused_Rust_parser_formatter_helpers": [
+    "is",
+    "cpu_array",
+    "mem_parse",
+    "mem_array",
+    "zero_mem",
+    "append",
+    "query_string"
+  ],
+  "new_public_parser_wrappers": [
+    "cpu_str2count",
+    "cpu_str2req",
+    "cpu_req2str",
+    "mem_str2count",
+    "mem_str2req",
+    "mem_req2str"
+  ],
+  "new_status_kmsg_source": [
+    "ihk_os_get_status",
+    "ihk_os_kmsg"
+  ],
+  "sysfs_selected_future_source": "ihklib_mcstat_memory_shared_parser.rs imports sole common mem_array rather than selecting duplicated parser body; previous6f851 standalone remains preserved unselectedhistory",
+  "missing_Rust": [
+    "ihk_os_makedumpfile ENABLE_MEMDUMP implementation",
+    "ikc_str2count",
+    "ikc_str2req",
+    "ikc_req2str"
+  ],
+  "temporary_real_C_provider_proof": {
+    "actual_shared_NM": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/bfd-header-bounded-correction-1/host-std-runtime-expert-correction-1/root-actual-host-std-runtime-1/shared-defined/stdout",
+      "sha256": "1b663976e7c2a1fb0459e096fc0671644b2c602ae8300b072c2a261a6b97b8ab",
+      "bytes": 188909
+    },
+    "actual_remaining_C_NM": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/bfd-header-bounded-correction-1/host-std-runtime-expert-correction-1/root-actual-host-std-runtime-1/C-object-defined/stdout",
+      "sha256": "c8bec25fc21ce98f49ca822ab9eb5d23a8c0cb6775154976f38eaed918e4e2b2",
+      "bytes": 3464
+    },
+    "all13_shared_counts": {
+      "ihk_os_get_status": 1,
+      "ihk_os_kmsg": 1,
+      "ihk_os_makedumpfile": 1,
+      "cpu_str2count": 1,
+      "cpu_str2req": 1,
+      "cpu_req2str": 1,
+      "mem_str2count": 1,
+      "mem_str2req": 1,
+      "mem_req2str": 1,
+      "ikc_str2count": 1,
+      "ikc_str2req": 1,
+      "ikc_req2str": 1,
+      "ihklib_os_query_mem_sysfs": 1
+    },
+    "all13_actual_C_counts": {
+      "ihk_os_get_status": 1,
+      "ihk_os_kmsg": 1,
+      "ihk_os_makedumpfile": 1,
+      "cpu_str2count": 1,
+      "cpu_str2req": 1,
+      "cpu_req2str": 1,
+      "mem_str2count": 1,
+      "mem_str2req": 1,
+      "mem_req2str": 1,
+      "ikc_str2count": 1,
+      "ikc_str2req": 1,
+      "ikc_req2str": 1,
+      "ihklib_os_query_mem_sysfs": 1
+    },
+    "shared_library_actual_sha256": "7d894288776c7a9606a3579ee34a966572e6ce3a9525cf5182b506e7691b0b81"
+  },
+  "contract_qualifications": [
+    "Wrappers preserve original validation/reqcount/output/order and returned malloc-owned strings",
+    "Existing CLI formatter has already declared defined-behavior allocation-failure extensions; original C NULL-after-realloc UB is NOT broad parity credit",
+    "Public CPU nullreq logs exact eprintf; memnullreq with zero parsed count returns0 as C",
+    "Current total-memory stat targetABI unresolved, no source/runtime acceptance invented",
+    "No command/parser reimplementation in foreground ihkosctl; use these exact library ABI providers"
+  ],
+  "current_executable_queue_unchanged": true,
+  "compiler_or_jobs": 0,
+  "canonical_changes": false,
+  "native_or_Rocky_default_claim": false
+}

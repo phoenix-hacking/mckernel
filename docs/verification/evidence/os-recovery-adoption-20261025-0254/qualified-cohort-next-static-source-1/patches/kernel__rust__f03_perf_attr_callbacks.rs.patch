@@ -1,0 +1,47 @@
+--- /dev/null
++++ kernel/rust/f03_perf_attr_callbacks.rs
+@@ -0,0 +1,44 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Reuse the complete existing genuine-header-qualified attribute type.
++include!("f03_perf_event_attr_abi.rs");
++use core::ffi::c_void;
++const EINVAL: CInt = 22;
++
++/// # Safety
++/// The nonnull attribute points to the same aligned, initialized, retained
++/// perf_event_attr used by the original C callback. Each nonnull output points
++/// to writable C int storage. Outputs may alias one another: preserve C order.
++#[no_mangle]
++pub unsafe extern "C" fn f03_perf_counter_attr_flags_v1(
++    attr: *const c_void,
++    exclude_kernel: *mut CInt,
++    exclude_user: *mut CInt,
++) -> CInt {
++    if attr.is_null() || exclude_kernel.is_null() || exclude_user.is_null() {
++        return -EINVAL;
++    }
++    let attr = attr.cast::<PerfEventAttr>();
++    *exclude_kernel = (((*attr).flags >> 5) & 1) as CInt;
++    *exclude_user = (((*attr).flags >> 4) & 1) as CInt;
++    0
++}
++
++/// # Safety
++/// Same retained attribute/output contract as counter flags. Raw stores retain
++/// the original user/kernel/inherit order when output pointers alias.
++#[no_mangle]
++pub unsafe extern "C" fn f03_perf_read_attr_flags_v1(
++    attr: *const c_void,
++    exclude_user: *mut CInt,
++    exclude_kernel: *mut CInt,
++    inherit: *mut CInt,
++) -> CInt {
++    if attr.is_null() || exclude_user.is_null() || exclude_kernel.is_null() || inherit.is_null() {
++        return -EINVAL;
++    }
++    let attr = attr.cast::<PerfEventAttr>();
++    *exclude_user = (((*attr).flags >> 4) & 1) as CInt;
++    *exclude_kernel = (((*attr).flags >> 5) & 1) as CInt;
++    *inherit = (((*attr).flags >> 1) & 1) as CInt;
++    0
++}

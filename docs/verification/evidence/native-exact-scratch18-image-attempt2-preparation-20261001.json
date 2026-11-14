@@ -1,0 +1,73 @@
+{
+  "schema": "mckernel.native-exact-scratch18-image-attempt2-preparation.v1",
+  "status": "PASS_PREPARATION_ONLY",
+  "candidate_sha": "89ab5c555aac9177a789efc67ddc775dacb25d6d",
+  "attempt1_cleanup": {
+    "execution_release_sha256": "a464067611516b8c1fb37fa4c279c316527b38152e8c4c14792ff5ca6fb61b26",
+    "independent_decision": "PASS_EXECUTION",
+    "result": "PASS_EXECUTED",
+    "terminal_replay": "PASS_TERMINAL_REPLAY",
+    "plan_sha256": "3a42c57a2df62a8d639c9b948ab00781836eb5ca9736989d7ad95e2656ce8724",
+    "container_absent": true,
+    "image_lease_absent": true,
+    "candidate_exclusion_absent": true,
+    "shared_exclusion_absent": true,
+    "attempt_archive_sha256": "891e8e0d22d0682f1cc696b61e51712ce5f3fa30d674e3fbf8fe5c74d498b5c3",
+    "shared_archive_sha256": "792925a927f25eba9b286d80ad31c8940f642f91bf05919e5e75e3ee6efe2253"
+  },
+  "bounded_correction": {
+    "failure_family": "nested read-only bind target absent beneath /src",
+    "action": "create only the empty tracked libdwarf gitlink mountpoint",
+    "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-18/executer/user/lib/libdwarf/libdwarf",
+    "before": "absent",
+    "after": {
+      "type": "directory",
+      "mode": "0755",
+      "device_inode": "1831:3842182",
+      "links": 2,
+      "empty": true,
+      "uid_gid": "1000:1000"
+    },
+    "parent_device_inode": "1831:3836130",
+    "tracked_mode": "160000",
+    "tracked_commit": "ab9230b2b8aa66a3d1d52e4be11fca17a3b63753",
+    "source_manifest_sha256_unchanged": "36e2ad1864bbec0641c88e097225c3aead887545b32882abbc288f8f41e4f71a",
+    "source_status_after": [
+      " D executer/user/lib/syscall_intercept",
+      " D executer/user/lib/uti",
+      " M ihk"
+    ],
+    "consumed_libdwarf_bytes": "remain the separately authenticated read-only gitlink checkout mounted over this empty destination"
+  },
+  "fresh_namespaces": {
+    "work_root": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-work-89ab5c55-scratch18-retry2-attempt2-20261001",
+    "work_device_inode": "1831:6685284",
+    "owner_evidence_root": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-owner-evidence-89ab5c55-scratch18-retry2-attempt2-20261001",
+    "owner_evidence_device_inode": "1831:6685285",
+    "both_empty": true,
+    "lease_absent": true,
+    "released_common_exclusion_reused": "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch18-image-1.json",
+    "common_exclusion_absent": true,
+    "shared_exclusion_absent": true
+  },
+  "request_preparation": {
+    "inputs": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-prepare-inputs-89ab5c55-scratch18-retry2-attempt2-20261001.json",
+    "inputs_sha256": "12f5ffc4d5d4c112d79f3986ac17f83664e8f9963f065a16561ce0c9aa2785b8",
+    "toolchain": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-toolchain-89ab5c55-scratch18-retry2-attempt2-20261001.json",
+    "toolchain_sha256": "de4bcafc0e0c33e5d19fb50e3b88c4b9470e3c4c27d7478b3da6c08abb81cf83",
+    "request": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-request-89ab5c55-scratch18-retry2-attempt2-20261001.json",
+    "request_sha256": "27d7f21fb53d5cb6bee216d02d68cb20808acbc43d99b970eac09ea3be0ee969",
+    "owner_read_only_validation": "PASS",
+    "jobs": 4,
+    "docker_started": false,
+    "heavy_token_acquired": false
+  },
+  "capacity": {
+    "host_free_bytes": 39509159936,
+    "scratch_free_bytes": 34582556672,
+    "memory_available_bytes": 23105703936,
+    "floors_satisfied": true
+  },
+  "acceptance": "preparation only; no image, guest, application, production or OS acceptance",
+  "next": "independently review and release exactly one serialized attempt-2 image owner invocation"
+}

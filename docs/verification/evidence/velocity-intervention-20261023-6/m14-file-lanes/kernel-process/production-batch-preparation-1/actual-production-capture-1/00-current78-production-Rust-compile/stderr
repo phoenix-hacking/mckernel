@@ -1,0 +1,35 @@
+warning: target feature `sse2` must be enabled to ensure that the ABI of the current target can be implemented correctly
+  |
+  = note: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+  = note: for more information, see issue #116344 <https://github.com/rust-lang/rust/issues/116344>
+
+warning: the feature `core_intrinsics` is internal to the compiler or standard library
+ --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/production-batch-preparation-1/source/kernel/rust/lib.rs:2:12
+  |
+2 | #![feature(core_intrinsics)]
+  |            ^^^^^^^^^^^^^^^
+  |
+  = note: using it is strongly discouraged
+  = note: `#[warn(internal_features)]` on by default
+
+error[E0308]: mismatched types
+    --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/production-batch-preparation-1/source/kernel/rust/process_helpers.rs:4358:72
+     |
+4358 |             crate::mem_helpers::rusage_memory_stat_sub((*args).memobj, pgsize, pgsize as CInt);
+     |             ------------------------------------------                 ^^^^^^ expected `u64`, found `usize`
+     |             |
+     |             arguments to this function are incorrect
+     |
+note: function defined here
+    --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/production-batch-preparation-1/source/kernel/rust/mem_helpers.rs:1257:26
+     |
+1257 | pub unsafe extern "C" fn rusage_memory_stat_sub(memobj: *mut Memobj, size: CULong, pgsize: CInt) {
+     |                          ^^^^^^^^^^^^^^^^^^^^^^                      ------------
+help: you can convert a `usize` to a `u64` and panic if the converted value doesn't fit
+     |
+4358 |             crate::mem_helpers::rusage_memory_stat_sub((*args).memobj, pgsize.try_into().unwrap(), pgsize as CInt);
+     |                                                                              ++++++++++++++++++++
+
+error: aborting due to 1 previous error; 2 warnings emitted
+
+For more information about this error, try `rustc --explain E0308`.

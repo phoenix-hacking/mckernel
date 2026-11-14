@@ -1,0 +1,148 @@
+{
+  "status": "FIXED_CANONICAL_REPORT_CONTRACT_ACTUAL_ACCEPTANCE_PENDING",
+  "schema_literal": "mckernel.independent-rust-four-leaf-image-actual-review.v1",
+  "decision_literal_only_after_strict_actual_proof": "PASS_ACTUAL_PRODUCTION_IMAGE_ARTIFACT_AND_GUARD_RETIREMENT",
+  "acceptance_bits": {
+    "production_artifact_acceptance": true,
+    "runtime_acceptance": false,
+    "compute_c_retirement_credit": false
+  },
+  "actual_artifacts": {
+    "exact_roles": [
+      "cpu",
+      "process",
+      "rust",
+      "image"
+    ],
+    "required_descriptor_fields": [
+      "path",
+      "sha256",
+      "bytes",
+      "dev",
+      "inode",
+      "uid",
+      "gid",
+      "mode"
+    ],
+    "mode_type": "permission int",
+    "stable_timestamp_fields": [
+      "mtime_ns",
+      "ctime_ns"
+    ]
+  },
+  "source_request_bindings": {
+    "exact_roles": [
+      "request",
+      "manifest",
+      "materialization_receipt"
+    ],
+    "ref_fields": [
+      "path",
+      "sha256"
+    ]
+  },
+  "top_level_source_projection": {
+    "source_identity": {
+      "dev": 66306,
+      "file_type": 16384,
+      "gid": 1000,
+      "inode": 47992786,
+      "mode": 448,
+      "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/materialized-source",
+      "uid": 1000
+    },
+    "candidate_identity_scope": "base_git_commit_only",
+    "candidate_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+    "source_derivative_sha256": "8ca6e79ff41ee3a90b2dc5d85f020a65efebb35c5cffd24acd37da6fe17d4cfc",
+    "materialization_sha256": "8fbf585c1b151801663ee0a1346505fdc50663191a0cd09349227fb7386499b5"
+  },
+  "actual_source11": {
+    "exact_fields": [
+      "count",
+      "host_owner",
+      "source11",
+      "current_guard",
+      "request_lineage"
+    ],
+    "count": 11,
+    "source11_ref_path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/source-sha256.json",
+    "source11_file_projection": "source_sha256 dict11 absactualpath\u2192SHA; guard_consumer_source_count11/publication_row_count12/publication_rows12",
+    "host_owner_projection": "actualrequest.host_owner_path, member of source11.source_sha256, value == actualrequest.host_owner_sha256",
+    "source11_metadata_current_guard_fields": "source11 and current_guard each exact {path,sha256}; no standalone metadata field or metadata acceptance gate",
+    "request_lineage_exact_roles": [
+      "request",
+      "owner_receipt",
+      "guard_result",
+      "postjoin_readback"
+    ],
+    "host_owner": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/adapters/native_rust_exact_build_container_owner.py"
+  },
+  "actual21_originals": {
+    "type": "list21 exact existing producer authority rows",
+    "row_fields": [
+      "kind",
+      "action",
+      "original",
+      "retained",
+      "retained_authority_pending"
+    ],
+    "original_engine_fields": [
+      "path",
+      "device",
+      "inode",
+      "mode",
+      "uid",
+      "gid",
+      "size",
+      "nlink",
+      "sha256",
+      "mtime_ns",
+      "ctime_ns"
+    ],
+    "mode_type": "octal string",
+    "constraints": "fixed genuine21kindset and unique originalpaths, copy17/reuse4; every represented original field projects into corresponding primary artifact or selected actual21 source authority"
+  },
+  "existing_primary_pairs": {
+    "exact_fields": [
+      "count",
+      "copier_receipt",
+      "pairs"
+    ],
+    "count": 4,
+    "copier_receipt": "exactref to retained-artifacts/retention-result.json statusPASS_EXACT_FOUR_ARTIFACT_RETENTION_ONLY",
+    "pairs": "list4 {role,original,retained}, exactunique cpu/process/rust/image roles; both descriptors use full actual_artifacts typed fields",
+    "projection": "original matches actual_artifacts and actual21engine-row normalization device\u2192dev,size\u2192bytes,octalmode\u2192int, including representedtimestamps; retained matches copyreceipt/currentheldFD, identicalbytes/hash, singlelink, distinctdev/inode, uniqueimagepair",
+    "historical_original_path_policy": "original descriptor evidence remains immutable; after separately accepted cleanup its path existence is not a nativeconsumption gate. Stageconsumedretainedimage remains currentfullFD/hash bound."
+  },
+  "remaining_retention": "UNPERFORMED",
+  "guard_retirement": {
+    "required_fields": [
+      "retired",
+      "container_id",
+      "owner_nonce",
+      "owner_receipt",
+      "common_shared_cleanup_pending"
+    ],
+    "retired": true,
+    "common_shared_cleanup_pending": true,
+    "binding": "genuine stoppedCID/nonce/ownerreceipt/guard/postjoin lineage; no absence-only retirement"
+  },
+  "preserved_failures": {
+    "original_full_DWARF_gap_open": true,
+    "all_original14_pass": false,
+    "failed_new14": "original declared expected0 actual1 missingnamedoutputsection preserved",
+    "correction": "separate remaining3receipt refs; no copy/1\u201313 replay or relabeling"
+  },
+  "strict_acceptance_pending": [
+    "3remaining descriptor reads with RustsymbolNdx3887/3889\u2192exact32B association and image64Brange",
+    "strict v3facts on originalcompletedreceipt+separatecorrectedreceipts",
+    "actualbody/defaultconsumer/descriptor proof and canonicalfield joins"
+  ],
+  "authority": {
+    "root": false,
+    "cleanup": false,
+    "retention21": false,
+    "native_execution": false
+  },
+  "supersedes_contract_sha256": "474646bb0618164c701ea208be5428f5c6577d2e7497b475b87ab7b6641724da"
+}

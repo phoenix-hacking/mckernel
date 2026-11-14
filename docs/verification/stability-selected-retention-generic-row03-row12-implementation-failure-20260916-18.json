@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "record_kind": "stability_selected_retention_generic_row03_row12_implementation_failure",
+  "task_id": "M01-B-selected-retention-generic-row03-row12",
+  "implementation_attempt": 18,
+  "evidence_audit_attempt": 19,
+  "recorded_utc": "2026-09-16T09:56:44Z",
+  "status": "FAIL_EVIDENCE_INPUT",
+  "authority": {
+    "packet_path": "docs/verification/stability-selected-retention-generic-row03-row12-implementation-packet-20260916-11.md",
+    "packet_sha256": "0307c1ce54cb297caf3fc98a6f83b70d715a424114806bdf33e62c92744028cb",
+    "review_path": "docs/verification/stability-selected-retention-generic-row03-row12-rerun-packet-review-20260916-17.json",
+    "review_sha256": "aabe8774af2d86e46fc24f0f3c80a2218954b2cd1077839dbba63a161a491bb0"
+  },
+  "failed_root": "/home/holden/mckernel-work/scratch/m01b-generic-row03-row12-packet-20260916-11",
+  "archive": {
+    "path": "docs/verification/evidence/stability-selected-retention-generic-row03-row12-implementation-failure-20260916-18.tar.gz",
+    "sha256": "7637f909c7b53c3dd4171e4bee696fbe5d086a35ce5fb838da156d8cf988e3e4",
+    "size": 1001218,
+    "members": 357,
+    "files": 346
+  },
+  "mechanical_checks": {
+    "source_members": "102/102 authenticated",
+    "exact_file_count": 346,
+    "special_or_symlink_files": 0,
+    "bytecode_artifacts": 0,
+    "manifest_sha256": "d18818ba10f4926eb737fe7f915f3dc5f2317b8aefc5adcc29e78e6a64fcd0d4"
+  },
+  "blocking_findings": [
+    {
+      "path": "mode2/adapter.rs and mode3/adapter.rs",
+      "sha256": "a16f42c36ed54f0e2d7997549caa92206e393ee3239bec741f4c5b5e71e2eee8",
+      "finding": "release and unreleased Drop use `let _ = self.backing.take()`, immediately dropping the Box before recording Deferred or Quarantine; Ledger has no owning deferred or quarantine vectors. The required retained ownership and post-snapshot drains do not exist."
+    },
+    {
+      "path": "mode2/runner.rs and mode3/runner.rs",
+      "sha256": "c6e9e9d4a7b5a9e0b947db922b0f73496285d3e62a88e4eb3989b7ff200791b5",
+      "finding": "The required actual method chain appears only inside a string literal. The runner invokes none of Mailbox::new, open_worker, admit, reserve, copied, return_value, phase query or publish."
+    }
+  ],
+  "parser_sha256": "8745cca06eea0ff96c4044b4b386fb3bbd4e3a0e935a3baec926eaceda32bd97",
+  "result_sha256_each_mode": "84a13772c6c294a9474a2574c7af470f76f6aafdd5190c8871e96457ca9df811",
+  "repository_files_changed_by_implementation": false,
+  "compiled": false,
+  "runtime_execution": false,
+  "native_backing_accepted": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false,
+  "next": "Stop cheap retries. Escalate the preserved packet and both implementation failures for a source-level actual-method implementation that owns backing in real ledger vectors and invokes the real methods."
+}

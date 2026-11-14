@@ -1,0 +1,263 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "independent": true,
+  "reviewer": "/root/custody_release_review",
+  "at": "2026-10-27T22:50:49.906549+00:00",
+  "decision": "PASS_EXACT_ONE_FAMILY_E0616_PRIVATE_FIELD_SOURCE_CORRECTION",
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/abi-private-field-correction-source-1/SOURCE-READY.json",
+    "bytes": 6859,
+    "sha256": "6a0ac4682b21c32c14511c2e140625d0991db016a8a26233bcad0fd5c1ced61f"
+  },
+  "profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/abi-private-field-correction-source-1/PROFILE.SOURCE-ONLY.json",
+    "bytes": 115651,
+    "sha256": "388c3c364f6c981a5749b058f59f94684091a12f381f785aab181508388bad05"
+  },
+  "corrected_leaf": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/abi-private-field-correction-source-1/candidate/kernel/rust/f06_clone_ptrace_provider_abi.rs",
+    "bytes": 1788,
+    "sha256": "cac59960063f7d66b66808a30d6b8fbbbfb61a0da49393167e97920fbadf8f07"
+  },
+  "existing_defining_module_witness": {
+    "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+    "runtime_authority": null,
+    "defining_source": {
+      "path": "/home/holden/mckernel/kernel/rust/lock_helpers.rs",
+      "bytes": 12202,
+      "sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3"
+    },
+    "accepted_current112_snapshot": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/rust-subtree/lock_helpers.rs",
+      "bytes": 12202,
+      "sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3"
+    },
+    "line": 59,
+    "predicate": "assert!(offset_of!(McsRwlockNodeIrqsave, irqsave) == 0);",
+    "same_semantic_predicate_removed_from_illegal_scope": "assert!(core::mem::offset_of!(McsRwlockNodeIrqsave, irqsave) == 0);",
+    "existing_const_block": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/abi-private-field-correction-source-1/defining-module-existing-const-witness.rs.inc",
+      "bytes": 917,
+      "sha256": "e136f13059a742671044e5b694204d56e3ba54bf21d0957f2b3084070835ddc3"
+    },
+    "unconditional_in_defining_module": true,
+    "private_field_visibility_unchanged": true,
+    "all_other_leaf_witnesses_unchanged": true,
+    "runtime_bodies_changed": false,
+    "source_only": true
+  },
+  "source_map": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/abi-private-field-correction-source-1/RUST-SUBTREE-CLOSED-SOURCE-MAP.json",
+    "bytes": 145233,
+    "sha256": "527f117b73812f39ed23ca4e967301a960d8764ff82b85af216309e9589a9a70"
+  },
+  "changed_leaf_only": [
+    "f06_clone_ptrace_provider_abi.rs"
+  ],
+  "closed_map_entries": 118,
+  "unchanged_entry_metadata_compared": 117,
+  "unchanged_body_rehashes": 0,
+  "verified": [
+    "Exact537B patch removes one illegal duplicate cross-module private-field offset assertion and adds only two explanatory comments. Every other leaf byte, typed ABI and size/alignment witness unchanged. No runtime body, struct visibility, field layout or calling convention change.",
+    "Accepted112/current lock_helpers76ba source is identical and retains same unconditional offset_of(McsRwlockNodeIrqsave, irqsave)==0 at line59 in defining-module const block. Private irqsave field and unconditional crate module declaration unchanged; effective ABI proof remains selected.",
+    "Closed118 map compares exact117 predecessor digest/length pairs with only leafcac599 delta. New export root/map,118cohort bindings and qualified readonly reference set agree. No unchanged-source body inventory or rehash.",
+    "Four exact command objects equal actual failed113 profile. Every input field except new Rust export directory equals predecessor, including eight retained objects,3fresh objects,configuration/toolchains/postimages. Four runner/worker/holder/publisher tools byte-identical.",
+    "Actual genuine113 origin2c419 receipt/headeraeece/origin-binding/env/CMake authenticate, with architecture source/argv unchanged. No producer replay or preview substitution.",
+    "Original actual worker preserves only command0 RustE0616 return1,3.113695s;3suffix commands unrun. Same family one bounded correction; repeated failure requires expert escalation.",
+    "Root37 current-free proof pending; native clearance/nonce/holder/resource/release fields null. SOURCE PASS grants no workload and revives no consumed admission."
+  ],
+  "original_failure": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/abi-private-field-correction-source-1/ORIGINAL-FAILURE-AND-ONE-CORRECTION.json",
+    "bytes": 1470,
+    "sha256": "fd6c8c7f1f0230623127c6a6a3b9f78e87602dd869dfb760f5e88b8a45e597a8"
+  },
+  "genuine_origin_reused": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/root-source-adoption-1/ROOT-ACTUAL-ORIGIN-PRODUCER.json",
+    "bytes": 3725,
+    "sha256": "2c419c6405deef8d6e8c2479e57f88884e34a84fec300e0aff5311ea04b944fb"
+  },
+  "runtime_authority": null,
+  "source_authority": null,
+  "artifact_acceptance": false,
+  "native_acceptance": false,
+  "actual_compiler_commands": 0,
+  "next_required": "Root adopt exact corrected leaf and rebind actual source/adoption/publication, fresh Root37 current-free/resource/nonce and independent actual execution review before4commands; preserve originals.",
+  "review_reader_note": "First offline receipt reader stopped before publication because expected diagnostic string omitted real lock_helpers:: module qualification. Corrected exact actual diagnostic comparison; raw stderr/source untouched and no predicate weakened.",
+  "references": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/abi-private-field-correction-source-1/SOURCE-READY.json",
+      "bytes": 6859,
+      "sha256": "6a0ac4682b21c32c14511c2e140625d0991db016a8a26233bcad0fd5c1ced61f"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/abi-private-field-correction-source-1/PROFILE.SOURCE-ONLY.json",
+      "bytes": 115651,
+      "sha256": "388c3c364f6c981a5749b058f59f94684091a12f381f785aab181508388bad05"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/abi-private-field-correction-source-1/RUST-SUBTREE-CLOSED-SOURCE-MAP.json",
+      "bytes": 145233,
+      "sha256": "527f117b73812f39ed23ca4e967301a960d8764ff82b85af216309e9589a9a70"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/abi-private-field-correction-source-1/EXACT-EXISTING-ABI-WITNESS.json",
+      "bytes": 1465,
+      "sha256": "ba779885aaa1fb9aa654f67e0aa88df5865e6c017ec3d03c5c4b600c258b3903"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/abi-private-field-correction-source-1/ORIGINAL-FAILURE-AND-ONE-CORRECTION.json",
+      "bytes": 1470,
+      "sha256": "fd6c8c7f1f0230623127c6a6a3b9f78e87602dd869dfb760f5e88b8a45e597a8"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/abi-private-field-correction-source-1/ROOT-ADOPTION-REBIND.NOT-AUTHORITY.json",
+      "bytes": 2714,
+      "sha256": "190d6801fabd5a10c303468100b5e80eb9af866aa910c69d5cb5ebcb3fd91efc"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT113-CORRECTED-SCALAR4-NEXT4-BUILD-ADMISSION-1/PROFILE.SOURCE-ONLY.json",
+      "bytes": 111691,
+      "sha256": "cf73e2de549c1332b8a830b5f426e6168d4568effd47d608520d660da946390d"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/RUST-SUBTREE-CLOSED-SOURCE-MAP.json",
+      "bytes": 133125,
+      "sha256": "2f63074afd989bc655f820c09776299899bb965ba31171d2b1076a0b6d6c31f1"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/abi-private-field-correction-source-1/preimages/f06_clone_ptrace_provider_abi.rs",
+      "bytes": 1715,
+      "sha256": "a23e378acec054c8c8895fb655f20e903b4f825b62bd642eb350b0b7c4b8bda7"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/abi-private-field-correction-source-1/candidate/kernel/rust/f06_clone_ptrace_provider_abi.rs",
+      "bytes": 1788,
+      "sha256": "cac59960063f7d66b66808a30d6b8fbbbfb61a0da49393167e97920fbadf8f07"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/abi-private-field-correction-source-1/rust-subtree/f06_clone_ptrace_provider_abi.rs",
+      "bytes": 1788,
+      "sha256": "cac59960063f7d66b66808a30d6b8fbbbfb61a0da49393167e97920fbadf8f07"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/abi-private-field-correction-source-1/f06_clone_ptrace_provider_abi.rs.patch",
+      "bytes": 537,
+      "sha256": "bfa0397db1120f98ffce964da71676f28c54bb130ef922c21d6a4df5e8d58266"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/lock_helpers.rs",
+      "bytes": 12202,
+      "sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/rust-subtree/lock_helpers.rs",
+      "bytes": 12202,
+      "sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/abi-private-field-correction-source-1/rust-subtree/lock_helpers.rs",
+      "bytes": 12202,
+      "sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/abi-private-field-correction-source-1/defining-module-existing-const-witness.rs.inc",
+      "bytes": 917,
+      "sha256": "e136f13059a742671044e5b694204d56e3ba54bf21d0957f2b3084070835ddc3"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/abi-private-field-correction-source-1/rust-subtree/lib.rs",
+      "bytes": 2252,
+      "sha256": "fe60e37167124fba9599112683332c75e1f18ee046afd351a075f3bcf03ed3f7"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/abi-private-field-correction-source-1/INPUT-EXPORT.TEMPLATE.NOT-AUTHORITY.json",
+      "bytes": 70418,
+      "sha256": "36dfb9b7077a37232c66181056ffe2563e798e9cf86f57f858fd064794699dff"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/root-source-adoption-1/ROOT-ACTUAL-ORIGIN-PRODUCER.json",
+      "bytes": 3725,
+      "sha256": "2c419c6405deef8d6e8c2479e57f88884e34a84fec300e0aff5311ea04b944fb"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/ROOT-CURRENT113-ORIGIN-PRODUCER-OUTPUT-1/f06_rt_sigreturn_origin.h",
+      "bytes": 268,
+      "sha256": "aeece54c3b6f01c326fff3eb925b89b88acd3b198b0047393c8c9c0d78f74ded"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/ROOT-CURRENT113-ORIGIN-PRODUCER-OUTPUT-1/ORIGIN-BINDING.json",
+      "bytes": 4077,
+      "sha256": "049c6d5b70fffda28563c5252f869299f3468f51781f8787f22c1d61959ef738"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/ROOT-CURRENT113-ORIGIN-PRODUCER-OUTPUT-1/rust-environment.json",
+      "bytes": 78,
+      "sha256": "142570bc2f239551641d6aefc59f406f55b6149ab1f8dbbce5a2557eb618df13"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/ROOT-CURRENT113-ORIGIN-PRODUCER-OUTPUT-1/f06_rt_sigreturn_origin.cmake",
+      "bytes": 74,
+      "sha256": "47da3c9c2b637527a73878d783e1f1043c8fde719c1ecf502f417b5d5d6fe736"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT113-CORRECTED-SCALAR4-NEXT4-BUILD-ADMISSION-1/run_build_only.py",
+      "bytes": 24251,
+      "sha256": "a59b8f4d7b442239b17a4e5de78f785e35e6cf228a11f650d83e040b75e33c4a"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/abi-private-field-correction-source-1/run_build_only.py",
+      "bytes": 24251,
+      "sha256": "a59b8f4d7b442239b17a4e5de78f785e35e6cf228a11f650d83e040b75e33c4a"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT113-CORRECTED-SCALAR4-NEXT4-BUILD-ADMISSION-1/build_only_worker.py",
+      "bytes": 4113,
+      "sha256": "0bdd40596f7d5a9fb056b9ff24c7033336af1305ce143391debd225a71d2b105"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/abi-private-field-correction-source-1/build_only_worker.py",
+      "bytes": 4113,
+      "sha256": "0bdd40596f7d5a9fb056b9ff24c7033336af1305ce143391debd225a71d2b105"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT113-CORRECTED-SCALAR4-NEXT4-BUILD-ADMISSION-1/hold_and_run_build_only.py",
+      "bytes": 7010,
+      "sha256": "d17bd70e3e3e6ef7febe48b6f0f892ab6f1a94c74e89d43808bbea8b5dc21551"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/abi-private-field-correction-source-1/hold_and_run_build_only.py",
+      "bytes": 7010,
+      "sha256": "d17bd70e3e3e6ef7febe48b6f0f892ab6f1a94c74e89d43808bbea8b5dc21551"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT113-CORRECTED-SCALAR4-NEXT4-BUILD-ADMISSION-1/publish_approved_ready.py",
+      "bytes": 3497,
+      "sha256": "af39ab7d55b8a11ca5a4a5361ce41639dd6207ffc3d9b0e55d64355d44697401"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/abi-private-field-correction-source-1/publish_approved_ready.py",
+      "bytes": 3497,
+      "sha256": "af39ab7d55b8a11ca5a4a5361ce41639dd6207ffc3d9b0e55d64355d44697401"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT113-CORRECTED-SCALAR4-NEXT4-BUILD-ADMISSION-1/OUTPUT/work/evidence/worker-result.json",
+      "bytes": 4879,
+      "sha256": "50820d4834af6826309251484142ec6d658d3428c9ec89464cec9dd9ad22be7a"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT113-CORRECTED-SCALAR4-NEXT4-BUILD-ADMISSION-1/OUTPUT/work/evidence/00.stderr",
+      "bytes": 18209,
+      "sha256": "bd6461f67dc0da9b38b2f14ed61175fa79d145030352760a60200fee893671fe"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/abi-private-field-correction-source-1/FROZEN-FOUR-COMMAND-EIGHT-INPUT-REUSE.json",
+      "bytes": 37480,
+      "sha256": "cc145c843ecadd72a3236a2c26c27f4f637a91c6a2f6c20978e659829234d5f7"
+    }
+  ],
+  "actions": {
+    "offline_changed_source_and_metadata_only": true,
+    "compiler_tests_queries_guard_workload_cleanup_canonical_Git": 0,
+    "subagents": 0
+  }
+}

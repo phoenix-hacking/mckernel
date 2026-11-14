@@ -1,0 +1,35 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_25_EXISTING_FIXED_FIVE_PARSER_PRODUCER_AND_15_INHERITED_GUARD_TESTS",
+  "command": [
+    "taskset",
+    "-c",
+    "0",
+    "prlimit",
+    "--as=2147483648",
+    "--cpu=30",
+    "--core=0",
+    "--",
+    "timeout",
+    "60s",
+    "python3",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-sync-processvm-host13-five-stage-source-1/test_existing_five_scope.py"
+  ],
+  "returncode": 0,
+  "tests": 25,
+  "first_failure_positions": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "elapsed_reported_seconds": 0.032,
+  "source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-sync-processvm-host13-five-stage-source-1/test_existing_five_scope.py",
+    "bytes": 7426,
+    "sha256": "9760d67653ad8af76846586201f2cdfaa805ba92cde6f822842b55f7c6d57839"
+  },
+  "actual_compiler_container_calls": 0
+}

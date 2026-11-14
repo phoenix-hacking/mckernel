@@ -1,0 +1,56 @@
+{
+  "cause_of_actualSDK8failure": null,
+  "compiler": null,
+  "diagnostic_schema": "P12_LONG_SNAPSHOT_ERROR site=settlement|failure_export n=<int> errno_after=<int> errno_valid=0|1 bound=<size_t> round=<unsigned> pid0=<int> pid1=<int> LF",
+  "errno_qualification": "errno_after captured immediately; errno_valid true onlywhen n<0; no inferred errno forfullpositivecount/0",
+  "exact_changes": [
+    "Settlement snapshot failure records immediatelycaptured n/rawerrno/bound/currentround/currentpairPIDs before unchangedreturn-1",
+    "Existing failureexport afterABORT emits retained settlementfailurefacts ifavailable",
+    "Failureexport snapshot fail emits actualown n/rawerrno/bound/round/pids before unchangedoriginalsnapshoterrormarker/return-1",
+    "One bounded320Bline per failedreadsite; constant site names; no buffer contents; preserveerrno across diagnosticwrite"
+  ],
+  "independent_review": null,
+  "native_acceptance": false,
+  "preimages": {
+    "long_bridge.inc": {
+      "bytes": 9511,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/production-source/long_bridge.inc",
+      "sha256": "56780e38e347e0f88c1b911525d56a2165e291387c260caf9ec3b031b1ddb4d8"
+    },
+    "retirement_settlement.inc": {
+      "bytes": 2780,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/production-source/retirement_settlement.inc",
+      "sha256": "efafd4127ee976c9ed0a24e1902a2d136600244a2b70113fc1fcd0db91dd5da6"
+    }
+  },
+  "retained_diagnosis": {
+    "bytes": 8845,
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/failure-diagnosis-1/EXACT-FAILURE-PREDICATE-AND-MISSING-FACTS.json",
+    "sha256": "09641ead4a84c7cca80e2f56e65e43c2891b0f8041570eff9227149e83449de4"
+  },
+  "root_runtime_release": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_refs": {
+    "long_bridge.inc": {
+      "bytes": 10780,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/failure-diagnosis-1/snapshot-error-diagnostic-candidate-1/long_bridge.inc",
+      "sha256": "3a44fcde12be393c00d0ab971e0a3e20f2cf0da918eba5150a8985f167c3918e"
+    },
+    "retirement_settlement.inc": {
+      "bytes": 3479,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/failure-diagnosis-1/snapshot-error-diagnostic-candidate-1/retirement_settlement.inc",
+      "sha256": "05f3119bc7a55f7b8602b54715a4ba7d913221ce9c672f6a24caf7e706c4fdaa"
+    }
+  },
+  "status": "PRIVATE_ERROR_ONLY_SNAPSHOT_RETURN_FACTS_SOURCE_CANDIDATE_UNCOMPILED",
+  "tests": null,
+  "unchanged": [
+    "actualsnapshotaction3/provider and capacity1048576",
+    "5ssettlement/10mspause/deadlines/timingreadinessguards",
+    "strict application/stream/route/retirement/token/source/quotas/oracles",
+    "ABORT emitted beforediagnostics",
+    "originalsnapshoterror marker and failure return",
+    "normal-successpath produceszero newoutput",
+    "No guest/kernel/module/SDKsource changes"
+  ]
+}

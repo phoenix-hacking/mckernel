@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "record_kind": "native_collector_lifecycle_raw_key_capture_u64_source_failure",
+  "task_id": "M02-C-lifecycle-raw-key-capture-u64-source",
+  "attempt": 1,
+  "status": "FAIL_SOURCE_ACCOUNTING_AND_ASSERTION_PLACEMENT_SUMMARY_ONLY",
+  "recorded_utc": "2026-09-15T15:20:00Z",
+  "command": "dual pinned unittest execution of scripts.tests.test_native_lifecycle_model.NativeLifecycleRawDecoderTests",
+  "observed_python_3_9_12": {
+    "tests_run": 17,
+    "failures": 3,
+    "errors": 1,
+    "failures_exact": [
+      "test_one_hundred_thirty_seven_raw_rejections_without_build_inputs: harness RAW_MECHANISM_REQUIRED omitted the new name",
+      "test_preflight_aggregate_node_payload_and_boundary: stale expected fixture size 1013510 versus 1014192",
+      "test_recursive_raw_and_build_tripwires: zero raw calls after the harness inventory assertion"
+    ],
+    "errors_exact": [
+      "test_expanded_node_budget_payload_and_boundary: NameError vector_path from misplaced new size assertion"
+    ]
+  },
+  "evidence_limitation": "The original terminal stream and exact failing test-source hash were not retained to a file before correction. This record is a contemporaneous summary derived from dispatcher-visible output and is not complete replayable failure evidence.",
+  "disposition": "Summary retained before the packet-scoped harness inventory and exact-size assertion corrections; no test or gate was weakened. Do not claim full original-failure preservation from this record.",
+  "compiler_execution": false,
+  "model_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

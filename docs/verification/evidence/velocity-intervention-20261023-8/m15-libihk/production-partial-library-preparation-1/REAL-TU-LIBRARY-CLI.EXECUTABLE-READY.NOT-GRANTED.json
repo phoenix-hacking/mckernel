@@ -1,0 +1,200 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ONE_HOST_REAL_TU_PARTIAL_LIBRARY_AND_EXISTING_RUST_CLI_LINK_QUEUE_READY_NOT_GRANTED",
+  "predecessor": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/PARTIAL-LIBRARY-SOURCE-AND-PROVIDERS.READY-NOT-GRANTED.json",
+    "sha256": "059df95ab2b277b2cb661b48891d7487a1ebf893cc72deb5b807e8af575b9ed5",
+    "bytes": 8024,
+    "dev": 66306,
+    "inode": 56142228,
+    "uid": 1000,
+    "mode": 33152
+  },
+  "source": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c",
+    "sha256": "d754a7ba4c0e5399001afe1ae7e2e8f437b68e89c9065863342c8b7e0e85a816",
+    "bytes": 80494,
+    "dev": 66306,
+    "inode": 56142225,
+    "uid": 1000,
+    "mode": 33152
+  },
+  "Rust_actual_staticlib": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/memory-provider-bounded-correction-1/libihklib_memory.fixture.a",
+    "sha256": "553bef3f690333e79b91f7cfa9f7f2f52fe6af6a2e3e76c4d03b12ea3b28dfa3",
+    "bytes": 7255380,
+    "dev": 66306,
+    "inode": 56142116,
+    "uid": 1000,
+    "mode": 33152
+  },
+  "CLI_source": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-7/m15-ihkconfig/ihkconfig.rs",
+    "sha256": "b4d9a08416b32b07ee57539bc6a292501b2e9569adc918e66a69a2b206e3dc4e",
+    "bytes": 22886,
+    "dev": 66306,
+    "inode": 56124318,
+    "uid": 1000,
+    "mode": 33204
+  },
+  "CLI_build_adapter": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-7/m15-ihkconfig/build_ihkconfig.py",
+    "sha256": "5ad48fb3de1349061fddd0c2a561028a35798336693ff1fc1db0086dc90807bc",
+    "bytes": 1341,
+    "dev": 66306,
+    "inode": 56124906,
+    "uid": 1000,
+    "mode": 33204
+  },
+  "CLI_actual_proof": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-7/m15-ihkconfig/root-owned-first-fixture-1/ACTUAL-WHOLE-JOIN.json",
+    "sha256": "f0e58de58675e5e2fa51c1474ebd98147bc9e06014ef9736b8674671ae45a886",
+    "bytes": 3374,
+    "dev": 66306,
+    "inode": 56127426,
+    "uid": 1000,
+    "mode": 33152
+  },
+  "CLI_contract": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-7/m15-ihkconfig/CONTRACT.json",
+    "sha256": "366b1bfd86d539e81c870568891f8661d21394bfd61250fca1178ae48587061d",
+    "bytes": 7266,
+    "dev": 66306,
+    "inode": 56125069,
+    "uid": 1000,
+    "mode": 33204
+  },
+  "actual_IHK_config": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/ihk/config.h",
+    "sha256": "9b316a20da4fee5188d6b103ecb21fe508277242cac0a081554d3362276d9712",
+    "bytes": 464,
+    "dev": 66306,
+    "inode": 48666928,
+    "uid": 1000,
+    "mode": 33188
+  },
+  "recipe": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/CHECK-REAL-TU-LIBRARY-CLI.NOT-EXECUTED.sh",
+    "sha256": "4b44031f01afec79fd617778734dccb70106639d8321eda5ad32e3ab067c30d2",
+    "bytes": 3002,
+    "dev": 66306,
+    "inode": 56142235,
+    "uid": 1000,
+    "mode": 33152
+  },
+  "commands": [
+    [
+      "/usr/bin/gcc-9",
+      "-DENABLE_PANIC_NOTIFIER_WORKAROUND",
+      "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+      "-DPAGE_SIZE=4096",
+      "-DPROFILE_ENABLE",
+      "-Dihklib_EXPORTS",
+      "-I/home/holden/mckernel/ihk/linux/include",
+      "-I/home/holden/mckernel/ihk/linux/include/ihk/arch/x86_64",
+      "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/ihk/linux/include",
+      "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/ihk",
+      "-g",
+      "-fPIC",
+      "-Wall",
+      "-Wextra",
+      "-Wno-unused-parameter",
+      "-Wno-sign-compare",
+      "-Wno-unused-function",
+      "-Wno-implicit-fallthrough",
+      "-Wno-stringop-truncation",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.o",
+      "-c",
+      "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.c"
+    ],
+    [
+      "/usr/bin/gcc-9",
+      "-fPIC",
+      "-g",
+      "-shared",
+      "-Wl,-soname,libihk.so",
+      "-Wl,--gc-sections",
+      "-Wl,-z,defs",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/libihk.so",
+      "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihklib.remaining.o",
+      "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/memory-provider-bounded-correction-1/libihklib_memory.fixture.a",
+      "-lbfd"
+    ],
+    [
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-7/m15-ihkconfig/build_ihkconfig.py",
+      "--rustc",
+      "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--source",
+      "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-7/m15-ihkconfig/ihkconfig.rs",
+      "--output",
+      "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihkconfig.production-consumer.o",
+      "--config",
+      "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/ihk/config.h",
+      "--krm",
+      "0"
+    ],
+    [
+      "/usr/bin/gcc-9",
+      "-g",
+      "-fPIE",
+      "-pie",
+      "-Wl,-z,defs",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihkconfig.production-consumer",
+      "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1/ihkconfig.production-consumer.o",
+      "-L/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/production-partial-library-preparation-1",
+      "-lihk",
+      "-Wl,-rpath,$ORIGIN"
+    ]
+  ],
+  "proposed_profile": {
+    "CPU": 6,
+    "AS": 2147483648,
+    "CPU_seconds": 60,
+    "wall_seconds": 90,
+    "retirement_seconds": 6,
+    "FSIZE": 33554432,
+    "FD": 256,
+    "core": 0,
+    "stack": 2097152,
+    "RUST_MIN_STACK": 2097152
+  },
+  "ABI": {
+    "chunk": {
+      "bytes": 16,
+      "node_offset": 8
+    },
+    "CPU_request": {
+      "bytes": 16,
+      "count_offset": 8
+    },
+    "memory_request": {
+      "bytes": 32,
+      "count_offset": 16,
+      "timeout_offset": 28
+    }
+  },
+  "provider_proofs_required": {
+    "remaining_C_object": "none of eleven Rust-selected definitions retained; genuine reserve_mem_conf/loglevel definitions plus unchanged setters present",
+    "shared_library": "eleven selected public definitions exactly once; -zdefs actual final link resolves realRust/core/libc/BFD dependencies; no fake runtime providers",
+    "CLI": "actualexisting source builds configured BUILDID=3114d9e rather than fixture-build; public four imports resolve from linked private libihk.so; no CLI execution",
+    "scope": "host GCC9/BFD2.34-link qualification only; retained Rocky GCC14/BFD2.41/default selector/native delivery still open"
+  },
+  "global_visibility_blocker": false,
+  "remaining_debt": [
+    "remaining80KB customC APIs",
+    "actual Cconfiguration/logging global storage/setters",
+    "balanced lifetime bug and two-pass OS race preserved",
+    "Rocky GCC14/BFD2.41 SDK selected target ABI/build",
+    "canonical CMake integration and actual deployed/defaultlibrary/CLI nativeproof"
+  ],
+  "actual_result": null,
+  "compiler_runs": 0,
+  "reservations": 0,
+  "canonical_changes": false
+}

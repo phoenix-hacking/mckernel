@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-061",
+  "packet_version": 1,
+  "context_sha256": "6664f45156eab61a212f2fee42511ef41c58f80aea14aaeb7721b6074b35a473",
+  "started_utc": "2026-09-09T13:20:00Z",
+  "finished_utc": "2026-09-09T13:22:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "loader.pie-startup",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/loader/loader.pie-startup.c",
+      "oracle": "scripts/application-tests/oracles/loader.pie-startup.json",
+      "changed_files": ["scripts/application-tests/cases/loader/loader.pie-startup.c", "scripts/application-tests/oracles/loader.pie-startup.json"],
+      "parameter_vectors": {"elf_type": ["ET_DYN/PIE"], "argc": [1], "lang": ["C"], "relocated_data": [42]},
+      "implemented_operations": ["startup argv/environment record", "relocated global-data check", "fixed interpreter-dependent oracle"],
+      "unresolved_oracle_notes": ["Actual PIE ELF and interpreter identities must be bound by the reviewed input manifest and Max review."],
+      "max_reviewer_question": "Confirm the selected PIE and interpreter identities, relocation evidence, and exact startup environment contract."
+    },
+    {
+      "case_id": "loader.static-startup",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/loader/loader.static-startup.c",
+      "oracle": "scripts/application-tests/oracles/loader.static-startup.json",
+      "changed_files": ["scripts/application-tests/cases/loader/loader.static-startup.c", "scripts/application-tests/oracles/loader.static-startup.json"],
+      "parameter_vectors": {"elf_type": ["ET_EXEC/static"], "argc": [1], "lang": ["C"], "marker": ["STATIC"]},
+      "implemented_operations": ["interpreter-free startup fixture", "argv/environment check", "static read-only marker check"],
+      "unresolved_oracle_notes": ["Static toolchain availability and ELF interpreter absence require Max review."],
+      "max_reviewer_question": "Confirm the pinned static toolchain output is interpreter-free and its startup record is exact."
+    },
+    {
+      "case_id": "loader.dlopen-function",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/loader/loader.dlopen-function.c",
+      "oracle": "scripts/application-tests/oracles/loader.dlopen-function.json",
+      "changed_files": ["scripts/application-tests/cases/loader/loader.dlopen-function.c", "scripts/application-tests/oracles/loader.dlopen-function.json"],
+      "parameter_vectors": {"path": ["/apps/libloader-fixture.so"], "symbol": ["fixture_add"], "arguments": [[19, 23]], "expected_result": [42]},
+      "implemented_operations": ["RTLD_NOW|RTLD_LOCAL load", "dlsym exported function", "independent arithmetic result and dlclose"],
+      "unresolved_oracle_notes": ["DSO path, exported symbol ABI, and loader closure hashes require Max review."],
+      "max_reviewer_question": "Confirm the bound DSO path and fixture_add ABI, result 42, and successful dlclose contract."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/loader/loader.pie-startup.c", "sha256": "a7c3c0ae6d57dbc2e1c631aee0e2aa3bbc1226486c2548596946154365635aa9"},
+    {"path": "scripts/application-tests/oracles/loader.pie-startup.json", "sha256": "a0f10eb3cdaedc79cd04c5b54540179817e143b8a7433305de87e7e6aca527ef"},
+    {"path": "scripts/application-tests/cases/loader/loader.static-startup.c", "sha256": "ca9ced3efdd83ee45b72f6528d2f670f570887191d8ce16c912125a09adf5395"},
+    {"path": "scripts/application-tests/oracles/loader.static-startup.json", "sha256": "caabc5f21f9ca022620a31fa92a282dbed5aec1aa03f89fbf3c104bcb6894492"},
+    {"path": "scripts/application-tests/cases/loader/loader.dlopen-function.c", "sha256": "cacfb42cac776d6635b2999e2d093ae3f1333d5d40c0f575dced3c63a48d4fac"},
+    {"path": "scripts/application-tests/oracles/loader.dlopen-function.json", "sha256": "bb697865ea9c80ab7f9fbdcd936bfbf26665e94533961d86dcd3ed81231ed0c9"},
+    {"path": "docs/verification/evidence/application-drafts-20260909/ultra-handoff-1/packet-061/context.json", "sha256": "6664f45156eab61a212f2fee42511ef41c58f80aea14aaeb7721b6074b35a473"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-061.json --emit-context /tmp/application-packet-061-context-20260909-1.json", "outcome": "PASS; planning metadata only; runtime_authorized=false"},
+    {"command": "python3 -m json.tool packet-061/report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["PIE/static ELF identity, interpreter/toolchain binding, DSO symbol ABI, and loader lifetime need final Max review."],
+  "blocked_execution_capabilities": ["runner-contract", "current-inputs", "runtime-transport-fault-injection"],
+  "first_failure_event": null,
+  "max_escalation": ["Review PIE relocation and interpreter identity", "Review static ELF toolchain binding", "Review DSO path, symbol ABI, and dlclose"],
+  "next_packet_id": "packet-062"
+}

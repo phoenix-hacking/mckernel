@@ -1,0 +1,61 @@
+--- canonical-original-FAIL-driver
++++ isolated-current-profile-checker
+@@ -366,6 +366,34 @@
+     return {"status":"PASS_ACTUAL_COMPOSITE_MM_PROVIDER_SYMBOLS","artifacts":result,"module_load":False}
+ 
+ 
++CURRENT_IHK_EXPORTS = ("ihk_os_create_unbooted_v6", "ihk_os_application_adopt_current_v4", "ihk_os_application_fork_control_current_v1")
++HELD_IHK_EXPORTS = CURRENT_IHK_EXPORTS + ("ihk_os_create_unbooted_v12", "ihk_os_application_prepare_fork_control_v1", "ihk_os_application_prepare_fork_control_receipt_v1")
++IHK_EXPORT_CONTRACTS = {"current-v6-adopt-v4-control-v1": CURRENT_IHK_EXPORTS,
++                        "held-v12-control-receipt": HELD_IHK_EXPORTS}
++IHK_EXPORT_PROFILE_BINDINGS = {
++    ("d9b827db21614e84e45f647deddf6df0a8fec8703da8a716d976d843f78ff3b9",
++     "26a572abd9ee003ca6fef03fbe110d3a5ec6e54aa701ae3b5ffc9b798318f7cb"):
++    "current-v6-adopt-v4-control-v1"}
++
++
++def ihk_export_profile(manifest):
++    identity = (manifest["source_identity"], PREPARATION_SHA256)
++    require(identity in IHK_EXPORT_PROFILE_BINDINGS, "unreviewed IHK export source/preparation tuple")
++    return IHK_EXPORT_PROFILE_BINDINGS[identity]
++
++
++def require_ihk_export_contract(symbols, profile):
++    require(profile in IHK_EXPORT_CONTRACTS, "unknown IHK export contract")
++    records = [line.split("\t") for line in symbols.splitlines()]
++    for symbol in IHK_EXPORT_CONTRACTS[profile]:
++        found = [row for row in records if len(row) >= 2 and row[1] == symbol]
++        require(len(found) == 1 and len(found[0]) == 5 and
++                re.fullmatch(r"0x[0-9a-fA-F]{8}", found[0][0]) is not None and
++                found[0][2:] == ["/candidate/modules/ihk", "EXPORT_SYMBOL_GPL", "MCKERNEL_IHK_V1"],
++                "missing or mismatched " + profile + " IHK export: " + symbol)
++    return {"profile": profile, "required_exports": list(IHK_EXPORT_CONTRACTS[profile])}
++
++
+ def outputs(candidate, inputs):
+     directory = candidate / "modules"
+     actual = files(directory)
+@@ -374,13 +402,8 @@
+     order = plain(directory / "modules.order").read_text().splitlines()
+     module_order(order)
+     symbols = plain(directory / "Module.symvers").read_text()
+-    require(re.search(r"\tihk_os_create_unbooted_v6\t/candidate/modules/ihk\t", symbols) is not None,
+-            "missing rebuilt ihk v6 export")
+-    for symbol in ("ihk_os_create_unbooted_v12", "ihk_os_application_prepare_fork_control_v1", "ihk_os_application_prepare_fork_control_receipt_v1"):
+-        require(re.search(r"\t" + re.escape(symbol) + r"\t/candidate/modules/ihk\t", symbols) is not None, "missing held v12/control-receipt export: " + symbol)
+-    for export in ("ihk_os_application_adopt_current_v4", "ihk_os_application_fork_control_current_v1"):
+-        require(re.search(r"\t" + re.escape(export) + r"\t/candidate/modules/ihk\t", symbols) is not None,
+-                "missing rebuilt current provider export: " + export)
++    export_profile = ihk_export_profile(load_preparation(inputs / "preparation.json"))
++    export_contract = require_ihk_export_contract(symbols, export_profile)
+     artifacts = {}
+     for crate, module in MODULES.items():
+         path = directory / (module + ".ko")
+@@ -390,6 +413,7 @@
+             require(plain(directory / (module + suffix)).stat().st_size > 0, "empty generated module input")
+         artifacts[module] = {"sha256": digest(path), "bytes": path.stat().st_size,
+                              "modinfo": info, "compiler_binding": source_bindings(crate, candidate, inputs)}
++    artifacts["ihk"]["export_contract"] = export_contract
+     artifacts["mcctrl"]["actual_mm_provider"] = actual_mm_provider_check(directory)
+     require(len({item["modinfo"]["vermagic"] for item in artifacts.values()}) == 1, "mixed vermagic set")
+     return artifacts

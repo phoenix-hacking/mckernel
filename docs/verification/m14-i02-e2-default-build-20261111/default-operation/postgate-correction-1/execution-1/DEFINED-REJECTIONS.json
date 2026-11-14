@@ -1,0 +1,36 @@
+{
+  "positive_actual_record_count": 72,
+  "positive_image_rows": 10,
+  "rejections": [
+    {
+      "case": "missing",
+      "rejected": true,
+      "diagnostic": "missing required image record"
+    },
+    {
+      "case": "duplicate",
+      "rejected": true,
+      "diagnostic": "duplicate required image record"
+    },
+    {
+      "case": "extra",
+      "rejected": true,
+      "diagnostic": "extra or wrong-source mckernel.img record"
+    },
+    {
+      "case": "wrong-target",
+      "rejected": true,
+      "diagnostic": "wrong target/output/directory for required image source"
+    },
+    {
+      "case": "wrong-directory",
+      "rejected": true,
+      "diagnostic": "wrong target/output/directory for required image source"
+    },
+    {
+      "case": "wrong-paired-MAP",
+      "rejected": true,
+      "diagnostic": "missing/duplicate/wrong paired KERNEL_RAM_VADDR"
+    }
+  ]
+}

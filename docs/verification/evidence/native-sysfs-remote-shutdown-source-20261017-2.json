@@ -1,0 +1,167 @@
+{
+  "task_id": "native_shutdown_services",
+  "status": "UNWIRED_COMPONENT_READY_FOR_INDEPENDENT_REVIEW",
+  "changed_paths": [
+    "host-kernel/native-rust/sysfs_remote.rs",
+    "scripts/tests/test_sysfs_remote_shutdown_20261017.py",
+    "scripts/tests/fixtures/sysfs_remote_shutdown_20261017.rs"
+  ],
+  "sources": [
+    {
+      "path": "host-kernel/native-rust/sysfs_remote.rs",
+      "sha256": "2e640d0483321985f55e7d8f3b154ad6f90d07df71fb974afe305e744d7c8c5e",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-sysfs-remote-shutdown-source-20261017-1/sysfs_remote.rs"
+    },
+    {
+      "path": "scripts/tests/test_sysfs_remote_shutdown_20261017.py",
+      "sha256": "bb78280a1b8d2d361fa9e4511c04d2293d434c80528575990b242ced945db8b0",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-sysfs-remote-shutdown-source-20261017-1/test_sysfs_remote_shutdown_20261017.py"
+    },
+    {
+      "path": "scripts/tests/fixtures/sysfs_remote_shutdown_20261017.rs",
+      "sha256": "e28130b1bae39d99ad7173653e25152495b08d8a8a09c1cfe4b711ab3825006d",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-sysfs-remote-shutdown-source-20261017-1/sysfs_remote_shutdown_20261017.rs"
+    }
+  ],
+  "api": [
+    "PeerStopped private slot/generation capability with no production constructor",
+    "Remote::shutdown_after_peer_stop(&PeerStopped) -> Result<bool>",
+    "Remote::shutdown_drained(&PeerStopped) -> Result<bool>"
+  ],
+  "invariants": [
+    "Proof slot and generation must match SharedData owner; foreign proof has no state or wake side effects",
+    "State mutex serializes terminal closure with publish, reply and payload access",
+    "All admitted calls counted including caller-serialization waiters; all wait loops observe closure and unwind counts",
+    "Closure wakes waiters, rejects future calls/publication/late replies with ENODEV, preserves pending Exchange and payload storage",
+    "True drain covers local call scopes only; Linux callback removal, mapping ledgers and worker join remain external requirements",
+    "No production proof constructor; no integration, release guard change or runtime acceptance"
+  ],
+  "test_scope": "Four actual-body Rust tests authored: blocked Attribute Drop Release plus queued show cancellation/lifetimes; foreign generation/slot reject and normal reply; terminal admission/repeat stop; interrupted exchange ownership and successor cancellation. Production Remote call/shutdown/publish/reply/queued and Attribute Drop plus production Exchange included; std mutex/condvar substitutes kernel synchronization. All four compiled with Rust1.92 and -Dwarnings and passed once in attempt3. No kernel build or actual Linux callback/hardware execution.",
+  "attempts": [
+    {
+      "attempt": 1,
+      "status": "FAIL_PREREQUISITE",
+      "reason": "Clean PATH chose Python3.8; existing imported helper tuple[str,str] requires newer interpreter",
+      "command_record": "/home/holden/mckernel-work/scratch/native-sysfs-remote-shutdown-source-20261017-1/command.json"
+    },
+    {
+      "attempt": 2,
+      "status": "FAIL_PREREQUISITE",
+      "reason": "Python3.9 fixture generation succeeded; rustc Popen failed EAGAIN, likely extra nproc=256 cap counts all same-user tasks",
+      "command_record": "/home/holden/mckernel-work/scratch/native-sysfs-remote-shutdown-source-20261017-1/command2.json"
+    },
+    {
+      "attempt": 3,
+      "status": "PASS",
+      "command_record": "/home/holden/mckernel-work/scratch/native-sysfs-remote-shutdown-source-20261017-1/command3.json",
+      "scope": "rustc1.92 actual-body fixture compilation with -Dwarnings; four sequential Rust tests using actual std synchronization; one Python unittest",
+      "result": "4 passed; 0 failed",
+      "profile": "CPU7; AS1GiB; CPU150; nofile256; fsize64MiB; core0; wall180; one job; explicit Python3.9; minimal PATH; private HOME/TMPDIR; no nproc cap"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-sysfs-remote-shutdown-source-20261017-1/attempt2/actual.rs",
+      "sha256": "bd79ffeaaf5318a4a45624d1090ce56337277de4c1c11a34394588cac59e5d65"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-sysfs-remote-shutdown-source-20261017-1/attempt3/actual",
+      "sha256": "ed5cc8d6426ac4f1e4fe9aa5addddc94366a0fdf6fed349b1870921e85d0f3bf"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-sysfs-remote-shutdown-source-20261017-1/attempt3/actual.rs",
+      "sha256": "bd79ffeaaf5318a4a45624d1090ce56337277de4c1c11a34394588cac59e5d65"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-sysfs-remote-shutdown-source-20261017-1/attempt3/compile.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-sysfs-remote-shutdown-source-20261017-1/attempt3/compile.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-sysfs-remote-shutdown-source-20261017-1/attempt3/compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-sysfs-remote-shutdown-source-20261017-1/attempt3/run.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-sysfs-remote-shutdown-source-20261017-1/attempt3/run.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-sysfs-remote-shutdown-source-20261017-1/attempt3/run.stdout",
+      "sha256": "63460223fd9015be60a66c358fc5a05c3cb2ede6744cd46bc3ff45a71192641b"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-sysfs-remote-shutdown-source-20261017-1/command.json",
+      "sha256": "c09a7f92a4fba6beeb7b58f3e6fca0c1de3bae343edcbd8434eadb086cf8fd93"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-sysfs-remote-shutdown-source-20261017-1/command2.json",
+      "sha256": "0392d8db3696d09fa45fe3d55553c0d8b752c3ee86574b491ef0fc719625768c"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-sysfs-remote-shutdown-source-20261017-1/command3.json",
+      "sha256": "1b3a2f55853093968d5a804ee72de1d72300b29c211816957e714970dbe08c78"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-sysfs-remote-shutdown-source-20261017-1/status",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-sysfs-remote-shutdown-source-20261017-1/status2",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-sysfs-remote-shutdown-source-20261017-1/status3",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-sysfs-remote-shutdown-source-20261017-1/stderr",
+      "sha256": "617ce9ebff443c7eb9e0a736a3f5b4ffe0ae807bb81d669673411aec639329d5"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-sysfs-remote-shutdown-source-20261017-1/stderr2",
+      "sha256": "ff0a1c00c2aeccb870421d89b82a641263c3cc4ca2925ca12bd1a409606fbce0"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-sysfs-remote-shutdown-source-20261017-1/stderr3",
+      "sha256": "f074a2c309c9d003a3e0932a626930b69c45908bfff48ae14245b679dc53f532"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-sysfs-remote-shutdown-source-20261017-1/stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-sysfs-remote-shutdown-source-20261017-1/stdout2",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-sysfs-remote-shutdown-source-20261017-1/stdout3",
+      "sha256": "fffb7e505d7f8724c5e4dbf567be513755c24e5a50c0d4bedea248997a69fa12"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-sysfs-remote-shutdown-source-20261017-1/sysfs_remote.rs",
+      "sha256": "2e640d0483321985f55e7d8f3b154ad6f90d07df71fb974afe305e744d7c8c5e"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-sysfs-remote-shutdown-source-20261017-1/sysfs_remote_shutdown_20261017.rs",
+      "sha256": "e28130b1bae39d99ad7173653e25152495b08d8a8a09c1cfe4b711ab3825006d"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-sysfs-remote-shutdown-source-20261017-1/test_sysfs_remote_shutdown_20261017.py",
+      "sha256": "bb78280a1b8d2d361fa9e4511c04d2293d434c80528575990b242ced945db8b0"
+    }
+  ],
+  "blocker": "Component deliberately unwired: PeerStopped has no production constructor. CPU/IRQ proof producer and subsequent worker/callback/claim retirement integration require separate reviewed contract.",
+  "next_task": "Independent source/ownership review of component and tests; then separate CPU+IRQ proof adapter and retirement protocol implementation. Dispatcher alone builds a reviewed candidate and runs fresh actual native-stop guest. Existing finish_shutdown terminal guard remains intact.",
+  "supersedes": {
+    "path": "docs/verification/evidence/native-sysfs-remote-shutdown-source-20261017-1.json",
+    "sha256": "641d788d943e7fb27af277bcd76620a50f198b6fa1b6ecc69d6038d238bd26d7",
+    "preserved_unchanged": true
+  }
+}

@@ -1,0 +1,29 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-default-actual-qualification-1/qualify_actual_image_suffix.py
++++ qualify_actual_image_suffix.py
+@@ -4,9 +4,9 @@
+ import ast,hashlib,json,os,re,shlex,stat,struct,subprocess,traceback
+ from pathlib import Path as HP,PurePosixPath as PP
+ D=HP(__file__).resolve().parent;E=D.parent
+-ROOT=E/'ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT';B=ROOT/'work/output/build';A=ROOT/'work/evidence'
++ROOT=E/'ROOT-F03-F06-QUALIFIED-DEFAULT-BUILD-ADMISSION-1/OUTPUT';B=ROOT/'work/output/build';A=ROOT/'work/evidence'
+ DRIVER=E/'current290-driver-identity-repair-source-1/native_rust_exact_mckernel_image_offline.CURRENT290.VIEW-AND-FRESH-OBJECT-GATE.py'
+-profile=json.loads((E/'ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/PROFILE.SOURCE-ONLY.json').read_text());I=profile['inputs'];seed=HP(I['retained_seed'])
++profile=json.loads((E/'ROOT-F03-F06-QUALIFIED-DEFAULT-BUILD-ADMISSION-1/PROFILE.SOURCE-ONLY.json').read_text());I=profile['inputs'];seed=HP(I['retained_seed'])
+ # This map is the actual immutable Docker RO binding, not the zero host placeholders.
+ exact={'/work/output/build/'+r['build_relative']:HP(r['source']['path']) for r in I['configuration']+[r for r in I['objects'] if not r['replace']]}
+ def actual(value):
+@@ -58,12 +58,12 @@
+ ns=dict(Path=Path,hashlib=hashlib,json=json,os=os,re=re,shlex=shlex,stat=stat,ImageBuildError=RuntimeError,_check_signal=lambda:None,_bounded_output=bounded)
+ exec(compile(ast.Module(body=nodes,type_ignores=[]),str(DRIVER)+':UNCHANGED_IMAGE_LINK_PROBE_GUARDS','exec'),ns)
+ tools=dict(tools={x:dict(path='/usr/bin/'+x) for x in ['readelf','nm','ld','dd']})
+-result=dict(scope=__doc__.splitlines()[0],status='IN_PROGRESS',phases={},nine_RO_original_input_resolution=[dict(container='/work/output/build/'+r['build_relative'],actual_original=r['source']) for r in I['objects'] if not r['replace']],new_host_placeholders_not_treated_as_objects=True)
++result=dict(scope=__doc__.splitlines()[0],status='IN_PROGRESS',phases={},eight_RO_input_resolution=[dict(container='/work/output/build/'+r['build_relative'],actual_original=r['source']) for r in I['objects'] if not r['replace']],new_host_placeholders_not_treated_as_objects=True)
+ try:
+  # Check mounted originals against all retained exact bytes without reading placeholder bytes.
+  for row in I['configuration']+[r for r in I['objects'] if not r['replace']]:
+   p=actual('/work/output/build/'+row['build_relative']);raw=p.read_bytes();assert len(raw)==row['source']['bytes'] and hashlib.sha256(raw).hexdigest()==row['source']['sha256']
+- result['phases']['RO_binding_identity']='PASS_ALL_RETAINED_CONFIGURATION_AND_NINE_ORIGINAL_OBJECT_REFS'
++ result['phases']['RO_binding_identity']='PASS_ALL_RETAINED_CONFIGURATION_AND_EIGHT_EXACT_ORIGINAL_AND_QUALIFIED_F02_OBJECT_REFS'
+  artifacts,snapshot=ns['_validate_image'](Bound('/work/output/build'),tools,D)
+  result['phases']['image_and_rawld_link_contract']=dict(status='PASS_UNCHANGED_9D2D_IMAGE_AND_LINK_GUARDS',artifacts=artifacts,required_native_symbols=ns['EXPECTED_SYMBOLS'])
+  probe=ns['_validate_modules_end_probe'](Bound('/work/output/build'),tools,D)

@@ -1,0 +1,89 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "SOURCE_PROFILE_EXACT_ONE_HOLDER_INTERRUPT_ONLY_NOT_GRANTED",
+  "source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/interrupt_exact_unlaunched_holder.py",
+    "bytes": 11035,
+    "sha256": "570b306904398f8d36d7bca3f6bc3cc2725e8bf698ce93accbb55c4942c225af"
+  },
+  "fixed": {
+    "admission": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-1",
+    "holder": {
+      "path": "/run/lock/mckernel-development.lock",
+      "pid": 1815979,
+      "starttime": 95215128,
+      "device": 27,
+      "inode": 4,
+      "fd": 3
+    },
+    "refs": {
+      "holder_ready": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-1/HOLDER/HOLDER.READY.json",
+        "bytes": 1371,
+        "sha256": "43f0ad8ce7ea87f64a24d7ce60132e16687abf0f1edfc5afb8206f271d7aae82"
+      },
+      "bootstrap": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-1/ROOT-HOLDER-BOOTSTRAP-GRANT.json",
+        "bytes": 1924,
+        "sha256": "248aa9c98f786a88b822317bc3724409a42fe2937ad3074263352fd59bbc2786"
+      },
+      "holder_source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-1/hold_and_run_build_only.py",
+        "bytes": 7010,
+        "sha256": "d17bd70e3e3e6ef7febe48b6f0f892ab6f1a94c74e89d43808bbea8b5dc21551"
+      },
+      "runner": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-1/run_build_only.py",
+        "bytes": 24465,
+        "sha256": "2471d24bcf8eaa5054c3d33b9ca9cc1cc77bd505e791b7ca6365e9ca0c854a6c"
+      },
+      "worker": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-1/build_only_worker.py",
+        "bytes": 4113,
+        "sha256": "0bdd40596f7d5a9fb056b9ff24c7033336af1305ce143391debd225a71d2b105"
+      },
+      "profile": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-1/PROFILE.SOURCE-ONLY.json",
+        "bytes": 112534,
+        "sha256": "022d9f08ec381a7b33649daf73840179516eb412d9c5cbcb8640e14692addb76"
+      },
+      "refused_review": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-1/INDEPENDENT-ACTUAL-HELD-RESOURCE-EXECUTION-REVIEW.json",
+        "bytes": 5725,
+        "sha256": "91e5ad3309f97e4e5625eaabd246ac8db92351e3955f005762dd84b81d4b4e31"
+      },
+      "expired_packet": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-1/ROOT-EXECUTION-INPUT.GRANT-PENDING-REVIEW.json",
+        "bytes": 2385,
+        "sha256": "3db1b68b3d260bff78e783054950507d9abc55e2a6cbb195552c59d9ab458be3"
+      },
+      "expired_resource": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-1/ROOT-ACTUAL-BUILD-RESOURCE-AUTHORITY.json",
+        "bytes": 11839,
+        "sha256": "5748b55e1233ccdfb07e84f010a74ba3cdc72571efc76b6a897329f9ac7f1e16"
+      }
+    },
+    "negative_paths": [
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-1/ACTUAL-INDEPENDENT-BUILD-EXECUTION-REVIEW.json",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-1/ROOT-ACTUAL-ONE-BUILD-ONLY-GRANT.json",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-1/HOLDER/ROOT-BUILD-GRANT.READY.json",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-1/HOLDER/RUNNER.STARTED.json",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-1/HOLDER/RUNNER.JOINED.json",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-1/HOLDER/runner.stdout",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-1/HOLDER/runner.stderr",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-1/HOLDER/BUILD-LOCAL-TERMINAL.json",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-1/HOLDER/QUARANTINE.json",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-1/OUTPUT"
+    ],
+    "nonce": "cf36b84313f404836ec6d80350e0e15a",
+    "root_tool_session": 11857
+  },
+  "signal": "SIGINT",
+  "maximum_signal_calls": 1,
+  "mechanism": "os.pidfd_open + signal.pidfd_send_signal; no numeric/group fallback",
+  "permanent_mutex_mutation": false,
+  "actual_compiler_guest_touched": false,
+  "Root_followup": "Positive join actualtool11857 then independent current-free and two closed mutex probes; signal receipt never claims retirement",
+  "runtime_authority": null,
+  "normal_holder_exit_path": "Exact SIGINT raises KeyboardInterrupt through exceptBaseException with child_startedFalse/can_releaseTrue, finally closes its ownFD; no helper unlock."
+}

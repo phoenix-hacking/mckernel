@@ -1,0 +1,75 @@
+{
+  "accepted_ordering_pattern": "2bc41dbc savedfailure selected before absent/empty main record refusal; adaptation to one existing single console frame, not pair replay",
+  "actual_bodies": {
+    "bytes": 7953,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/actual_helper_export_bodies.inc",
+    "sha256": "7393a710fcae018e4769503b4a406f5a5a759fe1f24973464f886eba9bc6e333"
+  },
+  "argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2",
+    "35",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=30:30",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--nofile=256:256",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/run_checks_once.py"
+  ],
+  "base": {
+    "bytes": 23723,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/source/scripts/application-tests/native_diagnostic_guest_collector.c",
+    "sha256": "db6c439396ac4d6918d30c89c3423ca0fe99830c6b1943708dc8ce19cd2f50e7"
+  },
+  "candidate": {
+    "bytes": 26899,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/candidate/native_diagnostic_guest_collector.c",
+    "sha256": "4d204530a80832a38425d04f386b64b3310fa0871903980ae99abcbcb9f7307b"
+  },
+  "cases": [
+    "missing-main",
+    "empty-main",
+    "success-no-spurious-frame",
+    "cap/omission",
+    "unsafe-handoff"
+  ],
+  "fixture": {
+    "bytes": 4451,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/test_helper_export.c",
+    "sha256": "611602cc763ae80afb4584aeee31e91a304ad138b9041a8acbf6b8f55bb5971b"
+  },
+  "guest_runs": 0,
+  "historical_helper_identity_unknown": true,
+  "patch": {
+    "bytes": 5419,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/helper-failure-export.patch",
+    "sha256": "296cbe1c3b4f72f628d9c0e39f3dc951599ca54a301eef72febda2fa2a0b8e64"
+  },
+  "pins": {
+    "bytes": 1060,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/INPUT-PINS.json",
+    "sha256": "ea66caa94fef72b0c652ba7631b1788b3df12cdc9e7e4f66ca6d00128cce8ac3"
+  },
+  "runner": {
+    "bytes": 4757,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/run_checks_once.py",
+    "sha256": "9786455b404288c91685bd299f84489e157524d49a144e53b362f8d4ea1ba36c"
+  },
+  "scope": "Functional OS/apps plus Rust cutover; Linux control collector evidence only",
+  "status": "PREPARED_UNRUN_ROOT_AUTHORIZED_ORDINARY_PROFILE",
+  "unchanged": [
+    "strict73B stdout/exit/EINVAL/data/write/unmap oracle",
+    "stream/frame limits and atomic single-frame budget",
+    "helper/round/global deadlines",
+    "app/kernel/image/modules",
+    "success publication body"
+  ]
+}

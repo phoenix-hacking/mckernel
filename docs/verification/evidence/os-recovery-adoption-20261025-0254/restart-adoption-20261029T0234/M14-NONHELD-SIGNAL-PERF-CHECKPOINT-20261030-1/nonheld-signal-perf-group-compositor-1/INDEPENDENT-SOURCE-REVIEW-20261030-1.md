@@ -1,0 +1,17 @@
+# Independent bounded source review: nonheld signal and perf group composition
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+Decision: CONDITIONAL PASS for the exact private source composition. This review grants no selection, build, physical operation, native acceptance or C retirement authority.
+
+The reviewed `NONHELD-SIGNAL-PERF-GROUP.PRIVATE.patch` has SHA-256 `595d137bcaba9b4ce85361623edd5a12c174dc3baa53670bda5352ce80dd1d1a`; `COMPOSITION.json` has SHA-256 `a83d176c6db48aeef608959c2ac47487ce66650b8ff2fe57db208f86819c154c`. All 14 input hashes in that composition match the retained bytes. The Rust policy baseline `14881100a803a90b25950b0c56d6fff6642a4cc8614c895a87418c6b7540dc50`, CMake baseline `30e3a04bf48777d4891f7390804e574ca221e4234e9a8d7879bb068910a13fbd` and original profile `8ab49c299dfc9218ddcf8df3cf71474d51e87167abe4cd166841ea47c3a32e2d` bind the qualified 19-definition source. That artifact acceptance does not extend to this composition.
+
+Independent in-memory comparison matched all patch hunk contexts against the exact baseline. The signal budget file remains identical to the preceding private signal/perf composition; the entry and group files exactly match their independently reviewed inputs; the policy equals that prior composition plus the exact reviewed selector snippet. All 106 original `line!`, `file!` and `column!` coordinates remain unchanged and the copied group module contains none. The four recorded original perf helper bodies match the reviewed group source and their declared SHA-256 values. CMake adds the three private Rust source dependencies; no C source is changed.
+
+The patch delta excludes the held generic_c direct-TID and terminate_host conversion and the separately held execve transfer/ACK conversion. Existing held requests, notices and unknown outcomes remain unchanged. The unrelated previously reviewed SIGTRAP notification constructor reads existing `thread.tid` under its approved contract; that is not the held direct-TID conversion.
+
+The exact qualified compiler commands enable some perf provider bridges but contain neither the Rust `f03_perf_entry_candidate` selector nor a C entry selector. The baseline C `sys_perf_event_open` body remains selected; this private source does not correct the selected C entry or retire it. The Rust entry guard requires x86_64, perf, sync-child, leaf and perf-allocation bridge cfgs. That guard cannot establish independently supplied C flags, actual provider identity or linked uniqueness. Any later selection requires matched C entry wiring and emitted C/Rust flags, exact event and callback ABI/layout, provider identities, metadata and link uniqueness.
+
+The counter-failure release is conditional on the exact reviewed fresh, unpublished event allocator, x86 counter and matching free provider. The group-failure release additionally depends on the matching group provider and existing group, descriptor and thread lifetimes and synchronization. Group-success and subsequent host, fd, allocation and rollback handling remain open. Signal staged-copy, core-slot and ownership requirements and the changed pointer-shaped atomic helper ABI remain open. Matching compiler, functional and native evidence and original metadata/link proof remain required before acceptance.
+
+No tests, compiler, guard, native operation or candidate edits were performed during this review. Comparisons were read-only and in memory; original inputs and evidence remain unchanged.

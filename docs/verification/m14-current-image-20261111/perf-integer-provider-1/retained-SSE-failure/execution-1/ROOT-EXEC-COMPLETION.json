@@ -1,0 +1,37 @@
+{
+  "at": "2026-11-11T16:42:28.128Z",
+  "args": {
+    "cmd": "'/usr/bin/python3' '-I' '-B' '/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/cwd-output-correction-1/run_root_once.py' '/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-first-builtins-compile-review-sourceacq-max-1/cwd-output-correction-1/REVIEW.json' '1a60abb3c4a0bbf29fd827e845c53661c5f36db1bfdbedd387e83064b10c4585'",
+    "workdir": "/home/holden/mckernel",
+    "login": false,
+    "tty": false,
+    "yield_time_ms": 1000,
+    "max_output_tokens": 4500
+  },
+  "admission": {
+    "chunk_id": "1f22bf",
+    "wall_time_seconds": 0.025047639,
+    "exit_code": 0,
+    "original_token_count": 232,
+    "output": "{\"at\": \"2026-11-11T16:42:12.753284+00:00\", \"status\": \"ADMITTED_BOUNDED_BUILTINS_CWD_CORRECTION_COMPILER_ONLY\", \"guard_updated_at\": \"2026-11-11T16:42:08.327658+00:00\", \"MemAvailable_bytes\": 29302697984, \"overhead_bytes\": 1476677632, \"new_job_bytes\": 2147483648, \"CPU\": 6, \"new_jobs\": 1, \"aggregate_HOST_bytes\": 4294967296, \"aggregate_jobs_max\": 3, \"host_free_bytes\": 121667715072, \"scratch_free_bytes\": 121667715072, \"batch_disk_headroom_bytes\": 5368709120, \"other_current_payloads\": [], \"one_heavy_owner\": true, \"source_core_metadata_frozen_for_operation\": true, \"core_metadata_sha256\": \"7ec5faeecbe4c7bd2c865000bf4e4b66367269f3bd5bbb0fc1c46015ee014aa9\", \"request_sha256\": \"952763d9844fb4c5f0469c971d096b77bf39bf49755d280fab1e76c56bf1e34b\", \"operation_review_sha256\": \"1a60abb3c4a0bbf29fd827e845c53661c5f36db1bfdbedd387e83064b10c4585\", \"native_source_UNKNOWN_holds_released\": false, \"consumer_kernel_image_not_admitted\": true}\n"
+  },
+  "initial": {
+    "chunk_id": "a8086b",
+    "wall_time_seconds": 1.000787373,
+    "session_id": 94779,
+    "original_token_count": 0,
+    "output": ""
+  },
+  "final": {
+    "chunk_id": "968657",
+    "wall_time_seconds": 0.00003334,
+    "exit_code": 1,
+    "original_token_count": 185,
+    "output": "Traceback (most recent call last):\n  File \"/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/cwd-output-correction-1/run_root_once.py\", line 22, in <module>\n    phase('builtins-build',a['create_argv'],a['expected_mounts'],2*2**30,256,a['max_wall_seconds'])\n  File \"/home/holden/mckernel-work/m14-blocker-resolution-20261110/root-reviewed-capture-correction-1/correction-1/phase-cpu6.py\", line 46, in phase\n    terminal=json.loads(call(label+'-terminal',docker+['inspect',cid]))[0];save(label+'-TERMINAL.json',terminal);state=terminal['State'];assert rc==0 and state['ExitCode']==0 and not state['Running'] and state['Pid']==0 and not state['OOMKilled']\nAssertionError\n"
+  },
+  "full_root_tool_terminal": true,
+  "session_id_remaining": null,
+  "actual_terminal_exit": 1,
+  "automatic_resource_release": false,
+  "original_acceptance": false
+}

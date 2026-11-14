@@ -1,0 +1,29 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "FROZEN_PRIVATE_SELECTED_BRIDGE_SOURCE_ONLY",
+  "symbol": "terminate_host_refcount_set_bridge",
+  "existing_Rust_target": "f03_terminate_host_refcount_set_v1",
+  "implementation": "Missing void-pointer ABI adapter to the existing Rust IhkAtomic SeqCst set; no atomic body copied.",
+  "whole_C_candidate": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/02-terminate-refcount-selected-1/candidate/kernel/syscall.c",
+    "bytes": 909754,
+    "sha256": "db7e193ca2c1aea511818f0b95df7371c9e764084339c937b69cb5dde50b051d"
+  },
+  "whole_Rust_policy_candidate": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/02-terminate-refcount-selected-1/candidate/kernel/rust/syscall_policy.rs",
+    "bytes": 1229570,
+    "sha256": "863ef1fdd985bcbb5cf74bdebb9f56dd5d52ea2e8149cd8dfa650ace71063247"
+  },
+  "C_selector": "MCKERNEL_RUST_F03_TERMINATE_REFCOUNT",
+  "Rust_cfg": "f03_terminate_refcount_selected_candidate",
+  "exact_next3argv_recipe": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/SOURCE-HANDOFF.NOT-GRANTED.json",
+    "bytes": 29348,
+    "sha256": "8e3f36456d2f1ee9ecd54004e4522edbe2852b17ed425c93a40316dc06a5d461"
+  },
+  "compiler_execution": false,
+  "default": "OFF",
+  "native": false,
+  "holds_cleared": [],
+  "whole_file_retired": false
+}

@@ -1,0 +1,126 @@
+{
+  "dependency": {
+    "accepted_frozen_seven_key_source_gate": null,
+    "actual_candidate_fixture": null,
+    "candidate_sha256_by_relative": null,
+    "implementation_owner": "m14_actual_consumer_fix",
+    "independent_source_review": null,
+    "owner": "case227_stage",
+    "required_status": "ACCEPTED_FROZEN_SOURCE_READY_FOR_SDK_PREPARATION",
+    "rule": "Exactly seven accepted sourcekeys and matching independent PASS_SOURCE candidate map + actualfixture; no permissive old one-key gate or invented review.",
+    "source_gate_path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-7/SOURCE-ACCEPTANCE.INPUT.json",
+    "source_gate_sha256": null
+  },
+  "executable": false,
+  "prepare": {
+    "accepted_source": {
+      "bytes": 17400,
+      "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/prepare.py",
+      "sha256": "fce5df7d63429018a3246d306492041ae7b926c6c4f92f02d7a4a74f9deb45fc"
+    },
+    "argv_template": [
+      "/usr/bin/taskset",
+      "-c",
+      "0",
+      "/usr/bin/prlimit",
+      "--as=2147483648:2147483648",
+      "--cpu=30:30",
+      "--fsize=134217728:134217728",
+      "--nofile=256:256",
+      "--core=0:0",
+      "--",
+      "/usr/bin/timeout",
+      "--signal=TERM",
+      "--kill-after=3",
+      "35",
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-7/prepare.py"
+    ],
+    "output_closure_count": null,
+    "output_nonce": null,
+    "output_preparation": null,
+    "output_pure_body_validation": null,
+    "output_runtime_cohort": null,
+    "output_source_identity": null,
+    "output_stager": null,
+    "profile": {
+      "AS": 2147483648,
+      "CPU": 30,
+      "FSIZE": 134217728,
+      "NOFILE": 256,
+      "core": 0,
+      "cpu": [
+        0
+      ],
+      "grace": 3,
+      "qualification": "Existing SDK6 directprepare command profile; no execution grant supplied here.",
+      "wall": 35
+    },
+    "source": {
+      "bytes": null,
+      "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-7/prepare.py",
+      "sha256": null
+    }
+  },
+  "root_grant": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "staging": {
+    "accepted_actual_capture": {
+      "bytes": 2400,
+      "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/run_stage.py",
+      "sha256": "ee6ca8cc03bc56651b37d15af05f7afabe3dfd6d459f503b37e1c135b3eb88b1"
+    },
+    "accepted_stager": {
+      "bytes": 5563,
+      "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/metadata/stage_bound_successor.py",
+      "sha256": "9da8d12f9acd49296ac1cddf995dbe489834d1d9d3197d92ddc500743664e32b"
+    },
+    "actual_result": null,
+    "argv_template": [
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-7/run_stage.py"
+    ],
+    "candidate_root": null,
+    "fresh_headroom_required": {
+      "capacity_kind": "Existing accepted fullremaining backinggap/capture/campaign/emergency/floors; remeasure immediately before ordinary execution",
+      "host_required_bytes": 140534349824,
+      "memory_available_bytes": 20401094656,
+      "scratch_required_bytes": 13899923456
+    },
+    "input_root": null,
+    "owner_evidence_root": null,
+    "profile": {
+      "AS": 2147483648,
+      "CPU": 60,
+      "FSIZE": 33554432,
+      "NOFILE": 256,
+      "core": 0,
+      "cpu": [
+        6
+      ],
+      "grace": 6,
+      "handlers": "Existing TERM/INT/ALRM registration; no newcapturebody",
+      "supervisor_sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8",
+      "wall": 120
+    },
+    "request": null,
+    "request_sha256": null,
+    "source": {
+      "bytes": null,
+      "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-7/run_stage.py",
+      "sha256": null
+    }
+  },
+  "status": "TEMPLATE_NOT_EXECUTABLE_SEVEN_KEY_CANDIDATE_GATE_AND_DERIVED_HELPERS_NULL",
+  "worker_executed": {
+    "compile": 0,
+    "copy": 0,
+    "query": 0,
+    "root": 0,
+    "stage": 0
+  }
+}

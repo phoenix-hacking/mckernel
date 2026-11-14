@@ -1,0 +1,108 @@
+{
+  "authority": null,
+  "boot_supplier_argv": [
+    "/bin/native-boot",
+    "-R",
+    "-c1",
+    "-m128M@0",
+    "-o0",
+    "-T0"
+  ],
+  "catalog_run": false,
+  "cohort": {
+    "compute_baseline": {
+      "bytes": 12621,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/stable-baseline1e64-wholeON-1/BASELINE.json",
+      "sha256": "7e5edf18c5e3806134420ce86aed406640a4be95ba3990c22865f821a2bb3495"
+    },
+    "compute_qualification": {
+      "bytes": 58097,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/next-credential-f06-1/f06-successor-1/qualification-1/QUALIFICATION.json",
+      "sha256": "0f6c7b01609b60791cc1bbb0253ea603d75d585b945bb6162da416515923bfbd"
+    },
+    "compute_source_commit": "1e64b165ff2a46e6ec7615e804b36c9a936172a8",
+    "module_binding": {
+      "bytes": 30444,
+      "path": "/home/holden/mckernel/docs/verification/m14-m15-matching-kbuild-20261110/bindings-qualified/BINDINGS.json",
+      "sha256": "0781087478376977da68666ee6ae257846d53dc5501cfa6b9b3ca170597f26be"
+    },
+    "module_binding_reuse_scope": "Only099/IHK8d/Linux6.12/config106055 module facts; BINDINGS old100d image wording is not this nativec664 tuple."
+  },
+  "input_refs": {
+    "application": {
+      "bytes": 18736,
+      "mode": "0755",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/output-1/signal.alternate-repeat",
+      "sha256": "77e8dfe6f8089f18b22524ad474e057cb061d67501f9e9fdb4f391dd4790f45d"
+    },
+    "compute_image": {
+      "bytes": 10396880,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/stable-baseline1e64-wholeON-1/build/kernel/mckernel.img",
+      "sha256": "c66492d44e2e71a072114f637cd04dff5feb77bd2216c42ef69f7a56944c7a5f"
+    },
+    "libc": {
+      "bytes": 2339896,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/output-1/runtime/lib64/libc.so.6",
+      "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4"
+    },
+    "loader": {
+      "bytes": 930600,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/output-1/runtime/lib64/ld-linux-x86-64.so.2",
+      "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b"
+    },
+    "three_modules": [
+      {
+        "bytes": 1521480,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/modules/ihk.ko",
+        "sha256": "04f5d3e0dbf0c70b7ff5aeb281fabda310751bc45c4916cb582575cf3f81155e"
+      },
+      {
+        "bytes": 13092960,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/modules/ihk-smp-x86_64.ko",
+        "sha256": "ae67f463920ae6267710624139c56ef5dcfa8d1c60f4fc1a42f0e52604066696"
+      },
+      {
+        "bytes": 2374656,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/modules/mcctrl.ko",
+        "sha256": "dc46a4f552776d6f9200cbdc8127882ea3f5d69d119f3e5b00672dce234eabcc"
+      }
+    ]
+  },
+  "live_fields_not_issued_here": [
+    "new operation nonce and clocks",
+    "Root current control/account authority",
+    "native capacity-scope disposition/admission",
+    "current source-owner and native-currentfree/restoration context",
+    "real inherited operation/custody channels",
+    "new named source/effective-view graph and deploy/stage manifest"
+  ],
+  "oracle": {
+    "exit_code": 0,
+    "stderr": "empty",
+    "stdout": "16 ordered handler=N in_alt=inside then delivery=16 alt_hits=16"
+  },
+  "original_checks": [
+    "M15-I04-native-admission",
+    "M14-06-02-FUNCTIONAL"
+  ],
+  "payload": {
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "/apps/signal.alternate-repeat"
+    ],
+    "cwd": "/case/work",
+    "environment": {
+      "COKERNEL_PATH": "/apps",
+      "LANG": "C",
+      "LC_ALL": "C",
+      "PATH": "/usr/bin:/bin",
+      "TZ": "UTC"
+    }
+  },
+  "release_or_runtime_permission": false,
+  "schema": "mckernel-named-signal-input-intent-v1",
+  "status": "SOURCE_ONLY_INPUT_BINDING_NO_AUTHORITY"
+}

@@ -1,0 +1,76 @@
+{
+  "schema": "mckernel.native-exact-candidate-retention-preparation.evidence.v1",
+  "recorded_at_utc": "2026-09-29T20:13:00Z",
+  "status": "PASS_RETENTION_PREPARATION",
+  "acceptance": {
+    "retention_preparation": true,
+    "retirement": false,
+    "deletion": false,
+    "build": false,
+    "runtime": false,
+    "application": false,
+    "production": false
+  },
+  "release_commit": "610b7bb4f99f4334bad84fdee05eb155c12fd32f",
+  "release_sha256": "5c2fbbeca97026dfde1abadbaed2ad8a31ef3e9b00b511e93bcc2da0a735edbf",
+  "operation": {
+    "returncode": 0,
+    "elapsed_ns": 51644925029,
+    "outer_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "outer_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "outer_status_sha256": "a7a4b021f1e7688232774971cc18847f1e15999d4b52522838b5ed9b3ddd507c"
+  },
+  "evidence": {
+    "inventory_path": "docs/verification/evidence/stability-native-exact-candidate-retention-9e5ab03d-20260929-1.inventory.json",
+    "inventory_sha256": "841dedac9c2a2f1bff7ecb903bd34500b6c5e8184a5466e744ee1a7154734f89",
+    "postflight_inventory_sha256": "841dedac9c2a2f1bff7ecb903bd34500b6c5e8184a5466e744ee1a7154734f89",
+    "restoration_archive_path": "docs/verification/evidence/stability-native-exact-candidate-retention-9e5ab03d-20260929-1.tar",
+    "restoration_archive_sha256": "624da324e6559bbee08c34e1cc70a12eb46727b0c338a0828815ba70c55ea6a4",
+    "receipt_sha256": "e054ef28662d1f9ffe7accabc9dca10c5b8132274fef448428536ad651055a84",
+    "raw_archive_path": "docs/verification/evidence/stability-native-exact-retention-preparation-success-raw-9e5ab03d-20260929-1.tar.gz",
+    "raw_archive_sha256": "7bd51f30ae44931521c15013176490df49a6c39030043059169c7398576883cf",
+    "raw_archive_members": 23
+  },
+  "inventory": {
+    "entries": 10714,
+    "capsule_required": 918,
+    "archive_members": 924,
+    "regular": 9703,
+    "directories": 962,
+    "symlinks": 49,
+    "reconstructible": 9796
+  },
+  "processes": {
+    "packet": "4028897/92235556",
+    "planner": "4028910/92235567",
+    "archiver": "4028943/92237651",
+    "postflight_planner": "4028967/92238545",
+    "all_absent_after_run": true,
+    "surviving_child_process_groups": 0
+  },
+  "roots_after": {
+    "candidate": "26/47678 uid/gid 1000/1000 mode 0755 allocated 9140117504",
+    "metadata_backup": "26/58429 uid/gid 1000/1000 mode 0755 allocated 1355776",
+    "main_commit": "f5d8d914f816d4a677990719854f7b4d312a430b",
+    "ihk_commit": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+    "tracked_clean": true
+  },
+  "cleanup": {
+    "preparation_claim_absent": true,
+    "preparation_lease_absent": true,
+    "build_lease_absent": true,
+    "roots_unchanged": true
+  },
+  "independent_review": "PASS_RETENTION_PREPARATION",
+  "limitations": [
+    "The capsule supplies reconstruction inputs; no restoration was executed.",
+    "Original inode identity, allocation layout, timestamps, ACLs, xattrs and unrecorded metadata are outside the reconstruction proof.",
+    "Retained Git blob availability is not a fresh full-object corruption audit.",
+    "No retirement, deletion, build, guest, application, production gate or whole-OS acceptance follows."
+  ],
+  "next_actions": [
+    "Checkpoint and fetch-verify this exact inventory, restoration archive and raw evidence.",
+    "Design a fresh two-root retirement packet against these exact identities and hashes.",
+    "Obtain independent source and execution review, canonical reconstruction admission and fresh process/mount/reference preflight before one retirement invocation."
+  ]
+}

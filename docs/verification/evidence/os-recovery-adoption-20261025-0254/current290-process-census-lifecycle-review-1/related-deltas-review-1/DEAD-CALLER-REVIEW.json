@@ -1,0 +1,82 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/census_lifecycle_review",
+  "execution_authority": false,
+  "custody_or_phase_adoption_authority": false,
+  "no_runtime_or_root_queries": true,
+  "independent_checks": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-process-census-lifecycle-review-1/related-deltas-review-1/independent.status.json",
+    "bytes": 1615,
+    "sha256": "34a55e3079ac016c40df118d7fde8de57ece9dea7fe31e84f0fdccd6a882e47d"
+  },
+  "schema": "mckernel.current290.dead-caller-proc-lifecycle.independent-source-review.v1",
+  "decision": "CHANGES_REQUIRED_FROZEN_SOURCE",
+  "source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-proc-snapshot-lifecycle-source-1/dead_caller_snapshot_lifecycle.FOCUSED-FUNCTIONS.SOURCE-ONLY.py",
+    "bytes": 9586,
+    "sha256": "45fd7803aff3d646d2233e6cd6ba102258eed84d3fa1c05d1fbecb2fa8bdcd4d"
+  },
+  "manifest": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-proc-snapshot-lifecycle-source-1/FOCUSED-FUNCTION-DELTA-MANIFEST.SOURCE-ONLY.NOT-RELEASED.json",
+    "bytes": 3536,
+    "sha256": "342693d4f809f27bdae5fcd5485fd0d50f10c3856105a49e0a20a40a3d317fca"
+  },
+  "worker_result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-proc-snapshot-lifecycle-source-1/RESULT.json",
+    "bytes": 1976,
+    "sha256": "913516c4fc083a23a825f0f3a1a6685c7e07deac7af34d7e23811d6c7d8d161a"
+  },
+  "actual_failure_causality": "This is a related source defect, not the observed actual legacy PROC_CODE192B failure. Original34 actualdeadcaller checks remain accepted at their originalscope.",
+  "reviewed_strengths": [
+    "At most3newcompletepair attempts, retained failedpartial evidence under original16MiB ceiling and no partial success/skip/merge.",
+    "Pinned observer root UID/effectiveUID/full four UID/GID arrays/birth and boot continuity; persistent observedbirth/forbiddenlineage evidence across retries.",
+    "Immediate observed forbiddenPID/group/descendant/operationargv and publisher refusal before secondstat retry; original fullpair andargv validators retained."
+  ],
+  "blocking_finding": {
+    "id": "MALFORMED_PARTIAL_ROW_CAN_RETRY_THEN_SUCCEED",
+    "severity": "functional_contract_blocker",
+    "cause": "Firststat only validates prefix/fieldcount then decodes row. Original fullpair validator checks birthdigits/nonnegative group only after full successful pair; the new retry path can discard malformed firststat fields before that validator runs.",
+    "independently_observed": [
+      {
+        "case": "nonnumeric-birth",
+        "failed_stat_hex": "373720286669787475726529205320312037372030203020302030203020302030203020302030203020302030203020302030206e6f742d612d6e756d6265722030203020302030203020302030203020302030203020302030203020302030203020302030203020302030203020302030203020302030203020300a",
+        "frozen_candidate_behavior": "ACCEPTS_AFTER_RETRY",
+        "required_behavior": "HARD_REFUSAL_BEFORE_RETRY",
+        "snapshot_enumerations": 3,
+        "statuses": [
+          "REFUSED",
+          "PASS_FULL_EOF_RECHECK"
+        ]
+      },
+      {
+        "case": "negative-pgrp",
+        "failed_stat_hex": "37372028666978747572652920532031202d312030203020302030203020302030203020302030203020302030203020302030203132332030203020302030203020302030203020302030203020302030203020302030203020302030203020302030203020302030203020302030203020300a",
+        "frozen_candidate_behavior": "ACCEPTS_AFTER_RETRY",
+        "required_behavior": "HARD_REFUSAL_BEFORE_RETRY",
+        "snapshot_enumerations": 3,
+        "statuses": [
+          "REFUSED",
+          "PASS_FULL_EOF_RECHECK"
+        ]
+      }
+    ],
+    "required_correction": "Validate each firststat row and required numeric/state fields immediately, before births/discovered insertion or lifecycle retry eligibility. Malformed observations must hardrefuse even when process subsequently exits. Retain originalfailedcandidate and use a bounded correction with exactregressions."
+  },
+  "policy_consistency": {
+    "frozen_candidate_scope": "Only fullyclassified ordinaryparent0/1 secondstatENOENT is retryable. Firststat/cmdline/exeENOENT and unknownparent remain hardrefusal; no full lifecycle-completion credit.",
+    "decision": "WHOLE_FRESH_PAIR_RETRY_CAN_MATCH_ACCEPTED_1EB_CURRENT_SNAPSHOT_SEMANTICS",
+    "reason": "A narrowly classified enumeratednonprotected ENOENT may invalidate the entire attempt rather than skip a row. Successful acceptance still requires two NEW COMPLETE snapshots. Unseencommand in a discarded attempt alone is not a differentiating reason for stricter policy while accepting1eb equivalent firststatENOENT behavior.",
+    "no_differentiating_counterexample_found_under_stated_contract": true,
+    "required_preconditions_for_separate_policy_change": [
+      "Immediately refuse numeric enumeratedPID belonging to protectedobserver/PID1/originalcaller/owner/waiters/recordedchildren or a previously observed forbiddenlineage BEFORE firstread.",
+      "Only exact builtin FileNotFoundError errno2 and exact current enumeratedPID stat/cmdline/exe path may classify lifecycle failure; caller/observer/boot/enumeration/permission/malformed/unknown remain hard.",
+      "Validate available firststat row completely before using it; preserve observedbirths/parent/group lineage across attempts and never let later ENOENT erase knownforbidden evidence.",
+      "Validate operationargv immediately after command decode, and register knownargv/executable publishers before any subsequent potentially retryable read.",
+      "Discard both snapshots on any eligible lifecycle failure; preserve bounded failedpartial+path/errno/attempt diagnostics without fabricating missing bytes; accept only fresh completepair through unchanged absence oracles.",
+      "Pin observerbirth and fullrootcredentials plus boot across all attempts; keep maximum3attempts, original fullEOF/read/process/capture/timebounds and quarantine/ownership behavior.",
+      "Obtain separately frozen source/review/manifest/newauthorization and actual keeper execution/custody review; recommendation itself changes no runtime policy."
+    ],
+    "limits": "Current sampled absence is not proof of historical absence or behavior between samples; neither accepted1eb nor the original two-snapshot deadcaller observer establishes such history. If a stronger historical contract is required, define it explicitly rather than silently claiming it from current snapshots.",
+    "recommendation": "Correct malformed-row blocker first. A separately specified exactsamefamily fullpairretry correction is semantically consistent and removes ordinaryfirststat liveness risk; retaining strictunknown is possible only as an explicit unresolved liveness limitation, not a claim of complete lifecycle repair."
+  }
+}

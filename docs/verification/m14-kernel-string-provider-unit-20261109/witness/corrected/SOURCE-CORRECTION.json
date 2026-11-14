@@ -1,0 +1,27 @@
+{
+  "status": "ONE_BOUNDED_CALLER_BINDING_SOURCE_CORRECTION_PREPARED_NOT_COMPILED_OR_RUN",
+  "preserved_failed_packet": {
+    "request": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kernel-string-provider-unit-1/witness-1/correction-1/REQUEST.json",
+    "sha256": "994d2597f07a9edc494436b0953a81bcb3c73d32c69f91e1b08ce8b2cfda2d0f",
+    "failure": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kernel-string-provider-unit-1/witness-1/correction-1/FIRST-FAILURE.json",
+    "failure_sha256": "b6e33f69804ffbbce3b6cfecca9eaaba420815e8e9e703bbe23c96d98980929d",
+    "caller_object_sha256": "bcc41bf3e2b03630ba880502554c896531408d94f71ae458adcf313793a843d9",
+    "actual": "3commandsPASS, endpointgatefailedbeforelink/runtime;genuinefortifiedmemsetinlinehasnoexternalKernelmemsetcall;__printf_chkHOSToutputobserved."
+  },
+  "new_source": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kernel-string-provider-unit-1/witness-1/correction-2/c_abi_witness.c",
+    "sha256": "bb35cb634acae6e7b7eee846fd5c7cf8a3115ff8d0dda4c9c85009c576e92f6e"
+  },
+  "only_changes": [
+    "Exacttypedstaticvolatilefunctionpointerinitializedtoactual &memset andusedforfill_case call; no alias/rename/override/callback/substitute definition",
+    "Compile-time actualselectedHOST__printf_chk prototypecompatibilityassert; allowonlythisobservedrealHOSToutputimport viaactualheaders"
+  ],
+  "preserved": "Actualheaders/FORTIFY/compiler-builtin-disableflags/actual965provider/all11validdomainobservations/counts<=5/outputunchanged; no core/join/source/profileweakening or replay.",
+  "pointer_contract": "File-private8B OBJECT kernel_memset_entry writabledata, initializedR_X86_64_64 toUFmemset+0; actualvolatileload/indirectcalltracebeforelink. FinalELFpointerbytesmustequalactualqualifiedKernelmemsetFUNCaddress, samecallerload/callprovenanceand2rootbytesbeforeONErun.",
+  "header_bindings": {
+    "/usr/include/x86_64-linux-gnu/bits/string_fortified.h": "4793434f02bbcd7fe6227451e5d35f7448f776f57f322838809cb2b1e45c0268",
+    "/usr/include/x86_64-linux-gnu/bits/stdio2.h": "f30effdddb33b0a38dee1cd596c1277d0f8f800a0fbfdadb2fe214f33c86129a"
+  },
+  "genuine_printf_chk_ABI": "Actualstdio2.h declaration int __printf_chk(int,const char *restrict,...), existingselectedHOSTformattedoutputonly. No wildcard HOST/provider allowance.",
+  "operation_started": false
+}

@@ -1,0 +1,659 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "producer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEXT10-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/evidence/producer-contract.json",
+    "bytes": 14156,
+    "sha256": "7f1c233c755d0d1016ce8795f4969c65e7f7119fc1d7b40cdfad9d3a3af84818"
+  },
+  "worker_result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEXT10-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/evidence/worker-result.json",
+    "bytes": 12064,
+    "sha256": "b3a95663d63b59f638fdede3aa48bfc7554a64953f683679a63184509f6b2626"
+  },
+  "validator_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-driver-identity-repair-source-1/native_rust_exact_mckernel_image_offline.CURRENT290.VIEW-AND-FRESH-OBJECT-GATE.py",
+    "bytes": 226480,
+    "sha256": "9d2d39a0f4a28dc15638fe2c1a01052e64886078d39c3b1e7bf57eccf68bbdfd"
+  },
+  "status": "PASS_ACTUAL_NEXT_PROFILE_PRODUCER_RUST_STORAGE_PANIC_LOGGER_CLONE_FINAL_GATES",
+  "phases": {
+    "producer": "PASS_EXACT_FOUR_ARGV_AND_FRESH_OUTPUT_IDENTITIES",
+    "changed_Rust_9d2d_gate_exact_four_F02_import_removals": {
+      "status": "PASS_ACTUAL_DEFAULT_WHOLE_RUST_HANDLER_NO_PANIC_AND_FOUR_LOCAL_LOGGERS",
+      "proof": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next10-validator-report-ref-correction-1/actual-qualification-1/fresh-compiled-rust-ownership-proof.json"
+    },
+    "three_Rust_data_providers": {
+      "resource_set_list": {
+        "Rust_symbol": {
+          "index": 6034,
+          "name": "resource_set_list",
+          "bind": 1,
+          "type": 1,
+          "shndx": 5761,
+          "value": 0,
+          "size": 16
+        },
+        "section": {
+          "name_off": 5180,
+          "type": 8,
+          "flags": 268435459,
+          "addr": 0,
+          "offset": 1051936,
+          "size": 16,
+          "link": 0,
+          "info": 0,
+          "align": 16,
+          "entsize": 0,
+          "index": 5761,
+          "name": ".lbss.resource_set_list"
+        },
+        "initial_hex": "00000000000000000000000000000000",
+        "process_has_no_definition": true
+      },
+      "resource_set_lock": {
+        "Rust_symbol": {
+          "index": 6035,
+          "name": "resource_set_lock",
+          "bind": 1,
+          "type": 1,
+          "shndx": 5762,
+          "value": 0,
+          "size": 64
+        },
+        "section": {
+          "name_off": 96948,
+          "type": 8,
+          "flags": 268435459,
+          "addr": 0,
+          "offset": 1051968,
+          "size": 64,
+          "link": 0,
+          "info": 0,
+          "align": 64,
+          "entsize": 0,
+          "index": 5762,
+          "name": ".lbss.resource_set_lock"
+        },
+        "initial_hex": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "process_has_no_definition": true
+      },
+      "runq_reservation_lock": {
+        "Rust_symbol": {
+          "index": 4126,
+          "name": "runq_reservation_lock",
+          "bind": 1,
+          "type": 1,
+          "shndx": 5763,
+          "value": 0,
+          "size": 4
+        },
+        "section": {
+          "name_off": 97187,
+          "type": 8,
+          "flags": 268435459,
+          "addr": 0,
+          "offset": 1051968,
+          "size": 4,
+          "link": 0,
+          "info": 0,
+          "align": 4,
+          "entsize": 0,
+          "index": 5763,
+          "name": ".lbss.runq_reservation_lock"
+        },
+        "initial_hex": "00000000",
+        "process_has_no_definition": true
+      }
+    },
+    "production_panic_gate": {
+      "status": "PASS_PRODUCTION_RUST_NO_TARGETED_CORE_PANIC_REFS",
+      "undefined_count": 215,
+      "clone_thread_undefined": 0,
+      "forbidden": [],
+      "clone_thread_witness": "EXACT_CURRENT290_SOURCE_REL_FINAL_TWO_R64_PROOF",
+      "profile_proof_canonical_sha256": "c981a86b630f295ad97f08ce6ebe9ff5fe1d788f515ce4500c5858448bc8b55e"
+    },
+    "current_profile_clone_source_object_final_proof": {
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "status": "PASS_CURRENT_DEFAULT_RUST_DEFINED_CLONE_SOURCE_OBJECT_FINAL_POINTER_PROOF_NOT_ORIGINAL_WITNESS_WAIVER",
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-next-ten-selector-default-source-1/rust-subtree/process_helpers.rs",
+        "bytes": 603471,
+        "sha256": "851acd51fab945456edd87c001a63b867634f51207fbf1900451edaa368b09ea"
+      },
+      "source_lines": [
+        14068,
+        14083
+      ],
+      "source_snippet": "#[no_mangle]\npub unsafe extern \"C\" fn clone_thread(\n    org: *mut Thread,\n    pc: CULong,\n    sp: CULong,\n    clone_flags: CInt,\n) -> *mut Thread {\n    // SAFETY: Exact original arguments and same config object address/body result.\n    // No additional validation, initialization, reference, ACK or cleanup surrounds it.\n    unsafe {\n        process_clone_thread_body_result(\n            org, pc, sp, clone_flags, core::ptr::addr_of!(process_clone_config),\n        )\n    }\n}\n\nconst _: unsafe extern \"C\" fn(*mut Thread, CULong, CULong, CInt) -> *mut Thread = clone_thread;",
+      "new_Rust_object": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEXT10-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o",
+        "bytes": 18223608,
+        "sha256": "a20e8d9bc7b7315a5ea41d446f9cf80a9134ef2b63d4b2302bd0d82c5bc8fb36"
+      },
+      "new_process_object": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+        "bytes": 73408,
+        "sha256": "b8168c1f52369f7909bf174fe1c926a4a4a3be4a63cd0667741841680b0ca289"
+      },
+      "new_image": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEXT10-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/mckernel.img",
+        "bytes": 10241736,
+        "sha256": "f42a871d83fcd1f30c9ee66734a8ba760a8587797c4e076079da0e37bfbcb908"
+      },
+      "clone_thread_object_symbol": {
+        "index": 4638,
+        "name": "clone_thread",
+        "bind": 1,
+        "type": 2,
+        "shndx": 974,
+        "value": 0,
+        "size": 27
+      },
+      "clone_thread_final_symbol": {
+        "index": 4288,
+        "name": "clone_thread",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684657616,
+        "size": 27
+      },
+      "resolved_R64_final_pointers": [
+        {
+          "relocation": {
+            "offset": 6,
+            "type": 1,
+            "target": {
+              "index": 4639,
+              "name": "process_clone_config",
+              "bind": 1,
+              "type": 0,
+              "shndx": 0,
+              "value": 0,
+              "size": 0
+            },
+            "addend": 0,
+            "owning_section": 974
+          },
+          "final_target": {
+            "index": 1018,
+            "name": "process_clone_config",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685446816,
+            "size": 136
+          }
+        },
+        {
+          "relocation": {
+            "offset": 16,
+            "type": 1,
+            "target": {
+              "index": 4640,
+              "name": "process_clone_thread_body_result",
+              "bind": 1,
+              "type": 2,
+              "shndx": 2951,
+              "value": 0,
+              "size": 4255
+            },
+            "addend": 0,
+            "owning_section": 974
+          },
+          "final_target": {
+            "index": 2859,
+            "name": "process_clone_thread_body_result",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684982032,
+            "size": 4255
+          }
+        }
+      ],
+      "final_function_exact_object_code_with_only_two_R64_patches": true,
+      "no_C_or_nine_input_duplicate_clone_or_storage_definitions": true,
+      "C_config_object": {
+        "index": 90,
+        "name": "process_clone_config",
+        "bind": 1,
+        "type": 1,
+        "shndx": 4,
+        "value": 992,
+        "size": 136
+      },
+      "three_final_storage_objects": {
+        "resource_set_list": {
+          "symbol": {
+            "index": 3331,
+            "name": "resource_set_list",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 217,
+            "value": 18446744073685983664,
+            "size": 16
+          },
+          "section": {
+            "name_off": 9232,
+            "type": 8,
+            "flags": 3,
+            "addr": 18446744073685721088,
+            "offset": 1335296,
+            "size": 299972,
+            "link": 0,
+            "info": 0,
+            "align": 4096,
+            "entsize": 0,
+            "index": 217,
+            "name": ".bss"
+          },
+          "initial_hex": "00000000000000000000000000000000"
+        },
+        "resource_set_lock": {
+          "symbol": {
+            "index": 1770,
+            "name": "resource_set_lock",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 217,
+            "value": 18446744073685983680,
+            "size": 64
+          },
+          "section": {
+            "name_off": 9232,
+            "type": 8,
+            "flags": 3,
+            "addr": 18446744073685721088,
+            "offset": 1335296,
+            "size": 299972,
+            "link": 0,
+            "info": 0,
+            "align": 4096,
+            "entsize": 0,
+            "index": 217,
+            "name": ".bss"
+          },
+          "initial_hex": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        },
+        "runq_reservation_lock": {
+          "symbol": {
+            "index": 2194,
+            "name": "runq_reservation_lock",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 217,
+            "value": 18446744073685983744,
+            "size": 4
+          },
+          "section": {
+            "name_off": 9232,
+            "type": 8,
+            "flags": 3,
+            "addr": 18446744073685721088,
+            "offset": 1335296,
+            "size": 299972,
+            "link": 0,
+            "info": 0,
+            "align": 4096,
+            "entsize": 0,
+            "index": 217,
+            "name": ".bss"
+          },
+          "initial_hex": "00000000"
+        }
+      },
+      "source38_target_retention_in_actual_current_default_link": {
+        "x86_interrupt_log_debug": [
+          {
+            "input_symbol": {
+              "index": 4129,
+              "name": "x86_interrupt_log_debug",
+              "bind": 1,
+              "type": 1,
+              "shndx": 5821,
+              "value": 0,
+              "size": 32
+            },
+            "input_section_flags": 2097155,
+            "final_symbol": {
+              "index": 914,
+              "name": "x86_interrupt_log_debug",
+              "bind": 1,
+              "type": 1,
+              "other": 0,
+              "shndx": 3,
+              "value": 18446744073685430656,
+              "size": 32
+            },
+            "final_section_flags": 3,
+            "input_GNU_RETAIN": true,
+            "final_GNU_RETAIN": false
+          }
+        ],
+        "REPLACE_TID_DEBUG": [
+          {
+            "input_symbol": {
+              "index": 4280,
+              "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust15process_helpers17REPLACE_TID_DEBUG",
+              "bind": 1,
+              "type": 1,
+              "shndx": 5478,
+              "value": 0,
+              "size": 32
+            },
+            "input_section_flags": 2097155,
+            "final_symbol": {
+              "index": 2236,
+              "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust15process_helpers17REPLACE_TID_DEBUG",
+              "bind": 1,
+              "type": 1,
+              "other": 0,
+              "shndx": 3,
+              "value": 18446744073685428640,
+              "size": 32
+            },
+            "final_section_flags": 3,
+            "input_GNU_RETAIN": true,
+            "final_GNU_RETAIN": false
+          }
+        ],
+        "RELEASE_TID_DEBUG": [
+          {
+            "input_symbol": {
+              "index": 4371,
+              "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust15process_helpers17RELEASE_TID_DEBUG",
+              "bind": 1,
+              "type": 1,
+              "shndx": 5476,
+              "value": 0,
+              "size": 32
+            },
+            "input_section_flags": 2097155,
+            "final_symbol": {
+              "index": 3924,
+              "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust15process_helpers17RELEASE_TID_DEBUG",
+              "bind": 1,
+              "type": 1,
+              "other": 0,
+              "shndx": 3,
+              "value": 18446744073685428608,
+              "size": 32
+            },
+            "final_section_flags": 3,
+            "input_GNU_RETAIN": true,
+            "final_GNU_RETAIN": false
+          }
+        ],
+        "RELEASE_FP_REGS_DEBUG": [
+          {
+            "input_symbol": {
+              "index": 4701,
+              "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust15x86_cpu_helpers21RELEASE_FP_REGS_DEBUG",
+              "bind": 1,
+              "type": 1,
+              "shndx": 5481,
+              "value": 0,
+              "size": 32
+            },
+            "input_section_flags": 2097155,
+            "final_symbol": {
+              "index": 4419,
+              "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust15x86_cpu_helpers21RELEASE_FP_REGS_DEBUG",
+              "bind": 1,
+              "type": 1,
+              "other": 0,
+              "shndx": 3,
+              "value": 18446744073685428672,
+              "size": 32
+            },
+            "final_section_flags": 3,
+            "input_GNU_RETAIN": true,
+            "final_GNU_RETAIN": false
+          }
+        ]
+      },
+      "Source38_HOST_ld234_partial_debt": "OPEN_DIFFERENT_SOURCE37_COHERENT_GRAPH_NOT_CLEARED_BY_CURRENT290_FINAL_LINK",
+      "original_generic_clone_U_witness_failure_preserved": true,
+      "independent_disposition_of_obsolete_U_witness_required": true,
+      "Rust_warning_count": 141,
+      "Rust_warning_headers": [
+        "warning: target feature `sse2` must be enabled to ensure that the ABI of the current target can be implemented correctly",
+        "warning: the feature `core_intrinsics` is internal to the compiler or standard library",
+        "warning: unused import: `IhkSpinlock`",
+        "warning: unused import: `MaybeUninit`",
+        "warning: unused imports: `null_mut` and `read_volatile`",
+        "warning: unused import: `MovePagesSmpReq`",
+        "warning: unused imports: `EFAULT`, `ENODEV`, `ENOMEM`, `MPOL_MF_MOVE_ALL`, `MovePagesGetNrNodesFn`, `MovePagesLogFn`, `MovePagesSmpCallFn`, `MovePagesVerifyFn`, `SyscallCopyFromUserFn`, `SyscallCopyToUserFn`, `SyscallMckfdFreeFn`, `SyscallPolicyAllocFn`, `SyscallRdtscFn`, `SyscallRwlockFn`, `move_pages_free_arrays`, `move_pages_log_delta`, `move_pages_policy_result`, and `move_pages_smp_req_prepare_result`",
+        "warning: unused import: `super::*`",
+        "warning: unused import: `super::*`",
+        "warning: unused import: `super::*`",
+        "warning: unused import: `addr_of_mut`",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: unnecessary `unsafe` block",
+        "warning: type `ProcessCloneConfig` is more private than the item `process_clone_thread_body_result`",
+        "warning: struct `CallerCredits` is never constructed",
+        "warning: associated items `acquire` and `cancel_unpublished` are never used",
+        "warning: struct `PrivateFork` is never constructed",
+        "warning: struct `CreateFailure` is never constructed",
+        "warning: struct `PrivateFailure` is never constructed",
+        "warning: enum `BeginFailure` is never used",
+        "warning: associated items `create`, `create_owned`, `create_raw`, `validate`, `cancel`, and `begin` are never used",
+        "warning: field `child_pid` is never read",
+        "warning: field `actual` is never read",
+        "warning: method `handle` is never used",
+        "warning: method `caller_cleanup_allowed` is never used",
+        "warning: constant `NATIVE_QUEUE_ABI_VERSION` is never used",
+        "warning: enum `PendingFreeBatchState` is never used",
+        "warning: struct `PendingPhysicalBounds` is never constructed",
+        "warning: struct `PendingFreeCallbackArgs` is never constructed",
+        "warning: struct `PendingInventoryLease` is never constructed",
+        "warning: associated items `new`, `descriptor`, `descriptor_node`, and `descriptor_index` are never used",
+        "warning: struct `ValidatedPendingInventory` is never constructed",
+        "warning: struct `PendingFreeBatch` is never constructed",
+        "warning: associated function `new` is never used",
+        "warning: function `validate_pending_inventory_metadata` is never used",
+        "warning: function `validate_pending_inventory_ring` is never used",
+        "warning: function `validate_pending_inventory` is never used",
+        "warning: methods `try_reanchor_into` and `reanchor_into` are never used",
+        "warning: function `drain_validated_pending_inventory` is never used",
+        "warning: function `detach_pending_free_batch` is never used",
+        "warning: function `drain_pending_free_batch` is never used",
+        "warning: associated function `unpublished` is never used",
+        "warning: function `native_irq_work_descriptor_offset` is never used",
+        "warning: associated items `new` and `can_drain` are never used",
+        "warning: module `selected_APboot_storage` should have a snake case name",
+        "warning: static variable `no_execute` should have an upper case name",
+        "warning: static variable `selected_mode` should have an upper case name",
+        "warning: direct cast of function item into an integer",
+        "warning: direct cast of function item into an integer",
+        "warning: direct cast of function item into an integer",
+        "warning: `ihk_ikc_send` redeclared with a different signature",
+        "warning: `page_fault_process_vm` redeclared with a different signature",
+        "warning: `sched_wakeup_thread` redeclared with a different signature",
+        "warning: `ihk_mc_map_virtual` redeclared with a different signature",
+        "warning: `ihk_mc_unmap_virtual` redeclared with a different signature",
+        "warning: `ihk_mc_map_virtual` redeclared with a different signature",
+        "warning: `ihk_mc_unmap_virtual` redeclared with a different signature",
+        "warning: `page_fault_process_vm` redeclared with a different signature",
+        "warning: `mem_kmalloc_panic` redeclares `panic` with a different signature",
+        "warning: `mem_register_interrupt_handler_provider` redeclares `ihk_mc_register_interrupt_handler` with a different signature",
+        "warning: `mem_get_vector_provider` redeclares `ihk_mc_get_vector` with a different signature",
+        "warning: `ORIGINAL_CPU_INFO` redeclares `ihk_mc_get_cpu_info` with a different signature",
+        "warning: `ORIGINAL_PROFILE_EVENT_ADD` redeclares `profile_event_add` with a different signature",
+        "warning: `mem_reserve_panic_provider` redeclares `panic` with a different signature",
+        "warning: `phys_to_page` redeclared with a different signature",
+        "warning: `process_copy_set_range_public` redeclares `ihk_mc_pt_set_range` with a different signature",
+        "warning: `ihk_mc_map_virtual` redeclared with a different signature",
+        "warning: `ihk_mc_unmap_virtual` redeclared with a different signature",
+        "warning: `release_thread` redeclared with a different signature",
+        "warning: `process_spin_lock_bridge_c` redeclares `process_spin_lock_bridge` with a different signature",
+        "warning: `process_spin_unlock_bridge_c` redeclares `process_spin_unlock_bridge` with a different signature",
+        "warning: `ihk_mc_pt_lookup_pte` redeclared with a different signature",
+        "warning: `f06_set_signal_kernel_panic` redeclares `panic` with a different signature",
+        "warning: `set_cputime` redeclared with a different signature",
+        "warning: `f06_vdso_pt_set_range` redeclares `ihk_mc_pt_set_range` with a different signature",
+        "warning: `c_map_fixed_area` redeclares `map_fixed_area` with a different signature",
+        "warning: `c_cpu_info` redeclares `ihk_mc_get_cpu_info` with a different signature",
+        "warning: `x86_memory_existing_panic` redeclares `panic` with a different signature",
+        "warning: `page_unmap` redeclared with a different signature",
+        "warning: `phys_to_page` redeclared with a different signature",
+        "warning: `memory_find_command_line` redeclares `find_command_line` with a different signature",
+        "warning: `syscall_generic_forwarding` redeclared with a different signature",
+        "warning: `memobj_unref` redeclared with a different signature",
+        "warning: `ihk_mc_pt_lookup_pte` redeclared with a different signature",
+        "warning: `ihk_mc_pt_set_range` redeclared with a different signature",
+        "warning: 141 warnings emitted"
+      ],
+      "Rust_warning_comparison": {
+        "original": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F03-F06-QUALIFIED-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/evidence/00.stderr",
+          "bytes": 54570,
+          "sha256": "c2031d425c594b49a7a29b95de89462c01156cca68a4854716a9b6c5a5b4f9a0"
+        },
+        "warning_headers_equal": false,
+        "new_only": {
+          "warning: `f06_vdso_pt_set_range` redeclares `ihk_mc_pt_set_range` with a different signature": 1,
+          "warning: 141 warnings emitted": 1
+        },
+        "old_only": {
+          "warning: 140 warnings emitted": 1
+        },
+        "Rust_warning_count": 141,
+        "new_source_bound_warning_headers": [
+          "warning: `f06_vdso_pt_set_range` redeclares `ihk_mc_pt_set_range` with a different signature"
+        ],
+        "new_warning_disposition_required": true,
+        "C_warnings": {
+          "kernel": {
+            "actual_rows": [
+              "/src/kernel/syscall.c:7539:19: warning: unused variable \u2018range\u2019 [-Wunused-variable]",
+              "/src/kernel/syscall.c:26376:65: warning: \u2018syscall_itimer_offsets\u2019 defined but not used [-Wunused-const-variable=]",
+              "/src/kernel/syscall.c:26058:71: warning: \u2018sched_syscall_offsets\u2019 defined but not used [-Wunused-const-variable=]",
+              "/src/kernel/syscall.c:24297:45: warning: \u2018syscall_cputime_offsets\u2019 defined but not used [-Wunused-const-variable=]",
+              "/src/kernel/syscall.c:4910:46: warning: \u2018wait_scan_kernel_offsets\u2019 defined but not used [-Wunused-const-variable=]",
+              "/src/kernel/syscall.c:4877:41: warning: \u2018wait_zombie_kernel_offsets\u2019 defined but not used [-Wunused-const-variable=]",
+              "/src/kernel/syscall.c:4720:43: warning: \u2018ptrace_detach_kernel_offsets\u2019 defined but not used [-Wunused-const-variable=]"
+            ],
+            "added": {},
+            "removed": {},
+            "stderr": {
+              "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEXT10-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/evidence/01.stderr",
+              "bytes": 1710,
+              "sha256": "98ecad2d738a29b59aee24efc7f796b5e63b972e64da2a2ac3f980b4fde65dde"
+            }
+          },
+          "arch": {
+            "actual_rows": [],
+            "added": {},
+            "removed": {},
+            "stderr": {
+              "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEXT10-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/evidence/02.stderr",
+              "bytes": 0,
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            }
+          }
+        },
+        "prior_two_fixed_LP64_declaration_warnings_remain_debt": true
+      },
+      "matching_F02_process_not_recompiled": true,
+      "current_C_warning_rows": {
+        "kernel": {
+          "actual_rows": [
+            "/src/kernel/syscall.c:7539:19: warning: unused variable \u2018range\u2019 [-Wunused-variable]",
+            "/src/kernel/syscall.c:26376:65: warning: \u2018syscall_itimer_offsets\u2019 defined but not used [-Wunused-const-variable=]",
+            "/src/kernel/syscall.c:26058:71: warning: \u2018sched_syscall_offsets\u2019 defined but not used [-Wunused-const-variable=]",
+            "/src/kernel/syscall.c:24297:45: warning: \u2018syscall_cputime_offsets\u2019 defined but not used [-Wunused-const-variable=]",
+            "/src/kernel/syscall.c:4910:46: warning: \u2018wait_scan_kernel_offsets\u2019 defined but not used [-Wunused-const-variable=]",
+            "/src/kernel/syscall.c:4877:41: warning: \u2018wait_zombie_kernel_offsets\u2019 defined but not used [-Wunused-const-variable=]",
+            "/src/kernel/syscall.c:4720:43: warning: \u2018ptrace_detach_kernel_offsets\u2019 defined but not used [-Wunused-const-variable=]"
+          ],
+          "added": {},
+          "removed": {},
+          "stderr": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEXT10-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/evidence/01.stderr",
+            "bytes": 1710,
+            "sha256": "98ecad2d738a29b59aee24efc7f796b5e63b972e64da2a2ac3f980b4fde65dde"
+          }
+        },
+        "arch": {
+          "actual_rows": [],
+          "added": {},
+          "removed": {},
+          "stderr": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEXT10-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/evidence/02.stderr",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        }
+      },
+      "ld_RWX_warning_preserved": "/usr/bin/ld: warning: mckernel.img has a LOAD segment with RWX permissions\n",
+      "default_native_retirement_acceptance": false
+    },
+    "both_old_new_clone_global_defined_27B": true,
+    "all_other_undefined_provider_witnesses_exact": true
+  }
+}

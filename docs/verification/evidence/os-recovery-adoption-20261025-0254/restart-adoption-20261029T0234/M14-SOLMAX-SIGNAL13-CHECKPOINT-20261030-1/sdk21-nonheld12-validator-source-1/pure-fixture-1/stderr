@@ -1,0 +1,22 @@
+test_authenticated_source_rejects_changed_bytes (__main__.RejectionFixtures) ... ok
+test_frozen_node_rejects_changed_ast_binding (__main__.RejectionFixtures) ... ok
+test_null_arch_origin_rejected (__main__.RejectionFixtures) ... ok
+test_old_object_reuse_rejected (__main__.RejectionFixtures) ... ok
+test_original_389_tuple_change_rejected (__main__.RejectionFixtures) ... FAIL
+test_two_rebuilds_rejected (__main__.RejectionFixtures) ... ok
+test_witness_section_rejected (__main__.RejectionFixtures) ... ok
+
+======================================================================
+FAIL: test_original_389_tuple_change_rejected (__main__.RejectionFixtures)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-nonheld12-validator-source-1/test_negative.py", line 96, in test_original_389_tuple_change_rejected
+    nodes=a.load_nodes(PROFILE)
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-nonheld12-validator-source-1/validate_artifacts.py", line 45, in load_nodes
+    assert hashlib.sha256(ast.dump(node, include_attributes=False).encode()).hexdigest() == row['AST_sha256']
+AssertionError
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.086s
+
+FAILED (failures=1)

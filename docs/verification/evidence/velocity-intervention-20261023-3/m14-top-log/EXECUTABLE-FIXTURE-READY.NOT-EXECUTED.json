@@ -1,0 +1,113 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "EXECUTABLE_FIXTURE_SOURCE_READY_NO_EXECUTION_GRANT",
+  "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-top-log",
+  "commands": [
+    {
+      "role": "actual full candidate Rust fixture object",
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--crate-name",
+        "m14_top_log_fixture",
+        "--crate-type=lib",
+        "--emit=obj",
+        "-C",
+        "codegen-units=1",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "panic=abort",
+        "fixture.rs",
+        "-o",
+        "fixture-rust.o"
+      ]
+    },
+    {
+      "role": "GCC9 Linux control fixture links actual C/Rust bodies and real Cvarargs collector",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-std=c11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "fixture.c",
+        "fixture-rust.o",
+        "-Wl,--gc-sections",
+        "-o",
+        "fixture"
+      ]
+    },
+    {
+      "role": "bounded179200 functionalparity pairs with independentexpectedcalls/arguments",
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-top-log/fixture"
+      ]
+    }
+  ],
+  "matched_prior_profile_source": "velocity-intervention-20261023-2/m14-memory-next/run-fixture.sh; sameRust1.92/CGU1/O2/panicabort/GCC9functionsections/gclink, newunprivilegedsource fixture only.",
+  "suggested_ordinary_profile": {
+    "CPU": "Root chooses free explicit slot; none held",
+    "jobs": 1,
+    "AS_bytes": 2147483648,
+    "CPU_seconds": 60,
+    "wall_seconds": 90,
+    "retirement_seconds": 6,
+    "FSIZE_bytes": 33554432,
+    "NOFILE": 256,
+    "core": 0,
+    "RUST_MIN_STACK": 2097152,
+    "capture_helper_sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8"
+  },
+  "sources": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-top-log/fixture.c",
+      "sha256": "ea11ba0b91a8fd033b9f7179f5de71ca7fc10ff9aee1d31052b3c31b6fad4029",
+      "bytes": 4915
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-top-log/fixture.rs",
+      "sha256": "0966db4a64cd0d31a77adc06010499fc34a3af99766f48bbe611c70d5179bd9f",
+      "bytes": 688
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-top-log/original-top-log.c.inc",
+      "sha256": "2cd8a9470f7404361fd2e62cbf8b8698efa98f879cbd03a64f04663f2e37c744",
+      "bytes": 470
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-top-log/selected-top-log.c.inc",
+      "sha256": "547f05804250bb8079de3668889d9adfc32a452ca008df0b99a6fab687cb2a12",
+      "bytes": 648
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-top-log/actual-logger-abi-snippet.h",
+      "sha256": "e88760d00a1f75d0124f06b868c98d985a66ae4926ea87804ffdb69c1942cb2a",
+      "bytes": 167
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-top-log/cutover.patch",
+      "sha256": "0ddc73cbe18ee7a4266bf13f732413a9c04f92e07716d9c222969c71fc74ef69",
+      "bytes": 2474
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-top-log/SOURCE-BINDINGS.PENDING.json",
+      "sha256": "ea87e9059b08bb850f1ccda4823e67971eb36cee78dd9d20e3911502072e7cb9",
+      "bytes": 4022
+    }
+  ],
+  "expected_pairs_NOT_ACTUAL": 179200,
+  "real_varargs": "Actual originalC ekprintf macro expands to same Cvariadic kprintf ABI. Rustcalls sameformat+arguments through realCvarargs collector; vsnprintf consumes va_list andrawtypedva_arg checks verifypointer32-bitint/stringpayloads. No shared copiedimplementation or fabricatedkernelACK.",
+  "limits": [
+    "Hosted Linuxvsnprintf outputparity is not actual production Rustformatter/kmsg lock/native log output. Production kprintf call/format/sourceABI is retained, realformatter source producer inspected only.",
+    "No compiler, fixture, root, Docker, guest, defaultlink or native execution yet.",
+    "Prior memory2failure/aliashistory preserved; this distinct logger family zeroattempts. Onefailure+oneboundedcorrectionthenexpert."
+  ],
+  "next": "Explicit ordinary slotgrant, freeze exactsources/driver, executeone Rustcompile/GCC9link/fixture viaacceptedownedcapture, persistdurableobject beforeobservers; preservefailure.",
+  "compiler_runs": 0,
+  "fixture_runs": 0,
+  "execution_grant": null
+}

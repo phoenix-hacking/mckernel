@@ -1,0 +1,216 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE32_READY_PENDING_INDEPENDENT_SOURCE_PROFILE_REVIEW_AND_FRESH_ROOT_ACTUAL_ADMISSION",
+  "at": "2026-10-27T18:00:50.288259+00:00",
+  "source_map": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/SOURCE-MAP.SOURCE-ONLY.json",
+    "bytes": 17623,
+    "sha256": "019c6af4150dd8a31f8acc1b400abd0bd5dad14dc9e02dd57fc23a7ef3e47bff"
+  },
+  "source_count": 38,
+  "Root26_ledger": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER26.json",
+    "bytes": 2864,
+    "sha256": "3156e5fa19f41ab1ec1a2e104745d25547d933db1e24fd65e75782f940637d20"
+  },
+  "last_accepted_free": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/INDEPENDENT-SOURCE31-FAILED-BATCH-CURRENT-FREE.json",
+    "bytes": 18553,
+    "sha256": "e9a026b3f91505cef0ceacb85409711282ffc2355f09781b9b51526706eeb98b"
+  },
+  "retained_completed_daemon_cases": 26,
+  "remaining_invocations": [
+    "ring-C",
+    "ring-Rust",
+    "oversize-Rust"
+  ],
+  "C_binary_unchanged_sha256": "8e4b86498b1659246e21fc01ec36e3a47b10397b0444ee1d3372d75cdbe08c05",
+  "resource_changes": {
+    "fixture_controller_stack": 8388608,
+    "C_ring_child_stack": 8388608,
+    "Rust_ring_child_stack": 2097152,
+    "Rust_oversize_child_stack": 2097152,
+    "RUST_MIN_STACK": "2097152",
+    "all_other_limits_unchanged": true
+  },
+  "retained_owner_definition_changes": [
+    "check_current_admission:Root26 rather than Root25"
+  ],
+  "retained_owner_definitions_unchanged": 40,
+  "source_checks": {
+    "count": 9,
+    "status": "PASS_SOURCE_ONLY",
+    "commands": [
+      [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/test_final_contract.py"
+      ]
+    ],
+    "actual_resource_mutations": 0,
+    "actual_resource_queries": 0,
+    "actual_workloads": 0,
+    "compilers": 0
+  },
+  "first_next_command": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/prepare_final_inputs.py",
+    "--nonce",
+    "ROOT_FRESH32HEX_NONCE"
+  ],
+  "resource_capture_command": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/ROOT_capture_final_resource.py",
+    "--latest-postjoin",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/INDEPENDENT-SOURCE31-FAILED-BATCH-CURRENT-FREE.json",
+    "--latest-postjoin-sha256",
+    "e9a026b3f91505cef0ceacb85409711282ffc2355f09781b9b51526706eeb98b"
+  ],
+  "proposal_API": [
+    "prepare_final_release.py",
+    "propose",
+    "--source-review",
+    "INDEPENDENT_SOURCE_REVIEW",
+    "--source-review-sha256",
+    "EXACT_SHA",
+    "--admission",
+    "CURRENT_ADMISSION",
+    "--admission-sha256",
+    "EXACT_SHA"
+  ],
+  "publish_API": [
+    "prepare_final_release.py",
+    "publish",
+    "--execution-review",
+    "INDEPENDENT_EXECUTION_REVIEW",
+    "--execution-review-sha256",
+    "EXACT_SHA"
+  ],
+  "owned_capture_API": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/run_final_owned_capture.py"
+  ],
+  "review_prerequisites": [
+    "Independent source and stack8 resource-profile acceptance",
+    "Root fresh nonce and this private namespace only; d275 consumed",
+    "Root actual static source publication of exact38source map",
+    "Fresh actual account/window/native ownership/resource admission; existing controls/holds remain effective",
+    "Exact independent one-shot release; corrected C-ring run only after new authority"
+  ],
+  "untouched": [
+    "Source31 request,inputmirror,results,36source map and originalfailure",
+    "Retained accepted26 cases/objects/compiler receipts/Cbinary",
+    "Revieweddirect physical observer2b736/v2guard1f152e and parent campaign controls"
+  ],
+  "files": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/CURRENT-ADMISSION.TEMPLATE.NOT-ACTUAL.json",
+      "bytes": 531,
+      "sha256": "91fcba3ba2f27e6bb4e66c359981c6575b9e7b768301e883d843eacfe02d1eec"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/PREPARATION.SOURCE-ONLY.json",
+      "bytes": 121565,
+      "sha256": "203ee3d823b76e2ee51ff79cbd7c993cf09bb8ad7570dc7f9bc9a2e119c81f86"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/REQUEST.TEMPLATE.NOT-ACTUAL.json",
+      "bytes": 1923,
+      "sha256": "f7f2ec1faf6d0174fa48629000823eccdff4f5ee2c853e2e6c438ae0f5970485"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/RETAINED-INPUTS.SOURCE-ONLY.json",
+      "bytes": 155722,
+      "sha256": "f2c801ef04343a9bd9521db3a2974f40d18be28496847a0ba8ddf88dea6bcfae"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/ROOT_capture_final_resource.py",
+      "bytes": 4751,
+      "sha256": "8b25e43674997e069186cc3c29d1bf6d0e3f7fa112aa48302ee7d6d3bb46eeb1"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/SOURCE-MAP.SOURCE-ONLY.json",
+      "bytes": 17623,
+      "sha256": "019c6af4150dd8a31f8acc1b400abd0bd5dad14dc9e02dd57fc23a7ef3e47bff"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/final_contract.py",
+      "bytes": 11051,
+      "sha256": "3366283b3bd5c832b6296296537af5fda5273aa4603c1cf7991ec37a058238b1"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/final_contract.py.diff",
+      "bytes": 871,
+      "sha256": "f0b3695f9dc6b1bdc6890f8838771c80d1a6e046bfad75806994afb82a36e8ef"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/final_driver.py",
+      "bytes": 6073,
+      "sha256": "57eac4c036dd606e44b22e0d2f3795b24ef9d8470e41708c7d198980831304c7"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/final_driver.py.diff",
+      "bytes": 2428,
+      "sha256": "e76b7706623d1c09ccf4d5ca45acf18bbaacb57ec175298d0bf739e3a043bc07"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/final_owner.py",
+      "bytes": 88577,
+      "sha256": "908c9b709fe8759d286e52759cbba00b41370f1f5ea17571caf217e3a68482ce"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/final_owner.py.diff",
+      "bytes": 12314,
+      "sha256": "6807aa985cd74ca744c0a65fe0edee5e3f146c040417fb2b8e4edaf915f887da"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/owned_process_stack8.py",
+      "bytes": 6465,
+      "sha256": "a3d4c2cc044e3d7187d2c5b038777e567d088d41a166a18d574cac8d3a445796"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/pinned_helpers.py",
+      "bytes": 3064,
+      "sha256": "b68817e48c48ff35361ed4eefb2324d819a7ac3d5aedc5bc706dc92aee9cff5c"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/prepare_final_inputs.py",
+      "bytes": 5492,
+      "sha256": "2212800dc03bbeb28b0684b2841d585b47fef9f78ed9de8ef1fe2e6c1c578bdc"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/prepare_final_inputs.py.diff",
+      "bytes": 1407,
+      "sha256": "f641508968bc4c345e76ba575187a23705665176b9e1c9448f4a3301198b7ff0"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/prepare_final_release.py",
+      "bytes": 3254,
+      "sha256": "86770cdd2efaca5be7101eaec8acc077723cd4121c3c707751c31619294042d6"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/retained_current.py",
+      "bytes": 3550,
+      "sha256": "39c04266f1d8fb387a0e81bf717559890b2bc14e44f1e5a6f953820e976ddb81"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/run_final_owned_capture.py",
+      "bytes": 2262,
+      "sha256": "d168f843f8c5c51800e758b319a703f3157fcfc7e5000be87eacf04feed4c5dc"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/test_final_contract.py",
+      "bytes": 3788,
+      "sha256": "bc441254ed68b26376f630db3a2c84deb4f3a09ad0c09ead8d96ff7e226b0736"
+    }
+  ],
+  "runtime_release": false,
+  "operation_performed": false
+}

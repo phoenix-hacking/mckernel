@@ -1,0 +1,214 @@
+{
+  "schema": "mckernel.f05-v2.independent-bound-source-and-staging-preparation-review.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/daemon_execution_review",
+  "implementation_ownership": false,
+  "independent": true,
+  "decision": "PASS_SOURCE",
+  "at": "2026-10-27T19:33:58.360102+00:00",
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/private-bound-owner-candidate-1/SOURCE-READY.json",
+    "size": 7450,
+    "sha256": "a47b45504711dccd57e04a5b5b47f87a731191fed16c49f7e2162bdd6c951112",
+    "mode": 33152
+  },
+  "source_sha256": {
+    "native_diagnostic_container_owner.py": "af2b1f57a19949e9867de2496b16063859c47298e9cf03b401e95de5bded5a10",
+    "native_diagnostic.py": "529830adcd6fafa13979bf6036b2812c88630c5e0112ce4d80f9fc28cc30d4da",
+    "native_diagnostic_runner.py": "25ea29f9b07232094e9df1db6094ad0a85ec678281749a1d6998abb7c700d499",
+    "native_diagnostic_backend.py": "cd0759c926876483665065cb320b9daf7d7c6b32f56e561805b4b0343f60d614",
+    "qmp_capture.py": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741",
+    "stage_bound_v2_current110.py": "9d0dc6c96dd722cf36270c4dde59006e2bd43174b30df17ea50f6560ea36e034",
+    "bind_stage_review.py": "30bb77c5dab841682abf19a17125c4d4d16418642eed43f8811cee64d1a258cc"
+  },
+  "source_references": {
+    "native_diagnostic_container_owner.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/private-bound-owner-candidate-1/native_diagnostic_container_owner.py",
+      "size": 94258,
+      "sha256": "af2b1f57a19949e9867de2496b16063859c47298e9cf03b401e95de5bded5a10",
+      "mode": 33152
+    },
+    "native_diagnostic.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/private-bound-owner-candidate-1/native_diagnostic.py",
+      "size": 100261,
+      "sha256": "529830adcd6fafa13979bf6036b2812c88630c5e0112ce4d80f9fc28cc30d4da",
+      "mode": 33152
+    },
+    "native_diagnostic_runner.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/private-bound-owner-candidate-1/native_diagnostic_runner.py",
+      "size": 6005,
+      "sha256": "25ea29f9b07232094e9df1db6094ad0a85ec678281749a1d6998abb7c700d499",
+      "mode": 33152
+    },
+    "native_diagnostic_backend.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/private-bound-owner-candidate-1/native_diagnostic_backend.py",
+      "size": 25398,
+      "sha256": "cd0759c926876483665065cb320b9daf7d7c6b32f56e561805b4b0343f60d614",
+      "mode": 33152
+    },
+    "qmp_capture.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/private-bound-owner-candidate-1/qmp_capture.py",
+      "size": 9913,
+      "sha256": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741",
+      "mode": 33152
+    },
+    "stage_bound_v2_current110.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/private-bound-owner-candidate-1/stage_bound_v2_current110.py",
+      "size": 1978,
+      "sha256": "9d0dc6c96dd722cf36270c4dde59006e2bd43174b30df17ea50f6560ea36e034",
+      "mode": 33152
+    },
+    "bind_stage_review.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/private-bound-owner-candidate-1/bind_stage_review.py",
+      "size": 1935,
+      "sha256": "30bb77c5dab841682abf19a17125c4d4d16418642eed43f8811cee64d1a258cc",
+      "mode": 33152
+    }
+  },
+  "actual_binding": {
+    "schema_version": 1,
+    "status": "SEALED_EXACT_V2_HOST_TUPLE",
+    "case_id": "M14-05-05-owned-processvm-v2-204B",
+    "source": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-v2-host-qualification-1/source-retention-1/app.rs",
+      "size": 11703,
+      "sha256": "7fa47f37a4006c4050c94409405da48c7bb959d813ec6523f15a54f55b5c8142",
+      "mode": 33152
+    },
+    "oracle": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-v2-host-qualification-1/source-retention-1/v2-oracle.json",
+      "size": 2097,
+      "sha256": "c38ea126ec9f146eb0f0caf6bdc2a212d58230c4802b1112c65b8faa007e338a",
+      "mode": 33152
+    },
+    "payload": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-v2-host-qualification-1/future-host-output-1/app",
+      "size": 5624424,
+      "sha256": "bfdda7ef5d3db84097086254125b8d31c958068495c2f8346ba0c9015ab1553d",
+      "mode": 33133
+    },
+    "host_qualification": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-v2-host-qualification-1/ACTUAL-RESULT.json",
+      "size": 7530,
+      "sha256": "ee7d3707998a9c90022da1538ff7c6fa153fc5533d4ee19f5791ca8b3b1ad033",
+      "mode": 33152
+    },
+    "static_elf": {
+      "class": 64,
+      "machine": 62,
+      "type": 2,
+      "interp": false,
+      "needed": false
+    }
+  },
+  "binding_file": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/bound-native-runtime-1/V2-BOUND-CONTRACT.json",
+    "size": 1474,
+    "sha256": "7852cb00decc4f07e1f9d1ab8e4ee36c3e0caf2d870f5f5f5df007cf8eb23578",
+    "mode": 33152
+  },
+  "Root_finalizer_result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/bound-native-runtime-1/FINALIZER-RESULT.json",
+    "size": 2339,
+    "sha256": "6570480c22399442a867b7267a1d2ad48583eea780f1fb80dfb43884b58bc2ea",
+    "mode": 33152
+  },
+  "stage_inputs": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/private-bound-owner-candidate-1/F05-STAGING-INPUTS.SOURCE-ONLY.json",
+    "size": 13797,
+    "sha256": "23b6140f31c9d1451e3e5ac18e0c04b0a6d20abd6a333d9264da93e85daf58bb",
+    "mode": 33152
+  },
+  "frozen_composition": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/private-bound-owner-candidate-1/FROZEN-F05-COMPOSITION.json",
+    "size": 13414,
+    "sha256": "d41ea260caf431ceabb211da3281adeabc870d9d99292946efe31133a611b369",
+    "mode": 33152
+  },
+  "current110_image": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT110-HOST19-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/mckernel.img",
+    "size": 10255112,
+    "sha256": "60e62f97ef48ecaf14174af1c5b75d7181969f439c1b45c618d6c16d4bc40d57",
+    "mode": 33261
+  },
+  "module_tuple": [
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/module-runtime-snapshots-1/ihk.ko",
+      "sha256": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c",
+      "size": 1527808
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-final-native-preparation-new12h-1/offline-materialization-1/runtime-inputs/ihk-smp-x86_64.ko",
+      "sha256": "887dc3567e6035c921588e61b45b41a8ef32a972d142fe2ba82ec48442353b12",
+      "size": 13098896,
+      "mode": 33188
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-final-native-preparation-new12h-1/offline-materialization-1/runtime-inputs/mcctrl.ko",
+      "sha256": "57546af5110c0674b307e5ac5a328228abbe784f890f69521db5f594f21f6ae8",
+      "size": 2578512,
+      "mode": 33188
+    }
+  ],
+  "launcher": {
+    "mode": 33261,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/launcher-runtime-snapshot-1/mcexec",
+    "sha256": "dca0250159ce04a272a72dd1217213a4b6e0f21ec8c21da211eede250c451954",
+    "size": 394648
+  },
+  "collector": {
+    "mode": 33277,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-helper-failure-export-1/errno-correction-1/collector-helper-diagnostic",
+    "sha256": "c020a8e0ab43e222caf901d92bfecb2a8d8cf20ea0b539910a17a578f1fd12fc",
+    "size": 1021320
+  },
+  "verified": [
+    "AllprivateREADYa47b declaredfile/size/SHA pins and actualcanonical529830 evaluator bytes independentlyverified. Complete generatedevaluator AST equals completee1e template withONLYliteralF05_BINDING substitution. Rootfinalizerqualify independentlyrecomputed exactactualee7dHOST/bfdda payload/7fa source/c38oracle/staticELFtuple withoutwrites orreferenceexecution.",
+    "Template is byteexact complete85837B f368 evaluator plus13148B39b633v2append. Originalaudit/cleanup/strictcasechain remain literal. Complete old235 evaluator execution on retainedobservation yields identical old/new/recordedresult,originalcase/profile preserved. Old227 logic is inheritedbyteexact,notreplayed orrelabelled.77foregroundtracecontrols and10finalizercontrols are retainedsourceevidence,notnativeacceptance.",
+    "Nativeowneraf2b preserves139originalSOURCE_HASHES andadds4canonical5298/25ea/cd07/5bccbindings. IndependentAST compare28function/class definitions identical;onlybound_manifest sourcepath changes. RUNNER/SELF pointcanonicalrepositoryruntime;siblingrunner imports fullactualevaluator/backend with genuinefile/spec context. Independentprivate literalimport143pincheck andactual_f05_contract onexactsourceboundreduceddata PASS.",
+    "Newsource/HOST/oracle/payload and allHOSTcapture inputreferences are repositoryexports. Newowner/evaluator/runner/backend/QMP bindings are repositorycanonicalpaths. Retainedoriginal139hosthelper/control pins remainunchanged,notnewruntimeleaks. Finalizerrejectsunknown/oldv1HOST/payload andnonstaticELF.",
+    "V2flags0x01200011 select admittedCHILD_SETTID|CHILD_CLEARTID|SIGCHLD withoutVM. Exactsource7fa performsfd2,count0write1 andrequiresRET0 beforeTRACEME/readiness/SIGSTOP;rawchildexit60 hasobservablehost231route. Exacttracepredicate requireslinkedpositivechildwrite1/RET0 beforeterminal231,publication/deletion,successfulparent61RETchild afterchildterminal and beforeparentterminal;originalACK/finalcleanup check retained. Trace doesnotinvent fd/count arguments or localTRACEME/SIGSTOP logs;thosecomeonlyfromfrozen source/oracle.",
+    "Ownedppid/nowait0 waitroute and exactCURRENT11060e62f97 static8body89reloc bindings are retainedsource/staticproof only. Originalv1/be508/ca6f proposal remainsHOLD;newcase/profile cannotrelabel it. No change toglobal parser,oldoracles orwholeFP4096/1024FAIL.",
+    "Stager9d0dc6c9 pins complete53d9 retainedstager source and literalcontext,changesCURRENT109labels/imagefilename to110 and reuses unchanged3module references instead of copying2again;setsHERE/FROZENSHA explicitly. No compiler/clock/nonce/admission/runtimeeffect onimport. Frozen d41/input23b6 bindcurrent110 image,exactmodules daced/887dc/57546,launcherdca025/collectorc020 and204Bpayloadcontract. Independentactualartifacthashes verified;1024Bstdout/stderr limits and10s payload timeout retained.",
+    "Binder30bb pinsstager/input/frozen andonlyfills stage_review reference after exactexistingreviewhash. Rootmustcopy same source/data intoroot-adopted-stage-source-1 so literalHERE equalsfreshoutputparent. It performs datavalidation only;reviewer didnotbindfinaldata,stageorcompose."
+  ],
+  "checks_actually_run": {
+    "private_literal_imports_143pins": true,
+    "original_owner_pins_preserved": 139,
+    "owner_AST_unchanged_definitions": 28,
+    "owner_changed_definition": "bound_manifest onlyliteralpath",
+    "generated_template_AST_exact_except_binding": true,
+    "actual_f05_contract_reduced_data": true,
+    "actual_host_finalizer_qualify_readonly": true,
+    "strict_retained235_old_new_recorded_equal": true,
+    "new_HOSThelpers_called": false,
+    "full_new_manifest_stage_validation": false,
+    "guard_calls": 0,
+    "compiler_reference_Docker_guest_stage_native_cleanup_calls": 0
+  },
+  "independent_import_evidence": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/independent-source-review-1/PRIVATE-LITERAL-IMPORT-INDEPENDENT.json",
+    "size": 2253,
+    "sha256": "01538fb30a3655104c7f7e71d69b0ae81f3ece9356980886ec35e33c1363988e",
+    "mode": 33152
+  },
+  "approved_static_next_steps": [
+    "Rootcopy/adopt exactowner/siblings tocanonicalbound-native-runtime-1 and runcheapcanonical143pin/literalimportcheck;do notrerunHOST/finalizer or replacecanonical5298evaluator.",
+    "Rootadopt exactstager/binder/frozen/input source underroot-adopted-stage-source-1 andbindthisreviewreference intootherwiseunchangedfinalinputdata.",
+    "Rootordinary explicitlygranted offlinecomposition may thencreatefreshinitramfs/finalmap/manifest andrunoriginalcomplete load_manifest/ownerbound_manifest validation withactualsourceauthority/map/v2casecapability. Suchactualstage/fullmanifest result isnotclaimedhere."
+  ],
+  "actual_static_bindings_still_required": [
+    "Canonicalownerand4runtimefiles sourceadoption+literalimportresults.",
+    "Newsourceauthority/sourcemap/v2capability boundto5298/af2b/current110/modules/stagedartifacts.",
+    "Freshactualofflinecomposition/finalmap/manifest/completeevaluator joins;matchingCloneTID/providerimageproof atoriginalstaticscope.",
+    "Freshaccount/window/nativeownership/resources/nonce/exactindependentoneheavyexecutionrelease beforeguest;actualF05read/patch/clonechildbehavior/nativecleanupproof remainsOPEN."
+  ],
+  "original_v1_native_HOLD": true,
+  "native_acceptance": false,
+  "F05_protocol_acceptance": false,
+  "whole_file_retired": false,
+  "M14_M15_credit_delta": 0,
+  "execution_release": false,
+  "runtime_authority": null
+}

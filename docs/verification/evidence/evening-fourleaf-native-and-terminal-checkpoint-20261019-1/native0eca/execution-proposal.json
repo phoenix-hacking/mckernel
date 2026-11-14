@@ -1,0 +1,355 @@
+{
+  "owner": {
+    "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+    "sha256": "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+    "size": 58828,
+    "mode": 33152
+  },
+  "runner": {
+    "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_runner.py",
+    "sha256": "25ea29f9b07232094e9df1db6094ad0a85ec678281749a1d6998abb7c700d499",
+    "size": 6005,
+    "mode": 33152
+  },
+  "owner_source_hashes": {
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_runner.py": "25ea29f9b07232094e9df1db6094ad0a85ec678281749a1d6998abb7c700d499",
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic.py": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e",
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_backend.py": "cd0759c926876483665065cb320b9daf7d7c6b32f56e561805b4b0343f60d614",
+    "/home/holden/mckernel/scripts/application-tests/qmp_capture.py": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741",
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py": "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200"
+  },
+  "collector": {
+    "mode": 33216,
+    "path": "/home/holden/mckernel-work/scratch/thread-tls-isolation-static-20261017-1/init",
+    "sha256": "ead247cdf56556c7491bd5d8f746c6c668c0c944414ce51392f7caaed895a63a",
+    "size": 1021968
+  },
+  "collector_SOURCE": {
+    "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_guest_collector.c",
+    "sha256": "82825cf128689ba8f8a74d9528c1acffb724a9356a2c6192c67c8abe4a74965e",
+    "size": 22952,
+    "mode": 33152
+  },
+  "collector_dependency": {
+    "path": "/home/holden/mckernel-work/scratch/thread-tls-isolation-static-20261017-1/collector.d",
+    "sha256": "445703cac8377218ba826ffb06cf10d941fa27ab0145f4ce2fd014d099341744",
+    "size": 7514,
+    "mode": 33152
+  },
+  "collector_contract": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/practical-rust-std-app-preparation-20261017-2.json",
+    "sha256": "2edb471d6ba361537f4b32ea2a890eb8914d78c5de571370d0dc70f0e08424cf",
+    "size": 20515,
+    "mode": 33152
+  },
+  "collector_profile": "Unchanged ND_FUTEX4096 no application arguments",
+  "collector_boot_argv": [
+    "/bin/native-boot",
+    "hidos",
+    "allow_oversubscribe"
+  ],
+  "native_boot": {
+    "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/native-proposal/stage-correction-1/stage/root/bin/native-boot",
+    "sha256": "6b9f753e34d12da474c701ca64ce62825788295646b60f67482ef9ec8690c417",
+    "size": 31208,
+    "mode": 33261
+  },
+  "bzImage": {
+    "mode": 33188,
+    "path": "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/bzImage",
+    "sha256": "032653ee0661b059c325e2a0911a9d492805f1a889c4df515473d69a8be105bc",
+    "size": 16130048
+  },
+  "matched_native_modules": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-a7d84db0d8b54b9b94347fd0aff57594/modules/ihk.ko",
+      "sha256": "51b48a9e42eaa2411cab2a28edf9bb5db8b2d648675d083473e926f91dd0e038",
+      "size": 1440392,
+      "mode": 33188
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-a7d84db0d8b54b9b94347fd0aff57594/modules/ihk-smp-x86_64.ko",
+      "sha256": "82c9021f7491fa8bc6d178fe99e7d4b7b6f90838474a9c91b62ddb8edb3d13f8",
+      "size": 11630064,
+      "mode": 33188
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-a7d84db0d8b54b9b94347fd0aff57594/modules/mcctrl.ko",
+      "sha256": "6571ac7eca13559d8bab65125d54facbbc65e84f815d4ff3fc77ec6aa1104972",
+      "size": 1913904,
+      "mode": 33188
+    }
+  ],
+  "module_source_candidate": "d99edf2f58ee44b1a7e9aa726cbb49eee7850248",
+  "d99_module_compatibility": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-cpu-reacquire-external-modules-result-review-20261017-1.json",
+    "sha256": "0cc6f31e9c8f92696abcd9390c937c6414f0917fc065061bef24c28034bf0ec5",
+    "size": 11103
+  },
+  "profile": {
+    "cleanup_timeout_seconds": 15,
+    "cpus": 4,
+    "cpuset": "2-5",
+    "guest_memory_mib": 8192,
+    "guest_numa_nodes": 2,
+    "guest_timeout_seconds": 300,
+    "guest_vcpus": 4,
+    "heavy_operations": 1,
+    "mckernel_cpus": 1,
+    "mckernel_memory_mib": 128,
+    "memory": 12884901888,
+    "memory_swap": 12884901888,
+    "network": "none",
+    "payload_timeout_seconds": 10,
+    "pids": 512
+  },
+  "failure_policy": "One released fresh attempt only. First unexpected setup/payload/evaluation/retirement failure stops affected work and retains original evidence; manual dispatcher review first. No renamed retry, weakened oracle, automatic cleanup/replay, or acceptance inference.",
+  "payload_contract": {
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "/apps/app"
+    ],
+    "cwd": "/case/work",
+    "env": {
+      "COKERNEL_PATH": "/apps",
+      "PATH": "/usr/bin:/bin"
+    },
+    "oracle": {
+      "exit_code": 0,
+      "stderr_hex": "",
+      "stdout_hex": "465054485245414420763120746872656164733d322073616d655f7065726d69747465645f6370753d312064697374696e63745f7469643d310a7468726561643020726f756e64733d363420796d6d5f6c616e65733d363420706565725f70726f67726573733d3634207969656c645f6d696e3d363420636f6e74726f6c733d303737662f3366383020726573746f7265643d310a7468726561643120726f756e64733d363420796d6d5f6c616e65733d363420706565725f70726f67726573733d3634207969656c645f6d696e3d363420636f6e74726f6c733d306237662f3566383020726573746f7265643d310a465054485245414420504153530a"
+    },
+    "stderr_limit_bytes": 4096,
+    "stdout_limit_bytes": 4096
+  },
+  "frozen_independent_oracle": {
+    "path": "/home/holden/mckernel-work/host-preparation/practical-fp-thread-state-app-20261018-1/frozen-oracle.json",
+    "sha256": "4146e26ab601b59e0301aaff37ef448a2305650063cc7791c99b78b52f6b4dfa",
+    "size": 6451,
+    "mode": 33152
+  },
+  "oracle_semantics": "Exact254BstdoutSHA52095dafd5235a8c1073248bbda3964f8a7b749722306ceaabf321d2fdcd4816/empty stderr/exit0;2realworkerTIDs, actually confirmed single permittedCPU, 64rounds each all16YMM/64distinct lanes and distinct valid x87/MXCSRcontrols across direct yield and in-live witnessed peer64progress, originalcontrols restored/readback. UnsupportedABI exits77 and remains prerequisitefailure, neverpass.",
+  "schema": "mckernel.fourleaf-fp-thread-state-parent-bound-execution-proposal.v1",
+  "status": "STATIC_CASE_BOUND_PENDING_NON_TEMPORAL_INTERFACE_CHECK_STATIC_REVIEW_LIVE60S_AND_FINAL_ROOT_RELEASE",
+  "scope": "Functional PRACTICAL-GOAL OS/apps plus Rust/reviewed-assembly compute migration; app-only Rust+user assembly, compute C not expanded; service guards/failure history preserved; no purchased billing.",
+  "task_id": "fourleaf-0eca-fp-thread-state-native-20261019-1",
+  "case_id": "practical.rust-std.fp-thread-state",
+  "execution_count": 1,
+  "payload": {
+    "path": "/home/holden/mckernel/scratch/fpts-a-34886485/app",
+    "sha256": "3488648514aa2d8d5eacfdbdd111ad33f17c2abccfff4755f3ebcefef45ec583",
+    "size": 5662872,
+    "mode": 33216
+  },
+  "manifest": {
+    "path": "/home/holden/mckernel-work/scratch/fl4-m-20261019-1/roundtrip/manifest-consumer-projection-1.json",
+    "sha256": "c8174672de0fd4a51f095c42415686c530ee3d1c849fa00812dac6e9fb426a24",
+    "size": 5615,
+    "mode": 33152
+  },
+  "staged_manifest": {
+    "path": "/home/holden/mckernel-work/scratch/fl4-m-20261019-1/roundtrip/manifest-consumer-projection-1.json",
+    "sha256": "c8174672de0fd4a51f095c42415686c530ee3d1c849fa00812dac6e9fb426a24",
+    "size": 5615,
+    "mode": 33152
+  },
+  "base": {
+    "path": "/home/holden/mckernel/scratch/fl4-a-20261019-1/roundtrip/base.cpio.gz",
+    "sha256": "dcef1df8e9a4c7bc788c36a0184ca8a53c5e05e178b6045c2f567b4851cef1bf",
+    "size": 12752178,
+    "mode": 33152
+  },
+  "overlay": {
+    "path": "/home/holden/mckernel/scratch/fl4-a-20261019-1/roundtrip/lifecycle.cpio.gz",
+    "sha256": "405729e4a4762e6367bcac5a99974e4f0f223628485c1462b58910de46870584",
+    "size": 15126576,
+    "mode": 33152
+  },
+  "mckernel_image": {
+    "path": "/home/holden/mckernel/scratch/fl4-a-20261019-1/image.artifact",
+    "sha256": "0eca91b13bd62ab98441104930eda1a63f247fecd939996858b16f90b7480550",
+    "size": 7962040,
+    "mode": 33261
+  },
+  "image_artifact_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/evening-git-owner-review-20261019-1/FOURLEAF-ACTUAL-PRODUCTION-ARTIFACT-REVIEW.json",
+    "sha256": "40ea08b79452706c126b676d85b8ea0cc38d4466b390ef881f054ffe8788a464",
+    "size": 38610,
+    "mode": 33152
+  },
+  "canonical_authority_binding": {
+    "path": "/home/holden/mckernel-work/host-preparation/evening-fourleaf-native-continuation-20261019-1/canonical-authority-binding.json",
+    "sha256": "9551f83cebe4907c82c885f8725f50f2627ea332708802f95161b5be7ad2c8f2",
+    "size": 7158,
+    "mode": 33152
+  },
+  "canonical_gate_source": {
+    "path": "/home/holden/mckernel-work/host-preparation/evening-fourleaf-native-continuation-20261019-1/stage_case.py",
+    "sha256": "2a855ed1793d0bfbdb8ecd53ecee52167e0e4952e35609a2057769ae98f323cb",
+    "size": 21502,
+    "mode": 33152
+  },
+  "full_original_image_source_authority": {
+    "image_request": {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/image-request.json",
+      "sha256": "bc98516d19e79ac3cc4a0fd89ca4f9de7e60ee7b64c77ead65e808d44c61dba9",
+      "size": 35945239,
+      "mode": 33152
+    },
+    "source_root": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/materialized-source",
+    "source_identity": {
+      "dev": 66306,
+      "file_type": 16384,
+      "gid": 1000,
+      "inode": 47992786,
+      "mode": 448,
+      "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/materialized-source",
+      "uid": 1000
+    },
+    "entire_source_manifest": {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/thin-inputs.json",
+      "sha256": "83e047abf793f2de3bf1a6f260c1493bf9ba600609b547c0665033dd90e88954",
+      "size": 6704212,
+      "mode": 33152
+    },
+    "materialization_receipt": {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/materialization-receipt.json",
+      "sha256": "4a4cdb6b3228b357f811be19056c3c1994e57b67fc670a3928a82113e749d64b",
+      "size": 471,
+      "mode": 33152
+    },
+    "source_derivative_sha256": "8ca6e79ff41ee3a90b2dc5d85f020a65efebb35c5cffd24acd37da6fe17d4cfc",
+    "materialization_sha256": "8fbf585c1b151801663ee0a1346505fdc50663191a0cd09349227fb7386499b5",
+    "candidate_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+    "candidate_identity_scope": "base_git_commit_only"
+  },
+  "actual_stage_result": {
+    "path": "/home/holden/mckernel/scratch/fl4-a-20261019-1/roundtrip/stage-result.json",
+    "sha256": "452e138b04a9094400e82c0235bca077b8b4989941b3660abbb1d69a1b409597",
+    "size": 18950,
+    "mode": 33152
+  },
+  "actual_fixture_result": {
+    "path": "/home/holden/mckernel-work/host-preparation/evening-fourleaf-native-continuation-20261019-1/fixture-result.json",
+    "sha256": "27bce263d5987f4231eee330ee224acec2111f1c04d8900dbfff2a48fa54a3f8",
+    "size": 1239,
+    "mode": 33152
+  },
+  "actual_parent_receipt": {
+    "path": "/home/holden/mckernel-work/host-preparation/evening-fourleaf-native-continuation-20261019-1/parent-receipt.json",
+    "sha256": "71b945c530d35422e73a2581cfd768b10f4b28dda9e7dc6d5efd6aecf058bf06",
+    "size": 523,
+    "mode": 33152
+  },
+  "accepted_actual_stage_fixture_parent_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/evening-fourleaf-continuation-ordinary-review-20261019-1/ACTUAL-CORRECTION-ORDINARY-ACCEPTANCE.json",
+    "sha256": "8f2f38fb4bc97bfcaade0b85dab0e6a006f6e3edf8df1fff5dde854d15fda818",
+    "size": 8183,
+    "mode": 33152
+  },
+  "original_builder_overlay_manifest": {
+    "path": "/home/holden/mckernel/scratch/fl4-a-20261019-1/roundtrip/overlay-manifest.json",
+    "sha256": "b0fef8dcd50a8a504158de77178ed16d172d62142f70568da848bc63398984d5",
+    "size": 19375,
+    "mode": 33152
+  },
+  "consumer_overlay_metadata": {
+    "path": "/home/holden/mckernel/scratch/fl4-a-20261019-1/roundtrip/consumer-overlay-manifest-projection-1.json",
+    "sha256": "b36cd00fe449f1e7d023030f69deda197b836ee8feff6daac86fddfff3a96729",
+    "size": 19336,
+    "mode": 33152
+  },
+  "payload_source_projection_receipt": {
+    "path": "/home/holden/mckernel/scratch/fl4-a-20261019-1/roundtrip/payload-source-visibility-projection-1.json",
+    "sha256": "34c81dbe86a341e0032b2796b1124962b6b46f1d45168ec850a2b30448853ff4",
+    "size": 2394,
+    "mode": 33152
+  },
+  "parent": {
+    "path": "/home/holden/mckernel-work/scratch/fl4-p-261019-1/a",
+    "identity": {
+      "device": 1828,
+      "inode": 757493,
+      "uid": 1000,
+      "gid": 1000,
+      "mode": "0o700"
+    }
+  },
+  "nonce": "01cc688cfc76be9f30652b1a64006189",
+  "unix_monitor_endpoints": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/fl4-p-261019-1/a/attempt-01cc688cfc76be9f30652b1a64006189/qmp.sock",
+      "encoded_bytes": 101,
+      "max_bytes": 107
+    }
+  ],
+  "other_monitor_endpoints": [],
+  "runtime_growth_reserve_bytes": 671088640,
+  "host_floor_bytes": 17179869184,
+  "scratch_floor_bytes": 12884901888,
+  "scheduling": "One-CPU new0eca case ready behind root-designated latest independent physical predecessor; no matching-image requirement and no replay of passed work.",
+  "runtime_release": false,
+  "native_acceptance": false,
+  "application_acceptance": false,
+  "distinct_behavior_increment": 0,
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-B",
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/fl4-p-261019-1/a",
+    "--nonce",
+    "01cc688cfc76be9f30652b1a64006189",
+    "--owner-sha256",
+    "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+    "--manifest",
+    "/home/holden/mckernel-work/scratch/fl4-m-20261019-1/roundtrip/manifest-consumer-projection-1.json",
+    "--manifest-sha256",
+    "c8174672de0fd4a51f095c42415686c530ee3d1c849fa00812dac6e9fb426a24"
+  ],
+  "postjoin_readback": {
+    "requested": true,
+    "approved": "CONDITIONAL_ON_EXACT_INDEPENDENT_EXECUTION_RELEASE",
+    "argv": [
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/fl4-p-261019-1/a.owner-01cc688cfc76be9f30652b1a64006189",
+        "."
+      ],
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/cat",
+        "/home/holden/mckernel-work/scratch/fl4-p-261019-1/a/attempt-01cc688cfc76be9f30652b1a64006189/result.json"
+      ],
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/fl4-p-261019-1/a/attempt-01cc688cfc76be9f30652b1a64006189",
+        "."
+      ]
+    ],
+    "timeout_seconds_per_command": 30,
+    "capture_limit_bytes_per_command": 33554432,
+    "conditions": "Only after direct owner physically joins exit0 with accepted source-known complete client retirement/lease release/evidence flush; exact UID/type/path and regular-single-link result checks precede three bounded non-dereference captures. Any error/uncertainty stops, no retry or cleanup authority inferred."
+  },
+  "late_fields": [
+    "actual_terminal_cleanup_review",
+    "actual_latest_independent_physical_predecessor_review",
+    "fresh_root_snapshot_within60seconds",
+    "independent_exact_static_review",
+    "final_machine_release_and_external_final_decision_hash"
+  ]
+}

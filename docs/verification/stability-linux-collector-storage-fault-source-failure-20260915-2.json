@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_source_failure",
+  "task_id": "M02-B-storage-fault-v1-source",
+  "attempt": 2,
+  "status": "FAIL_SOURCE_SEMANTIC_TESTS",
+  "recorded_utc": "2026-09-15T09:10:00Z",
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-source-failure-20260915-2.tar.gz",
+    "sha256": "1f4ee927970dcddd2eb45bb11098357f35247b730dafee52c406ffd555a8e3c4",
+    "size": 22367,
+    "members": 22
+  },
+  "source_sha256": {
+    "packet": "696533a097e60a0d95ba6b50f0b809dd15c71e905e0491144a9c23bf5e97c6e2",
+    "prepare": "67458c82902ef9a40d5da0c8407205aa9c1ff5cfb82f86f0c742536af65a7bbf",
+    "oracle": "3c1116e389a43059bb87b31462bb9228f622d5bcb20a79652b99f339bb43f533",
+    "inject": "06238647ac5dba4257e42f63c7c16e45c4e45b32029a6ebae0a90dddf8b16166",
+    "test": "f24dca618289341a37b3c5c022a38450d65c97ac644757304560784366402c09"
+  },
+  "command": "/usr/bin/python3.8 -B -m unittest scripts.tests.test_collector_storage_fault_packet",
+  "command_status": 1,
+  "command_started_utc": "2026-09-15T08:41:14Z",
+  "command_finished_utc": "2026-09-15T08:41:15Z",
+  "tests_run": 3,
+  "failures": [
+    {
+      "test": "test_source_and_guards",
+      "observation": "generated collector bytes do not contain the asserted M02_STORAGE_FAULT_CASE marker"
+    },
+    {
+      "test": "test_prepare_is_fresh_and_fsynced",
+      "observation": "a reused attempt root raises AssertionError instead of the asserted FileExistsError"
+    },
+    {
+      "test": "test_oracle_negative_matrix",
+      "observation": "at least one mutated witness is accepted; the first raw_wait_status mutation is not necessarily different from the selector expectation"
+    }
+  ],
+  "original_test_stream_retained": true,
+  "immediate_retry_released": false,
+  "two_attempt_stop_applied": true,
+  "compiler_execution": false,
+  "root_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

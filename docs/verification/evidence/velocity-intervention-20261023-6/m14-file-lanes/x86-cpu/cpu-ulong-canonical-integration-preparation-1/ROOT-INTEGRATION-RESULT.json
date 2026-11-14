@@ -1,0 +1,72 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\nRoot exactCPUlogger2file per-file atomicintegration; conditional owninode rollback only.\n",
+  "status": "ROOT_EXACT2_CPU_ULONG_SOURCE_INTEGRATION_PASS",
+  "copies": [
+    {
+      "target": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+      "preimage": {
+        "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+        "sha256": "8c71fe79e003f7aa7ef0f7faf2b31ebf11e65e747abdb0969dc77dbafbd839e9",
+        "bytes": 95267
+      },
+      "staged_postimage": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/cpu-ulong-canonical-integration-preparation-1/staged/arch/x86_64/kernel/cpu.c",
+        "sha256": "2d29bca555936a213f0a7296a302ec57b55c575536c33a58285b07b203390eca",
+        "bytes": 95484
+      },
+      "accepted_private_postimage": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-cpu-log-next/candidate/arch/x86_64/kernel/cpu.c",
+        "sha256": "2d29bca555936a213f0a7296a302ec57b55c575536c33a58285b07b203390eca",
+        "bytes": 95484
+      },
+      "rollback_preimage": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/cpu-ulong-canonical-integration-preparation-1/preimages/arch/x86_64/kernel/cpu.c",
+        "sha256": "8c71fe79e003f7aa7ef0f7faf2b31ebf11e65e747abdb0969dc77dbafbd839e9",
+        "bytes": 95267
+      },
+      "mode": 384,
+      "uid": 1000,
+      "gid": 1000,
+      "observed_old_inode": {
+        "device": 66306,
+        "inode": 47459703,
+        "nlink": 1
+      }
+    },
+    {
+      "target": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "preimage": {
+        "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+        "sha256": "a6e7465d7924755c97e5d72919a97c2985aacd35cf9db417c4ee981b4d5d071a",
+        "bytes": 90445
+      },
+      "staged_postimage": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/cpu-ulong-canonical-integration-preparation-1/staged/kernel/rust/x86_cpu_helpers.rs",
+        "sha256": "26180e00c1d6673aa600f0ec9afed5d100ca6e0c39af803c3328e58f8cc88fb9",
+        "bytes": 91270
+      },
+      "accepted_private_postimage": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-cpu-log-next/candidate/kernel/rust/x86_cpu_helpers.rs",
+        "sha256": "26180e00c1d6673aa600f0ec9afed5d100ca6e0c39af803c3328e58f8cc88fb9",
+        "bytes": 91270
+      },
+      "rollback_preimage": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/cpu-ulong-canonical-integration-preparation-1/preimages/kernel/rust/x86_cpu_helpers.rs",
+        "sha256": "a6e7465d7924755c97e5d72919a97c2985aacd35cf9db417c4ee981b4d5d071a",
+        "bytes": 90445
+      },
+      "mode": 384,
+      "uid": 1000,
+      "gid": 1000,
+      "observed_old_inode": {
+        "device": 66306,
+        "inode": 47484786,
+        "nlink": 1
+      }
+    }
+  ],
+  "conditional_rollback": [],
+  "all_other_C_debt_preserved": true,
+  "defaultGCC14_kernel_link_native": false,
+  "no_candidate15_mutation": true
+}

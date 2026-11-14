@@ -1,0 +1,36 @@
+{
+  "reviewer": "/root/numa_clear_range_review",
+  "implementation_ownership": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "ACCEPT_TWO_GENERATION_BOOTSTRAP_SOURCE_AND_ACTUAL_COMPONENT_BOUNDARY_ONLY",
+  "blockers_within_reviewed_scope": [],
+  "packet": "/home/holden/mckernel-work/host-preparation/native-second-stop-case-preparation-20261021-1/current053d-normalization-runtime-preparation-1/current-runtime-construction-preparation-1/two-generation-bootstrap-contract-correction-1/main-callsite-and-fixture-braces-correction-1",
+  "pins": {
+    "freeze": "deb9f41e7d11375ef7ace5470f77ac4af4627df1dbdec8a56d3eb861ca0cfa25",
+    "collector_source": "694b3eba48e01d4a88ffa87fc1b2dd641b806115f2e625a6612cb010d3738dfe",
+    "second_helper_source": "e5c92c7f801ffc00059d085ef3503f46c247030f948d304d68cd7b89b7e5e3d0",
+    "strict_decoder": "856ba88df4539307dd8574ab520652a3bc669e72aebd13fcb1683a39dbdc0a85",
+    "actual_result": "d4558cf0723abd9c58d81baef671e467f2aa482ea41b99a63e5199c197034ac4"
+  },
+  "source_findings": [
+    "First helper4312 and its generation1 assertion remain unchanged. Collector first discovery runs after the first boot and before the first payload.",
+    "Second lifetime uses distinct exclusive challenge/assignment paths, rejects nonce reuse and requires generation2 with the unchanged 48-byte assignment, OS/CPU/rank and discovery checks.",
+    "Helper validates root-owned0600 single-link frontier bytes through EOF and complete newline. Helper and collector require the entire saved prefix to match before applying unchanged route parsing to the appended suffix.",
+    "Collector prefix pointer refers to the retained reboot result throughout synchronous helper/discovery use. Failure prevents successful second-boot admission and preserves evidence; no retry or replacement is introduced.",
+    "Strict decoder changes only the expected helper argv. Strict67 output, stream completeness, resource ordering and public lifecycle checks remain intact."
+  ],
+  "actual_evidence": {
+    "observed": "All four commands exited0, directly joined, groups absent, streams closed and empty stderr; no timeout or capture/retirement errors.",
+    "body_coverage": "Eleven cases execute literal production first-main and reboot-after-resource fragments with controlled syscall/log/metadata callbacks. They preserve first evidence and refuse old helper reuse, repeated nonce, changed/missing/misowned/partial frontier, generation3, assignment nonce/mode mismatch and truncated log.",
+    "decoder_coverage": "Actual reboot publisher bytes compose with the retained resource fixture and pass the coupled strict decoder. Old decoder rejects the new helper argv; new decoder rejects66.",
+    "artifacts": {
+      "collector": "f0435be1e7d4f132c0a013297fbd462627a75eddabf001258f769ff34b2149b4",
+      "second_helper": "1a7fd6e3ff3d31c79c7c2665766a2b0e74bb895b2df0ebeff845b67f1dddd609",
+      "verified_shape": "Both ELF64 x86-64 EXEC, without PT_INTERP or PT_DYNAMIC."
+    }
+  },
+  "preservation": "Original failed compile and bounded callsite/braces correction remain retained; -Werror and generation1 requirements were not weakened.",
+  "eligibility": "Eligible source/artifact inputs for separately reviewed staging and downstream binding.",
+  "limitations": "Controlled body/model evidence only. Production PID1 boot, real ioctl, actual module generation2, archive staging, normalization, native execution, restoration and M05 cycle credit remain unproved.",
+  "provenance": "Independent bounded read-only source/diff and retained-evidence review. No tests, root actions, census, edits or new execution authority."
+}

@@ -1,0 +1,11 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/finite-review-handoff-correction-source-1/publish_after_independent_pass_once.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/finite-review-handoff-correction-source-1/strict-json-final-publication-correction-source-1/publish_after_independent_pass_once.py
+@@ -8,7 +8,7 @@
+ from handoff_common import *
+ def main():
+  p=argparse.ArgumentParser(description=__doc__);p.add_argument('--bindings',required=True);p.add_argument('--handoff',required=True);a=p.parse_args();b=read_json(a.bindings);A=Path(b['admission']);H=Path(a.handoff);no_launch(A)
+- passed=read_json(H/'INDEPENDENT-FINITE-REVIEW.PASS.json');need(passed['decision']=='PASS_EXACT_BUILD_ONLY_EXECUTION' and passed['independent'] is True and passed['reviewer']==REVIEWER and passed['nonce']==b['nonce'],'actual independent finite PASS only')
++ passed=read_json(H/'INDEPENDENT-FINITE-REVIEW.PASS.json');need(passed['decision']=='PASS_EXACT_BUILD_ONLY_EXECUTION' and passed['independent'] is True and passed['implementation_ownership'] is False and type(passed['maximum_invocations']) is int and passed['maximum_invocations']==1 and passed['payload_sha256']==passed['approved_input_sha256'] and passed['reviewer']==REVIEWER and passed['nonce']==b['nonce'],'actual independent finite PASS only')
+  need(passed['verifier']==b['finite_verifier'] and passed['prewarm_ready']==reference(H/'PREWARM_READY.json') and passed['complete_root_capture']==reference(H/'ROOT-HELD-CAPTURE.COMPLETE.json'),'exact reviewed independent/capture chain')
+  need(passed['pending_input']==reference(A/'ROOT-EXECUTION-INPUT.GRANT-PENDING-REVIEW.json') and passed['approved_input_sha256']==passed['pending_input']['sha256'],'exact approved pending SHA')
+  resource=read_json_ref(passed['resource_authority']);now=clocks();in_window(now,passed['earliest_clamps']);need(0<=now[0]-resource['observed_at_epoch']<=120,'original120s freshness at publication')

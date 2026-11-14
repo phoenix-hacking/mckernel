@@ -1,0 +1,249 @@
+{
+  "schema": "mckernel.native-scratch-provisioning-source-and-permission-disposition.v1",
+  "at": "2026-11-11T08:19:36.603832+00:00",
+  "reviewer": "source_acquisition_review_max",
+  "decision": "NO_GO_CURRENT_STAGING_PERMISSION_HOLD__EXACT_FILESYSTEM_PROVISIONING_OR_WRITE_GRANT_NOT_SUPPLIED",
+  "actual_failure": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-staging-root-1/RESULT.json",
+    "bytes": 1188,
+    "sha256": "4cedc439d3d8d4d9740f574848a3e2617e2704aa5f605e9042f488de76957fd1"
+  },
+  "permission_diagnosis": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-staging-root-1/DESTINATION-PERMISSION-DIAGNOSIS.json",
+    "bytes": 1215,
+    "sha256": "ea51eaeeff1dcac62ff23b3cc573d05033ebb61aa0bda3e257288652952399c4"
+  },
+  "Root_completion": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-staging-root-1/ROOT-EXEC-COMPLETION.json",
+    "bytes": 516,
+    "sha256": "439acef692cb301cc6f6a6d6ab2cf8d581caffd40be124a0ee48da352572a0a6"
+  },
+  "readonly_namespace_observation": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-scratch-provisioning-review-sourceacq-max-1/OBSERVATION.json",
+    "bytes": 2251,
+    "sha256": "e52679a302feab90b2e0dbd073dec65db119a53661403de7e6a3d63e4c66fbea"
+  },
+  "failed_operation": {
+    "argv": [
+      "/usr/bin/taskset",
+      "-c",
+      "0",
+      "/usr/bin/prlimit",
+      "--as=1073741824",
+      "--core=0",
+      "--cpu=180",
+      "--fsize=268435456",
+      "/usr/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-coherent-operation-source-p04-1/stager-correction-1/candidate/scripts/application-tests/native_diagnostic_stager.py",
+      "--bound-inputs",
+      "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-coherent-operation-source-p04-1/GUEST-STAGING-INPUTS.json",
+      "--bound-inputs-sha256",
+      "b4da2056d8ad1f8bd08e8a30eb087df45c424bc6738fe11be073f269c3b53132",
+      "--output",
+      "/home/holden/mckernel-work/scratch/native-signal-1e64-c664-stage-20261111-1"
+    ],
+    "failed_predicate": "os.access(output.parent, os.W_OK)",
+    "actor_uid": 1000,
+    "parent": "/home/holden/mckernel-work/scratch",
+    "parent_uid": 0,
+    "parent_gid": 0,
+    "mode": "0o755",
+    "output": "/home/holden/mckernel-work/scratch/native-signal-1e64-c664-stage-20261111-1",
+    "payload_started": false,
+    "admitted": false,
+    "Owner_rows": 0,
+    "new_memory_or_job_charge": false,
+    "Root_tool_exit": 1,
+    "Root_tool_chunk": "830878"
+  },
+  "actual_scratch_namespace_binding": {
+    "registered_capacity_record": {
+      "path": "/home/holden/mckernel-work/m14-resume-20261105-1/current-owner-publication-private-3/ACTUAL-CAPACITY-CURRENT.json",
+      "bytes": 1274,
+      "sha256": "a29ba02cb01055f424fba4ac6d3ddfaeea2d90721217bd6f703a6ac6d398a2a6"
+    },
+    "registered_source": "/dev/loop44",
+    "registered_device": "7:44",
+    "registered_mount_id": 974,
+    "current_exact_worker_mount": "974 29 7:44 / /home/holden/mckernel-work/scratch-readonly-20261105 ro,nosuid,nodev,relatime shared:623 - ext4 /dev/loop44 ro,norecovery",
+    "canonical_scratch_exact_mount_row_present_in_current_worker_namespace": false,
+    "directory_identities": [
+      {
+        "path": "/home/holden/mckernel-work/scratch",
+        "device": 66306,
+        "inode": 49551073,
+        "uid": 0,
+        "gid": 0,
+        "mode": "0o755",
+        "is_symlink": false
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch-readonly-20261105",
+        "device": 1836,
+        "inode": 2,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": "0o700",
+        "is_symlink": false
+      }
+    ],
+    "interpretation": "The denied canonical directory is not the exact registered readonly mountpoint. The reached current registered volume is readonly at scratch-readonly-20261105. These facts are scoped to this worker namespace and the saved Root permission diagnosis; they do not establish global namespace identity/absence, ownership retirement or writable volume authority."
+  },
+  "existing_genuine_interfaces": {
+    "scratch21_readonly_inspector": {
+      "source": {
+        "path": "/home/holden/mckernel/scripts/inspect_scratch21_cleanup.py",
+        "bytes": 10011,
+        "sha256": "5bdda89a30bd9e8a2b33024e68ec4eb84745820f395670e45592d5169e1618e4"
+      },
+      "interface": "inspect(live=False) / CLI default read-only; --live also runs privileged observations. NOT invoked.",
+      "contract": "Exact scratch mount UUID2a5768c8-718d-4914-bdc0-6b32c5a92a52/ext4/rw,nodev,nosuid and fixed old exclusions/evidence. JSON observation is never an execution release or fresh create grant."
+    },
+    "scratch21_terminal_retirement": {
+      "source": {
+        "path": "/home/holden/mckernel/scripts/native_exact_scratch21_terminal_cleanup.py",
+        "bytes": 50196,
+        "sha256": "6606af40114eb5b6019438c4127948081d80bbe65144d841e906a7cba84aabed"
+      },
+      "interface": "--prepare-observation/--observation-sha256 with source Git pins prepares a release; --release/--release-sha256 plus --execute is separately reviewed Root-only fixed retirement. NOT invoked.",
+      "contract": "RELEASE isNone until configured; exact-root-source/current device/boot/lock/publisher/evidence/container bindings, fixed archives/sentinels, no broad deletion or mutex unlink. Historical observations not execution authority.",
+      "fresh_named_staging_permission_provided": false,
+      "reason": "This is the specific old Scratch21 cleanup transaction, not a parent chmod/chown/provisioning service or authority to create arbitrary new children."
+    },
+    "ordinary_scratch_preparation_admission": {
+      "sources": [
+        {
+          "path": "/home/holden/mckernel/scripts/prepare_native_exact_scratch22.py",
+          "bytes": 23909,
+          "sha256": "3c3dd179301ee9d16ecf8c9e918fee304ee76cb6a89bc2a987235c1f52ec6663"
+        },
+        {
+          "path": "/home/holden/mckernel/scripts/run_os_parallel.py",
+          "bytes": 14783,
+          "sha256": "0344a89a0eaecf60be5dd4b7ad2ed45945d461492adec56c3facf906ba4a0d1a"
+        }
+      ],
+      "contract": "Existing preparation/host_blockers requires canonical Scratch mount, exact UUID/ext4/rw,nodev,nosuid and explicit reviewed release/live identity. It observes/refuses; it does not provision/remount/chown canonical parent. No source was run.",
+      "source_new_permission_grant_found": false
+    },
+    "resource_snapshot": {
+      "source": {
+        "path": "/home/holden/mckernel/scripts/os_goal_resources.py",
+        "bytes": 8775,
+        "sha256": "c4761334c67461717bb5f606c7d4d5355a1c80f42709770ab206803e597c5157"
+      },
+      "contract": "Host RAM/disk planning/snapshot only; not a filesystem permission, mount lease or scratch21 release."
+    },
+    "stager": {
+      "source": {
+        "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_stager.py",
+        "bytes": 21899,
+        "sha256": "d4d29757e34cdc4c8e208b420709d2b4a7c10eb2f8f40c29bfeca3d08f568952"
+      },
+      "contract": "Requires output absent and parent directory; creates fresh output itself mode0700. Does not elevate/provision its parent. Precreating output is not a repair because it violates the absent-output contract."
+    },
+    "native_owner": {
+      "source": {
+        "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+        "bytes": 58828,
+        "sha256": "4634075d634e9360d693e592c381379a427ef9b4b98460b5757217bf2b39f203"
+      },
+      "contract": "Existing root development flock/native cgroup/container ownership; it does not delegate filesystem ownership of scratch or authorize an elevated rerun of denied UID1000 staging."
+    }
+  },
+  "Scratch21_persistent_scope": {
+    "actual_checkpoint": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-exact-scratch21-build-failure-checkpoint-20261001.json",
+      "bytes": 3895,
+      "sha256": "905bf242c7e7fa83a0e46c3d1c2de49f8bf118b9b7c17717f67387f1424226d2"
+    },
+    "checkpoint_status": "FAIL_BEFORE_COMPILATION",
+    "original_terminal_owner": {
+      "container_id": "e1f6dd145149c026c46adb82c3f3addb9e3c9e2a12b0d71a6813f00895220ea9",
+      "container_name": "mckernel-exact-57e76f6bf33a48da82047f98242bf019",
+      "owner_nonce": "1439909012a04cf789981b951b34d399",
+      "image_id": "sha256:0f8ad280e47d76b23554de4aec411752e1f779f9b2fc7fece6b0b3375dc9775d",
+      "state": "exited",
+      "pid": 0,
+      "exit_code": 1,
+      "oom_killed": false,
+      "dead": false,
+      "retired": true,
+      "cleanup_separately_required": true,
+      "request_lease_absent": true,
+      "owner_pid": 3788091,
+      "owner_starttime": "110575783",
+      "owner_process_absent": true
+    },
+    "fixed_retained_exclusion_records": [
+      {
+        "path": "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock",
+        "device": 1831,
+        "inode": 57687,
+        "mode": "0600",
+        "uid": 1000,
+        "gid": 1000,
+        "size": 269,
+        "sha256": "7be39d1cf3bebcf4e586716badf2e3be366fae928ce2b39ce21fa6db770a7134"
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch18.json",
+        "device": 1831,
+        "inode": 57688,
+        "mode": "0600",
+        "uid": 1000,
+        "gid": 1000,
+        "size": 269,
+        "sha256": "eeb41f3a01bf2b31e5ff15232ba31ab6cf92676b8587963d1faffeace44451f5"
+      }
+    ],
+    "finite_current_old_names_observation": [
+      {
+        "path": "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock",
+        "observation": "ENOENT",
+        "read_attempts": 1,
+        "not_release_or_global_absence": true
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch18.json",
+        "observation": "ENOENT",
+        "read_attempts": 1,
+        "not_release_or_global_absence": true
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch-readonly-20261105/mckernel-heavy-operation.lock",
+        "observation": "ENOENT",
+        "read_attempts": 1,
+        "not_release_or_global_absence": true
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-candidate-operational-exclusion-scratch18.json",
+        "observation": "ENOENT",
+        "read_attempts": 1,
+        "not_release_or_global_absence": true
+      }
+    ],
+    "conclusion": "The exact old checkpoint/cleanup source governs fixed Scratch21 exclusions, output/evidence and persistent mutex/archive lifecycle. Current ENOENT at the four exact logical/view paths is not release and not a reason to discard its source/persistent hold. No read/write remount of the preserved readonly volume or historical cleanup/release is authorized here. A global ban on all unrelated child names is not invented from the label alone; this actual operation remains blocked by its concrete filesystem and namespace precondition."
+  },
+  "required_real_next_input_and_owner": {
+    "supplying_role": "Actual UID0 filesystem/mount provisioning owner for the intended canonical scratch namespace; original Scratch21 transaction owner/reviewer supplies any necessary exact protected-scope exclusion/retirement disposition. Same-Root integrator consumes those actual grants, not an arbitrary elevated stager actor.",
+    "smallest_missing_binding": "A current scoped scratch provisioning/admission record identifying actual intended writable filesystem/mount namespace and canonical parent device/inode/mount identity, the authorized provisioning actor, UID1000 create/search permission for this already-bound fresh staging destination/parent with output still absent, capacity/floors and preservation of held Scratch21/source/persistent objects. No such fresh-create permission record is supplied by the reached install/controller/native12 records or the inspected fixed cleanup interfaces.",
+    "necessary_action_if_legitimately_authorized": "The actual filesystem owner must supply the intended writable namespace and grant the required directory access under its proper scoped provisioning flow, retaining exact metadata/hold-preservation evidence. This review proposes no chmod/chown/mount/elevated command or alternate staging path and executes none.",
+    "existing_flow_answer": "A genuine fixed Scratch21 observation/release/retirement flow exists, but it cannot be treated as a generic staging write grant. No reached current callable provisioning interface/valid grant for the denied canonical parent was established. Do not use old scratch22 releases, c9 install-only RootLease, static native12 capacity or controller account data to fabricate it.",
+    "external_operator_question_only_if_no_existing_owner_record_can_be_supplied": "Which existing root-owned scratch provisioning operation owns the canonical /home/holden/mckernel-work/scratch namespace and can supply its scoped UID1000 fresh-child create grant, while preserving the /dev/loop44 readonly mapping and held Scratch21 objects?",
+    "not_an_invented_native_holder_or_external_inventory_packet": true
+  },
+  "prohibited_retries_and_changes": [
+    "No same stager via sudo/another agent/model/controller/alternate path as a permission workaround.",
+    "No create/chmod/chown/ACL/mount/remount/format, no new ownership transfer, no scratch21 cleanup or release, no Native operation or launcher-state change.",
+    "No broad process/workdir census, denied-path retry or legacy narrative reading list.",
+    "No new job/admission/charge to retire; historical and current holds remain."
+  ],
+  "next_action": {
+    "owner": "Root and genuine scratch filesystem/provisioning owner",
+    "action": "Obtain the precise existing scope/permission provisioning binding or report that exact absent grant. Keep the failed c66/88b preflight/raw completion. Continue independent eligible image/source work; no staging retry until genuinely changed authorized input and independent admission.",
+    "full_native_source_review": "Continues independently when PublicABI freezes callable full path; permission is an actual separate live gate, never a boolean bypass."
+  }
+}

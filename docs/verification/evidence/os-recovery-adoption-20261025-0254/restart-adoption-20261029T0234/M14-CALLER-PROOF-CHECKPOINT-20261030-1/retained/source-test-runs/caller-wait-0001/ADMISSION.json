@@ -1,0 +1,68 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": 1793402212.7171884,
+  "status": "ROOT_ADMITS_CALLER_CHANGED_WAIT_MOCK",
+  "thread_id": "01a18bc3-e072-7810-9426-75101b0856c0",
+  "source_pins": {
+    "root-install-caller-wait-correction-1/FROZEN-SOURCE.json": "282f4489226b7e13f0d65b0ae3a5845c86b1a3636cdc65c7f65e34bb88a50175",
+    "root-install-caller-wait-correction-1/prepare_and_exec.py": "1a42c4a660e719cd0b06f40b95eecb0b61305be4d9b8b592cfcc50fbc897ee10",
+    "root-install-caller-wait-correction-1/test_wait_nonterminal.py": "17d85371613b7201ee322d9fd589dc100a0cf43e61b6aa784efa27ef028973c1",
+    "root-install-caller-wait-correction-1/CALLER-ENTRY.py": "31779722a7d57f486c3b5e2e22b44f0ac1b06fd29289f946bf784bd4ca73eb69",
+    "root-install-caller-wait-correction-1/CALLER-PROFILE.SOURCE-ONLY.json": "c8a37081c472f0ebe529cbcb04d45034c5d22231f1fa2a74d42e4a36b67495b4"
+  },
+  "runner_sha256": "1679443242fd9c21de34d6658ed19e2f4b067ea0c17be5bd6019d3753a7b9c44",
+  "cpu": [
+    6
+  ],
+  "jobs": 1,
+  "address_space_bytes": 536870912,
+  "cpu_seconds": 30,
+  "wall_seconds": 45,
+  "kill_after_seconds": 5,
+  "native_root_fork_pidfd_signal_immutable": false,
+  "actual_effects": "pinned source reads; all root/fork/pidfd/signals/write/close faults mocked; no physical operation",
+  "unchanged5_protocolcases_not_replayed": true,
+  "production_parent_body": "ffdadparent4/7e2bootstrap/1e6caller changed source tests only",
+  "weekly_used_percent": 95,
+  "weekly_observed_at": 1793402209.887666,
+  "controllers": {
+    "guardian": {
+      "pid": 2996157,
+      "ppid": 2995936,
+      "start": "118034389",
+      "state": "R"
+    },
+    "monitor": {
+      "pid": 2996160,
+      "ppid": 2995936,
+      "start": "118034501",
+      "state": "R"
+    },
+    "server": {
+      "pid": 2996005,
+      "ppid": 2996003,
+      "start": "118034116",
+      "state": "S"
+    },
+    "watcher": {
+      "pid": 2996001,
+      "ppid": 2995936,
+      "start": "118034086",
+      "state": "S"
+    },
+    "worker": {
+      "pid": 2996003,
+      "ppid": 2996001,
+      "start": "118034102",
+      "state": "S"
+    }
+  },
+  "capacity": {
+    "MemAvailable_bytes": 27405180928,
+    "free_bytes": {
+      "/home/holden/mckernel": 142296502272,
+      "/home/holden/mckernel-work/scratch": 47613485056
+    }
+  },
+  "nonce": "f2e07e621df72df83eadf089dcd6b5797b924824a505496714866db43bf240bb"
+}

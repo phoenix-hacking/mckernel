@@ -1,0 +1,70 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ROOT_ADMITS_ONE_HOST_RUST_TYPECHECK",
+  "author": "/root",
+  "thread_id": "01a18bc3-e072-7810-9426-75101b0856c0",
+  "profile_sha256": "6e46cbc07637ea6985119caffe1993258a8ed1f2a7542a42d9e2d92fffa88083",
+  "at": 1793391113.4563375,
+  "nonce": "3220bd088e74d73e49abb7401b6c5afd1add9570b5bafdcc9e7782d273ac7a7b",
+  "native_access": false,
+  "jobs": 1,
+  "cpu": [
+    6
+  ],
+  "address_space_bytes": 4294967296,
+  "coordinator": {
+    "pid": 2996003,
+    "ppid": 2996001,
+    "start": "118034102",
+    "state": "S"
+  },
+  "weekly": {
+    "resetsAt": 1793774133,
+    "usedPercent": 90,
+    "windowDurationMins": 10080,
+    "limitId": "codex",
+    "observed_at": 1793391107.653069
+  },
+  "source_owner_exclusion": "HELD_BY_COORDINATOR_AND_COOPERATING_OWNERS",
+  "runner_sha256": "b7a8fd40555cfbddcfa58212e871586cdcade9938a24578895e82cceb50f9fc3",
+  "gate_sha256": "b8fc9ec7e82afdd4243bc2c5d632fcea495c2f142432f8ef0d90c0fd952f171a",
+  "minimum_memavailable_bytes": 25769803776,
+  "minimum_free_bytes": {
+    "/home/holden/mckernel": 17179869184,
+    "/home/holden/mckernel-work/scratch": 12884901888
+  },
+  "root": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu",
+  "review": "Independent four-fix source review positive for frontend diagnostic; Root exact runner/profile two-of-165-input delta review, same202args/cfg except freshsource+output paths; no production/runtime acceptance",
+  "outer_owner": {
+    "tool_owned": true,
+    "cpu_seconds": 180,
+    "wall_seconds": 235,
+    "kill_after_seconds": 5,
+    "address_space_bytes": 4294967296,
+    "nofile": 256,
+    "recorded_output_root": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/perf-typecheck-0002",
+    "positive_terminal_and_outer_plus_inner_group_census_required": true
+  },
+  "reservation": "one ordinaryCPU6/job1/4GiB; retained native12GiB+V2UNKNOWN2GiB planning and HOST reserve preserved; no new nativeheavy grant",
+  "capacity": {
+    "MemAvailable_bytes": 27459670016,
+    "free_bytes": {
+      "/home/holden/mckernel": 142479945728,
+      "/home/holden/mckernel-work/scratch": 47613485056
+    }
+  },
+  "actual_controls": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/ACTUAL-CONTROLS-ARMED.json",
+  "actual_capacity": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/ACTUAL-CAPACITY-FALLBACK-ARMED.json",
+  "retained_failure": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/host-toolchain-0002/RESULT.json",
+  "retained_prior_grant": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-host-compile-preparation-1/TOOLCHAIN-COLLECT-GRANT.0002.RETAINED.json",
+  "review_sha256": "a9d9910ace8f0d7b042233c5776a7da97cd24c49f1e228031970ed2c1b2d418d",
+  "toolchain_manifest_status": "REVIEWED_HELD_MATCH",
+  "toolchain_manifest_nonce": "e2dc9286c3a82794a0f0af98b20def746a63bd043b1afe85dd0a5a9edf9ec4a5",
+  "toolchain_manifest_sha256": "9f25b4c4d927dfb2ec96abd662ba13a9c7641bb6a0004c84ccb5bd43855ec6c3",
+  "diagnostic_platform_limits": [
+    "Trusted root-owned installed Linux Python/stdlib/extensions and system loader/cache; not a claim of full measured platform runtime closure",
+    "Toolchain tree/static dependency manifest held by cooperating coordinator; current canonical dependency identity revalidation only, no full rehash",
+    "Actual loader/dlopen/helper choices not fully observed; unexpected depinfo or uncertain process retirement is UNKNOWN"
+  ],
+  "checkpoint_fetched_verified": "da5ea8a2ed0a2c30bb1d1d35c0f3fd7b9d0943ac"
+}

@@ -1,0 +1,173 @@
+{
+  "final_module_join": {
+    "all_other_delivered_modules": "Saved ihk and ihk-smp nm contain no definition of these4 names; __pfx_ names are separate prefix symbols. Exact mcctrl.mod contains mcctrl_rust.o and these twoASM objects once; .mcctrl.o.cmd and final .ko command bind actual aggregate and final owner.",
+    "entry": "ENDBR64 at all4 final symbols",
+    "final_bug_table": {
+      "alignment": 8,
+      "bytes": 12,
+      "fault_text_addend_hex": "0x9594",
+      "filename": ".rodata+0x146",
+      "flags_hex": "0x0901",
+      "line": 24
+    },
+    "final_jump_records": [
+      {
+        "code_hex": "0x9504",
+        "key": "__tracepoint_mmap_lock_start_locking",
+        "key_addend_hex": "0xa",
+        "target_hex": "0x950d"
+      },
+      {
+        "code_hex": "0x9534",
+        "key": "__tracepoint_mmap_lock_acquire_returned",
+        "key_addend_hex": "0xa",
+        "target_hex": "0x953d"
+      },
+      {
+        "code_hex": "0x9564",
+        "key": "__tracepoint_mmap_lock_released",
+        "key_addend_hex": "0xa",
+        "target_hex": "0x956d"
+      }
+    ],
+    "final_return_sites": {
+      "instruction_offsets_hex": [
+        "0x9508",
+        "0x9512",
+        "0x9538",
+        "0x9542",
+        "0x9568",
+        "0x9572",
+        "0x9596"
+      ],
+      "required": "7 relative jmp return thunks; matched saved .rela.return_sites records and PLT32 thunk relocs, no raw RET substitution."
+    },
+    "gate_sites": "Source short jump at final0x9504/9534/9564 must be replaced with same-length2-byteNOP by actual selected objtool --hacks=jump_label; false path EAX=0, true target retains EAX=1. No5-byte expansion is expected.",
+    "module_sha256": "dc46a4f552776d6f9200cbdc8127882ea3f5d69d119f3e5b00672dce234eabcc",
+    "transform_source": "/source/tools/objtool/check.c:1900-1921 handle_jump_alt tests key_addend&2 and writes arch_nop_insn(orig_insn->len); /source/arch/x86/include/asm/jump_label.h:25-28 documents sourcejmp/objtoolNOP. Actual aggregate cmd includes --hacks=jump_label/--ibt/--rethunk/--prefix=16/--werror.",
+    "unique_T_owners": {
+      "m15_mmap_trace_acquire_enabled": "0x9530",
+      "m15_mmap_trace_release_enabled": "0x9560",
+      "m15_mmap_trace_start_enabled": "0x9500",
+      "m15_mmap_write_lock_warning": "0x9590"
+    }
+  },
+  "inputs": {
+    "bytes": 10128,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/assembly-emission-qualification-1/INPUTS.json",
+    "sha256": "2a953c6fd3fd26b254cf36d60a06e5625567d430087e8caa0a2c631afdbacbda"
+  },
+  "raw_trace_leaf": {
+    "body": "At symbol+4, source short jump targets symbol+13; fallthrough clears EAX to0 and jumps to __x86_return_thunk, target sets EAX=1 then jumps to same thunk. Return value is exactly0/1 in EAX for extern C bool; no argument, stack write or callee-saved-register mutation. Unprocessed raw jump is not executed.",
+    "entry": "f3 0f 1e fa ENDBR64 at each actual function symbol",
+    "jump_table": {
+      "alignment": 8,
+      "bytes": 48,
+      "layout_source": "selected bindings jump_entry=(s32,s32,c_long), tracepoint.key offset8; actualASM expression is exact tracepoint+8+2-PC. +2 is selected objtool hack signal; no JUMP_TYPE_LINKED interpretation.",
+      "record_bytes": 16,
+      "records": [
+        {
+          "code_PC32_text_addend_hex": "0x14",
+          "key_PC64_symbol": "__tracepoint_mmap_lock_start_locking",
+          "key_addend_hex": "0xa",
+          "target_PC32_text_addend_hex": "0x1d"
+        },
+        {
+          "code_PC32_text_addend_hex": "0x44",
+          "key_PC64_symbol": "__tracepoint_mmap_lock_acquire_returned",
+          "key_addend_hex": "0xa",
+          "target_PC32_text_addend_hex": "0x4d"
+        },
+        {
+          "code_PC32_text_addend_hex": "0x74",
+          "key_PC64_symbol": "__tracepoint_mmap_lock_released",
+          "key_addend_hex": "0xa",
+          "target_PC32_text_addend_hex": "0x7d"
+        }
+      ]
+    },
+    "object_sha256": "6fa26dd1b9306095441d7039e20f1597572e6365de0042bfa87d6face2166677",
+    "public_function_symbols": {
+      "m15_mmap_trace_acquire_enabled": {
+        "size_bytes": 23,
+        "text_offset_hex": "0x40"
+      },
+      "m15_mmap_trace_release_enabled": {
+        "size_bytes": 23,
+        "text_offset_hex": "0x70"
+      },
+      "m15_mmap_trace_start_enabled": {
+        "size_bytes": 23,
+        "text_offset_hex": "0x10"
+      }
+    },
+    "return_thunk_relocations": {
+      "addend": -4,
+      "symbol": "__x86_return_thunk",
+      "text_offsets_hex": [
+        "0x19",
+        "0x23",
+        "0x49",
+        "0x53",
+        "0x79",
+        "0x83"
+      ],
+      "type": "R_X86_64_PLT32"
+    },
+    "text_size_bytes": 135
+  },
+  "raw_warning_leaf": {
+    "UD2": {
+      "bytes_hex": "0f 0b",
+      "text_offset_hex": "0x14"
+    },
+    "bug_table": {
+      "bytes": 12,
+      "fault_PC32_text_addend_hex": "0x14",
+      "field_layout": "s32 relative fault; s32 relative filename; u16 source line; u16 flags",
+      "filename_PC32": ".rodata.str1.1+0",
+      "flags_bytes_little_endian_hex": "01 09",
+      "flags_hex": "0x0901",
+      "meaning": "BUGFLAG_WARNING=1 | (TAINT_WARN=9 <<8); no BUGFLAG_ONCE. UD2 is reachable annotation and returns via selected Linux warning handling; no actual warning is executed.",
+      "raw_alignment": 1,
+      "source_line": 24
+    },
+    "entry": "ENDBR64 f3 0f 1e fa",
+    "function_size_bytes": 11,
+    "function_symbol": "m15_mmap_write_lock_warning",
+    "function_text_offset_hex": "0x10",
+    "object_sha256": "ebeaeb0c367e9b7631d462af53c6ee216a310030a66ddc2c8d9d0224fc59c656",
+    "return_thunk_relocation": {
+      "addend": -4,
+      "symbol": "__x86_return_thunk",
+      "text_offset_hex": "0x17",
+      "type": "R_X86_64_PLT32"
+    },
+    "text_size_bytes": 27
+  },
+  "schema": 1,
+  "scope_limits": [
+    "No validation-suite, producer, fullreader, objtool or compiler rerun.",
+    "No user-mode gate probe, module load, UD2 execution, device/native lifecycle or original acceptance claim.",
+    "Reuse prior ASM include/profile/header review3d98 only at matching scope; source/caller actual wholeleaf review remains independent."
+  ],
+  "source_caller_ABI": {
+    "calls": "event0/start,event1/acquire,event2/release at143-145; warning only when mmap_lock.count bit0 absent at88-106; no new caller/behavior.",
+    "declarations": "mcctrl_mm_write.rs:50-55 extern C: three no-arg ->bool gates, no-arg ->unit warning.",
+    "obligations": "Both leaves have no pointer argument or data ownership. Review actual instruction register effects and selected CABI returns, relative jump/bug record layouts, build-derived return/hardening conventions, actual caller relocations and unique mcctrl owner together. SDK original whole-leaf qualification consumes actual outputs; exit0 alone earns none.",
+    "production_only": "No M15_USER_GATE_PROBE or m15_fixture define in accepted actual twoASM/Rustcmd; selected config/source unchanged.",
+    "selected_source_and_caller": {
+      "bytes": 10128,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/assembly-emission-qualification-1/INPUTS.json",
+      "sha256": "2a953c6fd3fd26b254cf36d60a06e5625567d430087e8caa0a2c631afdbacbda"
+    }
+  },
+  "status": "SOURCE_DERIVED_EXPECTATIONS_NOT_ACTUAL_RESULTS",
+  "transport": {
+    "all4_read_exit_codes": 0,
+    "all4_stderr_empty": true,
+    "checksums_all4_exact": true,
+    "raw_files_complete": true,
+    "semantic_GO_requires_independent_saved_output_review": true
+  }
+}

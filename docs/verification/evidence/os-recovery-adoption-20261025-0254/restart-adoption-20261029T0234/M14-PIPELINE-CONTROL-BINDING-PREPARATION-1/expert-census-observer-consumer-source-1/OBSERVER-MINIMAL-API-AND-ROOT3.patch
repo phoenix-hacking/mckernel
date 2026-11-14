@@ -1,0 +1,98 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-postbuild-current-successor-preparation-1/source-2/observe_current64_current118_postjoin.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/expert-census-observer-consumer-source-1/observe_current64_current118_postjoin.template.py
+@@ -100,8 +100,32 @@
+  rows.extend(dict(pid=r['pid'],start=r['birth'],role='CURRENT118_actual_recovery_recorded_command',group=r['pid'],fd=None)for r in clients)
+  need(value['additional_measured_actors']==rows,'exact actual recovery operator/parent/twelve clients; no invented or omitted births')
+  need(type(value['recorded_epoch'])in(int,float) and math.isfinite(value['recorded_epoch']) and all(type(parent[k])in(int,float) and math.isfinite(parent[k])for k in ['start_epoch','finish_epoch']) and checked(PINS['failed_recovery_join'])['finish_epoch']<=parent['start_epoch']<=parent['finish_epoch']<=value['recorded_epoch']<PINS['limits'][0],'post-failure current supplement within original caps')
+- retained['actors'].extend(rows);retained['custody_supplement']=row
++ retained['actors'].extend(rows);retained['actors'].extend(root3_failed_actors(checked(PINS['post_root3_pending'])));retained['actors'].extend(root4_outer_parent_actors());retained['custody_supplement']=row
+  return value
++
++
++def root3_failed_actors(ledger):
++ """Exact already-joined Root3 failure; no positive cleanup/current-free inference."""
++ note=json.loads(ledger['note']);closed=note['closed_failed_current118_cleanup']
++ need(closed['native_clearance']is False and closed['permanent_mutex_held']is False,'Root3 closed failure is not clearance')
++ for key in ['failure','parent_join','client_join','release']:auth(closed[key])
++ failed=checked(closed['failure']);joined=checked(closed['parent_join']);client=checked(closed['client_join']);release=checked(closed['release'])
++ need(failed['status']=='FAILED_FIRST_READ_ONLY_PROC_CENSUS_BEFORE_DOCKER' and failed['current_free']is False and failed['docker_commands']==0 and failed['mutation']is False and failed['rm_claimed']is False and failed['signals_sent']==0 and failed['quarantine']is False and failed['original_client2232653_exit']=='UNKNOWN','Root3 original failure/UNKNOWN preserved')
++ parent=joined['parent'];child=joined['child']
++ need((parent['pid'],parent['birth'],child['pid'],child['birth'],child['ppid'])==(2304474,104745866,2304475,104745869,2304474),'exact Root3 measured parent/executor identity')
++ need(joined['release']==closed['release'] and joined['returncode']==1 and joined['positive_direct_parent_wait']is True and joined['positive_wait4_join']is True and joined['wait4_pid']==child['pid'] and joined['wait4_status']==256 and joined['streams_closed']is True and joined['signals_sent']==0 and joined['native_clearance']is False,'Root3 exact positive direct wait4 failure join')
++ need(auth(joined['stdout']).read_bytes()==b'' and auth(joined['stderr']).read_bytes()!=b'','Root3 failed parent raw streams')
++ need(release['nonce']==NONCE and release['cid']==CID and release['author']=='/root' and release['current_ledger']==note['prior_metadata_boundary'],'Root3 release bound to prior97ce frontier')
++ need((failed['executor_pid'],failed['executor_birth'],failed['executor_returncode'])==(child['pid'],child['birth'],1),'failure/executor join identity agrees')
++ need((client['pid'],client['birth'],client['wait4_pid'])==(2304484,104745982,2304484) and client['positive_wait4']is True and client['wait4_status']==256 and client['returncode']==1 and client['group_absent']is True and client['group_members']==[] and client['streams_closed']is True and client['client_retirement_unproven']is False and client['signals_sent']==0,'Root3 first readonly client actual positive wait/group/stream closure')
++ need((failed['client_pid'],failed['client_birth'],failed['client_returncode'])==(client['pid'],client['birth'],client['returncode']) and failed['client_group_absent']is True and failed['positive_direct_wait4']is True and failed['streams_closed']is True,'failure/client join identity agrees')
++ need(set(client['raw'])=={'stdout','stderr','status.json'},'complete Root3 client raw receipt')
++ for row in client['raw'].values():auth(row)
++ status=checked(client['raw']['status.json']);need(status['state']=='exited' and status['pid']==client['pid'] and status['exit_code']==1 and status['argv']==client['argv'],'Root3 exact raw client exit/argv')
++ need(auth(client['raw']['stdout']).read_bytes()==b'' and b'FileNotFoundError'in auth(client['raw']['stderr']).read_bytes(),'Root3 first-census original ENOENT raw failure')
++ need(client['argv'][:6]==['/usr/bin/sudo','-A','/usr/bin/python3','-I','-B','-c'] and client['argv'][-2:]==[str(child['pid']),str(child['birth'])],'Root3 readonly census exact caller')
++ need(parent['pgrp']==parent['sid']==parent['pid'] and child['pgrp']==child['sid']==child['pid'] and client['process_group']==client['pid'],'only measured dedicated groups recorded')
++ return [dict(pid=parent['pid'],start=parent['birth'],role='CURRENT118_Root3_failed_cleanup_parent',group=parent['pgrp'],fd=None),dict(pid=child['pid'],start=child['birth'],role='CURRENT118_Root3_failed_cleanup_executor',group=child['pgrp'],fd=None),dict(pid=client['pid'],start=client['birth'],role='CURRENT118_Root3_failed_readonly_client',group=client['process_group'],fd=None)]
+ 
+ 
+ def validate_pending_ledger(value,retained):
+@@ -123,6 +147,23 @@
+  need(art==dict(status='REJECTED_ORIGINAL_389_METADATA_MULTISET',independent_review=PINS['artifact_rejection'],first_actual_failure=PINS['registry_failure'],accepted_default_remains='CURRENT116 C71/Rust68'),'artifact rejection and accepted116 scope immutable')
+  return True
+ 
++def root4_outer_parent_actors():
++ """Only the measured closed outer parent; no inherited group is claimed."""
++ ledger=checked(PINS['post_root4_pending']);note=json.loads(ledger['note']);old=checked(PINS['post_root3_pending'])
++ need(note['prior_metadata_boundary']==PINS['post_root3_pending'] and note['closed_failed_current118_cleanup']==json.loads(old['note'])['closed_failed_current118_cleanup'],'Root4 metadata retains exact Root3 closed custody')
++ closed=note['closed_current118_root4_retirement'];joined=checked(PINS['root4_parent_normalized']);raw=checked(PINS['root4_parent_raw'])
++ need(closed['parent_join']==PINS['root4_parent_raw']==joined['raw_parent_capture'] and closed['current_free']is False and closed['records_released']==[],'exact pending Root4 raw-parent metadata, no clearance')
++ auth(closed['result']);auth(closed['release'])
++ need(raw['release']==closed['release'] and raw['native_clearance']is False and raw['signals_sent']==joined['signals_sent']==0,'Root4 actual release and no signals/native claim')
++ child=raw['child'];parent=raw['parent']
++ need((parent['pid'],parent['birth'],child['pid'],child['birth'],child['ppid'])==(2311392,104859779,2311393,104859782,2311392),'exact measured Root4 outer parent/child')
++ need(joined['author']=='/root' and joined['pid']==child['pid'] and joined['birth']==child['birth'] and joined['parent_pid']==parent['pid'] and joined['parent_birth']==parent['birth'],'normalized Root4 identity projects raw capture')
++ for key in ['returncode','wait4_pid','wait4_status','positive_direct_parent_wait','positive_wait4_join','stdout','stderr']:
++  need(joined[key]==raw[key],'normalized Root4 raw projection '+key)
++ need(joined['returncode']==0 and joined['wait4_pid']==child['pid'] and joined['wait4_status']==0 and joined['positive_direct_parent_wait']is True and joined['positive_wait4_join']is True and joined['parent_streams_closed']is raw['streams_closed']is True,'Root4 positive direct wait and closed streams')
++ need(auth(joined['stderr']).read_bytes()==b'' and json.loads(auth(joined['stdout']).read_bytes())==dict(status='RETIREMENT_COMPLETE_PENDING_PARENT_JOIN_AND_FRESH_CURRENT',result=closed['result']),'Root4 raw streams bind exact result')
++ return [dict(pid=parent['pid'],start=parent['birth'],role='CURRENT118_Root4_closed_cleanup_outer_parent',group=None,fd=None)]
++
+ def validate_retirement(retained,result_ref,parent_ref):
+  executor=retained['executor'];b=retained['b'];value=checked(result_ref)
+  receipts=executor.validate_result(value,b)
+@@ -146,7 +187,7 @@
+  inherited=load(PINS['base_source'],'CURRENT118_source_closure').source_subjects()
+  result.update({'inherited:'+key:value for key,value in inherited.items()})
+  for key,row in checked(PINS['compatibility_runtime_files']).items():auth(row);result['compat:'+key]=row
+- for key in ['failed_normal','failed_recovery_join','failed_recovery_started','failed_recovery_release','recovery_parent_validator','recovery_bindings','recovery_source_ready','source1_ready','source1_observer']:result[key]=PINS[key];auth(PINS[key])
++ for key in ['failed_normal','failed_recovery_join','failed_recovery_started','failed_recovery_release','recovery_parent_validator','recovery_bindings','recovery_source_ready','source1_ready','source1_observer','post_root3_pending','post_root4_pending','root4_parent_normalized','root4_parent_raw']:result[key]=PINS[key];auth(PINS[key])
+  return result
+ 
+ def runtime_dependencies(bindings):
+@@ -181,11 +222,11 @@
+  need(len(rows)==3 and len(capture['current118_complete_process_reports'])==1,'exact two CID/name plus one complete census')
+  expected=[PREFIX+['ps','-aq','--no-trunc','--filter','id='+CID],PREFIX+['ps','-aq','--no-trunc','--filter','name=^/'+NAME+'$']]
+  for row,argv in zip(rows[:2],expected):need(row['argv']==argv and auth(row['raw']['stdout']).read_bytes()==auth(row['raw']['stderr']).read_bytes()==b'','exact new CID/name absence raw replies')
+- executor=retained['executor'];b=retained['b'];normal=load(b['normal'],'CURRENT118_pure_raw_census');code=executor.process_source(normal,checked(b['packet']))
++ executor=retained['executor'];b=retained['b'];normal=load(b['normal'],'CURRENT118_pure_raw_census');prior_pids=[r['pid']for r in retirement_receipts+original+rows[:2]]+[r['pid']for r in actors];code=executor.process_source(normal,checked(b['packet']),b,prior_pids)
+  row=rows[2];argv=row['argv'];caller=capture['observer_self']
+  need(len(argv)==10 and argv[:7]==['/usr/bin/sudo','-A','/usr/bin/python3','-I','-B','-c',code] and re.fullmatch('[0-9a-f]{32}',argv[7]) and argv[8:]==[str(caller['pid']),str(caller['birth'])],'exact full census code/challenge/real caller')
+  report=json.loads(auth(row['raw']['stdout']).read_bytes());need(report==capture['current118_complete_process_reports'][0],'same raw complete report')
+- executor.validate_process(report,normal,b,argv[7],[caller['pid'],str(caller['birth'])],[r['pid']for r in retirement_receipts+original+rows[:2]]+[r['pid']for r in actors])
++ executor.validate_process(report,normal,b,argv[7],[caller['pid'],str(caller['birth'])],prior_pids)
+  validate_absence_reports(capture['historical_Root63_reobservation']['complete_process_reports']+[report],actors)
+  clients=original+rows
+  need(capture['query_clients']==[dict(pid=r['pid'],birth=r['birth'])for r in clients],'all eight real client identities; no invented birth')
+@@ -274,10 +315,11 @@
+   response=commands.exact(argv,30);need(response.stdout==response.stderr=='','fresh exact CID/name absence')
+  normal=load(b['normal'],'CURRENT118_unchanged_full_census');primitive=load(b['primitive'],'CURRENT118_original_birth_helper')
+  caller=[os.getpid(),primitive.proc_stat(os.getpid())[19]];challenge=uuid.uuid4().hex
+- code=executor.process_source(normal,checked(b['packet']));argv=['/usr/bin/sudo','-A','/usr/bin/python3','-I','-B','-c',code,challenge,str(caller[0]),caller[1]]
++ original=retained['base'].validate_capture_commands(historical);prior_records=retained['base'].command_records(commands);prior_pids=[r['pid']for r in retirement_commands+original+prior_records]+[r['pid']for r in actors]
++ code=executor.process_source(normal,checked(b['packet']),b,prior_pids);argv=['/usr/bin/sudo','-A','/usr/bin/python3','-I','-B','-c',code,challenge,str(caller[0]),caller[1]]
+  response=commands.exact(argv,30);report=executor.strict(response.stdout)
+- original=retained['base'].validate_capture_commands(historical);records=retained['base'].command_records(commands)
+- executor.validate_process(report,normal,b,challenge,caller,[r['pid']for r in retirement_commands+original+records[:-1]]+[r['pid']for r in actors])
++ records=retained['base'].command_records(commands)
++ executor.validate_process(report,normal,b,challenge,caller,prior_pids)
+  validate_absence_reports(historical['complete_process_reports']+[report],actors)
+  for row in actors:need(not Path('/proc',str(row['pid'])).exists(),'fresh recorded actor PID absent')
+  for row in actors:

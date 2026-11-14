@@ -1,0 +1,95 @@
+{
+  "actual_fixture_full78_selected_TU_partial_default_native": null,
+  "canonical_Git_sharedABI_P12_changes": false,
+  "consumer_invariants": {
+    "arguments": "Raw ptr and signed32 page count unchanged, kernel flag from actual C macro0; no count conversion, null guard, validation, saturation or ignored-return change.",
+    "new_data_proof": "Future real-header ABI and compiler PP must establish four-byte line/flag, readonly file array, fallback anchored callsite, and matching Rust metadata U/partial providers.",
+    "order_lifetime": "One synchronous call to existing tracked Rust allocator; no references, retained callback, temporary data, lock, page reference or free-operation reordering; no extra free or accounting call.",
+    "selection": "PUBLIC C body absent; Rust unique global T and no self-U required. Existing Rust allocator unique T is reused; C import must be proven from actual retained callers/relocs and is not assumed.",
+    "trace": "C compilation-unit filename retains static lifetime; exact original line807 retained PUBLIC and fallback. No Rust file!()/line!() or private absolute filename literal in product."
+  },
+  "default_link_native_blockers": "This PTfree port has no fixture/TU/partial proof. Passed six-provider batch has current78/GCC9/partial only; GCC14 default image and native acceptance remain OPEN.",
+  "engineering_percentage": null,
+  "existing_actual_Rust_provider": {
+    "authority": "Current-union full78 actual six-provider production receipt859b1cb6; kernel tracked allocator implementation unchanged by this source port.",
+    "entry": "_ihk_mc_free_pages -> pagealloc_track_free_result",
+    "path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs"
+  },
+  "fallback_body_byte_identical": true,
+  "following_physical_source_line_restored": 818,
+  "fragments": [
+    {
+      "bytes": 1061,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-pt-free-source-only-1/FUTURE-REAL-ABI-FRAGMENT.NOT-QUEUED.c",
+      "sha256": "7686ca7bea689363f0ba7dfb108aebdbdfd56a8aa40c9bc616c1066223438f83"
+    },
+    {
+      "bytes": 1731,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-pt-free-source-only-1/FUTURE-CALL-TRACE-FRAGMENT.NOT-QUEUED.c",
+      "sha256": "c1a0eb7840ea11378082445f11cc58e631c46b87143545e00c4c8d37b8607603"
+    }
+  ],
+  "metadata_ABI": "Private const char[] file, const int line/flag; same established immutable data pattern as user-free. New PTfree fields have no previous compiled ABI proof. Numeric-only #line anchors preserve fallback __LINE__807 and do not change __FILE__; line control then resumes actual physical source position.",
+  "new_driver_queue_reservation": null,
+  "original_provider": {
+    "bytes": 156,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-pt-free-source-only-1/EXACT-ORIGINAL-C-PROVIDER.inc",
+    "sha256": "410b30745ee8027a38b4bbc31e0b27feec779fcb5a54ae2bf9f5e2c213a9907b"
+  },
+  "original_start_line": 805,
+  "original_tracked_free_call_line": 807,
+  "patch": {
+    "bytes": 1879,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-pt-free-source-only-1/EXACT-PT-FREE-SOURCE.patch",
+    "sha256": "b7e22f6aee1d606d523ebb8c5e22656f528523345057bf8530096499991c7e8a"
+  },
+  "postimages": [
+    {
+      "bytes": 89732,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-pt-free-source-only-1/candidate/arch/x86_64/kernel/memory.c",
+      "sha256": "63d13923395767d80b0d219140bd97f28b6feec84fad02554760de51f5d07c5c"
+    },
+    {
+      "bytes": 204908,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-pt-free-source-only-1/candidate/kernel/rust/x86_memory_helpers.rs",
+      "sha256": "6e8e21f3dae7ef5f3e02bd2df486ccb10e244856ec860572d73289cbd21f2e5d"
+    }
+  ],
+  "preimages": [
+    {
+      "bytes": 89444,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-memobj-flush-source-only-1/candidate/arch/x86_64/kernel/memory.c",
+      "sha256": "ceed123214cd293f5afefd21dd071e39aa824cf3424cc6355a841c1ae5467f39"
+    },
+    {
+      "bytes": 204359,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-memobj-flush-source-only-1/candidate/kernel/rust/x86_memory_helpers.rs",
+      "sha256": "087240006b3f1b99c844c77c1c645118710bf34f53546637eb12d54215822092"
+    }
+  ],
+  "remaining_already_held_bodies": [
+    {
+      "body": "x86_clear_range_log_bridge / x86_clear_effect_log_bridge",
+      "reuse": "existing Rust kprintf/debug descriptor ABI; exact per-event strings/dynamic-debug flags still need source port",
+      "state": "C; next substantive body"
+    },
+    {
+      "body": "x86_pt_phys_to_virt_bridge",
+      "reuse": "existing Rust phys_to_virt",
+      "state": "separate a914/3fc source only; excluded here"
+    },
+    {
+      "body": "x86_pt_alloc_pages_bridge",
+      "reuse": "existing allocator helpers; exact ownership/error/flag boundary remains C",
+      "state": "C"
+    },
+    {
+      "body": "x86_pt_destroy_panic_bridge",
+      "reuse": "existing Rust panic and reason constants",
+      "state": "C"
+    }
+  ],
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\nSource-only PTfree provider with the original C tracing callsite retained exactly.\nNo second executable cohort or compiler invocation.\n",
+  "status": "COMPLETE_PT_FREE_SOURCE_ONLY_NOT_TESTED",
+  "whole_file_complete": false
+}

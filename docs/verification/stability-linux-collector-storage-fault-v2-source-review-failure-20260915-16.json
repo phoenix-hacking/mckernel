@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_review_failure",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "review_attempt": 20,
+  "status": "FAIL_SOURCE",
+  "recorded_utc": "2026-09-16T02:52:00Z",
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260915-23.tar.gz",
+    "sha256": "ead3fabe0d48e4c02e43789cf603bfd4df9ea8ef965906c9e35ca530d0b48132",
+    "size": 2094855,
+    "members": 58,
+    "safe_unique_members": true,
+    "verified_bindings": 146,
+    "nested_archives": 18
+  },
+  "reviewed_source_sha256": {
+    "prepare.py": "1d09a2f4f143af79de7eb98e7cc6d5c6a01efa89e15fa925d2c7869c78ab2df4",
+    "witness_owner.py": "4554efcda371a395681ff7f7353e05d98adf6ab4aae656b40d524f128fdf4670",
+    "supervise.py": "306a4982bd4d04721bc0478a5cfec553ac751dd0b5e9379cb9ba519bf4c92ce1",
+    "oracle.py": "6a10b72bebea8704aafbf91822377c3a4c341b9ac3df08190f9aac4667931a17",
+    "test_collector_storage_fault_packet.py": "eb0e15e2efb91fdd4afc956cf167ddb3b00f6a146bf78d4fbf34c311a138eeb2"
+  },
+  "findings": [
+    "After a positive birth pair and later contradictory observation, both sentinel and owner paths accept a null direct reap because invalidated authority is conflated with never-established history.",
+    "A null-birth adopted sentinel reap can be followed by revived positive identity and direct signal or signal-error authority ending in a positive direct timeout.",
+    "Incomplete sentinel cleanup can bind a direct signal to one PID and its sole direct timeout to another PID because sentinel identity joins are conditional on complete cleanup or an actual reap."
+  ],
+  "required_next": [
+    "Add full-record null-reap/null-timeout contradiction controls and successful-signal/signal-error retirement controls.",
+    "Separate historical birth from current authority, make PID retirement revoke all later direct authority, and bind every sentinel direct evidence item to one PID.",
+    "Rerun both pinned suites and obtain another fresh full exact-byte source review."
+  ],
+  "compiler_packet_released": false,
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

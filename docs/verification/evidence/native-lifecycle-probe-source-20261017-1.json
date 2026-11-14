@@ -1,0 +1,1392 @@
+{
+  "schema": "mckernel.native-lifecycle-probe-source.v1",
+  "task_id": "M05-native-lifecycle-probe-source-20261017-1",
+  "status": "BLOCKED_SECOND_ATTEMPT_PYTHON_COMPATIBILITY",
+  "changed_paths": [
+    "scripts/application-tests/native_diagnostic_lifecycle_probe.c",
+    "scripts/tests/test_native_diagnostic_lifecycle_probe.py",
+    "docs/verification/evidence/native-lifecycle-probe-source-20261017-1.json"
+  ],
+  "sources": [
+    {
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_lifecycle_probe.c",
+      "sha256": "18444a0917ed850690cca41be1b9a6090a3ab533c94a0f1ad66892df0625ca44",
+      "size": 4282
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/tests/test_native_diagnostic_lifecycle_probe.py",
+      "sha256": "f41925e09695463d2beab071a8b02b600b9246df26d1ec13ae46b967e4130ff3",
+      "size": 10982
+    }
+  ],
+  "input_snapshots": [
+    {
+      "path": "/home/holden/mckernel/host-kernel/native-rust/ihk.rs",
+      "sha256": "8ae67d7208229c22c503508d16d2c9718a7f19123542270cf5589569d21a51ec",
+      "size": 18754
+    },
+    {
+      "path": "/home/holden/mckernel/host-kernel/native-rust/os_runtime.rs",
+      "sha256": "9519b7f35f5d28c88cdf366fe5c67a244ea005db713690a3686afe8c2a60fcab",
+      "size": 70776
+    },
+    {
+      "path": "/home/holden/mckernel/host-kernel/native-rust/os_registry.rs",
+      "sha256": "b776668f4746a309c59c3de5318eff4723e5d485d88235c089ebac5ec9bd0ad6",
+      "size": 30435
+    },
+    {
+      "path": "/home/holden/mckernel/host-kernel/native-rust/ihk_ioctl.rs",
+      "sha256": "60739598352b236a0d698abae0c6104e7adfc05524be9a0653b2477b8728519e",
+      "size": 10467
+    },
+    {
+      "path": "/home/holden/mckernel/host-kernel/native-rust/abi/x86_64.rs",
+      "sha256": "89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3",
+      "size": 19740
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/tests/fixtures/native-boot.c",
+      "sha256": "d3807493ef92c75feeccd8a72156abae9d992bb1facb6e2d54b1d54a93919935",
+      "size": 10740
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/tests/fixtures/native-os-resource-assignment.c",
+      "sha256": "57eb965f63e8aff5ff0e1e9ed72e29b0dedb01772236d6556268d4d157213ae5",
+      "size": 9829
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/signal-mask-restore-current942-staging-20261017-1.json",
+      "sha256": "6dd4a8ea086759246592e361cae9f2681cdc94b5a5dbf9774e5d62ae57334106",
+      "size": 25705
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/shutdown-actual-order-20261017.json",
+      "sha256": "59b901944c7fd68b2ead46f1121e230160d91a3555d0dd730be817fa04fb0f73",
+      "size": 6714
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-shutdown-v6-source-checkpoint-20261001.json",
+      "sha256": "1463e1de675378188f810e2930e0c664e80813812042824367cd68335c447654",
+      "size": 2570
+    }
+  ],
+  "pinned_ihk_headers": {
+    "ihk_host_user.h": {
+      "git_repository": "ihk",
+      "revision": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+      "git_path": "linux/include/ihk/ihk_host_user.h",
+      "sha256": "2335260024075a08becbe74651162a950aee8bea603e9a451cb8bcae3aa0ef97"
+    },
+    "status.h": {
+      "git_repository": "ihk",
+      "revision": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+      "git_path": "linux/include/ihk/status.h",
+      "sha256": "fef81cf170da96d41500a572c22e44c272f7110eff815cf43944de0e429d81e7"
+    },
+    "ihk_monitor.h": {
+      "git_repository": "ihk",
+      "revision": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+      "git_path": "linux/include/ihk/ihk_monitor.h",
+      "sha256": "6fb530c99848036f8c71f946c01d2f7189e15c3e8a42b9962be980eaf29e3b60"
+    },
+    "ihk_debug.h": {
+      "git_repository": "ihk",
+      "revision": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+      "git_path": "linux/include/ihk/ihk_debug.h",
+      "sha256": "63160ae79466f721b35bae1f2a8dad1378bcd4b8525045930abfaf4ec47383d7"
+    }
+  },
+  "abi": {
+    "device": "/dev/mcos<decimal minor>",
+    "device_mode": "O_RDWR | O_CLOEXEC | O_NOFOLLOW",
+    "query_request": 1124867,
+    "shutdown_request": 1124866,
+    "arguments": "unsigned long scalar zero; no pointer or structure",
+    "query_result": "status directly; libc converts negative kernel errno to -1/errno",
+    "shutdown_success": {
+      "return": 0,
+      "post_status": "NotBooted = 0"
+    },
+    "idempotence": "os_runtime returns zero without callback when already NotBooted; probe marks transition_observed=false",
+    "failure": "Capture post-status even after failed shutdown. Fail regardless of post-status. No retry. Admission refusal may retain Running; irreversible failures may retain Shutdown.",
+    "lease": "One open fd spans both queries and shutdown, holding the same OS generation lease until close."
+  },
+  "tests": {
+    "source_only": "PASS 2 unittest tests plus AST parse",
+    "compiled": "PASS actual main: 16 operational scenarios and10 invalid argument cases; private child HOME/TMPDIR profile not satisfied",
+    "wrapper_scope": "Only open/ioctl/close injected. Actual probe C copied byte-for-byte and included with main renamed. No device open. All source, binaries and subprocess streams retained in fresh evidence directory.",
+    "scenario_names": [
+      "running",
+      "ready",
+      "repeat",
+      "retry_shutdown",
+      "open_errno",
+      "before_errno",
+      "busy",
+      "negative_errno",
+      "unsupported",
+      "interrupted",
+      "after_errno",
+      "close_errno",
+      "before_unknown",
+      "wrong_after",
+      "after_unknown",
+      "positive_shutdown"
+    ],
+    "negative_arguments": [
+      "missing",
+      "empty",
+      "negative",
+      "plus",
+      "space",
+      "suffix",
+      "path",
+      "INT_MAX+1",
+      "overflow",
+      "extra"
+    ]
+  },
+  "compiler_proposal": {
+    "admission": "REQUIRED from dispatcher before execution",
+    "cwd": "/home/holden/mckernel",
+    "argv": [
+      "/usr/bin/taskset",
+      "-c",
+      "6",
+      "/usr/bin/prlimit",
+      "--as=1073741824",
+      "--cpu=90",
+      "--nofile=256",
+      "--fsize=67108864",
+      "--core=0",
+      "/usr/bin/timeout",
+      "-k",
+      "5s",
+      "120s",
+      "/usr/bin/python3",
+      "-B",
+      "-m",
+      "unittest",
+      "-f",
+      "scripts.tests.test_native_diagnostic_lifecycle_probe"
+    ],
+    "environment": {
+      "PATH": "/usr/bin:/bin",
+      "LANG": "C",
+      "LC_ALL": "C",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "NATIVE_LIFECYCLE_COMPILE": "1",
+      "NATIVE_LIFECYCLE_EVIDENCE": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1"
+    },
+    "inner_compiler": [
+      "/usr/bin/cc",
+      "-std=c11",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-I",
+      "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/include",
+      "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/harness.c",
+      "-o",
+      "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/harness"
+    ],
+    "execution": "Each of 26 scenario processes has timeout20; overall wall120/CPU90, one CPU6, 1GiB address space; stop on first unexpected result. No guest, root, module, network, production payload or live device access."
+  },
+  "acceptance": {
+    "compiler_executed": true,
+    "native_device_access": false,
+    "guest_executed": false,
+    "runtime_release": false,
+    "application_acceptance": false,
+    "resource_restoration_verified": false,
+    "production_acceptance": false
+  },
+  "limitations": [
+    "Success observes the native shutdown return and registry NotBooted status only. Does not independently prove physical CPU/memory restoration, OS destroy, module unload, application success or QEMU teardown.",
+    "Tool is invoked only by a later separately reviewed native-guest diagnostic packet after application completion. Current collector, launcher and current942 artifacts were not edited.",
+    "An external timeout is required; probe does not retry interrupted shutdown or close."
+  ],
+  "read_search_note": "An overly broad filename-only scratch search encountered unrelated permission-denied directories; search stopped and exact dispatcher paths used. Note retained; no check/compiler/device failure occurred.",
+  "evidence": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/command.json",
+      "sha256": "9fc631648372b731aef7f30bb3c35324d5f3a367c580f4afefd7b2557719e0c9",
+      "size": 597
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/001.command.json",
+      "sha256": "7f3a3350536143ca8d563232d659827e84028fb08d2043dd1f9beee552c8a25a",
+      "size": 374
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/001.json",
+      "sha256": "3a0ee97af3171f9d89ff31c5ac1fb3287ac2971c7aa9388401f77672b5de42b7",
+      "size": 629
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/001.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/001.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/002.command.json",
+      "sha256": "2ba75fae0b30bf377ebd09bfddeab1abccbd50abba7a7deb89a6d7e5b406da8f",
+      "size": 116
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/002.json",
+      "sha256": "ed3eb7c3a0b6ce45743634669c0e7fa104bbbb84ba5a26c6ed93e47fa9426079",
+      "size": 339
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/002.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/002.stdout",
+      "sha256": "77cbf584af48c02267c6071dde26f780023b44bfbb00a520038ab971bd32bce5",
+      "size": 480
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/003.command.json",
+      "sha256": "3e8bfa4ead49114536fe3b1a7992a3d8c9678afeadf87194c9c5339fbffd88fc",
+      "size": 114
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/003.json",
+      "sha256": "f8817e2accead9f9db725273ea0f0ebc227104d0f08df21407b53ca157209195",
+      "size": 337
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/003.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/003.stdout",
+      "sha256": "843296a1bb9bf5fcbb201c41a591ba8a2682c77db4331b5d641f545c2ca89977",
+      "size": 480
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/004.command.json",
+      "sha256": "3cd6e063cbac9d886d9ef1923bdcae58255121e67a0365084545f2de7d61f020",
+      "size": 115
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/004.json",
+      "sha256": "f3addcfde06655a4bfb288c3cb63a3820128d5ed1d438286e9ad04e1f3688832",
+      "size": 338
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/004.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/004.stdout",
+      "sha256": "451f9fb5c1fb640ebd1993b8940a21c4493eabe16d6d014e87a23ff255d523ae",
+      "size": 481
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/005.command.json",
+      "sha256": "31b0e8587750fd6344eff995390e37183dbd1238212f2a1d465ea88269fa41d5",
+      "size": 123
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/005.json",
+      "sha256": "92da034259fe5004b3d8297eb6257866ead4f3f12a092c63970c6666fedde4ae",
+      "size": 346
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/005.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/005.stdout",
+      "sha256": "2e840e4cbac57936051754707ce921f5e8f8943ea9fc0fa23d4dcd5b7c487765",
+      "size": 480
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/006.command.json",
+      "sha256": "3908b8b624779e9a38797bbb0448901672c0f170294937e884014a9eb4373d39",
+      "size": 119
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/006.json",
+      "sha256": "53719f16d72145151a209b6507bd4148260f32c65405cdd9d920c004cce56763",
+      "size": 342
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/006.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/006.stdout",
+      "sha256": "1ad85fe549804f6b96565953dd1fff8a102d4fe50bb19b9f18f42f25d59d9d77",
+      "size": 73
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/007.command.json",
+      "sha256": "e3ef26105d7cfbfb20505b0b7a8faebd188e7d1aaca4d905e1cf798ad76cde28",
+      "size": 121
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/007.json",
+      "sha256": "bf2cbbd92644b5a06e936dcc6738db52bf0d51963c8550e4123d3e2ef39b62bd",
+      "size": 344
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/007.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/007.stdout",
+      "sha256": "8cb7ff1ba60498b6868cb836f91ab6c544834250c748d641ee78714610166d91",
+      "size": 235
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/008.command.json",
+      "sha256": "29dbdff78c4e12954bcee506c0c700002cbd41b4d915d25cbe8ecd38e5cc8577",
+      "size": 113
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/008.json",
+      "sha256": "f3c8886176049f0f6eab6496850a54c95f6ce0410e7005cb1c7c35ce6dbc1c35",
+      "size": 336
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/008.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/008.stdout",
+      "sha256": "df6db5c2b513e8777d23e4874f083beb923cc485a5130d886b52e719512a1cf9",
+      "size": 401
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/009.command.json",
+      "sha256": "4221fc1f8bf8e6bd6f16bb0cba6cb06a830c9885b1bcdfd1f357d0f6ce757c06",
+      "size": 123
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/009.json",
+      "sha256": "34bc6dc9db0aebd95d6ce20026b33253fb6ad88d2c7793352ebaef8497b9e54a",
+      "size": 346
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/009.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/009.stdout",
+      "sha256": "14aa90a24d82b3bd396eef8bd7302ad8a4ba55c1b2ac7569558fac7e5802b07c",
+      "size": 399
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/010.command.json",
+      "sha256": "b86ac11e6193d17c60f1ab39b5746560daea66af8976db3f57ef2fd6750d78f0",
+      "size": 120
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/010.json",
+      "sha256": "bf65ec9de02e2144b8e07e01e053e7c160b348765ed2853d5681fa288b8c657c",
+      "size": 343
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/010.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/010.stdout",
+      "sha256": "5df3043a48f726e40e27b7e643a10240df6f2889a8b633167f62c041791d741e",
+      "size": 401
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/011.command.json",
+      "sha256": "86446e5ff0c81ae7d5eeec26acdd12eb3ee3e6be12b27d56322cceb2a08c6acf",
+      "size": 120
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/011.json",
+      "sha256": "5ba608ec086b22aef04160fbdebe3b1bf96896321c299b144329d5ebc5b0bdda",
+      "size": 343
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/011.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/011.stdout",
+      "sha256": "cb630ad15ca586bdd236f6a838813184ea984e504b2b38aba04aa4db10f65909",
+      "size": 399
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/012.command.json",
+      "sha256": "02a5ef943c2df604b7c1285d721f62ce51abee691f88e231b1c803cbb894d8eb",
+      "size": 120
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/012.json",
+      "sha256": "57fcc6f65bcbea4f3c0d04de2bb1cbd4640c58c3001b17a7eb7e87ef07a44b81",
+      "size": 343
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/012.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/012.stdout",
+      "sha256": "01a7cdc53e964005f222515622442bfbd40c910d11f51c143a41a781d31f09ed",
+      "size": 399
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/013.command.json",
+      "sha256": "5a60aaad5b0c3b41e90ca219cf57acd4eedf4432157de5629f07d267a896980b",
+      "size": 120
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/013.json",
+      "sha256": "529c82de842404f102041856617b5412471c4170738baf73c8ce04bd87d49ce8",
+      "size": 343
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/013.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/013.stdout",
+      "sha256": "d0e3c7cbdf1ac8b5bdaf1c0fbe661c620f3e26daf3ee8a14f9826dd011b9c358",
+      "size": 399
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/014.command.json",
+      "sha256": "1907c7778862d5df9213bdd5b699bb3764bf25f95bb0e1c1ab013ccc2ecc6136",
+      "size": 123
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/014.json",
+      "sha256": "fbacdc840853fa2ed75c22796f10c6b16d692e2de446ef1117c3040e4adbf0c9",
+      "size": 346
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/014.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/014.stdout",
+      "sha256": "b31e1232c42be84c78c420de7a4752dd1b8dfd79d7e968302e74b4bf3ea235c4",
+      "size": 233
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/015.command.json",
+      "sha256": "1965d01063217cf43950567cb0bb74673baeeedd78e2478bef7f78d42839e1bc",
+      "size": 120
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/015.json",
+      "sha256": "e31169d6a60c86eaa73933e92a4c24173716d6ebd163d2151ef6579dd52c6cfd",
+      "size": 343
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/015.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/015.stdout",
+      "sha256": "de80a516920a1d5762c7472038ab064547a64ebec4ef34ae42d5d7e8ddcc6a5a",
+      "size": 397
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/016.command.json",
+      "sha256": "23889f58da1500b3f83cfb56017b257f317a42b324586bb26f21ede323f8457b",
+      "size": 122
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/016.json",
+      "sha256": "305b57098f8f00d4a40470fcea633c0c1d6a071b83963c76842428d0974f650b",
+      "size": 345
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/016.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/016.stdout",
+      "sha256": "be2dfade15dac5ec432441dd1993b2a958c4f8e936f7cc1bd948136f9bb76726",
+      "size": 399
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/017.command.json",
+      "sha256": "a8729e48c0c86ac17768b6f7e8004cbcc15c517131a9cc51606b6f045ccdea99",
+      "size": 126
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/017.json",
+      "sha256": "19edc9c870d71d3d7f4e445080e471b0647ef3a2c7088fcb409b15c3513e39ce",
+      "size": 349
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/017.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/017.stdout",
+      "sha256": "2249dcb1da127fac5e3398f00fde4f4578f056c5d038f1c0d1822b3f4a2ed2e0",
+      "size": 397
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/018.command.json",
+      "sha256": "657acc58be66ea30d41457d0be6311a8e5bd45cbe0bd157b5e0113c9ff8ec65f",
+      "size": 110
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/018.json",
+      "sha256": "a9fa1e890b4bc5b41109afc174b2f1a9a0ce4c03a67b510be912032df88c1dc0",
+      "size": 329
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/018.stderr",
+      "sha256": "f0dfaec29702ae8093034336fee9af0655d229a61f942a78ee0af31b40fd3f84",
+      "size": 58
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/018.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/019.command.json",
+      "sha256": "41e374461bdf947bb0542f164ab440604ceea969d5a9556ae6c2f28878b05dac",
+      "size": 114
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/019.json",
+      "sha256": "2e07c1126f0419bc4ef851791ff3487960954c076500ec90cbbb8c1bc5d9a78d",
+      "size": 337
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/019.stderr",
+      "sha256": "f0dfaec29702ae8093034336fee9af0655d229a61f942a78ee0af31b40fd3f84",
+      "size": 58
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/019.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/020.command.json",
+      "sha256": "da919ac99fc53372d725d09ad3c50946016cfee71b83faaef57b53958479c2d8",
+      "size": 116
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/020.json",
+      "sha256": "628d065c6b8bb5d84395493938adccd308dda440f702f855151a58ba41ca192a",
+      "size": 339
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/020.stderr",
+      "sha256": "f0dfaec29702ae8093034336fee9af0655d229a61f942a78ee0af31b40fd3f84",
+      "size": 58
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/020.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/021.command.json",
+      "sha256": "1851e4ad84ff2073d787eb789c3f060daa485bd166ba3642113b39d34b434cad",
+      "size": 116
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/021.json",
+      "sha256": "f9b063d8afbd934552fb3944e3590c7c1a7378adf7315988e8b7af205b3087e8",
+      "size": 339
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/021.stderr",
+      "sha256": "f0dfaec29702ae8093034336fee9af0655d229a61f942a78ee0af31b40fd3f84",
+      "size": 58
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/021.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/022.command.json",
+      "sha256": "8a59de5f2d632646b30ad2ce3e7c6dce67146e8ae7c3f01905bc14cc15601fbe",
+      "size": 116
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/022.json",
+      "sha256": "c0f313ab4c386c6ba5505d8546b331fef5b88bf94ec006422f3f7c7075d758cd",
+      "size": 339
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/022.stderr",
+      "sha256": "f0dfaec29702ae8093034336fee9af0655d229a61f942a78ee0af31b40fd3f84",
+      "size": 58
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/022.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/023.command.json",
+      "sha256": "d049ecb3b92bed0f902063d2eec77941c123433fb733e976f84eb01a3da88980",
+      "size": 116
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/023.json",
+      "sha256": "e32e6ae672abc78a107e96370d204270102d6f6193bf9e4fc91c2254109e50fa",
+      "size": 339
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/023.stderr",
+      "sha256": "f0dfaec29702ae8093034336fee9af0655d229a61f942a78ee0af31b40fd3f84",
+      "size": 58
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/023.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/024.command.json",
+      "sha256": "a61ad2257d1c5b20dcee3980ac839185e974b4cb2e4d0bb47c69340ee36d16b6",
+      "size": 118
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/024.json",
+      "sha256": "e724648b9064fcf256aa4f545a76c947ddeed45d14b970ca034ad71122e4719e",
+      "size": 341
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/024.stderr",
+      "sha256": "f0dfaec29702ae8093034336fee9af0655d229a61f942a78ee0af31b40fd3f84",
+      "size": 58
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/024.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/025.command.json",
+      "sha256": "bf26fd8aec30a02a962f52689448cc12aa73209d54782be95425c09b0f28ebc9",
+      "size": 124
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/025.json",
+      "sha256": "5aa174f9faed946c7b004a9fdd7d58764f54dd5db2c52a8887afd9bea50d6ea7",
+      "size": 347
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/025.stderr",
+      "sha256": "f0dfaec29702ae8093034336fee9af0655d229a61f942a78ee0af31b40fd3f84",
+      "size": 58
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/025.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/026.command.json",
+      "sha256": "19a6364a6f150c4c49a0814eac700627bedf23cb80a259cb686c207687bc91fb",
+      "size": 135
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/026.json",
+      "sha256": "9bb8c0094bd2831a9af1b4d81a754af1a9b87d90e4e3b5f67ef9ef3d4344e3ac",
+      "size": 358
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/026.stderr",
+      "sha256": "f0dfaec29702ae8093034336fee9af0655d229a61f942a78ee0af31b40fd3f84",
+      "size": 58
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/026.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/027.command.json",
+      "sha256": "5047c3a79513a5938ee8d89bd1f21fcb4a23655e6c4e0558b37ba2516e01b616",
+      "size": 122
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/027.json",
+      "sha256": "e7cc0a3b977c734619b98d70133feb8a9ed2cb7f78236fc54d3942a1d04a25b1",
+      "size": 349
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/027.stderr",
+      "sha256": "f0dfaec29702ae8093034336fee9af0655d229a61f942a78ee0af31b40fd3f84",
+      "size": 58
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/027.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/harness",
+      "sha256": "940d3e7e1b3f65ba877c6a28c0c0d28dc132a6072075a14f8cd4c9a192648de0",
+      "size": 17648
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/harness.c",
+      "sha256": "28ca5e5185d92412ded3266c20be59cce8d9749eaf436f2bf1216bd85ca5b857",
+      "size": 3132
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/include/ihk/ihk_debug.h",
+      "sha256": "63160ae79466f721b35bae1f2a8dad1378bcd4b8525045930abfaf4ec47383d7",
+      "size": 919
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/include/ihk/ihk_host_user.h",
+      "sha256": "2335260024075a08becbe74651162a950aee8bea603e9a451cb8bcae3aa0ef97",
+      "size": 5704
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/include/ihk/ihk_monitor.h",
+      "sha256": "6fb530c99848036f8c71f946c01d2f7189e15c3e8a42b9962be980eaf29e3b60",
+      "size": 1575
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/include/ihk/status.h",
+      "sha256": "fef81cf170da96d41500a572c22e44c272f7110eff815cf43944de0e429d81e7",
+      "size": 995
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/probe.c",
+      "sha256": "18444a0917ed850690cca41be1b9a6090a3ab533c94a0f1ad66892df0625ca44",
+      "size": 4282
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-2-command.json",
+      "sha256": "1ce399beb4de9f34a88873c34333379d0c966f3204121b6a4c435e2107e3e4e6",
+      "size": 1172
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-2-result.json",
+      "sha256": "94e6ac3886721c00a034169c0d5f24f61293bf86d085a3c4e4215ff25f5c2f85",
+      "size": 236
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-2.stderr",
+      "sha256": "91fdff9255655caf7380712a28806d699bd76b79f63821f1557ea88217dd53c9",
+      "size": 637
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-2.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-command.json",
+      "sha256": "2693da033c7d01cb0443f5fcdb198fc4b32f6629710c4b41668aa75002f38b6f",
+      "size": 1284
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-result.json",
+      "sha256": "4d95603742f027a32f11f4866a12123a213d1bcdefb607837ed8565e3d776292",
+      "size": 236
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled.stderr",
+      "sha256": "84fe24983e6e7aa6ea43e6cf38c0352f78d1873a5b40a44b77d855e53d1b57d6",
+      "size": 98
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/final-source-check.json",
+      "sha256": "863c60a92dc17e9e64c27d20c649562feb2eb5491544fc18bce6689b8296550b",
+      "size": 511
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/final-source-check.stderr",
+      "sha256": "455a234a903f02c7d36882c9b036acc1ee7cca1176404082cfe9897ae40211f7",
+      "size": 100
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/final-source-check.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/ihk_debug.h",
+      "sha256": "63160ae79466f721b35bae1f2a8dad1378bcd4b8525045930abfaf4ec47383d7",
+      "size": 919
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/ihk_host_user.h",
+      "sha256": "2335260024075a08becbe74651162a950aee8bea603e9a451cb8bcae3aa0ef97",
+      "size": 5704
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/ihk_monitor.h",
+      "sha256": "6fb530c99848036f8c71f946c01d2f7189e15c3e8a42b9962be980eaf29e3b60",
+      "size": 1575
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/read-search-note.json",
+      "sha256": "d7af77889ae4ca2362d31f4ee61558b9931b34fd5204efbb39cb31709d2a2338",
+      "size": 444
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/result.json",
+      "sha256": "f07e485d0f9f9cdb3a4a711685b45ef2540275584d80e1fdfbc7a06e97e0c97a",
+      "size": 237
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/source-report-before-compiler.json",
+      "sha256": "025bc03d29e6d388e8940f3ae9798aca67a4a0939c599124c7fe26aa824237db",
+      "size": 11317
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/source-report-before-env-correction.json",
+      "sha256": "461e65074871bba489791795cf8bc2cd548c8603ad8d76eb7a533ae1c657e2ce",
+      "size": 59471
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/status.h",
+      "sha256": "fef81cf170da96d41500a572c22e44c272f7110eff815cf43944de0e429d81e7",
+      "size": 995
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/stderr",
+      "sha256": "455a234a903f02c7d36882c9b036acc1ee7cca1176404082cfe9897ae40211f7",
+      "size": 100
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    }
+  ],
+  "blocker": "Second attempt failed before compiler on unavailable pathlib.Path.is_relative_to. Await dispatcher decision; no further edits or execution.",
+  "next_task": "Dispatcher compatibility fix and separately admitted fresh attempt; original passing26scenario evidence remains limited by private child environment caveat.",
+  "compiled_execution": {
+    "admitted_by": "dispatcher following source/harness inspection",
+    "outer_command": {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-command.json",
+      "sha256": "2693da033c7d01cb0443f5fcdb198fc4b32f6629710c4b41668aa75002f38b6f",
+      "size": 1284
+    },
+    "outer_result": {
+      "exit_code": 0,
+      "elapsed_seconds": 0.22190234400477493,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "84fe24983e6e7aa6ea43e6cf38c0352f78d1873a5b40a44b77d855e53d1b57d6"
+    },
+    "inner_runs": [
+      {
+        "record": {
+          "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/001.json",
+          "sha256": "3a0ee97af3171f9d89ff31c5ac1fb3287ac2971c7aa9388401f77672b5de42b7",
+          "size": 629
+        },
+        "argv": [
+          "/usr/bin/cc",
+          "-std=c11",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-I",
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/include",
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/harness.c",
+          "-o",
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/harness"
+        ],
+        "returncode": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "record": {
+          "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/002.json",
+          "sha256": "ed3eb7c3a0b6ce45743634669c0e7fa104bbbb84ba5a26c6ed93e47fa9426079",
+          "size": 339
+        },
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/harness",
+          "running",
+          "12"
+        ],
+        "returncode": 0,
+        "stdout_sha256": "77cbf584af48c02267c6071dde26f780023b44bfbb00a520038ab971bd32bce5",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "record": {
+          "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/003.json",
+          "sha256": "f8817e2accead9f9db725273ea0f0ebc227104d0f08df21407b53ca157209195",
+          "size": 337
+        },
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/harness",
+          "ready",
+          "12"
+        ],
+        "returncode": 0,
+        "stdout_sha256": "843296a1bb9bf5fcbb201c41a591ba8a2682c77db4331b5d641f545c2ca89977",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "record": {
+          "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/004.json",
+          "sha256": "f3addcfde06655a4bfb288c3cb63a3820128d5ed1d438286e9ad04e1f3688832",
+          "size": 338
+        },
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/harness",
+          "repeat",
+          "12"
+        ],
+        "returncode": 0,
+        "stdout_sha256": "451f9fb5c1fb640ebd1993b8940a21c4493eabe16d6d014e87a23ff255d523ae",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "record": {
+          "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/005.json",
+          "sha256": "92da034259fe5004b3d8297eb6257866ead4f3f12a092c63970c6666fedde4ae",
+          "size": 346
+        },
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/harness",
+          "retry_shutdown",
+          "12"
+        ],
+        "returncode": 0,
+        "stdout_sha256": "2e840e4cbac57936051754707ce921f5e8f8943ea9fc0fa23d4dcd5b7c487765",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "record": {
+          "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/006.json",
+          "sha256": "53719f16d72145151a209b6507bd4148260f32c65405cdd9d920c004cce56763",
+          "size": 342
+        },
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/harness",
+          "open_errno",
+          "12"
+        ],
+        "returncode": 1,
+        "stdout_sha256": "1ad85fe549804f6b96565953dd1fff8a102d4fe50bb19b9f18f42f25d59d9d77",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "record": {
+          "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/007.json",
+          "sha256": "bf2cbbd92644b5a06e936dcc6738db52bf0d51963c8550e4123d3e2ef39b62bd",
+          "size": 344
+        },
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/harness",
+          "before_errno",
+          "12"
+        ],
+        "returncode": 1,
+        "stdout_sha256": "8cb7ff1ba60498b6868cb836f91ab6c544834250c748d641ee78714610166d91",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "record": {
+          "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/008.json",
+          "sha256": "f3c8886176049f0f6eab6496850a54c95f6ce0410e7005cb1c7c35ce6dbc1c35",
+          "size": 336
+        },
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/harness",
+          "busy",
+          "12"
+        ],
+        "returncode": 1,
+        "stdout_sha256": "df6db5c2b513e8777d23e4874f083beb923cc485a5130d886b52e719512a1cf9",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "record": {
+          "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/009.json",
+          "sha256": "34bc6dc9db0aebd95d6ce20026b33253fb6ad88d2c7793352ebaef8497b9e54a",
+          "size": 346
+        },
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/harness",
+          "negative_errno",
+          "12"
+        ],
+        "returncode": 1,
+        "stdout_sha256": "14aa90a24d82b3bd396eef8bd7302ad8a4ba55c1b2ac7569558fac7e5802b07c",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "record": {
+          "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/010.json",
+          "sha256": "bf65ec9de02e2144b8e07e01e053e7c160b348765ed2853d5681fa288b8c657c",
+          "size": 343
+        },
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/harness",
+          "unsupported",
+          "12"
+        ],
+        "returncode": 1,
+        "stdout_sha256": "5df3043a48f726e40e27b7e643a10240df6f2889a8b633167f62c041791d741e",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "record": {
+          "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/011.json",
+          "sha256": "5ba608ec086b22aef04160fbdebe3b1bf96896321c299b144329d5ebc5b0bdda",
+          "size": 343
+        },
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/harness",
+          "interrupted",
+          "12"
+        ],
+        "returncode": 1,
+        "stdout_sha256": "cb630ad15ca586bdd236f6a838813184ea984e504b2b38aba04aa4db10f65909",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "record": {
+          "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/012.json",
+          "sha256": "57fcc6f65bcbea4f3c0d04de2bb1cbd4640c58c3001b17a7eb7e87ef07a44b81",
+          "size": 343
+        },
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/harness",
+          "after_errno",
+          "12"
+        ],
+        "returncode": 1,
+        "stdout_sha256": "01a7cdc53e964005f222515622442bfbd40c910d11f51c143a41a781d31f09ed",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "record": {
+          "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/013.json",
+          "sha256": "529c82de842404f102041856617b5412471c4170738baf73c8ce04bd87d49ce8",
+          "size": 343
+        },
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/harness",
+          "close_errno",
+          "12"
+        ],
+        "returncode": 1,
+        "stdout_sha256": "d0e3c7cbdf1ac8b5bdaf1c0fbe661c620f3e26daf3ee8a14f9826dd011b9c358",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "record": {
+          "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/014.json",
+          "sha256": "fbacdc840853fa2ed75c22796f10c6b16d692e2de446ef1117c3040e4adbf0c9",
+          "size": 346
+        },
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/harness",
+          "before_unknown",
+          "12"
+        ],
+        "returncode": 1,
+        "stdout_sha256": "b31e1232c42be84c78c420de7a4752dd1b8dfd79d7e968302e74b4bf3ea235c4",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "record": {
+          "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/015.json",
+          "sha256": "e31169d6a60c86eaa73933e92a4c24173716d6ebd163d2151ef6579dd52c6cfd",
+          "size": 343
+        },
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/harness",
+          "wrong_after",
+          "12"
+        ],
+        "returncode": 1,
+        "stdout_sha256": "de80a516920a1d5762c7472038ab064547a64ebec4ef34ae42d5d7e8ddcc6a5a",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "record": {
+          "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/016.json",
+          "sha256": "305b57098f8f00d4a40470fcea633c0c1d6a071b83963c76842428d0974f650b",
+          "size": 345
+        },
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/harness",
+          "after_unknown",
+          "12"
+        ],
+        "returncode": 1,
+        "stdout_sha256": "be2dfade15dac5ec432441dd1993b2a958c4f8e936f7cc1bd948136f9bb76726",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "record": {
+          "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/017.json",
+          "sha256": "19edc9c870d71d3d7f4e445080e471b0647ef3a2c7088fcb409b15c3513e39ce",
+          "size": 349
+        },
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/harness",
+          "positive_shutdown",
+          "12"
+        ],
+        "returncode": 1,
+        "stdout_sha256": "2249dcb1da127fac5e3398f00fde4f4578f056c5d038f1c0d1822b3f4a2ed2e0",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "record": {
+          "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/018.json",
+          "sha256": "a9fa1e890b4bc5b41109afc174b2f1a9a0ce4c03a67b510be912032df88c1dc0",
+          "size": 329
+        },
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/harness",
+          "invalid"
+        ],
+        "returncode": 2,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "f0dfaec29702ae8093034336fee9af0655d229a61f942a78ee0af31b40fd3f84"
+      },
+      {
+        "record": {
+          "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/019.json",
+          "sha256": "2e07c1126f0419bc4ef851791ff3487960954c076500ec90cbbb8c1bc5d9a78d",
+          "size": 337
+        },
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/harness",
+          "invalid",
+          ""
+        ],
+        "returncode": 2,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "f0dfaec29702ae8093034336fee9af0655d229a61f942a78ee0af31b40fd3f84"
+      },
+      {
+        "record": {
+          "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/020.json",
+          "sha256": "628d065c6b8bb5d84395493938adccd308dda440f702f855151a58ba41ca192a",
+          "size": 339
+        },
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/harness",
+          "invalid",
+          "-1"
+        ],
+        "returncode": 2,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "f0dfaec29702ae8093034336fee9af0655d229a61f942a78ee0af31b40fd3f84"
+      },
+      {
+        "record": {
+          "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/021.json",
+          "sha256": "f9b063d8afbd934552fb3944e3590c7c1a7378adf7315988e8b7af205b3087e8",
+          "size": 339
+        },
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/harness",
+          "invalid",
+          "+1"
+        ],
+        "returncode": 2,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "f0dfaec29702ae8093034336fee9af0655d229a61f942a78ee0af31b40fd3f84"
+      },
+      {
+        "record": {
+          "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/022.json",
+          "sha256": "c0f313ab4c386c6ba5505d8546b331fef5b88bf94ec006422f3f7c7075d758cd",
+          "size": 339
+        },
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/harness",
+          "invalid",
+          " 1"
+        ],
+        "returncode": 2,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "f0dfaec29702ae8093034336fee9af0655d229a61f942a78ee0af31b40fd3f84"
+      },
+      {
+        "record": {
+          "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/023.json",
+          "sha256": "e32e6ae672abc78a107e96370d204270102d6f6193bf9e4fc91c2254109e50fa",
+          "size": 339
+        },
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/harness",
+          "invalid",
+          "1x"
+        ],
+        "returncode": 2,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "f0dfaec29702ae8093034336fee9af0655d229a61f942a78ee0af31b40fd3f84"
+      },
+      {
+        "record": {
+          "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/024.json",
+          "sha256": "e724648b9064fcf256aa4f545a76c947ddeed45d14b970ca034ad71122e4719e",
+          "size": 341
+        },
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/harness",
+          "invalid",
+          "../0"
+        ],
+        "returncode": 2,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "f0dfaec29702ae8093034336fee9af0655d229a61f942a78ee0af31b40fd3f84"
+      },
+      {
+        "record": {
+          "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/025.json",
+          "sha256": "5aa174f9faed946c7b004a9fdd7d58764f54dd5db2c52a8887afd9bea50d6ea7",
+          "size": 347
+        },
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/harness",
+          "invalid",
+          "2147483648"
+        ],
+        "returncode": 2,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "f0dfaec29702ae8093034336fee9af0655d229a61f942a78ee0af31b40fd3f84"
+      },
+      {
+        "record": {
+          "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/026.json",
+          "sha256": "9bb8c0094bd2831a9af1b4d81a754af1a9b87d90e4e3b5f67ef9ef3d4344e3ac",
+          "size": 358
+        },
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/harness",
+          "invalid",
+          "999999999999999999999"
+        ],
+        "returncode": 2,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "f0dfaec29702ae8093034336fee9af0655d229a61f942a78ee0af31b40fd3f84"
+      },
+      {
+        "record": {
+          "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/027.json",
+          "sha256": "e7cc0a3b977c734619b98d70133feb8a9ed2cb7f78236fc54d3942a1d04a25b1",
+          "size": 349
+        },
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/harness",
+          "invalid",
+          "12",
+          "12"
+        ],
+        "returncode": 2,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "f0dfaec29702ae8093034336fee9af0655d229a61f942a78ee0af31b40fd3f84"
+      }
+    ],
+    "compiler_count": 1,
+    "scenario_count": 26,
+    "actual_probe_copy": {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/probe.c",
+      "sha256": "18444a0917ed850690cca41be1b9a6090a3ab533c94a0f1ad66892df0625ca44",
+      "size": 4282
+    },
+    "harness": {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/harness.c",
+      "sha256": "28ca5e5185d92412ded3266c20be59cce8d9749eaf436f2bf1216bd85ca5b857",
+      "size": 3132
+    },
+    "binary": {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-1/harness",
+      "sha256": "940d3e7e1b3f65ba877c6a28c0c0d28dc132a6072075a14f8cd4c9a192648de0",
+      "size": 17648
+    },
+    "no_live_devices": "All open/ioctl/close calls replaced by injected wrappers; fake_open checks exact /dev/mcos12 string and flags; no actual open is called",
+    "environment_readback": {
+      "finding": "capture() supplies only PATH=/usr/bin:/bin, LANG=C, LC_ALL=C to inner compiler/harness. Approved private outer HOME/TMPDIR were dropped; compiler temporary files may have used default /tmp.",
+      "status": "STOPPED_AND_REPORTED_TO_DISPATCHER",
+      "production_source_changed": false,
+      "correction": "Propagate only HOME/TMPDIR private values to child environment, record actual child env, and rerun in fresh compiled-2 after dispatcher release."
+    }
+  },
+  "bounded_environment_correction": {
+    "authorization": "Dispatcher explicitly authorized private HOME/TMPDIR validation and forwarding only",
+    "source_change": "Child env now only PATH/LANG/LC_ALL plus canonical caller-owned private HOME/TMPDIR under evidence root, and recorded per command.",
+    "attempt": "compiled-2",
+    "result": {
+      "exit_code": 1,
+      "elapsed_seconds": 0.05571599199902266,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "91fdff9255655caf7380712a28806d699bd76b79f63821f1557ea88217dd53c9"
+    },
+    "failure": "Host Python pathlib.Path lacks is_relative_to; AttributeError in setUpClass before header staging, compiler or scenarios.",
+    "compiler_invoked": false,
+    "tests_run": 0,
+    "evidence": [
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-2-command.json",
+        "sha256": "1ce399beb4de9f34a88873c34333379d0c966f3204121b6a4c435e2107e3e4e6",
+        "size": 1172
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-2-result.json",
+        "sha256": "94e6ac3886721c00a034169c0d5f24f61293bf86d085a3c4e4215ff25f5c2f85",
+        "size": 236
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-2.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-2.stderr",
+        "sha256": "91fdff9255655caf7380712a28806d699bd76b79f63821f1557ea88217dd53c9",
+        "size": 637
+      }
+    ],
+    "escalated": "Second attempt stopped immediately and reported to dispatcher; no additional correction/run.",
+    "minimal_next_correction": "Use Path.relative_to(evidence_root) with ValueError handling, compatible with older host Python; preserve strict/canonical/ownership/mode validation."
+  }
+}

@@ -1,0 +1,63 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/custody-guard-correction-source-1/exact_root_guard_runner.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-root-command-result-read-source-1/exact_root_result_guard_runner.py
+@@ -5,8 +5,8 @@
+ import argparse,hashlib,json,os,stat,subprocess
+ from pathlib import Path
+ ROOT=Path(__file__).resolve().parent
+-PROFILE=ROOT/'EXACT-ACTOR-ROOT-READ-PROFILE.NOT-RELEASED.json'
+-PROFILE_SHA='5accbdaa97e4a9e9e8b970c477b89baac0e3313ece2f3ecac54e3969a31bddc1'
++PROFILE=ROOT/'EXACT-ROOT-COMMAND-RESULT-PROFILE.NOT-RELEASED.json'
++PROFILE_SHA='c85d1a143b71f8a394abe0d72d8abeae0b6cd59355023f22e61cda6b6202bab3'
+ class Refusal(RuntimeError):pass
+ def need(value,message):
+  if not value:raise Refusal(message)
+@@ -70,14 +70,24 @@
+  need(process_identity(profile['actor'])==actor and process_identity(profile['parent'])==parent,'guard-process-race')
+  return dict(actor=actor,parent=parent,lock=lock,boot_id=profile['boot_id'])
+ def readonly_gdb_argv(profile):
+- commands=['set pagination off','set confirm off','set may-call-functions off','set may-write-registers off','set may-write-memory off','set may-insert-breakpoints off','set may-insert-fast-tracepoints off','file '+profile['python']['path'],'attach '+str(profile['actor']['pid']),'source '+profile['helper']['path'],'read-exact-recover-error '+profile['source']['path']+' Refusal','detach']
++ commands=['set pagination off','set confirm off','set may-call-functions off','set may-write-registers off','set may-write-memory off','set may-insert-breakpoints off','set may-insert-fast-tracepoints off','file '+profile['python']['path'],'attach '+str(profile['actor']['pid']),'source '+profile['helper']['path'],'read-exact-root-command-result '+profile['source']['path']+' '+profile['proc_code']['sha256']+' '+str(profile['proc_code']['bytes'])+' '+profile['actor']['starttime'],'detach']
+  argv=[profile['gdb']['path'],'-nx','-nh','-batch','-q','-iex','set auto-load off']
+  for command in commands:argv+=['-ex',command]
+  return argv
+ def decode_result(stdout,profile):
+  answers=[json.loads(line) for line in stdout.decode('utf-8','strict').splitlines() if line.startswith('{')]
+  need(len(answers)==1,'unique-json-result');answer=answers[0]
+- need(answer.get('status')=='PASS_EXACT_RECOVER_ERROR_READ' and answer.get('co_filename')==profile['source']['path'] and answer.get('co_name')=='recover' and answer.get('local')=='error' and answer.get('exception_type')=='Refusal' and isinstance(answer.get('error_argument'),str) and len(answer['error_argument'])<=4096 and answer['error_argument'].isascii(),'exact-result-oracle')
++ need(answer.get('status')=='PASS_EXACT_ROOT_COMMAND_RESULT_READ' and answer.get('co_filename')==profile['source']['path'] and answer.get('co_name')=='root_command' and answer.get('local')=='result' and answer.get('exception_type')=='Refusal','exact-result-frame')
++ rc=answer.get('returncode');need(type(rc) is int and -(1<<30)<rc<(1<<30),'bounded-child-returncode')
++ rows=[]
++ for stream in ('stdout','stderr'):
++  row=answer.get(stream);need(isinstance(row,dict) and set(row)=={'bytes','sha256','raw_hex'} and type(row['bytes']) is int and 0<=row['bytes']<=4<<20 and isinstance(row['raw_hex'],str) and len(row['raw_hex'])==2*row['bytes'],'bounded-child-byte-result');rows.append(row)
++ need(sum(row['bytes'] for row in rows)<=5<<20,'combined-childoutput5MiB-bound')
++ for row in rows:
++  raw=bytes.fromhex(row['raw_hex']);need(len(raw)==row['bytes'] and hashlib.sha256(raw).hexdigest()==row['sha256'],'lossless-child-bytes-binding')
++ meta=answer.get('argv') or {};code=profile['proc_code']
++ need(meta.get('prefix')==['/usr/bin/python3','-I','-B','-c'] and meta.get('code_sha256')==code['sha256'] and meta.get('code_bytes')==code['bytes'] and meta.get('challenge_bytes')==48 and isinstance(meta.get('challenge_sha256'),str) and len(meta['challenge_sha256'])==64 and meta.get('caller_pid')==1060806 and meta.get('caller_starttime')=='80309560','exact-PROC_CODE-caller-metadata')
++ need(rc or answer['stderr']['bytes'] or answer['stdout']['bytes']>profile['root_command_limit_bytes'],'actual-source-failure-condition')
+  return answer
+ def perform(profile,guardfn=guard,runfn=subprocess.run):
+  before=guardfn(profile);stdout=stderr=b'';error=None;code=None;after=None
+@@ -91,13 +101,13 @@
+   # Always observe; never resume/signal/change target if custody is uncertain.
+   try:after=guardfn(profile)
+   except Exception as exc:error=(error+'; ' if error else '')+'postguard:'+type(exc).__name__+':'+str(exc)
+- need(len(stdout)<=1<<20 and len(stderr)<=1<<20,'debugger-output-bound')
++ need(len(stdout)<=profile['limits']['gdb_stdout_bytes'] and len(stderr)<=profile['limits']['gdb_stderr_bytes'],'debugger-output-bound')
+  result=dict(status='REFUSED',before=before,after=after,debugger_returncode=code,error=error,
+              stdout=dict(bytes=len(stdout),sha256=hashlib.sha256(stdout).hexdigest(),raw_hex=stdout.hex()),
+              stderr=dict(bytes=len(stderr),sha256=hashlib.sha256(stderr).hexdigest(),raw_hex=stderr.hex()))
+  if error is None:
+   try:
+-   need(code==0 and after==before,'same-custody-and-gdb-exit');result['extraction']=decode_result(stdout,profile);result['status']='PASS_EXACT_OWNED_QUARANTINE_ERROR_READ'
++   need(code==0 and after==before,'same-custody-and-gdb-exit');result['extraction']=decode_result(stdout,profile);result['status']='PASS_EXACT_OWNED_ROOT_COMMAND_RESULT_READ'
+   except Exception as exc:result['error']=type(exc).__name__+':'+str(exc)
+  return result
+ def main():
+@@ -106,5 +116,5 @@
+  raw=PROFILE.read_bytes();need(hashlib.sha256(raw).hexdigest()==PROFILE_SHA,'fixed-profile-sha');profile=json.loads(raw)
+  need(profile['actor']['pid']==1060806 and profile['actor']['starttime']=='80309560' and profile['parent']['pid']==1060803 and profile['parent']['starttime']=='80309553','fixed-actor-births')
+  for key in ('gdb','python','helper','source','release','quarantine'):authenticate(profile[key])
+- result=perform(profile);print(json.dumps(result,sort_keys=True));return 0 if result['status']=='PASS_EXACT_OWNED_QUARANTINE_ERROR_READ' else 1
++ result=perform(profile);print(json.dumps(result,sort_keys=True));return 0 if result['status']=='PASS_EXACT_OWNED_ROOT_COMMAND_RESULT_READ' else 1
+ if __name__=='__main__':raise SystemExit(main())

@@ -1,0 +1,528 @@
+{
+  "schema": "m14-signal-termination-host-source-bindings-v1",
+  "source_HEAD_observed_before_private_preparation": "fdbe7559081da29b316ff7a35a99a8f994a6fcef",
+  "consumed_kernel_material_source_commit": "f1992ec2c5f18bb3a7f139647edde6818c34991b",
+  "canonical_preimages_and_private_candidates": [
+    {
+      "relative_path": "kernel/CMakeLists.txt",
+      "baseline": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/signal-termination-host-provider-1/baseline/kernel/CMakeLists.txt",
+        "bytes": 62796,
+        "sha256": "06e818515cb5a79e9e8355b1f10db1dd44c70d67312a238855a4df8c640dc7c8"
+      },
+      "candidate": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/signal-termination-host-provider-1/candidate/kernel/CMakeLists.txt",
+        "bytes": 63702,
+        "sha256": "1e67ca92144f68bea1a17424c9231c05a804e5724e62b73d8172e5ef45ee8dbc"
+      }
+    },
+    {
+      "relative_path": "kernel/syscall.c",
+      "baseline": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/signal-termination-host-provider-1/baseline/kernel/syscall.c",
+        "bytes": 964476,
+        "sha256": "e2bb3e910dcaecf23a8e131b347b401d7baf372f3d749a073e03458c429f1947"
+      },
+      "candidate": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/signal-termination-host-provider-1/candidate/kernel/syscall.c",
+        "bytes": 966076,
+        "sha256": "657bb821e651ccaeaff79c14a5f456d2ea81937ed0efc271a319d3563343e0a3"
+      }
+    },
+    {
+      "relative_path": "kernel/rust/f03_terminate.rs",
+      "baseline": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/signal-termination-host-provider-1/baseline/kernel/rust/f03_terminate.rs",
+        "bytes": 21974,
+        "sha256": "c32cbef93b4441aa8adc12090b9d02d3c9bedbcc8fd99aa3a1b6111f0f3dd328"
+      },
+      "candidate": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/signal-termination-host-provider-1/candidate/kernel/rust/f03_terminate.rs",
+        "bytes": 24237,
+        "sha256": "f62d22c9f5b395617135f84869aebc100270cab34fdee2f810e980c29ba739f3"
+      }
+    }
+  ],
+  "untouched_actual_input_files": [
+    {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "bytes": 1240794,
+      "sha256": "76ce6016d6ddd1cfa6c41070c0cf35e87b94ddc31e67c805adbe3b94b3f17469"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/atomic_helpers.rs",
+      "bytes": 6207,
+      "sha256": "8acf10a907cede816da8300d36bf967d938cc672dd75dbb3ecc8f3992ec42941"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/cls.rs",
+      "bytes": 7877,
+      "sha256": "c0260e7634d53fcc0873746af8bd16b6691ee0a4b7f394ca18896aef070f6bba"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_offload_entry.rs",
+      "bytes": 13252,
+      "sha256": "378bd1373807833442cb72a602061157fd1109ee559f7b8f25e6d2a67a5112cf"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/cls.h",
+      "bytes": 2984,
+      "sha256": "19719fe663c33bc3aec62875baa7f1b8d4a0e0042b5a8aae94fe7b6c9799a4c1"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/process.h",
+      "bytes": 26602,
+      "sha256": "8848d536f2fa847a59af72d573ec9c55838c27cea664d46438ab4e038bf83649"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/syscall.h",
+      "bytes": 20836,
+      "sha256": "459e6d0faec3f1b8366a0d329571ef5ea813042706be11f9423b0399bbba6ffa"
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/cokernel/smp/x86_64/include/ihk/memconst.h",
+      "bytes": 198,
+      "sha256": "38b25a9fedbcf50d9eae799681aff60705d6e2e5e3559bcb721b0541ce98dc61"
+    },
+    {
+      "path": "/home/holden/mckernel/executer/user/rust/mcexec_helpers.rs",
+      "bytes": 256059,
+      "sha256": "ab6aaa29b9a9b8d07077a9bb27e02c7dc7a353fe3a0d0b538b119e41bd264a24"
+    }
+  ],
+  "exact_current_source_slices": [
+    {
+      "path": "/home/holden/mckernel/kernel/rust/f03_terminate.rs",
+      "name": "notify_host_exit",
+      "start_line": 54,
+      "end_line": 66,
+      "bytes": 644,
+      "sha256": "0d8c9648917545fd46709003ee963430afdf5deb5f6c097ff58fba45fb7f4971"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "name": "terminate_mcexec_body_result",
+      "start_line": 19474,
+      "end_line": 19534,
+      "bytes": 2158,
+      "sha256": "d24185fb54fb846d83bfb6652c249d7650cc90647405743f01cc4a1d8d8a6fed"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "name": "exit_group_status_result",
+      "start_line": 21650,
+      "end_line": 21652,
+      "bytes": 169,
+      "sha256": "2b6cab50c527e19b888425c8bfb41a1c9af00e78cb49c35aa7fd6e2887a86e51"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "name": "syscall_offload_prepare_result",
+      "start_line": 3101,
+      "end_line": 3130,
+      "bytes": 900,
+      "sha256": "b582e955252ee4105fc9697b005fc17c87b8da03311b248bc1bd9287d4669f2d"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "name": "syscall_send_prepare_result",
+      "start_line": 2431,
+      "end_line": 2443,
+      "bytes": 340,
+      "sha256": "b8cc9d2a193392d4bec9aa0b972c5599a8eb14bc6e012d925a28cb8329607c9d"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "name": "syscall_request_publish_result",
+      "start_line": 2480,
+      "end_line": 2487,
+      "bytes": 246,
+      "sha256": "12e65b782176e85dc9c0780fd11ddcceea368a4f66e89e0f58657d6f1cf48930"
+    },
+    {
+      "path": "/home/holden/mckernel/executer/user/rust/mcexec_helpers.rs",
+      "name": "act_exit",
+      "start_line": 2157,
+      "end_line": 2189,
+      "bytes": 1004,
+      "sha256": "7eac3558513c775f0acb2dfd22c12cdb0d971a2428cbf88167fde68d304b6ac8"
+    }
+  ],
+  "real104_and_owner_cohort": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-signal-reader-p03-max-1/qualification-1/QUALIFICATION.json",
+    "bytes": 69046,
+    "sha256": "82c82622b0fa53ec24222f0f129ecf62292f83e9227200b5dc24b0007132d729"
+  },
+  "reused_current_actual_Rust_provider_owners": {
+    "terminate_mcexec_body_result": {
+      "name": "terminate_mcexec_body_result",
+      "final": {
+        "index": 705,
+        "name": "terminate_mcexec_body_result",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073685277744,
+        "bytes": 267
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 7339,
+          "name": "terminate_mcexec_body_result",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 4689,
+          "value": 0,
+          "bytes": 267
+        },
+        "section": ".ltext.terminate_mcexec_body_result",
+        "placement": {
+          "address": 18446744073685277744,
+          "bytes": 267
+        }
+      }
+    },
+    "syscall_offload_prepare_result": {
+      "name": "syscall_offload_prepare_result",
+      "final": {
+        "index": 1077,
+        "name": "syscall_offload_prepare_result",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073685244160,
+        "bytes": 66
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 7263,
+          "name": "syscall_offload_prepare_result",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 4557,
+          "value": 0,
+          "bytes": 66
+        },
+        "section": ".ltext.syscall_offload_prepare_result",
+        "placement": {
+          "address": 18446744073685244160,
+          "bytes": 66
+        }
+      }
+    },
+    "syscall_request_publish_result": {
+      "name": "syscall_request_publish_result",
+      "final": {
+        "index": 1620,
+        "name": "syscall_request_publish_result",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073685253552,
+        "bytes": 28
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 7275,
+          "name": "syscall_request_publish_result",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 4578,
+          "value": 0,
+          "bytes": 28
+        },
+        "section": ".ltext.syscall_request_publish_result",
+        "placement": {
+          "address": 18446744073685253552,
+          "bytes": 28
+        }
+      }
+    },
+    "atomic_cmpxchg_ulong": {
+      "name": "atomic_cmpxchg_ulong",
+      "final": {
+        "index": 3114,
+        "name": "atomic_cmpxchg_ulong",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684628016,
+        "bytes": 14
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 8260,
+          "name": "atomic_cmpxchg_ulong",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1000,
+          "value": 0,
+          "bytes": 14
+        },
+        "section": ".ltext.atomic_cmpxchg8",
+        "placement": {
+          "address": 18446744073684628016,
+          "bytes": 14
+        }
+      }
+    },
+    "do_syscall": {
+      "name": "do_syscall",
+      "final": {
+        "index": 3522,
+        "name": "do_syscall",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684702400,
+        "bytes": 1421
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4230,
+          "name": "do_syscall",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1226,
+          "value": 0,
+          "bytes": 1421
+        },
+        "section": ".ltext.do_syscall",
+        "placement": {
+          "address": 18446744073684702400,
+          "bytes": 1421
+        }
+      }
+    },
+    "syscall_send_prepare_result": {
+      "name": "syscall_send_prepare_result",
+      "final": {
+        "index": 3526,
+        "name": "syscall_send_prepare_result",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073685253584,
+        "bytes": 39
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 7276,
+          "name": "syscall_send_prepare_result",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 4579,
+          "value": 0,
+          "bytes": 39
+        },
+        "section": ".ltext.syscall_send_prepare_result",
+        "placement": {
+          "address": 18446744073685253584,
+          "bytes": 39
+        }
+      }
+    },
+    "ihk_mc_get_processor_id": {
+      "name": "ihk_mc_get_processor_id",
+      "final": {
+        "index": 3731,
+        "name": "ihk_mc_get_processor_id",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684828816,
+        "bytes": 80
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 5585,
+          "name": "ihk_mc_get_processor_id",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 2045,
+          "value": 0,
+          "bytes": 80
+        },
+        "section": ".ltext.ihk_mc_get_processor_id",
+        "placement": {
+          "address": 18446744073684828816,
+          "bytes": 80
+        }
+      }
+    },
+    "check_sig_pending": {
+      "name": "check_sig_pending",
+      "final": {
+        "index": 3928,
+        "name": "check_sig_pending",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684639744,
+        "bytes": 859
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4848,
+          "name": "check_sig_pending",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1069,
+          "value": 0,
+          "bytes": 859
+        },
+        "section": ".ltext.check_sig_pending",
+        "placement": {
+          "address": 18446744073684639744,
+          "bytes": 859
+        }
+      }
+    },
+    "get_this_cpu_local_var": {
+      "name": "get_this_cpu_local_var",
+      "final": {
+        "index": 3994,
+        "name": "get_this_cpu_local_var",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684781248,
+        "bytes": 102
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4983,
+          "name": "get_this_cpu_local_var",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1673,
+          "value": 0,
+          "bytes": 102
+        },
+        "section": ".ltext.get_this_cpu_local_var",
+        "placement": {
+          "address": 18446744073684781248,
+          "bytes": 102
+        }
+      }
+    },
+    "terminate": {
+      "name": "terminate",
+      "final": {
+        "index": 4389,
+        "name": "terminate",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073685270688,
+        "bytes": 5669
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4429,
+          "name": "terminate",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 4681,
+          "value": 0,
+          "bytes": 5669
+        },
+        "section": ".ltext.terminate",
+        "placement": {
+          "address": 18446744073685270688,
+          "bytes": 5669
+        }
+      }
+    },
+    "send_syscall": {
+      "name": "send_syscall",
+      "final": {
+        "index": 4858,
+        "name": "send_syscall",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073685148368,
+        "bytes": 960
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 5023,
+          "name": "send_syscall",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 4076,
+          "value": 0,
+          "bytes": 960
+        },
+        "section": ".ltext.send_syscall",
+        "placement": {
+          "address": 18446744073685148368,
+          "bytes": 960
+        }
+      }
+    }
+  },
+  "actual_pending_boundary": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f03-signal-whole-default-review-sdk-max-1/SIGNAL-PENDING-BOUNDARY.json",
+    "bytes": 12589,
+    "sha256": "94f825c80d034f8eaefd1f5e17b6e8cf5e5ff4cafa502a47955f9c98d0863f8d"
+  },
+  "whole04_prior_NO_GO": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f03-signal-whole-default-review-sdk-max-1/REVIEW.json",
+    "bytes": 17131,
+    "sha256": "f0d7d7c1a0a4534573788a23e2f9dbd63f335c792240e049c452e822d12a49db"
+  },
+  "actual_mcexec_supplier": {
+    "path": "/home/holden/mckernel/docs/verification/m15-mcexec-matching-provider-20261110/qualification/QUALIFICATION.json",
+    "bytes": 44796,
+    "sha256": "dc0c975c362caba38100e13b5ca951cb864fc8ecba698096f24e72edf0115296"
+  },
+  "mcexec_actual_supplier_review": {
+    "path": "/home/holden/mckernel/docs/verification/m15-mcexec-matching-provider-20261110/review/qualification-1/REVIEW.json",
+    "bytes": 14426,
+    "sha256": "a6f130387ea40f2543f98a687980c9f4be899b7518a5282f08c0229cebd09068"
+  },
+  "source_policy_or_ABI_edited": false,
+  "wait_source_or_module_edited": false,
+  "canonical_or_cache_modified": false,
+  "body_test_or_SUT_executed": false
+}

@@ -1,0 +1,37 @@
+{
+  "schema": "mckernel.native-exact-retention-artifacts-checkpoint.v1",
+  "time_utc": "2026-10-01T09:34:00Z",
+  "status": "PASS_RETENTION_ARTIFACTS",
+  "execution_release": false,
+  "roots": {
+    "candidate": {"path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-c81aeaca-scratch-14", "device": 1831, "inode": 1464725},
+    "metadata_backup": {"path": "/home/holden/mckernel-work/scratch/native-exact-metadata-backup-c81aeaca-scratch-14", "device": 1831, "inode": 1858963}
+  },
+  "revisions": {"main": "c81aeaca5cedd893981a058444fa11a03a49a744", "ihk": "3114d9e7101ad52030eb3effa849a5c108972a1f"},
+  "inventory": {"path": "docs/verification/evidence/native-exact-candidate-retention-c81aeaca-scratch14-20261001.inventory.json", "sha256": "12de35d422c6ec014e9ed893c1e1c7ffdb772969ff6f5a5978258203f5519630", "bytes": 5479703, "entries": 10992, "capsule_required": 921},
+  "capsule": {"path": "docs/verification/evidence/native-exact-candidate-retention-c81aeaca-scratch14-20261001.tar", "sha256": "8ca6a306ade8b7eb88d62488b239e5c9a3b7c5fb4b11f9af8d313d0497c8203d", "bytes": 12247040, "members": 933, "embedded_manifest_sha256": "12de35d422c6ec014e9ed893c1e1c7ffdb772969ff6f5a5978258203f5519630"},
+  "tools": {
+    "scripts/native_exact_candidate_retention_capsule.py": "d0bd9ce3b1fe110b71aee47362728997c7500216802e5740befd57b8273bbae1",
+    "scripts/native_exact_candidate_retention_archive.py": "6a28184e13e4ddec3a5e2fe6229c618929df29f235901083d55918c8291ac06e"
+  },
+  "verification": {
+    "independent_review": "PASS_RETENTION_ARTIFACTS",
+    "main_reconstructible_nondirectories": 8108,
+    "ihk_reconstructible_nondirectories": 1295,
+    "required_overlay": {"path": "ihk/test/ihklib/whitebox/src/driver/mckernel/syscall.c", "sha256": "7abb77fdc3049a54caebc3344de14c41e779502b4abcb7f301de4a647e15bf77"},
+    "missing_members": 0,
+    "extra_members": 0,
+    "duplicate_members": 0
+  },
+  "external_preparation_records": {
+    "log": {"path": "/home/holden/mckernel-work/scratch/native-exact-candidate-preparation-c81aeaca-scratch-14.log", "device": 1831, "inode": 90684, "bytes": 49492, "sha256": "5b611d53e5f4dadd3614570500bb6075db0dbc2a9038ed965395bf3de5b26ad1"},
+    "terminal": {"path": "/home/holden/mckernel-work/scratch/native-exact-candidate-preparation-c81aeaca-scratch-14-terminal.json", "device": 1831, "inode": 90687, "bytes": 364, "sha256": "d41e80310c4af581e59a825936d73476e1e5f0a53e55dd6712eb60259069a6fd"},
+    "input_manifest": {"path": "/home/holden/mckernel-work/scratch/native-exact-inputs-c81aeaca-scratch-14.json", "device": 1831, "inode": 90685, "bytes": 1215056, "sha256": "1bf7aea3f3dbccc92a08f307e2b96626a4a24b879bdb592478851e3d2121eed3"},
+    "request": {"path": "/home/holden/mckernel-work/scratch/native-exact-build-request-c81aeaca-scratch-14.json", "device": 1831, "inode": 90686, "bytes": 3051, "sha256": "fb0d0a5b232e5efe12ea39d68596ee1440ed10fa34875059634d91abb53e1164"},
+    "metadata_receipt": {"path": "/home/holden/mckernel-work/scratch/native-exact-metadata-evidence-c81aeaca-scratch-14/receipt.json", "device": 1831, "inode": 1858112, "bytes": 2919, "sha256": "3b2a442932c07611d1f0c4cfdc0e7f374cd95568800c7a2d3a16170e9df63190"}
+  },
+  "blocked_wrapper": {"path": "docs/verification/evidence/native-exact-candidate-retention-preparation-c81aeaca-scratch14-20261001.py", "sha256": "fa63c10d3b0d1a10d4ab4fe498281f7b9b62de4860108c4b45793907072aaced", "status": "BLOCK_DO_NOT_RUN"},
+  "capacity_bytes": {"host_available": 14168383488, "scratch_available": 16150040576, "required_host_floor": 17179869184, "required_scratch_floor": 12884901888},
+  "blocker": "Host availability is below the 16-GiB retirement floor. Push/fetch these artifacts, recover host capacity without touching protected inputs, then prepare a fresh independently reviewed retirement release.",
+  "mutation": "No source root member was modified or deleted; only the inventory and deterministic capsule were created."
+}

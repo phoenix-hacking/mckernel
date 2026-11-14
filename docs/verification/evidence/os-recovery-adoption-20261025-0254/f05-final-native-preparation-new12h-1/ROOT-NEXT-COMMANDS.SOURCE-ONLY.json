@@ -1,0 +1,36 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_DEPENDENT_COMMANDS_NOT_GRANTED",
+  "canonical_export_directory": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-final-native-preparation-new12h-1",
+  "first_command_after_Root_export_and_independent_source_review": [
+    "/usr/bin/python3",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-final-native-preparation-new12h-1/bind_stage_review.py",
+    "--review",
+    "REQUIRED_REAL_INDEPENDENT_STAGE_REVIEW_ABSOLUTE_PATH",
+    "--review-sha256",
+    "REQUIRED_REAL_STAGE_REVIEW_SHA256"
+  ],
+  "next_stager_argv_after_binder_and_Root_ordinary_grant": [
+    "/usr/bin/python3",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-final-native-preparation-new12h-1/stage_current109_f05_specific.py",
+    "--inputs",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-final-native-preparation-new12h-1/F05-STAGING-INPUTS.FINAL-BOUND.json",
+    "--inputs-sha256",
+    "REQUIRED_REAL_BINDER_OUTPUT_SHA256"
+  ],
+  "stager_effects": "One fresh offline composition: derive image-only base, newF05 overlay+receipt, two exact module snapshots and final complete validated manifest. No compiler, guest, nonce/admission or cleanup.",
+  "must_not_replay_completed_composition": true,
+  "missing_before_stager": [
+    "Canonical source export plus exact source/frozen/input hashes and independently reviewed stager patch",
+    "Real stage review reference bound into final inputs",
+    "Root fresh ordinary composition grant and current resource/source/ownership admission as applicable"
+  ],
+  "missing_after_stager_before_native": [
+    "Independent actual offline composition acceptance and namespace-aware complete manifest/source/overlay map validation",
+    "Genuine Root source authority/case-capability bindings for newF05 and staticCloneTID independent review",
+    "Fresh account/current physical/native ownership/resource/nonce and original-contract execution release",
+    "Fresh parent-controlled new12h observer/wrapper binding; oldHERE/CID/NONCE observer body is not F05 authority"
+  ]
+}

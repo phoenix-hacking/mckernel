@@ -1,0 +1,109 @@
+{
+  "status": "SOURCE_ONLY_LITERAL_COUNTER8_REFRESH",
+  "wrapper_path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation8-20261019-1/observe-root-eight.py",
+  "wrapper_sha256": "bd9dc6f53affb3de361476720b56e0b87160ec4c079856ffd7c801072cecad2b",
+  "basis_wrapper": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation7-20261019-1/observe-root-seven.py",
+  "basis_wrapper_sha256": "9852c164c59ed0c816a2cfd721a54da75f3809facb796cc19b7d1808fe95858b",
+  "source_path": "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/exact120.py",
+  "source_sha256": "0c134ee778b273610ead1ecc507caa038642459c0a065c956b4431c35c755917",
+  "release_path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation8-20261019-1/actual-observation-release-8.json",
+  "outer_argv": [
+    "sudo",
+    "-A",
+    "/usr/bin/python3",
+    "-I",
+    "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation8-20261019-1/observe-root-eight.py",
+    "--release",
+    "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation8-20261019-1/actual-observation-release-8.json",
+    "--release-sha256",
+    "PENDING_GENUINE_RELEASE_SHA256"
+  ],
+  "five_literal_readback_commands": [
+    {
+      "name": "stat-before",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/stat",
+        "-c",
+        "%d:%i:%u:%g:%f:%h:%s:%y:%z",
+        "--",
+        "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation8-20261019-1/actual-observation-8.stdout",
+        "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation8-20261019-1/actual-observation-8.stderr",
+        "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation8-20261019-1/actual-observation-8.supervisor.jsonl"
+      ],
+      "capture_stem": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation8-20261019-1/observation8-raw-readback-1/stat-before"
+    },
+    {
+      "name": "raw-0",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/cat",
+        "--",
+        "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation8-20261019-1/actual-observation-8.stdout"
+      ],
+      "capture_stem": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation8-20261019-1/observation8-raw-readback-1/raw-0"
+    },
+    {
+      "name": "raw-1",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/cat",
+        "--",
+        "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation8-20261019-1/actual-observation-8.stderr"
+      ],
+      "capture_stem": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation8-20261019-1/observation8-raw-readback-1/raw-1"
+    },
+    {
+      "name": "raw-2",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/cat",
+        "--",
+        "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation8-20261019-1/actual-observation-8.supervisor.jsonl"
+      ],
+      "capture_stem": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation8-20261019-1/observation8-raw-readback-1/raw-2"
+    },
+    {
+      "name": "stat-after",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/stat",
+        "-c",
+        "%d:%i:%u:%g:%f:%h:%s:%y:%z",
+        "--",
+        "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation8-20261019-1/actual-observation-8.stdout",
+        "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation8-20261019-1/actual-observation-8.stderr",
+        "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation8-20261019-1/actual-observation-8.supervisor.jsonl"
+      ],
+      "capture_stem": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation8-20261019-1/observation8-raw-readback-1/stat-after"
+    }
+  ],
+  "AST_proof": {
+    "status": "PASS_FULL_MODULE_IDENTICAL_AFTER_REVERSING_ONLY_7_NAMESPACE_AND_CAPTURE_LITERAL_SUBSTITUTIONS",
+    "unchanged_helper_AST": [
+      "fixed_small",
+      "group_census",
+      "bounds"
+    ],
+    "changed_function": [
+      "main"
+    ],
+    "new_statements_or_semantics": false,
+    "runtime_tests": false
+  },
+  "apply_binding": {
+    "wrapper": "/home/holden/mckernel-work/host-preparation/evening-cleanup-apply-20261019-1/apply-root-one.py",
+    "wrapper_sha256": "f88d6f1b27828b6063f7e28fb01f9617e41da4478ef42c7b0b97a936e04b039b",
+    "new_release_path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-apply-20261019-1/actual-cleanup-release-1-observation8.json",
+    "release_path_contract": "Actual argparse --release required value passed unchanged to child; wrapper validates releasebytes/hash/source/status/selfhash but imposes no fixed release basename. No source modification needed.",
+    "journal": "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/actual-cleanup-apply-1.jsonl",
+    "new_snapshot_payload": "Root builds exact acceptedfresh8data; never edit/reuse stale old release36f982.",
+    "apply_capture1_unconsumed": "Dispatcher must freshly verify; author does not claim runtime admission."
+  },
+  "retained_semantics": "Existing accepted90s TERM5 KILL5 /4GiB virtual/1CPU6 supervisor and exactfive bounded FD/stat/hash readback contracts unchanged. No whole closure copied; no root/observe/compiler run."
+}

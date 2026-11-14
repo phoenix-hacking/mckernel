@@ -1,0 +1,34 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-native-entry-source-1/publication-files-correction-source-1/templates/prepare_startup_bindings.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/templates/prepare_startup_bindings.py
+@@ -20,7 +20,7 @@
+  b=read(A/'STATIC-NATIVE-BINDINGS.TEMPLATE.NOT-RELEASED.json')
+  for key in ['source_authority','case_capability','stage_map_acceptance','root_ledger35','owner_source','offline_manifest','capture_helper','collector','payload','overlay','overlay_manifest','latest_serial_operation_physical_acceptance','artifact_acceptance','compiled_collector_adoption','compiled_collector_caseprofile','compiled_collector_HOST_acceptance','compiled_collector_facts','nonce_reservation']:
+   checked(b[key])
+- manifest=read(Path(b['offline_manifest']['path']));need(manifest['case_id']=='startup.argv-empty' and manifest['payload']['oracle']==b['expected_oracle'] and len(bytes.fromhex(b['expected_oracle']['stdout_hex']))==91 and b['expected_oracle']['exit_code']==0 and b['expected_oracle']['stderr_hex']=='','original startup oracle differs')
++ manifest=read(Path(b['offline_manifest']['path']));need(manifest['case_id']=='P-M06-01-process-exec-wait-235B' and manifest['payload']['oracle']==b['expected_oracle'] and len(bytes.fromhex(b['expected_oracle']['stdout_hex']))==235 and b['expected_oracle']['exit_code']==0 and b['expected_oracle']['stderr_hex']=='','original startup oracle differs')
+  # Real first API imports and full immutable manifest validation, no backend/guest.
+  import importlib.util
+  owner=checked(b['owner_source']);validator=owner.with_name('native_diagnostic.py');need(hashlib.sha256(validator.read_bytes()).hexdigest()=='529830adcd6fafa13979bf6036b2812c88630c5e0112ce4d80f9fc28cc30d4da','exact existing manifest validator')
+@@ -31,10 +31,10 @@
+  for key in ['executor_supplement','executor_contract','loader_acceptance','composed_case_binding']:checked(b[key])
+  need(validated['artifacts']['mcexec']['sha256']=='e5d18169ee50581274b374bba17fcefebe39e828885f367bfee182beaa3df756','actual staged Rust executor')
+  facts=read(Path(b['compiled_collector_facts']['path']));profile=read(Path(b['compiled_collector_caseprofile']['path']));adopt=read(Path(b['compiled_collector_adoption']['path']))
+- need(facts['actual_test_count']==22 and facts['filtered']==facts['ignored']==0,'reuse all22 actual retirement startup producer controls')
++ need(facts['actual_test_count']==26 and facts['filtered']==facts['ignored']==0,'reuse all26 actual original235 producer controls')
+  need(facts['payload_argv']==profile['argv']==validated['payload']['argv']==b['expected_guest_argv'] and facts['payload_env']==profile['env']==validated['payload']['env'] and facts['payload_cwd']==profile['cwd']==validated['payload']['cwd'],'actual compiled startup producer launch profile')
+- need(facts['oracle']==profile['oracle']==validated['payload']['oracle'] and facts['source_caseprofile']['sha256']==b['compiled_collector_caseprofile']['sha256'],'compiled original91B oracle/profile join')
+- need(facts['actual_collector_artifact']['sha256']==adopt['actual_artifact']['sha256']==validated['staging']['collector']['sha256']=='33c11bb60d337a2a8dd99fbb3b5d4cf9522f44996d3b36080dfd534f38dc6144','correct compiled Rust startup collector, never oldc020')
++ need(facts['oracle']==profile['oracle']==validated['payload']['oracle'] and facts['source_caseprofile']['sha256']==b['compiled_collector_caseprofile']['sha256'],'compiled original235B oracle/profile join')
++ need(facts['actual_collector_artifact']['sha256']==adopt['actual_artifact']['sha256']==validated['staging']['collector']['sha256']=='ab3e775e6a9df8d36bbbb974ddafbb26493c24f1aaf49487f5fc27c5583bed6c','correct compiled Rust startup collector, never oldc020')
+  supplement_path=Path(b['executor_supplement']['path']);spec=importlib.util.spec_from_file_location('literal_original_startup_executor_supplement',supplement_path);supplement=importlib.util.module_from_spec(spec);spec.loader.exec_module(supplement)
+  need(supplement.__file__==str(supplement_path) and supplement.__spec__.origin==str(supplement_path),'literal supplement import context')
+  need(b['executor_supplement']['sha256']=='29f9add4327e6eff4dffe7dcac02ad1b10a8349ae621b8b3ee673426ba2bfaca' and b['executor_contract']['sha256']=='0e3a0cf6e63914e9cc23b6e8a6850156f1cd2ad4a481b517e1354e76a1fed443','exact executor supplement/contract')
+@@ -46,7 +46,7 @@
+  checked(stage['scratch_manifest']);b['manifest']=stage['scratch_manifest'];b['attempt_parent']=stage['planned_attempt_parent'];b['planned_attempt_parent']=stage['planned_attempt_parent'];b['scratch_manifest_stage']=ref(A/'ACTUAL-SCRATCH-MANIFEST-STAGE.json');b['stage_result']=b['scratch_manifest_stage']
+  pure_owner._manifest_identity(b['manifest']['path'],b['manifest']['sha256']);pure_owner._manifest_outside_writable_parent(b['manifest']['path'],b['attempt_parent']);v.load_manifest(b['manifest']['path'])
+  need(not list(Path(b['attempt_parent']).iterdir()),'fresh attempt parent is not empty')
+- ledger=read(Path(b['root_ledger35']['path']));need(len(ledger['consumed_nonces'])==45 and ledger['latest_accepted_free_boundary']==b['latest_serial_operation_physical_acceptance'],'exact actual Root44/free boundary')
++ ledger=read(Path(b['root_ledger35']['path']));need(len(ledger['consumed_nonces'])=='ROOT_CURRENT_CONSUMED_COUNT' and ledger['latest_accepted_free_boundary']==b['latest_serial_operation_physical_acceptance'],'exact actual Root46/free boundary')
+  for flag,value in [('--manifest',b['manifest']['path']),('--attempt-parent',b['attempt_parent']),('--manifest-sha256',b['manifest']['sha256'])]:b['exact_argv'][b['exact_argv'].index(flag)+1]=value
+ 
+  if args.nonce:

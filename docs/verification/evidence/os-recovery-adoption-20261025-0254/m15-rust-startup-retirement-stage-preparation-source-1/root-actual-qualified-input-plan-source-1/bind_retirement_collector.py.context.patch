@@ -1,0 +1,20 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-stage-preparation-source-1/bind_retirement_collector.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-stage-preparation-source-1/root-actual-qualified-input-plan-source-1/bind_retirement_collector.py
+@@ -5,7 +5,7 @@
+ from pathlib import Path
+ HERE=Path(__file__).resolve().parent
+ PLAN=HERE/'STAGE-PLAN.NOT-RELEASED.json'
+-PLAN_SHA=None  # Root binds final plan after actual new collector qualification
++PLAN_SHA='d22d9f2988df091aade281cbb7b0534d59fc21d0c8a0999f64b2db0c1ede1ef9'
+ def need(ok,why):
+  if not ok:raise ValueError(why)
+ def read(path):
+@@ -52,7 +52,7 @@
+  for r in p['references'].values():checked(r)
+  for r in [p['collector'],p['selected_executor'],p['source_base'],p['payload'],p['image'],*p['modules']]:checked(r)
+  facts=data(p['compiled_collector_binding_facts']);profile=data(p['compiled_collector_profile']);ad=data(p['references']['Root_collector_adoption'])
+- need(ad['artifact']['sha256']==p['collector']['sha256'] and ad['collector_binding_facts']['sha256']==p['compiled_collector_binding_facts']['sha256'],'Root adopted correct producer qualification')
++ need(ad['actual_artifact']['sha256']==p['collector']['sha256'] and ad['actual_binding_facts']['sha256']==p['compiled_collector_binding_facts']['sha256'],'Root adopted correct producer qualification')
+  check_collector(p['manifest_template'],None,p,facts,profile)
+  old=data(p['references']['failed_be6e_manifest']);expected=copy.deepcopy(old);expected['staging']['collector']=p['collector'];expected['staging']['derived_initramfs']=None;expected['staging']['overlay_manifest']=None
+  need(expected==p['manifest_template'],'only collector and unbound derived receipt inputs differ')

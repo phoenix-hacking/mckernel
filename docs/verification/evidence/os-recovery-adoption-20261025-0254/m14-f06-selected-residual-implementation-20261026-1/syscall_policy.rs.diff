@@ -1,0 +1,12 @@
+--- kernel/rust/syscall_policy.rs
++++ kernel/rust/syscall_policy.rs
+@@ -35270,3 +35270,9 @@
+         )
+     }
+ }
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Paired centrally with MCKERNEL_RUST_F06_PROCESS_VM_ENTRY; no automatic selection.
++#[cfg(f06_process_vm_entry_candidate)]
++#[path = "f06_process_vm_entry.rs"]
++mod f06_process_vm_entry;

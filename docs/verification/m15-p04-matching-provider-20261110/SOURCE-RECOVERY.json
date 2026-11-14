@@ -1,0 +1,209 @@
+{
+  "acceptance": "No original M14/M15 whole row, default cutover, whole runtime image, C retirement, native acceptance or valid-dump proof is claimed.",
+  "actual_crash_ABI_join": {
+    "ABI_record_u64_order": [
+      "version",
+      "CHAR_BIT",
+      "sizeof_int",
+      "sizeof_long",
+      "sizeof_pointer",
+      "sizeof_ulonglong",
+      "sizeof_cmd_func_t",
+      "sizeof_command_table_entry",
+      "align_command_table_entry",
+      "command_name_offset",
+      "command_func_offset",
+      "command_help_offset",
+      "command_flags_offset",
+      "machdep_flags_offset",
+      "machdep_kvbase_offset",
+      "sizeof_actual_full_machdep_table",
+      "MAXARGS",
+      "KVADDR",
+      "TRUE",
+      "FAULT_ON_ERROR",
+      "RETURN_ON_ERROR"
+    ],
+    "BFD": "Exact production78bc/3375 real-header/compiler guard generates section DATA by real native witness, asserting 12 APIs including bool bfd_close_all_done. No synthetic DATA, guessed layout or archive consumption claim.",
+    "CommandTableEntry": "repr(C) name char*, nullable extern-C void(void) callback, help char**, flags unsigned long; actual header full-layout static assertions and real object COMMAND_TABLE size/relocations required. Witness never creates Some callback or replacement table.",
+    "MachdepTable": "Only consumed flags/kvbase prefix offsets/types are joined. Full C machdep_table size is captured; it is not equated to the two-field Rust prefix size.",
+    "actual_descriptor": "Original helper initializes real 2-entry command table in ldump2mcdump_init, stores Some(cmd_ldump2mcdump), fills help and calls register_extension. Original used init_array/fini_array pointers select exported init/fini. Read actual object/final relocations and symbols; do not run those functions.",
+    "header": {
+      "bytes": 206461,
+      "path": "/home/holden/mckernel/executer/include/defs.h",
+      "sha256": "0cb677f0a2fd90dc3fbd04b9bc240c04a6409d4f751cb88ceff13d39308e8943"
+    },
+    "host_functions": [
+      "register_extension",
+      "symbol_value",
+      "readmem"
+    ],
+    "host_globals": [
+      "argcnt",
+      "args",
+      "fp",
+      "machdep"
+    ],
+    "runtime_provider_remaining": "No matching crash host ELF/export closure is selected by production shared target. Actual crash binary plus its exported register_extension/symbol_value/readmem/argcnt/args/fp/machdep and BFD symbols, matching header/provider ownership and eventual admitted backend/native behavior remain required. This is a specific remaining producer artifact, not an external inventory prerequisite."
+  },
+  "actual_current_production": {
+    "source_bindings": [
+      {
+        "byte_identical": true,
+        "materialized": {
+          "bytes": 32826,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/source/rust/ldump2mcdump_helpers.rs",
+          "sha256": "5aab8a4270858287d4eb61a1109d96126bae9bf06913da31adf79c3e8c1b7c2a"
+        },
+        "production": {
+          "bytes": 32826,
+          "path": "/home/holden/mckernel/executer/user/rust/ldump2mcdump_helpers.rs",
+          "sha256": "5aab8a4270858287d4eb61a1109d96126bae9bf06913da31adf79c3e8c1b7c2a"
+        }
+      },
+      {
+        "byte_identical": true,
+        "materialized": {
+          "bytes": 2568,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/source/cmake/ldump2-selected-bfd/Ldump2SelectedBfdLayout.cmake",
+          "sha256": "78bc5d6faecd013d3bfb263c097831ce880b76f0a567b99b5787baa6805ad0c4"
+        },
+        "production": {
+          "bytes": 2568,
+          "path": "/home/holden/mckernel/executer/user/cmake/ldump2-selected-bfd/Ldump2SelectedBfdLayout.cmake",
+          "sha256": "78bc5d6faecd013d3bfb263c097831ce880b76f0a567b99b5787baa6805ad0c4"
+        }
+      },
+      {
+        "byte_identical": true,
+        "materialized": {
+          "bytes": 3223,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/source/cmake/ldump2-selected-bfd/section_layout_witness.c",
+          "sha256": "3375c309059ad65b0f18d0431b7c413d10d9ed8196beec82409bdf715c3dc427"
+        },
+        "production": {
+          "bytes": 3223,
+          "path": "/home/holden/mckernel/executer/user/cmake/ldump2-selected-bfd/section_layout_witness.c",
+          "sha256": "3375c309059ad65b0f18d0431b7c413d10d9ed8196beec82409bdf715c3dc427"
+        }
+      },
+      {
+        "byte_identical": true,
+        "materialized": {
+          "bytes": 2426,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/source/cmake/SelectRustVmcore2mckdump.cmake",
+          "sha256": "b082d79c183cc3a19d872bc3252303b71871081036a89f9235d7ab049ed48c81"
+        },
+        "production": {
+          "bytes": 2426,
+          "path": "/home/holden/mckernel/executer/user/cmake/SelectRustVmcore2mckdump.cmake",
+          "sha256": "b082d79c183cc3a19d872bc3252303b71871081036a89f9235d7ab049ed48c81"
+        }
+      },
+      {
+        "byte_identical": true,
+        "materialized": {
+          "bytes": 1076,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/source/vmcore2mckdump.in",
+          "sha256": "6dcf6421727fb048de7149f45ec66624e2d0d688bd9c9736f452a928104ba455"
+        },
+        "production": {
+          "bytes": 1076,
+          "path": "/home/holden/mckernel/executer/user/vmcore2mckdump.in",
+          "sha256": "6dcf6421727fb048de7149f45ec66624e2d0d688bd9c9736f452a928104ba455"
+        }
+      },
+      {
+        "byte_identical": true,
+        "materialized": {
+          "bytes": 206461,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/source/qualification/defs.h",
+          "sha256": "0cb677f0a2fd90dc3fbd04b9bc240c04a6409d4f751cb88ceff13d39308e8943"
+        },
+        "production": {
+          "bytes": 206461,
+          "path": "/home/holden/mckernel/executer/include/defs.h",
+          "sha256": "0cb677f0a2fd90dc3fbd04b9bc240c04a6409d4f751cb88ceff13d39308e8943"
+        }
+      }
+    ],
+    "top_CMake": {
+      "bytes": 14215,
+      "path": "/home/holden/mckernel/CMakeLists.txt",
+      "sha256": "eb47132388de4fec0f50b4e25d7633da87dec3c9b251a93ac1a3bc2201f642fc"
+    },
+    "user_CMake": {
+      "bytes": 29328,
+      "path": "/home/holden/mckernel/executer/user/CMakeLists.txt",
+      "sha256": "046b1635bca3af73c9fc9ed37cc4fd0dc2026632c81bae9b2f4c2e078eb46959"
+    },
+    "wrapper": {
+      "bytes": 19292,
+      "path": "/home/holden/mckernel/executer/user/rust/vmcore2mckdump.rs",
+      "sha256": "ee647c17bd7337d881fe6ecdb3805ccf5e25eb60a1879da95a8ccbbbb1702a4b"
+    }
+  },
+  "actual_packaging_defect": {
+    "actual_consumers": "Both retained script and current Rust wrapper load and unload literal ${prefix}/lib/ldump2mcdump.so.",
+    "baseline_required": "Actual new matching-provider compile/link and DESTDIR staged install first, with supported explicit CMAKE_INSTALL_LIBDIR=lib64, must observe lib64/libldump2mcdump.so and absence of consumer lib/ldump2mcdump.so. Source prediction alone is not runtime/build acceptance.",
+    "candidate_gate": "Root may materialize candidate only after actual baseline packaging mismatch and independent source/operation GO plus fresh operation-specific admission. Stop on any earlier compiler/layout/ABI/link failure; do not apply packaging fix to mask it.",
+    "minimal_candidate": "Set only ldump target PREFIX empty; separate its install rule to literal relative lib matching both existing consumers. Preserve sched_yield and every other GNUInstallDirs destination, wrapper bytes/defaultOFF/status/ACK/staging and all compiler/layout flags/dependencies.",
+    "production_install": "install(TARGETS sched_yield ldump2mcdump DESTINATION CMAKE_INSTALL_LIBDIR); top includes GNUInstallDirs and prefix=CMAKE_INSTALL_PREFIX.",
+    "production_patch": {
+      "bytes": 922,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/candidate/production-packaging.patch",
+      "sha256": "532d84b10aa251e8ddd6795fcf9c5cccf2ba72e5fd5dcb8ff455983b6675ec55"
+    },
+    "production_postimage": {
+      "bytes": 29480,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/candidate/executer/user/CMakeLists.txt",
+      "sha256": "c66bfc9e5f904fcc37d07412b197d04bdcbdb7a4f434c4469715379b674eda6e"
+    },
+    "production_target": "add_library(ldump2mcdump SHARED ...) has no PREFIX or OUTPUT_NAME override. Linux default filename libldump2mcdump.so."
+  },
+  "materialization": {
+    "actual_fragments": "Byte-exact user compiler option/absolute existing-file guard, byte-exact ldump source selector/custom command/PIC shared target and wrapper selector include. Same top-level GNUInstallDirs/prefix/install-RPATH semantics. Only ldump member of combined install rule is materialized; sched_yield and unrelated targets are not fabricated.",
+    "baseline_CMake": {
+      "bytes": 2804,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/baseline/CMakeLists.txt",
+      "sha256": "cc03cd952c8d1631e52cb4a2a9755ba2487ac2f328941c4f5949f5ce782771f2"
+    },
+    "candidate_CMake": {
+      "bytes": 2900,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/candidate/CMakeLists.txt",
+      "sha256": "b1256a50db8dc67a59feaa5820f1280b8561dbf5f547b770bcb6458794638633"
+    },
+    "excluded_no_effect_on_selected_Rust_target": "Whole project, libraries and unrelated user targets are not configured. The legacy BFD three-argument C compatibility check affects only a C compile definition; selected Rust path uses the exact real typed layout witness instead. No project C converter source is copied or built.",
+    "qualification_C_witness": {
+      "bytes": 3159,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/source/qualification/crash_abi_compile.c",
+      "sha256": "7f747b67d90e30558f9121f71ad9dfeefab90ddd4f15a7d418c34d6fea2cecf3"
+    },
+    "qualification_boundary": "Compile-only actual defs.h types/layout/scalars; no implementation, callback table substitute, main or linked production object.",
+    "selector": "Exact production selector defaultOFF, no wrapper target dependency of ldump; retained template is configured and never executed. Wrapper source ee647 is current bound consumer but is not a compile input.",
+    "source_root": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/source"
+  },
+  "operations_by_preparer": {
+    "Docker": 0,
+    "build": 0,
+    "canonical_edits": 0,
+    "compiler": 0,
+    "extension_load_or_init_or_program_main": 0,
+    "native_or_dump": 0,
+    "tests": 0
+  },
+  "original_conditions": {
+    "M15-I01": "Bind delivered selected target sources, included headers, installed program roles and real provider/link ownership; no path-classification retirement.",
+    "M15-P04": "Preserve installed vmcore converter command/exit/diagnostic/lifecycle semantics; qualify Rust production selection, focused checks, production link and matching native backend separately.",
+    "rows": {
+      "bytes": 118812,
+      "path": "/home/holden/mckernel/docs/verification/os-milestones-20260914/rust-cutover-m15.json",
+      "sha256": "c5e0e84888c07541aa20f2d78611f87e1c9e04eb314dde16871b0d1abb579939"
+    }
+  },
+  "owner": "/root/p04_source_max, actual gpt-6.1-sol/MAX; Root sole executor/compositor",
+  "permission_profile": "Developer confirms danger-full-access, approval never; no compiler/test/Docker/probe/signal/native actions by preparer",
+  "schema": "m15-p04-matching-provider-source-recovery-v1",
+  "status": "FROZEN_SOURCE_ONLY_NOT_CONFIGURED_COMPILED_LINKED_INSTALLED_OR_RUN",
+  "write_allowlist": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1"
+}

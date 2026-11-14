@@ -1,0 +1,408 @@
+{
+  "schema": 1,
+  "status": "PASS_SOURCE_ACTUAL_CARRIER_LINK_RACES_UNWIRED",
+  "runtime_acceptance": false,
+  "production_activation": false,
+  "raw": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction",
+  "raw_generated_sha256": "1f22be70252187e9ea2fd997b8672a45026032159b420f7a73675060d39f5262",
+  "source_change": "None; all production source frozen from report1. Extracted ingress extern Ready target renamed ONLY in new test copy to call actualIHKReady then a deterministic interleaving hook.",
+  "base_report": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-fork-carrier-link-source-20261017-1.json",
+    "sha256": "da5237840b2824253ac368f9ff63caf7bbfd8fac9b427a89d446f0d3854efb27",
+    "raw_sha256": "a64e3b3b79703a20cdcbd63129f0326f3153257e1c0b71576933e450457739e1",
+    "independent_review": "PASS_SOURCE_ACTUAL_CARRIER_LINK_UNWIRED"
+  },
+  "oracle": {
+    "selected_rust_cases": 9,
+    "tests": [
+      "consumer_fixture::actual::actual_memory_ingress_first_and_link_writer_publish_to_original_guest_consumer",
+      "consumer_fixture::actual::actual_wrong_child_mm_vma_rejects_link_before_seal_and_keeps_payload_owner",
+      "consumer_fixture::actual::actual_parent_close_before_ticket_cannot_publish_automatic_negative",
+      "consumer_fixture::actual::actual_stale_generation_rejects_before_payload_or_mm_effect",
+      "consumer_fixture::actual::actual_link_before_first_ret_is_not_a_handoff_permission",
+      "consumer_fixture::actual::actual_immediate_link_after_first_writer_unlock_precedes_outer_adopt_return",
+      "consumer_fixture::actual::actual_host_between_ready_and_checked_finish_blocks_kind1_ret_and_revoke",
+      "consumer_fixture::actual::actual_sealed_link_finish_error_retains_same_ticket_and_retries_identical_receipt",
+      "consumer_fixture::actual::actual_same_ticket_repeat_keeps_sequence_and_duplicate_ret_has_no_effect"
+    ],
+    "old_five_unchanged": true,
+    "deterministic_service_interleaving": "not actual multicore/runtime"
+  },
+  "frozen_test_inputs": [
+    {
+      "source": "/home/holden/mckernel/scripts/tests/test_native_fork_carrier_link_races_20261017.py",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/frozen-source/test_native_fork_carrier_link_races_20261017.py",
+      "sha256": "64c616d7993dc63cdac6e26b0858a98e766a4580e605600370090475a9567247"
+    },
+    {
+      "source": "/home/holden/mckernel/scripts/tests/fixtures/native_fork_carrier_link_races_20261017.rs",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/frozen-source/native_fork_carrier_link_races_20261017.rs",
+      "sha256": "40de23ccc343f3a43f483230b136fade7032c23088381a0d4892dbf5b49c2246"
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/oracle.json",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/frozen-source/oracle.json",
+      "sha256": "bbc75d70687d7e295bed2d37e5deebcaf7cffd1bea2d80d65e51051e4b79a887"
+    }
+  ],
+  "results": {
+    "compile": 0,
+    "run-1": 0,
+    "run-2": 0,
+    "run-3": 0,
+    "run-4": 0,
+    "run-5": 0,
+    "run-6": 0,
+    "run-7": 0,
+    "run-8": 0,
+    "run-9": 0
+  },
+  "case_count": "9 selected cases executed separately, original5 unchanged plus4 new;41 external module cases compiled/filtered, not counted",
+  "new_controls": [
+    {
+      "case": "immediate LINK",
+      "observation": "real kind1 writer physically releases SAME slots; one-shot service adapter hook executes actual first RET/C Acquire+accept -> second Delivered -> actual IHK resolver/MM verifier/kind2 writer/RET/Caccept before outer adopt returns",
+      "invariants": [
+        "physically underlying StdMutexGuard drop ends before hook",
+        "LOCK_DEPTH0/MMfalse at hook entry",
+        "hook removed before reentrant callbacks",
+        "actual copied bytes only observed, no gate/phase/receipt synthetic writes",
+        "transient referenced child mm_users returns1",
+        "all actual payload/consumer/provider owners retained"
+      ]
+    },
+    {
+      "case": "HOST during Ready",
+      "observation": "wrapper first executes actualIHKReady; actual HOST stage1 uses retained table fullkey/livechild connection before checked first finish",
+      "invariants": [
+        "prepared lease blocks verifier/MMrevoke, MM event list unchanged",
+        "kind1 absent, no RET/wake permitted",
+        "actual Mirror admission remains open because host verifier did not run",
+        "fork quarantined with original response+payload+IHK owner retained"
+      ]
+    },
+    {
+      "case": "sealed Finish error",
+      "observation": "adapter sets existing Remote transport failure only AFTER actual LINK MM unlock/CASseal; actual Finish failsEIO; same durable ticket retries after clearing injected transport failure",
+      "invariants": [
+        "no kind2 on error",
+        "sealed child rejects abort and negative-125",
+        "IHK/payload/response retained",
+        "retry uses same second worker/serial/gate/fullkey/storedseq and actual cached MMreceipt",
+        "actual kind2/RET/Caccept succeeds after retry"
+      ]
+    },
+    {
+      "case": "repeat/replay",
+      "observation": "same actual ticket resolver repeats before RET, canonical bytes keep kind2; once RET published a duplicate return rejects without owner/byte effect",
+      "invariants": [
+        "transient mm_users balanced",
+        "payload claim remains retained after response release"
+      ]
+    }
+  ],
+  "adapter_deltas": [
+    "FixtureGuard.inner Option<StdGuard>, Drop takes/drops physical guard then decrements LOCK_DEPTH then one-shot hook; no callbacks run under slots",
+    "Ready extern test wrapper calls unchanged actualIHKReady before one-shot callback",
+    "existing MM unlock service adapter invokes one-shot failure injection only after unlocking",
+    "test-only fullkey observer reads actual pending table; no authority constructor added",
+    "transport false reset repairs only fixture-injected test failure, not a production recovery API"
+  ],
+  "history": [
+    {
+      "capture": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test",
+      "result": "RustE0599 only: overly broad fixture Deref replacement also touched Arc::Deref",
+      "bounded_correction": "restrict exact transformations to balanced FixtureGuard Deref and DerefMut blocks; no source/oracle/result weakening"
+    },
+    {
+      "capture": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction",
+      "result": "compile0 and9 selected Rustcases pass"
+    }
+  ],
+  "prior_history_preserved": [
+    "report1/test C0/Rustnamespace+unusedimports failure",
+    "report1/test-correction private_interfaces fixture-only failure",
+    "expert entry helper visibility correction ->report1/test-expert5PASS"
+  ],
+  "reused_c_objects": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/guest.o",
+      "sha256": "b2a9307ecd6549362209e1a6ae0d6931ccc805d099a403723fb19fa621cd1232"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/codec.o",
+      "sha256": "4c9034b235fade09b7e40739d5e262dff4041eda9e42ac3803f3b1426aaa8a4b"
+    }
+  ],
+  "remaining": [
+    "actualLinux MM/TLB/module/registry/physical direct-map and privatechild constructor remain explicit service adapters",
+    "full actualkernel module compiler/build has not run for this source closure",
+    "real publicCREATE fork selection remains-95 and guestweakprepareNULL",
+    "canonical kind3 revoke/kind4 final destructor ACK wire producers, backend drain/final ownership release and realguest execution remain gated",
+    "deterministic interleavings are not multicore/soak/runtime proof"
+  ],
+  "source_snapshots": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/sources/abi/application.rs",
+      "sha256": "9dc6ac72e1fbb458798764ffc0e8db2161b4004d6b498324f9647f9434a351c1",
+      "fixture_delta": false
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/sources/application_pager.rs",
+      "sha256": "adb65c878f6e9817cfb0932c38ac2f87d2715659468051957a1b747b7974ad19",
+      "fixture_delta": false
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/sources/application_rpc.rs",
+      "sha256": "9f811c86c4e996294a6cd3be6b83315dabd20a3fb375419e091f4b9dedcfad39",
+      "fixture_delta": false
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/sources/application_syscall.rs",
+      "sha256": "5602b9fc586425884ec4fe1dd028747b74ee6b9be3230e2359f7a78e3c994246",
+      "fixture_delta": false
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/sources/ihk_mapping.rs",
+      "sha256": "085f4f4e7935bd273d89ae4c7f7d600da557ce1da8873f57a142dc12bf9677dc",
+      "fixture_delta": false
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/sources/ihk_smp_x86_64.rs",
+      "sha256": "786c8e008a8b43ece1281aa47fbfc13acb24fbfbaeb463e5cf91727d672c874a",
+      "fixture_delta": false
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/sources/mcctrl_process.rs",
+      "sha256": "d1a9333c5eb548feadb24f07785e9986079c84d97c5002e2fe7270b2b23cba7a",
+      "fixture_delta": false
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/sources/mcctrl_vm.rs",
+      "sha256": "da7596b172bf8b62ca620f9dc88deb82e6913d1c789c8c80189e464849f983e8",
+      "fixture_delta": false
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/sources/os_runtime.rs",
+      "sha256": "37ae6ed33093708f077bc3e10a236f37b10eb1e9faa1c179dcaa7d42c68e8177",
+      "fixture_delta": false
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/sources/private_fork_carrier_request_20261017.rs",
+      "sha256": "97d2e03d0651c0570aae9a08ce8f442d1c3ef504b0b7640f556488e1689c72a6",
+      "fixture_delta": false
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/sources/smp_application.rs",
+      "sha256": "16f301fc3ab429e8352f79a48f98de2b3aa0939397f988e0e99f6ca922d5ee6c",
+      "fixture_delta": false
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/sources/smp_application_image.rs",
+      "sha256": "e248f594b64c3546415b16d4b5edd4623ac053c65cfd867b62c3211596865a7e",
+      "fixture_delta": false
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/sources/smp_application_syscall.rs",
+      "sha256": "ad239a66f649684674b0923a12492f7afe00a9464e2e576e730b17db36d2914c",
+      "fixture_delta": false
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/sources/smp_fork_ingress.rs",
+      "sha256": "c63a6aa3a898de233f96a7e0d86231a2a4b73538c8b8ebab2d95a975a99b0db1",
+      "fixture_delta": true
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/sources/smp_fork_link.rs",
+      "sha256": "69f0ccc64ab389a808b391bd931708769d890a26cd8f6d394ac025f854516e5f",
+      "fixture_delta": false
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/sources/smp_image.rs",
+      "sha256": "4f35ec396494fa428c55298c91ffe14aa0142d0282dd37d922f94a901a692689",
+      "fixture_delta": false
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/sources/smp_memory.rs",
+      "sha256": "b713cab756f8199700921cae94b32efd3979e9508be3ac738495273eb60b5b14",
+      "fixture_delta": false
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/sources/smp_resource.rs",
+      "sha256": "d4a5794f60be7fa5e549e7c9b806e366276d87370adbc5df94e51b8d464e8dcd",
+      "fixture_delta": false
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/sources/smp_service.rs",
+      "sha256": "60d970d38887bf4fb217dac149713581cf0ca1d71d01dfd0423494633ad7a8fd",
+      "fixture_delta": false
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/sources/sysfs_memory.rs",
+      "sha256": "b7ed3edd82862f83948a0c705e279c090319b8306513150d5f08c03723087aa7",
+      "fixture_delta": false
+    }
+  ],
+  "captures": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/compile.command.json",
+      "sha256": "54852cdf858e32ba6f7414d1fc3be1aa93378f60b7b31569499162a00f3c6338"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/compile.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/compile.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/run-1.command.json",
+      "sha256": "bb156b9a894396912b4b86361173094dd8db3bffd9ed6a5e9e5b88e5758b16d7"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/run-1.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/run-1.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/run-1.stdout",
+      "sha256": "b438ff14d34272888d4eecf2e9c90c759abaf7f3f97701d92a888f15530c1fe2"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/run-2.command.json",
+      "sha256": "4868b8d13ca4a7db5b6e87a785d503468cc780610f123d20bb22b0f7f714926a"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/run-2.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/run-2.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/run-2.stdout",
+      "sha256": "d41da237fdc45feb8f6fe49dec66dc5f64313b4f8073eae8f930df9ffbbb4bf9"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/run-3.command.json",
+      "sha256": "9d22feb27c9de60745eac0b4142e02a8389543ba7319c9407f557549adff1f78"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/run-3.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/run-3.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/run-3.stdout",
+      "sha256": "14c51dd0498d62c4e4d1c84aea163e630efd8522071f6f5a0000f6d995e7760b"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/run-4.command.json",
+      "sha256": "84fef2e7ed73cb8dee1296981956b44d372e7a568228d970634dfa03715d0e37"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/run-4.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/run-4.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/run-4.stdout",
+      "sha256": "973a892c6d6676e20c32af9eca926130b7d4460f7629313b3d450d6f4e6ba52a"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/run-5.command.json",
+      "sha256": "a77d1495220855c8060e42e8b42dd164fe216c17654e7e47beffddbbe3c6fbea"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/run-5.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/run-5.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/run-5.stdout",
+      "sha256": "1521b626e5037128f89b90cba268b2684b3d89a4cb7c870c660d4d734b585761"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/run-6.command.json",
+      "sha256": "57ee03fd20d2d55e06cb3de4aead3a3a0122e01e55860ea960d82f45a4392a81"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/run-6.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/run-6.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/run-6.stdout",
+      "sha256": "09812675552e7708f2679fc92da54f0cdbab14fd4f2e48e24f3cd09f1e0776d2"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/run-7.command.json",
+      "sha256": "9a11089c3fd79f214bc8501026cc20f420c6057bd73a5b7bb3a5e961d006ba98"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/run-7.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/run-7.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/run-7.stdout",
+      "sha256": "935d4a390c2cca6b166448b34b3a7d0cc75c8289dd1985df3eabdfcfe94281f4"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/run-8.command.json",
+      "sha256": "5d7241c03b7158f42bbdd98508e8c3ac065c0d621aaedb5c97c5964198dd537e"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/run-8.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/run-8.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/run-8.stdout",
+      "sha256": "6a69357de3bf6f1e01864cf0dc90a484e9a4146ce88b6aac44cea8eb7b63b61d"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/run-9.command.json",
+      "sha256": "a81f5b1fb455cc58668f87e0d9667842112e60779b50832b2aaba8fefdf0bbc3"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/run-9.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/run-9.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/run-9.stdout",
+      "sha256": "a878b0c645bf6d992a0a2ef64d6282d9af50250a2a9c31b734e0c5700ae42300"
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "schema": "mckernel.native-running-external-modules-release.v1",
+  "status": "PASS_EXECUTION_RELEASE",
+  "execution_count": 1,
+  "author": "/root",
+  "request": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-running-external-modules-request-20261017-3.json",
+    "sha256": "b48d09086974f9b115181d9812ec920465701473638236376b59ed4c6cf5b340"
+  },
+  "nonce": "2a392fdcffaf426894bed7ed67a33c66",
+  "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+  "fetched_source_verified": true,
+  "terminal_policy": "remove-owned-terminal",
+  "historical_observer": {
+    "path": "/home/holden/mckernel/scripts/native_exact_historical_lease_observer.py",
+    "prefix": [
+      "/usr/bin/sudo",
+      "-A",
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B"
+    ],
+    "sha256": "463ae558e141c2a6fe5a016fb19baddb26ed883c3bf6d39c114b27711ee78a51",
+    "timeout_seconds": 30
+  },
+  "source_sha256": {
+    "scripts/native_exact_historical_lease_observer.py": "463ae558e141c2a6fe5a016fb19baddb26ed883c3bf6d39c114b27711ee78a51",
+    "scripts/native_running_external_modules_offline.py": "8ea1e55140f64d46d60acfa7796ab1479b0314cee4b21cc74c8d17b0cf205685",
+    "scripts/native_running_external_modules_owner.py": "5c9799a8b44d2968dd57a396666548f2ad18227fa4b4291f9ac37c9decbbe961",
+    "scripts/native_rust_exact_build_container_owner.py": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1",
+    "scripts/native_rust_exact_build_image_prepare.py": "45cb12e0fd58d164468badfb99a3ed922e65e06046bf38b4a50e27e18595a27b",
+    "scripts/native_rust_exact_build_image_rebind.py": "f10ab116e55a24e8db7a8157d71efdd01198ba3453a8141bc8bbf596eda6b61e",
+    "scripts/native_rust_exact_build_image_rebind_probe.py": "412d46de7e078746a7ec979a13ccb25753d6fa34708610932e35be8f02a89635",
+    "scripts/native_rust_exact_build_offline.py": "cc243126ab8cc0754c62175c77e46d6ba0d98294f8168cc77893a2c12249cd1a",
+    "scripts/native_rust_exact_disk_build_wrapper.py": "c252ee341eb61752704f8b818503c0a5dc97400845494707ca3110f5f23df6d1",
+    "scripts/native_rust_exact_mckernel_image_container_owner.py": "e9861cf73b0328c9fe2eacb987ea179933146cbeddbc3951405d4e60e89560f4",
+    "scripts/tests/test_native_running_external_modules_owner.py": "7076a5e1b8c20a0dc7bf6b12be42e884e85feaa0fdbcdf315bd49bbd1d40aab7"
+  },
+  "source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-running-external-modules-independent-source-review-20261017-3.json",
+    "sha256": "f677bd2240fae8857af37d8011154cf61369eb6d3f3c0cab1bf73a54c1eb6386"
+  },
+  "reviewed_proposal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-running-external-modules-execution-proposal-20261017-4.json",
+    "sha256": "a71ff9af4d14fd05069b2b34ff01c8cee47cb99d6b7e8acd917b054a61e5b495"
+  },
+  "activation_conditions": "Only execute after independent exact payload review, source checkpoint pushed/fetched/blob verified, fresh mount/resource/root/shared ownership admission, exclusiveheavy and HEADfreeze. Fields do not themselves claim a build or observed source replay.",
+  "baseline_source_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+  "source_candidate_sha": "1769263c751befa9983d19705833d3d5ac6a1ace",
+  "execution_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-running-external-modules-independent-execution-review-20261017-1.json",
+    "sha256": "d3a9e86aa30f00859f869752cd73c68c0596136f27c721a80c4b17f52ef18b1d"
+  }
+}

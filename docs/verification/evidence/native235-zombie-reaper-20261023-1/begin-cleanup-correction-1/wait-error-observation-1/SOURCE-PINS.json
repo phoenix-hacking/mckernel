@@ -1,0 +1,25 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "DIAGNOSTIC_ONLY_NO_LIFECYCLE_REPAIR",
+  "preimage": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/consumer/mcctrl_process.rs",
+    "sha256": "2e88cc1777a635eb3599e0ac4c66129f3c2c77a19e421c95373f044d823a87be",
+    "bytes": 54077
+  },
+  "candidate": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/wait-error-observation-1/mcctrl_process.rs",
+    "sha256": "8bf30cd8ae79cc778bd91816f30aaf7a37ccc2aab59822ca2a03587426a212b8",
+    "bytes": 54854
+  },
+  "actual_body": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/wait-error-observation-1/wait_syscall.actual-body.rs",
+    "sha256": "3a4698601f337935a90e8451f6f77596199b3b55226d781ff1a3420750615b6b",
+    "bytes": 928
+  },
+  "diff": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/wait-error-observation-1/source.diff",
+    "sha256": "e586e6238902c7d35998a89c83dd49671e29a6dc2904e29334ff8227c7e1e952",
+    "bytes": 1434
+  },
+  "unchanged": "All code except Context::wait_syscall; no provider/ACK/publication/return-value changes."
+}

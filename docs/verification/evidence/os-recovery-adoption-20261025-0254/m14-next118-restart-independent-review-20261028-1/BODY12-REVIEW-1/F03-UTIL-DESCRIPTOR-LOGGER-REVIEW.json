@@ -1,0 +1,188 @@
+{
+  "C_storage_debt": {
+    "C_data_retirement": false,
+    "record_bytes_at_HOST_ABI": 32,
+    "record_count_delta": 0,
+    "record_owners": 1,
+    "type": "C-defined mutable __verbose Ddebug record, Rust borrows its packed flags"
+  },
+  "actual_HOST": {
+    "ABI_words": 10,
+    "CPU_seconds": 0.137291,
+    "C_Rust_pairs": 200,
+    "behavior_commands": 1,
+    "commands": 3,
+    "compiler_link_commands": 2,
+    "exact_lexical_metadata_pairs": 1,
+    "exits": [
+      0,
+      0,
+      0
+    ],
+    "fixed_bucket": "All3 in2026-10-28T23:36:28.104491+00:00\u201323:56:28.104491+00:00; zero23:16\u201323:36 contribution.",
+    "peak_child_RSS_KiB": 97860,
+    "retries_or_corrections": 0,
+    "sum_command_wall_seconds": 0.1710783839225769,
+    "timeline": [
+      {
+        "birth": "102904169",
+        "exit": 0,
+        "finish_UTC": "2026-10-28T23:53:17.076509+00:00",
+        "finish_epoch": 1793231597.076509,
+        "index": 0,
+        "parent_streams_closed": true,
+        "pid": 2206445,
+        "positive_wait4_join": true,
+        "start_UTC": "2026-10-28T23:53:17.002811+00:00",
+        "start_epoch": 1793231597.002811
+      },
+      {
+        "birth": "102904179",
+        "exit": 0,
+        "finish_UTC": "2026-10-28T23:53:17.180084+00:00",
+        "finish_epoch": 1793231597.1800845,
+        "index": 1,
+        "parent_streams_closed": true,
+        "pid": 2206452,
+        "positive_wait4_join": true,
+        "start_UTC": "2026-10-28T23:53:17.096361+00:00",
+        "start_epoch": 1793231597.0963607
+      },
+      {
+        "birth": "102904189",
+        "exit": 0,
+        "finish_UTC": "2026-10-28T23:53:17.213115+00:00",
+        "finish_epoch": 1793231597.2131152,
+        "index": 2,
+        "parent_streams_closed": true,
+        "pid": 2206457,
+        "positive_wait4_join": true,
+        "start_UTC": "2026-10-28T23:53:17.199397+00:00",
+        "start_epoch": 1793231597.1993968
+      }
+    ]
+  },
+  "all_original_caps_credit_holds_failures_preserved": true,
+  "blockers_for_private_source_HOST_review": [],
+  "checker": {
+    "AS_bytes": 2147483648,
+    "CPU": 0,
+    "CPU_limit_seconds": 30,
+    "compiler_fixture_guard_inventory_calls": 0,
+    "exact_input_references": 38,
+    "exit": 0,
+    "program": {
+      "bytes": 6508,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/BODY12-REVIEW-1/check_f03.py",
+      "sha256": "b87721a0f16a07dce949371e787191d65360e218f3ea062c3befa8c4357a1beb"
+    },
+    "result": {
+      "bytes": 13565,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/BODY12-REVIEW-1/F03-CHECKS.json",
+      "sha256": "4e667d30d639d91514102e93655d9096284eef2c06ea4c350509659c3bdcb3a0"
+    },
+    "retained_registry_reference": {
+      "bytes": 84536,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/F03-cumulative-next-source-1/CURRENT116-REGISTRY-REFERENCE.json",
+      "sha256": "af46e443770080fa9712c196233517bf7a9a8363d3d82659bd2ec4964d2402a2"
+    }
+  },
+  "composition_requirements": [
+    "Keep prior frozen BODY/cumulative packets immutable. Root appends this exact logger module and replaces its C span once in a newly coherent successor, preserving BODY5 map-order fix, BODY9 typed callback ordering, previous provider/metadata/storage debt and original global caller ABI.",
+    "Current118 qualification remains independent. Before new default/native claims, bind combined sources/cohort, full crate/selected+fallbackTU/default link, unique Rust global provider and one C record with exact original tuple/whole389registry. Matching-current registration/diagnostic behavior and whole-file closure remain separate."
+  ],
+  "decision": "PASS_F03_BODY12_UTIL_REGISTER_DESCRIPTOR_LOGGER_GLOBAL_ABI_METADATA_AND_RETAINED_HOST200_ONLY",
+  "findings": [
+    "Rust no_mangle extern C definition retains the original global syscall_util_register_desc_log_bridge symbol, void return, signed CInt TID and unsigned CULong descriptor. The existing Rust caller declaration and complete sys_util_register_desc function are byte-identical to canonical118; current-thread lookup and descriptor registration remain solely in that unchanged caller.",
+    "Logger reads only the genuine static Ddebug record and copied scalar arguments. It neither looks up a thread nor dereferences the descriptor address, performs registration, changes uti_desc, allocates, locks, owns a resource or returns a new error. Same exact format %s: tid=%d,uti_desc=%lx newline and sys_util_register_desc literal pass const string/int/unsigned-long variadic arguments in original order. Printer result ignored.",
+    "Raw volatile packed line_flags read enables output for any nonzero8-bit flags. Existing repr(C) Ddebug layout reused verbatim, with no extra shared type or reference spanning logging. Existing descriptor lifetime/update synchronization obligations remain; no new atomicity guarantee is claimed.",
+    "Original C function is verbatim, with original C identifier preserved through a test-only asm linked symbol alias. Genuine dkprintf therefore retains original __func__. No function macro rename or machine-instruction assembly is introduced. HOST #line kernel/syscall.c reproduces original lexical file/function/line; actual production record uses unchanged __FILE__ and original function text/line28605.",
+    "Independent lexical calculation28602+3 gives28605 and selected C initializer matches it. Retained accepted389 registry reference contains exactly the matching production tuple: /src/kernel/syscall.c, syscall_util_register_desc_log_bridge, nullfmt, line28605, flags0, padding0. Matching new linked record order/bytes and whole389registry remain unproved.",
+    "Production entry equals HOST entry except ABI-only static table. ABI10 checks genuine ddebug size32/align8/pointer field offsets/packed-word offset24, C int/ulong/function-pointer widths and one-record extent.5flags x5signedTIDs x8unsigneddescriptor patterns=200 original-C/Rust pairs, including int extrema and high descriptor bits.",
+    "Independent driver validates exact output call count/raw format/function string/int/ulong arguments, silent disabled gate, ignored printer-return extrema, two distinct original/selected lexical records and full unchanged record bytes. It executes no current-thread lookup, descriptor-registration body or actual printer/resource/native operation.",
+    "Paired C replacement stays inside the original MCKERNEL_RUST_SYSCALL_POLICY_HELPERS scope and declares the same global symbol for the selected Rust provider. Its nested helper guard is redundant; original C bytes are retained in the inactive inner branch. No fallback-provider or nonhelper metadata acceptance is inferred from this selected HOST proof. Combined selected+fallback preprocessing and line restoration must be checked before default adoption.",
+    "Honest worker-authored standing-parent authority retains CPU6/jobs1/AS2GiB/CPU60/wall90, original guardian/account/strictcaps and credit. Three actual exact argv/cwd commands exit0 with positive matching direct wait4 joins, parent captures closed, child absence and recorded empty groups; all stderr empty. F03 scanner skips inaccessible proc entries, so group records remain local evidence and supply no fresh global/native physical clearance."
+  ],
+  "independent": true,
+  "new_credit": {
+    "C_data_retirements": 0,
+    "C_retirements": 0,
+    "canonical_writes": 0,
+    "default_artifacts": 0,
+    "native_cases": 0,
+    "whole_file_closures": 0
+  },
+  "next_Root_action": "Bank exact BODY12 source/HOST result; integrate only through a new coherent reviewed source successor after current118 qualification, then genuine combined artifact and applicable matching-current native proof.",
+  "reviewer": "/root/consumer_review",
+  "runtime_authority": null,
+  "schema": "mckernel.independent-source-host-review.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_owner": "/root/f03_next",
+  "subjects": {
+    "C_debug_record": {
+      "bytes": 363,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body12-restart-20261028-1/debug.binding.C.inc",
+      "sha256": "3ee52f87bc79dc8e5395f5a6d1b34c88e790bb26691e1d33acb8cad3fbb416d3"
+    },
+    "authority": {
+      "bytes": 8764,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body12-restart-20261028-1/WORKER-RECORDED-STANDING-HOST-AUTHORIZATION.json",
+      "sha256": "30841a97456993a68303c10947714759c8371fcae3bbc54aefd852c46abdc6e8"
+    },
+    "caller": {
+      "bytes": 416,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body12-restart-20261028-1/caller-existing.Rust.inc",
+      "sha256": "9cc61200fc56ad5a7319363ec72a77f519725dfc7edd07ec003cebea19e9d4ab"
+    },
+    "driver": {
+      "bytes": 3725,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body12-restart-20261028-1/driver.c",
+      "sha256": "b34a7419ffa53cc96e4eb068079a38b1ed481c69046c3337b558ac9d80d0e753"
+    },
+    "fixture_entry": {
+      "bytes": 1977,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body12-restart-20261028-1/entry.fixture.Rust.inc",
+      "sha256": "78c1c59d86662bad79b93db57a3b5c5bfd867eb1f3a27f2716161508ef3fa6c3"
+    },
+    "handoff": {
+      "bytes": 2584,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body12-restart-20261028-1/ACTUAL-SOURCE-AND-HOST-HANDOFF.json",
+      "sha256": "0c39c52ba6fe7348331647e1f37c875f3be3d720610f23cf5c80f42cd624357e"
+    },
+    "original_C": {
+      "bytes": 156,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body12-restart-20261028-1/original.C.inc",
+      "sha256": "14274e4ed816dab012ed6d6675af958ccd4274335b7768d4ba2bcfd4c1ea53a8"
+    },
+    "original_lexical_fixture_C": {
+      "bytes": 187,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body12-restart-20261028-1/original.fixture.C.inc",
+      "sha256": "a567063ea99817929ae0b2c9c19381473650dc5c2d867fe2939877348f48b899"
+    },
+    "paired_C": {
+      "bytes": 600,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body12-restart-20261028-1/paired.C.inc",
+      "sha256": "e282964633bec95ffe11d941b2a837bfd8ba4b266b6707e0952580f024dbd89b"
+    },
+    "production_entry": {
+      "bytes": 1364,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body12-restart-20261028-1/util-desc-log-entry.Rust.inc",
+      "sha256": "e6dcfcf71ae9034cc241bb3deec3e177965ff7ac5a91923d4da148396b13a7d9"
+    },
+    "retained_HOST_result": {
+      "bytes": 14374,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body12-restart-20261028-1/output-STANDING-1/ACTUAL-HOST-RESULT.json",
+      "sha256": "eec549c185038e5503e8c50fbd9bca7f7438de01dd5e80560e8a18d920f81dfb"
+    },
+    "runner": {
+      "bytes": 10523,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body12-restart-20261028-1/run_granted_host_once.py",
+      "sha256": "98fdc42d01d0d61587a58cb08f3fb1eca714e8e8a96803d02fb17f9b6e3cbd7a"
+    },
+    "source_ready": {
+      "bytes": 8786,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body12-restart-20261028-1/SOURCE-READY.json",
+      "sha256": "f0d92939f983d1e4e1759e7200296f1b7fa2b152bb950e9e2277f30ae98b6219"
+    }
+  }
+}

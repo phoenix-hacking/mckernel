@@ -1,0 +1,135 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_SOURCE",
+  "decision": "PASS_SOURCE_ONE_ORDINARY_ACTUAL_MATCHING115_ORIGINAL235_MANIFEST_SCRATCH_STAGE",
+  "independent": true,
+  "reviewer": "/root/guardian_execution_review",
+  "implementation_ownership": false,
+  "runtime_authority": null,
+  "reviewed_source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/actual-manifest-scratch-stage-source-1/SOURCE-READY.json",
+    "bytes": 1988,
+    "sha256": "442bf268240e9ef6d84c5322f703e220ffcd77aac598a4aaf3293f7fa7c8dcad"
+  },
+  "reviewed_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/actual-manifest-scratch-stage-source-1/root_stage_bound_manifest_once.py",
+    "bytes": 4094,
+    "sha256": "932cf9e1da7b61f34b59e0deeaa7d29ea4f91864abec3fe2b0abcc2003d4f113"
+  },
+  "reviewed_profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/actual-manifest-scratch-stage-source-1/SCRATCH-STAGE.PROFILE.NOT-GRANTED.json",
+    "bytes": 1956,
+    "sha256": "13bb397a5b6b2bfc54e939e49ffcab21e216f505fd952dcd8c665f72153a329e"
+  },
+  "actual_manifest": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/root-actual-compose-1/manifest.HOST-STATIC.json",
+    "bytes": 8986,
+    "sha256": "b362c873552a9d3e4344dc311cc5fc69b7fa28b2f7ffe8a05cdd815d57b6b6ec"
+  },
+  "actual_compose_result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/future-ordinary-capture-1/ACTUAL-COMPOSE-RESULT.json",
+    "bytes": 3243,
+    "sha256": "0657decfd9f0db06cf283f26898b0eb066ee73a33afdbfaa6b7aee370ac47fdb"
+  },
+  "original_source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/ordinary-compose-profile-accepted115-source-1/independent-source-review-1/REVIEW.json",
+    "bytes": 9802,
+    "sha256": "816d92c9cfeeda86466c8f3ec2d4d7bb5bf0e8c14ed4de7ff8c6434c3fe98436"
+  },
+  "actual_composition_readback": {
+    "actual_compose_result_status": "ACTUAL_ONE_46D_COMPOSE_ZERO_JOINED_FULL_RECEIPT_NOT_NATIVE",
+    "producer_PID": 1859367,
+    "producer_birth": 95922821,
+    "producer_exit": 0,
+    "direct_child_joined": true,
+    "group_absent": true,
+    "closed_streams": true,
+    "producer_seconds": 21.73278625495732,
+    "stderr_bytes": 0,
+    "fullmap_only_delta": [
+      "images/mckernel.img"
+    ],
+    "newimage": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/OUTPUT/work/output/build/kernel/mckernel.img",
+      "size": 10257496,
+      "sha256": "de9fdd13b55a5a17158fa8247cc9351c1d9b1944a72c45bac9e4774473dca024",
+      "mode": 33261
+    },
+    "unchanged_original235": [
+      "payload",
+      "profile",
+      "modules",
+      "cleanup_profile",
+      "collectorab3e",
+      "executore5d"
+    ],
+    "not_native_acceptance": true
+  },
+  "stage_review": [
+    "Exactly one actual8986B manifest, actual composition result8a0d, prior binderd2db and normal owneraf2b are byte/hash pinned before mutation; no new compose/compiler/payload/native execution.",
+    "Exact UID/EUID1000. Before mutation, planned attempt parent, inputs parent and stage receipt must all be absent by lexists. Exact scratch parent and basenames f02p115n1/f02p115n1-inputs are checked. Both directories created0700; manifest exclusive xb, content fsync then inputs-directory fsync. Readback identical and attempt parent empty.",
+    "Imports exact owneraf2b and calls original _manifest_identity/_manifest_outside_writable_parent/bound_manifest. These require canonical actual scratch manifest, exact digest outside writable attempt parent, all original source pins and strict5298 manifest/artifact/source-inode/fullmap joins. Explicit original235 case/collectorab3e/current115de9f assertions follow.",
+    "Original235 argv/cwd/env/oracle/streams/modules/c020BEGINcleanup and installedexecutore5d are byte/data unchanged from accepted manifest. Complete actual final map differs only at images/mckernel.img. Historical227/frozen60e remains untouched.",
+    "Receipt created exclusively only after actual API success; receipt nonce/runtimeauthority NULL and printed native_acceptance false. API success is data binding, not stage-as-native or prior-native-acceptance circularity."
+  ],
+  "scratch_paths": {
+    "attempt_parent": "/home/holden/mckernel-work/scratch/f02p115n1",
+    "inputs_parent": "/home/holden/mckernel-work/scratch/f02p115n1-inputs",
+    "manifest": "/home/holden/mckernel-work/scratch/f02p115n1-inputs/manifest.json",
+    "future_QMP_pattern": "/home/holden/mckernel-work/scratch/f02p115n1/attempt-<fresh32hexnonce>/qmp.sock",
+    "QMP_encoded_bytes_for32hex": 94,
+    "unix_sun_path_limit_bytes": 108,
+    "freshness_checked_by_producer_at_execution_only": true
+  },
+  "ordinary_resource_contract": {
+    "argv": [
+      "/usr/bin/taskset",
+      "-c",
+      "6",
+      "/usr/bin/prlimit",
+      "--as=2147483648:2147483648",
+      "--cpu=60:60",
+      "--fsize=33554432:33554432",
+      "--core=0:0",
+      "--",
+      "/usr/bin/python3",
+      "-B",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/actual-manifest-scratch-stage-source-1/root_stage_bound_manifest_once.py"
+    ],
+    "CPU": 6,
+    "jobs": 1,
+    "wall_seconds_max": 90,
+    "AS_bytes": 2147483648,
+    "CPU_seconds": 60,
+    "FSIZE_bytes": 33554432,
+    "CORE": 0,
+    "HOST_floor_bytes": 17179869184,
+    "scratch_floor_bytes": 12884901888,
+    "aggregate_jobs_max": 7,
+    "aggregate_memory_ceiling_bytes": 23259332608,
+    "maximum_invocations": 1,
+    "Root_external_authority_required": true
+  },
+  "required_Root_interface": [
+    "Fresh exact source/account/v2fixedwindow/ownership/CPU6 exclusion and shared-reservation grant before entry",
+    "Root-owned90s bounded whole-group capture, actual terminal exit/positive direct join/groupabsence/closedstreams and fullstdout/emptyerr",
+    "One unused operation nonce/current ledger; actual scratch-stage receipt and literal owner API output before separate capability/native admission",
+    "No cleanup/retry or native authority granted by this source receipt"
+  ],
+  "execution_by_reviewer": {
+    "stage": 0,
+    "binder_or_owner_API": 0,
+    "guard_or_account": 0,
+    "resource_or_proc_query": 0,
+    "compose": 0,
+    "compiler": 0,
+    "native": 0,
+    "canonical_mutations": 0
+  },
+  "open_predicates": [
+    "Actual one-manifest stage and positive whole-operation capture",
+    "Fresh native source/case capability, ownership/resource/execution release",
+    "Matching current115 actual original235 native protocol and normal retirement; F02 wholefile remains OPEN"
+  ],
+  "blockers": []
+}

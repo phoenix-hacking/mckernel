@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-050",
+  "packet_version": 1,
+  "context_sha256": "4c064c967af48cbded0144583a1c599d3ae93a43401be6db708087855f191908",
+  "started_utc": "2026-09-09T11:50:00Z",
+  "finished_utc": "2026-09-09T11:51:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "process.exec-success",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/process/process.exec-success.c",
+      "oracle": "scripts/application-tests/oracles/process.exec-success.json",
+      "changed_files": ["scripts/application-tests/cases/process/process.exec-success.c", "scripts/application-tests/oracles/process.exec-success.json"],
+      "parameter_vectors": {"argv": ["argA", "", "argB"], "environment": ["LANG=C", "LC_ALL=C"], "new_exit_code": [23]},
+      "implemented_operations": ["bound-image re-exec via /proc/self/exe", "exact argv/env verification", "new-image exit 23"],
+      "unresolved_oracle_notes": ["Same guest identity and ET_EXEC binding require runner review."],
+      "max_reviewer_question": "Confirm re-exec preserves PID/TID identity and exact argv/env bytes."
+    },
+    {
+      "case_id": "process.exec-missing",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/process/process.exec-missing.c",
+      "oracle": "scripts/application-tests/oracles/process.exec-missing.json",
+      "changed_files": ["scripts/application-tests/cases/process/process.exec-missing.c", "scripts/application-tests/oracles/process.exec-missing.json"],
+      "parameter_vectors": {"path": ["/missing/frozen-executable"], "private_state": [37], "expected_errno": ["ENOENT"]},
+      "implemented_operations": ["missing execve call", "direct errno capture", "post-failure private-state check"],
+      "unresolved_oracle_notes": ["Namespace path resolution and ENOENT binding require Max review."],
+      "max_reviewer_question": "Confirm missing exec leaves the original image and private state intact."
+    },
+    {
+      "case_id": "process.exec-cloexec",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/process/process.exec-cloexec.c",
+      "oracle": "scripts/application-tests/oracles/process.exec-cloexec.json",
+      "changed_files": ["scripts/application-tests/cases/process/process.exec-cloexec.c", "scripts/application-tests/oracles/process.exec-cloexec.json"],
+      "parameter_vectors": {"inheritable_fd": [90], "cloexec_fd": [91], "file_bytes": ["KEEP"]},
+      "implemented_operations": ["two descriptor setup", "FD_CLOEXEC marking", "post-exec F_GETFD/read identity checks"],
+      "unresolved_oracle_notes": ["Descriptor identity and same-process open-file evidence require Max review."],
+      "max_reviewer_question": "Confirm fd 90 and its description survive while fd 91 is closed with EBADF."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/process/process.exec-success.c", "sha256": "742ff7f97d3fa24d292d5b59db808c3a6b92b606dc6da6714de3ba2a6f962b9d"},
+    {"path": "scripts/application-tests/oracles/process.exec-success.json", "sha256": "27b5d188be6c0378758e6181979e9b9dbb9a1c6dea0cb7d6b548cc5631042b76"},
+    {"path": "scripts/application-tests/cases/process/process.exec-missing.c", "sha256": "cd8ed18b5462b86d04bb859c0160e3eca0193ac94fc89929dd0e31dcaa0f3da7"},
+    {"path": "scripts/application-tests/oracles/process.exec-missing.json", "sha256": "751831023c47cd3e320cde0cfecd89885d81be71276a79777d0385fd66089d99"},
+    {"path": "scripts/application-tests/cases/process/process.exec-cloexec.c", "sha256": "9de40c55705e96d96e68e6b1884b9dd9b54753e4fab2c3b2312e0071eaa903da"},
+    {"path": "scripts/application-tests/oracles/process.exec-cloexec.json", "sha256": "9bb2e47d9e11e884fdf5d1e4f9c3d35b369d2fbad8b1b5f0a9df39392179c77b"},
+    {"path": "docs/verification/evidence/application-drafts-20260909/ultra-handoff-1/packet-050/context.json", "sha256": "4c064c967af48cbded0144583a1c599d3ae93a43401be6db708087855f191908"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-050.json --emit-context /tmp/application-packet-050-context-20260909-1.json", "outcome": "PASS; planning metadata only; runtime_authorized=false"},
+    {"command": "python3 -m json.tool packet-050/report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Exec success, missing path, and close-on-exec cases need final process identity, descriptor, ABI, and canonical record review."],
+  "blocked_execution_capabilities": ["current-inputs", "runtime-transport-fault-injection", "runner-contract"],
+  "first_failure_event": null,
+  "max_escalation": ["Review same-identity exec and exact argv/env", "Review ENOENT continuation", "Review descriptor inheritance and CLOEXEC"],
+  "next_packet_id": "packet-051"
+}

@@ -1,0 +1,93 @@
+[
+  {
+    "case": "flags_empty",
+    "outcome": "pass"
+  },
+  {
+    "case": "flags_nonempty",
+    "outcome": "pass"
+  },
+  {
+    "case": "override_['-DMCKERNEL_M14_NONHELD13_DATA32_EXPERIMENTAL:BOOL=OFF']",
+    "outcome": "rejected",
+    "error": "exact configure argv differs"
+  },
+  {
+    "case": "override_['-UKERNEL_DIR']",
+    "outcome": "rejected",
+    "error": "exact configure argv differs"
+  },
+  {
+    "case": "override_['-U', 'KERNEL_DIR']",
+    "outcome": "rejected",
+    "error": "exact configure argv differs"
+  },
+  {
+    "case": "override_['-C/tmp/a.cmake']",
+    "outcome": "rejected",
+    "error": "exact configure argv differs"
+  },
+  {
+    "case": "override_['-C', '/tmp/a.cmake']",
+    "outcome": "rejected",
+    "error": "exact configure argv differs"
+  },
+  {
+    "case": "override_['--preset', 'fake']",
+    "outcome": "rejected",
+    "error": "exact configure argv differs"
+  },
+  {
+    "case": "override_['-DUNAME_R:STRING=other']",
+    "outcome": "rejected",
+    "error": "exact configure argv differs"
+  },
+  {
+    "case": "override_['-DKERNEL_DIR=/other']",
+    "outcome": "rejected",
+    "error": "exact configure argv differs"
+  },
+  {
+    "case": "override_['-G', 'Ninja']",
+    "outcome": "rejected",
+    "error": "exact configure argv differs"
+  },
+  {
+    "case": "values_MCKERNEL_M14_EXPECTED_UNAME_R",
+    "outcome": "rejected",
+    "error": "uname mismatch"
+  },
+  {
+    "case": "values_MCKERNEL_M14_EXPECTED_KBUILD_MAKE_FLAGS",
+    "outcome": "rejected",
+    "error": "flags mismatch"
+  },
+  {
+    "case": "values_UNAME_R",
+    "outcome": "rejected",
+    "error": "unbound configure values"
+  },
+  {
+    "case": "values_MCKERNEL_M14_EXPECTED_MAKE_SHA256",
+    "outcome": "rejected",
+    "error": "make hash malformed"
+  },
+  {
+    "case": "composite_binding",
+    "outcome": "pass"
+  },
+  {
+    "case": "composite_mismatch",
+    "outcome": "rejected",
+    "error": "ON source mount proposal mismatch"
+  },
+  {
+    "case": "legacy_graph_still_rejects",
+    "outcome": "rejected",
+    "error": "unsupported overlap"
+  },
+  {
+    "case": "driver_owner_guards_preserved",
+    "outcome": "pass"
+  }
+]

@@ -1,0 +1,16 @@
+warning: unused import: `VaList`
+ --> sysfs-body-tests-1/sysfs_test.rs:2:25
+  |
+2 | use core::ffi::{c_void, VaList};
+  |                         ^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `null_mut`
+ --> sysfs-body-tests-1/sysfs_test.rs:3:31
+  |
+3 | use std::ptr::{addr_of, null, null_mut};
+  |                               ^^^^^^^^
+
+warning: 2 warnings emitted
+

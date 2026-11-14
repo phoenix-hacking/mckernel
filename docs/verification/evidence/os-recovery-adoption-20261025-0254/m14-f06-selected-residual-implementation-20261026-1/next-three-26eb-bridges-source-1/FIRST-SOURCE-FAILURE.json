@@ -1,0 +1,14 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "command": [
+    "python3",
+    "-B",
+    "docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-three-26eb-bridges-source-1/prepare_source.py"
+  ],
+  "uid": 1000,
+  "returncode": 1,
+  "error": "AssertionError: assert symbol not in policy at line67",
+  "diagnosis": "Canonical policy already contains ABI references; blanket substring absence does not distinguish declarations/calls from duplicate Rust definitions.",
+  "actual_compiler": null,
+  "next": "Dispatcher authorize definition-specific sourcecheck correction; preserve this first failure and original prepare_source.py."
+}

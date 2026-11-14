@@ -1,0 +1,11 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRESERVED_TOOL_INPUT_ENCODING_REJECTION_BEFORE_PROCESS_CREATION",
+  "error": "CreateProcess rejected: nul byte found in provided data",
+  "cause": "JavaScript source string interpreted a Python bytes backslash-zero literal as NUL before exec_command.",
+  "correction": "Use String.raw for source transport so literal backslashes remain source bytes.",
+  "child_processes_created": 0,
+  "compiler_jobs": 0,
+  "CPU_reservations": 0,
+  "bounded_input_corrections": 1
+}

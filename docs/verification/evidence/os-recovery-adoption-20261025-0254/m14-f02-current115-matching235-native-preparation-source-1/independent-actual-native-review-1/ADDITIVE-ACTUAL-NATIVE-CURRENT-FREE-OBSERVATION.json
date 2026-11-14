@@ -1,0 +1,726 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "observed_epoch": 1793165067.9770658,
+  "case_nonce": "4d1c28c2d9caa913e4ab1e8a504ac5ea",
+  "container": "3205b91b74d8bb5ca29f993f6c5851674f04f5446de1b324ae4636a22a07b215",
+  "name": "mckernel-native-diagnostic-4d1c28c2d9caa913e4ab1e8a504ac5ea",
+  "queries": [
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "ps",
+        "-aq",
+        "--no-trunc",
+        "--filter",
+        "name=^/mckernel-native-diagnostic-4d1c28c2d9caa913e4ab1e8a504ac5ea$"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "positive_wait": true,
+      "streams_closed": true
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "ps",
+        "-aq",
+        "--no-trunc",
+        "--filter",
+        "label=mckernel.native-diagnostic.owner=4d1c28c2d9caa913e4ab1e8a504ac5ea"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "positive_wait": true,
+      "streams_closed": true
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "ps",
+        "-aq",
+        "--no-trunc",
+        "--filter",
+        "id=3205b91b74d8bb5ca29f993f6c5851674f04f5446de1b324ae4636a22a07b215"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "positive_wait": true,
+      "streams_closed": true
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "inspect",
+        "3205b91b74d8bb5ca29f993f6c5851674f04f5446de1b324ae4636a22a07b215"
+      ],
+      "returncode": 1,
+      "stdout": "[]\n",
+      "stderr": "Error: No such object: 3205b91b74d8bb5ca29f993f6c5851674f04f5446de1b324ae4636a22a07b215\n",
+      "positive_wait": true,
+      "streams_closed": true
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "ps",
+        "-q",
+        "--no-trunc"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "positive_wait": true,
+      "streams_closed": true
+    }
+  ],
+  "actual_normal_owned_clients": [
+    {
+      "evidence_file": "001-ps.json",
+      "command": {
+        "pgid": 1875158,
+        "pid": 1875158,
+        "proc_starttime": 96203590,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1874436
+      },
+      "returncode": 0,
+      "stderr_hex": ""
+    },
+    {
+      "evidence_file": "002-ps.json",
+      "command": {
+        "pgid": 1875164,
+        "pid": 1875164,
+        "proc_starttime": 96203591,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1874436
+      },
+      "returncode": 0,
+      "stderr_hex": ""
+    },
+    {
+      "evidence_file": "003-image.json",
+      "command": {
+        "pgid": 1875170,
+        "pid": 1875170,
+        "proc_starttime": 96203593,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1874436
+      },
+      "returncode": 0,
+      "stderr_hex": ""
+    },
+    {
+      "evidence_file": "004-create.json",
+      "command": {
+        "pgid": 1875176,
+        "pid": 1875176,
+        "proc_starttime": 96203594,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1874436
+      },
+      "returncode": 0,
+      "stderr_hex": ""
+    },
+    {
+      "evidence_file": "005-ps.json",
+      "command": {
+        "pgid": 1875182,
+        "pid": 1875182,
+        "proc_starttime": 96203600,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1874436
+      },
+      "returncode": 0,
+      "stderr_hex": ""
+    },
+    {
+      "evidence_file": "006-ps.json",
+      "command": {
+        "pgid": 1875188,
+        "pid": 1875188,
+        "proc_starttime": 96203602,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1874436
+      },
+      "returncode": 0,
+      "stderr_hex": ""
+    },
+    {
+      "evidence_file": "007-ps.json",
+      "command": {
+        "pgid": 1875194,
+        "pid": 1875194,
+        "proc_starttime": 96203604,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1874436
+      },
+      "returncode": 0,
+      "stderr_hex": ""
+    },
+    {
+      "evidence_file": "008-inspect.json",
+      "command": {
+        "pgid": 1875200,
+        "pid": 1875200,
+        "proc_starttime": 96203606,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1874436
+      },
+      "returncode": 0,
+      "stderr_hex": ""
+    },
+    {
+      "evidence_file": "009-start.json",
+      "command": {
+        "pgid": 1875206,
+        "pid": 1875206,
+        "proc_starttime": 96203607,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1874436
+      },
+      "returncode": 0,
+      "stderr_hex": ""
+    },
+    {
+      "evidence_file": "010-wait.json",
+      "command": {
+        "pgid": 1875725,
+        "pid": 1875725,
+        "proc_starttime": 96207294,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1874436
+      },
+      "returncode": 0,
+      "stderr_hex": ""
+    },
+    {
+      "evidence_file": "011-ps.json",
+      "command": {
+        "pgid": 1875731,
+        "pid": 1875731,
+        "proc_starttime": 96207296,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1874436
+      },
+      "returncode": 0,
+      "stderr_hex": ""
+    },
+    {
+      "evidence_file": "012-ps.json",
+      "command": {
+        "pgid": 1875737,
+        "pid": 1875737,
+        "proc_starttime": 96207298,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1874436
+      },
+      "returncode": 0,
+      "stderr_hex": ""
+    },
+    {
+      "evidence_file": "013-ps.json",
+      "command": {
+        "pgid": 1875743,
+        "pid": 1875743,
+        "proc_starttime": 96207299,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1874436
+      },
+      "returncode": 0,
+      "stderr_hex": ""
+    },
+    {
+      "evidence_file": "014-inspect.json",
+      "command": {
+        "pgid": 1875749,
+        "pid": 1875749,
+        "proc_starttime": 96207301,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1874436
+      },
+      "returncode": 0,
+      "stderr_hex": ""
+    },
+    {
+      "evidence_file": "015-wait.json",
+      "command": {
+        "pgid": 1875755,
+        "pid": 1875755,
+        "proc_starttime": 96207302,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1874436
+      },
+      "returncode": 0,
+      "stderr_hex": ""
+    },
+    {
+      "evidence_file": "016-logs.json",
+      "command": {
+        "pgid": 1875762,
+        "pid": 1875762,
+        "proc_starttime": 96207304,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1874436
+      },
+      "returncode": 0,
+      "stderr_hex": ""
+    },
+    {
+      "evidence_file": "017-inspect.json",
+      "command": {
+        "pgid": 1875768,
+        "pid": 1875768,
+        "proc_starttime": 96207305,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1874436
+      },
+      "returncode": 0,
+      "stderr_hex": ""
+    },
+    {
+      "evidence_file": "018-ps.json",
+      "command": {
+        "pgid": 1875774,
+        "pid": 1875774,
+        "proc_starttime": 96207307,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1874436
+      },
+      "returncode": 0,
+      "stderr_hex": ""
+    },
+    {
+      "evidence_file": "019-ps.json",
+      "command": {
+        "pgid": 1875780,
+        "pid": 1875780,
+        "proc_starttime": 96207309,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1874436
+      },
+      "returncode": 0,
+      "stderr_hex": ""
+    },
+    {
+      "evidence_file": "020-ps.json",
+      "command": {
+        "pgid": 1875786,
+        "pid": 1875786,
+        "proc_starttime": 96207310,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1874436
+      },
+      "returncode": 0,
+      "stderr_hex": ""
+    },
+    {
+      "evidence_file": "021-inspect.json",
+      "command": {
+        "pgid": 1875792,
+        "pid": 1875792,
+        "proc_starttime": 96207312,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1874436
+      },
+      "returncode": 0,
+      "stderr_hex": ""
+    },
+    {
+      "evidence_file": "022-stop.json",
+      "command": {
+        "pgid": 1875798,
+        "pid": 1875798,
+        "proc_starttime": 96207313,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1874436
+      },
+      "returncode": 0,
+      "stderr_hex": ""
+    },
+    {
+      "evidence_file": "023-kill.json",
+      "command": {
+        "pgid": 1875804,
+        "pid": 1875804,
+        "proc_starttime": 96207315,
+        "reaped": true,
+        "returncode": 1,
+        "sid": 1874436
+      },
+      "returncode": 1,
+      "stderr_hex": "4572726f7220726573706f6e73652066726f6d206461656d6f6e3a2063616e6e6f74206b696c6c20636f6e7461696e65723a20333230356239316237346438626235636132396639393366366335383531363734663034663534343664653162333234616534363336613232613037623231353a20636f6e7461696e65722033323035623931623734643862623563613239663939336636633538353136373466303466353434366465316233323461653436333661323261303762323135206973206e6f742072756e6e696e670a"
+    },
+    {
+      "evidence_file": "024-wait.json",
+      "command": {
+        "pgid": 1875810,
+        "pid": 1875810,
+        "proc_starttime": 96207316,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1874436
+      },
+      "returncode": 0,
+      "stderr_hex": ""
+    },
+    {
+      "evidence_file": "025-logs.json",
+      "command": {
+        "pgid": 1875816,
+        "pid": 1875816,
+        "proc_starttime": 96207317,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1874436
+      },
+      "returncode": 0,
+      "stderr_hex": ""
+    },
+    {
+      "evidence_file": "026-inspect.json",
+      "command": {
+        "pgid": 1875822,
+        "pid": 1875822,
+        "proc_starttime": 96207319,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1874436
+      },
+      "returncode": 0,
+      "stderr_hex": ""
+    },
+    {
+      "evidence_file": "027-rm.json",
+      "command": {
+        "pgid": 1875828,
+        "pid": 1875828,
+        "proc_starttime": 96207321,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1874436
+      },
+      "returncode": 0,
+      "stderr_hex": ""
+    },
+    {
+      "evidence_file": "028-ps.json",
+      "command": {
+        "pgid": 1875834,
+        "pid": 1875834,
+        "proc_starttime": 96207323,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1874436
+      },
+      "returncode": 0,
+      "stderr_hex": ""
+    },
+    {
+      "evidence_file": "029-ps.json",
+      "command": {
+        "pgid": 1875840,
+        "pid": 1875840,
+        "proc_starttime": 96207324,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1874436
+      },
+      "returncode": 0,
+      "stderr_hex": ""
+    },
+    {
+      "evidence_file": "030-ps.json",
+      "command": {
+        "pgid": 1875846,
+        "pid": 1875846,
+        "proc_starttime": 96207326,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1874436
+      },
+      "returncode": 0,
+      "stderr_hex": ""
+    }
+  ],
+  "actual_host_actors": [
+    {
+      "pid": 1875156,
+      "start": 96203551,
+      "role": "actual_root_native_container_owner",
+      "group": null
+    },
+    {
+      "pid": 1875152,
+      "start": 96203538,
+      "role": "normal_native_helper_and_CAPTURE_caller",
+      "group": null
+    },
+    {
+      "pid": 1874437,
+      "start": null,
+      "role": "once_operator",
+      "group": null
+    },
+    {
+      "pid": 1874436,
+      "start": null,
+      "role": "Root_tool_session_group",
+      "group": 1874436
+    },
+    {
+      "pid": 1874406,
+      "start": null,
+      "role": "Root_actual_prewarm_waiter",
+      "group": null
+    },
+    {
+      "pid": 1875158,
+      "start": 96203590,
+      "role": "normal_owned_001-ps.json",
+      "group": 1875158
+    },
+    {
+      "pid": 1875164,
+      "start": 96203591,
+      "role": "normal_owned_002-ps.json",
+      "group": 1875164
+    },
+    {
+      "pid": 1875170,
+      "start": 96203593,
+      "role": "normal_owned_003-image.json",
+      "group": 1875170
+    },
+    {
+      "pid": 1875176,
+      "start": 96203594,
+      "role": "normal_owned_004-create.json",
+      "group": 1875176
+    },
+    {
+      "pid": 1875182,
+      "start": 96203600,
+      "role": "normal_owned_005-ps.json",
+      "group": 1875182
+    },
+    {
+      "pid": 1875188,
+      "start": 96203602,
+      "role": "normal_owned_006-ps.json",
+      "group": 1875188
+    },
+    {
+      "pid": 1875194,
+      "start": 96203604,
+      "role": "normal_owned_007-ps.json",
+      "group": 1875194
+    },
+    {
+      "pid": 1875200,
+      "start": 96203606,
+      "role": "normal_owned_008-inspect.json",
+      "group": 1875200
+    },
+    {
+      "pid": 1875206,
+      "start": 96203607,
+      "role": "normal_owned_009-start.json",
+      "group": 1875206
+    },
+    {
+      "pid": 1875725,
+      "start": 96207294,
+      "role": "normal_owned_010-wait.json",
+      "group": 1875725
+    },
+    {
+      "pid": 1875731,
+      "start": 96207296,
+      "role": "normal_owned_011-ps.json",
+      "group": 1875731
+    },
+    {
+      "pid": 1875737,
+      "start": 96207298,
+      "role": "normal_owned_012-ps.json",
+      "group": 1875737
+    },
+    {
+      "pid": 1875743,
+      "start": 96207299,
+      "role": "normal_owned_013-ps.json",
+      "group": 1875743
+    },
+    {
+      "pid": 1875749,
+      "start": 96207301,
+      "role": "normal_owned_014-inspect.json",
+      "group": 1875749
+    },
+    {
+      "pid": 1875755,
+      "start": 96207302,
+      "role": "normal_owned_015-wait.json",
+      "group": 1875755
+    },
+    {
+      "pid": 1875762,
+      "start": 96207304,
+      "role": "normal_owned_016-logs.json",
+      "group": 1875762
+    },
+    {
+      "pid": 1875768,
+      "start": 96207305,
+      "role": "normal_owned_017-inspect.json",
+      "group": 1875768
+    },
+    {
+      "pid": 1875774,
+      "start": 96207307,
+      "role": "normal_owned_018-ps.json",
+      "group": 1875774
+    },
+    {
+      "pid": 1875780,
+      "start": 96207309,
+      "role": "normal_owned_019-ps.json",
+      "group": 1875780
+    },
+    {
+      "pid": 1875786,
+      "start": 96207310,
+      "role": "normal_owned_020-ps.json",
+      "group": 1875786
+    },
+    {
+      "pid": 1875792,
+      "start": 96207312,
+      "role": "normal_owned_021-inspect.json",
+      "group": 1875792
+    },
+    {
+      "pid": 1875798,
+      "start": 96207313,
+      "role": "normal_owned_022-stop.json",
+      "group": 1875798
+    },
+    {
+      "pid": 1875804,
+      "start": 96207315,
+      "role": "normal_owned_023-kill.json",
+      "group": 1875804
+    },
+    {
+      "pid": 1875810,
+      "start": 96207316,
+      "role": "normal_owned_024-wait.json",
+      "group": 1875810
+    },
+    {
+      "pid": 1875816,
+      "start": 96207317,
+      "role": "normal_owned_025-logs.json",
+      "group": 1875816
+    },
+    {
+      "pid": 1875822,
+      "start": 96207319,
+      "role": "normal_owned_026-inspect.json",
+      "group": 1875822
+    },
+    {
+      "pid": 1875828,
+      "start": 96207321,
+      "role": "normal_owned_027-rm.json",
+      "group": 1875828
+    },
+    {
+      "pid": 1875834,
+      "start": 96207323,
+      "role": "normal_owned_028-ps.json",
+      "group": 1875834
+    },
+    {
+      "pid": 1875840,
+      "start": 96207324,
+      "role": "normal_owned_029-ps.json",
+      "group": 1875840
+    },
+    {
+      "pid": 1875846,
+      "start": 96207326,
+      "role": "normal_owned_030-ps.json",
+      "group": 1875846
+    }
+  ],
+  "all_host_actor_PID_and_owned_PGRP_controls_absent": true,
+  "container_QEMU_identity": {
+    "pid": 10,
+    "starttime_ticks": 96203730,
+    "namespace": "inside exact removed CID; not a hostPID10 absence claim"
+  },
+  "group_membership_observation_reused_from": "ACTUAL-ROOT57-OBSERVER.stdout.json",
+  "kernel_locks_raw": "1: POSIX  ADVISORY  READ 1616670 103:02:46011664 128 128\n2: POSIX  ADVISORY  READ 1616670 103:02:46013050 1073741826 1073742335\n3: POSIX  ADVISORY  READ 1616670 103:02:46010515 128 128\n4: POSIX  ADVISORY  READ 1616670 103:02:46013047 1073741826 1073742335\n5: FLOCK  ADVISORY  WRITE 1616670 103:02:47469024 0 EOF\n6: FLOCK  ADVISORY  WRITE 1616670 103:02:47469129 0 EOF\n7: FLOCK  ADVISORY  WRITE 1621307 103:02:58751461 0 EOF\n8: FLOCK  ADVISORY  WRITE 1621308 103:02:47586630 0 EOF\n9: FLOCK  ADVISORY  WRITE 1619833 103:02:58751152 0 EOF\n10: FLOCK  ADVISORY  WRITE 1616666 103:02:47479175 0 EOF\n11: FLOCK  ADVISORY  WRITE 9073 103:02:46013140 0 EOF\n12: POSIX  ADVISORY  WRITE 223502 103:02:56103909 1073741824 1073742335\n13: POSIX  ADVISORY  WRITE 223502 103:02:49286387 0 EOF\n14: POSIX  ADVISORY  READ 223502 103:02:48762832 1073741826 1073742335\n15: POSIX  ADVISORY  WRITE 223502 103:02:48891882 0 EOF\n16: POSIX  ADVISORY  WRITE 223502 103:02:48762831 0 EOF\n17: FLOCK  ADVISORY  WRITE 5713 00:38:103 0 EOF\n18: POSIX  ADVISORY  WRITE 2196 00:19:1701 0 EOF\n19: FLOCK  ADVISORY  WRITE 910 103:02:52691275 0 EOF\n20: FLOCK  ADVISORY  WRITE 1685260 103:02:47485214 0 EOF\n21: POSIX  ADVISORY  READ 1685260 103:02:46010515 128 128\n22: POSIX  ADVISORY  READ 1616670 103:02:46011659 128 128\n23: POSIX  ADVISORY  READ 1616670 103:02:46019532 1073741826 1073742335\n24: FLOCK  ADVISORY  WRITE 1616670 103:02:47469476 0 EOF\n25: FLOCK  ADVISORY  WRITE 1616670 103:02:47468837 0 EOF\n26: POSIX  ADVISORY  READ 1616670 103:02:46011662 128 128\n27: POSIX  ADVISORY  READ 1616670 103:02:46013044 1073741826 1073742335\n28: FLOCK  ADVISORY  WRITE 1616668 103:02:47479248 0 EOF\n29: POSIX  ADVISORY  WRITE 223502 103:02:48891900 1073741824 1073742335\n30: POSIX  ADVISORY  WRITE 223502 103:02:48891914 1073741824 1073742335\n31: POSIX  ADVISORY  WRITE 223502 103:02:10230183 0 EOF\n32: POSIX  ADVISORY  WRITE 223502 103:02:49026289 0 EOF\n33: POSIX  ADVISORY  WRITE 223502 103:02:48891874 0 EOF\n34: POSIX  ADVISORY  WRITE 223502 103:02:48891884 0 EOF\n35: POSIX  ADVISORY  WRITE 223502 103:02:49155976 0 EOF\n36: POSIX  ADVISORY  READ 223502 103:02:48762845 1073741826 1073742335\n37: POSIX  ADVISORY  READ 223502 103:02:48762798 1073741826 1073742335\n38: POSIX  ADVISORY  WRITE 971 103:02:13893648 0 EOF\n39: FLOCK  ADVISORY  WRITE 1685260 103:02:47485548 0 EOF\n40: FLOCK  ADVISORY  WRITE 9164 103:02:46012167 0 EOF\n41: FLOCK  ADVISORY  WRITE 1616670 103:02:47469477 0 EOF\n42: POSIX  ADVISORY  READ 1616670 103:02:46013058 128 128\n43: POSIX  ADVISORY  READ 1616670 103:02:46013056 1073741826 1073742335\n44: POSIX  ADVISORY  WRITE 223502 103:02:49022837 0 EOF\n45: POSIX  ADVISORY  WRITE 4369 103:02:57157305 1073741824 1073742335\n46: POSIX  ADVISORY  WRITE 223502 103:02:49155880 0 EOF\n47: POSIX  ADVISORY  WRITE 223502 103:02:48762798 1073741825 1073741825\n48: POSIX  ADVISORY  WRITE 223502 103:02:49026304 0 EOF\n49: POSIX  ADVISORY  WRITE 223502 103:02:48236670 1073741824 1073742335\n50: POSIX  ADVISORY  WRITE 223502 103:02:49286350 0 EOF\n51: FLOCK  ADVISORY  WRITE 1213 103:02:55051482 0 EOF\n52: FLOCK  ADVISORY  WRITE 1685260 103:02:47459912 0 EOF\n53: POSIX  ADVISORY  READ 9073 103:02:46010515 128 128\n54: POSIX  ADVISORY  READ 9073 103:02:46013047 1073741826 1073742335\n55: FLOCK  ADVISORY  WRITE 1722965 103:02:46012165 0 EOF\n56: POSIX  ADVISORY  READ 1685260 103:02:46013047 1073741826 1073742335\n57: FLOCK  ADVISORY  WRITE 1616670 103:02:47468549 0 EOF\n58: FLOCK  ADVISORY  WRITE 1685260 103:02:46011039 0 EOF\n59: FLOCK  ADVISORY  WRITE 1616670 103:02:47469500 0 EOF\n60: FLOCK  ADVISORY  WRITE 1219993 00:1b:6 0 EOF\n61: POSIX  ADVISORY  READ 1076570 103:02:45482671 128 128\n62: POSIX  ADVISORY  READ 1076570 103:02:45482006 1073741826 1073742335\n63: POSIX  ADVISORY  READ 223502 103:02:48236669 1073741826 1073742335\n64: FLOCK  ADVISORY  WRITE 9073 103:02:46013142 0 EOF\n65: FLOCK  ADVISORY  WRITE 2036 103:02:55052393 0 EOF\n66: FLOCK  ADVISORY  WRITE 2036 103:02:55051524 0 EOF\n67: FLOCK  ADVISORY  WRITE 2036 103:02:55051522 0 EOF\n68: FLOCK  ADVISORY  WRITE 2036 103:02:55051521 0 EOF\n69: FLOCK  ADVISORY  WRITE 2036 103:02:55051520 0 EOF\n70: POSIX  ADVISORY  WRITE 922 00:19:1500 0 EOF\n71: POSIX  ADVISORY  WRITE 892 103:02:13893651 0 EOF\n72: FLOCK  ADVISORY  WRITE 1616670 103:02:47460036 0 EOF\n73: FLOCK  ADVISORY  WRITE 1616670 103:02:47468483 0 EOF\n74: FLOCK  ADVISORY  WRITE 1616670 103:02:47468548 0 EOF\n75: POSIX  ADVISORY  WRITE 223502 103:02:48891964 1073741824 1073742335\n76: POSIX  ADVISORY  READ 223502 103:02:49155918 1073741826 1073742335\n77: POSIX  ADVISORY  WRITE 223502 103:02:48236660 1073741825 1073741825\n78: POSIX  ADVISORY  WRITE 223502 103:02:48891854 1073741824 1073742335\n79: POSIX  ADVISORY  WRITE 223502 103:02:48891972 1073741824 1073742335\n80: POSIX  ADVISORY  WRITE 223502 103:02:48891923 0 EOF\n81: POSIX  ADVISORY  WRITE 223502 103:02:49286371 0 EOF\n82: POSIX  ADVISORY  WRITE 223502 103:02:48762869 0 EOF\n83: POSIX  ADVISORY  READ 223502 103:02:48236668 1073741826 1073742335\n84: POSIX  ADVISORY  WRITE 223502 103:02:49026316 0 EOF\n85: POSIX  ADVISORY  WRITE 223502 103:02:49960096 0 EOF\n86: POSIX  ADVISORY  WRITE 223502 103:02:51511651 0 EOF\n87: POSIX  ADVISORY  WRITE 223502 103:02:48891901 1073741824 1073742335\n88: POSIX  ADVISORY  WRITE 223502 103:02:48762846 1073741824 1073742335\n89: POSIX  ADVISORY  READ 223502 103:02:48236660 1073741826 1073742335\n90: POSIX  ADVISORY  WRITE 4369 103:02:57147728 1073741826 1073742335\n91: POSIX  ADVISORY  WRITE 4369 103:02:57147708 0 EOF\n92: POSIX  ADVISORY  WRITE 4369 103:02:57147718 0 EOF\n93: FLOCK  ADVISORY  WRITE 2036 103:02:55051515 0 EOF\n94: FLOCK  ADVISORY  WRITE 1616670 103:02:47475595 0 EOF\n95: POSIX  ADVISORY  WRITE 223502 103:02:48236663 1073741824 1073742335\n96: POSIX  ADVISORY  WRITE 223502 103:02:48762817 1073741824 1073742335\n97: POSIX  ADVISORY  WRITE 223502 103:02:48891967 0 EOF\n98: POSIX  ADVISORY  READ 223502 103:02:48891887 1073741826 1073742335\n99: POSIX  ADVISORY  WRITE 223502 103:02:48891918 1073741824 1073742335\n100: POSIX  ADVISORY  WRITE 223502 103:02:48762824 0 EOF\n101: POSIX  ADVISORY  WRITE 223502 103:02:48762804 0 EOF\n102: FLOCK  ADVISORY  WRITE 2036 103:02:55051509 0 EOF\n103: POSIX  ADVISORY  WRITE 2199 00:19:1702 0 EOF\n104: POSIX  ADVISORY  READ 1685260 103:02:46011659 128 128\n105: POSIX  ADVISORY  READ 1685260 103:02:46019532 1073741826 1073742335\n106: POSIX  ADVISORY  READ 1685260 103:02:46011662 128 128\n107: POSIX  ADVISORY  READ 1685260 103:02:46013044 1073741826 1073742335\n108: FLOCK  ADVISORY  WRITE 1685260 103:02:47485190 0 EOF\n109: FLOCK  ADVISORY  WRITE 1685260 103:02:47459708 0 EOF\n110: POSIX  ADVISORY  READ 1685260 103:02:46013058 128 128\n111: POSIX  ADVISORY  READ 1685260 103:02:46013056 1073741826 1073742335\n112: FLOCK  ADVISORY  WRITE 1616670 103:02:46010993 0 EOF\n113: POSIX  ADVISORY  WRITE 223502 103:02:48891869 1073741824 1073742335\n114: POSIX  ADVISORY  WRITE 223502 103:02:48762884 0 EOF\n115: POSIX  ADVISORY  WRITE 223502 103:02:48762864 0 EOF\n116: POSIX  ADVISORY  WRITE 223502 103:02:49286378 0 EOF\n117: POSIX  ADVISORY  WRITE 223502 103:02:49286402 0 EOF\n118: POSIX  ADVISORY  WRITE 223502 103:02:48891845 0 EOF\n119: POSIX  ADVISORY  WRITE 223502 103:02:49286345 0 EOF\n120: POSIX  ADVISORY  READ 4405 103:02:45482671 128 128\n121: POSIX  ADVISORY  READ 4405 103:02:45482006 1073741826 1073742335\n122: FLOCK  ADVISORY  WRITE 2199 103:02:13893689 0 EOF\n123: FLOCK  ADVISORY  WRITE 867 00:19:1429 0 EOF\n",
+  "permanent_mutex": {
+    "device": 27,
+    "inode": 4,
+    "regular": true,
+    "no_kernel_lock_row": true
+  },
+  "pids_current": 0,
+  "retained_QMP_socket_artifact": {
+    "path": "/home/holden/mckernel-work/scratch/f02p115n1/attempt-4d1c28c2d9caa913e4ab1e8a504ac5ea/qmp.sock",
+    "device": 1828,
+    "inode": 9043978,
+    "mode": 49645,
+    "expected_preserved_capture": true,
+    "host_kernel_UNIX_endpoint_rows": [],
+    "not_inferred_live_from_path": true
+  },
+  "signals_or_removals_by_reviewer": 0,
+  "new_mutex_probes": 0,
+  "previous_original_two_closed_mutex_probes": [
+    "39: FLOCK  ADVISORY  WRITE 1876570 00:1b:4 0 EOF",
+    "39: FLOCK  ADVISORY  WRITE 1876570 00:1b:4 0 EOF"
+  ],
+  "prior_failed_additive_readonly_queries": 5
+}

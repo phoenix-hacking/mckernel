@@ -1,0 +1,48 @@
+{
+  "archive": {
+    "path": "native-running-lifecycle-strict5-failure-review-20261017-2-exact-metadata.tar.gz",
+    "sha256": "0040a16ec2f42c1e37f4f7d5c4ddbcf396366a4c59c1654466ffcb90cd9720b8",
+    "size": 42243
+  },
+  "evidence_directory": "/home/holden/mckernel/docs/verification/evidence",
+  "exact_snapshot_record": {
+    "path": "native-running-lifecycle-strict5-preservation-expert-correction-20261017-2.json",
+    "sha256": "5b2dcde73fafd0a5b5a2a10c292099dbae3a5d27425e296d6f82ba3a2ec90bbf"
+  },
+  "independent_runtime_review": {
+    "path": "native-running-lifecycle-strict5-independent-execution-review-20261017-2.json",
+    "reviewer": "/root/signal_guest_execution_review",
+    "sha256": "cfd98fa9a27af696980399e24940f5259ff302b5f73897cf6ef070a0c2f269db"
+  },
+  "limits": "Selected preservation only; no fresh root census, runtime execution, restoration or counter changes. Harness note retains assertions/transcript references, not standalone full raw logs.",
+  "new_distinct_diagnostic_credits": 0,
+  "original_archive": {
+    "path": "native-running-lifecycle-strict5-failure-review-20261017-2.tar.gz",
+    "sha256": "e7dea2e139f36016c308fe73ef6aefb5a370b519a66e63192fc0e69f3c772312",
+    "status": "PRESERVED_BYTES_AND_BASIC_METADATA_PASS_NANOSECOND_MTIME_FAIL"
+  },
+  "preservation_status": "PASS_EXACT_METADATA_ADDITIVE_ARCHIVE",
+  "preserved_failures": [
+    "JS timestamp rounding; first finalization exit1",
+    "Invalid <=128ns diagnostic; correction exit1",
+    "Original tar PAX float precision loss; earlier exact-nanosecond PASS claim incorrect"
+  ],
+  "raw_capture": "/home/holden/mckernel-work/scratch/native-running-lifecycle-strict5-dispatch-20261017-2",
+  "reviewer": "/root/image_retirement_review",
+  "runtime_scope": "Independent review: payload40bytes/exit0; native shutdown -16, after8, first failure reconcile-16. All25clients, owner, container, QEMU retired; lease false/root27:4 free. Original FAIL flags retained.",
+  "status": "RETIRED_FAILED_NATIVE_SHUTDOWN_RECONCILE",
+  "stopped_harness_record": {
+    "path": "/home/holden/mckernel-work/scratch/failure-preservation-harness.json",
+    "sha256": "c390b8b6b5840b8f5c052518b81498efa1c7bec61daf925a7705ced569ff35ca"
+  },
+  "successful_native_cycles": 0,
+  "verification": {
+    "arithmetic": "Python integers and Decimal; custom PAX values strings",
+    "atime_excluded": true,
+    "basic_metadata_matches": 13,
+    "byte_hash_matches": 13,
+    "exact_pax_mtime_and_all_custom_stat_fields_matches": 13,
+    "regular_unique_safe_members": 13,
+    "stable_pre_post_and_snapshot_record_match": true
+  }
+}

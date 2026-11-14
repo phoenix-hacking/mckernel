@@ -1,0 +1,22 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": "2026-10-25T05:19:32.943496+00:00",
+  "status": "CORRECTED_AND_ACTUAL_CANONICAL_INTEGRATION_COMPLETED",
+  "cause": "Root integration mistakenly used Source5 handoff base_* paths as canonical destinations; those paths identify retained Source4 private candidates. Prior05:18:22 integration claim was incorrect.",
+  "original_claim_preserved": "docs/verification/evidence/os-recovery-adoption-20261025-0254/INTEGRATED-MOVE-PAGES-CURRENT61-AND-F04.json",
+  "restoration": "Both Source4 private preimages restored exactly from still-unchanged hash-verified canonical originals; source originals fc6ed01b/ac129c81 match retained acceptance. No source content lost.",
+  "actual_canonical_targets": [
+    "kernel/syscall.c",
+    "kernel/rust/syscall_policy.rs"
+  ],
+  "actual_canonical_sha256": [
+    "0a3eb7a3ff5cb0e8318722298b58a09fedb3871fa1b78f361cbe9bd83d46f844",
+    "ac57c7d567b15a852a3a11028d9ec012f3d7121513762a31b389e8ffe9143472"
+  ],
+  "restored_private_sha256": [
+    "fc6ed01b2179d5a1a72a5f6d2edd32ab424206f60b832109dfd179c5875d5fe2",
+    "ac129c811983788e157e183671158f60b4ca00ea83a5c238c4a6819fd6036a30"
+  ],
+  "independent_review": "PASS_ACTUAL_HOST566c8d71 andcontrolledparity1f3acca9 unchanged",
+  "SDK_default_native_retirement": false
+}

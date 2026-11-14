@@ -1,0 +1,59 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "BLOCKED_DURABLE_ACTION_JOURNAL_DIRECTORY_SYNC_REQUIRED",
+  "independent": true,
+  "reviewer": "/root/guardian_execution_review",
+  "implementation_ownership": false,
+  "execution_release": false,
+  "maximum_signal_calls_approved": 0,
+  "reviewed_READY": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/READY.json",
+    "bytes": 2277,
+    "sha256": "a21fbe64429b1a5c18502d4a2927296c07509f06c7259ecf48f3f3f8e92f49a0"
+  },
+  "reviewed_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/interrupt_exact_unlaunched_holder.py",
+    "bytes": 11035,
+    "sha256": "570b306904398f8d36d7bca3f6bc3cc2725e8bf698ce93accbb55c4942c225af"
+  },
+  "reviewed_profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/SOURCE-PROFILE.NOT-A-GRANT.json",
+    "bytes": 6181,
+    "sha256": "855484192726811df290063f198b002364cc34ec32f23ff9c24e7db216dc0d69"
+  },
+  "reviewed_grant_template": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/ROOT-GRANT.TEMPLATE.NOT-A-GRANT.json",
+    "bytes": 1273,
+    "sha256": "8583441bb48085a934b6a4bfcfe783fe3acb2080ee21841ef8bd5b3cb9da8345"
+  },
+  "holder": {
+    "path": "/run/lock/mckernel-development.lock",
+    "pid": 1815979,
+    "starttime": 95215128,
+    "device": 27,
+    "inode": 4,
+    "fd": 3
+  },
+  "root_tool_session": 11857,
+  "blocker": {
+    "location": "execute(): journal.open(x), emit(ENTERED_NO_SIGNAL), before pidfd_send_signal",
+    "fact": "emit() flushes and fsyncs only the action journal file descriptor. No directory descriptor is opened/fsynced anywhere in the helper.",
+    "consequence": "A newly created O_EXCL journal path is not guaranteed durable after crash solely by file fsync. Its directory entry could be lost while the signal effect already happened; the declared durable one-attempt record would then not support no-retry recovery.",
+    "bounded_correction": "Preserve frozen source/READY and create a bounded successor. After exclusive journal creation and first fsynced ENTERED record, fsync the containing directory before any possible signal. Fail closed on directory sync failure. No retry/escalation/workload or target change is needed."
+  },
+  "otherwise_reviewed_sound": [
+    "Exact retained holder source d17bd waits without child while READY absent. child_started=False and can_release=True; SIGINT causes KeyboardInterrupt to rethrow through except BaseException and finally closes only its own fd. Native/child quarantine path is not entered for this state.",
+    "Helper pins source/bootstrap/ready/profile/expired packet/resource/refusal and exact1815979 birth95215128 UID1000 FD3 permanent27:4/tool11857.",
+    "At Root execution, two live checks around pidfd_open require exact birth/UID/signal mask/one thread/no children/cmdline/CLOEXEC same lockFD and sole flock, plus all10forbiddenpaths absent; Root freeze attestations prevent grant publication race.",
+    "Exactly one pidfd_send_signal(SIGINT) call, no numeric/group fallback/retry/unlock/deletion/subprocess/cleanup. Only this helper pidfd closes in finally.",
+    "Fresh Root grant must be<=60s, exact self/profile/holder and review ref, v2 account/window checks before action; expired120s build evidence is not renewed.",
+    "SIGNAL_SENT_NOT_RETIREMENT requires Root positive tool11857 join then separate independent current-free/probes; cf36 remains unused abandoned rather than build authority."
+  ],
+  "actual_proc_queries_by_reviewer": 0,
+  "actual_guard_calls_by_reviewer": 0,
+  "actual_signal_calls_by_reviewer": 0,
+  "actual_workloads_or_cleanup_by_reviewer": 0,
+  "actual_retirement": null,
+  "current_free": false,
+  "review_method": "Read-only exact source/ref hashes, holder finally/signal path and AST one-call check. No live process observation, guard, account, signal, workload or canonical mutation."
+}

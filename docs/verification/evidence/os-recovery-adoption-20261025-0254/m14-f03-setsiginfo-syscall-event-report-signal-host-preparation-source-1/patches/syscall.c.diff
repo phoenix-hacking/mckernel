@@ -1,0 +1,82 @@
+--- actual114/syscall.c
++++ three-wrapper-candidate/syscall.c
+@@ -7130,11 +7130,18 @@
+ 
+ extern void ptrace_report_signal(struct thread *thread, int sig);
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PTRACE_ENTRY)
++extern void f03_exec_report_signal_v1(void *thread, int sig);
++#define ptrace_report_signal_bridge f03_exec_report_signal_v1
++#else
++#line 7100
+ static void
+ ptrace_report_signal_bridge(void *thread, int sig)
+ {
+ 	ptrace_report_signal((struct thread *)thread, sig);
+ }
++#endif
++#line 7105
+ 
+ static long
+ ptrace_report_exec_arch_event_bridge(void *thread, void *ctx, long setret)
+@@ -7142,6 +7149,11 @@
+ 	return arch_ptrace_syscall_event((struct thread *)thread,
+ 			(ihk_mc_user_context_t *)ctx, setret);
+ }
++#endif
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++#line 7110
++#else
++#line 7119
+ #endif
+ 
+ static int ptrace_report_exec(struct thread *thread,
+@@ -7198,6 +7210,14 @@
+ #endif
+ }
+ 
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PTRACE_ENTRY)
++extern void ptrace_syscall_event(struct thread *thread);
++#else
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++#line 7165
++#else
++#line 7174
++#endif
+ void ptrace_syscall_event(struct thread *thread)
+ {
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+@@ -7212,6 +7232,12 @@
+ 	}
+ #endif
+ }
++#endif
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++#line 7179
++#else
++#line 7188
++#endif
+ 
+ static int ptrace_check_clone_event(struct thread *thread, int clone_flags)
+ {
+@@ -25600,6 +25626,11 @@
+ #endif
+ #line 25332
+ 
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PTRACE_ENTRY)
++extern long f03_ptrace_setsiginfo_v1(int pid, siginfo_t *data);
++#define ptrace_setsiginfo f03_ptrace_setsiginfo_v1
++#else
++#line 25333
+ static long
+ ptrace_setsiginfo(int pid, siginfo_t *data)
+ {
+@@ -25691,6 +25722,8 @@
+ 	return rc;
+ #endif
+ }
++#endif
++#line 25424
+ 
+ #ifdef MCKERNEL_RUST_F03_PTRACE_ENTRY
+ #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS

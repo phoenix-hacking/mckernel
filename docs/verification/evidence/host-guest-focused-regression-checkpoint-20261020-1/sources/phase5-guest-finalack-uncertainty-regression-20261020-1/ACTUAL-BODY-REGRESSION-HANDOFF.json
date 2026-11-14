@@ -1,0 +1,201 @@
+{
+  "status": "PASS_ACTUAL_PRODUCTION_BODY_REGRESSION",
+  "scope": "Functional supported-profile OS/apps plus active Rust compute-C retirement; normal unpublished fork finalACK uncertainty only",
+  "production_edit_required": false,
+  "tests_new_passed": 3,
+  "tests_selected_filter": "finalack_uncertainty_",
+  "old_tests_filtered": 5,
+  "checks": {
+    "compile": {
+      "pid": 2186535,
+      "exit_code": 0,
+      "positive_wait": true,
+      "owned_group_absent": true,
+      "elapsed": 0.6691131090046838
+    },
+    "test": {
+      "pid": 2186546,
+      "exit_code": 0,
+      "positive_wait": true,
+      "owned_group_absent": true,
+      "elapsed": 0.005288949003443122
+    }
+  },
+  "CPU6": "released after positive joins before postprocessing",
+  "invariants_verified": [
+    "After checked Thread/VM/Process/page callbacks, final transport -5 retains constructor/carrier/initial-request/revoke-request/final-request allocations, extra parent pin and CPU reservation.",
+    "Scalar0 without actual final response observer returnsEACCES; no fabricated finalACK, no request freeing or parent/CPU release.",
+    "Terminal retry on either uncertainty returnsEACCES, preserves exact four recorded carrier/request addresses,5 live allocations, and destructor counts1/1/1/1.",
+    "Successful actual observer finalACK detaches discovery, releases CPU and extra parent pin, returns live allocation count to baseline; terminal retry returnsENOENT and adds no free/destructor."
+  ],
+  "production_sources": {
+    "abi.rs": {
+      "current_source": {
+        "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+        "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+        "bytes": 76151
+      },
+      "private_fixture": {
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/fixture/abi.rs",
+        "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+        "bytes": 76151
+      },
+      "whole_module_equal": true,
+      "production_prefix_equal": true,
+      "test_accessors_appended": false
+    },
+    "fork_control_guest.rs": {
+      "current_source": {
+        "path": "/home/holden/mckernel/kernel/rust/fork_control_guest.rs",
+        "sha256": "26797f574fa1ba7006eb27ff3a1a7750ec04b83f71a2e90b8c35c4c536b33acd",
+        "bytes": 18671
+      },
+      "private_fixture": {
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/fixture/fork_control_guest.rs",
+        "sha256": "16599cdb2b05baf92917fec9a052add48c9b169549b74227bbe72d59ba2b5933",
+        "bytes": 19390
+      },
+      "whole_module_equal": false,
+      "production_prefix_equal": true,
+      "test_accessors_appended": true
+    },
+    "fork_control_registry.rs": {
+      "current_source": {
+        "path": "/home/holden/mckernel/kernel/rust/fork_control_registry.rs",
+        "sha256": "a2f92bb11cba42fef0d95e1f1e1a4c526351ff90860baed7913fa26c91137ba5",
+        "bytes": 14785
+      },
+      "private_fixture": {
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/fixture/fork_control_registry.rs",
+        "sha256": "a2f92bb11cba42fef0d95e1f1e1a4c526351ff90860baed7913fa26c91137ba5",
+        "bytes": 14785
+      },
+      "whole_module_equal": true,
+      "production_prefix_equal": true,
+      "test_accessors_appended": false
+    },
+    "fork_child_credits.rs": {
+      "current_source": {
+        "path": "/home/holden/mckernel/kernel/rust/fork_child_credits.rs",
+        "sha256": "63b82c97cc6e1204585cfaf2b89ef378b88c1d207a8e82c2f1400bc352f9c98d",
+        "bytes": 28612
+      },
+      "private_fixture": {
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/fixture/fork_child_credits.rs",
+        "sha256": "63b82c97cc6e1204585cfaf2b89ef378b88c1d207a8e82c2f1400bc352f9c98d",
+        "bytes": 28612
+      },
+      "whole_module_equal": true,
+      "production_prefix_equal": true,
+      "test_accessors_appended": false
+    },
+    "fork_constructed_credits.rs": {
+      "current_source": {
+        "path": "/home/holden/mckernel/kernel/rust/fork_constructed_credits.rs",
+        "sha256": "4c1e96ef4fbf5cb66acc54d900d37fcd68fb4d50dd1337c4428b3f5e2ecd1972",
+        "bytes": 10534
+      },
+      "private_fixture": {
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/fixture/fork_constructed_credits.rs",
+        "sha256": "4c1e96ef4fbf5cb66acc54d900d37fcd68fb4d50dd1337c4428b3f5e2ecd1972",
+        "bytes": 10534
+      },
+      "whole_module_equal": true,
+      "production_prefix_equal": true,
+      "test_accessors_appended": false
+    },
+    "fork_final_ack.rs": {
+      "current_source": {
+        "path": "/home/holden/mckernel/kernel/rust/fork_final_ack.rs",
+        "sha256": "093f742dfe4969d78b2ca6b8b643df94042945e890d26003dec9d1818c34826b",
+        "bytes": 5506
+      },
+      "private_fixture": {
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/fixture/fork_final_ack.rs",
+        "sha256": "093f742dfe4969d78b2ca6b8b643df94042945e890d26003dec9d1818c34826b",
+        "bytes": 5506
+      },
+      "whole_module_equal": true,
+      "production_prefix_equal": true,
+      "test_accessors_appended": false
+    },
+    "fork_runnable_child.rs": {
+      "current_source": {
+        "path": "/home/holden/mckernel/kernel/rust/fork_runnable_child.rs",
+        "sha256": "a9387ae13b85785176b95fc6ddc79b08bd31dd7960b0730307b41b5a05b5d137",
+        "bytes": 12855
+      },
+      "private_fixture": {
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/fixture/fork_runnable_child.rs",
+        "sha256": "a9387ae13b85785176b95fc6ddc79b08bd31dd7960b0730307b41b5a05b5d137",
+        "bytes": 12855
+      },
+      "whole_module_equal": true,
+      "production_prefix_equal": true,
+      "test_accessors_appended": false
+    }
+  },
+  "helper_body_binding": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/HELPER-BODY-BINDING.json",
+    "sha256": "3eefa94b463d37d21ca9e019ebeba390c268f8d448fb02e8fbdb7df19371971f",
+    "bytes": 2581
+  },
+  "uncertainty_ownership_count": "5 retained kmalloc allocations includes opaque constructor graph, checked indirectly by retirement_complete(false) and unchanged total; 4 exact addresses read through Carrier and actual registry",
+  "failure_history": {
+    "first": {
+      "compile_exit": 1,
+      "diagnostic": "E0616 test accessor reached private ForkRequestSlot.request",
+      "evidence": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/check-1/compile",
+      "candidate_snapshot": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/failed-candidate-1"
+    },
+    "one_bounded_correction": "test-only owner snapshot uses actualCarrier.request and asserts owned_request.is_some; no production visibility changes"
+  },
+  "limits": [
+    "Unprivileged source-body semantics only; constructor/VM callback/physical mapping/transport adapters explicit.",
+    "Current entire normal-path production modules compiled; runtime finalVM/write/runqueue callbacks fail closed and are not exercised.",
+    "No kernel/native/current-module/ABI integration, registry-detach refusal injection, runtime child retirement or parent-exit acceptance."
+  ],
+  "next_executable_observation": "Root independent review of ownership code/report; retain these exact cases when binding a supported-profile native child-run/exit/parentwait path. No additional guest run authorized by this report.",
+  "evidence": {
+    "compile/stdout": {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/check-2/compile/stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "compile/stderr": {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/check-2/compile/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "compile/status.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/check-2/compile/status.json",
+      "sha256": "63890f4d40da0d919a28aff4f114f6a764ba0febe3a27b4b70398cd051d2aad2",
+      "bytes": 115
+    },
+    "test/stdout": {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/check-2/test/stdout",
+      "sha256": "2fdcb9278831d9fef8a9eb3da7196577ca7db130414431fe3f77cc05074b08f5",
+      "bytes": 375
+    },
+    "test/stderr": {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/check-2/test/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "test/status.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/check-2/test/status.json",
+      "sha256": "b27c6a10c2efacab116412716de1616cd23eb127a056e8abb4bc6553b5f868ff",
+      "bytes": 117
+    }
+  },
+  "proposal": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/CHECK-CORRECTION-PROPOSAL.json",
+    "sha256": "1169476ea087e131f130fa23e83fdc8a4b60a2c63a10427b98ba2daece35ae41",
+    "bytes": 3283
+  },
+  "admission": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/ROOT-CORRECTION-ADMISSION.json",
+    "sha256": "e9786ca5b7a198e448e7b07049dfe9010f0abf3b68060c5d7a35cd2447a67e32",
+    "bytes": 905
+  }
+}

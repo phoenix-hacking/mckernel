@@ -1,0 +1,70 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_SOURCE_ONLY_INERT_UNTIL_PROFILE_BOUND",
+  "retained119_record": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CURRENT119-ACTUAL-ARTIFACT-QUALIFICATION-1/independent-review-1/INDEPENDENT-ACTUAL-CURRENT119-ARTIFACT-ACCEPTANCE.json",
+    "bytes": 31084,
+    "sha256": "3324128344411d3e8c0c87ce970b3fc851edc87507613b2186944f7be1158c6c"
+  },
+  "source_profile": {
+    "c_source_argument": "/src/kernel/syscall.c",
+    "recorded_dispatch_flags": "present",
+    "recorded_line_model": 4657,
+    "alternate_dispatch_line_model": 4664,
+    "alternate": "not independently profile-qualified"
+  },
+  "line_model": {
+    "dispatch=False,selected=False": {
+      "fallback_call": 4664,
+      "next_line": 4666
+    },
+    "dispatch=False,selected=True": {
+      "extern": 4662,
+      "next_line": 4666
+    },
+    "dispatch=True,selected=False": {
+      "fallback_call": 4657,
+      "next_line": 4659
+    },
+    "dispatch=True,selected=True": {
+      "extern": 4655,
+      "next_line": 4659
+    }
+  },
+  "checks": [
+    "original prefix and suffix and exact OFF body",
+    "four conditional logical-line paths and following-line reset",
+    "two unchanged callback consumers",
+    "Rust C ABI, static Rust byte-string, unconditional tracked-free forwarding",
+    "profile selectors default OFF",
+    "existing allocator source signature"
+  ],
+  "files": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-PTRACE-KFREE-1/Rust-owned-metadata-correction-1/RUST-METADATA.PRIVATE-NOT-APPLIED.patch",
+      "bytes": 3170,
+      "sha256": "7777f386ad0a80b6dbb98ccb6b693ebf2422d8b33302743f181af459c7096982"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-PTRACE-KFREE-1/Rust-owned-metadata-correction-1/postimage/kernel/syscall.c",
+      "bytes": 929527,
+      "sha256": "545eb203a1eefb2f719a141152b33cde5a903363c636c6808490c293d42e5621"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-PTRACE-KFREE-1/Rust-owned-metadata-correction-1/postimage/kernel/rust/syscall_ptrace_detach_kfree.rs",
+      "bytes": 1181,
+      "sha256": "b5793ef0ee2b837e356917c070a8931de5f893463190deea469641dd1e38e0f0"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-PTRACE-KFREE-1/Rust-owned-metadata-correction-1/postimage/kernel/rust/syscall_policy.rs",
+      "bytes": 1303618,
+      "sha256": "b1dbb6817928e4491805a3f55e1dd29c0b70804dc0da2e855bddff661fb802ba"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-PTRACE-KFREE-1/Rust-owned-metadata-correction-1/postimage/kernel/CMakeLists.txt",
+      "bytes": 44256,
+      "sha256": "c9a8b8de5defff188e517a7666d75b1bbfca75fcc4fdc8daa0f159b1f54ea012"
+    }
+  ],
+  "limitations": "No preprocessor/compiler/link/native or retirement evidence. Explicit paired profile, actual selected C path/flags and preprocessor proof required before selection."
+}

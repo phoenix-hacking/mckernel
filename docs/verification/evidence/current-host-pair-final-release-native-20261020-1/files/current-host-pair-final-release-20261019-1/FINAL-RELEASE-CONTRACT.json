@@ -1,0 +1,90 @@
+{
+  "schema": "mckernel.current-pair-final-stop-public-release-contract.v1",
+  "scope": "One bounded sameguest typedAVX lifecycle: firststop/publicrelease/reboot/secondstop/finalpublicrelease; no secondapp",
+  "required_order": [
+    "typed380-exact",
+    "first strict Running5/shutdown0/NotBooted0",
+    "first destroy/public CPU-MEMrelease",
+    "strict secondboot392",
+    "second strict Running5/shutdown0/NotBooted0",
+    "final destroy/public CPU-MEMrelease",
+    "VMteardown separate physicalreview"
+  ],
+  "mandatory_consumers": {
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_lifecycle_capture.py": {
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_lifecycle_capture.py",
+      "sha256": "0585f78b80e603c010316418ce307794d59e1d92581b845ec6b2e74e22c8954b",
+      "bytes": 7025
+    },
+    "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-decoder-20261017-2/reboot_capture.py": {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-decoder-20261017-2/reboot_capture.py",
+      "sha256": "eb9fa1106ec8caead27eaae37202c38bdae05c854cf61d533e89f86e18257cb5",
+      "bytes": 7120
+    },
+    "/home/holden/mckernel-work/scratch/native-resource-release-collector-20261017-1/transport-correction1/resource_capture.py": {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-release-collector-20261017-1/transport-correction1/resource_capture.py",
+      "sha256": "e66e014f4b67854f05457770a42250fb5e0929e0da304bdbc2b7366b6bde9240",
+      "bytes": 4146
+    },
+    "/home/holden/mckernel/scripts/application-tests/native_resource_release_capture.py": {
+      "path": "/home/holden/mckernel/scripts/application-tests/native_resource_release_capture.py",
+      "sha256": "9c628074de9ae897e82f15c2f4438d2558c2a10fde6a0d5a288b8964eddfcc76",
+      "bytes": 5649
+    },
+    "/home/holden/mckernel/scripts/application-tests/native_resource_reboot_sequence.py": {
+      "path": "/home/holden/mckernel/scripts/application-tests/native_resource_reboot_sequence.py",
+      "sha256": "53dace6e984b28b2236c91c69906c202399fed2cac88cff260db1f504e62191c",
+      "bytes": 4238
+    },
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/final_release_capture.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/final_release_capture.py",
+      "sha256": "112d41f52587f342659f94905edc1fc20c94aeb76d035e2d3bb75ddbb625bd32",
+      "bytes": 5059
+    }
+  },
+  "timer_budget": {
+    "PID1_global_alarm_seconds": 120,
+    "payload_milliseconds": 10000,
+    "procfs_milliseconds": 5000,
+    "boot_helper_milliseconds": 60000,
+    "ordinary_helper_milliseconds": 10000,
+    "all_helpers_share_global_deadline": true,
+    "serial_UTF8_bytes_max": 4194304,
+    "new_final_record_bytes_max": 16384,
+    "rawexport_bytes_max": 262144
+  },
+  "public_witnesses": [
+    "both strictstop transitions Running5->NotBooted0",
+    "both destroy return0",
+    "CPU1online/unowned before publicrelease",
+    "deviceMEM128MiB node0 then deviceCPU+MEMempty afterrelease"
+  ],
+  "not_proven": [
+    "physical-frame identity",
+    "mapping/callback/reference quiescence",
+    "generation identity",
+    "full ring history",
+    "nonnullFPownership",
+    "process provider/exec",
+    "tenfullcycles",
+    "hundredlaunches",
+    "sixtyminmixed"
+  ],
+  "fixed_tuple_provenance": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-repeatability-20261019-1/NATIVE-NONTEMPORAL-PROPOSAL.json",
+    "sha256": "b431ba93e430ae86c1bb05841aaef86cf76ba80b8634264d0ce37f47496049db",
+    "bytes": 31594
+  },
+  "first_semantics": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-repeatability-independent-review-20261019-1/ACTUAL-FIRST-PUBLIC-CYCLE-NATIVE-DIAGNOSTIC-REVIEW.json",
+    "sha256": "c32f227b0a57bbfdbb8730e66852f7b438f3e6e4d1fc5a344c5b067586a84248",
+    "bytes": 18017
+  },
+  "first_physical_provenance": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-lifecycle-physical-review-20261019-1/decision.json",
+    "sha256": "9b50f20c955a2ef082ce275b9336651f8a4aafae4ca459b72e76102bed585f64",
+    "bytes": 9063
+  },
+  "future_queue_predecessor": null,
+  "queue_policy": "Root-selected genuine current physical late; latest supplied2057d869 is independent of unchanged FP1e7/b9/5d artifacts."
+}

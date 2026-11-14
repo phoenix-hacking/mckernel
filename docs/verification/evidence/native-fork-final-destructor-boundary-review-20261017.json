@@ -1,0 +1,103 @@
+{
+  "schema": "mckernel.native-fork-final-destructor-boundary-review.v1",
+  "decision": "ADDITIVE_CHECKED_RELEASE_CONTRACT_SELECTED",
+  "reviewer": "/root/fork_adoption_boundary_review",
+  "model": "gpt-6.1-sol",
+  "independent_of_implementation_author": true,
+  "production_changed": false,
+  "execution_release": false,
+  "fork_admission_enabled": false,
+  "native_compile_or_runtime_executed": false,
+  "scope": "Select one implementable synchronous final-destructor result contract for the isolated fork repair. Preserve existing void wrappers and helper semantics; add no process_vm/thread layout or asynchronous completion state.",
+  "source_sha256": {
+    "kernel/rust/process_helpers.rs": "b3a28ea8b0cd2594305644c224ae718eac384c0709305da315a6b8fd1285d00b",
+    "kernel/process_helpers.c": "c444c9c911b3dd231e6c8d8ae544c82f5d69893506f99bcff4be4ae3216a34f5",
+    "kernel/include/process_helpers.h": "2c01124eaf57635e9fb1c8ba1467a2d829767198d49fa5d3e49b9a9c71fc7ad7",
+    "kernel/process.c": "6480b1ab121acf17610495682cd9e58cba774427de9695b1ce8dd65a9bc07cb2",
+    "kernel/include/process.h": "907391bd99a38b48be54ff6700f1ca12143e5a9bfabf4826b6f09ab2b842bc6c",
+    "kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "docs/verification/evidence/native-fork-adoption-first-slice-independent-review-20261017.json": "b53eec8ba51536fdf59c99284579437b0e0cc69b9c5da5162c7c5e84af8fef1d"
+  },
+  "verified_defect": [
+    "process_release_vm_body_result returns 0 for a retained VM and 1 after the final free_vm_fn invocation. Its public release_process_vm wrappers discard that result.",
+    "process_release_thread_body_result uses void ProcessVmActionFn/process_vm_action_fn_t, destroys the thread, invokes VM release and returns 1 without learning whether the VM was final. Public release_thread wrappers discard even that thread-level result.",
+    "process_ref_release_should_destroy_result is dec_and_test != 0 in both Rust and C. Reusing it in a checked path would misclassify an injected negative/error decrement as final.",
+    "The existing VM body prevalidates lock/unlock/flush/free_ranges/free_vm callbacks but can ignore missing detach/release_process/policy-free callbacks and return 1. A direct generic checked alias to that helper would not support the required error-proof contract.",
+    "Existing vm->free_cb is a pre-destruction callback, before flush, range release, address-space detach and final VM free. It is not a final-completion hook. The final process_free_vm_bridge actually kfree_tracked(vm), so no completion code may inspect vm afterward."
+  ],
+  "selected_result_contract": {
+    "vm_checked": {
+      "0": "Exactly one VM reference was consumed; another VM reference remains. No VM teardown callback or completion ACK is permitted by this result.",
+      "1": "The final VM reference was consumed and the complete established VM teardown sequence, including the trusted final free_vm_fn, returned. The VM pointer is dead.",
+      "negative_errno": "No final-destruction proof. Never convert an error into success or infer whether a broken callback consumed a reference. Caller must retain/quarantine its external transaction; no ACK or retry of the old pointer."
+    },
+    "thread_checked": {
+      "0": "Exactly one thread reference was consumed; another thread reference remains. No thread/VM destructor or ACK ran.",
+      "1": "The thread was destroyed, then VM release consumed one VM reference but returned nonfinal. The old thread pointer is dead and no final-VM proof exists.",
+      "2": "The thread was destroyed, then checked VM release returned its exact final result 1. Both thread destruction and final VM destruction have completed; neither pointer may be dereferenced.",
+      "negative_errno": "No final-VM proof. An error reported by the VM callback can occur after thread destruction. Therefore every caller must save scalar transaction identity before this call and must never dereference or retry the input thread on any result. Validation errors occur before decrement, but the generic negative return deliberately grants no destruction or rollback claim."
+    },
+    "ack_rule": "Only release_thread_checked == 2, for the exact pending fork transaction after its separately proven HostRevoked barrier, authorizes the native scalar-only destruction ACK. A checked VM-only caller may use release_process_vm_checked == 1 only if its independent thread-destructor obligation has already been proven. All other results leave the transaction unacknowledged and retained/quarantined.",
+    "no_async_claim": "This API proves synchronous final completion only. If an unexpected reference remains, it supplies no later automatic ACK. The caller must not keep an unowned pointer for polling or repeat a release. A future asynchronous completion mechanism would be a separate exact reviewed boundary; it is not silently required for or implemented by this additive slice."
+  },
+  "exact_additions": {
+    "callback_typedef_c": "typedef int (*process_vm_release_checked_fn_t)(void *vm);",
+    "callback_type_rust": "type ProcessVmReleaseCheckedFn = unsafe extern \"C\" fn(*mut c_void) -> CInt;",
+    "thread_body_c": "int process_release_thread_checked_body_result(void *thread, unsigned long refcount_offset, unsigned long vm_offset, unsigned long proc_offset, process_ref_dec_and_test_fn_t dec_fn, process_thread_profile_fn_t profile_fn, process_thread_action_fn_t procfs_delete_fn, process_thread_action_fn_t destroy_thread_fn, process_vm_release_checked_fn_t release_vm_fn);",
+    "vm_body_c": "int process_release_vm_checked_body_result(void *vm, unsigned long refcount_offset, unsigned long proc_offset, unsigned long proc_mckfd_offset, unsigned long proc_mckfd_lock_offset, unsigned long mckfd_next_offset, unsigned long mckfd_close_offset, unsigned long vm_free_cb_offset, unsigned long vm_opt_offset, unsigned long vm_address_space_offset, unsigned long proc_pid_offset, unsigned long proc_vm_offset, unsigned long vm_policy_tree_offset, unsigned long policy_node_offset, process_ref_dec_and_test_fn_t dec_fn, process_spin_lock_fn_t lock_fn, process_spin_unlock_fn_t unlock_fn, process_vm_action_fn_t flush_fn, process_vm_action_fn_t free_ranges_fn, process_detach_address_space_fn_t detach_fn, process_release_process_fn_t release_process_fn, process_policy_free_fn_t policy_free_fn, process_free_fn_t free_vm_fn);",
+    "public_thread_c": "int release_thread_checked(struct thread *thread);",
+    "public_vm_c": "int release_process_vm_checked(struct process_vm *vm);",
+    "bridge_c": "int process_release_vm_checked_bridge(void *vm);",
+    "rust_exports": "Add #[no_mangle] pub unsafe extern \"C\" definitions for the two checked bodies with the exact existing Rust body parameter shapes/types, replacing only the thread body's VM callback type with Option<ProcessVmReleaseCheckedFn>. Add release_thread_checked(*mut Thread)->CInt, release_process_vm_checked(*mut ProcessVm)->CInt and process_release_vm_checked_bridge(*mut c_void)->CInt. Preserve CULong offsets, nullable Option callback ABI and existing CInt returns.",
+    "duplicate_symbol_selection": "Follow existing MCKERNEL_RUST_PROCESS_HELPERS selection exactly. C fallback bodies and public checked wrappers are emitted only when the Rust implementation is absent. The checked bridge follows existing process_release_vm_bridge selection: C prototype when Rust supplies it, C definition otherwise. Rust supplies the bridge when that implementation is selected. Do not define the same bridge unconditionally in both languages.",
+    "existing_signatures_changed": []
+  },
+  "checked_thread_algorithm": [
+    "Before any reference decrement, validate non-null thread, non-null cached vm/proc fields and required procfs_delete/destroy_thread/checked-release-VM callbacks. The optional profile callback remains optional. Offsets and all pointed objects are trusted kernel-layout inputs, not user authority.",
+    "Call the selected dec_fn or existing direct atomic decrement exactly once. Accept only exact 0 or 1. Return 0 without any callbacks for nonfinal; propagate a negative result without teardown; reject a positive value other than 1 with -EINVAL and no teardown. Do not pass this result through the legacy nonzero predicate.",
+    "For exact final 1, use the vm/proc pointers already cached while the thread was live. Preserve profile, procfs-delete, destroy-thread order. After destroy_thread_fn returns, never read any field of thread, including its VM, PID, refcount or transaction identity.",
+    "Invoke checked-release-VM directly with cached vm and capture the integer result; do not pass it through process_vm_action_result, which discards callback results. Map VM 0 to thread 1 and VM 1 to thread 2. Propagate negative error; reject any other positive callback result with -EINVAL. Do not inspect vm after this callback because it may have freed it."
+  ],
+  "checked_vm_algorithm": [
+    "Implement a separate checked VM body, with the existing VM body's argument shape. Before decrement, validate non-null vm, its live proc pointer, and all mandatory lock/unlock/flush/free_ranges/detach/release_process/policy_free/free_vm callbacks. Their pointer-valued execution contracts remain the existing trusted kernel contracts; the optional in-object pre-free callback remains optional. This stricter validation belongs only to the new checked helper.",
+    "Decrement exactly once and handle its result exactly as the checked thread body: 0 returns nonfinal with no teardown; 1 enters final teardown; negative propagates; other positive rejects -EINVAL. No force-set of VM/thread refcounts is authorized.",
+    "Preserve the established final sequence: lock and close mckfd callbacks; unlock; optional vm->free_cb with its opt; flush VM; free all memory ranges; detach address space, clear proc->vm and release process; drain/free VM policy tree; final free_vm_fn(vm). Existing pre-free/action callbacks must obey their borrowed-lifetime contracts and may not free vm before the final free_vm_fn.",
+    "After final free_vm_fn returns, return literal 1 using scalar local state only. Do not read vm, proc, thread, tree fields or callback state from any object freed by that sequence. Public checked wrappers use only the concrete existing production bridge callbacks, including process_free_vm_bridge, to bind the proof to actual destruction rather than an arbitrary userspace callback."
+  ],
+  "public_wrapper_binding": {
+    "vm": "release_process_vm_checked calls the new checked VM body with exactly the same production offsets/callbacks as existing release_process_vm, returning its integer result. Do not refactor or redirect the old void wrapper as part of this slice.",
+    "thread": "release_thread_checked calls the new checked thread body with the same production offsets/profile/procfs/destroy callbacks as release_thread and the new result-returning process_release_vm_checked_bridge.",
+    "bridge": "process_release_vm_checked_bridge returns release_process_vm_checked((struct process_vm *)vm), with the Rust equivalent cast. Existing void process_release_vm_bridge remains unchanged.",
+    "integration_gate": "Add the APIs and cheap regressions only. kernel/syscall.c native abort/ACK integration is outside this new bounded slice and remains disabled. The later caller must cache nonce/root/length/PID scalars before release and require prior HostRevoked plus exact result 2."
+  },
+  "implementation_allowlist": [
+    "kernel/rust/process_helpers.rs",
+    "kernel/process_helpers.c",
+    "kernel/include/process_helpers.h",
+    "kernel/process.c",
+    "kernel/include/process.h",
+    "NEW scripts/tests/test_native_fork_final_destructor_20261017.py",
+    "NEW scripts/tests/fixtures/native_fork_final_destructor_20261017.rs",
+    "NEW scripts/tests/fixtures/native_fork_final_destructor_20261017.c"
+  ],
+  "ownership_and_limits": "Dispatcher must assign this exact packet to the isolated implementation author. Author is not alone in the codebase and must preserve others' edits. No shared manifest, ledger, Git, production-main, kernel/syscall.c or kernel/rust/abi.rs edits are included. No VM/thread field is added and all ProcessVm size/offset assertions remain unchanged. Reviewer writes only this record and owns no implementation.",
+  "actual_body_regression_expectations": [
+    "Extract and execute the exact new Rust checked helpers, the existing release-helper bodies and the C fallback checked bodies when their cheap compiler profile is released. Label kernel object/refcount/callback adapters explicitly. No handwritten substitute for the decisions under test.",
+    "Thread refcount 2->1: return 0, no profile/procfs/destroy/VM call. Thread final plus VM refcount 2->1: return 1, exact profile/procfs/destroy/VM-release order, no VM destructor or ACK. Thread final plus VM final: return 2 only after final VM free event.",
+    "Direct checked VM 2->1 returns 0 with no callbacks. Final checked VM returns 1 only after complete close/unlock/optional-pre-free/flush/ranges/detach/process-release/policy-free/final-free trace, with optional pre-free callback both present and absent and empty/nonempty policy lists.",
+    "Null object, null required vm/proc field and each omitted mandatory callback reject before any decrement/destructive callback. Optional profile/pre-free callback absence remains supported.",
+    "Injected decrement 0/1/-5/2 must yield only its specified nonfinal/final/error behavior. In particular -5 and 2 cannot invoke any destructor. A checked VM callback -5 or 2 after thread destruction cannot return thread result 2 or authorize ACK.",
+    "The destroy-thread adapter must invalidate/poison thread storage before invoking checked VM release; the final-VM adapter must invalidate/poison VM storage before return. The checked helper's completion depends only on cached/scalar state. Use a cheap fixture mechanism that detects post-free field reads rather than claiming a no-op free adapter proves their absence.",
+    "Compare Rust and C checked results/traces for the same vectors. Preserve original void wrappers, existing exported body signatures, callback typedefs and normal legacy result/trace behavior. Specifically the old thread helper's result 1 must still mean thread destruction without being reinterpreted as final VM destruction.",
+    "Retain byte/hash comparisons for old void wrapper/body regions and existing ABI layout assertions. An exact additive symbol/profile check must show one definition per new export under each Rust/C selection, plus prototypes matching pointer/offset/return types. Native compiler/link proof remains a later dispatcher layer.",
+    "A caller-level scalar-only adapter caches fork identity, proves HostRevoked, calls checked release and emits exactly one ACK only for result 2. Results 0/1/error, missing host revocation and mismatched transaction identity emit no ACK and never retry a consumed pointer. Keep original process.fork-exit oracle unchanged."
+  ],
+  "next_executable_observation": "Author implements this additive five-production-file API in the isolated fork worktree and supplies retained actual-body tests. Dispatcher releases the cheapest applicable unprivileged compiler profile; no native/root/guest run is implied. Independent review then checks the concrete returned values and post-free callback order before any native abort caller is wired.",
+  "failure_family_history": {
+    "original": "docs/verification/evidence/native-fork-ownership-20261017.json retains nr56=-95, raw wait status 256 and rejected Mirror-only candidate hashes.",
+    "first_slice": "docs/verification/evidence/native-fork-adoption-first-slice-independent-review-20261017.json accepted only the dormant owner/transition slice. Capture native-cheap-20261017-gj7VHZ retains 12 Rust/3 Python passes; it did not execute a real VM destructor.",
+    "constraint": "Preserve every failed source/capture. One failed candidate and one bounded correction per family, then concrete expert escalation. No renaming or fresh launcher resets that history."
+  },
+  "stop_condition": "Stop this implementation slice at the additive APIs and passing cheap source-body regressions, or at a concrete signature/layout/callback-lifetime mismatch. No asynchronous hook, refcount forcing, fork admission or ACK integration is authorized by this review. A nonfinal result is a retained/quarantined transaction, not completed cancellation. Keep the independent image-first target and 97-percent included-usage guard unaffected.",
+  "acceptance": {"source_contract_selected": true, "implementation_accepted": false, "native_behavior_verified": false, "formal_credit": false, "os_objective_complete": false}
+}

@@ -1,0 +1,666 @@
+{
+  "C_retirement": false,
+  "ELF_and_provider_import_graph": {
+    "DT_NEEDED": [
+      "libz.so.1",
+      "libc.so.6"
+    ],
+    "ELF": "ELF64 little-endian x86_64 DYN PIE",
+    "actual_dynamic_import_count": 128,
+    "actual_nm_roots": {
+      "bytes": 29714,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/production-execution-1/4/payload.stdout",
+      "sha256": "6f1ef3b23defee515a4b348804f2aac510113264d0ded9c1bd0dd8e2b48e8127"
+    },
+    "actual_readelf_built": {
+      "bytes": 222355,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/production-execution-1/3/payload.stdout",
+      "sha256": "bed69e1237e7ff7c4f6f82ddc70649ba66793a83ed165609af8fc793984755df"
+    },
+    "actual_readelf_staged": {
+      "bytes": 222355,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/production-execution-1/6/payload.stdout",
+      "sha256": "36c06a0f90cc799b403dc1897ff8b3e1790c065871f81d29fc1d367b0328f1bb"
+    },
+    "actual_strong_import_count": 124,
+    "all_actual_archive_member_counts": {
+      "/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/libiberty.a": 20,
+      "/usr/lib64/libbfd.a": 57,
+      "/usr/lib64/libsframe.a": 1
+    },
+    "direct_new_object_undefined_joins": 55,
+    "interpreter": "/lib64/ld-linux-x86-64.so.2",
+    "libc_actual_definition_version_joins": 119,
+    "libc_identity": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4; glibc2.39-121.el10_2 immutable46d",
+    "no_unmatched_project_static_or_new_object_provider": true,
+    "optional_unversioned_weak": [
+      {
+        "annotated_version_index": null,
+        "base_name": "_ITM_deregisterTMCloneTable",
+        "binding": "WEAK",
+        "bytes": 0,
+        "index": 16,
+        "kind": "NOTYPE",
+        "name": "_ITM_deregisterTMCloneTable",
+        "section": "UND",
+        "value": 0,
+        "version": null,
+        "visibility": "DEFAULT"
+      },
+      {
+        "annotated_version_index": null,
+        "base_name": "__gmon_start__",
+        "binding": "WEAK",
+        "bytes": 0,
+        "index": 68,
+        "kind": "NOTYPE",
+        "name": "__gmon_start__",
+        "section": "UND",
+        "value": 0,
+        "version": null,
+        "visibility": "DEFAULT"
+      },
+      {
+        "annotated_version_index": null,
+        "base_name": "_ITM_registerTMCloneTable",
+        "binding": "WEAK",
+        "bytes": 0,
+        "index": 117,
+        "kind": "NOTYPE",
+        "name": "_ITM_registerTMCloneTable",
+        "section": "UND",
+        "value": 0,
+        "version": null,
+        "visibility": "DEFAULT"
+      }
+    ],
+    "provider_joins": {
+      "bytes": 370034,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/qualification-1/PROVIDER-JOINS.json",
+      "sha256": "80afe2d17e6a9c4e56a7a54a7322a9c0e6ecf12cfcdd95eeac20e8df40cbd60d"
+    },
+    "weak_versioned_libc_cxa_finalize_is_actually_resolved_not_optional": true,
+    "zlib_same_provider_link_joins": 6,
+    "zlib_scope": "Six FUNC imports (five unversioned plus compressBound@ZLIB_1.2.0 ownneed9) match previous qualified same-image MCI link/provider records and actual new map/trace/DT_NEEDED. No full zlib export/version table or runtime load is invented. Saved actual zlib-ng-compat2.2.3-3.el10_1 RPM/devel-path evidence reused."
+  },
+  "actual_admission": {
+    "fresh_MemAvailable26GiB_and_HOST4GiB_with_old256MiB_accounted": true,
+    "identity": {
+      "bytes": 761,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/production-execution-1/ADMISSION.json",
+      "sha256": "e4fae2eb72e65e2f98d23903cd4f4db411ddec34ffa1acdc7b2b36fa86796534"
+    },
+    "record": {
+      "MemAvailable": 29299884032,
+      "aggregate_jobs": 2,
+      "at": "2026-11-10T16:45:35.819070+00:00",
+      "disk_free": 125062098944,
+      "guard_at": "2026-11-10T16:45:32.950510+00:00",
+      "new_CPU": [
+        7
+      ],
+      "new_job_bytes": 1073741824,
+      "old_UNJOINED_CPU0_bytes": 268435456,
+      "old_UNJOINED_jobs": 1,
+      "other_new_payloads": false,
+      "overhead": 1561714688,
+      "request_sha256": "b2c476c9432174fa30783d1129dc2260ed93ed1af25465d28f59911ef9d0f08e",
+      "review_sha256": "b241be7bf585668cc2a9f0f28d3f24604e7664b811c7a4c7f753d026849fa303",
+      "shared_HOST_bytes": 4294967296,
+      "source_commit": "4adf52e4248300e220dc4e6a55e50484b658a53b",
+      "temporary_CPU6_header_read_reconciled": "originalfinalexit0 receipt22c1, no runninghandle/subprocess; oldCPU0 not released"
+    },
+    "sum_reserved_payload_and_measured_overhead_bytes": 2903891968
+  },
+  "actual_artifacts": [
+    {
+      "bytes": 6808104,
+      "mode": "0o755",
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/build-output/user/eclair",
+      "regular_file": true,
+      "sha256": "f89f1db9131c0acc6e5db2e2f448706abab24bcf293d791e1b27904d661050da"
+    },
+    {
+      "bytes": 183864,
+      "mode": "0o644",
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/build-output/user/rust/eclair_helpers.o",
+      "regular_file": true,
+      "sha256": "3b14c441098f1060a42e19f5520b610468e2a92fa8bd31472e2cdc1b232a7efe"
+    },
+    {
+      "bytes": 16904,
+      "mode": "0o644",
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/build-output/user/rust/arch_eclair_x86_64.o",
+      "regular_file": true,
+      "sha256": "789e60e0122c2fd130b8036a70572bd670ca5b4fe7be3aee1db98e04e7e1a8f1"
+    },
+    {
+      "bytes": 6808104,
+      "mode": "0o755",
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/build-output/stage/bin/eclair",
+      "regular_file": true,
+      "sha256": "f7633f4fdce59435e61d24568db2cb66976bbdbaad167273efb526f3229221db"
+    }
+  ],
+  "actual_execution": {
+    "bytes": 23328,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/production-execution-1/RESULT.json",
+    "sha256": "d069296038b0bbdf1ad32f0d80fb09d6713af0fe3075f70fd0aee8dc8a51a3a0"
+  },
+  "actual_finished_at": "2026-11-10T16:45:41.467730+00:00",
+  "actual_object_ELF_types": {
+    "built_and_staged": "ELF64 ET_DYN=3 PIE",
+    "new_core_and_arch": "ELF64 ET_REL=1"
+  },
+  "actual_source_custody": {
+    "actual_current_blob_bytes_recomputed_equal": true,
+    "commit": "4adf52e4248300e220dc4e6a55e50484b658a53b",
+    "commit_blob_rows_from_exact_git_ls_tree": [
+      {
+        "blob": "cd18fc6b8ac2299bd42a35b204f8c585892da6b1",
+        "path": "executer/user/rust/eclair_helpers.rs"
+      },
+      {
+        "blob": "af363b5dd855f10c59288996e4e9d7dc85d5eab1",
+        "path": "executer/user/rust/arch_eclair_x86_64.rs"
+      },
+      {
+        "blob": "2498153ab2c0c186015bc3eff81c704231f0fdca",
+        "path": "executer/user/CMakeLists.txt"
+      },
+      {
+        "blob": "fde3e7ced1f32299e6d8412a38698939b6ab1488",
+        "path": "executer/user/cmake/BfdRustAccessors.cmake"
+      }
+    ],
+    "private_selected_core_arch_equal_canonical": true,
+    "pushed_fetched121_exact": "Root supplied actual custody statement; local commit blob equality independently checked. This qualifier did not fetch or publish."
+  },
+  "all50_direct_and_whole_descendant_waits_streams_joined_without_signal_timeout_adopted_reap_or_residual": true,
+  "exact_remaining_original_conditions": [
+    "Separate SDK independent focused actual-result review before Root publication of this new qualification.",
+    "No Eclair program main/help/gdb/socket/validdump/kernel/device/native/default/fullF04/I01/I03/cohort acceptance from static artifact or source tests. Existing supported behavior/type/layout proofs retain their exact scope; complete actual delivered runtime and supported error paths remain original obligations.",
+    "No new actual zlib dynamic-definition/versym/file-SHA dump or final Eclair loader execution is claimed. Six current edges are qualified at actual same-image installed-provider link/PLT/verneed scope, explicitly distinct from complete runtime ABI/deployment.",
+    "Old CPU0/256MiB/job1 remains UNJOINED; all generic/exec/replay/exact12/source/native/currentfree/UNKNOWN/service/account/finite-credit/resource holds remain; original M14 acceptance precedes M15."
+  ],
+  "independent_source_profile_GO": {
+    "bytes": 26862,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-review-source-acquisition-max-1/REVIEW.json",
+    "sha256": "b241be7bf585668cc2a9f0f28d3f24604e7664b811c7a4c7f753d026849fa303"
+  },
+  "old_UNJOINED_source_reader_released": false,
+  "original_acceptance": false,
+  "owner": "/root/p03_cutover_source_max actual Sol/MAX qualifier; Root sole executor/canonical/publisher; SDK independent actual-result review pending",
+  "positive_lifecycle_family_count": 50,
+  "private_install": {
+    "DT_RPATH_after": "/usr/local/lib64",
+    "DT_RPATH_before": "::::::::::::::::",
+    "actual_install_manifest": {
+      "bytes": 24,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/build-output/install_manifest.txt",
+      "sha256": "2dd95fe56a8c62b6aa262fb027d0a4e1ed996993e7ccea0f99e353a6cd64f82c"
+    },
+    "all_code_symbols_imports_versions_other_bytes_and_readelf_fields_identical": true,
+    "built": {
+      "bytes": 6808104,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/build-output/user/eclair",
+      "sha256": "f89f1db9131c0acc6e5db2e2f448706abab24bcf293d791e1b27904d661050da"
+    },
+    "built_and_staged_bytes": 6808104,
+    "destination": "/output/stage/bin/eclair",
+    "mode": "0755",
+    "normal_CMake_INSTALL_RPATH_preserved": true,
+    "private_only_no_HOST_install": true,
+    "sole_binary_mutation": {
+      "after": "/usr/local/lib64",
+      "before": "::::::::::::::::",
+      "byte_offset": 5281,
+      "bytes_changed": 16,
+      "sole_binary_change": true
+    },
+    "staged": {
+      "bytes": 6808104,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/build-output/stage/bin/eclair",
+      "sha256": "f7633f4fdce59435e61d24568db2cb66976bbdbaad167273efb526f3229221db"
+    }
+  },
+  "qualified_at": "2026-11-10T16:56:58.630611+00:00",
+  "qualifier_data_comparison_correction": {
+    "actual_three_field_rows": [
+      "__TMC_END__ D 158df8 ",
+      "__bss_start B 158df8 ",
+      "__data_start D 158340 ",
+      "__dso_handle D 143020 ",
+      "_edata D 158df8 ",
+      "_end B 159238 ",
+      "_fini T 107e30 ",
+      "_init T 32000 ",
+      "data_start W 158340 "
+    ],
+    "bounded_correction": "Accept three or four POSIX fields and use size0 when the size column is omitted. All73 project roots still have exact actual nonzero ELF/nm widths and map ownership. No source, artifact or test inputs changed; only saved-data parsing was corrected. No compiler/ELFtool/test/probe/runtime replay.",
+    "preserved_actual_diagnostic": "Initial read-only qualifier assertion at line159 required four nm POSIX fields for every final symbol. Actual nm omits a size column for zero-size symbols; this is reviewer parsing, not a SUT failure."
+  },
+  "qualifier_operations": "Read saved current source/config/JSON/profile/ownership/build/map/nm/readelf/provider and existing ELF bytes as data; exact git ls-tree commit metadata and stdlib blob/hash/text/ELF-table parsing; three private qualification JSON writes only. No build/CMake/compiler/ELFtool/nm/test/probe/RPM/Docker/network/library/API/main/validdump/device/native execution, canonical/index/other-owner edits or recursive agent.",
+  "request": {
+    "bytes": 45873,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/REQUEST.json",
+    "sha256": "b2c476c9432174fa30783d1129dc2260ed93ed1af25465d28f59911ef9d0f08e"
+  },
+  "schema": "mckernel.eclair-corrected-production-artifact-qualification.v1",
+  "six_phase_exact_profile_and_cleanup": [
+    {
+      "ID": "dc906dec092ae8cc5e0a54b45223581efc9c45e0a12ff8e4c9f86eb589e972a3",
+      "direct_descendants_streams_wait_and_normal_owned_remove": true,
+      "name": "mck-m15-eclair-configure-20261110-1",
+      "phase": "configure",
+      "raw_create_argv": {
+        "bytes": 4700,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/production-execution-1/1/CREATE-ARGV.json",
+        "sha256": "3a2e2c4dce8010f80bfb1b1cc78b76c51cb775cb16b065d6700748e6b3093697"
+      },
+      "raw_profile": {
+        "bytes": 20802,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/production-execution-1/1/profile.stdout",
+        "sha256": "8bb5a6f44d3a96c567058525a2330b777d7ae6137128b8397b1589e3b984c99c"
+      },
+      "raw_stderr": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/production-execution-1/1/payload.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "raw_stdout": {
+        "bytes": 344,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/production-execution-1/1/payload.stdout",
+        "sha256": "3978b5d2ce63299d7934100d1cbcfd3b27c81e098b789868e4e1f98a473fb0cd"
+      },
+      "state": {
+        "Dead": false,
+        "Error": "",
+        "ExitCode": 0,
+        "FinishedAt": "2026-11-10T16:45:36.399269967Z",
+        "OOMKilled": false,
+        "Paused": false,
+        "Pid": 0,
+        "Restarting": false,
+        "Running": false,
+        "StartedAt": "2026-11-10T16:45:36.181450998Z",
+        "Status": "exited"
+      },
+      "terminal": {
+        "bytes": 21462,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/production-execution-1/1/final-terminal.stdout",
+        "sha256": "7c7eae0acfd954388723021100389814aa145f051dfca25c862c5832bba1575b"
+      },
+      "twelve_exact_mounts": true
+    },
+    {
+      "ID": "ed64a14bbff97e4a35600d6da7c08d428ac33d2d593eaf20fa30e780b2e75e9f",
+      "direct_descendants_streams_wait_and_normal_owned_remove": true,
+      "name": "mck-m15-eclair-build-20261110-1",
+      "phase": "named-eclair",
+      "raw_create_argv": {
+        "bytes": 4206,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/production-execution-1/2/CREATE-ARGV.json",
+        "sha256": "2e76a8d5a85eb6836997c9cff62e3cc9764703864d17b0c0526de1e5e915ff05"
+      },
+      "raw_profile": {
+        "bytes": 19649,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/production-execution-1/2/profile.stdout",
+        "sha256": "5a0ec55a6b7d05f17c52a6007689a7030e496da80baad9eb693dd4877041f7d0"
+      },
+      "raw_stderr": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/production-execution-1/2/payload.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "raw_stdout": {
+        "bytes": 5573,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/production-execution-1/2/payload.stdout",
+        "sha256": "5d4c470a8d0eaa4b88925d98af14b4b83a373a6abd1e1c3f0dd1652b692bee1c"
+      },
+      "state": {
+        "Dead": false,
+        "Error": "",
+        "ExitCode": 0,
+        "FinishedAt": "2026-11-10T16:45:37.85709325Z",
+        "OOMKilled": false,
+        "Paused": false,
+        "Pid": 0,
+        "Restarting": false,
+        "Running": false,
+        "StartedAt": "2026-11-10T16:45:37.159682532Z",
+        "Status": "exited"
+      },
+      "terminal": {
+        "bytes": 20308,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/production-execution-1/2/final-terminal.stdout",
+        "sha256": "8edc89480b71e5ba6205ffe02c9a6e31a956a79178e3ca687d15f18f7b2f7d5e"
+      },
+      "twelve_exact_mounts": true
+    },
+    {
+      "ID": "82f20bd9a67eb40a3db568eff34cd80ca1dea33df3fd9b7e83b8ad7d7606b8d9",
+      "direct_descendants_streams_wait_and_normal_owned_remove": true,
+      "name": "mck-m15-eclair-built-elf-20261110-1",
+      "phase": "built-ELF",
+      "raw_create_argv": {
+        "bytes": 4257,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/production-execution-1/3/CREATE-ARGV.json",
+        "sha256": "9c6d5a422e8022b3275ff8231a7e4487bfcdba7361d5832a3e0af368fd6fe69b"
+      },
+      "raw_profile": {
+        "bytes": 19748,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/production-execution-1/3/profile.stdout",
+        "sha256": "36bcc988abec0929f0d94ad28108cd72d48122126f8686c8709d773d3e3361db"
+      },
+      "raw_stderr": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/production-execution-1/3/payload.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "raw_stdout": {
+        "bytes": 222355,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/production-execution-1/3/payload.stdout",
+        "sha256": "bed69e1237e7ff7c4f6f82ddc70649ba66793a83ed165609af8fc793984755df"
+      },
+      "state": {
+        "Dead": false,
+        "Error": "",
+        "ExitCode": 0,
+        "FinishedAt": "2026-11-10T16:45:38.642432Z",
+        "OOMKilled": false,
+        "Paused": false,
+        "Pid": 0,
+        "Restarting": false,
+        "Running": false,
+        "StartedAt": "2026-11-10T16:45:38.634650037Z",
+        "Status": "exited"
+      },
+      "terminal": {
+        "bytes": 20405,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/production-execution-1/3/final-terminal.stdout",
+        "sha256": "d9a7b68af311b588c5b02ffb6e6813dee8d7ffa987a5462c6c1aac29d85721e1"
+      },
+      "twelve_exact_mounts": true
+    },
+    {
+      "ID": "0b1684b7a601b1bde5e206162739e77183109c140a90ba0b0707185ae4b02eaf",
+      "direct_descendants_streams_wait_and_normal_owned_remove": true,
+      "name": "mck-m15-eclair-symbols-20261110-1",
+      "phase": "new-objects-final-roots",
+      "raw_create_argv": {
+        "bytes": 4286,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/production-execution-1/4/CREATE-ARGV.json",
+        "sha256": "5ed0e052376de2fc56d98f4bc3b9bdae5588e6cf396fcb25375c636300a10dd7"
+      },
+      "raw_profile": {
+        "bytes": 19808,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/production-execution-1/4/profile.stdout",
+        "sha256": "3ea33cf1c36c1c292072423bd177a0d4d960e41ecb4a61eb35757c5e6d0073d3"
+      },
+      "raw_stderr": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/production-execution-1/4/payload.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "raw_stdout": {
+        "bytes": 29714,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/production-execution-1/4/payload.stdout",
+        "sha256": "6f1ef3b23defee515a4b348804f2aac510113264d0ded9c1bd0dd8e2b48e8127"
+      },
+      "state": {
+        "Dead": false,
+        "Error": "",
+        "ExitCode": 0,
+        "FinishedAt": "2026-11-10T16:45:39.46043519Z",
+        "OOMKilled": false,
+        "Paused": false,
+        "Pid": 0,
+        "Restarting": false,
+        "Running": false,
+        "StartedAt": "2026-11-10T16:45:39.412511809Z",
+        "Status": "exited"
+      },
+      "terminal": {
+        "bytes": 20467,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/production-execution-1/4/final-terminal.stdout",
+        "sha256": "aa8a3ae0957f4f60b6840b439718a351a7ddd9143328e2cf6a1311e2923ea65d"
+      },
+      "twelve_exact_mounts": true
+    },
+    {
+      "ID": "08451c84642290a6a4cad03b7ad9a4ae943371c42f1847507c13ffcbfde40163",
+      "direct_descendants_streams_wait_and_normal_owned_remove": true,
+      "name": "mck-m15-eclair-stage-20261110-1",
+      "phase": "private-install",
+      "raw_create_argv": {
+        "bytes": 4183,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/production-execution-1/5/CREATE-ARGV.json",
+        "sha256": "b5f8feb11dec9b8cc5707007e95aa4bd75141ccbbaf036dd3d86e586e76cf09c"
+      },
+      "raw_profile": {
+        "bytes": 19532,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/production-execution-1/5/profile.stdout",
+        "sha256": "d617d212e58765284b26937cce91f833b1b82bb3b418927f702014d01f612171"
+      },
+      "raw_stderr": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/production-execution-1/5/payload.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "raw_stdout": {
+        "bytes": 173,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/production-execution-1/5/payload.stdout",
+        "sha256": "605b650c76e5f3416895a8688a125110f4fd2b6f66968a2354e4a713f26e5e17"
+      },
+      "state": {
+        "Dead": false,
+        "Error": "",
+        "ExitCode": 0,
+        "FinishedAt": "2026-11-10T16:45:40.256389663Z",
+        "OOMKilled": false,
+        "Paused": false,
+        "Pid": 0,
+        "Restarting": false,
+        "Running": false,
+        "StartedAt": "2026-11-10T16:45:40.244173169Z",
+        "Status": "exited"
+      },
+      "terminal": {
+        "bytes": 20192,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/production-execution-1/5/final-terminal.stdout",
+        "sha256": "3016a983c404a9c6e2cc5be7a6695cd97efdfeac79f958e1b401f3ec94678993"
+      },
+      "twelve_exact_mounts": true
+    },
+    {
+      "ID": "4e34861d82a14e4276cdb459e2e7937eac542b19f2bc68b4a1376919cd7fa9ad",
+      "direct_descendants_streams_wait_and_normal_owned_remove": true,
+      "name": "mck-m15-eclair-staged-elf-20261110-1",
+      "phase": "staged-ELF",
+      "raw_create_argv": {
+        "bytes": 4263,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/production-execution-1/6/CREATE-ARGV.json",
+        "sha256": "be08f8d0f9ecd4b89b4c1a22a3e6c60fdf30474a15879906a4e7837a783c2838"
+      },
+      "raw_profile": {
+        "bytes": 19759,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/production-execution-1/6/profile.stdout",
+        "sha256": "91e5dccf67e80e72bc7249b02ea4dbb21308751eaaaf94a027c917e00e132a91"
+      },
+      "raw_stderr": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/production-execution-1/6/payload.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "raw_stdout": {
+        "bytes": 222355,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/production-execution-1/6/payload.stdout",
+        "sha256": "36c06a0f90cc799b403dc1897ff8b3e1790c065871f81d29fc1d367b0328f1bb"
+      },
+      "state": {
+        "Dead": false,
+        "Error": "",
+        "ExitCode": 0,
+        "FinishedAt": "2026-11-10T16:45:41.03850518Z",
+        "OOMKilled": false,
+        "Paused": false,
+        "Pid": 0,
+        "Restarting": false,
+        "Running": false,
+        "StartedAt": "2026-11-10T16:45:41.028845802Z",
+        "Status": "exited"
+      },
+      "terminal": {
+        "bytes": 20418,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/production-execution-1/6/final-terminal.stdout",
+        "sha256": "e66c56406655deecad3762b95c68ec1773736d3dc5d62a6b56314ddfa09735e0"
+      },
+      "twelve_exact_mounts": true
+    }
+  ],
+  "source_and_config": {
+    "actual_cache": {
+      "bytes": 15515,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/build-output/CMakeCache.txt",
+      "sha256": "b7b61009f26a800f8c3e73ae1f185bcab034cc9a63c1fe9dd1edcb4b2d8b009b"
+    },
+    "actual_link_command": "/usr/bin/cc -O3 -DNDEBUG -fPIE -pie -Wl,--trace -Wl,-Map=/output/eclair.map -Wl,--dependency-file=CMakeFiles/eclair.dir/link.d \"/qualified-bfd/bfd_accessors.o\" rust/eclair_helpers.o rust/arch_eclair_x86_64.o -o eclair  -Wl,-rpath,:::::::::::::::: -lbfd\n",
+    "actual_link_file": {
+      "bytes": 253,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/build-output/user/CMakeFiles/eclair.dir/link.txt",
+      "sha256": "1bef15e2457162d359fbc57cfd78b74f865f7be2ca1fefd4d42f1730a5cbd894"
+    },
+    "actual_map": {
+      "bytes": 333687,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/build-output/eclair.map",
+      "sha256": "09c44aadf6448233a5cf4802ad5f56f032ca0f4be21dc5cfb17e9d2ebbee7633"
+    },
+    "actual_trace": [
+      "/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/Scrt1.o",
+      "/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crti.o",
+      "/usr/lib/gcc/x86_64-redhat-linux/14/crtbeginS.o",
+      "/qualified-bfd/bfd_accessors.o",
+      "rust/eclair_helpers.o",
+      "rust/arch_eclair_x86_64.o",
+      "/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/libbfd.so",
+      "/usr/lib64/libbfd.a",
+      "/usr/lib64/libsframe.a",
+      "/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/libiberty.a",
+      "/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/libz.so",
+      "/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/libdl.a",
+      "/usr/lib/gcc/x86_64-redhat-linux/14/libgcc.a",
+      "/usr/lib/gcc/x86_64-redhat-linux/14/libgcc_s.so",
+      "/lib64/libgcc_s.so.1",
+      "/usr/lib/gcc/x86_64-redhat-linux/14/libgcc.a",
+      "/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/libc.so",
+      "/lib64/libc.so.6",
+      "/usr/lib64/libc_nonshared.a",
+      "/lib64/ld-linux-x86-64.so.2",
+      "/usr/lib64/libc_nonshared.a",
+      "/lib64/ld-linux-x86-64.so.2",
+      "/usr/lib/gcc/x86_64-redhat-linux/14/libgcc.a",
+      "/usr/lib/gcc/x86_64-redhat-linux/14/libgcc_s.so",
+      "/lib64/libgcc_s.so.1",
+      "/usr/lib/gcc/x86_64-redhat-linux/14/libgcc.a",
+      "/usr/lib/gcc/x86_64-redhat-linux/14/crtendS.o",
+      "/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crtn.o"
+    ],
+    "actual_two_Rust_commands": [
+      "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc --crate-name eclair_helpers --crate-type lib --edition=2021 -C panic=abort -C opt-level=2 -C debuginfo=1 -C force-unwind-tables=no --cfg eclair_full_body --emit=obj=/output/user/rust/eclair_helpers.o /source/user/rust/eclair_helpers.rs",
+      "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc --crate-name arch_eclair_x86_64 --crate-type lib --edition=2021 -C panic=abort -C opt-level=2 -C debuginfo=1 -C force-unwind-tables=no --emit=obj=/output/user/rust/arch_eclair_x86_64.o /source/user/rust/arch_eclair_x86_64.rs"
+    ],
+    "no_project_C_fallback_or_libdwarf_or_old_MCinspect_rebuild": true,
+    "selected_arch": {
+      "bytes": 7574,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/source/user/rust/arch_eclair_x86_64.rs",
+      "sha256": "48e1af9fa7ec6c026a7a3c7657e147e04c905573ee5c08a7bcca4f5a57c634dd"
+    },
+    "selected_cache_rows": {
+      "CMAKE_BUILD_TYPE:STRING": "Release",
+      "CMAKE_C_COMPILER:STRING": "/usr/bin/cc",
+      "CMAKE_C_FLAGS:STRING": "",
+      "CMAKE_C_FLAGS_DEBUG-ADVANCED:INTERNAL": "1",
+      "CMAKE_C_FLAGS_DEBUG:STRING": "-g",
+      "CMAKE_C_FLAGS_MINSIZEREL-ADVANCED:INTERNAL": "1",
+      "CMAKE_C_FLAGS_MINSIZEREL:STRING": "-Os -DNDEBUG",
+      "CMAKE_C_FLAGS_RELEASE-ADVANCED:INTERNAL": "1",
+      "CMAKE_C_FLAGS_RELEASE:STRING": "-O3 -DNDEBUG",
+      "CMAKE_C_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL": "1",
+      "CMAKE_C_FLAGS_RELWITHDEBINFO:STRING": "-O2 -g -DNDEBUG",
+      "CMAKE_INSTALL_BINDIR:PATH": "bin",
+      "CMAKE_INSTALL_LIBDIR:PATH": "lib64",
+      "CMAKE_INSTALL_PREFIX:PATH": "/usr/local",
+      "ENABLE_RUST_USER_TOOLS:BOOL": "ON",
+      "MCKERNEL_RUNTIME_TOOL_RUSTC:FILEPATH": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc"
+    },
+    "selected_core": {
+      "bytes": 91128,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/source/user/rust/eclair_helpers.rs",
+      "sha256": "2988d0402d1637b8b0e375590e45949da7add2c8d429447c145c08f0245179fb"
+    },
+    "selected_target": {
+      "bytes": 3022,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/source/user/CMakeLists.txt",
+      "sha256": "d4efc569896c3190be4b69b89287d9a7f2da6055cb7f5492c31c2b0eb91fd4fd"
+    },
+    "selected_top": {
+      "bytes": 4493,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/source/CMakeLists.txt",
+      "sha256": "32ee67671815aeda52e6d82b64cd3f7c991cbe294bc2663de284e0d9109fe83c"
+    },
+    "source_bindings": {
+      "bytes": 10937,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/SOURCE-BINDINGS.json",
+      "sha256": "faf9ebc0bf046e136bb524acfd8edfe58515bf2dd2655f396ba0ccc25e3261e3"
+    },
+    "unchanged_old_type_proofs_reused": {
+      "actual_bool_type_result": {
+        "bytes": 8029,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/diagnostic-bfd-bool-correction-1/tests-1/correction-1/execution-1/RESULT.json",
+        "sha256": "241b0b917cdcff07523cf3a522ddb55e768dffdb05bb30481235a5f433bcc8b0"
+      },
+      "independent_bool_result_GO": {
+        "bytes": 12759,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/diagnostic-bfd-bool-correction-1/review-sdk-max-1/result-1/REVIEW.json",
+        "sha256": "ffaf6796a280bcf6dd2f90db3938aeb0931f217c52faabcdf20339d483f5d439"
+      },
+      "scope": "C11/Werror genuine header and baseline E0308/corrected fullcallers; reused unchanged, no runtime BFD call or old72/41 replay."
+    }
+  },
+  "source_object_root_ownership": {
+    "BFD_bridge_owner": "exact retained8a5b imported CABIprovider; four symbols, two compiler-coalesced address pairs legitimately belong same object",
+    "actual_membership_not_quota": {
+      "/qualified-bfd/bfd_accessors.o": 4,
+      "rust/arch_eclair_x86_64.o": 5,
+      "rust/eclair_helpers.o": 64
+    },
+    "all73_one_final_definition_same_kind_width_and_map_owner": true,
+    "imported_accessor_producer": "actual native46d Rust1.92.0-1.el10, unchanged original object/layout e21b; no undefined global/weak or Rust-private linkage, C ABI only",
+    "mixed_compiler_provenance_is_explicit": true,
+    "new_objects_compiler": "genuine qualified nightly1.95/fullroot70eb under native46d, same production flags",
+    "no_new_layout_witness_or_accessor_producer": true,
+    "reused_BFD_provider": {
+      "bytes": 3208,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/BFD-PROVIDER.json",
+      "sha256": "5956c655e2a37544e47af3b8059af93ba59a803673cfc7ed1b30108b6f42c87c"
+    },
+    "root_kinds": {
+      "/qualified-bfd/bfd_accessors.o": {
+        "FUNC": 4
+      },
+      "rust/arch_eclair_x86_64.o": {
+        "FUNC": 4,
+        "OBJECT": 1
+      },
+      "rust/eclair_helpers.o": {
+        "FUNC": 52,
+        "OBJECT": 12
+      }
+    },
+    "symbol_table_scope": "All73 strong project roots are actual .symtab/nm definitions in the linked PIE; no dynamic-export claim. The actual .dynsym has129 rows including NULL and128 imports.",
+    "unique_arch_roots_owner": "new789e Rust arch_eclair_x86_64.o",
+    "unique_main_owner": "new 3b14 Rust eclair_helpers.o"
+  },
+  "status": "PASS_ACTUAL_CURRENT_ECLAIR_RUST_OBJECTS_STATIC_PROVIDER_VERSION_PRIVATE_INSTALL_RESULT_AT_STATED_SCOPE"
+}

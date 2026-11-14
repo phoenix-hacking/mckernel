@@ -1,0 +1,71 @@
+{
+  "Rust_compile": "Extract exact private fragment plus existing ABI, actual string memcpy/inline_memcpy/inline_memset, actual pte_helpers, bitops::test_bit and atomic_helpers read/inc. Replace unsafe native hardware endpoints only at explicit module callback boundary; use same signature. Keep original vs Rust separate independent requests.",
+  "actual_ABI_source": {
+    "bytes": 2743,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-move-pages-smp-handler-source-1/fixture/real-request-and-dependent-ABI.c",
+    "sha256": "8e5268839390db8e8903ac3ca86df287fa2e57d801c313995d9352935bcb66f1"
+  },
+  "actual_cases": null,
+  "argv": null,
+  "driver": null,
+  "grant": null,
+  "known_reference_edges_not_repaired": [
+    "nr_cpus>=7 uses count/2 twice and leaves odd final input unchanged",
+    "large page exceeds count sets status[i]=-EINVAL then breaks without setting phase_ret",
+    "large-page ranges can cross a CPU partition and query loops can encounter null interior PTE; preserve reference and report fault/race domain, no invented expected success",
+    "no explicit null/zero nr_cpus/huge-count validation; supported caller preconditions retained"
+  ],
+  "planned_results": null,
+  "reference": {
+    "bytes": 8528,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-move-pages-smp-handler-source-1/fixture/original-move-pages-smp-handler.ACTUAL.inc",
+    "sha256": "34c68fe6f77cab06d644f5bd75c82a9ac70e718181af3c00c6ae4c5f1bb35537"
+  },
+  "reference_compile": "Rename only public move_pages_smp_handler to original_C_handler; include exact original body with actual process/VM/request/CPU/PTE/header ABI. Host callbacks redirect only PT-load/physical memory/allocator/TLB/NUMA lookup/debug effects. No privileged operations execute.",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "second_executable_queue": false,
+  "smallest_next_observation": {
+    "logging_oracle": "Six independent __verbose selectors; exact six debug formats and two unconditional large-page error formats/arguments. Source-tracking file/line intentionally records Rust callsite after port.",
+    "multi_CPU_initialization": {
+      "counts": [
+        0,
+        1,
+        7,
+        8,
+        16
+      ],
+      "nr_cpus": [
+        2,
+        3,
+        4,
+        6,
+        7,
+        8
+      ],
+      "schedule": "Owned HOST workers, thread-local CPU state, real shared req/three genuine atomic barriers, all joined. Test original and Rust separately from fresh arrays; retain phase count + per-index write/effect order. Invalid/large crossing baseline fault families run only explicit isolated child under future grant, not silently accepted."
+    },
+    "order_oracle": "Per-worker PTload then initialization\u2192ready/NUMA\u2192barrier1\u2192PTE\u2192barrier2\u2192master allocation\u2192barrier3\u2192copy\u2192oldfree\u2192pteupdate\u2192optional TLB\u2192PTrestore; requests borrowed until all SMP callbacks return.",
+    "ownership_oracle": "Each successful allocation token recorded once, copied from original physical PTE, original extent freed exactly once BEFORE PTE update; failure never frees; PTE attrs retained; target PT borrowed and restored once only when initial differs; no rollback of earlier migration.",
+    "single_CPU_cases": [
+      "zero count",
+      "single ordinary migration success",
+      "no user_nodes ordinary-page query",
+      "missing PTE",
+      "nonpresent PTE",
+      "fileoff PTE",
+      "negative node",
+      "node equal numa count",
+      "node absent from mask",
+      "allocation failure preserves src PTE/no free",
+      "large page contiguous full region",
+      "large page exceeds region status-only baseline",
+      "large page noncontiguous error",
+      "large page node mismatch error",
+      "current==idle save_init",
+      "save_pt==target no load/no restore",
+      "current process different skips local TLB",
+      "debug each six selector independently"
+    ]
+  },
+  "status": "SOURCE_PROPOSAL_NOT_EXECUTABLE_SECOND_QUEUE"
+}

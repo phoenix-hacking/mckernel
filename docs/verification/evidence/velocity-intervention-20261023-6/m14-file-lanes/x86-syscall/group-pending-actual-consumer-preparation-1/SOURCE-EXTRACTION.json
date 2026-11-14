@@ -1,0 +1,331 @@
+{
+  "actual_sources": [
+    {
+      "bytes": 76151,
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    {
+      "bytes": 12202,
+      "path": "/home/holden/mckernel/kernel/rust/lock_helpers.rs",
+      "sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3"
+    },
+    {
+      "bytes": 3105,
+      "path": "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs",
+      "sha256": "7b6c1e87f521eaf4674128afd7bff71785bead4ff7c9eb3c9a668d6a0cb0cbe7"
+    },
+    {
+      "bytes": 5770,
+      "path": "/home/holden/mckernel/kernel/rust/list_helpers.rs",
+      "sha256": "dac9c2f37c64967eebd8c466426fcdf1bf8d201b5c5ee5f1f466893517feb66a"
+    },
+    {
+      "bytes": 13172,
+      "path": "/home/holden/mckernel/kernel/rust/string.rs",
+      "sha256": "579d8c06bb766a270548399a8820733516a167bb8af5d1fea46d8a51f7e8fbf3"
+    },
+    {
+      "bytes": 209297,
+      "path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+      "sha256": "be693dec5e53b20f06f7963b7418a7c0dff68cbecaaa2360e291d8542784e045"
+    }
+  ],
+  "controlled": "CPU/preempt/IRQ callbacks, bounded HOST backing arena, page exhaustion injection and public recursive signal-delivery effects",
+  "exact_mem_function_extractions": [
+    {
+      "bytes": 2335,
+      "function": "___kfree_body_result",
+      "sha256": "a256a31f69f8910331f0c5b976c881fe1122ec38435bebd66128f79393c13de2"
+    },
+    {
+      "bytes": 1615,
+      "function": "___kmalloc_body_result",
+      "sha256": "6a37db12255959009e4f93538cabd6e3d85790ce8716f0f792b983ff2e80a394"
+    },
+    {
+      "bytes": 1057,
+      "function": "___kmalloc_consolidate_list_result",
+      "sha256": "54971439f7894e43251c444993d5c5c880119dd850ea21ccd116da7a7634d114"
+    },
+    {
+      "bytes": 257,
+      "function": "___kmalloc_init_chunk_result",
+      "sha256": "3a02360796da1ce7a0ea4a2f1da5ce4215c6a76e6075705b52b95adbac1b3a9c"
+    },
+    {
+      "bytes": 652,
+      "function": "___kmalloc_insert_chunk_result",
+      "sha256": "faff3130d95c877563395bcc40a38c403a5a2d67fb19dc7b0477c7acf658349c"
+    },
+    {
+      "bytes": 568,
+      "function": "_kfree",
+      "sha256": "81e273716e84f88fc6c3dedc3b596d8e6f1351112e6a24e22b6a02ab5d931c68"
+    },
+    {
+      "bytes": 699,
+      "function": "_kmalloc",
+      "sha256": "ac87451b1ffa4089f616585c432db7df0e619ebb36ecdaef731eff9891eb8b82"
+    },
+    {
+      "bytes": 121,
+      "function": "init_list_head",
+      "sha256": "ad71c1bc02e07596769b5d92098e97f7e6d1df27b92e4e6c8420599eabcc9421"
+    },
+    {
+      "bytes": 153,
+      "function": "kfree_tracked",
+      "sha256": "50387a253eeac79ba53062cf51aacb3a06a4ab124c578e710767a4ee5f0af2e4"
+    },
+    {
+      "bytes": 147,
+      "function": "kmalloc_addr_hash",
+      "sha256": "c0dd188c545893c8ceaa37684acc8f41d3b8c4af71e74eed1768d4d2a3dba97c"
+    },
+    {
+      "bytes": 131,
+      "function": "kmalloc_addr_hash_ptr",
+      "sha256": "164ac654165b5c4df20f27e3b8a39bec03ee7a27687a20d3da65ccca5db66a56"
+    },
+    {
+      "bytes": 138,
+      "function": "kmalloc_addr_locks_ptr",
+      "sha256": "416e6d89e7ab0cc97ac64482687e19df70694da3f258f8ae7de9f1879f892cdd"
+    },
+    {
+      "bytes": 206,
+      "function": "kmalloc_aligned_size",
+      "sha256": "79335bf7b10a1eb5c3e7f27abac7b1d5fe7a15a6f3d17b4447ef217952829d12"
+    },
+    {
+      "bytes": 368,
+      "function": "kmalloc_find_fit",
+      "sha256": "ae3b0b83b78f3e8645eb9f10e493b8d1052407337e3f17846f3e01025bfa41a9"
+    },
+    {
+      "bytes": 148,
+      "function": "kmalloc_list",
+      "sha256": "9d9afe0d3afe8d668ba31d1a874b95cc574ccb132244783e79f69052b4ededcf"
+    },
+    {
+      "bytes": 200,
+      "function": "kmalloc_no_preempt_counter",
+      "sha256": "3f279bf71f02265e866cc02f366488225cfabc5cdfb07e233fdb14c4d5a3e7e0"
+    },
+    {
+      "bytes": 617,
+      "function": "kmalloc_split_if_needed",
+      "sha256": "a2e52fdbf0764c6116625b31570fc61fa36f4e24a88978ee724a317b43aa2314"
+    },
+    {
+      "bytes": 232,
+      "function": "kmalloc_track_addr_from_hash",
+      "sha256": "8da9fa65853dba5772f4c7080705569f168e38542edb3b378ee0f29c4ee6ffe4"
+    },
+    {
+      "bytes": 4458,
+      "function": "kmalloc_track_alloc_result",
+      "sha256": "a84a404ca15ef38f6b1f541190aa94b75c261ddce19b92ee3a012da054429e1f"
+    },
+    {
+      "bytes": 180,
+      "function": "kmalloc_track_entry_alloc_count",
+      "sha256": "7ee575b6825be8b7a93471d96f65b42bfdd6a7ecbbb955f9e4796de56a59b87e"
+    },
+    {
+      "bytes": 221,
+      "function": "kmalloc_track_entry_from_hash",
+      "sha256": "f8a090b24a4e7bf1e56bd251c3904f82e66ea6b2fe2c77672a9e8b60bd7362a1"
+    },
+    {
+      "bytes": 668,
+      "function": "kmalloc_track_find_entry_result",
+      "sha256": "057c03a06fddd3ec2eb22437bfb40a3867b16afa83fc2f9b14c9735b6516125d"
+    },
+    {
+      "bytes": 2990,
+      "function": "kmalloc_track_free_result",
+      "sha256": "3e2fe1e7d1821cb26ab870ecdcd76e0cfcec7579c330b4c4fb47aa3e90f94a24"
+    },
+    {
+      "bytes": 276,
+      "function": "kmalloc_track_hash",
+      "sha256": "cb15b084583e192a04dcf5a1399c9797abb58d38365463869fff496e63f29af0"
+    },
+    {
+      "bytes": 133,
+      "function": "kmalloc_track_hash_ptr",
+      "sha256": "f07bddc1c0930cd812dc582f7f36075010badb73704718ba7f5f0a25b9d0ee00"
+    },
+    {
+      "bytes": 140,
+      "function": "kmalloc_track_locks_ptr",
+      "sha256": "1b28debedeabe502bdf41e9e2e71644ceb87e13f29ed36d94f14bf89847020da"
+    },
+    {
+      "bytes": 266,
+      "function": "kmalloc_track_log",
+      "sha256": "76f5af771a4d619ce75c71d82a026cfcce160e6e00a9bf5994bdbc9ab426330d"
+    },
+    {
+      "bytes": 449,
+      "function": "kmalloc_tracked",
+      "sha256": "4bb8e078e66973fd810cc16d8c4cbf44bd613a18cb017a53825444d16d3b649b"
+    },
+    {
+      "bytes": 208,
+      "function": "list_add",
+      "sha256": "33cde14d3dc93cfec61c1c5c810cf4bc3b1252ffe0af0b0cc9893e9ba5efea85"
+    },
+    {
+      "bytes": 133,
+      "function": "list_add_after",
+      "sha256": "15077554e0df2f7936c524de72dd31b2fba8220a7c964709712f31f1de727b8c"
+    },
+    {
+      "bytes": 132,
+      "function": "list_add_tail",
+      "sha256": "e56b39297c6582436b68c78218a3ad39f5b2653dea095d8a0c02296b8582ae29"
+    },
+    {
+      "bytes": 176,
+      "function": "list_del",
+      "sha256": "b67f5287798aca6bdec1510e8efe17a575404b4eef075eacc4a58cd33a6c36bc"
+    },
+    {
+      "bytes": 202,
+      "function": "list_del_poison",
+      "sha256": "cd28bd667e491fd5edc140aed9f08756299ad2187205948f0b631999597a27d1"
+    },
+    {
+      "bytes": 202,
+      "function": "list_to_kmalloc_header",
+      "sha256": "af0eca0999a306f37cf7b752ad1e4e1ef0cca4716ac9f1090f0fb3b3d391d6a1"
+    }
+  ],
+  "exact_string_function_extractions": [
+    {
+      "bytes": 162,
+      "function": "__inline_memcpy",
+      "sha256": "0cf083854e2fc9e9df795f72076bec15e50d8cbf28639f6d67f3f15b40917d9e"
+    },
+    {
+      "bytes": 691,
+      "function": "__inline_memset",
+      "sha256": "fc62abc7e4723b5e1b1dbb688f3e72cb9ce63fdda0beb3678dd41379fba3d224"
+    },
+    {
+      "bytes": 97,
+      "function": "char_diff",
+      "sha256": "557677bb1307221b4491259d39948c5110953a17f995870bdbe38d2bfc542859"
+    },
+    {
+      "bytes": 361,
+      "function": "memcpy",
+      "sha256": "932dbcbc0486ead8cf5a06e7a15e64ffbbf1baad0f393d692e77ba993e125c80"
+    },
+    {
+      "bytes": 270,
+      "function": "memset",
+      "sha256": "69cd20f99c4a3a9be7775bce28fbd4889cea61a4a981fd412a202f974f679e8e"
+    },
+    {
+      "bytes": 87,
+      "function": "read_char",
+      "sha256": "c32989333ff93951b0032df89d8ce2f249292daae3fa061772bf055044247587"
+    },
+    {
+      "bytes": 259,
+      "function": "strcmp",
+      "sha256": "10a284896d0e9049f8ec88b661cd354aa77a2c382699a99f479a80c28b4acf35"
+    },
+    {
+      "bytes": 315,
+      "function": "strcpy",
+      "sha256": "c79093416ba8434657ecfe8eca00df35a01559db75bd7d104b3a8d3638ac01bd"
+    },
+    {
+      "bytes": 199,
+      "function": "strlen",
+      "sha256": "9cbd7009aa31b5af644abe7bde18a46e8902a3e3b7b322ea915c55745d6e8210"
+    },
+    {
+      "bytes": 100,
+      "function": "write_char",
+      "sha256": "cb77d77050ce783b6d46561d2d73481f5854bfdbd00aabe78d03087f742059cb"
+    }
+  ],
+  "holds": [
+    "enabled memdebug",
+    "remote CPU free",
+    "physical page allocation",
+    "actual native IRQ/preempt/signal delivery",
+    "multicore scheduling"
+  ],
+  "outputs": [
+    {
+      "bytes": 76151,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/group-pending-actual-consumer-preparation-1/source/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    {
+      "bytes": 3263,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/group-pending-actual-consumer-preparation-1/source/arena_bindings.rs",
+      "sha256": "80c785270dd303845a59ac8fb38e5d86a64098d4cad2c50a7c2193db39e469fa"
+    },
+    {
+      "bytes": 5567,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/group-pending-actual-consumer-preparation-1/source/group.FRAGMENT.rs",
+      "sha256": "ccd66f9445df9dc04c934444634acea5d67bd08cf05bebde843a3136870d1608"
+    },
+    {
+      "bytes": 1251,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/group-pending-actual-consumer-preparation-1/source/group_pending_actual.rs",
+      "sha256": "b7c7cf82305e1ecd7ed856d7f7eda41ba8f44a9646aa65e29092fffc19756b4f"
+    },
+    {
+      "bytes": 5770,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/group-pending-actual-consumer-preparation-1/source/list_helpers.rs",
+      "sha256": "dac9c2f37c64967eebd8c466426fcdf1bf8d201b5c5ee5f1f466893517feb66a"
+    },
+    {
+      "bytes": 12202,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/group-pending-actual-consumer-preparation-1/source/lock_helpers.rs",
+      "sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3"
+    },
+    {
+      "bytes": 24080,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/group-pending-actual-consumer-preparation-1/source/mem_helpers.rs",
+      "sha256": "ae83ba9a2995827a2db86dae6abb64658aff3f9e65cdbafaa301c6dbd7354275"
+    },
+    {
+      "bytes": 1959,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/group-pending-actual-consumer-preparation-1/source/original-group.ACTUAL.inc",
+      "sha256": "f7b8ad00c96fc02aa8b4da11e85163570050c4dea3b37f50d453d05498148ceb"
+    },
+    {
+      "bytes": 937,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/group-pending-actual-consumer-preparation-1/source/original-pending.ACTUAL.inc",
+      "sha256": "0e5e204f1bb7dd1d172f50020af90037783f326a94270af9671e3d7b40699d16"
+    },
+    {
+      "bytes": 2634,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/group-pending-actual-consumer-preparation-1/source/pending.FRAGMENT.rs",
+      "sha256": "7f8fc85e5025efaf2762871b9addaf6adb8133c2a5269ad6c49b57b3b014872e"
+    },
+    {
+      "bytes": 3105,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/group-pending-actual-consumer-preparation-1/source/spinlock_helpers.rs",
+      "sha256": "7b6c1e87f521eaf4674128afd7bff71785bead4ff7c9eb3c9a668d6a0cb0cbe7"
+    },
+    {
+      "bytes": 2673,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/group-pending-actual-consumer-preparation-1/source/string.rs",
+      "sha256": "981348c5d6703601b3f3d92fc1eeb7702dfc7080f1cb424c3a9eeb5dc27d97bf"
+    }
+  ],
+  "real_allocator": "kmalloc_tracked/_kmalloc/track_alloc_result -> actual ___kmalloc_body_result with real chunk split/free/consolidation; MEMDEBUG=NULL",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\nPrivate source derivation only. Never compiles or executes fixture.\n",
+  "status": "SOURCE_ONLY_NOT_COMPILED"
+}

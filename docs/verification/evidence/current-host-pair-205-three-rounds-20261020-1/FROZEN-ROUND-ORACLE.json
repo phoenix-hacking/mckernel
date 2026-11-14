@@ -1,0 +1,105 @@
+{
+  "OS": 0,
+  "apps": [
+    {
+      "argv": [
+        "/bin/mcexec",
+        "-t",
+        "1",
+        "-c",
+        "0",
+        "0",
+        "/apps/app0"
+      ],
+      "cpu": 0,
+      "cwd": "/case/two-app/work0",
+      "env": {
+        "COKERNEL_PATH": "/apps",
+        "PAIR_CPU": "0",
+        "PATH": "/usr/bin:/bin"
+      },
+      "id": 0,
+      "oracle": {
+        "exit_code": 0,
+        "stderr_hex": "",
+        "stdout_hex": "626174636820626567696e2063617365733d32206d697865645f726f756e64733d330a727573742d66696c652d726f756e647472697020696e697469616c3d3136206f76657277726974653d3420736872696e6b3d31302067726f773d3134207a65726f733d34207461696c3d61616262636320696e76616c69645f7365656b3d323220637572736f723d313420636865636b65645f636c6f73653d312072656d6f7665643d310a6d6978656420726f756e64733d332062797465735f656163683d3831393320636865636b73756d5f746f74616c3d333037323237300a66696c65733d3320636865636b65645f636c6f7365733d362072656f70656e65643d3320656f663d332072656d6f7665643d330a6a6f696e65645f746872656164733d36207475726e735f656163683d31323820636f756e7465725f746f74616c3d3736380a626174636820706173732063617365733d3220636865636b65645f636c6f7365733d372072656d6f7665643d34206a6f696e65645f746872656164733d360a"
+      }
+    },
+    {
+      "argv": [
+        "/bin/mcexec",
+        "-t",
+        "1",
+        "-c",
+        "1",
+        "0",
+        "/apps/app1"
+      ],
+      "cpu": 1,
+      "cwd": "/case/two-app/work1",
+      "env": {
+        "COKERNEL_PATH": "/apps",
+        "PAIR_CPU": "1",
+        "PATH": "/usr/bin:/bin"
+      },
+      "id": 1,
+      "oracle": {
+        "exit_code": 0,
+        "stderr_hex": "",
+        "stdout_hex": "465054485245414420763120746872656164733d322073616d655f7065726d69747465645f6370753d312064697374696e63745f7469643d310a7468726561643020726f756e64733d363420796d6d5f6c616e65733d363420706565725f70726f67726573733d3634207969656c645f6d696e3d363420636f6e74726f6c733d303737662f3366383020726573746f7265643d310a7468726561643120726f756e64733d363420796d6d5f6c616e65733d363420706565725f70726f67726573733d3634207969656c645f6d696e3d363420636f6e74726f6c733d306237662f3566383020726573746f7265643d310a465054485245414420504153530a"
+      }
+    }
+  ],
+  "assigned_host_CPUs": [
+    1,
+    2
+  ],
+  "cases": [
+    "three rounds success",
+    "first or second failures stop all later rounds",
+    "third oracle/startup/identity/token/handoff failures refuse completion",
+    "typed round wire exact3"
+  ],
+  "deterministic_positive_ids": [
+    [
+      1001,
+      1002
+    ],
+    [
+      1003,
+      1004
+    ],
+    [
+      1005,
+      1006
+    ]
+  ],
+  "fixed_count_source": "Explicit user three-round/six-real-launch request; same accepted literal app oracle bytes",
+  "generation": 1,
+  "logical_CPUs": [
+    0,
+    1
+  ],
+  "not_claimed": [
+    "100launches",
+    "10cycles",
+    "60minutes",
+    "native acceptance"
+  ],
+  "requirements": [
+    "Exactly two sequential rounds, each two overlapping apps with original exact stream bytes/status/strict startup CPU.",
+    "One boot/OS/generation/IKC assignment, four distinct PIDs and globally fresh retirement attempt tokens.",
+    "Before second round, first round has all exact oracles, CPU/trace checks, safe supervisor joins and empty procfs; preserve per-round result/evidence.",
+    "First failure prevents later round/completion; uncertain supervisor ownership never enters shared teardown.",
+    "Round1 end/handoff precedes round2 start, no work/evidence overwrite."
+  ],
+  "rounds": 3,
+  "schema": "mckernel.fixed-three-round-oracle.v1",
+  "throughput_target": {
+    "actual_native_only": true,
+    "baseline_completed_owner_seconds": 44.160327,
+    "baseline_successful_apps": 2,
+    "required_ratio": 2.3,
+    "six_app_owner_limit_seconds": 57.6004265
+  }
+}

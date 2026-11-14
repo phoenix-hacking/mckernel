@@ -1,0 +1,31 @@
+{
+  "schema": "mckernel.evidence.additive-hash-correction.v1",
+  "recorded_at_utc": "2026-09-29T19:47:00Z",
+  "status": "CORRECTED_ADDITIVELY",
+  "original_record": {
+    "path": "docs/verification/stability-native-offline-exec-temp-root-light-failure-57133e95-20260929-1.json",
+    "sha256": "e8b2ad5e310cad223d61e2ced17a2d4cbd520b01587a6b0752ce8091e492fa1e",
+    "preserved_unchanged": true
+  },
+  "archive": {
+    "path": "docs/verification/evidence/stability-native-offline-exec-temp-root-light-failure-57133e95-20260929-1.tar.gz",
+    "sha256": "f6c0c49aa3bbbc754ccf26dbd82b6fadbcf5e599ea34764310642c039eb2d0b1",
+    "preserved_unchanged": true
+  },
+  "corrections": {
+    "stdout_sha256": {
+      "incorrect_original": "91dcfed2e7145ff089f8d6bb32b8c2f92af88dbdc4ddeed0e5afbd9e191f1d242",
+      "actual_archive_member": "91dcfed2a76063d7914d1fce7edcea2f1fed4446cb39a8312ff27789b3a3d242"
+    },
+    "stderr_sha256": {
+      "incorrect_original": "84ddc8e745e603872af08dc2d9400027a7e2d2df16a77443712c41d21b193457",
+      "actual_archive_member": "84ddc8e7df2ac36fbce1b7605d8b9d8ed12421ba6122f975134d58c1441f3457"
+    },
+    "inspect_sha256": {
+      "incorrect_original": "a9591562e043f7bea880f07f7f51155d43b9e5cf633b94e75d92c089c6f15cc0",
+      "actual_archive_member": "a9591562c03f76075fa57e248a1cdfd1315352899f547e056ef672a5c4c15cc0"
+    }
+  },
+  "method": "Each actual value was recomputed from the named member streamed directly from the immutable gzip tar archive with sha256sum.",
+  "scope": "This corrects only three copied member hashes. It does not alter the preserved archive, original failure result, source bindings, test outcome, or any acceptance status."
+}

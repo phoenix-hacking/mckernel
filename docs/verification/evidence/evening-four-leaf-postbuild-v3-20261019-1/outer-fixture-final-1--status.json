@@ -1,0 +1,37 @@
+{
+  "argv": [
+    "/usr/bin/env",
+    "-i",
+    "PATH=/usr/bin:/bin",
+    "LC_ALL=C",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--fsize=33554432",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/postbuild-consumer-v3/test_remaining_v3.py"
+  ],
+  "returncode": 0,
+  "direct_child_joined": true,
+  "elapsed_seconds": 0.5988713280239608,
+  "streams": {
+    "stdout": {
+      "bytes": 147,
+      "sha256": "d9b8ea0836f51e4dc5b365db31445a86d7d52019faa631a1021b2e0e61556f68"
+    },
+    "stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  }
+}

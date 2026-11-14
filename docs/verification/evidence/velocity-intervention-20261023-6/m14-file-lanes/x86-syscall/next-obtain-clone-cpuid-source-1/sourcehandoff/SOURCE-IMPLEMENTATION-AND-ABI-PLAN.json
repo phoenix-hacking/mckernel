@@ -1,0 +1,144 @@
+{
+  "ABI_unknown": null,
+  "C_patch": {
+    "bytes": 525,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-obtain-clone-cpuid-source-1/patch/syscall.c.diff",
+    "sha256": "a4749f15acbf650f4b925d4a6c500d64abf1566c001208f807a3d48367b5993f"
+  },
+  "C_preimage": {
+    "bytes": 113504,
+    "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+    "sha256": "912fb97a58cc797407979ce835c422578949ff876ac519193d2ebc4855cce791"
+  },
+  "Rust_fragment": {
+    "bytes": 5091,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-obtain-clone-cpuid-source-1/candidate/syscall_policy.obtain_clone_cpuid.FRAGMENT.rs",
+    "sha256": "51fba192655518d24fce2017b959257834931c8e15870ff9e5cd86f278577243"
+  },
+  "Rust_patch": {
+    "bytes": 5298,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-obtain-clone-cpuid-source-1/patch/syscall_policy.obtain_clone_cpuid.APPEND.diff",
+    "sha256": "7807fe9f77fd2da6f7d48bc20378f0cfd26e202ab145fc74ead6eb075ad36948"
+  },
+  "Rust_preimage": {
+    "bytes": 713471,
+    "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+    "sha256": "3ef8288617db7bcc26c56039491295d3f48c53d4f76d111b68dfcc3186546f7d"
+  },
+  "actual_result": null,
+  "boundary": "int obtain_clone_cpuid(cpu_set_t*,int)",
+  "candidate_C": {
+    "bytes": 113626,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-obtain-clone-cpuid-source-1/candidate/syscall.c",
+    "sha256": "91fc716c81ccaa50466e580d066d29c26f8c916a43485513e7724307e06abfa0"
+  },
+  "canonical_writes": 0,
+  "compiler_jobs": 0,
+  "default_consumer": null,
+  "fullcrate": null,
+  "future_fixture_plan": "Concrete complete actual originalC/publicRust differential source uses copied fullrealABI/actualRustaffinity module, control IRQ/spin/CPUlocal lookup only. Actual atomic64 increment executes on realalignedrunq_reserved field. 32193 planned masks/count/tie/truncation/wrap/use_last/debug vectors; no driver/compilerqueue.",
+  "future_fixture_sources": [
+    {
+      "bytes": 76151,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-obtain-clone-cpuid-source-1/future-fixture-source-only/abi.ACTUAL.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    {
+      "bytes": 1610,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-obtain-clone-cpuid-source-1/future-fixture-source-only/actual-public-Rust-fixture.rs",
+      "sha256": "ba5b5e7f7f0200d323eaf8f1475b9cd165c6f331238b1310ff00635bb7b9580b"
+    },
+    {
+      "bytes": 1909,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-obtain-clone-cpuid-source-1/future-fixture-source-only/affinity.ACTUAL.rs",
+      "sha256": "99ccbc64101e6c551c8bc033016a616dbcd709ec0c6b46067bffe92e3839ef7e"
+    },
+    {
+      "bytes": 5759,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-obtain-clone-cpuid-source-1/future-fixture-source-only/compare_original_body.c",
+      "sha256": "d5583a447a7347cec7d94c0e4b1f2fa5729def1e05264e7ba1009918e69c3456"
+    },
+    {
+      "bytes": 1443,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-obtain-clone-cpuid-source-1/future-fixture-source-only/original-entry.ACTUAL.inc",
+      "sha256": "ea8468b0bb065c689557ef76cb6178b08aecbc0ff9e450234c03d53cedd904a4"
+    },
+    {
+      "bytes": 457,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-obtain-clone-cpuid-source-1/future-fixture-source-only/real-ABI-Rust-facts.inc",
+      "sha256": "b51c802a8d207a4535cc895fc5bfbd21635d608de71be4571ccd3190b836490e"
+    },
+    {
+      "bytes": 1252,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-obtain-clone-cpuid-source-1/future-fixture-source-only/real-ABI-caller.c",
+      "sha256": "85653c7deaad6753e7e503d86060ec081c5f179cf02e77a47e5881f761ae23b2"
+    }
+  ],
+  "future_vectors_planned": 32193,
+  "invariants": [
+    "globalreservationIRQspinlock then eachallowedCPUrunqnoirqspinlock, unlockeach andrestoreoriginalIRQstateonce",
+    "firstallowed shortestqueue scan has nobreakat0; lasttie only changes whenmincpu!=cpu",
+    "same64bit sequentiallyconsistent atomic reservation increment after sameconditionalstatuswrite",
+    "mask/currentCPUlocal/APproviders reused, no new lock/lifetime/getter policy",
+    "no pointer references across callbacks except shortAtomicview on alignedlive slot",
+    "original wholeCbody fallback byteidentical, selectedentry C excluded"
+  ],
+  "native": null,
+  "provider_refs": [
+    {
+      "bytes": 76151,
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    {
+      "bytes": 1909,
+      "path": "/home/holden/mckernel/kernel/rust/affinity.rs",
+      "sha256": "99ccbc64101e6c551c8bc033016a616dbcd709ec0c6b46067bffe92e3839ef7e"
+    },
+    {
+      "bytes": 7877,
+      "path": "/home/holden/mckernel/kernel/rust/cls.rs",
+      "sha256": "c0260e7634d53fcc0873746af8bd16b6691ee0a4b7f394ca18896aef070f6bba"
+    },
+    {
+      "bytes": 3105,
+      "path": "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs",
+      "sha256": "7b6c1e87f521eaf4674128afd7bff71785bead4ff7c9eb3c9a668d6a0cb0cbe7"
+    },
+    {
+      "bytes": 16148,
+      "path": "/home/holden/mckernel/kernel/rust/ap.rs",
+      "sha256": "274823af8fcdf10462e9d1c2dff532b251754b63971778f8b412f698093d1137"
+    },
+    {
+      "bytes": 180826,
+      "path": "/home/holden/mckernel/kernel/rust/host_helpers.rs",
+      "sha256": "79ec492e531d9793206cd9ebc84482ab695fcfdc284675492d81ee5a072eeaac"
+    },
+    {
+      "bytes": 2984,
+      "path": "/home/holden/mckernel/kernel/include/cls.h",
+      "sha256": "19719fe663c33bc3aec62875baa7f1b8d4a0e0042b5a8aae94fe7b6c9799a4c1"
+    },
+    {
+      "bytes": 26602,
+      "path": "/home/holden/mckernel/kernel/include/process.h",
+      "sha256": "8848d536f2fa847a59af72d573ec9c55838c27cea664d46438ab4e038bf83649"
+    },
+    {
+      "bytes": 162758,
+      "path": "/home/holden/mckernel/kernel/process.c",
+      "sha256": "1ecbc287f2e704e738cc4e9fbe18289226b5aadadc9da88d226dc0ad0bb57234"
+    }
+  ],
+  "remaining_C_dependency": "Existing data-only kernel/process.c runq_reservation_lock; definition is not retired here. Selected body otherwise uses existing Rust affinity/CPUlocal/AP/spinlock and coreAtomic64; original C fallback retained.",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "selected_caller": "host_helpers::process_clone_obtain_cpu_bridge calls public obtain_clone_cpuid(&thread.cpu_set,0); legacy clone use_last callers retain sameABI",
+  "semantic_debt_preserved": [
+    "use_last selects only uti_cpu; unique minimum/no tie returns-1",
+    "uti_cpu is not cleared when a later lower min is found, so an earlier stale tie may be selected; do not silently repair policy",
+    "runq counters are unsignedsize_t; assignedmin truncates toCInt then comparisons convertbackunsigned; preserve -1sentinel/wrap cases",
+    "original debug%d consumes low32bits of unsigned64 runqcounter varargs; no formatbehavior correction claimed"
+  ],
+  "status": "COMPLETE_LIVE_CLONE_CPU_BODY_SOURCE_ONLY_NO_SECOND_READY_QUEUE"
+}

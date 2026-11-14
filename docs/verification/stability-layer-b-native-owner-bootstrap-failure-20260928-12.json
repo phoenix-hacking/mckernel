@@ -1,0 +1,52 @@
+{
+  "schema": "mckernel.layer-b-native-owner-bootstrap-failure.v1",
+  "status": "FAIL_PREACK_CGROUP_MAPPING",
+  "attempt": 12,
+  "root": "/home/holden/mckernel-work/scratch/stability-layer-b-native-owner-bootstrap-20260928-12",
+  "unit": "layer-b-native-owner-bootstrap-20260928-12-5a3a3fe8-03a9-4dc6-86fc-9666747decc4.service",
+  "packet": "docs/verification/stability-layer-b-native-owner-fifo-ack-expert-packet-20260928-24.md",
+  "packet_sha256": "ebc8778cda8d667c40b26362e4540e68a7217b0e7110526d31b7d2bf1c7a13a5",
+  "review": "docs/verification/stability-layer-b-native-owner-fifo-ack-expert-packet-review-20260928-25.json",
+  "strategy": "docs/verification/stability-layer-b-native-owner-fifo-strategy-review-20260928-23.md",
+  "result": {
+    "first_failure": "preack deadline",
+    "first_failure_sha256": "bb186d7fbfb07537952b15996b51a3099533938635e59a95b07037c3d8516ea9",
+    "defect": "The coordinator joined ControlGroup to /sys/fs/cgroup instead of mapping the name=systemd hierarchy at /sys/fs/cgroup/systemd. ControlPID membership was therefore never observed although the cat process and systemd identity were live.",
+    "unit_invocation_id": "a9ba8caace454337b6ef600c695fa75b",
+    "preack_queries": 1205,
+    "writer_initiated": false,
+    "compiler_started": false,
+    "compiler_artifacts_present": false,
+    "linking_started": false,
+    "owner_executed": false,
+    "guest_executed": false,
+    "application_acceptance": false
+  },
+  "cleanup": {
+    "stop_status": 0,
+    "cleanup_record_sha256": "104b635a0520f091ee29759b8d7e22a178c12c062ddeaad9cd2bbf6a521b19ee",
+    "original_systemd_cgroup": "/sys/fs/cgroup/systemd/user.slice/user-1000.slice/user@1000.service/layer-b-native-owner-bootstrap-20260928-12-5a3a3fe8-03a9-4dc6-86fc-9666747decc4.service",
+    "original_cgroup_absent": true,
+    "reset_failed_status": 0,
+    "final_query_status": 0,
+    "final_query_sha256": "e439c7459edbc4c203fe11a1a686f63d731c0d234becff4bd5c1665ed8a2fa45",
+    "final_load_state": "not-found",
+    "final_active_state": "inactive",
+    "final_sub_state": "dead",
+    "final_control_group": "",
+    "final_main_pid": 0,
+    "final_control_pid": 0
+  },
+  "evidence": {
+    "archive": "docs/verification/evidence/stability-layer-b-native-owner-bootstrap-failure-20260928-12.tar.gz",
+    "archive_sha256": "82574a70f22300c92fc01b1a5caaab39c3540b85e780d4b6974d8007fa312056",
+    "archive_size": 3281051,
+    "archive_members": 2431,
+    "preflight_sha256": "85338b0782566a26527c006175a4e4778ee5ae90683403440e7ea0816f386fc8",
+    "fifo_token_metadata_sha256": "fefe6a3cf23bab376c82776cf33a18ed58ec3d848275cd78089e08ccb64f312a",
+    "submission_argv_sha256": "e7764cb69f457b3650a05c2ebc96dd671053b52e2ae994242b7cc210b3636047",
+    "submission_result_sha256": "9896ddffdc92a2c3110c53a0e4f0cb588236396b1b4dc16191a235936a3c34f2",
+    "journal_sha256": "d1ca8ac08368edd8ad4299f34650a1c8fb03690173188f47d48d542dfbefa157"
+  },
+  "next_action": "Preserve root12 and its archive. Independently review the raw failure and cleanup. Then issue one bounded fresh-root correction that derives the hierarchy mount from /proc/self/mountinfo and the name=systemd entry in /proc/self/cgroup before joining ControlGroup; do not reuse root12 or its unit."
+}

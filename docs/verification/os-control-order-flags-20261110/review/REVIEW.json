@@ -1,0 +1,161 @@
+{
+  "schema": "mckernel.two-control-fixes.independent-source-focused-test-review.v1",
+  "decision": "GO_EXACT_TWO_ISOLATED_MOCK_LANES_BASELINE_ONCE_THEN_CORRECTED_SAME_CASES_ONCE_SUBJECT_TO_FRESH_ROOT_SHARED_ADMISSION",
+  "reviewer": "/root/memory_error_cleanup_witness_high",
+  "routing": "Assigned actual Sol/HIGH minimum; never/danger-full-access; private disjoint writer/no recursion",
+  "source_identities": {
+    "chronology": {
+      "baseline": {
+        "path": "/home/holden/mckernel-work/resume-20261110T044806Z-3ecbebf5/instruction-order-source-1/baseline/scripts/run_os_goal.py",
+        "sha256": "cf9a639f8e5820fb6745fe700486d6326d8c088493e09d59aa6e269feca992bd"
+      },
+      "candidate": {
+        "path": "/home/holden/mckernel-work/resume-20261110T044806Z-3ecbebf5/instruction-order-source-1/candidate/scripts/run_os_goal.py",
+        "sha256": "6f5ae87f0844db5718530f2198c2206a0d8900f951482ce5588243b832dc17a0"
+      },
+      "patch": {
+        "path": "/home/holden/mckernel-work/resume-20261110T044806Z-3ecbebf5/instruction-order-source-1/INSTRUCTION-ORDER.PRIVATE.patch",
+        "sha256": "571976b7eb472813ae974ea1df0b7e04ca942a728efd0d6e28dc9affff9d4094"
+      },
+      "proof": {
+        "path": "/home/holden/mckernel-work/resume-20261110T044806Z-3ecbebf5/instruction-order-source-1/SOURCE-PROOF.json",
+        "sha256": "92db50bdd56e210b9a4ebb19ab5819a46e10b7622876a504a26a91e132b9b6b2"
+      }
+    },
+    "explicit_flags": {
+      "baseline": {
+        "path": "/home/holden/mckernel-work/resume-20261110T044806Z-3ecbebf5/explicit-flags-source-1/PINNED-os_goal_service.py",
+        "sha256": "0768d2b28599e20d41734d30126e7cd8ecbb3a015d519c278ad593539eaedef3"
+      },
+      "candidate": {
+        "path": "/home/holden/mckernel-work/resume-20261110T044806Z-3ecbebf5/explicit-flags-source-1/CANDIDATE-os_goal_service.py",
+        "sha256": "db1f492d78be56b3c2eb50b8dbf2477c5c7ffba3ea6583966dd3dd9a09b1047e"
+      },
+      "patch": {
+        "path": "/home/holden/mckernel-work/resume-20261110T044806Z-3ecbebf5/explicit-flags-source-1/SOURCE.patch",
+        "sha256": "6291ab12786313ecaf39b3e1a775710f6c3a3cebd6c1136fe9bd11f5364f37f7"
+      },
+      "proof": {
+        "path": "/home/holden/mckernel-work/resume-20261110T044806Z-3ecbebf5/explicit-flags-source-1/SOURCE-PROOF.json",
+        "sha256": "3ebbb7e9c084a510e70c8c6787195ad4b1368b71a9c19a881bb85b6319fca4ca"
+      }
+    }
+  },
+  "test_identities": {
+    "chronology": {
+      "request": {
+        "path": "/home/holden/mckernel-work/resume-20261110T044806Z-3ecbebf5/instruction-order-tests-1/REQUEST.json",
+        "sha256": "046966f0b01024816204c1ccc5d7f016c8a46d2ffca566cead3a067d806800a2"
+      },
+      "patch": {
+        "path": "/home/holden/mckernel-work/resume-20261110T044806Z-3ecbebf5/instruction-order-tests-1/TESTS.PRIVATE.patch",
+        "sha256": "f41f06575fd10295649d19b821fd9607845e38894cacbec6c289eb199811ccd6"
+      },
+      "candidate": {
+        "path": "/home/holden/mckernel-work/resume-20261110T044806Z-3ecbebf5/instruction-order-tests-1/candidate/scripts/tests/test_os_goal_instruction_order.py",
+        "sha256": "8e72be09abc8900f6210e6360d475476df9415e79cbae59d038f32565b053982"
+      }
+    },
+    "explicit_flags": {
+      "manifest": {
+        "path": "/home/holden/mckernel-work/resume-20261110T044806Z-3ecbebf5/explicit-flags-tests-1/TEST-MANIFEST.json",
+        "sha256": "88f3ae57e28d0d41423083f43dfd981c7100a8cf79a08455d5746c7d68de7c7b"
+      },
+      "patch": {
+        "path": "/home/holden/mckernel-work/resume-20261110T044806Z-3ecbebf5/explicit-flags-tests-1/TESTS.PRIVATE.patch",
+        "sha256": "324bdd615f73b45e262182f69d4c5b1ef3297c11192f303b8daf2c68c0c02279"
+      },
+      "candidate": {
+        "path": "/home/holden/mckernel-work/resume-20261110T044806Z-3ecbebf5/explicit-flags-tests-1/candidate/scripts/tests/test_os_goal_service.py",
+        "sha256": "7ba88c808dfe011d787d56690c39ee16f4057d3cc4e8d48abae972431fa41afb"
+      }
+    }
+  },
+  "actual_canonical_bindings": {
+    "/home/holden/mckernel/CAMPAIGN.md": "04cc2a14129e63fa6fc0b3215c948e96d7233ea45f32fafbc90425739081ecfc",
+    "/home/holden/mckernel/scripts/run_os_goal.py": "cf9a639f8e5820fb6745fe700486d6326d8c088493e09d59aa6e269feca992bd",
+    "/home/holden/mckernel/scripts/os_goal_service.py": "0768d2b28599e20d41734d30126e7cd8ecbb3a015d519c278ad593539eaedef3",
+    "/home/holden/mckernel/scripts/tests/test_os_goal_service.py": "7ba88c808dfe011d787d56690c39ee16f4057d3cc4e8d48abae972431fa41afb",
+    "/home/holden/mckernel/scripts/tests/test_os_goal_instruction_order.py": "8e72be09abc8900f6210e6360d475476df9415e79cbae59d038f32565b053982",
+    "/home/holden/mckernel/scripts/tests/test_os_goal_launcher.py": "60f51cbadc6fe91a849eed95d2a609fe84b8c920ebcf905396b82e4bb361cabf"
+  },
+  "composition": {
+    "path": "/home/holden/mckernel-work/resume-20261110T044806Z-3ecbebf5/root-composition-1/COMPOSITION.json",
+    "sha256": "88b0c69a05923d35d46ba274bc003db5b2fa91174f2d4e8d38de4ec16dc9780c"
+  },
+  "chronology_source_findings": [
+    "Sole change is Campaign.deliver_instruction pending sort key: parse actual item.submitted_at using already imported datetime.fromisoformat, then deterministic path.name tie. No ID/filename/text/history rewrite or fallbackmtime/new schema.",
+    "Actual unchanged utc producer writes timezone-aware UTC datetime.isoformat for EVERY local/source item before durable atomic publication; unchanged source registry retains submitted_at/content/SHA identity/dedupe. Consumer valid producer domain compatible, no timestamp grammar migration or invented orderingoracle.",
+    "Unresolved sending refusal still occurs BEFORE pending reads/sort/selectedmove. Existing selected item atomicpending->sending move and accepted/refused/registration/error/uncertain archival, stopcause and26RPCcall sites remain unchanged. Parsing affects selection only; no activation/server/start/new delivery protocol.",
+    "Producer queue_instruction/utc AST unchanged; exact source patch/baseline/candidate checked. Equal timestampinstants use prior deterministicfilename order without claiming unknown submicrosecond arrival order."
+  ],
+  "chronology_tests": {
+    "selectors": [
+      "scripts.tests.test_os_goal_instruction_order.InstructionOrderTests.test_source_ids_deliver_by_submission_despite_reverse_hash_filename_order",
+      "scripts.tests.test_os_goal_instruction_order.InstructionOrderTests.test_local_and_source_instructions_share_submission_chronology",
+      "scripts.tests.test_os_goal_instruction_order.InstructionOrderTests.test_stable_source_id_dedup_preserves_original_content_and_accepted_receipt",
+      "scripts.tests.test_os_goal_instruction_order.InstructionOrderTests.test_unresolved_sending_instruction_blocks_newer_delivery_after_recovery"
+    ],
+    "payload": [
+      "/usr/bin/python3",
+      "-B",
+      "-m",
+      "unittest",
+      "-v",
+      "scripts.tests.test_os_goal_instruction_order.InstructionOrderTests.test_source_ids_deliver_by_submission_despite_reverse_hash_filename_order",
+      "scripts.tests.test_os_goal_instruction_order.InstructionOrderTests.test_local_and_source_instructions_share_submission_chronology",
+      "scripts.tests.test_os_goal_instruction_order.InstructionOrderTests.test_stable_source_id_dedup_preserves_original_content_and_accepted_receipt",
+      "scripts.tests.test_os_goal_instruction_order.InstructionOrderTests.test_unresolved_sending_instruction_blocks_newer_delivery_after_recovery"
+    ],
+    "meaningful_cases": "4 methods: actualproducer reverse-sourcehash chronology; actualsource/local/source mixedorder; stableID/originalcontent/registry/dedupe/contentconflict+acceptedreceipt immutability; actual uncertainsteer retainedsending blocks newer afterfreshFakeRPCreattachment.",
+    "isolation": "Actual Campaign.__init__/event/save/deliver_instruction and queue_instruction only on temporarydirectory. Campaign.run/begin and realRPCfactory never called; FakeRPC assigned before delivery, no goalset/threadstart/turnstart in activecases. Controlled utc values use exact actual +00:00 format. No model/service/process/network or live instruction send.",
+    "helper": "Predirty scripts/tests/test_os_goal_launcher.py60f51cba retained. Exact FakeRPC blockbc382a34 and goal2f25d31f matchincoming/source snapshot; unrelated dirtytests neverselected/changed. Existingconfig/defaultResource behavior compatible and no Campaignpreflight/run required.",
+    "expected_baseline": "Two orderingmethods fail; dedupe/uncertainsending controls pass. Source-derived, not observed.",
+    "expected_corrected": "All4 methods pass once; receipt/history/no resend semantics unchanged."
+  },
+  "explicit_flags_source_findings": [
+    "Candidate is exactly baseline with ONLY4 forcedappend lines deleted. Actual values=list(explicit ifnotNone else default_arguments(repo)) stays, so copied explicit flaglist/order/limits remain exactlycaller-supplied; neither,repaironly,milestoneonly,both keepF/F,T/F,F/T,T/T.",
+    "None default_arguments byte-identical with bothtrue, planner/source recipe defaults unchanged. Hidden/internalrecovery controls and read-only/instruction guards remain before/after real parser unchanged. No new negativeoption/filter/default/CLI/profile or recoveryauthority.",
+    "Chronology source does not change parser, so composition with flags source is disjoint and valid; no shared canonical mutation during either test phase."
+  ],
+  "explicit_flags_tests": {
+    "selectors": [
+      "scripts.tests.test_os_goal_service.ServiceTests.test_validator_preserves_each_explicit_optional_flag_combination",
+      "scripts.tests.test_os_goal_service.ServiceTests.test_validator_none_keeps_intentional_both_true_defaults",
+      "scripts.tests.test_os_goal_service.ServiceTests.test_legacy_forwarding_reaches_real_validator_without_adding_optional_flags",
+      "scripts.tests.test_os_goal_service.ServiceTests.test_engine_exec_preserves_flags_and_authenticated_recovery_lineage"
+    ],
+    "payload": [
+      "/usr/bin/python3",
+      "-B",
+      "-m",
+      "unittest",
+      "-v",
+      "scripts.tests.test_os_goal_service.ServiceTests.test_validator_preserves_each_explicit_optional_flag_combination",
+      "scripts.tests.test_os_goal_service.ServiceTests.test_validator_none_keeps_intentional_both_true_defaults",
+      "scripts.tests.test_os_goal_service.ServiceTests.test_legacy_forwarding_reaches_real_validator_without_adding_optional_flags",
+      "scripts.tests.test_os_goal_service.ServiceTests.test_engine_exec_preserves_flags_and_authenticated_recovery_lineage"
+    ],
+    "cases": "4selectors/10cases: purevalidator+realparser4pairs, Nonebothtrue control, reallegacy->service.main/start->realvalidator4pairs, materiallychangedexistingfakeengine explicitF/F with authenticatedrecoverylineage retained.",
+    "outer_effects": "ServiceTests tempdir/fakerepo; install_units,_systemctl,mailbox_preflight,shutil.which,execv,subprocess.run/check_output mocked. Legacyforward case additionally mocks Popen,umask,runtime_directory,_service_lock,lease_free,_legacy_owner,guardianauthorize,configatomicpublish,status. Validation spy wraps realvalidator. Engine only tempguardianJSON/process_start+lease mock andexecv fake; no actualinhibitor/service/frontdoor/deployment/start/stop/guardian/mailbox/network/account/model call.",
+    "semantics": "Tests assert explicit inputcopy/listorder/flagpairs and original6HIGH/3jobs/12planner values without grantingRAM; instruction text source-binds4GiBTOTAL. Nonekeepsbothtrue/default4. Existingengine twofalse assertions correct defect expectation, not unchangedgreenreplay.",
+    "expected_baseline": "7subcase/assertion failures across3methods (3pure,3legacy,1engine); bothtrue pair andNonedefault controls pass. Source-derived, not observed.",
+    "expected_corrected": "All4methods/10cases pass once."
+  },
+  "minimal_shared_execution_profile": {
+    "phase_order": [
+      "Root verifies stagedtests8e72+7ba and incomingSUTcf9a+0768; execute exactlychronology4 onCPU6 andflags4 onCPU7 ONCE inparallel with separatecaptures/tempdirs",
+      "Join both baseline waits and inspect exactexpectedfailures; no otherlightjobs. Root applies ONLY571976b7+6291ab12 sourcepatches and verifies6f5a+db1f stagedsource identities",
+      "Execute SAME4+4selectors once onCPU6/7, join both; no broadtest/replay/deployment"
+    ],
+    "parallel_limits": "Max2 aggregate lighttestpayloads/nootherlightjobs; each AS<=1GiB/CPU45s/wall60s/KILL5s/core0/boundedcapturefiles, outer+laneaffinitiesCPU6/7. Whole2lane/controller/worker overhead <=4GiBTOTAL under existing3jobceiling, fresh26GiBavailable/retained18+4floor/host16scratch12 floors. Root freshusage/capacity/admission needed.",
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "evidence_failure": "Separate immutable baseline/candidate stdios/status/PIDbirth before directwait/time-v CPUwallRSS; require allstartedwaitsjoined before sourceapply/nextphase. Plannedbaseline failures are evidence only; any unexpectedcase/profile/mockescape STOP/focusedreview/noautomaticretry or scopeexpansion.",
+    "excluded": "No166/old7/12/91/provider/securityfuzz/realprocesssmoke or systemd/guardian/mainfrontdoor/inhibitor/gh/mailbox/poll/phoneACK/network/humanmessage/notification/model/native workload."
+  },
+  "plan_and_authority": "CanonicalCAMPAIGN04cc2a14 reconciles manual0448066HIGH/onecompositor/0,6,7/max3/4GiBTOTAL/hours0/watchdog180/stall1200/restarts3/disabledliveflags/nativeheld/UNKNOWN/sourceholds. Adoptioninert; futureplain--supervisor needs separateauthorization, no directlauncher/frontdoor/service/state/goal/allowance reset. Root exactad526FF/16paths/33dirtypreservation reused asgiven, no census/restore.0originalOS/nativecredit.",
+  "reviewer_operations": "CPU0 source/hash/AST/diff/fixture comparisons and sole privateREVIEW write; no SUTmoduleimport/test/parserexecution/realRPC/service/process/controller/lease/state/canonical/index operation. One pre-staging read found newtest absent beforeRootcomposed it; source-only lookup, no workloadfailure/replay.",
+  "defects": []
+}

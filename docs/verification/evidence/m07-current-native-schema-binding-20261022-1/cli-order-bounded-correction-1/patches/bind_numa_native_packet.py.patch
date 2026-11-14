@@ -1,0 +1,83 @@
+--- original/bind_numa_native_packet.py
++++ cli-corrected/bind_numa_native_packet.py
+@@ -71,6 +71,28 @@
+  for path,b in outputs.items():
+   if path.suffix=='.json':walk(json.loads(b))
+  return raw
++def accepted_current_normalization(acceptance, root):
++    root=Path(root);a=json.loads(Path(acceptance).read_bytes())
++    need(ref(acceptance)['sha256']=='675277e49541894244498e34eae7d93aab87d3e3215b53d98e565969a449becb','genuine current normalization authority')
++    need(a['decision']=='PASS_ACTUAL_PAIRED_ALIAS_NORMALIZATION_BINDINGS_ONLY' and a['implementation_ownership'] is False and a['reviewer'] and a['source_review_projection_permission'] is True and a['native_permission'] is False and a['native_credit']==0 and a['runtime_release'] is None,'current bounded normalization review')
++    paths={'preflight':root/'ACTUAL-NATIVE-PREFLIGHT.json','binding':root/'ACTUAL-BINDING.json','provenance':root/'ACTUAL-PAIRED-ALIAS-PROVENANCE.json','source_closure':root/'BOUND-RUNTIME-SOURCE-ONLY.json'}
++    binding=json.loads(paths['binding'].read_bytes());paths['manifest']=Path(binding['manifest']['path'])
++    need(set(a['accepted_refs'])==set(paths),'complete current accepted reference set')
++    for key,path in paths.items():
++        observed=ref(path);need(a['accepted_refs'][key]==observed['sha256']+'/'+str(observed['bytes']),'current accepted whole descriptor '+key)
++    need(isinstance(a['verified'],list) and len(a['verified'])==4 and all(isinstance(x,str) and x for x in a['verified']),'current review verified facts')
++    return a
++
++def accepted_current_stage(acceptance, manifest):
++    need(ref(acceptance)['sha256']=='f0243ce2e3bbbd2c09de0b0b4296895aea15ff815a80db4d04f654dca2762aa5','genuine current image-only stage authority')
++    a=json.loads(Path(acceptance).read_bytes());v=a['accepted_boundary']
++    need(a['decision']=='PASS_ACTUAL_CBB_IMAGE_ONLY_OFFLINE_STAGE_AND_MANIFEST_ONLY' and a['implementation_ownership'] is False and a['reviewer'] and a['findings']==[],'current image-only stage review')
++    need(v['members']==60 and v['unchanged_members']==59 and v['sole_changed_member']=='images/mckernel.img' and v['changed_fields']==['size','sha256'] and v['all_other_metadata_preserved'] is True and v['producer_overlay_manifest_maps_equal'] is True and v['manifest_image_base_overlay_joins_match'] is True,'exact image-only stage boundary')
++    need(ref(a['manifest']['path'])==a['manifest'],'complete actual stage manifest descriptor')
++    image=manifest['artifacts']['mckernel_image'];need(image['sha256']==v['image_sha256'] and image['size']==v['image_bytes'],'normalization accepted staged image joins')
++    need(a['physical_acceptance'] is None and a['execution_release'] is None and a['native_credit_delta']==0,'stage grants no physical or execution authority')
++    return a
++
+ c=load(D/'STATIC-NONTEMPORAL-INPUTS.json')
+ need(len(sys.argv) in (1,3),'usage: bind_numa_native_packet.py [GENUINE_STATIC_DECISION SHA256]')
+ final=len(sys.argv)==3
+@@ -78,10 +100,10 @@
+  static=ref(sys.argv[1]);need(static['sha256']==sys.argv[2],'actual independent source/data review hash')
+ else:static=dict(path=None,sha256=None,bytes=None)
+ A=Path(c['actual_preparation_acceptance']['path']);need(ref(A)==c['actual_preparation_acceptance'],'actual accepted normalization bytes');accept=load(A)
+-need(c['actual_preparation_acceptance']['sha256']=='5362bc7a70cfcf62a9fed0ee4e0860ab86b7c5c13f6e70934e133dedba62a10f' and accept['decision']=='PASS_ACTUAL_PAIRED_ALIAS_COHERENT_SOURCE_AND_ORDINARY_NORMALIZATION_ONLY' and accept['implementation_ownership'] is False and accept['reviewer'] and accept['findings']==[],'actual remaining normalization acceptance')
++accepted_current_normalization(A,Path(c['actual_original_preflight']['path']).parent)
+ pre=load(c['actual_full_preflight']['path']);binding=load(c['actual_binding_result']['path'])
+ need(ref(c['actual_full_preflight']['path'])==c['actual_full_preflight'] and ref(c['actual_binding_result']['path'])==c['actual_binding_result'],'full actual preflight projection and binding')
+-original=ref(c['actual_original_preflight']['path']);need(pre['original_preflight']==original and original['sha256']==accept['references_relative_to_root']['ACTUAL-NATIVE-PREFLIGHT.json']['sha256'] and original['bytes']==accept['references_relative_to_root']['ACTUAL-NATIVE-PREFLIGHT.json']['bytes'],'projection exact independently accepted preflight')
++original=ref(c['actual_original_preflight']['path']);need(pre['original_preflight']==original and accept['accepted_refs']['preflight']==original['sha256']+'/'+str(original['bytes']),'projection exact independently accepted preflight')
+ accepted_manifest=binding['manifest'];need(accepted_manifest==c['normalized_manifest']==pre['binding']['manifest'],'actual normalized manifest typed refs')
+ nonce=binding['nonce'];parent=Path(binding['attempt_parent']);attempt=parent/('attempt-'+nonce);evidence=Path(str(parent)+'.owner-'+nonce);stage=Path(c['stage_manifest']['path']).parent
+ facts=dict(parent_identity=pre['parent_identity'],parent_nine_field_identity=pre['parent_nine_field_identity'])
+@@ -105,16 +127,20 @@
+ s=parent.stat();five=dict(device=s.st_dev,inode=s.st_ino,uid=s.st_uid,gid=s.st_gid,mode=oct(stat.S_IMODE(s.st_mode)));full=dict(path=str(parent),device=s.st_dev,inode=s.st_ino,uid=s.st_uid,gid=s.st_gid,mode=oct(stat.S_IMODE(s.st_mode)),nlink=s.st_nlink,size=s.st_size,mtime_ns=s.st_mtime_ns,ctime_ns=s.st_ctime_ns)
+ need(five==facts['parent_identity']==pre['parent_identity'] and not list(parent.iterdir()),'actual exact empty parent')
+ need(all(facts['parent_nine_field_identity'][k]==getattr(s,k) for k in facts['parent_nine_field_identity']),'actual full nine-field parent unchanged')
+-P=Path(c['latest_physical']['path']);need(ref(P)==c['latest_physical'],'genuine latest native physical report')
+-physical=load(P);physical_pending=False
+-def physical_ref():return ref(P)
++physical_pending=c['latest_physical'] is None
++need(not final or not physical_pending,'genuine independent physical acceptance required before final binding')
+ whole_ref=c['native_predecessor_binding'];need(ref(whole_ref['path'])==whole_ref,'exact distinct native/native/build role data')
+-roles=load(whole_ref['path']);need(roles['physical_review']==physical_ref(),'latest native role')
+-decoderref=roles['released_record_projection_source']
+-predecessor=roles['physical_predecessor'];need(set(predecessor)=={'boot_id','filesystem_uuid','container_id','owner_nonce','lease_path','common_exclusion','shared_heavy'},'existing seven-field predecessor interface')
+-spec=importlib.util.spec_from_file_location('actual_native_terminal_source',D/'root_manual_snapshot_threads.py');snapshot=importlib.util.module_from_spec(spec);spec.loader.exec_module(snapshot)
+-snapshot.terminal_joins(physical,roles)
+-need(all(not os.path.lexists(predecessor[k]) for k in ['lease_path','common_exclusion','shared_heavy']),'current native ownership records absent')
++roles=load(whole_ref['path']);decoderref=roles['released_record_projection_source'];predecessor=roles['physical_predecessor']
++need(set(predecessor)=={'boot_id','filesystem_uuid','container_id','owner_nonce','lease_path','common_exclusion','shared_heavy'},'existing seven-field predecessor interface')
++if physical_pending:
++ P=None
++ need(roles['physical_review'] is None and roles['native_controller_source'] is None and roles['native_controller_pair'] is None and all(v is None for v in predecessor.values()),'no fabricated physical authority in pending packet')
++else:
++ P=Path(c['latest_physical']['path']);need(ref(P)==c['latest_physical'] and roles['physical_review']==ref(P),'genuine latest physical report')
++ spec=importlib.util.spec_from_file_location('actual_native_terminal_source',D/'root_manual_snapshot_threads.py');snapshot=importlib.util.module_from_spec(spec);spec.loader.exec_module(snapshot)
++ snapshot.terminal_joins(load(P),roles)
++ need(all(not os.path.lexists(predecessor[k]) for k in ['lease_path','common_exclusion','shared_heavy']),'current native ownership records absent')
++def physical_ref():return dict(path=None,sha256=None,bytes=None) if physical_pending else ref(P)
+ prop=transform(load(OQ/'proposal.json'));prop.update(actual_full_argument_preflight=c['actual_full_preflight'],actual_ordinary_acceptance=ref(A),actual_stage_review=ref(A),actual_owner_sha256=ref(owner)['sha256'],argv=pre['owner_argv'],effective_current_controller_stop_percent=100,latest_exclusive_operation_physical_predecessor=physical_ref(),normalized_manifest=consumer['normalized_manifest'],parent=dict(path=str(parent),identity=five),parent_full_ninefield_identity=full,stage_manifest=ref(stage/'manifest.json'),scope='One unchanged NUMA interval consumer; M07 native conditional typed remaining-component stdout/empty stderr/exit37 and complete lifecycle; no native/default/ACK/C-retirement credit',status='PENDING_LAST_SNAPSHOT_AND_FINAL_MACHINE')
+ prop.pop('pair_rounds',None);prop.pop('native_throughput_measurement',None);prop.pop('strict_startup_CPU_unchanged',None)
+ prop.update(profile=c['native_profile'],payload_contract=c['payload_contract'],component_ABI=c['tested_tuple_authority'],component_artifact=c['matched_module_artifact_authority'],criterion='current-native-M07-remaining-components',expected_apps_if_native_passes=1,oracles_stdout_bytes=None,strict_oracle=c['strict_oracle'],scope='Functional OS/apps plus Rust cutover; current selected NUMA interval app with typed M07 conditional typed stdout/empty stderr/exit0-or-STOP2 and unchanged full lifecycle; no automatic native/default/ACK/C-retirement credit',new_throughput_or_behavior_credit=False)
+@@ -125,7 +151,7 @@
+ meta['postjoin_readback']=dict(meta['postjoin_readback'],argv=derive_current_readbacks(binding,pre))
+ meta['status']='PASS_NONTEMPORAL_DATA_ONLY' if final else 'PENDING_INDEPENDENT_STATIC_DATA_REVIEW'
+ mref=add(Q/'conditional-metadata.json',meta)
+-base=transform(load(OQ/'machine-base.json'));base.update(accepted_actual_stage_fixture_parent_review=ref(A),conditional_metadata_release=mref,exclusive_queue_predecessor=physical_ref(),independent_static_execution_decision=static,parent_identity=five,terminal_cleanup_and_common_shared_release=dict(status='PASS',ref=physical_ref()))
++base=transform(load(OQ/'machine-base.json'));base.update(accepted_actual_stage_fixture_parent_review=ref(A),conditional_metadata_release=mref,exclusive_queue_predecessor=physical_ref(),independent_static_execution_decision=static,parent_identity=five,terminal_cleanup_and_common_shared_release=dict(status='PENDING_GENUINE_PHYSICAL_ACCEPTANCE' if physical_pending else 'PASS',ref=physical_ref()))
+ base.update(current_heavy_released_record=roles['current_heavy_released_record'],external_latest_native_physical_review=roles['external_latest_native_physical_review'],legacy_reference_scope='NATIVE_TERMINAL_ANCESTRY_ONLY_C9_RELEASED_BUILD_ANCESTRY')
+ baseref=add(Q/'machine-base.json',base)
+ freeze=transform(load(OQ/'non-temporal-freeze.json'));freeze.update(actual_consumer_result=c['actual_binding_result'],actual_mandatory_consumer_review=ref(A),actual_preflight=c['actual_full_preflight'],actual_stage_review=ref(A),conditional_metadata=mref,current_snapshot_producer=ref(D/'root_manual_snapshot_threads.py'),effective_current_controller_stop_percent=100,independent_static_execution_decision=static,latest_exclusive_operation_physical_predecessor=physical_ref(),latest_predecessor_note='Native87f/C9 retained ancestry only; separate latest external M05 physical requires genuine runtime preentry review plus fresh live snapshot' ,machine_base=baseref,native_manifest=prop['normalized_manifest'],native_target=None,owner_argv=pre['owner_argv'],inside_argv=pre['inside_argv'],qemu_argv=pre['qemu_argv'],AF_UNIX_endpoints=pre['AF_UNIX_endpoints'],parent_full_ninefield_identity=full,parent_legacy_fivefield_identity=five,proposal=pref,readonly_roots=pre['readonly_roots'],runtime_owner=ref(owner),runtime_runner=c['runtime_runner'],runtime_observer=c['runtime_observer'],runtime_source_hashes=runtime,runtime_source_count=len(runtime),entire_consumed_paths=pre['consumed_paths'],consumed_path_count=len(pre['consumed_paths']),stage_native_manifest=prop['stage_manifest'])

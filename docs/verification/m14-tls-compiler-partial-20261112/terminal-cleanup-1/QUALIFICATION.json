@@ -1,0 +1,365 @@
+{
+  "schema": "mckernel.TLS.exact-terminal-container-cleanup-original576-new192-independent-qualification.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Saved exact terminal-container and HOST lifetime closure only.",
+  "reviewer": "/root/m15_installed_leaf_review; explicit gpt-6.1-sol/MAX; independent; depth1/no recursion",
+  "qualified_at_utc": "2026-11-12T21:18:17.956Z",
+  "decision": "PASS_EXACT_TLS_5645_CLEANUP_OLD603979776B_AND_NEW201326592B_TWO_JOBS_RETIREMENT_ELIGIBLE",
+  "CID": "5645915b0e8e9b2b76be3b9befef1676115d316836039a60719c5a4c0dd93362",
+  "retirement_eligibility": {
+    "eligible": true,
+    "sole_owner": "/root",
+    "old_TLS_payload_bytes": 536870912,
+    "old_TLS_capture_reserve_bytes": 67108864,
+    "only_old_total_bytes": 603979776,
+    "only_old_jobs": 1,
+    "new_cleanup_payload_bytes": 134217728,
+    "new_cleanup_capture_reserve_bytes": 67108864,
+    "only_new_total_bytes": 201326592,
+    "only_new_jobs": 1,
+    "only_combined_bytes": 805306368,
+    "only_combined_jobs": 2,
+    "new_CPU": [
+      0
+    ],
+    "Root_scoped_receipt_required": true,
+    "retirement_performed_by_reviewer": false,
+    "no_other_scope_retirement": true
+  },
+  "evidence": {
+    "actual_cleanup_result": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-TLS-arch-prctl-source-1/protected-host-packet-1/owner-custody-boundary-correction-1/terminal-container-cleanup-1/affinity-guard-correction-1/execution-1/RESULT.json",
+      "bytes": 2614,
+      "sha256": "c962abe38721e138060cb22cc76466314b91ae1825417a3db3e331ca2e1c1f8a"
+    },
+    "actual_outer_result": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-TLS-arch-prctl-source-1/protected-host-packet-1/owner-custody-boundary-correction-1/terminal-container-cleanup-1/affinity-guard-correction-1/root-capture-1/RESULT.json",
+      "bytes": 2748,
+      "sha256": "32c263799c4faefc53f0b80946b88e981d30931350d4be120f75d4a7df3272b0"
+    },
+    "actual_outer_clients": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-TLS-arch-prctl-source-1/protected-host-packet-1/owner-custody-boundary-correction-1/terminal-container-cleanup-1/affinity-guard-correction-1/root-capture-1/CLIENTS.json",
+      "bytes": 1354,
+      "sha256": "06e4481baa5fb22a4cbcf63b1916180bcc8b36c694515423a52eb701ef6fb6f3"
+    },
+    "actual_three_CLI_attempts": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-TLS-arch-prctl-source-1/protected-host-packet-1/owner-custody-boundary-correction-1/terminal-container-cleanup-1/affinity-guard-correction-1/execution-1/ATTEMPTS.json",
+      "bytes": 3076,
+      "sha256": "22d163b77f0d06088887b0837fafae62aedcd0271c97ae65dbae5d77a589b82e"
+    },
+    "actual_fresh_terminal_profile": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-TLS-arch-prctl-source-1/protected-host-packet-1/owner-custody-boundary-correction-1/terminal-container-cleanup-1/affinity-guard-correction-1/execution-1/FRESH-TERMINAL-PROFILE.json",
+      "bytes": 12373,
+      "sha256": "d388c3830c896853a2c1ef8180e68808c8d30799a62093574006c8425d3beff4"
+    },
+    "actual_initial": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-TLS-arch-prctl-source-1/protected-host-packet-1/owner-custody-boundary-correction-1/terminal-container-cleanup-1/affinity-guard-correction-1/ROOT-ACTUAL-EXECUTION-1/ROOT-TOOL-INITIAL.json",
+      "bytes": 350,
+      "sha256": "1642b49efa08cf506d683b5041b4204eb63e708168c93997282cc3b33deb2e58"
+    },
+    "actual_final": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-TLS-arch-prctl-source-1/protected-host-packet-1/owner-custody-boundary-correction-1/terminal-container-cleanup-1/affinity-guard-correction-1/ROOT-ACTUAL-EXECUTION-1/ROOT-TOOL-FINAL.json",
+      "bytes": 350,
+      "sha256": "1642b49efa08cf506d683b5041b4204eb63e708168c93997282cc3b33deb2e58"
+    },
+    "actual_parent_stdout": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-TLS-arch-prctl-source-1/protected-host-packet-1/owner-custody-boundary-correction-1/terminal-container-cleanup-1/affinity-guard-correction-1/root-capture-1/Root-parent.stdout",
+      "bytes": 208,
+      "sha256": "d69e77d5fe9a19d43319351d768a18e52bec4119ef15e865aac3bf6ab9d848b2"
+    },
+    "actual_parent_stderr": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-TLS-arch-prctl-source-1/protected-host-packet-1/owner-custody-boundary-correction-1/terminal-container-cleanup-1/affinity-guard-correction-1/root-capture-1/Root-parent.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "request": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-TLS-arch-prctl-source-1/protected-host-packet-1/owner-custody-boundary-correction-1/terminal-container-cleanup-1/affinity-guard-correction-1/REQUEST.FROZEN.json",
+      "bytes": 16265,
+      "sha256": "2e3aa9fa771fac90156fb19fa45700740050b8eaca55cac008460da04fa7ef5e"
+    },
+    "independent_source_operation_review": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-TLS-arch-prctl-source-1/protected-host-packet-1/owner-custody-boundary-correction-1/terminal-container-cleanup-1/affinity-guard-correction-1/independent-operation-review-1/OPERATION-REVIEW.json",
+      "bytes": 8818,
+      "sha256": "20280f6aadb5031511a928691e7a5e4ad70f4bbc2e4ec025a3b88164df12c5a9"
+    },
+    "actual31_field_grant": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-TLS-arch-prctl-source-1/protected-host-packet-1/owner-custody-boundary-correction-1/terminal-container-cleanup-1/affinity-guard-correction-1/ROOT-ADMISSION.UNISSUED.json",
+      "bytes": 4845,
+      "sha256": "604066781ca63091edb355651a7d472de615fccd1a83cc52c66042c9ca694dcf"
+    },
+    "original_partial_Q_reused": {
+      "bytes": 22336,
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-TLS-arch-prctl-source-1/protected-host-packet-1/owner-custody-boundary-correction-1/independent-native-binding-review-1/actual-partial-qualification-1/QUALIFICATION.PARTIAL-NOT-RETIREMENT.json",
+      "sha256": "d5d005790280a37d1dacd343b988ba00099f206d74a7c1537443345f24b114ba"
+    },
+    "original_initial": {
+      "bytes": 131,
+      "dev": 66306,
+      "gid": 1000,
+      "inode": 2255270,
+      "mode": "0o600",
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-TLS-arch-prctl-source-1/protected-host-packet-1/owner-custody-boundary-correction-1/ROOT-ACTUAL-TLS.INITIAL.json",
+      "resolved": "/home/holden/mckernel-work/resume-20261112T094452Z-TLS-arch-prctl-source-1/protected-host-packet-1/owner-custody-boundary-correction-1/ROOT-ACTUAL-TLS.INITIAL.json",
+      "sha256": "a851b4ecb723afecd842498f77addfd1700bf0148916c616888cee5b64547cbb",
+      "uid": 1000
+    },
+    "original_final": {
+      "bytes": 1469,
+      "dev": 66306,
+      "gid": 1000,
+      "inode": 2255272,
+      "mode": "0o600",
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-TLS-arch-prctl-source-1/protected-host-packet-1/owner-custody-boundary-correction-1/ROOT-ACTUAL-TLS.POLL-1.json",
+      "resolved": "/home/holden/mckernel-work/resume-20261112T094452Z-TLS-arch-prctl-source-1/protected-host-packet-1/owner-custody-boundary-correction-1/ROOT-ACTUAL-TLS.POLL-1.json",
+      "sha256": "bf43bc9298f1e3e86839b4b81276afb083aded7ae3451cfe1ff713f2c2517294",
+      "uid": 1000
+    },
+    "original_parent_clients": {
+      "bytes": 1215,
+      "dev": 66306,
+      "gid": 1000,
+      "inode": 2255268,
+      "mode": "0o600",
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-TLS-arch-prctl-source-1/protected-host-packet-1/owner-custody-boundary-correction-1/root-capture-1/CLIENTS.json",
+      "resolved": "/home/holden/mckernel-work/resume-20261112T094452Z-TLS-arch-prctl-source-1/protected-host-packet-1/owner-custody-boundary-correction-1/root-capture-1/CLIENTS.json",
+      "sha256": "1248ef169faaf4062a9eed4ff6dad5aafddc01ad3ae244907e5c21f3218a93c1",
+      "uid": 1000
+    },
+    "original_terminal_profile": {
+      "bytes": 12373,
+      "dev": 66306,
+      "gid": 1000,
+      "inode": 2255220,
+      "mode": "0o600",
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-TLS-arch-prctl-source-1/protected-host-packet-1/owner-custody-boundary-correction-1/execution-1/compile-terminal-profile.json",
+      "resolved": "/home/holden/mckernel-work/resume-20261112T094452Z-TLS-arch-prctl-source-1/protected-host-packet-1/owner-custody-boundary-correction-1/execution-1/compile-terminal-profile.json",
+      "sha256": "3af4e6ca8af6b43249a07def53febdbf8f5ada17e0fb987be5b111fc671b78df",
+      "uid": 1000
+    },
+    "saved_first3_artifact_manifest": {
+      "bytes": 4711,
+      "dev": 66306,
+      "gid": 1000,
+      "inode": 2255329,
+      "mode": "0o600",
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-TLS-arch-prctl-source-1/protected-host-packet-1/owner-custody-boundary-correction-1/terminal-container-cleanup-1/SAVED-TLS-ARTIFACTS.REUSE.json",
+      "resolved": "/home/holden/mckernel-work/resume-20261112T094452Z-TLS-arch-prctl-source-1/protected-host-packet-1/owner-custody-boundary-correction-1/terminal-container-cleanup-1/SAVED-TLS-ARTIFACTS.REUSE.json",
+      "sha256": "326609c5262564807ff57a3009b7340ae7db1d7a979a1c425b7bb78fa1dccbcd",
+      "uid": 1000
+    }
+  },
+  "original_failed_family_closure": {
+    "partial_Q_decision_preserved": "PASS_SAVED_FIRST3_COMMANDS_AND_FAILED_COMMAND4_OWNING_CLOSURE_ONLY_EXACT_TERMINAL_CONTAINER_CLEANUP_REVIEW_ELIGIBLE_NOT_RESOURCE_RETIREMENT",
+    "original_tool_session": 97302,
+    "original_initial_chunk": "996744",
+    "genuine_original_final_chunk": "471fc5",
+    "original_Root_exit": 1,
+    "no_original_session_remaining": true,
+    "original_Root_parent": {
+      "pid": 2028704,
+      "birth": "60148453",
+      "direct_wait": 1,
+      "streams_closed": true,
+      "receipt_persisted": true,
+      "lifecycle_UNKNOWN": false,
+      "secondary_errors": []
+    },
+    "all8_original_Docker_CLI_waits_streams_children_closed": true,
+    "all4_original_inner_command_waits_streams_children_closed": true,
+    "original_inner_exit_sequence": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "original_container_wait_returned": 1,
+    "original_failure_and_partial_qualification_unchanged": true,
+    "no_compiler_commands_or_artifact_hashes_replayed_by_reviewer": true,
+    "material_scope": "Existing d5d00579 first-three C/ASM/link material and failed fourth static-helper command remain only their saved partial scope; commands5/6/7 and payload/native/TLS acceptance are not proved by this cleanup."
+  },
+  "exact_current_terminal_and_namespace": {
+    "fresh_matches_original_entire_fields": [
+      "Id",
+      "Name",
+      "Image",
+      "Created",
+      "Config",
+      "HostConfig",
+      "AppArmorProfile",
+      "Platform",
+      "Driver",
+      "RestartCount",
+      "State"
+    ],
+    "all7_complete_Mount_records_equal_after_declared_sort": true,
+    "name": "/mck-tls-fs-20261112-094452-1-custody1",
+    "created": "2026-11-12T20:26:58.859041705Z",
+    "State": {
+      "Status": "exited",
+      "Pid": 0,
+      "ExitCode": 1,
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "Dead": false,
+      "OOMKilled": false,
+      "Error": "",
+      "StartedAt": "2026-11-12T20:26:59.167851399Z",
+      "FinishedAt": "2026-11-12T20:26:59.707736324Z"
+    },
+    "new_commands": [
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "inspect",
+        "5645915b0e8e9b2b76be3b9befef1676115d316836039a60719c5a4c0dd93362"
+      ],
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "rm",
+        "5645915b0e8e9b2b76be3b9befef1676115d316836039a60719c5a4c0dd93362"
+      ],
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "ps",
+        "-a",
+        "--no-trunc",
+        "--filter",
+        "id=5645915b0e8e9b2b76be3b9befef1676115d316836039a60719c5a4c0dd93362",
+        "--format",
+        "{{.ID}}"
+      ]
+    ],
+    "new_three_CLI_ownership": [
+      {
+        "adopted_kills": [],
+        "adopted_reaps": [],
+        "error": null,
+        "label": "exact-created-inspect",
+        "leader": 2043087,
+        "leader_birth": "60425855",
+        "leader_group_signalled": false,
+        "leader_parent_joined": true,
+        "remaining_direct_children": [],
+        "status": 0,
+        "streams_closed": true,
+        "timed_out": false,
+        "whole_descendants_joined": true
+      },
+      {
+        "adopted_kills": [],
+        "adopted_reaps": [],
+        "error": null,
+        "label": "exact-created-remove",
+        "leader": 2043095,
+        "leader_birth": "60425864",
+        "leader_group_signalled": false,
+        "leader_parent_joined": true,
+        "remaining_direct_children": [],
+        "status": 0,
+        "streams_closed": true,
+        "timed_out": false,
+        "whole_descendants_joined": true
+      },
+      {
+        "adopted_kills": [],
+        "adopted_reaps": [],
+        "error": null,
+        "label": "exact-removed-id-absence",
+        "leader": 2043103,
+        "leader_birth": "60425872",
+        "leader_group_signalled": false,
+        "leader_parent_joined": true,
+        "remaining_direct_children": [],
+        "status": 0,
+        "streams_closed": true,
+        "timed_out": false,
+        "whole_descendants_joined": true
+      }
+    ],
+    "new_CLI_labels_are_historical_names": "exact-created-inspect/remove labels are preserved; the checked actual object is the exact exited1 terminal container, not a never-started claim.",
+    "nonforce_exact_rm_stdout_equal_CID": true,
+    "subsequent_exact_fullCID_filtered_ps_stdout_and_stderr_empty": true,
+    "namespace_proof": "Actual reviewed source258-260 requires exact rm acknowledgement followed by successful empty exact-ID ps. Its original three positive Owner records and full Root0 establish that normal postcondition; no fresh query by reviewer.",
+    "final_container_state": {
+      "CID": "5645915b0e8e9b2b76be3b9befef1676115d316836039a60719c5a4c0dd93362",
+      "full_Root_completion_independent_Q_and_Root_scoped_retirement_still_required": true,
+      "lifecycle_UNKNOWN": false,
+      "old_created": "2026-11-12T20:26:58.859041705Z",
+      "old_name": "/mck-tls-fs-20261112-094452-1-custody1",
+      "removed": true,
+      "resource_charge_retained": false,
+      "state": "EXACT_OWNED_TERMINAL_CID_REMOVED_AND_ABSENT",
+      "terminal_exit": 1
+    },
+    "old_terminal_failure_not_converted_to_compile_success": true
+  },
+  "new_original_caller_and_FD_closure": {
+    "actual_full_tool_chunk": "2d24c2",
+    "actual_Root_exit": 0,
+    "no_session": true,
+    "initial_and_final_are_the_same_already_terminal_original_tool_response": true,
+    "no_second_wait_issued": true,
+    "actual_parent": {
+      "pid": 2043085,
+      "birth": "60425843",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true,
+      "receipt_persisted": true,
+      "lifecycle_UNKNOWN": false,
+      "resource_charge_retained": false,
+      "primary_error": null,
+      "secondary_errors": []
+    },
+    "all3_CLI_leaders_and_whole_descendants_joined0": true,
+    "all3_streams_closed_no_timeout_group_signal_adopted_kills_reaps_children_or_errors": true,
+    "parent_remaining_direct_children": [],
+    "outer_remaining_direct_children": [],
+    "own_input_output_FD_basis": "Reviewed bounded with-open readers and capture/fsync/finally contexts close their own handles; all original/new Owner families, E088 parent wait/closed streams and genuine complete Root tool termination close current process/capture descriptor lifetimes. No fabricated live FD or numeric wait inventory.",
+    "new_stdout_complete_bytes": 208,
+    "new_stderr_complete_bytes": 0,
+    "saved_artifact_preservation": "Actual parent pins saved first3 material before and after the three cleanup calls. No source/artifact overwrite, unlink, archive generation or new ELF/parser/collector execution."
+  },
+  "retirement_boundaries": {
+    "old603979776_and_new201326592_are_distinct_families": true,
+    "do_not_count_three_new_CLI_as_three_extra_jobs": true,
+    "do_not_retire_any_F05_UTI_F08_or_prior_failed_cleanup_charge_again": true,
+    "native12_source_service_account_resource_globalUNKNOWN_raw621_c309_normallease_partialinstall_unchanged": true,
+    "no_compiler_or_TLS_functional_or_native_or_original_acceptance_credit": true,
+    "already_GO_residual728d": "This Q supplies only cleanup/old-and-new HOST lifetime evidence. Root must record actual scoped receipt and freshly admit the separately reviewed residual packet; do not replay unchanged first3 commands or treat this as compiler/native authority."
+  },
+  "source_review_reused": {
+    "parent_sha256": "ad488827f953ac80d255990e2b4a1328f40ebbe89b13fcdf8dbcc4fa8a584798",
+    "outer_sha256": "3505a4be16f1b75d8bfa14dd8bfddcef6c6bdf9931e59ecbbc2742dc81182e2f",
+    "affinity_correction_only_as_independently_reviewed": true,
+    "no_source_changes_by_reviewer": true
+  },
+  "findings": [],
+  "missing_declared_cleanup_or_lifetime_predicates": [],
+  "preserved_identity": {
+    "Root_thread_id": "01a18bc3-e072-7810-9426-75101b0856c0",
+    "invocation": "20261112T094452Z-12a4bea0",
+    "same_Root_finite_credit_run_id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+    "private_budget_preserved_without_amount": true,
+    "M14_before_M15": true
+  },
+  "excluded_rejected_task": {
+    "worker": "01a1c48d-4d96-7cc3-b733-73a97973152f",
+    "turn": "01a1ce01-20cf-7e03-9442-f6d521fb8b02",
+    "request": "signal/frame/xstate collector",
+    "disposition": "Excluded from replay/rephrasing/reassignment; no recursion."
+  },
+  "reviewer_actions": "Only exact saved source/review/partial-Q/profile/result/caller/capture data and file metadata; wrote only this assigned private qualification. No Docker/tool/compiler/helper/parser/collection/import/live/native action or replay, account/private RAW access, source edit, resource mutation or unrelated review.",
+  "next_action": {
+    "owner": "/root",
+    "action": "Consume this Q and record only oldTLS603979776B/job1 plus actual cleanup201326592B/job1 scoped retirement. Preserve every original failure/hold and separately issue any compatible fresh admitted residual operation."
+  }
+}

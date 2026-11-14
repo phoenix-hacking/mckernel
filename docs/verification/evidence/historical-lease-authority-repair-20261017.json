@@ -1,0 +1,67 @@
+{
+  "schema": "historical-lease-authority-repair.v1",
+  "status": "NOT_RELEASED",
+  "author": "/root/scratch21_transaction",
+  "execution_released": false,
+  "acceptance_credit": false,
+  "files_sha256": {
+    "scripts/native_exact_historical_lease_observer.py": "463ae558e141c2a6fe5a016fb19baddb26ed883c3bf6d39c114b27711ee78a51",
+    "scripts/native_rust_exact_disk_build_wrapper.py": "c252ee341eb61752704f8b818503c0a5dc97400845494707ca3110f5f23df6d1",
+    "scripts/tests/test_native_exact_historical_lease_observer.py": "9040fc798d2a2aed1005bc3cc7c56e602871e2aaa4c19b9cf41b50911073a5d0",
+    "scripts/tests/test_native_rust_exact_disk_build_wrapper.py": "12f78efc7dae524167ad818384ea94d21f720df9f2e34c8386e7157b0121e44b"
+  },
+  "blocked_predecessor": {
+    "review_path": "docs/verification/evidence/scratch22-heavy-build-independent-execution-review-20261017.json",
+    "review_sha256": "5a267e8234f6dd517290353f4e52f2dff8742d2bc2cf11f5680e0ecbdf1ac489",
+    "failure_family": "S22-HISTORICAL-LEASE-BOOT-1",
+    "original_observer_sha256": "fad2dd08fdc098c1dcda1d2fa8eaf9fc885f64d4054c9ca85ad71f7a5000fed0",
+    "original_canonical_wrapper_sha256": "3b910b0c968d85390ca7d00e6953ddb13dc91714180c51fd476853dac529739c",
+    "initial_failure": "Exact canonical read-only admission refused: historical lease observer unavailable. Retired boot c733d83b-a5ae-4f91-9ce6-9f8ccf119afd and device1831 were incorrectly used as current authority.",
+    "production_correction_attempts": 1,
+    "unchanged_privileged_retry": false,
+    "preservation": "Original source is retained by Git and the exact failed-admission review. Seven root-owned immutable lease files, all retirement evidence and the accepted scratch22 candidate/materializations/leases were not changed."
+  },
+  "authority_generation": {
+    "historical_boot_id": "c733d83b-a5ae-4f91-9ce6-9f8ccf119afd",
+    "historical_device": 1831,
+    "current_boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "current_device": 1828,
+    "filesystem_uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52",
+    "scratch_root": "/home/holden/mckernel-work/scratch",
+    "scratch_root_identity": {"inode": 2, "mode": "0700", "uid": 1000, "gid": 1000},
+    "rationale": "One exact source-reviewed current generation, distinct from immutable historical retirement identities. Every later boot, different live device, root identity or UUID requires another explicit source/execution review; no automatic historical-record rewrite or environment/path override exists."
+  },
+  "invariants": [
+    "The seven LEASES entries and four EVIDENCE_BINDINGS entries retain their original bytes, inode catalog, PID/starttime identities and SHA256 bindings.",
+    "Each current lease must be a unique root-owned 0600 regular file on current device1828 with its original inode/size/SHA256 and immutable flag. Full ioctl flags must remain identical before and after each read.",
+    "All four retained retirement evidence hashes must match before any PASS_READ_ONLY result; exact historical owner identity still present in procfs refuses.",
+    "No source bypass, mutation, arbitrary CLI pathname, subprocess, credential access, lease removal, accepted-candidate edit, compilation or guest execution is added.",
+    "The v1 lease row schema is unchanged. The canonical consumer changes only its exact historical observer SHA256 pin; report authority is an additive explanation of the authenticated proof."
+  ],
+  "required_independent_read_only_execution_profile": {
+    "status": "NOT_RELEASED",
+    "privilege": "Existing authenticated sudo -A isolated Python observer; independent release must newly admit the exact fixed block-device read before live execution.",
+    "block_device": "/dev/loop36",
+    "open_flags": "O_RDONLY|O_NOFOLLOW|O_NONBLOCK|O_CLOEXEC|O_NOATIME; descriptor-relative non-symlink directory traversal",
+    "read": "Exactly1024bytes via pread at byte offset1024: ext4 primary superblock magic0xEF53 and UUID bytes at offset0x68.",
+    "device_bridge": "The pinned block node must remain a unique root-owned block file with st_rdev equal to the pinned scratch-root st_dev1828; root inode2/0700/uid1000/gid1000 and both directory ancestry chains are bound.",
+    "lifetime": "Block descriptor and scratch-root descriptor stay open through all seven lease and four evidence reads. Current boot, block identity/path, ancestry, ext4 magic and UUID are rechecked after the complete observation. The observer closes all descriptors without mutation.",
+    "not_performed": "No live observer or privileged block read was run by this source author."
+  },
+  "checks": {
+    "status": "PASS",
+    "command": "timeout 120s taskset -c 7 bash -c 'ulimit -v 1048576; exec python3 -B -m unittest -v scripts.tests.test_native_exact_historical_lease_observer scripts.tests.test_native_rust_exact_disk_build_wrapper.HistoricalObserverBoundaryTests'",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr_summary": "Ran 14 tests in 0.031s\n\nOK\n",
+    "resource_profile": "CPU7 only / RLIMIT_AS1GiB /120seconds / one ordinary mocked Python process",
+    "coverage": "Exact current binding; wrong UUID/magic/truncation; wrong root/device/block type/rdev/owner/link count; boot/block/ancestry drift; immutable-bit absence/full-flag drift/ioctl failure; original lease inode/mode/uid/gid/size/hash; retirement evidence drift; live owner; exact consumer source pin and current report; wrong historical boot and malformed report rows. UUID/block reads and all privileged observations are mocked; unique regular-file descriptor tests use disposable files.",
+    "preserved_harness_failure": {
+      "command": "timeout 120s taskset -c 7 bash -c 'ulimit -v 1048576; exec python3 -I -B -m unittest -v scripts.tests.test_native_exact_historical_lease_observer scripts.tests.test_native_rust_exact_disk_build_wrapper.HistoricalObserverBoundaryTests'",
+      "exit_code": 1,
+      "output": "Ran2tests; FAILED(errors=2); ModuleNotFoundError: No module named scripts",
+      "bounded_correction": "Remove self-imposed -I so the standard module test invocation can import the repository's scripts package. No production source or authority was weakened."
+    }
+  },
+  "next_executable_observation": "Independent source authority review of the exact four-file map above, plus separate approval of the fixed bounded read-only block-device profile. Dispatcher must bind fetched sources and fresh namespaces before any newly authorized live admission. Do not mutate or replay scratch22."
+}

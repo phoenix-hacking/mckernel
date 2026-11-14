@@ -1,0 +1,77 @@
+--- a/run_build_only.py
++++ b/run_build_only.py
+@@ -9,7 +9,7 @@
+ CUTOFFS=[1793774133, 1556235.568922472, 1571573.6959699572]
+ RUNTIME_GUARD_REF={'bytes': 9804, 'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/CURRENT119-PRODUCER-GUARD-1/confirmed-period-correction-source-1/tightening-minimum-correction-source-1/runtime_guard.py', 'sha256': '14debb632383f15bcadcf6cbd0f5e3edbdddc68b4705ba3a0add311569265158'}
+ MEMORY=12884901888
+-COMMAND_RECIPE_REF={'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/CURRENT119-FOUR-COMMANDS.NOT-GRANTED.json', 'bytes': 32637, 'sha256': '0c01ec0ee7b91decc9c6749fae8edf076f50e35f360f577bd3deac3d56edadfd'}
++COMMAND_RECIPE_REF={'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-PRODUCER-BINDING-1/THREE-COMMANDS.SOURCE-ONLY.json', 'bytes': 19209, 'sha256': '79a0054d5771b4bdb1bade8156c77533a31d5d68b17a5c41daa31cc36947159b'}
+ BUDGET=23259332608  # current aggregate21.661941528320312GiB ceiling
+ PROTECTED_SUFFIX='actual-current290-default-image-attempt-5'
+ SUDO_DOCKER_PREFIX=['/usr/bin/sudo','-A','/usr/bin/docker','--host=unix:///var/run/docker.sock']
+@@ -107,7 +107,7 @@
+             require(manifest['schema']=='ExactclosedRustsource-directoryreuse-v1' and manifest['base_source_root']=='Retained115 qualified inputs with8path116selectiveoverlay' and manifest['runtime_authority'] is None and manifest['export_root']==str(root) and manifest['container_destination']=='/src/kernel/rust' and len(manifest['files'])==121 and manifest['new_leaf_files']==['f06_shmget_dispatch.rs'] and manifest['no_symlinks'] is True and manifest['no_hardlinks'] is True, 'exact authenticated116 selective-overlay source manifest')
+         else:
+             require(manifest['schema']=='mckernel.exact-kernel-rust-subtree-readonly.v1' and manifest['runtime_authority'] is None and manifest['export_root']==str(root) and manifest['container_destination']=='/src/kernel/rust' and manifest['base_source_root']==profile['inputs']['source6153']+'/kernel/rust','exact source-directory manifest binding')
+-        require(len(manifest['files'])==133 and sum(row['relative'].endswith('.rs') for row in manifest['files'])==122,'exact118 source closure123/112')
++        require(len(manifest['files'])==149 and sum(row['relative'].endswith('.rs') for row in manifest['files'])==138,'exact118 source closure123/112')
+         external=profile['inputs']['external_relative_modules']
+         require(len(external)==3 and manifest['external_inputs']==external,'exact118 external3 module manifest')
+         require([row['relative'] for row in external]==['scripts/tests/fixtures/mckernel_guest_sysfs.rs','host-kernel/native-rust/abi/vdso.rs','host-kernel/native-rust/zero_pages.rs'],'exact inherited relative modules')
+@@ -128,32 +128,30 @@
+     return rows
+ 
+ def commands_for_plan(profile):
+-    """Fixed successor cohort only; data is incomplete until Root binds exact sources/flags."""
++    """Exact private affected-unit recipe; fresh actual Root binding required."""
+     require(isinstance(profile['request_sha256'],str) and len(profile['request_sha256'])==64 and all(c in '0123456789abcdef' for c in profile['request_sha256']),'Root must bind new exact request SHA256')
+     require(isinstance(profile['inputs']['postimages'],list) and profile['inputs']['postimages'],'Root must supply exact new readonly postimages')
+     require(profile['cohort_source_bindings']==[dict(relative=r['relative'],postimage=r['postimage']) for r in profile['inputs']['postimages']]+source_directory_postimages(profile),'exact new cohort source map')
+-    require(isinstance(profile['reuse_descriptor'],str) and profile['reuse_descriptor'],'Root must supply matching eight-object/three-replacement reuse descriptor')
++    require(isinstance(profile['reuse_descriptor'],str) and profile['reuse_descriptor'],'Root must supply matching nine-object/two-replacement reuse descriptor')
+     require(isinstance(profile['producer_contract']['process_delta'],str) and profile['producer_contract']['process_delta'],'Root must state exact new process delta')
+     if 'unchanged_completed_process_prefix' in profile:require(profile['unchanged_completed_process_prefix']['Root_decision'] is not None,'Root must disposition already completed unchanged F02 process prefix before grant')
+-    commands=profile['exact_commands']
+-    recipe=read(auth(COMMAND_RECIPE_REF))
+-    require(commands==recipe['ordered_commands'],'exact sealed118 fourargv recipe')
+-    require(sorted((r['link_token'],r['source']['sha256']) for r in profile['inputs']['objects'] if not r['replace'])==sorted((r['link_token'],r['source']['sha256']) for r in recipe['retained_inputs']),'exact inherited8object provider hashes')
+-    outputs=['rust/mckernel_rust.o','CMakeFiles/mckernel.img.dir/syscall.c.o','CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o','mckernel.img']
+-    sources=['/src/kernel/rust/lib.rs','/src/kernel/syscall.c','/src/arch/x86_64/kernel/syscall.c']
+-    require(len(commands)==4,'exact four selected successor commands')
+-    require(set(s.removeprefix('/src/') for s in sources)<={r['relative'] for r in profile['inputs']['postimages']}|{r['relative'] for r in source_directory_postimages(profile)},'all three changed compiler source paths must be bound readonly postimages')
+-    require(sum(not r['replace'] for r in profile['inputs']['objects'])==8 and sum(r['replace'] for r in profile['inputs']['objects'])==3,'eight accepted retained and three new objects')
+-    require({r['link_token'] for r in profile['inputs']['objects'] if r['replace']}==set(outputs[:3]),'exact three selected replacement object paths')
++    commands=profile['exact_commands'];recipe=read(auth(COMMAND_RECIPE_REF))
++    require(commands==recipe['ordered_commands'],'exact sealed conversion-first three argv recipe')
++    retained=[r for r in profile['inputs']['objects'] if not r['replace']]
++    require(sorted((r['link_token'],r['source']['sha256']) for r in retained)==sorted((r['link_token'],r['source']['sha256']) for r in recipe['retained_inputs']),'exact inherited nine object hashes including current119 arch')
++    outputs=['rust/mckernel_rust.o','CMakeFiles/mckernel.img.dir/syscall.c.o','mckernel.img']
++    sources=['/src/kernel/rust/lib.rs','/src/kernel/syscall.c']
++    require(len(commands)==3,'exact three selected successor commands')
++    require(set(s.removeprefix('/src/') for s in sources)<={r['relative'] for r in profile['inputs']['postimages']}|{r['relative'] for r in source_directory_postimages(profile)},'both changed compiler source paths must be bound readonly postimages')
++    require(len(retained)==9 and sum(r['replace'] for r in profile['inputs']['objects'])==2,'nine accepted retained and two new objects')
++    require({r['link_token'] for r in profile['inputs']['objects'] if r['replace']}==set(outputs[:2]),'exact two selected replacement object paths')
+     for i,(command,output) in enumerate(zip(commands,outputs)):
+-        argv=command['argv']
+-        require(isinstance(argv,list) and argv and all(isinstance(a,str) and a for a in argv),'Root must supply exact nonempty literal argv')
++        argv=command['argv'];require(isinstance(argv,list) and argv and all(isinstance(a,str) and a for a in argv),'exact nonempty literal argv')
+         require(command['cwd']=='/work/output/build/kernel' and command['new_output']=='/work/output/build/kernel/'+output,'exact fixed output/cwd map')
+         if i==0:require(argv[:3]==['/usr/bin/cmake','-E','env'] and '--emit=obj='+command['new_output'] in argv and argv[-1]==sources[i],'whole Rust object command binding')
+-        elif i<3:require(argv[0]=='/usr/bin/cc' and argv[-2:]==['-c',sources[i]] and argv[argv.index('-o')+1]==output,'exact selected C object/source command binding')
+-        else:require(argv==['/usr/bin/ld', '-e', 'arch_start', '-T', '/work/output/build/kernel/config/smp-x86.lds', '--build-id', '-Map=/work/output/build/kernel/mckernel.img.map', '--dependency-file=CMakeFiles/mckernel.img.dir/link.d', 'CMakeFiles/mckernel.img.dir/mem.c.o', 'CMakeFiles/mckernel.img.dir/syscall.c.o', 'CMakeFiles/mckernel.img.dir/process.c.o', 'CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o', 'CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/context.S.o', 'CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o', 'CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/interrupt.S.o', 'CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o', 'CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o', 'CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/trampoline.S.o', 'rust/mckernel_rust.o', '-o', 'mckernel.img'],'unchanged exact eleven-input raw linker argv')
++        elif i==1:require(argv[0]=='/usr/bin/cc' and argv[-2:]==['-c',sources[i]] and argv[argv.index('-o')+1]==output,'exact selected C object/source command binding')
++        else:require(argv==recipe['ordered_commands'][2]['argv'],'unchanged exact eleven-input raw link')
+     return commands
+-
+ 
+ def current_operation_guard():
+     import importlib.util
+@@ -227,7 +225,7 @@
+     rows=mounts(profile,export,output)
+     require(len({r['target'] for r in rows})==len(rows),'no duplicate RO mount targets')
+     for row in rows:require(os.access(row['host'],os.R_OK),'actual UID1000 input bind read access')
+-    name='current119-build-build-only-'+grant['nonce'];require(name.replace('-','').isalnum() and len(name)<=120,'bounded container identity')
++    name='conversion-first-build-only-'+grant['nonce'];require(name.replace('-','').isalnum() and len(name)<=120,'bounded container identity')
+     argv=docker_argv(profile,name,rows,output)
+     (output/'claim.json').write_text(json.dumps(dict(grant=reference(grant_path),argv=argv,pid=os.getpid(),scope=profile['scope'],native_authority=False),indent=2)+'\n')
+     # No --rm or automatic kill/cleanup: exact positive local terminal proof is retained.

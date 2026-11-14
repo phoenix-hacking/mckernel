@@ -1,0 +1,324 @@
+{
+  "actual_case_rows": 5,
+  "actual_one_JSON_line": true,
+  "actual_stdout": {
+    "bytes": 3595,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-p04tests-max-1/canonical-wrapper-reuse-1/execution-1/actual-anaconda-lazy-canonical-pidfd-five-controlled-cases.stdout",
+    "sha256": "45cdb0e2959c826c6da47ba38e8afb276e3032cc1bf1699c40762c8c7dcfa1dd"
+  },
+  "all_rows_and_runtime_and_scope_equal": true,
+  "canonical_watcher": {
+    "path": "/home/holden/mckernel/scripts/watch_os_goal.py",
+    "sha256": "9a105b4f37f61bed7ffbffd848ed0f02d2e792e4797a38609761e98480e7a1bb"
+  },
+  "expected": {
+    "bytes": 6323,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-p04tests-max-1/canonical-wrapper-reuse-1/EXPECTED.json",
+    "sha256": "b59c0b515375b91e46031549ca06a7ea4cbb5a30669190c95e139e517220bbb3"
+  },
+  "no_actual_pidfd_or_process_signal_or_controller_action": true,
+  "rows": [
+    {
+      "actual": {
+        "builtin_open_calls": [],
+        "builtin_send_calls": [],
+        "close_calls": [
+          777
+        ],
+        "errno": null,
+        "exception": null,
+        "identity_reads": [
+          20000001
+        ],
+        "identity_replies_remaining": 0,
+        "loader_calls": [
+          {
+            "name": null,
+            "use_errno": true
+          },
+          {
+            "name": null,
+            "use_errno": true
+          }
+        ],
+        "message": null,
+        "name": "missing_builtins_real_wrapper_syscall_ABI",
+        "numeric_signal_calls": [],
+        "returned_none": true,
+        "syscall_replies_remaining": 0,
+        "syscalls": [
+          {
+            "argument_types": [
+              "c_int",
+              "c_uint"
+            ],
+            "arguments": [
+              20000001,
+              0
+            ],
+            "errno_before": 0,
+            "number": 434,
+            "number_type": "c_long",
+            "restype": "c_long"
+          },
+          {
+            "argument_types": [
+              "c_int",
+              "c_int",
+              "c_void_p",
+              "c_uint"
+            ],
+            "arguments": [
+              777,
+              15,
+              null,
+              0
+            ],
+            "errno_before": 0,
+            "number": 424,
+            "number_type": "c_long",
+            "restype": "c_long"
+          }
+        ]
+      },
+      "actual_and_expected_row_canonical_sha256": "c2bf0437db333f120bf9ca491942976e742901df1d5a59ee232d50d7360801c8",
+      "all_fields_equal_to_external_oracle": true,
+      "case": "missing_builtins_real_wrapper_syscall_ABI"
+    },
+    {
+      "actual": {
+        "builtin_open_calls": [],
+        "builtin_send_calls": [],
+        "close_calls": [
+          777
+        ],
+        "errno": null,
+        "exception": "ValueError",
+        "identity_reads": [
+          20000001
+        ],
+        "identity_replies_remaining": 0,
+        "loader_calls": [
+          {
+            "name": null,
+            "use_errno": true
+          }
+        ],
+        "message": "Process birth differs; no signal sent",
+        "name": "birth_mismatch_no_send",
+        "numeric_signal_calls": [],
+        "returned_none": false,
+        "syscall_replies_remaining": 0,
+        "syscalls": [
+          {
+            "argument_types": [
+              "c_int",
+              "c_uint"
+            ],
+            "arguments": [
+              20000001,
+              0
+            ],
+            "errno_before": 0,
+            "number": 434,
+            "number_type": "c_long",
+            "restype": "c_long"
+          }
+        ]
+      },
+      "actual_and_expected_row_canonical_sha256": "5a75bbdca7a71b4c557fa88acaddd3e7c02fd1af8ecafc1d99748034c9b2a415",
+      "all_fields_equal_to_external_oracle": true,
+      "case": "birth_mismatch_no_send"
+    },
+    {
+      "actual": {
+        "builtin_open_calls": [],
+        "builtin_send_calls": [],
+        "close_calls": [],
+        "errno": 38,
+        "exception": "OSError",
+        "identity_reads": [],
+        "identity_replies_remaining": 0,
+        "loader_calls": [
+          {
+            "name": null,
+            "use_errno": true
+          }
+        ],
+        "message": null,
+        "name": "open_errno_no_handle_or_send",
+        "numeric_signal_calls": [],
+        "returned_none": false,
+        "syscall_replies_remaining": 0,
+        "syscalls": [
+          {
+            "argument_types": [
+              "c_int",
+              "c_uint"
+            ],
+            "arguments": [
+              20000001,
+              0
+            ],
+            "errno_before": 0,
+            "number": 434,
+            "number_type": "c_long",
+            "restype": "c_long"
+          }
+        ]
+      },
+      "actual_and_expected_row_canonical_sha256": "f9010db9d85915834725d0451e336ee720876d8306bbf77a0c44187d5eb86448",
+      "all_fields_equal_to_external_oracle": true,
+      "case": "open_errno_no_handle_or_send"
+    },
+    {
+      "actual": {
+        "builtin_open_calls": [],
+        "builtin_send_calls": [],
+        "close_calls": [
+          777
+        ],
+        "errno": 3,
+        "exception": "ProcessLookupError",
+        "identity_reads": [
+          20000001
+        ],
+        "identity_replies_remaining": 0,
+        "loader_calls": [
+          {
+            "name": null,
+            "use_errno": true
+          },
+          {
+            "name": null,
+            "use_errno": true
+          }
+        ],
+        "message": null,
+        "name": "send_errno_still_closes_once",
+        "numeric_signal_calls": [],
+        "returned_none": false,
+        "syscall_replies_remaining": 0,
+        "syscalls": [
+          {
+            "argument_types": [
+              "c_int",
+              "c_uint"
+            ],
+            "arguments": [
+              20000001,
+              0
+            ],
+            "errno_before": 0,
+            "number": 434,
+            "number_type": "c_long",
+            "restype": "c_long"
+          },
+          {
+            "argument_types": [
+              "c_int",
+              "c_int",
+              "c_void_p",
+              "c_uint"
+            ],
+            "arguments": [
+              777,
+              15,
+              null,
+              0
+            ],
+            "errno_before": 0,
+            "number": 424,
+            "number_type": "c_long",
+            "restype": "c_long"
+          }
+        ]
+      },
+      "actual_and_expected_row_canonical_sha256": "77af3953a878c3f5f767bf0d93a8d01d9ecf1d4c6a968c76bc0e6c8a9d53ff32",
+      "all_fields_equal_to_external_oracle": true,
+      "case": "send_errno_still_closes_once"
+    },
+    {
+      "actual": {
+        "builtin_open_calls": [],
+        "builtin_send_calls": [],
+        "close_calls": [
+          777
+        ],
+        "errno": 5,
+        "exception": "OSError",
+        "identity_reads": [
+          20000001
+        ],
+        "identity_replies_remaining": 0,
+        "loader_calls": [
+          {
+            "name": null,
+            "use_errno": true
+          },
+          {
+            "name": null,
+            "use_errno": true
+          }
+        ],
+        "message": null,
+        "name": "close_failure_observable_no_retry",
+        "numeric_signal_calls": [],
+        "returned_none": false,
+        "syscall_replies_remaining": 0,
+        "syscalls": [
+          {
+            "argument_types": [
+              "c_int",
+              "c_uint"
+            ],
+            "arguments": [
+              20000001,
+              0
+            ],
+            "errno_before": 0,
+            "number": 434,
+            "number_type": "c_long",
+            "restype": "c_long"
+          },
+          {
+            "argument_types": [
+              "c_int",
+              "c_int",
+              "c_void_p",
+              "c_uint"
+            ],
+            "arguments": [
+              777,
+              15,
+              null,
+              0
+            ],
+            "errno_before": 0,
+            "number": 424,
+            "number_type": "c_long",
+            "restype": "c_long"
+          }
+        ]
+      },
+      "actual_and_expected_row_canonical_sha256": "59739853bcc6d92197619f7bfd876502521150b0bf12de4505e12beb294c4a43",
+      "all_fields_equal_to_external_oracle": true,
+      "case": "close_failure_observable_no_retry"
+    }
+  ],
+  "runtime": {
+    "OS_name": "posix",
+    "executable_real": "/home/holden/anaconda3/bin/python3.9",
+    "machine": "x86_64",
+    "pidfd_open_builtin_available": false,
+    "pidfd_send_builtin_available": false,
+    "pointer_bytes": 8,
+    "sysname": "Linux",
+    "version": [
+      3,
+      9,
+      12
+    ]
+  },
+  "schema": "five-canonical-pidfd-actual-external-oracle-joins-v1"
+}

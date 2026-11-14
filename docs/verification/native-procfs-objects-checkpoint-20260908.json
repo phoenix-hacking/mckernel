@@ -1,0 +1,373 @@
+{
+  "artifact_bytes": 18351135,
+  "artifacts": [
+    {
+      "path": "docs/verification/evidence/native-procfs-objects-module-20260908-1.tar.gz",
+      "sha256": "ab5dffa89c17f60f8039468396756153180320a8f1d4de4feecfe41f4b5202a5",
+      "size": 3354191,
+      "source": "/work/native-procfs-objects-module-20260908-1"
+    },
+    {
+      "path": "docs/verification/evidence/native-procfs-objects-module-20260908-1-record.json.gz",
+      "sha256": "7e4927846bbaea130ce1b2b5be51ca48d150759399b872247c2b7a8b28f9b1e1",
+      "size": 3052,
+      "source": "/work/native-procfs-objects-module-20260908-1/record.json"
+    },
+    {
+      "path": "docs/verification/evidence/native-procfs-objects-guest-20260908-1.tar.gz",
+      "sha256": "a226e56902ab80cfb663646c1636ac5482b106f5da224b26411918c95c706900",
+      "size": 14851594,
+      "source": "/work/native-procfs-objects-guest-20260908-1"
+    },
+    {
+      "path": "docs/verification/evidence/native-procfs-objects-guest-20260908-1-record.json.gz",
+      "sha256": "f67c6e6c40e29e9efe6821313c309ae985f5843239bd2c4460b1faa17278c2d3",
+      "size": 3523,
+      "source": "/work/native-procfs-objects-guest-20260908-1/record.json"
+    },
+    {
+      "path": "docs/verification/evidence/native-procfs-objects-20260908-project-reference.tar.gz",
+      "sha256": "1b7bfce22a9f40bd956115e0838e15628eef32e010bda279f37afcf8c892c9dd",
+      "size": 129698,
+      "source": "/work/native-procfs-objects-retained-20260908-1/project-reference"
+    },
+    {
+      "path": "docs/verification/evidence/native-procfs-objects-20260908-build-native-procfs-objects.py.gz",
+      "sha256": "b4d63b5992307763af5328570c92911301c279c529f0de6c2151161139c2d407",
+      "size": 2289,
+      "source": "/work/build-native-procfs-objects.py"
+    },
+    {
+      "path": "docs/verification/evidence/native-procfs-objects-20260908-run-native-procfs-objects-guest.py.gz",
+      "sha256": "ee2c0d6fcd0d037be86962ab4f1c97643dbf2303b2bd2e6c8b96057a6a489546",
+      "size": 3360,
+      "source": "/work/run-native-procfs-objects-guest.py"
+    },
+    {
+      "path": "docs/verification/evidence/native-procfs-objects-20260908-retain-helper.py.gz",
+      "sha256": "8bf4a1aac6919511f72adbba67404c341ecc5bb14caa0dedc4479bdd98cc2c53",
+      "size": 3428,
+      "source": "/work/native-procfs-objects-retained-20260908-1/helper.py"
+    }
+  ],
+  "captures": [
+    {
+      "archive_exclusions": {},
+      "complete_capture_retained": true,
+      "path": "/work/native-procfs-objects-module-20260908-1",
+      "status": "PASS"
+    },
+    {
+      "archive_exclusions": {},
+      "complete_capture_retained": true,
+      "path": "/work/native-procfs-objects-guest-20260908-1",
+      "status": "PASS"
+    }
+  ],
+  "compiler_bindings": [
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-procfs-objects-module-20260908-1/source/host-kernel/native-rust/procfs_objects.rs",
+      "path": "host-kernel/native-rust/procfs_objects.rs",
+      "sha256": "7cd709b04b82e9f3f4f02bde2c435aacb19a8f67634257ce83052f49177d84d5",
+      "size": 15622
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-procfs-objects-module-20260908-1/source/scripts/tests/fixtures/mckernel_procfs_objects_verify.rs",
+      "path": "scripts/tests/fixtures/mckernel_procfs_objects_verify.rs",
+      "sha256": "4e9355d2975c9aa86e330ec3f065de4351e91231665e8ea558bd3c9dadec0134",
+      "size": 15349
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-procfs-objects-module-20260908-1/source/scripts/tests/fixtures/native-procfs-objects.c",
+      "path": "scripts/tests/fixtures/native-procfs-objects.c",
+      "sha256": "5be9544f7e1fb19aa420202a1a423f976b438d5f24bb4970deb719a1c49f2a04",
+      "size": 6404
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-procfs-objects-module-20260908-1/source/scripts/tests/fixtures/native_procfs_objects_layout.c",
+      "path": "scripts/tests/fixtures/native_procfs_objects_layout.c",
+      "sha256": "245026c1f7a235d166a1cbfb26a9df7c4d5f5bf39c7901c8ec17020d8c0fd7e7",
+      "size": 1133
+    }
+  ],
+  "complete_captures": 2,
+  "declared_stage_integrated": false,
+  "finished_utc": "2026-09-08T19:23:19.397334+00:00",
+  "guest_binary_bindings": [
+    {
+      "compiled": {
+        "path": "/work/native-procfs-objects-module-20260908-1/mckernel_procfs_objects_verify.ko",
+        "sha256": "50e91bbcff1b77d95bf3589f300e4a5e4b6c7cf0e76fee66f9c686b197fd6310",
+        "size": 1485112
+      },
+      "guest": {
+        "path": "/work/native-procfs-objects-guest-20260908-1/root/modules/mckernel_procfs_objects_verify.ko",
+        "sha256": "50e91bbcff1b77d95bf3589f300e4a5e4b6c7cf0e76fee66f9c686b197fd6310",
+        "size": 1485112
+      }
+    },
+    {
+      "compiled": {
+        "path": "/work/native-procfs-objects-module-20260908-1/native-procfs-objects",
+        "sha256": "9ca381b4c5f9219f73ec471811a225a5d28c6eba0204a30e4b810932e3c17335",
+        "size": 22312
+      },
+      "guest": {
+        "path": "/work/native-procfs-objects-guest-20260908-1/root/bin/native-procfs-objects",
+        "sha256": "9ca381b4c5f9219f73ec471811a225a5d28c6eba0204a30e4b810932e3c17335",
+        "size": 22312
+      }
+    }
+  ],
+  "guest_results": {
+    "actual_guest_syscall_service": false,
+    "concurrent_reads": 1024,
+    "concurrent_writes": 1024,
+    "container_memory_mib": 12288,
+    "copy_faults": 4,
+    "cpus": 4,
+    "cpuset": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "drain_milliseconds": [
+      1150,
+      1118
+    ],
+    "failed_opens": 2,
+    "joined_namespace_workers": 64,
+    "memory_mib": 8192,
+    "module_cycles": 2,
+    "namespace_races": 32,
+    "partial_read_bytes": 16384,
+    "qemu_exit_code": 0,
+    "removed_read_errno": "EIO",
+    "removed_seek_errno": "EINVAL",
+    "session_counts": [
+      [
+        1039,
+        1039,
+        1039
+      ],
+      [
+        1039,
+        1039,
+        1039
+      ]
+    ],
+    "terminated": "QMP quit after two completed module unloads and guest PASS"
+  },
+  "independent_acceptance": false,
+  "linux_c_rust_layout": [
+    96,
+    8,
+    0,
+    8,
+    16,
+    24,
+    32,
+    40,
+    48,
+    56,
+    64,
+    72,
+    80,
+    88,
+    624,
+    8,
+    616,
+    184,
+    8,
+    32,
+    112,
+    12,
+    4,
+    0,
+    4,
+    0,
+    1
+  ],
+  "mckernel_application_executed": false,
+  "native_vfs_adapter_verified": true,
+  "original_failures_in_this_batch": 0,
+  "pinned_linux_sources": [
+    {
+      "original": {
+        "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/fs/proc/generic.c",
+        "sha256": "8cf89dd53193ebe3cdee4784e83ffe964868e59653fab6bed70bc41ecba645ed",
+        "size": 19830
+      },
+      "retained": {
+        "path": "/work/native-procfs-objects-module-20260908-1/linux-reference/fs/proc/generic.c",
+        "sha256": "8cf89dd53193ebe3cdee4784e83ffe964868e59653fab6bed70bc41ecba645ed",
+        "size": 19830
+      }
+    },
+    {
+      "original": {
+        "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/fs/proc/inode.c",
+        "sha256": "9416ffa7f23addfad620095f91fe032930c88f70e2d8d4d409cd5951104d85d3",
+        "size": 17067
+      },
+      "retained": {
+        "path": "/work/native-procfs-objects-module-20260908-1/linux-reference/fs/proc/inode.c",
+        "sha256": "9416ffa7f23addfad620095f91fe032930c88f70e2d8d4d409cd5951104d85d3",
+        "size": 17067
+      }
+    },
+    {
+      "original": {
+        "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/fs/proc/internal.h",
+        "sha256": "7ee62ecaadea0be7dc2054a415e228c3eb0018f1075723fd6120d535415bdc76",
+        "size": 11101
+      },
+      "retained": {
+        "path": "/work/native-procfs-objects-module-20260908-1/linux-reference/fs/proc/internal.h",
+        "sha256": "7ee62ecaadea0be7dc2054a415e228c3eb0018f1075723fd6120d535415bdc76",
+        "size": 11101
+      }
+    },
+    {
+      "original": {
+        "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/fs/read_write.c",
+        "sha256": "d005c39290413df888a727ed2762237426b8de0d1d4f15dd96ab277b66fa2d28",
+        "size": 44827
+      },
+      "retained": {
+        "path": "/work/native-procfs-objects-module-20260908-1/linux-reference/fs/read_write.c",
+        "sha256": "d005c39290413df888a727ed2762237426b8de0d1d4f15dd96ab277b66fa2d28",
+        "size": 44827
+      }
+    },
+    {
+      "original": {
+        "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/include/linux/proc_fs.h",
+        "sha256": "139ba8d33a3cfefa16e4b2c9491123d4027fb7f408e98cd426ffd2ff2f5c1ef6",
+        "size": 9353
+      },
+      "retained": {
+        "path": "/work/native-procfs-objects-module-20260908-1/linux-reference/include/linux/proc_fs.h",
+        "sha256": "139ba8d33a3cfefa16e4b2c9491123d4027fb7f408e98cd426ffd2ff2f5c1ef6",
+        "size": 9353
+      }
+    },
+    {
+      "original": {
+        "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/rust/kernel/sync/lock/mutex.rs",
+        "sha256": "4585ef02032a4ac60f3440cb0cd5f0307ef04236cad6247bc3ad4bd16bb74b61",
+        "size": 3669
+      },
+      "retained": {
+        "path": "/work/native-procfs-objects-module-20260908-1/linux-reference/rust/kernel/sync/lock/mutex.rs",
+        "sha256": "4585ef02032a4ac60f3440cb0cd5f0307ef04236cad6247bc3ad4bd16bb74b61",
+        "size": 3669
+      }
+    },
+    {
+      "original": {
+        "path": "/work/native-source/linux-6.12.0-211.44.1.el10_2/rust/kernel/uaccess.rs",
+        "sha256": "e0127f615c717909d31042f8f7decef96bbbb72f6987579954cb9036774bdf07",
+        "size": 14314
+      },
+      "retained": {
+        "path": "/work/native-procfs-objects-module-20260908-1/linux-reference/rust/kernel/uaccess.rs",
+        "sha256": "e0127f615c717909d31042f8f7decef96bbbb72f6987579954cb9036774bdf07",
+        "size": 14314
+      }
+    }
+  ],
+  "procfs_guest_service_integrated": false,
+  "production_gate_credit": false,
+  "production_smp_selected": false,
+  "references": [
+    {
+      "path": "docs/verification/native-application-mailbox-checkpoint-20260908.json",
+      "sha256": "a8c4cb74b89a9792651e89905feefe5ba10ff631418f2bb2823089057681c644",
+      "size": 66116
+    }
+  ],
+  "retained_existing_procfs_sources": [
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-procfs-objects-retained-20260908-1/project-reference/executer/kernel/mcctrl/rust/mcctrl_helpers.rs",
+      "path": "executer/kernel/mcctrl/rust/mcctrl_helpers.rs",
+      "sha256": "abc99c0e160d3a8aa1aa182f37f297cf3827f86faaac559117ae4df3197e9d14",
+      "size": 403227
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-procfs-objects-retained-20260908-1/project-reference/executer/kernel/mcctrl/procfs.c",
+      "path": "executer/kernel/mcctrl/procfs.c",
+      "sha256": "3c940e3624aef142cea14906b964cdd55adbe69e8a6948c4b5e2960bf1de0c0b",
+      "size": 58155
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-procfs-objects-retained-20260908-1/project-reference/kernel/rust/object_helpers.rs",
+      "path": "kernel/rust/object_helpers.rs",
+      "sha256": "303982620e8abcfd240b5a3661531af552d2f7065283230d40a234c5dd299e64",
+      "size": 235614
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-procfs-objects-retained-20260908-1/project-reference/kernel/rust/abi.rs",
+      "path": "kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "size": 76151
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-procfs-objects-retained-20260908-1/project-reference/kernel/procfs.c",
+      "path": "kernel/procfs.c",
+      "sha256": "966a9c7508764771b248e28bc894fa0980278648b73d94443d7d5ec4c51a45ee",
+      "size": 21413
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/native-procfs-objects-retained-20260908-1/project-reference/kernel/include/syscall.h",
+      "path": "kernel/include/syscall.h",
+      "sha256": "758353cfee780c8ba95038947eebbbbfbd5d8cf571f9cb8ccc1558b723a6ece8",
+      "size": 20816
+    }
+  ],
+  "scope": "Actual native Linux procfs publication, per-open I/O and callback rundown. Separate verification module; no native guest procfs service, START or application execution.",
+  "source_parent": "e2ac85e18bcbea898d31f3899755a570a2372bf9",
+  "started_utc": "2026-09-08T19:23:15.180109+00:00",
+  "status": "PASS",
+  "unchanged_actual_guest_peer_bindings": [
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-sysfs-images-20260908-2/source/kernel/rust/object_helpers.rs",
+      "path": "kernel/rust/object_helpers.rs",
+      "sha256": "303982620e8abcfd240b5a3661531af552d2f7065283230d40a234c5dd299e64",
+      "size": 235614
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-sysfs-images-20260908-2/source/kernel/rust/abi.rs",
+      "path": "kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "size": 76151
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-sysfs-images-20260908-2/source/kernel/procfs.c",
+      "path": "kernel/procfs.c",
+      "sha256": "966a9c7508764771b248e28bc894fa0980278648b73d94443d7d5ec4c51a45ee",
+      "size": 21413
+    },
+    {
+      "binding": "identical compiler source",
+      "compiler_capture": "/work/mckernel-native-sysfs-images-20260908-2/source/kernel/include/syscall.h",
+      "path": "kernel/include/syscall.h",
+      "sha256": "758353cfee780c8ba95038947eebbbbfbd5d8cf571f9cb8ccc1558b723a6ece8",
+      "size": 20816
+    }
+  ]
+}

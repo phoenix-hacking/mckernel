@@ -1,0 +1,133 @@
+{
+  "F08_or_milestone_acceptance": false,
+  "HTTP_status": 200,
+  "RPM_signature_verified": false,
+  "actual_complete_Root_tool_result": "EXTERNAL_REQUIRED",
+  "all_original_direct_waits_and_streams_positive": true,
+  "clients": [
+    {
+      "argv": [
+        "/usr/bin/curl",
+        "--disable",
+        "--proto",
+        "=https",
+        "--proto-redir",
+        "=https",
+        "--max-redirs",
+        "0",
+        "--retry",
+        "0",
+        "--fail",
+        "--show-error",
+        "--silent",
+        "--tlsv1.2",
+        "--connect-timeout",
+        "15",
+        "--max-time",
+        "56",
+        "--max-filesize",
+        "209917",
+        "--dump-header",
+        "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/primarymetadata-fetch-1/execution-1/primary.headers",
+        "--output",
+        "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/primarymetadata-fetch-1/execution-1/a2ef3630068d7157f89975a22ebe23bb79f3055455a03490d6ec5da60c6f322b-primary.xml.gz",
+        "--write-out",
+        "%{http_code}\n%{url_effective}\n%{num_redirects}\n",
+        "https://download.rockylinux.org/pub/rocky/10.2/BaseOS/source/tree/repodata/a2ef3630068d7157f89975a22ebe23bb79f3055455a03490d6ec5da60c6f322b-primary.xml.gz"
+      ],
+      "attempt_id": 0,
+      "birth": "58855880",
+      "creation_attempted": true,
+      "direct_wait_joined": true,
+      "exit": 0,
+      "label": "primary-fetch",
+      "lifecycle_UNKNOWN": false,
+      "pid": 1960602,
+      "popen_returned": true,
+      "primary_error": null,
+      "receipt_persisted": true,
+      "resource_charge_retained": false,
+      "secondary_errors": [],
+      "streams_closed": true
+    }
+  ],
+  "compressed_primary": {
+    "bytes": 209917,
+    "device": 66306,
+    "inode": 2253551,
+    "mode": 384,
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/primarymetadata-fetch-1/execution-1/a2ef3630068d7157f89975a22ebe23bb79f3055455a03490d6ec5da60c6f322b-primary.xml.gz",
+    "sha256": "a2ef3630068d7157f89975a22ebe23bb79f3055455a03490d6ec5da60c6f322b"
+  },
+  "descriptor_replayed": false,
+  "effective_URL": "https://download.rockylinux.org/pub/rocky/10.2/BaseOS/source/tree/repodata/a2ef3630068d7157f89975a22ebe23bb79f3055455a03490d6ec5da60c6f322b-primary.xml.gz",
+  "finished_at": "2026-11-12T16:51:33.275765+00:00",
+  "headers": {
+    "bytes": 469,
+    "device": 66306,
+    "inode": 2253547,
+    "mode": 384,
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/primarymetadata-fetch-1/execution-1/primary.headers",
+    "sha256": "c39ad9a6c5dc4563ffc7335f3d5581f32e86cc796732cf321f1a7be20444413e"
+  },
+  "open_primary": {
+    "bytes": 1779000,
+    "device": 66306,
+    "inode": 2253550,
+    "mode": 384,
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/primarymetadata-fetch-1/execution-1/primary.xml",
+    "sha256": "00052d202fc566b92e397a2790c72bd7b8eea0a055d3c0df2f39ab505927374b"
+  },
+  "operation_nonce": "4959908a19854ae8781af6e00277df45059b25fd0d9038cfeda2e9423b5cc0b5",
+  "redirects": 0,
+  "repomd_signature_verified": false,
+  "request_sha256": "b1cf05817c3573a8c4a280c5b0c4e356e3f8debb3beb6851db103baebeaf0c4b",
+  "resource_retirement": "NONE_BY_CAPTURE",
+  "source_RPM_fetched": false,
+  "source_selection": {
+    "RPM_signature_verified": false,
+    "SRPM_SHA256_bound_from_actual_primary": true,
+    "all_actual_systemd_source_rows": [
+      {
+        "arch": "src",
+        "checksum": "71e6008384fb7b7bbdc3d423f5b9cfaae9a2fb88bca42739dd7e733d93ad361e",
+        "checksum_type": "sha256",
+        "epoch": "0",
+        "location": "Packages/s/systemd-257-23.el10_2.1.rocky.0.1.src.rpm",
+        "name": "systemd",
+        "package_bytes": 19134402,
+        "release": "23.el10_2.1.rocky.0.1",
+        "url": "https://download.rockylinux.org/pub/rocky/10.2/BaseOS/source/tree/Packages/s/systemd-257-23.el10_2.1.rocky.0.1.src.rpm",
+        "version": "257"
+      },
+      {
+        "arch": "src",
+        "checksum": "f8f3920fa4f42936865d827d114f06c2adba5bc3dce9d7589116054fafb1ad3c",
+        "checksum_type": "sha256",
+        "epoch": "0",
+        "location": "Packages/s/systemd-257-23.el10_2.2.rocky.0.1.src.rpm",
+        "name": "systemd",
+        "package_bytes": 19145688,
+        "release": "23.el10_2.2.rocky.0.1",
+        "version": "257"
+      }
+    ],
+    "archive_GET_issued": false,
+    "downstream_patch_source_extracted": false,
+    "target_source_package": {
+      "arch": "src",
+      "checksum": "71e6008384fb7b7bbdc3d423f5b9cfaae9a2fb88bca42739dd7e733d93ad361e",
+      "checksum_type": "sha256",
+      "epoch": "0",
+      "location": "Packages/s/systemd-257-23.el10_2.1.rocky.0.1.src.rpm",
+      "name": "systemd",
+      "package_bytes": 19134402,
+      "release": "23.el10_2.1.rocky.0.1",
+      "url": "https://download.rockylinux.org/pub/rocky/10.2/BaseOS/source/tree/Packages/s/systemd-257-23.el10_2.1.rocky.0.1.src.rpm",
+      "version": "257"
+    },
+    "total_primary_package_rows": 617
+  },
+  "started_at": "2026-11-12T16:51:32.724747+00:00",
+  "status": "PASS_EXACT_SOURCE_PRIMARY_GZIP_AND_SELECTED_SRPM_ROW_PENDING_FULL_ROOT"
+}

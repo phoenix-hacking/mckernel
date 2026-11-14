@@ -1,0 +1,16 @@
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-process-vm-rw-source-1/future-fixture-source-only/real-ABI-and-validation-caller.c:8:55: warning: 'struct iovec' declared inside parameter list will not be visible outside of this definition or declaration
+    8 | extern int do_process_vm_read_writev(int,const struct iovec *,unsigned long,
+      |                                                       ^~~~~
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-process-vm-rw-source-1/future-fixture-source-only/real-ABI-and-validation-caller.c:10:61: warning: 'struct iovec' declared inside parameter list will not be visible outside of this definition or declaration
+   10 | extern int original_selected_process_vm_rw(int,const struct iovec *,unsigned long,
+      |                                                             ^~~~~
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-process-vm-rw-source-1/future-fixture-source-only/real-ABI-and-validation-caller.c:13:58: warning: 'struct iovec' declared inside parameter list will not be visible outside of this definition or declaration
+   13 | typedef int (*real_process_vm_rw_entry)(int,const struct iovec *,unsigned long,
+      |                                                          ^~~~~
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-process-vm-rw-source-1/future-fixture-source-only/real-ABI-and-validation-caller.c:15:1: error: static assertion failed: "actual C public ABI"
+   15 | _Static_assert(__builtin_types_compatible_p(__typeof__(&do_process_vm_read_writev),real_process_vm_rw_entry),"actual C public ABI");
+      | ^~~~~~~~~~~~~~
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-process-vm-rw-source-1/future-fixture-source-only/real-ABI-and-validation-caller.c: In function 'f06_process_vm_rw_compare_ABI':
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-process-vm-rw-source-1/future-fixture-source-only/real-ABI-and-validation-caller.c:20:138: error: invalid application of 'sizeof' to incomplete type 'struct iovec'
+   20 |  const unsigned long facts[]={sizeof(struct thread),sizeof(struct process),sizeof(struct process_vm),sizeof(struct address_space),sizeof(struct iovec),sizeof(struct mcs_rwlock_node_irqsave),__alignof__(struct mcs_rwlock_node_irqsave),sizeof(struct mcs_rwlock_node),__alignof__(struct mcs_rwlock_node),
+      |                                                                                                                                          ^~~~~~

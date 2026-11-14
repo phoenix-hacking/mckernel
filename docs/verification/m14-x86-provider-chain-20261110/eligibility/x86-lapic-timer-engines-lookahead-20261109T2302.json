@@ -1,0 +1,88 @@
+{
+  "at": "2026-11-09T23:07:00.455346+00:00",
+  "decision": "GO_EXACT_EXISTING_F04_TWO_LAPIC_TIMER_RESULT_BODIES_SOURCE_ELIGIBILITY_ONLY",
+  "basis": "Actual ready lapic_timer_enable/disable dependencies in Root scheduler-lapic-provider-eligibility-1/RESULT.json; original accepted M14-F04 CPU source and exact selected C counterparts. Source eligibility only; Root owns independent packet review/admission.",
+  "source": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+  "cut": [
+    {
+      "symbol": "x86_lapic_timer_enable_body_result",
+      "source_lines": [
+        1858,
+        1871
+      ],
+      "ABI": "unsafe extern C fn(CUInt,Option<X86LapicWriteFn>)->CInt",
+      "semantics": "Exact original None returns-EINVAL, otherwise callback writes INITIAL(clocks/16),DIVIDE(3),TIMER(LOCAL_TIMER_VECTOR|PERIODIC),return0; no invented fallback/order/bounds."
+    },
+    {
+      "symbol": "x86_lapic_timer_disable_body_result",
+      "source_lines": [
+        1878,
+        1888
+      ],
+      "ABI": "unsafe extern C fn(Option<X86LapicWriteFn>)->CInt",
+      "semantics": "Exact original None returns-EINVAL; otherwise callback INITIAL(0),return0."
+    }
+  ],
+  "private_helpers": [],
+  "data_owners": [],
+  "actual_required_types": {
+    "CInt": "actual abi.rs5 i32",
+    "CUInt": "actual x86_cpu_helpers.rs9 u32",
+    "X86LapicWriteFn": "actual x86_cpu_helpers.rs69 unsafe extern C fn(CInt,CUInt)"
+  },
+  "actual_constants": {
+    "EINVAL": {
+      "value": 22,
+      "Rust_line": 11
+    },
+    "LAPIC_TIMER": {
+      "value": "0x320",
+      "Rust_line": 13,
+      "C_line": 301
+    },
+    "LAPIC_TIMER_INITIAL": {
+      "value": "0x380",
+      "Rust_line": 15,
+      "C_line": 303
+    },
+    "LAPIC_TIMER_DIVIDE": {
+      "value": "0x3e0",
+      "Rust_line": 16,
+      "C_line": 305
+    },
+    "LOCAL_TIMER_VECTOR": {
+      "value": "0xef",
+      "Rust_line": 25,
+      "C_line": 311
+    },
+    "APIC_DIVISOR": {
+      "value": 16,
+      "Rust_line": 35,
+      "C_line": 323
+    },
+    "APIC_LVT_TIMER_PERIODIC": {
+      "value": "1<<17",
+      "Rust_line": 36,
+      "C_line": 324
+    }
+  },
+  "C_correspondence": "arch/x86_64/kernel/cpu.c1273-1279 selects same Rust wrappers; reference1281-1296 has same original writes/order/constants. Same paired selection kernel/CMakeLists729-730 and lib.rs94 documented by current Root F04 wrapper contract.",
+  "expected_source_exports": [
+    "x86_lapic_timer_enable_body_result",
+    "x86_lapic_timer_disable_body_result"
+  ],
+  "expected_genuine_imports_if_separate_engines": [],
+  "efficiency": "If wrappers are not yet compiled, Root may independently review one exact combined4function cut (2existingwrappers+these2engines), optionally the alreadyseparate1bridge/real8Bslot contract. If wrappers alreadycompiled, reuse their result and compile onlymissing definitions; do not amend passed producer or replaygreencompiler. Preserve oneowner per global.",
+  "profile": "Actual no_std finite Rust candidate with supported existing ABI/flags/pins; no cfg invented. Actual fullC/default/sourcecustody/native admission remains unqualified.",
+  "not_included": [
+    "lapic_ack",
+    "otherpublicengines",
+    "hardwarewrite/MMIO/MSRbody",
+    "bootselection/publication/init",
+    "heldgeneric/exec/notification/equivalentrequests",
+    "wholemodule"
+  ],
+  "operations": "Read exact named bodies/types/constants and original C counterparts only; saved private JSON. No unit extraction/generation, compiler, metadata, ELF/predicate, link, functional/hardware/native execution or canonical/index/launcher edits.",
+  "preparation_note": "Initial read-only assertion looked for EINVAL in abi.rs and failed before artifact generation; actual existing source is x86_cpu_helpers.rs11 and is bound correctly here. No source, ABI or workload change.",
+  "original_counted_credit": 0
+}

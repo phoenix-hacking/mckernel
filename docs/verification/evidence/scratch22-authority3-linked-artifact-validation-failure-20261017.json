@@ -1,0 +1,25 @@
+{
+  "schema": "scratch22-authority3.linked-artifact-validation-failure.v1",
+  "candidate_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+  "original_attempt_status": "FAIL",
+  "compiler_and_linker": "Control kernel and all three native modules completed; final artifact validation failed afterward.",
+  "error": "ihk-native-lifecycle-check: built ihk.ko contains unreviewed export metadata: __kstrtab_ihk_os_create_unbooted_v6, __kstrtabns_ihk_os_create_unbooted_v6, __ksymtab_ihk_os_create_unbooted_v6",
+  "driver_log": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-evidence/build/driver.log",
+  "driver_log_sha256": "8074dbb0b323b9881c1a8dde306f3235e1cfc304d34b17b68cd9792fe6dd418a",
+  "terminal": "/home/holden/mckernel-work/scratch/native-exact-scratch-22-authority3-heavy-build.terminal.json",
+  "container_id": "153492d487bf1b66c47b43b03fc5552c9e912c1422265788d04722dcc7ebd4ab",
+  "session": "54012 joined exit1; owner and guard positively retired; stopped container retained pending reviewed cleanup",
+  "bounded_correction": "Add exactly the existing reviewed v6 export to the exact IHK artifact oracle; production sources and linked artifacts unchanged.",
+  "focused_tests": "Six PASS, including each missing v6 GPL metadata record, unknown v99, non-GPL rejection and existing artifact checks.",
+  "actual_retained_artifact_rechecks": {
+    "profile": "CPU6, one unprivileged Python process, 1GiB virtual-address limit, host modinfo/nm; no Docker/root/compiler",
+    "ihk.ko": "PASS artifact=validated",
+    "ihk-smp-x86_64.ko": "ARTIFACT-CONTRACT-VERIFIED",
+    "mcctrl.ko": "ARTIFACT-CONTRACT-VERIFIED"
+  },
+  "independent_correction_and_reuse_review": "docs/verification/evidence/native-ihk-v6-artifact-oracle-correction-review-20261017.json",
+  "next": "Reviewed terminal cleanup, then original remaining final checks in pinned tool environment with read-only retained build and fresh capture; matching McKernel image and signal.mask-restore. No Linux rebuild is needed for this checker-only correction.",
+  "full_native_build_pass": false,
+  "runtime_or_acceptance_credit": false,
+  "originals_preserved": true
+}

@@ -1,0 +1,864 @@
+{
+  "actual_closed_controller": {
+    "bytes": 1018,
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/ACTUAL-FAILED-NORMAL-OWNER-CLOSED.ROOT-RECORD.json",
+    "sha256": "486402aa5c53e8a4ce74b13d4e0691d16a9ea91f68e9d9b49a3ffdb878ccfdb7"
+  },
+  "authenticated_directory_listing": [
+    "001-ps.json",
+    "002-ps.json",
+    "003-image.json",
+    "004-create.json",
+    "004-create.stdout",
+    "005-ps.json",
+    "006-ps.json",
+    "007-ps.json",
+    "008-inspect.json",
+    "009-start.json",
+    "010-wait.json",
+    "011-inspect.json",
+    "012-ps.json",
+    "013-ps.json",
+    "014-ps.json",
+    "015-inspect.json",
+    "015-inspect.stdout",
+    "016-stop.json",
+    "017-kill.json",
+    "017-kill.stderr",
+    "018-wait.json",
+    "018-wait.stdout",
+    "019-inspect.json",
+    "019-inspect.stdout",
+    "020-rm.json",
+    "020-rm.stdout",
+    "021-ps.json",
+    "021-ps.stderr",
+    "021-ps.stdout",
+    "022-ps.json",
+    "022-ps.stderr",
+    "022-ps.stdout",
+    "023-ps.json",
+    "023-ps.stderr",
+    "023-ps.stdout",
+    "owner.json",
+    "result.json"
+  ],
+  "authenticated_export_binding": {
+    "bytes": 278248,
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/retirement-preparation-1/actual-readonly-closed-owner-export-1/stdout",
+    "sha256": "9ff823660edeaee51591d768079951aad43e70ed09335ae7f2f2694c8a13f39a"
+  },
+  "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+  "child_join_qualification": "All23 command.reaped true; exact nested returncodes preserved. 009-start nestedreturncode -9/topreturncode NULL/OwnerSignal retained, not normalexit. 017kill CommandError notrunning preserved; overallOwnerSignalFAIL retained.",
+  "clients": [
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "ps",
+        "-aq",
+        "--no-trunc",
+        "--filter",
+        "name=^/mckernel-native-diagnostic-599bd7a0a4cb4e29b52d6ed0cc9aa0db$"
+      ],
+      "name": "001-ps.json",
+      "pgid": 3925730,
+      "pid": 3925730,
+      "proc_starttime": 58851311,
+      "reaped": true,
+      "record_returncode": 0,
+      "returncode": 0,
+      "sid": 3925729,
+      "source": {
+        "bytes": 308,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/retirement-preparation-1/exported-closed-owner-proof-1/001-ps.json",
+        "sha256": "d925d69a7c3ecfe5849b1d17c120c1990807098753c39e9048b0412621e63578"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "ps",
+        "-aq",
+        "--no-trunc",
+        "--filter",
+        "label=mckernel.native-diagnostic.owner=599bd7a0a4cb4e29b52d6ed0cc9aa0db"
+      ],
+      "name": "002-ps.json",
+      "pgid": 3925736,
+      "pid": 3925736,
+      "proc_starttime": 58851312,
+      "reaped": true,
+      "record_returncode": 0,
+      "returncode": 0,
+      "sid": 3925729,
+      "source": {
+        "bytes": 312,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/retirement-preparation-1/exported-closed-owner-proof-1/002-ps.json",
+        "sha256": "5e80c20520772c0efa2f0089628aaa1065805fc47ca05639bb7b2edf35abbb82"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "image",
+        "inspect",
+        "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94"
+      ],
+      "name": "003-image.json",
+      "pgid": 3925742,
+      "pid": 3925742,
+      "proc_starttime": 58851313,
+      "reaped": true,
+      "record_returncode": 0,
+      "returncode": 0,
+      "sid": 3925729,
+      "source": {
+        "bytes": 295,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/retirement-preparation-1/exported-closed-owner-proof-1/003-image.json",
+        "sha256": "7df06280b3a08d17cc213d81b927ed827e7895dadab2cb1dea40b80857213e91"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "create",
+        "--pull=never",
+        "--attach=stdout",
+        "--attach=stderr",
+        "--init",
+        "--name",
+        "mckernel-native-diagnostic-599bd7a0a4cb4e29b52d6ed0cc9aa0db",
+        "--label",
+        "mckernel.native-diagnostic.owner=599bd7a0a4cb4e29b52d6ed0cc9aa0db",
+        "--cpus=4",
+        "--cpuset-cpus=2-5",
+        "--cgroup-parent=/mckernel-dev",
+        "--memory=12g",
+        "--memory-swap=12g",
+        "--pids-limit=512",
+        "--cap-drop=ALL",
+        "--security-opt=no-new-privileges",
+        "--read-only",
+        "--network=none",
+        "--user=1000:1000",
+        "--ulimit",
+        "core=0",
+        "--ulimit",
+        "nofile=4096:4096",
+        "--ulimit",
+        "fsize=402653184:402653184",
+        "--log-driver=none",
+        "--tmpfs",
+        "/tmp:rw,nodev,nosuid,size=256m",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel,dst=/home/holden/mckernel,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/scratch,dst=/home/holden/mckernel-work/scratch,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/repaired-affinity-n3-variant-20261019-1,dst=/home/holden/mckernel-work/host-preparation/repaired-affinity-n3-variant-20261019-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1,dst=/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/image-request.json,dst=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/image-request.json,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/thin-inputs.json,dst=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/thin-inputs.json,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/materialization-receipt.json,dst=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/materialization-receipt.json,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/postbuild-preparation-1,dst=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/postbuild-preparation-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1,dst=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/heavy-proposal-1/source-sha256.json,dst=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/heavy-proposal-1/source-sha256.json,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1,dst=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/postbuild-execution-preparation-1/copy-pin-correction-1/facts-inline-correction-1/actual-positive-fixture-facts.json,dst=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/postbuild-execution-preparation-1/copy-pin-correction-1/facts-inline-correction-1/actual-positive-fixture-facts.json,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1,dst=/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-independent-review-20261019-1,dst=/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-independent-review-20261019-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-independent-review-20261019-1,dst=/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-independent-review-20261019-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1,dst=/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-independent-review-20261019-1,dst=/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-independent-review-20261019-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1,dst=/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-independent-review-20261020-1,dst=/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-independent-review-20261020-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1,dst=/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/launch-expansion-source-review-20261020-1,dst=/home/holden/mckernel-work/host-preparation/launch-expansion-source-review-20261020-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1,dst=/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1,dst=/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1,dst=/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-independent-review-20261020-1/ALLOCATOR-CORRECTION1-ACTUAL-COMPOSITE64-MODULE-SOURCE-FFI-LINK-ACCEPTANCE.json,dst=/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-independent-review-20261020-1/ALLOCATOR-CORRECTION1-ACTUAL-COMPOSITE64-MODULE-SOURCE-FFI-LINK-ACCEPTANCE.json,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-independent-review-20261020-1/ALLOCATOR-CORRECTION1-ACTUAL-PHYSICAL-RETIREMENT-REVIEW.json,dst=/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-independent-review-20261020-1/ALLOCATOR-CORRECTION1-ACTUAL-PHYSICAL-RETIREMENT-REVIEW.json,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/current-v6-composite-sdk-preparation-20261020-1/compiler-allocator-correction-1/request.json,dst=/home/holden/mckernel-work/host-preparation/current-v6-composite-sdk-preparation-20261020-1/compiler-allocator-correction-1/request.json,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1,dst=/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-20352dabb9c94403a03c224ec2826ff2/modules,dst=/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-20352dabb9c94403a03c224ec2826ff2/modules,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/mckernel.img,dst=/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/mckernel.img,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/p-m06-01-pinned-launcher-process-inputs-20261022-1/pinned-launcher-attempt-1/owner-work/evidence/artifacts/mcexec,dst=/home/holden/mckernel-work/host-preparation/p-m06-01-pinned-launcher-process-inputs-20261022-1/pinned-launcher-attempt-1/owner-work/evidence/artifacts/mcexec,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/native-exec-reset-self-exec-case-preparation-20261021-1/ordinary-reference-1/result/app,dst=/home/holden/mckernel-work/host-preparation/native-exec-reset-self-exec-case-preparation-20261021-1/ordinary-reference-1/result/app,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-child-exec-wait-native-preparation-20261020-1/process-exec-wait-collector,dst=/home/holden/mckernel-work/host-preparation/phase5-child-exec-wait-native-preparation-20261020-1/process-exec-wait-collector,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/source,dst=/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/source,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/capsule-successor-preparation-1/actual-stage-1,dst=/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/capsule-successor-preparation-1/actual-stage-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/p12-long-mixed-apps-20261023-1,dst=/home/holden/mckernel-work/host-preparation/p12-long-mixed-apps-20261023-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/INDEPENDENT-ACTUAL-MATCHED-IMAGE-ARTIFACT-REVIEW-1.json,dst=/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/INDEPENDENT-ACTUAL-MATCHED-IMAGE-ARTIFACT-REVIEW-1.json,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/driver-hash-correction-1/INDEPENDENT-ACTUAL-LAUNCHER-PRODUCTION-ARTIFACT-ACCEPTANCE-1.json,dst=/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/driver-hash-correction-1/INDEPENDENT-ACTUAL-LAUNCHER-PRODUCTION-ARTIFACT-ACCEPTANCE-1.json,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-owner-9c96ba665d8d4ef19f81420e9fe33814/owner-receipt.json,dst=/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-owner-9c96ba665d8d4ef19f81420e9fe33814/owner-receipt.json,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/evidence/receipt.json,dst=/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/evidence/receipt.json,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/driver-hash-correction-1/pinned-launcher-attempt-1/owner-work/evidence/receipt.json,dst=/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/driver-hash-correction-1/pinned-launcher-attempt-1/owner-work/evidence/receipt.json,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1,dst=/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-next-native-preparation-1/capsule-next-1/actual-stage-1,dst=/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-next-native-preparation-1/capsule-next-1/actual-stage-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-33f4428ac1c74917bcd6715cdbaee963/modules,dst=/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-33f4428ac1c74917bcd6715cdbaee963/modules,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-33f4428ac1c74917bcd6715cdbaee963/evidence,dst=/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-33f4428ac1c74917bcd6715cdbaee963/evidence,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-owner-33f4428ac1c74917bcd6715cdbaee963,dst=/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-owner-33f4428ac1c74917bcd6715cdbaee963,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6,dst=/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-next-native-preparation-1/authority-successor-1/actual-SDK6-binding-1,dst=/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-next-native-preparation-1/authority-successor-1/actual-SDK6-binding-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/capsule-next-1/actual-stage-1,dst=/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/capsule-next-1/actual-stage-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-correction-1/bounded-correction-1,dst=/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-correction-1/bounded-correction-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/production-source,dst=/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/production-source,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/ACTUAL-SETTLEMENT-PRODUCER-CAPSULE-AND-STRICT-LOADER-HANDOFF.json,dst=/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/ACTUAL-SETTLEMENT-PRODUCER-CAPSULE-AND-STRICT-LOADER-HANDOFF.json,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/ACTUAL-PRODUCTION-BUILD-AND-CONSUMER-RESULT.json,dst=/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/ACTUAL-PRODUCTION-BUILD-AND-CONSUMER-RESULT.json,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/ACTUAL-COMPILED-ELF.DURABLE.json,dst=/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/ACTUAL-COMPILED-ELF.DURABLE.json,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/capsule-next-1/ACTUAL-CAPSULE-STAGE-WHOLE-JOIN.json,dst=/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/capsule-next-1/ACTUAL-CAPSULE-STAGE-WHOLE-JOIN.json,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/EXACT-PRODUCTION-BUILD.READY.json,dst=/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/EXACT-PRODUCTION-BUILD.READY.json,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/capsule-next-1/CAPSULE-BINDING.READY.json,dst=/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/capsule-next-1/CAPSULE-BINDING.READY.json,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8,dst=/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/actual-stage-1,dst=/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/actual-stage-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-owner-30717e2c0ee840ffa441d577bed3a427,dst=/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-owner-30717e2c0ee840ffa441d577bed3a427,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-30717e2c0ee840ffa441d577bed3a427/modules,dst=/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-30717e2c0ee840ffa441d577bed3a427/modules,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-30717e2c0ee840ffa441d577bed3a427/evidence,dst=/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-30717e2c0ee840ffa441d577bed3a427/evidence,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel/docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/expert-controller-binding-repair-1/failed91c-diagnosis-1,dst=/home/holden/mckernel/docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/expert-controller-binding-repair-1/failed91c-diagnosis-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1,dst=/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/sdk7-first-caller-correction-1,dst=/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/sdk7-first-caller-correction-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel/docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/sdk7-first-caller-correction-1,dst=/home/holden/mckernel/docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/sdk7-first-caller-correction-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2,dst=/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1,dst=/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/driver-hash-correction-1,dst=/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/driver-hash-correction-1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/source/abi,dst=/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/source/abi,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/source,dst=/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/source,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/sdk7-first-caller-correction-1/source,dst=/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/sdk7-first-caller-correction-1/source,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/l12s8a1/p,dst=/home/holden/mckernel-work/l12s8a1/p",
+        "--env",
+        "HOME=/tmp",
+        "--env",
+        "TMPDIR=/tmp",
+        "--env",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "--workdir=/home/holden/mckernel-work/l12s8a1/p",
+        "--entrypoint=/usr/bin/python3",
+        "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/source/native_diagnostic_container_owner.py",
+        "--inside",
+        "--owner-sha256",
+        "b23c19f45edf56c0b693e6a809727f85d6443d5c6569e02210ba2be97af6e6f3",
+        "--manifest",
+        "/home/holden/mckernel-work/scratch/p12s8l1/m.json",
+        "--manifest-sha256",
+        "6cfab63af3a9a528865134124dec5fde33ef209a0133153f91e55561341f18cf",
+        "--attempt-parent",
+        "/home/holden/mckernel-work/l12s8a1/p",
+        "--nonce",
+        "599bd7a0a4cb4e29b52d6ed0cc9aa0db",
+        "--long-profile-release",
+        "/home/holden/mckernel-work/scratch/p12s8l1/r.json",
+        "--long-profile-release-sha256",
+        "6803fdc29865203ab245c34f47cb08e131abf9cba933150cee98ad09c0f4bba5"
+      ],
+      "name": "004-create.json",
+      "pgid": 3925748,
+      "pid": 3925748,
+      "proc_starttime": 58851315,
+      "reaped": true,
+      "record_returncode": 0,
+      "returncode": 0,
+      "sid": 3925729,
+      "source": {
+        "bytes": 25181,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/retirement-preparation-1/exported-closed-owner-proof-1/004-create.json",
+        "sha256": "26f879d5e8db25765db27ffde01def35c8086176b63cd4ea97f43f0b40da1b55"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "ps",
+        "-aq",
+        "--no-trunc",
+        "--filter",
+        "name=^/mckernel-native-diagnostic-599bd7a0a4cb4e29b52d6ed0cc9aa0db$"
+      ],
+      "name": "005-ps.json",
+      "pgid": 3925754,
+      "pid": 3925754,
+      "proc_starttime": 58851320,
+      "reaped": true,
+      "record_returncode": 0,
+      "returncode": 0,
+      "sid": 3925729,
+      "source": {
+        "bytes": 308,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/retirement-preparation-1/exported-closed-owner-proof-1/005-ps.json",
+        "sha256": "3696404d0ebcf5fc8d397318f7c49b626b869e81c8be4bb8fed3b9371011bb6a"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "ps",
+        "-aq",
+        "--no-trunc",
+        "--filter",
+        "label=mckernel.native-diagnostic.owner=599bd7a0a4cb4e29b52d6ed0cc9aa0db"
+      ],
+      "name": "006-ps.json",
+      "pgid": 3925760,
+      "pid": 3925760,
+      "proc_starttime": 58851322,
+      "reaped": true,
+      "record_returncode": 0,
+      "returncode": 0,
+      "sid": 3925729,
+      "source": {
+        "bytes": 312,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/retirement-preparation-1/exported-closed-owner-proof-1/006-ps.json",
+        "sha256": "179756dabf083395984c6ad6b1627de6c40cad3b2ef34ef07bd11d5815cbd18b"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "ps",
+        "-aq",
+        "--no-trunc",
+        "--filter",
+        "id=3a18eb1f0bf952683e0f80e751ab0d45377fcc8709e013f237ba6068fd7b4296"
+      ],
+      "name": "007-ps.json",
+      "pgid": 3925766,
+      "pid": 3925766,
+      "proc_starttime": 58851324,
+      "reaped": true,
+      "record_returncode": 0,
+      "returncode": 0,
+      "sid": 3925729,
+      "source": {
+        "bytes": 308,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/retirement-preparation-1/exported-closed-owner-proof-1/007-ps.json",
+        "sha256": "46290fa7fae05005847a55d580e2feac2942382956afbe783094e531bdeeed82"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "inspect",
+        "3a18eb1f0bf952683e0f80e751ab0d45377fcc8709e013f237ba6068fd7b4296"
+      ],
+      "name": "008-inspect.json",
+      "pgid": 3925772,
+      "pid": 3925772,
+      "proc_starttime": 58851326,
+      "reaped": true,
+      "record_returncode": 0,
+      "returncode": 0,
+      "sid": 3925729,
+      "source": {
+        "bytes": 280,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/retirement-preparation-1/exported-closed-owner-proof-1/008-inspect.json",
+        "sha256": "5224e415ac83366e58e37833dc5a189a910058b06b0c65cd3a8d53ec031da09b"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "start",
+        "--attach",
+        "3a18eb1f0bf952683e0f80e751ab0d45377fcc8709e013f237ba6068fd7b4296"
+      ],
+      "name": "009-start.json",
+      "pgid": 3925778,
+      "pid": 3925778,
+      "proc_starttime": 58851328,
+      "reaped": true,
+      "record_returncode": null,
+      "returncode": -9,
+      "sid": 3925729,
+      "source": {
+        "bytes": 304,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/retirement-preparation-1/exported-closed-owner-proof-1/009-start.json",
+        "sha256": "2f668e1ca1536bedee31f3d83f59991592e8d3bd9559e09874ccf9068a22498b"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "wait",
+        "3a18eb1f0bf952683e0f80e751ab0d45377fcc8709e013f237ba6068fd7b4296"
+      ],
+      "name": "010-wait.json",
+      "pgid": 3932032,
+      "pid": 3932032,
+      "proc_starttime": 58935694,
+      "reaped": true,
+      "record_returncode": null,
+      "returncode": -9,
+      "sid": 3925729,
+      "source": {
+        "bytes": 290,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/retirement-preparation-1/exported-closed-owner-proof-1/010-wait.json",
+        "sha256": "a1d141180b339ea0ddc5340c8da9b8c51f123916b65837f96c4123c5721cc15e"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "inspect",
+        "3a18eb1f0bf952683e0f80e751ab0d45377fcc8709e013f237ba6068fd7b4296"
+      ],
+      "name": "011-inspect.json",
+      "pgid": 3932050,
+      "pid": 3932050,
+      "proc_starttime": 58935995,
+      "reaped": true,
+      "record_returncode": 0,
+      "returncode": 0,
+      "sid": 3925729,
+      "source": {
+        "bytes": 279,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/retirement-preparation-1/exported-closed-owner-proof-1/011-inspect.json",
+        "sha256": "0cada093db64d27cc5110a7a2288c7c94ce6b3c31634d16d8c00fb5843ac3da6"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "ps",
+        "-aq",
+        "--no-trunc",
+        "--filter",
+        "name=^/mckernel-native-diagnostic-599bd7a0a4cb4e29b52d6ed0cc9aa0db$"
+      ],
+      "name": "012-ps.json",
+      "pgid": 3932056,
+      "pid": 3932056,
+      "proc_starttime": 58935997,
+      "reaped": true,
+      "record_returncode": 0,
+      "returncode": 0,
+      "sid": 3925729,
+      "source": {
+        "bytes": 308,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/retirement-preparation-1/exported-closed-owner-proof-1/012-ps.json",
+        "sha256": "af6d609df3d3bf55e355daaed3f5a02028377d6eee51ba30885f16f53ee49731"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "ps",
+        "-aq",
+        "--no-trunc",
+        "--filter",
+        "label=mckernel.native-diagnostic.owner=599bd7a0a4cb4e29b52d6ed0cc9aa0db"
+      ],
+      "name": "013-ps.json",
+      "pgid": 3932062,
+      "pid": 3932062,
+      "proc_starttime": 58935999,
+      "reaped": true,
+      "record_returncode": 0,
+      "returncode": 0,
+      "sid": 3925729,
+      "source": {
+        "bytes": 312,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/retirement-preparation-1/exported-closed-owner-proof-1/013-ps.json",
+        "sha256": "8374bb6243a18885f91657e61e6685b31ebedc65fea9ff2cd567c5ee8ed6614d"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "ps",
+        "-aq",
+        "--no-trunc",
+        "--filter",
+        "id=3a18eb1f0bf952683e0f80e751ab0d45377fcc8709e013f237ba6068fd7b4296"
+      ],
+      "name": "014-ps.json",
+      "pgid": 3932068,
+      "pid": 3932068,
+      "proc_starttime": 58936000,
+      "reaped": true,
+      "record_returncode": 0,
+      "returncode": 0,
+      "sid": 3925729,
+      "source": {
+        "bytes": 308,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/retirement-preparation-1/exported-closed-owner-proof-1/014-ps.json",
+        "sha256": "1a3390a58fdeebec0bab5b1d802b61eb3835e29f0be650829267eebfbff810fd"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "inspect",
+        "3a18eb1f0bf952683e0f80e751ab0d45377fcc8709e013f237ba6068fd7b4296"
+      ],
+      "name": "015-inspect.json",
+      "pgid": 3932074,
+      "pid": 3932074,
+      "proc_starttime": 58936002,
+      "reaped": true,
+      "record_returncode": 0,
+      "returncode": 0,
+      "sid": 3925729,
+      "source": {
+        "bytes": 280,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/retirement-preparation-1/exported-closed-owner-proof-1/015-inspect.json",
+        "sha256": "c54e127f91b00d7ec6645fad80207cecae399734fbca590d8bec78ae8f0167c5"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "stop",
+        "--time=2",
+        "3a18eb1f0bf952683e0f80e751ab0d45377fcc8709e013f237ba6068fd7b4296"
+      ],
+      "name": "016-stop.json",
+      "pgid": 3932080,
+      "pid": 3932080,
+      "proc_starttime": 58936004,
+      "reaped": true,
+      "record_returncode": 0,
+      "returncode": 0,
+      "sid": 3925729,
+      "source": {
+        "bytes": 287,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/retirement-preparation-1/exported-closed-owner-proof-1/016-stop.json",
+        "sha256": "f210a749e04b7cd140b5a6aa14d442d101a24c4ba64304d9a053beb077f850ef"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "kill",
+        "3a18eb1f0bf952683e0f80e751ab0d45377fcc8709e013f237ba6068fd7b4296"
+      ],
+      "name": "017-kill.json",
+      "pgid": 3932111,
+      "pid": 3932111,
+      "proc_starttime": 58936014,
+      "reaped": true,
+      "record_returncode": 1,
+      "returncode": 1,
+      "sid": 3925729,
+      "source": {
+        "bytes": 276,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/retirement-preparation-1/exported-closed-owner-proof-1/017-kill.json",
+        "sha256": "f000fa9bba4f0ad1c6c7df566032788f89d8849cfcc0490c70e1907fa0ea4ac4"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "wait",
+        "3a18eb1f0bf952683e0f80e751ab0d45377fcc8709e013f237ba6068fd7b4296"
+      ],
+      "name": "018-wait.json",
+      "pgid": 3932117,
+      "pid": 3932117,
+      "proc_starttime": 58936016,
+      "reaped": true,
+      "record_returncode": 0,
+      "returncode": 0,
+      "sid": 3925729,
+      "source": {
+        "bytes": 276,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/retirement-preparation-1/exported-closed-owner-proof-1/018-wait.json",
+        "sha256": "326f7c0176c702c7ff8ed3d7442db06ad049964404210821668debe920f6c571"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "inspect",
+        "3a18eb1f0bf952683e0f80e751ab0d45377fcc8709e013f237ba6068fd7b4296"
+      ],
+      "name": "019-inspect.json",
+      "pgid": 3932123,
+      "pid": 3932123,
+      "proc_starttime": 58936018,
+      "reaped": true,
+      "record_returncode": 0,
+      "returncode": 0,
+      "sid": 3925729,
+      "source": {
+        "bytes": 279,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/retirement-preparation-1/exported-closed-owner-proof-1/019-inspect.json",
+        "sha256": "1279c51a0bc71ba3806f6807640a08cac155fe8feba4f988281a082ab1e09292"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "rm",
+        "--force",
+        "3a18eb1f0bf952683e0f80e751ab0d45377fcc8709e013f237ba6068fd7b4296"
+      ],
+      "name": "020-rm.json",
+      "pgid": 3932129,
+      "pid": 3932129,
+      "proc_starttime": 58936020,
+      "reaped": true,
+      "record_returncode": 0,
+      "returncode": 0,
+      "sid": 3925729,
+      "source": {
+        "bytes": 284,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/retirement-preparation-1/exported-closed-owner-proof-1/020-rm.json",
+        "sha256": "eb50762f3b0911e742f3b3e2dcccf65355e5065021c515bd0ac7604046ec2f44"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "ps",
+        "-aq",
+        "--no-trunc",
+        "--filter",
+        "name=^/mckernel-native-diagnostic-599bd7a0a4cb4e29b52d6ed0cc9aa0db$"
+      ],
+      "name": "021-ps.json",
+      "pgid": 3932135,
+      "pid": 3932135,
+      "proc_starttime": 58936022,
+      "reaped": true,
+      "record_returncode": 0,
+      "returncode": 0,
+      "sid": 3925729,
+      "source": {
+        "bytes": 308,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/retirement-preparation-1/exported-closed-owner-proof-1/021-ps.json",
+        "sha256": "d4329d461b6a6364a3afd47bd389224d460098f1a7341a5015c17a5d313c3b60"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "ps",
+        "-aq",
+        "--no-trunc",
+        "--filter",
+        "label=mckernel.native-diagnostic.owner=599bd7a0a4cb4e29b52d6ed0cc9aa0db"
+      ],
+      "name": "022-ps.json",
+      "pgid": 3932141,
+      "pid": 3932141,
+      "proc_starttime": 58936024,
+      "reaped": true,
+      "record_returncode": 0,
+      "returncode": 0,
+      "sid": 3925729,
+      "source": {
+        "bytes": 312,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/retirement-preparation-1/exported-closed-owner-proof-1/022-ps.json",
+        "sha256": "8b60bd96e4cd29563b59bff3da24d0962b507197787e19a259678da2b992e7ce"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "ps",
+        "-aq",
+        "--no-trunc",
+        "--filter",
+        "id=3a18eb1f0bf952683e0f80e751ab0d45377fcc8709e013f237ba6068fd7b4296"
+      ],
+      "name": "023-ps.json",
+      "pgid": 3932147,
+      "pid": 3932147,
+      "proc_starttime": 58936025,
+      "reaped": true,
+      "record_returncode": 0,
+      "returncode": 0,
+      "sid": 3925729,
+      "source": {
+        "bytes": 308,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/retirement-preparation-1/exported-closed-owner-proof-1/023-ps.json",
+        "sha256": "4451579b0889ff8194ddd3fb763aa8e17db6a4b5e98d6d443e9dc5c024c91005"
+      }
+    }
+  ],
+  "closed_ordinary_read_cancel_export_identities": [
+    {
+      "pid": 3932024,
+      "proc_starttime": 58935664
+    },
+    {
+      "pid": 3932028,
+      "proc_starttime": 58935681
+    },
+    {
+      "pid": 3932941,
+      "proc_starttime": 58949417
+    }
+  ],
+  "closed_read_cancel_export_qualification": "Root-delivered closed/joined identities only; not substituted for23ownercommandledger.",
+  "container_init_observation": {
+    "actual_inspect_refs": {
+      "015-inspect.stdout": {
+        "bytes": 82144,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/retirement-preparation-1/exported-closed-owner-proof-1/015-inspect.stdout",
+        "sha256": "421177798360e867d55fa9b384f15f9c8981992bafd8d293a401d037d0fac694"
+      },
+      "019-inspect.stdout": {
+        "bytes": 82086,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/retirement-preparation-1/exported-closed-owner-proof-1/019-inspect.stdout",
+        "sha256": "5de44d1b0407164f43c667a739c6a763b4c6aa4315feabcb0827e466adbdfa4a"
+      }
+    },
+    "birth": null,
+    "observed_PID_015": 3925813,
+    "observed_PID_019": 0,
+    "positive_retained_pids": [
+      3925813
+    ],
+    "qualification": "Positive initPID3925813 retained015; no historical birth recorded. Require numericPIDabsence in BOTH fresh COMPLETE snapshots; no inventedbirth and no PID0 identity."
+  },
+  "inner_owner": {
+    "pid": 3925729,
+    "proc_starttime": 58851263
+  },
+  "listing_completeness": "Pending actual finalPROC: stable retained root commandJSONlisting must equal all23 exact rows; no missing/extra ledger client silently omitted.",
+  "nonce": "599bd7a0a4cb4e29b52d6ed0cc9aa0db",
+  "outer_anchor": {
+    "pid": 3925725,
+    "proc_starttime": 58851251
+  },
+  "owner_evidence_root": "/home/holden/mckernel-work/l12s8a1/p.owner-599bd7a0a4cb4e29b52d6ed0cc9aa0db",
+  "owner_evidence_root_identity": {
+    "dev": 66306,
+    "gid": 0,
+    "inode": 55998456,
+    "mode": 448,
+    "uid": 0
+  },
+  "owner_identity": {
+    "pgid": 3925729,
+    "pid": 3925729,
+    "proc_starttime": 58851263,
+    "sid": 3925729
+  },
+  "owner_result": {
+    "bytes": 269,
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/retirement-preparation-1/exported-closed-owner-proof-1/result.json",
+    "sha256": "a4ba2033a243b28b515d9d3be2d5106ad044ba869fea26988795c66b728ec3ee"
+  },
+  "physical_clearance": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing."
+}

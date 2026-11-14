@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-051",
+  "packet_version": 1,
+  "context_sha256": "50991f1847281419ee2492868887074b04aa51cf6e6f4344fc65770cfbcf1cd0",
+  "started_utc": "2026-09-09T11:56:00Z",
+  "finished_utc": "2026-09-09T11:57:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "process.pipe-transfer",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/process/process.pipe-transfer.c",
+      "oracle": "scripts/application-tests/oracles/process.pipe-transfer.json",
+      "changed_files": ["scripts/application-tests/cases/process/process.pipe-transfer.c", "scripts/application-tests/oracles/process.pipe-transfer.json"],
+      "parameter_vectors": {"bytes": [65553], "pattern": ["index modulo 251"], "eof": ["after writer close"]},
+      "implemented_operations": ["forked producer", "partial-write loops", "per-byte integrity check and EOF capture"],
+      "unresolved_oracle_notes": ["Backpressure scheduling and endpoint retirement require Max review."],
+      "max_reviewer_question": "Confirm exact stream integrity, EOF ordering, and endpoint closure evidence."
+    },
+    {
+      "case_id": "process.pipe-epipe",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/process/process.pipe-epipe.c",
+      "oracle": "scripts/application-tests/oracles/process.pipe-epipe.json",
+      "changed_files": ["scripts/application-tests/cases/process/process.pipe-epipe.c", "scripts/application-tests/oracles/process.pipe-epipe.json"],
+      "parameter_vectors": {"readers": [0], "signal_disposition": ["SIG_IGN"], "write_bytes": [1], "expected_errno": ["EPIPE"]},
+      "implemented_operations": ["no-reader pipe", "ignored SIGPIPE", "direct EPIPE capture"],
+      "unresolved_oracle_notes": ["Pipe endpoint lifetime and EPIPE ABI require Max review."],
+      "max_reviewer_question": "Confirm ignored SIGPIPE converts no-reader write to EPIPE without a signal event."
+    },
+    {
+      "case_id": "process.pipe-sigpipe",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/process/process.pipe-sigpipe.c",
+      "oracle": "scripts/application-tests/oracles/process.pipe-sigpipe.json",
+      "changed_files": ["scripts/application-tests/cases/process/process.pipe-sigpipe.c", "scripts/application-tests/oracles/process.pipe-sigpipe.json"],
+      "parameter_vectors": {"readers": [0], "signal_disposition": ["default"], "child_signal": ["SIGPIPE"]},
+      "implemented_operations": ["no-reader child pipe", "default SIGPIPE write", "raw parent wait-status capture"],
+      "unresolved_oracle_notes": ["Raw signal status and endpoint-retirement evidence require Max review."],
+      "max_reviewer_question": "Confirm SIGPIPE remains raw signal termination and parent has no reader descriptor."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/process/process.pipe-transfer.c", "sha256": "51d203bd206ad2c7c1a573b5ad1b61a139fed83823417da393e610eb7e7e6f80"},
+    {"path": "scripts/application-tests/oracles/process.pipe-transfer.json", "sha256": "50e238dfff704a4d7ed7738c7078f82c060eacf7cb1d1e228c14d8a062fa4099"},
+    {"path": "scripts/application-tests/cases/process/process.pipe-epipe.c", "sha256": "3bc695a9c1b63c12b96c417f7239c51e6a310ede748811dfeb470b8e5a9ca951"},
+    {"path": "scripts/application-tests/oracles/process.pipe-epipe.json", "sha256": "358d8f716a9b1dd193c024ef2619ba65957f159b8865ebcbff0f809809a6ae9e"},
+    {"path": "scripts/application-tests/cases/process/process.pipe-sigpipe.c", "sha256": "40932750ce42628cc38a7f98ac477f36f5c5c04e1ac66a0d8419c88bb1f819bf"},
+    {"path": "scripts/application-tests/oracles/process.pipe-sigpipe.json", "sha256": "1cc991fa976da48327c9cc26a9951c0d5b9c64399c0a6a372254635f5a4dcaeb"},
+    {"path": "docs/verification/evidence/application-drafts-20260909/ultra-handoff-1/packet-051/context.json", "sha256": "50991f1847281419ee2492868887074b04aa51cf6e6f4344fc65770cfbcf1cd0"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-051.json --emit-context /tmp/application-packet-051-context-20260909-1.json", "outcome": "PASS; planning metadata only; runtime_authorized=false"},
+    {"command": "python3 -m json.tool packet-051/report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Pipe transfer, EPIPE, and SIGPIPE cases need final process, signal, descriptor, scheduler, and canonical record review."],
+  "blocked_execution_capabilities": ["current-inputs", "runtime-transport-fault-injection", "runner-contract"],
+  "first_failure_event": null,
+  "max_escalation": ["Review 65553-byte transfer and EOF", "Review ignored SIGPIPE EPIPE", "Review raw SIGPIPE status"],
+  "next_packet_id": "packet-052"
+}

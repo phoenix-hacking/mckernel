@@ -1,0 +1,61 @@
+{
+  "schema": "mckernel.native-exact-export26-postlink-diagnostic-preparation-checkpoint.v1",
+  "recorded_at": "2026-09-30T23:08:55-07:00",
+  "candidate_sha": "c81aeaca5cedd893981a058444fa11a03a49a744",
+  "status": "PASS_DIAGNOSTIC_POSTLINK_AND_SOURCE_PREPARATION",
+  "artifacts": {
+    "image_sha256": "fa6685543160fcaa5000b535ec8bd6fc70230465109564c3fb2beecb95bf39ed",
+    "link_map_sha256": "9a27435ca9faf2be359ae8a23f6f9e5d71a8701ccdcb2349e0d420f7b22bb7b3",
+    "rust_object_sha256": "532af6482181b68dfa4f6176fd50de34a999b53bbae9167f9c7cde0b3af70f92"
+  },
+  "postlink": {
+    "validator_sha256": "35a998c24aef03702a0d0c26760ef25a36323a0f5d0a5b6954df5a103b10f7ea",
+    "tests_sha256": "13f1119e8f3c8130b574ded1f7de14eb0f58de56a3e9cc16174da10290d4cad2",
+    "tests": "192/192 PASS independently; focused XRSTOR tests 12/12 on Python 3.8 and Python 3.9",
+    "report_path": "/home/holden/mckernel-work/scratch/native-exact-export26-postlink-validation-20261001-2/current-image-postlink-c81aeaca-exportset26-attempt2.json",
+    "report_sha256": "a22efb04bdf122778e5a122b7ceec8abe887e30870e03bb0b3231531fb869445",
+    "decoded_instructions": 168791,
+    "undefined_symbols": 0,
+    "relocations": 0,
+    "xrstor_exception": {
+      "source": "kernel/rust/native_fault.rs",
+      "exact_wrapper_bytes": "4889f04889f248c1ea200fae2f31c0c3",
+      "object_offsets": [16, 26, 31],
+      "image_addresses_hex": ["fffffffffe826250", "fffffffffe82625a", "fffffffffe82625f"],
+      "binding": "unique defined symbols in the same allocated executable .text PROGBITS section; exact object/image/map bytes and bounds"
+    },
+    "review": "PASS_RESULT"
+  },
+  "ownership": {
+    "report_path": "/home/holden/mckernel-work/scratch/native-exact-export26-postlink-validation-20261001-1/mckernel-linked-text-ownership-c81aeaca-exportset26.json",
+    "report_sha256": "23f83418101aea86c5400b34f2bf96c54b28e2b3936bb0309da88ff7d6f06a21",
+    "total_executable_text_bytes": 803383,
+    "rust_object_executable_text_bytes": 626547,
+    "rust_object_executable_text_percent": "77.988581",
+    "non_rust_or_padding_bytes": 176836
+  },
+  "preserved_failures": [
+    "The first invocation selected /usr/bin/readelf, a symlink rejected by no-follow admission, and exited 1 before artifact analysis.",
+    "The corrected tool selection reached the artifact and exposed intentional handwritten XRSTOR rejected by the original over-broad classifier.",
+    "The first exception implementation produced report ab50c3c03917615f30f7d69e793ddaa04db8cfc9a7c73e5c40d5d4b71226a6f5 but failed independent review because it discarded ELF section indices. That report remains retained and is not accepted."
+  ],
+  "diagnostic_stager": {
+    "source_sha256": "a99f18a971e8d564a32c576262ef9121b4035ecbf4149ecfc603d6d8f6e8a6a4",
+    "tests_sha256": "6d930344adb8bde69f61b57bc24c5f07864f8be5f4cd69d6cab5b76143f6ee4b",
+    "tests": "15 focused and 117 combined stager/overlay/diagnostic tests PASS",
+    "change": "accept exactly the four kernel artifacts or those four plus corrected bin/mcexec; five-file mode pins SHA-256, size and executable mode",
+    "review": "PASS_SOURCE"
+  },
+  "cleanup_helper": {
+    "source_path": "docs/verification/evidence/native-exact-export26-build-cleanup-20261001.py",
+    "source_sha256": "c41930c02951d7f47d2cd4409791f3042279b2e078ce95baa4f521d2bcee46ac",
+    "tests_path": "scripts/tests/test_native_exact_export26_build_cleanup_20261001.py",
+    "tests_sha256": "78c66b15ddfb7e59effe28eac69e2ce8189a60b53474d37dfa5cf7f1b496bdf5",
+    "tests": "87 mocked tests PASS",
+    "terminal_contract": "remove only the exact exited export26 container, prove absence via successful daemon census, move the exact exclusion into durable retained quarantine and never delete it in this packet",
+    "review": "PASS_SOURCE",
+    "executed": false
+  },
+  "acceptance": "Postlink admission and linked-object attribution are diagnostic static evidence. Stager and cleanup results are source preparation only. No guest, application, production gate, language gate or OS acceptance is claimed.",
+  "next": "Commit and fetched-verify these exact sources, create and independently review the export26 cleanup release, execute cleanup once, then produce a fresh five-artifact staged base, memory overlay, strict manifest and separately reviewed diagnostic guest release."
+}

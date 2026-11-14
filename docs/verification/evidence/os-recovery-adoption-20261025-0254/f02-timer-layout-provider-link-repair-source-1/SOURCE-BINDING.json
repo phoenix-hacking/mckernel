@@ -1,0 +1,80 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_EXPERT_REPAIR_NO_COMPILER_OR_ORACLE_RUN",
+  "canonical_provider": {
+    "path": "/home/holden/mckernel/kernel/rust/string.rs",
+    "bytes": 13172,
+    "sha256": "579d8c06bb766a270548399a8820733516a167bb8af5d1fea46d8a51f7e8fbf3"
+  },
+  "canonical_aliases": {
+    "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+    "bytes": 76151,
+    "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+  },
+  "provider_body": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-provider-link-repair-source-1/inline_memset.CURRENT.rs.inc",
+    "bytes": 691,
+    "sha256": "fc62abc7e4723b5e1b1dbb688f3e72cb9ce63fdda0beb3678dd41379fba3d224"
+  },
+  "provider_crate": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-provider-link-repair-source-1/provider.rs",
+    "bytes": 241,
+    "sha256": "5936bd657cd0d4d8679fb8ad983dfe488d63046a6b55e1fc1b70dc1585374adb"
+  },
+  "provider_lines": [
+    285,
+    313
+  ],
+  "C_prototype": "void *__inline_memset(void *s, unsigned long c, size_t count);",
+  "Rust_ABI": {
+    "CULong": "u64",
+    "SizeT": "usize",
+    "pointer": "*mut core::ffi::c_void",
+    "extern": "C",
+    "target": "x86_64-unknown-linux-gnu"
+  },
+  "architecture_header": {
+    "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch-string.h",
+    "bytes": 238,
+    "sha256": "98fe2c9021167e9b08d75dbe5ffc6b25bc84d708a8baeaf60d16fcb88e5b3831"
+  },
+  "string_header": {
+    "path": "/home/holden/mckernel/lib/include/string.h",
+    "bytes": 1588,
+    "sha256": "f612dad80dd16ff0d4d6232f155cc879522de6203ce015afa3ef0c36c3dd5636"
+  },
+  "corrected_main": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/table-name-alias-correction-1/fixture/main.c",
+    "bytes": 7360,
+    "sha256": "9f59ed6c91fd9a277c273983da86a341ec753b7058b88fde29b54ecdb647fc58"
+  },
+  "retained_objects": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/HOST-output-proposed-1/timer.o",
+      "bytes": 2640,
+      "sha256": "dae24d2258ccc1a5488869ad993871b61409656b1aa01e5938fe88aa8c9bc6b0"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/HOST-output-proposed-1/fallback.o",
+      "bytes": 38448,
+      "sha256": "e9cee1fe464e130e1a990b692491149f1304aafc568691daa59060168e8db198"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/HOST-output-proposed-1/selected.o",
+      "bytes": 36480,
+      "sha256": "54e0aa163274e61ba5899c48c38d3ecb6ef7a07e764b9caa6cfa61617b106337"
+    }
+  ],
+  "expert_handoff": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/EXPERT-LINK-CLOSURE-INPUTS.json",
+    "bytes": 9408,
+    "sha256": "c10abb7625d0110e594cfad32b73cfecacc1c87fd0b098d20a4e68e4ee8c4ba1"
+  },
+  "failure_family_history": "Original alias-order candidate failed, one bounded alias correction consumed; corrected GCC compilation passed then ld failed unresolved __inline_memset. This separate expert repair adds exact existing Rust provider only.",
+  "compiler_boundary": "Focused HOST provider crate, pinned Rust nightly/host target/opt-level=1 as timer.o. Same corrected GCC9 source and flags. Production full-crate/default GCC14/native remain separate.",
+  "prefix_recompilation": false,
+  "new_production_bodies": 0,
+  "production_or_native_credit": false,
+  "current_C_records_counted": 71,
+  "C_data_retirement_credit": 0
+}

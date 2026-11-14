@@ -1,0 +1,131 @@
+{
+  "kind": "SOURCE_BOUNDED_SHARED_LIBRARY_SCENARIO_DEFINITIONS_ONLY",
+  "canonical_ledger": "/home/holden/mckernel/docs/verification/m14-m15-closure-progress.json",
+  "ledger_updated_at_observed": "2026-11-07T03:12:54.316696+00:00",
+  "ledger_scope": "Original M14/M15 closure only; excludes separate S01-S06 and whole130/seven-language complete-system goals.",
+  "original_criteria_changed": false,
+  "new_acceptance_denominator": false,
+  "complete_original_API_inventory_claimed": false,
+  "new_tests_or_commands_prescribed": false,
+  "execution_authorized": false,
+  "definition_policy": "Source-local semantics already explicit are distinguished from missing original inventory/backend/proof binding. Only unknown policy is marked unresolved; no invented error codes/quotas or held work. Existing focused passing results are reused at their exact scope.",
+  "scenarios": [
+    {
+      "id": "F05-runtime-balanced-complete",
+      "ledger_gap": "M15-F05-original-behavior",
+      "definition_gap": "Required full arithmetic/backend scenario is explicit but has no complete agreed edge policy or matching proof; bounded ownership exits do not cover it.",
+      "selected_sources": [
+        "ihk/linux/include/ihk/ihklib.h: ihk_reserve_mem_conf/ihk_reserve_mem",
+        "ihk/linux/user/rust/whole70/ihklib_runtime_state.rs: key0 setter",
+        "ihk/linux/user/rust/whole70/ihklib_memory_os_and_os_assigned.rs: ihk_reserve_mem",
+        "ihk/linux/user/ihklib.c: matching ihk_reserve_mem"
+      ],
+      "trigger": "Serialized caller enables runtime key0, supplies valid request chunks, initial reserve succeeds and actual matching query returns initialized in-range node records. A full success scenario must establish all arithmetic denominators nonzero before execution.",
+      "success_result": "Current source returns0 after its computed partial-release request succeeds; one-shot configuration resets to defaults. No new numeric vector or arithmetic redesign is prescribed.",
+      "error_result": "Already proved bounded query failure maps-EINVAL and defined allocation/availability failures map-ENOMEM. Full-success later open/ioctl errors retain source-captured results. Desired behavior when nodes/compensate_nodes/release_nodes is0 is NOT defined here; current C division/Rust panic paths are not executable test plans.",
+      "output": "Input chunk array remains borrowed and unchanged; external resource quantities must match the actual successful reserve/partial-release requests and restored cohort accounting.",
+      "borrows": "Original request arrays through initial synchronous ioctl; query records through aggregation; replacement arrays through partial-release ioctl; all pointers remain function-owned.",
+      "cleanup": "Retain published saved-original/query-owner cleanup, close each acquired descriptor once, reset before the existing all-memory rollback on an error; no global errno promise.",
+      "reuse": [
+        "docs/verification/m15-balanced-memory-ownership-results-20261107.json:28 bounded owner/error cases; excluded arithmetic stays excluded",
+        "M15-F05-export-types/HOST-producer matching unchanged source/profile evidence"
+      ],
+      "next_missing_proof": "Original supported owner defines zero-denominator policy and backend/resource observation contract; obtain a source-bound defined arithmetic domain and actual admission before any full-success/edge operation. Remains DEFER for execution."
+    },
+    {
+      "id": "F05-create-destroy-matched-cohort",
+      "ledger_gap": "M15-F05-original-behavior; M15-F05-deployed-native",
+      "definition_gap": "Source-local results are defined; required matched backend lifecycle inventory and resource observation packet are not bound.",
+      "selected_sources": [
+        "ihk/linux/include/ihk/ihklib.h: ihk_create_os/ihk_destroy_os",
+        "ihk/linux/user/rust/whole70/ihklib_os_instance_lifecycle.rs",
+        "ihk/linux/user/ihklib.c: matching public create/destroy"
+      ],
+      "trigger": "On the actual matching admitted device, create then destroy the returned OS identity under exclusive lifecycle serialization. Required busy/error states must come from the original backend contract, not an invented local quota.",
+      "success_result": "Create returns the nonnegative OS index unchanged, which may differ from the device index; destroy returns0. Never collapse create index into generic0 success.",
+      "error_result": "Failed create ioctl returns captured-errno. Destroy retries EBUSY at most100 times with10000us sleeps, including the final busy attempt, then retains-EBUSY; other ioctl errors stop with captured-errno. Failed-open return parity remains as coded; deferred invalid-close/TLS issue is not changed.",
+      "output": "No output array; caller owns the returned identity only as established by matching provider semantics. Successful cleanup must restore the original cohort OS/resource state.",
+      "borrows": "Only scalar device/OS IDs; ioctl third argument remains the source promoted int. Device FD is locally owned, not returned.",
+      "cleanup": "One close attempt for each successfully opened local descriptor; captured result survives close errno. Keep broad serialized create_os_str rollback separate and unchanged.",
+      "reuse": [
+        "docs/verification/m15-current-public-consumer-results-20261106.json: pre-access provider/type/error scope only",
+        "docs/verification/m15-create-os-routing-results-20261106.json and m15-create-list-error-results-20261107.json: focused device/OS and rollback slices; not native lifecycle"
+      ],
+      "next_missing_proof": "Original owner binds matching device/module/image identities, legitimate create/destroy state transitions, busy-state setup/teardown, lifecycle serialization and final resource comparison. No native command is defined or admitted here."
+    },
+    {
+      "id": "F05-load-boot-matched-image",
+      "ledger_gap": "M15-F05-original-behavior; M15-F05-deployed-native",
+      "definition_gap": "Filename/polling source contract exists; matched image/backend success and cleanup scenario is not established by pre-access or focused boot-loop evidence.",
+      "selected_sources": [
+        "ihk/linux/include/ihk/ihklib.h: ihk_os_load/ihk_os_boot",
+        "ihk/linux/user/rust/whole70/ihklib_os_load_boot.rs",
+        "ihk/linux/user/ihklib.c: matching load/boot"
+      ],
+      "trigger": "Original owner supplies a valid matching image path and legitimate created OS; load that exact path, then boot using the existing provider ABI and supported cohort.",
+      "success_result": "Load returns0. Boot returns0 only after first RUNNING status5; current source polls up to50 times, sleeping200000us for transitional statuses2/3/4 and stopping at other terminal status/error.",
+      "error_result": "Load null filename after successful open returns-EINVAL; synchronous LOAD failure returns captured-errno. BOOT/status -1 returns captured-errno; non-RUNNING terminal/exhausted transitional result returns-EINVAL. Reuse the existing exact polling semantics rather than redefining them.",
+      "output": "Filename bytes/pointer are forwarded unchanged and remain caller-owned; no image-file allocation or path ownership transfer occurs in this wrapper. Backend OS state/output must be observed by a separately admitted matched lifecycle packet.",
+      "borrows": "Original readable NUL filename pointer lives through synchronous LOAD ioctl; local OS descriptor lives through request/status polling.",
+      "cleanup": "Each successful open has one local close attempt. Error result is captured before close; no whole TLS errno guarantee or rollback/unload behavior is invented for these wrappers.",
+      "reuse": [
+        "docs/verification/m14-m15-focused-results-20261101.json: parser/boot-result/terminal-stop behavior",
+        "docs/verification/m15-current-public-consumer-results-20261106.json: typed/pre-access cases"
+      ],
+      "next_missing_proof": "Original matching source/SDK/image/backend operation authority supplies valid input identity, required state transitions and resource-restoring scenario around these calls. Existing holds block execution; no new source test is scheduled."
+    },
+    {
+      "id": "F05-Rust-dump-complete-BFD-lifetime",
+      "ledger_gap": "M15-F05-original-behavior; M15-F05-deployed-native",
+      "definition_gap": "Root-parent/failed-fopen behavior is proved; real BFD-object section/write/close lifetime and supported dump/backend profile remain unbound.",
+      "selected_sources": [
+        "ihk/linux/include/ihk/ihklib.h: ihk_os_makedumpfile",
+        "ihk/linux/user/rust/whole70/ihklib_dump.rs: DumpSession.run/finish",
+        "ihk/linux/user/CMakeLists.txt: ENABLE_MEMDUMP-supported whole-library selection"
+      ],
+      "trigger": "Under serialized dump/libc-static metadata use, a matching admitted provider initializes bounded chunk metadata and a valid writable path; real supported BFD object creation/sections/writes are required for a full-success claim. Interactive and noninteractive obligations require original owner confirmation.",
+      "success_result": "Current selected Rust returns0 after required metadata/physchunks/physical sections and contents succeed; interactive returns before data READ, noninteractive follows bounded transfer loop. Full backend/file behavior is not inferred from the existing local failed-fopen cases.",
+      "error_result": "Retain existing captured provider errors and BFD-EINVAL. finish attempts CONT after NMI, then BFD close (failure-EINVAL), then FD close (failure captured-errno overrides), then allocation cleanup. No output-file deletion/unchanged-file promise exists in the body.",
+      "output": "Caller path is restored and borrowed; output file may be partial on failure. Required complete-file content/section inventory must come from the supported dump contract and matching image, not an invented mock schema.",
+      "borrows": "Chunk/header/transfer buffers through synchronous providers/section writes; section-name storage remains live through BFD close; libc metadata and caller path remain borrowed.",
+      "cleanup": "Selected Rust owns names/buffer/chunks, releases after CONT/BFD/FD close and preserves each allocation cleanup entry errno. Retained C two-buffer/name engineering debt is explicitly outside original default Rust acceptance quotas.",
+      "reuse": [
+        "M15-F05-dump-source/dump-behavior/changed-library: already passing parent/access/BFD-NULL profile",
+        "dump-parent-review-1/REVIEW.md and FIXTURE-REVIEW.md: exact C-scoped/full-Rust boundary and SDK limits"
+      ],
+      "next_missing_proof": "Original source/SDK/BFD authority supplies compatible actual prototypes/layouts/object operations, required artifact observations and operation admission. No BFD shim, legacy prototype substitution, actual dump/NMI/device operation or new fixture is authorized by this definition."
+    },
+    {
+      "id": "I03-library-installed-ABI-provider-reproducibility",
+      "ledger_gap": "M15-I03-original-reproducibility; M15-I03-complete-ABI; M15-I03-static-dynamic",
+      "definition_gap": "Complete delivered userspace inventory and actual installed static/dynamic provider join are absent; known70function/sixdata roots are not the complete public deliverable contract.",
+      "selected_sources": [
+        "ihk/linux/include/ihk/ihklib.h and selected private declarations for actually used imports",
+        "ihk/linux/user/CMakeLists.txt: selected archive,70+6 rooted shared link,LIBBFD and same-compile native response",
+        "ihk/linux/user/rust/whole70/libihklib_whole70.rs: selected module composition"
+      ],
+      "trigger": "For each original required installed library/tool/executor consumer in the owner-supplied delivered set, reproduce with exact supported source/config/toolchain/SDK and resolve its actual public imports/data layouts to the legitimate installed provider.",
+      "success_result": "Every required public function/data ABI and transitive project/provider dependency is joined to matching generated declarations, archive/shared object, loader/import ownership and reproduction evidence; actual supported install and lifecycle context match. Counts are not acceptance shortcuts.",
+      "error_result": "Missing/mismatched provider, type/layout, source/config/toolchain identity or loader binding leaves closure open. Do not substitute another artifact, retained C fallback, HOST supplementation or a held provider; no new runtime failure code is invented.",
+      "output": "An authoritative delivered-set/ABI/dependency/reproduction join with exact paths/providers and existing proof references; no blanket acceptance or new denominator is produced here.",
+      "borrows": "Per-API ownership follows the participating selected declarations/bodies; the join must retain caller/provider boundaries rather than infer ownership from symbol names.",
+      "cleanup": "Use actual supported lifecycle/resource restoration contracts of each included consumer; build/link/read-only proof alone does not retire C or accept deployment/native behavior.",
+      "reuse": [
+        "M15-I03-selection/HOST-ABI-link/source-replay: retain current exact scoped results",
+        "docs/verification/m15-shared-abi-environment-results-20261106.json",
+        "docs/verification/m15-corrected-library-tool-cohort-results-20261106.json: HOST loader/main pre-access scope only"
+      ],
+      "next_missing_proof": "Original authority supplies complete delivered set, complete supported public ABI/provider inventory and actual source/SDK/operation bindings. Then consume matching existing evidence and close only genuinely unmatched obligations. No repository-wide census, build/test batch or installed-operation command is prescribed."
+    }
+  ],
+  "not_obligations_for_original_Rust_acceptance": [
+    "Retained C dump two-buffer cleanup and per-chunk name debt: ledger uncounted engineering items, not extra Rust/default acceptance quotas."
+  ],
+  "preserved": [
+    "M14-before-M15 acceptance and final original supported Rocky/Linux contracts",
+    "Original source/SDK/native/service/generic/UNKNOWN ownership holds",
+    "No balanced arithmetic or real dump/BFD/device/native execution",
+    "No deferred invalid-close/TLS errno change",
+    "No canonical tracker/percentage/hash inventory mutation"
+  ]
+}

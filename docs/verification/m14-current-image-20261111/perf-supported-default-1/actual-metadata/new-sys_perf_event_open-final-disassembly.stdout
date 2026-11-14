@@ -1,0 +1,223 @@
+
+/work/output/build/kernel/mckernel.img:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+fffffffffe8e4940 <sys_perf_event_open>:
+fffffffffe8e4940:	48 b8 00 bd 93 fe ff ff ff ff 	movabs $0xfffffffffe93bd00,%rax
+fffffffffe8e494a:	48 83 38 68          	cmpq   $0x68,(%rax)
+fffffffffe8e494e:	48 c7 c0 ea ff ff ff 	mov    $0xffffffffffffffea,%rax
+fffffffffe8e4955:	0f 85 f0 03 00 00    	jne    fffffffffe8e4d4b <sys_perf_event_open+0x40b>
+fffffffffe8e495b:	48 b9 08 bd 93 fe ff ff ff ff 	movabs $0xfffffffffe93bd08,%rcx
+fffffffffe8e4965:	48 83 39 50          	cmpq   $0x50,(%rcx)
+fffffffffe8e4969:	0f 85 dc 03 00 00    	jne    fffffffffe8e4d4b <sys_perf_event_open+0x40b>
+fffffffffe8e496f:	48 b9 10 bd 93 fe ff ff ff ff 	movabs $0xfffffffffe93bd10,%rcx
+fffffffffe8e4979:	48 81 39 48 01 00 00 	cmpq   $0x148,(%rcx)
+fffffffffe8e4980:	0f 85 c5 03 00 00    	jne    fffffffffe8e4d4b <sys_perf_event_open+0x40b>
+fffffffffe8e4986:	48 b9 18 bd 93 fe ff ff ff ff 	movabs $0xfffffffffe93bd18,%rcx
+fffffffffe8e4990:	48 83 39 08          	cmpq   $0x8,(%rcx)
+fffffffffe8e4994:	0f 85 b1 03 00 00    	jne    fffffffffe8e4d4b <sys_perf_event_open+0x40b>
+fffffffffe8e499a:	48 b9 58 bd 93 fe ff ff ff ff 	movabs $0xfffffffffe93bd58,%rcx
+fffffffffe8e49a4:	48 83 39 0a          	cmpq   $0xa,(%rcx)
+fffffffffe8e49a8:	0f 85 9d 03 00 00    	jne    fffffffffe8e4d4b <sys_perf_event_open+0x40b>
+fffffffffe8e49ae:	55                   	push   %rbp
+fffffffffe8e49af:	48 89 e5             	mov    %rsp,%rbp
+fffffffffe8e49b2:	41 57                	push   %r15
+fffffffffe8e49b4:	41 56                	push   %r14
+fffffffffe8e49b6:	41 55                	push   %r13
+fffffffffe8e49b8:	41 54                	push   %r12
+fffffffffe8e49ba:	53                   	push   %rbx
+fffffffffe8e49bb:	48 81 ec f8 00 00 00 	sub    $0xf8,%rsp
+fffffffffe8e49c2:	48 b8 50 bd 93 fe ff ff ff ff 	movabs $0xfffffffffe93bd50,%rax
+fffffffffe8e49cc:	48 8b 00             	mov    (%rax),%rax
+fffffffffe8e49cf:	48 89 45 b0          	mov    %rax,-0x50(%rbp)
+fffffffffe8e49d3:	48 b8 48 bd 93 fe ff ff ff ff 	movabs $0xfffffffffe93bd48,%rax
+fffffffffe8e49dd:	48 8b 00             	mov    (%rax),%rax
+fffffffffe8e49e0:	48 89 45 a8          	mov    %rax,-0x58(%rbp)
+fffffffffe8e49e4:	48 b8 40 bd 93 fe ff ff ff ff 	movabs $0xfffffffffe93bd40,%rax
+fffffffffe8e49ee:	48 8b 00             	mov    (%rax),%rax
+fffffffffe8e49f1:	48 89 45 d0          	mov    %rax,-0x30(%rbp)
+fffffffffe8e49f5:	48 b8 38 bd 93 fe ff ff ff ff 	movabs $0xfffffffffe93bd38,%rax
+fffffffffe8e49ff:	48 8b 00             	mov    (%rax),%rax
+fffffffffe8e4a02:	48 89 45 98          	mov    %rax,-0x68(%rbp)
+fffffffffe8e4a06:	48 b8 30 bd 93 fe ff ff ff ff 	movabs $0xfffffffffe93bd30,%rax
+fffffffffe8e4a10:	48 8b 00             	mov    (%rax),%rax
+fffffffffe8e4a13:	48 89 45 a0          	mov    %rax,-0x60(%rbp)
+fffffffffe8e4a17:	48 b8 28 bd 93 fe ff ff ff ff 	movabs $0xfffffffffe93bd28,%rax
+fffffffffe8e4a21:	4c 8b 20             	mov    (%rax),%r12
+fffffffffe8e4a24:	48 b8 20 bd 93 fe ff ff ff ff 	movabs $0xfffffffffe93bd20,%rax
+fffffffffe8e4a2e:	4c 8b 28             	mov    (%rax),%r13
+fffffffffe8e4a31:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+fffffffffe8e4a36:	0f 32                	rdmsr
+fffffffffe8e4a38:	48 c1 e2 20          	shl    $0x20,%rdx
+fffffffffe8e4a3c:	89 c0                	mov    %eax,%eax
+fffffffffe8e4a3e:	48 09 d0             	or     %rdx,%rax
+fffffffffe8e4a41:	48 b9 20 c9 97 fe ff ff ff ff 	movabs $0xfffffffffe97c920,%rcx
+fffffffffe8e4a4b:	48 8b 39             	mov    (%rcx),%rdi
+fffffffffe8e4a4e:	48 b9 40 aa 93 fe ff ff ff ff 	movabs $0xfffffffffe93aa40,%rcx
+fffffffffe8e4a58:	4c 63 09             	movslq (%rcx),%r9
+fffffffffe8e4a5b:	49 c1 e1 0e          	shl    $0xe,%r9
+fffffffffe8e4a5f:	49 01 f9             	add    %rdi,%r9
+fffffffffe8e4a62:	48 39 c7             	cmp    %rax,%rdi
+fffffffffe8e4a65:	0f 97 c1             	seta   %cl
+fffffffffe8e4a68:	49 39 c1             	cmp    %rax,%r9
+fffffffffe8e4a6b:	0f 92 c0             	setb   %al
+fffffffffe8e4a6e:	08 c8                	or     %cl,%al
+fffffffffe8e4a70:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+fffffffffe8e4a77:	75 0a                	jne    fffffffffe8e4a83 <sys_perf_event_open+0x143>
+fffffffffe8e4a79:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+fffffffffe8e4a81:	48 98                	cltq
+fffffffffe8e4a83:	48 b9 f8 70 97 fe ff ff ff ff 	movabs $0xfffffffffe9770f8,%rcx
+fffffffffe8e4a8d:	48 8b 09             	mov    (%rcx),%rcx
+fffffffffe8e4a90:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+fffffffffe8e4a97:	48 8b 9c 01 a8 1e 00 00 	mov    0x1ea8(%rcx,%rax,1),%rbx
+fffffffffe8e4a9f:	48 8b 83 d0 10 00 00 	mov    0x10d0(%rbx),%rax
+fffffffffe8e4aa6:	48 89 45 b8          	mov    %rax,-0x48(%rbp)
+fffffffffe8e4aaa:	48 85 f6             	test   %rsi,%rsi
+fffffffffe8e4aad:	74 37                	je     fffffffffe8e4ae6 <sys_perf_event_open+0x1a6>
+fffffffffe8e4aaf:	4c 8b 86 a8 00 00 00 	mov    0xa8(%rsi),%r8
+fffffffffe8e4ab6:	48 8b 86 a0 00 00 00 	mov    0xa0(%rsi),%rax
+fffffffffe8e4abd:	48 89 45 c8          	mov    %rax,-0x38(%rbp)
+fffffffffe8e4ac1:	48 8b 86 98 00 00 00 	mov    0x98(%rsi),%rax
+fffffffffe8e4ac8:	48 8b 4e 70          	mov    0x70(%rsi),%rcx
+fffffffffe8e4acc:	48 89 4d c0          	mov    %rcx,-0x40(%rbp)
+fffffffffe8e4ad0:	85 c0                	test   %eax,%eax
+fffffffffe8e4ad2:	0f 9e c0             	setle  %al
+fffffffffe8e4ad5:	48 83 be 80 00 00 00 00 	cmpq   $0x0,0x80(%rsi)
+fffffffffe8e4add:	41 0f 94 c7          	sete   %r15b
+fffffffffe8e4ae1:	41 20 c7             	and    %al,%r15b
+fffffffffe8e4ae4:	eb 16                	jmp    fffffffffe8e4afc <sys_perf_event_open+0x1bc>
+fffffffffe8e4ae6:	41 b7 01             	mov    $0x1,%r15b
+fffffffffe8e4ae9:	48 c7 45 c0 00 00 00 00 	movq   $0x0,-0x40(%rbp)
+fffffffffe8e4af1:	48 c7 45 c8 00 00 00 00 	movq   $0x0,-0x38(%rbp)
+fffffffffe8e4af9:	45 31 c0             	xor    %r8d,%r8d
+fffffffffe8e4afc:	48 c7 45 90 00 00 00 00 	movq   $0x0,-0x70(%rbp)
+fffffffffe8e4b04:	48 c7 45 88 00 00 00 00 	movq   $0x0,-0x78(%rbp)
+fffffffffe8e4b0c:	48 c7 45 80 00 00 00 00 	movq   $0x0,-0x80(%rbp)
+fffffffffe8e4b14:	48 c7 85 78 ff ff ff 00 00 00 00 	movq   $0x0,-0x88(%rbp)
+fffffffffe8e4b1f:	48 c7 85 70 ff ff ff 00 00 00 00 	movq   $0x0,-0x90(%rbp)
+fffffffffe8e4b2a:	48 c7 85 68 ff ff ff 00 00 00 00 	movq   $0x0,-0x98(%rbp)
+fffffffffe8e4b35:	48 c7 85 60 ff ff ff 00 00 00 00 	movq   $0x0,-0xa0(%rbp)
+fffffffffe8e4b40:	48 c7 85 58 ff ff ff 00 00 00 00 	movq   $0x0,-0xa8(%rbp)
+fffffffffe8e4b4b:	48 c7 85 50 ff ff ff 00 00 00 00 	movq   $0x0,-0xb0(%rbp)
+fffffffffe8e4b56:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+fffffffffe8e4b5b:	0f 32                	rdmsr
+fffffffffe8e4b5d:	48 c1 e2 20          	shl    $0x20,%rdx
+fffffffffe8e4b61:	89 c0                	mov    %eax,%eax
+fffffffffe8e4b63:	48 09 d0             	or     %rdx,%rax
+fffffffffe8e4b66:	48 39 c7             	cmp    %rax,%rdi
+fffffffffe8e4b69:	0f 97 c1             	seta   %cl
+fffffffffe8e4b6c:	49 39 c1             	cmp    %rax,%r9
+fffffffffe8e4b6f:	0f 92 c0             	setb   %al
+fffffffffe8e4b72:	08 c8                	or     %cl,%al
+fffffffffe8e4b74:	41 be ff ff ff ff    	mov    $0xffffffff,%r14d
+fffffffffe8e4b7a:	75 09                	jne    fffffffffe8e4b85 <sys_perf_event_open+0x245>
+fffffffffe8e4b7c:	65 44 8b 34 25 00 00 00 00 	mov    %gs:0x0,%r14d
+fffffffffe8e4b85:	48 b8 10 a6 85 fe ff ff ff ff 	movabs $0xfffffffffe85a610,%rax
+fffffffffe8e4b8f:	48 8d bd e8 fe ff ff 	lea    -0x118(%rbp),%rdi
+fffffffffe8e4b96:	ba 68 00 00 00       	mov    $0x68,%edx
+fffffffffe8e4b9b:	4c 89 c6             	mov    %r8,%rsi
+fffffffffe8e4b9e:	ff d0                	call   *%rax
+fffffffffe8e4ba0:	89 c1                	mov    %eax,%ecx
+fffffffffe8e4ba2:	48 c7 c0 f2 ff ff ff 	mov    $0xfffffffffffffff2,%rax
+fffffffffe8e4ba9:	85 c9                	test   %ecx,%ecx
+fffffffffe8e4bab:	0f 85 89 01 00 00    	jne    fffffffffe8e4d3a <sys_perf_event_open+0x3fa>
+fffffffffe8e4bb1:	8b 95 e8 fe ff ff    	mov    -0x118(%rbp),%edx
+fffffffffe8e4bb7:	8b 8d 10 ff ff ff    	mov    -0xf0(%rbp),%ecx
+fffffffffe8e4bbd:	c1 e9 0a             	shr    $0xa,%ecx
+fffffffffe8e4bc0:	49 39 d5             	cmp    %rdx,%r13
+fffffffffe8e4bc3:	0f 94 c0             	sete   %al
+fffffffffe8e4bc6:	49 39 d4             	cmp    %rdx,%r12
+fffffffffe8e4bc9:	40 0f 94 c7          	sete   %dil
+fffffffffe8e4bcd:	48 39 55 a0          	cmp    %rdx,-0x60(%rbp)
+fffffffffe8e4bd1:	40 0f 94 c6          	sete   %sil
+fffffffffe8e4bd5:	48 8b 55 98          	mov    -0x68(%rbp),%rdx
+fffffffffe8e4bd9:	48 85 95 08 ff ff ff 	test   %rdx,-0xf8(%rbp)
+fffffffffe8e4be0:	48 8b 95 f8 fe ff ff 	mov    -0x108(%rbp),%rdx
+fffffffffe8e4be7:	0f 85 34 01 00 00    	jne    fffffffffe8e4d21 <sys_perf_event_open+0x3e1>
+fffffffffe8e4bed:	40 08 f8             	or     %dil,%al
+fffffffffe8e4bf0:	40 08 c6             	or     %al,%sil
+fffffffffe8e4bf3:	0f 84 28 01 00 00    	je     fffffffffe8e4d21 <sys_perf_event_open+0x3e1>
+fffffffffe8e4bf9:	f6 c1 01             	test   $0x1,%cl
+fffffffffe8e4bfc:	0f 85 31 01 00 00    	jne    fffffffffe8e4d33 <sys_perf_event_open+0x3f3>
+fffffffffe8e4c02:	48 85 55 d0          	test   %rdx,-0x30(%rbp)
+fffffffffe8e4c06:	0f 95 c0             	setne  %al
+fffffffffe8e4c09:	41 08 c7             	or     %al,%r15b
+fffffffffe8e4c0c:	0f 84 21 01 00 00    	je     fffffffffe8e4d33 <sys_perf_event_open+0x3f3>
+fffffffffe8e4c12:	48 c7 c0 ea ff ff ff 	mov    $0xffffffffffffffea,%rax
+fffffffffe8e4c19:	48 85 55 d0          	test   %rdx,-0x30(%rbp)
+fffffffffe8e4c1d:	0f 85 17 01 00 00    	jne    fffffffffe8e4d3a <sys_perf_event_open+0x3fa>
+fffffffffe8e4c23:	49 ba 80 32 84 fe ff ff ff ff 	movabs $0xfffffffffe843280,%r10
+fffffffffe8e4c2d:	49 bb f0 2e 84 fe ff ff ff ff 	movabs $0xfffffffffe842ef0,%r11
+fffffffffe8e4c37:	49 bf 40 29 83 fe ff ff ff ff 	movabs $0xfffffffffe832940,%r15
+fffffffffe8e4c41:	49 bc 10 27 83 fe ff ff ff ff 	movabs $0xfffffffffe832710,%r12
+fffffffffe8e4c4b:	49 bd 40 26 83 fe ff ff ff ff 	movabs $0xfffffffffe832640,%r13
+fffffffffe8e4c55:	48 b8 70 bc 86 fe ff ff ff ff 	movabs $0xfffffffffe86bc70,%rax
+fffffffffe8e4c5f:	48 8d bd 50 ff ff ff 	lea    -0xb0(%rbp),%rdi
+fffffffffe8e4c66:	48 8d 8d e8 fe ff ff 	lea    -0x118(%rbp),%rcx
+fffffffffe8e4c6d:	4c 8b 45 c8          	mov    -0x38(%rbp),%r8
+fffffffffe8e4c71:	4c 8b 4d c0          	mov    -0x40(%rbp),%r9
+fffffffffe8e4c75:	48 89 de             	mov    %rbx,%rsi
+fffffffffe8e4c78:	48 8b 55 b8          	mov    -0x48(%rbp),%rdx
+fffffffffe8e4c7c:	41 52                	push   %r10
+fffffffffe8e4c7e:	41 53                	push   %r11
+fffffffffe8e4c80:	41 57                	push   %r15
+fffffffffe8e4c82:	41 54                	push   %r12
+fffffffffe8e4c84:	41 55                	push   %r13
+fffffffffe8e4c86:	50                   	push   %rax
+fffffffffe8e4c87:	48 b8 e0 bf 86 fe ff ff ff ff 	movabs $0xfffffffffe86bfe0,%rax
+fffffffffe8e4c91:	50                   	push   %rax
+fffffffffe8e4c92:	48 b8 c0 83 8a fe ff ff ff ff 	movabs $0xfffffffffe8a83c0,%rax
+fffffffffe8e4c9c:	50                   	push   %rax
+fffffffffe8e4c9d:	48 b8 f0 95 8a fe ff ff ff ff 	movabs $0xfffffffffe8a95f0,%rax
+fffffffffe8e4ca7:	50                   	push   %rax
+fffffffffe8e4ca8:	48 b8 d0 b9 86 fe ff ff ff ff 	movabs $0xfffffffffe86b9d0,%rax
+fffffffffe8e4cb2:	50                   	push   %rax
+fffffffffe8e4cb3:	48 b8 50 ba 86 fe ff ff ff ff 	movabs $0xfffffffffe86ba50,%rax
+fffffffffe8e4cbd:	50                   	push   %rax
+fffffffffe8e4cbe:	6a 40                	push   $0x40
+fffffffffe8e4cc0:	6a 38                	push   $0x38
+fffffffffe8e4cc2:	6a 30                	push   $0x30
+fffffffffe8e4cc4:	6a 28                	push   $0x28
+fffffffffe8e4cc6:	6a 20                	push   $0x20
+fffffffffe8e4cc8:	6a 0c                	push   $0xc
+fffffffffe8e4cca:	68 04 05 00 00       	push   $0x504
+fffffffffe8e4ccf:	68 58 15 00 00       	push   $0x1558
+fffffffffe8e4cd4:	68 a8 00 00 00       	push   $0xa8
+fffffffffe8e4cd9:	68 d8 00 00 00       	push   $0xd8
+fffffffffe8e4cde:	68 e0 00 00 00       	push   $0xe0
+fffffffffe8e4ce3:	68 c8 00 00 00       	push   $0xc8
+fffffffffe8e4ce8:	68 c0 00 00 00       	push   $0xc0
+fffffffffe8e4ced:	6a 10                	push   $0x10
+fffffffffe8e4cef:	6a 08                	push   $0x8
+fffffffffe8e4cf1:	6a 00                	push   $0x0
+fffffffffe8e4cf3:	68 08 05 00 00       	push   $0x508
+fffffffffe8e4cf8:	68 90 00 00 00       	push   $0x90
+fffffffffe8e4cfd:	68 dc 00 00 00       	push   $0xdc
+fffffffffe8e4d02:	ff 75 b0             	push   -0x50(%rbp)
+fffffffffe8e4d05:	6a 50                	push   $0x50
+fffffffffe8e4d07:	41 56                	push   %r14
+fffffffffe8e4d09:	ff 75 a8             	push   -0x58(%rbp)
+fffffffffe8e4d0c:	48 b8 30 86 8a fe ff ff ff ff 	movabs $0xfffffffffe8a8630,%rax
+fffffffffe8e4d16:	ff d0                	call   *%rax
+fffffffffe8e4d18:	48 81 c4 10 01 00 00 	add    $0x110,%rsp
+fffffffffe8e4d1f:	eb 19                	jmp    fffffffffe8e4d3a <sys_perf_event_open+0x3fa>
+fffffffffe8e4d21:	48 85 55 d0          	test   %rdx,-0x30(%rbp)
+fffffffffe8e4d25:	74 0c                	je     fffffffffe8e4d33 <sys_perf_event_open+0x3f3>
+fffffffffe8e4d27:	48 c7 c0 ea ff ff ff 	mov    $0xffffffffffffffea,%rax
+fffffffffe8e4d2e:	83 e1 01             	and    $0x1,%ecx
+fffffffffe8e4d31:	74 07                	je     fffffffffe8e4d3a <sys_perf_event_open+0x3fa>
+fffffffffe8e4d33:	48 c7 c0 fe ff ff ff 	mov    $0xfffffffffffffffe,%rax
+fffffffffe8e4d3a:	48 81 c4 f8 00 00 00 	add    $0xf8,%rsp
+fffffffffe8e4d41:	5b                   	pop    %rbx
+fffffffffe8e4d42:	41 5c                	pop    %r12
+fffffffffe8e4d44:	41 5d                	pop    %r13
+fffffffffe8e4d46:	41 5e                	pop    %r14
+fffffffffe8e4d48:	41 5f                	pop    %r15
+fffffffffe8e4d4a:	5d                   	pop    %rbp
+fffffffffe8e4d4b:	c3                   	ret
+
+Disassembly of section .fixup:
+
+Disassembly of section .vsyscall:

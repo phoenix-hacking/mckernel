@@ -1,0 +1,29 @@
+--- preserved-aac529-shared-CPU-MEM
++++ same-parser-superset-IKC-format-tags-only
+@@ -119,7 +119,7 @@
+         min_chunk_size: 0, max_size_ratio_all: 0, timeout: 0 }
+ }
+ 
+-unsafe fn append(s: &mut *mut c_char, capacity: &mut usize, offset: c_int, kind: u8, a: usize, b: c_int) -> c_int {
++pub(super) unsafe fn append(s: &mut *mut c_char, capacity: &mut usize, offset: c_int, kind: u8, a: usize, b: c_int) -> c_int {
+     loop {
+         let p = (*s).offset(offset as isize);
+         let room = capacity.wrapping_sub(offset as usize);
+@@ -128,6 +128,8 @@
+             1 => snprintf(p, room, c!("%d-"), a as c_int),
+             2 => snprintf(p, room, c!("%d"), a as c_int),
+             3 => snprintf(p, room, c!("%lu@%d"), a as c_ulong, b),
++            5 => snprintf(p, room, c!(":%d"), a as c_int),
++            6 => snprintf(p, room, c!("+")),
+             _ => snprintf(p, room, c!(",")),
+         };
+         if written < 0 || room >= (written as usize + 1) { return written; }
+@@ -170,7 +172,7 @@
+     }
+     s
+ }
+-unsafe fn log<F:FnOnce(*mut c_char,usize)>(format:F) {
++pub(super) unsafe fn log<F:FnOnce(*mut c_char,usize)>(format:F) {
+  if unsafe {loglevel}<1 || unsafe {geteuid()}!=0 {return;}
+  let mut text=[0 as c_char;3840];format(text.as_mut_ptr(),text.len());
+  let fd=unsafe {open(c!("/dev/kmsg"),1)};

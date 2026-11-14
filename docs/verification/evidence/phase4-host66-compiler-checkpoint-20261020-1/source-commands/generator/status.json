@@ -1,0 +1,29 @@
+{
+  "argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--fsize=33554432",
+    "--core=0",
+    "--nofile=256",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-preparation-20261020-1/prepare_fullmodule_inputs.py"
+  ],
+  "pid": 1882266,
+  "start": 27470661,
+  "returncode": 0,
+  "direct_child_joined": true,
+  "process_group_absent": true,
+  "elapsed_seconds": 0.0479587749869097,
+  "compiler_calls": 0
+}

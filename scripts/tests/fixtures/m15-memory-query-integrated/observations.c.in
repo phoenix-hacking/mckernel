@@ -1,0 +1,112 @@
+#define _GNU_SOURCE
+#include <assert.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <limits.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/eventfd.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <ihk/ihklib_private.h>
+/* Exact declaration extracted from the bound production C source. */
+__LOGLEVEL_DECL__
+/* Only path/stat/fopen and device-open boundaries are local observations.
+ * Successful FILE/getline/allocator/descriptor operations reach genuine libc. */
+static const char *text_directory;
+static FILE *active_file;
+static void *active_line,*owned[8];
+static unsigned long generation;
+static int terminal_line,line_calls,line_frees,terminal_frees,file_opens,file_closes;
+static int attempted,allocated,released,live,fail_conversion,fd,opens,closes,checks;
+static char mapped_path[PATH_MAX];
+static const char *ordinary_path(const char *source) {
+ const char *prefix="/sys/devices/virtual/mcos/mcos17/sys/devices/system/node/node";
+ char node0[PATH_MAX],node1[PATH_MAX];
+ assert(snprintf(node0,sizeof(node0),"%s0/meminfo",prefix)>0);
+ assert(snprintf(node1,sizeof(node1),"%s1/meminfo",prefix)>0);
+ const char *leaf;
+ if(!strcmp(source,node0))leaf="node0.txt";
+ else{assert(!strcmp(source,node1));leaf="node1.missing";}
+ int n=snprintf(mapped_path,sizeof(mapped_path),"%s/%s",text_directory,leaf);
+ assert(n>0&&(size_t)n<sizeof(mapped_path));return mapped_path;
+}
+int observation_stat(const char *path,struct stat *storage) {return stat(ordinary_path(path),storage);}
+FILE *observation_fopen(const char *path,const char *mode) {
+ assert(!active_file&&!active_line&&file_opens==0&&!strcmp(mode,"r"));
+ active_file=fopen(ordinary_path(path),mode);assert(active_file);++file_opens;return active_file;
+}
+ssize_t observation_getline(char **line,size_t *capacity,FILE *file) {
+ assert(file==active_file&&*line==NULL&&!active_line);
+ ssize_t result=getline(line,capacity,file);int saved=errno;
+ assert(*line&&*capacity>0);active_line=*line;terminal_line=result==-1;++generation;++line_calls;
+ printf("LINE generation=%lu terminal=%d result=%zd\n",generation,terminal_line,result);
+ errno=terminal_line?EAGAIN:saved;return result;
+}
+static void *record(void *pointer) {
+ assert(pointer);for(int i=0;i<8;i++)if(!owned[i]){owned[i]=pointer;++live;++allocated;return pointer;}abort();
+}
+static int allocation_failure(const char *kind) {
+ assert(file_closes==1&&!active_file&&!active_line&&terminal_frees==1);
+ ++attempted;const char *expected[]={"strdup","strdup","calloc","calloc","strdup"};
+ assert(attempted<=5&&!strcmp(kind,expected[attempted-1]));
+ if(fail_conversion&&attempted==3){errno=ENOMEM;return 1;}return 0;
+}
+void *observation_calloc(size_t n,size_t size) {if(allocation_failure("calloc"))return NULL;return record(calloc(n,size));}
+char *observation_strdup(const char *text) {if(allocation_failure("strdup"))return NULL;return record(strdup(text));}
+void observation_free(void *pointer) {
+ if(pointer){
+  if(pointer==active_line){
+   printf("LINE-FREE generation=%lu terminal=%d entry-errno=%d\n",generation,terminal_line,errno);
+   if(terminal_line){assert(errno==EAGAIN);++terminal_frees;}else ++line_frees;
+   active_line=NULL;terminal_line=0;
+  }else{
+   int found=0;for(int i=0;i<8;i++)if(owned[i]==pointer){owned[i]=NULL;--live;++released;found=1;break;}assert(found);
+  }
+ }
+ free(pointer);errno=EIO; /* Observe the new terminal free's local errno guard. */
+}
+int observation_fclose(FILE *file) {
+ assert(file==active_file&&file_closes==0&&!active_line&&terminal_frees==1&&errno==EAGAIN);
+ puts("FILE-CLOSE terminal-freed=1 entry-errno=11");
+ int result=fclose(file);assert(result==0);active_file=NULL;++file_closes;return result;
+}
+int observation_open(int index) {
+ assert(index==17&&opens==0);fd=eventfd(0,EFD_CLOEXEC);assert(fd>=0);++opens;return fd;
+}
+int observation_close(int descriptor) {
+ assert(opens==1&&closes==0&&descriptor==fd);++closes;int result=close(descriptor);assert(result==0);return result;
+}
+static void write_text(const char *text) {
+ char path[PATH_MAX];int n=snprintf(path,sizeof(path),"%s/node0.txt",text_directory);assert(n>0&&(size_t)n<sizeof(path));
+ FILE *file=fopen(path,"w");assert(file);size_t length=strlen(text);assert(fwrite(text,1,length,file)==length);assert(fclose(file)==0);
+}
+static void reset(int failure) {
+ assert(!active_file&&!active_line&&live==0);for(int i=0;i<8;i++)assert(!owned[i]);
+ line_calls=line_frees=terminal_frees=file_opens=file_closes=attempted=allocated=released=opens=closes=0;
+ fd=-1;fail_conversion=failure;
+}
+typedef int (*MemoryAPI)(int,unsigned long *,int);
+static void check(MemoryAPI api,int kind,int mode) {
+ reset(mode==2);
+ write_text(mode==1?"Node 0 Other: 9 kB\n":"Node 0 MemTotal: 8 kB\nNode 0 MemFree: 2 kB\n");
+ const unsigned long first=0x1122334455667788UL,second=0x8877665544332211UL;
+ unsigned long output[2]={first,second};int result=api(17,output,1);
+ assert(opens==1&&closes==1&&file_opens==1&&file_closes==1);
+ errno=0;assert(fcntl(fd,F_GETFD)==-1&&errno==EBADF);
+ assert(!active_file&&!active_line&&!terminal_line&&terminal_frees==1);
+ assert(line_calls==(mode==1?2:3)&&line_frees==(mode==1?1:2));
+ assert(live==0&&allocated==released&&output[1]==second);
+ if(mode==0){assert(result==0&&output[0]==(kind==0?8192UL:2048UL)&&attempted==5&&allocated==5);}
+ else if(mode==1){assert(result==-EINVAL&&output[0]==first&&attempted==0&&allocated==0);}
+ else{assert(result==-ENOMEM&&output[0]==first&&attempted==3&&allocated==2);}
+ printf("CASE api=%s mode=%s return=%d output=%lu parser-attempts=%d parser-frees=%d terminal-frees=%d file-closes=%d fd-closes=%d\n",
+        kind==0?"total":"free",mode==0?"success":mode==1?"no-match":"converter-ENOMEM",result,output[0],attempted,released,terminal_frees,file_closes,closes);
+ ++checks;
+}
+int observation_run(MemoryAPI total,MemoryAPI available,const char *directory) {
+ assert(getuid()==1000&&geteuid()==1000);loglevel=0;text_directory=directory;assert(directory&&strlen(directory)<PATH_MAX-32);
+ MemoryAPI apis[]={total,available};for(int kind=0;kind<2;kind++)for(int mode=0;mode<3;mode++)check(apis[kind],kind,mode);
+ assert(checks==6);puts("integrated cases=6 APIs=2 success=2 no-match-EINVAL=2 post-EOF-converter-ENOMEM=2 all-line-parser-FILE-FD-ownership-released");return 0;
+}

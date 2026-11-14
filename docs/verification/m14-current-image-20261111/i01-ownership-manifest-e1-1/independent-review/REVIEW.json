@@ -1,0 +1,193 @@
+{
+  "C4_explicitly_reviewed_live_PROJECT_C": [
+    {
+      "actual_source_first_line": 8005,
+      "actual_source_last_line": 8242,
+      "bytes": 1659,
+      "reviewed_live_project_C_not_retired": true,
+      "source_body_sha256": "9e3c6e0d5378b029e1bc9ba6c35df456799de4f6f5e8c64575500be4efbcd5b3",
+      "symbol": "do_execveat"
+    },
+    {
+      "actual_source_first_line": 8245,
+      "actual_source_last_line": 8251,
+      "bytes": 12,
+      "reviewed_live_project_C_not_retired": true,
+      "source_body_sha256": "f821d0512fb8010a1e9cfa354444cf587a950d4b22425179ba95876c1c42fc45",
+      "symbol": "syscall_execveat_bridge"
+    },
+    {
+      "actual_source_first_line": 29500,
+      "actual_source_last_line": 29602,
+      "bytes": 1260,
+      "reviewed_live_project_C_not_retired": true,
+      "source_body_sha256": "648b0a2c35eb19bc6e5ab08798092c075b74d2a42228a9b5164c70d3e9fea1c4",
+      "symbol": "util_thread"
+    },
+    {
+      "actual_source_first_line": 29645,
+      "actual_source_last_line": 29650,
+      "bytes": 34,
+      "reviewed_live_project_C_not_retired": true,
+      "source_body_sha256": "82b9fa3f5da42e4c5edc55f9ca34544c52e3e78a2c00a76c14eba12bf2c79040",
+      "symbol": "syscall_util_indicate_clone_disabled_bridge"
+    }
+  ],
+  "E2_E3_not_satisfied": "C4 remain2965B live project C; each-live-Rust/permittedASM and actual C-retirement conditions stay OPEN. Source/ownership review does not replace, retire or prove native behavior.",
+  "Root_only_next_action": "Root may record/publish only original M14-I01-E1 using this independent wholeGO. Preserve E2/E3/parents/holds and M14-before-M15 acceptance order.",
+  "actual_cohort": {
+    "C": {
+      "bytes": 183672,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+      "sha256": "0ade1bb0cdb58dee3c081c7e420b064bacf9c8ecf19c9193283764430f98d260"
+    },
+    "Rust": {
+      "bytes": 21579336,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/rust/mckernel_rust.o",
+      "sha256": "a15699ebd17b7d7293b9b748bfc0301e3eedfd6e2482f1851218c0875903ca73"
+    },
+    "image": {
+      "bytes": 13349576,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/mckernel.img",
+      "sha256": "a2f00a6105f20642db8ef95fe12ade0873120594531f325ef363a4bb59f0ff8a"
+    },
+    "map": {
+      "bytes": 1274247,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/mckernel.img.map",
+      "sha256": "15b10db2310f91d83ac72f28fdeae0ea361d6bd152f64bca1a42976e2cfa3e98"
+    },
+    "source_commit": "c964be3917c8f4c5031108aa927c84894584b667"
+  },
+  "at_utc": "2026-11-11T21:00:36.311018+00:00",
+  "clause_matrix": {
+    "bytes": 12339,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/m14-i01-e1-ownership-review-sdk-max-1/CLAUSE-MATRIX.json",
+    "sha256": "a15369043161a663bf96e53cc4a23e85a69ead09f3ca38db40ffe6e38f43c4c0"
+  },
+  "decision": "GO_WHOLE_ORIGINAL_M14_I01_E1_OWNERSHIP_MANIFEST_ONLY",
+  "findings": [],
+  "literal_current_ledger_row_equal": true,
+  "literal_done_when": "Establish final selected/emitted compute ownership manifest across original sources, headers, macros, callbacks and unknown owners; exact matching proof has no unresolved required owner, ABI/provider obligation, unexplained failure or unreviewed project-C implementation. The ownership manifest covers original sources, emitted headers/macros/callbacks and every unknown owner, and distinguishes legitimate Linux/third-party/generated code from project runtime.",
+  "literal_verification_method": "Join source/config/toolchain/provider identities to the admitted final cohort; inspect actual selected/emitted/link ownership and execute only the original applicable defined functional scenarios after Root admission. Record exact command, result, cleanup and matching artifact identity; skipped/UNKNOWN results do not satisfy this step.",
+  "material_checks": {
+    "bytes": 9059,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/m14-i01-e1-ownership-review-sdk-max-1/INDEPENDENT-MATERIAL-CHECKS.json",
+    "sha256": "04c8b3439d0f5f674dc8fd6afd8feddf16c84cb246aeb85ac87e51a319d23571"
+  },
+  "minimum_required_new_source_or_command": null,
+  "new_C_retirements": 0,
+  "new_readelf_compiler_build_test_native_or_held_replay": false,
+  "no_native_or_behavior_waiver": "E1 is the complete literal selected/emitted ownership manifest condition. Existing admitted matching technical command/type/provider/body scopes are used only at their accepted scope; native/deployed/runtime/parent obligations remain distinct.",
+  "not_accepted": [
+    "M14-I01-E2",
+    "M14-I01-E3",
+    "M14-I01-ACCEPT/parent integration",
+    "FUNCTIONAL/native/file/milestone acceptance",
+    "generic/exec/XPMEM/backend/source/native/currentfree/account/Scratch/resource UNKNOWN release"
+  ],
+  "original_check_id": "M14-I01-E1",
+  "reused_original_accepted_scopes": [
+    "M14F01/F02/F04/F05 unchanged",
+    "F06 whole supported DEFAULT",
+    "whole03-03/04/05 DEFAULT at matching input/source identities",
+    "actual accepted provider and finiteHOST receipts"
+  ],
+  "review_actions": [
+    "Read actual source declarations/full C4 bodies, selected caller/type guards and frozen matching machine evidence.",
+    "Compare six key current source hashes to bound inputs and c964 Git blob identities.",
+    "Derive5052+5 ownership exhaustiveness,250object+5script import providers,163dependencies, callback joins and current positive lifecycle from saved data.",
+    "Write only this private review directory; no source/criteria/ledger/canonical mutation."
+  ],
+  "reviewer": "/root/sdk_binding_source_max actual Sol/MAX; independent of P04Source assessment; private review writer only",
+  "schema": 1,
+  "score_or_ledger_changed_by_reviewer": false,
+  "source_artifact_evidence_SHA_bindings": [
+    {
+      "bytes": 5088,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/m14-i01-e1-ownership-assessment-p04source-max-1/ASSESSMENT.json",
+      "sha256": "0987582e13d21f26f482abc830cce74d554b0158b84cb8a3e17f4fb2bf8b9f11"
+    },
+    {
+      "bytes": 10459,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/m14-i01-e1-ownership-assessment-p04source-max-1/CLAUSE-MATRIX.json",
+      "sha256": "4f286f80ec205880a53d0c1c8db36c07b2fb8ae0559cef9ce20c2dc725a2b105"
+    },
+    {
+      "bytes": 4584,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/m14-i01-e1-ownership-assessment-p04source-max-1/ORIGINAL-CRITERION.json",
+      "sha256": "e2a018a7d4fba4c9e599e0f0ea65978b4f9c699aed31175da17d5b10c1f5c0e6"
+    },
+    {
+      "bytes": 28372,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/m14-i01-e1-ownership-assessment-p04source-max-1/SELECTED-EMITTED-OWNERSHIP-MANIFEST.json",
+      "sha256": "0bfd151b0a7fc5e53a337762e675834cf20bec88edaa30989c28017822827a73"
+    },
+    {
+      "bytes": 20797,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/m14-i01-e1-ownership-assessment-p04source-max-1/C4-SOURCE-OWNER-CONTRACTS.json",
+      "sha256": "22f0146493e251163b070ffaea860768acd24f55c1371c07caec9f9a2db8d659"
+    },
+    {
+      "bytes": 4615,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/m14-i01-e1-ownership-assessment-p04source-max-1/SOURCE-BINDINGS.json",
+      "sha256": "5869046d13ee8345abdb03cce22f0e59200270e5b8036988f77a7f43a9a73a6e"
+    },
+    {
+      "bytes": 139468,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/qualification-1/dispatch-owner-correction-1/QUALIFICATION.json",
+      "sha256": "6f67cd0637b3127c8724e78ad259d3b86c536c66868a92dafa0a106f33f68623"
+    },
+    {
+      "bytes": 6655279,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/qualification-1/dispatch-owner-correction-1/OWNER-PROVIDER-JOINS.json",
+      "sha256": "ef312db79ab9c9d5173bae3d26f89e9a475236a7f49885d8d324c3ae18de512e"
+    },
+    {
+      "bytes": 15594,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/qualification-1/dispatch-owner-correction-1/ACTUAL-RECORD-ENVELOPE.json",
+      "sha256": "c32470b48a41431241c69faf3117b58901ca32feb9f15b4f2e92270611a3b540"
+    },
+    {
+      "bytes": 22616,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/qualification-1/dispatch-owner-correction-1/ACTUAL-RUST-C-NORMAL-PROVIDER-AND-LINK-COMMANDS.json",
+      "sha256": "ea3ebd6146a331d3dcccd99768069f9e410fcf110213abc94c11d533ae2097a3"
+    },
+    {
+      "bytes": 10547,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/qualification-1/dispatch-owner-correction-1/ACTUAL-ABI104-AND-PERF-TYPES.json",
+      "sha256": "894014e5e9a78752919c94b6fff526e0cf1c6c1bfc44b81666c99a9faad149b8"
+    },
+    {
+      "bytes": 371777,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/qualification-1/dispatch-owner-correction-1/ACTUAL-COMPLETE-03-05-REGION-OWNER-JOINS.json",
+      "sha256": "8747210846c11399216a581997c4c280d545d8a5c5795893f90ed85809a5e46e"
+    },
+    {
+      "bytes": 22331,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/qualification-1/dispatch-owner-correction-1/PRESERVED-COHORT-AND-INDEPENDENT-RECEIPTS.json",
+      "sha256": "03956a173c904b07c33db93bf2b7d221ea3df2143e173562005f630ea06fa6ef"
+    },
+    {
+      "bytes": 7296,
+      "path": "/home/holden/mckernel/docs/verification/m14-current-image-20261111/mprotect-signal-1/qualified-1/whole03-03/qualification-82c82622/REVIEW.json",
+      "sha256": "a50c053da1a3dd33f884ad8a9ded0c7071eba4ec96cf58288437d60bdeac3691"
+    },
+    {
+      "bytes": 28076,
+      "path": "/home/holden/mckernel/docs/verification/m14-current-image-20261111/wait-termination-1/qualified-1/whole04/REVIEW.json",
+      "sha256": "2f3b9a329f05cec77f60ff2fc7a7aa2a8a95640fb39a52c08a412ffac7a50eff"
+    },
+    {
+      "bytes": 66921,
+      "path": "/home/holden/mckernel/docs/verification/m14-current-image-20261111/perf-supported-default-1/whole-review/REVIEW.json",
+      "sha256": "c7f765f0db52a687b5cc81c4bf5fe9a4d5f7906704045dcdb3b72ab91f923377"
+    },
+    {
+      "bytes": 64506,
+      "path": "/home/holden/mckernel/docs/verification/m14-current-image-20261111/f06-whole-default-1/f06-whole-default-review-sourceacq-max-1/REVIEW.json",
+      "sha256": "fef8a19d5dd97b2a1a6907e5ae4951960248f9e3ea0b4594dded44926cefef6f"
+    }
+  ],
+  "unmatched_E1_clause": null,
+  "whole_original_E1_done_when_satisfied": true
+}

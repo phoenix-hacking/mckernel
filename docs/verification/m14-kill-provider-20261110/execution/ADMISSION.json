@@ -1,0 +1,41 @@
+{
+  "CPU": 7,
+  "HOST_max_jobs": 3,
+  "HOST_total_bytes": 4294967296,
+  "MemAvailable": 29317238784,
+  "all_overhead_RSS": 1560084480,
+  "allocation_bytes": 1073741824,
+  "at": "2026-11-10T18:38:45.816576+00:00",
+  "disk_free": {
+    "/home/holden/mckernel": 124847374336,
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/emitted-debug-correction-1": 124847374336
+  },
+  "driver_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "100s",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=60:60",
+    "--fsize=16777216:16777216",
+    "--core=0:0",
+    "--",
+    "/usr/bin/python3",
+    "-B",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/emitted-debug-correction-1/run.py",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/emitted-debug-correction-1/REQUEST.json"
+  ],
+  "guard_at": "2026-11-10T18:38:44.364448+00:00",
+  "jobs": 1,
+  "no_other_admitted_Root_payload": true,
+  "old_UNKNOWN_CPU0_bytes": 268435456,
+  "old_UNKNOWN_jobs": 1,
+  "prior_owned_Docker_positive_release": true,
+  "request_sha256": "badbfb5e86f00ebe5ef0ddbb02a8237d364049e51bd8bf0e7779f5cbada594b5",
+  "review_sha256": "e113730e527c89db88a95a1e7abacb1e66958e7582729ad15c2693edef63b658",
+  "three_unstarted_commands_only": true
+}

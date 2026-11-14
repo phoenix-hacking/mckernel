@@ -1,0 +1,58 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "STATIC_ONLY_NOT_EXECUTION",
+  "source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/scratch-growth-sdk7-110-to-142g-source-1/grow_scratch.py",
+    "bytes": 21034,
+    "sha256": "8229919524d803c3694aea42e85bb43d705228d7f78a8ce768704b613ce7608f"
+  },
+  "contract_draft": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-SCRATCH-GROWTH-SDK7-ADMISSION-1/CONTRACT.DRAFT.NOT-RELEASED.json",
+    "bytes": 3236,
+    "sha256": "28d5c1f1c6f1e25dc44f957a842974a9444464ba69a25fbd2fed20d5d9796805"
+  },
+  "before": {
+    "path": "/home/holden/mckernel-work/scratch.ext4",
+    "device": 66306,
+    "inode": 47468427,
+    "uid": 0,
+    "gid": 0,
+    "mode": 384,
+    "nlink": 1,
+    "size": 118111600640,
+    "uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52"
+  },
+  "after": {
+    "path": "/home/holden/mckernel-work/scratch.ext4",
+    "device": 66306,
+    "inode": 47468427,
+    "uid": 0,
+    "gid": 0,
+    "mode": 384,
+    "nlink": 1,
+    "size": 152471339008,
+    "uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52"
+  },
+  "commands": [
+    [
+      "/usr/bin/truncate",
+      "--no-create",
+      "--size=152471339008",
+      "/home/holden/mckernel-work/scratch.ext4"
+    ],
+    [
+      "/usr/sbin/losetup",
+      "--set-capacity",
+      "/dev/loop36"
+    ],
+    [
+      "/usr/sbin/resize2fs",
+      "/dev/loop36"
+    ]
+  ],
+  "caller_FS_SIZE_limit": [
+    -1,
+    -1
+  ],
+  "ordinary_preservation_and_capacity_preflight": "PASS; no root/mutation/sourcefunctionauthority used"
+}

@@ -1,0 +1,20 @@
+{
+  "source_or_compiler_execution": false,
+  "failures": [
+    {
+      "kind": "read-only metadata shape",
+      "failure": "compiler commands list treated as dict",
+      "correction": "explicit list/dict branch"
+    },
+    {
+      "kind": "output-bound violation",
+      "failure": "loose key filter included toolchain_roots nested inventory; tool truncated stdout",
+      "correction": "explicit selected scalar refs only; no repeat"
+    },
+    {
+      "kind": "read-only metadata shape",
+      "failure": "assumed tools key; actual pinned manifest uses image_tools",
+      "correction": "read only top5 key names; explicit image_tools.cc projection"
+    }
+  ]
+}

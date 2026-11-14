@@ -1,0 +1,62 @@
+{
+  "schema": "mckernel.scheduler-ipi-local.metadata-source-contract.v1",
+  "ipi": {
+    "T": [
+      "x86_issue_ipi_bridge",
+      "x86_interrupt_log_bridge"
+    ],
+    "data": "x86_interrupt_log_debug",
+    "filename_hex": "2f686f6d652f686f6c64656e2f6d636b65726e656c2f617263682f7838365f36342f6b65726e656c2f6370752e6300",
+    "descriptor_function_hex": "7838365f696e746572727570745f6c6f675f62726964676500",
+    "logger_literals_hex": [
+      "25733a20696e76616c6964204350552069643a2025640a00",
+      "69686b5f6d635f696e746572727570745f63707500",
+      "5b25645d2069686b5f6d635f696e746572727570745f6370753a2025640a00"
+    ],
+    "all_source_literals_hex": [
+      "2f686f6d652f686f6c64656e2f6d636b65726e656c2f617263682f7838365f36342f6b65726e656c2f6370752e6300",
+      "7838365f696e746572727570745f6c6f675f62726964676500",
+      "25733a20696e76616c6964204350552069643a2025640a00",
+      "69686b5f6d635f696e746572727570745f63707500",
+      "5b25645d2069686b5f6d635f696e746572727570745f6370753a2025640a00"
+    ],
+    "data_fields": {
+      "file": 0,
+      "func": 8,
+      "fmt": 16,
+      "line_flags": 24
+    },
+    "line_flags": 3140,
+    "data_bytes": 32,
+    "alignment": 8,
+    "section_flags": "0x200003 exactWRITE|ALLOC|GNU_RETAIN",
+    "expected_U": [
+      "x86_issue_ipi",
+      "kprintf",
+      "ihk_mc_get_processor_id"
+    ],
+    "policy": "Complete actualvolatileguard+latecurrentCPU+sourceformats/u32casts and genuinecallbackslotU; no disabledstatefolding or slotowner."
+  },
+  "local": {
+    "T": [
+      "get_x86_cpu_local_variable"
+    ],
+    "B": "x86_issue_ipi",
+    "B_bytes": 8,
+    "alignment": 8,
+    "target_relocations": 0,
+    "U": [
+      "locals"
+    ],
+    "policy": "Original None is realprebootNOBITSstorageonly; genuineexistinglocals remainsU; originalinlinehelper/pointer.add/idcast/wrapping constants unchanged. No target/runtime/readiness."
+  },
+  "common_expected_emission": {
+    "function_sections": ".ltext.<exactpublicsourceexport> PROGBITS/flags0x10000006/align16",
+    "readonly_source_strings": ".lrodata.str1.1 PROGBITS/flags0x10000032/align1/entsize1; exactsourceNULstrings/suffixpooling only",
+    "unwind": ".eh_frame SHT_X86_64_UNWIND0x70000001/ALLOC2/align8; exactonePC64type24localSECTIONreferenceperpublicfunction, no newruntimeprovider",
+    "emitted_private_FUNC_OBJECT": "Expectednone; source local_addr inline(always) normallyinlines, any actualprivatehelper/intrinsic/unknown ownerrequiresreview ratherthanwildcard acceptance",
+    "padding_pool_policy": "Record actualallocatedbytes/fieldtargets/ABIpadding; no semanticpaddingvalue or generalizedphysicalpoolcountclaim"
+  },
+  "profile_reference": "Exact retainednativepartialflags/qualifiedlargecode/unwind convention consumed from existing actual primitive metadata, not replayed or usedasnewobjectcontent.",
+  "no_runtime_claim": true
+}

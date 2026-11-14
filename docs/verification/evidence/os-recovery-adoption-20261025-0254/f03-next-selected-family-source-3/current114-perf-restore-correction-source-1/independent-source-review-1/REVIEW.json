@@ -1,0 +1,75 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "CHANGES_REQUIRED_COPIED_QUALIFIER_RELATIVE_IMPORT_CONTEXT",
+  "independent": true,
+  "implementation_ownership": false,
+  "reviewer": "/root/daemon_execution_review",
+  "recorded_at": "2026-10-28T03:12:41.411403+00:00",
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/SOURCE-READY.json",
+    "bytes": 3939,
+    "sha256": "9ae558d50695d05f380a93b465accae61c07b69b747c3e653bbf59f47547a990"
+  },
+  "profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/PROFILE.NOT-GRANTED.json",
+    "bytes": 191270,
+    "sha256": "93350906661f1b257b0694adc666df5949d6b089cbb74348dde04d0e4e7b6a66"
+  },
+  "predecessor_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/independent-source-review-1/REVIEW.json",
+    "bytes": 4423,
+    "sha256": "a5e158d6ff40152043409684c982dd81c5fc62ef4a586c911ff27ebca125398e"
+  },
+  "closed_prior_finding": "Exact accepted postENABLE_PERF five-line #line21118/#line21150 block inserted once and only once; candidate equals old candidate plus exact accepted block. Prior accepted-current114 line omission resolved.",
+  "blocking_findings": [
+    {
+      "id": "qualifier_context_relative_helper_missing",
+      "actual_qualifier": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/qualify_wakeup4_objects.py",
+        "bytes": 3367,
+        "sha256": "acfa6d727855c56ef3ba1e6def7b4cf058861169c0f49c520ea6c3540e0f6fb4"
+      },
+      "source_line": "helper=D.parent/'f02-source38-next-current-integration-source-1/check_thirteen_storage.py'",
+      "D": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1",
+      "resolved_missing_path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/f02-source38-next-current-integration-source-1/check_thirteen_storage.py",
+      "resolved_path_exists": false,
+      "original_reviewed_helper": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-source38-next-current-integration-source-1/check_thirteen_storage.py",
+        "bytes": 6103,
+        "sha256": "ba2b4764ce71f01cf2a4d80e6892acfa7862bb47455a945122b2c69646cb50cf"
+      },
+      "exact_seventh_command": {
+        "id": "06-four-callback-genuineABI-and-current-consumer-qualification",
+        "argv": [
+          "/usr/bin/python3",
+          "-B",
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/qualify_wakeup4_objects.py",
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/HOST-output-proposed-1"
+        ],
+        "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Real current ptrace_wakeup_sig consumers/16ABI words/four exports/matched fallback/GNU_RETAIN; no native credit.",
+        "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1",
+        "timeout_seconds": 90,
+        "stdout_limit_bytes": 67108864,
+        "stderr_limit_bytes": 67108864,
+        "requires_fresh_Root_ordinary_grant": true,
+        "leaf": "F03Wakeup4",
+        "argv_compact_json_LF_sha256": "b69d6f6f81223a6afb5861f9d14ef457b18923899ff2f6c34364b07d98f87137"
+      },
+      "effect": "Step6 would import missing helper before ABI reader main, after six proposed compiler/linker commands. Byte-identical source copied one directory deeper does not preserve its import context.",
+      "minimal_fix": "Change only helper path to exact existing absolute E/f02-source38-next-current-integration-source-1/check_thirteen_storage.py or correct ancestor; preserve helper semantics and refresh reader/profile/READY hashes in an additive successor."
+    }
+  ],
+  "positive_checks": [
+    "All READYrefs/Rustfragment hashes authenticate. Rust3reused adapters/newtypedstep/16word genuine ABI/staticCsignatures/matchingcfgfallback/current4LIVE12B+actualcaller checks reuse a5e158 review unchanged.",
+    "New C equals oldC plus exact accepted five-line perf restoration; sharedwakeouter exit block and callback bodies unchanged.",
+    "GenuineC ABI fixture changes only included private C path. Sevencommand argv differ only fresh output, fixture and qualifier paths; resource limits and original context-root Rust inputs unchanged.",
+    "No source or algorithm redesign, broader ABI mirror, new runtime gate or canonical source write is needed."
+  ],
+  "compiler_queries_grants_runtime_cleanup_Git": 0,
+  "subagents": 0,
+  "runtime_authority": null,
+  "execution_release": false,
+  "native_acceptance": false,
+  "retirement_credit": 0,
+  "blocker": "Copied qualifier resolves existing ELF helper relative to wrong directory."
+}

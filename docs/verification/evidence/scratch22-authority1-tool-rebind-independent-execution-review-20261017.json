@@ -1,0 +1,100 @@
+{
+  "schema": "scratch22-authority1.tool-rebind-independent-execution-review.v1",
+  "decision": "PASS_EXECUTION_CONDITIONAL",
+  "reviewer": "/root/scratch22_adapter_review",
+  "implementation_ownership": false,
+  "model": "gpt-6.1-sol",
+  "scope": "One fresh source-free offline tool-image probe and receipt rebind, only after the activation prerequisites below. No current execution, native build, kernel image, guest or application acceptance.",
+  "request": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-build-image-rebind-fd09933c-scratch22-authority1-image1-20261017.json",
+    "sha256": "dc13f4cc7ad37c2511978ef70db3a9e0de7354d61e88203d479e04ac5ad5a1d5",
+    "target_candidate_sha": "fd09933c64adaba32bf975ec96e5d518a42544e9",
+    "source_candidate_sha": "c81aeaca5cedd893981a058444fa11a03a49a744",
+    "source_receipt": "/home/holden/mckernel-exact-image-evidence-c81aeaca-7/image-receipt.json",
+    "source_receipt_sha256": "824e22c0aad7494914d39adb31bb70290c59912d5326618d2ffeb5cdbb6ef845",
+    "image_id": "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5",
+    "target_evidence_root": "/home/holden/mckernel-exact-image-evidence-fd09933c-scratch22-authority1-image1-20261017",
+    "target_receipt": "/home/holden/mckernel-exact-image-evidence-fd09933c-scratch22-authority1-image1-20261017/image-receipt.json",
+    "lease": "/home/holden/.mckernel-exact-image-evidence-fd09933c-scratch22-authority1-image1-20261017.lease.json"
+  },
+  "source_and_imports_sha256": {
+    "scripts/native_rust_exact_build_image_rebind_probe.py": "412d46de7e078746a7ec979a13ccb25753d6fa34708610932e35be8f02a89635",
+    "scripts/tests/test_native_rust_exact_build_image_rebind_probe.py": "2d2f2815ca7756634861554380c6cd7645c254c9486a45849180f984219ba7f5",
+    "scripts/native_rust_exact_build_container_owner.py": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1",
+    "scripts/native_rust_exact_build_image_prepare.py": "45cb12e0fd58d164468badfb99a3ed922e65e06046bf38b4a50e27e18595a27b",
+    "scripts/native_rust_exact_build_image_rebind.py": "f10ab116e55a24e8db7a8157d71efdd01198ba3453a8141bc8bbf596eda6b61e",
+    "scripts/native_rust_exact_mckernel_image_container_owner.py": "e9861cf73b0328c9fe2eacb987ea179933146cbeddbc3951405d4e60e89560f4",
+    "scripts/native_rust_exact_disk_build_wrapper.py": "c252ee341eb61752704f8b818503c0a5dc97400845494707ca3110f5f23df6d1",
+    "scripts/native_rust_exact_build_offline.py": "cc243126ab8cc0754c62175c77e46d6ba0d98294f8168cc77893a2c12249cd1a",
+    "scripts/native_exact_historical_lease_observer.py": "463ae558e141c2a6fe5a016fb19baddb26ed883c3bf6d39c114b27711ee78a51"
+  },
+  "correction_reviews": {
+    "image_owner_pin": {
+      "decision": "PASS_SOURCE",
+      "evidence": "docs/verification/evidence/scratch22-authority1-tool-probe-pin-correction-20261017.json",
+      "evidence_sha256": "0cca2fef38e399bb6da60b7626861611478bd0fcfbd7c41833687e2fbac9f1bb",
+      "independent_proof": "Reversing only EXPECTED_HEAVY_ENTRY_CONTRACT_SHA256 from reviewed c252ee34 back to3b910b0c reconstructs the complete old accepted image-owner SHA256556f2acecaf713c3eeb3e1f9c671bd13f401210a871554a89ac6f7b8d4ff6b4c. No executable algorithm or native candidate bytes change.",
+      "preserved_failure": "Original unprivileged --help import failure is retained in scratch22-authority1-tool-probe-import-original-20261017 captures. Dispatcher reports29 focused tests and corrected --help PASS."
+    },
+    "cli_root_guard": {
+      "decision": "PASS_SOURCE",
+      "author": "/root/scratch21_transaction",
+      "evidence": "docs/verification/evidence/scratch22-tool-probe-root-guard-source-20261017.json",
+      "evidence_sha256": "6f85a80f80c166ff04d08996793487ddcce7b1e0d0fc82577ccdd45b721f7e69",
+      "boundary": "Main enters guarded_execute in the same process. Exact root-owned empty0644 development lock27:4 is opened through NOFOLLOW ancestry and exclusively flocked before the unchanged execute core. HUP/INT/TERM/QUIT latch installation is atomic; handlers remain installed through retirement and quarantine.",
+      "successful_unlock": "Requires actual PASS receipt identical to core result, exact candidate/image/container/lease/shared paths, no client-retirement uncertainty, hash-bound exact container-absence and shared-release proofs, absent target lease/shared token, and final preserved-lock identity check.",
+      "uncertainty": "Entered-core exception, receipt/publication failure or unproven postflight retains the root flock indefinitely. Failed quarantine evidence and interrupted waits cannot return and unlock. No outer timeout or command-line lock override is added. SIGKILL cannot preserve a live flock; retained existing ownership tokens remain crash evidence.",
+      "independent_tests": "Six focused RootGuardTests PASS in0.206seconds under CPU0/2-GiB/120-second ordinary profile. Includes four serial actual disposable children surviving HUP/INT/TERM/QUIT during owner execution and quarantine despite evidence-writer failure, with real temporary flock contention. No real root lock or Docker was used.",
+      "baseline_reuse": "The original26 probe tests and execute core remain unchanged; author reports32 total tests PASS. Original restrictive-umask fixture failure and bounded explicit0644 fixture correction remain recorded. No repeated historical observer suite or full source census."
+    }
+  },
+  "actual_read_only_authentication": {
+    "status": "PASS_READ_ONLY_REBIND_AUTHENTICATION",
+    "exit_code": 0,
+    "source_evidence_rows": 92,
+    "source_evidence_bytes": 430738,
+    "source_tools": 22,
+    "source_libraries": 4,
+    "fresh_target_and_lease": true,
+    "method": "Called the actual authenticate_request against the exact external request digest. Source receipt/evidence closure, offline observation, probe contract and canonical fresh target paths pass. No Docker object, shared token, lease, target directory or container was constructed."
+  },
+  "activation_prerequisites": [
+    "The currently active native heavy build must reach its actual terminal, and its exact terminal container/leases/exclusions must receive independently accepted cleanup. Do not interrupt or overlap that build or mutate its roots.",
+    "Dispatcher checkpoints/pushes/fetches the exact reviewed probe, root-guard tests, pin correction and import hashes above, then binds this review and the exact request to its execution release. Existing source/request hashes must remain unchanged.",
+    "Immediately before invocation, reconcile current boot, scratch UUID2a5768c8-718d-4914-bdc0-6b32c5a92a52, mount/device and complete process/container/lease state. Development lock27:4 must be free for this guarded CLI to acquire; shared heavy token, target lease, target evidence/receipt and request quarantine marker must be absent.",
+    "Remeasure host/scratch/RAM. Preserve16-GiB host and12-GiB scratch floors plus actual evidence/capture needs and emergency headroom; retain at least the previously reviewed16-GiB available-RAM floor and aggregate24-GiB planning budget. This12-GiB container is the sole heavy operation, after the native operation is retired and cleaned.",
+    "No new external stop or97% included-usage stop. Use inherited sudo -A only through the reviewed Docker client; never read credentials or invoke askpass directly."
+  ],
+  "approved_command_after_activation": [
+    "python3", "-B", "scripts/native_rust_exact_build_image_rebind_probe.py",
+    "--request", "/home/holden/mckernel-work/scratch/native-exact-build-image-rebind-fd09933c-scratch22-authority1-image1-20261017.json",
+    "--expected-request-sha256", "dc13f4cc7ad37c2511978ef70db3a9e0de7354d61e88203d479e04ac5ad5a1d5"
+  ],
+  "execution_profile": {
+    "working_directory": "/home/holden/mckernel",
+    "invocations": 1,
+    "root_lock": "/run/lock/mckernel-development.lock",
+    "root_lock_identity": [27, 4],
+    "container_user": "current uid:gid",
+    "cpuset": "2-5",
+    "cpus": 4,
+    "memory_bytes": 12884901888,
+    "memory_swap_bytes": 12884901888,
+    "pids": 512,
+    "network": "none",
+    "bind_mounts": "none",
+    "read_only_root": true,
+    "cap_drop": "ALL",
+    "no_new_privileges": true,
+    "tmpfs": "/tmp:rw,nodev,nosuid,size=256m",
+    "no_outer_timeout_or_external_flock_unlock_wrapper": true
+  },
+  "required_result": "Exit0/PASS candidate-bound target receipt; fresh tool observation exactly equals authenticated source; effective no-mount/network-none/current-user profile verified; owned container retired/removed and exact absence proven; target lease and shared token absent; guarded CLI releases root lock only after its positive postflight. Preserve stdout/stderr, receipt and complete copied/fresh evidence.",
+  "failure_policy": "No unchanged replay. Preserve exact request, failed receipt/evidence, container/client identity, lease/shared token and any quarantine. Uncertain guarded execution keeps the development lock until separately reviewed reconciliation; do not kill it merely to free ownership.",
+  "failure_history": "Preserve original scratch18 libdwarf/placeholder failures and original scratch22 historical-authority failure. Tool-receipt rebinding does not fix libdwarf or populate gitlinks; the separately prepared exact gitlink input remains required for a later image build. No old attempt is replayed.",
+  "reviewer_live_execution": false,
+  "active_native_build_touched": false,
+  "execution_released_now": false,
+  "blocking_source_findings": [],
+  "acceptance_credit": false
+}

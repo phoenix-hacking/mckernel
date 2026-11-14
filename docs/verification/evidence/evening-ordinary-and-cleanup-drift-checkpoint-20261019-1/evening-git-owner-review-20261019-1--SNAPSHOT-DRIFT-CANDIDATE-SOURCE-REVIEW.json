@@ -1,0 +1,72 @@
+{
+  "status": "PASS_CANDIDATE_CONTAINER_MOUNT_MULTISET_AND_BOUNDED_DRIFT_DIAGNOSTIC",
+  "candidate_sha256": "5586388673348be64bd1e5b1734f60e6f26c87f77bb4ba019a063ea4b808d566",
+  "frozen_original_sha256": "0c134ee778b273610ead1ecc507caa038642459c0a065c956b4431c35c755917",
+  "changed_existing_functions": [
+    "container_census",
+    "main"
+  ],
+  "added_function": "snapshot_drift_detail",
+  "semantics": "Mounts is compared as a complete-row multiset by canonicalJSONsorting. No rowfield/count/duplicate omitted; sourceancestry validation still visits every originalrow before sorting. IDs/containerorder/state and every other immutable snapshot field remain unchanged. Existing full projection equality unchanged.",
+  "retained_evidence": {
+    "containers": 44,
+    "container_mount_row_order_only_differences_7vs8": 21,
+    "full_candidate_projection_equal_retained7vs8": true,
+    "actual_failed_apply_current_snapshot_cause": "UNKNOWN; generic actualsource618 did not retain failingprojection. This is one genuine retainedordering reproduction, not proof of exactcause."
+  },
+  "fixture": "Nine actualchangedbody cases passed once; subprocessdirectjoined0/emptystderr per retainedcommandreceipt; Docker/task_view effects stubbed, actualcanonicalsourceancestry guard used. Source/Destination/RW/Type/missingrow/duplicatecount changes remain different and mainunchanged equality would refuse.",
+  "diagnostic": "Reports changed nonprocess topkeys plus two canonicalSHA256 digests; no extraIO or weakening. Message argument is eagerly computed even on equality success, so small bounded CPU/memory overhead applies on pass too; it is not conditional-only execution. Current snapshot projection size small within existing1GiBRAM/4GiBAS ceilings.",
+  "integration_decision": "Root may integrate exactly candidate558 into originalP after preserving0c exactbytes; this sourcePASS grants no rootattempt or runtimeacceptance. Newsource558 requires exactscopednewobserver9/apply2 wrapperpins/capturenames and publish/fetch beforefresh work.",
+  "source_execution_conditions": [
+    "Oldobs8/apply1capture1/release2158/failured051+all5priorfailures remainconsumed/preserved",
+    "Newrolepackets must preserve actualsourceglobalsBASE, registry361/manifest8255/advisorybe259 and all4originalexecute/16namespace/groupretirement invariants; no broadtests replay",
+    "Same bounded90wall/60CPU/4GiBAS/1GiBRAM/CPU6/32MiBFSize profile and host17985175552/scratch13421772800 gates",
+    "Before anynewclock ordinaryfinalchecker must accept actualcompleted8schema with stablemetadata excludingatime, optionalreceiptfields notassumed; puredata-binding source/namespacehash transitions allowedonly after independentfreeze",
+    "Newrole source+execution conditionaldecision still pending preparedexactreadbacks/genuineactualstaticdatajoins; no standalone apply/root/retryauthority from candidateauthor or this sourcePASS"
+  ],
+  "root_or_tests_executed_by_reviewer": false,
+  "actual_apply_failure_family_count": 1,
+  "next_failure_policy": "One boundedsourcecorrection for ordering family only; if newattemptstillfails samefamily use newboundedchangedkeys/hashdiagnostic and expertdecision, not repeatedunchanged attempts.",
+  "inputs": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-snapshot-drift-debug-20261019-1/exact120-candidate.py",
+      "sha256": "5586388673348be64bd1e5b1734f60e6f26c87f77bb4ba019a063ea4b808d566",
+      "bytes": 38600
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-snapshot-drift-debug-20261019-1/candidate.patch",
+      "sha256": "692d65d4198908c62adf71740ed5eb623db3b0ccc4af337dc52c30fa3051a160",
+      "bytes": 2752
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-snapshot-drift-debug-20261019-1/source-facts.json",
+      "sha256": "9c6eff5b876cfe4cdface0ba4ab8340512a809b6a37638c0bddb429ab8e6b1f6",
+      "bytes": 701
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-snapshot-drift-debug-20261019-1/container-order-fixture.py",
+      "sha256": "8c17c35c457293dcee3f771d9cd32db69bf56f2fb65dee1fc39a6da3f69d27be",
+      "bytes": 4448
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-snapshot-drift-debug-20261019-1/container-order-fixture-result-1.json",
+      "sha256": "229c1e72e8fb6e3f5426e38bf1f6f8471185018d01af585267f7a21ea50819ff",
+      "bytes": 1351
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-snapshot-drift-debug-20261019-1/container-order-fixture-command-1.status.json",
+      "sha256": "f48adad5c391bf673d8eee0d86e8b5f06305f6b08af2782822f7aa994ed9a395",
+      "bytes": 1750
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-snapshot-drift-debug-20261019-1/container-order-fixture-command-1.stdout",
+      "sha256": "91e3de99d3d46602c48841c6b21f63531982cb932c25ef0656de71b19faaf820",
+      "bytes": 82
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-snapshot-drift-debug-20261019-1/container-order-fixture-command-1.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "schema": "mckernel.native-exact.output-archive-completion.v1",
+  "recorded_at_utc": "2026-10-01T16:00:00Z",
+  "review": "PASS scoped to deletion of source identity 1831:3933547 after immediate privileged no-consumer rescan",
+  "fetched_mapping_commit": "31d5df4b215ac701bd7b42591ebe1b363d60c1bf",
+  "source": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-build-output-acd4197b-scratch-11",
+    "device": 1831,
+    "inode": 3933547,
+    "pre_delete_size_bytes": 5166739456,
+    "post_delete_state": "absent"
+  },
+  "pre_delete_census": {
+    "privileged_proc_consumers": [],
+    "docker_mount_consumers": [],
+    "result": "PASS"
+  },
+  "archive": {
+    "path": "/home/holden/mckernel-work/native-exact-build-output-acd4197b-scratch-11.tar.gz",
+    "device": 66306,
+    "inode": 47498558,
+    "size_bytes": 1323885514,
+    "mode": "0600",
+    "uid": 1000,
+    "gid": 1000,
+    "links": 1,
+    "sha256": "0c159fe9fb86c7a7d54bb6372dd0975e20da83187e1fc55a0e27e740b419a875",
+    "independent_verification": "full ACL/xattr tar compare exited 0; exact pathname membership; no regular-file hardlinks"
+  },
+  "retained_failure_evidence": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-build-evidence-acd4197b-scratch-11",
+    "device": 1831,
+    "inode": 3933548,
+    "driver_log_sha256": "83d488a7b530049a1bb5b1edaf7460168172e826629abd80d0423064d86f6733",
+    "inspect_terminal_sha256": "2f7c50f6a64a72c90845bad86bb3c04a7d4a6e77281936b6dccb1de608ede36e"
+  },
+  "capacity": {
+    "scratch_available_before_bytes": 12959698944,
+    "scratch_available_after_bytes": 18126438400,
+    "recovered_bytes": 5166739456,
+    "host_available_after_bytes": 27026628608,
+    "floors_preserved": true
+  },
+  "acceptance_credit": false,
+  "restore": "Use the exact restore_command in native-exact-scratch11-output-archive-preparation-20261001.json before any historical replay that needs the expanded output."
+}

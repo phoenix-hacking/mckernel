@@ -1,0 +1,103 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_PRIVATE_SPIN_SLEEP_SELECTED_WRAPPER_LEAF_ONLY",
+  "source_bindings": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/SOURCE-BINDINGS.json",
+    "sha256": "4b01cccb3af8b40cc742c456d60a1910ecf73717326363f910cf1be21e9e43d7",
+    "bytes": 4386
+  },
+  "private_production_patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/PRIVATE-PRODUCTION.patch",
+    "sha256": "af8dde73c5f29528b4b59935ae497ce334574c196022ce710d3aa62902767dee",
+    "bytes": 5807
+  },
+  "actual_original_selected_C_body": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/ORIGINAL-SELECTED-C.c",
+    "sha256": "0ee1f53c7b29cfa57b11e367444a8289ee260d8433255c187d17a89ccd5fb7d1",
+    "bytes": 658
+  },
+  "selected_C_lines": 20,
+  "exact_C_fallback": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/ORIGINAL-FALLBACK-C.c",
+    "sha256": "02d31c784be02c7c3f16e5ef20e8854e7b895e03760b1d8800081162129170f8",
+    "bytes": 1992
+  },
+  "source_check": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/SOURCE-CHECK.json",
+    "sha256": "be9a15a0d2b501f8219914af8d38aa7f724a6aee1d9f8eb28ee99199748030a6",
+    "bytes": 495
+  },
+  "actual_fixture_receipt": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/leaf-output-1/receipt.json",
+    "sha256": "f4a9a00e3deced5245b1e2363cdbef783de6740d6816f87c788fdd019e19198e",
+    "bytes": 7720
+  },
+  "whole_join": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/actual-leaf-owned-capture-1/whole-join.json",
+    "sha256": "0f66d6528e93dabda80c9c20790939f50dd12d5adeca1ab9606b8582fb77b6d9",
+    "bytes": 1544
+  },
+  "actual_command": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/actual-leaf-owned-capture-1/command.json",
+    "sha256": "a7fc324721ad40a2c15d44bd0344ebcf4a1e07e499e4f42a16eed2788ca067a5",
+    "bytes": 454
+  },
+  "actual_runner": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/run_leaf_owned.py",
+    "sha256": "5c9d10a53d4b7a84672172be510bb7990f70a99358ba543ee0738c3025343132",
+    "bytes": 3337
+  },
+  "artifacts": {
+    "actual.o": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/leaf-output-1/actual.o",
+      "sha256": "9872901c5e533704a5101d08f6b0fe81ae4b3fe151991ca26ef3936d770f3093",
+      "bytes": 5208
+    },
+    "abi.o": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/leaf-output-1/abi.o",
+      "sha256": "0197df85e29da28aa9f1deda2b99bd74f1e4e52a3c2f4b352fcd6c82c443a33c",
+      "bytes": 976
+    },
+    "equivalence": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/leaf-output-1/equivalence",
+      "sha256": "fa821b5e1c3c5241136a0ff9c623f3f81b223b784763257856ec59d941b23110",
+      "bytes": 26400
+    },
+    "02.stdout": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/leaf-output-1/02.stdout",
+      "sha256": "b69a32b9f436a000c8933cda9d4e2c1b7e53606e5af76be7c6bb83a7c12f00d5",
+      "bytes": 184
+    },
+    "03.stdout": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/leaf-output-1/03.stdout",
+      "sha256": "56c9c3574067c525a85ddf65abbce7198951eb846ef05d2fd806437df7718cc9",
+      "bytes": 868
+    }
+  },
+  "observations": {
+    "original_selected_C_actual_Rust_pairs": 129750,
+    "actual_existing_futex_direct_callback_cases": 64875,
+    "actual_existing_body_and_offset_constructor_and_lock_adapters": true,
+    "independent_branch_oracles": [
+      "idle_halt -> schedule/log/return2",
+      "lostwake/spinwake/pending_signal -> return1 and exact reschedflag restoration",
+      "resched/runq_len>1 -> schedule/clear spin+need flag",
+      "late pause wake or resched in1..3cycles -> exact zero/pause count and terminal state",
+      "NULL thread -> -EINVAL ignored at void wrapper",
+      "arbitrary signed provider returns ignored at void wrapper"
+    ],
+    "descriptor_values": "All26Cmodeloffsetof values match actual extracted Rust offsetconstructor over explicitly modeled C/Rust fixture state; no invented production layout.",
+    "callback_order": "Exact ordered IRQ/save/noirq lock/unlock/restore/spin lock/unlock/signal/zero/pause/schedule/log trace plus actual argument values; validcurrentCPU getters remain pure and calledtwice/CPUidonce.",
+    "header_ABI": "Actual current sched_helpers.h sizeof208/int32/ulong64 public void(void) entry declaration compiled; full Thread/CpuLocalVar ABI witness remains for actual wholeCconsumer.",
+    "symbols": "one Tspin_sleep_or_schedule/noU; real extracted futexcallbackT; realhelperT; required currentCPU/IRQ/lock/schedule/pause/zero/signal/log extern providers bound; no C runqueue descriptor import"
+  },
+  "failures": 0,
+  "corrections": 0,
+  "canonical_inputs_unchanged": true,
+  "all_other_process_bytes_and_accepted_fixes_preserved": true,
+  "CPU6_released": true,
+  "production_fullcrate": "NOT_EXECUTED",
+  "whole_C_TU_default_link_native": "OPEN",
+  "independent_source_ABI_review": "REQUIRED_BEFORE_CANONICAL",
+  "wholefile_retirement_credit": false
+}

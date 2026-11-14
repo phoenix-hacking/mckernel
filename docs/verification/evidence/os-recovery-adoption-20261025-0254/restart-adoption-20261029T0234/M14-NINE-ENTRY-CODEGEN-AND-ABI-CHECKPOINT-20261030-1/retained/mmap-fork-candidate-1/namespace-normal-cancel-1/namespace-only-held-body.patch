@@ -1,0 +1,87 @@
+--- prior/do_fork-quarantine.PRIVATE.rs.inc
++++ private/do_fork-namespace-only.NOT-WIRED.rs.inc
+@@ -108,7 +108,7 @@
+     /// Snapshot only the scalar needed by the host clone policy.
+     /// The live current process owns its parent edge. Reparent/removal must take
+     /// this same process update_lock for writing; no parent pointer escapes.
+-    unsafe fn snapshot_host_parent_flags(process: *mut Process, flags: CInt) -> Result<CInt, CInt> {
++    unsafe fn snapshot_host_parent_flags(process: *mut Process, flags: CInt) -> Result<CULong, CInt> {
+         let mut node = MaybeUninit::<crate::lock_helpers::McsRwlockNodeIrqsave>::uninit();
+         unsafe {
+             let lock = addr_of_mut!((*process).update_lock).cast();
+@@ -117,7 +117,7 @@
+             let result = if parent.is_null() {
+                 Err(-super::EINVAL)
+             } else {
+-                Ok(clone_host_parent_flags_result(flags, (*parent).pid))
++                Ok(CLong::from(clone_host_parent_flags_result(flags, (*parent).pid)) as CULong)
+             };
+             crate::lock_helpers::__mcs_rwlock_reader_unlock(lock, node.as_mut_ptr());
+             result
+@@ -223,7 +223,6 @@
+     /// CPU reservation/constructor/gettid/publication providers retain their real
+     /// contracts; no successful return invents a child pin or host ACK. All child
+     /// borrows stop at the original destructive or retained-disposition edges.
+-    #[export_name = "do_fork"]
+     pub unsafe extern "C" fn f03_do_fork_owned_v1(
+         flags: CInt,
+         new_stack: CULong,
+@@ -335,7 +334,7 @@
+         let stack = if new_stack != 0 { new_stack } else { current_stack };
+         let new = unsafe {
+             if flags & CLONE_VM == 0 {
+-                crate::fork_constructed_credits::process_fork_construct_current_v1(
++                crate::fork_control_guest::process_fork_construct_current_v1(
+                     old, current_pc, stack, flags, cpu, addr_of_mut!(constructor),
+                 )
+             } else {
+@@ -393,13 +392,13 @@
+                 // This is the actual supported owned graph transaction. The legacy
+                 // partial request1 is not constructed, copied, zeroed or published.
+                 let mut outcome =
+-                    MaybeUninit::<crate::fork_child_credits::CallerForkOutcome>::uninit();
++                    MaybeUninit::<crate::fork_control_guest::CallerForkOutcome>::uninit();
+                 let host_flags = match unsafe { snapshot_host_parent_flags(old_process, flags) } {
+                     Ok(value) => value,
+                     Err(value) => { error = value; break 'prepared false; }
+                 };
+                 let result = unsafe {
+-                    crate::fork_child_credits::process_fork_owned_caller_runnable_current_v2(
++                    crate::fork_control_guest::process_fork_owned_caller_runnable_current_v2(
+                         old, new, cpu,
+                         host_flags,
+                         constructor, flags, parent_cpu, child_tid, outcome.as_mut_ptr(),
+@@ -493,7 +492,7 @@
+         }
+         if !constructor.is_null() {
+             let cancel = unsafe {
+-                crate::fork_constructed_credits::process_fork_cancel_constructed_current_v1(
++                crate::fork_control_guest::process_fork_cancel_constructed_current_v1(
+                     constructor,
+                 )
+             };
+@@ -520,7 +519,6 @@
+     };
+ 
+     // Compiler-only real C/Rust layout view; no runtime ownership getter.
+-    #[no_mangle]
+     #[used]
+     pub static f03_do_fork_Rust_ABI_v1: [CULong; 46] = [
+         size_of::<crate::abi::Thread>() as CULong,
+@@ -553,11 +551,11 @@
+         core::mem::offset_of!(crate::abi::McexecTid, thread) as CULong,
+         size_of::<CpuSet>() as CULong,
+         core::mem::align_of::<CpuSet>() as CULong,
+-        size_of::<crate::fork_child_credits::CallerForkOutcome>() as CULong,
+-        core::mem::align_of::<crate::fork_child_credits::CallerForkOutcome>() as CULong,
+-        core::mem::offset_of!(crate::fork_child_credits::CallerForkOutcome, disposition) as CULong,
+-        core::mem::offset_of!(crate::fork_child_credits::CallerForkOutcome, error) as CULong,
+-        core::mem::offset_of!(crate::fork_child_credits::CallerForkOutcome, handle) as CULong,
++        size_of::<crate::fork_control_guest::CallerForkOutcome>() as CULong,
++        core::mem::align_of::<crate::fork_control_guest::CallerForkOutcome>() as CULong,
++        core::mem::offset_of!(crate::fork_control_guest::CallerForkOutcome, disposition) as CULong,
++        core::mem::offset_of!(crate::fork_control_guest::CallerForkOutcome, error) as CULong,
++        core::mem::offset_of!(crate::fork_control_guest::CallerForkOutcome, handle) as CULong,
+         core::mem::offset_of!(crate::abi::Process, update_lock) as CULong,
+         size_of::<crate::abi::McsRwlockLock>() as CULong,
+         core::mem::align_of::<crate::abi::McsRwlockLock>() as CULong,

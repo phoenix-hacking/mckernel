@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "record_kind": "m01b_phase_i_handoff_review",
+  "review_attempt": 51,
+  "recorded_utc": "2026-09-28T08:34:00Z",
+  "status": "FAIL_HANDOFF",
+  "root": "/home/holden/mckernel-work/scratch/m01b-generic-row03-row12-expert-correction-packet-20260928-48",
+  "handoff_sha256": "0d4023533bd802a456680b04e9bd0ab404fd86771b8cbb57d4f0ed840515dcf0",
+  "handoff_size": 12566,
+  "regular_files": 327,
+  "source_members_per_mode": 51,
+  "archive": "docs/verification/evidence/stability-selected-retention-generic-row03-row12-phase-i-attempt-20260928-48.tar.gz",
+  "archive_sha256": "6bb534ea6893e113e136a890660ccebe9f1b122d10f84546c2e1fbffb92d6cd8",
+  "archive_size": 1011877,
+  "archive_members": 338,
+  "authentication": "All 71 inherited packet SHA pins, both complete 51-member authorities, the canonical allowlist, source/original/template/helper/record/handoff bindings and stager diffs through in-memory restoration match. All members are regular single-link files.",
+  "verified_source_improvements": [
+    "Narrow pristine-arm CAS and real row12 phase transitions are present.",
+    "Wake-none remains Err(-71), row03 invalid changes 0 to -125, and row03 destroys the mailbox before drain.",
+    "Guarded allocation and the unique metadata-only status hook are present; no post-publication backing read was found."
+  ],
+  "blocking_findings": [
+    "Derived Default on generic Vec imposes T: Default, so mem::take of Vec<Box<AlignedBacking>> is not source-feasible.",
+    "Adapter fabricates observer address counters from fixture calls, yielding 2/2 instead of actual fixture/observer 2/1; actual release/after/duplicate observer counters are unsampled.",
+    "Drain logs Deallocation before the detached Box is actually destroyed.",
+    "Rows omit required stage/accepted/commit baseline checks, retained owner/commit invariance, mailbox-destruction no-delta and full post-drain assertions; send closures discard required packet checks."
+  ],
+  "phase_ii_released": false,
+  "compilation_or_runtime": false,
+  "acceptance_credit": false,
+  "next": "Preserve attempt48 unchanged and prepare a newly reviewed consolidated expert packet before any fresh source attempt."
+}

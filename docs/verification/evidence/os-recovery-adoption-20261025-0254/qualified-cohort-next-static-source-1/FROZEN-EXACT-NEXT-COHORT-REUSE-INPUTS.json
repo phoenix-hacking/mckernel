@@ -1,0 +1,770 @@
+{
+  "archive": {
+    "bytes": 8509594,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-default-link-failure-retention-1/CURRENT290-DEFAULT-FINAL-LINK-FAILURE-FULL-BUILD-AND-OWNER.tar.gz",
+    "sha256": "eba7d942852d3fd938aaa79fea62da1412db00da06013a1a2933e3eca2627ea5"
+  },
+  "base_manifest": {
+    "bytes": 35830378,
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-inputs.CURRENT290-QUALIFIED-IHK3114.json",
+    "sha256": "3a0653623cc1cdb7ebb0e217274ded31ea8fea5068140af4884c273b493b5018"
+  },
+  "base_materialization_receipt": {
+    "bytes": 17922,
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/ACTUAL-CURRENT290-SOURCE-MATERIALIZATION-AND-EXACT-SIX-READBACK.NOT-BUILD-ACCEPTANCE.json",
+    "sha256": "e2699ae5da9b37f541aa6c27f50b8a2cdfb8a038cde44770309de617591594f9"
+  },
+  "base_source_root": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source",
+  "candidate_sha": "eb3ce544eb1f479a56933a5c7fa8300ab6dfe533",
+  "commands": {
+    "Rust_actual_default_command": "cd /work/output/build/kernel && /usr/bin/cmake -E env MAKEFLAGS= MCKERNEL_RUST_VERSION=1.8.0 MCKERNEL_RUST_BUILDID=3114d9e MCKERNEL_X86_ENABLE_SSE=1 MCKERNEL_CPU_C_FILE=/src/arch/x86_64/kernel/cpu.c /nightly/bin/rustc --crate-name mckernel_rust --crate-type lib --edition=2021 -C panic=abort -C opt-level=2 -C debuginfo=2 -C code-model=large -C relocation-model=static -C no-redzone=yes -C force-frame-pointers=yes -C overflow-checks=off -C force-unwind-tables=no -C no-vectorize-loops -C no-vectorize-slp -C target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma --cfg f03_io_diagnostic_callbacks_candidate --cfg f03_mincore_candidate --cfg f03_move_pages_candidate --cfg f03_sched_bridges_candidate --cfg f03_signal_process_bridges_candidate --cfg f03_dispatch_context_candidate --cfg f03_leaf_callbacks_candidate --cfg native_linux_irq_work_v6_12 --cfg f03_syscall_entry_candidate --cfg f03_futex_atomic_candidate --cfg f03_futex_no_uaccess_candidate --cfg process_global_storage_candidate --cfg f03_syscall_table_candidate --cfg f03_ptrace_entry_candidate --cfg f03_syscall_table_clone3 --cfg enable_profile --cfg enable_perf --cfg enable_rusage --emit=obj=/work/output/build/kernel/rust/mckernel_rust.o /src/kernel/rust/lib.rs",
+    "Rust_actual_default_makefile": {
+      "bytes": 9297,
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel_rust_obj.dir/build.make",
+      "sha256": "51a872a778d2b3e914918fab0de573392a645f58509c25b64bcb3c1cb56fe8d5"
+    },
+    "Rust_codegen_units_1_must_not_be_added": true,
+    "Rust_flags_must_remain_exact": true,
+    "Rust_input_view": "Exact closed Rust directory successor; original F02 Rust cfg/flags retained plus only individually HOST-qualified new selectors",
+    "additional_required_proof": "Fresh actualdefault-object LOCAL metadata proof for the4Source30loggerattributes, because Source30CGU1 fixture cannot qualify this defaultCGU-absence profile.",
+    "container_cwd": "/work/output/build/kernel",
+    "link_actual_default": {
+      "bytes": 759,
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/link.txt",
+      "sha256": "d9d50ed84770a8bff5af2371e19245200d99d61fe3cda28e880bd88e6669e428"
+    },
+    "link_argv": [
+      "/usr/bin/ld",
+      "-e",
+      "arch_start",
+      "-T",
+      "/work/output/build/kernel/config/smp-x86.lds",
+      "--build-id",
+      "-Map=/work/output/build/kernel/mckernel.img.map",
+      "--dependency-file=CMakeFiles/mckernel.img.dir/link.d",
+      "CMakeFiles/mckernel.img.dir/mem.c.o",
+      "CMakeFiles/mckernel.img.dir/syscall.c.o",
+      "CMakeFiles/mckernel.img.dir/process.c.o",
+      "CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o",
+      "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/context.S.o",
+      "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+      "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/interrupt.S.o",
+      "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o",
+      "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+      "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/trampoline.S.o",
+      "rust/mckernel_rust.o",
+      "-o",
+      "mckernel.img"
+    ],
+    "link_order_exact": [
+      "CMakeFiles/mckernel.img.dir/mem.c.o",
+      "CMakeFiles/mckernel.img.dir/syscall.c.o",
+      "CMakeFiles/mckernel.img.dir/process.c.o",
+      "CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o",
+      "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/context.S.o",
+      "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+      "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/interrupt.S.o",
+      "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o",
+      "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+      "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/trampoline.S.o",
+      "rust/mckernel_rust.o"
+    ],
+    "new_objects": [
+      "kernel/rust/mckernel_rust.o",
+      "kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+      "kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o"
+    ],
+    "new_owner_execution_argv": null,
+    "no_other_C_ASM_compile": true,
+    "no_unchanged_SDK_or_MODULES_END_probe_compile": true,
+    "post_link_existing_validators": [
+      "_validate_modules_end_probe on retained exact driver.ko and current exact consumers",
+      "_validate_production_rust_panic_refs on actual full new Rust object",
+      "_validate_image including rawld/link.d/ELF/required native symbols/compile database",
+      "_revalidate_inputs/source/toolchain/seed/overlay hashes and sourceview after compilation"
+    ],
+    "process_command_authority": "Actual current290 CMake compile_commands plus exactly the CMake56e3 APPEND property, independently evaluated with real LANGUAGES NONE probes. A reuse receipt must label this explicit oneflag command derivation, never fresh full configure.",
+    "process_command_expected_argv": [
+      "/usr/bin/cc",
+      "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+      "-DIHK_OS_MANYCORE",
+      "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+      "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+      "-DMCKERNEL_NATIVE_CLONE3",
+      "-DMCKERNEL_NATIVE_CLONE_TID",
+      "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+      "-DMCKERNEL_NATIVE_FUTEX",
+      "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+      "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+      "-DMCKERNEL_RUST_BITOPS",
+      "-DMCKERNEL_RUST_LIST_HELPERS",
+      "-DMCKERNEL_RUST_LOCK_HELPERS",
+      "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+      "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+      "-DMCKERNEL_RUST_PTE_HELPERS",
+      "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+      "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+      "-DPROFILE_ENABLE",
+      "-D__KERNEL__",
+      "-DMCKERNEL_RUST_PROCESS_GLOBAL_STORAGE",
+      "-DMCKERNEL_RUST_PROCESS_HELPERS",
+      "-I/work/output/build/kernel/include",
+      "-I/src/kernel/include",
+      "-I/work/output/build/kernel",
+      "-I/work/output/build",
+      "-I/src/ihk/cokernel/smp/x86_64/include",
+      "-I/src/ihk/cokernel/smp/x86_64",
+      "-I/src/ihk/ikc/include",
+      "-I/src/ihk/linux/include",
+      "-I/src/lib/include",
+      "-I/src/arch/x86_64/kernel/include",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-Wno-unused-parameter",
+      "-Wno-sign-compare",
+      "-Wno-unused-function",
+      "-Wno-implicit-fallthrough",
+      "-Wno-stringop-truncation",
+      "-ffreestanding",
+      "-O2",
+      "-nostdinc",
+      "-isystem",
+      "/usr/lib/gcc/x86_64-redhat-linux/14/include",
+      "-fno-omit-frame-pointer",
+      "-mcmodel=large",
+      "-mno-red-zone",
+      "-mno-sse",
+      "-o",
+      "CMakeFiles/mckernel.img.dir/process.c.o",
+      "-c",
+      "/src/kernel/process.c"
+    ],
+    "process_command_selected_original": {
+      "command": "/usr/bin/cc -DIHK_IKC_USE_LINUX_WORK_IRQ -DIHK_OS_MANYCORE -DKERNEL_RAM_VADDR=0xfffffffffe800000 -DMAP_KERNEL_START=0xfffffffffe800000UL -DMCKERNEL_NATIVE_CLONE3 -DMCKERNEL_NATIVE_CLONE_TID -DMCKERNEL_NATIVE_FAULT_FIXUP -DMCKERNEL_NATIVE_FUTEX -DMCKERNEL_NATIVE_SIGNAL_STACK -DMCKERNEL_RUST_ATOMIC_HELPERS -DMCKERNEL_RUST_BITOPS -DMCKERNEL_RUST_LIST_HELPERS -DMCKERNEL_RUST_LOCK_HELPERS -DMCKERNEL_RUST_MCS_RWLOCK_HELPERS -DMCKERNEL_RUST_MC_RWLOCK_HELPERS -DMCKERNEL_RUST_PTE_HELPERS -DMCKERNEL_RUST_REFCOUNT_HELPERS -DMCKERNEL_RUST_SPINLOCK_HELPERS -DPROFILE_ENABLE -D__KERNEL__ -DMCKERNEL_RUST_PROCESS_HELPERS -I/work/output/build/kernel/include -I/src/kernel/include -I/work/output/build/kernel -I/work/output/build -I/src/ihk/cokernel/smp/x86_64/include -I/src/ihk/cokernel/smp/x86_64 -I/src/ihk/ikc/include -I/src/ihk/linux/include -I/src/lib/include -I/src/arch/x86_64/kernel/include -g -Wall -Wextra -Wno-unused-parameter -Wno-sign-compare -Wno-unused-function -Wno-implicit-fallthrough -Wno-stringop-truncation -ffreestanding -O2 -nostdinc -isystem /usr/lib/gcc/x86_64-redhat-linux/14/include -fno-omit-frame-pointer -mcmodel=large -mno-red-zone -mno-sse -o CMakeFiles/mckernel.img.dir/process.c.o -c /src/kernel/process.c",
+      "directory": "/work/output/build/kernel",
+      "file": "/src/kernel/process.c",
+      "output": "kernel/CMakeFiles/mckernel.img.dir/process.c.o"
+    },
+    "process_only_delta": "-DMCKERNEL_RUST_PROCESS_GLOBAL_STORAGE exactlyonce; all other compiler/include/options/source/output tokens identical",
+    "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+    "status": "STATIC_FIXED_FOUR_COMMANDS_EXACT_MATCHING_F02_PROCESS_PREFIX_REUSED",
+    "exact_four_literal_argv": [
+      {
+        "stage": "full current default Rust object",
+        "cwd": "/work/output/build/kernel",
+        "argv": [
+          "/usr/bin/cmake",
+          "-E",
+          "env",
+          "MAKEFLAGS=",
+          "MCKERNEL_RUST_VERSION=1.8.0",
+          "MCKERNEL_RUST_BUILDID=3114d9e",
+          "MCKERNEL_X86_ENABLE_SSE=1",
+          "MCKERNEL_CPU_C_FILE=/src/arch/x86_64/kernel/cpu.c",
+          "/nightly/bin/rustc",
+          "--crate-name",
+          "mckernel_rust",
+          "--crate-type",
+          "lib",
+          "--edition=2021",
+          "-C",
+          "panic=abort",
+          "-C",
+          "opt-level=2",
+          "-C",
+          "debuginfo=2",
+          "-C",
+          "code-model=large",
+          "-C",
+          "relocation-model=static",
+          "-C",
+          "no-redzone=yes",
+          "-C",
+          "force-frame-pointers=yes",
+          "-C",
+          "overflow-checks=off",
+          "-C",
+          "force-unwind-tables=no",
+          "-C",
+          "no-vectorize-loops",
+          "-C",
+          "no-vectorize-slp",
+          "-C",
+          "target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma",
+          "--cfg",
+          "f03_io_diagnostic_callbacks_candidate",
+          "--cfg",
+          "f03_mincore_candidate",
+          "--cfg",
+          "f03_move_pages_candidate",
+          "--cfg",
+          "f03_sched_bridges_candidate",
+          "--cfg",
+          "f03_signal_process_bridges_candidate",
+          "--cfg",
+          "f03_dispatch_context_candidate",
+          "--cfg",
+          "f03_leaf_callbacks_candidate",
+          "--cfg",
+          "native_linux_irq_work_v6_12",
+          "--cfg",
+          "f03_syscall_entry_candidate",
+          "--cfg",
+          "f03_futex_atomic_candidate",
+          "--cfg",
+          "f03_futex_no_uaccess_candidate",
+          "--cfg",
+          "process_global_storage_candidate",
+          "--cfg",
+          "f03_syscall_table_candidate",
+          "--cfg",
+          "f03_ptrace_entry_candidate",
+          "--cfg",
+          "f03_syscall_table_clone3",
+          "--cfg",
+          "enable_profile",
+          "--cfg",
+          "enable_perf",
+          "--cfg",
+          "enable_rusage",
+          "--cfg",
+          "f03_prlimit_body_candidate",
+          "--cfg",
+          "f03_do_exit_supported_candidate",
+          "--cfg",
+          "f03_unmap_begin_selected_candidate",
+          "--cfg",
+          "f03_unmap_remove_selected_candidate",
+          "--cfg",
+          "f03_unmap_finish_selected_candidate",
+          "--cfg",
+          "f03_mmap_page_callback_candidate",
+          "--cfg",
+          "f03_wait_release_selected_candidate",
+          "--cfg",
+          "f06_mmap_flag_providers",
+          "--cfg",
+          "f06_prctl_set_register_candidate",
+          "--cfg",
+          "f06_prctl_get_register_candidate",
+          "--cfg",
+          "f06_mmap_dispatch_bridge_candidate",
+          "--emit=obj=/work/output/build/kernel/rust/mckernel_rust.o",
+          "/src/kernel/rust/lib.rs"
+        ],
+        "new_output": "/work/output/build/kernel/rust/mckernel_rust.o"
+      },
+      {
+        "stage": "selected kernel syscall object",
+        "cwd": "/work/output/build/kernel",
+        "argv": [
+          "/usr/bin/cc",
+          "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+          "-DIHK_OS_MANYCORE",
+          "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+          "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+          "-DMCKERNEL_NATIVE_CLONE3",
+          "-DMCKERNEL_NATIVE_CLONE_TID",
+          "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+          "-DMCKERNEL_NATIVE_FUTEX",
+          "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+          "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+          "-DMCKERNEL_RUST_BITOPS",
+          "-DMCKERNEL_RUST_LIST_HELPERS",
+          "-DMCKERNEL_RUST_LOCK_HELPERS",
+          "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+          "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+          "-DMCKERNEL_RUST_PTE_HELPERS",
+          "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+          "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+          "-DPROFILE_ENABLE",
+          "-D__KERNEL__",
+          "-DMCKERNEL_NATIVE_FORK_OWNED_TRANSACTION",
+          "-DMCKERNEL_RUST_F03_DISPATCH_CONTEXT",
+          "-DMCKERNEL_RUST_F03_FUTEX_ATOMIC",
+          "-DMCKERNEL_RUST_F03_IO_DIAGNOSTICS",
+          "-DMCKERNEL_RUST_F03_LEAF_CALLBACKS",
+          "-DMCKERNEL_RUST_F03_MINCORE",
+          "-DMCKERNEL_RUST_F03_MOVE_PAGES",
+          "-DMCKERNEL_RUST_F03_PTRACE_ENTRY",
+          "-DMCKERNEL_RUST_F03_SCHED_BRIDGES",
+          "-DMCKERNEL_RUST_F03_SIGNAL_PROCESS_BRIDGES",
+          "-DMCKERNEL_RUST_F03_SYSCALL_ENTRY",
+          "-DMCKERNEL_RUST_F03_SYSCALL_TABLE",
+          "-DMCKERNEL_RUST_RLIMIT_HELPERS",
+          "-DMCKERNEL_RUST_SCHED_POLICY_HELPERS",
+          "-DMCKERNEL_RUST_SCHED_PRIO_HELPERS",
+          "-DMCKERNEL_RUST_SHMID_HELPERS",
+          "-DMCKERNEL_RUST_SHM_PERM_HELPERS",
+          "-DMCKERNEL_RUST_SIGNAL_HELPERS",
+          "-DMCKERNEL_RUST_SYSCALL_OFFLOAD",
+          "-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+          "-DMCKERNEL_RUST_F03_PERF_ATTR_CALLBACKS",
+          "-DMCKERNEL_RUST_F03_PRLIMIT_BODY",
+          "-DMCKERNEL_RUST_F03_EXEC_DEFINED_TAIL",
+          "-DMCKERNEL_RUST_F03_DO_EXIT_V2",
+          "-DMCKERNEL_RUST_F03_UNMAP_BEGIN",
+          "-DMCKERNEL_RUST_F03_UNMAP_REMOVE",
+          "-DMCKERNEL_RUST_F03_UNMAP_FINISH",
+          "-DMCKERNEL_RUST_F03_MMAP_PAGE_CALLBACK",
+          "-DMCKERNEL_RUST_F03_WAIT_RELEASE",
+          "-I/work/output/build/kernel/include",
+          "-I/src/kernel/include",
+          "-I/work/output/build/kernel",
+          "-I/work/output/build",
+          "-I/src/ihk/cokernel/smp/x86_64/include",
+          "-I/src/ihk/cokernel/smp/x86_64",
+          "-I/src/ihk/ikc/include",
+          "-I/src/ihk/linux/include",
+          "-I/src/lib/include",
+          "-I/src/arch/x86_64/kernel/include",
+          "-g",
+          "-Wall",
+          "-Wextra",
+          "-Wno-unused-parameter",
+          "-Wno-sign-compare",
+          "-Wno-unused-function",
+          "-Wno-implicit-fallthrough",
+          "-Wno-stringop-truncation",
+          "-ffreestanding",
+          "-O2",
+          "-nostdinc",
+          "-isystem",
+          "/usr/lib/gcc/x86_64-redhat-linux/14/include",
+          "-fno-omit-frame-pointer",
+          "-mcmodel=large",
+          "-mno-red-zone",
+          "-mno-sse",
+          "-o",
+          "CMakeFiles/mckernel.img.dir/syscall.c.o",
+          "-c",
+          "/src/kernel/syscall.c"
+        ],
+        "new_output": "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o"
+      },
+      {
+        "stage": "selected x86 syscall object",
+        "cwd": "/work/output/build/kernel",
+        "argv": [
+          "/usr/bin/cc",
+          "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+          "-DIHK_OS_MANYCORE",
+          "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+          "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+          "-DMCKERNEL_NATIVE_CLONE3",
+          "-DMCKERNEL_NATIVE_CLONE_TID",
+          "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+          "-DMCKERNEL_NATIVE_FUTEX",
+          "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+          "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+          "-DMCKERNEL_RUST_BITOPS",
+          "-DMCKERNEL_RUST_LIST_HELPERS",
+          "-DMCKERNEL_RUST_LOCK_HELPERS",
+          "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+          "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+          "-DMCKERNEL_RUST_PTE_HELPERS",
+          "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+          "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+          "-DPROFILE_ENABLE",
+          "-D__KERNEL__",
+          "-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+          "-DMCKERNEL_RUST_X86_CPU_HELPERS",
+          "-DMCKERNEL_RUST_F06_MMAP_FLAG_PROVIDERS",
+          "-DMCKERNEL_RUST_F06_PRCTL_SET_REGISTER",
+          "-DMCKERNEL_RUST_F06_PRCTL_GET_REGISTER",
+          "-DMCKERNEL_RUST_F06_MMAP_DISPATCH_BRIDGE",
+          "-I/work/output/build/kernel/include",
+          "-I/src/kernel/include",
+          "-I/work/output/build/kernel",
+          "-I/work/output/build",
+          "-I/src/ihk/cokernel/smp/x86_64/include",
+          "-I/src/ihk/cokernel/smp/x86_64",
+          "-I/src/ihk/ikc/include",
+          "-I/src/ihk/linux/include",
+          "-I/src/lib/include",
+          "-I/src/arch/x86_64/kernel/include",
+          "-g",
+          "-Wall",
+          "-Wextra",
+          "-Wno-unused-parameter",
+          "-Wno-sign-compare",
+          "-Wno-unused-function",
+          "-Wno-implicit-fallthrough",
+          "-Wno-stringop-truncation",
+          "-ffreestanding",
+          "-O2",
+          "-nostdinc",
+          "-isystem",
+          "/usr/lib/gcc/x86_64-redhat-linux/14/include",
+          "-fno-omit-frame-pointer",
+          "-mcmodel=large",
+          "-mno-red-zone",
+          "-mno-sse",
+          "-o",
+          "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+          "-c",
+          "/src/arch/x86_64/kernel/syscall.c"
+        ],
+        "new_output": "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o"
+      },
+      {
+        "stage": "exact eleven-input raw link",
+        "cwd": "/work/output/build/kernel",
+        "argv": [
+          "/usr/bin/ld",
+          "-e",
+          "arch_start",
+          "-T",
+          "/work/output/build/kernel/config/smp-x86.lds",
+          "--build-id",
+          "-Map=/work/output/build/kernel/mckernel.img.map",
+          "--dependency-file=CMakeFiles/mckernel.img.dir/link.d",
+          "CMakeFiles/mckernel.img.dir/mem.c.o",
+          "CMakeFiles/mckernel.img.dir/syscall.c.o",
+          "CMakeFiles/mckernel.img.dir/process.c.o",
+          "CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o",
+          "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/context.S.o",
+          "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+          "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/interrupt.S.o",
+          "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o",
+          "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+          "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/trampoline.S.o",
+          "rust/mckernel_rust.o",
+          "-o",
+          "mckernel.img"
+        ],
+        "new_output": "/work/output/build/kernel/mckernel.img"
+      }
+    ]
+  },
+  "configuration": [
+    {
+      "build_relative": "CMakeCache.txt",
+      "retained_archive_member": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/CMakeCache.txt",
+      "source": {
+        "bytes": 26772,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/CMakeCache.txt",
+        "sha256": "0a76d32d26170bc88370a013dd189af7cd04a342222be2f2f0c03723dee74019"
+      }
+    },
+    {
+      "build_relative": "compile_commands.json",
+      "retained_archive_member": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/compile_commands.json",
+      "source": {
+        "bytes": 74750,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/compile_commands.json",
+        "sha256": "8355a2fa83310991bd21d3ddea7106d1e40134f2f90b4f0c5d4eb2e218869139"
+      }
+    },
+    {
+      "build_relative": "kernel/CMakeFiles/mckernel.img.dir/build.make",
+      "retained_archive_member": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/build.make",
+      "source": {
+        "bytes": 30122,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/build.make",
+        "sha256": "d038ece565cc965f11288eac31da307e56bd3c9ec40e9470f89d0756e1decb2f"
+      }
+    },
+    {
+      "build_relative": "kernel/CMakeFiles/mckernel.img.dir/flags.make",
+      "retained_archive_member": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/flags.make",
+      "source": {
+        "bytes": 3993,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/flags.make",
+        "sha256": "eb3f8f83cf8fffd7599118c70881f7203bee5e4a68894069212287ea54444b24"
+      }
+    },
+    {
+      "build_relative": "kernel/CMakeFiles/mckernel.img.dir/link.txt",
+      "retained_archive_member": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/link.txt",
+      "source": {
+        "bytes": 759,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/link.txt",
+        "sha256": "d9d50ed84770a8bff5af2371e19245200d99d61fe3cda28e880bd88e6669e428"
+      }
+    },
+    {
+      "build_relative": "kernel/CMakeFiles/mckernel_rust_obj.dir/build.make",
+      "retained_archive_member": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel_rust_obj.dir/build.make",
+      "source": {
+        "bytes": 9297,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel_rust_obj.dir/build.make",
+        "sha256": "51a872a778d2b3e914918fab0de573392a645f58509c25b64bcb3c1cb56fe8d5"
+      }
+    },
+    {
+      "build_relative": "kernel/config/smp-x86.lds",
+      "retained_archive_member": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/config/smp-x86.lds",
+      "source": {
+        "bytes": 915,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/config/smp-x86.lds",
+        "sha256": "b95d62a32abad215818adbde3597fad0607d4d14dddc7fc9adea09d9cd133bbd"
+      }
+    },
+    {
+      "build_relative": "kernel/include/swapfmt.h",
+      "retained_archive_member": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/include/swapfmt.h",
+      "source": {
+        "bytes": 878,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/include/swapfmt.h",
+        "sha256": "e14e0134c80c2a4bfcda779285b57d46e01a70702eb608fb6b378ff763d90183"
+      }
+    },
+    {
+      "build_relative": "tmp.resolve_MODULES_END/driver.ko",
+      "retained_archive_member": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/tmp.resolve_MODULES_END/driver.ko",
+      "source": {
+        "bytes": 151688,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/tmp.resolve_MODULES_END/driver.ko",
+        "sha256": "0c5c6d38362e859db21c28cba14101e8bc62119d4b33f5e38820294196444ff6"
+      }
+    },
+    {
+      "build_relative": "config.h",
+      "retained_archive_member": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/config.h",
+      "source": {
+        "bytes": 1055,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/config.h",
+        "sha256": "da78d6a8c94b274adad3159b1cc373b00e5de7fea6cc2ae7955a700078db6b2f"
+      }
+    }
+  ],
+  "configuration_mode": "REUSED_CONFIGURATION_DERIVED_CURRENT_DEFAULT_COMMANDS",
+  "fresh_full_configure": false,
+  "fresh_materialization": false,
+  "future_nonce": null,
+  "future_pid": null,
+  "ihk_sha": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+  "members": {
+    "bytes": 829416,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-default-link-failure-retention-1/MEMBERS.json",
+    "sha256": "f2b65f3ae91ac069f302e6e10c30e07e42957010507372c1dcf483832a71a03a"
+  },
+  "objects": [
+    {
+      "action": "reuse exact object; no C/ASM compile",
+      "build_relative": "kernel/CMakeFiles/mckernel.img.dir/mem.c.o",
+      "link_token": "CMakeFiles/mckernel.img.dir/mem.c.o",
+      "replace": false,
+      "retained_archive_member": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/mem.c.o",
+      "source": {
+        "bytes": 2848,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/mem.c.o",
+        "sha256": "4b595744494abba0493d75a1475e48b3745e1a668f5575543e81797b994e4f7c"
+      }
+    },
+    {
+      "action": "new selected coherent-cohort compilation; old object is provenance only",
+      "build_relative": "kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+      "link_token": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+      "replace": true,
+      "retained_archive_member": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+      "source": {
+        "bytes": 397416,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "sha256": "4ae43c42620a929f13f6dc83d628e01bc0186bc33c1c988121bfc2a1299931d4"
+      }
+    },
+    {
+      "action": "reuse exact qualified F02 object; no repeated process compile",
+      "build_relative": "kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+      "link_token": "CMakeFiles/mckernel.img.dir/process.c.o",
+      "replace": false,
+      "retained_archive_member": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+        "bytes": 73408,
+        "sha256": "b8168c1f52369f7909bf174fe1c926a4a4a3be4a63cd0667741841680b0ca289"
+      },
+      "matching_source_sha256": "9692036c3aa2d580a2a134c2d4a8fc32ab5ff4215b44128668858d6fac131b12",
+      "matching_exact_process_argv_unchanged": true
+    },
+    {
+      "action": "reuse exact object; no C/ASM compile",
+      "build_relative": "kernel/CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o",
+      "link_token": "CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o",
+      "replace": false,
+      "retained_archive_member": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o",
+      "source": {
+        "bytes": 2880,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o",
+        "sha256": "e139686acfa04f6d7576da5656693d13c4235e5beefb7f8ae3c9f7ccf03ea9b0"
+      }
+    },
+    {
+      "action": "reuse exact object; no C/ASM compile",
+      "build_relative": "kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/context.S.o",
+      "link_token": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/context.S.o",
+      "replace": false,
+      "retained_archive_member": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/context.S.o",
+      "source": {
+        "bytes": 2344,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/context.S.o",
+        "sha256": "dce0972b3291f970d49a5fa6d64f25c587423aafa63efc8b47bcfdbdfb679c7a"
+      }
+    },
+    {
+      "action": "reuse exact object; no C/ASM compile",
+      "build_relative": "kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+      "link_token": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+      "replace": false,
+      "retained_archive_member": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+      "source": {
+        "bytes": 2872,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+        "sha256": "3bed7de9807b6d8e70e87722a11b3d103119203822b9e022ebd0ecbc570bbce1"
+      }
+    },
+    {
+      "action": "reuse exact object; no C/ASM compile",
+      "build_relative": "kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/interrupt.S.o",
+      "link_token": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/interrupt.S.o",
+      "replace": false,
+      "retained_archive_member": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/interrupt.S.o",
+      "source": {
+        "bytes": 16056,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/interrupt.S.o",
+        "sha256": "66bcbec1fc5086cac18a8009f0e1b36ecaba7bf11f38cadd5de9f03e3873ee44"
+      }
+    },
+    {
+      "action": "reuse exact object; no C/ASM compile",
+      "build_relative": "kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o",
+      "link_token": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o",
+      "replace": false,
+      "retained_archive_member": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o",
+      "source": {
+        "bytes": 2888,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o",
+        "sha256": "d3207c7a7844086196676c82d66e6aa4f1233e37b167460e23ba089ec71aca85"
+      }
+    },
+    {
+      "action": "new selected coherent-cohort compilation; old object is provenance only",
+      "build_relative": "kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+      "link_token": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+      "replace": true,
+      "retained_archive_member": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+      "source": {
+        "bytes": 135464,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "sha256": "cea862c3d32ab3dfbc8e39d1da50b6fe324bb0ffcb88476915605ea639b832ed"
+      }
+    },
+    {
+      "action": "reuse exact object; no C/ASM compile",
+      "build_relative": "kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/trampoline.S.o",
+      "link_token": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/trampoline.S.o",
+      "replace": false,
+      "retained_archive_member": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/trampoline.S.o",
+      "source": {
+        "bytes": 5568,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/trampoline.S.o",
+        "sha256": "ebd728290101289164a887deb52dc7977d896e9627a2cb1323fd649db89055c5"
+      }
+    },
+    {
+      "action": "new selected coherent-cohort compilation; old object is provenance only",
+      "build_relative": "kernel/rust/mckernel_rust.o",
+      "link_token": "rust/mckernel_rust.o",
+      "replace": true,
+      "retained_archive_member": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/rust/mckernel_rust.o",
+      "source": {
+        "bytes": 18045008,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/rust/mckernel_rust.o",
+        "sha256": "5b70e620fbdc5467757f430c8a45328364abfdcca7dfeb91ec9aa4693d7e6506"
+      }
+    }
+  ],
+  "postimages": [
+    {
+      "relative": "kernel/CMakeLists.txt",
+      "base": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/kernel/CMakeLists.txt",
+        "bytes": 26500,
+        "sha256": "f54e9093abf7850e3c14afef4932b7ad9e67b92a395cf8e031b8e5366e170b7b"
+      },
+      "base_mode": 384,
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-cohort-next-static-source-1/candidate/kernel/CMakeLists.txt",
+        "bytes": 29064,
+        "sha256": "a2636a16d089ee4f93158d8bea30e6a43e40bed967a35a8d859d63f4a19afa32"
+      },
+      "postimage_mode": 256,
+      "container_destination": "/src/kernel/CMakeLists.txt",
+      "readonly": true
+    },
+    {
+      "relative": "kernel/process.c",
+      "base": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/kernel/process.c",
+        "bytes": 217347,
+        "sha256": "8c8fdab010bde75389d1b7bddadc19864fce27aff06e9fe6d40026c9bb5a44c4"
+      },
+      "base_mode": 420,
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-cohort-next-static-source-1/candidate/kernel/process.c",
+        "bytes": 217647,
+        "sha256": "9692036c3aa2d580a2a134c2d4a8fc32ab5ff4215b44128668858d6fac131b12"
+      },
+      "postimage_mode": 256,
+      "container_destination": "/src/kernel/process.c",
+      "readonly": true
+    },
+    {
+      "relative": "kernel/syscall.c",
+      "base": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/kernel/syscall.c",
+        "bytes": 909462,
+        "sha256": "54a9b0a8c6b9e1077fa7830bbaecdc699e7f3414767f50a77d4e5def63bdc582"
+      },
+      "base_mode": 384,
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-cohort-next-static-source-1/candidate/kernel/syscall.c",
+        "bytes": 913009,
+        "sha256": "2e1c3d5537551bb6a330ea37371ceed20718692d82e0522e004769bf1dcb7f89"
+      },
+      "postimage_mode": 256,
+      "container_destination": "/src/kernel/syscall.c",
+      "readonly": true
+    },
+    {
+      "relative": "arch/x86_64/kernel/syscall.c",
+      "base": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/arch/x86_64/kernel/syscall.c",
+        "bytes": 113935,
+        "sha256": "d6bf00d0a46755f37f511bff0c098487f04a155842f11a4ac64f2a1795faa8c1"
+      },
+      "base_mode": 384,
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-cohort-next-static-source-1/candidate/arch/x86_64/kernel/syscall.c",
+        "bytes": 114150,
+        "sha256": "affa9b6d2fdc2514c6d7414f4f7854410ae18ebea02db738665065a5179db893"
+      },
+      "postimage_mode": 256,
+      "container_destination": "/src/arch/x86_64/kernel/syscall.c",
+      "readonly": true
+    }
+  ],
+  "retention_receipt": {
+    "bytes": 10866,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-default-link-failure-retention-1/SOURCE-RETENTION.json",
+    "sha256": "67489c39965ef088b497a553cb6ec99044cfd442bc1de96fe7e5be4b944a8137"
+  },
+  "runtime_authority": null,
+  "schema": "mckernel.current290.next-qualified-four-command-eight-object-reuse.v1",
+  "seed_root": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build",
+  "source_directory_exports": [
+    {
+      "host_path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-cohort-next-static-source-1/rust-subtree",
+      "container_destination": "/src/kernel/rust",
+      "readonly": true,
+      "manifest": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-cohort-next-static-source-1/RUST-SUBTREE-CLOSED-SOURCE-MAP.json",
+        "bytes": 98240,
+        "sha256": "2f6814680493bef597ebe93c6afa01978df0fbabd16f2ca73425e6bb806fcb63"
+      }
+    }
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "recorder": "/root/root_history_audit",
+  "grant": "ROOT_FIXED9_ELF_20261030",
+  "argv": [
+    "/usr/bin/env",
+    "-i",
+    "PATH=/usr/bin:/bin",
+    "LC_ALL=C",
+    "TMPDIR=/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/abi-codegen-symbol-evidence-1/tmp",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=536870912",
+    "--cpu=30",
+    "--core=0",
+    "--nofile=128",
+    "--",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "45s",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/abi-codegen-symbol-evidence-1/time.txt",
+    "/usr/bin/python3",
+    "-s",
+    "-E",
+    "-S",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/abi-codegen-symbol-evidence-1/extract.py",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/abi-codegen-symbol-evidence-1"
+  ],
+  "actors": [
+    {
+      "pid": 2996157,
+      "ppid": 2995936,
+      "start": "118034389",
+      "state": "R"
+    },
+    {
+      "pid": 2996160,
+      "ppid": 2995936,
+      "start": "118034501",
+      "state": "R"
+    },
+    {
+      "pid": 2996005,
+      "ppid": 2996003,
+      "start": "118034116",
+      "state": "S"
+    },
+    {
+      "pid": 2996001,
+      "ppid": 2995936,
+      "start": "118034086",
+      "state": "S"
+    },
+    {
+      "pid": 2996003,
+      "ppid": 2996001,
+      "start": "118034102",
+      "state": "S"
+    },
+    {
+      "pid": 2996161,
+      "ppid": 2995936,
+      "start": "118034604",
+      "state": "R"
+    }
+  ],
+  "caps": {
+    "boot_deadline": 1571567.6959065471,
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "deadline": 1793774133,
+    "monotonic_deadline": 1556229.568859425
+  },
+  "weekly": {
+    "at": "2026-10-30T21:17:31.580822+00:00",
+    "usedPercent": 91,
+    "resetsAt": 1793774133
+  },
+  "free_bytes": {
+    "host": 142351183872,
+    "scratch": 47613485056
+  },
+  "mem_available_bytes": 27434917888,
+  "source_sha256": "3a84edd1a38e0649e1ea7e6038d75d51fb366e8c053aec89e07af762bc9f2c19"
+}

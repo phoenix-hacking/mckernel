@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "futex.requeue",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/futex.requeue"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["requeued=1 wake_a=1 wake_b=1 completed=2 result0=0 result1=0"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["CMP_REQUEUE moves exactly one waiter from A to B", "One wake on A and one wake on B complete the two waiters", "Each waiter returns zero exactly once"],
+  "unresolved_expectations": ["Freeze queue-order and scheduler evidence, including which waiter moved, before execution."],
+  "max_question_for_reviewer": "Confirm the native requeue count and ownership transfer semantics before accepting wake counts."
+}

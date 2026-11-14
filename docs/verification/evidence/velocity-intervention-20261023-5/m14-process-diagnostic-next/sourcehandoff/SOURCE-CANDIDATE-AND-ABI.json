@@ -1,0 +1,74 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_PREPARATION_ONLY_NOT_COMPILED",
+  "target": "kernel/process.c:vm_range_insert_log_bridge",
+  "original_success_debug_line": 2086,
+  "selector_identity": {
+    "file": "__FILE__ same actual C TU",
+    "func": "vm_range_insert_log_bridge",
+    "line": 2086,
+    "fmt": "NULL exactly existing macro initialization",
+    "flags": "DDEBUG_DEFAULT exact current C preprocessing rule"
+  },
+  "pure_Rust_body": true,
+  "existing_log_provider": "Existing production Rust debug::kprintf via existing C variadic symbol kprintf; identical pattern as sched_helpers::process_sched_migrate_log_bridge",
+  "existing_selector_ABI": "crate::debug::Ddebug repr(C), no guessed offsets or references",
+  "variadic_arguments": "Original C VmRange.flag is unsigned long even for %x; keep CULong in Rust, preserve actual machine ABI and formatter behavior.",
+  "ordering": "Unknown event reads no pointers/selector; overlap unconditional reads fields and calls once; success reads dynamic flags first and only evaluates fields/calls when nonzero.",
+  "lifetime": "Raw borrowed VM/range pointers retained only through synchronous kprintf; no allocation/free/locks/refcount changes. No Rust references to VM/ranges constructed.",
+  "fallback_original_unchanged": true,
+  "remaining_C_debt": [
+    "Declarative process_vm_range_insert_debug selector data",
+    "vm_range_insert_dump_bridge plus dump_tree/optional dtree",
+    "Other remaining VM range bodies/callbacks; no whole area/file claim"
+  ],
+  "tests_run": false,
+  "compiler_jobs": 0,
+  "CPU_reservations": 0,
+  "default_image_native": "OPEN",
+  "failure_family_history": "New diagnostic body source family; prior process-entry observer failure/correction remains retained and is not reset.",
+  "source_inputs": {
+    "kernel/process.c": {
+      "path": "/home/holden/mckernel/kernel/process.c",
+      "sha256": "64af918855ea361bd850d6ad7480d304634c28814e04127fe3dec8c013f21044",
+      "bytes": 161959
+    },
+    "kernel/rust/process_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "sha256": "3f2c3dc03445147addee47d77e3ad2b31207fb3bfaa591ad99b6d0d9c897932e",
+      "bytes": 352627
+    },
+    "kernel/include/process_helpers.h": {
+      "path": "/home/holden/mckernel/kernel/include/process_helpers.h",
+      "sha256": "1e4eceec2c06dcd409d86cbd5e24616684d83e828d62d6ca534e08c4e0a20bcb",
+      "bytes": 75149
+    },
+    "kernel/rust/abi.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "bytes": 76151
+    },
+    "kernel/rust/debug.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "sha256": "fed7537d21f5d5fe0fc3ffdb1fe44783f5f9ac13937b3bdbbcc452cc2fa5eb16",
+      "bytes": 13020
+    },
+    "lib/include/ihk/debug.h": {
+      "path": "/home/holden/mckernel/lib/include/ihk/debug.h",
+      "sha256": "7315ef758c56c4888242295ed9340b44f649d772b1315502acc49eb6105048dc",
+      "bytes": 1294
+    }
+  },
+  "postimages": {
+    "process.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-process-diagnostic-next/candidate/process.c",
+      "sha256": "08c238a08066a6eda5f346bbd6e6f87333bd505d8d598276dc9c52cd43568a45",
+      "bytes": 162457
+    },
+    "process_helpers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-process-diagnostic-next/candidate/process_helpers.rs",
+      "sha256": "17c927e656d0c8f3107bb21cfffd76bf5a4bc95002b8bd34cb00294d13fb2eb8",
+      "bytes": 353860
+    }
+  }
+}

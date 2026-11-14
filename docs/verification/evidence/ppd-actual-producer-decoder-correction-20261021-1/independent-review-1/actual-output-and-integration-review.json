@@ -1,0 +1,175 @@
+{
+  "schema": "ppd-independent-actual-output-and-integration-review-v1",
+  "reviewer": "/root/ppd_descriptor_abi_review",
+  "scope": "Functional OS/apps plus compute-C retirement into Rust/reviewed assembly; exact PPD field-order source correction and completed bounded ordinary adapter evidence",
+  "decision": "PASS_ACTUAL_ADAPTER_OUTPUT_AND_PERMIT_EXACT_ONE_LINE_RUST_INTEGRATION",
+  "basis": "Independent source and actual saved-output review completed before root integration. This report persists that completed decision; no repeated execution or verification performed to write it.",
+  "original_conditional_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/ppd-actual-producer-consumer-boundary-20261020-1/independent-review-1/conditional-source-and-ordinary-review.json",
+    "sha256": "f941d498854f63366a6b632f39bde42ded86f32f2c24249250382200d37224ed",
+    "preserved_unchanged": true
+  },
+  "reviewed_successor": {
+    "path": "/home/holden/mckernel-work/host-preparation/ppd-actual-producer-consumer-boundary-20261020-1/fixture-vaarg-correction-1",
+    "proposal_sha256": "86994c5cab07ca9d3500f77ff95a82816f490e1de5a6c4095957a9144ed439d0",
+    "freeze_sha256": "d3191b772f522f6eb4a0689f7a62d6141a27abb607c81d1d35c388938b5d4dda",
+    "producer_sha256": "3a581a951a0d95c120827a030e6a566faf746455a1d3b9a5bb92b3858879e319",
+    "frozen_hashes_and_sizes_independently_verified": true
+  },
+  "actual_commands": [
+    {
+      "label": "c-compile",
+      "argv": [
+        "/usr/bin/cc",
+        "-std=gnu11",
+        "-O0",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-c",
+        "/home/holden/mckernel-work/host-preparation/ppd-actual-producer-consumer-boundary-20261020-1/fixture-vaarg-correction-1/producer.c",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/ppd-actual-producer-consumer-boundary-20261020-1/fixture-vaarg-correction-1/capture-1/producer.o"
+      ],
+      "pid": 2288175,
+      "returncode": 0,
+      "timed_out": false,
+      "positive_wait": true,
+      "owned_group_absent": true,
+      "elapsed_seconds": 0.06526623404351994,
+      "stderr_empty": true,
+      "command_sha256": "c46eb1111d0d1a8d4df9764afdccee970fc3134e0b2c29beed123412aa492aaf"
+    },
+    {
+      "label": "rust-compile",
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--test",
+        "-Ccodegen-units=1",
+        "-Clink-arg=/home/holden/mckernel-work/host-preparation/ppd-actual-producer-consumer-boundary-20261020-1/fixture-vaarg-correction-1/capture-1/producer.o",
+        "/home/holden/mckernel-work/host-preparation/ppd-actual-producer-consumer-boundary-20261020-1/fixture-vaarg-correction-1/boundary.rs",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/ppd-actual-producer-consumer-boundary-20261020-1/fixture-vaarg-correction-1/capture-1/boundary-tests"
+      ],
+      "pid": 2288178,
+      "returncode": 0,
+      "timed_out": false,
+      "positive_wait": true,
+      "owned_group_absent": true,
+      "elapsed_seconds": 0.2655997729743831,
+      "stderr_empty": true,
+      "command_sha256": "eeb7910b2f16f612c2fac8604a8f2873b8044f654ffff7f8ef99d67a341ae954"
+    },
+    {
+      "label": "test",
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/ppd-actual-producer-consumer-boundary-20261020-1/fixture-vaarg-correction-1/capture-1/boundary-tests",
+        "--test-threads=1",
+        "--nocapture"
+      ],
+      "pid": 2288204,
+      "returncode": 0,
+      "timed_out": false,
+      "positive_wait": true,
+      "owned_group_absent": true,
+      "elapsed_seconds": 0.0026395900058560073,
+      "stderr_empty": true,
+      "command_sha256": "ebb0cb4104a40d2e7d4b713bd073110a0a450c4d1d430cc9689307eef631d1e1"
+    }
+  ],
+  "actual_output": {
+    "status": "PASS_ACTUAL_C_PRODUCER_RUST_BODY_ADAPTER_ONLY",
+    "test_cases": 3,
+    "passed": 3,
+    "failed": 0,
+    "ignored": 0,
+    "measured": 0,
+    "filtered_out": 0,
+    "test_stdout_sha256": "4993545e56b9fab34dc06f10cd216cc858b9567ba4e4de5041c4ab762db40979",
+    "test_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "result_sha256": "baf9f532d8c5e09ee19392266228592e0b9199ce2744e3c83d6f299b5e293933",
+    "tests": [
+      {
+        "name": "actual_c_producer_and_current_rust_consumer_permute_distinct_fixture_fields",
+        "result": "ok",
+        "observation": "Actual complete C producer body emits fixture root4096/start16384/length32768; exact current Rust body consumes these as root32768/start4096/length16384."
+      },
+      {
+        "name": "private_compat_decoder_order_uses_source_layout_only_not_actual_i386_producer",
+        "result": "ok",
+        "observation": "Corrected decoder consumes source-layout-only compat vector in root/start/length order."
+      },
+      {
+        "name": "private_decoder_order_candidate_preserves_c_fields_and_error_stage",
+        "result": "ok",
+        "observation": "Corrected native decoder preserves actual C fixture fields; six invalid geometry vectors retain EINVAL before effects, injected provider EINVAL remains at ihk-adopt."
+      }
+    ]
+  },
+  "actual_profile": {
+    "cpu": 6,
+    "jobs": 1,
+    "aggregate_plan_bytes": 1073741824,
+    "child_as_bytes": 1006632960,
+    "swap_expansion": false,
+    "native_execution": false,
+    "rustc_sha256": "028fd60b0e0add5505c661cd3ccde91393d615c8729bd95d94ab1e91409b36a1",
+    "profile_sha256": "3106bb4d4a54be4c0a789fe77fd2f16fc659d0bc1bcc21abfe2657d9a1a389f5"
+  },
+  "actual_root_admission": {
+    "path": "/home/holden/mckernel-work/host-preparation/ppd-actual-producer-consumer-boundary-20261020-1/fixture-vaarg-correction-1/ROOT-ONE-ORDINARY-GRANT-1.json",
+    "sha256": "844832cb58daaed2bfdfa5ece810aa64a171319359c9fbf7e39735d61e777cc4",
+    "MemAvailable": 28027367424,
+    "host_free_bytes": 43144134656,
+    "scratch_free_bytes": 14149410816,
+    "conservative_aggregate_bytes": 4294967296,
+    "shared_jobs": 4
+  },
+  "actual_outer_closure": {
+    "pid": 2288174,
+    "start": 33255412,
+    "pgid": 2288174,
+    "returncode": 0,
+    "direct_child_joined": true,
+    "process_group_absent": true,
+    "streams_closed": true,
+    "elapsed_seconds": 0.3716395130031742,
+    "created_utc": "2026-10-20T22:25:09.805469+00:00",
+    "stderr_empty": true,
+    "started_sha256": "303f2625bcd21fb528d87ed84bbde15cbc6a6fa9cda40350ce100881f86f7efe",
+    "closed_sha256": "dfe0fbe841c135e214123c8328b2d1852b1e60ff231be1233cc68051a1acd4bc"
+  },
+  "integration_disposition": {
+    "permission": "PERMIT_EXACT_ONE_LINE_TUPLE_ORDER_CORRECTION_ONLY",
+    "path": "host-kernel/native-rust/mcctrl_process.rs",
+    "method": "adopt_current_fork_v4",
+    "line": 1094,
+    "preimage_sha256": "546bb80299d2635683059357c388042db9f6317d437df2bf2ea12f1a1a01a8af",
+    "postimage_sha256": "73989fa5a5507f8ac634600ce3cb1a920187386ff7b2d7502308f784d64f30cd",
+    "preimage_bytes": 49776,
+    "postimage_bytes": 49776,
+    "from": "(integer(0),integer(4),integer(8))}else{(word(0),word(8),word(16))};",
+    "to": "(integer(4),integer(8),integer(0))}else{(word(8),word(16),word(0))};",
+    "source_difference_independently_verified_before_integration": "Exactly the one stated tuple line; geometry validation, errno propagation, diagnostics, reservation RAII, provider invocation and callback/publication checks unchanged.",
+    "root_completion_report": "Root reports guarded integration546bb802->73989fa5 in ROOT-EXACT-RUST-INTEGRATION.json; reviewer did not independently re-read receipt or source after integration."
+  },
+  "limits": [
+    "Actual complete C producer and actual Rust method bodies execute with explicit boundary/provider/ownership adapters only; no device/ioctl/UserSlice/kernel provider/native ownership execution.",
+    "Distinct numeric sentinel values are invented fixture inputs, not captured native descriptor values.",
+    "Compat test is source-layout-only; no actual i386 C producer execution.",
+    "Original native CHILD fork -22/errno71 failure rejection stage and actual descriptor remain unobserved; no native failure cause established.",
+    "No full production-module compile or unique final production definitions/link proof, current-module activation, native acceptance or compute-C retirement claim follows.",
+    "Original incompatible-vararg fixture and all failed/native evidence remain preserved; SDK scratch gate14159970304 and no-resize boundary remain authoritative."
+  ],
+  "reviewer_execution": {
+    "tests": false,
+    "builds": false,
+    "root": false,
+    "Git": false,
+    "guest": false,
+    "shared_source_edits": false,
+    "cpu_lease": false
+  },
+  "next_prerequisite": "Production SDK/current-module compilation and linking still need actual resource readiness and their own authorized profile; native execution requires its separate release and evidence."
+}

@@ -1,0 +1,55 @@
+{
+  "actual_kernel_CPU_offload_hostwait_native_executed": false,
+  "all_waits_streams_joined": true,
+  "finished_at": "2026-11-11T11:12:29.905978+00:00",
+  "original_acceptance": false,
+  "remaining_direct_children": [],
+  "request_sha256": "147d940c183bcb13a1f4a739319763a732cd9317550807c258e6ac0c78c8c62d",
+  "results": [
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=134217728",
+        "--cpu=10",
+        "--fsize=1048576",
+        "--nofile=64",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-wait-binding-tests-p04source-max-1/output-1/tmp",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-wait-binding-tests-p04source-max-1/wait_binding_regression.py"
+      ],
+      "cwd": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-wait-binding-tests-p04source-max-1",
+      "exit": 0,
+      "id": "actual-wait-preREADY-installer-digest-binding",
+      "ownership": {
+        "adopted_kills": [],
+        "adopted_reaps": [],
+        "error": null,
+        "label": "phase-1",
+        "leader": 1368484,
+        "leader_birth": "48181594",
+        "leader_group_signalled": false,
+        "leader_parent_joined": true,
+        "remaining_direct_children": [],
+        "status": 0,
+        "streams_closed": true,
+        "timed_out": false,
+        "whole_descendants_joined": true
+      }
+    }
+  ],
+  "review_sha256": "43a74adf4013d54707a0ce5f33cecb72ed6a2f51570c8808a997a51a0563b9f7",
+  "started_at": "2026-11-11T11:12:29.854623+00:00",
+  "status": "PASS_WAIT_PRE_READY_DIGEST_GUARD_PENDING_SAVED_QUALIFICATION"
+}

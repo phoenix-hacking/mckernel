@@ -1,0 +1,220 @@
+{
+  "Root_existing_intended_wire_decision": {
+    "host_consumer": "Selected act_sched_setaffinity reads args0..4 and requester tid, neverarg5; requesttransport still copies all6.",
+    "not_authorized": [
+      "general request zero-fill",
+      "otherpartialcallers2/3/exec slot guesses",
+      "uti_info/context wholesale zeroing",
+      "new ACK/completion protocol"
+    ],
+    "scope": "Only util request.args5=0, after original RUNNING_IN_LINUX store and immediately before existing do_syscall. Parent current task expressly retains this recorded decision."
+  },
+  "Root_release_prerequisites": [
+    "Retain sole recordedutilargs5=0 gate and exact original allocation/free/debug metadata. Keep existing C do_exit/terminate providers until separately qualified.",
+    "Approve/freeze precise supported single/current migrated-thread descriptor and hostpartialinfo protocol, or supply the existingactual synchronization/retention proof for anybroader concurrency. No scope widening from oldCexistence alone.",
+    "Actual23word selected-header ABI/layout witness must match Kattr/UtiAttr/UtiCtx/request sizes/offsets/alignments; do not assume64byteDMAalignment or all4096ctxbytes initialized.",
+    "Close real alloc/contextphysical mapping/currentstack/thread/VM/channel/futexqueue lifetimes through final actualhostuse on success, getctx/attr failures, proxydead, exitgroup and signal teardown; oldscalarrc is not a new drainACK.",
+    "Next controlled complete-body callback fixture must assert args0..4/state/effect order and exactlyargs5=0, save\u2192hostrefill\u2192read-before-free, bothallocfail paths, optionalarg, trackedfree/NULLout edges and original exit provider calls. OldCcomparison must poison-define oldargs5 rather than read indeterminate memory. Fixture proves only stated source/behavior edges, not actualhostconcurrency."
+  ],
+  "decision": "PASS_NARROW_UTIL_ARGS5_AND_FIELD_WRITER_CONTRACT_SOURCE_ONLY_LIFETIME_ABI_OPEN",
+  "default_selection_approved": false,
+  "fragment": {
+    "bytes": 13972,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-LARGE-UTIL-THREAD-REUSE-1/RUST-BODY.REUSED.rs.inc",
+    "sha256": "c8b878e0e9ff5d1818dcb4888aafa1412fa287c8f211c5921cc766ae0eca3783"
+  },
+  "host_completion_contract": {
+    "bounded_x86_teardown": "ihk_device_unmap_memory roundsaddresses anddispatches; x86 smp_ihk_unmap_memory returns0. smp_ihk_unmap_virtual delegates ihk_smp_unmap_virtual to smp_ihk_arch_dcache_flush, whose local x86 implementation is empty. No response payload access after status publication was found in that exact local x86 path.",
+    "decision_scope": "This permits a source-level last-response-payload-access-before-completion contract without inventing a new host ACK, only after Root binds exact selected host/IHK providers/configuration to this source. It does not prove arbitrary architecture/backend, error-path completion, asynchronous cancellation or that kernel stack/thread/monitor/IKC storage survives every nested schedule.",
+    "host_path": "executer/kernel/mcctrl/syscall.c __return_syscall: ret/stid writes2537-2538; requester notify2643; mb2648; status=12649; unmapvirtual/memory2651-2652. Rust selected control dispatcher calls this returncallback before packet/ptd/ppd release (mcctrl_helpers.rs3701-3706).",
+    "remaining_lifetime_predicate": "Current thread/process/current stack and response storage remain live through every outstanding host access/nested callback; original monitor/channel objects remain live across scheduling; finalret/status does not itself prove unrelated uti_info/descriptor/futex consumers drained."
+  },
+  "implementation_ownership": false,
+  "independent": true,
+  "legacy_HOLD_refs": {
+    "next-do-syscall-supported-orchestration-source-1": {
+      "bytes": 6216,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-do-syscall-supported-orchestration-source-1/SOURCE-HANDOFF.HOLD.json",
+      "sha256": "8d74ba4e74ef40cb53fab83281105db6669cb0ad1572b22369fa215097f2d9be"
+    },
+    "next-util-thread-whole-owned-source-1": {
+      "bytes": 7492,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-util-thread-whole-owned-source-1/SOURCE-HANDOFF.HOLD.json",
+      "sha256": "8cae4989a42abf1f5525ace5af1782f3422e7f8b9a1a6c2245f7c9ddba65007d"
+    }
+  },
+  "native_acceptance": false,
+  "next_authorized_source_work": "Private ordinary functional fixture/correction proposals within these stated contracts are suitable for Root dispatch. Compiler/link/default/native acceptance remains separately pending.",
+  "original_unselected_C_and_logical_lines": "Both existing check_rebase.py scripts independently PASS exact CURRENT119 C/Rust hash, byteidentical C fallback projection and logical source/debug positions; no compiler/preprocessor/native execution.",
+  "packet_source_state": {
+    "bytes": 2607,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-LARGE-UTIL-THREAD-REUSE-1/SOURCE-STATE.json",
+    "sha256": "b402d4a120f325de319cbdc70c50bb2be31e7519a5bbd05c46191bea13b86b36"
+  },
+  "partial_info_contract": {
+    "guest_defined12": [
+      "thread_va",
+      "uti_futex_resp_pa",
+      "ikc2linux_pa",
+      "tid",
+      "cpu",
+      "status_pa",
+      "spin_sleep_lock_pa",
+      "spin_sleep_pa",
+      "vm_pa",
+      "futex_q_pa",
+      "mc_idle_halt",
+      "futex_queue_pa"
+    ],
+    "host_defined9th": "os assigned in mcexec_syscall_thread before do_futex",
+    "host_derived8_before_futex": [
+      "uti_futex_resp",
+      "ikc2linux",
+      "status",
+      "spin_sleep_lock",
+      "spin_sleep",
+      "vm",
+      "futex_q",
+      "futex_queue"
+    ],
+    "source": "kernel/syscall.c28905-28920; executer/include/uti.h30-58; executer/kernel/mcctrl/control.c4527-4585",
+    "supported_claim": "Partial publication is explicit two-writer protocol. No typed Rust whole-info reference/assume_init is introduced by the candidate. Every selected consumer must read only guest-defined fields or host-derived fields after their writes; padding/unusedctx bytes are not thereby declared initialized."
+  },
+  "patch": {
+    "bytes": 17490,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-LARGE-UTIL-THREAD-REUSE-1/CURRENT119-PRIVATE-REBASE.patch",
+    "sha256": "1f6c7edc7916aa4cc100e3a48172ed74211ff899b171cdea08ffca09ff0989a3"
+  },
+  "recorded_utc": "2026-10-29T23:00:05.631951+00:00",
+  "related_do_syscall_contract_review": {
+    "bytes": 12444,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-LARGE-DO-SYSCALL-REUSE-1/independent-contract-review-1/CONTRACT-REVIEW.ACTUAL.json",
+    "sha256": "e7e390251a09bd7851cb3392e17bf50b73e514dbbc75fbdc7d238195386afe14"
+  },
+  "restriction_provenance": {
+    "no_clearance_inferred": "Absence of restriction provenance is not clearance of any real external restriction. This review neither clears such a restriction nor requests/runs a compiler, host fixture, service or runtime. Current source-only task authorization remains its only scope.",
+    "read_HOLD_scope": "Technical initialization, publication, lifetime, ABI and qualification prerequisites; no actual account/service rejection or policy denial cited in these two retained HOLD records."
+  },
+  "reviewer": "/root/recovery_review",
+  "runtime_authority": null,
+  "saved_context_and_kattr": {
+    "attribute": "Optional stack Kattr contains parent_cpuid and copied UtiAttr; actualhost mcexec_util_thread_body synchronously calls UTI_ATTR before switchctx, hostcontrol uses phys_to_virt(desc.phys_attr). Callerstack and mapping must remain live through that actual use.",
+    "descriptor": "Selected mcexec_util_thread_body stores borrowed uti_info pointer in uti_desc; selected syscall_intercept forwards it into host futex calls. Descriptor lifetime and absence of later/asynchronous uses after guestinfofree are not established merely by syscallret/status.",
+    "natural_alignment": "Selectedx86 IHK_DMA_ALIGN is empty (ihk/cokernel/smp/x86_64/include/ihk/memconst.h6); real23word C/Rust witness pending.",
+    "refill_slot": "save_uctx writes TransUctx.cond:CInt=0 atoffset0 before hostreads. Selected mcctrl_control_uti_get_ctx_body_result copies originalctx before writing workerTid into low4bytes, then unmaps. Candidate reads uti_refill_tid before freeingcontext, so this slot has a source initialization path on normal/error getctx paths. This does not initialize all4096ctx bytes."
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_only": true,
+  "source_refs": {
+    "executer/include/uprotocol.h": {
+      "bytes": 9756,
+      "path": "/home/holden/mckernel/executer/include/uprotocol.h",
+      "sha256": "1770a59cf4486380eb5aa483d3634dc1e4c9c9c16d1bf09865d4ff8f71191e69"
+    },
+    "executer/include/uti.h": {
+      "bytes": 1747,
+      "path": "/home/holden/mckernel/executer/include/uti.h",
+      "sha256": "0787fcf51f5c5f5a702196e891cede5e570bb472e2b0a1a1041566b59e784fb7"
+    },
+    "executer/kernel/mcctrl/control.c": {
+      "bytes": 147514,
+      "path": "/home/holden/mckernel/executer/kernel/mcctrl/control.c",
+      "sha256": "00d83f9ad7cf6c7bd263a33933aa3f5b89e4e399c2245b86ff90be87d1be3221"
+    },
+    "executer/kernel/mcctrl/rust/mcctrl_helpers.rs": {
+      "bytes": 403227,
+      "path": "/home/holden/mckernel/executer/kernel/mcctrl/rust/mcctrl_helpers.rs",
+      "sha256": "abc99c0e160d3a8aa1aa182f37f297cf3827f86faaac559117ae4df3197e9d14"
+    },
+    "executer/kernel/mcctrl/syscall.c": {
+      "bytes": 88788,
+      "path": "/home/holden/mckernel/executer/kernel/mcctrl/syscall.c",
+      "sha256": "6b769f9433be6c03dea41e5962d8ac44ce7c0903fe417d43eff7581ab2591450"
+    },
+    "executer/user/rust/mcexec_helpers.rs": {
+      "bytes": 255596,
+      "path": "/home/holden/mckernel/executer/user/rust/mcexec_helpers.rs",
+      "sha256": "d786abc498f5951c65b28246071fcbbe8023392f2cf7a372902fa76b259ed73d"
+    },
+    "executer/user/rust/syscall_intercept.rs": {
+      "bytes": 7160,
+      "path": "/home/holden/mckernel/executer/user/rust/syscall_intercept.rs",
+      "sha256": "9a3ccdb0241db7ed69e83f34a0d0d9b7f997bde042e528bc57e67380524e335f"
+    },
+    "ihk/cokernel/smp/x86_64/include/ihk/memconst.h": {
+      "bytes": 198,
+      "path": "/home/holden/mckernel/ihk/cokernel/smp/x86_64/include/ihk/memconst.h",
+      "sha256": "38b25a9fedbcf50d9eae799681aff60705d6e2e5e3559bcb721b0541ce98dc61"
+    },
+    "ihk/linux/core/host_driver.c": {
+      "bytes": 69863,
+      "path": "/home/holden/mckernel/ihk/linux/core/host_driver.c",
+      "sha256": "be75185f5b1a0aea84b0be995f67405e45964999b6ed28ae60adb3ed1dece722"
+    },
+    "ihk/linux/driver/smp/arch/x86_64/smp-arch-driver.c": {
+      "bytes": 52592,
+      "path": "/home/holden/mckernel/ihk/linux/driver/smp/arch/x86_64/smp-arch-driver.c",
+      "sha256": "6ec820741ce6e77e4f60ce4c6b6577ed215a42ecf1a7e30207390ed6d0cbb745"
+    },
+    "ihk/linux/driver/smp/smp-driver.c": {
+      "bytes": 138442,
+      "path": "/home/holden/mckernel/ihk/linux/driver/smp/smp-driver.c",
+      "sha256": "90fefdcb66ecd49cff6d43d2f5b8c13ce28010be2bde8043400cb2baebfa2544"
+    },
+    "kernel/include/syscall.h": {
+      "bytes": 20836,
+      "path": "/home/holden/mckernel/kernel/include/syscall.h",
+      "sha256": "459e6d0faec3f1b8366a0d329571ef5ea813042706be11f9423b0399bbba6ffa"
+    },
+    "kernel/rust/abi.rs": {
+      "bytes": 76151,
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    "kernel/rust/syscall_policy.rs": {
+      "bytes": 1301841,
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "sha256": "07cb4bff5a0a9a0d582ebc18e344e5cf06ccd6fc37005292c757ef0501ea50eb"
+    },
+    "kernel/syscall.c": {
+      "bytes": 928517,
+      "path": "/home/holden/mckernel/kernel/syscall.c",
+      "sha256": "7b33e5de55ddba41036a57ddba3694c51afe7153ca7d779ceec0206734a15fd0"
+    }
+  },
+  "verified_request_contract": {
+    "caller_must_define": [
+      "number",
+      "args[0]",
+      "args[1]",
+      "args[2]",
+      "args[3]",
+      "args[4]",
+      "args[5]"
+    ],
+    "helper_defines_before_copy": {
+      "rtid": "offload_prepare=current_tid",
+      "ttid": "offload_prepare=requester_tid or0",
+      "valid": "send_prepare writes caller valid0, sender publishes copied packet valid1 Release"
+    },
+    "response_initialization": {
+      "completion": "read ret only after existing acquire status loop observes completed1; no whole response assume_init",
+      "nested_states": "Keep existing PAGE_FAULT/SYSCALL provider protocol and initialized producer fields; scalar finalret is not a lifetime ACK.",
+      "offload_prepare": [
+        "req_thread_status=SPINNING",
+        "pde_data=NULL"
+      ],
+      "send_prepare": [
+        "status=0"
+      ]
+    },
+    "source_anchors": [
+      "kernel/rust/syscall_policy.rs:2412-2467",
+      "kernel/rust/syscall_policy.rs:2506-2559",
+      "kernel/rust/syscall_policy.rs:2671-2708",
+      "kernel/rust/syscall_policy.rs:3082-3110"
+    ],
+    "wire_size_note": "Supportedx86 declarations imply SyscallRequest72bytes/align8 and IKCpacket128bytes. This is source ABI arithmetic; real selected-header C/Rust witness remains required. Earlier independent message called request64B incorrectly; corrected before this receipt."
+  },
+  "whole_file_acceptance": false
+}

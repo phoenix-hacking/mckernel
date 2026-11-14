@@ -1,0 +1,2058 @@
+{
+  "P_M06_03": "OPEN",
+  "actions": {
+    "CPU_leases": 0,
+    "compiler_runs": 0,
+    "fixture_runs": 0,
+    "guest_runs": 0,
+    "normalization_runs": 0,
+    "root_operations": 0,
+    "source_edits": 0,
+    "source_imports": 0,
+    "stage_runs": 0
+  },
+  "actual_result": {
+    "CPU6_released": true,
+    "direct_child_joined": true,
+    "failure_location": "prepare_native.py:116 consumed-path readonly coverage assertion",
+    "first_refused_path": "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-stage-20261020-1/ordinary-stage-1/protection.cpio.gz",
+    "group_absent_recorded": true,
+    "pid": 2343407,
+    "returncode": 1,
+    "seconds": 1.0450998750166036,
+    "start": 34330740,
+    "streams_closed": true
+  },
+  "classification": "Functional normalization/container import-visibility mapping defect. The loader and owner verifier already returned using host-visible files, but the complete coupled readonly check correctly rejected an archive absent from container mounts. It is not a kernel/app/clone3/native result or service-policy disposition.",
+  "coupled_consumed_set": [
+    {
+      "origin": "normalized_manifest",
+      "path": "/home/holden/mckernel-work/scratch/m6n-261021-1/manifest.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/scratch"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/stage-preparation-1/native_diagnostic_runner.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/stage-preparation-1/native_diagnostic.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/stage-preparation-1/native_diagnostic_backend.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/stage-preparation-1/qmp_capture.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/stage-preparation-1/repaired_image_authority.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/image-request.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/image-request.json"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/thin-inputs.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/thin-inputs.json"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/materialization-receipt.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/materialization-receipt.json"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retention-role-paths.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/two-cpu-running-query-correction-1/pair_collector.c",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/two-cpu-running-query-correction-1/pair_collector.inc",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/two-cpu-running-query-correction-1/pair_runtime.inc",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/two-cpu-running-query-correction-1/pair_assignment.h",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/two-cpu-running-query-correction-1/native-boot-two.c",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/two-cpu-running-query-correction-1/native-os-resource-assignment.c",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/two-cpu-running-query-correction-1/native-memory-reservation.c",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/two-cpu-running-query-correction-1/native-cpu-reservation.c",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-CANONICAL-REPORT-FIXED-CONTRACT.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/heavy-proposal-1/source-sha256.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/heavy-proposal-1/source-sha256.json"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-CANONICAL-REPORT-FIXED-CONTRACT-v2.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/NEW205-FRESH8B-CANONICAL-CONTRACT-PROPOSAL-v4.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/n3-variant/stage_repaired_kernel_elf.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/n3-variant/matched-module-authorities.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-independent-review-20261019-1/CURRENT-HOST-PAIR-ACTUAL-THREE-MODULE-ARTIFACT-REVIEW.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-independent-review-20261019-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-independent-review-20261019-1/CURRENT-HOST-PAIR-ACTUAL-THREE-MODULE-ABI-JOIN.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-independent-review-20261019-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-independent-review-20261019-1/ACTUAL-THREE-STAGE-AND-STRICT-205-IDENTITY-REVIEW.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-independent-review-20261019-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/candidate/native_diagnostic.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/candidate/pair_assignment.h",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/candidate/pair_collector.c",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/candidate/pair_collector.inc",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/candidate/pair_round_oracles.h",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/candidate/pair_runtime.inc",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/candidate/pair_two_round_run.inc",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/candidate/pair_two_round_support.inc",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/stage-preparation-1/stage_two_round_init.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/ordinary-check-2/collector-two-rounds",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/stage-preparation-1/stage-two-rounds-1/pair-init-0755",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/stage-preparation-1/STAGE-INPUTS.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/candidate/native_diagnostic.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/candidate/pair_assignment.h",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/candidate/pair_collector.c",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/candidate/pair_collector.inc",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/candidate/pair_round_oracles.h",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/candidate/pair_runtime.inc",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/candidate/pair_three_round_run.inc",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/candidate/pair_three_round_support.inc",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/stage-preparation-1/stage_three_round_init.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/stage-preparation-1/STAGE-INPUTS.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/THREE-ROUND-SCOPE-ORACLE-ADDENDUM.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/ordinary-check-1/collector-three-rounds",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/stage-preparation-1/stage-three-rounds-1/pair-init-0755",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/candidate/native_diagnostic.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/candidate/pair_assignment.h",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/candidate/pair_collector.c",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/candidate/pair_collector.inc",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/candidate/pair_launch_expansion_run.inc",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/candidate/pair_launch_expansion_support.inc",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/candidate/pair_round_oracles.h",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/candidate/pair_runtime.inc",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/candidate/pair_trace_retention.inc",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/candidate/repaired_image_authority.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/stage-preparation-1/native_diagnostic_runner.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/stage-preparation-1/native_diagnostic.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/stage-preparation-1/native_diagnostic_backend.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/stage-preparation-1/qmp_capture.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/stage-preparation-1/repaired_image_authority.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/stage-preparation-1/stage_launch_init.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/stage-preparation-1/STAGE-INPUTS.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/ordinary-check-1/collector-launch-expansion",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/stage-preparation-1/stage-launches-1/pair-init-0755",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/candidate/native_diagnostic.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/candidate/pair_assignment.h",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/candidate/pair_collector.c",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/candidate/pair_collector.inc",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/candidate/pair_launch_expansion_run.inc",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/candidate/pair_launch_expansion_support.inc",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/candidate/pair_round_oracles.h",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/candidate/pair_runtime.inc",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/candidate/pair_trace_retention.inc",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/candidate/repaired_image_authority.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/stage-preparation-1/native_diagnostic_runner.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/stage-preparation-1/native_diagnostic.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/stage-preparation-1/native_diagnostic_backend.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/stage-preparation-1/qmp_capture.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/stage-preparation-1/repaired_image_authority.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/stage-preparation-1/stage_launch_init.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/stage-preparation-1/STAGE-INPUTS.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/check-2/collector",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/stage-preparation-1/stage-launches-1/pair-init-0755",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1/candidate/native_diagnostic.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1/candidate/pair_assignment.h",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1/candidate/pair_collector.c",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1/candidate/pair_collector.inc",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1/candidate/pair_launch_expansion_run.inc",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1/candidate/pair_launch_expansion_support.inc",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1/candidate/pair_round_oracles.h",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1/candidate/pair_runtime.inc",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1/candidate/pair_trace_retention.inc",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1/candidate/repaired_image_authority.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1/stage-preparation-1/native_diagnostic_runner.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1/stage-preparation-1/native_diagnostic.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1/stage-preparation-1/native_diagnostic_backend.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1/stage-preparation-1/qmp_capture.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1/stage-preparation-1/repaired_image_authority.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1/stage-preparation-1/stage_launch_init.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1/stage-preparation-1/STAGE-INPUTS.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1/check-1/collector",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1/stage-preparation-1/stage-launches-1/pair-init-0755",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/stage-preparation-correction-1/native_diagnostic.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/stage-preparation-correction-1/native_diagnostic_runner.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/stage-preparation-correction-1/native_diagnostic_backend.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/stage-preparation-correction-1/qmp_capture.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/stage-preparation-correction-1/repaired_image_authority.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/stage-preparation-correction-1/stage_launch_init.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/stage-preparation-correction-1/composite_module_binding.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/stage-preparation-correction-1/COMPOSITE-MODULE-BINDING.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/stage-preparation-correction-1/STAGE-INPUTS.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-independent-review-20261020-1/ALLOCATOR-CORRECTION1-ACTUAL-COMPOSITE64-MODULE-SOURCE-FFI-LINK-ACCEPTANCE.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-independent-review-20261020-1/ALLOCATOR-CORRECTION1-ACTUAL-COMPOSITE64-MODULE-SOURCE-FFI-LINK-ACCEPTANCE.json"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-independent-review-20261020-1/ALLOCATOR-CORRECTION1-ACTUAL-PHYSICAL-RETIREMENT-REVIEW.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-independent-review-20261020-1/ALLOCATOR-CORRECTION1-ACTUAL-PHYSICAL-RETIREMENT-REVIEW.json"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-ac8e29336b1a45c28dd255331a18ac21/evidence/receipt.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/scratch"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-sdk-preparation-20261020-1/compiler-allocator-correction-1/request.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-sdk-preparation-20261020-1/compiler-allocator-correction-1/request.json"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-c5280df71731403a97d5520f4dabc378/modules/abi/application.rs",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/scratch"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-ac8e29336b1a45c28dd255331a18ac21/modules/abi/application.rs",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/scratch"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/test_stage_module_bytes.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/stage-fixture-check-3/whole.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/stage-fixture-check-3/stdout",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/stage-fixture-check-3/stderr",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/consumer-readonly-correction-1/native_diagnostic.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/consumer-readonly-correction-1/native_diagnostic_runner.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/consumer-readonly-correction-1/native_diagnostic_backend.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/consumer-readonly-correction-1/qmp_capture.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/consumer-readonly-correction-1/repaired_image_authority.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/consumer-readonly-correction-1/composite_module_binding.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/consumer-readonly-correction-1/COMPOSITE-MODULE-BINDING.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-independent-review-20261020-1/HOST66-ACTUAL-THREE-MODULE-FFI-CONTROL-ARTIFACT-REVIEW.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-independent-review-20261020-1/HOST66-ACTUAL-THREE-MODULE-FFI-CONTROL-ARTIFACT-REVIEW.json"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-independent-review-20261020-1/HOST66-ACTUAL-PHYSICAL-RETIREMENT-REVIEW.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-independent-review-20261020-1/HOST66-ACTUAL-PHYSICAL-RETIREMENT-REVIEW.json"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/evidence/receipt.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/scratch"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-preparation-20261020-1/request.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-preparation-20261020-1/request.json"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/abi/application.rs",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/scratch"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-independent-review-20261020-1/ACTUAL-COMPOSITE64-THREE-MODULE-STAGE-ONLY-AND-CONSUMER-FAILURE-REVIEW.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-independent-review-20261020-1/ACTUAL-COMPOSITE64-THREE-MODULE-STAGE-ONLY-AND-CONSUMER-FAILURE-REVIEW.json"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-independent-review-20261020-1/COLLECTOR-DRAIN-CORRECTION1-SOURCE-AND-ACTUAL-ELEVEN-CASES-REVIEW.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-independent-review-20261020-1/COLLECTOR-DRAIN-CORRECTION1-SOURCE-AND-ACTUAL-ELEVEN-CASES-REVIEW.json"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/check-2/collector",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/check-2/whole.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_overlay.py",
+      "readonly_roots": [
+        "/home/holden/mckernel"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/stage-preparation-correction-1/stage-launches-1/manifest.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/candidate/pair_assignment.h",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/candidate/pair_collector.c",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/candidate/pair_collector.inc",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/candidate/pair_launch_expansion_run.inc",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/candidate/pair_launch_expansion_support.inc",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/candidate/pair_round_oracles.h",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/candidate/pair_runtime.inc",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/candidate/pair_trace_retention.inc",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native_diagnostic.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native_diagnostic_runner.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native_diagnostic_backend.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/qmp_capture.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/repaired_image_authority.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/composite_module_binding.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/COMPOSITE-MODULE-BINDING.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/stage_launch_init.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/STAGE-INPUTS.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/stage-launches-1/pair-init-0755",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/M03-FROZEN-CASE-BINDING.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/SOURCE-FREEZE.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/stage_m03.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/m03-collector",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native_diagnostic_container_owner.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/runtime-source-1/native_diagnostic.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/runtime-source-1/native_diagnostic.py"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/runtime-source-1/native_diagnostic_runner.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/runtime-source-1/native_diagnostic_runner.py"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/runtime-source-1/native_diagnostic_backend.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/runtime-source-1/native_diagnostic_backend.py"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/runtime-source-1/qmp_capture.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/runtime-source-1/qmp_capture.py"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-current-sdk-physical-binding-20261020-1/runtime-source-1/native_diagnostic.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/phase5-m03-current-sdk-physical-binding-20261020-1/runtime-source-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-current-sdk-physical-binding-20261020-1/runtime-source-1/native_diagnostic_runner.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/phase5-m03-current-sdk-physical-binding-20261020-1/runtime-source-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-current-sdk-physical-binding-20261020-1/runtime-source-1/native_diagnostic_backend.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/phase5-m03-current-sdk-physical-binding-20261020-1/runtime-source-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-current-sdk-physical-binding-20261020-1/runtime-source-1/qmp_capture.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/phase5-m03-current-sdk-physical-binding-20261020-1/runtime-source-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-current-sdk-physical-binding-20261020-1/runtime-source-1/native_owner_binding.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/phase5-m03-current-sdk-physical-binding-20261020-1/runtime-source-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-handshake-init-stage-20261020-1/native-stage-1/manifest.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/phase5-m03-handshake-init-stage-20261020-1/native-stage-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/M03-ACTUAL-AUTHENTICATED-HANDSHAKE-INIT-ONLY-OFFLINE-STAGE-ACCEPTANCE.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/M03-ACTUAL-AUTHENTICATED-HANDSHAKE-INIT-ONLY-OFFLINE-STAGE-ACCEPTANCE.json"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-authenticated-boot-handshake-correction-20261020-1/check-1/collector",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/phase5-m03-authenticated-boot-handshake-correction-20261020-1/check-1/collector"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-handshake-init-stage-20261020-1/native-stage-1/m03.cpio.gz",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/phase5-m03-handshake-init-stage-20261020-1/native-stage-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-handshake-init-stage-20261020-1/native-stage-1/overlay-manifest.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/phase5-m03-handshake-init-stage-20261020-1/native-stage-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/runtime-source-1/qmp_capture.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/runtime-source-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/runtime-source-1/native_diagnostic_runner.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/runtime-source-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/runtime-source-1/native_owner_binding.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/runtime-source-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/runtime-source-1/native_diagnostic_backend.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/runtime-source-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/runtime-source-1/native_diagnostic.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/runtime-source-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/ordinary-stage-1/manifest.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/ordinary-stage-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/ordinary-stage-1/exit7.cpio.gz",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/ordinary-stage-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/ordinary-stage-1/overlay-manifest.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/ordinary-stage-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/ordinary-stage-1/app-0755",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/ordinary-stage-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/INPUT-AND-DECLARED-DATA.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/INPUT-AND-DECLARED-DATA.json"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/ACTUAL-TWO-COMMAND-CLOSED-HANDOFF.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/ACTUAL-TWO-COMMAND-CLOSED-HANDOFF.json"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-grace-retry-binding-20261020-1/runtime-source-1/native_diagnostic.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/phase5-exit7-grace-retry-binding-20261020-1/runtime-source-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-retirement-defect-20261020-1/ordinary-check-1/collector",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/phase5-exit7-retirement-defect-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/EXIT7-RETIREMENT-GRACE-ACTUAL-BODY-CHECKS-AND-STATIC-COLLECTOR-ACCEPTANCE.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/EXIT7-RETIREMENT-GRACE-ACTUAL-BODY-CHECKS-AND-STATIC-COLLECTOR-ACCEPTANCE.json"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/normalization-resume-20261021-1/runtime-source-1/qmp_capture.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/normalization-resume-20261021-1/runtime-source-1/native_diagnostic_runner.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/normalization-resume-20261021-1/runtime-source-1/native_diagnostic_backend.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/normalization-resume-20261021-1/runtime-source-1/native_diagnostic.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/ordinary-stage-1/manifest.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/ordinary-stage-1/overlay-manifest.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1"
+      ]
+    },
+    {
+      "origin": "SOURCE_HASHES",
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/independent-review-1/actual-stage-output-acceptance-resume-20261021.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1"
+      ]
+    },
+    {
+      "origin": "current_runtime_source",
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/normalization-resume-20261021-1/runtime-source-1/native_owner_binding.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1"
+      ]
+    },
+    {
+      "origin": "current_runtime_source",
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/normalization-resume-20261021-1/runtime-source-1/native_diagnostic_container_owner.py",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1"
+      ]
+    },
+    {
+      "origin": "artifacts.bzImage",
+      "path": "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/bzImage",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/scratch"
+      ]
+    },
+    {
+      "origin": "artifacts.initramfs",
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-stage-20261020-1/ordinary-stage-1/protection.cpio.gz",
+      "readonly_roots": []
+    },
+    {
+      "origin": "artifacts.libc",
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/native-proposal/stage-correction-1/stage/root/lib64/libc.so.6",
+      "readonly_roots": [
+        "/home/holden/mckernel"
+      ]
+    },
+    {
+      "origin": "artifacts.loader",
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/native-proposal/stage-correction-1/stage/root/lib64/ld-linux-x86-64.so.2",
+      "readonly_roots": [
+        "/home/holden/mckernel"
+      ]
+    },
+    {
+      "origin": "artifacts.mcexec",
+      "path": "/home/holden/mckernel-work/scratch/mcexec-preload-fastpath-build-20260928-1/rust/executer/user/mcexec",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/scratch"
+      ]
+    },
+    {
+      "origin": "artifacts.mckernel_image",
+      "path": "/home/holden/mckernel-work/host-preparation/repaired-affinity-n3-variant-20261019-1/repaired-image-fresh8b-runtime-0755",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/repaired-affinity-n3-variant-20261019-1"
+      ]
+    },
+    {
+      "origin": "artifacts.native_boot",
+      "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/two-cpu-running-query-correction-1/native-boot-two-0755",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1"
+      ]
+    },
+    {
+      "origin": "artifacts.payload",
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/ordinary-compile-1/app",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1"
+      ]
+    },
+    {
+      "origin": "artifacts.root_base",
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-stage-20261020-1/ordinary-stage-1/protection.cpio.gz",
+      "readonly_roots": []
+    },
+    {
+      "origin": "staging.base_initramfs",
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-stage-20261020-1/ordinary-stage-1/protection.cpio.gz",
+      "readonly_roots": []
+    },
+    {
+      "origin": "staging.collector",
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-stage-20261020-1/ordinary-stage-1/collector-0755",
+      "readonly_roots": []
+    },
+    {
+      "origin": "staging.derived_initramfs",
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/ordinary-stage-1/clone3-io.cpio.gz",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1"
+      ]
+    },
+    {
+      "origin": "staging.overlay_manifest",
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/ordinary-stage-1/overlay-manifest.json",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1"
+      ]
+    },
+    {
+      "origin": "staging.overlay_source",
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_overlay.py",
+      "readonly_roots": [
+        "/home/holden/mckernel"
+      ]
+    },
+    {
+      "origin": "modules.0",
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/ihk.ko",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/scratch"
+      ]
+    },
+    {
+      "origin": "modules.1",
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/ihk-smp-x86_64.ko",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/scratch"
+      ]
+    },
+    {
+      "origin": "modules.2",
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/mcctrl.ko",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/scratch"
+      ]
+    },
+    {
+      "origin": "overlay.sources.base",
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-stage-20261020-1/ordinary-stage-1/protection.cpio.gz",
+      "readonly_roots": []
+    },
+    {
+      "origin": "overlay.sources.collector",
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-stage-20261020-1/ordinary-stage-1/collector-0755",
+      "readonly_roots": []
+    },
+    {
+      "origin": "overlay.sources.mcexec",
+      "path": "/home/holden/mckernel-work/scratch/mcexec-preload-fastpath-build-20260928-1/rust/executer/user/mcexec",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/scratch"
+      ]
+    },
+    {
+      "origin": "overlay.sources.payload",
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/ordinary-compile-1/app",
+      "readonly_roots": [
+        "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1"
+      ]
+    }
+  ],
+  "created_utc": "2026-10-21T01:26:04.668296+00:00",
+  "decision": "FAIL_ACTUAL_NORMALIZATION_EXACT_TWO_PATH_READONLY_MAPPING_GAP_SUCCESSOR_REQUIRES_WHOLE_BODY_FIXTURE",
+  "evidence": [
+    {
+      "identity": {
+        "st_ctime_ns": 1792545462338119165,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48392783,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792545462338119165,
+        "st_nlink": 1,
+        "st_size": 2795,
+        "st_uid": 1000
+      },
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/normalization-resume-20261021-1/SETTINGS.json",
+      "sha256": "26e49fbdc35903400137e5befc411b954d54d1f890c420628b58966e3bbd7250"
+    },
+    {
+      "identity": {
+        "st_ctime_ns": 1792545863751498285,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48392953,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792545863751498285,
+        "st_nlink": 1,
+        "st_size": 1309,
+        "st_uid": 1000
+      },
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/normalization-resume-20261021-1/ROOT-ACTUAL-NORMALIZATION-CLOSED-1.json",
+      "sha256": "2c77415478d976bcdb9556c105dbb01cff701e2786c5b40520529008d63f723b"
+    },
+    {
+      "identity": {
+        "st_ctime_ns": 1792545863747498543,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48392952,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792545863747498543,
+        "st_nlink": 1,
+        "st_size": 1157,
+        "st_uid": 1000
+      },
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/normalization-resume-20261021-1/ordinary-normalization-capture-1/whole.json",
+      "sha256": "5ff6cc2af2d1cf90bbce4e6ee3be712474b920675936ed6c50a0077b3c96e1f9"
+    },
+    {
+      "identity": {
+        "st_ctime_ns": 1792545863703501386,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48392948,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792545863703501386,
+        "st_nlink": 1,
+        "st_size": 630,
+        "st_uid": 1000
+      },
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/normalization-resume-20261021-1/ordinary-normalization-capture-1/stderr",
+      "sha256": "e79de3c6bf8724c9a2bd2bff2634c2809120c6bd3182dcdffcd51d02cb7b9e67"
+    },
+    {
+      "identity": {
+        "st_ctime_ns": 1792545862703566082,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48392947,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792545862703566082,
+        "st_nlink": 1,
+        "st_size": 0,
+        "st_uid": 1000
+      },
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/normalization-resume-20261021-1/ordinary-normalization-capture-1/stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "identity": {
+        "st_ctime_ns": 1792545862699566342,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48392946,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792545862699566342,
+        "st_nlink": 1,
+        "st_size": 202,
+        "st_uid": 1000
+      },
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/normalization-resume-20261021-1/ordinary-normalization-capture-1/command.json",
+      "sha256": "1c18b6bf188f29c9c07af8f0dc4894cffd55f0eb44014b285e6e356c480baad7"
+    },
+    {
+      "identity": {
+        "st_ctime_ns": 1792545862703566082,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48392949,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792545862703566082,
+        "st_nlink": 1,
+        "st_size": 36,
+        "st_uid": 1000
+      },
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/normalization-resume-20261021-1/ordinary-normalization-capture-1/started.json",
+      "sha256": "cdbb9d754b751b01b3327d45e1f432760a4f321f0a01e18b9cf2da3d86303bc6"
+    },
+    {
+      "identity": {
+        "st_ctime_ns": 1792545863731499576,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48392950,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792545863731499576,
+        "st_nlink": 1,
+        "st_size": 82,
+        "st_uid": 1000
+      },
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/normalization-resume-20261021-1/ordinary-normalization-capture-1/direct-wait.json",
+      "sha256": "7cd36914661a265238dff48c5f76caa6e9f8b99196bb996b5f04943c16cd7641"
+    },
+    {
+      "identity": {
+        "st_ctime_ns": 1792545863747498543,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48392951,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792545863747498543,
+        "st_nlink": 1,
+        "st_size": 259,
+        "st_uid": 1000
+      },
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/normalization-resume-20261021-1/ordinary-normalization-capture-1/direct-join.json",
+      "sha256": "b37d73968dce0e9ff34e63dadb2eb473a5a25e8cabe6ce00ee9efb605d2b32f4"
+    },
+    {
+      "identity": {
+        "st_ctime_ns": 1792545462170113958,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48392782,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792545462170113958,
+        "st_nlink": 1,
+        "st_size": 7142,
+        "st_uid": 1000
+      },
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/normalization-resume-20261021-1/prepare_native.py",
+      "sha256": "ae0678f82fd5153260d746d291b7ae797d1bed3004e6ba7de0c6505c21576b8c"
+    },
+    {
+      "identity": {
+        "st_ctime_ns": 1792535644833401787,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48392580,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792535644833401787,
+        "st_nlink": 1,
+        "st_size": 5714,
+        "st_uid": 1000
+      },
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/ordinary-stage-1/manifest.json",
+      "sha256": "24fafe0d7f35d8e0e094af47064a042a973580638b6fdcf6806923f1e82e49ab"
+    },
+    {
+      "identity": {
+        "st_ctime_ns": 1792535644577394448,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48392578,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792535644577394448,
+        "st_nlink": 1,
+        "st_size": 20025,
+        "st_uid": 1000
+      },
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/ordinary-stage-1/overlay-manifest.json",
+      "sha256": "8e6278da01ea80353902e96c954639efd829864d34311c8bf2fd1886f8898a0f"
+    },
+    {
+      "identity": {
+        "st_ctime_ns": 1792545462170113958,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48392780,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792545462170113958,
+        "st_nlink": 1,
+        "st_size": 109261,
+        "st_uid": 1000
+      },
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/normalization-resume-20261021-1/runtime-source-1/native_diagnostic_container_owner.py",
+      "sha256": "f4e80a7e1dcc6c7a43730935b5d4c49f8f5a50a869153dc51b6f4bc08d036d26"
+    },
+    {
+      "identity": {
+        "st_ctime_ns": 1792545863083541437,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 116237,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792545863083541437,
+        "st_nlink": 1,
+        "st_size": 5714,
+        "st_uid": 1000
+      },
+      "path": "/home/holden/mckernel-work/scratch/m6n-261021-1/manifest.json",
+      "sha256": "24fafe0d7f35d8e0e094af47064a042a973580638b6fdcf6806923f1e82e49ab"
+    },
+    {
+      "identity": {
+        "st_ctime_ns": 1792535644833401787,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48392580,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792535644833401787,
+        "st_nlink": 1,
+        "st_size": 5714,
+        "st_uid": 1000
+      },
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/ordinary-stage-1/manifest.json",
+      "sha256": "24fafe0d7f35d8e0e094af47064a042a973580638b6fdcf6806923f1e82e49ab"
+    }
+  ],
+  "execution_grant": false,
+  "future": {
+    "actual_fixture": null,
+    "native": null,
+    "native_release": null,
+    "normalization": null,
+    "successor_source_acceptance": null
+  },
+  "minimal_correct_successor": {
+    "current_source_directory": "Fresh successor local owner RUNNER/SELF/bound_manifest evaluator and verifier RUNTIME must join one new runtime-source directory; exact local runner/backend/QMP/evaluator pins must describe that directory, preserving original entries and adding current entries. Current source pins must retain the historical owner/evaluator source authority distinction.",
+    "namespace": "Use fresh normalization/attempt fixture/successor names and nonce/QMP<=107B. Preserve original partial scratch normalized manifest and private empty attempt parent unchanged, all captured failure/source generations and prior decisions.",
+    "preserve": "Keep all prior203 source pins at their original paths and hashes; keep accepted binary/stage/manifest/evaluator/oracles/tested205ff4/HOST66/normal300-360deadline tuple unchanged. Add the two exact file paths as readonly mounts; do not broaden host-preparation, remove old pins, project manifest or weaken coverage.",
+    "readonly_additions_exact_file_rows": [
+      {
+        "mode": 33152,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-stage-20261020-1/ordinary-stage-1/protection.cpio.gz",
+        "sha256": "67cdf384e1cd4bb95a6c5f718f0b9357cf2438a8c3b1eb839c70350128c14112",
+        "size": 25551545
+      },
+      {
+        "mode": 33261,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-stage-20261020-1/ordinary-stage-1/collector-0755",
+        "sha256": "37b370fd699246d301634e16eed4288b19d867a74ea82c9ef39eef8a04bd2058",
+        "size": 1025768
+      }
+    ],
+    "resource": "Fresh bounded dispatcher ordinary grants only, existingCPU6/1job/1GiBAS/55CPU/60wall/52child/32MiBstream envelope,host256MiB andscratch>=1MiB plus16/12GiBfloors,shared aggregate admission andpositive retirement. No root/native release."
+  },
+  "native_acceptance": false,
+  "partial_outputs_retained": {
+    "attempt_parent": "/home/holden/mckernel-work/scratch/m6g-261021-1/p",
+    "attempt_parent_empty": true,
+    "binding_absent": true,
+    "native_attempt_absent": true,
+    "normalized_manifest": {
+      "identity": {
+        "st_ctime_ns": 1792545863083541437,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 116237,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792545863083541437,
+        "st_nlink": 1,
+        "st_size": 5714,
+        "st_uid": 1000
+      },
+      "path": "/home/holden/mckernel-work/scratch/m6n-261021-1/manifest.json",
+      "sha256": "24fafe0d7f35d8e0e094af47064a042a973580638b6fdcf6806923f1e82e49ab"
+    },
+    "preflight_absent": true
+  },
+  "readonly_roots": [
+    "/home/holden/mckernel",
+    "/home/holden/mckernel-work/scratch",
+    "/home/holden/mckernel-work/host-preparation/repaired-affinity-n3-variant-20261019-1",
+    "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1",
+    "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/image-request.json",
+    "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/thin-inputs.json",
+    "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/materialization-receipt.json",
+    "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/postbuild-preparation-1",
+    "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1",
+    "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/heavy-proposal-1/source-sha256.json",
+    "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1",
+    "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/postbuild-execution-preparation-1/copy-pin-correction-1/facts-inline-correction-1/actual-positive-fixture-facts.json",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1",
+    "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-independent-review-20261019-1",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-independent-review-20261019-1",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-independent-review-20261019-1",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-independent-review-20261020-1",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1",
+    "/home/holden/mckernel-work/host-preparation/launch-expansion-source-review-20261020-1",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1",
+    "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1",
+    "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-independent-review-20261020-1/ALLOCATOR-CORRECTION1-ACTUAL-COMPOSITE64-MODULE-SOURCE-FFI-LINK-ACCEPTANCE.json",
+    "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-independent-review-20261020-1/ALLOCATOR-CORRECTION1-ACTUAL-PHYSICAL-RETIREMENT-REVIEW.json",
+    "/home/holden/mckernel-work/host-preparation/current-v6-composite-sdk-preparation-20261020-1/compiler-allocator-correction-1/request.json",
+    "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-independent-review-20261020-1/HOST66-ACTUAL-THREE-MODULE-FFI-CONTROL-ARTIFACT-REVIEW.json",
+    "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-independent-review-20261020-1/HOST66-ACTUAL-PHYSICAL-RETIREMENT-REVIEW.json",
+    "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-preparation-20261020-1/request.json",
+    "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-independent-review-20261020-1/ACTUAL-COMPOSITE64-THREE-MODULE-STAGE-ONLY-AND-CONSUMER-FAILURE-REVIEW.json",
+    "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-independent-review-20261020-1/COLLECTOR-DRAIN-CORRECTION1-SOURCE-AND-ACTUAL-ELEVEN-CASES-REVIEW.json",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-independent-functional-slice-20261020-1/ordinary-check-1/app",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/runtime-source-1/native_diagnostic_container_owner.py",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/runtime-source-1/native_diagnostic.py",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/runtime-source-1/native_diagnostic_runner.py",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/runtime-source-1/native_diagnostic_backend.py",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/runtime-source-1/qmp_capture.py",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/check-1/collector",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/stage-preparation-1/native-stage-1/m03.cpio.gz",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/stage-preparation-1/native-stage-1/overlay-manifest.json",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/stage-preparation-1/native-stage-1/manifest.json",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/runtime-source-1/native_owner_binding.py",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-current-sdk-physical-binding-20261020-1/runtime-source-1",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-handshake-init-stage-20261020-1/native-stage-1",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/M03-ACTUAL-AUTHENTICATED-HANDSHAKE-INIT-ONLY-OFFLINE-STAGE-ACCEPTANCE.json",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-authenticated-boot-handshake-correction-20261020-1/check-1/collector",
+    "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/runtime-source-1",
+    "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/ordinary-stage-1",
+    "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/INPUT-AND-DECLARED-DATA.json",
+    "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/ACTUAL-TWO-COMMAND-CLOSED-HANDOFF.json",
+    "/home/holden/mckernel-work/host-preparation/phase5-exit7-grace-retry-binding-20261020-1/runtime-source-1",
+    "/home/holden/mckernel-work/host-preparation/phase5-exit7-retirement-defect-20261020-1",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/EXIT7-RETIREMENT-GRACE-ACTUAL-BODY-CHECKS-AND-STATIC-COLLECTOR-ACCEPTANCE.json",
+    "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1"
+  ],
+  "reviewer": "/root/m06_closed_stage_review",
+  "reviewer_correction": "Prior conditional source review verified all203 SOURCE_HASHES paths and trusted the later complete coverage assertion; it did not independently enumerate non-SOURCE_HASHES consumed paths. That source-only confidence was insufficient. This report preserves original review and actual refusal and supplies the entire joined mapping.",
+  "schema": "mckernel.m06-actual-normalization-readonly-failure-expert-review.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "service_scope": "Prior service-policy/auth/billing holds remain authoritative and preserved. No replay/rephrase/retry or clearing claim. Included100%/zero reserve/no purchased/APIbilling.",
+  "source_contract": {
+    "complete_consumed_references": 227,
+    "historical_and_current_source_pin_count": 203,
+    "readonly_root_count": 56,
+    "source_pin_paths_all_exist": true,
+    "source_pin_paths_all_readonly_covered": true,
+    "source_pin_total_bytes": 116734303,
+    "uncovered_references": [
+      {
+        "origin": "artifacts.initramfs",
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-stage-20261020-1/ordinary-stage-1/protection.cpio.gz",
+        "readonly_roots": []
+      },
+      {
+        "origin": "artifacts.root_base",
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-stage-20261020-1/ordinary-stage-1/protection.cpio.gz",
+        "readonly_roots": []
+      },
+      {
+        "origin": "staging.base_initramfs",
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-stage-20261020-1/ordinary-stage-1/protection.cpio.gz",
+        "readonly_roots": []
+      },
+      {
+        "origin": "staging.collector",
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-stage-20261020-1/ordinary-stage-1/collector-0755",
+        "readonly_roots": []
+      },
+      {
+        "origin": "overlay.sources.base",
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-stage-20261020-1/ordinary-stage-1/protection.cpio.gz",
+        "readonly_roots": []
+      },
+      {
+        "origin": "overlay.sources.collector",
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-stage-20261020-1/ordinary-stage-1/collector-0755",
+        "readonly_roots": []
+      }
+    ],
+    "uncovered_unique_paths": [
+      "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-stage-20261020-1/ordinary-stage-1/collector-0755",
+      "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-stage-20261020-1/ordinary-stage-1/protection.cpio.gz"
+    ],
+    "unique_consumed_paths": 219
+  },
+  "whole_body_fixture_requirement": {
+    "actual_evidence_present_now": false,
+    "blocking_successor_command": true,
+    "required_negative": "Run a bounded missing-mapping fixture/vector through the same coverage assertion to demonstrate correct refusal with original error/oracles preserved. Do not weaken or bypass the check; record partial outputs if using unchanged late-check order.",
+    "required_positive": "Execute the actual corrected normalizer main composition using genuine complete accepted stage manifest/overlay/schema/source pins, real strict evaluator load_manifest/expected_qemu_argv and real source-local owner verifier in fresh fixture namespace. Verify all coupled consumed paths are covered including both two-file additions; positive exact binding/preflight/outputset andemptyattemptparent; same local owner/runner/evaluator/import/nonce/fullQEMUargv tuple; no clock/Docker/process/socket/root/native effects. Preserve exact command/result/closed streams andpositive retirement.",
+    "review_boundary": "Prepared fixture source is not actual fixture success. Expert adopts finite corrected source packet and passed actual-body fixture evidence before the successor normalization command. No unchanged failed command/name retry."
+  }
+}

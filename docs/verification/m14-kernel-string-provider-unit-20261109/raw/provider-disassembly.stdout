@@ -1,0 +1,63 @@
+
+/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kernel-string-provider-unit-1/output/kernel_string_provider.o:     file format elf64-x86-64
+
+
+Disassembly of section .ltext.memset:
+
+0000000000000000 <memset>:
+   0:	mov    rax,rdi
+   3:	test   rdx,rdx
+   6:	je     70 <memset+0x70>
+   8:	mov    r8,rdx
+   b:	mov    rdi,rdx
+   e:	mov    rcx,rax
+  11:	and    r8,0x7
+  15:	je     35 <memset+0x35>
+  17:	xor    ecx,ecx
+  19:	nop    DWORD PTR [rax+0x0]
+  20:	mov    BYTE PTR [rax+rcx*1],sil
+  24:	inc    rcx
+  27:	cmp    r8,rcx
+  2a:	jne    20 <memset+0x20>
+  2c:	mov    rdi,rdx
+  2f:	sub    rdi,rcx
+  32:	add    rcx,rax
+  35:	cmp    rdx,0x8
+  39:	jb     70 <memset+0x70>
+  3b:	xor    edx,edx
+  3d:	nop    DWORD PTR [rax]
+  40:	mov    BYTE PTR [rcx+rdx*1],sil
+  44:	mov    BYTE PTR [rcx+rdx*1+0x1],sil
+  49:	mov    BYTE PTR [rcx+rdx*1+0x2],sil
+  4e:	mov    BYTE PTR [rcx+rdx*1+0x3],sil
+  53:	mov    BYTE PTR [rcx+rdx*1+0x4],sil
+  58:	mov    BYTE PTR [rcx+rdx*1+0x5],sil
+  5d:	mov    BYTE PTR [rcx+rdx*1+0x6],sil
+  62:	mov    BYTE PTR [rcx+rdx*1+0x7],sil
+  67:	add    rdx,0x8
+  6b:	cmp    rdi,rdx
+  6e:	jne    40 <memset+0x40>
+  70:	ret    
+
+Disassembly of section .ltext.strnlen:
+
+0000000000000000 <strnlen>:
+   0:	cmp    BYTE PTR [rdi],0x0
+   3:	sete   al
+   6:	test   rsi,rsi
+   9:	sete   cl
+   c:	or     cl,al
+   e:	mov    rax,rdi
+  11:	jne    35 <strnlen+0x35>
+  13:	dec    rsi
+  16:	mov    rax,rdi
+  19:	nop    DWORD PTR [rax+0x0]
+  20:	add    rsi,0xffffffffffffffff
+  24:	setb   cl
+  27:	cmp    BYTE PTR [rax+0x1],0x0
+  2b:	lea    rax,[rax+0x1]
+  2f:	je     35 <strnlen+0x35>
+  31:	test   cl,cl
+  33:	jne    20 <strnlen+0x20>
+  35:	sub    rax,rdi
+  38:	ret    

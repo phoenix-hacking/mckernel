@@ -1,0 +1,572 @@
+{
+  "HOST435_interpretation": {
+    "decision": "NO_HOST435_IS_EXPECTED_FOR_THIS_LOCAL_OPERATION",
+    "local_entry_return_kmsg": "Not exported in the original capture; remains unavailable as a direct diagnostic trace. The literal requirement does not demand this additional instrumentation when actual immutable call/return control flow and linked local handler already establish the refusal.",
+    "reason": "Exact loaded syscall_table[435] selects sys_clone3. The kernel dispatches a valid nonnull table entry locally; syscall_generic_forwarding is its separate else branch. This Rust unsupported-mask rejection needs no Linux-host delegated435, so host application_syscall delivered/returned traces need not contain435."
+  },
+  "P_M06_03_recommendation": "COMPLETE_FOR_THE_EXACT_SELECTED_TESTED205_HOST66_PROFILE_AND_THIS_VALID_OPTIONAL_OPERATION",
+  "actual_lifecycle": [
+    {
+      "line": 920,
+      "text": "<6>[   32.770544] ihk_smp_x86_64: IHK-SMP: application SCHEDULE os=0 generation=1 pid=257 cpu=0"
+    },
+    {
+      "line": 921,
+      "text": "<6>[   32.777444] ihk_smp_x86_64: IHK-SMP: application procfs published os=0 generation=1 pid=257 tid=257"
+    },
+    {
+      "line": 933,
+      "text": "<6>[   32.871526] ihk_smp_x86_64: IHK-SMP: application cleanup ACK os=0 generation=1 pid=257 token=3 errno=0 abandoned=0"
+    },
+    {
+      "line": 934,
+      "text": "<6>[   32.876977] ihk_smp_x86_64: IHK-SMP: application retirement os=0 generation=1 pid=257 token=14 errno=-11"
+    },
+    {
+      "line": 935,
+      "text": "<6>[   32.880636] ihk_smp_x86_64: IHK-SMP: application procfs deleted os=0 generation=1 pid=257 tid=257"
+    },
+    {
+      "line": 936,
+      "text": "<6>[   32.982442] ihk_smp_x86_64: IHK-SMP: application retirement os=0 generation=1 pid=257 token=15 errno=0"
+    },
+    {
+      "line": 937,
+      "text": "<6>[   32.988780] mcctrl: application_process=release os=0 generation=1 pid=257 cleanup_errno=0"
+    }
+  ],
+  "actual_strict_frame": {
+    "application_acceptance": false,
+    "byte_oracle_matches": true,
+    "decoded_exit_code": 0,
+    "payload": {
+      "argv": [
+        "/bin/mcexec",
+        "-t",
+        "1",
+        "0",
+        "/apps/app"
+      ],
+      "cwd": "/case/work",
+      "env": {
+        "COKERNEL_PATH": "/apps",
+        "PATH": "/usr/bin:/bin"
+      },
+      "finished_ns": 38149430142,
+      "procfs_empty": true,
+      "raw_wait_status": 0,
+      "reaped_ns": 32983679188,
+      "started_ns": 32608512232,
+      "streams": {
+        "stderr": {
+          "discarded": 0,
+          "eof": true,
+          "eof_ns": 32882237245,
+          "hex": "",
+          "limit": 1024,
+          "observed": 0,
+          "retained": 0,
+          "truncated": false
+        },
+        "stdout": {
+          "discarded": 0,
+          "eof": true,
+          "eof_ns": 32882405423,
+          "hex": "72633d2d31206572726e6f3d393520656f706e6f74737570703d31206368696c645f637265617465643d300a",
+          "limit": 1024,
+          "observed": 44,
+          "retained": 44,
+          "truncated": false
+        }
+      }
+    },
+    "raw_wait_status": 0,
+    "serial_line": 939,
+    "source_bound_static_version0_request_size": 64,
+    "stderr_bytes": 0,
+    "stdout_ascii": "rc=-1 errno=95 eopnotsupp=1 child_created=0\n",
+    "stdout_bytes": 44,
+    "streams_complete": true
+  },
+  "app_control_flow_return_join": {
+    "accepted_app_artifact_sha256": "f1a10e7f7d8aa7c5b505c71b8e12536219007837597b9605c90ca65e96d568c7",
+    "actual_instruction_bytes_verified_this_delta": 277,
+    "actual_syscall_instruction": "44927b:0f05; return PC44927d",
+    "byte_verification": "Read targeted bytes from the existing actual ELF using its program headers and matched retained closed objdump instruction bytes for main401730..40180d and libc syscall449260..449296. No compiler/objdump/app command was run.",
+    "exit_guard": "main4017e0..4017ed yields success only for rc==-1 && errno==95. Saved raw_wait_status0 supplies a second actual control-flow condition.",
+    "no_fabricated_errno": "main clears errno immediately before call, reads it immediately after, and outputs actual rc/errno comparisons. The immutable stub converts a negative kernel return to errno via negation and returns-1. Observed rc-1/errno95 therefore establishes raw-95 through this actual app control flow; it is stronger than trusting a constant diagnostic string.",
+    "prior_actual_ELF_review": "c4c128187667fb0ad54cd3000b704bd9c94534b6b29365a3dbc664a9fc8dd9be",
+    "request": "main40174e loads zero-extended0x80000000 CLONE_IO;40176b writes flags;401770 writes SIGCHLD17; remaining version0 fields zero.40177e sets64-byte size,401783 args pointer,401788 number435;401798 directly calls the statically linked syscall stub.",
+    "valid_request": "The actual64-byte version0 request is accepted by decoder minimum64; absent trailing fields remain zero. CLONE_IO with SIGCHLD and zero stack/TID/TLS fields reaches explicit unsupported mask rather than malformed-size rejection."
+  },
+  "check_id": "P-M06-03",
+  "conclusion": "The already executed, source-bound immutable app and loaded tested205 image, exact linked Rust reject-before-only-clone control flow, real errno95/exit0/empty-stderr frame and accepted retirement together suffice for the literal clear-and-safe unsupported-operation check. A separate HOST435 offload record or exhaustive dynamic child inventory is not a stated prerequisite of this literal selected-profile check.",
+  "created_utc": "2026-10-21T03:18:37.768979+00:00",
+  "decision": "PASS_LITERAL_SELECTED_PROFILE_UNSUPPORTED_CLONE3_CLONE_IO_CLEAN_REFUSAL_ONLY",
+  "evidence": [
+    {
+      "bytes": 136560,
+      "path": "/home/holden/mckernel/docs/verification/os-milestones-20260914/practical-milestones.json",
+      "sha256": "04dd3ebe422e07c6a4735bd77232a3bb60c72598225663306182c4b43a70d02d",
+      "stable_full_identity": {
+        "st_ctime_ns": 1792534858268517318,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 47472768,
+        "st_mode": 33204,
+        "st_mtime_ns": 1792534858268517318,
+        "st_nlink": 1,
+        "st_size": 136560,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 1891,
+      "path": "/home/holden/mckernel-work/host-preparation/m06-local435-witness-closure-20261021-1/exact-final-elf-branch-binding.json",
+      "sha256": "d0166f0012a2ffc484b968f9e3b5950e07500079232fed7670cb7d1397cbdf4e",
+      "stable_full_identity": {
+        "st_ctime_ns": 1792550634748442140,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48394570,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792550634748442140,
+        "st_nlink": 1,
+        "st_size": 1891,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 17469,
+      "path": "/home/holden/mckernel-work/host-preparation/m06-local435-witness-closure-20261021-1/exact-clone3-final-elf-excerpt.txt",
+      "sha256": "eb81620bbbc34729036fbe6cb0263ad06c7cdfb46a1744a8c87b0ef19af8561a",
+      "stable_full_identity": {
+        "st_ctime_ns": 1792550634732441576,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48394569,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792550634732441576,
+        "st_nlink": 1,
+        "st_size": 17469,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 17275,
+      "path": "/home/holden/mckernel-work/host-preparation/m06-local435-witness-closure-20261021-1/exact-source-excerpts.txt",
+      "sha256": "ef976d547c2e6c5c1f74b398e18a03a183ccb7690bea3b36e3f37e4072a040ac",
+      "stable_full_identity": {
+        "st_ctime_ns": 1792550634700440450,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48394568,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792550634700440450,
+        "st_nlink": 1,
+        "st_size": 17275,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 11389,
+      "path": "/home/holden/mckernel-work/host-preparation/m06-local435-witness-closure-20261021-1/PROPOSAL.json",
+      "sha256": "259b913bc324bf8f3d0376ba783404fa58f51daf6948d85c97d5b0b3d0e3e7b4",
+      "stable_full_identity": {
+        "st_ctime_ns": 1792550634748442140,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48394571,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792550634748442140,
+        "st_nlink": 1,
+        "st_size": 11389,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 2873,
+      "path": "/home/holden/mckernel-work/host-preparation/m06-local435-witness-closure-20261021-1/PROPOSAL.md",
+      "sha256": "e65e9f68274de719db20ed9cbde2225a6ecaa0c91828e9ee6df051165bbaa20b",
+      "stable_full_identity": {
+        "st_ctime_ns": 1792550634748442140,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48394572,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792550634748442140,
+        "st_nlink": 1,
+        "st_size": 2873,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 7626,
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/independent-review-1/actual-v0-elf-and-stage-only-review.json",
+      "sha256": "c4c128187667fb0ad54cd3000b704bd9c94534b6b29365a3dbc664a9fc8dd9be",
+      "stable_full_identity": {
+        "st_ctime_ns": 1792535548430653037,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48392556,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792535548430653037,
+        "st_nlink": 1,
+        "st_size": 7626,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 29024,
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/independent-review-1/actual-stage-output-acceptance-resume-20261021.json",
+      "sha256": "4b9591f140d98a4079b9a5529ca9410a9c7532d7f1ab0146c1895a766c616a34",
+      "stable_full_identity": {
+        "st_ctime_ns": 1792545283424575073,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48392594,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792545283424575073,
+        "st_nlink": 1,
+        "st_size": 29024,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 5714,
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/ordinary-stage-1/manifest.json",
+      "sha256": "24fafe0d7f35d8e0e094af47064a042a973580638b6fdcf6806923f1e82e49ab",
+      "stable_full_identity": {
+        "st_ctime_ns": 1792535644833401787,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48392580,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792535644833401787,
+        "st_nlink": 1,
+        "st_size": 5714,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 20025,
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/ordinary-stage-1/overlay-manifest.json",
+      "sha256": "8e6278da01ea80353902e96c954639efd829864d34311c8bf2fd1886f8898a0f",
+      "stable_full_identity": {
+        "st_ctime_ns": 1792535644577394448,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48392578,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792535644577394448,
+        "st_nlink": 1,
+        "st_size": 20025,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 12630,
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/normalization-resume-20261021-1/independent-review-2/actual-successor-normalization-output-acceptance.json",
+      "sha256": "b3963fad54f4f4c6218cb5aebda12cf9b98ccbde697536fdae788040e7748db4",
+      "stable_full_identity": {
+        "st_ctime_ns": 1792546241943591375,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48393079,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792546241943591375,
+        "st_nlink": 1,
+        "st_size": 12630,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 95566,
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/normalization-resume-20261021-1/independent-review-2/actual-M06-failed-native-physical-retirement-acceptance.json",
+      "sha256": "471a1e87f2267a517016841e69090223241eedd5449d926fa5965b5a6aa8156c",
+      "stable_full_identity": {
+        "st_ctime_ns": 1792548883402260981,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48393911,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792548883402260981,
+        "st_nlink": 1,
+        "st_size": 95566,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 13119,
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/normalization-resume-20261021-1/independent-review-2/actual-M06-first-native-semantic-disposition.json",
+      "sha256": "3e92dd5167269d1fdd0e442c85a6ba726dcebd02f5f6878c97c79c8d81da5691",
+      "stable_full_identity": {
+        "st_ctime_ns": 1792549102797295285,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48393910,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792549102797295285,
+        "st_nlink": 1,
+        "st_size": 13119,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 1466,
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/native-preparation-1/production-metadata-1/native-control-packet-1/root-seven-whole-1.json",
+      "sha256": "b220ee30f81d41882e59f76c215de09ccfe87a1db6169704b0fe01ff85adfe30",
+      "stable_full_identity": {
+        "st_ctime_ns": 1792548235954013551,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48393826,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792548235954013551,
+        "st_nlink": 1,
+        "st_size": 1466,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 972,
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/native-preparation-1/production-metadata-1/native-control-packet-1/root-seven1-LAST-snapshot.status.json",
+      "sha256": "7cea45dc300100fa58ae70a8cd69bafc3c92557699d519cdb099a17476e5cad5",
+      "stable_full_identity": {
+        "st_ctime_ns": 1792548192176345795,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48393790,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792548192176345795,
+        "st_nlink": 1,
+        "st_size": 972,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 972,
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/native-preparation-1/production-metadata-1/native-control-packet-1/root-seven1-final-guard.status.json",
+      "sha256": "2668ae46deed0c04b346201324cda9f290f9099adf9cf05855b59068c80af64f",
+      "stable_full_identity": {
+        "st_ctime_ns": 1792548192416331142,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48393814,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792548192416331142,
+        "st_nlink": 1,
+        "st_size": 972,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 2882,
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/native-preparation-1/production-metadata-1/native-control-packet-1/captures/05-readback-2/stdout",
+      "sha256": "4ca78798fc0a8537de350a9835590cb5e915c83d5dca3c674dfc83e8346521f9",
+      "stable_full_identity": {
+        "st_ctime_ns": 1792548681416908592,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48393872,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792548681416908592,
+        "st_nlink": 1,
+        "st_size": 2882,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 699,
+      "path": "/home/holden/mckernel/scripts/application-tests/cases/process/process.clone3-io-unsupported.c",
+      "sha256": "7399dc07a754f5fd7b57619e3134cd7bd1e2345c4ab50573ba41e89da5479d25",
+      "stable_full_identity": {
+        "st_ctime_ns": 1790636578057497777,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 47476629,
+        "st_mode": 33204,
+        "st_mtime_ns": 1788973266039113158,
+        "st_nlink": 2,
+        "st_size": 699,
+        "st_uid": 1000
+      }
+    }
+  ],
+  "exclusions": [
+    "No exhaustive dynamic no-child/CREATE_PPD/extra-worker inventory is asserted.",
+    "No full generic evaluator/protocol/native-batch PASS or newly accepted guest-launch count.",
+    "No positive route-identity or complete-route-loss detection claim.",
+    "No collector/exporter/header/module/kernel/app integration, new stage or runtime grant.",
+    "No successful fork/exec/wait, wholeM06/wholeOS, Rust-path or compute-C retirement credit.",
+    "No catalog-wide optional capability claim; scope is this selected supported-profile clean refusal."
+  ],
+  "genuine_loaded_artifact_app_join": [
+    "Prior independent stage4b959 accepts actual archivee309a896 with all62 members, exact appf1a10e7f at/apps/app, imageff4fca45 at/images/mckernel.img, native-boot4312 and HOST66 tuple; only app changed in that stage. This adoption is reused, not regenerated or replaced by the private exporter proposal.",
+    "The source-local actual normalizationb396 and production/root controls bound current manifest24fafe0d and unchanged stage tuple. Actual LAST-snapshot, machine-assembly and final-guard returned0 immediately before native-owner in the same root operation; native-owner remained failed later.",
+    "Actual typed QEMU evidence, retained in physical471a and saved result4ca78798, has admitted argv equal actual argv and -initrd pointing to the exact e309 stage. Thus loaded collector/native-boot/modules/image/app identity is joined through the real verified staged archive, not an unbuilt source candidate.",
+    "Closed serial873 reports image loaded os0/generation1 with two segments/window8388608/checksum47956b1bce6fe5e1;908 reports observed boot status5;919-921 report app image prepared/scheduled and parent procfs published. These are runtime corroboration, not a newly invented SHA measurement of RAM.",
+    "Actual ND_PAYLOAD argv is/bin/mcexec -t1 0/apps/app, cwd/case/work and fixed COKERNEL_PATH. Saved genuine44B result, raw wait0 and complete pipe EOFs join to the one prepared/scheduled parent and normal final retirement. No source-only fixture is used as runtime authority."
+  ],
+  "implementation_ownership": false,
+  "ledger_entry_at_review": {
+    "assessment_note": "Reviewed version/unsupported-path errors are narrow source/body evidence, not complete safe-error behavior for the final selected application profile.",
+    "description": "Unsupported optional operations fail clearly and safely.",
+    "evidence": [
+      {
+        "path": "docs/verification/evidence/native-running-publication-independent-review-20261017-1.json",
+        "sha256": "de20c89c2ed5c27d09a6f6b856b1d0f3f71cf5ad5480d359236bc1a5db39552f",
+        "size": 1133
+      }
+    ],
+    "id": "P-M06-03",
+    "status": "open"
+  },
+  "linked_Rust_guard_and_safety": {
+    "binding_report": {
+      "accepted_artifact_review": {
+        "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-ACTUAL-PRODUCTION-ARTIFACT-REVIEW.json",
+        "sha256": "fa39824773f75a0e44303afcdcaf52a26fa8249bd7d0fe1d066c3dd2b6dd9813"
+      },
+      "closed_disassembly": {
+        "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/postbuild-execution-preparation-1/copy-pin-correction-1/observation-1/captures/image-objdump.txt",
+        "sha256": "f564190d7cb39a172f59aa8cb3bdb759425e00ad74b77e97bb75e2523659895c"
+      },
+      "image": {
+        "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/postbuild-readonly-1/retained-artifacts/image.artifact",
+        "sha256": "ff4fca457e9ffe50dc4eca930c5f91faf317eeee15bf0c2907067cffa77b23bb"
+      },
+      "local_handler": {
+        "address": "0xfffffffffe89f0a0",
+        "bounded_conclusion": "For correctly copied accepted CLONE_IO version0 input, reject edge precedes and bypasses the sole child-creating sys_clone edge. Static binding only; not proof actual runtime entered435/returned-95.",
+        "mask_includes_CLONE_IO": true,
+        "name": "sys_clone3",
+        "number_check": "0xfffffffffe89f0a6 cmp0x1b3",
+        "only_sys_clone_call": "0xfffffffffe89f4d0 -> 0xfffffffffe89ef40",
+        "reject_branch": "0xfffffffffe89f474 -> 0xfffffffffe89f3b7 epilogue",
+        "return_minus95": "0xfffffffffe89f46a",
+        "size": 1079,
+        "unsupported_mask": "0x3fe021080 = 0x400000000 + signextended32(0xfe021080)"
+      },
+      "syscall_table": {
+        "address": "0xfffffffffe8dbd60",
+        "bytes_hex": "a0f089feffffffff",
+        "entry_address": "0xfffffffffe8dcaf8",
+        "file_offset": 903928,
+        "slot": 435,
+        "target": "0xfffffffffe89f0a0"
+      }
+    },
+    "control_flow": "After argument copy/validation, mask0x3fe021080 includes CLONE_IO0x80000000. Atfe89f46a code loads RAX=-95;fe89f471/474 sees the nonzero mask and jumps directly to epiloguefe89f3b7. The sole sys_clone targetfe89ef40 is called only later atfe89f4d0 and is bypassed for the accepted request.",
+    "dynamic_absence_claim": false,
+    "new_targeted_actual_byte_verification": {
+      "artifact_paths": [
+        "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/postbuild-readonly-1/retained-artifacts/image.artifact",
+        "/home/holden/mckernel-work/host-preparation/repaired-affinity-n3-variant-20261019-1/repaired-image-fresh8b-runtime-0755"
+      ],
+      "instruction_bytes_matched_in_each_actual_image": 1088,
+      "method": "Parsed existing ELF program headers and matched every instruction byte in the retained sys_clone3 excerpt, including boundary padding, in both retained production artifact and runtime image copy. This verifies actual linked code, not only a source/disassembly assertion. Full unchanged artifact hashes/provenance remain the prior accepted authority.",
+      "table435_bytes": "a0f089feffffffff",
+      "table435_file_offset": 903928,
+      "target": "0xfffffffffe89f0a0"
+    },
+    "safe_refusal_inference": "For this valid source-bound CLONE_IO call, the actual loaded handler rejects before reaching its only child-creating clone edge. Together with real-95 delivery, normal app cleanup and accepted whole physical retirement, this is sufficient bounded safe-failure evidence. It is a control-flow argument joined to an actual result, not an inference of no child from sampled absence.",
+    "source_authority": "Tested205 manifestd3495242 plus accepted final artifactfa398247 bind decoder3f743368, syscall_policy2edc424e and syscall_lista9680be6. Rust decoder read copies checked input and creates no thread; sys_clone3 returns its Err before legacy argument construction/sys_clone. These are current linked source/artifact joins, not old image3af15935 or an unbuilt module proposal."
+  },
+  "literal_requirement": "Unsupported optional operations fail clearly and safely.",
+  "physical_disposition": {
+    "accepted": true,
+    "reference_sha256": "471a1e87f2267a517016841e69090223241eedd5449d926fa5965b5a6aa8156c",
+    "scope": "Existing independent positive closure of owner/all25clients/container/QEMU/gates/readbacks and normal parent ACK/deletion/final retirement0/release0; initial retirement-11 retained. No fresh census performed or claimed."
+  },
+  "remaining_literal_proof": null,
+  "review_actions": {
+    "Git_operations": 0,
+    "app_or_guest_runs": 0,
+    "broad_source_or_kmsg_audits": 0,
+    "builds": 0,
+    "lease_edits": 0,
+    "ledger_edits": 0,
+    "new_execution_grants": 0,
+    "root_operations": 0,
+    "shared_source_edits": 0,
+    "tests": 0
+  },
+  "reviewer": "/root/m06_closed_stage_review",
+  "root_next_action": "Apply at most the one scoped P-M06-03 literal check delta using this source-bound additive decision; preserve original failure and all separate routing/native/C-retirement/whole milestones. No new workload is prerequisite to this literal decision.",
+  "schema": "mckernel.independent-literal-P-M06-03-selected-profile-delta-adjudication.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "scope_of_delta": "One additive literal criterion decision only. Root owns any acceptance/ledger update. No rewrite or promotion of the original failed generic protocol report, no fresh execution or batch, and no whole M06/OS/C-retirement credit.",
+  "selected_actual_tuple": {
+    "OS_generation_parent": "os0/generation1/pid257/tid257",
+    "app": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/ordinary-compile-1/app",
+      "sha256": "f1a10e7f7d8aa7c5b505c71b8e12536219007837597b9605c90ca65e96d568c7",
+      "size": 871368
+    },
+    "attempt_nonce": "dbaa78c53e184514981d8e5dfce86901",
+    "case_id": "practical.process.clone3-io-unsupported",
+    "collector": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-stage-20261020-1/ordinary-stage-1/collector-0755",
+      "sha256": "37b370fd699246d301634e16eed4288b19d867a74ea82c9ef39eef8a04bd2058",
+      "size": 1025768
+    },
+    "derived_initramfs": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/ordinary-stage-1/clone3-io.cpio.gz",
+      "sha256": "e309a89645781557cf09d0ccddc3a80974a0aa287fa506e5253030158303a0aa",
+      "size": 26483199
+    },
+    "host_modules": [
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/ihk.ko",
+        "sha256": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c",
+        "size": 1527808
+      },
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/ihk-smp-x86_64.ko",
+        "sha256": "c6a9db8eaa2ec5f7898b021b6835d20e4359a5f4a1209b5b28fd9559cd03387f",
+        "size": 12210104
+      },
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/mcctrl.ko",
+        "sha256": "4e2f1e5b11cad8a9fbfaca4ae6671a2f3fa16ef3c8c651357506d93c7edf4fa9",
+        "size": 2368472
+      }
+    ],
+    "kernel_image": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/host-preparation/repaired-affinity-n3-variant-20261019-1/repaired-image-fresh8b-runtime-0755",
+      "sha256": "ff4fca457e9ffe50dc4eca930c5f91faf317eeee15bf0c2907067cffa77b23bb",
+      "size": 7988768
+    },
+    "mcexec": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/scratch/mcexec-preload-fastpath-build-20260928-1/rust/executer/user/mcexec",
+      "sha256": "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b",
+      "size": 453352
+    },
+    "native_boot": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/two-cpu-running-query-correction-1/native-boot-two-0755",
+      "sha256": "4312f9a8f53d8db7b2b6be4c7d5e409f5c0f82cf8215728209be0f6ff4a5d5c5",
+      "size": 35784
+    },
+    "source_checkpoint": "205410e43e19456ec98777dd6392940707061324"
+  },
+  "separate_failed_protocol_preserved": {
+    "all_route_loss": "OPEN; private observer regression does not settle the complete-cross-slot-witness-loss ambiguity.",
+    "generic_failure": "missing actual route/exit evidence; five delivered/four returned/one exit but zero return_route",
+    "original_result": "FAIL",
+    "positive_worker_slot_identity": "OPEN; no worker5 to launcher-slot0 positive map inferred.",
+    "relation_to_this_delta": "The original semantic review required a stronger explicit-local435/exhaustive-publication evidence contract before a fresh generic/native release. This new user-requested literal adjudication uses actual app/link/control-flow evidence and the literal check text; it adds a scoped criterion decision without changing any saved protocol status or waiving the separate route obligations.",
+    "root_seven": "FAIL_STOPPED at native-owner",
+    "saved_application_acceptance": false,
+    "semantic_report_sha256": "3e92dd5167269d1fdd0e442c85a6ba726dcebd02f5f6878c97c79c8d81da5691"
+  }
+}

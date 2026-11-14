@@ -1,0 +1,183 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "RETAINED_ACTUAL_COMMAND0_ABI_PASS_NO_REPLAY",
+  "previous_profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-next-readonly-data-new12h-1/successor-host-profile-2/PROFILE.NOT-GRANTED.json",
+    "bytes": 82211,
+    "sha256": "bb74b7fe6d8937b251e3e8a21e5e366e472270c59b0f993dea3e8e021b3a9fa5"
+  },
+  "previous_recipe": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-next-readonly-data-new12h-1/successor-host-profile-2/EXACT-SEVEN-COMMAND-HOST-RECIPE.NOT-ADMITTED.json",
+    "bytes": 15046,
+    "sha256": "47739832b5b6f692905f6bf302c680fac2407188ff85154ec69b115e8d370bc6"
+  },
+  "successful_command": {
+    "argv": [
+      "/usr/bin/gcc-9",
+      "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+      "-DIHK_OS_MANYCORE",
+      "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+      "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+      "-DMCKERNEL_NATIVE_CLONE3",
+      "-DMCKERNEL_NATIVE_CLONE_TID",
+      "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+      "-DMCKERNEL_NATIVE_FUTEX",
+      "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+      "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+      "-DMCKERNEL_RUST_BITOPS",
+      "-DMCKERNEL_RUST_LIST_HELPERS",
+      "-DMCKERNEL_RUST_LOCK_HELPERS",
+      "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+      "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+      "-DMCKERNEL_RUST_PTE_HELPERS",
+      "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+      "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+      "-DPROFILE_ENABLE",
+      "-D__KERNEL__",
+      "-DMCKERNEL_RUST_PROCESS_HELPERS",
+      "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/include",
+      "-I/home/holden/mckernel/kernel/include",
+      "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel",
+      "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build",
+      "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64/include",
+      "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64",
+      "-I/home/holden/mckernel/ihk/ikc/include",
+      "-I/home/holden/mckernel/ihk/linux/include",
+      "-I/home/holden/mckernel/lib/include",
+      "-I/home/holden/mckernel/arch/x86_64/kernel/include",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-Wno-unused-parameter",
+      "-Wno-sign-compare",
+      "-Wno-unused-function",
+      "-Wno-implicit-fallthrough",
+      "-Wno-stringop-truncation",
+      "-ffreestanding",
+      "-O2",
+      "-nostdinc",
+      "-isystem",
+      "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+      "-fno-omit-frame-pointer",
+      "-mcmodel=large",
+      "-mno-red-zone",
+      "-mno-sse",
+      "-fsyntax-only",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-next-readonly-data-new12h-1/fixture/genuine_abi.c"
+    ],
+    "argv_compact_json_LF_sha256": "84babd76b1a6b1c7bb853264d84050550969ff521a7bf60017d56c5c886b7ec4",
+    "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-next-readonly-data-new12h-1",
+    "id": "00-genuine26-field-ABI",
+    "leaf": "F02runqueue208",
+    "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 00-genuine26-field-ABI",
+    "requires_fresh_Root_ordinary_grant": true,
+    "stderr_limit_bytes": 16384,
+    "stdout_limit_bytes": 16384,
+    "timeout_seconds": 90
+  },
+  "join": {
+    "pid": 1652341,
+    "start": 92545616,
+    "returncode": 0,
+    "direct_child_joined": true,
+    "group_absent": true,
+    "remaining_group_members": [],
+    "unexpected_group_members": [],
+    "timed_out": false,
+    "error": null,
+    "retirement_error": null,
+    "seconds": 0.07920791499782354,
+    "closed_streams": true,
+    "captures": {
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-next-readonly-data-new12h-1/successor-host-profile-2/future-capture-2/step0/stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "device": 66306,
+        "inode": 59780036,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": "0o600",
+        "nlink": 1,
+        "size": 0,
+        "mtime_ns": 1793128011460822667,
+        "ctime_ns": 1793128011460822667
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-next-readonly-data-new12h-1/successor-host-profile-2/future-capture-2/step0/stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "device": 66306,
+        "inode": 59780037,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": "0o600",
+        "nlink": 1,
+        "size": 0,
+        "mtime_ns": 1793128011460822667,
+        "ctime_ns": 1793128011460822667
+      }
+    }
+  },
+  "retained_capture_files": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-next-readonly-data-new12h-1/successor-host-profile-2/future-capture-2/CONSUMED-GRANT.json",
+      "bytes": 1928,
+      "sha256": "a317e6dbd6decb294525005e2b1f30384a0b8fa703ece4b67c621384bac274d5"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-next-readonly-data-new12h-1/successor-host-profile-2/future-capture-2/FIRST-FAILURE.json",
+      "bytes": 158,
+      "sha256": "0e12c1ec7598571684c56bfcf68adf4a41d39e8326e80189a5d266d7201215ab"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-next-readonly-data-new12h-1/successor-host-profile-2/future-capture-2/RESULTS.json",
+      "bytes": 1738,
+      "sha256": "457d70dc16d4d0263e6bccbd5a82e4d3ab814725f3afbc410541f5e394d78f4a"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-next-readonly-data-new12h-1/successor-host-profile-2/future-capture-2/step0/admission.json",
+      "bytes": 1086,
+      "sha256": "91671ae0fd3cf8e95d5a1f089e9fd5a3206d8e6fcfd688c2d81d0dcf355e6896"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-next-readonly-data-new12h-1/successor-host-profile-2/future-capture-2/step0/command.json",
+      "bytes": 2478,
+      "sha256": "e8e5492976cbbbf2eaf05e277f354933282ce2ccacfe1b91d29fade9d58960ab"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-next-readonly-data-new12h-1/successor-host-profile-2/future-capture-2/step0/direct-join.json",
+      "bytes": 260,
+      "sha256": "9f1d8d8c11c3c4d6ac4ace60900ce4f9b4f1b4eb8db01c87c47c5874aabade05"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-next-readonly-data-new12h-1/successor-host-profile-2/future-capture-2/step0/direct-wait.json",
+      "bytes": 82,
+      "sha256": "9a84ef4f6435fd29a6b06421f476972eec50de414d1fc58478159a61ffe763e4"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-next-readonly-data-new12h-1/successor-host-profile-2/future-capture-2/step0/started.json",
+      "bytes": 36,
+      "sha256": "3d439b2ead89ec451c194ecaac8f1f4cd75669ecb4023abd048fe5928d924d9c"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-next-readonly-data-new12h-1/successor-host-profile-2/future-capture-2/step0/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-next-readonly-data-new12h-1/successor-host-profile-2/future-capture-2/step0/stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-next-readonly-data-new12h-1/successor-host-profile-2/future-capture-2/step0/whole-join.json",
+      "bytes": 1186,
+      "sha256": "70031c611eddf7959eb7a02c60cf8dc2bd556214b7ede63130d943c925862b1a"
+    }
+  ],
+  "preserved_harness_failure": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-next-readonly-data-new12h-1/successor-host-profile-2/future-capture-2/FIRST-FAILURE.json",
+    "bytes": 158,
+    "sha256": "0e12c1ec7598571684c56bfcf68adf4a41d39e8326e80189a5d266d7201215ab"
+  },
+  "note": "Command0 is syntax-only: no ABI object was emitted. Its genuine ABI artifact is this exact retained command/join/stdout/stderr receipt. Original output2 and all capture files remain untouched. Six remaining commands only; Root must invoke absolute --profile and --grant paths to survive runner cwd changes."
+}

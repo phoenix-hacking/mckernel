@@ -1,0 +1,92 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": 1793404173.4809742,
+  "status": "PASS_ACTUAL_UNPRIVILEGED_ONE_CHILD_RESTORE",
+  "exit_status": 0,
+  "positive_tool_terminal": true,
+  "owner": {
+    "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+    "pid": 3118646,
+    "ppid": 2996005,
+    "pgid": 3118646,
+    "start": "120161179",
+    "at": 1793404167.1480415
+  },
+  "group_members": [],
+  "records": [
+    {
+      "child_birth": "120161188",
+      "child_pid": 3118649,
+      "guard_error": null,
+      "native_currentfree": null,
+      "native_release": false,
+      "parent_pid": 3118648,
+      "pin_error": null,
+      "pin_verified": true,
+      "record_type": "DEFERRED_RESTORE_CHILD_CUSTODY_V1",
+      "stage": "PRE_GO"
+    },
+    {
+      "child_birth": "120161188",
+      "child_event": {
+        "handlers_restored": true,
+        "mask": [
+          14
+        ],
+        "pid": 3118649,
+        "ppid": 3118648,
+        "stage": "CALLBACK_AFTER_RESTORE"
+      },
+      "child_pid": 3118649,
+      "close_outcomes": [
+        {
+          "historical_fd": 5,
+          "label": "parent-result-writer",
+          "state": "CLOSED"
+        },
+        {
+          "historical_fd": 6,
+          "label": "parent-gate-reader",
+          "state": "CLOSED"
+        },
+        {
+          "historical_fd": 7,
+          "label": "parent-gate-writer",
+          "state": "CLOSED"
+        },
+        {
+          "historical_fd": 4,
+          "label": "parent-result-reader",
+          "state": "CLOSED"
+        },
+        {
+          "historical_fd": 8,
+          "label": "verified-terminal-child-pidfd",
+          "state": "CLOSED"
+        }
+      ],
+      "direct_wait_status": 0,
+      "early_published": true,
+      "gate_sent": true,
+      "guard_error": null,
+      "native_currentfree": null,
+      "native_release": false,
+      "parent_mask_before_guard": [
+        14
+      ],
+      "pidfd_closed": true,
+      "pidfd_terminal": true,
+      "pin_error": null,
+      "pin_verified": true,
+      "publication_error": null,
+      "status": "PASS_RESTORE_OBSERVED"
+    }
+  ],
+  "stderr": "",
+  "metrics_raw": "\tCommand being timed: \"/usr/bin/python3 -s -E -S -B /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-deferred-child-restore-check-1/correction-2/restore_probe.py\"\n\tUser time (seconds): 0.03\n\tSystem time (seconds): 0.00\n\tPercent of CPU this job got: 88%\n\tElapsed (wall clock) time (h:mm:ss or m:ss): 0:00.04\n\tAverage shared text size (kbytes): 0\n\tAverage unshared data size (kbytes): 0\n\tAverage stack size (kbytes): 0\n\tAverage total size (kbytes): 0\n\tMaximum resident set size (kbytes): 13824\n\tAverage resident set size (kbytes): 0\n\tMajor (requiring I/O) page faults: 0\n\tMinor (reclaiming a frame) page faults: 3874\n\tVoluntary context switches: 6\n\tInvoluntary context switches: 0\n\tSwaps: 0\n\tFile system inputs: 0\n\tFile system outputs: 16\n\tSocket messages sent: 0\n\tSocket messages received: 0\n\tSignals delivered: 0\n\tPage size (bytes): 4096\n\tExit status: 0\n",
+  "original_operation_reservation_released": false,
+  "native_release": false,
+  "C_retirement_delta": 0,
+  "grant_released": true,
+  "ordinary_reservation_released_bytes": 536870912
+}

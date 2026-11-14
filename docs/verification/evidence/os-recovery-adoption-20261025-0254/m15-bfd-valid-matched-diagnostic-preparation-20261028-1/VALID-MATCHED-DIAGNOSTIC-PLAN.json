@@ -1,0 +1,296 @@
+{
+  "actual_compiler_commands": 0,
+  "actual_context_ref": null,
+  "actual_diagnostic_cases": 0,
+  "actual_native_cases": 0,
+  "actual_native_currentfree": null,
+  "actual_native_execution_release": null,
+  "base_initramfs": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/root-adopted-stage-source-1/offline-materialization-1/current110-f05-mm-base.cpio.gz",
+    "sha256": "a6377bfe9735b5b6a8183d3f710305b78093512ab378a9529c38e88b13f15b37",
+    "size": 13308321
+  },
+  "bounded_source_correction": {
+    "original_protocols_changed": false,
+    "preserved_originals": "*.PRE-DECLARATION-CAPACITY-CORRECTION plus PURE-REGRESSION/v2 captures",
+    "pure_recheck": {
+      "bytes": 847,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-valid-matched-diagnostic-preparation-20261028-1/PURE-REGRESSION-v3.json",
+      "sha256": "3aa691e5ae651ddb6d818f33508c3bc29704a774f1752e94032afc6841398fd5"
+    },
+    "reason": "Original C DWARF traversal can visit ordinary declarations before definitions. Fixed four-line preamble and app-sized1KiB buffers would reject valid diagnostics."
+  },
+  "collector_successor": {
+    "final_report": "Bounded<=4096 summary envelope; complete paired bytes appear once in distinct bounded PROBE_STREAM serial records.",
+    "main": {
+      "bytes": 12864,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-valid-matched-diagnostic-preparation-20261028-1/main.rs",
+      "sha256": "5a341125790869abd9b6a44aa4001433530b993cc383343c3fedd9fdd5806320"
+    },
+    "new_case_prefix": "M15_BFD_PS_RESULT ",
+    "original227_changes": false,
+    "original235_payload_executed": false,
+    "probe": {
+      "bytes": 3063,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-valid-matched-diagnostic-preparation-20261028-1/idle_probe.rs",
+      "sha256": "0d1da0979269235e96d0a6d4173e666b32b8f0e11c64e0a9771dfcc9f62ad77f"
+    },
+    "profile": {
+      "bytes": 1098,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-valid-matched-diagnostic-preparation-20261028-1/profile.rs",
+      "sha256": "eceba74c59880502da8255ada6b95d960fa4dc47eac29a36859594a4a4a2b60c"
+    },
+    "readiness": "SOURCE_ONLY_NOT_RUST_COMPILED_OR_NATIVE_RELEASED",
+    "report": {
+      "bytes": 2733,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-valid-matched-diagnostic-preparation-20261028-1/report.rs",
+      "sha256": "86255812e668839b11ec2da191122f28cb691b807b6b0569959b733fc3ec1cb5"
+    },
+    "supervisor": {
+      "bytes": 22506,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-valid-matched-diagnostic-preparation-20261028-1/supervisor.rs",
+      "sha256": "2e0278ae28223792312ff452b74454e05c4b63fe7a6c04ffc50c68853c73a866"
+    },
+    "supervisor_delta": "Only STREAM_LIMIT1024\u219265536 and its scope comment; all process ownership, FFI, signal, join, group, timeout and file-writing bodies remain exact.",
+    "supervisor_delta_patch": {
+      "bytes": 559,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-valid-matched-diagnostic-preparation-20261028-1/supervisor-fixed-diagnostic-capacity.patch",
+      "sha256": "8780f27822f7731203296218088f9ceae8ac87b88868cbdb6ad0759be2500379"
+    },
+    "supervisor_reused_byte_identical": false
+  },
+  "credit_ceiling": "57774.852125",
+  "credit_run_id": "7f4af94a83b14cc08f97401f5891d965",
+  "current_tools": {
+    "current_eclair": {
+      "bytes": 6807032,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-default-next-integration-source-20261028-1/new-window-producer-cohort-source-1/latest-root61-consumer-successor-source-1/OUTPUT/work/current-bfd-build/executer/user/eclair",
+      "sha256": "ea39080e9fe8f6d8bf9f52be4dd263b98d542d044efa941954a32589a2f436c0"
+    },
+    "current_mcinspect": {
+      "bytes": 7163824,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-default-next-integration-source-20261028-1/new-window-producer-cohort-source-1/latest-root61-consumer-successor-source-1/OUTPUT/work/current-bfd-build/executer/user/mcinspect",
+      "sha256": "dcd94257b077363bddfe62221f9d9ad6bd5cd54cf10d4b8fce172803caa2b387"
+    },
+    "kernel": {
+      "bytes": 10255112,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT110-HOST19-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/mckernel.img",
+      "sha256": "60e62f97ef48ecaf14174af1c5b75d7181969f439c1b45c618d6c16d4bc40d57"
+    },
+    "reference_eclair": {
+      "bytes": 6805368,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/equivalence-oracle-correction-source-7/selected-bootstrap-correction-source-8/coherent-cxx-bound-retained11-suffix10-source-2/workspace/native-running-modules-candidate-a482f1c238884fa59bf8db97663925b8/qualification-1/eclair-original",
+      "sha256": "7e2775109eac71fec1454526dc1db2554aa984b741ad6db9654724443b19dd37"
+    },
+    "reference_mcinspect": {
+      "bytes": 7162008,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/equivalence-oracle-correction-source-7/selected-bootstrap-correction-source-8/coherent-cxx-bound-retained11-suffix10-source-2/workspace/native-running-modules-candidate-a482f1c238884fa59bf8db97663925b8/qualification-1/mcinspect-original",
+      "sha256": "0b753618f2bf3d77a18847967d0fbba1017c69c0c9b712051cb40a493c04802b"
+    }
+  },
+  "exact_future_reference_probe_argv": [
+    "/case/tools/mcinspect-reference",
+    "--kernel=/images/mckernel.img",
+    "--ps"
+  ],
+  "exact_future_valid_probe_argv": [
+    "/case/tools/mcinspect",
+    "--kernel=/images/mckernel.img",
+    "--ps"
+  ],
+  "exact_missing_dependency_export": {
+    "argv": [
+      "/usr/bin/docker",
+      "cp",
+      "-L",
+      "2460c49fbbbf8be6ee5ae931e7e769eec2f26e352937e7f4a4dcf5d2ebec8008:/usr/lib64/libelf.so.1",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-valid-matched-diagnostic-preparation-20261028-1/future-runtime-inputs-1/libelf.so.1"
+    ],
+    "prerequisites": [
+      "Existing stopped BFD container is still retained and positively owned; parent obtains applicable independent extra readback/export release. No ownership inference from Pid0.",
+      "If original container has already been retired, do not recreate it; use immutableSDKimage41778 under existing reviewed extraction profile and fresh owner.",
+      "Fresh private output parent; preserve all failed logs. Bind exported actual regular-file bytes, SONAME/version and recursive NEEDED closure against retained guest libc/zlib before staging. No host-distro substitution."
+    ],
+    "status": "NOT_GRANTED_NOT_RUN_PARENT_OWNS_EXISTING_CONTAINER"
+  },
+  "exact_next_HOST_collector_compile": {
+    "CPU_affinity": [
+      6
+    ],
+    "argv": [
+      "/usr/bin/env",
+      "TMPDIR=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-valid-matched-diagnostic-preparation-20261028-1/future-HOST-output-1",
+      "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2021",
+      "-D",
+      "warnings",
+      "-C",
+      "codegen-units=1",
+      "-C",
+      "opt-level=1",
+      "-C",
+      "panic=abort",
+      "-C",
+      "target-feature=+crt-static",
+      "-C",
+      "relocation-model=static",
+      "-C",
+      "link-arg=-no-pie",
+      "-C",
+      "link-arg=-Wl,-z,noexecstack",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-valid-matched-diagnostic-preparation-20261028-1/main.rs",
+      "-o",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-valid-matched-diagnostic-preparation-20261028-1/future-HOST-output-1/bfd-idle-supervisor"
+    ],
+    "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-valid-matched-diagnostic-preparation-20261028-1",
+    "jobs": 1,
+    "prerequisites": [
+      "Root actual ordinary grant and measured shared resource admission; create the new private future-HOST-output-1 once before compile.",
+      "Reuse existing Rust1.92 toolchain qualification; no SDK21/default producer replay.",
+      "Affected source/FFI/ownership review and focused HOST checks before native release."
+    ],
+    "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Compile only the new fixed valid-PS collector source; never execute PID1 collector on HOST.",
+    "status": "UNRUN_REQUIRES_ROOT_ORDINARY_GRANT"
+  },
+  "files_closed": 0,
+  "fixed_cutoffs": {
+    "BOOT": 1051042.6959879305,
+    "MONO": 1035704.5689393478,
+    "UTC": 1793253600
+  },
+  "guest_runtime_dependencies": {
+    "checked_prior_root_candidates": {
+      "bin/gdb": false,
+      "lib64/libelf.so.1": false,
+      "usr/bin/gdb": false,
+      "usr/lib64/libelf.so.1": false
+    },
+    "current_mcinspect": [
+      "libz.so.1",
+      "libelf.so.1",
+      "libc.so.6"
+    ],
+    "gdb_actual_source_ref": null,
+    "libelf_actual_source_ref": null,
+    "reference_mcinspect": [
+      "libz.so.1",
+      "libelf.so.1",
+      "libc.so.6"
+    ],
+    "retained_capsule_missing": [
+      "libelf.so.1"
+    ]
+  },
+  "holder_note": "BFD faac1b4804174de5800c58d61ba98004 is consumed;2460 container retained. This packet neither executes cleanup nor grants heavy clearance.",
+  "limits": {
+    "McKernel_logical_cpu_count": 1,
+    "additional_reserve": "Preserve greater measured native packet/capture/emergency floors; no floor relaxation.",
+    "collector_timeout_seconds": 120,
+    "each_probe_timeout_ms": 10000,
+    "frame_limit_bytes": 4096,
+    "guest_memory_mib": 8192,
+    "guest_numa_nodes": 2,
+    "guest_vcpus": 4,
+    "host_complete_serial_budget_required_bytes": 1048576,
+    "host_cpu_count": 4,
+    "host_cpus": "2-5",
+    "host_free_floor_GiB": 16,
+    "host_serial_budget_note": "Review against actual existing owner capture contract before native release; refuse if its complete retained budget is smaller. Four worst-case hex-encoded probe streams consume524288B, raw kernel snapshot262144B, leaving262144B of1MiB for metadata/boot/output. This source proposal grants no increase.",
+    "memory_bytes": 12884901888,
+    "network": "none; no extra Docker/guest",
+    "outer_native_timeout_seconds": 300,
+    "pids": 512,
+    "raw_kernel_snapshot_limit_bytes": 262144,
+    "scratch_free_floor_GiB": 12,
+    "stream_limit_bytes": 65536,
+    "swap_bytes": 0
+  },
+  "native_basis": {
+    "kernel": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT110-HOST19-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/mckernel.img",
+      "sha256": "60e62f97ef48ecaf14174af1c5b75d7181969f439c1b45c618d6c16d4bc40d57",
+      "size": 10255112
+    },
+    "manifest": {
+      "bytes": 9106,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-stage-preparation-source-1/root-actual-qualified-input-plan-source-1/process235.NEW-COLLECTOR.HOST-BOUND.json",
+      "sha256": "cf49bed61322fa0f1ccb6536bdd14753903c3ec3ac2b105e22ec64c809f0a86a"
+    },
+    "modules": [
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/module-runtime-snapshots-1/ihk.ko",
+        "sha256": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c",
+        "size": 1527808
+      },
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-final-native-preparation-new12h-1/offline-materialization-1/runtime-inputs/ihk-smp-x86_64.ko",
+        "sha256": "887dc3567e6035c921588e61b45b41a8ef32a972d142fe2ba82ec48442353b12",
+        "size": 13098896
+      },
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-final-native-preparation-new12h-1/offline-materialization-1/runtime-inputs/mcctrl.ko",
+        "sha256": "57546af5110c0674b307e5ac5a328228abbe784f890f69521db5f594f21f6ae8",
+        "size": 2578512
+      }
+    ],
+    "profile": {
+      "memory_mib": 8192,
+      "name": "native-diagnostic-4vcpu-8192mib",
+      "numa_nodes": 2,
+      "vcpus": 4
+    },
+    "scope": "Existing matched working OS/kernel/module profile provenance only. No consumed case235 operation/nonce/lease is reused; actual current identity and new diagnostic scope require Root binding."
+  },
+  "native_basis_manifest": {
+    "bytes": 9106,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-stage-preparation-source-1/root-actual-qualified-input-plan-source-1/process235.NEW-COLLECTOR.HOST-BOUND.json",
+    "sha256": "cf49bed61322fa0f1ccb6536bdd14753903c3ec3ac2b105e22ec64c809f0a86a"
+  },
+  "native_sequence": [
+    "After genuine BFD normal retirement/currentfree, Root separately admits soleheavy native case and a fresh namespace/nonce; never reusefaac or original235/227 nonce/manifest.",
+    "Qualify the new static collector at HOST scope using reused exact supervisor contracts and source-specific valid-argv/capture checks. No PID1 body runs on HOST.",
+    "Bind missing genuine libelf; compose new archive with fixed three added runtime inputs and new init using private derivative of accepted stable-FD overlay. Preserve exact matching60e kernel/module/boot tuple and original base bytes; keep original235/227 archives untouched.",
+    "Review actual ELF runtime/version closure and new stage manifest plus exact owner/execution/diagnostic decoder adaptation; no unrun source manifest is runtime authority.",
+    "Boot one disposable OS, record real assigned CPU0/loadedkernel/module generation and empty namespace; run reference then current validPS each10s under same120s collector/300s outer bounds. Preserve complete serial streams/kernel log/failures.",
+    "Use source-derived C oracle plus actual independent owner/CPU facts and exact stream equality. Host native owner validates normal guest/child/container/control ownership retirement; retain nestedOS poweroff as existing scope only, no publicresource-restoration credit.",
+    "Then finish eclair live/dump prerequisite bindings and separate NMI/GDB release; no validF04 case can be inferred from F03 success."
+  ],
+  "nearest": "M15-F03 paired valid mcinspect --ps on a new disposable idle CURRENT110/60e OS",
+  "oracle": {
+    "bytes": 7209,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-valid-matched-diagnostic-preparation-20261028-1/ORIGINAL-C-AND-REFERENCE-ORACLE.json",
+    "sha256": "bd89dc436e1bf02e8f2bca99b0dbfd3746c68fa4816caeedd46335ee877cb167"
+  },
+  "original_contracts": {
+    "bytes": 8755,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-current-default-selector-preparation-source-1/final-execution-preparation-source-1/VALID-DEVICE-AND-DUMP-CONTEXT.NOT-RELEASED.json",
+    "sha256": "ba4612c137042b5fd6d995a2e2273a562c2436867893f68616733deac8133469"
+  },
+  "overlay_successor": {
+    "actual_composition": false,
+    "fixed_added_inputs": [
+      "case/tools/mcinspect",
+      "case/tools/mcinspect-reference",
+      "lib64/libelf.so.1"
+    ],
+    "original_base_payload_mcexec_bytes_preserved": true,
+    "original_source": {
+      "bytes": 26579,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/native_diagnostic_overlay.py",
+      "sha256": "46d41bc0727fa77e4126e739f25352c53eadf2e1fa8e23ef06a6e46c9b3ba27d"
+    },
+    "source": {
+      "bytes": 28418,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-valid-matched-diagnostic-preparation-20261028-1/native_diagnostic_overlay_bfd.py",
+      "sha256": "4113c3b118e667d8558b4e09589185f3dc2ba35fb9dc33c98b24cf70b319a548"
+    }
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "spent_floor": "22812.3311",
+  "status": "PRIVATE_VALID_DIAGNOSTIC_SUCCESSOR_SOURCE_CONTEXT_AND_DEPENDENCY_BLOCKED"
+}

@@ -1,0 +1,57 @@
+{
+  "schema": "mckernel.stability-rocky-lean-source-candidate.v1",
+  "recorded_at": "2026-09-28T12:06:00-07:00",
+  "status": "PASS_LOCAL_PREPARATION_PENDING_INDEPENDENT_REVIEW",
+  "scope": "standalone sparse source tree for Rocky native current-candidate build staging",
+  "root": {
+    "path": "/home/holden/mckernel-work/scratch/rocky-lean-source-20260928-2",
+    "commit": "f8941f1b5ad136c65b6a20424f10250253d2be0b",
+    "branch": "codex/local-native-staging-repair",
+    "mode": "0700",
+    "git_mode": "0500",
+    "git_write_probe": "PASS_REJECTED",
+    "file_count": 8420,
+    "logical_bytes": 263342044,
+    "allocated_bytes": 277737472,
+    "canonical_tar_sha256": "0804ffc60549a632b915566a61f4b3ee36b9b2581532082668684754b22dfae4",
+    "canonical_tar_profile": "tar --sort=name --mtime=@0 --owner=0 --group=0 --numeric-owner --format=posix --pax-option=delete=atime,delete=ctime -C ROOT -cf - .",
+    "tar_timing_path": "/home/holden/mckernel-work/scratch/rocky-lean-source-20260928-2-tar-timing.txt",
+    "tar_timing_sha256": "2bd3669c8b33666d57d8d332c57a8d0144af762bd2edfd524dd1137918bb088d",
+    "sparse_checkout_sha256": "153545d85daf118dd326b06c6a84be1cd5c5a2ef64b673bcac6fb4425276aa57",
+    "included_directories": ["arch", "cmake", "doxygen", "executer", "host-kernel", "ihk", "kernel", "lib", "scripts", "test", "tools"],
+    "excluded_bulk": "docs and unrelated root caches/work products are absent from the sparse worktree; root-level tracked build/configuration files remain present"
+  },
+  "submodules": [
+    {"path": "executer/user/lib/libdwarf/libdwarf", "commit": "ab9230b2b8aa66a3d1d52e4be11fca17a3b63753"},
+    {"path": "executer/user/lib/syscall_intercept", "commit": "66a47ceb1c5c05e1d613ab3f1f7164f42d5aca6f"},
+    {"path": "executer/user/lib/syscall_intercept/capstone", "commit": "f9c6a90489be7b3637ff1c7298e45efafe7cf1b9"},
+    {"path": "executer/user/lib/uti", "commit": "8c5a556814efe1f57e5eb58b72318069dd7738b5"},
+    {
+      "path": "ihk",
+      "commit": "21a0d1eb1705c3ee597aed41358ba4c0a92d5f8c",
+      "superproject_gitlink": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+      "status": "intentional plus-status campaign-authored local commit",
+      "reason": "retains the independently source-reviewed whitebox mirror for the current host-PTE-clear error-propagation change; nested remote publication previously failed authorization",
+      "worktree_clean": true
+    }
+  ],
+  "wrapper_compatibility": {
+    "all_submodules_initialized": true,
+    "root_git_read_only_branch": "The existing rocky validator rejects its root Git write probe and accepts initialized recursive submodules; no update/reset of the intentional IHK plus-status occurs.",
+    "ihk_compat_patch": "forward applicable",
+    "rocky_validator_sha256": "69c64c5143458543d228ecea89b9cc46f28ff592a25b42a41dc27d1f7ef631bd",
+    "qemu_rocky_wrapper_sha256": "b1b05d094be8742c1ae6e81bbcefc565800f43bdf2aa7e1f48986c68e6907931",
+    "qemu_guest_wrapper_sha256": "83f73e402f4993e911a7ba34503d8a8b9578e6aef20ccaf2b43b331b10953dfe",
+    "ihk_compat_patch_sha256": "07b5a777f13fb8fd859bc1d941d9523b41f942b838813f75764a61fad379ecd8"
+  },
+  "preserved_failures": [
+    "A local file-protocol blobless probe reported filtering unsupported and was interrupted before a large full clone; Git removed its incomplete directory.",
+    "Git 2.25.1 remote clone with --sparse failed during sparse initialization and removed its incomplete directory.",
+    "The bounded correction used remote blobless --no-checkout followed by explicit sparse initialization/checkout, then initialized exact submodules."
+  ],
+  "limitations": [
+    "The root partial clone retains promisor packs; root Git metadata is read-only so the validator cannot lazily fetch or rewrite it.",
+    "This is source preparation, not a current-candidate build, root execution release, QEMU run or shutdown evidence.",
+    "Independent source-stage review and a separately reviewed Rocky execution packet remain required."
+  ]
+}

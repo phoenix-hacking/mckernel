@@ -1,0 +1,553 @@
+{
+  "schema_version": 1,
+  "snapshot_date": "2026-09-14",
+  "source_commit": "9d90b588bae761a6cea6596827f8cc296a3ee642",
+  "branch": "codex/local-native-staging-repair",
+  "execution_authorized_by_plan": false,
+  "audit_scope": "Repository path inventory plus authoritative progress/gate/case/roadmap and current blocker/interface review; not a line-by-line correctness audit of all source or revalidation of all archives.",
+  "repository_path_count": 10531,
+  "repository_paths": {
+    "path": "docs/verification/os-milestones-20260914/repository-paths.txt",
+    "size": 635211,
+    "sha256": "34b497dcdb0c70f66e80d992136c710a5b1e0c3bfe961a37a53ace90272bd8a5"
+  },
+  "top_level_path_counts": {
+    "AGENTS.md": 1,
+    "CMakeLists.txt": 1,
+    "KNOWN_BUGS.md": 1,
+    "LICENSE": 1,
+    "README.rst": 1,
+    "VALIDATION_PROGRESS.MD": 1,
+    "arch": 152,
+    "cmake": 8,
+    "config.h.in": 1,
+    "docs": 2475,
+    "executer": 2780,
+    "final-push.txt": 1,
+    "full-port.txt": 1,
+    "goal.txt": 1,
+    "host-kernel": 159,
+    "ihk": 1291,
+    "kernel.log": 1,
+    "kernel": 191,
+    "lib": 33,
+    "migration.txt": 1,
+    "overview.txt": 1,
+    "overview2.txt": 1,
+    "plan.txt": 1,
+    "rmeta8dyMXb": 1,
+    "rust-source-retirement.txt": 1,
+    "scripts": 1188,
+    "test": 2222,
+    "tools": 15
+  },
+  "selected_authority_and_starting_sources": [
+    {
+      "path": "AGENTS.md",
+      "size": 316908,
+      "sha256": "0353e5a1e42653fd4f955522ff797e49ba2c3977b9c77aead749646fb70fcf6b"
+    },
+    {
+      "path": "VALIDATION_PROGRESS.MD",
+      "size": 27112,
+      "sha256": "8061c52ed007acaba6bfc7460ae6cbfc4fbfe8993905cb292a8d9a16543597cf"
+    },
+    {
+      "path": "arch/x86_64/kernel/cpu.c",
+      "size": 93339,
+      "sha256": "115725e4341f34d13d2a8385d87521874af5b7a53923bb0d407d580793a934f9"
+    },
+    {
+      "path": "arch/x86_64/kernel/include/signal.h",
+      "size": 7474,
+      "sha256": "3cea81b9b2f723fbff2cafa634761d50316a397d06df2c12f94fe5f0dae03752"
+    },
+    {
+      "path": "docs/verification/application-draft-audit-20260913.json",
+      "size": 1222263,
+      "sha256": "b1fbb8a614d2539bf88c791b2631788dcbb490637f67828663915b78d5b1d6a5"
+    },
+    {
+      "path": "docs/verification/application-draft-corrections-20260913.json",
+      "size": 319675,
+      "sha256": "8eabb3106aed0a4c078b365e0bd2b15e0edf54b2923445f22f1e71e5d26d2b48"
+    },
+    {
+      "path": "docs/verification/compat-24a151fe-linked-rust.json",
+      "size": 2049,
+      "sha256": "21c3bd887fd5b1f7d62e9b9574835c086e48ada3e92c226f241a8a2a78fabebb"
+    },
+    {
+      "path": "docs/verification/mckernel-rust-assembly-completion.md",
+      "size": 4933,
+      "sha256": "a80671152f383b2c132a865235b09f0ce79fc2b839eedd56479b333f0670d2de"
+    },
+    {
+      "path": "docs/verification/rust-consumer-integration.md",
+      "size": 5204,
+      "sha256": "82f0fb2dd09f266dfd79b047368a34958d8ddec3e9c59258e298cd27ca876189"
+    },
+    {
+      "path": "docs/verification/rust-reuse-plan.md",
+      "size": 16587,
+      "sha256": "e4813b4c37e958772e8d2786207053d32f7eeb27ab2b8615d435ddb69f542c06"
+    },
+    {
+      "path": "docs/verification/stability-application-backend-map-20260913.md",
+      "size": 12802,
+      "sha256": "b1e459e61a41a4232e30df59d5ff686ad9ab4dc75d3912e7ed7a4b3c8a7e6142"
+    },
+    {
+      "path": "docs/verification/stability-goal-20260913.txt",
+      "size": 24742,
+      "sha256": "5b1999817f7d47767ac0f481c9797e54787a7ad8aeb4c06bf36ce9b0c4bf4487"
+    },
+    {
+      "path": "docs/verification/stability-invalidation-ownership-review-20260913.md",
+      "size": 26594,
+      "sha256": "bc855e3a1d1129cab55d7259916b467f5965fe82f6e602f8994653bc4cc19eba"
+    },
+    {
+      "path": "docs/verification/stability-linux-collector-build-independent-review-20260913.json",
+      "size": 110055,
+      "sha256": "01251287d5fa5dde4811a9f3d54468ecfbe34db2738f55e60945076e1b9b27aa"
+    },
+    {
+      "path": "docs/verification/stability-pending-free-batch-design-20260913.md",
+      "size": 12175,
+      "sha256": "4949cfb2a0428e9a2e3bee602a2a46894b95104f2f427548d3757f5ca955e158"
+    },
+    {
+      "path": "docs/verification/stability-permanent-backpressure-independent-review-20260913.json",
+      "size": 196466,
+      "sha256": "d963d9664c6a6dee95965590b26edfff33044e82ca76a3b512c077d81ba91b56"
+    },
+    {
+      "path": "docs/verification/stability-prepublish-hard-independent-review-20260913.json",
+      "size": 163229,
+      "sha256": "4b655b2baac40c30ad54ecb68a0199dbba44f74b661921a5dc19b279f39b6f8d"
+    },
+    {
+      "path": "docs/verification/stability-published-preparation-results-independent-review-20260913.json",
+      "size": 266894,
+      "sha256": "7d1e7ebe4a7d4035a39edd7bf5badbb6df87c9269adeff96e40c211e0146fffb"
+    },
+    {
+      "path": "docs/verification/stability-published-stack-review-20260913-1.json",
+      "size": 117992,
+      "sha256": "d0f40193bebda6b30d31a45ad4a5162874fcd705ca17be0f428cadd4c94c2524"
+    },
+    {
+      "path": "docs/verification/stability-run-20260913.md",
+      "size": 28574,
+      "sha256": "be11175526fee68773114637d9c63e3bb66372fa9db9ddc2dbba9a89a9d5ec62"
+    },
+    {
+      "path": "docs/verification/stability-service-failure-baseline-20260913-1.json",
+      "size": 64617,
+      "sha256": "19414524121064059f8764e41ba756ca3442cee2b17c6fa7af5c34cb6b9b1600"
+    },
+    {
+      "path": "docs/verification/stability-state-20260913-2.json",
+      "size": 1056347,
+      "sha256": "4505778e32f60532fd85a44e2628da5c051014ba033881ca927cf76b10b8abcd"
+    },
+    {
+      "path": "docs/verification/ultra-application-test-plan-20260909.md",
+      "size": 11218,
+      "sha256": "3415f1d078c664fe8bda6fe22e2af1ff241b750da5ec1941203e368012de1639"
+    },
+    {
+      "path": "docs/verification/ultra-vector-test-plan-20260909.md",
+      "size": 15184,
+      "sha256": "e1a17f4d7f4ea67a8509675b06c467526cc997a48ebfa4edd45e0fdbc4efbd89"
+    },
+    {
+      "path": "executer/kernel/mcctrl/rust/mcctrl_helpers.rs",
+      "size": 403227,
+      "sha256": "abc99c0e160d3a8aa1aa182f37f297cf3827f86faaac559117ae4df3197e9d14"
+    },
+    {
+      "path": "final-push.txt",
+      "size": 98012,
+      "sha256": "6cf0be68fdec7571decc5559e8037c08d789374e270c7afa922f78f9367563b5"
+    },
+    {
+      "path": "full-port.txt",
+      "size": 325165,
+      "sha256": "a7c81638dab618e2a09937f483358dfb10b1a67cdd6605fd36abd769d2a25fde"
+    },
+    {
+      "path": "goal.txt",
+      "size": 15308,
+      "sha256": "2f41fec6e585cf92dc4888e0f3bbfad17d1b30954144077f8fc289d118c74ed6"
+    },
+    {
+      "path": "host-kernel/contracts/native-rust-host-modules-policy-v1.json",
+      "size": 8854,
+      "sha256": "5c745cd7c01d061a7582c524849d4c9e566a7b0f02652c234b374738878cea6e"
+    },
+    {
+      "path": "host-kernel/contracts/native-rust-runtime-evidence-v1.json",
+      "size": 18504,
+      "sha256": "0f52ebd24600fc590c13c9e372d76d8de5d45f493496e994608ddc291ff496c0"
+    },
+    {
+      "path": "host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json",
+      "size": 418084,
+      "sha256": "41e238cd32ac770b2b03db722d5da7ee12487f55d58a22da982debf6773d1a17"
+    },
+    {
+      "path": "host-kernel/contracts/x86_64-shared-abi-v1.json",
+      "size": 31707,
+      "sha256": "fb58ed2b114aea9ee1ba8e8fe52d01e2b8bd036cc1349b76d79c9615ac2bc9fa"
+    },
+    {
+      "path": "host-kernel/kbuild/stage-manifest.json",
+      "size": 7886,
+      "sha256": "e6925ba14d3e56ec68053eb7e67c8fa3438babd54423f9d6bb2fade8bc5afb76"
+    },
+    {
+      "path": "host-kernel/native-rust/application_pager.rs",
+      "size": 3196,
+      "sha256": "adb65c878f6e9817cfb0932c38ac2f87d2715659468051957a1b747b7974ad19"
+    },
+    {
+      "path": "host-kernel/native-rust/application_syscall.rs",
+      "size": 15406,
+      "sha256": "a1f5e98413a83f7c11c069d23d883379aa64578b55e011dff49c528a236321fd"
+    },
+    {
+      "path": "host-kernel/native-rust/ihk-smp-lifecycle-contract-v1.json",
+      "size": 14965,
+      "sha256": "7357bd84d66b3b918fbe5df92dd1aced7c71ed274a7a11ba9805206f04359ea7"
+    },
+    {
+      "path": "host-kernel/native-rust/ikc_queue.rs",
+      "size": 23030,
+      "sha256": "3163d9cc7541941e49059aed7f8824a62229cbe8a650e02f79a4eb7a3944e9c5"
+    },
+    {
+      "path": "host-kernel/native-rust/mcctrl-lifecycle-contract-v1.json",
+      "size": 3923,
+      "sha256": "3f5174c6895cf0ec298b1156fd95ce780abe6fe57aad0add704be5fcff3cf8c2"
+    },
+    {
+      "path": "host-kernel/native-rust/os_registry.rs",
+      "size": 17961,
+      "sha256": "9a751f4e5b5bb49d0cd1d5a1b18b8bc7af98033c4c7b33e1df0034b3f33174a9"
+    },
+    {
+      "path": "host-kernel/native-rust/smp_application.rs",
+      "size": 44257,
+      "sha256": "c63a0179a648b0ab90c09c55cf5462779de12937cd5fa2dfa461e34ea29f94a0"
+    },
+    {
+      "path": "host-kernel/native-rust/smp_application_syscall.rs",
+      "size": 21026,
+      "sha256": "4118de1401f33b2df17393660e6acbce2f337dca8a9cdfcf10965b1d3dc84c55"
+    },
+    {
+      "path": "host-kernel/native-rust/smp_memory.rs",
+      "size": 98942,
+      "sha256": "2004cee3e3e9a4a8e94f66f27f7f4710a13707c451138e1259d109f4e3bcc429"
+    },
+    {
+      "path": "host-kernel/native-rust/smp_resource.rs",
+      "size": 129861,
+      "sha256": "d8c567be5d3e3953bf2954d5e43130e5204ae4f6ad4158d18e7efb99088c64d3"
+    },
+    {
+      "path": "host-kernel/native-rust/smp_service.rs",
+      "size": 39666,
+      "sha256": "0747b5dbc7a529282c3073294e9ed7f121da927c59923a60455bc6f6aa610478"
+    },
+    {
+      "path": "host-kernel/rocky/config-policy-v2.json",
+      "size": 10707,
+      "sha256": "9c746399387c7f32148a6a8e8814a19c629f4b905629a1b941c60d99ef3d64b7"
+    },
+    {
+      "path": "host-kernel/rocky/evidence-plan-v1.json",
+      "size": 19675,
+      "sha256": "dbe0788250f363c4f387782511753d9e3dfe8604cb44196e83db64302e876926"
+    },
+    {
+      "path": "host-kernel/rocky/source-lock.json",
+      "size": 18336,
+      "sha256": "b70df1e475072dbfa31fdc712900ac59d30eeb139219c7076aacaa19abf0fded"
+    },
+    {
+      "path": "host-kernel/rocky/toolchain-lock.json",
+      "size": 28867,
+      "sha256": "fd3d7a13e1b8b5d103f7e59d22f17c9e4b99cc937637decaa66749acfae6c802"
+    },
+    {
+      "path": "kernel/CMakeLists.txt",
+      "size": 22594,
+      "sha256": "ec19a303a9d39890e33d52af63846c9b4534c6f6fa184ce9231a7fe1152b0f4e"
+    },
+    {
+      "path": "kernel/mem.c",
+      "size": 223368,
+      "sha256": "167ad2b976bcdec048a625dedf68a9b7c1ef6db7c57f3ceddf3582d54887101a"
+    },
+    {
+      "path": "kernel/rust/futex.rs",
+      "size": 34480,
+      "sha256": "ecfafb1d08247eec584c429c0bc9cd4fbd75d1bd8f01e10847e5dad796a6b4d7"
+    },
+    {
+      "path": "kernel/rust/lib.rs",
+      "size": 1961,
+      "sha256": "efe5379e2e81dc15995bca9fb243b9d1cf5ac9074fd7b869dda696a1bc9de723"
+    },
+    {
+      "path": "kernel/rust/mem_helpers.rs",
+      "size": 177560,
+      "sha256": "35b25b1d67c86ba07a84b308a049806b25eaca4c6e34f2f1a631b6271bce6322"
+    },
+    {
+      "path": "kernel/rust/process_helpers.rs",
+      "size": 324283,
+      "sha256": "b3a28ea8b0cd2594305644c224ae718eac384c0709305da315a6b8fd1285d00b"
+    },
+    {
+      "path": "kernel/rust/syscall_policy.rs",
+      "size": 694954,
+      "sha256": "5e770e3375c7eb2f6f5aae23863a961123b5f200c77662780cb04a90dc13bf53"
+    },
+    {
+      "path": "kernel/syscall.c",
+      "size": 833975,
+      "sha256": "ac80bb17e41979652e3dd90f8a94d205c28853cd6171975fcf4349f3d301ab58"
+    },
+    {
+      "path": "migration.txt",
+      "size": 292514,
+      "sha256": "657de62da7a49271a550cc392483e4830c836abbbd6f72fab22aa1e45417771a"
+    },
+    {
+      "path": "overview.txt",
+      "size": 529821,
+      "sha256": "4a2454e555b31d3ea3224d2ac4ca970343d1612550b50b0bd8a513d147be8cc7"
+    },
+    {
+      "path": "overview2.txt",
+      "size": 285013,
+      "sha256": "393a057d2184105c7711bdce52c589d4bcf086e467e574ea1fde2e17f6b2f9f8"
+    },
+    {
+      "path": "plan.txt",
+      "size": 621228,
+      "sha256": "37f937104717cb8172b86ae383f4923592dd2b9180ffb0193517b6c5d3ab18a7"
+    },
+    {
+      "path": "rust-source-retirement.txt",
+      "size": 1038663,
+      "sha256": "b7f877efe305cd8431da4bc01ac4688148761a35fa8fc104b3769aa9bc0d6724"
+    },
+    {
+      "path": "scripts/application-tests/cases.json",
+      "size": 1387917,
+      "sha256": "e8402f71283634f53923b57a1a920d9bc5e4a0670c6c6aba03eb967f893bf316"
+    },
+    {
+      "path": "scripts/application-tests/reviewed/packet-001-v3/REVIEW.md",
+      "size": 2529,
+      "sha256": "9664a3e63c78875c62954829d6d9d13f1ca24109da64e26831857216cf832792"
+    },
+    {
+      "path": "scripts/application-tests/reviewed/packet-001-v3/review.json",
+      "size": 4211,
+      "sha256": "1468456b482ab77315336279ecc1ff279949446181688f54d3981149a8e5e581"
+    },
+    {
+      "path": "scripts/application-tests/run-preflight.md",
+      "size": 5799,
+      "sha256": "99e5483b90d5ae87f794d7922d3fbb5dead52d9b11c33e288a50932519301447"
+    },
+    {
+      "path": "scripts/application-tests/run.py",
+      "size": 13264,
+      "sha256": "75bd82edb4ac6bc55519e18c8eb1b89056793af871ef2b85b0bdb5f19d9f0347"
+    },
+    {
+      "path": "scripts/application-tests/runtime_contracts.py",
+      "size": 27703,
+      "sha256": "6d25c35718c056e9ee67dc8c0f132a650d1020a67cb9d9503a36092bba58b13e"
+    },
+    {
+      "path": "scripts/application-tests/supervisor.py",
+      "size": 24564,
+      "sha256": "8b8700175e6673c3a6b652d4a93bd18b56def83dfa3ac4ec821d4ae6c554e873"
+    },
+    {
+      "path": "scripts/application-tests/validate.py",
+      "size": 27404,
+      "sha256": "8db6140ec8e157b6f9e3084efb6aca70258c0226502f719ad28caed84d36a40c"
+    },
+    {
+      "path": "scripts/final_push_tracker.py",
+      "size": 10910,
+      "sha256": "5ca7d22317230380a9a6f7c0dc7198a1470e15dd8e8dd92f225e90858843757e"
+    },
+    {
+      "path": "scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/root-profile.md",
+      "size": 5252,
+      "sha256": "68350568cca75248a85a3e43cdcf1ca85e1197dff24713aa4fc01128c47ddb52"
+    },
+    {
+      "path": "scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/root_orchestrator.py",
+      "size": 46618,
+      "sha256": "d36432f8571a805e821ab2ddace7a6fee56ffc28c50963694d04fd1a8a951058"
+    },
+    {
+      "path": "scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/tests.md",
+      "size": 6940,
+      "sha256": "8d5249cef4565120ffeaad2949a011f32ac2a405b3b95d61a02e7e528236dacc"
+    },
+    {
+      "path": "scripts/tests/fixtures/stability-selected-retention-v1/README.md",
+      "size": 9629,
+      "sha256": "0d3a11b90a23ce3467279c7ae0f237bc9cd1f7230c603861f2273127be8f75dd"
+    },
+    {
+      "path": "scripts/tests/prepare_stability_published_guest.py",
+      "size": 26039,
+      "sha256": "addbadabce8cba4db7ef863fc8728e68150e8301ccc55972a5ef623f52160056"
+    },
+    {
+      "path": "scripts/tests/prepare_stability_selected_retention.py",
+      "size": 13760,
+      "sha256": "651f970f5c9b14ac204ad10df0b437a892b7ffd55016edc488e5c8a6b1e0f855"
+    },
+    {
+      "path": "scripts/tests/run_stability_published_guest.py",
+      "size": 33712,
+      "sha256": "0946acc6005b12818f3721a3714d5dadab8b599dde51aaff49a798598377e9bc"
+    },
+    {
+      "path": "scripts/tests/test_stability_published_response_guard.py",
+      "size": 7605,
+      "sha256": "7af0b98f4a4509f9bc3046e6a50c8ae22be7e36ac1f63ef084af5e4d29f5eda8"
+    }
+  ],
+  "preexisting_untracked_sources_and_evidence": [
+    {
+      "path": "docs/verification/evidence/stability-linux-collector-build-independent-review-20260913.tar.gz",
+      "size": 644217,
+      "sha256": "c1afd0dc3ecc7507fed26d0758ecc900ee4ce73fe61dc6a41255c9849cf796c8"
+    },
+    {
+      "path": "docs/verification/evidence/stability-published-preparation-results-independent-review-20260913.tar.gz",
+      "size": 634187,
+      "sha256": "fc1c78bbd72b98f0abbc16e8c1d24596d187898dd800723395ecfca6b1e77ea0"
+    },
+    {
+      "path": "docs/verification/stability-linux-collector-build-independent-review-20260913.json",
+      "size": 110055,
+      "sha256": "01251287d5fa5dde4811a9f3d54468ecfbe34db2738f55e60945076e1b9b27aa"
+    },
+    {
+      "path": "docs/verification/stability-published-preparation-results-independent-review-20260913.json",
+      "size": 266894,
+      "sha256": "7d1e7ebe4a7d4035a39edd7bf5badbb6df87c9269adeff96e40c211e0146fffb"
+    },
+    {
+      "path": "scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/root_orchestrator.py",
+      "size": 46618,
+      "sha256": "d36432f8571a805e821ab2ddace7a6fee56ffc28c50963694d04fd1a8a951058"
+    },
+    {
+      "path": "scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/supervisor-host38.patch",
+      "size": 1662,
+      "sha256": "b5fe4b0547de409e1fa8e57c69e7a7542a13328c27532b885b0c738a41acbc21"
+    },
+    {
+      "path": "scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/supervisor_host38.py",
+      "size": 24978,
+      "sha256": "cba4b4d50d68f9afd5aa8a4c2d830ec0b800f7fd7dfd07774911d5fd1b99c7e7"
+    },
+    {
+      "path": "scripts/tests/fixtures/stability-selected-retention-v1/README.md",
+      "size": 9629,
+      "sha256": "0d3a11b90a23ce3467279c7ae0f237bc9cd1f7230c603861f2273127be8f75dd"
+    },
+    {
+      "path": "scripts/tests/fixtures/stability-selected-retention-v1/cancel-guard.rs",
+      "size": 373,
+      "sha256": "39c75e46564da98a5d06d709bf31e309b46ba6bf2166a381d6f2e5354cdeb3e6"
+    },
+    {
+      "path": "scripts/tests/fixtures/stability-selected-retention-v1/mailbox-retention.append.rs",
+      "size": 1543,
+      "sha256": "b47f7f78f1b6d385a99de811eec46e7888f76219838fbeee1aff463d32d0a69a"
+    },
+    {
+      "path": "scripts/tests/fixtures/stability-selected-retention-v1/phase-retention.append.rs",
+      "size": 350,
+      "sha256": "cf67a5c2b944c312e6467208ef3c87519be284a896a46dc23d598f7d3fbf5089"
+    },
+    {
+      "path": "scripts/tests/fixtures/stability-selected-retention-v1/response-prepare.rs",
+      "size": 2165,
+      "sha256": "38f5202ca358fc89cf440e4633cf6d98aa5549d550740da3acadd1fd040d8421"
+    },
+    {
+      "path": "scripts/tests/fixtures/stability-selected-retention-v1/return-prepare.rs",
+      "size": 1030,
+      "sha256": "3ea01848a34cbefd202de4947d4598b10ad55b298b170a60158b43ded840ac7c"
+    },
+    {
+      "path": "scripts/tests/prepare_stability_selected_retention.py",
+      "size": 13760,
+      "sha256": "651f970f5c9b14ac204ad10df0b437a892b7ffd55016edc488e5c8a6b1e0f855"
+    },
+    {
+      "path": "scripts/tests/test_stability_published_response_guard.py",
+      "size": 7605,
+      "sha256": "7af0b98f4a4509f9bc3046e6a50c8ae22be7e36ac1f63ef084af5e4d29f5eda8"
+    }
+  ],
+  "preexisting_generated_cache_directories_omitted": true,
+  "planning_checks": [
+    {
+      "command_argv": [
+        "python3",
+        "-B",
+        "scripts/final_push_tracker.py",
+        "--check"
+      ],
+      "exit_code": 0,
+      "scope": "Read-only tracker/catalog/draft evidence checks executed during plan preparation; no OS runtime."
+    },
+    {
+      "command_argv": [
+        "python3",
+        "-B",
+        "scripts/application-tests/validate.py"
+      ],
+      "exit_code": 0,
+      "scope": "Read-only tracker/catalog/draft evidence checks executed during plan preparation; no OS runtime."
+    },
+    {
+      "command_argv": [
+        "python3",
+        "-B",
+        "scripts/application-tests/audit_drafts.py",
+        "--check",
+        "docs/verification/application-draft-audit-20260913.json"
+      ],
+      "exit_code": 0,
+      "scope": "Read-only tracker/catalog/draft evidence checks executed during plan preparation; no OS runtime."
+    }
+  ],
+  "local_cli": {
+    "version": "0.153.4",
+    "observed_primary_model": "gpt-6-astra",
+    "observed_primary_reasoning_effort": "max",
+    "recommended_worker": "gpt-5.6-luna",
+    "availability_basis": "Local advertised model cache and current collaboration tool metadata; quota-dependent calls were not tested."
+  }
+}

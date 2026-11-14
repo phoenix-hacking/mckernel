@@ -6214,4 +6214,97 @@ int process_release_vm_body_result(
 	return 1;
 }
 
+int process_release_thread_checked_body_result(
+	void *thread, unsigned long refcount_offset, unsigned long vm_offset,
+	unsigned long proc_offset, process_ref_dec_and_test_fn_t dec_fn,
+	process_thread_profile_fn_t profile_fn,
+	process_thread_action_fn_t procfs_delete_fn,
+	process_thread_action_fn_t destroy_thread_fn,
+	process_vm_release_checked_fn_t release_vm_fn)
+{
+	void *vm;
+	void *proc;
+	int result;
+
+	if (!thread || !procfs_delete_fn || !destroy_thread_fn || !release_vm_fn)
+		return -EINVAL;
+	vm = *(void **)((char *)thread + vm_offset);
+	proc = *(void **)((char *)thread + proc_offset);
+	if (!vm || !proc)
+		return -EINVAL;
+	result = process_ref_dec_and_test_result(thread, refcount_offset, dec_fn);
+	if (result == 0)
+		return 0;
+	if (result != 1)
+		return result < 0 ? result : -EINVAL;
+
+	process_thread_profile_result(thread, proc, profile_fn);
+	procfs_delete_fn(thread);
+	destroy_thread_fn(thread);
+	/* thread is dead; the VM callback may free vm before returning. */
+	result = release_vm_fn(vm);
+	if (result == 0)
+		return 1;
+	if (result == 1)
+		return 2;
+	return result < 0 ? result : -EINVAL;
+}
+
+int process_release_vm_checked_body_result(
+	void *vm, unsigned long refcount_offset, unsigned long proc_offset,
+	unsigned long proc_mckfd_offset, unsigned long proc_mckfd_lock_offset,
+	unsigned long mckfd_next_offset, unsigned long mckfd_close_offset,
+	unsigned long vm_free_cb_offset, unsigned long vm_opt_offset,
+	unsigned long vm_address_space_offset, unsigned long proc_pid_offset,
+	unsigned long proc_vm_offset, unsigned long vm_policy_tree_offset,
+	unsigned long policy_node_offset,
+	process_ref_dec_and_test_fn_t dec_fn,
+	process_spin_lock_fn_t lock_fn, process_spin_unlock_fn_t unlock_fn,
+	process_vm_action_fn_t flush_fn, process_vm_action_fn_t free_ranges_fn,
+	process_detach_address_space_fn_t detach_fn,
+	process_release_process_fn_t release_process_fn,
+	process_policy_free_fn_t policy_free_fn, process_free_fn_t free_vm_fn)
+{
+	process_vm_free_cb_fn_t free_cb;
+	unsigned long lock_addr;
+	unsigned long irqstate;
+	void *proc;
+	void *mckfd_head;
+	void *opt;
+	struct rb_root *policy_root;
+	int result;
+
+	if (!vm || !lock_fn || !unlock_fn || !flush_fn || !free_ranges_fn ||
+	    !detach_fn || !release_process_fn || !policy_free_fn || !free_vm_fn)
+		return -EINVAL;
+	proc = *(void **)((char *)vm + proc_offset);
+	if (!proc)
+		return -EINVAL;
+	result = process_ref_dec_and_test_result(vm, refcount_offset, dec_fn);
+	if (result == 0)
+		return 0;
+	if (result != 1)
+		return result < 0 ? result : -EINVAL;
+
+	lock_addr = (unsigned long)proc + proc_mckfd_lock_offset;
+	irqstate = process_spin_lock_result(lock_addr, lock_fn);
+	mckfd_head = *(void **)((char *)proc + proc_mckfd_offset);
+	process_mckfd_close_all_result(mckfd_head, mckfd_next_offset, mckfd_close_offset);
+	process_spin_unlock_result(lock_addr, irqstate, unlock_fn);
+	free_cb = *(process_vm_free_cb_fn_t *)((char *)vm + vm_free_cb_offset);
+	if (free_cb) {
+		opt = *(void **)((char *)vm + vm_opt_offset);
+		free_cb(vm, opt);
+	}
+	flush_fn(vm);
+	free_ranges_fn(vm);
+	process_release_vm_detach_process_result(vm, vm_address_space_offset,
+		proc_offset, proc_pid_offset, proc_vm_offset, detach_fn, release_process_fn);
+	policy_root = (struct rb_root *)((char *)vm + vm_policy_tree_offset);
+	process_vm_policy_drain_free_result(policy_root, policy_node_offset, policy_free_fn);
+	free_vm_fn(vm);
+	/* vm and proc may both be dead. No further field or callback-state read. */
+	return 1;
+}
+
 #endif /* MCKERNEL_RUST_PROCESS_HELPERS */

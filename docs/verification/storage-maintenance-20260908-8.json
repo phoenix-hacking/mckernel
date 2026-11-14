@@ -1,0 +1,88 @@
+{
+  "artifacts": [
+    {
+      "path": "docs/verification/evidence/cleanup-archived-captures-20260908-8.py.gz",
+      "sha256": "bfdebdd6f92f245da3579ecb1f46a8c57a226514cdd9f5d8e97cd4c07856720b",
+      "size": 5099,
+      "source": "/home/holden/mckernel-work/scratch/cleanup-archived-captures-20260908-8.py",
+      "source_sha256": "3611439c41eddb1e88b36d7bfaa0182ddec7b4b93bc99a34ac7f6ca87a6cb4e3"
+    },
+    {
+      "path": "docs/verification/evidence/storage-cleanup-20260908-8-plan.json.gz",
+      "sha256": "73ebfe527dd8b117b5b63bb1ca89f134c2e8061d1201479eeafa388409da716a",
+      "size": 231281,
+      "source": "/home/holden/mckernel-work/scratch/storage-cleanup-20260908-8-plan.json",
+      "source_sha256": "59dbe757484977071d28cd7fa479c8d6776e90de6e2fb9acea6ee83f759cefab"
+    },
+    {
+      "path": "docs/verification/evidence/storage-cleanup-20260908-8-report.json.gz",
+      "sha256": "72361a3053b109a7ee053cac844672201c2213b0e46d93c0c496e8580e5fc0fe",
+      "size": 1800,
+      "source": "/home/holden/mckernel-work/scratch/storage-cleanup-20260908-8-report.json",
+      "source_sha256": "bab1f47daa9ee784109895f5d1a88fffc660c9acf984eb1c79baa179a4c2be2c"
+    },
+    {
+      "path": "docs/verification/evidence/trim-scratch-storage-20260908-8.py.gz",
+      "sha256": "5ee7c1ee6e06fd22028ab19a2889e3a2c287fb65296f443d8918714602d90934",
+      "size": 706,
+      "source": "/home/holden/mckernel-work/scratch/trim-scratch-storage-20260908-8.py",
+      "source_sha256": "4b7d09d54053d109ab0ed50add2528af83dedf08775293a0951f26b899e189db"
+    },
+    {
+      "path": "docs/verification/evidence/storage-scratch-trim-20260908-8.json.gz",
+      "sha256": "2085071afa2814b272e59ffaa63e510a7c17f765527492f908b2a61ef1438ca8",
+      "size": 372,
+      "source": "/home/holden/mckernel-work/scratch/storage-scratch-trim-20260908-8.json",
+      "source_sha256": "037d5aa82357fe4ef8772c0bda59be5442ee24bbc9c95afd2f5081937f55bb10"
+    },
+    {
+      "path": "docs/verification/evidence/storage-preserved-inputs-after-20260908-8.json.gz",
+      "sha256": "4d94c29f44c15a0fdc73c10aa4dd0e648b5db50f7591ac01a7364d2d21c4a38f",
+      "size": 155,
+      "source": "/home/holden/mckernel-work/scratch/storage-preserved-inputs-after-20260908-8.json",
+      "source_sha256": "dbf699e6cefed53502407ef99c1c07cabc45c2b9fd9ecc89ffed5571a9aecf74"
+    }
+  ],
+  "checks": [
+    "All 14 terminal captures match every current byte, mode, directory and symlink in their complete committed archives at the verified GitHub branch HEAD.",
+    "All retained archives match their manifest SHA-256, sizes and Git blobs; all compressed streams were read and verified.",
+    "No target intersects the previous protected directories or preserved current input files. Historical helper references were reviewed; old attempts require archive restoration before replay.",
+    "Visible process descriptors, working directories and mappings, including /work aliases, were checked. Target snapshots were rechecked immediately before deletion.",
+    "All 4158 checked current files are byte-identical after deletion and targeted scratch trim. All 78 protected dependency directories remain present, including all nine current image build/protocol/guest captures.",
+    "The scratch backing image remains mounted with its original 60-GiB logical size. Host reclamation is measured from allocated backing-file blocks, not the fstrim advertised discard count.",
+    "All six maintenance artifacts pass exact gzip round-trip checks."
+  ],
+  "current_root_available_bytes": 162727219200,
+  "current_scratch_available_bytes": 43302125568,
+  "evidence_checked_at_pushed_head": "b1b3deecb270a63e6aae364359039896ad8ab8bb",
+  "finished_utc": "2026-09-08T15:10:34.450127+00:00",
+  "kind": "Requested cleanup of superseded, fully archived McKernel IKC prototypes and test captures",
+  "limitations": [
+    "Open-file checks cover visible processes; inaccessible descriptor counts are recorded in the plan. No active compiler or QEMU process was observed.",
+    "Active compiler/browser/index caches, installed environments, personal files, VM disks, other projects, recent host logs and Docker state remain intact.",
+    "Backing-file reduction can include previously freed scratch blocks. Unrelated activity and retained records also affect available drive space.",
+    "This maintenance gives no kernel or application validation credit. The full implementation and verification goal remains active."
+  ],
+  "preserved_current_files": 4158,
+  "protected_directories": 78,
+  "reclaimed_host_allocated_bytes": 596934656,
+  "references": [
+    {
+      "path": "docs/verification/storage-maintenance-20260908-7.json",
+      "sha256": "417322c4f5f0e6c9f05912a69ff6648dabb2f97ff0111f32c0cdd785e34c807f",
+      "size": 6168
+    }
+  ],
+  "removed_expanded_captures": 14,
+  "removed_retention_archive_copies": 0,
+  "removed_scratch_allocated_bytes": 502460416,
+  "restoration": [
+    "The compressed plan and report map each removed capture to its exact complete canonical archive and Git blob. Restore at the original /work path before historical replay; never reuse attempt names.",
+    "The four failed historical attempts remain fully recoverable: IKC prototype attempts 3, 6 and 7 and IKC completion test attempt 1. Their failure statuses and original evidence are preserved.",
+    "Current IKC prototype 9, vDSO service test 4, compiler/kernel/image/setup inputs and all new image module attempts 1-6, protocol attempt 1 and guest attempts 1-2 remain expanded.",
+    "The new image guest attempt 2 ended at its original 600-second timeout. Its complete emergency diagnostics remain unchanged for the pending VM write-notify diagnosis. No image or application pass is claimed."
+  ],
+  "status": "PASS",
+  "total_reclaimed_across_eleven_cleanups_bytes": 81276690432,
+  "verified_retained_files": 19
+}

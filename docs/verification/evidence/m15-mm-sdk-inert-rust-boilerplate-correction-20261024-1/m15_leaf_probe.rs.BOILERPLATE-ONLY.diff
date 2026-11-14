@@ -1,0 +1,10 @@
+--- a/modules/m15_leaf_probe.rs
++++ b/modules/m15_leaf_probe.rs
+@@ -1,7 +1,5 @@
+ // SPDX-License-Identifier: GPL-2.0
+ //! Inert exact-SDK leaf codegen probe; no module init or execution.
+-#![no_std]
+-extern crate kernel;
+ #[path = "mcctrl_mm_write.rs"]
+ mod candidate;
+ /// Acquire the exact pinned mmap write epoch.

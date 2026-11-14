@@ -1,0 +1,85 @@
+{
+  "schema": "mckernel.selected205.two-complete-cycle-exact-stage-preparation-proposal.v1",
+  "status": "SOURCE_ONLY_REVIEW_AND_ROOT_CPU7_ALLOCATION_REQUIRED",
+  "offline_acceptance": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-independent-review-20261019-1/ACTUAL-TWO-COMPLETE-CYCLE-OFFLINE-REVIEW.json",
+    "sha256": "cb527bce8fae9f4f6aa810687b628f3c01e75415a7dd791a6b92eaaff201c14c",
+    "bytes": 26589
+  },
+  "stage_binding": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/stage-preparation-1/STAGE-INPUTS.json",
+    "sha256": "50ddfc8cec42bd26a307b3af1cc0384e1f7e9d58f208aac0c3aaa859d7f98986",
+    "bytes": 5353
+  },
+  "preparation_binding": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/stage-preparation-1/PREPARATION-INPUTS.json",
+    "sha256": "9067efdd3ecb809e39363c3193b3a8d69af47894ab91640e1351b0b6f3a27425",
+    "bytes": 14856
+  },
+  "profile": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/stage-preparation-1/EXECUTION-PROFILE.json",
+    "sha256": "21ba88c6b00835c9c410ab57d39dcbb0cce24db98082f295fa448c334e57b77b",
+    "bytes": 2950
+  },
+  "outer_argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=3",
+    "35",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--fsize=33554432",
+    "--nofile=256",
+    "--core=0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/stage-preparation-1/run_stage_and_consumer.py",
+    "--profile",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/stage-preparation-1/EXECUTION-PROFILE.json",
+    "--profile-sha256",
+    "21ba88c6b00835c9c410ab57d39dcbb0cce24db98082f295fa448c334e57b77b"
+  ],
+  "source_authorities": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/stage-preparation-1/SOURCE-AUTHORITIES.json",
+    "sha256": "870711ac4015ec3d89baf6a46cc8ab7a5dedd8a23937c6ddc26a2db33e59809d",
+    "bytes": 19035
+  },
+  "source_count": 44,
+  "fresh_output_roots": [
+    "/home/holden/mckernel-work/scratch/cyc205-stage-261019-1",
+    "/home/holden/mckernel-work/scratch/cyc205-src-261019-1",
+    "/home/holden/mckernel-work/scratch/cyc205-m-261019-1",
+    "/home/holden/mckernel-work/scratch/cyc205-p",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/stage-preparation-1/ordinary-captures-1"
+  ],
+  "changed_members": {
+    "existing": [
+      "bin/native-boot",
+      "init"
+    ],
+    "added": [
+      "bin/native-resource-release-probe"
+    ]
+  },
+  "metadata_policy": "All original raw records/order/padding/untouchedbytes unchanged; only existingtwo payload,size,CRC fields change; accepted encoder adds one genuinelynew helper. No module/image/apps/strictstop change.",
+  "original_modes": "actual0700 inputs preserved; byte-identical0755 outputs matching inherited membermodes",
+  "mandatory_consumer": "full two complete nativecycles oracle/actual48Bassignment/source-boundfreshincarnations/allstartupCPU+retirement/strictstop/publicrelease; no emptyboot proxy",
+  "logger_seconds": 120,
+  "host_runner_timeout_seconds": 300,
+  "host_runner_timeout_scope": "unchanged owner; collector retains120s shared deadline, no extension",
+  "native_cycles": 0,
+  "stage_actual_ref": null,
+  "typed_actual_ref": null,
+  "latest_queue_physical": null,
+  "prospective_full_geometry": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/stage-preparation-1/PROSPECTIVE-FULL-ARGV-NOT-PREFLIGHT.json",
+    "sha256": "acccc4f90a4a42decf32a4ef4c6c968ae1630d3057f19d4a6f8f3f58c8db55ce",
+    "bytes": 2469
+  }
+}

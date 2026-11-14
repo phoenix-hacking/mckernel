@@ -1,0 +1,1139 @@
+{
+  "status": "PASS_NEW_RUST170_BRIDGE_C55_EXCLUSION_REQUEST72_REAL_PROVIDER_ARTIFACT_JOIN",
+  "source_commit": "14d3cc82da7db56d1783ab6ef3f661e1838abf2a",
+  "source_material_GO": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-time-fallback-bridge-review-p03-max-1/REVIEW.json",
+    "bytes": 19454,
+    "sha256": "ee7ad74a149cd507e0b7ef9395b91784a2ff75f43620678b15314a33563aebe0"
+  },
+  "composition_GO": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-time-fallback-bridge-review-p03-max-1/fork-context-rebase-1/REVIEW.json",
+    "bytes": 7909,
+    "sha256": "3ae8018a3042ef2fd8bc19fdb0adfa7257cb88a89c2e73f3d43aa0a7dccd0070"
+  },
+  "actual12_vector_qualification_reused": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-time-fallback-bridge-tests-p04tests-max-1/qualification-1/QUALIFICATION.json",
+    "bytes": 13799,
+    "sha256": "71ed960a97f6cb1fe85d6bf4805e40d7e87a6d721bada43c4e0e531bbbb465d1"
+  },
+  "actual_bridge": {
+    "name": "syscall_policy_do_syscall2_bridge",
+    "final": {
+      "index": 4058,
+      "name": "syscall_policy_do_syscall2_bridge",
+      "binding": "GLOBAL",
+      "type": "FUNC",
+      "visibility": 0,
+      "section_index": 1,
+      "value": 18446744073685251776,
+      "bytes": 170
+    },
+    "owner": {
+      "object": "rust/mckernel_rust.o",
+      "input": {
+        "index": 7144,
+        "name": "syscall_policy_do_syscall2_bridge",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 4543,
+        "value": 0,
+        "bytes": 170
+      },
+      "section": ".ltext.syscall_policy_do_syscall2_bridge",
+      "placement": {
+        "address": 18446744073685251776,
+        "bytes": 170
+      }
+    }
+  },
+  "input_file_offset": 860768,
+  "final_file_offset": 865984,
+  "input_code_sha256": "c54a4f9b9f5c95e76da4f1c8ff875bfe46cfdd6b35d3f8036635ee3c0d0fa238",
+  "final_code_sha256": "bbb34ec706f0e16d59e82c6b84a64896c9ae4338d81c5467c8a1f6ab4f0b3819",
+  "all_nonrelocated_code_bytes_equal": true,
+  "all_three_relocated_R64_words_equal_actual_typed_providers": [
+    {
+      "function_offset": 45,
+      "width": 8,
+      "expected_final_value": 18446744073685858592,
+      "actual_final_value": 18446744073685858592,
+      "edge": {
+        "input_offset": 45,
+        "observed_ELF_relocation_type": 1,
+        "addend": 0,
+        "input_target": {
+          "index": 4210,
+          "name": "locals",
+          "binding": "GLOBAL",
+          "type": "OBJECT",
+          "visibility": 0,
+          "section_index": 5855,
+          "value": 0,
+          "bytes": 8
+        },
+        "actual_physical_provider": {
+          "name": "locals",
+          "final": {
+            "index": 1669,
+            "name": "locals",
+            "binding": "GLOBAL",
+            "type": "OBJECT",
+            "visibility": 0,
+            "section_index": 270,
+            "value": 18446744073685858592,
+            "bytes": 8
+          },
+          "owner": {
+            "object": "rust/mckernel_rust.o",
+            "input": {
+              "index": 4210,
+              "name": "locals",
+              "binding": "GLOBAL",
+              "type": "OBJECT",
+              "visibility": 0,
+              "section_index": 5855,
+              "value": 0,
+              "bytes": 8
+            },
+            "section": ".lbss.locals",
+            "placement": {
+              "address": 18446744073685858592,
+              "bytes": 8
+            }
+          }
+        }
+      }
+    },
+    {
+      "function_offset": 68,
+      "width": 8,
+      "expected_final_value": 18446744073685465536,
+      "actual_final_value": 18446744073685465536,
+      "edge": {
+        "input_offset": 68,
+        "observed_ELF_relocation_type": 1,
+        "addend": 0,
+        "input_target": {
+          "index": 4211,
+          "name": "num_processors",
+          "binding": "GLOBAL",
+          "type": "OBJECT",
+          "visibility": 0,
+          "section_index": 5981,
+          "value": 0,
+          "bytes": 4
+        },
+        "actual_physical_provider": {
+          "name": "num_processors",
+          "final": {
+            "index": 4021,
+            "name": "num_processors",
+            "binding": "GLOBAL",
+            "type": "OBJECT",
+            "visibility": 0,
+            "section_index": 30,
+            "value": 18446744073685465536,
+            "bytes": 4
+          },
+          "owner": {
+            "object": "rust/mckernel_rust.o",
+            "input": {
+              "index": 4211,
+              "name": "num_processors",
+              "binding": "GLOBAL",
+              "type": "OBJECT",
+              "visibility": 0,
+              "section_index": 5981,
+              "value": 0,
+              "bytes": 4
+            },
+            "section": ".ldata.num_processors",
+            "placement": {
+              "address": 18446744073685465536,
+              "bytes": 4
+            }
+          }
+        }
+      }
+    },
+    {
+      "function_offset": 148,
+      "width": 8,
+      "expected_final_value": 18446744073684703952,
+      "actual_final_value": 18446744073684703952,
+      "edge": {
+        "input_offset": 148,
+        "observed_ELF_relocation_type": 1,
+        "addend": 0,
+        "input_target": {
+          "index": 4219,
+          "name": "do_syscall",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1220,
+          "value": 0,
+          "bytes": 1421
+        },
+        "actual_physical_provider": {
+          "name": "do_syscall",
+          "final": {
+            "index": 3528,
+            "name": "do_syscall",
+            "binding": "GLOBAL",
+            "type": "FUNC",
+            "visibility": 0,
+            "section_index": 1,
+            "value": 18446744073684703952,
+            "bytes": 1421
+          },
+          "owner": {
+            "object": "rust/mckernel_rust.o",
+            "input": {
+              "index": 4219,
+              "name": "do_syscall",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1220,
+              "value": 0,
+              "bytes": 1421
+            },
+            "section": ".ltext.do_syscall",
+            "placement": {
+              "address": 18446744073684703952,
+              "bytes": 1421
+            }
+          }
+        }
+      }
+    }
+  ],
+  "request72_geometry": "Frame80/request72 at rbp-0x48; definedzero rtid/ttid/valid and unused4args, signextendedCInt number, unchanged pointerbitsarg0/1, actual currentCPU ESI, exactlyone real do_syscall indirectcall, CLongRAX return preserved. Derived from exact source/type/ABI/disassembly, not simulated target execution.",
+  "passive_Rust_disassembly": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/metadata-1/bridge-Rust-disassembly.stdout",
+    "bytes": 223250,
+    "sha256": "7ce2721b0ce60faa929a04fb15efc7278ae859b6d183fef8240de5dbb3995649"
+  },
+  "passive_final_disassembly": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/metadata-1/bridge-final-disassembly.stdout",
+    "bytes": 2627,
+    "sha256": "e2eb4c840c1a9acfd945eb4f934f6b88320d689b3b8f214b934e77325bec831b"
+  },
+  "current_ABI104": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/qualification-1/ACTUAL-ABI104-AND-REQUEST72.json",
+    "bytes": 10364,
+    "sha256": "d8affe78a8190333ff16630edc9c4099614a9fd191194d8c457d498a1fe88b6e"
+  },
+  "adjacent_generic_setter_context_C12": {
+    "actual_owner": {
+      "name": "syscall_policy_forward_context_bridge",
+      "final": {
+        "index": 4028,
+        "name": "syscall_policy_forward_context_bridge",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684392912,
+        "bytes": 12
+      },
+      "owner": {
+        "object": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "input": {
+          "index": 88,
+          "name": "syscall_policy_forward_context_bridge",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1,
+          "value": 3024,
+          "bytes": 12
+        },
+        "section": ".text",
+        "placement": {
+          "address": 18446744073684389888,
+          "bytes": 4898
+        }
+      }
+    },
+    "input_bytes_hex": "48b80000000000000000ffe0",
+    "input_relocations": [
+      {
+        "input_offset": 3026,
+        "type": 1,
+        "addend": 0,
+        "target": {
+          "index": 67,
+          "name": "syscall_generic_forwarding",
+          "binding": "GLOBAL",
+          "type": "NOTYPE",
+          "visibility": 0,
+          "section_index": 0,
+          "value": 0,
+          "bytes": 0
+        },
+        "actual_physical_provider": {
+          "name": "syscall_generic_forwarding",
+          "final": {
+            "index": 1550,
+            "name": "syscall_generic_forwarding",
+            "binding": "GLOBAL",
+            "type": "FUNC",
+            "visibility": 0,
+            "section_index": 1,
+            "value": 18446744073685239376,
+            "bytes": 448
+          },
+          "owner": {
+            "object": "rust/mckernel_rust.o",
+            "input": {
+              "index": 4300,
+              "name": "syscall_generic_forwarding",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 4482,
+              "value": 0,
+              "bytes": 448
+            },
+            "section": ".ltext.syscall_generic_forwarding",
+            "placement": {
+              "address": 18446744073685239376,
+              "bytes": 448
+            }
+          }
+        }
+      }
+    ],
+    "unchanged_real_caller": "kernel/rust/syscall_policy.rs sys_settimeofday11900/11919 Some(syscall_policy_forward_context_bridge)",
+    "C_definition": "kernel/syscall.c20861 ->staticcontextbridge20853 ->existing generic forwarding",
+    "original_scope_description": "vDSO/process mappings and time-page/TSC publication",
+    "prior_adjacent_classification": "Native time() uses syscall_policy_do_syscall2_bridge(SYS_TIME,0,0) when Linux clock reads return None. That provider is55B emitted project C in generic syscall.c.o, constructing request.number,args0/1 and invoking real Rust do_syscall. None is a supported clock-mode/update/fallback outcome, so that branch cannot be dropped. Adjacent generic sys_clock_gettime/gettimeofday also use this same provider; sys_settimeofday uses remaining C policy-forward-context12B, recorded as an adjacent time-contract boundary rather than an invented new scope.",
+    "not_claimed_Rust_or_retired": true
+  },
+  "warnings_preserved": [
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 1,
+      "text": "warning: target feature `sse2` must be enabled to ensure that the ABI of the current target can be implemented correctly"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 6,
+      "text": "warning: the feature `core_intrinsics` is internal to the compiler or standard library"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 15,
+      "text": "warning: unused import: `IhkSpinlock`"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 23,
+      "text": "warning: unused import: `MaybeUninit`"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 29,
+      "text": "warning: unused imports: `null_mut` and `read_volatile`"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 35,
+      "text": "warning: unused import: `MovePagesSmpReq`"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 41,
+      "text": "warning: unused imports: `EFAULT`, `ENODEV`, `ENOMEM`, `MPOL_MF_MOVE_ALL`, `MovePagesGetNrNodesFn`, `MovePagesLogFn`, `MovePagesSmpCallFn`, `MovePagesVerifyFn`, `SyscallCopyFromUserFn`, `SyscallCopyToUserFn`, `SyscallMckfdFreeFn`, `SyscallPolicyAllocFn`, `SyscallRdtscFn`, `SyscallRwlockFn`, `move_pages_free_arrays`, `move_pages_log_delta`, `move_pages_policy_result`, and `move_pages_smp_req_prepare_result`"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 60,
+      "text": "warning: unused import: `super::*`"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 66,
+      "text": "warning: unused import: `super::*`"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 72,
+      "text": "warning: unused import: `super::*`"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 78,
+      "text": "warning: unused imports: `align_of` and `size_of`"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 84,
+      "text": "warning: unused imports: `CLong` and `SizeT`"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 90,
+      "text": "warning: unused import: `addr_of_mut`"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 96,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 104,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 110,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 116,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 122,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 128,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 134,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 140,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 146,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 152,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 158,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 164,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 170,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 176,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 182,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 188,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 194,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 200,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 206,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 212,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 218,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 224,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 230,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 236,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 242,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 248,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 254,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 260,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 266,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 272,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 278,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 284,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 290,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 296,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 302,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 308,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 314,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 320,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 326,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 332,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 338,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 344,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 350,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 356,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 362,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 368,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 374,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 380,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 386,
+      "text": "warning: unused variable: `thread`"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 394,
+      "text": "warning: unused variable: `sig`"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 400,
+      "text": "warning: unused variable: `lock_node`"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 406,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 412,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 418,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 424,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 430,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 436,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 442,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 448,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 454,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 460,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 466,
+      "text": "warning: unnecessary `unsafe` block"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 472,
+      "text": "warning: type `ProcessCloneConfig` is more private than the item `process_clone_thread_body_result`"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 491,
+      "text": "warning: struct `CallerCredits` is never constructed"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 499,
+      "text": "warning: associated items `acquire` and `cancel_unpublished` are never used"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 511,
+      "text": "warning: struct `PrivateFork` is never constructed"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 517,
+      "text": "warning: struct `CreateFailure` is never constructed"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 523,
+      "text": "warning: struct `PrivateFailure` is never constructed"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 529,
+      "text": "warning: enum `BeginFailure` is never used"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 535,
+      "text": "warning: associated items `create`, `create_owned`, `create_raw`, `validate`, `cancel`, and `begin` are never used"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 559,
+      "text": "warning: field `child_pid` is never read"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 567,
+      "text": "warning: field `actual` is never read"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 575,
+      "text": "warning: method `handle` is never used"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 583,
+      "text": "warning: method `caller_cleanup_allowed` is never used"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 592,
+      "text": "warning: constant `NATIVE_QUEUE_ABI_VERSION` is never used"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 598,
+      "text": "warning: enum `PendingFreeBatchState` is never used"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 604,
+      "text": "warning: struct `PendingPhysicalBounds` is never constructed"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 610,
+      "text": "warning: struct `PendingFreeCallbackArgs` is never constructed"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 616,
+      "text": "warning: struct `PendingInventoryLease` is never constructed"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 622,
+      "text": "warning: associated items `new`, `descriptor`, `descriptor_node`, and `descriptor_index` are never used"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 640,
+      "text": "warning: struct `ValidatedPendingInventory` is never constructed"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 646,
+      "text": "warning: struct `PendingFreeBatch` is never constructed"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 652,
+      "text": "warning: associated function `new` is never used"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 660,
+      "text": "warning: function `validate_pending_inventory_metadata` is never used"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 666,
+      "text": "warning: function `validate_pending_inventory_ring` is never used"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 672,
+      "text": "warning: function `validate_pending_inventory` is never used"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 678,
+      "text": "warning: methods `try_reanchor_into` and `reanchor_into` are never used"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 690,
+      "text": "warning: function `drain_validated_pending_inventory` is never used"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 696,
+      "text": "warning: function `detach_pending_free_batch` is never used"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 702,
+      "text": "warning: function `drain_pending_free_batch` is never used"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 708,
+      "text": "warning: associated function `unpublished` is never used"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 716,
+      "text": "warning: function `native_irq_work_descriptor_offset` is never used"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 722,
+      "text": "warning: associated items `new` and `can_drain` are never used"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 734,
+      "text": "warning: constant `F06_SIGNAL_LEGACY_FRAME_COPY_PENDING_FREE_LINE` is never used"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 740,
+      "text": "warning: constant `F06_SIGNAL_LEGACY_XSAVE_COPY_PENDING_FREE_LINE` is never used"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 746,
+      "text": "warning: constant `F06_SIGNAL_LEGACY_XSAVE_OOM_PENDING_FREE_LINE` is never used"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 752,
+      "text": "warning: constant `F06_HANDLER_SA_NODEFER` is never used"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 758,
+      "text": "warning: function `f06_signal_frame_copy_terminate` is never used"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 764,
+      "text": "warning: module `selected_APboot_storage` should have a snake case name"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 772,
+      "text": "warning: static variable `no_execute` should have an upper case name"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 785,
+      "text": "warning: static variable `selected_mode` should have an upper case name"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 797,
+      "text": "warning: direct cast of function item into an integer"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 809,
+      "text": "warning: direct cast of function item into an integer"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 820,
+      "text": "warning: direct cast of function item into an integer"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 831,
+      "text": "warning: `ihk_ikc_send` redeclared with a different signature"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 846,
+      "text": "warning: `page_fault_process_vm` redeclared with a different signature"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 860,
+      "text": "warning: `sched_wakeup_thread` redeclared with a different signature"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 874,
+      "text": "warning: `ihk_mc_map_virtual` redeclared with a different signature"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 888,
+      "text": "warning: `ihk_mc_unmap_virtual` redeclared with a different signature"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 902,
+      "text": "warning: `ihk_mc_map_virtual` redeclared with a different signature"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 916,
+      "text": "warning: `ihk_mc_unmap_virtual` redeclared with a different signature"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 930,
+      "text": "warning: `page_fault_process_vm` redeclared with a different signature"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 944,
+      "text": "warning: `mem_kmalloc_panic` redeclares `panic` with a different signature"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 958,
+      "text": "warning: `mem_register_interrupt_handler_provider` redeclares `ihk_mc_register_interrupt_handler` with a different signature"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 973,
+      "text": "warning: `mem_get_vector_provider` redeclares `ihk_mc_get_vector` with a different signature"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 987,
+      "text": "warning: `ORIGINAL_CPU_INFO` redeclares `ihk_mc_get_cpu_info` with a different signature"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 1001,
+      "text": "warning: `ORIGINAL_PROFILE_EVENT_ADD` redeclares `profile_event_add` with a different signature"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 1015,
+      "text": "warning: `mem_reserve_panic_provider` redeclares `panic` with a different signature"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 1029,
+      "text": "warning: `phys_to_page` redeclared with a different signature"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 1043,
+      "text": "warning: `process_copy_set_range_public` redeclares `ihk_mc_pt_set_range` with a different signature"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 1063,
+      "text": "warning: `ihk_mc_map_virtual` redeclared with a different signature"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 1077,
+      "text": "warning: `ihk_mc_unmap_virtual` redeclared with a different signature"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 1091,
+      "text": "warning: `release_thread` redeclared with a different signature"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 1105,
+      "text": "warning: `process_spin_lock_bridge_c` redeclares `process_spin_lock_bridge` with a different signature"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 1119,
+      "text": "warning: `process_spin_unlock_bridge_c` redeclares `process_spin_unlock_bridge` with a different signature"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 1133,
+      "text": "warning: `ihk_mc_pt_lookup_pte` redeclared with a different signature"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 1156,
+      "text": "warning: `f06_set_signal_kernel_panic` redeclares `panic` with a different signature"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 1170,
+      "text": "warning: `set_cputime` redeclared with a different signature"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 1184,
+      "text": "warning: `f06_vdso_pt_set_range` redeclares `ihk_mc_pt_set_range` with a different signature"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 1204,
+      "text": "warning: `f06_signal_adapter_syscall` redeclares `syscall` with a different signature"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 1218,
+      "text": "warning: `panic` redeclared with a different signature"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 1232,
+      "text": "warning: `c_map_fixed_area` redeclares `map_fixed_area` with a different signature"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 1246,
+      "text": "warning: `c_cpu_info` redeclares `ihk_mc_get_cpu_info` with a different signature"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 1260,
+      "text": "warning: `x86_memory_existing_panic` redeclares `panic` with a different signature"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 1274,
+      "text": "warning: `page_unmap` redeclared with a different signature"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 1288,
+      "text": "warning: `phys_to_page` redeclared with a different signature"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 1302,
+      "text": "warning: `memory_find_command_line` redeclares `find_command_line` with a different signature"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 1316,
+      "text": "warning: `syscall_generic_forwarding` redeclared with a different signature"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 1330,
+      "text": "warning: `memobj_unref` redeclared with a different signature"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 1344,
+      "text": "warning: `ihk_mc_pt_lookup_pte` redeclared with a different signature"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 1367,
+      "text": "warning: `ihk_mc_pt_set_range` redeclared with a different signature"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 1393,
+      "text": "warning: 154 warnings emitted"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 1396,
+      "text": "/src/kernel/syscall.c:7546:33: warning: unused variable 'range' [-Wunused-variable]"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 1400,
+      "text": "/src/kernel/syscall.c:26376:72: warning: 'syscall_itimer_offsets' defined but not used [-Wunused-const-variable=]"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 1403,
+      "text": "/src/kernel/syscall.c:26058:50: warning: 'sched_syscall_offsets' defined but not used [-Wunused-const-variable=]"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 1406,
+      "text": "/src/kernel/syscall.c:24599:39: warning: 'ptrace_io_kernel_offsets' defined but not used [-Wunused-const-variable=]"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 1409,
+      "text": "/src/kernel/syscall.c:24297:59: warning: 'syscall_cputime_offsets' defined but not used [-Wunused-const-variable=]"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 1412,
+      "text": "/src/kernel/syscall.c:4910:60: warning: 'wait_scan_kernel_offsets' defined but not used [-Wunused-const-variable=]"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 1415,
+      "text": "/src/kernel/syscall.c:4877:62: warning: 'wait_zombie_kernel_offsets' defined but not used [-Wunused-const-variable=]"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 1418,
+      "text": "/src/kernel/syscall.c:4726:43: warning: 'ptrace_detach_kernel_offsets' defined but not used [-Wunused-const-variable=]"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/capture-binding-correction-1/execution-1/build-payload.stderr",
+      "line": 1421,
+      "text": "/usr/bin/ld: warning: mckernel.img has a LOAD segment with RWX permissions"
+    }
+  ],
+  "no_target_program_native_or_test_replay": true
+}

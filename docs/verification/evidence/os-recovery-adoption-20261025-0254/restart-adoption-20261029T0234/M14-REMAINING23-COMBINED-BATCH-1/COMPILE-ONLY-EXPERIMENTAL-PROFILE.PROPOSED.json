@@ -1,0 +1,26 @@
+{
+  "status": "PROPOSAL_REQUIRES_ROOT_ADOPTED_PRODUCER_AND_EXECUTION_RELEASE",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "cmake_options_ON": [
+    "MCKERNEL_ARCH5_CUTOVER_CANDIDATE",
+    "MCKERNEL_F03_REQUEST_CONSTRUCTORS_EXPERIMENTAL",
+    "MCKERNEL_F03_EXECVEAT_BRIDGE_EXPERIMENTAL",
+    "MCKERNEL_F03_SIGNAL_FORWARD_EXPERIMENTAL",
+    "MCKERNEL_F03_PERF_ENTRY_EXPERIMENTAL",
+    "MCKERNEL_F03_CREDENTIAL_REFRESH_EXPERIMENTAL"
+  ],
+  "cmake_options_OFF": [
+    "MCKERNEL_ARCH5_ABI_WITNESS",
+    "MCKERNEL_F03_DO_SYSCALL_SUPPORTED_EXPERIMENTAL",
+    "MCKERNEL_F03_UTIL_THREAD_WHOLE_EXPERIMENTAL"
+  ],
+  "kfree_activation": "OFF unless actual origin/profile source binding independently supplied",
+  "termination_whole": "OFF: retained source/typed providers; selected source-origin and lifetime/metadata contracts remain explicit",
+  "do_syscall_whole": "OFF: no fabricated all-request-args gate; ca85 does not prove clone/coredump/init/exec or all direct callers",
+  "util_whole": "OFF: host partial-info/initialization/lifetime proof remains open",
+  "exec_whole": "OFF: fragment only; unresolved actual selected C metadata/ABI29/ACK/descriptor/lifetime/provider contracts",
+  "mmap_fork": "OFF: range mutator/teardown owner and fork/provider lifetime gaps remain",
+  "native_execution": false,
+  "default_adoption": false,
+  "runtime_authority": null
+}

@@ -1,0 +1,37 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Take the user's explicitly requested ordinary-UID readonly snapshot using the existing accepted reader; no guest, root, launch, or signal operation.",
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=10:10",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--nofile=256:256",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/qmp-runtime-successor-1/early-read-preparation-1/read_live_LONG_prefix.py",
+    "4056308",
+    "60669407"
+  ],
+  "profile": {
+    "uid": 1000,
+    "cpu": [
+      0
+    ],
+    "AS": 2147483648,
+    "CPU": 10,
+    "wall": 20,
+    "grace": 6,
+    "FSIZE": 33554432,
+    "NOFILE": 256,
+    "core": 0,
+    "prefix_cap": 8388608,
+    "line_cap": 262144
+  },
+  "authorization": "Current user explicitly asks for latest workload reading; same accepted ordinary readonly source, no privilege or workload"
+}

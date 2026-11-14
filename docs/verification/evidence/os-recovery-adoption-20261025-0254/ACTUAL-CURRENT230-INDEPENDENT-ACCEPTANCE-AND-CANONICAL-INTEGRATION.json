@@ -1,0 +1,120 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ACTUAL_CURRENT230_HOST_ACCEPTED_AND_EXACT_RUNTIME_POSTIMAGES_INTEGRATED",
+  "at": 1792910384.4768856,
+  "utc": "2026-10-25T06:39:44.476886+00:00",
+  "contract": "m14.current230.process-dispatch-logging",
+  "independent_reviewer": "/root/f02_review",
+  "independent_decision": "PASS_ACTUAL_HOST_ARTIFACT",
+  "handoff": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-10-current-union-successor-source-1/bounded-selected-zeroobj-declaration-source-successor-1/ACTUAL-PRIVATE-CURRENT230-HOST-HANDOFF.json",
+  "handoff_sha256": "ea54566137602243b7632c3b88054278efa46601318b66eb166c96c8112f3df4",
+  "binding_sha256": "28d44e21f5006093a6d27c49b6e56235183b6eddcf8f61ca01d2b9992a002885",
+  "runtime_integrations": [
+    {
+      "canonical_preimage": {
+        "bytes": 113077,
+        "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+        "sha256": "856b832124dac643363b268ae47276c4392f8b05b24e5277f38c2ebdd5753bf1"
+      },
+      "clean_private_postimage": {
+        "bytes": 113383,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-10-current-union-successor-source-1/bounded-selected-zeroobj-declaration-source-successor-1/runtime/arch/x86_64/kernel/syscall.c",
+        "sha256": "266a1a1fa33bd9cc92781ef8562ee45db8a82996c3eae5ea7999875a64999a5f"
+      },
+      "relative": "arch/x86_64/kernel/syscall.c"
+    },
+    {
+      "canonical_preimage": {
+        "bytes": 198836,
+        "path": "/home/holden/mckernel/kernel/process.c",
+        "sha256": "8c7508f418f6fe66c83d08c8d70a7ed78db302c489474084fb3f527a1263bfbe"
+      },
+      "clean_private_postimage": {
+        "bytes": 200704,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-10-current-union-successor-source-1/bounded-selected-zeroobj-declaration-source-successor-1/runtime/kernel/process.c",
+        "sha256": "11528787000bc8f4f89479d61bf1650869887abc80da08465b0599f6f1b3437a"
+      },
+      "relative": "kernel/process.c"
+    },
+    {
+      "canonical_preimage": {
+        "bytes": 22774,
+        "path": "/home/holden/mckernel/kernel/rust/page_helpers.rs",
+        "sha256": "f2f61bd6889f05c29f1531e4c6ade16a0698ac9f03b712caadfefd76cc35e56c"
+      },
+      "clean_private_postimage": {
+        "bytes": 22774,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-10-current-union-successor-source-1/bounded-selected-zeroobj-declaration-source-successor-1/runtime/kernel/rust/page_helpers.rs",
+        "sha256": "f2f61bd6889f05c29f1531e4c6ade16a0698ac9f03b712caadfefd76cc35e56c"
+      },
+      "relative": "kernel/rust/page_helpers.rs"
+    },
+    {
+      "canonical_preimage": {
+        "bytes": 529099,
+        "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+        "sha256": "345f4950dbfa941bba1e9fd7f7cdc3a75e93172cdc4d673057bb1031301179c0"
+      },
+      "clean_private_postimage": {
+        "bytes": 541867,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-10-current-union-successor-source-1/bounded-selected-zeroobj-declaration-source-successor-1/runtime/kernel/rust/process_helpers.rs",
+        "sha256": "332c172602636ff802487509f15780141aa420a4317d7feacaae07737f35f1cf"
+      },
+      "relative": "kernel/rust/process_helpers.rs"
+    },
+    {
+      "canonical_preimage": {
+        "bytes": 1151049,
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "sha256": "5c87f3a1061c9a5963d29579a5b2ac7cf968f2ffb41f44802125c877b8031bb1"
+      },
+      "clean_private_postimage": {
+        "bytes": 1163328,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-10-current-union-successor-source-1/bounded-selected-zeroobj-declaration-source-successor-1/runtime/kernel/rust/syscall_policy.rs",
+        "sha256": "e75ad9f0ff3bdb2c105831897d4c869d84f9a4b7b2641fd836e1980786052a63"
+      },
+      "relative": "kernel/rust/syscall_policy.rs"
+    },
+    {
+      "canonical_preimage": {
+        "bytes": 903013,
+        "path": "/home/holden/mckernel/kernel/syscall.c",
+        "sha256": "21bee2e48f32617c3a4983f67bbb931a9e389e750fa60422f5f4cffd80e6e7ef"
+      },
+      "clean_private_postimage": {
+        "bytes": 904323,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-10-current-union-successor-source-1/bounded-selected-zeroobj-declaration-source-successor-1/runtime/kernel/syscall.c",
+        "sha256": "22bf8f91559e18db2b1eb8d003fa5a001e4dc60c020da3b5f1fc40543c2f568c"
+      },
+      "relative": "kernel/syscall.c"
+    }
+  ],
+  "changed_files": [
+    "arch/x86_64/kernel/syscall.c",
+    "kernel/process.c",
+    "kernel/rust/process_helpers.rs",
+    "kernel/rust/syscall_policy.rs",
+    "kernel/syscall.c"
+  ],
+  "equal_page_helper_preserved": true,
+  "providers": 230,
+  "new_providers_over221": 9,
+  "one_Rust_codegen": true,
+  "main_receipt_sha256": "903d91a115c32a26babeb98b932e2baf3cc792f3f28b2c6b9457338d6d61e1a7",
+  "metadata_sha256": "94b4028a1811a9eb665e7dfcdeceae7bafccd94e5a94a746feb8b9a2a6b2bce8",
+  "join_sha256": "798c2737a2e3021f338c8ec313c196074f47bf94a241f72059f2673bfa3bbc22",
+  "CPU_seconds": 27.773174,
+  "wall_seconds": 27.8837232579,
+  "ABI_only_tails_not_integrated": true,
+  "original_C_missing_prototype_failure_preserved": true,
+  "open": [
+    "SDK",
+    "production default artifact",
+    "native",
+    "whole-file retirement",
+    "dispatch C table debt",
+    "physical readonly protection for relro descriptor",
+    "legacy/native fallback equivalence",
+    "old23anonymousmetadataedges"
+  ]
+}

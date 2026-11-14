@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_adverse_build_owner_success",
+  "task_id": "M02-B-adverse-v1-build",
+  "attempt": 1,
+  "status": "PASS_REBUILT_ADVERSE_COLLECTOR_INPUT",
+  "source_commit": "2e3fe26cf138c4d2170912b82fb8b6419e573c6b",
+  "host_result": {"path": "result.json", "sha256": "8e4b81c1f0527423e3b92039f76dc5deb6fad5c7ce48c0c365af85d9b0f32658", "status": "PASS_ADVERSE_BUILD_OWNER_INFRASTRUCTURE_ONLY"},
+  "inner_result": {"path": "profile/work/root-result.json", "sha256": "49e4ca10813979ed71219030417ba0d5a735854ab1ee32f81585588287d26782", "status": "PASS_ADVERSE_BUILD_INFRASTRUCTURE_ONLY"},
+  "build_record": {"path": "profile/work/build/build-record.json", "sha256": "e3e399e902efed7c868cb8f63a6570d4b7a689fde852161be9fb7b248cb0bd12", "status": "PASS_ADVERSE_BUILD_ONLY", "commands": 23, "unique_compiler_dependencies": 179, "compiled_outputs": 24, "selectors": 4},
+  "watchdog_result": {"path": "watchdog-result.json", "sha256": "200613a61bb512aab2200958ad31169596a8ef66158d4bbf5f8333efa7e2ddbb", "status": "DISARMED_AFTER_VERIFIED_ABSENCE"},
+  "archive": {"path": "docs/verification/evidence/stability-linux-collector-adverse-build-owner-success-20260915-1.tar.gz", "size": 3756275, "sha256": "eaf0665189b49d80359b44109d7f015e19700112cc1d07d68b2d1ccd405e8675", "members": 650},
+  "container_absence_observed": true,
+  "independent_reviews": [
+    {"role": "Luna evidence auditor", "status": "PASS_BUILD_EVIDENCE"},
+    {"role": "Astra/high ownership reviewer", "status": "PASS_REBUILT_ADVERSE_COLLECTOR_INPUT"}
+  ],
+  "reviewed_limitations": [
+    "The original outer owner invocation has no separate filesystem raw-wait capture; the dispatcher shell returned zero with empty streams.",
+    "Compile-guard rejection is source-inspected rather than executed.",
+    "Compiler-internal tools and startup objects inherit the pinned immutable image rather than individual retained identities."
+  ],
+  "independent_review_pending": false,
+  "collector_runtime_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

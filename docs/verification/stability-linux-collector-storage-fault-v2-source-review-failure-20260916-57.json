@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "status": "FAIL_SOURCE",
+  "attempt": 57,
+  "reviewed_at_utc": "2026-09-16T11:57:26Z",
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260916-57.tar.gz",
+    "sha256": "dbe24f5b7cdd94f9ba2f9846073b6b2cd6e5f00ffca55f4ce99d4343261b5100",
+    "size": 40004941,
+    "safe_unique_members": 37,
+    "regular_files": 27,
+    "verified_source_bindings": 26
+  },
+  "authenticated_sha256": {
+    "parent55": "1a975b2e5321f7abf4716541db46c769ba8af11e97841094f851cc8f6e1fdcf3",
+    "review55": "a1922f9834f96040e84398f8333bf7a87f5f43a8a1c8b75d2c9c224279aa34a9",
+    "oracle": "8ffd82203e074c663bef0a939d3081fe84e07b88127e9c76bdec34e0e8f113ef",
+    "witness_owner": "63e77d52d2197d4e5fa71381753a37de0a05ee69e278d875a144db6a015bbdc8",
+    "tests": "3971b8d439d1cbc929fa4a94cbdfe940b9e7a9d63b7d383d9305af17acb4358e"
+  },
+  "evidence": {
+    "recursive_archives_verified": 52,
+    "recursive_manifests_verified": 46,
+    "recursive_member_bindings_verified": 680,
+    "nonmember_cross_archive_references_resolved": 11,
+    "retained_focused_tests": 2,
+    "retained_python39_tests": 134,
+    "retained_python38_tests": 134,
+    "retained_test_pycompile_and_diff_statuses": "all zero",
+    "bind_size_negatives_rejected_by_each_validator": 36,
+    "eof_alias_negatives_rejected_by_each_validator": 36,
+    "prior_directory_negatives_rejected_by_each_packet_validator": 104,
+    "full_memory_baselines_accepted": 7,
+    "directory_size_positives_accepted_by_each_validator": 7,
+    "retired_acquisition_number_positives_accepted_by_each_validator": 7,
+    "eof_number_report_reuse_positives_accepted_by_each_validator": 3,
+    "scope": "Read-only source and complete retained archive-lineage inspection plus pure memory-backed validation. Each validator means offline packets, pre-ACK schema/schedule/state, and full oracle unless qualified. Retained suites were not rerun; full replay replaced only filesystem read/absence adapters."
+  },
+  "findings": [
+    {
+      "id": "high_fd_transition_and_result_domain",
+      "location": "oracle.py:776 validate_packet_order BIND; witness_owner.py:1119 PacketState.validate BIND and descriptor schemas",
+      "producer": "collector.c:107 high_fd returns fd unchanged when fd >= 3; a successful relocation of fd 0..2 returns a descriptor >= 3. Attempt directories, sinks and pipe ends pass through high_fd at :157, :173 and :519.",
+      "mutation": "For every reached BIND, move an original fd >= 3 to new_fd 30, updating subsequent report I/O when applicable; separately change create fd/return and both BIND descriptors to 0. Also independently set all directory descriptors, all request descriptors, or each EOF descriptor to 0.",
+      "observed": "All 49 invalid variants pass both packet validators and complete memory-backed oracle.validate.",
+      "selector0_events_relocation_packet_sha256": "2a0027d2eabf1937058c076d83dfa8f9960968f851c7a939f5a2e2e71422e185",
+      "correction": "Enforce the exact high_fd transition: old_fd >= 3 requires new_fd == old_fd; old_fd 0..2 requires new_fd >= 3 and an unoccupied destination. Require directory, request I/O and EOF pipe descriptors to be >= 3. Preserve legitimate raw low-number opens followed by relocation and subsequent reuse."
+    },
+    {
+      "id": "witness_socket_descriptor_not_reserved",
+      "location": "oracle.py:648,730,771 validate_packet_order; witness_owner.py:925 validate_packet_schema and :1065 PacketState.validate",
+      "producer": "inject.h:13 reserves SF_WITNESS_FD 198; sf_exchange at :110 sends every packet through it. collector.patch:44 closes the EOF descriptor before sf_observe_eof sends its record.",
+      "mutation": "Independently use fd 198 as the directory, successful create/BIND capability, BIND destination, request I/O descriptor, or each of the three EOF closed_fd values; maintain existing joins.",
+      "observed": "All 49 variants pass both packet validators and the complete memory-backed oracle, including EOF claims that close the very socket needed to deliver that EOF packet.",
+      "selector0_first_eof_packet_sha256": "162cecafad8bc42b3de3179b1b4da1b893a4a06587f3c0f8dfc15e3b2c2c2317",
+      "correction": "Reserve fd 198 throughout the collector witness lifetime and reject aliases in directory, acquisition, BIND, I/O and EOF fields in both validators. Add every-role negatives without changing the transport protocol."
+    },
+    {
+      "id": "directory_inode_aliases_regular_file",
+      "location": "oracle.py:737,763,807 validate_packet_order; witness_owner.py:1082,1105,1143 PacketState.validate",
+      "producer": "collector.c:157 holds the attempt-directory inode until :890, while :167 and :818 create regular files. Its same device/inode cannot simultaneously identify a regular file.",
+      "mutation": "At each successful create, set target_stat.ino and matching BIND/I/O inode fields to the retained directory inode 90, keeping device 1 and regular-file mode. Separately set all request target inode fields to 90.",
+      "observed": "All 18 variants pass both packet validators and the complete memory-backed oracle while the persistent directory remains device 1, inode 90, directory mode.",
+      "selector0_events_bind_packet_sha256": "dca186fdc23876ac406570b48c12092ff643a48a98f9a06d1ab06336bb74332d",
+      "correction": "Reject witnessed regular-file device/inode pairs equal to the still-live attempt-directory pair in both validators. Add create and request negatives across selectors while preserving arbitrary legitimate device/inode values and directory-size changes."
+    }
+  ],
+  "raw_source_checkpoint_release": false,
+  "compiler_packet_drafting_release": false,
+  "compilation": false,
+  "root_execution": false,
+  "native_execution": false,
+  "runtime": false,
+  "application_acceptance": false,
+  "production_acceptance": false,
+  "whole_os_acceptance": false,
+  "files_edited": false
+}

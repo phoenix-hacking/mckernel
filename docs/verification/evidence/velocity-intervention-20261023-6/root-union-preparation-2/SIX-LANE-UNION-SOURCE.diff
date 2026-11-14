@@ -1,0 +1,1549 @@
+--- preimage/kernel/mem.c
++++ source/kernel/mem.c
+@@ -7552,37 +7552,12 @@
+ }
+ 
+ #ifdef MCKERNEL_RUST_MEM_HELPERS
+-static pte_t *mem_lookup_fault_pte_bridge(page_table_t pt, void *virt,
+-		int pgshift, void **basep, size_t *sizep, int *p2alignp)
+-{
+-	return ihk_mc_pt_lookup_pte(pt, virt, pgshift, basep, sizep, p2alignp);
+-}
+-
+-static int mem_page_fault_process_vm_bridge(struct process_vm *vm,
+-		void *virt, unsigned long reason)
+-{
+-	return page_fault_process_vm(vm, virt, reason);
+-}
+-
+-static void mem_lookup_fault_log_bridge(void *virt)
+-{
+-	kprintf("%s: successfully faulted 0x%lx\n",
+-			"ihk_mc_pt_lookup_fault_pte", (unsigned long)virt);
+-}
+-#endif
+-
++extern pte_t *ihk_mc_pt_lookup_fault_pte(struct process_vm *vm, void *virt,
++        int pgshift, void **basep, size_t *sizep, int *p2alignp);
++#else
+ pte_t *ihk_mc_pt_lookup_fault_pte(struct process_vm *vm, void *virt,
+-		int pgshift, void **basep, size_t *sizep, int *p2alignp)
+-{
+-#ifdef MCKERNEL_RUST_MEM_HELPERS
+-	return mem_pt_lookup_fault_pte_body_result(vm, virt, pgshift, basep,
+-			sizep, p2alignp,
+-			__builtin_offsetof(struct process_vm, address_space),
+-			__builtin_offsetof(struct address_space, page_table),
+-			mem_lookup_fault_pte_bridge,
+-			mem_page_fault_process_vm_bridge,
+-			mem_lookup_fault_log_bridge);
+-#else
++        int pgshift, void **basep, size_t *sizep, int *p2alignp)
++{
+ 	int faulted = 0;
+ 	pte_t *ptep;
+ 
+@@ -7600,9 +7575,8 @@
+ 	}
+ 
+ 	return ptep;
+-#endif
+-}
+-
++}
++#endif /* Exact C fallback; default fault/PTE entry and callbacks execute in Rust. */
+ #ifdef MCKERNEL_RUST_MEM_HELPERS
+ extern int phys_to_nid(unsigned long p);
+ #else
+@@ -7625,15 +7599,11 @@
+ }
+ #endif /* MCKERNEL_RUST_MEM_HELPERS */
+ 
++#ifdef MCKERNEL_RUST_MEM_HELPERS
++extern int lookup_node(struct process_vm *vm, void *addr);
++#else
+ int lookup_node(struct process_vm *vm, void *addr)
+ {
+-#ifdef MCKERNEL_RUST_MEM_HELPERS
+-	return mem_lookup_node_body_result(vm, addr,
+-			__builtin_offsetof(struct process_vm, address_space),
+-			__builtin_offsetof(struct address_space, page_table),
+-			mem_lookup_fault_pte_bridge,
+-			mem_page_fault_process_vm_bridge, phys_to_nid);
+-#else
+ 	int node, err, reason = PF_POPULATE | PF_USER;
+ 	pte_t *ptep;
+ 
+@@ -7653,8 +7623,8 @@
+ 	node = phys_to_nid(pte_get_phys(ptep));
+ out:
+ 	return node;
+-#endif
+-}
++}
++#endif /* Exact C fallback; default Rust owns the public VM lookup. */
+ 
+ #ifdef MCKERNEL_RUST_PAGE_HELPERS
+ extern int is_splitable(struct page *page, uint32_t memobj_flags);
+--- preimage/kernel/rust/mem_helpers.rs
++++ source/kernel/rust/mem_helpers.rs
+@@ -16,6 +16,12 @@
+ use crate::string::{strcmp, strcpy, strlen, strstr};
+ 
+ unsafe extern "C" {
++    // Existing public providers; opaque VM/PT pointers preserve the C pointer ABI.
++    fn ihk_mc_pt_lookup_pte(
++        pt: *mut c_void, virt: *mut c_void, pgshift: CInt,
++        basep: *mut *mut c_void, sizep: *mut usize, p2alignp: *mut CInt,
++    ) -> *mut CULong;
++    fn page_fault_process_vm(vm: *mut c_void, virt: *mut c_void, reason: CULong) -> CInt;
+     // Same public Rust/reviewed-assembly providers used by the original C adapters.
+     fn rdtsc() -> CULong;
+     fn flush_tlb_single(addr: CULong);
+@@ -5599,6 +5605,59 @@
+     unsafe { cpu_pause() }
+ }
+ 
++/// Preserve the complete default VM fault/PTE/NUMA lookup entry.
++///
++/// # Safety
++/// The caller retains the original VM/address-space/page-table lifetime and the
++/// original mapping synchronization. This entry adds no reference or lock. The
++/// same helper faults first, propagates the exact error, then resolves an active
++/// PTE and its physical NUMA node; the default helper's null behavior is unchanged.
++#[no_mangle]
++pub unsafe extern "C" fn lookup_node(vm: *mut ProcessVm, addr: *mut c_void) -> CInt {
++    unsafe {
++        mem_lookup_node_body_result(
++            vm.cast(), addr,
++            offset_of!(ProcessVm, address_space) as CULong,
++            offset_of!(AddressSpace, page_table) as CULong,
++            Some(ihk_mc_pt_lookup_pte), Some(page_fault_process_vm), Some(phys_to_nid),
++        )
++    }
++}
++
++/// Exact former C diagnostic callback; preserve format bytes and varargs types.
++unsafe extern "C" fn mem_lookup_fault_log_bridge(virt: *mut c_void) {
++    unsafe {
++        kprintf(
++            b"%s: successfully faulted 0x%lx\n\0".as_ptr().cast(),
++            b"ihk_mc_pt_lookup_fault_pte\0".as_ptr().cast::<i8>(),
++            virt as CULong,
++        );
++    }
++}
++
++/// Complete default public fault/PTE lookup; reuse the unchanged production body.
++///
++/// # Safety
++/// Caller retains the VM/address-space/PT and output-pointer lifetimes and the
++/// same mapping synchronization as before. No new lock/reference or ownership
++/// transfer is introduced. The existing body retries once after fault, ignores
++/// the same fault return, and logs only an active post-fault PTE.
++#[no_mangle]
++pub unsafe extern "C" fn ihk_mc_pt_lookup_fault_pte(
++    vm: *mut ProcessVm, virt: *mut c_void, pgshift: CInt,
++    basep: *mut *mut c_void, sizep: *mut usize, p2alignp: *mut CInt,
++) -> *mut CULong {
++    unsafe {
++        mem_pt_lookup_fault_pte_body_result(
++            vm.cast(), virt, pgshift, basep, sizep, p2alignp,
++            offset_of!(ProcessVm, address_space) as CULong,
++            offset_of!(AddressSpace, page_table) as CULong,
++            Some(ihk_mc_pt_lookup_pte), Some(page_fault_process_vm),
++            Some(mem_lookup_fault_log_bridge),
++        )
++    }
++}
++
+ /// Preserve the original single-address stack-local handoff to the array entry.
+ ///
+ /// # Safety
+--- preimage/kernel/process.c
++++ source/kernel/process.c
+@@ -2434,6 +2434,27 @@
+ 	struct memobj *memobj;
+ };
+ 
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++/* Preserve displaced remap diagnostics and tracked-free source identity as
++ * static C ABI data only. Rust owns the complete callback computation. */
++const char *const process_remap_free_file = __FILE__;
++const int process_remap_free_line = 2469;
++struct ddebug __aligned(8) __attribute__((section("__verbose")))
++process_remap_one_page_entry_debug = {
++    .file = __FILE__, .func = "remap_one_page",
++    .line = 2448, .flags = DDEBUG_DEFAULT,
++};
++struct ddebug __aligned(8) __attribute__((section("__verbose")))
++process_remap_one_page_rss_debug = {
++    .file = __FILE__, .func = "remap_one_page",
++    .line = 2470, .flags = DDEBUG_DEFAULT,
++};
++struct ddebug __aligned(8) __attribute__((section("__verbose")))
++process_remap_one_page_exit_debug = {
++    .file = __FILE__, .func = "remap_one_page",
++    .line = 2476, .flags = DDEBUG_DEFAULT,
++};
++#else
+ int remap_one_page(void *arg0, page_table_t pt, pte_t *ptep,
+ 		   void *pgaddr, int pgshift)
+ {
+@@ -2477,6 +2498,7 @@
+ 			arg0, pt, ptep, *ptep, pgaddr, pgshift, error);
+ 	return error;
+ }
++#endif
+ 
+ int process_visit_pte_range_bridge(void *page_table, unsigned long start,
+ 				   unsigned long end, int pgshift, int flags,
+@@ -2535,6 +2557,19 @@
+ 	struct memobj *memobj;
+ };
+ 
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++/* Displaced sync callback dynamic-debug selectors: declarative data only. */
++struct ddebug __aligned(8) __attribute__((section("__verbose")))
++process_sync_one_page_entry_debug = {
++    .file = __FILE__, .func = "sync_one_page",
++    .line = 2546, .flags = DDEBUG_DEFAULT,
++};
++struct ddebug __aligned(8) __attribute__((section("__verbose")))
++process_sync_one_page_exit_debug = {
++    .file = __FILE__, .func = "sync_one_page",
++    .line = 2574, .flags = DDEBUG_DEFAULT,
++};
++#else
+ int sync_one_page(void *arg0, page_table_t pt, pte_t *ptep,
+ 		  void *pgaddr, int pgshift)
+ {
+@@ -2575,7 +2610,9 @@
+ 			arg0, pt, ptep, *ptep, pgaddr, pgshift, error);
+ 	return error;
+ }
+-
++#endif
++
++#ifndef MCKERNEL_RUST_PROCESS_HELPERS
+ void process_sync_range_log_bridge(struct process_vm *vm,
+ 				   struct vm_range *range, unsigned long start,
+ 				   unsigned long end, int error)
+@@ -2583,6 +2620,7 @@
+ 	ekprintf("sync_process_memory_range(%p,%p,%#lx,%#lx):"
+ 			"visit failed%d\n", vm, range, start, end, error);
+ }
++#endif
+ 
+ void *process_lookup_pte_bridge(void *page_table, unsigned long addr,
+ 		int pgshift, size_t *pgsizep)
+--- preimage/kernel/rust/process_helpers.rs
++++ source/kernel/rust/process_helpers.rs
+@@ -192,20 +192,14 @@
+     );
+     fn preempt_enable();
+     fn preempt_disable();
+-    fn remap_one_page(
+-        arg0: *mut c_void,
+-        page_table: *mut c_void,
+-        ptep: *mut c_void,
+-        pgaddr: *mut c_void,
+-        pgshift: CInt,
+-    ) -> CInt;
+-    fn sync_one_page(
+-        arg0: *mut c_void,
+-        page_table: *mut c_void,
+-        ptep: *mut c_void,
+-        pgaddr: *mut c_void,
+-        pgshift: CInt,
+-    ) -> CInt;
++    static mut process_remap_one_page_entry_debug: crate::debug::Ddebug;
++    static mut process_remap_one_page_rss_debug: crate::debug::Ddebug;
++    static mut process_remap_one_page_exit_debug: crate::debug::Ddebug;
++    static process_remap_free_file: *const i8;
++    static process_remap_free_line: CInt;
++    fn phys_to_page(phys: CULong) -> *mut crate::page_helpers::Page;
++    static mut process_sync_one_page_entry_debug: crate::debug::Ddebug;
++    static mut process_sync_one_page_exit_debug: crate::debug::Ddebug;
+     fn process_visit_pte_range_bridge(
+         page_table: *mut c_void,
+         start: CULong,
+@@ -225,13 +219,7 @@
+         old_pgshift: CInt,
+         error: CInt,
+     );
+-    fn process_sync_range_log_bridge(
+-        vm: *mut ProcessVm,
+-        range: *mut VmRange,
+-        start: CULong,
+-        end: CULong,
+-        error: CInt,
+-    );
++
+     fn process_lookup_pte_bridge(
+         page_table: *mut c_void,
+         addr: CULong,
+@@ -4231,6 +4219,156 @@
+     0
+ }
+ 
++/// Own the actual former C sync callback. The caller retains the live PTE,
++/// args/memobj and existing page-table exclusion for the synchronous visit.
++/// Valid pgshift is the original supported 0..63 domain. No new error policy,
++/// ownership transfer, allocation or lock is introduced.
++/// Existing synchronous range-sync failure notification. No pointer is
++/// dereferenced or retained; caller lock/ref/notification ordering is unchanged.
++#[no_mangle]
++pub unsafe extern "C" fn process_sync_range_log_bridge(
++    vm: *mut ProcessVm,
++    range: *mut VmRange,
++    start: CULong,
++    end: CULong,
++    error: CInt,
++) {
++    let _ = kprintf(
++        b"sync_process_memory_range(%p,%p,%#lx,%#lx):visit failed%d\n\0".as_ptr().cast(),
++        vm, range, start, end, error,
++    );
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn sync_one_page(
++    arg0: *mut c_void,
++    page_table: *mut c_void,
++    ptep: *mut c_void,
++    pgaddr: *mut c_void,
++    pgshift: CInt,
++) -> CInt {
++    let pgsize = (1 as SizeT).wrapping_shl(pgshift as u32);
++    let pte = ptep.cast::<CULong>();
++    let mut error = 0;
++    if core::ptr::read_volatile(core::ptr::addr_of!(
++        process_sync_one_page_entry_debug.line_flags
++    )) >> 24 != 0 {
++        let _ = kprintf(
++            b"sync_one_page(%p,%p,%p %#lx,%p,%d)\n\0".as_ptr().cast(),
++            arg0, page_table, ptep, *pte, pgaddr, pgshift,
++        );
++    }
++    if crate::pte_helpers::pte_is_null(pte) == 0
++        && crate::pte_helpers::pte_is_fileoff(pte, pgsize) == 0
++        && crate::pte_helpers::pte_is_dirty(pte, pgsize) != 0
++    {
++        crate::pte_helpers::pte_clear_dirty(pte, pgsize);
++        crate::x86_memory_helpers::flush_tlb_single(pgaddr as CULong);
++        // Original ordering: read physical PTE after the TLB-effect callback,
++        // then inspect zero-fill flags before the existing memobj operation.
++        let phys = crate::pte_helpers::pte_get_phys(pte);
++        let memobj = (*arg0.cast::<ProcessSyncArgs>()).memobj;
++        if (*memobj).flags & MF_ZEROFILL == 0 {
++            error = crate::object_helpers::memobj_flush_page(memobj, phys, pgsize);
++            if error != 0 {
++                let _ = kprintf(
++                    b"sync_one_page(%p,%p,%p %#lx,%p,%d):flush failed. %d\n\0".as_ptr().cast(),
++                    arg0, page_table, ptep, *pte, pgaddr, pgshift, error,
++                );
++                crate::pte_helpers::pte_set_dirty(pte, pgsize);
++            }
++        }
++    }
++    if core::ptr::read_volatile(core::ptr::addr_of!(
++        process_sync_one_page_exit_debug.line_flags
++    )) >> 24 != 0 {
++        let _ = kprintf(
++            b"sync_one_page(%p,%p,%p %#lx,%p,%d):%d\n\0".as_ptr().cast(),
++            arg0, page_table, ptep, *pte, pgaddr, pgshift, error,
++        );
++    }
++    error
++}
++
++/// Replace the actual former C remap visitor. The existing outer caller
++/// keeps its page-table exclusion and memobj reference for the synchronous
++/// visit; page_unmap owns its existing mapped-page/hash accounting. No new
++/// lock, reference, ownership transfer or error policy is introduced.
++#[no_mangle]
++pub unsafe extern "C" fn remap_one_page(
++    arg0: *mut c_void,
++    page_table: *mut c_void,
++    ptep: *mut c_void,
++    pgaddr: *mut c_void,
++    pgshift: CInt,
++) -> CInt {
++    let args = arg0.cast::<ProcessRemapArgs>();
++    let pgsize = (1 as SizeT).wrapping_shl(pgshift as u32);
++    let pte = ptep.cast::<CULong>();
++    let mut old_pte: CULong = 0;
++    if core::ptr::read_volatile(core::ptr::addr_of!(
++        process_remap_one_page_entry_debug.line_flags
++    )) >> 24 != 0 {
++        let _ = kprintf(
++            b"remap_one_page(%p,%p,%p %#lx,%p,%d)\n\0".as_ptr().cast(),
++            arg0, page_table, ptep, *pte, pgaddr, pgshift,
++        );
++    }
++    // Preserve C's unsigned uintptr_t arithmetic and LP64 off_t conversion.
++    // Both argument loads occur after the entry logger, as in the C body.
++    let off = ((*args).off as CULong)
++        .wrapping_add((pgaddr as CULong).wrapping_sub((*args).start)) as OffT;
++    crate::pte_helpers::pte_make_fileoff(off, 0, pgsize, &raw mut old_pte);
++    crate::pte_helpers::pte_xchg(pte, &raw mut old_pte);
++    crate::x86_memory_helpers::flush_tlb_single(pgaddr as CULong);
++
++    // All mapping-release decisions use the exchanged snapshot, never a PTE
++    // subsequently published at ptep by the existing TLB/flush boundaries.
++    if crate::pte_helpers::pte_is_null(&raw const old_pte) == 0
++        && crate::pte_helpers::pte_is_fileoff(&raw const old_pte, pgsize) == 0
++    {
++        let phys = crate::pte_helpers::pte_get_phys(&raw const old_pte);
++        if crate::pte_helpers::pte_is_dirty(&raw const old_pte, pgsize) != 0 {
++            // The original remap visitor deliberately ignores this result.
++            let _ = crate::object_helpers::memobj_flush_page((*args).memobj, phys, pgsize);
++        }
++        // Existing public phys_to_page provider retains its C forwarding
++        // wrapper and Rust lookup implementation; it is explicit provider debt.
++        let page = phys_to_page(phys);
++        if !page.is_null() && crate::page_helpers::page_unmap(page) != 0 {
++            let address = crate::x86_memory_helpers::phys_to_virt(phys);
++            crate::mem_helpers::_ihk_mc_free_pages(
++                address,
++                (pgsize / PAGE_SIZE as SizeT) as CInt,
++                1, // existing IHK_MC_PG_USER, checked against actual mm.h
++                process_remap_free_file as *mut i8,
++                process_remap_free_line,
++            );
++            if core::ptr::read_volatile(core::ptr::addr_of!(
++                process_remap_one_page_rss_debug.line_flags
++            )) >> 24 != 0 {
++                // Original %ld payloads are the unsigned size_t values.
++                let _ = kprintf(
++                    b"%lx-,%s: calling memory_stat_rss_sub(),size=%ld,pgsize=%ld\n\0".as_ptr().cast(),
++                    phys, b"remap_one_page\0".as_ptr().cast::<i8>(), pgsize, pgsize,
++                );
++            }
++            // Reload args->memobj after free/log callbacks, and retain C's
++            // narrowing conversion from size_t to the provider's int pgsize.
++            crate::mem_helpers::rusage_memory_stat_sub((*args).memobj, pgsize as CULong, pgsize as CInt);
++        }
++    }
++    if core::ptr::read_volatile(core::ptr::addr_of!(
++        process_remap_one_page_exit_debug.line_flags
++    )) >> 24 != 0 {
++        let _ = kprintf(
++            b"remap_one_page(%p,%p,%p %#lx,%p,%d): %d\n\0".as_ptr().cast(),
++            arg0, page_table, ptep, *pte, pgaddr, pgshift, 0 as CInt,
++        );
++    }
++    0
++}
++
+ #[no_mangle]
+ pub unsafe extern "C" fn process_sync_memory_range_body_result(
+     vm: *mut ProcessVm,
+--- preimage/kernel/syscall.c
++++ source/kernel/syscall.c
+@@ -19399,19 +19399,7 @@
+ #endif
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+-static void
+-syscall_sigcommon_writer_lock_bridge(void *lock, void *node)
+-{
+-	mcs_rwlock_writer_lock(lock, node);
+-}
+-
+-static void
+-syscall_sigcommon_writer_unlock_bridge(void *lock, void *node)
+-{
+-	mcs_rwlock_writer_unlock(lock, node);
+-}
+-
+-static long
++long
+ syscall_forward_sigaction_update_bridge(int sig, const void *actp)
+ {
+ 	const struct k_sigaction *act = actp;
+@@ -19423,23 +19411,13 @@
+ 	ihk_mc_syscall_set_arg2(&ctx0, act->sa.sa_flags);
+ 	return syscall_generic_forwarding(__NR_rt_sigaction, &ctx0);
+ }
+-#endif
+-
++
++int do_sigaction(int sig, struct k_sigaction *act, struct k_sigaction *oact);
++#else
+ int
+ do_sigaction(int sig, struct k_sigaction *act, struct k_sigaction *oact)
+ {
+ 	struct thread *thread = get_this_cpu_local_var()->current;
+-#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+-	struct mcs_rwlock_node_irqsave mcs_rw_node;
+-
+-	return do_sigaction_body_result(sig, act, oact, thread->sigcommon,
+-			__builtin_offsetof(struct sig_common, action),
+-			sizeof(struct k_sigaction),
+-			__builtin_offsetof(struct sig_common, lock),
+-			&mcs_rw_node, syscall_sigcommon_writer_lock_bridge,
+-			syscall_sigcommon_writer_unlock_bridge,
+-			syscall_forward_sigaction_update_bridge);
+-#else
+ 	struct k_sigaction *k;
+ 	struct mcs_rwlock_node_irqsave mcs_rw_node;
+ 	ihk_mc_user_context_t ctx0;
+@@ -19465,8 +19443,8 @@
+ 		syscall_generic_forwarding(__NR_rt_sigaction, &ctx0);
+ 	}
+ 	return 0;
++}
+ #endif
+-}
+ 
+ #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ static const struct syscall_mckfd_offsets syscall_mckfd_offsets = {
+@@ -19825,6 +19803,9 @@
+ #endif
+ }
+ 
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++unsigned long syscall_pending_mask_bridge(void *threadp);
++#else
+ unsigned long
+ syscall_pending_mask_bridge(void *threadp)
+ {
+@@ -19853,6 +19834,8 @@
+ 
+ 	return mask;
+ }
++#endif /* !MCKERNEL_RUST_SYSCALL_POLICY_HELPERS: retained C fallback */
++
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ long syscall_signalfd_create_bridge(int syscall_nr, int flags);
+@@ -20945,6 +20928,7 @@
+ }
+ #endif
+ 
++#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ static int
+ do_sigsuspend(struct thread *thread, const sigset_t *set)
+ {
+@@ -21038,6 +21022,7 @@
+ {
+ 	return do_sigsuspend(thread, set);
+ }
++#endif /* !MCKERNEL_RUST_SYSCALL_POLICY_HELPERS: retained C fallback */
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ long sys_pause(int n, ihk_mc_user_context_t *ctx);
+@@ -21068,11 +21053,15 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++int syscall_do_sigaction_bridge(int sig, void *act, void *oact);
++#else
+ int
+ syscall_do_sigaction_bridge(int sig, void *act, void *oact)
+ {
+ 	return do_sigaction(sig, act, oact);
+ }
++#endif
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ long sys_rt_sigaction(int n, ihk_mc_user_context_t *ctx);
+--- preimage/arch/x86_64/kernel/cpu.c
++++ source/arch/x86_64/kernel/cpu.c
+@@ -2056,6 +2056,9 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
++void interrupt_exit(struct x86_user_context *regs);
++#else
+ void interrupt_exit(struct x86_user_context *regs)
+ {
+ 	if (interrupt_from_user(regs)) {
+@@ -2065,6 +2068,7 @@
+ 		check_signal(0, regs, -1);
+ 	}
+ }
++#endif
+ 
+ void handle_interrupt(int vector, struct x86_user_context *regs)
+ {
+@@ -2913,6 +2917,9 @@
+ 
+ /* KPRINTF_LOCAL_BUF_LEN is 1024, useless to go further */
+ #define STACK_BUF_LEN (1024-sizeof("[  0]: "))
++#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
++void __print_stack(struct stack *rbp, unsigned long first);
++#else
+ static void __print_stack(struct stack *rbp, unsigned long first) {
+ 	char buf[STACK_BUF_LEN];
+ 	size_t len;
+@@ -2933,6 +2940,8 @@
+ 	}
+ 	__kprintf("%s\n", buf);
+ }
++
++#endif
+ 
+ #ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+ void x86_stack_frame_log_bridge(unsigned long ip, unsigned long sp,
+@@ -3692,6 +3701,9 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
++void mod_nmi_ctx(void *nmi_ctx, void (*func)());
++#else
+ void
+ mod_nmi_ctx(void *nmi_ctx, void (*func)())
+ {
+@@ -3708,6 +3720,8 @@
+ 	l[i++] = (unsigned long)(l + 27);	// ols rsp
+ 	l[i++] = 0x28;				// KERNEL DS
+ }
++
++#endif
+ 
+ void arch_save_panic_regs(void *irq_regs)
+ {
+--- preimage/kernel/rust/x86_cpu_helpers.rs
++++ source/kernel/rust/x86_cpu_helpers.rs
+@@ -103,7 +103,15 @@
+     fn x86_running_on_kvm_bridge() -> CInt;
+     fn x86_cpuid6_bridge(eaxp: *mut CULong, ecxp: *mut CULong);
+     fn kprintf(format: *const i8, ...) -> CInt;
++    // Existing providers; the Rust-local alias adds no exported C helper.
++    fn interrupt_from_user(regs: *mut c_void) -> CInt;
++    #[link_name = "cpu_enable_interrupt"]
++    fn x86_interrupt_exit_enable_interrupt();
++    fn check_sig_pending();
++    fn check_need_resched();
++    fn check_signal(rc: CULong, regs: *mut c_void, num: CInt);
+     fn __kprintf(format: *const i8, ...) -> CInt;
++    fn snprintf(buf: *mut i8, size: usize, format: *const i8, ...) -> CInt;
+     fn arch_delay(us: CInt);
+     fn do_arch_prctl(code: CULong, address: CULong) -> CLong;
+     fn x86_lapic_write_bridge(reg: CInt, value: CUInt);
+@@ -3144,3 +3152,94 @@
+         _ => {},
+     }
+ }
++
++
++/// Build the existing single addr2line stack diagnostic with existing Rust
++/// snprintf and unlocked-print providers. The caller supplies the same live
++/// two-word C stack frames; no frame/context or local-buffer pointer is retained.
++/// Frame reads stay separated by snprintf as in C so a provider may affect the
++/// next-link word before that word is read.
++#[no_mangle]
++pub unsafe extern "C" fn __print_stack(mut rbp: *mut CULong, first: CULong) {
++    // Exact existing C STACK_BUF_LEN: 1024-sizeof("[  0]: ").
++    const BUF_LEN: usize = 1024 - b"[  0]: \0".len();
++    let mut buf = [0i8; BUF_LEN];
++    let out = buf.as_mut_ptr();
++    let mut len = unsafe {
++        snprintf(
++            out, BUF_LEN,
++            b"addr2line -e smp-x86/kernel/mckernel.img -fpia\0".as_ptr().cast(),
++        )
++    } as usize;
++    if first != 0 {
++        len = len.wrapping_add(unsafe {
++            snprintf(
++                out.wrapping_add(len), BUF_LEN.wrapping_sub(len),
++                b" %#16lx\0".as_ptr().cast(), first,
++            )
++        } as usize);
++    }
++    while (rbp as CULong) > 0xffff880000000000
++        && BUF_LEN.wrapping_sub(len) > b" 0x0123456789abcdef\0".len()
++    {
++        let ip = unsafe { rbp.add(1).read() };
++        len = len.wrapping_add(unsafe {
++            snprintf(
++                out.wrapping_add(len), BUF_LEN.wrapping_sub(len),
++                b" %#16lx\0".as_ptr().cast(), ip,
++            )
++        } as usize);
++        rbp = unsafe { rbp.read() } as *mut CULong;
++    }
++    unsafe { __kprintf(b"%s\n\0".as_ptr().cast(), out); }
++}
++
++
++/// Preserve the complete existing NMI frame rewrite. The caller owns a live,
++/// aligned writable span of at least 27 C unsigned-long words. This forward
++/// overlapping copy and the final five fields exactly match the C producer;
++/// the supplied function is stored as a return address and is never invoked.
++#[no_mangle]
++pub unsafe extern "C" fn mod_nmi_ctx(
++    nmi_ctx: *mut c_void,
++    func: Option<unsafe extern "C" fn()>,
++) {
++    let flags: CULong;
++    // Same pushfq/pop read used by existing cpu_interrupt_disabled. Default
++    // memory/flags clobbers retain the original C "memory","cc" barrier.
++    unsafe { core::arch::asm!("pushfq", "pop {flags}", flags = lateout(reg) flags); }
++    let words = nmi_ctx.cast::<CULong>();
++    let mut i = 0usize;
++    while i < 22 {
++        let value = unsafe { core::ptr::read_volatile(words.add(i + 5)) };
++        unsafe { core::ptr::write_volatile(words.add(i), value); }
++        i += 1;
++    }
++    let return_address = func.map_or(0, |entry| entry as CULong);
++    unsafe {
++        words.add(22).write(return_address);
++        words.add(23).write(0x20);
++        // Actual registers.h RFLAGS_IF=(1<<9); same mask is already used by
++        // existing Rust cpu_interrupt_disabled. No IRQ state is changed here.
++        words.add(24).write(flags & !(1 << 9));
++        words.add(25).write(words.add(27) as CULong);
++        words.add(26).write(0x28);
++    }
++}
++
++/// Complete interrupt-return orchestration for the caller-owned context.
++///
++/// The classifier and callbacks retain their original contract. In particular,
++/// interrupt enable precedes pending-signal and reschedule handling. No context
++/// pointer or callback state is retained, and no new null/error policy is added.
++#[no_mangle]
++pub unsafe extern "C" fn interrupt_exit(regs: *mut X86UserContext) {
++    unsafe {
++        if interrupt_from_user(regs.cast::<c_void>()) != 0 {
++            x86_interrupt_exit_enable_interrupt();
++            check_sig_pending();
++            check_need_resched();
++            check_signal(0, regs.cast::<c_void>(), -1);
++        }
++    }
++}
+--- preimage/arch/x86_64/kernel/memory.c
++++ source/arch/x86_64/kernel/memory.c
+@@ -1313,11 +1313,16 @@
+ 	int max_nr_addr;
+ };
+ 
++#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
++extern void x86_clear_memobj_flush_bridge(void *memobj, unsigned long phys,
++        size_t pgsize);
++#else
+ static void x86_clear_memobj_flush_bridge(void *memobj, unsigned long phys,
+ 		size_t pgsize)
+ {
+ 	memobj_flush_page(memobj, phys, pgsize);
+ }
++#endif
+ 
+ #ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+ extern void *x86_clear_phys_to_virt_bridge(unsigned long phys);
+@@ -1347,16 +1352,25 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
++extern void x86_clear_rss_sub_bridge(size_t size, size_t pgsize);
++#else
+ static void x86_clear_rss_sub_bridge(size_t size, size_t pgsize)
+ {
+ 	memory_stat_rss_sub(size, pgsize);
+ }
+-
++#endif
++
++#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
++extern void x86_clear_memobj_rss_sub_bridge(void *memobj, size_t size,
++        size_t pgsize);
++#else
+ static void x86_clear_memobj_rss_sub_bridge(void *memobj, size_t size,
+ 		size_t pgsize)
+ {
+ 	rusage_memory_stat_sub(memobj, size, pgsize);
+ }
++#endif
+ 
+ static void x86_clear_effect_log_bridge(int event, unsigned long base,
+ 		unsigned long phys, size_t pgsize)
+@@ -1530,11 +1544,16 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
++extern int x86_clear_range_walk_l1_bridge(void *pt, unsigned long base,
++        unsigned long start, unsigned long end, void *args);
++#else
+ static int x86_clear_range_walk_l1_bridge(void *pt, unsigned long base,
+ 		unsigned long start, unsigned long end, void *args)
+ {
+ 	return walk_pte_l1(pt, base, start, end, &clear_range_l1, args);
+ }
++#endif
+ 
+ #ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+ /* Synchronous existing L1 C walker identity; its lower chain remains C debt. */
+@@ -1568,14 +1587,19 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
++extern int x86_clear_range_walk_l2_bridge(void *pt, unsigned long base,
++        unsigned long start, unsigned long end, void *args);
++#else
+ static int x86_clear_range_walk_l2_bridge(void *pt, unsigned long base,
+ 		unsigned long start, unsigned long end, void *args)
+ {
+ 	return walk_pte_l2(pt, base, start, end, &clear_range_l2, args);
+ }
+-
+-#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+-/* Typed immutable identities; these existing lower C callbacks remain debt. */
++#endif
++
++#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
++/* Typed immutable identities; remaining C providers are tracked independently. */
+ x86_clear_child_walk_fn_t const x86_clear_l3_child_walk = &x86_clear_range_walk_l2_bridge;
+ x86_clear_flush_memobj_fn_t const x86_clear_l3_memobj_flush = &x86_clear_memobj_flush_bridge;
+ x86_clear_rss_sub_fn_t const x86_clear_l3_rss_sub = &x86_clear_rss_sub_bridge;
+@@ -1612,14 +1636,19 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
++extern int x86_clear_range_walk_l3_bridge(void *pt, unsigned long base,
++        unsigned long start, unsigned long end, void *args);
++#else
+ static int x86_clear_range_walk_l3_bridge(void *pt, unsigned long base,
+ 		unsigned long start, unsigned long end, void *args)
+ {
+ 	return walk_pte_l3(pt, base, start, end, &clear_range_l3, args);
+ }
+-
+-#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+-/* Borrow the existing L3 callback synchronously; its C body remains debt. */
++#endif
++
++#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
++/* Same synchronous L3 walker identity; the default body is supplied by Rust. */
+ int (*const x86_clear_range_l3_callback)(void *, unsigned long,
+         unsigned long, unsigned long, void *) = &x86_clear_range_walk_l3_bridge;
+ extern int x86_clear_range_l4_body(void *args0, pte_t *ptep, uint64_t base,
+--- preimage/kernel/rust/x86_memory_helpers.rs
++++ source/kernel/rust/x86_memory_helpers.rs
+@@ -3277,6 +3277,80 @@
+ 
+ // Error logging preserves the original unconditional ekprintf -> kprintf
+ // call, format bytes and C varargs payload. Unknown events remain silent.
++/// Complete former C memobj flush callback. Reuse the existing Rust memobj
++/// operation dispatch and discard its int result exactly as the void C wrapper
++/// did. No object/page ownership or asynchronous retention is introduced.
++#[no_mangle]
++pub unsafe extern "C" fn x86_clear_memobj_flush_bridge(
++    memobj: *mut c_void,
++    phys: CULong,
++    pgsize: CULong,
++) {
++    let _ = unsafe {
++        crate::object_helpers::memobj_flush_page(memobj.cast::<Memobj>(), phys, pgsize as SizeT)
++    };
++}
++
++/// Complete former C RSS callback. Preserve its size_t callback ABI and the
++/// original C conversion to the existing accounting function's int pgsize.
++#[no_mangle]
++pub unsafe extern "C" fn x86_clear_rss_sub_bridge(size: CULong, pgsize: CULong) {
++    unsafe { crate::mem_helpers::memory_stat_rss_sub(size, pgsize as CInt) }
++}
++
++/// Complete former C memobj RSS callback. The existing Rust accounting path
++/// retains feature gating, memobj flags and atomic counter ownership. The
++/// wrapper only forwards the same borrowed pointer and C integer conversion.
++#[no_mangle]
++pub unsafe extern "C" fn x86_clear_memobj_rss_sub_bridge(
++    memobj: *mut c_void,
++    size: CULong,
++    pgsize: CULong,
++) {
++    unsafe {
++        crate::mem_helpers::rusage_memory_stat_sub(memobj.cast::<Memobj>(), size, pgsize as CInt)
++    }
++}
++
++/// Exact former C L3 walker dispatcher. Existing walk_pte_l3 retains all
++/// range bounds/error aggregation and borrows args only for synchronous calls.
++#[no_mangle]
++pub unsafe extern "C" fn x86_clear_range_walk_l3_bridge(
++    pt: *mut c_void,
++    base: CULong,
++    start: CULong,
++    end: CULong,
++    args: *mut c_void,
++) -> CInt {
++    unsafe { walk_pte_l3(pt, base, start, end, Some(clear_range_l3), args) }
++}
++
++/// Exact former C L2 walker dispatcher. The existing Rust walker retains
++/// bounds/error aggregation and synchronously borrows the same callback args.
++#[no_mangle]
++pub unsafe extern "C" fn x86_clear_range_walk_l2_bridge(
++    pt: *mut c_void,
++    base: CULong,
++    start: CULong,
++    end: CULong,
++    args: *mut c_void,
++) -> CInt {
++    unsafe { walk_pte_l2(pt, base, start, end, Some(clear_range_l2), args) }
++}
++
++/// Exact former C L1 walker dispatcher. The existing Rust walker owns bounds
++/// and short-circuit order; callback args remain synchronously borrowed.
++#[no_mangle]
++pub unsafe extern "C" fn x86_clear_range_walk_l1_bridge(
++    pt: *mut c_void,
++    base: CULong,
++    start: CULong,
++    end: CULong,
++    args: *mut c_void,
++) -> CInt {
++    unsafe { walk_pte_l1(pt, base, start, end, Some(clear_range_l1), args) }
++}
++
+ /// Complete former C L1 callback. The existing leaf helper owns old-entry,
+ /// flush/free/page-unmap/RSS effects; raw args and count pointers remain borrowed.
+ #[no_mangle]
+--- preimage/arch/x86_64/kernel/syscall.c
++++ source/arch/x86_64/kernel/syscall.c
+@@ -477,62 +477,6 @@
+ #endif
+ 
+ static void
+-arch_ptrace_signal_lock_bridge(void *lock, void *node)
+-{
+-	mcs_rwlock_writer_lock((struct mcs_rwlock_lock *)lock,
+-			(struct mcs_rwlock_node_irqsave *)node);
+-}
+-
+-static void
+-arch_ptrace_signal_unlock_bridge(void *lock, void *node)
+-{
+-	mcs_rwlock_writer_unlock((struct mcs_rwlock_lock *)lock,
+-			(struct mcs_rwlock_node_irqsave *)node);
+-}
+-
+-static void
+-arch_ptrace_save_debugreg_bridge(void *debugreg)
+-{
+-	save_debugreg((unsigned long *)debugreg);
+-}
+-
+-static void
+-arch_ptrace_waitq_wake_bridge(void *waitq)
+-{
+-	waitq_wakeup((waitq_t *)waitq);
+-}
+-
+-static long
+-arch_ptrace_do_kill_bridge(void *thread, int pid, int tid, int sig,
+-		const void *info, int ptracecont)
+-{
+-	return do_kill((struct thread *)thread, pid, tid, sig,
+-			(struct siginfo *)info, ptracecont);
+-}
+-
+-static void
+-arch_ptrace_schedule_bridge(void)
+-{
+-	schedule();
+-}
+-
+-static void
+-arch_ptrace_signal_log_bridge(int event, int value, int result)
+-{
+-	if (event == 8) {
+-		dkprintf("ptrace_report_signal, tid=%d, pid=%d\n",
+-				value, result);
+-	}
+-	else if (event == 9) {
+-		dkprintf("ptrace_report_signal,sleeping\n");
+-	}
+-	else if (event == 10) {
+-		dkprintf("ptrace_report_signal,wake up\n");
+-	}
+-}
+-
+-
+-static void
+ arch_process_vm_rw_read_lock_bridge(void *vm)
+ {
+ 	ihk_rwspinlock_read_lock_noirq(
+@@ -1563,6 +1507,9 @@
+ 
+ extern int coredump(struct thread *thread, void *regs, int sig);
+ 
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++extern void ptrace_report_signal(struct thread *thread, int sig);
++#else
+ void ptrace_report_signal(struct thread *thread, int sig)
+ {
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+@@ -1662,6 +1609,7 @@
+ 	dkprintf("ptrace_report_signal,wake up\n");
+ #endif
+ }
++#endif
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ extern long ptrace_arch_prctl(int pid, long code, long addr);
+@@ -2904,6 +2852,9 @@
+ 	return error;
+ } /* vdso_get_vdso_info() */
+ 
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++extern int vdso_map_global_pages(void);
++#else
+ int vdso_map_global_pages(void)
+ {
+ 	int error;
+@@ -2955,6 +2906,7 @@
+ 	dkprintf("vdso_map_global_pages(): %d\n", error);
+ 	return error;
+ } /* vdso_map_global_pages() */
++#endif /* complete global VDSO mapping orchestration is Rust-selected */
+ 
+ #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ static void vdso_calc_container_size(void)
+--- preimage/kernel/rust/syscall_policy.rs
++++ source/kernel/rust/syscall_policy.rs
+@@ -357,7 +357,6 @@
+     fn syscall_copy_from_user_bridge(dst: *mut u8, src_addr: CULong, bytes: SizeT) -> CLong;
+     fn syscall_copy_int_to_user_bridge(dst_addr: CULong, src: *const CInt) -> CLong;
+     fn syscall_forward_rt_sigprocmask_bridge(sigmask: CULong) -> CLong;
+-    fn syscall_pending_mask_bridge(thread: *mut c_void) -> CULong;
+     fn syscall_do_kill_thread_bridge(
+         thread: *mut c_void,
+         pid: CInt,
+@@ -368,7 +367,6 @@
+     ) -> CLong;
+     fn syscall_do_kill_current_bridge(pid: CInt, sig: CInt, info: *const SigInfo) -> CLong;
+     fn syscall_kill_log_bridge(event: CInt, pid: CInt, sig: CInt, error: CInt);
+-    fn syscall_do_sigaction_bridge(sig: CInt, act: *mut KSigAction, oact: *mut KSigAction) -> CInt;
+     fn do_setresuid();
+     fn do_setresgid();
+     fn syscall_mckfd_lock_bridge(lock: *mut c_void) -> CLong;
+@@ -398,7 +396,6 @@
+     fn syscall_threads_reader_unlock_bridge(proc: *mut c_void, lock_arg: *mut c_void);
+     fn syscall_interrupt_cpu_bridge(cpu_id: CInt);
+     fn syscall_cpu_pause_bridge();
+-    fn syscall_sigsuspend_bridge(thread: *mut c_void, set: *mut c_void) -> CLong;
+     fn syscall_set_timer_bridge(runq_locked: CInt);
+     fn syscall_find_process_bridge(pid: CInt, lock_arg: *mut c_void) -> *mut c_void;
+     fn syscall_process_unlock_bridge(proc: *mut c_void, lock_arg: *mut c_void);
+@@ -1952,6 +1949,43 @@
+     )
+ }
+ 
++// M14-F03 next source slice: exact pending-mask aggregation under the two
++// existing writer locks. The caller retains current Thread/SigCommon/list nodes;
++// this body does not remove, consume, free or retain any pending signal node.
++#[inline]
++unsafe fn syscall_pending_mask_list_locked_f03(head: *mut AbiListHead) -> CULong {
++    let mut mask: CULong = 0;
++    let mut entry = (*head).next;
++    while entry != head {
++        let pending = entry
++            .cast::<u8>()
++            .wrapping_sub(offset_of!(crate::abi::SigPending, list))
++            .cast::<crate::abi::SigPending>();
++        mask |= (*pending).sigmask.val[0];
++        entry = (*pending).list.next;
++    }
++    mask
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn syscall_pending_mask_bridge(threadp: *mut c_void) -> CULong {
++    let thread = threadp.cast::<Thread>();
++    let common = (*thread).sigcommon.cast::<SigCommon>();
++    let mut node = MaybeUninit::<McsRwlockNodeIrqsave>::uninit();
++    let common_lock = addr_of_mut!((*common).lock).cast();
++    let common_head = addr_of_mut!((*common).sigpending);
++    crate::lock_helpers::__mcs_rwlock_writer_lock(common_lock, node.as_mut_ptr());
++    let mut mask = syscall_pending_mask_list_locked_f03(common_head);
++    crate::lock_helpers::__mcs_rwlock_writer_unlock(common_lock, node.as_mut_ptr());
++
++    let thread_lock = addr_of_mut!((*thread).sigpendinglock).cast();
++    let thread_head = addr_of_mut!((*thread).sigpending);
++    crate::lock_helpers::__mcs_rwlock_writer_lock(thread_lock, node.as_mut_ptr());
++    mask |= syscall_pending_mask_list_locked_f03(thread_head);
++    crate::lock_helpers::__mcs_rwlock_writer_unlock(thread_lock, node.as_mut_ptr());
++    mask
++}
++
+ #[no_mangle]
+ pub unsafe extern "C" fn rt_sigpending_body_result(
+     set_addr: CULong,
+@@ -9970,6 +10004,109 @@
+     }
+ }
+ 
++// M14-F03 source slice: synchronous sigsuspend wait/selection/ownership body.
++// Current Thread/SigCommon/CPU/monitor remain live as required by the old C body.
++// Selected pending ownership transfers only after detach and unlock to do_signal.
++#[inline]
++unsafe fn syscall_sigsuspend_find_pending_locked_f03(
++    head: *mut AbiListHead,
++    wset: CULong,
++) -> *mut crate::abi::SigPending {
++    let mut entry = (*head).next;
++    while entry != head {
++        let pending = entry
++            .cast::<u8>()
++            .wrapping_sub(offset_of!(crate::abi::SigPending, list))
++            .cast::<crate::abi::SigPending>();
++        if sigsuspend_pending_matches((*pending).sigmask.val[0], wset) != 0 {
++            return pending;
++        }
++        entry = (*pending).list.next;
++    }
++    null_mut()
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn syscall_sigsuspend_bridge(
++    threadp: *mut c_void,
++    setp: *mut c_void,
++) -> CLong {
++    unsafe extern "C" {
++        #[link_name = "do_signal"]
++        fn syscall_sigsuspend_do_signal_f03(
++            rc: CULong,
++            regs: *mut c_void,
++            thread: *mut Thread,
++            pending: *mut crate::abi::SigPending,
++            num: CInt,
++        ) -> CInt;
++    }
++    let thread = threadp.cast::<Thread>();
++    let set = setp.cast::<SigSet>();
++    let mut node = MaybeUninit::<McsRwlockNodeIrqsave>::uninit();
++    let monitor = (*get_this_cpu_local_var()).monitor;
++    (*monitor).status = IHK_OS_MONITOR_KERNEL_HEAVY;
++    let wset = sigsuspend_prepare_mask((*set).val[0]);
++    let bset = (*thread).sigmask.val[0];
++    (*thread).sigmask.val[0] = wset;
++    write_volatile(addr_of_mut!((*thread).sigevent), 1);
++    loop {
++        while read_volatile(addr_of!((*thread).sigevent)) == 0 {
++            (*thread).status = PS_INTERRUPTIBLE;
++            let runq_irqstate = cpu_disable_interrupt_save();
++            let lock_cpu = get_this_cpu_local_var();
++            crate::spinlock_helpers::__ihk_mc_spinlock_lock_noirq(
++                addr_of_mut!((*lock_cpu).runq_lock).cast(),
++            );
++            let cpu = get_this_cpu_local_var();
++            let do_schedule = ((*cpu).flags & CPU_FLAG_NEED_RESCHED) != 0;
++            if do_schedule {
++                (*cpu).flags &= !CPU_FLAG_NEED_RESCHED;
++            }
++            crate::spinlock_helpers::__ihk_mc_spinlock_unlock_noirq(
++                addr_of_mut!((*cpu).runq_lock).cast(),
++            );
++            cpu_restore_interrupt(runq_irqstate);
++            if do_schedule {
++                schedule();
++            } else {
++                cpu_pause();
++            }
++        }
++        // Match the volatile C write before either protected pending-list scan.
++        write_volatile(addr_of_mut!((*thread).sigevent), 0);
++        (*thread).status = PS_RUNNING;
++        let common = (*thread).sigcommon.cast::<SigCommon>();
++        let mut lock = addr_of_mut!((*common).lock).cast();
++        let common_head = addr_of_mut!((*common).sigpending);
++        crate::lock_helpers::__mcs_rwlock_writer_lock(lock, node.as_mut_ptr());
++        let mut pending = syscall_sigsuspend_find_pending_locked_f03(common_head, wset);
++        if pending.is_null() {
++            crate::lock_helpers::__mcs_rwlock_writer_unlock(lock, node.as_mut_ptr());
++            lock = addr_of_mut!((*thread).sigpendinglock).cast();
++            let thread_head = addr_of_mut!((*thread).sigpending);
++            crate::lock_helpers::__mcs_rwlock_writer_lock(lock, node.as_mut_ptr());
++            pending = syscall_sigsuspend_find_pending_locked_f03(thread_head, wset);
++        }
++        if pending.is_null() {
++            crate::lock_helpers::__mcs_rwlock_writer_unlock(lock, node.as_mut_ptr());
++            continue;
++        }
++        crate::process_helpers::process_list_detach_result(addr_of_mut!((*pending).list));
++        crate::lock_helpers::__mcs_rwlock_writer_unlock(lock, node.as_mut_ptr());
++        (*thread).sigmask.val[0] = bset;
++        let _ = syscall_sigsuspend_do_signal_f03(
++            (-(EINTR as CLong)) as CULong,
++            null_mut(),
++            thread,
++            pending,
++            -1,
++        );
++        // do_signal may consume/free the detached node: never access it again.
++        return -(EINTR as CLong);
++    }
++}
++
+ #[no_mangle]
+ pub unsafe extern "C" fn pause_body_result(
+     thread: *mut c_void,
+@@ -10025,6 +10162,44 @@
+     } else {
+         0
+     }
++}
++
++// M14-F03 source-only: remaining selected do_sigaction orchestration and
++// public rt_sigaction callback. Existing Rust helper preserves validation,
++// action copies, lock/unlock and forwarding order. C forwarding remains debt.
++extern "C" {
++    #[link_name = "syscall_forward_sigaction_update_bridge"]
++    fn syscall_forward_sigaction_update_f03(sig: CInt, act: *const c_void) -> CLong;
++}
++
++unsafe extern "C" fn syscall_sigaction_writer_lock_f03(lock: *mut c_void, node: *mut c_void) {
++    crate::lock_helpers::__mcs_rwlock_writer_lock(lock.cast(), node.cast());
++}
++
++unsafe extern "C" fn syscall_sigaction_writer_unlock_f03(lock: *mut c_void, node: *mut c_void) {
++    crate::lock_helpers::__mcs_rwlock_writer_unlock(lock.cast(), node.cast());
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn do_sigaction(sig: CInt, act: *mut KSigAction, oact: *mut KSigAction) -> CInt {
++    let thread = current_thread_ptr();
++    let common = (*thread).sigcommon;
++    let mut node = MaybeUninit::<McsRwlockNodeIrqsave>::uninit();
++    do_sigaction_body_result(
++        sig, act, oact, common.cast::<c_void>(),
++        offset_of!(SigCommon, action), size_of::<KSigAction>(),
++        offset_of!(SigCommon, lock), node.as_mut_ptr().cast::<c_void>(),
++        Some(syscall_sigaction_writer_lock_f03),
++        Some(syscall_sigaction_writer_unlock_f03),
++        Some(syscall_forward_sigaction_update_f03),
++    )
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn syscall_do_sigaction_bridge(
++    sig: CInt, act: *mut KSigAction, oact: *mut KSigAction,
++) -> CInt {
++    do_sigaction(sig, act, oact)
+ }
+ 
+ #[no_mangle]
+@@ -13813,7 +13988,6 @@
+     );
+     #[cfg(not(native_linux_irq_work_v6_12))]
+     fn vdso_get_vdso_info() -> CInt;
+-    fn vdso_map_global_pages() -> CInt;
+     fn arch_vdso_setup_log_bridge(event: CInt, error: CInt);
+     fn arch_vdso_add_range_bridge(
+         vm: *mut ProcessVm,
+@@ -23481,3 +23655,298 @@
+         )
+     }
+ }
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// F06 source-only next slice: complete global VDSO mapping orchestration.
++// Root removes the old extern declaration of vdso_map_global_pages before merge.
++// Existing ArchVdso/state bridge, Rust memory/CPU providers and Ddebug ABI reused.
++extern "C" {
++    #[link_name = "pvti"]
++    static mut ARCH_VDSO_GLOBAL_PVTI: *mut c_void;
++    #[link_name = "pvti_npages"]
++    static mut ARCH_VDSO_GLOBAL_PVTI_NPAGES: CInt;
++}
++
++type ArchVdsoGlobalSetupFn = unsafe extern "C" fn() -> CInt;
++type ArchVdsoGlobalPhysFn = unsafe extern "C" fn(*mut c_void) -> CULong;
++type ArchVdsoGlobalMapFn =
++    unsafe extern "C" fn(*mut c_void, *mut c_void, CULong, CULong) -> CInt;
++type ArchVdsoGlobalLogFn = unsafe extern "C" fn(CInt, CInt);
++
++const VDSO_GLOBAL_LOG_ENTER: CInt = 0;
++const VDSO_GLOBAL_LOG_VVAR_FAILED: CInt = 1;
++const VDSO_GLOBAL_LOG_HPET_FAILED: CInt = 2;
++const VDSO_GLOBAL_LOG_SETUP_FAILED: CInt = 3;
++const VDSO_GLOBAL_LOG_PVTI_FAILED: CInt = 4;
++const VDSO_GLOBAL_LOG_EXIT: CInt = 5;
++
++#[used]
++#[link_section = "__verbose"]
++static mut VDSO_GLOBAL_ENTER_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
++    file: concat!(file!(), "\0").as_ptr().cast(),
++    func: b"vdso_map_global_pages\0".as_ptr().cast(),
++    fmt: core::ptr::null(),
++    line_flags: line!() & 0x00ff_ffff,
++};
++#[used]
++#[link_section = "__verbose"]
++static mut VDSO_GLOBAL_EXIT_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
++    file: concat!(file!(), "\0").as_ptr().cast(),
++    func: b"vdso_map_global_pages\0".as_ptr().cast(),
++    fmt: core::ptr::null(),
++    line_flags: line!() & 0x00ff_ffff,
++};
++
++unsafe extern "C" fn arch_vdso_global_log(event: CInt, error: CInt) {
++    unsafe {
++        match event {
++            VDSO_GLOBAL_LOG_ENTER => {
++                if read_volatile(addr_of!(VDSO_GLOBAL_ENTER_DEBUG.line_flags)) >> 24 != 0 {
++                    kprintf(b"vdso_map_global_pages()\n\0".as_ptr().cast());
++                }
++            }
++            VDSO_GLOBAL_LOG_VVAR_FAILED => {
++                kprintf(b"vdso_map_global_pages: mapping vvar failed. %d\n\0".as_ptr().cast(), error);
++            }
++            VDSO_GLOBAL_LOG_HPET_FAILED => {
++                kprintf(b"vdso_map_global_pages: mapping hpet failed. %d\n\0".as_ptr().cast(), error);
++            }
++            VDSO_GLOBAL_LOG_SETUP_FAILED => {
++                kprintf(b"vdso_map_global_pages: arch_setup_pvclock failed. %d\n\0".as_ptr().cast(), error);
++            }
++            VDSO_GLOBAL_LOG_PVTI_FAILED => {
++                kprintf(b"vdso_map_global_pages: mapping pvti failed. %d\n\0".as_ptr().cast(), error);
++            }
++            VDSO_GLOBAL_LOG_EXIT => {
++                if read_volatile(addr_of!(VDSO_GLOBAL_EXIT_DEBUG.line_flags)) >> 24 != 0 {
++                    kprintf(b"vdso_map_global_pages(): %d\n\0".as_ptr().cast(), error);
++                }
++            }
++            _ => {}
++        }
++    }
++}
++
++/// Preserve the original partial-map ownership: stop at the first setup/map
++/// error, leave successful prior mappings in place, and never free/rollback.
++/// vdso and both global slots must remain live under the original boot/setup
++/// exclusion. Callback effects on later state/slots are observed in order.
++#[no_mangle]
++pub unsafe extern "C" fn vdso_map_global_pages_body_result(
++    vdso: *mut ArchVdso,
++    pvti_slot: *mut *mut c_void,
++    pvti_npages_slot: *mut CInt,
++    setup_fn: ArchVdsoGlobalSetupFn,
++    phys_fn: ArchVdsoGlobalPhysFn,
++    map_fn: ArchVdsoGlobalMapFn,
++    log_fn: ArchVdsoGlobalLogFn,
++) -> CInt {
++    unsafe {
++        log_fn(VDSO_GLOBAL_LOG_ENTER, 0);
++        let ordinary_attr = PTATTR_ACTIVE | PTATTR_USER | PTATTR_NO_EXECUTE;
++        if !read_volatile(addr_of!((*vdso).vvar_virt)).is_null()
++            && read_volatile(addr_of!((*vdso).vvar_is_global)) != 0
++        {
++            let error = map_fn(
++                null_mut(),
++                read_volatile(addr_of!((*vdso).vvar_virt)),
++                read_volatile(addr_of!((*vdso).vvar_phys)) as CULong,
++                ordinary_attr,
++            );
++            if error != 0 {
++                log_fn(VDSO_GLOBAL_LOG_VVAR_FAILED, error);
++                log_fn(VDSO_GLOBAL_LOG_EXIT, error);
++                return error;
++            }
++        }
++        if !read_volatile(addr_of!((*vdso).hpet_virt)).is_null()
++            && read_volatile(addr_of!((*vdso).hpet_is_global)) != 0
++        {
++            let error = map_fn(
++                null_mut(),
++                read_volatile(addr_of!((*vdso).hpet_virt)),
++                read_volatile(addr_of!((*vdso).hpet_phys)) as CULong,
++                ordinary_attr | PTATTR_UNCACHABLE,
++            );
++            if error != 0 {
++                log_fn(VDSO_GLOBAL_LOG_HPET_FAILED, error);
++                log_fn(VDSO_GLOBAL_LOG_EXIT, error);
++                return error;
++            }
++        }
++        if !read_volatile(addr_of!((*vdso).pvti_virt)).is_null()
++            && read_volatile(addr_of!((*vdso).pvti_is_global)) != 0
++        {
++            let error = setup_fn();
++            if error != 0 {
++                log_fn(VDSO_GLOBAL_LOG_SETUP_FAILED, error);
++                log_fn(VDSO_GLOBAL_LOG_EXIT, error);
++                return error;
++            }
++            // PAGE_SIZE is C 1UL<<PAGE_SHIFT. Match its unsigned 64-bit
++            // displacement and the old destination-minus/source-plus order.
++            let mut i: CInt = 0;
++            while i < read_volatile(pvti_npages_slot) {
++                let displacement = (i as CULong).wrapping_mul(PAGE_SIZE) as usize;
++                let virt = read_volatile(addr_of!((*vdso).pvti_virt))
++                    .cast::<u8>().wrapping_sub(displacement).cast::<c_void>();
++                let source = read_volatile(pvti_slot)
++                    .cast::<u8>().wrapping_add(displacement).cast::<c_void>();
++                let phys = phys_fn(source);
++                let error = map_fn(null_mut(), virt, phys, ordinary_attr);
++                if error != 0 {
++                    log_fn(VDSO_GLOBAL_LOG_PVTI_FAILED, error);
++                    log_fn(VDSO_GLOBAL_LOG_EXIT, error);
++                    return error;
++                }
++                i += 1;
++            }
++        }
++        log_fn(VDSO_GLOBAL_LOG_EXIT, 0);
++        0
++    }
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn vdso_map_global_pages() -> CInt {
++    // Reuse the existing state-provider contract already used by the selected
++    // Rust arch_setup_vdso caller. It returns addresses of stable C data only.
++    let (vdso, _, _) = match unsafe { arch_vdso_state() } {
++        Ok(state) => state,
++        Err(error) => return error,
++    };
++    unsafe {
++        vdso_map_global_pages_body_result(
++            vdso,
++            addr_of_mut!(ARCH_VDSO_GLOBAL_PVTI),
++            addr_of_mut!(ARCH_VDSO_GLOBAL_PVTI_NPAGES),
++            crate::x86_cpu_helpers::arch_setup_pvclock,
++            crate::x86_memory_helpers::virt_to_phys,
++            crate::x86_memory_helpers::ihk_mc_pt_set_page,
++            arch_vdso_global_log,
++        )
++    }
++}
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// F06 private fragment: retire the existing ptrace_report_signal C entry and
++// its seven private adapters. Keep the accepted Rust signal algorithm intact.
++unsafe extern "C" {
++    #[link_name = "do_kill"]
++    fn f06_ptrace_report_signal_do_kill(
++        thread: *mut Thread, pid: CInt, tid: CInt, sig: CInt,
++        info: *mut SigInfo, ptracecont: CInt,
++    ) -> CULong;
++}
++
++static F06_PTRACE_REPORT_SIGNAL_OFFSETS: PtraceReportSignalOffsets = PtraceReportSignalOffsets {
++    thread_proc_offset: offset_of!(Thread, proc) as SizeT,
++    thread_tid_offset: offset_of!(Thread, tid) as SizeT,
++    thread_status_offset: offset_of!(Thread, status) as SizeT,
++    thread_exit_status_offset: offset_of!(Thread, exit_status) as SizeT,
++    thread_signal_flags_offset: offset_of!(Thread, signal_flags) as SizeT,
++    thread_ptrace_offset: offset_of!(Thread, ptrace) as SizeT,
++    thread_ptrace_debugreg_offset: offset_of!(Thread, ptrace_debugreg) as SizeT,
++    thread_report_proc_offset: offset_of!(Thread, report_proc) as SizeT,
++    proc_pid_offset: offset_of!(Process, pid) as SizeT,
++    proc_parent_offset: offset_of!(Process, parent) as SizeT,
++    proc_main_thread_offset: offset_of!(Process, main_thread) as SizeT,
++    proc_status_offset: offset_of!(Process, status) as SizeT,
++    proc_update_lock_offset: offset_of!(Process, update_lock) as SizeT,
++    proc_waitpid_q_offset: offset_of!(Process, waitpid_q) as SizeT,
++};
++
++unsafe extern "C" fn f06_ptrace_report_signal_lock(lock: *mut c_void, node: *mut c_void) {
++    unsafe { crate::lock_helpers::__mcs_rwlock_writer_lock(lock.cast(), node.cast()) }
++}
++unsafe extern "C" fn f06_ptrace_report_signal_unlock(lock: *mut c_void, node: *mut c_void) {
++    unsafe { crate::lock_helpers::__mcs_rwlock_writer_unlock(lock.cast(), node.cast()) }
++}
++unsafe extern "C" fn f06_ptrace_report_signal_save(debugreg: *mut c_void) {
++    unsafe { crate::x86_cpu_helpers::save_debugreg(debugreg.cast::<CULong>()) }
++}
++unsafe extern "C" fn f06_ptrace_report_signal_wake(waitq: *mut c_void) {
++    // RuntimeWaitq and C waitq_t are the already selected waitq ABI.
++    unsafe { crate::waitq::waitq_wakeup(waitq.cast::<RuntimeWaitq>()) }
++}
++unsafe extern "C" fn f06_ptrace_report_signal_kill(
++    thread: *mut c_void, pid: CInt, tid: CInt, sig: CInt,
++    info: *const SigInfo, ptracecont: CInt,
++) -> CLong {
++    // The old C adapter implicitly converted do_kill's unsigned long to long.
++    // Keep its exact bits; the signal body deliberately ignores the return.
++    unsafe {
++        f06_ptrace_report_signal_do_kill(
++            thread.cast::<Thread>(), pid, tid, sig, info.cast_mut(), ptracecont,
++        ) as CLong
++    }
++}
++
++#[used]
++#[link_section = "__verbose"]
++static mut F06_PTRACE_SIGNAL_ENTER_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
++    file: concat!(file!(), "\0").as_ptr().cast(),
++    func: b"arch_ptrace_signal_log_bridge\0".as_ptr().cast(),
++    fmt: core::ptr::null(),
++    line_flags: line!() & 0x00ff_ffff,
++};
++#[used]
++#[link_section = "__verbose"]
++static mut F06_PTRACE_SIGNAL_SLEEP_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
++    file: concat!(file!(), "\0").as_ptr().cast(),
++    func: b"arch_ptrace_signal_log_bridge\0".as_ptr().cast(),
++    fmt: core::ptr::null(),
++    line_flags: line!() & 0x00ff_ffff,
++};
++#[used]
++#[link_section = "__verbose"]
++static mut F06_PTRACE_SIGNAL_WAKE_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
++    file: concat!(file!(), "\0").as_ptr().cast(),
++    func: b"arch_ptrace_signal_log_bridge\0".as_ptr().cast(),
++    fmt: core::ptr::null(),
++    line_flags: line!() & 0x00ff_ffff,
++};
++unsafe extern "C" fn f06_ptrace_report_signal_log(event: CInt, value: CInt, result: CInt) {
++    unsafe {
++        match event {
++            PTRACE_REPORT_SIGNAL_LOG_ENTER => {
++                if read_volatile(addr_of!(F06_PTRACE_SIGNAL_ENTER_DEBUG.line_flags)) >> 24 != 0 {
++                    kprintf(b"ptrace_report_signal, tid=%d, pid=%d\n\0".as_ptr().cast(), value, result);
++                }
++            }
++            PTRACE_REPORT_SIGNAL_LOG_SLEEPING => {
++                if read_volatile(addr_of!(F06_PTRACE_SIGNAL_SLEEP_DEBUG.line_flags)) >> 24 != 0 {
++                    kprintf(b"ptrace_report_signal,sleeping\n\0".as_ptr().cast());
++                }
++            }
++            PTRACE_REPORT_SIGNAL_LOG_WAKE => {
++                if read_volatile(addr_of!(F06_PTRACE_SIGNAL_WAKE_DEBUG.line_flags)) >> 24 != 0 {
++                    kprintf(b"ptrace_report_signal,wake up\n\0".as_ptr().cast());
++                }
++            }
++            _ => {}
++        }
++    }
++}
++
++/// Preserve the existing synchronous ptrace notification and stack-node lifetime.
++/// The live current CPU/thread and reported thread/process are borrowed only;
++/// this entry neither acquires nor releases their owner references. The reused
++/// body restores the update lock/IRQ state before main-parent wake and schedule.
++/// The lock node stays live through every callback, including scheduler return.
++#[no_mangle]
++pub unsafe extern "C" fn ptrace_report_signal(thread: *mut Thread, sig: CInt) {
++    unsafe {
++        let mut lock = MaybeUninit::<McsRwlockNodeIrqsave>::uninit();
++        let current = read_volatile(addr_of!((*crate::cls::get_this_cpu_local_var()).current));
++        // Existing C public entry is void and intentionally ignores body status.
++        let _ = ptrace_report_signal_body_result(
++            thread.cast(), sig, current.cast(), &F06_PTRACE_REPORT_SIGNAL_OFFSETS,
++            lock.as_mut_ptr().cast(),
++            Some(f06_ptrace_report_signal_lock), Some(f06_ptrace_report_signal_unlock),
++            Some(f06_ptrace_report_signal_save), Some(f06_ptrace_report_signal_wake),
++            Some(f06_ptrace_report_signal_kill), Some(schedule),
++            Some(f06_ptrace_report_signal_log),
++        );
++    }
++}

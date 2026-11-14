@@ -1,0 +1,123 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_ACTUAL_DETERMINISTIC_HELPER_FIXTURE",
+  "at": "2026-10-30T05:50:55.003579+00:00",
+  "output_root": "/home/holden/mckernel-work/scratch/native-cheap-postformat-20261030-0twkqp6a",
+  "compiler_exit": 0,
+  "fixture_exit": 0,
+  "tests_passed": 5,
+  "fixture_stdout": "\nrunning 5 tests\ntest callback_pid_change_then_nested_log_charges_current_epoch_twice ... ok\ntest nested_formatter_at_63_logs_twice_then_leaves_65 ... ok\ntest nonlogging_entry_reset_during_formatter_still_receives_outer_increment ... ok\ntest serial_limit_and_entry_reset_follow_original_c_reference ... ok\ntest synthetic_low_word_wrap_never_carries_into_pid ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+  "compiler_time": "\tCommand being timed: \"/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc --edition=2021 --test postformat_cases.rs -o postformat.test\"\n\tUser time (seconds): 0.07\n\tSystem time (seconds): 0.04\n\tPercent of CPU this job got: 90%\n\tElapsed (wall clock) time (h:mm:ss or m:ss): 0:00.13\n\tAverage shared text size (kbytes): 0\n\tAverage unshared data size (kbytes): 0\n\tAverage stack size (kbytes): 0\n\tAverage total size (kbytes): 0\n\tMaximum resident set size (kbytes): 126812\n\tAverage resident set size (kbytes): 0\n\tMajor (requiring I/O) page faults: 1540\n\tMinor (reclaiming a frame) page faults: 12687\n\tVoluntary context switches: 88\n\tInvoluntary context switches: 65\n\tSwaps: 0\n\tFile system inputs: 3704\n\tFile system outputs: 12312\n\tSocket messages sent: 0\n\tSocket messages received: 0\n\tSignals delivered: 0\n\tPage size (bytes): 4096\n\tExit status: 0\n",
+  "fixture_time": "\tCommand being timed: \"./postformat.test --test-threads=1\"\n\tUser time (seconds): 0.00\n\tSystem time (seconds): 0.00\n\tPercent of CPU this job got: ?%\n\tElapsed (wall clock) time (h:mm:ss or m:ss): 0:00.00\n\tAverage shared text size (kbytes): 0\n\tAverage unshared data size (kbytes): 0\n\tAverage stack size (kbytes): 0\n\tAverage total size (kbytes): 0\n\tMaximum resident set size (kbytes): 2744\n\tAverage resident set size (kbytes): 0\n\tMajor (requiring I/O) page faults: 0\n\tMinor (reclaiming a frame) page faults: 119\n\tVoluntary context switches: 11\n\tInvoluntary context switches: 10\n\tSwaps: 0\n\tFile system inputs: 0\n\tFile system outputs: 8\n\tSocket messages sent: 0\n\tSocket messages received: 0\n\tSignals delivered: 0\n\tPage size (bytes): 4096\n\tExit status: 0\n",
+  "runner": {
+    "pid": 2759481,
+    "birth": "113689947",
+    "pgid": 2759480,
+    "identity": [
+      "2759481",
+      "2759480",
+      "2759480",
+      "2759480",
+      "S"
+    ]
+  },
+  "postterminal_group": {
+    "observed_at_epoch": 1793339455.0036612,
+    "members": [],
+    "errors": [],
+    "absent": true
+  },
+  "resources_released": {
+    "cpu": [
+      6
+    ],
+    "planning_bytes": 2147483648
+  },
+  "files": {
+    "RUNNER.pid": {
+      "bytes": 8,
+      "sha256": "ea0b0e4391d9075180d0dd203db945bc2ec8feb81d10e693062940d56dd2c924",
+      "mtime_ns": 1793339454771216943
+    },
+    "RUNNER.proc-stat": {
+      "bytes": 322,
+      "sha256": "6a7923f61ec46ad25755a543a8e1b02991c814075f244a57306203d31281c6ae",
+      "mtime_ns": 1793339454775217071
+    },
+    "RUNNER.identity": {
+      "bytes": 34,
+      "sha256": "d53b1e47e13cac18e28b958452b19ffe03820b2f539355d5571ecf891b3d2907",
+      "mtime_ns": 1793339454779217198
+    },
+    "run.sh": {
+      "bytes": 822,
+      "sha256": "910463d11384cd9065d8d3b1ab4355a6a7d0382cefd055d3b8785484986c17a8",
+      "mtime_ns": 1793339393669266224
+    },
+    "postformat_cases.rs": {
+      "bytes": 5773,
+      "sha256": "9a30385ab267090b15872cca74b245d08452d646619fb16ba1a15174b65a6d42",
+      "mtime_ns": 1793339393669266224
+    },
+    "old_budget_fixture.rs": {
+      "bytes": 1558,
+      "sha256": "41c1cf171e3e13b5147ef0886374044bf71c52aed8cd38e5b674f79849209749",
+      "mtime_ns": 1793339393669266224
+    },
+    "postimage/kernel/rust/f06_signal_log_budget.rs": {
+      "bytes": 1813,
+      "sha256": "60198f70116faa339ff90a4a3ec818c59d162198b5f27b6b8c755a0b32da062e",
+      "mtime_ns": 1793339393669266224
+    },
+    "compiler.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mtime_ns": 1793339454779217198
+    },
+    "compiler.stderr": {
+      "bytes": 1417,
+      "sha256": "3b1285fc86600d2ee0f7b08d86f5c05f270fe71cf4e5bcabc7f3486cd4a82941",
+      "mtime_ns": 1793339454907221282
+    },
+    "compiler.time": {
+      "bytes": 887,
+      "sha256": "6889ecf57ea4a7bd7fc5b39c3718a74a9a819aa07ea2ca0d27673e4625c797e8",
+      "mtime_ns": 1793339454911221410
+    },
+    "compiler.exit": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "mtime_ns": 1793339454911221410
+    },
+    "fixture.stdout": {
+      "bytes": 461,
+      "sha256": "7e78cb8807c9576b4b651a030a0031b4101d84056462d03c322ef4aa02854064",
+      "mtime_ns": 1793339454915221538
+    },
+    "fixture.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mtime_ns": 1793339454911221410
+    },
+    "fixture.time": {
+      "bytes": 748,
+      "sha256": "5491d898427c438a0b1d648f83f37e0db4943c198a0c8cc90cd1292c73e15649",
+      "mtime_ns": 1793339454915221538
+    },
+    "fixture.exit": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "mtime_ns": 1793339454915221538
+    },
+    "postformat.test": {
+      "bytes": 6177912,
+      "sha256": "8f2a7ffc978d6bc9d9aac1a49ae51e4528ace6817ff388c8d6747ca081f35fc2",
+      "mtime_ns": 1793339454903221155
+    }
+  },
+  "actual_real_formatter_or_whole_signal": false,
+  "production_links": 0,
+  "native_qualified": 0,
+  "retired_C": 0,
+  "limits": "Only exact helper under modeled callbacks; 2 real call sites, selected ABI/storage/callers/ownership and native remain unqualified. Old preclaim differs in the three reentrant cases. No concurrent-C or global64 claim; synthetic wrap is outside defined C overflow domain."
+}

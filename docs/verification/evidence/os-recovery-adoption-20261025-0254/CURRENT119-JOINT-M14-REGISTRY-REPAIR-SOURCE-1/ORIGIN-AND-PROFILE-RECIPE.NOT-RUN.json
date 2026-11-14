@@ -1,0 +1,44 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "producer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/candidate/scripts/derive_f06_origin.py",
+    "bytes": 7567,
+    "sha256": "73d618039490fc5faeb06683555f274fabde94866f616d18474aedf133ad7462"
+  },
+  "profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/candidate/scripts/f06_origin_command_profile.json",
+    "bytes": 13525,
+    "sha256": "49dba5414cae3d4f7aff20d6d90c1554bc75630d461885bdda650f468ff003d1"
+  },
+  "actual_arch_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/candidate/arch/x86_64/kernel/syscall.c",
+    "bytes": 121256,
+    "sha256": "b5e9a382491d0f6dc4b71a55f54f76f3d4ca610fa9f81adc60e70ec97a194669"
+  },
+  "argv": [
+    "python3",
+    "-B",
+    "/src/scripts/derive_f06_origin.py",
+    "--profile",
+    "/src/scripts/f06_origin_command_profile.json",
+    "--source",
+    "/src/arch/x86_64/kernel/syscall.c",
+    "--output",
+    "/work/output/build/kernel/rust/f06-origin"
+  ],
+  "generated_files": [
+    "f06_rt_sigreturn_origin.h",
+    "f06_rt_sigreturn_origin.cmake",
+    "f06_clone_cpuid_metadata.rs",
+    "rust-environment.json",
+    "ORIGIN-BINDING.json"
+  ],
+  "actual_origin_producer_runs": 0,
+  "existing_SDK21_reused": true,
+  "existing_eight_objects_reused": true,
+  "generated_clone_lines_preserved": [
+    898,
+    908
+  ],
+  "runtime_authority": null
+}

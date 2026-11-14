@@ -1,0 +1,51 @@
+{
+  "required3_T": [
+    "set_timer",
+    "timer_set_timer_body_result",
+    "ihk_mc_get_vector"
+  ],
+  "genuine7_U": [
+    "get_this_cpu_local_var",
+    "time_sharing",
+    "process_timer_runtime_offsets",
+    "process_timer_spin_lock_bridge",
+    "process_timer_spin_unlock_bridge",
+    "process_timer_lapic_enable_bridge",
+    "process_timer_lapic_disable_bridge"
+  ],
+  "all4_timer_callbacks_U": [
+    "process_timer_spin_lock_bridge",
+    "process_timer_spin_unlock_bridge",
+    "process_timer_lapic_enable_bridge",
+    "process_timer_lapic_disable_bridge"
+  ],
+  "source_private_functions": [
+    "list_next",
+    "list_empty_addr"
+  ],
+  "private_helper_patterns": {
+    "list_next": "^_RNvNtCs[0-9A-Za-z]+_27scheduler_timer_vector_unit13sched_helpers9list_next$",
+    "list_empty_addr": "^_RNvNtCs[0-9A-Za-z]+_27scheduler_timer_vector_unit13sched_helpers15list_empty_addr$"
+  },
+  "external_descriptor": "process_timer_runtime_offsets",
+  "external_mutable_state": "time_sharing",
+  "descriptor_fields_in_original_order": [
+    "thread_status_offset",
+    "thread_sched_list_offset",
+    "thread_spin_sleep_lock_offset",
+    "thread_spin_sleep_offset",
+    "thread_itimer_enabled_offset",
+    "cpu_runq_lock_offset",
+    "cpu_runq_offset",
+    "cpu_runq_len_offset",
+    "cpu_current_offset",
+    "cpu_timer_enabled_offset",
+    "cpu_backlog_list_offset",
+    "timer_timeout_offset",
+    "timer_waitq_offset",
+    "timer_list_offset",
+    "timer_thread_offset"
+  ],
+  "descriptor_and_callback_policy": "Fullactual15usizeoffsettypeandoriginal4Optioncallbackaliases; descriptor/time_sharing/all4callbacksexternalUONLY. No offsetinstance/defaultstate/table supplied.",
+  "readonly_policy": "No source literals/data/offsetconstructor selected; recordallreadonly andacceptonlyretainedprofileeh_frameboundtoselectedfunctions. Unplannedreadonly/offset/callbacktableorcorehelperstopsforconcretesourcebindingbeforelink."
+}

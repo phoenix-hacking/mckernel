@@ -1,0 +1,17 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "FAIL_FIRST_SYNC_PROCESSVM_ACTUAL_QUALIFICATION_PRESERVED",
+  "static_acceptance_inputs": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-sync-processvm-host13-five-stage-source-1/ACCEPTANCE-INPUTS.SOURCE-ONLY.json",
+    "bytes": 50488,
+    "sha256": "711656fb1b62c60b9aca2535cc9d1f853a6ec22f2b1a7a0db93b91b6187605f4"
+  },
+  "actual_admission": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-SYNC-PROCESSVM-HOST13-FIVE-BUILD-ADMISSION-1",
+  "completed": [],
+  "native_acceptance": false,
+  "whole_file_retirement": false,
+  "physical_postjoin": "SEPARATE_ROOT_READER",
+  "compiler_container_Git_grant_actions": 0,
+  "first_failure": "AssertionError(('new Rust warnings need exact source/ABI disposition', ['warning: unused imports: `align_of` and `size_of`']))",
+  "traceback": "Traceback (most recent call last):\n  File \"/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-sync-processvm-host13-five-stage-source-1/qualify_produced_cohort.py\", line 30, in main\n    runpy.run_path(str(out/filename),run_name='__main__');report['completed'].append(filename)\n  File \"/home/holden/anaconda3/lib/python3.9/runpy.py\", line 268, in run_path\n    return _run_module_code(code, init_globals, run_name,\n  File \"/home/holden/anaconda3/lib/python3.9/runpy.py\", line 97, in _run_module_code\n    _run_code(code, mod_globals, init_globals,\n  File \"/home/holden/anaconda3/lib/python3.9/runpy.py\", line 87, in _run_code\n    exec(code, run_globals)\n  File \"/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-sync-processvm-host13-five-stage-source-1/actual-qualification-1/qualify_clone_pointer_and_warning_suffix.py\", line 57, in <module>\n    unknown=[h for h in new_actual_headers if not allowed(h)];assert not unknown,('new Rust warnings need exact source/ABI disposition',unknown)\nAssertionError: ('new Rust warnings need exact source/ABI disposition', ['warning: unused imports: `align_of` and `size_of`'])\n"
+}

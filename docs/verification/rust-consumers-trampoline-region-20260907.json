@@ -1,0 +1,1896 @@
+{
+  "baseline_revision": "24a151fef5b9fcf303fdbb8cf9762340cd4100fd",
+  "caveat": "File/crate inclusion is not per-function execution, native integration, absence of C, or whole-OS completion.",
+  "cmake_extra_dependencies": [],
+  "cmake_missing_dependencies": [],
+  "complete_unification_claimed": false,
+  "configuration": {
+    "ENABLE_QLMPI": false,
+    "ENABLE_RUST_IHK_MODULE_HELPERS": true,
+    "ENABLE_RUST_KERNEL": true,
+    "ENABLE_RUST_USER_TOOLS": true,
+    "ENABLE_UTI": false
+  },
+  "configuration_input": {
+    "path": "/work/compat-build-pageattrs-20260907/CMakeCache.txt",
+    "sha256": "b3e06186228b3032235be83e9e00d817e1c5591ba7df1b041197b0a6382a7545",
+    "size": 26552
+  },
+  "created_utc": "2026-09-07T20:09:23.225441+00:00",
+  "disposition_counts": {
+    "compatibility_default_user_tool": 7,
+    "compatibility_mcctrl_pending_native_adaptation": 1,
+    "compatibility_mckernel_crate": 64,
+    "explicit_tool_test_target_excluded_from_all": 1,
+    "historical_tool_helper_comparison_consumer": 1,
+    "native_kbuild_module_graph": 19,
+    "optional_qlmpi_disabled": 4,
+    "optional_uti_disabled": 2,
+    "separate_crash_extension_build": 1,
+    "verification_fixture": 40
+  },
+  "files": [
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mcctrl_pending_native_adaptation",
+      "path": "executer/kernel/mcctrl/rust/mcctrl_helpers.rs",
+      "pending": "Adapt existing Rust bodies to native Linux services and remove project C bridge dependencies.",
+      "raw_lines": 13526,
+      "sha256": "abc99c0e160d3a8aa1aa182f37f297cf3827f86faaac559117ae4df3197e9d14",
+      "size": 403227,
+      "source_consumers": [
+        "executer/kernel/mcctrl/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_default_user_tool",
+      "path": "executer/user/rust/arch_eclair_x86_64.rs",
+      "pending": "Use preserved tools in native end-to-end workload tests.",
+      "raw_lines": 312,
+      "sha256": "48e1af9fa7ec6c026a7a3c7657e147e04c905573ee5c08a7bcca4f5a57c634dd",
+      "size": 7574,
+      "source_consumers": [
+        "executer/user/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "optional_uti_disabled",
+      "path": "executer/user/rust/archdep_uti_x86_64.rs",
+      "pending": "Build and validate with ENABLE_UTI=ON before claiming this configuration.",
+      "raw_lines": 87,
+      "sha256": "3c51fa723ad859fbc1ca6023f126c47ea3df6252816bf429e17822337e7aab33",
+      "size": 1836,
+      "source_consumers": [
+        "executer/user/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_default_user_tool",
+      "path": "executer/user/rust/eclair_helpers.rs",
+      "pending": "Use preserved tools in native end-to-end workload tests.",
+      "raw_lines": 3307,
+      "sha256": "9f1f3b1bd2e496f9e4485535af4f3dd73bfcf975887ba9cdfed6a33d64940d0e",
+      "size": 90194,
+      "source_consumers": [
+        "executer/user/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_default_user_tool",
+      "path": "executer/user/rust/ldump2mcdump_helpers.rs",
+      "pending": "Use preserved tools in native end-to-end workload tests.",
+      "raw_lines": 1031,
+      "sha256": "4e036420cd4f3e62694c33d235747d23dabc4ac54236fe46b9cdf0290c93a9f0",
+      "size": 28439,
+      "source_consumers": [
+        "executer/user/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_default_user_tool",
+      "path": "executer/user/rust/libsched_yield.rs",
+      "pending": "Use preserved tools in native end-to-end workload tests.",
+      "raw_lines": 70,
+      "sha256": "ca22211d2a069230898127994c2489250b61d552b2bda72f5f9e3a845c338a7f",
+      "size": 1569,
+      "source_consumers": [
+        "executer/user/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_default_user_tool",
+      "path": "executer/user/rust/mcexec_helpers.rs",
+      "pending": "Use preserved tools in native end-to-end workload tests.",
+      "raw_lines": 8666,
+      "sha256": "3718c537b3912f0a2b7714ad3f6d0e176d1a51fcf8f9fb449515c1f5f2a90ced",
+      "size": 251439,
+      "source_consumers": [
+        "executer/user/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_default_user_tool",
+      "path": "executer/user/rust/mcinspect_helpers.rs",
+      "pending": "Use preserved tools in native end-to-end workload tests.",
+      "raw_lines": 3536,
+      "sha256": "7449e7856d6699ee9fa245a75f3e63488fb42603b0e19c574bf148c9d84a9590",
+      "size": 98836,
+      "source_consumers": [
+        "executer/user/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "optional_qlmpi_disabled",
+      "path": "executer/user/rust/ql_server.rs",
+      "pending": "Build and validate with ENABLE_QLMPI=ON before claiming this configuration.",
+      "raw_lines": 686,
+      "sha256": "42fdebd5d430ae437d1e6c10aa3e5d1252f0fc5eb605803847519438b658773e",
+      "size": 19248,
+      "source_consumers": [
+        "executer/user/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "optional_qlmpi_disabled",
+      "path": "executer/user/rust/ql_talker.rs",
+      "pending": "Build and validate with ENABLE_QLMPI=ON before claiming this configuration.",
+      "raw_lines": 150,
+      "sha256": "4319c82311c5faf97904b5a8661f24a7d83ae10a1fbf746d6ba74de362a3b02b",
+      "size": 3962,
+      "source_consumers": [
+        "executer/user/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "optional_qlmpi_disabled",
+      "path": "executer/user/rust/qlfort.rs",
+      "pending": "Build and validate with ENABLE_QLMPI=ON before claiming this configuration.",
+      "raw_lines": 128,
+      "sha256": "cc8399fa2e0edd7283daa58636dcc88f46fb33943a0318775ea5eb79968743a8",
+      "size": 3500,
+      "source_consumers": [
+        "executer/user/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "optional_qlmpi_disabled",
+      "path": "executer/user/rust/qlmpilib.rs",
+      "pending": "Build and validate with ENABLE_QLMPI=ON before claiming this configuration.",
+      "raw_lines": 350,
+      "sha256": "81ee1aa159d7a0c82ebbebad5bc98aceeb002b3b18219d2a27839f96bfd8685a",
+      "size": 10084,
+      "source_consumers": [
+        "executer/user/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "optional_uti_disabled",
+      "path": "executer/user/rust/syscall_intercept.rs",
+      "pending": "Build and validate with ENABLE_UTI=ON before claiming this configuration.",
+      "raw_lines": 276,
+      "sha256": "9a3ccdb0241db7ed69e83f34a0d0d9b7f997bde042e528bc57e67380524e335f",
+      "size": 7160,
+      "source_consumers": [
+        "executer/user/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "native_kbuild_module_graph",
+      "path": "host-kernel/native-rust/abi/x86_64.rs",
+      "pending": "Per-capability native runtime acceptance; staging does not prove every function is used.",
+      "raw_lines": 510,
+      "sha256": "89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3",
+      "size": 19740,
+      "source_consumers": [
+        "host-kernel/kbuild/stage-manifest.json",
+        "host-kernel/native-rust/ihk.rs",
+        "host-kernel/native-rust/ihk_smp_x86_64.rs"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "native_kbuild_module_graph",
+      "path": "host-kernel/native-rust/device_registry.rs",
+      "pending": "Per-capability native runtime acceptance; staging does not prove every function is used.",
+      "raw_lines": 1677,
+      "sha256": "43c3a4badd09bb70a31c9120d23e3b2b63ffa735412d172e0f0ac3d2edc85af5",
+      "size": 60221,
+      "source_consumers": [
+        "host-kernel/kbuild/stage-manifest.json",
+        "host-kernel/native-rust/ihk.rs"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "native_kbuild_module_graph",
+      "path": "host-kernel/native-rust/ihk.rs",
+      "pending": "Per-capability native runtime acceptance; staging does not prove every function is used.",
+      "raw_lines": 489,
+      "sha256": "ea3720403482c66412b476d1e3dfeb1819f7397ba26f35d3aad62c47f1f0c73b",
+      "size": 18630,
+      "source_consumers": [
+        "host-kernel/kbuild/stage-manifest.json",
+        "host-kernel/native-rust/ihk.rs"
+      ]
+    },
+    {
+      "baseline_state": "modified",
+      "disposition": "native_kbuild_module_graph",
+      "path": "host-kernel/native-rust/ihk_ioctl.rs",
+      "pending": "Per-capability native runtime acceptance; staging does not prove every function is used.",
+      "raw_lines": 306,
+      "sha256": "60739598352b236a0d698abae0c6104e7adfc05524be9a0653b2477b8728519e",
+      "size": 10467,
+      "source_consumers": [
+        "host-kernel/kbuild/stage-manifest.json",
+        "host-kernel/native-rust/ihk.rs"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "native_kbuild_module_graph",
+      "path": "host-kernel/native-rust/ihk_mapping.rs",
+      "pending": "Per-capability native runtime acceptance; staging does not prove every function is used.",
+      "raw_lines": 713,
+      "sha256": "d5941f05e42d1984e5562a51d478a6e2c10a8d33c27ed9a6289629941c0a9687",
+      "size": 21132,
+      "source_consumers": [
+        "host-kernel/kbuild/stage-manifest.json",
+        "host-kernel/native-rust/ihk_smp_x86_64.rs"
+      ]
+    },
+    {
+      "baseline_state": "modified",
+      "disposition": "native_kbuild_module_graph",
+      "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
+      "pending": "Per-capability native runtime acceptance; staging does not prove every function is used.",
+      "raw_lines": 633,
+      "sha256": "fb04c0901acfb93da37adeb50470a9be7e62b42d406e86636759eeabf3aae750",
+      "size": 23337,
+      "source_consumers": [
+        "host-kernel/kbuild/stage-manifest.json",
+        "host-kernel/native-rust/ihk_smp_x86_64.rs"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "native_kbuild_module_graph",
+      "path": "host-kernel/native-rust/ikc_master.rs",
+      "pending": "Per-capability native runtime acceptance; staging does not prove every function is used.",
+      "raw_lines": 804,
+      "sha256": "f7e8f8bc1cc860a2eb3724457d81bf03b132fa156eac5c5e258a393808e6ca1e",
+      "size": 26419,
+      "source_consumers": [
+        "host-kernel/kbuild/stage-manifest.json",
+        "host-kernel/native-rust/ihk.rs"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "native_kbuild_module_graph",
+      "path": "host-kernel/native-rust/ikc_queue.rs",
+      "pending": "Per-capability native runtime acceptance; staging does not prove every function is used.",
+      "raw_lines": 444,
+      "sha256": "514f9bce452498e5e9394c450532b040c44fce1ac7a6b5158c76f3d4c7270d40",
+      "size": 17662,
+      "source_consumers": [
+        "host-kernel/kbuild/stage-manifest.json",
+        "host-kernel/native-rust/ihk.rs"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "native_kbuild_module_graph",
+      "path": "host-kernel/native-rust/mcctrl.rs",
+      "pending": "Per-capability native runtime acceptance; staging does not prove every function is used.",
+      "raw_lines": 83,
+      "sha256": "1a8b85c379d6976d90ba462b9386d1bbd7fce83ca152e46bce391e6cfa6b5389",
+      "size": 3017,
+      "source_consumers": [
+        "host-kernel/kbuild/stage-manifest.json",
+        "host-kernel/native-rust/mcctrl.rs"
+      ]
+    },
+    {
+      "baseline_state": "modified",
+      "disposition": "native_kbuild_module_graph",
+      "path": "host-kernel/native-rust/os_registry.rs",
+      "pending": "Per-capability native runtime acceptance; staging does not prove every function is used.",
+      "raw_lines": 560,
+      "sha256": "9a751f4e5b5bb49d0cd1d5a1b18b8bc7af98033c4c7b33e1df0034b3f33174a9",
+      "size": 17961,
+      "source_consumers": [
+        "host-kernel/kbuild/stage-manifest.json",
+        "host-kernel/native-rust/ihk.rs"
+      ]
+    },
+    {
+      "baseline_state": "modified",
+      "disposition": "native_kbuild_module_graph",
+      "path": "host-kernel/native-rust/os_runtime.rs",
+      "pending": "Per-capability native runtime acceptance; staging does not prove every function is used.",
+      "raw_lines": 611,
+      "sha256": "c66c8d6960f761bdbb393bd4edb416b60e04651a812f624563707bc030eebcea",
+      "size": 24817,
+      "source_consumers": [
+        "host-kernel/kbuild/stage-manifest.json",
+        "host-kernel/native-rust/ihk.rs"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "native_kbuild_module_graph",
+      "path": "host-kernel/native-rust/page_allocator.rs",
+      "pending": "Per-capability native runtime acceptance; staging does not prove every function is used.",
+      "raw_lines": 603,
+      "sha256": "8e2af0cde06cbb70204540b493e8a0a66d5203195ed671235b64bed44d328bc5",
+      "size": 21301,
+      "source_consumers": [
+        "host-kernel/kbuild/stage-manifest.json",
+        "host-kernel/native-rust/ihk.rs"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "native_kbuild_module_graph",
+      "path": "host-kernel/native-rust/page_owner_registry.rs",
+      "pending": "Per-capability native runtime acceptance; staging does not prove every function is used.",
+      "raw_lines": 369,
+      "sha256": "443d58fa5b2e423f538c6622ef04d8e34338abc43c5e0fd34811d52fc21f4869",
+      "size": 13085,
+      "source_consumers": [
+        "host-kernel/kbuild/stage-manifest.json",
+        "host-kernel/native-rust/ihk.rs"
+      ]
+    },
+    {
+      "baseline_state": "added",
+      "disposition": "native_kbuild_module_graph",
+      "path": "host-kernel/native-rust/smp_cpu.rs",
+      "pending": "Per-capability native runtime acceptance; staging does not prove every function is used.",
+      "raw_lines": 728,
+      "sha256": "e5bccbe0191d4330c7ea051f7569bab7368b6bbf34f703a869c7f2671ee812c7",
+      "size": 26613,
+      "source_consumers": [
+        "host-kernel/kbuild/stage-manifest.json",
+        "host-kernel/native-rust/ihk_smp_x86_64.rs"
+      ]
+    },
+    {
+      "baseline_state": "added",
+      "disposition": "native_kbuild_module_graph",
+      "path": "host-kernel/native-rust/smp_image.rs",
+      "pending": "Per-capability native runtime acceptance; staging does not prove every function is used.",
+      "raw_lines": 302,
+      "sha256": "5093c5f6aaece48d4a6a6e4dff8463724554c105b7c6225c0dfb3c2c1da8c66a",
+      "size": 10902,
+      "source_consumers": [
+        "host-kernel/kbuild/stage-manifest.json",
+        "host-kernel/native-rust/ihk_smp_x86_64.rs"
+      ]
+    },
+    {
+      "baseline_state": "added",
+      "disposition": "native_kbuild_module_graph",
+      "path": "host-kernel/native-rust/smp_loader.rs",
+      "pending": "Per-capability native runtime acceptance; staging does not prove every function is used.",
+      "raw_lines": 86,
+      "sha256": "2978017e7cfdb66aafc7ad148c0921095fd38772a2dfa9645ab95c6299358dba",
+      "size": 3183,
+      "source_consumers": [
+        "host-kernel/kbuild/stage-manifest.json",
+        "host-kernel/native-rust/ihk_smp_x86_64.rs"
+      ]
+    },
+    {
+      "baseline_state": "added",
+      "disposition": "native_kbuild_module_graph",
+      "path": "host-kernel/native-rust/smp_memory.rs",
+      "pending": "Per-capability native runtime acceptance; staging does not prove every function is used.",
+      "raw_lines": 1153,
+      "sha256": "7c67955ad305026f48f0006589d6b04a168d31f9d6aaca791c722111ecbd4183",
+      "size": 45050,
+      "source_consumers": [
+        "host-kernel/kbuild/stage-manifest.json",
+        "host-kernel/native-rust/ihk_smp_x86_64.rs"
+      ]
+    },
+    {
+      "baseline_state": "modified",
+      "disposition": "native_kbuild_module_graph",
+      "path": "host-kernel/native-rust/smp_resource.rs",
+      "pending": "Per-capability native runtime acceptance; staging does not prove every function is used.",
+      "raw_lines": 3611,
+      "sha256": "d8c567be5d3e3953bf2954d5e43130e5204ae4f6ad4158d18e7efb99088c64d3",
+      "size": 129861,
+      "source_consumers": [
+        "host-kernel/kbuild/stage-manifest.json",
+        "host-kernel/native-rust/ihk_smp_x86_64.rs"
+      ]
+    },
+    {
+      "baseline_state": "added",
+      "disposition": "native_kbuild_module_graph",
+      "path": "host-kernel/native-rust/smp_startup.rs",
+      "pending": "Per-capability native runtime acceptance; staging does not prove every function is used.",
+      "raw_lines": 122,
+      "sha256": "12c3a816af6ff20dcf916c946b780ff988e90650300ab7c00e07a83cda1474a2",
+      "size": 4963,
+      "source_consumers": [
+        "host-kernel/kbuild/stage-manifest.json",
+        "host-kernel/native-rust/ihk_smp_x86_64.rs"
+      ]
+    },
+    {
+      "baseline_state": "modified",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/abi.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 2541,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "size": 76151,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/abort.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 65,
+      "sha256": "443c480129b1191c0cd2b7ccf3663e185f5cb7cb386512854286404e11236d2a",
+      "size": 1554,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/affinity.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 78,
+      "sha256": "99ccbc64101e6c551c8bc033016a616dbcd709ec0c6b46067bffe92e3839ef7e",
+      "size": 1909,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/ap.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 554,
+      "sha256": "274823af8fcdf10462e9d1c2dff532b251754b63971778f8b412f698093d1137",
+      "size": 16148,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/atomic_helpers.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 234,
+      "sha256": "8acf10a907cede816da8300d36bf967d938cc672dd75dbb3ecc8f3992ec42941",
+      "size": 6207,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/bitmap.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 1297,
+      "sha256": "9ac9a8be0b412844451ff65fd6a3b519e0372c73b8f920a72c59f528f1786a17",
+      "size": 28875,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/bitops.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 362,
+      "sha256": "ee6c09e24ecf0d98b49e0608d5cf1f1d75ce20b6c2c9131a5ce1827233dd8f0f",
+      "size": 8469,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/builtin_dma.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 160,
+      "sha256": "d8f210ea795836bb372a80b1d778aa409f00412f105de6f22e9ddc09d356c2b5",
+      "size": 4397,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/cls.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 275,
+      "sha256": "c0260e7634d53fcc0873746af8bd16b6691ee0a4b7f394ca18896aef070f6bba",
+      "size": 7877,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/cls_helpers.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 91,
+      "sha256": "ab25e420794160eff18989a7e240c602aa9cad2f9836cc87cdfff544bb3e5e0c",
+      "size": 2679,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/debug.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 448,
+      "sha256": "fed7537d21f5d5fe0fc3ffdb1fe44783f5f9ac13937b3bdbbcc452cc2fa5eb16",
+      "size": 13020,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/devobj.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 398,
+      "sha256": "037942094e57b06c3620d885aeb2816bd0f82c436512b383e852a8041f4163a5",
+      "size": 11862,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/fileobj.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 1066,
+      "sha256": "52836335742d3df2088d87c6454111f3094358b9ba604ea5c32d2f92243681bb",
+      "size": 32461,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/freeze.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 71,
+      "sha256": "825144fe47b7f0409e4830c5349c14389d84b48fad0aa464ea09c3f2bd186ae0",
+      "size": 2046,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/futex.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 1109,
+      "sha256": "f0ea48258f25720e2eb7995a412f324e20d691812050246a2dbcf4b2bfaa838d",
+      "size": 31977,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/gencore.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 446,
+      "sha256": "67754cacf5f7567a526bde5790bbd2114df81d8ddadbd3abc641123729742bdb",
+      "size": 12884,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/hash.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 41,
+      "sha256": "9dd27922476ed87117500dc130fdce75f389347beb32df8d47b34b014ffe0a03",
+      "size": 872,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/host_helpers.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 6100,
+      "sha256": "faa721cdb6296ad921695c936478f33fbfdf06ff5da586b2db830383afed1457",
+      "size": 178017,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/hugefileobj.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 485,
+      "sha256": "164579599f8651d0588a35b8951ee5b0d2174bb9da5e9a4c59be9f71dfbfb9a9",
+      "size": 14364,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/ikc_manycore.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 346,
+      "sha256": "f2467d093e709b406fb738812c85f0fb7c74edd0ee8cd977faf9e4a59e83df5b",
+      "size": 10222,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/ikc_master.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 542,
+      "sha256": "800a8846a4a58657b4fbef61b5cab9f0319992be96a0011f64bcbf6db7f372be",
+      "size": 15978,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/ikc_queue.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 747,
+      "sha256": "0248e1cb907dec5b57c41dc86ece8a51a5449335b7821eb1fb3ab2e7495f1277",
+      "size": 21793,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/init.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 608,
+      "sha256": "b2e67f1ad6e1366b175fe10e6c854835987f337f5cd72992f249c23f4931393a",
+      "size": 17286,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/lib.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 84,
+      "sha256": "c32b4d8d58e3ccfdd325b3a3cb6b5b8274404535afe3e3d58593618df5523136",
+      "size": 1274,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/list_helpers.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 230,
+      "sha256": "dac9c2f37c64967eebd8c466426fcdf1bf8d201b5c5ee5f1f466893517feb66a",
+      "size": 5770,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/listeners.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 155,
+      "sha256": "da1e4d66e7dd5e5d11aa479d18d108f72ef201b1d7014c7670f30e70747a1cef",
+      "size": 4517,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/llist.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 104,
+      "sha256": "246764fe6b346d78bb3cac84b1773469106dc99ae394cefe0c9317d08b7305f8",
+      "size": 2753,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/lock_helpers.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 443,
+      "sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3",
+      "size": 12202,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "modified",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/mem_helpers.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 6024,
+      "sha256": "35b25b1d67c86ba07a84b308a049806b25eaca4c6e34f2f1a631b6271bce6322",
+      "size": 177560,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/mikc.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 228,
+      "sha256": "2907fa6d7ca49a15b737435bd61b2c1f372618ec2396aea570a8d76fd8342024",
+      "size": 6093,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/numparse.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 1684,
+      "sha256": "2d0aa19a78c86a6ea9a7a25d95aea484f981f6219a215314ddbeaee6d89a46ab",
+      "size": 46665,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/object_helpers.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 8382,
+      "sha256": "303982620e8abcfd240b5a3661531af552d2f7065283230d40a234c5dd299e64",
+      "size": 235614,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/page_alloc.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 3021,
+      "sha256": "53d2ab2e0e2c6c901d7116a41a929b01e19bfc21955ad014281154b78c839917",
+      "size": 81383,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/page_helpers.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 656,
+      "sha256": "fa2f68c00a1568acf6e9ebc4bbdfb0b2bf13e2e5eff758b9048acb06a6aec597",
+      "size": 16412,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/pager.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 1159,
+      "sha256": "d0e498292ce0e2ad8c68f7c4e2bdffb3d2f6fa99962ae3340e74bede0cdfb30f",
+      "size": 35974,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/plist.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 187,
+      "sha256": "27e3cef715e399f28035ba62240e4a9b6c73948e37cfb8578e0614e4ee3141ca",
+      "size": 5274,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/process_helpers.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 11202,
+      "sha256": "b3a28ea8b0cd2594305644c224ae718eac384c0709305da315a6b8fd1285d00b",
+      "size": 324283,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/procfs.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 1040,
+      "sha256": "e5143baf5d840b6d7bc4f3ad414498b81db7b72d978b6d226370c1ef224eb31e",
+      "size": 35820,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/profile.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 624,
+      "sha256": "f7a614cee0c4f301bc8bc21be0782e6912b944992cf06a87673e68694c3c1389",
+      "size": 20105,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/pte_helpers.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 310,
+      "sha256": "d6117286cc222c27ae6f76773796efd77d9f87b969644555e0a6286721653e62",
+      "size": 7855,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/rbtree.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 774,
+      "sha256": "114e8dbd0b48abc156879bfd2f019071c30174019e97904c028ccee911840256",
+      "size": 22536,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/refcount_helpers.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 126,
+      "sha256": "07430d9fe1529bb81a4b76c7a998546b8e54219f1d7c2d91f398ea7c28b618ba",
+      "size": 3105,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/rlimit_helpers.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 87,
+      "sha256": "7310af0b90bd37d146f7741c4f93fc75e37d00691c6f72ced645879fe21d1c30",
+      "size": 2512,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/sched_helpers.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 5204,
+      "sha256": "1568d813841a6aa2ef9cf2a49387e337f65d11621defbcdd24a802e3d41a8a90",
+      "size": 159026,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/shmid_helpers.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 321,
+      "sha256": "03961aa8192d7b6dd3958c2dcbf4994c005a158bd932dfd37e1666ba4a96b912",
+      "size": 6666,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/shmobj.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 780,
+      "sha256": "bfb452f3e28a6e5b649f7128a8f18d17bbc6e04d3c978feca8ef27db82e8e0b5",
+      "size": 21670,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "modified",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/smp_ikc.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 372,
+      "sha256": "64056fc3418792b6693875bd0dc4b3c59a76585bce2ce61e2e7203c38e35cfbe",
+      "size": 11359,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/spinlock_helpers.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 130,
+      "sha256": "7b6c1e87f521eaf4674128afd7bff71785bead4ff7c9eb3c9a668d6a0cb0cbe7",
+      "size": 3105,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/string.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 523,
+      "sha256": "369d6a0851c293dc0bf984d5f6061e16adcbb9385f1c5a3be94683afafef6ef6",
+      "size": 12661,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "modified",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/syscall_policy.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 22711,
+      "sha256": "17e656126a1ea34b9fd22dac08549893c5cb579ac6e4f347ada2051c4e9020c9",
+      "size": 681875,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/sysfs.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 826,
+      "sha256": "b01664e416e5bab418fb2f8b2d4de6cf061c7f638c1fbce6a04c08d4667ae4f7",
+      "size": 25143,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/timer.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 260,
+      "sha256": "6f1b4789d52cd402b4707d66a929bdac25fc6235dcf3c5fd34b9f17a33e22d5a",
+      "size": 8090,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/tofu_uapi.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 3054,
+      "sha256": "1fa2b20f7d59e963c4c9cc0c1f5be777f791a1d77f3071e9a1a81e2000d72bbe",
+      "size": 83617,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/ubsan.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 356,
+      "sha256": "b60d0e76924877f961ea001c501fc3bcfc2fd88f31180db018543cd882b3f501",
+      "size": 9830,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/waitq.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 419,
+      "sha256": "246a850a7e305d69d55de5903273e35ba62cc204167cc95acc90973c8f0aaefc",
+      "size": 10868,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/x86_coredump.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 138,
+      "sha256": "ad0b5a20a61f54247b05af1b6d62d8c77e6d060705357bde188d1762635cb631",
+      "size": 3426,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/x86_cpu_helpers.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 2547,
+      "sha256": "06198638ade1e3ff18ebffc1c386bbea721d393f6b9189f3e2ce875e92d41803",
+      "size": 69605,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/x86_local.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 165,
+      "sha256": "9f102654a22895615da854b08ea8e043a6c17b9157e4b77e5b58783e70abeb3f",
+      "size": 4525,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/x86_memory_helpers.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 7039,
+      "sha256": "4d290fa03da23644642bdd5a9b5699b8dc1646b4b29427026e96c401415c25e2",
+      "size": 187212,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/x86_perfctr.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 578,
+      "sha256": "9cabce0fb4295d421a3f5194b7ebb854bdfa93c4126573a643ab2a08e9d11af7",
+      "size": 16091,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/x86_setup.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 934,
+      "sha256": "2a6f8a9962706aa85d7c71b3785c8e657b3637253b3aca26c521191d42440b49",
+      "size": 28187,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/x86_vsyscall.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 115,
+      "sha256": "87a888402b181da0bf9c94c6675b85f20cb21480041bb18c7ea42f0bf12f90d7",
+      "size": 2556,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "modified",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/xpmem_helpers.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 7781,
+      "sha256": "e8c7970b672c724f14da2eb0a12fdbcd11df62f824422a5f8a98da4364328255",
+      "size": 236058,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_mckernel_crate",
+      "path": "kernel/rust/zeroobj.rs",
+      "pending": "Native Linux 6.12 McKernel boot and retirement of remaining C implementation.",
+      "raw_lines": 236,
+      "sha256": "eed90e36aceaaa44936a7c9513c0768278cfdd61882eb9327941f0751c9e9b5b",
+      "size": 6442,
+      "source_consumers": [
+        "kernel/rust/lib.rs",
+        "kernel/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "verification_fixture",
+      "path": "scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs",
+      "pending": null,
+      "raw_lines": 249,
+      "sha256": "9c21a1b67751db98e407439b77d014be6b92ba3cf6457fde6a4118a798f4fa05",
+      "size": 8134,
+      "source_consumers": [
+        "scripts/tests"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "verification_fixture",
+      "path": "scripts/tests/fixtures/ihk_device_registry_compile.rs",
+      "pending": null,
+      "raw_lines": 195,
+      "sha256": "1d49b35baa181938eadfa2a918da6f63a8aa33bc2af32c3bd32036f02baf4717",
+      "size": 7225,
+      "source_consumers": [
+        "scripts/tests"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "verification_fixture",
+      "path": "scripts/tests/fixtures/ihk_ioctl_dispatch_compile.rs",
+      "pending": null,
+      "raw_lines": 281,
+      "sha256": "b5d9f8f94c198ad09b40dac94e1b9460b8cc905062de314ce87fe314d55f65a0",
+      "size": 10899,
+      "source_consumers": [
+        "scripts/tests"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "verification_fixture",
+      "path": "scripts/tests/fixtures/ihk_ioctl_fp0006_negative_dispatch.rs",
+      "pending": null,
+      "raw_lines": 167,
+      "sha256": "905e7cbdfb0655c2ef3fba3425bfa87057f473bb85ef669061d2b3523f2e8209",
+      "size": 6177,
+      "source_consumers": [
+        "scripts/tests"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "verification_fixture",
+      "path": "scripts/tests/fixtures/ihk_ioctl_fp0006_status_alias.rs",
+      "pending": null,
+      "raw_lines": 189,
+      "sha256": "4ec5ab91da89eff9ea3d506a0429a5c15a1eb11c0b53a45232b9b0b5738f0769",
+      "size": 6800,
+      "source_consumers": [
+        "scripts/tests"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "verification_fixture",
+      "path": "scripts/tests/fixtures/ihk_mapping_compile.rs",
+      "pending": null,
+      "raw_lines": 486,
+      "sha256": "b4cf480694f92950e05269bd2f48c1864d58fd62e34a7ca7a1f4db11f1608c93",
+      "size": 16511,
+      "source_consumers": [
+        "scripts/tests"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "verification_fixture",
+      "path": "scripts/tests/fixtures/ihk_mapping_must_use_compile_fail.rs",
+      "pending": null,
+      "raw_lines": 45,
+      "sha256": "ce088992a56b04f2a9c86bc3361331fb0a2bab520d24c39ba12fcaf06a08a419",
+      "size": 1081,
+      "source_consumers": [
+        "scripts/tests"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "verification_fixture",
+      "path": "scripts/tests/fixtures/ihk_native_master_compile.rs",
+      "pending": null,
+      "raw_lines": 444,
+      "sha256": "828cfeb5983da77ab6b7fcd69be34e8fcd7d3b63fb85ee31f4fc330521530488",
+      "size": 13786,
+      "source_consumers": [
+        "scripts/tests"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "verification_fixture",
+      "path": "scripts/tests/fixtures/ihk_native_queue_compile.rs",
+      "pending": null,
+      "raw_lines": 148,
+      "sha256": "95b555195003c7a0e84ac87aa975ba05d6f1b1d779487644a511487bf50f767b",
+      "size": 5966,
+      "source_consumers": [
+        "scripts/tests"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "verification_fixture",
+      "path": "scripts/tests/fixtures/ihk_os_registry_compile.rs",
+      "pending": null,
+      "raw_lines": 218,
+      "sha256": "24ff3e4464f07c8b66451fee1b782be10fcd2d81e7059bbdcd6ac34eaf760e0a",
+      "size": 8297,
+      "source_consumers": [
+        "scripts/tests"
+      ]
+    },
+    {
+      "baseline_state": "modified",
+      "disposition": "verification_fixture",
+      "path": "scripts/tests/fixtures/ihk_os_runtime_compile.rs",
+      "pending": null,
+      "raw_lines": 582,
+      "sha256": "5ec8a9469e22af3e9efe69cc804d8b212b647250d7382dfc6484b602bdcde0b2",
+      "size": 25097,
+      "source_consumers": [
+        "scripts/tests"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "verification_fixture",
+      "path": "scripts/tests/fixtures/ihk_page_allocator_compile.rs",
+      "pending": null,
+      "raw_lines": 513,
+      "sha256": "ba06a4de06e93c2b9db1d45cd188919719128974620a93d4c97545bfc56ddc35",
+      "size": 19197,
+      "source_consumers": [
+        "scripts/tests"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "verification_fixture",
+      "path": "scripts/tests/fixtures/ihk_page_allocator_lifetime_compile_fail.rs",
+      "pending": null,
+      "raw_lines": 18,
+      "sha256": "64efd946d3929d8cd101de93b9e6c10f4e88358ee93fef1bf647ffef43d51736",
+      "size": 631,
+      "source_consumers": [
+        "scripts/tests"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "verification_fixture",
+      "path": "scripts/tests/fixtures/ihk_page_allocator_must_use_compile_fail.rs",
+      "pending": null,
+      "raw_lines": 18,
+      "sha256": "ff237cf413a81b8651badf03ab465948bc6483279c4975a9266c730c3ce20a25",
+      "size": 590,
+      "source_consumers": [
+        "scripts/tests"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "verification_fixture",
+      "path": "scripts/tests/fixtures/ihk_page_owner_registry_compile.rs",
+      "pending": null,
+      "raw_lines": 401,
+      "sha256": "49da4c0db1455809f99bb59498e7a92400062e5ec8b609c3f9e4a1b00e99bdc3",
+      "size": 15873,
+      "source_consumers": [
+        "scripts/tests"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "verification_fixture",
+      "path": "scripts/tests/fixtures/ihk_page_owner_registry_lifetime_compile_fail.rs",
+      "pending": null,
+      "raw_lines": 29,
+      "sha256": "3408c0d545b67c49bb90ce076b44f6a16c64e64811d99144efd4525817bd7e8e",
+      "size": 848,
+      "source_consumers": [
+        "scripts/tests"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "verification_fixture",
+      "path": "scripts/tests/fixtures/ihk_page_owner_registry_sync_compile_fail.rs",
+      "pending": null,
+      "raw_lines": 14,
+      "sha256": "e9eba5b3a0aac117a66daac35bde6a19596475db18f36062b2fcf6d7c97865fd",
+      "size": 376,
+      "source_consumers": [
+        "scripts/tests"
+      ]
+    },
+    {
+      "baseline_state": "modified",
+      "disposition": "verification_fixture",
+      "path": "scripts/tests/fixtures/ihk_smp_buildid_compile.rs",
+      "pending": null,
+      "raw_lines": 268,
+      "sha256": "462c0401c78debaa65db84548c884e6f39600f07da11055bb9bff87db1aa496c",
+      "size": 9378,
+      "source_consumers": [
+        "scripts/tests"
+      ]
+    },
+    {
+      "baseline_state": "added",
+      "disposition": "verification_fixture",
+      "path": "scripts/tests/fixtures/ihk_smp_image_compile.rs",
+      "pending": null,
+      "raw_lines": 303,
+      "sha256": "d2578ad2a2db8756479008fc19c51b0cf59b84f608ced25b9e5163155ba2a9cf",
+      "size": 10826,
+      "source_consumers": [
+        "scripts/tests"
+      ]
+    },
+    {
+      "baseline_state": "added",
+      "disposition": "verification_fixture",
+      "path": "scripts/tests/fixtures/ihk_smp_loader_compile.rs",
+      "pending": null,
+      "raw_lines": 234,
+      "sha256": "b880450385c389927d0a07c035c54e8f7f349794a6511f94df1bc5148bd4a51e",
+      "size": 6699,
+      "source_consumers": [
+        "scripts/tests"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "verification_fixture",
+      "path": "scripts/tests/fixtures/ihk_smp_provider_open_lease_compile_fail.rs",
+      "pending": null,
+      "raw_lines": 23,
+      "sha256": "eefe2b68114c227c8591677a935818eacd6e3e135816466a2b8f1c63b1f9be2a",
+      "size": 541,
+      "source_consumers": [
+        "scripts/tests"
+      ]
+    },
+    {
+      "baseline_state": "modified",
+      "disposition": "verification_fixture",
+      "path": "scripts/tests/fixtures/ihk_smp_resource_compile.rs",
+      "pending": null,
+      "raw_lines": 473,
+      "sha256": "cd38c200b5aa8f7cfa2f42ac0f9b47676958df53a0fdf19aeb2354294f6188f1",
+      "size": 18394,
+      "source_consumers": [
+        "scripts/tests"
+      ]
+    },
+    {
+      "baseline_state": "modified",
+      "disposition": "verification_fixture",
+      "path": "scripts/tests/fixtures/ihk_smp_resource_workspace_alias_compile_fail.rs",
+      "pending": null,
+      "raw_lines": 36,
+      "sha256": "4a3ee8971e6e34f48f4ee0a920fcdb21e713784a01838da4b05ab3bcc7276159",
+      "size": 1059,
+      "source_consumers": [
+        "scripts/tests"
+      ]
+    },
+    {
+      "baseline_state": "added",
+      "disposition": "verification_fixture",
+      "path": "scripts/tests/fixtures/ihk_smp_startup_compile.rs",
+      "pending": null,
+      "raw_lines": 175,
+      "sha256": "1546f2519571e0ff74b116691ae9124c335a068fb294d0db642c0e52aab884d5",
+      "size": 5955,
+      "source_consumers": [
+        "scripts/tests"
+      ]
+    },
+    {
+      "baseline_state": "added",
+      "disposition": "verification_fixture",
+      "path": "scripts/tests/fixtures/mckernel_irq_work_compile.rs",
+      "pending": null,
+      "raw_lines": 331,
+      "sha256": "3a83aeb264363dbed77201521c021f892da72bfcdd955772490d4525a49fd8cf",
+      "size": 10664,
+      "source_consumers": [
+        "scripts/tests"
+      ]
+    },
+    {
+      "baseline_state": "added",
+      "disposition": "verification_fixture",
+      "path": "scripts/tests/fixtures/mckernel_irq_work_verify.rs",
+      "pending": null,
+      "raw_lines": 349,
+      "sha256": "8f7eb0c3caf065e3300231a9ae8ed05afce258a62d67d4fc215e954583ebe13e",
+      "size": 13862,
+      "source_consumers": [
+        "scripts/tests"
+      ]
+    },
+    {
+      "baseline_state": "added",
+      "disposition": "verification_fixture",
+      "path": "scripts/tests/fixtures/mckernel_trampoline_region_verify.rs",
+      "pending": "Reuse the tested low-memory owner in native SMP boot with exact OS/CPU/IRQ lifetime integration.",
+      "raw_lines": 198,
+      "sha256": "ffe16cdafea78a3122905195002fc8cce1c0980a2e809819d49370febf62ad5b",
+      "size": 7936,
+      "source_consumers": [
+        "scripts/native-trampoline-region-init.sh",
+        "docs/verification/native-trampoline-region-checkpoint-20260907.json"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "verification_fixture",
+      "path": "scripts/tests/fixtures/rs006_miscdevice_module_owner_compile.rs",
+      "pending": null,
+      "raw_lines": 152,
+      "sha256": "909cabadb7862019bc8826dd70ab4bec84e87175b3a42a1570741f8c9fee79c8",
+      "size": 4258,
+      "source_consumers": [
+        "scripts/tests"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "verification_fixture",
+      "path": "scripts/tests/fixtures/rust-core-rocky-6.12/rust/bindings/lib.rs",
+      "pending": null,
+      "raw_lines": 51,
+      "sha256": "19e4c18d9999bd6871d5ea01decb37956c96a7dbf3064578e96130f539405524",
+      "size": 1457,
+      "source_consumers": [
+        "scripts/tests"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "verification_fixture",
+      "path": "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/alloc/allocator.rs",
+      "pending": null,
+      "raw_lines": 74,
+      "sha256": "15ce17c9dba35266ff57c1da606f98f2fa4ccb0048fea7d196cce22a4febdc3f",
+      "size": 3079,
+      "source_consumers": [
+        "scripts/tests"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "verification_fixture",
+      "path": "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/block/mq/tag_set.rs",
+      "pending": null,
+      "raw_lines": 86,
+      "sha256": "f811f6d04fec48a695495b38083c7729cdd574696310f1e53072e1f793fe1fa3",
+      "size": 2914,
+      "source_consumers": [
+        "scripts/tests"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "verification_fixture",
+      "path": "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/init/macros.rs",
+      "pending": null,
+      "raw_lines": 1400,
+      "sha256": "5f7171499edf31631d6aa25df850a81f902c2473fe94d3d6a75137b926e2c336",
+      "size": 57388,
+      "source_consumers": [
+        "scripts/tests"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "verification_fixture",
+      "path": "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/ioctl.rs",
+      "pending": null,
+      "raw_lines": 72,
+      "sha256": "5825ea4fa49271407d85d6be03f03419431732fc6534cd0e6d551aa29dd8f085",
+      "size": 2062,
+      "source_consumers": [
+        "scripts/tests"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "verification_fixture",
+      "path": "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/lib.rs",
+      "pending": null,
+      "raw_lines": 148,
+      "sha256": "730fce907dbd8c48439f63f506d9400ceb707282846f1e325822c77dc99a56f0",
+      "size": 4089,
+      "source_consumers": [
+        "scripts/tests"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "verification_fixture",
+      "path": "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/list/arc.rs",
+      "pending": null,
+      "raw_lines": 521,
+      "sha256": "69c4d3226b174ed5a183e501a82423d655dd5f54d2664be11fcae1297bec2e1f",
+      "size": 20203,
+      "source_consumers": [
+        "scripts/tests"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "verification_fixture",
+      "path": "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/sync/arc.rs",
+      "pending": null,
+      "raw_lines": 761,
+      "sha256": "3f3a8b0d560dcf5a1c965fbe677ca759a43e4fae405d0cec63196577672d51f9",
+      "size": 27515,
+      "source_consumers": [
+        "scripts/tests"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "verification_fixture",
+      "path": "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/types.rs",
+      "pending": null,
+      "raw_lines": 534,
+      "sha256": "3fe4d0cc0910560abefbd668afdb7aad90629b90079ad5e09a6b4346203f9413",
+      "size": 19590,
+      "source_consumers": [
+        "scripts/tests"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "verification_fixture",
+      "path": "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/uaccess.rs",
+      "pending": null,
+      "raw_lines": 388,
+      "sha256": "e0127f615c717909d31042f8f7decef96bbbb72f6987579954cb9036774bdf07",
+      "size": 14314,
+      "source_consumers": [
+        "scripts/tests"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "verification_fixture",
+      "path": "scripts/tests/fixtures/rust-core-rocky-6.12/rust/macros/module.rs",
+      "pending": null,
+      "raw_lines": 377,
+      "sha256": "5fbe26a038e97bdd04e629195e405987f61132d688f4fe808742d02a6bce223f",
+      "size": 13807,
+      "source_consumers": [
+        "scripts/tests"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "verification_fixture",
+      "path": "scripts/tests/fixtures/rust-core-rocky-6.12/rust/uapi/lib.rs",
+      "pending": null,
+      "raw_lines": 27,
+      "sha256": "bdfbafb3df88795d587d42a00ca1a574b31b8668721c645c87eff3ecf318fef8",
+      "size": 718,
+      "source_consumers": [
+        "scripts/tests"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "separate_crash_extension_build",
+      "path": "tools/crash/rust/mckernel_crash_helpers.rs",
+      "pending": "Validate the separate extension with its crash headers; source copying alone is not a build.",
+      "raw_lines": 1761,
+      "sha256": "2209a8b79d692348ee0eafbea8a3334910746b220cc8c5f240c2fda5b9534cd1",
+      "size": 44853,
+      "source_consumers": [
+        "tools/crash/CMakeLists.txt",
+        "tools/crash/mckernel.mk.in"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "compatibility_default_user_tool",
+      "path": "tools/mcstat/rust/mcstat.rs",
+      "pending": "Compare duplicated policy with mcstat_helpers.rs and retain relevant regression cases.",
+      "raw_lines": 645,
+      "sha256": "69609bee1602ba37849be3dd6e1e745d957b56c729e5206a444e69f160bef2d2",
+      "size": 17509,
+      "source_consumers": [
+        "tools/mcstat/CMakeLists.txt"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "historical_tool_helper_comparison_consumer",
+      "path": "tools/mcstat/rust/mcstat_helpers.rs",
+      "pending": "Compare parser, formatting and control policy against active mcstat.rs; consolidate proven common bodies.",
+      "raw_lines": 632,
+      "sha256": "dacd58bf3c3d333f85716fda2171bcc2d6b6adbeb64edd21a64da5f43b59cc7c",
+      "size": 15904,
+      "source_consumers": [
+        "kernel/rust/tests/run_equivalence.sh"
+      ]
+    },
+    {
+      "baseline_state": "unchanged",
+      "disposition": "explicit_tool_test_target_excluded_from_all",
+      "path": "tools/mcstat/rust/runtest.rs",
+      "pending": "Invoke mcstat_runtest explicitly; the default build does not select it.",
+      "raw_lines": 79,
+      "sha256": "65758d1e00b7a1b3dee4e658b4af6203f1ffb7740870a1a1b8b8b52c3f827198",
+      "size": 1653,
+      "source_consumers": [
+        "tools/mcstat/CMakeLists.txt"
+      ]
+    }
+  ],
+  "generator": {
+    "path": "/work/inventory-rust-consumers-trampoline-region-20260907.py",
+    "sha256": "042d1430069a11d15cd3846b9de628992e3fa5c43e0595266e4f7eb3fc035404",
+    "size": 10036
+  },
+  "input_identities": [
+    {
+      "path": "docs/verification/rust-reuse-baseline-24a151fe.json",
+      "sha256": "6a84946a9569a22359d0f7f5c5bb799eb27f9c86e4d3edb0dce6190dd3e54bb4",
+      "size": 30037
+    },
+    {
+      "path": "executer/kernel/mcctrl/CMakeLists.txt",
+      "sha256": "f86000b2034abd00c01431fb81bf6e8aa31ee1808c360da05d54023ad5380ba3",
+      "size": 3845
+    },
+    {
+      "path": "executer/user/CMakeLists.txt",
+      "sha256": "570a4477c39032fbe7d014fbb24f8cfb0ab562f5fb631fa9e0dc4cdad181025e",
+      "size": 19637
+    },
+    {
+      "path": "host-kernel/kbuild/stage-manifest.json",
+      "sha256": "e6925ba14d3e56ec68053eb7e67c8fa3438babd54423f9d6bb2fade8bc5afb76",
+      "size": 7886
+    },
+    {
+      "path": "kernel/CMakeLists.txt",
+      "sha256": "e918ff253657eb547be53a64fc12642d9849e9d590410ec389cd1f1d8bcc410b",
+      "size": 21309
+    },
+    {
+      "path": "kernel/rust/lib.rs",
+      "sha256": "c32b4d8d58e3ccfdd325b3a3cb6b5b8274404535afe3e3d58593618df5523136",
+      "size": 1274
+    },
+    {
+      "path": "kernel/rust/tests/run_equivalence.sh",
+      "sha256": "e6c51a0c45bc496666eab2cf7241332b480cc093383bc2434625929ca25b9435",
+      "size": 5002742
+    },
+    {
+      "path": "tools/crash/CMakeLists.txt",
+      "sha256": "af62727d88b8d1e2381a06f5a2948461d8a46b6ae18d58d114e0fa61a64c2bc6",
+      "size": 347
+    },
+    {
+      "path": "tools/crash/mckernel.mk.in",
+      "sha256": "fed060504a0ee8718eadcf61655e094e98141fc71bca5f65b4530d93b1d36e5c",
+      "size": 2056
+    },
+    {
+      "path": "tools/mcstat/CMakeLists.txt",
+      "sha256": "6db1e3921c59a4894540d19fd1cd37560ca50a7363ade71143033169114824b5",
+      "size": 2799
+    }
+  ],
+  "kernel_crate_files": 64,
+  "native_module_graph": {
+    "host-kernel/native-rust/ihk.rs": [
+      "host-kernel/native-rust/abi/x86_64.rs",
+      "host-kernel/native-rust/device_registry.rs",
+      "host-kernel/native-rust/ihk.rs",
+      "host-kernel/native-rust/ihk_ioctl.rs",
+      "host-kernel/native-rust/ikc_master.rs",
+      "host-kernel/native-rust/ikc_queue.rs",
+      "host-kernel/native-rust/os_registry.rs",
+      "host-kernel/native-rust/os_runtime.rs",
+      "host-kernel/native-rust/page_allocator.rs",
+      "host-kernel/native-rust/page_owner_registry.rs"
+    ],
+    "host-kernel/native-rust/ihk_smp_x86_64.rs": [
+      "host-kernel/native-rust/abi/x86_64.rs",
+      "host-kernel/native-rust/ihk_mapping.rs",
+      "host-kernel/native-rust/ihk_smp_x86_64.rs",
+      "host-kernel/native-rust/smp_cpu.rs",
+      "host-kernel/native-rust/smp_image.rs",
+      "host-kernel/native-rust/smp_loader.rs",
+      "host-kernel/native-rust/smp_memory.rs",
+      "host-kernel/native-rust/smp_resource.rs",
+      "host-kernel/native-rust/smp_startup.rs"
+    ],
+    "host-kernel/native-rust/mcctrl.rs": [
+      "host-kernel/native-rust/mcctrl.rs"
+    ]
+  },
+  "preservation_counts": {
+    "added": 11,
+    "modified": 14,
+    "unchanged": 115
+  },
+  "production_gate_credit": false,
+  "removed_baseline_files": [],
+  "schema": "mckernel-rust-consumer-inventory-v1",
+  "scope": "Main repository Rust source selection; x86_64 compatibility configuration and current native staging.",
+  "source_parent": "ef68f40fa638d37a6d9eff4644b199b96d4a0266"
+}

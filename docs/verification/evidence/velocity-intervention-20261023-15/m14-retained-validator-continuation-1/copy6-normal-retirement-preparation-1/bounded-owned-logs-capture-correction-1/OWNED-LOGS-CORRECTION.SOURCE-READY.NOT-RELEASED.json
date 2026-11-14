@@ -1,0 +1,124 @@
+{
+  "actual_cleanup": null,
+  "actual_owned_lifecycle": null,
+  "actual_root_observation": null,
+  "case": {
+    "bytes": 15850,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/copy6-normal-retirement-preparation-1/bounded-owned-logs-capture-correction-1/CURRENT-RETAINED-VALIDATOR-FAILURE.CASE.json",
+    "sha256": "54883f8449dff36370eed07d7868c4b8aac9dd8e85765e27a841e3b173320c0d"
+  },
+  "child_profile": {
+    "AS": 2147483648,
+    "FSIZE": 1048576,
+    "NOFILE": 256,
+    "core": 0,
+    "retire_seconds": 6,
+    "wall_seconds": 30
+  },
+  "future_expected_lifecycle_result": {
+    "fixture_sha256": "9474efff1ee2ed77ee8340c3a37cc6bf57cf83b68c3e0fdef0e823d7b0560b60",
+    "schema": "mckernel.copy6.exact-owned-log-lifecycle.v1",
+    "source_sha256": "fb3411e90b4e0e80e5cc57778464d4dc73cf73a65d7dd944eb8e7cd60f457862",
+    "status": "PASS",
+    "tests_run": 7
+  },
+  "important_operation_order": "Root read-only observer only as preflight; do not separately execute cleanup recover(False) and then reuse its fixed capture namespace. One genuine cleanup invocation may create <=8 numbered owned log captures, never overwrite. File creation marks transaction mutation latch; cancellation/uncertainty refuses or quarantines under unchanged transaction owner.",
+  "independent_execution_release": null,
+  "independent_source_review": null,
+  "lifecycle_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=30:30",
+    "--fsize=16777216:16777216",
+    "--nofile=256:256",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/copy6-normal-retirement-preparation-1/bounded-owned-logs-capture-correction-1/test_owned_logs_lifecycle.ORDINARY.py"
+  ],
+  "lifecycle_root_capture": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/root-copy6-owned-logs-lifecycle-tests-1",
+  "lifecycle_test": {
+    "bytes": 4602,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/copy6-normal-retirement-preparation-1/bounded-owned-logs-capture-correction-1/test_owned_logs_lifecycle.ORDINARY.py",
+    "sha256": "9474efff1ee2ed77ee8340c3a37cc6bf57cf83b68c3e0fdef0e823d7b0560b60"
+  },
+  "observer": {
+    "bytes": 31523,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/copy6-normal-retirement-preparation-1/bounded-owned-logs-capture-correction-1/observe_current_copy6_retained_validator_retirement.READONLY.py",
+    "sha256": "b24aad3c44a08ea50f6c000d9cec7bc1140cbee607c27032d6454a5ae6fc9711"
+  },
+  "original_HOLD_source": {
+    "bytes": 99398,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/copy6-normal-retirement-preparation-1/cleanup_failed_retained_validator.py",
+    "sha256": "e64f1bc5114c9648f4e2fdbd8d87ab5f48ebee7527a89f3de811f566eb07d505"
+  },
+  "production_capture_root": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/copy6-normal-retirement-preparation-1/bounded-owned-logs-capture-correction-1/owned-logs-client-capture-1",
+  "profile": {
+    "AS": 2147483648,
+    "CPU": 0,
+    "CPU_seconds": 30,
+    "FSIZE": 16777216,
+    "NOFILE": 256,
+    "core": 0,
+    "jobs": 1,
+    "retire_seconds": 6,
+    "wall_seconds": 45
+  },
+  "retained_actual12_predicate_join": {
+    "bytes": 1100,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/root-copy6-early-retirement-predicate-tests-1/WHOLE-JOIN.json",
+    "sha256": "a0d65b288b1ccc5be43c278c801481d881c7c3154939f46ea940656a6721f6f9"
+  },
+  "retained_actual12_result": {
+    "bytes": 274,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/copy6-normal-retirement-preparation-1/ACTUAL-PURE-FIXTURE-RESULT.json",
+    "sha256": "8e6a11b8de1d4caafeb3b81254c850be44642759e4e9d23de24a3c3857c969ed"
+  },
+  "root_cleanup_argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/copy6-normal-retirement-preparation-1/bounded-owned-logs-capture-correction-1/cleanup_failed_retained_validator.py",
+    "--release",
+    "ROOT_GENUINE_CLEANUP_RELEASE",
+    "--release-sha256",
+    "ROOT_GENUINE_CLEANUP_RELEASE_SHA",
+    "--execute"
+  ],
+  "root_readonly_argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/copy6-normal-retirement-preparation-1/bounded-owned-logs-capture-correction-1/observe_current_copy6_retained_validator_retirement.READONLY.py",
+    "--git-commit",
+    "ROOT_FETCHED_COMMIT",
+    "--git-tree",
+    "ROOT_FETCHED_TREE",
+    "--observation-release",
+    "ROOT_GENUINE_RELEASE",
+    "--observation-release-sha256",
+    "ROOT_GENUINE_RELEASE_SHA"
+  ],
+  "root_release_additional_fields": [
+    "owned_logs_lifecycle_whole_join",
+    "owned_logs_lifecycle_test_sha256"
+  ],
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source": {
+    "bytes": 104260,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/copy6-normal-retirement-preparation-1/bounded-owned-logs-capture-correction-1/cleanup_failed_retained_validator.py",
+    "sha256": "fb3411e90b4e0e80e5cc57778464d4dc73cf73a65d7dd944eb8e7cd60f457862"
+  },
+  "status": "BOUNDED_OWNED_LOGS_SOURCE_READY_NO_JOB_GRANTED",
+  "transaction_archive_sentinel_recover_root_command_AST_unchanged": true,
+  "unchanged_predicates_AST": true
+}

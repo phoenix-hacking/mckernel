@@ -1,0 +1,105 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_RUST_PUBLIC_CPU_BATCH_IMPLEMENTED_UNCOMPILED",
+  "exports": [
+    "ihklib_device_open",
+    "ihk_reserve_cpu",
+    "ihk_release_cpu",
+    "ihk_get_num_reserved_cpus",
+    "ihk_query_cpu"
+  ],
+  "inputs": [
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/ihklib.c",
+      "sha256": "6f2c7321667f405b3dc483c089eb5119db0d0a758c8e17a86460f9aad8dcdeab",
+      "bytes": 103430,
+      "dev": 66306,
+      "inode": 47467165,
+      "uid": 1000,
+      "mode": 33204
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/include/ihk/ihk_host_user.h",
+      "sha256": "2335260024075a08becbe74651162a950aee8bea603e9a451cb8bcae3aa0ef97",
+      "bytes": 5704,
+      "dev": 66306,
+      "inode": 47467151,
+      "uid": 1000,
+      "mode": 33204
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/include/ihk/ihk_rusage.h",
+      "sha256": "afc786f096e70bd9b89834b5b0af81ee0e1cfe3f3cd2e73ef5f88db4d63d5d01",
+      "bytes": 1404,
+      "dev": 66306,
+      "inode": 47467153,
+      "uid": 1000,
+      "mode": 33204
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/include/ihk/ihklib.h",
+      "sha256": "00b5bc8a195fbb94e2b14f73c6925bb85621da8a33aa349d32f20c70dcc4055a",
+      "bytes": 5025,
+      "dev": 66306,
+      "inode": 47467154,
+      "uid": 1000,
+      "mode": 33204
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/CMakeLists.txt",
+      "sha256": "2f827651e238bc81ee455eeb6b5aaa24425c9736e3c176d6abd3f0018df8f59f",
+      "bytes": 2262,
+      "dev": 66306,
+      "inode": 47467161,
+      "uid": 1000,
+      "mode": 33204
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/ihkconfig.c",
+      "sha256": "ce0d8ec9c3be60838389c627425335a86fa099fcdefbc1fb4fec8c204bb8314e",
+      "bytes": 12217,
+      "dev": 66306,
+      "inode": 47467164,
+      "uid": 1000,
+      "mode": 33204
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/CMakeCache.txt",
+      "sha256": "50e1523f485648386b9037630ce7306d8315c4dc08f8b9ca56f3a401f0ed0110",
+      "bytes": 26414,
+      "dev": 66306,
+      "inode": 48667014,
+      "uid": 1000,
+      "mode": 33188
+    }
+  ],
+  "selected_profile": {
+    "WITH_KRM": false,
+    "DEBUG": false,
+    "target": "x86_64 Linux libc ABI"
+  },
+  "semantics": [
+    "initial readability before argument validation",
+    "zero reserve/release has no open/ioctl",
+    "second readability inside device_open",
+    "negative device_open cleanup close except fd=-1 retained from originalC",
+    "query exact GET count then QUERY onlynonzero",
+    "ioctl anynonzero vs negative distinctions preserved",
+    "return captured before close may altererrno",
+    "original CPU pointer/count unchanged in request, output buffer writes driver-owned"
+  ],
+  "test": "test_cpu_equivalence.c: actual current C extracted bodies vs Rust using controlled libc/ioctl only; no device effects; 4608 planned vectors; actual count printed only after granted execution",
+  "qualification": {
+    "actual_fixture": null,
+    "production_CMake_selection": null,
+    "production_link": null,
+    "native": null
+  },
+  "remaining_debt": [
+    "WITH_KRM reservation policy",
+    "reserve_mem/release_mem/query_mem/config",
+    "OS instance APIs",
+    "remaining ihklib APIs and actual C-free shared-library selector"
+  ],
+  "canonical_changes": false
+}

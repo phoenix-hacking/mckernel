@@ -1,0 +1,54 @@
+{
+  "status": "PREPARATION_ONLY_NOT_RUNNABLE_PENDING_BOTH_ACTUAL_PROVIDER_GATES",
+  "object_inputs": [
+    {
+      "role": "actual_current97",
+      "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-next-provider-join-1/output/scheduler_next_provider_partial.o",
+      "sha256": "4b4cc4a00304bb0896864446896cbf159cd597bafa8a111b141bf346c460eb91"
+    },
+    {
+      "role": "lapic-producer",
+      "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-unit-1/output/scheduler_lapic_provider.o",
+      "sha256": "2f149772ebb539640d2a5eafcffaef6768ce40e57ed0a0a180934f5d91903ecb"
+    },
+    {
+      "role": "concrete-ipi-producer",
+      "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-concrete-provider-unit-1/output/scheduler_ipi_concrete_provider.o",
+      "sha256": "1f4a6b978f6b81737c4bf2bf62c94fbdd71a4003c59161db7abec761209be2e0"
+    }
+  ],
+  "only3future_payloads": [
+    [
+      "/usr/bin/ld",
+      "-r",
+      "-o",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-ipi-join-1/output/scheduler_lapic_ipi_partial.o",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-next-provider-join-1/output/scheduler_next_provider_partial.o",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-unit-1/output/scheduler_lapic_provider.o",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-concrete-provider-unit-1/output/scheduler_ipi_concrete_provider.o"
+    ],
+    [
+      "/usr/bin/nm",
+      "-S",
+      "--format=posix",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-ipi-join-1/output/scheduler_lapic_ipi_partial.o"
+    ],
+    [
+      "/usr/bin/readelf",
+      "-h",
+      "-SW",
+      "-Ws",
+      "-Wr",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-ipi-join-1/output/scheduler_lapic_ipi_partial.o"
+    ]
+  ],
+  "joined_object": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-ipi-join-1/output/scheduler_lapic_ipi_partial.o",
+  "required_metadata_states": {
+    "LAPIC": "pending actualCALLEDgate not rawcapture",
+    "concrete_IPI": "pending exactREQUEST/gatepaths andactualCALLEDgate"
+  },
+  "base_actual97_PASS": true,
+  "compiler_metadata_link_runtime_commands_by_worker": 0,
+  "no_runnable_REQUEST_or_admission": true,
+  "scope": "Only3exactoperands; alloldowners/data/descriptors/slot/relocs/tables/private/aliases preserved. No hardware/function/default/native/image/percentage claim."
+}

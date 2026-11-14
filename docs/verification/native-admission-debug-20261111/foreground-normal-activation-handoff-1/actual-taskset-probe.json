@@ -1,0 +1,38 @@
+{
+  "schema": "foreground-taskset-command-prefix-probe-v1",
+  "failed": {
+    "argv": [
+      "/usr/bin/taskset",
+      "-c",
+      "0",
+      "--",
+      "/usr/bin/true"
+    ],
+    "tool_result": {
+      "chunk_id": "66d783",
+      "wall_time_seconds": 1.4976e-05,
+      "exit_code": 127,
+      "original_token_count": 15,
+      "output": "taskset: failed to execute --: No such file or directory\n"
+    }
+  },
+  "corrected": {
+    "argv": [
+      "/usr/bin/taskset",
+      "-c",
+      "0",
+      "/home/holden/anaconda3/bin/python3",
+      "-B",
+      "-c",
+      "import os; print(sorted(os.sched_getaffinity(0)))"
+    ],
+    "tool_result": {
+      "chunk_id": "dd1e24",
+      "wall_time_seconds": 3.5179e-05,
+      "exit_code": 0,
+      "original_token_count": 1,
+      "output": "[0]\n"
+    }
+  },
+  "scope": "Only harmless command-prefix compatibility; no stop/start/service/account/native action or green campaign rerun."
+}

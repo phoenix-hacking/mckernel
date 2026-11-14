@@ -1,0 +1,120 @@
+{
+  "schema": "mckernel.signal-mask-restore-static-reference-independent-review.v1",
+  "recorded_at_utc": "2026-10-17T03:28:32Z",
+  "decision": "PASS_PREPARATION_ONLY",
+  "reviewer": "/root/cheap_profile_review",
+  "model": "gpt-6.1-sol",
+  "implementation_ownership": false,
+  "scope": "Exact retained static payload/default-collector build artifacts and ordinary Linux payload reference result. No guest execution, McKernel behavior, arbitrary whole-mask semantics or formal acceptance.",
+  "author_record": {
+    "path": "docs/verification/evidence/signal-mask-restore-static-reference-20261017.json",
+    "sha256": "96c16d4d11e31cea3d0b69ac224913508a8c4972494860dc0586736a0476a32e",
+    "status": "PASS_STATIC_COMPILE_LINUX_REFERENCE"
+  },
+  "profile": {
+    "path": "docs/verification/evidence/signal-mask-restore-compile-profile-review-20261017.json",
+    "sha256": "320d19452c638e0853d21798628d59387d551ff2b212806e1061d9d0b644ff31",
+    "decision": "PASS_LAYER_B"
+  },
+  "evidence_root": {
+    "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-compile-20261017-nX2kCR",
+    "device": 1828,
+    "inode": 6456967,
+    "mode": 448
+  },
+  "retained_observer": {
+    "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-compile-20261017-nX2kCR/observe.py",
+    "sha256": "33c8f321876f65f7b5a39ea9f15403eec6a7c90acc799f7c5daaa28e43e8d16e",
+    "record_sha256": "9b5b5f126b9744619901986a9d9b143ee369119bb8f05c08e9fc0a992ff7d20a",
+    "source_inspected": true,
+    "executed_by_reviewer": false
+  },
+  "artifacts": {
+    "app": {
+      "sha256": "8be0b167d7267d4ef5aa122f62ebdbd95d6aa0be4f75384b9285d9983683c234",
+      "size": 872056,
+      "device": 1828,
+      "inode": 6456985,
+      "mode": 448
+    },
+    "init": {
+      "sha256": "8089d5b7bcf8166e69cb9ea90fc4614674b4906813a40aa219972c02c7ec5e39",
+      "size": 1021928,
+      "device": 1828,
+      "inode": 6456990,
+      "mode": 448
+    },
+    "app.d": {
+      "sha256": "b7eb3103e801888155ddd4950d19be574339710e04017b8a48d6ca7f5fa784d5",
+      "size": 4234
+    },
+    "collector.d": {
+      "sha256": "c20853f27a1c7fd2beac35189fc6cbf8a69d6b9c31e084434c5a8d50ff1fe8d1",
+      "size": 7519
+    }
+  },
+  "independent_validation": {
+    "profile_source_tools": "Rehashed the exact profile, all four frozen source/oracle/preparation inputs, installed compiler/assembler/linker/Python identities and every profile-listed static archive/startup/compiler helper/header input; all match.",
+    "command_join": "Retained record.json matches author-record artifacts, exact commands, environment, initial blocked mask, consumed input hashes, observer/profile hashes and status. Both compile argv lists exactly match the approved static/no-PIE/noexecstack flags and -MD/-MF depfiles, with no ND_CORE/ND_FUTEX definitions. Both compile statuses are raw 0 newline with empty stdout/stderr.",
+    "capture_join": "All four artifact hashes/sizes and all 13 capture hashes/hex bytes match their actual retained files, including the observer source, outer status/time output and raw Linux stdout/stderr/status. Command stream hashes join the same captures.",
+    "dependency_join": "Independently parsed both retained depfiles, expanded continuations and recomputed their full 166-file union. It exactly matches consumed_inputs_sha256, and every consumed source/header hash matches its retained identity record and current bytes.",
+    "actual_linux_observation": "The read complete observer uses ordinary subprocess.run for the two fixed GCC commands and the fresh app with argv A, empty string, B under the recorded sanitized environment. It records actual returncodes/raw streams before asserting the frozen oracle. It contains no mocks, synthetic stdout producer, collector execution, Docker, guest launcher or native-runtime invocation.",
+    "baseline": "Observer queries signal.pthread_sigmask(SIG_BLOCK, set()), which does not change the mask, retains [], and refuses blocked SIGUSR1/SIGUSR2. Thus the Linux run has both relevant bits initially unblocked without altering the frozen payload.",
+    "elf": "Read-only /usr/bin/readelf -hW/-lW inspection and independent ELF64 program-header parsing agree: app/init are x86_64 ET_EXEC, have no PT_INTERP or PT_DYNAMIC, have exactly one GNU_STACK with RW flags and no X, and contain no writable/executable PT_LOAD.",
+    "collector_boundary": "The default collector was compiled only. The reviewed observer's three commands never execute init; no host collector/PID1/root path was invoked.",
+    "readelf_tool_sha256": "41a813335a74480f145fba9400aa7fb5c0ec7ffcaa7af7f33e832dc75eb90ffb"
+  },
+  "independent_read_only_check": {
+    "exit_code": 0,
+    "stdout": "PASS profile/tools/static libraries/frozen sources, 4 artifacts, 13 raw captures, exact commands/statuses and 166 depfile input hashes\nPASS app ELF64 EXEC; no PT_INTERP or PT_DYNAMIC; GNU_STACK RW without X; no W+X load\nPASS init ELF64 EXEC; no PT_INTERP or PT_DYNAMIC; GNU_STACK RW without X; no W+X load\nPASS Linux payload reference only; collector artifact never executed by reviewed observer; no guest/native/formal credit\n",
+    "resource_profile": "CPU0, 2-GiB inherited AS, 100 CPU seconds, 120-second timeout, no compiler/payload execution; Python stdlib hashing/parsing and readelf only."
+  },
+  "linux_reference": {
+    "argv": [
+      "/home/holden/mckernel-work/scratch/signal-mask-restore-compile-20261017-nX2kCR/app",
+      "A",
+      "",
+      "B"
+    ],
+    "cwd": "/home/holden/mckernel-work/scratch/signal-mask-restore-compile-20261017-nX2kCR/case/work",
+    "initial_blocked_signals": [],
+    "stdout_utf8": "handled=1 observed_blocked=1 restored=1\n",
+    "stdout_bytes": 40,
+    "stdout_sha256": "dcaa9f1bb23dd9194743e50b308030dbb3bae80ade2729e0605663edd28d1033",
+    "stderr_bytes": 0,
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "exit_code": 0,
+    "raw_wait_status": 0,
+    "frozen_oracle_match": true
+  },
+  "observed_run_resources": {
+    "cpu_affinity": [
+      6
+    ],
+    "wall_seconds": 0.49,
+    "user_seconds": 0.36,
+    "system_seconds": 0.07,
+    "peak_rss_kib": 43468,
+    "swaps": 0,
+    "source": "Exact retained observer.stderr GNU-time report; command shows original CPU6/env-i/prlimit/timeout wrapper."
+  },
+  "failure_history": "The retained earlier missing-static-libc container failure is not erased. This successful compile uses the independently bound installed host GCC/static libc environment admitted by the profile; no unchanged failed compiler environment was replayed. No repeated compile or payload run occurred during this review.",
+  "blocking_findings": [],
+  "limitations": [
+    "The Linux payload checks SIGUSR2 handler blocking and restoration of SIGUSR1/SIGUSR2 membership only; it does not inspect automatic SIGUSR1 handler blocking or arbitrary whole-mask restoration.",
+    "This host static-libc result is preparation evidence. Exact fresh McKernel image/module/source integration, manifest/overlay joins, startup/route/retirement/kernel-log evidence and verified guest teardown remain required under a separate execution release.",
+    "The compiled collector has not executed and has no new runtime acceptance."
+  ],
+  "acceptance": {
+    "static_payload_compilation_verified": true,
+    "static_default_collector_compilation_verified": true,
+    "linux_reference_verified": true,
+    "collector_execution_verified": false,
+    "guest_execution_released": false,
+    "new_guest_runs": 0,
+    "new_kernel_builds": 0,
+    "formal_application_acceptance": false,
+    "production_acceptance": false,
+    "os_complete": false
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "schema": "mckernel.native-exact-image-mapping-shutdown-wip.v1",
+  "recorded_at": "2026-09-30T11:17:00-07:00",
+  "source_head": "c4cd3aca66369093636e8accdbe09c8b7b47eac0",
+  "status": "WIP_REJECTED",
+  "scope": "source and fixture correction only; no Docker image preparation, McKernel image build, root operation, guest, or application run",
+  "policy_sha256": {
+    "GOAL.md": "76c4f5d12e3f233c8dc4f8f1a77dd1f2eae9df2ff8fb9f4000ef5a2e94c0bcc3",
+    "START.md": "1698d3429e71083634584dea7f78d22ff9e2927858de0dc714f829f9b3d6216c",
+    "CONVERGENCE.md": "f6938bd207d6fa2c0898def482e9bb4bd0cf173937fe55c2111a369d3393e86a",
+    "HANDOFF.md": "bdc946109f96d5681a02c43542efa2036af5cb842c1d21e1f82e642c110af8c5"
+  },
+  "bounded_correction": {
+    "agent": "/root/image_mapping_correction_225",
+    "terminal_state": "interrupted at shutdown after a bounded opportunity to finish",
+    "changed_files": {
+      "scripts/native_rust_exact_build_image_prepare.py": "f8ba20268a11995e80cbbc4f59fb9cd8e48e873a6240fe1a8a1803bd23e7373d",
+      "scripts/tests/test_native_rust_exact_build_image_prepare.py": "8743da125531b749df74913d18d3263273ed8ed258c6ba42e08a35f5d62279af",
+      "scripts/native_rust_exact_mckernel_image_container_owner.py": "9ec62640be6eac90697eb53baef2ddbdcbdc3fc637008dfb536263c5373459c1",
+      "scripts/tests/test_native_rust_exact_mckernel_image_container_owner.py": "5c7464511f848eccb70a2d7746cdba48faaf279122d15e38023bf96883d33005",
+      "scripts/native_rust_exact_mckernel_image_offline.py": "ce625bfa1798a2dfa0699f6b9f00a7517fab038b9fcbc9d94edd95c1fa39991d",
+      "scripts/tests/test_native_rust_exact_mckernel_image_offline.py": "4c81e4cf8a41411e17bc9fa631d1b41e15cac15cacacbd190eee99faec0e151d"
+    }
+  },
+  "independent_review": {
+    "status": "FAIL_SOURCE",
+    "reviewer": "/root/image_mapping_integration_review_224",
+    "finding_count": 7,
+    "findings": [
+      "owner and driver kernel_binding schemas disagree",
+      "owner mishandles the real absolute /out source symlink",
+      "driver leaks host paths into the container namespace and mishandles the nightly mount",
+      "runtime_network and package-versus-executable version contracts disagree",
+      "source authentication and PATH validation still assume the old tool schema",
+      "RPM epoch parsing and the original CMake package pin were unsupported",
+      "owner's authenticated driver hash was stale"
+    ]
+  },
+  "shutdown_regression": {
+    "command": "python3 -B -m unittest scripts.tests.test_native_rust_exact_build_image_prepare scripts.tests.test_native_rust_exact_mckernel_image_container_owner scripts.tests.test_native_rust_exact_mckernel_image_offline",
+    "result": "FAIL",
+    "tests_run": 58,
+    "errors": 3,
+    "failures": [
+      "owner integrated v2 fixture: PATH tool differs from bound tool: ld",
+      "owner negative receipt fixture re-enters the same ld mismatch",
+      "offline positive v2 fixture: complete toolchain inventory differs"
+    ],
+    "diff_check": "PASS"
+  },
+  "preserved_build": {
+    "candidate_sha": "4e99a82c9b87a7cf3d6002b75ec380fef37af7a1",
+    "output_root_identity": "1831:6555351",
+    "evidence_root_identity": "1831:6555352",
+    "exportset16_identity": "1831:72288",
+    "container_id": "4d15b3493f869a1b0a89f1dc16fda59e1c145b78e2b57308bed35f3d954e4f86",
+    "container_state": "exited 0, OOM false, PID 0"
+  },
+  "live_processes": {
+    "launcher_wrapper_pid": 1442141,
+    "launcher_pid": 1442142,
+    "worker_pid": 1442145,
+    "server_pid": 1442149,
+    "launched_at": "2026-09-30T10:46:42-07:00",
+    "heavy_build_or_guest": "none"
+  },
+  "resources": {
+    "host_free_bytes": 24678674432,
+    "scratch_free_bytes": 15496278016,
+    "mem_available_kib": 30157432
+  },
+  "counters": {
+    "current_candidate_builds_failed": 6,
+    "current_candidate_builds_completed": 1,
+    "real_current_diagnostic_guest_apps": 0
+  },
+  "next_actions": [
+    "Do not execute or admit the WIP image owner/driver while the three integrated tests fail.",
+    "Resume the same failure family by correcting the ld/PATH fixture and complete-toolchain inventory mismatch, then rerun all 58 focused tests.",
+    "Require independent integration re-review against the actual scratch12 /out link and nightly mappings before refreshing authenticated helper hashes.",
+    "Only after a pushed PASS_SOURCE checkpoint, prepare and independently release a refreshed source-free image containing CMake 3.31.8 and the required tools.",
+    "Then build the smallest current mckernel.img and obtain a separate root/guest release for the strict baseline.core.memory diagnostic, followed by files, threads/futexes, signals, and shutdown."
+  ],
+  "acceptance": "No acceptance promoted. Diagnostic and application counts remain unchanged; the OS goal remains active but paused by the launcher after this checkpoint."
+}

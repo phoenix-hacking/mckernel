@@ -1,0 +1,46 @@
+{
+  "actual_current_scope": "Original81691/c309 publication2GiB/job1 and all roles/lease/captures remain held. No collection/outcome/disposition/retirement/native/source acceptance is inferred.",
+  "all_sameRoot_finite7c6_source_service_native12_resource_historical_globalUNKNOWN_holds_preserved": true,
+  "at": "2026-11-12T19:17:25.414363+00:00",
+  "candidate_actor": {
+    "bytes": 19046,
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-native-first-repeat-1f5f-binding-1/current81012-diagnostic-successor-1/normal-fixed30-reporting-proposal-1/current-c309-result-projection-1/project_current_c309_saved_result.READONLY.PROPOSED.py",
+    "sha256": "b09dbfdabff1e84c48279bfd64ec14f71fc96e3664b58d56000f5c5b98c36408"
+  },
+  "decision": "MATERIAL_SOURCE_FINDING_NO_OPERATION_GO",
+  "exact_branch": [
+    {
+      "line": 49,
+      "operation": "os.open returns child; child has not been registered in OWNED or transferred into fd."
+    },
+    {
+      "line": 50,
+      "operation": "If the required stable(fstat(child))==stable(named) check refuses, control raises before line51 ownership transfer."
+    },
+    {
+      "line": 54,
+      "operation": "Exception handler closes only old fd. The new child is not consumed/closed or recorded as uncertain."
+    },
+    {
+      "line": 258,
+      "operation": "Precondition error path drains only OWNED and can report all_new_own_FDs_closed=true while that temporary child is untracked."
+    }
+  ],
+  "material_effect": "Own-FD closure evidence can be false on a required unstable-path refusal. Process termination would close descriptors later, but does not make the serialized own-handle claim true and is not a substitute for its specified consume/close contract.",
+  "no_helper_function_execution_or_live_private_ROOT_RAW_account_proc_Docker_signal_flags_native_action_by_reviewer": true,
+  "prior_conditions": {
+    "bytes": 16194,
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-native-review-1/reporting-current-c309-custody-review-1/CURRENT-C309-FAILURE-AND-CUSTODY.CONDITIONS.json",
+    "sha256": "cc1561eb5ba970408fad5adfccc30aa435e0529bc33c305b6cb57a722101c935"
+  },
+  "rejected_exclusion": {
+    "no_read_replay_rephrasing_or_reassignment": true,
+    "turn": "01a1ce01-20cf-7e03-9442-f6d521fb8b02",
+    "worker": "01a1c48d-4d96-7cc3-b733-73a97973152f"
+  },
+  "remaining_source_review": "No unresolved module globals in b09 static symbol analysis. Both file reads and saved-only projection are enclosed by unchanged directory and both named/held file final bookends. Only two source-named inputs, private32MiB output bound versus FSIZE64MiB, explicit original held-root identity UNPROVED, safe error output and original2GiB/81691 retention are present. Final request/parent/capture/argv/union still pending at this finding.",
+  "reviewer": "/root/native_binding_review",
+  "schema": "mckernel.current-c309.two-file-projection.temporary-FD-ownership-finding.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Exact current c309 two saved RESULT/START projection actor only.",
+  "smallest_required_change": "Preserve b09. Make temporary parent and newly opened child independently owned through open_exact: consume each local handle before exactly one close attempt; close every newly opened child on failure; retain all close errors in RAW_CLOSE_ERRORS and never retry an uncertain historical FD. Keep the exact stable/path predicates, two-file allowlist, privacy and all other semantics unchanged. Freeze source/hash/path/request/parent/capture/argv/fieldunion successor without tests or execution."
+}

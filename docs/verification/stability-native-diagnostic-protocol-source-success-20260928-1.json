@@ -1,0 +1,32 @@
+{
+  "schema": "mckernel.stability-source-review.v1",
+  "recorded_at": "2026-09-28T04:42:00-07:00",
+  "base_commit": "5dd488bbf3c914a1df141a08e12db52c7f16ef88",
+  "decision": "PASS_PROTOCOL_SOURCE_BLOCKED_RUNTIME",
+  "source_sha256": {
+    "scripts/application-tests/native_diagnostic.py": "6a286832c3180366748770e59dc255ffe60576af6f428c3ddacb9e2268b46751",
+    "scripts/tests/test_application_native_diagnostic.py": "ad851fefe0d431ab2ffca70009b20abdc8166d0f918e4150cc2dd00320132ff9"
+  },
+  "executed": {
+    "command": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/tests/test_application_native_diagnostic.py -v",
+    "tests": 23,
+    "result": "PASS",
+    "elapsed_seconds": 3.434
+  },
+  "verified_behavior": [
+    "Process/QMP cleanup completes before final serial and debugcon capture and evaluation",
+    "Warnings appended during terminate, wait or QMP close reject",
+    "Orphan, duplicate, unmatched or incorrectly ordered syscall records and invalid launcher slots reject",
+    "Only one terminal exit_group delivery may omit RET/route",
+    "Missing, raising or blocking QMP attribute lookup does not skip tested process termination/wait/kill/reap attempts",
+    "Failure publication occurs after cleanup under a separate bound and protects existing/racing terminal records",
+    "run_diagnostic fails closed before factories and explicitly reports no application execution or acceptance"
+  ],
+  "runtime_blockers": [
+    "Hash-bound retained guest root inventory and staging",
+    "Native boot executable, configuration and full runtime/DSO closure",
+    "Reviewed real guest collector and framed serial transport with raw wait/EOF/byte/time/process identities",
+    "Concrete process/QMP backends and independently reviewed execution packet"
+  ],
+  "limitations": "Synthetic protocol/backend evidence only; no guest, actual QMP transport, crash durability or application acceptance"
+}

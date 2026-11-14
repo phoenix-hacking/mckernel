@@ -1,0 +1,49 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source1": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-postbuild-current-successor-preparation-1/source-1/observe_current64_current118_postjoin.py",
+    "bytes": 28956,
+    "sha256": "a5cf56e287e655b690402a7afd72a4dc165fde9fb965a846033c5603e580fb4e"
+  },
+  "source2": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-postbuild-current-successor-preparation-1/source-2/observe_current64_current118_postjoin.py",
+    "bytes": 39250,
+    "sha256": "d216adacf568e3e13c70bc8877a0e6a5af6713dad0c60044b03b87091e03ecfd"
+  },
+  "changed_functions": [
+    "validate_retained",
+    "validate_pending_ledger",
+    "capture_scope",
+    "source_subjects",
+    "runtime_dependencies",
+    "validate_capture",
+    "validate_acceptance",
+    "validate_current_adoption",
+    "observe"
+  ],
+  "added_functions": [
+    "attach_custody",
+    "validate_failed_custody"
+  ],
+  "unchanged_functions": [
+    "actor",
+    "auth",
+    "checked",
+    "load",
+    "main",
+    "need",
+    "observer_schema",
+    "ref",
+    "validate_absence_reports",
+    "validate_new_commands",
+    "validate_retirement"
+  ],
+  "compatibility_runtime_ref_count": 12,
+  "known_pre_recovery_rows": 114,
+  "TEST_ONLY_future_recovery_rows": 128,
+  "TEST_ONLY_future_postcleanup_rows": 143,
+  "TEST_ONLY_accepted_reobservation_rows": 152,
+  "canonical_shared_source1_writes": 0,
+  "actual_guard_proc_query_cleanup_capture_calls": 0,
+  "runtime_authority": null
+}

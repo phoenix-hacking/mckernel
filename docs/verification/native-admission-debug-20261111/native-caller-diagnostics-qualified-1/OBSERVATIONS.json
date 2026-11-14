@@ -1,0 +1,707 @@
+{
+  "cases": [
+    {
+      "accepted_payloads": [
+        {
+          "exceptions": [
+            {
+              "all_frames_have_origin": true,
+              "errno": null,
+              "label": "primary",
+              "message": "primary-unknown",
+              "message_encoding": "actual_exception_str",
+              "raw_args": {
+                "items": [
+                  {
+                    "sha256": "25de16b7aab693c98bd35b8c111ae628ebd600759faa6a4dc5d4359e7f9a9c06",
+                    "text": "primary-unknown",
+                    "truncated": false
+                  }
+                ],
+                "truncated": false
+              },
+              "raw_exception_and_traceback_retained": true,
+              "traceback_functions": [
+                "raised"
+              ],
+              "traceback_truncated": false,
+              "type": "builtins.RuntimeError"
+            },
+            {
+              "all_frames_have_origin": true,
+              "errno": 5,
+              "label": "secondary:0:caller-diagnostic:CALLER-DIAGNOSTIC-1.json",
+              "message": "[Errno 5] diagnostic close unavailable",
+              "message_encoding": "actual_exception_str",
+              "raw_args": {
+                "items": [
+                  5,
+                  {
+                    "sha256": "0b471ec7991981268ef17cee97928afad6e1478e6813b1cfc7b1887fd65392a1",
+                    "text": "diagnostic close unavailable",
+                    "truncated": false
+                  }
+                ],
+                "truncated": false
+              },
+              "raw_exception_and_traceback_retained": true,
+              "traceback_functions": [
+                "persist_private_diagnostic",
+                "close_once",
+                "close",
+                "close"
+              ],
+              "traceback_truncated": false,
+              "type": "builtins.OSError"
+            },
+            {
+              "all_frames_have_origin": true,
+              "errno": 32,
+              "label": "diagnostic-stderr-report:UNKNOWN_NATIVE_CUSTODY",
+              "message": "{\"items\": [32, {\"sha256\": \"a9e3c90aaa2aff42722bcb291e472ecbb7c978c7ae92e9a2c5331d9a23bbdfe6\", \"text\": \"stderr unavailable\", \"truncated\": false}], \"truncated\": false}",
+              "message_encoding": "exact_bounded_primitive_baseexception_args",
+              "raw_args": {
+                "items": [
+                  32,
+                  {
+                    "sha256": "a9e3c90aaa2aff42722bcb291e472ecbb7c978c7ae92e9a2c5331d9a23bbdfe6",
+                    "text": "stderr unavailable",
+                    "truncated": false
+                  }
+                ],
+                "truncated": false
+              },
+              "raw_exception_and_traceback_retained": true,
+              "traceback_functions": [
+                "emit_failure_diagnostics",
+                "diagnostic_write",
+                "write",
+                "write"
+              ],
+              "traceback_truncated": false,
+              "type": "builtins.BrokenPipeError"
+            },
+            {
+              "all_frames_have_origin": true,
+              "errno": 32,
+              "label": "secondary:1:diagnostic-stderr-report:UNKNOWN_NATIVE_CUSTODY",
+              "message": "{\"items\": [32, {\"sha256\": \"a9e3c90aaa2aff42722bcb291e472ecbb7c978c7ae92e9a2c5331d9a23bbdfe6\", \"text\": \"stderr unavailable\", \"truncated\": false}], \"truncated\": false}",
+              "message_encoding": "exact_bounded_primitive_baseexception_args",
+              "raw_args": {
+                "items": [
+                  32,
+                  {
+                    "sha256": "a9e3c90aaa2aff42722bcb291e472ecbb7c978c7ae92e9a2c5331d9a23bbdfe6",
+                    "text": "stderr unavailable",
+                    "truncated": false
+                  }
+                ],
+                "truncated": false
+              },
+              "raw_exception_and_traceback_retained": true,
+              "traceback_functions": [
+                "emit_failure_diagnostics",
+                "diagnostic_write",
+                "write",
+                "write"
+              ],
+              "traceback_truncated": false,
+              "type": "builtins.BrokenPipeError"
+            }
+          ],
+          "native_authority_or_release": false,
+          "phase": "UNKNOWN_NATIVE_CUSTODY",
+          "pid": 20000001,
+          "raw_objects_retained": true,
+          "schema": "native-root-caller-failure-diagnostics-v1"
+        }
+      ],
+      "accepted_streams": [
+        1
+      ],
+      "close_calls": [
+        701
+      ],
+      "emitter_result": true,
+      "events": [
+        [
+          "open",
+          "CALLER-DIAGNOSTIC-1.json"
+        ],
+        [
+          "write",
+          701
+        ],
+        [
+          "fsync",
+          701
+        ],
+        [
+          "fsync",
+          401
+        ],
+        [
+          "close",
+          701
+        ],
+        [
+          "write",
+          2
+        ],
+        [
+          "write",
+          1
+        ]
+      ],
+      "family": "UNKNOWN_PRIMARY_TRACEBACK",
+      "id": "unknown_fallback",
+      "native_attempt_and_watchdog_retained": true,
+      "original_records_unchanged": true,
+      "own_states": [
+        [
+          "new-current-operation-root",
+          "HELD"
+        ],
+        [
+          "native-sentinel",
+          "HELD"
+        ],
+        [
+          "caller-diagnostic:CALLER-DIAGNOSTIC-1.json",
+          "CLOSE_ATTEMPTED_UNKNOWN"
+        ]
+      ],
+      "private_snapshot_labels": [
+        [
+          "primary"
+        ]
+      ],
+      "raw": {
+        "all_lower_errors_retained": true,
+        "primary_identity_retained": true,
+        "primary_traceback_functions": [
+          "raised"
+        ],
+        "primary_traceback_identity_retained": true,
+        "raw_errno": [
+          null,
+          5,
+          32,
+          32
+        ],
+        "raw_labels": [
+          "primary",
+          "secondary:0:caller-diagnostic:CALLER-DIAGNOSTIC-1.json",
+          "diagnostic-stderr-report:UNKNOWN_NATIVE_CUSTODY",
+          "secondary:1:diagnostic-stderr-report:UNKNOWN_NATIVE_CUSTODY"
+        ],
+        "raw_traceback_functions": [
+          [
+            "raised"
+          ],
+          [
+            "persist_private_diagnostic",
+            "close_once",
+            "close",
+            "close"
+          ],
+          [
+            "emit_failure_diagnostics",
+            "diagnostic_write",
+            "write",
+            "write"
+          ],
+          [
+            "emit_failure_diagnostics",
+            "diagnostic_write",
+            "write",
+            "write"
+          ]
+        ],
+        "raw_types": [
+          "builtins.RuntimeError",
+          "builtins.OSError",
+          "builtins.BrokenPipeError",
+          "builtins.BrokenPipeError"
+        ],
+        "secondary_labels": [
+          "caller-diagnostic:CALLER-DIAGNOSTIC-1.json",
+          "diagnostic-stderr-report:UNKNOWN_NATIVE_CUSTODY"
+        ]
+      }
+    },
+    {
+      "accepted_payloads": [],
+      "accepted_streams": [],
+      "close_calls": [],
+      "emitter_result": false,
+      "events": [
+        [
+          "open",
+          "CALLER-DIAGNOSTIC-1.json"
+        ],
+        [
+          "write",
+          2
+        ],
+        [
+          "write",
+          1
+        ],
+        [
+          "open",
+          "CALLER-DIAGNOSTIC-2.json"
+        ]
+      ],
+      "family": "UNKNOWN_PRIMARY_TRACEBACK",
+      "id": "all_channels_fail",
+      "native_attempt_and_watchdog_retained": true,
+      "original_records_unchanged": true,
+      "own_states": [
+        [
+          "new-current-operation-root",
+          "HELD"
+        ],
+        [
+          "native-sentinel",
+          "HELD"
+        ]
+      ],
+      "private_snapshot_labels": [],
+      "raw": {
+        "all_lower_errors_retained": true,
+        "primary_identity_retained": true,
+        "primary_traceback_functions": [
+          "raised"
+        ],
+        "primary_traceback_identity_retained": true,
+        "raw_errno": [
+          null,
+          30,
+          30,
+          28,
+          28,
+          28,
+          28,
+          30,
+          30
+        ],
+        "raw_labels": [
+          "primary",
+          "diagnostic-private-report:UNKNOWN_NATIVE_CUSTODY",
+          "secondary:0:diagnostic-private-report:UNKNOWN_NATIVE_CUSTODY",
+          "diagnostic-stderr-report:UNKNOWN_NATIVE_CUSTODY",
+          "secondary:1:diagnostic-stderr-report:UNKNOWN_NATIVE_CUSTODY",
+          "diagnostic-stdout-report:UNKNOWN_NATIVE_CUSTODY",
+          "secondary:2:diagnostic-stdout-report:UNKNOWN_NATIVE_CUSTODY",
+          "diagnostic-private-report:UNKNOWN_NATIVE_CUSTODY",
+          "secondary:3:diagnostic-private-report:UNKNOWN_NATIVE_CUSTODY"
+        ],
+        "raw_traceback_functions": [
+          [
+            "raised"
+          ],
+          [
+            "persist_private_diagnostic",
+            "open",
+            "open"
+          ],
+          [
+            "persist_private_diagnostic",
+            "open",
+            "open"
+          ],
+          [
+            "emit_failure_diagnostics",
+            "diagnostic_write",
+            "write",
+            "write"
+          ],
+          [
+            "emit_failure_diagnostics",
+            "diagnostic_write",
+            "write",
+            "write"
+          ],
+          [
+            "emit_failure_diagnostics",
+            "diagnostic_write",
+            "write",
+            "write"
+          ],
+          [
+            "emit_failure_diagnostics",
+            "diagnostic_write",
+            "write",
+            "write"
+          ],
+          [
+            "persist_private_diagnostic",
+            "open",
+            "open"
+          ],
+          [
+            "persist_private_diagnostic",
+            "open",
+            "open"
+          ]
+        ],
+        "raw_types": [
+          "builtins.RuntimeError",
+          "builtins.OSError",
+          "builtins.OSError",
+          "builtins.OSError",
+          "builtins.OSError",
+          "builtins.OSError",
+          "builtins.OSError",
+          "builtins.OSError",
+          "builtins.OSError"
+        ],
+        "secondary_labels": [
+          "diagnostic-private-report:UNKNOWN_NATIVE_CUSTODY",
+          "diagnostic-stderr-report:UNKNOWN_NATIVE_CUSTODY",
+          "diagnostic-stdout-report:UNKNOWN_NATIVE_CUSTODY",
+          "diagnostic-private-report:UNKNOWN_NATIVE_CUSTODY"
+        ]
+      }
+    },
+    {
+      "accepted_payloads": [
+        {
+          "exceptions": [
+            {
+              "all_frames_have_origin": true,
+              "errno": null,
+              "label": "primary",
+              "message": "primary-terminal",
+              "message_encoding": "actual_exception_str",
+              "raw_args": {
+                "items": [
+                  {
+                    "sha256": "ebec0247f7686802851442404699d14221e19297620bd4f8cd081bb31581db03",
+                    "text": "primary-terminal",
+                    "truncated": false
+                  }
+                ],
+                "truncated": false
+              },
+              "raw_exception_and_traceback_retained": true,
+              "traceback_functions": [
+                "raised"
+              ],
+              "traceback_truncated": false,
+              "type": "builtins.KeyboardInterrupt"
+            },
+            {
+              "all_frames_have_origin": true,
+              "errno": 5,
+              "label": "secondary:0:gamma",
+              "message": "[Errno 5] gamma close unavailable",
+              "message_encoding": "actual_exception_str",
+              "raw_args": {
+                "items": [
+                  5,
+                  {
+                    "sha256": "dea8711ae912f3a1bd50b187ed139b43ea2b9d1e4e1c9656e596b657f27a2b12",
+                    "text": "gamma close unavailable",
+                    "truncated": false
+                  }
+                ],
+                "truncated": false
+              },
+              "raw_exception_and_traceback_retained": true,
+              "traceback_functions": [
+                "close_all",
+                "close_once",
+                "close",
+                "close"
+              ],
+              "traceback_truncated": false,
+              "type": "__main__.BadCloseError"
+            },
+            {
+              "all_frames_have_origin": true,
+              "errno": 9,
+              "label": "secondary:1:beta",
+              "message": "[Errno 9] beta close unavailable",
+              "message_encoding": "actual_exception_str",
+              "raw_args": {
+                "items": [
+                  9,
+                  {
+                    "sha256": "77091edc8cb72b4e71f8f0309b16a224624d1a9c2ad5116c2e6b1e8a4dd97323",
+                    "text": "beta close unavailable",
+                    "truncated": false
+                  }
+                ],
+                "truncated": false
+              },
+              "raw_exception_and_traceback_retained": true,
+              "traceback_functions": [
+                "close_all",
+                "close_once",
+                "close",
+                "close"
+              ],
+              "traceback_truncated": false,
+              "type": "builtins.OSError"
+            },
+            {
+              "all_frames_have_origin": true,
+              "errno": null,
+              "label": "diagnostic-message-format:secondary:0:gamma",
+              "message": "{\"items\": [{\"sha256\": \"f562610b3917a17376f81f6a4b96f48873fed9e314386e7a05b7e4064b1e199b\", \"text\": \"format unavailable\", \"truncated\": false}], \"truncated\": false}",
+              "message_encoding": "exact_bounded_primitive_baseexception_args",
+              "raw_args": {
+                "items": [
+                  {
+                    "sha256": "f562610b3917a17376f81f6a4b96f48873fed9e314386e7a05b7e4064b1e199b",
+                    "text": "format unavailable",
+                    "truncated": false
+                  }
+                ],
+                "truncated": false
+              },
+              "raw_exception_and_traceback_retained": true,
+              "traceback_functions": [
+                "render_raw_failure",
+                "__str__"
+              ],
+              "traceback_truncated": false,
+              "type": "builtins.RuntimeError"
+            },
+            {
+              "all_frames_have_origin": true,
+              "errno": null,
+              "label": "secondary:2:diagnostic-message-format:secondary:0:gamma",
+              "message": "{\"items\": [{\"sha256\": \"f562610b3917a17376f81f6a4b96f48873fed9e314386e7a05b7e4064b1e199b\", \"text\": \"format unavailable\", \"truncated\": false}], \"truncated\": false}",
+              "message_encoding": "exact_bounded_primitive_baseexception_args",
+              "raw_args": {
+                "items": [
+                  {
+                    "sha256": "f562610b3917a17376f81f6a4b96f48873fed9e314386e7a05b7e4064b1e199b",
+                    "text": "format unavailable",
+                    "truncated": false
+                  }
+                ],
+                "truncated": false
+              },
+              "raw_exception_and_traceback_retained": true,
+              "traceback_functions": [
+                "render_raw_failure",
+                "__str__"
+              ],
+              "traceback_truncated": false,
+              "type": "builtins.RuntimeError"
+            },
+            {
+              "all_frames_have_origin": true,
+              "errno": 28,
+              "label": "diagnostic-stderr-report:AFTER_ALL_OWN_CLOSE_ATTEMPTS",
+              "message": "{\"items\": [28, {\"sha256\": \"e7193256f90f8dc2d4a16d4a73ce2e7faaf23da541141015228dc65d9d02cc13\", \"text\": \"report channel unavailable\", \"truncated\": false}], \"truncated\": false}",
+              "message_encoding": "exact_bounded_primitive_baseexception_args",
+              "raw_args": {
+                "items": [
+                  28,
+                  {
+                    "sha256": "e7193256f90f8dc2d4a16d4a73ce2e7faaf23da541141015228dc65d9d02cc13",
+                    "text": "report channel unavailable",
+                    "truncated": false
+                  }
+                ],
+                "truncated": false
+              },
+              "raw_exception_and_traceback_retained": true,
+              "traceback_functions": [
+                "emit_failure_diagnostics",
+                "diagnostic_write",
+                "write",
+                "write"
+              ],
+              "traceback_truncated": false,
+              "type": "builtins.OSError"
+            },
+            {
+              "all_frames_have_origin": true,
+              "errno": 28,
+              "label": "secondary:3:diagnostic-stderr-report:AFTER_ALL_OWN_CLOSE_ATTEMPTS",
+              "message": "{\"items\": [28, {\"sha256\": \"e7193256f90f8dc2d4a16d4a73ce2e7faaf23da541141015228dc65d9d02cc13\", \"text\": \"report channel unavailable\", \"truncated\": false}], \"truncated\": false}",
+              "message_encoding": "exact_bounded_primitive_baseexception_args",
+              "raw_args": {
+                "items": [
+                  28,
+                  {
+                    "sha256": "e7193256f90f8dc2d4a16d4a73ce2e7faaf23da541141015228dc65d9d02cc13",
+                    "text": "report channel unavailable",
+                    "truncated": false
+                  }
+                ],
+                "truncated": false
+              },
+              "raw_exception_and_traceback_retained": true,
+              "traceback_functions": [
+                "emit_failure_diagnostics",
+                "diagnostic_write",
+                "write",
+                "write"
+              ],
+              "traceback_truncated": false,
+              "type": "builtins.OSError"
+            }
+          ],
+          "native_authority_or_release": false,
+          "phase": "AFTER_ALL_OWN_CLOSE_ATTEMPTS",
+          "pid": 20000001,
+          "raw_objects_retained": true,
+          "schema": "native-root-caller-failure-diagnostics-v1"
+        }
+      ],
+      "accepted_streams": [
+        1
+      ],
+      "all3_closes_before_first_format_or_report": true,
+      "close_calls": [
+        303,
+        202,
+        101
+      ],
+      "emitter_result": true,
+      "events": [
+        [
+          "close",
+          303
+        ],
+        [
+          "close",
+          202
+        ],
+        [
+          "close",
+          101
+        ],
+        [
+          "format",
+          1
+        ],
+        [
+          "format",
+          2
+        ],
+        [
+          "write",
+          2
+        ],
+        [
+          "format",
+          3
+        ],
+        [
+          "write",
+          1
+        ]
+      ],
+      "family": "DRAIN_ALL_CLOSE_REPORT_FAILURES",
+      "format_calls": 3,
+      "id": "all_closes_before_format_report",
+      "own_states": [
+        [
+          "alpha",
+          "CLOSED"
+        ],
+        [
+          "beta",
+          "CLOSE_ATTEMPTED_UNKNOWN"
+        ],
+        [
+          "gamma",
+          "CLOSE_ATTEMPTED_UNKNOWN"
+        ]
+      ],
+      "raw": {
+        "all_lower_errors_retained": true,
+        "primary_identity_retained": true,
+        "primary_traceback_functions": [
+          "raised"
+        ],
+        "primary_traceback_identity_retained": true,
+        "raw_errno": [
+          null,
+          5,
+          9,
+          null,
+          null,
+          28,
+          28
+        ],
+        "raw_labels": [
+          "primary",
+          "secondary:0:gamma",
+          "secondary:1:beta",
+          "diagnostic-message-format:secondary:0:gamma",
+          "secondary:2:diagnostic-message-format:secondary:0:gamma",
+          "diagnostic-stderr-report:AFTER_ALL_OWN_CLOSE_ATTEMPTS",
+          "secondary:3:diagnostic-stderr-report:AFTER_ALL_OWN_CLOSE_ATTEMPTS"
+        ],
+        "raw_traceback_functions": [
+          [
+            "raised"
+          ],
+          [
+            "close_all",
+            "close_once",
+            "close",
+            "close"
+          ],
+          [
+            "close_all",
+            "close_once",
+            "close",
+            "close"
+          ],
+          [
+            "render_raw_failure",
+            "__str__"
+          ],
+          [
+            "render_raw_failure",
+            "__str__"
+          ],
+          [
+            "emit_failure_diagnostics",
+            "diagnostic_write",
+            "write",
+            "write"
+          ],
+          [
+            "emit_failure_diagnostics",
+            "diagnostic_write",
+            "write",
+            "write"
+          ]
+        ],
+        "raw_types": [
+          "builtins.KeyboardInterrupt",
+          "__main__.BadCloseError",
+          "builtins.OSError",
+          "builtins.RuntimeError",
+          "builtins.RuntimeError",
+          "builtins.OSError",
+          "builtins.OSError"
+        ],
+        "secondary_labels": [
+          "gamma",
+          "beta",
+          "diagnostic-message-format:secondary:0:gamma",
+          "diagnostic-stderr-report:AFTER_ALL_OWN_CLOSE_ATTEMPTS"
+        ]
+      },
+      "raw_close_errors_present_before_every_format": true,
+      "raw_primary_present_before_every_close": true,
+      "repeated_close_all_has_no_new_attempt": true
+    }
+  ],
+  "families": 2,
+  "main_run_pause_or_root_native_account_endpoints_executed": false,
+  "scope": "ACTUAL_FINITE_CALLER_DIAGNOSTICS_CONTROLLED_LOWER_EFFECTS_ONLY",
+  "source_sha256": "0ca054d1b097b16d699dd2ac9be843e6a2a6901ad0aab5c44bb1eb19168dd511"
+}

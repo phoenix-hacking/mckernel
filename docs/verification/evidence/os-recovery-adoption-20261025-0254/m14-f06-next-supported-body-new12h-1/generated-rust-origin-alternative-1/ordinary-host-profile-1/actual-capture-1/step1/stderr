@@ -1,0 +1,40 @@
+warning: type alias `CLong` is never used
+ --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-supported-body-new12h-1/generated-rust-origin-alternative-1/fixture.rs:6:14
+  |
+6 |     pub type CLong = i64;
+  |              ^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: struct `Thread` is never constructed
+ --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-supported-body-new12h-1/generated-rust-origin-alternative-1/fixture.rs:9:27
+  |
+9 |     #[repr(C)] pub struct Thread { _opaque: [u8; 0] }
+  |                           ^^^^^^
+
+warning: struct `X86UserContext` is never constructed
+  --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-supported-body-new12h-1/generated-rust-origin-alternative-1/fixture.rs:10:27
+   |
+10 |     #[repr(C)] pub struct X86UserContext { _opaque: [u8; 0] }
+   |                           ^^^^^^^^^^^^^^
+
+warning: struct `ProcessVm` is never constructed
+  --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-supported-body-new12h-1/generated-rust-origin-alternative-1/fixture.rs:11:27
+   |
+11 |     #[repr(C)] pub struct ProcessVm { _opaque: [u8; 0] }
+   |                           ^^^^^^^^^
+
+warning: struct `VmRange` is never constructed
+  --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-supported-body-new12h-1/generated-rust-origin-alternative-1/fixture.rs:12:27
+   |
+12 |     #[repr(C)] pub struct VmRange { _opaque: [u8; 0] }
+   |                           ^^^^^^^
+
+warning: struct `MemObj` is never constructed
+  --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-supported-body-new12h-1/generated-rust-origin-alternative-1/fixture.rs:13:27
+   |
+13 |     #[repr(C)] pub struct MemObj { _opaque: [u8; 0] }
+   |                           ^^^^^^
+
+warning: 6 warnings emitted
+

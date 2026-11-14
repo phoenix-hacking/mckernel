@@ -1,0 +1,72 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "original_reader": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/f06-second-family-qualification-source-1/check_partial.py",
+    "bytes": 4843,
+    "sha256": "7a454e85400db108488f9b069312c265c1fd87233150522324939c231e2ed8d9"
+  },
+  "original_profile": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/f06-second-family-qualification-source-1/PROFILE.NOT-GRANTED.json",
+    "bytes": 101764,
+    "sha256": "eb7ee8d505b0acba408bbb490c4e0ecd963325f68f181d04d3b1731116dcf2a0"
+  },
+  "actual_results": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/foreground-f06-shmget-current114-abi-source-1/actual-capture-1/RESULTS.json",
+    "bytes": 8403,
+    "sha256": "585b9ffd51cdc9ba75c020b512fec74c24fbb41c1353d7888a6c2baaad14ebb9"
+  },
+  "actual_stderr": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/foreground-f06-shmget-current114-abi-source-1/actual-capture-1/step4/stderr",
+    "bytes": 1270,
+    "sha256": "de1acef605f4f0362885c1aae0b788fbf73d6d85106803c5207756eb82e90372"
+  },
+  "actual_first_failure": {
+    "owner": "arch_rt_sigreturn_xrstor_bridge",
+    "offset": 10,
+    "type": 29,
+    "target": "_GLOBAL_OFFSET_TABLE_",
+    "addend": 6
+  },
+  "reviewer_observed_baseline_C_reloc_counts": {
+    "2": 3,
+    "25": 66,
+    "27": 4,
+    "29": 19,
+    "31": 103
+  },
+  "reviewer_observed_candidate_C_reloc_counts": {
+    "2": 3,
+    "25": 66,
+    "27": 4,
+    "29": 18,
+    "31": 102
+  },
+  "genuine_ELF_definitions": {
+    "25": "R_X86_64_GOTOFF64",
+    "27": "R_X86_64_GOT64",
+    "29": "R_X86_64_GOTPC64",
+    "31": "R_X86_64_PLTOFF64"
+  },
+  "genuine_header": {
+    "path": "/usr/include/elf.h",
+    "bytes": 177346,
+    "sha256": "afc21b7d86c9366562dda06f237152dce7634b878625d0c27925bb9e975d73bd"
+  },
+  "all_added_widths_bytes": 8,
+  "unrecognized_widths_still_rejected": true,
+  "shape_target_and_addend_equality_unchanged": true,
+  "unique_provider_18_other_C_bodies_nonrelocated_bytes_and_relocations_unchanged": true,
+  "synthetic_controls": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/foreground-f06-shmget-current114-abi-source-1/got64-reader-correction-source-1/PURE-READER-CONTROLS.json",
+    "bytes": 1195,
+    "sha256": "b354f8bd6ab6072277f79b96f1afeedf1f3acf0251870e907145af64ed4cc306"
+  },
+  "retained_inputs": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/foreground-f06-shmget-current114-abi-source-1/got64-reader-correction-source-1/RETAINED-FOUR-PREFIX-INPUT-IDENTITIES.json",
+    "bytes": 8035,
+    "sha256": "21e733e298f3b01935ad0192f21c898e3259507f993c5dd7a9a0d50ccbe2e744"
+  },
+  "compiler_link_replay": 0,
+  "source_body_changes": 0,
+  "actual_authority": null
+}

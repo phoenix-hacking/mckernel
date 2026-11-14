@@ -1,0 +1,36 @@
+{
+  "schema": "native-exact-scratch18-census-source-checkpoint-v1",
+  "recorded_at": "2026-10-01T15:00:00Z",
+  "status": "PASS_SOURCE_READ_ONLY_CENSUS_PENDING_PUBLICATION",
+  "base_commit": "215d338c06cc70ca6bad471eb2d035fb5650246f",
+  "wrapper_sha256": "12508d3a2d9bffcb84c34deabf9ef9e3d905167fc264ff2c4649057a95364a25",
+  "tests_sha256": "0cb921c7b873ad5fe56520296bcc5ddc1029d892e3e74998106a7d39d94e557a",
+  "embedded_observer_sha256": "42f690a2d5a551142e13ecdba1678bad49e0de1be42db099693664c16be09f1e",
+  "coordinator_tests": {"command": "taskset -c 6,7 bash -c 'ulimit -v 3145728; python3 -m unittest scripts.tests.test_native_rust_exact_disk_build_wrapper'", "passed": 46, "failed": 0},
+  "independent_review": {
+    "status": "PASS",
+    "additional_probes": 8,
+    "findings_closed": ["empty Python option operands", "authenticated recovery-to-wrapper caller chain", "full absolute ancestor replacement"],
+    "release": "read-only privileged census after fetched-byte verification only"
+  },
+  "live_unprivileged_audit": {
+    "recorded_at": "2026-10-01T14:49:45Z",
+    "boot_id": "c733d83b-a5ae-4f91-9ce6-9f8ccf119afd",
+    "visible_process_entries": 276,
+    "inaccessible_executable_identities": 63,
+    "global_heavy_absence_verified": false,
+    "host_free_bytes": 23230111744,
+    "scratch_free_bytes": 15174578176,
+    "memory_available_bytes": 23987646464
+  },
+  "retained_state_unchanged": {
+    "request": {"device": 1831, "inode": 90729, "sha256": "80de5f1c02867bcbee69752e186f7fc11d201c2df3c78887ea08aa85f92e2bd7"},
+    "shared_lock": {"device": 1831, "inode": 90730, "sha256": "3aa97b068d3e5246ff838417b32989b2760ca11680f8a65a978d949a9d85cdc5"},
+    "attempt_lock": {"device": 1831, "inode": 90731, "sha256": "e39dc0fe3faf917a0aa8adb61e9aa64334bf5d107bd35fe4ad7d441a6beeca1e"},
+    "build_lease_present": false,
+    "output_empty": true,
+    "evidence_empty": true
+  },
+  "not_released": ["recovery mutation", "build execution", "Docker", "guest"],
+  "acceptance": {"application": false, "whole_os": false}
+}

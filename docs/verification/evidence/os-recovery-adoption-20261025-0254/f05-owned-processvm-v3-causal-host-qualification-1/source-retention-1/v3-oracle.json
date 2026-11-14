@@ -1,0 +1,76 @@
+{
+  "schema": "mckernel.owned-child-f05-v3-causal-source-oracle.v1",
+  "status": "FROZEN_V3_CAUSAL_SOURCE_ORACLE_BEFORE_HOST_EXECUTION",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "case_id": "M14-05-05-owned-processvm-v3-causal-204B",
+  "source": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/f05-owned-processvm-v3-causal-source-1/app.rs",
+    "sha256": "50d654641b1b00e1ad08f79609cb99a1d5445027f9d719efa99ec5a90fba23d5",
+    "size": 15845
+  },
+  "expected_stdout": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/f05-owned-processvm-v3-causal-source-1/expected.stdout",
+    "sha256": "bb5952e803baae65378534b8fde8b9686795b3343c5429096297a372b1f1f46e",
+    "size": 204
+  },
+  "stdout_hex": "4f574e45445f463035207633206368696c6472656e3d3120636c6f6e655f6368696c645f7365747469643d3120706172656e745f7469645f756e6368616e6765643d310a74726163656d653d302073696773746f703d3139207065656b3d3020706f6b653d3020726561646261636b3d302063726f73735f346b5f776f72643d310a6368696c645f76657269666965643d3120707269766174655f756e6368616e6765643d31206368696c645f657869743d30207265617065643d310a4f574e45445f46303520504153530a",
+  "stderr_hex": "",
+  "exit_code": 0,
+  "child_count": 1,
+  "raw_clone_flags_hex": "0x01200011",
+  "clone_child_settid": true,
+  "clone_child_cleartid": true,
+  "CLONE_VM": false,
+  "child_forwarded_witness": {
+    "syscall": 1,
+    "fd": 2,
+    "buffer": "valid mapped child private bytes",
+    "count": 0,
+    "raw_result": 0,
+    "source_order": "after child-TID check/private initialization and before TRACEME/readiness/SIGSTOP",
+    "arguments_in_application_syscall_trace": false
+  },
+  "child_guest_terminal": 60,
+  "child_observed_host_terminal": 231,
+  "parent_observed_host_terminal": 231,
+  "poll_limit_each": 2000,
+  "poll_nanosleep_ns": 1000000,
+  "stream_limit_each_bytes": 1024,
+  "unsupported_is_success": false,
+  "original_v1_replaced_or_requalified": false,
+  "practical_check_count": 35,
+  "native_acceptance": false,
+  "causal_protocol": {
+    "protocol_version": 1,
+    "nonce": "31770ebb739fea402ded939617921dda",
+    "guest_gate_absolute": "/case/work/.f05-gate-31770ebb739fea402ded939617921dda",
+    "payload_gate_relative": ".f05-gate-31770ebb739fea402ded939617921dda",
+    "initial_gate_bytes": 0,
+    "go_byte_u8": 71,
+    "read_limit_bytes": 2,
+    "missing_or_EOF": "PENDING",
+    "bad_nonempty_or_other_errors": "FAIL",
+    "gate_polls_maximum": 32,
+    "gate_poll_nanosleep_ns": 125000000,
+    "global_application_timeout_ns": 10000000000,
+    "deadline_resets": 0,
+    "release_requires": [
+      "actual owned child DELETE",
+      "actual owned child final retirement errno0"
+    ],
+    "native_causal_proof_from_HOST": false
+  },
+  "ptrace_resume": {
+    "request": 17,
+    "name": "PTRACE_DETACH",
+    "data": 0,
+    "after_parent_memory_checks_while_child_stopped": true,
+    "original_TRACEME_ref_released_by_existing_owner": true,
+    "child_byte_verification_after_resume": true
+  },
+  "original_v2_replaced_or_requalified": false,
+  "env": {
+    "PATH": "/usr/bin:/bin",
+    "COKERNEL_PATH": "/apps"
+  }
+}

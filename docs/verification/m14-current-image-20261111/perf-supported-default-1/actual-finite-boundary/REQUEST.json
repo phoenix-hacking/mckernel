@@ -1,0 +1,436 @@
+{
+  "actual_provider_binding": {
+    "bytes": 3462,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/integer-provider-extension-1/execution-packet-1/ACTUAL-PROVIDER-BINDING.json",
+    "sha256": "5c36d52b5ba4a2d60396e8d7eeb7364967d2d634ff18d2f58b218aab4c06beeb"
+  },
+  "already_passing_18_family_or_core_producer_replayed": false,
+  "at": "2026-11-11T17:11:40.970193+00:00",
+  "author_execution": false,
+  "canonical_write": false,
+  "claims": {
+    "HOST_entry_output_terminal_only": true,
+    "actual_new_consumer_type_link_behavior": "UNPROVED_UNTIL_ACTUAL_COMMANDS",
+    "historical_UNKNOWN_or_source_resource_native_release": false,
+    "image_or_DEFAULT_or_original_acceptance": false,
+    "kernel_native_panic_behavior": false
+  },
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=2147483648",
+        "--cpu=60",
+        "--fsize=67108864",
+        "--nofile=64",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TZ=UTC",
+        "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/integer-provider-extension-1/execution-packet-1/output-1/tmp",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+        "--crate-name",
+        "kernel_core_boundary_consumer",
+        "--crate-type",
+        "lib",
+        "--edition=2021",
+        "--sysroot=/dev/null",
+        "-C",
+        "metadata=mckernel_kernel_195_boundary_consumer",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "debuginfo=2",
+        "-C",
+        "code-model=large",
+        "-C",
+        "relocation-model=static",
+        "-C",
+        "no-redzone=yes",
+        "-C",
+        "force-frame-pointers=yes",
+        "-C",
+        "overflow-checks=off",
+        "-C",
+        "force-unwind-tables=no",
+        "-C",
+        "no-vectorize-loops",
+        "-C",
+        "no-vectorize-slp",
+        "-C",
+        "target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma",
+        "-Z",
+        "dep-info-omit-d-target",
+        "-Z",
+        "binary-dep-depinfo",
+        "--extern",
+        "core=/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/first-core-compile-1/output-1/libcore.rmeta",
+        "--extern",
+        "compiler_builtins=/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/integer-builtins-1/output-1/libcompiler_builtins.rmeta",
+        "-L",
+        "dependency=/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/first-core-compile-1/output-1",
+        "-L",
+        "dependency=/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/integer-builtins-1/output-1",
+        "--emit=obj=/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/integer-provider-extension-1/execution-packet-1/output-1/core-boundary-consumer.o,dep-info=/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/integer-provider-extension-1/execution-packet-1/output-1/core-boundary-consumer.raw.d",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/integer-provider-extension-1/core_boundary_consumer.rs"
+      ],
+      "expected_exit": 0,
+      "id": "compile-real-core-builtin-consumer",
+      "required_stderr": "preserve_actual_compiler_diagnostics",
+      "required_stdout": "empty",
+      "wall_seconds": 90
+    },
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=2147483648",
+        "--cpu=60",
+        "--fsize=67108864",
+        "--nofile=64",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TZ=UTC",
+        "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/integer-provider-extension-1/execution-packet-1/output-1/tmp",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "/usr/bin/cc",
+        "-no-pie",
+        "-Wl,--gc-sections",
+        "-Wl,-Map=/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/integer-provider-extension-1/execution-packet-1/output-1/core-boundary-consumer.map",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/integer-provider-extension-1/execution-packet-1/output-1/core-boundary-consumer.o",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/first-core-compile-1/output-1/core.o",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/integer-builtins-1/output-1/compiler_builtins.o",
+        "-o",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/integer-provider-extension-1/execution-packet-1/output-1/core-boundary-consumer"
+      ],
+      "expected_exit": 0,
+      "id": "HOST-link-matching-core-and-builtins-no-libstd",
+      "required_output": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/integer-provider-extension-1/execution-packet-1/output-1/core-boundary-consumer",
+      "required_stderr": "preserve_actual_linker_diagnostics",
+      "required_stdout": "empty",
+      "wall_seconds": 30
+    },
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=268435456",
+        "--cpu=5",
+        "--fsize=67108864",
+        "--nofile=64",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TZ=UTC",
+        "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/integer-provider-extension-1/execution-packet-1/output-1/tmp",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/integer-provider-extension-1/execution-packet-1/output-1/core-boundary-consumer",
+        "0"
+      ],
+      "expected_exit": 0,
+      "id": "normal",
+      "required_stderr": "empty",
+      "required_stdout_json": {
+        "bound": 7,
+        "case": "normal",
+        "fmt": "d=-2147483648;x=ffffffd6;X=7FFFFFFF",
+        "option": 7,
+        "option_expect": 11,
+        "result": 9,
+        "u128_quotients": [
+          [
+            0,
+            0
+          ],
+          [
+            18446744073709551615,
+            18446744073709551615
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ]
+      },
+      "wall_seconds": 5
+    },
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=268435456",
+        "--cpu=5",
+        "--fsize=67108864",
+        "--nofile=64",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TZ=UTC",
+        "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/integer-provider-extension-1/execution-packet-1/output-1/tmp",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/integer-provider-extension-1/execution-packet-1/output-1/core-boundary-consumer",
+        "1"
+      ],
+      "expected_exit": 101,
+      "id": "result-expect",
+      "required_stderr": "empty",
+      "required_stdout_json": {
+        "case": "result-expect",
+        "message": "core-result: -7",
+        "terminal": "host-exit-101"
+      },
+      "wall_seconds": 5
+    },
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=268435456",
+        "--cpu=5",
+        "--fsize=67108864",
+        "--nofile=64",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TZ=UTC",
+        "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/integer-provider-extension-1/execution-packet-1/output-1/tmp",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/integer-provider-extension-1/execution-packet-1/output-1/core-boundary-consumer",
+        "2"
+      ],
+      "expected_exit": 101,
+      "id": "option-unwrap",
+      "required_stderr": "empty",
+      "required_stdout_json": {
+        "case": "option-unwrap",
+        "message": "called `Option::unwrap()` on a `None` value",
+        "terminal": "host-exit-101"
+      },
+      "wall_seconds": 5
+    },
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=268435456",
+        "--cpu=5",
+        "--fsize=67108864",
+        "--nofile=64",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TZ=UTC",
+        "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/integer-provider-extension-1/execution-packet-1/output-1/tmp",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/integer-provider-extension-1/execution-packet-1/output-1/core-boundary-consumer",
+        "3"
+      ],
+      "expected_exit": 101,
+      "id": "option-expect",
+      "required_stderr": "empty",
+      "required_stdout_json": {
+        "case": "option-expect",
+        "message": "core-option",
+        "terminal": "host-exit-101"
+      },
+      "wall_seconds": 5
+    },
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=268435456",
+        "--cpu=5",
+        "--fsize=67108864",
+        "--nofile=64",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TZ=UTC",
+        "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/integer-provider-extension-1/execution-packet-1/output-1/tmp",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/integer-provider-extension-1/execution-packet-1/output-1/core-boundary-consumer",
+        "4"
+      ],
+      "expected_exit": 101,
+      "id": "bounds",
+      "required_stderr": "empty",
+      "required_stdout_json": {
+        "case": "bounds",
+        "message": "index out of bounds: the len is 3 but the index is 3",
+        "terminal": "host-exit-101"
+      },
+      "wall_seconds": 5
+    }
+  ],
+  "cwd": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/integer-provider-extension-1/execution-packet-1",
+  "execution_preconditions": [
+    "Actual first-core and integer producer files/qualification/positive process retirements are pinned; no zero-byte Docker underlying metadata placeholder accepted.",
+    "Independent exact operation GO and Root fresh actual shared HOST4GiB/max3/fresh26GiB/disk floor admission.",
+    "Runtime phases depend on successful realRust compile, exact new metadata dependency proof, real HOST link and selected integer provider object/final map identity.",
+    "All seven owned command families must return their exact declared status with positive immediate identity/direct/family/streams closure; preserve every failed primary, partial result and actual diagnostic.",
+    "Current/native/source/Scratch/historicalUNKNOWN holds remain; no new image or default credit from this HOST test."
+  ],
+  "expected_status_vector": [
+    0,
+    0,
+    0,
+    101,
+    101,
+    101,
+    101
+  ],
+  "fresh_output_root": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/integer-provider-extension-1/execution-packet-1/output-1",
+  "full_five_external_oracles_unchanged": true,
+  "independent_oracles": {
+    "bytes": 1414,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/integer-provider-extension-1/EXPECTED.json",
+    "sha256": "d4844227f9caeac7eeff18ed0e1457c2689da096b97fbaa2f7c0830667272c25"
+  },
+  "inputs": {
+    "bytes": 15043,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/integer-provider-extension-1/execution-packet-1/INPUTS.json",
+    "sha256": "22c23740a7cc2550c2a7b5afaf3b9b73b639d58c326147149daecb0ea6135016"
+  },
+  "minimum_behavioral_coverage": [
+    "Normal real Option/Result methods and valid bounds plus actual i32 Display/LowerHex/UpperHex outputs",
+    "ResultErr.expect -> genuine result::unwrap_failed/panic_fmt with actual Debug i32 message",
+    "None.unwrap -> genuine option::unwrap_failed -> panicking::panic -> panic_fmt",
+    "None.expect -> genuine option::expect_failed/panic_display -> panic_fmt",
+    "Checked dynamic out-of-bounds -> genuine compiler panic_bounds_check/panic_fmt",
+    "Same normal process adds exact nonzero-domain real u128 divisions:0/MAX,MAX/1,MAX/MAX,MAX/u64MAX with external hi/lo quotient vectors; no new runtime/scenario count"
+  ],
+  "owner": "/root/p04_tests_max",
+  "ownership": {
+    "Root_full_tool_completion_required_before_current_scope_release": true,
+    "guard_AST": {
+      "bytes": 8606,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/run_once.py",
+      "sha256": "983b8c3ceabcd8dc4d2e1999d75e6edbef91145a5f2ab18bfa1a2dfa6639c822"
+    },
+    "helper": {
+      "bytes": 4668,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/owned_process.py",
+      "sha256": "afe7403ead1bf8b2c527dfa34a0c0c19010cde5f27a646ccf1545fb8f3b9bc1d"
+    },
+    "immediate_positive_join_and_expected_status_before_next_command": true,
+    "labels": [
+      "core-integer-consumer-1-compile-real-core-builtin-consumer",
+      "core-integer-consumer-2-HOST-link-matching-core-and-builtins-no-libstd",
+      "core-integer-consumer-3-normal",
+      "core-integer-consumer-4-result-expect",
+      "core-integer-consumer-5-option-unwrap",
+      "core-integer-consumer-6-option-expect",
+      "core-integer-consumer-7-bounds"
+    ],
+    "no_signals_or_adopted_reaps_or_residual_or_capture_error": true,
+    "protected_parent_basis": {
+      "bytes": 5659,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/compiler-correction-1/run_root_once.py",
+      "sha256": "2a874e561022a38a67e17200e31bcfcce5b57ad2f4440aa4824c9dc2e2484399"
+    }
+  },
+  "postcompile_metadata_check": {
+    "builtin_metadata": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/integer-builtins-1/output-1/libcompiler_builtins.rmeta",
+    "checker": {
+      "bytes": 5570,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/integer-provider-extension-1/execution-packet-1/check_provider_identity.py",
+      "sha256": "4c20b68c5ac55fb2d5c341ad8d6f7efe25a2ee9e9af6109cb0956ee37064d24e"
+    },
+    "core_metadata": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/first-core-compile-1/output-1/libcore.rmeta",
+    "dependency_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/integer-provider-extension-1/execution-packet-1/output-1/core-boundary-consumer.raw.d",
+    "exactly_these_two_metadata_inputs": true
+  },
+  "postlink_provider_check": {
+    "checker": {
+      "bytes": 5570,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/integer-provider-extension-1/execution-packet-1/check_provider_identity.py",
+      "sha256": "4c20b68c5ac55fb2d5c341ad8d6f7efe25a2ee9e9af6109cb0956ee37064d24e"
+    },
+    "consumer_object": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/integer-provider-extension-1/execution-packet-1/output-1/core-boundary-consumer.o",
+    "executable": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/integer-provider-extension-1/execution-packet-1/output-1/core-boundary-consumer",
+    "link_map": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/integer-provider-extension-1/execution-packet-1/output-1/core-boundary-consumer.map",
+    "provider_object": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/integer-builtins-1/output-1/compiler_builtins.o",
+    "real_consumer_exec_relocation_exact_map_input_and_final_definition": true,
+    "require_before_any_runtime": true
+  },
+  "preserved_source_proposal": {
+    "bytes": 17953,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/integer-provider-extension-1/COMMAND-PROPOSAL.json",
+    "sha256": "f647c101f50475120ae85c3c1efb52a5ab374f2285f2249d4c54e2cc3f6378fd"
+  },
+  "private_tmp": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/integer-provider-extension-1/execution-packet-1/output-1/tmp",
+  "profile": {
+    "Root_fresh_admission_before_start": true,
+    "Root_must_reconcile_all_other_current_payloads": true,
+    "Root_parent_overhead_included": true,
+    "cpu": 7,
+    "fresh_MemAvailable_bytes": 27917287424,
+    "host_disk_floor_bytes": 17179869184,
+    "jobs": 1,
+    "max_address_space_bytes": 2147483648,
+    "native_CPU_or_memory_borrow": false,
+    "output_disk_reservation_bytes": 134217728,
+    "runtime_address_space_bytes": 268435456,
+    "scratch_disk_floor_bytes": 12884901888,
+    "shared_HOST_bytes": 4294967296,
+    "shared_jobs_max": 3
+  },
+  "provider_source_or_ownership_or_kernel_handler_changed": false,
+  "schema": 1,
+  "source": {
+    "bytes": 6141,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/integer-provider-extension-1/core_boundary_consumer.rs",
+    "sha256": "ca6c5f71f3616c9c67cd424d61b17ec55f52c63b254c7003e1d748b5b53280b8"
+  },
+  "source_GO": {
+    "bytes": 9935,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-source-review-p03-max-1/integer-extension-1/REVIEW.json",
+    "sha256": "8bd51ab0485028271a2c7ff241c14c38cf076b313bf6660f3b099b8da926c64d"
+  },
+  "status": "FROZEN_FIRST_GENUINE_CORE_INTEGER_CONSUMER_COMPILE_LINK_AND_FIVE_OUTCOMES_UNEXECUTED"
+}

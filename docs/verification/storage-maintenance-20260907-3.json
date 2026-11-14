@@ -1,0 +1,135 @@
+{
+  "artifacts": [
+    {
+      "path": "docs/verification/evidence/cleanup-archived-captures-20260907-3.py.gz",
+      "sha256": "410b031396e3b3fc4efce889fdc42aec5832c93157f0763cb50d54d8289caaaa",
+      "size": 3710,
+      "source": "/home/holden/mckernel-work/scratch/cleanup-archived-captures-20260907-3.py",
+      "unpacked_sha256": "9cd8ee7e13aedd5d82abe65c71558c7ae1cf56193ca82da631be50fba83ea1cb",
+      "unpacked_size": 11493
+    },
+    {
+      "path": "docs/verification/evidence/cleanup-old-trash-20260907.py.gz",
+      "sha256": "bfb40e4292349ce70eb596d4f65386173708e75559c62ad04854945d95ee4575",
+      "size": 1889,
+      "source": "/home/holden/mckernel-work/scratch/cleanup-old-trash-20260907.py",
+      "unpacked_sha256": "c51e0426e64c4b5ece5075b268814b8dbc9f689bdc0b788775953e6e81355dca",
+      "unpacked_size": 4939
+    },
+    {
+      "path": "docs/verification/evidence/storage-cleanup-20260907-3-plan.json.gz",
+      "sha256": "d049e23396a7b26ee54635279416b774031c737d524d6aec26548b933e213042",
+      "size": 11541,
+      "source": "/home/holden/mckernel-work/scratch/storage-cleanup-20260907-3-plan.json",
+      "unpacked_sha256": "5459452ca4c0faaa302f4a7681ca7180650c80ca8968906c2305ae252c43af6b",
+      "unpacked_size": 125415
+    },
+    {
+      "path": "docs/verification/evidence/storage-cleanup-20260907-3-report.json.gz",
+      "sha256": "1b31660bccdb09bff7fa6552375707addaf26752f39b62eae23904a51076f1ab",
+      "size": 3222,
+      "source": "/home/holden/mckernel-work/scratch/storage-cleanup-20260907-3-report.json",
+      "unpacked_sha256": "cc8527dc99d482ee5a084a6ce31294e5fd9677f483de091e13c93df1e31d9784",
+      "unpacked_size": 18103
+    },
+    {
+      "path": "docs/verification/evidence/storage-preserved-inputs-20260907-3.json.gz",
+      "sha256": "775185398cc743152c18553bb5f77844bc5626c66c877b79d2deb14cfe08a01e",
+      "size": 33287,
+      "source": "/home/holden/mckernel-work/scratch/storage-preserved-inputs-20260907-3.json",
+      "unpacked_sha256": "ddcbfb5774cad377b707ab2205a5b1a99c32e9337fb11ddb086d07c88c68d2e9",
+      "unpacked_size": 181066
+    },
+    {
+      "path": "docs/verification/evidence/storage-preserved-inputs-after-20260907-3.json.gz",
+      "sha256": "84d765ab0610c5f9a68d286338b534451725f6fd7a967dd893eb97d713745278",
+      "size": 209,
+      "source": "/home/holden/mckernel-work/scratch/storage-preserved-inputs-after-20260907-3.json",
+      "unpacked_sha256": "0dc2e56bb7446077030f987d2b1b259c5cee9a44f46fc49685352766f0702b08",
+      "unpacked_size": 273
+    },
+    {
+      "path": "docs/verification/evidence/storage-scratch-trim-before-20260907-3.json.gz",
+      "sha256": "b356c2a0731a9b943c89ab05868637e292f51d5cb15eb9e2d89bb12c05b6d339",
+      "size": 150,
+      "source": "/home/holden/mckernel-work/scratch/storage-scratch-trim-before-20260907-3.json",
+      "unpacked_sha256": "5a73d78a783c3329953cf84e7b42396878ec24e493189b8a7dbf8499050f9d70",
+      "unpacked_size": 174
+    },
+    {
+      "path": "docs/verification/evidence/storage-scratch-trim-20260907-3.json.gz",
+      "sha256": "492ecde7c42432c2c7b4afc03b17fd66c874a834269b1ca3a5671e6b23cd769f",
+      "size": 374,
+      "source": "/home/holden/mckernel-work/scratch/storage-scratch-trim-20260907-3.json",
+      "unpacked_sha256": "8be3a096cbfa0c76240ac01559d7fe10739f94a4c22ea386348085bed3317019",
+      "unpacked_size": 713
+    },
+    {
+      "path": "docs/verification/evidence/storage-old-trash-cleanup-20260907.json.gz",
+      "sha256": "46299abd1aeae210c4666b0a17c75f37e40088b3584b018ae43f27a1619b4daa",
+      "size": 367,
+      "source": "/home/holden/mckernel-work/scratch/storage-old-trash-cleanup-20260907.json",
+      "unpacked_sha256": "3de4aa0c934fed33121483c6010fc86ae04cb396664a28746d4b37bd3dad196d",
+      "unpacked_size": 626
+    }
+  ],
+  "checks": [
+    "Every retained archive and manifest used for McKernel cleanup matches the Git blob at the verified pushed commit, declared SHA-256 and size, and complete gzip reading.",
+    "Every removed McKernel capture entry matches its retained archive for content, type, mode and symlink target. All archive identities and source snapshots were rechecked before deletion.",
+    "All 794 checked current files retain their exact sizes and SHA-256 values; all 18 protected source/build/kernel/module/image dependency directories remain present.",
+    "All 31 committed evidence files used for removal retain their exact sizes and hashes and their complete gzip streams pass after deletion.",
+    "All 36 removed user Trash entries were discarded over two years ago, had no recent payload modifications, contained no shared regular-file hardlinks, and were checked for open use by visible processes. No personal filenames or content were retained.",
+    "Targeted fstrim returns unused scratch backing blocks to the host; the scratch filesystem remains mounted with the same 60-GiB logical backing capacity."
+  ],
+  "current_root_available_bytes": 150060605440,
+  "current_scratch_available_bytes": 33390493696,
+  "evidence_checked_at_pushed_head": "ccc48c93c1a6e8c576739fd831bc96d4a0c8b9dc",
+  "finished_utc": "2026-09-08T05:56:15.019488+00:00",
+  "kind": "Requested storage maintenance; no kernel code changes, builds or runtime acceptance",
+  "limitations": [
+    "The 12.5-GiB fstrim output describes free ranges; only the 462,794,752-byte backing allocation decrease is credited.",
+    "Host free-space changes also include unrelated concurrent activity; reclaimed allocation is measured from deleted Trash blocks and the scratch backing decrease.",
+    "Current compiler and browser caches and recent host crash/system logs remain in use and were preserved. No installed packages, virtual machines, repository history or retained failure evidence were removed."
+  ],
+  "old_trash": {
+    "criterion": "User Trash entries discarded over 365 days ago with no newer payload modifications",
+    "newest_deletion_date": "2024-09-02T23:49:34",
+    "personal_paths_or_contents_recorded": false,
+    "remaining_items": 0,
+    "removed_allocated_bytes": 12223381504,
+    "removed_items": 36
+  },
+  "preserved_current_files": 794,
+  "protected_directories": [
+    "mckernel-native-irq-images-20260907-10",
+    "mckernel-native-irq-images-20260907-11",
+    "mckernel-native-irq-images-20260907-13",
+    "native-build-base-24a151fe",
+    "native-ikc-prototype-20260907-9",
+    "native-irq-transport-exact-stage-20260907-1",
+    "native-runtime-24a151fe",
+    "native-runtime-local-base-24a151fe",
+    "native-source",
+    "native-sysfs-objects-module-20260907-5",
+    "native-sysfs-os-module-20260907-2",
+    "native-sysfs-setup-module-20260907-1",
+    "native-sysfs-tree-module-20260907-2",
+    "native-topology-kernel-20260907-1",
+    "native-topology-module-20260907-1",
+    "native-trampoline-region-module-20260907-3",
+    "native-vdso-kernel-20260907-3",
+    "native-vdso-module-20260907-1"
+  ],
+  "reclaimed_host_allocated_bytes": 12686176256,
+  "reclaimed_scratch_backing_allocated_bytes": 462794752,
+  "removed_capture_directories": 5,
+  "removed_duplicate_archives": 29,
+  "removed_scratch_allocated_bytes": 447516672,
+  "restoration": [
+    "The compressed cleanup report maps every removed McKernel capture and duplicate archive to its retained committed evidence and SHA-256.",
+    "Verify an archive hash and restore its top-level directory into scratch for historical replay. Use new attempt names for new work.",
+    "User Trash payloads were permanently removed as discarded data; only aggregate maintenance metadata was retained."
+  ],
+  "status": "PASS",
+  "total_reclaimed_across_three_cleanups_bytes": 54834601984
+}

@@ -1,0 +1,7 @@
+The focused Rust parent-slot ownership repair passed its one new actual-body check. The existing constructor pin now transfers to exact retained ChildFork ownership at positive first-receipt commit. Both removal APIs refuse that retained owner until an authenticated terminal/handoff endpoint exists.
+
+The private two-file patch is against the retained held fork candidate, not a whole-file replacement for current production. The check compiled exact current transfer/progress/refusal bodies within the accepted actual Memory/IHK/MM/READY/LINK fixture and reused its genuine C guest objects. Compiler and one new test directly joined 0; groups are absent; stderr is empty; CPU6 is released.
+
+Limits remain explicit in HANDOFF.json: no full close_inner execution, no terminal ACK release proof, no sealed-before-writer Drop repair, no fresh postpositive revoke control capability, no module/guest/native activation. CREATE_PPD -95 and weak NULL remain unchanged. The reviewer owns independent source/result acceptance; root owns integration and runtime.
+
+Root current-production apply-check failed: smp_application differs and smp_fork_ingress is absent. This is a private held-provider source repair only. No safe production join is claimed or authorized. The saved test name mentions parent_close; actual execution uses close_worker_actual and release_ready, not full parent close or process death.

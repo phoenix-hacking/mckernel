@@ -1,0 +1,20 @@
+"""Metadata only: exact existing205 request/payload/once binding; never execute."""
+import pathlib,json,hashlib,sys
+G=pathlib.Path(__file__).resolve().parent
+assert len(sys.argv)==3
+snap_path=pathlib.Path(sys.argv[1]);raw=snap_path.read_bytes();assert hashlib.sha256(raw).hexdigest()==sys.argv[2];s=json.loads(raw);assert s['status']=='PASS_READ_ONLY_IMAGE_ROOT_SNAPSHOT' and s['launcher_phase']=='running' and s['pause_reason'] is None and s['stop_reason'] is None and s['included_used_percent']<100
+assert s['boot_id']==pathlib.Path('/proc/sys/kernel/random/boot_id').read_text().strip()
+q=json.loads(pathlib.Path('/home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1/owned-fork-pin-successor-1/coupled-current-pin-correction-1/image-request-SOURCE-BOUND-SUCCESSOR-PROPOSAL.json').read_text());assert q['source_identity']==s['source_identity'] and s['backup_identity']['path']==q['backup_root'];q['backup_identity']=s['backup_identity'];q['disk_admission']['host_device']=s['storage']['host']['device'];q['disk_admission']['scratch_device']=s['storage']['scratch']['device']
+def canon(x):return (json.dumps(x,sort_keys=True,separators=(',',':'),allow_nan=False)+'\n').encode()
+def ref(path):return {'path':str(path),'sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'bytes':path.stat().st_size}
+request=G/'image-request.json';qr=canon(q);assert len(qr)<33554432
+with request.open('xb') as f:f.write(qr)
+d=json.loads((G/'FINAL-ROOT-RELEASE-DATA-PENDING.json').read_text());d.pop('execution_review',None);d['status']='PASS_EXECUTION_RELEASE';d['request']={'path':str(request),'sha256':hashlib.sha256(qr).hexdigest()};d['boot_id']=s['boot_id'];d['scratch_binding']=s['scratch_binding'];d['nonce']=s['nonce'];d['guard_capture']=s['guard_capture'];d['root_snapshot']=ref(snap_path);d['root_snapshot_observed_at_utc']=s['observed_at_utc'];d['actual_elapsed_snapshot_age_limit_seconds']=None;d['temporal_policy']=s['temporal_policy'];d['root_finalization_required']=False
+payload=G/'final-release-payload-ROOT-DATA-1.json'
+with payload.open('x') as f:json.dump(d,f,sort_keys=True,indent=2);f.write('\n')
+canonical=canon(d);digest=hashlib.sha256(canonical).hexdigest();template=(G/'root-launch-reviewed-full-once.PENDING.py').read_text();assert template.count('PENDING_GENUINE_CANONICAL_PAYLOAD_SHA256')==1;template=template.replace('PENDING_GENUINE_CANONICAL_PAYLOAD_SHA256',digest);caller=G/'root-launch-reviewed-full-once.py'
+with caller.open('x') as f:f.write(template)
+packet={'schema':'mckernel.exact-current-image-final-root-binding.v1','status':'GENUINE_REQUEST_AND_CANONICAL_PAYLOAD_PREPARED_AWAITING_INDEPENDENT_FINAL_EXECUTION_REVIEW','request':ref(request),'root_snapshot':ref(snap_path),'canonical_payload':{'path':str(payload),'canonical_sha256':digest,'canonical_bytes':len(canonical),'file_ref':ref(payload)},'once_caller':ref(caller),'profile':ref(G/'FINAL-ROOT-LAUNCH-AND-CAPTURE-PROFILE.json'),'dispatcher':ref(G/'dispatch-image-once.py'),'guard':ref(G/'native_exact_current_optin_image_guard.py'),'current_predecessor':d['current_predecessor'],'source42_publication':d['prerequisites']['publication'],'control4_publication':d['prerequisites']['control_publication'],'final_release_written':False,'execution_review_pending':True,'compiler_or_Docker_or_ownership_executed':False,'next_command':['/home/holden/anaconda3/bin/python3','-I','-B',str(caller),'--review','GENUINE_FINAL_REVIEW_PATH','--sha256','GENUINE_FINAL_REVIEW_SHA256']}
+p=G/'FINAL-ROOT-BINDING-HANDOFF.json'
+with p.open('x') as f:json.dump(packet,f,sort_keys=True,indent=2);f.write('\n')
+print(json.dumps({'handoff':ref(p),'request':packet['request'],'canonical_payload_sha256':digest,'canonical_payload_bytes':len(canonical),'caller':packet['once_caller'],'final_release_written':False}))

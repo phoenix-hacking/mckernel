@@ -1,0 +1,506 @@
+{
+  "status": "SOURCE_DERIVED_SCENARIO_CONTRACT_PREPARATION_NOT_ORIGINAL_ACCEPTANCE_INVENTORY",
+  "scope": "Only currently selected ihkconfig/ihkosctl routes and their shared I03 dependencies; no API/repository census, new quota or test execution.",
+  "at": "2026-11-07T03:13:01.831689+00:00",
+  "definition_gap_confirmed": [
+    {
+      "id": "M15-F06-device-behavior",
+      "done_when": "Original ihkconfig owner supplies complete required supported/default real-device command scenario inventory and exact admitted provider/operation bindings; all required behavior observations pass.",
+      "definition_status": "closure condition stated; complete original inventory and/or actual operation bindings unresolved",
+      "dependencies": [
+        "M14_ACCEPTANCE_ORDER",
+        "MATCHED_COHORT",
+        "NATIVE_OWNER_AND_CURRENT_FREE",
+        "SOURCE-SDK-NATIVE"
+      ]
+    },
+    {
+      "id": "M15-F06-installed",
+      "done_when": "Installed ihkconfig, actual library/imports and static/dynamic providers match exact supported source/toolchain and coherent admitted cohort.",
+      "definition_status": "closure condition stated; complete original inventory and/or actual operation bindings unresolved",
+      "dependencies": [
+        "M14_ACCEPTANCE_ORDER",
+        "MATCHED_COHORT",
+        "NATIVE_OWNER_AND_CURRENT_FREE",
+        "SOURCE-SDK-NATIVE"
+      ]
+    },
+    {
+      "id": "M15-F06-native",
+      "done_when": "Original required ihkconfig native command/error/resource-restoring lifecycle scenario inventory has matching passing admitted results and restored ownership.",
+      "definition_status": "closure condition stated; complete original inventory and/or actual operation bindings unresolved",
+      "dependencies": [
+        "M14_ACCEPTANCE_ORDER",
+        "MATCHED_COHORT",
+        "NATIVE_OWNER_AND_CURRENT_FREE",
+        "SOURCE-SDK-NATIVE"
+      ]
+    },
+    {
+      "id": "M15-F07-device-behavior",
+      "done_when": "Original ihkosctl owner supplies complete required supported/default real-device command scenario inventory and exact admitted provider/operation bindings; all required behavior observations pass.",
+      "definition_status": "closure condition stated; complete original inventory and/or actual operation bindings unresolved",
+      "dependencies": [
+        "M14_ACCEPTANCE_ORDER",
+        "MATCHED_COHORT",
+        "NATIVE_OWNER_AND_CURRENT_FREE",
+        "SOURCE-SDK-NATIVE"
+      ]
+    },
+    {
+      "id": "M15-F07-installed",
+      "done_when": "Installed ihkosctl, actual library/imports and static/dynamic providers match exact supported source/toolchain and coherent admitted cohort.",
+      "definition_status": "closure condition stated; complete original inventory and/or actual operation bindings unresolved",
+      "dependencies": [
+        "M14_ACCEPTANCE_ORDER",
+        "MATCHED_COHORT",
+        "NATIVE_OWNER_AND_CURRENT_FREE",
+        "SOURCE-SDK-NATIVE"
+      ]
+    },
+    {
+      "id": "M15-F07-native",
+      "done_when": "Original required ihkosctl native command/error/resource-restoring lifecycle scenario inventory has matching passing admitted results and restored ownership.",
+      "definition_status": "closure condition stated; complete original inventory and/or actual operation bindings unresolved",
+      "dependencies": [
+        "M14_ACCEPTANCE_ORDER",
+        "MATCHED_COHORT",
+        "NATIVE_OWNER_AND_CURRENT_FREE",
+        "SOURCE-SDK-NATIVE"
+      ]
+    },
+    {
+      "id": "M15-I03-original-reproducibility",
+      "done_when": "All original supported source/configuration/compiler/SDK/transitive-provider identities and reproduction operations are supplied by original authority and matching reproduction evidence passes.",
+      "definition_status": "closure condition stated; complete original inventory and/or actual operation bindings unresolved",
+      "dependencies": [
+        "M14_ACCEPTANCE_ORDER",
+        "MATCHED_COHORT",
+        "NATIVE_OWNER_AND_CURRENT_FREE",
+        "SOURCE-SDK-NATIVE"
+      ]
+    },
+    {
+      "id": "M15-I03-complete-ABI",
+      "done_when": "Original owner enumerates required delivered userspace public ABI/provider contracts and joins all of them to exact passing supported-profile artifact/header/provider receipts; the complete inventory remains unestablished.",
+      "definition_status": "closure condition stated; complete original inventory and/or actual operation bindings unresolved",
+      "dependencies": [
+        "M14_ACCEPTANCE_ORDER",
+        "MATCHED_COHORT",
+        "NATIVE_OWNER_AND_CURRENT_FREE",
+        "SOURCE-SDK-NATIVE"
+      ]
+    },
+    {
+      "id": "M15-I03-static-dynamic",
+      "done_when": "Actual complete installed static/dynamic dependency manifests resolve every project provider to its legitimate owner and exact admitted artifact/source/toolchain identities; original I03 review accepts closure.",
+      "definition_status": "closure condition stated; complete original inventory and/or actual operation bindings unresolved",
+      "dependencies": [
+        "M14_ACCEPTANCE_ORDER",
+        "MATCHED_COHORT",
+        "NATIVE_OWNER_AND_CURRENT_FREE",
+        "SOURCE-SDK-NATIVE"
+      ]
+    }
+  ],
+  "source_bindings": {
+    "ihk/linux/user/rust/ihkconfig.rs": "7588b80db49d5304aea0e7644f46434745756cdf3c68e72ee0d8120fb1ed5201",
+    "ihk/linux/user/rust/ihkosctl.rs": "24022b834a2b5f90a8bd054f068f4da762fa7f5a7ee4bd4b5b0d50971047dd39",
+    "ihk/linux/user/CMakeLists.txt": "4a7dad497aeb6c381042dac35c52148c54b0231091158ff244d7e6ae110e8dc0",
+    "ihk/linux/core/host_driver.c": "be75185f5b1a0aea84b0be995f67405e45964999b6ed28ae60adb3ed1dece722",
+    "docs/verification/m14-m15-closure-progress.json": "eb6cca06ee75cab0682856f4387a15350e17f6b1c9a4a09c216c0a5b8e006a74"
+  },
+  "selection": {
+    "Rust": "Actual current CMake Rust/x86_64 CLI branches, existing selected compiler dependency.",
+    "HOST_config": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/full-cli-host-1/config.h",
+    "BUILDID": "c032c975",
+    "ENABLE_MEMDUMP": 1,
+    "ihkconfig_krm_workaround": false,
+    "optional_exclusion": "reserve_mem_max_ratio compiled cfgfalse in exact prior accepted ihkconfig recipe --krm0; no new optional profile inferred."
+  },
+  "common_invariants": [
+    "Return values in rows are main C-int return values; shell status is its low8bits. Do not translate raw -1 into -errno except branches explicitly doing so.",
+    "failed/checked_fail diagnostics are stdout; perror/explicit action diagnostics are stderr.",
+    "No whole-function errno guarantee; close/free may affect TLS errno. Captured return precedence is source-established.",
+    "FD ownership covers only opens actually successful; common main close executes once after fd_action, bypass routes own their own opens if any.",
+    "A caller-owned pointer passing to ioctl/public API establishes a synchronous borrow requirement, not proof of actual handler retention behavior. Those backend contracts remain to be joined.",
+    "Source presence does not establish original required supported set. Original membership, real provider operations, current-free/source/native gates remain UNKNOWN until actual owner input.",
+    "No undefined overflow/baseline, held raw ioctl, device/sysfs/native operation or monitor lookup is proposed."
+  ],
+  "passing_evidence_catalog": {
+    "preflight": {
+      "receipt": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/updated-cohort-main-1/RESULT.json",
+      "sha256": "2807e4fee3df1a949a8f66485c86c1d6e2b4026c4b5346f390647839a35062c6",
+      "reuse": "12 actual CLI early main cases, argc/invalid selectors only; before device dispatch."
+    },
+    "query": {
+      "record": "docs/verification/m14-m15-focused-results-20261101.json::combined_regression_run",
+      "test": "scripts/tests/test_m15_ihk_cli_query_errors.py::test_query_and_release_prerequisites",
+      "reuse": "Both CLIs/C+Rust: CPU/memory query count/fill failures, negative count, success and release-mem-all prerequisites; local synchronous provider scope, no actual main/backend."
+    },
+    "cpu_format": {
+      "record": "docs/verification/m14-m15-focused-results-20261101.json::combined_regression_run",
+      "test": "scripts/tests/test_m15_ihk_cli.py::test_ihkconfig_cpu_query_preserves_standalone_zero",
+      "reuse": "Six actual query_string CPU formatting cases only."
+    },
+    "dump_args": {
+      "record": "docs/verification/m15-parallel-host-results-20261106.json",
+      "test": "scripts/tests/test_m15_ihkosctl_dump_args.py::test_dump_consumes_only_its_options_and_filename",
+      "reuse": "Six argv shapes with and without POSIXLY_CORRECT; source-bound dump subcommand/provider observation only."
+    },
+    "ikc_caller": {
+      "record": "docs/verification/m15-ikc-allocation-results-20261107.json::caller",
+      "receipt": "/home/holden/mckernel-work/resume-20261107T000152Z-a458ed04/ikc-caller-1/qualification-1/RESULT.json",
+      "sha256": "3fc1897f7c8987aedbdb934b18d6d4bac635b853d1a44b67699bbb408968b7e5",
+      "reuse": "Actual Rust caller empty/NULL/correct formatter outputs; real request/output allocation and anonymous fd close/EBADF; declared local open/ioctl/formatter seams."
+    },
+    "imports": {
+      "receipt": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/cli-import-slice-1/REVIEW.json",
+      "sha256": "19a66dda24e181c429e992c20d4f96314e87f2d250ef5f4948ce201e3d8b77fd",
+      "reuse": "Exact selected import signatures: ihkconfig4, ihkosctl13, ihkmond2. Reuse unchanged ABI contracts; not complete delivered ABI inventory."
+    },
+    "loader": {
+      "record": "docs/verification/m15-corrected-library-tool-cohort-results-20261106.json",
+      "receipt": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-supervisor-1/updated-cohort-binding-1/qualification-1/RESULT.json",
+      "sha256": "9977b5b5546105bfd2a2bb4978925e978dcaa311dbba10ba3d29728f0ca6aa05",
+      "reuse": "Exact historical three-tool ELF/loader/provider cohort; preserve RPATH-or-RUNPATH predicate and its historical artifact scope."
+    },
+    "changed_ihkosctl": {
+      "receipt": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/intr-cli-producer-1/RESULT.json",
+      "sha256": "37cad18c0258982bc03073b9ba6a6cb47babc33760e06fbf8e38d36d924a25e4",
+      "reuse": "Current object/link passed once; first controller failed after direct wait, first codegen PID/birth/raw wait UNKNOWN. New link fully captured. No actual main/loader/native claim."
+    },
+    "intr_pending": {
+      "owner": "/root/create_empty_entry_parity_high",
+      "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/intr-cli-cases-1",
+      "reuse": "Current intr fixture is owned separately; final passing receipt not consumed in this inventory. No PASS inferred."
+    },
+    "unknown_action_pending": {
+      "owner": "/root/m15_cli_high",
+      "reuse": "New two-tool unknown-action full-main fixture is in preparation; no PASS inferred or duplicate vectors proposed."
+    }
+  },
+  "scenario_families": [
+    {
+      "scenario_family": "entry",
+      "tool": "both",
+      "source_function": "main/device_index/os_index",
+      "real_caller_trigger": "argc<3 or invalid nonnegative-int selector",
+      "return_and_output_contract": "Usage or Invalid device/OS index to stderr; return1 before dispatch. Valid selector does not imply action/provider success.",
+      "provider_borrow_and_FD_lifetime": "No fd/heap created on these early branches.",
+      "passing_coverage_to_reuse": [
+        "preflight"
+      ],
+      "next_missing_proof_or_binding": "Reuse passing early branches unchanged; unknown-action behavior is a separate currently owned delta, not covered by invalid-index proof.",
+      "original_required_membership": "UNKNOWN_PENDING_ORIGINAL_OWNER_CONFIRMATION; selected source route is established, no new quota."
+    },
+    {
+      "scenario_family": "unknown-action",
+      "tool": "both",
+      "source_function": "main/fd_action",
+      "real_caller_trigger": "valid index plus action outside dispatch set",
+      "return_and_output_contract": "Current source prints Unknown action plus usage, then returns0 after successful open. Intended unsupported-action failure contract is being handled by Root/B, not inferred here.",
+      "provider_borrow_and_FD_lifetime": "main opens selected /dev path; action borrows fd; main calls close once after action returns on every action result. Open failure returns1 without close. close result is ignored; no global errno-preservation guarantee.",
+      "passing_coverage_to_reuse": [
+        "unknown_action_pending"
+      ],
+      "next_missing_proof_or_binding": "Consume independently owned correction/result only; do not duplicate its tests.",
+      "original_required_membership": "UNKNOWN_PENDING_ORIGINAL_OWNER_CONFIRMATION; selected source route is established, no new quota."
+    },
+    {
+      "scenario_family": "reserve",
+      "tool": "ihkconfig",
+      "source_function": "reserve",
+      "real_caller_trigger": "dev reserve cpu list OR dev reserve mem size@node[,..]",
+      "return_and_output_contract": "argc<5=>-1/usage; bad target/count/parse=>-EINVAL; allocation=>-ENOMEM; valid payload returns public reservation result unchanged; any nonzero final result prints do_reserve error to stdout.",
+      "provider_borrow_and_FD_lifetime": "Request/argv pointers are borrowed by the called provider through its return; CLI does not transfer ownership. Actual provider retention/free behavior must be bound before real-device acceptance. No CLI device fd: early main route. CPU/chunks and all parser temporaries are freed after last provider borrow, also on errors.",
+      "passing_coverage_to_reuse": [
+        "imports"
+      ],
+      "next_missing_proof_or_binding": "Bind actual selected provider/handler and supported operation admission, then join matching full-main success/error/cleanup observations; local callback success is not real-device acceptance.",
+      "original_required_membership": "UNKNOWN_PENDING_ORIGINAL_OWNER_CONFIRMATION; selected source route is established, no new quota."
+    },
+    {
+      "scenario_family": "OS-enumeration",
+      "tool": "ihkconfig",
+      "source_function": "get",
+      "real_caller_trigger": "dev get os_instances",
+      "return_and_output_contract": "Negative count/fill failure=>-1 with checked_fail stdout; successful fill prints comma-separated OS indices plus newline and returns0; allocation failure=>-1.",
+      "provider_borrow_and_FD_lifetime": "No CLI fd. calloc indices are borrowed by fill, printed only after success, then freed once.",
+      "passing_coverage_to_reuse": [
+        "imports"
+      ],
+      "next_missing_proof_or_binding": "Bind actual selected provider/handler and supported operation admission, then join matching full-main success/error/cleanup observations; local callback success is not real-device acceptance.",
+      "original_required_membership": "UNKNOWN_PENDING_ORIGINAL_OWNER_CONFIRMATION; selected source route is established, no new quota."
+    },
+    {
+      "scenario_family": "buildid",
+      "tool": "both",
+      "source_function": "get",
+      "real_caller_trigger": "index get buildid",
+      "return_and_output_contract": "Open/ioctl failure=>-1 via checked_fail/failed stdout; success NUL-bounds configured BUILDID_CAPACITY, prints value newline, returns0.",
+      "provider_borrow_and_FD_lifetime": "get owns separately opened /dev/mcdN or /dev/mcosN read-only fd; closes once after ioctl regardless outcome. Stack result remains live throughout ioctl/printf. No outer main open.",
+      "passing_coverage_to_reuse": [
+        "imports"
+      ],
+      "next_missing_proof_or_binding": "Bind actual BUILDID size/string provider contract to configured c032c975 capacity and exact installed cohort; reuse existing config, no invented broader string domain.",
+      "original_required_membership": "UNKNOWN_PENDING_ORIGINAL_OWNER_CONFIRMATION; selected source route is established, no new quota."
+    },
+    {
+      "scenario_family": "query",
+      "tool": "both",
+      "source_function": "query",
+      "real_caller_trigger": "index query cpu OR query mem",
+      "return_and_output_contract": "CPU negative count and count/fill ioctl errors return captured failure before formatting; memory queries count then fill; allocation/NULL formatter=>-1 and stdout checked-failure; success prints formatted list newline and returns0; unknown target=>-EINVAL/usage.",
+      "provider_borrow_and_FD_lifetime": "Request/argv pointers are borrowed by the called provider through its return; CLI does not transfer ownership. Actual provider retention/free behavior must be bound before real-device acceptance. All request arrays and owned formatter result freed at common exit; main opens selected /dev path; action borrows fd; main calls close once after action returns on every action result. Open failure returns1 without close. close result is ignored; no global errno-preservation guarantee.",
+      "passing_coverage_to_reuse": [
+        "query",
+        "cpu_format"
+      ],
+      "next_missing_proof_or_binding": "Bind actual selected provider/handler and supported operation admission, then join matching full-main success/error/cleanup observations; local callback success is not real-device acceptance.",
+      "original_required_membership": "UNKNOWN_PENDING_ORIGINAL_OWNER_CONFIRMATION; selected source route is established, no new quota."
+    },
+    {
+      "scenario_family": "release",
+      "tool": "both",
+      "source_function": "release/change_resources(false)",
+      "real_caller_trigger": "index release cpu list OR release mem list/all",
+      "return_and_output_contract": "Count/parse/allocation errors=>-1 checked-failure stdout; mem all queries count+fill before release; ioctl result unchanged and nonzero diagnostic to stderr; invalid target=>-EINVAL.",
+      "provider_borrow_and_FD_lifetime": "Request/argv pointers are borrowed by the called provider through its return; CLI does not transfer ownership. Actual provider retention/free behavior must be bound before real-device acceptance. CPU/sizes/nodes freed once at common exit, including partial-allocation failures; main opens selected /dev path; action borrows fd; main calls close once after action returns on every action result. Open failure returns1 without close. close result is ignored; no global errno-preservation guarantee.",
+      "passing_coverage_to_reuse": [
+        "query"
+      ],
+      "next_missing_proof_or_binding": "Bind actual selected provider/handler and supported operation admission, then join matching full-main success/error/cleanup observations; local callback success is not real-device acceptance.",
+      "original_required_membership": "UNKNOWN_PENDING_ORIGINAL_OWNER_CONFIRMATION; selected source route is established, no new quota."
+    },
+    {
+      "scenario_family": "create",
+      "tool": "ihkconfig",
+      "source_function": "fd_action(create)",
+      "real_caller_trigger": "dev create",
+      "return_and_output_contract": "Actual source returns ioctl result unchanged and emits creating OS error for every r!=0. Actual __ihk_device_create_os selects first free global minor and returns that minor on success (host_driver.c1607+,1738). Thus minor>0 is a provider-success value that this predicate labels error. Original intended CLI exit-value convention is UNKNOWN, not normalized by this inventory.",
+      "provider_borrow_and_FD_lifetime": "main opens selected /dev path; action borrows fd; main calls close once after action returns on every action result. Open failure returns1 without close. close result is ignored; no global errno-preservation guarantee.",
+      "passing_coverage_to_reuse": [],
+      "next_missing_proof_or_binding": "Original owner must resolve intentional exit-minor versus success-status/diagnostic contract before any correction/test. Driver return-minor mapping is source-established, no operation admitted.",
+      "original_required_membership": "UNKNOWN_PENDING_ORIGINAL_OWNER_CONFIRMATION; selected source route is established, no new quota."
+    },
+    {
+      "scenario_family": "destroy",
+      "tool": "ihkconfig",
+      "source_function": "fd_action(destroy)",
+      "real_caller_trigger": "dev destroy os",
+      "return_and_output_contract": "Missing OS=>stdout usage/1; otherwise atoi OS passed as promoted int, raw ioctl result returned; nonzero emits stderr naming OS. Numeric overflow/undefined domains excluded.",
+      "provider_borrow_and_FD_lifetime": "main opens selected /dev path; action borrows fd; main calls close once after action returns on every action result. Open failure returns1 without close. close result is ignored; no global errno-preservation guarantee.",
+      "passing_coverage_to_reuse": [],
+      "next_missing_proof_or_binding": "Bind actual selected provider/handler and supported operation admission, then join matching full-main success/error/cleanup observations; local callback success is not real-device acceptance.",
+      "original_required_membership": "UNKNOWN_PENDING_ORIGINAL_OWNER_CONFIRMATION; selected source route is established, no new quota."
+    },
+    {
+      "scenario_family": "device-debug",
+      "tool": "ihkconfig",
+      "source_function": "fd_action(scratch/sbox)",
+      "real_caller_trigger": "dev scratch OR dev sbox [hex-index]",
+      "return_and_output_contract": "scratch prints16 ioctl-derived values and returns final raw value; sbox prints one value and returns raw value. These routes do not generally define zero-only result success.",
+      "provider_borrow_and_FD_lifetime": "main opens selected /dev path; action borrows fd; main calls close once after action returns on every action result. Open failure returns1 without close. close result is ignored; no global errno-preservation guarantee.",
+      "passing_coverage_to_reuse": [],
+      "next_missing_proof_or_binding": "Selected code exists; original supported/deployed inclusion and debug-provider meaning UNKNOWN. Do not invent real-device tests from action names.",
+      "original_required_membership": "UNKNOWN_PENDING_ORIGINAL_OWNER_CONFIRMATION; selected source route is established, no new quota."
+    },
+    {
+      "scenario_family": "device-memory-io",
+      "tool": "ihkconfig",
+      "source_function": "fd_action(read/mmap/clear_kmsg/clear_kmsg_write)",
+      "real_caller_trigger": "dev action hex-address",
+      "return_and_output_contract": "Missing address=>stderr/1; read negative pread=>perror/1, otherwise prints16 bytes; pwrite negative=>perror/1 else0; mmap MAP_FAILED=>perror/1; valid mapping print/read/write followed by munmap then0. Exact short-read C parity not claimed.",
+      "provider_borrow_and_FD_lifetime": "Main owns fd; mapping belongs action and is unmapped after last access. Stack read buffer remains owned locally. main opens selected /dev path; action borrows fd; main calls close once after action returns on every action result. Open failure returns1 without close. close result is ignored; no global errno-preservation guarantee.",
+      "passing_coverage_to_reuse": [],
+      "next_missing_proof_or_binding": "Actual addressed memory range/provider admission and original inclusion UNKNOWN. No device/read/mmap/held generic execution proposed.",
+      "original_required_membership": "UNKNOWN_PENDING_ORIGINAL_OWNER_CONFIRMATION; selected source route is established, no new quota."
+    },
+    {
+      "scenario_family": "raw-ioctl",
+      "tool": "both",
+      "source_function": "fd_action(ioctl)",
+      "real_caller_trigger": "index ioctl hex-request hex-argument",
+      "return_and_output_contract": "Missing request/argument=>stderr/1; bounded defined numeric conversions forwarded as c_ulong value; raw ioctl result returned with nonzero diagnostic.",
+      "provider_borrow_and_FD_lifetime": "main opens selected /dev path; action borrows fd; main calls close once after action returns on every action result. Open failure returns1 without close. close result is ignored; no global errno-preservation guarantee.",
+      "passing_coverage_to_reuse": [],
+      "next_missing_proof_or_binding": "Required request set/provider contracts UNKNOWN; this escape route supplies no authority for arbitrary ioctl or held operations.",
+      "original_required_membership": "UNKNOWN_PENDING_ORIGINAL_OWNER_CONFIRMATION; selected source route is established, no new quota."
+    },
+    {
+      "scenario_family": "status",
+      "tool": "ihkosctl",
+      "source_function": "get(status)",
+      "real_caller_trigger": "os get status",
+      "return_and_output_contract": "Negative API status=>-1/failed stdout; 0..7 print INACTIVE/BOOTING/RUNNING/SHUTDOWN/PANIC/HUNGUP/FREEZING/FROZEN newline, return0; other nonnegative value prints nothing and returns0.",
+      "provider_borrow_and_FD_lifetime": "No CLI fd in get status; actual API owns its provider lifetime internally.",
+      "passing_coverage_to_reuse": [
+        "imports"
+      ],
+      "next_missing_proof_or_binding": "Bind actual selected provider/handler and supported operation admission, then join matching full-main success/error/cleanup observations; local callback success is not real-device acceptance.",
+      "original_required_membership": "UNKNOWN_PENDING_ORIGINAL_OWNER_CONFIRMATION; selected source route is established, no new quota."
+    },
+    {
+      "scenario_family": "IKC-get",
+      "tool": "ihkosctl",
+      "source_function": "get_ikc_map",
+      "real_caller_trigger": "os get ikc_map",
+      "return_and_output_contract": "Open failure=>perror/-1; request allocation/ioctl/NULL formatter=>failed stdout/-1; nonNULL formatter=>print result newline/0. Empty nonNULL output is a blank success line.",
+      "provider_borrow_and_FD_lifetime": "Own read-only fd plus src/dst arrays and formatter string; each freed/closed once at common exit after final borrow.",
+      "passing_coverage_to_reuse": [
+        "ikc_caller",
+        "imports"
+      ],
+      "next_missing_proof_or_binding": "Bind actual selected provider/handler and supported operation admission, then join matching full-main success/error/cleanup observations; local callback success is not real-device acceptance.",
+      "original_required_membership": "UNKNOWN_PENDING_ORIGINAL_OWNER_CONFIRMATION; selected source route is established, no new quota."
+    },
+    {
+      "scenario_family": "assign",
+      "tool": "ihkosctl",
+      "source_function": "change_resources(true)",
+      "real_caller_trigger": "os assign cpu list OR assign mem list",
+      "return_and_output_contract": "Count/parse/allocation errors=>failed stdout/-1; raw ASSIGN result returned with existing stderr; invalid target=>-EINVAL/usage.",
+      "provider_borrow_and_FD_lifetime": "Request/argv pointers are borrowed by the called provider through its return; CLI does not transfer ownership. Actual provider retention/free behavior must be bound before real-device acceptance. Request arrays freed once at common exit; main opens selected /dev path; action borrows fd; main calls close once after action returns on every action result. Open failure returns1 without close. close result is ignored; no global errno-preservation guarantee.",
+      "passing_coverage_to_reuse": [
+        "imports"
+      ],
+      "next_missing_proof_or_binding": "Bind actual selected provider/handler and supported operation admission, then join matching full-main success/error/cleanup observations; local callback success is not real-device acceptance.",
+      "original_required_membership": "UNKNOWN_PENDING_ORIGINAL_OWNER_CONFIRMATION; selected source route is established, no new quota."
+    },
+    {
+      "scenario_family": "IKC-set",
+      "tool": "ihkosctl",
+      "source_function": "set",
+      "real_caller_trigger": "os set ikc_map map",
+      "return_and_output_contract": "Bad target=>stderr+usage/-1; count/parse/allocation failures=>failed stdout/-1; raw SET_IKC result returned, nonzero diagnostic stderr.",
+      "provider_borrow_and_FD_lifetime": "Request/argv pointers are borrowed by the called provider through its return; CLI does not transfer ownership. Actual provider retention/free behavior must be bound before real-device acceptance. Both request arrays freed after synchronous ioctl on every exit; main opens selected /dev path; action borrows fd; main calls close once after action returns on every action result. Open failure returns1 without close. close result is ignored; no global errno-preservation guarantee.",
+      "passing_coverage_to_reuse": [
+        "imports"
+      ],
+      "next_missing_proof_or_binding": "Bind actual selected provider/handler and supported operation admission, then join matching full-main success/error/cleanup observations; local callback success is not real-device acceptance.",
+      "original_required_membership": "UNKNOWN_PENDING_ORIGINAL_OWNER_CONFIRMATION; selected source route is established, no new quota."
+    },
+    {
+      "scenario_family": "lifecycle",
+      "tool": "ihkosctl",
+      "source_function": "fd_action(load/boot/shutdown)",
+      "real_caller_trigger": "os load [kernel.img], os boot, os shutdown",
+      "return_and_output_contract": "load borrows explicit argv path or existing fixed default path; boot/shutdown pass promoted int0. Each returns captured raw ioctl result and existing nonzero stderr. No wait-for-state logic in this CLI action.",
+      "provider_borrow_and_FD_lifetime": "Request/argv pointers are borrowed by the called provider through its return; CLI does not transfer ownership. Actual provider retention/free behavior must be bound before real-device acceptance. main opens selected /dev path; action borrows fd; main calls close once after action returns on every action result. Open failure returns1 without close. close result is ignored; no global errno-preservation guarantee.",
+      "passing_coverage_to_reuse": [],
+      "next_missing_proof_or_binding": "Need exact lifecycle handler/state/result semantics and matching resource restoration scenario from original owner, not a speculative restart/service command.",
+      "original_required_membership": "UNKNOWN_PENDING_ORIGINAL_OWNER_CONFIRMATION; selected source route is established, no new quota."
+    },
+    {
+      "scenario_family": "legacy-resource-actions",
+      "tool": "ihkosctl",
+      "source_function": "fd_action(alloc/reserve_cpu/reserve_mem)",
+      "real_caller_trigger": "os alloc [n [size]], reserve_cpu cpu..., reserve_mem start size",
+      "return_and_output_contract": "alloc CPU failure stops before memory; otherwise returns memory result (no local rollback). reserve_cpu requires values, allocates count-prefixed list, returns raw ioctl result then frees. reserve_mem requires start+size, passes stack pair and returns raw result. Defined bounded numeric input only.",
+      "provider_borrow_and_FD_lifetime": "Request/argv pointers are borrowed by the called provider through its return; CLI does not transfer ownership. Actual provider retention/free behavior must be bound before real-device acceptance. reserve_cpu heap list freed after ioctl; reserve_mem stack pair expires on return; main opens selected /dev path; action borrows fd; main calls close once after action returns on every action result. Open failure returns1 without close. close result is ignored; no global errno-preservation guarantee.",
+      "passing_coverage_to_reuse": [],
+      "next_missing_proof_or_binding": "Selected routes are actual; original supported inclusion and expected partial-alloc recovery are UNKNOWN. Bind actual handlers/owner before deriving required operation sequence.",
+      "original_required_membership": "UNKNOWN_PENDING_ORIGINAL_OWNER_CONFIRMATION; selected source route is established, no new quota."
+    },
+    {
+      "scenario_family": "kargs-clear",
+      "tool": "ihkosctl",
+      "source_function": "fd_action(kargs/clear_kmsg)",
+      "real_caller_trigger": "os kargs string OR os clear_kmsg",
+      "return_and_output_contract": "kargs missing string=>stderr/1, otherwise raw result with existing sending-IRQ diagnostic on failure. clear_kmsg returns nonnegative ioctl result or captured -errno. Do not change diagnostic wording/error convention in scenario preparation.",
+      "provider_borrow_and_FD_lifetime": "Request/argv pointers are borrowed by the called provider through its return; CLI does not transfer ownership. Actual provider retention/free behavior must be bound before real-device acceptance. kargs argv remains borrowed, never freed; main opens selected /dev path; action borrows fd; main calls close once after action returns on every action result. Open failure returns1 without close. close result is ignored; no global errno-preservation guarantee.",
+      "passing_coverage_to_reuse": [
+        "imports"
+      ],
+      "next_missing_proof_or_binding": "Bind actual selected provider/handler and supported operation admission, then join matching full-main success/error/cleanup observations; local callback success is not real-device acceptance.",
+      "original_required_membership": "UNKNOWN_PENDING_ORIGINAL_OWNER_CONFIRMATION; selected source route is established, no new quota."
+    },
+    {
+      "scenario_family": "kmsg",
+      "tool": "ihkosctl",
+      "source_function": "kmsg",
+      "real_caller_trigger": "os kmsg",
+      "return_and_output_contract": "calloc failure=>-ENOMEM; nonnegative API byte count yields bounded terminator, stdout text plus newline/0; negative result=>stderr error/-EINVAL.",
+      "provider_borrow_and_FD_lifetime": "No CLI outer fd. KMSG_SIZE+1 allocation is borrowed by ihk_os_kmsg then freed on either result.",
+      "passing_coverage_to_reuse": [
+        "imports"
+      ],
+      "next_missing_proof_or_binding": "Bind actual selected provider/handler and supported operation admission, then join matching full-main success/error/cleanup observations; local callback success is not real-device acceptance.",
+      "original_required_membership": "UNKNOWN_PENDING_ORIGINAL_OWNER_CONFIRMATION; selected source route is established, no new quota."
+    },
+    {
+      "scenario_family": "free-memory",
+      "tool": "ihkosctl",
+      "source_function": "fd_action(query_free_mem)",
+      "real_caller_trigger": "os query_free_mem",
+      "return_and_output_contract": "Calls exact shared reader with MemFree, fixed16384-byte stack result; nonzero=>failed stdout/-1; zero=>bounded terminator then text newline/0.",
+      "provider_borrow_and_FD_lifetime": "Request/argv pointers are borrowed by the called provider through its return; CLI does not transfer ownership. Actual provider retention/free behavior must be bound before real-device acceptance. main opens selected /dev path; action borrows fd; main calls close once after action returns on every action result. Open failure returns1 without close. close result is ignored; no global errno-preservation guarantee.",
+      "passing_coverage_to_reuse": [
+        "imports"
+      ],
+      "next_missing_proof_or_binding": "Reuse independently retained reader/query public-API cleanup regressions at exact scopes; still need actual CLI\u2192reader\u2192real sysfs/module cohort admission, not another isolated reader replay.",
+      "original_required_membership": "UNKNOWN_PENDING_ORIGINAL_OWNER_CONFIRMATION; selected source route is established, no new quota."
+    },
+    {
+      "scenario_family": "dump",
+      "tool": "ihkosctl",
+      "source_function": "dump",
+      "real_caller_trigger": "os dump [-d level] [-i|--interactive] [file] under ENABLE_MEMDUMP1",
+      "return_and_output_contract": "Invalid getopt=>dump usage stderr/1; explicit file is passed unchanged; absent file uses local time/name generation (time/localtime/strftime failure=>perror/1). Returns ihk_os_makedumpfile result unchanged.",
+      "provider_borrow_and_FD_lifetime": "No outer CLI fd. File borrows argv or stack path only during synchronous library call; library owns its own resources.",
+      "passing_coverage_to_reuse": [
+        "dump_args",
+        "imports"
+      ],
+      "next_missing_proof_or_binding": "Reuse current Root/A/B passed dump-parent proof and exact library once published; it is a bounded zero-chunk/local-provider body proof, not real dump/NMI/device acceptance.",
+      "original_required_membership": "UNKNOWN_PENDING_ORIGINAL_OWNER_CONFIRMATION; selected source route is established, no new quota."
+    },
+    {
+      "scenario_family": "intr",
+      "tool": "ihkosctl",
+      "source_function": "fd_action(intr)",
+      "real_caller_trigger": "os intr; os intr 242; os intr 2 243",
+      "return_and_output_contract": "Captured ioctl return unchanged; request0x122a00 promoted-int scalars0xf1/0xf2/0x2f3; nonzero exact stderr error: sending IRQ. Main propagates action result after close.",
+      "provider_borrow_and_FD_lifetime": "main opens selected /dev path; action borrows fd; main calls close once after action returns on every action result. Open failure returns1 without close. close result is ignored; no global errno-preservation guarantee.",
+      "passing_coverage_to_reuse": [
+        "intr_pending",
+        "changed_ihkosctl"
+      ],
+      "next_missing_proof_or_binding": "Consume F exact whole-main local-ioctl/genuine-fd result after its current corrected packet passes; no IRQ/backend/native inference.",
+      "original_required_membership": "UNKNOWN_PENDING_ORIGINAL_OWNER_CONFIRMATION; selected source route is established, no new quota."
+    }
+  ],
+  "shared_dependencies": [
+    {
+      "gate": "M15-I03-original-reproducibility",
+      "missing_contract": "Original delivered source/config/compiler/SDK/transitive-provider set and admitted reproduction operation are UNKNOWN. Current HOST C9/glibc2.31/BFD2.34+explicit udev supplement are documented alternative identities, not original SDK custody.",
+      "reuse": [
+        "imports",
+        "loader",
+        "changed_ihkosctl"
+      ],
+      "next": "Original authority must supply exact complete admitted source/SDK set. Do not probe guessed mappings or repeat Docker/source holds."
+    },
+    {
+      "gate": "M15-I03-complete-ABI",
+      "missing_contract": "Selected two-tool contract is concrete: ihkconfig4 public imports; ihkosctl13 public/private helper imports, plus libc/UAPI request layouts in actual declarations. Complete delivered-userspace set beyond these tools remains UNKNOWN.",
+      "reuse": [
+        "imports"
+      ],
+      "next": "Join original delivered target inventory to existing70function/6data guards and actual used-import declarations; only genuinely absent contracts require separate source review, no broad ABI rerun."
+    },
+    {
+      "gate": "M15-I03-static-dynamic / F06,F07-installed",
+      "missing_contract": "Installed paths, exact matched installed image/modules and legitimate complete static/dynamic provider owners remain UNKNOWN. Historical HOST loader proof has exact prior artifacts; current new ihkosctl has only current object/link proof.",
+      "reuse": [
+        "loader",
+        "changed_ihkosctl"
+      ],
+      "next": "Supply admitted installed/coherent-cohort manifest; reuse exact unchanged provider evidence, add only actual changed-artifact binding if Root requires it. No install/loader/main execution is authorized here."
+    }
+  ],
+  "decision": "The scenario-definition gap is real and can be narrowed by this source contract. It cannot be closed as original F06/F07/I03 acceptance without original required-set and actual admitted provider/installed-cohort bindings. Prioritize those shared bindings over leaf replay.",
+  "runtime_or_compiler_started": false,
+  "canonical_edits": false
+}

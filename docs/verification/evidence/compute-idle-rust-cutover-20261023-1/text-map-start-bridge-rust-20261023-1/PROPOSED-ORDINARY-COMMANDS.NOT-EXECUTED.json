@@ -1,0 +1,356 @@
+{
+  "commands": [
+    {
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--crate-type=lib",
+        "--emit=obj",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "codegen-units=1",
+        "-C",
+        "panic=abort",
+        "-C",
+        "relocation-model=static",
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/fixture.rs",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/fixture-rust.o"
+      ],
+      "label": "compile-actual-Rust-getter"
+    },
+    {
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Werror",
+        "-fno-pie",
+        "-no-pie",
+        "-I/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/preimage/arch/x86_64/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/preimage/lib/include",
+        "-DMCKERNEL_RUST_X86_MEMORY_PUBLIC",
+        "-DMAP_KERNEL_START=0UL",
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/fixture.c",
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/fixture-rust.o",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/fixture-public-0"
+      ],
+      "label": "original-C-vs-PUBLIC-Rust-0"
+    },
+    {
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/fixture-public-0"
+      ],
+      "label": "run-original-C-vs-PUBLIC-Rust-0"
+    },
+    {
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Werror",
+        "-fno-pie",
+        "-no-pie",
+        "-I/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/preimage/arch/x86_64/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/preimage/lib/include",
+        "-DMCKERNEL_RUST_X86_MEMORY_PUBLIC",
+        "-DMAP_KERNEL_START=1UL",
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/fixture.c",
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/fixture-rust.o",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/fixture-public-1"
+      ],
+      "label": "original-C-vs-PUBLIC-Rust-1"
+    },
+    {
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/fixture-public-1"
+      ],
+      "label": "run-original-C-vs-PUBLIC-Rust-1"
+    },
+    {
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Werror",
+        "-fno-pie",
+        "-no-pie",
+        "-I/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/preimage/arch/x86_64/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/preimage/lib/include",
+        "-DMCKERNEL_RUST_X86_MEMORY_PUBLIC",
+        "-DMAP_KERNEL_START=0x80000000UL",
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/fixture.c",
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/fixture-rust.o",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/fixture-public-2"
+      ],
+      "label": "original-C-vs-PUBLIC-Rust-2"
+    },
+    {
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/fixture-public-2"
+      ],
+      "label": "run-original-C-vs-PUBLIC-Rust-2"
+    },
+    {
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Werror",
+        "-fno-pie",
+        "-no-pie",
+        "-I/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/preimage/arch/x86_64/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/preimage/lib/include",
+        "-DMCKERNEL_RUST_X86_MEMORY_PUBLIC",
+        "-DMAP_KERNEL_START=0x100000000UL",
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/fixture.c",
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/fixture-rust.o",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/fixture-public-3"
+      ],
+      "label": "original-C-vs-PUBLIC-Rust-3"
+    },
+    {
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/fixture-public-3"
+      ],
+      "label": "run-original-C-vs-PUBLIC-Rust-3"
+    },
+    {
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Werror",
+        "-fno-pie",
+        "-no-pie",
+        "-I/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/preimage/arch/x86_64/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/preimage/lib/include",
+        "-DMCKERNEL_RUST_X86_MEMORY_PUBLIC",
+        "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/fixture.c",
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/fixture-rust.o",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/fixture-public-4"
+      ],
+      "label": "original-C-vs-PUBLIC-Rust-4"
+    },
+    {
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/fixture-public-4"
+      ],
+      "label": "run-original-C-vs-PUBLIC-Rust-4"
+    },
+    {
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Werror",
+        "-fno-pie",
+        "-no-pie",
+        "-I/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/preimage/arch/x86_64/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/preimage/lib/include",
+        "-DMCKERNEL_RUST_X86_MEMORY_PUBLIC",
+        "-DMAP_KERNEL_START=0x8000000000000000UL",
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/fixture.c",
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/fixture-rust.o",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/fixture-public-5"
+      ],
+      "label": "original-C-vs-PUBLIC-Rust-5"
+    },
+    {
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/fixture-public-5"
+      ],
+      "label": "run-original-C-vs-PUBLIC-Rust-5"
+    },
+    {
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Werror",
+        "-fno-pie",
+        "-no-pie",
+        "-I/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/preimage/arch/x86_64/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/preimage/lib/include",
+        "-DMCKERNEL_RUST_X86_MEMORY_PUBLIC",
+        "-DMAP_KERNEL_START=0xffffffffffffffffUL",
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/fixture.c",
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/fixture-rust.o",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/fixture-public-6"
+      ],
+      "label": "original-C-vs-PUBLIC-Rust-6"
+    },
+    {
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/fixture-public-6"
+      ],
+      "label": "run-original-C-vs-PUBLIC-Rust-6"
+    },
+    {
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Werror",
+        "-fno-pie",
+        "-no-pie",
+        "-I/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/preimage/arch/x86_64/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/preimage/lib/include",
+        "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/fixture.c",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/fixture-fallback"
+      ],
+      "label": "compile-exact-C-fallback"
+    },
+    {
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/fixture-fallback"
+      ],
+      "label": "run-exact-C-fallback"
+    },
+    {
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Werror",
+        "-fno-pie",
+        "-no-pie",
+        "-I/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/preimage/arch/x86_64/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/preimage/lib/include",
+        "-O0",
+        "-DMCKERNEL_RUST_X86_MEMORY_PUBLIC",
+        "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+        "-c",
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/consumer.c",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/public-consumer.o"
+      ],
+      "label": "compile-PUBLIC-consumer"
+    },
+    {
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Werror",
+        "-fno-pie",
+        "-no-pie",
+        "-I/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/preimage/arch/x86_64/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/preimage/lib/include",
+        "-O0",
+        "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+        "-c",
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/consumer.c",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/fallback-consumer.o"
+      ],
+      "label": "compile-fallback-consumer"
+    },
+    {
+      "argv": [
+        "/usr/bin/ld",
+        "-r",
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/public-consumer.o",
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/fixture-rust.o",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/public-rust-bound.o"
+      ],
+      "label": "bind-actual-default-selection"
+    },
+    {
+      "argv": [
+        "/usr/bin/nm",
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/public-rust-bound.o"
+      ],
+      "label": "nm-bound"
+    },
+    {
+      "argv": [
+        "/usr/bin/nm",
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/public-consumer.o"
+      ],
+      "label": "nm-PUBLIC-C"
+    },
+    {
+      "argv": [
+        "/usr/bin/nm",
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/fallback-consumer.o"
+      ],
+      "label": "nm-fallback-C"
+    },
+    {
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/verify_source_delta.py"
+      ],
+      "label": "finite-source-reverse"
+    },
+    {
+      "argv": [
+        "/bin/bash",
+        "-n",
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/postimage/kernel/rust/tests/run_equivalence.sh"
+      ],
+      "label": "harness-bash-syntax"
+    }
+  ],
+  "geometry_scope": "one retained host-profile compile value plus explicit scalar boundary cases; not a newly measured/current kernel acceptance",
+  "no_authority_for": [
+    "kernel build",
+    "guest/root",
+    "new native/default kernel linked-artifact credit",
+    "resource/profile expansion"
+  ],
+  "profile": {
+    "AS_bytes": 2147483648,
+    "CPU": 6,
+    "CPU_seconds": 60,
+    "FSIZE_bytes": 33554432,
+    "NOFILE": 256,
+    "RUST_MIN_STACK": 2097152,
+    "core": 0,
+    "jobs": 1,
+    "kind": "existing Rust1.92/GCC9 ordinary leaf profile",
+    "owned_capture_sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8",
+    "retirement_seconds": 6,
+    "signal_handlers": "reuse accepted helper stop/owned_capture bodies",
+    "wall_seconds": 90
+  },
+  "required_symbol_observations": {
+    "PUBLIC_C": "one R x86_map_kernel_start_geometry; U getter; no getter definition",
+    "bound_C_Rust": "one T getter; one R geometry; neither unresolved; no C duplicate",
+    "fallback_C": "local t getter; no geometry witness"
+  },
+  "reserved_CPU6": "normal cleanup guard; no lease/grant consumed by this source preparation",
+  "retained_geometry_source": {
+    "bytes": 4551,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/actual-check-1/commands.json",
+    "sha256": "41aa654aea27a5086f021a65325da959f636bbfbb861db0221f0ec06151f82e3"
+  },
+  "retained_profile_geometry_argument": "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "NOT_EXECUTED_EXPLICIT_ROOT_CPU_GRANT_REQUIRED"
+}

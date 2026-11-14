@@ -1,0 +1,115 @@
+{
+  "schema": "mckernel.fourleaf-fp-thread-state-conditional-native-metadata.v1",
+  "status": "STATIC_CASE_BOUND_PENDING_EXACT_INDEPENDENT_NATIVE_RELEASE",
+  "proposal": {
+    "path": "/home/holden/mckernel-work/host-preparation/evening-fourleaf-native-continuation-20261019-1/native-final-preparation-1/execution-proposal.json",
+    "sha256": "36af9a2e31bedf70e2e6cbb88bfefe9a706d438f633c3f3d86e2683a2e2d1ff4",
+    "size": 15881,
+    "mode": 33152
+  },
+  "runtime_wrapper": {
+    "path": "/home/holden/mckernel-work/host-preparation/evening-fourleaf-native-continuation-20261019-1/native-final-preparation-1/dispatch-runtime.py",
+    "sha256": "108d7f1f02ab46f60b9e0b908d75eb83aac23ab67c088b36b3b357ad81e59926",
+    "size": 5881,
+    "mode": 33152
+  },
+  "postjoin_readback": {
+    "requested": true,
+    "approved": "CONDITIONAL_ON_EXACT_INDEPENDENT_EXECUTION_RELEASE",
+    "argv": [
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/fl4-p-261019-1/a.owner-01cc688cfc76be9f30652b1a64006189",
+        "."
+      ],
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/cat",
+        "/home/holden/mckernel-work/scratch/fl4-p-261019-1/a/attempt-01cc688cfc76be9f30652b1a64006189/result.json"
+      ],
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/fl4-p-261019-1/a/attempt-01cc688cfc76be9f30652b1a64006189",
+        "."
+      ]
+    ],
+    "timeout_seconds_per_command": 30,
+    "capture_limit_bytes_per_command": 33554432,
+    "conditions": "Only after direct owner physically joins exit0 with accepted source-known complete client retirement/lease release/evidence flush; exact UID/type/path and regular-single-link result checks precede three bounded non-dereference captures. Any error/uncertainty stops, no retry or cleanup authority inferred."
+  },
+  "parent_identity": {
+    "device": 1828,
+    "inode": 757493,
+    "uid": 1000,
+    "gid": 1000,
+    "mode": "0o700"
+  },
+  "accepted_stage_fixture_parent_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/evening-fourleaf-continuation-ordinary-review-20261019-1/ACTUAL-CORRECTION-ORDINARY-ACCEPTANCE.json",
+    "sha256": "8f2f38fb4bc97bfcaade0b85dab0e6a006f6e3edf8df1fff5dde854d15fda818",
+    "size": 8183,
+    "mode": 33152
+  },
+  "full_image_source_authority": {
+    "image_request": {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/image-request.json",
+      "sha256": "bc98516d19e79ac3cc4a0fd89ca4f9de7e60ee7b64c77ead65e808d44c61dba9",
+      "size": 35945239,
+      "mode": 33152
+    },
+    "source_root": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/materialized-source",
+    "source_identity": {
+      "dev": 66306,
+      "file_type": 16384,
+      "gid": 1000,
+      "inode": 47992786,
+      "mode": 448,
+      "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/materialized-source",
+      "uid": 1000
+    },
+    "entire_source_manifest": {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/thin-inputs.json",
+      "sha256": "83e047abf793f2de3bf1a6f260c1493bf9ba600609b547c0665033dd90e88954",
+      "size": 6704212,
+      "mode": 33152
+    },
+    "materialization_receipt": {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/materialization-receipt.json",
+      "sha256": "4a4cdb6b3228b357f811be19056c3c1994e57b67fc670a3928a82113e749d64b",
+      "size": 471,
+      "mode": 33152
+    },
+    "source_derivative_sha256": "8ca6e79ff41ee3a90b2dc5d85f020a65efebb35c5cffd24acd37da6fe17d4cfc",
+    "materialization_sha256": "8fbf585c1b151801663ee0a1346505fdc50663191a0cd09349227fb7386499b5",
+    "candidate_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+    "candidate_identity_scope": "base_git_commit_only"
+  },
+  "canonical_authority_binding": {
+    "path": "/home/holden/mckernel-work/host-preparation/evening-fourleaf-native-continuation-20261019-1/canonical-authority-binding.json",
+    "sha256": "9551f83cebe4907c82c885f8725f50f2627ea332708802f95161b5be7ad2c8f2",
+    "size": 7158,
+    "mode": 33152
+  },
+  "original_builder_provenance": {
+    "path": "/home/holden/mckernel/scratch/fl4-a-20261019-1/roundtrip/overlay-manifest.json",
+    "sha256": "b0fef8dcd50a8a504158de77178ed16d172d62142f70568da848bc63398984d5",
+    "size": 19375,
+    "mode": 33152
+  },
+  "consumer_projection": {
+    "path": "/home/holden/mckernel/scratch/fl4-a-20261019-1/roundtrip/payload-source-visibility-projection-1.json",
+    "sha256": "34c81dbe86a341e0032b2796b1124962b6b46f1d45168ec850a2b30448853ff4",
+    "size": 2394,
+    "mode": 33152
+  },
+  "runtime_release": false
+}

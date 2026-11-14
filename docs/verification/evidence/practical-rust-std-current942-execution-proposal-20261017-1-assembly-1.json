@@ -1,0 +1,119 @@
+{
+  "schema": "mckernel.practical-rust-std-execution-assembly.v1",
+  "task_id": "practical-rust-std-current942-execution-proposal-20261017-1",
+  "status": "ASSEMBLED_PENDING_INDEPENDENT_STATIC_PREPARATION_AND_EXECUTION_REVIEW",
+  "author": "/root/native_lifecycle_probe",
+  "proposal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/practical-rust-std-current942-execution-proposal-20261017-1.json",
+    "sha256": "06e02724c0d72d8e546c7a5f3a4643a5272b25e956dac860faa03831ccc31195",
+    "size": 10236
+  },
+  "selected_inputs": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/file-closed-read-adapted-current942-execution-proposal-20261017-1.json",
+      "sha256": "02948c93f353e23f354aa9112d3baf0716c2ca5f5f0a9a4af4e19792ed984a4b",
+      "size": 8390
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/practical-rust-std-app-preparation-20261017-2.json",
+      "sha256": "2edb471d6ba361537f4b32ea2a890eb8914d78c5de571370d0dc70f0e08424cf",
+      "size": 20515
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-rust-std-app-static-20261017-2/staging/manifest.json",
+      "sha256": "364191b167b9b63f038f955c5c5d1f29778474f08ea8d03d3748017baa93480c",
+      "size": 5663,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/application-tests/practical_rust_std_app.rs",
+      "sha256": "b0c1c255aa954f0dd98fd437f102055cadbc2b73b9f4d541576d09ee7bcc978e",
+      "size": 3872
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+      "sha256": "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+      "size": 58828
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-rust-std-app-static-20261017-2/staging/overlay-result.json",
+      "sha256": "3d2d99a66c0a1548b61c0898416426654aa99d17a9ab3d43c6f8e49c42b6eae7",
+      "size": 14816
+    }
+  ],
+  "parent": {
+    "path": "/home/holden/mckernel-work/scratch/ndstd-1",
+    "device": 1828,
+    "inode": 109548,
+    "mode": "0o700",
+    "uid": 1000,
+    "gid": 1000
+  },
+  "nonce": "ad3658d098c3490682133960758367cf",
+  "socket": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/ndstd-1/attempt-ad3658d098c3490682133960758367cf/qmp.sock",
+      "encoded_bytes": 92,
+      "max_bytes": 107
+    }
+  ],
+  "profile": {
+    "cleanup_timeout_seconds": 15,
+    "cpus": 4,
+    "cpuset": "2-5",
+    "guest_memory_mib": 8192,
+    "guest_numa_nodes": 2,
+    "guest_timeout_seconds": 300,
+    "guest_vcpus": 4,
+    "heavy_operations": 1,
+    "mckernel_cpus": 1,
+    "mckernel_memory_mib": 128,
+    "memory": 12884901888,
+    "memory_swap": 12884901888,
+    "network": "none",
+    "payload_timeout_seconds": 10,
+    "pids": 512
+  },
+  "binding_checks": [
+    "Owner source matches frozen9084 current942 owner.",
+    "Prepared sourceb0c1/static6d1865/manifest364191/preparation2edb471 references match.",
+    "144stdout/emptyerr/exit0 and ND_FUTEX argv/both4096/allow_oversubscribe match immutable manifest/preparation.",
+    "Retained final map59 and selected app/init rows match; no stage/archive replay.",
+    "Parent1828/109548 remains canonical UIDGID1000/private0700/empty; new attempt/owner sibling absent; one QMP endpoint fits107bytes."
+  ],
+  "limitations": {
+    "supported_behavior": "Vec8193/checksum1024005, checked file write/read/EOF/sync_all/remove, String+BTreeMap word counts, two Rust std workers with barrier/mutex2000/TLS and joins.",
+    "overlap": "Barrier participants3 require two worker lifetimes to overlap. This proves neither parallel CPU execution nor sustained mutex contention.",
+    "requested_worker_stack_bytes": 262144,
+    "stack_limit": "No runtime stack-address/range check; requested stack size is not proof of returned stack geometry.",
+    "close_limit": "sync_all is checked and File is dropped before remove_file; File::drop closes but does not report close errors. No close-error check claimed.",
+    "runtime_expected": "One actual McKernel Rust standard-library invocation; all144frozen stdout bytes, empty stderr, exit0, normal schedule/retirement/procfs and owner/container/QEMU cleanup required.",
+    "not_claimed": [
+      "full Rust std compatibility",
+      "general allocator/file/thread correctness",
+      "formal catalog acceptance",
+      "native OS shutdown/resource restoration",
+      "whole-OS production acceptance"
+    ]
+  },
+  "remaining": [
+    "Independent static source/Linux/stage/producer-evaluator review.",
+    "Independent one-shot execution proposal review.",
+    "Bind whichever accepted retirement immediately precedes execution.",
+    "Dispatcher live preflight and separate one-shot execution release."
+  ],
+  "environment": {
+    "cpu_affinity": [
+      6
+    ],
+    "address_space_bytes": 1073741824,
+    "python_executable": "/home/holden/anaconda3/bin/python3",
+    "private_HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/home",
+    "private_TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/tmp"
+  },
+  "execution_approved": false,
+  "runtime_called": false,
+  "tests_run": false,
+  "root_called": false,
+  "git_called": false
+}

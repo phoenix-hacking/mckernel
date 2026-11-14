@@ -1,0 +1,84 @@
+{
+  "schema": "mckernel.independent-focused-ihk-heavy-execution-review.v1",
+  "decision": "PASS_EXECUTION",
+  "decision_scope": "CONDITIONAL_STATIC_REVIEW_ONLY",
+  "implementation_ownership": false,
+  "reviewer": "/root/native_kmsg_boundary_review_2208",
+  "release_author": "/root",
+  "reviewed_release_payload_sha256": "0f2c491b90480e7703dd75484f4b123655f19d75ba619301e104dab71ab65175",
+  "request": {
+    "path": "/home/holden/mckernel-work/host-preparation/native-kmsg-read-abi-20261018-1/target-preparation-1/proof-bound-target-preparation-1/request.json",
+    "sha256": "6322420cac5e85e14294e7aafb58c04b86e2e9f7f81278dfb3e3cee08fac8047"
+  },
+  "review_packet": {
+    "path": "/home/holden/mckernel-work/host-preparation/native-kmsg-read-abi-20261018-1/target-preparation-1/proof-bound-target-preparation-1/heavy-execution-review-1/EXECUTION-REVIEW-REQUEST.json",
+    "sha256": "32b26414549f4697a6b47b1353f44439e2ff100037c09b16e6adcd5167f33c5a"
+  },
+  "source_sha256": {
+    "scripts/native_running_external_modules_owner.py": "349d503862eb333151050d973138dae559652b7a5dc47bc52e06fe7ce14ffa5f",
+    "scripts/tests/test_native_running_external_modules_owner.py": "f530c512c25d0b9e1d85b339111effb4aaac895d4a79e0647f8843d32f4f1ea4",
+    "scripts/native_running_external_modules_offline.py": "e422544777fd750757b660ccf4c1d7829b00098d5af8c95d07802a03b877992b",
+    "scripts/native_rust_exact_mckernel_image_container_owner.py": "e9861cf73b0328c9fe2eacb987ea179933146cbeddbc3951405d4e60e89560f4",
+    "scripts/native_rust_exact_build_container_owner.py": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1",
+    "scripts/native_rust_exact_build_offline.py": "cc243126ab8cc0754c62175c77e46d6ba0d98294f8168cc77893a2c12249cd1a",
+    "scripts/native_rust_exact_disk_build_wrapper.py": "c252ee341eb61752704f8b818503c0a5dc97400845494707ca3110f5f23df6d1",
+    "scripts/native_rust_exact_build_image_rebind_probe.py": "412d46de7e078746a7ec979a13ccb25753d6fa34708610932e35be8f02a89635",
+    "scripts/native_rust_exact_build_image_prepare.py": "45cb12e0fd58d164468badfb99a3ed922e65e06046bf38b4a50e27e18595a27b",
+    "scripts/native_rust_exact_build_image_rebind.py": "f10ab116e55a24e8db7a8157d71efdd01198ba3453a8141bc8bbf596eda6b61e",
+    "scripts/native_exact_historical_lease_observer.py": "463ae558e141c2a6fe5a016fb19baddb26ed883c3bf6d39c114b27711ee78a51"
+  },
+  "source_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/native-kmsg-boundary-review-20261018-1/PROOF-BOUND-IHK-SOURCE-PROFILE-RESULT.json",
+    "sha256": "0ebfcb51e96d784c7ac646985fc2f3295004e9d140dd483ce9021e306ee9a854"
+  },
+  "actual_materialization_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/native-kmsg-boundary-review-20261018-1/ACTUAL-IHK-MATERIALIZATION-REVIEW.json",
+    "sha256": "61025b9ae207c4117f276d47ec8052578e44a456e5ab0f2e46768be7d53f613e"
+  },
+  "accepted_pipe_proof_export": {
+    "path": "/home/holden/mckernel-work/host-preparation/native-kmsg-boundary-review-20261018-1/ACTUAL-PINNED-MAKE-PROOF-EXPORT-REVIEW.json",
+    "sha256": "7142fb62ffbeb649045a21a4b5ed5f450cf20b61a8a54b22a3dca7944cc2d751"
+  },
+  "fetched_source_proof": {
+    "path": "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/checkpoint-3c026af1-fetched-proof.json",
+    "sha256": "9e86939c2f8313e3991868b8fa19bfdafe713cd0eff88a8046ff400a5d02eda9"
+  },
+  "fetched_current_metadata_proof": {
+    "path": "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/checkpoint-1e5eacbb-fetched-proof.json",
+    "sha256": "fc8599c398049434d9f50e73244a51c132050aa3bf14b6f6d869daedc7061382"
+  },
+  "current_publication_accepted": true,
+  "launch_authorized_now": false,
+  "capacity_accepted": false,
+  "fresh_live_admission_accepted": false,
+  "execution_count": 1,
+  "only_module_target": "ihk.ko",
+  "admission_conditions": {
+    "full_growth_and_emergency_bytes": 1207959552,
+    "host_floor_bytes": 17179869184,
+    "scratch_floor_bytes": 12884901888,
+    "host_required_bytes": 18387828736,
+    "scratch_required_bytes": 14092861440,
+    "fresh_live_capacity_usage_and_ownership_required": true,
+    "current_source_publication_fetched_proof_required": true,
+    "capacity_or_publication_status_asserted_here": false
+  },
+  "pending_genuine_facts": [
+    "Full heavy-capacity measurement after accepted cleanup if needed",
+    "Positive prior-operation/cleanup retirement and no conflicting live ownership/quarantine",
+    "Fresh under-lock usage/boot/mountUUID/source/request/directory/CPU/RAM/storage/namespace admission"
+  ],
+  "scope_exclusions": [
+    "SMP/mcctrl rebuild or unconditional pairing",
+    "compute C/kernel/image changes",
+    "module load/guest/native ioctl",
+    "archive staging or production/native/Rust retirement acceptance"
+  ],
+  "actual_operations_by_review": 0,
+  "new_tests": 0,
+  "findings": [],
+  "report": {
+    "path": "/home/holden/mckernel-work/host-preparation/native-kmsg-boundary-review-20261018-1/IHK-ONLY-HEAVY-EXECUTION-REVIEW.md",
+    "sha256": "f39d2caa400ecbf1e3f97cd133a45a54769957a8cbc8a15c416bdd6c4589e56b"
+  }
+}

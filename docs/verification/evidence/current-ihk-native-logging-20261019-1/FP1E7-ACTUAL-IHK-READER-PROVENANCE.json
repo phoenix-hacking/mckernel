@@ -1,0 +1,26 @@
+{
+  "actual_current_IHK_reader": {
+    "bytes": 77117,
+    "path": "/home/holden/mckernel-work/host-preparation/native-kmsg-read-abi-20261018-1/candidate/host-kernel/native-rust/os_runtime.rs",
+    "sha256": "6b736f94751c21a6b745f0476484d516c0de536c1cc2f4e1717eb899bf8be5e7"
+  },
+  "complete_native_lifetime_acceptance": false,
+  "decision": "CONFIRM_HISTORY_COMPLETENESS_GAP_WITH_ACTUAL_CURRENT_IHK_SOURCE",
+  "execution_authority": false,
+  "facts": [
+    "KmsgPages allocation fixes length to4MiB-4096; snapshot validates that exact length and all indices under shared ring lock.",
+    "Reader does not shift head or tail. Wrapped bottom uses strnlen-equivalent first-NUL termination; top span remains raw.",
+    "The fixed writer moves head to(tail+1)%len on overflow. CAP-1 is accepted by currentevaluator and can be an overwritten snapshot.",
+    "Below CAP-1 is not sufficient by itself because wrapped-bottom embeddedNUL can shorten returned bytes. No noembeddedNUL invariant was supplied by currentcontract."
+  ],
+  "implementation_ownership": false,
+  "prior_review": {
+    "bytes": 7530,
+    "path": "/home/holden/mckernel-work/host-preparation/current-ihk-fp-ring-independent-review-20261019-1/FP1E7-RING-EVALUATOR-INDEPENDENT-REVIEW.json",
+    "sha256": "2c11adb6b58803826eea3cee915cf96983b3043df04d553fb3efea133b2d9ad9"
+  },
+  "reviewer": "/root/next_replace_tid_review",
+  "reviewer_target_executions": 0,
+  "schema": "mckernel.independent-fp-ring-actual-reader-provenance.v1",
+  "source_path_scope": "Current module origin candidate6b736; live repository os_runtime6510 is not consumed by this provenance decision."
+}

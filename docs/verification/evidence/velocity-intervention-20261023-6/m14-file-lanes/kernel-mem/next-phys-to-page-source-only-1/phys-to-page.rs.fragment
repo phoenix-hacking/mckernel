@@ -1,0 +1,28 @@
+// Existing C geometry is already provided for page_unmap. The same page
+// shift/mask/stride and same borrowed arrays are used for this lookup.
+unsafe extern "C" {
+    static page_unmap_hash_shift: CInt;
+    static page_unmap_hash_mask: CULong;
+}
+
+/// Look up the original physical-address value through the existing hash.
+/// No reference is acquired: the existing synchronous lookup locks its bucket,
+/// finds the matching Page, unlocks with the captured flags, and returns the
+/// same borrowed pointer (or null). The caller keeps its original lifetime duty.
+#[no_mangle]
+pub unsafe extern "C" fn phys_to_page(phys: CULong) -> *mut MemPage {
+    unsafe {
+        crate::page_helpers::phys_to_page_lookup_body_result(
+            phys,
+            core::ptr::addr_of!(PAGE_INIT_HASH_FIRST) as usize,
+            core::ptr::addr_of!(PAGE_INIT_LOCK_FIRST) as usize,
+            page_unmap_hash_shift,
+            page_unmap_hash_mask,
+            page_init_hash_head_stride,
+            page_unmap_lock_stride,
+            Some(page_count_lock_callback),
+            Some(page_count_unlock_callback),
+            Some(crate::page_helpers::phys_to_page_lookup_orchestrate_result),
+        ).cast::<MemPage>()
+    }
+}

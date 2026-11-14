@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "record_kind": "pending_free_validated_inventory_source_review",
+  "recorded_utc": "2026-09-28T09:27:28Z",
+  "status": "FAIL_VALIDATED_INVENTORY_SOURCE",
+  "source_hashes": {
+    "kernel/rust/mem_helpers.rs": "423547dbfa8a39070c8dd6c8ce5b56d67cfd082ba091e12431359ffde46cf985",
+    "kernel/rust/tests/pending_free_batch_actual_harness.py": "b8870cb9db762ccd4ad765fae21b80806730d8b9de4e6046d4794dd9e8e069fe",
+    "kernel/rust/tests/pending_free_batch_vectors.rs": "c0e93ca7dc257b98461d788b252bda36c3e0a82b978570886979fb5413a8ea96"
+  },
+  "remaining_findings": [
+    "Free-dispatch controls lack the no-page/null-descriptor active-list case with exact immediate allocator arguments and complete list preservation; the active-capture case also needs exact resulting links and unrelated-field preservation.",
+    "World snapshots omit batch lease/token fields, pointer/length/bounds fields and descriptor-array entries, allowing repeated rejection to mutate retained inventory without detection."
+  ],
+  "verified_scope": "The frozen private helper retains independently supplied inventory, bounded membership and geometry checks, token-consuming pinned transfer, source reset, complete preflight and callback-argument capture, and no post-release descriptor reads. Production callers remain unwired and caller-provided lifetime/exclusivity remains an unsafe obligation.",
+  "next_action": "Evidence-only correction of the two remaining fixture gaps, followed by fresh independent source review. Do not prepare or run a Layer-B packet before PASS_VALIDATED_INVENTORY_SOURCE.",
+  "compilation_or_execution_released": false,
+  "production_integration_released": false,
+  "acceptance_credit": false
+}

@@ -1,0 +1,43 @@
+{
+  "schema": "mckernel.scheduler-debug18.flag-reference.v1",
+  "primary_reference_url": "https://raw.githubusercontent.com/llvm/llvm-project/llvmorg-22.1.0/llvm/include/llvm/BinaryFormat/ELF.h",
+  "reference_role": "Numeric ELF ABI definitions only; no assertion this reference release equals the installed/pinned compiler LLVM version. Actual codegen identity remains the unchanged qualified nightly1.95 profile.",
+  "exact_definition_snippets": {
+    "1179": "SHF_WRITE = 0x1,",
+    "1182": "SHF_ALLOC = 0x2,",
+    "1187": "SHF_MERGE = 0x10,",
+    "1190": "SHF_STRINGS = 0x20,",
+    "1211": "SHF_GNU_RETAIN = 0x200000,",
+    "1240": "SHF_X86_64_LARGE = 0x10000000,"
+  },
+  "retained_actual": {
+    "__verbose": {
+      "flags_decimal": 2097155,
+      "flags_hex": "0x200003",
+      "decomposition": [
+        "SHF_WRITE",
+        "SHF_ALLOC",
+        "SHF_GNU_RETAIN"
+      ],
+      "readelf_spelling": "WAo; retained older readelf labels bit as OS-specific",
+      "alignment": 8,
+      "bytes": 576
+    },
+    "readonly": {
+      "flags_decimal": 268435506,
+      "flags_hex": "0x10000032",
+      "decomposition": [
+        "SHF_ALLOC",
+        "SHF_MERGE",
+        "SHF_STRINGS",
+        "SHF_X86_64_LARGE"
+      ],
+      "readelf_spelling": "AMSl",
+      "alignment": 1,
+      "entry_size": 1,
+      "bytes": 137
+    }
+  },
+  "source_basis": "Original selected data static retains exact #[no_mangle], #[used], #[link_section=\"__verbose\"], static mut and Ddebug/[18] declaration. Actual emitted extra bit maps exactly GNU_RETAIN; permitting that one observed retained-source flag changes no byte/type/owner/source/body and no linker/runtime acceptance claim.",
+  "no_wildcard_flags": true
+}

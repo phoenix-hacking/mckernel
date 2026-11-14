@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "case_id": "file.closed-read",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "wait_status": {
+    "kind": "exited",
+    "code": 0
+  },
+  "stdout": {
+    "kind": "exact-line-lines",
+    "lines": [
+      "read-return=-1 errno=9",
+      "buffer-first=204 buffer-last=204"
+    ]
+  },
+  "stderr": {
+    "kind": "exact-bytes",
+    "hex": ""
+  },
+  "input_fixture": {
+    "operation": "read from closed fd",
+    "environment": {
+      "LANG": "C",
+      "LC_ALL": "C",
+      "TZ": "UTC"
+    }
+  },
+  "relational_assertions": [
+    "read must fail with EBADF",
+    "user-visible buffer content must stay unchanged"
+  ],
+  "unresolved_expectations": [
+    "Exact buffer byte dump may be normalized in execution capture to avoid line-specific assertions."
+  ],
+  "max_question_for_reviewer": "Should the unchanged-buffer rule be enforced as exact first/last byte or a stronger immutability relation?"
+}

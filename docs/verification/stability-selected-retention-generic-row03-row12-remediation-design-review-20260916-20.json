@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "record_kind": "stability_selected_retention_generic_row03_row12_remediation_design_review",
+  "task_id": "M01-B-selected-retention-generic-row03-row12",
+  "review_attempt": 20,
+  "recorded_utc": "2026-09-16T10:03:00Z",
+  "status": "PASS_REMEDIATION_DESIGN",
+  "authenticated_failure": {
+    "record_path": "docs/verification/stability-selected-retention-generic-row03-row12-implementation-failure-20260916-18.json",
+    "record_sha256": "346dcc884122f7e6a1ebf4032f014d91cfb008f1a37167038b3b6cfcf0997659",
+    "archive_path": "docs/verification/evidence/stability-selected-retention-generic-row03-row12-implementation-failure-20260916-18.tar.gz",
+    "archive_sha256": "7637f909c7b53c3dd4171e4bee696fbe5d086a35ce5fb838da156d8cf988e3e4",
+    "safe_unique_members": 357,
+    "regular_files": 346,
+    "bytecode_files": 0
+  },
+  "confirmed_blockers": [
+    "The attempt-18 adapter immediately drops its Box instead of retaining ownership in real deferred or quarantine vectors.",
+    "The attempt-18 runner names the required method chain only in strings and invokes none of the real methods.",
+    "Its adapter.diff, inverse records and manifest contain assertions rather than genuine diffs and file bindings."
+  ],
+  "released_design": {
+    "host_driver": "Use each runner.rs as a standalone std host-test crate loading the exact application_rpc, application_syscall, smp_application_syscall, stability_observer and stability_phase modules, plus only the minimal runner-local fallible Vec/log/clock compatibility surface.",
+    "ownership": "Ledger owns Mutex<State>; State owns actual Vec<Box<AlignedBacking>> deferred and quarantine queues. Transfer the sole Box into the appropriate queue, drop outside the lock only during explicit drain, and record deallocation after that drop.",
+    "real_method_chain": "A cfg(test) child of smp_application_syscall constructs and decodes the exact read request, then invokes real new, open_worker, admit, reserve, copied, verification_read16, observer selection, phase arm and return_value operations.",
+    "status_hook": "Add only a cfg(test) metadata hook immediately after the real response-status store and before release; do not fabricate Status from release.",
+    "row03": "After an accepted stage-2 baseline, publish Err(-11); publication deltas remain zero, mailbox destruction records unfinished/quarantine/live, and explicit drain records one deallocation.",
+    "row12": "After an accepted stage-2 baseline, publish Ok(true) at stage 3/commit 1; address, status, release, deferred and finished each advance once, send remains zero, and explicit drain records one deallocation.",
+    "isolation": "Use a fresh process for every row and mode when a separately authorized execution packet exists, because observer and token state are one-shot."
+  },
+  "bounded_future_scope": "One fresh packet-11-shaped remediation root; candidate edits only in the three named production source files plus adapters, runners, parser and enumerated evidence files. Both failed roots remain immutable.",
+  "acceptance_requirements": "A future packet must prove actual method calls and signatures, unique backing ownership, exact event ordering, metadata-only post-store hooks, complete cfg erasure, genuine adapter-to-staged-to-original byte restoration, exhaustive hashes and strict result parsing. It may not claim observations before execution.",
+  "implementation_released": false,
+  "compiled": false,
+  "runtime_execution": false,
+  "native_backing_accepted": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}

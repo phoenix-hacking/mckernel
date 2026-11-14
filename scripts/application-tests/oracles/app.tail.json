@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "app.tail",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"generator": {"kind": "numbered-lines", "prefix": "line-", "first": 1, "last": 100, "width": 3, "newline": true}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["line-084", "line-085", "line-086", "line-087", "line-088", "line-089", "line-090", "line-091", "line-092", "line-093", "line-094", "line-095", "line-096", "line-097", "line-098", "line-099", "line-100"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["tail -n17 emits exactly the last 17 complete input lines and preserves order/newlines"],
+  "unresolved_expectations": ["Pinned coreutils tail identity and option inventory require Max review."],
+  "max_question_for_reviewer": "Confirm tail -n17 output and numbered-line fixture expansion under the pinned coreutils binary."
+}

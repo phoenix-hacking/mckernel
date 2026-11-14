@@ -1,0 +1,125 @@
+{
+  "QEMU": {
+    "identity": {
+      "argv": [
+        "/usr/libexec/qemu-kvm",
+        "-machine",
+        "q35",
+        "-accel",
+        "tcg,thread=multi",
+        "-cpu",
+        "max,la57=off",
+        "-smp",
+        "4,sockets=2,cores=2,threads=1",
+        "-m",
+        "8192",
+        "-object",
+        "memory-backend-ram,size=4G,id=ram-node0",
+        "-object",
+        "memory-backend-ram,size=4G,id=ram-node1",
+        "-numa",
+        "node,nodeid=0,cpus=0-1,memdev=ram-node0",
+        "-numa",
+        "node,nodeid=1,cpus=2-3,memdev=ram-node1",
+        "-nic",
+        "none",
+        "-display",
+        "none",
+        "-no-reboot",
+        "-no-shutdown",
+        "-S",
+        "-monitor",
+        "none",
+        "-qmp",
+        "unix:/home/holden/mckernel-work/scratch/fl4-p-261019-1/a/attempt-01cc688cfc76be9f30652b1a64006189/qmp.sock,server=on,wait=off",
+        "-serial",
+        "file:/home/holden/mckernel-work/scratch/fl4-p-261019-1/a/attempt-01cc688cfc76be9f30652b1a64006189/serial.log",
+        "-debugcon",
+        "file:/home/holden/mckernel-work/scratch/fl4-p-261019-1/a/attempt-01cc688cfc76be9f30652b1a64006189/debugcon.log",
+        "-global",
+        "isa-debugcon.iobase=0xe9",
+        "-kernel",
+        "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/bzImage",
+        "-initrd",
+        "/home/holden/mckernel/scratch/fl4-a-20261019-1/roundtrip/lifecycle.cpio.gz",
+        "-append",
+        "console=ttyS0,115200n8 rdinit=/init nokaslr panic=-1 memmap=4K%0x80000-1"
+      ],
+      "pgid": 9,
+      "pid": 9,
+      "returncode": -9,
+      "sid": 9,
+      "starttime_ticks": 19503437
+    },
+    "reaped": true,
+    "returncode": -9
+  },
+  "actual_process_mutex_facts": {
+    "bytes": 435,
+    "path": "/home/holden/mckernel-work/host-preparation/evening-fourleaf-native-continuation-20261019-1/native-final-preparation-1/actual-postjoin-process-mutex-facts.json",
+    "sha256": "be75136f7ac888efe6ed1ddafb02d5d3d9ede45ffe8a52de38d5e4b30025c58d"
+  },
+  "application_acceptance": false,
+  "application_review_pending": true,
+  "case_id": "practical.rust-std.fp-thread-state",
+  "client_count": 30,
+  "client_positive_reaps": 30,
+  "client_unique_groups": 30,
+  "container_absent": true,
+  "container_id": "00632f2d282900604af370089634944545b8278669b7128bbd8e01efe6ad40bf",
+  "container_remove_returncode": 0,
+  "implementation_ownership": false,
+  "lease_retained": false,
+  "native_execution_authority": false,
+  "nonce": "01cc688cfc76be9f30652b1a64006189",
+  "observed_cleanup_race": "One docker kill returned1 because exact container already not running. Final exited0/noOOM inspect, rm0 and three independent empty censuses prove release; all30clients reaped.",
+  "owned_groups_empty": true,
+  "owner_elapsed_seconds": 35.88803083798848,
+  "owner_evidence_archive": {
+    "bytes": 552960,
+    "path": "/home/holden/mckernel-work/host-preparation/evening-fourleaf-native-continuation-20261019-1/native-final-preparation-1/readback-1.stdout",
+    "sha256": "bb6910e506ff882f12ddb5c482cae3bfcda5e6b1bc7f985406fd054cd4167ea9"
+  },
+  "owner_identity": {
+    "pgid": 1434391,
+    "pid": 1434406,
+    "proc_starttime": 19503305,
+    "sid": 1434391
+  },
+  "owner_join": {
+    "bytes": 912,
+    "path": "/home/holden/mckernel-work/host-preparation/evening-fourleaf-native-continuation-20261019-1/native-final-preparation-1/owner-join.json",
+    "sha256": "16a852f92b8436d074aab19f5eae4a96ae51b0b52fdab0e33ae6584d7176136a"
+  },
+  "owner_session_count": 1,
+  "physical_release": true,
+  "post_remove_empty_censuses": 3,
+  "readback_commands": [
+    {
+      "bytes": 335,
+      "path": "/home/holden/mckernel-work/host-preparation/evening-fourleaf-native-continuation-20261019-1/native-final-preparation-1/readback-1.command.json",
+      "sha256": "e1fb3e418fa1d6af9630329fb946864dc7b040274bc3314c80da10cd41e0a6aa"
+    },
+    {
+      "bytes": 296,
+      "path": "/home/holden/mckernel-work/host-preparation/evening-fourleaf-native-continuation-20261019-1/native-final-preparation-1/readback-2.command.json",
+      "sha256": "f826a6b63476e1e4ba3a6e0a13676f78afff2a3ffeb190ed62219341130f87c6"
+    },
+    {
+      "bytes": 337,
+      "path": "/home/holden/mckernel-work/host-preparation/evening-fourleaf-native-continuation-20261019-1/native-final-preparation-1/readback-3.command.json",
+      "sha256": "8182772bfd299315de3db2177988fc59538f9e71320d721fbfc4fa14ff9a37d4"
+    }
+  ],
+  "retry_authority": false,
+  "reviewer": "resume_git_owner_review",
+  "root_mutex": {
+    "device": 27,
+    "inode": 4,
+    "positively_reacquired": true
+  },
+  "schema": "mckernel.independent-native-diagnostic-physical-retirement.v1",
+  "status": "PASS_NATIVE_DIAGNOSTIC_POSITIVE_PHYSICAL_RETIREMENT",
+  "terminal": true,
+  "transport_note": "Attempt tar rc0 intentionally reports qmp.sock socket ignored; all6 regular evidence members retained. No empty-stderr predicate was part of frozen tar transport."
+}

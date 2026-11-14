@@ -1,0 +1,103 @@
+{
+  "actual_HOST_qualification": {
+    "bytes": 11612,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-review-sourceacq-max-1/actual-result-1/QUALIFICATION.json",
+    "sha256": "bbefe361728f7c0caa955e3791e9a4af4daf0279593134f24b86101a8a64c5a0"
+  },
+  "at": "2026-11-11T21:42:53.026422+00:00",
+  "author_static_proof": {
+    "bytes": 1922,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-source-sdk-max-1/CHANGED-PATH-PROOF.json",
+    "sha256": "6185a0444bc0d7c0c65f7682f2e9fb535f411fd876cfada698657c8fd1b26332"
+  },
+  "bindings": {
+    "bytes": 2864,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-source-sdk-max-1/SOURCE-BINDINGS.json",
+    "sha256": "a46bf180d564a87a933e68c9220cf0850d6ccbb2bd1c82239a6bcf070edc6408"
+  },
+  "canonical_changes_or_actions_by_reviewer": false,
+  "changed_scope": {
+    "all_other_existing_definition_ASTs_unchanged": true,
+    "changed_methods": [
+      "RPC.__init__",
+      "RPC.pump",
+      "RPC.call",
+      "Campaign.__init__",
+      "Campaign.record_rate_limits",
+      "Campaign.refresh_credit_budget"
+    ],
+    "complete_original_accounting_method_AST_identical_after_name_substitution": true,
+    "entire_original_refresh_exception_fallback_tail_AST_identical": true,
+    "new_definitions": [
+      "Campaign._record_rate_limits_accounting",
+      "_account_value_sha256",
+      "accepted_account_observation"
+    ],
+    "no_removed_definition": true
+  },
+  "complete_finite_findings": [],
+  "contract": {
+    "bytes": 4031,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-source-sdk-max-1/RECEIPT-CONTRACT.json",
+    "sha256": "5c383e2ab823c656f0d6f8b056b5bcbccdd02828ef5627d4c21176b134c552e1"
+  },
+  "decision": "GO_SOURCE_AT_RECEIPT_PRODUCER_AND_PURE_VALIDATOR_SCOPE",
+  "material_decisions": [
+    {
+      "clause": "true response provenance",
+      "decision": "GO",
+      "facts": "RPC assigns pending method by actual generated id, creates account context only on matched response and captures decoded receive UTC/monotonic/sequence/server PID before event/accounting. call passes actual completion object by identity. Request log/heartbeat/mtime never creates success."
+    },
+    {
+      "clause": "durable same cumulative credit/state before success",
+      "decision": "GO",
+      "facts": "Full original accounting first persists existing CreditBudget.observe and matching state. New PENDING observation dominates older receipt. Saved disk limits/ledger/state credit equality checked before trial validation and final accepted receipt save. Ledger.id/guard.identifier and original budget remain exact; no reset/allowance/refund."
+    },
+    {
+      "clause": "latest observation and hold priority",
+      "decision": "GO",
+      "facts": "Newest actual (monotonic receive,sequence) across read/notification metadata must be ACCEPTED. Newer pending/rejected item vetoes older success. Newer response error is saved REJECTED. Unknown/spend/account/stop/exhausted effects still traverse original accounting and stop paths. Both UTC and monotonic ages must be nonnegative and strictly below25s."
+    },
+    {
+      "clause": "late read after newer notification",
+      "decision": "GO",
+      "facts": "Actual old read remains conservatively accounted through same original ledger. Actual newer limits are restored and re-observed without changing receive clocks; existing genuine stop/error is not cleared. Down/up/down may count conservatively as expressly defined by unchanged CreditBudget.observe, never refund."
+    },
+    {
+      "clause": "original notification-only fallback",
+      "decision": "GO",
+      "facts": "Original exception tail and memory same-RPC notification marker semantics unchanged. New poll receipt never populates that marker. Notification fallback can keep existing controller path alive; the new pure consumer validator conservatively refuses an intervening newer REJECTED read."
+    },
+    {
+      "clause": "ownership and accepted evidence scope",
+      "decision": "GO at data-contract scope",
+      "facts": "Receipt binds actual boot, repo/logdir/thread/guardian/goal hash, worker/server PID+birth, original credit run/budget/path and complete limits+ledger hashes. Actual current owner and live kernel checks belong to independently pinned consumer/admission; receipt never creates owner/native/account authority. Constructor discards inherited receipt fields before current start."
+    }
+  ],
+  "original_acceptance_delta": 0,
+  "patch": {
+    "bytes": 20923,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-source-sdk-max-1/ACCOUNT-READ-RECEIPT.patch",
+    "sha256": "b1746c022adbb34d70f6464f54ab5ada5925af251caf242abe3c246baa0b8ae8"
+  },
+  "preimage": {
+    "bytes": 139343,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-source-sdk-max-1/preimage/scripts/run_os_goal.py",
+    "sha256": "6fe65a95407c54cf01a220a333453fa76146653df926b97627f6a79d9f8e2e0b"
+  },
+  "ready": {
+    "bytes": 2074,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-source-sdk-max-1/SOURCE-READY.NOT-EXECUTED.json",
+    "sha256": "16ed5bbd07091479005bc672d6afd1044b803cb45a6637be7afe2ff86ec499a8"
+  },
+  "required_before_production": "Root integrates exact reviewed bytes through legitimate normal same-Root transition, binds actual loaded interpreter/source and independently current owner/goal/boot/credit context, corrects consumer liveness and reviews actual future operation/admission. No hotpatch/competing controller/new credit run/synthetic observation.",
+  "review_method": "Read actual frozen source/callers/credit semantics and compare nonlocation AST; parse saved actual outputs only. No candidate import, execution, account query or production-state access by reviewer.",
+  "schema": "independent_account_rpc_receipt_source_review_v1",
+  "separate_consumer_finding": "CONSUMER-LIVE-01 in combined review: Root43935 kernel birth checks omit terminal process state. This does not alter the SDK39a source verdict.",
+  "source": {
+    "bytes": 155857,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-source-sdk-max-1/candidate/scripts/run_os_goal.py",
+    "sha256": "39a03dd8bb33ea943cad02897dee9b6b113187eee30d33ed22a89886b944d870"
+  },
+  "source_or_mock_result_is_not_native_or_original_acceptance": true
+}

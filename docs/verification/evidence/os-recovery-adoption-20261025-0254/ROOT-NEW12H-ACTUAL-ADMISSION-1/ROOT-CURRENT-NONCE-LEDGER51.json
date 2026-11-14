@@ -1,0 +1,966 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root",
+  "complete_within_declared_current_boundary": true,
+  "root_attests_no_unlisted_post_boundary_execution_or_custody_operation": true,
+  "declared_boundary": "Recipe22plusactualFP692, notall-timecampaignledger",
+  "consumed_nonces": [
+    "a482f1c238884fa59bf8db97663925b8",
+    "0b9c44bcab064992b16ff143fb626e4e",
+    "d115c3b6c48b45c0afb6f247106bf30f",
+    "bcc6706bcaa04ddfb223d6aa142a5c50",
+    "7b3d529538fe42ccb3612fb0348bef6d",
+    "db86abdf0ccf4e8a9ac86946401f3967",
+    "7cbbe469106d46aba7297d787ebcb598",
+    "71ac59057c3342d3aeeedbf11247fe62",
+    "cd9b2f425e5a48f1baf58d1b553f7ab8",
+    "9c4b439d613e437da475c9dccee0b8a0",
+    "567416a9e25d4923945486092c3e57f4",
+    "108cd725fce84fe769c9ff99e5f97562",
+    "d52e2aa8388a645c39da3dc6e2a3e6e6",
+    "2005b0dd8446ae5356152dfb13144dab",
+    "2345a19be8fbbc4ed1f4e81c8e94847c",
+    "a6dbd7d514dbdc410c4ecffe5c0a135d",
+    "1fff493f114662040e1147fdcbf5fa32",
+    "05779a0ade362eb7876ce6b6ef768877",
+    "7cf529a05d0430c6651f07b63168e8e1",
+    "86c485c4719a61f118032f283a3f7e62",
+    "302eabc386ed259685d41fbec898b174",
+    "d4134805d53969c694dd03c112991116",
+    "692afea0aa5a36d9cc82735b9bc4cf55",
+    "ea92dbc3148490a122f116a6afa7b010",
+    "1f970513ccad337e1822fbacb46260ee",
+    "d27509b612927d235adf7f07748f3f82",
+    "36aa4e210a1c5fcda971047b941f9659",
+    "4162b71a697cfc5ce7ed037f77e18c7f",
+    "001dd7ca399752afe1e02c27e529f97a",
+    "ea96c79fb14fa362522b690615e25f4f",
+    "7d21874e10a4f79465c03c4a499373b3",
+    "799adcb935b7640bdc2389c91abc00dd",
+    "3c67e3eb994c24683417880bfe0155a6",
+    "6e8068fed0e1dd27d6724a46ffbbff14",
+    "5c2cd5ea297e4770a1e1f4ea05d8cf9b",
+    "be6ef5d386ef68c2562799dd22cdcc86",
+    "adf6d220c84614c38565310d2b413a6d",
+    "31770ebb739fea402ded939617921dda",
+    "a8c41cf27729ebfd85f7bc45de76fe4e",
+    "cdc739fc1e365619d5be1b9745ecc291",
+    "6d2e6c210f8bf62b1a4f1abc127fb09a",
+    "8654464b4f71f697facfad75e2ed1d5b",
+    "b234866316eef21894551af57e0dc9c1",
+    "b23f646de606d9649ce80e40e18c9280",
+    "ffa5426da9a129388b885eb5f2c9eef2",
+    "22a1d92ed402f4d333bf527185e792b2",
+    "7c105a2dae96f0713ec587f1d716c259",
+    "303c66187868654a9a7dbb7ca58f1f52",
+    "42f49c156973fe69f9bc912198cf8031",
+    "3de3cbddc4028413e2d89ad8d98c8865",
+    "dffc3e89e3ba8b0195ca3f2eb8a04dd6",
+    "06c6182152c2d8cdb9d84e0b0261621f",
+    "8e2cd1e4aa716a36524172aa2c08c0cc",
+    "4cea7939b0ae2d977d9f73cdf88a9644",
+    "91015d4c834b89aa69df1d25d01fee01",
+    "150d370d34ca5da1a1d2f84569011ab6",
+    "d21f4e17faf1b0b806419b1860bd0598",
+    "9b4326c03b020c8662cca6b0d5731d4a",
+    "b7999202cca1b22f3e2b7bb9e17384a2",
+    "565026d079f0acc22e8e863c3deee226",
+    "69fdd9797d5e89afb1bef0555c63842a",
+    "7afe5d0bf1631a014acfc9be0ca95ec9"
+  ],
+  "latest_accepted_free_boundary": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/attempt2-held-only-retirement-source-1/independent-current-free-review-1/CURRENT-FREE.json",
+    "bytes": 88232,
+    "sha256": "040b08c75d06794f8599c8a51ac69e7915c9e1d8373f2f794423168fb41ff8c7"
+  },
+  "recorded_epoch": 1793158751.7444775,
+  "runtime_authority": null,
+  "reserved_abandoned_unconsumed_nonces": [
+    "640dc1258eabe29edce9af8214de41f0",
+    "e1332bf6efbdca888f6389f26c68e3a0",
+    "5a9f360ddf54b96846c8c8370aa610a4",
+    "95a6e9dddf8a378d9b0e17f02617c451",
+    "ff617c0f83e3644ac70f7aecb6e188c1",
+    "5fe0acdfcc75309f0cb40ddb1178b88b",
+    "cf36b84313f404836ec6d80350e0e15a",
+    "92e8d698cfe12176ddd0375937cbaeb1"
+  ],
+  "note": "62consumed, currentnative/heldphysicalfree040b retained. NewWAKE4twoRust0/CABIcontextFAIL allpositivejoin/groupsabsent/streamsclosed; noheavy/native sinceA2controlledretirement. cf36/92e8abandonedunconsumed. Source149119expertbaedPASS/fullretainedschema regression beforeA3capture.",
+  "prior_ledger_retained": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER50.json",
+    "bytes": 45441,
+    "sha256": "6e6f9db3d13c94c13d351bf0246074d9767c5963b30ceadb7d4f5a8b1f80b506"
+  },
+  "actual_window": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/ACTUAL-WINDOW.json",
+    "bytes": 815,
+    "sha256": "91bdfb1de3955a684d0766ffa85a5e18deda8f5f49c6ce1d85fcdbf2df6e3d86"
+  },
+  "current_thread": "01a17e6f-112f-7660-8771-85d15e07a26c",
+  "ordinary_operations_since_prior_heavy_boundary": [
+    {
+      "kind": "ordinary_HOST_exact_consumed_grant",
+      "nonce": "7c105a2dae96f0713ec587f1d716c259",
+      "issued_wall": 1793148706.029754,
+      "grant": {
+        "bytes": 3521,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/registry-scope-profile-schema-correction-source-1/ROOT-ACTUAL-SEVEN-COMMAND-HOST-GRANT-1.json",
+        "sha256": "f0e3c98e6c99c192b0cd04f469709fffa2aa8ec995180a9ba1c9c8e40fa95319"
+      },
+      "profile": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/registry-scope-profile-schema-correction-source-1/PROFILE.NOT-GRANTED.json",
+        "bytes": 163981,
+        "sha256": "5c012237943970fb844fba8c93fc7dcfeafbc096df372150e94694e0530f3b8a"
+      },
+      "consumed": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/future-capture-1/CONSUMED-GRANT.json",
+        "bytes": 2082,
+        "sha256": "5f63511a47dfe2a58fdffe2d4f30739a7cbf38ec88681de988d34ff21d6285e4"
+      },
+      "results": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/future-capture-1/RESULTS.json",
+        "bytes": 1737,
+        "sha256": "e92ba5ac353c7fc1439d9da82b0fb970952900aaa0286169d318afa1cd574828"
+      },
+      "retained_first_failure": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/future-capture-1/FIRST-FAILURE.json",
+        "bytes": 158,
+        "sha256": "332bdf711051e2b67601573c35e0c95f3146d1a9253e2e3501b56fa5ba81033e"
+      },
+      "observed_result_status": "RUNNING",
+      "observed_steps": [
+        {
+          "index": 0,
+          "returncode": 1,
+          "pid": 1780696,
+          "start": 94615785,
+          "seconds": 0.2830659720348194,
+          "direct_child_joined": true,
+          "group_absent": true,
+          "closed_streams": true
+        }
+      ],
+      "planned_commands": 7,
+      "unrun_planned_commands": 6,
+      "application_native_credit": 0
+    },
+    {
+      "kind": "ordinary_HOST_exact_consumed_grant",
+      "nonce": "303c66187868654a9a7dbb7ca58f1f52",
+      "issued_wall": 1793149250.9591143,
+      "grant": {
+        "bytes": 3386,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/ROOT-ACTUAL-SIX-COMMAND-HOST-GRANT-1.json",
+        "sha256": "b0fce5f9c7103337ea4c3f5bb0b319d78045ae0b22e48f7ca7568a445ee5ce32"
+      },
+      "profile": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/PROFILE.NOT-GRANTED.json",
+        "bytes": 52449,
+        "sha256": "54c0fdf186829201af58d96da1eb09de4f72025a5fc18c8a210b1c13b4a9fc3a"
+      },
+      "consumed": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/future-capture-1/CONSUMED-GRANT.json",
+        "bytes": 1976,
+        "sha256": "ae12d5c491f9c19bb1fb65aea6dc87d443dfca9fc1a1a664a11d9f9c6e53d09b"
+      },
+      "results": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/future-capture-1/RESULTS.json",
+        "bytes": 8498,
+        "sha256": "8ecd67583bdcbe37b68058046698a30e87263704b39fcd17e60a387f58341297"
+      },
+      "retained_first_failure": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/future-capture-1/FIRST-FAILURE.json",
+        "bytes": 158,
+        "sha256": "332bdf711051e2b67601573c35e0c95f3146d1a9253e2e3501b56fa5ba81033e"
+      },
+      "observed_result_status": "RUNNING",
+      "observed_steps": [
+        {
+          "index": 0,
+          "returncode": 0,
+          "pid": 1783264,
+          "start": 94670179,
+          "seconds": 0.12900771596468985,
+          "direct_child_joined": true,
+          "group_absent": true,
+          "closed_streams": true
+        },
+        {
+          "index": 1,
+          "returncode": 0,
+          "pid": 1783271,
+          "start": 94670253,
+          "seconds": 0.06437110691331327,
+          "direct_child_joined": true,
+          "group_absent": true,
+          "closed_streams": true
+        },
+        {
+          "index": 2,
+          "returncode": 0,
+          "pid": 1783274,
+          "start": 94670323,
+          "seconds": 0.022812753915786743,
+          "direct_child_joined": true,
+          "group_absent": true,
+          "closed_streams": true
+        },
+        {
+          "index": 3,
+          "returncode": 0,
+          "pid": 1783275,
+          "start": 94670388,
+          "seconds": 0.05434431892354041,
+          "direct_child_joined": true,
+          "group_absent": true,
+          "closed_streams": true
+        },
+        {
+          "index": 4,
+          "returncode": 1,
+          "pid": 1783283,
+          "start": 94670456,
+          "seconds": 0.139638573047705,
+          "direct_child_joined": true,
+          "group_absent": true,
+          "closed_streams": true
+        }
+      ],
+      "planned_commands": 6,
+      "unrun_planned_commands": 1,
+      "application_native_credit": 0
+    },
+    {
+      "kind": "ordinary_HOST_exact_consumed_grant",
+      "nonce": "42f49c156973fe69f9bc912198cf8031",
+      "issued_wall": 1793149502.080522,
+      "grant": {
+        "bytes": 3518,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/relative-module-context-correction-source-1/ROOT-ACTUAL-SEVEN-COMMAND-HOST-GRANT-1.json",
+        "sha256": "a0deb90ce8e63a31bf4606586350be8e2ea124380209e62b603f77963e41fa6f"
+      },
+      "profile": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/relative-module-context-correction-source-1/PROFILE.NOT-GRANTED.json",
+        "bytes": 173375,
+        "sha256": "016031f71441daf8783d3443db6bbb52659daf11d247f058efe15a15b18a7147"
+      },
+      "consumed": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/relative-module-context-correction-source-1/future-capture-1/CONSUMED-GRANT.json",
+        "bytes": 2070,
+        "sha256": "ae8927497cb13e9cdb1aed96a0b1bfa81ad808d647632acd392325af593c55e0"
+      },
+      "results": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/relative-module-context-correction-source-1/future-capture-1/RESULTS.json",
+        "bytes": 12505,
+        "sha256": "6a67293c72d64b27f5d360668f861e09cd042882e5332bf9fa400f5b0d74e1ef"
+      },
+      "retained_first_failure": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/relative-module-context-correction-source-1/future-capture-1/FIRST-FAILURE.json",
+        "bytes": 158,
+        "sha256": "332bdf711051e2b67601573c35e0c95f3146d1a9253e2e3501b56fa5ba81033e"
+      },
+      "observed_result_status": "RUNNING",
+      "observed_steps": [
+        {
+          "index": 0,
+          "returncode": 0,
+          "pid": 1784955,
+          "start": 94698050,
+          "seconds": 19.90066980791744,
+          "direct_child_joined": true,
+          "group_absent": true,
+          "closed_streams": true
+        },
+        {
+          "index": 1,
+          "returncode": 0,
+          "pid": 1784983,
+          "start": 94700136,
+          "seconds": 0.0742355058901012,
+          "direct_child_joined": true,
+          "group_absent": true,
+          "closed_streams": true
+        },
+        {
+          "index": 2,
+          "returncode": 0,
+          "pid": 1784986,
+          "start": 94700241,
+          "seconds": 0.06710535997990519,
+          "direct_child_joined": true,
+          "group_absent": true,
+          "closed_streams": true
+        },
+        {
+          "index": 3,
+          "returncode": 0,
+          "pid": 1784989,
+          "start": 94700346,
+          "seconds": 0.09658646991010755,
+          "direct_child_joined": true,
+          "group_absent": true,
+          "closed_streams": true
+        },
+        {
+          "index": 4,
+          "returncode": 0,
+          "pid": 1784991,
+          "start": 94700455,
+          "seconds": 0.08508333098143339,
+          "direct_child_joined": true,
+          "group_absent": true,
+          "closed_streams": true
+        },
+        {
+          "index": 5,
+          "returncode": 0,
+          "pid": 1784993,
+          "start": 94700559,
+          "seconds": 0.26787680306006223,
+          "direct_child_joined": true,
+          "group_absent": true,
+          "closed_streams": true
+        },
+        {
+          "index": 6,
+          "returncode": 1,
+          "pid": 1785011,
+          "start": 94700682,
+          "seconds": 11.717353324056603,
+          "direct_child_joined": true,
+          "group_absent": true,
+          "closed_streams": true
+        }
+      ],
+      "planned_commands": 7,
+      "unrun_planned_commands": 0,
+      "application_native_credit": 0
+    },
+    {
+      "kind": "ordinary_HOST_exact_consumed_grant",
+      "nonce": "3de3cbddc4028413e2d89ad8d98c8865",
+      "issued_wall": 1793149861.0176642,
+      "grant": {
+        "bytes": 3468,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/reset-builtin-memset-suffix-source-1/ROOT-ACTUAL-TWO-COMMAND-HOST-GRANT-1.json",
+        "sha256": "d5f3d874ed9abbab37ad50b0fab933884abf26baedd57ad79c0b6d82ee6c4c5d"
+      },
+      "profile": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/reset-builtin-memset-suffix-source-1/PROFILE.NOT-GRANTED.json",
+        "bytes": 45096,
+        "sha256": "4bab567e4f7a181f23278a3345e20278ef99d6d0d968649aa059f6698fa215e7"
+      },
+      "consumed": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/reset-builtin-memset-suffix-source-1/future-capture-1/CONSUMED-GRANT.json",
+        "bytes": 2055,
+        "sha256": "2abf7ad691c8170c1afb00238eeaebc843562bf1e3e79bb0c490edd1be508563"
+      },
+      "results": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/reset-builtin-memset-suffix-source-1/future-capture-1/RESULTS.json",
+        "bytes": 3635,
+        "sha256": "74f892095661bb31a4c315274b27972d7bc945a58078ab29e4f8558a1720878d"
+      },
+      "retained_first_failure": null,
+      "observed_result_status": "PASS_HOST_ONLY_READY_FOR_REVIEW",
+      "observed_steps": [
+        {
+          "index": 0,
+          "returncode": 0,
+          "pid": 1786510,
+          "start": 94731324,
+          "seconds": 0.14247225294820964,
+          "direct_child_joined": true,
+          "group_absent": true,
+          "closed_streams": true
+        },
+        {
+          "index": 1,
+          "returncode": 0,
+          "pid": 1786515,
+          "start": 94731399,
+          "seconds": 0.2075099899666384,
+          "direct_child_joined": true,
+          "group_absent": true,
+          "closed_streams": true
+        }
+      ],
+      "planned_commands": 2,
+      "unrun_planned_commands": 0,
+      "application_native_credit": 0
+    },
+    {
+      "kind": "ordinary_original235_HOST5_actual26controls",
+      "nonce": "dffc3e89e3ba8b0195ca3f2eb8a04dd6",
+      "issued_wall": 1793150451.4236395,
+      "grant": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-host-preparation-source-1/ROOT-ACTUAL-FIVE-STEP-HOST-GRANT-1.json",
+        "bytes": 1344,
+        "sha256": "98d978cdaeab6b1098cf030ca7fa1f2e911fcfc5d52a8ef45aa79236a9096079"
+      },
+      "results": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-host-preparation-source-1/future-capture-1/RESULTS.json",
+        "bytes": 9280,
+        "sha256": "5df89d07a8ff3a72f39c2b40a13caf11e9725f43b7f3e12e1291d2647050cb9e"
+      },
+      "tool_positive_completion": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-host-preparation-source-1/ROOT-ACTUAL-HOST-DISPATCH-TOOL-RESULT.json",
+        "bytes": 771,
+        "sha256": "1ce8f9c7eb04bdd9305f50f8ce6cf3be70c2bef77cc905431b83105f59868366"
+      },
+      "observed_steps": [
+        {
+          "index": 0,
+          "pid": 1789646,
+          "start": 94789648,
+          "returncode": 0,
+          "seconds": 0.13175070693250746,
+          "direct_child_joined": true,
+          "group_absent": true,
+          "closed_streams": true
+        },
+        {
+          "index": 1,
+          "pid": 1789661,
+          "start": 94789681,
+          "returncode": 0,
+          "seconds": 0.8195388739695773,
+          "direct_child_joined": true,
+          "group_absent": true,
+          "closed_streams": true
+        },
+        {
+          "index": 2,
+          "pid": 1789672,
+          "start": 94789781,
+          "returncode": 0,
+          "seconds": 1.4462795339059085,
+          "direct_child_joined": true,
+          "group_absent": true,
+          "closed_streams": true
+        },
+        {
+          "index": 3,
+          "pid": 1789711,
+          "start": 94789944,
+          "returncode": 0,
+          "seconds": 2.4425634749932215,
+          "direct_child_joined": true,
+          "group_absent": true,
+          "closed_streams": true
+        },
+        {
+          "index": 4,
+          "pid": 1789724,
+          "start": 94790206,
+          "returncode": 0,
+          "seconds": 0.022921513998880982,
+          "direct_child_joined": true,
+          "group_absent": true,
+          "closed_streams": true
+        }
+      ],
+      "application_native_credit": 0
+    },
+    {
+      "kind": "ordinary_HOST_exact_consumed_grant",
+      "nonce": "06c6182152c2d8cdb9d84e0b0261621f",
+      "issued_wall": 1793151447.0326223,
+      "grant": {
+        "bytes": 3524,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/absolute-retained-reference-correction-source-1/ROOT-ACTUAL-ONE-QUALIFIER-HOST-GRANT-1.json",
+        "sha256": "f5b4890cb8357301c90c1441287a155daf71cfa9269e550ac1fc31f12c973806"
+      },
+      "profile": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/absolute-retained-reference-correction-source-1/PROFILE.NOT-GRANTED.json",
+        "bytes": 172442,
+        "sha256": "f047bb8aaaa0a6017e54779870056cb43b22b9fdfb0d7792dd58323a3b6ae730"
+      },
+      "consumed": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/absolute-retained-reference-correction-source-1/future-capture-1/CONSUMED-GRANT.json",
+        "bytes": 2078,
+        "sha256": "1455347e8b1b58436ae148fa7db1945a71b428e792f1ef7bf3478bb4f5ffe552"
+      },
+      "results": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/absolute-retained-reference-correction-source-1/future-capture-1/RESULTS.json",
+        "bytes": 1840,
+        "sha256": "0d32a4f7c65bf1ce25526183e6e1a2f83aef5d3b2cc154cb9fab1a3d546a2f87"
+      },
+      "retained_first_failure": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/absolute-retained-reference-correction-source-1/future-capture-1/FIRST-FAILURE.json",
+        "bytes": 158,
+        "sha256": "332bdf711051e2b67601573c35e0c95f3146d1a9253e2e3501b56fa5ba81033e"
+      },
+      "observed_result_status": "RUNNING",
+      "observed_steps": [
+        {
+          "index": 0,
+          "returncode": 1,
+          "pid": 1795115,
+          "start": 94890049,
+          "seconds": 11.703411027090624,
+          "direct_child_joined": true,
+          "group_absent": true,
+          "closed_streams": true
+        }
+      ],
+      "planned_commands": 1,
+      "unrun_planned_commands": 0,
+      "application_native_credit": 0
+    },
+    {
+      "kind": "ordinary_original235_overlay_composition",
+      "nonce": "8e2cd1e4aa716a36524172aa2c08c0cc",
+      "issued_wall": 1793151781.5593188,
+      "grant": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-stage-preparation-source-1/root-actual-qualified-input-plan-source-1/root-actual-compose-1/ROOT-CAPTURE/ROOT-ACTUAL-COMPOSE-GRANT.json",
+        "bytes": 4163,
+        "sha256": "905e36d5cbded87d65ca095b3ef45879785f9d1d76c8ed6ae22838096c17d501"
+      },
+      "join": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-stage-preparation-source-1/root-actual-qualified-input-plan-source-1/root-actual-compose-1/ROOT-CAPTURE/ROOT-ACTUAL-COMPOSE-JOIN.json",
+        "bytes": 1303,
+        "sha256": "b376775af704682bbe232021ef3984ff3afa8545fb85c473c13ff050da288a76"
+      },
+      "returncode": 0,
+      "observed_seconds": 12.006822847994044,
+      "direct_child_joined": true,
+      "group_absent": true,
+      "closed_streams": true,
+      "archive": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-stage-preparation-source-1/root-actual-qualified-input-plan-source-1/root-actual-compose-1/process235-overlay.cpio.gz",
+        "bytes": 17069384,
+        "sha256": "701cd7d8cecb8e6d733066e73539b31a70949f9b3d22ee7c93ffda2ecc206f33"
+      },
+      "receipt": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-stage-preparation-source-1/root-actual-qualified-input-plan-source-1/root-actual-compose-1/overlay.json",
+        "bytes": 15637,
+        "sha256": "5a6214a268dd3dd3af8ebffaf1668ccfff449ac10a2330f9eadb63762b9eb137"
+      },
+      "application_native_credit": 0
+    },
+    {
+      "kind": "ordinary_HOST_exact_consumed_grant",
+      "nonce": "4cea7939b0ae2d977d9f73cdf88a9644",
+      "issued_wall": 1793152206.4730318,
+      "grant": {
+        "bytes": 3526,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/typed-timer-array-alignment-reader-correction-source-1/ROOT-ACTUAL-ONE-QUALIFIER-HOST-GRANT-1.json",
+        "sha256": "9c45e6f599048084598bf7809d7cdfd4b1c2583b3e2a8591644a9235571d466d"
+      },
+      "profile": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/typed-timer-array-alignment-reader-correction-source-1/PROFILE.NOT-GRANTED.json",
+        "bytes": 173556,
+        "sha256": "18975dc422fbbbd6e207d8d9340f68250d61c0cefa02627144df7bd82613cf1b"
+      },
+      "consumed": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/typed-timer-array-alignment-reader-correction-source-1/future-capture-1/CONSUMED-GRANT.json",
+        "bytes": 2092,
+        "sha256": "c2f0b7b1ba035e1e0239b89a7e007e6e3f5aa39102a9b2ff9006c039384edaa9"
+      },
+      "results": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/typed-timer-array-alignment-reader-correction-source-1/future-capture-1/RESULTS.json",
+        "bytes": 1851,
+        "sha256": "f28a628a1ea859024be5f4bd7b7628a157ea08b87b2558e8648e8fe8af791e8b"
+      },
+      "retained_first_failure": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/typed-timer-array-alignment-reader-correction-source-1/future-capture-1/FIRST-FAILURE.json",
+        "bytes": 158,
+        "sha256": "332bdf711051e2b67601573c35e0c95f3146d1a9253e2e3501b56fa5ba81033e"
+      },
+      "observed_result_status": "RUNNING",
+      "observed_steps": [
+        {
+          "index": 0,
+          "returncode": 2,
+          "pid": 1799085,
+          "start": 94966259,
+          "seconds": 11.979278794955462,
+          "direct_child_joined": true,
+          "group_absent": true,
+          "closed_streams": true
+        }
+      ],
+      "planned_commands": 1,
+      "unrun_planned_commands": 0,
+      "application_native_credit": 0
+    },
+    {
+      "kind": "ordinary_HOST_exact_consumed_grant",
+      "nonce": "91015d4c834b89aa69df1d25d01fee01",
+      "issued_wall": 1793152540.663899,
+      "grant": {
+        "bytes": 3374,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/f06-second-family-qualification-source-1/ROOT-ACTUAL-HOST-GRANT-1.json",
+        "sha256": "61758047397770fc7b0ea0be434e0db8774a7131f471127d510ef6b3c28c7d82"
+      },
+      "profile": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/f06-second-family-qualification-source-1/PROFILE.NOT-GRANTED.json",
+        "bytes": 101764,
+        "sha256": "eb7ee8d505b0acba408bbb490c4e0ecd963325f68f181d04d3b1731116dcf2a0"
+      },
+      "consumed": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/foreground-f06-shmget-current114-abi-source-1/actual-capture-1/CONSUMED-GRANT.json",
+        "bytes": 1970,
+        "sha256": "9745c28fb82efdd7b0a762912b30ab95258d8aca118fd7fe19ef84d9094f9370"
+      },
+      "results": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/foreground-f06-shmget-current114-abi-source-1/actual-capture-1/RESULTS.json",
+        "bytes": 8403,
+        "sha256": "585b9ffd51cdc9ba75c020b512fec74c24fbb41c1353d7888a6c2baaad14ebb9"
+      },
+      "retained_first_failure": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/foreground-f06-shmget-current114-abi-source-1/actual-capture-1/FIRST-FAILURE.json",
+        "bytes": 158,
+        "sha256": "332bdf711051e2b67601573c35e0c95f3146d1a9253e2e3501b56fa5ba81033e"
+      },
+      "observed_result_status": "RUNNING",
+      "observed_steps": [
+        {
+          "index": 0,
+          "returncode": 0,
+          "pid": 1801001,
+          "start": 95000297,
+          "seconds": 0.09903206198941916,
+          "direct_child_joined": true,
+          "group_absent": true,
+          "closed_streams": true
+        },
+        {
+          "index": 1,
+          "returncode": 0,
+          "pid": 1801008,
+          "start": 95000352,
+          "seconds": 0.24231985409278423,
+          "direct_child_joined": true,
+          "group_absent": true,
+          "closed_streams": true
+        },
+        {
+          "index": 2,
+          "returncode": 0,
+          "pid": 1801011,
+          "start": 95000419,
+          "seconds": 0.20744208293035626,
+          "direct_child_joined": true,
+          "group_absent": true,
+          "closed_streams": true
+        },
+        {
+          "index": 3,
+          "returncode": 0,
+          "pid": 1801017,
+          "start": 95000485,
+          "seconds": 0.10415835306048393,
+          "direct_child_joined": true,
+          "group_absent": true,
+          "closed_streams": true
+        },
+        {
+          "index": 4,
+          "returncode": 1,
+          "pid": 1801018,
+          "start": 95000540,
+          "seconds": 0.28191863000392914,
+          "direct_child_joined": true,
+          "group_absent": true,
+          "closed_streams": true
+        }
+      ],
+      "planned_commands": 5,
+      "unrun_planned_commands": 0,
+      "application_native_credit": 0
+    },
+    {
+      "kind": "ordinary_F03_threewrapper_HOST_consumed_prefix",
+      "nonce": "150d370d34ca5da1a1d2f84569011ab6",
+      "issued_wall": 1793152596.460799,
+      "grant": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/ROOT-ACTUAL-HOST-GRANT-1.json",
+        "bytes": 3515,
+        "sha256": "6bec4c03c522babab6e4a132b30090b64438cd10fe7ceb14ecc469db011c6505"
+      },
+      "profile": {
+        "bytes": 147867,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/PROFILE.NOT-GRANTED.json",
+        "sha256": "787c94ea911cb0cd44c65dd4bb2b7cfd562fe7d59d291d3551d046b0999e8c91"
+      },
+      "consumed": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/future-capture-1/CONSUMED-GRANT.json",
+        "bytes": 2091,
+        "sha256": "808efd28c004b24261afac988279d9227d39421b2cecbb3c3ed14e438426b3e5"
+      },
+      "results": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/future-capture-1/RESULTS.json",
+        "bytes": 9081,
+        "sha256": "b7e863586302c21aa399d019020134cad1f4baaabcc9e401d4ee3df6fc3e32b1"
+      },
+      "retained_first_failure": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/future-capture-1/FIRST-FAILURE.json",
+        "bytes": 158,
+        "sha256": "332bdf711051e2b67601573c35e0c95f3146d1a9253e2e3501b56fa5ba81033e"
+      },
+      "observed_result_status": "RUNNING",
+      "observed_steps": [
+        {
+          "index": 0,
+          "pid": 1801258,
+          "start": 95005888,
+          "returncode": 0,
+          "seconds": 20.57852387498133,
+          "direct_child_joined": true,
+          "group_absent": true,
+          "closed_streams": true
+        },
+        {
+          "index": 1,
+          "pid": 1801310,
+          "start": 95008036,
+          "returncode": 0,
+          "seconds": 0.6753450790420175,
+          "direct_child_joined": true,
+          "group_absent": true,
+          "closed_streams": true
+        },
+        {
+          "index": 2,
+          "pid": 1801316,
+          "start": 95008194,
+          "returncode": 0,
+          "seconds": 0.6613329279934987,
+          "direct_child_joined": true,
+          "group_absent": true,
+          "closed_streams": true
+        },
+        {
+          "index": 3,
+          "pid": 1801319,
+          "start": 95008350,
+          "returncode": 0,
+          "seconds": 0.08524081506766379,
+          "direct_child_joined": true,
+          "group_absent": true,
+          "closed_streams": true
+        },
+        {
+          "index": 4,
+          "pid": 1801321,
+          "start": 95008445,
+          "returncode": 1,
+          "seconds": 0.06519433599896729,
+          "direct_child_joined": true,
+          "group_absent": true,
+          "closed_streams": true
+        }
+      ],
+      "planned_commands": 6,
+      "unrun_planned_commands": 1,
+      "preserved_failure": "fallbackjoint duplicate sys_ptrace: CptraceentryOFF plus retained114Rustexport; first4producercommandsPASS, no producer replay or acceptance",
+      "Root_reported_outer_tool": {
+        "session": 3941,
+        "terminal_exit_code": 1,
+        "source": "Parent Root message; actual captured joins pinned separately"
+      },
+      "application_native_credit": 0
+    },
+    {
+      "nonce": "9b4326c03b020c8662cca6b0d5731d4a",
+      "grant": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/ROOT-ACTUAL-HOST-GRANT-1.json",
+        "bytes": 3528,
+        "sha256": "fae4b5422e3f9b3b65f9630da47b9bd4e238b66afedaa5aa80580c133fef9ae9"
+      },
+      "profile": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/PROFILE.NOT-GRANTED.json",
+        "bytes": 137463,
+        "sha256": "673c18b6b103581f08731835de32cae27cc24d99369ab8ef763cb2864bce856e"
+      },
+      "consumed_claim": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/future-capture-1/CONSUMED-GRANT.json",
+        "bytes": 2094,
+        "sha256": "9f73028a31848ae4bae7e5923fd25c0c234da599a70b0c90416d69273eef024c"
+      },
+      "actual_results": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/future-capture-1/RESULTS.json",
+        "bytes": 5537,
+        "sha256": "08dd4207707766b3af96b171a4dd4a26f64ae6aa8a765fe631607414e76ec274"
+      },
+      "summary": "Threeactualcommands0; independent93fb HOSTABI only; fourprefixobjects retained"
+    },
+    {
+      "nonce": "b7999202cca1b22f3e2b7bb9e17384a2",
+      "grant": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/foreground-f06-shmget-current114-abi-source-1/got64-reader-correction-source-1/ROOT-ACTUAL-HOST-GRANT-1.json",
+        "bytes": 3438,
+        "sha256": "cab6af1be9028751d11ce0ebdd6b15f894a5c0001abb8466ce65bbd87b94f189"
+      },
+      "profile": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/foreground-f06-shmget-current114-abi-source-1/got64-reader-correction-source-1/PROFILE.NOT-GRANTED.json",
+        "bytes": 89547,
+        "sha256": "10859ac88060c6d23b93db484176a861ccd431d002db3456fae1e0bdd6f5ff7a"
+      },
+      "consumed_claim": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/foreground-f06-shmget-current114-abi-source-1/got64-reader-correction-source-1/future-capture-1/CONSUMED-GRANT.json",
+        "bytes": 2015,
+        "sha256": "a5116ea1a82ec7dfba181a3bbe04a1efe86aca7028171268df26f008ed174d93"
+      },
+      "actual_results": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/foreground-f06-shmget-current114-abi-source-1/got64-reader-correction-source-1/future-capture-1/RESULTS.json",
+        "bytes": 1784,
+        "sha256": "6e6f548c8bf43073add416b9e3268afa3f07a5b5067cc042193909a0a4209037"
+      },
+      "summary": "OneactualreaderFAIL arch_vdso_map_log_bridge positive target mismatch; expert correction pending; fourcompilerobjects retained",
+      "first_failure": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/foreground-f06-shmget-current114-abi-source-1/got64-reader-correction-source-1/future-capture-1/FIRST-FAILURE.json",
+        "bytes": 158,
+        "sha256": "332bdf711051e2b67601573c35e0c95f3146d1a9253e2e3501b56fa5ba81033e"
+      }
+    },
+    {
+      "nonce": "565026d079f0acc22e8e863c3deee226",
+      "grant": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/foreground-f06-shmget-current114-abi-source-1/local-target-identity-reader-correction-source-1/ROOT-ACTUAL-HOST-GRANT-1.json",
+        "bytes": 3840,
+        "sha256": "61b65efb15947109a7e75cf2c7c92d50fbebfdac9d22642480be254985a10644"
+      },
+      "consumed_claim": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/foreground-f06-shmget-current114-abi-source-1/local-target-identity-reader-correction-source-1/future-capture-1/CONSUMED-GRANT.json",
+        "bytes": 2047,
+        "sha256": "6bb9047605e4f787e57dca5fa7009d2fd2dff0a64dbbc3a86b5961b1102e05e8"
+      },
+      "actual_results": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/foreground-f06-shmget-current114-abi-source-1/local-target-identity-reader-correction-source-1/future-capture-1/RESULTS.json",
+        "bytes": 1873,
+        "sha256": "469ffe8c85538ab55a83787c90f1e285226ff2b14687c3a16ac22f511317a09d"
+      },
+      "actual_tool": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/foreground-f06-shmget-current114-abi-source-1/local-target-identity-reader-correction-source-1/ROOT-ACTUAL-TOOL-RESULT.json",
+        "bytes": 1703,
+        "sha256": "38fa0617d76b018b3cbce43ce6f82b47bb6eb72ef8e3b9b171279005fbbe612f"
+      },
+      "independent_HOST": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/foreground-f06-shmget-current114-abi-source-1/local-target-identity-reader-correction-source-1/independent-actual-host-review-1/REVIEW.json",
+        "bytes": 25267,
+        "sha256": "67fadd26e4eccc8da668fe79233125e4cdfcba6b48a904693d5ef0bebe87b503"
+      },
+      "summary": "Fourproducerprefix reused; onefiniteidentityreaderPASS/.365s; HOSTpartiallinkonly"
+    },
+    {
+      "nonce": "69fdd9797d5e89afb1bef0555c63842a",
+      "grant": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-host-preparation-source-1/ROOT-ACTUAL-THREE-STEP-HOST-GRANT-1.json",
+        "bytes": 2089,
+        "sha256": "74b1390b56e561c6562fd91dc91620734de0ab7ca87eeabf972f6d97652d4621"
+      },
+      "consumed_claim": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-host-preparation-source-1/future-capture-1/CONSUMED-GRANT.json",
+        "bytes": 2018,
+        "sha256": "c54a5825a93bc5d9f7d5ac8a3b1e5399134646724740f579239c74110a0937da"
+      },
+      "actual_results": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-host-preparation-source-1/future-capture-1/RESULTS.json",
+        "bytes": 5868,
+        "sha256": "1e30fde6edf97ca7c7ecfe842709e5e9deb3bf07eaaf8e1d42ae30d2c4abe5ca"
+      },
+      "actual_tool": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-host-preparation-source-1/ROOT-ACTUAL-TOOL-RESULT.json",
+        "bytes": 1412,
+        "sha256": "5430f3701bc6e8c309b87ab633d1051a663d978d0846daed07c2a690b5fcbbea"
+      },
+      "summary": "Threeactual227HOSTcommands/all26controls0; genericab3eproductionELF reused/no payload/prod/readelfreplay; independentactualHOSTreviewpending"
+    },
+    {
+      "nonce": "7afe5d0bf1631a014acfc9be0ca95ec9",
+      "grant": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/absolute-helper-context-correction-source-1/ROOT-ACTUAL-HOST-GRANT-1.json",
+        "bytes": 3529,
+        "sha256": "f4ffc54762c970bcb176c4bbb9a8b9ec3f85280b9a670eb98ede61e3a7177f21"
+      },
+      "consumed_claim": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/absolute-helper-context-correction-source-1/future-capture-1/CONSUMED-GRANT.json",
+        "bytes": 2102,
+        "sha256": "f24f331a928323426ff5fd19cc9eb4523251743a70a3eda752ae39281c3bab9f"
+      },
+      "actual_results": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/absolute-helper-context-correction-source-1/future-capture-1/RESULTS.json",
+        "bytes": 5487,
+        "sha256": "5b5325f642801485d39478fffa11f4cc5fdfc3f73fb5ffa94249ce69dced7607"
+      },
+      "first_failure": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/absolute-helper-context-correction-source-1/future-capture-1/FIRST-FAILURE.json",
+        "bytes": 158,
+        "sha256": "332bdf711051e2b67601573c35e0c95f3146d1a9253e2e3501b56fa5ba81033e"
+      },
+      "actual_tool": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/absolute-helper-context-correction-source-1/ROOT-ACTUAL-TOOL-RESULT.json",
+        "bytes": 1263,
+        "sha256": "cb78102db1da00a6d9e0b18a5e4588e58d51bd7bc587068614960704a719a75d"
+      },
+      "summary": "Two fullRust producers0 retained; CABIstep2failed missinggenuineexecuter/include/uti.h,3..6UNRUN. Contextsuffixrepairpending, notOS/algorithmfailure."
+    }
+  ],
+  "reserved_unused_nonces": [],
+  "status": "ROOT_ACTUAL_COMPLETE_CURRENT_BOUNDARY_LEDGER51",
+  "prior_private55_proposal_preserved": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/root46-ledger-and-bindings-proposal-source-1/ROOT46-LEDGER.PROPOSAL.NOT-ACTUAL.json",
+    "bytes": 29494,
+    "sha256": "30ff596764c4d1ebc40344ff6284869d7423f80c71a9af36158dce9282254b7f"
+  },
+  "proposal_adopted": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/root46-ledger-and-bindings-proposal-source-1/f03-actual-prefix-addition-source-1/ROOT46-LEDGER.PROPOSAL.NOT-ACTUAL.json",
+    "bytes": 34106,
+    "sha256": "9976ca556c7b10692da31d41b02e72f228c520637d7635d48c29c258d40e4dd8"
+  },
+  "latest_native_once_claim": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/root-adopted-process235-entry-1/ROOT-ONCE-ENTRY.CLAIM.json",
+    "bytes": 2852,
+    "sha256": "d6f643348576dcc02074a1440b943e8f4a93ab318334ec5f1d14b82b88932f0b"
+  },
+  "latest_native_once_join": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/root-adopted-process235-entry-1/ROOT-ONCE-ENTRY.JOINED.json",
+    "bytes": 1474,
+    "sha256": "2473516c299f73510c6d09e2e380e62efd5f3fffc401af11ade6313cec5e9b9b"
+  },
+  "latest_native_caller_join": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/root-adopted-process235-entry-1/CAPTURE/JOINED.json",
+    "bytes": 234,
+    "sha256": "2bf214a5a728f93f774da391932662eb4496ac063a086c90feb0fa44d6d30f3a"
+  },
+  "unlaunched115_positive_retirement": {
+    "abandoned_nonce": "cf36b84313f404836ec6d80350e0e15a",
+    "expired_refusal": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-1/INDEPENDENT-ACTUAL-HELD-RESOURCE-EXECUTION-REVIEW.json",
+      "bytes": 5725,
+      "sha256": "91e5ad3309f97e4e5625eaabd246ac8db92351e3955f005762dd84b81d4b4e31"
+    },
+    "controlled_SIGINT_action": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/pidfd-syscall-compatibility-source-1/ACTUAL-COMPAT-ONE-HOLDER-INTERRUPT.ACTION.jsonl",
+      "bytes": 5775,
+      "sha256": "9bae79a78a445a3a75575d18bac5297bb8cc4a3610d3498be8adf6c9ee5755bd"
+    },
+    "positive_tool_join": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/pidfd-syscall-compatibility-source-1/ROOT-ACTUAL-HOLDER-TOOL11857-POSITIVE-JOIN.json",
+      "bytes": 1135,
+      "sha256": "7346f1ef476450759ff0f0fbac18dca225df330b2af85322705d3215fde87ef8"
+    },
+    "native_or_build_launched": false
+  },
+  "unlaunched115_A2_positive_retirement": {
+    "abandoned_nonce": "92e8d698cfe12176ddd0375937cbaeb1",
+    "actual_schema_refusal": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-2/independent-execution-review-1/REVIEW.json",
+      "bytes": 4174,
+      "sha256": "6e3ae7a52ef26e54e0d97d541b0f0a45568ba64ba855200a73bfae859398a5c7"
+    },
+    "controlled_SIGINT_action": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/attempt2-held-only-retirement-source-1/ACTUAL-A2-ONE-HOLDER-INTERRUPT.ACTION.jsonl",
+      "bytes": 5705,
+      "sha256": "4dae214c98e06954e13d99ddee9ad648b031f4cb2c17d0747947b9a6fbdb6361"
+    },
+    "positive_tool_join": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/attempt2-held-only-retirement-source-1/ROOT-ACTUAL-HOLDER-TOOL78413-POSITIVE-JOIN.json",
+      "bytes": 1305,
+      "sha256": "4848fed86f0e012f33bb139feb9c17e2a5d0f7dbc234473570bba9c81daa7bac"
+    },
+    "native_or_build_launched": false
+  }
+}

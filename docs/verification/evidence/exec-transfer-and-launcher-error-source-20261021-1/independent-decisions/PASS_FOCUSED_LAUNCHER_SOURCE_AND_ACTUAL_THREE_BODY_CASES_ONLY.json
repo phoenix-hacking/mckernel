@@ -1,0 +1,51 @@
+{
+  "status": "PASS_FOCUSED_LAUNCHER_SOURCE_AND_ACTUAL_THREE_BODY_CASES_ONLY",
+  "reviewer": "/root/insert_c_correction_review",
+  "implementation_ownership": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "candidate_sha256": "c9b1d55b3b25d18ff1336b9b18e46b845fa0407d246c36d7d25d79276722d78b",
+  "predecessor_sha256": "da71f31656ccfc58a79c4dcca01f9c6742135c292b213b7d86113ebddc4cae0a",
+  "patch_sha256": "2076274d9a6e4e072f164ecd1fb8653214130b35291e7153e32a669e7bc8f90f",
+  "blocking_findings": [],
+  "accepted_source_delta": [
+    "transfer_image: failed page-transfer ioctl now returns-1 immediately after the existing diagnostic, preventing later pages/sections and false success.",
+    "act_execve: nonzero phase2 result retains main_loop_ret, invokes existing command-server cleanup, then existing exit_process(1). This avoids the worker-return path whose td.ret is discarded by join_all_threads."
+  ],
+  "lifetime_and_error_review": {
+    "caller": "SYS_EXECVE reaches act_execve through act_main_loop_syscall. act_execve_phase2 propagates transfer_image failure before image-ok, CLOSE_EXEC, cloexec handling or success RET.",
+    "cleanup": "The candidate uses the same cleanup/process-exit bridge sequence as act_exit. The inspected bridge calls exit(term); no signature or bridge implementation changes are proposed.",
+    "locking": "The inspected Rust caller and failure branch introduce no held lock, join or new allocation across cleanup. Real optional command-server shutdown behavior is not established by the mocks.",
+    "ownership": "Fatal exit does not itself prove host/guest response, descriptor, physical-memory or OS retirement. Those obligations remain with the matched provider and existing owner lifecycle.",
+    "ABI_geometry_sentinel": "The exact diff contains only the two stated changes. Transfer descriptor ABI, direction, page geometry, sentinel logic and success ordering remain unchanged."
+  },
+  "actual_body_evidence": {
+    "path": "/home/holden/mckernel-work/host-preparation/native-exec-delivery-transfer-rust-repair-20261021-1/launcher-error-propagation-1/actual-body-comparison-1/whole.json",
+    "sha256": "c25a19654184d33c594404e44475678d2f2a36c0e3b1adae4356b32b1de9dcd0",
+    "bytes": 6711,
+    "harness_sha256": "0ca0f50f83401c70af65e8a7ace928bcc7ed069dfd38e14690aff1029d47634a",
+    "exact_candidate_bodies_included": true,
+    "compile_returncode": 0,
+    "success_returncode": 0,
+    "page1_returncode": 1,
+    "page2_returncode": 1,
+    "all_frozen_runtime_streams_match": true,
+    "all_direct_joined": true,
+    "all_groups_absent": true,
+    "all_streams_closed": true,
+    "capture_errors": [],
+    "observed_failure_order": "perror,image-failed,cmd-cleanup,process-exit1; no later page/section or success events",
+    "compile_stderr_bytes": 1866,
+    "compile_warning_scope": "Two private_interfaces warnings caused by the harness-private McexecSyscallWaitDesc type used by extracted public functions. Warning stream retained; target compilation is not proved."
+  },
+  "source_eligibility": "Eligible for the next matched launcher build under existing strict build controls.",
+  "limitations": [
+    "Mocks establish selected propagation and ordering, not real command-server cleanup, multithreaded exit behavior, kernel resource release or native exec.",
+    "Cases cover two aligned full-page sections and first/second-page failure; no additional geometry or failure-branch coverage is inferred.",
+    "Existing allocation/descriptor-transfer/error-RET branches were unchanged and receive no new acceptance.",
+    "Matched target build/link acceptance, host exec-transfer provider, fresh release and actual native failure/success retirement remain necessary."
+  ],
+  "native_activation": false,
+  "native_acceptance": false,
+  "runtime_permission": false,
+  "reviewer_quiescent": true
+}

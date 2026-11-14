@@ -1,0 +1,816 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": "2026-10-30T23:17:28.141794+00:00",
+  "status": "ACTIVE_CHECKPOINT_NOT_NATIVE_ACCEPTANCE",
+  "thread_id": "01a18bc3-e072-7810-9426-75101b0856c0",
+  "closed_review": {
+    "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+    "at": "2026-10-30T23:17:28.141794+00:00",
+    "interval": 1494501,
+    "thread_id": "01a18bc3-e072-7810-9426-75101b0856c0",
+    "bucket": {
+      "start": "2026-10-30T22:54:56Z",
+      "end": "2026-10-30T23:14:56Z",
+      "seconds": 1200,
+      "source_cases_passed": 24,
+      "new_Rust_compiler": 0,
+      "new_OS_behavior": 0,
+      "new_production_link": 0,
+      "new_native_qualified": 0,
+      "retired_C": 0,
+      "accepted_files": 0,
+      "native_unreleased_seconds": 1200
+    },
+    "native_unreleased_closed_minutes": 320,
+    "M14": [
+      4,
+      6
+    ],
+    "practical": [
+      35,
+      35
+    ],
+    "M15": "PAUSED",
+    "first_resumed_compiler_seconds": 6101.410126447678,
+    "exact_queue_to_compiler_seconds": null,
+    "failure_to_validated_fix_seconds": {
+      "loader_EMFILE": 469.74606442451477,
+      "installer_fixture_permissions": 202.433,
+      "caller_wait_bug": null
+    },
+    "compiler_error": null,
+    "largest_avoidable_handoff": "Root coupled ordinary compiler to SDK/native; exact avoidable portion unknown. Full proof previously inaccessible to caller; Parent4 provides bound DATA.",
+    "scheduling_adjustment": "Changed caller correction and independent execution review alongside checkpoint; preserve passing kernel compiler/tests without replay.",
+    "resources": {
+      "free_bytes": {
+        "/home/holden/mckernel": 142295461888,
+        "/home/holden/mckernel-work/scratch": 47613485056
+      },
+      "MemAvailable_bytes": 27390963712,
+      "eligible_cpu_cap": 7,
+      "jobs": 7,
+      "aggregate_gib": "22.5447",
+      "native_reserved_gib": 12,
+      "v2_unknown_reserved_gib": 2,
+      "scratch21": "HELD",
+      "permanent27_4": "HELD"
+    },
+    "weekly": {
+      "at": "2026-10-30T23:17:20.544009+00:00",
+      "used_percent": 95,
+      "reset_upper_bound": 1793774133,
+      "paid_fallback": false
+    },
+    "original30minute_baseline_preserved": true,
+    "target95_achieved": false,
+    "verified_push": "da90401423288c99b721bb29a489c70567c2955e",
+    "cleanup_or_nonce_replay": false,
+    "active_owners": {
+      "sdk_owner": "wait-result correction delivered1a42; newonecasePASS",
+      "protocol_review": "exact changed driver operation binding",
+      "Root": "fresh actual inputs, positive caller session join, install-only command if admitted"
+    }
+  },
+  "actual_results": {
+    "role-fd-parent-0001": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fd-parent-0001/RESULT.json",
+      "sha256": "174ae0605f7ebb773be888b4e029d444bcbc1c90baa26ae3484066e4dcb2b386"
+    },
+    "role-fd-parent-0002": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fd-parent-0002/RESULT.json",
+      "sha256": "16b4001f9bdf0dfa1512cfbe1fe13aa013c2afdbd7d7909e99daffd089d4f581"
+    },
+    "role-fd-keeper-0001": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fd-keeper-0001/RESULT.json",
+      "sha256": "62c1ac4cea20daecefe8b2f03f88af03ddb63db18d44525afde1d66dd2b4769b"
+    },
+    "role-fd-installer-0001": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fd-installer-0001/RESULT.json",
+      "sha256": "093749036ce3259a0f85769a0d39e403b07cdb3cc2301423865c777639ac2f0c"
+    },
+    "role-fixture-permissions-0001": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fixture-permissions-0001/RESULT.json",
+      "sha256": "e3184d9410dbaf0c80d4691a9a823551693729d09e23115819636fa345bcfc13"
+    },
+    "role-fd-installer-0002": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fd-installer-0002/RESULT.json",
+      "sha256": "0d5a221daca29381326f659f77daee260695105bdf0eceaaa28963970ef7914e"
+    },
+    "caller-data-0001": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/caller-data-0001/RESULT.json",
+      "sha256": "88e69b95f02acfe6e43a2096cd34d5716951449c032e2a21bab6cdf09afbeb52"
+    },
+    "parent4-caller-0001": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/parent4-caller-0001/RESULT.json",
+      "sha256": "83ff519136755793b950d1413795f443e8c2139bd7ee3ed3636819adf49cbc8f"
+    },
+    "caller-wait-0001": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/caller-wait-0001/RESULT.json",
+      "sha256": "55a1365bf821ec0611e39b1973132830fd1c1b8e386a21af4c314d341c056876"
+    }
+  },
+  "partial_role_FD_observations": {
+    "parent": 132,
+    "keeper": 120,
+    "installer": 96,
+    "observer_extra": 1,
+    "baseline": 16,
+    "production_peak": "UNMEASURED",
+    "cap": 256
+  },
+  "latest_kernel_source": "aab0f9d0 affected174/155 frontend; older4ae nine refs/seven bodies+56ABI exact scope",
+  "C_cursor": "selected1cd7/0633 generic23originalC; arch5historical; no newselectedartifact",
+  "M14": [
+    4,
+    6
+  ],
+  "practical": [
+    35,
+    35
+  ],
+  "M15": "PAUSED",
+  "physical_root_installs": 0,
+  "new_production_native_C_retirement_file_credit": 0,
+  "next": "Root fresh actual control/resource/usage binding and exact reviewed caller1a42 install-only invocation; native remains held",
+  "preserved_files": [
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-role-fd-budget-1/FROZEN-SOURCE.json",
+      "bytes": 1201,
+      "sha256": "065c03ee6c3aafd46ae5a51f1121c8c2aecc12b8ef833b68c5e5e20528c1633a",
+      "retained": "retained/root-install-role-fd-budget-1/FROZEN-SOURCE.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-role-fd-budget-1/README.md",
+      "bytes": 3461,
+      "sha256": "f66f1deaed6d48a6131a598fb86ce2b20a39b08e3ca93d13cc3a9446a71c971e",
+      "retained": "retained/root-install-role-fd-budget-1/README.md"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-role-fd-budget-1/role_fd_budget.py",
+      "bytes": 14472,
+      "sha256": "296339c84292b7d4392c3ce853a4b9354c689f75b355cc35375f8082e944d4b6",
+      "retained": "retained/root-install-role-fd-budget-1/role_fd_budget.py"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-role-fd-budget-2/CORRECTION.json",
+      "bytes": 683,
+      "sha256": "6f9eb9e8d45efc6dca7cbcc36d4bd34dec3221f56c6905cf9b5dd07345358a2c",
+      "retained": "retained/root-install-role-fd-budget-2/CORRECTION.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-role-fd-budget-2/role_fd_budget.py",
+      "bytes": 14482,
+      "sha256": "7198cc6bfac1b0ebb4f7bb04cdf5496afcb678348c12167219c076532cd7c803",
+      "retained": "retained/root-install-role-fd-budget-2/role_fd_budget.py"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-role-fd-budget-3/FROZEN-SOURCE.json",
+      "bytes": 849,
+      "sha256": "c23bb8d21b579ef876c5e6f9d893fa4bf4f8545fcabef36a64a0e4d644279b76",
+      "retained": "retained/root-install-role-fd-budget-3/FROZEN-SOURCE.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-role-fd-budget-3/README.md",
+      "bytes": 2216,
+      "sha256": "4d13bee39e185372f9cec1181841ca3bf25c49a1416a91abf73c0d33eaca4f12",
+      "retained": "retained/root-install-role-fd-budget-3/README.md"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-role-fd-budget-3/role_fd_budget.py",
+      "bytes": 14774,
+      "sha256": "753a94a66eab1f080877923ccdc6ec630cb8399957fbde65e1a0b0bf00b2212a",
+      "retained": "retained/root-install-role-fd-budget-3/role_fd_budget.py"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-role-fd-budget-3/test_permission_view.py",
+      "bytes": 2515,
+      "sha256": "2ac7535ca4f76e12d70fed6e6a3275ad07bf08514aed918f1f87cd31af211447",
+      "retained": "retained/root-install-role-fd-budget-3/test_permission_view.py"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-caller-data-output-1/CONTRACT.md",
+      "bytes": 3790,
+      "sha256": "09bc7b197d0f524d30f0bb8c0b6c1015e3141eb6df2b2794d5be1f719ade3e68",
+      "retained": "retained/root-install-caller-data-output-1/CONTRACT.md"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-caller-data-output-1/SOURCE-BOUND.json",
+      "bytes": 728,
+      "sha256": "0cdd473570b461fd4d7e10d8b4c3993ff7b2f8a6de534a42cba8f5d4cb55d319",
+      "retained": "retained/root-install-caller-data-output-1/SOURCE-BOUND.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-caller-data-output-1/data_output.py",
+      "bytes": 7620,
+      "sha256": "6e1197061e4c7f99abcea965c6b1fd6beb18556497174ed38e725dbbeeef3b22",
+      "retained": "retained/root-install-caller-data-output-1/data_output.py"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-caller-data-output-1/parent-data.patch",
+      "bytes": 4876,
+      "sha256": "aff0db5ac3b78f00b3b54e4b8b2ea80b7d4ffef6bf1a58c44bc09704c8c6c732",
+      "retained": "retained/root-install-caller-data-output-1/parent-data.patch"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-caller-data-output-1/root_parent.proposal.py",
+      "bytes": 20986,
+      "sha256": "f5984774e67d6d22be9e26290eef80c0c2c20d3335ffcfd256f22da108c30984",
+      "retained": "retained/root-install-caller-data-output-1/root_parent.proposal.py"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-caller-data-output-1/test_data_output.py",
+      "bytes": 6616,
+      "sha256": "79c5013e0967266fbe28e42b79ef89d2e8d4b1c409b1ed76706615d8383d5119",
+      "retained": "retained/root-install-caller-data-output-1/test_data_output.py"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-caller-data-output-1/test_parent_data_order.py",
+      "bytes": 4144,
+      "sha256": "500b3fa2df7495a901e1698c0e2c8fdaa5c3eb10de57fb24b28b9e86f2e848ac",
+      "retained": "retained/root-install-caller-data-output-1/test_parent_data_order.py"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-parent-successor-4/BOOTSTRAP.py",
+      "bytes": 6557,
+      "sha256": "7e2e05b2c19881ae4348b273e5eae7d734f199c93263219a2d0b49e2c763180c",
+      "retained": "retained/root-install-parent-successor-4/BOOTSTRAP.py"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-parent-successor-4/FROZEN-SOURCE.json",
+      "bytes": 1610,
+      "sha256": "d02ec0a8e0a6550afdb31d655068a07f213f387f42ad97d2a920ccfc39edcfdf",
+      "retained": "retained/root-install-parent-successor-4/FROZEN-SOURCE.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-parent-successor-4/PROFILE.SOURCE-ONLY.json",
+      "bytes": 8000,
+      "sha256": "af535cf3031e0aa7f955f72c0ffde7813eccd44b042bee1346f1b97970405eb9",
+      "retained": "retained/root-install-parent-successor-4/PROFILE.SOURCE-ONLY.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-parent-successor-4/README.md",
+      "bytes": 1737,
+      "sha256": "981c86cc80dbafccde24669198c8847163a3b3d9144f9b87a61a893e8fdcc3c4",
+      "retained": "retained/root-install-parent-successor-4/README.md"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-parent-successor-4/root_parent.py",
+      "bytes": 21483,
+      "sha256": "ffdad75a89dd433fa459968a3758e28d24809119698ba0afb2fd7ffbc02eeba3",
+      "retained": "retained/root-install-parent-successor-4/root_parent.py"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-parent-successor-4/test_parent_handoff.py",
+      "bytes": 6926,
+      "sha256": "e24717227698528e9377e70d5a777e479a1566d4f3383e9099b4f56466614d14",
+      "retained": "retained/root-install-parent-successor-4/test_parent_handoff.py"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-parent3-admission-preparation-1/CALLER-ENTRY.py",
+      "bytes": 1091,
+      "sha256": "b5f3241b6fc015045054947bc35a25d5fae62b0a7e54b80d5efb22a0851ddff7",
+      "retained": "retained/root-install-parent3-admission-preparation-1/CALLER-ENTRY.py"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-parent3-admission-preparation-1/CALLER-PROFILE.SOURCE-ONLY.json",
+      "bytes": 1787,
+      "sha256": "935f07f92b02b4bfaeffd10d4ec0aa8fcea64d940a3c99d8bd6740234f9dbdd4",
+      "retained": "retained/root-install-parent3-admission-preparation-1/CALLER-PROFILE.SOURCE-ONLY.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-parent3-admission-preparation-1/FD-PLAN.md",
+      "bytes": 1705,
+      "sha256": "2466aeeb57b2307bfd3b621aebe9d8da9ca0b85bb671929826be59b8c55606e7",
+      "retained": "retained/root-install-parent3-admission-preparation-1/FD-PLAN.md"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-parent3-admission-preparation-1/FROZEN-SOURCE.json",
+      "bytes": 1141,
+      "sha256": "39e7f062cdaa56a3b2bdefd2b15795cc646a9a3fe77cd0d10d39d00112da3018",
+      "retained": "retained/root-install-parent3-admission-preparation-1/FROZEN-SOURCE.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-parent3-admission-preparation-1/INPUT-RECIPE.md",
+      "bytes": 5661,
+      "sha256": "7b804a7045f2144c593d1c0b71942fdb6a6e4b103cb6604576e796de815064aa",
+      "retained": "retained/root-install-parent3-admission-preparation-1/INPUT-RECIPE.md"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-parent3-admission-preparation-1/RESOURCE-PROPOSAL-R2.json",
+      "bytes": 6376,
+      "sha256": "189ea4da57749f1545f011c945d2030744cb7c6ebf7d79045925950309bf1d90",
+      "retained": "retained/root-install-parent3-admission-preparation-1/RESOURCE-PROPOSAL-R2.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-parent3-admission-preparation-1/prepare_and_exec.py",
+      "bytes": 35196,
+      "sha256": "1e6baa7f88f4d371c272312b8a159d5391913b8d572015257d90b9d5b1e13d4d",
+      "retained": "retained/root-install-parent3-admission-preparation-1/prepare_and_exec.py"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-parent3-admission-preparation-1/test_caller.py",
+      "bytes": 5392,
+      "sha256": "95e70f3885b51122c37c5c1b37f2babc8a33acc14077280736b4f5eb590fdc40",
+      "retained": "retained/root-install-parent3-admission-preparation-1/test_caller.py"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-caller-wait-correction-1/CALLER-ENTRY.py",
+      "bytes": 1084,
+      "sha256": "31779722a7d57f486c3b5e2e22b44f0ac1b06fd29289f946bf784bd4ca73eb69",
+      "retained": "retained/root-install-caller-wait-correction-1/CALLER-ENTRY.py"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-caller-wait-correction-1/CALLER-PROFILE.SOURCE-ONLY.json",
+      "bytes": 1780,
+      "sha256": "c8a37081c472f0ebe529cbcb04d45034c5d22231f1fa2a74d42e4a36b67495b4",
+      "retained": "retained/root-install-caller-wait-correction-1/CALLER-PROFILE.SOURCE-ONLY.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-caller-wait-correction-1/FROZEN-SOURCE.json",
+      "bytes": 1433,
+      "sha256": "282f4489226b7e13f0d65b0ae3a5845c86b1a3636cdc65c7f65e34bb88a50175",
+      "retained": "retained/root-install-caller-wait-correction-1/FROZEN-SOURCE.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-caller-wait-correction-1/README.md",
+      "bytes": 1530,
+      "sha256": "73b3fc35cb05a6d54260da59e4fbfec30b5c15a288d08515081bffc078089155",
+      "retained": "retained/root-install-caller-wait-correction-1/README.md"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-caller-wait-correction-1/prepare_and_exec.py",
+      "bytes": 35208,
+      "sha256": "1a42c4a660e719cd0b06f40b95eecb0b61305be4d9b8b592cfcc50fbc897ee10",
+      "retained": "retained/root-install-caller-wait-correction-1/prepare_and_exec.py"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-caller-wait-correction-1/test_wait_nonterminal.py",
+      "bytes": 2847,
+      "sha256": "17d85371613b7201ee322d9fd589dc100a0cf43e61b6aa784efa27ef028973c1",
+      "retained": "retained/root-install-caller-wait-correction-1/test_wait_nonterminal.py"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-parent-independent-review-1/ACTUAL-PARENT4-INSTALL-REVIEW.json",
+      "bytes": 500,
+      "sha256": "001d1274c8903974956271aac3e1f46e111eba758726d0571ef62e80cd1dc80d",
+      "retained": "retained/root-install-direct-parent-independent-review-1/ACTUAL-PARENT4-INSTALL-REVIEW.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-parent-independent-review-1/ACTUAL-PARENT4-INSTALL-REVIEW.md",
+      "bytes": 2004,
+      "sha256": "af67c43b8e53fcfbde04b6c6f8fa74694023f9fad95d993e27b8a4111c93a5a2",
+      "retained": "retained/root-install-direct-parent-independent-review-1/ACTUAL-PARENT4-INSTALL-REVIEW.md"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-parent-independent-review-1/ACTUAL-PARENT4-WAIT-INSTALL-REVIEW.json",
+      "bytes": 500,
+      "sha256": "59333c5559afc72273b4626813e27b23843196c698b51e530b5f51f8c1b4d411",
+      "retained": "retained/root-install-direct-parent-independent-review-1/ACTUAL-PARENT4-WAIT-INSTALL-REVIEW.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-parent-independent-review-1/ADMISSION-WIP-REVIEW.md",
+      "bytes": 2155,
+      "sha256": "1aeb9d7ad2c633da797b3bedc69a4b8f29edcbc4d5e0d0eaa3c23cc2c70480b9",
+      "retained": "retained/root-install-direct-parent-independent-review-1/ADMISSION-WIP-REVIEW.md"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-parent-independent-review-1/CALLER-DATA-REVIEW.md",
+      "bytes": 2086,
+      "sha256": "729979d53792a4527e44737fe3bf1aba1e423b6d79fc70bb0459f218bc7a0b8b",
+      "retained": "retained/root-install-direct-parent-independent-review-1/CALLER-DATA-REVIEW.md"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-parent-independent-review-1/DELIMITER-CORRECTION.md",
+      "bytes": 558,
+      "sha256": "1434f0ab7dc49430c8610fe61a4cc909a149cc36fd3dcc0ee68aa0ae277a5014",
+      "retained_reference": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-DIRECT-PARENT-LOADER-FIX-CHECKPOINT-20261030-1/retained/root-install-direct-parent-independent-review-1/DELIMITER-CORRECTION.md"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-parent-independent-review-1/DESCRIPTOR-BUDGET-RECOMMENDATION.md",
+      "bytes": 2177,
+      "sha256": "eb586f66db904ee37dc011b231b57ea2ac283a6b0043c7541d768fe1116f130e",
+      "retained_reference": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-DIRECT-PARENT-LOADER-FIX-CHECKPOINT-20261030-1/retained/root-install-direct-parent-independent-review-1/DESCRIPTOR-BUDGET-RECOMMENDATION.md"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-parent-independent-review-1/INSTALLER-FIXTURE-PERMISSIONS.md",
+      "bytes": 1582,
+      "sha256": "e9114895fb93008e9694c8534597771ba7c4588a479eb1265cf2a604c5038ab9",
+      "retained": "retained/root-install-direct-parent-independent-review-1/INSTALLER-FIXTURE-PERMISSIONS.md"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-parent-independent-review-1/PARENT4-CALLER-REVIEW.md",
+      "bytes": 3541,
+      "sha256": "8f70d0bfb066edf8ad3dfb37987cd2ebead89697b8796f8df98261c23737b6be",
+      "retained": "retained/root-install-direct-parent-independent-review-1/PARENT4-CALLER-REVIEW.md"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-parent-independent-review-1/RESULT.md",
+      "bytes": 3281,
+      "sha256": "8a52a8e11181b5cdd224eede030452242e9d317c97758e3f4f2d1c197ae9e4c9",
+      "retained_reference": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-DIRECT-PARENT-LOADER-FIX-CHECKPOINT-20261030-1/retained/root-install-direct-parent-independent-review-1/RESULT.md"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-parent-independent-review-1/ROLLING-AND-FD-DRIVER-REVIEW.md",
+      "bytes": 2329,
+      "sha256": "16cc2fc59030d5e4f8d73f87a8f331a2c23044a86d6ef5269682d9039e9727b5",
+      "retained": "retained/root-install-direct-parent-independent-review-1/ROLLING-AND-FD-DRIVER-REVIEW.md"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-parent-independent-review-1/WAIT-CORRECTION-REVIEW.md",
+      "bytes": 1951,
+      "sha256": "3344d90a2f2dc32931d4f67568fdc67657b918068c8211622c250b7971a5f25b",
+      "retained": "retained/root-install-direct-parent-independent-review-1/WAIT-CORRECTION-REVIEW.md"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fd-parent-0001/ACTUAL-ARGV.json",
+      "bytes": 973,
+      "sha256": "8709577d21cdf6bd7978895ca2195927196948f6974e97c6f17f9bcd3e4e5329",
+      "retained": "retained/source-test-runs/role-fd-parent-0001/ACTUAL-ARGV.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fd-parent-0001/ADMISSION.json",
+      "bytes": 2098,
+      "sha256": "e7977389b1a9b7f1b435d79b9475cb95024315e571cf0b9b26571744a5006041",
+      "retained": "retained/source-test-runs/role-fd-parent-0001/ADMISSION.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fd-parent-0001/PROCESS-OWNER.json",
+      "bytes": 208,
+      "sha256": "ee1605bb7c5f03e1cfb6f5219db943bff179e5b09b258a469caf5da2c09d745a",
+      "retained": "retained/source-test-runs/role-fd-parent-0001/PROCESS-OWNER.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fd-parent-0001/RESULT.json",
+      "bytes": 4110,
+      "sha256": "174ae0605f7ebb773be888b4e029d444bcbc1c90baa26ae3484066e4dcb2b386",
+      "retained": "retained/source-test-runs/role-fd-parent-0001/RESULT.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fd-parent-0001/stderr.txt",
+      "bytes": 2088,
+      "sha256": "dd31ce2d1bee4aed6e45e311cbc9ca2934ff19259dddaf9e7f4a6fd4e89db369",
+      "retained": "retained/source-test-runs/role-fd-parent-0001/stderr.txt"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fd-parent-0001/stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retained_reference": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-NINE-ENTRY-CODEGEN-AND-ABI-CHECKPOINT-20261030-1/retained/source-test-runs/clone-abi-compare-0001/stderr.txt"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fd-parent-0001/time.txt",
+      "bytes": 1180,
+      "sha256": "fabcd918e0c258be7dad350456d54331842fa70785d1819f089fb77d6b1deeb0",
+      "retained": "retained/source-test-runs/role-fd-parent-0001/time.txt"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fd-parent-0002/ACTUAL-ARGV.json",
+      "bytes": 973,
+      "sha256": "b083edd6e6a8f3fbf05223d694ebc5404a87ee2c90eeeeec9a1ba67872447372",
+      "retained": "retained/source-test-runs/role-fd-parent-0002/ACTUAL-ARGV.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fd-parent-0002/ADMISSION.json",
+      "bytes": 2098,
+      "sha256": "b4a964aa1c8d368e1a118e9540e45479303f8e8523da687a1b6038e5574e4eef",
+      "retained": "retained/source-test-runs/role-fd-parent-0002/ADMISSION.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fd-parent-0002/PROCESS-OWNER.json",
+      "bytes": 207,
+      "sha256": "8a590dc25fae89edee0f67c6f92d414037817ab6a3da6ec1162f51f06f86cf93",
+      "retained": "retained/source-test-runs/role-fd-parent-0002/PROCESS-OWNER.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fd-parent-0002/RESULT.json",
+      "bytes": 3856,
+      "sha256": "16b4001f9bdf0dfa1512cfbe1fe13aa013c2afdbd7d7909e99daffd089d4f581",
+      "retained": "retained/source-test-runs/role-fd-parent-0002/RESULT.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fd-parent-0002/stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retained_reference": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-NINE-ENTRY-CODEGEN-AND-ABI-CHECKPOINT-20261030-1/retained/source-test-runs/clone-abi-compare-0001/stderr.txt"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fd-parent-0002/stdout.txt",
+      "bytes": 857,
+      "sha256": "d867aa1246ab99a5c99a803b990b6f6bb7d3c86835d1948e8c88410617f0d6b1",
+      "retained": "retained/source-test-runs/role-fd-parent-0002/stdout.txt"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fd-parent-0002/time.txt",
+      "bytes": 1142,
+      "sha256": "ef3e3ced67540a1c4336a21d2e0c52089d0e46e7ac0a3dd727ebed411bb96bb0",
+      "retained": "retained/source-test-runs/role-fd-parent-0002/time.txt"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fd-keeper-0001/ACTUAL-ARGV.json",
+      "bytes": 973,
+      "sha256": "0ede5a73f896e1af031f15da091a7731236eb7432e1a0aa51fb5025f6d443a1e",
+      "retained": "retained/source-test-runs/role-fd-keeper-0001/ACTUAL-ARGV.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fd-keeper-0001/ADMISSION.json",
+      "bytes": 2098,
+      "sha256": "2b9f6b8bfee9fd8b3eb4294aae3db120303b62e49a729378a4714e237b44ecf8",
+      "retained": "retained/source-test-runs/role-fd-keeper-0001/ADMISSION.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fd-keeper-0001/PROCESS-OWNER.json",
+      "bytes": 208,
+      "sha256": "31723620ef8b7a72fb2202e1c5210cf04f31bc9497b8472e014f450275798c1a",
+      "retained": "retained/source-test-runs/role-fd-keeper-0001/PROCESS-OWNER.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fd-keeper-0001/RESULT.json",
+      "bytes": 3924,
+      "sha256": "62c1ac4cea20daecefe8b2f03f88af03ddb63db18d44525afde1d66dd2b4769b",
+      "retained": "retained/source-test-runs/role-fd-keeper-0001/RESULT.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fd-keeper-0001/stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retained_reference": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-NINE-ENTRY-CODEGEN-AND-ABI-CHECKPOINT-20261030-1/retained/source-test-runs/clone-abi-compare-0001/stderr.txt"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fd-keeper-0001/stdout.txt",
+      "bytes": 885,
+      "sha256": "df08343e6e8edaa1561c1a78c1b5da1635d7ea3d97da74af1756eee4bf0324b2",
+      "retained": "retained/source-test-runs/role-fd-keeper-0001/stdout.txt"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fd-keeper-0001/time.txt",
+      "bytes": 1142,
+      "sha256": "84c8e183c6930d468cab2c33e29b7a5efbf86e6368f947cb562584e938ff2480",
+      "retained": "retained/source-test-runs/role-fd-keeper-0001/time.txt"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fd-installer-0001/ACTUAL-ARGV.json",
+      "bytes": 982,
+      "sha256": "2e12941a45cda6fbd903063c69f85b29844c5af85c3042cc461c8a9672bd482c",
+      "retained": "retained/source-test-runs/role-fd-installer-0001/ACTUAL-ARGV.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fd-installer-0001/ADMISSION.json",
+      "bytes": 2103,
+      "sha256": "b6e95c2595dac4c8fced92fac958691c44d665c49b0708757292dc7e0bb22a40",
+      "retained": "retained/source-test-runs/role-fd-installer-0001/ADMISSION.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fd-installer-0001/PROCESS-OWNER.json",
+      "bytes": 208,
+      "sha256": "982aeaf7b8cddf4c3ab3555ec47aa7b0ba8a5888b5daaf976ccedf265ecd67e1",
+      "retained": "retained/source-test-runs/role-fd-installer-0001/PROCESS-OWNER.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fd-installer-0001/RESULT.json",
+      "bytes": 4269,
+      "sha256": "093749036ce3259a0f85769a0d39e403b07cdb3cc2301423865c777639ac2f0c",
+      "retained": "retained/source-test-runs/role-fd-installer-0001/RESULT.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fd-installer-0001/stderr.txt",
+      "bytes": 2239,
+      "sha256": "e58619b5bfe08fd1726a48e7899840517a89bfd97d3ae7b4aa64973c38f85bdd",
+      "retained": "retained/source-test-runs/role-fd-installer-0001/stderr.txt"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fd-installer-0001/stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retained_reference": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-NINE-ENTRY-CODEGEN-AND-ABI-CHECKPOINT-20261030-1/retained/source-test-runs/clone-abi-compare-0001/stderr.txt"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fd-installer-0001/time.txt",
+      "bytes": 1186,
+      "sha256": "3f67842821a7ca650ba21a0c7a6b53cf471367ae347c1551800d9349d2072cf9",
+      "retained": "retained/source-test-runs/role-fd-installer-0001/time.txt"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fixture-permissions-0001/ACTUAL-ARGV.json",
+      "bytes": 613,
+      "sha256": "9fcfa63da66bc111f2410f018a451db6b31c4f86d978f17883fe2891943dd22d",
+      "retained": "retained/source-test-runs/role-fixture-permissions-0001/ACTUAL-ARGV.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fixture-permissions-0001/ADMISSION.json",
+      "bytes": 1399,
+      "sha256": "fb2a88b01ff5bae2a56879489f1b41eeb767f6da5b40eee4f6cf9f53802da596",
+      "retained": "retained/source-test-runs/role-fixture-permissions-0001/ADMISSION.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fixture-permissions-0001/PROCESS-OWNER.json",
+      "bytes": 208,
+      "sha256": "f68470f3831f1d987ec29f9e60d86d7ee919ddffc8337e97233fe102f0171659",
+      "retained": "retained/source-test-runs/role-fixture-permissions-0001/PROCESS-OWNER.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fixture-permissions-0001/RESULT.json",
+      "bytes": 2038,
+      "sha256": "e3184d9410dbaf0c80d4691a9a823551693729d09e23115819636fa345bcfc13",
+      "retained": "retained/source-test-runs/role-fixture-permissions-0001/RESULT.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fixture-permissions-0001/stderr.txt",
+      "bytes": 501,
+      "sha256": "2968a892c153be90e3450ed4ecc8ff6283709de51e3aad3ec88d9bf5d7e20d6e",
+      "retained": "retained/source-test-runs/role-fixture-permissions-0001/stderr.txt"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fixture-permissions-0001/stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retained_reference": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-NINE-ENTRY-CODEGEN-AND-ABI-CHECKPOINT-20261030-1/retained/source-test-runs/clone-abi-compare-0001/stderr.txt"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fixture-permissions-0001/time.txt",
+      "bytes": 779,
+      "sha256": "32c6924be2840ca27915937fbaf556fd3ec939718273ac7314fdfa7d64b4197b",
+      "retained": "retained/source-test-runs/role-fixture-permissions-0001/time.txt"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fd-installer-0002/ACTUAL-ARGV.json",
+      "bytes": 982,
+      "sha256": "00449b5c93878301dba3a42e88028a9d05c31dd02d8ed441fe28943cac5eefab",
+      "retained": "retained/source-test-runs/role-fd-installer-0002/ACTUAL-ARGV.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fd-installer-0002/ADMISSION.json",
+      "bytes": 2111,
+      "sha256": "e6b35121cb1ee8e45b4702053df458391e19935fa39df776a9ec44cf4a2b1284",
+      "retained": "retained/source-test-runs/role-fd-installer-0002/ADMISSION.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fd-installer-0002/PROCESS-OWNER.json",
+      "bytes": 208,
+      "sha256": "2055925c892219eac2f2d809595429de2235c54bc52b0d4ef80bdd2a0760717e",
+      "retained": "retained/source-test-runs/role-fd-installer-0002/PROCESS-OWNER.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fd-installer-0002/RESULT.json",
+      "bytes": 3917,
+      "sha256": "0d5a221daca29381326f659f77daee260695105bdf0eceaaa28963970ef7914e",
+      "retained": "retained/source-test-runs/role-fd-installer-0002/RESULT.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fd-installer-0002/stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retained_reference": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-NINE-ENTRY-CODEGEN-AND-ABI-CHECKPOINT-20261030-1/retained/source-test-runs/clone-abi-compare-0001/stderr.txt"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fd-installer-0002/stdout.txt",
+      "bytes": 882,
+      "sha256": "410c918fa611dbd73b8ba3d6bfd2b378da2a961ed2e3f6e6cdf150a1184f961f",
+      "retained": "retained/source-test-runs/role-fd-installer-0002/stdout.txt"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/role-fd-installer-0002/time.txt",
+      "bytes": 1148,
+      "sha256": "85bffa607ea4f2033d9f5fa52e2531e5ecfcc3cd0e332a9d9e1d14d429465364",
+      "retained": "retained/source-test-runs/role-fd-installer-0002/time.txt"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/caller-data-0001/ACTUAL-ARGV.json",
+      "bytes": 624,
+      "sha256": "fe614a4c43936fdaa3693174912ad4f82647bab4a614a44e75c83fb46a3d5a8a",
+      "retained": "retained/source-test-runs/caller-data-0001/ACTUAL-ARGV.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/caller-data-0001/ADMISSION.json",
+      "bytes": 2007,
+      "sha256": "00138cd941a5273134664d1fcfecad4b34ace1df661b2a588e59ea27a840f7ac",
+      "retained": "retained/source-test-runs/caller-data-0001/ADMISSION.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/caller-data-0001/PROCESS-OWNER.json",
+      "bytes": 206,
+      "sha256": "23ba38e4229623dbefd549e158bf16efda483fd8419c704ae229bbded8062d1b",
+      "retained": "retained/source-test-runs/caller-data-0001/PROCESS-OWNER.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/caller-data-0001/RESULT.json",
+      "bytes": 2545,
+      "sha256": "88e69b95f02acfe6e43a2096cd34d5716951449c032e2a21bab6cdf09afbeb52",
+      "retained": "retained/source-test-runs/caller-data-0001/RESULT.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/caller-data-0001/stderr.txt",
+      "bytes": 901,
+      "sha256": "5c5bf8915d026f5e77bc31f3b6c0b07ee5e240b4eec8988d1601ce6d01c33c86",
+      "retained": "retained/source-test-runs/caller-data-0001/stderr.txt"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/caller-data-0001/stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retained_reference": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-NINE-ENTRY-CODEGEN-AND-ABI-CHECKPOINT-20261030-1/retained/source-test-runs/clone-abi-compare-0001/stderr.txt"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/caller-data-0001/time.txt",
+      "bytes": 799,
+      "sha256": "b5c57153ca2736ee96fff6a371fc144d6c933fc41078435906d313f80bb400a6",
+      "retained": "retained/source-test-runs/caller-data-0001/time.txt"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/parent4-caller-0001/ACTUAL-ARGV.json",
+      "bytes": 927,
+      "sha256": "faa1082569ce56355fc716497da3468be74f18c9fedb2f77680cc0f341804de9",
+      "retained": "retained/source-test-runs/parent4-caller-0001/ACTUAL-ARGV.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/parent4-caller-0001/ADMISSION.json",
+      "bytes": 3354,
+      "sha256": "7b3c0ddd43a1148c1af88142eed12b2ebcf6bbb28f9a3a5f5f10fb4178e60e2f",
+      "retained": "retained/source-test-runs/parent4-caller-0001/ADMISSION.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/parent4-caller-0001/PROCESS-OWNER.json",
+      "bytes": 207,
+      "sha256": "80ad4d6be8af51f55626c31a855566c6afcf696a489cc7ac00a520ae2c9c400f",
+      "retained": "retained/source-test-runs/parent4-caller-0001/PROCESS-OWNER.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/parent4-caller-0001/RESULT.json",
+      "bytes": 3075,
+      "sha256": "83ff519136755793b950d1413795f443e8c2139bd7ee3ed3636819adf49cbc8f",
+      "retained": "retained/source-test-runs/parent4-caller-0001/RESULT.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/parent4-caller-0001/run_cases.py",
+      "bytes": 672,
+      "sha256": "13e5c06dad60f0ae1347739c2e77da736674d5c8c3e3202135917d1e073a8e56",
+      "retained": "retained/source-test-runs/parent4-caller-0001/run_cases.py"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/parent4-caller-0001/stderr.txt",
+      "bytes": 1341,
+      "sha256": "84e0b9407c6ae7ecf737e86858e69cccda39d7e91c39345341f938d8947dde40",
+      "retained": "retained/source-test-runs/parent4-caller-0001/stderr.txt"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/parent4-caller-0001/stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retained_reference": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-NINE-ENTRY-CODEGEN-AND-ABI-CHECKPOINT-20261030-1/retained/source-test-runs/clone-abi-compare-0001/stderr.txt"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/parent4-caller-0001/time.txt",
+      "bytes": 930,
+      "sha256": "c97574dc452bb44e271bafaec5cec326dca310b5b8c360d5b79c4d349ee14500",
+      "retained": "retained/source-test-runs/parent4-caller-0001/time.txt"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/caller-wait-0001/ACTUAL-ARGV.json",
+      "bytes": 918,
+      "sha256": "12e2e9813294810ca8d1e08352b6e7887e017c2c4e329a240f4c59b1382800e5",
+      "retained": "retained/source-test-runs/caller-wait-0001/ACTUAL-ARGV.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/caller-wait-0001/ADMISSION.json",
+      "bytes": 2418,
+      "sha256": "cebadf49acd073304632df61bd742ca6aa1d44bb416902223dcb1780dda9f500",
+      "retained": "retained/source-test-runs/caller-wait-0001/ADMISSION.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/caller-wait-0001/PROCESS-OWNER.json",
+      "bytes": 208,
+      "sha256": "fdd8316d349daeedf5fac2738eca54525ce96dd8f4136df42ab0eb50922d683e",
+      "retained": "retained/source-test-runs/caller-wait-0001/PROCESS-OWNER.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/caller-wait-0001/RESULT.json",
+      "bytes": 1908,
+      "sha256": "55a1365bf821ec0611e39b1973132830fd1c1b8e386a21af4c314d341c056876",
+      "retained": "retained/source-test-runs/caller-wait-0001/RESULT.json"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/caller-wait-0001/run_cases.py",
+      "bytes": 483,
+      "sha256": "1679443242fd9c21de34d6658ed19e2f4b067ea0c17be5bd6019d3753a7b9c44",
+      "retained": "retained/source-test-runs/caller-wait-0001/run_cases.py"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/caller-wait-0001/stderr.txt",
+      "bytes": 202,
+      "sha256": "c3010e9b1370ed9f623067dd34cd5e7fc0f88ca0900d175587e3acdaabd3a9e7",
+      "retained": "retained/source-test-runs/caller-wait-0001/stderr.txt"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/caller-wait-0001/stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retained_reference": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-NINE-ENTRY-CODEGEN-AND-ABI-CHECKPOINT-20261030-1/retained/source-test-runs/clone-abi-compare-0001/stderr.txt"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/caller-wait-0001/time.txt",
+      "bytes": 926,
+      "sha256": "793990a362c9334d7dd935678ac815560409acc576e21f72196d894345a82ea3",
+      "retained": "retained/source-test-runs/caller-wait-0001/time.txt"
+    }
+  ],
+  "corrected_driver_operation_review_sha256": "59333c5559afc72273b4626813e27b23843196c698b51e530b5f51f8c1b4d411"
+}

@@ -1,0 +1,404 @@
+{
+  "actual6case_field_return_CPU_lifetime_joins": [
+    {
+      "CPU_calls": 1,
+      "actual_CInt_return": 1,
+      "actual_CLong_reply": 1,
+      "actual_controlled_CPU": 0,
+      "actual_fields": {
+        "args": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "number": 61,
+        "rtid": 0,
+        "ttid": 0,
+        "valid": 0
+      },
+      "actual_wire72_hex": "000000000000000000000000000000003d00000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "all_boundary_oracles_match": true,
+      "configured_CPU": 0,
+      "do_syscall_calls": 1,
+      "id": "pid-one-success"
+    },
+    {
+      "CPU_calls": 1,
+      "actual_CInt_return": -10,
+      "actual_CLong_reply": -10,
+      "actual_controlled_CPU": 6,
+      "actual_fields": {
+        "args": [
+          2147483647,
+          0,
+          16777216,
+          0,
+          0,
+          0
+        ],
+        "number": 61,
+        "rtid": 0,
+        "ttid": 0,
+        "valid": 0
+      },
+      "actual_wire72_hex": "000000000000000000000000000000003d00000000000000ffffff7f0000000000000000000000000000000100000000000000000000000000000000000000000000000000000000",
+      "all_boundary_oracles_match": true,
+      "configured_CPU": 6,
+      "do_syscall_calls": 1,
+      "id": "max-pid-option-bit-error"
+    },
+    {
+      "CPU_calls": 1,
+      "actual_CInt_return": -4,
+      "actual_CLong_reply": -4,
+      "actual_controlled_CPU": 7,
+      "actual_fields": {
+        "args": [
+          18446744071562067968,
+          0,
+          18446744071562067968,
+          0,
+          0,
+          0
+        ],
+        "number": 61,
+        "rtid": 0,
+        "ttid": 0,
+        "valid": 0
+      },
+      "actual_wire72_hex": "000000000000000000000000000000003d0000000000000000000080ffffffff000000000000000000000080ffffffff000000000000000000000000000000000000000000000000",
+      "all_boundary_oracles_match": true,
+      "configured_CPU": 7,
+      "do_syscall_calls": 1,
+      "id": "min-pid-sign-options-interrupted"
+    },
+    {
+      "CPU_calls": 1,
+      "actual_CInt_return": 0,
+      "actual_CLong_reply": 0,
+      "actual_controlled_CPU": 6,
+      "actual_fields": {
+        "args": [
+          18446744073709551615,
+          0,
+          18446744073709551615,
+          0,
+          0,
+          0
+        ],
+        "number": 61,
+        "rtid": 0,
+        "ttid": 0,
+        "valid": 0
+      },
+      "actual_wire72_hex": "000000000000000000000000000000003d00000000000000ffffffffffffffff0000000000000000ffffffffffffffff000000000000000000000000000000000000000000000000",
+      "all_boundary_oracles_match": true,
+      "configured_CPU": 6,
+      "do_syscall_calls": 1,
+      "id": "negative-pid-all-option-bits"
+    },
+    {
+      "CPU_calls": 1,
+      "actual_CInt_return": 1,
+      "actual_CLong_reply": 4294967297,
+      "actual_controlled_CPU": 0,
+      "actual_fields": {
+        "args": [
+          123,
+          0,
+          16777218,
+          0,
+          0,
+          0
+        ],
+        "number": 61,
+        "rtid": 0,
+        "ttid": 0,
+        "valid": 0
+      },
+      "actual_wire72_hex": "000000000000000000000000000000003d000000000000007b0000000000000000000000000000000200000100000000000000000000000000000000000000000000000000000000",
+      "all_boundary_oracles_match": true,
+      "configured_CPU": 0,
+      "do_syscall_calls": 1,
+      "id": "wide-positive-return-narrows"
+    },
+    {
+      "CPU_calls": 1,
+      "actual_CInt_return": -1,
+      "actual_CLong_reply": -4294967297,
+      "actual_controlled_CPU": 7,
+      "actual_fields": {
+        "args": [
+          456,
+          0,
+          2,
+          0,
+          0,
+          0
+        ],
+        "number": 61,
+        "rtid": 0,
+        "ttid": 0,
+        "valid": 0
+      },
+      "actual_wire72_hex": "000000000000000000000000000000003d00000000000000c80100000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000",
+      "all_boundary_oracles_match": true,
+      "configured_CPU": 7,
+      "do_syscall_calls": 1,
+      "id": "wide-negative-return-narrows"
+    }
+  ],
+  "actual_admission": {
+    "HOST_ceiling_bytes": 4294967296,
+    "MemAvailable_bytes": 29312790528,
+    "actual_accounted_bytes": 3649196032,
+    "maxjobs": 3,
+    "measured_overhead_bytes": 1501712384,
+    "new_phase_bytes": 2147483648,
+    "receipt": {
+      "bytes": 573,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/execution-1/ADMISSION.json",
+      "sha256": "2fa58232032850432b7867fe704c1fc8f525f6e77ff07264a603cd01d7cad2fc"
+    },
+    "scope": "Historicalactualbatch only, not a newfuturegrant/physicalterminalpeak/cgroup guarantee. Allunchanged native/other reservations and stalehistory are preserved."
+  },
+  "actual_consumer_contract": {
+    "bytes": 27521,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-1/CONSUMER-CONTRACT.json",
+    "sha256": "a9f7d2f7981246f6cf7bf078f41adcaa3eb717ead4bf4ff229d838edb180c32f"
+  },
+  "actual_diagnostics": "Compile0 and runtime0; compile stdout/stderr and runtime stderr empty. Runtime2892B JSON matches allsix external fullrows, not a testcount-only assertion.",
+  "actual_executable": {
+    "bytes": 4384680,
+    "mode": "0o700",
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/output-1/wait-host-regression",
+    "sha256": "c31068d4b0ad9659375f447144e0f20fe911c5feb715a9a6036874d39f348dc7"
+  },
+  "actual_full_JSON_equals_frozen_external_EXPECTED_and_REQUEST": true,
+  "actual_interval": {
+    "finished_at": "2026-11-11T07:51:16.374505+00:00",
+    "started_at": "2026-11-11T07:51:16.152934+00:00"
+  },
+  "actual_ownership": {
+    "Root_chunk": "d1ad20",
+    "Root_fulltool0_no_session": true,
+    "actual_current_CPU6_2GiB_job1_positive_release_only": {
+      "CPU": 6,
+      "bytes": 2147483648,
+      "jobs": 1
+    },
+    "all2_positive": true,
+    "full_Root_completion": {
+      "bytes": 636,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/ROOT-EXEC-COMPLETION.json",
+      "sha256": "cf1ef87051562eab4f37b553d5225c0406ea8396bf01ac08e8c350f322efd37d"
+    },
+    "full_Root_tool": {
+      "bytes": 239,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/ROOT-EXEC-TOOL.json",
+      "sha256": "9e3be601391097067df281eafdfbca90988ffdd5b2a8ff7fe47f46c27a404790"
+    },
+    "inner_closure": {
+      "bytes": 237,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/execution-1/INNER-CLOSURE.json",
+      "sha256": "9fd831bda6fc50d42cd87f8186f660507f296c592aa768fec7f777ecf7e8d68f"
+    },
+    "no_timeout_group_signal_adopted_reap_kill_error_or_UNKNOWN": true,
+    "other_holds_or_native_or_UNKNOWN_released": false,
+    "records": {
+      "bytes": 745,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/execution-1/ownership.json",
+      "sha256": "3d920dc9f76b47e4153e602bd3ee8b15a21be105d51b7aa39bb8076b37409e7b"
+    },
+    "remaining_direct_children": []
+  },
+  "actual_raws": [
+    {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/execution-1/phase-1.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/execution-1/phase-1.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 2892,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/execution-1/phase-2.stdout",
+      "sha256": "728b250b8b03840ebb0f601048ebcfbc05a99cd844e0b4ff89b744bedfe2ea35"
+    },
+    {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/execution-1/phase-2.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "actual_request": {
+    "bytes": 13121,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/REQUEST.json",
+    "sha256": "aafb382b428c09dc5780ef84aca16d904f056fb0ccd0e546954249a042f0afab"
+  },
+  "actual_result": {
+    "bytes": 4088,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/execution-1/RESULT.json",
+    "sha256": "3c75aa49230930ce59dd8cd9030a8bf77d52f25d1381ebffd2d9d1c66879782f"
+  },
+  "actual_source_GO": {
+    "bytes": 20015,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-review-sourceacq-max-1/candidate-1/REVIEW.json",
+    "sha256": "4a6cfc793f878a6836bd4952b0090ac5796937258e5a81bae7fc4fc8f645204e"
+  },
+  "actual_source_candidate": {
+    "bytes": 2788,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-1/candidate/kernel/rust/f03_wait_host_provider.rs",
+    "sha256": "400ad42def827a0516dbe3a5a918802b929fae1c8861a6589f48f80bff4b0753"
+  },
+  "actual_two_commands": [
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648",
+        "--cpu=60",
+        "--fsize=16777216",
+        "--nofile=64",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TZ=UTC",
+        "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/output-1/tmp",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+        "--crate-name",
+        "wait_host_changed_provider",
+        "--edition=2021",
+        "-Dwarnings",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "debuginfo=1",
+        "-C",
+        "force-unwind-tables=no",
+        "--cfg",
+        "native_linux_irq_work_v6_12",
+        "--cfg",
+        "enable_profile",
+        "--cfg",
+        "enable_perf",
+        "--cfg",
+        "enable_rusage",
+        "--cfg",
+        "f03_do_syscall_outer_candidate",
+        "--cfg",
+        "f03_wait_host_provider_candidate",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/wait_host_regression.rs",
+        "-o",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/output-1/wait-host-regression"
+      ],
+      "cwd": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1",
+      "exit": 0,
+      "id": "compile-entire-genuine-wait-module-and-real-ABI-controlled-boundary",
+      "ownership": {
+        "adopted_kills": [],
+        "adopted_reaps": [],
+        "error": null,
+        "label": "phase-1",
+        "leader": 1308169,
+        "leader_birth": "46974223",
+        "leader_group_signalled": false,
+        "leader_parent_joined": true,
+        "remaining_direct_children": [],
+        "status": 0,
+        "streams_closed": true,
+        "timed_out": false,
+        "whole_descendants_joined": true
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648",
+        "--cpu=60",
+        "--fsize=16777216",
+        "--nofile=64",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TZ=UTC",
+        "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/output-1/tmp",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/output-1/wait-host-regression"
+      ],
+      "cwd": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1",
+      "exit": 0,
+      "id": "six-new-wait-request-CPU-return-lifetime-vectors",
+      "ownership": {
+        "adopted_kills": [],
+        "adopted_reaps": [],
+        "error": null,
+        "label": "phase-2",
+        "leader": 1308182,
+        "leader_birth": "46974243",
+        "leader_group_signalled": false,
+        "leader_parent_joined": true,
+        "remaining_direct_children": [],
+        "status": 0,
+        "streams_closed": true,
+        "timed_out": false,
+        "whole_descendants_joined": true
+      }
+    }
+  ],
+  "all15_frozen_file_and_compiler_pins_verified": true,
+  "all_holds_unchanged": true,
+  "at": "2026-11-11T07:55:15.103484+00:00",
+  "eligible_next_original_work": "Root may compose independently source-reviewed wait13a3/400ad and terminationf010/f62 only after actualsource/postimage checks; separate independentcomposition/productionoperation review+freshadmission then necessarynormalimage withrealC/Rusttypeguards/affectedcallback/directcallee physicalRust+Cexclusion evidence. Reuse unchangedbody/ABI/providerproof; no oldsuite/baseline/native replay.",
+  "external_oracles": {
+    "bytes": 3860,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/EXPECTED.json",
+    "sha256": "deaa24ccde96c5a7bebbc6f8cb27dd4a13840564cb64b09983ddb6733f90ca9d"
+  },
+  "frozen_fixture": {
+    "bytes": 5847,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/wait_host_regression.rs",
+    "sha256": "8650c51627e2bdd592948d1d98d46c9e75c1c221c7a8fc8a321983983f6c2651"
+  },
+  "independent_operation_GO": {
+    "bytes": 22261,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-review-p03-max-1/REVIEW.json",
+    "sha256": "9122741eafeefdad3e36c9b8d692e5f1cdbabedfac8fd0d3e988927990a0ccd1"
+  },
+  "inputs_manifest": {
+    "bytes": 4097,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/INPUTS.json",
+    "sha256": "5d210f43dbcc5bf388a7770d9055a2c74735f65c3f5479837ce84ac466eed0af"
+  },
+  "not_proved": [
+    "realCPU getter/currentGS/process/offload/ACK/hostwaitid/backend/nativefunctional or resource-restoring wait lifecycle",
+    "newdefaultC70exclusion or actual real48B.waitslot0Rust owner; needs composed productionimage andpassive currenttype/provider/owner join",
+    "termination source/body/wire or originalwhole04/default/parent/M14 acceptance from these sixcontrolled cases"
+  ],
+  "original_acceptance_or_C_retirement": false,
+  "owner": "/root/p04_tests_max fixture author/saved-data qualifier; Root sole actualexecutor/compositor/credit owner",
+  "qualifier_actions": "Only frozen local source/file hashes and saved JSON/rawbytes/72-byte integer decoding/ownership/Rootcompletion reads plus private qualificationwrite. No SUTimport/compiler/helper/validator/tool/test/ELFparser/Docker/network/native/process/canonical action or recursiveagent.",
+  "schema": "wait-host-new-whole-provider-saved-actual-qualification-v1",
+  "source_type_and_behavior_scope": "Exact entire2788B400ad new productionmodule compiled against full realff48 ABI with actualconst72/8/0,4,8,16,24 and unsafeexternC types; pinned realuprotocol header and previous current72/104 guards reused, no duplicateCheader suite. CPU6 and AS2GiB flags/profile/real19570eb match request. Test uses only explicitcontrolled getter/do_syscall modules; allsix positive/negativepid/options/highCLongreply vectors show full initializedcarrier/signextension, exactCLong\u2192CInt narrow, CPUonce\u2192sendonce\u2192return order, same configuredCPU and mutablealignedstackrequest during synchronous callback. Endpoint stores copiedbytes only, no pointer/address escape; actual kernel/offload/hostwaitid/service/IRQ/GS is unexecuted.",
+  "status": "PASS_ACTUAL_NEW_WAIT_WHOLE_MODULE_TWO_HOST_COMMANDS_SIX_CONTROLLED_CASES"
+}

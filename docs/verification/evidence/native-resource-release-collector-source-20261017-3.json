@@ -1,0 +1,99 @@
+{
+  "actual_pty": {
+    "command": {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-release-collector-20261017-1/transport-correction1/pty.command.json",
+      "sha256": "e66cd7181e3aef700c77b9d9f5e02e83b3ee6b8540c27df2c8c8a11cb6375a84",
+      "size": 714
+    },
+    "mechanism": "Existing actual mock-probe MAIN and collector supervisor/finish publication executed with stdout connected to actual kernelPTY OPOST|ONLCR. EveryND_RESOURCE line observed terminalCRLF; reconstructed2400-byte helper retainsLF and SHA19f7fd.",
+    "status": {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-release-collector-20261017-1/transport-correction1/pty.status.json",
+      "sha256": "280bdf8e759e93020721a7c5880c5f64de55c23f21ddd8a6b30be80b9f9a18ee",
+      "size": 58
+    },
+    "stderr": {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-release-collector-20261017-1/transport-correction1/pty.stderr",
+      "sha256": "08d2cc61bcb73eb158c5646575d7146af54a0497270a73dd107e0c15adb3603e",
+      "size": 55
+    },
+    "stdout": {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-release-collector-20261017-1/transport-correction1/pty.stdout",
+      "sha256": "8183f2b0b048180bdb1362fdc80daac4df495d98d6d4224ed9b44d9e8c69a783",
+      "size": 7753
+    }
+  },
+  "application_acceptance": false,
+  "checks": {
+    "actual_PTY_CRLF_positive": true,
+    "methods": 3,
+    "no_C_or_helper_or_static_rebuild": true,
+    "previous_six_source_protocol_methods_reused": true,
+    "retained_LF_positive": true,
+    "returncode": 0,
+    "wrong_embedded_bare_extraCR_VT_FF_negative": true
+  },
+  "collector": {
+    "path": "/home/holden/mckernel-work/scratch/native-resource-release-collector-20261017-1/correction1/native-resource-collector",
+    "sha256": "a897dc51e7b2ef673b84bba3d8ea0d02ce1d155d216c92375841a930bdac5ba0",
+    "size": 1030288
+  },
+  "collector_source": {
+    "path": "/home/holden/mckernel-work/scratch/native-resource-release-collector-20261017-1/correction1/source/native-resource-collector.c",
+    "sha256": "7da1e4628e28e772aab82e9b54cdaf30b31fbd690d0e311397f57816fbedc1f2",
+    "size": 32703
+  },
+  "command": {
+    "path": "/home/holden/mckernel-work/scratch/native-resource-release-collector-20261017-1/transport-correction1/command.json",
+    "sha256": "1c1fc1e4639e1e878a6de5003ad41a30f9070977be2186f85e7c45d33d5541b0",
+    "size": 775
+  },
+  "decoder": {
+    "path": "/home/holden/mckernel-work/scratch/native-resource-release-collector-20261017-1/transport-correction1/resource_capture.py",
+    "sha256": "e66e014f4b67854f05457770a42250fb5e0929e0da304bdbc2b7366b6bde9240",
+    "size": 4146
+  },
+  "decoder_diff": {
+    "path": "/home/holden/mckernel-work/scratch/native-resource-release-collector-20261017-1/transport-correction1/resource_capture.diff",
+    "sha256": "c861c3d3f82b6d7d016dbb1fa8921f559a3e842548e52b58d41386c5c3c12ec2",
+    "size": 994
+  },
+  "expert_decision": {
+    "authorized_scope": "Remove exactly one terminalCR before LF in outerND_RESOURCE record; reject embedded/bare/otherCR; reconstructed helper bytes remain exactLF.",
+    "blocker": "Actual QEMU ND serial records terminate CRLF; previous3286 decoder rejected CR.",
+    "reviewer": "/root/signal_guest_execution_review"
+  },
+  "original_literal_failure": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-resource-release-collector-source-20261017-1.json",
+    "sha256": "36f91423f0cd595189740a14c89938b3660fb94e47c113a8127deb3d1db756ce",
+    "size": 2863
+  },
+  "previous_passing_source_protocol": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-resource-release-collector-source-20261017-2.json",
+    "sha256": "e15003eceed5f2e0d7f541e36a8cc6d68783440537f5ac1bc6703fdfae91f881",
+    "size": 7352
+  },
+  "production_acceptance": false,
+  "resource_parser": {
+    "path": "/home/holden/mckernel/scripts/application-tests/native_resource_release_capture.py",
+    "sha256": "c1722019f27946a0c4a84018dd2eb50b0bd30de5081356f9debd77ece8339589",
+    "size": 5087
+  },
+  "runtime_release": false,
+  "status": "PASS_EXPERT_DIRECTED_OUTER_CRLF_CORRECTION_PENDING_INDEPENDENT_REVIEW",
+  "status_capture": {
+    "path": "/home/holden/mckernel-work/scratch/native-resource-release-collector-20261017-1/transport-correction1/status.json",
+    "sha256": "5a908f53cbaa28c854eb586746ea8079574ba34158504f9dc8bc9143189d4286",
+    "size": 64
+  },
+  "stderr": {
+    "path": "/home/holden/mckernel-work/scratch/native-resource-release-collector-20261017-1/transport-correction1/stderr",
+    "sha256": "7d82db6ffe7743bb310ec756947eb89ff706a6284956cb74054073565886dc61",
+    "size": 373
+  },
+  "task_id": "native-resource-release-collector-source-20261017-3",
+  "test": {
+    "path": "/home/holden/mckernel-work/scratch/native-resource-release-collector-20261017-1/transport-correction1/test_transport.py",
+    "sha256": "f8a981b6ea26763b90a6f7cdd5a59a08826306c92ed0e702b015254a4ea9e249",
+    "size": 4520
+  }
+}

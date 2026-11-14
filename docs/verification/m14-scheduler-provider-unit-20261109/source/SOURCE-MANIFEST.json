@@ -1,0 +1,550 @@
+{
+  "status": "FINITE_EXACT_CURRENT_ACCEPTED_F02_6FUNCTION_SOURCE_CUT_NO_EXECUTION",
+  "unit_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-provider-unit-1/scheduler_provider_unit.rs",
+  "unit_sha256": "6d632e252a68003654ffbab3779018f8a7d6185711d5d35f8aa8475ebfb77af4",
+  "actual_source_path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+  "actual_source_sha256": "c4e6153bef33ec018d2efc88c93854a4dc351f78c901ed3cb25f73524d7c0020",
+  "actual_abi_path": "/home/holden/mckernel/kernel/rust/abi.rs",
+  "actual_abi_sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+  "blocks": [
+    {
+      "role": "selected_function",
+      "name": "sched_process_spin_lock_bridge",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "definition_start_line": 309,
+      "source_byte_offset": 14067,
+      "source_bytes": 146,
+      "sha256": "47be0837b2556a6e255d4d08e5fb801c890e80f33847a91cdf42b0561c0daf98",
+      "exact_definition": "unsafe extern \"C\" fn sched_process_spin_lock_bridge(lock_addr: usize) -> CULong {\n    unsafe { process_spin_lock_bridge_c(lock_addr as CULong) }\n}"
+    },
+    {
+      "role": "selected_function",
+      "name": "sched_process_spin_unlock_bridge",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "definition_start_line": 313,
+      "source_byte_offset": 14215,
+      "source_bytes": 168,
+      "sha256": "fb7aa6e5c8056f6065dbc5f4ba2d33bf5bde9441ca0e5f76639aeadaf84f6035",
+      "exact_definition": "unsafe extern \"C\" fn sched_process_spin_unlock_bridge(lock_addr: usize, irqstate: CULong) {\n    unsafe { process_spin_unlock_bridge_c(lock_addr as CULong, irqstate) }\n}"
+    },
+    {
+      "role": "selected_function",
+      "name": "sched_runqueue_offsets",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "definition_start_line": 388,
+      "source_byte_offset": 16927,
+      "source_bytes": 1758,
+      "sha256": "e4912cad24b301daea5fcd50b16307ef8941ab49af9992555ba9f2cf83621d0c",
+      "exact_definition": "const fn sched_runqueue_offsets() -> SchedRunqueueOffsets {\n    SchedRunqueueOffsets {\n        thread_cpu_id_offset: offset_of!(Thread, cpu_id),\n        thread_tid_offset: offset_of!(Thread, tid),\n        thread_status_offset: offset_of!(Thread, status),\n        thread_spin_sleep_lock_offset: offset_of!(Thread, spin_sleep_lock),\n        thread_spin_sleep_offset: offset_of!(Thread, spin_sleep),\n        thread_sched_list_offset: offset_of!(Thread, sched_list),\n        thread_sigpending_offset: offset_of!(Thread, sigpending),\n        thread_sigcommon_offset: offset_of!(Thread, sigcommon),\n        sigcommon_sigpending_offset: offset_of!(SigCommon, sigpending),\n        thread_proc_offset: offset_of!(Thread, proc),\n        thread_mod_clone_offset: offset_of!(Thread, mod_clone),\n        proc_pid_offset: offset_of!(Process, pid),\n        proc_status_offset: offset_of!(Process, status),\n        proc_update_lock_offset: offset_of!(Process, update_lock),\n        proc_clone_count_offset: offset_of!(Process, clone_count),\n        cpu_runq_lock_offset: offset_of!(CpuLocalVar, runq_lock),\n        cpu_runq_irqstate_offset: offset_of!(CpuLocalVar, runq_irqstate),\n        cpu_current_offset: offset_of!(CpuLocalVar, current),\n        cpu_prevpid_offset: offset_of!(CpuLocalVar, prevpid),\n        cpu_runq_offset: offset_of!(CpuLocalVar, runq),\n        cpu_runq_len_offset: offset_of!(CpuLocalVar, runq_len),\n        cpu_runq_reserved_offset: offset_of!(CpuLocalVar, runq_reserved),\n        cpu_flags_offset: offset_of!(CpuLocalVar, flags),\n        cpu_status_offset: offset_of!(CpuLocalVar, status),\n        cpu_in_interrupt_offset: offset_of!(CpuLocalVar, in_interrupt),\n        cpu_nr_ctx_switches_offset: offset_of!(CpuLocalVar, nr_ctx_switches),\n    }\n}"
+    },
+    {
+      "role": "selected_function",
+      "name": "sched_wakeup_thread_body_result",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "definition_start_line": 3148,
+      "source_byte_offset": 106366,
+      "source_bytes": 4960,
+      "sha256": "aa09516a1f1bfaf097cf93da9c6f94fbe031bb5d077ca5176dd5ffded500efb7",
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn sched_wakeup_thread_body_result(\n    thread_addr: usize,\n    cpu_addr: usize,\n    update_lock_node_addr: usize,\n    current_cpu_id: CInt,\n    valid_states: CInt,\n    runq_locked: CInt,\n    running_status: CInt,\n    exited_status: CInt,\n    need_resched_flag: u32,\n    vector_key: CInt,\n    offsets: *const SchedRunqueueOffsets,\n    lock_fn: Option<SchedMigrateSpinLockFn>,\n    unlock_fn: Option<SchedMigrateSpinUnlockFn>,\n    rwlock_fn: Option<SchedRunqRwlockFn>,\n    rwunlock_fn: Option<SchedRunqRwlockFn>,\n    status_set_fn: Option<SchedRunqStatusSetFn>,\n    set_timer_fn: Option<SchedRunqSetTimerFn>,\n    vector_fn: Option<SchedMigrateVectorFn>,\n    interrupt_fn: Option<SchedMigrateInterruptFn>,\n    log_fn: Option<SchedRunqLogFn>,\n) -> CInt {\n    if thread_addr == 0 || cpu_addr == 0 || update_lock_node_addr == 0 || offsets.is_null() {\n        return -EINVAL;\n    }\n    let (\n        Some(lock),\n        Some(unlock),\n        Some(rwlock),\n        Some(rwunlock),\n        Some(status_set),\n        Some(set_timer),\n        Some(vector),\n        Some(interrupt),\n    ) = (\n        lock_fn,\n        unlock_fn,\n        rwlock_fn,\n        rwunlock_fn,\n        status_set_fn,\n        set_timer_fn,\n        vector_fn,\n        interrupt_fn,\n    )\n    else {\n        return -EINVAL;\n    };\n\n    let offsets = unsafe { &*offsets };\n    let proc_addr = unsafe {\n        read_volatile(thread_addr.wrapping_add(offsets.thread_proc_offset) as *const usize)\n    };\n    let thread_cpu = unsafe {\n        read_volatile(thread_addr.wrapping_add(offsets.thread_cpu_id_offset) as *const CInt)\n    };\n    let proc_pid = if proc_addr == 0 {\n        -1\n    } else {\n        unsafe { read_volatile(proc_addr.wrapping_add(offsets.proc_pid_offset) as *const CInt) }\n    };\n    if let Some(log) = log_fn {\n        unsafe {\n            log(\n                SCHED_RUNQ_LOG_WAKE_ENTRY,\n                thread_addr,\n                proc_addr,\n                proc_pid,\n                valid_states,\n            );\n        }\n    }\n\n    let spin_lock_addr = thread_addr.wrapping_add(offsets.thread_spin_sleep_lock_offset);\n    let spin_sleep_addr = thread_addr.wrapping_add(offsets.thread_spin_sleep_offset);\n    let irqstate = unsafe { lock(spin_lock_addr) };\n    if unsafe { read_volatile(spin_sleep_addr as *const CInt) } == 1 {\n        if let Some(log) = log_fn {\n            unsafe {\n                log(\n                    SCHED_RUNQ_LOG_SPIN_WAKEUP,\n                    thread_addr,\n                    0,\n                    thread_cpu,\n                    valid_states,\n                );\n            }\n        }\n    }\n    unsafe {\n        write_volatile(spin_sleep_addr as *mut CInt, 0);\n        unlock(spin_lock_addr, irqstate);\n    }\n\n    let runq_lock_addr = cpu_addr.wrapping_add(offsets.cpu_runq_lock_offset);\n    let runq_irqstate = if runq_locked == 0 {\n        unsafe { lock(runq_lock_addr) }\n    } else {\n        0\n    };\n\n    let current_status = unsafe {\n        read_volatile(thread_addr.wrapping_add(offsets.thread_status_offset) as *const CInt)\n    };\n    let status: CInt = if (current_status & valid_states) != 0 {\n        if proc_addr != 0 {\n            let proc_lock_addr = proc_addr.wrapping_add(offsets.proc_update_lock_offset);\n            unsafe {\n                rwlock(proc_lock_addr, update_lock_node_addr);\n            }\n            let proc_status_addr = proc_addr.wrapping_add(offsets.proc_status_offset);\n            let proc_status = unsafe { read_volatile(proc_status_addr as *const CInt) };\n            if proc_status != exited_status {\n                unsafe {\n                    write_volatile(proc_status_addr as *mut CInt, running_status);\n                }\n            }\n            unsafe {\n                rwunlock(proc_lock_addr, update_lock_node_addr);\n            }\n        }\n\n        unsafe {\n            status_set(\n                thread_addr.wrapping_add(offsets.thread_status_offset),\n                running_status,\n            );\n            let flags_addr = cpu_addr.wrapping_add(offsets.cpu_flags_offset);\n            let flags = read_volatile(flags_addr as *const u32);\n            write_volatile(flags_addr as *mut u32, flags | need_resched_flag);\n        }\n\n        if thread_cpu == current_cpu_id {\n            unsafe {\n                set_timer(1);\n            }\n        }\n        0\n    } else {\n        -EINVAL\n    };\n\n    if runq_locked == 0 {\n        unsafe {\n            unlock(runq_lock_addr, runq_irqstate);\n        }\n    }\n\n    if status == 0 && thread_cpu != current_cpu_id {\n        if let Some(log) = log_fn {\n            unsafe {\n                log(\n                    SCHED_RUNQ_LOG_REMOTE_IPI,\n                    thread_addr,\n                    cpu_addr,\n                    thread_cpu,\n                    vector_key,\n                );\n            }\n        }\n        unsafe {\n            interrupt(thread_cpu, vector(vector_key));\n        }\n    }\n\n    status\n}"
+    },
+    {
+      "role": "selected_function",
+      "name": "__sched_wakeup_thread",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "definition_start_line": 3316,
+      "source_byte_offset": 111328,
+      "source_bytes": 1221,
+      "sha256": "4c73d567d97e5fed41d7ae85df0f55d366b0e2e5661351b9e02d817f60036537",
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn __sched_wakeup_thread(\n    thread: *mut Thread,\n    valid_states: CInt,\n    runq_locked: CInt,\n) -> CInt {\n    if thread.is_null() {\n        return -EINVAL;\n    }\n    let cpu_addr = unsafe { process_sched_cpu_local_bridge((*thread).cpu_id) };\n    let mut updatelock = MaybeUninit::<McsRwlockNode>::uninit();\n    let offsets = sched_runqueue_offsets();\n    unsafe {\n        sched_wakeup_thread_body_result(\n            thread as usize,\n            cpu_addr,\n            updatelock.as_mut_ptr() as usize,\n            ihk_mc_get_processor_id(),\n            valid_states,\n            runq_locked,\n            PS_RUNNING,\n            PS_EXITED,\n            CPU_FLAG_NEED_RESCHED,\n            IHK_GV_IKC,\n            &offsets,\n            Some(sched_process_spin_lock_bridge),\n            Some(sched_process_spin_unlock_bridge),\n            Some(process_sched_rwlock_bridge),\n            Some(process_sched_rwunlock_bridge),\n            Some(process_sched_status_set_bridge),\n            Some(process_sched_set_timer_bridge),\n            Some(process_sched_vector_bridge),\n            Some(process_sched_interrupt_bridge),\n            Some(process_sched_runq_log_bridge),\n        )\n    }\n}"
+    },
+    {
+      "role": "selected_function",
+      "name": "sched_wakeup_thread",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "definition_start_line": 3362,
+      "source_byte_offset": 112743,
+      "source_bytes": 172,
+      "sha256": "8a7b60d0b768e344d27f9f5319a3a61fc13f0bd33b5d833ee95736ac7a6ace46",
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn sched_wakeup_thread(thread: *mut Thread, valid_states: CInt) -> CInt {\n    unsafe { __sched_wakeup_thread(thread, valid_states, 0) }\n}"
+    },
+    {
+      "role": "selected_type",
+      "name": "McsRwlockNode",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "definition_start_line": 299,
+      "source_byte_offset": 13913,
+      "source_bytes": 152,
+      "sha256": "a35ba3390842d9ecdb8cd1ad86cb892d11663b6dfd9eec437bc161970987453a",
+      "exact_definition": "#[repr(C, align(64))]\nstruct McsRwlockNode {\n    count: CInt,\n    type_: u8,\n    locked: u8,\n    dmy1: u8,\n    dmy2: u8,\n    next: *mut McsRwlockNode,\n}"
+    },
+    {
+      "role": "selected_type",
+      "name": "SchedRunqueueOffsets",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "definition_start_line": 346,
+      "source_byte_offset": 15351,
+      "source_bytes": 1036,
+      "sha256": "3ac54d797701b910eac291f5c49bfc8f454f271165c357f13df498f547f6bbe7",
+      "exact_definition": "#[repr(C)]\npub struct SchedRunqueueOffsets {\n    pub thread_cpu_id_offset: usize,\n    pub thread_tid_offset: usize,\n    pub thread_status_offset: usize,\n    pub thread_spin_sleep_lock_offset: usize,\n    pub thread_spin_sleep_offset: usize,\n    pub thread_sched_list_offset: usize,\n    pub thread_sigpending_offset: usize,\n    pub thread_sigcommon_offset: usize,\n    pub sigcommon_sigpending_offset: usize,\n    pub thread_proc_offset: usize,\n    pub thread_mod_clone_offset: usize,\n    pub proc_pid_offset: usize,\n    pub proc_status_offset: usize,\n    pub proc_update_lock_offset: usize,\n    pub proc_clone_count_offset: usize,\n    pub cpu_runq_lock_offset: usize,\n    pub cpu_runq_irqstate_offset: usize,\n    pub cpu_current_offset: usize,\n    pub cpu_prevpid_offset: usize,\n    pub cpu_runq_offset: usize,\n    pub cpu_runq_len_offset: usize,\n    pub cpu_runq_reserved_offset: usize,\n    pub cpu_flags_offset: usize,\n    pub cpu_status_offset: usize,\n    pub cpu_in_interrupt_offset: usize,\n    pub cpu_nr_ctx_switches_offset: usize,\n}"
+    },
+    {
+      "role": "original_size_align_assertions",
+      "name": "SchedRunqueueOffsets",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "definition_start_line": 383,
+      "source_byte_offset": 16776,
+      "source_bytes": 149,
+      "sha256": "e86cdf843bb1dba3ba2b50773ebbb622d399de4b817ea4550adc91f45d0cbd9b",
+      "exact_definition": "const _: () = {\n    assert!(core::mem::size_of::<SchedRunqueueOffsets>() == 208);\n    assert!(core::mem::align_of::<SchedRunqueueOffsets>() == 8);\n};"
+    },
+    {
+      "role": "selected_callback_alias",
+      "name": "SchedMigrateSpinLockFn",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "definition_start_line": 126,
+      "source_byte_offset": 6954,
+      "source_bytes": 68,
+      "sha256": "7014f6bd8c4f7880ca3b2c64474920f2b0295f31f1710df378d35ac7cd743d8e",
+      "exact_definition": "type SchedMigrateSpinLockFn = unsafe extern \"C\" fn(usize) -> CULong;"
+    },
+    {
+      "role": "selected_callback_alias",
+      "name": "SchedMigrateSpinUnlockFn",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "definition_start_line": 127,
+      "source_byte_offset": 7023,
+      "source_bytes": 68,
+      "sha256": "787f8d89fd9c0fc5810cb746c5d1e23a6640f79e064fec064a6062c10779d16b",
+      "exact_definition": "type SchedMigrateSpinUnlockFn = unsafe extern \"C\" fn(usize, CULong);"
+    },
+    {
+      "role": "selected_callback_alias",
+      "name": "SchedRunqRwlockFn",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "definition_start_line": 140,
+      "source_byte_offset": 7867,
+      "source_bytes": 60,
+      "sha256": "81866afbb6024682ad7eb27a7e627f24826d5c881a0cfe8a4a7b0e55f2fbf7f4",
+      "exact_definition": "type SchedRunqRwlockFn = unsafe extern \"C\" fn(usize, usize);"
+    },
+    {
+      "role": "selected_callback_alias",
+      "name": "SchedRunqStatusSetFn",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "definition_start_line": 141,
+      "source_byte_offset": 7928,
+      "source_bytes": 62,
+      "sha256": "5571ddb7391e1938f70325104a87b84cb3a62351c70986479184d0a1f9a4b592",
+      "exact_definition": "type SchedRunqStatusSetFn = unsafe extern \"C\" fn(usize, CInt);"
+    },
+    {
+      "role": "selected_callback_alias",
+      "name": "SchedRunqSetTimerFn",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "definition_start_line": 142,
+      "source_byte_offset": 7991,
+      "source_bytes": 54,
+      "sha256": "d049ad4eaa4ace82a5ff074c7e98f4069c132a5e3b63dbe666cf9799e0ee9c1f",
+      "exact_definition": "type SchedRunqSetTimerFn = unsafe extern \"C\" fn(CInt);"
+    },
+    {
+      "role": "selected_callback_alias",
+      "name": "SchedMigrateVectorFn",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "definition_start_line": 133,
+      "source_byte_offset": 7419,
+      "source_bytes": 63,
+      "sha256": "b63d180779b9854f7143655ddd4c8de73dfba393b8d70e2eb3b1f6dc66efb531",
+      "exact_definition": "type SchedMigrateVectorFn = unsafe extern \"C\" fn(CInt) -> CInt;"
+    },
+    {
+      "role": "selected_callback_alias",
+      "name": "SchedMigrateInterruptFn",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "definition_start_line": 134,
+      "source_byte_offset": 7483,
+      "source_bytes": 64,
+      "sha256": "822bdeed50ddb7257102b8c7ab645cc9612189d99bf328c71a214f56868c05ce",
+      "exact_definition": "type SchedMigrateInterruptFn = unsafe extern \"C\" fn(CInt, CInt);"
+    },
+    {
+      "role": "selected_callback_alias",
+      "name": "SchedRunqLogFn",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "definition_start_line": 143,
+      "source_byte_offset": 8046,
+      "source_bytes": 75,
+      "sha256": "c94b80b9735e24e09e2cb2f90d01197f1bd05786be3f9bc3eaa85ca50c88fcfa",
+      "exact_definition": "type SchedRunqLogFn = unsafe extern \"C\" fn(CInt, usize, usize, CInt, CInt);"
+    },
+    {
+      "role": "selected_constant",
+      "name": "EINVAL",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "definition_start_line": 161,
+      "source_byte_offset": 9154,
+      "source_bytes": 24,
+      "sha256": "0836b68bcc155c8cca768abaaaedb07a161e2f51aac938f86dae615d523423dd",
+      "exact_definition": "const EINVAL: CInt = 22;"
+    },
+    {
+      "role": "selected_constant",
+      "name": "PS_RUNNING",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "definition_start_line": 216,
+      "source_byte_offset": 11171,
+      "source_bytes": 29,
+      "sha256": "7a812594d3d932aab60907ceace27ea268e2d881954897b6c36f2c4ac656bddd",
+      "exact_definition": "const PS_RUNNING: CInt = 0x1;"
+    },
+    {
+      "role": "selected_constant",
+      "name": "PS_EXITED",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "definition_start_line": 218,
+      "source_byte_offset": 11239,
+      "source_bytes": 29,
+      "sha256": "9f63e550a44be072abbf35b9023eca7b25ccfd816346caf18b4442ad5b7251aa",
+      "exact_definition": "const PS_EXITED: CInt = 0x10;"
+    },
+    {
+      "role": "selected_constant",
+      "name": "CPU_FLAG_NEED_RESCHED",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "definition_start_line": 219,
+      "source_byte_offset": 11269,
+      "source_bytes": 39,
+      "sha256": "49472b13197f0fc00344380c71b4c02df54e98be961b51eed9130941496b9c9f",
+      "exact_definition": "const CPU_FLAG_NEED_RESCHED: u32 = 0x1;"
+    },
+    {
+      "role": "selected_constant",
+      "name": "IHK_GV_IKC",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "definition_start_line": 223,
+      "source_byte_offset": 11418,
+      "source_bytes": 27,
+      "sha256": "59da5a558434127853d4ff520938f775566b12b4db35c2ed87f1204ecf2af0c5",
+      "exact_definition": "const IHK_GV_IKC: CInt = 1;"
+    },
+    {
+      "role": "selected_constant",
+      "name": "SCHED_RUNQ_LOG_WAKE_ENTRY",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "definition_start_line": 232,
+      "source_byte_offset": 11843,
+      "source_bytes": 42,
+      "sha256": "1fa3fc2ae005ae82ac27d5c44e73bfced123cce248fbc6d0dfea0ecc3d0bae54",
+      "exact_definition": "const SCHED_RUNQ_LOG_WAKE_ENTRY: CInt = 2;"
+    },
+    {
+      "role": "selected_constant",
+      "name": "SCHED_RUNQ_LOG_SPIN_WAKEUP",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "definition_start_line": 233,
+      "source_byte_offset": 11886,
+      "source_bytes": 43,
+      "sha256": "e6faaaac820382e8b3fa8f408e5fd9d611418b718a3fa4e3fe31051ae2b96858",
+      "exact_definition": "const SCHED_RUNQ_LOG_SPIN_WAKEUP: CInt = 3;"
+    },
+    {
+      "role": "selected_constant",
+      "name": "SCHED_RUNQ_LOG_REMOTE_IPI",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "definition_start_line": 234,
+      "source_byte_offset": 11930,
+      "source_bytes": 42,
+      "sha256": "3d5be1d6562ad52ce7f093ae7921855ba2cb2f0f4f0c0186cd2a206d82c4d58e",
+      "exact_definition": "const SCHED_RUNQ_LOG_REMOTE_IPI: CInt = 4;"
+    },
+    {
+      "role": "genuine_external_declaration",
+      "name": "process_sched_cpu_local_bridge",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "definition_start_line": 32,
+      "source_byte_offset": 1500,
+      "source_bytes": 61,
+      "sha256": "e43b29e25f9858c136b367d2cf086eda1b43ea353bfc41eb26ab8ecbe852552a",
+      "exact_definition": "    fn process_sched_cpu_local_bridge(cpu_id: CInt) -> usize;"
+    },
+    {
+      "role": "genuine_external_declaration",
+      "name": "ihk_mc_get_processor_id",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "definition_start_line": 31,
+      "source_byte_offset": 1458,
+      "source_bytes": 41,
+      "sha256": "0d294e16e122da89ece6bf9fde0151791b33ebce39d0797af3fd92f259433454",
+      "exact_definition": "    fn ihk_mc_get_processor_id() -> CInt;"
+    },
+    {
+      "role": "genuine_external_declaration",
+      "name": "process_spin_lock_bridge",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "definition_start_line": 39,
+      "source_byte_offset": 1830,
+      "source_bytes": 109,
+      "sha256": "2f445e79c1706a8de211ef439527c36eebc4a332a65350cb914a7a0dcf42c4f0",
+      "exact_definition": "    #[link_name = \"process_spin_lock_bridge\"]\n    fn process_spin_lock_bridge_c(lock_addr: CULong) -> CULong;"
+    },
+    {
+      "role": "genuine_external_declaration",
+      "name": "process_spin_unlock_bridge",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "definition_start_line": 41,
+      "source_byte_offset": 1940,
+      "source_bytes": 121,
+      "sha256": "4d28feaa83cd8f52a12393328ab853c910e85c956e8de1758d79baa66ee29a45",
+      "exact_definition": "    #[link_name = \"process_spin_unlock_bridge\"]\n    fn process_spin_unlock_bridge_c(lock_addr: CULong, irqstate: CULong);"
+    },
+    {
+      "role": "genuine_external_declaration",
+      "name": "process_sched_rwlock_bridge",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "definition_start_line": 52,
+      "source_byte_offset": 2622,
+      "source_bytes": 71,
+      "sha256": "6a7d81b1abdccb12231b89dfe5d00d7590086451d44a98399338dee14aab9d33",
+      "exact_definition": "    fn process_sched_rwlock_bridge(lock_addr: usize, node_addr: usize);"
+    },
+    {
+      "role": "genuine_external_declaration",
+      "name": "process_sched_rwunlock_bridge",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "definition_start_line": 53,
+      "source_byte_offset": 2694,
+      "source_bytes": 73,
+      "sha256": "720bd16df65ee15f305aaecd3cae520d81b055920b030a4256aaf3d762031cea",
+      "exact_definition": "    fn process_sched_rwunlock_bridge(lock_addr: usize, node_addr: usize);"
+    },
+    {
+      "role": "genuine_external_declaration",
+      "name": "process_sched_status_set_bridge",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "definition_start_line": 54,
+      "source_byte_offset": 2768,
+      "source_bytes": 73,
+      "sha256": "d62cbcf1e7f991b5729482821a0be6379aae28afe867e8f96b06e6b3f767642e",
+      "exact_definition": "    fn process_sched_status_set_bridge(status_addr: usize, status: CInt);"
+    },
+    {
+      "role": "genuine_external_declaration",
+      "name": "process_sched_set_timer_bridge",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "definition_start_line": 55,
+      "source_byte_offset": 2842,
+      "source_bytes": 57,
+      "sha256": "a7323c56443a34443e7ceb89dea368a6f556ca8e8699f80f6a532e49d781da1f",
+      "exact_definition": "    fn process_sched_set_timer_bridge(runq_locked: CInt);"
+    },
+    {
+      "role": "genuine_external_declaration",
+      "name": "process_sched_vector_bridge",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "definition_start_line": 48,
+      "source_byte_offset": 2355,
+      "source_bytes": 61,
+      "sha256": "60b9b22d9bff77cc2266ab94bca11044cad042b13dc4f973d71833bb5d95bb42",
+      "exact_definition": "    fn process_sched_vector_bridge(vector_key: CInt) -> CInt;"
+    },
+    {
+      "role": "genuine_external_declaration",
+      "name": "process_sched_interrupt_bridge",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "definition_start_line": 49,
+      "source_byte_offset": 2417,
+      "source_bytes": 63,
+      "sha256": "d61600c4e84bd38f0fe4e9a8515a44c3dcd1f2da57550c56aba709fd2df1504f",
+      "exact_definition": "    fn process_sched_interrupt_bridge(cpu: CInt, vector: CInt);"
+    },
+    {
+      "role": "genuine_external_declaration",
+      "name": "process_sched_runq_log_bridge",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "definition_start_line": 51,
+      "source_byte_offset": 2521,
+      "source_bytes": 100,
+      "sha256": "a0b65ae42cf50918d49bfc8f9c7ed943c90031cc2e437ed4fe4e61363242f5cb",
+      "exact_definition": "    fn process_sched_runq_log_bridge(event: CInt, arg0: usize, arg1: usize, arg2: CInt, arg3: CInt);"
+    }
+  ],
+  "counts": {
+    "public_C_functions": 3,
+    "private_functions": 3,
+    "selected_types": 2,
+    "callback_aliases": 8,
+    "constants": 8,
+    "genuine_external_declarations": 11,
+    "offset_constructor_fields": 26,
+    "original_size_align_assertion_block": 1
+  },
+  "exact_constructor_fields": [
+    {
+      "name": "thread_cpu_id_offset",
+      "actual_abi_type": "Thread",
+      "actual_abi_field": "cpu_id"
+    },
+    {
+      "name": "thread_tid_offset",
+      "actual_abi_type": "Thread",
+      "actual_abi_field": "tid"
+    },
+    {
+      "name": "thread_status_offset",
+      "actual_abi_type": "Thread",
+      "actual_abi_field": "status"
+    },
+    {
+      "name": "thread_spin_sleep_lock_offset",
+      "actual_abi_type": "Thread",
+      "actual_abi_field": "spin_sleep_lock"
+    },
+    {
+      "name": "thread_spin_sleep_offset",
+      "actual_abi_type": "Thread",
+      "actual_abi_field": "spin_sleep"
+    },
+    {
+      "name": "thread_sched_list_offset",
+      "actual_abi_type": "Thread",
+      "actual_abi_field": "sched_list"
+    },
+    {
+      "name": "thread_sigpending_offset",
+      "actual_abi_type": "Thread",
+      "actual_abi_field": "sigpending"
+    },
+    {
+      "name": "thread_sigcommon_offset",
+      "actual_abi_type": "Thread",
+      "actual_abi_field": "sigcommon"
+    },
+    {
+      "name": "sigcommon_sigpending_offset",
+      "actual_abi_type": "SigCommon",
+      "actual_abi_field": "sigpending"
+    },
+    {
+      "name": "thread_proc_offset",
+      "actual_abi_type": "Thread",
+      "actual_abi_field": "proc"
+    },
+    {
+      "name": "thread_mod_clone_offset",
+      "actual_abi_type": "Thread",
+      "actual_abi_field": "mod_clone"
+    },
+    {
+      "name": "proc_pid_offset",
+      "actual_abi_type": "Process",
+      "actual_abi_field": "pid"
+    },
+    {
+      "name": "proc_status_offset",
+      "actual_abi_type": "Process",
+      "actual_abi_field": "status"
+    },
+    {
+      "name": "proc_update_lock_offset",
+      "actual_abi_type": "Process",
+      "actual_abi_field": "update_lock"
+    },
+    {
+      "name": "proc_clone_count_offset",
+      "actual_abi_type": "Process",
+      "actual_abi_field": "clone_count"
+    },
+    {
+      "name": "cpu_runq_lock_offset",
+      "actual_abi_type": "CpuLocalVar",
+      "actual_abi_field": "runq_lock"
+    },
+    {
+      "name": "cpu_runq_irqstate_offset",
+      "actual_abi_type": "CpuLocalVar",
+      "actual_abi_field": "runq_irqstate"
+    },
+    {
+      "name": "cpu_current_offset",
+      "actual_abi_type": "CpuLocalVar",
+      "actual_abi_field": "current"
+    },
+    {
+      "name": "cpu_prevpid_offset",
+      "actual_abi_type": "CpuLocalVar",
+      "actual_abi_field": "prevpid"
+    },
+    {
+      "name": "cpu_runq_offset",
+      "actual_abi_type": "CpuLocalVar",
+      "actual_abi_field": "runq"
+    },
+    {
+      "name": "cpu_runq_len_offset",
+      "actual_abi_type": "CpuLocalVar",
+      "actual_abi_field": "runq_len"
+    },
+    {
+      "name": "cpu_runq_reserved_offset",
+      "actual_abi_type": "CpuLocalVar",
+      "actual_abi_field": "runq_reserved"
+    },
+    {
+      "name": "cpu_flags_offset",
+      "actual_abi_type": "CpuLocalVar",
+      "actual_abi_field": "flags"
+    },
+    {
+      "name": "cpu_status_offset",
+      "actual_abi_type": "CpuLocalVar",
+      "actual_abi_field": "status"
+    },
+    {
+      "name": "cpu_in_interrupt_offset",
+      "actual_abi_type": "CpuLocalVar",
+      "actual_abi_field": "in_interrupt"
+    },
+    {
+      "name": "cpu_nr_ctx_switches_offset",
+      "actual_abi_type": "CpuLocalVar",
+      "actual_abi_field": "nr_ctx_switches"
+    }
+  ],
+  "original_required_assertions": {
+    "SchedRunqueueOffsets_size": 208,
+    "SchedRunqueueOffsets_align": 8
+  },
+  "source_eligibility_inputs": {
+    "/home/holden/mckernel-work/m14-m15-explicit-restart-20261109T200836Z/scheduler-provider-eligibility-20261109T2114.json": "b26a8c16699869f1e52069a241e4140b8695ae231bf4e786c41ce86c2a14176d",
+    "/home/holden/mckernel-work/m14-m15-explicit-restart-20261109T200836Z/scheduler-provider-boundary-review-20261109T2114.json": "faecfe2b2a62f74da62026dd5628921647bcc2ef35a432a8a95581e7977eb6e9",
+    "/home/holden/mckernel-work/m14-m15-explicit-restart-20261109T200836Z/scheduler-engine-eligibility-20261109T2114.json": "1f82f1795ea42ea6a12e07cec209d951536849341d099193fd4763def6cecf02"
+  },
+  "required3_C_exports": [
+    "sched_wakeup_thread_body_result",
+    "__sched_wakeup_thread",
+    "sched_wakeup_thread"
+  ],
+  "source_genuine_U": [
+    "process_sched_cpu_local_bridge",
+    "ihk_mc_get_processor_id",
+    "process_spin_lock_bridge",
+    "process_spin_unlock_bridge",
+    "process_sched_rwlock_bridge",
+    "process_sched_rwunlock_bridge",
+    "process_sched_status_set_bridge",
+    "process_sched_set_timer_bridge",
+    "process_sched_vector_bridge",
+    "process_sched_interrupt_bridge",
+    "process_sched_runq_log_bridge"
+  ],
+  "preserved_existing_link_name_aliases": [
+    "process_spin_lock_bridge_c -> process_spin_lock_bridge",
+    "process_spin_unlock_bridge_c -> process_spin_unlock_bridge"
+  ],
+  "actual_private_emission_policy": "The actual compiler may inline the const constructor and retain the two address-taken private spin adapters plus readonly offsets/literals. Record actual LOCAL owners/ranges/relocations; do not impose arbitrary byte lengths or discard compiler-generated readonly data.",
+  "unexpected_compiler_import_policy": "If an actual compiler-emitted memcpy/memset or other intrinsic appears, stop before link and bind its genuine selected kernel implementation/source/ABI via concrete review; do not add HOST libc or fake function. aaaf already has genuine memset; no assumption is made about whether codegen needs an intrinsic.",
+  "native_runtime_or_kernel_function_execution": false,
+  "canonical_index_writes": false,
+  "source_does_not_include_any_downstream_bridge_body": true,
+  "no_wholemodule_or_cfg_process_global_storage_candidate": true
+}

@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "record_kind": "stability_linux_collector_storage_fault_v2_source_review_failure",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "review_attempt": 37,
+  "recorded_utc": "2026-09-16T08:08:26Z",
+  "status": "FAIL_SOURCE",
+  "review_input": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260916-40.tar.gz",
+    "commit": "7e38d0b290c0a48d0bc5ab3fc33fe2f5fab1177e",
+    "sha256": "5f43d6af69298a84c980b04aa65f66a18c7e621043767a12f69039ed444e0a30",
+    "size": 38007901,
+    "members": 32,
+    "files": 22,
+    "safe_unique": true,
+    "manifest_bindings": 21
+  },
+  "reviewed_source_sha256": {
+    "oracle.py": "cfdbd7336241ce271d95fe3f82fce88f306a88ea5076e9df865dd03300c5a5d9",
+    "witness_owner.py": "be1e3878ad6e7818d42f062ef66496b6af98f71277fcf62c55009a293ff2f94c"
+  },
+  "findings": [
+    {
+      "id": "report_present_fifo_constants_remain",
+      "source": "oracle.py:2501",
+      "selectors": [0, 3, 5],
+      "mutation": "Change stdout/stderr FIFO inodes consistently to 901/902 in SETUP, setup.bin and report.",
+      "setup_sha256": "097aa90a86bce91f05d010396f18f769a597abcc28042cc406211b6df1e787fe",
+      "observed": "Selectors 0/3/5 reject with report setup semantics; selector 4 accepts.",
+      "required": "Join report setup words to authenticated collector-held dynamic pipe identities instead of synthetic constants."
+    },
+    {
+      "id": "successful_executable_seals_not_enforced",
+      "source": "oracle.py:2244",
+      "selector": 4,
+      "mutation": "Set SETUP executable_seals and setup word 29 to zero and rebind setup.bin.",
+      "setup_sha256": "f99bc86b878d64c8a3e59d1072170f97f20185c8d07d484c9dae6a16fce9ebaa",
+      "observed": "Accepted although the producer requires the complete four-seal mask before execution.",
+      "required": "Require the successful producer seal mask before report-presence branching."
+    },
+    {
+      "id": "pre_ack_numeric_domains_unbounded",
+      "source": "witness_owner.py:906-909,1011-1018 and oracle SETUP validation",
+      "mutation": "Use negative stat device values or 2**64 seals/PID/birth; separately set selector-4 stdin_stat.size to 2**64.",
+      "packet_sha256": "93f6036387139dd02015a829ec828eff0900ff244f259ec46659fe7659781c0f",
+      "observed": "The owner reaches journal append/ACK and the complete selector-4 oracle accepts the overflowing stat size.",
+      "required": "Enforce producer-representable exact integer ranges for every stat field, seals and leader identity in both pre-ACK owner validation and offline oracle validation."
+    }
+  ],
+  "verification": {
+    "archive39_nested_envelope": "PASS",
+    "retained_review_groups": 13,
+    "retained_review_scope": "reviews 24-33 and 35",
+    "retained_status": "PASS_IN_MEMORY",
+    "positive_selectors": 7,
+    "review34_controls": 9,
+    "review34_status": "ALL_REJECTED",
+    "review36_controls": "six setup-word mutations, one birth mismatch and eight malformed-word shape/type controls reject; dynamic FIFO still fails",
+    "generated_diff_header_checks": "PASS",
+    "retained_python39": "123/123 PASS",
+    "retained_python38": "123/123 PASS",
+    "review_exhaustive_acceptance": false,
+    "files_created_by_reviewer": false
+  },
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}

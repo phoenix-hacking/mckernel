@@ -1,0 +1,104 @@
+{
+  "schema": "scratch22-authority3.cleanup-postflight-review.v1",
+  "decision": "PASS_TERMINAL_CLEANUP_POSTFLIGHT",
+  "reviewer": "/root/scratch21_source_review",
+  "implementation_ownership": false,
+  "executor": "/root",
+  "result": {
+    "path": "/home/holden/mckernel-work/scratch/scratch22-authority3-cleanup-dispatch-20261017.stdout",
+    "sha256": "d2c0c65ba0c3672681829056a819784ac39814068ba0d280ad5e74bea59069b9"
+  },
+  "release": {
+    "path": "/home/holden/mckernel-work/scratch/scratch22-authority3-cleanup-execution-release-20261017.json",
+    "sha256": "3eed810fa1eedddd9e7aaa83f4f162e645b15c5df6c3adad89aebd7d9bd10b61"
+  },
+  "plan": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-scratch22-authority3-terminal-cleanup-20261017.plan.json",
+    "sha256": "7e076718eee4dffbd43dca9b0b02931e71016e132e43755a0e6c0d3496bef79d"
+  },
+  "journal": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-scratch22-authority3-terminal-cleanup-20261017.journal.jsonl",
+    "sha256": "e8684772a084be921ba12b8339201bdc5862c12faf3299434f986183b5df52aa"
+  },
+  "capture": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-scratch22-authority3-terminal-cleanup-20261017.docker-logs.capture",
+    "sha256": "339aa66ebc7084a682f4ae62732c4071b83e4f0ef29215a99ecaaeb2ad8b3f4b"
+  },
+  "terminal": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-scratch-22-authority3-heavy-build.terminal.json",
+    "sha256": "4b95163dd51a04e2c5a3a406d1ee4198725f4173e7ce522629a49a642a0f4c79"
+  },
+  "receipt": {
+    "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-evidence/receipt.json",
+    "sha256": "3002334af1776f5e90fe19c33a31e32ff6b431f5946803d2c0969b739e260c96"
+  },
+  "release_canonical_sha256": "da260184077b7de5173e15f2aba9c1620db3d2ac4c157b862f1d1f2a5e9e76f3",
+  "archives": [
+    {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 57863,
+      "mode": "0o600",
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/scratch/native-exact-scratch22-authority3-terminal-cleanup-20261017.attempt.archive",
+      "sha256": "1e7baabf474549a3bcb8f75a1f6716983400d969f66c96a32acf96058a5737ba",
+      "size": 266,
+      "uid": 1000
+    },
+    {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 57862,
+      "mode": "0o600",
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/scratch/native-exact-scratch22-authority3-terminal-cleanup-20261017.shared.archive",
+      "sha256": "896f82bf88cb2ee0bec6864bef8798f833473419645e64248569ddb822b6aca9",
+      "size": 266,
+      "uid": 1000
+    }
+  ],
+  "container_absent": true,
+  "exclusions_absent": true,
+  "execution_review": {
+    "path": "docs/verification/evidence/scratch22-authority3-cleanup-independent-execution-review-20261017.json",
+    "sha256": "ac70e88e00db1963f3a3b950b59f13e530d5fa256baed2c4a3b09c4a703be6c5"
+  },
+  "source_review": {
+    "path": "docs/verification/evidence/scratch22-authority3-cleanup-source-independent-review-20261017.json",
+    "sha256": "86a2236a7534b4f664e35a83167744937076c9c6584d9bcdfa88f2d9089477c5"
+  },
+  "verified_checks": [
+    "Actual PASS_EXECUTED terminal result; executor reports rc0, empty stderr and joined session93843.",
+    "Final raw release and no-newline canonical digest verified; final release differs from reviewed draft only in the five permitted top-level fields. Source/execution status, reviewer and exact evidence digests match the immutable reviews.",
+    "Plan raw canonical-plus-newline digest and distinct canonical digest b171022874642efb4295d2f535ecc1ccf9ed7b3a827cf100f7b5dde5d1a35a61 verified. All nine journal bodies/hashes, legal events, sequences, indices, plan identities and previous links end at complete/aabb949dd8d3836162f4e64e0636b5aabdbb8a70fad089aa3727541c668608d2.",
+    "Plan/journal/capture and both archive metadata/hash rows match result through stable NOFOLLOW descriptor/path reads. Capture matches original container-log digest. Original exclusion inodes57863/57862 and exact266-byte contents occupy the authorized archives.",
+    "Terminal and receipt seven-pointer hashes and complete file identity rows match frozen selected-file observations. The accepted transaction final protected_files/census path proves complete original inventories and selected bytes preserved; no duplicate full inventory or output hashing performed.",
+    "Independent fresh read-only census below acquired preserved root27:4, proved exact target/name/nonce absent and owner/guard absent, then released the lock normally. No cleanup replay or source/test suite repeated."
+  ],
+  "postcleanup_census": {
+    "status": "PASS_READ_ONLY_POSTCLEANUP_CENSUS",
+    "method": "One sudo -A isolated Python import of the unchanged accepted helper, O_RDONLY NOFOLLOW nonblocking flock27:4, exact lock/mount/boot checks, actual helper census/validate_process_report, active-path absence and exact archive checks. Configure/Transaction/recover and full protected inventory routines were not invoked.",
+    "root_lock": [27, 4],
+    "filesystem_uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52",
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "container_id": "153492d487bf1b66c47b43b03fc5552c9e912c1422265788d04722dcc7ebd4ab",
+    "container_count": 44,
+    "process_snapshot_counts": [291, 291],
+    "process_caller": [399660, "1793630"],
+    "process_validator": "PASS; no publishers; owner270194, guard269925 and related descendants absent from both snapshots",
+    "exclusions_lease_quarantine_absent": true,
+    "archives_exact": true,
+    "root_lock_released_normally": true,
+    "exit_code": 0,
+    "stderr_bytes": 0
+  },
+  "annotations": {
+    "review_pointer_path_omission": "Actual release review entries omit descriptive evidence_path keys from finalization prose, retaining the exact accepted status/reviewer/evidence_sha256 required by unchanged configure. This postflight explicitly binds both immutable review paths above. An initial ad-hoc postflight verifier raised KeyError on that absent descriptive key; bounded correction checked the actual accepted entries and exact on-disk review hashes. No source, oracle, release or runtime state was changed.",
+    "preservation": "Failed942c927b source/output/evidence/request and all original failures remain protected. Complete140054-output/286318-evidence metadata inventories and12 selected identities remain frozen in the release. No whole-output digest or repeat census traversal."
+  },
+  "build_status": "FAIL",
+  "cleanup_complete": true,
+  "scope": "Accept only completed authority3 retirement. This does not satisfy the conditional tool probe native-PASS prerequisite. Next heavy work requires its own repaired-source execution release and fresh resource/identity checks; no build, image, guest or formal acceptance credit.",
+  "blocking_findings": [],
+  "acceptance_credit": false
+}

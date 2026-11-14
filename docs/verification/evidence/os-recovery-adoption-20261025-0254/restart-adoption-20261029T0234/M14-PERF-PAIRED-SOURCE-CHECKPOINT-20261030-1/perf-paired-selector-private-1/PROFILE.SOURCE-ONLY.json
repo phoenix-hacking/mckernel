@@ -1,0 +1,47 @@
+{
+  "authority": null,
+  "baseline": {
+    "CMake_path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-COMPOSITION-1/postimage/kernel/CMakeLists.txt",
+    "CMake_sha256": "30e3a04bf48777d4891f7390804e574ca221e4234e9a8d7879bb068910a13fbd",
+    "C_path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-COMPOSITION-1/postimage/kernel/syscall.c",
+    "C_sha256": "3388adb79adff66eb85ae65a443af2c18e7b2057dd76d0ec99b531d62a36cab3",
+    "combined_rust_patch_path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/MANUAL-RESUME-M14-20261030-2/nonheld-signal-perf-group-compositor-1/NONHELD-SIGNAL-PERF-GROUP.PRIVATE.patch",
+    "combined_rust_patch_sha256": "595d137bcaba9b4ce85361623edd5a12c174dc3baa53670bda5352ce80dd1d1a",
+    "profile_path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-PRODUCER-BINDING-1/current-frontier-successor-1/PROFILE.SOURCE-ONLY.json",
+    "profile_sha256": "8ab49c299dfc9218ddcf8df3cf71474d51e87167abe4cd166841ea47c3a32e2d"
+  },
+  "checks": [
+    "baseline C and selected prior Rust hashes pinned",
+    "C fallback body byte-exact and all unchanged C logical line coordinates preserved",
+    "31 actual C-header scalar expressions in read-only witness for comparison with Rust binding",
+    "prior Rust argv includes enable_perf and paired provider cfgs; C argv includes selected provider flags and no entry selector; C ENABLE_PERF must be established from actual headers",
+    "C guard rejects missing checked C provider flags; Rust guard independently requires corresponding Rust cfgs"
+  ],
+  "default": "Default baseline has neither selector; C body remains selected. CMake unchanged. Only a future specifically reviewed exact raw producer may select both flags; never enable one in isolation.",
+  "delta": {
+    "C_patch_sha256": "7aaa310aaa15d12b0ce3a4c49a48f40e3a0e23a2d14c134b264935fbed93f345",
+    "experimental_C_argv_addition": [
+      "-DMCKERNEL_RUST_F03_PERF_ENTRY_EXPERIMENTAL"
+    ],
+    "experimental_rust_argv_addition": [
+      "--cfg",
+      "f03_perf_entry_candidate"
+    ],
+    "real_header_witness_C_argv_addition": [
+      "-DMCKERNEL_F03_PERF_ENTRY_ABI_WITNESS"
+    ],
+    "witness_sha256": "212fbf03425ea1e883f01cd4132b3821cca224a015890cabeaf3fda95e80d8c0"
+  },
+  "exclusions": "Held direct-TID/terminate_host and execve transfer/ACK not selected or modified. No C retirement or acceptance asserted.",
+  "native_or_compile": false,
+  "required_before_execution": [
+    "independent review of exact source patch, witness, flags and unmatched C/Rust configuration failure cases",
+    "review explicit control, physical ownership/resource and exact operation release; no current authority",
+    "bind closed source map including witness, new source/profile/guard, exact actual SDK21/header/toolchain and object dependencies; verify C ENABLE_PERF from bound headers",
+    "review 31 header values against Rust binding, all 13 callbacks and sys_perf_event_open ABI/type/relocations, provider uniqueness including Rust counter wrapper",
+    "check selection ON/OFF, original 389 metadata and complete current-consumer/link oracle on matching image",
+    "qualify actual allocation/counter/group ownership, synchronization, functional and native behavior"
+  ],
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_DELTA_NOT_A_BUILD_RELEASE"
+}

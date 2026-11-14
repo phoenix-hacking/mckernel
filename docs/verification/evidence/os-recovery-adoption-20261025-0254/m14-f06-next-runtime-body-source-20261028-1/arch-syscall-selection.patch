@@ -1,0 +1,18 @@
+--- a/arch/x86_64/kernel/syscall.c
++++ b/arch/x86_64/kernel/syscall.c
+@@ -2962,6 +2962,7 @@
+ }
+ #endif
+ 
++#ifndef MCKERNEL_RUST_F06_VDSO_INFO
+ int vdso_get_vdso_info(void)
+ {
+ 	int error;
+@@ -2999,6 +3000,7 @@
+ 	dkprintf("vdso_get_vdso_info(): %d\n", error);
+ 	return error;
+ } /* vdso_get_vdso_info() */
++#endif /* public legacy VDSO info flow is Rust-selected */
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ extern int vdso_map_global_pages(void);

@@ -1,0 +1,49 @@
+{
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--fsize=33554432",
+    "--nofile=256",
+    "--core=0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/execution-preparation-1/check_whole_guard_source_admission.py"
+  ],
+  "expected_status": "PASS_ACTUAL_WHOLE_GUARD_SOURCE_EVIDENCE_JOIN_ONLY",
+  "grant": null,
+  "positive": 1,
+  "prerequisites": [
+    "root actual source-schema projection",
+    "root actual gates record with exact same source_identity",
+    "reviewed fixed source/disk request basis",
+    "independent runtime/basis binding",
+    "frozen data-only guard source refs and final guard output/hash",
+    "fresh root ordinary grant and closed capture"
+  ],
+  "profile": {
+    "Docker": false,
+    "address_space_bytes": 1073741824,
+    "compiler": false,
+    "core": 0,
+    "cpu": 6,
+    "cpu_seconds": 30,
+    "fsize": 33554432,
+    "guest": false,
+    "jobs": 1,
+    "lock_lease": false,
+    "network": false,
+    "nofile": 256,
+    "root": false,
+    "wall_seconds": 35
+  },
+  "refusals": 8,
+  "result": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "READY_COMMAND_ONLY_GENUINE_FINAL_BINDINGS_REQUIRED"
+}

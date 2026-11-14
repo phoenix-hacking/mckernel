@@ -1,0 +1,17 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "first_exact_documented_cli": "python -I -B prepare_mock64_inputs.py --help",
+  "first_returncode": 1,
+  "first_error": "ModuleNotFoundError: No module named 'mock64_contract'",
+  "first_effects": 0,
+  "correction": "Root isolated runpy bootstrap inserts only frozen absolute Source20 directory; program bytes/map/frozen26caseargv unchanged",
+  "corrected_help_returncode": 0,
+  "actual_static_preparation_returncode": 0,
+  "actual_request": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/MOCK64-REQUEST.json",
+    "bytes": 4423,
+    "sha256": "55d8b71cce280212cfcb0a93e691ea5220958f3ab77982f9483f664a55a994c1"
+  },
+  "nonce_consumed": false,
+  "source_edits": 0
+}

@@ -1,0 +1,118 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_SOURCE_AND_SELECTED_HEADER_HOST_ABI",
+  "reviewer": "/root/recovery_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/selected-bfd-abi-repair-source-1/READY.SOURCE-AND-SELECTED-HEADER-HOST-ONLY.json",
+    "bytes": 3804,
+    "sha256": "dbfe5d7c3ad197a2ef323a95c281067d6b25e6ec175f89e3b783805d28dafa19"
+  },
+  "candidate": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/selected-bfd-abi-repair-source-1/ldump2mcdump_helpers.selected-bfd-candidate.rs",
+    "bytes": 32826,
+    "sha256": "5aab8a4270858287d4eb61a1109d96126bae9bf06913da31adf79c3e8c1b7c2a"
+  },
+  "patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/selected-bfd-abi-repair-source-1/SELECTED-BFD-ABI-REPAIR.patch",
+    "bytes": 7729,
+    "sha256": "f0f08e2cf3f65e1e7b46884f23a3f6d68c103d245afe4315b227d598fadbcbdf"
+  },
+  "contract": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/selected-bfd-abi-repair-source-1/SELECTED-BFD-API-AND-LAYOUT-CONTRACT.json",
+    "bytes": 8475,
+    "sha256": "ffec2fa5409363660d16a55b7a4b0eb95ceba0c87133340f9fabb6e3a1e67ce1"
+  },
+  "selected_header": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/selected-bfd-abi-repair-source-1/selected-include/bfd.h",
+    "bytes": 252810,
+    "sha256": "de900a9fe4ac94543ee1382cebc3063c3d7e20d16bc934fc816133dd55fe2432"
+  },
+  "C_witness": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/selected-bfd-abi-repair-source-1/section_layout_witness.c",
+    "bytes": 3223,
+    "sha256": "3375c309059ad65b0f18d0431b7c413d10d9ed8196beec82409bdf715c3dc427"
+  },
+  "generated_Rust_layout": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/selected-bfd-abi-repair-source-1/actual-selected-header-run-1/section_layout.rs",
+    "bytes": 616,
+    "sha256": "0d5b261473c33d919980ee65ef3a8635ff7228b772dc34de0ffa0e7dee50709f"
+  },
+  "selected_header_fixture": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/selected-bfd-abi-repair-source-1/selected_header_fixture.c",
+    "bytes": 16568,
+    "sha256": "8e92243c5f26e781594d1911cd09ac429f9be35acc8380cb9a4e9e46c146d96e"
+  },
+  "actual_result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/selected-bfd-abi-repair-source-1/actual-selected-header-run-1/RESULT.json",
+    "bytes": 124919,
+    "sha256": "068e5f7c8570c48c89eb88ae894d173c69f07a60ab8197fbc102b49d13a821dd"
+  },
+  "evidence_check": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/selected-bfd-abi-repair-source-1/independent-selected-abi-review-1/EVIDENCE-CHECK.ACTUAL.json",
+    "bytes": 98875,
+    "sha256": "324681d7cfc6210bfc0c38e033355f667c3380f6ad28c5a093b5e508fb5283d9"
+  },
+  "future_fragment": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/selected-bfd-abi-repair-source-1/Ldump2SelectedBfdLayout.FUTURE.cmake",
+    "bytes": 2568,
+    "sha256": "78bc5d6faecd013d3bfb263c097831ce880b76f0a567b99b5787baa6805ad0c4"
+  },
+  "prior_ABI_checklist": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/independent-ownership-review-1/SELECTED-BFD-ABI-BLOCKER-AND-CHECKLIST.json",
+    "bytes": 6328,
+    "sha256": "c779e8c163a6bfe89e491ce9aa4caaf19b02035ebd9f8d4ed4b1f6c6e34c3d3f"
+  },
+  "prior_ownership_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/independent-ownership-review-1/REVIEW.json",
+    "bytes": 8766,
+    "sha256": "b2f6ed9e4075babd439b9cc09ccc508d6295a5107a2768df4cc412a94822ab35"
+  },
+  "runtime_authority": null,
+  "selected_header_source_ABI_blocker_resolved": true,
+  "ownership_SOURCE_HOST_result_preserved": true,
+  "actual_selected_SDK_compiler_witness_pass": false,
+  "selected_actual_static_archive_bound": false,
+  "SDK_link_default_native_whole_file_acceptance": false,
+  "reviewer_compiler_or_body_reruns": 0,
+  "findings": [
+    {
+      "boundary": "All eleven exact selected BFD imports",
+      "result": "PASS_SOURCE_AND_HEADER_HOST",
+      "details": "Pinned headerde900, same-archive dependencies and all contract refs authenticate. Typed C witness checks eleven imported prototypes plus selected inline VMA helper. Rust now matches unsigned bfd_init, bool set_format/contents/close/all_done, two-argument bool section_size/flags, correct opaque pointer/const/arity for fopen/perror/make/get, uint64 VMA/size, int64 file_ptr and uint32 flagword. Selected bfd_object1/SEC_ALLOC1/SEC_HAS_CONTENTS256 and enum32/LP64 assumptions are witnessed. No new BFD symbol import or production C implementation appears."
+    },
+    {
+      "boundary": "Opaque section and actual generated data",
+      "result": "PASS_SOURCE_AND_HEADER_HOST",
+      "details": "ASection old fabricated prefix is removed. Full-body compilation requires explicit MCKERNEL_LDUMP2_BFD_LAYOUT_RS via env!/include! with no layout fallback; unsupported non-Linux/non-x86_64/non64 profile refuses compile. Actual witness output is exact bound DATA: size280/align8/name0/flags36/VMA48/LMA56/size64/userbyte40/mask1. Witness measures one changed byte from real user_set_vma assignment and uses offsetof only for ordinary fields. Rust raw writes use aligned actual asection pointer from BFD, write VMA/LMA to measured offsets and OR the measured packed byte; this exactly matches selected header886-890 inline semantics while preserving other packed bits."
+    },
+    {
+      "boundary": "Independent actual-header oracle and negative regressions",
+      "result": "PASS_SELECTED_HEADER_HOST",
+      "details": "C fixture includes exact real bfd.h and allocates actual asection/BFD structures; no legacy mirror/prototype remains. All function implementations satisfy selected declarations including bool returns and two-argument setters. Whole280byte section snapshots compare to same-header inline bfd_set_section_vma results after Rust updates, with unrelated next/prev/id/section_id/index/packed marks/alignment canaries. Actual old-three-argument setter compile and oldVMA40/size64 layout compile each fail1 for the expected reasons; records are retained. No claim relies on a self-mirrored ABI stub."
+    },
+    {
+      "boundary": "Ownership/ACK behavior preserved through pure ABI delta",
+      "result": "PASS_SOURCE_AND_HOST",
+      "details": "Exact f0f08 diff reconstructs5aab from frozendc0. Owner block is byte-identical apart from OwnedBfd.finish return c_int-to-bool. Bitmap, chunks, payload and linked names retain immediate ownership and BFD-before-names/payload/chunks teardown. Consuming terminal FALSE paths remain no-retry; no new alias/free path. Both source and all56 actual callback observations preserve original data/read/write/diagnostic/ACK plus zero-live project allocation and exactly one consuming teardown per mock handle. All prior56 ownership/name/event counters also match exactly."
+    },
+    {
+      "boundary": "Retained actual commands and scope",
+      "result": "PASS_SELECTED_HEADER_HOST",
+      "details": "796 independent selected evidence assertions pass: actual source/layout/command bindings,63 positive direct wait4joins with closed streams, exactly2 expected negative compiler exits1 and61 ordinary exits0, and56 whole actual registered Rust callback cases. Actual witness stdout equals Rust layout include bytes used by compile. No reviewer compiler rebuild or body rerun occurred. Existing40/56reports, original520/dc0 sources and20ownership failures remain historical immutable evidence, never promoted to SDK acceptance."
+    },
+    {
+      "boundary": "Future source integration and provider gates",
+      "result": "OPEN_SDK_RUNTIME_PREREQUISITES",
+      "details": "Future fragment78bc is explicitly UNRUN and unintegrated. It pins actual selected header and GCC14compiler SHA, refuses crosscompile, follows nonshipped witness-to-Rust DATA pattern, declares configure/header/witness/generated-data dependencies and exports LDUMP2_BFD_LAYOUT_ENV/DEPENDS for future full-body object. Future producer must actually add both environment and dependency set while preserving current argv/flags. HOST-generated DATA is not an SDK-GCC14 witness and cannot be silently shipped as its result. Fragment does not verify libbfd.a; actual selected archive2324comparison and current coherent source/admission remain mandatory before SDK linking."
+    }
+  ],
+  "source_or_selected_header_HOST_blockers": [],
+  "remaining_required_checks": [
+    "Run exact nonshipped witness with actual selected SDK GCC14/compiler/include bytes and bind its genuinely generated Rust layout DATA to matching full-body object environment/dependencies; no HOST layout substitution.",
+    "Bind actual selected /usr/lib64/libbfd.a bytes to the official selected archive2324c3f9 (and applicable producer/link dependencies), not merely382-byte .so linker-script hash.",
+    "Review coherent future private source/CMake consumer successor, preserve defaults and existing frozen packets, then matching named-target SDK compiler/link evidence.",
+    "Real BFD heap/file-descriptor cleanup, valid crashdump, repeated real sessions, ACK-sink errors, installed/default/native and M15 whole-file acceptance remain OPEN. Package cleanupFALSE can skip iovec bclose despite consumed handle; mock handle release does not prove OS descriptor release."
+  ]
+}

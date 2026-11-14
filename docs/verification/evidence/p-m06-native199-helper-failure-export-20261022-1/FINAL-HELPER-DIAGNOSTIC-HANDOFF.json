@@ -1,0 +1,49 @@
+{
+  "status": "COMPILED_AND_SIX_MODELED_CASES_PASS_NOT_RELEASED",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "diagnosis": "Actual boot helper or helper evidence persistence failed before the first mandatory 10-second capture pause and before app supervision. Original guest-only helper status/stdout/stderr were not exported, so exact assertion or IO cause remains unproved.",
+  "change": "Failure-only bounded ND_HELPER_FAILURE and separate stdout/stderr ND_HELPER_STREAM records. Original helper failure remains failure; payload supervisor, strict app oracles, timeouts and ownership remain unchanged. errno0 means unspecified evidence-save failure.",
+  "source": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-helper-failure-export-1/errno-correction-1/native_diagnostic_guest_collector.helper-diagnostic.c",
+    "bytes": 25205,
+    "sha256": "b3fc4fe0d46ae95a0b428a3c2ff46a8836affc0d929da9a2809cbe3e15b5e2d6"
+  },
+  "collector": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-helper-failure-export-1/errno-correction-1/collector-helper-diagnostic",
+    "bytes": 1021320,
+    "sha256": "c020a8e0ab43e222caf901d92bfecb2a8d8cf20ea0b539910a17a578f1fd12fc"
+  },
+  "validation": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-helper-failure-export-1/errno-correction-1/ordinary-check-1/result.json",
+    "bytes": 5950,
+    "sha256": "e78a91e5048fb9281d9afc69a9aa3d092ad64d1c037f8bb10970a5bb7770d27d"
+  },
+  "proposal": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-helper-failure-export-1/errno-correction-1/EXECUTABLE-VALIDATION-PROPOSAL.json",
+    "bytes": 12697,
+    "sha256": "9e9dba2fa92c5c23c81b26947a3cb9299a46640b03bde394c9153aa7121383da"
+  },
+  "resource_override": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-helper-failure-export-1/errno-correction-1/RESOURCE-PROFILE-OVERRIDE.json",
+    "bytes": 3007,
+    "sha256": "a2f2f114103a50028d099ff33ab3d553c526fe7cdf74b6c233bf1cae244051c2"
+  },
+  "independent_source_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-helper-failure-export-1/errno-correction-1/INDEPENDENT-HELPER-FAILURE-SOURCE-REVIEW.json",
+    "bytes": 5596,
+    "sha256": "722d9e489e904c40cd206fadbf88f7995d7b9f9c656edec4bdd39c9ce6c18ed1"
+  },
+  "modeled_cases": 6,
+  "wall_seconds": 0.5053334960248321,
+  "cpu_seconds": 0.454381,
+  "captured_output_bytes": 4493,
+  "all_direct_children_joined": true,
+  "all_groups_absent": true,
+  "all_streams_closed": true,
+  "cpu6_released": true,
+  "remaining": "Parent must bind this exact ELF in a collector-only stage and execute only under its separately authenticated native authorization. Read new helper frames to identify underlying assertion or evidence-save cause. No helper/kernel/image/module change was made.",
+  "native_events": 0,
+  "native_acceptance": false,
+  "actual_stage": null,
+  "actual_release": null
+}

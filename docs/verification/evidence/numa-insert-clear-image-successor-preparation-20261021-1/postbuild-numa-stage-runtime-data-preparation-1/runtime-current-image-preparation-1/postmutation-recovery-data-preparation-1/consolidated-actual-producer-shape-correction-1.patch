@@ -1,0 +1,54 @@
+--- /home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/postbuild-numa-stage-runtime-data-preparation-1/runtime-current-image-preparation-1/postmutation-recovery-data-preparation-1/current_insert_clear_eight_state_physical.UNBOUND.py
++++ /home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/postbuild-numa-stage-runtime-data-preparation-1/runtime-current-image-preparation-1/postmutation-recovery-data-preparation-1/current_insert_clear_eight_state_physical.CORRECTION-1.UNBOUND.py
+@@ -21,8 +21,17 @@
+ 
+ def raw_original(row,encoded):
+     raw=base64.b64decode(encoded,validate=True)
+-    need(len(raw)<=4<<20 and len(raw)==row['bytes']==row['size'] and hashlib.sha256(raw).hexdigest()==row['sha256'],'exact original bytes/copy authority')
+-    need(all(type(row[k]) is int for k in FULL9) and stat.S_ISREG(row['mode']) and row['nlink']==1,'full original regular FD identity')
++    full=row['full9']
++    need(row['before']==row['fd_after']==row['named_after']==full and set(full)==set(FULL9),'actual nested original stable full9')
++    need(len(raw)<=4<<20 and len(raw)==row['bytes']==full['size'] and hashlib.sha256(raw).hexdigest()==row['sha256'],'exact original bytes/copy authority')
++    need(all(type(full[k]) is int for k in FULL9) and stat.S_ISREG(full['mode']) and full['nlink']==1,'full original regular FD identity')
++    return raw
++
++def root_proof_bytes(probe,row):
++    exported=probe['evidence_raw_exports'][row['path']]
++    need(all(exported[k]==row[k] for k in ('path','sha256','bytes')),'exact exported root proof reference')
++    raw=base64.b64decode(exported['raw_base64'],validate=True)
++    need(type(row['bytes']) is int and 0<=row['bytes']<=1<<20 and len(raw)==row['bytes'] and hashlib.sha256(raw).hexdigest()==row['sha256'],'bounded authenticated original root proof bytes')
+     return raw
+ 
+ def controller(row,pair,expected):
+@@ -55,16 +64,19 @@
+     need(a['execution_review']['sha256']==EXPECTED_INSTANCE['execution_review_sha256'] and review['status']=='PASS' and review['decision']=='PASS_EXECUTION','exact readonly execution authority')
+     release=checked(a['reconciliation_release']);payload_raw=checked_bytes(a['reviewed_reconciliation_payload']);payload=json.loads(payload_raw)
+     need(payload_raw==CANON(payload)+b'\n' and {k:v for k,v in release.items() if k!='execution_review'}==payload and set(release)==set(payload)|{'execution_review'},'whole canonical readonly payload')
+-    need(review['reviewed_payload_sha256']==a['reviewed_reconciliation_payload']['sha256'] and release['execution_review']==review['whole_inline_execution_review'],'actual inline review/payload join')
++    need(review['reviewed_release_payload_sha256']==a['reviewed_reconciliation_payload']['sha256'] and release['execution_review']==a['execution_review'],'actual external review/canonical LF payload join')
+     for name,row in mapping['source_refs'].items():need(Path(row['path']).name==name,'source basename');checked_bytes(row)
+     need(a['source_reconciliation']['sha256']==EXPECTED_INSTANCE['cleanup_engine_sha256'] and a['source_reconciliation']==mapping['source_refs'][Path(a['source_reconciliation']['path']).name],'actual reviewed readonly implementation')
+     probe=checked(a['actual_reconciliation_result']);need(t['actual_reconciliation_result']==a['actual_reconciliation_result'],'whole result authority')
+     need(probe['schema']=='mckernel.current-insert-clear-image.postmutation-eight-event-readonly-reconciliation-result.v1' and probe['status']=='PASS_ACTUAL_POSTMUTATION_EIGHT_EVENT_READONLY_RECONCILIATION_ONLY','actual readonly result kind')
+     need(probe['target']==t['target'] and probe['boot_id']==t['boot_id'] and probe['filesystem_uuid']==t['filesystem_uuid'],'whole current target/boot/UUID')
++    need(probe['source']==release['source']==a['source_reconciliation'] and probe['physical_execution_release']==a['reconciliation_release'],'actual probe/source/external release joins')
+     for key in CHECKS:need(probe['checks'][key] is True and t['checks'][key] is True,'actual strict readonly finding '+key)
+     for key in ('mutation','signals_sent','container_removed','ownership_records_removed'):need(probe[key] is False,'no reconciliation effect '+key)
+-    for key in ('process_report','container_absence','root_mutex','transaction_mutex','original_failed_cleanup_status','durable_retirement_acceptance','retirement_prepared','retirement_complete'):
+-        need(probe[key]==a[key],'exact fresh evidence '+key);checked_bytes(a[key])
++    for key in ('process_report','container_absence','root_mutex','transaction_mutex'):
++        need(probe[key]==a[key],'exact fresh root evidence '+key);json.loads(root_proof_bytes(probe,a[key]))
++    for key in ('original_failed_cleanup_status','durable_retirement_acceptance','retirement_prepared','retirement_complete'):
++        need(probe[key]==a[key],'exact ordinary exported evidence '+key);checked_bytes(a[key])
+     failed=checked(a['original_failed_cleanup_status']);need(failed['returncode']==-9 and failed['direct_child_joined'] is True and failed['process_group_absent'] is True,'original failed holder positively closed, never PASS')
+     retirement=checked(a['durable_retirement_acceptance']);independent(retirement,'genuine independent exact pidfd retirement')
+     prepared=checked(a['retirement_prepared']);complete=checked(a['retirement_complete'])
+@@ -75,7 +87,7 @@
+     need(planraw==CANON(plan)+b'\n' and plan==probe['parsed_plan'] and plan_sha==journal['plan_canonical_sha256'],'whole exact canonical plan')
+     lines=journalraw.splitlines(keepends=True);events=[(event,index)for index in range(2)for event in ('before_exchange','after_exchange','release','after_release')];need(len(lines)==8,'eight real rows, no complete synthesis');previous=plan_sha;parsed=[]
+     for sequence,(line,(event,index)) in enumerate(zip(lines,events)):
+-        body=dict(event=event,index=index,sequence=sequence,plan_sha256=plan_sha,previous=previous,plan_identity=[probe['plan']['device'],probe['plan']['inode']]);wanted=dict(body,hash=hashlib.sha256(CANON(body)).hexdigest());need(json.loads(line)==wanted and line==CANON(wanted)+b'\n','canonical complete eight-event prefix');previous=wanted['hash'];parsed.append(wanted)
++        body=dict(event=event,index=index,sequence=sequence,plan_sha256=plan_sha,previous=previous,plan_identity=[probe['plan']['full9']['device'],probe['plan']['full9']['inode']]);wanted=dict(body,hash=hashlib.sha256(CANON(body)).hexdigest());need(json.loads(line)==wanted and line==CANON(wanted)+b'\n','canonical complete eight-event prefix');previous=wanted['hash'];parsed.append(wanted)
+     need(parsed==probe['parsed_journal'] and previous==journal['final_chain_hash'],'exact final after_release chain')
+     rows=probe['preservation']['objects'];need(probe['preservation']['nine_rows_equal'] is True and len(rows)==len({r['path']for r in rows})==9,'nine preserved unique actual originals')
+     for row in rows:

@@ -1,0 +1,47 @@
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -29809,6 +29809,10 @@
+ 
+ /* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
+ #if defined(ENABLE_PERF) && defined(MCKERNEL_RUST_F03_PERF_ENTRY_EXPERIMENTAL)
++_Static_assert(sizeof(struct perf_event_attr) == 104 && _Alignof(struct perf_event_attr) == 8, "perf attribute ABI");
++_Static_assert(__builtin_offsetof(struct perf_event_attr, type) == 0 && __builtin_offsetof(struct perf_event_attr, read_format) == 32 && __builtin_offsetof(struct perf_event_attr, sample_period) == 16, "perf field ABI");
++_Static_assert(sizeof(struct syscall_request) == 72 && _Alignof(struct syscall_request) == 8, "request ABI");
++_Static_assert(sizeof(unsigned long) == 8 && sizeof(void (*)(void)) == 8, "binding scalar and callback ABI");
+ struct f03_perf_entry_binding_v1_type {
+ 	unsigned long attr_size;
+ 	unsigned long attr_type;
+@@ -29855,6 +29859,7 @@
+ 	__typeof__(&syscall_mckfd_lock_bridge) lock;
+ 	__typeof__(&syscall_mckfd_unlock_bridge) unlock;
+ };
++_Static_assert(sizeof(struct f03_perf_entry_binding_v1_type) == 352 && _Alignof(struct f03_perf_entry_binding_v1_type) == 8, "binding layout ABI");
+ const struct f03_perf_entry_binding_v1_type f03_perf_entry_binding_v1 = {
+ 	.attr_size = sizeof(struct perf_event_attr),
+ 	.attr_type = __builtin_offsetof(struct perf_event_attr, type),
+--- a/kernel/rust/f03_perf_entry_candidate.rs
++++ b/kernel/rust/f03_perf_entry_candidate.rs
+@@ -1,6 +1,6 @@
+ //! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+ //! Default-off entry binding to the existing Rust perf body and C metadata.
+-use core::{ffi::c_void, mem::{size_of, MaybeUninit}};
++use core::{ffi::c_void, mem::{align_of, offset_of, size_of, MaybeUninit}};
+ use crate::abi::{CInt, CLong, CULong, SyscallRequest, X86UserContext};
+ use crate::f03_perf_attr_callbacks::PerfEventAttr;
+ use crate::x86_cpu_helpers::{ihk_mc_syscall_arg0, ihk_mc_syscall_arg1, ihk_mc_syscall_arg2, ihk_mc_syscall_arg3, ihk_mc_syscall_arg4};
+@@ -53,7 +53,14 @@
+     unlock: Option<SyscallMckfdUnlockFn>,
+ }
+ unsafe extern "C" { static f03_perf_entry_binding_v1: PerfEntryBinding; }
+-const _: () = { assert!(size_of::<CULong>() == 8 && size_of::<usize>() == 8); };
++const _: () = {
++    assert!(size_of::<CULong>() == 8 && size_of::<usize>() == 8);
++    assert!(size_of::<PerfEventAttr>() == 104 && align_of::<PerfEventAttr>() == 8);
++    assert!(offset_of!(PerfEventAttr, type_) == 0 && offset_of!(PerfEventAttr, read_format) == 32);
++    assert!(offset_of!(PerfEventAttr, sampling) == 16);
++    assert!(size_of::<SyscallRequest>() == 72 && align_of::<SyscallRequest>() == 8);
++    assert!(size_of::<PerfEntryBinding>() == 352 && align_of::<PerfEntryBinding>() == 8);
++};
+ /// Reuse the original perf entry provider, field and callback bindings.
+ ///
+ /// # Safety

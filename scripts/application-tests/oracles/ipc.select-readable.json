@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "ipc.select-readable",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/ipc.select-readable"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["rc=1 selected=1 read=1 byte=Q exact=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["select reports exactly the queued pipe descriptor readable", "Reading the selected descriptor yields the fixed byte Q"],
+  "unresolved_expectations": ["Select readiness and descriptor cleanup evidence require Max review."],
+  "max_question_for_reviewer": "Confirm only the queued descriptor is selected and exact byte readiness is preserved."
+}

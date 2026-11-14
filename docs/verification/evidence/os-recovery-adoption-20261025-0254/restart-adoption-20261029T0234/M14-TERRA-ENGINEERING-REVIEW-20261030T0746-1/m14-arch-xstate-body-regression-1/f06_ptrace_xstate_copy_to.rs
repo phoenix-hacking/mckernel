@@ -1,0 +1,38 @@
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Complete remaining selected xstate read callback; reuse the Rust user-copy provider.
+use core::ptr::{addr_of, read};
+
+use crate::abi::{CLong, CULong, SizeT, Thread};
+
+/// Copy borrowed target FP state through the existing user-copy implementation.
+///
+/// # Safety
+/// `thread_addr` names a live, properly aligned Thread whose fp_regs field is
+/// readable under the caller's existing ptrace/thread exclusion. A nonnull FP
+/// allocation remains live for the provider call. The caller retains the same
+/// user-copy address/size contract and original target lifetime; this callback
+/// acquires/releases no thread reference, lock, allocation, mapping or FP state.
+/// Null/invalid thread addresses remain outside the original C defined domain.
+/// No reference is formed over target state or user memory. Provider errors and
+/// partial-copy effects pass through unchanged, including signed int32 widening.
+#[no_mangle]
+pub unsafe extern "C" fn arch_ptrace_xstate_copy_to_bridge(
+    thread_addr: CULong,
+    user_addr: CULong,
+    bytes: SizeT,
+) -> CLong {
+    let thread = thread_addr as *const Thread;
+    // SAFETY: one ordinary raw read of the same borrowed field as the C body.
+    let fp_regs = unsafe { read(addr_of!((*thread).fp_regs)) };
+    if fp_regs.is_null() {
+        return -12; // unchanged -ENOMEM; no user-copy call on this path.
+    }
+    // SAFETY: same raw pointers/count, existing Rust provider and ownership.
+    unsafe {
+        crate::x86_memory_helpers::copy_to_user(
+            user_addr as *mut core::ffi::c_void,
+            fp_regs.cast_const(),
+            bytes,
+        ) as CLong
+    }
+}

@@ -1,0 +1,25 @@
+{
+  "schema": "mckernel.stability.execution-review.v1",
+  "date": "2026-09-28",
+  "candidate_commit": "c140d23f2eba47c84ca7cb9bc84031f9c52d8274",
+  "scope": "networked source-free Rocky tool-image preparation only",
+  "decision": "BLOCK",
+  "finding": "Docker.call buffered docker-exec stdout and stderr in pipes. SIGTERM could terminate the Python owner before finally, preserving the lease but losing already-emitted dnf transaction bytes; docker logs cannot recover exec output.",
+  "required_correction": [
+    "Persist each command's stdout and stderr continuously from the first byte.",
+    "Route orderly SIGTERM and SIGINT through bounded container retirement and atomic receipt generation.",
+    "Retain the lease whenever terminal retirement is unproven.",
+    "Add real subprocess regressions that emit identifiable output, receive SIGTERM/SIGINT, and prove partial evidence survives; abrupt death must also leave emitted bytes recoverable."
+  ],
+  "accepted_observations": [
+    "Preparation is separated from project inputs and has no source mount.",
+    "The implementation checks effective limits before start and restricts added capabilities to the listed RPM installation set.",
+    "Installed identities are probed, image commit follows container retirement, and failed containers are retained."
+  ],
+  "execution": {
+    "container_started": false,
+    "image_prepared": false,
+    "heavy_build_started": false
+  },
+  "limitations": "No execution release, build, module, guest, runtime or OS acceptance is granted."
+}

@@ -1,0 +1,55 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "NOT_EXECUTED",
+  "execution_authority": false,
+  "argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/fixture/run_fixture.py"
+  ],
+  "profile": "CPU6 onejob/AS2147483648/CPU60/wall90+6/FSIZE33554432/NOFILE256/core0/RUST_MIN_STACK2097152; inherited affinity and rlimits via accepted990 owned_capture + signal handlers; Rust1.92/GCC9 CGU1",
+  "capture_helper": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/phase5-m03-handshake-runtime-checkpoint-20261020-1/sdk-physical-source/run_two_commands_source_bound_corrected.py",
+    "sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8"
+  },
+  "files": {
+    "fixture/original.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/fixture/original.c",
+      "sha256": "c5daa569c057bec90c8e02026bdf6bb5ebb969ed0350f4597b5883fc4e9ded6d",
+      "bytes": 358
+    },
+    "fixture/actual.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/fixture/actual.rs",
+      "sha256": "90a089ad392ecc4a18f21cb933f7dfdf4e75cc5029d4d7495508086ec0d6316f",
+      "bytes": 5748
+    },
+    "fixture/main.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/fixture/main.c",
+      "sha256": "0e5c2b7307a78858d60d8ab9f4d10950ba44f0829895e72f26af9847c324b538",
+      "bytes": 6531
+    },
+    "fixture/timer-offsets.h": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/fixture/timer-offsets.h",
+      "sha256": "1ad9d822ff9d2b93810fe43a46c56ba002681665409e90d37e4bc069b893aecb",
+      "bytes": 607
+    },
+    "fixture/run_fixture.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/fixture/run_fixture.py",
+      "sha256": "875f61aa340612d7eda3c75d70b2566bbc7406a29f30efd09939c58bef92be3a",
+      "bytes": 2446
+    },
+    "fixture/abi.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/fixture/abi.c",
+      "sha256": "3e81bbbd2418b359491cb09f2aeaba4c033a07d0eca8f33f4b11a7ee0e1ca988",
+      "bytes": 506
+    }
+  },
+  "expected_pairs": 25750,
+  "source_parse_required": [
+    "PUBLIC selected set_timer declaration only; fallback original body exact",
+    "PUBLIC offset descriptor + four callback symbols global; fallback static",
+    "private production harness removes only obsolete weak set_timer, requires T set_timer and five new U, preserves existing U time_sharing, exact U ledger 593->597"
+  ],
+  "whole_C_TU_default_kernel_native": "OPEN"
+}

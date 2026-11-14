@@ -1,0 +1,17 @@
+{
+  "task": "begin_cleanup_provider",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "result": "PASS",
+  "checks": [
+    "exact retained and unchanged accepted preimage plus candidate hash: abi/application.rs",
+    "exact retained and unchanged accepted preimage plus candidate hash: ihk_smp_x86_64.rs",
+    "exact retained and unchanged accepted preimage plus candidate hash: smp_service.rs",
+    "exact retained and unchanged accepted preimage plus candidate hash: smp_application.rs",
+    "original synchronous CLEANUP body byte-identical",
+    "new begin body returns actual request result after lock scope ends and notification; no wait/release mutation",
+    "original CLEANUP dispatch and subsequent branches byte-identical; new command validates null/zero before raw slice"
+  ],
+  "elapsed_seconds": 0.0010325908660888672,
+  "limits": "CPU6 source-only Python AS512MiB; no Rust compile, build, guest or native execution",
+  "limitations": "structural checks only; shared actual-production-body runtime harness owned by native235_zombie_fix"
+}

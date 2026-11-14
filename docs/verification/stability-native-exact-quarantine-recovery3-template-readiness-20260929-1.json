@@ -1,0 +1,48 @@
+{
+  "acceptance_credit": false,
+  "base_checkpoint": "d6f1c2c1904f8679a357a7e39d975b09bea5aefd",
+  "checks": [
+    {
+      "command": "python3 -B -m unittest scripts.tests.test_native_exact_candidate_quarantine_recovery_v3 -v",
+      "exit_status": 0,
+      "result": "30 tests passed"
+    },
+    {
+      "command": "helper --self-test; py_compile to temporary output; bash -n; JSON parse; git diff --check",
+      "exit_status": 0
+    },
+    {
+      "command": "production git_bytes HEAD query with explicit git-dir/work-tree as the unprivileged dispatcher",
+      "exit_status": 0,
+      "result": "d6f1c2c1904f8679a357a7e39d975b09bea5aefd"
+    }
+  ],
+  "created_at_utc": "2026-09-29T07:12:00Z",
+  "execution_authorized": false,
+  "independent_review": {
+    "decision": "PASS_DRAFT_SOURCE_TEMPLATE_ONLY",
+    "execution_authorized": false,
+    "limitations": [
+      "successful sanitized-root Git diagnostic was dispatcher-observed rather than independently reproduced",
+      "operational exclusion applies throughout observation and deletion",
+      "no live observer, cleanup, Docker, privileged execution, build, guest or application ran",
+      "template checkpoint, mechanical finalization, fetched verification and separate execution review remain required"
+    ],
+    "runtime_acceptance": false
+  },
+  "inputs": {
+    "consumed_recovery2_failure_record_sha256": "fbdffcf75f073f22434bbdf43e52281e7bb8a99a30d14c9b1783f057ee133e3b",
+    "consumed_recovery2_raw_archive_sha256": "93fde8f0143931fb2e3105c2a30b94f5480b933dd8f6d9c9348fc5195edce424",
+    "observer_v2_sha256": "71fc9f54c6f7ac8a2e8030ac5a802e2c1354ac0f0ed4cf2737c0c9486a7d3bfa"
+  },
+  "record_kind": "native_exact_candidate_quarantine_recovery3_template_readiness",
+  "runtime_acceptance": false,
+  "schema_version": 1,
+  "status": "PASS_DRAFT_SOURCE_TEMPLATE_ONLY",
+  "template": {
+    "basis_sha256": "e887a35c1be4c355a632fa90b53ac67ad0f27ee248ea10bb597228b2d6f68ebe",
+    "helper_sha256": "b68ff7138868bbb072d6d54f53212012494b24f17264a2aef2931d12ab472d7e",
+    "packet_sha256": "d4353972c25fc7a05e305753394779c21797947010a6cc517357c7a7a36e1547",
+    "test_sha256": "aec127904379f66d4744a90c3c63068b5eb286b8168a474dde1af13906b8ad07"
+  }
+}

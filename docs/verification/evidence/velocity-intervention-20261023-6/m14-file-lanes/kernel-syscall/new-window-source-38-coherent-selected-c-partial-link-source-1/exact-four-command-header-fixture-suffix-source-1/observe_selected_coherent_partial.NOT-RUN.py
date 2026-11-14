@@ -1,0 +1,311 @@
+#!/usr/bin/env python3
+"""Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Strict selected-C/coherent-Rust partial-link observer. No artifact execution.
+"""
+import ast
+import hashlib
+import json
+from pathlib import Path
+import shlex
+import struct
+ROOT = Path(__file__).resolve().parent
+recipe = json.loads((ROOT / 'EXACT-SOURCE38-SELECTED-C-ABI-PARTIAL-LINK.NOT-GRANTED.json').read_text())
+def need(condition, message):
+    if not condition:
+        raise ValueError(message)
+def auth(row):
+    raw = Path(row['path']).read_bytes()
+    need(len(raw) == row['bytes'] and hashlib.sha256(raw).hexdigest() == row['sha256'], 'exact source/object/header changed: ' + row['path'])
+    return raw
+m = json.loads(auth(recipe['input_map']))
+for row in recipe['pinned_inputs']:
+    auth(row)
+source = auth(m['qualified_Elf_source'])
+nodes = [node for node in ast.parse(source).body if isinstance(node, ast.ClassDef) and node.name == 'Elf' or isinstance(node, ast.FunctionDef) and node.name in {'owning_relocations', 'object_bytes'}]
+ns = dict(Path=Path, struct=struct)
+exec(compile(ast.Module(body=nodes, type_ignores=[]), '<qualified-ELF-object-reader-only>', 'exec'), ns)
+Elf, owning, object_bytes = ns['Elf'], ns['owning_relocations'], ns['object_bytes']
+out = ROOT / 'output-1'
+process, syscall = Elf(Path(recipe['retained_process']['path'])), Elf(out / 'syscall.selected.o')
+partial, rust = Elf(out / 'coherent-selected.partial.o'), Elf(Path(m['Source37_Rust']['path']))
+def undefined(elf):
+    return {row['name'] for row in elf.symbols if row['name'] and row['shndx'] == 0}
+def defined(elf):
+    return {row['name'] for row in elf.symbols if row['name'] and row['shndx'] != 0 and row['bind'] in (1, 2)}
+def rows(elf, name):
+    return [row for row in elf.symbols if row['name'] == name and row['shndx'] != 0]
+def function(elf, name):
+    found = rows(elf, name)
+    need(len(found) == 1 and found[0]['bind'] == 1 and found[0]['type'] == 2 and found[0]['size'] > 0, 'unique Rust function owner missing: ' + name)
+    need(elf.sections[found[0]['shndx']]['flags'] & 6 == 6, 'function is not allocated executable storage')
+    return found[0]
+fixture_contract = json.loads(auth(recipe['closed20_fixture_contract']))
+need(len(fixture_contract['fixture_names']) == 20 and len(set(fixture_contract['fixture_names'])) == 20,
+     'exact closed20 fixture membership differs')
+need(fixture_contract['retained_new_process'] == recipe['retained_process'], 'retained process fixture proof differs')
+for row in fixture_contract['origin_chain']:
+    auth(row)
+for proof in fixture_contract['actual_and_baseline_input_proofs']:
+    auth(proof['input'])
+old_process = Elf(Path(fixture_contract['old_process']['path']))
+auth(fixture_contract['old_process'])
+need(defined(old_process) == set(m['old_process_D']), 'old process exact D differs')
+for f in fixture_contract['fixture_objects']:
+    symbol = old_process.sym(f['name'])
+    need(symbol == f['symbol'] and old_process.sections[symbol['shndx']] == f['section']
+         and object_bytes(old_process,symbol).hex() == f['bytes_hex'] and not owning(old_process,symbol),
+         'closed fixture storage/RELA differs')
+need(set(fixture_contract['fixture_names']) == set(f['name'] for f in fixture_contract['fixture_objects']), 'closed fixture rows differ')
+# This actual suffix observes all five concrete link inputs and partial again.
+# An undefined name, definition, named relocation, or resolved SECTION+addend
+# to any closed fixture object is a stop; no selected runtime consumer allowed.
+def no_fixture_consumers(elf, old_owner=False):
+    names = set(fixture_contract['fixture_names'])
+    need(all(s['name'] not in names or old_owner and s['shndx'] for s in elf.symbols), 'selected input consumes/defines fixture')
+    for sec in elf.sections:
+        if sec['type'] not in (4,9) or not elf.sections[sec['info']]['flags'] & 2:
+            continue
+        need(sec['type'] == 4 and sec['entsize'] == 24 and sec['size'] % 24 == 0 and sec['link'] == elf.table['index'], 'ALLOC RELA format differs')
+        for index in range(sec['size']//24):
+            offset, info, addend = struct.unpack_from('<QQq',elf.raw,sec['offset']+24*index)
+            target = elf.symbols[info >> 32]
+            need(target['name'] not in names, 'named ALLOC fixture consumer')
+            if old_owner:
+                addresses = {target['value'] + addend}
+                if info & 0xffffffff in (2,4):
+                    addresses.add(target['value'] + addend + 4)
+                for f in fixture_contract['fixture_objects']:
+                    s = f['symbol']
+                    need(not (target['shndx'] == s['shndx'] and any(s['value'] <= a < s['value']+s['size'] for a in addresses)), 'SECTION+addend fixture consumer')
+                    need(not (sec['info'] == s['shndx'] and s['value'] <= offset < s['value']+s['size']), 'outgoing fixture RELA')
+no_fixture_consumers(old_process,True)
+for path in recipe['commands'][2]['argv'][4:]:
+    no_fixture_consumers(Elf(Path(path)))
+no_fixture_consumers(partial)
+for name, elf in [('process',process),('syscall',syscall)]:
+    expected_D = set(m['old_' + name + '_D'])
+    if name == 'process':
+        expected_D -= set(fixture_contract['fixture_names'])
+    need(defined(elf) == expected_D, 'selected C definitions changed outside closed20 fixture-only removal: ' + name)
+    need(undefined(elf) == set(m['old_' + name + '_U']), 'selected C imports changed outside declaration selectors: ' + name)
+    need(not set(m['new_helper_providers']) & defined(elf), 'C object supplies a new Rust helper')
+    need(not set(m['shared_storage']) & defined(elf), 'C still defines/common-owns Rust shared storage')
+need(undefined(partial) == set(m['strict_expected_remaining_C_imports']), 'unexpected unresolved import; no new helper/debt allowance')
+need(not set(m['new_helper_providers']) & undefined(partial), 'new helper unresolved')
+need('process_destroy_thread_hash_detach_bridge' not in defined(partial) | undefined(partial), 'old detach provider remains in ON cohort')
+providers = {name:function(partial,name) for name in m['new_helper_providers']}
+data = {}
+for name, expected in m['shared_storage'].items():
+    found = rows(partial,name)
+    need(len(found) == 1 and found[0]['bind'] == 1 and found[0]['type'] == 1 and found[0]['size'] == expected['size'], 'unique shared data shape differs: ' + name)
+    symbol = found[0]
+    need(0 < symbol['shndx'] < len(partial.sections), 'shared storage is unresolved/common')
+    need(partial.sections[symbol['shndx']]['align'] >= expected['minimum_alignment'] and symbol['value'] % expected['minimum_alignment'] == 0, 'shared storage alignment differs')
+    need(object_bytes(partial,symbol).hex() == expected['initial_hex'], 'shared storage initializer differs')
+    need(not owning(partial,symbol), 'unexpected shared storage pointer relocation')
+    data[name] = symbol
+
+# Validate the original exact-object machine contract without altering it.
+need(__debug__, 'accepted inline helper assertions must remain enabled')
+contract = json.loads(auth(m['accepted_inline_machine']['contract']))
+accepted_ownership = json.loads(auth(m['accepted_inline_machine']['ownership']))
+need(contract['accepted_object_only'] == m['Source37_Rust'] == accepted_ownership['object'], 'exact accepted Rust object/machine proof binding differs')
+inline_ns = {}
+helper = m['accepted_inline_machine']['helper']
+exec(compile(auth(helper), helper['path'], 'exec'), inline_ns)
+check_inline = inline_ns['check_inline_machine_body']
+
+# ELF table/section indices can move in ld -r. Normalize their meanings while
+# retaining every function-relative relocation, exact allocation contribution,
+# symbol alias and machine byte. This is specific to the fixed six callers.
+def overlapping_aliases(elf, symbol):
+    return sorted((item['name'], item['bind'], item['type'], item['size'], item['value'] - symbol['value'])
+                  for item in elf.symbols
+                  if item['shndx'] == symbol['shndx'] and item['type'] in (1, 2) and item['size']
+                  and max(item['value'], symbol['value']) < min(item['value'] + item['size'], symbol['value'] + symbol['size']))
+
+
+# These are four existing selected-process C data definitions, not new helper
+# functions or a generic unresolved-symbol resolver. Every pointer slot is bound
+# through its own actual relocation to the selected source or exact function text.
+process_prior_U_spec = json.loads(auth(m['selected_process_prior_U_specs']))
+need(process_prior_U_spec['accepted_Rust'] == m['Source37_Rust']
+     and process_prior_U_spec['selected_process_C_source'] == m['compile_rows'][0]['source'], 'selected-process provider provenance differs')
+need(set(process_prior_U_spec['providers']) == {'process_tracked_allocator_source_file',
+     'process_optional_free_bridge_source_line','process_free_thread_pages_source_line',
+     'process_remaining_range_scheduler_debug'}, 'closed selected-process prior-U provider set changed')
+selected_process_provider_proofs = {}
+
+def exact_C_string_relocation(elf, row):
+    target = row['target']
+    need(row['type'] == 1 and target['type'] == 3 and target['bind'] == 0 and target['name'] == ''
+         and target['size'] == 0 and 0 < target['shndx'] < len(elf.sections), 'selected C pointer is not an owned64-bit section relocation')
+    section = elf.sections[target['shndx']]
+    need(section['flags'] & 2 and not section['flags'] & 4 and section['type'] != 8,
+         'C string pointer does not name allocated non-executable bytes')
+    payload = elf.payload(section)
+    start = target['value'] + row['addend']
+    need(0 <= start < len(payload), 'C string relocation address escapes allocation')
+    end = payload.find(bytes([0]),start)
+    need(end >= start, 'C string has no bounded NUL terminator')
+    return payload[start:end+1], section
+
+def bind_selected_process_prior_U(name, linked_target):
+    need(name in process_prior_U_spec['providers'], 'unreviewed prior-U C provider')
+    spec = process_prior_U_spec['providers'][name]
+    need(spec['owner'] == 'actual_selected_process_C_input' and spec['source'] == m['compile_rows'][0]['source'], 'provider is not from actual selected process C')
+    owner_rows = rows(process,name)
+    need(len(owner_rows) == 1 and rows(partial,name) == [linked_target], 'selected process data owner missing or aliased')
+    owner_symbol = owner_rows[0]
+    shape = (spec['bind'],spec['type'],spec['size'])
+    need(shape == (1,1,spec['size']) and (owner_symbol['bind'],owner_symbol['type'],owner_symbol['size']) == shape
+         and (linked_target['bind'],linked_target['type'],linked_target['size']) == shape, 'selected process object type/width differs')
+    need(0 < owner_symbol['shndx'] < len(process.sections) and 0 < linked_target['shndx'] < len(partial.sections), 'selected process data is undefined/common')
+    owner_section, linked_section = process.sections[owner_symbol['shndx']], partial.sections[linked_target['shndx']]
+    expected_section = spec['section']
+    need((owner_section['name'],owner_section['type'],owner_section['flags']) == (expected_section['name'],expected_section['type'],expected_section['flags'])
+         and (linked_section['name'],linked_section['type'],linked_section['flags']) == (owner_section['name'],owner_section['type'],owner_section['flags']), 'selected process allocation identity differs')
+    need(owner_section['align'] >= expected_section['minimum_alignment'] and linked_section['align'] >= owner_section['align'], 'selected process allocation alignment differs')
+    original_bytes, linked_bytes = object_bytes(process,owner_symbol), object_bytes(partial,linked_target)
+    need(original_bytes.hex() == spec['initial_hex'] and linked_bytes == original_bytes, 'selected process whole data initializer differs')
+    need(overlapping_aliases(process,owner_symbol) == overlapping_aliases(partial,linked_target), 'selected process provider overlapping alias changed')
+    original_relocations, linked_relocations = owning(process,owner_symbol), owning(partial,linked_target)
+    need(len(original_relocations) == len(linked_relocations) == len(spec['pointer_slots']), 'selected process pointer-relocation membership differs')
+    need(all(row['owning_section'] == owner_symbol['shndx'] for row in original_relocations)
+         and all(row['owning_section'] == linked_target['shndx'] for row in linked_relocations), 'foreign section used as selected process pointer evidence')
+    key = lambda row:(row['offset'],row['type'])
+    need(len({key(row) for row in original_relocations}) == len(original_relocations)
+         and len({key(row) for row in linked_relocations}) == len(linked_relocations), 'duplicate selected process pointer relocation')
+    pointer_proof = []
+    for expected,left,right in zip(spec['pointer_slots'],sorted(original_relocations,key=key),sorted(linked_relocations,key=key)):
+        need((left['offset'],left['type']) == (right['offset'],right['type']) == (expected['offset'],expected['type']), 'selected process pointer slot/type differs')
+        original_string, old_allocation = exact_C_string_relocation(process,left)
+        linked_string, new_allocation = exact_C_string_relocation(partial,right)
+        need(original_string == linked_string == expected['expected_string'].encode(), 'selected source/function pointer bytes or provenance differ')
+        need((old_allocation['name'],old_allocation['type'],old_allocation['flags']) == (new_allocation['name'],new_allocation['type'],new_allocation['flags']), 'selected C string allocation identity changed')
+        pointer_proof.append(dict(offset=expected['offset'],type=expected['type'],target_kind=expected['target_kind'],
+                                  exact_NUL_string_hex=original_string.hex(),section_name=old_allocation['name'],
+                                  original_target_address=left['target']['value']+left['addend'],
+                                  partial_target_address=right['target']['value']+right['addend']))
+    selected_process_provider_proofs[name] = dict(source=spec['source'],baseline_shape_and_initializer=spec['baseline_shape_and_initializer'],
+        selected_C_input_path=recipe['retained_process']['path'],name=name,bind=spec['bind'],type=spec['type'],size=spec['size'],
+        initial_hex=spec['initial_hex'],complete_pointer_relocations=pointer_proof,
+        aliases=overlapping_aliases(process,owner_symbol),no_C_or_Rust_retirement_acceptance=True)
+    return owner_symbol
+
+
+def semantic_relocation(reference_row, linked_row):
+    need(reference_row['offset'] == linked_row['offset'] and reference_row['type'] == linked_row['type'], 'caller-relative relocation offset/type changed')
+    reference_target, linked_target = reference_row['target'], linked_row['target']
+    if reference_target['type'] == 3:
+        need(reference_target['bind'] == linked_target['bind'] == 0 and linked_target['type'] == 3
+             and reference_target['name'] == linked_target['name'] == '' and reference_target['size'] == linked_target['size'] == 0,
+             'anonymous section relocation replaced by a symbol/alias')
+        old_section = rust.sections[reference_target['shndx']]
+        new_section = partial.sections[linked_target['shndx']]
+        need(old_section['name'] == new_section['name'] and old_section['type'] == new_section['type']
+             and old_section['flags'] == new_section['flags'] and old_section['type'] != 8,
+             'section-owned relocation allocation identity changed')
+        fragment = rust.payload(old_section)
+        payload = partial.payload(new_section)
+        need(bool(fragment), 'empty allocation cannot identify a section contribution')
+        offset = payload.find(fragment)
+        need(offset >= 0 and payload.find(fragment, offset + 1) == -1, 'Rust section contribution missing or ambiguous in partial')
+        need(linked_target['value'] + linked_row['addend'] == offset + reference_target['value'] + reference_row['addend'],
+             'anonymous allocation-relative relocation address changed')
+        return dict(offset=reference_row['offset'], type=reference_row['type'], target_kind='exact_Rust_section_contribution',
+                    section=old_section['name'], section_type=old_section['type'], section_flags=old_section['flags'],
+                    Rust_contribution_sha256=hashlib.sha256(fragment).hexdigest(), contribution_offset_in_partial=offset,
+                    address_within_Rust_contribution=reference_target['value'] + reference_row['addend'])
+    name = reference_target['name']
+    need(bool(name) and reference_target['bind'] == linked_target['bind'] == 1 and name == linked_target['name'], 'named relocation target/binding changed')
+    if reference_target['shndx']:
+        owner, owner_symbol, owner_role = rust, reference_target, 'exact_Source37_Rust_input'
+        need(rows(rust,name) == [reference_target], 'reference named target is ambiguous')
+    else:
+        owner, owner_role = process, 'actual_selected_process_C_input'
+        owner_symbol = bind_selected_process_prior_U(name,linked_target)
+    found = rows(partial,name)
+    need(found == [linked_target], 'partial named relocation uses a different section alias')
+    need((linked_target['bind'],linked_target['type'],linked_target['size']) == (owner_symbol['bind'],owner_symbol['type'],owner_symbol['size']),
+         'partial named symbol shape differs from exact input owner')
+    old_section, new_section = owner.sections[owner_symbol['shndx']], partial.sections[linked_target['shndx']]
+    need((old_section['name'],old_section['type'],old_section['flags']) == (new_section['name'],new_section['type'],new_section['flags']),
+         'named target allocation identity changed')
+    owner_bytes, linked_bytes = object_bytes(owner,owner_symbol), object_bytes(partial,linked_target)
+    need(owner_bytes == linked_bytes and overlapping_aliases(owner,owner_symbol) == overlapping_aliases(partial,linked_target),
+         'named target bytes or overlapping aliases changed')
+    need(linked_row['addend'] == reference_row['addend'], 'named target-relative addend changed')
+    return dict(offset=reference_row['offset'],type=reference_row['type'],target_kind='exact_named_input_owner',target=name,
+                owner_role=owner_role,type_and_size=[owner_symbol['type'],owner_symbol['size']],addend=reference_row['addend'],
+                owner_bytes_sha256=hashlib.sha256(owner_bytes).hexdigest(),aliases=overlapping_aliases(owner,owner_symbol))
+
+def bind_partial_Rust_caller(caller):
+    original, linked = function(rust,caller), function(partial,caller)
+    old_section, new_section = rust.sections[original['shndx']], partial.sections[linked['shndx']]
+    need((original['bind'],original['type'],original['size']) == (linked['bind'],linked['type'],linked['size']), 'Rust caller shape changed')
+    need(old_section['name'] == new_section['name'] and old_section['flags'] == new_section['flags']
+         and old_section['type'] == new_section['type'] and original['value'] == linked['value'] == 0
+         and old_section['size'] == new_section['size'] == original['size'], 'exact standalone caller section extent changed')
+    need(overlapping_aliases(rust,original) == overlapping_aliases(partial,linked) == [(caller,1,2,original['size'],0)], 'Rust caller gained or substituted an alias')
+    code, linked_code = object_bytes(rust,original), object_bytes(partial,linked)
+    need(code == linked_code, 'partial Rust caller bytes differ from exact accepted6e54 input')
+    before, after = owning(rust,original), owning(partial,linked)
+    actual_prior_U = [dict(offset=row['offset'],type=row['type'],target=row['target']['name'],addend=row['addend']) for row in before if row['target']['shndx'] == 0]
+    need(actual_prior_U == process_prior_U_spec['exact_six_caller_prior_U_rows'][caller], 'exact accepted caller prior-U membership changed')
+    need(all(row['owning_section'] == original['shndx'] for row in before)
+         and all(row['owning_section'] == linked['shndx'] for row in after), 'foreign section relocation used as caller evidence')
+    key = lambda row:(row['offset'],row['type'])
+    need(len({key(row) for row in before}) == len(before) and len({key(row) for row in after}) == len(after)
+         and len(before) == len(after), 'caller relocation membership ambiguous or changed')
+    semantic = [semantic_relocation(left,right) for left,right in zip(sorted(before,key=key),sorted(after,key=key))]
+    return dict(caller=caller,code_sha256=hashlib.sha256(code).hexdigest(),standalone_section=new_section['name'],
+                aliases=overlapping_aliases(partial,linked),semantic_relocations=semantic), original, before, after
+
+strict_named = {'destroy_thread':['process_destroy_thread_hash_detach_candidate_v3'],
+                'sys_sched_setaffinity':['sched_setaffinity_retained_v2','sched_affinity_hold_warning_v2']}
+need(contract['unchanged_strict_named_edges'] == strict_named, 'three direct named-edge contract changed')
+expected_inline = {'find_thread':['process_find_thread_live_body_result_v2','process_try_hold_thread_live_v2'],
+                   'process_destroy_thread_hash_detach_candidate_v3':['process_thread_hash_detach_live_body_v3'],
+                   'sys_sched_getaffinity':['sched_getaffinity_retained_v2','sched_affinity_hold_warning_v2'],
+                   'sched_do_migrate_public':['sched_do_migrate_mask_serialized_v3']}
+need(set(contract['contracts']) == set(expected_inline), 'four exact inline caller set changed')
+edge_proof = {}
+for caller in list(expected_inline) + list(strict_named):
+    binding, original, reference_relocations, linked_relocations = bind_partial_Rust_caller(caller)
+    if caller in expected_inline:
+        selected = contract['contracts'][caller]
+        need(selected['inlined_callees'] == expected_inline[caller], 'inline callee contract changed')
+        original_proof = check_inline(rust,original,reference_relocations,selected,object_bytes)
+        need(original_proof == accepted_ownership['production_consumer_edges'][caller], 'accepted source37 machine ownership proof changed')
+        need(not set(expected_inline[caller]) & {row['target']['name'] for row in linked_relocations}, 'partial inline absence changed without exact proof')
+        binding['accepted_machine_proof'] = original_proof
+    else:
+        names = {row['target']['name'] for row in linked_relocations}
+        need(set(strict_named[caller]) <= names, 'actual direct named edge missing: ' + caller)
+        binding['strict_named_edges'] = strict_named[caller]
+    edge_proof[caller] = binding
+
+need(set(selected_process_provider_proofs) == set(process_prior_U_spec['providers']), 'closed selected process provider closure was not fully bound')
+
+# A single changed header adds a prototype only. All consumed headers must still
+# match the exact selected HOST profile, with this one explicit overlay.
+allowed = {row['path']:row for row in recipe['pinned_inputs']}
+dependencies = {}
+for unit in ('process','syscall'):
+    text = (Path(recipe['retained_process_dependencies']['path']) if unit == 'process' else out / (unit + '.selected.d')).read_text().replace(chr(92) + chr(10), ' ')
+    need(':' in text, 'compiler dependency file missing')
+    paths = shlex.split(text.split(':',1)[1])
+    need(paths, 'empty actual C dependency set')
+    for value in paths:
+        need(value in allowed, 'unbound actual C source/header dependency: ' + value)
+        auth(allowed[value])
+    dependencies[unit] = paths
+for row in recipe['pinned_inputs']:
+    auth(row)
+C_debt = {name: sorted(row['name'] for row in elf.symbols if row['name'] and row['bind'] == 1 and row['type'] == 2 and row['shndx'] != 0) for name,elf in [('changed_process',process),('changed_syscall',syscall)]}
+result = dict(closed20_fixture_role=recipe['closed20_fixture_contract'],closed20_fixture_consumer_check='all five actual partial inputs and partial checked',retained_process=recipe['retained_process'],scope=recipe['scope'],status='PASS_SOURCE38_SELECTED_C_ABI_AND_COHERENT_PARTIAL_OWNERSHIP_ONLY',providers=providers,production_consumer_edges=edge_proof,selected_process_prior_U_providers=selected_process_provider_proofs,shared_data=data,remaining_unresolved=sorted(undefined(partial)),remaining_unresolved_count=len(undefined(partial)),existing_C_runtime_function_debt=C_debt,actual_dependencies=dependencies,compiler_profile='Reviewed HOST GCC9 selected-C profile; distinct from Docker default GCC14.',unchanged_CPU_VM_reused=True,ASM_recompiled=False,whole_Rust_recompiled=False,C_runtime_body_expansion=False,default_image=False,native=False,Process_VM_lifetimes_and_whole_C_retirement='OPEN')
+with (ROOT/'ACTUAL-SOURCE38-SELECTED-C-PARTIAL-OWNERSHIP.json').open('x') as stream:
+    json.dump(result,stream,indent=2)
+    stream.write('\n')
+print(json.dumps(dict(status=result['status'],new_Rust_providers=len(providers),production_caller_rows=len(edge_proof),shared_data_sizes={name:row['size'] for name,row in data.items()},remaining_unresolved=result['remaining_unresolved'],default_image=False,native=False),sort_keys=True))

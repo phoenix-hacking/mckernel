@@ -1,0 +1,14 @@
+--- preimage/pair_collector.c
++++ final-gate/pair_collector.c
+@@ -611,6 +611,11 @@
+         if (console >= 0) (void)write_all(console, message, sizeof message - 1);
+         remain_pid1(); /* Host deadline rejects the uncompleted teardown. */
+     }
++#if defined(ND_PAIR_LONG)
++    /* No fallible evidence/restoration gate follows terminal LONG publication.
++     * A short write or post-write clock failure retains PID1 for host rejection. */
++    if (!good || !safe || !empty || payload.fault || long_complete()) remain_pid1();
++#endif
+     poweroff_forever(console);
+     return 125; /* unreachable */
+ }

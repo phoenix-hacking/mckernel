@@ -1,0 +1,1296 @@
+{
+  "schema": "mckernel.m15-mm-original-body-fixture-vectors.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "DRAFT_INPUTS_NOT_EXECUTED",
+  "reference": "Unchanged original mcctrl_vm_write_compat.c plus byte-extracted exact pinned Linux inline bodies; lower Linux primitives mocked.",
+  "candidate_requirement": "Actual proposed Rust successor source included without body rewrites; no Rust model may stand in for it.",
+  "comparison": "Compare complete ordered outer/inner gate, helper-call, down/up, wmb-observed-sequence, WRITE_ONCE logs and final state; separately compare explicit primitive_order and final-state expectations.",
+  "trace_helper_arguments": {
+    "start": [
+      "mm_identity",
+      true
+    ],
+    "acquire": [
+      "mm_identity",
+      true,
+      true
+    ],
+    "release": [
+      "mm_identity",
+      true
+    ]
+  },
+  "valid_vectors": [
+    {
+      "id": "empty",
+      "initial": {
+        "mm_sequence": 0,
+        "vma_sequences": [
+          0,
+          0
+        ],
+        "held_mmap": false,
+        "held_vma": [
+          false,
+          false
+        ]
+      },
+      "trace": {
+        "outer_enabled_mask": 0,
+        "inner_enabled_mask": 0,
+        "bit_order": [
+          "start",
+          "acquire",
+          "release"
+        ]
+      },
+      "operations": [],
+      "expected": {
+        "mm_sequence": 0,
+        "vma_sequences": [
+          0,
+          0
+        ],
+        "held_mmap": false,
+        "held_vma": [
+          false,
+          false
+        ],
+        "primitive_order": [],
+        "trace_helper_calls": [],
+        "trace_events_emitted": []
+      }
+    },
+    {
+      "id": "lock_unlock_trace_off",
+      "initial": {
+        "mm_sequence": 0,
+        "vma_sequences": [
+          0,
+          9
+        ],
+        "held_mmap": false,
+        "held_vma": [
+          false,
+          false
+        ]
+      },
+      "trace": {
+        "outer_enabled_mask": 0,
+        "inner_enabled_mask": 0,
+        "bit_order": [
+          "start",
+          "acquire",
+          "release"
+        ]
+      },
+      "operations": [
+        "lock",
+        "unlock"
+      ],
+      "expected": {
+        "mm_sequence": 2,
+        "vma_sequences": [
+          0,
+          9
+        ],
+        "held_mmap": false,
+        "held_vma": [
+          false,
+          false
+        ],
+        "primitive_order": [
+          "mmap.down",
+          "wmb(seq=1)",
+          "wmb(seq=1)",
+          "mmap.up"
+        ],
+        "trace_helper_calls": [],
+        "trace_events_emitted": []
+      }
+    },
+    {
+      "id": "first_vma_write",
+      "initial": {
+        "mm_sequence": 0,
+        "vma_sequences": [
+          0,
+          9
+        ],
+        "held_mmap": false,
+        "held_vma": [
+          false,
+          false
+        ]
+      },
+      "trace": {
+        "outer_enabled_mask": 0,
+        "inner_enabled_mask": 0,
+        "bit_order": [
+          "start",
+          "acquire",
+          "release"
+        ]
+      },
+      "operations": [
+        "lock",
+        "vma0",
+        "unlock"
+      ],
+      "expected": {
+        "mm_sequence": 2,
+        "vma_sequences": [
+          1,
+          9
+        ],
+        "held_mmap": false,
+        "held_vma": [
+          false,
+          false
+        ],
+        "primitive_order": [
+          "mmap.down",
+          "wmb(seq=1)",
+          "vma0.down",
+          "vma0.write_once(1)",
+          "vma0.up",
+          "wmb(seq=1)",
+          "mmap.up"
+        ],
+        "trace_helper_calls": [],
+        "trace_events_emitted": []
+      }
+    },
+    {
+      "id": "already_written_same_sequence",
+      "initial": {
+        "mm_sequence": 0,
+        "vma_sequences": [
+          1,
+          9
+        ],
+        "held_mmap": false,
+        "held_vma": [
+          false,
+          false
+        ]
+      },
+      "trace": {
+        "outer_enabled_mask": 0,
+        "inner_enabled_mask": 0,
+        "bit_order": [
+          "start",
+          "acquire",
+          "release"
+        ]
+      },
+      "operations": [
+        "lock",
+        "vma0",
+        "unlock"
+      ],
+      "expected": {
+        "mm_sequence": 2,
+        "vma_sequences": [
+          1,
+          9
+        ],
+        "held_mmap": false,
+        "held_vma": [
+          false,
+          false
+        ],
+        "primitive_order": [
+          "mmap.down",
+          "wmb(seq=1)",
+          "wmb(seq=1)",
+          "mmap.up"
+        ],
+        "trace_helper_calls": [],
+        "trace_events_emitted": []
+      }
+    },
+    {
+      "id": "repeated_start_is_idempotent",
+      "initial": {
+        "mm_sequence": 0,
+        "vma_sequences": [
+          0,
+          9
+        ],
+        "held_mmap": false,
+        "held_vma": [
+          false,
+          false
+        ]
+      },
+      "trace": {
+        "outer_enabled_mask": 0,
+        "inner_enabled_mask": 0,
+        "bit_order": [
+          "start",
+          "acquire",
+          "release"
+        ]
+      },
+      "operations": [
+        "lock",
+        "vma0",
+        "vma0",
+        "unlock"
+      ],
+      "expected": {
+        "mm_sequence": 2,
+        "vma_sequences": [
+          1,
+          9
+        ],
+        "held_mmap": false,
+        "held_vma": [
+          false,
+          false
+        ],
+        "primitive_order": [
+          "mmap.down",
+          "wmb(seq=1)",
+          "vma0.down",
+          "vma0.write_once(1)",
+          "vma0.up",
+          "wmb(seq=1)",
+          "mmap.up"
+        ],
+        "trace_helper_calls": [],
+        "trace_events_emitted": []
+      }
+    },
+    {
+      "id": "two_distinct_vmas",
+      "initial": {
+        "mm_sequence": 2,
+        "vma_sequences": [
+          0,
+          1
+        ],
+        "held_mmap": false,
+        "held_vma": [
+          false,
+          false
+        ]
+      },
+      "trace": {
+        "outer_enabled_mask": 0,
+        "inner_enabled_mask": 0,
+        "bit_order": [
+          "start",
+          "acquire",
+          "release"
+        ]
+      },
+      "operations": [
+        "lock",
+        "vma0",
+        "vma1",
+        "unlock"
+      ],
+      "expected": {
+        "mm_sequence": 4,
+        "vma_sequences": [
+          3,
+          3
+        ],
+        "held_mmap": false,
+        "held_vma": [
+          false,
+          false
+        ],
+        "primitive_order": [
+          "mmap.down",
+          "wmb(seq=3)",
+          "vma0.down",
+          "vma0.write_once(3)",
+          "vma0.up",
+          "vma1.down",
+          "vma1.write_once(3)",
+          "vma1.up",
+          "wmb(seq=3)",
+          "mmap.up"
+        ],
+        "trace_helper_calls": [],
+        "trace_events_emitted": []
+      }
+    },
+    {
+      "id": "u32_wrap",
+      "initial": {
+        "mm_sequence": 4294967294,
+        "vma_sequences": [
+          4294967293,
+          0
+        ],
+        "held_mmap": false,
+        "held_vma": [
+          false,
+          false
+        ]
+      },
+      "trace": {
+        "outer_enabled_mask": 0,
+        "inner_enabled_mask": 0,
+        "bit_order": [
+          "start",
+          "acquire",
+          "release"
+        ]
+      },
+      "operations": [
+        "lock",
+        "vma0",
+        "vma1",
+        "unlock"
+      ],
+      "expected": {
+        "mm_sequence": 0,
+        "vma_sequences": [
+          4294967295,
+          4294967295
+        ],
+        "held_mmap": false,
+        "held_vma": [
+          false,
+          false
+        ],
+        "primitive_order": [
+          "mmap.down",
+          "wmb(seq=4294967295)",
+          "vma0.down",
+          "vma0.write_once(4294967295)",
+          "vma0.up",
+          "vma1.down",
+          "vma1.write_once(4294967295)",
+          "vma1.up",
+          "wmb(seq=4294967295)",
+          "mmap.up"
+        ],
+        "trace_helper_calls": [],
+        "trace_events_emitted": []
+      }
+    },
+    {
+      "id": "outer_mask_0",
+      "initial": {
+        "mm_sequence": 0,
+        "vma_sequences": [
+          0,
+          9
+        ],
+        "held_mmap": false,
+        "held_vma": [
+          false,
+          false
+        ]
+      },
+      "trace": {
+        "outer_enabled_mask": 0,
+        "inner_enabled_mask": 7,
+        "bit_order": [
+          "start",
+          "acquire",
+          "release"
+        ]
+      },
+      "operations": [
+        "lock",
+        "vma0",
+        "unlock"
+      ],
+      "expected": {
+        "mm_sequence": 2,
+        "vma_sequences": [
+          1,
+          9
+        ],
+        "held_mmap": false,
+        "held_vma": [
+          false,
+          false
+        ],
+        "primitive_order": [
+          "mmap.down",
+          "wmb(seq=1)",
+          "vma0.down",
+          "vma0.write_once(1)",
+          "vma0.up",
+          "wmb(seq=1)",
+          "mmap.up"
+        ],
+        "trace_helper_calls": [],
+        "trace_events_emitted": []
+      }
+    },
+    {
+      "id": "outer_mask_1",
+      "initial": {
+        "mm_sequence": 0,
+        "vma_sequences": [
+          0,
+          9
+        ],
+        "held_mmap": false,
+        "held_vma": [
+          false,
+          false
+        ]
+      },
+      "trace": {
+        "outer_enabled_mask": 1,
+        "inner_enabled_mask": 7,
+        "bit_order": [
+          "start",
+          "acquire",
+          "release"
+        ]
+      },
+      "operations": [
+        "lock",
+        "vma0",
+        "unlock"
+      ],
+      "expected": {
+        "mm_sequence": 2,
+        "vma_sequences": [
+          1,
+          9
+        ],
+        "held_mmap": false,
+        "held_vma": [
+          false,
+          false
+        ],
+        "primitive_order": [
+          "mmap.down",
+          "wmb(seq=1)",
+          "vma0.down",
+          "vma0.write_once(1)",
+          "vma0.up",
+          "wmb(seq=1)",
+          "mmap.up"
+        ],
+        "trace_helper_calls": [
+          "start"
+        ],
+        "trace_events_emitted": [
+          "start"
+        ]
+      }
+    },
+    {
+      "id": "outer_mask_2",
+      "initial": {
+        "mm_sequence": 0,
+        "vma_sequences": [
+          0,
+          9
+        ],
+        "held_mmap": false,
+        "held_vma": [
+          false,
+          false
+        ]
+      },
+      "trace": {
+        "outer_enabled_mask": 2,
+        "inner_enabled_mask": 7,
+        "bit_order": [
+          "start",
+          "acquire",
+          "release"
+        ]
+      },
+      "operations": [
+        "lock",
+        "vma0",
+        "unlock"
+      ],
+      "expected": {
+        "mm_sequence": 2,
+        "vma_sequences": [
+          1,
+          9
+        ],
+        "held_mmap": false,
+        "held_vma": [
+          false,
+          false
+        ],
+        "primitive_order": [
+          "mmap.down",
+          "wmb(seq=1)",
+          "vma0.down",
+          "vma0.write_once(1)",
+          "vma0.up",
+          "wmb(seq=1)",
+          "mmap.up"
+        ],
+        "trace_helper_calls": [
+          "acquire"
+        ],
+        "trace_events_emitted": [
+          "acquire"
+        ]
+      }
+    },
+    {
+      "id": "outer_mask_3",
+      "initial": {
+        "mm_sequence": 0,
+        "vma_sequences": [
+          0,
+          9
+        ],
+        "held_mmap": false,
+        "held_vma": [
+          false,
+          false
+        ]
+      },
+      "trace": {
+        "outer_enabled_mask": 3,
+        "inner_enabled_mask": 7,
+        "bit_order": [
+          "start",
+          "acquire",
+          "release"
+        ]
+      },
+      "operations": [
+        "lock",
+        "vma0",
+        "unlock"
+      ],
+      "expected": {
+        "mm_sequence": 2,
+        "vma_sequences": [
+          1,
+          9
+        ],
+        "held_mmap": false,
+        "held_vma": [
+          false,
+          false
+        ],
+        "primitive_order": [
+          "mmap.down",
+          "wmb(seq=1)",
+          "vma0.down",
+          "vma0.write_once(1)",
+          "vma0.up",
+          "wmb(seq=1)",
+          "mmap.up"
+        ],
+        "trace_helper_calls": [
+          "start",
+          "acquire"
+        ],
+        "trace_events_emitted": [
+          "start",
+          "acquire"
+        ]
+      }
+    },
+    {
+      "id": "outer_mask_4",
+      "initial": {
+        "mm_sequence": 0,
+        "vma_sequences": [
+          0,
+          9
+        ],
+        "held_mmap": false,
+        "held_vma": [
+          false,
+          false
+        ]
+      },
+      "trace": {
+        "outer_enabled_mask": 4,
+        "inner_enabled_mask": 7,
+        "bit_order": [
+          "start",
+          "acquire",
+          "release"
+        ]
+      },
+      "operations": [
+        "lock",
+        "vma0",
+        "unlock"
+      ],
+      "expected": {
+        "mm_sequence": 2,
+        "vma_sequences": [
+          1,
+          9
+        ],
+        "held_mmap": false,
+        "held_vma": [
+          false,
+          false
+        ],
+        "primitive_order": [
+          "mmap.down",
+          "wmb(seq=1)",
+          "vma0.down",
+          "vma0.write_once(1)",
+          "vma0.up",
+          "wmb(seq=1)",
+          "mmap.up"
+        ],
+        "trace_helper_calls": [
+          "release"
+        ],
+        "trace_events_emitted": [
+          "release"
+        ]
+      }
+    },
+    {
+      "id": "outer_mask_5",
+      "initial": {
+        "mm_sequence": 0,
+        "vma_sequences": [
+          0,
+          9
+        ],
+        "held_mmap": false,
+        "held_vma": [
+          false,
+          false
+        ]
+      },
+      "trace": {
+        "outer_enabled_mask": 5,
+        "inner_enabled_mask": 7,
+        "bit_order": [
+          "start",
+          "acquire",
+          "release"
+        ]
+      },
+      "operations": [
+        "lock",
+        "vma0",
+        "unlock"
+      ],
+      "expected": {
+        "mm_sequence": 2,
+        "vma_sequences": [
+          1,
+          9
+        ],
+        "held_mmap": false,
+        "held_vma": [
+          false,
+          false
+        ],
+        "primitive_order": [
+          "mmap.down",
+          "wmb(seq=1)",
+          "vma0.down",
+          "vma0.write_once(1)",
+          "vma0.up",
+          "wmb(seq=1)",
+          "mmap.up"
+        ],
+        "trace_helper_calls": [
+          "start",
+          "release"
+        ],
+        "trace_events_emitted": [
+          "start",
+          "release"
+        ]
+      }
+    },
+    {
+      "id": "outer_mask_6",
+      "initial": {
+        "mm_sequence": 0,
+        "vma_sequences": [
+          0,
+          9
+        ],
+        "held_mmap": false,
+        "held_vma": [
+          false,
+          false
+        ]
+      },
+      "trace": {
+        "outer_enabled_mask": 6,
+        "inner_enabled_mask": 7,
+        "bit_order": [
+          "start",
+          "acquire",
+          "release"
+        ]
+      },
+      "operations": [
+        "lock",
+        "vma0",
+        "unlock"
+      ],
+      "expected": {
+        "mm_sequence": 2,
+        "vma_sequences": [
+          1,
+          9
+        ],
+        "held_mmap": false,
+        "held_vma": [
+          false,
+          false
+        ],
+        "primitive_order": [
+          "mmap.down",
+          "wmb(seq=1)",
+          "vma0.down",
+          "vma0.write_once(1)",
+          "vma0.up",
+          "wmb(seq=1)",
+          "mmap.up"
+        ],
+        "trace_helper_calls": [
+          "acquire",
+          "release"
+        ],
+        "trace_events_emitted": [
+          "acquire",
+          "release"
+        ]
+      }
+    },
+    {
+      "id": "outer_mask_7",
+      "initial": {
+        "mm_sequence": 0,
+        "vma_sequences": [
+          0,
+          9
+        ],
+        "held_mmap": false,
+        "held_vma": [
+          false,
+          false
+        ]
+      },
+      "trace": {
+        "outer_enabled_mask": 7,
+        "inner_enabled_mask": 7,
+        "bit_order": [
+          "start",
+          "acquire",
+          "release"
+        ]
+      },
+      "operations": [
+        "lock",
+        "vma0",
+        "unlock"
+      ],
+      "expected": {
+        "mm_sequence": 2,
+        "vma_sequences": [
+          1,
+          9
+        ],
+        "held_mmap": false,
+        "held_vma": [
+          false,
+          false
+        ],
+        "primitive_order": [
+          "mmap.down",
+          "wmb(seq=1)",
+          "vma0.down",
+          "vma0.write_once(1)",
+          "vma0.up",
+          "wmb(seq=1)",
+          "mmap.up"
+        ],
+        "trace_helper_calls": [
+          "start",
+          "acquire",
+          "release"
+        ],
+        "trace_events_emitted": [
+          "start",
+          "acquire",
+          "release"
+        ]
+      }
+    },
+    {
+      "id": "inner_gate_changed_mask_0",
+      "initial": {
+        "mm_sequence": 0,
+        "vma_sequences": [
+          0,
+          9
+        ],
+        "held_mmap": false,
+        "held_vma": [
+          false,
+          false
+        ]
+      },
+      "trace": {
+        "outer_enabled_mask": 7,
+        "inner_enabled_mask": 0,
+        "bit_order": [
+          "start",
+          "acquire",
+          "release"
+        ]
+      },
+      "operations": [
+        "lock",
+        "vma0",
+        "unlock"
+      ],
+      "expected": {
+        "mm_sequence": 2,
+        "vma_sequences": [
+          1,
+          9
+        ],
+        "held_mmap": false,
+        "held_vma": [
+          false,
+          false
+        ],
+        "primitive_order": [
+          "mmap.down",
+          "wmb(seq=1)",
+          "vma0.down",
+          "vma0.write_once(1)",
+          "vma0.up",
+          "wmb(seq=1)",
+          "mmap.up"
+        ],
+        "trace_helper_calls": [
+          "start",
+          "acquire",
+          "release"
+        ],
+        "trace_events_emitted": []
+      }
+    },
+    {
+      "id": "inner_gate_changed_mask_1",
+      "initial": {
+        "mm_sequence": 0,
+        "vma_sequences": [
+          0,
+          9
+        ],
+        "held_mmap": false,
+        "held_vma": [
+          false,
+          false
+        ]
+      },
+      "trace": {
+        "outer_enabled_mask": 7,
+        "inner_enabled_mask": 1,
+        "bit_order": [
+          "start",
+          "acquire",
+          "release"
+        ]
+      },
+      "operations": [
+        "lock",
+        "vma0",
+        "unlock"
+      ],
+      "expected": {
+        "mm_sequence": 2,
+        "vma_sequences": [
+          1,
+          9
+        ],
+        "held_mmap": false,
+        "held_vma": [
+          false,
+          false
+        ],
+        "primitive_order": [
+          "mmap.down",
+          "wmb(seq=1)",
+          "vma0.down",
+          "vma0.write_once(1)",
+          "vma0.up",
+          "wmb(seq=1)",
+          "mmap.up"
+        ],
+        "trace_helper_calls": [
+          "start",
+          "acquire",
+          "release"
+        ],
+        "trace_events_emitted": [
+          "start"
+        ]
+      }
+    },
+    {
+      "id": "inner_gate_changed_mask_2",
+      "initial": {
+        "mm_sequence": 0,
+        "vma_sequences": [
+          0,
+          9
+        ],
+        "held_mmap": false,
+        "held_vma": [
+          false,
+          false
+        ]
+      },
+      "trace": {
+        "outer_enabled_mask": 7,
+        "inner_enabled_mask": 2,
+        "bit_order": [
+          "start",
+          "acquire",
+          "release"
+        ]
+      },
+      "operations": [
+        "lock",
+        "vma0",
+        "unlock"
+      ],
+      "expected": {
+        "mm_sequence": 2,
+        "vma_sequences": [
+          1,
+          9
+        ],
+        "held_mmap": false,
+        "held_vma": [
+          false,
+          false
+        ],
+        "primitive_order": [
+          "mmap.down",
+          "wmb(seq=1)",
+          "vma0.down",
+          "vma0.write_once(1)",
+          "vma0.up",
+          "wmb(seq=1)",
+          "mmap.up"
+        ],
+        "trace_helper_calls": [
+          "start",
+          "acquire",
+          "release"
+        ],
+        "trace_events_emitted": [
+          "acquire"
+        ]
+      }
+    },
+    {
+      "id": "inner_gate_changed_mask_3",
+      "initial": {
+        "mm_sequence": 0,
+        "vma_sequences": [
+          0,
+          9
+        ],
+        "held_mmap": false,
+        "held_vma": [
+          false,
+          false
+        ]
+      },
+      "trace": {
+        "outer_enabled_mask": 7,
+        "inner_enabled_mask": 3,
+        "bit_order": [
+          "start",
+          "acquire",
+          "release"
+        ]
+      },
+      "operations": [
+        "lock",
+        "vma0",
+        "unlock"
+      ],
+      "expected": {
+        "mm_sequence": 2,
+        "vma_sequences": [
+          1,
+          9
+        ],
+        "held_mmap": false,
+        "held_vma": [
+          false,
+          false
+        ],
+        "primitive_order": [
+          "mmap.down",
+          "wmb(seq=1)",
+          "vma0.down",
+          "vma0.write_once(1)",
+          "vma0.up",
+          "wmb(seq=1)",
+          "mmap.up"
+        ],
+        "trace_helper_calls": [
+          "start",
+          "acquire",
+          "release"
+        ],
+        "trace_events_emitted": [
+          "start",
+          "acquire"
+        ]
+      }
+    },
+    {
+      "id": "inner_gate_changed_mask_4",
+      "initial": {
+        "mm_sequence": 0,
+        "vma_sequences": [
+          0,
+          9
+        ],
+        "held_mmap": false,
+        "held_vma": [
+          false,
+          false
+        ]
+      },
+      "trace": {
+        "outer_enabled_mask": 7,
+        "inner_enabled_mask": 4,
+        "bit_order": [
+          "start",
+          "acquire",
+          "release"
+        ]
+      },
+      "operations": [
+        "lock",
+        "vma0",
+        "unlock"
+      ],
+      "expected": {
+        "mm_sequence": 2,
+        "vma_sequences": [
+          1,
+          9
+        ],
+        "held_mmap": false,
+        "held_vma": [
+          false,
+          false
+        ],
+        "primitive_order": [
+          "mmap.down",
+          "wmb(seq=1)",
+          "vma0.down",
+          "vma0.write_once(1)",
+          "vma0.up",
+          "wmb(seq=1)",
+          "mmap.up"
+        ],
+        "trace_helper_calls": [
+          "start",
+          "acquire",
+          "release"
+        ],
+        "trace_events_emitted": [
+          "release"
+        ]
+      }
+    },
+    {
+      "id": "inner_gate_changed_mask_5",
+      "initial": {
+        "mm_sequence": 0,
+        "vma_sequences": [
+          0,
+          9
+        ],
+        "held_mmap": false,
+        "held_vma": [
+          false,
+          false
+        ]
+      },
+      "trace": {
+        "outer_enabled_mask": 7,
+        "inner_enabled_mask": 5,
+        "bit_order": [
+          "start",
+          "acquire",
+          "release"
+        ]
+      },
+      "operations": [
+        "lock",
+        "vma0",
+        "unlock"
+      ],
+      "expected": {
+        "mm_sequence": 2,
+        "vma_sequences": [
+          1,
+          9
+        ],
+        "held_mmap": false,
+        "held_vma": [
+          false,
+          false
+        ],
+        "primitive_order": [
+          "mmap.down",
+          "wmb(seq=1)",
+          "vma0.down",
+          "vma0.write_once(1)",
+          "vma0.up",
+          "wmb(seq=1)",
+          "mmap.up"
+        ],
+        "trace_helper_calls": [
+          "start",
+          "acquire",
+          "release"
+        ],
+        "trace_events_emitted": [
+          "start",
+          "release"
+        ]
+      }
+    },
+    {
+      "id": "inner_gate_changed_mask_6",
+      "initial": {
+        "mm_sequence": 0,
+        "vma_sequences": [
+          0,
+          9
+        ],
+        "held_mmap": false,
+        "held_vma": [
+          false,
+          false
+        ]
+      },
+      "trace": {
+        "outer_enabled_mask": 7,
+        "inner_enabled_mask": 6,
+        "bit_order": [
+          "start",
+          "acquire",
+          "release"
+        ]
+      },
+      "operations": [
+        "lock",
+        "vma0",
+        "unlock"
+      ],
+      "expected": {
+        "mm_sequence": 2,
+        "vma_sequences": [
+          1,
+          9
+        ],
+        "held_mmap": false,
+        "held_vma": [
+          false,
+          false
+        ],
+        "primitive_order": [
+          "mmap.down",
+          "wmb(seq=1)",
+          "vma0.down",
+          "vma0.write_once(1)",
+          "vma0.up",
+          "wmb(seq=1)",
+          "mmap.up"
+        ],
+        "trace_helper_calls": [
+          "start",
+          "acquire",
+          "release"
+        ],
+        "trace_events_emitted": [
+          "acquire",
+          "release"
+        ]
+      }
+    }
+  ],
+  "additional_sequences_required": [
+    {
+      "id": "successive_lock_epochs",
+      "initial_sequence": 0,
+      "operations": [
+        "lock",
+        "vma0",
+        "unlock",
+        "lock",
+        "vma0",
+        "vma1",
+        "unlock"
+      ],
+      "expected_final_sequence": 4,
+      "expected_final_vma_sequences": [
+        3,
+        3
+      ]
+    },
+    {
+      "id": "independent_mm_objects",
+      "requirement": "Interleave operations on two distinct fixture mm objects; logs and VMA sequences must retain object identity without cross mutation."
+    },
+    {
+      "id": "trace_toggles_each_gate",
+      "requirement": "Enumerate separately scripted outer/inner true/false transitions for all three events; include original outer=false/inner=true and outer=true/inner=false scenarios. No unconditional helper substitution."
+    }
+  ],
+  "rejected_before_FFI": [
+    {
+      "operations": [
+        "unlock"
+      ],
+      "reason": "mmap write lock not held"
+    },
+    {
+      "operations": [
+        "vma0"
+      ],
+      "reason": "caller lacks mmap write lock"
+    },
+    {
+      "operations": [
+        "lock",
+        "lock"
+      ],
+      "reason": "same-owner nonrecursive lock would deadlock"
+    },
+    {
+      "operations": [
+        "lock"
+      ],
+      "reason": "unbalanced lock schedule at fixture exit"
+    }
+  ],
+  "excluded": "Null/dangling MM or VMA pointers violate original unsafe preconditions; no intentionally undefined pointer executions. Mock fixtures do not prove real concurrency or jump-label instruction patching."
+}

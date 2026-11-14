@@ -1,0 +1,41 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "EXECUTABLE_SOURCE_PREPARATION_ONLY_NOT_COMPILED",
+  "fixture_sources": {
+    "actual_request.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/fixture/actual_request.rs",
+      "sha256": "30f20f5acfed8ff1b45991cd09ab18a6f957c61067f393b26a82803518cad041",
+      "bytes": 1795
+    },
+    "actual_quarantine_branch.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/fixture/actual_quarantine_branch.rs",
+      "sha256": "9de0b0793ccd3b3c8233c62c7dc24551fc8dc8d663f02a0e2e85821679c2c7ba",
+      "bytes": 214
+    },
+    "ACTUAL-Memory-syscall.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/fixture/ACTUAL-Memory-syscall.rs",
+      "sha256": "b28046f9aeba93cebd6b155ceafa5386cc79a07e3bdbef2a3308bd1a3595a5d6",
+      "bytes": 2664
+    },
+    "diagnostic.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/fixture/diagnostic.rs",
+      "sha256": "b0f5f8aa7450338dd0107c02d03cb9e47b8426ebebe72bf3eb864086b2ed42e8",
+      "bytes": 21194
+    },
+    "ORIGINAL-Memory-syscall.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/fixture/ORIGINAL-Memory-syscall.rs",
+      "sha256": "8725a220de445e4d15504dce326012faaa04624c0f342b9ea720e9f050438cf5",
+      "bytes": 1649
+    }
+  },
+  "actual_extracted_bodies": [
+    "original/instrumented Memory::syscall",
+    "original Ledger::conflicts/tag",
+    "new diagnostic_conflict/context constructor/budget",
+    "original/instrumented Runtime::fail",
+    "actual Request type/decode/getters",
+    "unchanged actual Remote::syscall_request error/quarantine branch"
+  ],
+  "models": "stdArc/Mutex/Vec, ownedAtomic backing/address mapping, Runtime.application.fail_service and Remote entry/admit receiver only. No kernel layout/module/runtime proof.",
+  "tests": "8195 original/instrumented memory error/claim/quarantine pairs,256bucketmasks/halfopen/snoopignore,10originvariants,16ticket saturating budgets,100EAGAINthenEBUSY preservation,existing callcounts/serials/claims/unmodifiederrors. No trace attribution or semantic repair claimed."
+}

@@ -1,0 +1,386 @@
+ELF Header:
+  Magic:   7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00 
+  Class:                             ELF64
+  Data:                              2's complement, little endian
+  Version:                           1 (current)
+  OS/ABI:                            UNIX - System V
+  ABI Version:                       0
+  Type:                              DYN (Shared object file)
+  Machine:                           Advanced Micro Devices X86-64
+  Version:                           0x1
+  Entry point address:               0x0
+  Start of program headers:          64 (bytes into file)
+  Start of section headers:          727688 (bytes into file)
+  Flags:                             0x0
+  Size of this header:               64 (bytes)
+  Size of program headers:           56 (bytes)
+  Number of program headers:         11
+  Size of section headers:           64 (bytes)
+  Number of section headers:         30
+  Section header string table index: 29
+
+Section Headers:
+  [Nr] Name              Type            Address          Off    Size   ES Flg Lk Inf Al
+  [ 0]                   NULL            0000000000000000 000000 000000 00      0   0  0
+  [ 1] .note.gnu.property NOTE            00000000000002a8 0002a8 000040 00   A  0   0  8
+  [ 2] .note.gnu.build-id NOTE            00000000000002e8 0002e8 000024 00   A  0   0  4
+  [ 3] .note.package     NOTE            000000000000030c 00030c 00006c 00   A  0   0  4
+  [ 4] .gnu.hash         GNU_HASH        0000000000000378 000378 000580 00   A  5   0  8
+  [ 5] .dynsym           DYNSYM          00000000000008f8 0008f8 0014e8 18   A  6   1  8
+  [ 6] .dynstr           STRTAB          0000000000001de0 001de0 00135e 00   A  0   0  1
+  [ 7] .gnu.version      VERSYM          000000000000313e 00313e 0001be 02   A  5   0  2
+  [ 8] .gnu.version_r    VERNEED         0000000000003300 003300 000080 00   A  6   1  8
+  [ 9] .rela.dyn         RELA            0000000000003380 003380 0000d8 18   A  5   0  8
+  [10] .rela.plt         RELA            0000000000003458 003458 000a68 18  AI  5  24  8
+  [11] .relr.dyn         RELR            0000000000003ec0 003ec0 000018 08   A  0   0  8
+  [12] .init             PROGBITS        0000000000004000 004000 00001b 00  AX  0   0  4
+  [13] .plt              PROGBITS        0000000000004020 004020 000700 10  AX  0   0 16
+  [14] .plt.sec          PROGBITS        0000000000004720 004720 0006f0 10  AX  0   0 16
+  [15] .text             PROGBITS        0000000000004e40 004e40 09aff2 00  AX  0   0 64
+  [16] .fini             PROGBITS        000000000009fe34 09fe34 00000d 00  AX  0   0  4
+  [17] .rodata           PROGBITS        00000000000a0000 0a0000 005a18 00   A  0   0 32
+  [18] .eh_frame_hdr     PROGBITS        00000000000a5a18 0a5a18 00109c 00   A  0   0  4
+  [19] .eh_frame         PROGBITS        00000000000a6ab8 0a6ab8 007f00 00   A  0   0  8
+  [20] .init_array       INIT_ARRAY      00000000000af790 0af790 000008 08  WA  0   0  8
+  [21] .fini_array       FINI_ARRAY      00000000000af798 0af798 000008 08  WA  0   0  8
+  [22] .data.rel.ro      PROGBITS        00000000000af7a0 0af7a0 000258 00  WA  0   0 32
+  [23] .dynamic          DYNAMIC         00000000000af9f8 0af9f8 000220 10  WA  6   0  8
+  [24] .got              PROGBITS        00000000000afc18 0afc18 0003d8 08  WA  0   0  8
+  [25] .bss              NOBITS          00000000000b0000 0afff0 000030 00  WA  0   0  8
+  [26] .gnu.build.attributes NOTE            00000000000b2030 0afff0 000024 00      0   0  4
+  [27] .gnu_debuglink    PROGBITS        0000000000000000 0b0014 000030 00      0   0  4
+  [28] .gnu_debugdata    PROGBITS        0000000000000000 0b0044 001904 00      0   0  1
+  [29] .shstrtab         STRTAB          0000000000000000 0b1948 00013a 00      0   0  1
+Key to Flags:
+  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
+  L (link order), O (extra OS processing required), G (group), T (TLS),
+  C (compressed), x (unknown), o (OS specific), E (exclude),
+  D (mbind), l (large), p (processor specific)
+
+Dynamic section at offset 0xaf9f8 contains 29 entries:
+  Tag        Type                         Name/Value
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
+ 0x000000000000000e (SONAME)             Library soname: [libzstd.so.1]
+ 0x000000000000000c (INIT)               0x4000
+ 0x000000000000000d (FINI)               0x9fe34
+ 0x0000000000000019 (INIT_ARRAY)         0xaf790
+ 0x000000000000001b (INIT_ARRAYSZ)       8 (bytes)
+ 0x000000000000001a (FINI_ARRAY)         0xaf798
+ 0x000000000000001c (FINI_ARRAYSZ)       8 (bytes)
+ 0x000000006ffffef5 (GNU_HASH)           0x378
+ 0x0000000000000005 (STRTAB)             0x1de0
+ 0x0000000000000006 (SYMTAB)             0x8f8
+ 0x000000000000000a (STRSZ)              4958 (bytes)
+ 0x000000000000000b (SYMENT)             24 (bytes)
+ 0x0000000000000003 (PLTGOT)             0xafc18
+ 0x0000000000000002 (PLTRELSZ)           2664 (bytes)
+ 0x0000000000000014 (PLTREL)             RELA
+ 0x0000000000000017 (JMPREL)             0x3458
+ 0x0000000000000007 (RELA)               0x3380
+ 0x0000000000000008 (RELASZ)             216 (bytes)
+ 0x0000000000000009 (RELAENT)            24 (bytes)
+ 0x0000000000000018 (BIND_NOW)           
+ 0x000000006ffffffb (FLAGS_1)            Flags: NOW
+ 0x000000006ffffffe (VERNEED)            0x3300
+ 0x000000006fffffff (VERNEEDNUM)         1
+ 0x000000006ffffff0 (VERSYM)             0x313e
+ 0x0000000000000024 (RELR)               0x3ec0
+ 0x0000000000000023 (RELRSZ)             24 (bytes)
+ 0x0000000000000025 (RELRENT)            8 (bytes)
+ 0x0000000000000000 (NULL)               0x0
+
+Symbol table '.dynsym' contains 223 entries:
+   Num:    Value          Size Type    Bind   Vis      Ndx Name
+     0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND 
+     1: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND free@GLIBC_2.2.5 (2)
+     2: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND _ITM_deregisterTMCloneTable
+     3: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND ZSTD_trace_decompress_end
+     4: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pthread_cond_broadcast@GLIBC_2.3.2 (3)
+     5: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND qsort@GLIBC_2.2.5 (2)
+     6: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pthread_cond_wait@GLIBC_2.3.2 (3)
+     7: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND clock@GLIBC_2.2.5 (2)
+     8: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND ZSTD_trace_compress_begin
+     9: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __stack_chk_fail@GLIBC_2.4 (4)
+    10: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pthread_mutex_destroy@GLIBC_2.2.5 (2)
+    11: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __assert_fail@GLIBC_2.2.5 (2)
+    12: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND memset@GLIBC_2.2.5 (2)
+    13: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND fputc@GLIBC_2.2.5 (2)
+    14: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND ZSTD_trace_compress_end
+    15: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND memcmp@GLIBC_2.2.5 (2)
+    16: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pthread_cond_signal@GLIBC_2.3.2 (3)
+    17: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND calloc@GLIBC_2.2.5 (2)
+    18: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __memcpy_chk@GLIBC_2.3.4 (5)
+    19: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND __gmon_start__
+    20: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND memcpy@GLIBC_2.14 (6)
+    21: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pthread_cond_init@GLIBC_2.3.2 (3)
+    22: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pthread_mutex_unlock@GLIBC_2.2.5 (2)
+    23: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND malloc@GLIBC_2.2.5 (2)
+    24: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND fflush@GLIBC_2.2.5 (2)
+    25: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pthread_create@GLIBC_2.34 (7)
+    26: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND memmove@GLIBC_2.2.5 (2)
+    27: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pthread_cond_destroy@GLIBC_2.3.2 (3)
+    28: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __memset_chk@GLIBC_2.3.4 (5)
+    29: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND fwrite@GLIBC_2.2.5 (2)
+    30: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __fprintf_chk@GLIBC_2.3.4 (5)
+    31: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND _ITM_registerTMCloneTable
+    32: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pthread_join@GLIBC_2.34 (7)
+    33: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND ZSTD_trace_decompress_begin
+    34: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pthread_mutex_init@GLIBC_2.2.5 (2)
+    35: 0000000000000000     0 FUNC    WEAK   DEFAULT  UND __cxa_finalize@GLIBC_2.2.5 (2)
+    36: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pthread_mutex_lock@GLIBC_2.2.5 (2)
+    37: 0000000000000000     0 OBJECT  GLOBAL DEFAULT  UND stderr@GLIBC_2.2.5 (2)
+    38: 0000000000018c20   191 FUNC    GLOBAL DEFAULT   15 ZSTD_estimateCStreamSize_usingCParams
+    39: 0000000000060aa0    92 FUNC    GLOBAL DEFAULT   15 ZSTD_initDStream_usingDDict
+    40: 000000000001d710   490 FUNC    GLOBAL DEFAULT   15 ZSTD_compress
+    41: 000000000001be20    40 FUNC    GLOBAL DEFAULT   15 ZSTD_getBlockSize
+    42: 0000000000060280    17 FUNC    GLOBAL DEFAULT   15 ZSTD_DCtx_loadDictionary_byReference
+    43: 000000000001e490    19 FUNC    GLOBAL DEFAULT   15 ZSTD_getDictID_fromCDict
+    44: 000000000005ff30   226 FUNC    GLOBAL DEFAULT   15 ZSTD_createDStream
+    45: 0000000000023ad0   112 FUNC    GLOBAL DEFAULT   15 ZSTD_compress_usingCDict_advanced
+    46: 000000000001e4c0     9 FUNC    GLOBAL DEFAULT   15 ZSTD_createCStream_advanced
+    47: 000000000002f120   128 FUNC    GLOBAL DEFAULT   15 ZSTD_flushStream
+    48: 0000000000024330    10 FUNC    GLOBAL DEFAULT   15 ZSTD_defaultCLevel
+    49: 000000000001ca70     9 FUNC    GLOBAL DEFAULT   15 ZSTD_compressEnd
+    50: 0000000000022da0   128 FUNC    GLOBAL DEFAULT   15 ZSTD_compressStream
+    51: 000000000001e510    10 FUNC    GLOBAL DEFAULT   15 ZSTD_CStreamInSize
+    52: 0000000000074030    90 FUNC    GLOBAL DEFAULT   15 ZDICT_addEntropyTablesFromBuffer
+    53: 0000000000019f20   784 FUNC    GLOBAL DEFAULT   15 ZSTD_copyCCtx
+    54: 000000000005df00    43 FUNC    GLOBAL DEFAULT   15 ZSTD_createDDict_byReference
+    55: 000000000001dfb0   215 FUNC    GLOBAL DEFAULT   15 ZSTD_createCDict_advanced
+    56: 0000000000017610   617 FUNC    GLOBAL DEFAULT   15 ZSTD_initStaticCCtx
+    57: 000000000001c7c0    15 FUNC    GLOBAL DEFAULT   15 ZSTD_compressBegin
+    58: 00000000000178c0    80 FUNC    GLOBAL DEFAULT   15 ZSTD_CCtxParams_init
+    59: 000000000005e260    59 FUNC    GLOBAL DEFAULT   15 ZSTD_sizeof_DCtx
+    60: 000000000001cf80     9 FUNC    GLOBAL DEFAULT   15 ZSTD_sizeof_CStream
+    61: 0000000000024560   153 FUNC    GLOBAL DEFAULT   15 ZSTD_getParams
+    62: 000000000005de20   175 FUNC    GLOBAL DEFAULT   15 ZSTD_createDDict_advanced
+    63: 0000000000070d90   745 FUNC    GLOBAL DEFAULT   15 ZDICT_finalizeDictionary
+    64: 0000000000062fc0   307 FUNC    GLOBAL DEFAULT   15 ZSTD_decompress
+    65: 0000000000071bb0  9343 FUNC    GLOBAL DEFAULT   15 ZDICT_trainFromBuffer_legacy
+    66: 0000000000023670   541 FUNC    GLOBAL DEFAULT   15 ZSTD_adjustCParams
+    67: 0000000000060b00    55 FUNC    GLOBAL DEFAULT   15 ZSTD_resetDStream
+    68: 000000000005f220   150 FUNC    GLOBAL DEFAULT   15 ZSTD_findDecompressedSize
+    69: 000000000005f2c0   150 FUNC    GLOBAL DEFAULT   15 ZSTD_decompressBound
+    70: 000000000001d540    43 FUNC    GLOBAL DEFAULT   15 ZSTD_createCCtx
+    71: 0000000000017880    63 FUNC    GLOBAL DEFAULT   15 ZSTD_freeCCtxParams
+    72: 000000000005f360   306 FUNC    GLOBAL DEFAULT   15 ZSTD_decompressionMargin
+    73: 00000000000184f0   153 FUNC    GLOBAL DEFAULT   15 ZSTD_toFlushNow
+    74: 000000000001b0e0   108 FUNC    GLOBAL DEFAULT   15 ZSTD_writeSkippableFrame
+    75: 000000000006fcc0   189 FUNC    GLOBAL DEFAULT   15 ZDICT_getDictHeaderSize
+    76: 000000000006e6b0  2502 FUNC    GLOBAL DEFAULT   15 ZDICT_optimizeTrainFromBuffer_cover
+    77: 000000000005e2a0    10 FUNC    GLOBAL DEFAULT   15 ZSTD_estimateDCtxSize
+    78: 0000000000022e20   138 FUNC    GLOBAL DEFAULT   15 ZSTD_compressStream2_simpleArgs
+    79: 0000000000060b40     9 FUNC    GLOBAL DEFAULT   15 ZSTD_sizeof_DStream
+    80: 000000000005df30    24 FUNC    GLOBAL DEFAULT   15 ZSTD_estimateDDictSize
+    81: 0000000000018ce0   156 FUNC    GLOBAL DEFAULT   15 ZSTD_estimateCStreamSize
+    82: 000000000001f240   126 FUNC    GLOBAL DEFAULT   15 ZSTD_CCtx_setFParams
+    83: 000000000002f1a0   184 FUNC    GLOBAL DEFAULT   15 ZSTD_endStream
+    84: 000000000006fca0    28 FUNC    GLOBAL DEFAULT   15 ZDICT_getDictID
+    85: 000000000005f4f0    12 FUNC    GLOBAL DEFAULT   15 ZSTD_nextSrcSizeToDecompress
+    86: 0000000000060190    10 FUNC    GLOBAL DEFAULT   15 ZSTD_DStreamOutSize
+    87: 00000000000086f0    17 FUNC    GLOBAL DEFAULT   15 ZSTD_freeThreadPool
+    88: 000000000001f2c0   113 FUNC    GLOBAL DEFAULT   15 ZSTD_initCStream_usingDict
+    89: 0000000000024310    10 FUNC    GLOBAL DEFAULT   15 ZSTD_maxCLevel
+    90: 000000000001d110   391 FUNC    GLOBAL DEFAULT   15 ZSTD_freeCCtx
+    91: 0000000000017b80    69 FUNC    GLOBAL DEFAULT   15 ZSTD_createCCtxParams
+    92: 000000000005e390   316 FUNC    GLOBAL DEFAULT   15 ZSTD_createDCtx_advanced
+    93: 000000000001d620   221 FUNC    GLOBAL DEFAULT   15 ZSTD_CCtx_refPrefix_advanced
+    94: 0000000000071080  1222 FUNC    GLOBAL DEFAULT   15 ZDICT_trainFromBuffer_cover
+    95: 00000000000601a0   209 FUNC    GLOBAL DEFAULT   15 ZSTD_DCtx_loadDictionary_advanced
+    96: 0000000000017e90    13 FUNC    GLOBAL DEFAULT   15 ZSTD_CCtx_getParameter
+    97: 000000000001e890  2266 FUNC    GLOBAL DEFAULT   15 ZSTD_CCtxParams_setParameter
+    98: 000000000001e520    27 FUNC    GLOBAL DEFAULT   15 ZSTD_CStreamOutSize
+    99: 000000000005fbc0   205 FUNC    GLOBAL DEFAULT   15 ZSTD_decompressBegin
+   100: 0000000000018af0   291 FUNC    GLOBAL DEFAULT   15 ZSTD_estimateCStreamSize_usingCCtxParams
+   101: 0000000000008950    12 FUNC    GLOBAL DEFAULT   15 ZSTD_versionString
+   102: 000000000005f0a0   257 FUNC    GLOBAL DEFAULT   15 ZSTD_readSkippableFrame
+   103: 00000000000086c0    45 FUNC    GLOBAL DEFAULT   15 ZSTD_createThreadPool
+   104: 000000000001cbe0    25 FUNC    GLOBAL DEFAULT   15 ZSTD_compressCCtx
+   105: 000000000005e800    45 FUNC    GLOBAL DEFAULT   15 ZSTD_isFrame
+   106: 000000000001be50    88 FUNC    GLOBAL DEFAULT   15 ZSTD_compressBlock
+   107: 0000000000018a00   238 FUNC    GLOBAL DEFAULT   15 ZSTD_estimateCCtxSize
+   108: 0000000000071550  1226 FUNC    GLOBAL DEFAULT   15 ZDICT_trainFromBuffer_fastCover
+   109: 0000000000017fa0    31 FUNC    GLOBAL DEFAULT   15 ZSTD_CCtx_refThreadPool
+   110: 000000000001d380    17 FUNC    GLOBAL DEFAULT   15 ZSTD_CCtx_loadDictionary_byReference
+   111: 0000000000018590    25 FUNC    GLOBAL DEFAULT   15 ZSTD_sequenceBound
+   112: 000000000001d570   170 FUNC    GLOBAL DEFAULT   15 ZSTD_CCtx_refCDict
+   113: 000000000005e7f0    14 FUNC    GLOBAL DEFAULT   15 ZSTD_copyDCtx
+   114: 00000000000605c0    93 FUNC    GLOBAL DEFAULT   15 ZSTD_dParam_getBounds
+   115: 0000000000023c40  1729 FUNC    GLOBAL DEFAULT   15 ZSTD_compressSequences
+   116: 0000000000018880   182 FUNC    GLOBAL DEFAULT   15 ZSTD_estimateCCtxSize_usingCCtxParams
+   117: 000000000005e2b0   211 FUNC    GLOBAL DEFAULT   15 ZSTD_initStaticDCtx
+   118: 000000000001e500     9 FUNC    GLOBAL DEFAULT   15 ZSTD_freeCStream
+   119: 000000000001f3c0    96 FUNC    GLOBAL DEFAULT   15 ZSTD_initCStream
+   120: 00000000000602b0    41 FUNC    GLOBAL DEFAULT   15 ZSTD_DCtx_refPrefix_advanced
+   121: 0000000000008960    14 FUNC    GLOBAL DEFAULT   15 ZSTD_isError
+   122: 000000000005e830    29 FUNC    GLOBAL DEFAULT   15 ZSTD_isSkippableFrame
+   123: 0000000000008970    24 FUNC    GLOBAL DEFAULT   15 ZSTD_getErrorName
+   124: 0000000000024320    10 FUNC    GLOBAL DEFAULT   15 ZSTD_minCLevel
+   125: 00000000000234d0   185 FUNC    GLOBAL DEFAULT   15 ZSTD_compress_advanced
+   126: 00000000000602e0    14 FUNC    GLOBAL DEFAULT   15 ZSTD_DCtx_refPrefix
+   127: 000000000005dd10   153 FUNC    GLOBAL DEFAULT   15 ZSTD_initStaticDDict
+   128: 000000000005fec0    98 FUNC    GLOBAL DEFAULT   15 ZSTD_getDictID_fromFrame
+   129: 0000000000060bb0   110 FUNC    GLOBAL DEFAULT   15 ZSTD_estimateDStreamSize_fromFrame
+   130: 000000000005ddb0    98 FUNC    GLOBAL DEFAULT   15 ZSTD_freeDDict
+   131: 0000000000017f70    35 FUNC    GLOBAL DEFAULT   15 ZSTD_CCtx_setPledgedSrcSize
+   132: 000000000005e850    91 FUNC    GLOBAL DEFAULT   15 ZSTD_frameHeaderSize
+   133: 000000000005e4d0   226 FUNC    GLOBAL DEFAULT   15 ZSTD_createDCtx
+   134: 000000000001ca80   352 FUNC    GLOBAL DEFAULT   15 ZSTD_compress_usingDict
+   135: 000000000001cc00    87 FUNC    GLOBAL DEFAULT   15 ZSTD_estimateCDictSize_advanced
+   136: 0000000000060b70    62 FUNC    GLOBAL DEFAULT   15 ZSTD_estimateDStreamSize
+   137: 00000000000602a0    14 FUNC    GLOBAL DEFAULT   15 ZSTD_DCtx_loadDictionary
+   138: 000000000001e150   186 FUNC    GLOBAL DEFAULT   15 ZSTD_createCDict_byReference
+   139: 0000000000062ee0    24 FUNC    GLOBAL DEFAULT   15 ZSTD_decompress_usingDict
+   140: 000000000005f530  1464 FUNC    GLOBAL DEFAULT   15 ZSTD_decompressContinue
+   141: 000000000001d700    14 FUNC    GLOBAL DEFAULT   15 ZSTD_CCtx_refPrefix
+   142: 0000000000017ea0   204 FUNC    GLOBAL DEFAULT   15 ZSTD_CCtx_setParametersUsingCCtxParams
+   143: 000000000005fd70   291 FUNC    GLOBAL DEFAULT   15 ZSTD_decompressBegin_usingDDict
+   144: 0000000000060750   480 FUNC    GLOBAL DEFAULT   15 ZSTD_DCtx_setParameter
+   145: 000000000005efb0   226 FUNC    GLOBAL DEFAULT   15 ZSTD_getFrameContentSize
+   146: 000000000006fd80   112 FUNC    GLOBAL DEFAULT   15 ZDICT_trainFromBuffer
+   147: 0000000000023590   211 FUNC    GLOBAL DEFAULT   15 ZSTD_initCStream_advanced
+   148: 0000000000060930    16 FUNC    GLOBAL DEFAULT   15 ZSTD_DCtx_setFormat
+   149: 000000000001f340   120 FUNC    GLOBAL DEFAULT   15 ZSTD_initCStream_srcSize
+   150: 0000000000018360   394 FUNC    GLOBAL DEFAULT   15 ZSTD_getFrameProgression
+   151: 000000000001cc60   118 FUNC    GLOBAL DEFAULT   15 ZSTD_estimateCDictSize
+   152: 000000000005ded0    40 FUNC    GLOBAL DEFAULT   15 ZSTD_createDDict
+   153: 0000000000060620   113 FUNC    GLOBAL DEFAULT   15 ZSTD_DCtx_setMaxWindowSize
+   154: 000000000005e8b0   741 FUNC    GLOBAL DEFAULT   15 ZSTD_getFrameHeader_advanced
+   155: 0000000000060940   161 FUNC    GLOBAL DEFAULT   15 ZSTD_DCtx_reset
+   156: 000000000006fc70    14 FUNC    GLOBAL DEFAULT   15 ZDICT_isError
+   157: 000000000005f500    33 FUNC    GLOBAL DEFAULT   15 ZSTD_nextInputType
+   158: 000000000006e620   140 FUNC    GLOBAL DEFAULT   15 ZSTD_decompressBlock
+   159: 0000000000060180    10 FUNC    GLOBAL DEFAULT   15 ZSTD_DStreamInSize
+   160: 000000000001be00    26 FUNC    GLOBAL DEFAULT   15 ZSTD_compressContinue
+   161: 000000000005e5c0   547 FUNC    GLOBAL DEFAULT   15 ZSTD_freeDCtx
+   162: 0000000000023a60   104 FUNC    GLOBAL DEFAULT   15 ZSTD_compress_usingCDict
+   163: 000000000005ecd0    11 FUNC    GLOBAL DEFAULT   15 ZSTD_getFrameHeader
+   164: 000000000001e650   574 FUNC    GLOBAL DEFAULT   15 ZSTD_cParam_getBounds
+   165: 0000000000017be0   682 FUNC    GLOBAL DEFAULT   15 ZSTD_CCtxParams_getParameter
+   166: 0000000000062f00    25 FUNC    GLOBAL DEFAULT   15 ZSTD_decompress_usingDDict
+   167: 00000000000089b0     9 FUNC    GLOBAL DEFAULT   15 ZSTD_getErrorString
+   168: 0000000000022f80   174 FUNC    GLOBAL DEFAULT   15 ZSTD_generateSequences
+   169: 0000000000060170     9 FUNC    GLOBAL DEFAULT   15 ZSTD_freeDStream
+   170: 0000000000060a50    70 FUNC    GLOBAL DEFAULT   15 ZSTD_initDStream
+   171: 000000000001e210   636 FUNC    GLOBAL DEFAULT   15 ZSTD_initStaticCDict
+   172: 000000000001cf90   251 FUNC    GLOBAL DEFAULT   15 ZSTD_freeCDict
+   173: 0000000000024500    81 FUNC    GLOBAL DEFAULT   15 ZSTD_getCParams
+   174: 0000000000063100  4905 FUNC    GLOBAL DEFAULT   15 ZSTD_decompressStream
+   175: 000000000001e4b0     9 FUNC    GLOBAL DEFAULT   15 ZSTD_initStaticCStream
+   176: 0000000000064430   134 FUNC    GLOBAL DEFAULT   15 ZSTD_decompressStream_simpleArgs
+   177: 000000000005df50    46 FUNC    GLOBAL DEFAULT   15 ZSTD_sizeof_DDict
+   178: 000000000005fc90   222 FUNC    GLOBAL DEFAULT   15 ZSTD_decompressBegin_usingDict
+   179: 000000000001e610    60 FUNC    GLOBAL DEFAULT   15 ZSTD_initCStream_usingCDict
+   180: 0000000000024600    93 FUNC    GLOBAL DEFAULT   15 ZSTD_registerSequenceProducer
+   181: 0000000000023030   281 FUNC    GLOBAL DEFAULT   15 ZSTD_checkCParams
+   182: 0000000000062f20   150 FUNC    GLOBAL DEFAULT   15 ZSTD_decompressDCtx
+   183: 000000000006fc80    24 FUNC    GLOBAL DEFAULT   15 ZDICT_getErrorName
+   184: 000000000006f080  3043 FUNC    GLOBAL DEFAULT   15 ZDICT_optimizeTrainFromBuffer_fastCover
+   185: 000000000001e090   183 FUNC    GLOBAL DEFAULT   15 ZSTD_createCDict
+   186: 0000000000023150    96 FUNC    GLOBAL DEFAULT   15 ZSTD_CCtxParams_init_advanced
+   187: 00000000000602f0   711 FUNC    GLOBAL DEFAULT   15 ZSTD_DCtx_refDDict
+   188: 000000000001c7b0     9 FUNC    GLOBAL DEFAULT   15 ZSTD_compressBegin_usingDict
+   189: 000000000001cd20   599 FUNC    GLOBAL DEFAULT   15 ZSTD_sizeof_CCtx
+   190: 0000000000017bd0    14 FUNC    GLOBAL DEFAULT   15 ZSTD_CCtxParams_reset
+   191: 00000000000231b0   227 FUNC    GLOBAL DEFAULT   15 ZSTD_CCtx_setCParams
+   192: 0000000000023a40    26 FUNC    GLOBAL DEFAULT   15 ZSTD_compressBegin_usingCDict
+   193: 0000000000021220  7039 FUNC    GLOBAL DEFAULT   15 ZSTD_compressStream2
+   194: 0000000000060b50    32 FUNC    GLOBAL DEFAULT   15 ZSTD_decodingBufferSize_min
+   195: 0000000000060030   316 FUNC    GLOBAL DEFAULT   15 ZSTD_createDStream_advanced
+   196: 000000000005f4a0    69 FUNC    GLOBAL DEFAULT   15 ZSTD_insertBlock
+   197: 000000000005df80    19 FUNC    GLOBAL DEFAULT   15 ZSTD_getDictID_fromDDict
+   198: 000000000001d3b0   118 FUNC    GLOBAL DEFAULT   15 ZSTD_CCtx_reset
+   199: 000000000005f1d0    67 FUNC    GLOBAL DEFAULT   15 ZSTD_findFrameCompressedSize
+   200: 00000000000232a0   130 FUNC    GLOBAL DEFAULT   15 ZSTD_CCtx_setParams
+   201: 0000000000018940   191 FUNC    GLOBAL DEFAULT   15 ZSTD_estimateCCtxSize_usingCParams
+   202: 0000000000023a30    11 FUNC    GLOBAL DEFAULT   15 ZSTD_compressBegin_usingCDict_advanced
+   203: 0000000000022eb0   206 FUNC    GLOBAL DEFAULT   15 ZSTD_compress2
+   204: 000000000001cce0    51 FUNC    GLOBAL DEFAULT   15 ZSTD_sizeof_CDict
+   205: 000000000001d430   262 FUNC    GLOBAL DEFAULT   15 ZSTD_createCCtx_advanced
+   206: 0000000000008940    10 FUNC    GLOBAL DEFAULT   15 ZSTD_versionNumber
+   207: 00000000000606a0   168 FUNC    GLOBAL DEFAULT   15 ZSTD_DCtx_getParameter
+   208: 000000000001d3a0    14 FUNC    GLOBAL DEFAULT   15 ZSTD_CCtx_loadDictionary
+   209: 000000000001a230   126 FUNC    GLOBAL DEFAULT   15 ZSTD_mergeBlockDelimiters
+   210: 000000000001e4d0    43 FUNC    GLOBAL DEFAULT   15 ZSTD_createCStream
+   211: 0000000000060020     9 FUNC    GLOBAL DEFAULT   15 ZSTD_initStaticDStream
+   212: 000000000001d2a0   221 FUNC    GLOBAL DEFAULT   15 ZSTD_CCtx_loadDictionary_advanced
+   213: 000000000001f170   200 FUNC    GLOBAL DEFAULT   15 ZSTD_CCtx_setParameter
+   214: 000000000005fea0    28 FUNC    GLOBAL DEFAULT   15 ZSTD_getDictID_fromDict
+   215: 0000000000023330   408 FUNC    GLOBAL DEFAULT   15 ZSTD_compressBegin_advanced
+   216: 000000000001d900  1710 FUNC    GLOBAL DEFAULT   15 ZSTD_createCDict_advanced2
+   217: 00000000000609f0    93 FUNC    GLOBAL DEFAULT   15 ZSTD_initDStream_usingDict
+   218: 000000000001e590   126 FUNC    GLOBAL DEFAULT   15 ZSTD_initCStream_usingCDict_advanced
+   219: 000000000001e540    74 FUNC    GLOBAL DEFAULT   15 ZSTD_resetCStream
+   220: 00000000000175c0    75 FUNC    GLOBAL DEFAULT   15 ZSTD_compressBound
+   221: 000000000005f1b0    28 FUNC    GLOBAL DEFAULT   15 ZSTD_getDecompressedSize
+   222: 0000000000008990    18 FUNC    GLOBAL DEFAULT   15 ZSTD_getErrorCode
+
+Version symbols section '.gnu.version' contains 223 entries:
+ Addr: 0x000000000000313e  Offset: 0x0000313e  Link: 5 (.dynsym)
+  000:   0 (*local*)       2 (GLIBC_2.2.5)   1 (*global*)      1 (*global*)   
+  004:   3 (GLIBC_2.3.2)   2 (GLIBC_2.2.5)   3 (GLIBC_2.3.2)   2 (GLIBC_2.2.5)
+  008:   1 (*global*)      4 (GLIBC_2.4)     2 (GLIBC_2.2.5)   2 (GLIBC_2.2.5)
+  00c:   2 (GLIBC_2.2.5)   2 (GLIBC_2.2.5)   1 (*global*)      2 (GLIBC_2.2.5)
+  010:   3 (GLIBC_2.3.2)   2 (GLIBC_2.2.5)   5 (GLIBC_2.3.4)   1 (*global*)   
+  014:   6 (GLIBC_2.14)    3 (GLIBC_2.3.2)   2 (GLIBC_2.2.5)   2 (GLIBC_2.2.5)
+  018:   2 (GLIBC_2.2.5)   7 (GLIBC_2.34)    2 (GLIBC_2.2.5)   3 (GLIBC_2.3.2)
+  01c:   5 (GLIBC_2.3.4)   2 (GLIBC_2.2.5)   5 (GLIBC_2.3.4)   1 (*global*)   
+  020:   7 (GLIBC_2.34)    1 (*global*)      2 (GLIBC_2.2.5)   2 (GLIBC_2.2.5)
+  024:   2 (GLIBC_2.2.5)   2 (GLIBC_2.2.5)   1 (*global*)      1 (*global*)   
+  028:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  02c:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  030:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  034:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  038:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  03c:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  040:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  044:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  048:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  04c:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  050:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  054:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  058:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  05c:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  060:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  064:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  068:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  06c:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  070:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  074:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  078:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  07c:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  080:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  084:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  088:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  08c:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  090:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  094:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  098:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  09c:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  0a0:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  0a4:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  0a8:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  0ac:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  0b0:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  0b4:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  0b8:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  0bc:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  0c0:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  0c4:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  0c8:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  0cc:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  0d0:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  0d4:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  0d8:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  0dc:   1 (*global*)      1 (*global*)      1 (*global*)   
+
+Version needs section '.gnu.version_r' contains 1 entry:
+ Addr: 0x0000000000003300  Offset: 0x00003300  Link: 6 (.dynstr)
+  000000: Version: 1  File: libc.so.6  Cnt: 7
+  0x0010:   Name: GLIBC_ABI_DT_RELR  Flags: none  Version: 8
+  0x0020:   Name: GLIBC_2.34  Flags: none  Version: 7
+  0x0030:   Name: GLIBC_2.14  Flags: none  Version: 6
+  0x0040:   Name: GLIBC_2.3.4  Flags: none  Version: 5
+  0x0050:   Name: GLIBC_2.4  Flags: none  Version: 4
+  0x0060:   Name: GLIBC_2.3.2  Flags: none  Version: 3
+  0x0070:   Name: GLIBC_2.2.5  Flags: none  Version: 2

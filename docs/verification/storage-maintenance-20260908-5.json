@@ -1,0 +1,97 @@
+{
+  "artifacts": [
+    {
+      "path": "docs/verification/evidence/cleanup-checkout-evidence-20260908.py.gz",
+      "sha256": "44acf51560cf37a1e1488de13d02915084a9fd6c6031d3ff66f4c737af165e7a",
+      "size": 3180,
+      "source": "/home/holden/mckernel-work/scratch/cleanup-checkout-evidence-20260908.py",
+      "source_sha256": "cab0b3dae0ab87c25fbf0b73b4be448ae4e96bb8e5db8b2941ff8423a8abe107"
+    },
+    {
+      "path": "docs/verification/evidence/trim-scratch-storage-20260908-5.py.gz",
+      "sha256": "09ed528f3ae4a46c61ce42427d38e14728f5836a1262edc1be2f68c12cb2685a",
+      "size": 706,
+      "source": "/home/holden/mckernel-work/scratch/trim-scratch-storage-20260908-5.py",
+      "source_sha256": "8d5cd3a972baf68ed8594461147f519f3323b69bf35ab578d1397e7db8589afa"
+    },
+    {
+      "path": "docs/verification/evidence/storage-checkout-evidence-20260908-plan.json.gz",
+      "sha256": "a4a6e3f050cfad83b8b3aeff2223c59ed255275bcdac3beba00ea8ab5a414cf4",
+      "size": 1690915,
+      "source": "/home/holden/mckernel-work/scratch/storage-checkout-evidence-20260908-plan.json",
+      "source_sha256": "67d160d59653502ea7cb212b4c86c7b0e761a5839ad1e700c99d6f2c01a8182e"
+    },
+    {
+      "path": "docs/verification/evidence/storage-checkout-evidence-20260908-report.json.gz",
+      "sha256": "b448f84f22cc1cdbfd860a014c5a0747a0fd2bec2e73bd02d88fa1df0c9ef4f6",
+      "size": 1295940,
+      "source": "/home/holden/mckernel-work/scratch/storage-checkout-evidence-20260908-report.json",
+      "source_sha256": "02ff4e8c9f260a68ed57afdaae4c484a7aabc4b0bfcbed5580490b4540b4a5e2"
+    },
+    {
+      "path": "docs/verification/evidence/storage-checkout-evidence-after-trim-20260908.json.gz",
+      "sha256": "1492d6e7b9033e6dee10a6761e8fb21114373a5a0d476a015a509219bef398a9",
+      "size": 280,
+      "source": "/home/holden/mckernel-work/scratch/storage-checkout-evidence-after-trim-20260908.json",
+      "source_sha256": "1c4318fbe2df01e9badbd2a03392d3458a0b785c5b59c3c142e5e3643647b13c"
+    },
+    {
+      "path": "docs/verification/evidence/storage-scratch-trim-20260908-5.json.gz",
+      "sha256": "8764788106934f1a292ad8acf50425938934eda59bf7e93bd98dcafcf2b73bfe",
+      "size": 380,
+      "source": "/home/holden/mckernel-work/scratch/storage-scratch-trim-20260908-5.json",
+      "source_sha256": "a25215b886cd6a88a70e76afde701f6fb2c2f51ddb7401fd8ef9a6a509189abd"
+    }
+  ],
+  "checks": [
+    "All 15,240 removed copies matched their exact committed Git blob and SHA-256 at the pushed branch HEAD; no mismatched file was removed.",
+    "The allowlist covers only docs/verification/evidence inside 41 enumerated scratch checkouts and 22 duplicate archives inside the two completed mcctrl retention folders.",
+    "Visible file descriptor, working directory and memory mapping checks include container path aliases; metadata snapshots were checked again immediately before each unlink.",
+    "All 2,831 checked current files remain byte-identical after deletion and targeted scratch trim; all 71 protected directories remain present.",
+    "Both executable module attempts and all three executable guest attempts, including the latest EACCES versus ENOENT diagnostic failure, are preserved as current inputs.",
+    "The mounted sparse image retains its original 60-GiB logical size. Reclaimed host allocation is measured from its backing-file block reduction.",
+    "All six retained maintenance artifacts pass exact gzip round-trip checks."
+  ],
+  "current_root_available_bytes": 162680111104,
+  "current_scratch_available_bytes": 42809917440,
+  "evidence_checked_at_pushed_head": "34fb21cfb50072e3e92d1504945ca9e1556796d7",
+  "finished_utc": "2026-09-08T12:02:43.663412+00:00",
+  "kind": "Requested ongoing cleanup of exact committed evidence copies in scratch checkouts",
+  "limitations": [
+    "No source code, compiler object, boot image, original failed-attempt record, installed environment, personal file or other project workspace was removed.",
+    "Open-file checks cover visible processes; inaccessible descriptor counts are retained in the plan and report.",
+    "The measured backing-file reduction includes previously freed scratch blocks as well as the verified duplicate-file deletion. The advertised fstrim discard count is not treated as physically recovered space.",
+    "Other activity can change overall free space. This maintenance pass adds no kernel/application acceptance credit; the original verification goal remains active."
+  ],
+  "preserved_current_files": 2831,
+  "protected_directories": 71,
+  "reclaimed_host_allocated_bytes": 11566903296,
+  "references": [
+    {
+      "path": "docs/verification/storage-maintenance-20260908-3.json",
+      "sha256": "fdc0bf7adf6efd45b2507a19c34e0cbe58ab162447a098f639e0de14d25d87b4",
+      "size": 6388
+    },
+    {
+      "path": "docs/verification/storage-maintenance-20260908-4.json",
+      "sha256": "ee2a6f8c3477947e2a94011e7ead14b9867b5f8f7a6dd28f1fc63f44afcc0c55",
+      "size": 4919
+    },
+    {
+      "path": "docs/verification/native-mcctrl-service-checkpoint-20260908.json",
+      "sha256": "4bfe1e12b2cc015a6097bd5c7b394329abbaf0bd70f385d1d8206145c29b731d",
+      "size": 28786
+    }
+  ],
+  "removed_checkout_evidence_copies": 15218,
+  "removed_retention_archive_copies": 22,
+  "removed_scratch_allocated_bytes": 11239313408,
+  "restoration": [
+    "The compressed cleanup plan and report map every removed checkout evidence file to an exact Git blob, canonical committed path, SHA-256, mode and timestamp. Restore from that Git blob to the recorded path before replaying a historical full validation that consumes archived evidence.",
+    "The 22 removed retention copies map to unchanged canonical committed archives. Original source, compiler outputs, images, test captures and failure records remain in place.",
+    "Retain the existing archive exclusions and restoration maps from all earlier cleanup checkpoints; new test runs must use fresh attempt names."
+  ],
+  "status": "PASS",
+  "total_reclaimed_across_eight_cleanups_bytes": 79498104832,
+  "verified_retained_files": 780
+}

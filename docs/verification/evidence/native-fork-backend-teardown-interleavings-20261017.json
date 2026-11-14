@@ -1,0 +1,67 @@
+{
+  "schema": "mckernel.native-fork-backend-teardown-interleavings.v1",
+  "status": "PASS_SOURCE_BODY_INTERLEAVINGS_ONLY",
+  "author": "/root/fork_ownership",
+  "worktree": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1",
+  "production_changes": false,
+  "runtime_fork_acceptance": false,
+  "command": "taskset -c 7 timeout --signal=TERM --kill-after=5s 120s prlimit --as=2147483648 --nofile=256 --core=0 python3 -B -m unittest scripts.tests.test_native_fork_backend_teardown_interleavings_20261017",
+  "compiler_profile": "Dispatcher explicitly approved standalone pinned Rust1.92 serial --edition=2021 --test;60s compiler timeout/120s overall;CPU7/2GiBAS/core0/nofile256. Only new teardown_interleaving_ binary filter executed.",
+  "result": {
+    "exit_status": 0,
+    "python_passed": 2,
+    "new_rust_passed": 3,
+    "old_rust_filtered_out": 5,
+    "python_wall_seconds": 0.51,
+    "compiler_quiescent": true
+  },
+  "observations": [
+    "Two independent parent/child reservations: parent-specific close/abort and cancellation publication leave the unrelated child Reserved and its exact Delivered response claim unreleased. The unrelated child can then commit and publish its own positive RET successfully; both child owners remain retained.",
+    "Closing a different idle worker does not cancel the reserved worker or its Delivered response. Correct worker close requests cancellation while retaining the original claim through actual -512 publication, the child owner/root afterwards, and no guest destruction permission.",
+    "Parent close after ordinary positive RET is prepared cannot replace that completion. Its wake/status publish once, second publish is false, and the response claim releases once. The abort/positive-publication race conservatively Quarantines the retained child transaction, without inventing linkage or permission to destroy guest memory."
+  ],
+  "source_sha256": {
+    "scripts/tests/test_native_fork_backend_teardown_interleavings_20261017.py": "ab18d2a99c00d43afce3f1b8193f6bb9542afbdd6e1d5f0c34b5c6d2409dfa5a",
+    "scripts/tests/fixtures/native_fork_backend_teardown_interleavings_20261017.rs": "bef4578a6bfaca0b3249f20df1943666d7df956fdb6e3310866e9972ed9c7198",
+    "scripts/tests/test_native_fork_backend_reservation_20261017.py": "f99164ba8de4c62eaed26bacb451e22bde83c546fff68b6e8b7506560311ffcb",
+    "scripts/tests/fixtures/native_fork_backend_reservation_20261017.rs": "6a2e5e27b81d8454101cb34efb30cb1945854e3067a19b9692d99dbf5ebecd47",
+    "host-kernel/native-rust/smp_application.rs": "008102ae58ea83312b56b26ad62097dc871bc63a76286bd4d565c00205f2af5f",
+    "host-kernel/native-rust/smp_application_image.rs": "c41e7f2dc2907032d5a8b36cfa4679cad375e774c4103b9ef27f714c2c079721",
+    "host-kernel/native-rust/smp_application_syscall.rs": "8b477ef7d78b3516fa8e230f116104a2493f8ebf59631165f3781d3f0ca163d0",
+    "host-kernel/native-rust/application_syscall.rs": "03007f44c020c5d0cf797b18568ef8b329fd5cb4e81abe80bb5c542b58020c25",
+    "host-kernel/native-rust/application_rpc.rs": "9f811c86c4e996294a6cd3be6b83315dabd20a3fb375419e091f4b9dedcfad39"
+  },
+  "capture_sha256": {
+    "/tmp/native-fork-backend-teardown-20261017-iit8c8p_/run.command.json": "6fc90832b72f9bda97eb7f889a450927bbda292618a77c9326f03d09233dc3b0",
+    "/tmp/native-fork-backend-teardown-20261017-iit8c8p_/test": "e846b0eab0af6e72cbcb38d60d163da5c2040375e9a8d376fa872aa622e1342a",
+    "/tmp/native-fork-backend-teardown-20261017-iit8c8p_/run.status.json": "df4d721d233a2334088d2d2e0110346ae9e509ff46bf0b379fbcfa85c715af4d",
+    "/tmp/native-fork-backend-teardown-20261017-iit8c8p_/generated.rs": "f3d65a76ee1a60af5ad09f10906e2aef2d4992e38a4a69f00f7ff3231260747b",
+    "/tmp/native-fork-backend-teardown-20261017-iit8c8p_/run.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/tmp/native-fork-backend-teardown-20261017-iit8c8p_/version.stdout": "ecda74ca828b18debf1624cb36209a5b844fb1e1c1905ffb3d51b56cc275f96f",
+    "/tmp/native-fork-backend-teardown-20261017-iit8c8p_/version.command.json": "f3a86d4ebf35ac329fcb448d439b046b97af9ab2e8bb4ac1b5f616f531a6ef16",
+    "/tmp/native-fork-backend-teardown-20261017-iit8c8p_/version.status.json": "df4d721d233a2334088d2d2e0110346ae9e509ff46bf0b379fbcfa85c715af4d",
+    "/tmp/native-fork-backend-teardown-20261017-iit8c8p_/version.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/tmp/native-fork-backend-teardown-20261017-iit8c8p_/compile.status.json": "df4d721d233a2334088d2d2e0110346ae9e509ff46bf0b379fbcfa85c715af4d",
+    "/tmp/native-fork-backend-teardown-20261017-iit8c8p_/compile.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/tmp/native-fork-backend-teardown-20261017-iit8c8p_/compile.command.json": "7b4dc2a13b2dcc1042cd559ef637463cbe30b7c161f211262ec5654c4a87530d",
+    "/tmp/native-fork-backend-teardown-20261017-iit8c8p_/run.stdout": "5c0db0aa82357c218664213cb920f52f440f677239a4c283bd867d86b277dd43",
+    "/tmp/native-fork-backend-teardown-20261017-iit8c8p_/compile.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "capture_text": {
+    "run.command.json": "[\"/tmp/native-fork-backend-teardown-20261017-iit8c8p_/test\", \"--test-threads=1\", \"teardown_interleaving_\"]\n",
+    "run.status.json": "{\"returncode\": 0}\n",
+    "run.stderr": "",
+    "version.stdout": "rustc 1.92.0 (ded5c06cf 2025-12-08)\n",
+    "version.command.json": "[\"/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc\", \"--version\"]\n",
+    "version.status.json": "{\"returncode\": 0}\n",
+    "version.stderr": "",
+    "compile.status.json": "{\"returncode\": 0}\n",
+    "compile.stderr": "",
+    "compile.command.json": "[\"/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc\", \"--edition=2021\", \"--test\", \"/tmp/native-fork-backend-teardown-20261017-iit8c8p_/generated.rs\", \"-o\", \"/tmp/native-fork-backend-teardown-20261017-iit8c8p_/test\"]\n",
+    "run.stdout": "\nrunning 3 tests\ntest teardown_interleaving_close_after_ret_preparation_publishes_once_and_retains_root ... ok\ntest teardown_interleaving_two_parent_cancellation_is_independent ... ok\ntest teardown_interleaving_wrong_worker_close_preserves_reserved_delivery ... ok\n\ntest result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 5 filtered out; finished in 0.00s\n\n",
+    "compile.stdout": ""
+  },
+  "scope": "Reuse the accepted generator and append new tests without changing any frozen fixture or production bytes. Actual full RPC/Request/Response/Mailbox and production backend reservation/cancellation/publication/state bodies execute. Linux owned PID/MM identity, response backing and Vec allocation remain explicit adapters. Parent-close test invokes actual Mailbox::close plus actual abort_parent_forks, not full kernel Remote::close.",
+  "failure_history": "No new compile/test failure. Existing backend5Rust and ownership/adoption16Rust baseline reused, not rerun. Prior inherited-fixture E0425 and its bounded fac6fceed correction remain preserved separately. Original process.fork-exit runtime nr56=-95 and rejected Mirror-only candidate remain unchanged.",
+  "next_step": "Available for dispatcher checkpoint/integration; no additional compiler run required. Inherited-MM CREATE_PPD remains disabled pending independently reviewed VMA write/revoke/final-destruction integration."
+}

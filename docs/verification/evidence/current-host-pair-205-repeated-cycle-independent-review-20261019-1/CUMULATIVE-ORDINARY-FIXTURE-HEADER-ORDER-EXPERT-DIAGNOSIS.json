@@ -1,0 +1,76 @@
+{
+  "schema": "mckernel.independent-selected205-two-cycle-cumulative-ordinary-expert-diagnosis.v1",
+  "status": "FAIL",
+  "decision": "FAIL_FIXTURE_GNU_FEATURE_HEADER_ORDER_PRODUCTION_PID_CORRECTION_COMPILES",
+  "implementation_ownership": false,
+  "first_failed_candidate": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-independent-review-20261019-1/ACTUAL-FIRST-ORDINARY-FAILURE-REVIEW.json",
+    "sha256": "56294a3a33a63d835d8495d23326106d113c69c541498faaa9eb0fe65a62bf1c",
+    "bytes": 5226
+  },
+  "bounded_correction_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-independent-review-20261019-1/PID-RESULT-CORRECTION-AND-REMAINING-ORDINARY-REVIEW.json",
+    "sha256": "fd0ac5abc589f6019ef487ce189162504c8c96c89c78c78268494e3146e5ffdd",
+    "bytes": 5889
+  },
+  "actual_corrected_outer": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/pid-result-correction-1/ordinary.status.json",
+    "sha256": "4c494c860997c2e534ed7b090842ad448c4e53a741453ad9ed29494cd51fc41f",
+    "bytes": 641
+  },
+  "outer_stderr": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/pid-result-correction-1/ordinary.stderr",
+    "sha256": "628a840a374fc41a8a4fcff38a4c757488eac56f5b0b6073520a12397021f0a4",
+    "bytes": 837
+  },
+  "compiler_statuses": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/pid-result-correction-1/ordinary-check-1/compile-collector.status.json",
+      "sha256": "d13d264257b51677112941dd5bbcda0e2464bff0c9cf29504247c4986527a89c",
+      "bytes": 641
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/pid-result-correction-1/ordinary-check-1/compile-cycle-body.status.json",
+      "sha256": "bb1ac90e91409cd8967aacf878bfdcc3fdfa1e06a0fa4deffa50b26ef722653d",
+      "bytes": 624
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/pid-result-correction-1/ordinary-check-1/compile-resource-body.status.json",
+      "sha256": "0b789debe49b26f476c9e24bc45c8ae06c4072889b98a744a7badc80fd28d710",
+      "bytes": 706
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/pid-result-correction-1/ordinary-check-1/compile-resource.status.json",
+      "sha256": "318dd1e40aa4ddfcef0ea6a8aeb57a15f08e0e2edadcd4660f802828e6600e83",
+      "bytes": 717
+    }
+  ],
+  "failed_fixture_compiler_stderr": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/pid-result-correction-1/ordinary-check-1/compile-cycle-body.stderr",
+    "sha256": "6a139aa6d3d59573ed55ae42c51f4841426b81d58d58cfa11359ff93b88ced0c",
+    "bytes": 1507
+  },
+  "actual_compiler_successes": [
+    "Original exact boot compiler0 retained.",
+    "PID-corrected production collector compiler0.",
+    "Unchanged CPU2 resource helper compiler0.",
+    "Resource-body fixture compiler0."
+  ],
+  "failed_boundary": "Cycle-body fixture starts assert.h/stdlib.h before including the production base that defines _GNU_SOURCE. glibc feature selection therefore occurs too early; actual pipe2/syncfs prototypes are hidden. The corrected production collector compiles with those genuine prototypes.",
+  "unrun": [
+    "actual supervisor PID selfchild",
+    "CPU2 helper effect body",
+    "actual complete-cycle sequence body",
+    "generation specialization/parser/model checks"
+  ],
+  "expert_prescription": [
+    "Only reorder fixture includes: renamed actual production collector before any system header, then assert.h/stdlib.h. No injected prototypes, warning suppression, compiler flag weakening or production-source change.",
+    "Reuse exact four successful compiled artifacts and status/stream proofs; one fresh remaining-only fixture compile followed by existing PID/resource/cycle/parser checks can be considered after frozen source and caller pins plus root actual allocation/fresh admission.",
+    "Any further failure remains this cumulative family; do not reset by renaming paths or replay successful compilers."
+  ],
+  "runtime_or_stage_authority": false,
+  "actual_body_checks_accepted": false,
+  "native_cycles_accepted": 0,
+  "unknown_join": false,
+  "source_authority_unweakened": true
+}

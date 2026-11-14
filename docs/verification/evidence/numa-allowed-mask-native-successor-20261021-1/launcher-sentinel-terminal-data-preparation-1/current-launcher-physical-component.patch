@@ -1,0 +1,42 @@
+--- current_numa_image_physical.py
++++ current_numa_launcher_physical.UNBOUND.py
+@@ -16,7 +16,7 @@
+ BINDING=Path(__file__).resolve().parent/'CURRENT-PHYSICAL-MAPPING-BINDING.json'
+ CANON=lambda x:json.dumps(x,sort_keys=True,separators=(',',':'),allow_nan=False).encode()
+ # Late literal DATA only; frozen functions/CLI remain unchanged at binding.
+-EXPECTED_INSTANCE = {'mapping': {'bytes': 11827, 'path': '/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/runtime-actual-binding-data-preparation-2/CURRENT-PHYSICAL-MAPPING.ACTUAL.json', 'sha256': '8c9d4018424c66fc528c9a558899d7cfcaab380f24f0431498118dbbb23bcb21'}, 'physical_report': {'bytes': 27306, 'path': '/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/census-corrected-cleanup-data-preparation-1/ROOT-RECORDED-CANONICAL-CURRENT-IMAGE-PHYSICAL-RELEASE-1.json', 'sha256': '96108bb1cbde766986dbfb79aae15e1a6647029a8f42add93d9a04a6eab538a2'}, 'tool_terminals': {'cleanup': ('exec-407da5d2-3aee-4bdb-8550-6574f6ad35ca', '82175', 5233), 'postjoin': ('exec-054b16b4-852c-4286-a134-0fa0f3cc2865', '43973', 1748)}, 'execution_review_sha256': '2aa1a4c4cb487361568f95248ce3585b294382b00e67be9c3a3255613051ed0d', 'cleanup_engine_sha256': '5f6716a8914564cfae06693931033fa2efacae49aaf2e21f18600463b376d21d', 'selected_files': 92, 'objects': 88, 'roles': 97}
++EXPECTED_INSTANCE = None  # Future genuine launcher instance DATA only.
+ 
+ def capture_join(row,status,expected_pair):
+     """Actual closed inner/outer births and full stream identities, unchanged."""
+@@ -43,9 +43,10 @@
+     need(type(mapref) is dict and set(mapref)=={'path','sha256','bytes'},'genuine current NUMA physical mapping remains pending')
+     need(type(EXPECTED_INSTANCE) is dict and mapref==EXPECTED_INSTANCE['mapping'] and physical_ref==EXPECTED_INSTANCE['physical_report'],'genuine current instance DATA remains pending')
+     mapping=checked(mapref);authorities=mapping['genuine_current_authorities']
+-    need(mapping['schema']=='mckernel.current-numa-image.known-kind-physical-consumer-mapping.v1' and mapping['status']=='PASS_INDEPENDENT_CURRENT_NUMA_PHYSICAL_REPORT_MAPPING' and mapping['implementation_ownership'] is False and mapping['reviewer'],'actual independent current mapping')
++    need(mapping['schema']=='mckernel.current-numa-launcher.known-kind-physical-consumer-mapping.v1' and mapping['status']=='PASS_INDEPENDENT_CURRENT_NUMA_LAUNCHER_PHYSICAL_REPORT_MAPPING' and mapping['implementation_ownership'] is False and mapping['reviewer'],'actual independent current mapping')
+     need(physical_ref==authorities['original_physical'] and t==checked(physical_ref),'unchanged whole exact current physical report')
+-    need(t['schema']=='mckernel.independent-current-numa-image-cleanup-physical-release-review.v1' and t['status']=='PASS_ACTUAL_CURRENT_NUMA_IMAGE_CLEANUP_POSTJOIN_AND_POSITIVE_PHYSICAL_RETIREMENT' and t['decision']=='PASS_POSITIVE_CURRENT_NUMA_IMAGE_OWNER_AND_RECORD_RETIREMENT','explicit current PASS2 kind')
++    need(t['schema']=='mckernel.independent-current-numa-launcher-cleanup-physical-release-review.v1' and t['status']=='PASS_ACTUAL_CURRENT_NUMA_LAUNCHER_CLEANUP_POSTJOIN_AND_POSITIVE_PHYSICAL_RETIREMENT' and t['decision']=='PASS_POSITIVE_CURRENT_NUMA_LAUNCHER_OWNER_AND_RECORD_RETIREMENT','explicit current PASS2 kind')
++    need(t['operation_scope']=='launcher-only' and t['launcher_only'] is True,'explicit launcher-only physical scope')
+     for k in ('physical_release','retired','record_release_complete','terminal','container_absent','common_shared_records_absent','owned_inner_groups_empty','controller_terminal','root_mutex_available'):need(t[k] is True,'positive current fact '+k)
+     controller=mapping['controller_terminal_contract']
+     need(controller['kind']=='tool-owned-unified-exec-terminal' and controller['decision']=='PASS_TOOL_TERMINAL_AND_SINGLE_CHILD_CONTROL_FLOW' and controller['implementation_ownership'] is False and controller['reviewer'],'independent actual direct caller terminal decision')
+@@ -56,7 +57,7 @@
+     for k in ('execution_review','cleanup_release','actual_cleanup_result','actual_cleanup_status','actual_postjoin_archive','actual_postjoin_status','actual_postjoin_stderr'):need(t[k]==authorities[k],'whole current authority '+k)
+     release=checked(t['cleanup_release']);execution=checked(t['execution_review']);payload_raw=checked_bytes(authorities['reviewed_cleanup_payload']);payload=parsed(payload_raw)
+     need(payload_raw==CANON(payload)+b'\n' and {k:v for k,v in release.items() if k!='execution_review'}==payload and set(release)==set(payload)|{'execution_review'},'actual canonical reviewed payload plus only inline review')
+-    need(t['execution_review']['sha256']==EXPECTED_INSTANCE['execution_review_sha256'] and execution['schema']=='mckernel.numa-current-image.cleanup-exact-execution-review.v1' and execution['status']=='PASS' and execution['implementation_ownership'] is False and execution['reviewer'],'genuine actual independent current execution review')
++    need(t['execution_review']['sha256']==EXPECTED_INSTANCE['execution_review_sha256'] and execution['schema']=='mckernel.numa-current-launcher.cleanup-exact-execution-review.v1' and execution['status']=='PASS' and execution['implementation_ownership'] is False and execution['reviewer'],'genuine actual independent current execution review')
+     need(execution['reviewed_payload_sha256']==authorities['reviewed_cleanup_payload']['sha256'] and execution['same_release_preflight_cleanup_postjoin'] is True and execution['no_outer_timeout_or_kill'] is True,'actual exact three-role reviewed payload binding')
+     need(release['execution_review']==execution['whole_inline_execution_review'],'exact genuine whole inline execution review')
+     need(release['status']=='PASS_EXECUTION_RELEASE' and release['fetched_source_verified'] is True,'genuine cleanup release')
+@@ -99,7 +100,7 @@
+     need(plan['schema']=='fp-save-image.terminal-cleanup.v1' and plan['release_sha256']==internal and plan['container']==[target['container_id'],target['container_name'],target['owner_nonce']] and plan['owner']==[t['boot_id'],target['owner_pid'],target['owner_starttime']],'typed current plan target/owner/internal release')
+     terminal=plan['terminal'];need(type(terminal) is list and len(terminal)==4 and terminal[0]=='owner-receipt.json','actual terminal four-tuple')
+     rows=[r for r in obs['selected_files'] if [Path(r['path']).name,r['sha256'],r['inode'],r['size']]==terminal];need(len(rows)==1 and set(rows[0])==FIELDS,'unique full current terminal receipt')
+-    receipt=checked(rows[0]);need(receipt['schema']=='mckernel.native-exact-mckernel-image-container-receipt.v1' and receipt['status']=='PASS' and receipt['container_id']==target['container_id'] and receipt['container_name']==target['container_name'] and receipt['owner_nonce']==target['owner_nonce'],'actual current PASS owner receipt')
++    receipt=checked(rows[0]);need(receipt['schema']=='mckernel.native-exact-launcher-container-receipt.v1' and receipt['status']=='PASS' and receipt['operation_scope']=='launcher-only' and receipt['launcher_only'] is True and receipt['container_id']==target['container_id'] and receipt['container_name']==target['container_name'] and receipt['owner_nonce']==target['owner_nonce'],'actual current PASS owner receipt')
+     for original,row,archive in zip(originals,plan['records'],archives):
+         need(row==[original,str(Path(archive['path']).parent),Path(archive['path']).name,archive['sha256'],archive['inode'],archive['size']],'whole plan archive assignment')
+         record=parsed(saved[archive['path']]);need(record['boot_id']==t['boot_id'] and record['pid']==target['owner_pid'] and record['starttime']==target['owner_starttime'] and record['inode']==archive['inode'],'actual original producer birth/record identity')

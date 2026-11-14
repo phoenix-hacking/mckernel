@@ -1,0 +1,48 @@
+{
+  "task_id": "M14-F06-VDSO-SET-RANGE-HOST",
+  "status": "READY_FOR_INDEPENDENT_HOST_REVIEW",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "leaf": "vdso-set-range",
+  "cases": 56,
+  "plan": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-set-range/FUTURE-HOST-COMMAND-PLAN.json",
+    "bytes": 12612,
+    "sha256": "d1b43fbef398eb3665991d93f236cd24e7c1e2ba233d6cda0ea4852652467cb3"
+  },
+  "source_bindings": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-set-range/SOURCE-BINDINGS.json",
+    "bytes": 5459,
+    "sha256": "27c40e5e600551cfc1606b3cf84dfbaed49d33bdc7daf99aa1d1c2309a2fcaac"
+  },
+  "actual_leaf": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-context-range-host-1/vdso-set-range.RESULTS.json",
+    "bytes": 15256,
+    "sha256": "f203575bc014b53d6972bac3fdb3a4592e131b1727bec7906903dcfbe07a74dc"
+  },
+  "commands": 3,
+  "all_returncodes_zero": true,
+  "all_PID_births_retained": true,
+  "all_direct_waited": true,
+  "all_groups_absent": true,
+  "all_streams_closed": true,
+  "first_compiler_started_wall": 1793067003.663366,
+  "initial_account_age_seconds": 8.338049173355103,
+  "CPU_seconds": 0.109226,
+  "wall_seconds": 0.13475122884847224,
+  "max_child_RSS_KiB": 84948,
+  "artifacts": {
+    "libadapter.a": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-set-range/future-host-output-1/libadapter.a",
+      "bytes": 7240924,
+      "sha256": "38adb5c7da18bdddebd9cbec42268e931ce14e8a4998d267212776f79cd30551"
+    },
+    "fixture": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-set-range/future-host-output-1/fixture",
+      "bytes": 43544,
+      "sha256": "2220e0c0ffd3e931f961fdb0e010413f4a5f5fb179bcbad463bddc83ff952c58"
+    }
+  },
+  "effect_scope": "C ihk_mc_pt_set_range mock records all9args and controlled status only; no page-table write, lock, IRQ, translation, syscall or mapping effect.",
+  "no_actual_failure_correction_or_replay": true,
+  "production_native_acceptance": false
+}

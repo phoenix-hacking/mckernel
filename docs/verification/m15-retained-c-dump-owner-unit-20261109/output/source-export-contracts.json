@@ -1,0 +1,57 @@
+{
+  "C_function_bodies_emitted": false,
+  "metadata_only": true,
+  "original_C": "/home/holden/mckernel/ihk/linux/user/ihklib.c",
+  "sha256": "53a2ab78b817271541796adc16bd529c0d2a540f97b5b1cd68bf0dca2de8a59d",
+  "snippets": [
+    {
+      "end": 87513,
+      "kind": "function_definition_header",
+      "start": 87445,
+      "symbol": "_ihk_os_assign_cpu_str",
+      "text": "int _ihk_os_assign_cpu_str(int os_index, char *list, char *err_msg)"
+    },
+    {
+      "end": 88130,
+      "kind": "function_definition_header",
+      "start": 88061,
+      "symbol": "_ihk_os_set_ikc_map_str",
+      "text": "int _ihk_os_set_ikc_map_str(int os_index, char *list, char *err_msg)"
+    },
+    {
+      "end": 92580,
+      "kind": "function_definition_header",
+      "start": 92504,
+      "symbol": "parse_env",
+      "text": "int parse_env(const char *envp, int num_env, char ***_name, char ***_value)"
+    },
+    {
+      "end": 22887,
+      "kind": "function_definition_header",
+      "start": 22854,
+      "symbol": "dump_reserve_mem_conf",
+      "text": "void dump_reserve_mem_conf(void)"
+    },
+    {
+      "end": 686,
+      "kind": "data_definition",
+      "start": 675,
+      "symbol": "__argc",
+      "text": "int __argc;"
+    },
+    {
+      "end": 701,
+      "kind": "data_definition",
+      "start": 687,
+      "symbol": "__argv",
+      "text": "char **__argv;"
+    },
+    {
+      "end": 2213,
+      "kind": "data_definition",
+      "start": 1665,
+      "symbol": "namespace_files",
+      "text": "struct namespace_file namespace_files[] = {\n\t{ .nstype = CLONE_NEWUSER,\t.name = \"ns/user\", .fd = -1 },\n#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,6,0)\n\t{ .nstype = CLONE_NEWCGROUP,\t.name = \"ns/cgroup\", .fd = -1 },\n#endif\n\t{ .nstype = CLONE_NEWIPC,\t.name = \"ns/ipc\", .fd = -1 },\n\t{ .nstype = CLONE_NEWUTS,\t.name = \"ns/uts\", .fd = -1 },\n\t{ .nstype = CLONE_NEWNET,\t.name = \"ns/net\", .fd = -1 },\n\t{ .nstype = CLONE_NEWPID,\t.name = \"ns/pid\", .fd = -1 },\n\t{ .nstype = CLONE_NEWNS,\t.name = \"ns/mnt\", .fd = -1 },\n\t{ .nstype = 0, .name = NULL, .fd = -1 }\n};"
+    }
+  ]
+}

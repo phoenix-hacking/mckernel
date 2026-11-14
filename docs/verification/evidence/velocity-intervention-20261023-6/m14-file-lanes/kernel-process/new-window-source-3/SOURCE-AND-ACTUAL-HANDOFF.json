@@ -1,0 +1,36 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_ACTUAL_PROFILE_ALLOCATION_FAILURE_LOCK_RECOVERY_AND_CURRENT_FULLCRATE",
+  "result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-3/ACTUAL-PROFILE-LOCK-FIRST-RESULT.json",
+    "sha256": "34d2498b48b1b7af2547e1970537d25333d20c1e4939a1fc7640589dbc3f639b",
+    "bytes": 10307
+  },
+  "original_profile": {
+    "path": "/home/holden/mckernel/kernel/rust/profile.rs",
+    "sha256": "f7a614cee0c4f301bc8bc21be0782e6912b944992cf06a87673e68694c3c1389",
+    "bytes": 20105
+  },
+  "fixed_profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-3/source/kernel/rust/profile.rs",
+    "sha256": "2eacbb02e1988ac524e94b1c7824629cfa97bf5a18ddef5c046f0c60106ce543",
+    "bytes": 20253
+  },
+  "fixed_body": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-3/fixture/fixed_job_profile.ACTUAL-RUST.inc",
+    "sha256": "709f82f9695b9dc2d64fc5a2ca2970989926e05f1fc7a7426ce777d94a249a0e",
+    "bytes": 2140
+  },
+  "actual_function_regressions": [
+    "original defect retains lock/disabled IRQ after -ENOMEM",
+    "fixed allocation failure restores same node/IRQ and next call acquires/completes",
+    "normal new job aggregates and prints/resets on final process, one allocation",
+    "existing job skips allocator and preserves current job counters"
+  ],
+  "actual_commands": 3,
+  "full_current_crate_metadata": true,
+  "CPU0_released": true,
+  "canonical_mutations": 0,
+  "native": false,
+  "ownership_review_pending": true
+}

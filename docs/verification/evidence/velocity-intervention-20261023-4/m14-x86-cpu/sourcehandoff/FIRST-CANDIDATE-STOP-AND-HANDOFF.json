@@ -1,0 +1,68 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "FIRST_CANDIDATE_COMPILE_FAILURE_PRESERVED_STOP_NO_CORRECTION_OR_RETRY",
+  "cause": "Rust E0530: the new extern static no_turbo occupies the same Rust namespace as the unchanged x86_init_pstate_turbo_body_result parameter no_turbo. This source collision is present in both exact fixture and production candidate.",
+  "failure": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/sourcehandoff/FIRST-CANDIDATE-FAILURE-1.json",
+    "sha256": "fb4f94e397dd81dfc94132a817177623fb5dd736a21f30a75ef794d3c014704d",
+    "bytes": 3149
+  },
+  "stderr": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/sourcehandoff/actual-first-candidate-capture-1/00-actual-Rust-entry-body-compile/stderr",
+    "sha256": "ca11ef07989436d23080c4db31fd4afa408619ff940dff90530e0d8676b3eb3d",
+    "bytes": 489
+  },
+  "first_command": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/sourcehandoff/actual-first-candidate-capture-1/00-actual-Rust-entry-body-compile/command.json",
+    "sha256": "06172bd79bff503ca7408719481245ecd30c638380933b9eb553bfae1b89eddf",
+    "bytes": 1034
+  },
+  "whole_join": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/sourcehandoff/actual-first-candidate-capture-1/00-actual-Rust-entry-body-compile/whole-join.json",
+    "sha256": "2ed9b5083a50a7fa64d4aeb7125ae30ad4eb9be6f65ebd19c78ea82631f1d678",
+    "bytes": 1192
+  },
+  "candidate_Rust": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/candidate/kernel/rust/x86_cpu_helpers.rs",
+    "sha256": "814494daecd3b8f5cebea222406422041051ed7202d33e02aa4453c9aa00f6e5",
+    "bytes": 90407
+  },
+  "fixture_Rust": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/fixture/actual_entry.rs",
+    "sha256": "f936091ba839f8108aeab9964452c6c5ac225afc261a2cd13fac25ed78e29cdf",
+    "bytes": 2670
+  },
+  "profile": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/sourcehandoff/ACTUAL-PROFILE.json",
+    "sha256": "26915b588297d4bd7c89f976cb63f5c112e96b8d598233524afca83b327afb45",
+    "bytes": 1134
+  },
+  "headroom": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/sourcehandoff/ACTUAL-HEADROOM.json",
+    "sha256": "51f95241f9881c0f13f9376fd6849f5ef85cd94d67dfccaff2135177ed80544f",
+    "bytes": 382
+  },
+  "hosted_memset_source_preflight": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/sourcehandoff/HOSTED-MEMSET-SOURCE-PREFLIGHT.json",
+    "sha256": "82b2a6d79b113a590f85eacfa12a3804c47a6556b2777061f8f5e0d2c8adbe01",
+    "bytes": 1171
+  },
+  "helper_prerequisite": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/sourcehandoff/HELPER-GLOBAL-DEPENDENCY-CHECK.json",
+    "sha256": "5cc423b9840c6c000d54acfef57187dded47a7eee3de186bb5201f16e942864e",
+    "bytes": 1220
+  },
+  "actual_compiler_invocations": 1,
+  "actual_tests_run": 0,
+  "later_commands_run": 0,
+  "CPU6_released": true,
+  "observed_outer_tool_exit_code": 1,
+  "proposed_correction_not_applied": "Use #[link_name = \"no_turbo\"] static mut X86_NO_TURBO: CInt; in the extern block and read X86_NO_TURBO in the new entry. Leave existing helper parameter/body unchanged.",
+  "family_state": {
+    "failed_candidates": 1,
+    "bounded_corrections_used": 0,
+    "root_manages_next_grant": true
+  },
+  "canonical_changes": 0,
+  "native_credit": 0
+}

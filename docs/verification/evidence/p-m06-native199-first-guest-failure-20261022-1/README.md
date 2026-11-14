@@ -1,0 +1,5 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+Actual first guest attempt e052 failed in16.157864s; the strict199B/exit37 app was not accepted. Exact serial/debug/QMP/guest result, both owner captures, prior GoCLI/query and path failures, path correction, admissions/releases/reviews,77 root-owned journal files and fresh exact owner name/label/mutex/shared-heavy readbacks are retained. CAPSULE-SOURCE-MAP.json maps exact copied bytes; source modules/images/initramfs binaries are referenced without duplication or rehash.
+
+ACTUAL-FAILED-199-PHYSICAL-FACTS-HANDOFF.json records all25 reaped Docker commands, terminal FAIL with absence_verifiedtrue/lease_retainedfalse, remove success and empty postremove name/label/CID queries. QEMU was killed/reaped; fresh root name/label queries, permanent mutex27:4 reacquisition/release and shared-heavy absence pass. These are facts for independent physical review, not a worker-issued execution release or application acceptance. Collector early-return diagnosis is owned by the foreground; this lane did not duplicate it. Original failed evidence and inputs remain untouched.

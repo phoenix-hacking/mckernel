@@ -1,0 +1,19 @@
+--- a/driver-DATA-only.patch
++++ b/driver-DATA-only.patch
+@@ -4,11 +4,12 @@
+ STREAM = 32 * 2 ** 20
+ WORK = 640 * 2 ** 20
+ INSERT='syscall_vm_policy_insert_body_result'
++EXEC_RESET='exec_reset_signal_state_current_v1'
+ C_COMPILER_SHA256='2092e32fa9abee9ccbf777a5f893b9cc608582b660c93e742a17c3eb7da109c2'
+-RULES={'native-mckernel_rust.o':({INSERT},set(),set()),
+-       'legacy-mckernel_rust.o':({INSERT},set(),set()),
+-       'selected-owned-syscall.o':({'do_fork'},{INSERT},set()),
+-       'fallback-owned-syscall.o':({'do_fork'},set(),{INSERT})}
++RULES={'native-mckernel_rust.o':({INSERT,EXEC_RESET},set(),set()),
++       'legacy-mckernel_rust.o':({INSERT,EXEC_RESET},set(),set()),
++       'selected-owned-syscall.o':({'do_fork'},{INSERT,EXEC_RESET},set()),
++       'fallback-owned-syscall.o':({'do_fork'},set(),{INSERT,EXEC_RESET})}
+ 
+ def metadata(st):
+     return {key: getattr(st, key) for key in ('st_dev', 'st_ino', 'st_mode', 'st_uid', 'st_gid', 'st_nlink', 'st_size', 'st_mtime_ns', 'st_ctime_ns', 'st_blocks')}

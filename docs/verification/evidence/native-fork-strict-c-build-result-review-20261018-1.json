@@ -1,0 +1,699 @@
+{
+  "actual_execution": {
+    "Rust_bindings": {
+      "ihk": {
+        "command": {
+          "bytes": 2598,
+          "path": "/home/holden/mckernel-work/scratch/nsd-c-acc3b42f42e5dc087ce8ac605f8f4961/modules/.ihk.o.cmd",
+          "sha256": "fe3319e019ceb141a534092e29014bf4bf817b34072d5848813e5ebe810c8b44"
+        },
+        "source_count": 13,
+        "sources": [
+          "abi/application.rs",
+          "abi/os_service.rs",
+          "abi/x86_64.rs",
+          "device_registry.rs",
+          "ihk.rs",
+          "ihk_ioctl.rs",
+          "ikc_master.rs",
+          "ikc_queue.rs",
+          "os_registry.rs",
+          "os_runtime.rs",
+          "os_service.rs",
+          "page_allocator.rs",
+          "page_owner_registry.rs"
+        ],
+        "warnings_as_errors": true
+      },
+      "ihk_smp_x86_64": {
+        "command": {
+          "bytes": 4246,
+          "path": "/home/holden/mckernel-work/scratch/nsd-c-acc3b42f42e5dc087ce8ac605f8f4961/modules/.ihk_smp_x86_64.o.cmd",
+          "sha256": "7da662dc3cf24d93fbe768c3f3d69b35649d0adaae6f70622575aaff1dd7725f"
+        },
+        "source_count": 48,
+        "sources": [
+          "abi/application.rs",
+          "abi/sysfs.rs",
+          "abi/sysfs_request.rs",
+          "abi/vdso.rs",
+          "abi/x86_64.rs",
+          "application_image.rs",
+          "application_pager.rs",
+          "application_rpc.rs",
+          "application_syscall.rs",
+          "ihk-compat-build-id.bin",
+          "ihk_mapping.rs",
+          "ihk_smp_x86_64.rs",
+          "ikc_master.rs",
+          "ikc_queue.rs",
+          "private_fork_carrier_request_20261017.rs",
+          "procfs_objects.rs",
+          "smp_application.rs",
+          "smp_application_image.rs",
+          "smp_application_syscall.rs",
+          "smp_boot_code.rs",
+          "smp_cpu.rs",
+          "smp_file_pager.rs",
+          "smp_fork_ingress.rs",
+          "smp_fork_link.rs",
+          "smp_ikc.rs",
+          "smp_image.rs",
+          "smp_loader.rs",
+          "smp_memory.rs",
+          "smp_procfs.rs",
+          "smp_resource.rs",
+          "smp_service.rs",
+          "smp_startup.rs",
+          "smp_startup_entry.S",
+          "smp_topology.rs",
+          "smp_trampoline.S",
+          "smp_trampoline.rs",
+          "smp_vdso.rs",
+          "sysfs_memory.rs",
+          "sysfs_objects.rs",
+          "sysfs_os.rs",
+          "sysfs_remote.rs",
+          "sysfs_rpc.rs",
+          "sysfs_setup.rs",
+          "sysfs_snoop.rs",
+          "sysfs_tree.rs",
+          "sysfs_zeroing.rs",
+          "user_string.rs",
+          "zero_pages.rs"
+        ],
+        "warnings_as_errors": true
+      },
+      "mcctrl_entry": {
+        "command": {
+          "bytes": 2232,
+          "path": "/home/holden/mckernel-work/scratch/nsd-c-acc3b42f42e5dc087ce8ac605f8f4961/modules/.mcctrl_entry.o.cmd",
+          "sha256": "ef5dff8c7c83ed19258b9a75b504773f6fe7ada34cfaca5ae4cb74ae6b8e5006"
+        },
+        "missing_required_thunks": [
+          "mckernel_inherited_mmap_write_lock",
+          "mckernel_inherited_vma_start_write"
+        ],
+        "source_count": 9,
+        "sources": [
+          "abi/application.rs",
+          "abi/os_service.rs",
+          "abi/x86_64.rs",
+          "application_image.rs",
+          "mcctrl_entry.rs",
+          "mcctrl_exec.rs",
+          "mcctrl_process.rs",
+          "mcctrl_vm.rs",
+          "user_string.rs"
+        ],
+        "undefined_thunks": [
+          "mckernel_inherited_mmap_write_unlock"
+        ],
+        "warnings_as_errors": true
+      }
+    },
+    "actual_retained_files_hash_join": true,
+    "all66_source_hashes_match": true,
+    "all_new_files_compiler_consumed": true,
+    "artifacts_observed_only": {
+      "ihk": {
+        "bytes": 2002664,
+        "modinfo": {
+          "author": "McKernel Rust port",
+          "depends": "",
+          "description": "Native Rust IHK host core",
+          "license": "GPL v2",
+          "name": "ihk",
+          "retpoline": "Y",
+          "rhelversion": "10.2",
+          "srcversion": "C0186F072E9AE00C000A931",
+          "vermagic": "6.12.0-211.44.1.el10_2.mckernel1.x86_64 SMP preempt mod_unload ",
+          "version": "1.7.0rc4"
+        },
+        "path": "/home/holden/mckernel-work/scratch/nsd-c-acc3b42f42e5dc087ce8ac605f8f4961/modules/ihk.ko",
+        "sha256": "ece10048b39889176705841a842346531e71604417de3f8819537109d870a4fe"
+      },
+      "ihk-smp-x86_64": {
+        "bytes": 12960200,
+        "modinfo": {
+          "depends": "ihk",
+          "import_ns": "MCKERNEL_IHK_V1",
+          "license": "Dual BSD/GPL",
+          "name": "ihk_smp_x86_64",
+          "parm": "ihk_ikc_irq_core:Target CPU of IHK IKC IRQ",
+          "parmtype": "ihk_ikc_irq_core:uint",
+          "retpoline": "Y",
+          "rhelversion": "10.2",
+          "srcversion": "2E7D378E67FF07AA4C5F9F8",
+          "vermagic": "6.12.0-211.44.1.el10_2.mckernel1.x86_64 SMP preempt mod_unload "
+        },
+        "path": "/home/holden/mckernel-work/scratch/nsd-c-acc3b42f42e5dc087ce8ac605f8f4961/modules/ihk-smp-x86_64.ko",
+        "sha256": "6c67f228fd8c171161a0436b7e25e80946499ac9dda4fe50d6767903865d94e3"
+      },
+      "mcctrl": {
+        "bytes": 2171520,
+        "modinfo": {
+          "depends": "ihk",
+          "import_ns": "MCKERNEL_IHK_V1",
+          "license": "GPL v2",
+          "name": "mcctrl",
+          "retpoline": "Y",
+          "rhelversion": "10.2",
+          "srcversion": "CACF851E06410AFB812DDEB",
+          "vermagic": "6.12.0-211.44.1.el10_2.mckernel1.x86_64 SMP preempt mod_unload "
+        },
+        "path": "/home/holden/mckernel-work/scratch/nsd-c-acc3b42f42e5dc087ce8ac605f8f4961/modules/mcctrl.ko",
+        "sha256": "18030fc2a52d1a695a49d50a7da992a626074b78057bb723f0260b45a8d53361"
+      }
+    },
+    "composite_LD_contract_pass": false,
+    "error": "ValueError: Rust thunk imports missing",
+    "factory_exports": [
+      6,
+      7,
+      8,
+      9
+    ],
+    "full_module_make_returncode": 0,
+    "limit": "Source depinfo proves compiler consumption, not live reachability. Rust object lacks lock/vma_start_write imports; actual composite LD suffix omits reviewed --werror; composite C definitions alone do not prove callers. All3 .ko compile/modpost success does not accept artifacts against failed required imports or establish guest fork support.",
+    "matched_vermagic": true,
+    "module_phase": {
+      "error": "ValueError: Rust thunk imports missing",
+      "make_returncode": 0,
+      "status": "FAIL"
+    },
+    "new_files": [
+      "mcctrl_entry.rs",
+      "mcctrl_vm_write_compat.c",
+      "mcctrl_vm_write_compat.h",
+      "private_fork_carrier_request_20261017.rs",
+      "smp_fork_ingress.rs",
+      "smp_fork_link.rs"
+    ],
+    "objtool_warning_count": 2,
+    "objtool_warnings": "/candidate/modules/ihk-smp-x86_64.o: warning: objtool: _RNvNtNtCs5Iw3aBAMJ7i_14ihk_smp_x86_6415smp_application12fork_ingress22quarantine_provisional() falls through to next function _RNvNtNtCs5Iw3aBAMJ7i_14ihk_smp_x86_6415smp_application12fork_ingress7indexes()\n/candidate/modules/ihk-smp-x86_64.o: warning: objtool: _RINvXs9_NtNtNtCs2J1qyADxt9E_4core4iter8adapters4fuseINtB6_4FuseINtNtNtBc_5slice4iter4IterINtNtBc_6option6OptionNtNtCs5Iw3aBAMJ7i_14ihk_smp_x86_6415smp_application5EntryEEEINtB6_8FuseImplBZ_E8try_folduNCINvNtB8_7flatten15try_flatten_oneRB1p_uINtNtNtBc_3ops12control_flow11ControlFlowuENCINvNtB8_10filter_map19filter_map_try_foldRB1L_RNtB1N_9ChildForkuB3R_NCNCNvMs2_NtB1N_12fork_ingressNtB1N_6Remote20prepare_fork_carriers0_0s_0NCINvNvNtNtNtBa_6traits8iterator8Iterator3any5checkB5k_NCB5I_s0_0E0E0E0B3R_EB1P_: symbol name too long, can't create __pfx_ symbol\n",
+    "ordered_composite_LD": {
+      "actual_tokens": [
+        "ld.lld",
+        "-m",
+        "elf_x86_64",
+        "-z",
+        "noexecstack",
+        "-r",
+        "-o",
+        "/candidate/modules/mcctrl.o",
+        "@/candidate/modules/mcctrl.mod",
+        ";",
+        "./tools/objtool/objtool",
+        "--hacks=jump_label",
+        "--hacks=noinstr",
+        "--hacks=skylake",
+        "--ibt",
+        "--mcount",
+        "--mnop",
+        "--orc",
+        "--retpoline",
+        "--rethunk",
+        "--sls",
+        "--static-call",
+        "--uaccess",
+        "--prefix=16",
+        "--link",
+        "--module",
+        "/candidate/modules/mcctrl.o"
+      ],
+      "command": {
+        "bytes": 425,
+        "path": "/home/holden/mckernel-work/scratch/nsd-c-acc3b42f42e5dc087ce8ac605f8f4961/modules/.mcctrl.o.cmd",
+        "sha256": "48b2b0090374effdc46b4ca404992be7e313f2654221fc07d0966d4845d911b8"
+      },
+      "definitions": [
+        "mckernel_inherited_mmap_write_lock",
+        "mckernel_inherited_mmap_write_unlock",
+        "mckernel_inherited_vma_start_write"
+      ],
+      "exact_reviewed_command_match": false,
+      "expected_tokens": [
+        "ld.lld",
+        "-m",
+        "elf_x86_64",
+        "-z",
+        "noexecstack",
+        "-r",
+        "-o",
+        "/candidate/modules/mcctrl.o",
+        "@/candidate/modules/mcctrl.mod",
+        ";",
+        "./tools/objtool/objtool",
+        "--hacks=jump_label",
+        "--hacks=noinstr",
+        "--hacks=skylake",
+        "--ibt",
+        "--mcount",
+        "--mnop",
+        "--orc",
+        "--retpoline",
+        "--rethunk",
+        "--sls",
+        "--static-call",
+        "--uaccess",
+        "--prefix=16",
+        "--werror",
+        "--link",
+        "--module",
+        "/candidate/modules/mcctrl.o"
+      ],
+      "inputs": [
+        "/candidate/modules/mcctrl_entry.o",
+        "/candidate/modules/mcctrl_vm_write_compat.o"
+      ],
+      "missing_tokens": [
+        "--werror"
+      ]
+    },
+    "source_closure_files": 66,
+    "status": "FAIL",
+    "strict_C": {
+      "KCFLAGS": "-Werror",
+      "command": {
+        "bytes": 66438,
+        "path": "/home/holden/mckernel-work/scratch/nsd-c-acc3b42f42e5dc087ce8ac605f8f4961/modules/.mcctrl_vm_write_compat.o.cmd",
+        "sha256": "d1aed220c54a58f6a61ebf951adf53b3e1bc7e0f06559ec57cb28c1aa19a930a"
+      },
+      "command_tokens": 118,
+      "config_wildcard_count": 549,
+      "definitions": [
+        "mckernel_inherited_mmap_write_lock",
+        "mckernel_inherited_mmap_write_unlock",
+        "mckernel_inherited_vma_start_write"
+      ],
+      "generic_Werror": true,
+      "make_returncode": 0,
+      "matched_imports": [
+        "__fentry__",
+        "__mmap_lock_do_trace_acquire_returned",
+        "__mmap_lock_do_trace_released",
+        "__mmap_lock_do_trace_start_locking",
+        "__tracepoint_mmap_lock_acquire_returned",
+        "__tracepoint_mmap_lock_released",
+        "__tracepoint_mmap_lock_start_locking",
+        "__x86_return_thunk",
+        "down_write",
+        "up_write"
+      ],
+      "object": {
+        "bytes": 134400,
+        "path": "/home/holden/mckernel-work/scratch/nsd-c-acc3b42f42e5dc087ce8ac605f8f4961/modules/mcctrl_vm_write_compat.o",
+        "sha256": "ed1caaa49604b422af6bca7f89b748a73eac7209df3f3f6abebf9525d9f352dd"
+      },
+      "private_headers": [
+        "mcctrl_vm_write_compat.h"
+      ],
+      "same_C_object_across_phases": true,
+      "sdk_dependency_count": 499,
+      "seed_translation_exact": true,
+      "status": "C_OBJECT_AUDIT_PASS"
+    }
+  },
+  "application_acceptance": false,
+  "build_artifact_acceptance": false,
+  "decision": "PASS_RETIREMENT_STRICT_C_PASS_BUILD_HELD_RUST_IMPORT_AND_LD_OBJTOOL_CONTRACTS",
+  "evidence": {
+    "C_object_audit": {
+      "bytes": 186624,
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-acc3b42f42e5dc087ce8ac605f8f4961/evidence/C-object-audit.json",
+      "sha256": "9f06420e801820649999891c26c88465cc9f25e81adc0d1a5dd060cf49819d35"
+    },
+    "C_object_result": {
+      "bytes": 186999,
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-acc3b42f42e5dc087ce8ac605f8f4961/evidence/C-object-result.json",
+      "sha256": "4b3c1f7dc0de9ea661bef47f0e5f83857dac63e3530e0bba78d7a14e06b27de7"
+    },
+    "admission": {
+      "bytes": 5429,
+      "path": "/home/holden/mckernel-work/scratch/nsd-a-acc3b42f42e5dc087ce8ac605f8f4961/historical-lease-disposition.json",
+      "sha256": "d229ff230e96e3dddb7bc6057cae58e6d9466ceb06b46c218a74b780115bb9d2"
+    },
+    "driver_receipt": {
+      "bytes": 223357,
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-acc3b42f42e5dc087ce8ac605f8f4961/evidence/receipt.json",
+      "sha256": "c88a9e47bd713984a5b2302e1afb78174df80adfdad617aa5cdb1a6599da21de"
+    },
+    "make_stderr": {
+      "bytes": 875,
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-acc3b42f42e5dc087ce8ac605f8f4961/evidence/make.stderr",
+      "sha256": "25670b4b3190b91e5524d62fd3a6f3244abe779799bcde308f1bdf27b5c8f763"
+    },
+    "make_stdout": {
+      "bytes": 896,
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-acc3b42f42e5dc087ce8ac605f8f4961/evidence/make.stdout",
+      "sha256": "5999a39d1537807e38a1abba7024920edb8c17bdacb2df43ce39c84c4f7edfcc"
+    },
+    "owner_join": {
+      "bytes": 376,
+      "path": "/home/holden/mckernel-work/scratch/native-fork-strict-c-materialization-20261018-1/owner-join.json",
+      "sha256": "4482a8d520be29db8cb00ba8e28a3c13733fc3ef51378482b5411f00a5ac19d1"
+    },
+    "owner_receipt": {
+      "bytes": 36749,
+      "path": "/home/holden/mckernel-work/scratch/nsd-o-acc3b42f42e5dc087ce8ac605f8f4961/owner-receipt.json",
+      "sha256": "ac317338905e4540dc972efed739fd70c885fe51d2d92b18323cdaeb52f586a7"
+    },
+    "owner_stdout": {
+      "bytes": 30091,
+      "path": "/home/holden/mckernel-work/scratch/native-fork-strict-c-materialization-20261018-1/owner.stdout",
+      "sha256": "2c97f6ea12b71b2ddabcce3fb10f218a182a82ab5a440b1ce8afd781c6508bb3"
+    },
+    "postflight": {
+      "bytes": 12082,
+      "path": "/home/holden/mckernel-work/scratch/nsd-o-acc3b42f42e5dc087ce8ac605f8f4961/postflight-proof.json",
+      "sha256": "151e98682733fccc9db26de0db562d97ae0bb9bd950da637d80891b4ecff7087"
+    }
+  },
+  "execution_release": {
+    "bytes": 8506,
+    "path": "/home/holden/mckernel-work/scratch/native-fork-strict-c-materialization-20261018-1/execution-release.json",
+    "sha256": "73f0667c82cb1360dd89dc849f209adc58e83068a5febaaeae988660bbff21d5"
+  },
+  "failure_history": {
+    "bounded_correction": "Strict KCFLAGS=-Werror/source command derivative now actual PASS118; original command-contract family resolved",
+    "current_family": "Full build postcheck: missing2 required Rust thunk imports, missing objtool --werror from exact composite LD command, plus2 actual objtool warnings",
+    "predecessor": "conditional66 actual C0 then117-versus120 token audit failure; preserved canonical efad866d3be902c4e4a9e79f893e65c70ba737f80bf7da38bdbd2558d7fba95c",
+    "retry_policy": "No automatic retry or oracle weakening; independent focused expert source/reachability and objtool analysis required before another release"
+  },
+  "fetched_source_proof": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-fork-strict-c-fetched-source-proof-20261018-1.json",
+    "sha256": "a2fc67e873ded838f4416468677dc0642d4c9b0754f625e2c0a1b4deab92dbfd"
+  },
+  "functional_scope": "PRACTICAL-GOAL functional supported kernel and application infrastructure; active compute cutover Rust/reviewed assembly, comprehensive qualification deferred",
+  "guest_fork_acceptance": false,
+  "implementation_ownership": false,
+  "language_boundary": "Three existing MM compatibility thunks are Linux host control-plane glue; no compute C expansion; unrelated compute WIP excluded",
+  "manual_readback_decision": {
+    "authority": "Root direct message: session43592 physically joined outer1, positive owner retired/released receipt; exact ordinary read-only nonce candidate/evidence, owner and admission diagnostic classification explicitly authorized",
+    "automatic_outer_readback": "NOT_RUN: owner nonzero branch preserved",
+    "privileged_reader": false,
+    "source_or_execution_mutations": false
+  },
+  "next_step": "Review exact optimizer/live reachability and missing Rust imports, preserve default CREATE_PPD closed and service-held later transport/ACK excluded; separately classify both objtool warnings. Restore/independently review actual composite LD objtool --werror boundary before accepting artifact command identity. No guest release from this result.",
+  "physical_join": {
+    "dispatcher_physical_join": "Confirmed directly by root: outer1",
+    "dispatcher_session": 43592,
+    "owner_join": {
+      "capture_bytes": {
+        "stderr": 0,
+        "stdout": 30091
+      },
+      "capture_errors": [],
+      "capture_limit_bytes_per_stream": 8388608,
+      "elapsed_seconds": 23.429073122999398,
+      "joined": true,
+      "pid": 838215,
+      "process_record_error": null,
+      "release_sha256": "73f0667c82cb1360dd89dc849f209adc58e83068a5febaaeae988660bbff21d5",
+      "returncode": 1,
+      "starttime": "9581435"
+    }
+  },
+  "production_acceptance": false,
+  "request": {
+    "path": "/home/holden/mckernel-work/scratch/native-fork-strict-c-materialization-20261018-1/request.json",
+    "sha256": "8c96ff9b9523c70bb762119393decfc2a444f72e6c61fbb8862248654c932263"
+  },
+  "retirement": {
+    "admission_client_count": 1,
+    "all_client_group_checks_empty": true,
+    "archived_raw_records_exact": true,
+    "client_count": 14,
+    "clients": [
+      {
+        "evidence": {
+          "bytes": 1619,
+          "path": "/home/holden/mckernel-work/scratch/nsd-o-acc3b42f42e5dc087ce8ac605f8f4961/command-191989a81f4a4f3497109f136ed9db70/status.json",
+          "sha256": "d7531e20396c558954e95d634997d81b1e95421389ec8d0962cf1d1947a7cc44"
+        },
+        "exit_code": 0,
+        "pid": 838259,
+        "state": "exited"
+      },
+      {
+        "evidence": {
+          "bytes": 326,
+          "path": "/home/holden/mckernel-work/scratch/nsd-o-acc3b42f42e5dc087ce8ac605f8f4961/command-24530a75cbd64835ad4f3a07f3e94430/status.json",
+          "sha256": "c37a70f9d328fbdb13ebf529788a814e25f9b25e70eba82109a66b19f6e4cf1f"
+        },
+        "exit_code": 0,
+        "pid": 838223,
+        "state": "exited"
+      },
+      {
+        "evidence": {
+          "bytes": 321,
+          "path": "/home/holden/mckernel-work/scratch/nsd-o-acc3b42f42e5dc087ce8ac605f8f4961/command-34617aca9edf47d2a0a73c1b4484d5a0/status.json",
+          "sha256": "d58b8734d89f3c21648feec6159199bd4ffb5391db7dad3632f5824c94975499"
+        },
+        "exit_code": 0,
+        "pid": 838235,
+        "state": "exited"
+      },
+      {
+        "evidence": {
+          "bytes": 274,
+          "path": "/home/holden/mckernel-work/scratch/nsd-o-acc3b42f42e5dc087ce8ac605f8f4961/command-4eb95cedbeff42b48c5db7ac864017cd/status.json",
+          "sha256": "e8b721e7ebfdaca53c9adc1dd12856b39f7b04faf7d2852ae02c8afeb94d2cc8"
+        },
+        "exit_code": 0,
+        "pid": 838346,
+        "state": "exited"
+      },
+      {
+        "evidence": {
+          "bytes": 260,
+          "path": "/home/holden/mckernel-work/scratch/nsd-o-acc3b42f42e5dc087ce8ac605f8f4961/command-536d9256ccca461e81cf21ebd36215b6/status.json",
+          "sha256": "8d3c7c3400fa1c7ebf398d2cc8b556fd3f29b80cd13a36c2542f6cc0fb4219da"
+        },
+        "exit_code": 0,
+        "pid": 838284,
+        "state": "exited"
+      },
+      {
+        "evidence": {
+          "bytes": 270,
+          "path": "/home/holden/mckernel-work/scratch/nsd-o-acc3b42f42e5dc087ce8ac605f8f4961/command-62af16b7dcd3459fa0220b9b2f6ca3ef/status.json",
+          "sha256": "124f223b022e1ac49061b8dd5c1bd6881c45f636b15ceabb7c228f49b94e9a31"
+        },
+        "exit_code": 0,
+        "pid": 838866,
+        "state": "exited"
+      },
+      {
+        "evidence": {
+          "bytes": 326,
+          "path": "/home/holden/mckernel-work/scratch/nsd-o-acc3b42f42e5dc087ce8ac605f8f4961/command-6df1d834add24da7934b47162effa98d/status.json",
+          "sha256": "39df4fddc60c48a2e0ff8c77917e6c9ae3fbebc407b14bc782518216b904a229"
+        },
+        "exit_code": 0,
+        "pid": 838879,
+        "state": "exited"
+      },
+      {
+        "evidence": {
+          "bytes": 335,
+          "path": "/home/holden/mckernel-work/scratch/nsd-o-acc3b42f42e5dc087ce8ac605f8f4961/command-711525c554234652a72465e8f75e28a0/status.json",
+          "sha256": "9933efeb93c8226bc3fe6a16b4f7de7c95b284b991a4bc37b8898fc40ae2cb77"
+        },
+        "exit_code": 0,
+        "pid": 838903,
+        "state": "exited"
+      },
+      {
+        "evidence": {
+          "bytes": 296,
+          "path": "/home/holden/mckernel-work/scratch/nsd-o-acc3b42f42e5dc087ce8ac605f8f4961/command-76e92280c9dc4d6c85232fdd0744824f/status.json",
+          "sha256": "d7bbdc994a7a0a3b795ac96c479c0c05f695b4601c8fe4287ade7205add7c4bd"
+        },
+        "exit_code": 0,
+        "pid": 838247,
+        "state": "exited"
+      },
+      {
+        "evidence": {
+          "bytes": 262,
+          "path": "/home/holden/mckernel-work/scratch/nsd-o-acc3b42f42e5dc087ce8ac605f8f4961/command-873c6655999440308b925b9742b28144/status.json",
+          "sha256": "dc425994a81b3da6c125a94e39bcfc82444c4b0c0de499276222db1adb0cbbb8"
+        },
+        "exit_code": 0,
+        "pid": 838854,
+        "state": "exited"
+      },
+      {
+        "evidence": {
+          "bytes": 262,
+          "path": "/home/holden/mckernel-work/scratch/nsd-o-acc3b42f42e5dc087ce8ac605f8f4961/command-9350781b35dc4a2abc5df3c430935898/status.json",
+          "sha256": "6bf704f9e5156c16233de98defd4fb44b0f1570c9ad8b5152bae538d9ee41d64"
+        },
+        "exit_code": 0,
+        "pid": 838272,
+        "state": "exited"
+      },
+      {
+        "evidence": {
+          "bytes": 272,
+          "path": "/home/holden/mckernel-work/scratch/nsd-o-acc3b42f42e5dc087ce8ac605f8f4961/command-9dd0c660674e4fed845b06ef206b5884/status.json",
+          "sha256": "e6cdf142443fa948f391aa95a8bd238293757c71c203b16a025359061122b9d9"
+        },
+        "exit_code": 0,
+        "pid": 838841,
+        "state": "exited"
+      },
+      {
+        "evidence": {
+          "bytes": 262,
+          "path": "/home/holden/mckernel-work/scratch/nsd-o-acc3b42f42e5dc087ce8ac605f8f4961/command-bfc2afcec01f4790be9cb9e2f8855c8c/status.json",
+          "sha256": "d1638a309da667da4f7658d9f87d367428dc8ed76ce5a3a5e35ae8285fd75cd3"
+        },
+        "exit_code": 0,
+        "pid": 838829,
+        "state": "exited"
+      },
+      {
+        "evidence": {
+          "bytes": 321,
+          "path": "/home/holden/mckernel-work/scratch/nsd-o-acc3b42f42e5dc087ce8ac605f8f4961/command-cca610bc6eeb41b5b6fbb76cfb72959b/status.json",
+          "sha256": "2e392238df29e802311d19c9e113acafaccffd3763f8078d78e2367a1ebb004f"
+        },
+        "exit_code": 0,
+        "pid": 838891,
+        "state": "exited"
+      },
+      {
+        "evidence": {
+          "bytes": 11328,
+          "path": "/home/holden/mckernel-work/scratch/nsd-a-acc3b42f42e5dc087ce8ac605f8f4961/command-714bdd0611a440a1b0610a96baa85d05/status.json",
+          "sha256": "902ba89466db73b71c34398d7282131ba2cae2edb118d183ed6861d7da662253"
+        },
+        "exit_code": 0,
+        "pid": 838219,
+        "state": "exited"
+      }
+    ],
+    "container_id": "a22aaf57b98b75b42b4decb8e9b4d85e07bd6e6b63ac64b2cf5d3308ccdb8d57",
+    "container_name": "mckernel-external-acc3b42f42e5dc087ce8ac605f8f4961",
+    "initial_terminal_Config_HostConfig_equal": true,
+    "normalized_mount_rows_equal": true,
+    "owned_record_live_paths_absent_after_positive_release": true,
+    "owned_records": [
+      {
+        "device": 1828,
+        "inode": 113731,
+        "path": "/home/holden/mckernel-work/scratch/native-fork-consolidated-conditional-external-modules.lease.json",
+        "record": {
+          "container_name": "mckernel-external-acc3b42f42e5dc087ce8ac605f8f4961",
+          "nonce": "ff63df0d448f485d96486e37130d9fe3",
+          "pid": 838215,
+          "starttime": "9581435",
+          "state": "owned"
+        },
+        "sha256": "adf9e5f01a80b8bcd652e18bacbdd4f91e1ba8cc5eb6ab1e9a5dd73ae62accaf",
+        "size": 174
+      },
+      {
+        "device": 1828,
+        "inode": 113730,
+        "path": "/home/holden/mckernel-work/scratch/native-fork-consolidated-conditional-external-modules-operational-exclusion.json",
+        "record": {
+          "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+          "dev": 1828,
+          "inode": 113730,
+          "pid": 838215,
+          "request_sha256": "43aca57efe07ee1bc600ce5c784e7ffa0596afa851f52e94ae5e9f3833743339",
+          "schema": "mckernel.native-exact-operational-exclusion.v1",
+          "starttime": "9581435"
+        },
+        "sha256": "58c2b4cb19e38d84acfb740dc8f8fa24ab6b1e230b130262cc18d2c3057c084e",
+        "size": 267
+      },
+      {
+        "device": 1828,
+        "inode": 113729,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock",
+        "record": {
+          "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+          "device": 1828,
+          "inode": 113729,
+          "kind": "build",
+          "pid": 838215,
+          "request_sha256": "167b1fd5cc96bbbb2a8b333164280d64f8ad8814cf638651f5faeb303304065b",
+          "schema": "mckernel.heavy-operation.v1",
+          "starttime": "9581435"
+        },
+        "sha256": "8a1737ce4e0bb2ef94d2b25aa1e94deef695041f38cff3c2e7354691b09206d3",
+        "size": 267
+      }
+    ],
+    "ownership_archive": {
+      "bytes": 16255,
+      "path": "/home/holden/mckernel-work/scratch/nsd-o-acc3b42f42e5dc087ce8ac605f8f4961/ownership-archive.json",
+      "sha256": "a351f5323798321ae882142d95514c9114d716709dadee60966997ca8d0ca292"
+    },
+    "profile_verified": true,
+    "record_release_complete": {
+      "bytes": 176,
+      "path": "/home/holden/mckernel-work/scratch/nsd-o-acc3b42f42e5dc087ce8ac605f8f4961/record-release-complete.json",
+      "sha256": "61abb63a2a6abb639a4352f0851ddb12a5cce3e46e311fee194d9ea2ba695854"
+    },
+    "root_development_lock": "Exact frozen owner source requires root-owned27:4 inode validation before and after run; identical owner stdout receipt proves guarded normal return, safe=True and finally unlock/close before physical join. Not inferred from missing PIDs.",
+    "root_lock_quarantine_taken": false,
+    "terminal_fresh_equal_except_Mounts_order": true,
+    "terminal_state": {
+      "Dead": false,
+      "Error": "",
+      "ExitCode": 1,
+      "FinishedAt": "2026-10-18T04:39:48.794926917Z",
+      "OOMKilled": false,
+      "Paused": false,
+      "Pid": 0,
+      "Restarting": false,
+      "Running": false,
+      "StartedAt": "2026-10-18T04:39:29.357846168Z",
+      "Status": "exited"
+    }
+  },
+  "retirement_accepted": true,
+  "review_process": {
+    "downstream_failed_readonly_assertion": {
+      "bytes": 15446,
+      "path": "/home/holden/mckernel-work/scratch/native-fork-strict-c-actual-result-review-20261018-1/review-downstream-LD-held.py",
+      "sha256": "529a5617d439320589d2203a75a317cffeb354ccff3bbb77b80192ca93858fb8"
+    },
+    "downstream_failure": {
+      "bytes": 187,
+      "path": "/home/holden/mckernel-work/scratch/native-fork-strict-c-actual-result-review-20261018-1/review-downstream-LD-failure.txt",
+      "sha256": "479c656ef9518c56a058fec07ed34805ca650ebe7217cfed30ee6115907344c9"
+    },
+    "downstream_resolution": "No oracle change: exact reviewed LD mismatch remains false and is recorded as separate HOLD",
+    "first_failed_readonly_assertion": {
+      "bytes": 15220,
+      "path": "/home/holden/mckernel-work/scratch/native-fork-strict-c-actual-result-review-20261018-1/review-original-failed.py",
+      "sha256": "35506bc87f3047a664f7b0a684288f8e02d97073ac15d431af2ff2163463bfb0"
+    },
+    "first_failure": {
+      "bytes": 109,
+      "path": "/home/holden/mckernel-work/scratch/native-fork-strict-c-actual-result-review-20261018-1/review-original-failure.txt",
+      "sha256": "66f013d4375c5c7123b0d7a422987b17662789c960c043167ec517a37731253d"
+    },
+    "first_failure_resolution": "Initial and fresh terminal inspect differ only in Mounts list order; normalize complete row order, preserve every mount row and every other field",
+    "script": {
+      "bytes": 16945,
+      "path": "/home/holden/mckernel-work/scratch/native-fork-strict-c-actual-result-review-20261018-1/review.py",
+      "sha256": "cedac89d1580b450c6f8a1e4d70c022fe55c9eb9630b6592c96b86ef92c4cbd8"
+    }
+  },
+  "reviewer": "/root/strict_c_actual_build_review",
+  "schema": "mckernel.native-fork-strict-c-build-result-review.v1",
+  "source_candidate_sha256": "f656e2bd73549af2359520b9af94d5ece8774ceac9e3e26c6d0b5de67ed3abc1",
+  "source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-fork-strict-c-command-source-review-20261018-1.json",
+    "sha256": "88488f965804e39e72b52ca485e90d917bf81ec903dad9da329dda91f04cc510"
+  }
+}

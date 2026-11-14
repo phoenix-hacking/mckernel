@@ -1,0 +1,73 @@
+{
+  "schema": "mckernel.native-exact-scratch18-build-admission-failure.v1",
+  "captured_at": "2026-10-01T07:31:31-07:00",
+  "status": "FAIL_PRE_DOCKER_PROCESS_CENSUS",
+  "release_commit": "ef777b0718353152cb82fc363b45dc3c0f921717",
+  "packet_sha256": "072de9ddb8a9911a1183bdd086bdafdd50fbd2680065d17a66b64663adc8c185",
+  "wrapper_sha256_at_attempt": "788be3f5d31620d0aff0bd4e480d7bbbbde2f8f1dc5dcf671ad2ebf114107894",
+  "request": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-build-request-scratch-18-execution.json",
+    "sha256": "80de5f1c02867bcbee69752e186f7fc11d201c2df3c78887ea08aa85f92e2bd7",
+    "inode": 90729,
+    "mode": "0600",
+    "uid": 1000,
+    "gid": 1000,
+    "normalized_sha256": "3312fb6e6297ec1abae6836720c6bb1c6c49d958a48acf665d9cc4070b547c06"
+  },
+  "owner_identity": {
+    "pid": 3288332,
+    "starttime": "107474009",
+    "current_state": "absent"
+  },
+  "retained_locks": {
+    "shared": {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock",
+      "inode": 90730,
+      "sha256": "3aa97b068d3e5246ff838417b32989b2760ca11680f8a65a978d949a9d85cdc5",
+      "mode": "0600",
+      "uid": 1000,
+      "gid": 1000
+    },
+    "attempt": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch18.json",
+      "inode": 90731,
+      "sha256": "e39dc0fe3faf917a0aa8adb61e9aa64334bf5d107bd35fe4ad7d441a6beeca1e",
+      "mode": "0600",
+      "uid": 1000,
+      "gid": 1000
+    }
+  },
+  "failure": {
+    "command": ["python3", "docs/verification/evidence/native-exact-scratch18-build-execution-20261001.py", "--release-commit", "ef777b0718353152cb82fc363b45dc3c0f921717", "--execute"],
+    "working_directory": "/home/holden/mckernel",
+    "explicit_environment": {"PYTHONDONTWRITEBYTECODE": "1"},
+    "returncode": 1,
+    "exception": "AdmissionError: process identity unverifiable",
+    "cause": "PermissionError: [Errno 13] Permission denied: /proc/1/exe",
+    "boundary": "native_rust_exact_disk_build_wrapper._dispatcher_processes before owner load",
+    "trace_lines": [184, 192, 362, 584, 642, 648],
+    "raw_capture": "dispatcher invocation stderr; no scratch-side wrapper terminal existed at this pre-owner boundary",
+    "launcher_log_dir": "/home/holden/mckernel/.git/os-autopilot/runs/20260930T174643Z-2adefc1c",
+    "traceback": [
+      "PermissionError: [Errno 13] Permission denied: '/proc/1/exe'",
+      "The above exception was the direct cause of the following exception:",
+      "__main__.AdmissionError: process identity unverifiable"
+    ]
+  },
+  "postflight": {
+    "build_lease": "absent",
+    "output": {"device": 1831, "inode": 3571962, "files": 0},
+    "evidence": {"device": 1831, "inode": 3571963, "files": 0},
+    "relevant_processes": 0,
+    "new_container": false,
+    "latest_mckernel_container_before_attempt": {
+      "id": "b1f8b2cc6140c2522c9f2d85da902be3646f8a74f71f802702b00b7f6c1eff56",
+      "created_at": "2026-10-01T04:30:01-07:00",
+      "state": "exited",
+      "name": "mckernel-exact-496eaf7238ea44a69e55638f9fcc9202"
+    },
+    "attempt_started_after": "2026-10-01T07:28:49-07:00"
+  },
+  "interpretation": "No McKernel compilation occurred. The fail-closed wrapper retained the published request and both ownership records exactly as designed. They must not be deleted or reused without a separately reviewed recovery release.",
+  "next_action": "repair the process census for the host procfs policy, independently review exact failure retention and a resume/retirement design, then use a fresh reviewed one-shot recovery path; never rerun the unchanged packet"
+}

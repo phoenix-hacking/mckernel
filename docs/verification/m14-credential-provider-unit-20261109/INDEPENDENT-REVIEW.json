@@ -1,0 +1,185 @@
+{
+  "decision": "GO_EXACT_THREE_FUNCTION_CREDENTIAL_SOURCE_ABI_PROFILE_PARTIAL_JOIN_FOR_ROOT_ADMISSION",
+  "owner": "/root/create_empty_entry_parity_high",
+  "compiler_link_or_runtime_executed": false,
+  "execution_admission_granted": false,
+  "canonical_or_index_writes": false,
+  "bindings": {
+    "request": {
+      "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/credential-provider-unit-1/REQUEST.json",
+      "sha256": "9027dba081d048f63db6284b903b6337ea418866d6ce2f6408a009274caadb91"
+    },
+    "unit": {
+      "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/credential-provider-unit-1/credential_provider_unit.rs",
+      "sha256": "e9aa887a78063ed26e81aa8ea5273b76d6567f2279a9b121bf609071770f1288"
+    },
+    "preparer_sourceproof": {
+      "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/credential-provider-unit-1/SOURCE-PROOF.json",
+      "sha256": "597d3a06fda1614580deebb12eda8b7abbff47a07257330e74f1ef7d7f1a3ca8"
+    },
+    "fc5_receipt": {
+      "path": "/home/holden/mckernel/docs/verification/m14-f03-adapters-unit-20261105-2/receipt.json",
+      "sha256": "4c7f8d0870e24088e92b5c1685c2dcd2b030ff55cf1ee8dac0365b40cd283d2f"
+    },
+    "fc5_object": {
+      "path": "/home/holden/mckernel/docs/verification/m14-f03-adapters-unit-20261105-2/f03_adapters.o",
+      "sha256": "fc5f0385167262654aabedbceb6d1aa24e3ce143db80dc6eb39fea5f511a8725"
+    },
+    "fc5_unit": {
+      "path": "/home/holden/mckernel/docs/verification/m14-f03-adapters-unit-20261105-2/f03_adapters.rs",
+      "sha256": "d11e00af0ecd7ebdcc8245ea570f528ab6d102c9c1f700944e8bf650ce932ff8"
+    },
+    "current_abi_sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "current_refresh_entries_sha256": "9d52bfd14779a4396bf98e20058f8eac5a15ce3da99cdd788f667db6146a0e7c"
+  },
+  "source_eligibility": {
+    "authority": "Explicit Nov9 Root task and credential-provider-readonly.json partial_source_task authorize only current three credential definitions/actual ABI/constants for independent nonexecuted partial source/codegen/join preparation. Active CAMPAIGN original universal generic/exec and native/source holds remain binding.",
+    "current_source": "kernel/rust/syscall_policy.rs SHA11df0a7dbaeedcb009f5275e422f17eed444f4b513e7322e14f19e88566a2f1e",
+    "independent_comparison": "All three no_mangle definitions byte-equal current selected function definitions; four actual callback aliases and five actual constants exact. Only included module is actual pure type/layout abi.rs, unchanged fc5 SHA; no crate:: implementation dependencies in that ABI file.",
+    "definition_hashes": {
+      "getcred_body_result": "3dc387cc2d5560058649cd60ec08c4345f8f44f176aab2b73eb46b601f64c7bd",
+      "syscall_refresh_cred_fields_body_result": "f4ff0457d5fab272f1c60209ed522e33a4d2bb4eaead17883963d61402bac090",
+      "getcred": "22d91d8f90b433e0aec1534c037b53cd6b757801c74594df382f8df9c6a54b18"
+    },
+    "excluded": "No entire syscall_policy/whole kernel crate, generic/exec/ACK/TID/XPMEM implementation, bridge or callback implementation, c205/old8/oldcohort input, source remap, symbol override/rewrite or multiple-definition option. No hold is released."
+  },
+  "consumer_ABI_and_layout": {
+    "evidence": "Read current actual ABI/entry source, exact retained fc5 unit/receipt, current fc5 ELF header/global symbols and only .ltext.do_setresuid/.ltext.do_setresgid relocations/disassembly. Object+unit hashes match receipt.",
+    "ELF": "ELF64 little-endian x86_64 ET_REL",
+    "entry_ABI": "do_setresuid/do_setresgid unsafe extern C fn() / void(void), each173bytes in retained object",
+    "getter_ABI": "getcred unsafe extern C fn(*mut CInt)->*mut CInt / int*(int*)",
+    "scalars": {
+      "CInt_bits": 32,
+      "CLong_bits": 64,
+      "CULong_bits": 64,
+      "SizeT_bits": 64
+    },
+    "SyscallRequest": {
+      "repr": "C",
+      "bytes": 72,
+      "alignment": 8,
+      "rtid": 0,
+      "ttid": 4,
+      "valid": 8,
+      "number": 16,
+      "args": 24
+    },
+    "scratch": {
+      "CInt_slots": 16,
+      "bytes": 64,
+      "selected_snapshot_slots": 8,
+      "selected_snapshot_bytes": 32,
+      "synchronous_borrow": true
+    },
+    "actual_fc5_nonTOFU_offsets": {
+      "CpuLocalVar.current": 7848,
+      "Thread.proc": 4304,
+      "Process.ruid": 464,
+      "Process.euid": 468,
+      "Process.suid": 472,
+      "Process.fsuid": 476,
+      "Process.rgid": 480,
+      "Process.egid": 484,
+      "Process.sgid": 488,
+      "Process.fsgid": 492
+    },
+    "snapshot_slot_order": [
+      "ruid",
+      "euid",
+      "suid",
+      "fsuid",
+      "rgid",
+      "egid",
+      "sgid",
+      "fsgid"
+    ],
+    "uid_indices": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "gid_indices": [
+      4,
+      5,
+      6,
+      7
+    ],
+    "completion": "Only synchronous return0 and a genuine complete eight-value producer permit nonnull snapshot. All nonzero results return NULL; refresh helper checks NULL before process load/credential writes. Original void entries drop helper status; no setter serialization/rollback ownership is invented."
+  },
+  "unique_ownership": {
+    "fc5_actual_strong_definitions": {
+      "do_setresgid": 173,
+      "do_setresuid": 173,
+      "ptrace_detach_do_kill_bridge": 12,
+      "ptrace_detach_wakeup_bridge": 12,
+      "syscall_do_syscall2_bridge": 167,
+      "syscall_do_syscall3_bridge": 171,
+      "syscall_policy_do_syscall2_bridge": 167,
+      "syscall_policy_do_syscall3_bridge": 171,
+      "terminate_host": 183,
+      "wait_host_wait4_bridge": 166
+    },
+    "new_provider_definitions": [
+      "getcred_body_result",
+      "syscall_refresh_cred_fields_body_result",
+      "getcred"
+    ],
+    "intersection": [],
+    "partial_expected_strong_definition_count": 13,
+    "join_payload": [
+      "/usr/bin/ld",
+      "-r",
+      "-o",
+      "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/credential-provider-unit-1/output/credential_partial.o",
+      "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/credential-provider-unit-1/output/credential_provider.o",
+      "/home/holden/mckernel/docs/verification/m14-f03-adapters-unit-20261105-2/f03_adapters.o"
+    ],
+    "current_error_aware_getter_owns_binding": "fc5 getcred and refresh-helper imports resolve only against the new provider; no retained stale c205 getter or old eight-entry owner is selected.",
+    "lower_bridge_imports_intentionally_UNRESOLVED": [
+      "syscall_virt_to_phys_bridge",
+      "syscall_get_processor_id_bridge",
+      "syscall_do_syscall_request_bridge"
+    ],
+    "all_other_genuine_imports_intentionally_UNRESOLVED": [
+      "do_kill",
+      "do_syscall",
+      "f03_terminate_host_refcount_set_v1",
+      "f03_wait_release_process",
+      "f03_wait_release_thread",
+      "get_this_cpu_local_var",
+      "ihk_mc_get_processor_id",
+      "sched_wakeup_thread",
+      "syscall_do_kill_thread_bridge",
+      "syscall_do_syscall_request_bridge",
+      "syscall_find_process_bridge",
+      "syscall_generic_forwarding_body_result",
+      "syscall_get_processor_id_bridge",
+      "syscall_process_unlock_bridge",
+      "syscall_virt_to_phys_bridge",
+      "terminate_host_body_result"
+    ]
+  },
+  "profile_review": {
+    "commands": 5,
+    "compile_scope": "One private no_std unit only; actual abi.rs types/layouts plus exact3function partition. No test/runtime/native command.",
+    "compiler_payload": "Independently compared to fc5 receipt from rustc executable onward: only output path and source path differ. Same pinned compiler70ebcbba, edition2021/lib, panicabort,opt2,large/static,no-redzone,no-loop/SLP-vectorization and exact disabledSSE/AVX list; no additional cfg or warning suppression.",
+    "warning_policy": "Exact unchanged retained single sse2 ABI warning bytes bound by SHA52aa1b68; extra warning/error is an unexpected result. This inherited HOST partial-codegen profile does not establish final/native ABI acceptance.",
+    "metadata_and_link": "provider-nm, then plain ld-r with precisely provider.o and fc5.o, partial-nm, readelf headers/symbols/relocations. No archives, scripts, duplicate overrides or hidden cohort inputs.",
+    "resources": "CPU6/local1 serial/AS1GiB/CPU45s/60+5wall/FSIZE64MiB/core0; aggregate HOST0/6/7 max3jobs/4GiB TOTAL includes overhead, fresh26GiB availability retains18GiB+4GiBfloor. Root fresh admission remains mandatory."
+  },
+  "required_actual_result_checks": [
+    "Provider global strong definitions exactly the three reviewed names; genuine lower bridge imports remain undefined. Identify any compiler-support import explicitly and reconcile before qualification; no synthesized provider definition.",
+    "Before crediting partial join require exactly13 unique reviewed strong owners, getcred and refresh helper no longer undefined, retained credential entries173bytes each, correct ELF64x86_64REL, and actual entry relocations target current unique getter/helper.",
+    "List all remaining genuine imports; expected16 named unresolved imports are not a closed provider cohort. First unexpected compile/link/symbol/relocation result stops for focused reconciliation without autonomous retry.",
+    "Capture actual command/status/metrics/PIDbirth/directwaits and release slot; no function runs and no native/held original owner is retired."
+  ],
+  "unchanged_behavior_reuse": {
+    "receipt": "docs/verification/m14-credential-producer-results-20261105.json",
+    "scope": "Existing5 extracted HOST producer/consumer cases only",
+    "independent_body_check": "Current getcred_body_result and refresh helper byte-identical to retained test fixture from pub fn through closing brace (stronger than whitespace normalization); unrelated current syscall_policy whole-file hash change does not change those bodies.",
+    "replayed": false,
+    "limit": "The old test executable is not a replacement core/provider or matched deployed host artifact. getcred export/source partition and partial relocatable binding are new source/metadata obligations only."
+  },
+  "acceptance_limit": "GO only for this precise explicitly partial source/profile and future admitted nonexecuted codegen/ld-r proof. No M14 file acceptance, C retirement, final CREDENTIAL-COHORT/PROVIDER-CLOSURE, default/fullimage/native or matching host-module/executor cohort acceptance. Genuine current CPU/mapping/offload, get_this_cpu_local_var and remaining fc5 imports stay unresolved. Original service/source/SDK/native/current-free/UNKNOWN owners/18GiB charges unchanged."
+}

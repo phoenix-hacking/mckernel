@@ -1,0 +1,129 @@
+{
+  "task": "production-three-leaf-1",
+  "status": "READY_FOR_INDEPENDENT_PRODUCER_SOURCE_REVIEW",
+  "scope": "Functional OS/apps and actual C-to-Rust cutover preparation; no production acceptance",
+  "source_commit": "85468476a035f0528c1943e43ba041e4643be333",
+  "file_pins": {
+    "prepare.py": {
+      "sha256": "938dfe3cde7f4451b49d8ed0ce9407f03de8a5992c4d28126b560bbb7ed0fb48",
+      "bytes": 10452
+    },
+    "make_production_driver.py": {
+      "sha256": "5482ec8584a6d33aa9eefddcc6c715f8b2d0db87a60940e95556e07fd34df286",
+      "bytes": 1550
+    },
+    "production-driver-extension.py": {
+      "sha256": "38c1e5616565cbdbf4acea81a58410b01ed4816d4d5afabfbaed4fcbca99d7b3",
+      "bytes": 12481
+    },
+    "driver-extension.patch": {
+      "sha256": "a2c44576f5fb1f31cb903259ae035999237bec89b6bbfbf6cce11aef95c9d868",
+      "bytes": 13582
+    },
+    "production-process-assertions.inc": {
+      "sha256": "7e1876da9f47385b0259913925a246eb298d90438c7b3907f8e6f33af7120216",
+      "bytes": 6386
+    },
+    "C-ABI-expression-contract.json": {
+      "sha256": "583eaa2847fcc49d54c47efb8c8a88902097591575ee4864a95611034ca95c5b",
+      "bytes": 8303
+    },
+    "source-binding.json": {
+      "sha256": "84611a03002d37414a8b603fd6f2974dfdbfd9dd4101c950b7849f35df46ea62",
+      "bytes": 1587
+    },
+    "production-commands-INPUTS.json": {
+      "sha256": "0a1e711b963afeb181a7e459b08b7faa0d0a563ef5ffe064d990a521eb535aa8",
+      "bytes": 10694
+    },
+    "next-production-command.json": {
+      "sha256": "5bad36d67cdf2f5f2688ecc2b6c6b7bddc79612d96af767a21f7c299ba543822",
+      "bytes": 2239
+    },
+    "postbuild-14-INPUTS.json": {
+      "sha256": "edf1e1570685eaaacd1bb3549f73af4fa0111408fb7b7738a87039819dc96727",
+      "bytes": 31292
+    },
+    "postbuild_three_leaf_facts.py": {
+      "sha256": "96b9a52931cb3401a720ddfede00f69d35cdcc6cd9c6b280e4e75fd366a0c0c2",
+      "bytes": 5155
+    },
+    "test_producer.py": {
+      "sha256": "bd6d59611e948e1658919d35f6f52fce7685792074e041403db7b46f184dd1c1",
+      "bytes": 6256
+    },
+    "run_fixture.py": {
+      "sha256": "038fd2bc1d6d1ea507f616601eccbe39135b4e3abcb42b6b54562fbe5c361656",
+      "bytes": 2798
+    },
+    "fixture-admission.json": {
+      "sha256": "a5d15525f3b498804852d826b4807a113e229eaae36ed8aa3e3316072b9ad080",
+      "bytes": 424
+    },
+    "producer-fixture-1/summary.json": {
+      "sha256": "fd63b8fd0a5cb6cda6311bf29197b0dfa6ca844c3b80dbf20931f2daaa40ae22",
+      "bytes": 372
+    },
+    "outer-1/actual-production-producer-fixture.status.json": {
+      "sha256": "db0227bdcf1e17bdfdbaa764cbabc4a54bde9149bd34726f1b120ab9edf8d9f0",
+      "bytes": 879
+    },
+    "outer-1/actual-production-producer-fixture.stdout": {
+      "sha256": "c1912ec161edf7121803205489d7a8a2dbb755ee8874daa63371c53ca5644e87",
+      "bytes": 350
+    },
+    "outer-1/actual-production-producer-fixture.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "outer-1/commands.json": {
+      "sha256": "50517d2cc93751181ce9b6f5bc004a505021b2b0de39f38b2afe4e05bbd8bfa8",
+      "bytes": 945
+    }
+  },
+  "checks": {
+    "focused_actual_producer": {
+      "status": "PASS_SYNTHETIC_ACTUAL_THREE_LEAF_PRODUCER",
+      "cases": 15,
+      "positive": 1,
+      "expected_refusals": 14,
+      "C_layout_assertions": 41,
+      "C_type_assertions": 24,
+      "actual_producer_sha256": "38c1e5616565cbdbf4acea81a58410b01ed4816d4d5afabfbaed4fcbca99d7b3",
+      "compiler_invocations": 0,
+      "kernel_artifacts_produced": false,
+      "production_acceptance": false
+    },
+    "whole_join": {
+      "pid": 1299600,
+      "returncode": 0,
+      "direct_child_joined": true,
+      "seconds": 0.11586380697553977,
+      "timed_out": false,
+      "cleanup": []
+    },
+    "CPU7": "RELEASED to root before packaging",
+    "syntax_only": [
+      "make_production_driver.py",
+      "postbuild_three_leaf_facts.py",
+      "production-driver-extension.py"
+    ]
+  },
+  "assertion_oracle": "41 layout expressions and24 type contracts emitted as real C Static_assert expressions appended to entire actual process.c; no Rust-derived layout structs or injected leaf prototypes",
+  "retention": "Existing21 members unchanged: same two selected/fallback full-process objects now contain all3leaves; same caps, no new object/image cycle",
+  "reuse": "No56/32/60 leaf parity replay; existing full native/legacy FP prebuild objects consumed, never recompiled by new gate",
+  "baseline_claim": "12 original observations are7image and5Rust-object symbol presence observations; three added leaf exports are separate, not15retiredfunctions",
+  "pending": [
+    "Fresh85468476 source/gitlink manifest generation by existing admitted image-owner pipeline",
+    "Root-reviewed heavy admission; realGCC14.3.1 selected/fallback65assertions and fullcurrentnativelegacycrate export facts",
+    "Existing14postbuild inspections, unique linked3symbols and21member retention",
+    "Meaningful unchanged normal threadteardown native continuation"
+  ],
+  "unchanged": [
+    "Actual shared source/current FP1e7 artifact",
+    "Separate IHK os_runtime14 runtime closure; no globalHEAD equality gate",
+    "All original failures/reviews"
+  ],
+  "next_command": "next-production-command.json",
+  "limitations": "Fixture replaces only external process boundary with deterministic replies; executes actual producer control flow, not C/Rust compiler, object validity, native teardown or image acceptance. Adapter assembler syntax checked only, not executed here. Original source-binding PREPARED status preserved; this packet is additive completed-fixture status."
+}

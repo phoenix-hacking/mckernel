@@ -1,0 +1,120 @@
+{
+  "schema": "mckernel.scratch22-authority2-libdwarf-preparation.v1",
+  "status": "PASS_DATA_ONLY_GITLINK_PREPARATION",
+  "author": "/root/scratch22_adapter",
+  "candidate_sha": "d37d2216a60c6db10442ba8bc238d64fbd59c5ea",
+  "ihk_sha": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+  "preparation_helper": {
+    "path": "scripts/native_rust_exact_mckernel_gitlink_prepare.py",
+    "sha256": "d1cee2c5ab37c2d86328b6a5999f5a7f15cea38ba80c0948ae749aab79f6a597",
+    "source_read_completely": true,
+    "dispatcher_profile": "Existing accepted ordinary local-Git data preparation profile; no new suite or execution review expansion."
+  },
+  "command": "set -o noclobber\nexec env -i PATH=/usr/bin:/bin HOME=/nonexistent LANG=C LC_ALL=C PYTHONDONTWRITEBYTECODE=1 /usr/bin/time -v taskset -c 7 timeout --kill-after=5s 120s prlimit --rss=1073741824 --nofile=256 --core=0 /usr/bin/python3 -B /home/holden/mckernel/scripts/native_rust_exact_mckernel_gitlink_prepare.py --source /home/holden/mckernel-work/scratch/native-exact-mckernel-gitlink-libdwarf-c81aeaca-exportset-26 --checkout /home/holden/mckernel-work/scratch/native-exact-mckernel-gitlink-libdwarf-d37d2216-scratch22-authority2-image1-20261017 --output /home/holden/mckernel-work/scratch/native-exact-mckernel-gitlink-inputs-d37d2216-scratch22-authority2-image1-20261017.json --base-manifest /home/holden/mckernel-work/scratch/native-exact-inputs-scratch-22-authority2.json --candidate-sha d37d2216a60c6db10442ba8bc238d64fbd59c5ea --ihk-sha 3114d9e7101ad52030eb3effa849a5c108972a1f > /home/holden/mckernel-work/scratch/native-exact-mckernel-gitlink-inputs-d37d2216-scratch22-authority2-image1-20261017.prepare.stdout 2> /home/holden/mckernel-work/scratch/native-exact-mckernel-gitlink-inputs-d37d2216-scratch22-authority2-image1-20261017.prepare.stderr",
+  "execution": {
+    "exit_code": 0,
+    "elapsed_wall_seconds": 3.62,
+    "max_rss_kib": 162284,
+    "cpu_affinity": [
+      7
+    ],
+    "rss_planning_limit_bytes": 1073741824,
+    "rlimit_rss_hint_bytes": 1073741824,
+    "no_address_space_cap": true,
+    "wall_timeout_seconds": 120,
+    "nofile": 256,
+    "core_bytes": 0,
+    "note": "Linux RLIMIT_RSS is advisory and is not claimed as enforced memory containment. /usr/bin/time captured actual peakRSS; all Git processes inherited CPU7. No other build/guest token was acquired."
+  },
+  "source": {
+    "checkout": "/home/holden/mckernel-work/scratch/native-exact-mckernel-gitlink-libdwarf-c81aeaca-exportset-26",
+    "expected_commit": "ab9230b2b8aa66a3d1d52e4be11fca17a3b63753",
+    "base_manifest": "/home/holden/mckernel-work/scratch/native-exact-inputs-scratch-22-authority2.json",
+    "base_manifest_sha256_before": "4866232a621732999826d624f568d4bc0f2b949f9eb1f7c116ea26b4f7f44e4f",
+    "base_manifest_sha256_after": "4866232a621732999826d624f568d4bc0f2b949f9eb1f7c116ea26b4f7f44e4f",
+    "authenticated_git": {
+      "path": "/usr/bin/git",
+      "sha256": "c3edb15c9715b79fcfb1fa978256cdfc14a9ad72a4a8d5680a9fc5ebc6a57e0e",
+      "version": "git version 2.25.1"
+    }
+  },
+  "outputs": {
+    "checkout": "/home/holden/mckernel-work/scratch/native-exact-mckernel-gitlink-libdwarf-d37d2216-scratch22-authority2-image1-20261017",
+    "manifest": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-gitlink-inputs-d37d2216-scratch22-authority2-image1-20261017.json",
+      "sha256": "34db81e1c15a4a10ee929a8dd4bf4103daa03cf6d8662f364ecdfbe4f9442fa5",
+      "size": 96783,
+      "schema": "mckernel.native-exact-mckernel-gitlink-inputs.v1",
+      "consumed_path": "executer/user/lib/libdwarf/libdwarf",
+      "commit": "ab9230b2b8aa66a3d1d52e4be11fca17a3b63753",
+      "tree": "dcc29777813bf8625dce8bfb239c225d5535d668",
+      "tracked_files": 412,
+      "git_metadata_files": 21
+    },
+    "stdout": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-gitlink-inputs-d37d2216-scratch22-authority2-image1-20261017.prepare.stdout",
+      "sha256": "a35dc1229e70dce80c8e3ee6927635465308b3df1e3fa1e4be33c990ce2c729e",
+      "meaning": "Complete raw CLI stdout retained; parses to exactly the same document as the published supplemental manifest."
+    },
+    "stderr": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-gitlink-inputs-d37d2216-scratch22-authority2-image1-20261017.prepare.stderr",
+      "sha256": "87355661a5ffce98fa4428bb4307c19641e69b5490bbe39280af2fd5aa295404",
+      "meaning": "Complete raw stderr and /usr/bin/time resource report retained. Helper succeeded without reported Git errors."
+    }
+  },
+  "checks": [
+    "Fresh checkout and manifest names were absent before the single invocation.",
+    "Canonical helper independently authenticates exact Git executable/version; local no-hardlink/no-local clone with detached exact commit; removes origin and checks private self-contained Git metadata.",
+    "Canonical helper checks every tracked regular file permission/blob/SHA, index==HEAD tree, clean/noignoredextras, no gitlinks/nested repositories/symlinks/special files/shallow/replacement/alternate objects; full fsck passes.",
+    "Manifest exact candidate/IHK/base-manifest/gitlink joins and all412 tracked/21metadata inventories passed canonical helper.",
+    "Post-command standard-library JSON inspection confirms exact expected identities/counts and complete stdout semantic equality; no additional Git operation was started for that inspection."
+  ],
+  "capacity_before": {
+    "host_free_bytes": 28626182144,
+    "scratch_free_bytes": 26073325568,
+    "host_floor_bytes": 17179869184,
+    "scratch_floor_bytes": 12884901888
+  },
+  "git_quiescence": {
+    "helper_session": 35966,
+    "session_joined_exit_code": 0,
+    "command": "pgrep -a -x 'git|git-upload-pack|git-pack-objects|git-index-pack|git-receive-pack'",
+    "exit_code": 1,
+    "stdout": "",
+    "conclusion": "No matching Git process at the completion observation. This lane will start no more Git work; dispatcher notified immediately before evidence writing so fresh heavy census can run without this lane's process churn.",
+    "no_process_signal": true
+  },
+  "attempts": {
+    "invocations": 1,
+    "failures": 0,
+    "bounded_corrections": 0
+  },
+  "preservation": {
+    "main_HEAD_writes": false,
+    "candidate_source_writes": false,
+    "three_image_placeholder_paths_touched": false,
+    "old_checkouts_or_manifests_touched": false,
+    "running_or_failed_build_outputs_touched": false,
+    "locks_or_leases_touched": false
+  },
+  "not_performed": [
+    "compiler",
+    "sudo/root",
+    "Docker",
+    "tool-image probe",
+    "guest",
+    "network/fetch",
+    "release creation",
+    "source candidate modifications",
+    "recursive agents"
+  ],
+  "acceptance": {
+    "native_builds": 0,
+    "images": 0,
+    "guest_apps": 0,
+    "formal_applications": 0,
+    "production_gates": 0,
+    "image_acceptance": false
+  },
+  "next": "Dispatcher can bind this exact fresh libdwarf checkout/manifest into the current-candidate image request after native artifacts and applicable image/tool/runtime prerequisites are independently accepted."
+}

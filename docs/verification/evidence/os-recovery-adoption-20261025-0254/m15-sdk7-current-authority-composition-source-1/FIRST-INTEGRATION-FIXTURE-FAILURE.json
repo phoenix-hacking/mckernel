@@ -1,0 +1,11 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRESERVED_TEST_FIXTURE_FAILURE",
+  "tests": 3,
+  "passed": 2,
+  "errors": 1,
+  "command": "/usr/bin/prlimit --as=2147483648:2147483648 -- /usr/bin/taskset -c 0 /usr/bin/python3 -B test_current_window_integration.py",
+  "error": "AttributeError: module 'ast' has no attribute 'unparse'",
+  "cause": "/usr/bin/python3 is Python3.8; test-only AST transformer used3.9 helper.",
+  "correction": "Compare AST nodes structurally using ast.dump; production sources unchanged."
+}

@@ -1,0 +1,24 @@
+{
+  "schema": "mckernel.independent-source-review.v1",
+  "decision": "PASS_GUEST_BODY_TRANSPORT_ADAPTER_SCOPE",
+  "reviewer": "/root/native_cpu_reacquire_review",
+  "implementation_ownership": false,
+  "report": {
+    "path": "/home/holden/mckernel-work/scratch/fork-final-ack-carrier-20261017-1/guest-body-pass1/report.json",
+    "sha256": "622033e671b7eb283b01df1ca4e504c94986e152b0689ca0ed975878ec657a5b"
+  },
+  "verified_frozen_sources": 4,
+  "verified_actual_body_snapshots": 9,
+  "verified_raw_bindings": 23,
+  "verified": [
+    "Full identity/nonce/epoch/phase/embedded permit checked before consuming constructor credits.",
+    "Thread pointer cleared before actual checked release; literal2 only ACK and no child/proc/VM dereference after consumption.",
+    "Phase6 caches full kind4/sequence2 bytes; failed send retry retains carrier without repeated destructor; success duplicate has no transport effect.",
+    "Old factory and weak prepare remain closed."
+  ],
+  "scope_limits": [
+    "Receipt inputs and syscall completions are adapters; no genuine host authority.",
+    "No finalRET/claim release/native compilation/normal-child/postLINK revoke acceptance."
+  ],
+  "runtime_authority": false
+}

@@ -1,0 +1,304 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_ACTUAL_C_C_DIAGNOSTIC_CALLBACK_REGRESSION_ONLY",
+  "records": [
+    {
+      "step": 0,
+      "command": {
+        "argv": [
+          "/usr/bin/python3",
+          "-I",
+          "-B",
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/stripped-storage-correction-source-6/check_C_C_empty_storage_callbacks_once.NOT-GRANTED.py",
+          "--check-once",
+          "0ab32b322d1df97ca8c5e284beb323c7533b3de565569a24e055f3cdc8265310"
+        ],
+        "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Exactold/corrected C diagnostic under explicit mockcallbacks,3positive10negative+oldfailure; no pinnedABI/Rust/SDK claim."
+      },
+      "join": {
+        "pid": 614136,
+        "start": 71334076,
+        "returncode": 0,
+        "direct_child_joined": true,
+        "group_absent": true,
+        "remaining_group_members": [],
+        "unexpected_group_members": [],
+        "timed_out": false,
+        "error": null,
+        "retirement_error": null,
+        "seconds": 1.5164961460977793,
+        "closed_streams": true,
+        "captures": {
+          "stdout": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/stripped-storage-correction-source-6/actual-C-C-callback-regression-h990-CPU0-1/step0/stdout",
+            "sha256": "af8e84dd878bc0d9bf4b9fee25ebb9b040961fb3173cd5fe4c8d938f11b003cc",
+            "device": 66306,
+            "inode": 59534863,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 462,
+            "mtime_ns": 1792915897536535348,
+            "ctime_ns": 1792915897536535348
+          },
+          "stderr": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/stripped-storage-correction-source-6/actual-C-C-callback-regression-h990-CPU0-1/step0/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 59534864,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1792915896064489288,
+            "ctime_ns": 1792915896064489288
+          }
+        }
+      }
+    }
+  ],
+  "checks": {
+    "Rust_ABI_acceptance": false,
+    "mock_only": true,
+    "negative_cases": 10,
+    "old_oracle_reproduced": 1,
+    "pinned_SDK_acceptance": false,
+    "positive_cases": 3,
+    "query_or_Docker": false,
+    "records": [
+      {
+        "argv": [
+          "/usr/bin/cc",
+          "-std=c11",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-O0",
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/stripped-storage-correction-source-6/actual-callback-fixture-1/old.c",
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/stripped-storage-correction-source-6/mock_bfd_callbacks.c",
+          "-o",
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/stripped-storage-correction-source-6/actual-callback-fixture-1/old"
+        ],
+        "label": "old-compile",
+        "returncode": 0,
+        "stderr_bytes": 0,
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "argv": [
+          "/usr/bin/cc",
+          "-std=c11",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-O0",
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/stripped-storage-correction-source-6/actual-callback-fixture-1/new.c",
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/stripped-storage-correction-source-6/mock_bfd_callbacks.c",
+          "-o",
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/stripped-storage-correction-source-6/actual-callback-fixture-1/new"
+        ],
+        "label": "new-compile",
+        "returncode": 0,
+        "stderr_bytes": 0,
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/stripped-storage-correction-source-6/actual-callback-fixture-1/old",
+          "fixture",
+          "stripped"
+        ],
+        "label": "old-terminator-storage",
+        "returncode": -6,
+        "stderr_bytes": 393,
+        "stderr_sha256": "4a19517db1e247a7ee6c1e6b1f0de71656bece7ea229eb192f4dc0ec949ed66a",
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/stripped-storage-correction-source-6/actual-callback-fixture-1/new",
+          "fixture",
+          "stripped"
+        ],
+        "label": "normal",
+        "returncode": 0,
+        "stderr_bytes": 0,
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 727,
+        "stdout_sha256": "65f7833700a117e7fc9d27f103f0f314ecb473e03191f81493a18022ea58c326"
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/stripped-storage-correction-source-6/actual-callback-fixture-1/new",
+          "fixture",
+          "stripped"
+        ],
+        "label": "stable-pointers",
+        "returncode": 0,
+        "stderr_bytes": 0,
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 727,
+        "stdout_sha256": "67c918014939fd4fd98dcc863daeeaea603ab25663b15732441c38ebe3a1b85e"
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/stripped-storage-correction-source-6/actual-callback-fixture-1/new",
+          "fixture",
+          "stripped"
+        ],
+        "label": "zero-empty-upper",
+        "returncode": 0,
+        "stderr_bytes": 0,
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 727,
+        "stdout_sha256": "c7ab639eacf82cb94ba5dc60c46c4acdd8aa7e8073f493ebce59ce533e523d63"
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/stripped-storage-correction-source-6/actual-callback-fixture-1/new",
+          "fixture",
+          "stripped"
+        ],
+        "label": "negative-upper",
+        "returncode": -6,
+        "stderr_bytes": 414,
+        "stderr_sha256": "d9c1c88c441562bf86a837a0c7701913945d705e0f7e4f528647b4e6c903cf33",
+        "stdout_bytes": 34,
+        "stdout_sha256": "d4782657fdcde2788c903c3af39ed5305fd0ccda2ba51bcc06c2c5d3e5e9b92d"
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/stripped-storage-correction-source-6/actual-callback-fixture-1/new",
+          "fixture",
+          "stripped"
+        ],
+        "label": "zero-nonempty-upper",
+        "returncode": -6,
+        "stderr_bytes": 382,
+        "stderr_sha256": "ca8082ed627f7bf8bf4d091a7019ff10963169e8f044e02e0a2b381425173ec6",
+        "stdout_bytes": 32,
+        "stdout_sha256": "a5127cb7885c37787811f945139924d19b1ab17657d7fe7934c206204a0e7834"
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/stripped-storage-correction-source-6/actual-callback-fixture-1/new",
+          "fixture",
+          "stripped"
+        ],
+        "label": "zero-nonempty-count",
+        "returncode": -6,
+        "stderr_bytes": 395,
+        "stderr_sha256": "43861f6350cafe5245339f44733df24827e360d5ef51696565b0a84b5849c61b",
+        "stdout_bytes": 70,
+        "stdout_sha256": "575cd41891d548bb653c813d4a69f83801feefae5ccafc24d32bb54a754817ec"
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/stripped-storage-correction-source-6/actual-callback-fixture-1/new",
+          "fixture",
+          "stripped"
+        ],
+        "label": "nonzero-empty-count",
+        "returncode": -6,
+        "stderr_bytes": 395,
+        "stderr_sha256": "43861f6350cafe5245339f44733df24827e360d5ef51696565b0a84b5849c61b",
+        "stdout_bytes": 278,
+        "stdout_sha256": "1bbbe7004095963f134c061b1d56470760839521b68d45d8b3dd15daf644ba74"
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/stripped-storage-correction-source-6/actual-callback-fixture-1/new",
+          "fixture",
+          "stripped"
+        ],
+        "label": "out-of-bounds-count",
+        "returncode": -6,
+        "stderr_bytes": 394,
+        "stderr_sha256": "1e654a2ac047c6e322207c563948d620737db94f6094ff074b196eaf806046a8",
+        "stdout_bytes": 70,
+        "stdout_sha256": "a71fd33891617d3312a3a8418dd0a579541ed21355c600d032e3b240310f6c62"
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/stripped-storage-correction-source-6/actual-callback-fixture-1/new",
+          "fixture",
+          "stripped"
+        ],
+        "label": "second-count-mismatch",
+        "returncode": -6,
+        "stderr_bytes": 390,
+        "stderr_sha256": "4268cba5e3ccabddf23df73fdc7c7efe22bc883187859f79f69d4a2772312f1d",
+        "stdout_bytes": 106,
+        "stdout_sha256": "001f17faf4d9b0f9e6030d22f0ccc8b7fc36f3ed30baf80774f00e867218ea94"
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/stripped-storage-correction-source-6/actual-callback-fixture-1/new",
+          "fixture",
+          "stripped"
+        ],
+        "label": "second-error-mismatch",
+        "returncode": -6,
+        "stderr_bytes": 390,
+        "stderr_sha256": "4268cba5e3ccabddf23df73fdc7c7efe22bc883187859f79f69d4a2772312f1d",
+        "stdout_bytes": 106,
+        "stdout_sha256": "f178f45f252f90abd89188d655c136292d9ba848e3479aa96dfccb6abc56dd8d"
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/stripped-storage-correction-source-6/actual-callback-fixture-1/new",
+          "fixture",
+          "stripped"
+        ],
+        "label": "second-name-mismatch",
+        "returncode": -6,
+        "stderr_bytes": 392,
+        "stderr_sha256": "1d341998bf7ddc16bc5ee95ac9febf3f089f7694ed00f124e0dcc4327d0805e5",
+        "stdout_bytes": 179,
+        "stdout_sha256": "154b18cf969e31c3c23c50431ea90689b9fbb88852d37f496b227b476f472960"
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/stripped-storage-correction-source-6/actual-callback-fixture-1/new",
+          "fixture",
+          "stripped"
+        ],
+        "label": "second-value-mismatch",
+        "returncode": -6,
+        "stderr_bytes": 424,
+        "stderr_sha256": "351f2f4791b64c78128042acaa08ecf4fe4340dd5c477d032049c668568afa24",
+        "stdout_bytes": 177,
+        "stdout_sha256": "859a94c39e68981b9e12dd7f4e46456b124b9f3f027430c1e1861a8e500982bd"
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/stripped-storage-correction-source-6/actual-callback-fixture-1/new",
+          "fixture",
+          "stripped"
+        ],
+        "label": "second-flags-mismatch",
+        "returncode": -6,
+        "stderr_bytes": 424,
+        "stderr_sha256": "351f2f4791b64c78128042acaa08ecf4fe4340dd5c477d032049c668568afa24",
+        "stdout_bytes": 177,
+        "stdout_sha256": "35e4cd513337ed0fc08d94ca049d9824b243cc70becf2df73c1284b8629711e8"
+      }
+    ],
+    "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\nActual C diagnostic callback regression with explicit mock header/backend. NO pinned-SDK/Rust ABI claim.\n",
+    "source_sha256": "7cb25c729da35c7b8df18904e2790a84187941148715316787b4cdf45d89ffee",
+    "status": "PASS_ACTUAL_C_DIAGNOSTIC_MOCK_CALLBACK_REGRESSION"
+  },
+  "input_identities_unchanged": true,
+  "seconds": 1.5339208889054134,
+  "CPU_seconds": 0.291992,
+  "CPU0_released": true,
+  "SDK_query_root_native": false,
+  "execution_release": false
+}

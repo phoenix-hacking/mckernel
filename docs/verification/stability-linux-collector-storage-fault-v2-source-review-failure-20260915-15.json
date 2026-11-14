@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_review_failure",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "review_attempt": 19,
+  "status": "FAIL_SOURCE",
+  "recorded_utc": "2026-09-16T02:38:14Z",
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260915-22.tar.gz",
+    "sha256": "e2f24efd31ff7e1e6ee48624344f42d677cb9000291d91f8d7a6fa0f5237063f",
+    "size": 995159,
+    "members": 55,
+    "safe_unique_members": true,
+    "verified_bindings": 67
+  },
+  "reviewed_source_sha256": {
+    "prepare.py": "1d09a2f4f143af79de7eb98e7cc6d5c6a01efa89e15fa925d2c7869c78ab2df4",
+    "witness_owner.py": "4554efcda371a395681ff7f7353e05d98adf6ab4aae656b40d524f128fdf4670",
+    "supervise.py": "306a4982bd4d04721bc0478a5cfec553ac751dd0b5e9379cb9ba519bf4c92ce1",
+    "oracle.py": "fb232daed1759baeefbf2c4c88a6c8fcc629d98f58294f50a5f0a1709c7e5172",
+    "test_collector_storage_fault_packet.py": "d9b9698f4376816187bbdb680fa93a9caea0c0995175dc0cf26e05156291e2e1"
+  },
+  "findings": [
+    "The exact late owner-start failure tuple does not require its event-zero successful sentinel wait or a cleanup trigger strictly after the sentinel deadline; omission, post-trigger status substitution and backdating are accepted.",
+    "Both sentinel and real-owner null-timeout joins ignore a later contradictory observed birth or parent before the positive direct reap.",
+    "A null-birth adopted reap of the sentinel PID can be followed by new positive observations and a second direct reap because retirement is tracked only as a PID/birth tuple.",
+    "SPAWN_FAILED accepts a fabricated direct timeout for an arbitrary absent owner PID."
+  ],
+  "required_next": [
+    "Add full-record controls for the exact late-start tuple, contradiction and sentinel PID retirement cases, plus an absent-owner direct-timeout control.",
+    "Enforce the mandatory sentinel wait/trigger join, invalidate contradicted birth authority, make PID retirement sticky, and require zero direct timeouts after spawn failure.",
+    "Rerun both pinned source suites and obtain a fresh full exact-byte source review."
+  ],
+  "compiler_packet_released": false,
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

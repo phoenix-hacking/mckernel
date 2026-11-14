@@ -1,0 +1,41 @@
+{
+  "status": "READY_UNRUN_REQUIRES_FRESH_DISPATCHER_CPU6_GRANT",
+  "outer_argv": [
+    "taskset",
+    "-c",
+    "6",
+    "prlimit",
+    "--as=1073741824",
+    "--cpu=40",
+    "--fsize=33554432",
+    "--core=0",
+    "--nofile=256",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/body-regression-1/run-check-1.py",
+    "/home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/body-regression-1/capture-1"
+  ],
+  "compile_argv": [
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+    "--edition=2021",
+    "--test",
+    "-Ccodegen-units=1",
+    "/home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/body-regression-1/actual.rs",
+    "-o",
+    "/home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/body-regression-1/capture-1/adoption-method-tests"
+  ],
+  "test_argv": [
+    "/home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/body-regression-1/capture-1/adoption-method-tests",
+    "--test-threads=1"
+  ],
+  "profile": "CPU6;one serial direct child;aggregate1GiBAS;child960MiBAS;30CPU;compile35wall/test15wall+2;32MiBfiles;core0;nofile256",
+  "review_reuse": "/home/holden/mckernel-work/host-preparation/phase5-host-guest-focused-regression-independent-review-20261020-1/DECISION.json",
+  "owner_profile_source": "/home/holden/mckernel-work/host-preparation/phase5-host-postexit-delivery-source-20261020-1/response-counter-correction-1/ORDINARY-CHECK-PROPOSAL.json",
+  "runner_sha256": "664023e918f9c0aee1cd210f80fb9674001dd2f9948fdc6d9278aba5d1a37f77",
+  "source_freeze_sha256": "49811dd9f6c9954e547662c05d2562e042ce7620c5261c10ed5d296c129410ba",
+  "test_scope": "Three test functions,25 differential scenarios:6geometry errors+15stage errors+4LP64/compat success/error,23negative/2success. Both exact bodies run once per scenario.",
+  "failures_this_family": 0,
+  "limits": "No SDK/Linux callback/MM/ABI/module/native/defaultactivation proof. No production mutations. No execution until fresh dispatcher grant."
+}

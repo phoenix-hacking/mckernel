@@ -1,0 +1,10 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_SOURCE_ERRNO_GUARD_AND_RUST_OWNED_PERF_BINDING",
+  "credential_source_mutations_refused": 2,
+  "errno_model_vectors": 5,
+  "old_getcred_and_void_callback_abi": "unchanged; exact errno returned to guest transport, not beyond old void callback",
+  "perf": "Rust static, no C data definition, 31 offsets and 13 existing provider references; layout and pointers require actual ABI compilation/link",
+  "actual_code_executed": false,
+  "runtime_authority": null
+}

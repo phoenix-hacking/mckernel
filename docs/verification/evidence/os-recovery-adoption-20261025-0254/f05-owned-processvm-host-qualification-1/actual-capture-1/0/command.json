@@ -1,0 +1,70 @@
+{
+  "command": {
+    "argv": [
+      "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2021",
+      "-D",
+      "warnings",
+      "-C",
+      "opt-level=1",
+      "-C",
+      "codegen-units=1",
+      "-C",
+      "target-feature=+crt-static",
+      "-C",
+      "relocation-model=static",
+      "-C",
+      "link-arg=-no-pie",
+      "-C",
+      "link-arg=-Wl,-z,noexecstack",
+      "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/f05-owned-processvm-consumer-source-1/app.rs",
+      "-o",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-host-qualification-1/output/app"
+    ],
+    "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Exact Root-adopted foreground Rust compiler argv.",
+    "wall": 90
+  },
+  "admission": {
+    "wall": 1793084147.428559,
+    "monotonic": 866253.99751584,
+    "boottime": 881592.124566877,
+    "fixed_cutoff_ref": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW18H-20261026-FIXED-CUTOFF-BINDING.json",
+      "bytes": 952,
+      "sha256": "2e1d3fa8338e51973cf0af5677e7e256259aff539adb164be0fb53240d834b35"
+    },
+    "memory_available_bytes": 27219705856,
+    "aggregate_reserved_bytes": 21474836480,
+    "budget": {
+      "schema_version": 2,
+      "id": "7f4af94a83b14cc08f97401f5891d965",
+      "budget": "57774.852125",
+      "initial_balance": "57774.8521250000",
+      "minimum_balance": "52079.8011050000",
+      "last_balance": "52079.8011050000",
+      "spent": "22812.3311000000",
+      "remaining": "34962.5210250000",
+      "scope": "Cumulative account-wide observed balance decreases; increases never restore allowance; stale snapshots may count conservatively; in-flight charges can settle later"
+    },
+    "heartbeat_at": "2026-10-27T06:55:44.063551+00:00",
+    "phase": "running",
+    "account_wall": 1793084147.428921,
+    "heartbeat_age_seconds": 3.365370035171509,
+    "available_prepaid_balance": "52079.8011050000",
+    "spendControlReached": null,
+    "loadavg": [
+      1.22,
+      1.01,
+      1.02
+    ],
+    "CPU_affinity": [
+      6
+    ]
+  },
+  "disk_free_bytes": {
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-host-qualification-1": 150217764864,
+    "/home/holden/mckernel-work/scratch": 47870644224
+  },
+  "started_wall": 1793084147.4292195,
+  "started_monotonic": 866253.998175871
+}

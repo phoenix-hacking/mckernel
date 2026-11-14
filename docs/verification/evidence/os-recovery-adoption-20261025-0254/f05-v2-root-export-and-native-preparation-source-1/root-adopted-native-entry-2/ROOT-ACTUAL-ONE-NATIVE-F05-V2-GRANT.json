@@ -1,0 +1,48 @@
+{
+  "author": "/root",
+  "decision": "GRANTED_ONE_EXACT_NATIVE_F05_V2",
+  "exact_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--fsize=33554432",
+    "--as=2147483648:2147483648",
+    "--core=0:0",
+    "--",
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/bound-native-runtime-1/native_diagnostic_container_owner.py",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/f05-v2-owned-processvm-current110-20261027-1-run",
+    "--nonce",
+    "ff617c0f83e3644ac70f7aecb6e188c1",
+    "--owner-sha256",
+    "af2b1f57a19949e9867de2496b16063859c47298e9cf03b401e95de5bded5a10",
+    "--manifest",
+    "/home/holden/mckernel-work/scratch/f05-v2-owned-processvm-current110-20261027-1-inputs/manifest.json",
+    "--manifest-sha256",
+    "a035f93e5193e92183ac47b3c4271a40e4184563489f7cb7aa59bc7bebff573a"
+  ],
+  "execution_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/root-adopted-native-entry-2/ACTUAL-INDEPENDENT-NATIVE-EXECUTION-REVIEW.json",
+    "bytes": 9594,
+    "sha256": "2d33cbd146f07cc677d2479a861922987851eed1b37d0965222c38097e753df5"
+  },
+  "fresh_resource_physical": {
+    "bytes": 201753,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/root-adopted-native-entry-2/ROOT-FRESH-NATIVE-RESOURCE-PHYSICAL-1.json",
+    "sha256": "40e9006f941a240beea9c099207ce6145619a3d108b340b7741db2e95037536e"
+  },
+  "maximum_invocations": 1,
+  "nonce": "ff617c0f83e3644ac70f7aecb6e188c1",
+  "pending_execution_packet": {
+    "bytes": 8937,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/root-adopted-native-entry-2/ROOT-EXECUTION-GRANT.PENDING-REVIEW.json",
+    "sha256": "124f1ece53f8181598b00b4a78f9770f3b3f9d110f6a14aedc487d739b136cff"
+  },
+  "runtime_authority": "ONE_EXACT_NATIVE_F05_V2_ORIGINAL_CONTRACT_OPERATION"
+}

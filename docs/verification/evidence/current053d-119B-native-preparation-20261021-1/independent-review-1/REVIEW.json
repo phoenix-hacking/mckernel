@@ -1,0 +1,74 @@
+{
+  "schema": "mckernel.numa-nonempty-overlap.source-oracle-linux-reference-review.v1",
+  "status": "PASS_SOURCE_ORACLE_AND_ACTUAL_LINUX_REFERENCE_ONLY",
+  "decision": "ELIGIBLE_SEPARATE_FUTURE_STAGE_AND_STRICT_NATIVE_CASE",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/numa_compiler_review",
+  "implementation_ownership": false,
+  "case_id": "numa-nonempty-overlap-20261021-1",
+  "source": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/numa_nonempty_overlap_app.rs",
+    "sha256": "8cc2093cb17568e5d08080f997d66ebdb5926ab379e3132f8138c3c710f2ae92",
+    "bytes": 7015
+  },
+  "actual_result": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/compile-reference-1/whole.json",
+    "sha256": "52e7f3dfa58ddbb5f0020d87dd1a6fecc3e8d2556aca42ab710a3953914716b3",
+    "bytes": 2419
+  },
+  "compiled_binary": {
+    "sha256": "029065eb89fb79885d535f338395f986f890a1ed764062bb76ba463777b92ab3",
+    "bytes": 5620160,
+    "binding_authority": "Actual compile/reference whole.json and exact retained command records."
+  },
+  "accepted_oracle": {
+    "stdout_bytes": 119,
+    "stdout_sha256": "eaacab76026f77de6ba00785df71cdf37347a45bf6dd42f43525bedb09a8a7c5",
+    "stderr_bytes": 0,
+    "exit_code": 37,
+    "native_raw_wait_status_when_recorded": 9472,
+    "exact_source_literal_expected_file_and_actual_Linux_stdout_equal": true
+  },
+  "source_findings": {
+    "blocking_findings": [],
+    "binds": 3,
+    "policy_queries": 48,
+    "additional_allowed_mask_query": 1,
+    "mode_selection": "A and B differ from each other and process fallback for every admitted baseline mode0..3.",
+    "node_selection": "One actual allowed-mask bit; no assumed node number.",
+    "independent_page_layouts": [
+      "Exterior,A,A,A,A,A,Exterior",
+      "Exterior,A,A,B,A,A,Exterior",
+      "Exterior,A,B,B,B,A,Exterior"
+    ],
+    "coverage": "First and last byte of every page after each bind; four exterior snapshots compared by their own addresses; all nondefault mask words compared; mode/mask sentinels checked.",
+    "byte_preservation": "Three complete28672-byte pattern comparisons.",
+    "process_policy": "Exact before/after equality.",
+    "cleanup": "Exactly one munmap attempt after a successful mapping, including ordinary policy failure; success requires munmap0 and successful output flush."
+  },
+  "actual_Linux_reference": {
+    "compile_returncode": 0,
+    "compile_elapsed_seconds": 0.2148129270062782,
+    "compiler": "Pinned Rust1.92 static/no-PIE command with warnings denied.",
+    "reference_returncode": 37,
+    "reference_elapsed_seconds": 0.0020183679880574346,
+    "both_direct_joined": true,
+    "both_process_groups_absent": true,
+    "compile_streams_empty": true,
+    "reference_stderr_empty": true,
+    "raw_reference_stdout_inspected": true
+  },
+  "next_boundary": "After the current six-app batch, prepare distinct assets, manifest and captures binding this actual binary and119-byte oracle to accepted053d plus the accepted launcher/modules. Require separate staging, normalization and exact native admission/release; no kernel rebuild or original-case replacement.",
+  "limitations": [
+    "Linux reference success is not McKernel native evidence.",
+    "Split/reinsert labels describe the interval-transition witness; no internal callback trace or native branch coverage is claimed.",
+    "No physical-placement, topology, allocation-failure or noninterleave-cursor claim.",
+    "Original strict116-byte source, payload, oracle and evidence remain unchanged."
+  ],
+  "runtime_permission": false,
+  "native_acceptance": false,
+  "physical_clearance": false,
+  "C_retirement_credit": false,
+  "counter_delta": 0,
+  "reviewer_operations": "Read-only source, oracle and retained capture inspection; no execution, test replay, guest, root operation or writes."
+}

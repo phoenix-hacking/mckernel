@@ -1,0 +1,224 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "grant": {
+    "cpu": [
+      6
+    ],
+    "jobs": 1,
+    "max_address_space_bytes": 536870912,
+    "cpu_seconds": 30,
+    "wall_seconds": 45,
+    "native_access": false,
+    "heavy_lease": false
+  },
+  "tools": {
+    "/usr/bin/env": {
+      "sha256": "5f7c7882898e9e280e93579b459e22b339c4f38cfd54a05b46b81dfb60c557cc",
+      "device": 66306,
+      "inode": 1048858,
+      "mode": "0o100755",
+      "uid": 0
+    },
+    "/usr/bin/taskset": {
+      "sha256": "28f2dd426247d7d1d794c0fb8a723efc6a1ae3c56393a238b180fe9a0dc32f1c",
+      "device": 66306,
+      "inode": 1052691,
+      "mode": "0o100755",
+      "uid": 0
+    },
+    "/usr/bin/prlimit": {
+      "sha256": "06a57e4767f1bdfcc8c5a39b4b58decb9366447b007a8bdd9d6b12d1e6698d8c",
+      "device": 66306,
+      "inode": 1052683,
+      "mode": "0o100755",
+      "uid": 0
+    },
+    "/usr/bin/timeout": {
+      "sha256": "91db1e64064f0bf5ee99abda3a054cc6f05748dad2af5a145f890c9172d28d73",
+      "device": 66306,
+      "inode": 1049784,
+      "mode": "0o100755",
+      "uid": 0
+    },
+    "/usr/bin/time": {
+      "sha256": "f3c4104d963b00e1b3a3dcf80722fea57f15f67b57a512cc30adc434b60e6e03",
+      "device": 66306,
+      "inode": 1049782,
+      "mode": "0o100755",
+      "uid": 0
+    },
+    "/usr/bin/python3.8": {
+      "sha256": "298a9e830ed52f36c299427565485d717d1ce0179c0597cc16560513eb780b06",
+      "device": 66306,
+      "inode": 1048651,
+      "mode": "0o100755",
+      "uid": 0
+    }
+  },
+  "author": "/root",
+  "status": "ROOT_ADMITS_ONE16CASE_UNPRIVILEGED_SOURCE_OWNER_TEST",
+  "at": 1793387129.9745398,
+  "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/union-owner-guarded-test-binding-1",
+  "argv": [
+    "/usr/bin/env",
+    "-i",
+    "PATH=/usr/bin:/bin",
+    "LC_ALL=C",
+    "TMPDIR=/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/union-owner-0001/tmp",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=536870912",
+    "--cpu=30",
+    "--core=0",
+    "--nofile=128",
+    "--",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "45s",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/union-owner-0001/time.txt",
+    "/usr/bin/python3",
+    "-s",
+    "-E",
+    "-S",
+    "-B",
+    "-m",
+    "unittest",
+    "-v",
+    "test_source_owner"
+  ],
+  "sources": {
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/union-owner-guarded-test-binding-1/test_source_owner.py": {
+      "sha256": "dd7d82605c2b6eb0b6f7acbce6bbf8f433cf60f5b5b6a73fef2a97aaa9ffbee0",
+      "bytes": 16288
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/union-owner-guarded-test-binding-1/union_owner.py": {
+      "sha256": "955d879ff8fc0da6b81457bcea53415254a96367b9e23825bf07e8efb89ae2bb",
+      "bytes": 20741
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/union-owner-guarded-test-binding-1/verified_owner_loader.py": {
+      "sha256": "cec6e9506f29f07584ec5304c8deeb532a9d255be842b2faa55957c97a1f5c29",
+      "bytes": 6058
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/union-owner-guarded-test-binding-1/source_freeze.py": {
+      "sha256": "2a3cea45022e2104b6faa1ed8561ef9db1000a8a3734d94a1f17efab50ec8228",
+      "bytes": 10475
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/union-owner-guarded-test-binding-1/split_inventory.py": {
+      "sha256": "9bc54a33407c8abaed384a5d998fa3cea34d7f15179349e27e6122c09849de04",
+      "bytes": 4799
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/union-owner-guarded-test-binding-1/materializer.py": {
+      "sha256": "c3115c13a29dde74f6d316b64d26a6266c5a5cfeed877ef19de088844e09ba37",
+      "bytes": 18424
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/union-owner-guarded-test-binding-1/verify_scripts_fd.py": {
+      "sha256": "34bd9802c507b3408b685c6233f0a2f711edbdf7a6f31c5dcd3eaba70128ba8f",
+      "bytes": 5695
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/authenticated-adapter-successor-1/custody_protocol_v2.py": {
+      "sha256": "587cebf7b8359a1711f078882a012a701e290902dc4376d1bc6e4c03f7ce8cbb",
+      "bytes": 4452
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/authenticated-adapter-successor-1/graph_observations.py": {
+      "sha256": "c708c1bd87dd88a125644e02f8a1afcebdb568966b46d66a0de9f7e59df43da8",
+      "bytes": 9054
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/adapter-readiness-expert-1/union_server_guarded.py": {
+      "sha256": "3f96123f1a62ed427235c59f802452811522f62d5c5b4e5d84385c392a54a229",
+      "bytes": 12973
+    }
+  },
+  "controls": {
+    "ACTUAL-CONTROLS-ARMED.json": {
+      "sha256": "a3335ac6e6751f5816d25cd85579958f5c34007e090ff9d5306d0f3a3e6eb1dc",
+      "binding": {
+        "guardian": {
+          "pid": 2996157,
+          "ppid": 2995936,
+          "start": "118034389",
+          "state": "R"
+        },
+        "monitor": {
+          "pid": 2996160,
+          "ppid": 2995936,
+          "start": "118034501",
+          "state": "R"
+        },
+        "server": {
+          "pid": 2996005,
+          "ppid": 2996003,
+          "start": "118034116",
+          "state": "S"
+        },
+        "watcher": {
+          "pid": 2996001,
+          "ppid": 2995936,
+          "start": "118034086",
+          "state": "S"
+        },
+        "worker": {
+          "pid": 2996003,
+          "ppid": 2996001,
+          "start": "118034102",
+          "state": "S"
+        }
+      },
+      "caps": {
+        "boot_deadline": 1571567.6959065471,
+        "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+        "deadline": 1793774133,
+        "monotonic_deadline": 1556229.568859425
+      }
+    },
+    "ACTUAL-CAPACITY-FALLBACK-ARMED.json": {
+      "sha256": "08571e7f2d326484d9471838e60462553a9d59e756321d70328a9a20988beae6",
+      "binding": {
+        "guardian": {
+          "pid": 2996157,
+          "ppid": 2995936,
+          "start": "118034389",
+          "state": "R"
+        },
+        "monitor": {
+          "pid": 2996160,
+          "ppid": 2995936,
+          "start": "118034501",
+          "state": "R"
+        },
+        "server": {
+          "pid": 2996005,
+          "ppid": 2996003,
+          "start": "118034116",
+          "state": "S"
+        },
+        "watcher": {
+          "pid": 2996001,
+          "ppid": 2995936,
+          "start": "118034086",
+          "state": "S"
+        },
+        "worker": {
+          "pid": 2996003,
+          "ppid": 2996001,
+          "start": "118034102",
+          "state": "S"
+        }
+      },
+      "caps": {
+        "boot_deadline": 1571567.6959065471,
+        "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+        "deadline": 1793774133,
+        "monotonic_deadline": 1556229.568859425
+      }
+    }
+  },
+  "weekly_used_percent": 88,
+  "review": "Expert source review2340f01e described16temporary-file/local-thread/mock-ioctl cases; Root verified guarded receiver rebind/source closure. Actual modulebytes hash pinned, only privateTMPDIR cleanup; no child,fork,pidfd,rootflags,mount,currentfree,native effect. Scope expert1 guarded mode/readiness, not laterpidfdreceiver selection.",
+  "share_retirement": "pending directterminal/groupclosure; uncertainty retains share"
+}

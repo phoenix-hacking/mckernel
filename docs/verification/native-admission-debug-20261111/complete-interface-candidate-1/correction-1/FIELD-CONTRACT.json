@@ -1,0 +1,73 @@
+{
+  "status": "FROZEN_BOUNDED_FIELD_CONTRACT_NOT_RUNTIME_READY",
+  "only_families": [
+    "NATIVE-DEADLINE-AND-CAP-REVALIDATION",
+    "NORMAL-CODE-PACKAGE-INTERFACE"
+  ],
+  "declared_owner_duration": {
+    "field": "native.deadline_seconds",
+    "accepted_type": "exact int",
+    "accepted_value": 360,
+    "actual_call": "NativeAdmission.launch -> execute_owner(owner, deadline=self.deadline_seconds) -> owner.run(deadline=deadline)",
+    "genuine_signature": "execute_owner(owner, *, deadline=360)",
+    "scope": "The actual supported owner.run/start-attach timeout; Root overall one-shot UTC/BOOTTIME/MONOTONIC caps remain independently enforced and no cap is widened."
+  },
+  "allowance_derivation": {
+    "post_start_status_seconds": {
+      "wait": 5,
+      "three_exact_ps": 30,
+      "inspect": 10,
+      "total": 45
+    },
+    "final_capture_seconds": {
+      "wait": 3,
+      "logs": 3,
+      "inspect": 3,
+      "total": 9
+    },
+    "existing_owned_cleanup_seconds": 15,
+    "retirement_reserve_seconds": 24,
+    "completion_reserve_seconds": 69,
+    "required_full_owner_start_window_seconds": 429,
+    "limitations": "Reserve uses existing actual command allowances, not a promise that controller/filesystem I/O cannot block. Work checks fail closed after blocking calls; actual watchdog/owner retain UNKNOWN on unresolved completion. Cleanup stays permitted under the original owned bounds."
+  },
+  "work_gates": [
+    "Constructor validates exact360 before resource admission, requires429 clock window, rechecks after CurrentOwnerSession initialization, after preflight/controller revalidation and immediately before actual FLOCK acquisition.",
+    "NativeAdmission.verify(cleanup=False, required_seconds=24) checks all three caps both before and AFTER blocking current-controller revalidate. A reply crossing any native cap cannot authorize Popen/source work.",
+    "NativeAdmission.launch requires429 after current control roundtrip and source verification, then passes exact360 through actual owner API.",
+    "BoundOwner._call runs actual verify before work, retains typed source/effective gate, requires429 before start, and clips ordinary command timeout to remaining caps minus24 retirement reserve. Nonpositive work allowance refuses before super/Popen.",
+    "NativeSourceCustody.acquire requires429 before its changed-source work; NativeWorkLatch invokes real admission verification and a fresh all-clock check immediately before the existing apply_plan ioctl publication, after original durable prior-flags I/O. The generic source provider, plan, token and owner semantics stay unchanged.",
+    "NativeSourceCustody.verify rechecks clocks after source epoch I/O; cleanup=True skips all new work-clock/account tests and retains exact existing source/owner/identity checks."
+  ],
+  "cleanup_preservation": [
+    "BoundOwner cleaning still permits only exact owned ps/inspect/stop/kill/wait/logs/rm under existing original15s cleanup. No new permission or source/native grant.",
+    "Source.restore, positive typed completion, prior flag restoration, parent real-wait/kernel/FLOCK/own-close proofs and every historical outcome remain unchanged.",
+    "Old16/157 graph, old caps/refusals, all controller7207/6fe65/068e/1961 bodies/results, declared native resource profile and cohort are bytewise unchanged."
+  ],
+  "normal_package_binding": {
+    "actual_existing_layout": "/var/lib/mckernel-code-<nonce>/installed-source-<nonce>",
+    "nonce": "exact64 lowercase hexadecimal, identical in both directory names; independently issued code-install generation, not substituted native-operation nonce",
+    "predicate": "native_diagnostic_container_owner.normal_source_generation(path) shared by admission, bound owner and fourth RO-bind builder",
+    "retained_checks": [
+      "actual Root0 nonwritable/immutable generation directory",
+      "exact declared held FD/device/inode/mode/UID identity",
+      "no symlink/canonical component traversal",
+      "all selected24 source/module/runtime/bootstrap/hash/catalog checks",
+      "requested and actual fourthRO bind/source coverage checks",
+      "genuine existing normal publisher; no alternate root/sys.path/namespace or broader actor"
+    ],
+    "fixed_roster": "exact29 Python plus unchanged7f7 facts. SDK alone specializes normal code-only installer and later Root issues actual install after source/profile GO."
+  },
+  "focused_changed_assertions": [
+    "Declared duration mismatch/type refuses; actual360 reaches genuine execute_owner/owner.run keyword.",
+    "Fake controller advances clock across caps: actual verify refuses before fake Popen/source flag action; exact owned cleanup still proceeds.",
+    "429 start/24 ordinary-work boundaries and timeout clipping follow actual source constants.",
+    "Exact matching normal generation accepted; mismatched nonce/extra path/old assistant prefix refuses without dropping UID/immutable/FD/hash/catalog checks."
+  ],
+  "remaining_gates_unchanged": [
+    "Actual canonical scratch permission4f9 / pending Root PR3request6790932995",
+    "Actual staged c66 data and source rows, no path/actor/sudo fallback",
+    "Root normal immutable code-only install and sameRoot controller activation",
+    "Fresh actual native operation-specific source/resources/current-owner/admission and independent runtime review"
+  ]
+}

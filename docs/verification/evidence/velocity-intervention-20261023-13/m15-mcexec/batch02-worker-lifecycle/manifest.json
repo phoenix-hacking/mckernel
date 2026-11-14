@@ -1,0 +1,49 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_UNCOMPILED",
+  "retired_symbols_proposed": [
+    "mcexec_create_worker_thread_alloc_bridge",
+    "mcexec_create_worker_thread_alloc_error_bridge",
+    "mcexec_create_worker_thread_next_cpu_bridge",
+    "mcexec_create_worker_thread_lock_bridge",
+    "mcexec_create_worker_thread_publish_bridge",
+    "mcexec_create_worker_thread_pthread_create_bridge",
+    "mcexec_main_loop_thread_barrier_wait_bridge",
+    "mcexec_init_worker_threads_lock_init_bridge",
+    "mcexec_init_worker_threads_barrier_init_bridge",
+    "mcexec_init_worker_threads_reset_cpuid_bridge",
+    "mcexec_init_worker_threads_create_bridge",
+    "mcexec_init_worker_threads_wait_bridge",
+    "mcexec_init_worker_threads_error_bridge",
+    "mcexec_join_all_threads_head_bridge",
+    "mcexec_join_all_threads_join_bridge",
+    "mcexec_kill_thread_head_bridge",
+    "mcexec_kill_thread_pthread_kill_bridge",
+    "mcexec_util_thread_barrier_init_bridge",
+    "mcexec_util_thread_create_worker_bridge",
+    "mcexec_util_thread_worker_error_bridge",
+    "mcexec_util_thread_barrier_wait_bridge"
+  ],
+  "existing_rust_reuse": [
+    "mcexec_create_worker_thread_body",
+    "init_worker_threads",
+    "mcexec_join_all_threads_body",
+    "mcexec_main_loop_thread_func_body",
+    "mcexec_kill_thread_body",
+    "mcexec_util_thread_body"
+  ],
+  "providers": [
+    "existing C storage lock/init_ready/uti_init_ready/thread_data; opaque pthread storage never re-created or sized in Rust",
+    "existing Rust McexecThreadData layout and orchestration",
+    "libc malloc/fprintf/printf/stderr",
+    "libpthread mutex_init/barrier_init/barrier_wait/create/join/kill"
+  ],
+  "parity": [
+    "publish list and output before pthread_create; preserve failed-create node ownership",
+    "same ignored mutex/barrier/join return values",
+    "same n_threads+1 creation count and n_threads+2 barrier",
+    "same CPU assignment postincrement and resets",
+    "no new thread cancellation/rollback policy"
+  ],
+  "compiler_or_native_execution": false
+}

@@ -1,0 +1,12 @@
+--- a/long_trace_retention.inc
++++ b/long_trace_retention.inc
+@@ -36,6 +36,9 @@
+         if(pid>0 && pid!=r->pids[0] && pid!=r->pids[1])continue;
+         if(!r->bytes || long_trace_stat(r,&current) || !pair_trace_same(&r->identity,&current))return -1;
+         size_t off=r->offset,end=r->offset+r->bytes;
++        /* cursor is a prior exact match end; earlier bytes cannot match.
++         * Keep the same per-record identity check above, including skipped records. */
++        if(off<*cursor)off=*cursor;
+         while(off<end) {
+             const char *lf=memchr(pair_trace_authenticated+off,'\n',end-off);if(!lf)return -1;
+             size_t count=(size_t)(lf-(pair_trace_authenticated+off))+1;

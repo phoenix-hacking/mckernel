@@ -1,0 +1,92 @@
+{
+  "schema": "mckernel.source31.independent-exact-execution-review.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/daemon_execution_review",
+  "implementation_ownership": false,
+  "decision": "PASS_EXECUTION",
+  "at": "2026-10-27T17:53:51.424868+00:00",
+  "reviewed_release_payload_sha256": "59919c82e265a622650ade1884251595715f5dd40c9904df6ac656496ae1e288",
+  "proposal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/RELEASE-PAYLOAD.PROPOSAL.json",
+    "bytes": 5052,
+    "sha256": "59919c82e265a622650ade1884251595715f5dd40c9904df6ac656496ae1e288"
+  },
+  "nonce": "d27509b612927d235adf7f07748f3f82",
+  "request": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/ADOPT-REQUEST.json",
+    "bytes": 4209,
+    "sha256": "a443befbf1723b489a82f12b2782bb25d0b2e44ed00da89f11b0a4506e569b80"
+  },
+  "admission": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/CURRENT-ADMISSION.ACTUAL-1.json",
+    "bytes": 2931,
+    "sha256": "702159b3ba093094ab4c7401af85b83a32d23e991d37782711a122994e87d00f"
+  },
+  "resource_observation": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/ROOT-FRESH-RESOURCE-PHYSICAL-1.json",
+    "bytes": 127166,
+    "sha256": "92d21b7d2a942b2810832cd9040e268f8d4dd7d551ac79356d913c2a9d76d142"
+  },
+  "expires_wall": 1793123695.1475017,
+  "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+  "cutoffs_wall_monotonic_boottime": [
+    1793165769.0,
+    947874.5689514667,
+    963213.6960030915
+  ],
+  "source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/INDEPENDENT-SOURCE-REVIEW.json",
+    "bytes": 28454,
+    "sha256": "e70a229110691487b66005c9ed59e3afe8f251a2a9ad7905b73f7d90aa4470c2"
+  },
+  "original_36_source_publication": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/ACTUAL-STATIC-SOURCE-PUBLICATION.json",
+    "bytes": 20729,
+    "sha256": "681a1d90a20ff66ffdb7cc3085980ee0e1b548bce2fbe45d60e56c06d7c79cab"
+  },
+  "source_correction_supplement": {
+    "decision": "PASS_EXACT_TWO_SOURCE_READONLY_OBSERVATION_CORRECTION",
+    "source_ready": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/resource-observer-window-correction-source-1/SOURCE-READY.json",
+      "bytes": 5107,
+      "sha256": "283516f6a7dfdeae488d091ce588fc94d30dc843269b970291de2c6ddc48b2f3"
+    },
+    "observer": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/resource-observer-window-correction-source-1/check_postnative_current_new12h.py",
+      "bytes": 8767,
+      "sha256": "2b7362126fbe70475a208e40df9eb56fa12df0993d83d0aa9b9a22a36638481c"
+    },
+    "resource_writer": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/resource-observer-window-correction-source-1/ROOT_capture_final_resource_new12h.py",
+      "bytes": 4750,
+      "sha256": "6705e1d99cd39b121af750a096e8243057cff3f41acce0651d9b4b8a8b7ec56c"
+    },
+    "publication": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/resource-observer-window-correction-source-1/ACTUAL-SUPPLEMENTAL-SOURCE-PUBLICATION.json",
+      "bytes": 1050,
+      "sha256": "c6af29e3ad3233e54346169e6eace5d2276682f6f9f4bab3c1fe50cd3c9057e5"
+    },
+    "checks": "Exact2b736212/6705e1d9 pins verified;all45 original observation statements after admission assertion AST identical;8purecontrols passed with0observe/process/flock/Docker/workload calls. Only historical expired cutoff admission changed to retainedUID1000 plus exact reviewedv2guard. HERE/EVIDENCE and writerA/root literal contexts preserved. Supplemental fetchedpublicationca136f59 preserves original36source/request/nonce/publication."
+  },
+  "verified": [
+    "Exact36 executing source hashes match sourcePASS e70;requesta443/freshnonced275 matches staged empty output and readonly mirror/preparation identity. No compiler/completedcase replay permitted.",
+    "Current admission7021/resource92d21 bind exactRoot25 consumednonce ledger/currentthread;freshnonce excludes consumed1f97 and abandoned640. All3clock age checks pass within120s;newv2actualguardian/account check passed live.",
+    "Read-only actual physical capture passed:no current lockrows after two closed27:4probes,knownactors/groups absent,all historical records absent,expected scratchmount,HOST150023598080/scratch47870644224 bytes,MemAvailable27291271168,cgroup4CPU/12GiB/512tasks current0,no runningcontainers.",
+    "Actual sourcepublication59f4dbc53f78b327de66fcedd71327ebcd5dda3e binds36sources/staticrequest;additiveca136f5996151b4469cf79200f0f37698bf9fec9 binds correctedobserver/writer.",
+    "Existing approved owner retains original native/common/shared exclusions,one-heavy4CPU/12GiB/pids64 job,resourcefloors,custody/archive/quarantine,positiveDocker clients and terminalremoval. Actual nestedpids64 before/after proof remains mandatory.",
+    "Only3 unfinished mock invocations:C-ring,Rust-ring,Rust-oversize;unchanged8s perleaf/90s work/64MiB aggregate output and alljoin/resource/parity/oversize oracles. No native/production/file-retirement credit."
+  ],
+  "release_limits": {
+    "execution_count": 1,
+    "terminal_policy": "remove-owned-terminal",
+    "entry_must_occur_before": 1793123695.1475017,
+    "historical_release_reuse": false,
+    "new_compilers": 0,
+    "completed_cases_replayed": 0,
+    "new_invocations": 3
+  },
+  "actual_workload_executed_by_reviewer": false,
+  "native_acceptance": false,
+  "production_acceptance": false,
+  "M15_file_closure": false
+}

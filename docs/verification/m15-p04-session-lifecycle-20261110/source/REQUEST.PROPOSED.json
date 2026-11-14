@@ -1,0 +1,165 @@
+{
+  "status": "SOURCE_PROPOSAL_ONLY_REQUIRES_INDEPENDENT_MAX_TEST_HELPER_REVIEW_AND_ROOT_ACTUAL_ADMISSION",
+  "original_checks": [
+    "M15-P04 whole-session cleanup at one controlled scope",
+    "M15-I01 runtime lifecycle ownership"
+  ],
+  "scope": "Compile actual local header ABI witness, then exact baseline/candidate wrapper sources and run one controlled peer condition for each. No green22 or56 replay; no actual crash/converter/Eclair/dump/native operation.",
+  "inputs": {
+    "baseline": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-source-max-1/preimage/executer/user/rust/vmcore2mckdump.rs",
+      "bytes": 12392,
+      "sha256": "44329596ff8fcb1f197878664bf4999407648f056f81280008d885802f6e5427"
+    },
+    "candidate": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-source-max-1/source/executer/user/rust/vmcore2mckdump.rs",
+      "bytes": 19292,
+      "sha256": "ee647c17bd7337d881fe6ecdb3805ccf5e25eb60a1879da95a8ccbbbb1702a4b"
+    },
+    "patch": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-source-max-1/P04-OWNED-DESCENDANT-LIFECYCLE.PRIVATE.patch",
+      "bytes": 12235,
+      "sha256": "e6eaf6d22a6040fe3b3fd5164ef8baa5dc3e7bdedda19dfbe2c6f8d79134ca96"
+    },
+    "ABI": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-source-max-1/ABI-BINDINGS.SOURCE-ONLY.json",
+      "bytes": 5265,
+      "sha256": "80d07f1c25db4e39220f8eca47e0d7faeb15a659e014931d81bcecda85308650"
+    },
+    "witness": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-source-max-1/qualification/linux_child_abi_witness.c",
+      "bytes": 2545,
+      "sha256": "6b61d56b739dcfe888613a57d11bd16f928dd06236089c3ca3896583354bebe8"
+    },
+    "peer": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-source-max-1/qualification/controlled_crash_peer.py",
+      "bytes": 2484,
+      "sha256": "0f5fd17ff2b3a5a14041c919be08364b45945d6ee8cce98f6819257cf813b6c6"
+    },
+    "case_contract": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-source-max-1/CASE-CONTRACT.SOURCE-ONLY.json",
+      "bytes": 4114,
+      "sha256": "edb5f414cbf3d584bad272dd20e3e691431efbe8b0dfd98ecc7c03e3499bdb9f"
+    }
+  },
+  "compile_commands": [
+    {
+      "name": "actual-new-ABI-witness-compile",
+      "argv": [
+        "/usr/bin/cc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-source-max-1/qualification/linux_child_abi_witness.c",
+        "-o",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-source-max-1/output/linux-child-abi-witness"
+      ],
+      "expected_returncode": 0
+    },
+    {
+      "name": "actual-new-ABI-witness-values",
+      "argv": [
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-source-max-1/output/linux-child-abi-witness"
+      ],
+      "expected_returncode": 0,
+      "process_control_calls": 0,
+      "require": "All compile-time header/prototype/opaque-size assertions pass before any actual process/control test"
+    }
+  ],
+  "variants": [
+    {
+      "name": "baseline",
+      "compile_argv": [
+        "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "debuginfo=1",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-source-max-1/preimage/executer/user/rust/vmcore2mckdump.rs",
+        "-o",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-source-max-1/output/vmcore-baseline"
+      ],
+      "compile_environment": {
+        "VMCORE_INSTALLDIR": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-source-max-1/output/baseline/prefix",
+        "VMCORE_ARCH": "x86_64",
+        "VMCORE_CRASH": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-source-max-1/output/baseline/tools/crash",
+        "VMCORE_PROMPT_TIMEOUT_MS": "1000"
+      },
+      "case_argv": [
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-source-max-1/output/vmcore-baseline",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-source-max-1/output/baseline/input",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-source-max-1/output/baseline/mckdump"
+      ],
+      "peer_environment": {
+        "VMCORE_LIFECYCLE_CONTROL": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-source-max-1/output/baseline/control"
+      },
+      "peer_tool_binding": "Fresh private executable copy of exact controlled_crash_peer.py, same existing uname fixture; helper must prepare before compile/run under exact source admission.",
+      "expected_wrapper_returncode": 0,
+      "expected_baseline_live_descendant": true
+    },
+    {
+      "name": "candidate",
+      "compile_argv": [
+        "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "debuginfo=1",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-source-max-1/source/executer/user/rust/vmcore2mckdump.rs",
+        "-o",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-source-max-1/output/vmcore-candidate"
+      ],
+      "compile_environment": {
+        "VMCORE_INSTALLDIR": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-source-max-1/output/candidate/prefix",
+        "VMCORE_ARCH": "x86_64",
+        "VMCORE_CRASH": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-source-max-1/output/candidate/tools/crash",
+        "VMCORE_PROMPT_TIMEOUT_MS": "1000"
+      },
+      "case_argv": [
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-source-max-1/output/vmcore-candidate",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-source-max-1/output/candidate/input",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-source-max-1/output/candidate/mckdump"
+      ],
+      "peer_environment": {
+        "VMCORE_LIFECYCLE_CONTROL": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-source-max-1/output/candidate/control"
+      },
+      "peer_tool_binding": "Fresh private executable copy of exact controlled_crash_peer.py, same existing uname fixture; helper must prepare before compile/run under exact source admission.",
+      "expected_wrapper_returncode": 0,
+      "expected_baseline_live_descendant": false
+    }
+  ],
+  "same_case_controller_contract": [
+    "Independent MAX owner freezes exact Root helper/source/argv before execution. Reuse qualified bounded owner and clean interpreter/tool profile at matching scope; helper uses actual locallyderived pidfd ABI or verified os.pidfd support, never guessed structs.",
+    "Root helper owns its private subprocess tree/subreaper and fresh variant output/control roots. It launches only the wrapper under reviewed CPU/AS/deadline with positive direct waits and closed streams.",
+    "Peer forks exactlyone child. Child ignores SIGHUP, closes PTYfds, writes exact PID/birth/PGID/SID receipt, blocks on its self-held private pipe. Before first prompt the peer waits for a new root-pidfd-owned marker.",
+    "Root helper matches receipt to actual controlled child birth/PGID/SID, opens stable descendantpidfd and independently binds the existing wrapper/peer control identities; only then creates root-pidfd-owned marker. No signal by bare PID/PGID after any reap.",
+    "Use valid input file gate and synthetic nonempty staging output. Capture exact five command argv, matched ACK, return0, unchanged output bytes and peerleader exit0. This is a PTY protocol/lifecycle fixture, never genuine conversion.",
+    "Baseline443: after positive wrapper return, descendantpidfd remains live. Record concrete lifecycle FAIL, then exact pidfd_send_signal(SIGKILL,NULL,0) only to retained controlledchild descriptor and positive adoptedchild wait. Do not signal numeric PGID after wrapper/peerleader reaped.",
+    "Candidate: after positive wrapper return, descendantpidfd is already dead/readable; no Root rescue signal. Corrected source positive wait of leader/adoptedchild and ECHILD/restoration gate output publication. Helper joins all own direct/adopted children it actually owns; retain source/receipt evidence for candidate-owned descendant wait at actual scope.",
+    "Stop first unexpected source/compiler/ABI/protocol/ownership outcome. Exact-birth authenticated outer retirement only; any unjoined/unknown outcome remains held. No workaround by different owner/model/equivalent operation."
+  ],
+  "proposed_reused_HOST_profile": {
+    "affinity": [
+      0
+    ],
+    "jobs": 1,
+    "AS_bytes": 2147483648,
+    "FSIZE_bytes": 67108864,
+    "CORE_bytes": 0,
+    "whole_wall_seconds": 160,
+    "per_wrapper_seconds": 8,
+    "VMCORE_PROMPT_TIMEOUT_MS": "1000",
+    "budget": "same existing actual sharedCPU0/6/7,max3jobs/4GiBTOTAL including overhead/fresh26GiB/disk floors; no duplicated grant",
+    "Docker_root_network_custom_devices_native": false,
+    "ordinary_PTY": true,
+    "production_timeout_changed": false
+  },
+  "helper_not_yet_execution_authority": "Exact Root helper command/profile must be independently frozen by assigned MAX test owner. This source packet grants no test, compiler, signal, process, native or cleanup permission itself.",
+  "environment": "same clean HOST Rust1.95 runtime compiler/std/cc/ld profile already used for P04; no LD_PRELOAD/LD_LIBRARY_PATH overrides; PATH only private fixture uname plus /usr/bin:/bin; all fixture writes under this packet or independent test-owner private output.",
+  "runtime_authority": null,
+  "source_owner_executions": 0,
+  "source_owner_canonical_writes": 0
+}

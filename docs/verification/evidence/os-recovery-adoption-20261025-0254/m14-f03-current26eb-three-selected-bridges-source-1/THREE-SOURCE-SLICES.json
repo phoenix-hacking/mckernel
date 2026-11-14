@@ -1,0 +1,152 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_REUSED_THREE_CALLBACK_SELECTOR_SOURCE_NOT_COMPILED",
+  "cursor": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT26EB-SELECTED-F03-F06-REMAINING-SOURCE-CURSOR.json",
+    "bytes": 5561,
+    "sha256": "aa2ec71f9317efbe9f527345df973573c1b22382128a63639e14015ea8d592b9"
+  },
+  "actual_selected_object": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-SYNC-PROCESSVM-HOST13-FIVE-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+    "bytes": 366696,
+    "sha256": "351b652e511bde906867a4751591c4915a84e275359c74609db6d3b6cd169afb"
+  },
+  "slices": [
+    {
+      "C": "ptrace_wakeup_find_thread_bridge",
+      "Rust": "f03_ptrace_io_find",
+      "define": "MCKERNEL_RUST_F03_WAKEUP_FIND",
+      "declaration": "extern unsigned long f03_ptrace_io_find(int, int);",
+      "existing_export_cfg": "f03_ptrace_io_find_selected_candidate",
+      "original_C": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/01-ptrace_wakeup_find_thread_bridge/original.C.inc",
+        "bytes": 124,
+        "sha256": "076a60bc58af1f9a10a7cfc8137b7f9a8d96525e3e9ce98feacc8e30e4027f1e"
+      },
+      "selected_C": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/01-ptrace_wakeup_find_thread_bridge/paired-selector.C.inc",
+        "bytes": 352,
+        "sha256": "7286ae41aacee8d13e6b71af882fe4b91bcc9c487fe79659b1259803632cd811"
+      },
+      "unchanged_Rust_body": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/01-ptrace_wakeup_find_thread_bridge/reused.Rust.inc",
+        "bytes": 153,
+        "sha256": "d09cc9d508584b9ac10ac27c224fa52e310471d37e87f4693be420520505d661"
+      },
+      "old_logical_following_line": 24418
+    },
+    {
+      "C": "ptrace_wakeup_thread_unlock_bridge",
+      "Rust": "f03_ptrace_io_unlock",
+      "define": "MCKERNEL_RUST_F03_WAKEUP_UNLOCK",
+      "declaration": "extern void f03_ptrace_io_unlock(unsigned long);",
+      "existing_export_cfg": "f03_ptrace_io_unlock_selected_candidate",
+      "original_C": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/02-ptrace_wakeup_thread_unlock_bridge/original.C.inc",
+        "bytes": 124,
+        "sha256": "1bf0736959c0af9105c6851403fde02b0a0ac1c67da88d7053337a61c79da8cc"
+      },
+      "selected_C": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/02-ptrace_wakeup_thread_unlock_bridge/paired-selector.C.inc",
+        "bytes": 356,
+        "sha256": "d75472f400cd1eaf3eaef9b1016debb2125c534dab3e2708cfef0d3daaeceeeb"
+      },
+      "unchanged_Rust_body": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/02-ptrace_wakeup_thread_unlock_bridge/reused.Rust.inc",
+        "bytes": 143,
+        "sha256": "5d14eb0b87f81a82385c8c85412472f9fd9ce3ec57fe5a9760ccdc4887c0ebb8"
+      },
+      "old_logical_following_line": 24424
+    },
+    {
+      "C": "thread_exit_waitq_wake_bridge",
+      "Rust": "f03_exit_notify_wake",
+      "define": "MCKERNEL_RUST_F03_EXIT_WAITQ_WAKE",
+      "declaration": "extern void f03_exit_notify_wake(void *);",
+      "new_export_cfg": "f03_exit_waitq_wake_selected_candidate",
+      "original_C": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/03-thread_exit_waitq_wake_bridge/original.C.inc",
+        "bytes": 92,
+        "sha256": "939bc076afb6ba22e3a427b87cd9622f295f762dc31a58aa93ebddab4282f5f1"
+      },
+      "selected_C": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/03-thread_exit_waitq_wake_bridge/paired-selector.C.inc",
+        "bytes": 476,
+        "sha256": "f4a8850d899be6d5501fd7de69a5bf44d9430c06e21e09b1b42f055b64332045"
+      },
+      "unchanged_Rust_body": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/03-thread_exit_waitq_wake_bridge/reused.Rust.inc",
+        "bytes": 204,
+        "sha256": "9148a6840c2f7794326a33378a89d9870f82ebbc67aa4b5e41e706704b9f1de2"
+      },
+      "old_logical_following_line": 4493,
+      "old_logical_following_line_without_dispatch_context": 4500
+    }
+  ],
+  "source_preimages": {
+    "kernel/syscall.c": {
+      "path": "/home/holden/mckernel/kernel/syscall.c",
+      "bytes": 914839,
+      "sha256": "aeeb1d71cfd5b8d97935981aa3fc29674586289748e7e61514d247a43b473984"
+    },
+    "kernel/rust/syscall_policy.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "bytes": 1259403,
+      "sha256": "02ddaecff895693d389b0a6710c0ff4579c91caf2b53ea5f62746f4b8125d812"
+    },
+    "kernel/CMakeLists.txt": {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "bytes": 30707,
+      "sha256": "cd41d90e4b1dae5893c96cc0327aedf644dc7952300e25907543656df6e63586"
+    }
+  },
+  "source_postimages": {
+    "kernel/syscall.c": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/candidate/kernel/syscall.c",
+      "bytes": 915683,
+      "sha256": "eb3ec7202a3f6b6a0a13ae14d008ddfb6ff717f413e5b2e287c3eabba40243d1"
+    },
+    "kernel/rust/syscall_policy.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/candidate/kernel/rust/syscall_policy.rs",
+      "bytes": 1259465,
+      "sha256": "488a2da40042cd577e503007aed43d818939026cacf831a3dd66e36ba77254ab"
+    }
+  },
+  "new_Rust_algorithm_bodies": 0,
+  "existing_Rust_exports_reused": 2,
+  "newly_exported_existing_Rust_provider": 1,
+  "new_C_function_bodies": 0,
+  "logical_line_file_semantics": "Each guard restores the exact preexisting logical following line; original fallback bodies unchanged; no __FILE__ override",
+  "CMake_Root_plan": {
+    "preimage": {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "bytes": 30707,
+      "sha256": "cd41d90e4b1dae5893c96cc0327aedf644dc7952300e25907543656df6e63586"
+    },
+    "kernel_C_defines": [
+      "MCKERNEL_RUST_F03_WAKEUP_FIND",
+      "MCKERNEL_RUST_F03_WAKEUP_UNLOCK",
+      "MCKERNEL_RUST_F03_EXIT_WAITQ_WAKE"
+    ],
+    "new_Rust_cfgs": [
+      "f03_exit_waitq_wake_selected_candidate"
+    ],
+    "required_existing_Rust_cfgs": [
+      "f03_ptrace_io_find_selected_candidate",
+      "f03_ptrace_io_unlock_selected_candidate"
+    ],
+    "new_source_files": [],
+    "placement": "Append centrally inside existing supported Linux6.12/x86_64 non-UBSAN branch; preserve enable_perf and current non-DCFA lock ABI; no NOCACHE expansion"
+  },
+  "current_count": 75,
+  "expected_selected_count": 72,
+  "expected_removed_C_names": [
+    "ptrace_wakeup_find_thread_bridge",
+    "ptrace_wakeup_thread_unlock_bridge",
+    "thread_exit_waitq_wake_bridge"
+  ],
+  "canonical_Git_compiler_Docker_native_actions": 0,
+  "default_acceptance": false,
+  "native_acceptance": false,
+  "whole_file_retired": false
+}

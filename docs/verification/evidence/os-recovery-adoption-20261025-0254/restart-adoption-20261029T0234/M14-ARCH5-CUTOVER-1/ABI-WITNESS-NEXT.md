@@ -1,0 +1,11 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+The private CMake patch defaults both new options OFF. Root may select `MCKERNEL_ARCH5_CUTOVER_CANDIDATE=ON` for the next independently reviewed affected-source compile under the existing admitted producer. This pairs all five C body selectors with five Rust cohort flags inside the existing native Linux6.12/x86_64/non-UBSAN branches. Fallback C remains selected when OFF. This source packet does not execute or admit that compile.
+
+For actual ABI proof, Root additionally selects `MCKERNEL_ARCH5_ABI_WITNESS=ON` for a separate compile-only witness artifact. The actual selected arch translation unit appends the witness include after its real local `struct sigsp` definition and real public headers. The full Rust crate emits the matching shared-type array and checks the five Rust function signatures. There are no fabricated struct declarations, replacement headers, ABI cast stubs or executed kernel functions.
+
+Compare `arch5_c_abi_geometry` in `.arch5_abi_c` and `arch5_rust_abi_geometry` in `.arch5_abi_rust`: all61 ordered u64 slots must match exactly, using ABI-GEOMETRY-KEYS.json, actual x86_64 byte order and genuine object identities. Record compiler exits, exact argv/config/source origins and hashes. A mismatch is an original failure; do not rewrite the key table, expected record or ABI to force a pass. This supersedes reliance on a missing historical ABI20 receipt only after genuine matching compiler/object evidence exists.
+
+The C witness emits data only in the explicitly enabled qualification artifact; production candidate/witness OFF introduces no new C runtime data. Do not use a witness-enabled image as production acceptance. Root must subsequently compile the exact candidate with witness OFF, validate unique selected providers, complete original389 registry multiset/padding, full source origin and noFP/SIMD/GS/XSAVE codegen contract, then applicable native functional behavior. None of those checks is claimed here.
+
+The concrete pending/parent/report/currentCPU/GS/TSS/xstate constraints are in ROW-CONTRACTS.json. Source geometry cannot establish dynamic ownership or clear an originating service/account restriction.

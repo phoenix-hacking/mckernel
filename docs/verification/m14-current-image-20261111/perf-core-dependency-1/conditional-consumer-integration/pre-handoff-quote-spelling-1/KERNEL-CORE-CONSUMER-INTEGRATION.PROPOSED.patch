@@ -1,0 +1,133 @@
+--- a/kernel/CMakeLists.txt
++++ b/kernel/CMakeLists.txt
+@@ -717,6 +717,91 @@
+                 "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_owner/transactions.rs"
+ )
+         endif()
++        # One exact kernel codegen profile for rebuilt builtins and consumer.
++        set(MCKERNEL_RUST_CODEGEN_FLAGS
++            -C panic=abort -C opt-level=2 -C debuginfo=2
++            -C code-model=large -C relocation-model=static -C no-redzone=yes
++            -C force-frame-pointers=yes -C overflow-checks=off
++            -C force-unwind-tables=no -C no-vectorize-loops -C no-vectorize-slp
++            -C target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma)
++        set(MCKERNEL_RUST_PROVIDER_FLAGS)
++        set(MCKERNEL_RUST_PROVIDER_OBJECTS)
++        set(MCKERNEL_RUST_PROVIDER_DEPS)
++        if (MCKERNEL_PERF_OWNER_PROTOCOL_SELECTED)
++            # Genuine source-built core is a required SDK input, never the HOST
++            # prebuilt core. Root binds its actual compiler/profile/source tuple.
++            set(MCKERNEL_RUST_CORE_PROVIDER_DIR "" CACHE PATH
++                "Directory containing matching kernel-profile core.o and libcore.rmeta")
++            if (NOT IS_ABSOLUTE "${MCKERNEL_RUST_CORE_PROVIDER_DIR}" OR
++                NOT IS_DIRECTORY "${MCKERNEL_RUST_CORE_PROVIDER_DIR}")
++                message(FATAL_ERROR "Perf owner requires an actual kernel-profile core provider directory")
++            endif()
++            set(MCKERNEL_RUST_CORE_OBJECT "${MCKERNEL_RUST_CORE_PROVIDER_DIR}/core.o")
++            set(MCKERNEL_RUST_CORE_METADATA "${MCKERNEL_RUST_CORE_PROVIDER_DIR}/libcore.rmeta")
++            foreach(provider IN ITEMS "${MCKERNEL_RUST_CORE_OBJECT}" "${MCKERNEL_RUST_CORE_METADATA}")
++                if (NOT EXISTS "${provider}" OR IS_DIRECTORY "${provider}")
++                    message(FATAL_ERROR "Missing matching core provider: ${provider}")
++                endif()
++                file(SIZE "${provider}" provider_size)
++                if (provider_size EQUAL 0)
++                    message(FATAL_ERROR "Empty matching core provider: ${provider}")
++                endif()
++            endforeach()
++            # The genuine compiler-builtins Rust-only recipe is tied to the
++            # selected compiler's own complete rust-src tree, not a system rlib.
++            get_filename_component(MCKERNEL_RUST_BIN_DIR "${RUSTC}" DIRECTORY)
++            get_filename_component(MCKERNEL_RUST_TOOLCHAIN "${MCKERNEL_RUST_BIN_DIR}" DIRECTORY)
++            set(MCKERNEL_RUST_BUILTINS_PACKAGE
++                "${MCKERNEL_RUST_TOOLCHAIN}/lib/rustlib/src/rust/library/compiler-builtins/compiler-builtins")
++            set(MCKERNEL_RUST_BUILTINS_SOURCE "${MCKERNEL_RUST_BUILTINS_PACKAGE}/src/lib.rs")
++            if (NOT EXISTS "${MCKERNEL_RUST_BUILTINS_SOURCE}")
++                message(FATAL_ERROR "Selected Rust compiler is missing genuine compiler-builtins source")
++            endif()
++            set(MCKERNEL_RUST_PROVIDER_BUILD "${CMAKE_CURRENT_BINARY_DIR}/rust/freestanding")
++            set(MCKERNEL_RUST_BUILTINS_OBJECT "${MCKERNEL_RUST_PROVIDER_BUILD}/compiler_builtins.o")
++            set(MCKERNEL_RUST_BUILTINS_METADATA "${MCKERNEL_RUST_PROVIDER_BUILD}/libcompiler_builtins.rmeta")
++            set(MCKERNEL_RUST_BUILTINS_RAW_DEPFILE "${MCKERNEL_RUST_PROVIDER_BUILD}/compiler_builtins.raw.d")
++            set(MCKERNEL_RUST_BUILTINS_DEPFILE "${MCKERNEL_RUST_PROVIDER_BUILD}/compiler_builtins.d")
++            add_custom_command(
++                OUTPUT "${MCKERNEL_RUST_BUILTINS_OBJECT}" "${MCKERNEL_RUST_BUILTINS_METADATA}"
++                COMMAND "${CMAKE_COMMAND}" -E make_directory "${MCKERNEL_RUST_PROVIDER_BUILD}"
++                COMMAND "${RUSTC}" --crate-name compiler_builtins --crate-type rlib --edition=2024
++                    --sysroot=/dev/null -C metadata=mckernel_kernel_195_builtins
++                    ${MCKERNEL_RUST_CODEGEN_FLAGS}
++                    -Z dep-info-omit-d-target -Z binary-dep-depinfo
++                    --extern "core=${MCKERNEL_RUST_CORE_METADATA}"
++                    -L "dependency=${MCKERNEL_RUST_CORE_PROVIDER_DIR}"
++                    --cfg "feature="compiler-builtins"" --cfg "feature="no-asm""
++                    --cfg intrinsics_enabled --cfg optimizations_enabled
++                    --cfg "feature="unstable-intrinsics"" --cfg "feature="mem-unaligned""
++                    "--emit=obj=${MCKERNEL_RUST_BUILTINS_OBJECT},metadata=${MCKERNEL_RUST_BUILTINS_METADATA},dep-info=${MCKERNEL_RUST_BUILTINS_RAW_DEPFILE}"
++                    "${MCKERNEL_RUST_BUILTINS_SOURCE}"
++                COMMAND "${CMAKE_COMMAND}" "-DINPUT=${MCKERNEL_RUST_BUILTINS_RAW_DEPFILE}"
++                    "-DOUTPUT=${MCKERNEL_RUST_BUILTINS_DEPFILE}" -P "${MCKERNEL_RUST_DEPFILE_NORMALIZER}"
++                DEPENDS "${RUSTC}" "${MCKERNEL_RUST_BUILTINS_SOURCE}"
++                    "${MCKERNEL_RUST_BUILTINS_PACKAGE}/Cargo.toml"
++                    "${MCKERNEL_RUST_BUILTINS_PACKAGE}/build.rs"
++                    "${MCKERNEL_RUST_CORE_OBJECT}" "${MCKERNEL_RUST_CORE_METADATA}"
++                    "${MCKERNEL_RUST_DEPFILE_NORMALIZER}"
++                DEPFILE "${MCKERNEL_RUST_BUILTINS_DEPFILE}"
++                BYPRODUCTS "${MCKERNEL_RUST_BUILTINS_DEPFILE}" "${MCKERNEL_RUST_BUILTINS_RAW_DEPFILE}"
++                COMMENT "Building genuine matching kernel-profile compiler builtins"
++                VERBATIM)
++            # Both explicit metadata inputs prevent implicit HOST sysroot fallback.
++            list(APPEND MCKERNEL_RUST_PROVIDER_FLAGS --sysroot=/dev/null
++                --extern "core=${MCKERNEL_RUST_CORE_METADATA}"
++                --extern "compiler_builtins=${MCKERNEL_RUST_BUILTINS_METADATA}"
++                -L "dependency=${MCKERNEL_RUST_CORE_PROVIDER_DIR}"
++                -L "dependency=${MCKERNEL_RUST_PROVIDER_BUILD}")
++            list(APPEND MCKERNEL_RUST_PROVIDER_DEPS
++                "${MCKERNEL_RUST_CORE_OBJECT}" "${MCKERNEL_RUST_CORE_METADATA}"
++                "${MCKERNEL_RUST_BUILTINS_OBJECT}" "${MCKERNEL_RUST_BUILTINS_METADATA}")
++            list(APPEND MCKERNEL_RUST_PROVIDER_OBJECTS
++                "${MCKERNEL_RUST_CORE_OBJECT}" "${MCKERNEL_RUST_BUILTINS_OBJECT}")
++            set_source_files_properties("${MCKERNEL_RUST_CORE_OBJECT}" PROPERTIES EXTERNAL_OBJECT TRUE)
++            set_source_files_properties("${MCKERNEL_RUST_BUILTINS_OBJECT}"
++                PROPERTIES EXTERNAL_OBJECT TRUE GENERATED TRUE)
++        endif()
+ 		add_custom_command(
+ 		OUTPUT "${RUST_KERNEL_OBJ}"
+ 		COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/rust"
+@@ -738,27 +823,17 @@
+ 			--crate-name mckernel_rust
+ 			--crate-type lib
+ 			--edition=2021
+-			-C panic=abort
+-			-C opt-level=2
+-			-C debuginfo=2
+-			-C code-model=large
+-			-C relocation-model=static
+-			-C no-redzone=yes
+-			-C force-frame-pointers=yes
+-			-C overflow-checks=off
+-			-C force-unwind-tables=no
+-			-C no-vectorize-loops
+-			-C no-vectorize-slp
+-			-C target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma
++			${MCKERNEL_RUST_CODEGEN_FLAGS}
+ 			-Z dep-info-omit-d-target
+ 			-Z binary-dep-depinfo
+ 			${RUST_KERNEL_CFG}
++            ${MCKERNEL_RUST_PROVIDER_FLAGS}
+ 			"--emit=obj=${RUST_KERNEL_OBJ},dep-info=${RUST_KERNEL_RAW_DEPFILE}"
+ 			"${CMAKE_CURRENT_SOURCE_DIR}/rust/lib.rs"
+ 		COMMAND "${CMAKE_COMMAND}" "-DINPUT=${RUST_KERNEL_RAW_DEPFILE}"
+ 			"-DOUTPUT=${RUST_KERNEL_DEPFILE}" -P "${MCKERNEL_RUST_DEPFILE_NORMALIZER}"
+ 		# Replacing the selected compiler must not silently reuse an old object.
+-		DEPENDS ${RUST_KERNEL_SRCS} "${RUSTC}" "${MCKERNEL_RUST_DEPFILE_NORMALIZER}"
++		DEPENDS ${RUST_KERNEL_SRCS} "${RUSTC}" "${MCKERNEL_RUST_DEPFILE_NORMALIZER}" ${MCKERNEL_RUST_PROVIDER_DEPS}
+ 		DEPFILE "${RUST_KERNEL_DEPFILE}"
+ 		BYPRODUCTS "${RUST_KERNEL_DEPFILE}" "${RUST_KERNEL_RAW_DEPFILE}"
+ 		COMMENT "Building Rust kernel object"
+@@ -804,6 +879,7 @@
+ 		-DMCKERNEL_RUST_SPINLOCK_HELPERS)
+ 	list(APPEND MCKERNEL_SRCS
+ 		"${RUST_KERNEL_OBJ}"
++        ${MCKERNEL_RUST_PROVIDER_OBJECTS}
+ 		rust/abi_checks.c
+ 	)
+ 	list(REMOVE_ITEM MCKERNEL_SRCS

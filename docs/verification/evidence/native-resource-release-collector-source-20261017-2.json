@@ -1,0 +1,144 @@
+{
+  "actual_resource_stdout": {
+    "bytes": 2400,
+    "raw_wait_status": 0,
+    "sha256": "19f7fd3b2169230fc106a9cad4e096b6b88e195c7b27409f2c362adc8c07dc5b",
+    "stderr_bytes": 0
+  },
+  "actual_status": {
+    "path": "/home/holden/mckernel-work/scratch/native-resource-release-collector-20261017-1/correction1/status.json",
+    "sha256": "df172c50237ccfb7fe9c5216f82bdf43b76d7ce57d55c55e5443561fc6663fa3",
+    "size": 63
+  },
+  "application_acceptance": false,
+  "checks": {
+    "elapsed_seconds": 1.4181538710035966,
+    "methods": 6,
+    "negatives": [
+      "failed ordinary/lifecycle/unsafe prerequisites never invoke resource helper",
+      "actual helper ioctl failure",
+      "over4096/truncated stream",
+      "wrong zeroexit stdout rejected by resource parser",
+      "evidence write/open and console publication failures poison payload",
+      "missing/duplicate/reordered chunks and resource after payload rejected"
+    ],
+    "returncode": 0,
+    "scope": "Actual unchanged resource C main using authorized injected ioctl adapter through real collector fork/supervisor/pipes, exact extracted final console serializer, strict chunk decoder and corrected resource parser; unchanged lifecycle parser and frozen ordinary bytes independently checked."
+  },
+  "collector_binary": {
+    "path": "/home/holden/mckernel-work/scratch/native-resource-release-collector-20261017-1/correction1/native-resource-collector",
+    "sha256": "a897dc51e7b2ef673b84bba3d8ea0d02ce1d155d216c92375841a930bdac5ba0",
+    "size": 1030288
+  },
+  "command": {
+    "path": "/home/holden/mckernel-work/scratch/native-resource-release-collector-20261017-1/correction1/command.json",
+    "sha256": "1376bfccfd97d71c720c738e9d3f8e9b4cf05b46893d0728467f24a61d9c61c0",
+    "size": 951
+  },
+  "corrected_resource_parser": {
+    "path": "/home/holden/mckernel/scripts/application-tests/native_resource_release_capture.py",
+    "sha256": "c1722019f27946a0c4a84018dd2eb50b0bd30de5081356f9debd77ece8339589",
+    "size": 5087
+  },
+  "correction": "Only scratch collector gate/resource fragment/harness C payload LF literal corrected; original frozen ordinary oracle untouched.",
+  "default_sources_untouched": true,
+  "ordinary_and_lifecycle_limit": 1024,
+  "ordinary_oracle": {
+    "actual_hex": "68616e646c65643d31206f627365727665645f626c6f636b65643d3120726573746f7265643d310a",
+    "actual_sha256": "dcaa9f1bb23dd9194743e50b308030dbb3bae80ade2729e0605663edd28d1033",
+    "bytes": 40,
+    "required_hex": "68616e646c65643d31206f627365727665645f626c6f636b65643d3120726573746f7265643d310a",
+    "required_sha256": "dcaa9f1bb23dd9194743e50b308030dbb3bae80ade2729e0605663edd28d1033"
+  },
+  "original_failure": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-resource-release-collector-source-20261017-1.json",
+    "sha256": "36f91423f0cd595189740a14c89938b3660fb94e47c113a8127deb3d1db756ce",
+    "size": 2863
+  },
+  "outer_collector_seconds": 120,
+  "parser_correction_report": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-resource-release-parser-correction-20261017-1.json",
+    "sha256": "a539cd12d96e956bb9dbba8f249dc6cfb6dec620252d89f70cf6260425fead51",
+    "size": 6496
+  },
+  "production_acceptance": false,
+  "resource_chunk_bytes": 512,
+  "resource_helper_timeout_ms": 10000,
+  "resource_only_capture_limit": 4096,
+  "resource_restoration_verified": false,
+  "resource_static_binary": {
+    "path": "/home/holden/mckernel-work/scratch/native-resource-release-probe-20261017-1/static-2/native-resource-release-probe",
+    "sha256": "80bbfbb69b73935b38e1eb946d9246ccfa9f4c22084291703d2a4a51d1566e7e",
+    "size": 876600
+  },
+  "runtime_release": false,
+  "sources": {
+    "collector-harness.c": {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-release-collector-20261017-1/correction1/source/collector-harness.c",
+      "sha256": "3306dbf1211681647827d78e5ed3834af960080e9f392881bd2bc5d60c2ef2df",
+      "size": 4483
+    },
+    "collector.corrected.diff": {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-release-collector-20261017-1/correction1/source/collector.corrected.diff",
+      "sha256": "d19305627d8fd59557c8ecd470c444fb60bd9308a53e2813d1d3f2354a821988",
+      "size": 9616
+    },
+    "collector.diff": {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-release-collector-20261017-1/correction1/source/collector.diff",
+      "sha256": "67cd2739a20a97772a3fdd3d330c8e7fefcc311e6f90f08b90b15956043c2940",
+      "size": 9617
+    },
+    "collector.original.c": {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-release-collector-20261017-1/correction1/source/collector.original.c",
+      "sha256": "27dc6978e90cbca916e3df6b83b8e2c431f03b0ab72a08fe56a4e45d8accceab",
+      "size": 27274
+    },
+    "lifecycle-running.stdout": {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-release-collector-20261017-1/correction1/source/lifecycle-running.stdout",
+      "sha256": "77cbf584af48c02267c6071dde26f780023b44bfbb00a520038ab971bd32bce5",
+      "size": 480
+    },
+    "native-resource-collector.c": {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-release-collector-20261017-1/correction1/source/native-resource-collector.c",
+      "sha256": "7da1e4628e28e772aab82e9b54cdaf30b31fbd690d0e311397f57816fbedc1f2",
+      "size": 32703
+    },
+    "probe-adapter.c": {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-release-collector-20261017-1/correction1/source/probe-adapter.c",
+      "sha256": "030104cb0f24ec1b48f96b246c3e8799f6b799dceb972f063441c2ff792ac4e0",
+      "size": 3434
+    },
+    "probe-adapter.original.c": {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-release-collector-20261017-1/correction1/source/probe-adapter.original.c",
+      "sha256": "089152758135a94a1583e0e96970a695635c5d5346dc1a962d7f131ee8f365c5",
+      "size": 3313
+    },
+    "probe.c": {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-release-collector-20261017-1/correction1/source/probe.c",
+      "sha256": "84d1f218301d59954d92ac32eb0d856e628f1680907b795f3c27db30a70cbcb1",
+      "size": 7283
+    },
+    "resource-extension.c": {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-release-collector-20261017-1/correction1/source/resource-extension.c",
+      "sha256": "5fa731b459d61b7ecd2e3117c6ee7be8433f889c0e948e87b636ac1d5b3d699d",
+      "size": 5089
+    },
+    "resource_capture.py": {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-release-collector-20261017-1/correction1/source/resource_capture.py",
+      "sha256": "3286f6bc3c63c9e1845ea9ebcecc440be474fb93fd508e7b969009203e6ea9fd",
+      "size": 3958
+    }
+  },
+  "status": "PASS_FOCUSED_SOURCE_PROTOCOL_PENDING_INDEPENDENT_REVIEW",
+  "stderr": {
+    "path": "/home/holden/mckernel-work/scratch/native-resource-release-collector-20261017-1/correction1/stderr",
+    "sha256": "c609e976608de30266d15920cd64765395e3de2c0e743ab53a1ac36b629145eb",
+    "size": 639
+  },
+  "task_id": "native-resource-release-collector-source-20261017-2",
+  "test": {
+    "path": "/home/holden/mckernel-work/scratch/native-resource-release-collector-20261017-1/correction1/test_resource_collector.py",
+    "sha256": "5aeed4cbd6e14a5a17d6eecd69a9a060043a00c616f3c9033906b2f768119ed1",
+    "size": 6928
+  }
+}

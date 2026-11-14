@@ -1,0 +1,88 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root",
+  "authorized": true,
+  "nonce": "3d902fd0c173b46809f1da1e9fa8811d",
+  "issued_wall": 1793161941.9629745,
+  "expires_wall": 1793162121.962975,
+  "maximum_invocations": 1,
+  "source_profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/next-entry-current-boundary-source-1/SCRATCH-STAGE.PROFILE.NOT-GRANTED.json",
+    "bytes": 1974,
+    "sha256": "f32319c059073a91fc9449b3bd74ca6ef52e4394ff4193a424b9b12846f5c32b"
+  },
+  "independent_source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/next-entry-current-boundary-source-1/scratch-stage-independent-source-review-1/REVIEW.json",
+    "bytes": 5620,
+    "sha256": "a01460bcb27934448068400d005ddba264953e4c9ec7044cd3ee827778d93f96"
+  },
+  "current_nonce_ledger": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER55.json",
+    "bytes": 15843,
+    "sha256": "82e9d38620e51de45f3bddebc20dec4cb8559c3c0934737266af4994c5d2076b"
+  },
+  "current_free": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/independent-postbuild-current-free-review-1/CURRENT-FREE.json",
+    "bytes": 5561,
+    "sha256": "270a93392db9d5c64c7546d43ac36cb604b85da4668884736b4920b623c3111d"
+  },
+  "actual_admission": {
+    "wall": 1793161941.9619713,
+    "monotonic": 944048.530928217,
+    "boottime": 959386.657978687,
+    "fixed_cutoffs": [
+      1793165769.0,
+      947874.5689514667,
+      963213.695968197
+    ],
+    "memory_available_bytes": 27282153472,
+    "aggregate_reserved_bytes": 21474836480,
+    "strict_memory_floor_bytes": 23357213694,
+    "host_free_bytes": 148069814272,
+    "scratch_free_bytes": 47863586816,
+    "budget": {
+      "schema_version": 2,
+      "id": "7f4af94a83b14cc08f97401f5891d965",
+      "budget": "57774.852125",
+      "initial_balance": "57774.8521250000",
+      "minimum_balance": "52079.8011050000",
+      "last_balance": "52079.8011050000",
+      "spent": "22812.3311000000",
+      "remaining": "34962.5210250000",
+      "scope": "Cumulative account-wide observed balance decreases; increases never restore allowance; stale snapshots may count conservatively; in-flight charges can settle later"
+    },
+    "heartbeat_at": "2026-10-28T04:32:10.021170+00:00",
+    "phase": "running",
+    "account_wall": 1793161941.962851,
+    "heartbeat_age_seconds": 11.941681146621704,
+    "available_prepaid_balance": "52079.8011050000",
+    "spendControlReached": null,
+    "loadavg": [
+      1.06,
+      0.99,
+      0.93
+    ],
+    "CPU_affinity": [
+      6
+    ]
+  },
+  "cpu6_exclusive": true,
+  "other_cpu6_jobs": 0,
+  "heavy_jobs_current": 0,
+  "reserved_pids_ordinary": 64,
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=60:60",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--",
+    "/usr/bin/python3",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/next-entry-current-boundary-source-1/root_stage_bound_manifest_once.py"
+  ],
+  "runtime_native_authority": null
+}

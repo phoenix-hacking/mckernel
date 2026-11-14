@@ -1,0 +1,17 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "UNSELECTED_PRODUCER_CONTRACT_PROPOSAL",
+  "checks": [
+    "original fresh allocation published before copy in retained source",
+    "proposed fresh allocation copy-before-publish and exact cleanup edge",
+    "existing sendsig branch and separate recvsig second-copy order retained",
+    "five pure abstract failure/success contract vectors",
+    "no C ABI export or source selection"
+  ],
+  "candidate": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-C-1/defined-callers-correction-1/pending-producer-proposal-1/syscall_ptrace_setsiginfo_staged.PROPOSAL.rs",
+    "bytes": 5838,
+    "sha256": "a0c51a2577705f929bcc1e05eb4b1313fe453562ca6a8ecdc3efd0eed789c892"
+  },
+  "limitations": "The vectors model intended sequencing; they do not execute Rust, actual usercopy, allocator, concurrency, compiler or kernel. Root must approve the changed failure publication and allocator/free provenance, plus prove original slot exclusion/ownership, race handling and lifetime before integration."
+}

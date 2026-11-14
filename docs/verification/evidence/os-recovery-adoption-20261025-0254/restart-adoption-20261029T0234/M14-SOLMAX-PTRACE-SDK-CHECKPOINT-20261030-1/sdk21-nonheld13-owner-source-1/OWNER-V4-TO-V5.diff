@@ -1,0 +1,239 @@
+--- v4/sdk13_compile_image_owner.v4.py
++++ v5/sdk13_compile_image_owner.v5.py
+@@ -10,6 +10,7 @@
+ from __future__ import annotations
+ 
+ import argparse
++import base64
+ from decimal import Decimal
+ import hashlib
+ import importlib.util
+@@ -32,7 +33,7 @@
+ OWNER_RECEIPT_NAME = "owner-receipt.json"
+ EXPECTED_DRIVER_SHA256 = '7d30085edda4d1272f923b19e8632e9ab8b259874623974c2da53dbe4c3c5be0'
+ EXPECTED_PROVENANCE_SHA256 = '453dd998e4ef1e2ed21b0818771d97197d77f98c90ca8c6c67cc8ab019063044'
+-EXPECTED_HOST_OWNER_SHA256 = '49751a3d9e0cda96e27ffa1fc2511b75cdf0f139a30b7e0f1cb58d6feb04b3a0'
++EXPECTED_HOST_OWNER_SHA256 = '3d6f4edcd1edbb9f19a20755cab1b45267afcd8e708cd92f56f8b74ab8541b45'
+ EXPECTED_HEAVY_ENTRY_CONTRACT_SHA256 = "c252ee341eb61752704f8b818503c0a5dc97400845494707ca3110f5f23df6d1"
+ # The image owner advances with the image-candidate namespace.  Keep consumed
+ # exclusions explicit: accepting one of these would allow a request to race a
+@@ -182,7 +183,7 @@
+         sys.modules.pop(package_name, None)
+ 
+ 
+-_HOST_OWNER_PATH = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-nonheld13-owner-source-1/sdk13_compile_host_helper.py')
++_HOST_OWNER_PATH = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-nonheld13-owner-source-1/sdk13_compile_host_helper.v5.py')
+ _HOST_OWNER = _load_reviewed_host_owner(
+     _HOST_OWNER_PATH, EXPECTED_HOST_OWNER_SHA256,
+     Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-14/default-image-preparation-1/native_rust_exact_build_offline.py'),
+@@ -2057,12 +2058,12 @@
+     return {'release':identity,'controls':controls,'evidence':evidence,'daemon':daemon}
+ 
+ 
+-SDK13_DAEMON_PARENT = SDK13_DIR / 'sdk13_daemon_metadata_parent.v4.py'
+-SDK13_DAEMON_PARENT_SHA = '31c5e44ee77158f520441b3b0b0a01ca8b04d640eb6ba0a1287f662264e5cf2d'
++SDK13_DAEMON_PARENT = SDK13_DIR / 'sdk13_daemon_metadata_parent.v5.py'
++SDK13_DAEMON_PARENT_SHA = 'dd837c547d72324c3a301b234cacb48cd70e825d6827d11488219b24a773a342'
+ SDK13_DAEMON_READER = SDK13_DIR / 'sdk13_daemon_metadata_reader.v4.py'
+ SDK13_DAEMON_READER_SHA = 'ef5eadb127f024275e10cbe2d4c8b2f2a8cf1a3fe301a20cd7d23a627df1d9f8'
+-SDK13_CAPTURE_SOURCE = Path('/home/holden/mckernel/docs/verification/evidence/phase5-m03-handshake-runtime-checkpoint-20261020-1/sdk-physical-source/run_two_commands_source_bound_corrected.py')
+-SDK13_CAPTURE_SHA = '990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8'
++SDK13_CAPTURE_SOURCE = SDK13_DIR / 'sdk13_owned_capture.v5.py'
++SDK13_CAPTURE_SHA = '8f8774534d8c97436abc26dcbb45581ecb1debf025c9385dd3da95e482a34310'
+ SDK13_CENSUS_SHA = '96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1'
+ SDK13_PYTHON = '/home/holden/anaconda3/bin/python3.9'
+ SDK13_PYTHON_SHA = '8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb'
+@@ -2075,7 +2076,7 @@
+     'daemon_pid':2036,'daemon_birth':1513,'boot_id':SDK13_BOOT_ID,'socket':'/var/run/docker.sock',
+     'affinity':'7','AS_each':536870912,'CPU_each':10,'wall_seconds':15,'outer_kill_grace_seconds':5,
+     'reserved_parent_plus_reader_bytes':1073741824,'max_invocations':3,'phases':list(SDK13_DAEMON_PHASES),
+-    'compiler_concurrent':False,'argv':SDK13_DAEMON_ARGV}
++    'compiler_concurrent':False,'argv_prefix':SDK13_DAEMON_ARGV,'argv_suffix':'stable sealed release/control identity JSON'}
+ 
+ 
+ def _sdk13_capture_library():
+@@ -2105,6 +2106,23 @@
+           doc.get('reader_direct_joined') is True and doc.get('reader_group_absent') is True and
+           doc.get('reader_streams_closed') is True and doc.get('reader_wait4_status')==0 and not doc.get('error'),
+           'SDK13 root daemon reader custody unknown')
++    stdout=doc.get('reader_stdout');stderr=doc.get('reader_stderr')
++    _fail(isinstance(stdout,dict) and stdout.get('complete') is True and not stdout.get('error') and
++          isinstance(stderr,dict) and stderr.get('complete') is True and not stderr.get('error') and
++          stderr.get('bytes')==0 and stderr.get('base64')=='' and
++          stderr.get('sha256')==hashlib.sha256(b'').hexdigest(), 'SDK13 reader diagnostics incomplete or nonempty')
++    try: raw=base64.b64decode(stdout.get('base64',''),validate=True)
++    except (ValueError,TypeError) as exc:raise OwnerError('SDK13 reader stdout encoding differs') from exc
++    _fail(len(raw)==stdout.get('bytes') and hashlib.sha256(raw).hexdigest()==stdout.get('sha256') and
++          json.loads(raw)==doc.get('sample'), 'SDK13 retained reader stdout differs')
++    outer=join.get('effect_boundary');inner=doc.get('pre_reader_gate')
++    _fail(isinstance(outer,dict) and isinstance(inner,dict) and
++          outer.get('weekly_observed_utc')==inner.get('weekly_observed_utc') and
++          outer.get('expiry_utc')==inner.get('expiry_utc') and
++          type(outer.get('boot')) in (int,float) and type(inner.get('boot')) in (int,float) and
++          type(outer.get('mono')) in (int,float) and type(inner.get('mono')) in (int,float) and
++          inner['boot']>=outer['boot'] and inner['mono']>=outer['mono'],
++          'SDK13 outer/reader effect boundary evidence differs')
+     parent=doc.get('parent');reader=doc.get('reader');sample=doc.get('sample')
+     _fail(isinstance(parent,dict) and isinstance(reader,dict) and isinstance(sample,dict) and
+           type(parent.get('pid')) is int and parent['pid']>0 and type(parent.get('birth')) is int and parent['birth']>0 and
+@@ -2118,7 +2136,7 @@
+     return sample['daemon']
+ 
+ 
+-def _sdk13_capture_daemon(phase,evidence_root,expected,request,authority):
++def _sdk13_capture_daemon(phase,evidence_root,expected,request,authority,signals):
+     _fail(phase in SDK13_DAEMON_PHASES,'SDK13 unknown daemon capture phase')
+     _sdk13_read(SDK13_DAEMON_PARENT,2**20,SDK13_DAEMON_PARENT_SHA)
+     _sdk13_read(SDK13_DAEMON_READER,2**20,SDK13_DAEMON_READER_SHA)
+@@ -2130,7 +2148,11 @@
+                           (resource.RLIMIT_FSIZE,8388608),(resource.RLIMIT_NOFILE,128),(resource.RLIMIT_CORE,0)):
+             resource.setrlimit(key,(value,value))
+     _fail(_sdk13_authorize(request)==authority,'SDK13 authority changed immediately before daemon capture')
+-    join=capture['owned_capture']({'argv':SDK13_DAEMON_ARGV},path,15,limits)
++    token=json.dumps({'release':list(authority['release']),
++                      'controls':[list(x) for x in authority['controls']]},sort_keys=True,separators=(',',':'))
++    argv=SDK13_DAEMON_ARGV+[token]
++    join=capture['owned_capture']({'argv':argv},path,15,limits,
++            effect_gate=lambda:_sdk13_effect_gate(request,authority,signals,'daemon-'+phase))
+     raw,_=_sdk13_read(path/'stdout',16384);doc=json.loads(raw)
+     observed=_sdk13_check_daemon_capture(join,doc,expected)
+     _exclusive_json(path/'sdk13-daemon-verdict.json',{'status':'PASS_EXACT_DAEMON_CAPTURE',
+@@ -2306,6 +2328,63 @@
+     return outputs
+ 
+ 
++SDK13_EFFECT_STOP_SIGNALS={signal.SIGTERM,signal.SIGINT,signal.SIGALRM}
++
++
++def _sdk13_evaluate_effect(expected_release,actual_release,expected_controls,actual_controls,
++                           facts,utc,boot,mono,boot_id,stopped):
++    _fail(expected_release==actual_release and expected_controls==actual_controls,
++          'SDK13 release/control identity changed before effect')
++    _fail(not stopped,'SDK13 stop before effect')
++    _fail(isinstance(facts,dict) and facts.get('service_status')=='NO_NEW_REJECTION' and
++          facts.get('paid_fallback') is False and type(facts.get('weekly_used_percent')) in (int,float) and
++          0<=facts['weekly_used_percent']<100 and
++          _sdk13_capture_fresh(utc,facts.get('weekly_observed_utc'),facts.get('expiry_utc')) and
++          utc<SDK13_UTC and boot<SDK13_BOOT and mono<SDK13_MONO and boot_id==SDK13_BOOT_ID,
++          'SDK13 usage or clock expired before effect')
++    return {'utc':utc,'boot':boot,'mono':mono,'weekly_observed_utc':facts['weekly_observed_utc'],
++            'expiry_utc':facts['expiry_utc']}
++
++
++def _sdk13_effect_gate(request,authority,signals,phase):
++    _fail(signals is not None,'SDK13 stop observer missing')
++    current,release_id=_sdk13_root(request.get('compile_only_release'),SDK13_RELEASE)
++    facts=current.get('admission');controls=[]
++    for path,key in ((SDK13_CONTROL,'controls_sha256'),(SDK13_CAPACITY,'capacity_sha256')):
++        _fail(isinstance(facts,dict) and isinstance(facts.get(key),str),'SDK13 current control binding missing')
++        raw,ident=_sdk13_read(path,2**20,facts[key]);doc=json.loads(raw)
++        _fail(doc.get('caps')=={'boot_deadline':SDK13_BOOT,'boot_id':SDK13_BOOT_ID,'deadline':SDK13_UTC,
++                                'monotonic_deadline':SDK13_MONO},'SDK13 current control caps changed')
++        controls.append(ident)
++    boot_id=Path('/proc/sys/kernel/random/boot_id').read_text().strip()
++    utc=time.time();boot=time.clock_gettime(time.CLOCK_BOOTTIME);mono=time.monotonic()
++    stopped=signals.requested is not None or bool(signal.sigpending() & SDK13_EFFECT_STOP_SIGNALS)
++    result=_sdk13_evaluate_effect(authority['release'],release_id,authority['controls'],controls,
++                                  facts,utc,boot,mono,boot_id,stopped)
++    result['phase']=phase
++    return result
++
++
++def _sdk13_retirement_effect_gate(request,acceptance_identity,retirement_authority,signals,phase):
++    _fail(signals is not None,'SDK13 retirement stop observer missing')
++    current,actual=_sdk13_root(request.get('physical_acceptance'),SDK13_ACCEPTANCE)
++    controls=[]
++    for path,key in ((SDK13_CONTROL,'controls_sha256'),(SDK13_CAPACITY,'capacity_sha256')):
++        _fail(isinstance(current.get(key),str),'SDK13 retirement control binding missing')
++        raw,ident=_sdk13_read(path,2**20,current[key]);doc=json.loads(raw)
++        _fail(doc.get('caps')=={'boot_deadline':SDK13_BOOT,'boot_id':SDK13_BOOT_ID,'deadline':SDK13_UTC,
++                                'monotonic_deadline':SDK13_MONO},'SDK13 retirement control caps changed')
++        controls.append(ident)
++    _fail(current.get('release_action_authorized') is True,'SDK13 retirement action not released')
++    boot_id=Path('/proc/sys/kernel/random/boot_id').read_text().strip()
++    utc=time.time();boot=time.clock_gettime(time.CLOCK_BOOTTIME);mono=time.monotonic()
++    stopped=signals.requested is not None or bool(signal.sigpending() & SDK13_EFFECT_STOP_SIGNALS)
++    result=_sdk13_evaluate_effect(acceptance_identity,actual,retirement_authority[0],controls,
++                                  current,utc,boot,mono,boot_id,stopped)
++    result['phase']='retirement-'+phase
++    return result
++
++
+ class SDK13ImageOwner:
+     def __init__(self,request,validator,signals):
+         self.request=request;self.validator=validator;self.signals=signals
+@@ -2323,7 +2402,7 @@
+         os.mkdir(Path(bound['owner_evidence']),0o700)
+         _fsync_dir(Path(bound['owner_evidence']).parent)
+         try:
+-            _sdk13_capture_daemon('prelease',bound['owner_evidence'],authority['daemon'],r,authority)
++            _sdk13_capture_daemon('prelease',bound['owner_evidence'],authority['daemon'],r,authority,self.signals)
+             _fail(_sdk13_authorize(r)==authority,'SDK13 authority changed after prelease daemon read')
+         except BaseException as exc:
+             _exclusive_json(Path(bound['owner_evidence'])/'prelease-daemon-error.json',
+@@ -2349,7 +2428,8 @@
+         try:
+             receipt['work_created_identity']=_sdk13_prepare_work(bound,r,self.validator)
+             Path(bound['attempt']).mkdir(mode=0o700); _fsync_dir(Path(bound['owner_evidence']))
+-            client=_HOST_OWNER.Docker(Path(bound['attempt'])/'docker.log',self.signals,sudo=True)
++            client=_HOST_OWNER.Docker(Path(bound['attempt'])/'docker.log',self.signals,sudo=True,
++                    effect_gate=lambda action:_sdk13_effect_gate(r,authority,self.signals,'docker-'+action))
+             image_rows=client.call(['image','inspect','--format','{{json .Id}}\n{{json .Architecture}}',SDK13_IMAGE],timeout=30).stdout.splitlines()
+             _fail(len(image_rows)==2 and json.loads(image_rows[0])==SDK13_IMAGE and
+                   json.loads(image_rows[1])=='amd64','SDK13 image identity differs')
+@@ -2358,7 +2438,7 @@
+             self.validator.revalidate(bound,r)
+             _sdk13_revalidate_manifest(bound,manifest)
+             _fail(_sdk13_authorize(r)==authority,'SDK13 authority changed before create')
+-            _sdk13_capture_daemon('pre-create',bound['owner_evidence'],authority['daemon'],r,authority)
++            _sdk13_capture_daemon('pre-create',bound['owner_evidence'],authority['daemon'],r,authority,self.signals)
+             _fail(_sdk13_authorize(r)==authority,'SDK13 authority changed after pre-create daemon read')
+             args,mounts,command=_sdk13_create_args(bound,r,manifest)
+             _fail(not client.client_retirement_unproven,'SDK13 precreate client retirement unknown')
+@@ -2371,7 +2451,7 @@
+             self.validator.revalidate(bound,r)
+             _sdk13_revalidate_manifest(bound,manifest)
+             _fail(_sdk13_authorize(r)==authority,'SDK13 authority changed before start')
+-            _sdk13_capture_daemon('pre-start',bound['owner_evidence'],authority['daemon'],r,authority)
++            _sdk13_capture_daemon('pre-start',bound['owner_evidence'],authority['daemon'],r,authority,self.signals)
+             _fail(_sdk13_authorize(r)==authority,'SDK13 authority changed after pre-start daemon read')
+             _fail(not client.client_retirement_unproven,'SDK13 prestart client retirement unknown')
+             client.call(['start',cid]);waited=client.call(['wait',cid],timeout=r['timeout'])
+@@ -2427,7 +2507,7 @@
+           'SDK13 retirement daemon/socket continuity differs')
+     return rows,(identity,daemon)
+ 
+-def _sdk13_release_accepted_lease(request,validator):
++def _sdk13_release_accepted_lease(request,validator,signals):
+     _fail(os.getuid()==os.geteuid()==os.getgid()==os.getegid()==1000,'SDK13 ordinary release owner required')
+     core_request={k:v for k,v in request.items() if k!='physical_acceptance'}
+     # The initial validator correctly requires a fresh, absent work/evidence
+@@ -2441,7 +2521,7 @@
+           core_request.get('attempt_root')==str(bound['attempt']),
+           'SDK13 existing release paths differ')
+     _sdk13_set_profile(core_request,bound)
+-    acceptance,_=_sdk13_root(request.get('physical_acceptance'),SDK13_ACCEPTANCE)
++    acceptance,acceptance_identity=_sdk13_root(request.get('physical_acceptance'),SDK13_ACCEPTANCE)
+     _fail(acceptance.get('status')=='ACCEPTED_COMPILE_ONLY_PHYSICAL_RETIREMENT' and
+           acceptance.get('operation')==SDK13_OPERATION and acceptance.get('profile_sha256')==SDK13_PROFILE_SHA and
+           acceptance.get('owner_sha256')==_sha256(Path(__file__)) and
+@@ -2456,7 +2536,8 @@
+           receipt.get('all_docker_clients_joined') is True and receipt.get('operation')==SDK13_OPERATION and
+           receipt.get('request_core_sha256')==_request_core_hash(core_request),'SDK13 physical retirement missing')
+     retirement_authority=_sdk13_retirement_controls(acceptance)
+-    cid=receipt.get('container_id');client=_HOST_OWNER.Docker(Path(bound['attempt'])/'lease-release-docker.log',sudo=True)
++    cid=receipt.get('container_id');client=_HOST_OWNER.Docker(Path(bound['attempt'])/'lease-release-docker.log',signals,sudo=True,
++        effect_gate=lambda action:_sdk13_retirement_effect_gate(request,acceptance_identity,retirement_authority,signals,action))
+     absence=_own_absence(client,cid)
+     _fail(not client.client_retirement_unproven,'SDK13 lease release client retirement unknown')
+     _fail(_sdk13_retirement_controls(acceptance)==retirement_authority,
+@@ -2483,7 +2564,8 @@
+     request = json.loads(args.request.read_text())
+     validator = _sdk13_module()
+     if args.action == "release-accepted-lease":
+-        result = _sdk13_release_accepted_lease(request,validator)
++        with Signals() as signals:
++            result = _sdk13_release_accepted_lease(request,validator,signals)
+         print(json.dumps(result,sort_keys=True))
+         return 0
+     with Signals() as signals:

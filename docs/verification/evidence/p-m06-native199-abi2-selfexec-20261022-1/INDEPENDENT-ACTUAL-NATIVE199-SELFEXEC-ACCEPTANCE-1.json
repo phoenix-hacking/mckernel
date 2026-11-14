@@ -1,0 +1,35 @@
+{
+  "status": "PASS",
+  "decision": "ACCEPT_ACTUAL_NATIVE199_SELFEXEC_AND_LINKED_RUST_EXEC_RESET_BEHAVIOR_ONLY",
+  "reviewer": "/root/matched_guest_build_review",
+  "implementation": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "case_id": "p-m06-exec-reset-selfexec-199B",
+  "nonce": "6ed8a27da1d5481ea88d4a6d00ee5245",
+  "evidence_sha256": {
+    "manifest": "fef195b306eeb032e0ad44c42e597a8053e384f2df45d8bac099aa70f1f0cbc4",
+    "outer_capture": "84d4980db447eb1efcab0470e6369cb8e0f470ec65e40c511fe4410a98ddda84",
+    "actual_result": "9e37a8336b2e23f9f41ee2055193d9a1dbaa60b8fa9be2dd9247c1c3d48f0a97",
+    "raw_serial": "4dea013c53d45aa5154911c08a91ca71e50ef0b0976a3664500a7a02673e8d0a",
+    "application_stdout": "c415fd7c85986852584419737460894f4f7b03a781b3d991659d31fb665faf15"
+  },
+  "accepted_observations": [
+    "One raw ND_PAYLOAD frame exactly matches the actual guest_report.",
+    "Actual stdout matches all199 manifest bytes; stderr is empty; raw wait9472 establishes normal exit37.",
+    "Both streams reached EOF without truncation or discarded bytes; nonzero timestamps order start, EOF, reap and finish; procfs_empty=true.",
+    "Observed output changes caught disposition to default, preserves ignored/default dispositions and mask2560, and disables the alternate stack with sp0/size0.",
+    "Native os0/generation1/PID255 trace records syscall59 delivery23, return_route and return0, followed by post-exec observations.",
+    "Matching PID255 cleanup ACK errno0, procfs deletion, retirement errno0 and process release cleanup_errno0 are present.",
+    "Accepted source/build binding connects this image10972 to the Rust exec_reset_signal_state_current_v1 provider; that symbol's unique linked definition is retained."
+  ],
+  "application_acceptance": true,
+  "mckernel_application_executed": true,
+  "rust_path_scope": "Native behavior of the previously source/build-bound Rust exec-reset path is accepted for this exact tuple. No direct function-entry instrumentation is claimed.",
+  "original_automatic_result_preserved": "PROTOCOL_PASS; its conservative false acceptance fields remain unchanged.",
+  "physical_retirement_accepted": false,
+  "remaining": [
+    "Actual root owner journal, current nonce name/label absence and exclusion-release evidence require separate physical-retirement acceptance before another heavy operation.",
+    "235/227 and remaining P06 checks remain unaccepted.",
+    "No P05 restoration, whole-P06, whole-OS or whole-kernel Rust-retirement credit."
+  ]
+}

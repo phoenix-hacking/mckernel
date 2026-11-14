@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "kind": "stability-continuation-shutdown-checkpoint",
+  "checkpoint": 11,
+  "timestamp_utc": "2026-09-28T11:02:38Z",
+  "status": "PAUSED_INCOMPLETE",
+  "goal_complete": false,
+  "goal_status_changed": false,
+  "launcher": {
+    "pid": 3125264,
+    "worker_pid": 3125267,
+    "app_server_pid": 3125269,
+    "started": "2026-09-28 03:47:42 -0700",
+    "run_directory": ".git/os-autopilot/runs/20260928T104742Z-d8634f08",
+    "state_file": "absent",
+    "children_terminal": true
+  },
+  "policy_sha256": {
+    "GOAL.md": "76c4f5d12e3f233c8dc4f8f1a77dd1f2eae9df2ff8fb9f4000ef5a2e94c0bcc3",
+    "START.md": "1698d3429e71083634584dea7f78d22ff9e2927858de0dc714f829f9b3d6216c",
+    "CONVERGENCE.md": "f6938bd207d6fa2c0898def482e9bb4bd0cf173937fe55c2111a369d3393e86a",
+    "HANDOFF.md": "265cd9997588f84d69f4fa9da00b9df9b7153bf9e94366b478639941e680a415"
+  },
+  "results": {
+    "root13_observer": {
+      "status": "PASS_SOURCE_PACKET_UNREVIEWED",
+      "source_sha256": "2f18755073ef3c33b4df9178f708187d344a50b03240b0fb7ce51a1d2c87e5bc",
+      "tests_sha256": "ce6ebd78da99c45e5caccc5c87cf6423ee1738ae884c5dd9c5bf3745a8c371c9",
+      "tests": "26 passed",
+      "packet": "docs/verification/stability-layer-b-native-owner-bootstrap-root13-execution-packet-20260928-28.md",
+      "packet_sha256": "7db946647c44e8cd8eb2542e2ce6bda306cdf968e7d2d33e542a1bcbe6dde2fe",
+      "runtime_release": false
+    },
+    "vm_clear_error_propagation": {
+      "status": "PASS_SOURCE_READY_FOR_BUILD_PACKET_UNREVIEWED",
+      "source_sha256": {
+        "kernel/include/syscall.h": "459e6d0faec3f1b8366a0d329571ef5ea813042706be11f9423b0399bbba6ffa",
+        "kernel/syscall.c": "1f4836b5deef84b75801e461d4d13f683db2cb74802454f96965e8b7ca011647",
+        "kernel/rust/syscall_policy.rs": "2edc424e01e3bb3acc7542432dde8fa0f977884558d3525efb0354acbc3c04ea",
+        "kernel/rust/tests/run_equivalence.sh": "53c85fb9913d084eb11544477bde591f3a96b512f26b5d41708a9035831a492e",
+        "ihk/test/ihklib/whitebox/src/driver/mckernel/syscall.c": "7abb77fdc3049a54caebc3344de14c41e779502b4abcb7f301de4a647e15bf77"
+      },
+      "packet": "docs/verification/stability-vm-clear-error-build-equivalence-packet-20260928-1.md",
+      "packet_sha256": "b0a4415670cdeb0ad54ca5adc8eecb2927fe8ebd01ccc864701ee06d82913b66",
+      "blocker": "packet lacks a reviewed focused host-clear selector and forbids the broad suite",
+      "compiled": false,
+      "guest_executed": false
+    },
+    "linux_diagnostic": {
+      "status": "DRAFT_PACKET_UNREVIEWED",
+      "packet": "docs/verification/stability-linux-diagnostic-startup-argv-empty-execution-packet-20260928-2.md",
+      "packet_sha256": "ca3081276ad3a69861111272ec780861ccab688eeef401ad5e58ba817b91e6f5",
+      "executed": false
+    },
+    "m01_driver": {
+      "status": "INTERRUPTED_UNREVIEWED_PARTIAL",
+      "source_sha256": "9c64dc7ac642feb50e4866bd1187882be0a6e04afd199d5b81e179244afa65c1",
+      "tests_sha256": "75c90142db814337d2b576aa0e9c6c393f2f347dd76cc061af332ecb3ec01bb7",
+      "tests": "2 passed, 2 error because old tests do not supply the new authenticated manifest",
+      "execution_release": false
+    },
+    "native_diagnostic_adapter": {
+      "status": "FAIL_SOURCE_RESTORED_AFTER_INTERRUPTED_EXPERT",
+      "source_sha256": "fc17200bab97a279ccd4e7c7057ebb1b1341eaab8c4eff2dcc4c26dd1a1e9f4f",
+      "tests_sha256": "7832dfd27b2587f04b5283777bba1757ab974ad0faa98f251178fae3f87e5e8e",
+      "tests": "8 passed",
+      "restoration_source": ".git/os-autopilot/runs/20260928T104742Z-d8634f08/agents/d0d79c7da7b1d6431050697729a69a7fe84404b07263679ef7613afdd573d07f.log",
+      "runtime_release": false
+    }
+  },
+  "runtime": {
+    "real_guest_applications_this_window": 0,
+    "heavy_lease": "free",
+    "active_project_compiler_or_guest": false,
+    "host_free_gib": 44,
+    "scratch_free_gib": 21
+  },
+  "nested_repository": {
+    "path": "ihk",
+    "local_branch": "codex/vm-clear-error-propagation-20260928",
+    "local_commit": "21a0d1e",
+    "push_status": "FAILED_AUTHORIZATION",
+    "remote": "https://github.com/ihkmckernel/ihk.git",
+    "outer_pointer_staged": false
+  },
+  "counters": {
+    "applications": "0/273",
+    "narrow_fault_modes": "2/4",
+    "production_gates": "6/130",
+    "points": "350/10000",
+    "language_gates": "0/7"
+  },
+  "next_tasks": [
+    "independently review root13 packet 28; only a PASS may release one fresh root13 attempt",
+    "finish the interrupted M01 manifest-bound expert tests and independently review the exact resulting bytes",
+    "independently review the pinned Linux diagnostic packet and reauthenticate its same-image closure before any execution",
+    "add or authorize a reviewed focused host-clear equivalence selector, review the VM build packet, then compile and run equivalence",
+    "repair the native diagnostic adapter around real guest payload transport, finite deadlines, unconditional reap and durable failure publication before review or QEMU",
+    "continue M03 durable VM ownership, quarantine and invalidation acknowledgement after the narrow propagation build evidence"
+  ]
+}

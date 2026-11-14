@@ -1,0 +1,194 @@
+{
+  "status": "PASS_BASELINE_NINE_FAILURES_CORRECTED_TWELVE_SCENARIOS",
+  "review_sha256": "61e1466a7e7aaa5513896d73a73f825fec0c8d8df6479a749d61e650f754caca",
+  "selectors": [
+    "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_milestone_checkpoint_preserves_saved_complete",
+    "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_milestone_checkpoint_preserves_recovered_usage_limited",
+    "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_milestone_checkpoint_preserves_recovered_budget_limited",
+    "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_live_terminal_update_precedes_newly_closed_milestone_checkpoint",
+    "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_terminal_goal_discovered_by_checkpoint_pause_read_is_preserved",
+    "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_current_hard_stop_precedes_terminal_and_closed_milestones",
+    "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_both_accepted_milestones_checkpoint_the_larger_goal"
+  ],
+  "commands": [
+    {
+      "label": "baseline",
+      "argv": [
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261110T025232Z-785c93f5/focused-terminal-behavior-1/baseline.metrics",
+        "/usr/bin/timeout",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "unittest",
+        "-v",
+        "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_milestone_checkpoint_preserves_saved_complete",
+        "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_milestone_checkpoint_preserves_recovered_usage_limited",
+        "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_milestone_checkpoint_preserves_recovered_budget_limited",
+        "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_live_terminal_update_precedes_newly_closed_milestone_checkpoint",
+        "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_terminal_goal_discovered_by_checkpoint_pause_read_is_preserved",
+        "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_current_hard_stop_precedes_terminal_and_closed_milestones",
+        "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_both_accepted_milestones_checkpoint_the_larger_goal"
+      ],
+      "pid": 713716,
+      "birth": "36627702",
+      "joined": true,
+      "returncode": 1
+    },
+    {
+      "label": "source-apply-check",
+      "argv": [
+        "git",
+        "apply",
+        "--check",
+        "/home/holden/mckernel-work/resume-20261110T025232Z-785c93f5/terminal-precedence-source-1/correction-1/TERMINAL-PRECEDENCE.PRIVATE.patch"
+      ],
+      "pid": 713720,
+      "birth": "36627794",
+      "joined": true,
+      "returncode": 0
+    },
+    {
+      "label": "source-apply",
+      "argv": [
+        "git",
+        "apply",
+        "/home/holden/mckernel-work/resume-20261110T025232Z-785c93f5/terminal-precedence-source-1/correction-1/TERMINAL-PRECEDENCE.PRIVATE.patch"
+      ],
+      "pid": 713721,
+      "birth": "36627794",
+      "joined": true,
+      "returncode": 0
+    },
+    {
+      "label": "stage-source",
+      "argv": [
+        "git",
+        "add",
+        "--",
+        "scripts/run_os_goal.py"
+      ],
+      "pid": 713722,
+      "birth": "36627795",
+      "joined": true,
+      "returncode": 0
+    },
+    {
+      "label": "staged-paths",
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--name-only",
+        "-z"
+      ],
+      "pid": 713743,
+      "birth": "36627807",
+      "joined": true,
+      "returncode": 0
+    },
+    {
+      "label": "staged-format",
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--check",
+        "--",
+        "CAMPAIGN.md",
+        "scripts/m14-m15-continuous-instruction.txt",
+        "scripts/run_os_goal.py",
+        "scripts/tests/test_os_goal_continuous.py"
+      ],
+      "pid": 713744,
+      "birth": "36627809",
+      "joined": true,
+      "returncode": 0
+    },
+    {
+      "label": "staged-source-review",
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--",
+        "scripts/run_os_goal.py"
+      ],
+      "pid": 713745,
+      "birth": "36627812",
+      "joined": true,
+      "returncode": 0
+    },
+    {
+      "label": "candidate",
+      "argv": [
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261110T025232Z-785c93f5/focused-terminal-behavior-1/candidate.metrics",
+        "/usr/bin/timeout",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "unittest",
+        "-v",
+        "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_milestone_checkpoint_preserves_saved_complete",
+        "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_milestone_checkpoint_preserves_recovered_usage_limited",
+        "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_milestone_checkpoint_preserves_recovered_budget_limited",
+        "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_live_terminal_update_precedes_newly_closed_milestone_checkpoint",
+        "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_terminal_goal_discovered_by_checkpoint_pause_read_is_preserved",
+        "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_current_hard_stop_precedes_terminal_and_closed_milestones",
+        "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_both_accepted_milestones_checkpoint_the_larger_goal"
+      ],
+      "pid": 713815,
+      "birth": "36631642",
+      "joined": true,
+      "returncode": 0
+    }
+  ],
+  "cpu": 7,
+  "serial_jobs": 1,
+  "aggregate_gib_ceiling": 4,
+  "as_gib": 1,
+  "cpu_seconds": 45,
+  "wall_seconds": 60,
+  "kill_after_seconds": 5,
+  "core_bytes": 0,
+  "MemAvailable": 29775769600,
+  "usage": {
+    "at": "2026-11-10T03:04:38.878333+00:00",
+    "used_percent": 44,
+    "remaining_percent": 56,
+    "normal_guard_passed": true,
+    "included_only": true
+  },
+  "original_acceptance_delta": 0,
+  "baseline": {
+    "status": "CONFIRMED_NINE_TERMINAL_FAILURES",
+    "returncode": 1,
+    "methods": 7,
+    "failed_terminal_scenarios": 9,
+    "passing_control_scenarios": 3
+  },
+  "corrected_sha256": "454c01ec08767858787a2da8a060fc90d059d4030fa2675ab479a2a0c32b079f",
+  "all_started_waits_joined": true,
+  "Root_staged_source_review": "Exact staged source read after baseline; matches independently approved correction454c/9871; no extra terminal OR branch, reason=None signal/time effects unchanged.",
+  "candidate": {
+    "methods": 7,
+    "scenarios": 12,
+    "status": "PASS",
+    "terminal_scenarios": 9,
+    "hard_stop_scenarios": 2,
+    "existing_active_control": 1,
+    "returncode": 0
+  },
+  "all_direct_waits_joined": true,
+  "test_cpu_released": 7,
+  "finished_at": "2026-11-10T03:07:31.255244+00:00"
+}

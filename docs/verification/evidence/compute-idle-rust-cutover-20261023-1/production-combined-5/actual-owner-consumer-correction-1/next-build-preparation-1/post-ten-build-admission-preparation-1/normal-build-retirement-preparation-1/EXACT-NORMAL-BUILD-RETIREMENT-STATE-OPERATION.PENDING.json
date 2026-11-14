@@ -1,0 +1,144 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Read-only exact retained image CID inspection; no removal/stop/kill/record changes.",
+  "status": "EXACT_CURRENT_NORMAL_IMAGE_RETIREMENT_STATE_OPERATION_PENDING_INDEPENDENT_RELEASE",
+  "operations": [
+    {
+      "name": "exact-current-image-terminal-inspect",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Read-only exact retained image CID inspection; no removal/stop/kill/record changes.",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=30:30",
+        "--fsize=33554432:33554432",
+        "--core=0:0",
+        "--nofile=256",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "/usr/bin/docker",
+        "--config=/dev/null",
+        "--host=unix:///var/run/docker.sock",
+        "inspect",
+        "--type",
+        "container",
+        "0a0d591d48b44b8f88fce70d6fd6e0cd85592dbfad547a1e4d6155caa9eaa85b"
+      ],
+      "capture": {
+        "stdout": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/post-ten-build-admission-preparation-1/normal-build-retirement-preparation-1/actual-readonly-terminal-inspect-1/stdout",
+        "stderr": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/post-ten-build-admission-preparation-1/normal-build-retirement-preparation-1/actual-readonly-terminal-inspect-1/stderr",
+        "create_flags": "O_WRONLY|O_CREAT|O_EXCL|O_CLOEXEC; direct wait; close streams; no signal/timeout/kill"
+      },
+      "maximum_stdout_bytes": 33554432,
+      "expected": {
+        "exactly_one_item": true,
+        "Id": "0a0d591d48b44b8f88fce70d6fd6e0cd85592dbfad547a1e4d6155caa9eaa85b",
+        "Name": "/mckernel-image-f4c31978a59048069cb2cf143a9f3f10",
+        "Config.Labels.mckernel.owner": "c90a9cee3da242fa90366c447a25a081",
+        "State.Running": false,
+        "State.Paused": false,
+        "State.Restarting": false,
+        "State.OOMKilled": false,
+        "State.Dead": false,
+        "State.Pid": 0,
+        "State.ExitCode": 0,
+        "full_profile_comparison": "Accepted cleanup engine image_owner_receipt_binding compares full historical terminal inspect with exact current inspect using accepted core.inspect_comparison; do not reduce to these listed fields."
+      }
+    }
+  ],
+  "actual_closed_owner_capture": {
+    "status": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/post-ten-build-admission-preparation-1/actual-build-owner-capture-1/status.json",
+      "sha256": "e7ff989f1b7c5fab6d6ceaa3305a7f41a87473d7ac27eca27106be7776611a5d",
+      "bytes": 2019
+    },
+    "stdout": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/post-ten-build-admission-preparation-1/actual-build-owner-capture-1/stdout",
+      "sha256": "36da10c4f332356b197342d54f45b1525d310e4916143ad43dfa627b48d2d682",
+      "bytes": 17834
+    },
+    "stderr": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/post-ten-build-admission-preparation-1/actual-build-owner-capture-1/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    }
+  },
+  "target": {
+    "container_id": "0a0d591d48b44b8f88fce70d6fd6e0cd85592dbfad547a1e4d6155caa9eaa85b",
+    "container_name": "mckernel-image-f4c31978a59048069cb2cf143a9f3f10",
+    "owner_nonce": "c90a9cee3da242fa90366c447a25a081",
+    "owner_pid": 3725755,
+    "owner_starttime": "55985185",
+    "exit_code": 0
+  },
+  "current_retained_records": {
+    "shared": {
+      "kind": "image",
+      "path": "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock",
+      "record": {
+        "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+        "device": 1828,
+        "inode": 116651,
+        "kind": "image",
+        "pid": 3725755,
+        "request_sha256": "2176c6f4ce78d73122e2180864afd9ffc0c90abadf55a589f8205089c9b85274",
+        "schema": "mckernel.heavy-operation.v1",
+        "starttime": "55985185"
+      }
+    },
+    "common_exclusion_path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/pinned-full-image-attempt-2/common-exclusion.json",
+    "request_prepared": {
+      "bytes": 26526062,
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/image-request.PREPARED.json",
+      "sha256": "28caca822e9b6f6fa3d0ff49d0e874eb8da7b87a282afc5568f033c15179a7f3"
+    },
+    "request_identity_distinction": "Prepared file SHA28caca822... is not the ownership record digest. Existing engine image_record_binding already requires common SHA(json.dumps(request,sort_keys=True)) and shared SHA(canonical(request)); actual sharedrecord digest2176c6f4ce78d73122e2180864afd9ffc0c90abadf55a589f8205089c9b85274 must remain exact."
+  },
+  "existing_accepted_normal_image_cleanup_contract": {
+    "source": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/bound-matched-image-terminal-source-2/cleanup_pass_image.py",
+      "sha256": "59efab0bc29fa5784dc855743cec397237552821bc150b60ea1d6c2e5f7ac00d",
+      "bytes": 116010
+    },
+    "observer": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/bound-matched-image-terminal-source-2/observe_current_pass_image_retirement.py",
+      "sha256": "656230a896322bab3982529d1c5aacec91309eba840988ff5f1d7fd09c0d7027",
+      "bytes": 27776
+    },
+    "accepted_execution_release": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/ROOT-CLEANUP-EXECUTION-RELEASE-2.json",
+      "sha256": "985470db8f4ceaa8aa951e3a23a2d0a12e966f205230980317973dcdd3648e1b",
+      "bytes": 249792
+    },
+    "API": "cleanup_pass_image.py --prepare-observation OBS --observation-sha256 SHA --git-commit COMMIT --git-tree TREE produces release template; future --release RELEASE --release-sha256 SHA [--execute] uses independent source/execution/fetched Git guards. Current case-data binding is required before either can operate on this target.",
+    "accepted_API_guards": [
+      "positive normal image PASS+retired+retained+separatecleanup receipt and exact current terminal inspect",
+      "same exact CID/name/nonce/PID/starttime/boot and per-record original device/inode/content",
+      "fresh complete publisher-free PROC, permanent27:4 flock and scratch UUID/mount identity",
+      "full protected metadata inventory and selected current artifact/source/receipt hashes",
+      "accepted independent source+execution review, fetched Git commit/tree and script/test hashes",
+      "archival exchange with sentinels and no newer-owner deletion; permanent development mutex never unlinked"
+    ],
+    "old_case_data_cannot_be_reused": "Engine KNOWN_TARGET/namespace/typedsource/SOURCE_REFS are old e214/current68 values. Keep original bytes immutable. Bind a current case successor and genuine current build artifact review before cleanup; no direct Docker rm or raw ownership unlink."
+  },
+  "preserved_failure": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/post-ten-build-admission-preparation-1/actual-post-build-physical-readonly2-1/mutex",
+    "cause": "Unchanged eight-path oracle observed retained heavy token. Expected retained ownership, not permission to remove or repeat the failed oracle."
+  },
+  "source_changes": false,
+  "current_case_bound_cleanup_source": null,
+  "fresh_root_observation": null,
+  "cleanup_execution_release": null,
+  "read_only_execution_release": null,
+  "actual_result": null,
+  "actual_physical_clearance": false,
+  "cleanup_authorized": false,
+  "next_action": "Independent release of this exact terminal-state read-only operation, then current data-only normal-cleanup/observer successor binding using genuine artifact review and observation; no cleanup command is executable from this preparation packet."
+}

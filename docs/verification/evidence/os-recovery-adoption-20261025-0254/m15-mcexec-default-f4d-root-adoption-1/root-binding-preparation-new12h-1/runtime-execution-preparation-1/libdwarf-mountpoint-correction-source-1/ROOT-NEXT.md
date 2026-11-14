@@ -1,0 +1,25 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+One bounded empty-directory shape repair for actual001dd DockerSTART failure. The failed CID557cce66/owner1642881birth92391044/tool90206 and exact stderr are retained and hash-bound in REPAIR-PLAN/FAILURE-AND-REPAIR-SCOPE. OCI attempted to create /src/executer/user/lib/libdwarf/libdwarf underneath existing read-only /src and failed with read-only file system. The materializer copied7015files/symlinks and their containing directories; this empty vendor mount target was absent. No driver phase started: all6 configure/context/link/import/install/installed-ELF phases remain UNRUN. Failednonce001dd remains consumed; normal cleanup/current-free are separate evidence.
+
+The protected source root is the existing materialization inode59667059/device66306/UID:GID1000/mode0700. Target parent is exact existing inode59668494/device66306/UID:GID1000/mode0700. Target remains absent at preparation time. No actual protected-source mkdir, query, guard, mount/Docker, compiler, cleanup, new source copy or native action was performed.
+
+Proposed Root command creates only the exact empty child libdwarf with mode0700, using a validated parent directory FD/O_NOFOLLOW. It rejects symlink components, unexpected source/parent identities, any existing target, stale/incorrect grant, unknown current Root ledger or current-free hold. It calls exact guardv2 before admission/before mkdir/after proof, retaining inherited clocks/account holds and HOST16/scratch12GiB floors. Root29+ must include001dd consumed and attest complete current boundary; actual independent current-free and one-heavy-absent are separately required. Grant expires120s; no new campaign clock or credit allocation.
+
+Before and after creation, it rechecks every original7015file/symlink name/hash/mode and stable FD/path metadata, including original mtime/ctime. File bytes, modes and mtime/ctime must be identical; no atime or timestamp normalization is attempted. Source root full stable metadata and qualified node identity remain unchanged; immediate parent metadata changes are recorded because one child was added. The original materialization result and file inventory remain immutable. Durable intent plus final additive shape receipt preserve any interruption. A partial/expired result needs Root reconciliation; no automatic deletion/replay.
+
+This is an additive source-shape supplement: original result proved its finite file inventory, which does not enumerate empty directories. Root should bind the new PASS_EXACT_EMPTY_LIBDWARF_MOUNTPOINT_SHAPE_ONLY receipt into source publication and the next independently reviewed execution payload (for example source_mount_shape_supplement). The retained runtime source root/identity/materialization reference, all7015filebytes, Rust/ASM prefix and original19+outer5 source-code bytes can remain exact. Do not rewrite old materialization/PREP/map/release to pretend the original empty shape was already present. No header, library, compiler flag, BUILDID, file timestamp or read-only/container profile changes.
+
+Eleven local fixture checks pass0.004436s, including the original missing-target condition under an explicitly modeled read-only/src plus read-only nested vendor mapping, exact empty directory, full file/root metadata preservation, wrong parent/path, replay, symlink parent and changed/extra file rejection. This is a namespace-shape model, not a kernel mount or Docker pass.
+
+After focused source review and independent current-free/Root29+ admission, Root copies ROOT-GRANT.TEMPLATE.NOT-AUTHORITY.json to a fresh actual grant, sets status PASS_ROOT_ORDINARY_EXACT_EMPTY_MOUNTPOINT_CREATION, binds exact current ledger and independent current-free references, actual observed three clocks, true current_free_independently_accepted and one_heavy_absent. Template grants nothing. Exact small mutation command:
+
+```
+python3 -B PATH/repair_mountpoint_once.py --grant /ROOT_ACTUAL_SHAPE_GRANT.json --grant-sha256 ACTUAL_GRANT_SHA256
+```
+
+PATH is this directory. Success emits ROOT-ACTUAL-MOUNTPOINT-REPAIR.json; no compiler/native release follows from it. Cheap local check (already passed): python3 -B PATH/test_mountpoint_fixture.py.
+
+Then fresh executor nonce/request/currentresources/release are required. Previous literal outer metadata helpers refuse existing one-shot ADOPT-REQUEST/RESOURCE/proposal names: do not overwrite001dd state. Root may use the same five outer source bytes in a fresh private helper directory, with unchanged19map and fresh actual wrapper path in the new release; publish/fetch/review exact path and mount-shape context. That is helper-context relocation, not another121MB source view copy. Root's original wrapper also accepts arbitrary fresh request/release paths if Root binds equivalent data directly. This preparation does not perform either staging step.
+
+Next actual run still uses all6 original phases and exact qualified F4D producer context. A genuine context change stops before link; no349-body recompilation authority is supplied. Native/default/whole-file retirement credit remains OPEN.

@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-027",
+  "packet_version": 1,
+  "context_sha256": "4e6e844c8f8f88b7a06e0f86c57b240100ab1e447e725d48525de8ac9f60a106",
+  "started_utc": "2026-09-09T13:00:00Z",
+  "finished_utc": "2026-09-09T13:00:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {"case_id": "time.monotonic-libc", "status": "DRAFTED_WITH_UNRESOLVED", "fixture": "scripts/application-tests/cases/time/time.monotonic-libc.c", "oracle": "scripts/application-tests/oracles/time.monotonic-libc.json", "changed_files": ["scripts/application-tests/cases/time/time.monotonic-libc.c", "scripts/application-tests/oracles/time.monotonic-libc.json"], "parameter_vectors": {}, "unresolved_oracle_notes": ["Canonical timestamp record and reviewed input binding require confirmation."], "max_reviewer_question": "Confirm 1024-read monotonicity and nanosecond-range contract."},
+    {"case_id": "time.monotonic-syscall", "status": "DRAFTED_WITH_UNRESOLVED", "fixture": "scripts/application-tests/cases/time/time.monotonic-syscall.c", "oracle": "scripts/application-tests/oracles/time.monotonic-syscall.json", "changed_files": ["scripts/application-tests/cases/time/time.monotonic-syscall.c", "scripts/application-tests/oracles/time.monotonic-syscall.json"], "parameter_vectors": {}, "unresolved_oracle_notes": ["Raw syscall ABI binding and canonical record require confirmation."], "max_reviewer_question": "Confirm explicit SYS_clock_gettime path and independent 1024-sample relation."},
+    {"case_id": "time.realtime-range", "status": "DRAFTED_WITH_UNRESOLVED", "fixture": "scripts/application-tests/cases/time/time.realtime-range.c", "oracle": "scripts/application-tests/oracles/time.realtime-range.json", "changed_files": ["scripts/application-tests/cases/time/time.realtime-range.c", "scripts/application-tests/oracles/time.realtime-range.json"], "parameter_vectors": {}, "unresolved_oracle_notes": ["Supervisor bracket fields and canonical record require runner binding."], "max_reviewer_question": "Confirm bracket-plus-two-second allowance is runner-supplied and no realtime monotonicity is asserted."}
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/time/time.monotonic-libc.c", "sha256": "a2af258f8a63e391e370ff16f83ff6b0d3d766e316206a4fe085da3ea97f697a"},
+    {"path": "scripts/application-tests/oracles/time.monotonic-libc.json", "sha256": "fa0ee55543d33d22520813ffe4bd23b997098d6a3c872e258052b65ace346549"},
+    {"path": "scripts/application-tests/cases/time/time.monotonic-syscall.c", "sha256": "d8c518335c9af94d31ebefd3dcce8c9144211dceab5dc7d61e758f7d4552ac68"},
+    {"path": "scripts/application-tests/oracles/time.monotonic-syscall.json", "sha256": "a3d326a2813a9628135487bfc9aaca6af40a461e12bcc0158eb2edaf805c10b1"},
+    {"path": "scripts/application-tests/cases/time/time.realtime-range.c", "sha256": "1346f88d8e4c51a4ab40379be4be9b0ee85523cde493ef0699f2c80128297fc7"},
+    {"path": "scripts/application-tests/oracles/time.realtime-range.json", "sha256": "99a65589cd48acc198c29bce9abbc9124d46c83217a40063f6cb10aa2bfed4aa"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-027.json --emit-context /tmp/application-packet-027-context.json", "outcome": "PASS; metadata only"},
+    {"command": "python3 -m json.tool report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Three clock cases need final record, ABI, and supervisor-bracket review."],
+  "blocked_execution_capabilities": ["current-inputs", "runtime-transport-fault-injection", "runner-contract"],
+  "first_failure_event": null,
+  "max_escalation": ["Review monotonic raw/libc parity, timespec validity, and realtime bracket evidence."],
+  "next_packet_id": "packet-028"
+}

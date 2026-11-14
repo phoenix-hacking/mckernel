@@ -1,0 +1,153 @@
+{
+  "schema": "mckernel-focused-disk-only-operation-delta-review-v1",
+  "at": "2026-11-11T04:17:11.577808+00:00",
+  "reviewer": "/root/p03_cutover_source_max existing same-Root Sol/MAX independent reviewer; no children",
+  "verdict": "GO",
+  "decision": "GO_EXACT_DISK_ONLY_2GIB_SUCCESSOR_SUBJECT_TO_ACTUAL_ROOT_OPERATION_ADMISSION",
+  "original_check": "M15-I03-original-reproducibility",
+  "request": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/m15-i03-original-reproducibility-sdk-max-1/disk-reservation-correction-1/REQUEST.PROPOSED.json",
+    "bytes": 13792,
+    "sha256": "3f35f5a8378145c1838db89f6801308cb57451de9c4dcd402547d19ebd6d24b5"
+  },
+  "correction": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/m15-i03-original-reproducibility-sdk-max-1/disk-reservation-correction-1/CORRECTION.json",
+    "bytes": 2367,
+    "sha256": "b705a185734ac13625a65456754d68ae27d1e767229add30997676c7d4f1d637"
+  },
+  "disk_budget": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/m15-i03-original-reproducibility-sdk-max-1/disk-reservation-correction-1/DISK-BUDGET.json",
+    "bytes": 3648,
+    "sha256": "ea58a68cad2b48691de0e18bd022de2d12649a1bb7779a0f8186be1c9ce861f3"
+  },
+  "preserved_original_request": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/m15-i03-original-reproducibility-sdk-max-1/REQUEST.PROPOSED.json",
+    "bytes": 13792,
+    "sha256": "72aafbaa9b9511febec0fbcac7afc709a03e98ff68df37714c9816a7101ce170"
+  },
+  "independent_original_NO_GO": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/m15-i03-original-reproducibility-review-p03-max-1/REVIEW.json",
+    "bytes": 7592,
+    "sha256": "be61572e5bb172f84ac7341cefc8a251ea5f321e2fccf6eecfa94f45e6530f65"
+  },
+  "scope": "Only disk reservation/headroom delta and applicability of current kernel-only7231 advance. Reuse all unaffected original operation review/source/header/provider/tool/selector/install/lifecycle predicates; no old source-body/test/ABI or SDK inventory replay.",
+  "exact_single_changed_JSON_path": "/resources/output_disk_reservation_bytes",
+  "old_value_bytes": 1073741824,
+  "new_value_bytes": 2147483648,
+  "independent_findings": [
+    {
+      "result": "PASS",
+      "check": "Full parsed old/successor JSON objects are identical after removing only output_disk_reservation_bytes, and values change exactly1073741824 to2147483648. Original72aaf bytes and exact preserved copy remain unchanged, with be615 NO_GO intact."
+    },
+    {
+      "result": "PASS",
+      "check": "No command, label, timeout, create argv/image/name/mount/output namespace, payload, Owner, source/config/compiler/SDK/header/install selector, memory/swap/CPU/PIDs/network/capability or failure oracle changes. Exact eight serial command sequence remains unchanged; no new tests or tool probes are added."
+    },
+    {
+      "result": "PASS",
+      "check": "Budget arithmetic is explicit:16 streams\u00d764MiB=1024MiB;3 built+3 staged ELFs\u00d764MiB=384MiB;2 generated configs\u00d764MiB=128MiB, totaling1536MiB known file-category capacity. An additional512MiB shared CMake/temp/receipt/emergency planning reserve yields2048MiB."
+    },
+    {
+      "result": "PASS",
+      "check": "The previous certain defect, zero disk allowance beyond the full stream capacity, is corrected. The512MiB auxiliary allowance is a conservative planning reservation for this finite graph; the packet explicitly does not call it an enforced aggregate cap, proven total upper bound or measured temporary highwater. Actual growth/headroom/floor controls remain Root admission and monitoring conditions."
+    },
+    {
+      "result": "PASS",
+      "check": "Read-only committed-path comparison shows actual2cc\u21927231 changes exactly the seven kernel composition paths, outside these scripts/private producers. All13 canonical selected boot/P03 script/config/selector bytes equal both committed7231 blobs and the retained qualified source inputs; no body execution or old case replay occurred."
+    },
+    {
+      "result": "PASS",
+      "check": "The private P01/P03 CMake producer drivers and all existing pinned input/helper/command/provider references are unchanged by this successor.7231 is recorded only as a current relevant-source applicability check, not as a fabricated prior producer source identity or actual execution/admission."
+    },
+    {
+      "result": "PASS",
+      "check": "Same unexecuted output/name is appropriate only if Root freshly confirms the original never launched and both remain absent/new at admission. Any differing actual outcome requires reconciliation, without deleting historical output or adopting an existing container."
+    }
+  ],
+  "current_kernel_only_source_applicability": {
+    "from_commit": "2cc813c2df6544c05394639094f6e9e93149f972",
+    "to_commit": "7231ce6d17af39e9556ee815980a97f180b70eb1",
+    "actual_changed_paths": [
+      "kernel/CMakeLists.txt",
+      "kernel/rust/f03_memory_host_offload.rs",
+      "kernel/rust/f03_policy_forward_context_bridge.rs",
+      "kernel/rust/f06_ptrace_resume_callbacks.rs",
+      "kernel/rust/lib.rs",
+      "kernel/rust/syscall_policy.rs",
+      "kernel/syscall.c"
+    ],
+    "selected_canonical_inputs_equal_retained_and7231": [
+      {
+        "relative": "scripts/rust/boot-tools/SelectRustBootTools.cmake",
+        "sha256": "4530acbb7e2e1dc6b506db9ae8ae25cd61cdbb7328aa6bf22739bc7b9c98123b"
+      },
+      {
+        "relative": "scripts/rust/boot-tools/config.rs.in",
+        "sha256": "7d17d41df6984c5ab58f59b8c55a396699e0c987ee521d29f2b36c785c691bb3"
+      },
+      {
+        "relative": "scripts/rust/boot-tools/platform.rs",
+        "sha256": "7e837af3533f3496f35fea94561d39b4cedf55334ebc8864ac34308dd1aef10c"
+      },
+      {
+        "relative": "scripts/rust/boot-tools/reboot.rs",
+        "sha256": "36d32e918c2f69694bd8c3e54ff3041f57cac5ad511a524de11c313aec4986da"
+      },
+      {
+        "relative": "scripts/rust/boot-tools/stop.rs",
+        "sha256": "71d2ba856347d9f830bf0ca2bfab0c877adb139d5661dfae10e0a34da499f00b"
+      },
+      {
+        "relative": "scripts/rust/boot-tools/mcreboot_main.rs",
+        "sha256": "9bed3da348b7d663d9599888a4d6b8f49af65679bc81d2e0613b67106ed69473"
+      },
+      {
+        "relative": "scripts/rust/boot-tools/mcstop_main.rs",
+        "sha256": "0f19631e426f228b5bb61813a2fb3a06720e38b5e3c3ff728fe6451732263d47"
+      },
+      {
+        "relative": "scripts/rust/eclair-backtrace/config.rs.in",
+        "sha256": "91175ca74c3e3dc6413c1bc68a694160b64cb27ae2855adf03d371544be477bb"
+      },
+      {
+        "relative": "scripts/eclair-dump-backtrace.exp.in",
+        "sha256": "b6c97afd408c0eea9e25b21295c35268dc5c075b6f7aa3e3c2eed33c144ad7cd"
+      },
+      {
+        "relative": "scripts/rust/eclair-backtrace/SelectRustEclairBacktrace.cmake",
+        "sha256": "4c95a8b6d0fc7432a43d13fbdc143eee0157e5e9f9a5f72196cbc6071faa8c80"
+      },
+      {
+        "relative": "scripts/rust/eclair-backtrace/eclair_main.rs",
+        "sha256": "295c495f3400d35bd0b965910b7e19b3d9114b121a81bb8ab99a6b674bd5f8be"
+      },
+      {
+        "relative": "scripts/rust/eclair-backtrace/eclair_backtrace.rs",
+        "sha256": "1d69aa1a5840b31787c813698131b96af567ccd35f51ec2665e61d07d5aab865"
+      },
+      {
+        "relative": "scripts/rust/eclair-backtrace/eclair_native.rs",
+        "sha256": "b6e82247f81e32ceb857069baa788a808d3052f8aae48c3586c85c8a7b127e2a"
+      }
+    ],
+    "new_body_inventory_or_source_admission_claim": false
+  },
+  "mandatory_actual_Root_preconditions": [
+    "Primary M14 affected-image producer/reader/capture repair retains priority. This batch cannot overlap another heavy/cache owner or delay a ready M14 operation; use only its genuinely released lane after positive retirement and fresh grant.",
+    "Fresh actual HOST CPUs0,6,7/max3 jobs/4GiB TOTAL includes this CPU6-j1/2GiB memory=swap container plus every controller/worker/current retained job. Require the unchanged fresh26GiB available and all actual ownership/UNKNOWN reservations; no native2-5/12GiB/CPU1 or pool expansion.",
+    "Reserve the full new2GiB output allowance above actual host16GiB/scratch12GiB floors, retained data/other jobs and required capture/emergency headroom on the real destination filesystem. Existing real floor/headroom monitoring remains effective; if actual growth invalidates the planning allowance or floor, stop/preserve and obtain meaningful revised admission rather than silently widening.",
+    "Freshly verify source/toolchain/provider/mount identities, exact nine mount tuples/count/RO modes, unexecuted fresh output/name and actual source-owner/profile guards. Preserve pending SOURCE123 semantics and every genuine source/native/account/service hold. No review boolean or source7231 hash replaces an actual required gate.",
+    "Keep pinned46d/retained195/real imageGCC14 runtime suppliers distinct from HOST historical artifacts. No HOSTcc/path observation is fabricated for the image-resident compiler. Configure/build/install/readelf/nm execute only the eight literal source-bound commands; none of the three actual application mains or boot/device/PTY/native actions is invoked.",
+    "Require immediate positive exact child PID/birth/direct+whole-family/closed-stream/expected0 and no residual/timeout/signal/adoption/error after each command. Root must also capture/join its exact outer tool results and terminal0/nonOOM/Pid0/removal before releasing only this new current job.",
+    "Actual new Rust/config/ELF/import/version/static std/CRT/provider/install-byte/mode qualification follows saved producer results. Any exact new unmatched provider row is an engineering input; do not relabel a HOST userspace ELF as native runtime proof or infer whole original I03 reproducibility before qualification."
+  ],
+  "retained_boundaries": {
+    "unchanged_prior_source_ABI_behavior_proof": "P01/P02/P03 source/body/behavior/parser/PTY/config/install proof stays at its original scope without replay; other component producers and ABI8221/installed131b are reused unchanged.",
+    "old_NO_GO": "be615 remains the correct verdict for initial72aaf and is not overwritten; this GO applies only exact3f35 successor.",
+    "SOURCE123": "No source/native/currentfree/replay/owned/UNKNOWN hold is cleared. Root operation-specific actual admission remains mandatory.",
+    "scope_credit": "No producer has run in this review; no default/installed-live/native/application behavior, C retirement, whole I03/parent/M14/M15 acceptance or progress credit is granted.",
+    "routing_note": "CORRECTION historical routing text mentions P04Tests; Root later explicitly reassigned this exact delta review to the existing P03 reviewer. This administrative history changes no executable field or guard."
+  },
+  "reviewer_actions": "Only saved JSON/source byte/hash comparison and read-only git committed-path comparison, then this private JSON. No source body re-audit, compiler/test/CMake/helper/ELF tool/Docker/network/main/native execution, canonical/index/control edit, lease or recursive agent.",
+  "root_next_action": "Exact3f35 operation profile is GO for scheduling only after every actual precondition above. Root alone may freshly admit and execute the unchanged8-command Rocky userspace reconstruction in a genuinely released lane, then obtain independent saved-result/whole-condition qualification."
+}

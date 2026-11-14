@@ -1,0 +1,46 @@
+{
+  "schema": "mckernel.native-diagnostic-qemu-version-source-success.v1",
+  "recorded_at": "2026-09-28T07:38:00-07:00",
+  "source_commit": "79a1424fac318f692355f47669632f298cc84947",
+  "decision": "PASS_SOURCE_READY_FOR_FRESH_PACKET",
+  "failure_family": "observer-qemu-version-binding",
+  "preserved_runtime_failure": "docs/verification/stability-native-diagnostic-current-signal-attempt-failure-20260928-1.json",
+  "source_sha256": {
+    "scripts/application-tests/native_diagnostic_container_owner.py": "35cd4596c353e916e0167807ed97ecb13fbbefe5c9f98a87706ad97aab37699d",
+    "scripts/tests/test_application_native_diagnostic_container_owner.py": "f15fdef9472bfdadbca761db9d060f86c33c17e6808418b1b76580b98b7a6687"
+  },
+  "pinned_qemu": {
+    "binary_sha256": "5c1985041a27c64829d9ca18dd54c6ede039eafdef00c3abcd70479b03aca7d0",
+    "retained_record": "docs/verification/native-unbooted-24a151fe-local.json",
+    "exact_stdout": "QEMU emulator version 10.1.0 (qemu-kvm-10.1.0-16.el10_2.5)\nCopyright (c) 2003-2025 Fabrice Bellard and the QEMU Project developers\n"
+  },
+  "verified_behavior": [
+    "The inner owner now requires return code zero, empty stderr and byte-for-byte equality with the complete retained stdout before runner execve",
+    "The existing exact QEMU binary digest check remains before the version command",
+    "The positive unit fixture spells the retained bytes independently and asserts that the production constant matches them",
+    "Byte-valued negatives reject a missing distribution suffix, altered suffix, extra output, missing copyright line, altered copyright line and nonempty stderr",
+    "No ownership, Docker cleanup, process lifetime or lease behavior changed"
+  ],
+  "test": {
+    "directory": "/home/holden/mckernel-work/scratch/native-diagnostic-qemu-version-source-20260928-2",
+    "command": "/home/holden/anaconda3/bin/python3 -m unittest -v scripts.tests.test_application_native_diagnostic scripts.tests.test_application_native_diagnostic_backend scripts.tests.test_application_native_diagnostic_container_owner scripts.tests.test_application_native_diagnostic_overlay scripts.tests.test_application_native_diagnostic_runner scripts.tests.test_qmp_capture",
+    "result": "211/211 PASS under host Anaconda Python 3.9",
+    "unittest_stderr_sha256": "725d0bc002e87ea726614d2b3a1f332205601d0a64d9a940a0718554cb2c24f6",
+    "unittest_stdout_sha256": "919627aa9f49c2750b3e912859121c011d8b17f66208fdfeea2cca7ab9abe244",
+    "unittest_exit_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "py_compile_exit_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "diff_check_exit_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  "review_history": [
+    "The first independent review blocked because two intended copyright negatives were singleton tuples and the positive reused the production constant",
+    "The bounded correction converted both negatives to bytes and introduced an independent exact positive fixture",
+    "The second independent review returned PASS_SOURCE_READY_FOR_FRESH_PACKET"
+  ],
+  "limitations": [
+    "This is local source and fixture evidence only",
+    "No Docker, root, QEMU, guest, build or application execution occurred",
+    "A newly bound packet and separate independent execution release are required before another privileged attempt",
+    "No runtime, application, production-gate or whole-OS acceptance credit follows"
+  ],
+  "next_action": "Prepare a fresh exact packet on pushed commit 79a1424fac318f692355f47669632f298cc84947 using a never-used short parent and nonce, then obtain independent one-shot execution review."
+}

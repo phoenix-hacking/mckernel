@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/p-m06-current-build-terminal-preparation-20261022-1/log-channel-tuple-correction-1/check_actual_log_channels.py", line 63, in <module>
+    if __name__=='__main__':main()
+  File "/home/holden/mckernel-work/host-preparation/p-m06-current-build-terminal-preparation-20261022-1/log-channel-tuple-correction-1/check_actual_log_channels.py", line 50, in main
+    with patch.object(m,'census',lambda:True),patch.object(m,'run_privileged_large',logs):m.Transaction.preflight_fresh(tx)
+  File "/home/holden/mckernel-work/host-preparation/p-m06-current-build-terminal-preparation-20261022-1/bound-current-controller-source-6/cleanup_launcher.py", line 1298, in preflight_fresh
+    protected_files()
+  File "/home/holden/mckernel-work/host-preparation/p-m06-current-build-terminal-preparation-20261022-1/bound-current-controller-source-6/cleanup_launcher.py", line 143, in protected_files
+    if observe_identity(Path(row['path'])) != row:
+  File "/home/holden/mckernel-work/host-preparation/p-m06-current-build-terminal-preparation-20261022-1/bound-current-controller-source-6/cleanup_launcher.py", line 240, in observe_identity
+    parent, _ = directory(path.parent)
+  File "/home/holden/mckernel-work/host-preparation/p-m06-current-build-terminal-preparation-20261022-1/bound-current-controller-source-6/cleanup_launcher.py", line 764, in directory
+    nxt = os.open(part, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=fd)
+PermissionError: [Errno 13] Permission denied: 'root-observation-p-m06-current-controller-observation-1'

@@ -1,0 +1,141 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Private source adoption, no tests/builds.",
+  "status": "CURRENT_DRIVER_SOURCE_ADOPTED_NO_TEST_OR_EXECUTION",
+  "driver": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-default-image-preparation-1/native_rust_exact_mckernel_image_offline.py",
+    "sha256": "8f3f37b7b11d88a424ed35c838e76cf15c69549bad9ccd9199818a60af509781"
+  },
+  "base_driver": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/native_rust_exact_mckernel_image_offline.py",
+    "sha256": "776b478b6f4f7a9e3ec502ac2a23c6a03fbd407c6b599760206b1bf8bfdb0ff7"
+  },
+  "root_integration": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/root-union-preparation-1/CANONICAL-INTEGRATION.json",
+    "sha256": "fdc721a4d72df1b15cea2e1479e26de548af527772b11bb0b4524d6647456e4c"
+  },
+  "actual_union_NM": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/root-union-preparation-1/actual-six-C-partial-1/0/stdout",
+    "sha256": "bcc898048fb3d4f91a0746b9701a57de2710f30a4adeb7417eada0749f95a586"
+  },
+  "actual_current_memory_NM": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/combined-l2-l1-production-preparation-1/bounded-current-canonical-binding-correction-1/actual-attempt-1/06-memory-symbols/stdout",
+    "sha256": "a5a8a6c6e6fc5da6c22726444f44bf12911b2648d7007e4833a0129cdd1e1d84"
+  },
+  "new_Rust_exports": [
+    "mem_tlb_atomic_dec_bridge",
+    "mem_tlb_atomic_inc_bridge",
+    "mem_tlb_atomic_read_bridge",
+    "mem_tlb_atomic_set_bridge",
+    "mem_tlb_current_cpu_bridge",
+    "mem_tlb_flush_all_bridge",
+    "mem_tlb_flush_single_bridge",
+    "mem_tlb_get_vector_bridge",
+    "mem_tlb_interrupt_cpu_bridge",
+    "mem_tlb_noirq_lock_bridge",
+    "mem_tlb_noirq_unlock_bridge",
+    "mem_tlb_pause_bridge",
+    "mem_tlb_rdtsc_bridge",
+    "remote_flush_tlb_cpumask",
+    "vm_range_insert_dump_bridge",
+    "vm_range_insert_log_bridge",
+    "arch_ptrace_syscall_event",
+    "syscall_signalfd_create_bridge",
+    "x86_context_line_log_bridge",
+    "x86_cpu_ulong_log_bridge",
+    "clear_range_l1",
+    "clear_range_l2",
+    "clear_range_l3"
+  ],
+  "all_exports_count": 59,
+  "current_C_to_Rust_ownership": {
+    "kernel/mem.c": [
+      "mem_tlb_atomic_dec_bridge",
+      "mem_tlb_atomic_inc_bridge",
+      "mem_tlb_atomic_read_bridge",
+      "mem_tlb_atomic_set_bridge",
+      "mem_tlb_current_cpu_bridge",
+      "mem_tlb_flush_all_bridge",
+      "mem_tlb_flush_single_bridge",
+      "mem_tlb_get_vector_bridge",
+      "mem_tlb_interrupt_cpu_bridge",
+      "mem_tlb_noirq_lock_bridge",
+      "mem_tlb_noirq_unlock_bridge",
+      "mem_tlb_pause_bridge",
+      "mem_tlb_rdtsc_bridge",
+      "remote_flush_tlb_cpumask"
+    ],
+    "kernel/process.c": [
+      "vm_range_insert_dump_bridge",
+      "vm_range_insert_log_bridge"
+    ],
+    "kernel/syscall.c": [
+      "arch_ptrace_syscall_event",
+      "syscall_signalfd_create_bridge"
+    ],
+    "arch/x86_64/kernel/syscall.c": [
+      "arch_ptrace_syscall_event"
+    ],
+    "arch/x86_64/kernel/cpu.c": [
+      "x86_context_line_log_bridge",
+      "x86_cpu_ulong_log_bridge"
+    ],
+    "arch/x86_64/kernel/memory.c": [
+      "clear_range_l1",
+      "clear_range_l2",
+      "clear_range_l3"
+    ]
+  },
+  "retained_C_callbacks": {
+    "arch/x86_64/kernel/cpu.c": [
+      "x86_running_on_kvm_bridge",
+      "x86_cpuid6_bridge",
+      "x86_read_msr_bridge",
+      "x86_write_msr_bridge"
+    ],
+    "kernel/syscall.c": [
+      "syscall_alloc_bridge",
+      "syscall_mckfd_lock_bridge",
+      "syscall_mckfd_unlock_bridge"
+    ]
+  },
+  "exact_current_C_memory_imports": [
+    "x86_clear_range_public_body",
+    "clear_range_l1",
+    "clear_range_l2",
+    "clear_range_l3"
+  ],
+  "old_memory_helper_exports_still_C_excluded_and_Rust_final_T": true,
+  "L4_private_L3_C_child_section_observer_function_UNCHANGED": true,
+  "L3_L2_L1_typed_header_assertions_added_from_accepted_F05": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/combined-l2-l1-production-preparation-1/bounded-current-canonical-binding-correction-1/actual-memory-header-ABI.c",
+    "sha256": "6006e2cffb42a1a79529c954bd32fc670df821ebc4c6983a52cd06fe2b76daa6"
+  },
+  "warning": {
+    "original_retained_path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/next-build-preparation-1/pinned-full-image-attempt-1/owner-work/output/build/m14-production/successor-real-ABI-arch-x86_64-kernel-cpu-c.stderr",
+    "original_sha256": "36db2b44f91dbaa2c84ab62f3193b39b882213cc0086725aec7b8ea2805d6af6",
+    "current_expected_sha256": "7d5e343e066dffaf4e4b67a80f0854adf5ea12374f090256f9c9e5601698ac7e",
+    "bytes": 1519,
+    "producer_source_sha256": "c779079fb6de66991c861c823dca06b2a9ceec16ac4c984995200b668d7e78ce",
+    "exact_line_pairs": [
+      [
+        3720,
+        3732
+      ],
+      [
+        3746,
+        3758
+      ],
+      [
+        3775,
+        3787
+      ]
+    ],
+    "identical_source_expression_bytes": true,
+    "exact_stage_only": true,
+    "no_blanket_stderr": true
+  },
+  "regression_tests": null,
+  "actual_build": null,
+  "default_link": null,
+  "native": null
+}

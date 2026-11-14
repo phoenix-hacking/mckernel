@@ -1,0 +1,70 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ROOT_ADMITS_ONE_HOST_RUST_TYPECHECK",
+  "author": "/root",
+  "thread_id": "01a18bc3-e072-7810-9426-75101b0856c0",
+  "profile_sha256": "e5238111bdf3822bf3ba22c83273c19bbfb7cead6a47aec4b5e0c3712b8b2fbb",
+  "at": 1793389844.9271958,
+  "nonce": "d7229e179e1d89637ddf166fd192e1b1acb3dcdb8c180f7db7baadcc14f359af",
+  "native_access": false,
+  "jobs": 1,
+  "cpu": [
+    6
+  ],
+  "address_space_bytes": 4294967296,
+  "coordinator": {
+    "pid": 2996003,
+    "ppid": 2996001,
+    "start": "118034102",
+    "state": "S"
+  },
+  "weekly": {
+    "resetsAt": 1793774133,
+    "usedPercent": 89,
+    "windowDurationMins": 10080,
+    "limitId": "codex",
+    "observed_at": 1793389842.789233
+  },
+  "source_owner_exclusion": "HELD_BY_COORDINATOR_AND_COOPERATING_OWNERS",
+  "runner_sha256": "802c5ed03787654feeec35bf544b788c19b9f5b5463967df14807bc4cad6198e",
+  "gate_sha256": "df45ac329565bd782279ee0199a8a6347f474898f91504330d5060024eba74ae",
+  "minimum_memavailable_bytes": 25769803776,
+  "minimum_free_bytes": {
+    "/home/holden/mckernel": 17179869184,
+    "/home/holden/mckernel-work/scratch": 12884901888
+  },
+  "root": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu",
+  "review": "Root independent exact directrunner/gate delta review, original200args only metadata/source outputs changed plus private cfg; 165 files; no production calls or newheldselector; source typecheck only before unsafe integration acceptance",
+  "outer_owner": {
+    "tool_owned": true,
+    "cpu_seconds": 180,
+    "wall_seconds": 235,
+    "kill_after_seconds": 5,
+    "address_space_bytes": 4294967296,
+    "nofile": 256,
+    "recorded_output_root": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/perf-typecheck-0001",
+    "positive_terminal_and_outer_plus_inner_group_census_required": true
+  },
+  "reservation": "one ordinaryCPU6/job1/4GiB; retained native12GiB+V2UNKNOWN2GiB planning and HOST reserve preserved; no new nativeheavy grant",
+  "capacity": {
+    "MemAvailable_bytes": 27418923008,
+    "free_bytes": {
+      "/home/holden/mckernel": 142591991808,
+      "/home/holden/mckernel-work/scratch": 47613485056
+    }
+  },
+  "actual_controls": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/ACTUAL-CONTROLS-ARMED.json",
+  "actual_capacity": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/ACTUAL-CAPACITY-FALLBACK-ARMED.json",
+  "retained_failure": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/host-toolchain-0002/RESULT.json",
+  "retained_prior_grant": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-host-compile-preparation-1/TOOLCHAIN-COLLECT-GRANT.0002.RETAINED.json",
+  "review_sha256": "62cb1c4b4cbe5a653639bede65eaa247517edfd6fb999b2380ac366c80d58f7b",
+  "toolchain_manifest_status": "REVIEWED_HELD_MATCH",
+  "toolchain_manifest_nonce": "e2dc9286c3a82794a0f0af98b20def746a63bd043b1afe85dd0a5a9edf9ec4a5",
+  "toolchain_manifest_sha256": "9f25b4c4d927dfb2ec96abd662ba13a9c7641bb6a0004c84ccb5bd43855ec6c3",
+  "diagnostic_platform_limits": [
+    "Trusted root-owned installed Linux Python/stdlib/extensions and system loader/cache; not a claim of full measured platform runtime closure",
+    "Toolchain tree/static dependency manifest held by cooperating coordinator; current canonical dependency identity revalidation only, no full rehash",
+    "Actual loader/dlopen/helper choices not fully observed; unexpected depinfo or uncertain process retirement is UNKNOWN"
+  ],
+  "checkpoint_fetched_verified": "da5ea8a2ed0a2c30bb1d1d35c0f3fd7b9d0943ac"
+}

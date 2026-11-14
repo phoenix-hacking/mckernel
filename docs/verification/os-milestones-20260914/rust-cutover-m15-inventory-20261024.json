@@ -1,0 +1,367 @@
+{
+  "schema": "project-runtime-rust-scope-v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "mode": "bounded read-only current selector inventory; private reporting only; no compilation/runtime/source hashing",
+  "source_root": "/home/holden/mckernel",
+  "snapshot_date": "2026-10-23 America/Los_Angeles",
+  "configuration_evidence": "docs/verification/evidence/current68-launcher-v3-actual-build-20261023-1/actual/pinned-launcher-attempt-1/owner-work/output/build/CMakeCache.txt",
+  "configuration": {
+    "BUILD_TARGET": "smp-x86",
+    "ENABLE_RUST_USER_TOOLS": true,
+    "RUSTC": "/nightly/bin/rustc",
+    "ENABLE_QLMPI": false,
+    "ENABLE_UTI": false,
+    "LIBDWARF": "LIBDWARF-NOTFOUND",
+    "CMAKE_HOME_DIRECTORY": "/src",
+    "cache_origin": "retained launcher-only actual build; not a complete OS build census"
+  },
+  "counts": {
+    "selected_user_runtime_targets": 11,
+    "targets_with_direct_project_c": 7,
+    "unique_selected_project_c_files": 7,
+    "selected_c_unique_raw_lines_including_fallbacks_comments": 16625,
+    "separately_built_crash_extension_c_files": 1,
+    "bundled_vendor_dwarf_static_c_sources": 58,
+    "bundled_vendor_generated_static_c_sources": 1,
+    "bundled_vendor_build_generator_c_sources": 2
+  },
+  "selected_project_c_files": [
+    "executer/user/eclair_bfd_shim.c",
+    "executer/user/mcexec.c",
+    "executer/user/mcinspect_bfd_shim.c",
+    "ihk/linux/user/ihkconfig.c",
+    "ihk/linux/user/ihklib.c",
+    "ihk/linux/user/ihkmond.c",
+    "ihk/linux/user/ihkosctl.c"
+  ],
+  "targets": [
+    {
+      "target": "mcexec",
+      "kind": "installed executable",
+      "selected_c": [
+        "executer/user/mcexec.c"
+      ],
+      "selected_rust": [
+        "executer/user/rust/mcexec_helpers.rs"
+      ],
+      "selector": "executer/user/CMakeLists.txt:33",
+      "remaining": "Rust owns main sequencing; C main shim and libc/ioctl/ptrace/syscall/pthread/numa callback surface remain. Full file is not retired.",
+      "proof_gap": [
+        "inventory of selected C callback bodies and ABI equivalents",
+        "C-free default object/link map",
+        "matching native process/exec/wait and resource/lifecycle proof"
+      ]
+    },
+    {
+      "target": "mcinspect",
+      "kind": "installed executable",
+      "selected_c": [
+        "executer/user/mcinspect_bfd_shim.c"
+      ],
+      "selected_rust": [
+        "executer/user/rust/mcinspect_helpers.rs"
+      ],
+      "selector": "executer/user/CMakeLists.txt:100",
+      "remaining": "Two BFD accessor wrappers, called by existing Rust; full_body cfg removes mcinspect.c. Bundled libdwarf is selected vendor dependency.",
+      "proof_gap": [
+        "replace BFD macro wrappers using checked Rust binding or reviewed ASM ABI",
+        "C-free project object/link closure",
+        "matched native diagnostic behavior"
+      ]
+    },
+    {
+      "target": "eclair",
+      "kind": "installed executable",
+      "selected_c": [
+        "executer/user/eclair_bfd_shim.c"
+      ],
+      "selected_rust": [
+        "executer/user/rust/eclair_helpers.rs",
+        "executer/user/rust/arch_eclair_x86_64.rs"
+      ],
+      "selector": "executer/user/CMakeLists.txt:172",
+      "remaining": "Two BFD accessor wrappers called by existing Rust; eclair.c and arch/x86_64/arch-eclair.c removed by Rust selector.",
+      "proof_gap": [
+        "replace BFD macro wrappers using checked Rust binding or reviewed ASM ABI",
+        "C-free project object/link closure",
+        "matched native diagnostic behavior"
+      ]
+    },
+    {
+      "target": "ihklib",
+      "kind": "installed shared library libihk",
+      "selected_c": [
+        "ihk/linux/user/ihklib.c"
+      ],
+      "selected_rust": [],
+      "selector": "ihk/linux/user/CMakeLists.txt:21",
+      "remaining": "Current pinned user library is C; no Rust selector or ihk/linux/user/rust directory. Public exported ABI, request parsing, ioctl/sysfs/resources/BFD paths need reuse recovery or implementation.",
+      "proof_gap": [
+        "recover historically claimed ihklib_helpers.rs at an identified revision or implement against current ABI",
+        "Rust selector and exported libihk ABI parity",
+        "production link plus native lifecycle/resource restoration proof"
+      ]
+    },
+    {
+      "target": "ihkconfig",
+      "kind": "installed management executable",
+      "selected_c": [
+        "ihk/linux/user/ihkconfig.c"
+      ],
+      "selected_rust": [],
+      "selector": "ihk/linux/user/CMakeLists.txt:26",
+      "remaining": "C management CLI; links C ihklib.",
+      "proof_gap": [
+        "Rust CLI/action/exit-code/diagnostic parity",
+        "default Rust selector and link proof",
+        "matched native management operations"
+      ]
+    },
+    {
+      "target": "ihkosctl",
+      "kind": "installed management executable",
+      "selected_c": [
+        "ihk/linux/user/ihkosctl.c"
+      ],
+      "selected_rust": [],
+      "selector": "ihk/linux/user/CMakeLists.txt:31",
+      "remaining": "C OS control CLI; links C ihklib.",
+      "proof_gap": [
+        "Rust CLI/action/exit-code/diagnostic parity",
+        "default Rust selector and link proof",
+        "matched native OS lifecycle operations"
+      ]
+    },
+    {
+      "target": "ihkmond",
+      "kind": "installed monitoring daemon",
+      "selected_c": [
+        "ihk/linux/user/ihkmond.c"
+      ],
+      "selected_rust": [],
+      "selector": "ihk/linux/user/CMakeLists.txt:36",
+      "remaining": "C udev/epoll/eventfd/pthread monitoring and kmsg lifecycle; no current Rust replacement identified in bounded evidence.",
+      "proof_gap": [
+        "reuse search at identified historical revision or Rust implementation",
+        "daemon callback/thread/event and cleanup ABI parity",
+        "default link plus matched native creation/destruction/recovery behavior"
+      ]
+    },
+    {
+      "target": "sched_yield",
+      "kind": "installed shared library",
+      "selected_c": [],
+      "selected_rust": [
+        "executer/user/rust/libsched_yield.rs"
+      ],
+      "selector": "executer/user/CMakeLists.txt:216",
+      "remaining": "Rust source replaces libsched_yield.c in this configuration.",
+      "proof_gap": [
+        "current exact artifact/default symbol and applicable native proof not independently checked here"
+      ]
+    },
+    {
+      "target": "ldump2mcdump",
+      "kind": "installed shared library",
+      "selected_c": [],
+      "selected_rust": [
+        "executer/user/rust/ldump2mcdump_helpers.rs"
+      ],
+      "selector": "executer/user/CMakeLists.txt:494",
+      "remaining": "Rust source replaces ldump2mcdump.c in this configuration.",
+      "proof_gap": [
+        "current exact artifact/default symbol and applicable native dump conversion proof not independently checked here"
+      ]
+    },
+    {
+      "target": "mcstat",
+      "kind": "installed executable",
+      "selected_c": [],
+      "selected_rust": [
+        "tools/mcstat/rust/mcstat.rs"
+      ],
+      "selector": "tools/mcstat/CMakeLists.txt:36",
+      "remaining": "Rust main replaces mcstat.c, but links ihklib, whose selected implementation remains C.",
+      "proof_gap": [
+        "current exact Rust object/link/native monitoring proof not independently checked here",
+        "transitive ihklib C retirement"
+      ]
+    },
+    {
+      "target": "libmcexec",
+      "kind": "static assembly support library",
+      "selected_c": [],
+      "selected_rust": [],
+      "selected_assembly": [
+        "executer/user/arch/x86_64/archdep.S"
+      ],
+      "selector": "executer/user/CMakeLists.txt:27",
+      "remaining": "Assembly support for launcher; review status not reassessed.",
+      "proof_gap": [
+        "existing reviewed-assembly status and exact linked ABI evidence not independently checked here"
+      ]
+    }
+  ],
+  "nondefault": [
+    {
+      "target": "mckernel.so crash extension",
+      "selected_by": "tools/crash/mckernel.mk.in:65",
+      "c": [
+        "tools/crash/mckernel.c"
+      ],
+      "rust": [
+        "tools/crash/rust/mckernel_crash_helpers.rs"
+      ],
+      "status": "separate make target; CMake only copies inputs, so not default build or proven deployed; make always compiles C even when Rust found"
+    },
+    {
+      "targets": [
+        "qlmpi",
+        "qlfort",
+        "ql_server",
+        "ql_talker",
+        "ql_mpiexec_start",
+        "ql_mpiexec_finalize"
+      ],
+      "status": "ENABLE_QLMPI=OFF; existing Rust for first four, qlmpi additionally retains qlmpi_mpi_abi.c when enabled; final two directly compile ql_mpiexec_start.c and md5.c; not current selected debt"
+    },
+    {
+      "targets": [
+        "mck_syscall_intercept",
+        "libuti",
+        "syscall_intercept_shared"
+      ],
+      "status": "ENABLE_UTI=OFF; Rust intercept/arch wrappers exist, libuti ExternalProject selector requests --enable-rust when configured; vendor capstone/syscall_intercept and optional libuti not inventoried as live debt"
+    },
+    {
+      "target": "mcstat_runtest",
+      "status": "EXCLUDE_FROM_ALL test target, existing Rust runtest.rs; not production debt"
+    },
+    {
+      "sources": [
+        "scripts/tests/**/*.rs",
+        "test",
+        "ihk/test"
+      ],
+      "status": "fixtures/tests outside production scope; not walked"
+    }
+  ],
+  "vendor": {
+    "selected_reason": "LIBDWARF-NOTFOUND activates bundled libdwarf static library for mcinspect",
+    "selector": "executer/user/lib/libdwarf/CMakeLists.txt:108",
+    "static_c_sources": [
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/dwarf_abbrev.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/dwarf_alloc.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/dwarf_arange.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/dwarf_die_deliv.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/dwarf_dnames.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/dwarf_dsc.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/dwarf_elf_access.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/dwarf_error.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/dwarf_form.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/dwarf_frame.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/dwarf_frame2.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/dwarf_funcs.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/dwarf_gdbindex.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/dwarf_global.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/dwarf_groups.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/dwarf_harmless.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/dwarf_init_finish.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/dwarf_leb.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/dwarf_line.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/dwarf_loc.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/dwarf_macro.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/dwarf_macro5.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/dwarf_original_elf_init.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/dwarf_pubtypes.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/dwarf_query.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/dwarf_ranges.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/dwarf_string.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/dwarf_tied.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/dwarf_str_offsets.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/dwarf_tsearchhash.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/dwarf_types.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/dwarf_util.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/dwarf_vars.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/dwarf_weaks.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/dwarf_xu_index.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/dwarf_print_lines.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/malloc_check.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/pro_alloc.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/pro_arange.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/pro_die.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/pro_encode_nm.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/pro_error.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/pro_expr.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/pro_finish.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/pro_forms.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/pro_funcs.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/pro_frame.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/pro_init.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/pro_line.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/pro_reloc.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/pro_reloc_stream.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/pro_reloc_symbolic.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/pro_pubnames.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/pro_section.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/pro_types.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/pro_vars.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/pro_macinfo.c",
+      "executer/user/lib/libdwarf/libdwarf/libdwarf/pro_weaks.c"
+    ],
+    "generated_static_c": [
+      "dwarf_names.c"
+    ],
+    "build_only_c": [
+      "gennames.c",
+      "dwgetopt.c"
+    ],
+    "ownership": "vendored library, not included in project-owned seven-file count; baseline/vendor disposition still needs explicit artifact policy"
+  },
+  "non_c_project_runtime_scripts": [
+    {
+      "source": "scripts/mcreboot-smp.sh.in",
+      "interpreter": "#!/bin/bash"
+    },
+    {
+      "source": "scripts/mcstop+release-smp.sh.in",
+      "interpreter": "#!/bin/bash"
+    },
+    {
+      "source": "scripts/eclair-dump-backtrace.exp.in",
+      "interpreter": "#!/usr/bin/expect"
+    },
+    {
+      "source": "executer/user/vmcore2mckdump.in",
+      "interpreter": "#!/bin/sh"
+    },
+    {
+      "source": "executer/user/mcps.in",
+      "interpreter": "#!/bin/bash"
+    }
+  ],
+  "proof": {
+    "launcher_existing_evidence": {
+      "path": "docs/verification/evidence/current68-launcher-v3-actual-build-20261023-1/BUILD-SCOPE.json",
+      "build_result": "PASS_ACTUAL_M06_LAUNCHER_PRODUCTION_ARTIFACT_ONLY",
+      "native_acceptance": false,
+      "meaning": "historical exact launcher/Rust object artifact proof; does not retire current C surface or prove other targets"
+    },
+    "compile_commands": "retained current68 output has cache/config.h/selected executer artifacts, no compile_commands.json or generated Makefile/TargetDirectories; /home/holden/compile_commands.json is empty",
+    "reuse_sources": [
+      "rust-source-retirement.txt",
+      "docs/verification/rust-reuse-plan.md",
+      "docs/verification/rust-consumer-integration.md"
+    ],
+    "ihk_discrepancy": "historical retirement tracker describes ihklib_helpers.rs, but current pinned IHK user selector is C only, current rust subdirectory absent, and reuse plan records no pinned IHK .rs files; source recovery required before claiming reuse"
+  },
+  "limits": [
+    "not a whole repository source walk or complete application/deployment inventory",
+    "seven is configured user/runtime selector coverage, not final ELF composition or all project runtime C count",
+    "M14 six compute C owners and current native IHK/SMP/mcctrl module graph excluded by assignment; compatibility CMake module paths are not credited as deployed native debt without deployment evidence",
+    "no executable-header/body/preprocessor census or ABI equivalence audit",
+    "no claim that native proof is absent globally: only evidence inspected here is classified",
+    "new explicit user all-project-owned Rust/ASM scope overrides older control-plane-C allowance for planning; canonical policy not edited",
+    "practical 35 denominator unchanged; no whole OS/language completion or native acceptance credit"
+  ]
+}

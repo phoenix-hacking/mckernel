@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "case_id": "vector.fxsave-layout",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "canonical-record-with-relations", "fields": ["aligned", "control_seed", "mxcsr_seed", "guards", "defined", "valid"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["FXSAVE64 writes a 16-byte-aligned 512-byte area without changing guards", "Only defined control/status/tag, MXCSR, x87 values, and XMM bytes are compared; reserved/pointer fields are excluded"],
+  "unresolved_expectations": ["Exact seeded x87/XMM values, FXSAVE offsets, and instruction-window disassembly require Max review."],
+  "max_question_for_reviewer": "Confirm the 16-byte alignment and defined-field offset map, then replace the draft seed placeholders with exact architectural byte arrays."
+}

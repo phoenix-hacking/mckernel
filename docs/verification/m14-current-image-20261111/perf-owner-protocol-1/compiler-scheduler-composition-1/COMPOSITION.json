@@ -1,0 +1,66 @@
+{
+  "status": "EXACT_DISJOINT_THREE_PLUS_TWO_SOURCE_COMPOSITION_FROZEN_NO_EXECUTION",
+  "at_utc": "2026-11-11T13:56:29.391295+00:00",
+  "base_source_ready": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/ownership-proposal-1/implementation-1/SOURCE-READY.NOT-EXECUTED.json",
+    "bytes": 2070,
+    "sha256": "fb154ab61b167acf9a96febfe881b3472f5527473dd3f5ea321a2aa5818b643d"
+  },
+  "base_source_manifest": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/ownership-proposal-1/implementation-1/SOURCE-MANIFEST.json",
+    "bytes": 18552,
+    "sha256": "d17f3ea54931735f9088d0697477261d93684ab1f4b58c0dfca5713086a22b45"
+  },
+  "compiler_correction": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/ownership-proposal-1/implementation-1/compiler-diagnostics-correction-1/SOURCE-READY.NOT-EXECUTED.json",
+    "bytes": 4910,
+    "sha256": "ae527beaf4d6702717400ea20efacbb8ea3a74ead2bf1e0f8f399cfd3dcdeaea"
+  },
+  "compiler_correction_manifest": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/ownership-proposal-1/implementation-1/compiler-diagnostics-correction-1/SOURCE-MANIFEST.json",
+    "bytes": 31592,
+    "sha256": "c78c6301c111d5592431bbacfb514ea610e1294fcc350cbd114500b9d58acebe"
+  },
+  "compiler_correction_delta": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/ownership-proposal-1/implementation-1/compiler-diagnostics-correction-1/COMPILER-DIAGNOSTICS-DELTA.patch",
+    "bytes": 3716,
+    "sha256": "371c0bc805b44423adc0be2b799aec15c56553ff1be302cbfc71f36e0f47a0df"
+  },
+  "scheduler_correction": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/ownership-proposal-1/implementation-1/scheduler-epoch-correction-1/SOURCE-READY.NOT-EXECUTED.json",
+    "bytes": 3243,
+    "sha256": "f948ccb95bca654e329c4fa0dba1e689b2a92a452553e07be2ce2f4d0434221c"
+  },
+  "scheduler_correction_manifest": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/ownership-proposal-1/implementation-1/scheduler-epoch-correction-1/SOURCE-MANIFEST.json",
+    "bytes": 32595,
+    "sha256": "279ba05aae50f7584cd74a647a3f7fa2018cc4e45354c66fb8f4d460633238f8"
+  },
+  "scheduler_correction_delta": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/ownership-proposal-1/implementation-1/scheduler-epoch-correction-1/SCHEDULER-EPOCH-DELTA.patch",
+    "bytes": 6917,
+    "sha256": "48a1a510b0ab7a402cda87d785bc5ab8767ed997e37cefdf79140aecfad14560"
+  },
+  "scheduler_focused_source_GO": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-coherent-source-review-sourceacq-max-1/scheduler-epoch-correction-1/REVIEW.json",
+    "bytes": 9692,
+    "sha256": "bdd6587c119855cae4399bebc78190128d6ccc3b8b3a845f145c423d92c4bc9a"
+  },
+  "exact_changed_paths": [
+    "kernel/rust/f03_perf_owner/callbacks.rs",
+    "kernel/rust/f03_perf_owner/groups.rs",
+    "kernel/rust/f03_perf_owner/hardware.rs",
+    "kernel/rust/f03_perf_owner/lifecycle.rs",
+    "kernel/rust/f03_perf_owner/runtime.rs"
+  ],
+  "unchanged_paths_count": 23,
+  "composition_algorithm": "Copy exact frozen compiler branch bytes for callbacks/runtime/groups, exact independently reviewed scheduler branch bytes for hardware/lifecycle, and exact failed fb154 bytes for every other source. No overlapping edits and no rewritten body.",
+  "all_component_and_failed_sources_preserved": true,
+  "all_28_new_paths_byte_checked": true,
+  "six_actual_first_compiler_diagnostics_addressed_by_compiler_branch": true,
+  "scheduler_single_epoch_protocol_from_reviewed_branch": true,
+  "compiler_or_runtime_success_claimed": false,
+  "compiler_three_file_and_composition_review": "PENDING separate SourceAcq focused material review; no self-GO",
+  "selectors_defaults_CMake_unchanged": true,
+  "no_canonical_or_compiler_test_SUT_native_action": true
+}

@@ -1,0 +1,40 @@
+--- sync-predecessor/kernel/rust/process_helpers.rs
++++ sync-log-successor/kernel/rust/process_helpers.rs
+@@ -220,13 +220,7 @@
+         old_pgshift: CInt,
+         error: CInt,
+     );
+-    fn process_sync_range_log_bridge(
+-        vm: *mut ProcessVm,
+-        range: *mut VmRange,
+-        start: CULong,
+-        end: CULong,
+-        error: CInt,
+-    );
++
+     fn process_lookup_pte_bridge(
+         page_table: *mut c_void,
+         addr: CULong,
+@@ -4230,6 +4224,22 @@
+ /// args/memobj and existing page-table exclusion for the synchronous visit.
+ /// Valid pgshift is the original supported 0..63 domain. No new error policy,
+ /// ownership transfer, allocation or lock is introduced.
++/// Existing synchronous range-sync failure notification. No pointer is
++/// dereferenced or retained; caller lock/ref/notification ordering is unchanged.
++#[no_mangle]
++pub unsafe extern "C" fn process_sync_range_log_bridge(
++    vm: *mut ProcessVm,
++    range: *mut VmRange,
++    start: CULong,
++    end: CULong,
++    error: CInt,
++) {
++    let _ = kprintf(
++        b"sync_process_memory_range(%p,%p,%#lx,%#lx):visit failed%d\n\0".as_ptr().cast(),
++        vm, range, start, end, error,
++    );
++}
++
+ #[no_mangle]
+ pub unsafe extern "C" fn sync_one_page(
+     arg0: *mut c_void,

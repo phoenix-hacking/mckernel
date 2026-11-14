@@ -1,0 +1,91 @@
+{
+  "M14_candidate15_positive_physical": null,
+  "actual_readbacks": null,
+  "current_live_postjoin": null,
+  "independent_release": null,
+  "operations": [
+    {
+      "actual_result": null,
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=30:30",
+        "--fsize=33554432:33554432",
+        "--core=0:0",
+        "--nofile=256:256",
+        "--",
+        "/usr/bin/cat",
+        "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-snapshot-equality-successor-1/actual-capture-1/CAPTURE-RESULT.json"
+      ],
+      "capture_namespace": "/home/holden/mckernel/docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-snapshot-equality-successor-1/authenticated-terminal-readbacks-1/CAPTURE-RESULT.json",
+      "name": "CAPTURE-RESULT.json",
+      "source_path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-snapshot-equality-successor-1/actual-capture-1/CAPTURE-RESULT.json"
+    },
+    {
+      "actual_result": null,
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=30:30",
+        "--fsize=33554432:33554432",
+        "--core=0:0",
+        "--nofile=256:256",
+        "--",
+        "/usr/bin/cat",
+        "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-snapshot-equality-successor-1/actual-capture-1/stdout"
+      ],
+      "capture_namespace": "/home/holden/mckernel/docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-snapshot-equality-successor-1/authenticated-terminal-readbacks-1/stdout",
+      "name": "stdout",
+      "source_path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-snapshot-equality-successor-1/actual-capture-1/stdout"
+    },
+    {
+      "actual_result": null,
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=30:30",
+        "--fsize=33554432:33554432",
+        "--core=0:0",
+        "--nofile=256:256",
+        "--",
+        "/usr/bin/cat",
+        "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-snapshot-equality-successor-1/actual-capture-1/stderr"
+      ],
+      "capture_namespace": "/home/holden/mckernel/docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-snapshot-equality-successor-1/authenticated-terminal-readbacks-1/stderr",
+      "name": "stderr",
+      "source_path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-snapshot-equality-successor-1/actual-capture-1/stderr"
+    }
+  ],
+  "profile": {
+    "AS_bytes": 2147483648,
+    "CPU": [
+      7
+    ],
+    "CPU_seconds": 30,
+    "FSIZE_bytes": 33554432,
+    "NOFILE": 256,
+    "capture": "Reuse accepted direct O_EXCL capture/directjoin/groupabsence/closedstreams/stderr0, no newwrapperframework. Preserve root0600 files; read-only copies only.",
+    "core": 0,
+    "retirement_grace_seconds": 6,
+    "wall_seconds": 60
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_directories_preserved": true,
+  "status": "EXACT_THREE_READ_ONLY_CATS_PREPARED_NOT_RELEASED_NOT_EXECUTED",
+  "when": "Only after actual runtime owner+controller closes; no earlyterminalreads"
+}

@@ -21,6 +21,8 @@ Options:
   --ssh-port PORT       Host port forwarded to guest SSH. Default: 2222
   --memory SIZE         QEMU memory. Default: 4096M
   --cpus N              QEMU vCPU count. Default: 4
+  --disk-size SIZE      Expand the disposable overlay before boot, for example
+                        24G. Default: keep the backing image virtual size.
   --accel MODE          auto, kvm, or tcg. Default: auto
   --timeout SEC         Guest SSH wait timeout. Default: 300
   --runtime SEC         Max time to let QEMU run after SSH/command. Default: 0
@@ -32,6 +34,9 @@ Options:
                         QEMU exits. Default: stop McKernel if installed.
   --guest-cleanup-timeout SEC
                         Watchdog for guest cleanup. Default: 30
+  --guest-evidence-dir PATH
+                        Copy this guest /tmp child into LOG_DIR/guest-evidence
+                        after --guest-cmd, including on command failure.
   --ssh-key PATH        Existing private key to use for guest SSH. Default:
                         generate a temporary key in the log directory.
   --kernel PATH         Optional external kernel image to boot with QEMU.
@@ -46,6 +51,13 @@ Options:
                         Copy HOST directory into GUEST after SSH is ready.
                         May be specified more than once.
   --log-dir PATH        Log directory. Default: /tmp/mckernel-qemu-<timestamp>
+  --heavy-operation-request PATH
+                        Reviewed JSON request for the shared heavy-operation
+                        admission contract. Required for real launches.
+  --heavy-operation-request-sha256 SHA
+                        Exact independently released request digest.
+  --heavy-operation-fetched-commit COMMIT
+                        Fetched origin commit containing the exact request.
   --keep-overlay        Keep the temporary qcow2 overlay after exit.
   --keep-running        Leave QEMU running after the command completes.
   --dry-run             Print the QEMU command without starting the guest.
@@ -63,14 +75,16 @@ USER_NAME=mcktest
 SSH_PORT=2222
 MEMORY=4096M
 CPUS=4
+DISK_SIZE=
 ACCEL_REQUEST=auto
 TIMEOUT=300
 RUNTIME=0
 GUEST_CMD=
 GUEST_CMD_TIMEOUT=0
 GUEST_CLEANUP=1
-GUEST_CLEANUP_CMD='if [ -x /opt/mckernel-rust/sbin/mcstop+release.sh ]; then sudo /opt/mckernel-rust/sbin/mcstop+release.sh -k || true; fi'
+GUEST_CLEANUP_CMD='test -x /opt/mckernel-rust/sbin/mcstop+release.sh && sudo /opt/mckernel-rust/sbin/mcstop+release.sh -k'
 GUEST_CLEANUP_TIMEOUT=30
+GUEST_EVIDENCE_DIR=
 SHARED_DIR=
 STAGE_DIRS=()
 LOG_DIR="/tmp/mckernel-qemu-$(date +%Y%m%d-%H%M%S)"
@@ -85,6 +99,16 @@ INITRD_IMAGE=
 KERNEL_APPEND=
 PAUSE_AT_RESET=0
 GDB_PORT=
+HEAVY_OPERATION_REQUEST=
+HEAVY_REQUEST_SHA256=
+HEAVY_FETCHED_COMMIT=
+HEAVY_HELPER="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/qemu_guest_heavy_v1.py"
+HEAVY_LOCK_PATH=
+HEAVY_LOCK_RECORD=
+HEAVY_ACQUIRED=0
+EVIDENCE_SEALED=0
+evidence_rc=125
+command_rc=125
 
 while [ "$#" -gt 0 ]; do
 	case "$1" in
@@ -106,6 +130,10 @@ while [ "$#" -gt 0 ]; do
 			;;
 		--cpus)
 			CPUS="${2:?missing value for --cpus}"
+			shift 2
+			;;
+		--disk-size)
+			DISK_SIZE="${2:?missing value for --disk-size}"
 			shift 2
 			;;
 		--accel)
@@ -134,6 +162,10 @@ while [ "$#" -gt 0 ]; do
 			;;
 		--guest-cleanup-timeout)
 			GUEST_CLEANUP_TIMEOUT="${2:?missing value for --guest-cleanup-timeout}"
+			shift 2
+			;;
+		--guest-evidence-dir)
+			GUEST_EVIDENCE_DIR="${2:?missing value for --guest-evidence-dir}"
 			shift 2
 			;;
 		--ssh-key)
@@ -174,6 +206,18 @@ while [ "$#" -gt 0 ]; do
 			;;
 		--log-dir)
 			LOG_DIR="${2:?missing value for --log-dir}"
+			shift 2
+			;;
+		--heavy-operation-request)
+			HEAVY_OPERATION_REQUEST="${2:?missing value for --heavy-operation-request}"
+			shift 2
+			;;
+		--heavy-operation-request-sha256)
+			HEAVY_REQUEST_SHA256="${2:?missing request hash}"
+			shift 2
+			;;
+		--heavy-operation-fetched-commit)
+			HEAVY_FETCHED_COMMIT="${2:?missing fetched commit}"
 			shift 2
 			;;
 		--keep-overlay)
@@ -232,10 +276,23 @@ case "$IMAGE" in
 		;;
 esac
 
+if [ -n "$DISK_SIZE" ] && [[ ! "$DISK_SIZE" =~ ^[1-9][0-9]*[KMGT]?$ ]]; then
+	echo "error: --disk-size must be a positive byte count with an optional K, M, G, or T suffix" >&2
+	exit 2
+fi
+
+if [ -n "$GUEST_EVIDENCE_DIR" ]; then
+	if [[ ! "$GUEST_EVIDENCE_DIR" =~ ^/tmp/[A-Za-z0-9][A-Za-z0-9._-]*$ ]]; then
+		echo 'error: --guest-evidence-dir must be one safe directory directly under /tmp' >&2
+		exit 2
+	fi
+fi
+
 if [ ! -f "$IMAGE" ]; then
 	echo "error: image not found: $IMAGE" >&2
 	exit 1
 fi
+IMAGE="$(cd "$(dirname "$IMAGE")" && pwd)/$(basename "$IMAGE")"
 
 if [ -n "$SHARED_DIR" ] && [ ! -d "$SHARED_DIR" ]; then
 	echo "error: shared directory not found: $SHARED_DIR" >&2
@@ -309,73 +366,415 @@ require_uint guest-cleanup-timeout "$GUEST_CLEANUP_TIMEOUT"
 if [ -n "$GDB_PORT" ]; then
 	require_uint gdb "$GDB_PORT"
 fi
+LOG_DIR="$(realpath -m "$LOG_DIR")"
+IMAGE="$(realpath -e "$IMAGE")"
+[ -z "$KERNEL_IMAGE" ] || KERNEL_IMAGE="$(realpath -e "$KERNEL_IMAGE")"
+[ -z "$INITRD_IMAGE" ] || INITRD_IMAGE="$(realpath -e "$INITRD_IMAGE")"
+[ -z "$SSH_KEY_INPUT" ] || SSH_KEY_INPUT="$(realpath -e "$SSH_KEY_INPUT")"
+[ -z "$SHARED_DIR" ] || SHARED_DIR="$(realpath -e "$SHARED_DIR")"
 
-mkdir -p "$LOG_DIR"
-
-BASE_FORMAT="$(qemu-img info --output=json "$IMAGE" |
-	sed -n 's/.*"format": *"\([^"]*\)".*/\1/p' | head -n1)"
+BASE_FORMAT="$(LC_ALL=C qemu-img info "$IMAGE" |
+	sed -n 's/^file format: //p' | head -n1)"
 if [ -z "$BASE_FORMAT" ]; then
-	BASE_FORMAT=qcow2
+	echo "error: could not determine backing image format: $IMAGE" >&2
+	exit 1
 fi
 
 OVERLAY="$LOG_DIR/guest-overlay.qcow2"
 SEED="$LOG_DIR/seed.iso"
 SSH_KEY="$LOG_DIR/id_ed25519"
 PIDFILE="$LOG_DIR/qemu.pid"
+STARTED_PIDFILE="$LOG_DIR/qemu-started.pid"
 SERIAL_LOG="$LOG_DIR/serial.log"
+DEBUGCON_LOG="$LOG_DIR/debugcon.log"
+STARTUP_LOG="$LOG_DIR/qemu-startup.log"
+QMP_SOCKET="$LOG_DIR/qmp.sock"
+QMP_LOG="$LOG_DIR/qmp-status.jsonl"
 GUEST_CMD_LOG="$LOG_DIR/guest-command.log"
 GUEST_CLEANUP_LOG="$LOG_DIR/guest-cleanup.log"
+GUEST_EVIDENCE_ARCHIVE="$LOG_DIR/guest-evidence.tar"
+GUEST_EVIDENCE_ARCHIVE_SHA256="$LOG_DIR/guest-evidence.tar.sha256"
+GUEST_EVIDENCE_HOST_DIR="$LOG_DIR/guest-evidence"
+CPU_MODEL_FILE="$LOG_DIR/qemu-cpu-model.txt"
+HEAVY_RESULT="$LOG_DIR/heavy-operation-result.json"
+QEMU_STARTTIME=
+qemu_started_pid=
+
+proc_starttime() {
+	local pid="$1"
+	[ -r "/proc/$pid/stat" ] || return 1
+	awk -F') ' '{print $2}' "/proc/$pid/stat" | awk '{print $20}'
+}
+
+# Trusted bootstrap is part of the reviewed shell blob. It opens source files
+# once, verifies their fetched bytes and identities, then executes those bytes
+# with only system Python imports. FD 3 supplies code; stdin is never code.
+heavy_helper() {
+	local payload="$1"
+	shift
+	/usr/bin/env -i PATH=/usr/bin:/bin LC_ALL=C /usr/bin/python3 -I -S -B /dev/fd/3 \
+		"$HEAVY_HELPER" "$HEAVY_OPERATION_REQUEST" "$HEAVY_REQUEST_SHA256" \
+		"$HEAVY_FETCHED_COMMIT" "$$" "$payload" "$@" 3<<'BOOTSTRAP_PY'
+import hashlib, io, json, os, pathlib, re, stat, subprocess, sys
+
+def require(condition, message):
+    if not condition:
+        raise ValueError(message)
+
+def pairs(items):
+    result = {}
+    for key, value in items:
+        require(key not in result, 'duplicate JSON field')
+        result[key] = value
+    return result
+
+def stamp(info):
+    return (info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns)
+
+def snapshot(path, proc_descriptor=False):
+    fd = os.open(str(path), os.O_RDONLY | (0 if proc_descriptor else os.O_NOFOLLOW))
+    try:
+        before = os.fstat(fd)
+        require(stat.S_ISREG(before.st_mode) and before.st_size <= 64 * 1024**2,
+                'invalid source file')
+        chunks = []
+        while True:
+            chunk = os.read(fd, 1024 * 1024)
+            if not chunk:
+                break
+            chunks.append(chunk)
+            require(sum(map(len, chunks)) <= 64 * 1024**2, 'source grew beyond bound')
+        require(stamp(before) == stamp(os.fstat(fd)), 'source changed during snapshot')
+        if not proc_descriptor:
+            require(stamp(before) == stamp(path.lstat()), 'source path replaced during snapshot')
+        return b''.join(chunks), stamp(before)
+    finally:
+        os.close(fd)
+
+def git(*args):
+    return subprocess.check_output(
+        ['/usr/bin/git', '--no-pager', '--no-replace-objects',
+         '--git-dir=' + str(root / '.git'), '--work-tree=' + str(root), *args],
+        cwd=str(root), stderr=subprocess.PIPE,
+        env={'PATH': '/usr/bin:/bin', 'LC_ALL': 'C', 'GIT_CONFIG_NOSYSTEM': '1',
+             'GIT_CONFIG_SYSTEM': '/dev/null', 'GIT_CONFIG_GLOBAL': '/dev/null'})
+
+def fetched(commit):
+    require(re.fullmatch('[0-9a-f]{40}', commit) is not None, 'invalid fetched commit')
+    require(git('for-each-ref', '--format=%(refname)', '--contains', commit,
+                'refs/remotes/origin/').strip(), 'commit absent from fetched origin history')
+
+helper, request_path, expected_hash, commit, controller, payload = sys.argv[1:7]
+helper = pathlib.Path(helper)
+require(helper.is_absolute() and helper.resolve() == helper, 'unresolved helper path')
+root = helper.parents[1]
+request_path = pathlib.Path(request_path)
+require(request_path.is_absolute() and request_path.resolve() == request_path, 'unresolved request path')
+require(int(controller) == os.getppid(), 'bootstrap is not owned by controller')
+fetched(commit)
+raw, request_identity = snapshot(request_path)
+require(hashlib.sha256(raw).hexdigest() == expected_hash and
+        git('show', commit + ':' + str(request_path.relative_to(root))) == raw,
+        'request differs from fetched released bytes')
+request = json.loads(raw, object_pairs_hook=pairs)
+require(request['schema'] == 'mckernel.guest-heavy.v1' and request['release'] == 'REVIEWED_EXECUTION',
+        'request is not released')
+sources = ('scripts/qemu_guest_heavy_v1.py', 'scripts/qemu-mckernel-guest.sh',
+           'scripts/native_rust_exact_disk_build_wrapper.py')
+require(set(request['sources']) == set(sources), 'source set mismatch')
+fetched(request['source_commit'])
+snapshots, identities = {}, {}
+for relative in sources:
+    path = root / relative
+    require(path.resolve() == path, 'source path contains symlink')
+    data, identity = snapshot(path)
+    require(hashlib.sha256(data).hexdigest() == request['sources'][relative] and
+            git('show', request['source_commit'] + ':' + relative) == data,
+            'source differs from fetched released bytes')
+    snapshots[relative], identities[relative] = data, identity
+# Bash retains the actual script it is reading on fd 255. A replaced pathname
+# cannot authenticate a different running shell. Real runs must invoke the
+# runner as a standalone Bash script; sourced dry-runs do not enter bootstrap.
+shell_data, shell_identity = snapshot(pathlib.Path('/proc', controller, 'fd', '255'), True)
+require(shell_data == snapshots['scripts/qemu-mckernel-guest.sh'] and
+        shell_identity == identities['scripts/qemu-mckernel-guest.sh'], 'running shell source mismatch')
+require(stamp(request_path.lstat()) == request_identity, 'request path changed')
+for relative, identity in identities.items():
+    require(stamp((root / relative).lstat()) == identity, 'source path changed before execution')
+namespace = {'__name__': '__main__', '__file__': str(helper),
+             '_AUTHENTICATED_SOURCES': snapshots, '_AUTHENTICATED_IDENTITIES': identities}
+sys.argv = [str(helper)] + sys.argv[7:]
+sys.stdin = io.TextIOWrapper(io.BytesIO(payload.encode()), encoding='utf-8')
+exec(compile(snapshots[sources[0]], str(helper), 'exec', dont_inherit=True), namespace)
+BOOTSTRAP_PY
+}
+
+acquire_heavy_operation() {
+	if [ "$DRY_RUN" -eq 1 ]; then
+		return 0
+	fi
+	if [ -z "$HEAVY_OPERATION_REQUEST" ] || [ ! -f "$HEAVY_OPERATION_REQUEST" ]; then
+		echo 'error: real guest launch requires --heavy-operation-request (fail closed)' >&2
+		return 1
+	fi
+	if ! heavy_helper "$(guest_configuration)" admit \
+		"$HEAVY_OPERATION_REQUEST" "$HEAVY_REQUEST_SHA256" "$HEAVY_FETCHED_COMMIT"
+	then
+		echo 'error: shared heavy-operation admission unavailable or unreleased' >&2
+		return 1
+	fi
+	HEAVY_LOCK_RECORD="$LOG_DIR/heavy-operation-acquire.json"
+	HEAVY_ACQUIRED=1
+}
+
+guest_configuration() {
+	python3 -B - "$$" "$IMAGE" "$KERNEL_IMAGE" "$INITRD_IMAGE" "$SSH_KEY_INPUT" "$SHARED_DIR" \
+		"$LOG_DIR" "$OVERLAY" "$CPUS" "$MEMORY" "$KEEP_RUNNING" "$KEEP_OVERLAY" \
+		"$GUEST_CLEANUP" "$GUEST_CMD" "$GUEST_EVIDENCE_DIR" "$GUEST_CLEANUP_CMD" \
+		"$TIMEOUT" "$RUNTIME" "$GUEST_CMD_TIMEOUT" "$GUEST_CLEANUP_TIMEOUT" \
+		"$USER_NAME" "$DISK_SIZE" "${#STAGE_DIRS[@]}" "${STAGE_DIRS[@]}" "${QEMU_ARGS[@]}" <<'PY'
+import json, pathlib, sys
+a = sys.argv[1:]
+names = ('image', 'kernel', 'initrd', 'ssh_key', 'shared_dir', 'log_dir', 'overlay',
+         'cpus', 'memory', 'keep_running', 'keep_overlay', 'guest_cleanup', 'guest_cmd',
+         'guest_evidence_dir', 'guest_cleanup_cmd', 'timeout', 'runtime',
+         'guest_cmd_timeout', 'guest_cleanup_timeout', 'user', 'disk_size')
+config = dict(zip(names, a[1:22]))
+count = int(a[22]); config['stage_dirs'] = a[23:23+count]
+config['qemu_argv'] = a[23+count:]
+inputs = [x for x in a[1:6] if x]
+if config['ssh_key'] and pathlib.Path(config['ssh_key'] + '.pub').exists():
+    inputs.append(config['ssh_key'] + '.pub')
+inputs += [str(pathlib.Path(x.split(':', 1)[0]).resolve()) for x in config['stage_dirs']]
+inputs.append(config['qemu_argv'][0])
+print(json.dumps({'controller_pid': int(a[0]), 'config': config, 'input_paths': inputs}))
+PY
+}
 
 print_serial_tail() {
+	local crash_end
+	local crash_line
+	local crash_match
+	local crash_start
+
 	if [ -f "$SERIAL_LOG" ]; then
+		# A kdump reboot can put hundreds of recovery-kernel lines after the
+		# original panic. Prefer the panic endpoint so the preceding BUG, RIP,
+		# and call trace remain visible in the CI log.
+		crash_match="$(LC_ALL=C grep -a -n -m1 -E \
+			'Kernel panic|not syncing:' "$SERIAL_LOG" 2>/dev/null || true)"
+		if [ -z "$crash_match" ]; then
+			crash_match="$(LC_ALL=C grep -a -n -m1 -F \
+				'IHK: OS does not become ready, kernel msg:' \
+				"$SERIAL_LOG" 2>/dev/null || true)"
+		fi
+		if [ -z "$crash_match" ]; then
+			crash_match="$(LC_ALL=C grep -a -n -m1 -E \
+				'BUG:|Oops:|general protection fault|Unable to handle kernel|#PF:|RIP:|Call Trace:' \
+				"$SERIAL_LOG" 2>/dev/null || true)"
+		fi
+		crash_line="${crash_match%%:*}"
+		case "$crash_line" in
+			''|*[!0-9]*)
+				;;
+			*)
+				crash_start=$((crash_line > 300 ? crash_line - 300 : 1))
+				crash_end=$((crash_line + 500))
+				echo "serial failure context (lines ${crash_start}-${crash_end}, marker at ${crash_line}):" >&2
+				LC_ALL=C sed -n "${crash_start},${crash_end}p" "$SERIAL_LOG" >&2 || true
+				;;
+		esac
 		echo "recent serial log:" >&2
 		tail -n 80 "$SERIAL_LOG" >&2 || true
 	fi
+	if [ -s "$DEBUGCON_LOG" ]; then
+		echo "McKernel early debugcon phases:" >&2
+		tail -c 4096 "$DEBUGCON_LOG" >&2 || true
+		echo >&2
+	else
+		echo "McKernel early debugcon phases: empty" >&2
+	fi
+}
+
+qemu_pid_is_owned() {
+	local pid="$1"
+	[ -n "$pid" ] && [ "$pid" = "$qemu_started_pid" ] || return 1
+	heavy_helper '' state "$LOG_DIR"
 }
 
 qemu_is_running() {
-	local pid
+	qemu_pid_is_owned "$qemu_started_pid"
+}
 
-	if [ ! -f "$PIDFILE" ]; then
+record_qemu_process_sample() {
+	local label="$1"
+	local pid="$2"
+	local process_state
+	local process_ticks
+	local serial_bytes=0
+
+	if [ -f "$SERIAL_LOG" ]; then
+		serial_bytes="$(stat -c %s "$SERIAL_LOG")"
+	fi
+	if ! qemu_pid_is_owned "$pid"; then
+		printf '%s pid=%s owned=no serial_bytes=%s\n' \
+			"$label" "$pid" "$serial_bytes" >>"$STARTUP_LOG"
+		return 1
+	fi
+	read -r process_state process_ticks < <(
+		awk '{ print $3, ($14 + $15) }' "/proc/$pid/stat"
+	)
+	printf '%s pid=%s owned=yes state=%s ticks=%s serial_bytes=%s\n' \
+		"$label" "$pid" "$process_state" "$process_ticks" "$serial_bytes" \
+		>>"$STARTUP_LOG"
+}
+
+record_qmp_status() {
+	local label="$1"
+
+	if ! command -v python3 >/dev/null 2>&1 || [ ! -S "$QMP_SOCKET" ]; then
+		printf '{"label":"%s","error":"QMP unavailable"}\n' "$label" \
+			>>"$QMP_LOG"
 		return 0
 	fi
-	pid="$(cat "$PIDFILE" 2>/dev/null || true)"
-	if [ -z "$pid" ]; then
-		return 0
+	python3 - "$QMP_SOCKET" "$label" >>"$QMP_LOG" 2>&1 <<'PY' || true
+import json
+import socket
+import sys
+
+socket_path, label = sys.argv[1:]
+try:
+    client = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+    client.settimeout(5)
+    client.connect(socket_path)
+    stream = client.makefile("rwb", buffering=0)
+
+    def read_response():
+        while True:
+            line = stream.readline()
+            if not line:
+                raise RuntimeError("QMP socket closed")
+            message = json.loads(line)
+            if "event" not in message:
+                return message
+
+    greeting = read_response()
+    print(json.dumps({"label": label, "greeting": greeting}, sort_keys=True))
+    for command in ("qmp_capabilities", "query-status", "query-cpus-fast"):
+        stream.write((json.dumps({"execute": command}) + "\r\n").encode())
+        print(json.dumps({
+            "label": label,
+            "command": command,
+            "response": read_response(),
+        }, sort_keys=True))
+except Exception as error:
+    print(json.dumps({
+        "label": label,
+        "error": f"{type(error).__name__}: {error}",
+    }, sort_keys=True))
+PY
+}
+
+collect_guest_evidence() {
+	local archive_sha
+	local file_count
+	local remote_cmd
+
+	if [ -z "$GUEST_EVIDENCE_DIR" ]; then
+		return
 	fi
-	kill -0 "$pid" 2>/dev/null
+	remote_cmd="$(printf 'test -d %q && test ! -L %q && tar -C %q -cf - .' \
+		"$GUEST_EVIDENCE_DIR" "$GUEST_EVIDENCE_DIR" \
+		"$GUEST_EVIDENCE_DIR")"
+	if ! timeout --signal=TERM --kill-after=5s "$GUEST_CLEANUP_TIMEOUT" \
+		ssh "${SSH_ARGS[@]}" "$remote_cmd" >"$GUEST_EVIDENCE_ARCHIVE"
+	then
+		echo "error: could not collect guest evidence directory: $GUEST_EVIDENCE_DIR" >&2
+		return 1
+	fi
+	if [ ! -s "$GUEST_EVIDENCE_ARCHIVE" ]; then
+		echo 'error: collected guest evidence archive is empty' >&2
+		return 1
+	fi
+	if ! heavy_helper '' extract "$LOG_DIR"
+	then
+		echo 'error: could not extract the guest evidence archive' >&2
+		return 1
+	fi
+	if [ ! -s "$GUEST_EVIDENCE_HOST_DIR/SHA256SUMS" ]; then
+		echo 'error: guest evidence is missing SHA256SUMS' >&2
+		return 1
+	fi
+	if ! (
+		cd "$GUEST_EVIDENCE_HOST_DIR"
+		sha256sum -c SHA256SUMS
+	); then
+		echo 'error: guest evidence SHA256SUMS verification failed' >&2
+		return 1
+	fi
+	if ! (
+		cd "$LOG_DIR"
+		sha256sum "$(basename "$GUEST_EVIDENCE_ARCHIVE")" \
+			>"$(basename "$GUEST_EVIDENCE_ARCHIVE_SHA256")"
+	)
+	then
+		echo 'error: could not hash the guest evidence archive' >&2
+		return 1
+	fi
+	file_count="$(find "$GUEST_EVIDENCE_HOST_DIR" -type f | wc -l)" || return 1
+	archive_sha="$(awk '{ print $1 }' "$GUEST_EVIDENCE_ARCHIVE_SHA256")" || return 1
+	if [[ ! "$file_count" =~ ^[1-9][0-9]*$ ]] ||
+		[[ ! "$archive_sha" =~ ^[0-9a-f]{64}$ ]]
+	then
+		echo 'error: invalid guest evidence count or archive digest' >&2
+		return 1
+	fi
+	printf 'guest-evidence: collected files=%s archive_sha256=%s\n' \
+		"$file_count" "$archive_sha"
 }
 
 cleanup() {
-	local pid
-
-	if [ "$KEEP_RUNNING" -eq 0 ] && [ "$SSH_READY" -eq 1 ] &&
-		[ "$GUEST_CLEANUP" -eq 1 ]; then
-		timeout --foreground "$GUEST_CLEANUP_TIMEOUT" \
-			ssh "${SSH_ARGS[@]}" "$GUEST_CLEANUP_CMD" \
-			>>"$GUEST_CLEANUP_LOG" 2>&1 || true
+	local original_rc=$?
+	local cleanup_rc=125
+	local retirement_rc=0
+	trap - EXIT INT TERM
+	if [ "$DRY_RUN" -eq 1 ]; then
+		if [ "$KEEP_OVERLAY" -eq 0 ] && [ -f "$OVERLAY" ]; then rm -- "$OVERLAY"; fi
+		return "$original_rc"
 	fi
-
-	if [ "$KEEP_RUNNING" -eq 0 ] && [ -f "$PIDFILE" ]; then
-		pid="$(cat "$PIDFILE" 2>/dev/null || true)"
-		if [ -n "$pid" ] && kill -0 "$pid" 2>/dev/null; then
-			kill "$pid" 2>/dev/null || true
-			for _ in $(seq 1 20); do
-				kill -0 "$pid" 2>/dev/null || break
-				sleep 0.2
-			done
-			kill -9 "$pid" 2>/dev/null || true
-		fi
+	[ "$HEAVY_ACQUIRED" -eq 1 ] || return "$original_rc"
+	if [ "$SSH_READY" -eq 1 ] && [ "$GUEST_CLEANUP" -eq 1 ]; then
+		if timeout --signal=TERM --kill-after=5s "$GUEST_CLEANUP_TIMEOUT" \
+			ssh "${SSH_ARGS[@]}" "$GUEST_CLEANUP_CMD" >>"$GUEST_CLEANUP_LOG" 2>&1
+		then cleanup_rc=0; else cleanup_rc=$?; fi
 	fi
-
-	if [ "$KEEP_RUNNING" -eq 0 ] && [ "$KEEP_OVERLAY" -eq 0 ]; then
-		rm -f "$OVERLAY"
+	if heavy_helper '' stop "$LOG_DIR"; then
+		if [ -f "$OVERLAY" ] && [ ! -L "$OVERLAY" ]; then
+			if rm -- "$OVERLAY"; then :; else retirement_rc=$?; fi
+		else retirement_rc=1; fi
+	else retirement_rc=$?; fi
+	if [ "$retirement_rc" -eq 0 ]; then
+		if heavy_helper "$(printf '{"cleanup_rc":%s,"evidence_rc":%s,"command_rc":%s}\n' \
+			"$cleanup_rc" "$evidence_rc" "$command_rc")" seal "$LOG_DIR"
+		then HEAVY_ACQUIRED=0; else retirement_rc=$?; fi
 	fi
+	if [ "$HEAVY_ACQUIRED" -eq 1 ]; then
+		printf 'error: guest retirement incomplete; shared claim retained (cleanup=%s evidence=%s retirement=%s)\n' \
+			"$cleanup_rc" "$evidence_rc" "$retirement_rc" >&2
+		[ "$original_rc" -ne 0 ] || original_rc=1
+	fi
+	exit "$original_rc"
 }
 trap cleanup EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
 
+prepare_guest() {
 say "Preparing disposable guest overlay"
 qemu-img create -f qcow2 -F "$BASE_FORMAT" -b "$IMAGE" "$OVERLAY" >/dev/null
+if [ -n "$DISK_SIZE" ]; then
+	qemu-img resize "$OVERLAY" "$DISK_SIZE" >/dev/null
+fi
 
 if [ -n "$SSH_KEY_INPUT" ]; then
 	if [ ! -f "$SSH_KEY_INPUT" ]; then
@@ -416,6 +815,7 @@ local-hostname: mckernel-qemu
 EOF
 
 cloud-localds "$SEED" "$LOG_DIR/user-data" "$LOG_DIR/meta-data"
+}
 
 ACCEL=tcg
 if [ "$ACCEL_REQUEST" = "kvm" ]; then
@@ -430,26 +830,39 @@ elif [ -r /dev/kvm ] && [ -w /dev/kvm ]; then
 	ACCEL=kvm
 fi
 
-CPU_MODEL=max
+# McKernel's x86_64 boot path uses four-level page tables. Keep that invariant
+# under both emulation and host passthrough so accelerator selection cannot
+# expose LA57 merely because the runner or QEMU model supports it.
+CPU_MODEL=max,la57=off
 if [ "$ACCEL" = "kvm" ]; then
-	CPU_MODEL=host
+	CPU_MODEL=host,la57=off
 fi
 
 QEMU_ARGS=(
-	qemu-system-x86_64
+	"$(realpath -e "$(command -v qemu-system-x86_64)")"
 	-accel "$ACCEL"
-	-machine q35
+	# With graphics disabled SeaBIOS redirects its own output to ttyS0, so an
+	# empty serial log proves failure before the Rocky kernel console starts.
+	-machine q35,graphics=off
 	-cpu "$CPU_MODEL"
 	-smp "$CPUS"
 	-m "$MEMORY"
 	-no-reboot
 	-display none
 	-serial "file:$SERIAL_LOG"
+	-chardev "file,id=mckdebug,path=$DEBUGCON_LOG"
+	-device "isa-debugcon,iobase=0xe9,chardev=mckdebug"
+	-qmp "unix:$QMP_SOCKET,server=on,wait=off"
 	-pidfile "$PIDFILE"
 	-daemonize
-	-drive "if=virtio,file=$OVERLAY,format=qcow2,cache=unsafe"
-	-drive "if=virtio,file=$SEED,format=raw,media=cdrom,readonly=on"
-	-nic "user,model=virtio-net-pci,hostfwd=tcp:127.0.0.1:${SSH_PORT}-:22"
+	-drive "if=none,id=rocky_os,file=$OVERLAY,format=qcow2,cache=unsafe"
+	-device "virtio-blk-pci,drive=rocky_os,bootindex=1"
+	# NoCloud only needs a CIDATA-labelled block device.  virtio-blk does not
+	# support non-disk devices, so expose the read-only seed as a disk rather
+	# than requesting an unsupported virtio CD-ROM.
+	-drive "if=none,id=cloud_seed,file=$SEED,format=raw,readonly=on"
+	-device "virtio-blk-pci,drive=cloud_seed,bootindex=2"
+	-nic "user,restrict=on,model=virtio-net-pci,hostfwd=tcp:127.0.0.1:${SSH_PORT}-:22"
 )
 
 if [ "$PAUSE_AT_RESET" -eq 1 ]; then
@@ -475,10 +888,23 @@ if [ -n "$KERNEL_IMAGE" ]; then
 	fi
 fi
 
+acquire_heavy_operation
+if [ "$DRY_RUN" -eq 1 ]; then mkdir -p "$LOG_DIR"; fi
+prepare_guest
+
 printf '%s\n' "Log directory: $LOG_DIR"
 printf '%s\n' "Serial log: $SERIAL_LOG"
+printf '%s\n' "Debugcon log: $DEBUGCON_LOG"
+printf '%s\n' "QEMU startup log: $STARTUP_LOG"
+printf '%s\n' "QMP status log: $QMP_LOG"
 printf '%s\n' "Overlay: $OVERLAY"
+printf '%s\n' "Backing image format: $BASE_FORMAT"
+if [ -n "$DISK_SIZE" ]; then
+	printf '%s\n' "Overlay virtual size: $DISK_SIZE"
+fi
 printf '%s\n' "QEMU accel: $ACCEL"
+printf '%s\n' "QEMU cpu model: $CPU_MODEL"
+printf '%s\n' "$CPU_MODEL" > "$CPU_MODEL_FILE"
 if [ "$PAUSE_AT_RESET" -eq 1 ]; then
 	printf '%s\n' "QEMU pause-at-reset: enabled"
 fi
@@ -494,6 +920,57 @@ fi
 
 say "Starting guest"
 "${QEMU_ARGS[@]}"
+
+if [ ! -s "$PIDFILE" ]; then
+	echo "error: QEMU did not create a nonempty pidfile: $PIDFILE" >&2
+	exit 1
+fi
+qemu_started_pid="$(cat "$PIDFILE")"
+case "$qemu_started_pid" in
+	''|*[!0-9]*)
+		echo "error: QEMU wrote an invalid PID: $qemu_started_pid" >&2
+		exit 1
+		;;
+esac
+if ! heavy_helper '' register "$LOG_DIR" "$qemu_started_pid"; then
+	echo "error: started QEMU PID $qemu_started_pid failed identity verification" >&2
+	exit 1
+fi
+QEMU_STARTTIME="$(proc_starttime "$qemu_started_pid")" || {
+	echo "error: QEMU starttime is unreadable; retaining heavy-operation lock" >&2
+	exit 1
+}
+printf '%s\n' "$qemu_started_pid" >"$STARTED_PIDFILE"
+printf 'Verified QEMU startup PID: %s\n' "$qemu_started_pid"
+
+if [ "$PAUSE_AT_RESET" -eq 0 ]; then
+	record_qemu_process_sample start "$qemu_started_pid"
+	record_qmp_status start
+	for _ in $(seq 1 12); do
+		sleep 5
+		if ! qemu_pid_is_owned "$qemu_started_pid"; then
+			record_qemu_process_sample exited "$qemu_started_pid" || true
+			record_qmp_status exited
+			echo "error: guest exited before producing firmware serial output" >&2
+			print_serial_tail
+			exit 1
+		fi
+		if [ -s "$SERIAL_LOG" ]; then
+			break
+		fi
+	done
+	record_qemu_process_sample preflight "$qemu_started_pid"
+	record_qmp_status preflight
+	if [ ! -s "$SERIAL_LOG" ]; then
+		echo "error: guest produced no SeaBIOS/Rocky serial output within 60s" >&2
+		echo "startup diagnostics: $STARTUP_LOG" >&2
+		echo "QMP diagnostics: $QMP_LOG" >&2
+		exit 1
+	fi
+	printf 'QEMU firmware serial preflight: PASS\n'
+else
+	printf 'QEMU firmware serial preflight: skipped (pause-at-reset)\n'
+fi
 
 SSH_ARGS=(
 	-F /dev/null
@@ -518,7 +995,17 @@ until ssh "${SSH_ARGS[@]}" true >/dev/null 2>&1; do
 		print_serial_tail
 		exit 1
 	fi
+	if grep -Fq 'No bootable device.' "$SERIAL_LOG" 2>/dev/null; then
+		record_qemu_process_sample firmware-boot-failure "$qemu_started_pid" || true
+		record_qmp_status firmware-boot-failure
+		echo 'error: guest firmware reported that no bootable device exists' >&2
+		echo "serial log: $SERIAL_LOG" >&2
+		print_serial_tail
+		exit 1
+	fi
 	if [ "$SECONDS" -ge "$deadline" ]; then
+		record_qemu_process_sample ssh-timeout "$qemu_started_pid" || true
+		record_qmp_status ssh-timeout
 		echo "error: guest SSH did not become ready within ${TIMEOUT}s" >&2
 		echo "serial log: $SERIAL_LOG" >&2
 		print_serial_tail
@@ -544,16 +1031,21 @@ if [ -n "$GUEST_CMD" ]; then
 	say "Running guest command"
 	set +e
 	if [ "$GUEST_CMD_TIMEOUT" -gt 0 ]; then
-		timeout --foreground "$GUEST_CMD_TIMEOUT" \
+		timeout --signal=TERM --kill-after=5s "$GUEST_CMD_TIMEOUT" \
 			ssh "${SSH_ARGS[@]}" "$GUEST_CMD" >"$GUEST_CMD_LOG" 2>&1
 	else
 		ssh "${SSH_ARGS[@]}" "$GUEST_CMD" >"$GUEST_CMD_LOG" 2>&1
 	fi
 	rc=$?
+	command_rc=$rc
 	set -e
 	cat "$GUEST_CMD_LOG"
-	if [ "$rc" -eq 124 ] && [ "$GUEST_CMD_TIMEOUT" -gt 0 ]; then
-		echo "error: guest command exceeded the ${GUEST_CMD_TIMEOUT}s watchdog" >&2
+	evidence_rc=0
+	collect_guest_evidence || evidence_rc=$?
+	if { [ "$rc" -eq 124 ] || [ "$rc" -eq 137 ]; } &&
+		[ "$GUEST_CMD_TIMEOUT" -gt 0 ]
+	then
+		echo "error: guest command exceeded the ${GUEST_CMD_TIMEOUT}s watchdog (status ${rc})" >&2
 		echo "serial log: $SERIAL_LOG" >&2
 		print_serial_tail
 		exit "$rc"
@@ -563,6 +1055,10 @@ if [ -n "$GUEST_CMD" ]; then
 		echo "serial log: $SERIAL_LOG" >&2
 		print_serial_tail
 		exit "$rc"
+	fi
+	if [ "$evidence_rc" -ne 0 ]; then
+		echo "error: guest command passed but evidence collection failed with status $evidence_rc" >&2
+		exit "$evidence_rc"
 	fi
 fi
 

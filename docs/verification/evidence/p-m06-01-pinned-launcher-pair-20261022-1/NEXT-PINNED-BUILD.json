@@ -1,0 +1,107 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "WAITING_FOR_FRESH_DISPATCHER_RELEASE_AND_CAPACITY",
+  "source_preparation_review": {
+    "status": "PASS_SOURCE_PREPARATION_ONLY",
+    "authority_path": "/home/holden/mckernel-work/host-preparation/p-m06-01-pinned-launcher-process-inputs-20261022-1/RETAINED-INDEPENDENT-PAIRED-SOURCE-REVIEW-EVENT-1.json",
+    "sha256": "844214a4b4c9b051bf81b2ed1bba09ef74d2e0c2a0763d82fdde0016c74b3475",
+    "event_at": "2026-10-22T17:44:51.437815+00:00",
+    "metadata_precedence": "Retained independent review event is additive authority after frozen REVIEW_REQUIRED manifests. No original metadata rewritten."
+  },
+  "authority_request_data": "/home/holden/mckernel-work/host-preparation/p-m06-01-pinned-launcher-process-inputs-20261022-1/terminal-correction-1/PINNED-LAUNCHER-REQUEST-DATA.json",
+  "production_target_argv": [
+    "/usr/bin/cmake",
+    "--build",
+    "/work/output/build",
+    "--target",
+    "mcexec",
+    "-j1"
+  ],
+  "owner_argv_after_materialization_only": [
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/p-m06-01-pinned-launcher-process-inputs-20261022-1/terminal-correction-1/launcher_only_container_owner.py",
+    "/home/holden/mckernel-work/host-preparation/p-m06-01-pinned-launcher-process-inputs-20261022-1/terminal-correction-1/pinned-launcher-request.json"
+  ],
+  "production_driver_argv": [
+    "/driver.py",
+    "--source-root",
+    "/src",
+    "--candidate-sha",
+    "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+    "--ihk-sha",
+    "3114d9e7101ad52030eb3effa849a5c108972a1f",
+    "--manifest",
+    "/inputs.json",
+    "--toolchain",
+    "/toolchain.json",
+    "--output",
+    "/work/output",
+    "--evidence",
+    "/work/evidence",
+    "--jobs",
+    "1",
+    "--timeout",
+    "19800",
+    "--gitlink-manifest",
+    "/libdwarf-inputs.json",
+    "--native-fork-owned-transaction"
+  ],
+  "pinned_toolchain": {
+    "base_image": "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5",
+    "platform": "Rocky Linux",
+    "clang": "21.1.8",
+    "rustc": "rustc 1.95.0-nightly (c04308580 2026-02-18)",
+    "manifest": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/image-toolchain.json",
+    "manifest_sha256": "a68e02b3b66b8bfbae96bf742dc8702b6e81dd97b92189b87437c3d08fccdf72"
+  },
+  "required_fresh_late_binding": {
+    "pinned_launcher_request": null,
+    "source_identity_fresh_readback": null,
+    "retained_build_identity_fresh_readback": null,
+    "latest_physical_predecessor": null,
+    "independent_exact_execution_release": null,
+    "resource_grant": null,
+    "capacity_headroom": null,
+    "disk_admission": null,
+    "shared_heavy_entry": null,
+    "common_exclusion": null,
+    "lease": null,
+    "runtime_owner_nonce": null,
+    "actual_container_identity": null,
+    "build_receipt": null,
+    "artifact_acceptance": null
+  },
+  "profile": {
+    "cpus": "2-5",
+    "cpu_count": 4,
+    "memory_bytes": 12884901888,
+    "memory_swap_bytes": 12884901888,
+    "pids": 512,
+    "network": "none",
+    "jobs": 1
+  },
+  "capacity_context": {
+    "full_SDK68_gate_shortfall_bytes_reported_by_dispatcher": 572022784,
+    "fresh_measurement_performed_here": false,
+    "reserve576_approval": null,
+    "reserve_mutation_authorized": false,
+    "preserve_host_free_floor_bytes": 17179869184,
+    "preserve_scratch_free_floor_bytes": 12884901888,
+    "scratch_uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52",
+    "full_growth_and_capture_headroom_required": true
+  },
+  "new_request_rules": [
+    "Do not invoke copied owner as an execution release. Retain authority paths from the accepted request-data; publication copies are archival.",
+    "Check candidate attempt namespace is unused before materialization; use a fresh attempt name if it is occupied. Never overwrite/reuse a previous attempt.",
+    "Do not copy historical disk admission, resource grants, ownership nonces, physical observation or leases into new request.",
+    "Dispatcher must reconcile current_live_postjoin observer entry, live identities, heavy lease and positive predecessor retirement before any new release.",
+    "Bind exact accepted source pair, current source authority9901615a, retained production build identity, and pinned toolchain in the new request.",
+    "Require independent exact execution release after fresh full capacity/resource/isolation checks.",
+    "Capture actual target command exit, whole terminal result and six artifacts, unique providers/undefined-reference checks, exact source bindings and teardown. Production/native acceptance requires its own evidence."
+  ],
+  "build_executed": false,
+  "native_acceptance": false,
+  "practical_check_acceptance": false
+}

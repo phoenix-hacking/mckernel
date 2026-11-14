@@ -1,0 +1,191 @@
+--- frozen-ack-candidate.rs
++++ private-ownership-candidate.rs
+@@ -260,6 +260,8 @@
+         count: c_ulong,
+     ) -> c_int;
+     fn bfd_close(abfd: *mut Bfd) -> c_int;
++    // Exact selected binutils2.41-63 bfd.h: bool bfd_close_all_done(bfd *).
++    fn bfd_close_all_done(abfd: *mut Bfd) -> bool;
+ }
+ 
+ #[no_mangle]
+@@ -600,6 +602,81 @@
+ #[cfg(ldump2_full_body)]
+ pub unsafe extern "C" fn ldump2mcdump_fini() {}
+ 
++// Project-owned temporary allocations are scoped to their live users.
++#[cfg(ldump2_full_body)]
++struct OwnedAllocation(*mut c_void);
++
++#[cfg(ldump2_full_body)]
++impl OwnedAllocation {
++    unsafe fn allocate(size: usize) -> Self { Self(malloc(size)) }
++    fn as_ptr(&self) -> *mut c_void { self.0 }
++}
++
++#[cfg(ldump2_full_body)]
++impl Drop for OwnedAllocation {
++    fn drop(&mut self) {
++        if !self.0.is_null() {
++            unsafe { free(core::mem::replace(&mut self.0, null_mut())); }
++        }
++    }
++}
++
++// BFD borrows names until terminal teardown. Private prefixes own these blocks;
++// no public dump layout or allocator boundary changes.
++#[repr(C)]
++#[cfg(ldump2_full_body)]
++struct OwnedSectionName { next: *mut OwnedSectionName, bytes: [c_char; PHYSMEM_NAME_SIZE] }
++
++#[cfg(ldump2_full_body)]
++struct OwnedSectionNames { head: *mut OwnedSectionName }
++
++#[cfg(ldump2_full_body)]
++impl OwnedSectionNames {
++    fn new() -> Self { Self { head: null_mut() } }
++    unsafe fn allocate(&mut self) -> *mut c_char {
++        let item = malloc(size_of::<OwnedSectionName>()).cast::<OwnedSectionName>();
++        if item.is_null() { return null_mut(); }
++        (*item).next = self.head;
++        self.head = item;
++        addr_of_mut!((*item).bytes).cast::<c_char>()
++    }
++}
++
++#[cfg(ldump2_full_body)]
++impl Drop for OwnedSectionNames {
++    fn drop(&mut self) {
++        unsafe {
++            while !self.head.is_null() {
++                let item = self.head;
++                self.head = (*item).next;
++                free(item.cast::<c_void>());
++            }
++        }
++    }
++}
++
++#[cfg(ldump2_full_body)]
++struct OwnedBfd { handle: *mut Bfd }
++
++#[cfg(ldump2_full_body)]
++impl OwnedBfd {
++    unsafe fn finish(&mut self) -> c_int {
++        // Selected bfd_close consumes the handle even on FALSE. Disarm first.
++        bfd_close(core::mem::replace(&mut self.handle, null_mut()))
++    }
++}
++
++#[cfg(ldump2_full_body)]
++impl Drop for OwnedBfd {
++    fn drop(&mut self) {
++        if !self.handle.is_null() {
++            // Earlier errors do not finalize pending output. Selected
++            // close_all_done unconditionally deletes BFD, including FALSE.
++            unsafe { let _ = bfd_close_all_done(core::mem::replace(&mut self.handle, null_mut())); }
++        }
++    }
++}
++
+ #[cfg(ldump2_full_body)]
+ unsafe fn read_or_return(addr: c_ulong, buf: *mut c_void, size: usize, flags: c_ulong) -> c_int {
+     readmem(
+@@ -636,7 +713,8 @@
+         }
+         let ihk_dump_page = ihk_dump_page.assume_init();
+         let map_size = size_of::<c_ulong>().wrapping_mul(ihk_dump_page.map_count as usize);
+-        let map_buf = malloc(map_size).cast::<c_ulong>();
++        let map_owner = OwnedAllocation::allocate(map_size);
++        let map_buf = map_owner.as_ptr().cast::<c_ulong>();
+         if map_buf.is_null() {
+             perror(cstr(ALLOC_MEM_BUFFER));
+             return -1;
+@@ -649,7 +727,6 @@
+             map_size,
+             FAULT_ON_ERROR,
+         ) != TRUE {
+-            free(map_buf.cast::<c_void>());
+             return -1;
+         }
+ 
+@@ -666,7 +743,7 @@
+             )
+         };
+ 
+-        free(map_buf.cast::<c_void>());
++        drop(map_owner);
+ 
+         if count_only {
+             if chunk_count < 0 || chunk_count > c_int::MAX - total {
+@@ -770,7 +847,8 @@
+ 
+     let mem_size = size_of::<DumpMemChunks>()
+         .wrapping_add(size_of::<DumpMemChunk>().wrapping_mul(mem_num as usize));
+-    mem_chunks = malloc(mem_size).cast::<DumpMemChunks>();
++    let chunks_owner = OwnedAllocation::allocate(mem_size);
++    mem_chunks = chunks_owner.as_ptr().cast::<DumpMemChunks>();
+     if mem_chunks.is_null() {
+         perror(cstr(ALLOC_MEM_BUFFER));
+         return;
+@@ -789,7 +867,6 @@
+         size_of::<c_ulong>(),
+         FAULT_ON_ERROR,
+     ) != TRUE {
+-        free(mem_chunks.cast::<c_void>());
+         return;
+     }
+     (*mem_chunks).kernel_base = bootstrap_mem
+@@ -806,19 +883,23 @@
+     let _ = phys_size;
+ 
+     let bsize: usize = 0x100000;
+-    buf = malloc(bsize);
++    let payload_owner = OwnedAllocation::allocate(bsize);
++    buf = payload_owner.as_ptr();
+     if buf.is_null() {
+         perror(cstr(ALLOC_MALLOC));
+         return;
+     }
+ 
+     bfd_init();
++    // Declaration order keeps borrowed names alive through BFD teardown.
++    let mut section_names = OwnedSectionNames::new();
+     abfd = bfd_fopen(
+         addr_of_mut!(PATH).cast::<c_char>(),
+         null(),
+         cstr(b"w\0"),
+         -1,
+     );
++    let mut bfd_owner = OwnedBfd { handle: abfd };
+     if abfd.is_null() {
+         bfd_perror(cstr(BFD_FOPEN));
+         return;
+@@ -902,7 +983,7 @@
+ 
+     i = 0;
+     while i < (*mem_chunks).nr_chunks as usize {
+-        let physmem_name_buf = malloc(PHYSMEM_NAME_SIZE).cast::<c_char>();
++        let physmem_name_buf = section_names.allocate();
+         if physmem_name_buf.is_null() {
+             perror(cstr(ALLOC_MALLOC));
+             return;
+@@ -1036,13 +1117,15 @@
+         i += 1;
+     }
+ 
+-    if bfd_close(abfd) == 0 {
++    if bfd_owner.finish() == 0 {
+         bfd_perror(cstr(BFD_CLOSE));
+         return;
+     }
+ 
+-    free(buf);
+-    free(mem_chunks.cast::<c_void>());
++    drop(bfd_owner);
++    drop(section_names);
++    drop(payload_owner);
++    drop(chunks_owner);
+     if conversion_complete {
+         if fprintf(
+             fp,

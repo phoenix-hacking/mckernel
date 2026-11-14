@@ -1,0 +1,51 @@
+--- controller.original.c
++++ controller.c
+@@ -859,6 +859,40 @@
+     return false;
+ }
+ 
++/* Quarantine inventory starts after the actual launcher has finished closing
++ * its descriptors. Hold it WNOWAIT through both physical snapshots so its PID
++ * cannot be recycled; this is not proof that native retained owners are safe. */
++static bool owner_terminal_launcher_waitable(void)
++{
++    active_phase = "OWNER_TERMINAL";
++    uint64_t deadline = input_ns + UINT64_C(15000) * NS_PER_MS;
++    if (deadline > overall_deadline) deadline = overall_deadline;
++    while ((!launcher_done || !streams[0].eof || !streams[1].eof) && before(deadline)) pump(5);
++    if (!before(deadline)) return false;
++    uint64_t ticks;
++    if (!task_ticks(launcher, launcher, &ticks)) {
++        fail("owner-terminal-launcher-identity", errno); return false;
++    }
++    if (ticks != launcher_ticks) {
++        fail("owner-terminal-launcher-identity", ESTALE); return false;
++    }
++    siginfo_t si;
++    memset(&si, 0, sizeof si);
++    if (waitid(P_PID, (id_t)launcher, &si, WEXITED | WNOHANG | WNOWAIT) < 0) {
++        fail("owner-terminal-waitid", errno); return false;
++    }
++    event("\"event\":\"owner-terminal-waitid\",\"pid\":%d,\"si_code\":%d,\"si_status\":%d,\"stdout_eof\":%s,\"stderr_eof\":%s,\"deadline_ns\":%" PRIu64,
++          si.si_pid, si.si_code, si.si_status, streams[0].eof ? "true" : "false",
++          streams[1].eof ? "true" : "false", deadline);
++    if (!before(deadline)) return false;
++    if (si.si_pid != launcher || (si.si_code != CLD_EXITED && si.si_code != CLD_KILLED && si.si_code != CLD_DUMPED) ||
++        launcher_reaped || launcher_kill_sent || !streams[0].eof || !streams[1].eof ||
++        streams[0].sink.truncated || streams[1].sink.truncated) {
++        fail("owner-terminal-launcher-not-finished", EPROTO); return false;
++    }
++    return true;
++}
++
+ static bool owner_normal_completion(void)
+ {
+     active_phase = "NATURAL_COMPLETION";
+@@ -942,6 +976,7 @@
+     active_phase = "OBSERVE_RET";
+     if (guest && !observe_return()) goto cleanup;
+     if (owner_guest) {
++        if (terminal_mode && !owner_terminal_launcher_waitable()) goto cleanup;
+         if (!terminal_mode && !owner_normal_completion()) goto cleanup;
+         if (!collect_owner_phase(terminal_mode ? OP_TERMINAL : OP_RECOVERY,
+                                  terminal_mode ? "OWNER_TERMINAL" : "OWNER_RECOVERY")) goto cleanup;

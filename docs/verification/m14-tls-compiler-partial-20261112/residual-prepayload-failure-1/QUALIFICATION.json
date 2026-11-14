@@ -1,0 +1,133 @@
+{
+  "schema": "mckernel.TLS.residual-failed-preaction-only-new768mib-independent-qualification.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/m15_installed_leaf_review; independent explicit gpt-6.1-sol/MAX; depth1/no recursion",
+  "qualified_at_utc": "2026-11-12T21:23:15.001Z",
+  "decision": "PASS_RESIDUAL_PRE_POPEN_FAILURE_ONLY_NEW805306368B_JOB1_RETIREMENT_ELIGIBLE",
+  "retirement_eligibility": {
+    "eligible": true,
+    "sole_owner": "/root",
+    "only_new_bytes": 805306368,
+    "only_new_jobs": 1,
+    "CPU": [
+      0
+    ],
+    "new_parent_capture_extra_bytes": 0,
+    "only_family": "This exact residual6d0b/728d/7098/e81bd3 attempt; parent256MiB +largest serial child512MiB planning is one768MiB family.",
+    "actual_Root_scoped_receipt_required": true,
+    "retirement_performed_by_reviewer": false
+  },
+  "actual_evidence": {
+    "original_initial": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-TLS-arch-prctl-source-1/protected-host-packet-1/owner-custody-boundary-correction-1/collector-static-provider-residual-1/ROOT-ACTUAL-EXECUTION-1/ROOT-TOOL-INITIAL.json",
+      "bytes": 1365,
+      "sha256": "9569c8184e2434c233d86931afe0cd9f7df06becdf376b9cb1bffe6890726346"
+    },
+    "original_final": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-TLS-arch-prctl-source-1/protected-host-packet-1/owner-custody-boundary-correction-1/collector-static-provider-residual-1/ROOT-ACTUAL-EXECUTION-1/ROOT-TOOL-FINAL.json",
+      "bytes": 1365,
+      "sha256": "9569c8184e2434c233d86931afe0cd9f7df06becdf376b9cb1bffe6890726346"
+    },
+    "actual_capture_source": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-TLS-arch-prctl-source-1/protected-host-packet-1/owner-custody-boundary-correction-1/collector-static-provider-residual-1/capture_root_once.py",
+      "bytes": 5897,
+      "sha256": "8bb57e6a27b1106188f1e94b1099d7ed36a7481dbb96e04419ca08860f9dc3d6"
+    },
+    "request": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-TLS-arch-prctl-source-1/protected-host-packet-1/owner-custody-boundary-correction-1/collector-static-provider-residual-1/REQUEST.FROZEN.json",
+      "bytes": 36482,
+      "sha256": "6d0b075cf24df5d66b474a170eb389ed078a8fd4f7ed80a28e1b288c43959298"
+    },
+    "declared31_schema": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-TLS-arch-prctl-source-1/protected-host-packet-1/owner-custody-boundary-correction-1/collector-static-provider-residual-1/ADMISSION-SCHEMA.UNISSUED.json",
+      "bytes": 4853,
+      "sha256": "1e0de914af8fdc4f43370ca39874d7008dd25ccb87f924a3495377372dcf70b4"
+    },
+    "actual_used31_grant": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-TLS-arch-prctl-source-1/protected-host-packet-1/owner-custody-boundary-correction-1/collector-static-provider-residual-1/ROOT-ADMISSION.UNISSUED.json",
+      "bytes": 7386,
+      "sha256": "7098fca938c955549ee611ebfc14e5d56de9dea8fec9f160e615f79f66445ee4"
+    },
+    "independent_operation_review": {
+      "bytes": 11385,
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-TLS-arch-prctl-source-1/protected-host-packet-1/owner-custody-boundary-correction-1/collector-static-provider-residual-1/independent-operation-review-1/OPERATION-REVIEW.json",
+      "sha256": "728d7f061cf5c1e2c5f30ec4b0ed3f7d84284dab436e1ae32e0ac31dabb2abd6"
+    }
+  },
+  "actual_original_outcome": {
+    "chunk": "e81bd3",
+    "exit_code": 1,
+    "no_session": true,
+    "initial_equals_final_same_already_terminal_response": true,
+    "no_second_wait_or_reissue": true,
+    "raw_primary_error": "KeyError: 'no_exclusive_other_owner_scope'",
+    "raw_traceback_preserved": true
+  },
+  "exact_failure_boundary": {
+    "file": "/home/holden/mckernel-work/resume-20261112T094452Z-TLS-arch-prctl-source-1/protected-host-packet-1/owner-custody-boundary-correction-1/collector-static-provider-residual-1/capture_root_once.py",
+    "line": 50,
+    "expression": "grant['charge']==q['charge'] and grant['no_exclusive_other_owner_scope'] is True",
+    "declared_admission_fields": 31,
+    "actual_grant_fields": 31,
+    "actual_and_declared_sets_equal": true,
+    "required_lookup_omitted_from_both": true,
+    "actual_charge_matches_frozen_request": true,
+    "earlier_checks_passed": "Request/source/review/CAPTURE hashes, CPU0, actual grant hash, exact31-key membership, request and review-reference equality passed before the missing-key lookup.",
+    "later_unreached_steps": [
+      "capture source52 OUT.exists/OUT.mkdir(root-capture-1)",
+      "source55 selected E088 call definition and source56-59 Root-parent argv/save/call",
+      "run_root_once.py main/Owner/Docker/HOST compiler/passive producer and all target artifact actions"
+    ],
+    "no_Popen_or_subordinate_Root_parent_created_by_attempt": true,
+    "no_child_or_root_capture_created_by_attempt": true,
+    "no_HOST_output_or_passive_output_created_by_attempt": true,
+    "directory_fact_scope": "Source execution stops before the first output-root mkdir and before any parent/child invocation. Root also reports the four output roots absent. This reviewer performed no directory/proc/Docker probe and does not invent a fresh filesystem observation.",
+    "source_input_descriptor_basis": "The only reached reads are pathlib.read_bytes/stat/hash and selected qualified keeper function-definition materialization; those readers close normally. pending_calls starts empty, no E088 call occurs, and the completed original Python tool exits1, closing its own remaining process/stream lifetime. No child lifecycle/capture receipt is fabricated for a Popen that never occurred."
+  },
+  "historical_cleanup_separation": {
+    "earlier_cleanup_Q": "32b50d0f0c52bdaa2a17654f2bd346f6394a2cf4ee36714457bd7c93cfe20a75",
+    "Root_previous_cleanup_receipt_prefix": "d774507e",
+    "previous_retirement": "Only oldTLS603979776B/job1 plus cleanup201326592B/job1, combined805306368B/twojobs, was retired earlier. That equal numerical byte sum is a different scope from this new805306368B/onejob attempt.",
+    "no_double_retirement_of_old_TLS_or_cleanup": true,
+    "previous_actual_cleanup_receipt_ref": {
+      "bytes": 2400,
+      "dev": 66306,
+      "gid": 1000,
+      "inode": 2255230,
+      "mode": "0o600",
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-TLS-arch-prctl-source-1/protected-host-packet-1/owner-custody-boundary-correction-1/terminal-container-cleanup-1/affinity-guard-correction-1/ROOT-CURRENT-RETIREMENT.TLS-TERMINAL-CLEANUP-ONLY.json",
+      "resolved": "/home/holden/mckernel-work/resume-20261112T094452Z-TLS-arch-prctl-source-1/protected-host-packet-1/owner-custody-boundary-correction-1/terminal-container-cleanup-1/affinity-guard-correction-1/ROOT-CURRENT-RETIREMENT.TLS-TERMINAL-CLEANUP-ONLY.json",
+      "sha256": "d774507e5a224ed5019d0b0e29f7938892d0007971955331a8bdc62585eb6135",
+      "uid": 1000
+    },
+    "original_TLS_first3_material_and_failed_fourth_raw_evidence_unchanged": true
+  },
+  "next_bounded_correction": {
+    "owners": "Already assigned proc_vm_index_fix author and native_current_binding independent reviewer under Root",
+    "action": "Preserve exact failed31 schema/grant/source/review and e81bd3 raw error. Reconcile the complete actually consumed field union across capture, parent, declared schema and actual Root grant. Retain the actual no-exclusive-other-owner predicate and all genuine guards; do not default missing facts to true or weaken equality checks. Freeze the bounded successor, independent operation review and genuinely fresh grant before one meaningful changed-input issue.",
+    "implementation_or_replay_by_this_reviewer": false,
+    "unchanged_retry_authorized": false
+  },
+  "findings": [],
+  "missing_preaction_lifetime_closure_inputs": [],
+  "preserved": {
+    "Root_thread_id": "01a18bc3-e072-7810-9426-75101b0856c0",
+    "invocation": "invocation20261112T094452Z-12a4bea0",
+    "same_Root_finite_credit_run_id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+    "private_budget_unchanged_without_amount": true,
+    "M14_before_M15": true,
+    "native12_source_service_account_resource_globalUNKNOWN_raw621_c309_normallease_partialinstall_unchanged": true
+  },
+  "excluded_rejected_task": {
+    "replay_rephrasing_reassignment": "EXCLUDED",
+    "task": "signal/frame/xstate collector request",
+    "turn": "01a1ce01-20cf-7e03-9442-f6d521fb8b02",
+    "worker": "01a1c48d-4d96-7cc3-b733-73a97973152f"
+  },
+  "compiler_Docker_native_or_original_acceptance_credit": false,
+  "reviewer_actions": "Read only exact saved public source/request/schema/grant/tool/error bytes and their metadata; wrote only this assigned private failure qualification. No tool/Docker/compiler/parser/helper/collection/proc/live/native action, source correction, new nonce, private account/RootRAW read or resource mutation.",
+  "next_action": {
+    "owner": "/root",
+    "action": "Record only this new residual805306368B/job1 failed-preaction retirement after consuming Q; continue the existing bounded source/schema correction through independent review and actual fresh admission."
+  }
+}

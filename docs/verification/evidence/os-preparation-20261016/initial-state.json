@@ -1,0 +1,2352 @@
+{
+  "at": "2026-10-17T02:14:18.304147+00:00",
+  "head": "42fde3aae0572022324fe9090793a5166059993b",
+  "branch": "codex/local-native-staging-repair",
+  "status": " M docs/verification/os-milestones-20260914/CONVERGENCE.md\n M docs/verification/os-milestones-20260914/HANDOFF.md\n M docs/verification/os-milestones-20260914/LAUNCH.md\n M docs/verification/os-milestones-20260914/START.md\n M ihk\n D scripts/__pycache__/rust-source-retirement-audit.cpython-36.pyc\n M scripts/application-tests/native_diagnostic_container_owner.py\n M scripts/os_goal_output.py\n M scripts/os_goal_resources.py\n M scripts/os_goal_windows.py\n M scripts/run_os_goal.py\n M scripts/tests/test_os_goal_launcher.py\n M scripts/tests/test_os_goal_resources.py\n M scripts/tests/test_os_goal_windows.py\n M scripts/tests/test_shutdown_cpu_reclaim.py\n M scripts/tests/test_shutdown_irq_close.py\n?? docs/verification/evidence/__pycache__/\n?? docs/verification/evidence/native-exact-build-cleanup-76ae20b5-disk-build-2.py\n?? docs/verification/evidence/native-exact-candidate-relocation-scratch1-20260930.sh\n?? docs/verification/evidence/native-exact-candidate-retention-cleanup-scratch1-20260930.sh\n?? docs/verification/evidence/native-exact-candidate-retention-preparation-76ae20b5-1.sh\n?? docs/verification/evidence/native-exact-candidate-retention-preparation-c81aeaca-scratch14-20261001.py\n?? docs/verification/evidence/native-exact-candidate-retirement-c81aeaca-scratch14-20261001.py\n?? docs/verification/evidence/native-exact-image-preparation-packet-scratch9-20260930.sh\n?? docs/verification/evidence/native-exact-tool-image-scratch17-toolimage-1-execution-release-20261001.py\n?? docs/verification/evidence/os-preparation-20261016/\n?? kernel/rust/tests/__pycache__/\n?? scripts/__pycache__/fp0006_executable_acceptance_closure.cpython-312.pyc\n?? scripts/__pycache__/fp0006_executable_acceptance_closure.cpython-38.pyc\n?? scripts/__pycache__/fp0006_executable_acceptance_closure.cpython-39.pyc\n?? scripts/__pycache__/fp0006_runtime_capture_integration.cpython-312.pyc\n?? scripts/__pycache__/fp0006_runtime_capture_integration.cpython-38.pyc\n?? scripts/__pycache__/fp0006_runtime_capture_integration.cpython-39.pyc\n?? scripts/__pycache__/ihk_device_registry_check.cpython-38.pyc\n?? scripts/__pycache__/ihk_device_registry_check.cpython-39.pyc\n?? scripts/__pycache__/ihk_ioctl_dispatch_check.cpython-39.pyc\n?? scripts/__pycache__/ihk_mapping_check.cpython-39.pyc\n?? scripts/__pycache__/ihk_native_lifecycle_check.cpython-38.pyc\n?? scripts/__pycache__/ihk_native_lifecycle_check.cpython-39.pyc\n?? scripts/__pycache__/ihk_native_queue_check.cpython-38.pyc\n?? scripts/__pycache__/ihk_native_queue_check.cpython-39.pyc\n?? scripts/__pycache__/ihk_os_registry_check.cpython-39.pyc\n?? scripts/__pycache__/ihk_os_runtime_check.cpython-39.pyc\n?? scripts/__pycache__/ihk_smp_native_lifecycle_check.cpython-312.pyc\n?? scripts/__pycache__/ihk_smp_native_lifecycle_check.cpython-39.pyc\n?? scripts/__pycache__/linux_api_exact_probe.cpython-312.pyc\n?? scripts/__pycache__/linux_api_exact_probe.cpython-39.pyc\n?? scripts/__pycache__/mcctrl_native_lifecycle_check.cpython-39.pyc\n?? scripts/__pycache__/mckernel_linked_text_ownership.cpython-39.pyc\n?? scripts/__pycache__/native_exact_candidate_deleted_inode_audit.cpython-38.pyc\n?? scripts/__pycache__/native_exact_candidate_deleted_inode_audit.cpython-39.pyc\n?? scripts/__pycache__/native_exact_candidate_placement_observer_20260929.cpython-312.pyc\n?? scripts/__pycache__/native_exact_candidate_placement_observer_20260929.cpython-38.pyc\n?? scripts/__pycache__/native_exact_candidate_placement_observer_20260929.cpython-39.pyc\n?? scripts/__pycache__/native_exact_candidate_retention_archive.cpython-38.pyc\n?? scripts/__pycache__/native_exact_candidate_retention_archive.cpython-39.pyc\n?? scripts/__pycache__/native_exact_candidate_retention_capsule.cpython-38.pyc\n?? scripts/__pycache__/native_exact_candidate_retention_capsule.cpython-39.pyc\n?? scripts/__pycache__/native_exact_candidate_retire.cpython-38.pyc\n?? scripts/__pycache__/native_exact_candidate_retire.cpython-39.pyc\n?? scripts/__pycache__/native_exact_candidate_retire_1c00d2b8.cpython-39.pyc\n?? scripts/__pycache__/native_exact_candidate_retire_704f.cpython-38.pyc\n?? scripts/__pycache__/native_exact_candidate_retire_704f.cpython-39.pyc\n?? scripts/__pycache__/native_exact_historical_lease_observer.cpython-39.pyc\n?? scripts/__pycache__/native_rust_build_surface_audit.cpython-312.pyc\n?? scripts/__pycache__/native_rust_build_surface_audit.cpython-39.pyc\n?? scripts/__pycache__/native_rust_current_image_postlink.cpython-38.pyc\n?? scripts/__pycache__/native_rust_current_image_postlink.cpython-39.pyc\n?? scripts/__pycache__/native_rust_exact_build_candidate_metadata.cpython-39.pyc\n?? scripts/__pycache__/native_rust_exact_build_container_owner.cpython-38.pyc\n?? scripts/__pycache__/native_rust_exact_build_container_owner.cpython-39.pyc\n?? scripts/__pycache__/native_rust_exact_build_image_prepare.cpython-38.pyc\n?? scripts/__pycache__/native_rust_exact_build_image_prepare.cpython-39.pyc\n?? scripts/__pycache__/native_rust_exact_build_image_rebind.cpython-38.pyc\n?? scripts/__pycache__/native_rust_exact_build_image_rebind.cpython-39.pyc\n?? scripts/__pycache__/native_rust_exact_build_image_rebind_probe.cpython-38.pyc\n?? scripts/__pycache__/native_rust_exact_build_image_rebind_probe.cpython-39.pyc\n?? scripts/__pycache__/native_rust_exact_build_input_manifest.cpython-39.pyc\n?? scripts/__pycache__/native_rust_exact_build_offline.cpython-38.pyc\n?? scripts/__pycache__/native_rust_exact_build_offline.cpython-39.pyc\n?? scripts/__pycache__/native_rust_exact_candidate_inventory.cpython-39.pyc\n?? scripts/__pycache__/native_rust_exact_candidate_prepare.cpython-39.pyc\n?? scripts/__pycache__/native_rust_exact_disk_build_wrapper.cpython-312.pyc\n?? scripts/__pycache__/native_rust_exact_disk_build_wrapper.cpython-38.pyc\n?? scripts/__pycache__/native_rust_exact_disk_build_wrapper.cpython-39.pyc\n?? scripts/__pycache__/native_rust_exact_mckernel_gitlink_prepare.cpython-39.pyc\n?? scripts/__pycache__/native_rust_exact_mckernel_image_container_owner.cpython-312.pyc\n?? scripts/__pycache__/native_rust_exact_mckernel_image_container_owner.cpython-38.pyc\n?? scripts/__pycache__/native_rust_exact_mckernel_image_container_owner.cpython-39.pyc\n?? scripts/__pycache__/native_rust_exact_mckernel_image_offline.cpython-38.pyc\n?? scripts/__pycache__/native_rust_exact_mckernel_image_offline.cpython-39.pyc\n?? scripts/__pycache__/native_rust_exact_mckernel_image_request_prepare.cpython-38.pyc\n?? scripts/__pycache__/native_rust_exact_mckernel_image_request_prepare.cpython-39.pyc\n?? scripts/__pycache__/native_rust_host_audit.cpython-312.pyc\n?? scripts/__pycache__/native_rust_host_audit.cpython-39.pyc\n?? scripts/__pycache__/native_rust_kbuild_link_closure.cpython-312.pyc\n?? scripts/__pycache__/native_rust_kbuild_link_closure.cpython-39.pyc\n?? scripts/__pycache__/native_rust_kconfig_policy.cpython-312.pyc\n?? scripts/__pycache__/native_rust_kconfig_policy.cpython-39.pyc\n?? scripts/__pycache__/native_rust_runtime_evidence.cpython-312.pyc\n?? scripts/__pycache__/native_rust_runtime_evidence.cpython-38.pyc\n?? scripts/__pycache__/native_rust_runtime_evidence.cpython-39.pyc\n?? scripts/__pycache__/native_rust_unsafe_ffi_ledger.cpython-39.pyc\n?? scripts/__pycache__/os_goal_output.cpython-39.pyc\n?? scripts/__pycache__/os_goal_resources.cpython-39.pyc\n?? scripts/__pycache__/os_goal_windows.cpython-39.pyc\n?? scripts/__pycache__/qemu_guest_heavy_v1.cpython-38.pyc\n?? scripts/__pycache__/qemu_guest_heavy_v1.cpython-39.pyc\n?? scripts/__pycache__/rocky_kernel_config_resolution_v2.cpython-312.pyc\n?? scripts/__pycache__/rocky_kernel_platform_lock_v2.cpython-312.pyc\n?? scripts/__pycache__/rocky_kernel_rk006_full_source_build_capture.cpython-312.pyc\n?? scripts/__pycache__/rocky_kernel_rk006_full_source_build_capture.cpython-38.pyc\n?? scripts/__pycache__/rocky_kernel_rk006_patch_authority.cpython-39.pyc\n?? scripts/__pycache__/rocky_rust_staging.cpython-312.pyc\n?? scripts/__pycache__/rocky_rust_staging.cpython-39.pyc\n?? scripts/__pycache__/rs006_miscdevice_module_owner_followup.cpython-312.pyc\n?? scripts/__pycache__/rs006_miscdevice_module_owner_followup.cpython-38.pyc\n?? scripts/__pycache__/rs006_miscdevice_module_owner_followup.cpython-39.pyc\n?? scripts/__pycache__/secondary_reset_build_supplement.cpython-312.pyc\n?? scripts/__pycache__/secondary_reset_build_supplement.cpython-38.pyc\n?? scripts/__pycache__/secondary_reset_build_supplement.cpython-39.pyc\n?? scripts/__pycache__/stable_core_tracker.cpython-38.pyc\n?? scripts/__pycache__/stable_core_tracker.cpython-39.pyc\n?? scripts/__pycache__/watch_os_goal.cpython-39.pyc\n?? scripts/application-tests/__pycache__/\n?? scripts/tests/__pycache__/\n?? scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/__pycache__/\n?? scripts/tests/test_native_exact_build_cleanup_76ae20b5_disk_build_2.py\n?? scripts/tests/test_native_exact_candidate_relocation_scratch1_20260930.py\n?? scripts/tests/test_native_exact_candidate_retention_cleanup_scratch1_20260930.py\n?? scripts/tests/test_native_exact_candidate_retention_preparation_76ae20b5.py\n?? scripts/tests/test_native_exact_candidate_retention_preparation_c81aeaca_scratch14_20261001.py\n?? scripts/tests/test_native_exact_candidate_retirement_c81aeaca_scratch14_20261001.py\n?? scripts/tests/test_native_exact_image_preparation_packet_scratch9_20260930.py\n?? scripts/tests/test_native_exact_tool_image_scratch17_toolimage_1_release_20261001.py\n",
+  "untracked_files": [
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-build-cleanup-76ae20b5-disk-build-2.cpython-39.pyc",
+      "size": 13507,
+      "sha256": "c35fe0ad5bb9941239f27eba530a071e7ed8c6ca4690017398d192e05d5950b9"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-archive-c658175a-scratch7-retry1-20260930.cpython-38.pyc",
+      "size": 10719,
+      "sha256": "c9980d830c7474cb1ad2b37d2e58f3d49617646922f5c7a36c9ce6534e363bb4"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-archive-c658175a-scratch7-retry1-20260930.cpython-39.pyc",
+      "size": 10725,
+      "sha256": "516d65aaf8f0247d062413e4a8de28e62d6a790a75fedb6654922134712f5d87"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-delete-68cf089a-1.cpython-39.pyc",
+      "size": 30730,
+      "sha256": "fd8086a32e928903fde12d74a45242057e36cf26a2d13495da7047b5b25a6d95"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-delta-preparation-scratch16-20261001.cpython-39.pyc",
+      "size": 19616,
+      "sha256": "41a8923fe91cb9cc3b15907e8b870d98912ec2e94909b1451dc4a5a508a0e3a5"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-delta-preparation-scratch17-20261001.cpython-39.pyc",
+      "size": 20226,
+      "sha256": "ef14b9b5e39ee1555b08667c9385ff36b2a2adb0d2308f509dab290f8a234971"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-delta-preparation-scratch18-20261001.cpython-39.pyc",
+      "size": 26457,
+      "sha256": "bbd21e0a995abbca6f475154db05ef2720d393e10e172e989703dac5217f743a"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-delta-preparation-scratch19-20261001.cpython-39.pyc",
+      "size": 3212,
+      "sha256": "e81454c2247445e293591f2a75abc6d6f46957eea455021d866fb964b7b30dfa"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-delta-preparation-scratch20-20261001.cpython-39.pyc",
+      "size": 2260,
+      "sha256": "d34ddfa986f58cb86c474920cf8b3edca54d7079d1a7b9ca6a078cbf63f11cfc"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-delta-preparation-scratch21-20261001.cpython-39.pyc",
+      "size": 3033,
+      "sha256": "a2f9d507be8e2e7bb7b4de3ef6a83a8638c40ae6d11501830da5233bdd5ef1a7"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-live-reference-observer-1c00d2b8-1.cpython-39.pyc",
+      "size": 22545,
+      "sha256": "cc69611c6228a5cdfe4c112422bda80ff1e6df9536df5a1eba7a32b774835fb4"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-live-reference-observer-67589154-1.cpython-38.pyc",
+      "size": 21547,
+      "sha256": "5d2100cfc5c676e88ed6ecdd0285fc7a3ebafae50849350e657ef7c2e0905505"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-live-reference-observer-67589154-1.cpython-39.pyc",
+      "size": 21507,
+      "sha256": "3348547a3acbebaff76497cdbbecc1e371c50bbd7357f483f5956b06abb7a42e"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-live-reference-observer-68cf089a-1.cpython-39.pyc",
+      "size": 15795,
+      "sha256": "0d2163f55bf9c0b8becf444a6a69290e9bbac7ddfb8bbda3875cc2d5d785c55b"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-live-reference-observer-68cf089a-2.cpython-39.pyc",
+      "size": 21207,
+      "sha256": "225ad5b5a5b249cbd9a028978301aacc7522a03a415131d400567f7582a81b60"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-live-reference-observer-704f6654-2.cpython-38.pyc",
+      "size": 21547,
+      "sha256": "3e7dee4bb137a2d2d179af3d684d82602df1481b0a24f281fa163c42a9446d0e"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-live-reference-observer-704f6654-2.cpython-39.pyc",
+      "size": 21507,
+      "sha256": "0e5b11886a0c7acbc47fa26efbd592f58e6768942ebe3ce81db3fe806bc17430"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-live-reference-observer-704f6654-3.cpython-38.pyc",
+      "size": 6968,
+      "sha256": "95f81307a3b9a4b7a470b80709324fcafddc5507540be24bf7ad8c213b4fdb8c"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-live-reference-observer-704f6654-3.cpython-39.pyc",
+      "size": 6964,
+      "sha256": "ec43d7bcb35ffb67e806ff0eab6a72885df3a9b56a22e807cdd703887c170f6e"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-live-reference-observer-76ae20b5-1.cpython-38.pyc",
+      "size": 33215,
+      "sha256": "96903f02f2435abb611bf6775c4762528d360408b7ffbc905b6690061047a99b"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-live-reference-observer-76ae20b5-1.cpython-39.pyc",
+      "size": 33154,
+      "sha256": "11d539b8fbdf9e7684976cc2f77dec4836421b9c92205c77efd5db3f545e50e8"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-quarantine-recover-68cf089a-1.cpython-39.pyc",
+      "size": 33016,
+      "sha256": "7a110569b01aac4e08c16de393d4b2ffb04bf8e214ecf75c3472450411ff8cf9"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-quarantine-recover-68cf089a-2.cpython-39.pyc",
+      "size": 24965,
+      "sha256": "eecae8dd66d668c4bc5d04a05995ac862f49746675f6bbc39466b0cb7c69f894"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-quarantine-recover-704f6654-1.cpython-38.pyc",
+      "size": 81183,
+      "sha256": "0446965e001e1d3a290d17b1c6e5b2ffe565d10bdc2af186df9cbf558bfc2c4d"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-quarantine-recover-704f6654-1.cpython-39.pyc",
+      "size": 81847,
+      "sha256": "7fce33394425d0ca72e2ea47501c996538e685f3010d7e083e6f7eaa93dc3f13"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-retention-preparation-67589154-1.cpython-38.pyc",
+      "size": 24463,
+      "sha256": "a8df127afde891587cc43949907a0d2015148ca664018d751094110a962d49ee"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-retention-preparation-67589154-1.cpython-39.pyc",
+      "size": 25041,
+      "sha256": "3d61dcd0cc8f3700cb783456020e0ed465957e63c510887cba39afd9a227d82a"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-retention-preparation-704f6654-1.cpython-38.pyc",
+      "size": 24972,
+      "sha256": "6e227c4ba431ef2c8b25085aa07935648637472d358d81f55979c24ff5c77185"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-retention-preparation-704f6654-1.cpython-39.pyc",
+      "size": 25041,
+      "sha256": "706a902abba13b9930a80d4fdf8e2bb5654739b1ace3ff7047936934a5af959f"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-retention-preparation-76ae20b5-2.cpython-39.pyc",
+      "size": 39271,
+      "sha256": "11ff8208df2ae720ced5fbecaa595b639c3fd82d36232ddcc5452cab5d43ad89"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-retention-preparation-9e5ab03d-1.cpython-39.pyc",
+      "size": 25178,
+      "sha256": "02f98d70e6c8a166a985945ac2567cada2fd9eb916f772094fb347981536bec0"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-retention-preparation-c81aeaca-scratch14-20261001.cpython-39.pyc",
+      "size": 6127,
+      "sha256": "7350d81f6f0541f4e949c8424648fe7a2262f687846a6d8a37d63e5b406814e7"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-retention-relocation-8b5056f8-20260930.cpython-38.pyc",
+      "size": 14149,
+      "sha256": "8e933b0a1127c8c5fab9ba93afbd0563124972b54bb0d5f2b8c4a9412c3dc4bb"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-retirement-1c00d2b8-1.cpython-39.pyc",
+      "size": 80915,
+      "sha256": "b353dfdf9877170016858ce4836b959d73311e8343a642091f801612372af395"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-retirement-67589154-1.cpython-38.pyc",
+      "size": 73907,
+      "sha256": "6b31cad71d0cd371939a455388e1aa70d75ccd59486fb6f475e9909dc9b19a35"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-retirement-67589154-1.cpython-39.pyc",
+      "size": 73950,
+      "sha256": "d516dd7cf354fae959ac691b50badac1f3875df881b1e05108573d71a5e2dd86"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-retirement-704f6654-1.cpython-38.pyc",
+      "size": 74830,
+      "sha256": "380d76610d1500cf9b11ebe4e4a40530e88dcdba7d1407fff0a4d3b0213c83a0"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-retirement-704f6654-1.cpython-39.pyc",
+      "size": 74877,
+      "sha256": "0173f31a77270eff95c0b60d4490b28088ac7b208b4f0e42d6b9da2944cb7eb9"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-retirement-704f6654-2.cpython-38.pyc",
+      "size": 75954,
+      "sha256": "27612bcda2f0351149a3ba3142a9ff2623181e9982fe83344174a6bc7edb948f"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-retirement-704f6654-2.cpython-39.pyc",
+      "size": 76003,
+      "sha256": "c181a21a2a6dd3ed8719e8de153e32760a6e8aa9135f11de34dc7dafe84e73e7"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-retirement-76ae20b5-1.cpython-39.pyc",
+      "size": 101674,
+      "sha256": "f8c8f5a06908bb27d88683fdc5e574efe9f460cee0e2f782d6a9dd0145c06ec3"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-retirement-c81aeaca-scratch14-20261001.cpython-39.pyc",
+      "size": 3195,
+      "sha256": "62095fef6780b235acd8f0ce604b14ce8a6a333b1d9474743693c8fe0395dded"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-retirement-postflight-76ae20b5-1.cpython-38.pyc",
+      "size": 27024,
+      "sha256": "5920bb8ba1ed69f1a30d3fd9d60f2d80a2b310ca436ba437e34c6559311a2e81"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-retirement-postflight-76ae20b5-1.cpython-39.pyc",
+      "size": 26746,
+      "sha256": "ef06328f8f6f9a69b62d0da1220d730ac8ba455e01a374c19595e82cbeec403c"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-scratch19-preparation-execution-wrapper-20261001.cpython-39.pyc",
+      "size": 4072,
+      "sha256": "04e2a5ebc3855eebb95bc8ad45248cb6c33d694764ae5b32c869e0d919d9fa91"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-scratch20-preparation-execution-wrapper-20261001.cpython-39.pyc",
+      "size": 3288,
+      "sha256": "d6b4d2e306f26c1287b835eccf6424d74c8be2ab1ae60f6b8537afefa3359ff2"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate-scratch21-preparation-execution-wrapper-20261001.cpython-39.pyc",
+      "size": 3779,
+      "sha256": "f2181ccd8efedf237dd797c5947deec67647131b1c8a91df6e6f1c7bbd9aba9b"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate12-planbound-cleanup-20260930.cpython-39.pyc",
+      "size": 71840,
+      "sha256": "c20f418f4b6561faf80a35851c1d86aab323793ed84ec158f4b487c8b0ee0f0b"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-candidate12-planbound-renameback-recovery-20260930.cpython-39.pyc",
+      "size": 16757,
+      "sha256": "35354216c785cbe72e3e0d607b68b0d21c75d49dc824772574ac44d4c4f0db62"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-export26-build-cleanup-20261001.cpython-39.pyc",
+      "size": 21269,
+      "sha256": "e9a4d4526e58e146b8668becb40f637ba80532cdcf79d85bcc2d39a5e5c5311b"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-f021bdee-evidence-archive-retirement-20260930.cpython-39.pyc",
+      "size": 11303,
+      "sha256": "5e8851c662c1a57322cd8168728c918433f42654078346b2b319adacede0c3d5"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-f021bdee-evidence-retirement-20260930.cpython-39.pyc",
+      "size": 14392,
+      "sha256": "f3a808940c76582b5cca323c59bf29310a8a6d1bd70fcdfd1d3ec00d0662304a"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-retained-candidate-43e9-evidence-cleanup-20260930.cpython-39.pyc",
+      "size": 6247,
+      "sha256": "149ddf9f3d0d27b68d504fc77334abde56d1a8ef16aed0c1dbcb0fc224a09fe5"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-retained-candidate-4e99a82c-source-evidence-cleanup-20260930.cpython-39.pyc",
+      "size": 9732,
+      "sha256": "bf2c2fe9894e339e13b43c730fbc0f67ebbfd4dd2169b86fddb176137d4a65fd"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-retained-candidate-61bfbb6c-evidence-cleanup-20260930.cpython-39.pyc",
+      "size": 6273,
+      "sha256": "102904c7304e410145b6cadf6a5a747e3b19e685f4c0c2c8038eae74b0131d1f"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-retained-candidate-63235981-evidence-cleanup-20260930.cpython-38.pyc",
+      "size": 5047,
+      "sha256": "4147df718fbbe1077a3aa268d99f0063c2fe85da62875800ba3b9ee0d8f1b9a3"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-retained-candidate-63235981-evidence-cleanup-20260930.cpython-39.pyc",
+      "size": 5363,
+      "sha256": "b57834e28cf1e6e5264f79597472bce12380b9e25b689ac19dca041f90cf9959"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-retained-candidate-6fed3a10-source-evidence-audit-20261001.cpython-38.pyc",
+      "size": 13470,
+      "sha256": "a13daac8eea8d617da3e96dee69c342151b11236613beddae7a76c7d18e243d9"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-retained-candidate-6fed3a10-source-evidence-audit-20261001.cpython-39.pyc",
+      "size": 13624,
+      "sha256": "157926a055d3393656505f9a14ceef963bda60aa6485c33065bb5af0cde5c164"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-retained-candidate-74085185-source-evidence-cleanup-20260930.cpython-39.pyc",
+      "size": 13485,
+      "sha256": "804c141e703e685a0ed315117aea6fb9c01a3606d78745f243b37e47d5c34d6b"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-retained-candidate-acd4197b-source-evidence-cleanup-20260930.cpython-39.pyc",
+      "size": 9035,
+      "sha256": "105f8e47841cb4defbc5d2a7c89f02499acdc971cb192437cc9a821e2522b0dc"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-retained-candidate-c658175a-evidence-cleanup-20260930.cpython-38.pyc",
+      "size": 11967,
+      "sha256": "ec55a3b290f60417ff349fb58ea6367da5d209418781b78d2d4063587ff38c60"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-retained-candidate-c658175a-evidence-cleanup-20260930.cpython-39.pyc",
+      "size": 11829,
+      "sha256": "6581994ed2a701b52884012d12eedf7747c0b045ae7c08a4b100d806af0d69a3"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-retained-candidate-dce800af-evidence-cleanup-20260930.cpython-38.pyc",
+      "size": 5952,
+      "sha256": "635f51c0555db3348a7698726b17093cd3c9b8ed6725dab98628e65fdcf6b3a9"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-retained-candidate-dce800af-evidence-cleanup-20260930.cpython-39.pyc",
+      "size": 6702,
+      "sha256": "a5de35858d607194a84a57338f38363e805745609e07262dbe49eaaf9d663ecf"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-retained-candidate-e1c5e4e2-source-evidence-cleanup-20260930.cpython-39.pyc",
+      "size": 9287,
+      "sha256": "73c2c6c12e931fa453f37c79c1b5ceb009fb36801dc75cb530a97ee162d0b417"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-retained-candidate-e8bece7f-source-evidence-cleanup-20260930.cpython-39.pyc",
+      "size": 9142,
+      "sha256": "f3a0414bd0998a27c6b5d1c878024bdd5c625c3ff2cd56f22f485f85ab62ee44"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-retained-candidate-f021bdee-scratch8-evidence-cleanup-20260930.cpython-39.pyc",
+      "size": 4678,
+      "sha256": "851f58e5b3efd0eb5ff5bcbac5536e10ee42f7c905d2bdc142b8cafd79a2cc0f"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-scratch13-planbound-evidence-cleanup-20261001.cpython-38.pyc",
+      "size": 44317,
+      "sha256": "bdb2cfef50a71e609b52d510f91a38dea000baf7eeb5b272ab7d4e5bea47a4af"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-scratch13-planbound-evidence-cleanup-20261001.cpython-39.pyc",
+      "size": 44787,
+      "sha256": "c98f044c3036d1dccafc521c24e51d6d3f59f0580202687f023b9e180ec65182"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-scratch14-evidence-subtree-retire-20261001.cpython-39.pyc",
+      "size": 19496,
+      "sha256": "040d7a7c79d52dc8adc98c18f522f9e1848edf3bc1168e1f0eac2a690840eee1"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-scratch14-planbound-evidence-cleanup-20261001.cpython-39.pyc",
+      "size": 52767,
+      "sha256": "339589a573dff2ffad6c17a60a928fba4aea783ecd12f514097cc10c61adeae2"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-scratch15-build-execution-20261001.cpython-39.pyc",
+      "size": 10073,
+      "sha256": "9e8b4bc768a08f408c01c0f0c0ce79091dd34f2d601c1831bc79dd5cec187a29"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-scratch16-build-execution-20261001.cpython-39.pyc",
+      "size": 9911,
+      "sha256": "3f3390ffdee287d67b54d8b0c0b7cf6cbcd73618d3489986539a59e9b1971c57"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-scratch17-build-execution-20261001.cpython-39.pyc",
+      "size": 12164,
+      "sha256": "fcae0ef30eb14c8cd77766830383b5438ffe0ef75dbf52e799e19ee5bf186733"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-scratch18-build-execution-20261001.cpython-39.pyc",
+      "size": 11745,
+      "sha256": "716de53cd797b445924effe52fe20fc56e00494bc6960a5a67de58800d527a6d"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-scratch18-build-resume-execution-20261001.cpython-39.pyc",
+      "size": 11431,
+      "sha256": "5d7014401c1e5c8e0c6c5be25b3274f85ebe4e01ef56a7853dbbc37c24a4798e"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-scratch18-interrupt-cleanup-20261001.cpython-38.pyc",
+      "size": 25748,
+      "sha256": "d2db6035c80c310126dd5ab4ddf55ae0ff09ece211c18759b70d2064ffeb87ac"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-scratch18-interrupt-cleanup-20261001.cpython-39.pyc",
+      "size": 25750,
+      "sha256": "5d7c74146da9ede3fa52971f2bf92c8dee8599704d1cd6998e4bcf7c41784402"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-scratch18-preowner-recovery-execution-20261001.cpython-39.pyc",
+      "size": 8765,
+      "sha256": "328b8f71641c620ef422ac42ad14a18cc1efbaf3df5dbe08a8fa8e9e821a2b7f"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-scratch18-retry2-20261001.cpython-38.pyc",
+      "size": 19304,
+      "sha256": "ad1c2e6535bfc1c1c4acc0dfda4b046aebdc8ab58ee78324b1841a5f90d5aec5"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-scratch18-retry2-20261001.cpython-39.pyc",
+      "size": 17139,
+      "sha256": "369fb1da15ae831016a82283dda78b19616b89bc9ce012661a55107d289d8401"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-scratch18-retry2-build-cleanup-20261001.cpython-38.pyc",
+      "size": 32078,
+      "sha256": "7ce821d8068e45a15c8690d95f5c7f8cb86c813615a94d4f5548e846bf2e49dc"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-scratch18-retry2-build-cleanup-20261001.cpython-39.pyc",
+      "size": 25616,
+      "sha256": "45a42cc254229e222ee30b1f1737d2f8e177cf80ddc47a6f0b39d6640a2a5299"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-scratch18-retry2-execution-20261001.cpython-38.pyc",
+      "size": 12182,
+      "sha256": "aa1c83ffb28499bec1877c638b90ee6ef5a68f626af59f5c70952d3327656ce3"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-scratch18-retry2-execution-20261001.cpython-39.pyc",
+      "size": 9690,
+      "sha256": "9cf4913fe9cb23bf11d6b11586f4c4557ae69c128586379d3df45a8c9bbf082c"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-scratch18-synthetic-state-recovery-20261001.cpython-38.pyc",
+      "size": 10743,
+      "sha256": "82e1e980a54fdc2832ddc715e7de9b919eabcb33cacd5b6540c6bca976b9ede3"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-scratch18-synthetic-state-recovery-20261001.cpython-39.pyc",
+      "size": 10812,
+      "sha256": "2ea355383c87357ba43f031b4f36e89c20cd81aa17daae677d5db4eac6d69a49"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-scratch21-heavy-build-execution-release-v2-20261001.cpython-39.pyc",
+      "size": 13213,
+      "sha256": "2ee9b608c19c2c561f3a15bf2ad46b32ff53076bf6daa960c19e4d73de201d6f"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-scratch21-terminal-cleanup-20261001.cpython-39.pyc",
+      "size": 4553,
+      "sha256": "8da405b2298339ffdbe67ec86740b8e42e10f17a7767feedefb2b17537f54331"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-tool-image-scratch17-toolimage-1-execution-packet-20261001.cpython-39.pyc",
+      "size": 5405,
+      "sha256": "bfecaf93f01ea9c5d048b7bd25435d8d7cf8c3b014212286d82ac2ef77349115"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/native-exact-tool-image-scratch17-toolimage-1-execution-release-20261001.cpython-39.pyc",
+      "size": 11375,
+      "sha256": "109695a068a5b6eaa1db3261eccbd9210dc7706e8c73a05295cffaaf429dfa83"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/stability-linux-collector-build-owner-20260915.cpython-39.pyc",
+      "size": 40251,
+      "sha256": "961f889e7fbe457a6981579a12545fc8d9f8fdfb767b622321cf79c882536698"
+    },
+    {
+      "path": "docs/verification/evidence/__pycache__/stability-pending-free-batch-build-owner-20260915.cpython-39.pyc",
+      "size": 28858,
+      "sha256": "6245fa79bffdc3d19549abe2d7e0b559de362496777e12ebbdeb3d819de57eac"
+    },
+    {
+      "path": "docs/verification/evidence/native-exact-build-cleanup-76ae20b5-disk-build-2.py",
+      "size": 11915,
+      "sha256": "eca295a3c7469bc6fb87577e49ffd12d0286d397933ca6dc12828ec1fbaa0826"
+    },
+    {
+      "path": "docs/verification/evidence/native-exact-candidate-relocation-scratch1-20260930.sh",
+      "size": 17409,
+      "sha256": "190cf20cd1218d23f863aeb5d06a6f7db382c3fbc25c10aa9e7eca1ea73bc28d"
+    },
+    {
+      "path": "docs/verification/evidence/native-exact-candidate-retention-cleanup-scratch1-20260930.sh",
+      "size": 14484,
+      "sha256": "662d7de8231bb17667374b6413859a75bfb9f8a690af65ae35af8c71ca44d367"
+    },
+    {
+      "path": "docs/verification/evidence/native-exact-candidate-retention-preparation-76ae20b5-1.sh",
+      "size": 11631,
+      "sha256": "8d0e4e5644f49faa299180268d08a1f4fad9ab110816f274aabd41fe06d2e493"
+    },
+    {
+      "path": "docs/verification/evidence/native-exact-candidate-retention-preparation-c81aeaca-scratch14-20261001.py",
+      "size": 5402,
+      "sha256": "fa63c10d3b0d1a10d4ab4fe498281f7b9b62de4860108c4b45793907072aaced"
+    },
+    {
+      "path": "docs/verification/evidence/native-exact-candidate-retirement-c81aeaca-scratch14-20261001.py",
+      "size": 2983,
+      "sha256": "41904f20eb531f0ab72023fc910346fbb443287dcc57b63b01ef8d78076711ce"
+    },
+    {
+      "path": "docs/verification/evidence/native-exact-image-preparation-packet-scratch9-20260930.sh",
+      "size": 4990,
+      "sha256": "fcecd6a058a2bb6aa7f0158a2d92ce0daad1114f1ea132ac29fecee794716056"
+    },
+    {
+      "path": "docs/verification/evidence/native-exact-tool-image-scratch17-toolimage-1-execution-release-20261001.py",
+      "size": 13671,
+      "sha256": "f905cc67e97fab8a23da09b3a22bb587874bbdcbd4515f46cbf7bd2248e1b38e"
+    },
+    {
+      "path": "kernel/rust/tests/__pycache__/do_munmap_host_clear_actual_harness.cpython-39.pyc",
+      "size": 15969,
+      "sha256": "cb3f98573988f10c6e1765acea0f5bc667ea75328dc4abadea23efd3b7f75a17"
+    },
+    {
+      "path": "kernel/rust/tests/__pycache__/pending_free_batch_actual_harness.cpython-39.pyc",
+      "size": 27629,
+      "sha256": "4bb8acf8e31747a9aa8beb836aa5e5bca34f94fac631f131fe08177779276230"
+    },
+    {
+      "path": "kernel/rust/tests/__pycache__/pending_free_c_actual_harness.cpython-39.pyc",
+      "size": 15106,
+      "sha256": "ceba2ac2b88569373e9b415d0d9244b9f333c4b8c07a9cd30eecebc765505072"
+    },
+    {
+      "path": "scripts/__pycache__/fp0006_executable_acceptance_closure.cpython-312.pyc",
+      "size": 68610,
+      "sha256": "ee03fed34ec7ecbe9cffae428c96c0894322ab0a23f8c95b6ae3b0b3865ef3a8"
+    },
+    {
+      "path": "scripts/__pycache__/fp0006_executable_acceptance_closure.cpython-38.pyc",
+      "size": 41642,
+      "sha256": "177389c511e7178e4eeecf9b3a0a51973ba424224fc37b391fb5b4d46c93ded9"
+    },
+    {
+      "path": "scripts/__pycache__/fp0006_executable_acceptance_closure.cpython-39.pyc",
+      "size": 41707,
+      "sha256": "98aab3f897addc2410b3ab553dfed61dc2a8b6011e9b6c2f1677ee03563556de"
+    },
+    {
+      "path": "scripts/__pycache__/fp0006_runtime_capture_integration.cpython-312.pyc",
+      "size": 140539,
+      "sha256": "f25517d24fe564540362ece4a9efa51e6abc487703d4d8e4956f4beabc7a6d79"
+    },
+    {
+      "path": "scripts/__pycache__/fp0006_runtime_capture_integration.cpython-38.pyc",
+      "size": 89147,
+      "sha256": "479a31fca12629927fac6c1f89cca467cac747b686078c6e871a957f5cac4c27"
+    },
+    {
+      "path": "scripts/__pycache__/fp0006_runtime_capture_integration.cpython-39.pyc",
+      "size": 88528,
+      "sha256": "5e8c229c0d611259545778e8b221800df58ac9dba732c1d7d435290d2f9a8edb"
+    },
+    {
+      "path": "scripts/__pycache__/ihk_device_registry_check.cpython-38.pyc",
+      "size": 47478,
+      "sha256": "a602957a967aeee0b3f36e88af72fdc3af590ec3c3c84c02f51956cf0f705226"
+    },
+    {
+      "path": "scripts/__pycache__/ihk_device_registry_check.cpython-39.pyc",
+      "size": 47292,
+      "sha256": "4ea0c8d2ff12d3e21453faacd5260e9cf69a076f453f8e0f944c8e5ecd61c63b"
+    },
+    {
+      "path": "scripts/__pycache__/ihk_ioctl_dispatch_check.cpython-39.pyc",
+      "size": 19062,
+      "sha256": "96d961374b3a22df2067123bc119bdf0a9259f312a933f34691fb841753d04c5"
+    },
+    {
+      "path": "scripts/__pycache__/ihk_mapping_check.cpython-39.pyc",
+      "size": 30565,
+      "sha256": "7e97c4d9c7f858fa2b3f58b0d67600a8eeb7bd77259390a5b144dcd49d954566"
+    },
+    {
+      "path": "scripts/__pycache__/ihk_native_lifecycle_check.cpython-38.pyc",
+      "size": 45258,
+      "sha256": "01fbd873db165efe417bf2fda8cf2d5c18ab2a3e9f81609649c3430092123545"
+    },
+    {
+      "path": "scripts/__pycache__/ihk_native_lifecycle_check.cpython-39.pyc",
+      "size": 45281,
+      "sha256": "ea38f524eb5417565402aaf6744e00f5dfaa439db97ff68d8d21e276b0171716"
+    },
+    {
+      "path": "scripts/__pycache__/ihk_native_queue_check.cpython-38.pyc",
+      "size": 25072,
+      "sha256": "3bd59bf48c97f6ad02ead8c2f9503fe12a3c68723c18540e3cb94c22ae2216dd"
+    },
+    {
+      "path": "scripts/__pycache__/ihk_native_queue_check.cpython-39.pyc",
+      "size": 25009,
+      "sha256": "df402ff59bc1a687192212870e4aa73e1d699a334a80cbddb1173f858f6752c1"
+    },
+    {
+      "path": "scripts/__pycache__/ihk_os_registry_check.cpython-39.pyc",
+      "size": 16146,
+      "sha256": "43ece40480d6e048ee2516d61babec7e1796fe9c9216243cef3738c67b8fd8e9"
+    },
+    {
+      "path": "scripts/__pycache__/ihk_os_runtime_check.cpython-39.pyc",
+      "size": 6720,
+      "sha256": "1ffd1327bfbf40325948bfcd35cf12e7dced23485b10e6659182cb77db32338a"
+    },
+    {
+      "path": "scripts/__pycache__/ihk_smp_native_lifecycle_check.cpython-312.pyc",
+      "size": 114576,
+      "sha256": "cd14c35486172e86e46ec04d26b6c8378be7e19f7cb39351336fa49c3b5f38ed"
+    },
+    {
+      "path": "scripts/__pycache__/ihk_smp_native_lifecycle_check.cpython-39.pyc",
+      "size": 80422,
+      "sha256": "b2b1b718f3cd470dbbdc858037ec6bc4267f2b09a12408545682868983fa3131"
+    },
+    {
+      "path": "scripts/__pycache__/linux_api_exact_probe.cpython-312.pyc",
+      "size": 128205,
+      "sha256": "a88d4a4fcd57638dd8ce0e5682a95925d01c80cecb5cc220407f312d6c650d8b"
+    },
+    {
+      "path": "scripts/__pycache__/linux_api_exact_probe.cpython-39.pyc",
+      "size": 83714,
+      "sha256": "156f9ca5e11cc5f85e81b276d85bbaf4f845c403d9742e62d73c78555126354f"
+    },
+    {
+      "path": "scripts/__pycache__/mcctrl_native_lifecycle_check.cpython-39.pyc",
+      "size": 42090,
+      "sha256": "68f057ef3d30c3396b8242c9ba857c24ed82302b94fd6ec842103945441c7c49"
+    },
+    {
+      "path": "scripts/__pycache__/mckernel_linked_text_ownership.cpython-39.pyc",
+      "size": 12293,
+      "sha256": "5c08f15240f09d0fe23782a5cf21cbff80ca838b70e08a21249fa620e0a83685"
+    },
+    {
+      "path": "scripts/__pycache__/native_exact_candidate_deleted_inode_audit.cpython-38.pyc",
+      "size": 24725,
+      "sha256": "1ad0898a1dece4c222b822d62c3d943470a260648732448f8fb5764d4823ce86"
+    },
+    {
+      "path": "scripts/__pycache__/native_exact_candidate_deleted_inode_audit.cpython-39.pyc",
+      "size": 24789,
+      "sha256": "fd8068f253f3922d2020bedeb0932f489b81ff048d7749b78839a348f310aebd"
+    },
+    {
+      "path": "scripts/__pycache__/native_exact_candidate_placement_observer_20260929.cpython-312.pyc",
+      "size": 17022,
+      "sha256": "6875729a058bf24bf76c45ccc191211342d3c500f0b2fb4f2d46b682591d7fb3"
+    },
+    {
+      "path": "scripts/__pycache__/native_exact_candidate_placement_observer_20260929.cpython-38.pyc",
+      "size": 9834,
+      "sha256": "1a2b68df962a0b7b2338b5f1c6db99032807474256392b18f1050e4e5b9b9701"
+    },
+    {
+      "path": "scripts/__pycache__/native_exact_candidate_placement_observer_20260929.cpython-39.pyc",
+      "size": 9787,
+      "sha256": "fe755c5564639b8804482601cb6558ba8ccc9139dea761f833678c4eb48e8265"
+    },
+    {
+      "path": "scripts/__pycache__/native_exact_candidate_retention_archive.cpython-38.pyc",
+      "size": 19860,
+      "sha256": "102da4cbee0973480c777eabea91629d64c2388cb4dd097a04df7127f3ac16a9"
+    },
+    {
+      "path": "scripts/__pycache__/native_exact_candidate_retention_archive.cpython-39.pyc",
+      "size": 19692,
+      "sha256": "5a99500738d663d3875b10ee3e2737c31d4875a260ac10a80adcd886aac34795"
+    },
+    {
+      "path": "scripts/__pycache__/native_exact_candidate_retention_capsule.cpython-38.pyc",
+      "size": 15779,
+      "sha256": "15c3af7dbfedb52f37a46af5bcef14a973b6c4d5069a7199ea597e8495833be6"
+    },
+    {
+      "path": "scripts/__pycache__/native_exact_candidate_retention_capsule.cpython-39.pyc",
+      "size": 17889,
+      "sha256": "43c54b0c4e9fa7f49d571bea215e2b358c8487071d897ee323cd2e297880f64b"
+    },
+    {
+      "path": "scripts/__pycache__/native_exact_candidate_retire.cpython-38.pyc",
+      "size": 36524,
+      "sha256": "0843707e14a4312f48474044c65410b1a1eeb89378aac6bca1bad03cd347a41c"
+    },
+    {
+      "path": "scripts/__pycache__/native_exact_candidate_retire.cpython-39.pyc",
+      "size": 36198,
+      "sha256": "b4d552c2c07e50077509eeaa132454691cbf2fc035e9acf41d1e744e1d573011"
+    },
+    {
+      "path": "scripts/__pycache__/native_exact_candidate_retire_1c00d2b8.cpython-39.pyc",
+      "size": 37879,
+      "sha256": "3e96279f5e620a793e4502db2f730f517c0f63381fc70e7b2a9e0f6a106025c9"
+    },
+    {
+      "path": "scripts/__pycache__/native_exact_candidate_retire_704f.cpython-38.pyc",
+      "size": 37539,
+      "sha256": "26954e2ac2a32f70c0a26e9b26b088cfadf90668de9a13d94cc478ed531fe027"
+    },
+    {
+      "path": "scripts/__pycache__/native_exact_candidate_retire_704f.cpython-39.pyc",
+      "size": 37167,
+      "sha256": "355850cccdffd058ac06eb1f2d421f9f41e6d106161e49668ac75eb379756b3c"
+    },
+    {
+      "path": "scripts/__pycache__/native_exact_historical_lease_observer.cpython-39.pyc",
+      "size": 5084,
+      "sha256": "87f948b093bf22a1d9a1d9da3b03a3acd4070604df7e9104fb764fdfaba15c37"
+    },
+    {
+      "path": "scripts/__pycache__/native_rust_build_surface_audit.cpython-312.pyc",
+      "size": 31125,
+      "sha256": "7f99f9ced82c8982e695ca39df451e148daf8f3a2580ed3ae4633e416ba0b008"
+    },
+    {
+      "path": "scripts/__pycache__/native_rust_build_surface_audit.cpython-39.pyc",
+      "size": 18035,
+      "sha256": "85ee1410437a8bdcec70c0c5bf23d981fb66479e280f75bc0c8f5c049c3daefe"
+    },
+    {
+      "path": "scripts/__pycache__/native_rust_current_image_postlink.cpython-38.pyc",
+      "size": 21478,
+      "sha256": "f984c8d90d8be79cb9939473307f5d4972b7645e78daf361682810e08f7e55cc"
+    },
+    {
+      "path": "scripts/__pycache__/native_rust_current_image_postlink.cpython-39.pyc",
+      "size": 21554,
+      "sha256": "6660ab01bdbdc4758c4ac1dc32b4fba198799a81948d23e6abcfc99b7ba96e22"
+    },
+    {
+      "path": "scripts/__pycache__/native_rust_exact_build_candidate_metadata.cpython-39.pyc",
+      "size": 16364,
+      "sha256": "9bf2f894fa396348e6cb361bf19e045361e77d2e849bda1f34acedb38f3367d8"
+    },
+    {
+      "path": "scripts/__pycache__/native_rust_exact_build_container_owner.cpython-38.pyc",
+      "size": 38586,
+      "sha256": "e496429f9d098d3d392d42b2d5d3cc685ea286091c8b458cd43c2d421a5d1285"
+    },
+    {
+      "path": "scripts/__pycache__/native_rust_exact_build_container_owner.cpython-39.pyc",
+      "size": 39444,
+      "sha256": "355695d1713e8d76ce13837437e0284a75e324ef593bcdafbed2b47ef2fbc1da"
+    },
+    {
+      "path": "scripts/__pycache__/native_rust_exact_build_image_prepare.cpython-38.pyc",
+      "size": 16141,
+      "sha256": "e71aee5900b5552a5a75d68063153b236ed213f969e678ab493894f77d51116d"
+    },
+    {
+      "path": "scripts/__pycache__/native_rust_exact_build_image_prepare.cpython-39.pyc",
+      "size": 16599,
+      "sha256": "3f099d073097941a9071e36e4c4fc8b68ac55bcdcb9df9178cc69bc1311d2a7e"
+    },
+    {
+      "path": "scripts/__pycache__/native_rust_exact_build_image_rebind.cpython-38.pyc",
+      "size": 9137,
+      "sha256": "0775ad61d591f11e813521677c1ad26f90b26bdebabed3a5ad8f57bfca5ebee9"
+    },
+    {
+      "path": "scripts/__pycache__/native_rust_exact_build_image_rebind.cpython-39.pyc",
+      "size": 9281,
+      "sha256": "6ad513b8061c19e3a2594d968af727d1641fb70a89df83ba0ddcaeec00875ac5"
+    },
+    {
+      "path": "scripts/__pycache__/native_rust_exact_build_image_rebind_probe.cpython-38.pyc",
+      "size": 13266,
+      "sha256": "dca06d89f2b302ba26166deed01e22d3c4a182b06a72949476aafe7ae7808ccd"
+    },
+    {
+      "path": "scripts/__pycache__/native_rust_exact_build_image_rebind_probe.cpython-39.pyc",
+      "size": 13350,
+      "sha256": "eef78bc5d6eab3441a6fa0e9e9d272419665d92b825763c8fd29357c480d2de1"
+    },
+    {
+      "path": "scripts/__pycache__/native_rust_exact_build_input_manifest.cpython-39.pyc",
+      "size": 8167,
+      "sha256": "d2443c908e76b104b877b9750b07786347140fe1b05928b2133f234a5d1a91b7"
+    },
+    {
+      "path": "scripts/__pycache__/native_rust_exact_build_offline.cpython-38.pyc",
+      "size": 22107,
+      "sha256": "d84e59abac73040563fbc83b75a55b34d093ced5551aa664f592af77507057a4"
+    },
+    {
+      "path": "scripts/__pycache__/native_rust_exact_build_offline.cpython-39.pyc",
+      "size": 22187,
+      "sha256": "3c39f45c3fb9095baa3ae3a28b0879e206815cd2c2564b229a91c92d06974113"
+    },
+    {
+      "path": "scripts/__pycache__/native_rust_exact_candidate_inventory.cpython-39.pyc",
+      "size": 8086,
+      "sha256": "198de5cd35c374e96ccb61dc0a24f79bba682c0b6d8a29918496bc4d13fbc072"
+    },
+    {
+      "path": "scripts/__pycache__/native_rust_exact_candidate_prepare.cpython-39.pyc",
+      "size": 8501,
+      "sha256": "0aaa2a8b1df1931672fe47f709639acfe89dbddb64364ff9683843bb8bc5fb4b"
+    },
+    {
+      "path": "scripts/__pycache__/native_rust_exact_disk_build_wrapper.cpython-312.pyc",
+      "size": 24758,
+      "sha256": "aa5501b1a0d7409ff53ae9d790e615415848fc776c11ad4115724e4d6686de62"
+    },
+    {
+      "path": "scripts/__pycache__/native_rust_exact_disk_build_wrapper.cpython-38.pyc",
+      "size": 42870,
+      "sha256": "4bfba02d63400c2ac8c45d3ba6407e0fa4743014debecd4d77a3265d13d7406d"
+    },
+    {
+      "path": "scripts/__pycache__/native_rust_exact_disk_build_wrapper.cpython-39.pyc",
+      "size": 43184,
+      "sha256": "7935c0f0fd790759dc3b769adcf799424303ea59b6c8398172540f4c6982ab8d"
+    },
+    {
+      "path": "scripts/__pycache__/native_rust_exact_mckernel_gitlink_prepare.cpython-39.pyc",
+      "size": 10418,
+      "sha256": "775fe1b04a1e3c6e2745cffc114804325ec8c130e645dce948de49bf875566b6"
+    },
+    {
+      "path": "scripts/__pycache__/native_rust_exact_mckernel_image_container_owner.cpython-312.pyc",
+      "size": 66782,
+      "sha256": "400b4082e4b47bbc23ed218ba7ab4c550d573433a7c68eb3a59c4efafbdf3e1c"
+    },
+    {
+      "path": "scripts/__pycache__/native_rust_exact_mckernel_image_container_owner.cpython-38.pyc",
+      "size": 56348,
+      "sha256": "0596af20f8ac23e0382b3c8087c7bef8a75213e62a079b595e32bddd15a74098"
+    },
+    {
+      "path": "scripts/__pycache__/native_rust_exact_mckernel_image_container_owner.cpython-39.pyc",
+      "size": 57003,
+      "sha256": "5360734bc107a962f98f628eb45bab6ab3331bb89154a84895a549a391276a92"
+    },
+    {
+      "path": "scripts/__pycache__/native_rust_exact_mckernel_image_offline.cpython-38.pyc",
+      "size": 58746,
+      "sha256": "db2e7ec0860b09f1cec1d80c3cf23b605b8e15a0ff6fbef78f554a9c0eaa592a"
+    },
+    {
+      "path": "scripts/__pycache__/native_rust_exact_mckernel_image_offline.cpython-39.pyc",
+      "size": 58862,
+      "sha256": "8a59b6b198a7d234050b9914e4fe53fd973beba7dccf8656282518073c321288"
+    },
+    {
+      "path": "scripts/__pycache__/native_rust_exact_mckernel_image_request_prepare.cpython-38.pyc",
+      "size": 12783,
+      "sha256": "9a2934f933543a8568ec5a21d7321decec9b53eb6eb31ebb759541a9e327137e"
+    },
+    {
+      "path": "scripts/__pycache__/native_rust_exact_mckernel_image_request_prepare.cpython-39.pyc",
+      "size": 12793,
+      "sha256": "3bd1a0275e01937965aa021913a35b08ec1a48c59a7df67a14685de22a9650d4"
+    },
+    {
+      "path": "scripts/__pycache__/native_rust_host_audit.cpython-312.pyc",
+      "size": 62043,
+      "sha256": "192854234cf9e57a4c835ba984c186cccb7bd5f8d4d79e668acd848ea9ab8ff7"
+    },
+    {
+      "path": "scripts/__pycache__/native_rust_host_audit.cpython-39.pyc",
+      "size": 53600,
+      "sha256": "63ea775387d7b45c61c8b9ccfda4245420caef214345206ec835593ef264918d"
+    },
+    {
+      "path": "scripts/__pycache__/native_rust_kbuild_link_closure.cpython-312.pyc",
+      "size": 74776,
+      "sha256": "bec7c71b2bc3335ef9b3f38b0fd6894d6c4eef1d433869f91a8a78ee17b4f958"
+    },
+    {
+      "path": "scripts/__pycache__/native_rust_kbuild_link_closure.cpython-39.pyc",
+      "size": 45146,
+      "sha256": "acdd6e9932f6dc154a4108facd51c267a2e21289e707311c1c5b948ab7fce7f6"
+    },
+    {
+      "path": "scripts/__pycache__/native_rust_kconfig_policy.cpython-312.pyc",
+      "size": 9374,
+      "sha256": "124155216abadf9cdfb50b1bcb9a86355cdd33f0c12fe23f5689a8535dfb1d02"
+    },
+    {
+      "path": "scripts/__pycache__/native_rust_kconfig_policy.cpython-39.pyc",
+      "size": 6276,
+      "sha256": "6eb4832f9e3d254cd7ae4af51a0ead6b8ee69eeb7a4d28cf64ffb42dc5dbac6e"
+    },
+    {
+      "path": "scripts/__pycache__/native_rust_runtime_evidence.cpython-312.pyc",
+      "size": 347567,
+      "sha256": "f256ad8305a701c92dae3a006534a76f375f457ddd22d5352fb3f323f8ad631e"
+    },
+    {
+      "path": "scripts/__pycache__/native_rust_runtime_evidence.cpython-38.pyc",
+      "size": 236750,
+      "sha256": "482b64179cfb7f25c8dbd138ce6fa0dd9a653d9dfbd43ac98b58f5987955b9d6"
+    },
+    {
+      "path": "scripts/__pycache__/native_rust_runtime_evidence.cpython-39.pyc",
+      "size": 237027,
+      "sha256": "194df066301c7078ec66c53159460a448420c946c2e913fb9ca145b56a12cbc5"
+    },
+    {
+      "path": "scripts/__pycache__/native_rust_unsafe_ffi_ledger.cpython-39.pyc",
+      "size": 52319,
+      "sha256": "82e40fdc81d1671829d47542017db26222ba5d23db0348ccfd58953b2653339f"
+    },
+    {
+      "path": "scripts/__pycache__/os_goal_output.cpython-39.pyc",
+      "size": 10554,
+      "sha256": "eacd21faa70fa4bcb5fee02ff898d3b66f9b1091b8ca28709602b56ff2232bcb"
+    },
+    {
+      "path": "scripts/__pycache__/os_goal_resources.cpython-39.pyc",
+      "size": 7088,
+      "sha256": "e26a1fd2825e79088be0bec03930c3d11fb956e6c5cbc09ac6f624083bf0640f"
+    },
+    {
+      "path": "scripts/__pycache__/os_goal_windows.cpython-39.pyc",
+      "size": 9972,
+      "sha256": "ea7548ec5f9700b7d9e01b88ba64e531452d7f889be66870bf278f0910e2b03d"
+    },
+    {
+      "path": "scripts/__pycache__/qemu_guest_heavy_v1.cpython-38.pyc",
+      "size": 19998,
+      "sha256": "0d9e1d13295526a0ca186d9844894d47fbc2dc864293d55c4faeabc24cbd86d6"
+    },
+    {
+      "path": "scripts/__pycache__/qemu_guest_heavy_v1.cpython-39.pyc",
+      "size": 20079,
+      "sha256": "68043343168104808ea7e0e9c17e5bb4d54476ef3d4a088ffa6aaf63afe16973"
+    },
+    {
+      "path": "scripts/__pycache__/rocky_kernel_config_resolution_v2.cpython-312.pyc",
+      "size": 98642,
+      "sha256": "bf27146c00b6776566058fb3bec765109b235fadb7bba72ee5fa5ab6ea17d28d"
+    },
+    {
+      "path": "scripts/__pycache__/rocky_kernel_platform_lock_v2.cpython-312.pyc",
+      "size": 85182,
+      "sha256": "c20515e38c9795dbea3763bfa9860d5deb2c3f3931c3b77c3a444a82670cff79"
+    },
+    {
+      "path": "scripts/__pycache__/rocky_kernel_rk006_full_source_build_capture.cpython-312.pyc",
+      "size": 134541,
+      "sha256": "f01fc7e827caa402617ce7861458731814d5de1dd862f7491c24c2f5360babce"
+    },
+    {
+      "path": "scripts/__pycache__/rocky_kernel_rk006_full_source_build_capture.cpython-38.pyc",
+      "size": 77271,
+      "sha256": "0c81f836ae0d8b7bdee1a69cef54a3e879b66cd6645586c1b41a1d7d699a8f9e"
+    },
+    {
+      "path": "scripts/__pycache__/rocky_kernel_rk006_patch_authority.cpython-39.pyc",
+      "size": 37651,
+      "sha256": "b3021701ffccd854fb1d4846db1e8b9f1e72afac5ad1ba8e85d61e1444e6e352"
+    },
+    {
+      "path": "scripts/__pycache__/rocky_rust_staging.cpython-312.pyc",
+      "size": 103028,
+      "sha256": "96fb243a11b50f265a8c324db0bb95fdaf2414bd8b3ec9b0621a58e86a3a252a"
+    },
+    {
+      "path": "scripts/__pycache__/rocky_rust_staging.cpython-39.pyc",
+      "size": 69432,
+      "sha256": "173a14fbd51f39580d7aed4b8975c6212331ab59cc6e1417dc92bb6a2ee6ac87"
+    },
+    {
+      "path": "scripts/__pycache__/rs006_miscdevice_module_owner_followup.cpython-312.pyc",
+      "size": 91225,
+      "sha256": "51ea8d84b64030e7dab70b06cd784b71226b5a404905a618dfc1c76682938112"
+    },
+    {
+      "path": "scripts/__pycache__/rs006_miscdevice_module_owner_followup.cpython-38.pyc",
+      "size": 52580,
+      "sha256": "6cfb82a519f357127397365efd098f205c43f5601f4db4870695cdf67ad32f2f"
+    },
+    {
+      "path": "scripts/__pycache__/rs006_miscdevice_module_owner_followup.cpython-39.pyc",
+      "size": 52758,
+      "sha256": "1d10d305985c38699455bfb65624295c26247630defc9a245843e84d879eec79"
+    },
+    {
+      "path": "scripts/__pycache__/secondary_reset_build_supplement.cpython-312.pyc",
+      "size": 12127,
+      "sha256": "091389a7397256a60be5f3a314596caf3f8bb71c1735afa7a07e4070c4c7978f"
+    },
+    {
+      "path": "scripts/__pycache__/secondary_reset_build_supplement.cpython-38.pyc",
+      "size": 7148,
+      "sha256": "d37dca669fce518b46be89eb1382a14269e4a8cf40b235a9ced656da30174feb"
+    },
+    {
+      "path": "scripts/__pycache__/secondary_reset_build_supplement.cpython-39.pyc",
+      "size": 7064,
+      "sha256": "241f76f67e688b3dae6886baec00ef09b5a7773458dcb254753c634c120441c5"
+    },
+    {
+      "path": "scripts/__pycache__/stable_core_tracker.cpython-38.pyc",
+      "size": 18553,
+      "sha256": "441cf6628b920057ae0e1a955b2fbdbbdc22fc99de520a5b3f3cceea5fd2268d"
+    },
+    {
+      "path": "scripts/__pycache__/stable_core_tracker.cpython-39.pyc",
+      "size": 18417,
+      "sha256": "c89fb24f26b4b1e381ef76e9b1a653e94560ad41b44e0ee8001f3370e4e5f60d"
+    },
+    {
+      "path": "scripts/__pycache__/watch_os_goal.cpython-39.pyc",
+      "size": 8718,
+      "sha256": "6fb7b9140aa7fe590b90348e9f5e26cc7eee52838ce1bd71e4319dc6292eada2"
+    },
+    {
+      "path": "scripts/application-tests/__pycache__/linux_diagnostic.cpython-39.pyc",
+      "size": 13679,
+      "sha256": "6384322a1b7f31482a44abae80dbab04840134d680a4feb13b0a4f595205c736"
+    },
+    {
+      "path": "scripts/application-tests/__pycache__/linux_diagnostic_container_owner.cpython-39.pyc",
+      "size": 10109,
+      "sha256": "ed3dc345c3562ac04231b3f103c9daef4e9331173f7515cf2b35eb2fe02cd5eb"
+    },
+    {
+      "path": "scripts/application-tests/__pycache__/native_diagnostic.cpython-39.pyc",
+      "size": 43492,
+      "sha256": "fa8336e26a9059998011cfec5eb129c1e7fefbc869b3af732c3905e74f17dbe3"
+    },
+    {
+      "path": "scripts/application-tests/__pycache__/native_diagnostic_backend.cpython-39.pyc",
+      "size": 20684,
+      "sha256": "b5d2df35e0e7138f14f3b0dcee03e6e0542d023e8d5dc5480d701b30e3b15226"
+    },
+    {
+      "path": "scripts/application-tests/__pycache__/native_diagnostic_batch.cpython-39.pyc",
+      "size": 10368,
+      "sha256": "f0723688bf50633ea92e348954928a0cae873835c2784c599ee57ec28f86126e"
+    },
+    {
+      "path": "scripts/application-tests/__pycache__/native_diagnostic_closure_preflight.cpython-39.pyc",
+      "size": 18803,
+      "sha256": "0496491d76e620a264b48b4abcb0451255ba096fa82615c7ffa6b08a4eb4d754"
+    },
+    {
+      "path": "scripts/application-tests/__pycache__/native_diagnostic_container_owner.cpython-39.pyc",
+      "size": 46772,
+      "sha256": "7d0a082b125e2acc7305a236f4dfcdf23e67ffe79bb95c6410072b9931ec2982"
+    },
+    {
+      "path": "scripts/application-tests/__pycache__/native_diagnostic_dual_pilot.cpython-39.pyc",
+      "size": 21351,
+      "sha256": "df728f3cabbe3792210f8f955e2b6b2fe71273c27b634ac3647e069bec6611d7"
+    },
+    {
+      "path": "scripts/application-tests/__pycache__/native_diagnostic_overlay.cpython-39.pyc",
+      "size": 23054,
+      "sha256": "9b5710e865f89e31af1aec117f3ec9231e2889aca58380452ee4c00666c30b49"
+    },
+    {
+      "path": "scripts/application-tests/__pycache__/native_diagnostic_resource_observer.cpython-39.pyc",
+      "size": 12215,
+      "sha256": "e24635ee9916b40560c5ca9141c473f95d65966716a319983f896521d3c41679"
+    },
+    {
+      "path": "scripts/application-tests/__pycache__/native_diagnostic_runner.cpython-39.pyc",
+      "size": 5510,
+      "sha256": "ecb9f93db2e23681e95b301b1dd88644e4786aeaa563d7b9cc43f9e3967c9077"
+    },
+    {
+      "path": "scripts/application-tests/__pycache__/native_diagnostic_stager.cpython-39.pyc",
+      "size": 19931,
+      "sha256": "e62e86d6c3631549277165953bbdbec66c52768dd5af7e607b15b4e6447e1edf"
+    },
+    {
+      "path": "scripts/application-tests/__pycache__/native_shutdown_observer.cpython-39.pyc",
+      "size": 19377,
+      "sha256": "17e38747d7642a82541b097a63dd8b351cb22e1bf457cb30d38db7c7d8e52b77"
+    },
+    {
+      "path": "scripts/application-tests/__pycache__/qmp_capture.cpython-39.pyc",
+      "size": 8248,
+      "sha256": "89556bc95b77900c952a03d42b0d38456ff21eca6ec5a978fe588b16d4afa71f"
+    },
+    {
+      "path": "scripts/application-tests/__pycache__/runtime_contracts.cpython-39.pyc",
+      "size": 22262,
+      "sha256": "002c67432e812563b9a054725afad3918bd5fb568656539843e90ddd67164b67"
+    },
+    {
+      "path": "scripts/application-tests/__pycache__/supervisor.cpython-39.pyc",
+      "size": 18019,
+      "sha256": "a846ed2960f8508274ca8f2e9c3feac6efa1064902190d3f928b10d3e8f5f2f0"
+    },
+    {
+      "path": "scripts/tests/__pycache__/frozen_fp0006_authority.cpython-312.pyc",
+      "size": 4527,
+      "sha256": "d544d4e4ca706da4ce556742ffb5f1d125ff2a945166134d57430b1d8c162f95"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_application_native_diagnostic.cpython-39-pytest-7.1.1.pyc",
+      "size": 70141,
+      "sha256": "7a65b3ff540d78460e53a0c00480839373b928fe446199a1dbb0743608e698b5"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_application_native_diagnostic.cpython-39.pyc",
+      "size": 70030,
+      "sha256": "a8d7acff7b6083a0636489ef9cb31df18fb020dc75cbb8dfb258d64215e580ec"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_application_native_diagnostic_backend.cpython-39-pytest-7.1.1.pyc",
+      "size": 59734,
+      "sha256": "3fcf282d516503de23679ac0f4ac5c5dc4aacbb6c2e02026cbbb0711e0f16d66"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_application_native_diagnostic_backend.cpython-39.pyc",
+      "size": 59625,
+      "sha256": "3910d5b25649f47a1ad16fb781fac7b422f2aa13d29a927aa0adeb159a2cca2f"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_application_native_diagnostic_batch.cpython-39-pytest-7.1.1.pyc",
+      "size": 11456,
+      "sha256": "6ea812fc7e67b11e169327bdf3f1e801fe86805b279184dd3ff331bfca426001"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_application_native_diagnostic_batch.cpython-39.pyc",
+      "size": 11347,
+      "sha256": "32db57f58fab76a5c7e04c25f5c10002bd307e332c7ea8a07052cc74f709b889"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_application_native_diagnostic_closure_preflight.cpython-39-pytest-7.1.1.pyc",
+      "size": 17656,
+      "sha256": "92ab4c9afa6a9bae2ed88dbf5e22d764ad5f78c2c79be3058068989f0644e16a"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_application_native_diagnostic_closure_preflight.cpython-39.pyc",
+      "size": 17547,
+      "sha256": "10448c5fe06c044cc7f9953a4c7e2c8ce879d565c8cee11df8d072587f6df16e"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_application_native_diagnostic_container_owner.cpython-39-pytest-7.1.1.pyc",
+      "size": 76147,
+      "sha256": "b8d8a18c6bab534e8fa555395d6507b6c25b94c693e51e77a5b7aa44119452cb"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_application_native_diagnostic_container_owner.cpython-39.pyc",
+      "size": 75499,
+      "sha256": "4f2c3f1d37866b3679c52e1f76e13ac4ff27e1d97de7dc402e93fedafda52c1e"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_application_native_diagnostic_overlay.cpython-39.pyc",
+      "size": 35440,
+      "sha256": "9052dae5e548501e385d66fbeb580d3e84f1f0a799f3fa397d3dcb026790c8e6"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_application_native_diagnostic_resource_observer.cpython-39-pytest-7.1.1.pyc",
+      "size": 15180,
+      "sha256": "a190776eca95f7149c70278d862f961894c1badc5b34420986e8426f64c604ee"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_application_native_diagnostic_resource_observer.cpython-39.pyc",
+      "size": 15071,
+      "sha256": "a42ca181f7c3b9143057d71c60498c1475a9d946446c5942138e09fcb2d10ebc"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_application_native_diagnostic_runner.cpython-39-pytest-7.1.1.pyc",
+      "size": 15432,
+      "sha256": "68904c579f5baaff045eae4fba94f4c9d2dfc03f4affdd1a9c0c383d2e5ff57d"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_application_native_diagnostic_runner.cpython-39.pyc",
+      "size": 15321,
+      "sha256": "079567df192b16492be4fdc0faa9ed6a66758524c76918dca1a710b8d10d0249"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_application_native_diagnostic_stager.cpython-39.pyc",
+      "size": 16583,
+      "sha256": "7ceb27eac323fb3488adc11038dbb53650e50d5f5c241a0a0f6fb64ba3faaa39"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_application_native_shutdown_observer.cpython-39.pyc",
+      "size": 12989,
+      "sha256": "bc84d978449fddcafd17ddc0c2ca6a8b414b9129fe4c676662f0243bb9e10616"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_fp0006_executable_acceptance_closure.cpython-312.pyc",
+      "size": 47248,
+      "sha256": "ddfeee8d5a086c576e9cd82e542dc63e2322c5a227c75d7de8bd07ea7314042e"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_fp0006_executable_acceptance_closure.cpython-38.pyc",
+      "size": 25228,
+      "sha256": "18cb3e1d771da731ac042daee07d4d65dd1a6e91e73747c752c0839a7cc5118c"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_fp0006_executable_acceptance_closure.cpython-39-pytest-7.1.1.pyc",
+      "size": 26671,
+      "sha256": "d0434737a15558c312cb5aa15ee47a3a7cced1439cecbf029605678f81f9519d"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_fp0006_runtime_capture_integration.cpython-312.pyc",
+      "size": 65535,
+      "sha256": "eb0813fa35b8800eae013602615459b01fd653395fb61f6302cc5e972c2d8e7f"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_fp0006_runtime_capture_integration.cpython-39-pytest-7.1.1.pyc",
+      "size": 37995,
+      "sha256": "5814c3f6d62e7333d7d73f4c6d22a8354c734c1dc0cc57681f881da4bf5c6164"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_ihk_mapping_check.cpython-39.pyc",
+      "size": 19116,
+      "sha256": "738bf9ead18db2ba56cdcc61929eb308a7bafaf976351187aa8194e579b00230"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_ihk_native_lifecycle_check.cpython-38.pyc",
+      "size": 40303,
+      "sha256": "88f75458893a22cf20f9b8bb95970032a2cbf9984d6347b0c2e9b0bcbc190451"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_ihk_native_lifecycle_check.cpython-39-pytest-7.1.1.pyc",
+      "size": 41950,
+      "sha256": "a64ac87af04af7040557c9dc1f1400b0f93bc1e01503c63b1247ffac3583cfd9"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_ihk_native_lifecycle_check.cpython-39.pyc",
+      "size": 42398,
+      "sha256": "3e7aa10a24419aa6bc2ff897bcc55528969b946b5684bedc9459fe31550afa04"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_ihk_os_registry_check.cpython-39-pytest-7.1.1.pyc",
+      "size": 7820,
+      "sha256": "dcd0f99fe571b9f1af80e3ad3151838c229e2f1eac05c267a9e7f01f0ad7de85"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_ihk_os_registry_check.cpython-39.pyc",
+      "size": 7397,
+      "sha256": "0a5db4ae0a271456d66f4247c3420e7142bf9aec3a0311e62108b480191d630a"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_ihk_os_runtime.cpython-39.pyc",
+      "size": 2877,
+      "sha256": "b2ac6bf5fd3b3937190861c200a867b55eab12d8656873222656565312997fa6"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_ihk_os_runtime_check.cpython-39.pyc",
+      "size": 3943,
+      "sha256": "6ceaa60f1f35da328b0d8f77e180d8a83ed058a541c78ef8b1eb5cfc1b99078d"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_ihk_smp_buildid.cpython-312.pyc",
+      "size": 7724,
+      "sha256": "1b71cef2c81054aa6105e640187954d6e81f915fee8050ba0a447e3efb6240bb"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_ihk_smp_buildid.cpython-39-pytest-7.1.1.pyc",
+      "size": 4743,
+      "sha256": "d938063549e2411584d6fbb61ea88de416c45ce72c15dd1b9810da42733fb799"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_ihk_smp_buildid.cpython-39.pyc",
+      "size": 4634,
+      "sha256": "da3ebbcf031a6c2203f88832e0c3a095b0f5325108b89c3c663b3d4c7c3da451"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_ihk_smp_native_lifecycle_check.cpython-312.pyc",
+      "size": 94333,
+      "sha256": "98af03d9bf359327d9fc94159b0c15ed9252fe8535549503dcdbe22cb66c5ce7"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_ihk_smp_native_lifecycle_check.cpython-39-pytest-7.1.1.pyc",
+      "size": 56359,
+      "sha256": "af69e369fb90763f4b093e91a691d8b3bf3bc2fe5f24c66e92e9bdf8eb857593"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_ihk_smp_native_lifecycle_check.cpython-39.pyc",
+      "size": 56250,
+      "sha256": "e4ff34257739a13cbc96c1cb506a18c07afda18583c049869473ff814dc15163"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_ihk_smp_resource.cpython-39.pyc",
+      "size": 11229,
+      "sha256": "fab109a976f61f6761e85c4ed343b17892b814979d249a19e38ecff4aa25473f"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_linux_diagnostic_container_owner.cpython-39-pytest-7.1.1.pyc",
+      "size": 5893,
+      "sha256": "a0427c47c0637d18fc110443c7b492266fcca5e02d9250ba41b921b5a04b379d"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_mckernel_linked_text_ownership.cpython-39.pyc",
+      "size": 9851,
+      "sha256": "70ccc675f692c94156ee7e1ca90d3b455668c81dc84023ca2e7b6318c1abcca2"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_create_ppd_descriptor_decoder_20261001.cpython-39.pyc",
+      "size": 4710,
+      "sha256": "857587c2820cb3eb14a56e9c307c17e49b8393d343c2ca7daf1c08037533218f"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_diagnostic_futex_scratch17_packet_20261001.cpython-39.pyc",
+      "size": 4647,
+      "sha256": "cda2f15e4e7ad9ca554dc84dffc08690260f1f932c51a85fee1246a58ac5a9f2"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_diagnostic_futex_scratch18_packet_20261001.cpython-39.pyc",
+      "size": 5789,
+      "sha256": "74fbec2d46003ab8be9c24a23df0129e7a724d6d6e271575121008b3c82e57fe"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_diagnostic_guest_collector.cpython-39.pyc",
+      "size": 26250,
+      "sha256": "68664a3d23cb6bca841b161e8176f2a217ec019a71e637c6aa5daf197e21b7a6"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_build_cleanup_76ae20b5_disk_build_2.cpython-39-pytest-7.1.1.pyc",
+      "size": 6719,
+      "sha256": "7ac7cf85ce2cbc6614bc3e25ee3ef344e231b515ce4075fca144c6438d232436"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_build_cleanup_76ae20b5_disk_build_2.cpython-39.pyc",
+      "size": 6588,
+      "sha256": "ab2c8005f008d7117995b5377f4cf9cc21c4f5f09f1a31b18267e44690a81d7b"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate12_planbound_cleanup_20260930.cpython-39-pytest-7.1.1.pyc",
+      "size": 78863,
+      "sha256": "7a072cfb6a47bf5cb3d09fcbfff13d2926fac1d3ef6aae563b9d827fe900e5e0"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate12_planbound_cleanup_20260930.cpython-39.pyc",
+      "size": 98687,
+      "sha256": "d7a17c3556ea2494efd92d4d3ac60aeaf355328a23c8e8f828a04e47e3b36f42"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate12_planbound_renameback_recovery_20260930.cpython-39.pyc",
+      "size": 9528,
+      "sha256": "58e2d6f556482ac5ac1b4a193373e4bda6b5d901e9862217b8f837460842f7a4"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_archive_c658175a_scratch7_retry1_20260930.cpython-38.pyc",
+      "size": 5669,
+      "sha256": "e30b324cd8206708f94ab5f501206d71d4f2ddb6cb76bf0b7754beba74f6c02f"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_archive_c658175a_scratch7_retry1_20260930.cpython-39.pyc",
+      "size": 5691,
+      "sha256": "292f18a653283e056121adf9b43bac39e10c684440ae38b233c672869c534abf"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_delta_preparation_scratch16_20261001.cpython-39.pyc",
+      "size": 12136,
+      "sha256": "b7f5a949d00bd725cd8c65e62eaf6153a1742382f10a647e1927998ee4b6ca9e"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_delta_preparation_scratch17_20261001.cpython-39.pyc",
+      "size": 14915,
+      "sha256": "cb9d59b78fe799f87898a13c970d779350b23415a9390b3fa4043c655284fb0c"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_delta_preparation_scratch18_20261001.cpython-39.pyc",
+      "size": 21273,
+      "sha256": "006bde73861118075d6e22e267228a628f81297528cdf63f1397fdb33fa93bdb"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_delta_preparation_scratch19_20261001.cpython-39.pyc",
+      "size": 2954,
+      "sha256": "bf2e4df2707f9ad5b1a753921ebeffecaabeb58a5b84843e7d1834fdab567926"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_delta_preparation_scratch20_20261001.cpython-39.pyc",
+      "size": 4157,
+      "sha256": "3e6ecddee254adef996359d69a31adddb5b1d8725521f7ca121743f894e3b761"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_delta_preparation_scratch21_20261001.cpython-39.pyc",
+      "size": 4223,
+      "sha256": "38e73ac38c7039813a81d4923db55161b336ea165cb0b56ad82bcee3c83fe70b"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_disk_copy_76ae20b5.cpython-39.pyc",
+      "size": 2726,
+      "sha256": "a97ff9217164a4b3fcf13db0c9a8ffa38ece4b45c9c13f2fd1ffaf5e64611333"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_disk_copy_correction_76ae20b5.cpython-39.pyc",
+      "size": 2478,
+      "sha256": "83c83e727bf8113c659e2ec4ce75684c887b6faef2570ba0b3813416679f2289"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_disk_validation_76ae20b5.cpython-39.pyc",
+      "size": 2068,
+      "sha256": "df923e034cf549205813816687a446029bf5e2fe66cc716cddca62d8a2e88fcc"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_live_reference_observer_1c00d2b8.cpython-39.pyc",
+      "size": 11648,
+      "sha256": "5e861df9538dcc8a8b62c2a1466870b4a7f4009bf31037143a6d6b7c5ae3849e"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_preparation_scratch14_20261001.cpython-38.pyc",
+      "size": 27832,
+      "sha256": "bb5e5040cd1d0b757bb4bc1935e6257b631814de8194b2cf49620ac098afdbd3"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_preparation_scratch15_20261001.cpython-38.pyc",
+      "size": 27853,
+      "sha256": "e0404d78db5887a6294b71b4b46ec1a29bde6cabfa92c5a2f82b75916aa8b888"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_preparation_scratch15_20261001.cpython-39-pytest-7.1.1.pyc",
+      "size": 28354,
+      "sha256": "3644782e214b0973f2485e73c00cd9cf435317d7d5431f1ffa903f1f2f06d363"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_preparation_scratch15_20261001.cpython-39.pyc",
+      "size": 28498,
+      "sha256": "466d2f3c1a74028e54b50609e9118a2c90ccef659098d8dc40791a3aae5d619c"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_preparation_scratch_20260929.cpython-39-pytest-7.1.1.pyc",
+      "size": 19040,
+      "sha256": "b1f8836d9883a4e4f7f9a6b40b97deba75c75d707976873d142c807657b6c551"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_preparation_scratch_20260929.cpython-39.pyc",
+      "size": 18931,
+      "sha256": "ae191fa403752e7015373da67c57e57f0856f29cd71030252f81d9c115118eff"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_preparation_scratch_20260930.cpython-39.pyc",
+      "size": 18931,
+      "sha256": "0da61b8894967ae7ceb90b84fe369877d797e717aa9abaf40eafb0e60a670d8f"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_preparation_scratch_20260930_10.cpython-39-pytest-7.1.1.pyc",
+      "size": 25277,
+      "sha256": "67036675f426f310d3698775a9aee9da6a857ff09e12f392e3c19628c7bf2793"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_preparation_scratch_20260930_11.cpython-39.pyc",
+      "size": 25168,
+      "sha256": "646cb344285cfd4ee8dcfcc39692ce69c1de0a6b0d564e2aad9303762e5d0518"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_preparation_scratch_20260930_12.cpython-39.pyc",
+      "size": 25168,
+      "sha256": "5f8c3fa78913df78f6df81a914f1c08fb41d0969289a4aa2ded8b5891e7f44e9"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_preparation_scratch_20260930_13.cpython-38.pyc",
+      "size": 27855,
+      "sha256": "370df747e2ae37242757cfd541f9c80dd00b5d7ccafc560bfb4e89a22c8fb3af"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_preparation_scratch_20260930_3.cpython-39.pyc",
+      "size": 18933,
+      "sha256": "09984a2132e5867a18336253ea9f293808644b1ea43c8760946d03564274e5d1"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_preparation_scratch_20260930_5.cpython-38.pyc",
+      "size": 19477,
+      "sha256": "c89c3c18645e9ca381bf5ba52a2e3a9152c6523be91920e5f85d7c7fe7217a97"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_preparation_scratch_20260930_5.cpython-39-pytest-7.1.1.pyc",
+      "size": 19980,
+      "sha256": "797a7104f3ecbcd572a402d15fd008aadb5f43c9f76610a1ae1741d1c7e3f526"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_preparation_scratch_20260930_5.cpython-39.pyc",
+      "size": 19871,
+      "sha256": "409b0d3b4b0189dfff66ceb4c67882ae34f7b306b20349a0656b85e453b0509c"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_preparation_scratch_20260930_6.cpython-39-pytest-7.1.1.pyc",
+      "size": 19980,
+      "sha256": "0fbe9efcd966407cee2ed0820bf46589c811f3bcb0d7a45f3cc89b6d6dc7d7b9"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_preparation_scratch_20260930_7.cpython-38.pyc",
+      "size": 20537,
+      "sha256": "ee41867831645e647414ad724518969785faa43196cf119cbff8244663fdadae"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_preparation_scratch_20260930_7_resume_retry1.cpython-38.pyc",
+      "size": 21627,
+      "sha256": "ede501214c919af7070ee37376847e502ad53a9cecd6ec255deb0441b53144e3"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_preparation_scratch_20260930_8.cpython-39-pytest-7.1.1.pyc",
+      "size": 23338,
+      "sha256": "ffce67ecc0e11d888c5e534fb1b42c88878be8f93863c182cfbb6e1e4db33ada"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_preparation_scratch_20260930_9.cpython-312.pyc",
+      "size": 44126,
+      "sha256": "4007ba6c9473470cf7899bcadbf0d2379c83655dde5535ad671ca6bfc20f5fea"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_preparation_scratch_20260930_9.cpython-39-pytest-7.1.1.pyc",
+      "size": 25274,
+      "sha256": "5509ba4fc85770b2eec995923aaae170eb44039363b4c8851c8c59825634b67a"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_relocation_8b5056f8_20260930.cpython-38.pyc",
+      "size": 10391,
+      "sha256": "6916a180cc9bd4cfa218a1be7ed8b90e08c057707e1d4763358959b4ccefee07"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_relocation_8b5056f8_20260930.cpython-39-pytest-7.1.1.pyc",
+      "size": 18918,
+      "sha256": "461825055448fe8f0bcb7a25cacce22a4f737f62e1be7337d521efbaa3dde5dd"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_relocation_c658175a_resume3_20260930.cpython-39-pytest-7.1.1.pyc",
+      "size": 25118,
+      "sha256": "ec4a305832b345d2157a0e02032074e2c5a803d1229b78ff8a4096fa5eac4652"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_relocation_c658175a_scratch7_20260930.cpython-39-pytest-7.1.1.pyc",
+      "size": 19491,
+      "sha256": "88f9bd99fcb929d6f36821a1a2fa5503abf3c17d3d13c0a93ac0328baae17c68"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_relocation_c658175a_scratch7_20260930.cpython-39.pyc",
+      "size": 6410,
+      "sha256": "c58f3b0a0d5dbe9250b72c03d3b0a235baea77842d698c0da031c61a1b5074b6"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_relocation_dce800af_20260930.cpython-38.pyc",
+      "size": 5453,
+      "sha256": "77c4798eb9f047a60b7ed14f9f9678a88103d39c96f94ff19d439e5444ba9c05"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_relocation_dce800af_20260930.cpython-39-pytest-7.1.1.pyc",
+      "size": 15003,
+      "sha256": "1f4431d3b03e97fefabdac2dc4752e31a8728612a1c2603e1283278410c5f284"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_relocation_resume_dce800af_20260930.cpython-39-pytest-7.1.1.pyc",
+      "size": 13460,
+      "sha256": "faac98e5f274179faf3062bb98d367143465a2593f64b84fcd68a773635ad683"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_relocation_scratch1_20260930.cpython-39-pytest-7.1.1.pyc",
+      "size": 8829,
+      "sha256": "93ee6fdd98cfa422a116e1fd9c6f7ce4c221c18c85305293bf85889b2580f05e"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_retention_archive.cpython-39.pyc",
+      "size": 13336,
+      "sha256": "c2ae1b5cbd1b749f2fefe7500a7d96b88ef8eecea7fbae3f22159471d48d5290"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_retention_capsule.cpython-39.pyc",
+      "size": 20572,
+      "sha256": "3c20c209c09b21a47dc5415bb99e02d1c45f79ec203bec8d7f301581a2b02d65"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_retention_cleanup_scratch1_20260930.cpython-38.pyc",
+      "size": 2439,
+      "sha256": "9e223c2cf3fd631c9d11e5a965734c94167dc06e0bd368072308a53b202a277f"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_retention_cleanup_scratch1_20260930.cpython-39.pyc",
+      "size": 4754,
+      "sha256": "c487c044f6ce478138a5728b99331f02321ace886f1d28ffed54eda81864bd20"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_retention_preparation_67589154.cpython-39.pyc",
+      "size": 21070,
+      "sha256": "d4b766d8f3a0d327cc319bfa2581b59daea1150bb57adc567e15f15643b830a5"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_retention_preparation_704f6654.cpython-39.pyc",
+      "size": 21070,
+      "sha256": "753dfd875a683179367e890bdcbe272a0464ac00038d1068fea1571a9921415d"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_retention_preparation_76ae20b5.cpython-39.pyc",
+      "size": 2830,
+      "sha256": "c7b024ccef60e132f6d431c94cc54ef1aa5d2ac0df247f679c6e20dd07dc0ba0"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_retention_preparation_76ae20b5_v2.cpython-39.pyc",
+      "size": 24626,
+      "sha256": "886013169252f370e2c43d5715cce92777a028a9b71cf864cf65c96c079ccdc7"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_retention_preparation_9e5ab03d.cpython-39.pyc",
+      "size": 23579,
+      "sha256": "bf4905fbb4b43cb59fbe3b496d9d47c4fe4394c3d3081264d1470c5432e67886"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_retention_preparation_c81aeaca_scratch14_20261001.cpython-39-pytest-7.1.1.pyc",
+      "size": 4746,
+      "sha256": "6f87d16076fd292b84838048e100a86d228c92e8c2c6b8977c23ebeb42e15464"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_retention_preparation_c81aeaca_scratch14_20261001.cpython-39.pyc",
+      "size": 4637,
+      "sha256": "5491aefa0417034b1161eb0fc965d6b2b2f0d75cc55d4086b2994a19eec3af3c"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_retention_relocation_8b5056f8_20260930.cpython-38.pyc",
+      "size": 10465,
+      "sha256": "18ff55331187de44b65c9302e2d49d5ff575274404d81e110ad0302d8d604d40"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_retire_1c00d2b8.cpython-39.pyc",
+      "size": 29349,
+      "sha256": "c2913a6759f81f10ecec0b4e294a160f2b0813ccf98c649d7a7a38858430a479"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_retirement_1c00d2b8.cpython-39.pyc",
+      "size": 96417,
+      "sha256": "6f7e10520d4eb8cf35e6d355aed170a18f0ba6596f91d68e9ef65a968f84c5af"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_retirement_76ae20b5.cpython-39.pyc",
+      "size": 38100,
+      "sha256": "0ff018f9f6ca62b7fb07b05d7b76e2df62cd8fc4841ae75f95d6a07cae0a25cf"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_retirement_c81aeaca_scratch14_20261001.cpython-39-pytest-7.1.1.pyc",
+      "size": 4083,
+      "sha256": "37a1bce861f4221d19f16c5b2a95d0ca9b7a6fcdfa25770d21741eb93611d53e"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_retirement_c81aeaca_scratch14_20261001.cpython-39.pyc",
+      "size": 3952,
+      "sha256": "0a0507a017a29274e1e7a23ff8e814c4508bc0d50c1ab1ccd759f13dca094de1"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_retirement_postflight_76ae20b5.cpython-38.pyc",
+      "size": 14648,
+      "sha256": "535111c975a27e08501a30bb6e5d5c86b8595dd5743666f9c8ad17d5506c31e9"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_retirement_postflight_76ae20b5.cpython-39.pyc",
+      "size": 15044,
+      "sha256": "7ededf93d6b5c3adc05b3ddee6c192ff1eb84d883db876544cdec2ed8d3fb505"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_scratch19_preparation_execution_wrapper_20261001.cpython-39.pyc",
+      "size": 3212,
+      "sha256": "34b970d9ca0451696bfd4e9e2b39a4201db43dc182b555d8d890c8ab0ff680d7"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_scratch20_preparation_execution_wrapper_20261001.cpython-39.pyc",
+      "size": 2909,
+      "sha256": "4f16ad2c41fd3a0244163d2dcfbfd4ea25ee9c208441c8a20ee8578be53b0a20"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_candidate_scratch21_preparation_execution_wrapper_20261001.cpython-39.pyc",
+      "size": 3031,
+      "sha256": "3cff871b5a1b3259676d98a3151a285786d174470a0c572e318e6bdf21a691e8"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_export26_build_cleanup_20261001.cpython-39-pytest-7.1.1.pyc",
+      "size": 43125,
+      "sha256": "77efb765db9547a75c57c065133b55502061ac4a94ec4fb6dd121c50f943771f"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_export26_build_cleanup_20261001.cpython-39.pyc",
+      "size": 28830,
+      "sha256": "38073de0bcb36931ed9d332aa02cca2f10891761e9a3b547dce5380f360dd2db"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_f021bdee_evidence_archive_retirement_20260930.cpython-39-pytest-7.1.1.pyc",
+      "size": 9899,
+      "sha256": "40698d8e04eaaa5d4745ccc218802730cc82047828189edd27d32c7de6abcffe"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_f021bdee_evidence_retirement_20260930.cpython-39-pytest-7.1.1.pyc",
+      "size": 24336,
+      "sha256": "c07a3e3cb6426cb79effcbac3f811d231941c56bc16344437d3f78ead8f265ad"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_historical_lease_observer.cpython-39.pyc",
+      "size": 6252,
+      "sha256": "8ab26948e1e4219655fa4db1c69836858624ae51bc896c012c4b47c94cac028f"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_image_preparation_packet_scratch9_20260930.cpython-39.pyc",
+      "size": 6831,
+      "sha256": "6abcfaa47b9190ebaa9306d0055048c69735b99cdbc09f7f8c9eb81bce63633a"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_mckernel_gitlink_preparation_6fed3a10_exportset25.cpython-39.pyc",
+      "size": 12982,
+      "sha256": "8a73208cd7e344b30a317d757f50c2ac732f550e18571ab0f9c085107b668d21"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_mckernel_image_preparation_6fed3a10_exportset25.cpython-39.pyc",
+      "size": 28006,
+      "sha256": "0e22cab29139472f3474b95c896e841552176665b73bb75f7d406419f89062ea"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_mckernel_image_request_preparation_c81aeaca_exportset26_20261001.cpython-38.pyc",
+      "size": 28285,
+      "sha256": "68f27d3b46fcee886e874c8ebf189f3d0464bb466e17c5c3d9c07881441ccf56"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_mckernel_image_request_preparation_c81aeaca_exportset26_20261001.cpython-39.pyc",
+      "size": 28141,
+      "sha256": "0d3afe1d6ff8efe15f6701220e38df72d2bc9bf7c18d81c1b73da4cedf97e475"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_mckernel_link_wrapper.cpython-39.pyc",
+      "size": 4857,
+      "sha256": "e868aee9c41df28e09b64eacf0fb44789efe23ad01ba1fe1d5f7afac8c65c179"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_retained_candidate_43e9_evidence_cleanup_20260930.cpython-38.pyc",
+      "size": 3038,
+      "sha256": "19beba936c506eeb5fc4c8487aab1dae7c460d3b3c2e737b749ec970ae88b7fa"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_retained_candidate_43e9_evidence_cleanup_20260930.cpython-39-pytest-7.1.1.pyc",
+      "size": 5119,
+      "sha256": "680870fc2da985f77f3caf0272690f3e8b26bf631b35615b150addb2e7f4b87b"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_retained_candidate_43e9_evidence_cleanup_20260930.cpython-39.pyc",
+      "size": 3091,
+      "sha256": "e83ed015181871874f970a81398c09288469a38e5fd6bb179ac454644ee06720"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_retained_candidate_4e99a82c_source_evidence_cleanup_20260930.cpython-39-pytest-7.1.1.pyc",
+      "size": 6359,
+      "sha256": "7e7bde095c18c21613792dceb515007169b255873024b4fdf99902f76b631d05"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_retained_candidate_4e99a82c_source_evidence_cleanup_20260930.cpython-39.pyc",
+      "size": 3923,
+      "sha256": "e219c9ac7dbac99467300a39c3cdeaf351dd401df1789733a343aefd1587d82e"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_retained_candidate_61bfbb6c_evidence_cleanup_20260930.cpython-39-pytest-7.1.1.pyc",
+      "size": 5127,
+      "sha256": "6fbeb0711d1ad5399ce2aff47ee0e84c5423554b0be9f955d95e58c96c413374"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_retained_candidate_63235981_evidence_cleanup_20260930.cpython-39-pytest-7.1.1.pyc",
+      "size": 5493,
+      "sha256": "d609870cc6736319eb9fb715220ea1b1782a70ce79eb562a3189dae69799eaac"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_retained_candidate_6fed3a10_source_evidence_audit_20261001.cpython-38.pyc",
+      "size": 6827,
+      "sha256": "a2f49ee0a904c79d9423732e8c2fac214829a4d349582f043916415fddc069e8"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_retained_candidate_6fed3a10_source_evidence_audit_20261001.cpython-39-pytest-7.1.1.pyc",
+      "size": 10685,
+      "sha256": "8bb83a1bf643c5754464afd4a5694e7b841c2f30ba05ea1347ef7c0e058d5c21"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_retained_candidate_74085185_source_evidence_cleanup_20260930.cpython-39-pytest-7.1.1.pyc",
+      "size": 11457,
+      "sha256": "268cd6948fab724575db6d516ad1f0235dcc60c8b3828ee3458dd1bc81772e6e"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_retained_candidate_74085185_source_evidence_cleanup_20260930.cpython-39.pyc",
+      "size": 7290,
+      "sha256": "d0f1061bdb8d2a405a6894360dd2c145876379a105d66601966cb732482fd515"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_retained_candidate_acd4197b_source_evidence_cleanup_20260930.cpython-39-pytest-7.1.1.pyc",
+      "size": 9677,
+      "sha256": "dc291f0148bec82455f5e94b593b6a9aeae9c20ecf3ecf00f99fe64a54bdbaa1"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_retained_candidate_acd4197b_source_evidence_cleanup_20260930.cpython-39.pyc",
+      "size": 4863,
+      "sha256": "ab1db9121666d6413d3b86abfff459e3d2db223e67837a54f356b87a5f55dfc7"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_retained_candidate_c658175a_evidence_cleanup_20260930.cpython-39-pytest-7.1.1.pyc",
+      "size": 14273,
+      "sha256": "4414c9a826a4a42d0f87839cb31618cd623f2fa2b6993c25ebc696fc38f3d377"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_retained_candidate_dce800af_evidence_cleanup_20260930.cpython-39-pytest-7.1.1.pyc",
+      "size": 6091,
+      "sha256": "a8637487c7658dea70c07f7cec580579069d76d78adc0d427f052f01a4fae5d7"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_retained_candidate_dce800af_evidence_cleanup_20260930.cpython-39.pyc",
+      "size": 3369,
+      "sha256": "ded2c23f236616b5c38fe693fcbe59a4521a503babde7dac102504f4e097f65c"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_retained_candidate_e1c5e4e2_source_evidence_cleanup_20260930.cpython-39-pytest-7.1.1.pyc",
+      "size": 8441,
+      "sha256": "6ff63345604dca8e939b00e44f42ae02ceaeef73e1279c44338f198a3b0ca1ef"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_retained_candidate_e1c5e4e2_source_evidence_cleanup_20260930.cpython-39.pyc",
+      "size": 3717,
+      "sha256": "50d4caf145dcff38272f62451477f1edcd15a626e408d44c02ad88894ab8f3c9"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_retained_candidate_e8bece7f_source_evidence_cleanup_20260930.cpython-39-pytest-7.1.1.pyc",
+      "size": 5748,
+      "sha256": "2ebeb3d466b652965de47e335c45b759099a45666e95dbd5221e0827d35eb5a9"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_retained_candidate_e8bece7f_source_evidence_cleanup_20260930.cpython-39.pyc",
+      "size": 2963,
+      "sha256": "f626171aad39f746c0078421212dc21cecd1aefe4d7e1b3332ac78d4ada57084"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_retained_candidate_f021bdee_scratch8_evidence_cleanup_20260930.cpython-39-pytest-7.1.1.pyc",
+      "size": 8483,
+      "sha256": "509f23319b14861c9d48ae9c51235079befe708b16568bc7c74fcd1359a1a22d"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_scratch13_planbound_evidence_cleanup_20261001.cpython-38.pyc",
+      "size": 65412,
+      "sha256": "85eda6513019146fb4c9d98945b7a2f4bf2756fe2883728a4341274beb9c2d79"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_scratch13_planbound_evidence_cleanup_20261001.cpython-39-pytest-7.1.1.pyc",
+      "size": 67699,
+      "sha256": "bf1e06ca4914ab92f78eb86b1e83c82ffd6979280947da0182cff431d41325ee"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_scratch13_planbound_evidence_cleanup_20261001.cpython-39.pyc",
+      "size": 64571,
+      "sha256": "c838ecb79e4fbc713685c84bb19392bf17d202c971b25472a85d2c46ba522b3e"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_scratch14_evidence_subtree_retire_20261001.cpython-39-pytest-7.1.1.pyc",
+      "size": 7429,
+      "sha256": "3281ad4b30d762deb919ca8ac6f4957b49d2d4aeb9e34858d834b8faec6eaf74"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_scratch14_evidence_subtree_retire_20261001.cpython-39.pyc",
+      "size": 5451,
+      "sha256": "a806417df9c358f4c875846dacaf78ccdf844b363ebb0b34b855e05f7b980206"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_scratch14_planbound_evidence_cleanup_20261001.cpython-39-pytest-7.1.1.pyc",
+      "size": 12464,
+      "sha256": "e0db56e591c5d2c155afd531444d4222e5e4b9e3d47788f1ff3fe481443c29bd"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_scratch14_planbound_evidence_cleanup_20261001.cpython-39.pyc",
+      "size": 12333,
+      "sha256": "b38b903d7e74898364c977a949d429b4c692edd3551b2a38287585584adbea5a"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_scratch15_build_execution_20261001.cpython-39-pytest-7.1.1.pyc",
+      "size": 6767,
+      "sha256": "f98f490371c109a21b32b755a158120081390aef19a495742e7652d1aa40e821"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_scratch15_build_execution_20261001.cpython-39.pyc",
+      "size": 5072,
+      "sha256": "e4f05fecc75e88455b1b25d291b51ff8aa74269ced4fe0c246a4b248be2e234c"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_scratch16_build_execution_20261001.cpython-39.pyc",
+      "size": 11764,
+      "sha256": "e8599aa8e1b1a8d063880ff5677e73f5eb0617aa09f41883960ee15439e12632"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_scratch17_build_execution_20261001.cpython-39.pyc",
+      "size": 22375,
+      "sha256": "3d9288ae65f7e8d460a95bb51998438b82b7ef46e5d47e442eaef7a2552dae68"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_scratch18_build_execution_20261001.cpython-39.pyc",
+      "size": 21723,
+      "sha256": "3bedac540158ce374f44c5e5e637fdb33bc7348e6fec0fe955a67941ff5cc6d5"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_scratch18_build_resume_execution_20261001.cpython-39.pyc",
+      "size": 16209,
+      "sha256": "dfa0ba033f7142202394c6e75f1fd5a6b9f0c3e031339871cff584739cf48f0a"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_scratch18_interrupt_cleanup_20261001.cpython-38.pyc",
+      "size": 32069,
+      "sha256": "84fedac8b731a56978400651982904f23576d083bcd52acba354d16bbaaa890b"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_scratch18_interrupt_cleanup_20261001.cpython-39.pyc",
+      "size": 33769,
+      "sha256": "95c174b7fa76233af6b8ba7dc75986fc202956d4799892fe14383e54fa85f8ea"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_scratch18_preowner_recovery_execution_20261001.cpython-39.pyc",
+      "size": 15078,
+      "sha256": "4367c3d724a569cc9d98620b78c470b67abbdf4b1c096b943f856c92b3898d7f"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_scratch18_retry2_20261001.cpython-38.pyc",
+      "size": 22947,
+      "sha256": "ce9663d8aa40e71d4ad15cde2ad9d26fc998d334931f898c21722f628d0e6eb4"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_scratch18_retry2_20261001.cpython-39.pyc",
+      "size": 14068,
+      "sha256": "aaa561c649ced0e317c9b0dff852837fcc44bfaa9047a121df20e8054b9b931e"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_scratch18_retry2_build_cleanup_20261001.cpython-38.pyc",
+      "size": 31948,
+      "sha256": "1513fa756f20431ec14ae973ab243c6df7c2fe7a868a6d84ead1afc738045792"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_scratch18_retry2_build_cleanup_20261001.cpython-39-pytest-7.1.1.pyc",
+      "size": 7412,
+      "sha256": "4cb1b08e8d972009edc2b6de2a91b690212dc886e6e2ad1c0fc81e94ab4c63b2"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_scratch18_retry2_build_cleanup_20261001.cpython-39.pyc",
+      "size": 1780,
+      "sha256": "f180af81d55fb41bb111e02cbb50e8ae28a6a77d76c15e609dc6931245e7e53e"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_scratch18_retry2_execution_20261001.cpython-38.pyc",
+      "size": 9166,
+      "sha256": "385c9a4471fdad693776eab98a850f41f055fd08b4249a009f1bbbdddce2657e"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_scratch18_retry2_image_preparation_20261001.cpython-39.pyc",
+      "size": 3593,
+      "sha256": "7ad06e58a9ae271bfa6efbcf90552b474c1a36b57a14c952542d558ecf6a3e3b"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_scratch18_synthetic_state_recovery_20261001.cpython-38.pyc",
+      "size": 16184,
+      "sha256": "a1551aeb9ede2316dd6579980da0ccee0e10d21929a4a5f6b64f52d066f8c6b9"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_scratch18_synthetic_state_recovery_20261001.cpython-39.pyc",
+      "size": 16802,
+      "sha256": "2069faa6d536f9f4749873814c4b0084c97af2af751dd914c6cb016593feba7d"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_scratch21_terminal_cleanup_20261001.cpython-39.pyc",
+      "size": 1499,
+      "sha256": "82773af347d3fd2035fc2b77af014f962f80ce79e619a064b9b31018086d6c3e"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_tool_image_scratch17_toolimage_1_20261001.cpython-39.pyc",
+      "size": 3767,
+      "sha256": "203237bdaada0b56ff611fc6f1bb935ed8327460da2de4628e70c7b2483ef2e5"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_exact_tool_image_scratch17_toolimage_1_release_20261001.cpython-39.pyc",
+      "size": 9360,
+      "sha256": "284f6931d13b84d7560483b98282f3a29c47ee10c6fa6696bdae7d53e9daab0a"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_fork_child_adoption_model_20261001.cpython-39.pyc",
+      "size": 4844,
+      "sha256": "02886e78730487bfa4b7662bfe7641374ccf14d4f14646392560622840c4a09c"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_fork_ppd_20261001.cpython-39.pyc",
+      "size": 3798,
+      "sha256": "62fd5b3bce52df9151dffd1593c59eedb2e16265ff2f37d1fb6dd4a46b848b4d"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_irq_descriptor_production.cpython-39.pyc",
+      "size": 3090,
+      "sha256": "4d739300b4546f31b0e78ed8e742f816a70513fec3c09690a7f9f97cd60bda33"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_rust_build_surface_audit.cpython-39.pyc",
+      "size": 25746,
+      "sha256": "633522c67c7d8309b763613ef377aa686b0ea9c88039d66038593454fbfa7152"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_rust_current_image_postlink.cpython-38.pyc",
+      "size": 35909,
+      "sha256": "5dcda9ec22f6da39a747ce9820bcdab21b81816d61af3ac6a677fa14ae59cfa6"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_rust_current_image_postlink.cpython-39.pyc",
+      "size": 36433,
+      "sha256": "da302dba13575cf7756afc40979dd0fd5f9a7f7e4e83a7cf14d2c4d6ce243e0e"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_rust_exact_build_candidate_metadata.cpython-39.pyc",
+      "size": 10066,
+      "sha256": "87bc8774f21de5f30a6bef65faa4f100336b63648a7ed802cbc033355b21c218"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_rust_exact_build_container_owner.cpython-39-pytest-7.1.1.pyc",
+      "size": 75188,
+      "sha256": "53fe270868b90d1b32fa1ffe6d72b12118c6d11707400aa2552657f0d3bad25f"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_rust_exact_build_container_owner.cpython-39.pyc",
+      "size": 77473,
+      "sha256": "3f487bb4527335382e2094676ed75101c761ff764160b2cf18269fe6b82eab7e"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_rust_exact_build_image_prepare.cpython-38.pyc",
+      "size": 22519,
+      "sha256": "fe50958818de561c218ee91ffaa5239091d7a3263513e620b2b604f3d094b8c9"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_rust_exact_build_image_prepare.cpython-39-pytest-7.1.1.pyc",
+      "size": 20463,
+      "sha256": "376d9424a0a6eeae17260d34210204ed906a254104026c23f928807efc26a9e9"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_rust_exact_build_image_prepare.cpython-39.pyc",
+      "size": 23894,
+      "sha256": "469de1d161a643fa1dfecadba9155619412b92e0d92cea42476ccca73fab660b"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_rust_exact_build_image_rebind.cpython-39-pytest-7.1.1.pyc",
+      "size": 4169,
+      "sha256": "36fb84de0bad878c28b8dcc57f27361257c3981c49003ddb0a5342b693277206"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_rust_exact_build_image_rebind.cpython-39.pyc",
+      "size": 6140,
+      "sha256": "5e9c83bd038936f1982f66efa20c894f3441ace81aa294a098a80626cc23a0bb"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_rust_exact_build_image_rebind_probe.cpython-38.pyc",
+      "size": 13339,
+      "sha256": "c4b9c1f19c08f983c5e88b6641161481e12d0a14d2417bdde7b3170f219ee05c"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_rust_exact_build_image_rebind_probe.cpython-39.pyc",
+      "size": 12314,
+      "sha256": "a048618beb636203672fd8fc6eb648bfdf8845d594dd0f9efcc3cc3f27ff5aee"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_rust_exact_build_input_manifest.cpython-39.pyc",
+      "size": 24723,
+      "sha256": "c84ef7cf48e461f50c44b71c85ba0f1022b36b954a0c3de4fd62b72a0ecec5e7"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_rust_exact_build_offline.cpython-39.pyc",
+      "size": 23371,
+      "sha256": "368b26e632382387c9927283f57e6db57d9c3e799ef9b83f0b8024794f46db9b"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_rust_exact_build_workflow.cpython-312.pyc",
+      "size": 133259,
+      "sha256": "497bda78f56cdf2a39269f08300b1f1ff4b750f20532cb3c99347f1e48baf22e"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_rust_exact_build_workflow.cpython-38.pyc",
+      "size": 82514,
+      "sha256": "60fddb00890a475930454240124c971c2228e03efd2d364356b546a878fcf0b8"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_rust_exact_build_workflow.cpython-39.pyc",
+      "size": 83431,
+      "sha256": "0628b9dfeb9fb6b849b638826769e06794a8752510d84640cf11bd5dce3f0876"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_rust_exact_disk_build_wrapper.cpython-312.pyc",
+      "size": 25518,
+      "sha256": "693f97781027da9a8e5dca10bc4db28b5bbcf8e76f409452e03eda037fea0a75"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_rust_exact_disk_build_wrapper.cpython-38.pyc",
+      "size": 45506,
+      "sha256": "a15984a307f6ec49f3a6ffdd82caf1d425d95dd0cebebb7ec1600114d6be64ba"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_rust_exact_disk_build_wrapper.cpython-39-pytest-7.1.1.pyc",
+      "size": 14825,
+      "sha256": "1945aa292f379acad7a15dbb962c4e96ac413888d751fb504d136fb4132fe4ce"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_rust_exact_disk_build_wrapper.cpython-39.pyc",
+      "size": 48326,
+      "sha256": "a747e4c9c30a06009641b61f45a0d717f0bc788e231316b9394334d15d8d9d31"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_rust_exact_mckernel_gitlink_integration.cpython-39.pyc",
+      "size": 8324,
+      "sha256": "f3a98286478a6634bd6a3beff4258a783e3dcce677dc05d6020ee8c952976001"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_rust_exact_mckernel_gitlink_prepare.cpython-39.pyc",
+      "size": 6859,
+      "sha256": "02a2d78eafa96168007e520d7acb22c78bd8c43582078b30911759349e978b81"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_rust_exact_mckernel_image_container_owner.cpython-312.pyc",
+      "size": 49340,
+      "sha256": "d74cc1ae4ead1556011d8a2a89a2ba86d2bac025fd59691727bd01a4d7709a32"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_rust_exact_mckernel_image_container_owner.cpython-38.pyc",
+      "size": 43111,
+      "sha256": "3d00bdb3310f6adf8803967e024bab531ee5a4cce1c153d7a3d5b37f9d5bac48"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_rust_exact_mckernel_image_container_owner.cpython-39-pytest-7.1.1.pyc",
+      "size": 33038,
+      "sha256": "50511d421aeab4591c5e2a107fe9491b865d879f50bad9254a666f5008c81ef3"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_rust_exact_mckernel_image_container_owner.cpython-39.pyc",
+      "size": 43895,
+      "sha256": "3cba6c8fa78627bdda5303ae54b804d08f93bd6e61a3ce3204c520a17858a4ed"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_rust_exact_mckernel_image_offline.cpython-39-pytest-7.1.1.pyc",
+      "size": 34531,
+      "sha256": "22a6d2ad230a30e303f3fd988625f261d113a14d21dc23366ee3ede148bba998"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_rust_exact_mckernel_image_offline.cpython-39.pyc",
+      "size": 49484,
+      "sha256": "45380514d577daaf02ab388408f2e26f227492ec85ac6212a9d2e96514a5f959"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_rust_exact_mckernel_image_request_prepare.cpython-38.pyc",
+      "size": 13395,
+      "sha256": "d3a164f633c180766386c20fba3ccc3fd619415450aa1459055d86e7337b9f1c"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_rust_exact_mckernel_image_request_prepare.cpython-39-pytest-7.1.1.pyc",
+      "size": 13488,
+      "sha256": "804bf89e03d77bb15026c170c65c2c659497258be429be307207577dbecfe37b"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_rust_exact_mckernel_image_request_prepare.cpython-39.pyc",
+      "size": 13675,
+      "sha256": "c0740bd82a36a6a604d222d84b0cf465bdb26d37ba4bf43603e8a56dc5a49ff3"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_rust_host_audit.cpython-39.pyc",
+      "size": 29407,
+      "sha256": "4b7bf9128f95173c1cee63009d3bcab5c46b52b153ae3501aa10fedba3fa09c1"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_rust_kbuild_link_closure.cpython-312.pyc",
+      "size": 84452,
+      "sha256": "3d4cdd162018a05c9df3044719d6afc0f292c9fd59667feab6385ec1fab188cb"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_rust_kbuild_link_closure.cpython-39-pytest-7.1.1.pyc",
+      "size": 51950,
+      "sha256": "60bb5fb8ebb9c94f44e2845a3f281bed7ae80a0096f207f789368604e9848c70"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_rust_kbuild_link_closure.cpython-39.pyc",
+      "size": 52749,
+      "sha256": "d23dab681a0d9c950bddcd90be71e0a2c1eba2b5c1694b4392cc9a6b1323cc31"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_rust_runtime_evidence.cpython-312.pyc",
+      "size": 329948,
+      "sha256": "ca5c91ecb4ba0a2e114cf828b60bf6a000b8eac2d84ccf233dde29292819c8a8"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_rust_runtime_evidence.cpython-38.pyc",
+      "size": 177647,
+      "sha256": "477a51726a602e69f8d52eca6f2518c2196cf95f7a9bdd84602c3c2590a6bd7f"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_rust_runtime_evidence.cpython-39-pytest-7.1.1.pyc",
+      "size": 186863,
+      "sha256": "0679a9e8f45617c96be6fc07ed75004cdad2d978cbcacca6ef6018f7256295dc"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_rust_runtime_evidence.cpython-39.pyc",
+      "size": 184653,
+      "sha256": "98b01d27f36bdd40e2bedbc0158060deb6808edbf96bd587b240d1f127dc0c1f"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_rust_runtime_link_metadata.cpython-312.pyc",
+      "size": 18939,
+      "sha256": "bd726c1f99670870180ccc3141b0bb80c98b9662156ccfc233b77f43aff9c260"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_rust_runtime_link_metadata.cpython-38.pyc",
+      "size": 10547,
+      "sha256": "3aa4aef54bc8f9e1aaf39ea61717683f92de354818328fb22a820ffb6da7b58b"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_rust_runtime_link_metadata.cpython-39.pyc",
+      "size": 10865,
+      "sha256": "8772ab1116a1e21075c8769ea2d653012578ac1912452f9bcfb40f2950b35883"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_rust_unsafe_ffi_ledger.cpython-39.pyc",
+      "size": 30511,
+      "sha256": "941c1f303a5a2a118ef3fa47112cc650e39fde80a8ae206a60b938a802098336"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_shared_heavy_entry_contract_20261001.cpython-38.pyc",
+      "size": 10176,
+      "sha256": "29b905be73914b80f834014fc41dc68a2814f3de57b6a0bdcbf3b1d3aebb69c8"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_shared_heavy_entry_contract_20261001.cpython-39.pyc",
+      "size": 10592,
+      "sha256": "e0e40345c4a25027729751d7ef4f784ae6d18facce7a4c40ef0320e4c10f22bd"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_shutdown_v5_abi_blocker_20261001.cpython-39-pytest-7.1.1.pyc",
+      "size": 9441,
+      "sha256": "4ad97cbbe011acdc5ee347340120f1b66e05e303d28350cab2c16abc1deb0cf0"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_shutdown_v6_normal_boot_order_20261001.cpython-39-pytest-7.1.1.pyc",
+      "size": 5582,
+      "sha256": "dbf7c120b3c4a53710056135f725a6290f617194c9d8dd940bf56c37305b61bf"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_shutdown_v6_normal_boot_order_20261001.cpython-39.pyc",
+      "size": 5473,
+      "sha256": "21167cd363f67367968d24fafaca87a9b9f8a9e1810a344212a1f51b4c328596"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_shutdown_v6_provider_integration_20261001.cpython-39-pytest-7.1.1.pyc",
+      "size": 6102,
+      "sha256": "2495299bc8b996e6de0df7ae48e585a6d0f52485ce42805beadb2d8b9a24b32a"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_native_shutdown_v6_provider_integration_20261001.cpython-39.pyc",
+      "size": 5999,
+      "sha256": "f5024f14a702d895931f3c19aa94a1efb68abe88b245c4fd5a7aa1e80c7f0103"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_qemu_mckernel_guest_cpu_policy.cpython-39.pyc",
+      "size": 4690,
+      "sha256": "40e079648b72500272361ac220e7d60fa42ed9101a26c232670dbf5be07c2536"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_rocky_kernel_config_resolution.cpython-312.pyc",
+      "size": 87043,
+      "sha256": "c69e9f6d6e6aebff6aee01fbfd939d41b99803ac1aaedefd60f8ad8038a143d4"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_rs006_miscdevice_module_owner_followup.cpython-312.pyc",
+      "size": 41864,
+      "sha256": "dd39851c9f1d036e0e905309f17cf0d9316cea14e178b699b159211c54cea838"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_rs006_miscdevice_module_owner_followup.cpython-39-pytest-7.1.1.pyc",
+      "size": 24361,
+      "sha256": "c9d90fb8e518972986270c7a7d1f30b9e48446cc4fc2a261a60f252808ef5509"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_rust_target_compatibility_patches.cpython-312.pyc",
+      "size": 37916,
+      "sha256": "5d487862368af0b39bcfd047d7eb643bff317bb84d736d9f96bc984691592ba8"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_secondary_reset_build_supplement.cpython-312.pyc",
+      "size": 17541,
+      "sha256": "83735e61bc096765af354f006c6fed2110456a68245d350b0dbbc186d2be134f"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_shutdown_cpu_reclaim.cpython-39-pytest-7.1.1.pyc",
+      "size": 9509,
+      "sha256": "2842a9a5cafd0de00a296f5ca3dd0f197c9b27065012cdf114c8a67b4e388f83"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_shutdown_cpu_reclaim.cpython-39.pyc",
+      "size": 9400,
+      "sha256": "39e9b2ca876880ddb8bb45d426597cbe859f94a70b1d203f73be6887b0110e40"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_shutdown_irq_close.cpython-39-pytest-7.1.1.pyc",
+      "size": 6123,
+      "sha256": "71f7c00a0a623578f7ec6fe3b2d82184b7340758bcf96859f48f098e868c5839"
+    },
+    {
+      "path": "scripts/tests/__pycache__/test_shutdown_irq_close.cpython-39.pyc",
+      "size": 3903,
+      "sha256": "ff520ca7688504dd53585f5d366a1bc7247fb5f7d2025487c054bad4658ae798"
+    },
+    {
+      "path": "scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/__pycache__/root_orchestrator.cpython-39.pyc",
+      "size": 44863,
+      "sha256": "fd47bc358600ede0a4befeeced532cbbd7bd07654559aebf87113930c24f1cfb"
+    },
+    {
+      "path": "scripts/tests/test_native_exact_build_cleanup_76ae20b5_disk_build_2.py",
+      "size": 3762,
+      "sha256": "846d8692f9d76444d02fe14d2379b20d5193b608eea52fd4d0a2aff839a27582"
+    },
+    {
+      "path": "scripts/tests/test_native_exact_candidate_relocation_scratch1_20260930.py",
+      "size": 4492,
+      "sha256": "3c9ad6b53254a9bcec96b1ade885658cf812ff11f92f7cb67893764b2774eb34"
+    },
+    {
+      "path": "scripts/tests/test_native_exact_candidate_retention_cleanup_scratch1_20260930.py",
+      "size": 4654,
+      "sha256": "642055e760c39d72cec858b5c418447e3a2c7f78efe4c365bed310b0a146b2c3"
+    },
+    {
+      "path": "scripts/tests/test_native_exact_candidate_retention_preparation_76ae20b5.py",
+      "size": 2104,
+      "sha256": "9a6de4c768e9ee5c8b8007c8ee0f6de34017f064848c96b8bc6d6e6c54dee5a3"
+    },
+    {
+      "path": "scripts/tests/test_native_exact_candidate_retention_preparation_c81aeaca_scratch14_20261001.py",
+      "size": 3461,
+      "sha256": "9681523023242ca54d934a23a10c24151ce7f617485dcc5cd0fc662561208814"
+    },
+    {
+      "path": "scripts/tests/test_native_exact_candidate_retirement_c81aeaca_scratch14_20261001.py",
+      "size": 2624,
+      "sha256": "98fdbfd6d26647d1d0a8da6ad2b00428639eae4a25859347e474ed02cf61cad3"
+    },
+    {
+      "path": "scripts/tests/test_native_exact_image_preparation_packet_scratch9_20260930.py",
+      "size": 4356,
+      "sha256": "23a940df21f6c9c2390e578d8eb46fc854f4cf7f92818ce4f362b89d40a72553"
+    },
+    {
+      "path": "scripts/tests/test_native_exact_tool_image_scratch17_toolimage_1_release_20261001.py",
+      "size": 9464,
+      "sha256": "21d3522538b4b5733a833927911df23ada63b26c461867840791342d3c910291"
+    }
+  ],
+  "control_sha256": {
+    "AGENTS.md": "0353e5a1e42653fd4f955522ff797e49ba2c3977b9c77aead749646fb70fcf6b",
+    "docs/verification/os-milestones-20260914/GOAL.md": "76c4f5d12e3f233c8dc4f8f1a77dd1f2eae9df2ff8fb9f4000ef5a2e94c0bcc3",
+    "docs/verification/os-milestones-20260914/START.md": "1698d3429e71083634584dea7f78d22ff9e2927858de0dc714f829f9b3d6216c",
+    "docs/verification/os-milestones-20260914/CONVERGENCE.md": "f6938bd207d6fa2c0898def482e9bb4bd0cf173937fe55c2111a369d3393e86a",
+    "docs/verification/os-milestones-20260914/HANDOFF.md": "3a72d2b2dfaee1033ff693f4c9a54a71a4f0b35b1a206bdacacd2277441aeffe",
+    "docs/verification/os-milestones-20260914/CURRENT.md": "db5195919e6a7cfe5c4d70381eb743c5ecc2b3872b79c22d5c3dcd68e8dba4dd",
+    ".git/os-autopilot/state.json": "cc6804d9ec41019ac2d20440a569bee6e8996e7b989cd75aef6aa3831bc9c29e",
+    ".git/os-autopilot/watcher.json": "8453439090c380204dfabbf934e1b0ef78d5e6780061d278813a26785f97573d",
+    ".git/os-autopilot/instructions/pending/20261017T021032370649Z-e1d9b3466e7c4dcfb8838159453e3bf2.json": "a05027f2144889dfa93755e2680f27614352b588972becb178697f524ff831b9"
+  },
+  "launcher": {
+    "thread_id": "01a0a312-8c59-7c80-93de-0b64adde646b",
+    "phase": "stopped",
+    "active_turns": {},
+    "stop_reason": "signal_2"
+  },
+  "goal_status": "paused",
+  "scope": "Preparation only. No launcher, worker, build, guest, cleanup or release execution."
+}

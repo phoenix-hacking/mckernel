@@ -1,0 +1,222 @@
+{
+  "C4_replacement_or_functional_acceptance": false,
+  "C_source": {
+    "bytes": 967651,
+    "path": "/home/holden/mckernel/kernel/syscall.c",
+    "sha256": "9f5aa63d124784d772734bff1c0c63dd719cb814fd43d4ebf41f3bf7ce188b2e"
+  },
+  "actual_C_header_type_assertions": {
+    "bytes": 65125,
+    "path": "/home/holden/mckernel/kernel/rust/abi_checks.c",
+    "sha256": "f8deda08de0eccda152a6416a01bec00e6984c1cf4c998e9ca877b1bbe31c23a"
+  },
+  "actual_Rust_caller_source": {
+    "bytes": 1247778,
+    "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+    "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+  },
+  "actual_types": {
+    "bytes": 76151,
+    "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+    "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+  },
+  "exact_final_remaining_C_names": [
+    "do_execveat",
+    "syscall_execveat_bridge",
+    "util_thread",
+    "syscall_util_indicate_clone_disabled_bridge"
+  ],
+  "executed_by_assessor": false,
+  "no_unreviewed_C4_owner_remaining_in_this_manifest": true,
+  "rows": [
+    {
+      "body_bytes": 7255,
+      "body_sha256": "9e3c6e0d5378b029e1bc9ba6c35df456799de4f6f5e8c64575500be4efbcd5b3",
+      "classification": "retained live project C implementation; reviewed for ownership/source/ABI and NOT retired",
+      "complete_source_body": "static int do_execveat(ihk_mc_user_context_t *ctx, int dirfd,\n\t\tconst char *filename, char **argv, char **envp, int flags)\n{\n\tint error;\n\tlong ret;\n\n\tchar *argv_flat = NULL;\n\tint argv_flat_len = 0;\n\tchar *envp_flat = NULL;\n\tint envp_flat_len = 0;\n\t\n\tstruct syscall_request request IHK_DMA_ALIGN;\n\tstruct program_load_desc *desc;\n\tstruct thread *thread = get_this_cpu_local_var()->current;\n\tstruct process_vm *vm = thread->vm;\n\tstruct vm_range *range;\n\tstruct process *proc = thread->proc;\n\tihk_mc_user_context_t execve_ctx;\n#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS\n\tint i;\n#endif\n\n\tmemcpy(&execve_ctx, ctx, sizeof(execve_ctx));\n\n#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS\n\terror = f03_execveat_filename_admission_v1(vm, filename);\n\tif (error) {\n\t\treturn error;\n\t}\n#else\n\tihk_rwspinlock_read_lock_noirq(&vm->memory_range_lock);\n\n\trange = lookup_process_memory_range(vm, (unsigned long)filename, \n\t\t\t(unsigned long)filename+1);\n\n\tif (range == NULL || !(range->flag & VR_PROT_READ)) {\n\t\tihk_rwspinlock_read_unlock_noirq(&vm->memory_range_lock);\n\t\tkprintf(\"execve(): ERROR: filename is bad address\\n\");\n\t\treturn -EFAULT;\n\t}\n\t\n\tihk_rwspinlock_read_unlock_noirq(&vm->memory_range_lock);\n#endif\n\n#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS\n\tdesc = f03_execveat_allocate_descriptor_v1(__FILE__, 7142, &error);\n\tif (!desc) {\n\t\treturn error;\n\t}\n#else\n\tdesc = _ihk_mc_alloc_aligned_pages_node(4, PAGE_P2ALIGN, IHK_MC_AP_NOWAIT, -1, IHK_MC_PG_KERNEL, -1, __FILE__, __LINE__);\n\tif (!desc) {\n\t\tkprintf(\"execve(): ERROR: allocating program descriptor\\n\");\n\t\treturn -ENOMEM;\n\t}\n\n\tmemset((void*)desc, 0, 4 * PAGE_SIZE);\n#endif\n\n\t/* Request host to open executable and load ELF section descriptions */\n\trequest.number = __NR_execve;  \n\trequest.args[0] = 1;  /* 1st phase - get ELF desc */\n\trequest.args[1] = dirfd;\n\trequest.args[2] = (unsigned long)filename;\n\trequest.args[3] = virt_to_phys(desc);\n\trequest.args[4] = flags;\n\tret = do_syscall(&request, ihk_mc_get_processor_id());\n\n\tif (ret != 0) {\n\t\tdkprintf(\"execve(): ERROR: host failed to load elf header, errno: %d\\n\", \n\t\t\t\tret);\n\t\tret = -ret;\n\t\tgoto end;\n\t}\n\n\tdkprintf(\"execve(): ELF desc received, num sections: %d\\n\",\n\t\tdesc->num_sections);\n\t\n\t/* for shebang script we get extra argvs from mcexec */\n\tif (desc->args_len) {\n\t\tdesc->args = ((char *)desc) + sizeof(struct program_load_desc) +\n\t\t\t     sizeof(struct program_image_section) *\n\t\t\t     desc->num_sections;\n\t}\n\n\t/* Flatten argv and envp into kernel-space buffers */\n\targv_flat_len = flatten_strings_from_user(desc->args, argv,\n\t\t\t\t\t\t  &argv_flat);\n\tif (argv_flat_len < 0) {\n\t\tchar *kfilename;\n\t\tint len = strlen_user(filename);\n\n\t\tkfilename = kmalloc_tracked(len + 1, IHK_MC_AP_NOWAIT, __FILE__, __LINE__);\n\t\tif(kfilename)\n\t\t\tstrcpy_from_user(kfilename, filename);\n\t\tkprintf(\"ERROR: no argv for executable: %s?\\n\", kfilename? kfilename: \"\");\n\t\tif(kfilename)\n\t\t\tkfree_tracked(kfilename, __FILE__, __LINE__);\n\t\tret = argv_flat_len;\n\t\tgoto end;\n\t}\n\tdesc->args = NULL;\n\tdesc->args_len = 0;\n\n\tenvp_flat_len = flatten_strings_from_user(NULL, envp, &envp_flat);\n\tif (envp_flat_len < 0) {\n\t\tchar *kfilename;\n\t\tint len = strlen_user(filename);\n\n\t\tkfilename = kmalloc_tracked(len + 1, IHK_MC_AP_NOWAIT, __FILE__, __LINE__);\n\t\tif(kfilename)\n\t\t\tstrcpy_from_user(kfilename, filename);\n\t\tkprintf(\"ERROR: no envp for executable: %s?\\n\", kfilename? kfilename: \"\");\n\t\tif(kfilename)\n\t\t\tkfree_tracked(kfilename, __FILE__, __LINE__);\n\t\tret = envp_flat_len;\n\t\tgoto end;\n\t}\n\n\t/* Unmap all memory areas of the process, userspace will be gone */\n\tmunmap_all();\n\n#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_EXEC_DEFINED_TAIL) && defined(__x86_64__)\n\tf03_execveat_install_user_context_v1(thread, vm, desc->entry);\n#else\n\t/* Code assumes no process switch from here on */\n\tpreempt_disable();\n\tihk_mc_init_user_process(&thread->ctx, &thread->uctx,\n\t\t\t((char *)thread) +\n\t\t\tKERNEL_STACK_NR_PAGES * PAGE_SIZE, desc->entry, 0);\n\n\t/* map_start / map_end is used to track memory area\n\t * to which the program is loaded\n\t */\n\tvm->region.map_start = vm->region.map_end = LD_TASK_UNMAPPED_BASE;\n\n#endif\n\t/* Create virtual memory ranges and update args/envs */\n\tif ((ret = prepare_process_ranges_args_envs(thread, desc, desc,\n\t\t\tPTATTR_NO_EXECUTE | PTATTR_WRITABLE | PTATTR_FOR_USER,\n\t\t\targv_flat, argv_flat_len, envp_flat, envp_flat_len)) != 0) {\n\t\tkprintf(\"execve(): ERROR: preparing ranges, args, envs, stack, ret: %d\\n\",\n\t\t\tret);\n\t\tpreempt_enable();\n\t\t/* control can't be rolled back because vm_range is gone */\n\t\tdo_kill(thread, thread->proc->pid, thread->tid, SIGKILL, NULL, 0);\n\t\tgoto end;\n\t}\n\t\n\t/* Clear host user space PTEs */\n\tclear_host_pte(vm->region.user_start,\n\t\t\t(vm->region.user_end - vm->region.user_start), 0);\n\n\t/* Request host to transfer ELF image */\n\trequest.number = __NR_execve;\n\trequest.args[0] = 2;  /* 2nd phase - transfer ELF image */\n\trequest.args[1] = virt_to_phys(desc);\n\trequest.args[2] = sizeof(struct program_load_desc) + \n\t\tsizeof(struct program_image_section) * desc->num_sections;\n\n\tif ((ret = do_syscall(&request, ihk_mc_get_processor_id())) != 0) {\n\t\tpreempt_enable();\n\t\t/* control can't be rolled back because vm_range is gone */\n\t\tdo_kill(thread, thread->proc->pid, thread->tid, SIGKILL, NULL, 0);\n\t\tgoto end;\n\t}\n\n#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS\n\texec_reset_signal_state_current_v1(thread);\n#else\n\tfor(i = 0; i < _NSIG; i++){\n\t\tif(thread->sigcommon->action[i].sa.sa_handler != SIG_IGN &&\n\t\t   thread->sigcommon->action[i].sa.sa_handler != SIG_DFL)\n\t\t\tthread->sigcommon->action[i].sa.sa_handler = SIG_DFL;\n\t}\n\n\t/* Reset floating-point environment to default. */\n\tclear_fp_regs();\n\n\t/* Reset sigaltstack to default */\n\tthread->sigstack.ss_sp = NULL;\n\tthread->sigstack.ss_flags = SS_DISABLE;\n\tthread->sigstack.ss_size = 0;\n\n#endif\n\n#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_EXEC_DEFINED_TAIL) && defined(__x86_64__)\n\terror = f03_execveat_ptrace_report_v1(thread, &execve_ctx);\n#else\n\terror = ptrace_report_exec(thread, &execve_ctx);\n#endif\n\tif (error) {\n\t\tkprintf(\"execve(): ERROR: ptrace_report_exec()\\n\");\n\t}\n\n\t/* Switch to new execution context */\n\tdkprintf(\"execve(): switching to new process\\n\");\n\tproc->execed = 1;\n\t\n\tret = 0;\nend:\n#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS\n\tf03_execveat_release_temporaries_v1(envp_flat, argv_flat, desc,\n\t\t\t__FILE__, 7285, 7288, 7290);\n#else\n\tif (envp_flat) {\n\t\tkfree_tracked(envp_flat, __FILE__, __LINE__);\n\t}\n\tif (argv_flat) {\n\t\tkfree_tracked(argv_flat, __FILE__, __LINE__);\n\t}\n\t_ihk_mc_free_pages(desc, 4, IHK_MC_PG_KERNEL, __FILE__, __LINE__);\n#endif\n\n#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_EXEC_DEFINED_TAIL) && defined(__x86_64__)\n\treturn f03_execveat_finish_switch_v1(thread, ret);\n#else\n\tif (!ret) {\n\t\tunsigned long irqstate;\n\n\t\t/* Lock run queue because enter_user_mode expects to release it */\n\t\tirqstate = cpu_disable_interrupt_save();\n\t\tihk_mc_spinlock_lock_noirq(\n\t\t\t&(get_this_cpu_local_var()->runq_lock));\n\t\tget_this_cpu_local_var()->runq_irqstate = irqstate;\n\t\tpreempt_enable();\n\n\t\tihk_mc_switch_context(NULL, &thread->ctx, thread);\n\n\t\t/* not reached */\n\t\treturn -EFAULT;\n\t}\n\n\t/* no preempt_enable, errors can only happen before we disabled it */\n\n\treturn ret;\n#endif\n}",
+      "final_symbol": {
+        "binding": "LOCAL",
+        "bytes": 1659,
+        "index": 3,
+        "name": "do_execveat",
+        "section_index": 1,
+        "type": "FUNC",
+        "value": 18446744073684389888,
+        "visibility": 0
+      },
+      "physical_owner": {
+        "basis": "LOCAL final do_execveat entry equals actual C .text placement base; saved current unit ledger has exactly the four functions.",
+        "local_entry_offset": 0,
+        "object": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "placement": {
+          "address": 18446744073684389888,
+          "bytes": 2978
+        },
+        "section": ".text"
+      },
+      "source_ABI_and_behavior_contract": {
+        "C_ABI": "static int(ihk_mc_user_context_t*,int,const char*,char**,char**,int)",
+        "behavior": "Original exec lifecycle remains C: typed current context copy; Rust filename admission/descriptor allocation; host exec phase1; argv/env flatten; irreversible unmap; selected Rust context installation; ranges and host-PTE cleanup; host transfer phase2; signal reset/ptrace report; original execed publication/temp cleanup/context-switch result. Existing success/error/irreversible-failure order retained; no replacement or runtime parity claimed.",
+        "caller": "same-source syscall_execveat_bridge; no exported duplicate",
+        "migration_status": "OPEN: original exec/source/replay holds unchanged; source ownership review is not execution eligibility."
+      },
+      "source_first_line": 8005,
+      "source_last_line": 8242,
+      "source_path": "kernel/syscall.c",
+      "symbol": "do_execveat"
+    },
+    {
+      "body_bytes": 204,
+      "body_sha256": "f821d0512fb8010a1e9cfa354444cf587a950d4b22425179ba95876c1c42fc45",
+      "classification": "retained live project C implementation; reviewed for ownership/source/ABI and NOT retired",
+      "complete_source_body": "int\nsyscall_execveat_bridge(void *ctx, int dirfd, const char *filename,\n\t\tchar **argv, char **envp, int flags)\n{\n\treturn do_execveat((ihk_mc_user_context_t *)ctx, dirfd, filename,\n\t\t\targv, envp, flags);\n}",
+      "final_symbol": {
+        "binding": "GLOBAL",
+        "bytes": 12,
+        "index": 3229,
+        "name": "syscall_execveat_bridge",
+        "section_index": 1,
+        "type": "FUNC",
+        "value": 18446744073684391552,
+        "visibility": 0
+      },
+      "physical_owner": {
+        "input": {
+          "binding": "GLOBAL",
+          "bytes": 12,
+          "index": 48,
+          "name": "syscall_execveat_bridge",
+          "section_index": 1,
+          "type": "FUNC",
+          "value": 1664,
+          "visibility": 0
+        },
+        "object": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "placement": {
+          "address": 18446744073684389888,
+          "bytes": 2978
+        },
+        "section": ".text"
+      },
+      "source_ABI_and_behavior_contract": {
+        "C_ABI": "int(void*,int,const char*,char**,char**,int)",
+        "Rust_ABI": "extern C fn(*mut c_void,CInt,*const c_void,*mut *mut c_void,*mut *mut c_void,CInt)->CInt",
+        "Rust_caller": "f03_execveat_existing_C_provider passed by sys_execve/sys_execveat to real policy bodies",
+        "Rust_link_name": "syscall_execveat_bridge",
+        "behavior": "Exact cast/delegation to C do_execveat; C-int result consumed by genuine policy wrapper, no semantic body substituted."
+      },
+      "source_first_line": 8245,
+      "source_last_line": 8251,
+      "source_path": "kernel/syscall.c",
+      "symbol": "syscall_execveat_bridge"
+    },
+    {
+      "body_bytes": 3429,
+      "body_sha256": "648b0a2c35eb19bc6e5ab08798092c075b74d2a42228a9b5164c70d3e9fea1c4",
+      "classification": "retained live project C implementation; reviewed for ownership/source/ABI and NOT retired",
+      "complete_source_body": "int util_thread(struct uti_attr *arg)\n{\n\tstruct uti_ctx *rctx = NULL;\n\tunsigned long rp_rctx;\n\tstruct uti_info *uti_info = NULL;\n\tstruct syscall_request request IHK_DMA_ALIGN;\n\tlong rc;\n\tstruct thread *thread = get_this_cpu_local_var()->current;\n\tstruct kuti_attr {\n\t\tlong parent_cpuid;\n\t\tstruct uti_attr attr;\n\t} kattr;\n\n\tthread->uti_state = UTI_STATE_PROLOGUE;\n\n\trctx = kmalloc_tracked(sizeof(struct uti_ctx), IHK_MC_AP_NOWAIT, __FILE__, __LINE__);\n\tif (!rctx) {\n\t\trc = -ENOMEM;\n\t\tgoto out;\n\t}\n\trp_rctx = virt_to_phys((void *)rctx);\n\tsave_uctx((void *)rctx->ctx, NULL);\n\n\t/* Create a information for Linux thread */\n\tuti_info = kmalloc_tracked(sizeof(struct uti_info), IHK_MC_AP_NOWAIT, __FILE__, __LINE__);\n\tif (!uti_info) {\n\t\trc = -ENOMEM;\n\t\tgoto out;\n\t}\n\t/* clv info */\n\tuti_info->thread_va = (unsigned long)get_this_cpu_local_var()->current;\n\tuti_info->uti_futex_resp_pa = virt_to_phys((void *)get_this_cpu_local_var()->uti_futex_resp);\n\tuti_info->ikc2linux_pa = virt_to_phys((void *)get_this_cpu_local_var()->ikc2linux);\n\n\t/* thread info */\n\tuti_info->tid = thread->tid;\n\tuti_info->cpu = ihk_mc_get_processor_id();\n\tuti_info->status_pa = virt_to_phys((void *)&thread->status);\n\tuti_info->spin_sleep_lock_pa = virt_to_phys((void *)&thread->spin_sleep_lock);\n\tuti_info->spin_sleep_pa = virt_to_phys((void *)&thread->spin_sleep);\n\tuti_info->vm_pa = virt_to_phys((void *)thread->vm);\n\tuti_info->futex_q_pa = virt_to_phys((void *)&thread->futex_q);\n\n\t/* global info */\n\tuti_info->mc_idle_halt = idle_halt;\n\tuti_info->futex_queue_pa = virt_to_phys((void *)get_futex_queues());\n\n\trequest.number = __NR_sched_setaffinity;\n\trequest.args[0] = 0;\n\trequest.args[1] = rp_rctx;\n\trequest.args[2] = 0;\n\tif (arg) {\n\t\tmemcpy(&kattr.attr, arg, sizeof(struct uti_attr));\n\t\tkattr.parent_cpuid = thread->parent_cpuid;\n\t\trequest.args[2] = virt_to_phys(&kattr);\n\t}\n\trequest.args[3] = (unsigned long)uti_info;\n\trequest.args[4] = uti_desc;\n\tthread->uti_state = UTI_STATE_RUNNING_IN_LINUX;\n\t/* Defined unused wire slot; transport copies all six arguments. */\n\trequest.args[5] = 0;\n\trc = do_syscall(&request, ihk_mc_get_processor_id());\n\tdkprintf(\"%s: returned from do_syscall,tid=%d,rc=%lx\\n\", __FUNCTION__, thread->tid, rc);\n\n\tthread->uti_state = UTI_STATE_EPILOGUE;\n\n\tutil_show_syscall_profile();\n\n\t/* Save it before freed */\n\tthread->uti_refill_tid = rctx->uti_refill_tid;\n\tdkprintf(\"%s: mcexec worker tid=%d\\n\", __FUNCTION__, thread->uti_refill_tid);\n\t\n\tkfree_tracked(rctx, __FILE__, __LINE__);\n\trctx = NULL;\n\n\tkfree_tracked(uti_info, __FILE__, __LINE__);\n\tuti_info = NULL;\n\n\tif (rc >= 0) {\n\t\tif (rc & 0x100000000) { /* exit_group */\n\t\t\tdkprintf(\"%s: exit_group, tid=%d,rc=%lx\\n\", __FUNCTION__, thread->tid, rc);\n\t\t\tthread->proc->nohost = 1;\n\t\t\tterminate((rc >> 8) & 255, rc & 255);\n\t\t} else {\n\t\t\t/* exit or killed-by-signal detected */\n\t\t\tdkprintf(\"%s: exit or killed by signal, pid=%d,tid=%d,rc=%lx\\n\", __FUNCTION__, thread->proc->pid, thread->tid, rc);\n\t\t\tdo_exit(rc);\n\t\t}\n\t} else if (syscall_proxy_dead_result(rc)) {\n\t\t/* tracer is not working and /dev/mcosX has detected exit of mcexec process */\n\t\tkprintf(\"%s: release_handler,pid=%d,tid=%d,rc=%lx\\n\", __FUNCTION__, thread->proc->pid, thread->tid, rc);\n\t\tthread->proc->nohost = 1;\n\t\tdo_exit(rc);\n\t} else {\n\t\tkprintf(\"%s: ERROR: do_syscall() failed (%ld)\\n\", __FUNCTION__, rc);\n\t}\n\n out:\n\tkfree_tracked(rctx, __FILE__, __LINE__);\n\tkfree_tracked(uti_info, __FILE__, __LINE__);\n\n\treturn rc;\n}",
+      "final_symbol": {
+        "binding": "GLOBAL",
+        "bytes": 1260,
+        "index": 4906,
+        "name": "util_thread",
+        "section_index": 1,
+        "type": "FUNC",
+        "value": 18446744073684391568,
+        "visibility": 0
+      },
+      "physical_owner": {
+        "input": {
+          "binding": "GLOBAL",
+          "bytes": 1260,
+          "index": 49,
+          "name": "util_thread",
+          "section_index": 1,
+          "type": "FUNC",
+          "value": 1680,
+          "visibility": 0
+        },
+        "object": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "placement": {
+          "address": 18446744073684389888,
+          "bytes": 2978
+        },
+        "section": ".text"
+      },
+      "source_ABI_and_behavior_contract": {
+        "C_ABI": "int(struct uti_attr*)",
+        "Rust_ABI": "extern C fn(*mut UtiAttr)->CInt",
+        "Rust_callers": [
+          "syscall_util_thread_bridge: actual CInt result sign-extended to CLong",
+          "utilthr_migrate: original mode store before same endpoint; ignores result as original void route"
+        ],
+        "Rust_link_name": "util_thread",
+        "behavior": "Original UTI state sequence PROLOGUE->RUNNING_IN_LINUX->EPILOGUE; tracked context/info allocation; typed argument copy and actual affinity host request; actual refill/profile/free; exit/exit-group/proxy-dead/negative/error cleanup remain C. No new initialization/refcount/IRQ repair or same-owner native behavior is claimed.",
+        "migration_status": "OPEN: genuine UTI replacement and original resource/source/native obligations remain separate."
+      },
+      "source_first_line": 29500,
+      "source_last_line": 29602,
+      "source_path": "kernel/syscall.c",
+      "symbol": "util_thread"
+    },
+    {
+      "body_bytes": 155,
+      "body_sha256": "82b9fa3f5da42e4c5edc55f9ca34544c52e3e78a2c00a76c14eba12bf2c79040",
+      "classification": "retained live project C implementation; reviewed for ownership/source/ABI and NOT retired",
+      "complete_source_body": "void\nsyscall_util_indicate_clone_disabled_bridge(void)\n{\n\tkprintf(\"%s: error: --enable-uti mcexec option not specified\\n\",\n\t\t\t\"sys_util_indicate_clone\");\n}",
+      "final_symbol": {
+        "binding": "GLOBAL",
+        "bytes": 34,
+        "index": 1514,
+        "name": "syscall_util_indicate_clone_disabled_bridge",
+        "section_index": 1,
+        "type": "FUNC",
+        "value": 18446744073684392832,
+        "visibility": 0
+      },
+      "physical_owner": {
+        "input": {
+          "binding": "GLOBAL",
+          "bytes": 34,
+          "index": 58,
+          "name": "syscall_util_indicate_clone_disabled_bridge",
+          "section_index": 1,
+          "type": "FUNC",
+          "value": 2944,
+          "visibility": 0
+        },
+        "object": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "placement": {
+          "address": 18446744073684389888,
+          "bytes": 2978
+        },
+        "section": ".text"
+      },
+      "source_ABI_and_behavior_contract": {
+        "C_ABI": "void(void)",
+        "Rust_ABI": "extern C fn()",
+        "Rust_caller": "sys_util_indicate_clone only when current Process.enable_uti==0",
+        "behavior": "Same original diagnostic text and actual kprintf endpoint. This34B function remains project runtime C, not generated/platform data."
+      },
+      "source_first_line": 29645,
+      "source_last_line": 29650,
+      "source_path": "kernel/syscall.c",
+      "symbol": "syscall_util_indicate_clone_disabled_bridge"
+    }
+  ],
+  "schema": "finite-current-C4-ownership-contract-v1",
+  "source_commit": "c964be3917c8f4c5031108aa927c84894584b667",
+  "source_width_and_layout_contract": {
+    "CInt_bytes": 4,
+    "CLong_bytes": 8,
+    "CULong_bytes": 8,
+    "SyscallRequest_align": 8,
+    "SyscallRequest_bytes": 72,
+    "UtiAttr_bytes": 136,
+    "UtiAttr_flags_offset": 128,
+    "basis": "Existing actual production C static assertions and Rust const assertions plus current full104 emitted equality; ELF NOTYPE alone is not used as prototype proof.",
+    "context_bytes": 224,
+    "pointer_bytes": 8
+  },
+  "total_function_bytes": 2965
+}

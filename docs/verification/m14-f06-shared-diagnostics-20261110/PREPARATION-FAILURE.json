@@ -1,0 +1,11 @@
+{
+  "affected_input": {
+    "bytes": 66891,
+    "path": "/home/holden/mckernel/kernel/rust/f06_signal_tail.rs",
+    "sha256": "988cbe82d0db23fb8702990da1a758005aeba5bd19a2c3630d10e647983c7ae0"
+  },
+  "cause": "Writer expected a bare final terminate call; actual source correctly has an unsafe block around that call. Assertion stopped before any source/test candidate writes.",
+  "correction": "Preserve the exact real unsafe-wrapped termination tail; use its actual ending as source anchor. No SUT test/build/fixture/runtime failed or was retried.",
+  "diagnostic": "File <stdin>, line17, AssertionError",
+  "status": "PRIVATE_PREPARATION_ASSERTION_NO_COMPILER_OR_PAYLOAD"
+}

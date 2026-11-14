@@ -1,0 +1,71 @@
+{
+  "C_debt": "Existing munmap_do_bridge/do_munmap stays C; shared adapters remain for other consumers.",
+  "actual_result": null,
+  "canonical_preimages": {
+    "C": {
+      "bytes": 843077,
+      "path": "/home/holden/mckernel/kernel/syscall.c",
+      "sha256": "07af5efb4af2754988376301d19887ea90743b8f304455b7df980738f2629399"
+    },
+    "policy": {
+      "bytes": 733513,
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "sha256": "c5d6ddd9ce210ffd51f0e84c3feefddcf4d115044ced76018b9e946aad9cb6f5"
+    }
+  },
+  "compiler_jobs": 0,
+  "default_link": false,
+  "engineering_percentage": null,
+  "exact_order": [
+    "current thread/VM acquisition",
+    "write-lock",
+    "lookup(0,ULONG_MAX)",
+    "save next before do_munmap(current)",
+    "continue+log on every nonzero error",
+    "unlock",
+    "free residual ranges",
+    "map_end=map_start after free"
+  ],
+  "executable_queue": null,
+  "existing_Rust_reuse": "munmap_all_body_result byte-exact; genuine Rust write lock/range lookup/next/free providers",
+  "fallback_byteexact": true,
+  "file_retired": false,
+  "native": false,
+  "outputs": {
+    "fixture-fragments-only/SMALLEST-ACTUAL-C-RUST-CHECK.md": {
+      "bytes": 1423,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-unmap-old-image-source-1/fixture-fragments-only/SMALLEST-ACTUAL-C-RUST-CHECK.md",
+      "sha256": "c21a3fdee68b29252ef23f7bfe63531f665faad6391d12a2f84b4ba2b04a9fa3"
+    },
+    "fixture-fragments-only/munmap_all_body_result.UNCHANGED.inc": {
+      "bytes": 1799,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-unmap-old-image-source-1/fixture-fragments-only/munmap_all_body_result.UNCHANGED.inc",
+      "sha256": "791e2a50e5cc827ffa71ea64c59d40c3ea187a851dd404bf1764ecd6933271b9"
+    },
+    "unmap_old_image.C-SELECTION-FRAGMENT.inc": {
+      "bytes": 1102,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-unmap-old-image-source-1/unmap_old_image.C-SELECTION-FRAGMENT.inc",
+      "sha256": "4a85ae94a071477ded6fd3820c2a85097edebf8f653797576f49fc38c43e37d8"
+    },
+    "unmap_old_image.NONOVERLAPPING.patch": {
+      "bytes": 788,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-unmap-old-image-source-1/unmap_old_image.NONOVERLAPPING.patch",
+      "sha256": "4fe5c0a4ba98a832b7d8be23b7a9fc6619066b52fa86abc5326f9d0552c5a66c"
+    },
+    "unmap_old_image.ORIGINAL-C.inc": {
+      "bytes": 816,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-unmap-old-image-source-1/unmap_old_image.ORIGINAL-C.inc",
+      "sha256": "89c3876a49539efd1528f1aaa3a13a9c5f3830dbea834f8f92b99081d142a959"
+    },
+    "unmap_old_image.RUST-FRAGMENT.rs.inc": {
+      "bytes": 2200,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-unmap-old-image-source-1/unmap_old_image.RUST-FRAGMENT.rs.inc",
+      "sha256": "2252d7f24ab086c62a50e61e977d2fcc40ce3d90c3d9b48df5a267cab2186295"
+    }
+  },
+  "overlap": "Separate original static munmap_all region and one do_execveat call only; no overlap with filename admission/descriptor/cleanup/cputime/exec entries or F06 fragments.",
+  "ownership": "VM/lock and current CPU lifetime inherited from original exec; range not read after do_munmap; free happens after unlock.",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "shared_policy_edits": false,
+  "status": "IMPLEMENTED_COMPLETE_EXEC_OLD_IMAGE_UNMAP_ENTRY_SOURCE_ONLY"
+}

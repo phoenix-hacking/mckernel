@@ -1,0 +1,32 @@
+{
+  "schema": "mckernel.practical-file-stream-host-reference-review.v1",
+  "decision": "PASS_SOURCE_AND_HOST_REFERENCE",
+  "reviewer": "/root/m07_corrected_case_review",
+  "implementation_ownership": false,
+  "source_sha256": "4c3835a62ed86883a1969c5e06be15126fa4122f0dadc50ff1bf7e0685aecf4d",
+  "binary_sha256": "4e02d0bc16c52c5595a5196bf85b89968e0843de426503839919ee4326e52f91",
+  "report": {
+    "path": "/home/holden/mckernel-work/scratch/practical-file-stream-app-20261018-1/report.json",
+    "sha256": "c43e28547c79214a2ba6335daf45a3ec9dcbc0420890cdadb428c71feffcdea0"
+  },
+  "retained_archive": {
+    "path": "docs/verification/evidence/practical-file-stream-source-oracle-20261018-1.tar.gz",
+    "sha256": "c47a79ea48f4fa07f80785bf684f2bdb1f376004fd275767e22bc4f0de5abc49"
+  },
+  "actual_tests": [
+    "10247 binarybytes copy/reopen/readback/FNV1a64 plus emptyfile.",
+    "ENOENT65/nooutput.",
+    "EEXIST66/existingbytespreserved.",
+    "EISDIR67/incompleteoutputremoved."
+  ],
+  "invariants": [
+    "Bounded buffers and checked length overflow.",
+    "Short writes/EINTR handled by actualsource; close failures reported without unsafe retry.",
+    "Only successful O_EXCL-created destination may be unlinked; stable private directory/input required."
+  ],
+  "limitations": [
+    "GCC9.4/glibc2.31 hostreference only.",
+    "Forced shortIO/EINTR/close/unlink/checksumcorruption untested.",
+    "No guest or crash-persistence acceptance."
+  ]
+}

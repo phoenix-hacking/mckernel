@@ -1,0 +1,153 @@
+{
+  "acceptance_delta": 0,
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648",
+        "--cpu=60",
+        "--fsize=16777216",
+        "--nofile=64",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/atomic-output-1/tmp",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+        "--crate-name",
+        "do_mmap_lock_downgrade_regression",
+        "--edition=2021",
+        "-Dwarnings",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "debuginfo=1",
+        "-C",
+        "force-unwind-tables=no",
+        "--cfg",
+        "enable_profile",
+        "--cfg",
+        "enable_perf",
+        "--cfg",
+        "enable_rusage",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/tests/lock_downgrade.rs",
+        "-o",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/atomic-output-1/lock-downgrade"
+      ],
+      "expected_exit": 0,
+      "id": "compile-exact-new-typed-lock-transition-regression",
+      "required_output": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/atomic-output-1/lock-downgrade",
+      "required_stderr": "empty",
+      "required_stdout": "empty",
+      "scope": "Only byte-identical actualABI and exact new3line atomic transition plus owned stdHOST protocol regression. No kernelmmap/module/provider/runtimefixture or hardware code.",
+      "wall_seconds": 60
+    },
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648",
+        "--cpu=60",
+        "--fsize=16777216",
+        "--nofile=64",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/atomic-output-1/tmp",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/atomic-output-1/lock-downgrade"
+      ],
+      "expected_exit": 0,
+      "id": "typed-lock-reader-writer-lifetime-handoff",
+      "required_stderr": "empty",
+      "required_stdout_json": {
+        "joined_workers": 2,
+        "kernel_runtime": false,
+        "no_unlocked_handoff": true,
+        "scope": "actual-new-typed-lock-downgrade-only",
+        "status": "PASS",
+        "writer_excluded_until_readers_release": true
+      },
+      "scope": "One controlled local atomic protocol, main+2realjoinedworkers: writerstate rejects acquisition; actualdowngrade publishes1; reader joins2; writer denied2and1, succeeds only0. No kernel/preempt/VM callback or process child.",
+      "wall_seconds": 5
+    }
+  ],
+  "cwd": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1",
+  "exact_helper_slice_sha256": "8e837db66a13bc19595f478b7fb8fc71cd495e887bb34af54bad6898078641af",
+  "fresh_output_root": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/atomic-output-1",
+  "inputs": [
+    {
+      "bytes": 3969,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/tests/lock_downgrade.rs",
+      "sha256": "714ba1c8923a5e7caecc6a445c203caa61440b3afa59ac5b0c2bf88f68719152"
+    },
+    {
+      "bytes": 76151,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/input/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    {
+      "bytes": 43555,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-source-1/HOST-TOOLCHAIN-BINDING.json",
+      "sha256": "e27a98348bd44a341a37db8528008303111f7753af6a8fb441cd14199ec243ac"
+    }
+  ],
+  "lock_contract": {
+    "bytes": 4116,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/LOCK-CONTRACT.json",
+    "sha256": "21bbb9a8767cd6fcdbaba197c8c311302e75a77d6d59cd4304496b5b03d92375"
+  },
+  "no_old_suite_or_held_fixture_replay": true,
+  "not_proved": "Actual preempt counter execution, VM range remove/free interleaving, VMA/page/host/error/functional/native behavior remain unrun. Source concurrency review must bind realnoirq preempt pairs and unchangedreader/writer state transitions; test result alone does not establish them.",
+  "owner": "Root sole executor; p04_tests_max private preparation only",
+  "ownership_postconditions": {
+    "cleanup": "Use exact authenticated Owner retirement on timeout/failure; never numericPID/reapedPID fallback/global signal. Both direct waits+streams and final family have to close, no UNKNOWN release.",
+    "immediate_each_record": "Validate all existing successful positive-birth/wait/stream/exit/family facts immediately. Reject any adopted_reaps/adopted_kills/residual/UNKNOWN; preserve primary error and best-effort partialreceipt on compiler/deadline/owner/stream failure.",
+    "record_count": 2,
+    "result": "Runtime exact JSON plus exit0 required; compiler result or source assertion alone is not a functional PASS.",
+    "runtime_threads": "One runtime process with main+2std workers, both actual JoinHandle joins required before exact PASS. Compiler/linker family captured normally. No process children expected in runtime."
+  },
+  "preconditions": [
+    "Independent complete material source/ABI/concurrency/unsafeGO, exact unchanged test+ABI+helper input checks. No code execution by source author.",
+    "Root fresh allwork/sharedHOST4GiB/max3/freshMemAvailable26GiB/disk and credit/service admission; CPU6 only, j1, no nativeCPU2-5. Serialize with another2GiB image owner unless actual alloverhead admission fits unchanged total. Old CPU0/256MiB/job1 UNKNOWN stayscharged.",
+    "Root creates fresh owned atomic-output-1/tmp; existing outputroot is reject, never delete/reuse an old result.",
+    "Existing exact positive-birth Owner/capture/waits for both serial phases. No raw numericPID/control fallback or global signaling."
+  ],
+  "private_tmp": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/atomic-output-1/tmp",
+  "production_source": {
+    "bytes": 30728,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/candidate/kernel/rust/f03_do_mmap.rs",
+    "sha256": "5961fe04c786323bbe8640a4ee66b883f9062f311f69447b6bcd36219c7536d5"
+  },
+  "profile": {
+    "all_other_workers_controllers_and_UNJOINED": "Root measures/counts all actual overhead plus retained CPU0/256MiB/job1 UNKNOWN inside shared4GiB/max3; native18GiB reservations and floor remain; no execution unless complete operation fits existing grant",
+    "batch_wall_seconds": 120,
+    "cpu": 6,
+    "fresh_MemAvailable_floor_GiB": 26,
+    "host_disk_floor_GiB": 16,
+    "jobs": 1,
+    "kind": "same bounded ordinary HOST1.95 actual changed-atomic protocol lane; no quota expansion",
+    "max_address_space_bytes": 2147483648,
+    "max_aggregate_HOST_bytes": 4294967296,
+    "native_or_Docker_or_network": false,
+    "output_disk_reservation_bytes": 33554432,
+    "output_max_file_bytes": 16777216,
+    "runtime_threads_in_one_job": 3,
+    "scratch_disk_floor_GiB": 12
+  },
+  "schema": "m14-do-mmap-new-atomic-transition-request-v1",
+  "status": "PROPOSED_NOT_EXECUTED_REQUIRES_INDEPENDENT_MATERIAL_CONCURRENCY_GO_AND_ROOT_FRESH_ADMISSION"
+}

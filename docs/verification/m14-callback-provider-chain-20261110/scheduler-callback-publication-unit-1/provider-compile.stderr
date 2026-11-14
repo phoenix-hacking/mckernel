@@ -1,0 +1,20 @@
+warning: target feature `sse2` must be enabled to ensure that the ABI of the current target can be implemented correctly
+  |
+  = note: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+  = note: for more information, see issue #116344 <https://github.com/rust-lang/rust/issues/116344>
+
+warning: static variable `selected_mode` should have an upper case name
+  --> /home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-unit-1/publisher.rs:15:16
+   |
+15 |     static mut selected_mode: CInt = 0;
+   |                ^^^^^^^^^^^^^
+   |
+   = note: `#[warn(non_upper_case_globals)]` (part of `#[warn(nonstandard_style)]`) on by default
+help: convert the identifier to upper case
+   |
+15 -     static mut selected_mode: CInt = 0;
+15 +     static mut SELECTED_MODE: CInt = 0;
+   |
+
+warning: 2 warnings emitted
+

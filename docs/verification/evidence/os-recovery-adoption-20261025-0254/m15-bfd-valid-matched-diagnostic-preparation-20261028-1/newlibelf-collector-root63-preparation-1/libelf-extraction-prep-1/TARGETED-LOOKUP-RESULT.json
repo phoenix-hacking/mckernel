@@ -1,0 +1,39 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "FOUND_REVIEWED_41778_ORDINARY_IMAGE_OWNER_PROFILE_NO_CREATED_ONLY_EXPORT_ENTRYPOINT",
+  "reviewed_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-exact-scratch18-tool-image-rebind-probe-source-20261001.json",
+    "bytes": 2215,
+    "sha256": "904d237a0dad30e2b65721b53bf53799306a10485bcb3f9d1cc2b765dae41e8b"
+  },
+  "historical_execution_preparation": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-exact-scratch18-tool-image-rebind-probe-execution-release-20261001.json",
+    "bytes": 4921,
+    "sha256": "4adc1d73ebbedd2e16e375510f0d84be264aa8a3e86414cbc0831fcb627987da"
+  },
+  "snapshot": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-valid-matched-diagnostic-preparation-20261028-1/newlibelf-collector-root63-preparation-1/libelf-extraction-prep-1/reviewed-image-owner-133af.py",
+    "bytes": 17814,
+    "sha256": "9634b56f251857141c67b70ce7a0c058470d6ef000a5f041898a91e3a71f6679"
+  },
+  "current_source": {
+    "path": "/home/holden/mckernel/scripts/native_rust_exact_build_image_rebind_probe.py",
+    "bytes": 24966,
+    "sha256": "412d46de7e078746a7ec979a13ccb25753d6fa34708610932e35be8f02a89635"
+  },
+  "selected_AST_units_match_reviewed": true,
+  "reused_units": [
+    "create_args",
+    "validate_image_inspect",
+    "validate_container",
+    "_absence",
+    "ordinary_backend.check_profile",
+    "ordinary_backend.RESOURCE_ARGS",
+    "ordinary_backend.LIMITS"
+  ],
+  "full_entrypoint_forbidden": "execute() starts and execs the old full probe and has old candidate/lease/receipt semantics; never replay it.",
+  "narrow_adaptation": "Only created-only image/owner/profile/targeted cp/created-state recheck/removal/absence; reuse exact units and bounded command transport. Source-only pending new Root bridge/review/admission.",
+  "historical_release_status": "READY_FOR_INDEPENDENT_EXECUTION_REVIEW",
+  "historical_record_is_new_authority": false,
+  "runtime_authority": null
+}

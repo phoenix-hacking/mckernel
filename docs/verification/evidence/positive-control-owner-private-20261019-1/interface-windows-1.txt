@@ -1,0 +1,271 @@
+
+abi/application.rs:271
+pub(crate) type ForkAckFinishV1 = unsafe extern "C" fn(*mut c_void) -> i32;
+pub(crate) type ForkAckResolveV1 = unsafe extern "C" fn(
+    *mut c_void, *const ForkGuestAckV1, Option<ForkAckVerifyV1>,
+    Option<ForkAckFinishV1>, *mut c_void,
+) -> i32;
+pub(crate) type ForkPrepareAckV1 = unsafe extern "C" fn(
+    *mut c_void, u64, u64, i64, i64, Option<ForkAckResolveV1>, *mut c_void,
+) -> i32;
+// These immutable registered callbacks validate the actual durable publication
+// record and later retire that exact backend owner. IHK invokes neither under
+// its table lock. Receipt contexts are synchronous borrows, never owned leases.
+pub(crate) type ForkPublicationVerifyV1 = unsafe extern "C" fn(
+    *mut c_void, *const ForkIdentityV1, u64, *mut c_void,
+) -> i32;
+pub(crate) type ForkReleaseAckV1 = unsafe extern "C" fn(
+    *mut c_void, *const ForkIdentityV1, u64,
+) -> i32;
+// END PRIVATE FORK FINALIZATION ABI V1
+
+abi/application.rs:267
+    pub(crate) physical: u64,
+    pub(crate) sequence: u64,
+}
+pub(crate) type ForkAckVerifyV1 = unsafe extern "C" fn(*mut c_void, *mut c_void) -> i32;
+pub(crate) type ForkAckFinishV1 = unsafe extern "C" fn(*mut c_void) -> i32;
+pub(crate) type ForkAckResolveV1 = unsafe extern "C" fn(
+    *mut c_void, *const ForkGuestAckV1, Option<ForkAckVerifyV1>,
+    Option<ForkAckFinishV1>, *mut c_void,
+) -> i32;
+pub(crate) type ForkPrepareAckV1 = unsafe extern "C" fn(
+    *mut c_void, u64, u64, i64, i64, Option<ForkAckResolveV1>, *mut c_void,
+) -> i32;
+// These immutable registered callbacks validate the actual durable publication
+// record and later retire that exact backend owner. IHK invokes neither under
+// its table lock. Receipt contexts are synchronous borrows, never owned leases.
+pub(crate) type ForkPublicationVerifyV1 = unsafe extern "C" fn(
+    *mut c_void, *const ForkIdentityV1, u64, *mut c_void,
+) -> i32;
+pub(crate) type ForkReleaseAckV1 = unsafe extern "C" fn(
+    *mut c_void, *const ForkIdentityV1, u64,
+) -> i32;
+// END PRIVATE FORK FINALIZATION ABI V1
+
+abi/application.rs:266
+    pub(crate) reserved: u32,
+    pub(crate) physical: u64,
+    pub(crate) sequence: u64,
+}
+pub(crate) type ForkAckVerifyV1 = unsafe extern "C" fn(*mut c_void, *mut c_void) -> i32;
+pub(crate) type ForkAckFinishV1 = unsafe extern "C" fn(*mut c_void) -> i32;
+pub(crate) type ForkAckResolveV1 = unsafe extern "C" fn(
+    *mut c_void, *const ForkGuestAckV1, Option<ForkAckVerifyV1>,
+    Option<ForkAckFinishV1>, *mut c_void,
+) -> i32;
+pub(crate) type ForkPrepareAckV1 = unsafe extern "C" fn(
+    *mut c_void, u64, u64, i64, i64, Option<ForkAckResolveV1>, *mut c_void,
+) -> i32;
+// These immutable registered callbacks validate the actual durable publication
+// record and later retire that exact backend owner. IHK invokes neither under
+// its table lock. Receipt contexts are synchronous borrows, never owned leases.
+pub(crate) type ForkPublicationVerifyV1 = unsafe extern "C" fn(
+    *mut c_void, *const ForkIdentityV1, u64, *mut c_void,
+) -> i32;
+pub(crate) type ForkReleaseAckV1 = unsafe extern "C" fn(
+    *mut c_void, *const ForkIdentityV1, u64,
+) -> i32;
+// END PRIVATE FORK FINALIZATION ABI V1
+
+abi/application.rs:253
+
+// Borrowed metadata from the actual owned selector3 delivery. Header bytes
+// alone are not a guest destruction proof; its trusted provider ticket must
+// validate the retained carrier and original in-band checked result2 producer.
+#[repr(C)]
+pub(crate) struct ForkGuestAckV1 {
+    pub(crate) version: u32,
+    pub(crate) bytes: u32,
+    pub(crate) identity: ForkIdentityV1,
+    pub(crate) epoch: u64,
+    pub(crate) worker: u64,
+    pub(crate) delivery: u64,
+    pub(crate) cpu: i32,
+    pub(crate) reserved: u32,
+    pub(crate) physical: u64,
+    pub(crate) sequence: u64,
+}
+pub(crate) type ForkAckVerifyV1 = unsafe extern "C" fn(*mut c_void, *mut c_void) -> i32;
+pub(crate) type ForkAckFinishV1 = unsafe extern "C" fn(*mut c_void) -> i32;
+pub(crate) type ForkAckResolveV1 = unsafe extern "C" fn(
+    *mut c_void, *const ForkGuestAckV1, Option<ForkAckVerifyV1>,
+    Option<ForkAckFinishV1>, *mut c_void,
+) -> i32;
+pub(crate) type ForkPrepareAckV1 = unsafe extern "C" fn(
+    *mut c_void, u64, u64, i64, i64, Option<ForkAckResolveV1>, *mut c_void,
+) -> i32;
+// These immutable registered callbacks validate the actual durable publication
+// record and later retire that exact backend owner. IHK invokes neither under
+// its table lock. Receipt contexts are synchronous borrows, never owned leases.
+pub(crate) type ForkPublicationVerifyV1 = unsafe extern "C" fn(
+    *mut c_void, *const ForkIdentityV1, u64, *mut c_void,
+) -> i32;
+pub(crate) type ForkReleaseAckV1 = unsafe extern "C" fn(
+    *mut c_void, *const ForkIdentityV1, u64,
+) -> i32;
+// END PRIVATE FORK FINALIZATION ABI V1
+
+os_runtime.rs:260
+    start: OsBackendStartBootV3,
+    success_status: OsStatus,
+}
+
+#[derive(Clone, Copy)]
+struct ApplicationCallbacks {
+    open: super::application_abi::Open,
+    invoke: super::application_abi::Invoke,
+    close: super::application_abi::Close,
+    adopt_fork: Option<super::application_abi::ForkAdoptV1>,
+    fork_progress: Option<super::application_abi::ForkProgressV1>,
+    adopt_fork_scoped: Option<super::application_abi::ForkAdoptScopedV1>,
+    prepare_fork_link: Option<super::application_abi::ForkPrepareLinkV1>,
+    fork_progress_payload: Option<super::application_abi::ForkProgressPayloadV1>,
+    prepare_fork_ack: Option<super::application_abi::ForkPrepareAckV1>,
+    fork_publication_verify: Option<super::application_abi::ForkPublicationVerifyV1>,
+    release_fork_ack: Option<super::application_abi::ForkReleaseAckV1>,
+}
+
+#[derive(Clone, Copy)]
+struct OsBackend {
+    ioctl: OsBackendIoctlV2,
+    release: OsBackendReleaseV2,
+    boot: Option<OsBackendBootV3>,
+    application: Option<ApplicationCallbacks>,
+    shutdown: Option<OsBackendShutdown>,
+}
+
+#[derive(Clone, Copy)]
+enum OsBackendShutdown {
+    V5(OsBackendShutdownV5),
+    V6(OsBackendShutdownV6),
+}
+
+// The high bits close/poison admission; the low bits count every callback borrow
+// and every callback context whose Drop will call provider code.  It deliberately
+// does not replace OsLease: the latter pins the object for destruction, while
+// this gate makes shutdown bounded instead of racing a still-live provider
+// context.  All methods are atomic only and therefore may run under the OS
+// operation mutex or in callback-adjacent paths without sleeping.
+struct Admission {
+    word: AtomicU32,
+}
+
+const ADMISSION_CLOSED: u32 = 1 << 31;
+const ADMISSION_OVERFLOW: u32 = 1 << 30;
+const ADMISSION_COUNT_MASK: u32 = !(ADMISSION_CLOSED | ADMISSION_OVERFLOW);
+
+impl Admission {
+    const fn new() -> Self {
+        Self {
+            word: AtomicU32::new(0),
+        }
+    }
+
+    /// Acquire one callback/context admission.  A full count permanently
+    /// closes and poisons the gate, rather than wrapping to zero and admitting
+    /// a callback that shutdown could no longer observe.
+    fn enter(&self) -> Result<AdmissionOwner> {
+        loop {
+            let current = self.word.load(Ordering::Acquire);
+            if current & (ADMISSION_CLOSED | ADMISSION_OVERFLOW) != 0 {
+                return Err(EBUSY);
+            }
+            let count = current & ADMISSION_COUNT_MASK;
+            if count == ADMISSION_COUNT_MASK {
+                let _ = self.word.compare_exchange(
+                    current,
+                    current | ADMISSION_CLOSED | ADMISSION_OVERFLOW,
+                    Ordering::AcqRel,
+                    Ordering::Acquire,
+                );
+                return Err(EBUSY);
+            }
+            if self
+                .word
+                .compare_exchange(current, current + 1, Ordering::AcqRel, Ordering::Acquire)
+                .is_ok()
+            {
+                return Ok(AdmissionOwner {
+
+os_runtime.rs:2945
+
+/// # Safety
+/// This is the actual live parent file's pre-RETURN hook. Only registered
+/// backend code derives a guest ACK key from its owned original delivery.
+#[export_name = "ihk_os_application_prepare_fork_ack_v1"]
+pub(crate) unsafe extern "C" fn prepare_fork_ack_application(
+    parent: *mut c_void, worker: u64, serial: u64, cpu: i64, value: i64,
+) -> i32 {
+    let result = (|| -> Result {
+        if parent.is_null() { return Err(EINVAL); }
+        let parent = unsafe { &*parent.cast::<ApplicationConnection>() };
+        let handle = parent._lease.handle();
+        let raw = OS_OBJECTS[handle.minor()].load(Ordering::Acquire);
+        if raw.is_null() { return Err(EIO); }
+        let object = unsafe { &*raw };
+        let registered = object.backend.and_then(|backend| backend.application).ok_or(ENODEV)?;
+        let callbacks = parent.backend.callbacks;
+        if callbacks.open as usize != registered.open as usize
+            || callbacks.invoke as usize != registered.invoke as usize
+            || callbacks.close as usize != registered.close as usize
+            || callbacks.prepare_fork_ack.map(|f| f as usize) != registered.prepare_fork_ack.map(|f| f as usize)
+            || callbacks.fork_publication_verify.map(|f| f as usize) != registered.fork_publication_verify.map(|f| f as usize)
+            || callbacks.release_fork_ack.map(|f| f as usize) != registered.release_fork_ack.map(|f| f as usize)
+        { return Err(EACCES); }
+        let Some(prepare) = registered.prepare_fork_ack else { return Ok(()); };
+        let mut scope = ForkLinkResolverScope { object: ptr::from_ref(object),
+            slot: handle.minor() as u32, generation: handle.generation() };
+        let status = unsafe { prepare(parent.backend.context.as_ptr(), worker, serial, cpu, value,
+            Some(resolve_fork_ack_scope), ptr::from_mut(&mut scope).cast()) };
+        if status > 0 || status < -4095 { return Err(errno(-71)); }
+        to_result(status)
+    })();
+    result.map_or_else(|e| e.to_errno(), |()| 0)
+}
+
+/// # Safety
+/// ONLY the actual joined packet worker calls this outside all dependent
+/// guards with its non-Copy publication receipt borrowed through return. Its
+/// joined worker lifecycle pins provider text independently of the owner this
+/// endpoint may release. No wire/user scalar or ordinary Drop calls it.
+#[export_name = "ihk_os_application_publish_fork_ack_v1"]
+pub(crate) unsafe extern "C" fn publish_fork_ack_application(
+    slot: u32, generation: u64, identity: *const super::application_abi::ForkIdentityV1,
+    epoch: u64, receipt: *mut c_void,
+) -> i32 {
+    let result = (|| -> Result {
+        if identity.is_null() || receipt.is_null() || epoch == 0 { return Err(EINVAL); }
+        let key = unsafe { *identity };
+        if key.reserved0 != 0 || key.reserved1 != 0 || key.slot != slot || key.generation != generation { return Err(EACCES); }
+        // Pin the exact live OS BEFORE loading or dereferencing its object.
+        let handle = OS_REGISTRY.resolve_minor(slot as usize).map_err(|e| errno(e.errno()))?;
+        if handle.generation() != generation { return Err(EACCES); }
+        let _lease = OS_REGISTRY.acquire(handle).map_err(|e| errno(e.errno()))?;
+        let raw = OS_OBJECTS[handle.minor()].load(Ordering::Acquire);
+        if raw.is_null() { return Err(EIO); }
+        let object = unsafe { &*raw };
+        let registered = object.backend.and_then(|backend| backend.application).ok_or(ENODEV)?;
+        let publication_verify = registered.fork_publication_verify.ok_or(ENODEV)?;
+        let release = registered.release_fork_ack.ok_or(ENODEV)?;
+        let child_context = {
+            let table = object.forks.lock();
+            if table.completed.iter().flatten().any(|cached| cached.identity == key
+                && cached.epoch == epoch && cached.phase == ForkReceiptPhase::Finished) { return Ok(()); }
+            table.entries.iter().flatten().find(|entry|
+                entry.identity == Some(key) && entry.epoch == epoch).map(|entry| entry.child_context).ok_or(ENOENT)?
+        };
+        let mut claim = match ForkProviderClaim::acquire(object, key, child_context, 0)? {
+            ForkClaimLookup::Pending(claim) => claim,
+            ForkClaimLookup::Completed => return Err(EIO),
+        };
+        if claim.epoch != epoch { return Err(EACCES); }
+        let (published, accepted, completed, released) = claim.finalization_state()?;
+        if released { return Err(EIO); }
+        if !published {
+            let status = unsafe { publication_verify(child_context as *mut c_void, &key, epoch, receipt) };
+            if status != 0 { return Err(errno(if (-4095..0).contains(&status) { status } else { -71 })); }
+            claim.mark_finalization_step(0)?;
+        }
+        if !accepted {
+            let capsule = claim.capsule.as_ref().ok_or(ENODEV)?;

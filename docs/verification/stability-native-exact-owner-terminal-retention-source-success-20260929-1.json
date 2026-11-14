@@ -1,0 +1,59 @@
+{
+  "schema": "mckernel.native-exact-owner-terminal-retention-source-success.v1",
+  "date": "2026-09-29",
+  "status": "PASS_SOURCE_AND_TEST_CONTRACT_ONLY",
+  "base_commit": "88540df691edf5faaf1b070fd1044e47d42858e7",
+  "files": {
+    "scripts/native_rust_exact_build_container_owner.py": "a8c4c9fc61fab312e3a6e48e93b417453ec12e6543d6adbb7038933f92e79155",
+    "scripts/tests/test_native_rust_exact_build_container_owner.py": "c96d25c0a8d06aec6ff9d73a207cae3102771f89ec8d978cb6883183168a0857"
+  },
+  "original_blocker": "The exact prepared candidate owner removed a provisionally successful container before final allocation, inventory, signal and durable-receipt checks, so a late final FAIL could destroy required terminal evidence.",
+  "bounded_correction": {
+    "automatic_remove": "eliminated from BuildOwner.run",
+    "cleanup": "always a separately reviewed operation after any create attempt",
+    "retention_states": [
+      "not_attempted",
+      "unresolved",
+      "verified_owned_terminal_retained",
+      "unresolved_after_historical_terminal_observation"
+    ],
+    "truth_rule": "terminal_container_retained is false only before a create attempt, null while existence/terminal ownership is unresolved, and true only after an owned terminal observation plus proven client retirement",
+    "historical_snapshot_rule": "client uncertainty preserves the earlier terminal snapshot but marks it non-current and retains the lease"
+  },
+  "tests": [
+    {
+      "command": "python3 -m unittest -v scripts.tests.test_native_rust_exact_build_container_owner",
+      "result": "PASS 65 tests"
+    },
+    {
+      "command": "python3 -m unittest -v scripts.tests.test_native_rust_exact_build_candidate_metadata scripts.tests.test_native_rust_exact_build_container_owner scripts.tests.test_native_rust_exact_build_image_prepare scripts.tests.test_native_rust_exact_build_input_manifest scripts.tests.test_native_rust_exact_build_offline",
+      "result": "PASS 118 tests"
+    },
+    {
+      "command": "python3 -m py_compile scripts/native_rust_exact_build_container_owner.py scripts/tests/test_native_rust_exact_build_container_owner.py && git diff --check",
+      "result": "PASS"
+    }
+  ],
+  "preserved_harness_failure": {
+    "command": "python3 -m unittest -v plus scripts.tests.test_native_rust_exact_build_workflow",
+    "result": "FAIL before discovery: launcher Python 3.9 cannot evaluate the existing dict[str,int] | None annotation in scripts/native_rust_runtime_evidence.py",
+    "classification": "existing Python-version incompatibility, not an owner test failure"
+  },
+  "independent_review": {
+    "status": "PASS",
+    "scope": "source/diff and focused test contract",
+    "finding": "No rm remains; tri-state retention, historical snapshot downgrade, cleanup requirement and lease fail-closed behavior are coherent. No downstream consumer of the new fields was found in the bounded scripts search."
+  },
+  "required_rebind": [
+    "commit these exact owner and test bytes",
+    "prepare a new exact commit-derived candidate and regenerate its manifest/request",
+    "obtain a fresh heavy-build execution review after resource/process/lease/container preflight"
+  ],
+  "excluded": [
+    "mutation or build of candidate 68cf089a-1",
+    "Docker execution",
+    "native artifact build",
+    "guest or application execution",
+    "formal gate or whole-OS acceptance"
+  ]
+}

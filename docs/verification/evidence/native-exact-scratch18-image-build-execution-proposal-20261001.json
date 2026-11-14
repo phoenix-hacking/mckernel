@@ -1,0 +1,71 @@
+{
+  "schema": "mckernel.native-exact-heavy-image-build-execution-proposal.v1",
+  "status": "PROPOSED_NOT_RELEASED",
+  "scope": "one serialized four-job current-candidate scratch18 McKernel image build; no module load or guest",
+  "candidate_sha": "89ab5c555aac9177a789efc67ddc775dacb25d6d",
+  "ihk_sha": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+  "source_checkpoint": "cc8a55d34f3a360703991d73943ed5e9ca1e5b22",
+  "request": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-request-89ab5c55-scratch18-retry2-20261001.json",
+    "sha256": "e360fadc1585b3bf0f17e5ae3019955fdc4c2ea96f98f176dd5fbe38ba2a7f57",
+    "preparation_result": "PASS_PREPARATION_ONLY"
+  },
+  "command": [
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/scripts/native_rust_exact_mckernel_image_container_owner.py",
+    "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-request-89ab5c55-scratch18-retry2-20261001.json"
+  ],
+  "source_sha256": {
+    "scripts/native_rust_exact_mckernel_image_container_owner.py": "556f2acecaf713c3eeb3e1f9c671bd13f401210a871554a89ac6f7b8d4ff6b4c",
+    "scripts/tests/test_native_rust_exact_mckernel_image_container_owner.py": "f78b2641c1090eade3435471a62e470e731e43d1347e0862647b248c88934c48",
+    "scripts/native_rust_exact_mckernel_image_offline.py": "91aa047f61167dd93002a0bc12e55b18f4b2fcaf65e246e574e8350a0c37f4cc",
+    "scripts/native_rust_exact_build_offline.py": "cc243126ab8cc0754c62175c77e46d6ba0d98294f8168cc77893a2c12249cd1a",
+    "scripts/native_rust_exact_build_container_owner.py": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1"
+  },
+  "light_regression": "PASS 33/33 Python 3.8 on CPUs 6-7 under 3-GiB address-space ceiling",
+  "limits": {
+    "cpuset": "2-5",
+    "jobs": 4,
+    "memory_bytes": 12884901888,
+    "memory_swap_bytes": 12884901888,
+    "pids": 512,
+    "network": "none",
+    "host_floor_bytes": 17179869184,
+    "scratch_floor_bytes": 12884901888,
+    "memory_available_floor_bytes": 17179869184,
+    "aggregate_heavy_leases": 1
+  },
+  "fresh_paths": {
+    "work_root": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-work-89ab5c55-scratch18-retry2-20261001",
+    "owner_evidence_root": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-owner-evidence-89ab5c55-scratch18-retry2-20261001",
+    "output_root": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-work-89ab5c55-scratch18-retry2-20261001/output",
+    "evidence_root": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-work-89ab5c55-scratch18-retry2-20261001/evidence",
+    "attempt_root": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-owner-evidence-89ab5c55-scratch18-retry2-20261001/attempt",
+    "lease": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-lease-89ab5c55-scratch18-retry2-20261001.json",
+    "candidate_exclusion": "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch18-image-1.json",
+    "shared_heavy_operation": "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock"
+  },
+  "required_preflight": [
+    "fetched proposal, request, toolchain, receipt and source bytes match exactly",
+    "owner read-only validation passes against complete inventories",
+    "work and owner-evidence roots remain empty; output/evidence/attempt/lease/exclusions absent",
+    "no competing heavy build, image, guest, QEMU or mcexec owner",
+    "full Docker census contains no running container",
+    "host, scratch and memory floors pass immediately before execution"
+  ],
+  "required_result": [
+    "preserve exact output, progress, terminal container and evidence on failure",
+    "on PASS bind actual mckernel.img, map and Rust object bytes to all source/compiler inputs",
+    "independent artifact/postlink/linked-text review before any diagnostic guest",
+    "separately reviewed cleanup before the next heavy operation"
+  ],
+  "failure_family_history": [
+    "c81 exportset-26 passed the same image-owner path and remains preserved",
+    "scratch18 is a new source candidate; one observed failure permits one bounded correction before escalation",
+    "never retry an unchanged deterministic failure"
+  ],
+  "authorization": "requires independent PASS_EXECUTION for this exact fetched proposal, request and live preflight",
+  "acceptance": "compilation evidence only; no guest, application, production or OS acceptance"
+}

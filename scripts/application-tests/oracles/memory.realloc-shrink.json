@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "case_id": "memory.realloc-shrink",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "wait_status": {
+    "kind": "exited",
+    "code": 0
+  },
+  "stdout": {
+    "kind": "exact-line-lines",
+    "lines": [
+      "realloc-shrink status=PASS"
+    ]
+  },
+  "stderr": {
+    "kind": "exact-bytes",
+    "hex": ""
+  },
+  "input_fixture": {
+    "old_size": 2048,
+    "new_size": 64,
+    "environment": {
+      "LANG": "C",
+      "LC_ALL": "C",
+      "TZ": "UTC"
+    }
+  },
+  "relational_assertions": [
+    "realloc may move pointer, but first new_size bytes must retain the prior byte pattern"
+  ],
+  "unresolved_expectations": [
+    "Output shape is normalized to a line oracle; execution stage may emit richer structured output later"
+  ],
+  "max_question_for_reviewer": "Should realloc-shrink verify pointer movement explicitly or only final payload correctness for this planning artifact?"
+}

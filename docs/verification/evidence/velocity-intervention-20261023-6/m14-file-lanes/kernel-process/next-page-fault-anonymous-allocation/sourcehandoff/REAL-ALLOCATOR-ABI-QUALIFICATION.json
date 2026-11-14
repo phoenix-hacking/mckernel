@@ -1,0 +1,41 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_REAL_NOMINAL_ALLOCATOR_TYPE_QUALIFICATION_NO_EXECUTION",
+  "base_handoff": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-anonymous-allocation/sourcehandoff/SOURCE-NEXT-BODY.json",
+    "sha256": "89e8139709dbb9fa2aefda32d83f90e2a6a26b35776802d8932062b1539f1676",
+    "bytes": 6405
+  },
+  "original_fixture_preserved": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-anonymous-allocation/fixture/original_reference.SOURCE-ONLY.c.inc",
+    "sha256": "891bc48d4b4d70796f0f3682a625d65b16e29b14749dcde4162ad72f55d3ff91",
+    "bytes": 2422
+  },
+  "corrected_fixture_to_consume": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-anonymous-allocation/fixture/original_reference.REAL-ALLOCATOR-ABI-SOURCE-ONLY.c.inc",
+    "sha256": "df9fd57d34b2a0ca3ec1eb6b9d9932db113f7ed124a601f945bf8b959c0fdecc",
+    "bytes": 2419
+  },
+  "original_template_preserved": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-anonymous-allocation/sourcehandoff/prepare_source.PRE-ABI-QUALIFICATION.py",
+    "sha256": "485e1ee0a9b0ae5ca778ed09f2943d8c4d3f97e4c95a7f22c02315785395fe24",
+    "bytes": 13742
+  },
+  "corrected_template": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-anonymous-allocation/prepare_source.py",
+    "sha256": "524d385a705669d245c1a4801bdc9e14b56df3840c15c03a787880de9b39cfc9",
+    "bytes": 13739
+  },
+  "real_header": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/production-batch-preparation-1/bounded-source-correction-1/source/lib/include/ihk/mm.h",
+    "sha256": "a1b412608df7512a1b7295c6f19b3ec5a77e6364e8f24b208ab1a29e7556e5b1",
+    "bytes": 9548
+  },
+  "actual_C_signature": "void *_ihk_mc_alloc_aligned_pages_node(int,int,ihk_mc_ap_flag,int,int,uintptr_t,char *,int)",
+  "finding": "Finite held-header check found the newly drafted C fixture assertion used unsigned long for virtual address. Actual header declares uintptr_t; product C helper already uses uintptr_t and Rust selected provider CULong/u64 preserves existing supported x86_64 scalar ABI. Correct only the test witness to real nominal types, no cast or width-equivalence assertion.",
+  "product_changes": 0,
+  "compiler_jobs": 0,
+  "tests_executed": 0,
+  "CPU_reservations": 0,
+  "new_executable_queues": 0
+}

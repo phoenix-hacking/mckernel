@@ -1,0 +1,137 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_REQUIRES_REAL_ROOT_COMPOSITION_ADOPTION_BINDING_PUBLICATION_REVIEW",
+  "canonical_entry_directory": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-1",
+  "copy_plan": [
+    {
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/native-entry-source-preparation-1/prepare_f05_v3_bindings.py",
+        "bytes": 5872,
+        "sha256": "1601f2048aa6db2209c0bea998524cb7db8949dd99081906b11cda7fc1b5a788"
+      },
+      "destination": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-1/prepare_f05_v3_bindings.py"
+    },
+    {
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/native-entry-source-preparation-1/bind_f05_v3_resource.py",
+        "bytes": 4860,
+        "sha256": "2df373de91719dcdcb33cc0a363cf983b80a1a7af05d2e72918f6600bae09db6"
+      },
+      "destination": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-1/bind_f05_v3_resource.py"
+    },
+    {
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/native-entry-source-preparation-1/capture_fresh_f05_v3_resource.py",
+        "bytes": 13345,
+        "sha256": "49580f3f3dc1b60a871a198cb4ddbbc214a9d543466b80e53d0ae935cc54e0c0"
+      },
+      "destination": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-1/capture_fresh_f05_v3_resource.py"
+    },
+    {
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/native-entry-source-preparation-1/run_f05_v3_resource_once.py",
+        "bytes": 2833,
+        "sha256": "beb9a4dcd7e6398d5de4d3ed367abaf5208302e6551038d9a1b309818cd3eb92"
+      },
+      "destination": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-1/run_f05_v3_resource_once.py"
+    },
+    {
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/native-entry-source-preparation-1/run_native_f05_v3_capture.py",
+        "bytes": 5063,
+        "sha256": "a70bce36bc718bc6479aff1ba2ba422daf601942f02e521bba54a7115a62ec8f"
+      },
+      "destination": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-1/run_native_f05_v3_capture.py"
+    },
+    {
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/native-entry-source-preparation-1/root_once_f05_v3_entry.py",
+        "bytes": 13145,
+        "sha256": "7e910bd59ebcdc4a669d5c2548b219a17775502abab0d4ac8140cf0940cfbf73"
+      },
+      "destination": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-1/root_once_f05_v3_entry.py"
+    }
+  ],
+  "before_capture": [
+    {
+      "operation": "Root fills static template exact actual refs",
+      "fields_still_null": [
+        "artifact_acceptance",
+        "capture_helper",
+        "case_capability",
+        "independent_review",
+        "manifest",
+        "native_runtime_authority",
+        "offline_manifest",
+        "overlay",
+        "overlay_manifest",
+        "root_runtime_grant",
+        "runtime_authority",
+        "scratch_manifest_stage",
+        "source_authority",
+        "source_publication",
+        "stage_map_acceptance",
+        "stage_result"
+      ],
+      "note": "No null authority becomes real without Root actual evidence; source/manifest/overlay/cap/stage hashes must be actual bytes."
+    },
+    {
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-1/prepare_f05_v3_bindings.py",
+        "--check-static"
+      ],
+      "purpose": "Full actual e55 manifest/owner import and full expected_qemu_argv/QMP<=107 source API; no guest."
+    },
+    {
+      "operation": "Root ordinary stage scratch manifest, create fresh empty /scratch/f05v3n1 and adopt actual stage receipt; no scratch creation by this worker."
+    },
+    {
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-1/prepare_f05_v3_bindings.py",
+        "--nonce",
+        "31770ebb739fea402ded939617921dda"
+      ]
+    },
+    {
+      "operation": "Root binds only bridge STATIC_SHA to actual generated static SHA; five helpers unchanged. Update auth bridgeSHA/staticRef/profileSHA exact. Independent final context review, then actual push/fetch publication and Root conditional auth before resource."
+    }
+  ],
+  "once_source_published_and_conditionally_authorized": [
+    {
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-1/run_f05_v3_resource_once.py"
+      ],
+      "purpose": "Root invokes one fresh capture+data binder only after all source reviewed."
+    },
+    {
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-1/root_once_f05_v3_entry.py",
+        "--authorization-sha256",
+        null
+      ],
+      "purpose": "Root launches immediately POST-BINDER while exact independent daemon_execution_review reviews actual pending/resource; durable O_EXCL claim+grant and normal helper exactly once after PASS. The null argv value is an unknown actual auth SHA, never executable."
+    }
+  ],
+  "normal_native_helper": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-1/run_native_f05_v3_capture.py"
+  ],
+  "no_retry": true,
+  "freshness_seconds": 120,
+  "clock_clamps": "Original3fixedceilings; resource<=static; effectiveMINliveguardian; never renew.",
+  "native_authority": null
+}

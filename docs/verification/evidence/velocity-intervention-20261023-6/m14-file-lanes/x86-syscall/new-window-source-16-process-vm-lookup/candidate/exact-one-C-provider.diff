@@ -1,0 +1,21 @@
+--- /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-15-process-vm-lock-callbacks/candidate/arch-syscall.c
++++ /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup/candidate/arch-syscall.c
+@@ -503,12 +503,18 @@
+ #endif /* exact original VM-range lock callback */
+ #line 493
+ 
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++extern struct vm_range *arch_process_vm_rw_lookup_range_bridge(void *, unsigned long, unsigned long);
++#else
++#line 494
+ static struct vm_range *
+ arch_process_vm_rw_lookup_range_bridge(void *vm, unsigned long start,
+ 		unsigned long end)
+ {
+ 	return lookup_process_memory_range((struct process_vm *)vm, start, end);
+ }
++#endif /* exact original borrowed VM range lookup */
++#line 500
+ 
+ static struct process *
+ arch_process_vm_rw_find_process_bridge(int pid, void *lock_node)

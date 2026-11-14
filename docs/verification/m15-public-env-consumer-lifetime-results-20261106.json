@@ -1,0 +1,136 @@
+{
+  "Root": "01a18bc3-e072-7810-9426-75101b0856c0",
+  "accepted_delta": {
+    "C_retirements": 0,
+    "M14_files": 0,
+    "M15_files": 0,
+    "native_qualified_cohorts": 0,
+    "production_images": 0
+  },
+  "affected_real_library": {
+    "Rust_logic_unchanged": true,
+    "aggregate_metrics": {
+      "direct_wait_wall_seconds": 0.931517173,
+      "max_RSS_KiB": 136896,
+      "time_v_CPU_seconds_rounded_sum": 0.83
+    },
+    "all8_waits_joined": true,
+    "archive": {
+      "bytes": 21933586,
+      "path": "/home/holden/mckernel-work/resume-20261106T214601Z-945b55f2/public-env-consumer-producer-1/output/libihklib_whole70.a",
+      "sha256": "5ff0257866d2d366a49735418a6feae9ceba684b1ea90ba58991579946245f86"
+    },
+    "checks": {
+      "C_function_bodies_linked": false,
+      "SONAME": "libihk.so",
+      "actual19_generated_origins": "PASS",
+      "actual_C_source_contracts_and_19_offsets": "PASS",
+      "data_roots": 6,
+      "function_roots": 70,
+      "six_data_widths_match_prior_actual": true,
+      "unchanged_four_function_three_data_declaration_include": "PASS",
+      "unchanged_strict7warnings_sourcepins_native_order": "PASS"
+    },
+    "library": {
+      "bytes": 5403760,
+      "path": "/home/holden/mckernel-work/resume-20261106T214601Z-945b55f2/public-env-consumer-producer-1/output/libihk.so",
+      "sha256": "f74bd48c1459390ffe527c59a143ac1f3835bdac7e2f2ac217e89f829ffedf0d"
+    },
+    "old_behavior_suites_replayed": false,
+    "six_phases_two_reads_passed_once": true
+  },
+  "all_new_HOST_waits_joined_and_released": true,
+  "changes": [
+    "Release parser-transferred arrays/strings at each of six common C public-consumer exits after the last synchronous provider borrow.",
+    "Preserve primary result, helper-entry errno, first-match/config order and borrowed default-kargs ownership. Rust parser/consumer logic is unchanged.",
+    "Regenerate six actual C-source diagnostic locations and compile/link one affected real Rust library with unchanged qualified ABI/provider/warning inputs."
+  ],
+  "consumers": [
+    "ihk_reserve_cpu_str",
+    "ihk_reserve_mem_conf_str",
+    "ihk_reserve_mem_str",
+    "ihk_os_assign_cpu_str",
+    "ihk_os_set_ikc_map_str",
+    "ihk_os_kargs_str"
+  ],
+  "critical_path_ETA": "Unknown pending original scoped service disposition and reviewed original SDK/source-custody/native bindings; full-image/native argv unset.",
+  "durable_regression": "scripts/tests/test_m15_public_env_consumer_lifetimes.py",
+  "functional": {
+    "CPU6_released": true,
+    "baseline": {
+      "actual_genuine_free_reclaims_after_return": 108,
+      "defined_cases": 24,
+      "live_blocks_after_reclaim": 0,
+      "retained_array_and_string_blocks_observed": 108,
+      "successful_parse_calls_with_retained_owners_after_return": 18
+    },
+    "candidate": {
+      "borrowed_default_kargs_never_freed": true,
+      "cases_passed": 24,
+      "current_parser_ENOMEM_no_provider_no_doublefree": 6,
+      "live_blocks_at_every_return": 0,
+      "matching_provider_success": 6,
+      "no_match_or_borrowed_default_kargs": 6,
+      "no_provider_cleanup_entry_errno_preserved": 5,
+      "parser_failure_errno_preserved": 12,
+      "provider_calls_with_live_borrows": 13,
+      "provider_cleanup_entry_errno_preserved": 11,
+      "provider_failure_exact_negative53": 6,
+      "successful_parse_calls_all_owned_blocks_freed_after_borrow": 18,
+      "whole_libc_errno_contract_inferred": false
+    },
+    "command_CPU_seconds_rounded": 0.15,
+    "four_commands_and_driver_joined": true,
+    "max_RSS_KiB": 28636,
+    "outer_wall_seconds": 0.3153933900030097,
+    "retries": 0,
+    "scope": "ActualcurrentCparse_env+sixpublicconsumerbodies+candidatefree_parsed_env; genuine HOSTcalloc/strndup/strdup/free with local synchronous borrow-only provider callbacks. No realIHKdevice/backend/native or Rust execution."
+  },
+  "holds": "Original generic/exec/ACK/TID/XPMEM/source/service holds, SDK/source-view/native and UNKNOWN outer mapping remain. All18GiB charges,4GiBfloor,scratch21,mutex27:4 retained.",
+  "invocation": "20261106T214601Z-945b55f2",
+  "original_gates_open": {
+    "M14_files": [
+      "F03",
+      "F06"
+    ],
+    "M14_integration": [
+      "I01",
+      "I02",
+      "I03"
+    ],
+    "M15_files": [
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F06",
+      "F07",
+      "F08"
+    ],
+    "M15_integration": [
+      "I01",
+      "I02",
+      "I03",
+      "I04"
+    ]
+  },
+  "receipts": {
+    "functional": {
+      "path": "public-env-consumer-lifetime-tests-1/RESULT.json",
+      "sha256": "9f1eb336406298ab974f99893f982037ae163bc308081a4b5a8587205be91cda"
+    },
+    "producer": {
+      "path": "public-env-consumer-producer-1/RESULT.json",
+      "sha256": "fb11b7c18e846e56920d691b473c28c12da5e1a8ed5cb7387436f6fe13c6fe68"
+    },
+    "work_root": "/home/holden/mckernel-work/resume-20261106T214601Z-945b55f2"
+  },
+  "retention": "Candidate-only current canonical C default, explicit CC, one relative observer fixture. Generated candidate byte-identical to actual passing artifact38e21dc7; no behavior replay for packaging. Defined historical baseline remains private retained evidence.",
+  "source": {
+    "IHK_commit": "b6f986776be1b6cb3caadaa6671e042f7ef30801",
+    "IHK_tree": "1191e9e0cefd32179a6cf4610b59ea98dc9e6ac1",
+    "bundle_blob": "44e69a9fd9b7dafd93776cc60120a9d735b403bd",
+    "bundle_sha256": "df5c66111da2a538cd1ce6583bc9cc052f95a9fa81b37f9f2ce7903edb953e4d"
+  },
+  "status": "PASS_SIX_C_CONSUMER_CLEANUP_AND_AFFECTED_RUST_LIBRARY"
+}

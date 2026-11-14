@@ -1,0 +1,189 @@
+{
+  "acceptance_delta": 0,
+  "at": "2026-11-11T10:03:15.677076+00:00",
+  "capture_root": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-tests-p04source-max-1/correction-1/execution-1",
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=268435456",
+        "--cpu=10",
+        "--fsize=1048576",
+        "--nofile=64",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-tests-p04source-max-1/correction-1/output-1/tmp",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-tests-p04source-max-1/correction-1/code_package_regression.py",
+        "dependent-pins-boundary"
+      ],
+      "expected_exit": 0,
+      "id": "dependent-pins-boundary",
+      "required_stderr": "empty",
+      "required_stdout_json": {
+        "controller1961_rerun": false,
+        "family": "dependent-pins-boundary",
+        "real_account": false,
+        "real_install": false,
+        "real_nonce": false,
+        "real_root_or_native": false,
+        "result": {
+          "drift_refusals": [
+            "selected source hash drift",
+            "selected source path drift",
+            "privilege argv drift"
+          ],
+          "fixed30_closure": true,
+          "installer_or_issuer_executed": false,
+          "normal_privilege_argv": true,
+          "root_parent_actor_only": true,
+          "source_paths_and_hashes": true,
+          "unchanged_ipc_sha256": "eda1ff0139c3bbf0c713009fc7728eccf3418cc7ce5d028731bc443837d49bbe",
+          "unchanged_wait_sha256": "2ed1a7a3cc5cd72d70d6c4a3a05f8b4f2dcc524fcada7ae75a84e099b2ce5719"
+        },
+        "status": "PASS",
+        "unchanged_wait_IPC_executed": false
+      },
+      "wall_seconds": 15
+    }
+  ],
+  "contract": {
+    "bytes": 3834,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-tests-p04source-max-1/correction-1/TEST-CONTRACT.json",
+    "sha256": "5826904caa82ce2e61984f02900bcc4ab22dbc58de4f15c333782c31214290c2"
+  },
+  "corrected_source": {
+    "bytes": 1937,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/SOURCE-READY.NOT-EXECUTED.json",
+    "sha256": "64ed6331ca864479d7e32de30d40c1e8c844e844ac7322adadbfaa8ae934dfc5"
+  },
+  "correction": {
+    "bytes": 6094,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-tests-p04source-max-1/correction-1/CORRECTION.json",
+    "sha256": "9ccef524c5ef411e7b409ce16fdc5e1b1d1eb595abf1d2985c36b0a8c2123ea6"
+  },
+  "cwd": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-tests-p04source-max-1/correction-1",
+  "expected": {
+    "bytes": 37490,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-tests-p04source-max-1/correction-1/EXPECTED.json",
+    "sha256": "eb20e0e3f859395ef883269305e2152c757b69a4621a203c78ee5fc9de1978dc"
+  },
+  "fresh_output_root": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-tests-p04source-max-1/correction-1/output-1",
+  "inputs": {
+    "bytes": 40057,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-tests-p04source-max-1/correction-1/INPUTS.json",
+    "sha256": "cd5172c58455b81f067ec148034f5b99a086e08003ffeae060e4ac8b4cdedf08"
+  },
+  "no_author_execution": true,
+  "no_canonical_changes": true,
+  "not_proved": "No actual code package publication/immutable readback/current controller/native resource/source/custody grant or original FUNCTIONAL/parent acceptance.",
+  "original_failed_result": {
+    "bytes": 6986,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-tests-p04source-max-1/execution-1/RESULT.json",
+    "sha256": "492a02d67d44d6a8a450c416f96147e74f2da35dbfde27d00aa7d89dbaca4206"
+  },
+  "original_root_completion": {
+    "bytes": 387,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-tests-p04source-max-1/execution-1/ROOT-EXEC-COMPLETION.json",
+    "sha256": "410eea0f5cd9968dda52d722c0459297f0a06986d356f9398c8f095edbe66ad3"
+  },
+  "owner": "/root/p04_source_max actual Sol/MAX test author; SDK independent operation reviewer; Root sole executor/compositor",
+  "ownership": {
+    "failure": "Stop first unexpected diagnostic/oracle/ownership result; preserve actual primary exception/rawstreams/returned Owner rows and partial receipts. Only qualified exact-owned cleanup; no numeric/reaped fallback or automatic UNKNOWN release.",
+    "final": "One exact unchanged fourth JSON/empty stderr and one positive Owner record plus full Root completion before current HOST release. Reuse first three actual PASS, never rerun them.",
+    "helper": {
+      "bytes": 4668,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/owned_process.py",
+      "sha256": "afe7403ead1bf8b2c527dfa34a0c0c19010cde5f27a646ccf1545fb8f3b9bc1d"
+    },
+    "immediate_required": [
+      "positive exact leaderPID+birth/literalargv/cwd/currentlabel",
+      "status0",
+      "leader_parent_joined",
+      "whole_descendants_joined",
+      "streams_closed",
+      "timed_out=false",
+      "leader_group_signalled=false",
+      "adopted_reaps=[]",
+      "adopted_kills=[]",
+      "remaining_direct_children=[]",
+      "error=null"
+    ],
+    "labels": [
+      "phase-4"
+    ],
+    "record_count": 1
+  },
+  "preconditions": [
+    "Independent exact SDK operation GO for this finite fixture/source nodes/oracles/argv/Root parent proposal; P03source/design5f7 alone is not actual test admission.",
+    "Root fresh same-run current account/control/stop/hold guard, actual all-work/overhead<=4GiB/max3, available>=26GiB and host16/scratch12GiB disk floors plus32MiB. Native2-5/12GiB remains separate/held; no multiplication or inferred releases.",
+    "Check every actual source/script/data/interpreter/helper pin and fresh output/capture nonexistence before Root alone creates output-1/tmp/execution-1. Actual scratch permission4f9, source/native/UNKNOWN holds remain unchanged; this is ordinary private HOST fake testing, not an alternative install/staging actor/path.",
+    "Execute one literal Python3.8 commands via unchanged qualified Ownerafe740 with immediate full ownership and exact external full JSON checks before next child. No source main/issuer/Root/installer/nonce/ioctl/account/ledger/service/controller/VM/native action inside fixture; no controller1961/wait/IPC/oldgreen replay.",
+    "Root captures full returned exec/tool metadata and joins its outer owner before current HOST release. Parent failure capture remains protected; any unresolved ownership retains UNKNOWN and exact evidence.",
+    "Only failed dependent-pins-boundary executes. Preserve original994c/8c3 failure and all firstthreePASS. No production source, privilege/wait/IPC guard, oracle, account/native/permission or held-work change."
+  ],
+  "private_tmp": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-tests-p04source-max-1/correction-1/output-1/tmp",
+  "profile": {
+    "all_worker_controller_overhead_included": true,
+    "batch_wall_seconds": 30,
+    "cpu": 7,
+    "cpu_seconds_per_command": 10,
+    "fresh_MemAvailable_floor_GiB": 26,
+    "host_disk_floor_GiB": 16,
+    "jobs": 1,
+    "max_address_space_bytes": 268435456,
+    "max_aggregate_HOST_bytes": 4294967296,
+    "max_aggregate_jobs": 3,
+    "max_file_bytes": 1048576,
+    "no_real_privilege_install_nonce_account_service_ledger_native_VM_action": true,
+    "output_disk_reservation_bytes": 33554432,
+    "planning_reservation_not_enforced_aggregate": true,
+    "scratch_disk_floor_GiB": 12,
+    "wall_seconds_per_command": 15
+  },
+  "reused_first_three_actual_PASS": [
+    {
+      "bytes": 13816,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-tests-p04source-max-1/execution-1/phase-1.stdout",
+      "sha256": "432082990a44687e16f3f2c67972fa33e4a2ba3a5d745ed5ff4bc73429e7c299"
+    },
+    {
+      "bytes": 5848,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-tests-p04source-max-1/execution-1/phase-2.stdout",
+      "sha256": "f9d0d581bd525ab6731c654caedcad8178f6fa220cf0fa0029f468e580d4aec9"
+    },
+    {
+      "bytes": 2850,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-tests-p04source-max-1/execution-1/phase-3.stdout",
+      "sha256": "bfefa871ab78de55625bedbb09774a4ff75f28ff7e0227a8713676e68617bd1f"
+    },
+    {
+      "bytes": 4119,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-tests-p04source-max-1/execution-1/PARTIAL.json",
+      "sha256": "41d4dc8aec6e2362575d39c80290ed1de8f3ed1ebd0aed86e6e3e0ab6ba8f53e"
+    }
+  ],
+  "root_parent_proposal": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-tests-p04source-max-1/correction-1/ROOT-PARENT.PROPOSED.py",
+  "schema": "fixed30-final-static-family-host-successor-v1",
+  "source_bindings": {
+    "bytes": 34717,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-tests-p04source-max-1/correction-1/SOURCE-BINDINGS.json",
+    "sha256": "e7c133dca3cb2b34592b3bbcd37f4748406cc6373bef4b605c2448e242685774"
+  },
+  "source_design_GO": {
+    "bytes": 22511,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-specialization-review-p03-max-1/REVIEW.json",
+    "sha256": "5f7fefc5dac7ccb2caa3b555b840b1b7f930bf4c1b84389ace2b5ecd488293d9"
+  },
+  "status": "FROZEN_NOT_EXECUTED_PENDING_INDEPENDENT_SDK_OPERATION_GO_AND_FRESH_ROOT_ADMISSION"
+}

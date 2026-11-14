@@ -1,0 +1,23 @@
+--- /home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/terminal-consumer-preparation-1/prepare_successor_sources_correction1.py
++++ /home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/census-authority-next-constructor-correction-preparation-1/prepare_successor_sources.PROC-AUTHORITY-CORRECTED.py
+@@ -103,6 +103,12 @@
+     # Transaction/census/recovery/ownership algorithms and profiles are preserved.
+     bindings=t['source_bindings']; need(type(bindings) is dict and bindings['current_typed_request']==case['source_identity'] and bindings['target']==case['target'],'complete current terminal source/target DATA')
+     request=json.loads(checked(case['request'])); engine=texts.pop('cleanup_pass_image.py')
++    # Historical template remains immutable; select the accepted current PROC literal.
++    proc_source=pinned(S/'census-lifetime-race-correction-1/cleanup_pass_image.PROC-CORRECTED.py','b8c7d0f6ff3dc7303ca2063575c1affe0b63a4b283b0cc3223c4f3a11f93d80a')
++    proc_node=next(n for n in ast.parse(proc_source).body if isinstance(n,ast.Assign) and len(n.targets)==1 and isinstance(n.targets[0],ast.Name) and n.targets[0].id=='PROC_CODE')
++    current_proc=ast.literal_eval(proc_node.value)
++    need(digest(current_proc.encode())=='24e27a493a84a1ab6c3d22a5248ae456288fa590fc93e31b3fb5a0a29d8659af' and digest(current_proc.encode())!='986e64c50fd8d78bbe3c23e86a690e67b51255ab03c9f03f29db30ee50891532','accepted current PROC authority; obsolete literal forbidden')
++    engine=global_value(engine,'PROC_CODE',repr(current_proc))
+     values={'SOURCE_REFS':repr(bindings['source_refs']),'CURRENT_TYPED_REQUEST':repr(case['source_identity']),'PUBLISHED_SCRIPT':repr(str(p/'cleanup_pass_image.py').replace(str(H)+'/', 'docs/verification/evidence/')),'NAMESPACE':"Path("+repr(case['namespace'])+")",'NAMESPACE_ANCESTRY':repr(case['namespace_ancestry']),'NAMESPACE_BINDING':repr(case['namespace_binding']),'PREFIX':repr('numa-allowed-mask-image-terminal-20261021-1'),'ATTEMPT':"Path("+repr(request['common_exclusion_path'])+")",'REQUEST':"Path("+repr(case['request']['path'])+")",'LEASE':"Path("+repr(request['lease_path'])+")",'OUTPUT':"Path("+repr(str(Path(case['namespace'])/'owner-work'))+")",'EVIDENCE':"Path("+repr(str(Path(case['namespace'])/'owner-evidence'))+")",'KNOWN_TARGET':repr({k:v for k,v in case['target'].items() if k!='image_id'}),'REQUEST_SHA':repr(case['request']['sha256']),'IMAGE_CANDIDATE':repr(case['source_identity']['candidate_sha']),'PASS_LOG_CHANNELS':repr(case['log_channels'])}
+     for name,value in values.items(): engine=global_value(engine,name,value)
+     oldguard='native-rust-phase5-current-optin-image-guard-9d86fb76cc70406889799278b90e8752'; newguard=Path(case['guard_capture']).name
+@@ -130,6 +136,7 @@
+             cpins.update(engine=ref(p/'cleanup_pass_image.py'),observer=observer_ref,case=ref(p/'PASS-CASE-STATIC.json'),physical=t['retained_review'],postjoin=t['root_join'],artifact=t['artifact_acceptance'])
+             text=global_value(text,'PINS',repr(cpins))
+         if name=='check_current_pass_bodies.py': text=once(text,oldguard,newguard)
++        if name=='check_current_pass_bodies.py': text=once(text," obs=read('observer').decode();engine=read('engine').decode()\n"," obs=read('observer').decode();engine=read('engine').decode()\n proc=ast.literal_eval(next(n.value for n in ast.parse(engine).body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='PROC_CODE' for t in n.targets)))\n assert sha(proc.encode())=='24e27a493a84a1ab6c3d22a5248ae456288fa590fc93e31b3fb5a0a29d8659af' and sha(proc.encode())!='986e64c50fd8d78bbe3c23e86a690e67b51255ab03c9f03f29db30ee50891532','generated engine must retain accepted current PROC authority'\n")
+         if name=='postjoin_readback.py': text=global_value(global_value(text,'OBSERVER_SHA',repr(observer_ref['sha256'])),'ENGINE_SHA',repr(engine_ref['sha256']))
+         if name=='check_actual_fresh_preflight.py': text=global_value(text,'SOURCE_SHA',repr(engine_ref['sha256']))
+         if name in ('read_original_five_metadata.py','export_raw_five.py'): text=global_value(text,'SUMMARY_SHA',repr(ref(p/'readback_observer.py')['sha256']))

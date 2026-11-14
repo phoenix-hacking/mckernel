@@ -1,0 +1,268 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next116-f03-seven-f06-shmget-selective-composition-source-1/independent-source-review-1/REVIEW.json",
+    "bytes": 19949,
+    "sha256": "4bd374524bef5c90e182289467a9691bb5d3261b4579064801ad32482082b7f9"
+  },
+  "source_adoption": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next116-f03-seven-f06-shmget-selective-composition-source-1/ROOT-ACTUAL-SOURCE-ADOPTION.json",
+    "bytes": 11797,
+    "sha256": "ef82f32879b49729b985ba78bb4cf5bcb6f58bb66126185a8237419366aadde2"
+  },
+  "closed_source_manifest": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT116-F03SEVEN-SHM-BUILD-PREPARATION-1/RUST-SUBTREE-CLOSED-SOURCE-MAP.json",
+    "bytes": 96573,
+    "sha256": "45d375d10fb8c10221fc80967581ed77f151b310926279c665f2c3316729e10f"
+  },
+  "source_closure": 121,
+  "origin_alias": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-resume-20261028-1/CURRENT116-OPERATION-1/ADAPTED-ORIGIN-RECEIPT.json",
+    "bytes": 3483,
+    "sha256": "345e603271506156eb4aea222668e0e155c48d97f197a9bfa394d7bd30d6157c"
+  },
+  "original_origin": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT116-F03SEVEN-SHM-BUILD-PREPARATION-1/ROOT-ACTUAL-ORIGIN-PRODUCER-JOIN.json",
+    "bytes": 3002,
+    "sha256": "fa9c08cdd8bc382a13582b6b06c830f68879d831e4bb81cb4f5d0c2989874264"
+  },
+  "actual_origin_refs": {
+    "actual_origin_producer": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-resume-20261028-1/CURRENT116-OPERATION-1/ADAPTED-ORIGIN-RECEIPT.json",
+      "bytes": 3483,
+      "sha256": "345e603271506156eb4aea222668e0e155c48d97f197a9bfa394d7bd30d6157c"
+    },
+    "actual_generated_header": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT116-F03SEVEN-SHM-BUILD-PREPARATION-1/ROOT-ACTUAL-ORIGIN-PRODUCER-OUTPUT-1/f06_rt_sigreturn_origin.h",
+      "bytes": 268,
+      "sha256": "aeece54c3b6f01c326fff3eb925b89b88acd3b198b0047393c8c9c0d78f74ded"
+    },
+    "actual_generated_metadata": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT116-F03SEVEN-SHM-BUILD-PREPARATION-1/ROOT-ACTUAL-ORIGIN-PRODUCER-OUTPUT-1/f06_clone_cpuid_metadata.rs",
+      "bytes": 201,
+      "sha256": "71e4b0ab7f5ca612e4cd06bf2150e2e6b7b5e3e39717e466cfb626b1ce249a48"
+    },
+    "actual_origin_binding": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT116-F03SEVEN-SHM-BUILD-PREPARATION-1/ROOT-ACTUAL-ORIGIN-PRODUCER-OUTPUT-1/ORIGIN-BINDING.json",
+      "bytes": 4550,
+      "sha256": "4880885f1597c0224fa45d60714c7c237408548a5a01fb3b549012806fdbbced"
+    },
+    "actual_Rust_environment": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT116-F03SEVEN-SHM-BUILD-PREPARATION-1/ROOT-ACTUAL-ORIGIN-PRODUCER-OUTPUT-1/rust-environment.json",
+      "bytes": 321,
+      "sha256": "7c91132e1847163f1ceb2fa79e9d9216a46297ba24898db90cc7bdcc9e5616ef"
+    },
+    "actual_CMake_origin": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT116-F03SEVEN-SHM-BUILD-PREPARATION-1/ROOT-ACTUAL-ORIGIN-PRODUCER-OUTPUT-1/f06_rt_sigreturn_origin.cmake",
+      "bytes": 316,
+      "sha256": "01ffdb227cb5528b40c9d661ea1a5ea3082585a500693486b120de812f9d4f73"
+    }
+  },
+  "focused_selected_Rust_providers": 68,
+  "retained_process_note_bytes": 48,
+  "process_runtime_ALLOC_bytes": 0,
+  "WAKE4HOST_and_final": [
+    {
+      "name": "ptrace_wakeup_clear_saved_bridge",
+      "input": {
+        "index": 6597,
+        "name": "ptrace_wakeup_clear_saved_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 3654,
+        "value": 0,
+        "size": 26
+      },
+      "final": {
+        "name": "ptrace_wakeup_clear_saved_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073685080256,
+        "size": 26
+      },
+      "qualified_HOST_equal": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "ptrace_wakeup_set_single_step_bridge",
+      "input": {
+        "index": 6600,
+        "name": "ptrace_wakeup_set_single_step_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 3660,
+        "value": 0,
+        "size": 34
+      },
+      "final": {
+        "name": "ptrace_wakeup_set_single_step_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073685080384,
+        "size": 34
+      },
+      "qualified_HOST_equal": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "ptrace_wakeup_trace_syscall_bridge",
+      "input": {
+        "index": 6602,
+        "name": "ptrace_wakeup_trace_syscall_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 3665,
+        "value": 0,
+        "size": 37
+      },
+      "final": {
+        "name": "ptrace_wakeup_trace_syscall_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073685081536,
+        "size": 37
+      },
+      "qualified_HOST_equal": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "ptrace_wakeup_pending_take_bridge",
+      "input": {
+        "index": 6598,
+        "name": "ptrace_wakeup_pending_take_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 3655,
+        "value": 0,
+        "size": 39
+      },
+      "final": {
+        "name": "ptrace_wakeup_pending_take_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073685080288,
+        "size": 39
+      },
+      "qualified_HOST_equal": true,
+      "full_current_final_bytes": true
+    }
+  ],
+  "SHM": {
+    "actual_bytes": 17,
+    "historical_expectation_bytes": 12,
+    "frame_pointer_delta_bytes": 5,
+    "raw_hex": "554889e548b800000000000000005dffe0",
+    "provider": "do_shmget",
+    "provider_bytes": 2993,
+    "current_consumer": "sys_shmget",
+    "consumer_bytes": 338,
+    "consumer_relocation": [
+      {
+        "offset": 104,
+        "type": 1,
+        "target": {
+          "index": 4517,
+          "name": "do_shmget",
+          "bind": 1,
+          "type": 2,
+          "shndx": 1107,
+          "value": 0,
+          "size": 2993
+        },
+        "addend": 0,
+        "owning_section": 4291
+      }
+    ],
+    "same_low32_key_and_size_flags_register_ABI": true,
+    "full_final_bytes_readback": true,
+    "actual_compiler_fold": "sys_shmget338 differs only offset112 REX4c\u219244: mov r15,rdi becomes mov r15d,edi for genuine signed32 key narrowing; offset104 relocation directly targets original Rust do_shmget instead of17B adapter. All other instructions and relocation provenance exact115. This is observed compiler inlining with original key ABI, not byte equality."
+  },
+  "new_provider_current_edges": [
+    {
+      "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+      "consumer": "ptrace_wakeup_sig",
+      "offset": 118,
+      "target": "ptrace_wakeup_pending_take_bridge",
+      "final_address": "0xfffffffffe8a98e0"
+    },
+    {
+      "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+      "consumer": "ptrace_wakeup_sig",
+      "offset": 140,
+      "target": "ptrace_wakeup_trace_syscall_bridge",
+      "final_address": "0xfffffffffe8a9dc0"
+    },
+    {
+      "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+      "consumer": "ptrace_wakeup_sig",
+      "offset": 162,
+      "target": "ptrace_wakeup_set_single_step_bridge",
+      "final_address": "0xfffffffffe8a9940"
+    },
+    {
+      "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+      "consumer": "ptrace_wakeup_sig",
+      "offset": 173,
+      "target": "ptrace_wakeup_clear_saved_bridge",
+      "final_address": "0xfffffffffe8a98c0"
+    },
+    {
+      "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+      "consumer": "f03_ptrace_entry_ops_v1",
+      "offset": 112,
+      "target": "f03_ptrace_setsiginfo_v1",
+      "final_address": "0xfffffffffe851c00"
+    }
+  ],
+  "imports_added": [],
+  "imports_removed": [
+    "arch_do_shmget_bridge",
+    "ptrace_syscall_event"
+  ],
+  "Rust_warning_messages_added": [],
+  "Rust_warning_messages_removed": [],
+  "C_warning_messages_added": [
+    "\u2018ptrace_io_kernel_offsets\u2019 defined but not used [-Wunused-const-variable=]"
+  ],
+  "C_warning_messages_removed": [],
+  "arch_C_stderr_empty": true,
+  "ld_warning_equal115": true,
+  "C_object_deltas": {
+    "generic": {
+      "before": 158,
+      "after": 157,
+      "removed": [
+        "ptrace_io_kernel_offsets"
+      ],
+      "added": []
+    },
+    "arch": {
+      "before": 20,
+      "after": 20,
+      "removed": [],
+      "added": []
+    }
+  },
+  "Rust_data_added": [
+    ".Lanon.3095605168571ccfcc70317a0dc419ec.185",
+    ".Lanon.3095605168571ccfcc70317a0dc419ec.186",
+    ".Lanon.3095605168571ccfcc70317a0dc419ec.187",
+    ".Lanon.3095605168571ccfcc70317a0dc419ec.188"
+  ],
+  "Rust_data_removed": [
+    ".Lanon.417ddb61f0d242853afc022a9101b3c7.185",
+    ".Lanon.417ddb61f0d242853afc022a9101b3c7.186",
+    ".Lanon.417ddb61f0d242853afc022a9101b3c7.187",
+    ".Lanon.417ddb61f0d242853afc022a9101b3c7.188"
+  ],
+  "required_startup_and_ELF_entry": true,
+  "runtime_authority": null
+}

@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/retire_exact_bfd_stopped_container.py", line 446, in <module>
+    if __name__=='__main__':raise SystemExit(main())
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/retire_exact_bfd_stopped_container.py", line 438, in main
+    result=transaction(ops);complete=True;print(json.dumps(dict(status='RETIREMENT_COMPLETE_PENDING_PARENT_JOIN_AND_FRESH_CURRENT',result=result)));return 0
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/retire_exact_bfd_stopped_container.py", line 415, in transaction
+    ops.acquire();ops.safe();ops.census('PREINSPECT-1',True);ops.logs();proof,_=ops.census('PREINSPECT-2',True)
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/retire_exact_bfd_stopped_container.py", line 376, in census
+    safety=self.safe();challenge=uuid.uuid4().hex();caller=[os.getpid(),self.m.proc_stat(os.getpid())[19]]
+TypeError: 'str' object is not callable

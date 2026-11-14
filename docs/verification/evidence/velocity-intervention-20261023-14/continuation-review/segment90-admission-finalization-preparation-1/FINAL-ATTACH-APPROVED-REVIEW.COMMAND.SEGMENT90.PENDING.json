@@ -1,0 +1,153 @@
+{
+  "actual_admission": null,
+  "actual_fresh_query": null,
+  "argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport importlib.util,json,os,sys,time\nD=Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/runtime-successor-2')\nassert sys.version_info[:3]==(3,9,12) and os.getuid()==os.geteuid()==1000\ns=importlib.util.spec_from_file_location('actual_selected_production_transport',D/'source/long_transport.py');g=importlib.util.module_from_spec(s);s.loader.exec_module(g)\nassert g.digest(g.stable(D/'source/long_transport.py'))=='c5a3149b8c7eefa42b37916bb830a26fadddd145b5cb4d6bfcd0bfae1737e254'\n# Authenticated readback exists ONLY in repository; no private-copy prerequisite.\nassert len(sys.argv)==6\nquery=Path(sys.argv[4]);querysha=sys.argv[5];qraw=g.stable(query);assert len(querysha)==64 and g.digest(qraw)==querysha;q=json.loads(qraw)\nassert q['status']=='PASS_FRESH_READ_ONLY_P12_LONG_ADMISSION' and q['mutation'] is False and q['transient_mutex_released'] is True and q['execution_release'] is False and q['native_acceptance'] is False\nnow=time.time();assert type(q['at_unix']) in (int,float) and 0<=now-q['at_unix']<=120\nassert q['required']=={'host_required_bytes':140668567552,'scratch_required_bytes':13899923456}\ncohort=json.loads(g.stable(Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/segment90-admission-finalization-preparation-1/SELECTED-COHORT-BINDINGS.DATA.json')));assert g.digest(g.stable(Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/segment90-admission-finalization-preparation-1/SELECTED-COHORT-BINDINGS.DATA.json')))=='d05582ec07fcd9dce4f3f81fdc322423d5dba0c5d281597d71c5695732042a73'\npins={row['path']:(row['sha256'],row['size']) for row in q['observations']['source_pins']}\nfor row in cohort.values():assert pins[row['path']]==(row['sha256'],row['bytes']) and g.digest(g.stable(Path(row['path'])))==row['sha256']\nassert pins['/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-13/p12-current-normal-retirement-1/physical-preparation-1/ACTUAL-PHYSICAL-ACCEPTANCE.ROOT-RECORD.json']==('e54d603e473af8f26b20ecba91cc6e4c87a61102cdb0ec9707ce7880148f663f', 3523) and pins['/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-13/p12-current-normal-retirement-1/physical-preparation-1/current_live_postjoin.NONNULL.json']==('7c5d41e6dfe4e79aa08aac1138d46101a10786ef436ab81102060e03e9c8c638', 3023)\nassert q['observations']['parent']['dev']==66306 and q['observations']['parent']['ino']==56138797 and q['observations']['parent']['children']==[]\n\ndef exclusive(p,raw):\n fd=os.open(p,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW|os.O_CLOEXEC,0o600)\n with os.fdopen(fd,'wb') as f:f.write(raw);f.flush();os.fsync(f.fileno())\nassert len(sys.argv)==6\npayloadpath=Path(sys.argv[1]);payloadsha=sys.argv[2];reviewpath=Path(sys.argv[3]);assert len(payloadsha)==64 and payloadpath.is_absolute() and reviewpath.is_absolute()\npayloadraw=g.stable(payloadpath);assert g.digest(payloadraw)==payloadsha;value=json.loads(payloadraw);assert 'independent_review' not in value and g.canonical(value)==payloadraw and payloadraw.endswith(b'\\n')\nreview=json.loads(g.stable(reviewpath));assert set(review)=={'status','reviewer','implementation_ownership','payload_sha256'} and review['status']=='PASS' and review['implementation_ownership'] is False and type(review['reviewer']) is str and review['reviewer'] and review['reviewer']!=value['author'] and review['payload_sha256']==g.digest(payloadraw)\nassert value['profile']==g.TRANSPORT and value['storage_admission']==q['observations']['admission'] and value['boot_id']==Path('/proc/sys/kernel/random/boot_id').read_text().strip()\nassert value['nonce']=='afcf017e155344a1ad3fa2c2057dbbf2' and value['attempt_parent']=='/home/holden/mckernel-work/l12c1/p' and value['manifest']=={'path':'/home/holden/mckernel-work/scratch/p12c1/m.json','sha256':'e2e264d97f952bfded2018d284b037aa37dfdb7d26c212a1c777ebc3b9aec98b'}\nnow=time.time();assert now<=value['expires_unix']<=now+600 and value['execution_count']==1\nvalue['independent_review']=review;raw=g.canonical(value);release=Path('/home/holden/mckernel-work/scratch/p12c1/r.json');exclusive(release,raw);release_sha=g.digest(raw)\n# No clock or boot override: full unmodified production validation on published bytes.\nvalidated=g.validate_release(str(release),release_sha,value['manifest']['path'],value['nonce'],value['attempt_parent'])\nassert g.digest(g.stable(Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/segment90-admission-finalization-preparation-1/CAPTURE-REQUEST-PROTOTYPE.SEGMENT90.NOT-EXECUTABLE.json')))=='f094f88bb436387c196f45662570f671e85599b8de871519aa2caa1bbb8e93e1'\nreq=json.loads(g.stable(Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/segment90-admission-finalization-preparation-1/CAPTURE-REQUEST-PROTOTYPE.SEGMENT90.NOT-EXECUTABLE.json')));req['long_profile_release']={'path':str(release),'sha256':release_sha};req['argv'][req['argv'].index('--long-profile-release-sha256')+1]=release_sha;req['status']='EXACT_IMMUTABLE_REQUEST_CONDITIONED_ON_APPROVED_PAYLOAD_AND_REALCLOCK_CONSUMER';request_raw=g.canonical(req);exclusive(D/'CAPTURE-REQUEST.json',request_raw);request_sha=g.digest(request_raw)\n# Mandatory actual published-request consumer BEFORE any controller invocation.\nconsumer=Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/segment90-admission-finalization-preparation-1/controller_pre_effect_consumer.SEGMENT90.py');assert g.digest(g.stable(consumer))=='50677ee5ef081be342ea5cbe2401d4f7475fac4e7a986dc1114c2910c2099f0b'\ns=importlib.util.spec_from_file_location('reviewed_actual_published_request_pre_effect_consumer',consumer);p=importlib.util.module_from_spec(s);s.loader.exec_module(p)\nprior_argv=sys.argv;sys.argv=[str(consumer),str(D/'CAPTURE-REQUEST.json'),request_sha]\ntry:p.main()\nfinally:sys.argv=prior_argv\nargv=json.loads(g.stable(Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/segment90-admission-finalization-preparation-1/ROOT-ARGV.PROTOTYPE.SEGMENT90.NOT-EXECUTABLE.json')));argv[-1]=request_sha;exclusive(D/'ROOT-ARGV.FINAL.NOT-EXECUTED.json',g.canonical(argv))\nresult={'scope':'Functional OS/apps and Rust/assembly migration only; no security testing.','status':'PASS_PUBLISHED_FINAL_SERIALIZATION_AND_FULL_REALCLOCK_RELEASE_CONSUMER','payload_sha256':g.digest(payloadraw),'release_path':str(release),'release_sha256':release_sha,'request_path':str(D/'CAPTURE-REQUEST.json'),'request_sha256':request_sha,'root_argv_path':str(D/'ROOT-ARGV.FINAL.NOT-EXECUTED.json'),'expires_unix':validated['expires_unix'],'independent_review_source':str(reviewpath),'native_invoked':False,'actual_published_request_pre_effect_consumer_sha256':'50677ee5ef081be342ea5cbe2401d4f7475fac4e7a986dc1114c2910c2099f0b','actual_published_request_pre_effect_consumer':'PASS_ACTUAL_FINAL_SERIALIZED_REQUEST_PRE_EFFECT_GUARDS'}\nexclusive(D/'ACTUAL-FINAL-SERIALIZATION-AND-REALCLOCK-CONSUMER.json',g.canonical(result));print(json.dumps(result))\n",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/segment90-admission-finalization-preparation-1/PRE-REVIEW-PAYLOAD.SEGMENT90.NOT-RELEASED.canonical",
+    null,
+    null,
+    null,
+    null
+  ],
+  "controller": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/runtime-successor-2/capture_root_SEGMENT.NOT-RELEASED.py",
+    "sha256": "af730c0a1cb6e0e0d5fca241f327c667a4fd69611e1e1cb71396e54c1c5f6ecc",
+    "bytes": 7691
+  },
+  "current_live_postjoin": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-13/p12-current-normal-retirement-1/physical-preparation-1/current_live_postjoin.NONNULL.json",
+    "sha256": "7c5d41e6dfe4e79aa08aac1138d46101a10786ef436ab81102060e03e9c8c638",
+    "bytes": 3023
+  },
+  "current_ten_role_cohort": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/segment90-admission-finalization-preparation-1/SELECTED-COHORT-BINDINGS.DATA.json",
+    "sha256": "d05582ec07fcd9dce4f3f81fdc322423d5dba0c5d281597d71c5695732042a73",
+    "bytes": 3343
+  },
+  "execution_release": null,
+  "fresh_query_max_age_seconds": 120,
+  "future_expiry": null,
+  "future_payload": null,
+  "future_release_sha256": null,
+  "future_request_sha256": null,
+  "future_review": null,
+  "future_runtime": null,
+  "mandatory_final_published_request_consumer": {
+    "bytes": 4139,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/runtime-successor-2/controller_pre_effect_consumer.py",
+    "sha256": "27c9b90ffccc340bad8b377420cd44a17bc9a744b46caea5f2397e1d31a329a5"
+  },
+  "mandatory_sequence": [
+    "Verify fresh authenticated query with age<=120s and exact source10/profile/namespace",
+    "Attach genuine exact four-key PASS review binding canonical frozen payload",
+    "O_EXCL p12q1/r.json; full unchanged selected production validate_release on published bytes with actual clock/boot",
+    "O_EXCL CAPTURE-REQUEST.json; current exact selected pre-effect consumer on actual published bytes/hash",
+    "Only after both consumers PASS, O_EXCL final ROOT argv; root invocation separately released"
+  ],
+  "namespace": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/runtime-successor/ROOT-ACTUAL-FRESH-NAMESPACE.json",
+    "sha256": "dfbb0c027368986ff9c71694ef785c01747d4ab4fc801f5c3030022f0fbabc62",
+    "bytes": 930
+  },
+  "owner": {
+    "bytes": 147740,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/runtime-successor-2/source/native_diagnostic_container_owner.py",
+    "sha256": "8a41f20e72a9c705d604def5b95ff225bb90575e0b4ecf4b90048201bfaf7fd2"
+  },
+  "positive_current_physical": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-13/p12-current-normal-retirement-1/physical-preparation-1/ACTUAL-PHYSICAL-ACCEPTANCE.ROOT-RECORD.json",
+    "sha256": "e54d603e473af8f26b20ecba91cc6e4c87a61102cdb0ec9707ce7880148f663f",
+    "bytes": 3523
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "selected_profile": {
+    "bytes": 1459,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/runtime-successor-2/LONG-PROFILE.PREPARED.json",
+    "sha256": "bdbace13d5cb8685a821078433de5ae0666d7ee318159bff0c9809275b5e3ab8"
+  },
+  "slots": {
+    "argv6": "Genuine frozen exact payload SHA256",
+    "argv7": "Genuine independent four-key PASS review path binding that payload SHA",
+    "argv9": "Authenticated new query stdout SHA256"
+  },
+  "source10": {
+    "CURRENT68-SDK8-AUTHORITY-LINKS.json": {
+      "bytes": 3807,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/runtime-successor-2/source/CURRENT68-SDK8-AUTHORITY-LINKS.json",
+      "sha256": "9f0f9edc97cbe759d7d8b635e5fb9181ac2cd4c3dfb3f91ee3b408d5678dde43"
+    },
+    "composite_module_binding.py": {
+      "bytes": 5480,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/runtime-successor-2/source/composite_module_binding.py",
+      "sha256": "233e10b97114f47f357a1ab50bcd64159a4ce29b2bf04558ca31f3f176d84ca9"
+    },
+    "long_transport.py": {
+      "bytes": 17078,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/runtime-successor-2/source/long_transport.py",
+      "sha256": "c6b6c88f3d11fb132d198be4c368a1304c39def4f4f935dad8d5916cadaa2044"
+    },
+    "native_diagnostic.py": {
+      "bytes": 88800,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/runtime-successor-2/source/native_diagnostic.py",
+      "sha256": "2cc19500bdecdabf9fc419195df38c25636017bd038d94da688a2d4ad1fed7d3"
+    },
+    "native_diagnostic_backend.py": {
+      "bytes": 27949,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/runtime-successor-2/source/native_diagnostic_backend.py",
+      "sha256": "9e93445ea5710f64b1f55438470e8bcfe8e0766d77a8841d6e0059341f2a28d2"
+    },
+    "native_diagnostic_container_owner.py": {
+      "bytes": 147740,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/runtime-successor-2/source/native_diagnostic_container_owner.py",
+      "sha256": "8a41f20e72a9c705d604def5b95ff225bb90575e0b4ecf4b90048201bfaf7fd2"
+    },
+    "native_diagnostic_runner.py": {
+      "bytes": 7622,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/runtime-successor-2/source/native_diagnostic_runner.py",
+      "sha256": "ba64561121d1858d1b82251ee53f4ff338cbb06b223f7da5b45159cf5952479f"
+    },
+    "p12_long_session.py": {
+      "bytes": 10930,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/runtime-successor-2/source/p12_long_session.py",
+      "sha256": "bff717d885afdda0d82cd0ab05a0930a3e66b242c6200b1295f2173bb4cdc5d3"
+    },
+    "qmp_capture.py": {
+      "bytes": 11980,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/runtime-successor-2/source/qmp_capture.py",
+      "sha256": "d1d8ed4f72e4b8804c41b4d979ba738e16656b6bab786031e8bd8585a8137b2c"
+    },
+    "repaired_image_authority.py": {
+      "bytes": 3432,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/runtime-successor-2/source/repaired_image_authority.py",
+      "sha256": "a778431998bb9569dee9f4bcd27d0cfceb7361d11ebbe7654cb57082ebde0847"
+    }
+  },
+  "source_guard_transport": {
+    "bytes": 17078,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/runtime-successor-2/source/long_transport.py",
+    "sha256": "c6b6c88f3d11fb132d198be4c368a1304c39def4f4f935dad8d5916cadaa2044"
+  },
+  "status": "SEGMENT90_DATA_TEMPLATE_ONLY_PENDING_GENUINE_QUERY_AND_EXACT_PAYLOAD_REVIEW",
+  "actual_release": null,
+  "actual_review": null,
+  "fresh_query_path": null,
+  "fresh_query_sha256": null,
+  "final_expiry": null,
+  "canonical_rule": "Selectedg.canonical()+g.digest(), finalLFbyte10; no manualdigest/clock/approval. Actualquery<=120s, late+590s/max600; fullvalidate_release realclock and mandatoryactualpublishedrequestconsumer beforePopen.",
+  "root_fill_slots": {
+    "freeze": [
+      "authenticatedactualquerypath",
+      "authenticatedactualquerySHA"
+    ],
+    "attach": [
+      "actualfrozenpayloadSHA",
+      "approvedindependentreviewpath",
+      "authenticatedactualquerypath",
+      "authenticatedactualquerySHA"
+    ]
+  }
+}

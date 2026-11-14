@@ -1,0 +1,59 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "FROZEN_SOURCE_NOT_COMPILED_OR_EXECUTED",
+  "original_source": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/production-collector-preparation-1/production-source/long_trace_retention.inc",
+    "sha256": "66ad73a4b7da9ccb775247c2d32a803f445e93a1e5b8762cabc5a4968adf099f"
+  },
+  "candidate_include_sha256": "adc08b445de3d3cadff671ecf5b6ca8ac49c6480dd91830c7e5976b6a2a9af56",
+  "fixture_sha256": "f1c11f76bcffc5d4af22acd83a8e82b2c027560dbac086e0a890f8b1d7ac0c98",
+  "cases": [
+    "ordered subsequence and rejected backward query",
+    "zero/interior/end/later-record cursor boundaries",
+    "missing oldpath belowcursor stillrejects",
+    "hardlink metadatachange rejects",
+    "PID selection/unknownPID",
+    "identical lines cursor advancement and reorderedquery reject",
+    "1024realfile-backedorderedqueries: original524800vs candidate1024memchr calls; exactreturn/cursor equality"
+  ],
+  "real_identity_checks": true,
+  "mocked_unexercised_adapters": "save_file realhostwrite; pair_routes stub unused by membership-onlyfixture; no nativepair/resource acceptance",
+  "resource_profile": {
+    "host_only": true,
+    "max_single_processes": 1,
+    "static_trace_bytes": 268435456,
+    "maximum_records": 2048,
+    "used_test_trace_bytes_under": 20000,
+    "wall_proposed_seconds": 60,
+    "compiler_wall_proposed_seconds": 60,
+    "no_guest_root_signals": true,
+    "retain_fixture_data": true
+  },
+  "root_commands_NOT_EXECUTED": [
+    {
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-Wno-unused-function",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/cumulative-continuation-90s/cursor-host-fixture-1/fixture_cursor.c",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/cumulative-continuation-90s/cursor-host-fixture-1/fixture_cursor"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/cumulative-continuation-90s/cursor-host-fixture-1",
+      "purpose": "Functional OS only; no security testing. Compile7case actualfilesystem cursor equivalence fixture."
+    },
+    {
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/cumulative-continuation-90s/cursor-host-fixture-1/fixture_cursor",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/cumulative-continuation-90s/cursor-host-fixture-1/actual-host-data"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/cumulative-continuation-90s/cursor-host-fixture-1",
+      "purpose": "Functional OS only; no security testing. Execute7HOSTcursorcases afterrootgrant; dataretained."
+    }
+  ],
+  "limitations": "No collector quota/profile change. Membership equivalence fixture only; rootstillownsactualconsumer/native/lifecycle/oracle validation."
+}

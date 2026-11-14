@@ -1,0 +1,22 @@
+{
+  "status": "PASS_EXECUTION_REVIEW_CONDITIONAL",
+  "reviewer": "/root/signal_guest_execution_review",
+  "recorded_by": "/root",
+  "proposal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-vector-preservation-execution-proposal-20261017-1.json",
+    "sha256": "e52545db373258ad0e3b7b4540da3f11331e144e8526f8a967b4c7dfc72c0d24",
+    "size": 18289
+  },
+  "decision": "Exactargv/stage60members/54nonoverlay9metadata/41nonzeromtimes accepted. One selectedSSE2/XMM/MXCSR/x87 guest only; exact3conditional32MiB30sreadbacks. Only metadata joins review/livepreflight/release/predecessor permitted. No new record-only Gitgate.",
+  "conditions": [
+    "freshliveadmission",
+    "exclusiveheavy",
+    "runtimeHEADfreeze",
+    "preexecutionpendingresolved"
+  ],
+  "not_authorized": [
+    "lifecycle/resourceprobe",
+    "destroy/release/reboot",
+    "AVX/XSAVE/multicore/fullOScredit"
+  ]
+}

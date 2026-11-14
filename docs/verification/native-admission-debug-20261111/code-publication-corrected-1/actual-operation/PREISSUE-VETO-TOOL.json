@@ -1,0 +1,48 @@
+{
+  "schema": "mckernel.fixed30.root-tool-capture.v1",
+  "scope": "ROOT_CODE_INSTALL_ONLY",
+  "request_sha256": "b6f20566657bad0feea6278daae7d8449a554180d020d7d035a900cc2dccf760",
+  "issuer_sha256": "8837418eb87d1f1c618b37a62b5ca9494d5f303081860583cb95dfd4f5f91a07",
+  "argv": [
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/ROOT-ISSUE-AND-EXECUTE-ONCE.py",
+    "--operation-review",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-operation-review-sourceacq-max-1/wait-digest-correction-1/OPERATION-REVIEW.json",
+    "--operation-review-sha256",
+    "3b8b8e0c1bcfd9b7ac52e374904f6b1bccf147343752288e1347df3b04b9724d"
+  ],
+  "tool_calls": [
+    {
+      "tool": "exec_command",
+      "arguments": {
+        "cmd": "/usr/bin/python3 -I -B /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/ROOT-ISSUE-AND-EXECUTE-ONCE.py --operation-review /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-operation-review-sourceacq-max-1/wait-digest-correction-1/OPERATION-REVIEW.json --operation-review-sha256 3b8b8e0c1bcfd9b7ac52e374904f6b1bccf147343752288e1347df3b04b9724d",
+        "workdir": "/home/holden/mckernel",
+        "tty": false,
+        "login": false,
+        "yield_time_ms": 1000,
+        "max_output_tokens": 16000
+      },
+      "result": {
+        "chunk_id": "33c7c6",
+        "wall_time_seconds": 0.000016897,
+        "exit_code": 1,
+        "original_token_count": 135,
+        "output": "Traceback (most recent call last):\n  File \"/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/ROOT-ISSUE-AND-EXECUTE-ONCE.py\", line 215, in <module>\n    if __name__=='__main__':main()\n  File \"/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/ROOT-ISSUE-AND-EXECUTE-ONCE.py\", line 129, in main\n    assert 0 <= time.time() - observed < 25\nAssertionError\n"
+      }
+    }
+  ],
+  "full_tool_result": {
+    "chunk_id": "33c7c6",
+    "wall_time_seconds": 0.000016897,
+    "exit_code": 1,
+    "original_token_count": 135,
+    "output": "Traceback (most recent call last):\n  File \"/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/ROOT-ISSUE-AND-EXECUTE-ONCE.py\", line 215, in <module>\n    if __name__=='__main__':main()\n  File \"/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/ROOT-ISSUE-AND-EXECUTE-ONCE.py\", line 129, in main\n    assert 0 <= time.time() - observed < 25\nAssertionError\n"
+  },
+  "primary_error": null,
+  "secondary_errors": [],
+  "full_Root_tool_and_streams_joined": false,
+  "native_release": false,
+  "native_currentfree": null
+}

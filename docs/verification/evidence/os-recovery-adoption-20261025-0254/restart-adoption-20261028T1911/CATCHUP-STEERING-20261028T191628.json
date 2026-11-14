@@ -1,0 +1,155 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": "2026-10-28T19:19:01.479375+00:00",
+  "type": "overdue catchup with restart startup segment; not a full active twenty-minute bucket",
+  "controls": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/new-run-until-20261028-2300-pacific-1/restart-20261028-1200-pacific-1/ACTUAL-CONTROLS-ARMED.json",
+    "bytes": 3171,
+    "sha256": "fe3c2193600ce06c98f769d4659faaf52d3035437a98c5fa8d33ab43a7ed8202"
+  },
+  "earliest_caps": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/new-run-until-20261028-2300-pacific-1/restart-20261028-1200-pacific-1/EARLIEST-CONTROL-CAPS.json",
+    "bytes": 858,
+    "sha256": "a28da98b506a4e51a0f42985f346cc0e4036836731d682dbdeae2423ba236eb0"
+  },
+  "actual_caps": {
+    "at": "2026-10-28T19:12:51.217582+00:00",
+    "deadline_epoch": 1793253600,
+    "monotonic_deadline": 1035704.5689393478,
+    "boot_deadline": 1051042.6959879305,
+    "original_caps": {
+      "boot_deadline": 1051043.6959931096,
+      "monotonic_deadline": 1035705.5689454618
+    },
+    "derivation": {
+      "boot_sample": 1012215.913556548,
+      "monotonic_before": 996877.786503322,
+      "monotonic_after": 996877.786507965,
+      "actual_initial_watch_clock": {
+        "boot_deadline": 1051043.6959931096,
+        "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+        "bootstrap_packet_sha256": "d003763177001a17ae1bc5cda6baa26b67ce9f1f5f942befe45af69dd4e29bfd",
+        "deadline": 1793253600.0,
+        "watcher_cutoff_lower": 1035704.5689393478,
+        "watcher_cutoff_upper": 1035704.5702440687,
+        "watcher_pid": 2109395,
+        "watcher_start": "101211669"
+      }
+    }
+  },
+  "fresh_actor_observations": {
+    "watcher": {
+      "pid": 2109395,
+      "start": "101211669",
+      "ppid": 1311,
+      "state": "S",
+      "receipt_ppid": 1311
+    },
+    "worker": {
+      "pid": 2109397,
+      "start": "101211677",
+      "ppid": 2109395,
+      "state": "S",
+      "receipt_ppid": 2109395
+    },
+    "server": {
+      "pid": 2109399,
+      "start": "101211685",
+      "ppid": 2109397,
+      "state": "S",
+      "receipt_ppid": 2109397
+    },
+    "guardian": {
+      "pid": 2111552,
+      "start": "101236067",
+      "ppid": 1311,
+      "state": "S",
+      "receipt_ppid": 1311
+    },
+    "monitor": {
+      "pid": 2111966,
+      "start": "101243270",
+      "ppid": 1311,
+      "state": "S",
+      "receipt_ppid": 2111963
+    },
+    "phone": {
+      "pid": 1894242,
+      "start": "96505809",
+      "ppid": 1311,
+      "state": "S",
+      "receipt_ppid": 1311
+    }
+  },
+  "auxiliary_reparenting": "Exact monitor PID/start preserved; startup wrapper PPID changed to observed supervisor1311. Retained original receipt; focused guard source and independent review required.",
+  "measurement": {
+    "startup_segment_start": "2026-10-28T19:11:11.995407Z",
+    "startup_segment_end": "2026-10-28T19:16:28.104491Z",
+    "startup_segment_seconds": 316.109084,
+    "full_twenty_minute_baseline": "2026-10-28T19:16:28.104491Z",
+    "next_bucket_end": "2026-10-28T19:36:28.104491Z",
+    "stopped_downtime_seconds": 41784.995407,
+    "stopped_start": "2026-10-28T07:34:47Z",
+    "stopped_end": "2026-10-28T19:11:11.995407Z",
+    "prior_thirtyminute_baseline": "Preserved unchanged; no overlapping period or speedup inference"
+  },
+  "deltas": {
+    "producer_runs": 0,
+    "current_candidate_builds": 0,
+    "behavior_tested_runtime": 0,
+    "production_linked": 0,
+    "native_cases": 0,
+    "files_closed": 0,
+    "retired_C_boundaries": 0,
+    "recovered_predecessor_readbacks": 1
+  },
+  "time_to_first_compiler": null,
+  "ready_to_entry": "No new entry; operation identity/config repair remains blocking. Original prior ready timestamp is retained rather than reset at relaunch.",
+  "failure_to_validated_fix": null,
+  "blocked_duration": {
+    "parent_control_startup_seconds": 316.109084,
+    "ongoing_operation_identity_config": "Not yet resolved; report elapsed at completed bucket"
+  },
+  "largest_avoidable_handoff": "Retired-control binding propagation through nested observer dependencies; completed retained readback was recovered rather than rerun.",
+  "scheduling_adjustment": "Original227 owner now implements recursive source propagation instead of templates; BFDreview finishes source guard review while two remaining M14 owners implement distinct next bodies.",
+  "critical_path": {
+    "owner": "/root/restart_guard then independent /root/bfd_review then /root",
+    "next_command": "python3 -B <restart-operation-guard-source>/test_restart_guards.py (pure only), independent exact source review, then one actual read-only guardian guard check; no heavy/native release yet"
+  },
+  "active_owners": [
+    "m14_compose",
+    "f03_next",
+    "f06_next",
+    "m15_consumer",
+    "original227",
+    "restart_guard",
+    "bfd_review"
+  ],
+  "resource_snapshot": {
+    "disks": {
+      "/home/holden/mckernel": {
+        "available_bytes": 147613978624,
+        "ismount": false,
+        "st_dev": 66306
+      },
+      "/home/holden/mckernel-work/scratch": {
+        "available_bytes": 47862149120,
+        "ismount": true,
+        "st_dev": 1828
+      }
+    },
+    "load_average": [
+      1.27,
+      1.11,
+      0.94
+    ],
+    "memory": {
+      "MemAvailable_kib": 26701904,
+      "MemTotal_kib": 32421580
+    }
+  },
+  "recovered_stage_scope": "Frozen CURRENT110/60e only; no matchingCURRENT116 native",
+  "BUILD3_reconciliation": "Catchup monitor instruction references historical BUILD3. Latest CURRENT116/Root61 remains accepted; no new compiler/default/native/file closure since07:34stop. Do not replay consumed BUILD3/CID5487.",
+  "claim_95_percent": false,
+  "whole_M14_M15": "OPEN"
+}

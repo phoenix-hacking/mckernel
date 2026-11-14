@@ -1,0 +1,148 @@
+{
+  "Root_HEAD": "c37451865bb45d3555457afdbb18eae47c658f3c",
+  "SDK_execution_released": false,
+  "actual_Root_static_bindings": {
+    "ACTUAL-STATIC-PUBLICATION.json": {
+      "bytes": 2914,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-DAEMON7-POSTGROWTH-SDK-ADMISSION-4/ACTUAL-STATIC-PUBLICATION.json",
+      "sha256": "7323453baf84e8c1d2aa7d9428d1acd050761acbf415d05af52e7d1f3f30d966"
+    },
+    "SDK-HEAD-BINDING.json": {
+      "bytes": 189,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-DAEMON7-POSTGROWTH-SDK-ADMISSION-4/SDK-HEAD-BINDING.json",
+      "sha256": "44f8aae31a7d7140f00d7caf33a14004fc79fd3c11b31885aa1040bfd78ac5cf"
+    }
+  },
+  "actual_query_ref_only_after_actual_review": "QUERY-RELEASE-REF.json emitted by --bind-reviewed-query; pending null ref is never a valid adapter input",
+  "actual_request_reused": {
+    "bytes": 3496,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-DAEMON7-POSTGROWTH-SDK-ADMISSION-3/SDK7-REQUEST.json",
+    "sha256": "ab5454e7a731df1e94984ab0bad46fdaa2836fc5d16953fe40cdbc836b9f81c9"
+  },
+  "execution_release": null,
+  "expired_outputs_copied": false,
+  "fresh_inputs": [
+    "LIVE-CURRENT.json generated solely by Root invocation of unchanged observer",
+    "QUERY-HOLDER.READY.json generated solely by genuine new holder",
+    "all wall/MONOTONIC/BOOT clocks from actual LIVE capture and current adapter clock; no rolling deadline",
+    "fresh holder pid/starttime/fd/command from actual READY, never old1319250"
+  ],
+  "live_clock": null,
+  "metadata_outputs_after_prepare": [
+    "PREQUERY-BUNDLE.json",
+    "QUERY-RELEASE.PENDING-REVIEW.json",
+    "QUERY-RELEASE-REF.PENDING.json"
+  ],
+  "next_command": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-DAEMON7-POSTGROWTH-SDK-ADMISSION-4/capture_live_current.py"
+  ],
+  "nonce": "567416a9e25d4923945486092c3e57f4",
+  "owned_holder": null,
+  "predecessor": "ROOT-DAEMON7-POSTGROWTH-SDK-ADMISSION-3",
+  "preparer": {
+    "bytes": 5938,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-DAEMON7-POSTGROWTH-SDK-ADMISSION-4/prepare_live_bindings.py",
+    "sha256": "d049687f4c4455b605ac23527396b0dcc2f86f551e11cd3dc740eaa191c7db61"
+  },
+  "query_release": null,
+  "request_body_changed": false,
+  "review_filled_fields": {
+    "decision": "PASS_READONLY_QUERY_ONLY only if actually independently granted",
+    "reviewer": "/root/custody_release_review only by actual independent reviewer"
+  },
+  "root_fields_needed_before_clock": {},
+  "root_only_ordered_commands": [
+    {
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-DAEMON7-POSTGROWTH-SDK-ADMISSION-4/capture_live_current.py"
+      ],
+      "stage": "after Root static HEAD/publication input, before holder"
+    },
+    {
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-DAEMON7-POSTGROWTH-SDK-ADMISSION-4/hold_query_mutex.py"
+      ],
+      "stage": "ordinary UID1000 persistent holder, new tool, do not detach or inherit FD"
+    },
+    {
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-DAEMON7-POSTGROWTH-SDK-ADMISSION-4/prepare_live_bindings.py"
+      ],
+      "stage": "after actual LIVE-CURRENT + HOLDER.READY exist"
+    },
+    {
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-DAEMON7-POSTGROWTH-SDK-ADMISSION-4/prepare_live_bindings.py",
+        "--bind-reviewed-query"
+      ],
+      "stage": "after independent reviewer actually publishes exact QUERY-RELEASE.PENDING-REVIEW with only decision/reviewer filled"
+    },
+    {
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-DAEMON7-POSTGROWTH-SDK-ADMISSION-4/run_owned_query_capture.py"
+      ],
+      "stage": "after genuine bound query review only"
+    },
+    {
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-DAEMON7-POSTGROWTH-SDK-ADMISSION-4/prepare_final_metadata.py"
+      ],
+      "stage": "after actual query joined0; conditional proposal only"
+    },
+    {
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-DAEMON7-POSTGROWTH-SDK-ADMISSION-4/run_sdk_capture.py"
+      ],
+      "stage": "only after actual independent metadata/execution release, holder own close + holder actual join, and fresh120s/current ownership admission"
+    }
+  ],
+  "runtime_actions": 0,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_bytes_copied_exact": true,
+  "static_check": {
+    "argv": [
+      "/usr/bin/prlimit",
+      "--as=2147483648:2147483648",
+      "--",
+      "/usr/bin/taskset",
+      "-c",
+      "0",
+      "/home/holden/anaconda3/bin/python3",
+      "-B",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-DAEMON7-POSTGROWTH-SDK-ADMISSION-4/prepare_live_bindings.py",
+      "--check-static"
+    ],
+    "returncode": 0,
+    "stdout": "{\"status\": \"PASS_BYTE_IDENTICAL_STATIC_REUSE_ONLY\", \"execution_authority\": false}\n"
+  },
+  "static_inputs": {
+    "bytes": 5544,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-DAEMON7-POSTGROWTH-SDK-ADMISSION-4/STATIC-REUSE-INPUTS.json",
+    "sha256": "5393685b1781f462d790ebba2ff3110efbeaa44225a5230062107743858e0ff4"
+  },
+  "status": "STATIC_SUCCESSOR_READY_NO_LIVE_OBSERVATION_OR_RELEASE"
+}

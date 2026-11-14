@@ -1,0 +1,1624 @@
+#!/usr/bin/env python3
+"""Reviewed owner for one isolated current-source McKernel image build.
+
+This module is an admission/transport boundary around the offline image
+driver.  It does not relocate sources, install software, or perform a guest
+operation.  A real invocation creates exactly one private, read-only-root
+container under the reviewed 4 CPU/12 GiB lease; tests inject a fake Docker
+transport and never contact Docker.
+"""
+from __future__ import annotations
+
+import argparse
+from decimal import Decimal
+import hashlib
+import importlib.util
+import json
+import os
+from pathlib import Path
+import re
+import shutil
+import signal
+import stat
+import subprocess
+import sys
+import time
+import types
+import uuid
+
+
+REQUEST_SCHEMA = "mckernel.native-exact-mckernel-image-container-request.v1"
+RECEIPT_SCHEMA = "mckernel.native-exact-launcher-container-receipt.v1"
+OWNER_RECEIPT_NAME = "owner-receipt.json"
+EXPECTED_DRIVER_SHA256 = '03f60d447ca5be136cf4caeb0e193168125629d02d8401b277645e68914cbab3'
+EXPECTED_PROVENANCE_SHA256 = 'd508ba6ae81dbdad81199515d55d5406e4c0a41944c1d301240d75d81f8e6ec1'
+EXPECTED_HOST_OWNER_SHA256 = "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1"
+EXPECTED_HEAVY_ENTRY_CONTRACT_SHA256 = "c252ee341eb61752704f8b818503c0a5dc97400845494707ca3110f5f23df6d1"
+# The image owner advances with the image-candidate namespace.  Keep consumed
+# exclusions explicit: accepting one of these would allow a request to race a
+# retired build candidate.  Tests may replace COMMON_EXCLUSION with a private
+# fixture, so the rejection list remains separate from the active value.
+COMMON_EXCLUSION = '/home/holden/mckernel-work/host-preparation/p-m06-01-pinned-launcher-process-inputs-20261022-1/pinned-launcher-attempt-1/common-exclusion.json'
+RETIRED_COMMON_EXCLUSIONS = frozenset(
+    "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-" + suffix + ".json"
+    for suffix in (
+        "76ae20b5", "76ae20b5-2", "97fb67a7-3", "closurefix-4",
+        "runtimeclosure-5", "offlinecwd-5", "offlinecwd-6", "memorymap-7",
+        "memorymap-relocated-8", "mappingbinding-9", "lifecyclebinding-10",
+        "objtoolbinding-11", "runtimeblob-12", "selfdigest-13", "exportset-16",
+        "exportset-17", "exportset-18", "exportset-19", "exportset-20",
+        "exportset-21", "exportset-22", "exportset-23", "exportset-24",
+        "exportset-25", "exportset-26", "scratch15-exportset-27", "scratch16", "scratch17-image-1",
+    )
+)
+RETIRED_COMMON_EXCLUSIONS = RETIRED_COMMON_EXCLUSIONS | frozenset(('/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/common-exclusion.json',))
+
+RETIRED_COMMON_EXCLUSIONS = RETIRED_COMMON_EXCLUSIONS | frozenset(('/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-successor-preparation-1/launcher-attempt-1/common-exclusion.json',))
+
+LIMITS = {
+    "NanoCpus": 4_000_000_000, "CpusetCpus": "2-5",
+    "Memory": 12 * 2**30, "MemorySwap": 12 * 2**30,
+    "PidsLimit": 512, "NetworkMode": "none",
+}
+RESOURCE_ARGS = ("--cpus=4", "--cpuset-cpus=2-5", "--memory=12g",
+                 "--memory-swap=12g", "--pids-limit=512")
+MAX_TIMEOUT = 19_800
+LAUNCHER_AGGREGATE_GIB = "16.2158"
+LAUNCHER_AGGREGATE_BYTES = int(Decimal(LAUNCHER_AGGREGATE_GIB) * 2**30)
+REQUIRED_TOOLS = ("cmake", "cc", "clang", "ld.lld", "rustc", "nm", "readelf", "make", "ld",
+                  "objcopy", "ar", "ranlib", "git", "dd")
+REQUIRED_LIBRARIES = ("libnuma", "libbfd", "libiberty", "libudev")
+LIBRARY_SPECS = {
+    "libnuma": {"development_package": "numactl-devel",
+                "linker": {"path": "/usr/lib64/libnuma.so", "owner": "numactl-libs"},
+                "headers": {"/usr/include/numa.h": "numactl-devel"}},
+    "libbfd": {"development_package": "binutils-devel",
+               "linker": {"path": "/usr/lib64/libbfd.so", "owner": "binutils-devel"},
+               "headers": {"/usr/include/bfd.h": "binutils-devel"}},
+    "libiberty": {"development_package": "binutils-devel",
+                  "linker": {"path": "/usr/lib64/libiberty.a", "owner": "binutils-devel"},
+                  "headers": {"/usr/include/libiberty.h": "binutils-devel"}},
+    "libudev": {"development_package": "systemd-devel",
+                "linker": {"path": "/usr/lib64/libudev.so", "owner": "systemd-libs"},
+                "headers": {"/usr/include/libudev.h": "systemd-devel"}},
+}
+# This is duplicated deliberately: the image preparer is authenticated
+# independently and the downstream owner must not import an unbound producer
+# module merely to learn the base-image identity.
+PREPARER_BASE_IMAGE = (
+    "rockylinux/rockylinux:10.2@sha256:"
+    "e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176"
+)
+PINNED_CMAKE_RPM = "cmake-0:3.31.8-1.el10.x86_64"
+PINNED_RUST_RPM = "rust-0:1.92.0-1.el10.x86_64"
+EXPECTED_V2_RUSTC_VERSION = "rustc 1.95.0-nightly (c04308580 2026-02-18)"
+_PREPARATION_EVIDENCE = (
+    "image-inspect.json", "inspect-before-start.json", "tool-observation.json",
+    "inspect-terminal.json", "offline-inspect-before-start.json",
+    "offline-tool-observation.json", "offline-inspect-terminal.json",
+)
+SUDO_DOCKER_PREFIX = ("/usr/bin/sudo", "-A", "/usr/bin/docker",
+                      "--host=unix:///var/run/docker.sock")
+RETIRED_COMMON_EXCLUSIONS = RETIRED_COMMON_EXCLUSIONS | frozenset(('/home/holden/mckernel-work/scratch/native-fp-copy-image-preparation-20261018-1/preparation-commands-1/common-exclusion-084cffb0413a4275bfdd66e3fd6c3368.json',))
+
+
+def _load_heavy_entry_contract(path=None, expected_sha256=None):
+    """Execute the authenticated regular-file bytes of the shared contract.
+
+    Importlib is deliberately avoided: a loader may consult a cache or follow
+    a changed path after authentication.  The path and identity are checked
+    both before and after the single byte read, then those exact bytes are
+    compiled and executed.
+    """
+    path = (Path('/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/adapters/native_rust_exact_disk_build_wrapper.py')
+            if path is None else Path(path))
+    expected_sha256 = (EXPECTED_HEAVY_ENTRY_CONTRACT_SHA256
+                       if expected_sha256 is None else expected_sha256)
+    if not (path.is_absolute() and path.is_file() and not path.is_symlink()):
+        raise OwnerError("shared heavy-entry contract is not a regular source file")
+    current = Path(path.anchor)
+    for component in path.parts[1:]:
+        current /= component
+        if current.is_symlink():
+            raise OwnerError("shared heavy-entry contract has symlink parent")
+    before = os.lstat(path)
+    data = path.read_bytes()
+    after = os.lstat(path)
+    identity = lambda row: (row.st_dev, row.st_ino, row.st_size, row.st_mode)
+    if identity(before) != identity(after):
+        raise OwnerError("shared heavy-entry contract identity changed during import")
+    if hashlib.sha256(data).hexdigest() != expected_sha256:
+        raise OwnerError("shared heavy-entry contract hash mismatch")
+    module = types.ModuleType("_mckernel_exact_heavy_entry_contract")
+    module.__file__ = str(path)
+    module.__package__ = ""
+    exec(compile(data, str(path), "exec"), module.__dict__)
+    return module
+
+
+def _load_reviewed_host_owner(path, host_sha256=None, provenance_path=None,
+                              provenance_sha256=None):
+    """Load reviewed owner/provenance from authenticated source bytes only."""
+    path = Path(path)
+    provenance_path = (path.with_name("native_rust_exact_build_offline.py")
+                       if provenance_path is None else Path(provenance_path))
+    def source_bytes(candidate, expected, label):
+        if not (candidate.is_absolute() and candidate.is_file() and not candidate.is_symlink()):
+            raise RuntimeError(label + " is not a regular source file")
+        current = Path(candidate.anchor)
+        for component in candidate.parts[1:]:
+            current /= component
+            if current.is_symlink():
+                raise RuntimeError(label + " has symlink parent")
+        before = os.lstat(candidate)
+        data = candidate.read_bytes()
+        after = os.lstat(candidate)
+        if (before.st_dev, before.st_ino, before.st_size, before.st_mode) != \
+                (after.st_dev, after.st_ino, after.st_size, after.st_mode):
+            raise RuntimeError(label + " identity changed during import")
+        observed = hashlib.sha256(data).hexdigest()
+        if expected is not None:
+            if observed != expected:
+                raise RuntimeError(label + " hash mismatch")
+        return data
+    host_bytes = source_bytes(path, host_sha256, "host owner")
+    provenance_bytes = source_bytes(provenance_path, provenance_sha256, "host provenance")
+    package_name = "_mckernel_reviewed_exact_owner_%d" % os.getpid()
+    package = types.ModuleType(package_name)
+    package.__path__ = [str(path.parent)]
+    package.__package__ = package_name
+    sys.modules[package_name] = package
+    provenance_name = package_name + ".native_rust_exact_build_offline"
+    host_name = package_name + ".native_rust_exact_build_container_owner"
+    provenance = types.ModuleType(provenance_name)
+    provenance.__package__ = package_name
+    provenance.__file__ = str(provenance_path)
+    host = types.ModuleType(host_name)
+    host.__package__ = package_name
+    host.__file__ = str(path)
+    sys.modules[provenance_name] = provenance
+    sys.modules[host_name] = host
+    try:
+        exec(compile(provenance_bytes, str(provenance_path), "exec"), provenance.__dict__)
+        exec(compile(host_bytes, str(path), "exec"), host.__dict__)
+        return host
+    finally:
+        sys.modules.pop(host_name, None)
+        sys.modules.pop(provenance_name, None)
+        sys.modules.pop(package_name, None)
+
+
+_HOST_OWNER_PATH = Path('/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/adapters/native_rust_exact_build_container_owner.py')
+_HOST_OWNER = _load_reviewed_host_owner(
+    _HOST_OWNER_PATH, EXPECTED_HOST_OWNER_SHA256,
+    Path('/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/native_rust_exact_build_offline.py'),
+    EXPECTED_PROVENANCE_SHA256)
+
+
+class OwnerError(RuntimeError):
+    pass
+
+
+_SHARED_HEAVY_ENTRY_CONTRACT = _load_heavy_entry_contract()
+
+
+def _gitlink_rows(raw, tree=False):
+    _fail(isinstance(raw, bytes) and (not raw or raw.endswith(b"\0")),
+          "malformed libdwarf Git rows")
+    rows = {}
+    for item in raw.split(b"\0")[:-1]:
+        metadata, separator, raw_path = item.partition(b"\t")
+        _fail(separator and raw_path, "malformed libdwarf Git row")
+        try:
+            relative = raw_path.decode("utf-8")
+        except UnicodeDecodeError as exc:
+            raise OwnerError("non-UTF-8 libdwarf path") from exc
+        _fail(relative and not Path(relative).is_absolute() and "\\" not in relative and
+              "\0" not in relative and all(part not in ("", ".", "..")
+              for part in relative.split("/")), "libdwarf Git path escapes checkout")
+        fields = metadata.split()
+        if tree:
+            _fail(len(fields) == 3 and fields[1] == b"blob", "unsupported libdwarf tree entry")
+            mode, blob = fields[0], fields[2]
+        else:
+            _fail(len(fields) == 3 and fields[2] == b"0", "unsupported libdwarf index entry")
+            mode, blob = fields[0], fields[1]
+        _fail(mode in (b"100644", b"100755") and re.fullmatch(b"[0-9a-f]{40}", blob),
+              "unsupported libdwarf mode or blob")
+        _fail(relative not in rows, "duplicate libdwarf Git path")
+        rows[relative] = {"mode": mode.decode(), "blob": blob.decode()}
+    return rows
+
+
+def _validate_gitlink_manifest(document, manifest_path, checkout, base_manifest,
+                               candidate, ihk, git_tool=None):
+    """Authenticate the supplemental self-contained libdwarf closure."""
+    _fail(isinstance(document, dict) and
+          document.get("schema") == "mckernel.native-exact-mckernel-gitlink-inputs.v1",
+          "gitlink manifest schema")
+    _fail(document.get("candidate_sha") == candidate and document.get("ihk_sha") == ihk,
+          "gitlink manifest identity differs")
+    base = _regular(base_manifest, "base source manifest")
+    _fail(document.get("base_manifest_sha256") == _sha256(base),
+          "gitlink base manifest hash differs")
+    rows = document.get("consumed_gitlinks")
+    _fail(isinstance(rows, dict) and set(rows) == {"executer/user/lib/libdwarf/libdwarf"},
+          "consumed gitlink set differs")
+    checkout = _canonical(checkout, "libdwarf checkout", directory=True)
+    row = rows["executer/user/lib/libdwarf/libdwarf"]
+    _fail(isinstance(row, dict) and row.get("path") == "executer/user/lib/libdwarf/libdwarf",
+          "libdwarf gitlink path differs")
+    _fail(((_load_json(base, "base source manifest").get("gitlinks") or {}).get(row["path"]) ==
+           row.get("commit") and re.fullmatch(r"[0-9a-f]{40}", str(row.get("commit", ""))) and
+           re.fullmatch(r"[0-9a-f]{40}", str(row.get("tree", "")))),
+          "base manifest gitlink differs")
+    git = _git_factory(git_tool or {"path": "/usr/bin/git"})
+    # The source tree itself is the authenticated closure; no worktree state,
+    # alternate object database, replacement refs, or nested repository is
+    # accepted.  Use the reviewed helper's exact inventory shape when present.
+    _fail(git(checkout, "rev-parse", "HEAD").decode().strip() == row.get("commit"),
+          "libdwarf HEAD differs from manifest")
+    _fail(git(checkout, "rev-parse", "HEAD^{tree}").decode().strip() == row.get("tree"),
+          "libdwarf tree differs from manifest")
+    _fail(not git(checkout, "status", "--porcelain=v1", "--ignored=matching",
+                  "--untracked-files=all").decode(), "libdwarf checkout is dirty")
+    index_rows = _gitlink_rows(git(checkout, "ls-files", "--stage", "-z"))
+    tree_rows = _gitlink_rows(git(checkout, "ls-tree", "-r", "--full-tree", "-z", "HEAD"),
+                              tree=True)
+    _fail(index_rows == tree_rows, "libdwarf index differs from HEAD tree")
+    _fail(set(index_rows) == set(row.get("files", {})), "libdwarf tracked file set differs")
+    observed = {}
+    for raw, expected in row.get("files", {}).items():
+        path = checkout / raw
+        _fail(path.resolve(strict=False) == path and path.is_file() and not path.is_symlink(),
+              "libdwarf tracked path differs: " + raw)
+        info = os.lstat(path)
+        mode = format(stat.S_IFMT(info.st_mode) | stat.S_IMODE(info.st_mode), "06o")
+        _fail(mode in ("100644", "100755"),
+              "libdwarf tracked mode differs: " + raw)
+        observed[raw] = {"mode": mode,
+                         "blob": git(checkout, "hash-object", "--no-filters", "--", raw).decode().strip(),
+                         "sha256": _sha256(path)}
+        _fail({"mode": mode, "blob": observed[raw]["blob"]} == tree_rows[raw],
+              "libdwarf worktree differs from HEAD tree")
+    _fail(observed == row.get("files"), "libdwarf tracked inventory differs")
+    git_meta = _canonical(checkout / ".git", "libdwarf Git metadata", directory=True)
+    git_dir = git(checkout, "rev-parse", "--absolute-git-dir").decode().strip()
+    common_raw = git(checkout, "rev-parse", "--git-common-dir").decode().strip()
+    common = Path(common_raw)
+    if not common.is_absolute():
+        common = (checkout / common).resolve()
+    _fail(Path(git_dir) == git_meta and common == git_meta,
+          "libdwarf uses external Git metadata")
+    _fail(not (git_meta / "objects/info/alternates").exists() and
+          not (git_meta / "shallow").exists() and
+          git(checkout, "rev-parse", "--is-shallow-repository").decode().strip() == "false" and
+          not git(checkout, "for-each-ref", "--format=%(refname)", "refs/replace").decode().strip(),
+          "libdwarf uses external or replacement Git objects")
+    metadata = {}
+    for item in sorted(git_meta.rglob("*")):
+        relative = item.relative_to(git_meta).as_posix()
+        _fail(relative and not Path(relative).is_absolute() and ".." not in Path(relative).parts,
+              "libdwarf Git metadata path differs")
+        info = item.lstat()
+        _fail(not stat.S_ISLNK(info.st_mode), "libdwarf Git metadata contains symlink")
+        _fail(stat.S_ISREG(info.st_mode) or stat.S_ISDIR(info.st_mode),
+              "libdwarf Git metadata contains special file")
+        if stat.S_ISREG(info.st_mode):
+            metadata[relative] = {"mode": format(stat.S_IMODE(info.st_mode), "04o"),
+                                  "size": info.st_size, "sha256": _sha256(item)}
+    _fail(metadata == row.get("git_metadata"), "libdwarf Git metadata differs")
+    return checkout
+
+
+def _fail(condition, message):
+    if not condition:
+        raise OwnerError(message)
+
+
+def _sha256(path):
+    digest = hashlib.sha256()
+    with Path(path).open("rb") as stream:
+        for block in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def _fsync_dir(path):
+    fd = os.open(Path(path), os.O_RDONLY | os.O_DIRECTORY)
+    try:
+        os.fsync(fd)
+    finally:
+        os.close(fd)
+
+
+def _atomic_json(path, value):
+    path = Path(path)
+    temporary = path.with_name(path.name + ".tmp-" + uuid.uuid4().hex)
+    with temporary.open("x", encoding="utf-8") as stream:
+        json.dump(value, stream, sort_keys=True, indent=2)
+        stream.write("\n")
+        stream.flush()
+        os.fsync(stream.fileno())
+    os.replace(temporary, path)
+    _fsync_dir(path.parent)
+
+
+def _exclusive_json(path, value):
+    """Publish one receipt without following links or overwriting evidence."""
+    path = Path(path)
+    _no_symlink_parents(path, "receipt path")
+    payload = (json.dumps(value, sort_keys=True, indent=2) + "\n").encode()
+    flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL
+    if hasattr(os, "O_NOFOLLOW"):
+        flags |= os.O_NOFOLLOW
+    fd = os.open(path, flags, 0o600)
+    try:
+        offset = 0
+        while offset < len(payload):
+            written = os.write(fd, payload[offset:])
+            _fail(written > 0, "receipt short write")
+            offset += written
+        os.fsync(fd)
+    finally:
+        os.close(fd)
+    _fsync_dir(path.parent)
+
+
+def _exclusive_text(path, text):
+    path = Path(path)
+    _no_symlink_parents(path, "evidence path")
+    flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL
+    if hasattr(os, "O_NOFOLLOW"):
+        flags |= os.O_NOFOLLOW
+    fd = os.open(path, flags, 0o600)
+    try:
+        payload = text.encode("utf-8", "replace")
+        offset = 0
+        while offset < len(payload):
+            written = os.write(fd, payload[offset:])
+            _fail(written > 0, "evidence short write")
+            offset += written
+        os.fsync(fd)
+    finally:
+        os.close(fd)
+    _fsync_dir(path.parent)
+
+
+def _canonical(path, label, directory=False):
+    path = Path(path)
+    _fail(path.is_absolute() and not path.is_symlink() and path.exists(), label + " missing")
+    resolved = path.resolve(strict=True)
+    _fail(resolved == path, label + " is not canonical")
+    if directory:
+        _fail(resolved.is_dir(), label + " must be a directory")
+    return resolved
+
+
+def _regular(path, label):
+    path = _canonical(path, label)
+    _fail(stat.S_ISREG(path.lstat().st_mode), label + " must be regular")
+    return path
+
+
+def _safe_regular(path, label):
+    """Validate a regular file without following a leaf or ancestor link."""
+    path = Path(path)
+    _no_symlink_parents(path, label)
+    try:
+        info = os.lstat(path)
+    except OSError as exc:
+        raise OwnerError(label + " missing") from exc
+    _fail(stat.S_ISREG(info.st_mode), label + " must be a regular file")
+    return path
+
+
+def _safe_directory(path, label):
+    """Validate a directory and every path component without following links."""
+    path = Path(path)
+    _no_symlink_parents(path, label)
+    try:
+        info = os.lstat(path)
+    except OSError as exc:
+        raise OwnerError(label + " missing") from exc
+    _fail(stat.S_ISDIR(info.st_mode), label + " must be a directory")
+    return path
+
+
+def _no_symlink_parents(path, label):
+    path = Path(path)
+    _fail(path.is_absolute(), label + " must be absolute")
+    current = Path(path.anchor)
+    for component in path.parts[1:]:
+        current /= component
+        _fail(not current.is_symlink(), label + " has symlink parent")
+
+
+def _confined_path(path, label):
+    """Require an absolute path whose leaf and every ancestor are real."""
+    path = Path(path)
+    _no_symlink_parents(path, label)
+    _fail(path.is_absolute(), label + " must be absolute")
+    current = Path(path.anchor)
+    for component in path.parts[1:]:
+        current /= component
+        if current == path:
+            continue
+        _fail(current.exists() and current.is_dir(), label + " has non-directory ancestor")
+    if path.exists():
+        _fail(path.resolve(strict=True) == path, label + " is not canonical")
+    return path
+
+
+def _disjoint(paths):
+    roots = [Path(path).resolve(strict=False) for path in paths]
+    for index, left in enumerate(roots):
+        for right in roots[index + 1:]:
+            _fail(left != right and left not in right.parents and right not in left.parents,
+                  "bound roots overlap")
+
+
+def _load_json(path, label):
+    try:
+        value = json.loads(Path(path).read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        raise OwnerError("malformed " + label) from exc
+    _fail(isinstance(value, dict), label + " must be an object")
+    return value
+
+
+def _identity(path):
+    info = os.lstat(path)
+    return {"path": str(Path(path).resolve(strict=True)), "dev": info.st_dev,
+            "inode": info.st_ino, "uid": info.st_uid, "gid": info.st_gid,
+            "mode": stat.S_IMODE(info.st_mode), "file_type": stat.S_IFMT(info.st_mode)}
+
+
+def _tree_inventory(root):
+    root = Path(root)
+    observed = {}
+    for item in sorted(root.rglob("*")):
+        st = item.lstat()
+        _fail(not stat.S_ISLNK(st.st_mode), "inventory contains symlink")
+        _fail(stat.S_ISREG(st.st_mode) or stat.S_ISDIR(st.st_mode),
+              "inventory contains special file")
+        row = {"mode": stat.S_IMODE(st.st_mode),
+               "type": "directory" if stat.S_ISDIR(st.st_mode) else "file"}
+        if stat.S_ISREG(st.st_mode):
+            row.update(size=st.st_size, sha256=_sha256(item))
+        observed[str(item.relative_to(root))] = row
+    return observed
+
+
+def _closure_inventory(root, host_root=None, container_root=None):
+    """Inventory a translated build closure, retaining symlink spelling.
+
+    ``Path.rglob`` follows enough link metadata to make a closure admission
+    race-prone.  Walk with lstat instead, and validate every link's lexical
+    target and resolved target against the host root.  The container target is
+    recorded separately because an absolute host link must be translated to
+    its ``/out`` spelling without changing bytes on disk.
+    """
+    root = Path(root)
+    host_root = root if host_root is None else Path(host_root)
+    container_root = Path("/out") if container_root is None else Path(container_root)
+    _fail(root == host_root or root in host_root.parents,
+          "closure root is outside host root")
+    result = {}
+    active = set()
+    seen_objects = {}
+
+    def translated(path):
+        resolved = path.resolve(strict=True)
+        _fail(resolved == host_root or host_root in resolved.parents,
+              "closure symlink escapes host root")
+        return container_root / resolved.relative_to(host_root)
+
+    def visit(directory):
+        info = os.lstat(directory)
+        marker = (info.st_dev, info.st_ino)
+        _fail(marker not in active, "closure directory cycle")
+        active.add(marker)
+        try:
+            entries = sorted(os.scandir(directory), key=lambda item: item.name)
+            for entry in entries:
+                item = Path(entry.path)
+                relative = str(item.relative_to(host_root))
+                st = os.lstat(item)
+                mode = st.st_mode
+                if stat.S_ISLNK(mode):
+                    raw = os.readlink(item)
+                    _fail(raw != "", "closure symlink has empty target")
+                    # The on-disk spelling is container-facing.  Translate an
+                    # absolute /out edge solely for host admission, retaining
+                    # its original bytes in ``target`` below.
+                    raw_path = Path(raw)
+                    if raw_path.is_absolute() and (raw_path == container_root or
+                                                   container_root in raw_path.parents):
+                        target = host_root / raw_path.relative_to(container_root)
+                    else:
+                        target = raw_path if raw_path.is_absolute() else item.parent / raw_path
+                    _fail(not target.is_symlink(), "closure symlink alias/cycle")
+                    target = target.resolve(strict=True)
+                    _fail(target == host_root or host_root in target.parents,
+                          "closure symlink escapes host root")
+                    target_stat = os.lstat(target)
+                    _fail(stat.S_ISREG(target_stat.st_mode) or stat.S_ISDIR(target_stat.st_mode),
+                          "closure symlink targets special file")
+                    # A link to another link is an alias chain, not a stable
+                    # closure edge; reject it so the translated graph is
+                    # deterministic and cannot hide a cycle.
+                    row = {"mode": stat.S_IMODE(mode), "type": "symlink",
+                           "target": raw, "resolved": str(target.relative_to(host_root)),
+                           "container_target": str(container_root / target.relative_to(host_root))}
+                    result[relative] = row
+                elif stat.S_ISDIR(mode):
+                    result[relative] = {"mode": stat.S_IMODE(mode), "type": "directory"}
+                    visit(item)
+                elif stat.S_ISREG(mode):
+                    object_key = (st.st_dev, st.st_ino)
+                    _fail(object_key not in seen_objects,
+                          "closure contains aliased regular files")
+                    seen_objects[object_key] = item
+                    result[relative] = {"mode": stat.S_IMODE(mode), "type": "file",
+                                        "size": st.st_size, "sha256": _sha256(item)}
+                else:
+                    raise OwnerError("closure contains special file")
+        finally:
+            active.remove(marker)
+
+    visit(root)
+    return result
+
+
+def _validate_kernel_binding(toolchain_doc, host_root):
+    binding = toolchain_doc.get("kernel_binding")
+    _fail(isinstance(binding, dict) and
+          set(binding) == {"container_root", "container_kernel_dir", "closure_inventory"},
+          "kernel binding schema differs")
+    host_root = _canonical(host_root, "kernel host root", directory=True)
+    host_kernel = _canonical(host_root / "build", "kernel host directory", directory=True)
+    _fail(host_kernel == host_root / "build", "kernel host directory must be host_root/build")
+    _fail(binding["container_root"] == "/out" and
+          binding["container_kernel_dir"] == "/out/build",
+          "kernel container translation differs")
+    inventory = binding["closure_inventory"]
+    _fail(isinstance(inventory, dict) and inventory,
+          "kernel closure inventory missing")
+    observed = _closure_inventory(host_root, host_root, Path("/out"))
+    _fail(observed == inventory, "kernel closure inventory differs")
+    return host_root, host_kernel
+
+
+def _validate_v2_image_tools(request, toolchain_doc):
+    """Authenticate the immutable image tool closure without mounting it."""
+    receipt = _regular(request.get("image_receipt", ""), "image receipt")
+    expected = request.get("image_receipt_sha256")
+    _fail(isinstance(expected, str) and re.fullmatch(r"[0-9a-f]{64}", expected),
+          "image receipt hash binding")
+    _fail(_sha256(receipt) == expected, "image receipt hash drift")
+    document = _load_json(receipt, "image receipt")
+    _fail(document.get("status") == "PASS" and document.get("image_id") == request["image_id"] and
+          document.get("candidate_sha") == request.get("candidate_sha") and
+          document.get("retired") is True and
+          document.get("base_image") == PREPARER_BASE_IMAGE,
+          "image receipt identity differs")
+    _fail(document.get("source_free") is True and document.get("runtime_network") == "none",
+          "image receipt is not source-free and offline")
+    lock_sha = document.get("toolchain_lock_sha256")
+    _fail(isinstance(lock_sha, str) and re.fullmatch(r"[0-9a-f]{64}", lock_sha),
+          "image receipt toolchain lock hash")
+    requested_lock_sha = request.get("toolchain_lock_sha256")
+    _fail(isinstance(requested_lock_sha, str) and
+          re.fullmatch(r"[0-9a-f]{64}", requested_lock_sha) and
+          requested_lock_sha == lock_sha, "image receipt toolchain lock differs")
+    packages = document.get("packages")
+    _fail(isinstance(packages, dict) and packages and
+          all(isinstance(name, str) and name and isinstance(value, str) and value
+              for name, value in packages.items()),
+          "image receipt packages missing")
+    image_tools = toolchain_doc.get("image_tools")
+    mounted_tools = toolchain_doc.get("mounted_tools")
+    _fail(isinstance(image_tools, dict) and isinstance(mounted_tools, dict),
+          "v2 image/mounted tool partitions missing")
+    _fail(set(image_tools) | set(mounted_tools) == set(REQUIRED_TOOLS) and
+          not set(image_tools) & set(mounted_tools), "v2 tool partition overlaps")
+    _fail("rustc" in mounted_tools and "rustc" not in image_tools,
+          "nightly rustc must be mounted")
+    receipt_tools = document.get("tools")
+    _fail(isinstance(receipt_tools, dict) and receipt_tools,
+          "image receipt tools missing")
+    _fail(packages.get("cmake") == PINNED_CMAKE_RPM and
+          packages.get("rust") == PINNED_RUST_RPM,
+          "image receipt pinned CMake/Rust identity differs")
+    evidence = document.get("evidence")
+    _fail(isinstance(evidence, dict) and evidence, "image receipt evidence missing")
+    evidence_root = receipt.parent
+    for name in _PREPARATION_EVIDENCE:
+        row = evidence.get(name)
+        _fail(isinstance(row, dict) and
+              isinstance(row.get("sha256"), str) and
+              re.fullmatch(r"[0-9a-f]{64}", row["sha256"]) and
+              isinstance(row.get("size"), int) and row["size"] >= 0,
+              "image receipt evidence entry missing: " + name)
+        path = _safe_regular(evidence_root / name, "image receipt evidence")
+        _fail(path.stat().st_size == row["size"] and _sha256(path) == row["sha256"],
+              "image receipt evidence hash drift: " + name)
+    _fail(evidence["tool-observation.json"]["sha256"] ==
+          evidence["offline-tool-observation.json"]["sha256"],
+          "image receipt preparation/offline observations differ")
+    for name, descriptor in image_tools.items():
+        _fail(isinstance(descriptor, dict) and isinstance(descriptor.get("path"), str) and
+              isinstance(descriptor.get("target"), str) and
+              descriptor["path"].startswith("/usr/") and descriptor["target"].startswith("/usr/"),
+              "image tool descriptor incomplete: " + name)
+        _fail(re.fullmatch(r"[0-9a-f]{64}", str(descriptor.get("sha256", ""))),
+              "image tool hash missing: " + name)
+        _fail(isinstance(receipt_tools, dict) and receipt_tools.get(name) == descriptor and
+              isinstance(descriptor.get("rpm_nevra"), str) and
+              isinstance(descriptor.get("executable_version"), str),
+              "image receipt tool differs: " + name)
+        # Only tools consumed from the immutable image need package-owner
+        # authentication.  The producer may retain observations for
+        # base-provided tools (for example rpm) that are not part of this
+        # owner contract's image_tools partition.
+        rpm = descriptor["rpm_nevra"]
+        package_match = re.fullmatch(r"(.+)-\d+:[^-]+-.+\.[^.]+", rpm)
+        _fail(package_match is not None, "image receipt tool RPM identity malformed")
+        _fail(packages.get(package_match.group(1)) == rpm,
+              "image receipt package/tool identity differs")
+    _validate_library_closure(document, toolchain_doc.get("libraries"), receipt.parent)
+    return image_tools, mounted_tools
+
+
+def _validate_library_closure(document, expected, evidence_root=None):
+    """Bind CMake's immutable image library closure to both probe phases."""
+    libraries = document.get("libraries")
+    _fail(isinstance(libraries, dict) and set(libraries) == set(REQUIRED_LIBRARIES),
+          "image receipt libraries incomplete")
+    _fail(expected == libraries, "toolchain library closure differs from image receipt")
+    packages = document.get("packages")
+    _fail(isinstance(packages, dict), "image receipt packages missing")
+    evidence = document.get("evidence")
+    _fail(isinstance(evidence, dict), "image receipt evidence missing")
+    for name in REQUIRED_LIBRARIES:
+        row = libraries[name]
+        spec = LIBRARY_SPECS[name]
+        _fail(isinstance(row, dict) and row.get("development_package") == spec["development_package"] and
+              row["development_package"] in packages, "library development package missing: " + name)
+        linker = row.get("linker")
+        headers = row.get("headers")
+        _fail(isinstance(linker, dict) and isinstance(headers, dict) and headers,
+              "library artifacts incomplete: " + name)
+        _fail(isinstance(headers, dict) and set(headers) == set(spec["headers"]),
+              "library header set differs: " + name)
+        expected = [("linker", linker, spec["linker"]["path"], spec["linker"]["owner"])]
+        expected += [("header", headers[path], path, expected_owner)
+                     for path, expected_owner in spec["headers"].items()]
+        for label, artifact, expected_path, expected_owner in expected:
+            _fail(isinstance(artifact, dict) and isinstance(artifact.get("path"), str) and
+                  artifact["path"].startswith("/usr/") and
+                  isinstance(artifact.get("target"), str) and artifact["target"].startswith("/usr/") and
+                  isinstance(artifact.get("owner"), str) and artifact["owner"] and
+                  isinstance(artifact.get("rpm_nevra"), str) and
+                  re.fullmatch(r"[0-9a-f]{64}", str(artifact.get("sha256", ""))),
+                  "library " + label + " identity incomplete: " + name)
+            _fail(artifact["path"] == expected_path and artifact["owner"] == expected_owner,
+                  "library " + label + " role differs: " + name)
+            package_match = re.fullmatch(r"(.+)-\d+:[^-]+-.+\.[^.]+", artifact["rpm_nevra"])
+            _fail(package_match is not None and artifact["owner"] == package_match.group(1) and
+                  packages.get(package_match.group(1)) == artifact["rpm_nevra"],
+                  "library RPM identity differs: " + name)
+    if evidence_root is not None:
+        for filename in ("tool-observation.json", "offline-tool-observation.json"):
+            observed = _load_json(_safe_regular(Path(evidence_root) / filename,
+                                                "image receipt library evidence"),
+                                  "image receipt library evidence")
+            _fail(observed.get("libraries") == libraries,
+                  "preparation/offline library observation differs")
+    return libraries
+
+
+def _v2_host_git(request):
+    """Bind the host-side Git used before the offline container starts.
+
+    Image tools are authenticated by the preparation receipt and may only be
+    observed inside the image.  Source admission happens on the host, so it
+    needs a separate, explicitly hash-bound Git executable; borrowing the
+    image descriptor would silently compare host ``/usr`` with image bytes.
+    """
+    descriptor = request.get("host_git")
+    _fail(isinstance(descriptor, dict) and set(descriptor) == {"path", "sha256"},
+          "v2 host Git binding")
+    path = _regular(descriptor.get("path", ""), "v2 host Git")
+    expected = descriptor.get("sha256")
+    _fail(isinstance(expected, str) and re.fullmatch(r"[0-9a-f]{64}", expected),
+          "v2 host Git hash")
+    _fail(_sha256(path) == expected, "v2 host Git hash drift")
+    return {"path": str(path), "sha256": expected}
+
+
+def _check_identity(path, expected, label, directory=True):
+    actual = _identity(path)
+    _fail(isinstance(expected, dict), label + " identity missing")
+    for key in ("path", "dev", "inode", "uid", "gid", "mode", "file_type"):
+        _fail(expected.get(key) == actual[key], label + " identity changed: " + key)
+    if directory:
+        _fail(actual["file_type"] == stat.S_IFDIR, label + " is not a directory")
+    return actual
+
+
+def _toolchain_roots(request):
+    rows = request.get("toolchain_roots")
+    _fail(isinstance(rows, list) and rows, "toolchain_roots are required")
+    seen = []
+    for row in rows:
+        _fail(isinstance(row, dict) and set(row) == {"path", "inventory"}, "toolchain root row")
+        path = _canonical(row.get("path", ""), "toolchain root", directory=True)
+        inventory = row.get("inventory")
+        _fail(isinstance(inventory, dict) and inventory, "toolchain root inventory")
+        observed = {}
+        for item in path.rglob("*"):
+            relative = str(item.relative_to(path))
+            st = item.lstat()
+            _fail(not stat.S_ISLNK(st.st_mode), "toolchain root contains symlink")
+            _fail(stat.S_ISREG(st.st_mode) or stat.S_ISDIR(st.st_mode),
+                  "toolchain root contains special file")
+            row_data = {"mode": stat.S_IMODE(st.st_mode),
+                        "type": "directory" if stat.S_ISDIR(st.st_mode) else "file"}
+            if stat.S_ISREG(st.st_mode):
+                row_data.update(size=st.st_size, sha256=_sha256(item))
+            observed[relative] = row_data
+        _fail(observed == inventory, "toolchain root inventory differs")
+        for other in seen:
+            _fail(path != other and path not in other.parents and other not in path.parents,
+                  "toolchain roots overlap")
+        seen.append(path)
+    return seen
+
+
+def _v2_mount_roots(request, toolchain_doc):
+    """Bind host closures to their container spelling without leaking it into v2.
+
+    The v2 toolchain document is consumed verbatim inside the image and hence
+    contains only ``/out``/``/nightly`` paths.  The owner-only request supplies
+    the separate host mapping and is checked against the same inventories.
+    """
+    document_rows = toolchain_doc.get("toolchain_roots")
+    request_rows = request.get("toolchain_roots")
+    _fail(isinstance(document_rows, list) and isinstance(request_rows, list) and
+          document_rows and len(document_rows) == len(request_rows),
+          "v2 toolchain roots missing")
+    document = {}
+    for row in document_rows:
+        _fail(isinstance(row, dict) and set(row) == {"path", "inventory"} and
+              row["path"] in ("/out", "/nightly") and isinstance(row["inventory"], dict),
+              "v2 container root row")
+        _fail(row["path"] not in document, "duplicate v2 container root")
+        document[row["path"]] = row["inventory"]
+    mounted = {}
+    for row in request_rows:
+        _fail(isinstance(row, dict) and set(row) == {"host_path", "container_path", "inventory"},
+              "v2 host root row")
+        target = row["container_path"]
+        _fail(target in document and target not in mounted and row["inventory"] == document[target],
+              "v2 host/container root binding differs")
+        host = _canonical(row["host_path"], "v2 host toolchain root", directory=True)
+        observed = _closure_inventory(host, host, Path(target))
+        _fail(observed == row["inventory"], "v2 toolchain root inventory differs")
+        mounted[target] = host
+    _fail(set(mounted) == set(document) and set(mounted) == {"/out", "/nightly"},
+          "v2 mounted roots incomplete")
+    return mounted
+
+
+def _v2_host_path(raw, mounts, label, directory=False):
+    _fail(isinstance(raw, str) and raw.startswith("/"), label + " must be absolute")
+    path = Path(raw)
+    choices = [(Path(target), root) for target, root in mounts.items()
+               if path == Path(target) or Path(target) in path.parents]
+    _fail(len(choices) == 1, label + " is outside v2 mounted roots")
+    target, root = choices[0]
+    candidate = root / path.relative_to(target)
+    candidate = _canonical(candidate, label, directory=directory)
+    if directory:
+        _fail(candidate.is_dir(), label + " must be a directory")
+    else:
+        _fail(stat.S_ISREG(candidate.lstat().st_mode), label + " must be regular")
+    return candidate
+
+
+def _authenticated_provenance(path):
+    module_name = "_mckernel_exact_owner_provenance_%d" % os.getpid()
+    module = importlib.util.module_from_spec(importlib.util.spec_from_loader(module_name, loader=None))
+    try:
+        exec(compile(Path(path).read_bytes(), str(path), "exec"), module.__dict__)
+    except BaseException as exc:
+        raise OwnerError("authenticated provenance import failed") from exc
+    return module
+
+
+def _git_factory(tool):
+    tool_path = tool["path"]
+    def git(root, *args):
+        command = [tool_path, "-c", "safe.directory=" + str(root),
+                   "-c", "core.fsmonitor=", "-c", "core.hooksPath=/dev/null",
+                   "-C", str(root), *args]
+        env = {"PATH": str(Path(tool_path).parent), "GIT_OPTIONAL_LOCKS": "0",
+               "GIT_CONFIG_NOSYSTEM": "1", "GIT_CONFIG_GLOBAL": "/dev/null",
+               "GIT_NO_REPLACE_OBJECTS": "1", "GIT_TERMINAL_PROMPT": "0",
+               "LANG": "C", "LC_ALL": "C"}
+        result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                env=env, timeout=30, check=False)
+        _fail(result.returncode == 0 and not result.stderr,
+              "authenticated Git command failed")
+        return result.stdout
+    return git
+
+
+def _validate_authenticated_source(source, manifest, candidate, ihk, tools, provenance_path):
+    provenance = _authenticated_provenance(provenance_path)
+    if manifest.get('schema') == provenance.THIN_SCHEMA:
+        provenance.validate_thin_source(source, manifest, candidate, ihk)
+        return
+    git = _git_factory(tools["git"])
+    try:
+        _fail(git(source, "rev-parse", "HEAD").decode().strip() == candidate,
+              "source HEAD differs from candidate")
+        ihk_root = _canonical(source / "ihk", "IHK checkout", directory=True)
+        _fail(git(ihk_root, "rev-parse", "HEAD").decode().strip() == ihk,
+              "IHK HEAD differs from manifest")
+        production = ihk == provenance.REVIEWED_IHK_HEAD
+        if production:
+            provenance.verify_ihk_overlay(source, git, applied=True)
+        files, links = provenance.source_inventory(source, git, allow_ihk_overlay=production)
+    except BaseException as exc:
+        if isinstance(exc, OwnerError):
+            raise
+        raise OwnerError("authenticated source admission failed: " + str(exc)) from exc
+    _fail(manifest.get("repository_files") == files, "source inventory differs")
+    _fail(manifest.get("gitlinks") == links, "source gitlink inventory differs")
+
+
+def _proc_starttime(pid):
+    """Capture the process identity needed by the image common exclusion."""
+    return Path("/proc").joinpath(str(pid), "stat").read_text().rsplit(")", 1)[1].split()[19]
+
+
+def _admit_request_gitlink(request, source_doc, source, manifest, candidate, ihk,
+                           allocation_paths, git_descriptor):
+    if source_doc.get('schema') in ('mckernel.native-fp-save-thin-inputs.v1',
+                                     'mckernel.rust-fpu-sched-cutover-thin-inputs.v1'):
+        _fail(request.get('gitlink_manifest') is not None and
+              request.get('gitlink_root') is not None,
+              'thin source requires supplemental libdwarf manifest and root')
+    gitlink_manifest = request.get("gitlink_manifest")
+    if gitlink_manifest is not None:
+        gitlink_manifest = _regular(gitlink_manifest, "gitlink manifest")
+        _fail(isinstance(request.get("gitlink_manifest_sha256"), str) and
+              re.fullmatch(r"[0-9a-f]{64}", request["gitlink_manifest_sha256"]) and
+              _sha256(gitlink_manifest) == request["gitlink_manifest_sha256"],
+              "gitlink manifest hash drift")
+        gitlink_root = _canonical(request.get("gitlink_root", ""), "libdwarf checkout", directory=True)
+        _disjoint((source, gitlink_root))
+        _fail(gitlink_root in allocation_paths, "memory allocation roots do not bind libdwarf")
+        _validate_gitlink_manifest(_load_json(gitlink_manifest, "gitlink manifest"),
+                                   gitlink_manifest, gitlink_root, manifest, candidate, ihk,
+                                   git_descriptor)
+
+
+
+def preflight_request_crossrefs(request):
+    """Read-only deterministic join checks; live admission remains unchanged."""
+    _fail(isinstance(request, dict) and request.get('schema') ==
+          'mckernel.native-exact-mckernel-image-container-request.v1',
+          'image request schema')
+    documents = {}
+    for key in ('source_manifest', 'gitlink_manifest', 'driver_path'):
+        hash_key = 'driver_sha256' if key == 'driver_path' else key + '_sha256'
+        path = _regular(request.get(key, ''), key)
+        checksum = request.get(hash_key)
+        _fail(isinstance(checksum, str) and re.fullmatch(r'[0-9a-f]{64}', checksum)
+              and _sha256(path) == checksum, key + ' deterministic hash differs')
+        if key != 'driver_path':
+            documents[key] = _load_json(path, key)
+    _fail(request['driver_sha256'] == EXPECTED_DRIVER_SHA256,
+          'offline driver release hash')
+    source = documents['source_manifest']
+    supplement = documents['gitlink_manifest']
+    _fail(isinstance(source, dict) and isinstance(supplement, dict),
+          'source/supplement document shape')
+    _fail(supplement.get('schema') == 'mckernel.native-exact-mckernel-gitlink-inputs.v1',
+          'gitlink manifest schema')
+    _fail(supplement.get('base_manifest_sha256') == request['source_manifest_sha256'],
+          'gitlink base manifest hash differs')
+    _fail(supplement.get('candidate_sha') == request.get('candidate_sha') and
+          supplement.get('ihk_sha') == request.get('ihk_sha'),
+          'gitlink manifest identity differs')
+    rows = supplement.get('consumed_gitlinks')
+    key = 'executer/user/lib/libdwarf/libdwarf'
+    _fail(isinstance(rows, dict) and set(rows) == {key} and isinstance(rows[key], dict),
+          'consumed gitlink set differs')
+    row = rows[key]
+    _fail(row.get('path') == key and (source.get('gitlinks') or {}).get(key) == row.get('commit')
+          and re.fullmatch(r'[0-9a-f]{40}', str(row.get('commit', '')))
+          and re.fullmatch(r'[0-9a-f]{40}', str(row.get('tree', ''))),
+          'base manifest gitlink differs')
+    return {'status': 'PASS_DETERMINISTIC_REQUEST_CROSSREFS_ONLY',
+            'source_manifest_sha256': request['source_manifest_sha256'],
+            'gitlink_manifest_sha256': request['gitlink_manifest_sha256'],
+            'driver_sha256': request['driver_sha256']}
+
+
+RETIRED_COMMON_EXCLUSIONS = RETIRED_COMMON_EXCLUSIONS | frozenset(('/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/full-image-attempt-1/common-exclusion.json',))
+
+RETIRED_COMMON_EXCLUSIONS = RETIRED_COMMON_EXCLUSIONS | frozenset(('/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/gitlink-nine-copy-observer-correction-1/full-image-attempt-1/common-exclusion.json',))
+
+def _validate_request(request):
+    _fail(isinstance(request, dict) and request.get("schema") == REQUEST_SCHEMA,
+          "request schema")
+    _fail(isinstance(request.get("native_fork_owned_transaction", False), bool),
+          "owned native fork opt-in must be Boolean")
+    candidate = request.get("candidate_sha")
+    ihk = request.get("ihk_sha")
+    _fail(isinstance(candidate, str) and re.fullmatch(r"[0-9a-f]{40}", candidate),
+          "candidate identity")
+    _fail(isinstance(ihk, str) and re.fullmatch(r"[0-9a-f]{40}", ihk), "IHK identity")
+    _fail(isinstance(request.get("image_id"), str) and
+          re.fullmatch(r"sha256:[0-9a-f]{64}", request["image_id"]), "image identity")
+    _fail(1 <= request.get("jobs", 0) <= 4 and isinstance(request.get("jobs"), int),
+          "jobs exceed reviewed bound")
+    _fail(1 <= request.get("timeout", 0) <= MAX_TIMEOUT and isinstance(request.get("timeout"), int),
+          "timeout exceeds reviewed bound")
+    _fail(request.get("launcher_aggregate_memory_gib") == LAUNCHER_AGGREGATE_GIB,
+          "launcher aggregate must be exactly 16.2158 GiB")
+    memory_effect = request.get("memory_backed_bytes")
+    _fail(isinstance(memory_effect, int) and not isinstance(memory_effect, bool) and memory_effect == 0,
+          "memory-backed source bytes are not zero")
+    aggregate = request.get("aggregate_memory_required")
+    _fail(aggregate == LIMITS["Memory"] and aggregate + memory_effect <= LAUNCHER_AGGREGATE_BYTES,
+          "aggregate memory admission failed")
+    disk_admission = request.get("disk_admission")
+    _fail(isinstance(disk_admission, dict), "disk admission manifest missing")
+    _fail(disk_admission.get("host_free_floor") == 16 * 2**30 and
+          disk_admission.get("scratch_free_floor") == 12 * 2**30,
+          "disk admission floors differ")
+    host_measure = _canonical(disk_admission.get("host_root", ""), "host measurement root", directory=True)
+    scratch_measure = _canonical(disk_admission.get("scratch_root", ""), "scratch measurement root", directory=True)
+    _fail(shutil.disk_usage(host_measure).free >= 16 * 2**30, "host disk floor failed")
+    _fail(shutil.disk_usage(scratch_measure).free >= 12 * 2**30, "scratch disk floor failed")
+    _fail(isinstance(disk_admission.get("host_device"), int) and
+          os.stat(host_measure).st_dev == disk_admission["host_device"], "host device changed")
+    _fail(isinstance(disk_admission.get("scratch_device"), int) and
+          os.stat(scratch_measure).st_dev == disk_admission["scratch_device"], "scratch device changed")
+    allocation_roots = request.get("memory_allocation_roots")
+    _fail(isinstance(allocation_roots, list) and allocation_roots,
+          "memory allocation roots missing")
+    allocation_paths = [_canonical(item, "memory allocation root", directory=True)
+                        for item in allocation_roots]
+    source = _canonical(request.get("source_root", ""), "source root", directory=True)
+    _fail(source in allocation_paths and len(set(allocation_paths)) == len(allocation_paths),
+          "memory allocation roots do not bind source")
+    owner_evidence = _canonical(request.get("owner_evidence_root", ""),
+                                "owner evidence root", directory=True)
+    _no_symlink_parents(owner_evidence, "owner evidence root")
+    _fail(not any(owner_evidence.iterdir()), "owner evidence root must be fresh")
+    work_root = _canonical(request.get("work_root", ""), "dedicated work root", directory=True)
+    _fail(stat.S_IMODE(work_root.stat().st_mode) == 0o700,
+          "dedicated work root must be mode 0700")
+    attempt = _confined_path(request.get("attempt_root", ""), "attempt root")
+    _fail(not attempt.exists() and attempt.parent == owner_evidence,
+          "attempt root must be private and absent")
+    receipt_path = _confined_path(owner_evidence / OWNER_RECEIPT_NAME, "owner receipt")
+    _fail(not receipt_path.exists() and not receipt_path.is_symlink(),
+          "owner receipt must be fresh")
+    output = _confined_path(request.get("output_root", ""), "output root")
+    evidence = _confined_path(request.get("evidence_root", ""), "evidence root")
+    for path, label in ((output, "output root"), (evidence, "evidence root")):
+        _fail(not path.exists() and not path.is_symlink(), label + " must be fresh")
+        _fail(path.parent.exists() and path.parent.is_dir(), label + " parent missing")
+    _fail(not any(work_root.iterdir()), "dedicated work root must be empty")
+    _fail(output.parent == work_root and evidence.parent == work_root,
+          "output/evidence must be direct children of dedicated work root")
+    manifest = _regular(request.get("source_manifest", ""), "source manifest")
+    toolchain = _regular(request.get("toolchain_manifest", ""), "toolchain manifest")
+    driver = _regular(request.get("driver_path", ""), "offline driver")
+    provenance = _regular(request.get("provenance_path", ""), "offline provenance")
+    host_owner = _regular(request.get("host_owner_path", ""), "host owner")
+    _fail(request.get("driver_sha256") == EXPECTED_DRIVER_SHA256, "offline driver release hash")
+    _fail(_sha256(driver) == EXPECTED_DRIVER_SHA256, "offline driver bytes differ")
+    _fail(isinstance(request.get("provenance_sha256"), str) and
+          re.fullmatch(r"[0-9a-f]{64}", request["provenance_sha256"]),
+          "offline provenance hash binding")
+    _fail(_sha256(provenance) == request["provenance_sha256"],
+          "offline provenance bytes differ")
+    _fail(request["provenance_sha256"] == EXPECTED_PROVENANCE_SHA256,
+          "offline provenance release hash")
+    _fail(isinstance(request.get("host_owner_sha256"), str) and
+          re.fullmatch(r"[0-9a-f]{64}", request["host_owner_sha256"]),
+          "host owner hash binding")
+    _fail(_sha256(host_owner) == request["host_owner_sha256"],
+          "host owner bytes differ")
+    _fail(request["host_owner_sha256"] == EXPECTED_HOST_OWNER_SHA256,
+          "host owner release hash")
+    for path, label, key in ((manifest, "source manifest", "source_manifest_sha256"),
+                             (toolchain, "toolchain manifest", "toolchain_manifest_sha256")):
+        _fail(isinstance(request.get(key), str) and re.fullmatch(r"[0-9a-f]{64}", request[key]),
+              label + " hash binding")
+        _fail(_sha256(path) == request[key], label + " hash drift")
+    source_doc = _load_json(manifest, "source manifest")
+    _fail(source_doc.get("candidate_sha") == candidate and source_doc.get("ihk_sha") == ihk,
+          "source manifest identity differs")
+    _fail(source_doc.get("schema") in ("mckernel.native-exact-mckernel-image-inputs.v1",
+                                        "mckernel.native-exact-build-inputs.v1",
+                                        "mckernel.native-fp-save-thin-inputs.v1",
+                                        "mckernel.rust-fpu-sched-cutover-thin-inputs.v1"),
+          "source manifest schema")
+    if source_doc.get('schema') in ('mckernel.native-fp-save-thin-inputs.v1',
+                                     'mckernel.rust-fpu-sched-cutover-thin-inputs.v1'):
+        _fail(request.get('source_derivative_sha256') == source_doc.get('source_derivative_sha256') and
+              request.get('materialization_sha256') == source_doc.get('materialization_sha256') and
+              request.get('candidate_identity_scope') == 'base_git_commit_only',
+              'explicit derivative request identity differs')
+    else:
+        _fail(request.get('source_derivative_sha256') is None and
+              request.get('materialization_sha256') is None and
+              request.get('candidate_identity_scope') is None,
+              'thin identity fields on original full-tree request')
+    _fail(isinstance(request.get("source_identity"), dict), "source identity missing")
+    _check_identity(source, request["source_identity"], "source root")
+    disk = request.get("disk_identity")
+    _fail(isinstance(disk, dict) and disk.get("path") == str(source), "disk identity binding")
+    _check_identity(source, disk, "disk candidate")
+    toolchain_doc = _load_json(toolchain, "toolchain manifest")
+    toolchain_schema = toolchain_doc.get("schema")
+    _fail(toolchain_schema in ("mckernel.native-exact-mckernel-image-toolchain.v1",
+                               "mckernel.native-exact-mckernel-image-toolchain.v2"),
+          "toolchain manifest schema")
+    if toolchain_schema.endswith(".v2"):
+        mounts_by_target = _v2_mount_roots(request, toolchain_doc)
+        roots = list(mounts_by_target.values())
+        image_tools, mounted_tools = _validate_v2_image_tools(request, toolchain_doc)
+        host_git = _v2_host_git(request)
+        tools = {**image_tools, **mounted_tools}
+    else:
+        mounts_by_target = None
+        host_git = None
+        roots = _toolchain_roots(request)
+        tools = toolchain_doc.get("tools")
+        _fail(isinstance(tools, dict) and all(name in tools for name in REQUIRED_TOOLS),
+              "toolchain tools incomplete")
+    git_descriptor = host_git if toolchain_schema.endswith(".v2") else tools["git"]
+    _admit_request_gitlink(request, source_doc, source, manifest, candidate, ihk,
+                           allocation_paths, git_descriptor)
+    if toolchain_schema.endswith(".v2"):
+        kernel_root = mounts_by_target["/out"]
+        kernel_root, kernel_dir = _validate_kernel_binding(toolchain_doc, kernel_root)
+        # v2's kernel is deliberately not a second bind: it is part of the
+        # read-only host_root -> /out translation.
+    else:
+        _fail(isinstance(toolchain_doc.get("kernel_dir"), str), "kernel directory binding")
+        kernel_root = None
+        kernel_dir = _canonical(toolchain_doc["kernel_dir"], "kernel directory", directory=True)
+    for name in REQUIRED_TOOLS:
+        descriptor = tools[name]
+        _fail(isinstance(descriptor, dict) and isinstance(descriptor.get("path"), str) and
+              isinstance(descriptor.get("sha256"), str) and
+              re.fullmatch(r"[0-9a-f]{64}", descriptor["sha256"]) and
+              isinstance(descriptor.get("version"), str) and descriptor["version"],
+              "toolchain tool identity incomplete: " + name)
+        if toolchain_schema.endswith(".v2") and name in mounted_tools:
+            tool_path = _v2_host_path(descriptor["path"], mounts_by_target, "tool " + name)
+            _fail(_sha256(tool_path) == descriptor["sha256"], "tool hash drift: " + name)
+        elif not (toolchain_schema.endswith(".v2") and name in image_tools):
+            tool_path = _regular(descriptor["path"], "tool " + name)
+            _fail(_sha256(tool_path) == descriptor["sha256"], "tool hash drift: " + name)
+    if toolchain_schema.endswith(".v2"):
+        _fail(toolchain_doc.get("kernel_dir") in (None, "/out/build"),
+              "container kernel directory binding")
+    else:
+        _fail(isinstance(toolchain_doc.get("kernel_inventory"), dict) and
+              _tree_inventory(kernel_dir) == toolchain_doc["kernel_inventory"],
+              "kernel inventory differs")
+    if not toolchain_schema.endswith(".v2"):
+        _fail(toolchain_doc.get("toolchain_roots") == request.get("toolchain_roots"),
+              "toolchain root manifest differs")
+        _fail(toolchain_doc.get("path_dirs") == request.get("path_dirs"),
+              "PATH manifest differs")
+    _fail(isinstance(toolchain_doc.get("linux_probe"), dict) and
+          toolchain_doc["linux_probe"].get("kernel_dir") ==
+          ("/out/build" if toolchain_schema.endswith(".v2") else str(kernel_dir)),
+          "Linux probe manifest differs")
+    _fail(isinstance(toolchain_doc.get("environment"), dict) and not toolchain_doc["environment"],
+          "toolchain environment is not sealed")
+    _fail(isinstance(tools.get("rustc"), dict), "toolchain Rust identity")
+    rust_version = tools["rustc"].get("version", "")
+    _fail(rust_version == EXPECTED_V2_RUSTC_VERSION,
+          "toolchain Rust version is not the supported exact nightly")
+    source_tools = dict(tools)
+    if toolchain_schema.endswith(".v2"):
+        # Authentication of the source checkout is a host operation.  Do not
+        # read image /usr paths here: the container's receipt is their only
+        # host-side authority.  Git alone is needed by source admission.
+        source_tools = {"git": host_git}
+    _launcher_base_authority(source, source_doc, request)
+    backup_raw = request.get("backup_root", request.get("source_backup_root"))
+    backup = _canonical(backup_raw, "source backup", directory=True)
+    _check_identity(backup, request.get("backup_identity"), "source backup")
+    _fail(isinstance(request.get("backup_inventory"), dict) and request["backup_inventory"],
+          "source backup inventory missing")
+    _fail(_tree_inventory(backup) == request["backup_inventory"],
+          "source backup inventory differs")
+    path_dirs = toolchain_doc.get("path_dirs") if toolchain_schema.endswith(".v2") else request.get("path_dirs")
+    _fail(isinstance(path_dirs, list) and path_dirs, "path_dirs manifest missing")
+    image_path_dirs = ({str(Path(row["path"]).parent) for row in image_tools.values()}
+                       if toolchain_schema.endswith(".v2") else set())
+    for row in path_dirs:
+        _fail(isinstance(row, str), "path_dirs row")
+        if toolchain_schema.endswith(".v2"):
+            if row.startswith(("/out/", "/nightly/")):
+                path = _v2_host_path(row, mounts_by_target, "path_dirs entry", directory=True)
+                _fail(path.is_dir(), "PATH directory escapes toolchain roots")
+            else:
+                _fail(row in image_path_dirs, "image PATH directory differs")
+        else:
+            path = _canonical(row, "path_dirs entry", directory=True)
+            _fail(path.is_dir() and any(path == other or other in path.parents for other in roots),
+                  "PATH directory escapes toolchain roots")
+    nightly = request.get("nightly")
+    _fail(isinstance(nightly, dict) and isinstance(nightly.get("rustc_version"), str) and
+          nightly["rustc_version"] == EXPECTED_V2_RUSTC_VERSION and
+          nightly["rustc_version"] == rust_version, "nightly manifest")
+    expected_mounts = {"source": "/src", "manifest": "/inputs.json",
+                                 "toolchain": "/toolchain.json", "driver": "/driver.py",
+                                 "provenance": "/native_rust_exact_build_offline.py",
+                                 "work": "/work"}
+    if request.get("gitlink_manifest") is not None:
+        expected_mounts.update({"gitlink_manifest": "/libdwarf-inputs.json",
+                                "gitlink": "/src/executer/user/lib/libdwarf/libdwarf"})
+    _fail(request.get("mounts") == expected_mounts, "mount manifest differs")
+    common = request.get("common_exclusion_path")
+    _fail(common == COMMON_EXCLUSION and common not in RETIRED_COMMON_EXCLUSIONS,
+          "common exclusion path differs or is retired")
+    lease = _regular(request.get("lease_path", ""), "lease path") if Path(request.get("lease_path", "")).exists() else Path(request.get("lease_path", ""))
+    _no_symlink_parents(lease, "lease path")
+    disjoint_paths = (source, manifest, toolchain, driver, provenance, host_owner,
+                      owner_evidence, work_root, *roots, backup)
+    gitlink_root = None
+    if request.get("gitlink_manifest") is not None:
+        gitlink_root = _canonical(request.get("gitlink_root", ""), "libdwarf checkout", directory=True)
+        _disjoint((source, gitlink_root))
+        disjoint_paths += (gitlink_root, _regular(request["gitlink_manifest"], "gitlink manifest"))
+    if not toolchain_schema.endswith(".v2"):
+        disjoint_paths += (kernel_dir,)
+    _disjoint(disjoint_paths)
+    _fail(work_root != owner_evidence and work_root not in owner_evidence.parents and
+          owner_evidence not in work_root.parents, "work/evidence roots overlap")
+    try:
+        authenticated_host = _load_reviewed_host_owner(
+            host_owner, request["host_owner_sha256"], provenance,
+            request["provenance_sha256"])
+    except (OSError, RuntimeError, SyntaxError) as exc:
+        raise OwnerError("authenticated host owner import failed: " + str(exc)) from exc
+    try:
+        measurement = authenticated_host.measure(
+            host_measure, scratch_measure, 16 * 2**30, 12 * 2**30,
+            source_root=source, output_root=work_root,
+            memory_allocation_roots=allocation_paths)
+    except (OSError, RuntimeError, ValueError) as exc:
+        raise OwnerError("resource/allocation measurement failed: " + str(exc)) from exc
+    _fail(measurement.get("memory_allocation_memory_backed_bytes") == memory_effect,
+          "measured memory-backed allocation differs")
+    _fail(measurement.get("aggregate_memory_required") == aggregate,
+          "measured aggregate memory differs")
+    return {"source": source, "manifest": manifest, "toolchain": toolchain,
+            "driver": driver, "provenance": provenance, "output": output, "evidence": evidence,
+            "owner_evidence": owner_evidence, "attempt": attempt,
+            "work": work_root, "backup": backup, "measurement": measurement,
+            "host_owner": authenticated_host,
+            "host_owner_path": host_owner, "roots": roots, "kernel": kernel_dir,
+            "kernel_root": kernel_root, "toolchain_schema": toolchain_schema,
+            "mounts_by_target": mounts_by_target, "host_git": host_git,
+            "allocation_roots": allocation_paths,
+            "gitlink_root": gitlink_root,
+            "gitlink_manifest": _regular(request["gitlink_manifest"], "gitlink manifest")
+            if request.get("gitlink_manifest") is not None else None,
+            "path_dirs": [_v2_host_path(row, mounts_by_target, "PATH directory", directory=True)
+                          if row.startswith(("/out/", "/nightly/")) else Path(row)
+                          for row in path_dirs] if toolchain_schema.endswith(".v2") else
+            [_canonical(row, "PATH directory", directory=True) for row in path_dirs],
+            "lease": lease}
+
+
+class CommonExclusion:
+    def __init__(self, path, request):
+        self.path = Path(path); self.request = request; self.record = None
+
+    def acquire(self):
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        self.record = {"schema": "mckernel.native-exact-operational-exclusion.v1",
+                       "pid": os.getpid(), "starttime": _proc_starttime(os.getpid()),
+                       "boot_id": Path("/proc/sys/kernel/random/boot_id").read_text().strip(),
+                       "request_sha256": hashlib.sha256(json.dumps(self.request, sort_keys=True).encode()).hexdigest()}
+        try:
+            fd = os.open(self.path, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
+        except FileExistsError as exc:
+            raise OwnerError("common exclusion exists; reconciliation required") from exc
+        identity = os.fstat(fd)
+        self.record.update({"dev": identity.st_dev, "inode": identity.st_ino})
+        payload = (json.dumps(self.record, sort_keys=True) + "\n").encode()
+        offset = 0
+        try:
+            while offset < len(payload):
+                written = os.write(fd, payload[offset:])
+                _fail(isinstance(written, int) and written > 0, "common exclusion short write")
+                offset += written
+            os.fsync(fd)
+        finally:
+            os.close(fd)
+        _fsync_dir(self.path.parent)
+
+
+def _check_profile(info, image, nonce, mounts=None, command=None, user=None,
+                   host_owner=None):
+    (host_owner or _HOST_OWNER).check_profile(info, image, nonce)
+    config = info.get("Config", {})
+    if command is not None:
+        _fail(config.get("Entrypoint") == ["/usr/bin/python3"] and config.get("Cmd") == command,
+              "effective driver command mismatch")
+    if user is not None:
+        _fail(config.get("User") == user, "effective container user mismatch")
+    if mounts is not None:
+        expected = {(str(source), target, not readonly) for source, target, readonly in mounts}
+        actual = {(row.get("Source"), row.get("Destination"), row.get("RW"))
+                  for row in info.get("Mounts", []) if row.get("Type") == "bind"}
+        _fail(actual == expected, "effective bind mounts mismatch")
+        _fail(all(row.get("Type") in ("bind", "tmpfs") for row in info.get("Mounts", [])),
+              "unexpected effective mount type")
+        tmpfs_mounts = [row for row in info.get("Mounts", []) if row.get("Type") == "tmpfs"]
+        _fail(not tmpfs_mounts or (len(tmpfs_mounts) == 1 and
+              tmpfs_mounts[0].get("Destination") == "/tmp" and
+              tmpfs_mounts[0].get("RW") is True), "unexpected effective tmpfs mount")
+    tmpfs = config_host = info.get("HostConfig", {}).get("Tmpfs")
+    _fail(tmpfs == {"/tmp": "rw,nodev,nosuid,size=256m"},
+          "effective tmpfs profile mismatch")
+
+
+# The accepted host owner supplies the reviewed lease, signal, Docker transport,
+# inspection, and retirement semantics.  Image-specific admission remains local.
+Lease = _HOST_OWNER.Lease
+Docker = _HOST_OWNER.Docker
+Signals = _HOST_OWNER.CliSignals
+_inspect = _HOST_OWNER.inspect
+_retire = _HOST_OWNER.retire
+
+
+def _validate_driver_result(evidence, output, result, request):
+    evidence=_safe_directory(evidence,'launcher evidence');output=_safe_directory(output,'launcher output')
+    _fail(result.get('schema')=='mckernel.native-exact-launcher-build-receipt.v1' and result.get('status')=='PASS' and result.get('operation_scope')=='launcher-only' and result.get('kernel_rebuilt') is False,'truthful launcher-only receipt required')
+    _fail(result.get('target')=='mcexec' and result.get('launcher_source_sha256')==EXPECTED_LAUNCHER_SOURCE_AUTHORITY['source_override'] and result.get('actual_elf_needed_provider_join') is True,'actual launcher target/source/providers')
+    _fail(result.get('candidate_sha')==request['candidate_sha'] and result.get('ihk_sha')==request['ihk_sha'] and result.get('source_manifest_sha256')==request['source_manifest_sha256'] and result.get('toolchain_manifest_sha256')==request['toolchain_manifest_sha256'],'accepted base/toolchain provenance')
+    commands=result.get('commands');_fail(isinstance(commands,list) and len(commands)==1 and commands[0]['argv']==['/usr/bin/cmake','--build','/work/output/build','--target','mcexec','-j1'] and commands[0]['exit_code']==0,'single actual production target command')
+    inventory = result.get("inventory")
+    _fail(isinstance(inventory, dict), "driver evidence inventory missing")
+    observed_inventory = {}
+    for item in sorted(evidence.rglob("*")):
+        st = item.lstat()
+        _fail(not stat.S_ISLNK(st.st_mode), "driver evidence contains symlink")
+        _fail(stat.S_ISREG(st.st_mode) or stat.S_ISDIR(st.st_mode),
+              "driver evidence contains special file")
+        if item.is_file() and item.relative_to(evidence) != Path("receipt.json"):
+            relative = item.relative_to(evidence)
+            _fail(not relative.is_absolute() and ".." not in relative.parts,
+                  "driver evidence inventory path escapes root")
+            observed_inventory[str(relative)] = {
+                "size": item.stat().st_size, "sha256": _sha256(item)}
+    for relative, metadata in inventory.items():
+        relative_path = Path(relative)
+        _fail(not relative_path.is_absolute() and ".." not in relative_path.parts and
+              str(relative_path) == relative, "driver evidence inventory path is not canonical")
+        path = _safe_regular(evidence / relative_path, "driver evidence member")
+        _fail(isinstance(metadata, dict) and metadata.get("size") == path.stat().st_size and
+              metadata.get("sha256") == _sha256(path), "driver evidence inventory drift")
+    _fail(set(observed_inventory) == set(inventory),
+          "driver evidence inventory is incomplete or has unexpected members")
+    paths={'mcexec':'executer/user/mcexec','mcexec_helpers.o':'executer/user/rust/mcexec_helpers.o','mcexec.c.o':'executer/user/CMakeFiles/mcexec.dir/mcexec.c.o','libmcexec.a':'executer/user/libmcexec.a','mcexec-rust-build.make':'executer/user/CMakeFiles/mcexec_rust_helpers.dir/build.make','mcexec-link.txt':'executer/user/CMakeFiles/mcexec.dir/link.txt'}
+    _fail(set(result.get('artifacts',{}))==set(paths)==set(result.get('artifact_copies',{})),'exact six launcher artifacts, no image alias')
+    for name,rel in paths.items():
+        for key,path,wanted in [('artifacts',output/'build'/rel,'/work/output/build/'+rel),('artifact_copies',evidence/'artifacts'/name,'/work/evidence/artifacts/'+name)]:
+            row=result[key][name];_safe_regular(path,'launcher artifact');_fail(row.get('path')==wanted and row.get('size')==path.stat().st_size and row.get('sha256')==_sha256(path),'launcher artifact byte/path binding '+name)
+
+
+def _revalidate_inputs(bound, request):
+    _check_identity(bound["source"], request["source_identity"], "source root")
+    _check_identity(bound["backup"], request["backup_identity"], "source backup")
+    _fail(_tree_inventory(bound["backup"]) == request["backup_inventory"],
+          "source backup inventory changed")
+    _fail(_sha256(bound["manifest"]) == request["source_manifest_sha256"],
+          "source manifest changed")
+    _fail(_sha256(bound["toolchain"]) == request["toolchain_manifest_sha256"],
+          "toolchain manifest changed")
+    if bound.get("gitlink_manifest") is not None:
+        _fail(_sha256(bound["gitlink_manifest"]) == request["gitlink_manifest_sha256"],
+              "gitlink manifest changed")
+    _fail(_sha256(bound["driver"]) == EXPECTED_DRIVER_SHA256 and
+          _sha256(bound["provenance"]) == EXPECTED_PROVENANCE_SHA256,
+          "authenticated helper bytes changed")
+    _fail(_sha256(bound["host_owner_path"]) == request["host_owner_sha256"],
+          "authenticated host owner changed")
+    source_doc = _load_json(bound["manifest"], "source manifest")
+    toolchain_doc = _load_json(bound["toolchain"], "toolchain manifest")
+    if bound.get("toolchain_schema", "").endswith(".v2"):
+        _v2_mount_roots(request, toolchain_doc)
+        host_root, host_kernel = _validate_kernel_binding(toolchain_doc, bound["kernel_root"])
+        _fail(host_root == bound["kernel_root"] and host_kernel == bound["kernel"],
+              "kernel binding changed")
+        _validate_v2_image_tools(request, toolchain_doc)
+    if bound.get("toolchain_schema", "").endswith(".v2"):
+        _validate_v2_image_tools(request, toolchain_doc)
+        source_tools = {"git": _v2_host_git(request)}
+    else:
+        source_tools = toolchain_doc["tools"]
+    rust_descriptor = (toolchain_doc.get("mounted_tools", {}).get("rustc", {})
+                       if bound.get("toolchain_schema", "").endswith(".v2")
+                       else toolchain_doc.get("tools", {}).get("rustc", {}))
+    rust_version = rust_descriptor.get("version", "")
+    _fail(rust_version == EXPECTED_V2_RUSTC_VERSION and
+          request.get("nightly", {}).get("rustc_version") == rust_version,
+          "toolchain Rust version drifted")
+    _launcher_base_authority(bound["source"], source_doc, request)
+    if bound.get("gitlink_manifest") is not None:
+        _validate_gitlink_manifest(_load_json(bound["gitlink_manifest"], "gitlink manifest"),
+                                   bound["gitlink_manifest"], bound["gitlink_root"],
+                                   bound["manifest"], request["candidate_sha"],
+                                   request["ihk_sha"], source_tools["git"])
+
+
+EXPECTED_LAUNCHER_SOURCE_AUTHORITY={'original_source': '80e59ae27fe87bdced4e08bd3bdb580185b439311a4fba1daaade7308630afc8', 'source_override': '9901615acc98ec710d23afa57423d59eee802cde1981752805436b1bf535c463', 'reviewed_preimage': 'da71f31656ccfc58a79c4dcca01f9c6742135c292b213b7d86113ebddc4cae0a', 'source_patch': 'ac5d873e9c8d8da3a4c96c6663fa5b06a7ba8b3c7279afcbd5a2910067efd22d', 'source_review': 'ebe655ed83bdf6b292ea13a5995d0964a022c970252a9c49f81eb6ebafda9807'}
+
+def _validate_launcher_source(plan,source,original,preimage,patch,review):
+    # Exact independently reviewed source pair; scalar IDs alone cannot admit
+    # a different patch. Resource, source-tree and runtime authority stay outside.
+    expected=EXPECTED_LAUNCHER_SOURCE_AUTHORITY
+    paths={'source_override':source,'original_source':original,'reviewed_preimage':preimage,'source_patch':patch,'source_review':review}
+    for key,path in paths.items():
+        pointer=plan.get(key)
+        if not isinstance(pointer,dict) or pointer.get('sha256')!=expected[key]:
+            raise RuntimeError('unreviewed launcher source authority '+key)
+        data=Path(path).read_bytes()
+        if type(pointer.get('bytes')) is not int or len(data)!=pointer['bytes'] or hashlib.sha256(data).hexdigest()!=expected[key]:
+            raise RuntimeError('launcher source authority bytes drift '+key)
+    accepted=json.loads(Path(review).read_bytes())
+    if accepted.get('status')!='PASS_SOURCE_INTEGRATION_ONLY' or accepted.get('preimage_sha256')!=expected['reviewed_preimage'] or accepted.get('postimage_sha256')!=expected['source_override'] or accepted.get('patch_sha256')!=expected['source_patch']:
+        raise RuntimeError('launcher reviewed patch endpoints differ')
+    old=Path(original).read_bytes()
+    if old.count(b'const PLD_MPOL_MAX: c_int = 4;')!=1 or old.replace(b'const PLD_MPOL_MAX: c_int = 4;',b'const PLD_MPOL_MAX: c_int = 5;')!=Path(preimage).read_bytes():
+        raise RuntimeError('launcher retained base to reviewed preimage differs')
+    return expected['source_override']
+
+def _launcher_plan(request):
+    pointer=request.get('launcher_plan');_fail(isinstance(pointer,dict) and set(pointer)=={'path','bytes','sha256'},'exact launcher plan pointer')
+    path=_safe_regular(Path(pointer['path']),'launcher plan');_fail(path.stat().st_size==pointer['bytes'] and _sha256(path)==pointer['sha256'],'launcher plan drift')
+    plan=_load_json(path,'launcher plan');_fail(plan.get('schema')=='mckernel.exact-launcher-only-plan.v1' and request.get('jobs')==1,'one fixed launcher-only plan')
+    return path,plan
+
+def _launcher_base_authority(source,document,request):
+    _,plan=_launcher_plan(request);pointer=plan['base_source_acceptance'];path=_safe_regular(Path(pointer['path']),'accepted base source review');_fail(path.stat().st_size==pointer['bytes'] and _sha256(path)==pointer['sha256'],'base source authority drift');accepted=_load_json(path,'accepted base source review')
+    _fail(accepted.get('status')=='PASS_ACTUAL6959_PRIVATE_SOURCE_RECEIPT_JOURNAL_CLOSED_CAPTURE_ONLY' and accepted.get('source_entries')==6959 and accepted.get('tracked_symlinks')==49,'genuine accepted base authority')
+    for key in ['source_derivative_sha256','materialization_sha256']:_fail(accepted[key]==document[key]==request[key],'accepted base source fingerprint')
+    identity=accepted['source_identity'];_fail(identity['device']==request['source_identity']['dev'] and identity['inode']==request['source_identity']['inode'],'accepted base source inode')
+    _check_identity(source,request['source_identity'],'retained accepted base source')
+    for rel in ['executer/user/CMakeLists.txt','executer/user/mcexec.c','kernel/CMakeLists.txt']:
+        _fail(_sha256(source/rel)==document['materialized_repository_files'][rel],'selected unchanged launcher consumer/CMake source '+rel)
+
+_validate_request_image_base=_validate_request
+_revalidate_inputs_image_base=_revalidate_inputs
+
+def _validate_launcher_additions(bound,request):
+    planpath,plan=_launcher_plan(request);items={}
+    for key in ['source_override','original_source','base_driver','reviewed_preimage','source_patch','source_review']:
+        pointer=plan[key];path=_safe_regular(Path(pointer['path']),'launcher '+key);_fail(path.stat().st_size==pointer['bytes'] and _sha256(path)==pointer['sha256'],'launcher input drift '+key);items[key]=path
+    _fail(items['original_source']==bound['source']/'executer/user/rust/mcexec_helpers.rs','retained original launcher source path')
+    _validate_launcher_source(plan,items['source_override'],items['original_source'],items['reviewed_preimage'],items['source_patch'],items['source_review'])
+    build=_safe_directory(Path(plan['retained_build']['path']),'retained configured build');s=build.lstat();identity=plan['retained_build'];_fail(identity['file_type']=='directory' and (s.st_dev,s.st_ino,s.st_uid,s.st_gid,stat.S_IMODE(s.st_mode))==(identity['dev'],identity['inode'],identity['uid'],identity['gid'],int(identity['mode'],8)),'exact retained build identity')
+    _fail(build!=bound['output'] and build not in bound['output'].parents and bound['output'] not in build.parents,'disjoint original/new configured outputs')
+    _fail(type(plan['retained_build_bytes']) is int and plan['retained_build_bytes']>0 and plan['clone_growth_bytes']>=plan['retained_build_bytes']+(256<<20),'measured full clone growth budget')
+    v=os.statvfs(bound['output'].parent);_fail(v.f_bavail*v.f_frsize>=(16<<30)+plan['clone_growth_bytes']+(512<<20),'host output full clone growth plus floor/reserve')
+    expected={'CMakeCache.txt','CMakeFiles/Makefile2','executer/user/CMakeFiles/mcexec_rust_helpers.dir/build.make','executer/user/CMakeFiles/mcexec.dir/link.txt','executer/user/CMakeFiles/mcexec.dir/flags.make'}
+    seen=set()
+    for pointer in plan['retained_controls']:
+        path=_safe_regular(Path(pointer['path']),'selected retained build control');rel=str(path.relative_to(build));seen.add(rel);_fail(path.stat().st_size==pointer['bytes'] and _sha256(path)==pointer['sha256'],'retained selected control drift')
+    _fail(seen==expected and len(plan['retained_controls'])==5,'exact five selected retained controls')
+    bound.update(launcher_plan=planpath,launcher_override=items['source_override'],launcher_original=items['original_source'],launcher_base_driver=items['base_driver'],launcher_retained_build=build,launcher_preimage=items['reviewed_preimage'],launcher_patch=items['source_patch'],launcher_review=items['source_review'])
+    return bound
+
+def _validate_request(request):
+    return _validate_launcher_additions(_validate_request_image_base(request),request)
+
+def _revalidate_inputs(bound,request):
+    _revalidate_inputs_image_base(bound,request);_validate_launcher_additions(bound,request)
+
+class ImageOwner:
+    def __init__(self, request, docker=None, signals=None):
+        self.request = dict(request); self.docker = docker; self.signals = signals
+
+    def validate(self):
+        self.bound = _validate_request(self.request)
+        _fail(os.geteuid() != 0, "owner must be unprivileged")
+        return self.bound
+
+    def run(self):
+        r = self.request
+        # Shared admission must precede validation because validation performs
+        # authenticated host measurement.  If anything after this acquisition
+        # fails, the token is intentionally retained for recovery/review.
+        shared_lock, shared_record = _SHARED_HEAVY_ENTRY_CONTRACT.acquire_heavy_operation(
+            r, "image")
+        bound = self.validate()
+        evidence = bound["evidence"]
+        _revalidate_inputs(bound, r)
+        host_owner = bound["host_owner"]
+        name = "mckernel-launcher-" + uuid.uuid4().hex
+        nonce = uuid.uuid4().hex
+        common = CommonExclusion(r["common_exclusion_path"], r)
+        common.acquire()
+        # No output/evidence mutation occurs until the shared heavy-build
+        # exclusion is durably owned.  A stale common lock therefore fails
+        # before creating a misleading fresh output namespace.
+        # The driver must see absent output/evidence directories.  Only their
+        # already-existing parent is mounted; the driver creates the fresh
+        # child roots inside that parent.
+        bound["attempt"].mkdir(mode=0o700)
+        _fsync_dir(bound["owner_evidence"])
+        _fsync_dir(evidence.parent); _fsync_dir(bound["output"].parent)
+        lease = host_owner.Lease(bound["lease"], name); lease.acquire()
+        docker = self.docker or host_owner.Docker(bound["attempt"] / "docker.log", self.signals, sudo=True)
+        receipt = {"schema": RECEIPT_SCHEMA, "status": "FAIL", "operation_scope":"launcher-only", "launcher_only":True, "candidate_sha": r["candidate_sha"],
+                   "ihk_sha": r["ihk_sha"], "container_name": name, "owner_nonce": nonce,
+                   "cleanup_separately_required": True, "terminal_container_retained": False,
+                   "terminal_container_info": None, "terminal_container_info_current": False,
+                   "shared_heavy_operation": {"kind": "image", "path": str(shared_lock),
+                                              "record": shared_record}}
+        if r.get('source_derivative_sha256') is not None:
+            receipt.update(candidate_identity_scope='base_git_commit_only',
+                           source_derivative_sha256=r['source_derivative_sha256'],
+                           materialization_sha256=r['materialization_sha256'])
+        attempted = False
+        try:
+            image = json.loads(docker.call(["image", "inspect", r["image_id"]]).stdout)[0]
+            _fail(image.get("Id") == r["image_id"] and image.get("Architecture") == "amd64",
+                  "container image identity mismatch")
+            mounts = [(bound["source"], "/src", True), (bound["manifest"], "/inputs.json", True),
+                      (bound["toolchain"], "/toolchain.json", True), (bound["driver"], "/driver.py", True),
+                      (bound["provenance"], "/native_rust_exact_build_offline.py", True),
+                      (bound["output"].parent, "/work", False)]
+            if bound.get("gitlink_manifest") is not None:
+                mounts.insert(2, (bound["gitlink_manifest"], "/libdwarf-inputs.json", True))
+                mounts.insert(3, (bound["gitlink_root"], "/src/executer/user/lib/libdwarf/libdwarf", True))
+            mounts += [(bound['launcher_plan'],'/launcher-plan.json',True),
+                       (bound['launcher_base_driver'],'/image_driver_base.py',True),
+                       (bound['launcher_retained_build'],'/retained-build',True),
+                       (bound['launcher_original'],'/launcher-original.rs',True),
+                       (bound['launcher_preimage'],'/launcher-preimage.rs',True),
+                       (bound['launcher_patch'],'/launcher-patch.diff',True),
+                       (bound['launcher_review'],'/launcher-review.json',True),
+                       (bound['launcher_override'],'/src/executer/user/rust/mcexec_helpers.rs',True)]
+            # v2 translates the complete host build output to /out.  It is a
+            # single read-only mount: never mount /build separately or copy
+            # and rewrite closure bytes.
+            if bound["toolchain_schema"].endswith(".v2"):
+                mount_roots = [(root, target) for target, root in bound["mounts_by_target"].items()]
+            else:
+                mount_roots = [(root, str(root)) for root in bound["roots"] + [bound["kernel"]]]
+            for root, target in mount_roots:
+                row = (root, target, True)
+                if row not in mounts: mounts.append(row)
+            rw_mounts = [(source, target) for source, target, readonly in mounts if not readonly]
+            _fail(rw_mounts == [(bound["work"], "/work")],
+                  "dedicated work root is not sole RW mount")
+            args = ["create", "--name", name, "--label", "mckernel.owner=" + nonce, "--init",
+                    "--network=none", "--ipc=private", *RESOURCE_ARGS, "--user", "%d:%d" % (os.getuid(), os.getgid()),
+                    "--cap-drop=ALL", "--security-opt=no-new-privileges", "--read-only",
+                    "--tmpfs", "/tmp:rw,nodev,nosuid,size=256m"]
+            for source, target, readonly in mounts:
+                args += ["--mount", "type=bind,src=" + str(source) + ",dst=" + target +
+                         (",readonly" if readonly else "")]
+            command = ["/driver.py", "--source-root", "/src",
+                       "--candidate-sha", r["candidate_sha"], "--ihk-sha", r["ihk_sha"],
+                       "--manifest", "/inputs.json", "--toolchain", "/toolchain.json",
+                       "--output", "/work/" + bound["output"].name,
+                       "--evidence", "/work/" + evidence.name, "--jobs", str(r["jobs"]),
+                       "--timeout", str(r["timeout"])]
+            if bound.get("gitlink_manifest") is not None:
+                command += ["--gitlink-manifest", "/libdwarf-inputs.json"]
+            if r.get("native_fork_owned_transaction", False):
+                command += ["--native-fork-owned-transaction"]
+            args += ["--entrypoint", "/usr/bin/python3", r["image_id"], *command]
+            attempted = True
+            created = docker.call(args); receipt["container_id"] = created.stdout.strip()
+            info = host_owner.inspect(docker, name)
+            _check_profile(info, r["image_id"], nonce, mounts=mounts, command=command,
+                           user="%d:%d" % (os.getuid(), os.getgid()), host_owner=host_owner)
+            # The admission measurement is only a lower bound.  Rebind the
+            # lease to a fresh host/scratch measurement immediately before
+            # Docker start so a concurrent allocation cannot slip between
+            # validation and execution.
+            latest = host_owner.measure(
+                r["disk_admission"]["host_root"],
+                r["disk_admission"]["scratch_root"],
+                16 * 2**30, 12 * 2**30, source_root=bound["source"],
+                output_root=bound["work"], memory_allocation_roots=bound["allocation_roots"])
+            _fail(latest.get("memory_allocation_memory_backed_bytes") ==
+                  r["memory_backed_bytes"], "pre-start memory allocation changed")
+            _fail(latest.get("aggregate_memory_required") ==
+                  r["aggregate_memory_required"], "pre-start aggregate memory changed")
+            receipt["pre_start_measurement"] = latest
+            docker.call(["start", name]); waited = docker.call(["wait", name], timeout=r["timeout"])
+            receipt["exit_code"] = int(waited.stdout.strip())
+            _fail(receipt["exit_code"] == 0, "offline image driver failed")
+            receipt_path = _safe_regular(evidence / "receipt.json", "driver receipt")
+            build_receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+            _validate_driver_result(evidence, bound["output"], build_receipt, r)
+            _revalidate_inputs(bound, r)
+            receipt["status"] = "PASS"
+        except BaseException as exc:
+            receipt["error"] = str(exc)
+        finally:
+            if self.signals: self.signals.cleaning = True
+            if attempted:
+                try:
+                    receipt["terminal_container_info"] = host_owner.retire(docker, name, nonce)
+                    receipt["terminal_container_retained"] = True
+                    receipt["retired"] = True
+                except BaseException as exc:
+                    receipt["status"] = "FAIL"; receipt["retirement_error"] = str(exc); receipt["retired"] = False
+                try:
+                    logs = docker.call(["logs", name], check=False)
+                    _fail(logs.returncode == 0, "Docker logs command failed")
+                    _exclusive_text(bound["attempt"] / "container.log", logs.stdout + logs.stderr)
+                except BaseException as exc:
+                    receipt["status"] = "FAIL"; receipt["capture_error"] = str(exc)
+                if getattr(docker, "client_retirement_unproven", False):
+                    receipt["status"] = "FAIL"; receipt["retired"] = False
+                    receipt["client_retirement_unproven"] = True
+            else:
+                receipt["retired"] = True
+                receipt["cleanup_separately_required"] = False
+                receipt["terminal_container_info_current"] = True
+            try:
+                _revalidate_inputs(bound, r)
+            except BaseException as exc:
+                receipt["status"] = "FAIL"
+                receipt["input_revalidation_error"] = str(exc)
+            if self.signals and self.signals.requested is not None:
+                receipt["status"] = "FAIL"
+                receipt["interrupted_signal"] = self.signals.requested
+            receipt["driver_evidence_root"] = str(evidence)
+            receipt["owner_evidence_root"] = str(bound["owner_evidence"])
+            receipt["attempt_root"] = str(bound["attempt"])
+            receipt["common_exclusion_path"] = r["common_exclusion_path"]
+            receipt["finished_at"] = time.time()
+            _exclusive_json(bound["owner_evidence"] / OWNER_RECEIPT_NAME, receipt)
+            if receipt.get("retired"):
+                lease.release()
+            # The shared contract releases only after a positive PASS,
+            # terminal retirement, and sealed evidence.  Any uncertain
+            # container, observer, or evidence state deliberately retains it
+            # for explicit reconciliation.
+            _SHARED_HEAVY_ENTRY_CONTRACT._release_exclusion(
+                shared_lock, shared_record, receipt)
+        return receipt
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser()
+    parser.add_argument("request", type=Path)
+    args = parser.parse_args(argv)
+    with Signals() as signals:
+        result = ImageOwner(json.loads(args.request.read_text()), signals=signals).run()
+    print(json.dumps(result, sort_keys=True))
+    return 0 if result.get("status") == "PASS" else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

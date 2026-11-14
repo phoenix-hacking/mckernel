@@ -1,0 +1,55 @@
+
+/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/relative-module-context-correction-source-1/HOST-output-proposed-1/rust-selected.o:     file format elf64-x86-64
+
+
+Disassembly of section .ltext.process_split_range_alloc_bridge:
+
+0000000000000000 <process_split_range_alloc_bridge>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	53                   	push   %rbx
+   5:	50                   	push   %rax
+   6:	48 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%rdx	8: R_X86_64_64	.lrodata.str1.1+0x64af
+  10:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	12: R_X86_64_64	_kmalloc
+  1a:	b9 5c 06 00 00       	mov    $0x65c,%ecx
+  1f:	ff d0                	call   *%rax
+  21:	48 85 c0             	test   %rax,%rax
+  24:	0f 85 a1 00 00 00    	jne    cb <process_split_range_alloc_bridge+0xcb>
+  2a:	48 89 c3             	mov    %rax,%rbx
+  2d:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+  32:	0f 32                	rdmsr  
+  34:	48 c1 e2 20          	shl    $0x20,%rdx
+  38:	89 c1                	mov    %eax,%ecx
+  3a:	48 09 d1             	or     %rdx,%rcx
+  3d:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	3f: R_X86_64_64	locals
+  47:	48 8b 10             	mov    (%rax),%rdx
+  4a:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+  51:	48 39 ca             	cmp    %rcx,%rdx
+  54:	77 23                	ja     79 <process_split_range_alloc_bridge+0x79>
+  56:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	58: R_X86_64_64	num_processors
+  60:	48 63 36             	movslq (%rsi),%rsi
+  63:	48 c1 e6 0e          	shl    $0xe,%rsi
+  67:	48 01 f2             	add    %rsi,%rdx
+  6a:	48 39 ca             	cmp    %rcx,%rdx
+  6d:	72 0a                	jb     79 <process_split_range_alloc_bridge+0x79>
+  6f:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+  77:	48 98                	cltq   
+  79:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	7b: R_X86_64_64	clv
+  83:	48 8b 09             	mov    (%rcx),%rcx
+  86:	48 85 c9             	test   %rcx,%rcx
+  89:	74 10                	je     9b <process_split_range_alloc_bridge+0x9b>
+  8b:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+  92:	8b 8c 01 28 1f 00 00 	mov    0x1f28(%rcx,%rax,1),%ecx
+  99:	eb 05                	jmp    a0 <process_split_range_alloc_bridge+0xa0>
+  9b:	b9 ff ff ff ff       	mov    $0xffffffff,%ecx
+  a0:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	a2: R_X86_64_64	.lrodata.str1.1+0x4847
+  aa:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	ac: R_X86_64_64	.lrodata.str1.1+0x64af
+  b4:	49 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%r8	b6: R_X86_64_64	kprintf
+  be:	ba 5c 06 00 00       	mov    $0x65c,%edx
+  c3:	31 c0                	xor    %eax,%eax
+  c5:	41 ff d0             	call   *%r8
+  c8:	48 89 d8             	mov    %rbx,%rax
+  cb:	48 83 c4 08          	add    $0x8,%rsp
+  cf:	5b                   	pop    %rbx
+  d0:	5d                   	pop    %rbp
+  d1:	c3                   	ret    

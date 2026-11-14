@@ -1,0 +1,31 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "UNIT51_PASS_WITH_ACTUAL_PREPARATION_INPUT_BLOCKER",
+  "original_tests": 44,
+  "original_failures": 11,
+  "original_errors": 3,
+  "candidate1_tests": 49,
+  "candidate1_failures": 8,
+  "correction1_tests": 51,
+  "correction1_failures": 0,
+  "production_pipe_contract_returncode": 1,
+  "files": {
+    "scripts/tests/test_native_running_external_modules_owner.py": {
+      "original_sha256": "7076a5e1b8c20a0dc7bf6b12be42e884e85feaa0fdbcdf315bd49bbd1d40aab7",
+      "current_sha256": "c816f7dfd6fa167670876d8e64e8474bec119e1f19280fcc1cb902dff1a2c340"
+    },
+    "scripts/tests/test_native_running_external_modules_offline.py": {
+      "original_sha256": "ada91f841065b14af1fce2a46f57d8a8ab7a19dc8bb0905a7b5bef2c6f773ce9",
+      "current_sha256": "6b996b859e81b4c85410f146ac24d8e41abf5601850726fdf429f7137dd701eb"
+    }
+  },
+  "next_prerequisites": [
+    "Dispatcher repair or explicitly normalize references.make_pipe_proof into pipe_probe input_name/sha256 without weakening checks; preserve frozen preparation identity or refresh every pin if changing it.",
+    "Recheck actual preparation regression in pinned container environment; host make identity differs and is not acceptance for container make.",
+    "Refresh final reviewed runtime source map for changed owner-test hash; independently review source and exact execution release before root/module/guest use."
+  ],
+  "application_acceptance": false,
+  "module_acceptance": false,
+  "native_acceptance": false,
+  "rust_retirement": false
+}

@@ -1,0 +1,68 @@
+{
+  "operations": [
+    null,
+    {
+      "argv_template": [
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--nofile=256",
+        "--core=0",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "30s",
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/tar",
+        "--exclude=./qmp.sock",
+        "-C",
+        "/home/holden/mckernel-work/scratch/cyc205-p/a/attempt-4ca75a609b4b42b2b30d243a930e2f51",
+        "-czf",
+        "-",
+        "."
+      ],
+      "profile": "metadata",
+      "role": "readback-3",
+      "status_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/native-packet-1/sdk-predecessor-correction-1/readback-3.status.json",
+      "stderr_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/native-packet-1/sdk-predecessor-correction-1/readback-3.stderr",
+      "stdout_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/native-packet-1/sdk-predecessor-correction-1/readback-3.stdout"
+    }
+  ],
+  "profiles": {
+    "metadata": {
+      "as_limit": 1073741824,
+      "cpu": 7,
+      "cpu_limits": 30,
+      "parent_kill_grace_seconds": 4,
+      "parent_wall_seconds": 35,
+      "stream_fsize": 33554432
+    },
+    "native": {
+      "as_limit": null,
+      "cpu": 7,
+      "cpu_limits": null,
+      "parent_kill_grace_seconds": null,
+      "parent_wall_seconds": null,
+      "stream_fsize": 33554432
+    },
+    "snapshot_metadata": {
+      "as_limit": 1073741824,
+      "cpu": 6,
+      "cpu_limits": 30,
+      "parent_kill_grace_seconds": 4,
+      "parent_wall_seconds": 35,
+      "stream_fsize": 33554432
+    }
+  },
+  "release": {
+    "bytes": 27924,
+    "path": "/home/holden/mckernel-work/host-preparation/held-host-control-fullmodule-independent-review-20261019-1/HELD-HOST-CONTROL-SDK-FAILED-BUILD-ACTUAL-PHYSICAL-RETIREMENT-REVIEW.json",
+    "sha256": "7a2dd8db86cd707f17e801a3800402233678a631e724a2da20d6f8298447ca8f"
+  },
+  "root_installed_release_path": "/home/holden/mckernel-work/host-preparation/held-host-control-fullmodule-independent-review-20261019-1/HELD-HOST-CONTROL-SDK-FAILED-BUILD-ACTUAL-PHYSICAL-RETIREMENT-REVIEW.json"
+}

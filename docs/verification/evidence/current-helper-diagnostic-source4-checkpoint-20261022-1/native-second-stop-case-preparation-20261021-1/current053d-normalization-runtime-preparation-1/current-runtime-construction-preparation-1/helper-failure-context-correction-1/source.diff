@@ -1,0 +1,52 @@
+--- /home/holden/mckernel-work/host-preparation/native-second-stop-case-preparation-20261021-1/current053d-stage-runtime-preparation-1/two-cpu-boot-contract-correction-1/native-second-stop-collector.two-cpu.c
++++ /home/holden/mckernel-work/host-preparation/native-second-stop-case-preparation-20261021-1/current053d-normalization-runtime-preparation-1/current-runtime-construction-preparation-1/helper-failure-context-correction-1/native-second-stop-collector.helper-failure.c
+@@ -450,9 +450,40 @@
+     return bad ? -1 : 0;
+ }
+ 
++static struct result first_failed_helper;
++static const char *first_failed_helper_tag;
++
++/* Preserve helper failure context beyond disposal of the guest filesystem.
++ * Each separately bounded line reuses the exact existing stream serializer. */
++static int publish_helper_failure(int fd)
++{
++    if (!first_failed_helper_tag) return 0;
++    const struct result *r = &first_failed_helper;
++    char b[FRAME_LIMIT]; size_t n = 0;
++    if (append(b, &n, "ND_HELPER_FAILURE {\"tag\":\"%s\",\"raw_wait_status\":%d,"
++               "\"fault\":%d,\"timeout\":%d,\"clean\":%d,\"stage\":%d,\"errno\":%d,"
++               "\"started_ns\":%llu,\"reaped_ns\":%llu,\"finished_ns\":%llu}\n",
++               first_failed_helper_tag, r->status, r->fault, r->timeout, r->clean,
++               r->child_stage, r->child_errno, (unsigned long long)r->started,
++               (unsigned long long)r->reaped, (unsigned long long)r->finished) ||
++        write_all(fd, b, n)) return -1;
++    n = 0;
++    if (append(b, &n, "ND_HELPER_FAILURE_STDOUT ") || stream_json(b, &n, &r->out) ||
++        append(b, &n, "\n") || write_all(fd, b, n)) return -1;
++    n = 0;
++    if (append(b, &n, "ND_HELPER_FAILURE_STDERR ") || stream_json(b, &n, &r->err) ||
++        append(b, &n, "\n") || write_all(fd, b, n)) return -1;
++    return 0;
++}
++
+ static int helper(const char *tag, const char *path, char *const av[], int *safe)
+ {
+-    return helper_capture(tag, path, av, safe, NULL);
++    struct result r;
++    int rc = helper_capture(tag, path, av, safe, &r);
++    if (rc && !first_failed_helper_tag) {
++        first_failed_helper = r; first_failed_helper_tag = tag;
++    }
++    return rc;
+ }
+ 
+ /* A transport-complete successful payload and empty procfs permit the probe.
+@@ -929,6 +960,7 @@
+     int evidence_fd = open("/case/evidence", O_RDONLY | O_DIRECTORY | O_CLOEXEC);
+     if (evidence_fd < 0) good = 0;
+     else { if (syncfs(evidence_fd)) good = 0; if (close(evidence_fd)) good = 0; }
++    if (console >= 0 && publish_helper_failure(console)) good = 0;
+     if (!good || !safe) payload.fault = 1;
+     payload.finished = now_ns();
+     if (console >= 0 && safe) {

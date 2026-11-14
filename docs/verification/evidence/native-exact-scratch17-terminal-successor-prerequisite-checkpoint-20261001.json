@@ -1,0 +1,84 @@
+{
+  "schema": "mckernel.native-exact-scratch17-terminal-successor-prerequisite-checkpoint.v1",
+  "recorded_at_utc": "2026-10-01T12:45:18Z",
+  "status": "PASS_SOURCE_SUCCESSOR_PREREQUISITE",
+  "scratch17": {
+    "target_commit": "50b084322610a9326b1b7b528edd4cd73b635632",
+    "prepared_request_file_sha256": "852f7d8f652079828cd30377de30d7d810e7747e8e0703a1efb65ae09cedb852",
+    "validated_canonical_request_sha256": "26ffa62e0a3ed98fe19da1ec12890affd8721dff3a7dfc71f3df29829cb0aa83",
+    "historical_owner_sha256": "a8c4c9fc6e684a5858bf6c2897bf78a75a0a7e033235b8103407dcf9255b9155",
+    "execution_status": "TERMINAL_NON_RELEASABLE",
+    "execution_attempted": false,
+    "request_or_manifest_mutated": false,
+    "derived_request_published": false
+  },
+  "artifacts": {
+    "container_owner": {
+      "path": "scripts/native_rust_exact_build_container_owner.py",
+      "sha256": "57a5af06e6339030dad727fef655d4bd3550f65c9e60553090511f42426f077a"
+    },
+    "container_owner_tests": {
+      "path": "scripts/tests/test_native_rust_exact_build_container_owner.py",
+      "sha256": "e2d9360147944f9188746f0804cfa80c163d58abbf4864e9973241eef769abcd"
+    },
+    "disk_wrapper": {
+      "path": "scripts/native_rust_exact_disk_build_wrapper.py",
+      "sha256": "578d34e8fa96a08a0729edb9ff58ffa9d66837bbf30eed8cb75fa9da9f7f26b1"
+    },
+    "disk_wrapper_tests": {
+      "path": "scripts/tests/test_native_rust_exact_disk_build_wrapper.py",
+      "sha256": "88fa533ae8d1c054bc331f45de10d608866d1c2df5de93174f09e1e1180e19fb"
+    },
+    "historical_lease_observer": {
+      "path": "scripts/native_exact_historical_lease_observer.py",
+      "sha256": "fad2dd08fdc098c1dcda1d2fa8eaf9fc885f64d4054c9ca85ad71f7a5000fed0"
+    },
+    "historical_lease_observer_tests": {
+      "path": "scripts/tests/test_native_exact_historical_lease_observer.py",
+      "sha256": "7420e76cfcf43057e51e679c25346ce60e081fd34b9f38ea5c43fcf966bb3b4a"
+    },
+    "terminal_packet": {
+      "path": "docs/verification/evidence/native-exact-scratch17-build-execution-20261001.py",
+      "sha256": "078c34b27d72acdbfce0c8d97f63c453687e43fc15b48ee2e50311e4f3e2c573"
+    },
+    "terminal_packet_tests": {
+      "path": "scripts/tests/test_native_exact_scratch17_build_execution_20261001.py",
+      "sha256": "e4cd536588b0a9e19ea7c1ae7e61788ca557d36d039f49845fd5fe72eb3f2179"
+    }
+  },
+  "verified_behavior": {
+    "coordinator_tests": "PASS 123 including 56 wrapper/observer/packet tests",
+    "live_heavy_process_blocks_before_owner_load": true,
+    "malformed_unknown_or_live_container_blocks": true,
+    "sudo_askpass_preserved_without_value_logging": true,
+    "unknown_or_self_declared_lease_blocks": true,
+    "authenticated_historical_leases": 7,
+    "shared_lock_kinds": ["build", "image", "guest"],
+    "shared_lock_contract_released": false,
+    "uncertain_lock_retained": true,
+    "scratch17_execute_refuses_before_publication": true,
+    "review_decision": "PASS_SOURCE_SUCCESSOR_PREREQUISITE"
+  },
+  "historical_lease_evidence": {
+    "lease_count": 7,
+    "root_owned_mode": "0600",
+    "recorded_owner_pids_absent": true,
+    "running_relevant_containers": 0,
+    "privileged_observer_executed": false,
+    "privileged_observer_review_required": true
+  },
+  "next_gate": {
+    "strategy": "new fetched side target based on 50b containing only reviewed build-admission corrections, followed by fresh scratch18 preparation",
+    "shared_lock_entrypoint_wiring_required": true,
+    "fresh_candidate_request_manifest_required": true,
+    "independent_execution_release_required": true
+  },
+  "acceptance": {
+    "build_executed": false,
+    "guest_executed": false,
+    "compiled_current_candidate_count": 1,
+    "diagnostic_guest_pass_count": 5,
+    "formal_application_acceptance_count": 0,
+    "os_complete": false
+  }
+}

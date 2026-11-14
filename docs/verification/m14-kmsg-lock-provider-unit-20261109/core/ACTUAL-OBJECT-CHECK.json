@@ -1,0 +1,185 @@
+{
+  "status": "PASS_ACTUAL_FINITE_LOCK_INIT_NATIVE_IRQ_PREEMPT_OBJECT_SOURCE_OWNERS",
+  "object_sha256": "82579b770c4b857bf695b4ae8ca4f52e3ddfe6e64f7322eb222a478b4dd742b8",
+  "original_C_function_T": [
+    "__ihk_mc_spinlock_lock",
+    "__ihk_mc_spinlock_lock_noirq",
+    "__ihk_mc_spinlock_unlock",
+    "__ihk_mc_spinlock_unlock_noirq",
+    "cpu_disable_interrupt_save",
+    "cpu_interrupt_disabled",
+    "cpu_pause",
+    "cpu_restore_interrupt",
+    "ihk_mc_spinlock_init",
+    "kmsg_init",
+    "kprintf_lock",
+    "kprintf_unlock",
+    "preempt_disable",
+    "preempt_enable"
+  ],
+  "actual_all_global_strong_owners": {
+    "__ihk_mc_spinlock_lock": {
+      "kind": "T",
+      "size": 108
+    },
+    "cpu_local_var_initialized": {
+      "kind": "B",
+      "size": 4
+    },
+    "__ihk_mc_spinlock_lock_noirq": {
+      "kind": "T",
+      "size": 91
+    },
+    "__ihk_mc_spinlock_unlock": {
+      "kind": "T",
+      "size": 61
+    },
+    "__ihk_mc_spinlock_unlock_noirq": {
+      "kind": "T",
+      "size": 59
+    },
+    "cpu_disable_interrupt_save": {
+      "kind": "T",
+      "size": 6
+    },
+    "cpu_interrupt_disabled": {
+      "kind": "T",
+      "size": 16
+    },
+    "cpu_pause": {
+      "kind": "T",
+      "size": 3
+    },
+    "cpu_restore_interrupt": {
+      "kind": "T",
+      "size": 5
+    },
+    "ihk_mc_spinlock_init": {
+      "kind": "T",
+      "size": 5
+    },
+    "kmsg_init": {
+      "kind": "T",
+      "size": 15
+    },
+    "kprintf_lock": {
+      "kind": "T",
+      "size": 107
+    },
+    "kprintf_unlock": {
+      "kind": "T",
+      "size": 71
+    },
+    "preempt_disable": {
+      "kind": "T",
+      "size": 54
+    },
+    "preempt_enable": {
+      "kind": "T",
+      "size": 54
+    },
+    "kmsg_buf": {
+      "kind": "B",
+      "size": 8
+    }
+  },
+  "actual_original_singleton_symbol": {
+    "name": "_RNvNtCs3AfSQJNpqeM_31kmsg_lock_preempt_provider_unit5debug9KMSG_LOCK",
+    "bind": 0,
+    "type": 1,
+    "other": 0,
+    "section": 26,
+    "value": 0,
+    "size": 4
+  },
+  "actual_singleton_binding_class": "LOCAL_source_private",
+  "original_kmsg_buf_NULL_NOBITS_pointer_declaration": {
+    "name": "kmsg_buf",
+    "bind": 1,
+    "type": 1,
+    "other": 0,
+    "section": 28,
+    "value": 0,
+    "size": 8
+  },
+  "original_KMSG_LOCK_zero_NOBITS_declaration": {
+    "name": "_RNvNtCs3AfSQJNpqeM_31kmsg_lock_preempt_provider_unit5debug9KMSG_LOCK",
+    "bind": 0,
+    "type": 1,
+    "other": 0,
+    "section": 26,
+    "value": 0,
+    "size": 4
+  },
+  "all_three_debug_wrappers_reference_one_original_singleton": {
+    "kprintf_lock": [
+      {
+        "section": 18,
+        "offset": 54,
+        "type": 1,
+        "symbol": {
+          "name": "",
+          "bind": 0,
+          "type": 3,
+          "other": 0,
+          "section": 26,
+          "value": 0,
+          "size": 0
+        },
+        "addend": 0
+      }
+    ],
+    "kprintf_unlock": [
+      {
+        "section": 20,
+        "offset": 3,
+        "type": 1,
+        "symbol": {
+          "name": "",
+          "bind": 0,
+          "type": 3,
+          "other": 0,
+          "section": 26,
+          "value": 0,
+          "size": 0
+        },
+        "addend": 0
+      }
+    ],
+    "kmsg_init": [
+      {
+        "section": 16,
+        "offset": 2,
+        "type": 1,
+        "symbol": {
+          "name": "",
+          "bind": 0,
+          "type": 3,
+          "other": 0,
+          "section": 26,
+          "value": 0,
+          "size": 0
+        },
+        "addend": 0
+      }
+    ]
+  },
+  "actual_selected_source_owned_local_helpers": [],
+  "original_cpu_local_var_initialized_zero_NOBITS_declaration": {
+    "name": "cpu_local_var_initialized",
+    "bind": 1,
+    "type": 1,
+    "other": 0,
+    "section": 27,
+    "value": 0,
+    "size": 4
+  },
+  "genuine_existing_CPU_getter_U": [
+    "get_cpu_local_var",
+    "ihk_mc_get_processor_id"
+  ],
+  "all_actual_metadata_retained": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-provider-unit-1/expanded-1/ACTUAL-ELF-METADATA.json",
+  "source_private_visibility_not_rewritten": true,
+  "join_not_admitted_or_executed": true,
+  "no_privileged_function_boot_buffer_init_or_runtime_claim": true
+}

@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "app.sort-numeric",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"generator": {"kind": "descending-padded-integers", "count": 4096, "width": 8, "newline": true}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "canonical-record-with-relations", "fields": ["line_count", "first", "last", "strictly_ascending", "all_unique"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["sort -n emits 4096 lines in numeric ascending order from00000000 through00004095", "No line is duplicated or lost and each line retains its newline"],
+  "unresolved_expectations": ["Pinned coreutils sort identity, option inventory, and full generated-output capture require Max review."],
+  "max_question_for_reviewer": "Confirm numeric ordering semantics for padded decimal records and the bounded 4096-line output oracle."
+}

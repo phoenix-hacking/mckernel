@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_review_failure",
+  "review_attempt": 45,
+  "recorded_utc": "2026-09-16T10:31:19Z",
+  "status": "FAIL_SOURCE",
+  "review_input": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260916-47.tar.gz",
+    "sha256": "0f1c14cb106d0ec4e055c3fd18b46710111941fa22b7c6cfaf2a5ba6077c88ee",
+    "size": 39301852,
+    "safe_unique_members": 37,
+    "regular_files": 27,
+    "source_sha256_bindings": 26
+  },
+  "reviewed_sha256": {
+    "oracle": "b5ee9db9317effe02f46afd151292a14a1607f215566328c15df281cdd45ecb6",
+    "tests": "bb6b98418c264f750095d1154b1a9da990272e4dddcfcc24161c3d961829bce6",
+    "parent46": "15ac775cf137503ae69c10220db13467f9fb3c49a5df650d6514573e5ce94187",
+    "failure39": "a9abaa2d3f0c9b9c13503f85a10aebf72aa9bf0f465e68d63a0bfa636ba9be96",
+    "validation_failure43_record": "c0532b711af37d832b3ef156dcd5c2ebee0a328159124698d8e9eeea48947c43",
+    "validation_failure43_archive": "eddfcfe96959c53e2d39d9f3b2228ee94d94eb36a4e6c15d074e3d58d09948d9"
+  },
+  "verified_evidence": "All archive47 bindings and 24 nested lineage manifests authenticate. Both retained interpreter logs report 130 tests OK; both pycompile statuses and diff status are zero. Authentic DEVNULL output, historical empty-fixture isolation, canonical regression hashes and retained source-stat corrections were checked.",
+  "review_method": "Read-only source inspection plus memory-backed replay: seven positive selectors and 18 retained regression methods passed. No filesystem fixture writes or process launches. Review35 and39 paths were inspected; two memory-adapter interruptions are preserved in the review transcript.",
+  "blocking_finding": {
+    "path": "scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/storage-fault-v1/oracle.py",
+    "line": 872,
+    "symbol": "validate_record",
+    "affected_selectors": [
+      1,
+      4
+    ],
+    "mutation": "Starting with a valid selector4 fixture, add collection/report.json as a dangling symlink to missing-target; change no JSON or hashes. Selector1 collection/events.jsonl has the same bypass.",
+    "expected": "Reject: an existing symlink is not authenticated artifact absence.",
+    "observed": "validate(root, 4, 0) returns True; selector1 also returns True. Reproduced using memory-backed filesystem semantics: exists=False, is_symlink=True.",
+    "cause": "Path.exists follows symlinks. Both the generic absence check and selector-specific checks at lines2285 and2634 accept dangling links. Producer witness_owner.py:183,214-220 uses O_NOFOLLOW and would reject rather than record this as absent.",
+    "correction": "Use a shared non-following absence check accepting only genuine ENOENT; reject symlinks and all other existing objects, and propagate unexpected lookup errors. Apply it to generic and selector-specific absence checks. Add complete selector1/4 dangling-link negatives without rebinding hashes; preserve genuine-absence positives."
+  },
+  "source_accepted": false,
+  "source_checkpoint_released": false,
+  "compiler_packet_released": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "runtime_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}

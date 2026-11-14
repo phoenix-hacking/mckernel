@@ -1,0 +1,221 @@
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -30200,8 +30200,8 @@
+ /// `thread` is the current live thread and `regs` its readable, complete kernel
+ /// context. Their existing lifecycle remains valid through the synchronous dump
+ /// call. `log_state` addresses the live aligned atomic diagnostic budget;
+-/// all accesses to that state use the atomic protocol. The slot is claimed
+-/// before logging to make the concurrent bound well-defined.
++/// the check precedes formatting and the update follows it, against the current
++/// epoch. All accesses use atomics; no reference spans the formatter callback.
+ /// `pid` and `fault_address` are the caller's snapshots taken before pending free.
+ #[no_mangle]
+ pub unsafe extern "C" fn arch_do_signal_core_terminate_result(
+@@ -30213,8 +30213,8 @@
+     log_state: *const core::sync::atomic::AtomicU64,
+ ) {
+     // SAFETY: log_state points to the live atomic budget. Its shared borrow
+-    // ends at the claim; no lock is held over the formatter or its callbacks.
+-    if f06_signal_log_budget::f06_log_claim(unsafe { &*log_state }) {
++    // ends at the check; no lock or reference spans the formatter callback.
++    if f06_signal_log_budget::f06_log_enabled(unsafe { &*log_state }) {
+         // SAFETY: the live context and thread are the original do_signal inputs.
+         // Literal formatting bytes and argument widths match the C diagnostic.
+         unsafe {
+@@ -30232,9 +30232,9 @@
+                 (*regs).gpr.rsp,
+                 fault_address,
+             );
+-            // The slot was atomically claimed before this formatting call.
+-            // No lock is held across the callback and no post-call write occurs.
+-
++            // Match the original post-formatter increment of current state.
++            // No lock or reference spans the callback; reacquire state here.
++            f06_signal_log_budget::f06_log_complete(&*log_state);
+         }
+     }
+ 
+@@ -31016,7 +31016,7 @@
+ /// Default traced-SIGTRAP uses the approved initialized parent notification.
+ /// Whole selection remains OFF pending ABI/ownership/codegen/native proof.
+ /// The caller-owned info lives through synchronous consumer copies; no pending
+-/// payload is read after transfer/free. Diagnostic budget claims are atomic;
++/// payload is read after transfer/free. Budget checks and updates are atomic;
+ /// overwritten old core slots remain independent existing debt.
+ #[no_mangle]
+ pub unsafe extern "C" fn do_signal(
+@@ -31195,14 +31195,14 @@
+         unsafe { (user_sp as *mut CULong).write((*action).sa.sa_restorer as CULong) };
+         // SAFETY: original handler diagnostic before register/action commit.
+         unsafe {
+-            if f06_signal_log_budget::f06_log_claim(&f06_signal_log_budget::F06_SIGNAL_LOG_STATE) {
++            if f06_signal_log_budget::f06_log_enabled(&f06_signal_log_budget::F06_SIGNAL_LOG_STATE) {
+                 kprintf(concat!("mcexec_v10: signal_handler pid=%d tid=%d sig=%d ",
+                     "handler=0x%lx restorer=0x%lx old_rip=0x%lx old_sp=0x%lx ",
+                     "new_sp=0x%lx si_addr=0x%lx\n\0").as_ptr().cast(), pid,
+                     if thread.is_null() { -1 } else { (*thread).tid }, signal,
+                     (*action).sa.sa_handler as CULong, (*action).sa.sa_restorer as CULong,
+                     (*regs).gpr.rip, (*regs).gpr.rsp, user_sp, fault);
+-
++                f06_signal_log_budget::f06_log_complete(&f06_signal_log_budget::F06_SIGNAL_LOG_STATE);
+             }
+             arch_do_signal_handler_commit_result(thread, regs, action, pending, signal,
+                 user_frame, offset_of!(F06SignalFrame, info), user_sp, node.as_mut_ptr());
+--- a/kernel/rust/f06_signal_log_budget.rs
++++ b/kernel/rust/f06_signal_log_budget.rs
+@@ -1,17 +1,17 @@
+ // Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+-// Private candidate: PID epoch and reserved diagnostic slots share one atomic word.
++// Shared diagnostic PID and post-formatter count occupy one atomic word.
+ use core::sync::atomic::{AtomicU64, Ordering};
+ 
+-const F06_LOG_LIMIT: u32 = 64;
++const F06_LOG_LIMIT: i32 = 64;
++const F06_PID_MASK: u64 = 0xffff_ffff_0000_0000;
+ pub(super) static F06_SIGNAL_LOG_STATE: AtomicU64 = AtomicU64::new((u32::MAX as u64) << 32);
+ 
+-// Called once at the original do_signal entry reset point, even for signals that
+-// do not ultimately log. The high word contains the bit representation of pid.
++// Original entry observes every PID, even when its signal will not log.
+ pub(super) fn f06_log_observe_pid(state: &AtomicU64, pid: i32) {
+     let pid_bits = (pid as u32 as u64) << 32;
+     let mut seen = state.load(Ordering::Relaxed);
+     loop {
+-        if seen & 0xffff_ffff_0000_0000 == pid_bits { return; }
++        if seen & F06_PID_MASK == pid_bits { return; }
+         match state.compare_exchange_weak(seen, pid_bits, Ordering::Relaxed, Ordering::Relaxed) {
+             Ok(_) => return,
+             Err(next) => seen = next,
+@@ -19,117 +19,23 @@
+     }
+ }
+ 
+-// Claim against the CURRENT epoch at the original log site. A different PID can
+-// have entered since this invocation began; do not reset to this caller's PID.
+-// Claim precedes kprintf so simultaneous or reentrant calls cannot exceed 64.
+-pub(super) fn f06_log_claim(state: &AtomicU64) -> bool {
++// Original C reads the signed int counter before the synchronous formatter.
++// This is a check, not a reservation, and the borrow ends before the callback.
++pub(super) fn f06_log_enabled(state: &AtomicU64) -> bool {
++    (state.load(Ordering::Relaxed) as u32 as i32) < F06_LOG_LIMIT
++}
++
++// After the formatter returns, increment the then-current count while keeping
++// its PID bits. A callback may have reset or incremented the budget meanwhile.
++// The C signed-overflow domain remains outside the defined equivalence claim.
++pub(super) fn f06_log_complete(state: &AtomicU64) {
+     let mut seen = state.load(Ordering::Relaxed);
+     loop {
+-        let count = seen as u32;
+-        if count >= F06_LOG_LIMIT { return false; }
+-        match state.compare_exchange_weak(seen, seen + 1, Ordering::Relaxed, Ordering::Relaxed) {
+-            Ok(_) => return true,
+-            Err(next) => seen = next,
++        let next_count = (seen as u32).wrapping_add(1);
++        let next = (seen & F06_PID_MASK) | u64::from(next_count);
++        match state.compare_exchange_weak(seen, next, Ordering::Relaxed, Ordering::Relaxed) {
++            Ok(_) => return,
++            Err(next_seen) => seen = next_seen,
+         }
+     }
+ }
+-
+-#[cfg(test)]
+-mod tests {
+-    use super::*;
+-    use std::sync::{Arc, Barrier};
+-    use std::thread;
+-
+-    #[test]
+-    fn limit_reset_and_delayed_invocation_use_current_epoch() {
+-        let state = AtomicU64::new((u32::MAX as u64) << 32);
+-        f06_log_observe_pid(&state, 17);
+-        assert!((0..64).all(|_| f06_log_claim(&state)));
+-        assert!(!f06_log_claim(&state));
+-        f06_log_observe_pid(&state, 17);
+-        assert!(!f06_log_claim(&state));
+-        f06_log_observe_pid(&state, 18); // entry without a log resets too
+-        assert!(f06_log_claim(&state)); // delayed PID 17 claims current epoch
+-        assert_eq!(state.load(Ordering::Relaxed), (18u64 << 32) | 1);
+-        f06_log_observe_pid(&state, -1);
+-        assert!(f06_log_claim(&state));
+-        assert_eq!(state.load(Ordering::Relaxed), ((u32::MAX as u64) << 32) | 1);
+-    }
+-
+-    #[test]
+-    fn simultaneous_claims_never_exceed_limit() {
+-        let state = Arc::new(AtomicU64::new(0));
+-        f06_log_observe_pid(&state, 91);
+-        let barrier = Arc::new(Barrier::new(16));
+-        let handles: Vec<_> = (0..16).map(|_| {
+-            let state = Arc::clone(&state);
+-            let barrier = Arc::clone(&barrier);
+-            thread::spawn(move || {
+-                barrier.wait();
+-                (0..32).filter(|_| f06_log_claim(&state)).count()
+-            })
+-        }).collect();
+-        assert_eq!(handles.into_iter().map(|h| h.join().unwrap()).sum::<usize>(), 64);
+-        assert_eq!(state.load(Ordering::Relaxed), (91u64 << 32) | 64);
+-    }
+-
+-    #[test]
+-    fn serial_schedule_matches_original_counter() {
+-        // Original reset happens on every entry, including nonlogging signals.
+-        // In the non-reentrant serial domain original increment follows logging.
+-        let state = AtomicU64::new((u32::MAX as u64) << 32);
+-        let (mut old_pid, mut old_count) = (-1i32, 0u32);
+-        let events = [(-1, false), (1, false), (1, true), (2, false),
+-                      (1, true), (1, true), (-1, true)];
+-        let mut sequence = events.to_vec();
+-        sequence.extend((0..70).map(|_| (-1, true)));
+-        sequence.extend([(4, false), (4, true), (1, true)]);
+-        for (pid, logs) in sequence {
+-            if pid != old_pid { old_pid = pid; old_count = 0; }
+-            f06_log_observe_pid(&state, pid);
+-            if logs {
+-                let original_logs = old_count < 64;
+-                if original_logs { old_count += 1; }
+-                assert_eq!(f06_log_claim(&state), original_logs);
+-            }
+-            assert_eq!(state.load(Ordering::Relaxed),
+-                       ((old_pid as u32 as u64) << 32) | u64::from(old_count));
+-        }
+-    }
+-
+-    #[test]
+-    fn logger_reentry_cannot_overbook_last_slot() {
+-        let state = AtomicU64::new(0);
+-        f06_log_observe_pid(&state, 7);
+-        assert!((0..63).all(|_| f06_log_claim(&state)));
+-        // Outer logger reserves slot 64 before a reentrant logger is called.
+-        assert!(f06_log_claim(&state));
+-        assert!(!f06_log_claim(&state));
+-        assert_eq!(state.load(Ordering::Relaxed), (7u64 << 32) | 64);
+-    }
+-
+-    #[test]
+-    fn concurrent_pid_switches_keep_a_valid_bounded_epoch() {
+-        let state = Arc::new(AtomicU64::new(0));
+-        let barrier = Arc::new(Barrier::new(8));
+-        let handles: Vec<_> = (0..8).map(|i| {
+-            let state = Arc::clone(&state);
+-            let barrier = Arc::clone(&barrier);
+-            thread::spawn(move || {
+-                barrier.wait();
+-                for n in 0..500 {
+-                    let pid = 1 + ((i + n) & 1);
+-                    f06_log_observe_pid(&state, pid);
+-                    let _ = f06_log_claim(&state);
+-                    let observed = state.load(Ordering::Relaxed);
+-                    assert!((1..=2).contains(&(observed >> 32)));
+-                    assert!((observed as u32) <= 64);
+-                }
+-            })
+-        }).collect();
+-        for handle in handles { handle.join().unwrap(); }
+-        f06_log_observe_pid(&state, 42);
+-        assert_eq!(state.load(Ordering::Relaxed), 42u64 << 32);
+-        assert!(f06_log_claim(&state));
+-    }
+-}

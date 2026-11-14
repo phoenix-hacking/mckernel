@@ -1,0 +1,1482 @@
+#!/usr/bin/env python3
+"""Fixed-path archival retirement; default is read-only validation.
+
+The persistent mutex is never unlinked. flock releases it on process death.
+A torn plan/journal is retained and quarantined, never repaired speculatively.
+Execution requires an independently reviewed release and runs under sudo -A.
+Historical observations are frozen evidence, never execution authority.
+Ownership records exchange with empty directory sentinels and remain archived.
+Sentinels keep the active names occupied until durable release authorization;
+only rmdir releases them, so a newer regular ownership record is never deleted.
+
+Supported publisher contract: one campaign coordinator, no concurrent project
+build/cleanup worker, and ordinary publishers creating regular files with
+O_CREAT|O_EXCL. The privileged census checks these prerequisites immediately
+before mutations and sentinel release. This is NOT protection against an
+arbitrary same-UID adversary swapping directories between the final check and
+rmdir. Such directory publishers are excluded by the execution prerequisite.
+"""
+import argparse
+import ctypes
+import fcntl
+import hashlib
+import json
+import os
+from pathlib import Path
+import re
+import stat
+import subprocess
+import signal
+import time
+
+SOURCE_REFS = {'source_manifest': {'path': '/home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1/thin-inputs.json', 'sha256': 'a7b88bdd821490521c440313657ab7945e4d0c411989bac279c106686c68d45a', 'bytes': 6774404}, 'toolchain_manifest': {'path': '/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/image-toolchain.json', 'sha256': 'a68e02b3b66b8bfbae96bf742dc8702b6e81dd97b92189b87437c3d08fccdf72', 'bytes': 72685013}, 'gitlink_manifest': {'path': '/home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1/gitlink-inputs.json', 'sha256': 'ff6cc795b366643a324a291e327b25a8eb4f9c094f59a71fdcca41ce2430ae16', 'bytes': 72854}, 'driver_path': {'path': '/home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1/native_rust_exact_mckernel_image_offline.py', 'sha256': '319790fd648ea82c7ef3adc129cc9cc329c08ea23beed105fdfeeb6770f09d9a', 'bytes': 135622}, 'provenance_path': {'path': '/home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1/native_rust_exact_build_offline.py', 'sha256': '0407c1d87fe85fbcda7f23872f3f47fe64c238f7ef6cc0c6e4f21fd63253fd4d', 'bytes': 41115}, 'host_owner_path': {'path': '/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/adapters/native_rust_exact_build_container_owner.py', 'sha256': '96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1', 'bytes': 51420}, 'image_owner': {'path': '/home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1/native_rust_exact_mckernel_image_container_owner.py', 'sha256': '0091003fd8f2bc2afc37b5b68829f776b530a61e17f18eb5b8ee28a7da307f15', 'bytes': 88721}, 'materialization': {'path': '/home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1/source-materialization-1/materialization-receipt.json', 'sha256': '619145d1fbf60b728aee9296f136b0a5e9ab1fe3f90843ccd130cb482eb45356', 'bytes': 510}}
+CURRENT_TYPED_REQUEST = {'source_root': '/home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1/source-materialization-1/materialized-source', 'source_identity': {'dev': 66306, 'file_type': 16384, 'gid': 1000, 'inode': 48394680, 'mode': 448, 'path': '/home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1/source-materialization-1/materialized-source', 'uid': 1000}, 'source_derivative_sha256': 'f783466fea0907a7a3e04b761c1e8cea9c61251c2d4b3d6f756920d90b89279c', 'materialization_sha256': '58e0845c6706818971522d6873bf1ed4d4f4043e5b9fe2fcb2a54a351015294f', 'candidate_sha': '942c927b1ec93cc31284ff498455909d9bb2d0fc', 'candidate_identity_scope': 'base_git_commit_only'}
+REPO = Path('/home/holden/mckernel')
+PUBLISHED_SCRIPT = 'docs/verification/evidence/settid-current-production-link-preparation-20261021-1/independent-review-1/current-terminal-logs-channel-correction-1/cleanup_failed_image.py'
+PUBLISHED_TESTS = 'scripts/tests/test_native_rust_cutover_image_terminal_cleanup.py'
+SELFTEST = REPO / PUBLISHED_TESTS
+NAMESPACE = Path('/home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1/full-image-attempt-1')
+NAMESPACE_ANCESTRY = [{'path': '/', 'device': 66306, 'inode': 2, 'mode': 16877, 'uid': 0, 'gid': 0}, {'path': '/home', 'device': 66306, 'inode': 45481985, 'mode': 16877, 'uid': 0, 'gid': 0}, {'path': '/home/holden', 'device': 66306, 'inode': 45481986, 'mode': 16877, 'uid': 1000, 'gid': 1000}, {'path': '/home/holden/mckernel-work', 'device': 66306, 'inode': 47459822, 'mode': 16893, 'uid': 1000, 'gid': 1000}, {'path': '/home/holden/mckernel-work/host-preparation', 'device': 66306, 'inode': 47848559, 'mode': 16832, 'uid': 1000, 'gid': 1000}, {'path': '/home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1', 'device': 66306, 'inode': 48394424, 'mode': 16832, 'uid': 1000, 'gid': 1000}, {'path': '/home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1/full-image-attempt-1', 'device': 66306, 'inode': 48402520, 'mode': 16832, 'uid': 1000, 'gid': 1000}]
+NAMESPACE_BINDING = {'device': 66306, 'inode': 48402520, 'mode': 16832, 'uid': 1000, 'gid': 1000}
+ROOT = Path('/home/holden/mckernel-work/scratch')
+UUID = '2a5768c8-718d-4914-bdc0-6b32c5a92a52'
+DEVICE = None  # A future, independently reviewed release binds the live device.
+UID = GID = 1000
+PREFIX = 'settid-current-precompiler-terminal-logs-correction-20261021-1'
+CANDIDATE = None  # Derived only from the exact consumed image request at release validation.
+ATTEMPT = Path('/home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1/full-image-attempt-1/common-exclusion.json')
+SHARED = ROOT / 'mckernel-heavy-operation.lock'
+REQUEST = Path('/home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1/image-execution-preparation-1/actual-source-successor-1/image-request.json')
+LEASE = Path('/home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1/full-image-attempt-1/lease.json')
+OUTPUT = Path('/home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1/full-image-attempt-1/owner-work')
+EVIDENCE = Path('/home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1/full-image-attempt-1/owner-evidence')
+MUTEX = ROOT / (PREFIX + '.mutex')
+PLAN = ROOT / (PREFIX + '.plan.json')
+JOURNAL = ROOT / (PREFIX + '.journal.jsonl')
+CAPTURE = ROOT / (PREFIX + '.docker-logs.capture')
+QUARANTINE = ROOT / (PREFIX + '.quarantine.json')
+ARCHIVE_NAMES = (PREFIX + '.attempt.archive', PREFIX + '.shared.archive')
+ROOT_LOCK = Path('/run/lock/mckernel-development.lock')
+BASELINE_SOURCE_SHA = '6606af40114eb5b6019438c4127948081d80bbe65144d841e906a7cba84aabed'
+NATIVE_BASELINE_SOURCE_SHA = '8449b4b87b2286d4dc3d08e0c5921d2d79e44f17920d0aaee3eae646993fc995'
+KNOWN_TARGET = {'container_id': '88102070029b941df8c18c8a25a11778625a28390887c91127539bae5914b120', 'container_name': 'mckernel-image-09985ff0da1447108c557205a9b24845', 'owner_nonce': '45d0f8d4997b441ab526df26762e8fbc', 'owner_pid': 2387943, 'owner_starttime': '35010201'}
+REQUEST_SHA = 'fb50e9eaa83ce2b6e94610581188cd1d19a292f493421a08c4b61ec1ee2a0af0'
+IMAGE_CANDIDATE = '942c927b1ec93cc31284ff498455909d9bb2d0fc'
+ROOT_TERMINAL = None  # Exact future nonce-bound guard-result.json proof.
+CONTAINER = CONTAINER_NAME = OWNER_NONCE = OWNER_PID = OWNER_START = None
+EXPECTED_EXIT = None
+# Retain the root guard and all eight historical Docker clients as census roots.
+WAITER_PIDS = ()  # Future exact guard command ledger supplies every current client PID.
+BOOT_ID = None
+RECORDS = {}
+DIRS = {}
+PROTECTED = []
+TERMINAL = EVIDENCE / 'owner-receipt.json'
+TERMINAL_SHA = TERMINAL_INODE = TERMINAL_SIZE = None
+LIMIT = 1 << 20
+# Preserve the reviewed authority1 actual-size caps and complete inventory bounds.
+PROTECTED_LIMIT = 128 << 20
+DOCUMENT_LIMIT = 256 << 20
+INVENTORY_LIMIT = 400000
+RELEASE = None
+ROOT_LOCK_BINDING = None
+EXPECTED_CONTAINER = None
+PUBLISHER_CONTRACT = {
+    'schema': 'fp-save-image.publisher-contract.v1',
+    'coordination': 'sole-campaign-coordinator-no-concurrent-build-or-cleanup',
+    'publishers': 'project-owned-regular-file-O_CREAT|O_EXCL-only',
+    'census': 'root-full-process-and-container-before-transaction-and-every-rmdir',
+    'excluded': 'arbitrary-same-UID-directory-substitution-after-final-check',
+}
+DEFERRED_SIGNALS = {signal.SIGHUP, signal.SIGINT, signal.SIGTERM, signal.SIGQUIT}
+
+def namespace_ancestry():
+    rows = []
+    for path in reversed((NAMESPACE, *NAMESPACE.parents)):
+        meta = path.lstat()
+        if not stat.S_ISDIR(meta.st_mode):
+            raise Refusal('namespace-ancestor-not-directory')
+        rows.append(dict(path=str(path), device=meta.st_dev, inode=meta.st_ino,
+                         mode=meta.st_mode, uid=meta.st_uid, gid=meta.st_gid))
+    return rows
+
+
+def metadata_identity(path):
+    """Cheap complete output/evidence census; never follow a build symlink."""
+    meta = path.lstat()
+    if not (stat.S_ISREG(meta.st_mode) or stat.S_ISDIR(meta.st_mode) or stat.S_ISLNK(meta.st_mode)):
+        raise Refusal('protected-inventory-type:' + str(path))
+    row = {'path': str(path), 'device': meta.st_dev, 'inode': meta.st_ino,
+           'mode': meta.st_mode, 'uid': meta.st_uid, 'gid': meta.st_gid,
+           'size': meta.st_size, 'nlink': meta.st_nlink,
+           'mtime_ns': meta.st_mtime_ns, 'ctime_ns': meta.st_ctime_ns}
+    if stat.S_ISLNK(meta.st_mode):
+        row['target'] = os.readlink(path)
+    return row
+
+def metadata_inventory(root):
+    paths = []
+    for path in root.rglob('*'):
+        if len(paths) + 1 >= INVENTORY_LIMIT:
+            raise Refusal('protected-inventory-bound')
+        paths.append(path)
+    return [metadata_identity(root)] + [metadata_identity(path) for path in sorted(paths)]
+
+PRECOMPILER_CASE = {'target': {'container_id': '88102070029b941df8c18c8a25a11778625a28390887c91127539bae5914b120', 'container_name': 'mckernel-image-09985ff0da1447108c557205a9b24845', 'owner_nonce': '45d0f8d4997b441ab526df26762e8fbc', 'image_id': 'sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5', 'owner_pid': 2387943, 'owner_starttime': '35010201', 'exit_code': 1}, 'request': {'path': '/home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1/image-execution-preparation-1/actual-source-successor-1/image-request.json', 'sha256': 'fb50e9eaa83ce2b6e94610581188cd1d19a292f493421a08c4b61ec1ee2a0af0', 'bytes': 26524931}, 'owner': {'path': '/home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1/full-image-attempt-1/owner-evidence/owner-receipt.json', 'sha256': 'd403bf97a0d5638a657b5d35e02a56514e5fd99c9505a6ca2d3bfdc78b05fc35', 'bytes': 19529}, 'guard': {'path': '/home/holden/mckernel-work/scratch/native-rust-phase5-current-optin-image-guard-c8d19a0e07d8465ba1ac61f096e3f82c/guard-result.json', 'sha256': '2b734fb9d5363f9bbee5f7afc6096f7e81077c73884156633c81811e8586e9c6', 'bytes': 299}, 'log': {'path': '/home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1/full-image-attempt-1/owner-evidence/attempt/container.log', 'sha256': '3a01121644174ac971c1f15c6120ffb1363a0caa8d1aac05bf3367a388031df2', 'bytes': 746}, 'release': {'path': '/home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1/image-execution-preparation-1/actual-source-successor-1/image-execution-release.json', 'sha256': '7f928ebb91d230f45bb6edc7636c81230a96934b0f3a01a5a6cdf434bb7f0b6c', 'bytes': 63265}, 'consumed_release': {'path': '/home/holden/mckernel-work/scratch/native-rust-phase5-current-optin-image-guard-c8d19a0e07d8465ba1ac61f096e3f82c/consumed-release.json', 'sha256': 'b3fa3d274898cf34128aba5cb946fdf2e669e4797c898000600b8f6f7cf968be', 'bytes': 226}}
+
+def precompiler_absence(target):
+    """Only this exact closed precompiler refusal can lack a driver receipt."""
+    if canonical(target) != canonical(PRECOMPILER_CASE['target']):
+        return False
+    for key in ('request','owner','guard','log','release','consumed_release'):
+        row=PRECOMPILER_CASE[key]
+        raw=read_bounded(Path(row['path']),maximum=PROTECTED_LIMIT)
+        if len(raw)!=row['bytes'] or digest(raw)!=row['sha256']:
+            raise Refusal('precompiler-fixed-evidence-drift:'+key)
+    owner=parse(read_bounded(TERMINAL))
+    if owner.get('status')!='FAIL' or owner.get('exit_code')!=1 or owner.get('retired') is not True:
+        raise Refusal('precompiler-positive-owner-failure-required')
+    log=read_bounded(EVIDENCE/'attempt/container.log',maximum=PROTECTED_LIMIT)
+    if not log.endswith(b'ImageBuildError: owned fork current prerequisite drift kernel/syscall.c\n'):
+        raise Refusal('precompiler-exact-log-reason')
+    receipt=OUTPUT/'evidence/receipt.json'
+    evidence=OUTPUT/'evidence'
+    if os.path.lexists(receipt) or os.path.lexists(OUTPUT/'output'):
+        raise Refusal('precompiler-artifact-or-receipt-appeared')
+    if os.path.lexists(evidence):
+        meta=evidence.lstat()
+        if not stat.S_ISDIR(meta.st_mode) or any(evidence.iterdir()):
+            raise Refusal('precompiler-evidence-not-empty')
+    return True
+
+def protected_files():
+    """Preserve complete metadata census and only selected published byte joins."""
+    if RELEASE is None:
+        raise Refusal('release-not-configured')
+    precompiler_absence(RELEASE['observation']['target'])
+    if os.path.lexists(LEASE):
+        raise Refusal('request-lease-reappeared')
+    for root in (OUTPUT, EVIDENCE):
+        wanted = RELEASE['observation']['inventories'][str(root)]
+        if metadata_inventory(root) != wanted:
+            raise Refusal('protected-inventory-drift:' + str(root))
+    if observe_identity(CANDIDATE) != RELEASE['observation']['candidate_root']:
+        raise Refusal('candidate-root-drift')
+    backup = RELEASE['observation']['backup_root']
+    if observe_identity(Path(backup['path'])) != backup:
+        raise Refusal('backup-root-drift')
+    for row in PROTECTED:
+        if observe_identity(Path(row['path'])) != row:
+            raise Refusal('selected-artifact-or-receipt-drift:' + row['path'])
+
+def capture_logs(present, execute=False, transaction=None):
+    expected = read_bounded(EVIDENCE / 'attempt/container.log', maximum=PROTECTED_LIMIT)
+    if os.path.lexists(CAPTURE):
+        read_at_path(CAPTURE, expected)
+        return
+    if not present:
+        raise Refusal('docker-log-capture-missing')
+    if canonical(RELEASE['observation']['target']) == canonical(PRECOMPILER_CASE['target']):
+        # This exact failed container's pinned application log is on stderr.
+        # Every other target keeps the existing strict stdout-only command path.
+        if os.geteuid() != 0:
+            raise Refusal('root-execution-required-use-sudo-A')
+        pinned = PRECOMPILER_CASE['log']
+        if len(expected) != pinned['bytes'] or digest(expected) != pinned['sha256']:
+            raise Refusal('exact-precompiler-log-input-drift')
+        args = ['/usr/bin/docker', '--host=unix:///var/run/docker.sock',
+                'logs', '--', CONTAINER]
+        result = subprocess.run(args, env={'PATH': '/usr/bin:/bin', 'LANG': 'C', 'LC_ALL': 'C'},
+                                stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE, timeout=30, check=False)
+        if (result.returncode or result.stdout or len(result.stderr) > PROTECTED_LIMIT or
+                result.stderr != expected):
+            # Preserve completed-child facts before the unchanged refusal outcome.
+            def channel(raw):
+                prefix=raw[:65536]
+                return dict(observed_bytes=len(raw),observed_sha256=digest(raw),
+                            retained_bytes=len(prefix),retained_sha256=digest(prefix),
+                            retained_hex=prefix.hex(),complete=len(raw)<=65536)
+            print(json.dumps(dict(status='EXACT_PRECOMPILER_LOG_CHILD_REFUSED',argv=args,
+                                  returncode=result.returncode,stdout=channel(result.stdout),
+                                  stderr=channel(result.stderr)),sort_keys=True),flush=True)
+            raise Refusal('exact-precompiler-docker-log-channels')
+        raw = result.stderr
+    else:
+        raw = run_privileged_large(['/usr/bin/docker', '--host=unix:///var/run/docker.sock',
+                                    'logs', '--', CONTAINER])
+    if raw != expected:
+        raise Refusal('docker-log-mismatch')
+    if execute:
+        fd, _ = directory(ROOT)
+        try:
+            create_at(fd, CAPTURE.name, raw,
+                      on_created=(lambda: setattr(transaction, 'mutation_started', True))
+                      if transaction is not None else None)
+        finally:
+            os.close(fd)
+
+def validate_container_profile(item):
+    # Bind every recorded config/host-profile field, the command and exact mounts.
+    for key in ('Id', 'Name', 'Image', 'Path', 'Args', 'Config', 'HostConfig', 'State',
+                'Created', 'RestartCount', 'AppArmorProfile', 'Platform'):
+        if canonical(item.get(key)) != canonical(EXPECTED_CONTAINER.get(key)):
+            raise Refusal('container-profile-binding:' + key)
+    if canonical(sorted(item.get('Mounts', []), key=lambda m: m['Destination'])) != canonical(sorted(
+            EXPECTED_CONTAINER['Mounts'], key=lambda m: m['Destination'])):
+        raise Refusal('container-mounts-binding')
+
+class Refusal(ValueError):
+    pass
+
+def digest(data):
+    return hashlib.sha256(data).hexdigest()
+
+def canonical(value):
+    return json.dumps(value, sort_keys=True, separators=(',', ':')).encode()
+
+def parse(raw):
+    def pairs(items):
+        out = {}
+        for key, value in items:
+            if key in out:
+                raise Refusal('duplicate-json-key')
+            out[key] = value
+        return out
+    try:
+        return json.loads(raw, object_pairs_hook=pairs)
+    except (ValueError, UnicodeError) as exc:
+        raise Refusal('invalid-json') from exc
+
+def identity(meta):
+    return (meta.st_dev, meta.st_ino)
+
+def read_bounded(path, maximum=DOCUMENT_LIMIT):
+    fd, _ = directory(path.parent)
+    opened = None
+    try:
+        opened = os.open(path.name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, dir_fd=fd)
+        before = os.fstat(opened)
+        if not stat.S_ISREG(before.st_mode) or before.st_size > maximum:
+            raise Refusal('bounded-file-shape:' + str(path))
+        chunks = []
+        remaining = before.st_size + 1
+        while remaining:
+            raw = os.read(opened, min(remaining, 1 << 20))
+            if not raw:
+                break
+            chunks.append(raw)
+            remaining -= len(raw)
+        raw = b''.join(chunks)
+        after = os.fstat(opened)
+        fields = ('st_dev', 'st_ino', 'st_mode', 'st_size', 'st_nlink', 'st_uid',
+                  'st_gid', 'st_mtime_ns', 'st_ctime_ns')
+        if (any(getattr(before, k) != getattr(after, k) for k in fields) or
+                len(raw) != before.st_size or identity(before) != identity(
+                    os.stat(path.name, dir_fd=fd, follow_symlinks=False))):
+            raise Refusal('bounded-file-raced:' + str(path))
+        return raw
+    finally:
+        if opened is not None:
+            os.close(opened)
+        os.close(fd)
+
+def observe_identity(path):
+    parent, _ = directory(path.parent)
+    fd = None
+    try:
+        fd = os.open(path.name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, dir_fd=parent)
+        meta = os.fstat(fd)
+        if not (stat.S_ISREG(meta.st_mode) or stat.S_ISDIR(meta.st_mode)):
+            raise Refusal('identity-type:' + str(path))
+        row = {'path': str(path), 'device': meta.st_dev, 'inode': meta.st_ino,
+               'mode': oct(stat.S_IMODE(meta.st_mode)), 'uid': meta.st_uid,
+               'gid': meta.st_gid, 'size': meta.st_size, 'nlink': meta.st_nlink}
+        if stat.S_ISREG(meta.st_mode):
+            if meta.st_size > PROTECTED_LIMIT:
+                raise Refusal('protected-file-size-bound:' + str(path))
+            hashed = hashlib.sha256()
+            remaining = meta.st_size + 1
+            observed = 0
+            while remaining:
+                raw = os.read(fd, min(remaining, 1 << 20))
+                if not raw:
+                    break
+                observed += len(raw)
+                remaining -= len(raw)
+                hashed.update(raw)
+            if observed != meta.st_size:
+                raise Refusal('protected-file-size-raced:' + str(path))
+            row['sha256'] = hashed.hexdigest()
+        after = os.fstat(fd)
+        fields = ('st_dev', 'st_ino', 'st_mode', 'st_size', 'st_nlink', 'st_uid',
+                  'st_gid', 'st_mtime_ns', 'st_ctime_ns')
+        if (any(getattr(meta, key) != getattr(after, key) for key in fields) or
+                identity(after) != identity(os.stat(path.name, dir_fd=parent, follow_symlinks=False))):
+            raise Refusal('identity-raced')
+        return row
+    finally:
+        if fd is not None:
+            os.close(fd)
+        os.close(parent)
+
+def read_at_path(path, expected):
+    row = observe_identity(path)
+    if (row['device'] != DEVICE or row['mode'] != '0o600' or row['uid'] != UID or
+            row['gid'] != GID or row['nlink'] != 1 or row['size'] != len(expected) or
+            row.get('sha256') != digest(expected)):
+        raise Refusal('retained-capture-bytes')
+
+def create_at(parent, name, data, on_created=None):
+    fd = os.open(name, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW,
+                 0o600, dir_fd=parent)
+    try:
+        if on_created is not None:
+            on_created()
+        os.fchown(fd, UID, GID)
+        write_all(fd, data)
+        os.fsync(fd)
+    finally:
+        os.close(fd)
+    os.fsync(parent)
+
+def validate_mount():
+    raw = subprocess.check_output(['/usr/bin/findmnt', '-J', '-T', str(ROOT), '-o',
+                                   'TARGET,SOURCE,FSTYPE,OPTIONS,UUID,MAJ:MIN'], timeout=10)
+    mounts = parse(raw)['filesystems']
+    if len(mounts) != 1 or mounts[0] != RELEASE['observation']['mount']:
+        raise Refusal('mount-drift')
+    root = observe_identity(ROOT)
+    expected = RELEASE['observation']['root']
+    for key in ('path', 'device', 'inode', 'mode', 'uid', 'gid'):
+        if root[key] != expected[key]:
+            raise Refusal('root-identity-drift')
+
+def validate_attempt_binding(target, request_identity):
+    if (canonical({key: target.get(key) for key in KNOWN_TARGET}) != canonical(KNOWN_TARGET) or
+            request_identity.get('path') != str(REQUEST) or request_identity.get('sha256') != REQUEST_SHA or
+            not re.fullmatch('mckernel-image-[0-9a-f]{32}', str(target.get('container_name', ''))) or
+            not re.fullmatch('[0-9a-f]{32}', str(target.get('owner_nonce', '')))):
+        raise Refusal('exact-authority3-attempt-binding')
+
+def image_request_binding(request):
+    fixed = {'work_root': OUTPUT, 'owner_evidence_root': EVIDENCE,
+             'output_root': OUTPUT / 'output', 'evidence_root': OUTPUT / 'evidence',
+             'attempt_root': EVIDENCE / 'attempt', 'lease_path': LEASE,
+             'common_exclusion_path': ATTEMPT}
+    if (request.get('schema') != 'mckernel.native-exact-mckernel-image-container-request.v1' or
+            request.get('candidate_sha') != IMAGE_CANDIDATE or
+            any(request.get(key) != str(path) for key, path in fixed.items())):
+        raise Refusal('image-request-namespace')
+    for key in ('source_root', 'backup_root'):
+        path = Path(request[key])
+        if path != (Path(CURRENT_TYPED_REQUEST['source_root']) if key == 'source_root' else ROOT / 'mckernel-exact-candidate-scratch-22-authority3-metadata-backup') or '..' in path.parts or path in (OUTPUT, EVIDENCE):
+            raise Refusal('image-input-root-binding')
+    return Path(request['source_root'])
+
+def image_record_binding(path, row, owner, request, target, boot):
+    common = path == ATTEMPT
+    expected = {'schema': 'mckernel.native-exact-operational-exclusion.v1' if common else
+                'mckernel.heavy-operation.v1', 'pid': target['owner_pid'],
+                'starttime': target['owner_starttime'], 'boot_id': boot,
+                'request_sha256': digest(json.dumps(request, sort_keys=True).encode()) if common else
+                digest(canonical(request)), 'dev' if common else 'device': row['device'],
+                'inode': row['inode']}
+    if not common:
+        expected['kind'] = 'image'
+    if path not in (ATTEMPT, SHARED) or canonical(owner) != canonical(expected):
+        raise Refusal('image-exclusion-owner-binding')
+
+def image_layout(request):
+    import ast
+    ref = SOURCE_REFS['image_owner']
+    source = read_bounded(Path(ref['path']), maximum=PROTECTED_LIMIT)
+    if digest(source) != ref['sha256']: raise Refusal('current-image-owner-source')
+    nodes = list(ast.walk(ast.parse(source.decode())))
+    command = next(n for n in nodes if isinstance(n,ast.Assign) and isinstance(n.targets[0],ast.Name) and n.targets[0].id=='command' and isinstance(n.value,ast.List) and n.value.elts and isinstance(n.value.elts[0],ast.Constant) and n.value.elts[0].value=='/driver.py')
+    mounts = next(n for n in nodes if isinstance(n,ast.Assign) and isinstance(n.targets[0],ast.Name) and n.targets[0].id=='mounts' and isinstance(n.value,ast.List) and command.lineno-40<n.lineno<command.lineno)
+    gm = next(n for n in nodes if isinstance(n,ast.If) and n.lineno==mounts.end_lineno+1)
+    gc = next(n for n in nodes if isinstance(n,ast.If) and n.lineno==command.end_lineno+1)
+    # Include the current opt-in conditional immediately following gitlink args.
+    opt = next(n for n in nodes if isinstance(n,ast.If) and n.lineno==gc.end_lineno+1)
+    bound={k:Path(request[v]) for k,v in [('source','source_root'),('manifest','source_manifest'),('toolchain','toolchain_manifest'),('driver','driver_path'),('provenance','provenance_path'),('output','output_root')]}
+    bound.update(work=Path(request['work_root']),gitlink_manifest=Path(request['gitlink_manifest']),gitlink_root=Path(request['gitlink_root']))
+    scope=dict(r=request,bound=bound,evidence=Path(request['evidence_root']))
+    tree=ast.fix_missing_locations(ast.Module(body=[mounts,gm,command,gc,opt],type_ignores=[]))
+    exec(compile(tree,'<pinned current producer literal layout>','exec'),scope)
+    pairs=[(dst,str(src),'bind',not readonly) for src,dst,readonly in scope['mounts']]
+    pairs.extend((row['container_path'],row['host_path'],'bind',False) for row in request['toolchain_roots'])
+    if scope['command'].count('--native-fork-owned-transaction') != 1: raise Refusal('current-image-opt-in-layout')
+    return scope['command'],sorted(pairs)
+
+
+def image_owner_receipt_binding(receipt, item, receipt_sha):
+    """Positive owner evidence alone never authorizes cleanup."""
+    import importlib.util
+    path = REPO / 'scripts/native_exact_scratch22_authority1_quarantine_recovery.py'
+    spec = importlib.util.spec_from_file_location('image_receipt_mount_core', path)
+    core = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(core)
+    if (receipt.get('schema') != 'mckernel.native-exact-mckernel-image-container-receipt.v1' or
+            receipt.get('status') not in ('PASS', 'FAIL') or receipt.get('retired') is not True or
+            receipt.get('terminal_container_retained') is not True or
+            receipt.get('cleanup_separately_required') is not True or
+            receipt.get('client_retirement_unproven', False) or
+            receipt.get('candidate_sha') != IMAGE_CANDIDATE):
+        raise Refusal('image-positive-owner-retirement')
+    try:
+        if core.inspect_comparison(receipt.get('terminal_container_info')) != core.inspect_comparison(item):
+            raise Refusal('image-positive-owner-terminal-inspect')
+    except core.Refusal as exc:
+        raise Refusal('image-positive-owner-terminal-inspect') from exc
+
+
+def image_receipt_binding(receipt, guard, target, item, receipt_sha):
+    image_owner_receipt_binding(receipt, item, receipt_sha)
+    if (canonical(receipt.get('exit_code')) != canonical(target['exit_code']) or
+            (receipt.get('status') == 'PASS' and target['exit_code'] != 0) or
+            any(receipt.get(key) != target[key] for key in ('container_id', 'container_name', 'owner_nonce')) or
+            canonical(guard) != canonical({'owner_status': receipt['status'], 'owner_receipt_sha256': receipt_sha,
+                      'container_id': target['container_id'], 'retired': True,
+                      'retained_for_separate_cleanup': True, 'interrupted_signal': None})):
+        raise Refusal('image-positive-owner-and-guard-retirement')
+
+
+def recovery_proof_binding(binding, obs):
+    import importlib.util
+    path = REPO / 'scripts/native_exact_scratch22_image_retirement_reconcile.py'
+    spec = importlib.util.spec_from_file_location('cleanup_image_reconciliation', path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    try:
+        module.validate_proof(binding, obs)
+    except module.Refusal as exc:
+        raise Refusal('image-reconciliation-proof: ' + str(exc)) from exc
+
+def typed_source_binding(request,obs,selected_map):
+    expected = CURRENT_TYPED_REQUEST
+    if any(request.get(k)!=v for k,v in expected.items()): raise Refusal('current-typed-source-request')
+    for name,ref in SOURCE_REFS.items():
+        row=selected_map.get(ref['path'])
+        if row is None or row.get('sha256')!=ref['sha256'] or digest(read_bounded(Path(ref['path']),maximum=PROTECTED_LIMIT))!=ref['sha256']: raise Refusal('current-selected-source:'+name)
+    receipt=parse(read_bounded(Path(SOURCE_REFS['materialization']['path'])))
+    if receipt.get('status')!='PASS_SOURCE_MATERIALIZATION_ONLY' or receipt.get('source')!=request['source_root'] or any(receipt.get(k)!=request[k] for k in ('source_derivative_sha256','materialization_sha256')): raise Refusal('current-materialization-authority')
+    if obs['candidate_root']['inode']!=request['source_identity']['inode']: raise Refusal('current-source-root-identity')
+
+
+
+def configure(value, execute=False):
+    """Future release only. No runtime identity is inherited from scratch21."""
+    global RELEASE, DEVICE, BOOT_ID, ROOT_LOCK_BINDING, EXPECTED_CONTAINER, EXPECTED_EXIT
+    global CONTAINER, CONTAINER_NAME, OWNER_NONCE, OWNER_PID, OWNER_START
+    global RECORDS, PROTECTED, DIRS, TERMINAL_SHA, TERMINAL_INODE, TERMINAL_SIZE
+    global CANDIDATE, ROOT_TERMINAL, WAITER_PIDS
+    RELEASE = None
+    if (not isinstance(value, dict) or value.get('schema') != 'fp-save-image.cleanup-release.v1' or
+            value.get('status') != 'PASS_EXECUTION_RELEASE' or
+            value.get('baseline_source_sha256') != BASELINE_SOURCE_SHA or
+            value.get('script_sha256') != digest(read_bounded(Path(__file__).resolve())) or
+            value.get('tests_sha256') != digest(read_bounded(
+                SELFTEST)) or
+            value.get('publisher_contract') != PUBLISHER_CONTRACT):
+        raise Refusal('cleanup-not-released')
+    for key in ('source_review', 'execution_review'):
+        review = value.get(key) or {}
+        if (review.get('status') != 'PASS' or not review.get('reviewer') or
+                review.get('reviewer') == value.get('author') or not review.get('evidence_sha256')):
+            raise Refusal('independent-review-required:' + key)
+    if (not value.get('author') or value.get('fetched_source_verified') is not True or
+            not value.get('git_commit') or not value.get('git_tree')):
+        raise Refusal('source-git-binding-required')
+    commit, tree = value['git_commit'], value['git_tree']
+    if any(not isinstance(item, str) or len(item) != 40 or
+           any(char not in '0123456789abcdef' for char in item) for item in (commit, tree)):
+        raise Refusal('source-git-shape')
+    if subprocess.check_output(['/usr/bin/git', '-C', str(REPO), 'rev-parse', commit + '^{tree}'],
+                               timeout=10).decode().strip() != tree:
+        raise Refusal('source-git-tree-binding')
+    for relative, expected in ((PUBLISHED_SCRIPT, value['script_sha256']),
+                               (PUBLISHED_TESTS, value['tests_sha256'])):
+        if digest(subprocess.check_output(['/usr/bin/git', '-C', str(REPO), 'show', commit + ':' + relative],
+                                           timeout=10)) != expected:
+            raise Refusal('source-git-blob-binding')
+    obs = value.get('observation') or {}
+    required = {'mount', 'root', 'boot_id', 'root_lock', 'request', 'target', 'container_inspect',
+                'retained_exclusions', 'request_lease_absent', 'inventories', 'candidate_root',
+                'candidate_commit', 'candidate_tree', 'selected_files', 'backup_root', 'namespace_binding', 'namespace_ancestry', 'client_ledger'}
+    proof_keys = set(obs) & {'guard_proof', 'recovery_proof'}
+    if len(proof_keys) != 1:
+        raise Refusal('exactly-one-positive-retirement-proof-required')
+    proof_key = next(iter(proof_keys))
+    required.add(proof_key)
+    if set(obs) != required or obs.get('request_lease_absent') is not True:
+        raise Refusal('future-runtime-observation-required')
+    mount = obs['mount']
+    if (mount.get('target') != str(ROOT) or mount.get('uuid') != UUID or
+            mount.get('fstype') != 'ext4' or obs['boot_id'] != '7bfc5687-6c04-4d15-84eb-b92ab9a55dcb' or
+            not {'rw', 'nodev', 'nosuid'} <= set(mount.get('options', '').split(','))):
+        raise Refusal('fresh-mount-binding')
+    device = obs['root'].get('device')
+    if type(device) is not int or device <= 0 or obs['root'].get('path') != str(ROOT):
+        raise Refusal('fresh-root-binding')
+    if obs['namespace_binding'] != NAMESPACE_BINDING or obs['namespace_ancestry'] != NAMESPACE_ANCESTRY or namespace_ancestry() != NAMESPACE_ANCESTRY:
+        raise Refusal('exact-namespace-binding')
+    client_rows = obs['client_ledger']
+    if not isinstance(client_rows, list) or not client_rows or any(set(r) != {'pid', 'status_path', 'status_sha256'} or type(r['pid']) is not int or r['pid'] <= 0 for r in client_rows):
+        raise Refusal('positive-client-ledger-required')
+    guard_capture = ROOT / 'native-rust-phase5-current-optin-image-guard-c8d19a0e07d8465ba1ac61f096e3f82c'
+    if {r['status_path'] for r in client_rows} != {str(p) for p in guard_capture.glob('command-*/status.json')} or any(Path(r['status_path']).parent.parent != guard_capture for r in client_rows):
+        raise Refusal('complete-current-guard-client-ledger-required')
+    for row in client_rows:
+        status = parse(read_bounded(Path(row['status_path'])))
+        if digest(read_bounded(Path(row['status_path']))) != row['status_sha256'] or status.get('pid') != row['pid'] or status.get('state') != 'exited' or type(status.get('exit_code')) is not int or status['exit_code'] < 0 or status.get('client_retirement_unproven'):
+            raise Refusal('positive-client-status-required')
+    WAITER_PIDS = tuple(r['pid'] for r in client_rows)
+    if len(set(WAITER_PIDS)) != len(WAITER_PIDS):
+        raise Refusal('duplicate-client-pid')
+    target, item = obs['target'], obs['container_inspect']
+    keys = {'container_id', 'container_name', 'owner_nonce', 'image_id', 'owner_pid', 'owner_starttime', 'exit_code'}
+    if (set(target) != keys or type(target['owner_pid']) is not int or target['owner_pid'] <= 0 or
+            not isinstance(target['owner_starttime'], str) or not target['owner_starttime'].isdigit() or
+            type(target['exit_code']) is not int or not 0 <= target['exit_code'] <= 255 or
+            not isinstance(target['container_id'], str) or len(target['container_id']) != 64 or
+            any(char not in '0123456789abcdef' for char in target['container_id']) or
+            not target['container_name'] or not target['owner_nonce']):
+        raise Refusal('future-owner-binding')
+    validate_attempt_binding(target, obs['request'])
+    state = item.get('State', {})
+    wanted_state = {'Status': 'exited', 'Running': False, 'Paused': False, 'Restarting': False,
+                    'OOMKilled': False, 'Dead': False, 'Pid': 0, 'ExitCode': target['exit_code'], 'Error': ''}
+    if (any(canonical(state.get(key)) != canonical(wanted) for key, wanted in wanted_state.items()) or
+            item.get('Id') != target['container_id'] or item.get('Name') != '/' + target['container_name'] or
+            item.get('Image') != target['image_id'] or
+            item.get('Config', {}).get('Labels', {}).get('mckernel.owner') != target['owner_nonce']):
+        raise Refusal('exact-terminal-container-binding')
+    lock = obs['root_lock']
+    if (lock.get('path') != str(ROOT_LOCK) or lock.get('uid') != 0 or lock.get('gid') != 0 or
+            lock.get('mode') != '0o644' or lock.get('nlink') != 1 or lock.get('size') != 0 or
+            lock.get('sha256') != digest(b'') or type(lock.get('device')) is not int or
+            type(lock.get('inode')) is not int or (lock['device'], lock['inode']) != (27, 4)):
+        raise Refusal('fresh-root-lock-binding')
+    if observe_identity(REQUEST) != obs['request']:
+        raise Refusal('exact-request-binding')
+    request = parse(read_bounded(REQUEST))
+    CANDIDATE = image_request_binding(request)
+    if request.get('candidate_sha') != obs['candidate_commit'] or request.get('image_id') != target['image_id']:
+        raise Refusal('request-candidate-image-binding')
+    config, host = item.get('Config', {}), item.get('HostConfig', {})
+    profile = {'CpusetCpus': '2-5', 'NanoCpus': 4000000000, 'Memory': 12884901888,
+               'MemorySwap': 12884901888, 'PidsLimit': 512, 'NetworkMode': 'none',
+               'IpcMode': 'private', 'ReadonlyRootfs': True, 'Privileged': False,
+               'CapDrop': ['ALL'], 'Init': True, 'SecurityOpt': ['no-new-privileges'],
+               'Tmpfs': {'/tmp': 'rw,nodev,nosuid,size=256m'},
+               'RestartPolicy': {'MaximumRetryCount': 0, 'Name': 'no'}, 'AutoRemove': False}
+    expected_args, expected_mounts = image_layout(request)
+    if (any(canonical(host.get(key)) != canonical(wanted) for key, wanted in profile.items()) or
+            config.get('User') != '1000:1000' or config.get('Entrypoint') != ['/usr/bin/python3'] or
+            config.get('Cmd') != expected_args or item.get('Args') != expected_args or
+            item.get('Path') != '/usr/bin/python3' or config.get('Image') != target['image_id']):
+        raise Refusal('reviewed-container-profile')
+    if sorted((m.get('Destination'), m.get('Source'), m.get('Type'), m.get('RW'))
+              for m in item.get('Mounts', []) if m.get('Type') == 'bind') != expected_mounts:
+        raise Refusal('exact-image-mounts')
+    extra_mounts = [m for m in item.get('Mounts', []) if m.get('Type') != 'bind']
+    if extra_mounts and (len(extra_mounts) != 1 or extra_mounts[0].get('Type') != 'tmpfs' or
+                         extra_mounts[0].get('Destination') != '/tmp' or extra_mounts[0].get('RW') is not True):
+        raise Refusal('unexpected-image-mount')
+    records = obs['retained_exclusions']
+    if len(records) != 2 or {r['path'] for r in records} != {str(ATTEMPT), str(SHARED)}:
+        raise Refusal('exact-exclusions-required')
+    for row in records:
+        if (row.get('device') != (NAMESPACE_BINDING['device'] if Path(row['path']) == ATTEMPT else device) or row.get('uid') != UID or row.get('gid') != GID or
+                row.get('mode') != '0o600' or row.get('nlink') != 1 or
+                type(row.get('inode')) is not int or row['inode'] <= 0 or
+                observe_identity(Path(row['path'])) != row):
+            raise Refusal('future-exclusion-binding')
+        owner = parse(read_bounded(Path(row['path'])))
+        image_record_binding(Path(row['path']), row, owner, request, target, obs['boot_id'])
+    selected = obs['selected_files']
+    selected_map = {r['path']: r for r in selected}
+    if len(selected_map) != len(selected):
+        raise Refusal('duplicate-selected-file')
+    ROOT_TERMINAL = Path(obs[proof_key]['path'])
+    if proof_key == 'guard_proof' and (ROOT_TERMINAL.name != 'guard-result.json' or ROOT_TERMINAL.parent.parent != ROOT or
+            ROOT_TERMINAL.parent.name != 'native-rust-phase5-current-optin-image-guard-c8d19a0e07d8465ba1ac61f096e3f82c'):
+        raise Refusal('image-guard-proof-path')
+    joins = {'driver_path': 'driver_sha256', 'provenance_path': 'provenance_sha256',
+             'host_owner_path': 'host_owner_sha256', 'source_manifest': 'source_manifest_sha256',
+             'toolchain_manifest': 'toolchain_manifest_sha256'}
+    if request.get('gitlink_manifest') is not None:
+        joins['gitlink_manifest'] = 'gitlink_manifest_sha256'
+    needed = {str(REQUEST), str(TERMINAL), str(ROOT_TERMINAL), str(EVIDENCE / 'attempt/container.log')}
+    if not precompiler_absence(target):
+        needed.add(str(OUTPUT / 'evidence/receipt.json'))
+    if target['exit_code'] == 0:
+        needed.update(str(OUTPUT / relative) for relative in
+                      ('output/build/kernel/mckernel.img', 'evidence/artifacts/mckernel.img'))
+    needed.update(request[key] for key in joins)
+    needed.update(row['status_path'] for row in client_rows)
+    if not needed <= set(selected_map):
+        raise Refusal('complete-receipt-and-source-joins-required')
+    for key, hash_key in joins.items():
+        if selected_map[request[key]].get('sha256') != request[hash_key]:
+            raise Refusal('request-source-hash-binding')
+    if selected_map[str(ROOT_TERMINAL)] != obs[proof_key]:
+        raise Refusal('exact-image-guard-proof-binding')
+    if proof_key == 'guard_proof':
+        image_receipt_binding(parse(read_bounded(TERMINAL)), parse(read_bounded(ROOT_TERMINAL)),
+                              target, item, selected_map[str(TERMINAL)]['sha256'])
+    else:
+        recovery_proof_binding(obs[proof_key], obs)
+    if target['exit_code'] == 0 and not any(r.get('sha256') and
+                                            str(r['path']).startswith(str(OUTPUT) + '/')
+                                            for r in selected):
+        raise Refusal('successful-output-artifact-required')
+    if set(obs['inventories']) != {str(OUTPUT), str(EVIDENCE)}:
+        raise Refusal('complete-inventories-required')
+    if obs['candidate_root'].get('path') != str(CANDIDATE):
+        raise Refusal('candidate-root-required')
+    for key, row in (('source_identity', obs['candidate_root']), ('backup_identity', obs['backup_root'])):
+        expected = request[key]
+        if any(canonical(expected.get(k)) != canonical(v) for k, v in {
+                'path': row['path'], 'dev': row['device'], 'inode': row['inode'],
+                'uid': row['uid'], 'gid': row['gid'], 'mode': int(row['mode'], 8),
+                'file_type': stat.S_IFDIR}.items()):
+            raise Refusal('image-source-or-backup-identity')
+    if obs['backup_root']['path'] != request['backup_root']:
+        raise Refusal('image-backup-path')
+    typed_source_binding(request, obs, selected_map)
+    for path in (OUTPUT, EVIDENCE):
+        if obs['inventories'][str(path)][0]['path'] != str(path):
+            raise Refusal('inventory-root-binding')
+    if value.get('transaction_paths') != transaction_paths():
+        raise Refusal('transaction-path-binding')
+    RELEASE, DEVICE, BOOT_ID = value, device, obs['boot_id']
+    ROOT_LOCK_BINDING, EXPECTED_CONTAINER, EXPECTED_EXIT = lock, item, target['exit_code']
+    CONTAINER, CONTAINER_NAME, OWNER_NONCE = target['container_id'], target['container_name'], target['owner_nonce']
+    OWNER_PID, OWNER_START = target['owner_pid'], target['owner_starttime']
+    RECORDS = {Path(r['path']): (r['sha256'], r['inode'], r['size']) for r in records}
+    PROTECTED = selected
+    terminal = selected_map[str(TERMINAL)]
+    TERMINAL_SHA, TERMINAL_INODE, TERMINAL_SIZE = terminal['sha256'], terminal['inode'], terminal['size']
+    DIRS = {path: (obs['inventories'][str(path)][0]['device'],
+                   obs['inventories'][str(path)][0]['inode'],
+                   obs['inventories'][str(path)][0]['nlink']) for path in (OUTPUT, EVIDENCE)}
+    validate_mount()
+    protected_files()
+
+def path_device(path):
+    # Only the two frozen parents are supported. Never infer authority from a
+    # newly opened object's device or widen this to an arbitrary caller path.
+    if path in (ATTEMPT, OUTPUT, EVIDENCE, TERMINAL) or path in archive_paths()[:1]:
+        return NAMESPACE_BINDING['device']
+    if path in (SHARED, MUTEX, PLAN, JOURNAL, CAPTURE, QUARANTINE) or path in archive_paths()[1:]:
+        return DEVICE
+    raise Refusal('unmapped-fixed-device')
+
+def archive_paths():
+    # renameat2 exchange requires both names on the same filesystem. Each
+    # ownership record retains its archive beside its exact original parent.
+    return tuple(path.parent / name for path, name in zip((ATTEMPT, SHARED), ARCHIVE_NAMES))
+
+def transaction_paths():
+    return [str(path) for path in (MUTEX, PLAN, JOURNAL, CAPTURE, QUARANTINE)] + [
+        str(path) for path in archive_paths()]
+
+def prepare_release(observation, git_commit, git_tree):
+    """Bind only a supplied future runtime observation; always emit an unreleased draft."""
+    return {'schema': 'fp-save-image.cleanup-release.v1', 'status': 'NOT_RELEASED',
+            'author': '/root/debugreg_pair_terminal_prepare_1920', 'script_sha256': digest(read_bounded(Path(__file__).resolve())),
+            'tests_sha256': digest(read_bounded(SELFTEST)),
+            'baseline_source_sha256': BASELINE_SOURCE_SHA, 'git_commit': git_commit, 'git_tree': git_tree,
+            'fetched_source_verified': False, 'source_review': None, 'execution_review': None,
+            'publisher_contract': PUBLISHER_CONTRACT, 'observation': observation,
+            'transaction_paths': transaction_paths()}
+
+def quarantine_wait():
+    """Nonreturning hold. Signal deferral starts before transaction acquisition."""
+    while True:
+        try:
+            time.sleep(60)
+        except BaseException:
+            # Diagnostics, handlers and interrupted waits cannot surrender ownership.
+            # SIGKILL is intentionally outside this contract; sentinels survive it.
+            pass
+
+def terminal_result(status, plan):
+    return {'schema': 'fp-save-image.cleanup-result.v1', 'status': status, 'terminal': True,
+            'container_absent': True, 'container_id': CONTAINER, 'filesystem_uuid': UUID,
+            'boot_id': BOOT_ID, 'release_sha256': digest(canonical(RELEASE)),
+            'plan_sha256': digest(canonical(plan)),
+            'plan': observe_identity(PLAN), 'journal': observe_identity(JOURNAL),
+            'capture': observe_identity(CAPTURE),
+            'archives': [observe_identity(path) for path in archive_paths()],
+            'publisher_contract': PUBLISHER_CONTRACT}
+
+def directory(path):
+    if not path.is_absolute() or '..' in path.parts:
+        raise Refusal('noncanonical-directory')
+    fd = os.open('/', os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+    chain = [identity(os.fstat(fd))]
+    try:
+        for part in path.parts[1:]:
+            nxt = os.open(part, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=fd)
+            os.close(fd)
+            fd = nxt
+            chain.append(identity(os.fstat(fd)))
+        return fd, chain
+    except BaseException:
+        os.close(fd)
+        raise
+
+def exists(fd, name):
+    try:
+        os.stat(name, dir_fd=fd, follow_symlinks=False)
+        return True
+    except FileNotFoundError:
+        return False
+
+def read_at(fd, name, binding=None, *, expected_device=None):
+    expected_device = DEVICE if expected_device is None else expected_device
+    if type(expected_device) is not int or expected_device <= 0:
+        raise Refusal('unbound-file-device')
+    opened = os.open(name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, dir_fd=fd)
+    try:
+        before = os.fstat(opened)
+        if (not stat.S_ISREG(before.st_mode) or before.st_nlink != 1 or
+            before.st_dev != expected_device or before.st_size > LIMIT or
+            stat.S_IMODE(before.st_mode) != 0o600 or
+            (before.st_uid, before.st_gid) != (UID, GID)):
+            raise Refusal('file-shape:' + name)
+        data = bytearray()
+        while len(data) <= before.st_size:
+            chunk = os.read(opened, min(65536, before.st_size + 1 - len(data)))
+            if not chunk:
+                break
+            data.extend(chunk)
+        after = os.fstat(opened)
+        fields = ('st_dev', 'st_ino', 'st_mode', 'st_nlink', 'st_uid', 'st_gid',
+                  'st_size', 'st_mtime_ns', 'st_ctime_ns')
+        if (any(getattr(before, k) != getattr(after, k) for k in fields) or
+            len(data) != before.st_size or
+            identity(os.stat(name, dir_fd=fd, follow_symlinks=False)) != identity(before)):
+            raise Refusal('file-raced:' + name)
+        if binding is not None and (digest(data), before.st_ino, before.st_size) != binding:
+            raise Refusal('file-binding:' + name)
+        return bytes(data), before
+    finally:
+        os.close(opened)
+
+def write_all(fd, data):
+    while data:
+        count = os.write(fd, data)
+        if count <= 0:
+            raise Refusal('write-no-progress')
+        data = data[count:]
+
+def rename_exchange(fd, source, destination, destination_fd=None):
+    destination_fd = fd if destination_fd is None else destination_fd
+    """Atomically leave a directory sentinel at the active ownership name."""
+    libc = ctypes.CDLL(None, use_errno=True)
+    rename = getattr(libc, 'renameat2', None)
+    if rename is None:
+        raise Refusal('renameat2-unavailable')
+    rename.argtypes = [ctypes.c_int, ctypes.c_char_p, ctypes.c_int, ctypes.c_char_p, ctypes.c_uint]
+    rename.restype = ctypes.c_int
+    if rename(fd, os.fsencode(source), destination_fd, os.fsencode(destination), 2):
+        error = ctypes.get_errno()
+        raise OSError(error, os.strerror(error))
+
+# Executed only by root's absolute Python, isolated from caller modules/env.
+# Every listed stat must read/parse; disappearing processes cause a retryable
+# refusal. Two full snapshots and unchanged boot identity authenticate scope.
+PROC_CODE = r'''
+import json,os,sys
+caller=[int(sys.argv[2]),sys.argv[3]]
+caller_parent=int(open('/proc/'+str(caller[0])+'/stat','rb').read().rpartition(b') ')[2].split()[1])
+heavy={'qemu-system-x86_64','qemu-system-aarch64','qemu-kvm','mcexec','firecracker',
+       'rustc','cargo','make','ninja','buildah','gcc','g++','cc','clang','clang++'}
+def publisher(exe,argv):
+    name=os.path.basename(exe[:-10] if exe.endswith(' (deleted)') else exe)
+    if name in heavy or name.startswith('qemu-system-'): return True
+    if name in ('docker','podman') and any(a in ('build','run','start') for a in argv[1:]): return True
+    for arg in argv:
+        base=os.path.basename(arg)
+        if (base.startswith(('native_rust_exact_','native-exact-','native_exact_')) and
+            base.endswith(('.py','.sh')) and any(term in base for term in ('build','cleanup','recovery','prepare'))): return True
+    return False
+def snapshot():
+    rows=[]; publishers=[]; found=False
+    entries=os.listdir('/proc')
+    if len(entries)>4096: raise ValueError('process-count')
+    for name in entries:
+        if not name.isdigit(): continue
+        pid=int(name)
+        with open('/proc/'+name+'/stat','rb') as f: raw=f.read(65537)
+        if len(raw)>65536: raise ValueError('stat-size')
+        left,sep,right=raw.rpartition(b') ')
+        if not sep or not left.startswith(str(pid).encode()+b' ('): raise ValueError('stat-prefix')
+        fields=right.split()
+        if len(fields)<50 or fields[0] not in (b'R',b'S',b'D',b'Z',b'T',b't',b'X',b'x',b'K',b'W',b'P',b'I'): raise ValueError('stat-fields')
+        for field in fields[1:]:
+            digits=field[1:] if field.startswith(b'-') else field
+            if not digits or any(c<48 or c>57 for c in digits): raise ValueError('stat-number')
+        ppid=int(fields[1]); start=int(fields[19])
+        if ppid<0 or start<0: raise ValueError('stat-number')
+        with open('/proc/'+name+'/cmdline','rb') as f: command=f.read(65537)
+        if len(command)>65536 or (command and not command.endswith(b'\0')): raise ValueError('cmdline-size-or-termination')
+        argv=[a.decode('utf-8','strict') for a in command[:-1].split(b'\0')] if command else []
+        if len(argv)>256 or any(len(a)>16384 for a in argv): raise ValueError('cmdline-arguments')
+        if not argv and fields[0] not in (b'Z',b'X',b'x') and not (int(fields[6]) & 0x200000): raise ValueError('live-cmdline-empty')
+        exe=os.readlink('/proc/'+name+'/exe') if argv else ''
+        with open('/proc/'+name+'/stat','rb') as f: again=f.read(65537)
+        check=again.rpartition(b') ')[2].split()
+        if len(check)<50 or check[19]!=fields[19]: raise ValueError('process-raced')
+        if pid==caller[0]:
+            if str(start)!=caller[1]: raise ValueError('caller-raced')
+            found=True
+        elif argv and not (pid==caller_parent and os.path.basename(exe)=='sudo') and publisher(exe,argv): publishers.append([pid,str(start),exe])
+        rows.append([pid,ppid,str(start)])
+    if not found: raise ValueError('caller-missing')
+    return sorted(rows),publishers
+if os.geteuid()!=0: raise ValueError('not-root')
+with open('/proc/sys/kernel/random/boot_id') as f: boot=f.read().strip()
+first,pubs1=snapshot(); second,pubs2=snapshot()
+with open('/proc/sys/kernel/random/boot_id') as f: after=f.read().strip()
+if boot!=after: raise ValueError('boot-raced')
+print(json.dumps({'schema':'fp-save-image.proc.v1','uid':os.geteuid(),'boot_id':boot,
+                  'challenge':sys.argv[1],'caller':caller,'publishers':pubs1+pubs2,'snapshots':[first,second]}))
+'''
+
+def run_privileged(args):
+    return root_command(args, LIMIT)
+
+def run_privileged_large(args):
+    return root_command(args, PROTECTED_LIMIT)
+
+def root_command(args, limit):
+    if os.geteuid() != 0:
+        raise Refusal('root-execution-required-use-sudo-A')
+    result = subprocess.run(args, env={'PATH': '/usr/bin:/bin', 'LANG': 'C', 'LC_ALL': 'C'},
+                            stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE, timeout=30, check=False)
+    if result.returncode or result.stderr or len(result.stdout) > limit:
+        raise Refusal('root-command-failed:' + args[0])
+    return result.stdout
+
+def validate_process_report(report, challenge, caller):
+    if (not isinstance(report, dict) or set(report) != {'schema','uid','boot_id','challenge','caller','publishers','snapshots'} or
+        report['schema'] != 'fp-save-image.proc.v1' or type(report['uid']) is not int or report['uid'] != 0 or
+        report['boot_id'] != BOOT_ID or report['challenge'] != challenge or report['caller'] != caller or
+        not isinstance(report['snapshots'], list) or len(report['snapshots']) != 2):
+        raise Refusal('process-report-binding')
+    if report['publishers'] != []:
+        raise Refusal('concurrent-build-or-cleanup-publisher')
+    combined = {}
+    for snapshot in report['snapshots']:
+        if not isinstance(snapshot, list) or not snapshot:
+            raise Refusal('process-snapshot-shape')
+        seen = set()
+        for row in snapshot:
+            if (not isinstance(row, list) or len(row) != 3 or type(row[0]) is not int or row[0] <= 0 or
+                type(row[1]) is not int or row[1] < 0 or not isinstance(row[2], str) or
+                not row[2].isdigit() or row[0] in seen):
+                raise Refusal('process-row-shape')
+            seen.add(row[0])
+            if row[0] == caller[0] and row[2] != caller[1]:
+                raise Refusal('process-caller-binding')
+            combined.setdefault(row[0], set()).add(row[1])
+        if 1 not in seen or caller[0] not in seen:
+            raise Refusal('process-snapshot-incomplete')
+    related = {OWNER_PID, *WAITER_PIDS}
+    while True:
+        expanded = related | {pid for pid, parents in combined.items() if parents & related}
+        if expanded == related:
+            break
+        related = expanded
+    if related & set(combined):
+        # PID reuse is also refused, including a changed owner starttime.
+        raise Refusal('owner-waiter-or-descendant-present')
+
+def process_absent():
+    challenge = os.urandom(24).hex()
+    raw_stat = Path('/proc/self/stat').read_bytes()
+    caller = [os.getpid(), raw_stat.rpartition(b') ')[2].split()[19].decode('ascii')]
+    raw = run_privileged(['/usr/bin/python3', '-I', '-B', '-c', PROC_CODE, challenge, str(caller[0]), caller[1]])
+    validate_process_report(parse(raw), challenge, caller)
+
+def docker(args):
+    return run_privileged(['/usr/bin/docker', '--host=unix:///var/run/docker.sock', *args])
+
+def census():
+    process_absent()
+    raw = docker(['ps', '-a', '--no-trunc', '--format', '{{json .}}'])
+    candidates = []
+    seen = set()
+    for line in raw.splitlines():
+        item = parse(line)
+        if (not isinstance(item, dict) or not isinstance(item.get('ID'), str) or len(item['ID']) != 64 or
+            any(c not in '0123456789abcdef' for c in item['ID']) or
+            not isinstance(item.get('Names'), str) or not isinstance(item.get('Labels'), str) or
+            item.get('State') not in ('created','restarting','running','removing','paused','exited','dead') or item['ID'] in seen):
+            raise Refusal('container-inventory-shape')
+        if item['State'] in ('running','restarting','paused','removing'):
+            raise Refusal('concurrent-active-container')
+        seen.add(item['ID'])
+        labels = item['Labels'].split(',')
+        if item['ID'] == CONTAINER or item['Names'] == CONTAINER_NAME or 'mckernel.owner='+OWNER_NONCE in labels:
+            candidates.append(item)
+    if not candidates:
+        return False
+    if len(candidates) != 1 or candidates[0]['ID'] != CONTAINER or candidates[0]['Names'] != CONTAINER_NAME:
+        raise Refusal('container-inventory-binding')
+    data = parse(docker(['inspect', '--type', 'container', CONTAINER]))
+    if not isinstance(data, list) or len(data) != 1 or not isinstance(data[0], dict):
+        raise Refusal('container-inspect-shape')
+    item = data[0]
+    state = item.get('State')
+    config = item.get('Config')
+    if (not isinstance(state, dict) or not isinstance(config, dict) or
+        item.get('Id') != CONTAINER or item.get('Name') != '/' + CONTAINER_NAME or
+        not isinstance(config.get('Labels'), dict) or config['Labels'].get('mckernel.owner') != OWNER_NONCE or
+        state.get('Status') != 'exited' or type(state.get('ExitCode')) is not int or state['ExitCode'] != EXPECTED_EXIT or
+        state.get('Running') is not False or state.get('Pid') != 0):
+        raise Refusal('container-retirement-binding')
+    validate_container_profile(item)
+    return True
+
+class Transaction:
+    def __init__(self):
+        self.fd = self.mfd = self.rfd = self.nfd = None
+        self.mutation_started = False
+        self.root_locked = False
+        if RELEASE is None:
+            raise Refusal('release-not-configured')
+        self.rfd = os.open(ROOT_LOCK, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+        try:
+            if observe_identity(ROOT_LOCK) != ROOT_LOCK_BINDING:
+                raise Refusal('root-lock-binding')
+            fcntl.flock(self.rfd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            self.root_locked = True
+            if identity(os.fstat(self.rfd)) != (ROOT_LOCK_BINDING['device'], ROOT_LOCK_BINDING['inode']):
+                raise Refusal('root-lock-replaced')
+            self.fd, self.chain = directory(ROOT)
+            self.nfd, self.namespace_chain = directory(NAMESPACE)
+            self.pinned()
+        except BaseException:
+            self.close()
+            raise
+        if os.fstat(self.fd).st_dev != DEVICE:
+            self.close()
+            raise Refusal('scratch-device')
+        for path in (ATTEMPT, SHARED, MUTEX, PLAN, JOURNAL, CAPTURE, OUTPUT, EVIDENCE):
+            wanted_parent = NAMESPACE if path in (ATTEMPT, OUTPUT, EVIDENCE) else ROOT
+            if path.parent != wanted_parent:
+                self.close()
+                raise Refusal('fixed-path-parent')
+
+    def parent_fd(self, path):
+        if path in (ATTEMPT, OUTPUT, EVIDENCE) and path.parent == NAMESPACE:
+            return self.nfd
+        if path in (SHARED, MUTEX, PLAN, JOURNAL, CAPTURE, QUARANTINE) and path.parent == ROOT:
+            return self.fd
+        raise Refusal('unmapped-fixed-path')
+
+    def close(self):
+        for name in ('mfd', 'nfd', 'fd', 'rfd'):
+            fd = getattr(self, name, None)
+            if fd is not None:
+                os.close(fd)
+                setattr(self, name, None)
+        self.root_locked = False
+
+    def pinned(self):
+        validate_mount()
+        if (observe_identity(ROOT_LOCK) != ROOT_LOCK_BINDING or
+                identity(os.fstat(self.rfd)) != (ROOT_LOCK_BINDING['device'], ROOT_LOCK_BINDING['inode'])):
+            raise Refusal('root-lock-replaced')
+        if Path('/proc/sys/kernel/random/boot_id').read_text().strip() != BOOT_ID:
+            raise Refusal('boot-drift')
+        fd, chain = directory(ROOT)
+        os.close(fd)
+        if chain != self.chain:
+            raise Refusal('ancestor-replaced')
+        nfd, nchain = directory(NAMESPACE)
+        try:
+            meta = os.fstat(nfd)
+            actual = dict(device=meta.st_dev, inode=meta.st_ino, mode=meta.st_mode, uid=meta.st_uid, gid=meta.st_gid)
+            if (actual != NAMESPACE_BINDING or namespace_ancestry() != NAMESPACE_ANCESTRY or nchain != self.namespace_chain or
+                    identity(os.fstat(self.nfd)) != identity(meta) or meta.st_dev != NAMESPACE_BINDING['device']):
+                raise Refusal('namespace-parent-replaced')
+        finally:
+            os.close(nfd)
+        if self.mfd is not None and identity(os.stat(MUTEX.name, dir_fd=self.fd, follow_symlinks=False)) != identity(os.fstat(self.mfd)):
+            raise Refusal('mutex-replaced')
+
+    def preserved(self):
+        self.pinned()
+        for path, (device, inode, nlink) in DIRS.items():
+            fd = os.open(path.name, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=self.parent_fd(path))
+            try:
+                meta = os.fstat(fd)
+                if (identity(meta) != (path_device(path), inode) or device != path_device(path) or meta.st_nlink != nlink or
+                    stat.S_IMODE(meta.st_mode) != 0o700 or (meta.st_uid, meta.st_gid) != (UID, GID)):
+                    raise Refusal('preserved-directory-binding')
+                if path == EVIDENCE:
+                    read_at(fd, TERMINAL.name, (TERMINAL_SHA, TERMINAL_INODE, TERMINAL_SIZE), expected_device=path_device(TERMINAL))
+                if identity(os.stat(path.name, dir_fd=self.parent_fd(path), follow_symlinks=False)) != identity(meta):
+                    raise Refusal('preserved-directory-raced')
+            finally:
+                os.close(fd)
+
+    def lock(self, execute):
+        self.pinned()
+        if not exists(self.fd, MUTEX.name):
+            if not execute:
+                return
+            try:
+                self.mfd = os.open(MUTEX.name, os.O_RDWR | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600, dir_fd=self.fd)
+                self.mutation_started = True
+                os.fchown(self.mfd, UID, GID)
+            except FileExistsError:
+                pass
+        if self.mfd is None:
+            self.mfd = os.open(MUTEX.name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, dir_fd=self.fd)
+        meta = os.fstat(self.mfd)
+        if (not stat.S_ISREG(meta.st_mode) or identity(meta)[0] != DEVICE or meta.st_size != 0 or
+            meta.st_nlink != 1 or stat.S_IMODE(meta.st_mode) != 0o600 or (meta.st_uid, meta.st_gid) != (UID, GID)):
+            raise Refusal('mutex-binding')
+        try:
+            fcntl.flock(self.mfd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError as exc:
+            raise Refusal('cleanup-busy') from exc
+        self.pinned()
+        if execute:
+            os.fsync(self.mfd)
+            os.fsync(self.fd)
+
+    def expected_plan(self, sentinels):
+        return {'schema': 'fp-save-image.terminal-cleanup.v1', 'root': str(ROOT),
+                'release_sha256': digest(canonical(RELEASE)),
+                'filesystem_uuid': UUID, 'root_lock': ROOT_LOCK_BINDING,
+                'ancestry': [list(x) for x in self.chain], 'device': DEVICE,
+                'mutex': list(identity(os.fstat(self.mfd))) if self.mfd is not None else None,
+                'journal_identity': list(identity(os.stat(JOURNAL.name, dir_fd=self.fd, follow_symlinks=False)))
+                    if exists(self.fd, JOURNAL.name) else None,
+                'owner': [BOOT_ID, OWNER_PID, OWNER_START], 'waiters': list(WAITER_PIDS),
+                'container': [CONTAINER, CONTAINER_NAME, OWNER_NONCE],
+                'namespace': {'path': str(NAMESPACE), 'binding': NAMESPACE_BINDING, 'ancestry': NAMESPACE_ANCESTRY, 'chain': [list(x) for x in self.namespace_chain]},
+                'records': [[str(p), str(p.parent), archive, *RECORDS[p]]
+                            for p, archive in zip((ATTEMPT, SHARED), ARCHIVE_NAMES)],
+                'sentinels': sentinels,
+                'publisher_contract': PUBLISHER_CONTRACT,
+                'directories': [[p.name, *DIRS[p]] for p in (OUTPUT, EVIDENCE)],
+                'terminal': [TERMINAL.name, TERMINAL_SHA, TERMINAL_INODE, TERMINAL_SIZE]}
+
+    def pristine(self):
+        self.preserved()
+        if exists(self.fd, JOURNAL.name):
+            raise Refusal('journal-without-plan')
+        for path, archive in zip((ATTEMPT, SHARED), ARCHIVE_NAMES):
+            read_at(self.parent_fd(path), path.name, RECORDS[path], expected_device=path_device(path))
+            if exists(self.parent_fd(path), archive):
+                # A crash during preparation has not touched any active record.
+                # Retain unbound preparation, rather than adopt a foreign dir.
+                raise Refusal('unbound-sentinel-preparation')
+
+    def sentinel(self, name, expected, parent_fd=None):
+        parent_fd = self.fd if parent_fd is None else parent_fd
+        fd = os.open(name, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=parent_fd)
+        try:
+            meta = os.fstat(fd)
+            if (meta.st_dev != expected[0] or os.fstat(parent_fd).st_dev != expected[0] or list(identity(meta)) != expected or meta.st_nlink != 2 or
+                stat.S_IMODE(meta.st_mode) != 0o700 or (meta.st_uid, meta.st_gid) != (UID, GID) or
+                os.listdir(fd)):
+                raise Refusal('sentinel-binding')
+            if identity(os.stat(name, dir_fd=parent_fd, follow_symlinks=False)) != identity(meta):
+                raise Refusal('sentinel-raced')
+        finally:
+            os.close(fd)
+
+    def load_plan(self):
+        raw, _ = read_at(self.fd, PLAN.name)
+        value = parse(raw)
+        sentinels = value.get('sentinels') if isinstance(value, dict) else None
+        if (not isinstance(sentinels, list) or len(sentinels) != 2 or
+            any(not isinstance(row, list) or len(row) != 2 or
+                type(row[0]) is not int or row[0] != path_device(path) or
+                type(row[1]) is not int or row[1] <= 0 for row, path in zip(sentinels, (ATTEMPT, SHARED))) or
+            len({tuple(row) for row in sentinels}) != 2):
+            raise Refusal('plan-sentinel-binding')
+        plan = self.expected_plan(sentinels)
+        if raw != canonical(plan) + b'\n':
+            raise Refusal('plan-binding')
+        return plan
+
+    def prepare(self):
+        self.pristine()
+        sentinels = []
+        for path, archive in zip((ATTEMPT, SHARED), ARCHIVE_NAMES):
+            self.pinned()
+            parent = self.parent_fd(path)
+            os.mkdir(archive, 0o700, dir_fd=parent)
+            self.mutation_started = True
+            fd = os.open(archive, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=parent)
+            try:
+                os.fchown(fd, UID, GID)
+                expected = list(identity(os.fstat(fd)))
+                self.sentinel(archive, expected, parent)
+                os.fsync(fd)
+            finally:
+                os.close(fd)
+            os.fsync(parent)
+            sentinels.append(expected)
+        self.create(JOURNAL.name, b'')
+        plan = self.expected_plan(sentinels)
+        self.create(PLAN.name, canonical(plan) + b'\n')
+        return plan
+
+    def create(self, name, data):
+        self.pinned()
+        fd = os.open(name, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600, dir_fd=self.fd)
+        self.mutation_started = True
+        try:
+            os.fchown(fd, UID, GID)
+            write_all(fd, data)
+            os.fsync(fd)
+        finally:
+            os.close(fd)
+        os.fsync(self.fd)
+
+    def state(self, plan):
+        self.preserved()
+        if exists(self.fd, PLAN.name):
+            raw, _ = read_at(self.fd, PLAN.name)
+            if raw != canonical(plan) + b'\n':
+                raise Refusal('plan-binding')
+        else:
+            raise Refusal('missing-plan')
+        rows = []
+        if exists(self.fd, JOURNAL.name):
+            raw, _ = read_at(self.fd, JOURNAL.name)
+            if raw and not raw.endswith(b'\n'):
+                raise Refusal('torn-journal')
+            rows = [parse(line) for line in raw.splitlines()]
+        legal = [(event, index) for index in range(2)
+                 for event in ('before_exchange', 'after_exchange', 'release', 'after_release')] + [('complete', 2)]
+        if len(rows) > len(legal):
+            raise Refusal('journal-after-complete')
+        previous = digest(canonical(plan))
+        for seq, row in enumerate(rows):
+            event, index = legal[seq]
+            body = {'event': event, 'index': index, 'sequence': seq,
+                    'plan_sha256': digest(canonical(plan)), 'previous': previous,
+                    'plan_identity': list(identity(os.stat(PLAN.name, dir_fd=self.fd, follow_symlinks=False)))}
+            wanted = dict(body, hash=digest(canonical(body)))
+            if canonical(row) != canonical(wanted) or canonical(row) + b'\n' != raw.splitlines(keepends=True)[seq]:
+                raise Refusal('journal-prefix-binding')
+            previous = wanted['hash']
+        paths = (ATTEMPT, SHARED)
+        actual = []
+        for index, path in enumerate(paths):
+            phase = min(max(len(rows) - 4 * index, 0), 4)
+            archive = ARCHIVE_NAMES[index]
+            sentinel = plan['sentinels'][index]
+            archived_meta = os.stat(archive, dir_fd=self.parent_fd(path), follow_symlinks=False)
+            if stat.S_ISDIR(archived_meta.st_mode):
+                if phase not in (0, 1):
+                    raise Refusal('exchange-state-regression')
+                self.sentinel(archive, sentinel, self.parent_fd(path))
+                read_at(self.parent_fd(path), path.name, RECORDS[path], expected_device=path_device(path))
+                actual.append('before_exchange')
+                continue
+            read_at(self.parent_fd(path), archive, RECORDS[path], expected_device=path_device(path))
+            if phase == 0:
+                raise Refusal('unplanned-exchange')
+            if exists(self.parent_fd(path), path.name):
+                active_meta = os.stat(path.name, dir_fd=self.parent_fd(path), follow_symlinks=False)
+                if stat.S_ISDIR(active_meta.st_mode):
+                    if phase == 4:
+                        raise Refusal('sentinel-reappeared-after-release')
+                    self.sentinel(path.name, sentinel, self.parent_fd(path))
+                    actual.append('after_exchange')
+                    continue
+                # A fresh ordinary owner may acquire the name after release.
+                # Validate its shape only; never remove or claim its ownership.
+                read_at(self.parent_fd(path), path.name, expected_device=path_device(path))
+            if phase < 3:
+                raise Refusal('unauthorized-sentinel-release')
+            actual.append('after_release')
+        return rows, actual
+
+    def append(self, plan, rows, event, index):
+        self.pinned()
+        raw, before = read_at(self.fd, JOURNAL.name)
+        if raw != b''.join(canonical(row) + b'\n' for row in rows):
+            raise Refusal('journal-raced')
+        body = {'event': event, 'index': index, 'sequence': len(rows),
+                'plan_sha256': digest(canonical(plan)),
+                'plan_identity': list(identity(os.stat(PLAN.name, dir_fd=self.fd, follow_symlinks=False))),
+                'previous': rows[-1]['hash'] if rows else digest(canonical(plan))}
+        row = dict(body, hash=digest(canonical(body)))
+        fd = os.open(JOURNAL.name, os.O_WRONLY | os.O_APPEND | os.O_NOFOLLOW, dir_fd=self.fd)
+        try:
+            if identity(os.fstat(fd)) != identity(before):
+                raise Refusal('journal-replaced')
+            write_all(fd, canonical(row) + b'\n')
+            os.fsync(fd)
+        finally:
+            os.close(fd)
+        os.fsync(self.fd)
+        rows.append(row)
+
+    def preflight_fresh(self):
+        """Read-only fresh-attempt refusal before creating the cleanup mutex.
+
+        The constructor already holds the permanent root lock. This is no
+        release authority: run repeats every original post-lock check/latch.
+        Existing-mutex transactions keep the original state-validation path.
+        """
+        if not self.root_locked or self.mutation_started or self.mfd is not None:
+            raise Refusal('fresh-preflight-lock-state')
+        self.pinned()
+        def absent():
+            if any(exists(self.fd, path.name) for path in (MUTEX, PLAN, JOURNAL, CAPTURE, QUARANTINE)):
+                raise Refusal('fresh-preflight-transaction-present')
+            if any(exists(self.parent_fd(path), name)
+                   for path, name in zip((ATTEMPT, SHARED), ARCHIVE_NAMES)):
+                raise Refusal('fresh-preflight-archive-present')
+        absent()
+        self.lock(False)
+        if self.mfd is not None:
+            raise Refusal('fresh-preflight-mutex-appeared')
+        protected_files()
+        self.pristine()
+        present = census()
+        if not present:
+            raise Refusal('container-absent-before-plan')
+        # Existing capture_logs(execute=False) compares retained/actual logs;
+        # it never creates CAPTURE or changes its existing mutation latch.
+        capture_logs(present, execute=False, transaction=self)
+        self.pinned()
+        absent()
+
+    def run(self, execute):
+        if os.path.lexists(QUARANTINE):
+            raise Refusal('quarantined-independent-reconciliation-required')
+        if (execute and
+                not any(exists(self.fd, path.name) for path in (MUTEX, PLAN, JOURNAL, CAPTURE, QUARANTINE)) and
+                not any(exists(self.parent_fd(path), name)
+                        for path, name in zip((ATTEMPT, SHARED), ARCHIVE_NAMES))):
+            self.preflight_fresh()
+        self.lock(execute)
+        protected_files()
+        if execute and exists(self.fd, PLAN.name):
+            self.mutation_started = True  # Reconciliation owns a prior transaction.
+        plan = self.load_plan() if exists(self.fd, PLAN.name) else None
+        if plan is None:
+            if execute and (exists(self.fd, JOURNAL.name) or any(
+                    exists(self.parent_fd(path), name) for path, name in zip((ATTEMPT, SHARED), ARCHIVE_NAMES))):
+                self.mutation_started = True  # Prior unbound mutation is uncertain.
+            self.pristine()
+            rows, actual = [], []
+        else:
+            rows, actual = self.state(plan)
+        present = census()
+        if not present and plan is None:
+            raise Refusal('container-absent-before-plan')
+        capture_logs(present, execute, transaction=self)
+        self.pinned()
+        if len(rows) == 9:
+            if present:
+                raise Refusal('terminal-container-reappeared')
+            return terminal_result('PASS_TERMINAL_REPLAY', plan)
+        if not execute:
+            return {'status': 'PASS_VALIDATE_ONLY', 'terminal': False, 'events': len(rows),
+                    'container_present': present, 'publisher_contract': PUBLISHER_CONTRACT}
+        if plan is None:
+            plan = self.prepare()
+        if not exists(self.fd, JOURNAL.name):
+            self.create(JOURNAL.name, b'')
+        if present:
+            # Require the same exited identity immediately before removal.
+            protected_files()
+            capture_logs(True, execute=True, transaction=self)
+            if not census():
+                raise Refusal('container-disappeared-before-rm')
+            self.pinned()
+            self.mutation_started = True
+            removed = docker(['rm', '--', CONTAINER]).strip()
+            if removed not in (CONTAINER.encode(), CONTAINER_NAME.encode()):
+                raise Refusal('container-remove-response')
+        if census():
+            raise Refusal('container-still-present')
+        self.pinned()
+        for index, path in enumerate((ATTEMPT, SHARED)):
+            protected_files()
+            rows, actual = self.state(plan)
+            if len(rows) >= 4 * index + 4:
+                continue
+            if census():
+                raise Refusal('container-reappeared')
+            self.preserved()
+            if len(rows) == 4 * index:
+                self.append(plan, rows, 'before_exchange', index)
+            rows, actual = self.state(plan)
+            if actual[index] == 'before_exchange':
+                read_at(self.parent_fd(path), path.name, RECORDS[path], expected_device=path_device(path))
+                self.sentinel(ARCHIVE_NAMES[index], plan['sentinels'][index], self.parent_fd(path))
+                self.pinned()
+                # Atomic exchange never vacates the active ownership pathname.
+                # A foreign capture fails validation while its sentinel stays
+                # active; neither object is deleted or speculatively rolled back.
+                rename_exchange(self.parent_fd(path), path.name, ARCHIVE_NAMES[index])
+                os.fsync(self.parent_fd(path))
+                os.fsync(self.fd)
+            os.fsync(self.fd)
+            rows, actual = self.state(plan)
+            if len(rows) == 4 * index + 1:
+                self.append(plan, rows, 'after_exchange', index)
+            if len(rows) == 4 * index + 2:
+                self.append(plan, rows, 'release', index)
+            rows, actual = self.state(plan)
+            if actual[index] == 'after_exchange':
+                if census():
+                    raise Refusal('container-reappeared-before-release')
+                protected_files()
+                self.sentinel(path.name, plan['sentinels'][index], self.parent_fd(path))
+                self.pinned()
+                # This is the intended release point. A raced-in regular file
+                # causes ENOTDIR and remains intact; replay preserves that owner.
+                os.rmdir(path.name, dir_fd=self.parent_fd(path))
+                os.fsync(self.parent_fd(path))
+            os.fsync(self.fd)
+            rows, actual = self.state(plan)
+            self.append(plan, rows, 'after_release', index)
+        rows, actual = self.state(plan)
+        protected_files()
+        if census():
+            raise Refusal('container-reappeared')
+        self.preserved()
+        self.append(plan, rows, 'complete', 2)
+        self.state(plan)
+        return terminal_result('PASS_EXECUTED', plan)
+
+def quarantine_diagnostic(error, transaction):
+    """Bounded diagnostics only: no exception formatting or ownership effects."""
+    def bounded(text, limit):
+        prefix = text[:limit]
+        raw = prefix.encode('utf-8', 'replace')
+        return raw[:limit].decode('utf-8', 'ignore'), len(text) > limit or len(raw) > limit
+
+    result = {'message': None, 'message_truncated': False,
+              'message_kind': 'non-Refusal-omitted',
+              'source_location': None, 'transaction_location': None,
+              'origin_location': None, 'traceback_truncated': False}
+    # Refusal has no custom formatter. Other exceptions may implement arbitrary
+    # __str__/__repr__; their type is already retained by the original marker.
+    if type(error) is Refusal:
+        args = error.args
+        result['message_kind'] = 'unsupported-Refusal-args'
+        if len(args) == 1 and type(args[0]) is str:
+            result['message'], result['message_truncated'] = bounded(args[0], 384)
+            result['message_kind'] = 'Refusal'
+    tb = error.__traceback__
+    for _ in range(128):
+        if tb is None:
+            break
+        frame = tb.tb_frame
+        location = {'file': bounded(frame.f_code.co_filename, 384)[0],
+                    'function': bounded(frame.f_code.co_name, 96)[0],
+                    'line': tb.tb_lineno}
+        result['origin_location'] = location
+        if frame.f_code.co_filename == __file__:
+            result['source_location'] = location
+        if frame.f_locals.get('self') is transaction:
+            result['transaction_location'] = location
+        tb = tb.tb_next
+    result['traceback_truncated'] = tb is not None
+    return result
+
+def recover(execute=False):
+    # Defer ordinary termination before acquiring any cleanup lock or mutating.
+    # Successful/preflight paths restore delivery only after all held locks close.
+    # Uncertain mutation never reaches restoration: quarantine holds indefinitely.
+    previous_mask = signal.pthread_sigmask(signal.SIG_BLOCK, DEFERRED_SIGNALS) if execute else None
+    tx = None
+    try:
+        tx = Transaction()
+        return tx.run(execute)
+    except BaseException as error:
+        # The preserved root lock remains held while durable quarantine is written.
+        # No ownership name is ever unlinked or restored speculatively.
+        if execute and tx is not None and tx.fd is not None and tx.root_locked and tx.mutation_started:
+            try:
+                try:
+                    diagnostic = quarantine_diagnostic(error, tx)
+                except BaseException as diagnostic_error:
+                    diagnostic = {'diagnostic_error_type': type(diagnostic_error).__name__}
+                tx.create(QUARANTINE.name, canonical({
+                    'schema': 'fp-save-image.cleanup-quarantine.v1',
+                    'release_sha256': digest(canonical(RELEASE)),
+                    'error_type': type(error).__name__,
+                    'diagnostic': diagnostic,
+                    'requires': 'independent-exact-state-reconciliation'}) + b'\n')
+            except BaseException:
+                pass
+            try:
+                print(json.dumps({'status': 'QUARANTINED_ROOT_LOCK_HELD',
+                                  'error_type': type(error).__name__,
+                                  'requires': 'independent-exact-state-reconciliation'}), flush=True)
+            except BaseException:
+                pass
+            quarantine_wait()
+        raise
+    finally:
+        if tx is not None:
+            tx.close()
+        if previous_mask is not None:
+            signal.pthread_sigmask(signal.SIG_SETMASK, previous_mask)
+
+def main(argv=None):
+    # configure() requires exact independent source/execution releases before effects.
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--release', type=Path)
+    parser.add_argument('--release-sha256')
+    parser.add_argument('--prepare-observation', type=Path)
+    parser.add_argument('--observation-sha256')
+    parser.add_argument('--git-commit')
+    parser.add_argument('--git-tree')
+    parser.add_argument('--execute', action='store_true')
+    args = parser.parse_args(argv)
+    try:
+        if args.prepare_observation:
+            if args.execute or args.release or not args.git_commit or not args.git_tree:
+                raise Refusal('prepare-arguments')
+            raw = read_bounded(args.prepare_observation)
+            if digest(raw) != args.observation_sha256:
+                raise Refusal('observation-file-digest')
+            print(json.dumps(prepare_release(parse(raw), args.git_commit, args.git_tree), sort_keys=True))
+            return 0
+        if not args.release or not args.release_sha256:
+            raise Refusal('exact-release-required')
+        raw = read_bounded(args.release)
+        if digest(raw) != args.release_sha256:
+            raise Refusal('release-file-digest')
+        configure(parse(raw), execute=args.execute)
+        if os.geteuid() != 0:
+            raise Refusal('root-execution-required-use-sudo-A')
+        result = recover(args.execute)
+    except (Refusal, OSError, ValueError, subprocess.SubprocessError) as exc:
+        print(json.dumps({'status': 'REFUSED', 'reason': str(exc)}, sort_keys=True))
+        return 1
+    print(json.dumps(result, sort_keys=True))
+    return 0
+
+if __name__ == '__main__':
+    raise SystemExit(main())
+
+
+
+
+

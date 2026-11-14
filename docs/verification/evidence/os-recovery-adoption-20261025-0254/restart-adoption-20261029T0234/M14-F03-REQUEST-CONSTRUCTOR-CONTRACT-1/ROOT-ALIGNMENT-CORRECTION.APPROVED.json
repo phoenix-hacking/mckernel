@@ -1,0 +1,13 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root",
+  "created_utc": "2026-10-29T23:34:49.417706+00:00",
+  "decision": "APPROVE_SOURCE_CONTRACT_CORRECTION_NATURAL_REQUEST_ALIGNMENT",
+  "original_contract_sha256": "ca85a6c4de8c6e09f03039ffd7fc8d3c9aa3803ea94dcea21e0d52de11905ed0",
+  "correction": "The original 64B IHK stack-object alignment premise was incorrect for the selected x86 profile. IHK_DMA_ALIGN is empty. SyscallRequest is repr(C),72 bytes,natural alignment8. Candidate align64 was additional local over-alignment, not selected-C parity or a wire requirement.",
+  "implementation_direction": "Use MaybeUninit<SyscallRequest> at natural request alignment8; preserve all approved declared-arity field writes, raw pointers, no uninitialized whole-struct reference, original request lifetime and send ordering. Separate transport packet remains128B with its own alignment and valid publication.",
+  "unchanged_contract": "Approved named arities and explicit six wire slots only; no general packet,response,UTI initialization,ACK or exec authorization.",
+  "actual_abi29_codegen": "OPEN",
+  "compiler_link_native_retirement": "OPEN",
+  "runtime_authority": null
+}

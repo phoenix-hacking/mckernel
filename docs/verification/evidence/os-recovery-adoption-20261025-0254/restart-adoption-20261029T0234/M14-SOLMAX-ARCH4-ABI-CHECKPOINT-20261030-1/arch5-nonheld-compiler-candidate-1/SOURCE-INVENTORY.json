@@ -1,0 +1,166 @@
+{
+  "status": "NONHELD_ARCH5_SOURCE_ONLY_UNACCEPTED",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "bindings": {
+    "arch/x86_64/kernel/syscall.c": {
+      "preimage_sha256": "b5e9a382491d0f6dc4b71a55f54f76f3d4ca610fa9f81adc60e70ec97a194669",
+      "postimage_sha256": "78546125873dbf1f3619c2ce678bf9a07cc306b72db73f4597cc3d85ac4146de"
+    },
+    "kernel/rust/syscall_policy.rs": {
+      "preimage_sha256": "8827684e4f78e8bdecb4cd6a9ff03a96363809b76e1f625fd1d0015e38664902",
+      "postimage_sha256": "e8d237820bd0937c835dac62174d1306e6c1cd62d2a8659b06cfd4e8c5a4c41e"
+    },
+    "kernel/rust/x86_cpu_helpers.rs": {
+      "preimage_sha256": "8db479fbea9493ee498bf5d78aef71589b49d9f065e13a8617b5765cd681c194",
+      "postimage_sha256": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde"
+    },
+    "kernel/rust/syscall_regset_defined_logger.rs": {
+      "preimage_sha256": null,
+      "postimage_sha256": "307a4f9d08e72e6ad43fda2e4453b2d5961b97459030c3942c678380017d3fa6"
+    },
+    "kernel/rust/syscall_signal_leaf_adapters.rs": {
+      "preimage_sha256": null,
+      "postimage_sha256": "718d8aa4b34a1e9297e5b4c3a33d451d6ad46af13f8c5c80c36cd0901ad53134"
+    },
+    "kernel/rust/f06_signal_log_budget.rs": {
+      "preimage_sha256": null,
+      "postimage_sha256": "474fbc12b68003d3b79f22c557425f2800f37888da4554c782590acfc90f9a0c"
+    }
+  },
+  "patch_sha256": "98f6f045d9fa450a33e35c07fdcc97bf0cb3c3cb4aefecf3c187c73fdaa2ae50",
+  "C_selectors": [
+    "-DMCKERNEL_RUST_F06_XRSTOR_LEAF",
+    "-DMCKERNEL_RUST_F06_BAD_FRAME_LEAF",
+    "-DMCKERNEL_RUST_F06_SIGNAL_CONTEXT",
+    "-DMCKERNEL_RUST_F06_DO_SIGNAL_WHOLE",
+    "-DMCKERNEL_RUST_F06_REGSET_DEFINED_DIAGNOSTIC"
+  ],
+  "Rust_cfg_tokens": [
+    "--cfg",
+    "f06_regset_defined_diagnostic_candidate",
+    "--cfg",
+    "f06_signal_leaf_adapters_candidate",
+    "--cfg",
+    "f06_signal_context_candidate",
+    "--cfg",
+    "f06_do_signal_whole_candidate",
+    "--cfg",
+    "f06_do_signal_reuse_qualified_context"
+  ],
+  "baseline": "qualified19 plus independently prepared nonheld constructor/perf/signal successor2; compositor must bind exact selected union",
+  "witness_disabled": true,
+  "six_original_debug_lines": [
+    1778,
+    2077,
+    2081,
+    2106,
+    2109,
+    2162
+  ],
+  "unchanged_location_macro_sites": 94,
+  "removed_replaced_original_macro_sites": [
+    [
+      30330,
+      "file!(",
+      18,
+      "file: concat!(file!(), \"\\0\").as_ptr().cast(),"
+    ],
+    [
+      30333,
+      "line!(",
+      16,
+      "line_flags: line!() & 0x00ff_ffff,"
+    ],
+    [
+      30339,
+      "file!(",
+      18,
+      "file: concat!(file!(), \"\\0\").as_ptr().cast(),"
+    ],
+    [
+      30342,
+      "line!(",
+      16,
+      "line_flags: line!() & 0x00ff_ffff,"
+    ],
+    [
+      30348,
+      "file!(",
+      18,
+      "file: concat!(file!(), \"\\0\").as_ptr().cast(),"
+    ],
+    [
+      30351,
+      "line!(",
+      16,
+      "line_flags: line!() & 0x00ff_ffff,"
+    ],
+    [
+      30452,
+      "file!(",
+      17,
+      "file:concat!(file!(),\"\\0\").as_ptr().cast(),"
+    ],
+    [
+      30454,
+      "line!(",
+      15,
+      "line_flags:line!()&0x00ff_ffff,"
+    ],
+    [
+      30967,
+      "file!(",
+      18,
+      "file: concat!(file!(), \"\\0\").as_ptr().cast(),"
+    ],
+    [
+      30970,
+      "line!(",
+      16,
+      "line_flags: line!() & 0x00ff_ffff,"
+    ],
+    [
+      30975,
+      "file!(",
+      18,
+      "file: concat!(file!(), \"\\0\").as_ptr().cast(),"
+    ],
+    [
+      30978,
+      "line!(",
+      16,
+      "line_flags: line!() & 0x00ff_ffff,"
+    ]
+  ],
+  "added_macro_sites": [],
+  "sigtrap_full_initialization_inserted": true,
+  "atomic_log_calls": {
+    "entry_observe": 1,
+    "claim_sites": 2,
+    "helper_pointer_sites": 2,
+    "helper_ABI": "*const AtomicU64"
+  },
+  "C_origin_source": {
+    "old_sha256": "b5e9a382491d0f6dc4b71a55f54f76f3d4ca610fa9f81adc60e70ec97a194669",
+    "new_sha256": "78546125873dbf1f3619c2ce678bf9a07cc306b72db73f4597cc3d85ac4146de",
+    "unchanged_cpuid_body_sha256": "ea8468b0bb065c689557ef76cb6178b08aecbc0ff9e450234c03d53cedd904a4",
+    "logical_sites": [
+      898,
+      908
+    ],
+    "old_receipt": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/m14-exclusive-producer-binding-1/ROOT-ACTUAL-ORIGIN119-1/ORIGIN-BINDING.json",
+    "old_receipt_sha256": "ac57fc154e6f1ac50b97c91c85b7dd915c66861f018287f99f223c6b5a2789d6",
+    "new_full_source_origin_receipt": null,
+    "C_HOST_only_file_remap": "-fmacro-prefix-map=/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch5-nonheld-compiler-candidate-1/postimage/arch/x86_64/kernel/syscall.c=/src/arch/x86_64/kernel/syscall.c"
+  },
+  "host_46_numeric_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch46-host-witness-origin-correction-1/INDEPENDENT-ACTUAL-HOST-ABI-REVIEW.md",
+    "sha256": "c9769495b801a2161db3d675982be47bcd8ce778da1d20ecbe9f288b1b3db5f0",
+    "scope": "prior independent matched46 HOST geometry only; not binding new selectors, lifetimes or production"
+  },
+  "actual_CPP": null,
+  "actual_rust_compile": null,
+  "selected_provider_link": null,
+  "native_test": null,
+  "authority": null
+}

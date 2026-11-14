@@ -1,0 +1,40 @@
+{
+  "status": "GRANTED_ONCE_ORDINARY_CPU6",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "proposal_sha256": "4a88ab1a1bd67dff9808975ce99c8e53b30990b6872bd1fc2dc0a967c8958f49",
+  "runner_sha256": "13d89e6c8b975d132d80da6db1ef52eb3634ac28e8393613c5205a84be88329c",
+  "review_sha256": "b904cc913c6972a107f7693e6c0eeb333145b66ace0b833f08756216a259105e",
+  "granted_at": "2026-10-22T22:58:51.448544+00:00",
+  "invocation": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/python3",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/run_checks_once.py"
+  ],
+  "limits": {
+    "cpu": 6,
+    "jobs": 1,
+    "as_bytes": 536870912,
+    "cpu_seconds": 30,
+    "aggregate_child_work_seconds": 24,
+    "exceptional_cleanup_seconds": 6,
+    "whole_wall_seconds": 30,
+    "fsize_bytes": 1048576,
+    "nproc": "inherited unchanged",
+    "retained_output_file_count_max": 39,
+    "retained_payload_bytes_max": 40894464,
+    "host_retained_reserve_bytes": 67108864,
+    "host_temporary_reserve_bytes": 1073741824
+  },
+  "fresh_admission": {
+    "cpu6_ordinary_slot": "free; no active heavy workload; other source lane CPU0 only",
+    "host_available_bytes": 176991158272,
+    "scratch_available_bytes": 14120730624,
+    "mem_available_kib": 27602152,
+    "host_required_bytes": 18320719872,
+    "scratch_required_bytes": 12884901888,
+    "fresh_output_and_three_artifacts_absent": true
+  },
+  "stop": "One invocation; preserve first failure without retry; join all children and release CPU6. No root/Docker/guest/native or stage authority."
+}

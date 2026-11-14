@@ -1,0 +1,96 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_PRIVATE_COHERENT_SYNC_PROCESSVM_SOURCE_PROFILE_AND_PREPUBLISHED_ACCEPTANCE_READY_FOR_ROOT_REVIEW",
+  "runtime_authority": null,
+  "source_plan": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-sync-processvm-next-default-source-1/COHERENT-SOURCE-PLAN.NOT-GRANTED.json",
+    "bytes": 6727,
+    "sha256": "3f667a052f4b4ec6913222abfdfd2cdcb084636bf55c4c3e8c5bd7a4f31d7a4c"
+  },
+  "profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-sync-processvm-next-default-source-1/PROFILE.SOURCE-ONLY.json",
+    "bytes": 93323,
+    "sha256": "3aa20954351172445932f5196a6527b13936b5dd0c5043a08fdb0909ee89776c"
+  },
+  "acceptance_inputs": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-sync-processvm-next-default-source-1/ACCEPTANCE-INPUTS.SOURCE-ONLY.json",
+    "bytes": 36590,
+    "sha256": "2880b15975109ea649b10eb40f152cc1aa31f2617e385b9a134d33d3d3d0ba72"
+  },
+  "request_draft": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-sync-processvm-next-default-source-1/REQUEST-PAYLOAD.DRAFT.NOT-AUTHORITY.json",
+    "bytes": 2912,
+    "sha256": "df8a1bd8d42185937f33291f8b61170331b4e83dc748a5f2397208c162e04951"
+  },
+  "static_check": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-sync-processvm-next-default-source-1/RESULT.SOURCE-ONLY.json",
+    "bytes": 2102,
+    "sha256": "3657a2847d90de799527f3545b2a50ecd5973d456c1fc23a7b25c7ce9d874e3e"
+  },
+  "pure_regressions": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-sync-processvm-next-default-source-1/PURE-REGRESSION-RESULT.json",
+    "bytes": 1328,
+    "sha256": "153d18dd7f3262eb04fac4aa77f049b9741269cd69458cd0621d29f2bbb3ccdf"
+  },
+  "recipe": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-sync-processvm-next-default-source-1/README.md",
+    "bytes": 7178,
+    "sha256": "25b365febd077553dc19335e9d1eac8bac0acea7137cd13d0d51248e01eaf7df"
+  },
+  "validator": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-sync-processvm-next-default-source-1/qualify_produced_cohort.py",
+    "bytes": 6469,
+    "sha256": "b3e80f21255002cd9638325b650df24ccf4b9b4d77478861174e859b0665b72a"
+  },
+  "validator_templates": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-sync-processvm-next-default-source-1/VALIDATOR-TEMPLATE-SOURCES.json",
+    "bytes": 3308,
+    "sha256": "77c0fea5becb827b78dc0f70bea0562e506bb9e42248e1ed2bb4c6862b61a2d0"
+  },
+  "postjoin_reader": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-sync-processvm-next-default-source-1/check_postbuild_current.py",
+    "bytes": 4172,
+    "sha256": "0fb6ad6e6806c4a9e286ce1e0175a80d9a74055c33d99c6e638784b524a5187e"
+  },
+  "source_ready_observed_file_mtime_ns": 1793074848810068120,
+  "source_ready_observation_basis": "Final successful actual source/API/metadata preflight report file mtime; not a live resource admission clock.",
+  "actual_first_compiler_epoch": null,
+  "actual_blocked_duration_seconds": null,
+  "actual_Root_admission": null,
+  "actual_request_sha256": null,
+  "actual_nonce": null,
+  "actual_current_clearance": null,
+  "actual_resource_authority": null,
+  "actual_independent_execution_release": null,
+  "source_incompatible_pieces": [],
+  "expected_public_Rust_exports": {
+    "carried": 33,
+    "new": 2,
+    "total": 35
+  },
+  "actual_current_C_FUNC_counts": [
+    76,
+    45
+  ],
+  "expected_new_C_FUNC_counts": [
+    75,
+    31
+  ],
+  "expected_U_delta": {
+    "removed": [
+      "sync_child_event",
+      "do_process_vm_read_writev"
+    ],
+    "added": []
+  },
+  "commands": 4,
+  "retained_C_inputs": 8,
+  "closed_Rust_files": 106,
+  "real_MM_usercopy_fault_concurrency_and_lifetime_holds_preserved": true,
+  "unresolved_direct_VMlock192_ABI6_receipt_preserved": true,
+  "event_initialization_list_PMU_ownership_hold_preserved": true,
+  "artifact_acceptance": false,
+  "native_acceptance": false,
+  "whole_file_retirement": false,
+  "canonical_Git_Root_actual_workload_mutations": 0
+}

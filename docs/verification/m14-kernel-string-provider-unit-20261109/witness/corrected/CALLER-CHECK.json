@@ -1,0 +1,29 @@
+{
+  "status": "PASS_ACTUAL_CALLER_POINTER_AND_DIRECT_CALL_PROVENANCE_BEFORE_LINK",
+  "required_genuine_Kernel_undefined": [
+    "memset",
+    "strnlen"
+  ],
+  "private8Bvolatile_pointer_slot": "kernel_memset_entry",
+  "actual_slot_initializer": "R_X86_64_64 to U memset+0",
+  "actual_memset_load_indirect_calls": [
+    {
+      "source_function": "fill_case",
+      "slot_reference_offset": 51,
+      "slot_reference_type": 2,
+      "volatile_load_address": 48,
+      "indirect_call_address": 63
+    }
+  ],
+  "actual_strnlen_direct_E8_calls": 1,
+  "no_local_Kernel_substitute": true,
+  "exact_HOST_imports": [
+    "__assert_fail",
+    "__printf_chk",
+    "__stack_chk_fail",
+    "free",
+    "malloc",
+    "puts"
+  ],
+  "real_header_bound_printf_chk": true
+}

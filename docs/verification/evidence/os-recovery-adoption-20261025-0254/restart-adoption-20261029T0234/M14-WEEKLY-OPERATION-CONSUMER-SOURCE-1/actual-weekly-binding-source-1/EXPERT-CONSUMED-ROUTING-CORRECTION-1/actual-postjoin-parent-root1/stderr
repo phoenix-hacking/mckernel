@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/EXPERT-CONSUMED-ROUTING-CORRECTION-1/observe_current64_current118_postjoin.py", line 391, in <module>
+    if __name__=='__main__':main()
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/EXPERT-CONSUMED-ROUTING-CORRECTION-1/observe_current64_current118_postjoin.py", line 387, in main
+    try:value=observe(checked(binding_ref),out)
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/EXPERT-CONSUMED-ROUTING-CORRECTION-1/observe_current64_current118_postjoin.py", line 343, in observe
+    retained['base'].validate_fresh_physical(historical['historical_Root61_reobservation'],actors,historical['BFD_exact_absence_queries'],historical['observed_clocks'],historical['last_observed_clocks'],historical['fixed_cutoffs'])
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current62-after-bfd-default-build-source-20261028-1/review-correction-source-1/attempt2-binding-successor-1/retirement-parent-abi-correction-source-1/observe_current62_bfd_postjoin.py", line 123, in validate_fresh_physical
+    need(all(a<=b<limit<=ceiling for a,b,limit,ceiling in zip(first,last,limits,PINS['limits'])),'fresh observation under actual tighter clamps')
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current62-after-bfd-default-build-source-20261028-1/review-correction-source-1/attempt2-binding-successor-1/retirement-parent-abi-correction-source-1/observe_current62_bfd_postjoin.py", line 29, in need
+    if not ok:raise ValueError(why)
+ValueError: fresh observation under actual tighter clamps

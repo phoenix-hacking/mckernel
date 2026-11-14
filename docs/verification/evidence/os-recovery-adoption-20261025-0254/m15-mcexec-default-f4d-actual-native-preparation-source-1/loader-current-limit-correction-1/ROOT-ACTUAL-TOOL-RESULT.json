@@ -1,0 +1,27 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=536870912:536870912",
+    "--cpu=30:30",
+    "--fsize=134217728:134217728",
+    "--nofile=256:256",
+    "--core=0:0",
+    "--",
+    "/usr/bin/python3",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-actual-native-preparation-source-1/loader-current-limit-correction-1/run_installed_loader_h990_once.py",
+    "--grant",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-actual-native-preparation-source-1/loader-current-limit-correction-1/ROOT-LOADER-GRANT.ACTUAL.json",
+    "--grant-sha256",
+    "32acba43b580c9084e581805c6e2db8a3310221523868757fa5f1dc9c7bc6604"
+  ],
+  "pid": 1666738,
+  "returncode": 0,
+  "positive_wait": true,
+  "started": 1793130227.8006835,
+  "finished": 1793130227.9797986
+}

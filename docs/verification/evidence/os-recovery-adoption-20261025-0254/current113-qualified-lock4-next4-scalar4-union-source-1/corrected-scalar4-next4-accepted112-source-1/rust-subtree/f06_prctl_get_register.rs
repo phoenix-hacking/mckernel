@@ -1,0 +1,14 @@
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Exact existing private provider; selected CPU helper retains the MSR effect.
+use crate::abi::{CInt, CULong};
+
+/// # Safety
+/// Same architecture/current-thread and writable output contract as the genuine
+/// get-special-register provider. No null handling is added to the adapter.
+#[no_mangle]
+pub unsafe extern "C" fn arch_prctl_get_register_bridge(
+    type_: CInt, addr: *mut CULong,
+) -> CInt {
+    // SAFETY: preserve actual RDMSR provider/output/error semantics.
+    unsafe { crate::x86_cpu_helpers::ihk_mc_arch_get_special_register(type_, addr) }
+}

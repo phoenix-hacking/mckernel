@@ -1,0 +1,192 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/guardian_execution_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "recorded_at": "2026-10-27T21:46:12.904862+00:00",
+  "decision": "PASS_SOURCE",
+  "blocking_findings": [],
+  "execution_release": false,
+  "proposal": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/f05-owned-processvm-v3-causal-source-1/ROOT-NEXT-HOST-PROPOSAL.json",
+    "bytes": 6874,
+    "sha256": "ac4b611f014b69004a85cda7530084872830335358fcebefff4f497337b9346a"
+  },
+  "reviewed_profile": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/f05-owned-processvm-v3-causal-source-1/host-qualification-preparation-1/PROFILE.NOT-GRANTED.json",
+    "bytes": 11669,
+    "sha256": "83becd74ed6fc52eaf61bd1ebdf979d508faae92b74474d543ac56734cbf3c2d"
+  },
+  "runner": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/f05-owned-processvm-v3-causal-source-1/host-qualification-preparation-1/run_v3_host_qualification_bound.py",
+    "bytes": 6262,
+    "sha256": "f3e05b091fb296222c0ac90874c0ef8a0935f540a3214839fd1d7387a3488271"
+  },
+  "plan": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/f05-owned-processvm-v3-causal-source-1/host-qualification-preparation-1/PLAN.SOURCE-ONLY.json",
+    "bytes": 5975,
+    "sha256": "6615b8df2a54eba9d4a09a74728affb336daafbc0b516e38d237832fa32e74b6"
+  },
+  "grant_schema_not_authority": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/f05-owned-processvm-v3-causal-source-1/host-qualification-preparation-1/ROOT-GRANT.SCHEMA.NOT-A-GRANT.json",
+    "bytes": 2660,
+    "sha256": "4bd8f4d30213ceda29fb4bd9cfdba3a78d728658eed2d8c13a88665772176e95"
+  },
+  "source": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/f05-owned-processvm-v3-causal-source-1/app.rs",
+    "bytes": 15845,
+    "sha256": "50d654641b1b00e1ad08f79609cb99a1d5445027f9d719efa99ec5a90fba23d5"
+  },
+  "oracle": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/f05-owned-processvm-v3-causal-source-1/v3-oracle.json",
+    "bytes": 3240,
+    "sha256": "6d5946ab99f795a7e9887cdba163a4271511b5be9e8f30f6fef19b9360d2f392"
+  },
+  "expected_stdout": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/f05-owned-processvm-v3-causal-source-1/expected.stdout",
+    "bytes": 204,
+    "sha256": "bb5952e803baae65378534b8fde8b9686795b3343c5429096297a372b1f1f46e"
+  },
+  "retained_legacy_harness": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-host-qualification-1/run_f05_qualification.py",
+    "bytes": 6542,
+    "sha256": "6b1895e49b603b61611889fd0176db876a959dcab7132f10a75f775694cca14d"
+  },
+  "literal_legacy_changes": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/f05-owned-processvm-v3-causal-source-1/host-qualification-preparation-1/LITERAL-LEGACY-CONTEXT-CHANGES.json",
+    "bytes": 2719,
+    "sha256": "9453f1920b9840dcbaaf6d5a0e7a49e8fd093efbe2c897f3da9e146e947ccfbe"
+  },
+  "transformed_harness": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/f05-owned-processvm-v3-causal-source-1/host-qualification-preparation-1/literal-transformed-harness.SOURCE-ONLY.py",
+    "bytes": 7383,
+    "sha256": "36063c0689843469c30b74db405165ae01fb29ef680eedbe71342205ee5f430b"
+  },
+  "all_exact_profile_inputs_checked": 20,
+  "commands": [
+    {
+      "id": "compile",
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "-D",
+        "warnings",
+        "-C",
+        "opt-level=1",
+        "-C",
+        "codegen-units=1",
+        "-C",
+        "target-feature=+crt-static",
+        "-C",
+        "relocation-model=static",
+        "-C",
+        "link-arg=-no-pie",
+        "-C",
+        "link-arg=-Wl,-z,noexecstack",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/f05-owned-processvm-v3-causal-source-1/app.rs",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-v3-causal-host-qualification-1/future-host-output-1/app"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/f05-owned-processvm-v3-causal-source-1",
+      "wall": 90,
+      "leaf": "F05v3",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. compile exact v3 causal-source HOST reference only.",
+      "argv_compact_json_LF_sha256": "f1d1d1a9fc3f9ee1164053a1faaed5bd5c0f65765174670ed4725a4e5031461f"
+    },
+    {
+      "id": "static-ELF",
+      "argv": [
+        "/usr/bin/readelf",
+        "-W",
+        "-h",
+        "-l",
+        "-d",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-v3-causal-host-qualification-1/future-host-output-1/app"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/f05-owned-processvm-v3-causal-source-1",
+      "wall": 90,
+      "leaf": "F05v3",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. static-ELF exact v3 causal-source HOST reference only.",
+      "argv_compact_json_LF_sha256": "3dd01643f0186deb88bee80c3b043369bba2f65ccea308f3a47920910359fef4"
+    },
+    {
+      "id": "Linux-reference",
+      "argv": [
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-v3-causal-host-qualification-1/future-host-output-1/app"
+      ],
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-v3-causal-host-qualification-1/fresh-reference-cwd-1",
+      "wall": 10,
+      "leaf": "F05v3",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Linux-reference exact v3 causal-source HOST reference only.",
+      "argv_compact_json_LF_sha256": "bcd7a03b3231809c3b403e227eddd29c311a74e12a27256ae626c856cbb8fb74"
+    }
+  ],
+  "source_findings": [
+    "Exact app50d65464/15845B,oracle6d5946ab/expected204Bbb5952e8,runnerf3e05b09/profile83becd74/plan6615b8df,20profilepins and literal replacement counts/hash match independently. No imports/tests/compiler/runtime entry occurred in review.",
+    "Three commands are exactly Rust static ELF compile, readelf static qualification, then one Linux-reference ELF invocation. Frozen compiler argv/Dwarnings/static/crt/noPIE/noexecstack flags unchanged from approved shape except selected source/output context. Allargv compact-json-LF pins match plan/profile/proposal.",
+    "Literal legacy6b1895e4 harness transformed exactly by sealed replacements9453f192 to36063c06. Process capture h990 selected AST/lifecycle,CPU6,onejob/60CPU/FSIZE64MiB/core0/wall90/90/10 and exact204Bstdout/emptyerr/exit0 predicates remain. Actual childAS1GiB is stricter than reviewed/profile/grant2GiB allowance; no resource widening.",
+    "Old historical admission/policy EXEC block is removed from transformed code. Retained old helper files are metadata references only. Actual qualified_admission uses exact existing6e98 profile/grant validator and7df167b3 admission selecting guardv2/actual fixed window/account credit state. It reverifies20inputs+plan/profile/grant and validates live fresh Root grant before every stage and again before gate preparation.",
+    "Gate preparation index is2 (Linux-reference), after compile0/readelf1 succeeded and before chdir to future referencecwd. Existing absolute sourcecwd used earlier. Fresh reference directory and proof absent required, mkdir0700, O_RDWR|O_CREAT|O_EXCL|O_CLOEXEC gate0600, actual regular/size0/empty observation, write exactly one G/fsync/pread2==G/FDclose, then exclusive proofJSON. It never fabricates childDELETE/retirement observations.",
+    "ELF reads exact same relative gate name under actual fresh absolute referencecwd. Original single10s budget/pollbound32*125ms,missing/emptyPENDING,badtoken/errorFAIL remain; HOSTprewrittenG is explicitly controlled reference execution with native_causal_proof=false,child_DELETE_observed=false,child_retirement0_observed=false. No native owner/guest/protocol ledger is consumed.",
+    "Gate suffix31770 identifies frozen causal protocol/source context only. Root must choose a fresh separate HOST operation nonce distinct from native31770. The schema intentionally leaves operationnonce/times/currentobservation/reservations unset and authorizedfalse; no source-only actual authority.",
+    "Distinct absolute output/capture/referencecwd/proof/result paths are absent at this review. Fresh actual grant path is absolute/nonsymlink and itsdigest pinned; sourcepaths/plan/proposal/cwd are coherent. Failure retains first actual prefix and performs no second compiler/reference invocation.",
+    "384MiB HOSTgrowth reserve retains existing runner required fullcapture allowance; HOST16GiB+reserve/scratch12GiB,strictmemoryfloor/shared7jobs21.6619GiB/oneheavy enforced by current admission/grant. Capture32MiB transport limit is documented separately from1024native/application protocol bound; nonzero/oversize first failure stops before nextstage. ELF64MiB plus up-to4prior32MiB streams and2failure64MiB streams gives320MiB before bounded metadata/staging, within384MiB.",
+    "HOST source approval is independent of Rust supervisor development and proves no McKernel kernel/native causal behavior, wholefile/provider retirement or consumed native31770 release. Frozen v2/original failures remain separate."
+  ],
+  "resources": {
+    "cpu": 6,
+    "jobs": 1,
+    "AS_bytes": 2147483648,
+    "CPU_seconds_each": 60,
+    "FSIZE_bytes": 67108864,
+    "CORE_bytes": 0,
+    "wall_seconds_each": 90,
+    "aggregate_jobs": 7,
+    "aggregate_GiB": "21.6619"
+  },
+  "actual_harness_profile": {
+    "CPU": 6,
+    "jobs": 1,
+    "RLIMIT_AS_bytes": 1073741824,
+    "ordinary_reviewed_AS_ceiling_bytes": 2147483648,
+    "RLIMIT_CPU_seconds": 60,
+    "RLIMIT_FSIZE_bytes": 67108864,
+    "RLIMIT_CORE": 0,
+    "compile_wall_seconds": 90,
+    "static_ELF_wall_seconds": 90,
+    "reference_payload_wall_seconds": 10
+  },
+  "host_growth_reserve_bytes": 402653184,
+  "gate_protocol": {
+    "reference_cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-v3-causal-host-qualification-1/fresh-reference-cwd-1",
+    "gate_relative": ".f05-gate-31770ebb739fea402ded939617921dda",
+    "nonce": "31770ebb739fea402ded939617921dda",
+    "native_causal_proof": false,
+    "prepared_before_payload_launch": true
+  },
+  "Root_literal_launch": {
+    "argv": [
+      "/usr/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/f05-owned-processvm-v3-causal-source-1/host-qualification-preparation-1/run_v3_host_qualification_bound.py",
+      "--grant",
+      "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/f05-owned-processvm-v3-causal-source-1/host-qualification-preparation-1/ROOT-GRANT.ACTUAL.json",
+      "--grant-sha256",
+      "ROOT_MUST_BIND_ACTUAL_FRESH_GRANT_SHA256"
+    ],
+    "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/f05-owned-processvm-v3-causal-source-1"
+  },
+  "Root_grant_requirements": "Bind exact runnerf3e05b09/profile83becd74/plan/source50d65464/ordinaryprofile/referencegate/max1compile,max1reference,max3stages with fresh actual Root CPU6exclusion/currentaccount/window/nativeownership/sharedreservations/currentheadroom evidence and independent source review; use new HOST operationnonce distinct from native31770; existing expiry/age checks all remain.",
+  "actual_compiler_ELF_run_commands": 0,
+  "native_causal_proof": false,
+  "native_release_consumed": false,
+  "new_execution_authority": false,
+  "review_actions": {
+    "source_bytes_AST_literal_context_checks_only": true,
+    "no_actual_compile_ELF_run_guard_resource_account_guest_sudo": true,
+    "no_canonical_or_sourceowner_edits": true,
+    "only_E_private_review_directory_written": true
+  },
+  "persistent_controls": "Fixed2026-10-28T05:36:09Z/v2MONO947874.5689514667/BOOT963213.6960030915/boot7bfc5687; creditrun7f/cap57774.852125/cumulative>=22812.3311/allrealholds/oneheavy/permanentnativeownership unchanged. Root alone grants actual workloads/canonical edits; parent outercontrols exclusive."
+}

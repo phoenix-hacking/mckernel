@@ -1,0 +1,29 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport importlib.util,json,os,sys,time\nD=Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/runtime-successor-3')\nassert len(sys.argv)==5 and os.getuid()==os.geteuid()==1000 and sys.version_info[:3]==(3,9,12)\ns=importlib.util.spec_from_file_location('frozen_expert_selected_transport',D/'source/long_transport.py');g=importlib.util.module_from_spec(s);s.loader.exec_module(g)\nassert g.digest(g.stable(D/'source/long_transport.py'))=='e286aab5b107df3bd8d23a5813abc504a6bb2e4105c4f9f2d27b3dcdfb1e9742'\nquery=Path(sys.argv[3]);querysha=sys.argv[4];assert query.is_absolute() and len(querysha)==64\nqraw=g.stable(query);assert g.digest(qraw)==querysha;q=json.loads(qraw)\nassert q['status']=='PASS_FRESH_READ_ONLY_P12_LONG_ADMISSION' and q['mutation'] is False and q['transient_mutex_released'] is True and q['execution_release'] is False and q['native_acceptance'] is False\nnow=time.time();assert type(q['at_unix']) in (int,float) and 0<=now-q['at_unix']<=120\nassert q['required']=={'host_required_bytes':140668567552,'scratch_required_bytes':13899923456}\ncohort=json.loads(g.stable(Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/segment90-admission-finalization-preparation-1/runtime3-binding-1/SELECTED-COHORT-BINDINGS.DATA.json')));assert g.digest(g.stable(Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/segment90-admission-finalization-preparation-1/runtime3-binding-1/SELECTED-COHORT-BINDINGS.DATA.json')))=='df9cdfb0b2f500524d66c79a8b154fe704704a06c4d93690daf0aa8342274e58'\npins={row['path']:(row['sha256'],row['size']) for row in q['observations']['source_pins']}\nfor row in cohort.values():assert pins[row['path']]==(row['sha256'],row['bytes']) and g.digest(g.stable(Path(row['path'])))==row['sha256']\nassert pins['/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-13/p12-current-normal-retirement-1/physical-preparation-1/ACTUAL-PHYSICAL-ACCEPTANCE.ROOT-RECORD.json']==('e54d603e473af8f26b20ecba91cc6e4c87a61102cdb0ec9707ce7880148f663f', 3523) and pins['/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-13/p12-current-normal-retirement-1/physical-preparation-1/current_live_postjoin.NONNULL.json']==('7c5d41e6dfe4e79aa08aac1138d46101a10786ef436ab81102060e03e9c8c638', 3023)\nassert q['observations']['parent']['dev']==66306 and q['observations']['parent']['ino']==56138797 and q['observations']['parent']['children']==[]\nassert g.digest(g.stable(Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/segment90-admission-finalization-preparation-1/runtime3-binding-1/RELEASE-PROTOTYPE.SEGMENT90.DATA.NOT-EXECUTABLE.json')))=='d9be3530ca88e5b64e33b4c32cc8d74e8a5f1b265d30fc2f00c854832c6a8f9d'\nvalue=json.loads(g.stable(Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/segment90-admission-finalization-preparation-1/runtime3-binding-1/RELEASE-PROTOTYPE.SEGMENT90.DATA.NOT-EXECUTABLE.json')));value.pop('independent_review',None)\nvalue['profile']=g.TRANSPORT;value['storage_admission']=q['observations']['admission'];value['boot_id']=Path('/proc/sys/kernel/random/boot_id').read_text().strip();value['author']=sys.argv[2];assert value['author']=='/root'\nvalue['status']='PASS_EXECUTION_RELEASE';value['execution_count']=1;value['expires_unix']=time.time()+590\nvalue['source_sha256']={name:g.digest(g.stable(D/'source'/name)) for name in g.FILES}\nassert value['nonce']=='afcf017e155344a1ad3fa2c2057dbbf2' and value['attempt_parent']=='/home/holden/mckernel-work/l12c1/p'\nraw=g.canonical(value);assert raw.endswith(b'\\n') and 'independent_review' not in json.loads(raw)\noutput=Path(sys.argv[1]);assert output.is_absolute() and output.parent.resolve(strict=True)==output.parent\nfd=os.open(output,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW|os.O_CLOEXEC,0o600)\nwith os.fdopen(fd,'wb') as f:f.write(raw);f.flush();os.fsync(f.fileno())\nprint(json.dumps(dict(scope='Functional McKernel OS/apps and Rust/assembly migration only; no security testing.',status='ROOT_PRE_REVIEW_CANONICAL_PAYLOAD_FROZEN_NOT_RELEASED',path=str(output),sha256=g.digest(raw),bytes=len(raw),expires_unix=value['expires_unix'],review=None,release_published=False)))\n",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/segment90-admission-finalization-preparation-1/runtime3-binding-1/PRE-REVIEW-PAYLOAD.SEGMENT90.NOT-RELEASED.canonical",
+    "/root",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/segment90-admission-finalization-preparation-1/runtime3-binding-1/ACTUAL-FRESH-QUERY.AUTHENTICATED-EXPORT.json",
+    "b3122aa2530571cf44ad0da2c38e30a371944dc6e813a97821e7f3fca817cec6"
+  ],
+  "authenticated_root_closed_stdout": {
+    "ctime_ns": 1792822225519341627,
+    "device": 66306,
+    "gid": 0,
+    "inode": 56362762,
+    "mode": "0o600",
+    "mtime_ns": 1792822225519341627,
+    "nlink": 1,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/segment90-admission-finalization-preparation-1/runtime3-binding-1/actual-fresh-root-admission-1/stdout",
+    "sha256": "b3122aa2530571cf44ad0da2c38e30a371944dc6e813a97821e7f3fca817cec6",
+    "size": 132320,
+    "uid": 0
+  },
+  "export_digest": "b3122aa2530571cf44ad0da2c38e30a371944dc6e813a97821e7f3fca817cec6",
+  "prior_root_execution_context_error": "UID assertion before any payload/clock; code unchanged"
+}

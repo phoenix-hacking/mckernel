@@ -1,0 +1,117 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "DOWNSTREAM_COMMAND_PROPOSAL_ONLY_NOT_ADMITTED",
+  "runtime_authority": null,
+  "predecessor_recipe": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/explicit-sdk-dependency-successor-1/SMALLEST-SDK-DEFAULT-CONSUMER-CHECKS.EXPLICIT-DEPENDENCIES.NOT-GRANTED.json",
+    "bytes": 10435,
+    "sha256": "c1f87862506550e1cd8ba6a602d5d9c5a970b2263372b14112f309995a532060"
+  },
+  "new_source_filemap": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/current119-cmake-integration-source-1/FILEMAP.SOURCE-ONLY.json",
+    "bytes": 14924,
+    "sha256": "2535addfa43322b29e1b790df6ac2a1cee087a9fbb3613348fc7402346b16306"
+  },
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/cmake",
+        "-C",
+        "/src/executer/user/rust/m15_selected_sdk_cache.cmake",
+        "-S",
+        "/src",
+        "-B",
+        "/work/output/m15-runtime-program-consumers-1/build",
+        "-DENABLE_RUST_USER_TOOLS=ON",
+        "-DRUSTC:FILEPATH=/nightly/bin/rustc",
+        "-DMCKERNEL_RUNTIME_TOOL_RUSTC:FILEPATH=/nightly/bin/rustc",
+        "-DIHKLIB_USE_QUALIFIED_EXTERNAL_ARCHIVE=OFF",
+        "-DENABLE_QLMPI=OFF",
+        "-DENABLE_TOFU=OFF",
+        "-DENABLE_UTI=OFF",
+        "-DIHK_USER_RUSTC:FILEPATH=/nightly/bin/rustc",
+        "-DENABLE_RUST_BOOT_TOOLS=ON",
+        "-DENABLE_RUST_ECLAIR_BACKTRACE=ON",
+        "-DENABLE_RUST_VMCORE2MCKDUMP=OFF"
+      ],
+      "expected_rc": 0,
+      "label": "actual-production-default-consumer-configure",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Configure the actual production graph using private source overlays and accepted SDK cache, no guest/native launch."
+    },
+    {
+      "argv": [
+        "/usr/bin/cmake",
+        "--build",
+        "/work/output/m15-runtime-program-consumers-1/build",
+        "--target",
+        "mcreboot_rust_program",
+        "mcstop_rust_program",
+        "eclair_backtrace_rust_program",
+        "--",
+        "-j1",
+        "VERBOSE=1"
+      ],
+      "expected_rc": 0,
+      "label": "three-real-Rust-runtime-executables",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Build/link existing Rust boot/stop/backtrace bodies only; do not execute Native backends."
+    },
+    {
+      "argv": [
+        "/usr/bin/readelf",
+        "-hSWsd",
+        "/work/output/m15-runtime-program-consumers-1/build/mcreboot.sh"
+      ],
+      "expected_rc": 0,
+      "label": "ELF-link-mcreboot.sh",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Observe actual ELF/import/build output; no program execution."
+    },
+    {
+      "argv": [
+        "/usr/bin/readelf",
+        "-hSWsd",
+        "/work/output/m15-runtime-program-consumers-1/build/mcstop+release.sh"
+      ],
+      "expected_rc": 0,
+      "label": "ELF-link-mcstop+release.sh",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Observe actual ELF/import/build output; no program execution."
+    },
+    {
+      "argv": [
+        "/usr/bin/readelf",
+        "-hSWsd",
+        "/work/output/m15-runtime-program-consumers-1/build/eclair-dump-backtrace.exp"
+      ],
+      "expected_rc": 0,
+      "label": "ELF-link-eclair-dump-backtrace.exp",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Observe actual ELF/import/build output; no program execution."
+    }
+  ],
+  "explicit_sdk_source_dependencies": {
+    "cache_overlay": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/executor-integration-source-2/sdk11-lifetime-adapter-source-1/source-materialization-1/materialized-source/executer/user/rust/m15_selected_sdk_cache.cmake",
+      "bytes": 12667,
+      "sha256": "a75f7188e5b37caba67e0d0c575151e1c9135b2b4b7c2e85d2db7a785edf37cb",
+      "container_path": "/src/executer/user/rust/m15_selected_sdk_cache.cmake"
+    },
+    "cache_is_not_canonical": true,
+    "accepted_production_materialization": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/executor-integration-source-2/sdk11-lifetime-adapter-source-1/source-materialization-1/materialized-source/executer",
+    "materialization_requirement": "Root must bind the current actual qualified SDK source/readset and matching /out/build support before admission; this existing cache alone is insufficient. Preserve existing canonical user-CMake image including accepted executor/BFD/daemon deltas, then apply the exact runtime patch to matching preimages. Do not copy an old complete user subtree over current sources.",
+    "runtime_delta": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/EXACT-PREIMAGE-RUST-CONSUMER-DELTA.NOT-QUALIFIED.json",
+      "bytes": 19769,
+      "sha256": "700463207db1e4b6b32caadd6d2154fb4f6843c9e836679d4aeb83ef336c7947"
+    },
+    "runtime_patch": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/RUNTIME-PROGRAM-CONSUMERS.PRIVATE-NOT-APPLIED.patch",
+      "bytes": 49918,
+      "sha256": "96c5e0cb8568dcc4f147b3489a47538a9a3411bdbf88153a2b48c8e4b7c3dfa8"
+    },
+    "fresh_source_and_output": true,
+    "current_owner_release_and_current_resources_required": true,
+    "do_not_replay_completed_executor_or_BFD_commands": true,
+    "separate_BFD_CXX_install_fix_not_required_by_this_recipe_without_observed_failure": true
+  },
+  "must_use_fresh_output_namespace": true,
+  "selected_vmcore": false,
+  "current_heavy_slot_or_release": false
+}

@@ -1,0 +1,67 @@
+error: couldn't read `/candidate/modules/private_fork_carrier_request_20261017.rs`: No such file or directory (os error 2)
+  --> /candidate/modules/sysfs_memory.rs:20:1
+   |
+20 | mod fork_carrier_request;
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: aborting due to 1 previous error
+
+make[3]: *** [/out/source/linux-6.12.0-211.44.1.el10_2/scripts/Makefile.build:284: /candidate/modules/ihk_smp_x86_64.o] Error 1
+make[3]: *** Waiting for unfinished jobs....
+error[E0425]: cannot find value `EOVERFLOW` in this scope
+    --> /candidate/modules/os_runtime.rs:2183:59
+     |
+2183 |         let epoch = table.next_epoch.checked_add(1).ok_or(EOVERFLOW)?;
+     |                                                           ^^^^^^^^^ not found in this scope
+     |
+note: these constants exist but are inaccessible
+    --> /candidate/modules/os_registry.rs:27:1
+     |
+  27 | const EOVERFLOW: i32 = 75;
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::os_registry::EOVERFLOW`: not accessible
+     |
+    ::: /candidate/modules/ihk_ioctl.rs:24:1
+     |
+  24 | const EOVERFLOW: i32 = 75;
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::ihk_ioctl::EOVERFLOW`: not accessible
+     |
+    ::: /candidate/modules/device_registry.rs:48:1
+     |
+  48 | const EOVERFLOW: i32 = 75;
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::device_registry::EOVERFLOW`: not accessible
+help: consider importing this constant
+     |
+  10 + use crate::os_runtime::bindings::EOVERFLOW;
+     |
+
+error[E0425]: cannot find value `callbacks` in this scope
+    --> /candidate/modules/os_runtime.rs:3088:16
+     |
+3088 |             || callbacks.prepare_fork_control.map(|f| f as usize) != registered.prepare_fork_control.map(|f| f as usize)
+     |                ^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find value `registered` in this scope
+    --> /candidate/modules/os_runtime.rs:3088:70
+     |
+3088 |             || callbacks.prepare_fork_control.map(|f| f as usize) != registered.prepare_fork_control.map(|f| f as usize)
+     |                                                                      ^^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find value `callbacks` in this scope
+    --> /candidate/modules/os_runtime.rs:3089:16
+     |
+3089 |             || callbacks.prepare_fork_control_receipt.map(|f|f as usize) != registered.prepare_fork_control_receipt.map(|f|f as usize)
+     |                ^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find value `registered` in this scope
+    --> /candidate/modules/os_runtime.rs:3089:77
+     |
+3089 |             || callbacks.prepare_fork_control_receipt.map(|f|f as usize) != registered.prepare_fork_control_receipt.map(|f|f as usize)
+     |                                                                             ^^^^^^^^^^ not found in this scope
+
+error: aborting due to 5 previous errors
+
+For more information about this error, try `rustc --explain E0425`.
+make[3]: *** [/out/source/linux-6.12.0-211.44.1.el10_2/scripts/Makefile.build:284: /candidate/modules/ihk.o] Error 1
+make[2]: *** [/out/source/linux-6.12.0-211.44.1.el10_2/Makefile:1990: /candidate/modules] Error 2
+make[1]: *** [/out/source/linux-6.12.0-211.44.1.el10_2/Makefile:242: __sub-make] Error 2
+make: *** [Makefile:242: __sub-make] Error 2

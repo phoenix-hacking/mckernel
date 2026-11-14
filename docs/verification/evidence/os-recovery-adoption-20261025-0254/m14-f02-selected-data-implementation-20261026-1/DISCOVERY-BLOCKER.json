@@ -1,0 +1,37 @@
+{
+  "task": "m14-f02-selected-data-implementation-20261026-1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "BLOCKED_DISCOVERY_PATHS_ESCALATED_NO_IMPLEMENTATION",
+  "cwd": "/home/holden/mckernel",
+  "at": "2026-10-26T23:54:56.905583+00:00",
+  "attempts": [
+    {
+      "command": "rg --files docs/verification/evidence/os-recovery-adoption-20261025-0254 /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1 | rg -i 'f02|process.*(data|global)|data5'",
+      "pipeline_rc": 0,
+      "unexpected_diagnostics": "Permission denied (os error 13) in protected E custody/admission descendants; broad discovery stopped.",
+      "protected_paths": [
+        "ROOT-SCRATCH-GROWTH-FINAL-COPY-CLOSE-1",
+        "ROOT-SCRATCH-GROWTH-CUSTODY-RECOVERY-1",
+        "ROOT-NEW18H-PARTIAL-CUSTODY-PREPARATION-1/INBOX",
+        "ROOT-SCRATCH-GROWTH-SDK7-ADMISSION-1/OUTPUT",
+        "ROOT-NEW18H-KEEPER-SUCCESSOR-PREPARATION-1/INBOX",
+        "ROOT-NEW18H-KEEPER-SUCCESSOR-PREPARATION-2/INBOX",
+        "current290-dead-caller-normal-cleanup-source-1/normal-entry-reference-closure-correction-source-1/actual-owner1043716-readonly-observation-1",
+        "current290-dead-caller-normal-cleanup-source-1/overall-deadline-correction-source-1/actual-owner1043716-readonly-observation-1"
+      ]
+    },
+    {
+      "command": "rg -n 'time_sharing|allow_oversubscribe|idle_halt|DATA|RUST' kernel/process.c rust/process_helpers.rs docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT285-DATA5-ACCEPTANCE-OPEN-ITEM-DISPOSITION.json docs/verification/evidence/os-recovery-adoption-20261025-0254/INTEGRATED-39-PROVIDERS-AND-F02-PUBLICATION.json",
+      "rc": 2,
+      "stderr": "rg: rust/process_helpers.rs: No such file or directory (os error 2)",
+      "relevant_stdout": [
+        "kernel/process.c:726:int idle_halt = 0;",
+        "kernel/process.c:727:int allow_oversubscribe = 0;",
+        "kernel/process.c:728:int time_sharing = 1;"
+      ]
+    }
+  ],
+  "source_changes": false,
+  "compiler_executed": false,
+  "next": "Dispatcher supplies exact existing private F02/data5/three-global proof and actual process_helpers.rs paths, then reissues continuation."
+}

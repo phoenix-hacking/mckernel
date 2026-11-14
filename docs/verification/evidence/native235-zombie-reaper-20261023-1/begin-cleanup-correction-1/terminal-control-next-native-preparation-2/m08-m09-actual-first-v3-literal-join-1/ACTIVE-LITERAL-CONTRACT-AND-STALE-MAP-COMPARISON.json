@@ -1,0 +1,73 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\nFinite existing-evidence join; no compiler, tests, probes or runtime operation.\n",
+  "ledger": {
+    "path": "/home/holden/mckernel/docs/verification/os-milestones-20260914/practical-milestones.json",
+    "sha256": "31030e7de903c71174c1de0c7ca0bfc4d4d4d01779198890568dd2a5a71d664d",
+    "size": 194318
+  },
+  "active": {
+    "M08": {
+      "id": "M08",
+      "title": "Native modules and interfaces",
+      "exit_condition": "Matched native modules build/load and used ABI/lifetime paths work.",
+      "completion_status": "open",
+      "current_evidence_summary": "Current matched SDK b9ea18d0/ABI5d31c1f0 builds all three modules from the joint kmsg6b736/mailbox33e7 source closure. Actual matching FP1e7 diagnostic88121b15 verifies all three loads, strict AVX output and bounded ring transport; physicala03e987a accepts retirement. Native failed-MM-error ownership and changed fork/provider/complete lifetime boundaries remain open. Separate205 compatibility preparation is not runtime acceptance. SDK68 current source preparation is integrated (owner96687487/driverb19b610f/preparation62c869a8); the independent helper-only observation passes complete11keys and four refusals. This is source integration, not current-module/compiler/native acceptance. Current retained ownership, capacity gate and separate runtime release remain prerequisites; reserve576 approval is unanswered. Current source driver3ba03f13 plus both affected suites53PASS and actual descriptor/retained-proof decode PASS (container make digest injected only), independently accepted. CURRENT11map28f9a79d refreshed; this is source/unit evidence only.",
+      "checks": [
+        {
+          "id": "P-M08-01",
+          "description": "Build/load matching IHK/SMP/mcctrl modules.",
+          "status": "complete",
+          "assessment_note": "Matched source3f7b265b IHK/SMP/mcctrl modules compiled with make0/driver0 in18.664067s and loaded together in the strict native shutdown guest. Exact payload, Running5 and shutdown0 observed. IHK/mcctrl are honestly byte-identical to prior artifacts; SMP changed. Future source integration retains its own build/load obligation. Currentd99 matchedmodule build andload now independently accepted; CPUreacquisition/fullpubliccycle1 works. Fork/carrier andremainingunsafe/ABI obligations remain open. Current joint Rust-fix SDK b9ea18d0/5d31c1f0 now has matching three-module load proof88121b15 and physicala03e987a on fixed FP1e7; no changed-MM-error/fork/full-history/non-null-FP proof follows."
+        },
+        {
+          "id": "P-M08-02",
+          "description": "Validate used boot/resource/process/mapping/shutdown ABI paths and changed unsafe boundaries.",
+          "status": "open",
+          "assessment_note": "Current3f7b matched binaries now validate used strict boot/Running/publication/shutdown paths. Resource destroy/release/reboot, dormant fork integration and remaining changed unsafe/ABI boundaries are still open. Currentd99 matchedmodule build andload now independently accepted; CPUreacquisition/fullpubliccycle1 works. Fork/carrier andremainingunsafe/ABI obligations remain open. SDK68 current source preparation is integrated (owner96687487/driverb19b610f/preparation62c869a8); the independent helper-only observation passes complete11keys and four refusals. This is source integration, not current-module/compiler/native acceptance. Current retained ownership, capacity gate and separate runtime release remain prerequisites; reserve576 approval is unanswered."
+        }
+      ]
+    },
+    "M09": {
+      "id": "M09",
+      "title": "Rust and assembly integration",
+      "exit_condition": "Existing Rust consumers preserved and changed consumed Rust/C/assembly boundaries validated in the final artifact set; host compatibility exceptions explicit. Complete compute-kernel C retirement is tracked separately by M14.",
+      "completion_status": "open",
+      "current_evidence_summary": "21 selected production Rust paths/18 applicable native paths after actual named insert/clear default caller/object/ELF joins and representative current053d NUMA native acceptance. First-node insertion and clear-entry empty-tree scope only; nonempty branches/full final boundary set remain open. Whole compute-kernel C retirement remains active and is tracked separately by M14.",
+      "checks": [
+        {
+          "id": "P-M09-01",
+          "description": "Keep existing Rust consumers active.",
+          "status": "complete",
+          "assessment_note": "Existing accepted Rust consumers remain active. Current1e7a/f4799cc5 preserves twelve earlier defaults and adds Rust release_fp_regs, thirteen selected production paths total. Eleven applicable native paths include accepted paired SAVE/RESTORE workload chains; hardware/nonzeroDR/exhaustive branches remain open. release_fp_regs nonnull native proof remains open, clear_fp_regs refused execve remains excluded; no whole-kernel C retirement claim."
+        },
+        {
+          "id": "P-M09-02",
+          "description": "Validate changed consumed Rust/C/assembly boundaries in the final artifact set.",
+          "status": "open",
+          "assessment_note": "Current5f7 production40713d52 validates selected SAVE/RESTORE default ABI/link/scalar bodies and preserves previous accepted Rust bodies. Full final artifact set/native/fallback/legacy/hardware remains open. Original syscall-DWARF13 failed and all14passed=false; required ABI facts instead established by successful complete process-DWARF14 plus actual compiled C assertions. No failed check relabeled PASS."
+        }
+      ],
+      "scope_separation_20261023": {
+        "authority": "User explicitly requests a separate file-by-file Rust-cutover milestone instead of adding the entire cutover to M09.",
+        "prior_exit_condition_preserved": "Existing Rust consumers preserved; live McKernel compute C retired into Rust/reviewed assembly through production default consumers, linked artifacts and native proof; host compatibility exceptions explicit.",
+        "retirement_milestone": "M14",
+        "worklist": "rust-cutover-m14.json",
+        "practical_check_ids_statuses_and_evidence_unchanged": true
+      }
+    }
+  },
+  "old_pending_map": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/M08-M09-OBSERVATION-MAP.PENDING-FIRST-V3.json",
+    "sha256": "b8bb0fb657644d1db9ffb5b1746a11b3a87f94ff54299188ef6d6fb01bfcd734",
+    "size": 4321
+  },
+  "old_map_bytes_preserved": true,
+  "scope_resolution": {
+    "current_M08": "Used boot/resource/process/mapping/shutdown ABI paths and changed unsafe boundaries; no universal unconsumed-path mapping matrix is stated.",
+    "current_M09": "Changed consumed Rust/C/assembly boundaries in final artifact set; preserve existing Rust consumers and explicit host compatibility exceptions.",
+    "superseded_nested_M09_retirement_wording": "Historical preserved scope_alignment completion_requirement is explicitly superseded by M14 separation; it is not an additional M09 gate.",
+    "old_exhaustive_mapping_beyond_consumed_selected_paths": "Extra breadth in pending observation map, not an active check clause; retain as deferred qualification, not invented optional acceptance gate.",
+    "old_first_V3_null_slots": "Now bind accepted formal12a05b2d, physical1f3c1830 and inner532aeb25 without rewriting old map.",
+    "ten_cycles_LONG": "P-M05-03/P12 repetition/work requirements remain separate; current M08/M09 clauses do not require10cycles or an hour workload."
+  }
+}

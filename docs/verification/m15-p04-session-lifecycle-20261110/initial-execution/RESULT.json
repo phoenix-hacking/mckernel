@@ -1,0 +1,38 @@
+{
+  "status": "FAIL",
+  "started_at": "2026-11-10T10:17:03.161508+00:00",
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--core=0:0",
+    "--fsize=67108864:67108864",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/run_lifecycle.py",
+    "--execute"
+  ],
+  "finished_at": "2026-11-10T10:17:03.334145+00:00",
+  "error": "AssertionError('Traceback (most recent call last):\\n  File \"/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/run_lifecycle.py\", line 157, in <module>\\n    sys.exit(main())\\n  File \"/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/run_lifecycle.py\", line 85, in main\\n    checked([\\'/usr/bin/cc\\', \\'-std=c11\\', \\'-Wall\\', \\'-Wextra\\', \\'-Werror\\',\\n  File \"/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/run_lifecycle.py\", line 58, in checked\\n    raise RuntimeError(label + \\': unexpected command/ownership failure: \\' + \\',\\'.join(bad))\\nRuntimeError: abi-compile: unexpected command/ownership failure: \\n')",
+  "outer_records": [
+    {
+      "label": "single-lifecycle",
+      "leader": 844681,
+      "leader_birth": "39208922",
+      "status": 1,
+      "leader_parent_joined": true,
+      "timed_out": false,
+      "leader_group_signalled": false,
+      "adopted_reaps": [],
+      "adopted_kills": [],
+      "whole_descendants_joined": true,
+      "remaining_direct_children": [],
+      "streams_closed": true,
+      "error": null
+    }
+  ]
+}

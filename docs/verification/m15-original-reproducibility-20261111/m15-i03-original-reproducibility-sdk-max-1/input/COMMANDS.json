@@ -1,0 +1,131 @@
+[
+  {
+    "label": "p01p02-configure",
+    "argv": [
+      "/usr/bin/cmake",
+      "-S",
+      "/input/p01",
+      "-B",
+      "/output/p01",
+      "-DCMAKE_INSTALL_PREFIX:PATH=/usr/local",
+      "-DCMAKE_INSTALL_LIBDIR:PATH=lib64",
+      "-DCMAKE_INSTALL_SBINDIR:PATH=sbin",
+      "-DCMAKE_BUILD_TYPE=Debug",
+      "-DENABLE_RUST_BOOT_TOOLS=ON",
+      "-DENABLE_LINUX_WORK_IRQ_FOR_IKC=ON",
+      "-DMCKERNEL_RUNTIME_TOOL_RUSTC:FILEPATH=/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+      "-DP01P02_SOURCE_ROOT:PATH=/p01/source"
+    ],
+    "timeout": 60
+  },
+  {
+    "label": "p01p02-build",
+    "argv": [
+      "/usr/bin/cmake",
+      "--build",
+      "/output/p01",
+      "--target",
+      "mcreboot_rust_program",
+      "mcstop_rust_program",
+      "--parallel",
+      "1",
+      "--verbose"
+    ],
+    "timeout": 120
+  },
+  {
+    "label": "p01p02-install",
+    "argv": [
+      "/usr/bin/cmake",
+      "-E",
+      "env",
+      "DESTDIR=/output/stage",
+      "/usr/bin/cmake",
+      "--install",
+      "/output/p01",
+      "--prefix",
+      "/usr/local"
+    ],
+    "timeout": 30
+  },
+  {
+    "label": "p03-configure",
+    "argv": [
+      "/usr/bin/cmake",
+      "-S",
+      "/p03/source",
+      "-B",
+      "/output/p03",
+      "-G",
+      "Unix Makefiles",
+      "-DCMAKE_MAKE_PROGRAM:FILEPATH=/usr/bin/make",
+      "-DCMAKE_INSTALL_PREFIX:PATH=/usr/local",
+      "-DCMAKE_INSTALL_LIBDIR:PATH=lib64",
+      "-DCMAKE_INSTALL_BINDIR:PATH=bin",
+      "-DBUILD_TARGET:STRING=smp-x86",
+      "-DENABLE_RUST_ECLAIR_BACKTRACE:BOOL=ON",
+      "-DMCKERNEL_RUNTIME_TOOL_RUSTC:FILEPATH=/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc"
+    ],
+    "timeout": 60
+  },
+  {
+    "label": "p03-build",
+    "argv": [
+      "/usr/bin/cmake",
+      "--build",
+      "/output/p03",
+      "--target",
+      "eclair_backtrace_rust_program",
+      "--parallel",
+      "1",
+      "--verbose"
+    ],
+    "timeout": 120
+  },
+  {
+    "label": "p03-install",
+    "argv": [
+      "/usr/bin/cmake",
+      "-E",
+      "env",
+      "DESTDIR=/output/stage",
+      "/usr/bin/cmake",
+      "--install",
+      "/output/p03",
+      "--prefix",
+      "/usr/local"
+    ],
+    "timeout": 30
+  },
+  {
+    "label": "three-new-ELF-metadata",
+    "argv": [
+      "/usr/bin/readelf",
+      "--wide",
+      "--file-header",
+      "--program-headers",
+      "--section-headers",
+      "--symbols",
+      "--relocs",
+      "--dynamic",
+      "--version-info",
+      "/output/p01/mcreboot.sh",
+      "/output/p01/mcstop+release.sh",
+      "/output/p03/eclair-dump-backtrace.exp"
+    ],
+    "timeout": 30
+  },
+  {
+    "label": "three-new-symbol-owners",
+    "argv": [
+      "/usr/bin/nm",
+      "-a",
+      "-S",
+      "--format=posix",
+      "/output/p01/mcreboot.sh",
+      "/output/p01/mcstop+release.sh",
+      "/output/p03/eclair-dump-backtrace.exp"
+    ],
+    "timeout": 30
+  }
+]

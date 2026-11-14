@@ -1,0 +1,85 @@
+[
+  {
+    "case": "live_guard",
+    "outcome": "rejected",
+    "error": "UNRELEASED SCRIPTS BRANCH: no authenticated live owner, packet or custody authority"
+  },
+  {
+    "case": "missing_receipt",
+    "outcome": "UNKNOWN_RETAIN_OUTPUT",
+    "receipt_accepted": false,
+    "mocked_capture_record": {
+      "returncode": 0,
+      "direct_child_joined": true,
+      "group_absent": true,
+      "fixture_receipt": null
+    }
+  },
+  {
+    "case": "partial_receipt",
+    "outcome": "UNKNOWN_RETAIN_OUTPUT",
+    "receipt_accepted": false,
+    "mocked_capture_record": {
+      "returncode": 0,
+      "direct_child_joined": true,
+      "group_absent": true,
+      "fixture_receipt": "{\"status\":"
+    }
+  },
+  {
+    "case": "success_shaped_receipt",
+    "outcome": "UNKNOWN_RETAIN_OUTPUT",
+    "receipt_accepted": false,
+    "mocked_capture_record": {
+      "returncode": 0,
+      "direct_child_joined": true,
+      "group_absent": true,
+      "fixture_receipt": "{\"status\":\"SUCCESS_BODY_ONLY\"}"
+    }
+  },
+  {
+    "case": "failed_join",
+    "outcome": "UNKNOWN_RETAIN_OUTPUT",
+    "receipt_accepted": false,
+    "mocked_capture_record": {
+      "returncode": 0,
+      "direct_child_joined": false,
+      "group_absent": false,
+      "fixture_receipt": "{\"status\":\"SUCCESS_BODY_ONLY\"}"
+    }
+  },
+  {
+    "case": "synthetic_all_true",
+    "outcome": "UNKNOWN_RETAIN_OUTPUT",
+    "receipt_accepted": false,
+    "mocked_capture_record": {
+      "returncode": 0,
+      "direct_child_joined": true,
+      "group_absent": true,
+      "closed_streams": true,
+      "custody": true,
+      "durability": true,
+      "fixture_receipt": "{\"status\":\"SUCCESS_BODY_ONLY\"}"
+    }
+  },
+  {
+    "case": "capture_exception",
+    "outcome": "UNKNOWN_RETAIN_OUTPUT",
+    "reason": "capture exception: OSError"
+  },
+  {
+    "case": "child_drift",
+    "outcome": "rejected",
+    "error": "exact scripts child bytes"
+  },
+  {
+    "case": "manifest_drift",
+    "outcome": "rejected",
+    "error": "bound bytes: manifest"
+  },
+  {
+    "case": "limits_guard",
+    "outcome": "rejected",
+    "error": "UNRELEASED SCRIPTS BRANCH: no reviewed child limits"
+  }
+]

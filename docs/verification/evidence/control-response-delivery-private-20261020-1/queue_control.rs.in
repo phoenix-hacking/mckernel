@@ -1,0 +1,37 @@
+    /// Transfer exactly one authenticated parked control response. Unlike
+    /// generic restore, close/cancellation refuses before any transfer.
+    /// Error bool denotes a possibly changed guest wake state; its SAME owner
+    /// stays in the ticket or Completion and requires quarantine/retention.
+    pub(crate) fn queue_control_response(&mut self,ticket:&mut ForkIngressResponse<M>,
+        value:i64,
+    )->core::result::Result<(),(i32,bool)>{
+        if self.closed||self.quarantined{return Err((-32,false));}
+        let call=self.fork_abort_call(ticket.worker,ticket.serial,&ticket.request).map_err(|e|(e,false))?;
+        if call.cancelled||!call.fork_ingress_pending||call.response.is_some()||call.completion.is_some(){return Err((-16,false));}
+        let worker=call.worker.ok_or((-71,false))?;
+        call.delivery.check_return(worker,ticket.request.cpu()as i64).map_err(|e|(e,false))?;
+        let response=ticket.response.take().ok_or((-71,false))?;
+        let completion=match response.prepare_control_retained(&ticket.request,worker.tid(),value){
+            Ok(completion)=>completion,
+            Err((error,response))=>{ticket.response=Some(response);return Err((error,true));},
+        };
+        // Retain completion before the remaining metadata step can fail.
+        call.completion=Some(completion);call.fork_ingress_pending=false;
+        call.delivery.begin_return(worker,ticket.request.cpu()as i64).map_err(|e|(e,true))?;
+        Ok(())
+    }
+
+    pub(crate) fn publish_control_observed(&mut self,handle:u64,serial:u64,
+        expected:&Request,cpu:i32,send:impl FnOnce(&[u8;128])->Result,
+        observed:impl FnOnce(&Request,Option<u64>,u64),
+    )->Result<bool>{
+        if self.closed||self.quarantined{return Err(-32);}
+        let index=self.calls.iter().position(|s|s.as_ref().is_some_and(|c|
+            c.delivery.serial().wire()==serial)).ok_or(-2)?;
+        let call=self.calls[index].as_ref().unwrap();
+        if call.delivery.request()!=expected||call.delivery.request().cpu()!=cpu
+            ||call.worker.map(Worker::wire)!=Some(handle)||call.kernel||call.service||call.cancelled
+            ||call.fork_ingress_pending||call.response.is_some()||call.completion.is_none()
+        {return Err(-16);}
+        self.publish_index_observed(index,send,observed)
+    }

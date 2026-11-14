@@ -1,0 +1,79 @@
+{
+  "checks": "OriginalFAIL/make0/sourceprep provenance; all107retainedsource/generated/modulefiles hashes before/after; exact68closure; existingmoduleorder/vermagic/actualcfg/compilerbindings/actualMM checks plus correctedtypedexportcontract. No source/helper subprocess or make invoked.",
+  "command": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=536870912:536870912",
+    "--cpu=20:20",
+    "/usr/bin/python3",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/provider-opt-in-1/current-export-contract-correction-1/run_bounded_validation.py",
+    "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/provider-opt-in-1/current-export-contract-correction-1/ordinary-check-1"
+  ],
+  "compiled_bytes_unchanged_required": true,
+  "limits": {
+    "as_bytes": 536870912,
+    "cpu": 6,
+    "cpu_seconds": 20,
+    "jobs": 1,
+    "per_file_output_bytes": 1048576,
+    "total_output_budget_bytes": 3145728,
+    "wall_seconds": 20
+  },
+  "no_rebuild": true,
+  "original_input": {
+    "candidate": "/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-20352dabb9c94403a03c224ec2826ff2",
+    "original_driver_receipt_sha256": "58ffcfb9febb788d6e3f4c6d949f0307c88031b95940655b49f8a577a0bbb2d3",
+    "retained_bytes": 50696615,
+    "retained_files": 107
+  },
+  "preserve_original_failure": true,
+  "schema": "mckernel.current68.readonly-artifact-check-proposal.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_inputs": {
+    "READONLY-REVALIDATION-FIXED-INPUTS.json": {
+      "bytes": 473,
+      "path": "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/provider-opt-in-1/current-export-contract-correction-1/READONLY-REVALIDATION-FIXED-INPUTS.json",
+      "sha256": "a92c36553d19536421d437bea936b7021290ddedbffbb083a1b5067fa6ef4702"
+    },
+    "native_running_external_modules_offline.py": {
+      "bytes": 37609,
+      "path": "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/provider-opt-in-1/current-export-contract-correction-1/native_running_external_modules_offline.py",
+      "sha256": "a129da6157069d341226741b3a948712cca51c6b976eac3bf55001a5780ff539"
+    },
+    "revalidate_retained_artifacts.py": {
+      "bytes": 5509,
+      "path": "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/provider-opt-in-1/current-export-contract-correction-1/revalidate_retained_artifacts.py",
+      "sha256": "ae8d4f682d9c598ef2f9ebf261a38e8e54183fad94f1ba4613fb040ccd3fe802"
+    },
+    "run_bounded_validation.py": {
+      "bytes": 2563,
+      "path": "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/provider-opt-in-1/current-export-contract-correction-1/run_bounded_validation.py",
+      "sha256": "1138d0765bf362fc2581320c8770b5fadaca6e9a098b38bece16d8e1742f6c2f"
+    }
+  },
+  "status": "AWAITING_EXACT_ORDINARY_GRANT_NO_EXECUTION",
+  "tool_pins": {
+    "/usr/bin/prlimit": {
+      "bytes": 39672,
+      "path": "/usr/bin/prlimit",
+      "sha256": "06a57e4767f1bdfcc8c5a39b4b58decb9366447b007a8bdd9d6b12d1e6698d8c"
+    },
+    "/usr/bin/python3.8": {
+      "bytes": 5490456,
+      "path": "/usr/bin/python3.8",
+      "sha256": "298a9e830ed52f36c299427565485d717d1ce0179c0597cc16560513eb780b06"
+    },
+    "/usr/bin/taskset": {
+      "bytes": 35048,
+      "path": "/usr/bin/taskset",
+      "sha256": "28f2dd426247d7d1d794c0fb8a723efc6a1ae3c56393a238b180fe9a0dc32f1c"
+    }
+  },
+  "writes_only": [
+    "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/provider-opt-in-1/current-export-contract-correction-1/ordinary-check-1",
+    "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/provider-opt-in-1/current-export-contract-correction-1/readonly-validation-1"
+  ]
+}

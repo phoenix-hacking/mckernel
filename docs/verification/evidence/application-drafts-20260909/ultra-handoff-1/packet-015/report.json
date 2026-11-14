@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-015",
+  "packet_version": 1,
+  "context_sha256": "8730c4c75bd35ef76c45b20f6a14711764138334358d7294c0fa01ada45f311c",
+  "started_utc": "2026-09-09T11:00:00Z",
+  "finished_utc": "2026-09-09T11:00:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {"case_id": "memory.protection-subrange", "status": "DRAFTED_WITH_UNRESOLVED", "fixture": "scripts/application-tests/cases/memory/memory.protection-subrange.c", "oracle": "scripts/application-tests/oracles/memory.protection-subrange.json", "changed_files": ["scripts/application-tests/cases/memory/memory.protection-subrange.c", "scripts/application-tests/oracles/memory.protection-subrange.json"], "parameter_vectors": {}, "unresolved_oracle_notes": ["Pinned signal numeric binding and canonical output require review."], "max_reviewer_question": "Confirm only the middle page faults at offset 4096 while outer pages remain unchanged."},
+    {"case_id": "memory.mprotect-unaligned", "status": "DRAFTED_WITH_UNRESOLVED", "fixture": "scripts/application-tests/cases/memory/memory.mprotect-unaligned.c", "oracle": "scripts/application-tests/oracles/memory.mprotect-unaligned.json", "changed_files": ["scripts/application-tests/cases/memory/memory.mprotect-unaligned.c", "scripts/application-tests/oracles/memory.mprotect-unaligned.json"], "parameter_vectors": {}, "unresolved_oracle_notes": ["Pinned EINVAL numeric binding and canonical output require review."], "max_reviewer_question": "Confirm page_base+1 is rejected atomically with unchanged bytes and permissions."},
+    {"case_id": "memory.munmap-unaligned", "status": "DRAFTED_WITH_UNRESOLVED", "fixture": "scripts/application-tests/cases/memory/memory.munmap-unaligned.c", "oracle": "scripts/application-tests/oracles/memory.munmap-unaligned.json", "changed_files": ["scripts/application-tests/cases/memory/memory.munmap-unaligned.c", "scripts/application-tests/oracles/memory.munmap-unaligned.json"], "parameter_vectors": {}, "unresolved_oracle_notes": ["Pinned EINVAL numeric binding and canonical output require review."], "max_reviewer_question": "Confirm unaligned munmap is rejected without changing the two-page mapping."}
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/memory/memory.protection-subrange.c", "sha256": "02b7978b265a7ff4bd74b115023ae4e67a2c3eeef5f8afab9c63bbd8f68763ac"},
+    {"path": "scripts/application-tests/oracles/memory.protection-subrange.json", "sha256": "5fa6b9a761dcda1c0a63fccbc5541159f25c12ad551707c9e1f2ceb978ae8cca"},
+    {"path": "scripts/application-tests/cases/memory/memory.mprotect-unaligned.c", "sha256": "f7268f30c5146ac85ea0e87c35b49c8493715d6dfd38eae956e8ffe3ea7eda80"},
+    {"path": "scripts/application-tests/oracles/memory.mprotect-unaligned.json", "sha256": "2fb6618d6c3b9b4abde66af6c9999836b47d1cef001968b6ddfbc79eac4f05a7"},
+    {"path": "scripts/application-tests/cases/memory/memory.munmap-unaligned.c", "sha256": "34c29ac9d1cc171a98bbc9418840366d3566117a83db9bce411ec077ae999e7f"},
+    {"path": "scripts/application-tests/oracles/memory.munmap-unaligned.json", "sha256": "6da05a2615fd72243cb6f22acc2f9d60a53e288f6d25d4a24011a4f868de379a"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-015.json --emit-context /tmp/application-packet-015-context.json", "outcome": "PASS; metadata only"},
+    {"command": "python3 -m json.tool report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Three memory protection-alignment cases need final signal/errno and canonical record review."],
+  "blocked_execution_capabilities": ["current-inputs", "runtime-transport-fault-injection", "runner-contract"],
+  "first_failure_event": null,
+  "max_escalation": ["Review exact subrange fault provenance and atomic unaligned syscall rejection before execution."],
+  "next_packet_id": "packet-016"
+}

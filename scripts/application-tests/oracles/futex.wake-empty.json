@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "case_id": "futex.wake-empty",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "wait_status": {
+    "kind": "exited",
+    "code": 0
+  },
+  "stdout": {
+    "kind": "exact-line-lines",
+    "lines": [
+      "futex-wake-empty rc=0 errno=0",
+      "word=0 guard=165"
+    ]
+  },
+  "stderr": {
+    "kind": "exact-bytes",
+    "hex": ""
+  },
+  "input_fixture": {
+    "futex_initial": 0,
+    "wake_count": 1,
+    "environment": {
+      "LANG": "C",
+      "LC_ALL": "C",
+      "TZ": "UTC"
+    }
+  },
+  "relational_assertions": [
+    "wake call returns zero when no waiters are present",
+    "word and guard must remain stable"
+  ],
+  "unresolved_expectations": [
+    "Structured stream capture policy for this payload is not fixed in draft schema."
+  ],
+  "max_question_for_reviewer": "Should wake-empty assert wake return value exactly 0 or allow spurious wake semantics in any accepted implementation path?"
+}

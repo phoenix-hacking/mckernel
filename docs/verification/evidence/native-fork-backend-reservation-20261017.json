@@ -1,0 +1,48 @@
+{
+  "schema": "mckernel.native-fork-backend-reservation.v1",
+  "status": "SOURCE_CHECKS_PASS_COMPILER_PENDING",
+  "author": "/root/fork_ownership",
+  "worktree": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1",
+  "base_commit": "1eb1017dc9f123ef7b5898cffa09c25c2a2e95af",
+  "runtime_fork_acceptance": false,
+  "implementation": [
+    "Reserve binds an exact unique live ordinary Delivered first nr56, worker, serial, CPU, native MCFK0001 marker and nonzero nonce, range/root, same OS generation, distinct child connection and referenced current Linux child TGID/MM.",
+    "Child PID/MM references and their Arc allocation precede Remote.slots acquisition. Validation, replay exclusion and transaction-token allocation precede the single child metadata publication. The MM owner retains mm_count, not mm_users, avoiding a VMA/application connection cycle.",
+    "Commit changes only the prevalidated transaction state and is unsafe/internal pending the infallible VMA transaction. No new ABI command or caller is exposed. Existing commands 1-14 and the original Mailbox methods remain byte-identical.",
+    "Original ordinary RET owns its response memory through actual wake/status publication. Positive RET must match the child PID and committed state; parent/worker close or negative completion requests cancellation. Cancellation retains the child identity/root metadata and blocks ordinary child cleanup/release. No HostRevoked or final scalar ACK is fabricated."
+  ],
+  "source_sha256": {
+    "host-kernel/native-rust/smp_application.rs": "008102ae58ea83312b56b26ad62097dc871bc63a76286bd4d565c00205f2af5f",
+    "host-kernel/native-rust/smp_application_image.rs": "c41e7f2dc2907032d5a8b36cfa4679cad375e774c4103b9ef27f714c2c079721",
+    "host-kernel/native-rust/smp_application_syscall.rs": "8b477ef7d78b3516fa8e230f116104a2493f8ebf59631165f3781d3f0ca163d0",
+    "host-kernel/native-rust/application_rpc.rs": "9f811c86c4e996294a6cd3be6b83315dabd20a3fb375419e091f4b9dedcfad39",
+    "host-kernel/native-rust/application_syscall.rs": "03007f44c020c5d0cf797b18568ef8b329fd5cb4e81abe80bb5c542b58020c25",
+    "host-kernel/native-rust/abi/application.rs": "d2b3770a111777d4f28a7a81814a03414d318a90d3ec7082d5c89149b1704a0f",
+    "scripts/tests/test_native_fork_backend_reservation_20261017.py": "f99164ba8de4c62eaed26bacb451e22bde83c546fff68b6e8b7506560311ffcb",
+    "scripts/tests/fixtures/native_fork_backend_reservation_20261017.rs": "6a2e5e27b81d8454101cb34efb30cb1945854e3067a19b9692d99dbf5ebecd47",
+    "generated_actual_bodies.rs": "685ecea850a14b9209076ba24d84b568f720db2aec4fdf4e5d1882a109b6cd77"
+  },
+  "source_only_check": {
+    "command": "taskset -c 7 timeout 60s prlimit --as=2147483648 --nofile=256 --fsize=67108864 --core=0 python3 -B -m unittest scripts.tests.test_native_fork_backend_reservation_20261017.NativeForkBackendReservationTests.test_exact_production_bodies_are_extracted scripts.tests.test_native_fork_backend_reservation_20261017.NativeForkBackendReservationTests.test_original_mailbox_and_wire_abi_are_preserved scripts.tests.test_native_fork_backend_reservation_20261017.NativeForkBackendReservationTests.test_no_success_gate_or_external_reservation_caller",
+    "exit_status": 0,
+    "result": "3 tests passed",
+    "compiler_invoked": false
+  },
+  "next_executable_check": {
+    "entrypoint": "python3 -B -m unittest scripts.tests.test_native_fork_backend_reservation_20261017",
+    "release": "Dispatcher must inspect and approve before compiler invocation; CPU7, 2GiB AS, 180s owned process group, nofile256, fsize64MiB, core0, serial Rust1.92.",
+    "vectors": "Five actual-body Rust tests: queued/copying/kernel/returning phase rejection; unique reserve/commit and original real RET response publication including failed wake retention; cancel-before-RET and original -512 cancellation publication; range/OS/PID/occupied-child mismatch, token and replay rejection; non-native marker/zero nonce and ambiguous Delivered rejection.",
+    "adapters": "Kernel Vec allocation and Linux PID/MM/OS identity are explicit fixture adapters. Exact production RPC, Request/Response and complete Mailbox bodies, ForkAdoption transitions, reservation metadata and backend reserve/commit/cancel/RET/publication helpers are extracted. Linux reference acquisition/destruction and Remote integration require native compilation/review; no live fork is tested.",
+    "capture": "Persistent mkdtemp under inherited TMPDIR retains generated source, binary, compiler version, every command, stdout, stderr and status, including timeouts."
+  },
+  "remaining_gates": [
+    "Non-null CREATE_PPD remains -95. No ABI15-17, VMA replacement, second-handshake, revoke, final-ACK or success gate is connected.",
+    "Live per-VMA write exclusion remains unavailable in the pinned generated Rust bindings; mmap write locking alone is not accepted. Backend reserve stays callable only internally, with no external caller.",
+    "Cancellation ownership is deliberately retained until actual host revoke/drain plus exact checked final guest destruction and scalar ACK are wired. PID absence is not a safety proof."
+  ],
+  "preserved_history": [
+    "native-fork-ownership-20261017.json retains original runtime nr56=-95/raw wait status256 and rejected Mirror-only candidate.",
+    "native-fork-adoption-implementation-20261017.json retains prior 3Python/12Rust actual-body PASS.",
+    "native-fork-final-destructor-implementation-20261017.json remains the exact frozen precompile record 4f84d8efbd00f5ea26e95626cc1be2dec8932b3929d7da2e15e977f265086700; separate native-fork-final-destructor-central-pass-20261017.json retains 4Python/2Rust,46C+46Rustvectors and nondumpable SIGSEGV controls PASS with original static/profile failures."
+  ]
+}

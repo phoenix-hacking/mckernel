@@ -1,0 +1,151 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_CONSUMER_PLAN_NO_SECOND_EXECUTABLE_COHORT",
+  "selected_entry": "void interrupt_exit(struct x86_user_context *regs)",
+  "current_callers": [
+    {
+      "path": "arch/x86_64/kernel/cpu.c",
+      "function": "handle_interrupt"
+    },
+    {
+      "path": "arch/x86_64/kernel/cpu.c",
+      "function": "gpe_handler"
+    },
+    {
+      "path": "arch/x86_64/kernel/cpu.c",
+      "function": "debug_handler"
+    },
+    {
+      "path": "arch/x86_64/kernel/cpu.c",
+      "function": "int3_handler"
+    }
+  ],
+  "actual_original_C_provider": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-cpu-log-next/production-consumer-preparation-1/bounded-header-transport-correction-1/actual-remaining-capture-1/06-selected-complete-CPU-symbols/stdout",
+    "sha256": "d84911c11ef5ed5a9498c55fe62ec1d3ef467e3be69dbefed28cc242a7b3ae3c",
+    "bytes": 15909
+  },
+  "actual_original_C_provider_rows": [
+    "                 U check_need_resched",
+    "                 U check_sig_pending",
+    "                 U check_signal",
+    "                 U cpu_enable_interrupt",
+    "00000000000020e0 000000000000008b T interrupt_exit",
+    "                 U interrupt_from_user"
+  ],
+  "historical_full_Rust_baseline": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-cpu-log-next/production-consumer-preparation-1/actual-production-capture-1/01-current78-Rust-symbols/stdout",
+    "sha256": "fbac91c87be9003a0d945fa4628f8629cf4213667e37cf90a1c428beefdc9a4e",
+    "bytes": 167251
+  },
+  "historical_Rust_provider_rows": [
+    "0000000000000000 T check_need_resched",
+    "                 U check_sig_pending",
+    "0000000000000000 T cpu_enable_interrupt",
+    "0000000000000000 T interrupt_from_user"
+  ],
+  "existing_providers": [
+    {
+      "name": "interrupt_from_user",
+      "body": "kernel/rust/syscall_policy.rs:11644",
+      "ABI": "unsafe extern C fn(*mut c_void)->CInt",
+      "semantics": "Actual existing classifier reads saved RSP bit63; do not substitute CS predicate."
+    },
+    {
+      "name": "cpu_enable_interrupt",
+      "body": "kernel/rust/x86_cpu_helpers.rs:825",
+      "ABI": "unsafe extern C fn()->()",
+      "semantics": "Existing selected sti body; alias is Rust-local, link_name unchanged. Native instruction never run by source preparation."
+    },
+    {
+      "name": "check_need_resched",
+      "body": "kernel/rust/sched_helpers.rs:2850",
+      "ABI": "unsafe extern C fn()->()",
+      "semantics": "Existing selected Rust scheduler/lock/callback body remains untouched."
+    },
+    {
+      "name": "check_sig_pending",
+      "body": "kernel/syscall.c:27441",
+      "ABI": "void(void)",
+      "remaining_C_debt": true
+    },
+    {
+      "name": "check_signal",
+      "body": "kernel/syscall.c:27664",
+      "ABI": "void(unsigned long,void*,int)",
+      "remaining_C_debt": true
+    }
+  ],
+  "focused_future_fixture": {
+    "not_created_or_queued": true,
+    "extraction": "Compile exact ORIGINAL-C-BODY.inc and actual Rust export/declarations with real abi.rs X86UserContext; symbol-rename only for coexistence.",
+    "endpoint_control": "Provide recording endpoints for existing external symbols; replace only native cpu_enable_interrupt provider at link boundary with a tape endpoint. Do not execute sti or real scheduling/signals on host.",
+    "oracles": [
+      "Classifier zero: exactly one classifier call and no other call.",
+      "Every nonzero classifier result including INT_MIN/INT_MAX: ordered classifier, enable, pending, resched, signal.",
+      "check_signal gets exact unsigned-long0, original pointer, signed-int-1; no return value or context ownership added.",
+      "Callbacks may mutate valid caller-owned frame; later callbacks see mutation; exact original pointer retained through sequence; no pointer survives return.",
+      "Actual classifier body can separately compare bit63 of real saved RSP, not user CS or a modeled layout. NULL classifier-stub tests are endpoint-only and never prove actual classifier tolerates NULL."
+    ],
+    "ABI": "Real headers assert entry void(*)(struct x86_user_context*), provider signatures from process.h; compare actual Rust X86UserContext size/alignment/field offsets with C context.h; no model struct.",
+    "counts_and_results": null,
+    "execution_authority": "Requires future explicit root ordinary grant; none requested or held by this source-only handoff."
+  },
+  "future_production_observation": [
+    "Refresh current accepted 77 canonical inputs + private x86_cpu_helpers only after parent selects coherent context/stack/other union. This candidate is independent logger2d29/26180 base, not a merged context consumer.",
+    "Reuse exact accepted pinned production nightly70eb/48argv/4cfg/CGU1/two extern modules and GCC9 wholeCPU/header profile after explicit grant; derive T/U delta from actual selected baseline, never hardcode historical counts.",
+    "Expect exactly one Rust T interrupt_exit and no selected C T interrupt_exit; selected complete CPU real handle_interrupt/gpe/debug/int3 caller relocations must target the Rust entry.",
+    "Rust local cpu_enable_interrupt alias links to existing actual Rust provider; interrupt_from_user and check_need_resched resolve to existing Rust Ts; remaining check_sig_pending/check_signal C providers stay explicit debt.",
+    "Partial link actual Rust object + complete selected CPU C + required existing syscall C provider as appropriate; no arbitrary stubs in production consumer. Fallback C must still define its exact original body when selection is off.",
+    "Whole GCC14/default kernel link/native behavior remain open until their separately admitted real operations."
+  ],
+  "source_pins": {
+    "arch/x86_64/kernel/cpu.c": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+      "sha256": "2d29bca555936a213f0a7296a302ec57b55c575536c33a58285b07b203390eca",
+      "bytes": 95484
+    },
+    "kernel/rust/x86_cpu_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "26180e00c1d6673aa600f0ec9afed5d100ca6e0c39af803c3328e58f8cc88fb9",
+      "bytes": 91270
+    },
+    "kernel/rust/abi.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "bytes": 76151
+    },
+    "kernel/rust/syscall_policy.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "sha256": "f1f7866c0f2ccc8e1b0024dfb632ec7359dd2a0a4bcd8e22deb957d48ef6d770",
+      "bytes": 711734
+    },
+    "kernel/rust/sched_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "sha256": "d16200db3054d88a83752fda1383d6c101d24de4b787bd78cd42edb46ab251fc",
+      "bytes": 185669
+    },
+    "kernel/include/process.h": {
+      "path": "/home/holden/mckernel/kernel/include/process.h",
+      "sha256": "8848d536f2fa847a59af72d573ec9c55838c27cea664d46438ab4e038bf83649",
+      "bytes": 26602
+    },
+    "kernel/CMakeLists.txt": {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "sha256": "b141d09ad4d717171d9fca51b8ffefec65573f266652bc0d93129bd2a03ec40e",
+      "bytes": 23076
+    },
+    "arch/x86_64/kernel/include/ihk/context.h": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/ihk/context.h",
+      "sha256": "13a67bcf26c512ac27ece4ab801e5e96976b88ec505d9f549e53755b431171f8",
+      "bytes": 2286
+    }
+  },
+  "actual_leaf": null,
+  "production": null,
+  "default_link": null,
+  "native": null,
+  "CPU_slots_held": 0,
+  "compiler_jobs": 0,
+  "test_jobs": 0
+}

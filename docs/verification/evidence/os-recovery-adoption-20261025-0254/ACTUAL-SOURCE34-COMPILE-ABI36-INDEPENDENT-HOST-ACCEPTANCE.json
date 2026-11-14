@@ -1,0 +1,59 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "ACCEPT_HOST_SOURCE34_COMPILE_AND_STATIC_ABI36_ONLY",
+  "reviewer": "/root/perf_review18h",
+  "recorded_at": "2026-10-26T04:34:45.458094+00:00",
+  "result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-34-thread-hash-writer-production-abi-source-1/ACTUAL-THREE-COMMAND-CORRECTION1-RESULT.json",
+    "sha256": "56cf3c00bdc2ca65af4a0b271c7b1ad993b0aa238f2b1030fb1c46242c443353",
+    "bytes": 94896
+  },
+  "commands": 3,
+  "all_returncodes_zero": true,
+  "all_children_joined": true,
+  "all_groups_absent": true,
+  "all_streams_closed": true,
+  "stable_admitted_input_identities": 101,
+  "abi_values_equal": 36,
+  "thread_hash": {
+    "buckets": 73,
+    "size": 5888,
+    "alignment": 64,
+    "list_offset": 0,
+    "lock_offset": 1216
+  },
+  "lock_node_size_alignment": [
+    64,
+    64
+  ],
+  "objects": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-34-thread-hash-writer-production-abi-source-1/output-correction1/provider.o",
+      "bytes": 3504,
+      "sha256": "750ba5c97ef6328607f0527c207302871356986f6df31981db70fd4cd03d8525"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-34-thread-hash-writer-production-abi-source-1/output-correction1/header-abi.o",
+      "bytes": 26456,
+      "sha256": "30c9897758163a6695e0fad83119a2d533f8ddb07b2cd4c1572fa18f27e81a8f"
+    }
+  ],
+  "exact_undefined_imports": [
+    "get_this_cpu_local_var",
+    "panic",
+    "process_list_detach_result",
+    "process_list_is_linked_result",
+    "process_mcs_writer_lock_bridge",
+    "process_mcs_writer_unlock_bridge"
+  ],
+  "new_core_panicking_helpers": 0,
+  "wall_seconds": 0.4078442379832268,
+  "cpu_seconds": 0.39988100000000004,
+  "peak_rss_kib": 96916,
+  "first_failure_preserved": "180659d61238fd2307a2d9399f5ede5e91423827318523f32302c2bdb53aba0f",
+  "limits": [
+    "No runtime or provider-resolution link",
+    "Production flag pairing/full crate/default/native/all freeing paths and lifetime acceptance open"
+  ],
+  "new_default_native_or_c_retirement_closures": 0
+}

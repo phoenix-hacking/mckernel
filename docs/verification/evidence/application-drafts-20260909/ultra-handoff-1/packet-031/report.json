@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-031",
+  "packet_version": 1,
+  "context_sha256": "35b6a43c7462d09a61504a88ae508e76d50eb8621c2a7954ebda0180c0facc73",
+  "started_utc": "2026-09-09T13:40:00Z",
+  "finished_utc": "2026-09-09T13:40:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {"case_id": "futex.wait-unmapped", "status": "DRAFTED_WITH_UNRESOLVED", "fixture": "scripts/application-tests/cases/futex/futex.wait-unmapped.c", "oracle": "scripts/application-tests/oracles/futex.wait-unmapped.json", "changed_files": ["scripts/application-tests/cases/futex/futex.wait-unmapped.c", "scripts/application-tests/oracles/futex.wait-unmapped.json"], "parameter_vectors": {}, "unresolved_oracle_notes": ["Pinned EFAULT numeric binding and no-retained-waiter evidence require review."], "max_reviewer_question": "Confirm unmapped FUTEX_WAIT returns EFAULT without process termination or waiter publication."},
+    {"case_id": "futex.wake-one", "status": "DRAFTED_WITH_UNRESOLVED", "fixture": "scripts/application-tests/cases/futex/futex.wake-one.c", "oracle": "scripts/application-tests/oracles/futex.wake-one.json", "changed_files": ["scripts/application-tests/cases/futex/futex.wake-one.c", "scripts/application-tests/oracles/futex.wake-one.json"], "parameter_vectors": {}, "unresolved_oracle_notes": ["Scheduler wait-publication bracket and canonical wake evidence require review."], "max_reviewer_question": "Confirm retry-until-one-actual-wake and zero wake-after-join requirements."},
+    {"case_id": "futex.wake-two", "status": "DRAFTED_WITH_UNRESOLVED", "fixture": "scripts/application-tests/cases/futex/futex.wake-two.c", "oracle": "scripts/application-tests/oracles/futex.wake-two.json", "changed_files": ["scripts/application-tests/cases/futex/futex.wake-two.c", "scripts/application-tests/oracles/futex.wake-two.json"], "parameter_vectors": {}, "unresolved_oracle_notes": ["Scheduler waiter-publication bracket and canonical wake evidence require review."], "max_reviewer_question": "Confirm two distinct actual wake returns and no lost waiter under the bounded scheduler."}
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/futex/futex.wait-unmapped.c", "sha256": "854d07e665d4b0a6f95d4c64999e109270896072def95112e7b8f356226c5389"},
+    {"path": "scripts/application-tests/oracles/futex.wait-unmapped.json", "sha256": "d77daef440911938f4275fadba168a1e382227cfd5fe86cc09a4e4ad76e19333"},
+    {"path": "scripts/application-tests/cases/futex/futex.wake-one.c", "sha256": "05d54c9dfed57b35d10ee4a9be9e0c1b12512204e1d4d82b9b37c17005f42b86"},
+    {"path": "scripts/application-tests/oracles/futex.wake-one.json", "sha256": "705ec66224f831072e9dac3268158f34ae6ac3aaee72b685436d2615a6e2ccdd"},
+    {"path": "scripts/application-tests/cases/futex/futex.wake-two.c", "sha256": "0a34022685894523ca23587b23c5ed32337d4156696164aa82ade0113145fe01"},
+    {"path": "scripts/application-tests/oracles/futex.wake-two.json", "sha256": "37f1c69baae8b485be897c75805ad728d26d0ca53e4358d729a5a7eca4e2b104"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-031.json --emit-context /tmp/application-packet-031-context.json", "outcome": "PASS; metadata only"},
+    {"command": "python3 -m json.tool report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Three futex cases need final ABI, scheduler publication, and exact wake evidence review."],
+  "blocked_execution_capabilities": ["current-inputs", "runtime-transport-fault-injection", "runner-contract"],
+  "first_failure_event": null,
+  "max_escalation": ["Review EFAULT handling, actual waiter publication, wake counts, and cleanup ownership."],
+  "next_packet_id": "packet-032"
+}

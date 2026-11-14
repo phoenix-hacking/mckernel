@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-unprivileged-build-only-source-1/run_build_only.py", line 158, in <module>
+    if __name__=='__main__':main()
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-unprivileged-build-only-source-1/run_build_only.py", line 156, in main
+    if args.execute:execute(Path(args.execute))
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-unprivileged-build-only-source-1/run_build_only.py", line 121, in execute
+    resource_guards(profile,grant,review,resources,time.time(),int(mem['MemAvailable'])*1024,int(Path('/proc/loadavg').read_text().split()[3].split('/')[1]),int(Path('/proc/sys/kernel/threads-max').read_text()),Path('/proc/locks').read_text(),start)
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-unprivileged-build-only-source-1/run_build_only.py", line 32, in resource_guards
+    require(now<DEADLINE and 0<=now-resources['observed_at_epoch']<=120,'fresh resource admission within fixed window')
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-unprivileged-build-only-source-1/run_build_only.py", line 15, in require
+    if not ok:raise RuntimeError(message)
+RuntimeError: fresh resource admission within fixed window

@@ -1,0 +1,64 @@
+
+/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o:     file format elf64-x86-64
+
+
+Disassembly of section .ltext.process_init_stack_free_pages_bridge:
+
+0000000000000000 <process_init_stack_free_pages_bridge>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	41 57                	push   %r15
+   6:	41 56                	push   %r14
+   8:	41 55                	push   %r13
+   a:	41 54                	push   %r12
+   c:	53                   	push   %rbx
+   d:	50                   	push   %rax
+   e:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	10: R_X86_64_64	process_init_stack_free_file
+  18:	48 8b 08             	mov    (%rax),%rcx
+  1b:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	1d: R_X86_64_64	process_init_stack_free_line
+  25:	44 8b 00             	mov    (%rax),%r8d
+  28:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	2a: R_X86_64_64	memdebug
+  32:	4c 8b 08             	mov    (%rax),%r9
+  35:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	37: R_X86_64_64	pagealloc_track_initialized
+  3f:	8b 00                	mov    (%rax),%eax
+  41:	48 83 ec 08          	sub    $0x8,%rsp
+  45:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	47: R_X86_64_64	mem_pagealloc_track_log_bridge
+  4f:	49 bb 00 00 00 00 00 00 00 00 	movabs $0x0,%r11	51: R_X86_64_64	mem_pagealloc_invalid_size_bridge
+  59:	48 bb 00 00 00 00 00 00 00 00 	movabs $0x0,%rbx	5b: R_X86_64_64	mem_pagealloc_invalid_free_bridge
+  63:	49 be 00 00 00 00 00 00 00 00 	movabs $0x0,%r14	65: R_X86_64_64	mem_pagealloc_track_noirq_unlock_bridge
+  6d:	49 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%r15	6f: R_X86_64_64	mem_pagealloc_track_noirq_lock_bridge
+  77:	49 bc 00 00 00 00 00 00 00 00 	movabs $0x0,%r12	79: R_X86_64_64	mem_kmalloc_remote_unlock_bridge
+  81:	49 bd 00 00 00 00 00 00 00 00 	movabs $0x0,%r13	83: R_X86_64_64	mem_kmalloc_remote_lock_bridge
+  8b:	ba 01 00 00 00       	mov    $0x1,%edx
+  90:	41 52                	push   %r10
+  92:	41 53                	push   %r11
+  94:	53                   	push   %rbx
+  95:	41 56                	push   %r14
+  97:	41 57                	push   %r15
+  99:	41 54                	push   %r12
+  9b:	41 55                	push   %r13
+  9d:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	9f: R_X86_64_64	___kfree
+  a7:	41 52                	push   %r10
+  a9:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	ab: R_X86_64_64	mem_pagealloc_track_meta_alloc_bridge
+  b3:	41 52                	push   %r10
+  b5:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	b7: R_X86_64_64	___ihk_mc_free_pages
+  bf:	41 52                	push   %r10
+  c1:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	c3: R_X86_64_64	pagealloc_addr_hash_locks
+  cb:	41 52                	push   %r10
+  cd:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	cf: R_X86_64_64	pagealloc_addr_hash
+  d7:	41 52                	push   %r10
+  d9:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	db: R_X86_64_64	pagealloc_track_hash_locks
+  e3:	41 52                	push   %r10
+  e5:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	e7: R_X86_64_64	pagealloc_track_hash
+  ef:	41 52                	push   %r10
+  f1:	50                   	push   %rax
+  f2:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	f4: R_X86_64_64	pagealloc_track_free_result
+  fc:	ff d0                	call   *%rax
+  fe:	48 81 c4 88 00 00 00 	add    $0x88,%rsp
+ 105:	5b                   	pop    %rbx
+ 106:	41 5c                	pop    %r12
+ 108:	41 5d                	pop    %r13
+ 10a:	41 5e                	pop    %r14
+ 10c:	41 5f                	pop    %r15
+ 10e:	5d                   	pop    %rbp
+ 10f:	c3                   	ret    

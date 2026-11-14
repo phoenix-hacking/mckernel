@@ -1,0 +1,65 @@
+{
+  "changed_files": [
+    {
+      "additive_publication_target": "docs/verification/evidence/collector-gate-failure-export-correction-20261020-1/candidate/pair_collector.c",
+      "fresh_copy_patch_relative_target": "candidate/pair_collector.c",
+      "production_source_preimage": {
+        "bytes": 24161,
+        "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/candidate/pair_collector.c",
+        "sha256": "b4c019d216ab12d41559fcdb9ea3c9f9380201e8f9d4434847ec254118731431"
+      },
+      "reviewed_replacement": {
+        "bytes": 24489,
+        "path": "/home/holden/mckernel-work/host-preparation/collector-gate-failure-export-correction-20261020-1/candidate/pair_collector.c",
+        "sha256": "fa044ae1994e6da4b20766d9b133acebb8881528dd718b268b2cf53984a883ed"
+      }
+    },
+    {
+      "additive_publication_target": "docs/verification/evidence/collector-gate-failure-export-correction-20261020-1/candidate/pair_trace_retention.inc",
+      "fresh_copy_patch_relative_target": "candidate/pair_trace_retention.inc",
+      "production_source_preimage": {
+        "bytes": 12059,
+        "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/candidate/pair_trace_retention.inc",
+        "sha256": "acb8163419236147da3c330f26e8dabb67c0e4802d9bdcd2c247d1cded40a468"
+      },
+      "reviewed_replacement": {
+        "bytes": 12080,
+        "path": "/home/holden/mckernel-work/host-preparation/collector-gate-failure-export-correction-20261020-1/candidate/pair_trace_retention.inc",
+        "sha256": "56fbc60937a4be373a42a44670df573add73cf2b5b5e12e2fec653262507c2e9"
+      }
+    }
+  ],
+  "current_binding_field": "sources.compiled_collector",
+  "current_consumed_binary": {
+    "mode": 33216,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/check-2/collector",
+    "sha256": "9c5b82a6fcd1baace70cea8daf29433684a3f7bc4d2307d4d31899653abf0e02",
+    "size": 1043696
+  },
+  "current_consumed_stage_inputs": {
+    "bytes": 4168,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/STAGE-INPUTS.json",
+    "sha256": "ae10b02e5d418bb012f070ce528a5d09d1393c6aa3d84d8f8151e6097902a271"
+  },
+  "current_repo_source_finding": "git ls-files exact pair_collector.c/pair_trace_retention.inc identifies historical two/three-round evidence only; current5d617 source is private and currentHOST66 consumer binds its compiled artifact. Historical tracked evidence is not an integration target.",
+  "independent_acceptance": {
+    "bytes": 11714,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-independent-review-20261020-1/GATE-FAILURE-EXPORT-ORDERING-SOURCE-AND-ACTUAL-FIVE-CASES-REVIEW.json",
+    "sha256": "2bc41dbcbea89f391fed4a6312193fa4fb215de10a5cbf1e121462da8e7b5d85"
+  },
+  "integration_method": "Preserve accepted source/stage byte-for-byte. Root may publish the complete candidate source closure additively. To apply the patch, begin with a NEW copy of the accepted source closure and patch -p1 from its parent; verify both exact preimages then both reviewed replacements. Future stage preparation may bind the replacement0700 binary in a new stage namespace, deriving a separate same-byte0755 archive copy. Do not patch any retained accepted stage/source/archive.",
+  "patch": {
+    "bytes": 2777,
+    "path": "/home/holden/mckernel-work/host-preparation/collector-gate-failure-export-correction-20261020-1/integration.patch",
+    "sha256": "2d12765186bdc82741230df80f2044a8dea5279789ab5ce0e96486872c7adbd6"
+  },
+  "production_or_native_or_stage_or_default_acceptance": false,
+  "replacement_binary": {
+    "bytes": 1043696,
+    "mode": "0o700",
+    "path": "/home/holden/mckernel-work/host-preparation/collector-gate-failure-export-correction-20261020-1/check-2/collector",
+    "sha256": "f672d2872f2bbbfbf3c8a686ec2932494b090ed35d9fd973df92cf4769262b10"
+  },
+  "schema": "mckernel.collector-gate-export.exact-integration-map.v1",
+  "scope": "Functional OS/apps plus Rust cutover; Linux userland failure transport only"
+}

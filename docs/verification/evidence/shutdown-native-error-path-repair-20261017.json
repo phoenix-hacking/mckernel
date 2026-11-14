@@ -1,0 +1,47 @@
+{
+  "schema": "mckernel.shutdown-native-error-path-repair.v1",
+  "status": "SOURCE_CORRECTION_TARGET_STATIC_CHECK_PASS_AWAITING_DISPATCHER_COMPILE",
+  "failure_family": "S22-NATIVE-SHUTDOWN-ERROR-PATH-1",
+  "initial_actual_candidate_failures": 1,
+  "bounded_corrections_used": 1,
+  "original_failure": {
+    "retained_log": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority1-evidence/build/driver.log",
+    "log_sha256_at_inspection": "1ff0935e69306bb2fde0ecc542e013cd9aa72dabd3a524541263e3a69d7f1b64",
+    "diagnostic": "error[E0412]: cannot find type `Error` in crate `kernel` at ihk_smp_x86_64.rs:402:43",
+    "retained_git_commit": "511cbc832382150993ec0c23fc391f3d3f6f6e45",
+    "source_git_path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
+    "source_sha256": "ead31123d69508bd678f321137e9fba023621a46cdf86aa3466381b966b52b44",
+    "original_complete_function": "fn shutdown_v6_post_effect(error: kernel::Error) -> i64 {\n    IHK_SMP_SHUTDOWN_V6_POST_EFFECT | (error.to_errno() as u32 as i64)\n}",
+    "preservation": "Original source bytes remain in the exact Git commit and failed staged tree; driver log/output/container and leases are dispatcher-owned and untouched by this lane."
+  },
+  "actual_target_crate": {
+    "root": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority1-output/source/linux-6.12.0-211.44.1.el10_2/rust/kernel",
+    "lib_rs_sha256": "cde3e1e9608006f36c3a44ee11be848d8481c665f75b6d29937c9e9d9f76b0b6",
+    "error_rs_sha256": "50181273de10264d9aa181ba573ef859945808ebf59b01453939de75f9b47ff2",
+    "exports": "lib.rs line37 publishes pub mod error; Error is defined at error.rs line91, with public inherent to_errno at line125. No crate-root Error reexport exists."
+  },
+  "correction": {
+    "production_path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
+    "corrected_source_sha256": "a353b2915a4038e7739d01cc440376daf091367f976cf6de297bceb1dd59fce8",
+    "change": "Only parameter type path kernel::Error becomes kernel::error::Error; post-effect tag, errno bit encoding, callback error arms and all ownership/effect policy are unchanged.",
+    "regression_driver": "scripts/tests/test_shutdown_native_error_path_20261017.py",
+    "regression_driver_sha256": "48899df693514106d4c125d0fa204b9ae1c79325396b8de04913499effd8fc83",
+    "fixture_adapter": "scripts/tests/fixtures/shutdown_v6_provider.rs",
+    "fixture_adapter_original_sha256": "2cf0952892bdd0cc2643e2422682249a0307df946fbca2a1f0053c8b8fc3df6a",
+    "fixture_adapter_sha256": "86a50132f331fdac00ae155d8970d6644b0e7c0f4e82c5bdd4ddcc950890c94c",
+    "fixture_adapter_scope": "Expose nested kernel::error::Error alias. Historical root alias remains solely for existing provider mutation replacement at test_native_shutdown_v6_provider_integration_20261001.py:53. New target-export regression provides no root alias and extracts the actual selected Linux Error declaration and complete to_errno method."
+  },
+  "checks": {
+    "source_static_command": "taskset -c 6 timeout 60s prlimit --as=2147483648 --core=0 --nofile=256 --fsize=67108864 -- python3 -B -m unittest scripts.tests.test_shutdown_native_error_path_20261017.ShutdownNativeErrorPathTests.test_target_exports_and_actual_helper_are_exact",
+    "source_static_result": "PASS 1 test; actual target lib.rs/error.rs hashes and selected export surface verified",
+    "compiler_owner": "dispatcher; worker has not invoked rustc",
+    "compiler_pinned_path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+    "compiler_sha256": "028fd60b0e0add5505c661cd3ccde91393d615c8729bd95d94ab1e91409b36a1",
+    "proposed_compile": "rustc --edition=2021 --test -Dwarnings <fresh>/repaired.rs -o <fresh>/repaired",
+    "positive_oracle": "Complete actual shutdown helper runs against the actual target Error declaration/to_errno; all4095 valid negative Linux errno values preserve exact tag and low32 payload bits",
+    "negative_oracle": "Old kernel::Error spelling must fail compilation with E0412 when the local target export surface deliberately omits a root alias",
+    "combined_touched_families": "New target-error test plus existing provider integration and actual-order regressions; dispatcher to retain full generated artifacts and statuses."
+  },
+  "next_dependency": "Confirm against actual kernel.rmeta when metadata/compiler compatible, integrate source authority and fresh candidate under existing serialized heavy release, then first new guest signal.mask-restore. No replay or mutation of failed scratch22 materialization.",
+  "acceptance_delta": {"current_candidate_builds": 0, "real_guest_apps": 0, "formal_application_cases": 0, "production_gates": 0}
+}

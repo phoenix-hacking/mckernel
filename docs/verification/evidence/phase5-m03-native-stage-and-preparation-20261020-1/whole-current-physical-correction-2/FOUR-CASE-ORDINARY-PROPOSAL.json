@@ -1,0 +1,66 @@
+{
+  "status": "FROZEN_CONDITIONAL_ROOT_CPU6_GRANT_AFTER_PEER_DELTA_AGREEMENT_AND_FRESH_GUARDS",
+  "functional_scope": "Functional OS/apps plus Rust/reviewed assembly compute cutover",
+  "outer_argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--fsize=33554432",
+    "--core=0",
+    "--nofile=256",
+    "--",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-preparation-1/native-packet-1/whole-current-physical-correction-2/run_checks_once.py"
+  ],
+  "fixture": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-preparation-1/native-packet-1/whole-current-physical-correction-2/check_whole_current.py",
+    "sha256": "2a7dc447a9c1c5aa76374458321807ffd3f46c3df33801fc7a76e6335d35b232",
+    "bytes": 2386
+  },
+  "runner": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-preparation-1/native-packet-1/whole-current-physical-correction-2/run_checks_once.py",
+    "sha256": "89363c3852e35bc7b03aebbd1415338da28a59f74c754a39633807bc92ecbf75",
+    "bytes": 2586
+  },
+  "inputs": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-preparation-1/native-packet-1/whole-current-physical-correction-2/INPUTS.json",
+    "sha256": "8a062a33c520938926185e5d8e128066f3068832c1ba675a11ee5c895cf2ab79",
+    "bytes": 1293
+  },
+  "case_count": 4,
+  "profile": {
+    "cpu": 6,
+    "jobs": 1,
+    "AS_bytes": 1073741824,
+    "CPU_seconds": 30,
+    "wall_seconds": 35,
+    "kill_grace_seconds": 2,
+    "perstream_bytes": 33554432,
+    "core_bytes": 0,
+    "nofile": 256,
+    "minimum_MemAvailable_bytes": 5368709120,
+    "minimum_host_available_bytes": 18887655424,
+    "minimum_scratch_available_bytes": 14026801152
+  },
+  "no_approval_fixture_or_protected_raw": true,
+  "report": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-production-link-image-independent-review-20261020-1/ACTUAL-FAILED-IMAGE-SUCCESSOR-CLEANUP-PHYSICAL-RELEASE-REVIEW.json",
+    "sha256": "d55efb73f89ab110386dedbfc176081a32a4b0b4b28cb6f3176b0d94b23aa9ef",
+    "bytes": 12528
+  },
+  "source_delta": "ONE bounded actual failure correction: plan.terminal is exact producer4tuple bound to unique full9 selected owner receipt/schema/CID/name/nonce, while engine.terminal remains separately True. All other full d55/UID/canonicalhash/normalproof/currentFD guards and4cases unchanged. Firstactual0f3 failure preserved.",
+  "prior_helper_only_result_preserved": true,
+  "no_old59_28_or_fixtures_replay": true,
+  "root_operations": 0,
+  "guest_runs": 0,
+  "failure_family_history": "One actualwholefailure at bool-versus-tuple terminalguard; this is sole bounded correction; any further actualfailure =>expert escalation, no third retry."
+}

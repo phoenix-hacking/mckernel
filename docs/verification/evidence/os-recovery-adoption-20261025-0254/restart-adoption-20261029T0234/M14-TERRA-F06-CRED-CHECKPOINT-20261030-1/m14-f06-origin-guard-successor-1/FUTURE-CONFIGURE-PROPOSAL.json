@@ -1,0 +1,77 @@
+{
+  "status": "PROPOSED_SOURCE_ONLY_ORIGIN_GUARD_SUCCESSOR_NOT_RELEASED",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "authority": null,
+  "source_and_artifact_binding": {
+    "base_profile_sha256": "e6a8462b10b409e86a7192d34328de33307cccd5c8e53d75b6312c85042c1ec3",
+    "source_mounts": "Exact 29-target e6a source/toolchain map, independently rebound; replace only CMake and add two origin source mounts",
+    "/src/kernel/CMakeLists.txt": "0a149e2fa29522150f1a6bf39d544062581ff7ebd5c528d8f19eb766c1dcb536",
+    "/src/scripts/derive_f06_origin.py": "0eecb12a434415523b744b73f1704f7cc68693ab3a28a328a3e354bf43c83f3c",
+    "/src/scripts/f06_origin_command_profile.json": "7b60afe60f069bb863e7c38ca8c28abe8ea682814d0207e54663572adfde7dca",
+    "/src/arch/x86_64/kernel/syscall.c": "9a356317ff621decba53a11fe0967ae9eee1bb5059d262e6b2402f90042a4a25",
+    "/src/lib/include/ihk/debug.h": "7315ef758c56c4888242295ed9340b44f649d772b1315502acc49eb6105048dc",
+    "/out/build": "UNBOUND Linux build configuration and generated headers; exact reviewed identity and mount required",
+    "/work": "fresh unique private writable root, never reused e6a frozen read-only build overlays"
+  },
+  "configure": {
+    "cwd": "/work",
+    "argv": [
+      "/usr/bin/cmake",
+      "-S",
+      "/src",
+      "-B",
+      "/work/output/build",
+      "-G",
+      "Unix Makefiles",
+      "-DCMAKE_BUILD_TYPE=Debug",
+      "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+      "-DCMAKE_C_COMPILER=/usr/bin/cc",
+      "-DCMAKE_ASM_COMPILER=/usr/bin/cc",
+      "-DCMAKE_LINKER=/usr/bin/ld",
+      "-DCMAKE_MAKE_PROGRAM=/usr/bin/make",
+      "-DRUSTC=/nightly/bin/rustc",
+      "-DBUILD_TARGET=smp-x86",
+      "-DKERNEL_DIR=/out/build",
+      "-DENABLE_RUST_KERNEL=ON",
+      "-DMCKERNEL_M14_NONHELD13_DATA32_EXPERIMENTAL=ON",
+      "-DMCKERNEL_HOST_IRQ_ABI=linux-6.12",
+      "-DENABLE_PERF=ON",
+      "-DPROFILE_ENABLE=ON",
+      "-DENABLE_RUSAGE=ON",
+      "-DENABLE_UBSAN=OFF",
+      "-DENABLE_TOFU=OFF",
+      "-DENABLE_PER_CPU_ALLOC_CACHE=OFF",
+      "-DENABLE_FUGAKU_HACKS=OFF",
+      "-DENABLE_NATIVE_SYSFS_VERIFY=OFF",
+      "-DENABLE_NATIVE_FORK_OWNED_TRANSACTION=ON",
+      "-DENABLE_RUST_PROCESS_VERBOSE_DATA=ON",
+      "-DENABLE_RUST_PROCESS_VERBOSE_LOCAL_COMPANIONS=ON",
+      "-DENABLE_PROCESS_DEBUG_PRINT=OFF"
+    ]
+  },
+  "build": {
+    "cwd": "/work",
+    "argv": [
+      "/usr/bin/cmake",
+      "--build",
+      "/work/output/build",
+      "--target",
+      "mckernel.img",
+      "--parallel",
+      "1"
+    ],
+    "status": "FUTURE UNRELEASED: no actual reuse of eight retained objects asserted; fresh compilation may occur"
+  },
+  "required_before_configure": [
+    "Independent review exact source, origin producer, fixed origin profile, CMake patch and functional/provider delta",
+    "Fresh source identity/quiescence, mount map including missing /out/build, fresh live controllers/resource/owner and one-shot release",
+    "Bind complete expected cache/input/toolchain/env and output writer, enforce original holds and kernel source/ABI contracts",
+    "New output location and owned cleanup; e6a 8 read-only objects are historical, do not infer safe incremental reuse"
+  ],
+  "required_after_configure_before_build": [
+    "Verify exact actual arch compiler invocation selects MCKERNEL_M14_F06_ORIGIN_GUARD in addition to the e6a selected flags; actual C compile fails closed on DDEBUG_DEFAULT, DEBUG_PRINT_SC and file origin, independently review all other actual macro/header and producer/profile inputs",
+    "Capture actual generated compile_commands.json and Rust custom command; independently compare all effective flags, source, origin and provider requirements with e6a; manual e6a command is not actual CMake output",
+    "Resolve CMake-generated command versus producer profile, header and original389 oracle; review and bind any concrete difference before build",
+    "Independent build execution admission and live resource identity; no dynamic wakeup/free logger, held generic scopes, native or guest execution"
+  ]
+}

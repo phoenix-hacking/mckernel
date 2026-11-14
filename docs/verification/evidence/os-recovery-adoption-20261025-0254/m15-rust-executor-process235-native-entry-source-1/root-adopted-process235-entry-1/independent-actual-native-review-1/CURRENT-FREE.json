@@ -1,0 +1,136 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Exact original235 current-free only.",
+  "decision": "PASS_POSITIVE_ORIGINAL235_NATIVE_OPERATION_RETIREMENT_AND_CURRENT_FREE",
+  "independent": true,
+  "implementation_ownership": false,
+  "reviewer": "/root/custody_release_review",
+  "nonce": "d21f4e17faf1b0b806419b1860bd0598",
+  "nonce_consumed": true,
+  "current_free": true,
+  "normal_owned_retirement": true,
+  "container": "cf8479d23553018d39eabd2d1de0b1c858b850a57b3b82650271ed1287185199",
+  "actual_statuses": {
+    "capture_returncode": 0,
+    "bridge_returncode": 0,
+    "owner_result": {
+      "absence_verified": true,
+      "application_acceptance": false,
+      "container": "cf8479d23553018d39eabd2d1de0b1c858b850a57b3b82650271ed1287185199",
+      "failure": null,
+      "lease_retained": false,
+      "secondary": [],
+      "secondary_omitted": 0,
+      "signal_number": null,
+      "status": "PROTOCOL_PASS"
+    },
+    "container_state": {
+      "Dead": false,
+      "Error": "",
+      "ExitCode": 0,
+      "FinishedAt": "2026-10-28T02:05:17.756424603Z",
+      "OOMKilled": false,
+      "Paused": false,
+      "Pid": 0,
+      "Restarting": false,
+      "Running": false,
+      "StartedAt": "2026-10-28T02:04:40.774026519Z",
+      "Status": "exited"
+    },
+    "QEMU_cleanup": {
+      "errors": [],
+      "reaped": true
+    },
+    "QEMU_evidence": {
+      "argv": [
+        "/usr/libexec/qemu-kvm",
+        "-machine",
+        "q35",
+        "-accel",
+        "tcg,thread=multi",
+        "-cpu",
+        "max,la57=off",
+        "-smp",
+        "4,sockets=2,cores=2,threads=1",
+        "-m",
+        "8192",
+        "-object",
+        "memory-backend-ram,size=4G,id=ram-node0",
+        "-object",
+        "memory-backend-ram,size=4G,id=ram-node1",
+        "-numa",
+        "node,nodeid=0,cpus=0-1,memdev=ram-node0",
+        "-numa",
+        "node,nodeid=1,cpus=2-3,memdev=ram-node1",
+        "-nic",
+        "none",
+        "-display",
+        "none",
+        "-no-reboot",
+        "-no-shutdown",
+        "-S",
+        "-monitor",
+        "none",
+        "-qmp",
+        "unix:/home/holden/mckernel-work/scratch/m15p235/attempt-d21f4e17faf1b0b806419b1860bd0598/qmp.sock,server=on,wait=off",
+        "-serial",
+        "file:/home/holden/mckernel-work/scratch/m15p235/attempt-d21f4e17faf1b0b806419b1860bd0598/serial.log",
+        "-debugcon",
+        "file:/home/holden/mckernel-work/scratch/m15p235/attempt-d21f4e17faf1b0b806419b1860bd0598/debugcon.log",
+        "-global",
+        "isa-debugcon.iobase=0xe9",
+        "-kernel",
+        "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/bzImage",
+        "-initrd",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-stage-preparation-source-1/root-actual-qualified-input-plan-source-1/root-actual-compose-1/process235-overlay.cpio.gz",
+        "-append",
+        "console=ttyS0,115200n8 rdinit=/init nokaslr panic=-1 memmap=4K%0x80000-1"
+      ],
+      "pgid": 10,
+      "pid": 10,
+      "returncode": -9,
+      "sid": 10,
+      "starttime_ticks": 95052642
+    }
+  },
+  "owned_client_retirement": {
+    "actual_commands": 30,
+    "all_exact_reaped": true,
+    "all33_owned_actor_PIDs_and_PGRPs_absent": true
+  },
+  "fresh_current": {
+    "exact_observation": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/root-adopted-process235-entry-1/independent-actual-native-review-1/FRESH-EXACT-CONTAINER-AND-ACTORS.json",
+      "bytes": 58073,
+      "sha256": "5d562aab74781305a3193a2fbf7ecdd4d8a51bbac0b043ccf6e73b62002eefa0"
+    },
+    "baseline_observation": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/root-adopted-process235-entry-1/independent-actual-native-review-1/FRESH-BASELINE-READONLY.stdout",
+      "bytes": 124453,
+      "sha256": "f7cbdba440ec9dbe7a3aac8fcee98d309f97e4c26ae2c9cfb33ea5b1483d30b8"
+    },
+    "baseline_join": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/root-adopted-process235-entry-1/independent-actual-native-review-1/FRESH-BASELINE-READONLY.JOINED.json",
+      "bytes": 648,
+      "sha256": "ad53fed8db26875b4a725c669e91d4c0f587504026daeeead53a84d4d90955e6"
+    },
+    "exactCID_name_label_absent": true,
+    "no_running_containers": true,
+    "pids_current": 0,
+    "closed_permanent_mutex_probes": [
+      "19: FLOCK  ADVISORY  WRITE 1806541 00:1b:4 0 EOF",
+      "19: FLOCK  ADVISORY  WRITE 1806541 00:1b:4 0 EOF"
+    ],
+    "census_errors": []
+  },
+  "complete_raw_capture": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/root-adopted-process235-entry-1/independent-actual-native-review-1/RAW-CAPTURE-MANIFEST.json",
+    "bytes": 66743,
+    "sha256": "ba400da6a4e70eb6430e1b5c93104035ba2d23bc2cb8a1e7e0bf6a36e8b4342c"
+  },
+  "native_acceptance": false,
+  "case_acceptance": "Independent full original235 contract review follows; wrapper0 not acceptance.",
+  "next_operation_authority": null,
+  "runtime_authority": null,
+  "reviewer_cleanup_signals_or_retries": 0,
+  "new_workloads": 0
+}

@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "recorded_at_utc": "2026-09-29T03:24:00Z",
+  "status": "PASS_SOURCE_CLOSURE_ONLY",
+  "base_commit": "474404529d595217551714e5dabbf3f0f3d25d6e",
+  "policy_sha256": {
+    "GOAL.md": "76c4f5d12e3f233c8dc4f8f1a77dd1f2eae9df2ff8fb9f4000ef5a2e94c0bcc3",
+    "START.md": "1698d3429e71083634584dea7f78d22ff9e2927858de0dc714f829f9b3d6216c",
+    "CONVERGENCE.md": "f6938bd207d6fa2c0898def482e9bb4bd0cf173937fe55c2111a369d3393e86a",
+    "HANDOFF.md_at_resume": "c31f3bbe0cf7bc5fc64d4d117869cd8bca7a068ff4e456efa1a05919cfac3fca"
+  },
+  "corrections": {
+    "host_audit_exact_prefixes": {
+      "result": "PASS",
+      "details": "Extended only the exact OS create-v5 and topology-query prefixes to bind their complete reviewed Safety documentation; exact count, order, top-level placement and remaining-escape rejection are unchanged.",
+      "audit_sha256": "14a8a059ce39281902d07baccb54adf85ffa0bf5f67b7418dfb358d03ce5375a"
+    },
+    "host_audit_fixture_reseal": {
+      "result": "PASS",
+      "details": "Fixture-only authority resealing lets negative mutations reach their intended oracle while production hard locks and independent order/root/digest negatives remain unchanged.",
+      "test_sha256": "1342a8a3255ba2f4d7d36572d7d93efa112f4b87ee3190770f0450dcbaf14f86"
+    },
+    "ihk_lifecycle_contract_reseal": {
+      "result": "PASS",
+      "details": "Only support_sources[6].contract_sha256 changed to bind the already-reviewed IHK OS-runtime contract; no readiness or credit field changed.",
+      "contract_sha256": "b29ed685d406e8d0ee0c0e82730436e1c8fa0b4544788560a63fb6d1b682416c",
+      "bound_os_runtime_contract_sha256": "f73b707c0488903085f6bde761c0e831b15b6752aa6d6f163a2ef60db18a5989"
+    }
+  },
+  "source_closure": {
+    "rust_inputs": 55,
+    "unsafe_ffi_sites": 637,
+    "historical_mappings_preserved": 156,
+    "new_pending_ids": 481,
+    "closure_sha256": "c1ae16ed3306db6ae7d566891f5181461e92085aa924f3bd76025b7e918947c6",
+    "canonical_ids_sha256": "eee9c941a0a5e83bf7d7c6948876b64c187a81ab0908ffda5934a530e6567bc4",
+    "inventory_stdout_sha256": "ce5c3a318a616a5dd81f4d52dec1a0ce7c8cc5141bc302d465133041251dee98",
+    "rust_comment_only_files": 22,
+    "non_comment_token_equivalence_base": "1129961b56a3fff54f473b9ca63fe6101f787e70"
+  },
+  "authoritative_matrix": {
+    "path": "/home/holden/mckernel-work/scratch/native-rust-source-closure-final-20260928-2.log",
+    "sha256": "944e572cd797bf998c0b096de3c7f6736ebc130cae42ecc0eed14d8cf6428857",
+    "provenance": "Embedded schema, UTC interval, HEAD/branch, exact source hashes, shell-escaped commands, per-command return codes and terminal MATRIX_RC=0.",
+    "tests": {
+      "recursive_staging_build_surface_host_audit": "119 PASS",
+      "unsafe_ffi_ledger": "22 PASS",
+      "ihk_native_lifecycle": "55 PASS",
+      "total": "196 PASS"
+    },
+    "direct_commands": "16/16 returned zero",
+    "mapping_fixture": "SKIPPED_NO_CONFIGURED_RUSTC"
+  },
+  "preserved_failures": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-rust-ledger-resume-20260928-1.log",
+      "sha256": "54799aac10f4fee0707e14046a2c0c4741850211aa94402ce5e5130bea4071d6",
+      "failure": "Observer invoked inventory with unsupported --output after 22 tests/check passed."
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-rust-integrated-source-closure-20260928-3.log",
+      "sha256": "3338310504e6289b08c1467d1b484a88991f8d396087a0f919eda34ea30a8c82",
+      "failure": "119 tests exposed 39 fixture early-failure subcases before the fixture reseal correction."
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-rust-source-closure-direct-20260928-1.log",
+      "sha256": "e7a9058c8ecb4dadf12748a85bb11bdd7f6c7c6e0857e4fcb1f703dab124f2c6",
+      "failure": "IHK lifecycle support_sources[6] stale digest; the first composite writer also did not fail fast."
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-rust-source-closure-final-20260928-1.log",
+      "sha256": "56e8ef94e14434dc62dbfa4b5b2c94e633b5a23d678b035ab6892b6dc18e9e5e",
+      "failure": "Passing output lacked command/source/return-code provenance and was superseded by the v2 matrix."
+    }
+  ],
+  "archive": {
+    "path": "docs/verification/evidence/stability-native-rust-source-closure-20260928-1.tar.gz",
+    "sha256": "6e9700a2e394e75508ad9b846d042b28a9da4423a9fb02a2ec010834f789b1bb",
+    "bytes": 10541,
+    "members": 6
+  },
+  "independent_review": {
+    "result": "PASS for pushing the source checkpoint and preparing a fresh candidate; execution is not approved",
+    "limitations": "Lexical/source accounting is not compiler-expanded coverage or runtime ownership proof. Rocky retains four readiness blockers; RS-011 remains NOT_READY, compiler capture is missing and credit is forbidden."
+  },
+  "acceptance": {
+    "application_catalog": "0/273",
+    "narrow_fault_modes": "2/4",
+    "native_production_gates": "6/130",
+    "contractual_points": "350/10000",
+    "language_gates": "0/7",
+    "diagnostic_guest_apps": 4,
+    "successful_current_candidate_builds": 0,
+    "claim": "This closes the phase-0 source failure family only. It grants no build, module-load, guest, application, language-gate or whole-OS acceptance."
+  },
+  "next_action": "Commit/push/fetch this checkpoint, then obtain a fresh command-level preparation release and prepare one new commit-derived, correctly-moded candidate under fresh SHA-derived names."
+}

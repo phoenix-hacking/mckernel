@@ -1,0 +1,26 @@
+test_confirmed_close (test_actual_close.ActualDispositionCases) ... ok
+test_constructor_error_after_adoption_never_eagerly_closes (test_actual_close.ActualDispositionCases) ... ok
+test_duplicate_adoption_failure_is_unknown_and_never_closed_again (test_actual_close.ActualDispositionCases) ... ok
+test_partial_socket_close_does_not_close_pidfd (test_actual_close.ActualDispositionCases) ... ok
+test_pending_after_syscall_never_reuses_numeric_descriptor (test_actual_close.ActualDispositionCases) ... ok
+test_pending_before_close_never_calls_close (test_actual_close.ActualDispositionCases) ... ok
+test_revalidate_failure_never_eagerly_disposes (test_actual_close.ActualDispositionCases) ... ok
+test_unknown_before_admission_blocks_close (test_actual_close.ActualDispositionCases) ... ok
+test_unknown_concurrent_with_close_waits_for_confirmed_disposition (test_actual_close.ActualDispositionCases) ... ok
+test_actual_consumer_stops_at_existing_source_gate (test_validator_consumer.ConsumerCases) ... ok
+test_actual_emitter_oversize_retains_operation (test_validator_consumer.ConsumerCases) ... ok
+test_actual_emitter_partial_write_retains_operation (test_validator_consumer.ConsumerCases) ... ok
+test_failure_preserves_plan_and_live_session (test_validator_consumer.ConsumerCases) ... ok
+test_live_during_consumer_and_terminal_close_order (test_validator_consumer.ConsumerCases) ... ok
+test_operation_retains_session_even_if_journal_publish_fails (test_validator_consumer.ConsumerCases) ... ok
+test_stdout_data_record_is_canonical_and_bound (test_validator_consumer.ConsumerCases) ... ok
+test_stdout_refuses_oversize_with_actual_lengths (test_validator_consumer.ConsumerCases) ... ok
+test_terminal_close_failure_is_unknown_no_retry (test_validator_consumer.ConsumerCases) ... ok
+test_reentrant_unknown_on_pidfd_guard_restore_blocks_authentication (test_lock_order.ConstructorCases) ... ok
+test_cross_thread_unknown_waits_for_owner_locked_revalidation (test_lock_order.RevalidationCases) ... ok
+test_reentrant_unknown_during_revalidation_prevents_data_return (test_lock_order.RevalidationCases) ... ok
+
+----------------------------------------------------------------------
+Ran 21 tests in 0.017s
+
+OK

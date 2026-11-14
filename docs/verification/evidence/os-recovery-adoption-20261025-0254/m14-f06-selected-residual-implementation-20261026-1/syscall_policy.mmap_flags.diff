@@ -1,0 +1,12 @@
+--- kernel/rust/syscall_policy.rs
++++ kernel/rust/syscall_policy.rs
+@@ -35270,3 +35270,9 @@
+         )
+     }
+ }
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Pair centrally with MCKERNEL_RUST_F06_MMAP_FLAG_PROVIDERS and genuine NOCACHE cfg.
++#[cfg(f06_mmap_flag_providers)]
++#[path = "f06_mmap_flags.rs"]
++mod f06_mmap_flags;

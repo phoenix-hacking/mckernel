@@ -1,0 +1,228 @@
+--- root-install-source-9/install_source_closure.py	2026-10-30 14:46:16.082714866 -0700
++++ root-install-source-10/install_source_closure.py	2026-10-30 14:53:28.307918542 -0700
+@@ -15,8 +15,8 @@
+ import sys
+ import time
+ 
+-CLOSURE_SHA256='05990d787063e3c8bf5be0153afda5da863397054477cfe2f9b1760f0e212f81'
+-SOURCE_DIR='/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-source-9/package'
++CLOSURE_SHA256='81be55d5bf48ff462d291683ef1a26238b27581026bc5ffacc488125b6667ba6'
++SOURCE_DIR='/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-source-10/package'
+ WEEKLY_UTC_CAP_NS=calendar.timegm((2026,11,4,6,35,33))*1000000000
+ GETFLAGS=0x80086601
+ SETFLAGS=0x40086602
+--- root-install-source-9/install_issuer.py	2026-10-30 14:46:49.295728756 -0700
++++ root-install-source-10/install_issuer.py	2026-10-30 14:53:28.311918663 -0700
+@@ -181,7 +181,7 @@
+         install.root_file(fd)
+         if hashlib.sha256(install.read_stable(fd,install.MAX_SOURCE)).hexdigest()!=template[key]:raise ValueError('receipt hash')
+     fresh_controls(prelim,install,template,deadline)
+-    completion.verify_creation_custody(install,owner_fd,template,intent)
++    completion.verify_creation_model(install,owner_fd,template,intent)
+     proc_fd=os.open('/proc',os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW|os.O_CLOEXEC)
+     completion.verify_proc_scope(proc_fd,intent['proc_scope'])
+     if type(lease_path) is not str or os.path.dirname(lease_path)!=template['operation_path'] or os.path.basename(lease_path) in ('','.','..'):
+@@ -252,7 +252,7 @@
+         if hashlib.sha256(install.read_stable(rfd,install.MAX_SOURCE)).hexdigest()!=digest:raise ValueError('release changed')
+         install.journal(journal_fd,{'state':'RELEASE_SEALED','sha256':digest});install.journal(journal_fd,{'state':'BEFORE_GO'})
+         actors=fresh_controls(prelim,install,template,deadline);verify_tools(install,intent,template,timer_started_boot)
+-        completion.verify_creation_custody(install,owner_fd,template,intent)
++        completion.verify_creation_model(install,owner_fd,template,intent)
+         install.verify_base_runtime(template['interpreter']);install.verify_host_receipt(host_fd,template)
+         if not 0<=time.time_ns()-intent['weekly_observed_utc_ns']<=30000000000:raise ValueError('usage observation stale')
+         verify_private_group(prelim,install,intent,timer_pid,timer_birth,ready,timer_argv,actors)
+@@ -265,18 +265,18 @@
+         proof=completion.install_proof(install,root_fd,code_fd,closure_fd,intent['nonce'],digest,template,latch.retained)
+         capture_results=[completion.close_capture(install,latch,timer_record,journal_fd,root_fd,fd,name,template) for name,fd in captures]
+         census=completion.census_empty(proc_fd,intent['proc_scope'],os.getpid(),timer_pid,template)
+-        custody=completion.verify_creation_custody(install,owner_fd,template,intent)
++        custody=completion.verify_creation_model(install,owner_fd,template,intent)
+         completion.need_time(template)
+         result={'status':'INSTALL_ONLY_COMPLETE_PENDING_UID1000_READ','nonce':intent['nonce'],'authority':None,
+                 'native_release':False,'native_currentfree':None,'terminals':terminals,'census':census,
+-                'creation_custody_verified':True,'creation_custody':custody,'source_closure_sha256':install.CLOSURE_SHA256,
++                'creation_model_bound':True,'creation_model':custody,'source_closure_sha256':install.CLOSURE_SHA256,
+                 'keeper':{'pid':os.getpid(),'birth':obs.process(os.getpid())[0]},'timer':timer,'installer':child,
+                 'release_sha256':digest,'install_proof':proof,'captures':capture_results,
+                 'lease_disposition_at_handoff':'HELD','operation_lease_fd_closed':False}
+         # Full nonce/identity/source-bound proof is durable and handed to the Root
+         # capture before any authorized operation-only lease close.
+         completion.publish_full_result(install,latch,journal_fd,root_fd,intent['nonce'],result,template)
+-        completion.verify_creation_custody(install,owner_fd,template,intent)
++        completion.verify_creation_model(install,owner_fd,template,intent)
+         result['operation_lease_fd_closed']=completion.retire_lease_if_authorized(install,latch,timer_record,journal_fd,lease_fd,owner_fd,release,result)
+         return result,latch
+     except BaseException as error:
+--- root-install-source-9/install_completion.py	2026-10-30 14:47:43.037369626 -0700
++++ root-install-source-10/install_completion.py	2026-10-30 14:54:39.294088447 -0700
+@@ -7,7 +7,7 @@
+ 
+ MAX_JOURNAL=4*1024*1024
+ MAX_PROC=131072
+-CREATION_MODEL_SHA256='6310296be4af64df634ccda833729c9625b25c1fcb12c7b8b730826af0a4b7b2'
++CREATION_MODEL_SHA256='6d72c6db01f60c8d66fb55bd0d3e179cbc5666f86164e1a9a7fd2342d09612bd'
+ # The verified bootstrap or same-process phase-zero loader must set these pins.
+ SOURCE_PINS=None
+ 
+@@ -61,17 +61,12 @@
+     verify_proc_scope(proc_fd,scope)
+     if keeper_pid not in rows:raise ValueError('keeper missing from census')
+     if any(group==timer_pgid for _,group,_ in rows.values()):raise ValueError('private group not empty')
+-    for pid in rows:
+-        if pid==keeper_pid:continue
+-        current=pid;seen=set()
+-        while current in rows and current not in seen:
+-            seen.add(current);parent=rows[current][0]
+-            if parent==keeper_pid:raise ValueError('keeper descendant still exists')
+-            if parent not in rows and parent!=0:raise ValueError('process parent omitted from census')
+-            current=parent
+-        if current in seen:raise ValueError('process ancestry cycle')
+-    return {'processes_checked':count,'private_group_empty_observed':True,'keeper_descendants_empty_observed':True,
+-            'evidence_class':'NONATOMIC_POINT_OBSERVATION'}
++    if any(parent==keeper_pid for pid,(parent,_,_) in rows.items() if pid!=keeper_pid):
++        raise ValueError('unexpected direct keeper child observed')
++    return {'processes_checked':count,'private_group_empty_observed':True,
++            'unexpected_direct_keeper_child_observed':False,
++            'global_descendants':'UNKNOWN','evidence_class':'NONATOMIC_POINT_OBSERVATION'}
++
+ 
+ 
+ def verify_writer_sequence(records,row):
+@@ -170,8 +165,8 @@
+         complete.get('nonce')!=release['nonce'] or complete.get('native_release') is not False or
+         complete.get('native_currentfree') is not None or terminals.get('timer_direct_wait_status')!=0 or
+         terminals.get('installer_pidfd_terminal') is not True or terminals.get('installer_direct_wait_status') not in (None,0) or
+-        census.get('private_group_empty_observed') is not True or census.get('keeper_descendants_empty_observed') is not True or
+-        census.get('evidence_class')!='NONATOMIC_POINT_OBSERVATION' or complete.get('creation_custody_verified') is not True or
++        census.get('private_group_empty_observed') is not True or census.get('unexpected_direct_keeper_child_observed') is not False or census.get('global_descendants')!='UNKNOWN' or
++        census.get('evidence_class')!='NONATOMIC_POINT_OBSERVATION' or complete.get('creation_model_bound') is not True or
+         type(proof.get('files')) is not list or len(proof['files'])!=23 or type(captures) is not list or
+         len(captures)!=2 or any(row.get('writer_closed') is not True for row in captures)):
+         raise ValueError('operation-only retirement authority or positive proof absent')
+@@ -195,39 +190,40 @@
+     return True
+ 
+ 
+-def verify_creation_custody(install,owner_fd,template,intent):
+-    """Verify independent Root custody for the exact reviewed creation model."""
+-    if type(SOURCE_PINS) is not dict or set(SOURCE_PINS)!={'issuer_sha256','completion_sha256'}:
+-        raise ValueError('verified issuer/completion pins absent')
+-    install.root_file(owner_fd);raw=install.read_stable(owner_fd,install.MAX_SOURCE)
+-    if install.sha(raw)!=template['owner_release_sha256']:raise ValueError('owner release hash')
+-    owner=json.loads(raw,object_pairs_hook=install.unique);row=owner.get('creation_custody') if type(owner) is dict else None
+-    keys={'version','record_type','scope','nonce','native_release','status','model_sha256','issuer_sha256',
+-          'completion_sha256','installer_sha256','wait_sha256','timeout_sha256','runtime_sha256',
+-          'source_closure_sha256','review_sha256','holder_pid','holder_birth','holder_exe_sha256',
+-          'issued_boot_ns','expires_boot_ns'}
++TIMEOUT_PROOF_SHA256='2e7b538161bed50275f36befa2011344ccebc0370a4b2a6bcb4fed76235066f2'
++TIMEOUT_BINARY_SHA256='91db1e64064f0bf5ee99abda3a054cc6f05748dad2af5a145f890c9172d28d73'
++
++
++def verify_creation_model_value(install,owner,template,intent):
++    """Check approved finite creation model; this is not live custody proof."""
++    if type(SOURCE_PINS) is not dict or set(SOURCE_PINS)!={'issuer_sha256','completion_sha256','timeout_proof_sha256','review_sha256'}:
++        raise ValueError('verified source/toolproof pins absent')
++    if SOURCE_PINS['timeout_proof_sha256']!=TIMEOUT_PROOF_SHA256:raise ValueError('timeout toolproof pin differs')
++    row=owner.get('creation_model_approval') if type(owner) is dict else None
++    keys={'version','record_type','scope','nonce','native_release','native_currentfree','global_descendants',
++          'status','model_sha256','toolproof_sha256','issuer_sha256','completion_sha256','installer_sha256',
++          'wait_sha256','timeout_sha256','runtime_sha256','source_closure_sha256','review_sha256','trusted_platform'}
+     if (type(row) is not dict or set(row)!=keys or type(row['version']) is not int or row['version']!=1 or
+-        row['record_type']!='ROOT_INSTALL_CREATION_CUSTODY_V1' or row['scope']!='ROOT_CODE_INSTALL_ONLY' or
+-        row['nonce']!=template['nonce'] or row['native_release'] is not False or row['status']!='HELD_THROUGH_OPERATION' or
+-        row['model_sha256']!=CREATION_MODEL_SHA256 or row['issuer_sha256']!=SOURCE_PINS['issuer_sha256'] or
++        row['record_type']!='ROOT_INSTALL_CREATION_MODEL_APPROVAL_V1' or row['scope']!='ROOT_CODE_INSTALL_ONLY' or
++        row['nonce']!=template['nonce'] or row['native_release'] is not False or row['native_currentfree'] is not None or
++        row['global_descendants']!='UNKNOWN' or row['status']!='APPROVED_KNOWN_ROLE_MODEL' or
++        row['trusted_platform']!='PINNED_TIMEOUT_CPYTHON_LIBC_KERNEL' or row['model_sha256']!=CREATION_MODEL_SHA256 or
++        row['toolproof_sha256']!=TIMEOUT_PROOF_SHA256 or row['issuer_sha256']!=SOURCE_PINS['issuer_sha256'] or
+         row['completion_sha256']!=SOURCE_PINS['completion_sha256'] or row['installer_sha256']!=template['installer_sha256'] or
+-        row['wait_sha256']!=intent['wait_literal_sha256'] or row['timeout_sha256']!=intent['timeout_exe_sha256'] or
+-        row['runtime_sha256']!=template['interpreter']['sha256'] or row['source_closure_sha256']!=install.CLOSURE_SHA256 or
+-        not install.hex64(row['review_sha256']) or not install.hex64(row['holder_exe_sha256'])):
+-        raise ValueError('independent creation custody absent or differs')
+-    if (type(row['holder_pid']) is not int or row['holder_pid']<=1 or type(row['holder_birth']) is not str or not row['holder_birth'].isdigit() or
+-        type(row['issued_boot_ns']) is not int or type(row['expires_boot_ns']) is not int):raise ValueError('creation holder identity/time')
+-    now=time.clock_gettime_ns(time.CLOCK_BOOTTIME)
+-    if not row['issued_boot_ns']<=now<row['expires_boot_ns']<=template['deadline_boot_ns']:raise ValueError('creation custody freshness')
+-    pid=row['holder_pid'];st=os.stat('/proc/%d'%pid)
+-    if st.st_uid!=0 or install.proc_birth(pid)!=row['holder_birth']:raise ValueError('creation holder not live root')
+-    fd=os.open('/proc/%d/exe'%pid,os.O_RDONLY|os.O_CLOEXEC)
+-    try:
+-        if install.sha(install.read_stable(fd,128*1024*1024))!=row['holder_exe_sha256']:raise ValueError('creation holder executable changed')
+-    finally:os.close(fd)
+-    if install.proc_birth(pid)!=row['holder_birth']:raise ValueError('creation holder changed')
+-    return {'record_type':row['record_type'],'model_sha256':row['model_sha256'],'review_sha256':row['review_sha256'],
+-            'holder_pid':pid,'holder_birth':row['holder_birth'],'expires_boot_ns':row['expires_boot_ns']}
++        row['wait_sha256']!=intent['wait_literal_sha256'] or row['timeout_sha256']!=TIMEOUT_BINARY_SHA256 or
++        row['timeout_sha256']!=intent['timeout_exe_sha256'] or row['runtime_sha256']!=template['interpreter']['sha256'] or
++        row['source_closure_sha256']!=install.CLOSURE_SHA256 or not install.hex64(row['review_sha256']) or
++        row['review_sha256']!=SOURCE_PINS['review_sha256']):
++        raise ValueError('Root-approved reviewed known-role creation model absent or differs')
++    return {'record_type':row['record_type'],'model_sha256':row['model_sha256'],'toolproof_sha256':row['toolproof_sha256'],
++            'review_sha256':row['review_sha256'],'trusted_platform':row['trusted_platform'],
++            'scope':'ROOT_CODE_INSTALL_ONLY','global_descendants':'UNKNOWN'}
++
++
++def verify_creation_model(install,owner_fd,template,intent):
++    install.root_file(owner_fd);raw=install.read_stable(owner_fd,install.MAX_SOURCE)
++    if install.sha(raw)!=template['owner_release_sha256']:raise ValueError('owner release hash')
++    return verify_creation_model_value(install,json.loads(raw,object_pairs_hook=install.unique),template,intent)
+ 
+ 
+ def publish_full_result(install,latch,journal_fd,root_fd,nonce,result,template):
+--- root-install-source-9/BOOTSTRAP-CODE.py	2026-10-30 14:48:03.754002253 -0700
++++ root-install-source-10/BOOTSTRAP-CODE.py	2026-10-30 14:55:03.614831948 -0700
+@@ -1,12 +1,13 @@
+ import hashlib,os,stat,sys,types,signal
+-EXPECTED_INSTALL='7b91b6ab5558725a7378e8ff374652cfa3668456a71bb43ccca0a9fd6290ed1e'
+-EXPECTED_ISSUER='048a0b7e5f8f15614ee24176a95d7afc53db2e52f15a21954e8ab977b836edb3'
++EXPECTED_INSTALL='7a6ecfc875758a60dd3c6641b87a53cf9780af1a6473f9826d38b0b0509e76da'
++EXPECTED_ISSUER='18196891bdd58e29488c70a780f589787103b17c1f44e1a6e6b9de94f2985edd'
+ EXPECTED_PRELIM='de6de10ff79d07281e95216a5ecf751d03bade1d75445c87abd8a2e0405e124d'
+-EXPECTED_WAIT='f17f9d407b899e63063ba1c700d5fcdd5f278e4165c85051527f9076059126a9'
+-EXPECTED_COMPLETION='80ebad0d091d5e96972b43c8b0afbcfd3f44861715028269ebc07542361fff06'
++EXPECTED_WAIT='d8191218fde3da7972a4af4b37511af3ee6cb82bb106c42e1ed3c6466c58cbe4'
++EXPECTED_COMPLETION='87092d1fa2a30b8fa1609c9692dd4dbd95953de518d8d846fbaeb2d6fe714e23'
++EXPECTED_TIMEOUT_PROOF='2e7b538161bed50275f36befa2011344ccebc0370a4b2a6bcb4fed76235066f2'
+ PINS=(('ownership_latch','fb264b1e6f12852e6a11c44239089a015a02e25019f9094af586422398bfa390'),('graph_observations','df7bb673c206585318a4e41a58486c05548d9981b81074baeb29437f458114ed'),('pidfd_compat','068e8316ef03a03d1977d05ce755dfa8133c13bd4dfa56254c27b0066be2575c'),('pidfd_custody','3b22cac50183723456e6701031f00bdc446c04641c08c5864f1a379b5407686e'),('deferred_fork','b28d2f3483fb90c858479b65c9cebe6bd1b586c01902f004ec44964da6b4625f'))
+-if len(sys.argv)!=17:raise ValueError('exact bootstrap arguments required')
+-installer_path,issuer_path,completion_path,prelim_path,wait_path,intent_path,intent_sha,source_path,root_path,code_path,lease_path,closure_path,controls_path,capacity_path,host_custody_path,owner_path=sys.argv[1:]
++if len(sys.argv)!=20:raise ValueError('exact bootstrap arguments required')
++installer_path,issuer_path,completion_path,prelim_path,wait_path,timeout_proof_path,review_path,review_sha,intent_path,intent_sha,source_path,root_path,code_path,lease_path,closure_path,controls_path,capacity_path,host_custody_path,owner_path=sys.argv[1:]
+ hold=[]
+ def opened(path,flags):
+  if not path.startswith('/') or '//' in path:raise ValueError('absolute path')
+@@ -30,6 +31,9 @@
+  return data
+ installer_fd=opened(installer_path,os.O_RDONLY);installer_raw=verified(installer_fd,EXPECTED_INSTALL)
+ wait_fd=opened(wait_path,os.O_RDONLY);wait_raw=verified(wait_fd,EXPECTED_WAIT)
++proof_fd=opened(timeout_proof_path,os.O_RDONLY);proof_raw=verified(proof_fd,EXPECTED_TIMEOUT_PROOF)
++if len(review_sha)!=64 or any(c not in '0123456789abcdef' for c in review_sha):raise ValueError('expert review digest')
++review_fd=opened(review_path,os.O_RDONLY);review_raw=verified(review_fd,review_sha)
+ issuer_fd=opened(issuer_path,os.O_RDONLY);issuer_raw=verified(issuer_fd,EXPECTED_ISSUER)
+ completion_fd=opened(completion_path,os.O_RDONLY);completion_raw=verified(completion_fd,EXPECTED_COMPLETION)
+ prelim_fd=opened(prelim_path,os.O_RDONLY);prelim_raw=verified(prelim_fd,EXPECTED_PRELIM)
+@@ -42,11 +46,12 @@
+ install=types.ModuleType('install_source_closure');install.__file__=installer_path
+ install._BOOTSTRAP_INSTALLER_HASH=EXPECTED_INSTALL;install._BOOTSTRAP_SOURCE_FD=installer_fd;sys.modules[install.__name__]=install
+ exec(compile(installer_raw,installer_path,'exec'),install.__dict__)
++install.root_file(review_fd)
+ prelim=types.ModuleType('reviewed_controller_reader');prelim.__file__=prelim_path;sys.modules[prelim.__name__]=prelim
+ exec(compile(prelim_raw,prelim_path,'exec'),prelim.__dict__)
+ completion=types.ModuleType('install_completion');completion.__file__=completion_path;sys.modules[completion.__name__]=completion
+ exec(compile(completion_raw,completion_path,'exec'),completion.__dict__)
+-completion.SOURCE_PINS={'issuer_sha256':EXPECTED_ISSUER,'completion_sha256':EXPECTED_COMPLETION}
++completion.SOURCE_PINS={'issuer_sha256':EXPECTED_ISSUER,'completion_sha256':EXPECTED_COMPLETION,'timeout_proof_sha256':hashlib.sha256(proof_raw).hexdigest(),'review_sha256':hashlib.sha256(review_raw).hexdigest()}
+ issuer=types.ModuleType('install_issuer');issuer.__file__=issuer_path;sys.modules[issuer.__name__]=issuer
+ exec(compile(issuer_raw,issuer_path,'exec'),issuer.__dict__)
+ intent=opened(intent_path,os.O_RDONLY)
+--- root-install-source-9/WAIT-INSTALL-CODE.py	2026-10-30 14:48:03.754002253 -0700
++++ root-install-source-10/WAIT-INSTALL-CODE.py	2026-10-30 14:55:03.614831948 -0700
+@@ -1,5 +1,5 @@
+ import fcntl,hashlib,json,os,select,signal,struct,sys,time,types
+-EXPECTED='7b91b6ab5558725a7378e8ff374652cfa3668456a71bb43ccca0a9fd6290ed1e'
++EXPECTED='7a6ecfc875758a60dd3c6641b87a53cf9780af1a6473f9826d38b0b0509e76da'
+ if len(sys.argv)!=17:raise ValueError('exact waiting-installer argv required')
+ source_fd,ready_fd,go_fd,root_fd,package_fd,code_fd,lease_fd,closure_fd,controls_fd,capacity_fd,host_fd,owner_fd=map(int,sys.argv[1:13])
+ nonce,deadline,installer_path,boot_id=sys.argv[13:17];deadline=int(deadline)

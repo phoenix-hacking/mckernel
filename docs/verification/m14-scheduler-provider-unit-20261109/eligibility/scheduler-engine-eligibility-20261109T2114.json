@@ -1,0 +1,274 @@
+{
+  "schema": "mckernel.scheduler-engine-eligibility.v1",
+  "request": "Separate bounded accepted-F02 engine follow-on to exact wrapper eligibility; source only, no source unit generation or execution.",
+  "decision": "ELIGIBLE_EXACT_GENERAL_SCHEDULER_ENGINE_PLUS_WRAPPER_PARTITION_FOR_PRIVATE_PREPARATION_AND_REVIEW",
+  "owner": "Saved Root sole canonical compositor; independent source/ABI/profile review and fresh actual admission remain required before compiler/link execution.",
+  "wrapper_contract": "/home/holden/mckernel-work/m14-m15-explicit-restart-20261109T200836Z/scheduler-provider-eligibility-20261109T2114.json",
+  "eligibility_basis": {
+    "positive_scope": "Current CAMPAIGN preserves accepted M14-F02 scheduling and expressly excludes a blanket ban on every other source. Exact source here implements general thread wakeup/CPU runqueue state, not generic syscall dispatch or the held notification packet endpoints.",
+    "independent_boundary": "sched_wakeup_thread, __sched_wakeup_thread and sched_wakeup_thread_body_result are actual accepted-F02 functions in kernel/rust/sched_helpers.rs, matching kernel/process.c's wakeup family. Engine and private helpers do not call/include eventfd, syscall_eventfd_send_result, f03_eventfd_send, packet construction, do_syscall, exec/ACK/TID or XPMEM implementation.",
+    "held_downstream_exclusion": "Genuine CPU mapping, IRQ/vector delivery, locks, status exchange, timer and logger bridge bodies remain external unresolved imports; this prepares no notification/IRQ payload, source endpoint implementation or runtime delivery.",
+    "original_hold_boundary": "Original generic/exec/notification request membership and release conditions remain UNKNOWN for those excluded lanes. No authority is inferred from this cut for them. If preparation expands into a held/unclear body, stop before inclusion.",
+    "references": [
+      "AGENTS.md",
+      "CAMPAIGN.md:accepted M14-F02 and Notification source preparation NO_GO",
+      "docs/verification/m14-kernel-notify-source-eligibility-20261109.json"
+    ],
+    "no_new_acceptance": "Accepted F02 remains closed; this supplies a new missing genuine provider implementation to the explicitly partial cohort, not F02 requalification."
+  },
+  "source_partition": {
+    "public_definitions": [
+      {
+        "symbol": "sched_wakeup_thread_body_result",
+        "source": "kernel/rust/sched_helpers.rs:3149–3313",
+        "abi": "Actual existing extern C signature with raw addresses, signed states, runq_locked, flags/vector, actual offsets pointer and existing optional callback function pointers; include signature/body byte-for-byte."
+      },
+      {
+        "symbol": "__sched_wakeup_thread",
+        "source": "kernel/rust/sched_helpers.rs:3317–3351",
+        "abi": "unsafe extern C fn(*mut abi::Thread,CInt,CInt)->CInt"
+      },
+      {
+        "symbol": "sched_wakeup_thread",
+        "source": "kernel/rust/sched_helpers.rs:3363–3365",
+        "abi": "unsafe extern C fn(*mut abi::Thread,CInt)->CInt; exact upstream runq_locked0"
+      }
+    ],
+    "private_functions": [
+      {
+        "symbol": "sched_process_spin_lock_bridge",
+        "source": "kernel/rust/sched_helpers.rs:309–311",
+        "abi": "unsafe extern C fn(usize)->CULong",
+        "body_dependency": "Existing link_name process_spin_lock_bridge via process_spin_lock_bridge_c; exact current cast/forwarding."
+      },
+      {
+        "symbol": "sched_process_spin_unlock_bridge",
+        "source": "kernel/rust/sched_helpers.rs:313–315",
+        "abi": "unsafe extern C fn(usize,CULong)",
+        "body_dependency": "Existing link_name process_spin_unlock_bridge via process_spin_unlock_bridge_c; exact current cast/forwarding."
+      },
+      {
+        "symbol": "sched_runqueue_offsets",
+        "source": "kernel/rust/sched_helpers.rs:388–418",
+        "abi": "const fn()->SchedRunqueueOffsets",
+        "body_dependency": "Exact actual 26 offset_of calculations using actual ABI types. Keep original complete constructor; no shortened/handmade offset table."
+      }
+    ],
+    "types": [
+      {
+        "source": "kernel/rust/abi.rs",
+        "names": [
+          "CInt=i32",
+          "CULong=u64",
+          "Thread",
+          "Process",
+          "CpuLocalVar",
+          "SigCommon"
+        ],
+        "treatment": "Use actual existing ABI definitions/module. Preserve all layouts, field types/offsets and pointer ABI; no handwritten replacements."
+      },
+      {
+        "source": "kernel/rust/sched_helpers.rs:299–307",
+        "name": "McsRwlockNode",
+        "attributes": "Exact repr(C,align(64)) and actual count:CInt,type_/locked/dmy1/dmy2:u8,next:*mut self fields; preserve uninitialized MaybeUninit stack scratch and synchronous original rwlock borrow."
+      },
+      {
+        "source": "kernel/rust/sched_helpers.rs:346–375",
+        "name": "SchedRunqueueOffsets",
+        "attributes": "Exact repr(C) 26usize fields; preserve existing size208/align8 const assertions, actual constructor and offsets; no field or order reduction."
+      }
+    ],
+    "callback_aliases": [
+      {
+        "name": "SchedMigrateSpinLockFn",
+        "abi": "unsafe extern C fn(usize)->CULong"
+      },
+      {
+        "name": "SchedMigrateSpinUnlockFn",
+        "abi": "unsafe extern C fn(usize,CULong)"
+      },
+      {
+        "name": "SchedRunqRwlockFn",
+        "abi": "unsafe extern C fn(usize,usize)"
+      },
+      {
+        "name": "SchedRunqStatusSetFn",
+        "abi": "unsafe extern C fn(usize,CInt)"
+      },
+      {
+        "name": "SchedRunqSetTimerFn",
+        "abi": "unsafe extern C fn(CInt)"
+      },
+      {
+        "name": "SchedMigrateVectorFn",
+        "abi": "unsafe extern C fn(CInt)->CInt"
+      },
+      {
+        "name": "SchedMigrateInterruptFn",
+        "abi": "unsafe extern C fn(CInt,CInt)"
+      },
+      {
+        "name": "SchedRunqLogFn",
+        "abi": "unsafe extern C fn(CInt,usize,usize,CInt,CInt)"
+      }
+    ],
+    "constants": {
+      "EINVAL": 22,
+      "PS_RUNNING": 1,
+      "PS_EXITED": 16,
+      "CPU_FLAG_NEED_RESCHED": 1,
+      "IHK_GV_IKC": 1,
+      "SCHED_RUNQ_LOG_WAKE_ENTRY": 2,
+      "SCHED_RUNQ_LOG_SPIN_WAKEUP": 3,
+      "SCHED_RUNQ_LOG_REMOTE_IPI": 4
+    },
+    "core_imports": [
+      "core::mem::{offset_of,MaybeUninit}",
+      "core::ptr::{read_volatile,write_volatile}"
+    ],
+    "exclude": [
+      "sched_wakeup_thread_locked unused optional sibling",
+      "sched_runq_del_thread and all unrelated scheduling/migration functions",
+      "cfg(process_global_storage_candidate) process_sched_runqueue_offsets static; keep config unset for this partition",
+      "whole sched_helpers.rs/process_helpers.rs/lock_helpers.rs/runtime crate inclusion",
+      "all downstream bridge bodies and native operations"
+    ],
+    "actual_C_match": "kernel/process.c:7175–7240 __sched_wakeup_thread and7248–7252 public wrapper; MCKERNEL_RUST_PROCESS_HELPERS selects Rust ownership. Exact Rust helper's existing null/optional preflight and guard behavior is preserved; this task is not a new C/Rust equivalence test."
+  },
+  "genuine_imports": [
+    {
+      "symbol": "process_sched_cpu_local_bridge",
+      "abi": "extern C fn(CInt)->usize",
+      "actual_source": "kernel/rust/sched_helpers.rs:32 declaration; kernel/rust/process_helpers.rs:6021 definition; C process.c:645 declaration",
+      "treatment": "U only; actual source uses CULong for same supported LP64 scalar."
+    },
+    {
+      "symbol": "ihk_mc_get_processor_id",
+      "abi": "extern C fn()->CInt",
+      "actual_source": "kernel/rust/sched_helpers.rs:30 declaration",
+      "treatment": "U in new object; current aaaf has actual existing T (size0x4d) and can resolve it."
+    },
+    {
+      "symbol": "process_spin_lock_bridge",
+      "rust_declaration": "process_spin_lock_bridge_c with actual link_name",
+      "abi": "extern C fn(CULong)->CULong",
+      "actual_source": "kernel/rust/sched_helpers.rs:39–40; kernel/rust/process_helpers.rs:5976",
+      "treatment": "U"
+    },
+    {
+      "symbol": "process_spin_unlock_bridge",
+      "rust_declaration": "process_spin_unlock_bridge_c with actual link_name",
+      "abi": "extern C fn(CULong,CULong)",
+      "actual_source": "kernel/rust/sched_helpers.rs:41–42; kernel/rust/process_helpers.rs:5981",
+      "treatment": "U"
+    },
+    {
+      "symbol": "process_sched_rwlock_bridge",
+      "abi": "extern C fn(usize,usize)",
+      "actual_source": "kernel/rust/sched_helpers.rs:52; kernel/rust/process_helpers.rs:5996; C process.c:6452",
+      "treatment": "U"
+    },
+    {
+      "symbol": "process_sched_rwunlock_bridge",
+      "abi": "extern C fn(usize,usize)",
+      "actual_source": "kernel/rust/sched_helpers.rs:53; kernel/rust/process_helpers.rs:6001; C process.c:6454",
+      "treatment": "U"
+    },
+    {
+      "symbol": "process_sched_status_set_bridge",
+      "abi": "extern C fn(usize,CInt)",
+      "actual_source": "kernel/rust/sched_helpers.rs:54; kernel/rust/process_helpers.rs:6050; C process.c:6458",
+      "treatment": "U"
+    },
+    {
+      "symbol": "process_sched_set_timer_bridge",
+      "abi": "extern C fn(CInt)",
+      "actual_source": "kernel/rust/sched_helpers.rs:55; kernel/rust/process_helpers.rs:6055; C process.c:6459",
+      "treatment": "U"
+    },
+    {
+      "symbol": "process_sched_vector_bridge",
+      "abi": "extern C fn(CInt)->CInt",
+      "actual_source": "kernel/rust/sched_helpers.rs:48; kernel/rust/process_helpers.rs:6006; C process.c:642",
+      "treatment": "U"
+    },
+    {
+      "symbol": "process_sched_interrupt_bridge",
+      "abi": "extern C fn(CInt,CInt)",
+      "actual_source": "kernel/rust/sched_helpers.rs:49; kernel/rust/process_helpers.rs:6011; C process.c:643",
+      "treatment": "U"
+    },
+    {
+      "symbol": "process_sched_runq_log_bridge",
+      "abi": "extern C fn(CInt,usize,usize,CInt,CInt)",
+      "actual_source": "kernel/rust/sched_helpers.rs:51; matching C process.c:6473–6476",
+      "treatment": "U; actual existing endpoint declaration, no logger implementation or fabricated callback."
+    }
+  ],
+  "semantic_preservation": {
+    "locking": "Retain spin_sleep lock/clear/unlock, optional runq lock governed by original runq_locked, actual proc update rwlock node borrow, status/flags updates and original unlock ordering.",
+    "state": "Preserve actual valid_states bit test, unchanged running/exited states and null preflight; do not introduce scheduler serialization, ownership or validation policy.",
+    "timer_and_remote": "Actual same-CPU set_timer(1) callback remains; remote interrupt/vector call occurs only after successful state transition and runq unlock. Do not execute or stub either endpoint.",
+    "logs": "Retain exact three event IDs, argument values and synchronous optional log callbacks. Real logger import remains unresolved.",
+    "scope": "No scheduler, lock, RDTSC, CPU-local, atomic status exchange, timer, IRQ, boot or hardware behavior runs or receives new proof credit."
+  },
+  "expected_metadata": {
+    "new_global_T": [
+      "sched_wakeup_thread_body_result",
+      "__sched_wakeup_thread",
+      "sched_wakeup_thread"
+    ],
+    "new_global_writable_data": [],
+    "no_new_exported_offsets_static": true,
+    "private_source_helpers": [
+      "sched_process_spin_lock_bridge",
+      "sched_process_spin_unlock_bridge",
+      "sched_runqueue_offsets"
+    ],
+    "private_emission_policy": "The actual compiler may inline the const constructor and retain the two address-taken private spin adapters plus readonly offsets/literals. Record actual LOCAL owners/ranges/relocations; do not impose arbitrary byte lengths or discard compiler-generated readonly data.",
+    "source_external_U_count": 11,
+    "possible_compiler_memory_dependency": "If an actual compiler-emitted memcpy/memset or other intrinsic appears, stop before link and bind its genuine selected kernel implementation/source/ABI via concrete review; do not add HOST libc or fake function. aaaf already has genuine memset; no assumption is made about whether codegen needs an intrinsic.",
+    "join_inputs": "One combined engine+wrapper new provider object plus only current aaaf8a1a; avoid redundant standalone wrapper compile/link and omit oldc205/old8/other cohorts.",
+    "base_receipt": "docs/verification/m14-delay-provider-results-20261109.json",
+    "base_object_path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/join-1/output/delay_kmsg_partial.o",
+    "base_sha256": "aaaf8a1a31d92d1fbf7dcac72b09247e808d733f373bf3a19e92c2ec15479ce2",
+    "base_owners": "63global=52T+11data,13U; private formatter helpers/tables, oneLOCAL KMSG_LOCK and delay aliases preserved.",
+    "known_join_result_expectation": "Resolve prior sched_wakeup_thread U and new ihk_mc_get_processor_id U. With only11explicit source imports, resulting66global=55T+11data and22U. Any actual intrinsic or compiler ownership variation must be concretely reviewed; count increase exposes real upstream obligations and is not a regression or invented completion percentage."
+  },
+  "profile_and_smallest_plan": {
+    "reuse_profile_from": "/home/holden/mckernel-work/m14-m15-explicit-restart-20261109T200836Z/scheduler-provider-eligibility-20261109T2114.json",
+    "source_profile": "Same retained freestanding x86_64 LP64 Rust1.95 partial-unit flags, no process_global_storage_candidate and no wholecrate profile expansion.",
+    "steps": [
+      {
+        "id": "ENGINE-SOURCE-PREPARATION",
+        "owner": "Root/private source preparer",
+        "required_input": "Exact3public+3private functions, unchanged3source types/actual ABI,8callback aliases/8constants and11genuine declarations.",
+        "done_when": "Private unit imports only this exact finite accepted scheduler source cut plus actual abi.rs; matches original bodies/attributes/type/cfg/offsets and excludes all engine downstream implementations and held domains.",
+        "verification_method": "Function-level source comparison and include/name closure; record relevant actual type/offset layouts and source identities without new runtime tests."
+      },
+      {
+        "id": "ENGINE-CONCRETE-REVIEW",
+        "owner": "Independent source/ABI/profile reviewer and Root compositor",
+        "required_input": "Concrete private unit and3T/11U/potential private readonly compiler output plan.",
+        "done_when": "Exact cut is independently eligible, original C/Rust signatures and layouts are preserved, no source bridge body/whole module/notification payload/fake callback/libc is included, and actual metadata/prejoin checks are defined.",
+        "verification_method": "Read concrete source/signatures/types/constants/pointer borrows/cfgs/expected symbol ownership; source GO before compiler."
+      },
+      {
+        "id": "ENGINE-CODEGEN-READBACK",
+        "owner": "Root actual fresh HOST admission/job owner",
+        "required_input": "Source/profile GO and actual resource/ownership admission under existing grant.",
+        "done_when": "One combined engine+wrapper compile and two necessary symbol/ELF readbacks produce actual3publicT with expected11genuineU and only source-bound private/read-only compiler owners; actual predicate is CALLED before any later linker.",
+        "verification_method": "Capture actual exact command/waits/metrics/diagnostics and emitted bytes/sizes/visibility/alignments/relocations; no runtime or stale metadata substitution."
+      },
+      {
+        "id": "ENGINE-AAAF-JOIN",
+        "owner": "Root sole compositor/admitted linker owner",
+        "required_input": "Exact new actual object+currentaaaf only; actual prejoin predicate/independent review; fresh exact link grant.",
+        "done_when": "One partial join resolves actual scheduler wrapper+engine internally and genuine currentCPU from aaaf, preserves allold63global/private/data/alias/relocation owners and emits only known real remaining imports.",
+        "verification_method": "Called/persisted prejoin collision/input/type/metadata gate beforeld-r, then actual postjoin ELF/relocation ownership gate. If unexpected imports/data/owners arise, stop for focused concrete review. No oldcohort replay or function execution."
+      }
+    ],
+    "scope_limit": "This contract authorizes source preparation/review only; Root separately admits actual compiler/link operation. It clears no original source/native/service hold and adds no native quota or acceptance condition."
+  },
+  "operations": "Read exact accepted scheduler engine/body and finite private type/offset/spin dependencies, matching C general wakeup, direct genuine bridge signatures/current selected definitions, and named current aaaf metadata lines. No source-unit generation, source edit, compiler/link/test/native/runtime, fake endpoint, wholecrate/held body, broad inventory, nested agent or goal control. Wrote only this separate authorized private JSON."
+}

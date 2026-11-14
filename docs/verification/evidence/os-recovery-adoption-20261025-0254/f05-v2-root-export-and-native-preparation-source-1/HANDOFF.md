@@ -1,0 +1,7 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+Ready exact Root export/finalizer plan. Nine byte-identical private small source/control copies only; none adopted as runtime. Reuse Root-approved repository source7fa/oraclec38/expected13fc and existing actual bfdda ELF plus actualHOSTee7d/adoptionc321. ROOT-EXPORT-AND-FINALIZER-PLAN.json supplies fully literal Root finalizer argv; output distinct bound-native-runtime-1 is absent and no finalizer/import ran.
+
+Root derives new owner only after actual bound-evaluator hash exists. ROOT-OWNER-AND-RUNTIME-REBIND.RECIPE.json preserves original45010 lifecycle and139source predicates, adds four repository sibling bindings, and keeps owner/runner/full generated evaluator/backend/QMP together. No private v2 source path is inserted into runtime bindings. Host receipt retains original compilation argv as forensic strings; runtime opens only repository bound refs/captures. Originalv1 and unboundv2 template remain untouched.
+
+V2-CURRENT110-SOURCE-MAP-AND-CAPABILITY.SOURCE-ONLY.json binds accepted60e image, actualbfdda payload/HOST, existing8body89reloc static proof and precise v2 childwrite1RET0/terminal231/parentwait/ACK/1024B10s contract. Actual final stage/map/capability/admission/nonce/native release and retirement remainOPEN. No existing heavy process was observed or altered. No compiler/reference replay, helper import, actual finalizer, guard, stage, Docker, sudo, module, guest or cleanup occurred.

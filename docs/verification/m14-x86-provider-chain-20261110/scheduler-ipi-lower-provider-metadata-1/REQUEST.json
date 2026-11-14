@@ -1,0 +1,164 @@
+{
+  "status": "READY_ACTUAL_IPI_LOWER_TWO_NEW_METADATA_READS_CALLED_ASM_ALIAS_OWNER_GATE_PENDING_F_GO_ROOT_ADMISSION",
+  "owner": "/root/m15_public_abi_high",
+  "cwd": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-metadata-1",
+  "commands": [
+    {
+      "label": "provider-symbols",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-metadata-1/provider-symbols.metrics",
+        "/usr/bin/nm",
+        "-S",
+        "--format=posix",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-unit-1/output/scheduler_ipi_lower_provider.o"
+      ],
+      "stdout_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-metadata-1/provider-symbols.stdout",
+      "stderr_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-metadata-1/provider-symbols.stderr"
+    },
+    {
+      "label": "provider-elf",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-metadata-1/provider-elf.metrics",
+        "/usr/bin/readelf",
+        "-h",
+        "-SW",
+        "-Ws",
+        "-Wr",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-unit-1/output/scheduler_ipi_lower_provider.o"
+      ],
+      "stdout_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-metadata-1/provider-elf.stdout",
+      "stderr_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-metadata-1/provider-elf.stderr"
+    }
+  ],
+  "environment_replace": {
+    "PATH": "/usr/bin:/bin",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "inputs": {
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-unit-1/scheduler_ipi_lower_provider_unit.rs": "59ac46e5f2e4219f1da36f901055e9a5c65313709498c98de9560cde746e62fe",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-unit-1/SOURCE-MANIFEST.json": "3a1c44c0c09fadfdde59267b0e916a7dd796296fa7208ef808b349845d874e80",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-unit-1/PROFILE-PROOF.json": "ad06bced3b6a6b7ab337ba189eac5b061009d14a75b70e34aeca79bd4dba6d7c",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-unit-1/REQUEST.json": "1e5d029b6bbdee03c07692e53fd241370182df8af5048dca4a2345edf53bfb42",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-review-1/REVIEW.json": "c350c5f4e10d536cff5a43a35a4c83a82b018545dc61fae466dc86f2f410daa6",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/shared-lapic-ipi-metadata-and-lower-producer-1/ADMISSION.json": "88f4427e02d18c142835c9fcff2a6475a25d5d09d26a36a23453ffc8a3f9853e",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/shared-lapic-ipi-metadata-and-lower-producer-1/RESULT.json": "185e6e0d0e8a0fea41761da3c02268aafd61cb791ee3d429af947bece7066908",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/lower-provider-emission-capture-root-1/ADMISSION.json": "e43aa85fe673d5fe2eed49ea1e858e01fbd36b353aa55a8539dd9894ea3bcd9b",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/lower-provider-emission-capture-root-1/RESULT.json": "f49228abb93c2105e0130acab955ab7f4b2447a23bec9aab8b825d221224b78f",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-unit-1/output/scheduler_ipi_lower_provider.o": "8e7ca2ffcfa218acd6342019bc8bcc85dade472e1923c356335d0f2027874032",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-metadata-1/ACTUAL-CAPTURE-BEFORE-GATE.json": "79999ea9eac9d621fb66cd5d2ccc12b2f0431bccc7beb07d6c654fb6f15dec64",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-metadata-1/provider-disassembly.stdout": "3252505943dd9fda5067d6aee74d801b1b2ffc9bc7bd806c718591c102394caa",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-metadata-1/EMISSION-SOURCE-ASM-CONTRACT.json": "232c5f7988d5aac67afc5dd2fa7d97e269ef271fcd78257617864e590eb39580",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-metadata-1/ipi_lower_checks.py": "6334158002c2ac67e659497de01cf966cf8d89c0ab4e69af451dd4d02fd5102a",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-metadata-1/run_metadata.py": "c8faac10417cb38ba3aef1dd7b937a5b25327f14ecf56dcc2c3f86984953acef",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/storage_predicate.py": "a4df81bb2b86d97f4199ae816dab7965213ceba05dca17945f9eae861dc31892",
+    "/usr/bin/nm": "5fb0dd8acc18e3f348ed0acbcada0580dbdddd1eb5de3c8323613af13580032b",
+    "/usr/bin/readelf": "41a813335a74480f145fba9400aa7fb5c0ec7ffcaa7af7f33e832dc75eb90ffb",
+    "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde",
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-eligibility-1/RESULT.json": "9f8038ef3cd3df57f4fe6c9eaef68ecbf7568fcc974e96db2ad35e8649f197c9",
+    "/home/holden/mckernel-work/m14-m15-scheduler-resume-20261109T211802Z/x86-ipi-irq-barrier-lookahead-20261109T2322.json": "3ae62269a1cadc533defa56997e0e84802356b0f3adb85ee2fd862e6a7856d0c",
+    "/home/holden/mckernel-work/m14-m15-scheduler-resume-20261109T211802Z/x86-ipi-msr-pause-readslot-lookahead-20261109T2322.json": "9e7295dc39c5104ab8bd4aee74d01443a582f1db9927117f696fbdd14459d1f2"
+  },
+  "source_bindings": {
+    "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde",
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+  },
+  "compiled_input": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-unit-1/output/scheduler_ipi_lower_provider.o",
+    "sha256": "8e7ca2ffcfa218acd6342019bc8bcc85dade472e1923c356335d0f2027874032",
+    "bytes": 1712,
+    "actual_producer_RESULT": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/shared-lapic-ipi-metadata-and-lower-producer-1/RESULT.json",
+    "actual_producer_RESULT_sha256": "185e6e0d0e8a0fea41761da3c02268aafd61cb791ee3d429af947bece7066908",
+    "compile_replay": false
+  },
+  "actual_nm": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-metadata-1/provider-symbols.stdout",
+  "actual_elf": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-metadata-1/provider-elf.stdout",
+  "saved_disassembly": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-metadata-1/provider-disassembly.stdout",
+  "retained_actual_capture": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-metadata-1/ACTUAL-CAPTURE-BEFORE-GATE.json",
+  "actual_metadata_capture": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-metadata-1/ACTUAL-ELF-METADATA.json",
+  "emission_source_contract": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-metadata-1/EMISSION-SOURCE-ASM-CONTRACT.json",
+  "qualified_ELF_reader": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/storage_predicate.py",
+    "sha256": "a4df81bb2b86d97f4199ae816dab7965213ceba05dca17945f9eae861dc31892",
+    "qualification_receipt": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/RESULT.json",
+    "scope": "Reuse existing exact Image/parse_nm for ELF64-LE/x86_64 REL metadata/bytes only, not storage predicate re-review or new parser/loader."
+  },
+  "object_predicate": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-metadata-1/ipi_lower_checks.py",
+    "sha256": "6334158002c2ac67e659497de01cf966cf8d89c0ab4e69af451dd4d02fd5102a",
+    "callable": "actual_object_gate(q)",
+    "must_IMPORT_and_CALL_after_two_actual_readbacks_before_any_future_link": true,
+    "capture_all_actual_metadata_before_assertions": true
+  },
+  "controller": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-metadata-1/run_metadata.py",
+    "sha256": "c8faac10417cb38ba3aef1dd7b937a5b25327f14ecf56dcc2c3f86984953acef",
+    "literal_argv": [
+      "/usr/bin/python3",
+      "-B",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-metadata-1/run_metadata.py",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-metadata-1/REQUEST.json"
+    ],
+    "only_two_new_nm_ELF_payloads_no_compiler_objdump_link": true
+  },
+  "inherited_resource_profile": {
+    "CPU": [
+      6
+    ],
+    "local_serial_jobs": 1,
+    "AS_bytes": 1073741824,
+    "CPU_seconds": 45,
+    "wall_seconds": 60,
+    "kill_after_seconds": 5,
+    "FSIZE_bytes": 67108864,
+    "core_bytes": 0,
+    "aggregate_CPUs": [
+      0,
+      6,
+      7
+    ],
+    "aggregate_jobs_max": 3,
+    "aggregate_HOST_total_bytes_all_overhead": 4294967296,
+    "retained_prior_GiB": 18,
+    "floor_GiB": 4,
+    "minimum_MemAvailable_GiB": 26
+  },
+  "actual_emission_scope": "4genuineTnames/3physicalranges, actualwrmsr+MSRbridgealias15B, barrier4B,pausebridge12B, originalNone lapic_readB8/.lbssflags268435459align8;1realcpu_pauseU.1R64callref+3PC64physicalunwindrefs, actualSHT_X86_64_UNWIND1879048193. No synthetictarget/data/helper or per-nameunwindguess.",
+  "future_current_partial_and_join": "UNBOUND until actual metadataPASS+matchingcurrentcohort source/collision/alias/byte/reloc review and freshRootadmission. ExistingCPU/IRQowners never redefined.",
+  "no_execution_in_preparation": true,
+  "not_runnable_until": "F actualemission/ASM/sourcealias/owner/controller GO thenfreshRootadmission. Stopfirstunexpectedvariation/noautomaticretry/compilerobjdumpreplay."
+}

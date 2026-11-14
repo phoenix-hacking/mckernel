@@ -1,0 +1,20 @@
+
+/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/relative-module-context-correction-source-1/HOST-output-proposed-1/rust-selected.o:     file format elf64-x86-64
+
+
+Disassembly of section .ltext.process_init_stack_alloc_aligned_bridge:
+
+0000000000000000 <process_init_stack_alloc_aligned_bridge>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	49 89 c9             	mov    %rcx,%r9
+   7:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	9: R_X86_64_64	.lrodata.str1.1+0x64af
+  11:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	13: R_X86_64_64	_ihk_mc_alloc_aligned_pages_node
+  1b:	b9 ff ff ff ff       	mov    $0xffffffff,%ecx
+  20:	41 b8 01 00 00 00    	mov    $0x1,%r8d
+  26:	68 1f 0d 00 00       	push   $0xd1f
+  2b:	50                   	push   %rax
+  2c:	41 ff d2             	call   *%r10
+  2f:	48 83 c4 10          	add    $0x10,%rsp
+  33:	5d                   	pop    %rbp
+  34:	c3                   	ret    

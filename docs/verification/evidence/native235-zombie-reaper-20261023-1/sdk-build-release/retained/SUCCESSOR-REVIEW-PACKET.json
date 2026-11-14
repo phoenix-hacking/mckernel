@@ -1,0 +1,204 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PREPARED_EXACT_SOURCE_STAGING_AND_DERIVED_RUNTIME_REVIEW_PENDING_NO_EXECUTION_RELEASE",
+  "source_bundle": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-sdk-successor-20261023-1/CURRENT68-ZOMBIE-INPUT-MAP.json",
+    "sha256": "b76146a45dd0e2fc6fb66dbb477ce6bcbe0c9e79f797b7cab48aa1431af11158",
+    "bytes": 31237
+  },
+  "preparation": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-sdk-successor-20261023-1/preparation.json",
+    "sha256": "cf809fb3b6adfcde41746071853bd116f20ef68445fe86061d2e980ce3a4c72e",
+    "bytes": 47895
+  },
+  "source_identity": "15334501928a36becca541c8cd8beeead3da0acd8737f955abaf98f34cece515",
+  "source_files": 68,
+  "source_bytes": 1355207,
+  "input_files": 15,
+  "input_bytes": 575685,
+  "total_copy_bytes": 1930892,
+  "only_provider_source_delta": [
+    {
+      "relative": "mcctrl_process.rs",
+      "old": "b2e635f6590d401e2d37646486c2d3a5a52fece210d569533001f354d0537d23",
+      "new": "fcddb2679847c70e8d663cdf990f54be3a7645560c0dac2910018cda82ae5d2f",
+      "bytes": 53992
+    }
+  ],
+  "staging_script": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/sdk-successor-preparation/stage_bound_successor.py",
+    "sha256": "a4c4034f4b26899dd885829b4bc314471459a863c186a78b8d11fc9781673826",
+    "bytes": 5504
+  },
+  "staging_dispatcher_only_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=536870912:536870912",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/sdk-successor-preparation/stage_bound_successor.py",
+    "--execute"
+  ],
+  "staging_effects": [
+    "Create reserved fresh HOST candidate/modules+home+tmp",
+    "Create reserved fresh SCRATCH input directory and copy15files",
+    "Write exact request.json with fresh stat identities; no execution release",
+    "Keep all partial source copies/once-marker on error; no automatic retry/cleanup"
+  ],
+  "request_template": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-sdk-successor-20261023-1/REQUEST.TEMPLATE.PENDING-LIVE-IDENTITIES.json",
+    "sha256": "fa5b34c3f4bb0bfc76ea0c6f9ffe11f62cae6f1f1ffdc0b0e6b17c2e02776825",
+    "bytes": 1891
+  },
+  "driver": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-sdk-successor-20261023-1/derived-runtime/native_running_external_modules_offline.py",
+    "sha256": "614ce6543ad63a7a6e48ab0ee6cfb9d432c291067005597fa270fc9b48b78925",
+    "bytes": 37676
+  },
+  "owner": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-sdk-successor-20261023-1/derived-runtime/native_running_external_modules_owner.py",
+    "sha256": "43f09ca006a828c5d1916b71042f85ef23251bf5123a3713b426466ef27086d6",
+    "bytes": 54724
+  },
+  "runtime_cohort": {
+    "scripts/native_running_external_modules_owner.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-sdk-successor-20261023-1/derived-runtime/native_running_external_modules_owner.py",
+      "sha256": "43f09ca006a828c5d1916b71042f85ef23251bf5123a3713b426466ef27086d6",
+      "bytes": 54724
+    },
+    "scripts/tests/test_native_running_external_modules_owner.py": {
+      "path": "/home/holden/mckernel/scripts/tests/test_native_running_external_modules_owner.py",
+      "sha256": "c816f7dfd6fa167670876d8e64e8474bec119e1f19280fcc1cb902dff1a2c340",
+      "bytes": 36798
+    },
+    "scripts/native_running_external_modules_offline.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-sdk-successor-20261023-1/derived-runtime/native_running_external_modules_offline.py",
+      "sha256": "614ce6543ad63a7a6e48ab0ee6cfb9d432c291067005597fa270fc9b48b78925",
+      "bytes": 37676
+    },
+    "scripts/native_rust_exact_mckernel_image_container_owner.py": {
+      "path": "/home/holden/mckernel/scripts/native_rust_exact_mckernel_image_container_owner.py",
+      "sha256": "e9861cf73b0328c9fe2eacb987ea179933146cbeddbc3951405d4e60e89560f4",
+      "bytes": 81525
+    },
+    "scripts/native_rust_exact_build_container_owner.py": {
+      "path": "/home/holden/mckernel/scripts/native_rust_exact_build_container_owner.py",
+      "sha256": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1",
+      "bytes": 51420
+    },
+    "scripts/native_rust_exact_build_offline.py": {
+      "path": "/home/holden/mckernel/scripts/native_rust_exact_build_offline.py",
+      "sha256": "cc243126ab8cc0754c62175c77e46d6ba0d98294f8168cc77893a2c12249cd1a",
+      "bytes": 27338
+    },
+    "scripts/native_rust_exact_disk_build_wrapper.py": {
+      "path": "/home/holden/mckernel/scripts/native_rust_exact_disk_build_wrapper.py",
+      "sha256": "c252ee341eb61752704f8b818503c0a5dc97400845494707ca3110f5f23df6d1",
+      "bytes": 57015
+    },
+    "scripts/native_rust_exact_build_image_rebind_probe.py": {
+      "path": "/home/holden/mckernel/scripts/native_rust_exact_build_image_rebind_probe.py",
+      "sha256": "412d46de7e078746a7ec979a13ccb25753d6fa34708610932e35be8f02a89635",
+      "bytes": 24966
+    },
+    "scripts/native_rust_exact_build_image_prepare.py": {
+      "path": "/home/holden/mckernel/scripts/native_rust_exact_build_image_prepare.py",
+      "sha256": "45cb12e0fd58d164468badfb99a3ed922e65e06046bf38b4a50e27e18595a27b",
+      "bytes": 22959
+    },
+    "scripts/native_rust_exact_build_image_rebind.py": {
+      "path": "/home/holden/mckernel/scripts/native_rust_exact_build_image_rebind.py",
+      "sha256": "f10ab116e55a24e8db7a8157d71efdd01198ba3453a8141bc8bbf596eda6b61e",
+      "bytes": 11193
+    },
+    "scripts/native_exact_historical_lease_observer.py": {
+      "path": "/home/holden/mckernel/scripts/native_exact_historical_lease_observer.py",
+      "sha256": "463ae558e141c2a6fe5a016fb19baddb26ed883c3bf6d39c114b27711ee78a51",
+      "bytes": 10901
+    }
+  },
+  "runtime_binding_change": "Only exact prep/source maps, sizes, identities and explicit successor owner/driver paths; runtime support cohort keys/digest checks and all execution/isolation/ownership logic preserved.",
+  "pure_validation": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-sdk-successor-20261023-1/PURE-PREPARATION-VALIDATION.json",
+    "sha256": "58b897ea008593ccc33720f7d1a5f63ddea5db3ee2b4c3cbf27cd6ae8297454d",
+    "bytes": 9830
+  },
+  "preview2": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/sdk-successor-preparation/preview2.stdout",
+    "sha256": "cde8cf88073fbdbc449869bb48e436a742b8f774722b47bc9cc229911eb96039",
+    "bytes": 909
+  },
+  "next_real_module_command": [
+    "/usr/bin/env",
+    "-i",
+    "KBUILD_BUILD_HOST=rocky-10.2-x86_64",
+    "KBUILD_BUILD_TIMESTAMP=Tue, 11 Aug 2026 07:40:34 +0000",
+    "KBUILD_BUILD_USER=mckernel",
+    "KBUILD_BUILD_VERSION=1",
+    "SOURCE_DATE_EPOCH=1786434034",
+    "PATH=/usr/bin:/bin",
+    "LANG=C",
+    "LC_ALL=C",
+    "TZ=UTC",
+    "BASH_ENV=",
+    "ENV=",
+    "GNUMAKEFLAGS=",
+    "MAKEFILES=",
+    "MAKEFLAGS=",
+    "MAKEOVERRIDES=",
+    "MFLAGS=",
+    "LD_LIBRARY_PATH=",
+    "LD_PRELOAD=",
+    "HOME=/candidate/home",
+    "TMPDIR=/candidate/tmp",
+    "/usr/bin/make",
+    "-C",
+    "/out/source/linux-6.12.0-211.44.1.el10_2",
+    "O=/out/build",
+    "M=/candidate/modules",
+    "ARCH=x86_64",
+    "LLVM=1",
+    "LOCALVERSION=-211.44.1.el10_2.mckernel1.x86_64",
+    "KBUILD_BUILD_HOST=rocky-10.2-x86_64",
+    "KBUILD_BUILD_TIMESTAMP=Tue, 11 Aug 2026 07:40:34 +0000",
+    "KBUILD_BUILD_USER=mckernel",
+    "KBUILD_BUILD_VERSION=1",
+    "SOURCE_DATE_EPOCH=1786434034",
+    "MCKERNEL_CURRENT_FORK_ADOPTION_OPT_IN=1",
+    "--jobserver-style=pipe",
+    "-j2",
+    "modules"
+  ],
+  "execution_prerequisites": [
+    "source acceptance and exact derived runtime review",
+    "root materializes tiny prepared input set at fresh accepted scratch input namespace and candidate source set at fresh accepted HOST output namespace",
+    "fresh live identities/headroom/leases/historical observer and positive physical clearance",
+    "independent exact one-shot execution release for matching cohort/request",
+    "actual full module build/link/provider artifact checks/physical retirement"
+  ],
+  "no_compiler_or_privileged_operations": true,
+  "profile": {
+    "container_CPUs": "2-5",
+    "container_memory_bytes": 12884901888,
+    "container_swap": 0,
+    "container_tasks": 512,
+    "network": "none",
+    "make_jobs": 2,
+    "read_only": [
+      "/out",
+      "/inputs",
+      "/driver.py"
+    ],
+    "writable": [
+      "/candidate"
+    ]
+  },
+  "accepted_basis_reused_read_only": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+  "accepted_tool_image": "sha256:0f8ad280e47d76b23554de4aec411752e1f779f9b2fc7fece6b0b3375dc9775d",
+  "root_review_note": "The stage helper --execute was NOT run by this worker. The request template has null live identities until dispatcher staging. Native235 physical clearance exists separately and does not itself release this build."
+}

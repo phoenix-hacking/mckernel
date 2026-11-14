@@ -1,0 +1,28 @@
+{
+  "argv": [
+    "/usr/bin/cc",
+    "-std=gnu11",
+    "-O2",
+    "-fPIE",
+    "-pie",
+    "-I",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-7/m15-ihkconfig/fixture/include",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-7/m15-ihkconfig/fixture-output/default/ihkconfig-rust.o",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-7/m15-ihkconfig/fixture/abi_stub.c",
+    "-Wl,--wrap=open",
+    "-Wl,--wrap=close",
+    "-Wl,--wrap=ioctl",
+    "-Wl,--wrap=pread",
+    "-Wl,--wrap=pwrite",
+    "-Wl,--wrap=mmap",
+    "-Wl,--wrap=munmap",
+    "-Wl,--wrap=calloc",
+    "-Wl,--wrap=malloc",
+    "-Wl,--wrap=realloc",
+    "-Wl,--wrap=strdup",
+    "-o",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-7/m15-ihkconfig/fixture-output/default/rust/ihkconfig"
+  ],
+  "IHKCONFIG_BUILDID": "fixture-build",
+  "LC_ALL": "C"
+}

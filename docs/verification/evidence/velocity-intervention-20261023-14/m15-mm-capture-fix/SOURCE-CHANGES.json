@@ -1,0 +1,33 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "predecessor_runner": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-13/m15-mm-finish/batch-1/run_candidate_fixture.py",
+    "bytes": 15150,
+    "sha256": "81c2b363c0340e082759e823f0c708e22ece8769e2d1f69d2d3ecffc4a419fc0"
+  },
+  "successor_runner": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/m15-mm-capture-fix/run_body_fixture.py",
+    "bytes": 15323,
+    "sha256": "a60f041abe588f6b303ddc9e3d304bada69db08e0b2af08935bb7f633a60c790"
+  },
+  "exact_replacements": {
+    "HERE=Path(__file__).resolve().parent": "HERE=Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-13/m15-mm-finish/batch-1')\nSUCCESSOR=Path(__file__).resolve().parent",
+    "if HERE not in output.parents:": "if output != SUCCESSOR/'actual-body-attempt-1':",
+    "'HOME':str(output),'TMPDIR':str(output),'RUST_BACKTRACE':'0'": "'HOME':str(output),'TMPDIR':str(output),'RUST_BACKTRACE':'0',\n                 'RUST_MIN_STACK':'2097152'",
+    "choices=['body','gate']": "choices=['body']"
+  },
+  "product_MM_sources_copied_or_modified": false,
+  "predecessor_batch_modified": false,
+  "helper": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/phase5-m03-handshake-runtime-checkpoint-20261020-1/sdk-physical-source/run_two_commands_source_bound_corrected.py",
+    "bytes": 14753,
+    "sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8"
+  },
+  "census": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-20261019-1/capsule/scripts/native_rust_exact_build_container_owner.py",
+    "bytes": 51420,
+    "sha256": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1"
+  },
+  "source_only_ast_grammar": "Python3.8",
+  "executions": 0
+}

@@ -1,0 +1,15 @@
+Observed tool output copied from the bounded correction command on 2026-10-22.
+The correction preparation asserted current test bytes equal observed966874870dfe34dabe78bebac535466eae36e9d23c5542ea486cb82045cbbb67.
+Root-owned test bytes had returned to7076a5e1b8c20a0dc7bf6b12be42e884e85feaa0fdbcdf315bd49bbd1d40aab7; assertion stopped preparation before changing provenance/test.
+
+Traceback (most recent call last):
+  File "<stdin>", line 7, in <module>
+AssertionError
+
+The shell lacked fail-fast and continued to the test command. No helper body executed: its existing immutable attempt directory blocked startup.
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/m05-sdk68-final-consumer-check-20261022-1/test_owner_source_binding.py", line 12, in <module>
+    cohort=P/'private-installed-cohort';cohort.mkdir(mode=0o700)
+FileExistsError: [Errno 17] File exists: '/home/holden/mckernel-work/host-preparation/m05-sdk68-final-consumer-check-20261022-1/private-installed-cohort'
+
+No retry authorized by this packet; one failed candidate plus bounded correction consumed. Prior actual-loader family was never imported/replayed.

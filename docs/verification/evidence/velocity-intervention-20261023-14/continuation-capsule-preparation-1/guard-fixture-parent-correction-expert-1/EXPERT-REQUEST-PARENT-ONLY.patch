@@ -1,0 +1,14 @@
+--- /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-capsule-preparation-1/guard-fixture-binding-correction-1/fixture_actual_controller_guards.py
++++ /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-capsule-preparation-1/guard-fixture-parent-correction-expert-1/fixture_actual_controller_guards.py
+@@ -21,7 +21,10 @@
+ def refused_factory(*a,**kw):factory_calls.append((a,kw));raise AssertionError('process factory forbidden')
+ checks=[];seq=[0]
+ def request_file(x):
+- seq[0]+=1;p=D/('TESTONLY-request-%02d.json'%seq[0]);b=(json.dumps(x,sort_keys=True)+'\n').encode();p.write_bytes(b);return p,sha(b)
++ seq[0]+=1;p=RUNTIME/('TESTONLY-GUARD-PARENT-CORRECTION1-request-%02d.json'%seq[0]);assert 1<=seq[0]<=16,'exact16requestwriteallowlist';b=(json.dumps(x,sort_keys=True)+'\n').encode()
++ fd=os.open(p,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_CLOEXEC|os.O_NOFOLLOW,0o600)
++ with os.fdopen(fd,'wb') as stream:stream.write(b);stream.flush();os.fsync(stream.fileno())
++ return p,sha(b)
+ def consume(controller,request_path,request_sha):
+  m=load(controller,'actual_controller_'+str(seq[0]));tree=ast.parse(controller.read_bytes());main=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='main');body=[];boundary=None
+  for n in main.body:

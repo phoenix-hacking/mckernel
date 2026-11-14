@@ -1,0 +1,70 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_FRESH_CURRENT_PRODUCER_REQUIRES_ROOT_AUTHORITY",
+  "commands": [
+    {
+      "id": "0-current-selected-tools-configure",
+      "argv": [
+        "/usr/bin/cmake",
+        "-S",
+        "/candidate/tool-project",
+        "-B",
+        "/work/current-bfd-build",
+        "-DCMAKE_C_COMPILER=/usr/bin/cc",
+        "-DSTAGED_USER_SOURCE=/src/executer/user",
+        "-DORIGINAL_SOURCE=/src",
+        "-DCMAKE_VERBOSE_MAKEFILE=ON",
+        "-DIHK_USER_RUSTC:FILEPATH=/nightly/bin/rustc"
+      ],
+      "cwd": "/work",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Configure genuine current executer/user targets using accepted native SDK layout witness; no full SDK/image rebuild"
+    },
+    {
+      "id": "1-build-only-mcinspect-eclair",
+      "argv": [
+        "/usr/bin/cmake",
+        "--build",
+        "/work/current-bfd-build",
+        "--target",
+        "mcinspect",
+        "eclair",
+        "--parallel",
+        "1"
+      ],
+      "cwd": "/work",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Build only selected tools and genuine required vendor/object dependencies"
+    },
+    {
+      "id": "2-actual-project-object-selection",
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "/candidate/inspect_project_objects.py",
+        "/work/current-bfd-build",
+        "/work/BFD-CURRENT-PROJECT-OBJECTS.json"
+      ],
+      "cwd": "/work",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Verify genuine new linkfiles/project objects and Rust providers; no replay of SDK21 equivalence/error vectors"
+    }
+  ],
+  "SDK_prefix_equivalence_retirement_replays": 0,
+  "tool_image": "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5",
+  "resources": {
+    "cpus": "2-5",
+    "jobs": 1,
+    "memory_bytes": 12884901888,
+    "memory_swap_bytes": 12884901888,
+    "pids": 512,
+    "network": "none"
+  },
+  "requires": "Root exact current closedsource with only four proposed paths adopted into /src; accepted SDK mounts/pins; independently reviewed existing resource/source operation. Current tuple/free/account/nonce all futureNULL.",
+  "current_source": null,
+  "current_ledger": null,
+  "current_free": null,
+  "grant": null,
+  "source_publication": null,
+  "native_authority": null,
+  "output_budget_bytes": 536870912,
+  "capture_budget_bytes": 67108864,
+  "full_growth_including_staging_and_temporary_bytes": 4294967296
+}

@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "kind": "linux-sealed-collector-adverse-v1",
+  "status": "SOURCE_PACKET_ONLY",
+  "application_acceptance": false,
+  "backend_enabled": false,
+  "source": {
+    "path": "../collector.c",
+    "sha256": "09a63a343fa8cc9f511a26693371f5ba4f55ac5ca56fcb47abdc44759830cf1f",
+    "patch_sha256": "262e75200c9d34600a977425f3a4549e187411d091d1f0d6300866bc6a5fcdb0",
+    "header_sha256": "c00f73b43c41a2d0f1abc224e881d3e85c980e3188352ae5169505950d2fd130",
+    "language": "c11",
+    "guards": ["M02_ADVERSE_TEST_ONLY", "M02_ADVERSE_CASE"]
+  },
+  "cases": [
+    {"id": "missing-setup", "selector": 1, "setup_length": 0, "failure": ["SETUP_ERROR", "setup-pipe-incomplete", "EPROTO"]},
+    {"id": "partial-setup", "selector": 2, "setup_length": 383, "failure": ["SETUP_ERROR", "setup-pipe-incomplete", "EPROTO"]},
+    {"id": "interrupt-completed-wait", "selector": 3, "setup_length": 384, "failure": ["INTERRUPTED", "collector-interrupted", "EINTR"]}
+  ],
+  "bounds_seconds": {"case": 40, "cleanup": 15, "whole_container": 300},
+  "runtime_evidence": ["source", "generated_diff", "compiler", "elf", "requests", "diagnostics", "setup", "stdout", "stderr", "report", "events", "raw_wait", "pid_startticks", "deadlines", "container", "watchdog", "absence"]
+}

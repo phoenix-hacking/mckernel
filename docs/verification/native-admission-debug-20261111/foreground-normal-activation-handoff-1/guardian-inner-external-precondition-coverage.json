@@ -1,0 +1,450 @@
+{
+  "all_original_preconditions_proved_by_inner_packet_alone": false,
+  "at": "2026-11-11T22:07:44.450120+00:00",
+  "controls_and_resource_detail": {
+    "account_freshness_and_limits": {
+      "evidence": [
+        {
+          "bytes": 634,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/execution-1/ADMISSION.json",
+          "sha256": "6ee1c7494179792d1f72f5c190bcf497dd0a244df774f68abf234d54b929f89c"
+        },
+        {
+          "bytes": 8606,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/run_once.py",
+          "sha256": "983b8c3ceabcd8dc4d2e1999d75e6edbef91145a5f2ab18bfa1a2dfa6639c822"
+        }
+      ],
+      "exact_executed_guard": "def guard():\n    s=json.loads((ROOT/'.git/os-autopilot/state.json').read_text())\n    assert s['phase']=='running' and not s.get('stop_reason') and not s.get('credit_budget_error')\n    assert s['credit_budget']['id']=='7c6ef3604bfb4008a917bba8cfb6cfaa'\n    assert not s['last_rate_limits'].get('spendControlReached') and not s['last_rate_limits'].get('rateLimitReachedType')\n    assert time.time()-datetime.datetime.fromisoformat(s['updated_at']).timestamp()<90\n    return s['updated_at']",
+      "scope": "State phase running; no stop_reason/credit_budget_error; exact7c6 id; no spendControlReached/rateLimitReachedType; state.updated_at age<90. Actual saved guard_updated_at21:45:45.709858 precedes admission21:45:45.772995. No new account query or budget reset."
+    },
+    "capacity_and_CPU_limits": {
+      "actual_exec_prefix": [
+        "/usr/bin/taskset",
+        "-c",
+        "0",
+        "/usr/bin/prlimit",
+        "--as=268435456",
+        "--cpu=30",
+        "--fsize=16777216",
+        "--nofile=128:128",
+        "--core=0"
+      ],
+      "checked_thresholds": [
+        "MemAvailable>=26GiB",
+        "sampled overhead+256MiB<=4GiB",
+        "hostfree>=16GiB+1GiB",
+        "HERE filesystemfree>=12GiB+1GiB"
+      ],
+      "evidence": [
+        {
+          "bytes": 634,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/execution-1/ADMISSION.json",
+          "sha256": "6ee1c7494179792d1f72f5c190bcf497dd0a244df774f68abf234d54b929f89c"
+        },
+        {
+          "bytes": 2017,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/execution-1/RESULT.json",
+          "sha256": "09c26d1a25540f0f514364ad2898182c57f85b8cfc469ad9d216f030a6e1e21a"
+        },
+        {
+          "bytes": 5588,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/ROOT-PARENT.PROPOSED.py",
+          "sha256": "b87149f8b58f7fcd5b561eeba642acf758dfeb3ca36e762ccfd3cea75ca57cd1"
+        }
+      ],
+      "new_job_bytes": 268435456,
+      "recorded_MemAvailable": 29264420864,
+      "recorded_overhead": 1503617024,
+      "recorded_plan_sum": 1772052480,
+      "scope_limit": "Disk inequalities were asserted by successful executed parent; raw disk-free values were not serialized in ADMISSION. AS is per-process/prlimit; no aggregate cgroup high-water guarantee is claimed."
+    },
+    "engine_service_goal_and_budget": {
+      "checked_fields": [
+        "state.thread_id originalRoot",
+        "state/guardian/watcher guardian_run_id equality",
+        "state.stop_reason None,phase running,goal.status active",
+        "service_hold,policy_hold,auth_hold,billing_hold,budget_hold,permission_hold,transport_uncertain,pending_request,credit_budget_error all false",
+        "guardian.user_stop/checkpoint/launch empty and guardian-stop.json absent",
+        "credit_budget.id7c6 and budgetPRIVATE_FINITE_CREDIT_CAP_REDACTED",
+        "watcher/worker/server live exact current identities and watcher age0..90"
+      ],
+      "evidence": [
+        {
+          "bytes": 11758,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/recover_exact_guardian.py",
+          "sha256": "4bbcdc47c389e10f4adb0ae085888bcd8cc6550803de4376e02c7acea4315035"
+        },
+        {
+          "bytes": 3378,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/operation-output-1/PRE-ACTION.json",
+          "sha256": "2c73093146c6643d46990ae0b7b0e775fbb714f0480094abb8129e5c92ec010d"
+        },
+        {
+          "bytes": 4353,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/operation-output-1/RESULT.json",
+          "sha256": "6efca0718c7f241ac9980765ac48ba662ec331487d46d947216f17ae7c48d578"
+        }
+      ],
+      "scope_limit": "These are the actual named inner checks, not a blanket new inventory/disposition of every native/source/resource hold. Historical holds are preserved and no native/source release is performed."
+    },
+    "overhead_and_other_owner_coverage": {
+      "actual_method": "Recorded method samples a defined PID/name/descendant closure, not a serialized per-owner charge ledger.",
+      "evidence": [
+        {
+          "bytes": 8606,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/run_once.py",
+          "sha256": "983b8c3ceabcd8dc4d2e1999d75e6edbef91145a5f2ab18bfa1a2dfa6639c822"
+        },
+        {
+          "bytes": 634,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/execution-1/ADMISSION.json",
+          "sha256": "6ee1c7494179792d1f72f5c190bcf497dd0a244df774f68abf234d54b929f89c"
+        },
+        {
+          "bytes": 4377,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-only-recovery-review-p04source-max-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/qualification-1/RESOURCE-AND-OUTER-AUDIT-DISPOSITION.json",
+          "sha256": "92177882ca65c30c23c499dc4182678c0269a91bf7c402844dc1d72ec0b0809c"
+        }
+      ],
+      "exact_missing_fields": [
+        "pre_action_actual_HOST_job_count",
+        "pre_action_other_current_HOST_owner_charge_rows",
+        "successful_separate_Root_external_admission_record"
+      ],
+      "exact_overhead_source": "def overhead():\n    rows={}\n    for p in pathlib.Path('/proc').iterdir():\n        if not p.name.isdigit():continue\n        try:\n            t=(p/'stat').read_text();v=t[t.rfind(')')+2:].split();rows[int(p.name)]=(int(v[1]),int(v[21])*os.sysconf('SC_PAGE_SIZE'),t[t.find('(')+1:t.rfind(')')])\n        except (OSError,ValueError,IndexError):pass\n    w={761845,762046,762048,762050,os.getpid()}\n    w.update(p for p,v in rows.items() if v[2] in ('codex','codex-code-mode','dockerd','containerd'))\n    while True:\n        children={p for p,v in rows.items() if v[0] in w}\n        if children<=w:break\n        w.update(children)\n    return sum(rows[p][1] for p in w if p in rows)",
+      "not_proved_by_inner_alone": [
+        "Actual concurrent HOST job count<=3 and zero other active payloads",
+        "Full current owner/charge list, including applicability of all live controller overhead to the shared grant"
+      ],
+      "why": "ADMISSION.aggregate_jobs_max3 is a configured constant and ADMISSION.other_current_payloads explicitly says Root separate fresh actual concurrent-owner admission required. Later Root zero-other-payload statement/retirement2744 supports current disposition separately; it is not a pre-action inner observation."
+    },
+    "positive_completion_and_new_owner": {
+      "covered": "One real helper+four nested owned clients0/direct/family/streams; both pinned fds soleclose/noerrors; old manager exit and cgroup disposition; new guardian1561218/b51981693 under normal parent1561217, SUPERVISED/same88169 run/originalRoot/7c6/enginebirths; fullRootsession84472->terminal0/noSession.",
+      "evidence": [
+        {
+          "bytes": 383,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/operation-output-1/OLD-UNIT-TERMINAL.json",
+          "sha256": "e17bc4f9a1ba380255d9151f127cf172eee4c64e4a559b40f9d755570576bbce"
+        },
+        {
+          "bytes": 664,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/operation-output-1/CGROUP-AND-ORIGINAL-FD-CLOSURE.json",
+          "sha256": "c633395abf871629b9803cc99757f20a8a303984de2f4dadbd69eb997fd970dd"
+        },
+        {
+          "bytes": 452,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/operation-output-1/UNIT-AFTER.json",
+          "sha256": "2464a85fc89f197b7e58de6e5aaaa139159aed05a1f381907be79b288a3c1328"
+        },
+        {
+          "bytes": 4353,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/operation-output-1/RESULT.json",
+          "sha256": "6efca0718c7f241ac9980765ac48ba662ec331487d46d947216f17ae7c48d578"
+        },
+        {
+          "bytes": 2017,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/execution-1/RESULT.json",
+          "sha256": "09c26d1a25540f0f514364ad2898182c57f85b8cfc469ad9d216f030a6e1e21a"
+        },
+        {
+          "bytes": 1859,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/ROOT-EXEC-COMPLETION.json",
+          "sha256": "75457265c16fe0a38b6f1e0e9aa166af8eb3a3284753b4d951272c4a980a4ff7"
+        }
+      ],
+      "two_heartbeat_precision": "The executed reviewed helper requires two advancing observations; only final raw new guardian record and its started_at are serialized. No new first-observation record is invented."
+    },
+    "source_and_no_scope_expansion": {
+      "covered": "Exact canonical source/unit/interpreter/currentownership/prior actualQ pins; ordinaryUID1000 normal import; source before/after; no unit rewrite/newgoal/newcreditrun/model/native action.",
+      "evidence": [
+        {
+          "bytes": 3823,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/INPUTS.json",
+          "sha256": "725f4a096c6daffce1474a7c92e36887e9b8d5d1fd3a19ef6fd3ddd8cdccbe14"
+        },
+        {
+          "bytes": 3580,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/NORMAL-SOURCE-PUBLICATION-AND-LOAD.json",
+          "sha256": "9d845dc35e04122539fea48d43f12b43f171e1c0fedfe417c4d3036ff4c0db42"
+        },
+        {
+          "bytes": 4353,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/operation-output-1/RESULT.json",
+          "sha256": "6efca0718c7f241ac9980765ac48ba662ec331487d46d947216f17ae7c48d578"
+        }
+      ],
+      "external_inputs": "Actual publication and operator scope are Root inputs; general source/native/currentfree holds stay binding and are not cleared by this mapping."
+    }
+  },
+  "current_only_process_disposition_unchanged": "9c97/921 retain positive current temporary256MiB/job retirement eligibility from actual whole process/Root closure. This does not discharge the historical external admission audit gap, infer exact aggregate peak, or release any other/native/source/Scratch UNKNOWN.",
+  "effort": "max",
+  "model": "gpt-6.1-sol",
+  "no_census_test_import_signal_unit_or_native_action_by_author": true,
+  "no_new_required_signal_or_recovery_replay": true,
+  "no_original_acceptance_or_status_or_canonical_mutation": true,
+  "original_GO_fresh_admission_conditions": [
+    "Root separately verifies actual current account/stop/source/resource controls and exact scope authorization at execution; this review is not actual admission.",
+    "CPU0 and one256MiB recovery family, all current owner/controller/worker overhead and any other separately admitted HOST work inside shared4GiB/max3; fresh26GiB available.",
+    "Host16GiB/scratch12GiB floors plus1GiB planned output/capture headroom; no nativeCPU2\u20135 or12GiB borrowing, no affinity/unit/cgroup/system-limit widening.",
+    "Only exact source/pins/argv/review and fresh output/capture paths; any stale PID/birth/unit/old-invocation/heartbeat or identity mismatch refuses. No unchanged signal retry after an uncertain attempt."
+  ],
+  "original_operation_GO": {
+    "bytes": 12197,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-only-recovery-review-p04source-max-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/REVIEW.json",
+    "sha256": "8a44f1f1cde525815252ce88a9e38dbb29a3421346c73a3e48362611eceec096"
+  },
+  "original_request": {
+    "bytes": 9471,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/REQUEST.PROPOSED.json",
+    "sha256": "1c10a7bf6e5ed42503d5dab24feb32ad29c63cd1d4e6c20db01b1d123444518c"
+  },
+  "owner": "/root/p04_source_max",
+  "purpose": "Userdddd exact original1c10/8a44 precondition-to-saved-evidence mapping only; no general re-review or execution.",
+  "qualified_actual_status_unchanged": {
+    "bytes": 5755,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-only-recovery-review-p04source-max-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/qualification-1/QUALIFICATION.json",
+    "sha256": "9c97d62d2979c5f709f785190a0623c96976990e5112510cff4c5be3b9d2cd2c"
+  },
+  "request_preconditions": [
+    {
+      "coverage": "COVERED_BY_PINNED_REUSED_ACTUAL_RESULT",
+      "inner_mechanism": "Root parent pins INPUTS and exact prior actual fae688 qualification before child; current source9bc is separately hash guarded.",
+      "limit": "No passing five-case test was replayed; exact reused result scope stays controlled lower effects.",
+      "literal_requirement": "Actual narrowed5-row Anaconda3.9.12 SOURCE9bc passed ae6486/fullRoota00844 and independent savedQfae688; exact reference bound, no test replay.",
+      "request_required_index": 0,
+      "saved_evidence": [
+        {
+          "bytes": 6967,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-review-p04source-max-1/canonical-wrapper-reuse-1/qualification-1/QUALIFICATION.json",
+          "sha256": "fae688bafab88937413673ce0fce4f0f6aa3b6fda29e3600c0f6476343748f43"
+        },
+        {
+          "bytes": 3823,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/INPUTS.json",
+          "sha256": "725f4a096c6daffce1474a7c92e36887e9b8d5d1fd3a19ef6fd3ddd8cdccbe14"
+        },
+        {
+          "bytes": 2017,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/execution-1/RESULT.json",
+          "sha256": "09c26d1a25540f0f514364ad2898182c57f85b8cfc469ad9d216f030a6e1e21a"
+        }
+      ]
+    },
+    {
+      "coverage": "INNER_CURRENT_BYTES_AND_NORMAL_LOAD_COVERED_PUBLICATION_IS_EXTERNAL_ROOT_INPUT",
+      "inner_mechanism": "Parent input pins and child execution_source_guards authenticate canonical9bc plus normal loader scripts/unit before action and after new normal guardian load.",
+      "limit": "Git integration/push/fetched-blob publication was Root-reported14ede and was not performed/proved by this inner helper. No separate proof of publication is invented here.",
+      "literal_requirement": "Root exact lazy9bc canonical integration and verified source publication; no automatic source override or normal package reinstall.",
+      "request_required_index": 1,
+      "saved_evidence": [
+        {
+          "bytes": 3580,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/NORMAL-SOURCE-PUBLICATION-AND-LOAD.json",
+          "sha256": "9d845dc35e04122539fea48d43f12b43f171e1c0fedfe417c4d3036ff4c0db42"
+        },
+        {
+          "bytes": 3823,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/INPUTS.json",
+          "sha256": "725f4a096c6daffce1474a7c92e36887e9b8d5d1fd3a19ef6fd3ddd8cdccbe14"
+        },
+        {
+          "bytes": 4353,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/operation-output-1/RESULT.json",
+          "sha256": "6efca0718c7f241ac9980765ac48ba662ec331487d46d947216f17ae7c48d578"
+        },
+        {
+          "bytes": 452,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/operation-output-1/UNIT-AFTER.json",
+          "sha256": "2464a85fc89f197b7e58de6e5aaaa139159aed05a1f381907be79b288a3c1328"
+        }
+      ]
+    },
+    {
+      "coverage": "INDEPENDENT_REVIEW_AND_INNER_FRESH_THRESHOLDS_COVERED_EXTERNAL_RECONCILIATION_RECORD_MISSING",
+      "inner_mechanism": "Parent authenticates exact8a44 review and executes guard(), overhead(), MemAvailable>=26GiB, overhead+256MiB<=4GiB and disk-floor assertions before helper.",
+      "limit": "No observed concurrent HOST job count/owner-charge reconciliation or successful separate external admission receipt exists inside this packet. Parent explicitly leaves other_current_payloads to Root.",
+      "literal_requirement": "Independent full guarded helper/ownership/user-manager/parent/closure review then Root fresh operation-specific aggregate admission.",
+      "request_required_index": 2,
+      "saved_evidence": [
+        {
+          "bytes": 12197,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-only-recovery-review-p04source-max-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/REVIEW.json",
+          "sha256": "8a44f1f1cde525815252ce88a9e38dbb29a3421346c73a3e48362611eceec096"
+        },
+        {
+          "bytes": 634,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/execution-1/ADMISSION.json",
+          "sha256": "6ee1c7494179792d1f72f5c190bcf497dd0a244df774f68abf234d54b929f89c"
+        },
+        {
+          "bytes": 2017,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/execution-1/RESULT.json",
+          "sha256": "09c26d1a25540f0f514364ad2898182c57f85b8cfc469ad9d216f030a6e1e21a"
+        },
+        {
+          "bytes": 2082,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/ROOT-OUTER-PREFLIGHT-ERROR.json",
+          "sha256": "0fc2e73e60f90eeb0d8a515a6d20f83407e857688b32cd66d3cb8826346df99e"
+        },
+        {
+          "bytes": 4377,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-only-recovery-review-p04source-max-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/qualification-1/RESOURCE-AND-OUTER-AUDIT-DISPOSITION.json",
+          "sha256": "92177882ca65c30c23c499dc4182678c0269a91bf7c402844dc1d72ec0b0809c"
+        }
+      ]
+    },
+    {
+      "coverage": "COVERED_BY_EXECUTED_MATCHED_SOURCE_CHECKS_AND_SAVED_PREACTION",
+      "inner_mechanism": "Child checks boot and UID1000/cwd, each frozen PID/birth/PPID/UID/cgroup/cmdline; actual unit owner/InvocationID/ControlGroup; engine_healthy current state/guardian/watcher tuples, goal.active, phase.running, no stop, named service/account/transport holds, exact Root/run/budget; pre-action retains raw roles/watcher/state tuples.",
+      "limit": "Not every control-state scalar is separately serialized. The exact checks are evidenced by immutable executed source and positive child0, with saved selected raw fields; no synthetic raw state/boot snapshot is added.",
+      "literal_requirement": "Current boot/birth/cgroup/parent/UID/command/source guards and actual unitMainPID/InvocationID; same Root/engine/account holds/deliveries. Guardian helper unavailable at actual runtime remains confirmed.",
+      "request_required_index": 3,
+      "saved_evidence": [
+        {
+          "bytes": 5725,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/CURRENT-OWNERSHIP.json",
+          "sha256": "ed82aa3b40999c5f16b10dc9bd97b718375cea17d97ce8dd9402e7873eb273ff"
+        },
+        {
+          "bytes": 11758,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/recover_exact_guardian.py",
+          "sha256": "4bbcdc47c389e10f4adb0ae085888bcd8cc6550803de4376e02c7acea4315035"
+        },
+        {
+          "bytes": 3378,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/operation-output-1/PRE-ACTION.json",
+          "sha256": "2c73093146c6643d46990ae0b7b0e775fbb714f0480094abb8129e5c92ec010d"
+        },
+        {
+          "bytes": 450,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/operation-output-1/UNIT-BEFORE.json",
+          "sha256": "4b49cb9a699693ab4c9f10cbbd10c5a5da7c480b59ad3df1c78e3c02f2d5a630"
+        },
+        {
+          "bytes": 4353,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/operation-output-1/RESULT.json",
+          "sha256": "6efca0718c7f241ac9980765ac48ba662ec331487d46d947216f17ae7c48d578"
+        }
+      ]
+    },
+    {
+      "coverage": "COVERED_BY_SAVED_ACTUAL_OLD_MANAGER_AND_TERMINAL_PIDFDS",
+      "inner_mechanism": "Both pidfds report POLLIN; systemctl manager record is same old invocation/ExecMainPID761844, MainPID0, ExecMainCode1/ExecMainStatus1, nonzero exit timestamp.",
+      "limit": "No direct waitpid(nonchild) or inferred reaping from PID absence is claimed.",
+      "literal_requirement": "Exact original parent terminal manager record captured before automatic new invocation; missing record -> preserved UNKNOWN, no unchanged signal retry.",
+      "request_required_index": 4,
+      "saved_evidence": [
+        {
+          "bytes": 1320,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/operation-output-1/OLD-PIDFD-TERMINAL.json",
+          "sha256": "297e6725a59b39aa3e51db8891771bda7ee6a45b21821c78b97dceefd8c38709"
+        },
+        {
+          "bytes": 383,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/operation-output-1/OLD-UNIT-TERMINAL.json",
+          "sha256": "e17bc4f9a1ba380255d9151f127cf172eee4c64e4a559b40f9d755570576bbce"
+        },
+        {
+          "bytes": 450,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/operation-output-1/UNIT-BEFORE.json",
+          "sha256": "4b49cb9a699693ab4c9f10cbbd10c5a5da7c480b59ad3df1c78e3c02f2d5a630"
+        }
+      ]
+    },
+    {
+      "coverage": "AUTHORIZED_ROOT_DISPATCH_IS_EXTERNAL_INPUT_INNER_CHECKS_REVIEWED_SCOPE",
+      "inner_mechanism": "User/Root scoped technical recovery authority and sole actual Root invocation supply authority. Parent checks exact independent review and source; child only one guardian pidfdSIGKILL and normal same-unit start.",
+      "limit": "The inner helper does not issue permission, source/native/account grants or a nonce. Root external admission file was not issued and is not reconstructed as an authority token.",
+      "literal_requirement": "Current Root controls/operator authorization are this ordinary scoped technical recovery; no new permission/API/grant boolean is fabricated.",
+      "request_required_index": 5,
+      "saved_evidence": [
+        {
+          "bytes": 12197,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-only-recovery-review-p04source-max-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/REVIEW.json",
+          "sha256": "8a44f1f1cde525815252ce88a9e38dbb29a3421346c73a3e48362611eceec096"
+        },
+        {
+          "bytes": 1859,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/ROOT-EXEC-COMPLETION.json",
+          "sha256": "75457265c16fe0a38b6f1e0e9aa166af8eb3a3284753b4d951272c4a980a4ff7"
+        },
+        {
+          "bytes": 705,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/operation-output-1/ACTION-ATTEMPTED.json",
+          "sha256": "bb00058538da658c11bcde2393cd0010a096145bb3361200894492c805d2b98b"
+        }
+      ]
+    },
+    {
+      "coverage": "COVERED_BY_ACTUAL_POSITIVE_CGROUP_MANAGER_PIDFD_JOIN",
+      "inner_mechanism": "Before action actual old cgroup members are exactly761844/761845. After action actual old manager ControlGroup is explicitly cleared together with old exit and two terminal pidfds; this is the authorized positive alternate to an empty extant cgroup.procs.",
+      "limit": "The kernel member file was absent after exit; it is not reported as an observed empty file. Missing-only release remains prohibited.",
+      "literal_requirement": "Actual guardian unit membership before action must be exactly the two pinned old monitor/inhibitor PIDs; additional current helper members cause pre-action refusal. After action require actual empty cgroup.procs or positive original-manager ControlGroup-cleared together with original unit exit record and both terminal pidfds. No absence-only FD/cgroup release.",
+      "request_required_index": 6,
+      "saved_evidence": [
+        {
+          "bytes": 277,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/operation-output-1/CGROUP-BEFORE.json",
+          "sha256": "c6884b174511dac8c44113a69c0b4fa577f5a73708f14567aca5671734774cb0"
+        },
+        {
+          "bytes": 664,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/operation-output-1/CGROUP-AND-ORIGINAL-FD-CLOSURE.json",
+          "sha256": "c633395abf871629b9803cc99757f20a8a303984de2f4dadbd69eb997fd970dd"
+        },
+        {
+          "bytes": 383,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/operation-output-1/OLD-UNIT-TERMINAL.json",
+          "sha256": "e17bc4f9a1ba380255d9151f127cf172eee4c64e4a559b40f9d755570576bbce"
+        },
+        {
+          "bytes": 1320,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/operation-output-1/OLD-PIDFD-TERMINAL.json",
+          "sha256": "297e6725a59b39aa3e51db8891771bda7ee6a45b21821c78b97dceefd8c38709"
+        }
+      ]
+    },
+    {
+      "coverage": "COVERED_BY_EXECUTED_EVERY_CALL_PREDICATE_AND_SAVED_TUPLES",
+      "inner_mechanism": "Every engine_healthy checks exact recorded watcher PID/birth, type(at) int/float excludingbool, isfinite(at),0<=time.time()-at<=90, current state+watcher worker tuple and state server tuple, plus same actual live proc snapshots.",
+      "limit": "The full pre-action raw watcher/state tuple is retained; post-adoption positive source predicate is retained by actual successful helper and new guardian record, not a newly fabricated intermediate timestamp.",
+      "literal_requirement": "Every engine_healthy call requires exact current watcher PID/birth, finite numeric wall-heartbeat age0..90s, matching state+watcher worker metadata and actual state server metadata against the original frozen roles; actual proc snapshots alone never satisfy current-record liveness.",
+      "request_required_index": 7,
+      "saved_evidence": [
+        {
+          "bytes": 11758,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/recover_exact_guardian.py",
+          "sha256": "4bbcdc47c389e10f4adb0ae085888bcd8cc6550803de4376e02c7acea4315035"
+        },
+        {
+          "bytes": 3378,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/operation-output-1/PRE-ACTION.json",
+          "sha256": "2c73093146c6643d46990ae0b7b0e775fbb714f0480094abb8129e5c92ec010d"
+        },
+        {
+          "bytes": 4353,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/operation-output-1/RESULT.json",
+          "sha256": "6efca0718c7f241ac9980765ac48ba662ec331487d46d947216f17ae7c48d578"
+        }
+      ]
+    }
+  ],
+  "resource_outer_gap_status_unchanged": {
+    "bytes": 4377,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-only-recovery-review-p04source-max-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/qualification-1/RESOURCE-AND-OUTER-AUDIT-DISPOSITION.json",
+    "sha256": "92177882ca65c30c23c499dc4182678c0269a91bf7c402844dc1d72ec0b0809c"
+  },
+  "schema": "bounded-original-recovery-precondition-coverage-addendum-v1",
+  "summary": "Every actual inner-enforced predicate is mapped below to recorded evidence or an assertion in the exact successfully executed source. The original review also required Root external current-owner/job/admission reconciliation; that was not issued after the separate preflight NameError. Current source publication/operator authority are external Root inputs. No broader inner-only admission claim is made.",
+  "unchanged_outer_error": {
+    "do_not_backdate_or_fabricate": true,
+    "inner_fresh_admission": "PASS at actual saved timestamp, separate from outer failure",
+    "receipt": {
+      "bytes": 2082,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/ROOT-OUTER-PREFLIGHT-ERROR.json",
+      "sha256": "0fc2e73e60f90eeb0d8a515a6d20f83407e857688b32cd66d3cb8826346df99e"
+    },
+    "status": "EXTERNAL_PREFLIGHT_FAILED_AND_EXTERNAL_RECORD_NOT_ISSUED"
+  }
+}

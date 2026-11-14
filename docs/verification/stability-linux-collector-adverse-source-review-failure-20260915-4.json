@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_adverse_source_review_failure",
+  "task_id": "M02-B-adverse-v1-source",
+  "attempt": 4,
+  "status": "FAIL_SOURCE_PACKET_AND_BUILD_PACKET",
+  "base_commit": "2f60fdd286fa30cc04d3be36fde8126b3db6e9c5",
+  "candidate_source_manifest_sha256": "ebb1b5c3bda61b61f77fe81dea9c6ac51625380bfb4885e002c8478fab1e52c5",
+  "source_tests": {
+    "status": "PASS_UNIT_SOURCE_ONLY",
+    "tests": 10,
+    "returncode": 0,
+    "result_sha256": "700d42b5b1c0d8b644d839b4363c5945b314079ce7f3283ff093469a693a2a58",
+    "diff_check": "PASS"
+  },
+  "candidate_files": [
+    {"path": "build_owner.py", "sha256": "c169495c74a6c3c15719a205c5433d6479f4fa176f84d104cfe9ae482f01592b"},
+    {"path": "collector.patch", "sha256": "262e75200c9d34600a977425f3a4549e187411d091d1f0d6300866bc6a5fcdb0"},
+    {"path": "inject.h", "sha256": "c00f73b43c41a2d0f1abc224e881d3e85c980e3188352ae5169505950d2fd130"},
+    {"path": "oracle.py", "sha256": "36d4c86df3363cae6a034a24d9b943aa310b4de6f1099b09c217dbb7b1fbf8e6"},
+    {"path": "packet.json", "sha256": "b9d61a1f74a63d84ffd5dcbdccabdcc950fe5264dc4fbc3c1ac4948b4d883306"},
+    {"path": "prepare.py", "sha256": "6a6fbf2dee226973f9d8a259baf990b3c2dc92005e522cdf7b82e9ab70b80976"},
+    {"path": "root_inside.py", "sha256": "438084f5c962caa93b191c1ca0ae2eff822e3123539aba52f838ed8a3f228520"},
+    {"path": "root_orchestrator.py", "sha256": "be77a3585f94e159b8dd5222bd7cc894c083879cd82495fccf6e408749f18b2b"},
+    {"path": "root_profile.py", "sha256": "e7df850a6c927c7e9aadcf393ef05be177883fe66cba7134fa27822eebf5fe9f"},
+    {"path": "run.py", "sha256": "fc60f6ce355c0807ac219a7208e36f21435c002c868a1dfdb4c1e25e4b356692"},
+    {"path": "tests.md", "sha256": "9818ba4d1132a27a90bb934f5b608bf8376a991252d615e2e5315d1fb57d0cdf"},
+    {"path": "scripts/tests/test_collector_adverse_packet.py", "sha256": "feb1229853a662880f43f74cd7ef7e55f97d0fa69ae952603c12bb61deddb863"}
+  ],
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-adverse-source-success-20260915-4.tar.gz",
+    "size": 49790,
+    "sha256": "56add90444d29f667b5260d5290f4f36c94d1e8742876072e1e3133b14c0f8bf",
+    "members": 45
+  },
+  "independent_review": {
+    "role": "Astra/high collector ownership reviewer",
+    "status": "FAIL_SOURCE_PACKET_AND_BUILD_PACKET",
+    "findings": [
+      "atomic_new does not fchmod the requested mode; under root umask 077, recorded 0644/0755 inputs are actually 0600/0700 and root_inside rejects them.",
+      "verify_build omits complete link/readelf/objdump argv/executable/cwd/deadline/source-membership/loader validation.",
+      "compile_inside does not retain and bind the generated diff in each actual build tree."
+    ],
+    "accepted_source_scope_only": "Attempt3 oracle and signal/source binding defects are corrected; real owner paths are invoked and selector0 hooks are inert by source inspection."
+  },
+  "collector_compiled": false,
+  "root_execution": false,
+  "runtime_acceptance": false,
+  "production_gate_credit": false
+}

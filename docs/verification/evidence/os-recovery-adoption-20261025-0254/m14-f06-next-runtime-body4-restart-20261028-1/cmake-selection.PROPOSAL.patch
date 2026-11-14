@@ -1,0 +1,15 @@
+--- a/kernel/CMakeLists.txt
++++ b/kernel/CMakeLists.txt
+@@ -299,6 +299,12 @@
+ 				set_property(SOURCE "${MCKERNEL_F06_C_SOURCE}" APPEND PROPERTY
+ 				    COMPILE_DEFINITIONS "MCKERNEL_RUST_F06_SHMGET_DISPATCH")
+ 
++				# Complete existing borrowed ptrace xstate-write callback; same Rust usercopy.
++				list(APPEND RUST_KERNEL_CFG "--cfg" "f06_ptrace_xstate_copy_from_candidate")
++				list(APPEND RUST_KERNEL_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_ptrace_xstate_copy_from.rs")
++				set_property(SOURCE "${MCKERNEL_F06_C_SOURCE}" APPEND PROPERTY
++				    COMPILE_DEFINITIONS "MCKERNEL_RUST_F06_PTRACE_XSTATE_COPY_FROM")
++
+ 				set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
+ 				    "${MCKERNEL_F06_ORIGIN_PROFILE}"
+ 				    "${MCKERNEL_F06_ORIGIN_PRODUCER}"

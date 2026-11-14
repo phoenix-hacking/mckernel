@@ -1,0 +1,73 @@
+--- /home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/candidate/native_diagnostic_guest_collector.c
++++ /home/holden/mckernel-work/host-preparation/phase5-m03-authenticated-boot-handshake-correction-20261020-1/candidate/native_diagnostic_guest_collector.c
+@@ -454,6 +454,16 @@
+ #endif
+ }
+ 
++#if defined(ND_M03_MPROTECT_UNALIGNED)
++static struct { const char *phase; int number; } startup_failure;
++static int refuse_startup(const char *phase)
++{
++    startup_failure.phase = phase;
++    startup_failure.number = errno;
++    return -1;
++}
++#endif
++
+ static int publish_diagnostic(int fd, const struct result *payload, int empty, int safe)
+ {
+     if (!safe) return -1;
+@@ -461,6 +471,19 @@
+      * the unstarted-payload frame, using the same single-frame console budget. */
+     if (failed_helper.ready && (!payload || !payload->started))
+         return publish_helper_failure(fd);
++#if defined(ND_M03_MPROTECT_UNALIGNED)
++    if (startup_failure.phase && (!payload || !payload->started)) {
++        char b[256];
++        int n = snprintf(b, sizeof b,
++                         "ND_STARTUP_FAIL {\"phase\":\"%s\",\"errno\":%d,"
++                         "\"app_started\":false}\n",
++                         startup_failure.phase, startup_failure.number);
++        if (n <= 0 || (size_t)n >= sizeof b) return -1;
++        ssize_t written;
++        do { written = write(fd, b, (size_t)n); } while (written < 0 && errno == EINTR);
++        return written == n ? 0 : -1;
++    }
++#endif
+     if (!payload) return -1;
+     return publish(fd, payload, empty);
+ }
+@@ -492,6 +515,10 @@
+     if (close(fd)) bad = -1;
+     return bad;
+ }
++
++#if defined(ND_M03_MPROTECT_UNALIGNED)
++#include "nd_pair_startup.h"
++#endif
+ 
+ static int helper(const char *tag, const char *path, char *const av[], int *safe)
+ {
+@@ -572,10 +599,22 @@
+     loaded = 2;
+     if (helper("load-mcctrl", "/sbin/insmod", (char *const[]){"insmod","/modules/mcctrl.ko",NULL}, &safe)) { good = 0; goto finish; }
+     loaded = 3;
++#if defined(ND_M03_MPROTECT_UNALIGNED)
++    errno = 0;
++    if (pair_prepare_challenge()) {
++        refuse_startup("challenge-prepare"); good = 0; goto finish;
++    }
++#endif
+ #if defined(ND_FUTEX) || defined(ND_PROCESS_EXEC_WAIT)
+     if (helper("boot", "/bin/native-boot", oversubscribed_boot_argv, &safe)) { good = 0; goto finish; }
+ #else
+     if (helper("boot", "/bin/native-boot", (char *const[]){"/bin/native-boot",NULL}, &safe)) { good = 0; goto finish; }
++#endif
++#if defined(ND_M03_MPROTECT_UNALIGNED)
++    int cpus[2]; errno = 0;
++    if (pair_discover(cpus)) {
++        refuse_startup("assignment-readback"); good = 0; goto finish;
++    }
+ #endif
+     supervise("/bin/mcexec", payload_argv, payload_env, "/case/work", 10000, &payload);
+     if (!payload.clean) safe = 0;

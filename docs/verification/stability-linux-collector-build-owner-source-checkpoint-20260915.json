@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "record_kind": "collector_build_owner_source_checkpoint",
+  "task_id": "M02-B-rebuild-owner",
+  "candidate": 8,
+  "status": "PASS_BUILD_PACKET",
+  "base_commit": "2ae50cbbec321c2ee9367dc0026b86e6470017d5",
+  "recorded_utc": "2026-09-15T05:36:04Z",
+  "files": [
+    {"path": "docs/verification/evidence/stability-linux-collector-build-owner-20260915.py", "sha256": "06268712e4c070112e0d8aabdf68d7fba1413a2a1ccfebdd5ccbaf6737b583ee"},
+    {"path": "scripts/tests/test_stability_linux_collector_build_owner.py", "sha256": "273c1ce062d83376ef43fce45a7e30dd55651aa299e91f8428ebac172c891af6"},
+    {"path": "docs/verification/evidence/stability-linux-collector-rebuild-20260915.py", "sha256": "6ae0e29dbebf2593f91b4cfa19a5252a157241b83715b2243826cf528efca0e2"},
+    {"path": "scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/root_orchestrator.py", "sha256": "6e6311ac7059eb97f1cba2eb9606bdc7e82016e381cb47a732ca5b274c216ab3"},
+    {"path": "scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/supervisor_host38.py", "sha256": "cba4b4d50d68f9afd5aa8a4c2d830ec0b800f7fd7dfd07774911d5fd1b99c7e7"}
+  ],
+  "focused_tests": {
+    "python3": "8/8 PASS",
+    "python3_8": "8/8 PASS",
+    "adversarial_clock_and_type_mutations": "23/23 rejected",
+    "docker_executed": false
+  },
+  "evidence_contract": {
+    "container_host_namespaces": "PASS",
+    "docker_config_hostconfig_entrypoint_mount_network_allowlist": "PASS",
+    "compiler_dependency_count": 176,
+    "compiler_dependency_unique_depfile_membership": "PASS",
+    "compiled_output_count": 16,
+    "command_count": 20,
+    "stream_retention_and_deadlines": "PASS",
+    "immutable_loader_identities": "PASS",
+    "sha_cases": 9,
+    "builder_negative_cases": 1
+  },
+  "independent_reviews": [
+    {"role": "Luna evidence auditor", "status": "PASS_EVIDENCE_CONTRACT"},
+    {"role": "Astra/high ownership and runtime-acceptance reviewer", "status": "PASS_BUILD_PACKET"}
+  ],
+  "nonblocking_limitation": "A parent death after stopped-container creation but before CID-bound watchdog readiness can leave a stopped container requiring audited cleanup; it cannot start the build.",
+  "heavy_build_executed": false,
+  "application_acceptance": false,
+  "transport_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false,
+  "next": "Commit, push and fetched-blob verify this exact source packet, then execute the one bounded UID1000 rebuild under the dispatcher-owned heavy lease."
+}

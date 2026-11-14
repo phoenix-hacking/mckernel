@@ -1,0 +1,14 @@
+--- 059c-preimage
++++ M05-failure-writer-successor
+@@ -956,6 +956,11 @@
+     if failure is not None:
+         record = {"status": "FAIL", "application_acceptance": False,
+                   "mckernel_application_executed": False, "failure": failure}
++        # An observer refusal must retain the already-collected real envelope.
++        # This adds evidence only; the first failure and false acceptance flags
++        # remain unchanged, under the existing bounded final-record writer.
++        if observation:
++            record["observation"] = observation
+     record["cleanup"] = cleanup
+     record["capture_errors"] = capture_errors
+     if qemu_evidence is not None:

@@ -1,0 +1,9 @@
+error[E0425]: cannot find function `smp_load_acquire_ulong` in module `crate::x86_cpu_helpers`
+   --> /home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/current-child-credit-owner-1/fixture/fork_control_guest.rs:180:32
+    |
+180 |     if crate::x86_cpu_helpers::smp_load_acquire_ulong(addr_of!(response.status))!=1{error=EPROTO;}
+    |                                ^^^^^^^^^^^^^^^^^^^^^^ not found in `crate::x86_cpu_helpers`
+
+error: aborting due to 1 previous error
+
+For more information about this error, try `rustc --explain E0425`.

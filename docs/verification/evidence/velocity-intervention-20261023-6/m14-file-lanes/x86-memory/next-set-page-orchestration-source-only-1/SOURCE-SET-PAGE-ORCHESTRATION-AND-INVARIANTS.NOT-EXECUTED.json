@@ -1,0 +1,76 @@
+{
+  "Rust_body": {
+    "bytes": 1185,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-set-page-orchestration-source-only-1/EXACT-RUST-BODY.inc",
+    "sha256": "60c427b37ba5e7cb1ccc3eadce521384b4ccf3a6c7d97397e504c46cda87a95d"
+  },
+  "actual_fixture_production_default_native": null,
+  "actual_lock_authorities": [
+    {
+      "bytes": 4603,
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch-lock.h",
+      "sha256": "ca8baa66ed77634cd6319a918211b3eb8fe80fc7dcb2ac0110ab6bfbd0c1b81b"
+    },
+    {
+      "bytes": 3105,
+      "path": "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs",
+      "sha256": "7b6c1e87f521eaf4674128afd7bff71785bead4ff7c9eb3c9a668d6a0cb0cbe7"
+    }
+  ],
+  "alias_lifetime": "Only raw lock pointer crosses body callbacks; no Rust reference/mutable borrow retained. Existing table helper owns allocation/traversal; callback pointers never stored beyond synchronous call. Existing static lock/init_pt/mask getter providers reused; no new C functions/getters.",
+  "consumer": "Existing Rust ihk_mc_pt_set_page/set_pt_large_page and map/setup callers use existing x86_pt_set_page_bridge symbol. C fallback-only __set_pt_page callers remain exact; C callback consumer remains declaration under PUBLIC.",
+  "engineering_percentage": null,
+  "fragments": [
+    {
+      "bytes": 1106,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-set-page-orchestration-source-only-1/FUTURE-REAL-HEADER-ABI-FRAGMENT.NOT-QUEUED.c",
+      "sha256": "50c8303934f00f38a3e7ce67f447d96489725a470455ff1db8e6a26eb594adeb"
+    },
+    {
+      "bytes": 4070,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-set-page-orchestration-source-only-1/FUTURE-ORIGINAL-C-RUST-CONSUMER.NOT-QUEUED.c",
+      "sha256": "704b75fdfc746e36ebfa987549f0476fa3d1a2886cd8d279666bc37fa8a814f0"
+    }
+  ],
+  "invariant": "Kernel address decision unchanged. Acquire same init_pt_lock through exact existing IRQ-saving Rust implementation; read init_pt only after acquisition; identical body helper/callback identities/raw arguments; unlock once with exact saved flags on every returned CInt. User addresses acquire no lock or new lock getter. No policy, ownership, error translation or cleanup added.",
+  "new_executable_queue": null,
+  "original_C": {
+    "bytes": 705,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-set-page-orchestration-source-only-1/EXACT-ORIGINAL-C-BODY.inc",
+    "sha256": "772f94b42dd2d16552e2e7c9164b335895202e7448d16840314a3742eac83985"
+  },
+  "patch": {
+    "bytes": 3744,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-set-page-orchestration-source-only-1/EXACT-SET-PAGE-ORCHESTRATION.patch",
+    "sha256": "3e9de60f840d23e604572c330c85221f51f2bc71bba0a781de4710bf0df2e345"
+  },
+  "postimages": [
+    {
+      "bytes": 92002,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-set-page-orchestration-source-only-1/candidate/arch/x86_64/kernel/memory.c",
+      "sha256": "797768b1adcacccfce7ce89f507c768592a757e7c28040f46e6b430db0c8ac2e"
+    },
+    {
+      "bytes": 211807,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-set-page-orchestration-source-only-1/candidate/kernel/rust/x86_memory_helpers.rs",
+      "sha256": "f5f555b2c12f2444d5a7e71a7d1747acd31388488bea18f3ea02a812804081de"
+    }
+  ],
+  "preimages": [
+    {
+      "bytes": 91803,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-set-page-log-source-only-1/candidate/arch/x86_64/kernel/memory.c",
+      "sha256": "5fafcfb02eef0e41c48b9b037c4233921e255cd467cc126226a77731b8abf4f4"
+    },
+    {
+      "bytes": 210719,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-set-page-log-source-only-1/candidate/kernel/rust/x86_memory_helpers.rs",
+      "sha256": "8453f89bb7f87ab0dfa3f55159e1b15bd592b7457b28523f02401dad001a690a"
+    }
+  ],
+  "retained_untested_predecessors": "Reason/helper-error/log source remains untested separately; no fixture acceptance inferred from source merge. Production four-provider suffix remains f13 only.",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\nSource-only complete set-page lock orchestration, no second executable queue.\n",
+  "selection": "PUBLIC excludes complete original __set_pt_page plus C bridge body, preserves exact declaration and real C fallback. Remove foreign self-import and supply unique Rust T; actual wholeTU/Rust/partial/default/native remain NULL.",
+  "sole_queue": "passed-four-provider-union2-production-suffix-preparation-1/c03ce4ee",
+  "status": "COMPLETE_SET_PAGE_LOCK_ORCHESTRATION_SOURCE_ONLY"
+}

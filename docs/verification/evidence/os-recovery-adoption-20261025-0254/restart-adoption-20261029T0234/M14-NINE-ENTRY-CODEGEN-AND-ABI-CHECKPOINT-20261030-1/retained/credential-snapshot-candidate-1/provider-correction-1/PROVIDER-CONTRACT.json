@@ -1,0 +1,19 @@
+{
+  "provider_status": "BLOCKED_UNSUPPORTED_EXISTING_OWNER_CONTRACT",
+  "literal_prototypes": [
+    "unsafe extern C fn f03_cred_owner_begin_v1(proc: *mut Process, kind: CInt) -> CredBegin",
+    "unsafe extern C fn f03_cred_owner_snapshot_v1(token: *mut c_void) -> CredReply",
+    "unsafe extern C fn f03_cred_owner_finish_v1(token: *mut c_void, outcome: CInt, status: CInt) -> CInt",
+    "unsafe extern C fn f03_cred_refresh_failure_v1(proc: *mut Process, kind: CInt, status: CInt)"
+  ],
+  "required_missing_facts": [
+    "real original response owner bound to current guest and exact task/MM",
+    "typed terminal/partial/unknown credential write outcome",
+    "owned immutable eight-ID snapshot copied by value before lifetime end",
+    "all setters share real serialization spanning original host mutation through guest commit",
+    "host-success/query-failure stale-cache reconciliation",
+    "void callback caller migration or actual reconciler",
+    "actual loaded host+guest source/ABI linkage and visibility"
+  ],
+  "absent_provider_reason": "Existing scalar guest/host routes discard credential error and expose borrowed stack scratch; native mailbox has no credential-completion state. No unsupported transport/ACK/prototype implementation invented."
+}

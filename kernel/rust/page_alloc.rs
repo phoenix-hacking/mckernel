@@ -219,6 +219,22 @@ const _: () = {
     assert!(offset_of!(IhkMcNumaNode, max_addr) == 216);
 };
 
+#[cfg(native_linux_irq_work_v6_12)]
+const _: () = {
+    use crate::zero_pages as wire;
+    assert!(size_of::<FreeChunk>() == wire::HEADER_BYTES);
+    assert!(offset_of!(FreeChunk, list) as u64 == wire::LINK_OFFSET);
+    assert!(size_of::<IhkMcNumaNode>() == wire::NODE_BYTES);
+    assert!(align_of::<IhkMcNumaNode>() as u64 == wire::NODE_ALIGN);
+    assert!(offset_of!(IhkMcNumaNode, zeroing_workers) as u64 == wire::CONTROL_OFFSET);
+    assert!(offset_of!(IhkMcNumaNode, free_chunks)
+        - offset_of!(IhkMcNumaNode, zeroing_workers) == wire::CONTROL_BYTES);
+    assert!(size_of::<LListNode>() == size_of::<crate::llist::LListNode>());
+    assert!(align_of::<LListNode>() == align_of::<crate::llist::LListNode>());
+    assert!(size_of::<LListHead>() == size_of::<crate::llist::LListHead>());
+    assert!(align_of::<LListHead>() == align_of::<crate::llist::LListHead>());
+};
+
 unsafe extern "C" {
     static mut cpu_local_var_initialized: CInt;
 
@@ -1059,6 +1075,74 @@ pub unsafe extern "C" fn ihk_numa_add_free_pages_result(
     rc
 }
 
+/// Every native pending consumer detaches a complete batch. In particular,
+/// allocator, timer, offload poll and the host must not mix del_first with
+/// another consumer: that would read a link after its chunk could be reused.
+#[cfg(native_linux_irq_work_v6_12)]
+unsafe fn native_zero_free_pages_node(node: *mut IhkMcNumaNode, nr_pages: CInt) -> CInt {
+    let pending = &raw mut (*node).to_zero_list;
+    let mut cursor = crate::llist::llist_del_all(pending.cast()).cast::<LListNode>();
+    let mut skipped_first: *mut LListNode = null_mut();
+    let mut skipped_last: *mut LListNode = null_mut();
+    let mut zeroed: CInt = 0;
+    let requested_size = if nr_pages > 0 {
+        (nr_pages as CULong) << PAGE_SHIFT
+    } else {
+        0
+    };
+
+    while !cursor.is_null() {
+        let link = cursor;
+        cursor = read_volatile(&(*link).next);
+        let chunk = list_to_chunk(link);
+        let addr = (*chunk).addr;
+        let size = (*chunk).size;
+        if nr_pages != 0 && size < requested_size {
+            if skipped_last.is_null() {
+                skipped_first = link;
+            } else {
+                (*skipped_last).next = link;
+            }
+            skipped_last = link;
+            continue;
+        }
+
+        let pages = (size >> PAGE_SHIFT) as CInt;
+        if size > size_of::<FreeChunk>() as CULong {
+            zero_phys_range(
+                addr + size_of::<FreeChunk>() as CULong,
+                size - size_of::<FreeChunk>() as CULong,
+            );
+        }
+        llist_add(link, &raw mut (*node).zeroed_list);
+        // Publication transfers the chunk immediately. Never read its size or
+        // next link again: the allocator can already be reusing that memory.
+        compiler_fence(Ordering::SeqCst);
+        ihk_atomic_sub(pages, &raw mut (*node).nr_to_zero_pages);
+        zeroed = zeroed.wrapping_add(pages);
+        if nr_pages != 0 {
+            break;
+        }
+    }
+
+    // Return the unselected private chain in its original order. Concurrent
+    // arrivals stay on the shared head; this insertion is one atomic batch.
+    let first = if skipped_first.is_null() {
+        cursor
+    } else {
+        (*skipped_last).next = cursor;
+        skipped_first
+    };
+    if !first.is_null() {
+        let mut last = first;
+        while !(*last).next.is_null() {
+            last = (*last).next;
+        }
+        crate::llist::llist_add_batch(first.cast(), last.cast(), pending.cast());
+    }
+    zeroed
+}
+
 #[no_mangle]
 pub unsafe extern "C" fn __ihk_numa_zero_free_pages_node(
     node: *mut IhkMcNumaNode,
@@ -1068,6 +1152,12 @@ pub unsafe extern "C" fn __ihk_numa_zero_free_pages_node(
         return 0;
     }
 
+    #[cfg(native_linux_irq_work_v6_12)]
+    {
+        return native_zero_free_pages_node(node, nr_pages);
+    }
+    #[cfg(not(native_linux_irq_work_v6_12))]
+    {
     let mut nr_zeroed_pages: CInt = 0;
     let requested_size = if nr_pages > 0 {
         (nr_pages as CULong) << PAGE_SHIFT
@@ -1144,6 +1234,7 @@ pub unsafe extern "C" fn __ihk_numa_zero_free_pages_node(
     }
 
     nr_zeroed_pages
+    }
 }
 
 #[no_mangle]
@@ -1876,6 +1967,10 @@ pub unsafe extern "C" fn __ihk_numa_zero_request_packet_fill(
     let traditional = (&raw mut (*packet).body).cast::<IkcScdPacketTraditional>();
     (*traditional).req.number = syscall_number;
     (*traditional).req.args[0] = node_addr;
+    #[cfg(native_linux_irq_work_v6_12)]
+    if syscall_number == NR_MOVE_PAGES {
+        (*traditional).req.args[1] = crate::zero_pages::BATCH_MARKER;
+    }
 
     compiler_fence(Ordering::Release);
     write_volatile(&raw mut (*traditional).req.valid, 1);
@@ -3018,4 +3113,288 @@ pub unsafe extern "C" fn ihk_numa_free_pages(node: *mut IhkMcNumaNode, addr: CUL
             Some(page_alloc_free_log_bridge),
         );
     }
+}
+
+/// Append the existing page allocator descriptor to its owning NUMA node.
+///
+/// # Safety
+/// A non-null allocator must point to a live IhkPageAllocatorDesc and a non-null
+/// node to a live IhkMcNumaNode. Their embedded list storage must satisfy the
+/// original list_add_tail contract: initialized node head, exclusive boot-time
+/// mutation and an unlinked allocator entry. Neither allocation is moved or freed.
+#[no_mangle]
+pub unsafe extern "C" fn mem_numa_list_allocator_bridge(
+    allocator: *mut c_void,
+    node: *mut c_void,
+) {
+    if allocator.is_null() || node.is_null() {
+        return;
+    }
+
+    // SAFETY: Use the defining module's actual private descriptor/node fields,
+    // rather than a guessed offset, copied layout, new C getter or borrowed ref.
+    // Both raw addresses stay within the original caller-owned allocations.
+    unsafe {
+        let descriptor = allocator.cast::<IhkPageAllocatorDesc>();
+        let node = node.cast::<IhkMcNumaNode>();
+        let entry = core::ptr::addr_of_mut!((*descriptor).list);
+        let head = core::ptr::addr_of_mut!((*node).allocators);
+
+        // SAFETY: Both repr(C) list types have the actual next/prev pointer ABI.
+        // Reuse the selected Rust list provider; it performs the original tail
+        // insertion order. No init, extra lock, reference or ownership ACK added.
+        crate::list_helpers::list_add_tail(entry.cast(), head.cast());
+    }
+}
+
+#[repr(C)]
+struct MemReservePagesDebugMetadata {
+    record: *mut u8,
+    flags_byte: usize,
+}
+
+unsafe extern "C" {
+    static mem_reserve_pages_debug_metadata: MemReservePagesDebugMetadata;
+    #[link_name = "panic"]
+    fn mem_reserve_panic_provider(message: *const c_char);
+}
+
+/// Retain the optional reservation diagnostic without changing reservation state.
+///
+/// # Safety
+/// The caller retains the original logging/debug-record access discipline.
+#[no_mangle]
+pub unsafe extern "C" fn mem_reserve_pages_log_bridge(
+    start: CULong,
+    end: CULong,
+    pages: CULong,
+) {
+    // SAFETY: Actual mutable C record and actual-GCC9 byte witness; plain read
+    // retains the original predicate. Exact words/formats, no atomic upgrade.
+    unsafe {
+        let metadata = &mem_reserve_pages_debug_metadata;
+        if core::ptr::read(metadata.record.add(metadata.flags_byte)) != 0 {
+            kprintf(
+                b"reserve: %016lx - %016lx (%ld pages)\n\0".as_ptr().cast(),
+                start, end, pages,
+            );
+        }
+    }
+}
+
+/// Reuse the actual Rust page-bitmap reservation provider.
+///
+/// # Safety
+/// The caller must retain a live descriptor and its original reservation lock
+/// and range discipline. This adapter adds no ownership or synchronization.
+#[no_mangle]
+pub unsafe extern "C" fn mem_reserve_pages_range_bridge(
+    allocator: *mut c_void,
+    start: CULong,
+    end: CULong,
+) {
+    // SAFETY: Same original descriptor and words reach the same selected provider.
+    unsafe { ihk_pagealloc_reserve(allocator, start, end) }
+}
+
+/// Preserve the original void panic callback used after a helper error.
+///
+/// # Safety
+/// The original boot/panic context must hold; no rollback or success is invented.
+#[no_mangle]
+pub unsafe extern "C" fn mem_reserve_pages_panic_bridge() {
+    // SAFETY: Genuine debug.h declares void panic, including its exact message.
+    // Deliberately do not inherit the separate historical noreturn Rust alias.
+    unsafe { mem_reserve_panic_provider(b"reserve_pages: helper failed\0".as_ptr().cast()) }
+}
+
+/// Reserve the original clipped range through the existing complete helper chain.
+///
+/// # Safety
+/// Non-null allocator must be a live actual IhkPageAllocatorDesc, with stable
+/// start/end fields and the original caller's exclusive boot/reservation context.
+/// Callback storage stays live synchronously; no Rust reference escapes the call.
+#[no_mangle]
+pub unsafe extern "C" fn reserve_pages(
+    allocator: *mut c_void,
+    start: CULong,
+    end: CULong,
+    _range_type: CInt,
+) {
+    // SAFETY: Derive fields from the defining module's actual private layout,
+    // conditional on the same original non-null test. Stable ordinary fields
+    // need no volatile/atomic upgrade. The helper's result remains discarded.
+    unsafe {
+        let descriptor = allocator.cast::<IhkPageAllocatorDesc>();
+        let allocator_start = if descriptor.is_null() { 0 } else { (*descriptor).start };
+        let allocator_end = if descriptor.is_null() { 0 } else { (*descriptor).end };
+        crate::mem_helpers::mem_reserve_pages_public_body_result(
+            allocator,
+            allocator_start,
+            allocator_end,
+            start,
+            end,
+            Some(mem_reserve_pages_log_bridge),
+            Some(mem_reserve_pages_range_bridge),
+            Some(crate::mem_helpers::mem_reserve_pages_body_result),
+            Some(mem_reserve_pages_panic_bridge),
+        );
+    }
+}
+
+#[repr(C)]
+struct MemPageAllocatorInitializationMetadata {
+    pa_start_slot: *mut CULong,
+    pa_end_slot: *mut CULong,
+    kernel_end: *mut c_char,
+    page_size: CULong,
+    page_mask: CULong,
+    attached_mic: CInt,
+    reserved_count_type: CInt,
+    reserved_start_type: CInt,
+    reserved_end_type: CInt,
+}
+
+unsafe extern "C" {
+    static mem_page_allocator_initialization_metadata: MemPageAllocatorInitializationMetadata;
+}
+
+/// Initialize the complete original physical page allocator and reserved ranges.
+///
+/// # Safety
+/// Original exclusive boot ownership of pa_start/pa_end, early-heap state and
+/// mapped page storage must hold. The existing allocator must initialize its
+/// pages output on any path that returns here, as required by the original C
+/// subsequent read. No new null/overflow/failure recovery policy is introduced.
+#[no_mangle]
+pub unsafe extern "C" fn page_allocator_init(mut start: u64, end: u64) -> *mut c_void {
+    // SAFETY: Immutable C metadata supplies real private slots/linker symbol and
+    // header geometry. Every state change follows the original statement order.
+    unsafe {
+        let metadata = &mem_page_allocator_initialization_metadata;
+        let phys_end = crate::x86_memory_helpers::virt_to_phys(metadata.kernel_end.cast());
+        start &= metadata.page_mask as u64;
+        let allocator_start = (start as CULong)
+            .wrapping_add(metadata.page_size.wrapping_sub(1))
+            & metadata.page_mask;
+        let allocator_end = (end as CULong) & metadata.page_mask;
+        core::ptr::write(metadata.pa_start_slot, allocator_start);
+        core::ptr::write(metadata.pa_end_slot, allocator_end);
+
+        let map_phys = if metadata.attached_mic != 0 {
+            0x10_0000
+        } else if allocator_start <= phys_end && phys_end <= allocator_end {
+            let heap = crate::x86_memory_helpers::get_last_early_heap();
+            crate::x86_memory_helpers::virt_to_phys(heap)
+        } else {
+            allocator_start
+        };
+        let page_map = crate::x86_memory_helpers::phys_to_virt(map_phys);
+        let mut pages = core::mem::MaybeUninit::<CULong>::uninit();
+        let allocator = __ihk_pagealloc_init(
+            allocator_start,
+            allocator_end.wrapping_sub(allocator_start),
+            metadata.page_size,
+            page_map,
+            pages.as_mut_ptr(),
+        );
+        // SAFETY: Same original defined-behavior requirement: allocator output
+        // must have been written. Do not replace an undefined original value by
+        // a synthetic zero, accept failure, or invent a new panic/free policy.
+        let pages = pages.assume_init();
+        reserve_pages(
+            allocator,
+            map_phys,
+            map_phys.wrapping_add(pages.wrapping_mul(metadata.page_size)),
+            0,
+        );
+        if allocator_start < start as CULong {
+            reserve_pages(allocator, allocator_start, start as CULong, 0);
+        }
+
+        let mut index: u32 = 1;
+        // Retain the provider lookup on every condition; do not cache the count.
+        while (index as CULong)
+            <= crate::x86_setup::ihk_mc_get_memory_address(metadata.reserved_count_type, 0)
+        {
+            // Exact selected providers return independent constants for these
+            // two types; their evaluation order has no effects or shared writes.
+            let reserved_start = crate::x86_setup::ihk_mc_get_memory_address(
+                metadata.reserved_start_type,
+                index as CInt,
+            );
+            let reserved_end = crate::x86_setup::ihk_mc_get_memory_address(
+                metadata.reserved_end_type,
+                index as CInt,
+            );
+            reserve_pages(allocator, reserved_start, reserved_end, 0);
+            index = index.wrapping_add(1);
+        }
+        crate::x86_memory_helpers::ihk_mc_reserve_arch_pages(
+            allocator,
+            allocator_start,
+            allocator_end,
+            Some(reserve_pages),
+        );
+        allocator
+    }
+}
+
+/// Retain the NUMA callback's exact word-to-uint64_t arguments and result.
+///
+/// # Safety
+/// Same exclusive boot/allocator lifetime obligations as page_allocator_init.
+#[no_mangle]
+pub unsafe extern "C" fn mem_numa_page_allocator_init_bridge(
+    start: CULong,
+    end: CULong,
+) -> *mut c_void {
+    // SAFETY: The genuine C callback converts both unsigned words to uint64_t
+    // once and delegates synchronously without changing the returned ownership.
+    unsafe { page_allocator_init(start as u64, end as u64) }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Keep the defining physical-allocator type here, reusing its exact real layout.
+mod owned_page_allocator_initialization_data {
+    use super::{CULong, MemPageAllocatorInitializationMetadata};
+    use core::ffi::c_char;
+
+    // SAFETY: Immutable scalar config/raw permanent addresses only; the existing
+    // boot allocator remains sole mutable owner. No safe dereference is exposed.
+    unsafe impl Sync for MemPageAllocatorInitializationMetadata {}
+
+    unsafe extern "C" {
+        #[link_name = "pa_start"]
+        static mut PA_START: CULong;
+        #[link_name = "pa_end"]
+        static mut PA_END: CULong;
+        #[link_name = "_end"]
+        static mut KERNEL_END: c_char;
+    }
+
+    #[export_name = "mem_page_allocator_initialization_metadata"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    #[used]
+    static METADATA: MemPageAllocatorInitializationMetadata =
+        MemPageAllocatorInitializationMetadata {
+            // SAFETY: Genuine permanent owned words/linker end symbol, addresses only.
+            pa_start_slot: unsafe { core::ptr::addr_of_mut!(PA_START) },
+            pa_end_slot: unsafe { core::ptr::addr_of_mut!(PA_END) },
+            kernel_end: unsafe { core::ptr::addr_of_mut!(KERNEL_END) },
+            page_size: 4096,
+            page_mask: !4095,
+            attached_mic: 0,
+            reserved_count_type: 5,
+            reserved_start_type: 6,
+            reserved_end_type: 7,
+        };
+
+    const _: () = {
+        use core::mem::{align_of, offset_of, size_of};
+        assert!(size_of::<MemPageAllocatorInitializationMetadata>() == 56);
+        assert!(align_of::<MemPageAllocatorInitializationMetadata>() == 8);
+        assert!(offset_of!(MemPageAllocatorInitializationMetadata, page_size) == 24);
+        assert!(offset_of!(MemPageAllocatorInitializationMetadata, attached_mic) == 40);
+    };
 }

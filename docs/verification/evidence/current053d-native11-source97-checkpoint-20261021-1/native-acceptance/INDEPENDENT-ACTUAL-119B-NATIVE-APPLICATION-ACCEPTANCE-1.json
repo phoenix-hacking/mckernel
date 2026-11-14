@@ -1,0 +1,93 @@
+{
+  "schema": "mckernel.numa-nonempty-overlap.actual-native-application-review.v1",
+  "status": "PASS_ACTUAL_STRICT_119_BYTE_NUMA_NONEMPTY_OVERLAP_APPLICATION_ONLY",
+  "decision": "ACCEPT_CURRENT_NATIVE_NONEMPTY_INTERVAL_TRANSITION_BEHAVIOR",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/numa_compiler_review",
+  "implementation_ownership": false,
+  "application_acceptance": true,
+  "evidence_base": "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/normalization-runtime-data/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1",
+  "readback_locator_authority": "FINAL-SEVEN-ROOT-CALL-DATA.json steps[4],steps[5],steps[6].stdout",
+  "raw_evidence": {
+    "root-seven-whole-1.json": {
+      "sha256": "8ff955143e76d3a8c993bc6950d6124d33080af37207d726c975c2e21187dc32",
+      "bytes": 2979
+    },
+    "readback1_owner_TAR": {
+      "sha256": "34c3a6de8fbd8243d340f66d91e22b507060a8ca365b12d445f6e8a3f95a303c",
+      "bytes": 552960
+    },
+    "readback2_guest_JSON": {
+      "sha256": "c3fdbb40f2ac9bbcd37223f0cca71fb5d088602d45670d6de1ef7494b5d4d026",
+      "bytes": 82516
+    },
+    "readback3_attempt_TAR": {
+      "sha256": "40ead0680216128db6272a6426db64d1f39b9662b2f03399afbc83c1a9f80b25",
+      "bytes": 409600
+    }
+  },
+  "strict_actual_result": {
+    "case_id": "numa-nonempty-overlap",
+    "stdout_bytes": 119,
+    "stdout_sha256": "eaacab76026f77de6ba00785df71cdf37347a45bf6dd42f43525bedb09a8a7c5",
+    "matches_unchanged_source_oracle_exactly": true,
+    "stderr_bytes": 0,
+    "raw_wait_status": 9472,
+    "exit_code": 37,
+    "both_streams_EOF_complete": true,
+    "truncated_or_discarded_bytes": 0,
+    "procfs_empty": true,
+    "capture_errors": [],
+    "cleanup_errors": [],
+    "reaped": true
+  },
+  "accepted_behavior_scope": {
+    "source_checked_binds_completed": 3,
+    "source_checked_policy_queries_completed": 48,
+    "additional_allowed_mask_query": 1,
+    "byte_preservation_passes": 3,
+    "bytes_checked_per_pass": 28672,
+    "external_interval_states": [
+      "A across five interior pages with unchanged exterior endpoints",
+      "Interior B replacing part of nonempty A, preserving both A tails",
+      "Wider B replacing the middle span while preserving outer A tails"
+    ],
+    "guards_masks_process_policy_and_unmap_assertions_passed": true,
+    "internal_path_limit": "Split, right-tail reinsertion and covered-node deletion are source-backed explanations of the checked external transitions; no callback or instruction-hit trace was measured."
+  },
+  "native_route": {
+    "registered_application_pid": 255,
+    "os": 0,
+    "generation": 1,
+    "final_application_retirement_errno": 0,
+    "final_process_release_cleanup_errno": 0,
+    "preceding_EAGAIN_retirement_observation_preserved": true,
+    "matched_tuple": "Accepted053d kernel/33f launcher/51b4,82c9,6571 modules",
+    "payload_sha256": "029065eb89fb79885d535f338395f986f890a1ed764062bb76ba463777b92ab3",
+    "accepted_source_sha256": "8cc2093cb17568e5d08080f997d66ebdb5926ab379e3132f8138c3c710f2ae92"
+  },
+  "execution_provenance": {
+    "all_seven_rows_returncode0": true,
+    "native_owner_outer_elapsed_seconds": 37.482589778956026,
+    "owner_direct_joined_and_group_absent": true,
+    "owner_observer_error": null,
+    "three_readbacks_returncode0_joined_group_absent_empty_stderr": true,
+    "guest_started_ns": 32252350318,
+    "guest_reaped_ns": 33112391468,
+    "guest_finished_ns": 33275816987,
+    "guest_timestamps_are_relative_not_absolute_UTC": true
+  },
+  "preservation": "Raw generic application_acceptance=false and mckernel_application_executed=false labels remain unchanged. Original116-byte case remains separate and unchanged.",
+  "potential_after_separate_physical_acceptance_and_dedup": {
+    "distinct_behavior_increment": 1,
+    "accepted_native_batch_increment": 1
+  },
+  "limitations": "No placement/topology, all-NUMA-branch, full restoration, new Rust-path, default-selection or C-retirement claim.",
+  "physical_clearance": false,
+  "future_runtime_permission": false,
+  "new_Rust_path_credit": 0,
+  "milestone_credit": 0,
+  "counter_edits_performed": 0,
+  "reviewer_runtime_runs": 0,
+  "reviewer_quiescent": true
+}

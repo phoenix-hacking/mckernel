@@ -1,0 +1,67 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "commands": [
+    {
+      "index": 0,
+      "label": "compile36controls",
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "-D",
+        "warnings",
+        "--test",
+        "-C",
+        "codegen-units=1",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/review-correction-1/main.rs",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-host-qualification-1/attempt-1/supervisor-tests"
+      ],
+      "joined": {
+        "pid": 1714296,
+        "start": 93582097,
+        "returncode": 1,
+        "direct_child_joined": true,
+        "group_absent": true,
+        "remaining_group_members": [],
+        "unexpected_group_members": [],
+        "timed_out": false,
+        "error": null,
+        "retirement_error": null,
+        "seconds": 0.2878631119383499,
+        "closed_streams": true,
+        "captures": {
+          "stdout": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-host-qualification-1/attempt-1/step0/stdout",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 59796775,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1793138376268543760,
+            "ctime_ns": 1793138376268543760
+          },
+          "stderr": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-host-qualification-1/attempt-1/step0/stderr",
+            "sha256": "59cfd953a63cf8f1bdbec69b74c4ed61d707d1da848f38c2b1fa446058ddf146",
+            "device": 66306,
+            "inode": 59796776,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 791,
+            "mtime_ns": 1793138376508551367,
+            "ctime_ns": 1793138376508551367
+          }
+        }
+      },
+      "started_at": 1793138376.2736933,
+      "finished_at": 1793138376.5629125
+    }
+  ],
+  "status": "FAIL_PRESERVE_PREFIX_NO_RETRY",
+  "native_acceptance": false
+}

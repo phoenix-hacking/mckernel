@@ -1,0 +1,11 @@
+--- failed/wakeup.FRAGMENT.rs
++++ bounded/wakeup.FRAGMENT.rs
+@@ -85,7 +85,7 @@
+         }
+         // SAFETY: held target reference remains live until the final release;
+         // reads retain original unsynchronized signal/status observation semantics.
+-        if doint != 0 && mask & unsafe { (*target).sigmask.__val[0] } == 0 {
++        if doint != 0 && mask & unsafe { (*target).sigmask.val[0] } == 0 {
+             let status = unsafe { (*target).status };
+             if caller != target {
+                 // SAFETY: static debug metadata is retained; read its flag without

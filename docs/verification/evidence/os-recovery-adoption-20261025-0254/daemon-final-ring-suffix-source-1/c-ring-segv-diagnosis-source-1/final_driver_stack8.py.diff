@@ -1,0 +1,11 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/final_driver.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/c-ring-segv-diagnosis-source-1/final_driver_stack8.py
+@@ -36,7 +36,7 @@
+  for number in namespace['STOP_SIGNALS']:signal.signal(number,namespace['stop'])
+  def limits():
+   os.sched_setaffinity(0,{2})
+-  for kind,value in [(resource.RLIMIT_AS,2<<30),(resource.RLIMIT_CPU,60),(resource.RLIMIT_FSIZE,32<<20),(resource.RLIMIT_NOFILE,256),(resource.RLIMIT_CORE,0),(resource.RLIMIT_STACK,2<<20)]:resource.setrlimit(kind,(value,value))
++  for kind,value in [(resource.RLIMIT_AS,2<<30),(resource.RLIMIT_CPU,60),(resource.RLIMIT_FSIZE,32<<20),(resource.RLIMIT_NOFILE,256),(resource.RLIMIT_CORE,0),(resource.RLIMIT_STACK,8<<20)]:resource.setrlimit(kind,(value,value))
+  namespace['write'](capture/'command.json',dict(argv=command,scope=mc.PREP['scope']))
+  signal.setitimer(signal.ITIMER_REAL,mc.PREP['timeout'])
+  try:result=namespace['owned_capture'](dict(argv=command,scope=mc.PREP['scope']),capture,mc.PREP['timeout']-6,limits)

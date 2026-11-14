@@ -1,0 +1,41 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Compile independent original-C/Rust metadata/zero-padding/flags/output fixture against the actual mixed partial link.",
+  "argv": [
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+    "--edition=2021",
+    "--test",
+    "-C",
+    "opt-level=2",
+    "-C",
+    "link-arg=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body11-restart-20261028-1/future-host-output-1/joined.o",
+    "-C",
+    "link-arg=-no-pie",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body11-restart-20261028-1/fixture.rs",
+    "-o",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body11-restart-20261028-1/future-host-output-1/fixture"
+  ],
+  "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body11-restart-20261028-1",
+  "identity": {
+    "pid": 2207291,
+    "birth": "102922438",
+    "ppid": 2207274,
+    "pgrp": 2207291,
+    "session": 2207291,
+    "state": "R"
+  },
+  "affinity": [
+    7
+  ],
+  "AS_limit": [
+    2147483648,
+    2147483648
+  ],
+  "CPU_limit": [
+    60,
+    60
+  ],
+  "epoch": 1793231779.6857684,
+  "monotonic": 1013886.254726005,
+  "boot": 1029224.381776258
+}

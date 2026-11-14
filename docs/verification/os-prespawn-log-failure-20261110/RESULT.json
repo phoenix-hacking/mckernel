@@ -1,0 +1,74 @@
+{
+  "status": "PASS_PRESPAWN_LOG_FAILURE_REPAIR",
+  "invocation": "20261110T032750Z-14c19ec7",
+  "incoming_commit": "d84ee20ae834626ac62eaaae9233f4a12500a3d7",
+  "parent": "bca25e0dd2a298c9e397acc62eeea79882f3152b",
+  "adoption": {
+    "exact_paths": 4,
+    "unrelated_dirty_tracked_paths_preserved": 33,
+    "ihk_unchanged": true
+  },
+  "baseline": {
+    "status": "CONFIRMED_FIVE_NEW_FAILURES",
+    "methods": 7,
+    "failures": 3,
+    "errors": 2,
+    "failing_methods": [
+      [
+        "ERROR",
+        "test_log_open_failure_is_failed_and_explicit_retry_spawns_once"
+      ],
+      [
+        "ERROR",
+        "test_log_fdopen_failure_closes_acquired_fd_and_persists_failure"
+      ],
+      [
+        "FAIL",
+        "test_failure_log_write_is_best_effort_after_durable_receipt"
+      ],
+      [
+        "FAIL",
+        "test_attempted_popen_exception_is_unknown_and_prevents_second_spawn"
+      ],
+      [
+        "FAIL",
+        "test_failure_receipt_storage_unavailable_keeps_unknown_and_blocks_spawn"
+      ]
+    ],
+    "existing_controls_passed": 2,
+    "returncode": 1
+  },
+  "candidate": {
+    "methods": 7,
+    "new_regressions": 5,
+    "existing_controls": 2,
+    "returncode": 0,
+    "status": "PASS",
+    "known_prespawn_failure_retry_mock_spawn_count": 1,
+    "attempted_spawn_unknown_no_second_spawn": true,
+    "failed_receipt_persistence_keeps_unknown": true,
+    "owned_fd_cleanup_and_best_effort_logging": true
+  },
+  "source_sha256": "5937e05070f9c539dee33ed0ae0fc1f79a96e803e8f716151af808beb564a390",
+  "tests_sha256": "d781b59d54aed1f0408009b56ede4f0844654843ac0c5528127558ff52b81c80",
+  "independent_review_sha256": "9a1d9a9a7130216df3c139e49ec42cedd3342a8c74a217ddefcca453389cbc48",
+  "all_direct_waits_joined": true,
+  "test_cpu_released": 7,
+  "contract": "Only proven failure before Popen can persist FAILED and permit explicit retry. Entered Popen with no handle stays UNKNOWN. Failed receipt persistence retains original unresolved durable records. Owned log FD/stream closes; logging is best effort after receipt persistence.",
+  "execution_scope": "Five new mocked tests and two necessary existing ownership controls; no real helper/inhibitor/start/stop/campaign/native payload. No91 suite, terminal12 or real-process smoke replay.",
+  "live_changes": {
+    "launcher_reload": false,
+    "helper_deployed": false,
+    "optional_flags_enabled": false,
+    "launcher_state_edits": false,
+    "new_goal_or_budget": false
+  },
+  "original_credit_delta": {
+    "M14": 0,
+    "M15": 0,
+    "acceptance": 0,
+    "C_retirement": 0,
+    "native": 0
+  },
+  "remaining": "Original universal source/provider and supported SDK/source-custody/native/currentfree inputs remain unestablished; all exact NO_GO/replay/equivalent/resource holds persist."
+}

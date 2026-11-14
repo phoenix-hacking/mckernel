@@ -1,0 +1,24 @@
+--- /home/holden/mckernel-work/host-preparation/native235-procfs-delete-sdk-preparation-20261023-5/metadata/stage_bound_successor.py
++++ /home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/metadata/stage_bound_successor.py
+@@ -5,9 +5,9 @@
+ """
+ from pathlib import Path
+ import argparse,hashlib,json,os,stat,time
+-H=Path('/home/holden/mckernel-work/host-preparation/native235-procfs-delete-sdk-preparation-20261023-5/prepared-sdk')
+-PREP_SHA='b04df1ec9d82ea0b5eff91ba1570ab1abf5d2035fbe3be9962c893eac37936d5'
+-NONCE='9c96ba665d8d4ef19f81420e9fe33814'
++H=Path('/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/prepared-sdk')
++PREP_SHA='19b0c4ced20df432a6e4944c8f38ff13ba509959808eed3b1cc285c589bcb2b6'
++NONCE='33f4428ac1c74917bcd6715cdbaee963'
+ ROOT=Path('/home/holden/mckernel-work/scratch')
+ OUTPUT=Path('/home/holden/mckernel-work/host-preparation/native-running-modules-host-output')
+ BASIS=ROOT/'mckernel-exact-candidate-scratch-22-authority3-output'
+@@ -26,7 +26,7 @@
+ def main():
+  args=argparse.ArgumentParser(description=__doc__);args.add_argument('--execute',action='store_true');a=args.parse_args()
+  prep=H/'preparation.json';assert digest(plain(prep))==PREP_SHA;manifest=json.loads(prep.read_text())
+- assert digest(plain(H/'REQUEST.TEMPLATE.PENDING-LIVE-IDENTITIES.json'))=='a54063def7631367ef32427b9c730a3d68ad37c1344e0a338eb8f1dadecd0719'
++ assert digest(plain(H/'REQUEST.TEMPLATE.PENDING-LIVE-IDENTITIES.json'))=='1aa123b41ad92fdff0f0dce0ca0ff9c976d4a35aed9aa1ecb94226ba0b28109f'
+  request=json.loads((H/'REQUEST.TEMPLATE.PENDING-LIVE-IDENTITIES.json').read_text());assert request['nonce']==NONCE
+  candidate=Path(request['candidate_root']);inputs=Path(request['input_root']);evidence=Path(request['owner_evidence_root'])
+  assert candidate==OUTPUT/('native-running-modules-candidate-'+NONCE)

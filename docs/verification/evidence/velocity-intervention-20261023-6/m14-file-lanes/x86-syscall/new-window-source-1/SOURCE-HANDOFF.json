@@ -1,0 +1,60 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_UNCOMPILED_NO_EXECUTION_GRANTED",
+  "body": "do_kill complete post-pending-IRQ-restore SIGCONT notify/wakeup/IPI/final reference-release tail",
+  "bindings": [
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+      "bytes": 112911,
+      "sha256": "bd2ea4750d041c5b7aec05c409ed2d34ff1837fe6ee54d05e8e18dbc1a5412f0"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "bytes": 1048112,
+      "sha256": "8d42e6071211ed68fb03ef9ed0535f183abab57f1ede987a453750962e5530b7"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-1/candidate/do_kill_wakeup.FRAGMENT.rs",
+      "bytes": 6492,
+      "sha256": "081b15e227a827981595f4263e0ef3e67ea732c66e90d45de1a0fddf6502ac43"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-1/candidate/syscall.c",
+      "bytes": 113299,
+      "sha256": "e582168d9827c4d4b568e70886895da94d28550301c9a601ff830eba42f7bee6"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-1/patch/syscall.c.diff",
+      "bytes": 1012,
+      "sha256": "95102dbaed838ee6004f91b1ebffcfb335653d23f8ce9afb1f9b8fa7ce7f1a0e"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-1/reference/original-wakeup.ACTUAL.inc",
+      "bytes": 1342,
+      "sha256": "eaa36eaae4fa48806c6f174320820d3e53406fffa1a506f766b07ce380d55c5c"
+    }
+  ],
+  "root_integration": "Append isolated Rust module; compose C hunk with earlier private group/gate/pending candidates centrally. No canonical source changed.",
+  "existing_candidates_reused": "Existing group/gate/pending implementations left intact; no duplicate slice.",
+  "next_executable_check": "After actual physical clearance and ordinary grant: actual repr(C) ABI/header-bound original-C versus extracted Rust tail, controlled scheduler/notify/IPI/release endpoints with ordered event and field/byte comparisons; then genuine compute crate compile and integrated consumer link.",
+  "fixture_cases": [
+    "SIGCONT and ptracecont=1 successful stop wake: zeroed SIGCHLD bytes, both status writes, parent PID and notification order, caller/self IPI distinction",
+    "wake nonzero and doint=0/1, blocked/unblocked signal mask",
+    "running/stopped/traced/interruptible snapshot, SIGKILL combined wake mask versus ordinary interruptible mask",
+    "callback mutates status/proc/cpu: preserve post-notify rereads and pre-IPI status snapshot",
+    "enqueue rc 0/-ENOMEM unchanged; reference release exactly once after all effects",
+    "dynamic debug disabled/enabled matches exact message and original target_proc PID"
+  ],
+  "holds": [
+    "No compiler/test/Docker/root/guest executed",
+    "Controlled endpoint comparison cannot prove scheduler/IRQ/native lifecycle",
+    "Default link/native and whole-file retirement remain open",
+    "Service-held fork/ACK excluded"
+  ],
+  "failure_history": "New body source preparation; existing signal-restart header failure retained and not replayed."
+}

@@ -1,0 +1,474 @@
+{
+  "schema": "mckernel.m15-i01-original-integration-gate-independent-acceptance-review.v1",
+  "reviewed_at": "2026-11-12T10:08:56.231699+00:00",
+  "reviewer": "/root/m15_installed_leaf_review; explicit gpt-6.1-sol/MAX; independent same-Root direct reviewer; no recursive agents",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Original M15-I01 gate acceptance from saved unchanged evidence only.",
+  "original_gate_id": "M15-I01",
+  "original_acceptance_check_id": "M15-I01-ACCEPT",
+  "decision": "GO_EXPLICITLY_ACCEPT_ORIGINAL_M15_I01_COMPLETE_DELIVERED_RUNTIME_OWNERSHIP_MANIFEST_GATE_AT_DECLARED_MATCHING_SUPPORTED_PROFILES",
+  "original_gate_explicitly_accepted": true,
+  "original_applicable_child_conditions_satisfied": true,
+  "saved_Root": "01a18bc3-e072-7810-9426-75101b0856c0",
+  "guarded_invocation_as_supplied_by_Root": "invocation20261112T094452Z-12a4bea0",
+  "private_budget_and_same_finite_credit_run_preserved": true,
+  "criterion_source": {
+    "path": "/home/holden/mckernel/docs/verification/m14-m15-closure-progress.json",
+    "bytes": 965334,
+    "sha256": "d1683218217314674c6be945aedc2304ad3dd7c5c631f20b432489d3ba11d0e1"
+  },
+  "original_milestone_criterion_source": {
+    "path": "/home/holden/mckernel/docs/verification/os-milestones-20260914/rust-cutover-m15.json",
+    "bytes": 118812,
+    "sha256": "c5e0e84888c07541aa20f2d78611f87e1c9e04eb314dde16871b0d1abb579939"
+  },
+  "original_I01_subgoal_unchanged": {
+    "id": "M15-I01",
+    "title": "Complete delivered-runtime ownership manifest",
+    "status": "open",
+    "owner": null,
+    "next_action": "Reconcile selected target sources, included headers, installed programs, project-authored platform helpers, actual link maps and optional-product dispositions. Add any newly found owned runtime C; never hide it through a path/classification change.",
+    "proof": {
+      "implementation": {
+        "status": "unassessed",
+        "evidence": []
+      },
+      "focused_checks": {
+        "status": "unassessed",
+        "evidence": []
+      },
+      "production_link": {
+        "status": "unassessed",
+        "evidence": []
+      },
+      "native_validation": {
+        "status": "unassessed",
+        "evidence": []
+      }
+    }
+  },
+  "original_I01_subgoal_required_action": "Reconcile selected target sources, included headers, installed programs, project-authored platform helpers, actual link maps and optional-product dispositions. Add any newly found owned runtime C; never hide it through a path/classification change.",
+  "original_milestone_definition_preserved": "All project-owned runtime implementation in the supported delivered system outside M14 is Rust/reviewed assembly, including custom Linux modules, executors, libraries and installed tools. Account for actual selected/linked/deployed code and retain the functional baseline. Linux/third-party/generated boundaries require provenance, not relocation of project C.",
+  "original_milestone_boundary_preserved": {
+    "in_scope": [
+      "custom IHK/SMP/mcctrl Linux-loadable modules and transitive project callbacks",
+      "mcexec and project libraries/CLI/diagnostic/monitoring tools",
+      "project-owned installed runtime shell/expect programs",
+      "project-specific runtime helpers even if staged inside Rocky source/build trees"
+    ],
+    "separately_classified": [
+      "Rocky/Linux baseline APIs and legitimate generic platform support",
+      "unmodified third-party libc/BFD/libdwarf/toolchain code",
+      "generated Linux module metadata with no authored project runtime body",
+      "Python campaign/build/test orchestration and test fixtures",
+      "inactive retained C reference/fallback sources"
+    ],
+    "optional_products": "Crash extension, QLMPI/UTI and unsupported configurations need explicit delivery/scope dispositions; disabled is not converted. Final manifest cannot silently omit a delivered optional component.",
+    "working_C_policy": "Keep working C until an equivalent qualified Rust successor exists. Earlier host compatibility exceptions preserve behavior during migration and do not complete M15.",
+    "Linux_control_plane_C": "Explicitly reconfirmed by the user: Rocky/Linux-owned control-plane code may remain C. Project-owned custom runtime is the M14/M15 Rust target."
+  },
+  "current_original_acceptance_row": {
+    "id": "M15-I01-ACCEPT",
+    "parent": "M15-I01",
+    "title": "Accept original M15-I01 scope",
+    "done_when": "Every applicable original child condition is demonstrated on the required matching supported cohort and the original gate is explicitly accepted. M15 final acceptance follows M14. Existing accepted scopes stay closed.",
+    "verification_method": "Review the accumulated source, build, ABI/provider, behavior, deployment and cleanup evidence against the original gate; record its acceptance without substituting focused HOST results or new quotas.",
+    "dependencies": [
+      "M15-I01-HOST-slices",
+      "M15-I01-complete-linked",
+      "M15-I01-complete-selected",
+      "M15-I01-deployed"
+    ],
+    "scope_limit": "",
+    "execution_profile": "retained_evidence_review",
+    "counted_in_requirement_rollup": true
+  },
+  "current_original_parent_gate_row": {
+    "id": "M15-I01",
+    "parent": null,
+    "title": "Complete project-runtime ownership manifest",
+    "kind": "original_integration_gate",
+    "target": "Selected, linked and deployed project runtime",
+    "owner": "Saved Root integration owner; original source/SDK/native authorities retain their admissions",
+    "remaining_actions": [
+      "Compose the complete original supported runtime ownership manifest from actual selected/emitted, linked and deployed artifacts, including headers/macros/callbacks and unresolved owners.",
+      "Resolve every project runtime provider to Rust/reviewed assembly or legitimate unchanged Linux/third-party/generated ownership; establish no unsupported project-C ownership remains.",
+      "Bind manifest to exact coherent admitted artifacts and actual deployment; review original integration gate."
+    ],
+    "dependencies": [
+      "M14_ACCEPTANCE_ORDER",
+      "MATCHED_COHORT",
+      "NATIVE_OWNER_AND_CURRENT_FREE",
+      "SOURCE-SDK-NATIVE"
+    ],
+    "task_ids": [
+      "M15-I01-HOST-slices",
+      "M15-I01-complete-selected",
+      "M15-I01-complete-linked",
+      "M15-I01-deployed",
+      "M15-I01-ACCEPT"
+    ]
+  },
+  "four_original_child_decisions": [
+    {
+      "id": "M15-I01-HOST-slices",
+      "original_done_when": "Existing recipe/export/provider receipts identify selected and linked Rust ownership for their specific HOST userspace slices only.",
+      "decision": "DEMONSTRATED_AT_EXACT_DECLARED_HOST_SCOPE",
+      "evidence_aliases": [
+        "HOST_selection",
+        "HOST_ABI_ownership",
+        "HOST_corrected_cohort"
+      ],
+      "finding": "Recorded qualified x86_64 recipes select Rust mcexec/BFD and actual whole70 IHK/CLI/supervisor at their guarded profiles. Genuine HOST archive/library receipts carry70 function/six data unique global-default roots and exact provider/trace/map ownership; changed dd974 HOST provider is linked by three real Rust tools with two unchanged CLI objects reused. Existing15 main outcomes precede valid IHK dispatch/device/daemon; they remain limited HOST observations. Later current complete source/header/link/SDK/cohort manifests supply the full exact-profile obligations, so these historical slices are neither discarded nor substituted for complete current/native evidence."
+    },
+    {
+      "id": "M15-I01-complete-selected",
+      "original_done_when": "A source/config/artifact-bound manifest accounts for all emitted supported project runtime implementations including headers/macros/callbacks, resolves unknown owners and classifies legitimate Linux/third-party/generated code.",
+      "decision": "WHOLE_ORIGINAL_CONDITION_DEMONSTRATED",
+      "evidence_aliases": [
+        "complete_selected_linked_whole",
+        "complete_selected_linked_manifest",
+        "current_canonical_consumed_source",
+        "current_canonical_complete_ABI_whole",
+        "current_canonical_cleanup_tuple",
+        "complete13_delivery_manifest"
+      ],
+      "finding": "Independent whole508119/manifest2d256 accounts for the entire thirteen-group supported selected/emitted runtime: full bodies, configuration/generated input/data, source/header/macro/inline/callback emissions and language/owner roles. No unknown owner or omitted optional role remains. Canonical cleanup00e7/8221 and consumed-source59b5 replace only the explicitly stale old cleanup selection/lifetime sentence; old/private/canonical artifacts remain distinguished and C104 remains owned project-C debt. No C retirement or default change is inferred."
+    },
+    {
+      "id": "M15-I01-complete-linked",
+      "original_done_when": "Actual link/provider manifests account for every required project runtime definition/import and dependency, resolve duplicates/unknown providers and join identities to the selected-source manifest.",
+      "decision": "WHOLE_ORIGINAL_CONDITION_DEMONSTRATED",
+      "evidence_aliases": [
+        "complete_selected_linked_whole",
+        "complete_selected_linked_manifest",
+        "current_canonical_complete_ABI_whole",
+        "installed_static_dynamic_whole",
+        "I03_ACCEPT",
+        "complete13_delivery_manifest"
+      ],
+      "finding": "Whole508119 accepts actual module/source/object/archive/map/export/import/provider/static/dynamic/type/version/link ownership and duplicate/weak/alias dispositions across every original runtime group. CLI argc/argv data is deliberate caller ownership, not an unbound DSO import. Current8221 and whole131b/I03ACCEPT3b9f retain public/header/callback/typed-provider and complete installed static/dynamic relationships. Known authored platform C/C104/header bodies are classified honestly; there is no unresolved mandatory project provider or unexplained duplicate in this manifest."
+    },
+    {
+      "id": "M15-I01-deployed",
+      "original_done_when": "Every delivered installed runtime artifact/provider is joined to its reviewed selected/linked identities; a complete original I01 review accepts that manifest.",
+      "decision": "WHOLE_ORIGINAL_CONDITION_DEMONSTRATED",
+      "evidence_aliases": [
+        "deployed_whole",
+        "complete13_delivery_manifest",
+        "current_native_stage",
+        "actual_archive_material_joins",
+        "current_native_manifest",
+        "original_reproducibility_whole",
+        "installed_static_dynamic_whole",
+        "I03_ACCEPT"
+      ],
+      "finding": "Final actual independent wholef36e explicitly accepts complete876f for every delivered installed artifact/provider joined to reviewed selected/linked identities. All13 original component decisions match with no unresolved owner/evidence alias. Current f133/actual121b archive rows join executor/CLI/libihk/modules/c964-a2f and exact supported provider identities; each private DESTDIR, explicit-ON product, HOST-produced archive and actual46d namespace is kept at its own declared profile. ActualQ7ea41 closes the concrete configured MCPS/MCINSPECT/image/five-provider path; it does not assert mcexec/CLI main or device/native behavior."
+    }
+  ],
+  "parent_clause_decisions": [
+    {
+      "original_clause": "Every applicable original child condition is demonstrated on the required matching supported cohort",
+      "decision": "SATISFIED",
+      "basis": "The exact four dependencies are individually demonstrated above by scope-matched saved producer/source/header/link/provider/install/deployment/cleanup evidence and explicit independent whole decisions, not their numerical tracker values. All13 component groups have current complete original ownership/delivery joins. Historical focused HOST evidence is retained at its stated scope; current whole manifests carry the complete matching supported source/configuration/toolchain/provider relation."
+    },
+    {
+      "original_clause": "the original gate is explicitly accepted",
+      "decision": "SATISFIED_BY_THIS_INDEPENDENT_ORIGINAL_GATE_DECISION",
+      "basis": "This review explicitly accepts ORIGINAL M15-I01 as the complete delivered-runtime ownership-manifest gate. The original source definition requires reconciling selected sources, included headers, installed programs, project-authored platform helpers, real link maps and optional dispositions, and expressly adding newly found owned runtime C. Every such ownership role is reconciled. This acceptance is neither readiness nor acceptance inferred from a percentage."
+    },
+    {
+      "original_clause": "M15 final acceptance follows M14",
+      "decision": "PRESERVED",
+      "basis": "Original I01 integration-gate acceptance does not accept M15 as a milestone. M14 original milestone acceptance must still precede final M15 acceptance, and finalM15 retains all original language/functional/native/lifecycle obligations."
+    },
+    {
+      "original_clause": "Existing accepted scopes stay closed",
+      "decision": "PRESERVED",
+      "basis": "Four accepted M14 file scopes, accepted M15-F01, accepted I03 and unchanged exact-scope child evidence are reused without reopening or green replay. No accepted scope is enlarged."
+    }
+  ],
+  "original_ownership_clause_decisions": [
+    {
+      "original_action": "Reconcile selected target sources, included headers",
+      "decision": "SATISFIED",
+      "basis": "Source/config/artifact-bound whole508119 plus canonical59b5/00e7/8221 and final876f account full selected bodies, generated inputs/data, public/private included headers, affinity/macros/inline/callbacks and each exact compiler/SDK recipe role."
+    },
+    {
+      "original_action": "installed programs, project-authored platform helpers, actual link maps",
+      "decision": "SATISFIED",
+      "basis": "All13 whole decisions under f36e/876f join actual named installed artifacts and project helpers to source/object/archive/map/import/provider roles. New authored three-call Linux-platform adapter, C104 cleanup boundary, retained wrappers and actual emitted Rust/assembly are explicitly owned, never silently relabeled platform/generated/Rust."
+    },
+    {
+      "original_action": "optional-product dispositions",
+      "decision": "SATISFIED",
+      "basis": "Delivered cleanup extension is included; default-OFF/explicit-ON boot/Expect wrappers, manual unbuilt crash mckernel.so, QLMPI/UTI, EXCLUDE_FROM_ALL tests and templates/data remain explicitly distinguished. Disabled/inactive is never claimed converted."
+    },
+    {
+      "original_action": "Add any newly found owned runtime C; never hide it through a path/classification change.",
+      "decision": "SATISFIED_WITH_EXPLICIT_UNRETIRED_C_DEBT",
+      "basis": "The complete manifest and whole proofs explicitly add/classify authored C104, new Linux-platform adapter and public C header/macro emissions as their actual source/language owners, preserving all larger Rust-retirement obligations. C104 is not legitimate unchanged Linux/third-party/generated code and is not retired by this decision."
+    }
+  ],
+  "matching_supported_cohort_finding": {
+    "decision": "MATCHED_AT_REQUIRED_DECLARED_ARTIFACT_SOURCE_CONFIGURATION_TOOLCHAIN_PROVIDER_AND_INSTALLATION_PROFILES",
+    "basis": "Complete ownership508119/2d256, canonical cleanup00e7/8221/59b5, original reproducibility8875, installed static-dynamic131b, acceptedI033b9f and final deployedf36e/876f reconcile real native46d/GCC14/default guarded Rust1.95 or1.92 recipe roles, IHK8d/buildID/current headers, exact Linux415b/config106055/099 modules and current c964/a2f/f133 archive identities. Their artifact/profile/source/header/type/map/provider/deployment relationships match without pretending all separately qualified private installs are one presently running filesystem.",
+    "all13_original_component_decisions": [
+      {
+        "group_index": 1,
+        "targets": [
+          "ihk.ko",
+          "ihk-smp-x86_64.ko",
+          "mcctrl.ko"
+        ],
+        "decision": "MATCHED_ALL_REQUIRED_OWNERSHIP_DELIVERY_IDENTITIES_AT_DECLARED_PROFILE",
+        "unresolved_required_owner_or_evidence_alias": null
+      },
+      {
+        "group_index": 2,
+        "targets": [
+          "mcexec",
+          "libmcexec.a"
+        ],
+        "decision": "MATCHED_ALL_REQUIRED_OWNERSHIP_DELIVERY_IDENTITIES_AT_DECLARED_PROFILE",
+        "unresolved_required_owner_or_evidence_alias": null
+      },
+      {
+        "group_index": 3,
+        "targets": [
+          "mcinspect"
+        ],
+        "decision": "MATCHED_ALL_REQUIRED_OWNERSHIP_DELIVERY_IDENTITIES_AT_DECLARED_PROFILE",
+        "unresolved_required_owner_or_evidence_alias": null
+      },
+      {
+        "group_index": 4,
+        "targets": [
+          "eclair"
+        ],
+        "decision": "MATCHED_ALL_REQUIRED_OWNERSHIP_DELIVERY_IDENTITIES_AT_DECLARED_PROFILE",
+        "unresolved_required_owner_or_evidence_alias": null
+      },
+      {
+        "group_index": 5,
+        "targets": [
+          "libihk.so"
+        ],
+        "decision": "MATCHED_ALL_REQUIRED_OWNERSHIP_DELIVERY_IDENTITIES_AT_DECLARED_PROFILE",
+        "unresolved_required_owner_or_evidence_alias": null
+      },
+      {
+        "group_index": 6,
+        "targets": [
+          "ihkconfig",
+          "ihkosctl"
+        ],
+        "decision": "MATCHED_ALL_REQUIRED_OWNERSHIP_DELIVERY_IDENTITIES_AT_DECLARED_PROFILE",
+        "unresolved_required_owner_or_evidence_alias": null
+      },
+      {
+        "group_index": 7,
+        "targets": [
+          "ihkmond"
+        ],
+        "decision": "MATCHED_ALL_REQUIRED_OWNERSHIP_DELIVERY_IDENTITIES_AT_DECLARED_PROFILE",
+        "unresolved_required_owner_or_evidence_alias": null
+      },
+      {
+        "group_index": 8,
+        "targets": [
+          "mcreboot.sh",
+          "mcstop+release.sh"
+        ],
+        "decision": "MATCHED_ALL_REQUIRED_OWNERSHIP_DELIVERY_IDENTITIES_AT_DECLARED_PROFILE",
+        "unresolved_required_owner_or_evidence_alias": null
+      },
+      {
+        "group_index": 9,
+        "targets": [
+          "eclair-dump-backtrace.exp"
+        ],
+        "decision": "MATCHED_ALL_REQUIRED_OWNERSHIP_DELIVERY_IDENTITIES_AT_DECLARED_PROFILE",
+        "unresolved_required_owner_or_evidence_alias": null
+      },
+      {
+        "group_index": 10,
+        "targets": [
+          "vmcore2mckdump",
+          "ldump2mcdump"
+        ],
+        "decision": "MATCHED_ALL_REQUIRED_OWNERSHIP_DELIVERY_IDENTITIES_AT_DECLARED_PROFILE",
+        "unresolved_required_owner_or_evidence_alias": null
+      },
+      {
+        "group_index": 11,
+        "targets": [
+          "mcps"
+        ],
+        "decision": "MATCHED_ALL_REQUIRED_OWNERSHIP_DELIVERY_IDENTITIES_AT_DECLARED_PROFILE",
+        "unresolved_required_owner_or_evidence_alias": null
+      },
+      {
+        "group_index": 12,
+        "targets": [
+          "sched_yield"
+        ],
+        "decision": "MATCHED_ALL_REQUIRED_OWNERSHIP_DELIVERY_IDENTITIES_AT_DECLARED_PROFILE",
+        "unresolved_required_owner_or_evidence_alias": null
+      },
+      {
+        "group_index": 13,
+        "targets": [
+          "mcstat"
+        ],
+        "decision": "MATCHED_ALL_REQUIRED_OWNERSHIP_DELIVERY_IDENTITIES_AT_DECLARED_PROFILE",
+        "unresolved_required_owner_or_evidence_alias": null
+      }
+    ],
+    "whole_deployed_manifest": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/M15-i01-deployed-closure-publicabi-max-1/actual-runtime-whole-manifest-1/qualified-runtime-join-1/COMPLETE-13-DELIVERY-OWNERSHIP.JOIN.json",
+      "bytes": 85890,
+      "sha256": "876f4fdcdcd7b8468d3044467786f5dce891fe8a318fea8c858ed05bdd6c2111"
+    },
+    "distinct_profiles_retained": true,
+    "HOST_green_proof_promoted_to_current_native_or_live_deployment": false,
+    "new_source_or_artifact_inventory_regenerated": false
+  },
+  "canonical_parent_remaining_action_precision": {
+    "remaining_action_preserved": "Resolve every project runtime provider to Rust/reviewed assembly or legitimate unchanged Linux/third-party/generated ownership; establish no unsupported project-C ownership remains.",
+    "interpretation_bound_to_original_I01_source": "No unsupported or unexplained project ownership is left in the manifest: every definition/import/dependency has an actual language/owner and exact supported source/artifact/provider profile. This does not claim that every known project body is already Rust. The original I01 next_action expressly says to add newly found owned runtime C; mandatory Rust retirement belongs to original M15 definition and remaining relevant original cutover/default/file/final conditions. This review neither removes that broader obligation nor changes the parent source text.",
+    "no_zero_C_parent_criterion_added_or_C_waiver_granted": true
+  },
+  "behavior_deployment_and_cleanup_scope": {
+    "behavior": "Existing exact functional/error/parser/ABI/lifetime observations remain at their unchanged source/profile scopes. No new main/device/native or all-behavior acceptance is invented.",
+    "deployment": "All actual installed artifact/provider rows are joined to reviewed source/link ownership at their exact physical installation/package/archive/observed46d profiles. The final I01-deployed literal condition is explicitly whole-GO, including the real configured MCPS dependency path. No persistent HOST-wide installation or extra program-main/device/native quota is added to an ownership gate.",
+    "cleanup": "Current canonical8221 includes the genuine normal production cleanup boundary and saved seven-case exactly-once release evidence before nonlocal main/foreach restart. Actual producer/readback/46d delivery controls have positively scoped family/client/container/stream cleanup proofs. No historical UNKNOWN reservation is released by that separate positive evidence.",
+    "why_no_new_runtime_or_native_operation_for_original_I01": "Original I01 requires complete honest ownership reconciliation across actual selected/linked/deployed runtime; all four declared conditions and original named reconciliation actions are now demonstrated. Valid device/boot/application/load-unload/resource-restoration and final language retirement still govern their own original rows and M15 final acceptance."
+  },
+  "language_and_optional_product_disposition": {
+    "C104_project_boundary": "Known selected authored project cleanup C104 remains C debt, not Rust/reviewed assembly, unchanged Linux, third-party or generated. Original I01 records its exact actual owner/ABI/provider/install relation and does not retire it.",
+    "project_authored_platform_and_headers": "Reviewed newly authored three-call Linux-platform C adapter and public C header/macro/inline emissions remain explicit actual owner/language roles; no path-based exception or general C waiver.",
+    "default_and_optional_runtime": "Retained default-OFF shell/Expect and optional products retain language/default/delivery debt wherever selected. Explicit-ON Rust proofs do not silently cut over defaults; disabled is not converted.",
+    "original_final_M15_language_requirement": "All project-owned runtime implementation in the supported delivered system outside M14 is Rust/reviewed assembly, including custom Linux modules, executors, libraries and installed tools. Account for actual selected/linked/deployed code and retain the functional baseline. Linux/third-party/generated boundaries require provenance, not relocation of project C.",
+    "final_language_retirement_claimed": false
+  },
+  "evidence": {
+    "criterion_source": {
+      "path": "/home/holden/mckernel/docs/verification/m14-m15-closure-progress.json",
+      "bytes": 965334,
+      "sha256": "d1683218217314674c6be945aedc2304ad3dd7c5c631f20b432489d3ba11d0e1"
+    },
+    "original_milestone_criterion_source": {
+      "path": "/home/holden/mckernel/docs/verification/os-milestones-20260914/rust-cutover-m15.json",
+      "bytes": 118812,
+      "sha256": "c5e0e84888c07541aa20f2d78611f87e1c9e04eb314dde16871b0d1abb579939"
+    },
+    "HOST_selection": {
+      "path": "/home/holden/mckernel/docs/verification/m14-m15-net-conversion-owner-assessment-20261106.json",
+      "bytes": 3384,
+      "sha256": "7bf98caed1f3e8059bfb3f2575ba8bf59cdb642aaa4efe093b843ea079de47db"
+    },
+    "HOST_ABI_ownership": {
+      "path": "/home/holden/mckernel/docs/verification/m15-shared-abi-environment-results-20261106.json",
+      "bytes": 12349,
+      "sha256": "f259a70a1178873a079a2bf23d54fa93388676dd9d50b630aca4e4637bf6f5fb"
+    },
+    "HOST_corrected_cohort": {
+      "path": "/home/holden/mckernel/docs/verification/m15-corrected-library-tool-cohort-results-20261106.json",
+      "bytes": 125325,
+      "sha256": "b4477769f1296162698068fe3d1840dd5f0ca8752d8f58357ed42f69349af6e0"
+    },
+    "complete_selected_linked_whole": {
+      "path": "/home/holden/mckernel/docs/verification/m15-runtime-ownership-qualified-20261111/runtime-selected-linked-abi-original-review-sourceacq-max-1/REVIEW.json",
+      "bytes": 46161,
+      "sha256": "508119440b350a3b6cafaca8200b752ea2ed19d79aab8da15d02af77c6b53f46"
+    },
+    "complete_selected_linked_manifest": {
+      "path": "/home/holden/mckernel/docs/verification/m15-runtime-ownership-qualified-20261111/runtime-selected-linked-abi-join-sdk-max-1/canonical-dual-account-successor-1/MANIFEST-JOIN.json",
+      "bytes": 31427,
+      "sha256": "2d25640db041e8e1bf846c5688368505c31b28f8f1aa72a790482164654014bf"
+    },
+    "current_canonical_complete_ABI_whole": {
+      "path": "/home/holden/mckernel/docs/verification/m15-complete-abi-qualified-20261111/runtime-selected-linked-abi-original-review-sourceacq-max-1/cleanup-canonical-i03-successor-1/REVIEW.json",
+      "bytes": 49084,
+      "sha256": "8221a0175d192a59091766e24df2f4b3e7336bc21cb4c4822ce479e947678b65"
+    },
+    "current_canonical_cleanup_tuple": {
+      "path": "/home/holden/mckernel/docs/verification/m15-complete-abi-qualified-20261111/runtime-selected-linked-abi-join-sdk-max-1/cleanup-canonical-i03-successor-1/ACTUAL-SELECTED-TUPLE.json",
+      "bytes": 23738,
+      "sha256": "00e7d3979b9808e9788d1f8fdddc53bb66ac16b0d989317a8cefd43382f1c11a"
+    },
+    "deployed_whole": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/M15-i01-deployed-whole-review-sdk-max-1/REVIEW.json",
+      "bytes": 79880,
+      "sha256": "f36eab95902c566985e0491b707bc1533c314dade5e5a514b62348b21379d813"
+    },
+    "complete13_delivery_manifest": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/M15-i01-deployed-closure-publicabi-max-1/actual-runtime-whole-manifest-1/qualified-runtime-join-1/COMPLETE-13-DELIVERY-OWNERSHIP.JOIN.json",
+      "bytes": 85890,
+      "sha256": "876f4fdcdcd7b8468d3044467786f5dce891fe8a318fea8c858ed05bdd6c2111"
+    },
+    "current_canonical_consumed_source": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/M15-i01-deployed-closure-publicabi-max-1/CURRENT-CANONICAL-CONSUMED-SOURCE-JOINS.json",
+      "bytes": 11275,
+      "sha256": "59b5ba67be45b59dcbc4ce5f2278d77116388f8aab3f281c6db4fbd0de58c82f"
+    },
+    "current_native_stage": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-stage-qualification-p03-max-1/qualification-1/QUALIFICATION.json",
+      "bytes": 8047,
+      "sha256": "4cc2e385d54cc7e291262e579150be8d6506b4155cc3d701079913c40eb738c0"
+    },
+    "actual_archive_material_joins": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-stage-qualification-p03-max-1/qualification-1/ACTUAL-BASE-AND-DERIVED-ARCHIVE-JOINS.json",
+      "bytes": 86631,
+      "sha256": "121b39664e6b365050bda8014f765535eea126439193f105f44e845ca2c1b2c9"
+    },
+    "current_native_manifest": {
+      "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/native-diagnostic-manifest.json",
+      "bytes": 5994,
+      "sha256": "f13363e5eb31efee749e6fc2c9f9ca83f8d2304318e1b31c63318c20411f49d7"
+    },
+    "I03_ACCEPT": {
+      "path": "/home/holden/mckernel/docs/verification/m15-original-reproducibility-20261111/m15-i03-accept-review-sourceacq-max-1/REVIEW.json",
+      "bytes": 24024,
+      "sha256": "3b9f222f66c90dd174be253b60726db6b54499a39260e3301acdc692608baa4d"
+    },
+    "original_reproducibility_whole": {
+      "path": "/home/holden/mckernel/docs/verification/m15-original-reproducibility-20261111/m15-i03-original-reproducibility-review-sourceacq-max-1/REVIEW.json",
+      "bytes": 42609,
+      "sha256": "8875f4a296430e73098e910a2c12f7fed4b35c2198f2af60e6aebbc19ec06427"
+    },
+    "installed_static_dynamic_whole": {
+      "path": "/home/holden/mckernel/docs/verification/m15-installed-dependencies-qualified-20261111/REVIEW.json",
+      "bytes": 33572,
+      "sha256": "131b919d34d2d0d26373ce02754298af6e02da74965842b82d173b81875f5cad"
+    }
+  },
+  "unmatched_literal_original_I01_clause": null,
+  "smallest_additional_indispensable_input_or_command_for_I01_acceptance": null,
+  "new_test_build_provider_source_install_loader_main_device_or_native_execution_required": false,
+  "decision_not_derived_from_percentage_or_row_count": true,
+  "M15_milestone_accepted": false,
+  "M14_milestone_accepted_by_this_review": false,
+  "larger_system_complete": false,
+  "C_retirement": false,
+  "native_current_free_or_hold_release": false,
+  "existing_accepted_scopes_reopened": false,
+  "preserved_holds_and_exclusions": {
+    "all_service_account_source_resource_native_Scratch_UNKNOWN_and_dirty_edits": "Preserved; no live state/guard/ledger/owner changes.",
+    "rejected_worker": "01a1c48d-4d96-7cc3-b733-73a97973152f",
+    "rejected_turn": "01a1ce01-20cf-7e03-9442-f6d521fb8b02",
+    "excluded_task": "The rejected signal/frame/xstate collector request remains excluded from replay, rephrasing and reassignment; this review does not execute or propose it.",
+    "resource_scope": "Current HOST CPUs0,6,7/max3 light jobs/4GiB TOTAL including workers/controllers and retained charges; native CPUs2-5/12GiB separate held owner. No workload grant used."
+  },
+  "Root_sole_ledger_integration_and_publication": true,
+  "Root_next_action": "If Root accepts this independent decision, record original M15-I01-ACCEPT and parent integration-gate acceptance only; preserve all original broader M15 language/default/file/native/lifecycle/final criteria and M14-before-M15 final order. Publish exact necessary evidence without private account/budget amounts. Do not rerun unchanged green suites or regenerate inventories.",
+  "reviewer_actions": {
+    "read_only_saved_evidence_and_required_AGENTS_CAMPAIGN": true,
+    "stdlib_data_comparison_and_private_review_write": true,
+    "compiler_build_test_source_import_ELFtool_Docker_loader_main_device_native_or_network_execution": false,
+    "new_agent": false,
+    "canonical_CAMPAIGN_source_installed_control_state_or_credit_ledger_edit": false,
+    "private_prior_review_overwritten": false,
+    "account_or_budget_amount_disclosed": false
+  }
+}

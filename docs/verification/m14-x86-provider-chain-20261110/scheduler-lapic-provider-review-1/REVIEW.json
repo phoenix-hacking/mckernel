@@ -1,0 +1,343 @@
+{
+  "schema": "mckernel.scheduler-lapic.source-profile-review.v1",
+  "decision": "GO_FINITE_FIVE_ORIGINAL_FUNCTIONS_ONE_ORIGINAL_PREBOOT_SLOT_SOURCE_ABI_PROFILE_ONLY",
+  "reviewer": "/root/m15_public_abi_high",
+  "request": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-unit-1/REQUEST.json",
+  "request_sha256": "a5709399aad576c53fba3054150f8f4b1251fbdd7061d01bdef315842173ac69",
+  "unit": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-unit-1/scheduler_lapic_provider_unit.rs",
+    "sha256": "68eb48635613f0b611787ef64a0dbb269b80dc066b9e858e2b1e478dcb407113",
+    "bytes": 2455
+  },
+  "manifest": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-unit-1/SOURCE-MANIFEST.json",
+    "sha256": "e30bb72568e7436a03d5ea9f919c676fefa611c1b7e8f2cc421a297e6c1fef0b"
+  },
+  "profile": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-unit-1/PROFILE-PROOF.json",
+    "sha256": "a4658e9434f05f9c336513395295d8182c24bb1180d66ee42d46cf108be369e4"
+  },
+  "actual_frozen_input_pins": [
+    {
+      "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-unit-1/scheduler_lapic_provider_unit.rs",
+      "sha256": "68eb48635613f0b611787ef64a0dbb269b80dc066b9e858e2b1e478dcb407113"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-unit-1/SOURCE-MANIFEST.json",
+      "sha256": "e30bb72568e7436a03d5ea9f919c676fefa611c1b7e8f2cc421a297e6c1fef0b"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-unit-1/PROFILE-PROOF.json",
+      "sha256": "a4658e9434f05f9c336513395295d8182c24bb1180d66ee42d46cf108be369e4"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-eligibility-1/RESULT.json",
+      "sha256": "38107c2acc60908d4d110a51bb673a70bffd60e601f3d991a650d256052f35f4"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-eligibility-1/ENGINE-RESULT.json",
+      "sha256": "6f4ec3c234a1827c8f94b6a7cb5aaeb10cd9f8f90e58c7a15810dca5ce06b858"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-m15-scheduler-resume-20261109T211802Z/x86-lapic-write-owner-lookahead-20261109T2302.json",
+      "sha256": "1cd9e7a754d4830367d8f7995f24a322049cf816d02fbf965d8d7d2d683d64e9"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-m15-scheduler-resume-20261109T211802Z/x86-lapic-timer-engines-lookahead-20261109T2302.json",
+      "sha256": "7e255415058281e0ba0be406f6b5e6f9968da9d89dbefc9d06251b8dc929ce0f"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/REQUEST.json",
+      "sha256": "fa8166319eed657c68c83efca2537c30c93a89b5a5e0325abe0d5ecf953c2783"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+      "sha256": "70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/m14-f03-adapters-unit-20261105-2/stderr.txt",
+      "sha256": "52aa1b68329c0e77b9847f4d1c1d5a4f88f802ffe2e6a69f2dace0fadf9add99"
+    }
+  ],
+  "exact_source_block_checks": [
+    {
+      "name": "CUInt",
+      "kind": "actual_type_alias",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 9,
+      "last_line": 9,
+      "source_sha256": "c805374cb64cd23693fd085ad2b8826126eb2efd01b8e083c7686ec006e7f358",
+      "unit_byte_offset": 120,
+      "bytes": 18
+    },
+    {
+      "name": "EINVAL",
+      "kind": "actual_scalar_constant",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 11,
+      "last_line": 11,
+      "source_sha256": "859c14c67e6dfbcf569b7cbcb7fe17386c68ea474ce4af9925b4efed549a5345",
+      "unit_byte_offset": 139,
+      "bytes": 25
+    },
+    {
+      "name": "LAPIC_TIMER",
+      "kind": "actual_scalar_constant",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 13,
+      "last_line": 13,
+      "source_sha256": "af8fdf07accf46b5fe7b2a400fc8694cb35889ab540a4221ee3154475486452e",
+      "unit_byte_offset": 164,
+      "bytes": 33
+    },
+    {
+      "name": "LAPIC_TIMER_INITIAL",
+      "kind": "actual_scalar_constant",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 15,
+      "last_line": 15,
+      "source_sha256": "7d27605da7a38781f39b6852fbcd4dff0ea3fe486f4426de19ead8a802e6c995",
+      "unit_byte_offset": 197,
+      "bytes": 41
+    },
+    {
+      "name": "LAPIC_TIMER_DIVIDE",
+      "kind": "actual_scalar_constant",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 16,
+      "last_line": 16,
+      "source_sha256": "cfd631b9bb5b0ce1385403a4da0f69ad5891214f7af07e190de5c62aa8295530",
+      "unit_byte_offset": 238,
+      "bytes": 40
+    },
+    {
+      "name": "LOCAL_TIMER_VECTOR",
+      "kind": "actual_scalar_constant",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 25,
+      "last_line": 25,
+      "source_sha256": "6c841406430062dbcfe0cb0d1a3b1743a758e4d9cf14abe2e64ba62297ef0d9d",
+      "unit_byte_offset": 278,
+      "bytes": 40
+    },
+    {
+      "name": "APIC_DIVISOR",
+      "kind": "actual_scalar_constant",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 35,
+      "last_line": 35,
+      "source_sha256": "986ce904b5652a92434e697c57aa45e3b7c34bbc0486398a2cb577df4f7e3382",
+      "unit_byte_offset": 318,
+      "bytes": 32
+    },
+    {
+      "name": "APIC_LVT_TIMER_PERIODIC",
+      "kind": "actual_scalar_constant",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 36,
+      "last_line": 36,
+      "source_sha256": "26e32b020c0a73a0182bc32970e629a8db6946967c61137cba2c582999fb9c8c",
+      "unit_byte_offset": 350,
+      "bytes": 48
+    },
+    {
+      "name": "X86LapicWriteFn",
+      "kind": "actual_callback_alias",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 69,
+      "last_line": 69,
+      "source_sha256": "a3644f3493daf9d3fe90a693caa33431ada9dbb7f11af2046b7802f24e7a625b",
+      "unit_byte_offset": 399,
+      "bytes": 58
+    },
+    {
+      "name": "x86_lapic_write_bridge_declaration",
+      "kind": "actual_existing_declaration",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 117,
+      "last_line": 117,
+      "source_sha256": "99f2d3e244ffa7f2172006b145d613a4acffbda230398c876bbbf679ef16718f",
+      "unit_byte_offset": 478,
+      "bytes": 56
+    },
+    {
+      "name": "x86_lapic_timer_enable_body_result",
+      "kind": "actual_public_function",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 1858,
+      "last_line": 1871,
+      "source_sha256": "512b1e2a6163b67f78637b9b88f358d08eb91702a5ab4a2b7cf06de350a8a9ef",
+      "unit_byte_offset": 537,
+      "bytes": 381
+    },
+    {
+      "name": "lapic_timer_enable",
+      "kind": "actual_public_function",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 1873,
+      "last_line": 1876,
+      "source_sha256": "1c6fc9889a1dabe38d529a91fac65fb3f3263e90ec83a0c450afae068a173368",
+      "unit_byte_offset": 919,
+      "bytes": 162
+    },
+    {
+      "name": "x86_lapic_timer_disable_body_result",
+      "kind": "actual_public_function",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 1878,
+      "last_line": 1888,
+      "source_sha256": "47e8be151101ec1f4d35c3aaad7a46dad15f17ce07ebb41ba6d25590c2b017f5",
+      "unit_byte_offset": 1082,
+      "bytes": 239
+    },
+    {
+      "name": "lapic_timer_disable",
+      "kind": "actual_public_function",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 1890,
+      "last_line": 1893,
+      "source_sha256": "6f89e356c6f80a5c81227feb0c6007f6921aaabdd305843e21316c06a03e8fdd",
+      "unit_byte_offset": 1322,
+      "bytes": 143
+    },
+    {
+      "name": "lapic_write_slot_declaration",
+      "kind": "actual_existing_slot_declaration",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 5706,
+      "last_line": 5706,
+      "source_sha256": "9382ef344e13dee8f9813576b4e7570c680794de1f862bd3f7c87b6ca11d5738",
+      "unit_byte_offset": 1575,
+      "bytes": 73
+    },
+    {
+      "name": "x86_lapic_write_bridge",
+      "kind": "actual_public_function_docs_and_attributes",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 5742,
+      "last_line": 5750,
+      "source_sha256": "cb0fe1355864e882c6fccc496e360cb5c26292555acd477e27f8acc9235eb79a",
+      "unit_byte_offset": 1655,
+      "bytes": 423
+    },
+    {
+      "name": "WriteRegister",
+      "kind": "actual_callback_alias",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 5277,
+      "last_line": 5277,
+      "source_sha256": "aa5b18ea21f1d2ef0ce3dc570e089565b8602ac11bc62d349ebce1d383a6539c",
+      "unit_byte_offset": 2139,
+      "bytes": 58
+    },
+    {
+      "name": "lapic_write",
+      "kind": "actual_original_data_definition",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 5287,
+      "last_line": 5288,
+      "source_sha256": "3613d6fe0e375cb08b9176113349649570429be3b3559c0dc4f3e8e8fc5020d2",
+      "unit_byte_offset": 2198,
+      "bytes": 86
+    },
+    {
+      "name": "WriteRegister_Option_layout_assertions",
+      "kind": "actual_two_selected_layout_assertions",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 5299,
+      "last_line": 5300,
+      "source_sha256": "317e632f06926a54e5c9962288731792bd5a1f6381343ed462f63a55cacca9ee",
+      "unit_byte_offset": 2305,
+      "bytes": 139
+    }
+  ],
+  "checks": {
+    "all19source_spans_hashes_and_unit_offsets_exact": true,
+    "five_actual_no_mangle_functions_and_one_original_no_mangle_data_definition_only": true,
+    "no_duplicate_definition_or_symbol_alias_in_unit": true,
+    "original_namespaces_and_extern_declarations_preserved": true,
+    "actual_CInt_i32_CUInt_u32_nullable_C_callback_types": true,
+    "real_None_slot_Option8_align8_asserts_preserved": true,
+    "seven_actual_scalar_constants_including_EINVAL_x86_line11": true,
+    "enable_write_order_initial_divide_timer_and_u32_division16_preserved": true,
+    "disable_single_initial_zero_write_preserved": true,
+    "original_None_error_neg22_and_wrapper_ignored_results_preserved": true,
+    "write_bridge_addr_of_read_unwrap_unchecked_forwarding_preserved": true,
+    "compiler_payload_flags_equal_retained_delay_profile_except_source_output_paths": true,
+    "one_literal_compile_no_extra_cfg_env_lint_or_feature_expansion": true,
+    "preflight_selects_unique_output_o_after_exact_rustc_and_mkdir_actual_parent": true,
+    "future_object_and_matching_cohort_unique_owner_gate_required": true
+  },
+  "proposed_compile_command": {
+    "label": "provider-compile",
+    "argv": [
+      "/usr/bin/taskset",
+      "-c",
+      "6",
+      "/usr/bin/timeout",
+      "--signal=TERM",
+      "--kill-after=5s",
+      "60s",
+      "/usr/bin/prlimit",
+      "--as=1073741824:1073741824",
+      "--cpu=45:45",
+      "--fsize=67108864:67108864",
+      "--core=0:0",
+      "--",
+      "/usr/bin/time",
+      "-v",
+      "-o",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-unit-1/provider-compile.metrics",
+      "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2021",
+      "--crate-type=lib",
+      "-C",
+      "panic=abort",
+      "-C",
+      "opt-level=2",
+      "-C",
+      "code-model=large",
+      "-C",
+      "relocation-model=static",
+      "-C",
+      "no-redzone=yes",
+      "-C",
+      "no-vectorize-loops",
+      "-C",
+      "no-vectorize-slp",
+      "-C",
+      "target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma",
+      "--emit=obj",
+      "-o",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-unit-1/output/scheduler_lapic_provider.o",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-unit-1/scheduler_lapic_provider_unit.rs"
+    ],
+    "environment_overrides": {},
+    "stdout_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-unit-1/provider-compile.stdout",
+    "stderr_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-unit-1/provider-compile.stderr",
+    "expected_returncode": 0
+  },
+  "prelaunch_requirements": "Root must check all frozen inputs, find exact pinned rustc index and exactly one -o AFTER it; following literal object path must be absent, then mkdir its actual parent before Popen. Source remains last argv. Wrapper time-metrics -o is separate. Exclusive fresh captures, raw PID/birth before direct wait/stdios/metrics/joins; first unexpected failure STOP/no automatic retry.",
+  "qualification_boundaries": {
+    "source_expected_only": "5genuineT+originalNone8Bslot/0U; actual private/core/literal/import variation must be captured and reconciled separately",
+    "initial_None_is_preboot_storage_only": true,
+    "actual_bootselected_nonNULL_callback_controller_mapping_IRQ_lifetime_remain_required": true,
+    "future_current_partial_and_join": "UNBOUND; no collision/metadata/object/runtime admission from this source GO",
+    "source_scope": "Exact two wrappers+two result engines+write bridge+one slot; no other CPU/backend/init/held bodies"
+  },
+  "operations": {
+    "source_byte_hash_profile_comparison_and_private_review_write_only": true,
+    "compiler_GNU_ELF_parser_predicate_gate_link_test_function_hardware_runtime": false,
+    "canonical_index_or_other_owner_edits": false,
+    "recursive_agents": false
+  },
+  "next": "Root fresh exact HOST compile admission only; separately selected actual metadata gate before any future join."
+}

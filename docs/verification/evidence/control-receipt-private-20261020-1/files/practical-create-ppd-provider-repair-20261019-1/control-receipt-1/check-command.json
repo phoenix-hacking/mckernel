@@ -1,0 +1,86 @@
+{
+  "status": "SOURCE_BOUNDARY_AB7F_READY_NOT_RUN",
+  "argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2",
+    "35",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=30:30",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--core=0:0",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/control-receipt-1/run_receipt_check.py"
+  ],
+  "capture_stdout": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/control-receipt-1/whole-check.stdout",
+  "capture_stderr": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/control-receipt-1/whole-check.stderr",
+  "output": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/control-receipt-1/check-1",
+  "commands": 4,
+  "new_tests": 3,
+  "test_names": [
+    "actual_control_receipt_real_mm_proof_writes_exact_frame_without_ret",
+    "actual_control_receipt_mm_validation_error_writes_nothing_retains_owners",
+    "actual_control_receipt_copy_error_quarantines_journal_and_original_claim"
+  ],
+  "old59_tests_executed": false,
+  "profile_reference": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/run_control_check_after_erratum.py",
+  "global_inner_wall": 28,
+  "outer_wall": 35,
+  "cleanup_grace": 2,
+  "jobs": 1,
+  "cpu": 6,
+  "as": 1073741824,
+  "cpu_seconds": 30,
+  "filecap": 33554432,
+  "growth_cap": 33554432,
+  "host_floor": 17179869184,
+  "scratch_floor": 12884901888,
+  "headroom": 671088640,
+  "new_guest_consumer": false,
+  "native": false,
+  "current_default_consumer": false,
+  "partial_write_observed": false,
+  "source_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/provider-ownership-review-20261019-1/CONTROL-RECEIPT-PRIVATE-SOURCE-BOUNDARY-REVIEW.json",
+    "sha256": "ab7f874d8025a3f319da889a9a37551f9ab06a0fd750dd5e7063f23c9da6db9c"
+  },
+  "inputs": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/control-receipt-1/control-receipt.patch",
+      "sha256": "346cbd3a797954f6754c7f066e112c20350bd2d2a6079b6c34965056f4a1fd67",
+      "bytes": 37499
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/control-receipt-1/source-pins.json",
+      "sha256": "37f9207a01b226bf07d7eee9af09bded3d3fce1a2a7146644fd7d1f861e4e30b",
+      "bytes": 3094
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/control-receipt-1/fixture-inputs.json",
+      "sha256": "e8bca5f804feabde13ec917a529ca8df2c9085468cb87a477fa04a1b6d2c5b17",
+      "bytes": 5755
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/control-receipt-1/actual-control-receipt.rs",
+      "sha256": "e9141aa07122971ffd6e6cb592af97b7282341174a043892a2774800e9025a97",
+      "bytes": 347255
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/control-receipt-1/run_receipt_check.py",
+      "sha256": "0114928052883b0bedf254d286ad5abc7aed80b57190210d42d448414c55ea56",
+      "bytes": 5017
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/control-receipt-1/RECEIPT-BYTE-CONTRACT.json",
+      "sha256": "4bc1b3710c575174e8b4bac5409b6cb3bda74b7870764c4e948120b37257439e",
+      "bytes": 1191
+    }
+  ]
+}

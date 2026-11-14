@@ -1,0 +1,331 @@
+{
+  "schema": "mckernel.independent-rust-process-exec-wait-source-linux-reference-review.v1",
+  "decision": "PASS_SOURCE_OWNERSHIP_STATIC_ARTIFACT_AND_ACTUAL_LINUX_REFERENCE_ONLY",
+  "reviewer": "/root/condvar_timeout_source_review",
+  "scope": "Functional OS/apps plus actual Rust/reviewed assembly. Bounded source and already-completed ordinaryLinuxcase review; no newkernel/computeCimplementation, tests/replays/root/guest/providerchanges. NativeCREATE_PPD/heldACK path remains unavailable.",
+  "actual_author_result": {
+    "path": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/linux-reference-result.json",
+    "sha256": "8473324029b136bce8e72ead4a5a087788b5bfa113475386784e9355c0b1def6",
+    "bytes": 9218
+  },
+  "source": {
+    "ctime_ns": 1792448085678589783,
+    "device": 66306,
+    "gid": 1000,
+    "inode": 48118176,
+    "mode": 33152,
+    "mtime_ns": 1792448085678589783,
+    "nlink": 1,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/process_exec_wait.rs",
+    "sha256": "baa27be71b1ca2e8b3a5856f4e42f5f31aebc51b22350a4b38a8f16eceb16c7d",
+    "size": 11038,
+    "uid": 1000
+  },
+  "oracle": {
+    "path": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/frozen-oracle.json",
+    "sha256": "ba9e4a70d8756830e2d30da877a26bd14ce0f1ebc852d11ecca248f3f7a690c9",
+    "bytes": 1829
+  },
+  "binary": {
+    "ctime_ns": 1792448425264627666,
+    "device": 66306,
+    "gid": 1000,
+    "inode": 48118276,
+    "mode": 33216,
+    "mtime_ns": 1792448425260627547,
+    "nlink": 1,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/process_exec_wait",
+    "sha256": "537cb22b2af1f7fca1202afaf45b017364823c185c2ec47474093e51647ba5b8",
+    "size": 5628568,
+    "uid": 1000
+  },
+  "runner": {
+    "path": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/run_reference.py",
+    "sha256": "45d20ecd3b4b3a498d06f1b16e1bdef8054b9891b900b87ae15b1386027f4c38",
+    "bytes": 9255
+  },
+  "admission": {
+    "path": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/compiler-linux-reference-1/admission.json",
+    "sha256": "276de7bcfff08603f5be29abaf1f01609ee6d144f04572104aba0a6b393b9182",
+    "bytes": 734
+  },
+  "actual_observations": {
+    "path": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/observations.json",
+    "sha256": "b66b903c05291ba0cbad2dc726d7c0d366343bcd43663ae78cd9082288848304",
+    "bytes": 332
+  },
+  "trace": {
+    "ctime_ns": 1792448425332629685,
+    "device": 66306,
+    "gid": 1000,
+    "inode": 48118277,
+    "mode": 33152,
+    "mtime_ns": 1792448425332629685,
+    "nlink": 1,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/linux-process.trace",
+    "sha256": "3da19526399fa040d990eac76b1386c7c2ee08051be09cc09e5fc1c89447803b",
+    "size": 66494,
+    "uid": 1000
+  },
+  "actual_captures": [
+    {
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "-D",
+        "warnings",
+        "-C",
+        "opt-level=1",
+        "-C",
+        "codegen-units=1",
+        "-C",
+        "target-feature=+crt-static",
+        "-C",
+        "relocation-model=static",
+        "-C",
+        "link-arg=-no-pie",
+        "-C",
+        "link-arg=-Wl,-z,noexecstack",
+        "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/process_exec_wait.rs",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/process_exec_wait"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1",
+      "direct_child_joined": true,
+      "elapsed_seconds": 0.26523238598019816,
+      "env": {
+        "HOME": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/home",
+        "LANG": "C",
+        "LC_ALL": "C",
+        "PATH": "/usr/bin:/bin",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "TMPDIR": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/tmp",
+        "TZ": "UTC"
+      },
+      "pid": 1676040,
+      "process_group_absent": true,
+      "returncode": 0,
+      "start": "24586972",
+      "stderr": {
+        "ctime_ns": 1792448425024620539,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 48118264,
+        "mode": 33152,
+        "mtime_ns": 1792448425024620539,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/compiler-linux-reference-1/compile/stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0,
+        "uid": 1000
+      },
+      "stdout": {
+        "ctime_ns": 1792448425024620539,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 48118263,
+        "mode": 33152,
+        "mtime_ns": 1792448425024620539,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/compiler-linux-reference-1/compile/stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0,
+        "uid": 1000
+      },
+      "timed_out": false
+    },
+    {
+      "argv": [
+        "/usr/bin/readelf",
+        "-W",
+        "-h",
+        "-l",
+        "-d",
+        "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/process_exec_wait"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1",
+      "direct_child_joined": true,
+      "elapsed_seconds": 0.0021541689930018038,
+      "env": {
+        "HOME": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/home",
+        "LANG": "C",
+        "LC_ALL": "C",
+        "PATH": "/usr/bin:/bin",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "TMPDIR": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/tmp",
+        "TZ": "UTC"
+      },
+      "pid": 1676051,
+      "process_group_absent": true,
+      "returncode": 0,
+      "start": "24586999",
+      "stderr": {
+        "ctime_ns": 1792448425292628497,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 48118269,
+        "mode": 33152,
+        "mtime_ns": 1792448425292628497,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/compiler-linux-reference-1/readelf/stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0,
+        "uid": 1000
+      },
+      "stdout": {
+        "ctime_ns": 1792448425292628497,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 48118268,
+        "mode": 33152,
+        "mtime_ns": 1792448425292628497,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/compiler-linux-reference-1/readelf/stdout",
+        "sha256": "7860f5ecc41e6921a247ce9bff00c5610317653f3ba2867b3247f719a7055494",
+        "size": 2620,
+        "uid": 1000
+      },
+      "timed_out": false
+    },
+    {
+      "argv": [
+        "/usr/bin/strace",
+        "-f",
+        "-e",
+        "trace=clone,fork,vfork,execve,wait4,exit,exit_group",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/linux-process.trace",
+        "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/process_exec_wait",
+        "--observations",
+        "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/observations.json"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1",
+      "direct_child_joined": true,
+      "elapsed_seconds": 0.06428178201895207,
+      "env": {
+        "HOME": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/home",
+        "LANG": "C",
+        "LC_ALL": "C",
+        "PATH": "/usr/bin:/bin",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "TMPDIR": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/tmp",
+        "TZ": "UTC"
+      },
+      "pid": 1676052,
+      "process_group_absent": true,
+      "returncode": 0,
+      "start": "24586999",
+      "stderr": {
+        "ctime_ns": 1792448425292628497,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 48118274,
+        "mode": 33152,
+        "mtime_ns": 1792448425292628497,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/compiler-linux-reference-1/linux-reference/stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0,
+        "uid": 1000
+      },
+      "stdout": {
+        "ctime_ns": 1792448425328629566,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 48118273,
+        "mode": 33152,
+        "mtime_ns": 1792448425328629566,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/compiler-linux-reference-1/linux-reference/stdout",
+        "sha256": "0e7aa2ed289b122be9c38f44dc284cbb7bda64a662c2b09b4036a030f3f2d17b",
+        "size": 235,
+        "uid": 1000
+      },
+      "timed_out": false
+    }
+  ],
+  "source_findings": [
+    "Linuxx86_64LP64compileguard and reprC libcFFI signatures match selectedABI. No computeCbody or nativeprovider is changed. Source uses preconstructedstack argv/env and borrowedCString in postforkchild; no allocation/formatting/Rustdrop occurs beforeexecve/_exit.",
+    "OneChildOwnerowns bothpipeends and only its unreapedpositivechildPID. Parent closeswriter, drains boundednonblockingpipe toEOF and positivelywaitpidreaps expected37/42. Successfulwait immediatelysetsreapedtrue/ownedfalse; ECHILDrevokesownedfalse. CleanupSIGKILL is permitted onlywhileowned/unreaped, then boundedwait; no signal afterreap/PIDreuseauthority.",
+    "Capturefailure retainschildownership for Dropcleanup. Anyunprovenretirement emitscleanup_unproven and fails; externalowningprocessgroupsupervisor remainsmandatory. Actualordinaryexecutionhasnocleanupfailure, bothchildPIDsreaped and allthreeowninggroupsabsent.",
+    "Successchild verifies exactargv and exactlythreeenvironmentstrings afterexec. Missingexec checks rc=-1/errnoENOENT and continuesto_exit42. Markerprivate_state37 matches originalCreferencebut is a constant, not a claim of broadMM/COWrollback correctness.",
+    "Bothcases require exactchildmarkers, normalrawstatus, EOF, positivefirstwait and secondwaitECHILD beforeparentforwardsmarker or reportsowned0. Sixsecondparent/twosecondcleanupclockbounds are operationalfailurebounds; noexacttimingoracle."
+  ],
+  "provenance": {
+    "genuine_frozen_rlib_carrier": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/practical-rust-std-app-preparation-20261017-1.json",
+      "sha256": "dc21ad51b212016976f4fed1b30e412ca407712758d52d1c12fe523f56a44226",
+      "bytes": 26137
+    },
+    "target_rlibs_checked": 27,
+    "installed_static_link_inputs_checked": 9,
+    "inherited_toolpins_checked": 4,
+    "new_reference_toolpins_checked": 2,
+    "new_reference_only_tool_record": {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/reference-tool-pins.json",
+      "sha256": "a00b63b0b0a27039c1c87258f337163630db5cbcce4a4c6ab9e4725a9a100236",
+      "bytes": 510
+    },
+    "actualCPU": [
+      6
+    ],
+    "flags": "ExistingRust1.92GNUstatic/codegen1/EXEC/noINTERP/noNEEDED/nonexecGNU_STACK retained. readelf/strace pins are honestlynewreference-only; no retroactiveoldtoolqualification.",
+    "profile_note": "TypedCPU6/resources and actualrunneraffinity are authoritative; inheritedprofile_basis prose stillmentionsCPU7. Existingouterordinaryprofile supplies inheritedresourcecontrols; no widerauthorityinferred."
+  },
+  "actual_reference": {
+    "commands": 3,
+    "elapsed_seconds": 0.5424850590061396,
+    "direct_all_zero": true,
+    "all_groups_absent": true,
+    "stdout_bytes": 235,
+    "stderr_bytes": 0,
+    "parent_pid": 1676055,
+    "children": [
+      {
+        "pid": 1676056,
+        "wait_status": 9472,
+        "exit_code": 37,
+        "captured_bytes": 34,
+        "eof": true,
+        "reaped": true,
+        "second_wait_errno": 10,
+        "owned_after": false
+      },
+      {
+        "pid": 1676057,
+        "wait_status": 10752,
+        "exit_code": 42,
+        "captured_bytes": 51,
+        "eof": true,
+        "reaped": true,
+        "second_wait_errno": 10,
+        "owned_after": false
+      }
+    ],
+    "owned_after": 0,
+    "trace_observation": "Sameactualparentclone=>child PIDs, samebinaryexec0/execmissingENOENT, eachpositivewait4=>exactchild and laterECHILD. Sidecar/trace/exactstdout agree."
+  },
+  "witnesses": [
+    "source:86-105 successfulwaitrevokesownedbeforelateroutput; ECHILDrevokesauthority; cleanupsignalsonlyownedunreapedPID.",
+    "source:124-135 childforkbranch usesclose/dup2/execve/errno/rawclock-poll-write/_exit with prebuiltargv/env andnoRustallocation/destructor.",
+    "Actualparent1676055 ownschildren1676056/1676057; exits37/42/raw9472/10752,34/51Bchildmarkers,EOF+reaped+secondECHILD10,owned0.",
+    "Actual3ordinarycommands direct0/groupsabsent/static5628568Bbinary537cb22b/exact235Bstdout/emptyerr; sourcebaa27/oracleba9e frozenpinsmatch.",
+    "Genuine27rlibcarrier/9staticlinkinputs/inheritedtoolpins verified; readelf+strace2newreferencepins accuratelylabeled."
+  ],
+  "exact_native_prerequisite": "Nonnull native CREATE_PPD remains -95 pending separately held real provider bridge, whole MM alias revocation and final fork ACK; no held-lane replay or implementation.",
+  "next": "Preserve compiledRustcase/oracle/Linuxtrace as executablepreparation. Nativeexecution waits for a separatelyauthorizedandreviewed realnonnullCREATE_PPD providerbridge, wholeMMaliasrevocation and finalforkACK, followedbymatchingkernelartifact/isolatednativeexecutionrelease. Do not replay heldproviderwork, substituteLinuxsuccess fornativeacceptance, or closeP-M06-01.",
+  "counts": {
+    "sources_reviewed": 1,
+    "completed_ordinary_commands_reviewed": 3,
+    "actual_linux_children": 2,
+    "target_rlibs": 27,
+    "static_link_inputs": 9,
+    "new_reference_toolpins": 2,
+    "newtests_builds_guests_by_reviewer": 0,
+    "native_app_acceptances": 0
+  },
+  "native_acceptance": false,
+  "P_M06_01_closure": false,
+  "held_provider_changes": false,
+  "newruntime_release": false
+}

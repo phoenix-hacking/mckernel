@@ -1,0 +1,117 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ACTUAL_INVALIDATE_DISPATCH_AND_ERROR_LOG_SOURCE_ONLY_NOT_EXECUTABLE_READY",
+  "predecessor": {
+    "kernel/process.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/production-batch-preparation-1/candidate/kernel/process.c",
+      "sha256": "7ab29dad607ac06e9548065f4395c6e870359558a2777844c1052d67e046ca13",
+      "bytes": 164210
+    },
+    "kernel/rust/process_helpers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/production-batch-preparation-1/candidate/kernel/rust/process_helpers.rs",
+      "sha256": "908aa07b957d5ff7cc96edfaff4d6324b8e9f12059e5d0d68538c4eba9145cca",
+      "bytes": 361665
+    }
+  },
+  "postimages": {
+    "kernel/process.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-invalidate-dispatch-log/candidate/kernel/process.c",
+      "sha256": "9bf642a4387765a0e7a84a8a9ae7f6d9e69f4507e0c3e8a9adc0d05e52a8b6d6",
+      "bytes": 164491
+    },
+    "kernel/rust/process_helpers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-invalidate-dispatch-log/candidate/kernel/rust/process_helpers.rs",
+      "sha256": "25c029da79f228fa12be1eda716788d25f6c68225bef6fe1eb3601a8c51db675",
+      "bytes": 362023
+    }
+  },
+  "original_C": {
+    "original_dispatch.ACTUAL-C.inc": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-invalidate-dispatch-log/fixture/original_dispatch.ACTUAL-C.inc",
+      "sha256": "f3358ddcc126428fe81bb58527a6bc00ca51f3ba1b740a353540c61a45eadd3a",
+      "bytes": 168
+    },
+    "original_error_log.ACTUAL-C.inc": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-invalidate-dispatch-log/fixture/original_error_log.ACTUAL-C.inc",
+      "sha256": "b5d3b03acd33fe824c150c29ed809cba2f61c3cf54afbb5bc6d799ac6d12aa09",
+      "bytes": 307
+    }
+  },
+  "actual_Rust": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-invalidate-dispatch-log/fixture/callbacks.ACTUAL-RUST.inc",
+    "sha256": "f8eac62062923146d0b6b5b5363456ea73f5a634f8119de4f35fe94b67a91f3c",
+    "bytes": 659
+  },
+  "fixture_sources": {
+    "actual_parity.SOURCE-ONLY.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-invalidate-dispatch-log/actual_parity.SOURCE-ONLY.c",
+      "sha256": "0f1b0fac7ff3995cb2225fc49b668d3e93f4e3e769ad85bf873d7c293f4bb565",
+      "bytes": 6308
+    },
+    "fixture/actual_provider.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-invalidate-dispatch-log/fixture/actual_provider.rs",
+      "sha256": "c38b902056ba2f04b899bf5b3c81a1d8209a9b511254b01c2747bcb258a70084",
+      "bytes": 737
+    },
+    "fixture/actual_header_ABI.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-invalidate-dispatch-log/fixture/actual_header_ABI.c",
+      "sha256": "541026623960400d3e4ac9ccbb92ac229e4bc113201792f4ed85e9f05d21bf3d",
+      "bytes": 1190
+    },
+    "fixture/actual_default_and_fallback_consumer.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-invalidate-dispatch-log/fixture/actual_default_and_fallback_consumer.c",
+      "sha256": "48ec8928b3bfaf6430953295b208bfecdb8c0f04d29e6581df70afb0b10a6973",
+      "bytes": 711
+    }
+  },
+  "planned_comparisons": 340,
+  "fixture_scope": "Actual originalC callbacks and new actual Rust callbacks share the exact existing Rust memobj operation dispatcher. 320 present/absent-operation, full-width phys/size, signed-return and operation-mutation cases, plus20 direct logger opaque/null pointer, signed-shift/error and ignored-logger-return cases. Actual owner/caller source retained unchanged, but its full PTE/lock algorithm is not executed by this minimal callback fixture.",
+  "providers": {
+    "kernel/rust/object_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/object_helpers.rs",
+      "sha256": "7444ec38a30cdb2b0505b939f02eacb5018d3732a97fcd12b3eba189133f0f06",
+      "bytes": 235965
+    },
+    "kernel/rust/abi.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "bytes": 76151
+    },
+    "kernel/include/memobj.h": {
+      "path": "/home/holden/mckernel/kernel/include/memobj.h",
+      "sha256": "7d587411f1b6957c6fcc6f61d8f03b052d875cfd774f602aefe05ff99f536bb9",
+      "bytes": 3957
+    },
+    "lib/include/ihk/debug.h": {
+      "path": "/home/holden/mckernel/lib/include/ihk/debug.h",
+      "sha256": "7315ef758c56c4888242295ed9340b44f649d772b1315502acc49eb6105048dc",
+      "bytes": 1294
+    }
+  },
+  "invariant": "Unchanged invalidate_one_page passes these exact callbacks to its unchanged existing Rust owner. Owner resolves phys/page/PTE transitions and page_unmap before dispatch; a nonzero signed dispatch result invokes the logger once with current live PTE before returning that same result. New wrappers acquire no locks, references or ownership and retain no pointers. Existing typed memobj operation is invoked once if present, otherwise returns0. Error logger ignores kprintf return and preserves all pointer/UL/CInt variadic arguments.",
+  "original_C_fallback_exact": true,
+  "kprintf_declaration_count": 1,
+  "remaining_C_debt": [
+    "All other invalidate PTE/phys/page offset/contiguity/TLB/panic bridges",
+    "process_invalidate_range_log_bridge and remap range logging",
+    "phys_to_page C provider and existing lock/backend callbacks",
+    "Actual memobj invalidate operation implementations selected at runtime"
+  ],
+  "qualified_scope": "No caller algorithm, ABI, kernel lock/refcount, PTE or notification changes. No new compute-C helper. Real originalC/Rust/header fixture sources only; no compilation or comparison acceptance.",
+  "failure_history_preserved": [
+    "Historical duplicate kprintf E0428 2fb/e9a",
+    "Accepted sync bounded comma correction 4e2d/795, no replay",
+    "Dump original c774 observer failure and retained84ef/e48c acceptance",
+    "Unrun production9d/4df plus current observer successor01fbc preserved unchanged"
+  ],
+  "queued_production_ready": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/production-batch-preparation-1/EXECUTABLE-READY.OBSERVER-SUCCESSOR.NOT-GRANTED.json",
+    "sha256": "01fbc1acba56489e91f8198865a348379a7aac6518979696465c65dfdfbcea15",
+    "bytes": 11662
+  },
+  "compiler_jobs": 0,
+  "fixture_runs": 0,
+  "CPU_reservations": 0,
+  "new_executable_queues": 0,
+  "fullimage_native_credit": false
+}

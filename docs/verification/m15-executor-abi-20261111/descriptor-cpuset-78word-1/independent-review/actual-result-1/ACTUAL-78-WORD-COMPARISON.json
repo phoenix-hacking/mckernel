@@ -1,0 +1,718 @@
+{
+  "all78_unsigned64_words_equal": true,
+  "bytes_per_symbol": 624,
+  "raw624bytes_equal": true,
+  "recipe": {
+    "bytes": 25597,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/f02-complete-abi-behavior-publicabi-max-1/proposal/RECIPE.SOURCE-ONLY.json",
+    "sha256": "d161729b524e4052ea7635ef4074aaeeea5c1056c60eab6ecb7cf648bd99fae3"
+  },
+  "record_sha256": "dba0bca914e2d0892d1b4cd1dc81c768549d0914f71157075a0e128e0316f535",
+  "schema": 1,
+  "symbol": "m15_f02_descriptor_cpuset_abi",
+  "word_count": 78,
+  "words": [
+    {
+      "C_expression": "1UL",
+      "Rust_expression": "1",
+      "actual_C_u64": 1,
+      "actual_Rust_u64": 1,
+      "equal": true,
+      "label": "witness_version",
+      "word_index": 0
+    },
+    {
+      "C_expression": "sizeof(unsigned long)",
+      "Rust_expression": "core::mem::size_of::<c_ulong>() as u64",
+      "actual_C_u64": 8,
+      "actual_Rust_u64": 8,
+      "equal": true,
+      "label": "sizeof(unsigned long)",
+      "word_index": 1
+    },
+    {
+      "C_expression": "sizeof(int)",
+      "Rust_expression": "core::mem::size_of::<c_int>() as u64",
+      "actual_C_u64": 4,
+      "actual_Rust_u64": 4,
+      "equal": true,
+      "label": "sizeof(int)",
+      "word_index": 2
+    },
+    {
+      "C_expression": "sizeof(pid_t)",
+      "Rust_expression": "core::mem::size_of::<c_int>() as u64",
+      "actual_C_u64": 4,
+      "actual_Rust_u64": 4,
+      "equal": true,
+      "label": "sizeof(pid_t)",
+      "word_index": 3
+    },
+    {
+      "C_expression": "sizeof(size_t)",
+      "Rust_expression": "core::mem::size_of::<usize>() as u64",
+      "actual_C_u64": 8,
+      "actual_Rust_u64": 8,
+      "equal": true,
+      "label": "sizeof(size_t)",
+      "word_index": 4
+    },
+    {
+      "C_expression": "sizeof(void*)",
+      "Rust_expression": "core::mem::size_of::<*mut c_void>() as u64",
+      "actual_C_u64": 8,
+      "actual_Rust_u64": 8,
+      "equal": true,
+      "label": "sizeof(void*)",
+      "word_index": 5
+    },
+    {
+      "C_expression": "sizeof(struct program_load_desc)",
+      "Rust_expression": "core::mem::size_of::<ProgramLoadDesc>() as u64",
+      "actual_C_u64": 776,
+      "actual_Rust_u64": 776,
+      "equal": true,
+      "label": "sizeof(program_load_desc)",
+      "word_index": 6
+    },
+    {
+      "C_expression": "_Alignof(struct program_load_desc)",
+      "Rust_expression": "core::mem::align_of::<ProgramLoadDesc>() as u64",
+      "actual_C_u64": 8,
+      "actual_Rust_u64": 8,
+      "equal": true,
+      "label": "alignof(program_load_desc)",
+      "word_index": 7
+    },
+    {
+      "C_expression": "offsetof(struct program_load_desc, magic)",
+      "Rust_expression": "core::mem::offset_of!(ProgramLoadDesc, magic) as u64",
+      "actual_C_u64": 0,
+      "actual_Rust_u64": 0,
+      "equal": true,
+      "label": "program_load_desc::magic",
+      "word_index": 8
+    },
+    {
+      "C_expression": "offsetof(struct program_load_desc, num_sections)",
+      "Rust_expression": "core::mem::offset_of!(ProgramLoadDesc, num_sections) as u64",
+      "actual_C_u64": 8,
+      "actual_Rust_u64": 8,
+      "equal": true,
+      "label": "program_load_desc::num_sections",
+      "word_index": 9
+    },
+    {
+      "C_expression": "offsetof(struct program_load_desc, cpu)",
+      "Rust_expression": "core::mem::offset_of!(ProgramLoadDesc, cpu) as u64",
+      "actual_C_u64": 12,
+      "actual_Rust_u64": 12,
+      "equal": true,
+      "label": "program_load_desc::cpu",
+      "word_index": 10
+    },
+    {
+      "C_expression": "offsetof(struct program_load_desc, pid)",
+      "Rust_expression": "core::mem::offset_of!(ProgramLoadDesc, pid) as u64",
+      "actual_C_u64": 16,
+      "actual_Rust_u64": 16,
+      "equal": true,
+      "label": "program_load_desc::pid",
+      "word_index": 11
+    },
+    {
+      "C_expression": "offsetof(struct program_load_desc, stack_prot)",
+      "Rust_expression": "core::mem::offset_of!(ProgramLoadDesc, stack_prot) as u64",
+      "actual_C_u64": 20,
+      "actual_Rust_u64": 20,
+      "equal": true,
+      "label": "program_load_desc::stack_prot",
+      "word_index": 12
+    },
+    {
+      "C_expression": "offsetof(struct program_load_desc, pgid)",
+      "Rust_expression": "core::mem::offset_of!(ProgramLoadDesc, pgid) as u64",
+      "actual_C_u64": 24,
+      "actual_Rust_u64": 24,
+      "equal": true,
+      "label": "program_load_desc::pgid",
+      "word_index": 13
+    },
+    {
+      "C_expression": "offsetof(struct program_load_desc, cred)",
+      "Rust_expression": "core::mem::offset_of!(ProgramLoadDesc, cred) as u64",
+      "actual_C_u64": 28,
+      "actual_Rust_u64": 28,
+      "equal": true,
+      "label": "program_load_desc::cred",
+      "word_index": 14
+    },
+    {
+      "C_expression": "offsetof(struct program_load_desc, reloc)",
+      "Rust_expression": "core::mem::offset_of!(ProgramLoadDesc, reloc) as u64",
+      "actual_C_u64": 60,
+      "actual_Rust_u64": 60,
+      "equal": true,
+      "label": "program_load_desc::reloc",
+      "word_index": 15
+    },
+    {
+      "C_expression": "offsetof(struct program_load_desc, enable_vdso)",
+      "Rust_expression": "core::mem::offset_of!(ProgramLoadDesc, enable_vdso) as u64",
+      "actual_C_u64": 64,
+      "actual_Rust_u64": 64,
+      "equal": true,
+      "label": "program_load_desc::enable_vdso",
+      "word_index": 16
+    },
+    {
+      "C_expression": "offsetof(struct program_load_desc, padding)",
+      "Rust_expression": "core::mem::offset_of!(ProgramLoadDesc, padding) as u64",
+      "actual_C_u64": 65,
+      "actual_Rust_u64": 65,
+      "equal": true,
+      "label": "program_load_desc::padding",
+      "word_index": 17
+    },
+    {
+      "C_expression": "offsetof(struct program_load_desc, entry)",
+      "Rust_expression": "core::mem::offset_of!(ProgramLoadDesc, entry) as u64",
+      "actual_C_u64": 72,
+      "actual_Rust_u64": 72,
+      "equal": true,
+      "label": "program_load_desc::entry",
+      "word_index": 18
+    },
+    {
+      "C_expression": "offsetof(struct program_load_desc, user_start)",
+      "Rust_expression": "core::mem::offset_of!(ProgramLoadDesc, user_start) as u64",
+      "actual_C_u64": 80,
+      "actual_Rust_u64": 80,
+      "equal": true,
+      "label": "program_load_desc::user_start",
+      "word_index": 19
+    },
+    {
+      "C_expression": "offsetof(struct program_load_desc, user_end)",
+      "Rust_expression": "core::mem::offset_of!(ProgramLoadDesc, user_end) as u64",
+      "actual_C_u64": 88,
+      "actual_Rust_u64": 88,
+      "equal": true,
+      "label": "program_load_desc::user_end",
+      "word_index": 20
+    },
+    {
+      "C_expression": "offsetof(struct program_load_desc, rprocess)",
+      "Rust_expression": "core::mem::offset_of!(ProgramLoadDesc, rprocess) as u64",
+      "actual_C_u64": 96,
+      "actual_Rust_u64": 96,
+      "equal": true,
+      "label": "program_load_desc::rprocess",
+      "word_index": 21
+    },
+    {
+      "C_expression": "offsetof(struct program_load_desc, rpgtable)",
+      "Rust_expression": "core::mem::offset_of!(ProgramLoadDesc, rpgtable) as u64",
+      "actual_C_u64": 104,
+      "actual_Rust_u64": 104,
+      "equal": true,
+      "label": "program_load_desc::rpgtable",
+      "word_index": 22
+    },
+    {
+      "C_expression": "offsetof(struct program_load_desc, at_phdr)",
+      "Rust_expression": "core::mem::offset_of!(ProgramLoadDesc, at_phdr) as u64",
+      "actual_C_u64": 112,
+      "actual_Rust_u64": 112,
+      "equal": true,
+      "label": "program_load_desc::at_phdr",
+      "word_index": 23
+    },
+    {
+      "C_expression": "offsetof(struct program_load_desc, at_phent)",
+      "Rust_expression": "core::mem::offset_of!(ProgramLoadDesc, at_phent) as u64",
+      "actual_C_u64": 120,
+      "actual_Rust_u64": 120,
+      "equal": true,
+      "label": "program_load_desc::at_phent",
+      "word_index": 24
+    },
+    {
+      "C_expression": "offsetof(struct program_load_desc, at_phnum)",
+      "Rust_expression": "core::mem::offset_of!(ProgramLoadDesc, at_phnum) as u64",
+      "actual_C_u64": 128,
+      "actual_Rust_u64": 128,
+      "equal": true,
+      "label": "program_load_desc::at_phnum",
+      "word_index": 25
+    },
+    {
+      "C_expression": "offsetof(struct program_load_desc, at_entry)",
+      "Rust_expression": "core::mem::offset_of!(ProgramLoadDesc, at_entry) as u64",
+      "actual_C_u64": 136,
+      "actual_Rust_u64": 136,
+      "equal": true,
+      "label": "program_load_desc::at_entry",
+      "word_index": 26
+    },
+    {
+      "C_expression": "offsetof(struct program_load_desc, at_clktck)",
+      "Rust_expression": "core::mem::offset_of!(ProgramLoadDesc, at_clktck) as u64",
+      "actual_C_u64": 144,
+      "actual_Rust_u64": 144,
+      "equal": true,
+      "label": "program_load_desc::at_clktck",
+      "word_index": 27
+    },
+    {
+      "C_expression": "offsetof(struct program_load_desc, args)",
+      "Rust_expression": "core::mem::offset_of!(ProgramLoadDesc, args) as u64",
+      "actual_C_u64": 152,
+      "actual_Rust_u64": 152,
+      "equal": true,
+      "label": "program_load_desc::args",
+      "word_index": 28
+    },
+    {
+      "C_expression": "offsetof(struct program_load_desc, args_len)",
+      "Rust_expression": "core::mem::offset_of!(ProgramLoadDesc, args_len) as u64",
+      "actual_C_u64": 160,
+      "actual_Rust_u64": 160,
+      "equal": true,
+      "label": "program_load_desc::args_len",
+      "word_index": 29
+    },
+    {
+      "C_expression": "offsetof(struct program_load_desc, envs)",
+      "Rust_expression": "core::mem::offset_of!(ProgramLoadDesc, envs) as u64",
+      "actual_C_u64": 168,
+      "actual_Rust_u64": 168,
+      "equal": true,
+      "label": "program_load_desc::envs",
+      "word_index": 30
+    },
+    {
+      "C_expression": "offsetof(struct program_load_desc, envs_len)",
+      "Rust_expression": "core::mem::offset_of!(ProgramLoadDesc, envs_len) as u64",
+      "actual_C_u64": 176,
+      "actual_Rust_u64": 176,
+      "equal": true,
+      "label": "program_load_desc::envs_len",
+      "word_index": 31
+    },
+    {
+      "C_expression": "offsetof(struct program_load_desc, rlimit)",
+      "Rust_expression": "core::mem::offset_of!(ProgramLoadDesc, rlimit) as u64",
+      "actual_C_u64": 184,
+      "actual_Rust_u64": 184,
+      "equal": true,
+      "label": "program_load_desc::rlimit",
+      "word_index": 32
+    },
+    {
+      "C_expression": "offsetof(struct program_load_desc, interp_align)",
+      "Rust_expression": "core::mem::offset_of!(ProgramLoadDesc, interp_align) as u64",
+      "actual_C_u64": 504,
+      "actual_Rust_u64": 504,
+      "equal": true,
+      "label": "program_load_desc::interp_align",
+      "word_index": 33
+    },
+    {
+      "C_expression": "offsetof(struct program_load_desc, mpol_flags)",
+      "Rust_expression": "core::mem::offset_of!(ProgramLoadDesc, mpol_flags) as u64",
+      "actual_C_u64": 512,
+      "actual_Rust_u64": 512,
+      "equal": true,
+      "label": "program_load_desc::mpol_flags",
+      "word_index": 34
+    },
+    {
+      "C_expression": "offsetof(struct program_load_desc, mpol_threshold)",
+      "Rust_expression": "core::mem::offset_of!(ProgramLoadDesc, mpol_threshold) as u64",
+      "actual_C_u64": 520,
+      "actual_Rust_u64": 520,
+      "equal": true,
+      "label": "program_load_desc::mpol_threshold",
+      "word_index": 35
+    },
+    {
+      "C_expression": "offsetof(struct program_load_desc, heap_extension)",
+      "Rust_expression": "core::mem::offset_of!(ProgramLoadDesc, heap_extension) as u64",
+      "actual_C_u64": 528,
+      "actual_Rust_u64": 528,
+      "equal": true,
+      "label": "program_load_desc::heap_extension",
+      "word_index": 36
+    },
+    {
+      "C_expression": "offsetof(struct program_load_desc, stack_premap)",
+      "Rust_expression": "core::mem::offset_of!(ProgramLoadDesc, stack_premap) as u64",
+      "actual_C_u64": 536,
+      "actual_Rust_u64": 536,
+      "equal": true,
+      "label": "program_load_desc::stack_premap",
+      "word_index": 37
+    },
+    {
+      "C_expression": "offsetof(struct program_load_desc, mpol_bind_mask)",
+      "Rust_expression": "core::mem::offset_of!(ProgramLoadDesc, mpol_bind_mask) as u64",
+      "actual_C_u64": 544,
+      "actual_Rust_u64": 544,
+      "equal": true,
+      "label": "program_load_desc::mpol_bind_mask",
+      "word_index": 38
+    },
+    {
+      "C_expression": "offsetof(struct program_load_desc, mpol_mode)",
+      "Rust_expression": "core::mem::offset_of!(ProgramLoadDesc, mpol_mode) as u64",
+      "actual_C_u64": 552,
+      "actual_Rust_u64": 552,
+      "equal": true,
+      "label": "program_load_desc::mpol_mode",
+      "word_index": 39
+    },
+    {
+      "C_expression": "offsetof(struct program_load_desc, mpol_nodemask)",
+      "Rust_expression": "core::mem::offset_of!(ProgramLoadDesc, mpol_nodemask) as u64",
+      "actual_C_u64": 560,
+      "actual_Rust_u64": 560,
+      "equal": true,
+      "label": "program_load_desc::mpol_nodemask",
+      "word_index": 40
+    },
+    {
+      "C_expression": "offsetof(struct program_load_desc, thp_disable)",
+      "Rust_expression": "core::mem::offset_of!(ProgramLoadDesc, thp_disable) as u64",
+      "actual_C_u64": 592,
+      "actual_Rust_u64": 592,
+      "equal": true,
+      "label": "program_load_desc::thp_disable",
+      "word_index": 41
+    },
+    {
+      "C_expression": "offsetof(struct program_load_desc, enable_uti)",
+      "Rust_expression": "core::mem::offset_of!(ProgramLoadDesc, enable_uti) as u64",
+      "actual_C_u64": 596,
+      "actual_Rust_u64": 596,
+      "equal": true,
+      "label": "program_load_desc::enable_uti",
+      "word_index": 42
+    },
+    {
+      "C_expression": "offsetof(struct program_load_desc, uti_thread_rank)",
+      "Rust_expression": "core::mem::offset_of!(ProgramLoadDesc, uti_thread_rank) as u64",
+      "actual_C_u64": 600,
+      "actual_Rust_u64": 600,
+      "equal": true,
+      "label": "program_load_desc::uti_thread_rank",
+      "word_index": 43
+    },
+    {
+      "C_expression": "offsetof(struct program_load_desc, uti_use_last_cpu)",
+      "Rust_expression": "core::mem::offset_of!(ProgramLoadDesc, uti_use_last_cpu) as u64",
+      "actual_C_u64": 604,
+      "actual_Rust_u64": 604,
+      "equal": true,
+      "label": "program_load_desc::uti_use_last_cpu",
+      "word_index": 44
+    },
+    {
+      "C_expression": "offsetof(struct program_load_desc, straight_map)",
+      "Rust_expression": "core::mem::offset_of!(ProgramLoadDesc, straight_map) as u64",
+      "actual_C_u64": 608,
+      "actual_Rust_u64": 608,
+      "equal": true,
+      "label": "program_load_desc::straight_map",
+      "word_index": 45
+    },
+    {
+      "C_expression": "offsetof(struct program_load_desc, straight_map_threshold)",
+      "Rust_expression": "core::mem::offset_of!(ProgramLoadDesc, straight_map_threshold) as u64",
+      "actual_C_u64": 616,
+      "actual_Rust_u64": 616,
+      "equal": true,
+      "label": "program_load_desc::straight_map_threshold",
+      "word_index": 46
+    },
+    {
+      "C_expression": "offsetof(struct program_load_desc, mcexec_flags)",
+      "Rust_expression": "core::mem::offset_of!(ProgramLoadDesc, mcexec_flags) as u64",
+      "actual_C_u64": 624,
+      "actual_Rust_u64": 624,
+      "equal": true,
+      "label": "program_load_desc::mcexec_flags",
+      "word_index": 47
+    },
+    {
+      "C_expression": "offsetof(struct program_load_desc, nr_processes)",
+      "Rust_expression": "core::mem::offset_of!(ProgramLoadDesc, nr_processes) as u64",
+      "actual_C_u64": 632,
+      "actual_Rust_u64": 632,
+      "equal": true,
+      "label": "program_load_desc::nr_processes",
+      "word_index": 48
+    },
+    {
+      "C_expression": "offsetof(struct program_load_desc, process_rank)",
+      "Rust_expression": "core::mem::offset_of!(ProgramLoadDesc, process_rank) as u64",
+      "actual_C_u64": 636,
+      "actual_Rust_u64": 636,
+      "equal": true,
+      "label": "program_load_desc::process_rank",
+      "word_index": 49
+    },
+    {
+      "C_expression": "offsetof(struct program_load_desc, cpu_set)",
+      "Rust_expression": "core::mem::offset_of!(ProgramLoadDesc, cpu_set) as u64",
+      "actual_C_u64": 640,
+      "actual_Rust_u64": 640,
+      "equal": true,
+      "label": "program_load_desc::cpu_set",
+      "word_index": 50
+    },
+    {
+      "C_expression": "offsetof(struct program_load_desc, profile)",
+      "Rust_expression": "core::mem::offset_of!(ProgramLoadDesc, profile) as u64",
+      "actual_C_u64": 768,
+      "actual_Rust_u64": 768,
+      "equal": true,
+      "label": "program_load_desc::profile",
+      "word_index": 51
+    },
+    {
+      "C_expression": "offsetof(struct program_load_desc, sections)",
+      "Rust_expression": "core::mem::offset_of!(ProgramLoadDesc, sections) as u64",
+      "actual_C_u64": 776,
+      "actual_Rust_u64": 776,
+      "equal": true,
+      "label": "program_load_desc::sections",
+      "word_index": 52
+    },
+    {
+      "C_expression": "sizeof(struct program_image_section)",
+      "Rust_expression": "core::mem::size_of::<ImageSection>() as u64",
+      "actual_C_u64": 56,
+      "actual_Rust_u64": 56,
+      "equal": true,
+      "label": "sizeof(program_image_section)",
+      "word_index": 53
+    },
+    {
+      "C_expression": "_Alignof(struct program_image_section)",
+      "Rust_expression": "core::mem::align_of::<ImageSection>() as u64",
+      "actual_C_u64": 8,
+      "actual_Rust_u64": 8,
+      "equal": true,
+      "label": "alignof(program_image_section)",
+      "word_index": 54
+    },
+    {
+      "C_expression": "offsetof(struct program_image_section, vaddr)",
+      "Rust_expression": "core::mem::offset_of!(ImageSection, vaddr) as u64",
+      "actual_C_u64": 0,
+      "actual_Rust_u64": 0,
+      "equal": true,
+      "label": "program_image_section::vaddr",
+      "word_index": 55
+    },
+    {
+      "C_expression": "offsetof(struct program_image_section, len)",
+      "Rust_expression": "core::mem::offset_of!(ImageSection, len) as u64",
+      "actual_C_u64": 8,
+      "actual_Rust_u64": 8,
+      "equal": true,
+      "label": "program_image_section::len",
+      "word_index": 56
+    },
+    {
+      "C_expression": "offsetof(struct program_image_section, remote_pa)",
+      "Rust_expression": "core::mem::offset_of!(ImageSection, remote_pa) as u64",
+      "actual_C_u64": 16,
+      "actual_Rust_u64": 16,
+      "equal": true,
+      "label": "program_image_section::remote_pa",
+      "word_index": 57
+    },
+    {
+      "C_expression": "offsetof(struct program_image_section, filesz)",
+      "Rust_expression": "core::mem::offset_of!(ImageSection, filesz) as u64",
+      "actual_C_u64": 24,
+      "actual_Rust_u64": 24,
+      "equal": true,
+      "label": "program_image_section::filesz",
+      "word_index": 58
+    },
+    {
+      "C_expression": "offsetof(struct program_image_section, offset)",
+      "Rust_expression": "core::mem::offset_of!(ImageSection, offset) as u64",
+      "actual_C_u64": 32,
+      "actual_Rust_u64": 32,
+      "equal": true,
+      "label": "program_image_section::offset",
+      "word_index": 59
+    },
+    {
+      "C_expression": "offsetof(struct program_image_section, prot)",
+      "Rust_expression": "core::mem::offset_of!(ImageSection, prot) as u64",
+      "actual_C_u64": 40,
+      "actual_Rust_u64": 40,
+      "equal": true,
+      "label": "program_image_section::prot",
+      "word_index": 60
+    },
+    {
+      "C_expression": "offsetof(struct program_image_section, interp)",
+      "Rust_expression": "core::mem::offset_of!(ImageSection, interp) as u64",
+      "actual_C_u64": 44,
+      "actual_Rust_u64": 44,
+      "equal": true,
+      "label": "program_image_section::interp",
+      "word_index": 61
+    },
+    {
+      "C_expression": "offsetof(struct program_image_section, padding)",
+      "Rust_expression": "core::mem::offset_of!(ImageSection, padding) as u64",
+      "actual_C_u64": 45,
+      "actual_Rust_u64": 45,
+      "equal": true,
+      "label": "program_image_section::padding",
+      "word_index": 62
+    },
+    {
+      "C_expression": "offsetof(struct program_image_section, fp)",
+      "Rust_expression": "core::mem::offset_of!(ImageSection, fp) as u64",
+      "actual_C_u64": 48,
+      "actual_Rust_u64": 48,
+      "equal": true,
+      "label": "program_image_section::fp",
+      "word_index": 63
+    },
+    {
+      "C_expression": "sizeof(struct get_cpu_set_arg)",
+      "Rust_expression": "core::mem::size_of::<GetCpuSetArg>() as u64",
+      "actual_C_u64": 96,
+      "actual_Rust_u64": 96,
+      "equal": true,
+      "label": "sizeof(get_cpu_set_arg)",
+      "word_index": 64
+    },
+    {
+      "C_expression": "_Alignof(struct get_cpu_set_arg)",
+      "Rust_expression": "core::mem::align_of::<GetCpuSetArg>() as u64",
+      "actual_C_u64": 8,
+      "actual_Rust_u64": 8,
+      "equal": true,
+      "label": "alignof(get_cpu_set_arg)",
+      "word_index": 65
+    },
+    {
+      "C_expression": "offsetof(struct get_cpu_set_arg, nr_processes)",
+      "Rust_expression": "core::mem::offset_of!(GetCpuSetArg, nr_processes) as u64",
+      "actual_C_u64": 0,
+      "actual_Rust_u64": 0,
+      "equal": true,
+      "label": "get_cpu_set_arg::nr_processes",
+      "word_index": 66
+    },
+    {
+      "C_expression": "offsetof(struct get_cpu_set_arg, req_cpu_list)",
+      "Rust_expression": "core::mem::offset_of!(GetCpuSetArg, req_cpu_list) as u64",
+      "actual_C_u64": 8,
+      "actual_Rust_u64": 8,
+      "equal": true,
+      "label": "get_cpu_set_arg::req_cpu_list",
+      "word_index": 67
+    },
+    {
+      "C_expression": "offsetof(struct get_cpu_set_arg, req_cpu_list_len)",
+      "Rust_expression": "core::mem::offset_of!(GetCpuSetArg, req_cpu_list_len) as u64",
+      "actual_C_u64": 16,
+      "actual_Rust_u64": 16,
+      "equal": true,
+      "label": "get_cpu_set_arg::req_cpu_list_len",
+      "word_index": 68
+    },
+    {
+      "C_expression": "offsetof(struct get_cpu_set_arg, process_rank)",
+      "Rust_expression": "core::mem::offset_of!(GetCpuSetArg, process_rank) as u64",
+      "actual_C_u64": 24,
+      "actual_Rust_u64": 24,
+      "equal": true,
+      "label": "get_cpu_set_arg::process_rank",
+      "word_index": 69
+    },
+    {
+      "C_expression": "offsetof(struct get_cpu_set_arg, ppid)",
+      "Rust_expression": "core::mem::offset_of!(GetCpuSetArg, ppid) as u64",
+      "actual_C_u64": 32,
+      "actual_Rust_u64": 32,
+      "equal": true,
+      "label": "get_cpu_set_arg::ppid",
+      "word_index": 70
+    },
+    {
+      "C_expression": "offsetof(struct get_cpu_set_arg, cpu_set)",
+      "Rust_expression": "core::mem::offset_of!(GetCpuSetArg, cpu_set) as u64",
+      "actual_C_u64": 40,
+      "actual_Rust_u64": 40,
+      "equal": true,
+      "label": "get_cpu_set_arg::cpu_set",
+      "word_index": 71
+    },
+    {
+      "C_expression": "offsetof(struct get_cpu_set_arg, cpu_set_size)",
+      "Rust_expression": "core::mem::offset_of!(GetCpuSetArg, cpu_set_size) as u64",
+      "actual_C_u64": 48,
+      "actual_Rust_u64": 48,
+      "equal": true,
+      "label": "get_cpu_set_arg::cpu_set_size",
+      "word_index": 72
+    },
+    {
+      "C_expression": "offsetof(struct get_cpu_set_arg, target_core)",
+      "Rust_expression": "core::mem::offset_of!(GetCpuSetArg, target_core) as u64",
+      "actual_C_u64": 56,
+      "actual_Rust_u64": 56,
+      "equal": true,
+      "label": "get_cpu_set_arg::target_core",
+      "word_index": 73
+    },
+    {
+      "C_expression": "offsetof(struct get_cpu_set_arg, mcexec_linux_numa)",
+      "Rust_expression": "core::mem::offset_of!(GetCpuSetArg, mcexec_linux_numa) as u64",
+      "actual_C_u64": 64,
+      "actual_Rust_u64": 64,
+      "equal": true,
+      "label": "get_cpu_set_arg::mcexec_linux_numa",
+      "word_index": 74
+    },
+    {
+      "C_expression": "offsetof(struct get_cpu_set_arg, mcexec_cpu_set)",
+      "Rust_expression": "core::mem::offset_of!(GetCpuSetArg, mcexec_cpu_set) as u64",
+      "actual_C_u64": 72,
+      "actual_Rust_u64": 72,
+      "equal": true,
+      "label": "get_cpu_set_arg::mcexec_cpu_set",
+      "word_index": 75
+    },
+    {
+      "C_expression": "offsetof(struct get_cpu_set_arg, mcexec_cpu_set_size)",
+      "Rust_expression": "core::mem::offset_of!(GetCpuSetArg, mcexec_cpu_set_size) as u64",
+      "actual_C_u64": 80,
+      "actual_Rust_u64": 80,
+      "equal": true,
+      "label": "get_cpu_set_arg::mcexec_cpu_set_size",
+      "word_index": 76
+    },
+    {
+      "C_expression": "offsetof(struct get_cpu_set_arg, ikc_mapped)",
+      "Rust_expression": "core::mem::offset_of!(GetCpuSetArg, ikc_mapped) as u64",
+      "actual_C_u64": 88,
+      "actual_Rust_u64": 88,
+      "equal": true,
+      "label": "get_cpu_set_arg::ikc_mapped",
+      "word_index": 77
+    }
+  ]
+}

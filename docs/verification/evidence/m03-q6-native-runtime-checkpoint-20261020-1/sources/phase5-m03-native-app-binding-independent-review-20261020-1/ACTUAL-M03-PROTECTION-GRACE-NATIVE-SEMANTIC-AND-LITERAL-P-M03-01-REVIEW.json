@@ -1,0 +1,215 @@
+{
+  "accepted_source_to_binary_linux_binding": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel/docs/verification/evidence/practical-memory-protection-source-linux-20261017-1.json",
+    "sha256": "2812e66701d2daf0935939a732ccd2d172f3a48466def88bfe0ce2ba6404416f",
+    "size": 32248
+  },
+  "accepted_stage": {
+    "bytes": 11532,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-valid-protection-closure-independent-review-20261020-1/ACTUAL-PROTECTION-GRACE-INIT-ONLY-STAGE-ACCEPTANCE.json",
+    "sha256": "c6e24c60bc3542d4ec9a23f17b6f70bdffc0f6b2f27558eacf3d577b96215e00"
+  },
+  "actual_attempt_archive": {
+    "bytes": 440320,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/positive-s5-runtime-successor-1/native-control-packet-6/captures/06-readback-3/stdout",
+    "sha256": "3cd48145bcfb3b70cb9692bb1bebf3284b4bc9f634c2ba836a46692fb570005b"
+  },
+  "actual_data": {
+    "bytes": 61943,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/positive-s5-runtime-successor-1/native-control-packet-6/FINAL-SEVEN-ROOT-CALL-DATA.json",
+    "sha256": "afe59044fa91adac3b4463817e71b9b8debd4735449f8d0e8f09075d762a5f70"
+  },
+  "actual_direct_result": {
+    "bytes": 82509,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/positive-s5-runtime-successor-1/native-control-packet-6/captures/05-readback-2/stdout",
+    "sha256": "93cd3526873a45cbc20fdc7a6166be4967baf5839d9155084404a8ee129bc56f"
+  },
+  "actual_evaluator": {
+    "bytes": 58163,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-stage-20261020-1/native_diagnostic.py",
+    "sha256": "2827a106e9a82ba1590cb4726d98ef25f337c741b63e5d571ae38850bba39fd6"
+  },
+  "actual_manifest": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/scratch/vpg-n261020-1/manifest.json",
+    "sha256": "bddc79460178fb6d89fb4f84b9e3a04fdaf9b49c17fb9d0584e4e8f8bd60617c",
+    "size": 5805
+  },
+  "actual_whole": {
+    "bytes": 2446,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/positive-s5-runtime-successor-1/native-control-packet-6/root-seven-whole-1.json",
+    "sha256": "e452005c5067d58cfa50d2d40966ecba78ca0416053cec0cb43fcaf920d098f4"
+  },
+  "criterion": "P-M03-01",
+  "criterion_completion": true,
+  "criterion_literal": "Exercise used map/protect/unmap operations and invalid-input cases.",
+  "current_tuple_compatible_prior_invalid_mprotect_mapping_slice": {
+    "bytes": 12578,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/ACTUAL-M03-AUTHENTICATED-HANDSHAKE-UNALIGNED-MPROTECT-NATIVE-SLICE-SEMANTIC-REVIEW.json",
+    "sha256": "b7aa10fca87703fd94ae60d9f26e728514c8f15d8341e515a87a2ce1a2ef5058"
+  },
+  "decision": "PASS_ACTUAL_CURRENT_TUPLE_RO_WRITE_FAULT_EXACT_TARGET_UNCHANGED_BYTE_RW_RESTORE_AND_USED_MAP_PROTECT_UNMAP_INVALID_INPUT_CRITERION",
+  "deduplication": {
+    "literal_P_M03_01_current_gap_closed": true,
+    "new_Rust_path_credit": 0,
+    "new_unique_behavior_credit": 0,
+    "no_whole_M03_milestone_claim": true,
+    "one_current_tuple_native_launch": 1,
+    "same_logical_behavior_as_prior02bea": true
+  },
+  "facts": {
+    "WIFEXITED": true,
+    "actual_real_native_app_launches": 1,
+    "actual_successful_native_app_launches": 1,
+    "exact_stdout_and_empty_stderr_bothEOF_nontruncated_zero_discard": true,
+    "exit_code": 0,
+    "guest_CPU": 0,
+    "guest_PID": 257,
+    "guest_finished_seconds": 38.498431597,
+    "guest_procfs_empty": true,
+    "one_final_exit_group_and_full_correspondence_CPU_order": true,
+    "owner_outer_wall_seconds": 43.012907337979414,
+    "postreap_retirement_grace_ns": 5169220948,
+    "powerdown_seconds": 38.58841,
+    "raw_wait_status": 0,
+    "release0_seconds": 34.088068,
+    "release_cleanup_errno": 0,
+    "retirement0_seconds": 34.079695,
+    "retirement_errno": 0,
+    "sampled_return_routes": 1,
+    "sampled_syscall_deliveries": 14,
+    "sampled_syscall_returns": 13,
+    "stderr_bytes": 0,
+    "stdout_bytes": 61,
+    "strict_bad_marker_scan_clear": true,
+    "unexpected_helper_startup_frames": 0,
+    "unique_ND_PAYLOAD_equals_saved_report": true
+  },
+  "findings": [
+    "Exact frozen C USERSPACE payload source9cb00/binarya4bbba checks a successful usedRW mapping, volatile0x31 write/read, read-only protection, exactly one real protected write SIGSEGV with SEGV_ACCERR and exacttarget page+37, unchanged0x31 after failedwrite, restoredRW/write0x73/readback, restored handler/mask and successfulmunmap. Exact61B and exit0 occur only after allguards; no newcompute-kernel C or Rustpath credit.",
+    "Saved ND_PAYLOAD uniquely equals guest_report; exact launchcontract/limits/oracle, complete EOF/rawexit0/procfsempty/nativePID257CPU0 and complete sampledtrace establish nativeexecution. Memory syscall numbers9/10/11 are absent from sampledtrace: operationproof is acceptedsource/binarycontract plus actualguardedresult, not invented syscalltrace.",
+    "Actualretire-11 precedes realretirement0, releasecleanup0, framecompletion and powerdown. Physical498cd separately proves hostretirement. No separately archived siginfo/faultregisterdump or numericfaultaddress is invented; exacttarget is enforced by frozenhandler and represented by address=1.",
+    "Compatible b7aa byte-identical tested205 image/HOST66modules/ee1fmcexec/nativeboot validates mmap8192, unalignedmprotect EINVAL22, all8192bytes preserved, checkedwrites/readbacks and munmap. Combined with this currentvalid-protection transition, the previouslynamed literalP-M03-01 exercised-operation gap is closed. Unrelated timeout/ownership/SDK/ACK conditions are not added to thiscriterion.",
+    "Prior02bea already accepted this same logical RO-fault/RW-restoration behavior on current942. This actualrun adds current205/HOST66 tupleevidence and closesitscriteriongap; it adds no newunique behavior29 or selectedRustpath. Dispatcherupdatesledgers."
+  ],
+  "functional_scope": "Functional supported-profile kernel/apps plus active compute-C retirement into Rust/reviewed assembly. Literal P-M03-01 operations/invalid-input criterion only; other M03 milestone, ownership, SDK/default/fork/ACK obligations remain separate.",
+  "implementation_ownership": false,
+  "native_application_acceptance": true,
+  "payload_binary": {
+    "mode": 33261,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-valid-protection-closure-delta-20261020-1/ordinary-stage-1/app-0755",
+    "sha256": "a4bbba00f9c3ed174ebe31498be4ab92e0326c439611bb4fababf635de7f3223",
+    "size": 876848
+  },
+  "payload_report": {
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "/apps/app"
+    ],
+    "cwd": "/case/work",
+    "env": {
+      "COKERNEL_PATH": "/apps",
+      "PATH": "/usr/bin:/bin"
+    },
+    "finished_ns": 38498431597,
+    "procfs_empty": true,
+    "raw_wait_status": 0,
+    "reaped_ns": 33329210649,
+    "started_ns": 32893331229,
+    "streams": {
+      "stderr": {
+        "discarded": 0,
+        "eof": true,
+        "eof_ns": 33227709201,
+        "hex": "",
+        "limit": 1024,
+        "observed": 0,
+        "retained": 0,
+        "truncated": false
+      },
+      "stdout": {
+        "discarded": 0,
+        "eof": true,
+        "eof_ns": 33227633214,
+        "hex": "6661756c74733d31206163636572723d3120616464726573733d3120726573746f7265645f77726974653d31206d61736b5f726573746f7265643d310a",
+        "limit": 1024,
+        "observed": 61,
+        "retained": 61,
+        "truncated": false
+      }
+    }
+  },
+  "payload_source": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel/scripts/application-tests/practical_memory_protection.c",
+    "sha256": "9cb00ff2244a17f8b8c28aed4ad1e3573a878eeedec2c5c72bf0244624b5b448",
+    "size": 4752
+  },
+  "payload_source_input_authority": {
+    "bytes": 7764,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-valid-protection-closure-delta-20261020-1/INPUT-AND-DECLARED-DATA.json",
+    "sha256": "52d4f157e80c7a7fd754bef6ece4294dd53655110884fa6897c676bcbcf103a4"
+  },
+  "physical_review": {
+    "bytes": 25167,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/ACTUAL-M03-PROTECTION-GRACE-NATIVE-PHYSICAL-RETIREMENT-REVIEW.json",
+    "sha256": "498cd4a7dbedb9de21a3f41e5c97136b9a556c488e72b0da2a6047536beff8da"
+  },
+  "positive_CREATE_PPD_parent_RETURN_or_final_ACK_acceptance": false,
+  "prior_narrow_remaining_operation_note": {
+    "bytes": 2672,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/P-M03-01-CURRENT-TUPLE-VALID-PROTECTION-GAP-AND-RETAINED61B-REUSE-NOTE.json",
+    "sha256": "59fc0d205e4b7594c6d012cfe86b50f163901972cca4bedf0e700a11b1018128"
+  },
+  "producer_metadata_note": "Original producer application_acceptance/mckernel_application_executed remain false pendingindependentreview. This additive report supplies only statedacceptance. Inputkey rust_source actuallyholds retained .c USERSPACE source; actualpath/language reported accurately.",
+  "production_default_activation": false,
+  "remaining": "No remaining exercised-operation/input gap identified for stated literalP-M03-01 supportedtuple from current61B plus compatibleb7. OtherM03criteria, broaderqualification, SDK/ownership/default/fork/ACK goals remain separate and notpassed.",
+  "review_local_observation": "An initial reviewer-only evaluatorpath lookup assumed an owner sibling and failedbefore reportwrite; actual selected evaluatorfull3 was resolvedfrom genuine source_pins and verified. No source/test/root/native action repeated.",
+  "reviewed_at_epoch": 1792524271.056685,
+  "reviewer": "/root/resume20_physical",
+  "schema": "mckernel.independent-actual-M03-protection-grace-native-semantic-and-literal-criterion-review.v1",
+  "status": "PASS_ACTUAL_NATIVE_VALID_PROTECTION_AND_LITERAL_P_M03_01_EVIDENCE",
+  "whole_M03_acceptance": false,
+  "whole_kernel_language_retirement": false,
+  "witnesses": [
+    {
+      "kind": "guarded_payload_result",
+      "raw_wait_status": 0,
+      "stderr_bytes": 0,
+      "stdout": "faults=1 accerr=1 address=1 restored_write=1 mask_restored=1\n"
+    },
+    {
+      "guards": "SIGSEGV +SEGV_ACCERR +same page+37 +onefault +unchanged0x31 beforeRWrestore0x73",
+      "kind": "real_fault_contract",
+      "source": {
+        "mode": 33152,
+        "path": "/home/holden/mckernel/scripts/application-tests/practical_memory_protection.c",
+        "sha256": "9cb00ff2244a17f8b8c28aed4ad1e3573a878eeedec2c5c72bf0244624b5b448",
+        "size": 4752
+      }
+    },
+    {
+      "kind": "real_retirement",
+      "retry": "<6>[   33.314124] ihk_smp_x86_64: IHK-SMP: application retirement os=0 generation=1 pid=257 token=26 errno=-11",
+      "success": "<6>[   34.079695] ihk_smp_x86_64: IHK-SMP: application retirement os=0 generation=1 pid=257 token=27 errno=0"
+    },
+    {
+      "kind": "release_then_powerdown",
+      "powerdown": "[   38.588410] reboot: Power down",
+      "release": "<6>[   34.088068] mcctrl: application_process=release os=0 generation=1 pid=257 cleanup_errno=0"
+    },
+    {
+      "image_modules_launcher_boot_exactmatch": true,
+      "kind": "compatible_invalid_inputs",
+      "review": {
+        "bytes": 12578,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/ACTUAL-M03-AUTHENTICATED-HANDSHAKE-UNALIGNED-MPROTECT-NATIVE-SLICE-SEMANTIC-REVIEW.json",
+        "sha256": "b7aa10fca87703fd94ae60d9f26e728514c8f15d8341e515a87a2ce1a2ef5058"
+      }
+    }
+  ]
+}

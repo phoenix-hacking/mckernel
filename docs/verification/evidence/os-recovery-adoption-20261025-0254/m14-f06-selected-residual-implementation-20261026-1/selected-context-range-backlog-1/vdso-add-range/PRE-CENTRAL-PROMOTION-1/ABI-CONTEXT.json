@@ -1,0 +1,10 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\nFour exact finite future HOST recipes, no admission framework or execution.\n",
+  "selected_provider": "arch_vdso_add_range_bridge",
+  "cases": 112,
+  "ABI": "int32 result; genuine ProcessVm*/VmRange** raw pointers, unsigned-long64 boundaries/physical/flags, off_t64 and page-shift32",
+  "ownership": "Existing add_process_memory_range owns VM/range lifetime, partial failure and output publication. Preserve NOPHYS/null memobj/zero offset/PAGE_SHIFT/null private_data and exact output pointer; no rollback/free/hold.",
+  "effects": "C add_process_memory_range mock records all10args and writes only a valid nonnull caller output slot, including controlled error-return paths; no VM/ref/allocator/mapping operation.",
+  "real_IRQ_IPC_finalref_currentstack_holds_preserved": true,
+  "production_native_proof": null
+}

@@ -1,0 +1,273 @@
+{
+  "Root_preconditions": [
+    "Independent material production source/ABI and test/profile GO for exact source85e389/994320/0a2fc and this frozen packet; Root fresh sameRun account/source/resource/owner/output admission.",
+    "Bind and reuse exact real195 COMPILER-BINDING978a/LOADERabdd/currentROtree and native46d/cc2092. No new compiler/version/loader/SDK inventory probe or profile fallback.",
+    "New output-1 must be absent, then Root creates empty UID1000-owned directory only; driver creates tmp/record files. Name absent and immutableID controlled by Root; exact8bind set/readonly/root/security/limits validated before start.",
+    "Use reviewed Root capture4ca/a034 actualimmutableCID deadline/wait/terminal/cleanup; preserve primary and cleanup errors. Payload success only after all9 outer families as actual batch requires, terminal0/nonOOM/Pid0/ownedCIDremoved and every inner record positive. No assumed timeouts/peaks or currentfree release."
+  ],
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/cc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsyntax-only",
+        "-MD",
+        "-MF",
+        "/output/pthread_callback_header.d",
+        "-MT",
+        "pthread_callback_header",
+        "/input/pthread_callback_header.c"
+      ],
+      "expected_exit": 0,
+      "label": "actual-C11-header",
+      "timeout": 30
+    },
+    {
+      "argv": [
+        "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+        "--crate-name",
+        "libsched_yield",
+        "--crate-type",
+        "lib",
+        "--edition=2021",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "debuginfo=1",
+        "-C",
+        "relocation-model=pic",
+        "-C",
+        "force-unwind-tables=no",
+        "--error-format=json",
+        "--emit=obj=/output/baseline.o",
+        "/input/baseline.callback.rs"
+      ],
+      "expected_E0308_primary_lines": [
+        75,
+        76
+      ],
+      "expected_exit": 1,
+      "label": "whole-baseline-callback-types",
+      "object": "/output/baseline.o",
+      "timeout": 30
+    },
+    {
+      "argv": [
+        "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+        "--crate-name",
+        "libsched_yield",
+        "--crate-type",
+        "lib",
+        "--edition=2021",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "debuginfo=1",
+        "-C",
+        "relocation-model=pic",
+        "-C",
+        "force-unwind-tables=no",
+        "--error-format=json",
+        "--emit=obj=/output/candidate.o",
+        "/input/candidate.callback.rs"
+      ],
+      "expected_E0308_primary_lines": [],
+      "expected_exit": 0,
+      "label": "whole-candidate-callback-types",
+      "object": "/output/candidate.o",
+      "timeout": 30
+    }
+  ],
+  "create_argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/docker",
+    "--host=unix:///var/run/docker.sock",
+    "create",
+    "--name",
+    "mck-m15-sched-callback-type-20261111-1",
+    "--label",
+    "mckernel.preparation-owner=m15-sched-callback-type-1",
+    "--init",
+    "--pull=never",
+    "--network=none",
+    "--ipc=private",
+    "--cpus=1",
+    "--cpuset-cpus=7",
+    "--memory=1g",
+    "--memory-swap=1g",
+    "--pids-limit=64",
+    "--user",
+    "1000:1000",
+    "--cap-drop=ALL",
+    "--security-opt=no-new-privileges",
+    "--read-only",
+    "--tmpfs",
+    "/tmp:rw,nodev,nosuid,noexec,size=32m,mode=1777",
+    "--ulimit",
+    "core=0:0",
+    "--ulimit",
+    "fsize=67108864:67108864",
+    "--ulimit",
+    "nofile=128:128",
+    "--ulimit",
+    "cpu=90:90",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-tests-sourceacq-max-1/pthread_callback_header.c,dst=/input/pthread_callback_header.c,readonly",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-tests-sourceacq-max-1/baseline.callback.rs,dst=/input/baseline.callback.rs,readonly",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-tests-sourceacq-max-1/candidate.callback.rs,dst=/input/candidate.callback.rs,readonly",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-tests-sourceacq-max-1/run_compile_only.py,dst=/input/run_compile_only.py,readonly",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/owned_process.py,dst=/input/owned_process.py,readonly",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-tests-sourceacq-max-1/INPUTS.json,dst=/input/INPUTS.json,readonly",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu,dst=/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu,readonly",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-tests-sourceacq-max-1/output-1,dst=/output",
+    "--workdir",
+    "/output",
+    "--entrypoint",
+    "/usr/bin/env",
+    "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+    "-i",
+    "PATH=/usr/bin:/bin",
+    "LANG=C",
+    "LC_ALL=C",
+    "TZ=UTC",
+    "PYTHONDONTWRITEBYTECODE=1",
+    "/usr/bin/bash",
+    "--noprofile",
+    "--norc",
+    "-e",
+    "-c",
+    "ulimit -v 1048576; exec \"$@\"",
+    "sched-callback-compile-only-as-limit",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/input/run_compile_only.py"
+  ],
+  "exact_owned_name": "mck-m15-sched-callback-type-20261111-1",
+  "exact_owner_label": "mckernel.preparation-owner=m15-sched-callback-type-1",
+  "expected_authoritative_status": "PASS_REAL_C11_HEADER_AND_WHOLE_RUST_CALLBACK_TYPE_CHECKS_ONLY",
+  "expected_compiler_statuses": [
+    0,
+    1,
+    0
+  ],
+  "expected_returncode": 0,
+  "forbidden": [
+    "No threading/pthread/dlsym/syscall/clone/sched_yield/library-interposition/main/runtime/loader/native/API invocation, DSO link/install/load, baseline UB execution or old passing case/ABI/library/CLI replay.",
+    "No source/canonical/default/C-retirement/milestone credit, fake provider/body/attributes/warning suppression or broad test framework/SDK copy."
+  ],
+  "fresh_output": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-tests-sourceacq-max-1/output-1",
+  "image": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+  "inputs": {
+    "bytes": 8206,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-tests-sourceacq-max-1/INPUTS.json",
+    "sha256": "08dfd2a679dd49e5158742686c0f48c7eef47adfdefd9eadb5062db614d70fca"
+  },
+  "mounts": [
+    {
+      "destination": "/input/pthread_callback_header.c",
+      "read_only": true,
+      "source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-tests-sourceacq-max-1/pthread_callback_header.c"
+    },
+    {
+      "destination": "/input/baseline.callback.rs",
+      "read_only": true,
+      "source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-tests-sourceacq-max-1/baseline.callback.rs"
+    },
+    {
+      "destination": "/input/candidate.callback.rs",
+      "read_only": true,
+      "source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-tests-sourceacq-max-1/candidate.callback.rs"
+    },
+    {
+      "destination": "/input/run_compile_only.py",
+      "read_only": true,
+      "source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-tests-sourceacq-max-1/run_compile_only.py"
+    },
+    {
+      "destination": "/input/owned_process.py",
+      "read_only": true,
+      "source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/owned_process.py"
+    },
+    {
+      "destination": "/input/INPUTS.json",
+      "read_only": true,
+      "source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-tests-sourceacq-max-1/INPUTS.json"
+    },
+    {
+      "destination": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu",
+      "read_only": true,
+      "source": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu"
+    },
+    {
+      "destination": "/output",
+      "read_only": false,
+      "source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-tests-sourceacq-max-1/output-1"
+    }
+  ],
+  "no_execution_by_preparer": true,
+  "original_check": "Original I01/I03 selected libsched_yield pthread_create callback ABI: actual C prototype and complete Rust export/cached function-pointer type must match. This focused compile-only regression does not accept runtime/interposition or retire C.",
+  "owner": "Root sole executor/compositor; source_acquisition_review_max test files only; sdk_binding_source_max actual production source only",
+  "pass_conditions": [
+    "C11/Wall/Wextra/Werror/syntax-only complete C baseline prefix plus genuinepthread.h witness exits0 with empty stdout/stderr; dependency record actually contains/usr/include/pthread.h and exact three actual header byte identities retained. No fabricated header/declaration or callback is invoked.",
+    "Whole1569B baseline + identical test-only suffix fails exactly two E0308 at the export and PthreadCreateFn const check primary spans; no object and no other compiler error/source/feature/tool/limit failure may count.",
+    "Whole1793B candidate + same suffix compiles0 with all actual body/callers/productionPIC flags selected into a new nonemptyELF64REL object. No cast/waiver/stub/reduced-body test can force agreement. Candidate warnings are preserved; error0 is required.",
+    "QualifiedOwner afe740 unchanged. After each one compiler, require exactly1 new exactlabel/positivePIDbirth/expectedstatus/direct+wholewait/streams and no error/timeout/group signal/adopted reaps/kills/residual/UNKNOWN before launching next compiler. Final exact3records/statuses0,1,0.",
+    "The correction types a nullable foreign callback and preserves its address conversion only at the actual special clone argument boundary; this check proves no new runtime valid-call/NULL/corruption/concurrency/lifetime claim."
+  ],
+  "prepared_at_UTC": "2026-11-11T00:29:02.006867+00:00",
+  "profile": {
+    "CPU": [
+      7
+    ],
+    "CPU_seconds": 90,
+    "FSIZE_bytes": 67108864,
+    "RLIMIT_AS_bytes": 1073741824,
+    "fresh_MemAvailable_min_bytes": 27917287424,
+    "host_disk_floor_bytes": 17179869184,
+    "jobs": 1,
+    "memory_bytes": 1073741824,
+    "memory_swap_bytes": 1073741824,
+    "output_capture_headroom_bytes": 134217728,
+    "per_compiler_timeout_seconds": 30,
+    "pids": 64,
+    "scope": "One strictly serial actual46d compile batch using originalGCC14/header + real1.95/sysroot/driver/LLVM ROtree. No separate HOST Rust loader lane, no per-child multiplied memory grant. Root measures current alloverhead/liveowners; existing two dead HOST charges remain retired only per540/a41 and no native/Scratch/other hold changes.",
+    "scratch_disk_floor_bytes": 12884901888,
+    "shared_HOST_max_jobs": 3,
+    "shared_HOST_total_all_overhead_bytes": 4294967296,
+    "tmpfs_bytes": 33554432,
+    "wall_seconds": 120
+  },
+  "schema": "mckernel.sched-callback-real-header-whole-source-compile-request.v1",
+  "source_contract": {
+    "bytes": 7264,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-correction-1/CONTRACT.json",
+    "sha256": "714ff8eab22a147c8eb7a090621028ac04d09f27ebefc39f3f9f86ab945acbd6"
+  },
+  "source_patch": {
+    "bytes": 1155,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-correction-1/PTHREAD-CALLBACK-TYPE.patch",
+    "sha256": "0a2fc03861cbf373f44562aaac76d1bc7571d878bf51bbba8d577ddc93d69ccc"
+  },
+  "source_ready": {
+    "bytes": 1269,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-correction-1/SOURCE-READY.json",
+    "sha256": "85e389878908000696b71ab6a13b301219c51c40f67f1367cde06b6c46286546"
+  },
+  "status": "FROZEN_NOT_EXECUTED_REQUIRES_INDEPENDENT_SOURCE_TEST_PROFILE_GO_AND_ROOT_FRESH_ADMISSION"
+}

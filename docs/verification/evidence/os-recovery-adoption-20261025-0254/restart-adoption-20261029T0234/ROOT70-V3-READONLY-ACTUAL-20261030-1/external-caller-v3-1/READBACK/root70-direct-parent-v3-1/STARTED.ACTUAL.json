@@ -1,0 +1,63 @@
+{
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=30:30",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "-c",
+    "import os,sys; fd=int(sys.argv[1]); b=os.read(fd,1); os.close(fd); b==b\"G\" or sys.exit(71); os.execv(sys.executable,[sys.executable,\"-I\",\"-B\",sys.argv[2]])",
+    "197",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-root70-readonly-admission-source-1/read_root70_identity.py"
+  ],
+  "caller": {
+    "birth": 113814045,
+    "pgrp": 2766316,
+    "pid": 2766316,
+    "ppid": 2766309,
+    "sid": 2766316
+  },
+  "child": {
+    "birth": 113814057,
+    "pgrp": 2766321,
+    "pid": 2766321,
+    "ppid": 2766320,
+    "sid": 2766321
+  },
+  "parent": {
+    "birth": 113814053,
+    "pgrp": 2766316,
+    "pid": 2766320,
+    "ppid": 2766319,
+    "sid": 2766316
+  },
+  "release": {
+    "bytes": 971,
+    "ctime_ns": 1793340695750548388,
+    "device": 66306,
+    "gid": 0,
+    "inode": 1217257,
+    "mode": 33152,
+    "mtime_ns": 1793340695750548388,
+    "nlink": 1,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-root70-readonly-admission-source-1/ROOT-OBSERVER-RELEASE-V3.ACTUAL.json",
+    "sha256": "3b9ce21f18716fc96556d982670dfce1c15edb4df2334266e791e239e51a27b5",
+    "uid": 0
+  },
+  "started_utc": 1793340695.8809485,
+  "watchdog": {
+    "birth": 113814053,
+    "pgrp": 2766316,
+    "pid": 2766319,
+    "ppid": 2766316,
+    "sid": 2766316
+  }
+}

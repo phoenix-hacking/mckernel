@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "thread.errorcheck-mutex",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/thread.errorcheck-mutex"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["first=0 relock=35 unlock=0 relock_after=0 unlock_after=0 deadlock=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["An owner relock returns EDEADLK", "One unlock releases ownership and a subsequent lock/unlock succeeds", "The pthread return value is checked directly rather than errno"],
+  "unresolved_expectations": ["Freeze EDEADLK numeric ABI and error-checking mutex implementation details before execution."],
+  "max_question_for_reviewer": "Confirm EDEADLK is the direct owner-relock result and one unlock fully releases the error-checking mutex."
+}

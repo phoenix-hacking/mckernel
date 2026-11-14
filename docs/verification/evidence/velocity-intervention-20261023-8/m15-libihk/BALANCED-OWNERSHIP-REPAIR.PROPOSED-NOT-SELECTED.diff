@@ -1,0 +1,30 @@
+--- unqualified-C-parity-lifetimes
++++ PROPOSED-leak-repair-requires-own-focused-proof
+@@ -177,10 +177,14 @@
+         }
+         if missing > excess { return -12; }
+         // Preserve the original C pointer replacement/lifetime; see SOURCE-DEBT note.
+-        req.sizes = unsafe { calloc(1024, core::mem::size_of::<usize>()).cast() };
+-        if req.sizes.is_null() { return -12; }
+-        req.numa_ids = unsafe { calloc(1024, core::mem::size_of::<c_int>()).cast() };
+-        if req.numa_ids.is_null() { return -12; }
++        let new_sizes: *mut usize = unsafe { calloc(1024, core::mem::size_of::<usize>()).cast() };
++        if new_sizes.is_null() { return -12; }
++        unsafe { free(req.sizes.cast()); }
++        req.sizes = new_sizes;
++        let new_numa_ids: *mut c_int = unsafe { calloc(1024, core::mem::size_of::<c_int>()).cast() };
++        if new_numa_ids.is_null() { return -12; }
++        unsafe { free(req.numa_ids.cast()); }
++        req.numa_ids = new_numa_ids;
+         let compensation = ((missing / compensate_nodes).wrapping_add(ALIGN - 1) / ALIGN).wrapping_mul(ALIGN);
+         let mut release_nodes = 0usize; let mut missing2 = 0usize;
+         // C accumulates total_excess2 only for diagnostics; DEBUG is off in selected profile.
+@@ -223,7 +227,7 @@
+     unsafe { free(req.sizes.cast()); free(req.numa_ids.cast()); }
+     // Original code reads balanced_enable AFTER reset, so these frees are normally skipped.
+     // Keep that behavior visible as unqualified source debt; do not claim leak-free acceptance.
+-    if unsafe { core::ptr::addr_of!(reserve_mem_conf.balanced_enable).read() } != 0 {
++    if config.balanced_enable != 0 {
+         unsafe { free(chunks_reserved.cast()); free(reserved.cast()); }
+     }
+     result

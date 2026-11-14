@@ -1,0 +1,525 @@
+diff --git a/scripts/tests/test_os_goal_credit_timeout.py b/scripts/tests/test_os_goal_credit_timeout.py
+index 37cb47431..c30167c1b 100644
+--- a/scripts/tests/test_os_goal_credit_timeout.py
++++ b/scripts/tests/test_os_goal_credit_timeout.py
+@@ -1,11 +1,14 @@
+ """Functional OS launcher accounting only; no inference or production state access."""
+ import importlib.util
++import hashlib
+ import json
++import os
+ from pathlib import Path
+ import sys
+ import tempfile
+ import unittest
+ from unittest.mock import Mock, patch
++from test_os_goal_transport import usage_error
+ 
+ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+ SOURCE = (Path(__file__).resolve().parents[1] / 'run_os_goal.py')
+@@ -38,7 +41,7 @@ class CreditTimeout(unittest.TestCase):
+     def refresh(self, now=110, error=None):
+         self.c.rpc.call.side_effect = error or launcher.RecoverableFailure(
+             'App-server request timed out: account/rateLimits/read')
+-        with patch.object(launcher.time, 'monotonic', return_value=now):
++        with patch.object(launcher.time, 'monotonic', return_value=now), patch.object(launcher.time, 'sleep'):
+             self.c.refresh_credit_budget()
+ 
+     def test_notification_during_rpc_timeout_preserves_guard_and_spending(self):
+@@ -123,6 +126,74 @@ class CreditTimeout(unittest.TestCase):
+         self.refresh(now=115.001)
+         self.assertEqual(self.c.stop_reason, 'credit_budget_unknown')
+ 
++    def test_502_retries_only_read_then_validates_persistent_guard(self):
++        self.c.record_rate_limits(limits())
++        self.c.rpc.call.side_effect = [RuntimeError(usage_error()), {'rateLimits': limits('950')}]
++        with patch.object(launcher.time, 'sleep') as sleep:
++            self.c.refresh_credit_budget()
++        sleep.assert_called_once_with(1)
++        self.assertEqual(self.c.rpc.call.call_count, 2)
++        self.assertIsNone(self.c.stop_reason)
++        saved = json.loads(self.c.credit_guard.path.read_text())
++        self.assertEqual((saved['spent'], saved['remaining'], saved['id']), ('50', '50', 'a' * 32))
++        for call in self.c.rpc.call.call_args_list:
++            self.assertEqual(call.args, ('account/rateLimits/read', {}))
++
++    def test_gateway_failure_fresh_notification_and_stale_data_paths(self):
++        for error in [RuntimeError(usage_error(500)), RuntimeError(usage_error(502)),
++                      RuntimeError(usage_error(503)), RuntimeError(usage_error(504)),
++                      BrokenPipeError('peer closed'), ConnectionResetError('peer reset')]:
++            with self.subTest(error=error):
++                self.c.stop_reason, self.c.stop_now = None, False
++                self.notification()
++                self.refresh(error=error)
++                self.assertIsNone(self.c.stop_reason)
++        self.c.last_credit_notification = (self.c.rpc, 90)
++        self.refresh(error=RuntimeError(usage_error()))
++        self.assertEqual(self.c.stop_reason, 'credit_budget_unknown')
++
++    def test_true_guard_write_failure_during_rpc_is_not_normalized_or_overwritten(self):
++        def call(*args, **kwargs):
++            with patch.object(self.c.credit_guard, 'observe', side_effect=BrokenPipeError('guard write failed')):
++                self.notification()
++            raise RuntimeError(usage_error())
++        self.c.rpc.call.side_effect = call
++        self.c.refresh_credit_budget()
++        self.assertEqual(self.c.state['credit_budget_error'], 'guard write failed')
++        self.assertNotIn('last_usage_read_notification_fallback', self.c.state)
++        self.assertNotIn('last_usage_transport_error', self.c.state)
++
++    def test_gateway_owns_pause_and_startup_receipts_with_same_legacy_keys(self):
++        before = {'threadId': 'saved', 'status': 'active', 'updatedAt': 1, 'objective': launcher.OBJECTIVE}
++        after = dict(before, status='paused', updatedAt=2)
++        self.c.state.update(thread_id='saved', worker_pid=os.getpid(), worker_start='123',
++                            credit_budget_error=usage_error())
++        self.c.controlled, self.c.stopping, self.c.stop_now = True, True, True
++        self.c.stop_reason = 'credit_budget_unknown'
++        self.c.rpc.call.side_effect = [{'goal': before}, {'goal': after}]
++        self.c.pause()
++        receipt = self.c.state['credit_timeout_shutdown_pause']
++        self.assertEqual(receipt['credit_budget_error'], usage_error())
++        self.assertEqual(receipt['goal_after'], after)
++        self.c.controlled, self.c.stopping, self.c.stop_now = False, False, False
++        self.c.stop_reason = None
++        self.c.args.credit_timeout_goal_sha256 = receipt['goal_after_sha256']
++        self.c.state.update(phase='starting', auth_mode='chatgpt')
++        self.refresh(error=RuntimeError(usage_error()))
++        self.assertTrue(self.c.state['credit_timeout_startup']['before_inference'])
++        self.assertEqual(self.c.state['credit_timeout_startup']['expected_goal_sha256'], receipt['goal_after_sha256'])
++
++    def test_generic_recovery_usage_failure_emits_only_read_only_startup_marker(self):
++        self.c.args.recovery_require_active = True
++        self.c.state.update(thread_id='saved', worker_pid=os.getpid(), worker_start='123',
++                            phase='starting', auth_mode='chatgpt', goal={'status': 'active'})
++        self.refresh(error=RuntimeError(usage_error()))
++        marker = self.c.state['transport_startup']
++        self.assertTrue(marker['before_inference'])
++        self.assertTrue(marker['require_active'])
++        self.assertEqual((marker['class'], marker['method']), ('http_502', 'account/rateLimits/read'))
++        self.assertEqual(self.c.stop_reason, 'credit_budget_unknown')
++
+ 
+ if __name__ == '__main__':
+     unittest.main()
+diff --git a/scripts/tests/test_os_goal_launcher.py b/scripts/tests/test_os_goal_launcher.py
+index 420913d35..f86cf0086 100644
+--- a/scripts/tests/test_os_goal_launcher.py
++++ b/scripts/tests/test_os_goal_launcher.py
+@@ -1008,12 +1008,22 @@ class CampaignTests(unittest.TestCase):
+                     else:
+                         rpc.emit(event, {"threadId": "test-thread", "turn": {
+                             "id": "turn-1", "status": "failed", "error": error}})
+-                    rpc.status("blocked")
+                 self.saved(goal())
+                 rpc = FakeRPC(self.args, goal(), steps=[fail])
+                 state = self.run_campaign(rpc, 23)
+                 self.assertTrue(watcher.should_restart(23, state))
+ 
++    def test_service_transient_does_not_override_an_unattributed_blocked_goal(self):
++        def fail(rpc):
++            rpc.emit("error", {"threadId": "test-thread", "willRetry": False,
++                              "error": {"message": "temporary capacity limit",
++                                        "codexErrorInfo": "serverOverloaded"}})
++            rpc.status("blocked")
++        self.saved(goal())
++        rpc = FakeRPC(self.args, goal(), steps=[fail])
++        state = self.run_campaign(rpc, 23)
++        self.assertFalse(watcher.should_restart(23, state))
++
+     def test_active_resume_is_not_replaced_or_started_twice(self):
+         self.saved(goal())
+         rpc = FakeRPC(self.args, goal(), [lambda r: (r.completed(), r.status("blocked"))])
+@@ -1745,6 +1755,7 @@ from pathlib import Path
+ path=Path(__file__).resolve().parents[1]/'.git/os-autopilot/state.json'
+ state={'thread_id':'quiet-thread','worker_pid':os.getpid(),'phase':'running',
+        'agent_event_count':1,'goal':{'status':'active'}}
++state['worker_start']=Path('/proc/self/stat').read_text().rsplit(')',1)[1].split()[19]
+ signal.signal(signal.SIGTERM, signal.SIG_IGN)
+ signal.signal(signal.SIGUSR1, signal.SIG_IGN)
+ if '--recovered' in sys.argv:
+@@ -1782,6 +1793,7 @@ from pathlib import Path
+ path=Path(__file__).resolve().parents[1]/'.git/os-autopilot/state.json'
+ state={'thread_id':'busy-thread','worker_pid':os.getpid(),'phase':'running',
+        'agent_event_count':0,'goal':{'status':'active'}}
++state['worker_start']=Path('/proc/self/stat').read_text().rsplit(')',1)[1].split()[19]
+ deadline=time.monotonic()+1
+ while True:
+     state['agent_event_count']+=1
+@@ -1804,9 +1816,11 @@ while True:
+             self.assertNotIn("agent_progress_stalled", (directory / "watcher.jsonl").read_text())
+ 
+     def test_only_recoverable_failures_restart(self):
+-        self.assertTrue(watcher.should_restart(1, {"retryable": True}))
+-        self.assertTrue(watcher.should_restart(-9, {}))
+-        self.assertTrue(watcher.should_restart(24, {}))
++        self.assertFalse(watcher.should_restart(1, {"retryable": True}))
++        self.assertFalse(watcher.should_restart(-9, {}))
++        self.assertTrue(watcher.should_restart(-9, {
++            "thread_id": "saved-thread", "goal": {"status": "active"}}))
++        self.assertFalse(watcher.should_restart(24, {}))
+         self.assertFalse(watcher.should_restart(1, {"retryable": False}))
+         for status in ("complete", "usageLimited", "budgetLimited"):
+             self.assertFalse(watcher.should_restart(-9, {"goal": {"status": status}}, watchdog=True))
+@@ -1814,12 +1828,12 @@ while True:
+             self.assertFalse(watcher.should_restart(code, {}))
+         self.assertFalse(watcher.should_restart(-9, {}, stopped=True))
+ 
+-    def test_only_classified_transients_restart_and_user_stops_do_not(self):
++    def test_unowned_transient_hints_and_user_stops_do_not_restart(self):
+         for code, state in ((23, {"stop_reason": "turn_failed", "last_error": {"codexErrorInfo": "serverOverloaded"}}),
+                             (23, {"stop_reason": "server_error", "last_error": {"codexErrorInfo": "rateLimitExceeded"}}),
+                             (23, {"stop_reason": "rate_limit"})):
+             with self.subTest(code=code, state=state):
+-                self.assertTrue(watcher.should_restart(code, state))
++                self.assertFalse(watcher.should_restart(code, state))
+                 self.assertFalse(watcher.should_restart(code, state, stopped=True))
+         for reason in ("work_window", "signal_2", "signal_15", "signal_1"):
+             state = {"goal": {"status": "paused"}, "stop_reason": reason}
+@@ -1841,12 +1855,15 @@ path=Path(__file__).resolve().parents[1]/'.git/os-autopilot/state.json'
+ state=json.loads(path.read_text()) if path.exists() else {'thread_id':'retained-thread','attempts':0,'windows':[]}
+ state['attempts']+=1
+ state['windows'].append(float(sys.argv[sys.argv.index('--hours')+1]))
+-scenarios=[(23,'blocked','turn_failed'),(23,'active','server_error'),(23,'paused','rate_limit'),
+-           (1,'paused','launcher_error'),(24,'active','active_goal_did_not_continue'),
+-           (21,'blocked','quota_exhausted')]
++scenarios=[(1,'active','launcher_error')]*5+[(21,'blocked','quota_exhausted')]
+ code,status,reason=scenarios[state['attempts']-1]
+ state.update(worker_pid=os.getpid(),retryable=True,goal={'status':status},stop_reason=reason)
+-state['last_error']={'codexErrorInfo':'serverOverloaded'}
++state['worker_start']=Path('/proc/self/stat').read_text().rsplit(')',1)[1].split()[19]
++state['last_error']='Codex app server disconnected; see retained stderr.'
++state['transport_failure']={'schema_version':1,'worker_pid':os.getpid(),
++ 'worker_start':state['worker_start'],'thread_id':state['thread_id'],
++ 'class':'disconnected','error':state['last_error'],'error_type':'RecoverableFailure',
++ 'method':None,'mutating':False}
+ path.write_text(json.dumps(state))
+ sys.exit(code)
+ '''
+@@ -1873,8 +1890,14 @@ path=Path(__file__).resolve().parents[1]/'.git/os-autopilot/state.json'
+ state=json.loads(path.read_text()) if path.exists() else {'thread_id':'retained-thread','windows':[]}
+ state['windows'].append(float(sys.argv[sys.argv.index('--hours')+1]))
+ state['worker_pid']=os.getpid()
++state['worker_start']=Path('/proc/self/stat').read_text().rsplit(')',1)[1].split()[19]
+ state['retryable']=True
+ state['goal']={'status':'complete' if '--recovered' in sys.argv else 'active'}
++state['stop_reason']='launcher_error'
++state['transport_failure']={'schema_version':1,'worker_pid':os.getpid(),
++ 'worker_start':state['worker_start'],'thread_id':state['thread_id'],
++ 'class':'disconnected','error':'Codex app server disconnected; see retained stderr.',
++ 'error_type':'RecoverableFailure','method':None,'mutating':False}
+ path.write_text(json.dumps(state))
+ sys.exit(0 if '--recovered' in sys.argv else 1)
+ '''
+@@ -1894,13 +1917,13 @@ sys.exit(0 if '--recovered' in sys.argv else 1)
+             self.assertEqual(json.loads((directory / "watcher.json").read_text())["restarts"], 1)
+ 
+     def test_server_retirement_does_not_signal_reused_or_unverified_pid(self):
+-        state = {"server_pid": 123, "server_start": "original", "worker_pid": 456}
+-        with patch.object(watcher, "process_start", return_value="replacement"), patch.object(watcher.os, "kill") as kill:
++        state = {"server_pid": 123, "server_start": "700", "worker_pid": 456}
++        with patch.object(watcher, "process_start", return_value="701"), patch.object(watcher, "pidfd_open") as pidfd:
+             self.assertTrue(watcher.retire_server(state, 456))
+-            kill.assert_not_called()
+-        with patch.object(watcher, "process_start", return_value="original"), patch.object(watcher.os, "kill") as kill:
++            pidfd.assert_not_called()
++        with patch.object(watcher, "process_start", return_value="700"), patch.object(watcher, "pidfd_open") as pidfd:
+             self.assertFalse(watcher.retire_server(state, 999))
+-            kill.assert_not_called()
++            pidfd.assert_not_called()
+ 
+     def test_stalled_worker_recovers_without_losing_session(self):
+         source = r'''
+@@ -1909,6 +1932,7 @@ from pathlib import Path
+ path=Path(__file__).resolve().parents[1]/'.git/os-autopilot/state.json'
+ state={'thread_id':'stalled-thread','worker_pid':os.getpid(),
+        'goal':{'status':'complete' if '--recovered' in sys.argv else 'active'}}
++state['worker_start']=Path('/proc/self/stat').read_text().rsplit(')',1)[1].split()[19]
+ path.write_text(json.dumps(state))
+ if '--recovered' not in sys.argv: time.sleep(10)
+ '''
+diff --git a/scripts/tests/test_os_goal_recovery.py b/scripts/tests/test_os_goal_recovery.py
+index c95d8f788..e574ca0f2 100644
+--- a/scripts/tests/test_os_goal_recovery.py
++++ b/scripts/tests/test_os_goal_recovery.py
+@@ -8,6 +8,7 @@ import json
+ import os
+ from pathlib import Path
+ import signal
++import sys
+ import tempfile
+ import time
+ from types import SimpleNamespace
+@@ -15,6 +16,8 @@ import unittest
+ from unittest.mock import Mock, patch
+ 
+ 
++sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
++
+ SOURCE = Path(__file__).resolve().parents[1] / "watch_os_goal.py"
+ SPEC = importlib.util.spec_from_file_location("os_goal_recovery_watch", SOURCE)
+ watcher = importlib.util.module_from_spec(SPEC)
+@@ -29,12 +32,12 @@ class RecoveryTests(unittest.TestCase):
+             for code in (10, 20, 23, 24, 1, -9):
+                 for watchdog in (False, True):
+                     with self.subTest(reason=reason, code=code, watchdog=watchdog):
+-                        state = {"goal": {"status": "paused"}, "stop_reason": reason,
++                        state = {"thread_id": "saved-thread", "goal": {"status": "paused"}, "stop_reason": reason,
+                                  "retryable": True}
+                         self.assertFalse(watcher.should_restart(code, state, watchdog=watchdog))
+ 
+     def test_terminal_goals_and_supervisor_stop_override_transient_errors(self):
+-        state = {"stop_reason": "server_error",
++        state = {"thread_id": "saved-thread", "stop_reason": "server_error",
+                  "last_error": {"codexErrorInfo": "serverOverloaded"}}
+         for status in ("complete", "usageLimited", "budgetLimited"):
+             with self.subTest(status=status):
+@@ -50,7 +53,7 @@ class RecoveryTests(unittest.TestCase):
+                 for watchdog in (False, True):
+                     with self.subTest(status=status, code=code, watchdog=watchdog):
+                         self.assertFalse(watcher.should_restart(
+-                            code, {"goal": {"status": status}}, watchdog=watchdog))
++                            code, {"thread_id": "saved-thread", "goal": {"status": status}}, watchdog=watchdog))
+ 
+     def test_generic_failures_need_structured_transient_evidence(self):
+         for reason in ("server_error", "turn_failed"):
+@@ -63,33 +66,39 @@ class RecoveryTests(unittest.TestCase):
+                             "stop_reason": reason, "last_error": error, "retryable": True,
+                             "goal": {"status": "blocked"}}, watchdog=watchdog))
+ 
+-    def test_recognized_transients_and_transport_continuation_still_recover(self):
++    def test_recognized_transients_require_current_typed_active_or_owned_paused_context(self):
+         for status in ("active", "paused", "blocked"):
+-            for reason in ("server_error", "turn_failed"):
++            for reason in ("server_error", "turn_failed", "rate_limit"):
+                 for info in ("serverOverloaded", "rateLimitExceeded"):
++                    error = {"codexErrorInfo": info, "message": "Temporary backend unavailable"}
++                    state = {"thread_id": "saved-thread", "worker_pid": 100, "worker_start": "1100",
++                             "goal": {"status": status}, "stop_reason": reason, "last_error": error,
++                             "transport_failure": {"schema_version": 1, "worker_pid": 100,
++                                 "worker_start": "1100", "thread_id": "saved-thread", "class": "service_transient",
++                                 "error_type": "ServiceTransient", "method": None, "mutating": False,
++                                 "error": json.dumps(error, sort_keys=True, separators=(",", ":"))}}
+                     with self.subTest(status=status, reason=reason, info=info):
+-                        self.assertTrue(watcher.should_restart(23, {
+-                            "goal": {"status": status}, "stop_reason": reason,
+-                            "last_error": {"codexErrorInfo": info}}))
+-            state = {"goal": {"status": status}}
+-            self.assertTrue(watcher.should_restart(23, dict(state, stop_reason="rate_limit")))
+-            self.assertTrue(watcher.should_restart(24, dict(state, stop_reason="active_goal_did_not_continue")))
+-            self.assertTrue(watcher.should_restart(1, dict(state, stop_reason="launcher_error", retryable=True)))
+-        self.assertTrue(watcher.should_restart(24, {}))
+-        self.assertFalse(watcher.should_restart(1, {"retryable": False}))
++                        self.assertEqual(watcher.should_restart(23, state), status == "active")
++                    historical = dict(state); historical.pop("transport_failure")
++                    self.assertFalse(watcher.should_restart(23, historical))
++            state = {"thread_id": "saved-thread", "goal": {"status": status}}
++            self.assertFalse(watcher.should_restart(24, dict(state, stop_reason="active_goal_did_not_continue")))
++            self.assertFalse(watcher.should_restart(1, dict(state, stop_reason="launcher_error", retryable=True)))
++        self.assertFalse(watcher.should_restart(24, {}))
++        self.assertFalse(watcher.should_restart(1, {"thread_id": "saved-thread", "goal": {"status": "active"}, "retryable": False}))
+ 
+     def test_direct_stop_signals_are_not_crashes(self):
+         for signum in (signal.SIGINT, signal.SIGTERM, signal.SIGHUP):
+             with self.subTest(signal=signum):
+-                self.assertFalse(watcher.should_restart(-signum, {"goal": {"status": "active"}}))
+-        self.assertTrue(watcher.should_restart(-signal.SIGTERM, {"goal": {"status": "active"}}, watchdog=True))
+-        self.assertTrue(watcher.should_restart(-signal.SIGKILL, {"goal": {"status": "active"}}))
++                self.assertFalse(watcher.should_restart(-signum, {"thread_id": "saved-thread", "goal": {"status": "active"}}))
++        self.assertTrue(watcher.should_restart(-signal.SIGTERM, {"thread_id": "saved-thread", "goal": {"status": "active"}}, watchdog=True))
++        self.assertTrue(watcher.should_restart(-signal.SIGKILL, {"thread_id": "saved-thread", "goal": {"status": "active"}}))
+ 
+     def test_usage_auth_and_policy_stops_survive_crash_and_watchdog(self):
+-        states = [{"stop_reason": reason} for reason in (
++        states = [{"thread_id": "saved-thread", "stop_reason": reason} for reason in (
+             "included_usage_guard", "included_usage_unknown", "credit_balance_decreased",
+             "credit_balance_unknown", "chatgpt_auth_required", "chatgpt_auth_changed")]
+-        states.extend({"stop_reason": "launcher_error", "last_error": {"codexErrorInfo": info}}
++        states.extend({"thread_id": "saved-thread", "stop_reason": "launcher_error", "last_error": {"codexErrorInfo": info}}
+                       for info in ("cyberPolicy", "unauthorized", "quotaExceeded",
+                                    "insufficientCredits", {"cyberPolicy": {}}))
+         for state in states:
+@@ -100,8 +109,8 @@ class RecoveryTests(unittest.TestCase):
+ 
+     def test_watchdog_checkpoint_requires_positive_supervisor_classification(self):
+         for status in ("active", "paused", "blocked"):
+-            state = {"stop_reason": "watchdog_recovery", "goal": {"status": status}}
+-            self.assertTrue(watcher.should_restart(10, state, watchdog=True))
++            state = {"thread_id": "saved-thread", "stop_reason": "watchdog_recovery", "goal": {"status": status}}
++            self.assertEqual(watcher.should_restart(10, state, watchdog=True), status in {"active", "paused"})
+             self.assertFalse(watcher.should_restart(10, state))
+             self.assertFalse(watcher.should_restart(10, state, watchdog=True, stopped=True))
+             self.assertFalse(watcher.should_restart(21, state, watchdog=True))
+@@ -118,6 +127,10 @@ class RecoveryTests(unittest.TestCase):
+             child.poll.return_value = child.returncode
+         if watchdog:
+             children[0].poll.side_effect = [None, None, children[0].returncode]
++        states = [dict(row, worker_start=row.get("worker_start", str(1000 + row.get("worker_pid", 0))))
++                  for row in states]
++        if watchdog and states and states[0].get("worker_pid") == children[0].pid:
++            states[0]["worker_start"] = "12345"
+         lease, writes = Mock(), []
+         with tempfile.TemporaryDirectory(prefix="os-goal-recovery-test-") as temporary:
+             directory = Path(temporary)
+@@ -132,6 +145,8 @@ class RecoveryTests(unittest.TestCase):
+             def process_start(pid):
+                 if watchdog and pid == children[0].pid:
+                     return "12345"
++                if any(child.pid == pid for child in children):
++                    return str(1000 + pid)
+                 return original_process_start(pid)
+ 
+             def snapshot(path):
+@@ -172,8 +187,12 @@ class RecoveryTests(unittest.TestCase):
+ 
+     def test_code24_resumes_saved_session_after_server_retirement(self):
+         states = [{"thread_id": "saved-thread", "worker_pid": 100,
+-                   "goal": {"status": "paused"}, "cleanup_verified": False,
+-                   "stop_reason": "active_goal_did_not_continue"},
++                   "goal": {"status": "active"}, "cleanup_verified": False,
++                   "stop_reason": "active_goal_did_not_continue", "retryable": True,
++                   "transport_failure": {"schema_version": 1, "worker_pid": 100,
++                       "worker_start": "1100", "thread_id": "saved-thread", "class": "continuation_stall",
++                       "error": "active_goal_did_not_continue", "error_type": "ContinuationStall",
++                       "method": None, "mutating": False}},
+                   {"thread_id": "saved-thread", "worker_pid": 101,
+                    "goal": {"status": "complete"}, "cleanup_verified": False}]
+         code, spawns, records, retired = self.supervise([24, 0], states)
+@@ -196,7 +215,7 @@ class RecoveryTests(unittest.TestCase):
+     def test_fresh_recovery_preserves_same_prepaid_credit_run(self):
+         states = [{"thread_id": "old-thread", "worker_pid": 100,
+                    "goal": {"status": "active"}},
+-                  {"thread_id": "new-thread", "worker_pid": 101,
++                  {"thread_id": "old-thread", "worker_pid": 101,
+                    "goal": {"status": "complete"}}]
+         ident = "a" * 32
+         argv = ["--fresh-on-recovery", "--credit-budget", "100", "--credit-run-id", ident]
+@@ -219,33 +238,22 @@ class RecoveryTests(unittest.TestCase):
+         self.assertNotIn("--fresh-recovery-proof", spawns[1].args[0])
+         self.assertIn("restarting_saved_session", [row["event"] for row in records])
+ 
+-    def test_fresh_recovery_receipt_binds_classified_retired_worker_snapshot(self):
++    def test_fresh_opt_in_cannot_archive_unreconciled_remote_cursor(self):
+         states = [{"thread_id": "old-thread", "worker_pid": 100,
+                    "phase": "running", "goal": {"status": "active"}},
+-                  {"thread_id": "new-thread", "worker_pid": 101,
++                  {"thread_id": "old-thread", "worker_pid": 101,
+                    "goal": {"status": "complete"}}]
+         code, spawns, records, retired = self.supervise(
+             [-9, 0], states, fresh=True, argv=["--fresh-session", "--fresh-on-recovery"])
+         self.assertEqual(code, 0)
+-        self.assertNotIn("--fresh-recovery-proof", spawns[0].args[0])
+         self.assertNotIn("--fresh-session", spawns[1].args[0])
+-        command = spawns[1].args[0]
+-        proof_path = Path(command[command.index("--fresh-recovery-proof") + 1])
+-        self.assertTrue(proof_path.name.startswith("fresh-recovery-"))
+-        proofs = [row for row in records if row.get("schema_version") == 1]
+-        self.assertEqual(len(proofs), 1)
+-        proof = proofs[0]
+-        self.assertEqual(proof["worker_pid"], 100)
+-        self.assertEqual(proof["thread_id"], "old-thread")
+-        self.assertEqual(proof["exit_code"], -9)
+-        self.assertTrue(proof["server_retired"])
+-        self.assertFalse(proof["stopped"])
+-        self.assertFalse(proof["watchdog"])
+-        self.assertEqual(proof["state_sha256"], hashlib.sha256(
+-            json.dumps(states[0]).encode()).hexdigest())
+-        self.assertIsNotNone(proof["watcher_start"])
++        self.assertNotIn("--fresh-on-recovery", spawns[1].args[0])
++        self.assertNotIn("--fresh-recovery-proof", spawns[1].args[0])
++        self.assertIn("--recovery-require-active", spawns[1].args[0])
+         self.assertEqual([call.args[1] for call in retired], [100, 101])
+-        self.assertIn("restarting_fresh_session", [row.get("event") for row in records])
++        self.assertIn("restarting_saved_session", [row.get("event") for row in records])
++        self.assertNotIn("restarting_fresh_session", [row.get("event") for row in records])
++        self.assertTrue(any(row.get("recovery_handoff") for row in records))
+ 
+     def test_fresh_opt_in_cannot_override_stop_or_unresolved_retirement(self):
+         cases = [("signal_15", True), ("included_usage_guard", True),
+@@ -260,25 +268,25 @@ class RecoveryTests(unittest.TestCase):
+                 self.assertEqual(len(spawns), 1)
+                 self.assertFalse(any(row.get("schema_version") == 1 for row in records))
+ 
+-    def test_watchdog_termination_can_authorize_fresh_recovery_after_retirement(self):
++    def test_watchdog_termination_reconnects_same_cursor_after_retirement(self):
+         states = [{"thread_id": "hung-thread", "worker_pid": 100,
+                    "phase": "running", "goal": {"status": "active"}},
+-                  {"thread_id": "new-thread", "worker_pid": 101,
++                  {"thread_id": "hung-thread", "worker_pid": 101,
+                    "goal": {"status": "complete"}}]
+         code, spawns, records, _ = self.supervise(
+             [-signal.SIGTERM, 0], states, fresh=True, watchdog=True)
+         self.assertEqual(code, 0)
+         self.assertEqual(len(spawns), 2)
+         self.assertIn("heartbeat_stalled", [row.get("event") for row in records])
+-        proof = next(row for row in records if row.get("server_retired") is True)
+-        self.assertTrue(proof["watchdog"])
+-        self.assertTrue(proof["server_retired"])
++        self.assertIn("--recovery-require-active", spawns[1].args[0])
++        self.assertNotIn("--fresh-recovery-proof", spawns[1].args[0])
++        self.assertTrue(any(row.get("server_retired") is True for row in records))
+ 
+     def test_responsive_watchdog_checkpoint_recovers_paused_goal(self):
+         states = [{"thread_id": "hung-thread", "worker_pid": 100,
+                    "phase": "stopped", "goal": {"status": "paused"},
+                    "stop_reason": "watchdog_recovery"},
+-                  {"thread_id": "new-thread", "worker_pid": 101,
++                  {"thread_id": "hung-thread", "worker_pid": 101,
+                    "goal": {"status": "complete"}}]
+         code, spawns, records, _ = self.supervise([10, 0], states, fresh=True, watchdog=True)
+         self.assertEqual(code, 0)
+@@ -286,21 +294,20 @@ class RecoveryTests(unittest.TestCase):
+         request = next(row for row in records if row.get("reason") == "heartbeat_stalled"
+                        and "watcher_start" in row)
+         self.assertEqual(request["worker_start"], "12345")
+-        proof = next(row for row in records if row.get("server_retired") is True)
+-        self.assertTrue(proof["watchdog"])
++        self.assertIn("--recovery-goal-sha256", spawns[1].args[0])
++        self.assertNotIn("--fresh-recovery-proof", spawns[1].args[0])
++        restart = next(row for row in records if row.get("event") == "restarting_saved_session")
++        self.assertEqual(restart["transport_recovery"]["origin_kind"], "authenticated_watchdog")
+ 
+-    def test_fresh_recovery_resumes_prepared_bootstrap_without_archiving(self):
++    def test_unknown_bootstrap_goal_is_held_without_new_thread(self):
+         for thread_id in (None, "bootstrapping-thread"):
+             states = [{"thread_id": thread_id, "worker_pid": 100,
+-                       "phase": "starting", "previous_session": {"thread_id": "prior-thread"}},
+-                      {"thread_id": "new-thread", "worker_pid": 101,
+-                       "goal": {"status": "complete"}}]
++                       "phase": "starting", "previous_session": {"thread_id": "prior-thread"}}]
+             with self.subTest(thread_id=thread_id):
+-                _, spawns, records, _ = self.supervise([-9, 0], states, fresh=True)
+-                self.assertEqual(len(spawns), 2)
+-                self.assertNotIn("--fresh-recovery-proof", spawns[1].args[0])
+-                self.assertFalse(any(row.get("server_retired") is True for row in records))
+-                self.assertIn("restarting_saved_session", [row.get("event") for row in records])
++                _, spawns, records, _ = self.supervise([-9], states, fresh=True)
++                self.assertEqual(len(spawns), 1)
++                self.assertNotIn("restarting_saved_session", [row.get("event") for row in records])
++                self.assertNotIn("restarting_fresh_session", [row.get("event") for row in records])
+ 
+     def test_restart_limit_prevents_fresh_recovery_receipt(self):
+         _, spawns, records, _ = self.supervise([-9], [{
+diff --git a/scripts/tests/test_os_goal_timeout_recovery.py b/scripts/tests/test_os_goal_timeout_recovery.py
+index 2521c6641..dc24a01a3 100644
+--- a/scripts/tests/test_os_goal_timeout_recovery.py
++++ b/scripts/tests/test_os_goal_timeout_recovery.py
+@@ -12,6 +12,8 @@ from types import SimpleNamespace
+ import unittest
+ from unittest.mock import Mock, patch
+ 
++sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
++
+ spec = importlib.util.spec_from_file_location('watch_candidate', (Path(__file__).resolve().parents[1] / 'watch_os_goal.py'))
+ watcher = importlib.util.module_from_spec(spec)
+ spec.loader.exec_module(watcher)
+@@ -57,8 +59,8 @@ class CreditWatcher(unittest.TestCase):
+             third = Mock(pid=103, returncode=0); third.poll.return_value = 0
+             args = SimpleNamespace(hours=.1, max_restarts=2, fresh_on_recovery=True,
+                                    restart_delay=0, heartbeat_seconds=10)
+-            terminal = state('complete', worker_pid=102, stop_reason=None)
+-            initial = state()
++            terminal = state('complete', worker_pid=102, worker_start='700', stop_reason=None)
++            initial = state(worker_start='700')
+             if owned:
+                 goal = {'status': 'paused', 'updatedAt': 2, 'objective': 'same-objective'}
+                 initial.update(goal=goal, worker_start='700')

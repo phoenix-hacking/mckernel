@@ -1,0 +1,85 @@
+{
+  "application_acceptance": false,
+  "changes": {
+    "smp_application.rs": [
+      "Remote::advance"
+    ],
+    "smp_service.rs": [
+      "Runtime::metadata",
+      "Runtime::zeroing",
+      "Runtime::pump",
+      "Runtime::pump_master",
+      "Runtime::pump_regular",
+      "Runtime::publish_remote",
+      "Runtime::publish_applications",
+      "Runtime::publish_syscalls",
+      "Runtime::publish_procfs"
+    ]
+  },
+  "compile_authorized": true,
+  "compiled_first_attempt_review": {
+    "path": "/home/holden/mckernel/docs/verification/stability-observer-stack-review-20260913-1.json",
+    "sha256": "72c0f63e759331688de49131099300d3396bb2268412537038dc2d2793655ad6",
+    "size": 431099
+  },
+  "compiled_stack_bound_verified": false,
+  "helper": {
+    "path": "/home/holden/mckernel/scripts/tests/prepare_stability_owner_phase.py",
+    "sha256": "cd58971d7a810728f9426dfa10d2b661c831ecfe1328e413554632764f2d1d0d",
+    "size": 9056
+  },
+  "independent_review_scope": "Read-only review of the ten added inline(never) attributes and their exact generator replacements; no independent compilation, guest or stack measurement.",
+  "independent_review_statement": "Exactly ten inline(never) attributes, existing replace_once/inverse proof, unchanged method bodies/order and noninlined Remote::advance. No concrete semantic defect found. This is a source-only stack-shape candidate; actual maximum live call-chain sum and formatting stack require compiled measurement.",
+  "independent_reviewer": "/root/completion_audit",
+  "limitations": [
+    "Removing inlining does not prove a smaller nested stack; fresh exact compiled frames are required.",
+    "Original compiled modules and source review remain preserved and distinct from this candidate.",
+    "No production source, method body, call order, lock scope, allocation, timer or fault behavior was changed by this lane."
+  ],
+  "original_helper": {
+    "path": "/tmp/stability-observer-stack-boundaries-20260913-1/prepare_stability_owner_phase.py.original",
+    "sha256": "08f122921f8c496e7b6a67d3175294f7e4d5edd924bf80422418e9a4aade3041",
+    "size": 7170
+  },
+  "production_gate_credit": false,
+  "record_kind": "stability-phase-stack-boundary-source-review",
+  "review_date": "2026-09-13",
+  "runtime_authorized": false,
+  "schema_version": 1,
+  "source_staging_check": {
+    "comparisons": [
+      {
+        "name": "smp_application.rs",
+        "new_attributes": 1,
+        "without_attributes_equals_previous_overlay": true
+      },
+      {
+        "name": "smp_application_syscall.rs",
+        "new_attributes": 0,
+        "without_attributes_equals_previous_overlay": true
+      },
+      {
+        "name": "smp_memory.rs",
+        "new_attributes": 0,
+        "without_attributes_equals_previous_overlay": true
+      },
+      {
+        "name": "smp_service.rs",
+        "new_attributes": 9,
+        "without_attributes_equals_previous_overlay": true
+      },
+      {
+        "name": "ihk_smp_x86_64.rs",
+        "new_attributes": 0,
+        "without_attributes_equals_previous_overlay": true
+      }
+    ],
+    "helper_sha256": "cd58971d7a810728f9426dfa10d2b661c831ecfe1328e413554632764f2d1d0d",
+    "new_attributes": 10,
+    "no_guest": true,
+    "no_native_compile": true,
+    "previous_record_sha256": "d494b75c1b6d2d4ae4232d8210405309138c6af4afa6d6ce2e242a6b669d2ef9",
+    "status": "PASS_SOURCE_STAGING_ONLY"
+  },
+  "status": "SOURCE_REVIEW_ACCEPTABLE_FOR_PARENT_ISOLATED_COMPILATION"
+}

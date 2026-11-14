@@ -1,0 +1,136 @@
+{
+  "schema": "proc-vm-index-saved-actual-functional-qualification.v1",
+  "at": "2026-11-12T10:47:01.625868+00:00",
+  "reviewer": "/root/proc_vm_index_fix; explicit gpt-6.1-sol/MAX",
+  "decision": "GO_SAVED_ACTUAL_PROC_VM_REAL_BODY_REGRESSION_ONLY_NO_RERUN_OR_ORIGINAL_ACCEPTANCE",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Three finite valid-inprocess-buffer unit observations only. No process_vm syscall, live other-process memory, invalid/malformed buffer, Docker, sudo, native or kernel operation.",
+  "excluded_rejected_request": {
+    "worker": "01a1c48d-4d96-7cc3-b733-73a97973152f",
+    "turn": "01a1ce01-20cf-7e03-9442-f6d521fb8b02",
+    "request": "signal/frame/xstate collector",
+    "replay": false,
+    "rephrase": false,
+    "reassign": false
+  },
+  "sameRoot": "01a18bc3-e072-7810-9426-75101b0856c0",
+  "invocation": "invocation20261112T094452Z-12a4bea0",
+  "request": {
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-proc-vm-index-1/fixture-operation-1/REQUEST.FROZEN.json",
+    "bytes": 9501,
+    "sha256": "d12adea18243b3c627e05dcc5e291bc1fad6bbdc4fb7738e88d1685569cfb869"
+  },
+  "independent_operation_review": {
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-functional-review-1/proc-vm-index-fixture/OPERATION-REVIEW.json",
+    "bytes": 7066,
+    "sha256": "3ea7e06a876b724f8e519d64ae6ff57ea60575e544a011f185f9f0454ad2d824"
+  },
+  "actual_result": {
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-proc-vm-index-1/fixture-operation-1/execution-1/RESULT.json",
+    "bytes": 5018,
+    "sha256": "0f762124800e31d57c4640603b5e4235f21771f91790edc87aebdc57c54f78a3"
+  },
+  "parent_capture": {
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-proc-vm-index-1/fixture-operation-1/root-capture-1/RESULT.json",
+    "bytes": 1496,
+    "sha256": "1c8984428bd4ddec9d78ffc800e42e9f05b35633024b03547bfc4150353e9f81"
+  },
+  "Root_tool_initial": {
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-proc-vm-index-1/fixture-operation-1/ROOT-ACTUAL-EXECUTION-1/ROOT-TOOL-INITIAL.json",
+    "bytes": 130,
+    "sha256": "227759a7276d9da1fdc4382f94e2fb0396244da18e60fd227e646c2e29e67074"
+  },
+  "Root_tool_final": {
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-proc-vm-index-1/fixture-operation-1/ROOT-ACTUAL-EXECUTION-1/ROOT-TOOL-FINAL.json",
+    "bytes": 257,
+    "sha256": "38c4171fec42c1c02a3ddbfa329d7e88da230cf65ab62ce2772fababdede33e3"
+  },
+  "saved_source_oracle_review": {
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-proc-vm-index-1/fixture-operation-1/FIXTURE-REVIEW.json",
+    "bytes": 5569,
+    "sha256": "edff8b09ad5762dd56fa6d98fb242695ebbebc2bb33d5b851d79ddb68f9beabc"
+  },
+  "saved_complete_actual_admission": {
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-proc-vm-index-1/fixture-operation-1/ROOT-CURRENT-ADMISSION.ACTUAL.json",
+    "bytes": 1712,
+    "sha256": "b1fdc2a9da06dbae33b98437f4f706f66146f31768918fd76e9c3524930087fc"
+  },
+  "saved_complete_census": {
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-proc-vm-index-1/fixture-operation-1/Root-fresh-shared-admission-2/COMPLETE-CURRENT-SHARED-HOST-CENSUS.json",
+    "bytes": 2777,
+    "sha256": "1835f1a61f86792600d31215559bfd157e242993a86fb2447055b5d09d7cf0bf"
+  },
+  "saved_current_only_retirement": {
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-proc-vm-index-1/fixture-operation-1/ROOT-CURRENT-RETIREMENT.json",
+    "bytes": 1558,
+    "sha256": "c8ddeed5ee50cf922ef57135526fb61dc56fb288cff65d0d5ca3b91fb42b238c"
+  },
+  "captured_streams": [
+    {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-proc-vm-index-1/fixture-operation-1/execution-1/preimage-compile.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-proc-vm-index-1/fixture-operation-1/execution-1/preimage-compile.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-proc-vm-index-1/fixture-operation-1/execution-1/preimage-fixture.stdout",
+      "bytes": 1598,
+      "sha256": "75dcd663507de7e5fc8e6f8ddf719ddf074a91a6fb7dc266591205d6f8b0a71e"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-proc-vm-index-1/fixture-operation-1/execution-1/preimage-fixture.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-proc-vm-index-1/fixture-operation-1/execution-1/postimage-compile.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-proc-vm-index-1/fixture-operation-1/execution-1/postimage-compile.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-proc-vm-index-1/fixture-operation-1/execution-1/postimage-fixture.stdout",
+      "bytes": 1558,
+      "sha256": "a69a4dc2c2bc82818ad460b1d943553dc2dbf0bce3ce0023573bcab713b07df7"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-proc-vm-index-1/fixture-operation-1/execution-1/postimage-fixture.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "checks": [
+    {
+      "clause": "exact changed source and actual real-body invocation",
+      "decision": "PASS_AT_SAVED_SCOPE",
+      "evidence": "Accepted source/fixture/op reviews and actual request SHA match; prepared units bind exact production pre/post body. Actual four literal argv arrays match request; no production/library/image suite replay."
+    },
+    {
+      "clause": "retained preimage defect and single candidate correction",
+      "decision": "PASS",
+      "evidence": "Compile0/preimage runtime1/compile0/postimage runtime0. Both runtime outputs equal exact independent pinned three-row oracles. Baseline normal data copies8 but wrong repeated remote0 trace; provider-error baseline returns8. Candidate READ/WRITE8B traces and-EINVAL-after4B deterministic-provider row all PASS. Runtime stderr empty; actual artifacts still match saved executable SHA."
+    },
+    {
+      "clause": "four child families, parent and full Root completion",
+      "decision": "PASS",
+      "evidence": "All4 positive PID/birth/status/directwait/wholefamily/closedstream records agree with ATTEMPTS and ownership file; no timeouts/signals/adopted reap/kill/errors/residual children. E088 sole parent1843869/b56626935 wait0/streamsclosed/receipt persisted/UNKNOWNfalse. Root initial3ed805/session37142 completes3fe82f exit0/noSession with exact PASS4/3 output."
+    },
+    {
+      "clause": "actual admission and current-only custody",
+      "decision": "PASS_AT_RECORDED_ROOT_SCOPE",
+      "evidence": "Complete actual census includes retained1.5GiB control job plus overhead+768MiB:3280252928B/2jobs within4GiB/3, MemAvailable30190391296B and floors pass. Root records actual account/serviceACCEPTED without exposing private validation. Saved retirement releases only768MiB/CPU6/onejob; native1837769/sudo1837766/session73649/1.5GiB and native12/allhistoricalUNKNOWNs remain retained."
+    }
+  ],
+  "no_new_execution_by_reviewer": true,
+  "canonical_source_or_image_changed_by_reviewer": false,
+  "first_repeat_cohort_changed": false,
+  "original_acceptance_delta": 0,
+  "remaining_original_scope": "Root may integrate independently reviewed paired correction after this focused passing result. Actual matching coherent image/native M14-06-05-FUNCTIONAL remains pending; source/fixture alone supplies no image, native or whole original acceptance."
+}

@@ -1,0 +1,95 @@
+--- scripts/tests/test_native_running_external_modules_owner.py.original
++++ scripts/tests/test_native_running_external_modules_owner.py
+@@ -292,17 +292,18 @@
+         candidate=self.root/('native-running-modules-candidate-'+nonce)
+         inputs=self.root/('native-running-modules-inputs-'+nonce)
+         for path in (candidate/'modules',candidate/'home',candidate/'tmp',inputs):path.mkdir(parents=True,exist_ok=True)
+-        closure=[]
+-        for index in range(60):
+-            raw=('source%d'%index).encode();name='source%d.rs'%index
+-            (candidate/'modules'/name).write_bytes(raw)
+-            closure.append(dict(path=name,sha256=m.sha(raw),bytes=len(raw)))
+-        prep=dict(baseline_candidate=m.CANDIDATE,tool_image=m.IMAGE,closure=closure,references={})
+-        for index in range(13):
+-            raw=('reference%d'%index).encode();name='reference%d'%index
+-            (inputs/name).write_bytes(raw)
+-            prep['references'][name]=dict(retained_copy='/retained/'+name,sha256=m.sha(raw),bytes=len(raw))
+-        prep_path=self.root/'preparation.json';prep_raw=json.dumps(prep).encode();prep_path.write_bytes(prep_raw)
++        # Use retained current68 bytes; the exact map decoder remains unmocked.
++        prep_raw=m.PREPARATION.read_bytes();prep=json.loads(prep_raw)
++        for row in prep['closure']:
++            raw=Path(row['origin']).read_bytes()
++            self.assertEqual((m.sha(raw),len(raw)),(row['sha256'],row['bytes']))
++            target=candidate/'modules'/row['path'];target.parent.mkdir(parents=True,exist_ok=True)
++            target.write_bytes(raw)
++        for ref in prep['references'].values():
++            raw=Path(ref['retained_copy']).read_bytes()
++            self.assertEqual((m.sha(raw),len(raw)),(ref['sha256'],ref['bytes']))
++            (inputs/Path(ref['retained_copy']).name).write_bytes(raw)
++        prep_path=self.root/'preparation.json';prep_path.write_bytes(prep_raw)
+         (inputs/'preparation.json').write_bytes(prep_raw)
+         driver=self.root/'driver.py';driver.write_bytes(b'# frozen driver')
+         basis=self.root/'basis';basis.mkdir()
+@@ -338,7 +339,8 @@
+ 
+     def test_exact_independent_release_source_and_execution_bindings(self):
+         request=dict(nonce='b'*32,terminal_policy='remove-owned-terminal',driver=dict(sha256='f'*64))
+-        sources={name:'f'*64 for name in m.SOURCES}
++        sources={name:m.sha((m.REPO/name).read_bytes()) for name in m.SOURCES}
++        request['driver']['sha256']=sources['scripts/native_running_external_modules_offline.py']
+         release=dict(schema='mckernel.native-running-external-modules-release.v1',status='PASS_EXECUTION_RELEASE',
+                      execution_count=1,request=dict(path='/request',sha256='a'*64),nonce=request['nonce'],
+                      historical_observer=dict(path=str(m.HISTORICAL_OBSERVER),sha256=m.HISTORICAL_OBSERVER_SHA,
+@@ -353,14 +355,50 @@
+                                                 reviewer='/reviewer',source_sha256=sources)
+             return dict(decision='PASS_EXECUTION',implementation_ownership=False,reviewer='/reviewer',
+                         reviewed_release_payload_sha256=m.sha(m.canonical({k:v for k,v in release.items() if k!='execution_review'})))
+-        with mock.patch.object(m,'bound',side_effect=bound),mock.patch.object(m,'safe_path',side_effect=lambda p,*a:Path(p)), \
+-             mock.patch.object(m.host,'digest',return_value='f'*64),mock.patch.object(m.host,'Docker') as docker:
++        with mock.patch.object(m,'bound',side_effect=bound),mock.patch.object(m.host,'Docker') as docker:
+             self.assertEqual(m.authenticate(Path('/request'),'a'*64,Path('/release'),'b'*64),(request,release))
+             for key,value in [('execution_count',True),('fetched_source_verified',False),('author','/reviewer')]:
+                 old=release[key];release[key]=value
+                 with self.subTest(field=key),self.assertRaises(m.Refusal):m.authenticate(Path('/request'),'a'*64,Path('/release'),'b'*64)
+                 release[key]=old
+             docker.assert_not_called()
++
++    def test_exact_current68_preparation_and_wrong_maps_are_refused(self):
++        current=json.loads(m.PREPARATION.read_bytes())
++        m.validate_preparation(current)
++        historical=m.REPO/'docs/verification/evidence/native-running-external-modules-preparation-20261017-2.json'
++        with self.assertRaises((m.Refusal,KeyError)):
++            m.validate_preparation(json.loads(historical.read_bytes()))
++        for failure in ('map','dependencies','identity','duplicate'):
++            prep=copy.deepcopy(current)
++            if failure=='map':prep['closure'][0]['sha256']='0'*64
++            if failure=='dependencies':prep['source_dependency_sets']['mcctrl']=[]
++            if failure=='identity':prep['source_identity']='0'*64
++            if failure=='duplicate':prep['closure'][-1]=copy.deepcopy(prep['closure'][0])
++            with self.subTest(failure=failure),self.assertRaises(m.Refusal):m.validate_preparation(prep)
++
++    def test_runtime_source_binding_reads_actual_installed_bytes_and_location(self):
++        installed=self.root/'runtime'
++        sources={}
++        for name in m.SOURCES:
++            path=installed/name;path.parent.mkdir(parents=True,exist_ok=True)
++            raw=(m.REPO/name).read_bytes();path.write_bytes(raw);sources[name]=m.sha(raw)
++        owner=installed/'scripts/native_running_external_modules_owner.py'
++        with mock.patch.object(m,'REPO',installed),mock.patch.object(m,'__file__',str(owner)):
++            self.assertEqual(m.validate_runtime_source_bindings(sources),sources)
++            for failure in ('missing','extra','drift','location'):
++                changed=dict(sources)
++                if failure=='missing':changed.pop(m.SOURCES[-1])
++                if failure=='extra':changed['scripts/unreviewed.py']='0'*64
++                if failure=='drift':changed[m.SOURCES[-1]]='0'*64
++                location=installed/'wrong-owner.py' if failure=='location' else owner
++                if failure=='location':location.write_bytes(owner.read_bytes())
++                with self.subTest(failure=failure),mock.patch.object(m,'__file__',str(location)),self.assertRaises(m.Refusal):
++                    m.validate_runtime_source_bindings(changed)
++            # Bind a reviewed map, then mutate an actual installed input.
++            (installed/m.SOURCES[-1]).write_bytes(b'changed installed observer')
++            with self.assertRaisesRegex(m.Refusal,'reviewed source drift'):
++                m.validate_runtime_source_bindings(sources)
+ 
+     def test_all_four_root_guard_signals_use_existing_latch(self):
+         import signal

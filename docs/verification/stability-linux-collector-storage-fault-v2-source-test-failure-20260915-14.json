@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_test_failure",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "attempt": 14,
+  "status": "FAIL_SOURCE_TEST_CONTROL",
+  "recorded_utc": "2026-09-16T04:17:21Z",
+  "finding": "The first review-24 regression control passed against the exact rejected archive-27 oracle. Its asserted ValueErrors therefore came from unrelated record invalidity and did not exercise the birth-overwrite defect.",
+  "candidate_source_sha256": {
+    "oracle.py": "c62ed382147aa95ee44e46f3792774d43ab7e6ffa592446609f120139ebd2692",
+    "test_collector_storage_fault_packet.py": "ec8bd414c13ac662f74a81b2f7f2f8fa260959a5fe0e07bb5140e7558a45f710"
+  },
+  "prefix_oracle": {
+    "source_archive": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260915-27.tar.gz",
+    "source_archive_sha256": "85316fd95101c33448090d4fc2e3ce51fbf8a4b22fc0dd5075d5387e0c6f1ffb",
+    "oracle_sha256": "cffe244a2e0d027898d5fcda86cf41637b68bc8a3ca939c8a053f7c7e111217a",
+    "focused_test_status": 0,
+    "focused_test_result": "Ran 1 test; OK",
+    "stdout_stderr_sha256": "24cefc2bc38a1c71e18591075993695fc72546b32ff6b5baab3d98032ce96fb5"
+  },
+  "failure_archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-failure-20260915-30.tar.gz",
+    "sha256": "8a756749a091c72a716ea16e9926a7f21d5a900089bfe494422212ab7f111864",
+    "size": 174450
+  },
+  "required_next": [
+    "Construct full records accepted by the exact archive-27 oracle and rejected only by the sticky-birth correction.",
+    "Bind stable canonical JSON hashes for sentinel and owner controls.",
+    "Rerun both pinned interpreter suites and obtain independent exact-byte source review."
+  ],
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

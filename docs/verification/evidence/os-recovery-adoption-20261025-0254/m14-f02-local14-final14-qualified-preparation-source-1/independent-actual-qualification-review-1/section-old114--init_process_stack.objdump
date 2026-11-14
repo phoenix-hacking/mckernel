@@ -1,0 +1,72 @@
+
+/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o:     file format elf64-x86-64
+
+
+Disassembly of section .ltext.init_process_stack:
+
+0000000000000000 <init_process_stack>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	41 57                	push   %r15
+   6:	41 56                	push   %r14
+   8:	41 55                	push   %r13
+   a:	41 54                	push   %r12
+   c:	53                   	push   %rbx
+   d:	50                   	push   %rax
+   e:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	10: R_X86_64_64	process_init_stack_entry_config+0x8
+  18:	44 8b 28             	mov    (%rax),%r13d
+  1b:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	1d: R_X86_64_64	process_init_stack_entry_config+0x18
+  25:	44 8b 30             	mov    (%rax),%r14d
+  28:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	2a: R_X86_64_64	process_init_stack_entry_config+0x30
+  32:	44 8b 38             	mov    (%rax),%r15d
+  35:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	37: R_X86_64_64	process_init_stack_entry_config+0x50
+  3f:	8b 00                	mov    (%rax),%eax
+  41:	49 bc 00 00 00 00 00 00 00 00 	movabs $0x0,%r12	43: R_X86_64_64	process_init_stack_entry_config+0x88
+  4b:	48 bb 00 00 00 00 00 00 00 00 	movabs $0x0,%rbx	4d: R_X86_64_64	process_init_stack_entry_config+0x90
+  55:	49 bb 00 00 00 00 00 00 00 00 	movabs $0x0,%r11	57: R_X86_64_64	process_init_stack_entry_config+0x98
+  5f:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	61: R_X86_64_64	process_init_stack_entry_config+0xa0
+  69:	41 ff 32             	push   (%r10)
+  6c:	41 ff 33             	push   (%r11)
+  6f:	ff 33                	push   (%rbx)
+  71:	41 ff 34 24          	push   (%r12)
+  75:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	77: R_X86_64_64	process_init_stack_entry_config+0x80
+  7f:	41 ff 32             	push   (%r10)
+  82:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	84: R_X86_64_64	process_init_stack_entry_config+0x78
+  8c:	41 ff 32             	push   (%r10)
+  8f:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	91: R_X86_64_64	process_init_stack_entry_config+0x70
+  99:	41 ff 32             	push   (%r10)
+  9c:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	9e: R_X86_64_64	process_init_stack_entry_config+0x68
+  a6:	41 ff 32             	push   (%r10)
+  a9:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	ab: R_X86_64_64	process_init_stack_entry_config+0x60
+  b3:	41 ff 32             	push   (%r10)
+  b6:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	b8: R_X86_64_64	process_init_stack_entry_config+0x58
+  c0:	41 ff 32             	push   (%r10)
+  c3:	50                   	push   %rax
+  c4:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	c6: R_X86_64_64	process_init_stack_entry_config+0x48
+  ce:	ff 30                	push   (%rax)
+  d0:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	d2: R_X86_64_64	process_init_stack_entry_config+0x40
+  da:	ff 30                	push   (%rax)
+  dc:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	de: R_X86_64_64	process_init_stack_entry_config+0x38
+  e6:	ff 30                	push   (%rax)
+  e8:	41 57                	push   %r15
+  ea:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	ec: R_X86_64_64	process_init_stack_entry_config+0x28
+  f4:	ff 30                	push   (%rax)
+  f6:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	f8: R_X86_64_64	process_init_stack_entry_config+0x20
+ 100:	ff 30                	push   (%rax)
+ 102:	41 56                	push   %r14
+ 104:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	106: R_X86_64_64	process_init_stack_entry_config+0x10
+ 10e:	ff 30                	push   (%rax)
+ 110:	41 55                	push   %r13
+ 112:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	114: R_X86_64_64	process_init_stack_entry_config
+ 11c:	ff 30                	push   (%rax)
+ 11e:	ff 75 10             	push   0x10(%rbp)
+ 121:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	123: R_X86_64_64	process_init_stack_body_result
+ 12b:	ff d0                	call   *%rax
+ 12d:	48 81 c4 b8 00 00 00 	add    $0xb8,%rsp
+ 134:	5b                   	pop    %rbx
+ 135:	41 5c                	pop    %r12
+ 137:	41 5d                	pop    %r13
+ 139:	41 5e                	pop    %r14
+ 13b:	41 5f                	pop    %r15
+ 13d:	5d                   	pop    %rbp
+ 13e:	c3                   	ret    

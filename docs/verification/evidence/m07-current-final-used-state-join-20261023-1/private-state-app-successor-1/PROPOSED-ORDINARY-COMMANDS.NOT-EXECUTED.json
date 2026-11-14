@@ -1,0 +1,67 @@
+{
+  "compiler": {
+    "expected_version": "Rust1.92.0 existing profile; tool hash must be bound before compile",
+    "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc"
+  },
+  "next_after_compile": "independent source/ABI review and separate reviewed functional guest release; no host target-register test",
+  "ordinary_profile": {
+    "AS_bytes": 2147483648,
+    "CPU_seconds": 60,
+    "FSIZE_bytes": 33554432,
+    "NOFILE": 256,
+    "RUST_MIN_STACK": 2097152,
+    "core": 0,
+    "cpu": 6,
+    "jobs": 1,
+    "owned_capture_sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8",
+    "retirement_seconds": 6,
+    "wall_seconds": 90
+  },
+  "private_app_compile_argv": [
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+    "--edition=2021",
+    "-D",
+    "warnings",
+    "-C",
+    "opt-level=1",
+    "-C",
+    "codegen-units=1",
+    "-C",
+    "target-feature=+crt-static",
+    "-C",
+    "relocation-model=static",
+    "-C",
+    "link-arg=-no-pie",
+    "-C",
+    "link-arg=-Wl,-z,noexecstack",
+    "/home/holden/mckernel-work/host-preparation/m07-current-final-used-state-join-20261023-1/private-state-app-successor-1/app.rs",
+    "-o",
+    "/home/holden/mckernel-work/host-preparation/m07-current-final-used-state-join-20261023-1/private-state-app-successor-1/state-app"
+  ],
+  "private_app_execution_authorized": false,
+  "profile_reference": {
+    "bytes": 807,
+    "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/compile1.status.json",
+    "sha256": "b4827b7de3599170204addcf598f1cb76c7599251465941995c385fd0b29146c"
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "semantic_test_compile_argv": [
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+    "--edition=2021",
+    "--test",
+    "-D",
+    "warnings",
+    "-C",
+    "opt-level=1",
+    "-C",
+    "codegen-units=1",
+    "/home/holden/mckernel-work/host-preparation/m07-current-final-used-state-join-20261023-1/private-state-app-successor-1/eligibility.rs",
+    "-o",
+    "/home/holden/mckernel-work/host-preparation/m07-current-final-used-state-join-20261023-1/private-state-app-successor-1/eligibility-tests"
+  ],
+  "semantic_test_run_argv": [
+    "/home/holden/mckernel-work/host-preparation/m07-current-final-used-state-join-20261023-1/private-state-app-successor-1/eligibility-tests",
+    "--test-threads=1"
+  ],
+  "status": "PROPOSED_NOT_EXECUTED_ROOT_GRANT_REQUIRED"
+}

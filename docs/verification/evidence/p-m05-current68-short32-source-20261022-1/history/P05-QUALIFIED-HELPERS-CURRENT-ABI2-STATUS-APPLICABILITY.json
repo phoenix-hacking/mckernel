@@ -1,0 +1,396 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_EXTRACTION_COMPLETE_P05_STATUS5_ALREADY_MATCHES_CURRENT_ABI2_NO_HELPER_CHANGE_NEEDED",
+  "qualified_helpers": [
+    {
+      "role": "first4312",
+      "source": {
+        "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/two-cpu-running-query-correction-1/native-boot-two.c",
+        "bytes": 14917,
+        "sha256": "ab4446ac49920a73c5cc0c13852fa65e312725c93dd241b0ced5e4fc4ba33341"
+      },
+      "accepted_ELF": {
+        "mode": 33261,
+        "path": "/home/holden/mckernel/scratch/m05-a-261021-1/native-boot-4312-0755",
+        "sha256": "4312f9a8f53d8db7b2b6be4c7d5e409f5c0f82cf8215728209be0f6ff4a5d5c5",
+        "size": 35784
+      },
+      "selected_compile_flags": [
+        "-DCPUHP_FAILURE_STATE=234",
+        "-DNATIVE_VDSO_REV3=1",
+        "-DNATIVE_SYSFS_OS=1",
+        "-DNATIVE_SYSFS_SETUP=1",
+        "-DNATIVE_SYSFS_SERVICE=1",
+        "-DNATIVE_MCCTRL_SERVICE=1",
+        "-DBOOT_PREPARE_ONLY=0"
+      ],
+      "full_original_compile_argv": [
+        "/usr/bin/cc",
+        "-m64",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-ffreestanding",
+        "-fno-builtin",
+        "-fno-stack-protector",
+        "-fno-pie",
+        "-nostdlib",
+        "-static",
+        "-no-pie",
+        "-Wl,-e,_start",
+        "-Wl,-z,noexecstack",
+        "-DCPUHP_FAILURE_STATE=234",
+        "-DNATIVE_VDSO_REV3=1",
+        "-DNATIVE_SYSFS_OS=1",
+        "-DNATIVE_SYSFS_SETUP=1",
+        "-DNATIVE_SYSFS_SERVICE=1",
+        "-DNATIVE_MCCTRL_SERVICE=1",
+        "-DBOOT_PREPARE_ONLY=0",
+        "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/two-cpu-running-query-correction-1/native-boot-two.c",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/two-cpu-running-query-correction-1/native-boot-two"
+      ],
+      "successful_BOOT_predicate": [
+        {
+          "line": 268,
+          "text": "    require(call(SYS_IOCTL, os, OS_LOAD, (long)\"/images/mckernel.img\") == 0);"
+        },
+        {
+          "line": 269,
+          "text": "#if defined(NATIVE_SYSFS_SERVICE)"
+        },
+        {
+          "line": 270,
+          "text": "    long boot_result = call(SYS_IOCTL, os, OS_BOOT, 0);"
+        },
+        {
+          "line": 271,
+          "text": "    message(\"NATIVE_BOOT_SERVICE \" ARCH_LABEL \" boot_errno=\");"
+        },
+        {
+          "line": 272,
+          "text": "    print_number(boot_result < 0 ? (unsigned long)-boot_result : 0);"
+        },
+        {
+          "line": 273,
+          "text": "    message(\"\\n\");"
+        },
+        {
+          "line": 274,
+          "text": "    require(boot_result == 0);"
+        },
+        {
+          "line": 275,
+          "text": "#else"
+        },
+        {
+          "line": 276,
+          "text": "    require(call(SYS_IOCTL, os, OS_BOOT, 0) == -110);"
+        }
+      ],
+      "post_BOOT_status_predicate": [
+        {
+          "line": 281,
+          "text": "#if defined(NATIVE_SYSFS_SERVICE)"
+        },
+        {
+          "line": 282,
+          "text": "    long observed_status = call(SYS_IOCTL, os, OS_STATUS, 0);"
+        },
+        {
+          "line": 283,
+          "text": "    message(\"NATIVE_BOOT_STATUS \" ARCH_LABEL \" observed=\");"
+        },
+        {
+          "line": 284,
+          "text": "    if (observed_status < 0) message(\"-\");"
+        },
+        {
+          "line": 285,
+          "text": "    print_number(observed_status < 0 ? 0UL - (unsigned long)observed_status :"
+        },
+        {
+          "line": 286,
+          "text": "                 (unsigned long)observed_status);"
+        },
+        {
+          "line": 287,
+          "text": "    message(\" expected=5\\n\");"
+        },
+        {
+          "line": 288,
+          "text": "    native_running_status_log(observed_status);"
+        },
+        {
+          "line": 289,
+          "text": "    require(observed_status == 5);"
+        },
+        {
+          "line": 290,
+          "text": "#else"
+        },
+        {
+          "line": 291,
+          "text": "    require(call(SYS_IOCTL, os, OS_STATUS, 0) == 9);"
+        },
+        {
+          "line": 292,
+          "text": "#endif"
+        },
+        {
+          "line": 293,
+          "text": "    sysfs_state(0, 1);"
+        }
+      ],
+      "literal_expected_status": 5,
+      "selected_branch": "#if defined(NATIVE_SYSFS_SERVICE); compile flag -DNATIVE_SYSFS_SERVICE=1 selects it; BOOT_PREPARE_ONLY=0 selects liveboot branch.",
+      "fallback_branch": "Without NATIVE_SYSFS_SERVICE: BOOT expects -110 and status9. This fallback is not selected; neither qualified success predicate expects4.",
+      "kargs_unchanged": "hidos allow_oversubscribe",
+      "source_edit_required": false,
+      "new_helper_artifact": null
+    },
+    {
+      "role": "second1a7",
+      "source": {
+        "path": "/home/holden/mckernel-work/host-preparation/native-second-stop-case-preparation-20261021-1/current053d-normalization-runtime-preparation-1/current-runtime-construction-preparation-1/two-generation-bootstrap-contract-correction-1/main-callsite-and-fixture-braces-correction-1/native-boot-second.c",
+        "bytes": 16362,
+        "sha256": "e5c92c7f801ffc00059d085ef3503f46c247030f948d304d68cd7b89b7e5e3d0"
+      },
+      "accepted_ELF": {
+        "path": "/home/holden/mckernel/scratch/m05d-261021-1/native-boot-second",
+        "sha256": "1a7fd6e3ff3d31c79c7c2665766a2b0e74bb895b2df0ebeff845b67f1dddd609",
+        "size": 35768,
+        "mode": 33261
+      },
+      "selected_compile_flags": [
+        "-DCPUHP_FAILURE_STATE=234",
+        "-DNATIVE_VDSO_REV3=1",
+        "-DNATIVE_SYSFS_OS=1",
+        "-DNATIVE_SYSFS_SETUP=1",
+        "-DNATIVE_SYSFS_SERVICE=1",
+        "-DNATIVE_MCCTRL_SERVICE=1",
+        "-DBOOT_PREPARE_ONLY=0"
+      ],
+      "full_original_compile_argv": [
+        "/usr/bin/cc",
+        "-m64",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-ffreestanding",
+        "-fno-builtin",
+        "-fno-stack-protector",
+        "-fno-pie",
+        "-nostdlib",
+        "-static",
+        "-no-pie",
+        "-Wl,-e,_start",
+        "-Wl,-z,noexecstack",
+        "-DCPUHP_FAILURE_STATE=234",
+        "-DNATIVE_VDSO_REV3=1",
+        "-DNATIVE_SYSFS_OS=1",
+        "-DNATIVE_SYSFS_SETUP=1",
+        "-DNATIVE_SYSFS_SERVICE=1",
+        "-DNATIVE_MCCTRL_SERVICE=1",
+        "-DBOOT_PREPARE_ONLY=0",
+        "-I",
+        "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/two-cpu-running-query-correction-1",
+        "-MMD",
+        "-MF",
+        "/home/holden/mckernel-work/host-preparation/native-second-stop-case-preparation-20261021-1/current053d-normalization-runtime-preparation-1/current-runtime-construction-preparation-1/two-generation-bootstrap-contract-correction-1/main-callsite-and-fixture-braces-correction-1/actual-two-generation-check-1/second-helper.d",
+        "/home/holden/mckernel-work/host-preparation/native-second-stop-case-preparation-20261021-1/current053d-normalization-runtime-preparation-1/current-runtime-construction-preparation-1/two-generation-bootstrap-contract-correction-1/main-callsite-and-fixture-braces-correction-1/native-boot-second.c",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/native-second-stop-case-preparation-20261021-1/current053d-normalization-runtime-preparation-1/current-runtime-construction-preparation-1/two-generation-bootstrap-contract-correction-1/main-callsite-and-fixture-braces-correction-1/actual-two-generation-check-1/native-boot-second"
+      ],
+      "successful_BOOT_predicate": [
+        {
+          "line": 301,
+          "text": "    require(call(SYS_IOCTL, os, OS_LOAD, (long)\"/images/mckernel.img\") == 0);"
+        },
+        {
+          "line": 302,
+          "text": "#if defined(NATIVE_SYSFS_SERVICE)"
+        },
+        {
+          "line": 303,
+          "text": "    long boot_result = call(SYS_IOCTL, os, OS_BOOT, 0);"
+        },
+        {
+          "line": 304,
+          "text": "    message(\"NATIVE_BOOT_SERVICE \" ARCH_LABEL \" boot_errno=\");"
+        },
+        {
+          "line": 305,
+          "text": "    print_number(boot_result < 0 ? (unsigned long)-boot_result : 0);"
+        },
+        {
+          "line": 306,
+          "text": "    message(\"\\n\");"
+        },
+        {
+          "line": 307,
+          "text": "    require(boot_result == 0);"
+        },
+        {
+          "line": 308,
+          "text": "#else"
+        },
+        {
+          "line": 309,
+          "text": "    require(call(SYS_IOCTL, os, OS_BOOT, 0) == -110);"
+        }
+      ],
+      "post_BOOT_status_predicate": [
+        {
+          "line": 314,
+          "text": "#if defined(NATIVE_SYSFS_SERVICE)"
+        },
+        {
+          "line": 315,
+          "text": "    long observed_status = call(SYS_IOCTL, os, OS_STATUS, 0);"
+        },
+        {
+          "line": 316,
+          "text": "    message(\"NATIVE_BOOT_STATUS \" ARCH_LABEL \" observed=\");"
+        },
+        {
+          "line": 317,
+          "text": "    if (observed_status < 0) message(\"-\");"
+        },
+        {
+          "line": 318,
+          "text": "    print_number(observed_status < 0 ? 0UL - (unsigned long)observed_status :"
+        },
+        {
+          "line": 319,
+          "text": "                 (unsigned long)observed_status);"
+        },
+        {
+          "line": 320,
+          "text": "    message(\" expected=5\\n\");"
+        },
+        {
+          "line": 321,
+          "text": "    native_running_status_log(observed_status);"
+        },
+        {
+          "line": 322,
+          "text": "    require(observed_status == 5);"
+        },
+        {
+          "line": 323,
+          "text": "#else"
+        },
+        {
+          "line": 324,
+          "text": "    require(call(SYS_IOCTL, os, OS_STATUS, 0) == 9);"
+        },
+        {
+          "line": 325,
+          "text": "#endif"
+        },
+        {
+          "line": 326,
+          "text": "    sysfs_state(0, 1);"
+        }
+      ],
+      "literal_expected_status": 5,
+      "selected_branch": "#if defined(NATIVE_SYSFS_SERVICE); compile flag -DNATIVE_SYSFS_SERVICE=1 selects it; BOOT_PREPARE_ONLY=0 selects liveboot branch.",
+      "fallback_branch": "Without NATIVE_SYSFS_SERVICE: BOOT expects -110 and status9. This fallback is not selected; neither qualified success predicate expects4.",
+      "kargs_unchanged": "hidos allow_oversubscribe",
+      "source_edit_required": false,
+      "new_helper_artifact": null
+    }
+  ],
+  "first_compile_receipt": {
+    "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/two-cpu-running-query-correction-1/compile-boot.status.json",
+    "bytes": 1013,
+    "sha256": "5db2ce6e3d5fe0b4bd49c6261b092090ad499769ef989fa18e149b2bbc741332"
+  },
+  "first_stage_ancestry": {
+    "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/two-cpu-running-query-correction-1/stage-inputs.json",
+    "bytes": 2627,
+    "sha256": "81fbb008db6e2a6f2e1d9d0afac3e2b9b844eddcc42beb68ebfc3c7f2155656e"
+  },
+  "second_compile_command": {
+    "path": "/home/holden/mckernel-work/host-preparation/native-second-stop-case-preparation-20261021-1/current053d-normalization-runtime-preparation-1/current-runtime-construction-preparation-1/two-generation-bootstrap-contract-correction-1/main-callsite-and-fixture-braces-correction-1/actual-two-generation-check-1/compile-changed-second-helper/command.json",
+    "bytes": 1928,
+    "sha256": "07567bddebd2f44cd5ad5da0db9c93b6bc32dcc7c6d8d86007c8dffe946f760b"
+  },
+  "second_compile_receipt": {
+    "path": "/home/holden/mckernel-work/host-preparation/native-second-stop-case-preparation-20261021-1/current053d-normalization-runtime-preparation-1/current-runtime-construction-preparation-1/two-generation-bootstrap-contract-correction-1/main-callsite-and-fixture-braces-correction-1/actual-two-generation-check-1/compile-changed-second-helper/owned-result.json",
+    "bytes": 1704,
+    "sha256": "106fca48c68273ffa9ed0de8d1a88a22ea9464bd50209b60feacb31d5998f591"
+  },
+  "second_compile_antecedent": {
+    "source": {
+      "path": "/home/holden/mckernel-work/host-preparation/native-second-stop-case-preparation-20261021-1/current053d-normalization-runtime-preparation-1/current-runtime-construction-preparation-1/two-generation-bootstrap-contract-correction-1/main-callsite-and-fixture-braces-correction-1/run_actual_two_generation_check.py",
+      "bytes": 8193,
+      "sha256": "fa63fd26aac078e093534b8bc97900b59509aace92c356098f1bbea931a2f8d0"
+    },
+    "line": 31,
+    "derivation": "Qualified first compile argv inherited; same CPUHP_FAILURE_STATE234/NATIVE_VDSO_REV3/NATIVE_SYSFS_OS/NATIVE_SYSFS_SETUP/NATIVE_SYSFS_SERVICE/NATIVE_MCCTRL_SERVICE/BOOT_PREPARE_ONLY0 retained; only include/dependency/source/output fields change."
+  },
+  "collector_and_twohelper_accepted_fact_record": {
+    "path": "/home/holden/mckernel-work/host-preparation/native-second-stop-case-preparation-20261021-1/current053d-normalization-runtime-preparation-1/current-runtime-construction-preparation-1/two-generation-bootstrap-contract-correction-1/main-callsite-and-fixture-braces-correction-1/FROZEN-M05-TWO-GENERATION-SOURCE-AND-ACTUAL-RESULT-1.json",
+    "bytes": 16011,
+    "sha256": "deb9f41e7d11375ef7ace5470f77ac4af4627df1dbdec8a56d3eb861ca0cfa25"
+  },
+  "current_ABI2_comparison": {
+    "authority": "Dispatcher exact20352 linked callbackABI2/source finding: READY4/RUNNING5, successfulBOOT0 publishes5, GET_STATUS returnsraw5. No duplicate199 provider investigation performed here.",
+    "first_helper_expected": 5,
+    "second_helper_expected": 5,
+    "mismatch": false
+  },
+  "foreground_macro_profile_reuse": "Foreground199 explicit ABI2 flag/default4 correction is unnecessary for these qualified P05 sources: both already print expected5 and require observed5 under their actual accepted SERVICE flags. Do not apply default4 to these P05 sources, add a new profile, or rebuild them solely because199 differs.",
+  "stage_delta_decision": {
+    "additional_helpers_needed": false,
+    "actual_artifact_member_changes": [
+      "bin/mcexec",
+      "images/mckernel.img",
+      "modules/ihk-smp-x86_64.ko",
+      "modules/ihk.ko",
+      "modules/mcctrl.ko"
+    ],
+    "count": 5,
+    "retained_members": [
+      "init=f043",
+      "apps/app realsignal-mask",
+      "bin/native-boot=4312",
+      "bin/native-boot-second=1a7"
+    ],
+    "seven_member_successor_needed": false,
+    "new_first_helper_fields": null,
+    "new_second_helper_fields": null,
+    "accepted_consumer_unchanged": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/stage_m05_two_generation.py",
+      "bytes": 12180,
+      "sha256": "01645826b5b33b131ab6af08ce6097dc18c90d3bad7dd92a9c53ea006bf7ac53"
+    },
+    "binding_unchanged": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/BINDING.json",
+      "bytes": 8066,
+      "sha256": "57ca4a0466c3002b15f922fbddf418b4deac5ccb9e190e8f3ebfeb7952c49480"
+    }
+  },
+  "source_epoch_proof_unchanged": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/INDEPENDENT-EPOCH-PRODUCER-SOURCE-SUCCESSOR.json",
+    "bytes": 6391,
+    "sha256": "f19ab0c617a03a8e631584ca588e36b0665d9cb803f563e9ce159bc705fb36e3"
+  },
+  "remaining_prerequisite": "No P05 helperstatus correction required. Existing isolated5tuple consumer review, admitted realstage/normalization/current M05 runtime-binding and independent exact execution/physical observations remain. No source/app/provider/ABI/stage changes in this extraction.",
+  "operations": {
+    "source_data_extraction": 1,
+    "helper_edits": 0,
+    "tests": 0,
+    "compilers": 0,
+    "stages": 0,
+    "root": 0,
+    "VM": 0,
+    "native_apps": 0
+  },
+  "native_or_goal_credit": false,
+  "stop": "Exact applicability/flags/antecedents delivered; do not compile or stage under this source-only task."
+}

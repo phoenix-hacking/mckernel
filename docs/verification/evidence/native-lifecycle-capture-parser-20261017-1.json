@@ -1,0 +1,152 @@
+{
+  "task_id": "native-lifecycle-capture-parser-20261017-1",
+  "status": "READY_FOR_REVIEW",
+  "scope": "Additive offline lifecycle oracle and focused unit tests; no production integration, device, guest, PID1 or probe execution; no application acceptance.",
+  "contract": {
+    "collector_sha256": "36fa0d55a30f5e943de0b28c6f54e033cf84ff8cc83cdc54c59688e993c44383",
+    "probe_sha256": "18444a0917ed850690cca41be1b9a6090a3ab533c94a0f1ad66892df0625ca44",
+    "api": "validate_lifecycle_capture(serial): lifecycle-only result; raises LifecycleCaptureError on invalid lifecycle evidence",
+    "payload_boundary": "Exactly one opaque bounded ND_PAYLOAD follows lifecycle records; caller must separately invoke unchanged native_diagnostic.evaluate. Payload bytes/schema/results, QMP, kernel errors and guest owner acceptance are not validated by this module.",
+    "transition": "Running (3) -> shutdown request 0x112a02 return 0 errno 0 -> status request 0x112a03 NotBooted (0); close return 0 errno 0; idempotent NotBooted is rejected.",
+    "claim_limits": "OS destruction and resource restoration are never credited.",
+    "limits": {
+      "stream_bytes": 1024,
+      "record_bytes_including_original_LF": 4096,
+      "serial_utf8_bytes": 4194304
+    }
+  },
+  "checks": [
+    {
+      "name": "Focused Python 3.9 unittest failfast",
+      "returncode": 0,
+      "test_methods": 10,
+      "duration_seconds": 0.029,
+      "subprocess": {
+        "argv": [
+          "/usr/bin/taskset",
+          "-c",
+          "6",
+          "/usr/bin/prlimit",
+          "--as=1073741824",
+          "--cpu=90",
+          "--nofile=256",
+          "--fsize=67108864",
+          "--core=0",
+          "/usr/bin/timeout",
+          "-k",
+          "5s",
+          "120s",
+          "/home/holden/anaconda3/bin/python3.9",
+          "-B",
+          "-m",
+          "unittest",
+          "-f",
+          "scripts.tests.test_native_diagnostic_lifecycle_capture"
+        ],
+        "cwd": "/home/holden/mckernel",
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-parser-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-parser-20261017-1/tmp",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "LIFECYCLE_SERIALIZER_STDOUT": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-parser-20261017-1/actual-c-serializer.stdout"
+        },
+        "interpreter": {
+          "path": "/home/holden/anaconda3/bin/python3.9",
+          "resolved": "/home/holden/anaconda3/bin/python3.9",
+          "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb",
+          "version": "Python 3.9.12"
+        },
+        "serializer_fixture": {
+          "source": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/002.stdout",
+          "retained": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-parser-20261017-1/actual-c-serializer.stdout",
+          "sha256": "084f31d512994011cbc9fb8ac2e5312f3f72536fc7668f52360a3d326b158895"
+        },
+        "input_sha256": {
+          "scripts/application-tests/native_diagnostic_lifecycle_capture.py": "49b8382495ab1f0a2bc7d42abfd8379a2c9071283acdc6979f460c516cb6958a",
+          "scripts/tests/test_native_diagnostic_lifecycle_capture.py": "009272a0b17f7aee6013239faa557a75605a9901e06168cf2162231ac01f758a",
+          "scripts/application-tests/native_diagnostic_lifecycle_collector.c": "36fa0d55a30f5e943de0b28c6f54e033cf84ff8cc83cdc54c59688e993c44383",
+          "scripts/application-tests/native_diagnostic_lifecycle_probe.c": "18444a0917ed850690cca41be1b9a6090a3ab533c94a0f1ad66892df0625ca44"
+        }
+      },
+      "result": {
+        "returncode": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "f90205cbd4fdd781cd1743acb491bbf8107bba0a826706e16eea68607db679c8"
+      }
+    },
+    {
+      "name": "New source final newline/trailing whitespace",
+      "result": "PASS",
+      "scope": [
+        "scripts/application-tests/native_diagnostic_lifecycle_capture.py",
+        "scripts/tests/test_native_diagnostic_lifecycle_capture.py"
+      ]
+    }
+  ],
+  "negative_coverage": [
+    "missing/duplicate/out-of-order/unterminated transport and probe records",
+    "unknown keys and duplicate JSON keys at lifecycle metadata/streams/probe boundary",
+    "bool-as-int, nonfinite values, numeric bounds, operation/request/errno/result mismatches",
+    "wrong argv, helper fault/timeout/unclean/child setup failure/nonzero exit/signal",
+    "missing EOF, invalid EOF timestamps, truncation, invalid hex, limit/accounting mismatch, nonempty stderr",
+    "idempotent or non-Running initial status, false transition or resource-restoration claim",
+    "oversize UTF-8 serial, record and stream, malformed or non-ASCII probe output",
+    "retained actual C serializer synthetic binary bytes denied transition credit"
+  ],
+  "artifacts": [
+    {
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_lifecycle_capture.py",
+      "size": 7025,
+      "sha256": "49b8382495ab1f0a2bc7d42abfd8379a2c9071283acdc6979f460c516cb6958a"
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/tests/test_native_diagnostic_lifecycle_capture.py",
+      "size": 9101,
+      "sha256": "009272a0b17f7aee6013239faa557a75605a9901e06168cf2162231ac01f758a"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-parser-20261017-1/command.json",
+      "size": 2066,
+      "sha256": "33052ea4de48ddd95e67784a36095270a4fbf3a795a6b1a9fcb5c6d15cf7fc1a"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-parser-20261017-1/result.json",
+      "size": 196,
+      "sha256": "4a6410c87072f606c371e55079638a81c234784d713fc3b227786b180a2bfc95"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-parser-20261017-1/stdout",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-parser-20261017-1/stderr",
+      "size": 109,
+      "sha256": "f90205cbd4fdd781cd1743acb491bbf8107bba0a826706e16eea68607db679c8"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-parser-20261017-1/python-version.stdout",
+      "size": 14,
+      "sha256": "7750f5e8f71f71a6eebaaffed28eb4d06c659e7de830931b4ac9d320086b2a73"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-parser-20261017-1/python-version.stderr",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-parser-20261017-1/actual-c-serializer.stdout",
+      "size": 627,
+      "sha256": "084f31d512994011cbc9fb8ac2e5312f3f72536fc7668f52360a3d326b158895"
+    }
+  ],
+  "findings": [
+    "Existing C serializer fixture is transport-valid but contains injected non-probe stdout and stderr; rejection is required and tested. Positive transition fixtures are synthetic parser vectors, not actual device evidence.",
+    "Existing native_diagnostic.py and all collector/probe/owner/runner sources remain unedited."
+  ],
+  "blocker": null,
+  "next_task": "Independent review, then separately scoped caller integration that requires both existing payload evaluation and this lifecycle oracle. No runtime acceptance change is authorized here."
+}

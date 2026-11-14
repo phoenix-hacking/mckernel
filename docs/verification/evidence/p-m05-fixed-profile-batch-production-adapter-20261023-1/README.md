@@ -1,0 +1,13 @@
+# Fixed-profile production batch adapter retention
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+This capsule retains exact private source, test and result bytes for the final stop-mask-corrected Production Hooks adapter (`da76f9ef…c0a7a`). The genuine root-supplied independent reviewer receipt is included unchanged. It accepts the source and modeled-boundary evidence only; it grants no execution release.
+
+The final check passed20 tests, including actual deferred SIGTERM delivery across modeled native creation/assignment and durable birth commit, child prior-mask restoration, retained ownership on start/write/timeout failures, byte-authenticated owner/QEMU/container evidence and first-operation qualification before advance. Native process/privileged OS boundaries were modeled. Both the first fixture failure and its sole correction remain complete: a reused modeled one-use namespace was refused before native creation; the correction supplied an independent namespace per injection case. Original17PASS source/evidence and its explicit historical-path restoration map remain intact.
+
+The accepted990807 capture source, actual command/limits metadata, raw stdout/stderr, direct-wait/direct-join records and result descriptors are retained. Both correction-family test processes joined, closed all streams and proved group absence; CPU6 was released. No new tests, compiler, root, Docker, VM, QEMU or network operation was run to create this capsule.
+
+The future tuple/profile/execution release remain NULL. Next prerequisites are acceptance of the matching V3 SDK/launcher/native tuple and first complete restoration, then a fixed future profile and one exact ordered nonce/operation release with fresh per-operation admission and positive prior retirement. Accepted old20352 restoration quota cannot transfer. A retained native process with a blocked signal mask is uncertain ownership requiring external reconciliation, never successful teardown or credit. This capsule adds no native application, release or milestone credit.
+
+`MANIFEST.json` binds every retained payload and the restoration map by SHA256 and size. `RESTORATION-MAP.json` maps every copied byte sequence to its original private/upstream path; all originals remain untouched. Copies preserve bytes, while original file modes are recorded. `VERIFICATION.json` records the finite selected-file equality check. No binary or large entry was omitted. Sources keep their original absolute references; replay requires explicit restoration/binding and separate authorization, not execution directly from this capsule.

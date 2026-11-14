@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "record_kind": "stability_selected_retention_actual_method_source_blocker",
+  "task_id": "M01-B",
+  "attempt": 2,
+  "created_utc": "2026-09-16T07:14:00Z",
+  "status": "BLOCKED_BY_REVIEWED_WRITE_BOUNDARY",
+  "prior_failure": {
+    "path": "docs/verification/stability-selected-retention-actual-method-source-failure-20260916-1.json",
+    "sha256": "9cbd070645e6571f8337de08c83ca6de51493e5ab8f3f791135f00a0a2c853bf"
+  },
+  "preserved_archive": {
+    "path": "docs/verification/evidence/stability-selected-retention-actual-method-source-failure-20260916-1.tar.gz",
+    "sha256": "4fee427b35ca4f84fb4e7dd966274b9203502b49cf9893a8b7629df4fd8b5c16"
+  },
+  "source_changed_in_attempt": false,
+  "exact_blocker": [
+    "Production ResponseMemory is an unsafe trait requiring physical(&self), address(&mut self) -> *mut u8 and consuming unsafe release(self).",
+    "Response::from_memory requires both &Request and memory; Mailbox::open_worker accepts a tid and returns a handle.",
+    "Truthful aligned backing lifetime, selected Claim identity, private Call admission and allocator-compatible ledger hooks require module-local cfg(test) additions inside the exact generated candidate sources.",
+    "The current three-file allowlist cannot define those private helpers without inventing APIs or replacing production behavior with a model."
+  ],
+  "required_next_review": "Independently review exact cfg(test) patch points and a narrow expanded generated-candidate allowlist before another implementation attempt.",
+  "retained_hashes": {
+    "generator": "bcad086872addd50ff6b4f6dd35104da48a1a48a9daaf24c35acb1f1e76b3469",
+    "tests": "3892fc299df88d16ef3ea35180a4cd0250909b40612e780cf4a9021815042183",
+    "adapter": "aa8c79db9c904209e247e86ca620314f01b27dd23d85fafb3c5b7eb5802d767d"
+  },
+  "checks": {
+    "python3_9_and_3_8_pycompile": "PASS",
+    "v2_plus_retained_v1_envelope": "7/7 PASS but non-probative",
+    "diff_check": "PASS"
+  },
+  "source_packet_accepted": false,
+  "compiled": false,
+  "runtime_execution": false,
+  "guest_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}

@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "record_kind": "stability_linux_collector_storage_fault_v2_source_review_failure",
+  "task_id": "M02-B-storage-fault-v2-source-review",
+  "review_attempt": 38,
+  "recorded_utc": "2026-09-16T08:35:00Z",
+  "status": "FAIL_SOURCE",
+  "review_input": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260916-41.tar.gz",
+    "sha256": "b96f2107b6a2857b3995b65e626c9d8b5a47d0a9d5fd8f697489baab6779a5e0",
+    "size": 38136275,
+    "members": 36,
+    "files": 26,
+    "safe_unique_members": true,
+    "manifest_bindings_verified": 25,
+    "commit": "aa5fa4e21d014e6f1fc5a67c7578d85070c8414e"
+  },
+  "authenticated_inputs": {
+    "archive_41_exact": true,
+    "nested_archives_40_through_27_envelopes_and_manifests": "PASS",
+    "retained_python3_9": "124/124 PASS",
+    "retained_python3_8": "124/124 PASS",
+    "positive_selectors": "7/7 PASS",
+    "replayed_review_groups_24_through_33_and_37": "13/13 PASS after correcting one reviewer-only oversized-read adapter mismatch",
+    "reviewer_adapter_failure_was_not_a_source_result": true
+  },
+  "finding": {
+    "id": "setup-executable-backing-size-and-permissions-unbound",
+    "severity": "source-blocking",
+    "producer_contract": "collector seal_source requires the executable backing size to equal the pinned executable size and its permission bits to equal 0500 before execution; inject.h serializes that retained backing stat in SETUP",
+    "owner_gap": "witness_owner.py validates only the generic stat ranges before ACK and does not enforce the successful executable backing size or permissions",
+    "oracle_gap": "oracle.py joins executable dev/ino, regular-file type and complete seals but neither size nor exact permissions before the report-presence branch, and report-present selectors do not join all shared backing fields to report metadata",
+    "affected_selectors": [0, 3, 4, 5],
+    "false_accepts": [
+      {
+        "mutation": "SETUP.executable_backing.size=0",
+        "selector_4_canonical_compact_sorted_packet_sha256": "59f63e520e309b23bc4f3ebce008cd31c84bedd9835fd07498dcef51389591a1",
+        "owner_pre_ack": "ACCEPTED_INCORRECTLY",
+        "full_oracle": "ACCEPTED_INCORRECTLY"
+      },
+      {
+        "mutation": "SETUP.executable_backing.mode=0100600",
+        "selector_4_canonical_compact_sorted_packet_sha256": "f0854a4c4883ecb46218b9bddd6f01234673766456e3755a117aaa627596cbb0",
+        "owner_pre_ack": "ACCEPTED_INCORRECTLY",
+        "full_oracle": "ACCEPTED_INCORRECTLY"
+      }
+    ],
+    "independent_reproduction": "Both mutations also pass separately from fresh valid fixtures for selectors 0, 3 and 5. Existing report metadata remains contradictory for report-present selectors. Report-absent selector 4 also passes.",
+    "source_anchors": {
+      "oracle": "scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/storage-fault-v1/oracle.py:2252-2256",
+      "owner": "scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/storage-fault-v1/witness_owner.py:1018-1026",
+      "producer": "scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/collector.c:352-357",
+      "serializer": "scripts/tests/fixtures/application-collector-v1/linux-sealed-v1/storage-fault-v1/inject.h:383-385"
+    }
+  },
+  "required_correction": [
+    "enforce the successful backing size and exact permission bits before ACK and before report-presence branching",
+    "join all shared executable-backing fields to report metadata when a report is present",
+    "add independently rebound archive-41 old-accept/current-reject controls for both mutations across selectors 0, 3, 4 and 5"
+  ],
+  "review_limitations": [
+    "review stopped at the concrete source blocker and is not exhaustive acceptance of unaffected paths",
+    "the reviewer used in-memory fixtures and created or edited no project files"
+  ],
+  "source_accepted": false,
+  "compiler_packet_released": false,
+  "compiled": false,
+  "root_execution": false,
+  "native_execution": false,
+  "guest_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}

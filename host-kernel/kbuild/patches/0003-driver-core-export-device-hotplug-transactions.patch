@@ -1,0 +1,44 @@
+From: McKernel native Rust integration
+Subject: [PATCH] driver core: export existing device hotplug transaction APIs
+
+The Rust IHK CPU adapter must hold device_hotplug_lock across the complete
+multi-CPU preflight, transitions, final observations and compensation. The
+exported add_cpu/remove_cpu wrappers take this mutex internally and cannot be
+called while that batch lock is held. Export the existing lock and device
+transition entry points without introducing a project C bridge or changing
+their implementation. Callers retain device references and obey the existing
+documented lock order. CPUHP policy callbacks separately protect reservations
+between transactions.
+
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -2344,11 +2344,13 @@ void lock_device_hotplug(void)
+ {
+ 	mutex_lock(&device_hotplug_lock);
+ }
++EXPORT_SYMBOL_GPL(lock_device_hotplug);
+ 
+ void unlock_device_hotplug(void)
+ {
+ 	mutex_unlock(&device_hotplug_lock);
+ }
++EXPORT_SYMBOL_GPL(unlock_device_hotplug);
+ 
+ int lock_device_hotplug_sysfs(void)
+ {
+@@ -4204,6 +4206,7 @@ int device_offline(struct device *dev)
+ 
+ 	return ret;
+ }
++EXPORT_SYMBOL_GPL(device_offline);
+ 
+ /**
+  * device_online - Put the device back online after successful device_offline().
+@@ -4235,6 +4238,7 @@ int device_online(struct device *dev)
+ 
+ 	return ret;
+ }
++EXPORT_SYMBOL_GPL(device_online);
+ 
+ struct root_device {
+ 	struct device dev;

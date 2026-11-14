@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "record_kind": "native_collector_lifecycle_raw_key_domain_source_checkpoint",
+  "task_id": "M02-C-lifecycle-raw-key-domain-source",
+  "attempt": 1,
+  "status": "PASS_RAW_KEY_DOMAIN_SOURCE_CHECKPOINT_ONLY",
+  "recorded_utc": "2026-09-15T15:19:00Z",
+  "base_commit": "4fa4fa4a0b1664a97421f1ac36951ac5743fc8f1",
+  "reviews": {
+    "packet": "PASS_RAW_KEY_DOMAIN_PACKET_ONLY",
+    "source": "PASS_RAW_KEY_DOMAIN_SOURCE_ONLY",
+    "evidence": "PASS_RAW_KEY_DOMAIN_EVIDENCE_ONLY"
+  },
+  "source": {
+    "harness_sha256": "cb8d5ea3b08aed57d716d65e3fe85b3ddc78ef0dd73b268bec997edf6360ea8a",
+    "vectors_sha256": "546e31899c5fcbc5c2e234c9394c00ce02286be4bc682b03613fe138cc4894e2",
+    "expected_sha256": "86473f7b4027b9a06e064788d7ed41115b28705a62edc199879990310323a7f7",
+    "test_sha256": "94cb0431f14578030cd6a740528394e5a10c0316f4a9eefb9fc8e1b459ac8521",
+    "accepted_prefix_text_sha256": "bf14431f328af1b37777352fa70a24055e7824f0b2fd721c386debb1e4c57741"
+  },
+  "archive": {
+    "path": "docs/verification/evidence/stability-native-collector-lifecycle-raw-key-domain-source-checkpoint-20260915-1.tar.gz",
+    "sha256": "26cf16260093388c9cd94da800f2a3c61057ee3201c52d1409f0274d53a42e4b",
+    "members": 11
+  },
+  "checks": {
+    "python_3_9_12": {"tests_passed": 9, "tests_failed": 0},
+    "python_3_8_10": {"tests_passed": 9, "tests_failed": 0},
+    "new_raw_cases": 30,
+    "cumulative_raw_cases": 88,
+    "accepted_prior_records": 58,
+    "relationship_consistent_positive_controls": true,
+    "typed_boolean_substitution_control": true
+  },
+  "preserved_review_failures": 1,
+  "full_per_component_key_coverage_deferred": true,
+  "pool_budget_coverage_deferred": true,
+  "raw_full_matrix_frozen": false,
+  "corpus_complete": false,
+  "compiler_execution": false,
+  "model_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

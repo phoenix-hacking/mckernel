@@ -1,0 +1,163 @@
+{
+  "schema": 1,
+  "created_at": "2026-11-12T09:59:10.553769+00:00",
+  "root": "01a18bc3-e072-7810-9426-75101b0856c0",
+  "invocation": "invocation20261112T094452Z-12a4bea0",
+  "owner": "/root/proc_vm_index_fix",
+  "model": "gpt-6.1-sol",
+  "reasoning_effort": "max",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Valid in-process buffers and callback traces only; no live other-process memory access.",
+  "excluded_rejected_request": {
+    "worker": "01a1c48d-4d96-7cc3-b733-73a97973152f",
+    "turn": "01a1ce01-20cf-7e03-9442-f6d521fb8b02",
+    "request": "signal/frame/xstate collector",
+    "replay": false,
+    "rephrase": false,
+    "reassign": false
+  },
+  "repo_head": "a9c662cc8386fdb6d90a4f1f659f80c5fe7491f3",
+  "canonical_target_status": "",
+  "files": [
+    {
+      "path": "arch/x86_64/kernel/syscall.c",
+      "preimage": {
+        "bytes": 123719,
+        "sha256": "4f6ea41af837748aae2d9581c7c45963c5cd5367093c8aebb1e62b12f75994ca",
+        "git_blob_sha1": "54820e85b803b18b1a43848ecc0b9d1ea4fab717"
+      },
+      "postimage": {
+        "bytes": 123719,
+        "sha256": "160e79f6352272d5b9f4f6106f70fcae00e4850220985444c272a78e1a2b09ca",
+        "git_blob_sha1": "17cb88c13b8fec94f3f62519ed128f574fde8183"
+      },
+      "canonical_bytes_still_equal_preimage": true
+    },
+    {
+      "path": "kernel/rust/syscall_policy.rs",
+      "preimage": {
+        "bytes": 1247778,
+        "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503",
+        "git_blob_sha1": "58f40278e79091aa87dd3cb30c24f31b6f0f75fe"
+      },
+      "postimage": {
+        "bytes": 1247778,
+        "sha256": "5c4a4ff3ac86f4898018a8dc819847fa2f7fd9489d52b87b9a566a7cf40f6022",
+        "git_blob_sha1": "20184eea32e7b508b9c0ba6424b80dd4a70105ae"
+      },
+      "canonical_bytes_still_equal_preimage": true
+    }
+  ],
+  "source_pins": [
+    {
+      "path": "kernel/rust/f06_process_vm_entry.rs",
+      "bytes": 5428,
+      "sha256": "0e9d9d23db1a376f38757fba98c6b34d0aed4f4b6c45398b0b9372d7624c3d2e",
+      "git_blob_sha1": "d612548db726c2dc81937426990ee4b396651f57"
+    },
+    {
+      "path": "kernel/rust/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "git_blob_sha1": "f813c89abcc437b8cde754cc3faa31c48cc6b391"
+    },
+    {
+      "path": "kernel/include/uio.h",
+      "bytes": 486,
+      "sha256": "f1f1e29cec39675214291cfe435b6fb80b423ce13ced0b54727659df486e9991",
+      "git_blob_sha1": "2fdb70cca7d37c3566f0953a5f98f382d9d6eb92"
+    },
+    {
+      "path": "kernel/include/syscall.h",
+      "bytes": 20836,
+      "sha256": "459e6d0faec3f1b8366a0d329571ef5ea813042706be11f9423b0399bbba6ffa",
+      "git_blob_sha1": "aecc880ea625eeee306d1f98faa14ef56da1e551"
+    },
+    {
+      "path": "kernel/CMakeLists.txt",
+      "bytes": 74700,
+      "sha256": "581bc9398e486ad398c4ecc9e4e5445f236213af2543022a421881d904c471df",
+      "git_blob_sha1": "b331f1fe8e8a27d1aea9c531bd17deb4669d12ec"
+    },
+    {
+      "path": "kernel/syscall.c",
+      "bytes": 967651,
+      "sha256": "9f5aa63d124784d772734bff1c0c63dd719cb814fd43d4ebf41f3bf7ce188b2e",
+      "git_blob_sha1": "8541a230d72879f4484682d79bc6921eff593365"
+    },
+    {
+      "path": "docs/verification/m14-m15-closure-progress.json",
+      "bytes": 962195,
+      "sha256": "c7cc97fffad7e719e5146621335cef3e93ffcbb62c859fa7666fd273adc4fab6",
+      "git_blob_sha1": "ee9017ac9cfe31b51834c9ff002ca5eb13e233c7"
+    }
+  ],
+  "patch": {
+    "path": "INTEGRATION.PRIVATE.patch",
+    "bytes": 1245,
+    "sha256": "a3ee285c4e0a354ba2ac957f9517b97c54634e4e28c9dce820de3f7d455be2f4",
+    "git_blob_sha1": "0e8ff7112067664856411d5828f9f7962f1ce158"
+  },
+  "edit_summary": {
+    "rust": "remote_check_index = li becomes remote_check_index = ri",
+    "retained_c": "Only five remote_iov[li] uses in the pri != ri range-validation block become remote_iov[ri]",
+    "index_token_replacements_total": 6,
+    "changed_lines_total": 5
+  },
+  "original_requirement": {
+    "id": "M14-06-05-FUNCTIONAL",
+    "parent": "M14-06-05",
+    "done_when": "Cross-process memory/move-pages preserve required data/error results, target references and NUMA callback lifetimes through completion and cleanup on the matching image.",
+    "credit_from_this_preparation": 0,
+    "acceptance": "pending"
+  },
+  "diagnosis": {
+    "trigger": "One initialized local 8-byte segment and two initialized remote 4-byte segments with equal total lengths.",
+    "state_after_first_copy": {
+      "li": 0,
+      "ri": 1,
+      "loff": 4,
+      "roff": 0,
+      "copied": 4
+    },
+    "before": "pri != ri enters the remote validation block for remote segment 1 but looks up remote segment 0 using li. Copy and VTOP already use ri.",
+    "after": "Each newly current remote segment is validated using the same ri that drives VTOP, copy, and remote-offset advancement."
+  },
+  "source_contract": {
+    "layout": "x86_64 C iovec is pointer plus size_t; Rust Iovec is repr(C) with *mut c_void plus SizeT. CInt=i32; CULong=u64; SizeT=usize. No layout or width changes.",
+    "entry": "Rust sys_process_vm_readv/sys_process_vm_writev -> process_vm_rw_body_result -> existing do_process_vm_read_writev in f06_process_vm_entry.rs -> arch_process_vm_read_writev_body_result. C fallback retains its existing body when corresponding Rust selection is absent.",
+    "locks_and_borrows": "Current thread/process/VM/iovec storage remains borrowed for the synchronous operation. Stack find/update lock nodes stay distinct and live. Remote VM hold occurs before update/process unlocks and is released exactly through the pre-existing exits. Patch changes no ownership, lock operations or lifetime.",
+    "validation": "Flags, count bounds, iovec-array coverage and equal byte totals remain unchanged. For each new local or remote vector, base lookup precedes whole-range lookup, permission read and unlock. Local READ requires writable local range; WRITE requires readable local range. Remote READ requires readable remote range; WRITE requires writable remote range.",
+    "transfer": "Existing VTOP, one bounded fault retry, page cap, copy direction, copy log, offset advancement and copied accumulation retain exact order.",
+    "returns": "Existing CInt/int body return and CLong/long wrapper extension remain unchanged. Success returns copied. Failure retains existing negative error rather than converting prior copied bytes into partial success. Existing release ordering remains.",
+    "unchanged": [
+      "public ABI and symbols",
+      "callback signatures and arguments other than selected remote-vector base/length",
+      "constants and error codes",
+      "lock acquisition/release sequence",
+      "VM reference lifetime",
+      "volatile reads and arithmetic widths",
+      "fault/copy/log/offset ordering",
+      "supported-default selection and C exclusion conditions"
+    ]
+  },
+  "review": {
+    "independent_owner": "/root/functional_delta_review",
+    "status": "requested; fixture and independent patch review pending",
+    "reviewer_owns_fixture_expectations": true
+  },
+  "execution": {
+    "compiler": false,
+    "functional_tests": false,
+    "container": false,
+    "native": false,
+    "canonical_integration": false,
+    "image_rebuild": false
+  },
+  "remaining_validation": [
+    "Independent valid-buffer fixture/oracle must distinguish the retained preimage defect from the corrected body, for both READ and WRITE; Root alone admits and executes necessary changed-input checks.",
+    "Independent focused patch review confirms the exact minimal paired correction and unchanged ABI/ownership/cleanup contracts.",
+    "After Root integration and only with actual operation-specific admission, regenerate necessary changed Rust body/object and matched coherent successor image/provider evidence; do not replay unchanged green suites.",
+    "The frozen first-repeat c964/a2f/f133 cohort remains untouched. Matching image/native original M14-06-05-FUNCTIONAL evidence is still required; preparation and a host fixture earn no original acceptance."
+  ],
+  "holds": "All actual generic/exec/ACK/source/UNKNOWN, service/account/spend, resource/native and rejected-request restrictions retained. This patch preparation asserts no clearance and grants no execution authority."
+}

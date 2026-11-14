@@ -1,0 +1,833 @@
+{
+  "acceptance_and_credit": {
+    "default_cutover": false,
+    "project_C_retirements": 0,
+    "qualified_delta": "Matching-provider Rust shared compile/link + real crash-header ABI bridge + actual corrected staged wrapper-consumed extension path only",
+    "whole_I03_accepted": false,
+    "whole_P04_or_I01_accepted": false,
+    "whole_image_or_native_acceptance": false
+  },
+  "actual_artifacts": {
+    "Rust_object": {
+      "bytes": 44792,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/build-output/rust/ldump2mcdump_helpers.o",
+      "sha256": "615309a13bfb9978a0d0420194fd0b2564bff83ed64f160efefc4848bccf1578"
+    },
+    "baseline_build": {
+      "bytes": 41152,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/build-output/libldump2mcdump.so",
+      "sha256": "60e4770ed4865024dce6189ba8cf3aae18ee1aee9d198b0ff43d4489e9f4b07c"
+    },
+    "baseline_stage": {
+      "bytes": 41152,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/build-output/stage-baseline/opt/mckernel-p04/lib64/libldump2mcdump.so",
+      "sha256": "a53655dff368c805294d9ec10e307ebd14554a73daa494fae197c8d812c72295"
+    },
+    "candidate_build": {
+      "bytes": 41152,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/build-output/ldump2mcdump.so",
+      "sha256": "7d9a3aa0f106819abee32477b54fb1bdfd6f2c639d9a402ccbdd1e266a221dd6"
+    },
+    "candidate_stage": {
+      "bytes": 41152,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/build-output/stage-candidate/opt/mckernel-p04/lib/ldump2mcdump.so",
+      "sha256": "695845a9b2308bf679ddc8039f1a6fa7364c9dfc58344ad25d5920632ecec20b"
+    },
+    "crash_ABI_compile_only_object": {
+      "bytes": 2936,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/build-output/crash_abi_compile.o",
+      "sha256": "0fbc0d04dfdf488310ef59da02e909e1263e39390a47349eb29ab407eacfecec"
+    },
+    "real_BFD_generated_DATA": {
+      "bytes": 616,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/build-output/rust/ldump2_bfd_section_layout.rs",
+      "sha256": "0d5b261473c33d919980ee65ef3a8635ff7228b772dc34de0ffa0e7dee50709f"
+    }
+  },
+  "actual_execution": {
+    "admissions": [
+      {
+        "bytes": 635,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/baseline-execution-1/1/ADMISSION.json",
+        "sha256": "a0878eea8c7ec7fcf12541b571a36edbe7fa8cb8e3f000d9583ee57453f15111"
+      },
+      {
+        "bytes": 528,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/candidate-execution-1/1/ADMISSION.json",
+        "sha256": "812df18fb28779393ccac003aaed8f1585d18d0110817e74f719595c739f5301"
+      }
+    ],
+    "all14_phase_attach_and_container_returns_zero": true,
+    "all14_positive_direct_waits_and_owned_terminal_removals": true,
+    "baseline": {
+      "bytes": 10073,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/baseline-execution-1/RESULT.json",
+      "sha256": "b70a14b338d31e48a10bbaf2246a462388722709d4e036a02e3c7f113e7c766b"
+    },
+    "baseline_finished_at": "2026-11-10T12:53:47.174727+00:00",
+    "baseline_status": "PASS_REAL_SHARED_EXTENSION_BASELINE_WITH_CONFIRMED_PUBLIC_PACKAGING_MISMATCH",
+    "candidate": {
+      "bytes": 7608,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/candidate-execution-1/RESULT.json",
+      "sha256": "eafdf6e96c0acd251a5a08150b07f32565758f3b7ad65a91c9c73d01e47ba415"
+    },
+    "candidate_finished_at": "2026-11-10T13:02:13.761929+00:00",
+    "candidate_status": "PASS_PRODUCTION_PACKAGING_CORRECTION_WITH_EXACT_WRAPPER_CONSUMED_STAGED_PATH",
+    "no_extension_init_main_or_native_dump_execution": true,
+    "retained_failure_family": "Baseline successful new matching-provider build/stage confirms real packaging mismatch; original baseline files/results/staging preserved and one reviewed CMake correction was applied privately. No suite replay or unrelated retry."
+  },
+  "actual_packaging_change": {
+    "baseline_observed": "Actual CMake shared link SONAME/output libldump2mcdump.so; actual DESTDIR install with GNU libdir=lib64 produces stage-baseline/opt/mckernel-p04/lib64/libldump2mcdump.so, while literal wrapper-consumed lib/ldump2mcdump.so is absent.",
+    "candidate_observed": "Actual corrected shared target SONAME/output ldump2mcdump.so; actual DESTDIR install produces stage-candidate/opt/mckernel-p04/lib/ldump2mcdump.so, with ELF identity695845a9..., while old lib64/libldump2mcdump.so and lib/libldump2mcdump.so are absent in candidate stage.",
+    "consumer_join": "Both frozen retained script and current ee647 Rust wrapper explicitly extend/unload ${prefix}/lib/ldump2mcdump.so. New staged relative path matches those unchanged literals at explicit prefix/opt/mckernel-p04 and supported nondefault GNUInstallDirs lib64.",
+    "install_manifest": {
+      "bytes": 37,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/build-output/install_manifest.txt",
+      "sha256": "b6796960e827a79ed6883ff863aa035d71a26dddd25ff5a2a448279dd95b8cc3"
+    },
+    "preserved_baseline_artifacts_verified_against_receipt": true,
+    "source_mutation": {
+      "bytes": 455,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/candidate-execution-1/SOURCE-MUTATION.json",
+      "sha256": "eb6e6a13d000fb615982262d002d0a51a093d0d572b353f522e4988b4a767a9d"
+    },
+    "staging_only": "No write to /opt or installed host tree occurred; DESTDIR is the reviewed private output. The extension was never loaded, dlopened or run."
+  },
+  "actual_shared_ELF": {
+    "DT_NEEDED": [
+      "libc.so.6"
+    ],
+    "baseline_SONAME": "libldump2mcdump.so",
+    "candidate_SONAME": "ldump2mcdump.so",
+    "class": "ELF64 little endian",
+    "dynamic_defined_count": 13,
+    "dynamic_defined_symbols": [
+      {
+        "binding": "GLOBAL",
+        "index": "11",
+        "kind": "FUNC",
+        "name": "ldump2_fill_chunks_result",
+        "size": 283,
+        "value": "0x2fc0",
+        "visibility": "DEFAULT"
+      },
+      {
+        "binding": "GLOBAL",
+        "index": "11",
+        "kind": "FUNC",
+        "name": "ldump2mcdump_init",
+        "size": 158,
+        "value": "0x3250",
+        "visibility": "DEFAULT"
+      },
+      {
+        "binding": "GLOBAL",
+        "index": "11",
+        "kind": "FUNC",
+        "name": "_ZN79_$LT$ldump2mcdump_helpers..OwnedAllocation$u20$as$u20$core..ops..drop..Drop$GT$4drop17h9f78495f48de9a78E",
+        "size": 25,
+        "value": "0x2580",
+        "visibility": "DEFAULT"
+      },
+      {
+        "binding": "GLOBAL",
+        "index": "11",
+        "kind": "FUNC",
+        "name": "_RNvCs3oH69xKo20m_7___rustc17rust_begin_unwind",
+        "size": 4,
+        "value": "0x2100",
+        "visibility": "DEFAULT"
+      },
+      {
+        "binding": "GLOBAL",
+        "index": "11",
+        "kind": "FUNC",
+        "name": "_ZN81_$LT$ldump2mcdump_helpers..OwnedSectionNames$u20$as$u20$core..ops..drop..Drop$GT$4drop17h1544aa70792995beE",
+        "size": 59,
+        "value": "0x25a0",
+        "visibility": "DEFAULT"
+      },
+      {
+        "binding": "GLOBAL",
+        "index": "21",
+        "kind": "OBJECT",
+        "name": "help_ldump2mcdump",
+        "size": 64,
+        "value": "0x7090",
+        "visibility": "DEFAULT"
+      },
+      {
+        "binding": "GLOBAL",
+        "index": "11",
+        "kind": "FUNC",
+        "name": "ldump2_count_chunks_result",
+        "size": 131,
+        "value": "0x2f30",
+        "visibility": "DEFAULT"
+      },
+      {
+        "binding": "GLOBAL",
+        "index": "11",
+        "kind": "FUNC",
+        "name": "_ZN72_$LT$ldump2mcdump_helpers..OwnedBfd$u20$as$u20$core..ops..drop..Drop$GT$4drop17h319310750ec78478E",
+        "size": 25,
+        "value": "0x2560",
+        "visibility": "DEFAULT"
+      },
+      {
+        "binding": "GLOBAL",
+        "index": "11",
+        "kind": "FUNC",
+        "name": "ldump2_physmem_name_result",
+        "size": 346,
+        "value": "0x30e0",
+        "visibility": "DEFAULT"
+      },
+      {
+        "binding": "GLOBAL",
+        "index": "11",
+        "kind": "FUNC",
+        "name": "ldump2mcdump_fini",
+        "size": 1,
+        "value": "0x3240",
+        "visibility": "DEFAULT"
+      },
+      {
+        "binding": "GLOBAL",
+        "index": "16",
+        "kind": "OBJECT",
+        "name": "_ZN20ldump2mcdump_helpers23LDUMP2MCDUMP_FINI_ARRAY17hcdceeca4bf0ea37eE",
+        "size": 8,
+        "value": "0x5c98",
+        "visibility": "DEFAULT"
+      },
+      {
+        "binding": "GLOBAL",
+        "index": "11",
+        "kind": "FUNC",
+        "name": "cmd_ldump2mcdump",
+        "size": 2374,
+        "value": "0x25e0",
+        "visibility": "DEFAULT"
+      },
+      {
+        "binding": "GLOBAL",
+        "index": "15",
+        "kind": "OBJECT",
+        "name": "_ZN20ldump2mcdump_helpers23LDUMP2MCDUMP_INIT_ARRAY17h5058dd1148b693abE",
+        "size": 8,
+        "value": "0x5c88",
+        "visibility": "DEFAULT"
+      }
+    ],
+    "dynamic_import_count": 41,
+    "init_fini_final_relocations": [
+      {
+        "record": "0000000000005c88  0000002b00000001 R_X86_64_64            0000000000003250 ldump2mcdump_init + 0",
+        "section": ".rela.dyn"
+      },
+      {
+        "record": "0000000000005c98  0000003300000001 R_X86_64_64            0000000000003240 ldump2mcdump_fini + 0",
+        "section": ".rela.dyn"
+      }
+    ],
+    "init_fini_object_relocations": [
+      {
+        "record": "0000000000000000  0000007400000001 R_X86_64_64            0000000000000000 ldump2mcdump_fini + 0",
+        "section": ".rela.fini_array"
+      },
+      {
+        "record": "0000000000000000  0000007500000001 R_X86_64_64            0000000000000000 ldump2mcdump_init + 0",
+        "section": ".rela.init_array"
+      }
+    ],
+    "initializer_join": "Actual object .rela.init_array/.rela.fini_array point to original Rust ldump2mcdump_init/fini. Final/staged Rust slots5c88/5c98 have R_X86_64_64 relocations to functions3250/3240. Each array is16bytes including ordinary toolchain startup slot. Raw hex zero in Rust slot is relocated at load time; no initializer was run.",
+    "machine": "x86-64",
+    "real_registration_join": "Selected source init fills original help/two-entry table with Some(cmd_ldump2mcdump) and calls register_extension; actual init object relocations reference real table/help/cmd/register symbol. This confirms compiled ownership/selection, not an executed registration claim.",
+    "staged_RPATH": "/opt/mckernel-p04/lib64 (unchanged top production GNUInstallDirs RPATH policy)",
+    "type": "DYN shared object, entry0, no PT_INTERP",
+    "unchanged_rows": "All54 non-null dynamic symbol rows, including definitions/imports/addresses/sizes/types/bindings, are byte-for-byte parsed-equivalent baseline shared ELF, candidate shared ELF and staged candidate. Entire saved Rust-object ELF readback is byte-identical baseline/candidate (121 non-null static symbols plus sections/relocations)."
+  },
+  "canonical_patch_handoff": {
+    "Root_next_action": "Root alone may apply exact reviewed532d patch to matching current user CMake preimage046b, preserving others, publish through existing wrapper and reuse these successful14 phases. No green rerun or acceptance/default flip follows from this qualification.",
+    "canonical_state_read_only": {
+      "at_qualification": {
+        "bytes": 29480,
+        "path": "/home/holden/mckernel/executer/user/CMakeLists.txt",
+        "sha256": "c66bfc9e5f904fcc37d07412b197d04bdcbdb7a4f434c4469715379b674eda6e"
+      },
+      "equals_frozen_preimage": false,
+      "equals_proposed_postimage": true
+    },
+    "equivalence": "Independently derived exact two-site postimage from frozen current production preimage; generated unified diff equals532d byte-for-byte. Tested source cut applies exactly the same target PREFIX-empty and install-lib changes. No compiler/source/layout/dependency/default/ACK/cleanup/staging semantics changed.",
+    "materialized_baseline": {
+      "bytes": 2804,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/baseline/CMakeLists.txt",
+      "sha256": "cc03cd952c8d1631e52cb4a2a9755ba2487ac2f328941c4f5949f5ce782771f2"
+    },
+    "materialized_candidate": {
+      "bytes": 2900,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/candidate/CMakeLists.txt",
+      "sha256": "b1256a50db8dc67a59feaa5820f1280b8561dbf5f547b770bcb6458794638633"
+    },
+    "patch": {
+      "bytes": 922,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/candidate/production-packaging.patch",
+      "sha256": "532d84b10aa251e8ddd6795fcf9c5cccf2ba72e5fd5dcb8ff455983b6675ec55"
+    },
+    "postimage": {
+      "bytes": 29480,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/candidate/executer/user/CMakeLists.txt",
+      "sha256": "c66bfc9e5f904fcc37d07412b197d04bdcbdb7a4f434c4469715379b674eda6e"
+    },
+    "preimage": {
+      "bytes": 29328,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/baseline/executer-user-CMakeLists.txt",
+      "sha256": "046b1635bca3af73c9fc9ed37cc4fd0dc2026632c81bae9b2f4c2e078eb46959"
+    },
+    "scope": "Only ldump target PREFIX is set empty, ldump is removed from combined sched_yield install and installed to relative lib; sched_yield retains GNUInstallDirs libdir. All other current production source remains exact."
+  },
+  "crash_public_ABI_bridge": {
+    "CommandTableEntry": "Actual C full size32/alignment8/offsets0,8,16,24 match selected Linux/x86_64 repr(C) Rust fields. Actual production Rust object has real two-entry COMMAND_TABLE size64 and help array64; no substitute callback/table was constructed by the witness.",
+    "MachdepTable": "Actual flags/kvbase offsets0/8 and unsigned-long types match the consumed Rust prefix. Actual full C struct size520 is recorded and is not equated to Rust two-field prefix16.",
+    "actual_type_assertions": "Saved compile-only phase2 exit0 includes actualdefs0cb and checks nullable cmd callback void(void), char*/char**/unsigned-long fields, register_extension, symbol_value, readmem and argcnt/args/fp/machdep global types, MAXARGS100 and readmem constants against real header declarations.",
+    "actual_u64_record": {
+      "CHAR_BIT": 8,
+      "FAULT_ON_ERROR": 1,
+      "KVADDR": 1,
+      "MAXARGS": 100,
+      "RETURN_ON_ERROR": 2,
+      "TRUE": 1,
+      "align_command_table_entry": 8,
+      "command_flags_offset": 24,
+      "command_func_offset": 8,
+      "command_help_offset": 16,
+      "command_name_offset": 0,
+      "machdep_flags_offset": 0,
+      "machdep_kvbase_offset": 8,
+      "sizeof_actual_full_machdep_table": 520,
+      "sizeof_cmd_func_t": 8,
+      "sizeof_command_table_entry": 32,
+      "sizeof_int": 4,
+      "sizeof_long": 8,
+      "sizeof_pointer": 8,
+      "sizeof_ulonglong": 8,
+      "version": 1
+    },
+    "compile_only_witness": {
+      "bytes": 3159,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/source/qualification/crash_abi_compile.c",
+      "sha256": "7f747b67d90e30558f9121f71ad9dfeefab90ddd4f15a7d418c34d6fea2cecf3"
+    },
+    "header": {
+      "bytes": 206461,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/source/qualification/defs.h",
+      "sha256": "0cb677f0a2fd90dc3fbd04b9bc240c04a6409d4f751cb88ceff13d39308e8943"
+    },
+    "limits": "Typed header/source/compiled-object layout bridge only. Actual crash binary symbol export/type ownership and runtime callback/readmem behavior still require their real producer/native proof.",
+    "raw_readback": {
+      "bytes": 1529,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/baseline-execution-1/6/payload.stdout",
+      "sha256": "e5b6381aa5e0da1e51e40582a76c4084b80910ccc42f2eb3997dc38300a7069d"
+    },
+    "witness_is_not_implementation": "Actual header additionally emits diskdump_flags BSS in the compile-only object. That object was never linked or executed; no extra project provider or ABI shim was introduced."
+  },
+  "full_original_conditions_still_missing": [
+    {
+      "condition": "M15-P04 selected/delivered/default runtime program",
+      "remaining": "Exact production wrapper selector stays defaultOFF; this target has no wrapper dependency and did not compile Rust ee647 with the matching SDK or install the Rust wrapper. Joint actual default/installed-role selection, complete supported argv/status/diagnostic/ACK/lifecycle behavior at original scope still require their remaining evidence; prior22/56/lifecycle/selector proofs retain exact scopes and are reused."
+    },
+    {
+      "condition": "M15-P04 real crash/backend/native validation",
+      "remaining": "Matching crash18 export/provider/header/BFD bridge and exact five libc export joins above remain open, followed only by separately admitted actual backend/valid-dump/native functionality under preserved source/native/resource/UNKNOWN holds. No load/init/main action was performed or newly authorized."
+    },
+    {
+      "condition": "M15-I01 complete delivered-runtime ownership",
+      "remaining": "This leaf now has genuine Rust shared producer, real headers/imports/descriptor and corrected staged consumer path. Full all-selected-target/header/installed-program/link/provider/optional-product reconciliation and ownership manifest is not closed by one shared extension. No project C retirement/path reclassification is claimed."
+    },
+    {
+      "condition": "M15-I03 whole ABI/provider closure and milestone order",
+      "remaining": "No complete I03, whole image, original P04/I01 row, M15 milestone or M14 acceptance follows from source/build/mock evidence. Preserve M14-before-M15 acceptance and every generic/exec/replay/source/native/UNKNOWN hold."
+    }
+  ],
+  "import_ownership_and_exact_remaining": {
+    "BFD_functions": [
+      "bfd_close",
+      "bfd_close_all_done",
+      "bfd_fopen",
+      "bfd_get_section_by_name",
+      "bfd_init",
+      "bfd_make_section_anyway",
+      "bfd_perror",
+      "bfd_set_format",
+      "bfd_set_section_contents",
+      "bfd_set_section_flags",
+      "bfd_set_section_size"
+    ],
+    "BFD_scope": "All11 remain actual undefined shared imports. Production target deliberately does not target_link_libraries BFD. Matching archive2324 custody/header proof is reused but no archive consumption or crash-host export resolution is claimed.",
+    "crash_artifact_needed": "A real matching crash host ELF with dynamic exports for the above seven crash globals/functions and11 BFD functions, with actual defs.h/compiler/BFD provider ownership and ABI binding. Production shared link success permits these host imports and does not resolve them.",
+    "crash_functions_and_globals": [
+      "argcnt",
+      "args",
+      "fp",
+      "machdep",
+      "readmem",
+      "register_extension",
+      "symbol_value"
+    ],
+    "host_strong_import_count": 18,
+    "libc_limit": "These five are outside the prior mcinspect import subset. The retained native46d libc readback reviewed by source_acquisition_review_max contains only three C23 export lines, not a verified full export path. No new census/probe is required for this packaging fix; precise five-name actual provider export join remains open for complete provider closure.",
+    "libc_version_requirement": "All20 are GLIBC_2.2.5, actual DT_NEEDED libc.so.6 under unchanged qualified image46d/glibc2.39 provider profile.",
+    "optional_unversioned_toolchain_weak": [
+      {
+        "binding": "WEAK",
+        "index": "UND",
+        "kind": "NOTYPE",
+        "name": "_ITM_deregisterTMCloneTable",
+        "size": 0,
+        "value": "0x0",
+        "visibility": "DEFAULT"
+      },
+      {
+        "binding": "WEAK",
+        "index": "UND",
+        "kind": "NOTYPE",
+        "name": "__gmon_start__",
+        "size": 0,
+        "value": "0x0",
+        "visibility": "DEFAULT"
+      },
+      {
+        "binding": "WEAK",
+        "index": "UND",
+        "kind": "NOTYPE",
+        "name": "_ITM_registerTMCloneTable",
+        "size": 0,
+        "value": "0x0",
+        "visibility": "DEFAULT"
+      }
+    ],
+    "precise_remaining_libc_export_join": [
+      "localtime@GLIBC_2.2.5",
+      "getpwuid@GLIBC_2.2.5",
+      "asctime@GLIBC_2.2.5",
+      "getopt@GLIBC_2.2.5",
+      "gethostname@GLIBC_2.2.5"
+    ],
+    "strong_versioned_libc_count": 19,
+    "versioned_libc_imports_including_weak_finalize": [
+      {
+        "binding": "GLOBAL",
+        "index": "UND",
+        "kind": "FUNC",
+        "name": "free@GLIBC_2.2.5",
+        "size": 0,
+        "value": "0x0",
+        "visibility": "DEFAULT"
+      },
+      {
+        "binding": "GLOBAL",
+        "index": "UND",
+        "kind": "FUNC",
+        "name": "localtime@GLIBC_2.2.5",
+        "size": 0,
+        "value": "0x0",
+        "visibility": "DEFAULT"
+      },
+      {
+        "binding": "GLOBAL",
+        "index": "UND",
+        "kind": "FUNC",
+        "name": "strcpy@GLIBC_2.2.5",
+        "size": 0,
+        "value": "0x0",
+        "visibility": "DEFAULT"
+      },
+      {
+        "binding": "GLOBAL",
+        "index": "UND",
+        "kind": "FUNC",
+        "name": "getpwuid@GLIBC_2.2.5",
+        "size": 0,
+        "value": "0x0",
+        "visibility": "DEFAULT"
+      },
+      {
+        "binding": "GLOBAL",
+        "index": "UND",
+        "kind": "FUNC",
+        "name": "strlen@GLIBC_2.2.5",
+        "size": 0,
+        "value": "0x0",
+        "visibility": "DEFAULT"
+      },
+      {
+        "binding": "GLOBAL",
+        "index": "UND",
+        "kind": "FUNC",
+        "name": "getuid@GLIBC_2.2.5",
+        "size": 0,
+        "value": "0x0",
+        "visibility": "DEFAULT"
+      },
+      {
+        "binding": "GLOBAL",
+        "index": "UND",
+        "kind": "FUNC",
+        "name": "asctime@GLIBC_2.2.5",
+        "size": 0,
+        "value": "0x0",
+        "visibility": "DEFAULT"
+      },
+      {
+        "binding": "GLOBAL",
+        "index": "UND",
+        "kind": "FUNC",
+        "name": "memset@GLIBC_2.2.5",
+        "size": 0,
+        "value": "0x0",
+        "visibility": "DEFAULT"
+      },
+      {
+        "binding": "GLOBAL",
+        "index": "UND",
+        "kind": "FUNC",
+        "name": "calloc@GLIBC_2.2.5",
+        "size": 0,
+        "value": "0x0",
+        "visibility": "DEFAULT"
+      },
+      {
+        "binding": "GLOBAL",
+        "index": "UND",
+        "kind": "OBJECT",
+        "name": "optarg@GLIBC_2.2.5",
+        "size": 0,
+        "value": "0x0",
+        "visibility": "DEFAULT"
+      },
+      {
+        "binding": "GLOBAL",
+        "index": "UND",
+        "kind": "FUNC",
+        "name": "fprintf@GLIBC_2.2.5",
+        "size": 0,
+        "value": "0x0",
+        "visibility": "DEFAULT"
+      },
+      {
+        "binding": "GLOBAL",
+        "index": "UND",
+        "kind": "FUNC",
+        "name": "time@GLIBC_2.2.5",
+        "size": 0,
+        "value": "0x0",
+        "visibility": "DEFAULT"
+      },
+      {
+        "binding": "GLOBAL",
+        "index": "UND",
+        "kind": "FUNC",
+        "name": "malloc@GLIBC_2.2.5",
+        "size": 0,
+        "value": "0x0",
+        "visibility": "DEFAULT"
+      },
+      {
+        "binding": "GLOBAL",
+        "index": "UND",
+        "kind": "FUNC",
+        "name": "fflush@GLIBC_2.2.5",
+        "size": 0,
+        "value": "0x0",
+        "visibility": "DEFAULT"
+      },
+      {
+        "binding": "GLOBAL",
+        "index": "UND",
+        "kind": "FUNC",
+        "name": "perror@GLIBC_2.2.5",
+        "size": 0,
+        "value": "0x0",
+        "visibility": "DEFAULT"
+      },
+      {
+        "binding": "GLOBAL",
+        "index": "UND",
+        "kind": "FUNC",
+        "name": "getopt@GLIBC_2.2.5",
+        "size": 0,
+        "value": "0x0",
+        "visibility": "DEFAULT"
+      },
+      {
+        "binding": "GLOBAL",
+        "index": "UND",
+        "kind": "FUNC",
+        "name": "gethostname@GLIBC_2.2.5",
+        "size": 0,
+        "value": "0x0",
+        "visibility": "DEFAULT"
+      },
+      {
+        "binding": "GLOBAL",
+        "index": "UND",
+        "kind": "FUNC",
+        "name": "fwrite@GLIBC_2.2.5",
+        "size": 0,
+        "value": "0x0",
+        "visibility": "DEFAULT"
+      },
+      {
+        "binding": "WEAK",
+        "index": "UND",
+        "kind": "FUNC",
+        "name": "__cxa_finalize@GLIBC_2.2.5",
+        "size": 0,
+        "value": "0x0",
+        "visibility": "DEFAULT"
+      },
+      {
+        "binding": "GLOBAL",
+        "index": "UND",
+        "kind": "OBJECT",
+        "name": "stderr@GLIBC_2.2.5",
+        "size": 0,
+        "value": "0x0",
+        "visibility": "DEFAULT"
+      }
+    ],
+    "weak_versioned_libc_count": 1
+  },
+  "owner": "/root/p04_source_max, actual gpt-6.1-sol/MAX; saved-result qualification, no new execution; Root sole compositor/executor/publisher",
+  "qualified_at": "2026-11-10T13:12:56.449094+00:00",
+  "qualifier_operations": {
+    "agents_spawned": 0,
+    "canonical_edits": 0,
+    "native_or_dump_actions": 0,
+    "new_compiler_test_build_Docker_or_probe": 0,
+    "program_extension_initializer_execution": 0,
+    "saved_file_reads_and_static_JSON_ELF_text_source_comparisons_only": true
+  },
+  "raw_evidence": [
+    {
+      "bytes": 344,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/baseline-execution-1/1/payload.stdout",
+      "sha256": "3978b5d2ce63299d7934100d1cbcfd3b27c81e098b789868e4e1f98a473fb0cd"
+    },
+    {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/baseline-execution-1/2/payload.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 2514,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/baseline-execution-1/3/payload.stdout",
+      "sha256": "061dc98941ae69f53bdc7e89514201f086789d7acd0d3501eb10c5ed84401adb"
+    },
+    {
+      "bytes": 1089,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/baseline-execution-1/3/payload.stderr",
+      "sha256": "57b3f8407f51e8f5ccd00c4a9c3556a51940d1583d59c596cd82d5cb6b6a1edc"
+    },
+    {
+      "bytes": 118486,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/baseline-execution-1/4/payload.stdout",
+      "sha256": "a93274f09259c4c3c6457aa93d046bc6a1fe28e039d6dfd03519d1e33c980e4e"
+    },
+    {
+      "bytes": 206,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/baseline-execution-1/5/payload.stdout",
+      "sha256": "07d66703499d429851c13858bf532e6739118d64be68f6e8bd582f4360c6e45c"
+    },
+    {
+      "bytes": 1529,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/baseline-execution-1/6/payload.stdout",
+      "sha256": "e5b6381aa5e0da1e51e40582a76c4084b80910ccc42f2eb3997dc38300a7069d"
+    },
+    {
+      "bytes": 260,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/baseline-execution-1/7/payload.stdout",
+      "sha256": "a70f292eba3fd816e0601d30965c6be5fda43c872b5dddaf213964e0635a2358"
+    },
+    {
+      "bytes": 25186,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/baseline-execution-1/8/payload.stdout",
+      "sha256": "b96226e2d2316f9717cb6526867740d0a17c1ce37d94e11d52679377d64f8b45"
+    },
+    {
+      "bytes": 98,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/candidate-execution-1/1/payload.stdout",
+      "sha256": "9a1125e19392ff335901ace9adf9cc17815942af39f06435f78ce05b185e5fa5"
+    },
+    {
+      "bytes": 2718,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/candidate-execution-1/2/payload.stdout",
+      "sha256": "b7227f00cf7368e32f205fabd537b6f9ede815d39595849e6e3c5be1b54d245c"
+    },
+    {
+      "bytes": 1089,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/candidate-execution-1/2/payload.stderr",
+      "sha256": "57b3f8407f51e8f5ccd00c4a9c3556a51940d1583d59c596cd82d5cb6b6a1edc"
+    },
+    {
+      "bytes": 118480,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/candidate-execution-1/3/payload.stdout",
+      "sha256": "278076fcf6b2e104f9519cf6aad775f961d9f13eaa9cd0cb7caecf1024edec8a"
+    },
+    {
+      "bytes": 206,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/candidate-execution-1/4/payload.stdout",
+      "sha256": "07d66703499d429851c13858bf532e6739118d64be68f6e8bd582f4360c6e45c"
+    },
+    {
+      "bytes": 252,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/candidate-execution-1/5/payload.stdout",
+      "sha256": "1d4891412f086f4f871c76b42831d050c8671ddc5f4b3e6f6be9ce841dadfa2e"
+    },
+    {
+      "bytes": 25183,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/candidate-execution-1/6/payload.stdout",
+      "sha256": "f56932b119f5d24efc574ecc5027a1628d0b76bc5ab0a8fb4e6a9f332e58b779"
+    }
+  ],
+  "requests": {
+    "baseline": {
+      "bytes": 52626,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/schedule-correction-1/BASELINE-REQUEST.json",
+      "sha256": "d48c53775f07a32d54cc710d96664225f03b010c253dccc7a98c0ec9c4a46864"
+    },
+    "candidate": {
+      "bytes": 42098,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/schedule-correction-1/CANDIDATE-REQUEST.PROPOSED.json",
+      "sha256": "ad4193457a3b4bfe140555030a4be18e52f401a40bab64269cefa1b3bc40ec2e"
+    },
+    "independent_source_and_operation_GO": {
+      "bytes": 11973,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-review-source-acquisition-max-1/schedule-correction-1/REVIEW.json",
+      "sha256": "65c1f1610648d60d5568f12f2892a732d645df8156cdf67b76220c8197c5383a"
+    },
+    "source_recovery": {
+      "bytes": 12152,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/SOURCE-RECOVERY.json",
+      "sha256": "8435b7f2212884752b77770b61433239f503e16236759b56de71232b0c60c853"
+    }
+  },
+  "reuse_without_execution": {
+    "bytes": 3770,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/EVIDENCE-REUSE.json",
+    "sha256": "fe4a25f09fc41e6e3b2c143ceaccaa3a8e1725fa8fdaa63a33dd70b2026d304b"
+  },
+  "schema": "m15-p04-matching-provider-build-qualification-v1",
+  "scope": "Actual baseline8 and candidate6 saved phases qualify one production ldump2mcdump shared-target packaging repair and unchanged Rust/header/import/initializer bridge. They do not establish full crash-host provider resolution, M15-I03, default wrapper cutover or native behavior.",
+  "source_compiler_and_link_join": {
+    "BFD_DATA": {
+      "SEC_ALLOC": 1,
+      "SEC_HAS_CONTENTS": 256,
+      "bfd_object": 1,
+      "flags_offset": 36,
+      "lma_offset": 56,
+      "name_offset": 0,
+      "section_align": 8,
+      "section_size": 280,
+      "size_offset": 64,
+      "user_vma_byte": 40,
+      "user_vma_mask": 1,
+      "vma_offset": 48
+    },
+    "actual_Rust_command": "/usr/bin/cmake -E env MAKEFLAGS= MCKERNEL_LDUMP2_BFD_LAYOUT_RS=/output/rust/ldump2_bfd_section_layout.rs /usr/bin/rustc --crate-name ldump2mcdump_helpers --crate-type lib --edition=2021 --cfg ldump2_full_body -C panic=abort -C opt-level=2 -C debuginfo=1 -C relocation-model=pic -C force-unwind-tables=no --emit=obj=/output/rust/ldump2mcdump_helpers.o /source/rust/ldump2mcdump_helpers.rs",
+    "actual_candidate_link": "/usr/bin/cc -fPIC -O3 -DNDEBUG -Wl,--dependency-file=CMakeFiles/ldump2mcdump.dir/link.d -shared -Wl,-soname,ldump2mcdump.so -o ldump2mcdump.so rust/ldump2mcdump_helpers.o  -Wl,-rpath,:::::::::::::::::::::::",
+    "compiler": "Actual image Rust1.92 via /usr/bin/rustc and selected GCC14.3.1 cc2092 from reused matching provider receipt; configure reports GNU14.3.1. No compiler/image probes repeated.",
+    "header_guard": "Unchanged78bc module and3375 typed witness succeeded under actual pinned bfd.hde900/cc2092; production guard generates DATA by real native C witness, not synthetic output.",
+    "image": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+    "matching_provider_basis": {
+      "bytes": 17680,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/PROVIDERS-REUSED.json",
+      "sha256": "c4d9fcf61b687b090d6da5921725102a0ac894a73e131da1b0504e6c878d60be"
+    },
+    "project_object_ownership": "The actual verbose shared link selects only real Rust ldump2mcdump_helpers.o as the project object. No ldump2mcdump.c, fake converter, qualification ABI object or legacy C shim is linked. Normal compiler/linker system startup and libc dependencies retain their real owners.",
+    "source": [
+      {
+        "byte_identical": true,
+        "materialized": {
+          "bytes": 32826,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/source/rust/ldump2mcdump_helpers.rs",
+          "sha256": "5aab8a4270858287d4eb61a1109d96126bae9bf06913da31adf79c3e8c1b7c2a"
+        },
+        "production": {
+          "bytes": 32826,
+          "path": "/home/holden/mckernel/executer/user/rust/ldump2mcdump_helpers.rs",
+          "sha256": "5aab8a4270858287d4eb61a1109d96126bae9bf06913da31adf79c3e8c1b7c2a"
+        }
+      },
+      {
+        "byte_identical": true,
+        "materialized": {
+          "bytes": 2568,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/source/cmake/ldump2-selected-bfd/Ldump2SelectedBfdLayout.cmake",
+          "sha256": "78bc5d6faecd013d3bfb263c097831ce880b76f0a567b99b5787baa6805ad0c4"
+        },
+        "production": {
+          "bytes": 2568,
+          "path": "/home/holden/mckernel/executer/user/cmake/ldump2-selected-bfd/Ldump2SelectedBfdLayout.cmake",
+          "sha256": "78bc5d6faecd013d3bfb263c097831ce880b76f0a567b99b5787baa6805ad0c4"
+        }
+      },
+      {
+        "byte_identical": true,
+        "materialized": {
+          "bytes": 3223,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/source/cmake/ldump2-selected-bfd/section_layout_witness.c",
+          "sha256": "3375c309059ad65b0f18d0431b7c413d10d9ed8196beec82409bdf715c3dc427"
+        },
+        "production": {
+          "bytes": 3223,
+          "path": "/home/holden/mckernel/executer/user/cmake/ldump2-selected-bfd/section_layout_witness.c",
+          "sha256": "3375c309059ad65b0f18d0431b7c413d10d9ed8196beec82409bdf715c3dc427"
+        }
+      },
+      {
+        "byte_identical": true,
+        "materialized": {
+          "bytes": 2426,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/source/cmake/SelectRustVmcore2mckdump.cmake",
+          "sha256": "b082d79c183cc3a19d872bc3252303b71871081036a89f9235d7ab049ed48c81"
+        },
+        "production": {
+          "bytes": 2426,
+          "path": "/home/holden/mckernel/executer/user/cmake/SelectRustVmcore2mckdump.cmake",
+          "sha256": "b082d79c183cc3a19d872bc3252303b71871081036a89f9235d7ab049ed48c81"
+        }
+      },
+      {
+        "byte_identical": true,
+        "materialized": {
+          "bytes": 1076,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/source/vmcore2mckdump.in",
+          "sha256": "6dcf6421727fb048de7149f45ec66624e2d0d688bd9c9736f452a928104ba455"
+        },
+        "production": {
+          "bytes": 1076,
+          "path": "/home/holden/mckernel/executer/user/vmcore2mckdump.in",
+          "sha256": "6dcf6421727fb048de7149f45ec66624e2d0d688bd9c9736f452a928104ba455"
+        }
+      },
+      {
+        "byte_identical": true,
+        "materialized": {
+          "bytes": 206461,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/source/qualification/defs.h",
+          "sha256": "0cb677f0a2fd90dc3fbd04b9bc240c04a6409d4f751cb88ceff13d39308e8943"
+        },
+        "production": {
+          "bytes": 206461,
+          "path": "/home/holden/mckernel/executer/include/defs.h",
+          "sha256": "0cb677f0a2fd90dc3fbd04b9bc240c04a6409d4f751cb88ceff13d39308e8943"
+        }
+      }
+    ],
+    "unchanged_dependency_effect": "Candidate reconfigure meaningfully changed target packaging; unchanged production module regenerated actual DATA and production dependency wiring rebuilt Rust as required. No independent old56/22 or owner/PTY fixture was invoked.",
+    "warnings": "Both actual builds emitted only five dead-code warnings for unused generated layout constants. Exit0, compiler flags and production warning behavior were preserved; no waiver or suppressor introduced."
+  },
+  "status": "PASS_MATCHING_RUST_SHARED_COMPILE_TYPED_ABI_BRIDGE_AND_CORRECTED_STAGED_WRAPPER_PATH_ONLY"
+}

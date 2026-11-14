@@ -1,0 +1,111 @@
+{
+  "allowed_exact_keysets": [
+    4,
+    6
+  ],
+  "entire_module_AST_equal_except": "MCEEXEC_REPLACEMENT_PATHS literal tuple adds only bin/native-boot",
+  "full_six_roles": {
+    "bin/mcexec": {
+      "mode": 493,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/compiler-attempt-1/work/output/build/executer/user/mcexec",
+      "sha256": "689dcad27b2ce3a30f49df1bfe9452f2169a14e9c350c24c9677c88b1f152876",
+      "size": 394656
+    },
+    "bin/native-boot": {
+      "mode": 493,
+      "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/two-cpu-running-query-correction-1/native-boot-two-0755",
+      "sha256": "4312f9a8f53d8db7b2b6be4c7d5e409f5c0f82cf8215728209be0f6ff4a5d5c5",
+      "size": 35784
+    },
+    "images/mckernel.img": {
+      "mode": 493,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/panic-free-full-image-correction-1/full-image-attempt-2/owner-work/output/build/kernel/mckernel.img",
+      "sha256": "1f4dde2fb4f458fe2586e2fa8ec6d481d9d586577377ad8e50a2c307ad2d0b93",
+      "size": 8418992
+    },
+    "modules/ihk-smp-x86_64.ko": {
+      "mode": 420,
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-7421ab938ea04f85b956236fad7210cc/modules/ihk-smp-x86_64.ko",
+      "sha256": "c6a9db8eaa2ec5f7898b021b6835d20e4359a5f4a1209b5b28fd9559cd03387f",
+      "size": 12210104
+    },
+    "modules/ihk.ko": {
+      "mode": 420,
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-7421ab938ea04f85b956236fad7210cc/modules/ihk.ko",
+      "sha256": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c",
+      "size": 1527808
+    },
+    "modules/mcctrl.ko": {
+      "mode": 420,
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-7421ab938ea04f85b956236fad7210cc/modules/mcctrl.ko",
+      "sha256": "e959a2a20ec86622155e15a42b70b3b19f7963e8aac69105f3ba0f162e5f00d1",
+      "size": 2512712
+    }
+  },
+  "new_boot_full_identity": {
+    "bytes": 35784,
+    "mode": 33261,
+    "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/two-cpu-running-query-correction-1/native-boot-two-0755",
+    "sha256": "4312f9a8f53d8db7b2b6be4c7d5e409f5c0f82cf8215728209be0f6ff4a5d5c5"
+  },
+  "no_stage_or_test_executed": true,
+  "old_base_boot_full_identity": {
+    "bytes": 30984,
+    "mode": 33261,
+    "path": "/home/holden/mckernel-work/scratch/native-ultra-futex-guest-20260909-2026091302/root/bin/native-boot",
+    "sha256": "4558995ea1ae70c8d5a115542e333ad695a54b4b8f450ea717df37fd1e631af3"
+  },
+  "old_packet_preserved": true,
+  "original_stager": {
+    "bytes": 21904,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-exec-wait-native-preparation-20261020-1/source/scripts/application-tests/native_diagnostic_stager.py",
+    "sha256": "e935383fac40ec9f2e10f6ffdd42c5e7c4c0de49a243cb34ec0e9b417f5ec860"
+  },
+  "private_stager": {
+    "bytes": 21922,
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-current-child-three-fix-stage-preparation-20261020-1/native_diagnostic_stager.py",
+    "sha256": "cf817433781d7acbf90c1808994003d02136a868229328db845fa47b429b32dc"
+  },
+  "whole235B_contract": {
+    "artifacts_payload": {
+      "bytes": 5628568,
+      "mode": 33216,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/process_exec_wait",
+      "sha256": "537cb22b2af1f7fca1202afaf45b017364823c185c2ec47474093e51647ba5b8"
+    },
+    "case_id": "practical.rust.process.fork-exec-exit-wait.owned-current-v6",
+    "inner_exec_environment": [
+      "PATH=/usr/bin:/bin",
+      "LC_ALL=C",
+      "PRACTICAL_EXEC_TOKEN=fixed-v1"
+    ],
+    "meaning": "One invocation of unchanged static Rust parent; it creates two sequential real children, success exec exits37, missing exec ENOENT child exits42, each EOF/reapedonce/secondwait ECHILD; parent exits0/owned0. Exact source internally verifies raw9472/10752. No --observations file option needed for initial retained stdout oracle.",
+    "native_execution_authority": false,
+    "no_executable_or_oracle_rebuild": true,
+    "outer_payload_timeout_ms": 10000,
+    "parent_deadline_ns": 6000000000,
+    "payload": {
+      "argv": [
+        "/bin/mcexec",
+        "-t",
+        "1",
+        "0",
+        "/apps/app"
+      ],
+      "cwd": "/case/work",
+      "env": {
+        "COKERNEL_PATH": "/apps",
+        "PATH": "/usr/bin:/bin"
+      },
+      "oracle": {
+        "exit_code": 0,
+        "stderr_hex": "",
+        "stdout_hex": "706172656e742073746172740a6368696c642065786563207375636365737320746f6b656e3d66697865642d76310a706172656e742077616974207375636365737320657869743d333720656f663d31207265617065643d3120656368696c643d310a6368696c642065786563206572726f72206572726e6f3d454e4f454e542073746174653d333720756e6368616e6765643d310a706172656e742077616974206572726f7220657869743d343220656f663d31207265617065643d3120656368696c643d310a706172656e7420636f6d706c657465206368696c6472656e3d32206f776e65643d300a"
+      },
+      "stderr_limit_bytes": 1024,
+      "stdout_limit_bytes": 1024
+    },
+    "staged_member": "apps/app"
+  }
+}

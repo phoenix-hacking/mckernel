@@ -1,0 +1,36 @@
+{
+  "schema": "stability-native-exact-disk-build-wrapper-source-v1",
+  "status": "PASS_SOURCE",
+  "date_utc": "2026-09-29",
+  "source_commit": "21fb56e340995def52a37d9cefda266bd048c5f4",
+  "fetched_checkpoint": "f4586a7dd8e1de8807fb77d28f112a829e455390",
+  "artifacts": {
+    "scripts/native_rust_exact_disk_build_wrapper.py": "ca838820d1e21d522023e09890fd963a4d931e03ab99d39bb70c2a9c0b5b4bbd",
+    "scripts/tests/test_native_rust_exact_disk_build_wrapper.py": "7e091b0547797fa861f1c77373a6ed3d802a55d3479fd8e3292cd935d66b2513"
+  },
+  "tests": {
+    "command": "python3 -m unittest scripts.tests.test_native_rust_exact_disk_build_wrapper",
+    "result": "PASS",
+    "count": 12,
+    "py_compile": "PASS"
+  },
+  "verified_behavior": [
+    "candidate owner and offline-driver modules execute only authenticated descriptor-read source bytes without filesystem import-loader or bytecode-cache reopening",
+    "descriptor-relative no-follow traversal rejects link and path escapes and all descriptors close on success or failure",
+    "the offline driver path and hash agree with driver_path and driver_path_sha256; an owner-as-driver request is rejected",
+    "disk-only allocation rows, totals, candidate memory effect and the pinned-container aggregate formula are independently validated",
+    "the decimal launcher aggregate cap is 17411582669 bytes and the pinned container remains 12884901888 bytes"
+  ],
+  "preserved_failures": [
+    "the original wrapper executed candidate provenance before authenticating it and accepted malformed zero-memory measurements",
+    "the first bounded correction hashed then reopened candidate paths and retained malformed measurement cases",
+    "expert review found the next correction bound driver_path to the owner rather than the offline driver; the narrow final correction repaired that regression"
+  ],
+  "execution_state": {
+    "build_executed": false,
+    "docker_executed": false,
+    "guest_executed": false,
+    "application_acceptance": false
+  },
+  "next_action": "After independently accepted tmpfs retirement, create an externally bound fresh disk request containing owner_path_sha256 and provenance_path_sha256, then obtain a separate heavy execution release."
+}

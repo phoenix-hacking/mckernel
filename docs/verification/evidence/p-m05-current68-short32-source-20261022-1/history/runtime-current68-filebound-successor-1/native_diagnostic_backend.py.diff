@@ -1,0 +1,38 @@
+--- /home/holden/mckernel-work/host-preparation/native-second-stop-case-preparation-20261021-1/current053d-normalization-runtime-preparation-1/runtime-source-1/two-generation-namespace-4/native_diagnostic_backend.py
++++ /home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/runtime-current68-filebound-successor-1/native_diagnostic_backend.py
+@@ -6,6 +6,7 @@
+ 
+ import math
+ import os
++import resource
+ import signal
+ import socket
+ import stat
+@@ -379,6 +380,11 @@
+         raise first
+ 
+ 
++
++def require_short_fsize():
++    if resource.getrlimit(resource.RLIMIT_FSIZE) != (33554432, 33554432):
++        raise ValueError("exact inherited SHORT32 FSIZE required")
++
+ def process_factory(argv, cwd, *, popen_factory=subprocess.Popen):
+     """Return a lifecycle factory for a reviewed direct-QEMU command.
+ 
+@@ -386,6 +392,7 @@
+     directory.  No ambient environment, inherited descriptor, shell, or
+     standard-input stream is passed to the child.
+     """
++    require_short_fsize()
+     if (type(argv) not in (tuple, list) or not argv or
+             any(type(arg) is not str or "\0" in arg for arg in argv) or
+             argv[0] != QEMU):
+@@ -401,6 +408,7 @@
+         raise ValueError("QMP must use the private attempt socket")
+ 
+     def spawn(*, timeout):
++        require_short_fsize()
+         deadline = _deadline(timeout)
+         if _private_directory(cwd) != parent_identity:
+             raise ValueError("attempt directory identity changed")

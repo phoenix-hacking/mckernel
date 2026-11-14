@@ -1,0 +1,55 @@
+{
+  "schema": "mckernel.native-scratch18-target-shutdown-checkpoint.v1",
+  "captured_at": "2026-10-01T06:50:50-07:00",
+  "status": "PASS_SOURCE_CHECKPOINT_ONLY",
+  "published_side_target": {
+    "target": "89ab5c555aac9177a789efc67ddc775dacb25d6d",
+    "parent": "50b084322610a9326b1b7b528edd4cd73b635632",
+    "tree": "e57e36cfefa874eb97eff87aca32794a3826b538",
+    "reachable_merge": "6afe71c9371cd694d8393144418a59d90697577f",
+    "fetched_ref": "refs/remotes/origin/codex/local-native-staging-repair",
+    "independent_review": "PASS: exact 14-path delta, 5 additions and 9 modifications; all blob hashes and four gitlinks verified from raw published objects"
+  },
+  "scratch18_preparation": {
+    "helper_sha256": "f1f2a56b6ac82fbdd39c06e6a8c91cb45ce01d7cc3965c9a89301b4561c37da3",
+    "test_sha256": "0732479a93e68bba34b3f808b16ef8f23453ea60d9af1e099617968b260cc0e2",
+    "binding": "exact target, parent, tree, fetched ref and 14 path/status/blob entries",
+    "coordinator_test": "PASS 13/13; CPUs 6-7; RLIMIT_AS 3 GiB",
+    "execution": "NOT_RUN"
+  },
+  "shutdown_order_model": {
+    "driver_sha256": "d0934bf1d2ef7a4e361b6635d30fa398aad36a9679a261d69f79c9021d554781",
+    "fixture_sha256": "b96df16cf007ea164cc7b39529f8d1f3f6aa03f8510ad26723b914ce8bb9ecfa",
+    "independent_review": "PASS_SOURCE_MODEL_ONLY",
+    "coordinator_test": "PASS 2 Python checks and 5 Rust cases; reordered mutant compiled and exited 101 on the required prerequisite assertion",
+    "limitations": "sequential source model only; no production shutdown body, module, guest, hardware or application credit"
+  },
+  "shutdown_reconciliation": {
+    "child_lanes": "all completed or interrupted and closed; no new dispatch",
+    "campaign_heavy_processes": 0,
+    "heavy_lock": "absent",
+    "launcher_processes": [
+      {"pid": 1442141, "started": "2026-09-30T10:46:42-07:00", "role": "tmux launcher"},
+      {"pid": 1442142, "started": "2026-09-30T10:46:42-07:00", "role": "launcher"},
+      {"pid": 1442145, "started": "2026-09-30T10:46:42-07:00", "role": "worker"},
+      {"pid": 1442149, "started": "2026-09-30T10:46:42-07:00", "role": "Codex app server"},
+      {"pid": 1442494, "started": "2026-09-30T10:47:15-07:00", "role": "code-mode host"}
+    ]
+  },
+  "counters": {
+    "compiled_current_candidate": 1,
+    "diagnostic_guest_passes": 5,
+    "formal_application_acceptances": 0,
+    "production_gates": "6/130",
+    "language_gates": "0/7"
+  },
+  "next_actions": [
+    "independently rereview the final exact bound preparation helper; the earlier preparation review predates its target binding",
+    "run validate-only against the fetched target and confirm all scratch18 destinations remain absent",
+    "remeasure capacity and reconcile the shared heavy lock, processes and containers",
+    "prepare scratch18 once, independently review the resulting candidate/request/manifest, then issue a fresh artifact-bound build release",
+    "run one serialized current-candidate build, then image and real futex diagnostic guest if each preceding artifact review passes",
+    "integrate the reviewed shutdown ordering semantics into production and obtain module plus normal-boot runtime evidence"
+  ],
+  "acceptance": "No build, preparation, Docker, guest or production shutdown execution occurred. The OS remains incomplete."
+}

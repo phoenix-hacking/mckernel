@@ -1,0 +1,69 @@
+{
+  "status": "PASS_RETIREMENT_WITH_PINNED_CONSUMER_CONTRACT_FAILURE",
+  "reviewer": "/root/signal_guest_execution_review",
+  "source_contract_reviewer": "/root/lifecycle_collector_review",
+  "recorded_by": "/root",
+  "source_candidate_sha": "d99edf2f58ee44b1a7e9aa726cbb49eee7850248",
+  "owner_exit_code": 0,
+  "elapsed_seconds": 58.94694638252258,
+  "original_attempt_result": {
+    "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-dispatch-20261017-2/attempt-result.json",
+    "sha256": "78b90dc7d99382d1dd8b3932b2b1348d7bacd70864f9a5b41eb79f028ce7a8c1",
+    "size": 287566
+  },
+  "owner_result": {
+    "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-dispatch-20261017-2/owner-result.json",
+    "sha256": "1136d7a3bce21266c86d94fc7949f9bac6a6a88bd21688e20fe114ecda6c420a",
+    "size": 257
+  },
+  "readback_result": {
+    "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-dispatch-20261017-2/readback-result.json",
+    "sha256": "22f63f69e841019e7fa36339300cca686d68f8f361db81c82fa99a7612e51085",
+    "size": 1271
+  },
+  "retention": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-resource-reboot-cycle-retention-20261017-2.json",
+    "sha256": "027dcced805aba771ffa93a2eb382e6367afbf428d96e1608c125ada41fa45eb",
+    "size": 10833
+  },
+  "validators": {
+    "ordinary": "PASS",
+    "strict_stop": "PASS_5_0_0_CLOSE0",
+    "public_resource_release": "PASS",
+    "pinned_second_boot_consumer": "FAIL_EXPECTED_PRI6_ACTUAL_PRI14"
+  },
+  "observations": {
+    "second_helper_exit": 0,
+    "stdout_bytes": 392,
+    "stderr_bytes": 0,
+    "fresh_status": 5,
+    "expected_status": 5,
+    "snapshot_before_bytes": 42439,
+    "snapshot_after_bytes": 47595,
+    "prefix_preserved": true
+  },
+  "classification": "Evidence-consumer mismatch. Helperwrites<6> to/dev/kmsg; exactmatchedLinux defaultLOG_USER facility1 yields serializedPRI14. Originaldfa2 requiresPRI6. No observedsecondbootfailure; correctedversionedconsumer/retainedactualpositive+strictnegatives pending.",
+  "retirement": {
+    "accepted": true,
+    "docker_clients": 30,
+    "owner_pid": 644256,
+    "container_id": "d77c2cac026ac0f61ae6c799707e6b0e93ed7663c456eb755cb64750f9e2fed8",
+    "container_terminal_exit": 0,
+    "container_removed": true,
+    "all_client_groups_reaped": true,
+    "empty_identity_queries": 3,
+    "absence_verified": true,
+    "lease_retained": false,
+    "secondary_owners": [],
+    "root_lock_free": [
+      27,
+      4
+    ],
+    "qemu_reaped": true,
+    "capture_errors": [],
+    "cleanup_note": "stop0/kill1 expected container-not-running stderr retained; not every cleanup command exited0"
+  },
+  "complete_native_cycles": 0,
+  "formal_acceptance": false,
+  "next": "NarrowhostconsumerPRIcorrection, realretaineddecoder\u2192consumer positive+negatives and independentacceptance; no guestretry needed for parserdelta."
+}

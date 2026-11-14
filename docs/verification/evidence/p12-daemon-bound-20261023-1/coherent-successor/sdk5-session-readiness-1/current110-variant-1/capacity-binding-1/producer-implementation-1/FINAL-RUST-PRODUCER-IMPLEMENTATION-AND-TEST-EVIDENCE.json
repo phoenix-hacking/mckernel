@@ -1,0 +1,238 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_ACTUAL_RUST_LONG_LOOP_AND_10_DETERMINISTIC_TESTS_PRIVATE_NOT_LINKED",
+  "sources": {
+    "pair_long_producer.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/pair_long_producer.rs",
+      "sha256": "bbc1825906ca220a24019291ddae1af9d585d5fbb192f54bd09b0754c36876fc",
+      "bytes": 11489
+    },
+    "tests.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/tests.rs",
+      "sha256": "1b8558b4894bc8f8d649d70dd87a558556e3c565102d3dbb59908f852f5f1899",
+      "bytes": 8951
+    },
+    "pair_long_producer.h": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/pair_long_producer.h",
+      "sha256": "6dcbafaadee1743c26c5f7e32675d42b5fd5a72311f1491aca907ae596c86646",
+      "bytes": 1303
+    },
+    "abi_witness.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/abi_witness.c",
+      "sha256": "e1f910e9d66f1366ac545f495cb799c01e3768348690a2df91bb586407b6cfb5",
+      "bytes": 771
+    },
+    "run_producer_tests.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/run_producer_tests.py",
+      "sha256": "19beb5d104d52ebc666227e441a1caba7b9ad701e847292e45715e5b89ea7150",
+      "bytes": 3123
+    }
+  },
+  "profile_authority": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/FINAL-TRANSPORT-PROFILE.NOT-RELEASED.json",
+    "sha256": "5c577ac949c04e2b39a15d6cb10b44167793380c382969d00d34fa3097dbebb7",
+    "producer": {
+      "min_launches": 100,
+      "round_cap": 2048,
+      "trace_cap": 268435456,
+      "version": 1,
+      "wall_ns": 7200000000000,
+      "work_ns": 3600000000000
+    }
+  },
+  "unchanged_consumer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/source/p12_long_session.py",
+    "sha256": "bff717d885afdda0d82cd0ab05a0930a3e66b242c6200b1295f2173bb4cdc5d3",
+    "work_definition_lines": "178-197: perround max(app.reaped_ns)-min(app.started_ns), sum; genuine mixed overlap mandatory; eachapp<=10s; finalelapsedlastreap-firststart and roundend-firststart<7200s."
+  },
+  "seed_provenance": {
+    "pair_collector.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1/candidate/pair_collector.c",
+      "sha256": "b4c019d216ab12d41559fcdb9ea3c9f9380201e8f9d4434847ec254118731431"
+    },
+    "pair_collector.inc": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1/candidate/pair_collector.inc",
+      "sha256": "dcfbb3a9c7199c4d06e014a7b9df9933da7c6f26ed552bc2bdca9e272a082020"
+    },
+    "pair_runtime.inc": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1/candidate/pair_runtime.inc",
+      "sha256": "6fb3c422bd11ecfa2cfdd29eb3665f9d81eb29039cf379ebd415f07087634899"
+    },
+    "pair_launch_expansion_support.inc": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1/candidate/pair_launch_expansion_support.inc",
+      "sha256": "9348bce5f046b3285547e1348966c18b0f09cbfaa9592d04fcc3c7d2c4a64379"
+    },
+    "pair_launch_expansion_run.inc": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1/candidate/pair_launch_expansion_run.inc",
+      "sha256": "6a948ebc2a68b9f3e18cb5fded0eb8309a1bc31a94ecf4e1dccdf1bc620dacbd"
+    }
+  },
+  "implemented": "Actual exported unsafeexternC pair_run_long_session Rustbody owns fixed profile/monotonic clock/deadline/roundcap/minlaunch/unionwork/PIDuniqueness/procfs pre+posthandoff/strictgate/status+clean+EOF+timingchecks/progress+profile+completionwire/boundedexacttrace spoolread-write and serialwritecounts. No configurable shortquota. Fixedten sources untouched.",
+  "actual_fixture_results": {
+    "results": [
+      {
+        "label": "C-ABI-witness",
+        "whole_join": {
+          "captures": {
+            "stderr": {
+              "ctime_ns": 1792752152919926093,
+              "device": 66306,
+              "gid": 1000,
+              "inode": 48802063,
+              "mode": "0o600",
+              "mtime_ns": 1792752152919926093,
+              "nlink": 1,
+              "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/attempt-1/C-ABI-witness/stderr",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0,
+              "uid": 1000
+            },
+            "stdout": {
+              "ctime_ns": 1792752152919926093,
+              "device": 66306,
+              "gid": 1000,
+              "inode": 48802062,
+              "mode": "0o600",
+              "mtime_ns": 1792752152919926093,
+              "nlink": 1,
+              "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/attempt-1/C-ABI-witness/stdout",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0,
+              "uid": 1000
+            }
+          },
+          "closed_streams": true,
+          "direct_child_joined": true,
+          "error": null,
+          "group_absent": true,
+          "pid": 3646183,
+          "remaining_group_members": [],
+          "retirement_error": null,
+          "returncode": 0,
+          "seconds": 0.044422863982617855,
+          "start": 54959762,
+          "timed_out": false,
+          "unexpected_group_members": []
+        }
+      },
+      {
+        "label": "Rust-actual-loop-tests-build",
+        "whole_join": {
+          "captures": {
+            "stderr": {
+              "ctime_ns": 1792752152967927629,
+              "device": 66306,
+              "gid": 1000,
+              "inode": 48802072,
+              "mode": "0o600",
+              "mtime_ns": 1792752152967927629,
+              "nlink": 1,
+              "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/attempt-1/Rust-actual-loop-tests-build/stderr",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0,
+              "uid": 1000
+            },
+            "stdout": {
+              "ctime_ns": 1792752152967927629,
+              "device": 66306,
+              "gid": 1000,
+              "inode": 48802071,
+              "mode": "0o600",
+              "mtime_ns": 1792752152967927629,
+              "nlink": 1,
+              "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/attempt-1/Rust-actual-loop-tests-build/stdout",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0,
+              "uid": 1000
+            }
+          },
+          "closed_streams": true,
+          "direct_child_joined": true,
+          "error": null,
+          "group_absent": true,
+          "pid": 3646186,
+          "remaining_group_members": [],
+          "retirement_error": null,
+          "returncode": 0,
+          "seconds": 0.5571323089534417,
+          "start": 54959767,
+          "timed_out": false,
+          "unexpected_group_members": []
+        }
+      },
+      {
+        "label": "actual-loop-tests",
+        "whole_join": {
+          "captures": {
+            "stderr": {
+              "ctime_ns": 1792752153527945557,
+              "device": 66306,
+              "gid": 1000,
+              "inode": 48802081,
+              "mode": "0o600",
+              "mtime_ns": 1792752153527945557,
+              "nlink": 1,
+              "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/attempt-1/actual-loop-tests/stderr",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0,
+              "uid": 1000
+            },
+            "stdout": {
+              "ctime_ns": 1792752153647949399,
+              "device": 66306,
+              "gid": 1000,
+              "inode": 48802080,
+              "mode": "0o600",
+              "mtime_ns": 1792752153647949399,
+              "nlink": 1,
+              "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/attempt-1/actual-loop-tests/stdout",
+              "sha256": "4b0cc91d50d26d8406262e405523d159bfb903517f2107a4ea7274152c58c831",
+              "size": 753,
+              "uid": 1000
+            }
+          },
+          "closed_streams": true,
+          "direct_child_joined": true,
+          "error": null,
+          "group_absent": true,
+          "pid": 3646196,
+          "remaining_group_members": [],
+          "retirement_error": null,
+          "returncode": 0,
+          "seconds": 0.14667820802424103,
+          "start": 54959823,
+          "timed_out": false,
+          "unexpected_group_members": []
+        }
+      }
+    ],
+    "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+    "status": "PASS"
+  },
+  "test_coverage": [
+    "Unchanged3600s profile completes360controlled10s-union rounds/720launches, all exact scalar wire/progress counts. No realhourworkload claim.",
+    "Gap/setup time excluded fromwork; fastpairs stop at2048cap withoutfakework/completion.",
+    "Strictgate/error/status/EOF/ownership/overlap/10s/PIDdomain/clock/deadline failures refuse completion.",
+    "Wrongreportmarker/multiline/CR/NUL/4096boundary refuse; exactwrite/retain/readcounts mandatory.",
+    "Per-round1MiB tracecap and cumulative256MiBcap refuse excess beforequota; no completionmarker.",
+    "Rust/C ABI size+offset+entrysignature witness compile; C header declarations only."
+  ],
+  "callback_contract_and_remaining_integration": "No production collector bridge exists yet. Operations::run_pair must call actual matched SDK5 strict pair launch/load/byte+exit+reap+EOF+CPU/syscall/BEGIN/resource oracle path; report/trace pointers must denote its authenticated unchangedbytes throughnextpair. Operations::empty must check realworkspace/procfs; tracecallbacks must ownoneboundedspool. Controlled unit callbacks test actualRustbody, not realapps or strictfulltraceacceptance. Seedfixedten global20PID/240token capacities andlegacyrelease oracle cannot simply be rebound as LONGproof: their supported invariants need a separate reviewed Rust-compatible long binding preserving strictoracles.",
+  "ownership": "Any uncertainrun/clean callback leaves summary.ownership_complete0; failedpublication never creates completionACK. Actual owner retains realcallerresources according to existinglifecycle.",
+  "new_compute_kernel_C_functionality": false,
+  "new_C_functionality": "None; ABI witness is compile-only functional C declarations/assertions.",
+  "production_ELF": null,
+  "production_ELF_bytes": null,
+  "capsule_bytes": null,
+  "stage": null,
+  "final_link": null,
+  "native_hour_run": null,
+  "actual_successful_guest_launches": 0,
+  "quota_credit": 0,
+  "storage_admission": null,
+  "root_Docker_guest": 0,
+  "candidate_failures": 0,
+  "bounded_corrections": 0,
+  "CPU6_released": true,
+  "next": "Independent source/ownership/ABI/wire review, then implement real matched collector callback binding and pinned artifact build/stage under its reviewed profile; no ordinary-test result promotes native/cycle acceptance."
+}

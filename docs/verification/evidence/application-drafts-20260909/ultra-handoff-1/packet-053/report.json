@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-053",
+  "packet_version": 1,
+  "context_sha256": "17f05ce9c8a5d8446d8e5b429ce9c7d9da7d37e8cb793b3e561f95b75cd6226a",
+  "started_utc": "2026-09-09T12:08:00Z",
+  "finished_utc": "2026-09-09T12:09:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "process.fork-unsupported",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/process/process.fork-unsupported.c",
+      "oracle": "scripts/application-tests/oracles/process.fork-unsupported.json",
+      "changed_files": ["scripts/application-tests/cases/process/process.fork-unsupported.c", "scripts/application-tests/oracles/process.fork-unsupported.json"],
+      "parameter_vectors": {"path": ["non-null CREATE_PPD-dependent fork"], "expected_errno": ["EOPNOTSUPP"], "child_created": [0]},
+      "implemented_operations": ["fork capability probe", "EOPNOTSUPP capture", "unexpected-child cleanup observation"],
+      "unresolved_oracle_notes": ["Native adapter binding and rollback/no-orphan trace require Max review."],
+      "max_reviewer_question": "Confirm EOPNOTSUPP and clean rollback are the current native result, distinct from host fork."
+    },
+    {
+      "case_id": "process.clone3-size-small",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/process/process.clone3-size-small.c",
+      "oracle": "scripts/application-tests/oracles/process.clone3-size-small.json",
+      "changed_files": ["scripts/application-tests/cases/process/process.clone3-size-small.c", "scripts/application-tests/oracles/process.clone3-size-small.json"],
+      "parameter_vectors": {"struct_size": [63], "input": ["readable zeroed clone_args"], "expected_errno": ["EINVAL"]},
+      "implemented_operations": ["zeroed clone_args storage", "size-63 clone3 syscall", "child-creation observation"],
+      "unresolved_oracle_notes": ["clone3 availability and validation ordering require Max review."],
+      "max_reviewer_question": "Confirm size below 64 rejects before child creation with EINVAL."
+    },
+    {
+      "case_id": "process.clone3-size-large",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/process/process.clone3-size-large.c",
+      "oracle": "scripts/application-tests/oracles/process.clone3-size-large.json",
+      "changed_files": ["scripts/application-tests/cases/process/process.clone3-size-large.c", "scripts/application-tests/oracles/process.clone3-size-large.json"],
+      "parameter_vectors": {"struct_size": [4097], "input": ["readable zeroed bounded storage"], "expected_errno": ["E2BIG"]},
+      "implemented_operations": ["4097-byte clone_args storage", "large-size clone3 syscall", "child-creation observation"],
+      "unresolved_oracle_notes": ["clone3 availability and validation ordering require Max review."],
+      "max_reviewer_question": "Confirm size above 4096 rejects before child creation with E2BIG."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/process/process.fork-unsupported.c", "sha256": "f9612dc05505246199d0c4a55a93cd64e1d69904f49f2669d6e9b95b2b094cca"},
+    {"path": "scripts/application-tests/oracles/process.fork-unsupported.json", "sha256": "d0bfdb1e77ab3a3261ab78f7f41d510cbcedc8538627a3ddeb126a2899691ab9"},
+    {"path": "scripts/application-tests/cases/process/process.clone3-size-small.c", "sha256": "ae4f0d6b9ae066ae9145322dbd0c36efabdb0c952c7200a1b947f39bb4611aef"},
+    {"path": "scripts/application-tests/oracles/process.clone3-size-small.json", "sha256": "ac6d73d99d291808c2d5832581c15eb1b4dbb57d2fed1e4a1c7d5771c82f365d"},
+    {"path": "scripts/application-tests/cases/process/process.clone3-size-large.c", "sha256": "2ee4d6f7d128cfd19b9a46ffc77c845ad6a19d05cb4075883664a3d7827a67ab"},
+    {"path": "scripts/application-tests/oracles/process.clone3-size-large.json", "sha256": "5602779fd4f64da790d9a3501d0f973bdb4d7e021f764e3a7f79a6762e4d4995"},
+    {"path": "docs/verification/evidence/application-drafts-20260909/ultra-handoff-1/packet-053/context.json", "sha256": "17f05ce9c8a5d8446d8e5b429ce9c7d9da7d37e8cb793b3e561f95b75cd6226a"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-053.json --emit-context /tmp/application-packet-053-context-20260909-1.json", "outcome": "PASS; planning metadata only; runtime_authorized=false"},
+    {"command": "python3 -m json.tool packet-053/report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Unsupported fork and clone3 size-boundary cases need final native process ABI, validation-ordering, and no-child evidence review."],
+  "blocked_execution_capabilities": ["current-inputs", "runtime-transport-fault-injection", "runner-contract"],
+  "first_failure_event": null,
+  "max_escalation": ["Review CREATE_PPD rollback and EOPNOTSUPP", "Review clone3 small-size EINVAL", "Review clone3 large-size E2BIG"],
+  "next_packet_id": "packet-054"
+}

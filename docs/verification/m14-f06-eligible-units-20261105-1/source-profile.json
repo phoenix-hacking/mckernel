@@ -1,0 +1,103 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_UNRUN_SOURCE_ONLY_NO_ADMISSION",
+  "source_manifest_sha256": "c7ecf1e55785b09bddd9649a986890b1eadf84faad8305dfb2ab10af14f4e37a",
+  "generator_sha256": "69f243dced14ec7e2ad6221912501f678382157c1e9262e1f8d12f3d93b9cda3",
+  "f06_source_sha256": "21dd4c6771b9e97ca8d466e91b709fc090cbce6dd544d003530ff88cecd7b08b",
+  "metadata_sha256": "0da870f9f48a4500f57d593a776a5f7d38b03d37cd1abd78baf4a27f8520fd58",
+  "native_provider_source_sha256": "023df6f58311794eacbf6cf73ed32e75aa719dbcb6faefd7ec0792bf22619a67",
+  "source_owner_exclusion": "Root must hold exact manifest source identities and prevent mutation throughout both builds; recheck before and after.",
+  "compile_cpu": 6,
+  "max_jobs": 1,
+  "address_limit_bytes": 2147483648,
+  "rustc": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+  "compile_commands": [
+    {
+      "argv": [
+        "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--crate-type=lib",
+        "-Awarnings",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "code-model=large",
+        "-C",
+        "relocation-model=static",
+        "-C",
+        "no-redzone=yes",
+        "-C",
+        "no-vectorize-loops",
+        "-C",
+        "no-vectorize-slp",
+        "-C",
+        "target-feature=-sse,-sse2,-avx,-avx2",
+        "--emit=obj=/home/holden/mckernel-work/m14-resume-20261105-1/f06-linkage-private-1/unit/f06.o,dep-info=/home/holden/mckernel-work/m14-resume-20261105-1/f06-linkage-private-1/unit/f06.d",
+        "/home/holden/mckernel-work/m14-resume-20261105-1/f06-linkage-private-1/unit/f06.rs",
+        "--cfg",
+        "f06_signal_context_candidate",
+        "--cfg",
+        "f06_do_signal_whole_candidate",
+        "--cfg",
+        "f06_do_signal_reuse_qualified_context",
+        "--cfg",
+        "f06_signal_trap_info_candidate",
+        "--cfg",
+        "f06_rt_sigreturn_xrstor_candidate",
+        "--cfg",
+        "f06_debug_constants_candidate",
+        "--cfg",
+        "native_linux_irq_work_v6_12"
+      ],
+      "environment": {
+        "MCKERNEL_F06_SIGNAL_METADATA_RS": "/home/holden/mckernel-work/m14-resume-20261105-1/f06-linkage-private-1/unit/metadata/f06_signal_metadata.rs"
+      }
+    },
+    {
+      "argv": [
+        "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--crate-type=lib",
+        "-Awarnings",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "code-model=large",
+        "-C",
+        "relocation-model=static",
+        "-C",
+        "no-redzone=yes",
+        "-C",
+        "no-vectorize-loops",
+        "-C",
+        "no-vectorize-slp",
+        "-C",
+        "target-feature=-sse,-sse2,-avx,-avx2",
+        "--emit=obj=/home/holden/mckernel-work/m14-resume-20261105-1/f06-linkage-private-1/unit/native-provider.o,dep-info=/home/holden/mckernel-work/m14-resume-20261105-1/f06-linkage-private-1/unit/native-provider.d",
+        "/home/holden/mckernel-work/m14-resume-20261105-1/f06-linkage-private-1/unit/native-provider.rs"
+      ],
+      "environment": {}
+    }
+  ],
+  "partial_link": {
+    "argv": [
+      "/usr/bin/ld",
+      "-r",
+      "-o",
+      "/home/holden/mckernel-work/m14-resume-20261105-1/f06-linkage-private-1/unit/f06-native-partial.o",
+      "/home/holden/mckernel-work/m14-resume-20261105-1/f06-linkage-private-1/unit/f06.o",
+      "/home/holden/mckernel-work/m14-resume-20261105-1/f06-linkage-private-1/unit/native-provider.o"
+    ],
+    "expected": "Exactly one definition each of the five selected F06 entries and five native signal providers. Real remaining undefined kernel providers remain undefined; this is not a complete kernel link."
+  },
+  "next_required": [
+    "Independent source/ABI review, actual tool/input and resource admission, positive terminal/custody and source readback.",
+    "Check five F06 symbols, all five genuine native provider definitions, references and duplicates, remaining undefined symbols, paired selected C config and Frame/ABI witness.",
+    "The retained arch syscall object is zero bytes and historical retained full Rust object carries held source, so neither is an eligible matching input; no full kernel link claim."
+  ],
+  "preserve": "No source selection, native execution, C retirement, or removal of held scopes."
+}

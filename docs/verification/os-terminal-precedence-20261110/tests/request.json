@@ -1,0 +1,44 @@
+{
+  "status": "SOURCE_AND_AST_ONLY_NOT_EXECUTED_PENDING_ROOT_COMPOSITION_REVIEW_AND_FRESH_HOST_ADMISSION",
+  "incoming_commit": "8fa22bdc77da30d19f7c802fe520d3aa887c81f9",
+  "test_patch": "/home/holden/mckernel-work/resume-20261110T025232Z-785c93f5/terminal-precedence-tests-1/TESTS.PRIVATE.patch",
+  "test_patch_sha256": "fedff0640e1ccf1ae5367f8e16670698b3cadc9e072d1611199eebca269cb830",
+  "candidate_test": "/home/holden/mckernel-work/resume-20261110T025232Z-785c93f5/terminal-precedence-tests-1/candidate/scripts/tests/test_os_goal_continuous.py",
+  "candidate_test_sha256": "c4492236fa9166f0d24d7d934866891f5f27253eed0c77dc9cba4ab12b619fcd",
+  "selectors": [
+    "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_milestone_checkpoint_preserves_saved_complete",
+    "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_milestone_checkpoint_preserves_recovered_usage_limited",
+    "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_milestone_checkpoint_preserves_recovered_budget_limited",
+    "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_live_terminal_update_precedes_newly_closed_milestone_checkpoint",
+    "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_terminal_goal_discovered_by_checkpoint_pause_read_is_preserved",
+    "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_current_hard_stop_precedes_terminal_and_closed_milestones",
+    "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_both_accepted_milestones_checkpoint_the_larger_goal"
+  ],
+  "proposed_payload": [
+    "/usr/bin/python3",
+    "-B",
+    "-m",
+    "unittest",
+    "-v",
+    "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_milestone_checkpoint_preserves_saved_complete",
+    "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_milestone_checkpoint_preserves_recovered_usage_limited",
+    "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_milestone_checkpoint_preserves_recovered_budget_limited",
+    "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_live_terminal_update_precedes_newly_closed_milestone_checkpoint",
+    "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_terminal_goal_discovered_by_checkpoint_pause_read_is_preserved",
+    "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_current_hard_stop_precedes_terminal_and_closed_milestones",
+    "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_both_accepted_milestones_checkpoint_the_larger_goal"
+  ],
+  "environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "expected_incoming_baseline": "3 savedterminal scenarios +3 live-beforemilestone +3 terminal-at-checkpoint-pause-read scenarios fail exit10 instead of0/21/22;2currenthardstop scenarios and existingACTIVEcheckpoint10 control pass. These are source-derived expectations, NOT observed.",
+  "expected_corrected": "All7selectedmethods/12scenarios pass:9terminalpreservation+2hardstop+1existingACTIVEcheckpoint control. No operational launcher/server/account/model/native actions.",
+  "scope": "11new FakeRPC scenarios +1existingACTIVEcheckpoint10 control, exactoriginalacceptedledger fixture.9terminal0/21/22 transitions cover3saved/3live/3pause-time reads;2hardstops guard currentusage21/service23 precedence. Tempdir state/journal only; no livecontrols.",
+  "no_test_execution": true,
+  "source_inputs": {
+    "/home/holden/mckernel-work/resume-20261110T025232Z-785c93f5/terminal-precedence-tests-1/incoming/scripts/run_os_goal.py": "33b5158563b05ed2773bf0040a4ed5b5f1892a27e24640cfc1679a483c6d50f8",
+    "/home/holden/mckernel-work/resume-20261110T025232Z-785c93f5/terminal-precedence-tests-1/incoming/scripts/tests/test_os_goal_continuous.py": "9f67e662bf50c4ecb12520beecc75c64809a63c97fa0696597ff940bd720b039",
+    "/home/holden/mckernel-work/resume-20261110T025232Z-785c93f5/terminal-precedence-tests-1/incoming/scripts/tests/test_os_goal_launcher.py": "836b5f4a6c877636e596e74e3bb7fe9590eaf090532ab3e9874321f2e5384f05"
+  },
+  "prior_unexecuted_proposal": "/home/holden/mckernel-work/resume-20261110T025232Z-785c93f5/terminal-precedence-tests-1/proposal-1"
+}

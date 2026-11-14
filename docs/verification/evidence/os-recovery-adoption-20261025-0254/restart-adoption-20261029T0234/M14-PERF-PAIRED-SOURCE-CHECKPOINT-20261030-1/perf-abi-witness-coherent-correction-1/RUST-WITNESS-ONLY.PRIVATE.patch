@@ -1,0 +1,12 @@
+--- a/kernel/rust/f03_perf_entry_candidate.rs
++++ b/kernel/rust/f03_perf_entry_candidate.rs
+@@ -206,3 +206,9 @@
+     ) }
+ }
+ const _: unsafe extern "C" fn(CInt, *mut X86UserContext) -> CLong = sys_perf_event_open;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Witness-only: use only in separate, excluded Rust witness object.
++#[cfg(f03_perf_entry_abi_witness)]
++#[path = "f03_perf_entry_abi_witness.rs"]
++mod f03_perf_entry_abi_witness;

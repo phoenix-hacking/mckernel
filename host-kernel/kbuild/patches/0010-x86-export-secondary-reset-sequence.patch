@@ -1,0 +1,37 @@
+From: McKernel native Rust integration
+Subject: [PATCH] x86 SMP: export the existing secondary reset sequence
+
+Expose the existing INIT reset attempt to the native Rust shutdown owner.
+The helper only performs the INIT assertion/deassertion reset attempt; the
+caller remains responsible for any later startup sequence and for CPU
+ownership.  Preserve the existing void return and implementation unchanged.
+
+--- a/arch/x86/include/asm/smp.h
++++ b/arch/x86/include/asm/smp.h
+@@ -104,6 +104,7 @@ void native_smp_prepare_cpus(unsigned int max_cpus);
+ void native_smp_cpus_done(unsigned int max_cpus);
+ int common_cpu_up(unsigned int cpunum, struct task_struct *tidle);
+ int wakeup_secondary_cpu_via_init(u32 phys_apicid, unsigned long start_eip, unsigned int cpu);
++void send_init_sequence(u32 phys_apicid);
+ int native_kick_ap(unsigned int cpu, struct task_struct *tidle);
+ int native_cpu_disable(void);
+ void __noreturn hlt_play_dead(void);
+--- a/arch/x86/kernel/smpboot.c
++++ b/arch/x86/kernel/smpboot.c
+@@ -687,6 +687,7 @@
+ /*
+  * Wake up AP by INIT, INIT, STARTUP sequence.
++ * This helper performs the INIT reset attempt only; startup is separate.
+  */
+-static void send_init_sequence(u32 phys_apicid)
++void send_init_sequence(u32 phys_apicid)
+ {
+ 	int maxlvt = lapic_get_maxlvt();
+@@ -708,6 +709,7 @@ static void send_init_sequence(u32 phys_apicid)
+ 	apic_icr_write(APIC_INT_LEVELTRIG | APIC_DM_INIT, phys_apicid);
+ 	safe_apic_wait_icr_idle();
+ }
++EXPORT_SYMBOL_GPL(send_init_sequence);
+ 
+ /*
+  * Wake up AP by INIT, INIT, STARTUP sequence.

@@ -1,0 +1,86 @@
+{
+  "CPU_reservation": null,
+  "actual_manifest": null,
+  "actual_source": null,
+  "actual_wholejoin": null,
+  "affinity_successor_qualification": "CPU6->7 scalar only plus immutable producer filenames/hash bindings; reversing exact substitutions reproduces originalsource bytes. Original CPU6 operation preserved; select one exclusiveattempt only, neverboth.",
+  "all_materializer_functions_AST_identical": true,
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=60:60",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/run_source_materialization_once.CPU7.L4-SUCCESSOR.py"
+  ],
+  "changed_source_pins_exactly_two": [
+    "arch/x86_64/kernel/memory.c",
+    "kernel/rust/x86_memory_helpers.rs"
+  ],
+  "compiler_build_native": null,
+  "grant": "RootexplicitoneCPU7 ordinary source-only materialization /AS2GCPU60wall90+6FSIZE32MFD256core0/990+signals/full19Gfloorsfull110gap/reserves; no compiler/root/Docker/heavy.",
+  "owned_wrapper": {
+    "bytes": 4459,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/run_source_materialization_once.CPU7.L4-SUCCESSOR.py",
+    "sha256": "66efb814b7b7a2afbf396351fb242833362a7d9bc3a3ae57d48409003e10a1fa"
+  },
+  "parent_profile": {
+    "bytes": 3004,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/NEXT-SOURCE-MATERIALIZATION.CPU7.NOT-RELEASED.json",
+    "sha256": "4adac72be8880b360ec80c37fc4ece7eb7f50d29a7d25a1b49f56e78989b4922"
+  },
+  "parent_profile_authority": {
+    "bytes": 2401,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/NEXT-SOURCE-MATERIALIZATION.NOT-RELEASED.json",
+    "sha256": "59e9d528d2b4cb386204aba94c99685f961e03c6326e5416f4e931bd73d77b04"
+  },
+  "prediction": {
+    "canonical_manifest_sha256": "77fd79cde7d48ceb65aaf9de2ff8be78005274f22031fe12c58d8309173c58a4",
+    "entries": 6959,
+    "materialization_sha256": "b04d514d743068ef233ac6e068583b3843b24a52e2dc96042312f8d483259cf0",
+    "source_derivative_sha256": "3a8df20ee4f2dd464fc23183c642882111c09b7ef34bafbf3b7749856dfa2c65",
+    "symlinks": 49
+  },
+  "producer": {
+    "bytes": 11266,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/materialize_source.CPU7.L4-SUCCESSOR.py",
+    "sha256": "19a463575a6db5eb20f8eabbc062c1962ae8ec4d36765d3b7a0c87c9a350921f"
+  },
+  "profile": {
+    "AS": 2147483648,
+    "CPU": 7,
+    "CPU_seconds": 60,
+    "FSIZE": 33554432,
+    "HOST": "16GiB + full110sparsegap +16106090496compiler/output+377487360postcapture+679477248emergency+256MiBsource+16MiBcapture",
+    "MemAvailable_minimum": 20401094656,
+    "NOFILE": 256,
+    "capture_growth_max": 16777216,
+    "core": 0,
+    "handlers": [
+      "SIGTERM",
+      "SIGINT",
+      "SIGALRM"
+    ],
+    "jobs": 1,
+    "owned_capture_sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8",
+    "retirement_seconds": 6,
+    "scratch_required": 13631488000,
+    "source_growth_max": 268435456,
+    "wall_seconds": 90
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_basis": {
+    "bytes": 10647,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/CANONICAL-SOURCE-SUCCESSOR-BASIS.L4-SUCCESSOR.json",
+    "sha256": "8b6f9b4da4347a00d06042325ea8592078c5a233e71dfd81575203a2419443ae"
+  },
+  "status": "ROOT_GRANTED_ONE_CPU7_SOURCE_ONLY_L4_TWO_DATA_SUCCESSOR"
+}

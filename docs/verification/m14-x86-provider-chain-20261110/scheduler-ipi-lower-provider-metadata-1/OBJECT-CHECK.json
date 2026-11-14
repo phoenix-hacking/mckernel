@@ -1,0 +1,96 @@
+{
+  "status": "PASS_CALLED_ACTUAL_IPI_LOWER_FOUR_T_ONE_READ_SLOT_ONE_REAL_U_ASM_ALIAS_GATE",
+  "object_sha256": "8e7ca2ffcfa218acd6342019bc8bcc85dade472e1923c356335d0f2027874032",
+  "actual_global_T": 4,
+  "actual_global_B": {
+    "name": "lapic_read",
+    "bytes": 8,
+    "section": ".lbss.lapic_read",
+    "NOBITS_declaration_only": true
+  },
+  "actual_alias": {
+    "names": [
+      "wrmsr",
+      "x86_write_msr_bridge"
+    ],
+    "section": 4,
+    "value": 0,
+    "size": 15,
+    "physical_code_ranges": 1,
+    "distinct_original_source_names_no_symbolrewrite": true
+  },
+  "physical_code_ranges": 3,
+  "genuine_U": [
+    "cpu_pause"
+  ],
+  "private_owners": [],
+  "actual_source_asm_memory_effects_preserved": true,
+  "actual_wrmsr_ECX_EAX_EDX_and_barrier_tailcall_bytes_bound": true,
+  "actual_relocations": [
+    {
+      "section": 5,
+      "offset": 2,
+      "type": 1,
+      "symbol": {
+        "name": "cpu_pause",
+        "bind": 1,
+        "type": 0,
+        "other": 0,
+        "section": 0,
+        "value": 0,
+        "size": 0
+      },
+      "addend": 0
+    },
+    {
+      "section": 10,
+      "offset": 32,
+      "type": 24,
+      "symbol": {
+        "name": "",
+        "bind": 0,
+        "type": 3,
+        "other": 0,
+        "section": 3,
+        "value": 0,
+        "size": 0
+      },
+      "addend": 0
+    },
+    {
+      "section": 10,
+      "offset": 64,
+      "type": 24,
+      "symbol": {
+        "name": "",
+        "bind": 0,
+        "type": 3,
+        "other": 0,
+        "section": 4,
+        "value": 0,
+        "size": 0
+      },
+      "addend": 0
+    },
+    {
+      "section": 10,
+      "offset": 96,
+      "type": 24,
+      "symbol": {
+        "name": "",
+        "bind": 0,
+        "type": 3,
+        "other": 0,
+        "section": 5,
+        "value": 0,
+        "size": 0
+      },
+      "addend": 0
+    }
+  ],
+  "saved_disassembly_reused_not_replayed": true,
+  "actual_metadata_capture": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-metadata-1/ACTUAL-ELF-METADATA.json",
+  "future_cohort_unique_owner_join_UNBOUND": true,
+  "preboot_None_not_runtime_target_readiness": true,
+  "no_function_barrier_MSR_IRQ_boot_native_execution": true
+}

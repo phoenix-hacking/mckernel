@@ -1,0 +1,47 @@
+{
+  "schema": "mckernel.instruction-durable-chronology.private-source-correction.v1",
+  "status": "FROZEN_SOURCE_ONLY_PENDING_INDEPENDENT_REVIEW_AND_FRESH_FOCUSED_TEST_ADMISSION",
+  "incoming_commit": "ad526fc4e8484fced90265668486167566d7087d",
+  "incoming_parent_prefix": "96886",
+  "baseline": {
+    "path": "/home/holden/mckernel-work/resume-20261110T044806Z-3ecbebf5/instruction-order-source-1/baseline/scripts/run_os_goal.py",
+    "sha256": "cf9a639f8e5820fb6745fe700486d6326d8c088493e09d59aa6e269feca992bd",
+    "bytes": 133989,
+    "origin": "Exactgitshowincoming:scripts/run_os_goal.py"
+  },
+  "candidate": {
+    "path": "/home/holden/mckernel-work/resume-20261110T044806Z-3ecbebf5/instruction-order-source-1/candidate/scripts/run_os_goal.py",
+    "sha256": "6f5ae87f0844db5718530f2198c2206a0d8900f951482ce5588243b832dc17a0",
+    "bytes": 134144
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/resume-20261110T044806Z-3ecbebf5/instruction-order-source-1/INSTRUCTION-ORDER.PRIVATE.patch",
+    "sha256": "571976b7eb472813ae974ea1df0b7e04ca942a728efd0d6e28dc9affff9d4094",
+    "changed_canonical_paths": [
+      "scripts/run_os_goal.py"
+    ]
+  },
+  "exact_change": "ONLYCampaign.deliver_instructionpendingselectionsortkey. Chronologicaldurable item.submitted_at parsedwithalreadyimportedstdlibdatetime.fromisoformat; path.name isdeterministictie. NoIDsrenamedoritemsrewritten/requeued.",
+  "actual_producer_contract": {
+    "timestamp": "queue_instructionalwaysconstructsitemwithsubmitted_at=utc();utcusesdatetime.now(timezone.utc).isoformat()",
+    "local_items": "Existingtimestamp+UUIDfilenameitempersistsviaatomic_json; submitted_atretained.",
+    "source_items": "Existingstable source-SHA256ID andsourcesregistry storetheexactitem/submitted_at/contenthash; dedupe/contentconflictchecksunchanged.",
+    "compatibility": "Bothactuallegacy/localandnewsourceproducer itemsalreadycarryawareUTCISOsubmitted_at. No mtime/filename-derivedtimestamp, newfield, fallbackorder, malformedinputframeworkornewCLI introduced.",
+    "ties": "Equal timestampinstants useexistingfilename deterministicorder, withoutclaimingunknownsubmicrosecondarrivalorder."
+  },
+  "preserved_invariants": [
+    "queue_instructionandstableIDs/sourceSHA/content/source registry/deduplicationbyteunchanged.",
+    "DeliverretainsunresolvedsendingrefusalBEFOREpendingenumerationandchronologicalselection; noearlieruncertaindeliverybypass.",
+    "Selectedoriginalfilealoneatomicmovespending\u2192sending, decodedreceipt/registration/refused/accepted/delivery_uncertainarchivalandstateupdatesunchanged.",
+    "Noexpiry/capture/event/repair/goal/stopsemanticsorRPCmethod/callsitechanges. Nohistory/deliveredreplayorIDrewrite.",
+    "Earlierproduceritemtimestampswinregardlesssourcehashorlocalfilenameprefix; latercorrectionisdeliveredafterolderinstructionusingthesameexistingdeliveryprotocol."
+  ],
+  "source_only_checks": {
+    "single_exact_sort_expression_replacement": true,
+    "producer_function_byteidentical": true,
+    "all_source_before_and_after_replacement_byteidentical": true,
+    "no_added_imports_helpers_schema_flags_or_public_API": true
+  },
+  "verification": "Sourcebyte/diffcomparisonandprivateproofwritesonly; NOtests/moduleimport/AST/runtimeparser/model/RPC/service/network/guardian/mailbox/frontdoor/launch/state/canonical/indexactions. Bownsrealproducer+FakeRPCregressions; Rootsoleexecutor/compositor.",
+  "authority_boundary": "Fetchedsourceadoptionisinert; mainfrontdooractivatesservicesandwasnotcalled. Currentlive6HIGH/4GiBTOTAL/max3/CPUs0,6,7/26floor/nativeheld/watchdog180/stall1200/restarts3/hours0anddisabledflagsunchanged;0originalcredit."
+}

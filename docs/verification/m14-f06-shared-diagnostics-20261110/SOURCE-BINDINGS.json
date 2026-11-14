@@ -1,0 +1,41 @@
+{
+  "at": "2026-11-10T19:50:33.796849+00:00",
+  "atomic_code_exact_test_extraction_sha256": "3bd81873e39583c39b1d04272099a802dcafe1700a08e6c9f4c351595970349c",
+  "candidate": {
+    "bytes": 69014,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-remaining-ownership-1/candidate/kernel/rust/f06_signal_tail.rs",
+    "sha256": "32e44bf79e3058ad2b43b8ed530d606281143fa7217aebad1a194cc49ccdfd97"
+  },
+  "canonical_preimage_at_preparation": {
+    "bytes": 66891,
+    "path": "/home/holden/mckernel/kernel/rust/f06_signal_tail.rs",
+    "sha256": "988cbe82d0db23fb8702990da1a758005aeba5bd19a2c3630d10e647983c7ae0"
+  },
+  "independent_context_prefix_unchanged": true,
+  "no_current_cohort_or_canonical_write": true,
+  "patch": {
+    "bytes": 10983,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-remaining-ownership-1/F06-WHOLE-SIGNAL-DEFINED-DIAGNOSTICS.patch",
+    "sha256": "4cfb55a019190935c8db062c7146a89a82f4869e008fefb93046d3b6c1c865be"
+  },
+  "preimage": {
+    "bytes": 66891,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-remaining-ownership-1/preimage/kernel/rust/f06_signal_tail.rs",
+    "sha256": "988cbe82d0db23fb8702990da1a758005aeba5bd19a2c3630d10e647983c7ae0"
+  },
+  "preparation_failure": {
+    "bytes": 676,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-remaining-ownership-1/PREPARATION-FAILURE.json",
+    "sha256": "17ede798dc62de0841a0632c3f759e4f985fda69f34e76aed5e9a09b8749cc63"
+  },
+  "source_counter_defect": "Raw shared mutable static PID/count have valid multiCPU conflicting accesses before/under different sigcommon locks; unsafe raw pointers and volatile do not serialize them. Original helper proof explicitly excluded that shared race. New production state is atomic; public caller-private log-count helper ABI/order remains.",
+  "status": "PRIVATE_SOURCE_NOT_EXECUTED",
+  "test": {
+    "bytes": 2806,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-remaining-ownership-1/tests/diagnostic_budget.rs",
+    "sha256": "b73d451d0d32b9061d2a94d68b399dcdfb25530289ac8537d142c6a7d01e2fbb"
+  },
+  "unchanged_core_after_log_tail_sha256": "2c7850e7a04c870558f2817d37363b2af523aeba42a1b2382d5f56a0780bff00",
+  "unchanged_core_printf_call_sha256": "a690e4bfd47ebf0ae093d6b6f9abb6042f6f0f2ef397c11671e8f59820ac5efc",
+  "whole_default_flag_unchanged": true
+}

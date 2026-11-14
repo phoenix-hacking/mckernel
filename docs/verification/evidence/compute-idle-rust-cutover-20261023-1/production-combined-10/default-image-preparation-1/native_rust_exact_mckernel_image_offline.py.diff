@@ -1,0 +1,11 @@
+--- base/native_rust_exact_mckernel_image_offline.py
++++ candidate10/native_rust_exact_mckernel_image_offline.py
+@@ -27,7 +27,7 @@
+ import native_rust_exact_build_offline as provenance
+ 
+ # Authenticate the neighboring provenance selected by this exact driver capsule.
+-EXPECTED_PROVENANCE_SHA256 = '1701cdc138485af6b5c0a7483ae45d492f6ddbefc116f3d896400a95d265021b'
++EXPECTED_PROVENANCE_SHA256 = '32b7b3889e106a89037f70abfcf6a84faeb73483b289205088342f32ed790f5f'
+ _EXPECTED_PROVENANCE_PATH = Path(__file__).with_name("native_rust_exact_build_offline.py").resolve()
+ if (Path(provenance.__file__).resolve() != _EXPECTED_PROVENANCE_PATH or
+         hashlib.sha256(_EXPECTED_PROVENANCE_PATH.read_bytes()).hexdigest() != EXPECTED_PROVENANCE_SHA256):

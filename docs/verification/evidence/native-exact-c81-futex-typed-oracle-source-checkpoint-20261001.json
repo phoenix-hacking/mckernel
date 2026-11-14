@@ -1,0 +1,45 @@
+{
+  "schema": "mckernel.native-exact-c81-futex-typed-oracle-source-checkpoint.v1",
+  "recorded_at": "2026-10-01T09:00:00Z",
+  "status": "PASS_SOURCE_FUTEX_TYPED_ORACLE",
+  "repository_commit_before_record": "58679bcc404860c76bec8b9993d8cb370189f3ad",
+  "files": {
+    "scripts/application-tests/native_diagnostic.py": "e50d2c1b2eacdac57e758400718e9d3a338d959ecb9a9698703572dedef29317",
+    "scripts/application-tests/native_diagnostic_guest_collector.c": "82825cf128689ba8f8a74d9528c1acffb724a9356a2c6192c67c8abe4a74965e",
+    "scripts/tests/test_native_diagnostic_guest_collector.py": "492ccde4944cee2c6440b8627ac9cee15d3782051848926307810993fc63d27e"
+  },
+  "failure_history": [
+    "Initial collector review blocked because the futex branch was compile-only and the evaluator required byte-identical dynamic stderr.",
+    "Initial typed-oracle review blocked missing timing/deadline/identity/count bounds, accepted alternate ordering, and lacked executable partial-write evidence.",
+    "Rereview blocked a clone/thread elapsed variable alias, the exact 20,000,000 worker failure threshold, and unproved partial-write delivery.",
+    "The bounded correction uses distinct elapsed values, requires worker counts below 20,000,000, authenticates both retained streams, and proves exact large-frame delivery with observed short-write and EAGAIN."
+  ],
+  "verified": {
+    "command": "python3 -B -m unittest -v scripts.tests.test_native_diagnostic_guest_collector",
+    "tests_passed": 21,
+    "tests_failed": 0,
+    "independent_decision": "PASS_SOURCE_FUTEX_TYPED_ORACLE",
+    "collector_profile": {
+      "define": "ND_FUTEX=1",
+      "argv": ["/bin/mcexec", "-t", "1", "0", "/apps/app"],
+      "boot_argv": ["/bin/native-boot", "hidos", "allow_oversubscribe"],
+      "stream_limit_bytes": 4096,
+      "frame_limit_bytes": 8192
+    },
+    "retained_replay": [
+      {"member": "native-ultra-futex-guest-20260909-2/linux-futex-payload-stderr.bin", "bytes": 2583, "sha256": "4aff87fd63e9e1f97b92082311d8a8bc31b13c5257ef205a82720047f36d45d6"},
+      {"member": "native-ultra-futex-guest-20260909-2/mckernel-futex-payload-stderr.bin", "bytes": 2608, "sha256": "85f59a080a5dbc7c620d22910ff6524d4184c0ab93a9df5c3bbff70f5131e67f"}
+    ]
+  },
+  "payload": {
+    "path": "/home/holden/mckernel-work/scratch/native-ultra-futex-build-20260909-1/native-ultra-futex",
+    "sha256": "9593e5f1f17736d8be4f720691df5da3b636e21bc82fbc5391baa894969b2ecc",
+    "size": 45304,
+    "mode_octal": "0755",
+    "stdout": "NATIVE_ULTRA_FUTEX PASS cases=16 threads=2 raw_clone=1\n",
+    "exit_code": 37
+  },
+  "accounting": {"compiled_candidate_count": 1, "accepted_current_candidate_diagnostic_applications": 5, "formal_application_acceptance": 0, "os_goal_complete": false},
+  "limitations": ["source and host tests only", "no ND_FUTEX collector artifact was compiled", "no c81 futex overlay, packet, guest or runtime result exists"],
+  "next_tasks": ["compile the exact ND_FUTEX collector in the reviewed pinned unprivileged profile", "prepare and review a fresh c81 overlay/manifest before any one-shot guest release"]
+}

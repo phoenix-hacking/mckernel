@@ -1,0 +1,93 @@
+
+/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/workspace/native-running-modules-candidate-d27509b612927d235adf7f07748f3f82/fixture-output/ring-C-helper:     file format elf64-x86-64
+
+
+Disassembly of section .init:
+
+Disassembly of section .plt:
+
+Disassembly of section .text:
+
+0000000000402400 <main>:
+  402400:	41 54                	push   %r12
+  402402:	31 c0                	xor    %eax,%eax
+  402404:	b9 40 00 00 00       	mov    $0x40,%ecx
+  402409:	55                   	push   %rbp
+  40240a:	53                   	push   %rbx
+  40240b:	48 81 ec 20 03 00 00 	sub    $0x320,%rsp
+  402412:	48 8d 9c 24 20 01 00 	lea    0x120(%rsp),%rbx
+  402419:	00 
+  40241a:	4c 8d 64 24 20       	lea    0x20(%rsp),%r12
+  40241f:	c7 44 24 0c 00 00 00 	movl   $0x0,0xc(%rsp)
+  402426:	00 
+  402427:	48 89 df             	mov    %rbx,%rdi
+  40242a:	f3 48 ab             	rep stos %rax,%es:(%rdi)
+  40242d:	b9 20 00 00 00       	mov    $0x20,%ecx
+  402432:	4c 89 e7             	mov    %r12,%rdi
+  402435:	f3 48 ab             	rep stos %rax,%es:(%rdi)
+  402438:	31 ff                	xor    %edi,%edi
+  40243a:	e8 31 2c 00 00       	callq  405070 <ihklib_device_open>
+  40243f:	c5 f9 ef c0          	vpxor  %xmm0,%xmm0,%xmm0
+  402443:	48 8d 54 24 10       	lea    0x10(%rsp),%rdx
+  402448:	be 08 29 11 00       	mov    $0x112908,%esi
+  40244d:	89 c7                	mov    %eax,%edi
+  40244f:	89 c5                	mov    %eax,%ebp
+  402451:	31 c0                	xor    %eax,%eax
+  402453:	c5 f9 7f 44 24 10    	vmovdqa %xmm0,0x10(%rsp)
+  402459:	e8 a2 2d 00 00       	callq  405200 <__wrap_ioctl>
+  40245e:	89 ef                	mov    %ebp,%edi
+  402460:	85 c0                	test   %eax,%eax
+  402462:	0f 88 a0 00 00 00    	js     402508 <main+0x108>
+  402468:	e8 c3 1c 00 00       	callq  404130 <__wrap_close>
+  40246d:	bd 03 00 00 00       	mov    $0x3,%ebp
+  402472:	48 8b 74 24 18       	mov    0x18(%rsp),%rsi
+  402477:	31 d2                	xor    %edx,%edx
+  402479:	31 ff                	xor    %edi,%edi
+  40247b:	4c 8d 4c 24 0c       	lea    0xc(%rsp),%r9
+  402480:	4d 89 e0             	mov    %r12,%r8
+  402483:	48 89 d9             	mov    %rbx,%rcx
+  402486:	e8 65 03 00 00       	callq  4027f0 <fwrite_kmsg.constprop.0>
+  40248b:	85 c0                	test   %eax,%eax
+  40248d:	78 16                	js     4024a5 <main+0xa5>
+  40248f:	83 ed 01             	sub    $0x1,%ebp
+  402492:	75 de                	jne    402472 <main+0x72>
+  402494:	8b 74 24 0c          	mov    0xc(%rsp),%esi
+  402498:	48 89 df             	mov    %rbx,%rdi
+  40249b:	e8 80 01 00 00       	callq  402620 <syslog_kmsg>
+  4024a0:	48 85 c0             	test   %rax,%rax
+  4024a3:	74 11                	je     4024b6 <main+0xb6>
+  4024a5:	b8 01 00 00 00       	mov    $0x1,%eax
+  4024aa:	48 81 c4 20 03 00 00 	add    $0x320,%rsp
+  4024b1:	5b                   	pop    %rbx
+  4024b2:	5d                   	pop    %rbp
+  4024b3:	41 5c                	pop    %r12
+  4024b5:	c3                   	retq   
+  4024b6:	31 ff                	xor    %edi,%edi
+  4024b8:	e8 b3 2b 00 00       	callq  405070 <ihklib_device_open>
+  4024bd:	48 8b 54 24 18       	mov    0x18(%rsp),%rdx
+  4024c2:	be 0a 29 11 00       	mov    $0x11290a,%esi
+  4024c7:	89 c7                	mov    %eax,%edi
+  4024c9:	89 c5                	mov    %eax,%ebp
+  4024cb:	31 c0                	xor    %eax,%eax
+  4024cd:	e8 2e 2d 00 00       	callq  405200 <__wrap_ioctl>
+  4024d2:	89 ef                	mov    %ebp,%edi
+  4024d4:	41 89 c4             	mov    %eax,%r12d
+  4024d7:	e8 54 1c 00 00       	callq  404130 <__wrap_close>
+  4024dc:	0f 1f 40 00          	nopl   0x0(%rax)
+  4024e0:	48 8b 3b             	mov    (%rbx),%rdi
+  4024e3:	48 85 ff             	test   %rdi,%rdi
+  4024e6:	74 05                	je     4024ed <main+0xed>
+  4024e8:	e8 33 fc ff ff       	callq  402120 <fclose@plt>
+  4024ed:	48 83 c3 08          	add    $0x8,%rbx
+  4024f1:	48 8d 84 24 20 03 00 	lea    0x320(%rsp),%rax
+  4024f8:	00 
+  4024f9:	48 39 c3             	cmp    %rax,%rbx
+  4024fc:	75 e2                	jne    4024e0 <main+0xe0>
+  4024fe:	31 c0                	xor    %eax,%eax
+  402500:	45 85 e4             	test   %r12d,%r12d
+  402503:	0f 95 c0             	setne  %al
+  402506:	eb a2                	jmp    4024aa <main+0xaa>
+  402508:	e8 23 1c 00 00       	callq  404130 <__wrap_close>
+  40250d:	eb 96                	jmp    4024a5 <main+0xa5>
+
+Disassembly of section .fini:

@@ -1,0 +1,91 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root",
+  "decision": "AUTHORIZE_ONE_ACTUAL_A3_INDEPENDENT_FINITE_COLD_AND_HOT_REVIEW_ONLY",
+  "designated_reviewer": "/root/observerreview",
+  "maximum_invocations": 1,
+  "nonce": "e984210ca59641b299cf42d392eb953b",
+  "admission": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3",
+  "handoff": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3/FINITE-REVIEW-HANDOFF",
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next-attempt-after-expired-capture-preparation-1/A3-source-successor-1/cohort/finite_review.py",
+    "--independent-reviewer",
+    "/root/observerreview",
+    "--bindings",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next-attempt-after-expired-capture-preparation-1/A3-source-successor-1/cohort/REVIEWER-ACTUAL-BINDINGS.json",
+    "--handoff",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3/FINITE-REVIEW-HANDOFF"
+  ],
+  "verifier_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next-attempt-after-expired-capture-preparation-1/A3-source-successor-1/cohort/finite_review.py",
+    "bytes": 17471,
+    "sha256": "eacd859b938a70e6a07ed562ff07cd6377fc8314b3b14683ee441322d4de443e"
+  },
+  "actual_bindings": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next-attempt-after-expired-capture-preparation-1/A3-source-successor-1/cohort/REVIEWER-ACTUAL-BINDINGS.json",
+    "bytes": 9806,
+    "sha256": "ba7999dc6a8d316de71b108f45390aded05d387bf0e23d56c5382516cdd793d2"
+  },
+  "actual_source_publication": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3/ROOT-ACTUAL-STATIC-SOURCE-PUBLICATION.json",
+    "bytes": 449057,
+    "sha256": "9481687242d332f6256979cd3722d304ad7a62a20736d1187088e653cf724942"
+  },
+  "actual_operation": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-FRESH-A3-1/CURRENT118-A3-OPERATION.ACTUAL.json",
+    "bytes": 13625,
+    "sha256": "cfeb5125f25f80908cc41d95d2e15b936f9bc1d296c5ec5a46b3553145fea410"
+  },
+  "actual_operation_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-FRESH-A3-1/CURRENT118-A3-OPERATION-REVIEW.ACTUAL.json",
+    "bytes": 16222,
+    "sha256": "4fce806ef8aa351b0c78d3099d85a13176e43cc654d3f38c5b192b9e8ee32936"
+  },
+  "actual_current_descriptor": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next-attempt-after-expired-capture-preparation-1/A3-source-successor-1/cohort/ROOT-ACTUAL-CURRENT-BOUNDARY.json",
+    "bytes": 2119,
+    "sha256": "e7eb2d9dad4d3d5ab485ba1ab3a043c5d959aa7ba6667f157d9c10641ab69fd7"
+  },
+  "closed_unlaunched_frontier": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-FRESH-A3-1/ROOT-CLOSED-UNLAUNCHED-FRONTIER.ACTUAL.json",
+    "bytes": 2509,
+    "sha256": "e59a728ad8dbe7829761411da56fed3550df95e317c049a0348ae714b185ae3d"
+  },
+  "limits": [
+    1793253600,
+    1035704.5689393478,
+    1051042.6959879305
+  ],
+  "credit_run_id": "7f4af94a83b14cc08f97401f5891d965",
+  "credit_ceiling": "57774.852125",
+  "CPU": [
+    0
+  ],
+  "address_space_bytes": 2147483648,
+  "no_automatic_CPU_signal_or_timeout_kill": true,
+  "original_finite_wait_seconds": 600,
+  "original_physical_resource_Hot_limit_seconds": 120,
+  "required_nonself_static_refs_published": 25,
+  "all_fixed_other_reservations_present": true,
+  "guard": "Use existing exact newcohort runtime_guard.guard before child start; finite cold also calls it. Preserve actual current controls/earliest clamps/included-first/account holds.",
+  "custody": "Retain direct PID/birth/start/argv, original live tool session, raw stdout/stderr; positive wait4, group absence and closed streams at completion. No automatic retry/signals. Notify PREWARM promptly, retain original finite handle through Hot/exit.",
+  "forbidden": [
+    "Root invoking approver",
+    "Docker or compiler/native launch by reviewer",
+    "oldA2nonce/wrapper/grant replay",
+    "timestamp renewal",
+    "controller/account/window/resource changes"
+  ],
+  "issued_epoch": 1793233778.1426888,
+  "runtime_authority": "Only one independent Cold/Hot verification under exact original reviewed code; no production/native workload grant"
+}

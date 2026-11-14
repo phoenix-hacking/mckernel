@@ -1,0 +1,105 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "runtime_authority": null,
+  "reviewed_GLOBAL32_source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/newdebug32-next114-source/actual113-three-command-reuse-source-1/SOURCE-READY.json",
+    "bytes": 15236,
+    "sha256": "fa3340abb8a0026fd0309f6a1b9014d1cc706cbc72e757931fb258d75e4d7268"
+  },
+  "reviewed_GLOBAL32_profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/newdebug32-next114-source/actual113-three-command-reuse-source-1/PROFILE.SOURCE-ONLY.json",
+    "bytes": 115570,
+    "sha256": "a73c5d3304b84934ffacabe3e179f4ad89e6212ededca3bcfdb365b8e07cfd7d"
+  },
+  "GLOBAL32_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/newdebug32-next114-source/actual113-three-command-reuse-source-1/independent-source-profile-review-1/INDEPENDENT-SOURCE-PROFILE-REVIEW.json",
+    "bytes": 15293,
+    "sha256": "10d980d9a96c4df46ad9abe7762195c6162205ab640c2d5e77d0e7f2b0095ebe"
+  },
+  "perf3_actual_full_HOST": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/ordinary-host-profile-1/independent-actual-review-1/FINAL-REVIEW.json",
+    "bytes": 15157,
+    "sha256": "4af93d3013c136a3dc9db8df2652959adc45c9d6814f137cc502feba476d87b3"
+  },
+  "accepted_CURRENT113": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT113-ABI-PRIVATE-CORRECTION-BUILD-ADMISSION-1/independent-artifact-review-1/INDEPENDENT-ACCEPTANCE.json",
+    "bytes": 5905,
+    "sha256": "02c1001e037ea4d57d3d2dc5fdffa3655ce6d94c36a77ff6ea84b409f1f18cbd"
+  },
+  "exact_paired_fragments": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/perf_counter_extra_set_bridge.original.C.inc",
+      "bytes": 123,
+      "sha256": "2d740b1d75d7d84b6207884c2149a7d28f9da1099ff81fdfe1550da37deb7695"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/perf_counter_extra_set_bridge.paired-selector.C.inc",
+      "bytes": 323,
+      "sha256": "00a87d87940d144a8c8bbe3d97171681a9d6f90a2260706bdc334b0a4933cf62"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/perf_counter_init_raw_bridge.original.C.inc",
+      "bytes": 157,
+      "sha256": "976286decb9ea6d0dcee1ac52d1aea7d3f926ecffd6a22a9a8160cab1cad798c"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/perf_counter_init_raw_bridge.paired-selector.C.inc",
+      "bytes": 686,
+      "sha256": "d566e625cc8da8e560a36009ac2faa236815742f11eba467ea7fd4beb3aaeb93"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/perf_event_atomic64_read_bridge.original.C.inc",
+      "bytes": 113,
+      "sha256": "aeb6307f9a31c5bf6a6aa6904d10ba9c58a973e4d0fd2f924d91db60f6c3fe51"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/perf_event_atomic64_read_bridge.paired-selector.C.inc",
+      "bytes": 704,
+      "sha256": "b87bff6bea48456ab836a7e0f7425f9ffc641cbb1a9e24eaa775c2d93b7bb08b"
+    }
+  ],
+  "two_Rust_wrappers": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/selected-bridges.Rust.inc",
+    "bytes": 1378,
+    "sha256": "d1a94a5454b599770563eb017bfacbb15a0682afc783439ffa3dab867e826b93"
+  },
+  "existing_atomic_body_count": 1,
+  "new_Rust_leaf_files": 0,
+  "closed_Rust_files": 119,
+  "changed_Rust_files": [
+    "syscall_policy.rs"
+  ],
+  "changed_postimages": [
+    "kernel/syscall.c",
+    "kernel/CMakeLists.txt"
+  ],
+  "unchanged_GLOBAL32_process": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/newdebug32-next114-source/candidate/kernel/process.c",
+    "bytes": 226577,
+    "sha256": "110e3e820fed06adbbf647e2f52bc06a157b7001653157863e7e6733b878d172"
+  },
+  "unchanged_process_command": true,
+  "unchanged_env_bindings": true,
+  "original_fallback_bodies_preserved": true,
+  "retained_actual113arch": {
+    "action": "Retain actual accepted113 archCda1e0f3a; exact unchanged argv/source/origin; never recompile",
+    "build_relative": "kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+    "link_token": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+    "replace": false,
+    "retained_archive_member": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT112-EVENT2-ALLOC2-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+    "source": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT113-ABI-PRIVATE-CORRECTION-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+      "bytes": 106008,
+      "sha256": "da1e0f3a5c170e6ca8c6e2c55d4b5329987e7fc4f47f26f7aef74f5bca7454c0"
+    }
+  },
+  "genuine_origin_reused": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/root-source-adoption-1/ROOT-ACTUAL-ORIGIN-PRODUCER.json",
+    "bytes": 3725,
+    "sha256": "2c419c6405deef8d6e8c2479e57f88884e34a84fec300e0aff5311ea04b944fb"
+  },
+  "actual_origin_replayed": false,
+  "actual_compilers": 0,
+  "canonical_or_Git_writes": 0,
+  "app_stream_or_oracle_mutations": 0
+}

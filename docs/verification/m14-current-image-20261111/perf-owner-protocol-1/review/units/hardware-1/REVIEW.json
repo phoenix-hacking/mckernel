@@ -1,0 +1,97 @@
+{
+  "bindings": {
+    "actual_C_provider_tables": {
+      "path": "/home/holden/mckernel/kernel/syscall.c",
+      "sha256": "8030afeba14c6c29e93e97e430e9c300b2239aff09c5f96c8986d3baa2b5cec8",
+      "size": 966862
+    },
+    "caller_boundary_correction": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/ownership-proposal-1/implementation-1/read-entry-count-boundary-1/CORRECTION.json",
+      "sha256": "f8b75757f620b2139026b2c2d09904033d347d7f2ef028aec0c0b40cbc8da2b6",
+      "size": 918
+    },
+    "caller_read_boundary": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/ownership-proposal-1/implementation-1/candidate/kernel/rust/f03_perf_owner/callbacks.rs",
+      "sha256": "a1deb5d37128f0e74b6bf11bea0493c333f5a190c69dca6d2b8131db4489e7bb",
+      "size": 11487
+    },
+    "current_baseline_math_source": {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "sha256": "76ce6016d6ddd1cfa6c41070c0cf35e87b94ddc31e67c805adbe3b94b3f17469",
+      "size": 1240794
+    },
+    "hardware": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/ownership-proposal-1/implementation-1/candidate/kernel/rust/f03_perf_owner/hardware.rs",
+      "sha256": "ddaf850da5230b0bb18f1941c4f0549cfe62e38add253531e13a87e585ee64a1",
+      "size": 19850
+    },
+    "interface": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/ownership-proposal-1/implementation-1/HARDWARE-UNIT-INTERFACE.json",
+      "sha256": "5f15dee41804a8823159719cb4964658b407111e43efed849ab5d53d86b9a555",
+      "size": 6282
+    },
+    "three_unit_interface": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/ownership-proposal-1/implementation-1/MODULE-OWNERSHIP-INTERFACE.json",
+      "sha256": "38a6af3184991b9d545a3a6710d6531c206c4901080df5d3040176d4ec7b4e05",
+      "size": 9601
+    }
+  },
+  "context": {
+    "actual_baseline_source": "6aae",
+    "actual_matching_image": "4b711",
+    "execution_or_activation_or_whole_DEFAULT_or_NATIVE_approval": false,
+    "independent_protocol_GO": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-review-p04tests-max-1/proposal-1/correction-1/REVIEW.json",
+      "sha256": "34c569e011798c2d418953b28dbce0394f39b7fe7c22b55c467247fdbcfd3856",
+      "size": 6474
+    },
+    "preserve_generic_exec_oldperf_held_fixture_replay_restrictions": true,
+    "protocol": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/ownership-proposal-1/correction-1/OWNERSHIP-PROPOSAL.json",
+      "sha256": "202acdfc69ede3e04e9099c8a9d490d80841cdb89820e41eaa5484c91ba4dc07",
+      "size": 30898
+    }
+  },
+  "created_utc": "2026-11-11T12:58:25.658259+00:00",
+  "decision": "GO_AT_HARDWARE_LOWER_UNIT_SCOPE_ONLY",
+  "focused_changed_test_obligations": [
+    "Actual start/reset/stop/read/sync with genuine math helpers and controlled hardware lower effects, including invalid/valid masks/TSC wrap, stop-all-mask before update order and per-event window restoration.",
+    "New extra-register reserve/program/fail/rollback must never allocate under R/S or clear a preexisting/programmed bit; IRQ/void paths remain allocation-free.",
+    "Read-one after logical close stays pinned; stable group/header/value order and count-short rejection occur before usercopy, with partial EFAULT and all lifetime refs balanced.",
+    "Use coherent actual production functions and candidate-specific controls once source is frozen; no old held perf/generic/exec fixture replay or native acceptance."
+  ],
+  "limits": "No wholeDEFAULT/compiler/test/image/native operation approval, current credit/resource/UNKNOWN or source permission release.",
+  "material_defects_found": [],
+  "read_count_boundary_resolved": {
+    "question": "ddaf lower read_locked intentionally ignores _count, whereas actual C perf_read21538 and current Rust entry26622 validate count before lower read helpers.",
+    "reviewed_source_lines": "callbacks.rs46\u201366",
+    "scope_limit": "Only this exact boundary was inspected. callbacks as a whole is still P03 DRAFT/unreviewed until its final manifest. A lower-helper GO does not waive count admission; final coherent source must retain both checks and same-R handoff.",
+    "source_resolution": "P03 supplied concrete callbacks.rs::read/read_size_valid (a1deb draft boundary) that checks >=8 or(stable GroupRead.event_count()+1)*8 before any transient map allocation, then revalidates under the SAME final R transferred into hardware::read_locked. This preserves the original short-buffer EINVAL/no usercopy behavior and removes the group-growth gap without modifying ddaf."
+  },
+  "required_final_coherent_boundaries": [
+    "Actual descriptor callbacks and scheduler/PMI/sync/exit callers must supply live EventPin, prebound genuine current/positive/scheduler-owned Thread, exact snapshots and no incoming illegal lock/IRQ exclusions; no allocation or ENOMEM may be introduced on void IRQ/exit paths.",
+    "Final common read entry must retain the resolved before-allocation and same-R count admission; final common successful stop must detach only exact association and set original PP_NONE.",
+    "Final maps/runtime/three-unit source pins must be frozen coherently: the stable interface contracts were reused and relevant current APIs inspected, but supporting P03 files are active writers and are not approved wholesale by this unit review.",
+    "Preserve complete actual provider/ABI/math/mask source and tracked counter/extra leases in real compiler/image/changed-behavior packet; no fake production callbacks, unrelated old perf fixture or held replay."
+  ],
+  "reviewed_semantics": [
+    "capture receives one real R, takes mapping and walk plus stop-follow snapshots under that SAME R epoch/sequence/tail, captures genuine per-executing-Thread Operation leases without allocation, explicitly finishes mapping and error-path snapshots before R releases. GroupRead/HardwareLeases drops occur after R is gone on ordinary returns, preventing recursive R acquisition.",
+    "Each next topology step is taken under short R then releases it before Event S. Matching LocalRuntime/physical counter index come from genuine HardwareLeases key/token, never measurement count or stale origin index. RuntimeWindow drops before S. Usercopy occurs only after all local R/S windows have ended; leases/snapshot refs protect storage across copy faults.",
+    "Start preserves original inactive/mask conditions, attr exclusion modes, period-before-counter-set order and deliberately ignored signed counter-set status before mask/ACTIVE. TSC arithmetic reuses exact helper. Extra template is sampled under S, S drops before R-taking reserve_extra, and reenters for allocation-free actual MSR programming. Only newly reserved AND unprogrammed extra bits are aborted after S; programmed/foreign/old bits are never guessed free.",
+    "Reset preserves invariant TSC base/stopped/accumulator arithmetic and physical mask checks; ordinary counters perform genuine read/update before atomic count zero. value_window passes the actual executing/scheduler-owned Thread explicitly rather than nested CPU-current lookup.",
+    "Stop reuses exact state/mask/TSC/stopped-array helper, preserving65 pointer capacity. It stops the entire computed physical mask before updating each actually stopped event, using a third same-initial-epoch snapshot and matching S/RuntimeWindow for each update. Real Process association detach and PP_NONE belong to the common owner only after success.",
+    "Sync keeps original inherit/pid need check, leader pid action and early NONE stop; sibling action uses original INPUT pid rather than substituting each sibling pid. Real atomic/count and physical counter providers remain genuine and serialized by S.",
+    "Read-one captures that exact pinned event even if logical close has omitted it from newer topology. Group read emits captured members+leader count and leader-first values, one header then one-word siblings, genuine EFAULT behavior/wrapping pointer and original CInt\u2192CLong return boundary. No raw mutable C list is traversed.",
+    "Actual source checks contain no allocator, blocking wait, host offload or usercopy under P/R/S. Called provider paths are bounded genuine arithmetic/atomic/PMC/MSR operations. Whole callback/callsite and final provider selection remain separate coherent-source/image obligations."
+  ],
+  "reviewer": "/root/source_acquisition_review_max",
+  "schema": "mckernel.perf-hardware-accounting-unit-review.v1",
+  "scope": "Frozen19850B ddaf hardware.rs and its exact lower ABI/lifetime contracts; not the complete read entry or whole source cohort",
+  "verification": {
+    "caller_count_question_resolved_by_actual_source": true,
+    "error_return_and_RAII_lock_order_reviewed": true,
+    "exact_helper_math_and_ABI_call_boundaries_reviewed": true,
+    "hardware_exact_19850_SHA_ddaf": true,
+    "no_execution_or_whole_source_typecheck_claim": true
+  }
+}

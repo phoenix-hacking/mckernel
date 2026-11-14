@@ -1,0 +1,56 @@
+{
+  "status": "AWAITING_INDEPENDENT_REVIEW_AND_ROOT_FRESH_CPU6_GRANT",
+  "scope": "Functional OS/apps plus live Rust/reviewed assembly cutover. One host Rust exact-attempt private carrier rollback; no compute C, no independent delegated executor, no activation.",
+  "source_freeze": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-source-next-20261020-1/SOURCE-FREEZE.json",
+    "sha256": "99f56306f41c2fb6cdc72e2ed82c921eae1cfa163415ae05dbaacc06f6af5254",
+    "bytes": 3493
+  },
+  "inputs": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-source-next-20261020-1/CHECK-PINS.json",
+    "sha256": "68fb58519cba90240e5aa405ecc79fe50afb986887485d2ca3f0515e9cf07a0c",
+    "bytes": 3313
+  },
+  "commands": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-source-next-20261020-1/COMMANDS.json",
+    "sha256": "dc29b42622ac3c9488f4fdf3ded4b2c54ba3ba8a9f6a175cd7eb340ae7eca62f",
+    "bytes": 1755
+  },
+  "runner": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-source-next-20261020-1/run-rollback-checks-1.py",
+    "sha256": "6110beb87e7d78470a2b76b3e90af831a01df8fd5c160dc4f4ec369693588707",
+    "bytes": 3933
+  },
+  "outer_argv": [
+    "taskset",
+    "-c",
+    "6",
+    "prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--fsize=33554432",
+    "--core=0",
+    "--nofile=256",
+    "--",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-source-next-20261020-1/run-rollback-checks-1.py"
+  ],
+  "profile": "CPU6/1job/1GiBAS/30CPU35+2wall/32MiBstream/core0nofile256/statusFIRST/directwait/groupabsence/fresh2GiBMemAvailable/host16GiB+scratch12GiB+512MiB",
+  "checks": "Whole unchanged actual original and candidate current_fork_host.rs compiled through explicit std ownership/provider adapter; original EBUSY witness + 8 changed-path tests. No physical MM, genuine Request, module, guest or ACK acceptance.",
+  "tests": [
+    "Original actual caller no-transfer refusal leaves key; corrected actual retry returns EBUSY (preserved baseline witness)",
+    "Candidate intact negative capsule releases box once, returns key, actual corrected selector2/selector3 succeeds in adapter",
+    "Refused Request identity leaves key reusable for corrected delivered adapter request",
+    "Partial and fully transferred negative outcomes retain key; duplicate refuses",
+    "Untouched success and changed call fields retain key with EPROTO",
+    "Wrong parent/child/carrier/capsule/response/nonce cannot roll back",
+    "Stale attempt cannot cancel rebound same carrier; different capsule identity required",
+    "Concurrent duplicate and premature selector3 leave in-flight binding; original private refusal then actual retry succeeds",
+    "Zero capsule and duplicate other-child carrier refuse without overwrite"
+  ],
+  "next_observation": "Compile original witness, execute 1 witness; compile changed complete actual host Rust body, execute 8 cases. Stop first unexpected failure; preserve captures; one bounded correction before independent expert escalation.",
+  "authorization": "Source preparation only so far. No job started. Await root fresh ordinary grant after review.",
+  "no_effects": "No Git/root/container/module/build/guest/source integration/default activation."
+}

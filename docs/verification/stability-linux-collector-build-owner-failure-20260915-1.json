@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "record_kind": "collector_build_owner_failure",
+  "task_id": "M02-B-rebuild-owner",
+  "attempt": 1,
+  "status": "FAIL_SOURCE_REVIEW",
+  "base_commit": "121f0461619cad55aa96505f2a1552b00517e286",
+  "candidate_files": [
+    {"path": "docs/verification/evidence/stability-linux-collector-build-owner-20260915.py", "sha256": "dfb6b92a5166c018a4bd4b8b41cd8dd228e520d55fb74c843245e3127835c4e4"},
+    {"path": "scripts/tests/test_stability_linux_collector_build_owner.py", "sha256": "a493fc41f4dd4c900acfe4791fb5564d32ba83393ec2fe29aa088b5b502b8d96"}
+  ],
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-build-owner-failure-20260915-1.tar.gz",
+    "size": 5158,
+    "sha256": "5a9eaae26fdc2130b2a610ad7e6ec03b0ee5cecde2a05d0a605d3695c14298b4",
+    "members": 2
+  },
+  "independent_review": {
+    "role": "Astra/high ownership and runtime-acceptance reviewer",
+    "status": "FAIL",
+    "findings": [
+      {"severity": "P1", "finding": "Bounded cleanup and watchdog exception paths can exit and release the inherited flock without verified container absence."},
+      {"severity": "P1", "finding": "No watchdog ready/identity handshake or recovery signal handling exists before start."},
+      {"severity": "P1", "finding": "The root-owned mode-0700 directory mounted as /work is not writable or traversable by container UID 1000."},
+      {"severity": "P1", "finding": "Docker client/context, cgroups, image manifest and full actual container configuration are not strictly bound."},
+      {"severity": "P1", "finding": "Unbounded PIPE capture can lose timeout streams and does not supply reviewed command/process cleanup evidence."},
+      {"severity": "P2", "finding": "Writes/config replacement omit complete-write and directory-fsync durability; cleanup journals and diagnostic loss are incomplete."},
+      {"severity": "P2", "finding": "The PASS predicate incompletely validates build bindings and mislabels decoded watchdog exit as raw wait status."}
+    ]
+  },
+  "heavy_build_executed": false,
+  "runtime_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}

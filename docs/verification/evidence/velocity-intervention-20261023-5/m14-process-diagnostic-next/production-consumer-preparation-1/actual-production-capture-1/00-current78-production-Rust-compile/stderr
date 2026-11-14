@@ -1,0 +1,28 @@
+warning: target feature `sse2` must be enabled to ensure that the ABI of the current target can be implemented correctly
+  |
+  = note: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+  = note: for more information, see issue #116344 <https://github.com/rust-lang/rust/issues/116344>
+
+error[E0428]: the name `kprintf` is defined multiple times
+     --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-process-diagnostic-next/production-consumer-preparation-1/source/kernel/rust/process_helpers.rs:11627:5
+      |
+   20 |     fn kprintf(format: *const i8, ...) -> CInt;
+      |     ------------------------------------------- previous definition of the value `kprintf` here
+...
+11627 |     fn kprintf(format: *const i8, ...) -> CInt;
+      |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `kprintf` redefined here
+      |
+      = note: `kprintf` must be defined only once in the value namespace of this module
+
+warning: the feature `core_intrinsics` is internal to the compiler or standard library
+ --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-process-diagnostic-next/production-consumer-preparation-1/source/kernel/rust/lib.rs:2:12
+  |
+2 | #![feature(core_intrinsics)]
+  |            ^^^^^^^^^^^^^^^
+  |
+  = note: using it is strongly discouraged
+  = note: `#[warn(internal_features)]` on by default
+
+error: aborting due to 1 previous error; 2 warnings emitted
+
+For more information about this error, try `rustc --explain E0428`.

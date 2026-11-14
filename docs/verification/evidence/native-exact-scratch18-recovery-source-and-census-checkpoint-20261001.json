@@ -1,0 +1,33 @@
+{
+  "schema": "native-exact-scratch18-recovery-source-and-census-checkpoint-v1",
+  "recorded_at_utc": "2026-10-01T15:10:00Z",
+  "recovery_source": {
+    "status": "PASS_SOURCE",
+    "helper_sha256": "5159d2d31a3727c25479ab0c12ad9332cf0352fcfc2073de5cdee6e3e7c6e8e7",
+    "tests_sha256": "8e3def927077ab46daabea08083c7202afaacb2be9593e72a3441e45588354ec",
+    "wrapper_sha256": "12508d3a2d9bffcb84c34deabf9ef9e3d905167fc264ff2c4649057a95364a25",
+    "wrapper_fetched_commit": "9e708ce49dfd76c22e60a745c8595bd44967fc9c",
+    "coordinator_tests": {"passed": 35, "failed": 0},
+    "independent_review": "PASS_SOURCE_SEPARATE_ONE_SHOT_RELEASE_REQUIRED",
+    "production_mutation_run": false
+  },
+  "privileged_census": {
+    "command": ["/usr/bin/python3", "-I", "-B", "/home/holden/mckernel/scripts/native_rust_exact_disk_build_wrapper.py", "/home/holden/mckernel-work/scratch/native-exact-build-request-scratch-18-execution.json", "--census-only", "--request-sha256", "80de5f1c02867bcbee69752e186f7fc11d201c2df3c78887ea08aa85f92e2bd7"],
+    "returncode": 1,
+    "stdout": {"schema": "mckernel.heavy-recovery-census.v1", "status": "REFUSED"},
+    "unchanged_retry": false
+  },
+  "blocking_containers": [
+    {"id": "1e470f1cba7ba44dc96d8441404f88cb8b086c9e12a7869e717dfff9575050b5", "name": "kasper-results_web-interface_1", "image_id": "sha256:1dc7fae943e31a9ea7fb8186d94b9e43fb89f38305a24c3bb6fe45eb206309f6", "created": "2023-05-26T02:19:06.0479579Z", "started_at": "2026-09-19T03:56:25.611678864Z", "memory_limit": 0, "nano_cpus": 0, "cpu_quota": 0, "cpuset_cpus": "", "pids_limit": null},
+    {"id": "8da74b66cf274dcf833954acd1c40fe431e5feb1dddff93f087e80fbaa3e97a3", "name": "kasper-results_db_1", "image_id": "sha256:61eca46d7769696024576c77399590837fa7efd5265809638981ad7d7977e987", "created": "2023-05-25T23:55:54.814111049Z", "started_at": "2026-09-19T03:56:25.67554966Z", "memory_limit": 0, "nano_cpus": 0, "cpu_quota": 0, "cpuset_cpus": "", "pids_limit": null}
+  ],
+  "container_profile_review": {
+    "status": "BLOCK",
+    "reason": "exact identities are lightly loaded but have no enforceable CPU, memory, PID, block-I/O or log-growth bounds; exact-ID exemption cannot preserve aggregate resource ceilings",
+    "containers_modified": false,
+    "exemption_added": false
+  },
+  "retained_state_mutated": false,
+  "next": ["Publish and fetched-verify recovery source", "Author and review a one-shot recovery release", "Do not execute recovery while strict census refuses", "Continue independent source work; recheck external container state before a future recovery attempt"],
+  "acceptance": {"recovery": false, "build": false, "application": false, "whole_os": false}
+}

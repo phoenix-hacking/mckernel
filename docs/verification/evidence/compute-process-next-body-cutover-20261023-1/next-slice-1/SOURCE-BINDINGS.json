@@ -1,0 +1,84 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_SOURCE_PREPARED",
+  "source_inputs": {
+    "kernel/process.c": {
+      "path": "/home/holden/mckernel/kernel/process.c",
+      "sha256": "55872d7235a06364565ec7732b7a67c918ed7c006b1e55ababa88dbe42e2a93a",
+      "bytes": 161780
+    },
+    "kernel/rust/sched_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "sha256": "700a9e20349df5ae18ceea8c9195e38078a6bb05b81c79f7368fbdf6fc14abcc",
+      "bytes": 180017
+    },
+    "kernel/rust/tests/run_equivalence.sh": {
+      "path": "/home/holden/mckernel/kernel/rust/tests/run_equivalence.sh",
+      "sha256": "5df92eff793c7ff0358567340a35b3d9e36188b142186c4fe962a40370490822",
+      "bytes": 5010196
+    }
+  },
+  "outputs": {
+    "kernel/process.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/source/kernel/process.c",
+      "sha256": "9e3cdea2027618ce954b80f2436ed44ef16e2df448c83a5b3734d77ffb161798",
+      "bytes": 161155
+    },
+    "kernel/rust/sched_helpers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/source/kernel/rust/sched_helpers.rs",
+      "sha256": "5a09c8420d33027483d302ce9f94c350ed2dfdad450a3834214cd224023ab4f8",
+      "bytes": 181991
+    },
+    "kernel/rust/tests/run_equivalence.sh": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/source/kernel/rust/tests/run_equivalence.sh",
+      "sha256": "b6e5926d39edcdc9b65f00877e74564af4b363ad20034ab5ccccbb9c919ab737",
+      "bytes": 5010284
+    }
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/PRIVATE-PRODUCTION.patch",
+    "sha256": "af8dde73c5f29528b4b59935ae497ce334574c196022ce710d3aa62902767dee",
+    "bytes": 5807
+  },
+  "original_selected_C": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/ORIGINAL-SELECTED-C.c",
+    "sha256": "0ee1f53c7b29cfa57b11e367444a8289ee260d8433255c187d17a89ccd5fb7d1",
+    "bytes": 658
+  },
+  "original_fallback_C": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/ORIGINAL-FALLBACK-C.c",
+    "sha256": "02d31c784be02c7c3f16e5ef20e8854e7b895e03760b1d8800081162129170f8",
+    "bytes": 1992
+  },
+  "header_inputs": {
+    "kernel/rust/abi.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "bytes": 76151
+    },
+    "kernel/include/sched_helpers.h": {
+      "path": "/home/holden/mckernel/kernel/include/sched_helpers.h",
+      "sha256": "9712a3df59eb0251f517ce01254e4576119868924b35f7da6fbee294bff966ae",
+      "bytes": 34428
+    },
+    "kernel/include/process.h": {
+      "path": "/home/holden/mckernel/kernel/include/process.h",
+      "sha256": "8848d536f2fa847a59af72d573ec9c55838c27cea664d46438ab4e038bf83649",
+      "bytes": 26602
+    },
+    "ihk/ikc/include/ikc/ihk.h": {
+      "path": "/home/holden/mckernel/ihk/ikc/include/ikc/ihk.h",
+      "sha256": "0ddad6947192b527be6a6f9560718c98fb70b50cb2cbb838094d0ca6ce199e3e",
+      "bytes": 4138
+    },
+    "kernel/rust/futex.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/futex.rs",
+      "sha256": "ecfafb1d08247eec584c429c0bc9cd4fbd75d1bd8f01e10847e5dad796a6b4d7",
+      "bytes": 34480
+    }
+  },
+  "implementation": "Reuse existing Rust sched_runqueue_offsets/lockadapters/body; no new C/data/provider/layout. Exact C fallback preserved. LWK ihk_ikc CPUid macro resolves to existing ihk_mc CPUid.",
+  "callback_identity": "Existing Rust lock adapters preserve their established usize/CULong ABI and delegate to the same exported providers. Cstatic descriptor vs Ruststack descriptor identity differs; all26offsetvalues match, synchronous body retains no pointers.",
+  "C_argument_order": "Cargument evaluation order unspecified. Valid current-CPU getters remain non-mutating; two getters and one CPUid call preserved. Fixture compares calls/count/values and body callback order, not an invented Cargument evaluation order.",
+  "whole_C_TU_default_link_native": "OPEN"
+}

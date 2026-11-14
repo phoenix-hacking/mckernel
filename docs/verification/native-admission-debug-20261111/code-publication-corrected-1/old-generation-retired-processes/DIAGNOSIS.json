@@ -1,0 +1,338 @@
+{
+  "actual_values": {
+    "bytes": 1127,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/ACTUAL-VALUES-CURRENT.json",
+    "sha256": "8242f3439ea65c093122bdb238530ba8f5b520fff5f3797f4c73269782c8efb8"
+  },
+  "clock_and_signal_classification": {
+    "actual_sampled_boot_ns": 479792147051349,
+    "clock_extension_or_hold_override_authorized": false,
+    "conclusion": "Saved timing is consistent with internal60s SIGALRM, not evidence that a user/service stop occurred. Generic on_stop message handles SIGINT,SIGTERM,SIGHUP,SIGQUIT,SIGALRM and does not identify which. Later10:43 expiry is downstream, not proof of malformed original clock inputs.",
+    "deadline_boot_ns": 479942000000000,
+    "deadline_mono_ns": 263747000000000,
+    "parent_handoff_alarm_source": "root_parent-current.py243\u2013257: min(parent_boot_now+60s,total_boot_cap\u221215s), all-clock caps, setitimerITIMER_REAL",
+    "phase1_deadline_boot_ns": 479872000000000,
+    "phase1_remaining_at_sample_ns": 79852948651,
+    "receipt_expires_boot_ns": 479902000000000,
+    "recorded_signal_number": null,
+    "root_parent_observed_record_mtime_ns": 1794393526348407673,
+    "stderr_lastmtime_minus_root_parent_observed_record_ns": 60085879338,
+    "stderr_lastmtime_ns": 1794393586434287011,
+    "stderr_lastmtime_utc": "2026-11-11T10:39:46.434287+00:00",
+    "total_remaining_at_sample_ns": 149852948651,
+    "utc_cap_ns": 1794393676000000000
+  },
+  "compatible_observed_failure_chain": [
+    "Actual parent accepted LEASE and INSTALLER frames and advanced to go_handoff.",
+    "Deterministic stale wait digest rejects selected installer source before READY; actual primary inner exception remains unobserved in allowed captures.",
+    "issuer _read_ready observes installer terminal and raises, then issuer except wraps the primary as generic IssuerUnknown.",
+    "phase0 catch prints PHASE0_UNKNOWN_RETAINED and retains custody via signal.pause indefinitely.",
+    "parent waits for GO_READY while keeper retains channel; internal60s handoff alarm is consistent with saved final stderr timing.",
+    "parent except stops only owned pidfds then retains original lease/FDs indefinitely. Caller waits for positive direct sudo termination, so CALLER-TERMINAL absent and original unifiedsession97528 live."
+  ],
+  "confirmed_source_predicate": {
+    "actual_selected_installer_sha256": "8076a13c5c47230f2059c150036b0aac6d4c9b1ae64bd1d0f6de011ecaf8521c",
+    "check": "hashlib.sha256(raw).hexdigest()!=EXPECTED",
+    "exception_if_reached": "ValueError: installer source changed",
+    "guard_scope": "stable held exact installer FD, not payload catalogue or runtime/account permission",
+    "line": 12,
+    "matching_digest": false,
+    "observation_limit": "IssuerUnknown prints only its generic outer message. Actual installer stderr is Root-private and was not read. No assertion that no earlier I/O or runtime failure occurred.",
+    "observed_actual_inner_exception": null,
+    "occurs_before": "installer module exec and actual READY write",
+    "selected_installer_bytes": 23246,
+    "source": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/WAIT-INSTALL-CODE-current.py",
+    "wait_expected_installer_sha256": "d87594a07ecd27d0760b418cb51c64f67f0b01e889d5c3b587cadd080944d8f5"
+  },
+  "created_utc": "2026-11-11T10:51:51.376665+00:00",
+  "decision": "CONFIRMED_DETERMINISTIC_WAIT_INSTALLER_DIGEST_MISMATCH; ACTUAL_INNER_EXCEPTION_NOT_EXPOSED_BY_PERMITTED_CAPTURE",
+  "minimal_meaningful_source_fix_proposal": {
+    "first_change": "WAIT-INSTALL-CODE-current.py EXPECTED literal must equal exact selected installer source8076a13c5c47230f2059c150036b0aac6d4c9b1ae64bd1d0f6de011ecaf8521c",
+    "focus_regression_proposal": "Independent owner: actual waiting-source prefix with controlled already-open source bytes should reject retained stale-digest baseline before READY and accept exact selected installer candidate through hash predicate; exact drift refusal remains. No real installer/import/main/root/private journal/nonce effect. Full operation retry requires separate actual custody/retirement disposition and fresh normal review/admission.",
+    "live_source_mutated": false,
+    "necessary_dependent_changes_only": "new exact wait SHA into direct-entry WAIT_SHA; resulting entry/bootstrap/prepare and source-model/operation bindings re-frozen coherently. Payload30, installer catalogue, IPC/wait guards and all clocks/caps/FD/immutability checks unchanged.",
+    "patch_prepared": false
+  },
+  "operation_evidence": {
+    "ADMISSION.json": {
+      "bytes": 1522,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-operation-root-1/ADMISSION.json",
+      "sha256": "5bbcaf89bd18d1a06836623d72a74ef9dbffddfa1aa17ae6025219af88094f8f"
+    },
+    "CALLER-STDERR.POINT-OBSERVATION": {
+      "bytes": 484,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-operation-root-1/CALLER-STDERR.POINT-OBSERVATION",
+      "sha256": "5ba0a0ec98b4ad65b90652eb7c32f77d58a029df4c0b5a9eeea11fe55dda72ab"
+    },
+    "DEADLINE-ROLE-OBSERVATION.json": {
+      "bytes": 1243,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-operation-root-1/DEADLINE-ROLE-OBSERVATION.json",
+      "sha256": "ebb012802dae018146b138aa459ea1d2cefb3701309c11daf10ec604a85dca63"
+    },
+    "EXACT-ARGV.json": {
+      "bytes": 459,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-operation-root-1/EXACT-ARGV.json",
+      "sha256": "b4371cd8f1a78f7364474774159911cd1b0240ea6587ee1888d48aff73fab437"
+    },
+    "PROGRESS-OBSERVATION.json": {
+      "bytes": 990,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-operation-root-1/PROGRESS-OBSERVATION.json",
+      "sha256": "7db1202af8e84eac1a7c0a9d8bd91865c3edf07f808ae5ffc87e1da251e31ccd"
+    }
+  },
+  "owned_user_evidence": {
+    "OBSERVED-installer.json": {
+      "bytes": 267,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/reservations/install-6b6892ec39c7e413b14d82bb97a9beb995c6c1765b395dfc0811489a19997a7e/OBSERVED-installer.json",
+      "sha256": "49c69d43b9c8b85e7474c13db3488bfe977ab178d141e77235336f1194cc8816"
+    },
+    "OBSERVED-keeper.json": {
+      "bytes": 264,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/reservations/install-6b6892ec39c7e413b14d82bb97a9beb995c6c1765b395dfc0811489a19997a7e/OBSERVED-keeper.json",
+      "sha256": "82dbb58471cae738b9e0cd99ab94488daefb588eacab37abb9a9658f62f43915"
+    },
+    "OBSERVED-root_parent.json": {
+      "bytes": 269,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/reservations/install-6b6892ec39c7e413b14d82bb97a9beb995c6c1765b395dfc0811489a19997a7e/OBSERVED-root_parent.json",
+      "sha256": "14b270dc76c1cb1e853859a1e699f9d4af0a0c0347c68ff6cb61c53607d332f5"
+    },
+    "PREEXEC.json": {
+      "bytes": 178,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/reservations/install-6b6892ec39c7e413b14d82bb97a9beb995c6c1765b395dfc0811489a19997a7e/PREEXEC.json",
+      "sha256": "5056c857b150d22adb800a5a13916ee6db295fe11e60b9c69b2bd0368445fbe4"
+    },
+    "RESERVATION.json": {
+      "bytes": 1125,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/reservations/install-6b6892ec39c7e413b14d82bb97a9beb995c6c1765b395dfc0811489a19997a7e/RESERVATION.json",
+      "sha256": "bdab35f3f4966774c915eebac31246cca7adcba15cd39af0fb2c1f8db789af50"
+    },
+    "SUDO-CHILD.json": {
+      "bytes": 160,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/reservations/install-6b6892ec39c7e413b14d82bb97a9beb995c6c1765b395dfc0811489a19997a7e/SUDO-CHILD.json",
+      "sha256": "be5efc896b79d221d2265b46943c65cf32e93a858129154229f668db930525c4"
+    },
+    "request.json": {
+      "bytes": 3152,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/reservations/install-6b6892ec39c7e413b14d82bb97a9beb995c6c1765b395dfc0811489a19997a7e/request.json",
+      "sha256": "4fedd786f0a740b422ae18318e149a1484789786301131344d9e2dc5f90b9809"
+    },
+    "stderr.capture": {
+      "bytes": 484,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/reservations/install-6b6892ec39c7e413b14d82bb97a9beb995c6c1765b395dfc0811489a19997a7e/stderr.capture",
+      "sha256": "5ba0a0ec98b4ad65b90652eb7c32f77d58a029df4c0b5a9eeea11fe55dda72ab"
+    },
+    "stdout.capture": {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/reservations/install-6b6892ec39c7e413b14d82bb97a9beb995c6c1765b395dfc0811489a19997a7e/stdout.capture",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "retained_custody": {
+    "all_current_operation_charges_retained": true,
+    "caller_terminal_exists": false,
+    "captured_stderr_bytes": 484,
+    "captured_stdout_bytes": 0,
+    "installed_proof_confirmed": false,
+    "installer": {
+      "birth": "47979260",
+      "pid": 1358836
+    },
+    "keeper": {
+      "birth": "47979244",
+      "pid": 1358835
+    },
+    "new_nonce_or_retry_or_state_edit": false,
+    "no_OTHER_UNKNOWN_release": true,
+    "no_native_release": true,
+    "no_scratch_release": true,
+    "normal_retirement_owner": "source_acquisition_review_max + Root",
+    "original_unified_session": 97528,
+    "root_parent": {
+      "birth": "47979237",
+      "pid": 1358834
+    },
+    "root_private_journal_read": false,
+    "sudo": {
+      "birth": "47979229",
+      "pid": 1358831
+    },
+    "sudo_or_signal_or_permission_fallback": false,
+    "user_caller": {
+      "birth": "47979209",
+      "pid": 1358830
+    }
+  },
+  "scope": "READ_ONLY_SOURCE_AND_OWNED_CAPTURE_DIAGNOSIS_OF_ORIGINAL_ONCE51ca_OPERATION",
+  "source_and_operation_pins": {
+    "BOOTSTRAP-current.py": {
+      "bytes": 8190,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/BOOTSTRAP-current.py",
+      "sha256": "927483d66ff9bf2cbfae451793b15ffc8a75d92c7234062143cdaa91e508237f"
+    },
+    "ROOT-ISSUE-AND-EXECUTE-ONCE.py": {
+      "bytes": 13146,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/ROOT-ISSUE-AND-EXECUTE-ONCE.py",
+      "sha256": "8d7f936ae6ae6fc24afe95c8ab3d58a14242282acfdee908b9b37933a867cd69"
+    },
+    "WAIT-INSTALL-CODE-current.py": {
+      "bytes": 2646,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/WAIT-INSTALL-CODE-current.py",
+      "sha256": "2ed1a7a3cc5cd72d70d6c4a3a05f8b4f2dcc524fcada7ae75a84e099b2ce5719"
+    },
+    "direct-entry-current.py": {
+      "bytes": 8986,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/direct-entry-current.py",
+      "sha256": "c5ee9db292a1834bda2ef6b41740a3cae91bc93826d1d23f56699dd7f3ce7c48"
+    },
+    "install-source-current.py": {
+      "bytes": 23246,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/install-source-current.py",
+      "sha256": "8076a13c5c47230f2059c150036b0aac6d4c9b1ae64bd1d0f6de011ecaf8521c"
+    },
+    "issuer-current.py": {
+      "bytes": 23625,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/issuer-current.py",
+      "sha256": "db5086a8f7574a6536ffe31d5d2a443ddfaaf1c51244223ddb7288936c9bd2d3"
+    },
+    "phase0-current.py": {
+      "bytes": 31139,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/phase0-current.py",
+      "sha256": "f0771fbd3bfe4dcf7cfa89f6259e46011fb96fb81786113365ab4ea75118fab5"
+    },
+    "prepare_current.py": {
+      "bytes": 39348,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/prepare_current.py",
+      "sha256": "f8d58d6068b63cb6acd1dde722c2a30bdc04f5f6df7ead92eaebc70601af3d5a"
+    },
+    "root_parent-current.py": {
+      "bytes": 33053,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/root_parent-current.py",
+      "sha256": "fc2b4942ec04f1ed1f301cf47a2dd12bd36cd517989ddc4e514b91422e42066b"
+    }
+  },
+  "source_excerpts": [
+    {
+      "first_line": 1,
+      "last_line": 20,
+      "source": {
+        "bytes": 2646,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/WAIT-INSTALL-CODE-current.py",
+        "sha256": "2ed1a7a3cc5cd72d70d6c4a3a05f8b4f2dcc524fcada7ae75a84e099b2ce5719"
+      },
+      "text": "import fcntl,hashlib,json,os,select,signal,struct,sys,time,types\nEXPECTED='d87594a07ecd27d0760b418cb51c64f67f0b01e889d5c3b587cadd080944d8f5'\nif len(sys.argv)!=17:raise ValueError('exact waiting-installer argv required')\nsource_fd,ready_fd,go_fd,root_fd,package_fd,code_fd,lease_fd,closure_fd,controls_fd,capacity_fd,host_fd,owner_fd=map(int,sys.argv[1:13])\nnonce,deadline,installer_path,boot_id=sys.argv[13:17];deadline=int(deadline)\nos.lseek(source_fd,0,os.SEEK_SET);before=os.fstat(source_fd);raw=b''\nwhile len(raw)<=2097152:\n part=os.read(source_fd,min(65536,2097153-len(raw)))\n if not part:break\n raw+=part\nafter=os.fstat(source_fd)\nif ((before.st_dev,before.st_ino,before.st_size,before.st_mtime_ns,before.st_ctime_ns)!=(after.st_dev,after.st_ino,after.st_size,after.st_mtime_ns,after.st_ctime_ns) or len(raw)!=before.st_size or hashlib.sha256(raw).hexdigest()!=EXPECTED):raise ValueError('installer source changed')\nmod=types.ModuleType('install_source_closure');mod.__file__=installer_path;mod._BOOTSTRAP_INSTALLER_HASH=EXPECTED;sys.modules[mod.__name__]=mod\nexec(compile(raw,installer_path,'exec'),mod.__dict__)\nfields=open('/proc/self/stat').read(65536).rsplit(')',1)[1].split()\nactual_boot=open('/proc/sys/kernel/random/boot_id').read(128).strip()\nif actual_boot!=boot_id:raise ValueError('boot identity changed')\nready={'pid':os.getpid(),'birth':fields[19],'parent_pid':os.getppid(),'pgrp':os.getpgrp(),'boot_id':actual_boot,'nonce':nonce}\nmsg=json.dumps(ready,sort_keys=True,separators=(',',':')).encode();frame=struct.pack('!I',len(msg))+msg\nif len(frame)>4096 or os.write(ready_fd,frame)!=len(frame):raise OSError('READY short write')\n"
+    },
+    {
+      "first_line": 117,
+      "last_line": 135,
+      "source": {
+        "bytes": 8986,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/direct-entry-current.py",
+        "sha256": "c5ee9db292a1834bda2ef6b41740a3cae91bc93826d1d23f56699dd7f3ce7c48"
+      },
+      "text": "        ipc,ipc_fd,ipc_raw=module('parent_control',IPC,IPC_SHA)\n        installer_fd,installer_raw=verified(CURRENT+'/install-source-current.py',INSTALL_SHA)\n        install=types.ModuleType('install_source_closure');install.__file__=CURRENT+'/install-source-current.py'\n        install._BOOTSTRAP_INSTALLER_HASH=INSTALL_SHA;install._BOOTSTRAP_SOURCE_FD=installer_fd\n        sys.modules['install_source_closure']=install\n        exec(compile(installer_raw,install.__file__,'exec'),install.__dict__)\n        prelim,_,_=module('reviewed_controller_reader',PRELIM,PRELIM_SHA)\n        completion,_,completion_raw=module('install_completion',HERE+'/install_completion.py',COMPLETION_SHA)\n        sys.modules['direct_completion']=completion\n        issuer,_,issuer_raw=module('install_issuer',CURRENT+'/issuer-current.py',ISSUER_SHA)\n        phase,_,_=module('direct_phase0',CURRENT+'/phase0-current.py',PHASE_SHA)\n        _,wait_raw=verified(CURRENT+'/WAIT-INSTALL-CODE-current.py',WAIT_SHA)\n        _,closure_raw=verified(CURRENT+'/SOURCE-CLOSURE.json',CLOSURE_SHA)\n        verified(BASE+'/root-install-direct-child-successor-4/DIRECT-MODEL.json','98ea72583a41f747f01c5bdb04b545319fc08cedf443366a6c2637a35562ed04')\n        pins={'issuer_sha256':hashlib.sha256(issuer_raw).hexdigest(),'completion_sha256':hashlib.sha256(completion_raw).hexdigest(),'ipc_sha256':hashlib.sha256(ipc_raw).hexdigest()}\n        completion.SOURCE_PINS=dict(pins)\n        LOADED={'install':install,'issuer':issuer,'completion':completion,'prelim':prelim,'phase':phase,\n                'wait_raw':wait_raw,'closure_raw':closure_raw,'pins':pins,'ipc':ipc}\n        LOAD_STATE='READY'\n"
+    },
+    {
+      "first_line": 262,
+      "last_line": 286,
+      "source": {
+        "bytes": 23625,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/issuer-current.py",
+        "sha256": "db5086a8f7574a6536ffe31d5d2a443ddfaaf1c51244223ddb7288936c9bd2d3"
+      },
+      "text": "        inherited=[install._BOOTSTRAP_SOURCE_FD,rw,gr,root_fd,source_fd,code_fd,lease,closure_fd,controls_fd,capacity_fd,host_fd,owner_fd]\n        for fd in inherited:os.set_inheritable(fd,True)\n        argv=['/usr/bin/python3','-I','-B','-c',wait_literal]+[str(fd) for fd in inherited]+[nonce,str(deadline),install.__file__,template['boot_id']]\n        def child_exec():\n            os.setpgid(0,0)\n            os.dup2(captures[0][1],1);os.dup2(captures[1][1],2)\n            os.execve('/usr/bin/python3',argv,{})\n        record=latch.reserve_child('installer',root_fd,lease,rr,rw,gr,gw,captures[0][1],captures[1][1])\n        install.journal(journal_fd,{'state':'BEFORE_INSTALLER_FORK'})\n        with deferred_fork.DeferredFork() as guard:\n            child_pid,child_fd,child_birth=guard.fork_and_pin(record,child_exec)\n        # Establish/check the private PGID, then transfer the pinned child to\n        # Root before waiting for the child-side READY protocol.\n        try:os.setpgid(child_pid,child_pid)\n        except PermissionError:pass\n        actual=prelim.identity(child_pid)\n        if actual['ppid']!=os.getpid() or actual['pgrp']!=child_pid or str(actual['birth'])!=child_birth:raise ValueError('direct installer identity')\n        event={'type':'INSTALLER','nonce':nonce,'seq':2,'keeper_pid':os.getpid(),'keeper_birth':keeper_birth,'installer_pid':child_pid,'installer_birth':child_birth,'installer_pgid':child_pid}\n        parent_control.send(channel,event,[child_fd],caps)\n        ack=dict(event);ack['type']='INSTALLER_ACK';_expect_ack(channel,caps,latch,prelim,root_parent_pid,root_parent_birth,ack)\n        installer_handed=True\n        ready=_read_ready(rr,child_fd,channel,caps)\n        expected_ready={'pid':child_pid,'birth':child_birth,'parent_pid':os.getpid(),'pgrp':child_pid,'boot_id':template['boot_id'],'nonce':nonce}\n        if parent_control.canonical(ready)!=parent_control.canonical(expected_ready):raise ValueError('direct installer READY differs')\n        release=dict(template);release.update(controller_pid=os.getpid(),controller_birth=keeper_birth,installer_pid=child_pid,installer_birth=child_birth,keeper_pid=os.getpid(),keeper_birth=keeper_birth)\n"
+    },
+    {
+      "first_line": 333,
+      "last_line": 346,
+      "source": {
+        "bytes": 23625,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/issuer-current.py",
+        "sha256": "db5086a8f7574a6536ffe31d5d2a443ddfaaf1c51244223ddb7288936c9bd2d3"
+      },
+      "text": "    except BaseException as error:\n        if record is not None and not installer_handed:\n            try:\n                stopped=_stop_unhanded(record,caps,template['term_grace_ns'])\n                if journal_fd is not None:install.journal(journal_fd,{'state':'UNHANDED_CHILD_STOP_OBSERVED' if stopped else 'UNHANDED_CHILD_STOP_UNKNOWN','nonce':nonce})\n            except BaseException:pass\n        if record is not None:record.unknown(error)\n        else:latch.fail(error)\n        if journal_fd is not None:\n            try:install.journal(journal_fd,{'state':'UNKNOWN_RETAINED','error_type':type(error).__name__,'nonce_consumed':True,'lease_disposition':getattr(latch,'lease_disposition','UNKNOWN')})\n            except BaseException:pass\n        raise IssuerUnknown(latch) from error\n"
+    },
+    {
+      "first_line": 453,
+      "last_line": 471,
+      "source": {
+        "bytes": 31139,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/phase0-current.py",
+        "sha256": "f0771fbd3bfe4dcf7cfa89f6259e46011fb96fb81786113365ab4ea75118fab5"
+      },
+      "text": "                                   code_fd, root_path+'/lease', closure_fd, controls_fd,\n                                   capacity_fd, host_fd, copied_owner_fd, wait_raw.decode('utf-8'),\n                                   channel, root_parent_pid, root_parent_birth)\n        # Parent has acknowledged verified proof and holds the actual lease OFD.\n        # Parent alone owns conditional disposition after positive keeper wait.\n        return result\n    except BaseException as error:\n        if not mutated:\n            raise\n        try:\n            if root_fd is not None:\n                try:\n                    immutable_file(root_fd, 'phase0-unknown.json', canonical({'state':'UNKNOWN_RETAINED','nonce':request['nonce'],'error_type':type(error).__name__}), install)\n                except BaseException:\n                    os.write(2, b'PHASE0_UNKNOWN_PUBLICATION_FAILED\\n')\n            os.write(2, ('PHASE0_UNKNOWN_RETAINED: ' + type(error).__name__ + ': ' + str(error) + '\\n').encode())\n        finally:\n            while True:\n                signal.pause()\n"
+    },
+    {
+      "first_line": 243,
+      "last_line": 257,
+      "source": {
+        "bytes": 33053,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/root_parent-current.py",
+        "sha256": "fc2b4942ec04f1ed1f301cf47a2dd12bd36cd517989ddc4e514b91422e42066b"
+      },
+      "text": "    installer_fd=None;installer_pid=None;lease_fd=None;keeper_fd=None;keeper_pid=None;result=None\n    stop_at=min(now+60000000000,caps['boot_ns']-15000000000)\n    stop_mono=time.monotonic_ns()+max(0,stop_at-now)\n    stop_utc=time.time_ns()+max(0,stop_at-now)\n    handoff_caps={'boot_ns':stop_at,'mono_ns':min(caps['mono_ns']-15000000000,stop_mono),'utc_ns':min(caps['utc_ns']-15000000000,stop_utc)}\n    stop={'raised':False};stage='parent_prepare'\n    def on_stop(signum,frame):\n        if not stop['raised']:\n            stop['raised']=True\n            raise InterruptedError('configured stop received')\n    try:\n        for signum in (signal.SIGINT,signal.SIGTERM,signal.SIGHUP,signal.SIGQUIT,signal.SIGALRM):signal.signal(signum,on_stop)\n        left=ipc.remaining(handoff_caps)\n        if left<=0:raise Unknown('no deadline remaining')\n        signal.setitimer(signal.ITIMER_REAL,left/1000000000)\n"
+    },
+    {
+      "first_line": 298,
+      "last_line": 308,
+      "source": {
+        "bytes": 33053,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/root_parent-current.py",
+        "sha256": "fc2b4942ec04f1ed1f301cf47a2dd12bd36cd517989ddc4e514b91422e42066b"
+      },
+      "text": "        stage='go_handoff'\n        ready_parent_socket(parent_sock,keeper_fd,handoff_caps)\n        frame,fds=receive_owned(parent_sock,handoff_caps,latch.retained,keeper_pid)\n        if len(fds)!=3 or set(frame)!={'type','nonce','seq','keeper_pid','keeper_birth','installer_pid','installer_birth','release_sha256'}:raise Unknown('GO shape')\n        go_fds=fds\n        release_sha=frame['release_sha256']\n        if type(release_sha) is not str or len(release_sha)!=64 or any(c not in '0123456789abcdef' for c in release_sha):raise Unknown('release sha')\n        expected_go={'type':'GO_READY','nonce':nonce,'seq':3,'keeper_pid':keeper_pid,'keeper_birth':keeper_birth,'installer_pid':installer_pid,'installer_birth':installer_birth}\n        if ipc.canonical({k:frame[k] for k in expected_go})!=ipc.canonical(expected_go):raise Unknown('GO identity')\n        if ipc.remaining(handoff_caps)<=0:raise Unknown('GO cap')\n        go_verified=direct_completion.verify_parent_go(frame,go_fds,admission_raw,review_raw,latch.retained)\n"
+    },
+    {
+      "first_line": 342,
+      "last_line": 367,
+      "source": {
+        "bytes": 33053,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/root_parent-current.py",
+        "sha256": "fc2b4942ec04f1ed1f301cf47a2dd12bd36cd517989ddc4e514b91422e42066b"
+      },
+      "text": "        signal.setitimer(signal.ITIMER_REAL,0)\n        latch.fail(error)\n        # If fork_and_pin raised after recording the handle but before assigning\n        # locals, recover only the still-owned, independently verified target.\n        keeper_pid,keeper_fd=retained_keeper_target(latch,record,error,keeper_pid,keeper_fd)\n        # Do not wait for filesystem journal I/O before stopping known children.\n        stop_owned([installer_fd,keeper_fd],signal.SIGTERM)\n        until=min(time.clock_gettime_ns(time.CLOCK_BOOTTIME)+5000000000,caps['boot_ns'])\n        while time.clock_gettime_ns(time.CLOCK_BOOTTIME)<until and ipc.remaining(caps)>0:\n            try:\n                if (installer_fd is None or terminal(installer_fd)) and (keeper_fd is None or terminal(keeper_fd)):break\n            except BaseException:break\n            time.sleep(.05)\n        stop_owned([installer_fd,keeper_fd],signal.SIGKILL)\n        # Keep original lease and pidfds indefinitely on uncertainty. Root must\n        # provide independently reviewed operation custody before termination.\n        _failure_note('root_parent',stage,error,_failure_identity(parent['pid'],parent['birth']),_keeper_record_identity(record))\n        while True:\n            try:\n                if keeper_pid is not None and keeper_fd is not None:wait_known(keeper_pid,keeper_fd)\n                if installer_fd is not None and terminal(installer_fd):\n                    try:os.waitpid(installer_pid,os.WNOHANG)\n                    except (ChildProcessError,ValueError):pass\n            except BaseException:pass\n            time.sleep(1)\n\n"
+    }
+  ],
+  "source_fd_route": [
+    {
+      "fact": "verified CURRENT/install-source-current.py at INSTALL_SHA8076; same held fd assigned install._BOOTSTRAP_SOURCE_FD",
+      "lines": [
+        117,
+        121
+      ],
+      "source": "direct-entry-current.py"
+    },
+    {
+      "fact": "verified unchanged wait2ed1 stored as wait_raw",
+      "lines": [
+        128,
+        135
+      ],
+      "source": "direct-entry-current.py"
+    },
+    {
+      "fact": "wait_raw.decode passed unchanged to issuer.run",
+      "lines": [
+        453,
+        457
+      ],
+      "source": "phase0-current.py"
+    },
+    {
+      "fact": "install._BOOTSTRAP_SOURCE_FD is inherited[0], first positional wait argument",
+      "lines": [
+        262,
+        264
+      ],
+      "source": "issuer-current.py"
+    },
+    {
+      "fact": "first positional fd becomes source_fd; seek/read/stability/hash check compares new installer8076 with old embedded d875",
+      "lines": [
+        4,
+        12
+      ],
+      "source": "WAIT-INSTALL-CODE-current.py"
+    }
+  ],
+  "version": 1
+}

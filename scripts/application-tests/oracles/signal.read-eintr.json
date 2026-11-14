@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "signal.read-eintr",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/signal.read-eintr"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["rc=-1 errno=4 eintr=1 handled=1 untouched=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["A handled signal interrupts a blocked read without SA_RESTART", "The read returns EINTR, the sentinel buffer is untouched, and the writer remains open until capture"],
+  "unresolved_expectations": ["Delegation boundary, signal delivery bracket, and raw blocked-read evidence require runtime review."],
+  "max_question_for_reviewer": "Confirm EINTR is returned directly with no partial buffer mutation when the writer remains open."
+}

@@ -1,0 +1,108 @@
+{
+  "schema": "mckernel.s22-digest-companion-independent-review.v1",
+  "decision": "PASS_MINIMAL_SOURCE_REPAIR",
+  "reviewer": "/root/scratch21_source_review",
+  "implementation_author": "/root/rs011_authority",
+  "implementation_ownership": false,
+  "previous_type_path_implementation_author": "/root/shutdown_actual_bodies",
+  "baseline_candidate": "fd09933c64adaba32bf975ec96e5d518a42544e9",
+  "target": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+  "target_tree": "07d05c1bb2ea5f4b6a3817ba55cd32afe56c8d59",
+  "files_sha256_delta": {
+    "host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json": {
+      "baseline_sha256": "12e67cb24105d53021da12aa3ad563dcd99baee6444d0ff21842cd36776971fa",
+      "target_sha256": "862f0c2c5c88bbd9bbef9571bae4103b4922bab079a0a111818178cdc5fdc7fa"
+    },
+    "host-kernel/kbuild/stage-manifest.json": {
+      "baseline_sha256": "f5c7efabb35366142600b4c58df8aa77718ad982f282e00cdcf55c99cb965d46",
+      "target_sha256": "1d6da4db918016fbe11b98503e828049ecd821cfc6ebdb0600345fe04786eb8f"
+    },
+    "host-kernel/native-rust/ihk-mapping-foundation-contract-v1.json": {
+      "baseline_sha256": "9843b938d283e792c678032d697de46a966f071a634195d86163a8caddd50abc",
+      "target_sha256": "207202899e53c04943dad98e5c0499ccbcf1429f1c43adf4c6a5b9861ecf21c4"
+    },
+    "host-kernel/native-rust/ihk_smp_x86_64.rs": {
+      "baseline_sha256": "ead31123d69508bd678f321137e9fba023621a46cdf86aa3466381b966b52b44",
+      "target_sha256": "a353b2915a4038e7739d01cc440376daf091367f976cf6de297bceb1dd59fce8"
+    },
+    "scripts/rocky_rust_staging.py": {
+      "baseline_sha256": "adf9d798856859ce7391f0cd7b8ba5a8c425cda71e73365db2923f0ab1abe981",
+      "target_sha256": "c9fe7bc9afb04e9acf943ab52760c451c2db3afd19ff9823a3ee937a9a553f2a"
+    },
+    "scripts/tests/fixtures/shutdown_v6_provider.rs": {
+      "baseline_sha256": "2cf0952892bdd0cc2643e2422682249a0307df946fbca2a1f0053c8b8fc3df6a",
+      "target_sha256": "86a50132f331fdac00ae155d8970d6644b0e7c0f4e82c5bdd4ddcc950890c94c"
+    }
+  },
+  "source_checks_baseline": {
+    "path": "docs/verification/evidence/rs011-authority-20261017.json",
+    "sha256": "77c98238bb181b0bab2ee0915f386c9294441fb8d07692995b61a789e6172516"
+  },
+  "source_review_baseline": {
+    "path": "docs/verification/evidence/rs011-authority-independent-review-20261017.json",
+    "sha256": "5457654a2b15bdf94e4edf5d163fd4eeb1192da6604996df8646d45328c33213"
+  },
+  "current_source_checks": {
+    "path": "docs/verification/evidence/s22-digest-companion-20261017.json",
+    "sha256": "090a13048362c740e4d134bc7091c99f65e6aba4c4fa1badc570e932a97e6e09"
+  },
+  "reused_type_path_evidence": [
+    {
+      "path": "docs/verification/evidence/shutdown-native-error-path-repair-20261017.json",
+      "sha256": "417d467fd171b7ead4306d4c9d05d70a9678243af5e2823689e6e4bb65993942"
+    },
+    {
+      "path": "docs/verification/evidence/shutdown-native-error-path-central-pass-20261017.json",
+      "sha256": "7a25e80779305d8308bfa9af37e4e2c7db789b56e76a64d910e332686c1619ff"
+    }
+  ],
+  "independent_findings": {
+    "exact_target_parent_tree_and_six_modified_paths": true,
+    "production_delta": "Exactly one parameter type path kernel::Error -> kernel::error::Error; shutdown body unchanged. Previously accepted provider fixture export adaptation reused.",
+    "companion_delta": "Manifest and staging checker each replace only the root SHA literal; mapping changes only that SHA and size 34552 -> 34559; ledger changes only mechanically derived root hashes, sizes, byte positions and enclosing digests.",
+    "site_count": 654,
+    "root_sites_hash_updated": 39,
+    "root_sites_byte_positions_shifted": 11,
+    "byte_position_shift": 7,
+    "all_site_ids_order_status_expression_safety_and_obligations_unchanged": true,
+    "all_updated_site_source_slices_identical": true,
+    "ledger_other_fields_unchanged_after_exact_whitelisted_reconstruction": true,
+    "target_source_inputs_checked": 55,
+    "target_repository_locks_checked": 4,
+    "target_source_input_lengths_and_hashes_match_ledger": true,
+    "source_closure_sha256_recomputed": "8e649ff53ccd3b37f2724374e364cb73138cf0bd6c24b226aadd4bb77d74df06",
+    "ledger_sha256_recomputed": "49fe1a437f370ef99c65b4fcefee00c6c9e54de7360dcf3eea0c22164b3c4f8f",
+    "current_checks_apply_to_minimal_target": "All 55 source inputs and four repository locks match both exact target blobs and current checked files. No host-kernel worktree delta exists relative to target. The four checker programs, their locally imported source dependencies and existing test modules recursively compared equal to target blobs (11 Python files). The added companion regression is separately hash-bound below and not part of the six-file target.",
+    "historical_source_checks_and_review_byte_preserved_in_target_and_worktree": true,
+    "oracles_weakened": false,
+    "readiness_unchanged": "RS-011 NOT_READY; compiler capture missing, independent review pending, technical_complete and credit_eligible false. All original blockers remain."
+  },
+  "focused_independent_regression": {
+    "path": "scripts/tests/test_s22_digest_companion.py",
+    "sha256": "286064272f9031afc9a3ef59d6d35155d65056a04680ca2652d52b84ec45587f",
+    "command": "timeout 120s taskset -c 2 /bin/bash -c 'ulimit -v 2097152; exec python3 -B -m unittest -v scripts.tests.test_s22_digest_companion'",
+    "exit_code": 0,
+    "tests": 2,
+    "seconds": 1.489,
+    "result": "OK",
+    "negative_oracle": "Both manifest and EXPECTED_MODULES reverted to the same stale digest still produce exit1 and the exact original module root digest drift diagnostic against actual current source."
+  },
+  "reused_ordered_checks": {
+    "author_record_commands": 5,
+    "all_exit_zero": true,
+    "recorded_python_tests": 145,
+    "full_suites_repeated_by_reviewer": false
+  },
+  "reviewer_diagnostic_corrections": [
+    "An ad-hoc metadata verifier first asserted mapping field bytes instead of actual field size after completing the 654-site and 55-input checks. Exact raw mapping comparison corrected this assertion; only the authorized SHA and size literals differ.",
+    "A checker-list diagnostic named nonexistent test_ihk_native_lifecycle.py. The actual recorded command names test_ihk_native_lifecycle_check.py; the final recursive comparison used the actual module and passed. Neither diagnostic changed source or ran a privileged command."
+  ],
+  "preserved_failure": {
+    "family": "S22-DIGEST-COMPANION-1",
+    "failed_candidate": "d37d2216a60c6db10442ba8bc238d64fbd59c5ea",
+    "driver_log_sha256": "ff754c19fcc4a5a773912b84986e1fd263e5a439b481d8d4b8af5f5b559de5dd",
+    "reason": "Native build-surface root digest drift rejected the changed root before compiler execution; exact pre-patch reproduction and failed attempt remain bound by current_source_checks."
+  },
+  "scope": "Source-only acceptance of this exact six-file minimal repair and its metadata authority. No build execution release, runtime result, guest acceptance, RS-011 credit or production gate promotion. No implementation files, Git state, Docker, processes or root state changed by reviewer.",
+  "blockers": []
+}

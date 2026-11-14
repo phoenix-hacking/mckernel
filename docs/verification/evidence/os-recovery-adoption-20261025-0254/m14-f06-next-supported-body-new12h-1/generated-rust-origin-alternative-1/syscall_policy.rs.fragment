@@ -1,0 +1,5 @@
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Default OFF. Root alone may insert after metadata-owner disposition.
+#[cfg(any(f06_rt_sigreturn_alloc_candidate, f06_rt_sigreturn_free_candidate))]
+#[path = "f06_rt_sigreturn_alloc_free.rs"]
+mod f06_rt_sigreturn_alloc_free;

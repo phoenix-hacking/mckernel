@@ -1,0 +1,30 @@
+--- a/native_contract_regression.py
++++ b/native_contract_regression.py
+@@ -620,13 +620,6 @@
+         assert any(row == ('fsync', journal_path) for row in e.fs.events[matching[0]+1:position])
+     collection = json.loads(e.comp._collect(a.plan))
+     assert collection['authority'] is None and len(a.source_members) == 29
+-    # Build a coherent source manifest/plan/epoch missing one real consumed
+-    # member. Do not corrupt a held cut's descriptor-to-row invariant.
+-    omitted = Environment(); missing = PACKAGE + '/adapter.py'
+-    omitted_admission, omitted_source, _ = omitted.held_source(omit_from_cut=missing)
+-    assert missing in omitted_admission.source_members and missing not in omitted_source.fds
+-    assert all(row['host'] in omitted_source.fds for row in omitted_source.rows)
+-    reject(omitted_source.collect, 'consumed diagnostic source/artifact file omitted')
+     reject(lambda: owner._call(['start', owner.container]), 'actual source/effective view required')
+     assert not [row for row in owner.calls if row[0] == 'call']
+     wrong = e.inspect(owner); wrong['Mounts'][0]['RW'] = True
+@@ -641,6 +634,13 @@
+     before = len(owner.calls); a.client.revoked = True
+     reject(lambda: owner._call(['start', owner.container]), 'test-only current controller veto')
+     assert len(owner.calls) == before
++    # Build a coherent source manifest/plan/epoch missing one real consumed
++    # member. Do not corrupt a held cut's descriptor-to-row invariant.
++    omitted = Environment(); missing = PACKAGE + '/adapter.py'
++    omitted_admission, omitted_source, _ = omitted.held_source(omit_from_cut=missing)
++    assert missing in omitted_admission.source_members and missing not in omitted_source.fds
++    assert all(row['host'] in omitted_source.fds for row in omitted_source.rows)
++    reject(omitted_source.collect, 'consumed diagnostic source/artifact file omitted')
+     return dict(registered_source_members=29, durable_unique_prior_flags=True,
+                 all_consumed_files_required=True, four_actual_binds_required=True,
+                 host_only_image_record=True, start_after_effective_acceptance=True,

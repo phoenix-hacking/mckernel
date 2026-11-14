@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/driver.py", line 192, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/driver.py", line 187, in main
+    artifacts=[object_info(Path('/work')/relative) for relative in ARTIFACTS]
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/driver.py", line 89, in object_info
+    if name in undefined:assert d==0 and u==1,(path.name,name,d,u)
+                                ^^^^^^^^^^^^^
+AssertionError: ('mcexec.c.o', 'act_clone_start', 0, 0)

@@ -1,0 +1,60 @@
+{
+  "schema": "mckernel.scratch13-planbound-cleanup-checkpoint.v1",
+  "status": "PASS_POSTFLIGHT",
+  "scope": "selective removal of exact Git-restorable historical evidence copies only; no trim, build, guest, diagnostic, or acceptance claim",
+  "source_commit": "1e6fb92892d6eccc03c2dc841abc8ecea56ead0e",
+  "release_commit": "f1a209509c701bb6124d596867fb52bdb15ce0c0",
+  "plan": {
+    "path": "docs/verification/evidence/native-exact-retained-candidate-6fed3a10-source-evidence-plan-20261001.json",
+    "sha256": "0176dc3032e9df821494d2f08c8b810db0dac6b12681367733676b7729df647a",
+    "targets": 2560,
+    "preserved": 0,
+    "logical_bytes": 9098723581,
+    "allocated_bytes": 9104986112
+  },
+  "execution": {
+    "pid": 2365657,
+    "terminal": "STORAGE_PASS",
+    "journal": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-scratch13-planbound-evidence-cleanup-20261001-1.journal.jsonl",
+      "sha256": "6c1522b64f56f556b0e44837818b1a9bebe57929d2d1030f684b1acf211537a3",
+      "events": 10250
+    },
+    "receipt": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-scratch13-planbound-evidence-cleanup-20261001-1.receipt.json",
+      "sha256": "d8bc9cf22ad51edffa6fd797e404caedc9ea4f74fe019e19ed5ff85a32ee9e6e",
+      "states_deleted": 2560
+    },
+    "status": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-scratch13-planbound-evidence-cleanup-20261001-1.status.json",
+      "sha256": "577ac43975f114adcfe8999a8a479ff6d90f8379e29c130f0b48bdeed5c6db38"
+    },
+    "quarantine": {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-6fed3a10-scratch-13/.planbound-cleanup-20261001-1",
+      "identity": "1831:3180176",
+      "entries": 0
+    }
+  },
+  "postflight": {
+    "decision": "PASS_POSTFLIGHT",
+    "candidate_identity": "1831:3169097",
+    "remaining_source_manifest_entries": 6824,
+    "metadata_backup_entries": 86,
+    "driver_evidence_entries": 6,
+    "protected_objects": 24,
+    "anchors": 2,
+    "ihk_commit": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+    "ihk_overlay_sha256": "7abb77fdc3049a54caebc3344de14c41e779502b4abcb7f301de4a647e15bf77",
+    "exclusion_identity": "1831:90679",
+    "exclusion_sha256": "2eeed65d24ff927cee2421ff49dc3ee0351f682cf96e71517afa375a3f3d7c18",
+    "retained_container": "aef5164c5209f62b5f1be6d545f34001779d2ed78008235114890f981635708b",
+    "retained_container_state": "exited-1-pid0",
+    "cleanup_process_retired": true,
+    "leases_absent": true,
+    "scratch_free_bytes": 25875873792,
+    "required_floor_bytes": 23731113984,
+    "floor_margin_bytes": 2144759808,
+    "census_time_utc": "2026-10-01T04:24:57Z"
+  },
+  "next": "independently review and release the scratch-14 candidate preparation packet for c81aeaca, then create the fresh candidate-bound tool image, gitlink and exportset-26 image request"
+}

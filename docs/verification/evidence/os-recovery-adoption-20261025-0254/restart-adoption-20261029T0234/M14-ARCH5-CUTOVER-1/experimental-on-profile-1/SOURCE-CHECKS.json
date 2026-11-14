@@ -1,0 +1,18 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_EXPERIMENTAL_PROFILE_SOURCE_ONLY",
+  "all_five_implemented_and_selected_in_candidate": true,
+  "all_five_compiled_and_validated": false,
+  "paired_C_selectors": 5,
+  "paired_Rust_cohort_cfgs": 5,
+  "ABI_probe_full_link_profile": "OFF; separate compile-only artifact only",
+  "seven_other_parent_targets_reused_exact": true,
+  "single_line_CMake_change": true,
+  "exact_patch_applicability": true,
+  "mutations_rejected": [
+    "missing_rust_cfg",
+    "missing_C_selector",
+    "probe_accidentally_enabled"
+  ],
+  "compiler_native_runtime": false
+}

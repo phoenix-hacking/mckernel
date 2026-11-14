@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "time.absolute-sleep",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/time.absolute-sleep"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "canonical-record-with-relations", "fields": ["rc", "before_ns", "deadline_ns", "after_ns", "reached"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["clock_nanosleep returns direct error value 0, not an errno-mediated result", "deadline is exactly 10 ms after before", "after is at or beyond the absolute deadline", "reached=1"],
+  "unresolved_expectations": ["Freeze canonical output and reviewed input/oracle SHA256 before execution."],
+  "max_question_for_reviewer": "Confirm TIMER_ABSTIME monotonic deadline and direct pthread-style return convention."
+}

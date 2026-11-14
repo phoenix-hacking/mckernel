@@ -1,0 +1,63 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PREPARED_SOURCE_NOT_EXECUTED_NOT_RELEASED",
+  "query_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/query_daemon_filesystem.NOT-EXECUTED.py",
+    "sha256": "bb6ce88b0c7e3ac9fbd25100f8100a94760619efbd2af09ca17d47988210daeb",
+    "bytes": 6333
+  },
+  "base_identity_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/identity-query/query.py",
+    "sha256": "2f88ff1f515ca3c8dbfa8b76718751a5e65f3842f4f187b3a387b0d776181cf9",
+    "bytes": 3021
+  },
+  "prior_independent_review": "../identity-query/INDEPENDENT-REVIEW-2.json applies only its exact prior source/argv, not this new query.",
+  "argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2",
+    "20",
+    "sudo",
+    "-A",
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/query_daemon_filesystem.NOT-EXECUTED.py"
+  ],
+  "profile": {
+    "cpu": 0,
+    "jobs": 1,
+    "as_bytes": 536870912,
+    "cpu_seconds": 10,
+    "wall_seconds": 20,
+    "kill_grace_seconds": 2,
+    "fsize_bytes": 0,
+    "core_bytes": 0,
+    "stdout_record_max_bytes": 16384
+  },
+  "capture_requirement": "Separate owned pipes, parent drain and bounded retention. Never direct regular output descriptors inherited under childFSIZE0. Outer capture must positively join; no workload/owner is started.",
+  "read_allowlist": [
+    "prior exactidentity source",
+    "/proc/2036/stat",
+    "/proc/2036/exe",
+    "/proc/2036/root",
+    "/proc/2036/status",
+    "/proc/2036/cmdline",
+    "/proc/2036/mountinfo",
+    "selected daemon config file max64KiB; emit onlypath/hash not secretvalues",
+    "actual DockerRoot stat/statvfs",
+    "matching ext4 backing block device exactly1024B pread at1024; only decode geometry/features+rawhash",
+    "/sys/fs/ext4/<matching device>/mb_group_prealloc",
+    "/sys/fs/ext4/<matching device>/mb_stream_req",
+    "/sys/fs/ext4/<matching device>/mb_order2_req",
+    "/sys/fs/ext4/<matching device>/max_writeback_mb_bump"
+  ],
+  "no_Docker_API": true,
+  "no_workload": true,
+  "no_mutation": true,
+  "gate": "Distinct exactsource independent review and fresh processidentity/capture binding required; stop on failure, no automatic retry.",
+  "purpose": "Obtain only missing actual daemon-root/ext4 identity and allocation geometry/tunables for conservative source-bound log allocation calculation. Facts alone do not prove allocation bound."
+}

@@ -8,8 +8,34 @@ use crate::abi::{
 };
 
 unsafe extern "C" {
+    fn process_sched_waitq_init_bridge(waitq_addr: usize);
+    fn process_sched_waitq_prepare_bridge(waitq_addr: usize, entry_addr: usize, status: CInt);
+    fn process_sched_waitq_finish_bridge(waitq_addr: usize, entry_addr: usize);
+    static mut process_sched_migrate_debug: crate::debug::Ddebug;
+    static mut idle_halt: CInt;
+    fn process_sched_irq_restore_bridge(irqstate: CULong);
+    fn process_sched_zero_free_bridge();
+    fn process_sched_pause_bridge();
+    fn process_sched_has_signal_bridge(thread_addr: usize) -> CInt;
+    fn get_this_cpu_local_var() -> *mut CpuLocalVar;
+    static mut time_sharing: CInt;
+    static process_timer_runtime_offsets: TimerRuntimeOffsets;
+    fn process_timer_spin_lock_bridge(lock_addr: usize) -> CULong;
+    fn process_timer_spin_unlock_bridge(lock_addr: usize, irqstate: CULong);
+    fn process_timer_lapic_enable_bridge(clocks: u32);
+    fn process_timer_lapic_disable_bridge();
+    fn arch_flush_icache_all();
+    fn release_thread(thread: *mut core::ffi::c_void);
+    fn rusage_num_threads_dec();
+    fn kprintf(format: *const i8, ...) -> CInt;
     fn ihk_mc_get_processor_id() -> CInt;
     fn process_sched_cpu_local_bridge(cpu_id: CInt) -> usize;
+    fn process_sched_irq_save_bridge() -> CULong;
+    fn save_fp_regs(thread: *mut core::ffi::c_void) -> CInt;
+    fn save_debugreg(debugreg: *mut CULong);
+    fn clear_debugreg();
+    fn restore_debugreg(debugreg: *mut CULong);
+    fn panic(message: *const i8) -> !;
     #[link_name = "process_spin_lock_bridge"]
     fn process_spin_lock_bridge_c(lock_addr: CULong) -> CULong;
     #[link_name = "process_spin_unlock_bridge"]
@@ -188,6 +214,7 @@ const ERESTARTSYS: i64 = 512;
 const ENOSYS: CInt = 38;
 const EFAULT: CInt = 14;
 const PS_RUNNING: CInt = 0x1;
+const PS_UNINTERRUPTIBLE: CInt = 0x4;
 const PS_EXITED: CInt = 0x10;
 const CPU_FLAG_NEED_RESCHED: u32 = 0x1;
 const CPU_FLAG_NEED_MIGRATE: u32 = 0x2;
@@ -346,7 +373,19 @@ pub struct SchedRunqueueOffsets {
     pub cpu_nr_ctx_switches_offset: usize,
 }
 
-fn sched_runqueue_offsets() -> SchedRunqueueOffsets {
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Paired with MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE in process.c. Reuse the
+// existing typed constructor; no scheduler body or callback/lifetime change.
+#[cfg(process_global_storage_candidate)]
+#[no_mangle]
+pub static process_sched_runqueue_offsets: SchedRunqueueOffsets = sched_runqueue_offsets();
+
+const _: () = {
+    assert!(core::mem::size_of::<SchedRunqueueOffsets>() == 208);
+    assert!(core::mem::align_of::<SchedRunqueueOffsets>() == 8);
+};
+
+const fn sched_runqueue_offsets() -> SchedRunqueueOffsets {
     SchedRunqueueOffsets {
         thread_cpu_id_offset: offset_of!(Thread, cpu_id),
         thread_tid_offset: offset_of!(Thread, tid),
@@ -790,6 +829,44 @@ pub extern "C" fn setscheduler_validate(policy: CInt, priority: CInt) -> CInt {
     0
 }
 
+/// Applies a previously copied kernel sched_param to a live selected thread.
+///
+/// Safety: the caller provides valid aligned int fields, readable param_size
+/// bytes at param_addr, and a live writable thread with the supplied C offsets.
+/// Source and destination do not overlap, as required by the original memcpy.
+/// Existing caller locking/lifetime rules remain the caller's responsibility.
+#[no_mangle]
+pub unsafe extern "C" fn setscheduler_body_result(
+    thread_addr: usize,
+    policy: CInt,
+    param_addr: usize,
+    param_size: SizeT,
+    priority_offset: SizeT,
+    thread_param_offset: SizeT,
+    thread_policy_offset: SizeT,
+) -> CInt {
+    let priority = unsafe {
+        core::ptr::read(param_addr.wrapping_add(priority_offset) as *const CInt)
+    };
+    let ret = setscheduler_validate(policy, priority);
+    if ret != 0 {
+        return ret;
+    }
+
+    unsafe {
+        core::ptr::copy_nonoverlapping(
+            param_addr as *const u8,
+            thread_addr.wrapping_add(thread_param_offset) as *mut u8,
+            param_size,
+        );
+        core::ptr::write(
+            thread_addr.wrapping_add(thread_policy_offset) as *mut CInt,
+            policy,
+        );
+    }
+    0
+}
+
 #[no_mangle]
 pub extern "C" fn sched_rr_interval_nsec(policy: CInt) -> i64 {
     if policy == SCHED_RR {
@@ -1148,19 +1225,38 @@ pub unsafe extern "C" fn sched_setscheduler_body_result(
     }
 
     let offsets = unsafe { &*offsets };
-    let (thread, normalized_pid, other_thread) =
-        match unsafe { sched_select_thread(pid, current_thread, offsets, find_fn, unlock_fn) } {
-            Ok(selected) => selected,
+    let normalized_pid = unsafe {
+        match sched_normalized_pid(pid, current_thread, offsets) {
+            Ok(pid) => pid,
             Err(ret) => return ret,
-        };
-    if other_thread {
-        let ret = unsafe { syscall2(syscall_nr, SCHED_CHECK_SAME_OWNER, normalized_pid as CULong) };
-        if ret != 0 {
-            return ret;
         }
+    };
+    let current_pid = unsafe { sched_thread_pid(current_thread, offsets) };
+    if current_pid < 0 {
+        return sched_errno(EINVAL);
+    }
+    if current_pid == normalized_pid {
+        return unsafe { apply(current_thread, policy, param_addr) as CLong };
     }
 
-    unsafe { apply(thread, policy, param_addr) as CLong }
+    let (Some(find_thread), Some(thread_unlock)) = (find_fn, unlock_fn) else {
+        return sched_errno(EINVAL);
+    };
+    let thread = unsafe { find_thread(normalized_pid) };
+    if thread == 0 {
+        return sched_errno(ESRCH);
+    }
+    // find_thread owns a reference but has already dropped its hash lock.
+    // Keep that SAME allocation across offload; a repeated ID lookup could
+    // select a different target. Every normal return below consumes this edge.
+    let ret = unsafe { syscall2(syscall_nr, SCHED_CHECK_SAME_OWNER, normalized_pid as CULong) };
+    if ret != 0 {
+        unsafe { thread_unlock(thread) };
+        return ret;
+    }
+    let ret = unsafe { apply(thread, policy, param_addr) as CLong };
+    unsafe { thread_unlock(thread) };
+    ret
 }
 
 #[no_mangle]
@@ -1276,6 +1372,72 @@ unsafe fn sched_affinity_select_thread(
     Ok(thread)
 }
 
+// Serialize supported thread-clone snapshots with selected affinity writers.
+// The reservation provider takes this lock itself, so the caller must release
+// it before obtain_clone_cpuid or sched_request_migrate is invoked.
+unsafe fn sched_affinity_lock() -> CULong {
+    unsafe {
+        process_spin_lock_bridge_c(core::ptr::addr_of_mut!(runq_reservation_lock) as CULong)
+    }
+}
+
+unsafe fn sched_affinity_unlock(irqstate: CULong) {
+    unsafe {
+        process_spin_unlock_bridge_c(
+            core::ptr::addr_of_mut!(runq_reservation_lock) as CULong,
+            irqstate,
+        );
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sched_clone_affinity_snapshot_result(
+    thread_mask: usize,
+    process_mask: usize,
+    snapshot: usize,
+    bytes: SizeT,
+    nr_cpus: CInt,
+) -> CInt {
+    if thread_mask == 0 || process_mask == 0 || snapshot == 0 || bytes == 0
+        || bytes % core::mem::size_of::<CULong>() != 0
+        || nr_cpus <= 0 || (nr_cpus as usize) > bytes.saturating_mul(8)
+    {
+        return -EINVAL;
+    }
+    // All inputs are live syscall-owned native cpu_set_t objects; snapshot is
+    // disjoint stack storage. Process eligibility is stable for this syscall.
+    let irqstate = unsafe { sched_affinity_lock() };
+    unsafe { sched_cpuset_zero(snapshot, bytes) };
+    let mut nonempty = false;
+    for cpu in 0..nr_cpus {
+        if unsafe { sched_cpuset_is_set(thread_mask, bytes, cpu) }
+            && unsafe { sched_cpuset_is_set(process_mask, bytes, cpu) }
+        {
+            unsafe { sched_cpuset_set(snapshot, bytes, cpu) };
+            nonempty = true;
+        }
+    }
+    unsafe { sched_affinity_unlock(irqstate) };
+    if nonempty { 0 } else { -EINVAL }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sched_clone_affinity_inherit_result(
+    child_mask: usize,
+    snapshot: usize,
+    bytes: SizeT,
+) -> CInt {
+    if child_mask == 0 || snapshot == 0 || bytes == 0 {
+        return -EINVAL;
+    }
+    // Destination is private. Source may be the live creator mask in the
+    // initial clone initializer, so serialize every copy with affinity writers.
+    let irqstate = unsafe { sched_affinity_lock() };
+    unsafe { sched_cpuset_copy(child_mask, snapshot, bytes) };
+    unsafe { sched_affinity_unlock(irqstate) };
+    0
+}
+
 #[no_mangle]
 pub unsafe extern "C" fn sched_setaffinity_body_result(
     tid: CInt,
@@ -1364,11 +1526,14 @@ pub unsafe extern "C" fn sched_setaffinity_body_result(
     }
 
     let thread_cpu_set_addr = thread.wrapping_add(offsets.thread_cpu_set_offset);
+    let irqstate = unsafe { sched_affinity_lock() };
     unsafe {
         sched_cpuset_copy(thread_cpu_set_addr, cpu_set_addr, cpuset_size);
     }
     let cpu_id = unsafe { sched_thread_cpu_id(thread, offsets) };
-    if !unsafe { sched_cpuset_is_set(thread_cpu_set_addr, cpuset_size, cpu_id) } {
+    let needs_migrate = !unsafe { sched_cpuset_is_set(thread_cpu_set_addr, cpuset_size, cpu_id) };
+    unsafe { sched_affinity_unlock(irqstate) };
+    if needs_migrate {
         unsafe {
             migrate(cpu_id, thread);
         }
@@ -1528,14 +1693,30 @@ pub unsafe extern "C" fn timer_schedule_timeout_body_result(
     let runq_lock_addr = cpu_local_addr.wrapping_add(offsets.cpu_runq_lock_offset);
     let runq_len_addr = cpu_local_addr.wrapping_add(offsets.cpu_runq_len_offset);
 
+    #[cfg(native_linux_irq_work_v6_12)]
+    let (native_started, native_duration) = (unsafe { rdtsc() }, timeout);
+
     loop {
         let t_s = unsafe { rdtsc() };
+        #[cfg(native_linux_irq_work_v6_12)]
+        {
+            timeout = native_duration.saturating_sub(t_s.wrapping_sub(native_started));
+        }
         let irqstate = unsafe { spin_lock(thread_spin_lock_addr) };
 
         if unsafe { read_volatile(thread_spin_sleep_addr as *const CInt) } == 0 {
             let t_e = unsafe { rdtsc() };
             timeout = timer_spin_sleep_remaining_result(timeout, t_e.wrapping_sub(t_s));
             unsafe {
+                spin_unlock(thread_spin_lock_addr, irqstate);
+            }
+            break;
+        }
+
+        #[cfg(native_linux_irq_work_v6_12)]
+        if timeout == 0 {
+            unsafe {
+                write_volatile(thread_spin_sleep_addr as *mut CInt, 0);
                 spin_unlock(thread_spin_lock_addr, irqstate);
             }
             break;
@@ -1560,14 +1741,25 @@ pub unsafe extern "C" fn timer_schedule_timeout_body_result(
             spin_unlock(runq_lock_addr, irqstate);
         }
 
-        while unsafe { rdtsc().wrapping_sub(t_s) } < loop_timeout {
+        #[cfg(native_linux_irq_work_v6_12)]
+        let spin_budget = loop_timeout.min(timeout);
+        #[cfg(not(native_linux_irq_work_v6_12))]
+        let spin_budget = loop_timeout;
+        while unsafe { rdtsc().wrapping_sub(t_s) } < spin_budget {
             unsafe {
                 zero_free();
                 pause();
             }
         }
 
-        timeout = timer_after_spin_remaining_result(timeout, loop_timeout);
+        #[cfg(native_linux_irq_work_v6_12)]
+        {
+            timeout = native_duration.saturating_sub(unsafe { rdtsc() }.wrapping_sub(native_started));
+        }
+        #[cfg(not(native_linux_irq_work_v6_12))]
+        {
+            timeout = timer_after_spin_remaining_result(timeout, loop_timeout);
+        }
         if timeout == 0 {
             let irqstate = unsafe { spin_lock(thread_spin_lock_addr) };
             unsafe {
@@ -1686,6 +1878,30 @@ pub unsafe extern "C" fn timer_wake_loop_body_result(
     }
 }
 
+/// Preserve the process.c timer entry boundary using the existing timer body.
+///
+/// # Safety
+/// The caller runs on the current CPU under the original scheduler/IRQ contract;
+/// runq_locked describes ownership of its runqueue lock. C owns the immutable
+/// descriptor and callback providers; no pointer or lock ownership is transferred.
+#[no_mangle]
+pub unsafe extern "C" fn set_timer(runq_locked: CInt) {
+    let v = unsafe { get_this_cpu_local_var() };
+    let sharing = unsafe { core::ptr::read(core::ptr::addr_of!(time_sharing)) };
+    let _ = unsafe {
+        timer_set_timer_body_result(
+            v as usize,
+            sharing,
+            runq_locked,
+            core::ptr::addr_of!(process_timer_runtime_offsets),
+            Some(process_timer_spin_lock_bridge),
+            Some(process_timer_spin_unlock_bridge),
+            Some(process_timer_lapic_enable_bridge),
+            Some(process_timer_lapic_disable_bridge),
+        )
+    };
+}
+
 #[no_mangle]
 pub unsafe extern "C" fn timer_set_timer_body_result(
     cpu_local_addr: usize,
@@ -1773,6 +1989,286 @@ pub unsafe extern "C" fn timer_set_timer_body_result(
     }
 
     num_running
+}
+
+#[repr(C)]
+pub struct SchedIdleOffsets {
+    pub cpu_runq_lock_offset: usize,
+    pub cpu_runq_irqstate_offset: usize,
+    pub cpu_current_offset: usize,
+    pub cpu_flags_offset: usize,
+    pub cpu_status_offset: usize,
+    pub cpu_runq_offset: usize,
+    pub thread_sched_list_offset: usize,
+    pub thread_status_offset: usize,
+    pub monitor_status_offset: usize,
+    pub monitor_counter_offset: usize,
+}
+
+#[repr(C)]
+pub struct SchedIdleValues {
+    pub cpu_running: CInt,
+    pub cpu_idle: CInt,
+    pub cpu_reserved: CInt,
+    pub thread_running: CInt,
+    pub thread_stopped: CInt,
+    pub thread_interruptible: CInt,
+    pub need_migrate: u32,
+    pub monitor_idle: CInt,
+    pub monitor_kernel: CInt,
+}
+
+#[repr(C)]
+pub struct SchedIdleCallbacks {
+    pub current_cpu: unsafe extern "C" fn() -> usize,
+    pub lock: unsafe extern "C" fn(usize) -> CULong,
+    pub unlock: unsafe extern "C" fn(usize, CULong),
+    pub enable_interrupt: unsafe extern "C" fn(),
+    pub disable_interrupt: unsafe extern "C" fn(),
+    pub schedule: unsafe extern "C" fn(),
+    pub migrate: unsafe extern "C" fn(),
+    pub consolidate: unsafe extern "C" fn(),
+    pub zero_free: unsafe extern "C" fn(),
+    pub safe_halt: unsafe extern "C" fn(),
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sched_idle_current_cpu_bridge() -> usize {
+    unsafe { process_sched_cpu_local_bridge(ihk_mc_get_processor_id()) }
+}
+
+unsafe fn sched_idle_write_current_status(
+    offsets: &SchedIdleOffsets,
+    callbacks: &SchedIdleCallbacks,
+    status: CInt,
+) {
+    let current_cpu = unsafe { (callbacks.current_cpu)() };
+    let thread = unsafe {
+        read_volatile(current_cpu.wrapping_add(offsets.cpu_current_offset) as *const usize)
+    };
+    unsafe {
+        write_volatile(thread.wrapping_add(offsets.thread_status_offset) as *mut CInt, status);
+    }
+}
+
+/// Release the initial idle runqueue handoff, then enable interrupts.
+///
+/// # Safety
+/// CPU fields, all descriptor tables, and non-null callbacks have the original
+/// idle() lifetimes/ABI. The current CPU owns the inherited runqueue lock with
+/// its saved irqstate. Descriptors remain immutable; mutable kernel objects are
+/// accessed only through raw pointers. No pointer ownership is transferred.
+#[no_mangle]
+pub unsafe extern "C" fn sched_idle_begin_body_result(
+    cpu_addr: usize,
+    offsets: *const SchedIdleOffsets,
+    values: *const SchedIdleValues,
+    callbacks: *const SchedIdleCallbacks,
+) {
+    let (offsets, values, callbacks) = unsafe { (&*offsets, &*values, &*callbacks) };
+    let current_cpu = unsafe { (callbacks.current_cpu)() };
+    let irqstate = unsafe {
+        read_volatile(current_cpu.wrapping_add(offsets.cpu_runq_irqstate_offset) as *const CULong)
+    };
+    unsafe { (callbacks.unlock)(current_cpu.wrapping_add(offsets.cpu_runq_lock_offset), irqstate) };
+    let status_addr = cpu_addr.wrapping_add(offsets.cpu_status_offset) as *mut CInt;
+    if unsafe { read_volatile(status_addr) } == values.cpu_running {
+        unsafe { write_volatile(status_addr, values.cpu_idle) };
+    }
+    unsafe { (callbacks.enable_interrupt)() };
+}
+
+/// Execute exactly one existing idle-loop iteration in its original order.
+///
+/// # Safety
+/// Same valid immutable descriptor and CPU/monitor/current-thread lifetimes as
+/// sched_idle_begin_body_result. Scheduler/migration/IRQ callbacks implement the
+/// original primitive contracts. Current-thread lookup is repeated after each
+/// schedule/halt boundary. The captured CPU and monitor remain valid throughout;
+/// the queue scan is performed only while the supplied runqueue lock is held.
+#[no_mangle]
+pub unsafe extern "C" fn sched_idle_iteration_body_result(
+    cpu_addr: usize,
+    monitor_addr: usize,
+    offsets: *const SchedIdleOffsets,
+    values: *const SchedIdleValues,
+    callbacks: *const SchedIdleCallbacks,
+) {
+    let (offsets, values, callbacks) = unsafe { (&*offsets, &*values, &*callbacks) };
+    unsafe {
+        sched_idle_write_current_status(offsets, callbacks, values.thread_stopped);
+        (callbacks.schedule)();
+        sched_idle_write_current_status(offsets, callbacks, values.thread_running);
+        (callbacks.disable_interrupt)();
+    }
+    let flags_addr = cpu_addr.wrapping_add(offsets.cpu_flags_offset) as *mut u32;
+    if unsafe { read_volatile(flags_addr) } & values.need_migrate != 0 {
+        unsafe { (callbacks.migrate)() };
+        // Migration can change flags: clear only the requested bit in its NEW value.
+        let flags = unsafe { read_volatile(flags_addr) };
+        unsafe { write_volatile(flags_addr, flags & !values.need_migrate) };
+    }
+    let status_addr = cpu_addr.wrapping_add(offsets.cpu_status_offset) as *mut CInt;
+    let status = unsafe { read_volatile(status_addr) };
+    if status == values.cpu_idle || status == values.cpu_reserved {
+        let lock_addr = cpu_addr.wrapping_add(offsets.cpu_runq_lock_offset);
+        let irqstate = unsafe { (callbacks.lock)(lock_addr) };
+        if unsafe {
+            sched_idle_runqueue_has_running_result(
+                cpu_addr.wrapping_add(offsets.cpu_runq_offset),
+                offsets.thread_sched_list_offset,
+                offsets.thread_status_offset,
+                values.thread_running,
+            )
+        } != 0 {
+            unsafe { write_volatile(status_addr, values.cpu_running) };
+        }
+        unsafe { (callbacks.unlock)(lock_addr, irqstate) };
+    }
+    // Unlock/migration can affect CPU status: decide from a fresh observation.
+    let status = unsafe { read_volatile(status_addr) };
+    if status == values.cpu_idle || status == values.cpu_reserved {
+        unsafe {
+            (callbacks.consolidate)();
+            (callbacks.zero_free)();
+            write_volatile(monitor_addr.wrapping_add(offsets.monitor_status_offset) as *mut CInt,
+                           values.monitor_idle);
+            sched_idle_write_current_status(offsets, callbacks, values.thread_interruptible);
+            (callbacks.safe_halt)();
+            write_volatile(monitor_addr.wrapping_add(offsets.monitor_status_offset) as *mut CInt,
+                           values.monitor_kernel);
+        }
+        let counter = monitor_addr.wrapping_add(offsets.monitor_counter_offset) as *mut CULong;
+        unsafe {
+            write_volatile(counter, read_volatile(counter).wrapping_add(1));
+            sched_idle_write_current_status(offsets, callbacks, values.thread_running);
+        }
+    } else {
+        unsafe { (callbacks.enable_interrupt)() };
+    }
+}
+
+/// Own the existing infinite idle control loop; no callback/data is retained.
+///
+/// # Safety
+/// All begin/iteration preconditions hold for the complete lifetime of idle().
+#[no_mangle]
+pub unsafe extern "C" fn sched_idle_loop_body_result(
+    cpu_addr: usize,
+    monitor_addr: usize,
+    offsets: *const SchedIdleOffsets,
+    values: *const SchedIdleValues,
+    callbacks: *const SchedIdleCallbacks,
+) -> ! {
+    unsafe { sched_idle_begin_body_result(cpu_addr, offsets, values, callbacks) };
+    loop {
+        // begin released the real runqueue lock and enabled interrupts. Each
+        // iteration returns via the original enable_interrupt or STI/HLT path.
+        // This genuine idle process-context boundary is outside P/R/S/IRQ and
+        // retires VM/Thread perf owners even if no later user syscall occurs.
+        #[cfg(f03_perf_owner_protocol)]
+        unsafe { crate::f03_perf_owner::drain_safe_point() };
+        unsafe { sched_idle_iteration_body_result(cpu_addr, monitor_addr, offsets, values, callbacks) };
+    }
+}
+
+
+/// Returns one iff a locked idle runqueue contains a thread exactly running.
+///
+/// # Safety
+/// The caller holds the runqueue lock and supplies a valid circular list whose
+/// sentinel and thread nodes remain live for this call. Offsets come from the
+/// C thread definition; status is a C int and list_head.next is its first field.
+/// This scan retains no references and changes no list, thread, CPU, or IRQ state.
+#[no_mangle]
+pub unsafe extern "C" fn sched_idle_runqueue_has_running_result(
+    runq_head: usize,
+    thread_sched_list_offset: usize,
+    thread_status_offset: usize,
+    running_status: CInt,
+) -> CInt {
+    let mut entry = unsafe { list_next(runq_head) };
+    while entry != runq_head {
+        let thread = entry.wrapping_sub(thread_sched_list_offset);
+        let status = unsafe {
+            read_volatile(thread.wrapping_add(thread_status_offset) as *const CInt)
+        };
+        if status == running_status {
+            return 1;
+        }
+        entry = unsafe { list_next(entry) };
+    }
+    0
+}
+
+/// Preserve the existing optional migration diagnostic through Rust logging.
+/// The C declaration owns only the existing __verbose selector data so current
+/// C file/function/line selectors remain stable. Arguments are already evaluated
+/// at the caller boundary even when disabled; thread_addr is never dereferenced.
+#[no_mangle]
+pub unsafe extern "C" fn process_sched_migrate_log_bridge(
+    _thread_addr: usize, tid: CInt, cpu_id: CInt,
+) {
+    let flags = unsafe {
+        read_volatile(core::ptr::addr_of!(process_sched_migrate_debug.line_flags)) >> 24
+    };
+    if flags != 0 {
+        unsafe {
+            kprintf(
+                b"%s: tid: %d -> cpu: %d\n\0".as_ptr().cast(),
+                b"sched_request_migrate\0".as_ptr().cast::<i8>(), tid, cpu_id,
+            );
+        }
+    }
+}
+
+/// Publish a stack-local migration request using the existing scheduler body.
+///
+/// # Safety
+/// The caller preserves the existing scheduler/current-CPU contract and supplies
+/// a live thread and CPU. As in the C wrapper, schedule completes the request
+/// before returning; waitq_finish then detaches the entry before either stack
+/// object expires. The body acquires migq_lock before runq_lock and retains it
+/// through target notification. Callbacks must not retain the offset table.
+#[no_mangle]
+pub unsafe extern "C" fn sched_request_migrate(cpu_id: CInt, thread: *mut Thread) {
+    let cpu = unsafe { process_sched_cpu_local_bridge(cpu_id) };
+    let mut request = MaybeUninit::<SchedMigrateRequest>::uninit();
+    let mut entry = MaybeUninit::<crate::waitq::WaitqEntry>::uninit();
+    unsafe {
+        crate::waitq::waitq_init_locked_entry(
+            entry.as_mut_ptr(), (*get_this_cpu_local_var()).current.cast(),
+        );
+    }
+    let current_cpu_id = unsafe { ihk_mc_get_processor_id() };
+    let offsets = SchedMigrateOffsets {
+        req_list_offset: offset_of!(SchedMigrateRequest, list),
+        req_thread_offset: offset_of!(SchedMigrateRequest, thread),
+        req_wq_offset: offset_of!(SchedMigrateRequest, wq),
+        thread_cpu_id_offset: offset_of!(Thread, cpu_id),
+        thread_tid_offset: offset_of!(Thread, tid),
+        cpu_migq_lock_offset: offset_of!(CpuLocalVar, migq_lock),
+        cpu_migq_offset: offset_of!(CpuLocalVar, migq),
+        cpu_runq_lock_offset: offset_of!(CpuLocalVar, runq_lock),
+        cpu_flags_offset: offset_of!(CpuLocalVar, flags),
+        cpu_status_offset: offset_of!(CpuLocalVar, status),
+    };
+    let _ = unsafe {
+        sched_request_migrate_body_result(
+            cpu_id, cpu, request.as_mut_ptr() as usize, entry.as_mut_ptr() as usize,
+            thread as usize, current_cpu_id, PS_UNINTERRUPTIBLE, CPU_FLAG_NEED_RESCHED,
+            CPU_FLAG_NEED_MIGRATE, CPU_STATUS_RUNNING, IHK_GV_IKC, &offsets,
+            Some(sched_process_spin_lock_bridge),
+            Some(sched_process_spin_unlock_bridge),
+            Some(sched_process_noirq_lock_bridge),
+            Some(sched_process_noirq_unlock_bridge),
+            Some(process_sched_waitq_init_bridge),
+            Some(process_sched_waitq_prepare_bridge),
+            Some(process_sched_waitq_finish_bridge),
+            Some(process_sched_vector_bridge), Some(process_sched_interrupt_bridge),
+            Some(process_sched_schedule_bridge), Some(process_sched_migrate_log_bridge),
+        )
+    };
 }
 
 #[no_mangle]
@@ -2559,14 +3055,18 @@ pub unsafe extern "C" fn __runq_add_thread(thread: *mut Thread, cpu_id: CInt) {
 
 #[no_mangle]
 pub unsafe extern "C" fn runq_add_thread(thread: *mut Thread, cpu_id: CInt) {
+    let _ = runq_add_thread_checked(thread, cpu_id);
+}
+
+pub(crate) unsafe fn runq_add_thread_checked(thread: *mut Thread, cpu_id: CInt) -> CInt {
     if thread.is_null() {
-        return;
+        return -EINVAL;
     }
     let cpu_addr = unsafe { process_sched_cpu_local_bridge(cpu_id) };
     let reservation_lock_addr =
         core::ptr::addr_of_mut!(runq_reservation_lock) as *mut IhkSpinlock as usize;
     let offsets = sched_runqueue_offsets();
-    let _ = unsafe {
+    unsafe {
         sched_runq_add_thread_body_result(
             thread as usize,
             cpu_addr,
@@ -2590,7 +3090,7 @@ pub unsafe extern "C" fn runq_add_thread(thread: *mut Thread, cpu_id: CInt) {
             Some(process_sched_interrupt_bridge),
             Some(process_sched_runq_log_bridge),
         )
-    };
+    }
 }
 
 #[no_mangle]
@@ -2911,6 +3411,120 @@ unsafe fn sched_write_schedule_result(
     }
 }
 
+/// Optional C-header-bound RUSAGE_DEBUG inputs. No rusage-global layout is
+/// assumed here; the C default consumer forwards the original member addresses.
+#[repr(C)]
+pub struct SchedExitDebug {
+    pub num_threads: *const CULong,
+    pub total_memory_usage: *const CULong,
+    pub memory_stat_rss: *const CLong,
+    pub memory_stat_mapped_file: *const CLong,
+    pub page_sizes: CInt,
+}
+
+/// Complete the exited-thread branch after arch_switch_context returns.
+/// The caller has already unlocked the CURRENT CPU runqueue and restored its
+/// saved entry IRQ state. old_cpu remains the pre-switch v, even after migration.
+/// last is owned/live until release_thread; no field is accessed after release.
+/// Non-null debug is a valid static descriptor with the C build's array bounds.
+#[no_mangle]
+pub unsafe extern "C" fn sched_schedule_exit_cleanup(
+    old_cpu: *mut CpuLocalVar,
+    last: *mut Thread,
+    exited_status: CInt,
+    debug: *const SchedExitDebug,
+) {
+    if last.is_null() || unsafe { read_volatile(&raw const (*last).status) } != exited_status {
+        return;
+    }
+    unsafe {
+        write_volatile(&raw mut (*old_cpu).prevpid, 0);
+        arch_flush_icache_all();
+        // Freeze the existing slot/epoch while last is still live. An
+        // untracked Thread must remain untracked if release frees its address.
+        let exit_token = crate::fork_control_registry::capture_runtime_exit_before_release(last as usize);
+        release_thread(last.cast());
+        // Never relook up or dereference last after the ordinary edge release.
+        let _ = crate::fork_control_registry::complete_runtime_exit_after_release(exit_token);
+        rusage_num_threads_dec();
+    }
+    // release_thread may free last, including its backing pages. Only the
+    // independent accounting inputs are used from this point onward.
+    if !debug.is_null() && unsafe { read_volatile((*debug).num_threads) } == 0 {
+        unsafe {
+            kprintf(
+                b"total_memory_usage=%ld\n\0".as_ptr().cast(),
+                read_volatile((*debug).total_memory_usage),
+            );
+            let mut i: CInt = 0;
+            while i < (*debug).page_sizes {
+                kprintf(
+                    b"memory_stat_rss[%d]=%ld\n\0".as_ptr().cast(),
+                    i,
+                    read_volatile((*debug).memory_stat_rss.add(i as usize)),
+                );
+                i += 1;
+            }
+            i = 0;
+            while i < (*debug).page_sizes {
+                kprintf(
+                    b"memory_stat_mapped_file[%d]=%ld\n\0".as_ptr().cast(),
+                    i,
+                    read_volatile((*debug).memory_stat_mapped_file.add(i as usize)),
+                );
+                i += 1;
+            }
+        }
+    }
+}
+
+/// Transfer the live debug-register state after preparation and before the
+/// architecture context switch. next is non-null; both thread structures and
+/// any debug buffers stay live under the caller's scheduler exclusion. Buffers
+/// may alias. Read next's pointer after saving prev, matching the C sequence.
+#[no_mangle]
+pub unsafe extern "C" fn sched_schedule_debug_handoff(prev: *mut Thread, next: *mut Thread) {
+    if !prev.is_null() {
+        let previous = unsafe { read_volatile(&raw const (*prev).ptrace_debugreg) };
+        if !previous.is_null() {
+            unsafe { save_debugreg(previous) };
+            if unsafe { read_volatile(&raw const (*next).ptrace_debugreg) }.is_null() {
+                unsafe { clear_debugreg() };
+            }
+        }
+    }
+    let following = unsafe { read_volatile(&raw const (*next).ptrace_debugreg) };
+    if !following.is_null() {
+        unsafe { restore_debugreg(following) };
+    }
+}
+
+/// Admit a scheduler entry before any runqueue mutation. IRQ exclusion pins
+/// this CPU's current thread and its live FPU state through schedule preparation.
+/// The caller must retain the returned entry flags through a switch, or restore
+/// them on the non-switch path. Saving failure cannot return to its caller:
+/// production panic stops the calling CPU (it is not a global CPU rendezvous).
+#[no_mangle]
+pub unsafe extern "C" fn sched_schedule_fp_admit(exited_status: CInt) -> CULong {
+    let irqstate = unsafe { process_sched_irq_save_bridge() };
+    let cpu_id = unsafe { ihk_mc_get_processor_id() };
+    let cpu = unsafe { process_sched_cpu_local_bridge(cpu_id) } as *mut CpuLocalVar;
+
+    // Match the production ihk_atomic_read's SeqCst observation. No runqueue lock is taken
+    // here: exclusion must span saving the live owner and the existing prepare.
+    if unsafe { AtomicI32::from_ptr(&raw mut (*cpu).no_preempt.counter).load(Ordering::SeqCst) } == 0 {
+        let prev = unsafe { read_volatile(&raw const (*cpu).current) };
+        if !prev.is_null()
+            && prev != unsafe { &raw mut (*cpu).idle }
+            && unsafe { read_volatile(&raw const (*prev).status) } != exited_status
+            && unsafe { save_fp_regs(prev.cast()) } != 0
+        {
+            unsafe { panic(b"schedule: failed to save floating point state\0".as_ptr().cast()) }
+        }
+    }
+    irqstate
+}
+
 #[no_mangle]
 pub unsafe extern "C" fn sched_schedule_prepare_body_result(
     cpu_addr: usize,
@@ -3145,6 +3759,42 @@ pub unsafe extern "C" fn sched_schedule_prepare_body_result(
         );
     }
     action
+}
+
+/// Current-CPU spin-sleep boundary; preserve the existing timer/scheduler body.
+///
+/// # Safety
+/// A wait/futex queue is already installed and the current thread's spin_sleep
+/// marker is set before testing its wait condition. The caller preserves the
+/// original current-CPU/IRQ lifetime contract. The existing shared ABI supplies
+/// current and the stack-local immutable offset table; the body does not retain
+/// either the table or callback pointers. No lock or pointer ownership transfers.
+#[no_mangle]
+pub unsafe extern "C" fn spin_sleep_or_schedule() {
+    let thread = unsafe { (*get_this_cpu_local_var()).current };
+    let cpu = unsafe { get_this_cpu_local_var() };
+    // The live LWK ihk/ikc/include/ikc/ihk.h maps ihk_ikc_get_processor_id
+    // directly to ihk_mc_get_processor_id.
+    let current_cpu_id = unsafe { ihk_mc_get_processor_id() };
+    let halt = unsafe { core::ptr::read(core::ptr::addr_of!(idle_halt)) };
+    let offsets = sched_runqueue_offsets();
+    let _ = unsafe {
+        sched_spin_sleep_or_schedule_body_result(
+            thread as usize, cpu as usize, current_cpu_id, halt,
+            CPU_FLAG_NEED_RESCHED, &offsets,
+            Some(process_sched_irq_save_bridge),
+            Some(process_sched_irq_restore_bridge),
+            Some(sched_process_spin_lock_bridge),
+            Some(sched_process_spin_unlock_bridge),
+            Some(sched_process_noirq_lock_bridge),
+            Some(sched_process_noirq_unlock_bridge),
+            Some(process_sched_schedule_bridge),
+            Some(process_sched_zero_free_bridge),
+            Some(process_sched_pause_bridge),
+            Some(process_sched_has_signal_bridge),
+            Some(process_sched_runq_log_bridge),
+        )
+    };
 }
 
 #[no_mangle]
@@ -4891,6 +5541,9 @@ pub unsafe extern "C" fn futex_wait_body_result(
     }
     let tid = unsafe { read_cint_field(thread_addr, thread_tid_offset) };
 
+    #[cfg(native_linux_irq_work_v6_12)]
+    let native_started = crate::native_futex::ticks_now();
+
     loop {
         let mut hb_addr = 0usize;
         let ret = unsafe { setup(uaddr, val, fshared, q_addr, (&raw mut hb_addr) as usize) };
@@ -4901,7 +5554,17 @@ pub unsafe extern "C" fn futex_wait_body_result(
             return ret;
         }
 
-        let time_remain = unsafe { wait_queue(hb_addr, q_addr, timeout) };
+        #[cfg(native_linux_irq_work_v6_12)]
+        let remaining = if timeout == 0 {
+            0
+        } else {
+            timeout
+                .saturating_sub(crate::native_futex::ticks_now().wrapping_sub(native_started))
+                .max(1)
+        };
+        #[cfg(not(native_linux_irq_work_v6_12))]
+        let remaining = timeout;
+        let time_remain = unsafe { wait_queue(hb_addr, q_addr, remaining) };
         let unqueued = unsafe { unqueue(q_addr) };
         let mut has_pending_signal = 0;
         if unqueued != 0 && !(timeout != 0 && time_remain == 0) {

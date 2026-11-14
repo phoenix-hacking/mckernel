@@ -1,0 +1,237 @@
+{
+  "schema": "m14-memory-host-context-correction-review-v1",
+  "at": "2026-11-11T02:53:20.156418+00:00",
+  "reviewer": "/root/public_abi_join_max independent actual Sol/MAX",
+  "decision": "GO_BOUNDED_SOURCE_CORRECTION_ONLY",
+  "frozen_corrected_READY": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-closure-p04source-max-1/correction-1/SOURCE-READY.NOT-EXECUTED.json",
+    "bytes": 3388,
+    "sha256": "5aff021aeead821f19fbd05d9bf8f460d34cb7dc5018edeaeca3780deddcf556"
+  },
+  "new_module": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-closure-p04source-max-1/correction-1/candidate/kernel/rust/f03_memory_host_offload.rs",
+    "bytes": 5930,
+    "sha256": "f181d7308fcc3ecc81343f38788c9a9f1a1f7b024b3a24586a057f3ff2c17d33"
+  },
+  "minimal_delta": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-closure-p04source-max-1/correction-1/CONTEXT-INITIALIZATION.patch",
+    "bytes": 1769,
+    "sha256": "c2c866748e41a3a35f490e0f0c83ef47092e3e31197c689b24c45afcfce33d9f"
+  },
+  "full_production_patch": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-closure-p04source-max-1/correction-1/MEMORY-HOST-OFFLOAD-OWNERSHIP.CORRECTED.patch",
+    "bytes": 13334,
+    "sha256": "aead1ad5a472ac6f048d072f45de5c4da183b8afb7c2a99767c8f52f9ecd3324"
+  },
+  "source_paths": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-closure-p04source-max-1/correction-1/SOURCE-PATHS.json",
+    "bytes": 2318,
+    "sha256": "37ad3f84d6e3b3b41216d3aafb6caa91495658378c769880b063846b5e4eb28b"
+  },
+  "zero_validity_record": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-closure-p04source-max-1/correction-1/ZERO-VALIDITY-AND-DELTA.json",
+    "bytes": 6004,
+    "sha256": "2bae09c7b1d81d7f66771191ab2e4359edd4c41b2ae4599fca62352b7882b044"
+  },
+  "corrected_contract": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-closure-p04source-max-1/correction-1/CONTRACT.json",
+    "bytes": 5930,
+    "sha256": "0434cdfed9291f165c76c3efa215144230f26d81322fa8d6e3b9e6f5d94a827a"
+  },
+  "test_source_pin_contract": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-closure-p04source-max-1/correction-1/CHANGED-BEHAVIOR-TEST-CONTRACT.json",
+    "bytes": 2614,
+    "sha256": "f5eb49b703d19edeed013f9bf1b9c10ead43e4d5fc54358cbf61e359deae3210"
+  },
+  "reused_complete_family_review": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-review-publicabi-max-1/REVIEW.json",
+    "bytes": 17889,
+    "sha256": "1d85931eb592787fb792666225d89608ef94ac720fe6d115d04f8bc710a31626"
+  },
+  "exact_material_delta": {
+    "only_executable_change": "MaybeUninit::<X86UserContext>::uninit() -> zeroed() before original current lookup and same three real GPR setter calls. Comment-line-stripped source equality independently confirms all other executable bytes are unchanged.",
+    "minimal_patch_roundtrip": "Independent unified-diff reconstruction exactly matches1769B c2c86674. Complete corrected patch preserves byte-identical three prior source hunks; its new-file hunk is exactly the5930B f181 module.",
+    "other_paths": "CMake8c5688,lib1841be,C59d0 postimages identical to rejected packet and the sealed full-family review. Same cfg/Cmacro/ABI/current lookup/arg conversion/provider/forward/log/borrow/return order. No shared helper/global ABI edit.",
+    "comments": "Corrected descriptions acknowledge initialized u64 field references and real volatile writes, retaining all3 setters/order. No pure-store/elision or no-whole-read premise is used to excuse uninitialized fields."
+  },
+  "actual_zero_validity": {
+    "ABI_source": {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    "defining_fields": {
+      "X86UserContext": [
+        [
+          "sr",
+          "X86Sregs"
+        ],
+        [
+          "is_gpr_valid",
+          "u8"
+        ],
+        [
+          "is_sr_valid",
+          "u8"
+        ],
+        [
+          "spare_flags6",
+          "u8"
+        ],
+        [
+          "spare_flags5",
+          "u8"
+        ],
+        [
+          "spare_flags4",
+          "u8"
+        ],
+        [
+          "spare_flags3",
+          "u8"
+        ],
+        [
+          "spare_flags2",
+          "u8"
+        ],
+        [
+          "spare_flags1",
+          "u8"
+        ],
+        [
+          "gpr",
+          "X86BasicRegs"
+        ]
+      ],
+      "X86Sregs": [
+        [
+          "fs_base",
+          "CULong"
+        ],
+        [
+          "gs_base",
+          "CULong"
+        ],
+        [
+          "ds",
+          "CULong"
+        ],
+        [
+          "es",
+          "CULong"
+        ],
+        [
+          "fs",
+          "CULong"
+        ],
+        [
+          "gs",
+          "CULong"
+        ]
+      ],
+      "X86BasicRegs": [
+        [
+          "r15",
+          "CULong"
+        ],
+        [
+          "r14",
+          "CULong"
+        ],
+        [
+          "r13",
+          "CULong"
+        ],
+        [
+          "r12",
+          "CULong"
+        ],
+        [
+          "rbp",
+          "CULong"
+        ],
+        [
+          "rbx",
+          "CULong"
+        ],
+        [
+          "r11",
+          "CULong"
+        ],
+        [
+          "r10",
+          "CULong"
+        ],
+        [
+          "r9",
+          "CULong"
+        ],
+        [
+          "r8",
+          "CULong"
+        ],
+        [
+          "rax",
+          "CULong"
+        ],
+        [
+          "rcx",
+          "CULong"
+        ],
+        [
+          "rdx",
+          "CULong"
+        ],
+        [
+          "rsi",
+          "CULong"
+        ],
+        [
+          "rdi",
+          "CULong"
+        ],
+        [
+          "orig_rax",
+          "CULong"
+        ],
+        [
+          "rip",
+          "CULong"
+        ],
+        [
+          "cs",
+          "CULong"
+        ],
+        [
+          "rflags",
+          "CULong"
+        ],
+        [
+          "rsp",
+          "CULong"
+        ],
+        [
+          "ss",
+          "CULong"
+        ]
+      ]
+    },
+    "CULong": "actual u64 alias",
+    "representation": "repr(C),X86Sregs6*u64 +8*u8 flags +X86BasicRegs21*u64; all-zero valid for every field,224B/align8 retained from qualified actual ABI. No enum,bool,reference,nonzero or function-pointer field. Zero padding is allowed.",
+    "setter_source": {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "bytes": 256003,
+      "sha256": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde"
+    },
+    "closed_finding": "Real setters still form &mut field references before write_volatile, but those addressed u64 fields now hold initialized valid zero values. Raw pointer/lifetime/alignment and original exclusive private stack ownership remain intact. No whole-context reference/assume_init/read/forward is added.",
+    "observable_semantics": "The context is never forwarded or consumed as a whole; actual set_host_vma_body_result still receives the original addr,len,prot,holding scalars. Only previously unspecified private bytes are initialized. Current-thread lookup, each real setter effect, body call, signed-int result, native quiet error behavior and flag restore ordering are unchanged."
+  },
+  "closed_blocker": "MEMORY-HOST-CONTEXT-INITIALIZATION from full-family1d85931e is resolved at source scope by this exact meaningful new input. Original c1ca/344b/d7ae and NO_GO stay intact; there was no actual failed compiler/test run to replay.",
+  "unaffected_findings_reused": "Reuse sealed1d85931e other findings exactly: all5 function ABIs, full72B real request/signed return/one transaction, all6 unmap callbacks, real20 lower owners, MAP_FIXED/rollback/setitimer edges, clearCPU flag restored before nonzero log, native set-host logNone/int truncation, callback tables, Cguard/#line/source origins and narrow unsupported/broad/owned fallbacks. No body/provider/provenance inventory was repeated.",
+  "following_required_actions": [
+    "P04Tests binds f181 exact production source for its finite affected cases; no old d7ae run or old suite/heldfixture replay. This is source-input approval, not an uninspected test operation GO.",
+    "Root composes focused hunks over actual14d/peer changes, preserving clock2/ptrace and all dirty work; never copy full f839 snapshots over current canonical files. Actual integrated source bindings and genuine reala875 RO crash header/FILEPATH must enter the selecting configure.",
+    "A separately reviewed/fresh admitted normal named image must produce actual five Rust owners and C exclusion plus exact runtime callback table/direct3arg-provider/type/guard joins. New source alone does not satisfy whole M14-06-01-DEFAULT."
+  ],
+  "limits": "No compiler/test/helper/parser/SUT/readelf/objdump/Docker/network/sudo/native/kernel/canonical action, old green replay or source-body rewrite by reviewer. Only exact frozen source/data reads, equality/diff reconstruction and this private review JSON write. Root sole compositor/admission/executor; all original functional/native/currentfree/restoration/hold/UNKNOWN/account/source/resource criteria remain."
+}

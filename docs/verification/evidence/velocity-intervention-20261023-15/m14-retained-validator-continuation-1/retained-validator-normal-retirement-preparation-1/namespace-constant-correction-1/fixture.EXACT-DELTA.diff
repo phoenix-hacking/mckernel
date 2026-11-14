@@ -1,0 +1,23 @@
+--- fixture.original7
++++ fixture.namespace8
+@@ -42,10 +42,19 @@
+  def test_unverified_retained_copy_refused(self):
+   c=copy.deepcopy(COPY);c['complete_build_copy_verified']=False
+   with self.assertRaises(m.Refusal):self.gate(copied=c)
++ def test_namespace_constant_and_all_eight_pinned_ancestors(self):
++  self.assertEqual(m.NAMESPACE, m.ATTEMPT.parent)
++  actual=m.namespace_ancestry()
++  self.assertEqual(len(actual), 8)
++  self.assertEqual(actual, m.NAMESPACE_ANCESTRY)
++  expected_paths=[str(p) for p in reversed((m.NAMESPACE, *m.NAMESPACE.parents))]
++  self.assertEqual([row['path'] for row in actual], expected_paths)
++  self.assertEqual(actual[-1]['path'], str(m.NAMESPACE))
++  self.assertEqual({k:v for k,v in actual[-1].items() if k!='path'}, m.NAMESPACE_BINDING)
+ if __name__=='__main__':
+  suite=unittest.defaultTestLoader.loadTestsFromTestCase(CurrentRetainedGate)
+  result=unittest.TextTestRunner(verbosity=2).run(suite)
+- if not(result.wasSuccessful() and result.testsRun==7):sys.exit(1)
++ if not(result.wasSuccessful() and result.testsRun==8):sys.exit(1)
+  record={'schema':'mckernel.m14.current-retained-receipt-pure-fixture.v1','status':'PASS','tests_run':result.testsRun,'source_sha256':hashlib.sha256(S.read_bytes()).hexdigest(),'fixture_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest()}
+  raw=(json.dumps(record,sort_keys=True,separators=(',',':'))+'\n').encode()
+  fd=os.open(D/'CURRENT-RECEIPT-FIXTURE-PASS.json',os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o600)

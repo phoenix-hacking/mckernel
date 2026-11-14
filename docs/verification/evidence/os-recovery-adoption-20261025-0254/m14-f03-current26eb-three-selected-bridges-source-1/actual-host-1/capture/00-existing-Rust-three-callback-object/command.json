@@ -1,0 +1,30 @@
+{
+  "label": "00-existing-Rust-three-callback-object",
+  "argv": [
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+    "--crate-name",
+    "f03_current26eb_three_callbacks",
+    "--crate-type",
+    "lib",
+    "--edition=2021",
+    "-C",
+    "panic=abort",
+    "-C",
+    "opt-level=2",
+    "--cfg",
+    "enable_profile",
+    "--cfg",
+    "enable_perf",
+    "--cfg",
+    "f03_ptrace_io_find_selected_candidate",
+    "--cfg",
+    "f03_ptrace_io_unlock_selected_candidate",
+    "--cfg",
+    "f03_exit_waitq_wake_selected_candidate",
+    "--emit=obj=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/future-host-output-1/providers.o",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/lib.fixture.rs"
+  ],
+  "cwd": "/home/holden/mckernel",
+  "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Original-C/selected-Rust callback forwarding with genuine headers; find/unlock/waitq are inert HOST identity/scalar endpoints. No real lookup, thread lock, wait list, wake, scheduler, refcount, current stack, kernel, syscall, IRQ or native effect.",
+  "argv_compact_json_LF_sha256": "b380c3702e210a6cf590014cbfc625cbf97379d471cac29064b3fb221888de43"
+}

@@ -1,0 +1,142 @@
+{
+  "HOST_only_source_closure": [
+    {
+      "bytes": 3130,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-supervisor-source-1/tests.rs",
+      "sha256": "1f4b82546db14736a87476a21b71f9cdcb9f4717e6cd0b852bd1d0f39f78cd30"
+    },
+    {
+      "bytes": 6738,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-supervisor-source-1/host_tests.rs",
+      "sha256": "140a44a7d8600fe08cfd42abbc8379a535a769488798896291c4fb2bf61491d7"
+    },
+    {
+      "bytes": 2044,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-supervisor-source-1/fakeexec.rs",
+      "sha256": "cc3092a4e7a560c8417fd439006e643764b60d47b239adb4856ed8b1308f9d2c"
+    }
+  ],
+  "actual_HOST_fakeexec": {
+    "bytes": 5465296,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-supervisor-host-qualification-1/attempt-1/startup-fakeexec",
+    "sha256": "0b56598999cf37873b427031f619b90162736543920c1630f913045217c63ad2"
+  },
+  "actual_HOST_result": {
+    "bytes": 8716,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-supervisor-host-qualification-1/attempt-1/RESULTS.json",
+    "sha256": "784cfbe6bc256954b91ad4bfdf79628c3695de8cf633fcfb6a73a653d46cd16f"
+  },
+  "actual_Root_grant": {
+    "bytes": 2529,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-supervisor-host-qualification-1/attempt-1/ROOT-GRANT.json",
+    "sha256": "eb16ff95b9c8eaf2c8e74d84606342cd08998948002bc46f1f5ad05e2ce127d3"
+  },
+  "actual_collector_artifact": {
+    "bytes": 5647312,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-supervisor-host-qualification-1/attempt-1/startup-supervisor",
+    "sha256": "d0bf61dc45754e72d3ebab34853756c6ce5cce0c9e84ac1713122ba1cf8f0d5a"
+  },
+  "actual_compiled_test_fakeexec_path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-supervisor-host-qualification-1/attempt-1/startup-fakeexec",
+  "actual_test_count": 16,
+  "actual_test_executable": {
+    "bytes": 6389904,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-supervisor-host-qualification-1/attempt-1/startup-tests",
+    "sha256": "e5cfc3cbad363851c2247a368f6b2c4d402abd159307ded6148f9a24e853f590"
+  },
+  "application_acceptance": false,
+  "artifact_mode": "0o700",
+  "case_id": "startup.argv-empty",
+  "compiled_test_path_evidence": "Exact expected fakeexec path found in actual test ELF .rodata; tested option_env value is source-exclusive path to real fakeexec, not a metadata-only asserted value.",
+  "filtered": 0,
+  "ignored": 0,
+  "independent_source_review": {
+    "bytes": 7872,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-supervisor-source-1/independent-source-review-1/REVIEW.json",
+    "sha256": "772741f3cad4951adedc8c5be0ef291a907b6dad2809d0f017f84a52c8317c6f"
+  },
+  "limits": {
+    "collector_timeout_seconds": 120,
+    "frame_limit_bytes": 4096,
+    "outer_native_timeout_seconds": 300,
+    "payload_timeout_ms": 10000,
+    "post_reap_retirement_ms": 5000,
+    "raw_kernel_snapshot_limit_bytes": 262144,
+    "stderr_limit_bytes": 1024,
+    "stdout_limit_bytes": 1024
+  },
+  "native_acceptance": false,
+  "native_qualification": null,
+  "oracle": {
+    "exit_code": 0,
+    "stderr_hex": "",
+    "stdout_hex": "7b2263617365223a22737461727475702e617267762d656d707479222c2261726763223a342c2261726776223a5b22617070222c2241222c22222c2242225d2c227465726d696e61746f725f69735f6e756c6c223a747275657d0a"
+  },
+  "original_F05_source_and_908f_unchanged": true,
+  "original_failed_be6e_case_preserved": true,
+  "original_payload": {
+    "mode": 33261,
+    "path": "/home/holden/mckernel-work/scratch/stability-packet001-compile-20260913-1/startup.argv-empty/payload",
+    "sha256": "ff227c83b2da598110768e13f5e042b437e049659706b56079cc73f7c818a836",
+    "size": 20528
+  },
+  "payload_argv": [
+    "/bin/mcexec",
+    "-t",
+    "1",
+    "0",
+    "app",
+    "A",
+    "",
+    "B"
+  ],
+  "payload_cwd": "/case/work",
+  "payload_env": {
+    "COKERNEL_PATH": "/apps",
+    "PATH": "/usr/bin:/bin"
+  },
+  "production_source_closure": [
+    {
+      "bytes": 13552,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-supervisor-source-1/main.rs",
+      "sha256": "3366dc3aedf3a9499f866bd372046b3792ac6528f81b9ce81f637fde80a58ba5"
+    },
+    {
+      "bytes": 1016,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-supervisor-source-1/profile.rs",
+      "sha256": "b395546ba05320c50d215770d760bc4ea6f4348a35b8ce03458f21bc6ca7df0a"
+    },
+    {
+      "bytes": 2196,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-supervisor-source-1/report.rs",
+      "sha256": "da958f3e0ca75817781b2914843f40bddbcbf9735204ff7f1658549ddcdaf4b9"
+    },
+    {
+      "bytes": 22104,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-supervisor-source-1/supervisor.rs",
+      "sha256": "a6e805b21adb9624e916619ea3f8e36d8ac2dbdb6965d8e44ab49f7800c9ba13"
+    }
+  ],
+  "report_prefix": "ND_PAYLOAD ",
+  "runtime_authority": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_caseprofile": {
+    "bytes": 4926,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-supervisor-source-1/COLLECTOR-CASEPROFILE.json",
+    "sha256": "94b008753f112972780401219a6ae36778b858c7c4e6f1f164eb23b487065d6e"
+  },
+  "source_ready": {
+    "bytes": 7797,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-supervisor-source-1/READY.json",
+    "sha256": "03647eee5a17e839433ef6290deea7813bf726d9e47ba752d2409578f75b1364"
+  },
+  "startup_boot_argv": [
+    "/bin/native-boot"
+  ],
+  "status": "ACTUAL_ORIGINAL_STARTUP_RUST_COLLECTOR_SOURCE_PROFILE_ARTIFACT_HOST_BINDING_ONLY",
+  "unchanged_full_evaluator": {
+    "bytes": 100261,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/bound-native-runtime-1/native_diagnostic.py",
+    "sha256": "529830adcd6fafa13979bf6036b2812c88630c5e0112ce4d80f9fc28cc30d4da"
+  },
+  "whole_file_retirement": false
+}

@@ -1,0 +1,61 @@
+{
+  "status": "COHERENT_PRIVATE_SOURCE_API_HANDOFF_COMPILER_AND_MATERIAL_PROOF_PENDING",
+  "actual_implementation_root": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/ownership-proposal-1/implementation-1/candidate/kernel/rust/f03_perf_owner",
+  "facade": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/ownership-proposal-1/implementation-1/candidate/kernel/rust/f03_perf_owner.rs",
+  "new_cfg": "f03_perf_owner_protocol (UNSELECTED; no CMake option/default changed)",
+  "paired_C_macro": "MCKERNEL_RUST_F03_PERF_OWNER_PROTOCOL (UNDEFINED in current production; future ordinary paired compile only after scope/material review)",
+  "actual_required_shared_sources": [
+    "kernel/rust/syscall_policy.rs",
+    "kernel/rust/process_helpers.rs",
+    "kernel/rust/x86_cpu_helpers.rs",
+    "kernel/rust/sched_helpers.rs",
+    "kernel/rust/x86_perfctr.rs",
+    "kernel/rust/f03_do_fork.rs",
+    "kernel/rust/f03_terminate.rs",
+    "kernel/rust/lib.rs",
+    "kernel/syscall.c"
+  ],
+  "real_functions_for_four_changed_families": [
+    {
+      "family": "transaction_rollback_and_origins",
+      "source": "f03_perf_owner/transactions.rs::open_from_body/Open + real events::EventPin::allocate and descriptors::Prepared::{allocate,publish}",
+      "required": "Actual registered EventPin, actual typed80/72 inputs, genuine lower allocator/host effects only. Original attr validation order and late descriptor allocation preserved. Failed host-open rawCLong unchanged; posthost failures issue one real same-owner close and preserve primary. Nonzero/unissued cleanup retained as exact HostState debt; no idle numeric close."
+    },
+    {
+      "family": "every_executing_Thread_claim_and_retire",
+      "source": "maps::{prepare_thread,Plan::{origin_locked,monitor_locked,new_thread_monitor_locked,group_append_locked,commit_locked},HardwareLeases,retire_thread_before_destroy}; thread_counters::CounterSlot",
+      "required": "Keys only from real EventPin constructor/Thread registry. Actual Thread fields and checked generation, real pending reservation/commit/linear token release, inherit prebind before visibility, own/group-specific/monitor/call tokens distinct. Actual extra lease only first real start claim; no measurement/count/ref alias. True Thread pre-free hook clears raw pointer before memory destruction; deferred release never dereferences dead Thread."
+    },
+    {
+      "family": "positive_remote_and_terminal_monitor",
+      "source": "target_process::with_remote_target + process_targets + monitors::Target/MonitorSlot + lifecycle::prepare_cloned_thread",
+      "required": "Full current Process refcount CAS increment-unless-zero/overflow, actual hash unlock BEFORE allocating body and final positive release. No persistent Process cycle. Target generations and terminal detach real. Remote target/fork may have NO perf fd: actual Process-owned inherited slot and separate association edge, distinct logical descriptors/storage/origin lifetime."
+    },
+    {
+      "family": "P_held_VM_copy_close_and_deferred_free",
+      "source": "actual changed process_helpers::{process_mckfd_close_all_result,process_mckfd_free_result,process_release_vm_body_result,process_release_vm_checked_inner}, descriptors/copy_borrows/fork_copy and actual idle safe point",
+      "required": "Real managed marks under P, no waiting/free/hardware under P/R/S. Opaque parent snapshot takes real checked-positive VM pin, retains actual node borrow before unlock, original child dup receives actual allocated child node. Ordinary close waits actual borrow only AFTER unlink/unlock and on same current route. No-extra-pin final VM path and pending child cleanup exercised. Actual source safe point calls real token/group/event/descriptor drains; never invented callback/free ownership."
+    }
+  ],
+  "source_integration_contracts": [
+    "Process transaction gate serializes actual open/rollback, ordinary close BEFORE lookup/unlink, finite parent snapshot->Linux fork and terminal exit preparation; no P/R/hash/IRQ lock held through wait/offload.",
+    "Parent finite VM copy pin drops on real parent route after all copy/dup borrows. Pending-child record holds only real parent gate+metadata across actual fork call; copied fds remain PendingChildRoute until actual positive Linux fork. Host consumer is actual fork(), not inferred from guest flags. Error/cancel releases gate without closing parent numeric fd.",
+    "Terminal current-owner routine is called before original exit-group/nohost transition while actual current Thread/Process valid and prior locks released. Existing nohost/nonzero/interrupted/foreign outcomes never become ACK. Nonlast do_exit never closes shared Process fds. Unknown host cleanup survives local allocator frees and is not retried.",
+    "Original callback read size>=8 or (coherent event_count+1)*8 validated before allocation and in SAME R transferred to reader, before usercopy. FMI/PMI snapshots only actual scalar sig_no/fd under P; F_SETSIG writes use P.",
+    "Scheduler/exit capture actual current association and map Operation tokens before R unlock; no allocation/new ENOMEM in void hardware path. Window uses preallocated per-executing-Thread state on real event under S; restores creation/global view, never uses measurement as liveness. Original helper math/order and real provider data reused.",
+    "Actual helper start/reset/stop do NOT read pmc_status: strict original C mirror retained but NOT used as a new hardware filter. Nested selected group vs own subgroup and exact(group,event) lease retirement preserved.",
+    "Target::clear_locked is explicit six-line existing-detach integration after db25, preserving live Process identity; not terminal Target reset/resurrection. SDK terminal/fork units and hardware original bytes preserved under their manifests; finite P03 monitor caller composition separately retained."
+  ],
+  "proved_now": [
+    "Private real participating source exists and is pinned. Prior independent specification/unit/material source decisions apply only at their exact recorded scopes."
+  ],
+  "explicitly_unproved": [
+    "Rust syntax/name/type/link closure of this coherent candidate (NO compiler run yet).",
+    "Complete final shared lifecycle/lock/protocol/source eligibility material review by SourceAcq.",
+    "Actual independent four-family compile/runtime request and results; no DRAFT runnable claim.",
+    "Paired real normal whole-image C/Rust compile/header104/provider/ownership proof after separate selector/operation admission.",
+    "All functional/native/runtime/restoration/full perf DEFAULT and original milestone acceptance; technical historical NO_GO stays until actual proof."
+  ],
+  "no_execution_activation_canonical_or_hold_release": true,
+  "unchanged_acceptance_and_retained_holds": true
+}

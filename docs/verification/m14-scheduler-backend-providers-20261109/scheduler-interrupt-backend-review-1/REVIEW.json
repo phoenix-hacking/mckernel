@@ -1,0 +1,55 @@
+{
+  "decision": "GO_SOURCE_ABI_PROFILE_LITERAL_COMPILE_PROPOSAL_ONLY",
+  "reviewer": "/root/create_empty_entry_parity_high",
+  "routing": "Root verified actual Sol/HIGH turn 01a1c233-8018-7631-891f-df9a7a757a3c; approval never; danger-full-access. No recursive agents.",
+  "inputs": {
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-unit-1/scheduler_interrupt_backend_unit.rs": "661fe2b9a5aca100ffa6fafb61fbf76473843677e2bfe6a6f6c52c8219992332",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-unit-1/SOURCE-MANIFEST.json": "6e9018dd8ecebe97872d679509eee774ef0c749a938708c441c51d85449baba7",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-unit-1/COMPILE-PROPOSAL.json": "d46bee5801390ab5c1a5de309ff06a427673e0a02bcc1a2736f11fa471235cbc",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-unit-1/SOURCE-PROFILE-PROOF.json": "f727874373e0feb368731111a948a1133620377af78634bb8bd437f0384827e8"
+  },
+  "affirmative_contract": {
+    "path": "/home/holden/mckernel-work/m14-m15-scheduler-resume-20261109T211802Z/scheduler-interrupt-backend-lookahead-20261109T2142.json",
+    "sha256": "db1a8214207953c15467a9fb6cd7a82c8ce1251ff3f77bc7a67bceb49595c63e"
+  },
+  "exact_source": {
+    "checked_blocks": 11,
+    "method": "Compared each supplied line-bounded block to canonical bytes and its SHA; all non-ABI blocks occur exactly once in unit. Verified canonical source hashes and complete unit/manifest/proof/proposal chain. Reviewed complete 2804-byte unit.",
+    "public_definitions": [
+      "ihk_mc_interrupt_cpu",
+      "x86_get_interrupt_id_result",
+      "x86_interrupt_cpu_result"
+    ],
+    "private_definition": "x86_cpu_local_native",
+    "original_callback_aliases": [
+      "X86CpuLocalFn",
+      "X86IssueIpiFn",
+      "X86InterruptLogFn"
+    ],
+    "attributes": "Original extern C and three no_mangle attributes; no new cfg, features or equivalence profile."
+  },
+  "ABI": {
+    "actual_module_sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "scalars": "CInt=i32; CULong=u64. Original Option<unsafe extern C fn> callback aliases retained.",
+    "CPU_local": "Original repr(C,packed) X86CpuLocalVariables included through actual ABI module. First fields processor_id/apic_id are CULong; APIC offset8 agrees with unchanged size_of::<CULong>() as CULong expression.",
+    "imports": {
+      "get_x86_cpu_local_variable": "extern C fn(CInt)->*mut actual X86CpuLocalVariables",
+      "num_processors": "extern static mut CInt, no initializer or replica",
+      "x86_issue_ipi_bridge": "extern C fn(CULong,CInt)->void",
+      "x86_interrupt_log_bridge": "extern C fn(CInt,CInt,CInt)->void"
+    },
+    "runtime_obligation": "Packed alignment1 does not establish validity/alignment of volatile CULong read. Genuine getter/boot mapping must supply live valid aligned storage; no runtime/domain assumption is qualified by this source review."
+  },
+  "semantics": "Original negative/out-of-range CPU check and event1/-1; original missing callbacks/null pointer/negative converted APIC returns; volatile u64 APIC read then signed CInt conversion unchanged. Event2 precedes void issue callback, original CInt-to-CULong cast/vector preserved, successful path returns0. Live num_processors read preserved. No fabricated callbacks/count or error-policy rewrite.",
+  "ownership": "Source has three C export owners and one private adapter; no writable-state definitions. Four genuine imports stay unresolved. Existing num_processors owner is reused only by a future actual unique-input join; no source/data copy. CPU-local/backend/logger bodies and storage excluded. Actual emitted private/readonly/unwind/compiler owners remain to be reconciled from a separately admitted object-metadata packet.",
+  "profile": {
+    "qualified_reference": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/REQUEST.json",
+    "qualified_reference_sha256": "fa8166319eed657c68c83efca2537c30c93a89b5a5e0325abe0d5ecf953c2783",
+    "compiler_sha256": "70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09",
+    "comparison": "Pinned compiler and every payload flag through -o match qualified reference; only explicit new source/output/capture paths differ. Environment overrides empty. No feature suppression or optional cfg.",
+    "bounds": "One CPU6 compile proposal: taskset6, timeout TERM60+kill5, AS1GiB/CPU45/FSIZE64MiB/core0/time-v; aggregate HOST3 jobs/4GiB including overhead remains binding. Exact retained single SSE diagnostic required; any new diagnostics require review."
+  },
+  "next_gate": "Fresh exact Root admission required before compiler. Actual object/metadata/source-emission/collision predicates require later review; unexpected import/private/data/intrinsic emission stops before any future join. Current engine partial identity and future join are unbound in this proposal; no guessed final counts or stale foundation substituted.",
+  "exclusions": "No CPU/IRQ/APIC/MSR/logger/timer/device/native/function execution, no downstream IPI/logger/data implementation eligibility inferred, no held notification/generic/exec/ACK/TID/XPMEM source preparation, no final image or original supported-scope acceptance.",
+  "operations": "Read exact source blocks/actual ABI and frozen contract/profile packets; source-byte/hash/profile comparisons only, then this private JSON. No compiler, nm/readelf/objdump, predicate, linker, tests/runtime, canonical/index/state writes or delegation."
+}

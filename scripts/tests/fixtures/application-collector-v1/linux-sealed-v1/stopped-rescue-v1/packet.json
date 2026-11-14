@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "kind": "linux-sealed-collector-stopped-rescue-v1",
+  "status": "SOURCE_PACKET_ONLY",
+  "application_acceptance": false,
+  "backend_enabled": false,
+  "source": {
+    "path": "../collector.c",
+    "sha256": "09a63a343fa8cc9f511a26693371f5ba4f55ac5ca56fcb47abdc44759830cf1f",
+    "patch_sha256": "0e3e18809673c9f7b54980ca20002ca90f3a779a8ff5b7893bf4a1ee6c572318",
+    "header_sha256": "6bc0b1517de94cb8f08f41c4f475568327658e45dd10c94b70e930fb8f5a240b",
+    "language": "c11",
+    "guards": ["M02_STOPPED_RESCUE_TEST_ONLY", "M02_STOPPED_RESCUE_CASE"]
+  },
+  "cases": [
+    {"id": "control", "selector": 0, "setup_length": 384, "expected": "COMPLETED"},
+    {"id": "stopped-rescue", "selector": 1, "setup_length": 384, "expected": "RESCUED", "raw_stop_status": 4991, "raw_fixture_wait": 9, "raw_collector_wait": 256, "signal": 15, "adoption": "ECHILD"}
+  ],
+  "bounds_seconds": {"case": 40, "cleanup": 15, "whole_container": 300},
+  "runtime_evidence": ["source", "generated_diff", "compiler", "elf", "requests", "diagnostics", "setup", "stdout", "stderr", "report", "events", "raw_wait", "pid_startticks", "deadlines", "container", "watchdog", "absence"]
+}

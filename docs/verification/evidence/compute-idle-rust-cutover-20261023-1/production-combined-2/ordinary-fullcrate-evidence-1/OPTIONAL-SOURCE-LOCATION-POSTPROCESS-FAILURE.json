@@ -1,0 +1,27 @@
+{
+  "actual_symbol_uniqueness_evidence": {
+    "bytes": 3959,
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-2/ordinary-fullcrate-evidence-1/nm-result.json",
+    "sha256": "8bd3a0e3e8d2fc0f53c9032047fe4f366694bb776c6c3e58da0143ee0ef751a7"
+  },
+  "cause": "Text-location helper found two cfg-dependent ihk_mc_get_processor_id function-body candidates in kernel/rust/x86_local.rs at lines141 and147. Text uniqueness is not object uniqueness. No selected-cfg location inferred.",
+  "failure": "AssertionError: all(len(rows)==1 for rows in locations.values())",
+  "failure_history": "First optional source-location parser attempt; no correction or rerun. Compilation and nm already PASS and unaffected.",
+  "operation": "Post-success source text-location derivation; no compiler/nm invocation",
+  "returncode": 1,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_file": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-2/source-materialization-attempt-2/materialized-source/kernel/rust/x86_local.rs",
+    "sha256": "9f102654a22895615da854b08ea8e043a6c17b9157e4b77e5b58783e70abeb3f",
+    "st_ctime_ns": 1792737100833233730,
+    "st_dev": 66306,
+    "st_gid": 1000,
+    "st_ino": 48785033,
+    "st_mode": 33188,
+    "st_mtime_ns": 1792737100833233730,
+    "st_size": 4525,
+    "st_uid": 1000
+  },
+  "status": "FAILED_OPTIONAL_METADATA_PARSER_STOPPED_NO_RETRY",
+  "unwritten_output": "ACTUAL-EXPORT-SOURCE-BINDING.json"
+}

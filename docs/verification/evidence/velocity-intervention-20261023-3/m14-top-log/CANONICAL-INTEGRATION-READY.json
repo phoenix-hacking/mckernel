@@ -1,0 +1,88 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "READY_ROOT_EXACT_LOGGER_TWO_FILE_INTEGRATION_AFTER_ACTUAL_RUST_REVIEW_NOT_EXECUTED",
+  "changes": {
+    "arch/x86_64/kernel/memory.c": {
+      "before": {
+        "path": "/home/holden/mckernel/arch/x86_64/kernel/memory.c",
+        "sha256": "b9380953fd379bb28c8827a402700d415cf604a8e46fbae40a1d7daa483fe75b",
+        "bytes": 86177
+      },
+      "after": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-top-log/candidate/arch/x86_64/kernel/memory.c",
+        "sha256": "e52b056f783641ab8b48a5a0d6cec793b89c764f8a5ba3b0f16550eac2fd615f",
+        "bytes": 86355
+      }
+    },
+    "kernel/rust/x86_memory_helpers.rs": {
+      "before": {
+        "path": "/home/holden/mckernel/kernel/rust/x86_memory_helpers.rs",
+        "sha256": "4868d1b599ff89dffc5dfe32403927b4e887442001bb93253805ab0d94088a90",
+        "bytes": 195780
+      },
+      "after": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-top-log/candidate/kernel/rust/x86_memory_helpers.rs",
+        "sha256": "8d9cf2a72a5fcca67edf25e99f20c84fb2aaac4d6c7f95ec73a8e7de9d46b1cc",
+        "bytes": 196605
+      }
+    }
+  },
+  "current_preimages_match": true,
+  "patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-top-log/cutover.patch",
+    "sha256": "0ddc73cbe18ee7a4266bf13f732413a9c04f92e07716d9c222969c71fc74ef69",
+    "bytes": 2474
+  },
+  "source_and_actual179200_fixture_acceptance": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-3/m14-top-log/INDEPENDENT-SOURCE-AND-ACTUAL-FIXTURE-ACCEPTANCE.ROOT-RECORD.json",
+    "sha256": "1234ed7eb8e67a9e9a2ad574328163bd848e88944e6bb739bd19b1c2a6e7435e",
+    "bytes": 1198
+  },
+  "actual_fixture": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-top-log/ACTUAL-LOGGER-FIXTURE-RECEIPT.json",
+    "sha256": "d2e61a4eff2a38f386d3d9f8027c6b57244dcdec2f8a5e2dc83f10b2f7fd22fe",
+    "bytes": 5495
+  },
+  "actual78_Rust_production": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-top-log/production-fullcrate-1/ACTUAL-PRODUCTION-FULLCRATE-RECEIPT.json",
+    "sha256": "d150b50530e4ebe45071a0b59a96eb0ff5f3e41f6198eb08acdccad3751edda9",
+    "bytes": 5976
+  },
+  "production_object_not_rehashed": {
+    "ctime_ns": 1792787323141921202,
+    "device": 66306,
+    "gid": 1000,
+    "inode": 55988332,
+    "mode": "0o600",
+    "mtime_ns": 1792787323141921202,
+    "nlink": 1,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-top-log/production-fullcrate-1/mckernel_rust.o",
+    "sha256": "8abc01d72a0a8af2a98e153c0a3518a55d4170ea7bb8440e450fe8adc2538a22",
+    "size": 13752464,
+    "uid": 1000
+  },
+  "selected_SDK7_pin_exclusion": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-top-log/SDK7-68-15-PIN-EXCLUSION.json",
+    "sha256": "493940a2e85fe12e4440b06e700720486215d01be27488a76d822199b4806c7c",
+    "bytes": 68052
+  },
+  "root_only_apply_argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport hashlib,json\nroot=Path('/home/holden/mckernel')\nrows={'arch/x86_64/kernel/memory.c': {'before': {'path': '/home/holden/mckernel/arch/x86_64/kernel/memory.c', 'sha256': 'b9380953fd379bb28c8827a402700d415cf604a8e46fbae40a1d7daa483fe75b', 'bytes': 86177}, 'after': {'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-top-log/candidate/arch/x86_64/kernel/memory.c', 'sha256': 'e52b056f783641ab8b48a5a0d6cec793b89c764f8a5ba3b0f16550eac2fd615f', 'bytes': 86355}}, 'kernel/rust/x86_memory_helpers.rs': {'before': {'path': '/home/holden/mckernel/kernel/rust/x86_memory_helpers.rs', 'sha256': '4868d1b599ff89dffc5dfe32403927b4e887442001bb93253805ab0d94088a90', 'bytes': 195780}, 'after': {'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-top-log/candidate/kernel/rust/x86_memory_helpers.rs', 'sha256': '8d9cf2a72a5fcca67edf25e99f20c84fb2aaac4d6c7f95ec73a8e7de9d46b1cc', 'bytes': 196605}}}\npayloads={}\nfor rel,row in rows.items():\n b=Path(row['after']['path']).read_bytes()\n assert hashlib.sha256((root/rel).read_bytes()).hexdigest()==row['before']['sha256'],('preimage',rel)\n assert hashlib.sha256(b).hexdigest()==row['after']['sha256'],('privatepostimage',rel)\n payloads[rel]=b\nfor rel,b in payloads.items(): (root/rel).write_bytes(b)\nfor rel,row in rows.items(): assert hashlib.sha256((root/rel).read_bytes()).hexdigest()==row['after']['sha256'],('postimage',rel)\nprint(json.dumps({'status':'PASS_EXACT_TOP_LOG_TWO_CANONICAL_POSTIMAGES','paths':list(rows)}))\n"
+  ],
+  "contract": "Root checks actualRust independentreview and SDK7ownership context; verifyboth2preimages/privatepostimages beforeanywrite; copyonlythese2canonicalpaths andverifybothpostimages. No worker apply.",
+  "source_delta": "OnlyactualPUBLICtwo-event top-log Cbody moves toRust; Cfallback originalbodyretained, byteformats/argument/event/voidABI unchanged. No Cfunctionality added.",
+  "remaining_debt": [
+    "Toplogger defaultGCCmemoryTU/defaultimage link/nativekmsg stillOPEN; hostedvsnprintf is notproductionformatter/nativeproof.",
+    "remote_flush_tlb_array_cpumask and x86_clear_range_walk_l4_bridge remaincomputeCproviders; no Cglueexemption.",
+    "Currentlinked13/10972 retain their own frozenC/Rustselection; sourceintegration alone earns no native/wholefilezeroCretirement."
+  ],
+  "independent_actual78_Rust_acceptance": null,
+  "canonical_mutation_executed": false,
+  "compiler_or_test_jobs_after_cohort": 0,
+  "current13_or_10972_changes": 0,
+  "CPU_held": false
+}

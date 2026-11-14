@@ -1,0 +1,91 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_PRIVATE_TESTS",
+  "total_tests": 51,
+  "tests": [
+    {
+      "argv": [
+        "python3",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/keeper-capture-shared-mutator-source-1/lifecycle-exhaustion-repair-source-1/test_confirmed_exited.PURE.py"
+      ],
+      "returncode": 0,
+      "test_count": 39,
+      "elapsed_seconds": 1.6198635789332911,
+      "cpu_affinity": [
+        6
+      ],
+      "jobs": 1,
+      "address_space_limit_bytes": 2147483648,
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/keeper-capture-shared-mutator-source-1/lifecycle-exhaustion-repair-source-1/process-pure.stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/keeper-capture-shared-mutator-source-1/lifecycle-exhaustion-repair-source-1/process-pure.stderr",
+        "bytes": 3402,
+        "sha256": "cebae2b1a603a62cf6c9a60d540098a15c92733d0131d138101fa1ad366b746c"
+      }
+    },
+    {
+      "argv": [
+        "python3",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/keeper-capture-shared-mutator-source-1/lifecycle-exhaustion-repair-source-1/test_lifecycle_installer.PURE.py"
+      ],
+      "returncode": 0,
+      "test_count": 12,
+      "elapsed_seconds": 2.7654262350406498,
+      "cpu_affinity": [
+        6
+      ],
+      "jobs": 1,
+      "address_space_limit_bytes": 2147483648,
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/keeper-capture-shared-mutator-source-1/lifecycle-exhaustion-repair-source-1/installer-pure.stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/keeper-capture-shared-mutator-source-1/lifecycle-exhaustion-repair-source-1/installer-pure.stderr",
+        "bytes": 896,
+        "sha256": "4fa52b0153f9cf8972d7723e280fcb30f0a17c47a2244197075624d72db29a61"
+      }
+    }
+  ],
+  "sources": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/keeper-capture-shared-mutator-source-1/lifecycle-exhaustion-repair-source-1/dead_caller_confirmed_exited.FOCUSED-FUNCTIONS.SOURCE-ONLY.py",
+      "bytes": 17841,
+      "sha256": "c75997323aee2032dcacb4dcb21f3bc73d08b450b8669f95f617582e2317549d"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/keeper-capture-shared-mutator-source-1/lifecycle-exhaustion-repair-source-1/lifecycle_runtime_bridge.SOURCE-ONLY.py",
+      "bytes": 11597,
+      "sha256": "021165e4fb4d67bb89574c9c0643340731572dec7702ed77892e16daa014a759"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/keeper-capture-shared-mutator-source-1/lifecycle-exhaustion-repair-source-1/test_confirmed_exited.PURE.py",
+      "bytes": 9248,
+      "sha256": "5ae065d52594566a34fe9aef42516c3dccaabb4d7ca117208b0a13d547c7608f"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/keeper-capture-shared-mutator-source-1/lifecycle-exhaustion-repair-source-1/test_lifecycle_installer.PURE.py",
+      "bytes": 5101,
+      "sha256": "f6dfe2217c8165c74ae7e6a75f959df0881b6bc2ca2e6c0f52c25cdf0ae18d16"
+    }
+  ],
+  "manifest": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/keeper-capture-shared-mutator-source-1/lifecycle-exhaustion-repair-source-1/CONFIRMED-EXITED-DELTA.SOURCE-ONLY.NOT-RELEASED.json",
+    "bytes": 4993,
+    "sha256": "67b45c47509ff12997e2a89a84e0d648f94f61e9176bf72f0397b0f0d1a14591"
+  },
+  "preserved_first_fixture_failure": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/keeper-capture-shared-mutator-source-1/lifecycle-exhaustion-repair-source-1/FIRST-PRIVATE-TEST-FAILURE.json",
+    "bytes": 800,
+    "sha256": "15c3aa896860dadd5496e34b7e15aea3c18adfdfebc9cf33cee4230fb9c5436a"
+  },
+  "limitations": [
+    "No production process observer, root acquisition, retirement, injection, shared cleanup or workload replay executed.",
+    "Existing held keeper and consumed command preserved; no new accepted default/native/file closure."
+  ]
+}

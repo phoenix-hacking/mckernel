@@ -1,0 +1,60 @@
+--- a/arch/x86_64/kernel/cpu.c
++++ b/arch/x86_64/kernel/cpu.c
+@@ -3689,6 +3689,9 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
++void mod_nmi_ctx(void *nmi_ctx, void (*func)());
++#else
+ void
+ mod_nmi_ctx(void *nmi_ctx, void (*func)())
+ {
+@@ -3705,6 +3708,8 @@
+ 	l[i++] = (unsigned long)(l + 27);	// ols rsp
+ 	l[i++] = 0x28;				// KERNEL DS
+ }
++
++#endif
+ 
+ void arch_save_panic_regs(void *irq_regs)
+ {
+--- a/kernel/rust/x86_cpu_helpers.rs
++++ b/kernel/rust/x86_cpu_helpers.rs
+@@ -3099,3 +3099,36 @@
+         _ => {},
+     }
+ }
++
++
++/// Preserve the complete existing NMI frame rewrite. The caller owns a live,
++/// aligned writable span of at least 27 C unsigned-long words. This forward
++/// overlapping copy and the final five fields exactly match the C producer;
++/// the supplied function is stored as a return address and is never invoked.
++#[no_mangle]
++pub unsafe extern "C" fn mod_nmi_ctx(
++    nmi_ctx: *mut c_void,
++    func: Option<unsafe extern "C" fn()>,
++) {
++    let flags: CULong;
++    // Same pushfq/pop read used by existing cpu_interrupt_disabled. Default
++    // memory/flags clobbers retain the original C "memory","cc" barrier.
++    unsafe { core::arch::asm!("pushfq", "pop {flags}", flags = lateout(reg) flags); }
++    let words = nmi_ctx.cast::<CULong>();
++    let mut i = 0usize;
++    while i < 22 {
++        let value = unsafe { words.add(i + 5).read() };
++        unsafe { words.add(i).write(value); }
++        i += 1;
++    }
++    let return_address = func.map_or(0, |entry| entry as CULong);
++    unsafe {
++        words.add(22).write(return_address);
++        words.add(23).write(0x20);
++        // Actual registers.h RFLAGS_IF=(1<<9); same mask is already used by
++        // existing Rust cpu_interrupt_disabled. No IRQ state is changed here.
++        words.add(24).write(flags & !(1 << 9));
++        words.add(25).write(words.add(27) as CULong);
++        words.add(26).write(0x28);
++    }
++}

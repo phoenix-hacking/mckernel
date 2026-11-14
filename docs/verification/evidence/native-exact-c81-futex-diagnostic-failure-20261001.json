@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "status": "FAIL",
+  "scope": "current-candidate direct-futex diagnostic; preserved original one-shot failure",
+  "packet": {"commit": "0440661f6d80fb6723a44da08444947b161d858c", "sha256": "38e16673228df7c507d2a0fbd2475e4ddc8647379fb74a741c5883746461fc40"},
+  "release": "PASS_EXECUTION_C81_FUTEX",
+  "nonce": "1a9f699e18ae309d0cb9205564458ab0",
+  "container": "27637190d8dda98987751b66a0bcb80f28d7fa961be1fbe9a7676d1ab01d808a",
+  "failure": {
+    "phase": "evaluation",
+    "type": "DiagnosticError",
+    "error": "typed futex clone framing",
+    "cause": "oracle expected historical 15 CASE, CLONE, final CASE, THREADS order; retained current payload source and actual c81 output use 16 CASE, THREADS, CLONE",
+    "unchanged_retry_forbidden": true
+  },
+  "actual_application": {
+    "argv": ["/bin/mcexec", "-t", "1", "0", "/apps/app"],
+    "stdout": "NATIVE_ULTRA_FUTEX PASS cases=16 threads=2 raw_clone=1\n",
+    "stdout_size": 55,
+    "stdout_sha256": "c70ccab9355ffa7ad8021c3b6d0d78b8c5c7f73c53b2749e99b29ff64b4d08b9",
+    "stderr_size": 2610,
+    "stderr_sha256": "64e45bd32c9605a28ea809ed5b0d1fc8205a77228ffde7f32bf11291c2132a2c",
+    "stderr_record_order": "16 CASE, THREADS, CLONE",
+    "raw_wait_status": 9472,
+    "exit_code": 37,
+    "procfs_empty": true,
+    "stdout_complete": true,
+    "stderr_complete": true,
+    "discarded_bytes": 0,
+    "semantic_observation": "all 16 expected result/errno records, two joined distinct worker TIDs with positive counts, one raw-clone record and the frozen PASS line were observed; this record does not promote runtime PASS because evaluation failed"
+  },
+  "inner_evidence": {
+    "result.json": {"size": 2851, "sha256": "9c0f0f87a4ded11a14bf4f99eca7a097d953259a2309a39e6484d4bc12af4851"},
+    "serial.log": {"size": 158783, "sha256": "02b3b4ef48026dbb2a497963dc5010c3553c7737275af824f91b36e469b4a90c"},
+    "debugcon.log": {"size": 152, "sha256": "bd87db779e6878802fa64fdee99f2eb08dee1529bbea800a65356f051e186685"},
+    "qmp.transcript.json": {"size": 253295, "sha256": "b6e980921be94e729bdc96702d4e84793de7284a41823c8d773d25c72b09d56b"},
+    "first-failure.jsonl": {"size": 89, "sha256": "799bd726afa89e7ee6ac087b166233ce58a685ad76addc436c89cc07cf18ec44"},
+    "qemu.stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "qemu.stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "owner_evidence": {
+    "result_sha256": "3533d0e8a8e58b2d210f780c314968ab2a713f5ee605e242ca7d8a0401edaa19",
+    "owner_sha256": "416371a7f05605cdaa618ac11a871700198893211e00a89627758d0e35183ce4",
+    "start_stderr_sha256": "ee4d6d3b5aa09778683d682d967e5979d42c06aa1c6e48c897245a4e1b9f3d3b",
+    "container_absence_verified": true,
+    "lease_retained": false,
+    "secondary_failures": [],
+    "container_removed": true,
+    "oom_killed": false
+  },
+  "qmp_terminal": {"guest_shutdown": true, "query_status": "shutdown", "running": false, "quit_acknowledged": true, "qemu_returncode": -9},
+  "postflight": {"owner_live": false, "qemu_live": false, "mcexec_live": false, "diagnostic_container_live": false, "development_lock": "free", "heavy_lease": "free"},
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "next": "make one bounded source-bound record-order correction, prepare a fresh manifest/packet, independently review, then run one fresh attempt"
+}

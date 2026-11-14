@@ -1,0 +1,720 @@
+{
+  "schema": "mckernel.new-current-image-functional-handoff.source-only.v1",
+  "at": "2026-11-11T18:04:15.312166+00:00",
+  "owner": "/root/p03_cutover_source_max; Root sole compositor/admission/native/ledger/publisher",
+  "status": "EXACT_A2F_IMAGE_AND_EXISTING_GUEST_PROGRAM_TOOL_TUPLE_BOUND_PENDING_REAL_STAGING_COHORT_SOURCE_CONTROLLER_NATIVE_AND_RESTORATION_INPUTS",
+  "authority": null,
+  "operation_issued": false,
+  "original_check": {
+    "id": "M14-06-02-FUNCTIONAL",
+    "parent": "M14-06-02",
+    "title": "Qualify signal/rt_sigreturn frames, alternate stack, context and xstate restoration on the matching admissible coherent image",
+    "percent_complete": 0,
+    "progress_metric": "binary verified completion at stated scope",
+    "status": "open_or_unverified",
+    "owner": "Root integration/compositor; applicable original hold and native/source authorities retain release ownership",
+    "done_when": "Signal/rt_sigreturn paths restore the selected signal frame, alternate stack, register context and configured xstate with the required normal/error behavior and genuine providers on the matching image.",
+    "verification_method": "Join source/config/toolchain/provider identities to the admitted final cohort; inspect actual selected/emitted/link ownership and execute only the original applicable defined functional scenarios after Root admission. Record exact command, result, cleanup and matching artifact identity; skipped/UNKNOWN results do not satisfy this step.",
+    "required_inputs": {
+      "original_requirement": "M14-06-02",
+      "target": "arch/x86_64/kernel/syscall.c",
+      "source_profile": "Original supported x86_64/Rocky profile; exact source/config/toolchain/artifact identities must match the proof scope.",
+      "missing_before_execution": [
+        "Bind correct signal-frame, alternate-stack, context and configured xstate restoration to actual final sources/providers.",
+        "Run matching signal/rt_sigreturn behavior and error-path validation with actual native admission."
+      ]
+    },
+    "dependencies": [
+      "HOLD-GENERIC",
+      "PROVIDER-CLOSURE",
+      "SOURCE-SDK-NATIVE"
+    ],
+    "evidence": [
+      "CAMPAIGN.md"
+    ],
+    "scope_limit": "Requires actual applicable native/source-view/resource ownership admission; not an authorization to execute held work.",
+    "definition_status": "completion_condition_defined; runnable packet waits for named original contract/admission inputs",
+    "execution_profile": "native",
+    "counted_in_requirement_rollup": true
+  },
+  "criterion_source_snapshot": {
+    "path": "/home/holden/mckernel/docs/verification/m14-m15-closure-progress.json",
+    "target_id": "M14-06-02-FUNCTIONAL",
+    "criterion_unchanged": true
+  },
+  "why_this_next_original_case": "One already-defined actual signal/rt_sigreturn normal altstack case has real program/provider/collector/boot source and matching complete image ownership proof. This bounded next handoff is not a claim of complete FUNCTIONAL or a perf/native acceptance.",
+  "deliberate_new_cohort": {
+    "compute_source_commit": "c964be3917c8f4c5031108aa927c84894584b667",
+    "image": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/preserved-c964-a2f00a61-1/build/kernel/mckernel.img",
+      "size": 13349576,
+      "sha256": "a2f00a6105f20642db8ef95fe12ade0873120594531f325ef363a4bb59f0ff8a",
+      "mode": 292
+    },
+    "image_qualification": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/qualification-1/dispatch-owner-correction-1/QUALIFICATION.json",
+      "bytes": 139468,
+      "sha256": "6f67cd0637b3127c8724e78ad259d3b86c536c66868a92dafa0a106f33f68623"
+    },
+    "image_preservation": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/preserved-c964-a2f00a61-1/PRESERVED-COHORT.json",
+      "bytes": 17139,
+      "sha256": "6024f36ad02385f07f3988566c45d712e48e5f4d69395652f7e9c89d14e42b45"
+    },
+    "source30": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/SOURCE-BINDINGS.json",
+      "bytes": 20069,
+      "sha256": "2e1c5b8dc4ae06da90bd4b38c0a76d5556c23717c21bb6c2746b291021e066ce"
+    },
+    "actual_signal_Rust_owners": [
+      {
+        "name": "arch_rt_sigreturn_context_bridge",
+        "final": {
+          "index": 4890,
+          "name": "arch_rt_sigreturn_context_bridge",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1,
+          "value": 18446744073684722352,
+          "bytes": 165
+        },
+        "owner": {
+          "object": "rust/mckernel_rust.o",
+          "input": {
+            "index": 5240,
+            "name": "arch_rt_sigreturn_context_bridge",
+            "binding": "GLOBAL",
+            "type": "FUNC",
+            "visibility": 0,
+            "section_index": 1206,
+            "value": 0,
+            "bytes": 165
+          },
+          "section": ".ltext.arch_rt_sigreturn_context_bridge",
+          "placement": {
+            "address": 18446744073684722352,
+            "bytes": 165
+          }
+        }
+      },
+      {
+        "name": "do_signal",
+        "final": {
+          "index": 5279,
+          "name": "do_signal",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1,
+          "value": 18446744073684808752,
+          "bytes": 2707
+        },
+        "owner": {
+          "object": "rust/mckernel_rust.o",
+          "input": {
+            "index": 4796,
+            "name": "do_signal",
+            "binding": "GLOBAL",
+            "type": "FUNC",
+            "visibility": 0,
+            "section_index": 1490,
+            "value": 0,
+            "bytes": 2707
+          },
+          "section": ".ltext.do_signal",
+          "placement": {
+            "address": 18446744073684808752,
+            "bytes": 2707
+          }
+        }
+      },
+      {
+        "name": "arch_native_signal_bad_frame_bridge",
+        "final": {
+          "index": 2356,
+          "name": "arch_native_signal_bad_frame_bridge",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1,
+          "value": 18446744073684712480,
+          "bytes": 59
+        },
+        "owner": {
+          "object": "rust/mckernel_rust.o",
+          "input": {
+            "index": 5189,
+            "name": "arch_native_signal_bad_frame_bridge",
+            "binding": "GLOBAL",
+            "type": "FUNC",
+            "visibility": 0,
+            "section_index": 1133,
+            "value": 0,
+            "bytes": 59
+          },
+          "section": ".ltext.arch_native_signal_bad_frame_bridge",
+          "placement": {
+            "address": 18446744073684712480,
+            "bytes": 59
+          }
+        }
+      },
+      {
+        "name": "arch_rt_sigreturn_xrstor_bridge",
+        "final": {
+          "index": 4561,
+          "name": "arch_rt_sigreturn_xrstor_bridge",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1,
+          "value": 18446744073684722624,
+          "bytes": 29
+        },
+        "owner": {
+          "object": "rust/mckernel_rust.o",
+          "input": {
+            "index": 5245,
+            "name": "arch_rt_sigreturn_xrstor_bridge",
+            "binding": "GLOBAL",
+            "type": "FUNC",
+            "visibility": 0,
+            "section_index": 1214,
+            "value": 0,
+            "bytes": 29
+          },
+          "section": ".ltext.arch_rt_sigreturn_xrstor_bridge",
+          "placement": {
+            "address": 18446744073684722624,
+            "bytes": 29
+          }
+        }
+      }
+    ],
+    "actual_four104_and_current_debug_constants": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/qualification-1/dispatch-owner-correction-1/ACTUAL-ABI104-AND-PERF-TYPES.json",
+      "bytes": 10547,
+      "sha256": "894014e5e9a78752919c94b6fff526e0cf1c6c1bfc44b81666c99a9faad149b8"
+    },
+    "module_source_commit": "099cb5b874e34a72848e12838d367da62b097db6",
+    "IHK_commit": "8d288b8bd81b50cc3a3f814d949b89bf416a6ec7",
+    "Linux_release": "6.12.0-211.44.1.el10_2",
+    "Linux_config_SHA256": "106055ad26cfc19373b1bc52e1dcc24b3eaa7c48125c451be029898b8f696474",
+    "module_binding": {
+      "path": "/home/holden/mckernel/docs/verification/m14-m15-matching-kbuild-20261110/bindings-qualified/BINDINGS.json",
+      "bytes": 30444,
+      "sha256": "0781087478376977da68666ee6ae257846d53dc5501cfa6b9b3ca170597f26be"
+    },
+    "three_modules": [
+      {
+        "bytes": 1521480,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/modules/ihk.ko",
+        "sha256": "04f5d3e0dbf0c70b7ff5aeb281fabda310751bc45c4916cb582575cf3f81155e"
+      },
+      {
+        "bytes": 13092960,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/modules/ihk-smp-x86_64.ko",
+        "sha256": "ae67f463920ae6267710624139c56ef5dcfa8d1c60f4fc1a42f0e52604066696"
+      },
+      {
+        "bytes": 2374656,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/modules/mcctrl.ko",
+        "sha256": "dc46a4f552776d6f9200cbdc8127882ea3f5d69d119f3e5b00672dce234eabcc"
+      }
+    ],
+    "module_reuse_scope": "Only exact099/IHK8d/Linux6.12/config106055 module/host/kernel ABI provenance is reused. Older100d/c664 compute image prose is not used as this newimage identity.",
+    "old_native_cohort_reused_as_actual_new_operation": false
+  },
+  "one_named_payload": {
+    "cwd": "/case/work",
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "/apps/signal.alternate-repeat"
+    ],
+    "env": {
+      "PATH": "/usr/bin:/bin",
+      "COKERNEL_PATH": "/apps",
+      "LANG": "C",
+      "LC_ALL": "C",
+      "TZ": "UTC"
+    },
+    "oracle": {
+      "stdout_hex": "68616e646c65723d3120696e5f616c743d696e736964650a68616e646c65723d3220696e5f616c743d696e736964650a68616e646c65723d3320696e5f616c743d696e736964650a68616e646c65723d3420696e5f616c743d696e736964650a68616e646c65723d3520696e5f616c743d696e736964650a68616e646c65723d3620696e5f616c743d696e736964650a68616e646c65723d3720696e5f616c743d696e736964650a68616e646c65723d3820696e5f616c743d696e736964650a68616e646c65723d3920696e5f616c743d696e736964650a68616e646c65723d313020696e5f616c743d696e736964650a68616e646c65723d313120696e5f616c743d696e736964650a68616e646c65723d313220696e5f616c743d696e736964650a68616e646c65723d313320696e5f616c743d696e736964650a68616e646c65723d313420696e5f616c743d696e736964650a68616e646c65723d313520696e5f616c743d696e736964650a68616e646c65723d313620696e5f616c743d696e736964650a64656c69766572793d313620616c745f686974733d31360a",
+      "stderr_hex": "",
+      "exit_code": 0
+    },
+    "stdout_limit_bytes": 1024,
+    "stderr_limit_bytes": 1024
+  },
+  "literal_boot_supplier_argv": [
+    "/bin/native-boot",
+    "-R",
+    "-c1",
+    "-m128M@0",
+    "-o0",
+    "-T0"
+  ],
+  "literal_payload_command_display": "/bin/mcexec -t 1 0 /apps/signal.alternate-repeat",
+  "named_scope": "16 sequential SA_ONSTACK deliveries with handler locals inside configured alternate stack, exit0/empty stderr. Does not by itself prove every register/xstate byte, whole normal/error behavior, currentfree or restoration.",
+  "existing_qualified_program_guest_tool_tuple": {
+    "artifact_sources": {
+      "bzImage": {
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/bzImage",
+        "size": 16134144,
+        "sha256": "415b951d9d83f62ec9253eee43ffbd0c6daf3fa02b25618d995d89dc3de928c4",
+        "mode": 420
+      },
+      "mckernel_image": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/preserved-c964-a2f00a61-1/build/kernel/mckernel.img",
+        "size": 13349576,
+        "sha256": "a2f00a6105f20642db8ef95fe12ade0873120594531f325ef363a4bb59f0ff8a",
+        "mode": 292
+      },
+      "mcexec": {
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/production-packet-1/output-1/stage/usr/local/bin/mcexec",
+        "size": 398096,
+        "sha256": "df65517e79c5f0923cd7c1547469f645dd2857648a596349781d5e62c79682b4",
+        "mode": 493
+      },
+      "payload": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/output-1/signal.alternate-repeat",
+        "size": 18736,
+        "sha256": "77e8dfe6f8089f18b22524ad474e057cb061d67501f9e9fdb4f391dd4790f45d",
+        "mode": 493
+      },
+      "native_boot": {
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01p02-production-cutover-1/output-1/stage/usr/local/sbin/mcreboot.sh",
+        "size": 4493400,
+        "sha256": "cd50d3da3f8707a3bb1735da4873f9ac09e8ac6990abfbb423a7a518f4cd7818",
+        "mode": 493
+      },
+      "libc": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/output-1/runtime/lib64/libc.so.6",
+        "size": 2339896,
+        "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+        "mode": 493
+      },
+      "loader": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/output-1/runtime/lib64/ld-linux-x86-64.so.2",
+        "size": 930600,
+        "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b",
+        "mode": 493
+      },
+      "collector": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/output-1/collector",
+        "size": 1029880,
+        "sha256": "9a553f4a33d4ed99b106bc4795bb34e75071dbbf08469115a0765f4f7f364914",
+        "mode": 493
+      }
+    },
+    "artifact_locations": {
+      "bzImage": "assets/bzImage",
+      "mckernel_image": "root/images/mckernel.img",
+      "mcexec": "assets/mcexec",
+      "payload": "assets/signal.alternate-repeat",
+      "native_boot": "root/bin/native-boot",
+      "libc": "root/lib64/libc.so.6",
+      "loader": "root/lib64/ld-linux-x86-64.so.2",
+      "collector": "assets/collector"
+    },
+    "profile": {
+      "name": "native-diagnostic-4vcpu-8192mib",
+      "memory_mib": 8192,
+      "vcpus": 4,
+      "numa_nodes": 2,
+      "append": "console=ttyS0,115200n8 rdinit=/init nokaslr panic=-1 memmap=4K%0x80000-1"
+    },
+    "base_files": 43,
+    "base_total_input_bytes": 81798929,
+    "base_directories": 21,
+    "static_helper30_closure": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+      "bytes": 146175,
+      "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+    },
+    "static_helper30_independent": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-capng-one-provider-review-source-acquisition-max-1/actual-result-1/REVIEW.json",
+      "sha256": "1293bd7e990c9db290a484844993310abc364c33cd1b6b1c34c5d3e3c69598ce"
+    },
+    "qualified_payload": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/qualification-1/RESULT.json",
+      "bytes": 19010,
+      "sha256": "ae2965d9575488919e44ff338d1d4ca7b6268d1c1a93ed02f747c619e09b5055"
+    },
+    "three_signal_ELFs": [
+      {
+        "case": "vector.mxcsr-nested-signal",
+        "artifact": {
+          "bytes": 19352,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/output-1/vector.mxcsr-nested-signal",
+          "sha256": "db18e3d6e9497f86d10605e0e7b52e15f2952cb49076c954931d5e338ca81706"
+        },
+        "mode": "0755",
+        "ELF": {
+          "DT_NEEDED": [
+            "libc.so.6"
+          ],
+          "RPATH_RUNPATH": [],
+          "class": "ELF64",
+          "comment": [
+            "GCC: (GNU) 14.3.1 20251022 (Red Hat 14.3.1-4)"
+          ],
+          "endian": "little",
+          "entry": "0x401230",
+          "interpreter": "/lib64/ld-linux-x86-64.so.2",
+          "machine": "EM_X86_64",
+          "main_address": "0x0000000000401070",
+          "main_bytes": 442,
+          "raw_header_dynamic_dynsym_versym_match_saved_metadata": true,
+          "type": "ET_EXEC"
+        },
+        "literal_future_guest_argv": [
+          "/bin/mcexec",
+          "-t",
+          "1",
+          "0",
+          "/apps/vector.mxcsr-nested-signal"
+        ],
+        "oracle": {
+          "exit_code": 0,
+          "stdout": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/mxcsr-oracle-correction-1/source/expected.stdout",
+            "bytes": 141,
+            "sha256": "2ad8848ffacb1c561e88bdc46649394a51cb289630855e984bdb44b48e5c8093"
+          },
+          "stdout_utf8": "nested=2 inner_mxcsr=00005f80 outer_mxcsr=00003f80 main_mxcsr=00001f80 outer_restored=1 main_restored=1 exceptions_masked=1 tid_ok=1 valid=1\n",
+          "stderr_hex": ""
+        },
+        "stage_and_frontdoor_selection_for_this_additional_case_bound": false,
+        "native_result": null,
+        "scope": "Already compiled/read/qualified ELF/provider and oracle facts; not part of the one named alternate-repeat request and not a new scenario quota."
+      },
+      {
+        "case": "signal.mask-restore",
+        "artifact": {
+          "bytes": 18656,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/output-1/signal.mask-restore",
+          "sha256": "49c21ce0098cddf0778797bca50d4bfa7be4e4513fe7dd34474b614dab871827"
+        },
+        "mode": "0755",
+        "ELF": {
+          "DT_NEEDED": [
+            "libc.so.6"
+          ],
+          "RPATH_RUNPATH": [],
+          "class": "ELF64",
+          "comment": [
+            "GCC: (GNU) 14.3.1 20251022 (Red Hat 14.3.1-4)"
+          ],
+          "endian": "little",
+          "entry": "0x401220",
+          "interpreter": "/lib64/ld-linux-x86-64.so.2",
+          "machine": "EM_X86_64",
+          "main_address": "0x00000000004010a0",
+          "main_bytes": 378,
+          "raw_header_dynamic_dynsym_versym_match_saved_metadata": true,
+          "type": "ET_EXEC"
+        },
+        "literal_future_guest_argv": [
+          "/bin/mcexec",
+          "-t",
+          "1",
+          "0",
+          "/apps/signal.mask-restore"
+        ],
+        "oracle": {
+          "exit_code": 0,
+          "stdout": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/existing-signal-oracles-1/source/signal.mask-restore.expected.stdout",
+            "bytes": 40,
+            "sha256": "dcaa9f1bb23dd9194743e50b308030dbb3bae80ade2729e0605663edd28d1033"
+          },
+          "stdout_utf8": "handled=1 observed_blocked=1 restored=1\n",
+          "stderr_hex": ""
+        },
+        "stage_and_frontdoor_selection_for_this_additional_case_bound": false,
+        "native_result": null,
+        "scope": "Already compiled/read/qualified ELF/provider and oracle facts; not part of the one named alternate-repeat request and not a new scenario quota."
+      },
+      {
+        "case": "signal.altstack-small",
+        "artifact": {
+          "bytes": 18248,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/output-1/signal.altstack-small",
+          "sha256": "9554beb200a168f648ea919dbe2e75b0a63add208d0bee32bebba3b175e425e1"
+        },
+        "mode": "0755",
+        "ELF": {
+          "DT_NEEDED": [
+            "libc.so.6"
+          ],
+          "RPATH_RUNPATH": [],
+          "class": "ELF64",
+          "comment": [
+            "GCC: (GNU) 14.3.1 20251022 (Red Hat 14.3.1-4)"
+          ],
+          "endian": "little",
+          "entry": "0x401170",
+          "interpreter": "/lib64/ld-linux-x86-64.so.2",
+          "machine": "EM_X86_64",
+          "main_address": "0x0000000000401080",
+          "main_bytes": 233,
+          "raw_header_dynamic_dynsym_versym_match_saved_metadata": true,
+          "type": "ET_EXEC"
+        },
+        "literal_future_guest_argv": [
+          "/bin/mcexec",
+          "-t",
+          "1",
+          "0",
+          "/apps/signal.altstack-small"
+        ],
+        "oracle": {
+          "exit_code": 0,
+          "stdout": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/existing-signal-oracles-1/source/signal.altstack-small.expected.stdout",
+            "bytes": 36,
+            "sha256": "8cff46eccdbec3bec7c8d86ee0fe556e54db13904634ed72544e6114de4a8a7b"
+          },
+          "stdout_utf8": "rc=-1 errno=12 enomem=1 unchanged=1\n",
+          "stderr_hex": ""
+        },
+        "stage_and_frontdoor_selection_for_this_additional_case_bound": false,
+        "native_result": null,
+        "scope": "Already compiled/read/qualified ELF/provider and oracle facts; not part of the one named alternate-repeat request and not a new scenario quota."
+      }
+    ],
+    "three_signal_ELF_qualification": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-existing-signal-oracles-review-p04tests-max-1/actual-result-1/QUALIFICATION.json",
+      "bytes": 83089,
+      "sha256": "b5871a3c591bd10901befb4822467131975feca14cc9687d70067169cf9ab6c6"
+    },
+    "three_signal_ELF_independent": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-existing-signal-oracles-review-publicabi-max-1/actual-result-1/REVIEW.json",
+      "bytes": 20998,
+      "sha256": "6195521447ed3e98afd35558161fc0aa4b27536faf0adbe10232742b93d10454"
+    },
+    "same_libc_b058_and_loader0853_provider_reuse": true,
+    "no_app_collector_boot_or_native_function_executed_by_preparer": true
+  },
+  "staging_source_intent": {
+    "inputs": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-functional-a2f-handoff-p03-max-1/GUEST-STAGING-INPUTS.PROPOSED.json",
+      "bytes": 53409,
+      "sha256": "58043c742a8593bb50faccf3a4ea7bfff7bb6e8f30eaa7f18ee06652dd792e1a"
+    },
+    "original_stager_source_ready": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-coherent-operation-source-p04-1/stager-correction-1/SOURCE-READY.NOT-EXECUTED.json",
+      "bytes": 3028,
+      "sha256": "31a2ec6a6b32cf51c8f6f5436e47f4675f3c2265469367c911910583ca19c681"
+    },
+    "original_stager_material_review": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-stager-review-p03-max-1/REVIEW.json",
+      "bytes": 19569,
+      "sha256": "88b628cbe6cd414d344213a78c50afed0208eeeae14b328aaf99f336f4a7aa66"
+    },
+    "source_only_unissued_exact_command": [
+      "/usr/bin/taskset",
+      "-c",
+      "0",
+      "/usr/bin/prlimit",
+      "--as=1073741824",
+      "--core=0",
+      "--cpu=180",
+      "--fsize=268435456",
+      "/usr/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-coherent-operation-source-p04-1/stager-correction-1/candidate/scripts/application-tests/native_diagnostic_stager.py",
+      "--bound-inputs",
+      "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-functional-a2f-handoff-p03-max-1/GUEST-STAGING-INPUTS.PROPOSED.json",
+      "--bound-inputs-sha256",
+      "58043c742a8593bb50faccf3a4ea7bfff7bb6e8f30eaa7f18ee06652dd792e1a",
+      "--output",
+      "/home/holden/mckernel-work/scratch/native-signal-c964-a2f00a61-stage-20261111-1"
+    ],
+    "proposed_output": "/home/holden/mckernel-work/scratch/native-signal-c964-a2f00a61-stage-20261111-1",
+    "execute_now": false,
+    "original_c664_inputs_unchanged": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-coherent-operation-source-p04-1/GUEST-STAGING-INPUTS.json",
+      "bytes": 51472,
+      "sha256": "b4da2056d8ad1f8bd08e8a30eb087df45c424bc6738fe11be073f269c3b53132"
+    },
+    "exact_two_guest_image_targets_changed": [
+      "images/mckernel.img",
+      "usr/local/smp-x86/kernel/mckernel.img"
+    ],
+    "new_preserved_source_mode0444_is_image_data_not_a_guest_program": true
+  },
+  "real_native_frontdoor": {
+    "installed_generation": "/var/lib/mckernel-code-2c4cd062dbec96e05ded7079ee4c772d2d7f5d8c976024428db96ea2681c789f/installed-source-2c4cd062dbec96e05ded7079ee4c772d2d7f5d8c976024428db96ea2681c789f",
+    "actual_code_only_readback": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-readback-publicabi-max-1/producer-resource-reconciliation-1/output-1/RESULT.json",
+      "bytes": 23374,
+      "sha256": "2834c3a01a022a8774131726e980eb37884011bf26d5c01774eb9f3f04fff347"
+    },
+    "actual_code_only_independent": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-readback-review-sourceacq-max-1/producer-resource-reconciliation-1/actual-result-1/QUALIFICATION.json",
+      "bytes": 11481,
+      "sha256": "ebce88777f4f9c79009d16b20082203dc811ef49a1fb5f09a9f49ed9099a8038"
+    },
+    "current_complete_source_review": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-complete-interface-review-sourceacq-max-1/complete-candidate-2/correction-1/REVIEW.json",
+      "bytes": 10345,
+      "sha256": "c14f528e1ee5b628a0b0eec073c58cee3c564bd33e07ffce468ee6c804962505"
+    },
+    "actual_four_HOST_contract_families": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-four-contract-tests-review-p04tests-max-1/correction-1/qualification-1/QUALIFICATION.json",
+      "bytes": 16835,
+      "sha256": "c5646bd1722f33572dae6f7c8fa2b073eb87f3f059675895a2e107ae7d80256c"
+    },
+    "entry": "Registered immutable-source loader -> supervisor_entry.run(config_path,config_sha,root_fd,lease_fd) -> typed native operation path; rootfd/leasefd held by actual watchdog, never fabricated CLI descriptor numbers.",
+    "actual_outer_native_argv": null,
+    "why_outer_not_issued": "Exact fresh Root-pinned config/caps/runtime/owner/source/FD current identities and actual staged manifest do not exist for this a2f attempt. These are precise current owning APIs/outputs to supply, not unspecified external inventory.",
+    "cohort_specific_source_gap": {
+      "source": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-real-binding-source-1/complete-interface-1/complete-candidate-2/correction-1/package/native_resource_admission.py",
+        "bytes": 43352,
+        "sha256": "afe83dc21462e92aee5642d425e65031c4f0d6eaa8d6bc73ee4c60f55775948b"
+      },
+      "actual_installed_source_path": "/var/lib/mckernel-code-2c4cd062dbec96e05ded7079ee4c772d2d7f5d8c976024428db96ea2681c789f/installed-source-2c4cd062dbec96e05ded7079ee4c772d2d7f5d8c976024428db96ea2681c789f/native_resource_admission.py",
+      "actual_installed_readback_row": {
+        "identity": {
+          "device": 66306,
+          "inode": 53521665
+        },
+        "immutable": true,
+        "name": "native_resource_admission.py",
+        "sha256": "afe83dc21462e92aee5642d425e65031c4f0d6eaa8d6bc73ee4c60f55775948b",
+        "size": 43352
+      },
+      "source_predicate": {
+        "constant": "EXPECTED.mckernel_image",
+        "line": 33,
+        "current_value": "c66492d44e2e71a072114f637cd04dff5feb77bd2216c42ef69f7a56944c7a5f",
+        "guard_line": 367,
+        "guard": "for name,sha in EXPECTED.items():need(manifest['artifacts'][name]['sha256']==sha,'matched native artifact: '+name)"
+      },
+      "precise_new_input_needed": "Root assigns/reviews the smallest actual cohort-specific image pin correction to a2f00a6105f20642db8ef95fe12ade0873120594531f325ef363a4bb59f0ff8a and matching source/profile/config data, preserving exact payload/libc/loader/modules, currentFD/immutable roster/account/current-owner/refusal/restoration checks. Normal source catalogue/installer pins depend on changed bytes and must be produced through the existing normal publisher; do not patch immutable installed code or caller-spoof the expected hash.",
+      "owner": "Root sole compositor/publication and native/source authority; existing source owner plus separate independent material reviewer before any deployment/activation.",
+      "implementation_or_release_issued_here": false
+    }
+  },
+  "missing_actual_inputs_with_suppliers": [
+    {
+      "input": "Canonical SCRATCH staging write/provisioning authority for exactly the new output",
+      "actual_counterevidence": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-scratch-provisioning-review-sourceacq-max-1/RESULT.json",
+        "bytes": 14367,
+        "sha256": "4f9b7f79349ef6dd99773e48059f6f865d87c435e59bdf3cea6691c447935af2"
+      },
+      "predicate": "Prior actual failure before payload: os.access('/home/holden/mckernel-work/scratch',os.W_OK) false forUID1000; reached parentUID0/0755. No actual successful scoped provisioning/write receipt supplied here.",
+      "supplying_owner_and_interface": "Actual Root scratch-volume/resource custodian through existing reviewed canonical staging/provisioning ownership route and pending owner-scoped request6790932995. Fresh admission must preserve Scratch21 and actual mount/device/namespace identity.",
+      "missing_result": "Genuine authorized writable canonical parent/exact output ownership and source-stage materialization positive capture; no alternate path/chmod/sudo fallback or retry of unchanged permission rejection.",
+      "satisfied": false
+    },
+    {
+      "input": "Materialized new a2f base/archive/overlay/strict manifest and exact consumed source rows",
+      "source_input": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-functional-a2f-handoff-p03-max-1/GUEST-STAGING-INPUTS.PROPOSED.json",
+        "bytes": 53409,
+        "sha256": "58043c742a8593bb50faccf3a4ea7bfff7bb6e8f30eaa7f18ee06652dd792e1a"
+      },
+      "supplying_owner_and_interface": "Root uses existing stage_bound_inputs after permission and exact changed-input operation review/admission; actual output native-diagnostic-manifest.json/STAGED-REGULAR-SOURCE-ROWS.json/RESULT.json must bind real new source files and guest namespaces.",
+      "missing_result": "No actual base.cpio.gz/derived.cpio.gz/native manifest/effective namespace exists for this new cohort; all actual paths/hashes/source rows must come from the real stage, never filled with oldc664 results.",
+      "satisfied": false
+    },
+    {
+      "input": "New cohort-selected immutable native admission package",
+      "concrete_source_gap": {
+        "source": {
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-real-binding-source-1/complete-interface-1/complete-candidate-2/correction-1/package/native_resource_admission.py",
+          "bytes": 43352,
+          "sha256": "afe83dc21462e92aee5642d425e65031c4f0d6eaa8d6bc73ee4c60f55775948b"
+        },
+        "actual_installed_source_path": "/var/lib/mckernel-code-2c4cd062dbec96e05ded7079ee4c772d2d7f5d8c976024428db96ea2681c789f/installed-source-2c4cd062dbec96e05ded7079ee4c772d2d7f5d8c976024428db96ea2681c789f/native_resource_admission.py",
+        "actual_installed_readback_row": {
+          "identity": {
+            "device": 66306,
+            "inode": 53521665
+          },
+          "immutable": true,
+          "name": "native_resource_admission.py",
+          "sha256": "afe83dc21462e92aee5642d425e65031c4f0d6eaa8d6bc73ee4c60f55775948b",
+          "size": 43352
+        },
+        "source_predicate": {
+          "constant": "EXPECTED.mckernel_image",
+          "line": 33,
+          "current_value": "c66492d44e2e71a072114f637cd04dff5feb77bd2216c42ef69f7a56944c7a5f",
+          "guard_line": 367,
+          "guard": "for name,sha in EXPECTED.items():need(manifest['artifacts'][name]['sha256']==sha,'matched native artifact: '+name)"
+        },
+        "precise_new_input_needed": "Root assigns/reviews the smallest actual cohort-specific image pin correction to a2f00a6105f20642db8ef95fe12ade0873120594531f325ef363a4bb59f0ff8a and matching source/profile/config data, preserving exact payload/libc/loader/modules, currentFD/immutable roster/account/current-owner/refusal/restoration checks. Normal source catalogue/installer pins depend on changed bytes and must be produced through the existing normal publisher; do not patch immutable installed code or caller-spoof the expected hash.",
+        "owner": "Root sole compositor/publication and native/source authority; existing source owner plus separate independent material reviewer before any deployment/activation.",
+        "implementation_or_release_issued_here": false
+      },
+      "supplying_owner_and_interface": "Existing normal fixed30 code publisher/catalogue/immutable source loader + Root integration, independent source/operation review and actual code-only readback, retaining current actor/credit/resource UNKNOWN.",
+      "missing_result": "Current2c4c installed source remains exact oldc664 admission; availability/readback is positive code-only proof, not an a2f or runtime grant.",
+      "satisfied": false
+    },
+    {
+      "input": "Authority-ordered same-Root installed-controller transition",
+      "source_proposal": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/TRANSITION.PROPOSED.json",
+        "bytes": 20050,
+        "sha256": "017c353db9f76fa3a983a97cff80a5210003d59c541dcfdf7a12acc94017fa53"
+      },
+      "independent_source_disposition": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-review-sourceacq-max-1/bootstrap-1/REVIEW.json",
+        "bytes": 11318,
+        "sha256": "abe3764e1685670150402fffe698376398f863cd908dd9806d575eefd17bd9a6"
+      },
+      "supplying_owner_and_interface": "Actual current owning Root/guardian through existing normal stop/checkpoint/positive watcher-worker-server/model-lease closure and a genuinely later authorized normal start with the same Root/goal/thread/invocation/credit-run budget.",
+      "missing_result": "Healthy live controller has not adopted the canonical tested native current-owner component; current supported interfaces have no transparent healthy source-adoption caller. Existing service.start returns EXISTING_OWNER; guardian healthy intent is already_supervised, recovery remains supervisor_unavailable-only. No force restart/monkeypatch/fake stop-resume or synthetic recovery. Source-only user7e4b is not a stop/start issue.",
+      "satisfied": false
+    },
+    {
+      "input": "Fresh actual one-shot native claim/current-owner/current-free/source eligibility",
+      "supplying_owner_and_interface": "Root actual native resource owner uses registered immutable loader -> supervisor_entry.run(config_path,config_sha,root_fd,lease_fd); typed VerifiedNativeRequest/RootLease -> NativeAdmission/CurrentOwnerSession -> real cgroup profile/current membership+memory+pids/FLOCK -> NativeSourceCustody.",
+      "exact_unbound_fields": [
+        "new operation nonce and bootID",
+        "actual Root-pinned one-shot config + held root/leaseFD identities",
+        "watchdog exactPID/birth",
+        "actual current owner controller socket/PID/birth/current source/session",
+        "actual same7c6 account/service/stop/hold/current cumulative credit result",
+        "native scope/current reservation reconciliation + real per-operation CPU2-5/12GiB allowance",
+        "actual current-empty cgroup membership+memory/pids counters and current development lock ownership",
+        "actual source acquisition/view/custody eligibility for c964/a2f and matching modules/programs",
+        "actual monotonic/boottime/UTC caps with native360deadline/429startwindow and retirement reserve"
+      ],
+      "missing_result": "No claim/current-free/account/source observation is issued or inferred by this handoff. Historical source/native/Scratch/cleanup UNKNOWNs retain their real owners; no old nonce or missing path is a free proof.",
+      "satisfied": false
+    },
+    {
+      "input": "Positive owned completion/source restoration/resource restoration for the actual new attempt",
+      "supplying_owner_and_interface": "Actual same watchdog/native owner via DiagnosticOwner positive child/VM/client/family/streams/terminal removal, NativeCompletion, NativeSourceCustody.restore and NativeParentRetirement; Root final original-condition review.",
+      "missing_result": "Exact command/oracle/actual selected image+providers, all cleanup/direct waits/current owner acknowledgments and prior source flags restoration must be measured. Every unresolved close/cleanup/source/native result remains UNKNOWN and held; no success from absence.",
+      "satisfied": false
+    }
+  ],
+  "remaining_original_coverage": "The three existing additional cases provide finite full64mask, undersized-altstack unchanged-state and nestedMXCSR/TID observations at known static scope; they are not currently selected by this one named operation or claimed executed. Full original frame/register-context/configured-xstate normal/error scope remains exactly the original criterion; reuse matching old proofs only and derive any genuinely unmatched obligation without an invented scenario quota.",
+  "preserved_holds": {
+    "HOLD_GENERIC_and_exec_equivalent_replay": true,
+    "native_and_source_and_Scratch21_UNKNOWNs": true,
+    "permission_rejection_4f9_and_canonical_scratch_ungranted": true,
+    "healthy_current_Root_guardian_run_untouched": true,
+    "same_credit_run_id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+    "cumulative_budget": "[REDACTED_PRIVATE_CREDIT_CAP] unchanged",
+    "no_new_nonce_claim_lease_caps_allowance_or_state": true,
+    "native_profile": "Existing guest4vCPU/8192MiB/2NUMA inside separately held nativeCPU2-5/12GiB; no native allocation/admission granted",
+    "HOST_source_only_scope": "No scheduled compile/test/materialization/native job or resource claim; later staging requires its exact reviewed fresh aggregate HOST admission."
+  },
+  "original_FUNCTIONAL_DEFAULT_parent_or_milestone_credit": false,
+  "canonical_cache_control_account_controller_native_actions": false,
+  "next_owner_action": "Root assigns only the minimal literal a2f native admission/profile/catalogue binding source delta for independent review while actual scratch/normal-transition/native-owner suppliers retain their existing gates; stage/run only after genuine scoped inputs, exact operation review and fresh admission. No implementation or gate release is self-authorized by this handoff."
+}

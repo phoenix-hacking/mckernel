@@ -1,0 +1,50 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-stage-preparation-source-1/bind_retirement_collector.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-stage-preparation-source-1/bind_process235_collector.py
+@@ -30,16 +30,16 @@
+  need(m.__file__==r['path'] and m.__spec__.origin==r['path'],'literal import context');return m
+ 
+ def check_collector(m,receipt,p,facts,profile):
+- need(m['case_id']==facts['case_id']==profile['case_id']=='startup.argv-empty','compiled case id')
+- need(m['payload']['argv']==facts['payload_argv']==profile['argv']==['/bin/mcexec','-t','1','0','app','A','','B'],'actual compiled collector argv')
++ need(m['case_id']==facts['case_id']==profile['case_id']=='P-M06-01-process-exec-wait-235B','compiled case id')
++ need(m['payload']['argv']==facts['payload_argv']==profile['argv']==['/bin/mcexec','-t','1','0','/apps/app'],'actual compiled collector argv')
+  need(m['payload']['cwd']==facts['payload_cwd']==profile['cwd']=='/case/work','compiled cwd')
+  need(m['payload']['env']==facts['payload_env']==profile['env']=={'PATH':'/usr/bin:/bin','COKERNEL_PATH':'/apps'},'compiled twoenv')
+- need(m['payload']['oracle']==facts['oracle']==profile['oracle'] and len(bytes.fromhex(facts['oracle']['stdout_hex']))==91,'unchanged91B oracle')
++ need(m['payload']['oracle']==facts['oracle']==profile['oracle'] and len(bytes.fromhex(facts['oracle']['stdout_hex']))==235,'unchanged235B oracle')
+  need(type(p['qualified_actual_test_count']) is int and p['qualified_actual_test_count']>0 and facts['actual_test_count']==p['qualified_actual_test_count'] and facts['ignored']==facts['filtered']==0,'exact actual new qualification count; no ignored/filtered')
+  need(facts['source_caseprofile']['sha256']==p['compiled_collector_profile']['sha256'],'qualified compiled profile join')
+  expected=p['collector'];need(m['staging']['collector']==expected,'exact collector selection')
+  need(facts['actual_collector_artifact']['path']==expected['path'] and facts['actual_collector_artifact']['sha256']==expected['sha256'] and facts['actual_collector_artifact']['bytes']==expected['size'],'actual artifact qualification')
+- need(facts['startup_boot_argv']==profile['startup_boot_argv']==['/bin/native-boot'],'original boot argv')
++ need(facts['startup_boot_argv']==profile['startup_boot_argv']==['/bin/native-boot','hidos','allow_oversubscribe'],'original boot argv')
+  for name,v in [('stdout_limit_bytes',1024),('stderr_limit_bytes',1024)]:need(m['payload'][name]==facts['limits'][name]==profile[name]==v,'unchanged '+name)
+  need(facts['limits']['payload_timeout_ms']==profile['payload_timeout_ms']==10000 and facts['limits']['post_reap_retirement_ms']==profile['post_reap_retirement_ms']==5000,'original deadlines')
+  if receipt is not None:
+@@ -52,13 +52,13 @@
+  for r in p['references'].values():checked(r)
+  for r in [p['collector'],p['selected_executor'],p['source_base'],p['payload'],p['image'],*p['modules']]:checked(r)
+  facts=data(p['compiled_collector_binding_facts']);profile=data(p['compiled_collector_profile']);ad=data(p['references']['Root_collector_adoption'])
+- need(ad['artifact']['sha256']==p['collector']['sha256'] and ad['collector_binding_facts']['sha256']==p['compiled_collector_binding_facts']['sha256'],'Root adopted correct producer qualification')
++ need(ad['actual_artifact']['sha256']==p['collector']['sha256'] and ad['actual_binding_facts']['sha256']==p['compiled_collector_binding_facts']['sha256'],'Root adopted correct producer qualification')
+  check_collector(p['manifest_template'],None,p,facts,profile)
+- old=data(p['references']['failed_be6e_manifest']);expected=copy.deepcopy(old);expected['staging']['collector']=p['collector'];expected['staging']['derived_initramfs']=None;expected['staging']['overlay_manifest']=None
++ old=data(p['references']['original_case_source_plan'])['cases']['strict235']['manifest_proposal'];expected=copy.deepcopy(old);expected['staging']['collector']=p['collector'];expected['staging']['derived_initramfs']=None;expected['staging']['overlay_manifest']=None
+  need(expected==p['manifest_template'],'only collector and unbound derived receipt inputs differ')
+  need(all(p[k] is None for k in ['current_free','current_ledger','nonce','source_authority','native_release','actual_compose_receipt','actual_manifest','actual_binding']),'future current/grant/actual outputs null')
+- diagnostic=module('literal_correct_startup_diagnostic',p['references']['diagnostic']);diagnostic._validate_payload_argv(p['manifest_template']['payload']['argv']);diagnostic._validate_cleanup_profile(p['manifest_template']['cleanup_profile'],p['modules'])
+- owner=module('literal_correct_startup_owner',p['references']['normal_owner']);need(callable(owner._manifest_identity) and callable(owner._manifest_outside_writable_parent),'original owner data API')
++ diagnostic=module('literal_original235_diagnostic',p['references']['diagnostic']);diagnostic._validate_payload_argv(p['manifest_template']['payload']['argv']);diagnostic._validate_cleanup_profile(p['manifest_template']['cleanup_profile'],p['modules'])
++ owner=module('literal_original235_owner',p['references']['normal_owner']);need(callable(owner._manifest_identity) and callable(owner._manifest_outside_writable_parent),'original owner data API')
+  return p,facts,profile,diagnostic,owner
+ 
+ def bind(p,facts,profile,diagnostic,owner,receipt_path,receipt_sha):
+@@ -76,7 +76,7 @@
+  # Original owner requires a scratch manifest, outside its real writable parent.
+  # Root must first ordinary-stage byte-exact manifest to fresh scratch, then use
+  # --check-existing-root-scratch-stage below. Never call owner API on REPO manifest.
+- binding=dict(scope=p['scope'],status='ACTUAL_ROOT_COMPOSED_CORRECT_RUST_STARTUP_MANIFEST_BOUND_NOT_RUNTIME_RELEASE',manifest=mr,overlay=output,actual_receipt=r,collector=p['collector'],compiled_profile=p['compiled_collector_profile'],compiled_facts=p['compiled_collector_binding_facts'],Root_collector_adoption=p['references']['Root_collector_adoption'],normal_owner=p['references']['normal_owner'],diagnostic=p['references']['diagnostic'],loader_acceptance=p['references']['loader_acceptance'],current_free=None,current_ledger=None,nonce=None,source_authority=None,native_release=None,execution_authority=False,preserved_failure=p['preserved_failure'])
++ binding=dict(scope=p['scope'],status='ACTUAL_ROOT_COMPOSED_ORIGINAL235_RUST_COLLECTOR_MANIFEST_BOUND_NOT_RUNTIME_RELEASE',manifest=mr,overlay=output,actual_receipt=r,collector=p['collector'],compiled_profile=p['compiled_collector_profile'],compiled_facts=p['compiled_collector_binding_facts'],Root_collector_adoption=p['references']['Root_collector_adoption'],normal_owner=p['references']['normal_owner'],diagnostic=p['references']['diagnostic'],loader_acceptance=p['references']['loader_acceptance'],current_free=None,current_ledger=None,nonce=None,source_authority=None,native_release=None,execution_authority=False,preserved_failure=p['preserved_failure'])
+  with binding_path.open('x') as f:json.dump(binding,f,indent=2,sort_keys=True);f.write('\n')
+  return binding
+ 

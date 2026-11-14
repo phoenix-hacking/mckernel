@@ -1,0 +1,176 @@
+{
+  "application_acceptance": false,
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-B",
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/ndcal-1",
+    "--nonce",
+    "5aab3db8a4bd4ca6857ad0158055b40d",
+    "--owner-sha256",
+    "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+    "--manifest",
+    "/home/holden/mckernel-work/scratch/memory-calloc-zero-current942-manifest-20261017-1.json",
+    "--manifest-sha256",
+    "589a4a8616691093d26b275bba498bd84f646bd8359db6b17f4fb7bb6d1e000d"
+  ],
+  "author": "/root/signal_guest_binding",
+  "candidate_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+  "draft_oracle_caveat": [
+    "Exact stdout serialization is prepared as line list; execution capture may later switch to binary/structured record"
+  ],
+  "execution_count": 0,
+  "formal_case_credit": false,
+  "manifest": {
+    "path": "/home/holden/mckernel-work/scratch/memory-calloc-zero-current942-manifest-20261017-1.json",
+    "sha256": "589a4a8616691093d26b275bba498bd84f646bd8359db6b17f4fb7bb6d1e000d",
+    "size": 5775
+  },
+  "next_task": "Dispatcher evaluates preceding signal/memory results, creates fresh parent identity, joins current prerequisites and obtains fresh one-shot execution review/release before invoking proposed argv.",
+  "nonce": "5aab3db8a4bd4ca6857ad0158055b40d",
+  "oracle": {
+    "exit_code": 0,
+    "stderr_hex": "",
+    "stdout_hex": "63616c6c6f632d7a65726f2073697a653d31207374617475733d504153530a63616c6c6f632d7a65726f2073697a653d34303935207374617475733d504153530a63616c6c6f632d7a65726f2073697a653d34303936207374617475733d504153530a63616c6c6f632d7a65726f2073697a653d34303937207374617475733d504153530a63616c6c6f632d7a65726f2073697a653d3635353533207374617475733d504153530a63616c6c6f632d7a65726f2073697a653d31303438353736207374617475733d504153530a",
+    "stdout_utf8": "calloc-zero size=1 status=PASS\ncalloc-zero size=4095 status=PASS\ncalloc-zero size=4096 status=PASS\ncalloc-zero size=4097 status=PASS\ncalloc-zero size=65553 status=PASS\ncalloc-zero size=1048576 status=PASS\n"
+  },
+  "other_monitor_endpoints": [],
+  "owner": {
+    "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+    "sha256": "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+    "size": 58828
+  },
+  "parent": {
+    "actual_parent_identity": null,
+    "identity_admission": "Dispatcher must create and bind fresh device/inode/mode/uid/gid during separate admission; this proposal does not create or reserve the path.",
+    "name_absent_at_preparation_lookup": true,
+    "path": "/home/holden/mckernel-work/scratch/ndcal-1",
+    "status": "PLANNED_NOT_CREATED"
+  },
+  "payload_contract": {
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "app",
+      "A",
+      "",
+      "B"
+    ],
+    "cwd": "/case/work",
+    "env": {
+      "COKERNEL_PATH": "/apps",
+      "PATH": "/usr/bin:/bin"
+    },
+    "oracle": {
+      "exit_code": 0,
+      "stderr_hex": "",
+      "stdout_hex": "63616c6c6f632d7a65726f2073697a653d31207374617475733d504153530a63616c6c6f632d7a65726f2073697a653d34303935207374617475733d504153530a63616c6c6f632d7a65726f2073697a653d34303936207374617475733d504153530a63616c6c6f632d7a65726f2073697a653d34303937207374617475733d504153530a63616c6c6f632d7a65726f2073697a653d3635353533207374617475733d504153530a63616c6c6f632d7a65726f2073697a653d31303438353736207374617475733d504153530a"
+    },
+    "stderr_limit_bytes": 1024,
+    "stdout_limit_bytes": 1024
+  },
+  "planned_execution_count": 1,
+  "preparation_checks": {
+    "address_space_limit_bytes": 1073741824,
+    "artifact_corpus_rehashed": false,
+    "backend_or_prepare_attempt_called": false,
+    "cpu_affinity": [
+      7
+    ],
+    "generated_qmp_path_within_107_bytes": true,
+    "live_preflight_performed": false,
+    "manifest_hash_matches_expected": true,
+    "owner_hash_matches_current_pin": true,
+    "selected_reads_only": true
+  },
+  "prerequisites": {
+    "current_image_cleanup_and_retirement_authority": {
+      "inherited_signal_prerequisites_not_asserted": true,
+      "status": "DISPATCHER_MUST_JOIN_CURRENT_ACCEPTED_EVIDENCE"
+    },
+    "final_execution_release": {
+      "status": "PENDING"
+    },
+    "fresh_parent_identity": {
+      "status": "PENDING"
+    },
+    "independent_exact_execution_review": {
+      "status": "PENDING"
+    },
+    "live_preflight": {
+      "status": "PENDING_NOT_RUN"
+    },
+    "memory_diagnostic_order": {
+      "runtime_results_observed_by_this_task": false,
+      "status": "PENDING_AFTER_SIGNAL"
+    },
+    "signal2_result_and_positive_retirement": {
+      "signal2_result_observed_by_this_task": false,
+      "status": "PENDING_DISPATCHER_ADMISSION"
+    }
+  },
+  "production_acceptance": false,
+  "profile": {
+    "cleanup_timeout_seconds": 15,
+    "cpus": 4,
+    "cpuset": "2-5",
+    "guest_memory_mib": 8192,
+    "guest_numa_nodes": 2,
+    "guest_timeout_seconds": 300,
+    "guest_vcpus": 4,
+    "heavy_operations": 1,
+    "mckernel_cpus": 1,
+    "mckernel_memory_mib": 128,
+    "memory": 12884901888,
+    "memory_swap": 12884901888,
+    "network": "none",
+    "payload_timeout_seconds": 10,
+    "pids": 512
+  },
+  "proposal_structure_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/signal-mask-restore-current942-execution-proposal-20261017-2.json",
+    "sha256": "7cedc92dea05f6cd7ebc321a7f06b3aab897cf6820c8beae92076f06260c51aa",
+    "size": 4278
+  },
+  "runtime_release": false,
+  "schema": "mckernel.memory-calloc-zero-execution-proposal.v1",
+  "scope": "Exactly one future diagnostic under unchanged profile, pending preceding diagnostic outcomes and fresh dispatcher admission. No parent creation, runtime, source changes, staging replay, compiler, root, mounts, live preflight, root lock, Git or acceptance promotion.",
+  "semantic_limits": [
+    "Exact stdout serialization is prepared as line list; execution capture may later switch to binary/structured record"
+  ],
+  "source_review_context": {
+    "recorded_owner_source_review": {
+      "actual_test_exit": 0,
+      "decision": "PASS_SOURCE_INTEGRATED_QMP_ADMISSION",
+      "diagnostic_sha256": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e",
+      "owner_sha256": "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+      "reviewer": "/root/image_retirement_review",
+      "test_sha256": "6d7fdebda5a064dfbf8f1ddac8e4a771f9db237c575e2475bf643190560a8818",
+      "tests_passed": 76
+    },
+    "scope": "Prior signal2 source-review context only; no independent execution admission for this proposed case.",
+    "source": "/home/holden/mckernel/docs/verification/evidence/signal-mask-restore-current942-execution-proposal-20261017-2.json"
+  },
+  "staging_evidence": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/memory-calloc-zero-current942-staging-20261017-1.json",
+    "sha256": "c24d80b88215923ccdfaab6d398082b4f1db94b10c40bf2fe37a6941d3b57e4f",
+    "size": 6988
+  },
+  "status": "PREPARATION_ONLY_PENDING_SIGNAL_RESULT_AND_FRESH_ADMISSION",
+  "task_id": "memory-calloc-zero-current942-execution-proposal-20261017-1",
+  "unix_monitor_endpoints": [
+    {
+      "encoded_bytes": 92,
+      "encoding": "os.fsencode on selected UTF-8/ASCII path",
+      "generated_path_only": true,
+      "generation": "planned parent / attempt-<32hexnonce> / qmp.sock",
+      "max_bytes": 107,
+      "path": "/home/holden/mckernel-work/scratch/ndcal-1/attempt-5aab3db8a4bd4ca6857ad0158055b40d/qmp.sock"
+    }
+  ]
+}

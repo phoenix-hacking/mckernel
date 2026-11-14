@@ -1,0 +1,16 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "history": "One initial observer assertion misclassified legitimate GCC9 COMMON C tentative symbol as BSS-only. Preserve originalFAIL. This one correction accepts one C or B data provider; all other assertions unchanged.",
+  "initial_result_sha256": "d66596620181b7f966812395bfbe84b47e6a249326726d3555b1c9d09d630bd8",
+  "correction_source_sha256": "66d73e9a94667c2f382300d77c52483d442bad88ef4e8a59299e86b75a1d20e7",
+  "compiler_rerun": false,
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-unmap-body-1/production-consumer-1/correction1/run_remaining.py"
+  ]
+}

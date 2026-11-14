@@ -1,0 +1,96 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "LIVE_CONTINUED_CAMPAIGN_GUARDIAN_20MIN_STEERING_AND_RETAINED_PHONE",
+  "at": "2026-10-28T19:16:28.110248+00:00",
+  "thread_id": "01a183ec-72e5-7400-8f48-b4efb8725520",
+  "phase": "running",
+  "goal_status": "active",
+  "actors": {
+    "watcher": {
+      "pid": 2109395,
+      "start": "101211669",
+      "ppid": 1311,
+      "state": "S"
+    },
+    "worker": {
+      "pid": 2109397,
+      "start": "101211677",
+      "ppid": 2109395,
+      "state": "S"
+    },
+    "server": {
+      "pid": 2109399,
+      "start": "101211685",
+      "ppid": 2109397,
+      "state": "S"
+    },
+    "guardian": {
+      "pid": 2111552,
+      "start": "101236067",
+      "ppid": 1311,
+      "state": "S"
+    },
+    "monitor": {
+      "pid": 2111966,
+      "start": "101243270",
+      "ppid": 2111963,
+      "state": "R"
+    },
+    "phone": {
+      "pid": 1894242,
+      "start": "96505809",
+      "ppid": 1311,
+      "state": "S"
+    }
+  },
+  "auxiliary_leases_held": {
+    "guardian": true,
+    "monitor": true,
+    "phone": true
+  },
+  "guardian_packet_sha256": "5bc656cc12b97c2ec5f53312a26e8ef800e45d5451c1f0b5d084576d95ff1b22",
+  "monitor_source_sha256": "70abfa92f948e69ced400bc303d028f412e642f207754390bf77000f2f2c6ec0",
+  "monitor_arm_sha256": "da012b9ef274b6bb97f2da565769b0db53f849b651ba3f62e33a2aef32e798e7",
+  "steering_interval_seconds": 1200,
+  "monitor_last_status": "queued",
+  "monitor_instruction_id": null,
+  "earliest_control_caps": {
+    "at": "2026-10-28T19:12:51.217582+00:00",
+    "deadline_epoch": 1793253600,
+    "monotonic_deadline": 1035704.5689393478,
+    "boot_deadline": 1051042.6959879305,
+    "original_caps": {
+      "boot_deadline": 1051043.6959931096,
+      "monotonic_deadline": 1035705.5689454618
+    },
+    "derivation": {
+      "boot_sample": 1012215.913556548,
+      "monotonic_before": 996877.786503322,
+      "monotonic_after": 996877.786507965,
+      "actual_initial_watch_clock": {
+        "boot_deadline": 1051043.6959931096,
+        "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+        "bootstrap_packet_sha256": "d003763177001a17ae1bc5cda6baa26b67ce9f1f5f942befe45af69dd4e29bfd",
+        "deadline": 1793253600.0,
+        "watcher_cutoff_lower": 1035704.5689393478,
+        "watcher_cutoff_upper": 1035704.5702440687,
+        "watcher_pid": 2109395,
+        "watcher_start": "101211669"
+      }
+    }
+  },
+  "credit_budget": {
+    "schema_version": 2,
+    "id": "7f4af94a83b14cc08f97401f5891d965",
+    "budget": "57774.852125",
+    "initial_balance": "57774.8521250000",
+    "minimum_balance": "52079.8011050000",
+    "last_balance": "52079.8011050000",
+    "spent": "22812.3311000000",
+    "remaining": "34962.5210250000",
+    "scope": "Cumulative account-wide observed balance decreases; increases never restore allowance; stale snapshots may count conservatively; in-flight charges can settle later"
+  },
+  "original_window_unchanged_sha256": "0bfb54bff698f53c744d797e2f57db94db08cd20120da70566d555fa6c1e320e",
+  "log_dir": "/home/holden/mckernel/.git/os-autopilot/runs/20261028T191112Z-cf989001",
+  "native_release": false
+}

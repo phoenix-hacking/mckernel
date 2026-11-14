@@ -1,0 +1,26 @@
+{
+  "status": "PROPOSAL_ONLY_NOT_EXECUTED",
+  "functional_scope": "Supported functional OS/apps plus live compute-C retirement into Rust/reviewed assembly. Private diagnostic body preservation only.",
+  "owner_write_set": "Fresh disjoint test-output namespace only; consume private mcctrl_process.diagnostic.rs and exact original b1b3a7f5 read-only. Root owns compiler/profile/runtime approval, Git and acceptance.",
+  "reviewed_profile_required": "Existing reviewed unprivileged ordinary Rust compile/test profile, disjoint output, aggregate resource grant; no root/module/guest/native execution or default activation.",
+  "actual_body_extraction": "Extract fn adopt_current_fork_v4 from both exact sources by balanced Rust braces. Compile both unchanged bodies in separate modules with equivalent injected dependency stubs. Do not reimplement the state machine. Only remove pub(super) if harness module visibility requires it.",
+  "comparison_oracle": "For every vector, both bodies return identical Result/errno and dependency call-order trace, pending-reservation state, reservation Drop count, IHK call count and callback/publication effects. Diagnostic body adds exactly one expected-stage line only on failure and none on success.",
+  "vectors": [
+    "valid LP64 descriptor with successful real stubbed call/callback",
+    "valid compat12 descriptor identical low32 geometry interpretation",
+    "root0, unalignedroot, unalignedstart, length0, unalignedlength, endoverflow (all geometry/EINVAL)",
+    "process lookup error (process)",
+    "current identity acquisition error and mismatchedidentity (current-identity)",
+    "pending reservation compare_exchange refusal (pending-reservation/EBUSY)",
+    "alreadyregistered refusal (existing-registration/EINVAL)",
+    "inherited mirror error (inherited-registration)",
+    "parent slot/generation/currentPID mismatch (parent-identity/EACCES)",
+    "child acquisition error (child-acquire)",
+    "IHKadopt returns -22, -13, -71 (ihk-adopt, same errno)",
+    "IHKreturns0 but callback missing or publicationmissing (callback-publication/EPROTO)",
+    "stage diagnostics show decoded exact LP64 or compat geometry; child_pid0 before acquisition, actualacquired PID afterwards"
+  ],
+  "next_compile": "One full affected Rust module compile using the latest correct SDK source closure with this explicitly reviewed additional mcctrl_process overlay; prove existing definitions remain unique and unresolved references absent. This compile is separate from actualnative positivePPD/child acceptance.",
+  "stop_condition": "One failed candidate plus one bounded correction for the diagnostic-test family; retain both failures and escalate if unchanged. Do not replay capacityblocked c75 source command or native attempt unchanged.",
+  "remaining_native_missing_fact": "If stage=ihk-adopt, distinguish exact provider failure before another privileged attempt by adding equivalent existing-provider error-stage metadata; one generic -22 cannot establish callback/MM/receipt cause."
+}

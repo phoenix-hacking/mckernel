@@ -1,0 +1,127 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ROOTREADY_LEAF_CURRENT_WALK_CONSUMER_SUCCESSOR_AWAIT_CPU6_GRANT",
+  "recipe": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-mem-next/EXACT-SINGLE-ENTRY-RECIPE.CURRENT-WALK-CONSUMER.NOT-EXECUTED.json",
+    "sha256": "f0e9110d04534a777b1851de6d0a69d5060af1a8aa88492d1ac3136162656c09",
+    "bytes": 71455
+  },
+  "original_recipe_preserved": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-mem-next/EXACT-SINGLE-ENTRY-RECIPE.NOT-EXECUTED.json",
+    "sha256": "ff08e7355d045edd15ceadb29b8a44c2c2d2204fa7a740939eeb46302c2099c6",
+    "bytes": 69171
+  },
+  "original_source_handoff_preserved": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-mem-next/SOURCE-READY-HANDOFF.json",
+    "sha256": "f8386e8ccc086984e17592ee7ea85958a8acdd3db54f3ddcb1029b8bc53055b8",
+    "bytes": 3693
+  },
+  "source_patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-mem-next/PRIVATE-SINGLE-TLB-ENTRY.patch",
+    "sha256": "8c7961d8329fae0e8b0e6ab7407cc31389335d2671efff3dc06d37bb0afa3958",
+    "bytes": 1521
+  },
+  "preimages": {
+    "kernel/mem.c": {
+      "path": "/home/holden/mckernel/kernel/mem.c",
+      "sha256": "7498e7c930a55bdcde5ecd12f4498c47c5573d690355c8f09a7b9f957ffe00a2",
+      "bytes": 226712
+    },
+    "kernel/rust/mem_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+      "sha256": "c0e7f8bd0b117c9b4e0a4e3690ef5ed5cb01bdc6b16f7225de973eba039d72d5",
+      "bytes": 202708
+    }
+  },
+  "postimages": {
+    "kernel/mem.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-mem-next/candidate/kernel/mem.c",
+      "sha256": "638788c79fb96c1edb229d016fa678a02c0fcde6e1b56c7fa45d33b5490354d4",
+      "bytes": 226806
+    },
+    "kernel/rust/mem_helpers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-mem-next/candidate/kernel/rust/mem_helpers.rs",
+      "sha256": "4635a252332cd369e36384f04a414e2b4c2d79726a4f95caafcf1d3ed1a56b4d",
+      "bytes": 203495
+    }
+  },
+  "actual_current_arch_consumer": {
+    "path": "/home/holden/mckernel/arch/x86_64/kernel/memory.c",
+    "sha256": "0da70d7cbc80dc96fe4a6643374c8b0e00c0b3dc02796551115d3d97cf0e3889",
+    "bytes": 86744
+  },
+  "actual_retained_GCC9_arch_object": {
+    "ctime_ns": 1792794481261437420,
+    "device": 66306,
+    "gid": 1000,
+    "inode": 56001249,
+    "mode": "0o600",
+    "mtime_ns": 1792794481261437420,
+    "nlink": 1,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-walk-l4/production-consumer-preparation-1/output-1/memory.c.o",
+    "sha256": "b1a4b2c0b66da8fba62043c0efa9c637c69197c20945729ebc79e39692a261e0",
+    "size": 155784,
+    "uid": 1000
+  },
+  "retained_object_content_not_rehashed": true,
+  "accepted_walk_full78_and_CTU": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-walk-l4/production-consumer-preparation-1/ACTUAL-PRODUCTION-CONSUMER-RECEIPT.json",
+    "sha256": "698ba7dc5bda25827fcaa35da21db3174d1673c0fadfedf08d88bf4cddd731e3",
+    "bytes": 17554
+  },
+  "actual_current_consumer_relocation": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-walk-l4/production-consumer-preparation-1/actual-attempt-1/07-memory-relocations/stdout",
+    "sha256": "20ee47541062cdf00da582e3682fb86036d2afbd33089dd0971635924bd5825c",
+    "bytes": 315105
+  },
+  "actual_scalar_relocation_lines": [
+    "00000000000018b5  000001090000001f R_X86_64_PLTOFF64      0000000000000000 remote_flush_tlb_cpumask + 0",
+    "0000000000002d35  0000003500000019 R_X86_64_GOTOFF64      00000000000018a0 x86_pt_split_flush_bridge + 0"
+  ],
+  "current78_source_attribution": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-mem-next/CURRENT78-COHERENCE.ATTRIBUTION-ONLY.json",
+    "sha256": "9c7bc59d7d00c324d10e3bdaf818ba229a163902665f5db6b9d71b789fb75b69",
+    "bytes": 22452
+  },
+  "commands_unchanged_count": 15,
+  "only_argv_data_changes": [
+    {
+      "command_index": 11,
+      "label": "11-retained-actual-C-consumer-relocations",
+      "argv_index": 2,
+      "before": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-top-log/selected-production-consumer-1/memory.c.o",
+      "after": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-walk-l4/production-consumer-preparation-1/output-1/memory.c.o"
+    },
+    {
+      "command_index": 12,
+      "label": "12-actual-C-consumer-Rust-entry-partial-link",
+      "argv_index": 2,
+      "before": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-top-log/selected-production-consumer-1/memory.c.o",
+      "after": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-walk-l4/production-consumer-preparation-1/output-1/memory.c.o"
+    }
+  ],
+  "planned_pairs_not_acceptance": 4896,
+  "planned_ABI_words_not_acceptance": 5,
+  "profile": {
+    "CPU": "ROOT_ASSIGN",
+    "jobs": 1,
+    "AS": 2147483648,
+    "CPU_seconds": 60,
+    "wall_seconds": 90,
+    "retirement_seconds": 6,
+    "FSIZE": 33554432,
+    "NOFILE": 256,
+    "core": 0,
+    "CGU": 1,
+    "RUST_MIN_STACK": 2097152
+  },
+  "no_CMake_or_sharedABI_changes": true,
+  "product_source_changes_since_original_candidate": 0,
+  "fixture_source_changes": 0,
+  "compiler_jobs": 0,
+  "test_jobs": 0,
+  "CPU_slots_held": 0,
+  "remaining_C_callback_bodies": 13,
+  "combined78_exactGCC14_defaultkernel_native": "OPEN",
+  "failure_history": "Allpriorfailures preserved. Newsinglewrappercandidate notexecuted. Rootmanages firstcandidate+boundedcorrection; no reset/newframework."
+}

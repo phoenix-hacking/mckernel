@@ -1,0 +1,12 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PURE_POSTPROCESSOR_OVERBROAD_FINAL_ELF_SYMBOL_RETENTION_ASSERTION_FAILED",
+  "actual_command": "taskset -c 7 python3 -B /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/check_elf_and_result.py",
+  "exit": 1,
+  "original_checker_sha256": "3faaae8010458e5592bad706e3a23c6335ea1deeb0439af7a3001d8ce6d44d9d",
+  "compiler_or_fixture_failure": false,
+  "actual_HOST_commands_all_pass": 4,
+  "actual_semantic_pairs_pass": 56250,
+  "exact_cause": "Rust object and partial link contain all3banked storage owners and state bridge. Optimized HOST final link retains only the used offset, because logger inlined existing state bridge/null optional outputs; unreferenced state/container_size/bridge sections are garbage-collected. New target record and logger remain unique.",
+  "one_bounded_correction": "Require all3banked owners/bridge in real Rust object+partial link, and the used offset only in final fixture; retain all original target metadata/ownership/semantic assertions. No source/oracle/fixture/command changes or replay."
+}

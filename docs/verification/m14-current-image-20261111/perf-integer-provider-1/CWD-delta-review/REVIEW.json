@@ -1,0 +1,140 @@
+{
+  "schema_version": 1,
+  "decision": "GO_BOUNDED_CWD_OUTPUT_CORRECTION_OPERATION",
+  "at_utc": "2026-11-11T16:39:51.294559+00:00",
+  "reviewer": "/root/p04_source_max",
+  "author": "/root/sdk_binding_source_max",
+  "scope": "Only the genuine first builtins compiler output-location failure and its working-directory/resumption delta. Existing source/profile/capture proof reused. No source/helper/compiler invocation, binary probe or payload execution by reviewer.",
+  "inputs": {
+    "SOURCE-READY.NOT-EXECUTED.json": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/cwd-output-correction-1/SOURCE-READY.NOT-EXECUTED.json",
+      "bytes": 4152,
+      "sha256": "dcb0beda7f8b1a13ebd9351829223163ac47ad44be22c597119ae45aa098d91b"
+    },
+    "REQUEST.json": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/cwd-output-correction-1/REQUEST.json",
+      "bytes": 21154,
+      "sha256": "952763d9844fb4c5f0469c971d096b77bf39bf49755d280fab1e76c56bf1e34b"
+    },
+    "INPUTS.json": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/cwd-output-correction-1/INPUTS.json",
+      "bytes": 13591,
+      "sha256": "a136ad734a6fb9034bf71fe7c1fb72776429c226b6e5f009bcacfdb8d261ea84"
+    },
+    "BOUNDED-DELTA.json": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/cwd-output-correction-1/BOUNDED-DELTA.json",
+      "bytes": 4562,
+      "sha256": "ef98a0ce05a156af689794bd7dd8b28442cd05bccd552ea0ebe4085fb7c6fcdb"
+    },
+    "ROOT-PARENT-DELTA.patch": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/cwd-output-correction-1/ROOT-PARENT-DELTA.patch",
+      "bytes": 4341,
+      "sha256": "02f94ccaa4aa1135144efb8ac21c6e60a8e4b527ea37974e9ff204883e3327fa"
+    },
+    "run_root_once.py": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/cwd-output-correction-1/run_root_once.py",
+      "bytes": 7808,
+      "sha256": "7b5cbc97c8b8d13ea279ee6f166aff159ec7b87e0fc9ed4b7919e04657a5dc36"
+    }
+  },
+  "prior_request": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/REQUEST.json",
+    "bytes": 16178,
+    "sha256": "ad8c6e3b58fd1ab9ea7e068cf2925473b31f3dcfe385fb4e7e5bcf1b750b8e2e"
+  },
+  "failure_and_completed_current_only_retirement": {
+    "prior_builtin_source_operation_GO": {
+      "bytes": 18558,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-first-builtins-compile-review-sourceacq-max-1/REVIEW.json",
+      "sha256": "7b9a2ddeeabe704b6bb7f7ef06c326b0dbc9402c648b2af068ef7709e3508fd0"
+    },
+    "prior_failed_builtin_Root_completion": {
+      "bytes": 2895,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/execution-1/ROOT-EXEC-COMPLETION.json",
+      "sha256": "d3255800616c047768d8ea132b0332fafbd2c27f4df34469a91e0da6cf8a3aae"
+    },
+    "prior_failed_builtin_current_only_retirement": {
+      "bytes": 835,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/CURRENT-PROCESS-MEMORY-RETIREMENT.json",
+      "sha256": "843f6c375b2e6c18acb8013c081d7b583c4c0472f2a491b650b8b96997c49362"
+    },
+    "prior_failed_builtin_independent_qualification": {
+      "bytes": 17242,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-first-builtins-compile-review-sourceacq-max-1/actual-result-1/QUALIFICATION.json",
+      "sha256": "97daa81e969377ec26e9134c488dbfc0d4e02f38931af3537831b9a9290c6fbd"
+    },
+    "prior_failed_builtin_result": {
+      "bytes": 9303,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/execution-1/RESULT.json",
+      "sha256": "2c7d8e3503f25bbc695f84a4a90183c3a29b59aea6e0c528e6c98eae4b0d84e2"
+    },
+    "prior_failed_builtin_stderr": {
+      "bytes": 538,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/execution-1/builtins-build-payload.stderr",
+      "sha256": "84c2d5e5bdf9201703ef8b95048fc7ddfd2edd1ba41ff32452986aaa64dec681"
+    }
+  },
+  "actual_failure_basis": "Selected rustc reported one EROFS error writing a relative compiler_builtins...cgu.0.rcgu.o at its explicitly configured readonly source-package CWD. Absolute final --emit paths did not redirect that observed intermediate write. No invariant/body/core-profile error was reported in this attempt.",
+  "changed_create_argv": [
+    {
+      "index": 6,
+      "old": "mck-m14-perf-builtins-dependency-20261111-1",
+      "new": "mck-m14-perf-builtins-dependency-20261111-2"
+    },
+    {
+      "index": 8,
+      "old": "mckernel.preparation-owner=m14-perf-builtins-dependency-1",
+      "new": "mckernel.preparation-owner=m14-perf-builtins-dependency-2"
+    },
+    {
+      "index": 32,
+      "old": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/compiler-builtins/compiler-builtins",
+      "new": "/core-output"
+    },
+    {
+      "index": 38,
+      "old": "type=bind,src=/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/output-1,dst=/core-output",
+      "new": "type=bind,src=/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/cwd-output-correction-1/output-1,dst=/core-output"
+    }
+  ],
+  "correction": "Only effective compiler-environment change is workdir=/core-output at the already granted output RW boundary. New name/label/output host namespace separate the retry from retained failed partial outputs. Source, compiler, parent profile and permissions are unchanged.",
+  "checks": {
+    "all55_compiler_tokens_identical": true,
+    "same_actual_core7ec5_metadata_file_RO": true,
+    "same4_mount_destinations_and_RO_flags": true,
+    "only_RW_output_host_source_fresh": true,
+    "same_readonly_compiler_and_whole_genuine_source": true,
+    "same_exact_literal_build_and_three_passive_commands": true,
+    "payload_helper": {
+      "bytes": 1716,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/input/build_builtins.sh",
+      "sha256": "899225e74d2f41b9681fb6071f48a291bafac63edfe790b5fafe49a3d5090e29"
+    },
+    "same_CPU6_2GiB_j1_time_disk_pid_limits": true,
+    "same_protected_e088_call_and7266_phase_capture": true,
+    "parent_restores_original_byte_for_byte_after_only_request_hash_and4_precise_failure_retirement_assertions": true,
+    "all_new_actual_execution_HOST_pin_rows_equal_old": true,
+    "old_partial_metadata_outputs_not_adopted": true,
+    "fresh_output_and_execution_dirs_absent_at_review": true,
+    "prior_current_only_retirement_843f6c_matches_positive_Root_and97daa": true,
+    "no_new_filesystem_permission_sourceRO_or_Host_fallback": true
+  },
+  "Root_conditions": [
+    "Use this exact952763 request and7b5cbc runner, reviewed source/profile and immutable actual inputs; Root sole executor/current output owner.",
+    "Fresh shared aggregate HOST4GiB/max3/all-overhead/fresh26GiB and disk-floor admission, no assumption of an idle lane from prior retirement.",
+    "Preserve all failed ad8c/2c7d/84c/d325 artifacts and all historical source/native/account/UNKNOWN holds. Only the prior failed compiler process charge is positively retired.",
+    "Capture actual compiler/passive outputs, owned client births/waits/streams, CID nonOOM/Pid0/removal and full Root completion before any current-only retirement.",
+    "Any genuine next compiler diagnostic is retained; no on-the-fly source/flags/profile change or unchanged replay."
+  ],
+  "non_claims": [
+    "No compiler compatibility or successful builtins object/metadata is asserted until actual new producer PASS",
+    "No old core rebuild, core metadata change, consumer/image/native execution or original acceptance",
+    "No resource/admission grant or permission widening by this review"
+  ],
+  "findings": [],
+  "actions": {
+    "source_or_candidate_canonical_cache_index_changed": false,
+    "CMake_compiler_Docker_helper_test_native_executed": false,
+    "private_review_only": true
+  }
+}

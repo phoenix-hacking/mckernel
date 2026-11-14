@@ -1,0 +1,175 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_TIMER120_CURRENT_BYTES_READONLY_SELECTED_FALLBACK_AND_EXACT_RUST_ORIGINS",
+  "tables": {
+    "current055c": {
+      "symbol": {
+        "name": "process_timer_runtime_offsets",
+        "kind": 1,
+        "bind": 1,
+        "ndx": 4,
+        "value": 1152,
+        "size": 120
+      },
+      "section": ".rodata",
+      "section_flags": 2,
+      "bytes_hex": "5810000000000000e81000000000000000110000000000000411000000000000d013000000000000981e000000000000c01e000000000000d01e000000000000a81e0000000000002c1f000000000000781f0000000000000000000000000000080000000000000020000000000000003000000000000000",
+      "words": [
+        4184,
+        4328,
+        4352,
+        4356,
+        5072,
+        7832,
+        7872,
+        7888,
+        7848,
+        7980,
+        8056,
+        0,
+        8,
+        32,
+        48
+      ]
+    },
+    "focused_Rust": {
+      "symbol": {
+        "name": "process_timer_runtime_offsets",
+        "kind": 1,
+        "bind": 1,
+        "ndx": 6,
+        "value": 0,
+        "size": 120
+      },
+      "section": ".rodata.process_timer_runtime_offsets",
+      "section_flags": 2,
+      "bytes_hex": "5810000000000000e81000000000000000110000000000000411000000000000d013000000000000981e000000000000c01e000000000000d01e000000000000a81e0000000000002c1f000000000000781f0000000000000000000000000000080000000000000020000000000000003000000000000000",
+      "words": [
+        4184,
+        4328,
+        4352,
+        4356,
+        5072,
+        7832,
+        7872,
+        7888,
+        7848,
+        7980,
+        8056,
+        0,
+        8,
+        32,
+        48
+      ]
+    },
+    "fallback_C": {
+      "symbol": {
+        "name": "process_timer_runtime_offsets",
+        "kind": 1,
+        "bind": 1,
+        "ndx": 4,
+        "value": 0,
+        "size": 120
+      },
+      "section": ".rodata",
+      "section_flags": 2,
+      "bytes_hex": "5810000000000000e81000000000000000110000000000000411000000000000d013000000000000981e000000000000c01e000000000000d01e000000000000a81e0000000000002c1f000000000000781f0000000000000000000000000000080000000000000020000000000000003000000000000000",
+      "words": [
+        4184,
+        4328,
+        4352,
+        4356,
+        5072,
+        7832,
+        7872,
+        7888,
+        7848,
+        7980,
+        8056,
+        0,
+        8,
+        32,
+        48
+      ]
+    },
+    "HOST_final": {
+      "symbol": {
+        "name": "process_timer_runtime_offsets",
+        "kind": 1,
+        "bind": 1,
+        "ndx": 15,
+        "value": 4207800,
+        "size": 120
+      },
+      "section": ".rodata",
+      "section_flags": 2,
+      "bytes_hex": "5810000000000000e81000000000000000110000000000000411000000000000d013000000000000981e000000000000c01e000000000000d01e000000000000a81e0000000000002c1f000000000000781f0000000000000000000000000000080000000000000020000000000000003000000000000000",
+      "words": [
+        4184,
+        4328,
+        4352,
+        4356,
+        5072,
+        7832,
+        7872,
+        7888,
+        7848,
+        7980,
+        8056,
+        0,
+        8,
+        32,
+        48
+      ]
+    }
+  },
+  "final_origins": [
+    {
+      "name": "process_timer_runtime_offsets",
+      "object_section": ".rodata.process_timer_runtime_offsets",
+      "final_address": "0x4034b8",
+      "exact_Rust_provider": true
+    },
+    {
+      "name": "set_timer",
+      "object_section": ".text.set_timer",
+      "final_address": "0x402360",
+      "exact_Rust_provider": true
+    },
+    {
+      "name": "leaf_timer_set_timer_body_result",
+      "object_section": ".text.leaf_timer_set_timer_body_result",
+      "final_address": "0x4021a0",
+      "exact_Rust_provider": true
+    }
+  ],
+  "selected_C_owner_absent": true,
+  "current_C_baseline": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-SYNC-PROCESSVM-HOST13-FIVE-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+    "bytes": 71144,
+    "sha256": "055c157831118f4b434a92e03725a05bd9ff8c3071235b8c79ab6019c94a9c40"
+  },
+  "Rust": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/HOST-output-proposed-1/timer.o",
+    "bytes": 2640,
+    "sha256": "dae24d2258ccc1a5488869ad993871b61409656b1aa01e5938fe88aa8c9bc6b0"
+  },
+  "fallback": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/HOST-output-proposed-1/fallback.o",
+    "bytes": 38448,
+    "sha256": "e9cee1fe464e130e1a990b692491149f1304aafc568691daa59060168e8db198"
+  },
+  "selected": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/HOST-output-proposed-1/selected.o",
+    "bytes": 36480,
+    "sha256": "54e0aa163274e61ba5899c48c38d3ecb6ef7a07e764b9caa6cfa61617b106337"
+  },
+  "executable": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-provider-link-repair-source-1/actual-provider-suffix-1/timer",
+    "bytes": 56416,
+    "sha256": "98a4a195f9b31d7f958b6389394e2e8aea9ae23913ffb24826f14d1ff17ee5b0"
+  },
+  "production_or_native_credit": false,
+  "GNU_RETAIN_verbose_scope": "Unchanged; no descriptor or retention waiver",
+  "file_retirement": false
+}

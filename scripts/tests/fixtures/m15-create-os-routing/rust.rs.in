@@ -1,0 +1,35 @@
+// Actual helper/callsite routing; local observation callbacks, no IHK/native proof.
+use core::ffi::{c_char,c_int,c_ulong,c_void};
+use core::ptr::null_mut;
+#[repr(C)]pub struct IhkMemChunk{pub size:c_ulong,pub numa_node_number:c_int}
+unsafe extern "C"{
+ #[link_name="observation_calloc"]fn calloc(n:usize,size:usize)->*mut c_void;
+ #[link_name="observation_free"]fn free(p:*mut c_void);
+ #[link_name="observation_reserved_cpu_count"]fn ihk_get_num_reserved_cpus(index:c_int)->c_int;
+ #[link_name="observation_query_cpu"]fn ihk_query_cpu(index:c_int,cpus:*mut c_int,n:c_int)->c_int;
+ #[link_name="observation_release_cpu"]fn ihk_release_cpu(index:c_int,cpus:*mut c_int,n:c_int)->c_int;
+ #[link_name="observation_reserved_mem_count"]fn ihk_get_num_reserved_mem_chunks(index:c_int)->c_int;
+ #[link_name="observation_query_mem"]fn ihk_query_mem(index:c_int,mem:*mut IhkMemChunk,n:c_int)->c_int;
+ fn observation_assign_cpu(index:c_int,cpus:*mut c_int,n:c_int)->c_int;
+ fn observation_assign_mem(index:c_int,mem:*mut IhkMemChunk,n:c_int)->c_int;
+ fn observation_run(baseline:c_int,phase:unsafe extern "C" fn(c_int,c_int)->c_int,memory:unsafe extern "C" fn(c_int,c_int)->c_int)->c_int;
+}
+mod os_cpu{use super::*;pub unsafe fn ihk_os_assign_cpu(index:c_int,cpus:*mut c_int,n:c_int)->c_int{unsafe{observation_assign_cpu(index,cpus,n)}}}
+mod accepted_cpu_memory{pub mod ihklib_memory_os{use super::super::*;pub unsafe fn ihk_os_assign_mem(index:c_int,mem:*mut IhkMemChunk,n:c_int)->c_int{unsafe{observation_assign_mem(index,mem,n)}}}}
+mod actual{
+ use super::*;
+ // Every witness call supplies NULL; actual error() also does nothing then.
+ unsafe fn error(output:*mut c_char,_site:usize,_value:c_int){assert!(output.is_null());}
+__HELPERS__
+ pub unsafe extern "C" fn phase(device:c_int,index:c_int)->c_int{
+  let _=device;
+  let error_output=null_mut();
+__PHASE__
+  0
+ }
+ pub unsafe extern "C" fn memory(device:c_int,index:c_int)->c_int{
+  let _=device;
+__MEMORY_CALL__
+ }
+}
+fn main(){let baseline=std::env::var("M15_ROUTING_BASELINE_ONLY").as_deref()==Ok("1");std::process::exit(unsafe{observation_run(baseline as c_int,actual::phase,actual::memory)});}

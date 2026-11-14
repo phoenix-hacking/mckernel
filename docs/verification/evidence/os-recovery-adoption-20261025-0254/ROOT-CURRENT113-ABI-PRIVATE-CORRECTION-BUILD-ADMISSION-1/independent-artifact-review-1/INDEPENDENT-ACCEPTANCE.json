@@ -1,0 +1,91 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_ACTUAL_CURRENT113_SELECTED_DEFAULT_ARTIFACT_AND_CONSUMERS_NOT_NATIVE_OR_WHOLE_FILE",
+  "independent": true,
+  "implementation_ownership": false,
+  "reviewer": "/root/custody_release_review",
+  "at": "2026-10-27T23:16:45.344883+00:00",
+  "artifact": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT113-ABI-PRIVATE-CORRECTION-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/mckernel.img",
+    "bytes": 10262984,
+    "sha256": "5a5944c047f686b4522c829ab0305b0cd3459f067c01889e75cc1f96d3acdd03"
+  },
+  "Rust_object": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT113-ABI-PRIVATE-CORRECTION-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o",
+    "bytes": 18293600,
+    "sha256": "896eb7e96455ad3a858357c172445b2906ba10306f1601052eb137434bb0a5dd"
+  },
+  "profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT113-ABI-PRIVATE-CORRECTION-BUILD-ADMISSION-1/PROFILE.SOURCE-ONLY.json",
+    "bytes": 116660,
+    "sha256": "88f219b06d15b9ef651624efe05cefdf24bf400c232f47a43daaac1267fe949d"
+  },
+  "Root_source_adoption": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/abi-private-field-correction-source-1/root-source-adoption-1/ROOT-SOURCE-ADOPTION.json",
+    "bytes": 12718,
+    "sha256": "b09e93956f599c6c942717ae93abc63fa7b830255abb35d5df34252d4c15e685"
+  },
+  "previous_CURRENT112_acceptance": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT112-EVENT2-ALLOC2-BUILD-ADMISSION-1/independent-postbuild-review-1/INDEPENDENT-ACCEPTANCE.json",
+    "bytes": 13924,
+    "sha256": "c2e8bba1120d2e289819c1991b2e5d18321741074b3ec1bbc16dee3f628ec323"
+  },
+  "actual_default_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT113-ABI-PRIVATE-CORRECTION-BUILD-ADMISSION-1/independent-artifact-review-1/DEFAULT-ARTIFACT-REVIEW.json",
+    "bytes": 450493,
+    "sha256": "4fe68ae093c198e9dc6ff1036d18a47054a2c35da49af80c5f40bc65e607a001"
+  },
+  "source_ABI_scalar_supplement": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT113-ABI-PRIVATE-CORRECTION-BUILD-ADMISSION-1/independent-artifact-review-1/SOURCE-ABI-AND-SCALAR-CONSUMER-SUPPLEMENT.json",
+    "bytes": 30914,
+    "sha256": "963a044253be772f053f55b040ea6d9812d8a49ef8e2d7e1d0733945565335a8"
+  },
+  "reproducible_offline_reader": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT113-ABI-PRIVATE-CORRECTION-BUILD-ADMISSION-1/independent-artifact-review-1/review_current113.py",
+    "bytes": 20399,
+    "sha256": "9d8668354815d515a20fed77be3e595da5f7c3db08aae4450e3a775740b5f0a2"
+  },
+  "actual_commands": 4,
+  "all_returncodes_zero": true,
+  "new_objects": 3,
+  "retained_objects": 8,
+  "raw_ld_inputs": 11,
+  "observed_counts": {
+    "Rust_function_exports": 56,
+    "C_kernel_functions": 64,
+    "C_arch_functions": 19,
+    "C_functions_total": 83,
+    "C_process_OBJECTs": 63
+  },
+  "accepted_scope": [
+    "All56 unique Rust exports have genuine allocatedRust ownership/no C owner and complete current final instruction/positive relocation reproduction;52 inherited bodies retain accepted112 nonrelocated code.",
+    "New4F06 source/real-header HOST ABI qualifications bind currenttypedwitnesses andselectedCflags;2reader IRQ-save aliases,17B find_thread tailjmp and143B thread_unlock bodycopy preserve provider contracts. Ten actualcurrentcallbacktargets in7schedulerconsumers positivelybind full current equalbody; no native effect inferred.",
+    "Four signedCInt readonly4B/align4 Rust origins match oldC bytes1/4002/1/0 with no C owner. Eight actualcompiled scalarconsumers have fullcurrentfinalbyte proof, sameexistingRustsourceprefix and exactfolded/volatile forms; only2volatile dumpreads remain actualRELAtoscalars.",
+    "Inherited13foldedarguments/timer120B15words9consumed6dataclassification/idle116B/runqueue208B26fields17consumed9data andcurrentRustschedule consumer preserve originalscope andpositiveactualnewaddresses.",
+    "FourLOCAL32B loggerrecords/exact337B callback/fourentryjumptable reproduced with currentnamed/exactstring targets.158retainedkernelC+24arch+63process=245 rawCmetadataOBJECTs preserve prior limitedcontract;7oldersectionrelative metadata provenance deltas remainpreservedOPEN.",
+    "Rust143warningstream byteidentical accepted112; exact17B syscallthinrawpointertailjmp binds7398 disposition to896e/5a59. Newprocess/archCstderrEMPTY,rawlinkstderrunchanged. No suppression/recompile/replay.",
+    "OriginalE0616 failedcommand0/3initialunrun preserved alongside singlebounded correction and actualfour0. Actual113 build/artifact does not replace F05fixed60e native tuple."
+  ],
+  "measurements": {
+    "elapsed_seconds": 20.37364959716797,
+    "CPU_seconds": 20.372311,
+    "maximum_child_RSS_KiB_worker_cumulative": 590944
+  },
+  "actual_native_qualification": null,
+  "native_acceptance": false,
+  "whole_file_retirement": false,
+  "language_whole_file_acceptance": false,
+  "Source38_native_lifetime_holds": "OPEN",
+  "original_failures_OPEN_preserved": true,
+  "excluded_unrun_or_unfolded": [
+    "original LOCK4 FILELINE cohort",
+    "WAKE3",
+    "debug32",
+    "native IRQ/reference-effect acceptance"
+  ],
+  "actions": {
+    "offline_artifact_source_hash_AST_objdump_only": true,
+    "compiler_replay_runtime_queries_guard_cleanup_canonical_Git": 0,
+    "subagents": 0
+  }
+}

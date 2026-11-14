@@ -1,0 +1,132 @@
+{
+  "schema": "mckernel.native-fp-save-terminal-result-review.v1",
+  "status": "PASS_EXECUTED",
+  "decision": "PASS_EXACT_TERMINAL_CLEANUP_AND_COMMON_RELEASE",
+  "reviewer": "/root/fpu_terminal_cleanup_review",
+  "implementation_ownership": false,
+  "actual_result": {
+    "archives": [
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 362133,
+        "mode": "0o600",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/native-fp-save-image-terminal-cleanup-20261017-1.attempt.archive",
+        "sha256": "55fb9cb111f864d1259144394cd16534b8383738ebbea66b45f14129a4a475da",
+        "size": 267,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 112298,
+        "mode": "0o600",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/native-fp-save-image-terminal-cleanup-20261017-1.shared.archive",
+        "sha256": "1a7a75dd0ee75829247164f8fdeacba674fe09bcf1d19d0fa0b4d6fe2a0124de",
+        "size": 267,
+        "uid": 1000
+      }
+    ],
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "capture": {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 112393,
+      "mode": "0o600",
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-image-terminal-cleanup-20261017-1.docker-logs.capture",
+      "sha256": "01e6194794f39220a251060b7d43d226f7e5ae7d837ee3d2217b38886943e220",
+      "size": 7922,
+      "uid": 1000
+    },
+    "container_absent": true,
+    "container_id": "7b7045c7b729cde128a630dd97796c935f8af7a689e71940964c78df9452d125",
+    "filesystem_uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52",
+    "journal": {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 112394,
+      "mode": "0o600",
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-image-terminal-cleanup-20261017-1.journal.jsonl",
+      "sha256": "33f7f9c40871634cb454ad74e94b5b2e374e023fa8ac467a4313e0d34b7ae00d",
+      "size": 2797,
+      "uid": 1000
+    },
+    "plan": {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 112395,
+      "mode": "0o600",
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-image-terminal-cleanup-20261017-1.plan.json",
+      "sha256": "0545471c242c4191af8b392516fdb89c519a34050228e0170f12ccd1c08d3fb5",
+      "size": 3220,
+      "uid": 1000
+    },
+    "plan_sha256": "fb972e620f3c56846af3a5409e254f20736b0b0336f72cf2c58b282190d3753d",
+    "publisher_contract": {
+      "census": "root-full-process-and-container-before-transaction-and-every-rmdir",
+      "coordination": "sole-campaign-coordinator-no-concurrent-build-or-cleanup",
+      "excluded": "arbitrary-same-UID-directory-substitution-after-final-check",
+      "publishers": "project-owned-regular-file-O_CREAT|O_EXCL-only",
+      "schema": "fp-save-image.publisher-contract.v1"
+    },
+    "release_sha256": "21d6e9ccfc73a68b591ae0ac4093a5d0d60e7227f8fd8b4431e38c1595786ad9",
+    "schema": "fp-save-image.cleanup-result.v1",
+    "status": "PASS_EXECUTED",
+    "terminal": true
+  },
+  "joined_status": {
+    "argv": [
+      "/usr/bin/sudo",
+      "-A",
+      "/usr/bin/prlimit",
+      "--as=2147483648",
+      "--core=0",
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel/scripts/native_fp_save_image_terminal_cleanup.py",
+      "--release",
+      "/home/holden/mckernel-work/scratch/native-fp-save-image-retirement-preparation-20261017-1/cleanup-execution-release-20261018-1.json",
+      "--release-sha256",
+      "2505c8b53b961e4a3a89adb22b65945eb3f8157d3b1a4f42811c31bd9bd08d0e",
+      "--execute"
+    ],
+    "returncode": 0,
+    "elapsed_seconds": 4.238224577988149,
+    "utc": "2026-10-18T01:46:20.224585+00:00"
+  },
+  "release": {
+    "path": "/home/holden/mckernel-work/scratch/native-fp-save-image-retirement-preparation-20261017-1/cleanup-execution-release-20261018-1.json",
+    "sha256": "2505c8b53b961e4a3a89adb22b65945eb3f8157d3b1a4f42811c31bd9bd08d0e",
+    "size": 282870
+  },
+  "capture": {
+    "path": "/home/holden/mckernel-work/scratch/native-fp-save-image-retirement-preparation-20261017-1/dispatch-cleanup-20261018-1/cleanup.stdout",
+    "sha256": "703649a103cba3a6071b8c9c93d1ca46af2bbcc178a4ae41843767c57975f54e",
+    "size": 2350
+  },
+  "raw_journal": {
+    "path": "/home/holden/mckernel-work/scratch/native-fp-save-image-terminal-cleanup-20261017-1.journal.jsonl",
+    "sha256": "33f7f9c40871634cb454ad74e94b5b2e374e023fa8ac467a4313e0d34b7ae00d",
+    "size": 2797
+  },
+  "raw_plan": {
+    "path": "/home/holden/mckernel-work/scratch/native-fp-save-image-terminal-cleanup-20261017-1.plan.json",
+    "sha256": "0545471c242c4191af8b392516fdb89c519a34050228e0170f12ccd1c08d3fb5",
+    "size": 3220
+  },
+  "verified": [
+    "Nine ordered hash-linked journal events and exact plan/client/CID/rootlock joins.",
+    "Archived267byte ownrecords retain oldinodes362133/112298 and exact55fb/1a7 hashes.",
+    "Both live names, lease and quarantine absent; root27:4 and persistentcleanupmutex positively unheld.",
+    "All46 selected bytes/identities and503/4 inventories preserved; BOTHprocessobjects/source/backup unchanged.",
+    "Container absence is executed source-helper finalcensus evidence; no new independent Docker inspection."
+  ],
+  "common_lease_released": true,
+  "kernel_runtime_acceptance": false
+}

@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-073",
+  "packet_version": 1,
+  "context_sha256": "68c7852a9fe2b9e88c2cc05df8e900458262ee764b0db7e55fb3b9f86406461e",
+  "started_utc": "2026-09-09T15:20:00Z",
+  "finished_utc": "2026-09-09T15:24:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "vector.sse2-integer-lanes",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/vector/vector.sse2-integer-lanes.c",
+      "oracle": "scripts/application-tests/oracles/vector.sse2-integer-lanes.json",
+      "changed_files": ["scripts/application-tests/cases/vector/vector.sse2-integer-lanes.c", "scripts/application-tests/oracles/vector.sse2-integer-lanes.json"],
+      "parameter_vectors": {"feature": ["sse2"], "instructions": ["paddd", "pxor", "pslld"], "lanes": [4], "patterns": ["zero", "all-one", "high-bit", "alternating"]},
+      "implemented_operations": ["SSE2 target-isolated packed arithmetic", "independent uint32 lane checks", "high-bit and alternating pattern coverage"],
+      "unresolved_oracle_notes": ["SSE2 target disassembly, raw lane arrays, and both-engine feature evidence require Max review."],
+      "max_reviewer_question": "Confirm exact SSE2 instruction window and independent per-lane expected arrays before optional execution."
+    },
+    {
+      "case_id": "vector.ssse3-byte-shuffle",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/vector/vector.ssse3-byte-shuffle.c",
+      "oracle": "scripts/application-tests/oracles/vector.ssse3-byte-shuffle.json",
+      "changed_files": ["scripts/application-tests/cases/vector/vector.ssse3-byte-shuffle.c", "scripts/application-tests/oracles/vector.ssse3-byte-shuffle.json"],
+      "parameter_vectors": {"feature": ["ssse3"], "instruction": ["pshufb"], "bytes": [16], "selectors": ["reversed", "repeated", "bit7-zero"]},
+      "implemented_operations": ["SSSE3 target-isolated byte shuffle", "independent selector indexing", "high-bit zero and lane-boundary checks"],
+      "unresolved_oracle_notes": ["SSSE3 target disassembly, exact selector/source arrays, and feature evidence require Max review."],
+      "max_reviewer_question": "Confirm PSHUFB lane boundaries and high-bit zero semantics with the pinned SSSE3 feature gate."
+    },
+    {
+      "case_id": "vector.sse41-integer-blend",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/vector/vector.sse41-integer-blend.c",
+      "oracle": "scripts/application-tests/oracles/vector.sse41-integer-blend.json",
+      "changed_files": ["scripts/application-tests/cases/vector/vector.sse41-integer-blend.c", "scripts/application-tests/oracles/vector.sse41-integer-blend.json"],
+      "parameter_vectors": {"feature": ["sse4.1"], "instruction": ["pblendw"], "lanes": [8], "immediate_masks": [0, 85, 170, 255]},
+      "implemented_operations": ["SSE4.1 target-isolated 16-bit blending", "all selected/unselected lane checks", "four immediate-mask classes"],
+      "unresolved_oracle_notes": ["SSE4.1 target disassembly, immediate-mask encoding, and feature evidence require Max review."],
+      "max_reviewer_question": "Confirm PBLENDW immediate-mask lane semantics and exact SSE4.1 transitive feature gate."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/vector/vector.sse2-integer-lanes.c", "sha256": "0a45c34223621d5c8ee08818d483069c44c0e2a3be344da70e1cc3d325442e8e"},
+    {"path": "scripts/application-tests/oracles/vector.sse2-integer-lanes.json", "sha256": "e86d2429f6fe57d7a0d9cb69d49e2e3ef1452123665b438709e0eef03da6e5c3"},
+    {"path": "scripts/application-tests/cases/vector/vector.ssse3-byte-shuffle.c", "sha256": "610a9b14fdeb43d0e54d398315ca9d721ca152429b24819f1e83b90d6a0d9984"},
+    {"path": "scripts/application-tests/oracles/vector.ssse3-byte-shuffle.json", "sha256": "c77e623724722d2cda6f788b3ea9d4b718cdf29b0c23650f1604f9940b880935"},
+    {"path": "scripts/application-tests/cases/vector/vector.sse41-integer-blend.c", "sha256": "99e533204c015bccfa1e33efc5ddbde3cdafac986e028466fc710c7be681d56c"},
+    {"path": "scripts/application-tests/oracles/vector.sse41-integer-blend.json", "sha256": "2cfd9b2c164da8539f709ce22321881d67b39839738eb73e3cf9ad95f3c2ca0b"},
+    {"path": "docs/verification/evidence/application-drafts-20260909/ultra-handoff-1/packet-073/context.json", "sha256": "68c7852a9fe2b9e88c2cc05df8e900458262ee764b0db7e55fb3b9f86406461e"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-073.json --emit-context /tmp/application-packet-073-context-20260909-1.json", "outcome": "PASS; planning metadata only; runtime_authorized=false"},
+    {"command": "python3 -m json.tool packet-073/report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Exact feature masks, target disassembly, instruction windows, lane arrays, and both-engine capability records require final Max review."],
+  "blocked_execution_capabilities": ["runner-contract", "current-inputs", "vector-runtime-discovery", "vector-instruction-audit"],
+  "first_failure_event": null,
+  "max_escalation": ["Review SSE2 lane arithmetic", "Review PSHUFB selector semantics", "Review PBLENDW immediate masks"],
+  "next_packet_id": "packet-074"
+}

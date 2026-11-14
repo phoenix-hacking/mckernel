@@ -1,0 +1,55 @@
+{
+  "decision": "GO_EXACT_TWO_UNSTARTED_METADATA_READS_AND_CALLED_OBJECT_PREJOIN_ONLY_PENDING_FRESH_ROOT_ADMISSION",
+  "request": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-provider-execution-1/METADATA-REQUEST.json",
+    "sha256": "479365c501cbcb899b88a9fcbebf2d9bd670eba55dc6e521f0de3f6819121228"
+  },
+  "controller": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-provider-execution-1/run_metadata.py",
+    "sha256": "673f7f82282a2d00b0f817f3340bf260e113dc73aef8678a0e7f49f655fc2aff"
+  },
+  "predicate": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-provider-execution-1/scheduler_checks.py",
+    "sha256": "29054e53b330558cedad6b83aa539eaf59b6614743f629579a945c4b7611324a"
+  },
+  "source_GO_reused": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-provider-review-1/SOURCE-GO-1.json",
+    "sha256": "711873a26c5f431d72ee7448d0c0242d61ab70d7904aff77976d0512552b3329"
+  },
+  "consumed_producer_result": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-provider-producer-1/RESULT.json",
+    "sha256": "f93f6f4621c3da9f5c7aba9f181dc498182f7d0f9c3b94de51f382694b832e1f"
+  },
+  "compiled_input": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-provider-execution-1/output/scheduler_provider.o",
+    "sha256": "29bb80dcedd1babc2ebb950fef88c656d38bcf7a2d9126c83c3511f830f4eb1f",
+    "bytes": 4064,
+    "producer_result_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-provider-producer-1/RESULT.json",
+    "producer_result_sha256": "f93f6f4621c3da9f5c7aba9f181dc498182f7d0f9c3b94de51f382694b832e1f",
+    "actual_compile_once_root_pid": 616152,
+    "actual_birth": "34612550",
+    "actual_wait_joined": true,
+    "compile_replay": false
+  },
+  "stage_review": "All35frozeninputbindingsmatched. ExactlyoriginalCOREcommands[1:] unchangedliteralnm+readelf, CPU6. Existingoutputdirectoryrequired,nocreation/replacement; currentcompiledinput29bb80dcedd1babc2ebb950fef88c656d38bcf7a2d9126c83c3511f830f4eb1f/4064B andRootproducerRESULT/ADMISSION/compilecapturesbound. OriginalCOREwithcompilepreservedunadmittedandMUSTNOTrun; no compilerreplay orlinkinnewcontroller. Bothnewstdiofilesabsentduringreview.",
+  "object_predicate_review": {
+    "actual_call": "Aftertwoactualsuccessfulreadbacks controllerCALLSscheduler_checks.prejoin(q), whichCALLSobject_gate(q); persistsactualOBJECT-CHECKandPREJOIN-CHECK. No qualificationfromsourcegrep/nmexit0alone.",
+    "global_imports": "Exact3strongGLOBALDEFAULTFUNCnames/nonemptypositiveactualsizes; exact11realU. Anyunexpectedglobal/intrinsic/memcpy/memset/helperimportSTOPbeforelink;nowritableallocateddata.",
+    "private_functions": "Onlyexactthreeoriginalsourceprivatefunctionnames encodedwithinexactunitcrate/sched_helperspath; noarbitrarycompilerfunction. Emittedspinadaptermustretainexactrealprocessspinlock/unlockUrelocationedge. Sizes/bytes/normalizedrelocsrecordedwithoutinventedfixedlength.",
+    "readonly_constructor": "OnlyreadonlyPROGBITS208B/alignment>=8/integer-only26usizeconstructorsections, nointernalprovideraddressrelocations. EachactualincomingR_X86_64_64targetmustbelongonlytoactual__sched/schedwrapper/constconstructorfunction. Allcopiesmusthavesamepayload; values+byteshashrecordedboundtoactualsourceconstructorandqualifiedABIhash, notnewindependentnumericABIacceptance. Anyotherreadonlyshape STOP.",
+    "readonly_objects": "NamedLOCALDEFAULTOBJECTemissiononlyforfull208Breadonlyconstructorstoragewithvalue0/sectionmatching; noexportedoffsetstaticorunboundprivateobject.",
+    "unwind": "Onlyretainedprofile.eh_frameX86_64UNWINDtype0x70000001/ALLOCflags2/alignment8withactualrelocationreferences toselectedsourcecode; no arbitraryreadonlydata allowance. Notnativeunwind/runtimequalification.",
+    "prejoin_check_readonly": "Passedobjectgateplusactualaaafhash/retainednm exact63global52T11data13U/no duplicateglobals;oldsingleLOCALKMSG4B,2privateformatterhelpersanddelayaliaseschecked;prospective66global55T11data22Uderivedfromactualsets. Thisdoesnotlaunchld-r orqualifyafuturejoin."
+  },
+  "capture_profile": "Twoonce-onlyserialCPU6nm/ELFcommands,AS1GiB/CPU45s/wall60s/KILL5s/FSIZE64MiB/core0,outerwall140s, sharedordinary0/6/7max3jobs4GiBTOTALoverhead/fresh>=26GiB plusdiskfloors underfreshRootusage/resourceadmission. PID/birthpersistedbeforedirectwait;exclusivecaptures/emptystderr/status0required. FirstunexpectedfailureSTOP/preservereadbacks/object/joinstartedchildren/release/focusedsourceABIreview,noautonomousretry/codegenoroldmetadatareplay.",
+  "next_scope": "Onlyafteractualmetadata/predicatesPASSandprivate/readonlyemissionreviewmayRootfreeze/admitseparatethreeunstartedlink/readbackcommands. ThisGOauthorizesneitherlinknorfunction/scheduler/lock/IRQ/timer/boot/nativeexecution;allheldproviders/F02/default/scorelimitsremain.",
+  "routing": "ExistingactualSol/HIGH/never/danger-full-accessconfirmedbyRoot,no recursiveagents.",
+  "reviewer_operations": {
+    "compiler": false,
+    "linker": false,
+    "new_metadata_tool": false,
+    "object_predicate_execution": false,
+    "runtime": false,
+    "canonical_index_live_state_write": false
+  }
+}

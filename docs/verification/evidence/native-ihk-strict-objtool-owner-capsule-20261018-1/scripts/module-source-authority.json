@@ -1,0 +1,306 @@
+{
+  "acceptance_scope": "One strict IHK module/tool integration pilot only; no three-module acceptance/fork activation/native acceptance.",
+  "accepted_control_expectations": [
+    {
+      "expected": 1,
+      "fallthroughs": 1,
+      "label": "before-check",
+      "returncode": 1
+    },
+    {
+      "expected": 0,
+      "fallthroughs": 0,
+      "label": "after-check",
+      "returncode": 0
+    },
+    {
+      "expected": 1,
+      "fallthroughs": 1,
+      "label": "unknown-suffix-check",
+      "returncode": 1
+    },
+    {
+      "expected": 1,
+      "fallthroughs": 1,
+      "label": "wrong-function-check",
+      "returncode": 1
+    },
+    {
+      "expected": 1,
+      "fallthroughs": 1,
+      "label": "not-rust-check",
+      "returncode": 1
+    }
+  ],
+  "accepted_controls": {
+    "bytes": 16641,
+    "path": "/home/holden/mckernel-work/host-preparation/native-host-objtool-corrected-exact-review-20261018-1/completed-actual-result-review-corrected-1.json",
+    "sha256": "5bb3059514175c2b5ceebb490a5e51ecf5917410dd4b07e15291da85bf799560"
+  },
+  "cwd": "/out/build",
+  "environment": {
+    "BASH_ENV": "",
+    "ENV": "",
+    "GNUMAKEFLAGS": "",
+    "HOME": "/candidate/home",
+    "KBUILD_BUILD_HOST": "rocky-10.2-x86_64",
+    "KBUILD_BUILD_TIMESTAMP": "Tue, 11 Aug 2026 07:40:34 +0000",
+    "KBUILD_BUILD_USER": "mckernel",
+    "KBUILD_BUILD_VERSION": "1",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "LD_LIBRARY_PATH": "",
+    "LD_PRELOAD": "",
+    "MAKEFILES": "",
+    "MAKEFLAGS": "",
+    "MAKEOVERRIDES": "",
+    "MFLAGS": "",
+    "PATH": "/usr/bin:/bin",
+    "SOURCE_DATE_EPOCH": "1786434034",
+    "TMPDIR": "/candidate/tmp",
+    "TZ": "UTC"
+  },
+  "forbidden_activation": "CREATE_PPD remains -95, guest weak NULL and final completion remain closed; v10 excluded",
+  "frozen_command_count": 17,
+  "frozen_tool_original_sha256": "b6a5cf759c86391d24463722d597d4d4e40b5094540b9d5f656c8146ea118e28",
+  "full_frozen_closure_files": 66,
+  "kernel_build_basis": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output",
+  "kernel_build_basis_mount": "/out readonly",
+  "make_argv": [
+    "/usr/bin/env",
+    "-i",
+    "KBUILD_BUILD_HOST=rocky-10.2-x86_64",
+    "KBUILD_BUILD_TIMESTAMP=Tue, 11 Aug 2026 07:40:34 +0000",
+    "KBUILD_BUILD_USER=mckernel",
+    "KBUILD_BUILD_VERSION=1",
+    "SOURCE_DATE_EPOCH=1786434034",
+    "PATH=/usr/bin:/bin",
+    "LANG=C",
+    "LC_ALL=C",
+    "TZ=UTC",
+    "BASH_ENV=",
+    "ENV=",
+    "GNUMAKEFLAGS=",
+    "MAKEFILES=",
+    "MAKEFLAGS=",
+    "MAKEOVERRIDES=",
+    "MFLAGS=",
+    "LD_LIBRARY_PATH=",
+    "LD_PRELOAD=",
+    "HOME=/candidate/home",
+    "TMPDIR=/candidate/tmp",
+    "/usr/bin/make",
+    "-C",
+    "/out/source/linux-6.12.0-211.44.1.el10_2",
+    "O=/out/build",
+    "M=/candidate/modules",
+    "ARCH=x86_64",
+    "LLVM=1",
+    "LOCALVERSION=-211.44.1.el10_2.mckernel1.x86_64",
+    "KBUILD_BUILD_HOST=rocky-10.2-x86_64",
+    "KBUILD_BUILD_TIMESTAMP=Tue, 11 Aug 2026 07:40:34 +0000",
+    "KBUILD_BUILD_USER=mckernel",
+    "KBUILD_BUILD_VERSION=1",
+    "SOURCE_DATE_EPOCH=1786434034",
+    "KCFLAGS=-Werror",
+    "CONFIG_MCKERNEL_IHK_RUST=m",
+    "CONFIG_MCKERNEL_IHK_SMP_X86_64_RUST=n",
+    "CONFIG_MCKERNEL_MCCTRL_RUST=n",
+    "objtool=/accepted-tool/objtool-after",
+    "objtool-args=--hacks=jump_label --hacks=noinstr --hacks=skylake --ibt --mcount --mnop --orc --retpoline --rethunk --sls --static-call --uaccess --prefix=16 --werror --link --module",
+    "-j2",
+    "modules"
+  ],
+  "preserve_original_basis_hash": true,
+  "reference_driver": {
+    "bytes": 35143,
+    "container_path": "/strict-consumer.py",
+    "path": "/home/holden/mckernel-work/scratch/native-fork-c-command-correction-20261018-1/owner-capsule/scripts/native_running_external_modules_offline.py",
+    "sha256": "331538eb13236a866b8ec29b9b7b03fd9c31622a3a56738af8437f20281afc71"
+  },
+  "schema": "mckernel.fixed-ihk-objtool-consumer-inputs.v1",
+  "scope": "FunctionalPRACTICAL-GOAL kernel/apps+active Rust/reviewed assembly compute retirement; hostLinuxC permitted/no computeC expansion.",
+  "sdk_input_count": 85,
+  "selected_module": "ihk",
+  "source_authority": {
+    "accepted_host_base": "d99edf2f58ee44b1a7e9aa726cbb49eee7850248",
+    "digest": "f656e2bd73549af2359520b9af94d5ece8774ceac9e3e26c6d0b5de67ed3abc1",
+    "fork_original_base": "09f438751c28df0f497ed45a6bf6a4c6e0821d7b",
+    "kind": "isolated-source-closure-sha256",
+    "not_a_Git_commit": true
+  },
+  "source_dependency_count": 13,
+  "source_files": [
+    {
+      "baseline_sha256": "f33c826539ed0807617337ba64a1cb646daf510cc06a44b47243d14e366d67a3",
+      "bytes": 496,
+      "new_file": false,
+      "origin": "/home/holden/mckernel-work/scratch/native-fork-composite-module-preparation-20261018-1/modules/Kbuild",
+      "path": "Kbuild",
+      "published_path": "/home/holden/mckernel/docs/verification/evidence/native-fork-conditional66-capsule-20261018-1/modules/Kbuild",
+      "reviewed_replacement": true,
+      "sha256": "f6ea506d4fde9050d007ad168ce0f53c257e56853a9447f4a031fa1611028ba3"
+    },
+    {
+      "baseline_sha256": "d2b3770a111777d4f28a7a81814a03414d318a90d3ec7082d5c89149b1704a0f",
+      "bytes": 12318,
+      "new_file": false,
+      "origin": "/home/holden/mckernel-work/scratch/native-fork-composite-module-preparation-20261018-1/modules/abi/application.rs",
+      "path": "abi/application.rs",
+      "published_path": "/home/holden/mckernel/docs/verification/evidence/native-fork-conditional66-capsule-20261018-1/modules/abi/application.rs",
+      "reviewed_replacement": true,
+      "sha256": "9dc6ac72e1fbb458798764ffc0e8db2161b4004d6b498324f9647f9434a351c1"
+    },
+    {
+      "baseline_sha256": "9dac670ec6567d379c346106d3b164ddb6d607be1dedc2be21283d4adffa5937",
+      "bytes": 2527,
+      "new_file": false,
+      "origin": "/home/holden/mckernel-work/scratch/native-fork-composite-module-preparation-20261018-1/modules/abi/os_service.rs",
+      "path": "abi/os_service.rs",
+      "published_path": "/home/holden/mckernel/docs/verification/evidence/native-fork-conditional66-capsule-20261018-1/modules/abi/os_service.rs",
+      "reviewed_replacement": false,
+      "sha256": "9dac670ec6567d379c346106d3b164ddb6d607be1dedc2be21283d4adffa5937"
+    },
+    {
+      "baseline_sha256": "89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3",
+      "bytes": 19740,
+      "new_file": false,
+      "origin": "/home/holden/mckernel-work/scratch/native-fork-composite-module-preparation-20261018-1/modules/abi/x86_64.rs",
+      "path": "abi/x86_64.rs",
+      "published_path": "/home/holden/mckernel/docs/verification/evidence/native-fork-conditional66-capsule-20261018-1/modules/abi/x86_64.rs",
+      "reviewed_replacement": false,
+      "sha256": "89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3"
+    },
+    {
+      "baseline_sha256": "43c3a4badd09bb70a31c9120d23e3b2b63ffa735412d172e0f0ac3d2edc85af5",
+      "bytes": 60221,
+      "new_file": false,
+      "origin": "/home/holden/mckernel-work/scratch/native-fork-composite-module-preparation-20261018-1/modules/device_registry.rs",
+      "path": "device_registry.rs",
+      "published_path": "/home/holden/mckernel/docs/verification/evidence/native-fork-conditional66-capsule-20261018-1/modules/device_registry.rs",
+      "reviewed_replacement": false,
+      "sha256": "43c3a4badd09bb70a31c9120d23e3b2b63ffa735412d172e0f0ac3d2edc85af5"
+    },
+    {
+      "baseline_sha256": "8ae67d7208229c22c503508d16d2c9718a7f19123542270cf5589569d21a51ec",
+      "bytes": 18754,
+      "new_file": false,
+      "origin": "/home/holden/mckernel-work/scratch/native-fork-composite-module-preparation-20261018-1/modules/ihk.rs",
+      "path": "ihk.rs",
+      "published_path": "/home/holden/mckernel/docs/verification/evidence/native-fork-conditional66-capsule-20261018-1/modules/ihk.rs",
+      "reviewed_replacement": false,
+      "sha256": "8ae67d7208229c22c503508d16d2c9718a7f19123542270cf5589569d21a51ec"
+    },
+    {
+      "baseline_sha256": "60739598352b236a0d698abae0c6104e7adfc05524be9a0653b2477b8728519e",
+      "bytes": 10467,
+      "new_file": false,
+      "origin": "/home/holden/mckernel-work/scratch/native-fork-composite-module-preparation-20261018-1/modules/ihk_ioctl.rs",
+      "path": "ihk_ioctl.rs",
+      "published_path": "/home/holden/mckernel/docs/verification/evidence/native-fork-conditional66-capsule-20261018-1/modules/ihk_ioctl.rs",
+      "reviewed_replacement": false,
+      "sha256": "60739598352b236a0d698abae0c6104e7adfc05524be9a0653b2477b8728519e"
+    },
+    {
+      "baseline_sha256": "1e52c69093936291f309a0317fac707c47858c6d0151cb2d288ced12353853f3",
+      "bytes": 26480,
+      "new_file": false,
+      "origin": "/home/holden/mckernel-work/scratch/native-fork-composite-module-preparation-20261018-1/modules/ikc_master.rs",
+      "path": "ikc_master.rs",
+      "published_path": "/home/holden/mckernel/docs/verification/evidence/native-fork-conditional66-capsule-20261018-1/modules/ikc_master.rs",
+      "reviewed_replacement": false,
+      "sha256": "1e52c69093936291f309a0317fac707c47858c6d0151cb2d288ced12353853f3"
+    },
+    {
+      "baseline_sha256": "3163d9cc7541941e49059aed7f8824a62229cbe8a650e02f79a4eb7a3944e9c5",
+      "bytes": 23030,
+      "new_file": false,
+      "origin": "/home/holden/mckernel-work/scratch/native-fork-composite-module-preparation-20261018-1/modules/ikc_queue.rs",
+      "path": "ikc_queue.rs",
+      "published_path": "/home/holden/mckernel/docs/verification/evidence/native-fork-conditional66-capsule-20261018-1/modules/ikc_queue.rs",
+      "reviewed_replacement": false,
+      "sha256": "3163d9cc7541941e49059aed7f8824a62229cbe8a650e02f79a4eb7a3944e9c5"
+    },
+    {
+      "baseline_sha256": "b776668f4746a309c59c3de5318eff4723e5d485d88235c089ebac5ec9bd0ad6",
+      "bytes": 30435,
+      "new_file": false,
+      "origin": "/home/holden/mckernel-work/scratch/native-fork-composite-module-preparation-20261018-1/modules/os_registry.rs",
+      "path": "os_registry.rs",
+      "published_path": "/home/holden/mckernel/docs/verification/evidence/native-fork-conditional66-capsule-20261018-1/modules/os_registry.rs",
+      "reviewed_replacement": false,
+      "sha256": "b776668f4746a309c59c3de5318eff4723e5d485d88235c089ebac5ec9bd0ad6"
+    },
+    {
+      "baseline_sha256": "9519b7f35f5d28c88cdf366fe5c67a244ea005db713690a3686afe8c2a60fcab",
+      "bytes": 142756,
+      "new_file": false,
+      "origin": "/home/holden/mckernel-work/scratch/native-fork-composite-module-preparation-20261018-1/modules/os_runtime.rs",
+      "path": "os_runtime.rs",
+      "published_path": "/home/holden/mckernel/docs/verification/evidence/native-fork-conditional66-capsule-20261018-1/modules/os_runtime.rs",
+      "reviewed_replacement": true,
+      "sha256": "df8a38f83c28dfc474ceea46e775f2ec935de0b56fb50cbd3c9921a9faa44893"
+    },
+    {
+      "baseline_sha256": "f5fc0c7fa0f62e0c3d1cef366a280c74ce083030ee6569b8c52979d9b361a572",
+      "bytes": 6907,
+      "new_file": false,
+      "origin": "/home/holden/mckernel-work/scratch/native-fork-composite-module-preparation-20261018-1/modules/os_service.rs",
+      "path": "os_service.rs",
+      "published_path": "/home/holden/mckernel/docs/verification/evidence/native-fork-conditional66-capsule-20261018-1/modules/os_service.rs",
+      "reviewed_replacement": false,
+      "sha256": "f5fc0c7fa0f62e0c3d1cef366a280c74ce083030ee6569b8c52979d9b361a572"
+    },
+    {
+      "baseline_sha256": "8e2af0cde06cbb70204540b493e8a0a66d5203195ed671235b64bed44d328bc5",
+      "bytes": 21301,
+      "new_file": false,
+      "origin": "/home/holden/mckernel-work/scratch/native-fork-composite-module-preparation-20261018-1/modules/page_allocator.rs",
+      "path": "page_allocator.rs",
+      "published_path": "/home/holden/mckernel/docs/verification/evidence/native-fork-conditional66-capsule-20261018-1/modules/page_allocator.rs",
+      "reviewed_replacement": false,
+      "sha256": "8e2af0cde06cbb70204540b493e8a0a66d5203195ed671235b64bed44d328bc5"
+    },
+    {
+      "baseline_sha256": "443d58fa5b2e423f538c6622ef04d8e34338abc43c5e0fd34811d52fc21f4869",
+      "bytes": 13085,
+      "new_file": false,
+      "origin": "/home/holden/mckernel-work/scratch/native-fork-composite-module-preparation-20261018-1/modules/page_owner_registry.rs",
+      "path": "page_owner_registry.rs",
+      "published_path": "/home/holden/mckernel/docs/verification/evidence/native-fork-conditional66-capsule-20261018-1/modules/page_owner_registry.rs",
+      "reviewed_replacement": false,
+      "sha256": "443d58fa5b2e423f538c6622ef04d8e34338abc43c5e0fd34811d52fc21f4869"
+    }
+  ],
+  "source_preparation": {
+    "bytes": 46260,
+    "path": "/home/holden/mckernel-work/scratch/native-fork-c-command-correction-20261018-1/owner-capsule/docs/verification/evidence/native-fork-consolidated-conditional-external-modules-preparation-20261018-1.json",
+    "sha256": "05cacc2e65d165d4f74a2c480dc4d3f4bbb44d8564dcb7ff919da79c9de46b74"
+  },
+  "staged_source_count": 14,
+  "timeout_seconds": 1800,
+  "tool": {
+    "bytes": 655064,
+    "container_path": "/accepted-tool/objtool-after",
+    "path": "/home/holden/mckernel-work/host-preparation/native-host-objtool-admission-repair-20261018-1/output-proposed-new-attempt/expect-failed-controls/objtool-after",
+    "sha256": "86fbde8639ac6a936de9867966b7470bb11be10ff0a9a0566de6dc1f40bc7bc0"
+  },
+  "toolflags": [
+    "--hacks=jump_label",
+    "--hacks=noinstr",
+    "--hacks=skylake",
+    "--ibt",
+    "--mcount",
+    "--mnop",
+    "--orc",
+    "--retpoline",
+    "--rethunk",
+    "--sls",
+    "--static-call",
+    "--uaccess",
+    "--prefix=16",
+    "--werror",
+    "--link",
+    "--module"
+  ]
+}

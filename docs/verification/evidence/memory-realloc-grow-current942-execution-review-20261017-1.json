@@ -1,0 +1,20 @@
+{
+  "schema": "mckernel.independent-execution-review.v1",
+  "reviewer": "/root/lifecycle_collector_review",
+  "decision": "PASS_PREPARATION_CONDITIONAL_ONE_SHOT_EXECUTION",
+  "proposal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/memory-realloc-grow-current942-execution-proposal-20261017-1.json",
+    "sha256": "148c58a7c4fd0efced079a8d3464e4beb6740b2c8aaf744ad0fe1a17a863f0dd",
+    "size": 6866
+  },
+  "runtime_bindings_changes_allowed": false,
+  "permitted_additions": [
+    "accepted alternate retirement reference",
+    "fresh dispatcher preflight",
+    "this review reference"
+  ],
+  "checks": "30references/12captures;59x9metadata;actualserializer/evaluator positive+limit+byte negatives; parent1828/109214; root27:4free/sharedabsent",
+  "conditions": "Fresh dispatcher admission, safe checkpoint, one heavy owner, HEAD/source freeze; all3 postjoin readbacks bounded32MiB/30s after positive retirement.",
+  "scope": "32original bytes preserved after grow to2048; relocation/newbyte contents unproved.",
+  "runtime_executed": false
+}

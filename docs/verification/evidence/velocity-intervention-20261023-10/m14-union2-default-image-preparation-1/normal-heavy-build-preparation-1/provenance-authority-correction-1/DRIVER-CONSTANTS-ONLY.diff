@@ -1,0 +1,11 @@
+--- /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-union2-default-image-preparation-1/normal-heavy-build-preparation-1/native_rust_exact_mckernel_image_offline.union2.py
++++ /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-union2-default-image-preparation-1/normal-heavy-build-preparation-1/provenance-authority-correction-1/native_rust_exact_mckernel_image_offline.py
+@@ -27,7 +27,7 @@
+ import native_rust_exact_build_offline as provenance
+ 
+ # Authenticate the neighboring provenance selected by this exact driver capsule.
+-EXPECTED_PROVENANCE_SHA256 = 'c5868d8a336795b5c3d76215bba8bcb3e56a804e00f1014d8b4eeaf6ddb76a69'
++EXPECTED_PROVENANCE_SHA256 = '68e1c97a16d849ab7d8d1b87fd6ffaf104f632e87f8e0d7a9fd21ca77d75460b'
+ _EXPECTED_PROVENANCE_PATH = Path(__file__).with_name("native_rust_exact_build_offline.py").resolve()
+ if (Path(provenance.__file__).resolve() != _EXPECTED_PROVENANCE_PATH or
+         hashlib.sha256(_EXPECTED_PROVENANCE_PATH.read_bytes()).hexdigest() != EXPECTED_PROVENANCE_SHA256):

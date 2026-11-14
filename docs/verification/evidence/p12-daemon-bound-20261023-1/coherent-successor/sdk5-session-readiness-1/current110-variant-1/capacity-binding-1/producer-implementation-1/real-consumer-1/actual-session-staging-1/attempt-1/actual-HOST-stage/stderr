@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/actual-session-staging-1/stage_long_session.py", line 115, in <module>
+    print(json.dumps(stage(json.loads(Path(args.binding).read_text())),sort_keys=True))
+  File "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/actual-session-staging-1/stage_long_session.py", line 79, in stage
+    need(item.sha256==selected[name]['sha256'] and len(item.data)==selected[name]['size'],'replacement exact '+name)
+KeyError: 'size'

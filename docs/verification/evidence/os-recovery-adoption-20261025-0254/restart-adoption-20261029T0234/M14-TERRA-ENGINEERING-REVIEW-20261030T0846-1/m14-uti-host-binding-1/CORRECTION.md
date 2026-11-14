@@ -1,0 +1,4 @@
+# Additive correction: public thread release
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Independent review found that RESULT.md's citation to the checked helper is not the public release_thread path. The selected `kernel/rust/process_helpers.rs:10164` public `release_thread` calls legacy `process_release_thread_body_result` at approximately :11433-11472, not `process_release_thread_checked_body_result` at :11574-11614. Preserve RESULT.md unchanged; do not use its checked-helper citation to establish behavior of public release_thread. Exact decrement/error semantics and the host-side reference and completion ownership remain to be verified; no final-reference or safe teardown proof follows. The UTI overlap and status synchronization blockers remain open.

@@ -1,0 +1,214 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PROPOSED_NOT_EXECUTED",
+  "compiler": {
+    "path": "/home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
+    "sha256": "f8d033fd72e878ec60493788c8bffec2e6c154dcab6f0cb4c145af8ada26a7ed",
+    "version_authority": "dispatcher verified 1.85.1; actualbody only; SDK 1.92 full module compile remains required"
+  },
+  "supervisor": {
+    "path": "/home/holden/mckernel/scripts/application-tests/supervisor.py",
+    "sha256": "8b8700175e6673c3a6b652d4a93bd18b56def83dfa3ac4ec821d4ae6c554e873",
+    "api": "run_supervised; unchanged accepted source8b870; no replacement harness"
+  },
+  "profile": {
+    "affinity": [
+      6
+    ],
+    "jobs": 1,
+    "rlimit_as": 2147483648,
+    "rlimit_cpu": 30,
+    "rlimit_fsize": 8388608,
+    "rlimit_nofile": 4096,
+    "rlimit_nproc": "inherited unchanged",
+    "timeout_seconds": 24,
+    "cleanup_timeout_seconds": 6,
+    "whole_seconds": 30,
+    "output_growth_limit_bytes": 67108864,
+    "stdout_limit_bytes": 1048576,
+    "stderr_limit_bytes": 1048576,
+    "root": false,
+    "docker": false,
+    "network": false,
+    "heavy": false
+  },
+  "cwd": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1",
+  "env": {
+    "HOME": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/home",
+    "TMPDIR": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/tmp",
+    "PATH": "/usr/bin:/bin",
+    "LC_ALL": "C"
+  },
+  "operations": [
+    {
+      "name": "compile-start",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=30:30",
+        "--fsize=8388608:8388608",
+        "--nofile=4096:4096",
+        "--",
+        "/home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--test",
+        "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-start.rs",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-v2-start"
+      ],
+      "source_sha256": "a9191b4b73ed85e2494ce1bf17083c4252c08c7b5f8288566a23768f65ba9ca2",
+      "expected_exit": 0
+    },
+    {
+      "name": "run-start",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=30:30",
+        "--fsize=8388608:8388608",
+        "--nofile=4096:4096",
+        "--",
+        "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-v2-start",
+        "--test-threads=1"
+      ],
+      "expected_exit": 0,
+      "executable_pin": "Require fresh compiled binary hash recorded after preceding compile and before run"
+    },
+    {
+      "name": "compile-pool",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=30:30",
+        "--fsize=8388608:8388608",
+        "--nofile=4096:4096",
+        "--",
+        "/home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--test",
+        "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-pool.rs",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-v2-pool"
+      ],
+      "source_sha256": "d795572a52285282e9c6f79069a724e48955d48ac9f6fd3c2f409b749a381f5a",
+      "expected_exit": 0
+    },
+    {
+      "name": "run-pool",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=30:30",
+        "--fsize=8388608:8388608",
+        "--nofile=4096:4096",
+        "--",
+        "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-v2-pool",
+        "--test-threads=1"
+      ],
+      "expected_exit": 0,
+      "executable_pin": "Require fresh compiled binary hash recorded after preceding compile and before run"
+    },
+    {
+      "name": "compile-dispatch",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=30:30",
+        "--fsize=8388608:8388608",
+        "--nofile=4096:4096",
+        "--",
+        "/home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--test",
+        "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-dispatch.rs",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-v2-dispatch"
+      ],
+      "source_sha256": "108d3aa20b11049d0aee4f82b04afe0cca1b9dc73f57a2a0271fd6f369d6e387",
+      "expected_exit": 0
+    },
+    {
+      "name": "run-dispatch",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=30:30",
+        "--fsize=8388608:8388608",
+        "--nofile=4096:4096",
+        "--",
+        "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-v2-dispatch",
+        "--test-threads=1"
+      ],
+      "expected_exit": 0,
+      "executable_pin": "Require fresh compiled binary hash recorded after preceding compile and before run"
+    },
+    {
+      "name": "compile-launcher",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=30:30",
+        "--fsize=8388608:8388608",
+        "--nofile=4096:4096",
+        "--",
+        "/home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-launcher.rs",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-v2-launcher"
+      ],
+      "source_sha256": "cc2d5aa0ac429bdcb552e164edfffe057a204669a6873a6527cdba5fcfa90610",
+      "expected_exit": 0
+    },
+    {
+      "name": "run-launcher",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=30:30",
+        "--fsize=8388608:8388608",
+        "--nofile=4096:4096",
+        "--",
+        "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-v2-launcher"
+      ],
+      "expected_exit": 1,
+      "executable_pin": "Require fresh compiled binary hash recorded after preceding compile and before run"
+    }
+  ],
+  "gating": "Requires root amended frozen grant. Firstcapture failure preserved; bounded capture correction selects installedPython3.9 without altering supervisor. Production SDK1.92 compile/native evidence remain unproven.",
+  "caller_python": {
+    "path": "/home/holden/anaconda3/bin/python3",
+    "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb",
+    "version": "Python3.9.12 (python3 PATH resolves same installed tree); supplies os.waitstatus_to_exitcode required by unchanged supervisor",
+    "replaces_failed_caller": "/usr/bin/python3 is3.8; supervisor collection failed after rustc exit0; retained completeoriginal"
+  },
+  "supersedes_proposal_sha256": "bf07a3bf91e53417b02bcfc20edd8422cf5372054ffcfc9d02365be203f39802",
+  "changes": "Fifth existing source smp_application_syscall.rs supplies exact read-only delivered_fork_request(handle,serial), used by host-start helper; concurrent2selector1/wronghandle/serial/generation regressions in same start binary. Eight operations/profile unchanged; fresh v2 binary/capture namespaces retain every old input/output. Caller Python3.9 fixes captured supervisor Python3.8 API deficiency.",
+  "candidate_source_pins_sha256": "c39c6e39e72660da0a587753f42c41882b310c41ee783031f3f2bf3f8d766cbc",
+  "actualbody_source_binding_sha256": "ed86bccdafb6245827ca50a458d98feb071b6cb24fa547c2eb8d2a425a2c3077",
+  "capture_namespace": "actualbody-owned-capture-2-{operation}; fresh binaries actualbody-v2-{name}"
+}

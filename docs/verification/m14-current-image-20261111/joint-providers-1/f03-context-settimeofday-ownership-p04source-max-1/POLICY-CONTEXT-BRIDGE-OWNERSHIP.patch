@@ -1,0 +1,93 @@
+--- a/kernel/CMakeLists.txt
++++ b/kernel/CMakeLists.txt
+@@ -103,6 +103,7 @@
+ set(MCKERNEL_DO_MMAP_SELECTED OFF)
+ set(MCKERNEL_DO_FORK_SELECTED OFF)
+ set(MCKERNEL_DO_SYSCALL2_BRIDGE_SELECTED OFF)
++set(MCKERNEL_POLICY_FORWARD_CONTEXT_SELECTED OFF)
+ set(MCKERNEL_DO_SYSCALL_C_FILE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c")
+ set(MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS 0)
+ set(RUST_KERNEL_ENABLED OFF)
+@@ -605,6 +606,13 @@
+             list(APPEND RUST_KERNEL_SRCS
+                 "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_do_syscall2_bridge.rs")
+         endif()
++        # Narrow genuine context adapter; retain every existing generic/exec gate.
++        if (MCKERNEL_RUST_F06_WHOLE_DEFAULT AND NOT ENABLE_NATIVE_FORK_OWNED_TRANSACTION)
++            set(MCKERNEL_POLICY_FORWARD_CONTEXT_SELECTED ON)
++            list(APPEND RUST_KERNEL_CFG "--cfg" "f03_policy_forward_context_bridge_candidate")
++            list(APPEND RUST_KERNEL_SRCS
++                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_policy_forward_context_bridge.rs")
++        endif()
+ 		add_custom_command(
+ 		OUTPUT "${RUST_KERNEL_OBJ}"
+ 		COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/rust"
+@@ -1047,6 +1055,11 @@
+         COMPILE_DEFINITIONS MCKERNEL_RUST_F03_DO_SYSCALL2_BRIDGE)
+ endif()
+ 
++if (MCKERNEL_POLICY_FORWARD_CONTEXT_SELECTED)
++    set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
++        COMPILE_DEFINITIONS MCKERNEL_RUST_F03_POLICY_FORWARD_CONTEXT_BRIDGE)
++endif()
++
+ add_executable(mckernel.img ${MCKERNEL_SRCS})
+ if (RUST_KERNEL_ENABLED)
+ 	add_dependencies(mckernel.img mckernel_rust_obj)
+--- a/kernel/rust/lib.rs
++++ b/kernel/rust/lib.rs
+@@ -68,6 +68,8 @@
+ mod syscall_offload_entry;
+ #[cfg(f03_do_syscall2_bridge_candidate)]
+ mod f03_do_syscall2_bridge;
++#[cfg(f03_policy_forward_context_bridge_candidate)]
++mod f03_policy_forward_context_bridge;
+ #[cfg(any(f06_rt_sigreturn_xrstor_candidate, f06_debug_constants_candidate))]
+ mod f06_rt_sigreturn_xrstor;
+ #[cfg(all(f03_forward_adapters_candidate, target_arch = "x86_64"))]
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -20856,7 +20856,7 @@
+ 			(ihk_mc_user_context_t *)ctx);
+ }
+ 
+-#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && !defined(MCKERNEL_RUST_F03_POLICY_FORWARD_CONTEXT_BRIDGE)
+ long
+ syscall_policy_forward_context_bridge(int syscall_nr, void *ctx)
+ {
+--- /dev/null
++++ b/kernel/rust/f03_policy_forward_context_bridge.rs
+@@ -0,0 +1,32 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Genuine narrow policy context adapter over the already selected Rust forwarder.
++use core::ffi::c_void;
++use crate::abi::{CInt, CLong, X86UserContext};
++
++#[cfg(any(not(target_arch = "x86_64"), not(native_linux_irq_work_v6_12),
++    not(enable_profile), not(enable_perf), not(enable_rusage), enable_tofu,
++    enable_fugaku_hacks, f03_forward_adapters_candidate))]
++compile_error!("policy context bridge requires its paired qualified ordinary profile");
++
++/// Preserve the actual CInt/opaque-context/CLong ABI and one forwarding call.
++///
++/// # Safety
++/// The original caller owns the live x86_64 syscall context through the complete
++/// synchronous operation. The cast preserves its address without forming a Rust
++/// reference, modifying registers, validating new conditions or retaining it.
++/// The unchanged genuine forwarder still owns its existing null handling, all
++/// six argument loads, current-CPU selection, request construction, diagnostics
++/// and call to the selected do_syscall implementation. No held request is run.
++#[no_mangle]
++pub unsafe extern "C" fn syscall_policy_forward_context_bridge(
++    number: CInt, context: *mut c_void,
++) -> CLong {
++    unsafe {
++        crate::syscall_policy::syscall_generic_forwarding(
++            number, context.cast::<X86UserContext>(),
++        )
++    }
++}
++
++const _: unsafe extern "C" fn(CInt, *mut c_void) -> CLong =
++    syscall_policy_forward_context_bridge;

@@ -1,0 +1,42 @@
+{
+  "CPU_reserved": false,
+  "C_witness": {
+    "bytes": 1036,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-x86-wakeup-source-only-1/FUTURE-C-TYPE-ABI.c.inc",
+    "sha256": "393c116e7e6a7b5052635c111d578e24565482372f45fea4bf501b0e9b303231"
+  },
+  "Rust_witness": {
+    "bytes": 1318,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-x86-wakeup-source-only-1/FUTURE-RUST-TYPE-ABI.inc",
+    "sha256": "03d16d9903a89a4967fd6f0ec0ab5cd4bae512a3240760649c235923f549b0ba"
+  },
+  "actual_result": null,
+  "candidate_bytes_changed": false,
+  "compiler_jobs": 0,
+  "controlled_effect_requirements": [
+    "originalC and actualRust equal independent INIT/SIPI tape",
+    "status initiallynonzero still performs first SIPI/delay before check",
+    "0..3 completion times/never complete and negative nonzero values",
+    "fullulong warmreset IP then exactunsigned32 IPIconversion",
+    "callback slot mutation between calls proves expression-order reload; no concurrent writer invented"
+  ],
+  "engineering_percentage": null,
+  "oracle": "all22 words exact C/Rust equality; staticassert actual existing slot/callback prototypes; actual original macro-data array has exactly5unsigned-int words",
+  "original_source_handoff": {
+    "bytes": 5823,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-x86-wakeup-source-only-1/SOURCE-HANDOFF.json",
+    "sha256": "250536a1cf81591e4e4c50a44c541d59e60b8aa93eff63ed115afed0713006d3"
+  },
+  "planned_ABI_words_NOT_MEASURED": 22,
+  "production_symbol_requirements": [
+    "one Rust T __x86_wakeup and no Rust U __x86_wakeup",
+    "selected C no t/T __x86_wakeup or set_warm_reset_vector; fallback retains both original local bodies",
+    "five actual pointer descriptors and one5wordconstant array provider in selected C; no invented C getter or generic provider",
+    "actual current selected x86_wakeup_bridge call relocation must resolve to new Rust entry in partial",
+    "all prior Rust exports/callback imports preserved according to actual current78 baseline at future grant; no guessed counts"
+  ],
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "sole_executable_queue": "exception-stop bounded-error-alias-correction-1/631899 sealeddriver6e39; this fragment adds no main/argv/driver",
+  "status": "SOURCE_ONLY_REAL_TYPED_ABI_PROOF_FRAGMENT_NO_NEW_QUEUE",
+  "unsafe_platform_native": "NOTEXECUTED; future root admission and existing APIC/static-storage lifetime prerequisites retained"
+}

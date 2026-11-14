@@ -1,0 +1,32 @@
+--- original/run_installed_loader_h990_once.py
++++ current-limit/run_installed_loader_h990_once.py
+@@ -17,13 +17,16 @@
+   spec=importlib.util.spec_from_file_location('installed_loader_actual_guard',GUARD);_ACCOUNT=importlib.util.module_from_spec(spec);spec.loader.exec_module(_ACCOUNT)
+  return _ACCOUNT.guard()
+ parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--grant',required=True);parser.add_argument('--grant-sha256',required=True);args=parser.parse_args()
+-packet=D/'LOADER-THREE-COMMANDS.NOT-RELEASED.json';need(hashlib.sha256(packet.read_bytes()).hexdigest()=='c10d3e71f66fb9d97e91319ada8a4951b55b48740c440ca270b7d6b79cec9d3c','exact reviewed source packet')
++packet=D/'LOADER-THREE-COMMANDS.NOT-RELEASED.json';need(hashlib.sha256(packet.read_bytes()).hexdigest()=='455a43daa524dee21cdeb2e91d4204fb855f9ed6601fb20fe9a9b2caf3548041','exact reviewed source packet')
+ graw=Path(args.grant).read_bytes();need(hashlib.sha256(graw).hexdigest()==args.grant_sha256,'actual Root grant bytes');actual_grant=json.loads(graw)
+ need(actual_grant.get('status')=='PASS_ROOT_ORDINARY_INSTALLED_LOADER_THREE_COMMANDS' and actual_grant.get('author')=='/root' and actual_grant.get('execution_count')==1,'actual one-shot Root ordinary loader grant')
+ need(actual_grant.get('packet')==dict(path=str(packet),sha256=hashlib.sha256(packet.read_bytes()).hexdigest()) and actual_grant.get('source')==dict(path=str(SELF),sha256=hashlib.sha256(SELF.read_bytes()).hexdigest()),'actual exact packet/source grant')
+ now=check_campaign();need(len(actual_grant['observed_clocks'])==3 and all(0<=n-o<120 for n,o in zip(now,actual_grant['observed_clocks'])) and actual_grant.get('ordinary_CPU6_reserved') is True,'fresh Root ordinary CPU6 reservation')
+ 
+-p=json.loads(packet.read_text());need(actual_grant.get('profile')==p['profile'],'exact granted profile');need(os.getuid()==os.geteuid()==1000 and os.sched_getaffinity(0)=={6},'nonroot CPU6 grant')
++p=json.loads(packet.read_text());need(actual_grant.get('profile')==p['profile'],'exact granted profile')
++reserved=actual_grant.get('aggregate_reserved_memory_bytes')
++need(type(reserved) is int and p['profile']['AS_bytes']<=reserved<=p['profile']['aggregate_memory_ceiling_bytes']==23259332608,'actual shared reservation including this job within current invocation ceiling')
++need(os.getuid()==os.geteuid()==1000 and os.sched_getaffinity(0)=={6},'nonroot CPU6 grant')
+ for kind,n in [(resource.RLIMIT_AS,512<<20),(resource.RLIMIT_CPU,30),(resource.RLIMIT_FSIZE,128<<20),(resource.RLIMIT_NOFILE,256),(resource.RLIMIT_CORE,0)]:need(resource.getrlimit(kind)==(n,n),'exact granted profile')
+ need(hashlib.sha256(H.read_bytes()).hexdigest()=='990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8','exact h990')
+ functions={'need','write','hashed','stop','members','cpu_used','process_start','terminal_unreaped','wait_terminal','owned_capture'};constants={'FIELDS','stopping','CENSUS_SOURCE','CENSUS_SHA','_CENSUS','STOP_SIGNALS'}
+--- original/LOADER-THREE-COMMANDS.NOT-RELEASED.json
++++ current-limit/LOADER-THREE-COMMANDS.NOT-RELEASED.json
+@@ -241,7 +241,7 @@
+     "HOST_MemAvailable_reserve_bytes": 4294967296,
+     "NOFILE": 256,
+     "aggregate_jobs_max": 7,
+-    "aggregate_memory_ceiling_bytes": 23941543572,
++    "aggregate_memory_ceiling_bytes": 23259332608,
+     "commands_sequential": 3,
+     "compiler": false,
+     "daemon_or_CLI_main": false,

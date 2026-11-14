@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "record_kind": "pending_free_inventory_fixture_source_failure",
+  "task_id": "M03-A/M03-B-private-bounded-inventory-fixture",
+  "attempt": 1,
+  "status": "FAIL_SOURCE",
+  "recorded_utc": "2026-09-15T08:45:00Z",
+  "source_sha256": {
+    "model": "14e42e0ebda3bb5b47662747ddc98f161ab3cd571dd0e12b966f6c709ae45fd0",
+    "vectors": "3af14f248780564c6d93a829fc67121b309ad41c287cf654bc5975f74397414a",
+    "c_reference": "3118234925260c0c41d0eade12e9b5f4fc05d67af092cecdfa9f28fb26bc1c2d",
+    "harness": "b45253d694092ccf9b53b192aa9817329c220534eae1496fa7e7ce5ee02782e9"
+  },
+  "archive": {
+    "path": "docs/verification/evidence/stability-pending-free-inventory-source-checkpoint-20260915-1.tar.gz",
+    "sha256": "8c199451342f04a5dde1815372573524da9da4708d57648c53f84d15cbe45793",
+    "size": 2468,
+    "members": 4
+  },
+  "independent_results": ["FAIL_SOURCE", "FAIL_SOURCE_EVIDENCE"],
+  "blocking_findings": [
+    "Rust and C vectors contain expected constants but construct or compute no cases",
+    "validator accepts malformed/self/nonreciprocal/out-of-inventory rings without sentinel/cardinality proof",
+    "descriptor identity is conflated with extent and lacks trusted alignment/range/page geometry",
+    "Copy inventories retain no arena lifetime and validation invokes repeatable release callbacks instead of returning non-releasing authority"
+  ],
+  "reported_source_parser_output": "PASS_SOURCE_INVENTORY_PARITY|vectors=14|compile=disabled|runtime=disabled",
+  "retained_command_streams": false,
+  "compiler_execution": false,
+  "runtime_acceptance": false,
+  "production_gate_credit": false
+}

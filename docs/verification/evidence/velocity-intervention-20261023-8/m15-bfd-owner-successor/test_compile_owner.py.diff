@@ -1,0 +1,129 @@
+--- /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/test_compile_owner.py
++++ /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-bfd-owner-successor/test_compile_owner.py
+@@ -69,7 +69,7 @@
+ def effective_info(bound=None, request=None):
+     config = {"Labels": {"mckernel.owner": owner.COMPILE_PROFILE["owner_nonce"],
+                          "mckernel.operation": owner.COMPILE_PROFILE["operation"]},
+-              "Entrypoint": ["/usr/bin/python3"], "Cmd": owner._compile_command(bound, request) if request else [],
++              "Entrypoint": ["/usr/bin/env"], "Cmd": owner._compile_command(bound, request) if request else [],
+               "User": "1000:1000"}
+     host = dict(owner.LIMITS, Privileged=False, ReadonlyRootfs=True, CapDrop=["ALL"], SecurityOpt=["no-new-privileges"],
+                 Init=True, PidMode="", IpcMode="private", Devices=[], DeviceRequests=[], Binds=None,
+@@ -113,7 +113,7 @@
+ 
+     def test_null_release_rejects_before_docker_lease_or_output(self):
+         fake = types.SimpleNamespace(call=lambda *args, **kwargs: self.fail("Docker must not be called"))
+-        with self.assertRaises(owner.OwnerError):
++        with patch.object(owner._HOST_OWNER, "Docker", side_effect=AssertionError("Docker factory forbidden")), self.assertRaises(owner.OwnerError):
+             owner.ImageOwner(REQUEST, docker=fake).run()
+         self.assertFalse(Path(REQUEST["lease_path"]).exists())
+         self.assertFalse(Path(REQUEST["attempt_root"]).exists())
+@@ -250,18 +250,17 @@
+         evidence_parent = root / "owner-evidence"
+         work.mkdir()
+         evidence_parent.mkdir()
+-        evidence = work / "evidence"
++        evidence = work / "qualification-1"
+         evidence.mkdir()
+-        (evidence / "receipt.json").write_text("{}")
++        (evidence / "RESULT.json").write_text("{}")
+         request = {"compile_only_release": {"fake": "fixture-only"}, "lease_path": str(root / "compile-lease.json"),
+-                   "candidate_sha": "c" * 40, "ihk_sha": "d" * 40, "source_derivative_sha256": "e" * 64,
+-                   "materialization_sha256": "f" * 64, "image_id": owner.COMPILE_PROFILE["image_id"],
+-                   "timeout": 60, "memory_backed_bytes": 0, "aggregate_memory_required": 4 * 2**30,
++                   "input_manifest_sha256": "c" * 64, "candidate_root": str(root / "candidate"), "source_root": str(root / "source"), "image_id": owner.COMPILE_PROFILE["image_id"],
++                   "timeout": 60, "memory_backed_bytes": 0, "aggregate_memory_required": 2 * 2**30,
+                    "disk_admission": {"host_root": str(root), "scratch_root": str(root)}}
+         fake_host = types.SimpleNamespace(check_profile=owner._HOST_OWNER.check_profile,
+-            measure=lambda *args, **kwargs: {"memory_allocation_memory_backed_bytes": 0, "aggregate_memory_required": 4 * 2**30})
++            measure=lambda *args, **kwargs: {"memory_allocation_memory_backed_bytes": 0, "aggregate_memory_required": 2 * 2**30})
+         bound = {"attempt": evidence_parent / "attempt", "owner_evidence": evidence_parent, "evidence": evidence,
+-                 "output": work / "output", "work": work, "host_owner": fake_host, "source": root / "source",
++                 "output": evidence, "work": work, "candidate": root / "candidate", "host_owner": fake_host, "source": root / "source",
+                  "manifest": root / "inputs.json", "gitlink_manifest": root / "gitlink.json", "gitlink_root": root / "libdwarf",
+                  "toolchain": root / "toolchain.json", "driver": root / "driver.py", "provenance": root / "provenance.py",
+                  "toolchain_schema": "mckernel.native-exact-mckernel-image-toolchain.v2", "mounts_by_target": {"/out": root / "cache", "/nightly": root / "nightly"},
+@@ -294,7 +293,7 @@
+         answer = obj.run()
+         self.assertEqual(answer["status"], "FAIL")
+         self.assertEqual(answer["exit_code"], 1)
+-        self.assertIn("offline candidate14 image driver failed", answer["error"])
++        self.assertIn("BFD qualifier failed; failure evidence retained", answer["error"])
+         self.assertTrue(answer["retired"])
+         self.assertTrue((root / "compile-lease.json").exists())
+ 
+@@ -306,6 +305,74 @@
+         self.assertFalse(client.removed)
+         self.assertTrue((root / "compile-lease.json").exists())
+ 
++    def test_exact_bfd_command_and_mounts_create_inspect(self):
++        root = self.temp()
++        self.temporary_profile(root)
++        bound = {"source": root / "src", "candidate": root / "candidate", "work": root / "owner-work",
++                 "mounts_by_target": {"/out": root / "pinned", "/nightly": root / "nightly"}}
++        args, mounts, command = owner._compile_create_args(bound, REQUEST)
++        self.assertEqual(["/usr/bin/env", *command], REQUEST["exact_command"])
++        self.assertEqual(args[args.index("--entrypoint") + 1], "/usr/bin/env")
++        self.assertIn("--memory=2g", args)
++        self.assertIn("--memory-swap=2g", args)
++        self.assertNotIn("--memory=4g", args)
++        self.assertEqual(owner.LIMITS["Memory"], 2 * 2**30)
++        self.assertEqual(owner.LIMITS, owner._HOST_OWNER.LIMITS)
++        self.assertEqual(owner._HOST_OWNER.MEMORY_AGGREGATE_LIMIT, 24 * 2**30)
++        self.assertEqual([(target, ro) for _, target, ro in mounts],
++                         [("/src", True), ("/candidate", True), ("/work", False), ("/nightly", True), ("/out", True)])
++        info = effective_info(bound, REQUEST)
++        owner._check_profile(info, REQUEST["image_id"], owner.COMPILE_PROFILE["owner_nonce"], mounts, command, "1000:1000")
++        for changes in ({"Entrypoint": ["/usr/bin/python3"]}, {"Cmd": ["/driver.py"]}):
++            changed = copy.deepcopy(info)
++            changed["Config"].update(changes)
++            with self.assertRaises(owner.OwnerError):
++                owner._check_profile(changed, REQUEST["image_id"], owner.COMPILE_PROFILE["owner_nonce"], mounts, command, "1000:1000")
++        changed = copy.deepcopy(info)
++        changed["HostConfig"]["MemorySwap"] = 4 * 2**30
++        with self.assertRaises(RuntimeError):
++            owner._check_profile(changed, REQUEST["image_id"], owner.COMPILE_PROFILE["owner_nonce"], mounts, command, "1000:1000")
++        changed = copy.deepcopy(info)
++        changed["Mounts"][1]["RW"] = True
++        with self.assertRaises(owner.OwnerError):
++            owner._check_profile(changed, REQUEST["image_id"], owner.COMPILE_PROFILE["owner_nonce"], mounts, command, "1000:1000")
++
++    def test_changed_bfd_workload_refused(self):
++        for key, value in (("candidate_root", "/tmp/foreign"), ("source_root", "/tmp/source"),
++                           ("input_manifest_sha256", "0" * 64), ("exact_command", ["/usr/bin/python3", "/driver.py"])):
++            with self.subTest(key=key), self.assertRaises(owner.OwnerError):
++                owner._validate_compile_domain(dict(REQUEST, **{key:value}))
++
++    def test_input_inventory_directory_link_is_bound(self):
++        root = self.temp()
++        (root / "selected").mkdir()
++        (root / "selected/target").mkdir()
++        (root / "selected/target/body").write_text("functional body")
++        (root / "selected/link").symlink_to("target", target_is_directory=True)
++        observed = owner._bfd_inventory(root, ["selected"])
++        self.assertEqual(observed["selected/link"]["resolved"], "selected/target")
++        (root / "outside").mkdir()
++        (root / "selected/link").unlink()
++        (root / "selected/link").symlink_to("../outside", target_is_directory=True)
++        with self.assertRaises(owner.OwnerError):
++            owner._bfd_inventory(root, ["selected"])
++
++    def test_precreate_failure_retains_cidless_lease(self):
++        root, obj, client = self.setup_full_run()
++        with patch.object(owner, "_check_live_p12", side_effect=owner.OwnerError("fixture changed P12")):
++            answer = obj.run()
++        self.assertEqual(answer["status"], "FAIL")
++        self.assertIsNone(answer["container_id"])
++        self.assertFalse(answer["retired"])
++        self.assertTrue(answer["no_container_create_attempted"])
++        self.assertTrue((root / "compile-lease.json").exists())
++        self.assertEqual([x[0] for x in client.calls], ["image"])
++
++    def test_old_image_result_cannot_be_bfd_acceptance(self):
++        root = self.temp()
++        with self.assertRaises(owner.OwnerError):
++            owner._validate_driver_result(root, root, {"status":"PASS"}, REQUEST)
++
+     def test_release_controller_without_root_acceptance_has_no_docker_effect(self):
+         fake = types.SimpleNamespace(call=lambda *args, **kwargs: self.fail("release must not contact Docker"))
+         with self.assertRaises(FileNotFoundError):

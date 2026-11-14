@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "e8402f71283634f53923b57a1a920d9bc5e4a0670c6c6aba03eb967f893bf316",
+  "packet_id": "packet-007",
+  "packet_version": 2,
+  "context_sha256": "3a24d92c733eea4ccd11ab66cff02e3107384a508b533309f44aaebf22c196e3",
+  "started_utc": "2026-09-09T09:52:41Z",
+  "finished_utc": "2026-09-09T09:52:41Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "vector.capability-snapshot",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/vector/vector.capability-snapshot.c",
+      "oracle": "scripts/application-tests/oracles/vector.capability-snapshot.json",
+      "changed_files": [
+        "scripts/application-tests/cases/vector/vector.capability-snapshot.c",
+        "scripts/application-tests/oracles/vector.capability-snapshot.json"
+      ],
+      "unresolved_oracle_notes": [
+        "Exact canonical seed/input byte and expected leaf-subleaf boundary arrays are not yet frozen for all CPUID subleafs and QEMU CPU model rows."
+      ],
+      "max_reviewer_question": "Can this case keep XGETBV as BLOCKED when XSAVE/OSXSAVE is missing and still preserve a deterministic blocked outcome contract?"
+    },
+    {
+      "case_id": "vector.xmm-raw-syscall",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/vector/vector.xmm-raw-syscall.c",
+      "oracle": "scripts/application-tests/oracles/vector.xmm-raw-syscall.json",
+      "changed_files": [
+        "scripts/application-tests/cases/vector/vector.xmm-raw-syscall.c",
+        "scripts/application-tests/oracles/vector.xmm-raw-syscall.json"
+      ],
+      "unresolved_oracle_notes": [
+        "Seed/output byte arrays are represented by formulas; exact per-byte literals and identity-only transitions should be finalized before PASS enforcement."
+      ],
+      "max_reviewer_question": "Can full per-byte equality (all 5*16*16 snapshots + identity tuples) be required, or should identity-only post-syscall constraints remain bounded?"
+    },
+    {
+      "case_id": "vector.ymm-raw-syscall",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/vector/vector.ymm-raw-syscall.c",
+      "oracle": "scripts/application-tests/oracles/vector.ymm-raw-syscall.json",
+      "changed_files": [
+        "scripts/application-tests/cases/vector/vector.ymm-raw-syscall.c",
+        "scripts/application-tests/oracles/vector.ymm-raw-syscall.json"
+      ],
+      "unresolved_oracle_notes": [
+        "Upper-lane/dispatch-window disassembly and exact 512-byte literals remain unresolved pending final oracle freeze."
+      ],
+      "max_reviewer_question": "Is strict full-256-bit half-independent equality required for both lower and upper halves or only for total register payload?"
+    }
+  ],
+  "changed_files_with_sha256": [
+    {
+      "path": "scripts/application-tests/cases/vector/vector.capability-snapshot.c",
+      "sha256": "c5a978c031f582b429a0d6d2f04db6c965275111e6f57a0c26d4bdb44098fc99"
+    },
+    {
+      "path": "scripts/application-tests/oracles/vector.capability-snapshot.json",
+      "sha256": "6a87daa6045ed8cdfd18f0a4e47a2ba2467171a6975451f1e63036b9c677280c"
+    },
+    {
+      "path": "scripts/application-tests/cases/vector/vector.xmm-raw-syscall.c",
+      "sha256": "de568ecee52c5d756e6ec818878c261713f0e050c66c9ae54699925b8a3e87ad"
+    },
+    {
+      "path": "scripts/application-tests/oracles/vector.xmm-raw-syscall.json",
+      "sha256": "cd2bfd03d6daa85d8dce292f47fd797d4ab8c4f328f7f30d80721e01cd964ee8"
+    },
+    {
+      "path": "scripts/application-tests/cases/vector/vector.ymm-raw-syscall.c",
+      "sha256": "0d93088c54fa6bac12707a559ee9b309897233c3c59b605e77dc65b179be2750"
+    },
+    {
+      "path": "scripts/application-tests/oracles/vector.ymm-raw-syscall.json",
+      "sha256": "933b31572bee3db40a9ac5918913722ee2c0c2cf3e63499beebee47c9bf52593"
+    }
+  ],
+  "commands_and_outcomes": [
+    {
+      "command": "python3 -B /home/holden/mckernel/scripts/application-tests/validate.py --packet /home/holden/mckernel/scripts/application-tests/packets/packet-007.json",
+      "outcome": "PASS"
+    },
+    {
+      "command": "python3 -B /home/holden/mckernel/scripts/application-tests/validate.py --packet /home/holden/mckernel/scripts/application-tests/packets/packet-007.json --emit-context /home/holden/mckernel-work/scratch/application-test-drafts-20260909/packet-007-context-attempt-1.json",
+      "outcome": "PASS"
+    },
+    {
+      "command": "git diff --check",
+      "outcome": "PASS"
+    }
+  ],
+  "unresolved_oracles": [
+    "Exact CPUID boundary/layering and xgetbv guard contract still requires a fixed raw-byte baseline for final draft acceptance.",
+    "XMM raw syscall case still has symbolic per-byte seed/output expectations; exact arrays are not yet frozen.",
+    "YMM raw syscall case still has symbolic per-byte seed/output expectations; exact upper-lane constraints are not yet frozen."
+  ],
+  "blocked_execution_capabilities": [
+    "current-inputs",
+    "dynamic-etexec",
+    "runner-contract",
+    "runtime-transport-fault-injection",
+    "vector-context-observer",
+    "vector-instruction-audit",
+    "vector-runtime-discovery"
+  ],
+  "first_failure_event": null,
+  "max_escalation": [
+    "Finalize exact CPUID raw snapshot schema (including leaf7/leafD boundaries and xgetbv blocked-vs-enabled transitions) before enabling execution.",
+    "Confirm whether write-byte identity checks require byte-for-byte register snapshots across all transitions for both XMM/YMM cases."
+  ],
+  "next_packet_id": "packet-008"
+}

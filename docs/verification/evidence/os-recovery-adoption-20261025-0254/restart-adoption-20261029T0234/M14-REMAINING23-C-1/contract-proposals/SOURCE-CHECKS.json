@@ -1,0 +1,23 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PROPOSED_UNSELECTED_REQUIRES_ROOT_CONTRACT",
+  "checks": [
+    "event 4 and C callback signature",
+    "modeled retained C file/function/line 24429",
+    "Rust proposed unsigned-int vararg formatting and writable descriptor",
+    "pure arithmetic examples only, not C parity or runtime"
+  ],
+  "u32_hex_examples": {
+    "-2147483648": "80000000",
+    "-1": "ffffffff",
+    "0": "00000000",
+    "1": "00000001",
+    "2147483647": "7fffffff"
+  },
+  "proposal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-C-1/contract-proposals/ptrace_wakeup_log.UNSELECTED.rs.inc",
+    "bytes": 1689,
+    "sha256": "55e13d33c95e85bd71c7a530a9d7056fa5c2c66f26412d5aa7906b087fa47886"
+  },
+  "limitations": "No C selector or production integration. Actual source file/metadata, flags, vararg contract, compiler/link and functional proof remain open."
+}

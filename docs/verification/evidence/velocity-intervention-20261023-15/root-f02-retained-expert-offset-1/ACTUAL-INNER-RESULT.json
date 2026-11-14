@@ -1,0 +1,3099 @@
+{
+  "COW_copy_log_evaluation_HOLD": true,
+  "CPU0_released": true,
+  "actual_Rust_T_U_delta": {
+    "T": {
+      "added": [
+        "process_extend_region_body_result",
+        "process_page_fault_anon_clear_body_result",
+        "process_page_fault_cow_classify_body_result",
+        "process_page_fault_cow_commit_body_result",
+        "process_page_fault_finish_body_result",
+        "process_page_fault_memobj_get_body_result",
+        "process_page_fault_out_body_result",
+        "process_page_fault_set_pte_body_result",
+        "process_page_fault_set_range_body_result"
+      ],
+      "after": 3119,
+      "before": 3110,
+      "removed": []
+    },
+    "U": {
+      "added": [],
+      "after": 596,
+      "before": 596,
+      "removed": []
+    }
+  },
+  "actual_original_commands_completed": 13,
+  "actual_unchanged_C_callers": [
+    {
+      "bytes": 2586,
+      "caller": "page_fault_process_memory_range",
+      "full_relocations": [
+        {
+          "addend": 6,
+          "relative_offset": 10,
+          "symbol": "_GLOBAL_OFFSET_TABLE_",
+          "type": 29
+        },
+        {
+          "addend": 0,
+          "relative_offset": 21,
+          "symbol": "get_this_cpu_local_var",
+          "type": 31
+        },
+        {
+          "addend": 0,
+          "relative_offset": 113,
+          "symbol": "ddebug.11883",
+          "type": 25
+        },
+        {
+          "addend": 0,
+          "relative_offset": 135,
+          "symbol": "ddebug.11885",
+          "type": 25
+        },
+        {
+          "addend": 0,
+          "relative_offset": 208,
+          "symbol": "process_page_fault_prepare_body_result",
+          "type": 31
+        },
+        {
+          "addend": 0,
+          "relative_offset": 235,
+          "symbol": "ddebug.11887",
+          "type": 25
+        },
+        {
+          "addend": 0,
+          "relative_offset": 270,
+          "symbol": "pte_is_fileoff",
+          "type": 31
+        },
+        {
+          "addend": 0,
+          "relative_offset": 311,
+          "symbol": "pte_is_null",
+          "type": 31
+        },
+        {
+          "addend": 0,
+          "relative_offset": 339,
+          "symbol": "__FUNCTION__.11888",
+          "type": 25
+        },
+        {
+          "addend": 0,
+          "relative_offset": 352,
+          "symbol": "kprintf",
+          "type": 31
+        },
+        {
+          "addend": 0,
+          "relative_offset": 369,
+          "symbol": ".LC109",
+          "type": 25
+        },
+        {
+          "addend": 0,
+          "relative_offset": 397,
+          "symbol": "pte_is_null",
+          "type": 31
+        },
+        {
+          "addend": 0,
+          "relative_offset": 469,
+          "symbol": "process_page_fault_memobj_get_body_result",
+          "type": 31
+        },
+        {
+          "addend": 0,
+          "relative_offset": 510,
+          "symbol": "phys_to_page",
+          "type": 31
+        },
+        {
+          "addend": 0,
+          "relative_offset": 545,
+          "symbol": "arch_vrflag_to_ptattr",
+          "type": 31
+        },
+        {
+          "addend": 0,
+          "relative_offset": 573,
+          "symbol": "process_page_fault_cow_classify_body_result",
+          "type": 31
+        },
+        {
+          "addend": 0,
+          "relative_offset": 647,
+          "symbol": ".LC0",
+          "type": 25
+        },
+        {
+          "addend": 0,
+          "relative_offset": 665,
+          "symbol": "_ihk_mc_alloc_aligned_pages_node",
+          "type": 31
+        },
+        {
+          "addend": 0,
+          "relative_offset": 696,
+          "symbol": "phys_to_virt",
+          "type": 31
+        },
+        {
+          "addend": 0,
+          "relative_offset": 721,
+          "symbol": "ddebug.11895",
+          "type": 25
+        },
+        {
+          "addend": 0,
+          "relative_offset": 790,
+          "symbol": "memcpy",
+          "type": 31
+        },
+        {
+          "addend": 0,
+          "relative_offset": 841,
+          "symbol": "process_page_fault_cow_rss_sub_debug",
+          "type": 25
+        },
+        {
+          "addend": 0,
+          "relative_offset": 858,
+          "symbol": "process_page_fault_cow_rss_add_debug",
+          "type": 25
+        },
+        {
+          "addend": 0,
+          "relative_offset": 872,
+          "symbol": "process_page_fault_cow_commit_body_result",
+          "type": 31
+        },
+        {
+          "addend": 0,
+          "relative_offset": 939,
+          "symbol": "pgsize_is_contiguous",
+          "type": 31
+        },
+        {
+          "addend": 0,
+          "relative_offset": 983,
+          "symbol": "ihk_mc_pt_set_range",
+          "type": 27
+        },
+        {
+          "addend": 0,
+          "relative_offset": 1000,
+          "symbol": "process_page_fault_set_range_body_result",
+          "type": 31
+        },
+        {
+          "addend": 0,
+          "relative_offset": 1041,
+          "symbol": "process_page_fault_finish_body_result",
+          "type": 31
+        },
+        {
+          "addend": 0,
+          "relative_offset": 1070,
+          "symbol": "process_page_fault_out_return_debug",
+          "type": 25
+        },
+        {
+          "addend": 0,
+          "relative_offset": 1094,
+          "symbol": "process_page_fault_out_rss_sub_debug",
+          "type": 25
+        },
+        {
+          "addend": 0,
+          "relative_offset": 1108,
+          "symbol": "process_page_fault_out_stray_debug",
+          "type": 25
+        },
+        {
+          "addend": 0,
+          "relative_offset": 1126,
+          "symbol": "process_page_fault_out_body_result",
+          "type": 31
+        },
+        {
+          "addend": 0,
+          "relative_offset": 1189,
+          "symbol": "__func__.11884",
+          "type": 25
+        },
+        {
+          "addend": 0,
+          "relative_offset": 1202,
+          "symbol": "kprintf",
+          "type": 31
+        },
+        {
+          "addend": 0,
+          "relative_offset": 1219,
+          "symbol": ".LC107",
+          "type": 25
+        },
+        {
+          "addend": 0,
+          "relative_offset": 1250,
+          "symbol": "zeroobj_create",
+          "type": 31
+        },
+        {
+          "addend": 0,
+          "relative_offset": 1326,
+          "symbol": ".LC108",
+          "type": 25
+        },
+        {
+          "addend": 0,
+          "relative_offset": 1336,
+          "symbol": "kprintf",
+          "type": 31
+        },
+        {
+          "addend": 0,
+          "relative_offset": 1410,
+          "symbol": ".LC105",
+          "type": 25
+        },
+        {
+          "addend": 0,
+          "relative_offset": 1436,
+          "symbol": ".LC106",
+          "type": 25
+        },
+        {
+          "addend": 0,
+          "relative_offset": 1458,
+          "symbol": ".LC110",
+          "type": 25
+        },
+        {
+          "addend": 0,
+          "relative_offset": 1472,
+          "symbol": "panic",
+          "type": 31
+        },
+        {
+          "addend": 0,
+          "relative_offset": 1498,
+          "symbol": "_ihk_mc_alloc_aligned_pages_node",
+          "type": 31
+        },
+        {
+          "addend": 0,
+          "relative_offset": 1533,
+          "symbol": ".LC0",
+          "type": 25
+        },
+        {
+          "addend": 0,
+          "relative_offset": 1592,
+          "symbol": "arch_get_smaller_page_size",
+          "type": 31
+        },
+        {
+          "addend": 0,
+          "relative_offset": 1742,
+          "symbol": "process_page_fault_anon_map_debug",
+          "type": 25
+        },
+        {
+          "addend": 0,
+          "relative_offset": 1768,
+          "symbol": "process_page_fault_anon_clear_debug",
+          "type": 25
+        },
+        {
+          "addend": 0,
+          "relative_offset": 1782,
+          "symbol": "process_page_fault_anon_clear_body_result",
+          "type": 31
+        },
+        {
+          "addend": 0,
+          "relative_offset": 1826,
+          "symbol": "pte_is_fileoff",
+          "type": 31
+        },
+        {
+          "addend": 0,
+          "relative_offset": 1861,
+          "symbol": "pte_get_phys",
+          "type": 31
+        },
+        {
+          "addend": 0,
+          "relative_offset": 1905,
+          "symbol": "process_page_fault_set_pte_attr_debug",
+          "type": 25
+        },
+        {
+          "addend": 0,
+          "relative_offset": 1929,
+          "symbol": "process_page_fault_set_pte_rss_skip_debug",
+          "type": 25
+        },
+        {
+          "addend": 0,
+          "relative_offset": 1943,
+          "symbol": "process_page_fault_set_pte_rss_add_debug",
+          "type": 25
+        },
+        {
+          "addend": 0,
+          "relative_offset": 1957,
+          "symbol": "ihk_mc_pt_set_pte",
+          "type": 27
+        },
+        {
+          "addend": 0,
+          "relative_offset": 1971,
+          "symbol": "process_page_fault_set_pte_body_result",
+          "type": 31
+        },
+        {
+          "addend": 0,
+          "relative_offset": 2007,
+          "symbol": "ddebug.11896",
+          "type": 25
+        },
+        {
+          "addend": 0,
+          "relative_offset": 2040,
+          "symbol": "ihk_atomic_read",
+          "type": 31
+        },
+        {
+          "addend": 0,
+          "relative_offset": 2082,
+          "symbol": "page_is_in_memobj",
+          "type": 31
+        },
+        {
+          "addend": 0,
+          "relative_offset": 2106,
+          "symbol": "__FUNCTION__.11888",
+          "type": 25
+        },
+        {
+          "addend": 0,
+          "relative_offset": 2119,
+          "symbol": "kprintf",
+          "type": 31
+        },
+        {
+          "addend": 0,
+          "relative_offset": 2136,
+          "symbol": ".LC115",
+          "type": 25
+        },
+        {
+          "addend": 0,
+          "relative_offset": 2188,
+          "symbol": ".LC111",
+          "type": 25
+        },
+        {
+          "addend": 0,
+          "relative_offset": 2204,
+          "symbol": "kprintf",
+          "type": 31
+        },
+        {
+          "addend": 0,
+          "relative_offset": 2242,
+          "symbol": "virt_to_phys",
+          "type": 31
+        },
+        {
+          "addend": 0,
+          "relative_offset": 2332,
+          "symbol": "__FUNCTION__.11888",
+          "type": 25
+        },
+        {
+          "addend": 0,
+          "relative_offset": 2342,
+          "symbol": "kprintf",
+          "type": 31
+        },
+        {
+          "addend": 0,
+          "relative_offset": 2367,
+          "symbol": ".LC114",
+          "type": 25
+        },
+        {
+          "addend": 0,
+          "relative_offset": 2457,
+          "symbol": ".LC116",
+          "type": 25
+        },
+        {
+          "addend": 0,
+          "relative_offset": 2482,
+          "symbol": "__FUNCTION__.11888",
+          "type": 25
+        },
+        {
+          "addend": 0,
+          "relative_offset": 2492,
+          "symbol": "kprintf",
+          "type": 31
+        },
+        {
+          "addend": 0,
+          "relative_offset": 2509,
+          "symbol": ".LC112",
+          "type": 25
+        },
+        {
+          "addend": 0,
+          "relative_offset": 2563,
+          "symbol": ".LC113",
+          "type": 25
+        }
+      ],
+      "sha256": "bdc1f6ef157bcee51355bd0354f15f246d78c30aadb196a5df9df555128a8066",
+      "targets": {
+        "process_page_fault_anon_clear_body_result": {
+          "actual_named_target_count": 1,
+          "named_target_relocations": [
+            {
+              "addend": 0,
+              "relative_offset": 1782,
+              "symbol": "process_page_fault_anon_clear_body_result",
+              "type": 31
+            }
+          ]
+        },
+        "process_page_fault_cow_classify_body_result": {
+          "actual_named_target_count": 1,
+          "named_target_relocations": [
+            {
+              "addend": 0,
+              "relative_offset": 573,
+              "symbol": "process_page_fault_cow_classify_body_result",
+              "type": 31
+            }
+          ]
+        },
+        "process_page_fault_cow_commit_body_result": {
+          "actual_named_target_count": 1,
+          "named_target_relocations": [
+            {
+              "addend": 0,
+              "relative_offset": 872,
+              "symbol": "process_page_fault_cow_commit_body_result",
+              "type": 31
+            }
+          ]
+        },
+        "process_page_fault_finish_body_result": {
+          "actual_named_target_count": 1,
+          "named_target_relocations": [
+            {
+              "addend": 0,
+              "relative_offset": 1041,
+              "symbol": "process_page_fault_finish_body_result",
+              "type": 31
+            }
+          ]
+        },
+        "process_page_fault_memobj_get_body_result": {
+          "actual_named_target_count": 1,
+          "named_target_relocations": [
+            {
+              "addend": 0,
+              "relative_offset": 469,
+              "symbol": "process_page_fault_memobj_get_body_result",
+              "type": 31
+            }
+          ]
+        },
+        "process_page_fault_out_body_result": {
+          "actual_named_target_count": 1,
+          "named_target_relocations": [
+            {
+              "addend": 0,
+              "relative_offset": 1126,
+              "symbol": "process_page_fault_out_body_result",
+              "type": 31
+            }
+          ]
+        },
+        "process_page_fault_set_pte_body_result": {
+          "actual_named_target_count": 1,
+          "named_target_relocations": [
+            {
+              "addend": 0,
+              "relative_offset": 1971,
+              "symbol": "process_page_fault_set_pte_body_result",
+              "type": 31
+            }
+          ]
+        },
+        "process_page_fault_set_range_body_result": {
+          "actual_named_target_count": 1,
+          "named_target_relocations": [
+            {
+              "addend": 0,
+              "relative_offset": 1000,
+              "symbol": "process_page_fault_set_range_body_result",
+              "type": 31
+            }
+          ]
+        }
+      }
+    },
+    {
+      "bytes": 169,
+      "caller": "extend_process_region",
+      "full_relocations": [
+        {
+          "addend": 13,
+          "relative_offset": 17,
+          "symbol": "_GLOBAL_OFFSET_TABLE_",
+          "type": 29
+        },
+        {
+          "addend": 0,
+          "relative_offset": 27,
+          "symbol": "process_extend_region_success_debug",
+          "type": 25
+        },
+        {
+          "addend": 0,
+          "relative_offset": 66,
+          "symbol": "process_extend_region_alloc_debug",
+          "type": 25
+        },
+        {
+          "addend": 0,
+          "relative_offset": 80,
+          "symbol": "process_extend_region_exists_debug",
+          "type": 25
+        },
+        {
+          "addend": 0,
+          "relative_offset": 94,
+          "symbol": ".LC0",
+          "type": 25
+        },
+        {
+          "addend": 0,
+          "relative_offset": 118,
+          "symbol": "process_extend_region_body_result",
+          "type": 31
+        }
+      ],
+      "sha256": "9096f54ce8088bbdc4e81bab0492440d7b93784e568a407aaac7ea4adf690ba4",
+      "targets": {
+        "process_extend_region_body_result": {
+          "actual_named_target_count": 1,
+          "named_target_relocations": [
+            {
+              "addend": 0,
+              "relative_offset": 118,
+              "symbol": "process_extend_region_body_result",
+              "type": 31
+            }
+          ]
+        }
+      }
+    },
+    {
+      "bytes": 52,
+      "caller": "process_add_range_insert_bridge",
+      "full_relocations": [
+        {
+          "addend": 6,
+          "relative_offset": 10,
+          "symbol": "_GLOBAL_OFFSET_TABLE_",
+          "type": 29
+        },
+        {
+          "addend": 0,
+          "relative_offset": 21,
+          "symbol": "vm_range_insert",
+          "type": 31
+        }
+      ],
+      "sha256": "5fca502eb591ddc767fd71a76680fe4c563b35f4b13d3307f37fb170e0e7ea2a",
+      "targets": {
+        "vm_range_insert": {
+          "actual_named_target_count": 1,
+          "named_target_relocations": [
+            {
+              "addend": 0,
+              "relative_offset": 21,
+              "symbol": "vm_range_insert",
+              "type": 31
+            }
+          ]
+        }
+      }
+    },
+    {
+      "bytes": 52,
+      "caller": "process_split_range_insert_bridge",
+      "full_relocations": [
+        {
+          "addend": 6,
+          "relative_offset": 10,
+          "symbol": "_GLOBAL_OFFSET_TABLE_",
+          "type": 29
+        },
+        {
+          "addend": 0,
+          "relative_offset": 21,
+          "symbol": "vm_range_insert",
+          "type": 31
+        }
+      ],
+      "sha256": "5fca502eb591ddc767fd71a76680fe4c563b35f4b13d3307f37fb170e0e7ea2a",
+      "targets": {
+        "vm_range_insert": {
+          "actual_named_target_count": 1,
+          "named_target_relocations": [
+            {
+              "addend": 0,
+              "relative_offset": 21,
+              "symbol": "vm_range_insert",
+              "type": 31
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "actual_unchanged_Rust_helpers": [
+    {
+      "bytes": 127,
+      "full_relocations": [],
+      "name": "process_page_fault_memobj_get_body_result",
+      "sha256": "a6f00157565dfcb67f53b72f3e08c7b01d0d3a107b1d745c7036614a7bc6bcf3"
+    },
+    {
+      "bytes": 83,
+      "full_relocations": [],
+      "name": "process_page_fault_cow_classify_body_result",
+      "sha256": "0cd829c52f1c8965a1bed4d44729051521eab7ea6b9a7588d8712ec23f3405c4"
+    },
+    {
+      "bytes": 861,
+      "full_relocations": [
+        {
+          "addend": 0,
+          "relative_offset": 138,
+          "symbol": "process_range_public_log_bridge",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 169,
+          "symbol": "process_lookup_memory_range_body_result",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 213,
+          "symbol": "process_range_public_log_bridge",
+          "type": 1
+        },
+        {
+          "addend": 12234,
+          "relative_offset": 248,
+          "symbol": "",
+          "type": 1
+        },
+        {
+          "addend": 12148,
+          "relative_offset": 258,
+          "symbol": "",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 268,
+          "symbol": "kprintf",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 376,
+          "symbol": "_ihk_mc_alloc_aligned_pages_node",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 420,
+          "symbol": "x86_user_map_kernel_start_bridge",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 444,
+          "symbol": "linux_page_offset_base",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 484,
+          "symbol": "x86_addr_log_bridge",
+          "type": 1
+        },
+        {
+          "addend": 12044,
+          "relative_offset": 559,
+          "symbol": "",
+          "type": 1
+        },
+        {
+          "addend": 12148,
+          "relative_offset": 569,
+          "symbol": "",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 579,
+          "symbol": "kprintf",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 628,
+          "symbol": "x86_kernel_phys_base",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 647,
+          "symbol": "x86_addr_log_bridge",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 705,
+          "symbol": "add_process_memory_range",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 753,
+          "symbol": "_ihk_mc_free_pages",
+          "type": 1
+        },
+        {
+          "addend": 12170,
+          "relative_offset": 798,
+          "symbol": "",
+          "type": 1
+        },
+        {
+          "addend": 12148,
+          "relative_offset": 808,
+          "symbol": "",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 818,
+          "symbol": "kprintf",
+          "type": 1
+        }
+      ],
+      "name": "process_extend_region_body_result",
+      "sha256": "18020d4d23b0cf92acf28e3054d2259627c8383f7d026f8774cd79bc270bb66f"
+    },
+    {
+      "bytes": 501,
+      "full_relocations": [
+        {
+          "addend": 14693,
+          "relative_offset": 38,
+          "symbol": "",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 48,
+          "symbol": "",
+          "type": 1
+        },
+        {
+          "addend": 12421,
+          "relative_offset": 105,
+          "symbol": "",
+          "type": 1
+        },
+        {
+          "addend": 12330,
+          "relative_offset": 115,
+          "symbol": "",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 125,
+          "symbol": "kprintf",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 159,
+          "symbol": "page_unmap",
+          "type": 1
+        },
+        {
+          "addend": 12511,
+          "relative_offset": 193,
+          "symbol": "",
+          "type": 1
+        },
+        {
+          "addend": 12330,
+          "relative_offset": 203,
+          "symbol": "",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 213,
+          "symbol": "kprintf",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 272,
+          "symbol": "rusage",
+          "type": 1
+        },
+        {
+          "addend": 64,
+          "relative_offset": 282,
+          "symbol": "rusage",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 316,
+          "symbol": "x86_user_map_kernel_start_bridge",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 333,
+          "symbol": "linux_page_offset_base",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 365,
+          "symbol": "x86_addr_log_bridge",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 400,
+          "symbol": "x86_kernel_phys_base",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 419,
+          "symbol": "x86_addr_log_bridge",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 469,
+          "symbol": "phys_to_page",
+          "type": 1
+        }
+      ],
+      "name": "process_page_fault_cow_commit_body_result",
+      "sha256": "480f8b75d44eed86f98e8b60ce164c49cdd290272af7edcca34f8e18fa2af354"
+    },
+    {
+      "bytes": 403,
+      "full_relocations": [
+        {
+          "addend": 14693,
+          "relative_offset": 52,
+          "symbol": "",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 62,
+          "symbol": "",
+          "type": 1
+        },
+        {
+          "addend": 12993,
+          "relative_offset": 124,
+          "symbol": "",
+          "type": 1
+        },
+        {
+          "addend": 12330,
+          "relative_offset": 134,
+          "symbol": "",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 155,
+          "symbol": "kprintf",
+          "type": 1
+        },
+        {
+          "addend": 13092,
+          "relative_offset": 184,
+          "symbol": "",
+          "type": 1
+        },
+        {
+          "addend": 12330,
+          "relative_offset": 194,
+          "symbol": "",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 212,
+          "symbol": "kprintf",
+          "type": 1
+        },
+        {
+          "addend": 13148,
+          "relative_offset": 247,
+          "symbol": "",
+          "type": 1
+        },
+        {
+          "addend": 12330,
+          "relative_offset": 257,
+          "symbol": "",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 272,
+          "symbol": "kprintf",
+          "type": 1
+        },
+        {
+          "addend": 13161,
+          "relative_offset": 340,
+          "symbol": "",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 364,
+          "symbol": "kprintf",
+          "type": 1
+        }
+      ],
+      "name": "process_page_fault_set_pte_body_result",
+      "sha256": "6928ebb27bb58ab388d5b6f313c3f50f8fbef528d1f8e2043f62c3b987e8114f"
+    },
+    {
+      "bytes": 169,
+      "full_relocations": [
+        {
+          "addend": 13237,
+          "relative_offset": 109,
+          "symbol": "",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 119,
+          "symbol": "kprintf",
+          "type": 1
+        }
+      ],
+      "name": "process_page_fault_set_range_body_result",
+      "sha256": "381ba94cce925a608ba1517900a6a8bbd70184eafd68db78509ec50375b851e6"
+    },
+    {
+      "bytes": 22,
+      "full_relocations": [],
+      "name": "process_page_fault_finish_body_result",
+      "sha256": "7f0a38e197d0eeafcd67ece193e3162e029a68b027fb072d20c7c7af7148c911"
+    },
+    {
+      "bytes": 505,
+      "full_relocations": [
+        {
+          "addend": 0,
+          "relative_offset": 44,
+          "symbol": "cpu_local_var_initialized",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 75,
+          "symbol": "locals",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 100,
+          "symbol": "num_processors",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 135,
+          "symbol": "clv",
+          "type": 1
+        },
+        {
+          "addend": 12575,
+          "relative_offset": 209,
+          "symbol": "",
+          "type": 1
+        },
+        {
+          "addend": 12330,
+          "relative_offset": 219,
+          "symbol": "",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 229,
+          "symbol": "kprintf",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 253,
+          "symbol": "page_unmap",
+          "type": 1
+        },
+        {
+          "addend": 12631,
+          "relative_offset": 302,
+          "symbol": "",
+          "type": 1
+        },
+        {
+          "addend": 12330,
+          "relative_offset": 312,
+          "symbol": "",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 322,
+          "symbol": "kprintf",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 379,
+          "symbol": "rusage",
+          "type": 1
+        },
+        {
+          "addend": 64,
+          "relative_offset": 389,
+          "symbol": "rusage",
+          "type": 1
+        },
+        {
+          "addend": 12695,
+          "relative_offset": 451,
+          "symbol": "",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 461,
+          "symbol": "kprintf",
+          "type": 1
+        }
+      ],
+      "name": "process_page_fault_out_body_result",
+      "sha256": "590feea29db52092a0651f77a6ad34f1ba415b960b6b297b2c7640d9006a65fc"
+    },
+    {
+      "bytes": 600,
+      "full_relocations": [
+        {
+          "addend": 12306,
+          "relative_offset": 52,
+          "symbol": "",
+          "type": 1
+        },
+        {
+          "addend": 12330,
+          "relative_offset": 62,
+          "symbol": "",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 72,
+          "symbol": "kprintf",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 97,
+          "symbol": "profile_event_add",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 320,
+          "symbol": "x86_user_map_kernel_start_bridge",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 337,
+          "symbol": "linux_page_offset_base",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 369,
+          "symbol": "x86_addr_log_bridge",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 404,
+          "symbol": "x86_kernel_phys_base",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 423,
+          "symbol": "x86_addr_log_bridge",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 469,
+          "symbol": "phys_to_page",
+          "type": 1
+        },
+        {
+          "addend": 12362,
+          "relative_offset": 533,
+          "symbol": "",
+          "type": 1
+        },
+        {
+          "addend": 12330,
+          "relative_offset": 543,
+          "symbol": "",
+          "type": 1
+        },
+        {
+          "addend": 0,
+          "relative_offset": 553,
+          "symbol": "kprintf",
+          "type": 1
+        }
+      ],
+      "name": "process_page_fault_anon_clear_body_result",
+      "sha256": "1fd6edfbdaaeee42d9f6af769816e2485aa5221fd7bcf1a2f7186986b31c5e01"
+    }
+  ],
+  "all13_local_metadata": [
+    {
+      "C": {
+        "allocated_pointer_relocations": [
+          {
+            "addend": 0,
+            "offset": 960,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "addend": 5424,
+            "offset": 968,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "normalized_complete_pointer_relocations": [
+          {
+            "relative_offset": 0,
+            "string": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/current-union3b-page-fault-production-preparation-1/expert-adopted-header-schema-successor-1/source/kernel/process.c",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "relative_offset": 8,
+            "string": "page_fault_process_memory_range",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "raw": "000000000000000000000000000000000000000000000000ff0b000000000000",
+        "section": "__verbose",
+        "symbol": {
+          "bind": 0,
+          "name": "process_page_fault_cow_rss_add_debug",
+          "other": 0,
+          "section": 9,
+          "size": 32,
+          "type": 1,
+          "value": 960
+        }
+      },
+      "name": "process_page_fault_cow_rss_add_debug",
+      "partial": {
+        "allocated_pointer_relocations": [
+          {
+            "addend": 0,
+            "offset": 960,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "addend": 5424,
+            "offset": 968,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "normalized_complete_pointer_relocations": [
+          {
+            "relative_offset": 0,
+            "string": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/current-union3b-page-fault-production-preparation-1/expert-adopted-header-schema-successor-1/source/kernel/process.c",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "relative_offset": 8,
+            "string": "page_fault_process_memory_range",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "raw": "000000000000000000000000000000000000000000000000ff0b000000000000",
+        "section": "__verbose",
+        "symbol": {
+          "bind": 0,
+          "name": "process_page_fault_cow_rss_add_debug",
+          "other": 0,
+          "section": 4184,
+          "size": 32,
+          "type": 1,
+          "value": 960
+        }
+      }
+    },
+    {
+      "C": {
+        "allocated_pointer_relocations": [
+          {
+            "addend": 0,
+            "offset": 928,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "addend": 5424,
+            "offset": 936,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "normalized_complete_pointer_relocations": [
+          {
+            "relative_offset": 0,
+            "string": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/current-union3b-page-fault-production-preparation-1/expert-adopted-header-schema-successor-1/source/kernel/process.c",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "relative_offset": 8,
+            "string": "page_fault_process_memory_range",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "raw": "000000000000000000000000000000000000000000000000040c000000000000",
+        "section": "__verbose",
+        "symbol": {
+          "bind": 0,
+          "name": "process_page_fault_cow_rss_sub_debug",
+          "other": 0,
+          "section": 9,
+          "size": 32,
+          "type": 1,
+          "value": 928
+        }
+      },
+      "name": "process_page_fault_cow_rss_sub_debug",
+      "partial": {
+        "allocated_pointer_relocations": [
+          {
+            "addend": 0,
+            "offset": 928,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "addend": 5424,
+            "offset": 936,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "normalized_complete_pointer_relocations": [
+          {
+            "relative_offset": 0,
+            "string": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/current-union3b-page-fault-production-preparation-1/expert-adopted-header-schema-successor-1/source/kernel/process.c",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "relative_offset": 8,
+            "string": "page_fault_process_memory_range",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "raw": "000000000000000000000000000000000000000000000000040c000000000000",
+        "section": "__verbose",
+        "symbol": {
+          "bind": 0,
+          "name": "process_page_fault_cow_rss_sub_debug",
+          "other": 0,
+          "section": 4184,
+          "size": 32,
+          "type": 1,
+          "value": 928
+        }
+      }
+    },
+    {
+      "C": {
+        "allocated_pointer_relocations": [
+          {
+            "addend": 0,
+            "offset": 896,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "addend": 5424,
+            "offset": 904,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "normalized_complete_pointer_relocations": [
+          {
+            "relative_offset": 0,
+            "string": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/current-union3b-page-fault-production-preparation-1/expert-adopted-header-schema-successor-1/source/kernel/process.c",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "relative_offset": 8,
+            "string": "page_fault_process_memory_range",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "raw": "0000000000000000000000000000000000000000000000002e0c000000000000",
+        "section": "__verbose",
+        "symbol": {
+          "bind": 0,
+          "name": "process_page_fault_set_pte_rss_add_debug",
+          "other": 0,
+          "section": 9,
+          "size": 32,
+          "type": 1,
+          "value": 896
+        }
+      },
+      "name": "process_page_fault_set_pte_rss_add_debug",
+      "partial": {
+        "allocated_pointer_relocations": [
+          {
+            "addend": 0,
+            "offset": 896,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "addend": 5424,
+            "offset": 904,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "normalized_complete_pointer_relocations": [
+          {
+            "relative_offset": 0,
+            "string": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/current-union3b-page-fault-production-preparation-1/expert-adopted-header-schema-successor-1/source/kernel/process.c",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "relative_offset": 8,
+            "string": "page_fault_process_memory_range",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "raw": "0000000000000000000000000000000000000000000000002e0c000000000000",
+        "section": "__verbose",
+        "symbol": {
+          "bind": 0,
+          "name": "process_page_fault_set_pte_rss_add_debug",
+          "other": 0,
+          "section": 4184,
+          "size": 32,
+          "type": 1,
+          "value": 896
+        }
+      }
+    },
+    {
+      "C": {
+        "allocated_pointer_relocations": [
+          {
+            "addend": 0,
+            "offset": 864,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "addend": 5424,
+            "offset": 872,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "normalized_complete_pointer_relocations": [
+          {
+            "relative_offset": 0,
+            "string": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/current-union3b-page-fault-production-preparation-1/expert-adopted-header-schema-successor-1/source/kernel/process.c",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "relative_offset": 8,
+            "string": "page_fault_process_memory_range",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "raw": "000000000000000000000000000000000000000000000000310c000000000000",
+        "section": "__verbose",
+        "symbol": {
+          "bind": 0,
+          "name": "process_page_fault_set_pte_rss_skip_debug",
+          "other": 0,
+          "section": 9,
+          "size": 32,
+          "type": 1,
+          "value": 864
+        }
+      },
+      "name": "process_page_fault_set_pte_rss_skip_debug",
+      "partial": {
+        "allocated_pointer_relocations": [
+          {
+            "addend": 0,
+            "offset": 864,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "addend": 5424,
+            "offset": 872,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "normalized_complete_pointer_relocations": [
+          {
+            "relative_offset": 0,
+            "string": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/current-union3b-page-fault-production-preparation-1/expert-adopted-header-schema-successor-1/source/kernel/process.c",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "relative_offset": 8,
+            "string": "page_fault_process_memory_range",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "raw": "000000000000000000000000000000000000000000000000310c000000000000",
+        "section": "__verbose",
+        "symbol": {
+          "bind": 0,
+          "name": "process_page_fault_set_pte_rss_skip_debug",
+          "other": 0,
+          "section": 4184,
+          "size": 32,
+          "type": 1,
+          "value": 864
+        }
+      }
+    },
+    {
+      "C": {
+        "allocated_pointer_relocations": [
+          {
+            "addend": 0,
+            "offset": 832,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "addend": 5424,
+            "offset": 840,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "normalized_complete_pointer_relocations": [
+          {
+            "relative_offset": 0,
+            "string": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/current-union3b-page-fault-production-preparation-1/expert-adopted-header-schema-successor-1/source/kernel/process.c",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "relative_offset": 8,
+            "string": "page_fault_process_memory_range",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "raw": "000000000000000000000000000000000000000000000000350c000000000000",
+        "section": "__verbose",
+        "symbol": {
+          "bind": 0,
+          "name": "process_page_fault_set_pte_attr_debug",
+          "other": 0,
+          "section": 9,
+          "size": 32,
+          "type": 1,
+          "value": 832
+        }
+      },
+      "name": "process_page_fault_set_pte_attr_debug",
+      "partial": {
+        "allocated_pointer_relocations": [
+          {
+            "addend": 0,
+            "offset": 832,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "addend": 5424,
+            "offset": 840,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "normalized_complete_pointer_relocations": [
+          {
+            "relative_offset": 0,
+            "string": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/current-union3b-page-fault-production-preparation-1/expert-adopted-header-schema-successor-1/source/kernel/process.c",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "relative_offset": 8,
+            "string": "page_fault_process_memory_range",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "raw": "000000000000000000000000000000000000000000000000350c000000000000",
+        "section": "__verbose",
+        "symbol": {
+          "bind": 0,
+          "name": "process_page_fault_set_pte_attr_debug",
+          "other": 0,
+          "section": 4184,
+          "size": 32,
+          "type": 1,
+          "value": 832
+        }
+      }
+    },
+    {
+      "C": {
+        "allocated_pointer_relocations": [
+          {
+            "addend": 0,
+            "offset": 800,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "addend": 5424,
+            "offset": 808,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "normalized_complete_pointer_relocations": [
+          {
+            "relative_offset": 0,
+            "string": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/current-union3b-page-fault-production-preparation-1/expert-adopted-header-schema-successor-1/source/kernel/process.c",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "relative_offset": 8,
+            "string": "page_fault_process_memory_range",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "raw": "000000000000000000000000000000000000000000000000820c000000000000",
+        "section": "__verbose",
+        "symbol": {
+          "bind": 0,
+          "name": "process_page_fault_out_stray_debug",
+          "other": 0,
+          "section": 9,
+          "size": 32,
+          "type": 1,
+          "value": 800
+        }
+      },
+      "name": "process_page_fault_out_stray_debug",
+      "partial": {
+        "allocated_pointer_relocations": [
+          {
+            "addend": 0,
+            "offset": 800,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "addend": 5424,
+            "offset": 808,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "normalized_complete_pointer_relocations": [
+          {
+            "relative_offset": 0,
+            "string": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/current-union3b-page-fault-production-preparation-1/expert-adopted-header-schema-successor-1/source/kernel/process.c",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "relative_offset": 8,
+            "string": "page_fault_process_memory_range",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "raw": "000000000000000000000000000000000000000000000000820c000000000000",
+        "section": "__verbose",
+        "symbol": {
+          "bind": 0,
+          "name": "process_page_fault_out_stray_debug",
+          "other": 0,
+          "section": 4184,
+          "size": 32,
+          "type": 1,
+          "value": 800
+        }
+      }
+    },
+    {
+      "C": {
+        "allocated_pointer_relocations": [
+          {
+            "addend": 0,
+            "offset": 768,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "addend": 5424,
+            "offset": 776,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "normalized_complete_pointer_relocations": [
+          {
+            "relative_offset": 0,
+            "string": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/current-union3b-page-fault-production-preparation-1/expert-adopted-header-schema-successor-1/source/kernel/process.c",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "relative_offset": 8,
+            "string": "page_fault_process_memory_range",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "raw": "000000000000000000000000000000000000000000000000860c000000000000",
+        "section": "__verbose",
+        "symbol": {
+          "bind": 0,
+          "name": "process_page_fault_out_rss_sub_debug",
+          "other": 0,
+          "section": 9,
+          "size": 32,
+          "type": 1,
+          "value": 768
+        }
+      },
+      "name": "process_page_fault_out_rss_sub_debug",
+      "partial": {
+        "allocated_pointer_relocations": [
+          {
+            "addend": 0,
+            "offset": 768,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "addend": 5424,
+            "offset": 776,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "normalized_complete_pointer_relocations": [
+          {
+            "relative_offset": 0,
+            "string": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/current-union3b-page-fault-production-preparation-1/expert-adopted-header-schema-successor-1/source/kernel/process.c",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "relative_offset": 8,
+            "string": "page_fault_process_memory_range",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "raw": "000000000000000000000000000000000000000000000000860c000000000000",
+        "section": "__verbose",
+        "symbol": {
+          "bind": 0,
+          "name": "process_page_fault_out_rss_sub_debug",
+          "other": 0,
+          "section": 4184,
+          "size": 32,
+          "type": 1,
+          "value": 768
+        }
+      }
+    },
+    {
+      "C": {
+        "allocated_pointer_relocations": [
+          {
+            "addend": 0,
+            "offset": 736,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "addend": 5424,
+            "offset": 744,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "normalized_complete_pointer_relocations": [
+          {
+            "relative_offset": 0,
+            "string": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/current-union3b-page-fault-production-preparation-1/expert-adopted-header-schema-successor-1/source/kernel/process.c",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "relative_offset": 8,
+            "string": "page_fault_process_memory_range",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "raw": "0000000000000000000000000000000000000000000000008a0c000000000000",
+        "section": "__verbose",
+        "symbol": {
+          "bind": 0,
+          "name": "process_page_fault_out_return_debug",
+          "other": 0,
+          "section": 9,
+          "size": 32,
+          "type": 1,
+          "value": 736
+        }
+      },
+      "name": "process_page_fault_out_return_debug",
+      "partial": {
+        "allocated_pointer_relocations": [
+          {
+            "addend": 0,
+            "offset": 736,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "addend": 5424,
+            "offset": 744,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "normalized_complete_pointer_relocations": [
+          {
+            "relative_offset": 0,
+            "string": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/current-union3b-page-fault-production-preparation-1/expert-adopted-header-schema-successor-1/source/kernel/process.c",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "relative_offset": 8,
+            "string": "page_fault_process_memory_range",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "raw": "0000000000000000000000000000000000000000000000008a0c000000000000",
+        "section": "__verbose",
+        "symbol": {
+          "bind": 0,
+          "name": "process_page_fault_out_return_debug",
+          "other": 0,
+          "section": 4184,
+          "size": 32,
+          "type": 1,
+          "value": 736
+        }
+      }
+    },
+    {
+      "C": {
+        "allocated_pointer_relocations": [
+          {
+            "addend": 0,
+            "offset": 704,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "addend": 5424,
+            "offset": 712,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "normalized_complete_pointer_relocations": [
+          {
+            "relative_offset": 0,
+            "string": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/current-union3b-page-fault-production-preparation-1/expert-adopted-header-schema-successor-1/source/kernel/process.c",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "relative_offset": 8,
+            "string": "page_fault_process_memory_range",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "raw": "000000000000000000000000000000000000000000000000f30b000000000000",
+        "section": "__verbose",
+        "symbol": {
+          "bind": 0,
+          "name": "process_page_fault_anon_clear_debug",
+          "other": 0,
+          "section": 9,
+          "size": 32,
+          "type": 1,
+          "value": 704
+        }
+      },
+      "name": "process_page_fault_anon_clear_debug",
+      "partial": {
+        "allocated_pointer_relocations": [
+          {
+            "addend": 0,
+            "offset": 704,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "addend": 5424,
+            "offset": 712,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "normalized_complete_pointer_relocations": [
+          {
+            "relative_offset": 0,
+            "string": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/current-union3b-page-fault-production-preparation-1/expert-adopted-header-schema-successor-1/source/kernel/process.c",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "relative_offset": 8,
+            "string": "page_fault_process_memory_range",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "raw": "000000000000000000000000000000000000000000000000f30b000000000000",
+        "section": "__verbose",
+        "symbol": {
+          "bind": 0,
+          "name": "process_page_fault_anon_clear_debug",
+          "other": 0,
+          "section": 4184,
+          "size": 32,
+          "type": 1,
+          "value": 704
+        }
+      }
+    },
+    {
+      "C": {
+        "allocated_pointer_relocations": [
+          {
+            "addend": 0,
+            "offset": 672,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "addend": 5424,
+            "offset": 680,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "normalized_complete_pointer_relocations": [
+          {
+            "relative_offset": 0,
+            "string": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/current-union3b-page-fault-production-preparation-1/expert-adopted-header-schema-successor-1/source/kernel/process.c",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "relative_offset": 8,
+            "string": "page_fault_process_memory_range",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "raw": "000000000000000000000000000000000000000000000000fb0b000000000000",
+        "section": "__verbose",
+        "symbol": {
+          "bind": 0,
+          "name": "process_page_fault_anon_map_debug",
+          "other": 0,
+          "section": 9,
+          "size": 32,
+          "type": 1,
+          "value": 672
+        }
+      },
+      "name": "process_page_fault_anon_map_debug",
+      "partial": {
+        "allocated_pointer_relocations": [
+          {
+            "addend": 0,
+            "offset": 672,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "addend": 5424,
+            "offset": 680,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "normalized_complete_pointer_relocations": [
+          {
+            "relative_offset": 0,
+            "string": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/current-union3b-page-fault-production-preparation-1/expert-adopted-header-schema-successor-1/source/kernel/process.c",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "relative_offset": 8,
+            "string": "page_fault_process_memory_range",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "raw": "000000000000000000000000000000000000000000000000fb0b000000000000",
+        "section": "__verbose",
+        "symbol": {
+          "bind": 0,
+          "name": "process_page_fault_anon_map_debug",
+          "other": 0,
+          "section": 4184,
+          "size": 32,
+          "type": 1,
+          "value": 672
+        }
+      }
+    },
+    {
+      "C": {
+        "allocated_pointer_relocations": [
+          {
+            "addend": 0,
+            "offset": 416,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "addend": 878,
+            "offset": 424,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "normalized_complete_pointer_relocations": [
+          {
+            "relative_offset": 0,
+            "string": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/current-union3b-page-fault-production-preparation-1/expert-adopted-header-schema-successor-1/source/kernel/process.c",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "relative_offset": 8,
+            "string": "extend_process_region",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "raw": "000000000000000000000000000000000000000000000000420d000000000000",
+        "section": "__verbose",
+        "symbol": {
+          "bind": 0,
+          "name": "process_extend_region_exists_debug",
+          "other": 0,
+          "section": 9,
+          "size": 32,
+          "type": 1,
+          "value": 416
+        }
+      },
+      "name": "process_extend_region_exists_debug",
+      "partial": {
+        "allocated_pointer_relocations": [
+          {
+            "addend": 0,
+            "offset": 416,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "addend": 878,
+            "offset": 424,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "normalized_complete_pointer_relocations": [
+          {
+            "relative_offset": 0,
+            "string": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/current-union3b-page-fault-production-preparation-1/expert-adopted-header-schema-successor-1/source/kernel/process.c",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "relative_offset": 8,
+            "string": "extend_process_region",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "raw": "000000000000000000000000000000000000000000000000420d000000000000",
+        "section": "__verbose",
+        "symbol": {
+          "bind": 0,
+          "name": "process_extend_region_exists_debug",
+          "other": 0,
+          "section": 4184,
+          "size": 32,
+          "type": 1,
+          "value": 416
+        }
+      }
+    },
+    {
+      "C": {
+        "allocated_pointer_relocations": [
+          {
+            "addend": 0,
+            "offset": 384,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "addend": 878,
+            "offset": 392,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "normalized_complete_pointer_relocations": [
+          {
+            "relative_offset": 0,
+            "string": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/current-union3b-page-fault-production-preparation-1/expert-adopted-header-schema-successor-1/source/kernel/process.c",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "relative_offset": 8,
+            "string": "extend_process_region",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "raw": "000000000000000000000000000000000000000000000000530d000000000000",
+        "section": "__verbose",
+        "symbol": {
+          "bind": 0,
+          "name": "process_extend_region_alloc_debug",
+          "other": 0,
+          "section": 9,
+          "size": 32,
+          "type": 1,
+          "value": 384
+        }
+      },
+      "name": "process_extend_region_alloc_debug",
+      "partial": {
+        "allocated_pointer_relocations": [
+          {
+            "addend": 0,
+            "offset": 384,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "addend": 878,
+            "offset": 392,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "normalized_complete_pointer_relocations": [
+          {
+            "relative_offset": 0,
+            "string": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/current-union3b-page-fault-production-preparation-1/expert-adopted-header-schema-successor-1/source/kernel/process.c",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "relative_offset": 8,
+            "string": "extend_process_region",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "raw": "000000000000000000000000000000000000000000000000530d000000000000",
+        "section": "__verbose",
+        "symbol": {
+          "bind": 0,
+          "name": "process_extend_region_alloc_debug",
+          "other": 0,
+          "section": 4184,
+          "size": 32,
+          "type": 1,
+          "value": 384
+        }
+      }
+    },
+    {
+      "C": {
+        "allocated_pointer_relocations": [
+          {
+            "addend": 0,
+            "offset": 352,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "addend": 878,
+            "offset": 360,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "normalized_complete_pointer_relocations": [
+          {
+            "relative_offset": 0,
+            "string": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/current-union3b-page-fault-production-preparation-1/expert-adopted-header-schema-successor-1/source/kernel/process.c",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "relative_offset": 8,
+            "string": "extend_process_region",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "raw": "000000000000000000000000000000000000000000000000640d000000000000",
+        "section": "__verbose",
+        "symbol": {
+          "bind": 0,
+          "name": "process_extend_region_success_debug",
+          "other": 0,
+          "section": 9,
+          "size": 32,
+          "type": 1,
+          "value": 352
+        }
+      },
+      "name": "process_extend_region_success_debug",
+      "partial": {
+        "allocated_pointer_relocations": [
+          {
+            "addend": 0,
+            "offset": 352,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "addend": 878,
+            "offset": 360,
+            "relocation_section": ".rela__verbose",
+            "section": "__verbose",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "normalized_complete_pointer_relocations": [
+          {
+            "relative_offset": 0,
+            "string": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/current-union3b-page-fault-production-preparation-1/expert-adopted-header-schema-successor-1/source/kernel/process.c",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          },
+          {
+            "relative_offset": 8,
+            "string": "extend_process_region",
+            "symbol": "",
+            "type": 1,
+            "undefined": false
+          }
+        ],
+        "raw": "000000000000000000000000000000000000000000000000640d000000000000",
+        "section": "__verbose",
+        "symbol": {
+          "bind": 0,
+          "name": "process_extend_region_success_debug",
+          "other": 0,
+          "section": 4184,
+          "size": 32,
+          "type": 1,
+          "value": 352
+        }
+      }
+    }
+  ],
+  "bindings": {
+    "bytes": 25221,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/current-union3b-page-fault-production-preparation-1/expert-adopted-header-schema-successor-1/expert-adopted-local-metadata-observer-successor-1/INPUT-BINDINGS.json",
+    "sha256": "a25c6b6318dc23916fef80d1475f21e39f0df07f85bc6a21e6ded1bcd7a04392"
+  },
+  "canonical_mutations": 0,
+  "equivalent_original_stage13_ELF_predicates_now_executed": true,
+  "existing_phys_to_page_C_debt": true,
+  "file_retired": false,
+  "full_current_default_image_link": false,
+  "headers": 73,
+  "native": false,
+  "new_functional_execution": false,
+  "object_rehashes": 0,
+  "observer": {
+    "bytes": 15150,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/current-union3b-page-fault-production-preparation-1/expert-adopted-header-schema-successor-1/expert-adopted-local-metadata-observer-successor-1/observe_retained_pagefault.py",
+    "sha256": "790fc77178d1d3f90eb4b2e1c9d11a2947271ab43177f12a7e454e4d300f5590"
+  },
+  "observer_new_compiler_linker_object_tool_invocations": 0,
+  "original_command13_replayed": false,
+  "original_command_count": 14,
+  "original_command_not_run": {
+    "argv": [
+      "/usr/bin/readelf",
+      "-rW",
+      "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/current-union3b-page-fault-production-preparation-1/expert-adopted-header-schema-successor-1/output-1/process-rust-partial.o"
+    ],
+    "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/current-union3b-page-fault-production-preparation-1/expert-adopted-header-schema-successor-1/output-1",
+    "name": "13-process-fullRust-partial-relocations",
+    "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 13-process-fullRust-partial-relocations; changed-source current private union3b78 plus nine actual process helper bodies; real whole C/header/allocated-caller consumer, no hosted body execution/native claim."
+  },
+  "original_failure": {
+    "bytes": 25342,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/current-union3b-page-fault-production-preparation-1/expert-adopted-header-schema-successor-1/PAGEFAULT-PRODUCTION-FIRST-FAILURE-1.json",
+    "sha256": "4e320629bb5b4d92e9015300dbd2f63295d66e2a5c37bca134616d4b30f3439c"
+  },
+  "partial_raw_U_names": [
+    "_GLOBAL_OFFSET_TABLE_",
+    "__freeze",
+    "__kfree",
+    "__kmalloc",
+    "__page_fault_handler_address",
+    "__start___verbose",
+    "__stop___verbose",
+    "__x86_syscall_handler",
+    "_end",
+    "_head",
+    "arch_clone_reader_lock_bridge",
+    "arch_clone_reader_unlock_bridge",
+    "arch_copy_from_user_bridge",
+    "arch_copy_to_user_bridge",
+    "arch_do_mmap_bridge",
+    "arch_do_shmget_bridge",
+    "arch_mmap_error_flags_bridge",
+    "arch_mmap_ignored_flags_bridge",
+    "arch_mmap_log_bridge",
+    "arch_mmap_supported_flags_bridge",
+    "arch_native_signal_bad_frame_bridge",
+    "arch_native_signal_mxcsr_mask_bridge",
+    "arch_native_signal_reset_fp_bridge",
+    "arch_prctl_get_register_bridge",
+    "arch_prctl_log_bridge",
+    "arch_prctl_set_register_bridge",
+    "arch_ptrace_alloc_bridge",
+    "arch_ptrace_find_thread_bridge",
+    "arch_ptrace_lookup_user_context_bridge",
+    "arch_ptrace_read_gpregs_bridge",
+    "arch_ptrace_read_user_bridge",
+    "arch_ptrace_regset_log_bridge",
+    "arch_ptrace_thread_unlock_bridge",
+    "arch_ptrace_user_log_bridge",
+    "arch_ptrace_write_gpregs_bridge",
+    "arch_ptrace_write_user_bridge",
+    "arch_ptrace_xstate_copy_from_bridge",
+    "arch_ptrace_xstate_copy_to_bridge",
+    "arch_rt_sigreturn_context_bridge",
+    "arch_shmget_log_bridge",
+    "arch_switch_context",
+    "arch_syscall_forward_context_bridge",
+    "arch_vdso_add_range_bridge",
+    "arch_vdso_map_log_bridge",
+    "arch_vdso_public_log_bridge",
+    "arch_vdso_set_range_bridge",
+    "arch_vdso_setup_log_bridge",
+    "arch_vdso_state_bridge",
+    "attr_mask",
+    "brk_extend_bridge",
+    "brk_flush_bridge",
+    "brk_log_bridge",
+    "brk_write_lock_bridge",
+    "brk_write_unlock_bridge",
+    "check_sig_pending",
+    "check_signal",
+    "clear_fp_regs",
+    "copy_fp_regs",
+    "do_fork",
+    "do_kill",
+    "do_mmap",
+    "do_process_vm_read_writev",
+    "do_setresgid",
+    "do_setresuid",
+    "do_signal",
+    "do_syscall",
+    "eventfd",
+    "exit_do_exit_bridge",
+    "exit_group_current_pid_bridge",
+    "exit_group_log_bridge",
+    "exit_group_terminate_bridge",
+    "futex_atomic_access_ok_bridge",
+    "futex_atomic_cmpxchg_inatomic_bridge",
+    "futex_atomic_op_inuser_bridge",
+    "gettime_local_support",
+    "hassigpending",
+    "ihk_mc_chk_page_address",
+    "ihk_mc_get_mem_user_page",
+    "ihk_mc_get_numa_node_by_distance",
+    "ihk_mc_init_ap",
+    "ihk_mc_init_context",
+    "ihk_mc_init_user_process",
+    "ihk_mc_pt_change_attr_range",
+    "ihk_mc_pt_lookup_pte",
+    "ihk_mc_pt_set_pte",
+    "ihk_mc_pt_set_range",
+    "ihk_mc_pt_split",
+    "ihk_mc_register_interrupt_handler",
+    "ihk_mc_unregister_interrupt_handler",
+    "kmalloc_addr_hash",
+    "kmalloc_addr_hash_locks",
+    "kmalloc_cache_alloc_bridge",
+    "kmalloc_cache_log",
+    "kmalloc_consolidate_free_list",
+    "kmalloc_init",
+    "kmalloc_runcount",
+    "kmalloc_track_hash",
+    "kmalloc_track_hash_locks",
+    "mem_barrier_bridge",
+    "mem_begin_free_pages_pending_panic_bridge",
+    "mem_dump_chunk_addr_bridge",
+    "mem_dump_chunk_size_bridge",
+    "mem_dump_complete_log_bridge",
+    "mem_dump_first_free_chunk_bridge",
+    "mem_dump_free_pages_bridge",
+    "mem_dump_level_bridge",
+    "mem_dump_next_free_chunk_bridge",
+    "mem_dump_warn_bridge",
+    "mem_find_command_line_bridge",
+    "mem_finish_free_pages_pending_panic_bridge",
+    "mem_flush_tlb_single_bridge",
+    "mem_get_dump_page_bridge",
+    "mem_get_dump_page_set_bridge",
+    "mem_get_vector_bridge",
+    "mem_init_allocator_bridge",
+    "mem_init_anon_on_demand_bridge",
+    "mem_init_hugetlbfs_on_demand_bridge",
+    "mem_init_log_bridge",
+    "mem_init_page_fault_handler_bridge",
+    "mem_init_query_free_handler_bridge",
+    "mem_init_xpmem_remote_bridge",
+    "mem_kmalloc_invalid_free_bridge",
+    "mem_kmalloc_leak_log_bridge",
+    "mem_kmalloc_track_base_alloc_bridge",
+    "mem_kmalloc_track_base_free_bridge",
+    "mem_kmalloc_track_lock_bridge",
+    "mem_kmalloc_track_log_bridge",
+    "mem_kmalloc_track_spin_init_bridge",
+    "mem_kmalloc_track_unlock_bridge",
+    "mem_monitor_init_bridge",
+    "mem_num_processors_bridge",
+    "mem_numa_distances_init_bridge",
+    "mem_numa_init_bridge",
+    "mem_page_init_bridge",
+    "mem_pagealloc_invalid_free_bridge",
+    "mem_pagealloc_invalid_size_bridge",
+    "mem_pagealloc_leak_log_bridge",
+    "mem_pagealloc_track_base_alloc_bridge",
+    "mem_pagealloc_track_base_free_bridge",
+    "mem_pagealloc_track_lock_bridge",
+    "mem_pagealloc_track_log_bridge",
+    "mem_pagealloc_track_meta_alloc_bridge",
+    "mem_pagealloc_track_meta_free_bridge",
+    "mem_pagealloc_track_noirq_lock_bridge",
+    "mem_pagealloc_track_noirq_unlock_bridge",
+    "mem_pagealloc_track_spin_init_bridge",
+    "mem_pagealloc_track_unlock_bridge",
+    "mem_pending_free_bridge",
+    "mem_pending_free_pages_bridge",
+    "mem_process_hash_lists_bridge",
+    "mem_pt_clear_page_bridge",
+    "mem_pt_set_page_bridge",
+    "mem_register_interrupt_handler_bridge",
+    "mem_remote_tlb_geometry",
+    "mem_rusage_init_bridge",
+    "mem_set_page_fault_handler_bridge",
+    "mem_virtual_allocator_init_bridge",
+    "mem_vmap_alloc_bridge",
+    "mem_vmap_allocator_bridge",
+    "mem_vmap_free_bridge",
+    "memdebug",
+    "memlock_join_range_bridge",
+    "memlock_log_bridge",
+    "memlock_lookup_range_bridge",
+    "memlock_next_range_bridge",
+    "memlock_populate_bridge",
+    "memlock_split_range_bridge",
+    "memlock_write_lock_bridge",
+    "memlock_write_unlock_bridge",
+    "mprotect_flush_nfo_bridge",
+    "mremap_add_range_bridge",
+    "mremap_extend_bridge",
+    "mremap_log_bridge",
+    "mremap_memobj_ref_bridge",
+    "mremap_memobj_unref_bridge",
+    "mremap_move_pte_bridge",
+    "mremap_pte_lock_bridge",
+    "mremap_pte_unlock_bridge",
+    "mremap_search_bridge",
+    "msync_has_pager_bridge",
+    "msync_invalidate_range_bridge",
+    "msync_log_bridge",
+    "msync_lookup_range_bridge",
+    "msync_next_range_bridge",
+    "msync_read_lock_bridge",
+    "msync_read_unlock_bridge",
+    "msync_sync_range_bridge",
+    "munmap_do_bridge",
+    "munmap_log_bridge",
+    "munmap_write_lock_bridge",
+    "munmap_write_unlock_bridge",
+    "no_turbo",
+    "numa_sysfs_setup",
+    "obtain_clone_cpuid",
+    "page_hash",
+    "page_hash_alloc_file",
+    "page_hash_alloc_line",
+    "page_hash_locks",
+    "page_init_hash_bucket_count",
+    "page_init_hash_head_stride",
+    "page_unmap_hash_mask",
+    "page_unmap_hash_shift",
+    "page_unmap_lock_stride",
+    "page_unmap_log_bridge",
+    "pagealloc_addr_hash",
+    "pagealloc_addr_hash_locks",
+    "pagealloc_runcount",
+    "pagealloc_track_hash",
+    "pagealloc_track_hash_locks",
+    "pagealloc_track_initialized",
+    "phys_to_page",
+    "phys_to_page_insert_hash",
+    "process_cleanup_before_terminate",
+    "process_cleanup_fd",
+    "ptrace_syscall_event",
+    "pvti",
+    "pvti_msr",
+    "pvti_npages",
+    "remap_file_pages_callable_bridge",
+    "remap_file_pages_clear_host_bridge",
+    "remap_file_pages_log_bridge",
+    "remap_file_pages_remap_bridge",
+    "restore_fp_regs",
+    "save_fp_regs",
+    "sched_apply_scheduler_bridge",
+    "sched_find_thread_bridge",
+    "sched_hold_thread_bridge",
+    "sched_release_thread_bridge",
+    "sched_request_migrate_bridge",
+    "sched_setparam_log_bridge",
+    "sched_thread_unlock_bridge",
+    "sched_yield_lock_bridge",
+    "sched_yield_schedule_bridge",
+    "sched_yield_unlock_bridge",
+    "set_signal",
+    "setup_x86_phase1",
+    "setup_x86_phase2",
+    "shmid_index",
+    "split_contiguous_pages",
+    "syscall",
+    "syscall_alloc_bridge",
+    "syscall_atomic64_inc_bridge",
+    "syscall_atomic64_read_bridge",
+    "syscall_copy_from_user_bridge",
+    "syscall_copy_int_to_user_bridge",
+    "syscall_copy_to_user_bridge",
+    "syscall_cpu_pause_bridge",
+    "syscall_dispatch_context_bridge",
+    "syscall_do_kill_current_bridge",
+    "syscall_do_kill_thread_bridge",
+    "syscall_do_prlimit64_bridge",
+    "syscall_execveat_bridge",
+    "syscall_find_process_bridge",
+    "syscall_forward_rt_sigprocmask_bridge",
+    "syscall_forward_sigaction_update_bridge",
+    "syscall_get_mempolicy_log_bridge",
+    "syscall_get_mempolicy_lookup_node_bridge",
+    "syscall_get_mempolicy_lookup_range_bridge",
+    "syscall_get_mempolicy_policy_search_bridge",
+    "syscall_get_mempolicy_read_lock_bridge",
+    "syscall_get_mempolicy_read_unlock_bridge",
+    "syscall_get_numa_id_bridge",
+    "syscall_get_processor_id_bridge",
+    "syscall_gettime_bridge",
+    "syscall_has_sigpending_bridge",
+    "syscall_interrupt_cpu_bridge",
+    "syscall_kill_log_bridge",
+    "syscall_linux_mlock_log_bridge",
+    "syscall_madvise_log_bridge",
+    "syscall_mbind_clear_range_bridge",
+    "syscall_mbind_entry_log_bridge",
+    "syscall_mbind_log_bridge",
+    "syscall_mbind_lookup_range_bridge",
+    "syscall_mbind_policy_alloc_bridge",
+    "syscall_mbind_policy_insert_bridge",
+    "syscall_mbind_policy_rb_clear_bridge",
+    "syscall_mbind_policy_search_bridge",
+    "syscall_mbind_write_lock_bridge",
+    "syscall_mbind_write_unlock_bridge",
+    "syscall_mckfd_free_bridge",
+    "syscall_mckfd_lock_bridge",
+    "syscall_mckfd_unlock_bridge",
+    "syscall_migrate_pages_log_bridge",
+    "syscall_mlockall_log_bridge",
+    "syscall_munlockall_log_bridge",
+    "syscall_name",
+    "syscall_ns_per_tsc_bridge",
+    "syscall_policy_do_syscall2_bridge",
+    "syscall_policy_do_syscall3_bridge",
+    "syscall_policy_forward_context_bridge",
+    "syscall_process_unlock_bridge",
+    "syscall_rdtsc_bridge",
+    "syscall_set_mempolicy_log_bridge",
+    "syscall_set_timer_bridge",
+    "syscall_settimeofday_lock_bridge",
+    "syscall_settimeofday_log_bridge",
+    "syscall_settimeofday_panic_bridge",
+    "syscall_settimeofday_unlock_bridge",
+    "syscall_strlen_user_bridge",
+    "syscall_swapout_log_bridge",
+    "syscall_threads_reader_lock_bridge",
+    "syscall_threads_reader_unlock_bridge",
+    "syscall_timespec_to_jiffy_bridge",
+    "syscall_tofu_close_bridge",
+    "syscall_tofu_ioctl_bridge",
+    "syscall_ts_add_bridge",
+    "syscall_tsc_to_ts_bridge",
+    "syscall_util_indicate_clone_disabled_bridge",
+    "syscall_util_register_desc_log_bridge",
+    "syscall_util_thread_bridge",
+    "syscall_wmb_bridge",
+    "syscall_xpmem_open_bridge",
+    "syscall_xpmem_openat_bridge",
+    "sysctl_overcommit_memory",
+    "terminate_host",
+    "the_shm_info",
+    "tlb_flush_vector",
+    "tod_data_lock",
+    "uti_desc",
+    "wait4_do_wait_bridge",
+    "x86_addr_init_pt_loaded_bridge",
+    "x86_addr_log_bridge",
+    "x86_alloc_aligned_pages_node_bridge",
+    "x86_arch_mem_phys_to_virt_bridge",
+    "x86_arch_mem_virt_to_phys_bridge",
+    "x86_attr_mask_bridge",
+    "x86_boot_ap_trampoline_bridge",
+    "x86_boot_page_table_phys_bridge",
+    "x86_boot_setup_ap_bridge",
+    "x86_boot_trampoline_code_data_bridge",
+    "x86_boot_trampoline_code_size_bridge",
+    "x86_boot_trampoline_va_bridge",
+    "x86_bootstrap_mem_end_bridge",
+    "x86_check_available_page_size_bridge",
+    "x86_clear_effect_child_free_debug",
+    "x86_clear_effect_free_anon_debug",
+    "x86_clear_effect_free_unmapped_debug",
+    "x86_clear_effect_xpmem_keep_debug",
+    "x86_clear_free_pages_user_file",
+    "x86_clear_free_pages_user_flag",
+    "x86_clear_free_pages_user_line",
+    "x86_clear_l2_child_walk",
+    "x86_clear_l3_child_walk",
+    "x86_clear_l3_effect_log",
+    "x86_clear_l3_memobj_flush",
+    "x86_clear_l3_memobj_rss_sub",
+    "x86_clear_l3_range_log",
+    "x86_clear_l3_rss_sub",
+    "x86_clear_l3_use_1gb_page",
+    "x86_clear_range_l3_callback",
+    "x86_clear_range_l4_callback",
+    "x86_clear_range_large_phys_debug",
+    "x86_common_vrflag_to_ptattr_bridge",
+    "x86_cpu_boot_status_slot_bridge",
+    "x86_cpu_kstack_bridge",
+    "x86_cpu_pause_bridge",
+    "x86_cpuid6_bridge",
+    "x86_cpuid_leaf_bridge",
+    "x86_current_cpu_bridge",
+    "x86_current_thread_bridge",
+    "x86_debug_handler_debug_print_enabled",
+    "x86_early_alloc_end_bridge",
+    "x86_early_alloc_invalidate_bridge",
+    "x86_early_alloc_last_page_slot_bridge",
+    "x86_early_alloc_panic_bridge",
+    "x86_init_fixed_panic_bridge",
+    "x86_init_linux_find_command_line_bridge",
+    "x86_init_linux_get_memory_chunk_bridge",
+    "x86_init_linux_get_nr_memory_chunks_bridge",
+    "x86_init_linux_log_bridge",
+    "x86_init_linux_panic_bridge",
+    "x86_init_low_panic_bridge",
+    "x86_init_normal_get_memory_address_bridge",
+    "x86_init_normal_log_bridge",
+    "x86_init_normal_panic_bridge",
+    "x86_init_page_table_alloc_bridge",
+    "x86_init_page_table_boot_pt_slot_bridge",
+    "x86_init_page_table_fixed_bridge",
+    "x86_init_page_table_init_pt_slot_bridge",
+    "x86_init_page_table_linux_bridge",
+    "x86_init_page_table_load_bridge",
+    "x86_init_page_table_loaded_slot_bridge",
+    "x86_init_page_table_lock_bridge",
+    "x86_init_page_table_log_bridge",
+    "x86_init_page_table_low_bridge",
+    "x86_init_page_table_normal_bridge",
+    "x86_init_page_table_panic_bridge",
+    "x86_init_page_table_size_bridge",
+    "x86_init_page_table_spin_init_bridge",
+    "x86_init_page_table_text_bridge",
+    "x86_init_page_table_vsyscall_bridge",
+    "x86_init_text_log_bridge",
+    "x86_init_text_panic_bridge",
+    "x86_init_vsyscall_page_bridge",
+    "x86_init_vsyscall_panic_bridge",
+    "x86_int3_debug_print_enabled",
+    "x86_interrupt_log_bridge",
+    "x86_issue_ipi",
+    "x86_issue_ipi_bridge",
+    "x86_kfree_bridge",
+    "x86_kmalloc_bridge",
+    "x86_kmalloc_initialized_bridge",
+    "x86_kprintf_lock_bridge",
+    "x86_kprintf_unlock_bridge",
+    "x86_lapic_write_bridge",
+    "x86_load_page_table_panic_bridge",
+    "x86_map_fixed_area_fixed_virt_slot_bridge",
+    "x86_map_fixed_area_init_pt_bridge",
+    "x86_map_fixed_area_log_bridge",
+    "x86_map_kernel_start_geometry",
+    "x86_mcexec_v10_trace_log_bridge",
+    "x86_mem_log_bridge",
+    "x86_move_flush_tlb_bridge",
+    "x86_page_table_boot_pt_bridge",
+    "x86_page_table_init_pt_bridge",
+    "x86_print_stack_bridge",
+    "x86_pt_alloc_pages_file",
+    "x86_pt_alloc_pages_is_user",
+    "x86_pt_alloc_pages_line",
+    "x86_pt_alloc_pages_p2align",
+    "x86_pt_destroy_helper_failed_panic_bridge",
+    "x86_pt_destroy_panic_bridge",
+    "x86_pt_free_pages_file",
+    "x86_pt_free_pages_flag",
+    "x86_pt_free_pages_line",
+    "x86_pt_phys_to_virt_bridge",
+    "x86_pt_print_log_bridge",
+    "x86_pt_set_page_bridge",
+    "x86_pt_virt_to_phys_bridge",
+    "x86_pvclock_log_bridge",
+    "x86_read_msr_bridge",
+    "x86_reserve_arch_pages_bridge",
+    "x86_reserve_arch_pages_panic_bridge",
+    "x86_running_on_kvm_bridge",
+    "x86_runq_irqstate_offset_bridge",
+    "x86_runq_lock_offset_bridge",
+    "x86_runq_unlock_bridge",
+    "x86_stack_frame_log_bridge",
+    "x86_this_cpu_local_var_bridge",
+    "x86_tick_log_bridge",
+    "x86_trace_enter_user_offsets_bridge",
+    "x86_transit_page_table_bridge",
+    "x86_use_1gb_page_bridge",
+    "x86_user_copy_log_bridge",
+    "x86_user_is_memory_bridge",
+    "x86_user_map_bridge",
+    "x86_user_map_kernel_start_bridge",
+    "x86_user_page_fault_bridge",
+    "x86_user_phys_to_virt_bridge",
+    "x86_user_unmap_bridge",
+    "x86_user_verify_bridge",
+    "x86_user_vtop_bridge",
+    "x86_virt_to_phys_bridge",
+    "x86_visit_pte_log_bridge",
+    "x86_wakeup_boot_status_slot",
+    "x86_wakeup_bridge",
+    "x86_wakeup_constants",
+    "x86_wakeup_first_page_slot",
+    "x86_wakeup_lapic_read_slot",
+    "x86_wakeup_lapic_write_slot",
+    "x86_wakeup_wait_slot",
+    "x86_write_msr_bridge",
+    "x86_xsave_mask_bridge",
+    "x86_xsave_size_bridge",
+    "xpmem_page_in_remote_on_attach"
+  ],
+  "prior_leaf_reused_without_replay": [
+    "96",
+    "4480/21ABI",
+    "795/404"
+  ],
+  "private_Page_count_provider_HOLD": true,
+  "ready": {
+    "bytes": 3961,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/current-union3b-page-fault-production-preparation-1/expert-adopted-header-schema-successor-1/expert-adopted-local-metadata-observer-successor-1/EXECUTABLE-READY.RETAINED-OBSERVER.NOT-GRANTED.json",
+    "sha256": "e59dafa3ad7d8170b7ce4f172dae90945df4e45f7390ee9d054d45fe45b47d6a"
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "seconds": 1.467856182018295,
+  "source_count": 78,
+  "source_identity": "adbcdbbd1f49700c9d55c7c1cd8df3429c1695f143cea7bf61f48111c0505368",
+  "status": "PASS_RETAINED_ONLY_LOCAL_METADATA_AND_REMAINING_ALLOCATED_CONSUMERS",
+  "unchanged_durable_objects": {
+    "C": {
+      "ctime_ns": 1792826244492905948,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 56366529,
+      "mode": "0o600",
+      "mtime_ns": 1792826244492905948,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/current-union3b-page-fault-production-preparation-1/expert-adopted-header-schema-successor-1/output-1/process.c.o",
+      "sha256": "f6aaae9a2211212267c4dd6e272702cb4c9491ef52cdcf5fbafba7165a329cc4",
+      "size": 218832,
+      "uid": 1000
+    },
+    "Rust": {
+      "ctime_ns": 1792826242620847600,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 56366482,
+      "mode": "0o600",
+      "mtime_ns": 1792826242620847600,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/current-union3b-page-fault-production-preparation-1/expert-adopted-header-schema-successor-1/output-1/mckernel_rust.o",
+      "sha256": "68fef14536c70136e0bcd7eda8a5f32ef13729f2ab76feed58d7356c1b8072f3",
+      "size": 14162784,
+      "uid": 1000
+    },
+    "partial": {
+      "ctime_ns": 1792826244760914302,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 56366572,
+      "mode": "0o600",
+      "mtime_ns": 1792826244760914302,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/current-union3b-page-fault-production-preparation-1/expert-adopted-header-schema-successor-1/output-1/process-rust-partial.o",
+      "sha256": "993c2f6612b87497af00855b9ac114d1f5313c80846bbaeb227c859479e5ec0b",
+      "size": 14540688,
+      "uid": 1000
+    }
+  },
+  "zeroobj_reference_HOLD": true
+}

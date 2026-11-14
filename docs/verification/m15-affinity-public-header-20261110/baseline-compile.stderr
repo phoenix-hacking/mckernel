@@ -1,0 +1,273 @@
+In file included from /home/holden/mckernel-work/m15-original-integration-20261110T0708Z/affinity-tests-1/affinity_consumer.c:8:
+/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/affinity-tests-1/affinity_consumer.c: In function 'main':
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:81:6: error: '__bits' undeclared (first use in this function)
+   81 |  if (__bits[__i] != __bits[__i])           \
+      |      ^~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:131:3: note: in expansion of macro '__CPU_EQUAL_S'
+  131 |   __CPU_EQUAL_S (sizeof (cpu_set_t), cpusetp1, cpusetp2)
+      |   ^~~~~~~~~~~~~
+/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/affinity-tests-1/affinity_consumer.c:40:11: note: in expansion of macro 'CPU_EQUAL'
+   40 |     check(CPU_EQUAL(&left, &right), "CPU_EQUAL empty sets");
+      |           ^~~~~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:81:6: note: each undeclared identifier is reported only once for each function it appears in
+   81 |  if (__bits[__i] != __bits[__i])           \
+      |      ^~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:131:3: note: in expansion of macro '__CPU_EQUAL_S'
+  131 |   __CPU_EQUAL_S (sizeof (cpu_set_t), cpusetp1, cpusetp2)
+      |   ^~~~~~~~~~~~~
+/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/affinity-tests-1/affinity_consumer.c:40:11: note: in expansion of macro 'CPU_EQUAL'
+   40 |     check(CPU_EQUAL(&left, &right), "CPU_EQUAL empty sets");
+      |           ^~~~~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:77:27: error: unused variable '__arr2' [-Werror=unused-variable]
+   77 |       __const __cpu_mask *__arr2 = (cpusetp2)->__bits;         \
+      |                           ^~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:131:3: note: in expansion of macro '__CPU_EQUAL_S'
+  131 |   __CPU_EQUAL_S (sizeof (cpu_set_t), cpusetp1, cpusetp2)
+      |   ^~~~~~~~~~~~~
+/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/affinity-tests-1/affinity_consumer.c:40:11: note: in expansion of macro 'CPU_EQUAL'
+   40 |     check(CPU_EQUAL(&left, &right), "CPU_EQUAL empty sets");
+      |           ^~~~~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:76:27: error: unused variable '__arr1' [-Werror=unused-variable]
+   76 |    ({ __const __cpu_mask *__arr1 = (cpusetp1)->__bits;         \
+      |                           ^~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:131:3: note: in expansion of macro '__CPU_EQUAL_S'
+  131 |   __CPU_EQUAL_S (sizeof (cpu_set_t), cpusetp1, cpusetp2)
+      |   ^~~~~~~~~~~~~
+/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/affinity-tests-1/affinity_consumer.c:40:11: note: in expansion of macro 'CPU_EQUAL'
+   40 |     check(CPU_EQUAL(&left, &right), "CPU_EQUAL empty sets");
+      |           ^~~~~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:77:27: error: unused variable '__arr2' [-Werror=unused-variable]
+   77 |       __const __cpu_mask *__arr2 = (cpusetp2)->__bits;         \
+      |                           ^~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:133:3: note: in expansion of macro '__CPU_EQUAL_S'
+  133 |   __CPU_EQUAL_S (setsize, cpusetp1, cpusetp2)
+      |   ^~~~~~~~~~~~~
+/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/affinity-tests-1/affinity_consumer.c:41:11: note: in expansion of macro 'CPU_EQUAL_S'
+   41 |     check(CPU_EQUAL_S(sizeof(left), &left, &right), "CPU_EQUAL_S empty sets");
+      |           ^~~~~~~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:76:27: error: unused variable '__arr1' [-Werror=unused-variable]
+   76 |    ({ __const __cpu_mask *__arr1 = (cpusetp1)->__bits;         \
+      |                           ^~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:133:3: note: in expansion of macro '__CPU_EQUAL_S'
+  133 |   __CPU_EQUAL_S (setsize, cpusetp1, cpusetp2)
+      |   ^~~~~~~~~~~~~
+/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/affinity-tests-1/affinity_consumer.c:41:11: note: in expansion of macro 'CPU_EQUAL_S'
+   41 |     check(CPU_EQUAL_S(sizeof(left), &left, &right), "CPU_EQUAL_S empty sets");
+      |           ^~~~~~~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:77:27: error: unused variable '__arr2' [-Werror=unused-variable]
+   77 |       __const __cpu_mask *__arr2 = (cpusetp2)->__bits;         \
+      |                           ^~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:131:3: note: in expansion of macro '__CPU_EQUAL_S'
+  131 |   __CPU_EQUAL_S (sizeof (cpu_set_t), cpusetp1, cpusetp2)
+      |   ^~~~~~~~~~~~~
+/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/affinity-tests-1/affinity_consumer.c:49:11: note: in expansion of macro 'CPU_EQUAL'
+   49 |     check(CPU_EQUAL(&left, &right), "CPU_EQUAL matching cross-word bits");
+      |           ^~~~~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:76:27: error: unused variable '__arr1' [-Werror=unused-variable]
+   76 |    ({ __const __cpu_mask *__arr1 = (cpusetp1)->__bits;         \
+      |                           ^~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:131:3: note: in expansion of macro '__CPU_EQUAL_S'
+  131 |   __CPU_EQUAL_S (sizeof (cpu_set_t), cpusetp1, cpusetp2)
+      |   ^~~~~~~~~~~~~
+/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/affinity-tests-1/affinity_consumer.c:49:11: note: in expansion of macro 'CPU_EQUAL'
+   49 |     check(CPU_EQUAL(&left, &right), "CPU_EQUAL matching cross-word bits");
+      |           ^~~~~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:77:27: error: unused variable '__arr2' [-Werror=unused-variable]
+   77 |       __const __cpu_mask *__arr2 = (cpusetp2)->__bits;         \
+      |                           ^~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:133:3: note: in expansion of macro '__CPU_EQUAL_S'
+  133 |   __CPU_EQUAL_S (setsize, cpusetp1, cpusetp2)
+      |   ^~~~~~~~~~~~~
+/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/affinity-tests-1/affinity_consumer.c:50:11: note: in expansion of macro 'CPU_EQUAL_S'
+   50 |     check(CPU_EQUAL_S(sizeof(left), &left, &right), "CPU_EQUAL_S matching bits");
+      |           ^~~~~~~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:76:27: error: unused variable '__arr1' [-Werror=unused-variable]
+   76 |    ({ __const __cpu_mask *__arr1 = (cpusetp1)->__bits;         \
+      |                           ^~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:133:3: note: in expansion of macro '__CPU_EQUAL_S'
+  133 |   __CPU_EQUAL_S (setsize, cpusetp1, cpusetp2)
+      |   ^~~~~~~~~~~~~
+/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/affinity-tests-1/affinity_consumer.c:50:11: note: in expansion of macro 'CPU_EQUAL_S'
+   50 |     check(CPU_EQUAL_S(sizeof(left), &left, &right), "CPU_EQUAL_S matching bits");
+      |           ^~~~~~~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:77:27: error: unused variable '__arr2' [-Werror=unused-variable]
+   77 |       __const __cpu_mask *__arr2 = (cpusetp2)->__bits;         \
+      |                           ^~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:131:3: note: in expansion of macro '__CPU_EQUAL_S'
+  131 |   __CPU_EQUAL_S (sizeof (cpu_set_t), cpusetp1, cpusetp2)
+      |   ^~~~~~~~~~~~~
+/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/affinity-tests-1/affinity_consumer.c:53:12: note: in expansion of macro 'CPU_EQUAL'
+   53 |     check(!CPU_EQUAL(&left, &right), "CPU_EQUAL first-word difference");
+      |            ^~~~~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:76:27: error: unused variable '__arr1' [-Werror=unused-variable]
+   76 |    ({ __const __cpu_mask *__arr1 = (cpusetp1)->__bits;         \
+      |                           ^~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:131:3: note: in expansion of macro '__CPU_EQUAL_S'
+  131 |   __CPU_EQUAL_S (sizeof (cpu_set_t), cpusetp1, cpusetp2)
+      |   ^~~~~~~~~~~~~
+/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/affinity-tests-1/affinity_consumer.c:53:12: note: in expansion of macro 'CPU_EQUAL'
+   53 |     check(!CPU_EQUAL(&left, &right), "CPU_EQUAL first-word difference");
+      |            ^~~~~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:77:27: error: unused variable '__arr2' [-Werror=unused-variable]
+   77 |       __const __cpu_mask *__arr2 = (cpusetp2)->__bits;         \
+      |                           ^~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:131:3: note: in expansion of macro '__CPU_EQUAL_S'
+  131 |   __CPU_EQUAL_S (sizeof (cpu_set_t), cpusetp1, cpusetp2)
+      |   ^~~~~~~~~~~~~
+/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/affinity-tests-1/affinity_consumer.c:54:12: note: in expansion of macro 'CPU_EQUAL'
+   54 |     check(!CPU_EQUAL(&right, &left), "CPU_EQUAL reverse operands differ");
+      |            ^~~~~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:76:27: error: unused variable '__arr1' [-Werror=unused-variable]
+   76 |    ({ __const __cpu_mask *__arr1 = (cpusetp1)->__bits;         \
+      |                           ^~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:131:3: note: in expansion of macro '__CPU_EQUAL_S'
+  131 |   __CPU_EQUAL_S (sizeof (cpu_set_t), cpusetp1, cpusetp2)
+      |   ^~~~~~~~~~~~~
+/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/affinity-tests-1/affinity_consumer.c:54:12: note: in expansion of macro 'CPU_EQUAL'
+   54 |     check(!CPU_EQUAL(&right, &left), "CPU_EQUAL reverse operands differ");
+      |            ^~~~~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:77:27: error: unused variable '__arr2' [-Werror=unused-variable]
+   77 |       __const __cpu_mask *__arr2 = (cpusetp2)->__bits;         \
+      |                           ^~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:131:3: note: in expansion of macro '__CPU_EQUAL_S'
+  131 |   __CPU_EQUAL_S (sizeof (cpu_set_t), cpusetp1, cpusetp2)
+      |   ^~~~~~~~~~~~~
+/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/affinity-tests-1/affinity_consumer.c:57:12: note: in expansion of macro 'CPU_EQUAL'
+   57 |     check(!CPU_EQUAL(&left, &right), "CPU_EQUAL final-word difference");
+      |            ^~~~~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:76:27: error: unused variable '__arr1' [-Werror=unused-variable]
+   76 |    ({ __const __cpu_mask *__arr1 = (cpusetp1)->__bits;         \
+      |                           ^~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:131:3: note: in expansion of macro '__CPU_EQUAL_S'
+  131 |   __CPU_EQUAL_S (sizeof (cpu_set_t), cpusetp1, cpusetp2)
+      |   ^~~~~~~~~~~~~
+/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/affinity-tests-1/affinity_consumer.c:57:12: note: in expansion of macro 'CPU_EQUAL'
+   57 |     check(!CPU_EQUAL(&left, &right), "CPU_EQUAL final-word difference");
+      |            ^~~~~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:77:27: error: unused variable '__arr2' [-Werror=unused-variable]
+   77 |       __const __cpu_mask *__arr2 = (cpusetp2)->__bits;         \
+      |                           ^~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:133:3: note: in expansion of macro '__CPU_EQUAL_S'
+  133 |   __CPU_EQUAL_S (setsize, cpusetp1, cpusetp2)
+      |   ^~~~~~~~~~~~~
+/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/affinity-tests-1/affinity_consumer.c:58:12: note: in expansion of macro 'CPU_EQUAL_S'
+   58 |     check(!CPU_EQUAL_S(sizeof(left), &left, &right), "CPU_EQUAL_S final-word difference");
+      |            ^~~~~~~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:76:27: error: unused variable '__arr1' [-Werror=unused-variable]
+   76 |    ({ __const __cpu_mask *__arr1 = (cpusetp1)->__bits;         \
+      |                           ^~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:133:3: note: in expansion of macro '__CPU_EQUAL_S'
+  133 |   __CPU_EQUAL_S (setsize, cpusetp1, cpusetp2)
+      |   ^~~~~~~~~~~~~
+/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/affinity-tests-1/affinity_consumer.c:58:12: note: in expansion of macro 'CPU_EQUAL_S'
+   58 |     check(!CPU_EQUAL_S(sizeof(left), &left, &right), "CPU_EQUAL_S final-word difference");
+      |            ^~~~~~~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:77:27: error: unused variable '__arr2' [-Werror=unused-variable]
+   77 |       __const __cpu_mask *__arr2 = (cpusetp2)->__bits;         \
+      |                           ^~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:133:3: note: in expansion of macro '__CPU_EQUAL_S'
+  133 |   __CPU_EQUAL_S (setsize, cpusetp1, cpusetp2)
+      |   ^~~~~~~~~~~~~
+/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/affinity-tests-1/affinity_consumer.c:59:11: note: in expansion of macro 'CPU_EQUAL_S'
+   59 |     check(CPU_EQUAL_S(word, &left, &right), "one-word prefix excludes final bit");
+      |           ^~~~~~~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:76:27: error: unused variable '__arr1' [-Werror=unused-variable]
+   76 |    ({ __const __cpu_mask *__arr1 = (cpusetp1)->__bits;         \
+      |                           ^~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:133:3: note: in expansion of macro '__CPU_EQUAL_S'
+  133 |   __CPU_EQUAL_S (setsize, cpusetp1, cpusetp2)
+      |   ^~~~~~~~~~~~~
+/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/affinity-tests-1/affinity_consumer.c:59:11: note: in expansion of macro 'CPU_EQUAL_S'
+   59 |     check(CPU_EQUAL_S(word, &left, &right), "one-word prefix excludes final bit");
+      |           ^~~~~~~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:77:27: error: unused variable '__arr2' [-Werror=unused-variable]
+   77 |       __const __cpu_mask *__arr2 = (cpusetp2)->__bits;         \
+      |                           ^~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:133:3: note: in expansion of macro '__CPU_EQUAL_S'
+  133 |   __CPU_EQUAL_S (setsize, cpusetp1, cpusetp2)
+      |   ^~~~~~~~~~~~~
+/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/affinity-tests-1/affinity_consumer.c:60:11: note: in expansion of macro 'CPU_EQUAL_S'
+   60 |     check(CPU_EQUAL_S(2 * word, &left, &right), "two-word prefix excludes final bit");
+      |           ^~~~~~~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:76:27: error: unused variable '__arr1' [-Werror=unused-variable]
+   76 |    ({ __const __cpu_mask *__arr1 = (cpusetp1)->__bits;         \
+      |                           ^~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:133:3: note: in expansion of macro '__CPU_EQUAL_S'
+  133 |   __CPU_EQUAL_S (setsize, cpusetp1, cpusetp2)
+      |   ^~~~~~~~~~~~~
+/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/affinity-tests-1/affinity_consumer.c:60:11: note: in expansion of macro 'CPU_EQUAL_S'
+   60 |     check(CPU_EQUAL_S(2 * word, &left, &right), "two-word prefix excludes final bit");
+      |           ^~~~~~~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:77:27: error: unused variable '__arr2' [-Werror=unused-variable]
+   77 |       __const __cpu_mask *__arr2 = (cpusetp2)->__bits;         \
+      |                           ^~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:133:3: note: in expansion of macro '__CPU_EQUAL_S'
+  133 |   __CPU_EQUAL_S (setsize, cpusetp1, cpusetp2)
+      |   ^~~~~~~~~~~~~
+/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/affinity-tests-1/affinity_consumer.c:64:11: note: in expansion of macro 'CPU_EQUAL_S'
+   64 |     check(CPU_EQUAL_S(word, &left, &right), "one-word prefix excludes second-word bit");
+      |           ^~~~~~~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:76:27: error: unused variable '__arr1' [-Werror=unused-variable]
+   76 |    ({ __const __cpu_mask *__arr1 = (cpusetp1)->__bits;         \
+      |                           ^~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:133:3: note: in expansion of macro '__CPU_EQUAL_S'
+  133 |   __CPU_EQUAL_S (setsize, cpusetp1, cpusetp2)
+      |   ^~~~~~~~~~~~~
+/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/affinity-tests-1/affinity_consumer.c:64:11: note: in expansion of macro 'CPU_EQUAL_S'
+   64 |     check(CPU_EQUAL_S(word, &left, &right), "one-word prefix excludes second-word bit");
+      |           ^~~~~~~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:77:27: error: unused variable '__arr2' [-Werror=unused-variable]
+   77 |       __const __cpu_mask *__arr2 = (cpusetp2)->__bits;         \
+      |                           ^~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:133:3: note: in expansion of macro '__CPU_EQUAL_S'
+  133 |   __CPU_EQUAL_S (setsize, cpusetp1, cpusetp2)
+      |   ^~~~~~~~~~~~~
+/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/affinity-tests-1/affinity_consumer.c:65:12: note: in expansion of macro 'CPU_EQUAL_S'
+   65 |     check(!CPU_EQUAL_S(2 * word, &left, &right), "two-word prefix includes second-word bit");
+      |            ^~~~~~~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:76:27: error: unused variable '__arr1' [-Werror=unused-variable]
+   76 |    ({ __const __cpu_mask *__arr1 = (cpusetp1)->__bits;         \
+      |                           ^~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:133:3: note: in expansion of macro '__CPU_EQUAL_S'
+  133 |   __CPU_EQUAL_S (setsize, cpusetp1, cpusetp2)
+      |   ^~~~~~~~~~~~~
+/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/affinity-tests-1/affinity_consumer.c:65:12: note: in expansion of macro 'CPU_EQUAL_S'
+   65 |     check(!CPU_EQUAL_S(2 * word, &left, &right), "two-word prefix includes second-word bit");
+      |            ^~~~~~~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:77:27: error: unused variable '__arr2' [-Werror=unused-variable]
+   77 |       __const __cpu_mask *__arr2 = (cpusetp2)->__bits;         \
+      |                           ^~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:133:3: note: in expansion of macro '__CPU_EQUAL_S'
+  133 |   __CPU_EQUAL_S (setsize, cpusetp1, cpusetp2)
+      |   ^~~~~~~~~~~~~
+/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/affinity-tests-1/affinity_consumer.c:66:11: note: in expansion of macro 'CPU_EQUAL_S'
+   66 |     check(CPU_EQUAL_S(0, &left, &right), "zero-word prefix compares no words");
+      |           ^~~~~~~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:76:27: error: unused variable '__arr1' [-Werror=unused-variable]
+   76 |    ({ __const __cpu_mask *__arr1 = (cpusetp1)->__bits;         \
+      |                           ^~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:133:3: note: in expansion of macro '__CPU_EQUAL_S'
+  133 |   __CPU_EQUAL_S (setsize, cpusetp1, cpusetp2)
+      |   ^~~~~~~~~~~~~
+/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/affinity-tests-1/affinity_consumer.c:66:11: note: in expansion of macro 'CPU_EQUAL_S'
+   66 |     check(CPU_EQUAL_S(0, &left, &right), "zero-word prefix compares no words");
+      |           ^~~~~~~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:77:27: error: unused variable '__arr2' [-Werror=unused-variable]
+   77 |       __const __cpu_mask *__arr2 = (cpusetp2)->__bits;         \
+      |                           ^~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:133:3: note: in expansion of macro '__CPU_EQUAL_S'
+  133 |   __CPU_EQUAL_S (setsize, cpusetp1, cpusetp2)
+      |   ^~~~~~~~~~~~~
+/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/affinity-tests-1/affinity_consumer.c:67:12: note: in expansion of macro 'CPU_EQUAL_S'
+   67 |     check(!CPU_EQUAL_S(sizeof(left), &left, &right), "full-size comparison includes difference");
+      |            ^~~~~~~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:76:27: error: unused variable '__arr1' [-Werror=unused-variable]
+   76 |    ({ __const __cpu_mask *__arr1 = (cpusetp1)->__bits;         \
+      |                           ^~~~~~
+/home/holden/mckernel/ihk/linux/include/ihk/affinity.h:133:3: note: in expansion of macro '__CPU_EQUAL_S'
+  133 |   __CPU_EQUAL_S (setsize, cpusetp1, cpusetp2)
+      |   ^~~~~~~~~~~~~
+/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/affinity-tests-1/affinity_consumer.c:67:12: note: in expansion of macro 'CPU_EQUAL_S'
+   67 |     check(!CPU_EQUAL_S(sizeof(left), &left, &right), "full-size comparison includes difference");
+      |            ^~~~~~~~~~~
+cc1: all warnings being treated as errors

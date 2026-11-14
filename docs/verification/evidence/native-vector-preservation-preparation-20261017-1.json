@@ -1,0 +1,328 @@
+{
+  "application_acceptance": false,
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-B",
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/ndv-7ed3fd1a",
+    "--nonce",
+    "7ed3fd1ab72e402597376c263165531a",
+    "--owner-sha256",
+    "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+    "--manifest",
+    "/home/holden/mckernel-work/scratch/native-vector-preservation-preparation-20261017-1/manifest.json",
+    "--manifest-sha256",
+    "63fbefdfd139d44ee52859e57a3b7bb6df288d35e20327ac2f008c9fda3aa3e4"
+  ],
+  "checks": {
+    "negative": [
+      "wrongexit",
+      "wrongbytes",
+      "incompleteEOF"
+    ],
+    "no_vector_source_Linux_reference_or_static_app_rerun": true,
+    "positive": "Actual retained Linux output bytes via cat through included unchanged collector supervisor/pipes/frame; newframe+newmanifest evaluated by unchanged ND.evaluate with prior kernel/QMP observation. Protocol-only, no vector guest or hostapp rerun.",
+    "protocol": {
+      "elapsed_seconds": 0.8667198599941912,
+      "returncode": 0
+    },
+    "protocol_join": {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-preparation-20261017-1/protocol/result.json",
+      "sha256": "c2e9162bc7f33a47d16b76445c76a37d57de7c437cb51b9258b679099172143b",
+      "size": 2837
+    },
+    "stage": {
+      "elapsed_seconds": 17.253530112997396,
+      "returncode": 0
+    },
+    "strict_manifest_load": true
+  },
+  "collector": {
+    "binary": {
+      "mode": 33216,
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/init",
+      "sha256": "268b967064e44a61340e43a23940ef2bba16ad22e3615a6f5d0e7108428890b6",
+      "size": 1021992
+    },
+    "lifecycle_probe_invoked": false,
+    "profile": "Existing accepted ND_CORE_THREADS general collector;1024streamlimits, fixed app threads argv; vector main(void) ignores argument. Same strict5helper6b9 boots hidos allow_oversubscribe for pthreadworker on1McCPU.",
+    "resource40gate_used": false,
+    "source": {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/collector-threads.c",
+      "sha256": "60921bc30463be3fa7bbf49e7589cb23ba31cff0fb56c767075a06927e7d4b70",
+      "size": 23008
+    },
+    "source_changed": false
+  },
+  "evidence": {
+    "command.json": {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-preparation-20261017-1/command.json",
+      "sha256": "20988000664c0e8c3ed5e3167fbe676a01f6375c7f409e73982e286bae35edd8",
+      "size": 649
+    },
+    "final-metadata-join.json": {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-preparation-20261017-1/final-metadata-join.json",
+      "sha256": "ab049288bb7163759bb8b52d8ecdaa95d88c272877ea2179a9d867e8b5db57ba",
+      "size": 34244
+    },
+    "manifest.json": {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-preparation-20261017-1/manifest.json",
+      "sha256": "63fbefdfd139d44ee52859e57a3b7bb6df288d35e20327ac2f008c9fda3aa3e4",
+      "size": 5525
+    },
+    "overlay-manifest.json": {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-preparation-20261017-1/overlay-manifest.json",
+      "sha256": "5ea8c35c06f70922a3a75246689d7524da3e8f18f150414ffe42778c7fa9f093",
+      "size": 19441
+    },
+    "overlay.command.json": {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-preparation-20261017-1/overlay.command.json",
+      "sha256": "bc03529f0ab0dead2505164c3b09bee6791fe40dd859c6eadf0eff52cd1c901d",
+      "size": 1669
+    },
+    "overlay.status.json": {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-preparation-20261017-1/overlay.status.json",
+      "sha256": "1b33583deea39acb3d79a6a34e122242cb818a759e222029bb97d00904e8e51c",
+      "size": 61
+    },
+    "prepare.py": {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-preparation-20261017-1/prepare.py",
+      "sha256": "7a4b025fe7d5ed21cc049387c9b538f8065ca8b8c740d4f568df346f11fd5a1b",
+      "size": 10843
+    },
+    "protocol/collector-frame.c": {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-preparation-20261017-1/protocol/collector-frame.c",
+      "sha256": "19479f6597fe508f9386662f4062380d7b492ea2bccfeda8cc27f7dad94d2d4b",
+      "size": 809
+    },
+    "protocol/command.json": {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-preparation-20261017-1/protocol/command.json",
+      "sha256": "6ffab14415248600682ab7abd47a349283c705c134f89f6352319527cf1e5cce",
+      "size": 714
+    },
+    "protocol/result.json": {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-preparation-20261017-1/protocol/result.json",
+      "sha256": "c2e9162bc7f33a47d16b76445c76a37d57de7c437cb51b9258b679099172143b",
+      "size": 2837
+    },
+    "protocol/run.py": {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-preparation-20261017-1/protocol/run.py",
+      "sha256": "7b3d612d6c49dafe7f30fd2e647e2e03d4a55d2adc87fa16da5e8f3e95fb272c",
+      "size": 4179
+    },
+    "protocol/status.json": {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-preparation-20261017-1/protocol/status.json",
+      "sha256": "e2019197d564ba352d1f73db512e06127d2d85fca4436948bae5d8612be1856c",
+      "size": 63
+    },
+    "replacements.json": {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-preparation-20261017-1/replacements.json",
+      "sha256": "04ab8d978205bee0dd00551d3dce69b5ffeac47aab891a065fb3ab29ad482640",
+      "size": 1352
+    },
+    "stage.command.json": {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-preparation-20261017-1/stage.command.json",
+      "sha256": "8f3db96812423e5cdc7fc0741eb566cc245fc9762954f74f01206b366a99cff4",
+      "size": 1217
+    },
+    "stage.status.json": {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-preparation-20261017-1/stage.status.json",
+      "sha256": "bae5e1ca1f9b9b1684ab023f3faf621d5453930aec3b1d1ee74b25bdd45f1838",
+      "size": 63
+    },
+    "status.json": {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-preparation-20261017-1/status.json",
+      "sha256": "a46e3f0fa7543938c14e2a91b7321fcce78baa80e645cc9043918f4478e7f336",
+      "size": 63
+    }
+  },
+  "formal_case_credit": false,
+  "frozen_oracle": {
+    "path": "/home/holden/mckernel/docs/verification/native-vector-preservation-linux-oracle-20261017-1.json",
+    "sha256": "88f336f3febab1295d0cc70f060892448bde3aa5be593d59538ce3ab9877fe65",
+    "size": 2191
+  },
+  "frozen_payload": {
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "app",
+      "threads"
+    ],
+    "cwd": "/case/work",
+    "env": {
+      "COKERNEL_PATH": "/apps",
+      "PATH": "/usr/bin:/bin"
+    },
+    "oracle": {
+      "exit_code": 0,
+      "stderr_hex": "",
+      "stdout_hex": "564543544f525f53595343414c4c5f504153530a564543544f525f46555445585f504153530a564543544f525f5349474e414c5f504153530a564543544f525f50524f46494c455f504153530a"
+    },
+    "stderr_limit_bytes": 1024,
+    "stdout_limit_bytes": 1024
+  },
+  "metadata": {
+    "actual_nonzero_mtime_nonoverlay": 41,
+    "all9fields_untouched_nonoverlay": 54,
+    "final_members": 60,
+    "only_content_nonmtime_deltas_vs_accepted_strict5": [
+      "apps/app",
+      "init"
+    ],
+    "source_view_members": 56
+  },
+  "nonce": "7ed3fd1ab72e402597376c263165531a",
+  "parent": {
+    "device": 1828,
+    "gid": 1000,
+    "inode": 114702,
+    "mode": "0o700",
+    "path": "/home/holden/mckernel-work/scratch/ndv-7ed3fd1a",
+    "uid": 1000
+  },
+  "predecessor": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-resource-release-failure-review-20261017-1.json",
+    "sha256": "665d05683f432027b2144427e0a8b18d5308ac8caff8565cdc30187c33eabb5a",
+    "size": 16108
+  },
+  "production_acceptance": false,
+  "qmp": {
+    "encoded_bytes": 97,
+    "max_bytes": 107,
+    "path": "/home/holden/mckernel-work/scratch/ndv-7ed3fd1a/attempt-7ed3fd1ab72e402597376c263165531a/qmp.sock"
+  },
+  "result": {
+    "actual_runtime_content_changes": [
+      "apps/app",
+      "init"
+    ],
+    "application_acceptance": false,
+    "compiler_or_helper_tests_replayed": false,
+    "guest_executed": false,
+    "manifest": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-preparation-20261017-1/manifest.json",
+      "sha256": "63fbefdfd139d44ee52859e57a3b7bb6df288d35e20327ac2f008c9fda3aa3e4",
+      "size": 5525
+    },
+    "matched_modules": [
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/scratch/nsd-c-79b00103de104607b182b374a2a396ae/modules/ihk.ko",
+        "sha256": "51b48a9e42eaa2411cab2a28edf9bb5db8b2d648675d083473e926f91dd0e038",
+        "size": 1440392
+      },
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/scratch/nsd-c-79b00103de104607b182b374a2a396ae/modules/ihk-smp-x86_64.ko",
+        "sha256": "990104bb9a384db8ffdb4832cc043f94b4abf54d044309ca56cbee02e389161f",
+        "size": 11634760
+      },
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/scratch/nsd-c-79b00103de104607b182b374a2a396ae/modules/mcctrl.ko",
+        "sha256": "6571ac7eca13559d8bab65125d54facbbc65e84f815d4ff3fc77ec6aa1104972",
+        "size": 1913904
+      }
+    ],
+    "overlay": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-preparation-20261017-1/lifecycle.cpio.gz",
+      "sha256": "b7a6cb1a2693a7d81dcc34496845769ba77d43e4c72d386b7c386da508db188e",
+      "size": 13913814
+    },
+    "receipt": {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-79b00103de104607b182b374a2a396ae/evidence/receipt.json",
+      "sha256": "85e13855248b6adccf70118743345baed84384e860001e6d07e7532bb8da4e8a",
+      "size": 30863
+    },
+    "runtime_release": false,
+    "source_provenance": {
+      "baseline_source_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+      "closure_hash_encoding": "SHA256 of UTF-8 JSON relative-path-to-SHA256 map, sorted keys, separators comma/colon",
+      "closure_sha256": "bf4774c6a520e98550d94acdaca80f62434308a0fbeb0e2cf27ddf35cc7d8737",
+      "compatibility_build_id": {
+        "meaning": "Retained baseline ABI compatibility blob; not proof of unchanged compiled source",
+        "path": "ihk-compat-build-id.bin",
+        "sha256": "6836dd3f0fd3d273816c58b067eeea1b53a2a7ab760c68e3d918eb14e80c38f0"
+      },
+      "excluded_working_tree": "Every unreviewed working-tree file; the nine reviewed shutdown deltas over retained176 and carried os_runtime are included",
+      "reviewed_deltas": [
+        {
+          "baseline_sha256": "a353b2915a4038e7739d01cc440376daf091367f976cf6de297bceb1dd59fce8",
+          "path": "ihk_smp_x86_64.rs",
+          "source_candidate_sha256": "5b12bf77664095c966245ac8a1312a41c2fc16dd4a8233abd9e6c602305ecd6d"
+        },
+        {
+          "baseline_sha256": "9519b7f35f5d28c88cdf366fe5c67a244ea005db713690a3686afe8c2a60fcab",
+          "path": "os_runtime.rs",
+          "source_candidate_sha256": "65107aafb28868e76640cb2e1862e5d9e36a930a2e9dab850824d5108879225a"
+        },
+        {
+          "baseline_sha256": "6b37a71ba79bf5746fd72123b82ebe5afc71c809310a2a942cea08a3d66cf5e8",
+          "path": "smp_application.rs",
+          "source_candidate_sha256": "127829f3dd35b3d44c2b098279b7439dccb31a53508055e3cdd1fd9e450682e2"
+        },
+        {
+          "baseline_sha256": "ed5520878d89e9a79d7ffeb128ccbb54fbab5472b4b0f57abd00a0399fc8e9cb",
+          "path": "smp_cpu.rs",
+          "source_candidate_sha256": "52b77ecad0d686a57eaa1c5a5385686129eb7ae6af0d014296317ddf6468d7b3"
+        },
+        {
+          "baseline_sha256": "9876f1b374ecfb44fba09395aa9fca1ed840619488f9b4f8cde38a6693004cd9",
+          "path": "smp_file_pager.rs",
+          "source_candidate_sha256": "655c029bcddf937b6445ee01d076978ff9606832d60fd038e07076bee939e96c"
+        },
+        {
+          "baseline_sha256": "db0c5f94b5ea41610c501002ff359b7f23a38841715a0307e8b8f7872ac65522",
+          "path": "smp_memory.rs",
+          "source_candidate_sha256": "8785b1be4dffe2ef24bc54dc8f861c290418ce13773d46177692c709d69fb525"
+        },
+        {
+          "baseline_sha256": "7aba4319fdc6fa76761ca01128c7a7d920c4be85244737167122c914fc1268d5",
+          "path": "smp_procfs.rs",
+          "source_candidate_sha256": "4ae39992d0354b2f0b32de4a3e26ce8a621ede6dff69dd92ce303d4ab90232ea"
+        },
+        {
+          "baseline_sha256": "bd0a109fe6c402e21b702b0fa96d99c2d9edbd5179877aa61f9f27bd595fe0e4",
+          "path": "smp_service.rs",
+          "source_candidate_sha256": "cd97c1528602323c43aaf70f528342fc3874fe9da1660cf1a767d27284cb5b5a"
+        },
+        {
+          "baseline_sha256": "c4bb558432a85c565977a7820d42eaf06530398d7fe9b916bf58f6741ca78d81",
+          "path": "sysfs_memory.rs",
+          "source_candidate_sha256": "d64efe15ff3545e6f21733cdc6dcbf026df370049484a7221a653d502612bfc1"
+        },
+        {
+          "baseline_sha256": "8a33f152307d66f7c205fe7557da1a4e02e5d230335dd9b36f16797e11db53ee",
+          "path": "sysfs_remote.rs",
+          "source_candidate_sha256": "fe4ec42333148770a36843a82f0c4cdf675a27065dbed1f13449a2b61472dfa9"
+        }
+      ],
+      "source_candidate_sha": "3f7b265b9f90279f5bd36f33f294eaa117609f12"
+    },
+    "status": "PASS_VECTOR_STAGE_PENDING_INDEPENDENT_REVIEW",
+    "strict_manifest_load": true
+  },
+  "runtime_release": false,
+  "source_identity": {
+    "all3modules": "3f7b265b9f90279f5bd36f33f294eaa117609f12",
+    "linux_and_image_abi": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+    "unreviewed_fork_and_kernel_WIP_excluded": true
+  },
+  "source_or_collector_or_default_oracle_changed": false,
+  "source_report": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-vector-preservation-linux-reference-20261017-2.json",
+    "sha256": "3d63c5beb530b70a400ee390e732c57fade777d0ba65b308222af0b25a8b8e78",
+    "size": 35083
+  },
+  "status": "PASS_STAGE_AND_SERIALIZER_ORACLE_JOIN_PENDING_INDEPENDENT_EXECUTION_REVIEW",
+  "task_id": "native-vector-preservation-preparation-20261017-1"
+}

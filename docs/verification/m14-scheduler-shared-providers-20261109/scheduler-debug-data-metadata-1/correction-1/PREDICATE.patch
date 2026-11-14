@@ -1,0 +1,12 @@
+--- /home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-metadata-1/debug_data_metadata_checks.py
++++ /home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-metadata-1/correction-1/debug_data_metadata_checks.py
+@@ -52,7 +52,8 @@
+     assert definitions[name] == dict(kind='D', size=576)
+     section = image.sections[symbol['section']]
+     assert section['name'] == '__verbose' and section['type'] == 1
+-    assert section['flags'] == 3 and section['align'] == 8
++    # Exact observed WRITE|ALLOC|GNU_RETAIN, retaining original #[used] emission.
++    assert section['flags'] == 0x200003 and section['align'] == 8
+     assert symbol['value'] == 0 and section['size'] == 576
+     assert not [s for s in image.symbols if s['section'] != 0 and s['type'] == 2], 'No public/private emitted functions'
+     assert not [s for s in image.sections if s['size'] and s['flags'] & 4], 'No executable allocated content'

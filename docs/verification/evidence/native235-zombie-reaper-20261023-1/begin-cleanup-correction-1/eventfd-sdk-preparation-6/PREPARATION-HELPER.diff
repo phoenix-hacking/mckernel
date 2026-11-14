@@ -1,0 +1,38 @@
+--- /home/holden/mckernel-work/host-preparation/native235-procfs-delete-sdk-preparation-20261023-5/prepare.py
++++ /home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/prepare.py
+@@ -13,17 +13,13 @@
+ 
+ R = Path('/home/holden/mckernel')
+ E = Path(__file__).resolve().parent / 'metadata'
+-OLD = Path('/home/holden/mckernel-work/host-preparation/native235-terminal-control-sdk-preparation-20261023-4/prepared-sdk')
+-H = Path('/home/holden/mckernel-work/host-preparation/native235-procfs-delete-sdk-preparation-20261023-5/prepared-sdk')
++OLD = Path('/home/holden/mckernel-work/host-preparation/native235-procfs-delete-sdk-preparation-20261023-5/prepared-sdk')
++H = Path('/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/prepared-sdk')
+ SCOPE = 'Functional McKernel OS/apps and Rust/assembly migration only; no security testing.'
+-ALLOWED_CHANGED_SOURCES = {'smp_application.rs', 'smp_service.rs', 'procfs_objects.rs'}
++ALLOWED_CHANGED_SOURCES = {'smp_service.rs'}
+ EXPECTED = None  # Bound only from genuine accepted SOURCE-ACCEPTANCE.INPUT.json at main().
+ 
+-OLD_PINS = {
+-    'preparation.json': '3d5f4d14b1b9e9abeb0beb4925a56419bd25e9b8f1b83d0b007b9dccc0db5407',
+-    'derived-runtime/native_running_external_modules_offline.py': 'd0adb1168ef470301d81bf6680d7b7ec90dd5e25f239c5037be433ec2707ee68',
+-    'derived-runtime/native_running_external_modules_owner.py': 'effec02c0d393f9126e92aab9317faf7eace9a9560b9ea5a6014a871100d2018',
+-}
++OLD_PINS = {'preparation.json': 'b04df1ec9d82ea0b5eff91ba1570ab1abf5d2035fbe3be9962c893eac37936d5', 'derived-runtime/native_running_external_modules_offline.py': 'bdcdd52cceb789778ab1c1b6ceedc743d030e64241f8a32dc674f60eb5230f1f', 'derived-runtime/native_running_external_modules_owner.py': '67aa07243f6f7e07afdc988b28c5de383cb2da07151886e67b1f6c7e8480f72b'}
+ 
+ def digest(path):
+     return hashlib.sha256(path.read_bytes()).hexdigest()
+@@ -177,10 +173,10 @@
+         request[key] = None
+     template = H / 'REQUEST.TEMPLATE.PENDING-LIVE-IDENTITIES.json'
+     save(template, request)
+-    stage_source = Path('/home/holden/mckernel-work/host-preparation/native235-terminal-control-sdk-preparation-20261023-4/metadata/stage_bound_successor.py')
++    stage_source = Path('/home/holden/mckernel-work/host-preparation/native235-procfs-delete-sdk-preparation-20261023-5/metadata/stage_bound_successor.py')
+     stage = stage_source.read_text().replace(str(OLD), str(H)).replace(OLD_PINS['preparation.json'], digest(prep)).replace(
+-        'c943d66a843c4682be64165cbed0039d', nonce).replace(
+-        '09ca46bc9d478d0411bd22ef7bb57224bc3c263beb56894dbd4345524e7f598e', digest(template))
++        '9c96ba665d8d4ef19f81420e9fe33814', nonce).replace(
++        'a54063def7631367ef32427b9c730a3d68ad37c1344e0a338eb8f1dadecd0719', digest(template))
+     ast.parse(stage)
+     write(E / 'stage_bound_successor.py', stage.encode())
+     write(E / 'MATERIALIZER.patch', ''.join(difflib.unified_diff(

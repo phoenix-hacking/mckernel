@@ -1,0 +1,73 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_DECLARATION_QUALIFICATION_NOT_PRODUCTION_ACCEPTANCE",
+  "first_fullcrate_failure": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-process-diagnostic-next/production-consumer-preparation-1/PRODUCTION-FIRST-FAILURE-1.json",
+    "sha256": "2fb3a2294e4347bc7eced2aee91ef259778c079779bcbfa5e8f61eda3fb17698",
+    "bytes": 3145
+  },
+  "first_error": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-process-diagnostic-next/production-consumer-preparation-1/actual-production-capture-1/00-current78-production-Rust-compile/stderr",
+    "sha256": "e9a1a83c79078bfecf6bfd2e63cca2705fa1dbfbe16ad7afff3e830d093e0425",
+    "bytes": 1574
+  },
+  "first_failed_fullmodule": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-process-diagnostic-next/candidate/process_helpers.rs",
+    "sha256": "17c927e656d0c8f3107bb21cfffd76bf5a4bc95002b8bd34cb00294d13fb2eb8",
+    "bytes": 353860
+  },
+  "corrected_fullmodule": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-process-diagnostic-next/production-consumer-preparation-1/bounded-correction-1/candidate/process_helpers.rs",
+    "sha256": "d04b48c887c834edd6380e3ae06fccdef7dfafaf67196fd28af7f9571993bd6d",
+    "bytes": 353812
+  },
+  "C08c_unchanged": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-process-diagnostic-next/production-consumer-preparation-1/bounded-correction-1/candidate/process.c",
+    "sha256": "08c238a08066a6eda5f346bbd6e6f87333bd505d8d598276dc9c52cd43568a45",
+    "bytes": 162457
+  },
+  "removed_line": 20,
+  "exact_removed_bytes": "    fn kprintf(format: *const i8, ...) -> CInt;\n",
+  "remaining_declaration": "Identical unconditional existing canonical module extern before process_release_tid_log_bridge; canonicalline11593.",
+  "remaining_declaration_count": 1,
+  "callback_body_unchanged": true,
+  "callback_body_sha256": "d4e1d6cb8f5a97a83bccc1580396f5d22a521c2cc89c92385a18f763d411bfca",
+  "accepted_original_1101_leaf_receipt": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-process-diagnostic-next/sourcehandoff/ACTUAL-FIRST-CANDIDATE-WHOLE-JOIN.json",
+    "sha256": "bebe72021c410cddfd8c67dfc086c365d51641e074aca04f87f5450405509316",
+    "bytes": 24274
+  },
+  "leaf_scope": "The accepted actual Rust leaf compiled a body extraction with exactly one necessary standalone kprintf declaration and test-only callback symbol. It proved the body/ABI/consumer behavior, but did not compile all process_helpers.rs declarations. That narrower acceptance is unchanged.",
+  "unchanged_source_algorithm": true,
+  "unchanged_fixture_1101": true,
+  "unchanged_C_and_debug_ABI": true,
+  "unchanged_all_T_U_metadata_relocation_and_link_predicates": true,
+  "expected_T_delta": {
+    "removed": [],
+    "added": [
+      "arch_ptrace",
+      "remote_flush_tlb_cpumask",
+      "syscall_signalfd_publish_bridge",
+      "vm_range_insert_log_bridge",
+      "x86_clear_range_l4_body"
+    ],
+    "before": 3039,
+    "after": 3044
+  },
+  "expected_U_delta": {
+    "removed": [
+      "syscall_signalfd_publish_bridge",
+      "vm_range_insert_log_bridge"
+    ],
+    "added": [
+      "process_vm_range_insert_debug",
+      "x86_clear_range_l3_callback"
+    ],
+    "before": 577,
+    "after": 577
+  },
+  "test_executed": false,
+  "compiler_executed": false,
+  "CPU_reserved": false,
+  "next_unexpected_result": "STOP_EXPERT_ESCALATION_NO_FURTHER_RETRY"
+}

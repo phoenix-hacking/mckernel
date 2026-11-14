@@ -1,0 +1,80 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_BRANCH_PROJECTION_ONLY_NOT_CPP_OR_COMPILER_PROOF",
+  "source": "kernel/mem.c",
+  "source_sha256": "2a0658f3d2b010ee34808851c9b0d0fc080a0cf1f2cfbdf8858c03f680ae8baf",
+  "selected_defines": [
+    "IHK_IKC_USE_LINUX_WORK_IRQ",
+    "IHK_OS_MANYCORE",
+    "KERNEL_RAM_VADDR",
+    "MAP_KERNEL_START",
+    "MCKERNEL_NATIVE_CLONE3",
+    "MCKERNEL_NATIVE_CLONE_TID",
+    "MCKERNEL_NATIVE_FAULT_FIXUP",
+    "MCKERNEL_NATIVE_FUTEX",
+    "MCKERNEL_NATIVE_SIGNAL_STACK",
+    "MCKERNEL_RUST_ATOMIC_HELPERS",
+    "MCKERNEL_RUST_BITOPS",
+    "MCKERNEL_RUST_HASH_HELPERS",
+    "MCKERNEL_RUST_LIST_HELPERS",
+    "MCKERNEL_RUST_LOCK_HELPERS",
+    "MCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+    "MCKERNEL_RUST_MC_RWLOCK_HELPERS",
+    "MCKERNEL_RUST_MEM_HELPERS",
+    "MCKERNEL_RUST_MMAN_HELPERS",
+    "MCKERNEL_RUST_PAGE_HELPERS",
+    "MCKERNEL_RUST_PTE_HELPERS",
+    "MCKERNEL_RUST_REFCOUNT_HELPERS",
+    "MCKERNEL_RUST_RUSAGE_PRIVATE_HELPERS",
+    "MCKERNEL_RUST_SPINLOCK_HELPERS",
+    "PROFILE_ENABLE",
+    "__KERNEL__"
+  ],
+  "assumptions": "Macro selection from M14 worklist. Headers not expanded. Unlisted feature macros treated undefined; both RB-tree profiles checked. This cannot prove selected inline/header providers or final link ownership.",
+  "profiles": [
+    {
+      "IHK_RBTREE_ALLOCATOR": false,
+      "file": "source-selection-rbtree-0.c",
+      "sha256": "ec7d3db675f52a6857a79beff2b6c62c477e403a7e1b78b03c501a4604d98879",
+      "function_definitions": [
+        {
+          "name": "mem_try_alloc_node_bridge",
+          "line": 3624,
+          "declaration": "static unsigned long mem_try_alloc_node_bridge(int numa_id, int npages,\n\t\tint p2align, int is_user, int *oomp)"
+        },
+        {
+          "name": "mem_query_free_node_pages_bridge",
+          "line": 4207,
+          "declaration": "static int mem_query_free_node_pages_bridge(int node)"
+        },
+        {
+          "name": "mem_numa_node_init_bridge",
+          "line": 5533,
+          "declaration": "static void mem_numa_node_init_bridge(struct ihk_mc_numa_node *node,\n\t\tint rbtree_allocator)"
+        },
+        {
+          "name": "mem_numa_add_free_pages_bridge",
+          "line": 5559,
+          "declaration": "static void mem_numa_add_free_pages_bridge(struct ihk_mc_numa_node *node,\n\t\tunsigned long start, unsigned long len)"
+        },
+        {
+          "name": "mem_get_this_cpu_local_var_bridge",
+          "line": 7321,
+          "declaration": "static struct cpu_local_var *mem_get_this_cpu_local_var_bridge(void)"
+        }
+      ]
+    },
+    {
+      "IHK_RBTREE_ALLOCATOR": true,
+      "file": "source-selection-rbtree-1.c",
+      "sha256": "51ad2ae017b7c837740b499f3ae448999641b9ded24c17f1055db989eee45a33",
+      "function_definitions": [
+        {
+          "name": "mem_get_this_cpu_local_var_bridge",
+          "line": 7321,
+          "declaration": "static struct cpu_local_var *mem_get_this_cpu_local_var_bridge(void)"
+        }
+      ]
+    }
+  ]
+}

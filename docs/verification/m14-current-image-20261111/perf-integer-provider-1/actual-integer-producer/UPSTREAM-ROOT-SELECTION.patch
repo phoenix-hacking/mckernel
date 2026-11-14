@@ -1,0 +1,55 @@
+--- /home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/compiler-builtins/compiler-builtins/src/lib.rs
++++ /home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/integer-builtins-1/input/compiler_builtins_integer.rs
+@@ -1,3 +1,5 @@
++// Genuine kernel-required unsigned-division provider selection.
++// All selected upstream function and macro bodies remain unchanged.
+ #![cfg_attr(feature = "compiler-builtins", compiler_builtins)]
+ #![cfg_attr(all(target_family = "wasm"), feature(wasm_numeric_instr))]
+ #![feature(abi_custom)]
+@@ -40,39 +42,12 @@
+ extern crate core;
+ 
+ #[macro_use]
++#[path = "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/compiler-builtins/compiler-builtins/src/macros.rs"]
+ mod macros;
+ 
+-pub mod float;
+-pub mod int;
+-pub mod math;
+-pub mod mem;
+-pub mod sync;
+-
+-// `libm` expects its `support` module to be available in the crate root.
+-use math::libm_math::support;
+-
+-#[cfg(target_arch = "arm")]
+-pub mod arm;
+-
+-#[cfg(any(target_arch = "aarch64", target_arch = "arm64ec"))]
+-pub mod aarch64;
+-
+-#[cfg(all(target_arch = "aarch64", target_feature = "outline-atomics"))]
+-pub mod aarch64_outline_atomics;
+-
+-#[cfg(target_arch = "avr")]
+-pub mod avr;
+-
+-#[cfg(target_arch = "hexagon")]
+-pub mod hexagon;
+-
+-#[cfg(any(target_arch = "riscv32", target_arch = "riscv64"))]
+-pub mod riscv;
+-
+-#[cfg(target_arch = "x86")]
+-pub mod x86;
+-
+-#[cfg(target_arch = "x86_64")]
+-pub mod x86_64;
+-
+-pub mod probestack;
++pub mod int {
++    #[path = "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/compiler-builtins/compiler-builtins/src/int/specialized_div_rem/mod.rs"]
++    mod specialized_div_rem;
++    #[path = "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/compiler-builtins/compiler-builtins/src/int/udiv.rs"]
++    pub mod udiv;
++}

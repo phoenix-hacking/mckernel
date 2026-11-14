@@ -1,0 +1,535 @@
+{
+  "status": "PASS_ACTUAL_CURRENT80_PLUS_TIMER_VECTOR_AND_CPU_IPI_PARTIAL",
+  "request_sha256": "26806f5e882b46e7f9f7c20acd72bb6e57f50c3b79997f4f37ab9233dfc9cc92",
+  "actual_inputs": [
+    {
+      "role": "qualified_current80",
+      "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-primitives-debugdata-join-1/output/scheduler_primitives_debug_partial.o",
+      "sha256": "b18f9e01ea7b3cb0b2deb2670c0d393e39370f4d4df9defcf5b102aa97d68241",
+      "actual_nm": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-primitives-debugdata-join-1/joined-symbols.stdout",
+      "actual_definitions": {
+        "_RNvNtNtCs5mudLkas02F_21provider_storage_unit18x86_memory_helpers17owned_memory_data10TRACE_FILE": {
+          "kind": "R",
+          "size": 319
+        },
+        "__ihk_mc_spinlock_lock": {
+          "kind": "T",
+          "size": 108
+        },
+        "__ihk_mc_spinlock_lock_noirq": {
+          "kind": "T",
+          "size": 91
+        },
+        "__ihk_mc_spinlock_unlock": {
+          "kind": "T",
+          "size": 61
+        },
+        "__ihk_mc_spinlock_unlock_noirq": {
+          "kind": "T",
+          "size": 59
+        },
+        "__sched_wakeup_thread": {
+          "kind": "T",
+          "size": 634
+        },
+        "arch_delay": {
+          "kind": "T",
+          "size": 91
+        },
+        "clv": {
+          "kind": "B",
+          "size": 8
+        },
+        "cpu_disable_interrupt_save": {
+          "kind": "T",
+          "size": 6
+        },
+        "cpu_interrupt_disabled": {
+          "kind": "T",
+          "size": 16
+        },
+        "cpu_local_var_initialized": {
+          "kind": "B",
+          "size": 4
+        },
+        "cpu_pause": {
+          "kind": "T",
+          "size": 3
+        },
+        "cpu_restore_interrupt": {
+          "kind": "T",
+          "size": 5
+        },
+        "do_setresgid": {
+          "kind": "T",
+          "size": 173
+        },
+        "do_setresuid": {
+          "kind": "T",
+          "size": 173
+        },
+        "format_decode_result": {
+          "kind": "T",
+          "size": 876
+        },
+        "get_cpu_local_var": {
+          "kind": "T",
+          "size": 24
+        },
+        "get_this_cpu_local_var": {
+          "kind": "T",
+          "size": 99
+        },
+        "getcred": {
+          "kind": "T",
+          "size": 259
+        },
+        "getcred_body_result": {
+          "kind": "T",
+          "size": 272
+        },
+        "ihk_mc_delay_us": {
+          "kind": "T",
+          "size": 91
+        },
+        "ihk_mc_get_processor_id": {
+          "kind": "T",
+          "size": 77
+        },
+        "ihk_mc_spinlock_init": {
+          "kind": "T",
+          "size": 5
+        },
+        "kmsg_buf": {
+          "kind": "B",
+          "size": 8
+        },
+        "kmsg_init": {
+          "kind": "T",
+          "size": 15
+        },
+        "kprintf": {
+          "kind": "T",
+          "size": 706
+        },
+        "kprintf_lock": {
+          "kind": "T",
+          "size": 107
+        },
+        "kprintf_unlock": {
+          "kind": "T",
+          "size": 71
+        },
+        "linux_page_offset_base": {
+          "kind": "B",
+          "size": 8
+        },
+        "locals": {
+          "kind": "B",
+          "size": 8
+        },
+        "memset": {
+          "kind": "T",
+          "size": 113
+        },
+        "num_processors": {
+          "kind": "D",
+          "size": 4
+        },
+        "preempt_disable": {
+          "kind": "T",
+          "size": 54
+        },
+        "preempt_enable": {
+          "kind": "T",
+          "size": 54
+        },
+        "printf_copy_literal_result": {
+          "kind": "T",
+          "size": 174
+        },
+        "printf_emit_char_result": {
+          "kind": "T",
+          "size": 14
+        },
+        "printf_terminate_result": {
+          "kind": "T",
+          "size": 19
+        },
+        "printf_write_nchars_result": {
+          "kind": "T",
+          "size": 25
+        },
+        "process_sched_cpu_local_bridge": {
+          "kind": "T",
+          "size": 12
+        },
+        "process_sched_interrupt_bridge": {
+          "kind": "T",
+          "size": 12
+        },
+        "process_sched_runq_log_bridge": {
+          "kind": "T",
+          "size": 684
+        },
+        "process_sched_rwlock_bridge": {
+          "kind": "T",
+          "size": 12
+        },
+        "process_sched_rwunlock_bridge": {
+          "kind": "T",
+          "size": 12
+        },
+        "process_sched_set_timer_bridge": {
+          "kind": "T",
+          "size": 12
+        },
+        "process_sched_status_set_bridge": {
+          "kind": "T",
+          "size": 12
+        },
+        "process_sched_vector_bridge": {
+          "kind": "T",
+          "size": 12
+        },
+        "process_spin_lock_bridge": {
+          "kind": "T",
+          "size": 12
+        },
+        "process_spin_unlock_bridge": {
+          "kind": "T",
+          "size": 12
+        },
+        "ptrace_detach_do_kill_bridge": {
+          "kind": "T",
+          "size": 12
+        },
+        "ptrace_detach_wakeup_bridge": {
+          "kind": "T",
+          "size": 12
+        },
+        "put_dec_full_result": {
+          "kind": "T",
+          "size": 174
+        },
+        "put_dec_result": {
+          "kind": "T",
+          "size": 291
+        },
+        "put_dec_trunc_result": {
+          "kind": "T",
+          "size": 214
+        },
+        "rdtsc": {
+          "kind": "T",
+          "size": 12
+        },
+        "sched_wakeup_thread": {
+          "kind": "T",
+          "size": 14
+        },
+        "sched_wakeup_thread_body_result": {
+          "kind": "T",
+          "size": 781
+        },
+        "skip_atoi_result": {
+          "kind": "T",
+          "size": 66
+        },
+        "snprintf": {
+          "kind": "T",
+          "size": 76
+        },
+        "strnlen": {
+          "kind": "T",
+          "size": 57
+        },
+        "syscall_do_syscall2_bridge": {
+          "kind": "T",
+          "size": 167
+        },
+        "syscall_do_syscall3_bridge": {
+          "kind": "T",
+          "size": 171
+        },
+        "syscall_get_processor_id_bridge": {
+          "kind": "T",
+          "size": 77
+        },
+        "syscall_policy_do_syscall2_bridge": {
+          "kind": "T",
+          "size": 167
+        },
+        "syscall_policy_do_syscall3_bridge": {
+          "kind": "T",
+          "size": 171
+        },
+        "syscall_refresh_cred_fields_body_result": {
+          "kind": "T",
+          "size": 163
+        },
+        "syscall_virt_to_phys_bridge": {
+          "kind": "T",
+          "size": 165
+        },
+        "terminate_host": {
+          "kind": "T",
+          "size": 183
+        },
+        "virt_to_phys": {
+          "kind": "T",
+          "size": 165
+        },
+        "wait_host_wait4_bridge": {
+          "kind": "T",
+          "size": 166
+        },
+        "x86_addr_log_bridge": {
+          "kind": "T",
+          "size": 98
+        },
+        "x86_addr_log_kernel_debug": {
+          "kind": "D",
+          "size": 32
+        },
+        "x86_addr_log_straight_debug": {
+          "kind": "D",
+          "size": 32
+        },
+        "x86_kernel_phys_base": {
+          "kind": "B",
+          "size": 8
+        },
+        "x86_map_kernel_start_geometry": {
+          "kind": "R",
+          "size": 8
+        },
+        "x86_user_map_kernel_start_bridge": {
+          "kind": "T",
+          "size": 14
+        },
+        "x86_virt_to_phys_body_result": {
+          "kind": "T",
+          "size": 105
+        },
+        "__mcs_rwlock_writer_lock_noirq": {
+          "kind": "T",
+          "size": 12
+        },
+        "__mcs_rwlock_writer_unlock_noirq": {
+          "kind": "T",
+          "size": 12
+        },
+        "xchg4": {
+          "kind": "T",
+          "size": 5
+        },
+        "process_remaining_range_scheduler_debug": {
+          "kind": "D",
+          "size": 576
+        }
+      },
+      "actual_U": [
+        "do_kill",
+        "do_syscall",
+        "eventfd",
+        "f03_terminate_host_refcount_set_v1",
+        "f03_wait_release_process",
+        "f03_wait_release_thread",
+        "ihk_mc_get_vector",
+        "ihk_mc_interrupt_cpu",
+        "set_timer",
+        "syscall_do_kill_thread_bridge",
+        "syscall_do_syscall_request_bridge",
+        "syscall_find_process_bridge",
+        "syscall_generic_forwarding_body_result",
+        "syscall_process_unlock_bridge",
+        "terminate_host_body_result"
+      ]
+    },
+    {
+      "role": "qualified_timer_vector3",
+      "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-vector-unit-1/output/scheduler_timer_vector_provider.o",
+      "sha256": "7003d9bc46cfaff0ed0add8161305cfe98a34d56744bf6c207ffa3847e5166a6",
+      "actual_nm": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-vector-metadata-1/provider-symbols.stdout",
+      "actual_definitions": {
+        "ihk_mc_get_vector": {
+          "kind": "T",
+          "size": 37
+        },
+        "set_timer": {
+          "kind": "T",
+          "size": 465
+        },
+        "timer_set_timer_body_result": {
+          "kind": "T",
+          "size": 420
+        }
+      },
+      "actual_U": [
+        "get_this_cpu_local_var",
+        "process_timer_lapic_disable_bridge",
+        "process_timer_lapic_enable_bridge",
+        "process_timer_runtime_offsets",
+        "process_timer_spin_lock_bridge",
+        "process_timer_spin_unlock_bridge",
+        "time_sharing"
+      ]
+    },
+    {
+      "role": "qualified_CPU_IPI3",
+      "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-unit-1/output/scheduler_interrupt_backend_provider.o",
+      "sha256": "602d24e8bd14ac0d9a38f5e90114b1aa4945d81e49dedbe61c64c8ec6dc54777",
+      "actual_nm": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-metadata-1/provider-symbols.stdout",
+      "actual_definitions": {
+        "ihk_mc_interrupt_cpu": {
+          "kind": "T",
+          "size": 142
+        },
+        "x86_get_interrupt_id_result": {
+          "kind": "T",
+          "size": 38
+        },
+        "x86_interrupt_cpu_result": {
+          "kind": "T",
+          "size": 147
+        }
+      },
+      "actual_U": [
+        "get_x86_cpu_local_variable",
+        "num_processors",
+        "x86_interrupt_log_bridge",
+        "x86_issue_ipi_bridge"
+      ]
+    }
+  ],
+  "actual_joined_object_sha256": "35b3a058034215e07af1fc24271e474e383b0387315ec1852cfc4054211d3a45",
+  "actual_prejoin_called_persisted_before_ld_r": true,
+  "actual_postjoin_called": true,
+  "all3_direct_waits_joined": true,
+  "CPU6_released": true,
+  "commands": [
+    {
+      "label": "partial-link",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-backend-join-1/partial-link.metrics",
+        "/usr/bin/ld",
+        "-r",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-backend-join-1/output/scheduler_backends_partial.o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-primitives-debugdata-join-1/output/scheduler_primitives_debug_partial.o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-vector-unit-1/output/scheduler_timer_vector_provider.o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-unit-1/output/scheduler_interrupt_backend_provider.o"
+      ],
+      "pid": 643428,
+      "birth_ticks_before_wait": "35143926",
+      "returncode": 0,
+      "direct_wait_joined": true
+    },
+    {
+      "label": "joined-symbols",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-backend-join-1/joined-symbols.metrics",
+        "/usr/bin/nm",
+        "-S",
+        "--format=posix",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-backend-join-1/output/scheduler_backends_partial.o"
+      ],
+      "pid": 643431,
+      "birth_ticks_before_wait": "35143927",
+      "returncode": 0,
+      "direct_wait_joined": true
+    },
+    {
+      "label": "joined-elf",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-backend-join-1/joined-elf.metrics",
+        "/usr/bin/readelf",
+        "-h",
+        "-SW",
+        "-Ws",
+        "-Wr",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-backend-join-1/output/scheduler_backends_partial.o"
+      ],
+      "pid": 643434,
+      "birth_ticks_before_wait": "35143928",
+      "returncode": 0,
+      "direct_wait_joined": true
+    }
+  ],
+  "global_owners": 86,
+  "global_T": 74,
+  "global_data": 12,
+  "actual_remaining_genuine_U": [
+    "do_kill",
+    "do_syscall",
+    "eventfd",
+    "f03_terminate_host_refcount_set_v1",
+    "f03_wait_release_process",
+    "f03_wait_release_thread",
+    "get_x86_cpu_local_variable",
+    "process_timer_lapic_disable_bridge",
+    "process_timer_lapic_enable_bridge",
+    "process_timer_runtime_offsets",
+    "process_timer_spin_lock_bridge",
+    "process_timer_spin_unlock_bridge",
+    "syscall_do_kill_thread_bridge",
+    "syscall_do_syscall_request_bridge",
+    "syscall_find_process_bridge",
+    "syscall_generic_forwarding_body_result",
+    "syscall_process_unlock_bridge",
+    "terminate_host_body_result",
+    "time_sharing",
+    "x86_interrupt_log_bridge",
+    "x86_issue_ipi_bridge"
+  ],
+  "no_compiler_provider_metadata_replay_function_IRQ_boot_native_default_Cretirement_or_score": true
+}

@@ -1,0 +1,29 @@
+--- a/arch/x86_64/kernel/syscall.c
++++ b/arch/x86_64/kernel/syscall.c
+@@ -531,12 +531,6 @@
+ 	}
+ }
+ 
+-static void
+-arch_ptrace_syscall_event_bridge(void *thread, int unused)
+-{
+-	(void)unused;
+-	ptrace_syscall_event((struct thread *)thread);
+-}
+ 
+ static void
+ arch_process_vm_rw_read_lock_bridge(void *vm)
+@@ -4129,6 +4123,7 @@
+ #endif
+ 
+ extern void ptrace_syscall_event(struct thread *thread);
++#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ long arch_ptrace_syscall_event(struct thread *thread,
+ 				ihk_mc_user_context_t *ctx, long setret)
+ {
+@@ -4142,4 +4137,5 @@
+ 	return ihk_mc_syscall_ret(ctx);
+ #endif
+ }
++#endif /* public arch_ptrace_syscall_event is owned by Rust */
+ /*** End of File ***/

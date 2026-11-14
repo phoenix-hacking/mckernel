@@ -1,0 +1,84 @@
+{
+  "schema": "mckernel.stability.native-exact-standalone-metadata-wip.v1",
+  "recorded_at": "2026-09-28T16:58:46-07:00",
+  "status": "BLOCK",
+  "scope": "source-only bounded correction after exact-build attempt 1 failed at linked-worktree identity",
+  "acceptance_credit": {
+    "application_cases": 0,
+    "current_candidate_builds": 0,
+    "guest_runs": 0,
+    "runtime_or_production_acceptance": false
+  },
+  "attempt_1": {
+    "archive": "docs/verification/evidence/stability-native-exact-build-identity-failure-d0947e0c-20260928-1.tar.gz",
+    "archive_sha256": "da36c9ec9e8582e9a501bea2316ada3f997e2b9b9b0878c691801e64a69698c0",
+    "result": "identity failure before any build command",
+    "container": "mckernel-exact-272a777b73aa4a5185f607bfa8fad490",
+    "container_id": "110dfe01e3fb5dea16c30911f3589dc49137dcaaff905a66dd4c0a6f731799b0",
+    "preservation": "retain exited container and original evidence"
+  },
+  "candidate_correction": {
+    "files": {
+      "scripts/native_rust_exact_build_candidate_metadata.py": "4f4843a53c91fd1346af7ff02e1abdce093ea2b0c03cc29e03927b3f0cbca561",
+      "scripts/tests/test_native_rust_exact_build_candidate_metadata.py": "829ed441289bc4ba920b9812efdc98b80aa47fd87e0869abd43594b86ab3ff5e",
+      "scripts/native_rust_exact_build_container_owner.py": "8efdaea5f2c7c70add81cdac4ef5d4234e80e2dc0bdbc15047367f54b6d0ce37",
+      "scripts/tests/test_native_rust_exact_build_container_owner.py": "91f5703fd50502b5c2f06e4e52aac83175de268df30325c0035f0eafdcf4c3cc"
+    },
+    "implemented": [
+      "transactional replacement of linked main and IHK Git metadata",
+      "self-contained metadata admission before lease or container acquisition",
+      "rejection of commondir, alternates, config includes, external worktree/hooks/fsmonitor, and metadata symlinks",
+      "unchanged six-mount container boundary",
+      "rollback regression and relocated current identity/status regression"
+    ]
+  },
+  "tests": {
+    "first_run": {
+      "result": "FAIL",
+      "reason": "tracked symlink blob was absent from the reduced metadata",
+      "raw_sha256": "9bb3c073cb2724be17fca18ffdf814904ef5e0781dd301ecd857783ac39a5647",
+      "log": "docs/verification/evidence/stability-native-exact-standalone-metadata-correction-failure-20260928-1.log.gz",
+      "log_sha256": "7a0f47754a3b842ef097267aece17ec4abc150e9e992ac26cb0770dcf78cb2f0"
+    },
+    "bounded_correction": {
+      "result": "PASS",
+      "count": 51,
+      "scope": "metadata helper, owner, image preparation and three focused lifecycle tests",
+      "raw_sha256": "01db26ee373577bbc7b2ff00136e71103e09f18b1c1da7e989472a4292fa65f2",
+      "log": "docs/verification/evidence/stability-native-exact-standalone-metadata-tests-20260928-1.log.gz",
+      "log_sha256": "e0c567eb1405f2f82694b38d84befc9909b9e39fc4dee0ab3693d9cd93dbe34e"
+    }
+  },
+  "independent_review": {
+    "result": "BLOCK",
+    "finding": "the reduced main metadata omits a historical object closure required by the unchanged exact workflow",
+    "consumer": "scripts/x86_64_shared_abi.py --check",
+    "required_ref": "f2eb735212e6ab0494e638497e80d9ae78b2848e",
+    "required_paths": [
+      "CMakeLists.txt",
+      "kernel/include/syscall.h",
+      "executer/include/uprotocol.h",
+      "executer/kernel/mcctrl/mcctrl.h"
+    ],
+    "limits": [
+      "no candidate conversion is released",
+      "no exact-build attempt 2 is eligible",
+      "the passing regression does not test historical main-repository access",
+      "rollback coverage does not establish crash atomicity"
+    ]
+  },
+  "lifecycle_side_lane": {
+    "test_file": "scripts/tests/test_ihk_native_lifecycle_check.py",
+    "test_file_sha256": "e608441724025d79b61121ed8954edf51fd3dea42574f749fbfb3823d2f5ad30",
+    "result": "five focused tests and explicit positive import/detach ordering regression pass",
+    "blocker": "complete suites remain fail-closed on separately stale source/contract identities",
+    "production_source_changed": false
+  },
+  "next_actions": [
+    "expert-review every Git consumer invoked by the exact offline workflow",
+    "extend the standalone metadata contract with the exact hash-checked historical main commit/tree/blob closure",
+    "add a real regression proving historical main reads with original object stores unavailable",
+    "obtain independent review before modifying the actual candidate or requesting attempt 2",
+    "after review, use fresh backup, evidence, output, lease and request paths and repeat all identity/resource/ownership gates"
+  ]
+}

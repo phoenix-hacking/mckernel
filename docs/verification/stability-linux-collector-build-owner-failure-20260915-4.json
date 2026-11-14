@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "record_kind": "collector_build_owner_failure",
+  "task_id": "M02-B-rebuild-owner",
+  "attempt": 4,
+  "status": "FAIL_SOURCE_REVIEW",
+  "base_commit": "1eb2208e6a3300b2e30503c208046b0fe40c1718",
+  "candidate_files": [
+    {"path": "docs/verification/evidence/stability-linux-collector-build-owner-20260915.py", "sha256": "1d9414b50193471983beae60ea2766fd43957e00ad49118890e459ea9120fd34"},
+    {"path": "scripts/tests/test_stability_linux_collector_build_owner.py", "sha256": "b8ebd88047aab291cdd277b6e660b33b511f630d7b17fd84b01ac5ef5e3ec0ae"}
+  ],
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-build-owner-failure-20260915-4.tar.gz",
+    "size": 11715,
+    "sha256": "3e950674cb9b5de46a7a46feb4aa25d2e9e26fbd62649b6aa73f727ab157d2be",
+    "members": 2
+  },
+  "independent_review": {
+    "role": "Astra/high ownership and runtime-acceptance reviewer",
+    "status": "FAIL",
+    "findings": [
+      {"severity": "P1", "finding": "Inspect omits the submitted -B argument and uses the wrong HostConfig mount schema."},
+      {"severity": "P1", "finding": "Isolation checks accept extra environment and host PID namespace and omit reviewed defaults/actual mounts."},
+      {"severity": "P1", "finding": "Python 3.8 lacks Path.is_relative_to and raw build JSON is incorrectly passed to JSON save."},
+      {"severity": "P1", "finding": "Cleanup signals are not latched in memory and can permit a false PASS."},
+      {"severity": "P2", "finding": "Counts do not prove exact dependency/output/command membership or literal SHA9/builder results."},
+      {"severity": "P2", "finding": "The interval between create and watchdog readiness still lacks independent crash recovery."}
+    ]
+  },
+  "heavy_build_executed": false,
+  "runtime_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}

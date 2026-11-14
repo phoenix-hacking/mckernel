@@ -1,0 +1,92 @@
+{
+  "artifacts": [
+    {
+      "path": "docs/verification/evidence/cleanup-archived-captures-20260908-7.py.gz",
+      "sha256": "d7cfbc78534c5ae0e5179a1358200c63cca947b383067fbbfe91978a4c0dc9a6",
+      "size": 4941,
+      "source": "/home/holden/mckernel-work/scratch/cleanup-archived-captures-20260908-7.py",
+      "source_sha256": "7539e805907277b523a9721aba3afba0ea743d107c241e1414e57b2729b8fdbb"
+    },
+    {
+      "path": "docs/verification/evidence/storage-cleanup-20260908-7-plan.json.gz",
+      "sha256": "f8d7337dbdce4452079cc7ff31f27ead98b85156ebe4aad14eda137064abc2dd",
+      "size": 147905,
+      "source": "/home/holden/mckernel-work/scratch/storage-cleanup-20260908-7-plan.json",
+      "source_sha256": "b21bba04b23ece74c2a115d88ed46184391d7ead88b8ae05ae5a18b3aafdbdd2"
+    },
+    {
+      "path": "docs/verification/evidence/storage-cleanup-20260908-7-report.json.gz",
+      "sha256": "7e36b157b8e57b2bbfb52c3aae4a14deb484f3d84f25606f0cb10d8bdc27f9d1",
+      "size": 2204,
+      "source": "/home/holden/mckernel-work/scratch/storage-cleanup-20260908-7-report.json",
+      "source_sha256": "2deb73d2755a6d395f36d38655dc73399a40e10de9042ba5a3bc5fb2d88fe3a0"
+    },
+    {
+      "path": "docs/verification/evidence/trim-scratch-storage-20260908-7.py.gz",
+      "sha256": "d8d13ff7c93a735c5c8ec2db8a5554b56e0935a45901602cc8734ae4c1fecf28",
+      "size": 706,
+      "source": "/home/holden/mckernel-work/scratch/trim-scratch-storage-20260908-7.py",
+      "source_sha256": "b8911ac01b69104ff841f4edb7b727fc81d079ff56afd01d6af7cb32afb89291"
+    },
+    {
+      "path": "docs/verification/evidence/storage-scratch-trim-20260908-7.json.gz",
+      "sha256": "55066c6f15791abb37b700264611ac2311b6f970a13b0d83bddde25750be9141",
+      "size": 376,
+      "source": "/home/holden/mckernel-work/scratch/storage-scratch-trim-20260908-7.json",
+      "source_sha256": "407e58f8a9ca4883dc10fc5ebf5b0abe4062781f6c08946e88a93899667d6ee2"
+    },
+    {
+      "path": "docs/verification/evidence/storage-preserved-inputs-after-20260908-7.json.gz",
+      "sha256": "0d7c1d7fd6b145b0b6498f184dd8236f1d46e4594f11d420490a7f7769dc7163",
+      "size": 155,
+      "source": "/home/holden/mckernel-work/scratch/storage-preserved-inputs-after-20260908-7.json",
+      "source_sha256": "1ecece1bfe9c76292b0e6c45fc3f660c9ff5604297958fba8fe3d76f28b03b5e"
+    }
+  ],
+  "checks": [
+    "All four completed process guest captures match every current file byte, mode, directory and symlink in their complete committed archives at the verified GitHub branch HEAD.",
+    "All 18 extra process retention archives match their canonical committed SHA-256, size and Git blob. Retained originals and compressed streams verify without exclusions.",
+    "Removal was restricted to the four enumerated completed process guest directories and exact duplicate archives in the completed process retention directory.",
+    "Visible process descriptors, working directories and memory mappings, including /work aliases, were checked before removal; all target metadata snapshots were rechecked immediately before deletion.",
+    "All 2678 checked current files are byte-identical after deletion and targeted scratch trim. All protected dependency directories remain present, including the current native process module and application protocol checks.",
+    "The sparse scratch image remains mounted with its original 60-GiB logical size. Host reclamation is measured from the reduction in allocated backing-file blocks.",
+    "All six maintenance artifacts pass exact gzip round-trip checks."
+  ],
+  "current_root_available_bytes": 162751389696,
+  "current_scratch_available_bytes": 43314851840,
+  "evidence_checked_at_pushed_head": "7747d66469e743f453fc540472077b7c342cd2e6",
+  "finished_utc": "2026-09-08T13:49:26.974296+00:00",
+  "kind": "Requested ongoing cleanup of completed, committed McKernel verification captures",
+  "limitations": [
+    "Open-file checks cover visible processes; inaccessible descriptor counts are recorded in the plan. No active McKernel build or guest was observed.",
+    "Read-only disk sizing found recently active compiler caches. These, browser caches, host journals, installed environments, personal files, VM disks, other projects and Docker state remain intact.",
+    "The backing-file reduction can include previously freed scratch blocks. The fstrim advertised discard count is not the amount physically reclaimed; unrelated activity and retained records also affect free space.",
+    "This is host storage maintenance and gives no kernel build, guest test or application acceptance credit. The original implementation and verification goal remains active."
+  ],
+  "preserved_current_files": 2678,
+  "protected_directories": 69,
+  "reclaimed_host_allocated_bytes": 335380480,
+  "references": [
+    {
+      "path": "docs/verification/storage-maintenance-20260908-6.json",
+      "sha256": "17a1459472fbe829c87a8f3fd0ab9d8e3e2606e5181e5caa700b6e0483ffb87e",
+      "size": 7845
+    },
+    {
+      "path": "docs/verification/native-mcctrl-process-checkpoint-20260908.json",
+      "sha256": "535de2209d28ffbab3af8810b32b62c99fcc90e656be04ee3407263bd3738b4c",
+      "size": 42087
+    }
+  ],
+  "removed_expanded_captures": 4,
+  "removed_retention_archive_copies": 18,
+  "removed_scratch_allocated_bytes": 306262016,
+  "restoration": [
+    "The compressed cleanup plan and report map every removed capture to its complete canonical committed archive, exact Git blob and verified source metadata. Restore archives at their original /work paths before historical replay; do not reuse attempt names.",
+    "Both failed guest attempts remain fully recoverable with their original failure status and evidence. The accepted native-mcctrl-process-module-20260908-1 and native-application-protocol-20260908-1 remain expanded, alongside existing executable, service, kernel, image, compiler and setup inputs.",
+    "Duplicate archive files can be restored exactly from their mapped repository artifacts. Earlier source-checkout evidence restoration maps remain in force."
+  ],
+  "status": "PASS",
+  "total_reclaimed_across_ten_cleanups_bytes": 80679755776,
+  "verified_retained_files": 19
+}

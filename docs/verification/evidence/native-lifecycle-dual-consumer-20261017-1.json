@@ -1,0 +1,385 @@
+{
+  "task_id": "native-lifecycle-dual-consumer-20261017-1",
+  "status": "READY_FOR_REVIEW",
+  "check_status": "PASS_OFFLINE_DUAL_CONSUMER",
+  "scope": "Actual frozen collector serializer output evaluated by both unchanged native_diagnostic.evaluate and corrected strict lifecycle parser. Offline injected serializer plus retained kernel-observation replay; no native runtime acceptance.",
+  "source_contract": {
+    "collector_sha256": "36fa0d55a30f5e943de0b28c6f54e033cf84ff8cc83cdc54c59688e993c44383",
+    "probe_sha256": "18444a0917ed850690cca41be1b9a6090a3ab533c94a0f1ad66892df0625ca44",
+    "parser_sha256": "0585f78b80e603c010316418ce307794d59e1d92581b845ec6b2e74e22c8954b",
+    "manifest_sha256": "47eb95897b0a4f2d8b2cb2673c2ed3b3feff11895654ac160c854710cc7582da",
+    "consumer_sources_unchanged": true,
+    "production_or_test_sources_edited": false
+  },
+  "producer": {
+    "implementation": "Exact collector C included under renamed main; actual publish_lifecycle/publish_lifecycle_stream/stream_json/append/write_all/publish/frame execute. PID1 main and supervise are never called.",
+    "lifecycle_stdout": "Retained actual frozen probe main stdout under injected open/ioctl/close; Running5->shutdown0->NotBooted0. Probe not rerun.",
+    "payload_stdout_hex": "68616e646c65643d31206f627365727665645f626c6f636b65643d3120726573746f7265643d310a",
+    "payload_stdout_bytes": 40,
+    "payload_stderr_bytes": 0,
+    "stream_limit": 1024,
+    "metadata": "Injected successful clean result/status/EOF/timestamps; actual serializer emits original ND_PAYLOAD schema, argv, cwd and env."
+  },
+  "retained_observation_replay": {
+    "source": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-dispatch-20261017-2/attempt-result.json",
+    "replacement": "Only original ND_PAYLOAD line replaced with four actual producer records: ND_LIFECYCLE, stdout stream, stderr stream, ND_PAYLOAD.",
+    "preservation": "Check asserts every other original serial line survives byte-for-byte in order. All debugcon, QMP, process identity, qemu_evidence, teardown and outer timing fields remain exactly equal.",
+    "manifest_loading": "Exact retained manifest bytes SHA-bound and JSON parsed. Actual evaluate called with the entire unchanged dictionary; no new artifact/staging identity revalidation or runtime execution is claimed."
+  },
+  "consumer_results": {
+    "positive": {
+      "payload": {
+        "status": "PROTOCOL_PASS",
+        "application_acceptance": false
+      },
+      "lifecycle": {
+        "status": "LIFECYCLE_DIAGNOSTIC_PASS",
+        "transition_observed": true,
+        "status_before": 5,
+        "status_after": 0,
+        "resource_restoration_verified": false,
+        "os_destroyed": false,
+        "payload_validation_required": true
+      }
+    },
+    "negative-payload-limit": {
+      "payload": {
+        "status": "REJECT",
+        "error": "stream accounting"
+      },
+      "lifecycle": {
+        "status": "LIFECYCLE_DIAGNOSTIC_PASS",
+        "transition_observed": true,
+        "status_before": 5,
+        "status_after": 0,
+        "resource_restoration_verified": false,
+        "os_destroyed": false,
+        "payload_validation_required": true
+      }
+    },
+    "negative-payload-bytes": {
+      "payload": {
+        "status": "REJECT",
+        "error": "wrong payload bytes"
+      },
+      "lifecycle": {
+        "status": "LIFECYCLE_DIAGNOSTIC_PASS",
+        "transition_observed": true,
+        "status_before": 5,
+        "status_after": 0,
+        "resource_restoration_verified": false,
+        "os_destroyed": false,
+        "payload_validation_required": true
+      }
+    },
+    "negative-lifecycle-booted": {
+      "payload": {
+        "status": "PROTOCOL_PASS",
+        "application_acceptance": false
+      },
+      "lifecycle": {
+        "status": "REJECT",
+        "error": "probe did not observe Running -> shutdown -> NotBooted"
+      }
+    }
+  },
+  "checks": {
+    "vectors": 4,
+    "consumer_calls": 8,
+    "expected_rejections": 3,
+    "unexpected_failures": 0,
+    "command": {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=90",
+        "--nofile=256",
+        "--fsize=67108864",
+        "--core=0",
+        "/usr/bin/timeout",
+        "-k",
+        "5s",
+        "120s",
+        "/home/holden/anaconda3/bin/python3.9",
+        "-B",
+        "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/check.py"
+      ],
+      "cwd": "/home/holden/mckernel",
+      "environment": {
+        "PATH": "/usr/bin:/bin",
+        "LANG": "C",
+        "LC_ALL": "C",
+        "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/home",
+        "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/tmp",
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "interpreter": {
+        "path": "/home/holden/anaconda3/bin/python3.9",
+        "resolved": "/home/holden/anaconda3/bin/python3.9",
+        "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb",
+        "version": "Python 3.9.12"
+      },
+      "check_sha256": "ab658f5200fb97e7b1a83712f4d7e36166c69a95f6ca92cbbcc79c14d24a93a7"
+    },
+    "result": {
+      "returncode": 0,
+      "stdout_sha256": "d46ee6a3c38bc551b1d94c3143d81f7a7803e89243e1b518a19133ed7a0162fa",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "source_hash_readback": "PASS for all original input files",
+    "child_processes": "One cheap cc and one serializer-only wrapper; both real returncode0 with empty stderr retained.",
+    "limits": "CPU6;1GiB address space;CPU90s;wall120s;one job;clean env;private home/tmp;Python 3.9.12"
+  },
+  "evidence_inputs": [
+    {
+      "source": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-manifest-20261017-1.json",
+      "retained": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/manifest.json",
+      "sha256": "47eb95897b0a4f2d8b2cb2673c2ed3b3feff11895654ac160c854710cc7582da",
+      "size": 5455
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-dispatch-20261017-2/attempt-result.json",
+      "retained": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/retained-signal-attempt-result.json",
+      "sha256": "b9a49cb23d48279acb2bdd45d1bc238fb2aa4d81f66a21dc99851aa70b57883d",
+      "size": 79636
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/002.stdout",
+      "retained": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/actual-probe-running.stdout",
+      "sha256": "77cbf584af48c02267c6071dde26f780023b44bfbb00a520038ab971bd32bce5",
+      "size": 480
+    },
+    {
+      "source": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_lifecycle_collector.c",
+      "retained": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/collector.c",
+      "sha256": "36fa0d55a30f5e943de0b28c6f54e033cf84ff8cc83cdc54c59688e993c44383",
+      "size": 26673
+    },
+    {
+      "source": "/home/holden/mckernel/scripts/application-tests/native_diagnostic.py",
+      "retained": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/evaluator-source.py",
+      "sha256": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e",
+      "size": 53440
+    },
+    {
+      "source": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_lifecycle_capture.py",
+      "retained": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/parser-source.py",
+      "sha256": "0585f78b80e603c010316418ce307794d59e1d92581b845ec6b2e74e22c8954b",
+      "size": 7025
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-crossbody-20261017-1/attempt-1/compiled-1/harness.c",
+      "retained": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/previous-crossbody-harness.c",
+      "sha256": "739d486733e5d92f51ee9bf502d5db279d5945b79e7521862f0001c0f12e99c0",
+      "size": 1323
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/actual-probe-running.stdout",
+      "size": 480,
+      "sha256": "77cbf584af48c02267c6071dde26f780023b44bfbb00a520038ab971bd32bce5"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/check.py",
+      "size": 8821,
+      "sha256": "ab658f5200fb97e7b1a83712f4d7e36166c69a95f6ca92cbbcc79c14d24a93a7"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/collector.c",
+      "size": 26673,
+      "sha256": "36fa0d55a30f5e943de0b28c6f54e033cf84ff8cc83cdc54c59688e993c44383"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/command.json",
+      "size": 1072,
+      "sha256": "6c18c83fab5b4a5acc2f99ed45a5753013e9b55bc46dd00fa75ab22e3523811f"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/compile-command.json",
+      "size": 621,
+      "sha256": "8c46d75838bcfa8d19be602fae207225d11f5b9d5b6729974448d40fc928f59d"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/compile-result.json",
+      "size": 497,
+      "sha256": "a786301582420a4904917fe967571a27adff764cb38c2d03130a13503b6b8576"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/compile.stderr",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/compile.stdout",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/consumer-matrix.json",
+      "size": 1436,
+      "sha256": "b3f46e037c580bfc79dee7b6bb425d3bc8b50e13a0dca68e7768e7574aa92500"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/evaluator-source.py",
+      "size": 53440,
+      "sha256": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/harness",
+      "size": 35888,
+      "sha256": "6eaa18ce6cc39989250a61273c3b6620ea73e35aa5f9e1a76207a6c9128199ca"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/harness.c",
+      "size": 1720,
+      "sha256": "2142e2d12968dff053090344e3acc9252878332d70016d1c28933f21f0735e63"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/inputs.json",
+      "size": 2359,
+      "sha256": "049991ca01c1214951cb2bc81ac2473f219dd7dfa6be9e79e9104142f49ca6bf"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/manifest.json",
+      "size": 5455,
+      "sha256": "47eb95897b0a4f2d8b2cb2673c2ed3b3feff11895654ac160c854710cc7582da"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/negative-lifecycle-booted-observation.json",
+      "size": 77930,
+      "sha256": "496a4d06b4797f5971ba2109d976b1505a63a4db9178c1af7e9c80f5860ef0ea"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/negative-lifecycle-booted-payload-consumer-result.json",
+      "size": 79273,
+      "sha256": "8969da9d8e53703e62a969cb2f5690d8431f01345a9bbd874ed990a82cc33375"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/negative-lifecycle-booted.serial",
+      "size": 73742,
+      "sha256": "3c09adb03784ec426f8e3c3babad98178ac22694b0c02839143494fa377d31e1"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/negative-payload-bytes-observation.json",
+      "size": 77930,
+      "sha256": "c14011f110fd9e10ea1f4b6d286e43e69cb30775a9d10a30088375ce5263bd7e"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/negative-payload-bytes.serial",
+      "size": 73742,
+      "sha256": "a5aa0b631ac28d79abff23f85f8257c42108c5d336cd84af14cddfd2624378ea"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/negative-payload-limit-observation.json",
+      "size": 77930,
+      "sha256": "9f6f54ea73f4a4f507b823b5aa5f882e2ce5f44cb7c14431c7b44f7791ee1562"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/negative-payload-limit.serial",
+      "size": 73742,
+      "sha256": "72fc6924e3b6217af101430a34ba8f3c6a6b473c5305154dc9b5c1b6367aaafc"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/offline-check-result.json",
+      "size": 150,
+      "sha256": "0910050d011f1f786e33deed3b772477eaf154cc3bdcd7bb60ece6b8d1133456"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/parser-source.py",
+      "size": 7025,
+      "sha256": "0585f78b80e603c010316418ce307794d59e1d92581b845ec6b2e74e22c8954b"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/positive-observation.json",
+      "size": 77930,
+      "sha256": "17d329208f809e70543345fa844f0a65256b6c7bcbd43631617b7fedad70d55b"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/positive-payload-consumer-result.json",
+      "size": 79273,
+      "sha256": "62dd4d27b5d7fd631f598d96cd4f435e1d21f14962412b803cc3ddae192e9a86"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/positive.serial",
+      "size": 73742,
+      "sha256": "6a783840beb4945c25549f4005e7a0cbc6c110364c6d8ae6b65beb7da3d1f058"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/previous-crossbody-harness.c",
+      "size": 1323,
+      "sha256": "739d486733e5d92f51ee9bf502d5db279d5945b79e7521862f0001c0f12e99c0"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/producer-command.json",
+      "size": 540,
+      "sha256": "df868b934f39e0564b98387a4dcca563708dc7a89b31004e2a60aeb2d69cedf8"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/producer-payload-record.json",
+      "size": 783,
+      "sha256": "f4c124c9152fe550d5380e5e2b621229809b95a35d021125e45912b3514ea4b2"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/producer-result.json",
+      "size": 416,
+      "sha256": "d7390ed15fa3172f17ab3aeee6097b78d2a48f3fc1bd41371b9d00df74c642d6"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/producer.stderr",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/producer.stdout",
+      "size": 2024,
+      "sha256": "56355dd2d8069c7dcaea637bb0f1dc92ba20229c49bba462a064adfa2c661f55"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/python-version.stderr",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/python-version.stdout",
+      "size": 14,
+      "sha256": "7750f5e8f71f71a6eebaaffed28eb4d06c659e7de830931b4ac9d320086b2a73"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/result.json",
+      "size": 196,
+      "sha256": "6360c6736d7205ea830aa48fccdfd1e2f60a4a6af0632fb068edc69e74ff5c2d"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/retained-signal-attempt-result.json",
+      "size": 79636,
+      "sha256": "b9a49cb23d48279acb2bdd45d1bc238fb2aa4d81f66a21dc99851aa70b57883d"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/stderr",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-dual-consumer-20261017-1/stdout",
+      "size": 57,
+      "sha256": "d46ee6a3c38bc551b1d94c3143d81f7a7803e89243e1b518a19133ed7a0162fa"
+    }
+  ],
+  "findings": [
+    "Positive actual C producer output is compatible with both unchanged consumers.",
+    "Payload stream limit1024->4096 rejected by evaluate with stream accounting; lifecycle-only parser still requires independent payload validation.",
+    "Corrupted payload bytes retaining40-byte accounting rejected by evaluate with wrong payload bytes; lifecycle-only parser still requires independent payload validation.",
+    "Booted3 lifecycle mutation rejected by strict parser while unchanged payload evaluator passes, demonstrating both gates are necessary."
+  ],
+  "limitations": [
+    "Retained probe harness used mocked minor12; collector metadata emits frozen argv minor0. JSON operation records carry no minor, so no actual minor0 probe execution credit.",
+    "Successful result/timestamps and payload stdout are injected into struct result. This tests actual serialization and consumer behavior, not process supervision or application execution.",
+    "Neither consumer output grants application acceptance, actual shutdown, OS destruction or resource restoration."
+  ],
+  "blocker": null,
+  "next_task": "Independent source-bound review, then dispatcher-owned lifecycle execution packet/release gates. This record alone does not enable or accept a guest run."
+}

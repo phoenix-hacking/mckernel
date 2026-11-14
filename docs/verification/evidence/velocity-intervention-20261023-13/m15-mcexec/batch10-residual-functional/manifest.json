@@ -1,0 +1,63 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_UNCOMPILED",
+  "retired_symbols_proposed": [
+    "mcexec_lookup_lstat_errno_bridge",
+    "mcexec_load_desc_stat_size_bridge",
+    "mcexec_overlay_stat_exists_bridge",
+    "mcexec_overlay_stat_errno_bridge",
+    "mcexec_overlay_lstat_is_symlink_bridge",
+    "mcexec_overlay_readlink_bridge",
+    "mcexec_overlay_find_libdir_bridge",
+    "mcexec_dma_mmap_bridge",
+    "mcexec_dma_mlock_bridge",
+    "mcexec_create_ppd_bridge",
+    "mcexec_dma_mmap_failed_bridge",
+    "mcexec_dma_mlock_failed_bridge",
+    "mcexec_create_ppd_failed_bridge",
+    "mcexec_main_prepare_image_failed_bridge",
+    "mcexec_main_start_image_failed_bridge",
+    "mcexec_main_worker_threads_failed_bridge",
+    "mcexec_flib_affinity_alloc_failed_bridge",
+    "mcexec_main_invalid_option_bridge",
+    "mcexec_atobytes_set_errno_bridge",
+    "mcexec_print_usage_add_envs_bridge",
+    "mcexec_print_usage_write_bridge",
+    "mcexec_kill_thread_bridge",
+    "mcexec_sched_setaffinity_util_bridge",
+    "mcexec_util_thread_switch_ctx_bridge",
+    "mcexec_debug_mlock_bridge",
+    "mcexec_debug_mlock_log_bridge",
+    "mcexec_desc_mpol_log_bridge",
+    "mcexec_reduce_stack_newval_overflow_bridge",
+    "mcexec_reduce_stack_setenv_failed_bridge",
+    "mcexec_main_stack_parse_failed_bridge",
+    "mcexec_load_realloc_failed_bridge",
+    "mcexec_load_desc_sections_bridge",
+    "mcexec_print_desc_intro_bridge",
+    "mcexec_print_desc_main_bridge",
+    "mcexec_print_desc_section_bridge",
+    "mcexec_overlay_getdents_upper_bridge",
+    "mcexec_overlay_getdents_lower_bridge",
+    "mcexec_overlay_getdents_mck_size_log_bridge",
+    "mcexec_overlay_getdents_linux_size_log_bridge"
+  ],
+  "requires": [
+    "batch04 descriptor module"
+  ],
+  "providers": [
+    "existing Rust loader/findlibdir/usage/kill/util orchestration",
+    "existing reviewed x86 switch_ctx assembly ABI",
+    "genuine libc stat/lstat/mmap/mlock/FD/process/output APIs",
+    "C debug and fd data only"
+  ],
+  "reference_parity": [
+    "stat==-1 versus stat<0 distinctions, positive/negative errno and untouched outputs",
+    "size and symlink mode fields use ABI-checked pinned offsets",
+    "DMA4096 mmap flags/protection and mlock length",
+    "original error close/exit ordering and invalid option messages/usage",
+    "same usage fwrite length and debug formatting",
+    "arch context switch calls existing assembly directly, no project C shim"
+  ],
+  "compiler_or_native_execution": false
+}

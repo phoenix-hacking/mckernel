@@ -1,0 +1,59 @@
+From 511ceee89966ce906ca8989523e1a67ba6de44c1 Mon Sep 17 00:00:00 2001
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Tue, 6 May 2025 14:02:01 -0700
+Subject: [PATCH] kbuild: Disable -Wdefault-const-init-unsafe
+
+Upstream-Commit: d0afcfeb9e3810ec89d1ffde1a0e36621bb75dca
+Stable-Commit: 511ceee89966ce906ca8989523e1a67ba6de44c1
+Upstream-Repository: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+Stable-Repository: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+License: GPL-2.0-only
+
+commit d0afcfeb9e3810ec89d1ffde1a0e36621bb75dca upstream.
+
+Clang 21 enables `-Wdefault-const-init-unsafe` by default.  It reports
+intentional kernel patterns where aggregate const members are filled through
+another path or never read, and CONFIG_WERROR promotes those diagnostics to
+fatal errors.  Keep `-Wuninitialized` coverage while disabling this noisy
+warning family exactly as upstream and stable Linux do.
+
+The exact Rocky 10.2 build reached the full C kernel after the Rust 1.92 API
+reconciliation, then stopped in kernel/params.c and
+arch/x86/kernel/alternative.c on this diagnostic.  This patch is therefore
+applied after the Rust-specific compatibility series and before project
+staging.
+
+Cc: stable@vger.kernel.org
+Link: https://github.com/llvm/llvm-project/commit/576161cb6069e2c7656a8ef530727a0f4aefff30
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+[ Adapted only the hunk context to Rocky's earlier Makefile.extrawarn,
+  preserving the upstream warning policy verbatim. ]
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ scripts/Makefile.extrawarn | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
+index f8b1582..fdb71ad 100644
+--- a/scripts/Makefile.extrawarn
++++ b/scripts/Makefile.extrawarn
+@@ -36,6 +36,18 @@ KBUILD_CFLAGS-$(CONFIG_CC_NO_ARRAY_BOUNDS) += -Wno-array-bounds
+ ifdef CONFIG_CC_IS_CLANG
+ # The kernel builds with '-std=gnu11' so use of GNU extensions is acceptable.
+ KBUILD_CFLAGS += -Wno-gnu
++
++# Clang may emit a warning when a const variable, such as the dummy variables
++# in typecheck(), or const member of an aggregate type are not initialized,
++# which can result in unexpected behavior. However, in many audited cases of
++# the "field" variant of the warning, this is intentional because the field is
++# never used within a particular call path, the field is within a union with
++# other non-const members, or the containing object is not const so the field
++# can be modified via memcpy() / memset(). While the variable warning also gets
++# disabled with this same switch, there should not be too much coverage lost
++# because -Wuninitialized will still flag when an uninitialized const variable
++# is used.
++KBUILD_CFLAGS += $(call cc-disable-warning, default-const-init-unsafe)
+ else
+ 
+ # gcc inanely warns about local variables called 'main'

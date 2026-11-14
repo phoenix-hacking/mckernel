@@ -1,0 +1,10 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "Private unselected Rust source and unrun fixtures. No configured, linked, native, guest or C retirement credit.",
+  "patch": "a8f4e33... moves group_leader initialization before hash-list insertion/unlock in actual xpmem_open_tg Rust body; other callbacks/ABI preserved. Independent source review: under same correct writer/reader bucket lock this closes the specific uninitialized-leader publication window; raw thread/VM lifetime, concurrent duplicate TG creation, partition/open/fork/host rollback remain open.",
+  "integration": "Private ordered composite 84f9215d... binds nonheld composite + XPMEM delta. XPMEM Rust module is not gated by nonheld option, so use in Rust-enabled OFF profile changes behavior too. Existing validator allows only perf nested leaf and rejects XPMEM; source/mount map, effective view, full inputs and current custody unbound. No patch applied or physical mount.",
+  "fixture": "Standalone source generator/fixture extract exact original and patched production bodies and real Rust definitions; original-negative and patched-positive insertion oracle plus failure cases are planned only. No generator, compiler or fixture run. Bounded-read source review accepts regular type/exact size/O_NONBLOCK/exclusive fd creation at source scope; all output custody, aliases, watchdog/durability and actual ABI/native proof remain external.",
+  "profile": "No applicable reviewed reusable light profile or process owner bound; proposed profile is NOT_RELEASED with all live facts/authority null.",
+  "next": "Obtain independent exact light operation profile/owner and fresh admission to run only new fixture; separately resolve mount/source closure and broader TG ownership. Preserve all native owners, UNKNOWNs, used nonces, fixed/tighter clocks, scratch21, 27:4 and weekly-only allowance.",
+  "baseline": "M14 4/6, practical 35/35, M15 queued; selected 1cd7 retains 23 generic + 5 arch C."
+}

@@ -1,0 +1,30 @@
+--- accepted142d/run_actual_production_build.py
++++ diagnosticbuild/run_actual_production_build.py
+@@ -2,9 +2,9 @@
+ from pathlib import Path
+ import ast,hashlib,json,os,resource,sys,signal,time
+ D=Path(__file__).resolve().parent
+-E=Path('/home/holden/mckernel/docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1')
++E=D/'evidence'
+ assert sys.version.startswith('3.9.12 ')
+-raw=(D/'EXACT-PRODUCTION-BUILD.READY.json').read_bytes();assert hashlib.sha256(raw).hexdigest()=='6e3693008e2f4ba47da55483f1ee3a4f6d5e3ea7ef4c774b87c57edc70011f91';plan=json.loads(raw)
++raw=(D/'EXACT-PRODUCTION-BUILD.READY.json').read_bytes();assert hashlib.sha256(raw).hexdigest()=='ae255ddd1f2246d2bd40e8c0c149ca25f7570a476d1a008c6463d32893809123';plan=json.loads(raw)
+ helper=Path('/home/holden/mckernel/docs/verification/evidence/phase5-m03-handshake-runtime-checkpoint-20261020-1/sdk-physical-source/run_two_commands_source_bound_corrected.py');raw=helper.read_bytes();assert hashlib.sha256(raw).hexdigest()=='990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8'
+ tree=ast.parse(raw,str(helper));end=next(i for i,x in enumerate(tree.body) if isinstance(x,ast.FunctionDef) and x.name=='owned_capture');ns={'__file__':str(helper)};exec(compile(ast.Module(body=tree.body[:end+1],type_ignores=[]),str(helper),'exec'),ns)
+ for signum in (signal.SIGTERM,signal.SIGINT,signal.SIGALRM):signal.signal(signum,ns['stop'])
+@@ -13,6 +13,7 @@
+ capacity={}
+ for label,root,floor in [('HOST',D,16<<30),('scratch',Path('/home/holden/mckernel-work/scratch'),12<<30)]:
+  st=os.statvfs(root);free=st.f_bavail*st.f_frsize;assert free>=floor+(64<<20);capacity[label]=free
++assert capacity['HOST']>=140534349824 and capacity['scratch']>=13899923456,'existing fullgap/capture/floors/reserves'
+ ns['write'](D/'ACTUAL-PREBUILD-HEADROOM.json',dict(scope=__doc__,MemAvailable=mem,capacity=capacity,included_usage_percent=used,CPU=[6],aggregate_ceiling=19<<30))
+ for name,row in plan['source_closure'].items():
+  for path in [Path(row['selected']['path']),D/'production-source'/name]:assert hashlib.sha256(path.read_bytes()).hexdigest()==row['selected']['sha256']
+@@ -46,6 +47,7 @@
+   fields=line.split()
+   if len(fields)>=3:names.setdefault(fields[-1],[]).append(fields[-2])
+  for symbol in ['pair_run_long_session','pair_complete_long_session']:assert names.get(symbol)==['T'],symbol
++ for symbol in plan['required_actual_output_checks']['real_production_callbacks_present']:assert names.get(symbol)==['t'],symbol
+  assert not reads['ELF-undefined'].strip(),'unresolved symbols'
+  headers=reads['ELF-headers'];assert 'ELF64' in headers and 'EXEC (Executable file)' in headers and 'Advanced Micro Devices X86-64' in headers
+  assert 'INTERP' not in headers and 'There is no dynamic section' in headers,'ELF static headers'

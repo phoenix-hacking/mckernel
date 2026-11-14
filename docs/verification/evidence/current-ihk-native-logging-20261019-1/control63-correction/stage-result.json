@@ -1,0 +1,3654 @@
+{
+  "status": "PASS_THREE_ROLE_BYTES_STAGE_ONLY",
+  "native_acceptance": false,
+  "artifact_acceptance": false,
+  "derivation": {
+    "changed_members": [
+      "bin/native-boot",
+      "init",
+      "modules/ihk.ko"
+    ],
+    "predecessor_overlay_manifest_sha256": "b0b04351be52d2ff77dc7bdd8f17ebcdd84b29e9e730f750ac454665e0b026f2"
+  },
+  "binding_sha256": "70366937d22283342f98ce59c1c6c1ad6e38b8b57be3d225303e171fc55cc5ad",
+  "base_sha256": "bed524dfaee9aafd2d42ae9aa4a2c9b3c41f8fb0cbb726e14f44c7760aaf8434",
+  "overlay_sha256": "c2161c53bd0623cfd60016368796033feb3e60f6667edd1ed6a347b6e81c9307",
+  "module_sha256": "c396958bfdb0f22036b469ea2a64e0a6b188b9619ee4105c7879483bb3b9790d",
+  "proof": {
+    "role_headers": {
+      "bin/native-boot": [
+        {
+          "name": "bin/native-boot",
+          "old_header_hex": "3037303730313030303030303042303030303831454430303030303030303030303030303030303030303030303136414433414633363030303037394538303030303030303030303030303030303030303030303030303030303030303030303030303031303030303030303030",
+          "new_header_hex": "3037303730313030303030303042303030303831454430303030303030303030303030303030303030303030303136414433414633363030303037393630303030303030303030303030303030303030303030303030303030303030303030303030303031303030303030303030",
+          "old_payload_sha256": "6b9f753e34d12da474c701ca64ce62825788295646b60f67482ef9ec8690c417",
+          "new_payload_sha256": "f25a803019a024e4d0e4e056ad2ba9f6b6bf411e81c5252bc59e1a81c1e9d2c8",
+          "ordered_raw_spans": [
+            {
+              "kind": "record",
+              "name": "apps",
+              "old_offset": 0,
+              "new_offset": 0,
+              "old_bytes": 116,
+              "new_bytes": 116,
+              "old_sha256": "8aa42696162236cbd6afbca61f58fe2d7405af742d6d45fb9a3f04c3cc705e85",
+              "new_sha256": "8aa42696162236cbd6afbca61f58fe2d7405af742d6d45fb9a3f04c3cc705e85",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "apps/app",
+              "old_offset": 116,
+              "new_offset": 116,
+              "old_bytes": 20648,
+              "new_bytes": 20648,
+              "old_sha256": "99d41e940e9916569fd7e522a4698f6dd1623cbf4493130c2414326d409c4232",
+              "new_sha256": "99d41e940e9916569fd7e522a4698f6dd1623cbf4493130c2414326d409c4232",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "bin",
+              "old_offset": 20764,
+              "new_offset": 20764,
+              "old_bytes": 116,
+              "new_bytes": 116,
+              "old_sha256": "715a15bf004c4e7a17d763fef5a4428477fd3aff62db3554f999b617a4cf65b1",
+              "new_sha256": "715a15bf004c4e7a17d763fef5a4428477fd3aff62db3554f999b617a4cf65b1",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "bin/bash",
+              "old_offset": 20880,
+              "new_offset": 20880,
+              "old_bytes": 1410808,
+              "new_bytes": 1410808,
+              "old_sha256": "8d4c26f595a32ada21d402a1104659e429b87be0b241dfd6c793face0e793cb5",
+              "new_sha256": "8d4c26f595a32ada21d402a1104659e429b87be0b241dfd6c793face0e793cb5",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "bin/dmesg",
+              "old_offset": 1431688,
+              "new_offset": 1431688,
+              "old_bytes": 72208,
+              "new_bytes": 72208,
+              "old_sha256": "1b71344c8485d0a5fa977cb1cde9e8a78693f64fff9ffbbb9112ab47c5a08188",
+              "new_sha256": "1b71344c8485d0a5fa977cb1cde9e8a78693f64fff9ffbbb9112ab47c5a08188",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "bin/mcd0-ioctl-i386",
+              "old_offset": 1503896,
+              "new_offset": 1503896,
+              "old_bytes": 8548,
+              "new_bytes": 8548,
+              "old_sha256": "c2b91c77cd2afdcc91cbf8da0826c5dfce0a44b7b4b083981fa2a19b0f96e2e7",
+              "new_sha256": "c2b91c77cd2afdcc91cbf8da0826c5dfce0a44b7b4b083981fa2a19b0f96e2e7",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "bin/mcd0-ioctl-x86_64",
+              "old_offset": 1512444,
+              "new_offset": 1512444,
+              "old_bytes": 8644,
+              "new_bytes": 8644,
+              "old_sha256": "c0f96b5b15550457c960ee457b4262f4cdd5ebc9ec43fc5d6afed8694b77baa9",
+              "new_sha256": "c0f96b5b15550457c960ee457b4262f4cdd5ebc9ec43fc5d6afed8694b77baa9",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "bin/mcexec",
+              "old_offset": 1521088,
+              "new_offset": 1521088,
+              "old_bytes": 453476,
+              "new_bytes": 453476,
+              "old_sha256": "a176498d3faaa6732af3e5dd690345ef30e81e1214e389951300c79d36c00e9f",
+              "new_sha256": "a176498d3faaa6732af3e5dd690345ef30e81e1214e389951300c79d36c00e9f",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "bin/mount",
+              "old_offset": 1974564,
+              "new_offset": 1974564,
+              "old_bytes": 48984,
+              "new_bytes": 48984,
+              "old_sha256": "e45f9c77cf6b892e4da4f98ec331de77a83afa3b62e80e902661b1a5e2e6d4cc",
+              "new_sha256": "e45f9c77cf6b892e4da4f98ec331de77a83afa3b62e80e902661b1a5e2e6d4cc",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "bin/native-application-core",
+              "old_offset": 2023548,
+              "new_offset": 2023548,
+              "old_bytes": 39628,
+              "new_bytes": 39628,
+              "old_sha256": "591504eb057bfd6d51dc5cb4692b7c12dc129b6d756b5b3ea76cf9edd1c75ee0",
+              "new_sha256": "591504eb057bfd6d51dc5cb4692b7c12dc129b6d756b5b3ea76cf9edd1c75ee0",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "bin/native-application-hello",
+              "old_offset": 2063176,
+              "new_offset": 2063176,
+              "old_bytes": 1404,
+              "new_bytes": 1404,
+              "old_sha256": "8c60a9b649047b8dc1c3368651aea7b2e2a2905f4ca13e175036f0253dcbd0ee",
+              "new_sha256": "8c60a9b649047b8dc1c3368651aea7b2e2a2905f4ca13e175036f0253dcbd0ee",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "bin/native-boot",
+              "old_offset": 2064580,
+              "new_offset": 2064580,
+              "old_bytes": 31336,
+              "new_bytes": 31200,
+              "old_sha256": "8a330d14036c4ca26b459bb7fc69e8e8957d085833a4e96da411f23bf78073a5",
+              "new_sha256": "083702a48e6b3e6160736144cae45cab64cce9b9c162ce7c0260aa7a27e7f6ff",
+              "untouched": false
+            },
+            {
+              "kind": "record",
+              "name": "bin/native-lifecycle-probe",
+              "old_offset": 2095916,
+              "new_offset": 2095780,
+              "old_bytes": 872756,
+              "new_bytes": 872756,
+              "old_sha256": "04d0e5278542d8cddf28661403ff347ba4d7ef3938f7c08a48e09e497b3d1f06",
+              "new_sha256": "04d0e5278542d8cddf28661403ff347ba4d7ef3938f7c08a48e09e497b3d1f06",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "bin/native-os-buildid-i386",
+              "old_offset": 2968672,
+              "new_offset": 2968536,
+              "old_bytes": 29856,
+              "new_bytes": 29856,
+              "old_sha256": "ae10e058dd01cc94cb6cfabaa09364e8acc38c0334bf958ab21c63f9fd5a55ac",
+              "new_sha256": "ae10e058dd01cc94cb6cfabaa09364e8acc38c0334bf958ab21c63f9fd5a55ac",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "bin/native-os-buildid-x86_64",
+              "old_offset": 2998528,
+              "new_offset": 2998392,
+              "old_bytes": 30516,
+              "new_bytes": 30516,
+              "old_sha256": "391bd1d2b31554438baf1572817986fce4ad4c32b6a9ecf1cd8d92297e8388d2",
+              "new_sha256": "391bd1d2b31554438baf1572817986fce4ad4c32b6a9ecf1cd8d92297e8388d2",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "bin/native-string-i386",
+              "old_offset": 3029044,
+              "new_offset": 3028908,
+              "old_bytes": 38876,
+              "new_bytes": 38876,
+              "old_sha256": "d0494cdda9ae5d57b90d6ecd3607da9de17f7ee5358b93e0953b7aa2878d3a7e",
+              "new_sha256": "d0494cdda9ae5d57b90d6ecd3607da9de17f7ee5358b93e0953b7aa2878d3a7e",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "bin/native-string-x86_64",
+              "old_offset": 3067920,
+              "new_offset": 3067784,
+              "old_bytes": 39488,
+              "new_bytes": 39488,
+              "old_sha256": "4685920ef610a1f8e62e80825d30a45d9fbff565d33346f6ce6b0cbf0964eaec",
+              "new_sha256": "4685920ef610a1f8e62e80825d30a45d9fbff565d33346f6ce6b0cbf0964eaec",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "bin/stat",
+              "old_offset": 3107408,
+              "new_offset": 3107272,
+              "old_bytes": 172,
+              "new_bytes": 172,
+              "old_sha256": "feaa3d06dd274f20d969e41fe0c9a2261a285768b35ff0578c2601623ee14bef",
+              "new_sha256": "feaa3d06dd274f20d969e41fe0c9a2261a285768b35ff0578c2601623ee14bef",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "bin/uname",
+              "old_offset": 3107580,
+              "new_offset": 3107444,
+              "old_bytes": 172,
+              "new_bytes": 172,
+              "old_sha256": "f3378ddf0e7ce6ca514d3b21958245260cf986eec99d27c23ff843f5cf10b6b1",
+              "new_sha256": "f3378ddf0e7ce6ca514d3b21958245260cf986eec99d27c23ff843f5cf10b6b1",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "case",
+              "old_offset": 3107752,
+              "new_offset": 3107616,
+              "old_bytes": 116,
+              "new_bytes": 116,
+              "old_sha256": "72799b8360feccad126552be8222744d96954fa9dc743053128eeeafa1702ed6",
+              "new_sha256": "72799b8360feccad126552be8222744d96954fa9dc743053128eeeafa1702ed6",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "case/work",
+              "old_offset": 3107868,
+              "new_offset": 3107732,
+              "old_bytes": 120,
+              "new_bytes": 120,
+              "old_sha256": "4805c9e4bc9cef9d61555936de5bc15bbcc0323cb96576fc92ca43067fca6548",
+              "new_sha256": "4805c9e4bc9cef9d61555936de5bc15bbcc0323cb96576fc92ca43067fca6548",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "dev",
+              "old_offset": 3107988,
+              "new_offset": 3107852,
+              "old_bytes": 116,
+              "new_bytes": 116,
+              "old_sha256": "98fdbedae99f5bd3756029783f974fba7e0725c89794390ae724ef54589e0a3c",
+              "new_sha256": "98fdbedae99f5bd3756029783f974fba7e0725c89794390ae724ef54589e0a3c",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "images",
+              "old_offset": 3108104,
+              "new_offset": 3107968,
+              "old_bytes": 120,
+              "new_bytes": 120,
+              "old_sha256": "3324082e27697edf8b13c373b478dbf01132e8b5d914f56ea74889d3e393d6f5",
+              "new_sha256": "3324082e27697edf8b13c373b478dbf01132e8b5d914f56ea74889d3e393d6f5",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "images/mckernel.img",
+              "old_offset": 3108224,
+              "new_offset": 3108088,
+              "old_bytes": 7934100,
+              "new_bytes": 7934100,
+              "old_sha256": "6bfbba49aeeba53f4a0a3448761534767dba3bc814883248c21a24bf0c0cb041",
+              "new_sha256": "6bfbba49aeeba53f4a0a3448761534767dba3bc814883248c21a24bf0c0cb041",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "init",
+              "old_offset": 11042324,
+              "new_offset": 11042188,
+              "old_bytes": 1022108,
+              "new_bytes": 1022108,
+              "old_sha256": "b30749af32c2d6cd2dc0976bf160a2ac6f6c9ce743061b59cae58355969cf76e",
+              "new_sha256": "b30749af32c2d6cd2dc0976bf160a2ac6f6c9ce743061b59cae58355969cf76e",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "lib",
+              "old_offset": 12064432,
+              "new_offset": 12064296,
+              "old_bytes": 116,
+              "new_bytes": 116,
+              "old_sha256": "12a25a6a28993719c6ed90ae4bb76729eb7d13454609825ff4ed6c7f5e06d765",
+              "new_sha256": "12a25a6a28993719c6ed90ae4bb76729eb7d13454609825ff4ed6c7f5e06d765",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "lib64",
+              "old_offset": 12064548,
+              "new_offset": 12064412,
+              "old_bytes": 116,
+              "new_bytes": 116,
+              "old_sha256": "9d33ef41ab60a6ec7366dc831398b946c5df00b81d7f3016392c9e986ff16973",
+              "new_sha256": "9d33ef41ab60a6ec7366dc831398b946c5df00b81d7f3016392c9e986ff16973",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "lib64/ld-linux-x86-64.so.2",
+              "old_offset": 12064664,
+              "new_offset": 12064528,
+              "old_bytes": 930740,
+              "new_bytes": 930740,
+              "old_sha256": "8eb4538a4f76ffa9d48c85c2d715e2f7bafda12a5f2e4855250865b640b79cad",
+              "new_sha256": "8eb4538a4f76ffa9d48c85c2d715e2f7bafda12a5f2e4855250865b640b79cad",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "lib64/libacl.so.1",
+              "old_offset": 12995404,
+              "new_offset": 12995268,
+              "old_bytes": 41024,
+              "new_bytes": 41024,
+              "old_sha256": "4d97002bdf50f73bdb0a6262a5d959e670e4f666a8db2099efb6e67f3c0ad2d6",
+              "new_sha256": "4d97002bdf50f73bdb0a6262a5d959e670e4f666a8db2099efb6e67f3c0ad2d6",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "lib64/libattr.so.1",
+              "old_offset": 13036428,
+              "new_offset": 13036292,
+              "old_bytes": 28428,
+              "new_bytes": 28428,
+              "old_sha256": "0129e13b5afe6282e25d91866a490a6c5b8ba51d3eb9f60363d9ee68a4cf936d",
+              "new_sha256": "0129e13b5afe6282e25d91866a490a6c5b8ba51d3eb9f60363d9ee68a4cf936d",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "lib64/libblkid.so.1",
+              "old_offset": 13064856,
+              "new_offset": 13064720,
+              "old_bytes": 242260,
+              "new_bytes": 242260,
+              "old_sha256": "3a9682bc5a1e559bf14771aee9492115fd6f66dce730cc936626b3970b63b561",
+              "new_sha256": "3a9682bc5a1e559bf14771aee9492115fd6f66dce730cc936626b3970b63b561",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "lib64/libc.so.6",
+              "old_offset": 13307116,
+              "new_offset": 13306980,
+              "old_bytes": 2340024,
+              "new_bytes": 2340024,
+              "old_sha256": "d35a318736d0eed4860ff8a45fecaf391bad6a3da3e22d0e455507ea652fb958",
+              "new_sha256": "d35a318736d0eed4860ff8a45fecaf391bad6a3da3e22d0e455507ea652fb958",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "lib64/libcap.so.2",
+              "old_offset": 15647140,
+              "new_offset": 15647004,
+              "old_bytes": 53296,
+              "new_bytes": 53296,
+              "old_sha256": "12f0df4caa2b1cf1bccb9afecfc97e21a4adb5e8c77e93884ee7822108f8a09e",
+              "new_sha256": "12f0df4caa2b1cf1bccb9afecfc97e21a4adb5e8c77e93884ee7822108f8a09e",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "lib64/libcrypto.so.3",
+              "old_offset": 15700436,
+              "new_offset": 15700300,
+              "old_bytes": 5631284,
+              "new_bytes": 5631284,
+              "old_sha256": "d0cac62a01463f3d3c115ec4ccf4f46c925bd4008e2f90542c050751db8bc0c8",
+              "new_sha256": "d0cac62a01463f3d3c115ec4ccf4f46c925bd4008e2f90542c050751db8bc0c8",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "lib64/libgcc_s.so.1",
+              "old_offset": 21331720,
+              "new_offset": 21331584,
+              "old_bytes": 186660,
+              "new_bytes": 186660,
+              "old_sha256": "d52bf7878fd831ddfde4cd62c382f13191a9c3c3793b739c7e2c78b542e4f6c1",
+              "new_sha256": "d52bf7878fd831ddfde4cd62c382f13191a9c3c3793b739c7e2c78b542e4f6c1",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "lib64/liblzma.so.5",
+              "old_offset": 21518380,
+              "new_offset": 21518244,
+              "old_bytes": 215628,
+              "new_bytes": 215628,
+              "old_sha256": "ceb2b649be455045cad149a7049a0f9c8e942c538c929172ac2f347268eeaf9f",
+              "new_sha256": "ceb2b649be455045cad149a7049a0f9c8e942c538c929172ac2f347268eeaf9f",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "lib64/libmount.so.1",
+              "old_offset": 21734008,
+              "new_offset": 21733872,
+              "old_bytes": 333644,
+              "new_bytes": 333644,
+              "old_sha256": "16f5654b8829ed0c3347d2bd91c869e0ddf3d1a329bb39b5fe35cf91052c4f96",
+              "new_sha256": "16f5654b8829ed0c3347d2bd91c869e0ddf3d1a329bb39b5fe35cf91052c4f96",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "lib64/libnuma.so.1",
+              "old_offset": 22067652,
+              "new_offset": 22067516,
+              "old_bytes": 62460,
+              "new_bytes": 62460,
+              "old_sha256": "1c0d9b247210d1e2d996c0a212c19e69bb3ce929e5be81ae796c8c73b2103dfe",
+              "new_sha256": "1c0d9b247210d1e2d996c0a212c19e69bb3ce929e5be81ae796c8c73b2103dfe",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "lib64/libpcre2-8.so.0",
+              "old_offset": 22130112,
+              "new_offset": 22129976,
+              "old_bytes": 665796,
+              "new_bytes": 665796,
+              "old_sha256": "b544c540c690356bf37246eb3a731f076dc1f60454e8b548c06301459a390f02",
+              "new_sha256": "b544c540c690356bf37246eb3a731f076dc1f60454e8b548c06301459a390f02",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "lib64/libpthread.so.0",
+              "old_offset": 22795908,
+              "new_offset": 22795772,
+              "old_bytes": 15628,
+              "new_bytes": 15628,
+              "old_sha256": "c9b2358cdd5d644460920a24b2d635f8023447f18a209cdadb9fa8e0c50da077",
+              "new_sha256": "c9b2358cdd5d644460920a24b2d635f8023447f18a209cdadb9fa8e0c50da077",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "lib64/librt.so.1",
+              "old_offset": 22811536,
+              "new_offset": 22811400,
+              "old_bytes": 15760,
+              "new_bytes": 15760,
+              "old_sha256": "9cd50775c24ee1bf2b40ff488a5d83b2960befdec4e23d0a1333c70c0ea3f2f9",
+              "new_sha256": "9cd50775c24ee1bf2b40ff488a5d83b2960befdec4e23d0a1333c70c0ea3f2f9",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "lib64/libselinux.so.1",
+              "old_offset": 22827296,
+              "new_offset": 22827160,
+              "old_bytes": 200796,
+              "new_bytes": 200796,
+              "old_sha256": "20817df07293eec3600a127f98f496e938c83ceb47da2017d17ba46a45e39013",
+              "new_sha256": "20817df07293eec3600a127f98f496e938c83ceb47da2017d17ba46a45e39013",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "lib64/libtinfo.so.6",
+              "old_offset": 23028092,
+              "new_offset": 23027956,
+              "old_bytes": 187428,
+              "new_bytes": 187428,
+              "old_sha256": "efd3e99fbf1dd1c225105b2e8b113a011a14d2ec2bc9bca88b3de59d33be5634",
+              "new_sha256": "efd3e99fbf1dd1c225105b2e8b113a011a14d2ec2bc9bca88b3de59d33be5634",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "lib64/libz.so.1",
+              "old_offset": 23215520,
+              "new_offset": 23215384,
+              "old_bytes": 140952,
+              "new_bytes": 140952,
+              "old_sha256": "59e631cccc0ed2373eb07f749bbd44edafaafc6fdc47a3cfc1ed4958574501e2",
+              "new_sha256": "59e631cccc0ed2373eb07f749bbd44edafaafc6fdc47a3cfc1ed4958574501e2",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "lib64/libzstd.so.1",
+              "old_offset": 23356472,
+              "new_offset": 23356336,
+              "old_bytes": 729740,
+              "new_bytes": 729740,
+              "old_sha256": "24f6b70dad2c475a9d9bf640a880018aacf83e72ccd3b6ffa5c5fe2b7e226973",
+              "new_sha256": "24f6b70dad2c475a9d9bf640a880018aacf83e72ccd3b6ffa5c5fe2b7e226973",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "modules",
+              "old_offset": 24086212,
+              "new_offset": 24086076,
+              "old_bytes": 120,
+              "new_bytes": 120,
+              "old_sha256": "be44c4a857a49a5df4ad53f8d718ba36033246ac84531596b1b0062e5da67063",
+              "new_sha256": "be44c4a857a49a5df4ad53f8d718ba36033246ac84531596b1b0062e5da67063",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "modules/ihk-smp-x86_64.ko",
+              "old_offset": 24086332,
+              "new_offset": 24086196,
+              "old_bytes": 11630200,
+              "new_bytes": 11630200,
+              "old_sha256": "a69507398d568382721d543b8e6efdcd87a502c38f06438cd254b15dbe830c67",
+              "new_sha256": "a69507398d568382721d543b8e6efdcd87a502c38f06438cd254b15dbe830c67",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "modules/ihk.ko",
+              "old_offset": 35716532,
+              "new_offset": 35716396,
+              "old_bytes": 1440520,
+              "new_bytes": 1440520,
+              "old_sha256": "24099ecdfe6ad3f0555a041181f795586c8d7da4719581a4c716b82521c9a923",
+              "new_sha256": "24099ecdfe6ad3f0555a041181f795586c8d7da4719581a4c716b82521c9a923",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "modules/mcctrl.ko",
+              "old_offset": 37157052,
+              "new_offset": 37156916,
+              "old_bytes": 1914032,
+              "new_bytes": 1914032,
+              "old_sha256": "8136e1e932966904149305759c84605a1dd9f66a0e81b79be0b330e306d0e118",
+              "new_sha256": "8136e1e932966904149305759c84605a1dd9f66a0e81b79be0b330e306d0e118",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "poweroff",
+              "old_offset": 39071084,
+              "new_offset": 39070948,
+              "old_bytes": 4576,
+              "new_bytes": 4576,
+              "old_sha256": "35357387e98251936bf5a2699a2f4769ce5489ea538b00bd66a6e4405cdba51f",
+              "new_sha256": "35357387e98251936bf5a2699a2f4769ce5489ea538b00bd66a6e4405cdba51f",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "proc",
+              "old_offset": 39075660,
+              "new_offset": 39075524,
+              "old_bytes": 116,
+              "new_bytes": 116,
+              "old_sha256": "1eefefd143e86a70d664f925322100ce1598989b08ff50ca8846cffb067adfee",
+              "new_sha256": "1eefefd143e86a70d664f925322100ce1598989b08ff50ca8846cffb067adfee",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "sbin",
+              "old_offset": 39075776,
+              "new_offset": 39075640,
+              "old_bytes": 116,
+              "new_bytes": 116,
+              "old_sha256": "5bf6c2382b37f2334db1b7209656428ae57a5dea83a4994786684d2db80e0180",
+              "new_sha256": "5bf6c2382b37f2334db1b7209656428ae57a5dea83a4994786684d2db80e0180",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "sbin/insmod",
+              "old_offset": 39075892,
+              "new_offset": 39075756,
+              "old_bytes": 182212,
+              "new_bytes": 182212,
+              "old_sha256": "a137c6a0bbc118cc26465f3794cbeec47d3bcedc3b138369951877365d9ec6c9",
+              "new_sha256": "a137c6a0bbc118cc26465f3794cbeec47d3bcedc3b138369951877365d9ec6c9",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "sbin/rmmod",
+              "old_offset": 39258104,
+              "new_offset": 39257968,
+              "old_bytes": 182212,
+              "new_bytes": 182212,
+              "old_sha256": "2269bf0feb53b111521e4b357ce9e8cd53f6d08b7d1e6c70d4d285db4f8fb884",
+              "new_sha256": "2269bf0feb53b111521e4b357ce9e8cd53f6d08b7d1e6c70d4d285db4f8fb884",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "sys",
+              "old_offset": 39440316,
+              "new_offset": 39440180,
+              "old_bytes": 116,
+              "new_bytes": 116,
+              "old_sha256": "6b054c231793967fa892efe1953f7ba1e9c643178cb031e52acf0817a6d99226",
+              "new_sha256": "6b054c231793967fa892efe1953f7ba1e9c643178cb031e52acf0817a6d99226",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "tmp",
+              "old_offset": 39440432,
+              "new_offset": 39440296,
+              "old_bytes": 116,
+              "new_bytes": 116,
+              "old_sha256": "20355d6a47ea8a06be3dd0dfb5e3a1d5751b3c57650b9a04b960c8b751df289a",
+              "new_sha256": "20355d6a47ea8a06be3dd0dfb5e3a1d5751b3c57650b9a04b960c8b751df289a",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "usr",
+              "old_offset": 39440548,
+              "new_offset": 39440412,
+              "old_bytes": 116,
+              "new_bytes": 116,
+              "old_sha256": "a7fbf9d23df7b98d3d0d09510765323f6bbd0ab3802a114a4d5ac5945850efab",
+              "new_sha256": "a7fbf9d23df7b98d3d0d09510765323f6bbd0ab3802a114a4d5ac5945850efab",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "usr/bin",
+              "old_offset": 39440664,
+              "new_offset": 39440528,
+              "old_bytes": 120,
+              "new_bytes": 120,
+              "old_sha256": "eeb24c8f3a3ff2f610abbed0ee5182b3b4bbbfb76de4dd42944b39301e1b89c9",
+              "new_sha256": "eeb24c8f3a3ff2f610abbed0ee5182b3b4bbbfb76de4dd42944b39301e1b89c9",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "usr/bin/coreutils",
+              "old_offset": 39440784,
+              "new_offset": 39440648,
+              "old_bytes": 1347856,
+              "new_bytes": 1347856,
+              "old_sha256": "1115e4fd180bc1e6427a6842c4222f318244c044b7fc6ee232860a390898409f",
+              "new_sha256": "1115e4fd180bc1e6427a6842c4222f318244c044b7fc6ee232860a390898409f",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "usr/sbin",
+              "old_offset": 40788640,
+              "new_offset": 40788504,
+              "old_bytes": 120,
+              "new_bytes": 120,
+              "old_sha256": "d8091470dcab7fa3b94729af59416da40a8c97defbb3deaabcfe9edeb658a387",
+              "new_sha256": "d8091470dcab7fa3b94729af59416da40a8c97defbb3deaabcfe9edeb658a387",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "TRAILER!!!",
+              "old_offset": 40788760,
+              "new_offset": 40788624,
+              "old_bytes": 124,
+              "new_bytes": 124,
+              "old_sha256": "5096c083e1a504be55b70a56a6e5585adaafd9382547b916d5f081e2cf6e110d",
+              "new_sha256": "5096c083e1a504be55b70a56a6e5585adaafd9382547b916d5f081e2cf6e110d",
+              "untouched": true
+            },
+            {
+              "kind": "zero-span",
+              "name": null,
+              "old_offset": 40788884,
+              "new_offset": 40788748,
+              "old_bytes": 132,
+              "new_bytes": 132,
+              "old_sha256": "115bad14f1c9f2c027a84de21b107015722cb76be8d0abf3760ad8e00d6c24a5",
+              "new_sha256": "115bad14f1c9f2c027a84de21b107015722cb76be8d0abf3760ad8e00d6c24a5",
+              "untouched": true
+            }
+          ]
+        }
+      ],
+      "modules/ihk.ko": [
+        {
+          "name": "modules/ihk.ko",
+          "old_header_hex": "3037303730313030303030303246303030303831413430303030303030303030303030303030303030303030303136414433414633363030313546413838303030303030303030303030303030303030303030303030303030303030303030303030303030463030303030303030",
+          "new_header_hex": "3037303730313030303030303246303030303831413430303030303030303030303030303030303030303030303136414433414633363030313638353730303030303030303030303030303030303030303030303030303030303030303030303030303030463030303030303030",
+          "old_payload_sha256": "51b48a9e42eaa2411cab2a28edf9bb5db8b2d648675d083473e926f91dd0e038",
+          "new_payload_sha256": "c396958bfdb0f22036b469ea2a64e0a6b188b9619ee4105c7879483bb3b9790d",
+          "ordered_raw_spans": [
+            {
+              "kind": "record",
+              "name": "apps",
+              "old_offset": 0,
+              "new_offset": 0,
+              "old_bytes": 116,
+              "new_bytes": 116,
+              "old_sha256": "8aa42696162236cbd6afbca61f58fe2d7405af742d6d45fb9a3f04c3cc705e85",
+              "new_sha256": "8aa42696162236cbd6afbca61f58fe2d7405af742d6d45fb9a3f04c3cc705e85",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "apps/app",
+              "old_offset": 116,
+              "new_offset": 116,
+              "old_bytes": 20648,
+              "new_bytes": 20648,
+              "old_sha256": "99d41e940e9916569fd7e522a4698f6dd1623cbf4493130c2414326d409c4232",
+              "new_sha256": "99d41e940e9916569fd7e522a4698f6dd1623cbf4493130c2414326d409c4232",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "bin",
+              "old_offset": 20764,
+              "new_offset": 20764,
+              "old_bytes": 116,
+              "new_bytes": 116,
+              "old_sha256": "715a15bf004c4e7a17d763fef5a4428477fd3aff62db3554f999b617a4cf65b1",
+              "new_sha256": "715a15bf004c4e7a17d763fef5a4428477fd3aff62db3554f999b617a4cf65b1",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "bin/bash",
+              "old_offset": 20880,
+              "new_offset": 20880,
+              "old_bytes": 1410808,
+              "new_bytes": 1410808,
+              "old_sha256": "8d4c26f595a32ada21d402a1104659e429b87be0b241dfd6c793face0e793cb5",
+              "new_sha256": "8d4c26f595a32ada21d402a1104659e429b87be0b241dfd6c793face0e793cb5",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "bin/dmesg",
+              "old_offset": 1431688,
+              "new_offset": 1431688,
+              "old_bytes": 72208,
+              "new_bytes": 72208,
+              "old_sha256": "1b71344c8485d0a5fa977cb1cde9e8a78693f64fff9ffbbb9112ab47c5a08188",
+              "new_sha256": "1b71344c8485d0a5fa977cb1cde9e8a78693f64fff9ffbbb9112ab47c5a08188",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "bin/mcd0-ioctl-i386",
+              "old_offset": 1503896,
+              "new_offset": 1503896,
+              "old_bytes": 8548,
+              "new_bytes": 8548,
+              "old_sha256": "c2b91c77cd2afdcc91cbf8da0826c5dfce0a44b7b4b083981fa2a19b0f96e2e7",
+              "new_sha256": "c2b91c77cd2afdcc91cbf8da0826c5dfce0a44b7b4b083981fa2a19b0f96e2e7",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "bin/mcd0-ioctl-x86_64",
+              "old_offset": 1512444,
+              "new_offset": 1512444,
+              "old_bytes": 8644,
+              "new_bytes": 8644,
+              "old_sha256": "c0f96b5b15550457c960ee457b4262f4cdd5ebc9ec43fc5d6afed8694b77baa9",
+              "new_sha256": "c0f96b5b15550457c960ee457b4262f4cdd5ebc9ec43fc5d6afed8694b77baa9",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "bin/mcexec",
+              "old_offset": 1521088,
+              "new_offset": 1521088,
+              "old_bytes": 453476,
+              "new_bytes": 453476,
+              "old_sha256": "a176498d3faaa6732af3e5dd690345ef30e81e1214e389951300c79d36c00e9f",
+              "new_sha256": "a176498d3faaa6732af3e5dd690345ef30e81e1214e389951300c79d36c00e9f",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "bin/mount",
+              "old_offset": 1974564,
+              "new_offset": 1974564,
+              "old_bytes": 48984,
+              "new_bytes": 48984,
+              "old_sha256": "e45f9c77cf6b892e4da4f98ec331de77a83afa3b62e80e902661b1a5e2e6d4cc",
+              "new_sha256": "e45f9c77cf6b892e4da4f98ec331de77a83afa3b62e80e902661b1a5e2e6d4cc",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "bin/native-application-core",
+              "old_offset": 2023548,
+              "new_offset": 2023548,
+              "old_bytes": 39628,
+              "new_bytes": 39628,
+              "old_sha256": "591504eb057bfd6d51dc5cb4692b7c12dc129b6d756b5b3ea76cf9edd1c75ee0",
+              "new_sha256": "591504eb057bfd6d51dc5cb4692b7c12dc129b6d756b5b3ea76cf9edd1c75ee0",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "bin/native-application-hello",
+              "old_offset": 2063176,
+              "new_offset": 2063176,
+              "old_bytes": 1404,
+              "new_bytes": 1404,
+              "old_sha256": "8c60a9b649047b8dc1c3368651aea7b2e2a2905f4ca13e175036f0253dcbd0ee",
+              "new_sha256": "8c60a9b649047b8dc1c3368651aea7b2e2a2905f4ca13e175036f0253dcbd0ee",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "bin/native-boot",
+              "old_offset": 2064580,
+              "new_offset": 2064580,
+              "old_bytes": 31200,
+              "new_bytes": 31200,
+              "old_sha256": "083702a48e6b3e6160736144cae45cab64cce9b9c162ce7c0260aa7a27e7f6ff",
+              "new_sha256": "083702a48e6b3e6160736144cae45cab64cce9b9c162ce7c0260aa7a27e7f6ff",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "bin/native-lifecycle-probe",
+              "old_offset": 2095780,
+              "new_offset": 2095780,
+              "old_bytes": 872756,
+              "new_bytes": 872756,
+              "old_sha256": "04d0e5278542d8cddf28661403ff347ba4d7ef3938f7c08a48e09e497b3d1f06",
+              "new_sha256": "04d0e5278542d8cddf28661403ff347ba4d7ef3938f7c08a48e09e497b3d1f06",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "bin/native-os-buildid-i386",
+              "old_offset": 2968536,
+              "new_offset": 2968536,
+              "old_bytes": 29856,
+              "new_bytes": 29856,
+              "old_sha256": "ae10e058dd01cc94cb6cfabaa09364e8acc38c0334bf958ab21c63f9fd5a55ac",
+              "new_sha256": "ae10e058dd01cc94cb6cfabaa09364e8acc38c0334bf958ab21c63f9fd5a55ac",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "bin/native-os-buildid-x86_64",
+              "old_offset": 2998392,
+              "new_offset": 2998392,
+              "old_bytes": 30516,
+              "new_bytes": 30516,
+              "old_sha256": "391bd1d2b31554438baf1572817986fce4ad4c32b6a9ecf1cd8d92297e8388d2",
+              "new_sha256": "391bd1d2b31554438baf1572817986fce4ad4c32b6a9ecf1cd8d92297e8388d2",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "bin/native-string-i386",
+              "old_offset": 3028908,
+              "new_offset": 3028908,
+              "old_bytes": 38876,
+              "new_bytes": 38876,
+              "old_sha256": "d0494cdda9ae5d57b90d6ecd3607da9de17f7ee5358b93e0953b7aa2878d3a7e",
+              "new_sha256": "d0494cdda9ae5d57b90d6ecd3607da9de17f7ee5358b93e0953b7aa2878d3a7e",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "bin/native-string-x86_64",
+              "old_offset": 3067784,
+              "new_offset": 3067784,
+              "old_bytes": 39488,
+              "new_bytes": 39488,
+              "old_sha256": "4685920ef610a1f8e62e80825d30a45d9fbff565d33346f6ce6b0cbf0964eaec",
+              "new_sha256": "4685920ef610a1f8e62e80825d30a45d9fbff565d33346f6ce6b0cbf0964eaec",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "bin/stat",
+              "old_offset": 3107272,
+              "new_offset": 3107272,
+              "old_bytes": 172,
+              "new_bytes": 172,
+              "old_sha256": "feaa3d06dd274f20d969e41fe0c9a2261a285768b35ff0578c2601623ee14bef",
+              "new_sha256": "feaa3d06dd274f20d969e41fe0c9a2261a285768b35ff0578c2601623ee14bef",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "bin/uname",
+              "old_offset": 3107444,
+              "new_offset": 3107444,
+              "old_bytes": 172,
+              "new_bytes": 172,
+              "old_sha256": "f3378ddf0e7ce6ca514d3b21958245260cf986eec99d27c23ff843f5cf10b6b1",
+              "new_sha256": "f3378ddf0e7ce6ca514d3b21958245260cf986eec99d27c23ff843f5cf10b6b1",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "case",
+              "old_offset": 3107616,
+              "new_offset": 3107616,
+              "old_bytes": 116,
+              "new_bytes": 116,
+              "old_sha256": "72799b8360feccad126552be8222744d96954fa9dc743053128eeeafa1702ed6",
+              "new_sha256": "72799b8360feccad126552be8222744d96954fa9dc743053128eeeafa1702ed6",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "case/work",
+              "old_offset": 3107732,
+              "new_offset": 3107732,
+              "old_bytes": 120,
+              "new_bytes": 120,
+              "old_sha256": "4805c9e4bc9cef9d61555936de5bc15bbcc0323cb96576fc92ca43067fca6548",
+              "new_sha256": "4805c9e4bc9cef9d61555936de5bc15bbcc0323cb96576fc92ca43067fca6548",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "dev",
+              "old_offset": 3107852,
+              "new_offset": 3107852,
+              "old_bytes": 116,
+              "new_bytes": 116,
+              "old_sha256": "98fdbedae99f5bd3756029783f974fba7e0725c89794390ae724ef54589e0a3c",
+              "new_sha256": "98fdbedae99f5bd3756029783f974fba7e0725c89794390ae724ef54589e0a3c",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "images",
+              "old_offset": 3107968,
+              "new_offset": 3107968,
+              "old_bytes": 120,
+              "new_bytes": 120,
+              "old_sha256": "3324082e27697edf8b13c373b478dbf01132e8b5d914f56ea74889d3e393d6f5",
+              "new_sha256": "3324082e27697edf8b13c373b478dbf01132e8b5d914f56ea74889d3e393d6f5",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "images/mckernel.img",
+              "old_offset": 3108088,
+              "new_offset": 3108088,
+              "old_bytes": 7934100,
+              "new_bytes": 7934100,
+              "old_sha256": "6bfbba49aeeba53f4a0a3448761534767dba3bc814883248c21a24bf0c0cb041",
+              "new_sha256": "6bfbba49aeeba53f4a0a3448761534767dba3bc814883248c21a24bf0c0cb041",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "init",
+              "old_offset": 11042188,
+              "new_offset": 11042188,
+              "old_bytes": 1022108,
+              "new_bytes": 1022108,
+              "old_sha256": "b30749af32c2d6cd2dc0976bf160a2ac6f6c9ce743061b59cae58355969cf76e",
+              "new_sha256": "b30749af32c2d6cd2dc0976bf160a2ac6f6c9ce743061b59cae58355969cf76e",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "lib",
+              "old_offset": 12064296,
+              "new_offset": 12064296,
+              "old_bytes": 116,
+              "new_bytes": 116,
+              "old_sha256": "12a25a6a28993719c6ed90ae4bb76729eb7d13454609825ff4ed6c7f5e06d765",
+              "new_sha256": "12a25a6a28993719c6ed90ae4bb76729eb7d13454609825ff4ed6c7f5e06d765",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "lib64",
+              "old_offset": 12064412,
+              "new_offset": 12064412,
+              "old_bytes": 116,
+              "new_bytes": 116,
+              "old_sha256": "9d33ef41ab60a6ec7366dc831398b946c5df00b81d7f3016392c9e986ff16973",
+              "new_sha256": "9d33ef41ab60a6ec7366dc831398b946c5df00b81d7f3016392c9e986ff16973",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "lib64/ld-linux-x86-64.so.2",
+              "old_offset": 12064528,
+              "new_offset": 12064528,
+              "old_bytes": 930740,
+              "new_bytes": 930740,
+              "old_sha256": "8eb4538a4f76ffa9d48c85c2d715e2f7bafda12a5f2e4855250865b640b79cad",
+              "new_sha256": "8eb4538a4f76ffa9d48c85c2d715e2f7bafda12a5f2e4855250865b640b79cad",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "lib64/libacl.so.1",
+              "old_offset": 12995268,
+              "new_offset": 12995268,
+              "old_bytes": 41024,
+              "new_bytes": 41024,
+              "old_sha256": "4d97002bdf50f73bdb0a6262a5d959e670e4f666a8db2099efb6e67f3c0ad2d6",
+              "new_sha256": "4d97002bdf50f73bdb0a6262a5d959e670e4f666a8db2099efb6e67f3c0ad2d6",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "lib64/libattr.so.1",
+              "old_offset": 13036292,
+              "new_offset": 13036292,
+              "old_bytes": 28428,
+              "new_bytes": 28428,
+              "old_sha256": "0129e13b5afe6282e25d91866a490a6c5b8ba51d3eb9f60363d9ee68a4cf936d",
+              "new_sha256": "0129e13b5afe6282e25d91866a490a6c5b8ba51d3eb9f60363d9ee68a4cf936d",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "lib64/libblkid.so.1",
+              "old_offset": 13064720,
+              "new_offset": 13064720,
+              "old_bytes": 242260,
+              "new_bytes": 242260,
+              "old_sha256": "3a9682bc5a1e559bf14771aee9492115fd6f66dce730cc936626b3970b63b561",
+              "new_sha256": "3a9682bc5a1e559bf14771aee9492115fd6f66dce730cc936626b3970b63b561",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "lib64/libc.so.6",
+              "old_offset": 13306980,
+              "new_offset": 13306980,
+              "old_bytes": 2340024,
+              "new_bytes": 2340024,
+              "old_sha256": "d35a318736d0eed4860ff8a45fecaf391bad6a3da3e22d0e455507ea652fb958",
+              "new_sha256": "d35a318736d0eed4860ff8a45fecaf391bad6a3da3e22d0e455507ea652fb958",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "lib64/libcap.so.2",
+              "old_offset": 15647004,
+              "new_offset": 15647004,
+              "old_bytes": 53296,
+              "new_bytes": 53296,
+              "old_sha256": "12f0df4caa2b1cf1bccb9afecfc97e21a4adb5e8c77e93884ee7822108f8a09e",
+              "new_sha256": "12f0df4caa2b1cf1bccb9afecfc97e21a4adb5e8c77e93884ee7822108f8a09e",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "lib64/libcrypto.so.3",
+              "old_offset": 15700300,
+              "new_offset": 15700300,
+              "old_bytes": 5631284,
+              "new_bytes": 5631284,
+              "old_sha256": "d0cac62a01463f3d3c115ec4ccf4f46c925bd4008e2f90542c050751db8bc0c8",
+              "new_sha256": "d0cac62a01463f3d3c115ec4ccf4f46c925bd4008e2f90542c050751db8bc0c8",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "lib64/libgcc_s.so.1",
+              "old_offset": 21331584,
+              "new_offset": 21331584,
+              "old_bytes": 186660,
+              "new_bytes": 186660,
+              "old_sha256": "d52bf7878fd831ddfde4cd62c382f13191a9c3c3793b739c7e2c78b542e4f6c1",
+              "new_sha256": "d52bf7878fd831ddfde4cd62c382f13191a9c3c3793b739c7e2c78b542e4f6c1",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "lib64/liblzma.so.5",
+              "old_offset": 21518244,
+              "new_offset": 21518244,
+              "old_bytes": 215628,
+              "new_bytes": 215628,
+              "old_sha256": "ceb2b649be455045cad149a7049a0f9c8e942c538c929172ac2f347268eeaf9f",
+              "new_sha256": "ceb2b649be455045cad149a7049a0f9c8e942c538c929172ac2f347268eeaf9f",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "lib64/libmount.so.1",
+              "old_offset": 21733872,
+              "new_offset": 21733872,
+              "old_bytes": 333644,
+              "new_bytes": 333644,
+              "old_sha256": "16f5654b8829ed0c3347d2bd91c869e0ddf3d1a329bb39b5fe35cf91052c4f96",
+              "new_sha256": "16f5654b8829ed0c3347d2bd91c869e0ddf3d1a329bb39b5fe35cf91052c4f96",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "lib64/libnuma.so.1",
+              "old_offset": 22067516,
+              "new_offset": 22067516,
+              "old_bytes": 62460,
+              "new_bytes": 62460,
+              "old_sha256": "1c0d9b247210d1e2d996c0a212c19e69bb3ce929e5be81ae796c8c73b2103dfe",
+              "new_sha256": "1c0d9b247210d1e2d996c0a212c19e69bb3ce929e5be81ae796c8c73b2103dfe",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "lib64/libpcre2-8.so.0",
+              "old_offset": 22129976,
+              "new_offset": 22129976,
+              "old_bytes": 665796,
+              "new_bytes": 665796,
+              "old_sha256": "b544c540c690356bf37246eb3a731f076dc1f60454e8b548c06301459a390f02",
+              "new_sha256": "b544c540c690356bf37246eb3a731f076dc1f60454e8b548c06301459a390f02",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "lib64/libpthread.so.0",
+              "old_offset": 22795772,
+              "new_offset": 22795772,
+              "old_bytes": 15628,
+              "new_bytes": 15628,
+              "old_sha256": "c9b2358cdd5d644460920a24b2d635f8023447f18a209cdadb9fa8e0c50da077",
+              "new_sha256": "c9b2358cdd5d644460920a24b2d635f8023447f18a209cdadb9fa8e0c50da077",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "lib64/librt.so.1",
+              "old_offset": 22811400,
+              "new_offset": 22811400,
+              "old_bytes": 15760,
+              "new_bytes": 15760,
+              "old_sha256": "9cd50775c24ee1bf2b40ff488a5d83b2960befdec4e23d0a1333c70c0ea3f2f9",
+              "new_sha256": "9cd50775c24ee1bf2b40ff488a5d83b2960befdec4e23d0a1333c70c0ea3f2f9",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "lib64/libselinux.so.1",
+              "old_offset": 22827160,
+              "new_offset": 22827160,
+              "old_bytes": 200796,
+              "new_bytes": 200796,
+              "old_sha256": "20817df07293eec3600a127f98f496e938c83ceb47da2017d17ba46a45e39013",
+              "new_sha256": "20817df07293eec3600a127f98f496e938c83ceb47da2017d17ba46a45e39013",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "lib64/libtinfo.so.6",
+              "old_offset": 23027956,
+              "new_offset": 23027956,
+              "old_bytes": 187428,
+              "new_bytes": 187428,
+              "old_sha256": "efd3e99fbf1dd1c225105b2e8b113a011a14d2ec2bc9bca88b3de59d33be5634",
+              "new_sha256": "efd3e99fbf1dd1c225105b2e8b113a011a14d2ec2bc9bca88b3de59d33be5634",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "lib64/libz.so.1",
+              "old_offset": 23215384,
+              "new_offset": 23215384,
+              "old_bytes": 140952,
+              "new_bytes": 140952,
+              "old_sha256": "59e631cccc0ed2373eb07f749bbd44edafaafc6fdc47a3cfc1ed4958574501e2",
+              "new_sha256": "59e631cccc0ed2373eb07f749bbd44edafaafc6fdc47a3cfc1ed4958574501e2",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "lib64/libzstd.so.1",
+              "old_offset": 23356336,
+              "new_offset": 23356336,
+              "old_bytes": 729740,
+              "new_bytes": 729740,
+              "old_sha256": "24f6b70dad2c475a9d9bf640a880018aacf83e72ccd3b6ffa5c5fe2b7e226973",
+              "new_sha256": "24f6b70dad2c475a9d9bf640a880018aacf83e72ccd3b6ffa5c5fe2b7e226973",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "modules",
+              "old_offset": 24086076,
+              "new_offset": 24086076,
+              "old_bytes": 120,
+              "new_bytes": 120,
+              "old_sha256": "be44c4a857a49a5df4ad53f8d718ba36033246ac84531596b1b0062e5da67063",
+              "new_sha256": "be44c4a857a49a5df4ad53f8d718ba36033246ac84531596b1b0062e5da67063",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "modules/ihk-smp-x86_64.ko",
+              "old_offset": 24086196,
+              "new_offset": 24086196,
+              "old_bytes": 11630200,
+              "new_bytes": 11630200,
+              "old_sha256": "a69507398d568382721d543b8e6efdcd87a502c38f06438cd254b15dbe830c67",
+              "new_sha256": "a69507398d568382721d543b8e6efdcd87a502c38f06438cd254b15dbe830c67",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "modules/ihk.ko",
+              "old_offset": 35716396,
+              "new_offset": 35716396,
+              "old_bytes": 1440520,
+              "new_bytes": 1476080,
+              "old_sha256": "24099ecdfe6ad3f0555a041181f795586c8d7da4719581a4c716b82521c9a923",
+              "new_sha256": "30a9969f10d578c40b7823a7ba42983a800f128aec60341c393c20674e7aa651",
+              "untouched": false
+            },
+            {
+              "kind": "record",
+              "name": "modules/mcctrl.ko",
+              "old_offset": 37156916,
+              "new_offset": 37192476,
+              "old_bytes": 1914032,
+              "new_bytes": 1914032,
+              "old_sha256": "8136e1e932966904149305759c84605a1dd9f66a0e81b79be0b330e306d0e118",
+              "new_sha256": "8136e1e932966904149305759c84605a1dd9f66a0e81b79be0b330e306d0e118",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "poweroff",
+              "old_offset": 39070948,
+              "new_offset": 39106508,
+              "old_bytes": 4576,
+              "new_bytes": 4576,
+              "old_sha256": "35357387e98251936bf5a2699a2f4769ce5489ea538b00bd66a6e4405cdba51f",
+              "new_sha256": "35357387e98251936bf5a2699a2f4769ce5489ea538b00bd66a6e4405cdba51f",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "proc",
+              "old_offset": 39075524,
+              "new_offset": 39111084,
+              "old_bytes": 116,
+              "new_bytes": 116,
+              "old_sha256": "1eefefd143e86a70d664f925322100ce1598989b08ff50ca8846cffb067adfee",
+              "new_sha256": "1eefefd143e86a70d664f925322100ce1598989b08ff50ca8846cffb067adfee",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "sbin",
+              "old_offset": 39075640,
+              "new_offset": 39111200,
+              "old_bytes": 116,
+              "new_bytes": 116,
+              "old_sha256": "5bf6c2382b37f2334db1b7209656428ae57a5dea83a4994786684d2db80e0180",
+              "new_sha256": "5bf6c2382b37f2334db1b7209656428ae57a5dea83a4994786684d2db80e0180",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "sbin/insmod",
+              "old_offset": 39075756,
+              "new_offset": 39111316,
+              "old_bytes": 182212,
+              "new_bytes": 182212,
+              "old_sha256": "a137c6a0bbc118cc26465f3794cbeec47d3bcedc3b138369951877365d9ec6c9",
+              "new_sha256": "a137c6a0bbc118cc26465f3794cbeec47d3bcedc3b138369951877365d9ec6c9",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "sbin/rmmod",
+              "old_offset": 39257968,
+              "new_offset": 39293528,
+              "old_bytes": 182212,
+              "new_bytes": 182212,
+              "old_sha256": "2269bf0feb53b111521e4b357ce9e8cd53f6d08b7d1e6c70d4d285db4f8fb884",
+              "new_sha256": "2269bf0feb53b111521e4b357ce9e8cd53f6d08b7d1e6c70d4d285db4f8fb884",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "sys",
+              "old_offset": 39440180,
+              "new_offset": 39475740,
+              "old_bytes": 116,
+              "new_bytes": 116,
+              "old_sha256": "6b054c231793967fa892efe1953f7ba1e9c643178cb031e52acf0817a6d99226",
+              "new_sha256": "6b054c231793967fa892efe1953f7ba1e9c643178cb031e52acf0817a6d99226",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "tmp",
+              "old_offset": 39440296,
+              "new_offset": 39475856,
+              "old_bytes": 116,
+              "new_bytes": 116,
+              "old_sha256": "20355d6a47ea8a06be3dd0dfb5e3a1d5751b3c57650b9a04b960c8b751df289a",
+              "new_sha256": "20355d6a47ea8a06be3dd0dfb5e3a1d5751b3c57650b9a04b960c8b751df289a",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "usr",
+              "old_offset": 39440412,
+              "new_offset": 39475972,
+              "old_bytes": 116,
+              "new_bytes": 116,
+              "old_sha256": "a7fbf9d23df7b98d3d0d09510765323f6bbd0ab3802a114a4d5ac5945850efab",
+              "new_sha256": "a7fbf9d23df7b98d3d0d09510765323f6bbd0ab3802a114a4d5ac5945850efab",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "usr/bin",
+              "old_offset": 39440528,
+              "new_offset": 39476088,
+              "old_bytes": 120,
+              "new_bytes": 120,
+              "old_sha256": "eeb24c8f3a3ff2f610abbed0ee5182b3b4bbbfb76de4dd42944b39301e1b89c9",
+              "new_sha256": "eeb24c8f3a3ff2f610abbed0ee5182b3b4bbbfb76de4dd42944b39301e1b89c9",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "usr/bin/coreutils",
+              "old_offset": 39440648,
+              "new_offset": 39476208,
+              "old_bytes": 1347856,
+              "new_bytes": 1347856,
+              "old_sha256": "1115e4fd180bc1e6427a6842c4222f318244c044b7fc6ee232860a390898409f",
+              "new_sha256": "1115e4fd180bc1e6427a6842c4222f318244c044b7fc6ee232860a390898409f",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "usr/sbin",
+              "old_offset": 40788504,
+              "new_offset": 40824064,
+              "old_bytes": 120,
+              "new_bytes": 120,
+              "old_sha256": "d8091470dcab7fa3b94729af59416da40a8c97defbb3deaabcfe9edeb658a387",
+              "new_sha256": "d8091470dcab7fa3b94729af59416da40a8c97defbb3deaabcfe9edeb658a387",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "TRAILER!!!",
+              "old_offset": 40788624,
+              "new_offset": 40824184,
+              "old_bytes": 124,
+              "new_bytes": 124,
+              "old_sha256": "5096c083e1a504be55b70a56a6e5585adaafd9382547b916d5f081e2cf6e110d",
+              "new_sha256": "5096c083e1a504be55b70a56a6e5585adaafd9382547b916d5f081e2cf6e110d",
+              "untouched": true
+            },
+            {
+              "kind": "zero-span",
+              "name": null,
+              "old_offset": 40788748,
+              "new_offset": 40824308,
+              "old_bytes": 132,
+              "new_bytes": 132,
+              "old_sha256": "115bad14f1c9f2c027a84de21b107015722cb76be8d0abf3760ad8e00d6c24a5",
+              "new_sha256": "115bad14f1c9f2c027a84de21b107015722cb76be8d0abf3760ad8e00d6c24a5",
+              "untouched": true
+            }
+          ]
+        }
+      ],
+      "init": [
+        {
+          "name": "init",
+          "old_header_hex": "3037303730313030303030303034303030303831656430303030303030303030303030303030303030303030303130303030303030303030306639383238303030303030303030303030303030303030303030303030303030303030303030303030303030353030303030303030",
+          "new_header_hex": "3037303730313030303030303034303030303831656430303030303030303030303030303030303030303030303130303030303030303030306639363830303030303030303030303030303030303030303030303030303030303030303030303030303030353030303030303030",
+          "old_payload_sha256": "268b967064e44a61340e43a23940ef2bba16ad22e3615a6f5d0e7108428890b6",
+          "new_payload_sha256": "6fc0fe9c5264597eeb6cb9ab20173ec42e9749f315d36ece91523d0567075889",
+          "ordered_raw_spans": [
+            {
+              "kind": "record",
+              "name": "apps",
+              "old_offset": 0,
+              "new_offset": 0,
+              "old_bytes": 116,
+              "new_bytes": 116,
+              "old_sha256": "b5b4dd2647f728851ce0f323ca5951536dd9c0da9ed9dda0381e58a050b557c9",
+              "new_sha256": "b5b4dd2647f728851ce0f323ca5951536dd9c0da9ed9dda0381e58a050b557c9",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "case",
+              "old_offset": 116,
+              "new_offset": 116,
+              "old_bytes": 116,
+              "new_bytes": 116,
+              "old_sha256": "02f59e2b39ed894ba1cc70bdd50ab75c7af7fb1abb7a9fb6b4a94c4ed8fdf642",
+              "new_sha256": "02f59e2b39ed894ba1cc70bdd50ab75c7af7fb1abb7a9fb6b4a94c4ed8fdf642",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "case/work",
+              "old_offset": 232,
+              "new_offset": 232,
+              "old_bytes": 120,
+              "new_bytes": 120,
+              "old_sha256": "d9adf945b730fe196c8edb3f87f52c3db324b098f9870f5acdca5279595ba594",
+              "new_sha256": "d9adf945b730fe196c8edb3f87f52c3db324b098f9870f5acdca5279595ba594",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "init",
+              "old_offset": 352,
+              "new_offset": 352,
+              "old_bytes": 1022108,
+              "new_bytes": 1021684,
+              "old_sha256": "a8e4bd6f7f5178473c485e5d632174a6700c528bdb513922e54191aeb5eea18b",
+              "new_sha256": "850128495eab2448af40cddbfd550d9ae3fb4eaa70c20b12c6d994c68fbc8b93",
+              "untouched": false
+            },
+            {
+              "kind": "record",
+              "name": "apps/app",
+              "old_offset": 1022460,
+              "new_offset": 1022036,
+              "old_bytes": 1522952,
+              "new_bytes": 1522952,
+              "old_sha256": "12df80ab022bb8204634e73083719f37df8cf9ae527669512dee41827726059a",
+              "new_sha256": "12df80ab022bb8204634e73083719f37df8cf9ae527669512dee41827726059a",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "bin/mcexec",
+              "old_offset": 2545412,
+              "new_offset": 2544988,
+              "old_bytes": 453476,
+              "new_bytes": 453476,
+              "old_sha256": "f3c8aa6783c5b9019ad6eb1476ff9ee973623907604d40b34714d49b3b747a9f",
+              "new_sha256": "f3c8aa6783c5b9019ad6eb1476ff9ee973623907604d40b34714d49b3b747a9f",
+              "untouched": true
+            },
+            {
+              "kind": "record",
+              "name": "TRAILER!!!",
+              "old_offset": 2998888,
+              "new_offset": 2998464,
+              "old_bytes": 124,
+              "new_bytes": 124,
+              "old_sha256": "23d0422b4fea28f771e872741bb370790b3cd0538eafb461233e820b84b57a2e",
+              "new_sha256": "23d0422b4fea28f771e872741bb370790b3cd0538eafb461233e820b84b57a2e",
+              "untouched": true
+            }
+          ]
+        }
+      ]
+    },
+    "ordered_raw_spans": [
+      {
+        "index": 0,
+        "name": "apps",
+        "changed": false,
+        "old_sha256": "8aa42696162236cbd6afbca61f58fe2d7405af742d6d45fb9a3f04c3cc705e85",
+        "new_sha256": "8aa42696162236cbd6afbca61f58fe2d7405af742d6d45fb9a3f04c3cc705e85"
+      },
+      {
+        "index": 1,
+        "name": "apps/app",
+        "changed": false,
+        "old_sha256": "99d41e940e9916569fd7e522a4698f6dd1623cbf4493130c2414326d409c4232",
+        "new_sha256": "99d41e940e9916569fd7e522a4698f6dd1623cbf4493130c2414326d409c4232"
+      },
+      {
+        "index": 2,
+        "name": "bin",
+        "changed": false,
+        "old_sha256": "715a15bf004c4e7a17d763fef5a4428477fd3aff62db3554f999b617a4cf65b1",
+        "new_sha256": "715a15bf004c4e7a17d763fef5a4428477fd3aff62db3554f999b617a4cf65b1"
+      },
+      {
+        "index": 3,
+        "name": "bin/bash",
+        "changed": false,
+        "old_sha256": "8d4c26f595a32ada21d402a1104659e429b87be0b241dfd6c793face0e793cb5",
+        "new_sha256": "8d4c26f595a32ada21d402a1104659e429b87be0b241dfd6c793face0e793cb5"
+      },
+      {
+        "index": 4,
+        "name": "bin/dmesg",
+        "changed": false,
+        "old_sha256": "1b71344c8485d0a5fa977cb1cde9e8a78693f64fff9ffbbb9112ab47c5a08188",
+        "new_sha256": "1b71344c8485d0a5fa977cb1cde9e8a78693f64fff9ffbbb9112ab47c5a08188"
+      },
+      {
+        "index": 5,
+        "name": "bin/mcd0-ioctl-i386",
+        "changed": false,
+        "old_sha256": "c2b91c77cd2afdcc91cbf8da0826c5dfce0a44b7b4b083981fa2a19b0f96e2e7",
+        "new_sha256": "c2b91c77cd2afdcc91cbf8da0826c5dfce0a44b7b4b083981fa2a19b0f96e2e7"
+      },
+      {
+        "index": 6,
+        "name": "bin/mcd0-ioctl-x86_64",
+        "changed": false,
+        "old_sha256": "c0f96b5b15550457c960ee457b4262f4cdd5ebc9ec43fc5d6afed8694b77baa9",
+        "new_sha256": "c0f96b5b15550457c960ee457b4262f4cdd5ebc9ec43fc5d6afed8694b77baa9"
+      },
+      {
+        "index": 7,
+        "name": "bin/mcexec",
+        "changed": false,
+        "old_sha256": "a176498d3faaa6732af3e5dd690345ef30e81e1214e389951300c79d36c00e9f",
+        "new_sha256": "a176498d3faaa6732af3e5dd690345ef30e81e1214e389951300c79d36c00e9f"
+      },
+      {
+        "index": 8,
+        "name": "bin/mount",
+        "changed": false,
+        "old_sha256": "e45f9c77cf6b892e4da4f98ec331de77a83afa3b62e80e902661b1a5e2e6d4cc",
+        "new_sha256": "e45f9c77cf6b892e4da4f98ec331de77a83afa3b62e80e902661b1a5e2e6d4cc"
+      },
+      {
+        "index": 9,
+        "name": "bin/native-application-core",
+        "changed": false,
+        "old_sha256": "591504eb057bfd6d51dc5cb4692b7c12dc129b6d756b5b3ea76cf9edd1c75ee0",
+        "new_sha256": "591504eb057bfd6d51dc5cb4692b7c12dc129b6d756b5b3ea76cf9edd1c75ee0"
+      },
+      {
+        "index": 10,
+        "name": "bin/native-application-hello",
+        "changed": false,
+        "old_sha256": "8c60a9b649047b8dc1c3368651aea7b2e2a2905f4ca13e175036f0253dcbd0ee",
+        "new_sha256": "8c60a9b649047b8dc1c3368651aea7b2e2a2905f4ca13e175036f0253dcbd0ee"
+      },
+      {
+        "index": 11,
+        "name": "bin/native-boot",
+        "changed": true,
+        "old_sha256": "8a330d14036c4ca26b459bb7fc69e8e8957d085833a4e96da411f23bf78073a5",
+        "new_sha256": "083702a48e6b3e6160736144cae45cab64cce9b9c162ce7c0260aa7a27e7f6ff"
+      },
+      {
+        "index": 12,
+        "name": "bin/native-lifecycle-probe",
+        "changed": false,
+        "old_sha256": "04d0e5278542d8cddf28661403ff347ba4d7ef3938f7c08a48e09e497b3d1f06",
+        "new_sha256": "04d0e5278542d8cddf28661403ff347ba4d7ef3938f7c08a48e09e497b3d1f06"
+      },
+      {
+        "index": 13,
+        "name": "bin/native-os-buildid-i386",
+        "changed": false,
+        "old_sha256": "ae10e058dd01cc94cb6cfabaa09364e8acc38c0334bf958ab21c63f9fd5a55ac",
+        "new_sha256": "ae10e058dd01cc94cb6cfabaa09364e8acc38c0334bf958ab21c63f9fd5a55ac"
+      },
+      {
+        "index": 14,
+        "name": "bin/native-os-buildid-x86_64",
+        "changed": false,
+        "old_sha256": "391bd1d2b31554438baf1572817986fce4ad4c32b6a9ecf1cd8d92297e8388d2",
+        "new_sha256": "391bd1d2b31554438baf1572817986fce4ad4c32b6a9ecf1cd8d92297e8388d2"
+      },
+      {
+        "index": 15,
+        "name": "bin/native-string-i386",
+        "changed": false,
+        "old_sha256": "d0494cdda9ae5d57b90d6ecd3607da9de17f7ee5358b93e0953b7aa2878d3a7e",
+        "new_sha256": "d0494cdda9ae5d57b90d6ecd3607da9de17f7ee5358b93e0953b7aa2878d3a7e"
+      },
+      {
+        "index": 16,
+        "name": "bin/native-string-x86_64",
+        "changed": false,
+        "old_sha256": "4685920ef610a1f8e62e80825d30a45d9fbff565d33346f6ce6b0cbf0964eaec",
+        "new_sha256": "4685920ef610a1f8e62e80825d30a45d9fbff565d33346f6ce6b0cbf0964eaec"
+      },
+      {
+        "index": 17,
+        "name": "bin/stat",
+        "changed": false,
+        "old_sha256": "feaa3d06dd274f20d969e41fe0c9a2261a285768b35ff0578c2601623ee14bef",
+        "new_sha256": "feaa3d06dd274f20d969e41fe0c9a2261a285768b35ff0578c2601623ee14bef"
+      },
+      {
+        "index": 18,
+        "name": "bin/uname",
+        "changed": false,
+        "old_sha256": "f3378ddf0e7ce6ca514d3b21958245260cf986eec99d27c23ff843f5cf10b6b1",
+        "new_sha256": "f3378ddf0e7ce6ca514d3b21958245260cf986eec99d27c23ff843f5cf10b6b1"
+      },
+      {
+        "index": 19,
+        "name": "case",
+        "changed": false,
+        "old_sha256": "72799b8360feccad126552be8222744d96954fa9dc743053128eeeafa1702ed6",
+        "new_sha256": "72799b8360feccad126552be8222744d96954fa9dc743053128eeeafa1702ed6"
+      },
+      {
+        "index": 20,
+        "name": "case/work",
+        "changed": false,
+        "old_sha256": "4805c9e4bc9cef9d61555936de5bc15bbcc0323cb96576fc92ca43067fca6548",
+        "new_sha256": "4805c9e4bc9cef9d61555936de5bc15bbcc0323cb96576fc92ca43067fca6548"
+      },
+      {
+        "index": 21,
+        "name": "dev",
+        "changed": false,
+        "old_sha256": "98fdbedae99f5bd3756029783f974fba7e0725c89794390ae724ef54589e0a3c",
+        "new_sha256": "98fdbedae99f5bd3756029783f974fba7e0725c89794390ae724ef54589e0a3c"
+      },
+      {
+        "index": 22,
+        "name": "images",
+        "changed": false,
+        "old_sha256": "3324082e27697edf8b13c373b478dbf01132e8b5d914f56ea74889d3e393d6f5",
+        "new_sha256": "3324082e27697edf8b13c373b478dbf01132e8b5d914f56ea74889d3e393d6f5"
+      },
+      {
+        "index": 23,
+        "name": "images/mckernel.img",
+        "changed": false,
+        "old_sha256": "6bfbba49aeeba53f4a0a3448761534767dba3bc814883248c21a24bf0c0cb041",
+        "new_sha256": "6bfbba49aeeba53f4a0a3448761534767dba3bc814883248c21a24bf0c0cb041"
+      },
+      {
+        "index": 24,
+        "name": "init",
+        "changed": false,
+        "old_sha256": "b30749af32c2d6cd2dc0976bf160a2ac6f6c9ce743061b59cae58355969cf76e",
+        "new_sha256": "b30749af32c2d6cd2dc0976bf160a2ac6f6c9ce743061b59cae58355969cf76e"
+      },
+      {
+        "index": 25,
+        "name": "lib",
+        "changed": false,
+        "old_sha256": "12a25a6a28993719c6ed90ae4bb76729eb7d13454609825ff4ed6c7f5e06d765",
+        "new_sha256": "12a25a6a28993719c6ed90ae4bb76729eb7d13454609825ff4ed6c7f5e06d765"
+      },
+      {
+        "index": 26,
+        "name": "lib64",
+        "changed": false,
+        "old_sha256": "9d33ef41ab60a6ec7366dc831398b946c5df00b81d7f3016392c9e986ff16973",
+        "new_sha256": "9d33ef41ab60a6ec7366dc831398b946c5df00b81d7f3016392c9e986ff16973"
+      },
+      {
+        "index": 27,
+        "name": "lib64/ld-linux-x86-64.so.2",
+        "changed": false,
+        "old_sha256": "8eb4538a4f76ffa9d48c85c2d715e2f7bafda12a5f2e4855250865b640b79cad",
+        "new_sha256": "8eb4538a4f76ffa9d48c85c2d715e2f7bafda12a5f2e4855250865b640b79cad"
+      },
+      {
+        "index": 28,
+        "name": "lib64/libacl.so.1",
+        "changed": false,
+        "old_sha256": "4d97002bdf50f73bdb0a6262a5d959e670e4f666a8db2099efb6e67f3c0ad2d6",
+        "new_sha256": "4d97002bdf50f73bdb0a6262a5d959e670e4f666a8db2099efb6e67f3c0ad2d6"
+      },
+      {
+        "index": 29,
+        "name": "lib64/libattr.so.1",
+        "changed": false,
+        "old_sha256": "0129e13b5afe6282e25d91866a490a6c5b8ba51d3eb9f60363d9ee68a4cf936d",
+        "new_sha256": "0129e13b5afe6282e25d91866a490a6c5b8ba51d3eb9f60363d9ee68a4cf936d"
+      },
+      {
+        "index": 30,
+        "name": "lib64/libblkid.so.1",
+        "changed": false,
+        "old_sha256": "3a9682bc5a1e559bf14771aee9492115fd6f66dce730cc936626b3970b63b561",
+        "new_sha256": "3a9682bc5a1e559bf14771aee9492115fd6f66dce730cc936626b3970b63b561"
+      },
+      {
+        "index": 31,
+        "name": "lib64/libc.so.6",
+        "changed": false,
+        "old_sha256": "d35a318736d0eed4860ff8a45fecaf391bad6a3da3e22d0e455507ea652fb958",
+        "new_sha256": "d35a318736d0eed4860ff8a45fecaf391bad6a3da3e22d0e455507ea652fb958"
+      },
+      {
+        "index": 32,
+        "name": "lib64/libcap.so.2",
+        "changed": false,
+        "old_sha256": "12f0df4caa2b1cf1bccb9afecfc97e21a4adb5e8c77e93884ee7822108f8a09e",
+        "new_sha256": "12f0df4caa2b1cf1bccb9afecfc97e21a4adb5e8c77e93884ee7822108f8a09e"
+      },
+      {
+        "index": 33,
+        "name": "lib64/libcrypto.so.3",
+        "changed": false,
+        "old_sha256": "d0cac62a01463f3d3c115ec4ccf4f46c925bd4008e2f90542c050751db8bc0c8",
+        "new_sha256": "d0cac62a01463f3d3c115ec4ccf4f46c925bd4008e2f90542c050751db8bc0c8"
+      },
+      {
+        "index": 34,
+        "name": "lib64/libgcc_s.so.1",
+        "changed": false,
+        "old_sha256": "d52bf7878fd831ddfde4cd62c382f13191a9c3c3793b739c7e2c78b542e4f6c1",
+        "new_sha256": "d52bf7878fd831ddfde4cd62c382f13191a9c3c3793b739c7e2c78b542e4f6c1"
+      },
+      {
+        "index": 35,
+        "name": "lib64/liblzma.so.5",
+        "changed": false,
+        "old_sha256": "ceb2b649be455045cad149a7049a0f9c8e942c538c929172ac2f347268eeaf9f",
+        "new_sha256": "ceb2b649be455045cad149a7049a0f9c8e942c538c929172ac2f347268eeaf9f"
+      },
+      {
+        "index": 36,
+        "name": "lib64/libmount.so.1",
+        "changed": false,
+        "old_sha256": "16f5654b8829ed0c3347d2bd91c869e0ddf3d1a329bb39b5fe35cf91052c4f96",
+        "new_sha256": "16f5654b8829ed0c3347d2bd91c869e0ddf3d1a329bb39b5fe35cf91052c4f96"
+      },
+      {
+        "index": 37,
+        "name": "lib64/libnuma.so.1",
+        "changed": false,
+        "old_sha256": "1c0d9b247210d1e2d996c0a212c19e69bb3ce929e5be81ae796c8c73b2103dfe",
+        "new_sha256": "1c0d9b247210d1e2d996c0a212c19e69bb3ce929e5be81ae796c8c73b2103dfe"
+      },
+      {
+        "index": 38,
+        "name": "lib64/libpcre2-8.so.0",
+        "changed": false,
+        "old_sha256": "b544c540c690356bf37246eb3a731f076dc1f60454e8b548c06301459a390f02",
+        "new_sha256": "b544c540c690356bf37246eb3a731f076dc1f60454e8b548c06301459a390f02"
+      },
+      {
+        "index": 39,
+        "name": "lib64/libpthread.so.0",
+        "changed": false,
+        "old_sha256": "c9b2358cdd5d644460920a24b2d635f8023447f18a209cdadb9fa8e0c50da077",
+        "new_sha256": "c9b2358cdd5d644460920a24b2d635f8023447f18a209cdadb9fa8e0c50da077"
+      },
+      {
+        "index": 40,
+        "name": "lib64/librt.so.1",
+        "changed": false,
+        "old_sha256": "9cd50775c24ee1bf2b40ff488a5d83b2960befdec4e23d0a1333c70c0ea3f2f9",
+        "new_sha256": "9cd50775c24ee1bf2b40ff488a5d83b2960befdec4e23d0a1333c70c0ea3f2f9"
+      },
+      {
+        "index": 41,
+        "name": "lib64/libselinux.so.1",
+        "changed": false,
+        "old_sha256": "20817df07293eec3600a127f98f496e938c83ceb47da2017d17ba46a45e39013",
+        "new_sha256": "20817df07293eec3600a127f98f496e938c83ceb47da2017d17ba46a45e39013"
+      },
+      {
+        "index": 42,
+        "name": "lib64/libtinfo.so.6",
+        "changed": false,
+        "old_sha256": "efd3e99fbf1dd1c225105b2e8b113a011a14d2ec2bc9bca88b3de59d33be5634",
+        "new_sha256": "efd3e99fbf1dd1c225105b2e8b113a011a14d2ec2bc9bca88b3de59d33be5634"
+      },
+      {
+        "index": 43,
+        "name": "lib64/libz.so.1",
+        "changed": false,
+        "old_sha256": "59e631cccc0ed2373eb07f749bbd44edafaafc6fdc47a3cfc1ed4958574501e2",
+        "new_sha256": "59e631cccc0ed2373eb07f749bbd44edafaafc6fdc47a3cfc1ed4958574501e2"
+      },
+      {
+        "index": 44,
+        "name": "lib64/libzstd.so.1",
+        "changed": false,
+        "old_sha256": "24f6b70dad2c475a9d9bf640a880018aacf83e72ccd3b6ffa5c5fe2b7e226973",
+        "new_sha256": "24f6b70dad2c475a9d9bf640a880018aacf83e72ccd3b6ffa5c5fe2b7e226973"
+      },
+      {
+        "index": 45,
+        "name": "modules",
+        "changed": false,
+        "old_sha256": "be44c4a857a49a5df4ad53f8d718ba36033246ac84531596b1b0062e5da67063",
+        "new_sha256": "be44c4a857a49a5df4ad53f8d718ba36033246ac84531596b1b0062e5da67063"
+      },
+      {
+        "index": 46,
+        "name": "modules/ihk-smp-x86_64.ko",
+        "changed": false,
+        "old_sha256": "a69507398d568382721d543b8e6efdcd87a502c38f06438cd254b15dbe830c67",
+        "new_sha256": "a69507398d568382721d543b8e6efdcd87a502c38f06438cd254b15dbe830c67"
+      },
+      {
+        "index": 47,
+        "name": "modules/ihk.ko",
+        "changed": true,
+        "old_sha256": "24099ecdfe6ad3f0555a041181f795586c8d7da4719581a4c716b82521c9a923",
+        "new_sha256": "30a9969f10d578c40b7823a7ba42983a800f128aec60341c393c20674e7aa651"
+      },
+      {
+        "index": 48,
+        "name": "modules/mcctrl.ko",
+        "changed": false,
+        "old_sha256": "8136e1e932966904149305759c84605a1dd9f66a0e81b79be0b330e306d0e118",
+        "new_sha256": "8136e1e932966904149305759c84605a1dd9f66a0e81b79be0b330e306d0e118"
+      },
+      {
+        "index": 49,
+        "name": "poweroff",
+        "changed": false,
+        "old_sha256": "35357387e98251936bf5a2699a2f4769ce5489ea538b00bd66a6e4405cdba51f",
+        "new_sha256": "35357387e98251936bf5a2699a2f4769ce5489ea538b00bd66a6e4405cdba51f"
+      },
+      {
+        "index": 50,
+        "name": "proc",
+        "changed": false,
+        "old_sha256": "1eefefd143e86a70d664f925322100ce1598989b08ff50ca8846cffb067adfee",
+        "new_sha256": "1eefefd143e86a70d664f925322100ce1598989b08ff50ca8846cffb067adfee"
+      },
+      {
+        "index": 51,
+        "name": "sbin",
+        "changed": false,
+        "old_sha256": "5bf6c2382b37f2334db1b7209656428ae57a5dea83a4994786684d2db80e0180",
+        "new_sha256": "5bf6c2382b37f2334db1b7209656428ae57a5dea83a4994786684d2db80e0180"
+      },
+      {
+        "index": 52,
+        "name": "sbin/insmod",
+        "changed": false,
+        "old_sha256": "a137c6a0bbc118cc26465f3794cbeec47d3bcedc3b138369951877365d9ec6c9",
+        "new_sha256": "a137c6a0bbc118cc26465f3794cbeec47d3bcedc3b138369951877365d9ec6c9"
+      },
+      {
+        "index": 53,
+        "name": "sbin/rmmod",
+        "changed": false,
+        "old_sha256": "2269bf0feb53b111521e4b357ce9e8cd53f6d08b7d1e6c70d4d285db4f8fb884",
+        "new_sha256": "2269bf0feb53b111521e4b357ce9e8cd53f6d08b7d1e6c70d4d285db4f8fb884"
+      },
+      {
+        "index": 54,
+        "name": "sys",
+        "changed": false,
+        "old_sha256": "6b054c231793967fa892efe1953f7ba1e9c643178cb031e52acf0817a6d99226",
+        "new_sha256": "6b054c231793967fa892efe1953f7ba1e9c643178cb031e52acf0817a6d99226"
+      },
+      {
+        "index": 55,
+        "name": "tmp",
+        "changed": false,
+        "old_sha256": "20355d6a47ea8a06be3dd0dfb5e3a1d5751b3c57650b9a04b960c8b751df289a",
+        "new_sha256": "20355d6a47ea8a06be3dd0dfb5e3a1d5751b3c57650b9a04b960c8b751df289a"
+      },
+      {
+        "index": 56,
+        "name": "usr",
+        "changed": false,
+        "old_sha256": "a7fbf9d23df7b98d3d0d09510765323f6bbd0ab3802a114a4d5ac5945850efab",
+        "new_sha256": "a7fbf9d23df7b98d3d0d09510765323f6bbd0ab3802a114a4d5ac5945850efab"
+      },
+      {
+        "index": 57,
+        "name": "usr/bin",
+        "changed": false,
+        "old_sha256": "eeb24c8f3a3ff2f610abbed0ee5182b3b4bbbfb76de4dd42944b39301e1b89c9",
+        "new_sha256": "eeb24c8f3a3ff2f610abbed0ee5182b3b4bbbfb76de4dd42944b39301e1b89c9"
+      },
+      {
+        "index": 58,
+        "name": "usr/bin/coreutils",
+        "changed": false,
+        "old_sha256": "1115e4fd180bc1e6427a6842c4222f318244c044b7fc6ee232860a390898409f",
+        "new_sha256": "1115e4fd180bc1e6427a6842c4222f318244c044b7fc6ee232860a390898409f"
+      },
+      {
+        "index": 59,
+        "name": "usr/sbin",
+        "changed": false,
+        "old_sha256": "d8091470dcab7fa3b94729af59416da40a8c97defbb3deaabcfe9edeb658a387",
+        "new_sha256": "d8091470dcab7fa3b94729af59416da40a8c97defbb3deaabcfe9edeb658a387"
+      },
+      {
+        "index": 60,
+        "name": "TRAILER!!!",
+        "changed": false,
+        "old_sha256": "5096c083e1a504be55b70a56a6e5585adaafd9382547b916d5f081e2cf6e110d",
+        "new_sha256": "5096c083e1a504be55b70a56a6e5585adaafd9382547b916d5f081e2cf6e110d"
+      },
+      {
+        "index": 61,
+        "name": null,
+        "changed": false,
+        "old_sha256": "115bad14f1c9f2c027a84de21b107015722cb76be8d0abf3760ad8e00d6c24a5",
+        "new_sha256": "115bad14f1c9f2c027a84de21b107015722cb76be8d0abf3760ad8e00d6c24a5"
+      },
+      {
+        "index": 62,
+        "name": "apps",
+        "changed": false,
+        "old_sha256": "b5b4dd2647f728851ce0f323ca5951536dd9c0da9ed9dda0381e58a050b557c9",
+        "new_sha256": "b5b4dd2647f728851ce0f323ca5951536dd9c0da9ed9dda0381e58a050b557c9"
+      },
+      {
+        "index": 63,
+        "name": "case",
+        "changed": false,
+        "old_sha256": "02f59e2b39ed894ba1cc70bdd50ab75c7af7fb1abb7a9fb6b4a94c4ed8fdf642",
+        "new_sha256": "02f59e2b39ed894ba1cc70bdd50ab75c7af7fb1abb7a9fb6b4a94c4ed8fdf642"
+      },
+      {
+        "index": 64,
+        "name": "case/work",
+        "changed": false,
+        "old_sha256": "d9adf945b730fe196c8edb3f87f52c3db324b098f9870f5acdca5279595ba594",
+        "new_sha256": "d9adf945b730fe196c8edb3f87f52c3db324b098f9870f5acdca5279595ba594"
+      },
+      {
+        "index": 65,
+        "name": "init",
+        "changed": true,
+        "old_sha256": "a8e4bd6f7f5178473c485e5d632174a6700c528bdb513922e54191aeb5eea18b",
+        "new_sha256": "850128495eab2448af40cddbfd550d9ae3fb4eaa70c20b12c6d994c68fbc8b93"
+      },
+      {
+        "index": 66,
+        "name": "apps/app",
+        "changed": false,
+        "old_sha256": "12df80ab022bb8204634e73083719f37df8cf9ae527669512dee41827726059a",
+        "new_sha256": "12df80ab022bb8204634e73083719f37df8cf9ae527669512dee41827726059a"
+      },
+      {
+        "index": 67,
+        "name": "bin/mcexec",
+        "changed": false,
+        "old_sha256": "f3c8aa6783c5b9019ad6eb1476ff9ee973623907604d40b34714d49b3b747a9f",
+        "new_sha256": "f3c8aa6783c5b9019ad6eb1476ff9ee973623907604d40b34714d49b3b747a9f"
+      },
+      {
+        "index": 68,
+        "name": "TRAILER!!!",
+        "changed": false,
+        "old_sha256": "23d0422b4fea28f771e872741bb370790b3cd0538eafb461233e820b84b57a2e",
+        "new_sha256": "23d0422b4fea28f771e872741bb370790b3cd0538eafb461233e820b84b57a2e"
+      }
+    ],
+    "old_final_map": {
+      "apps": {
+        "mode": 16877,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 2,
+        "mtime": 0,
+        "size": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "apps/app": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 0,
+        "size": 1522832,
+        "sha256": "5b116839f8cfbb796793d88f7792d21e5e29bd0510d527e8782284ae18239177",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "bin": {
+        "mode": 16877,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 2,
+        "mtime": 0,
+        "size": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "bin/bash": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 1410688,
+        "sha256": "a59fc4da19d169c175b247bfaf4a21c2ee7c16c3ed2820daa807ab12affe98fc",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "bin/dmesg": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 72088,
+        "sha256": "8d98381f576d147789c950da4377464d2dfbb590bd4d7ef8ff9dbc81d74cdbd1",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "bin/mcd0-ioctl-i386": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 8416,
+        "sha256": "9cae94a48462fe1fd409d572acd2c0dff04decb0c7eacae703aa5876389c24f2",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "bin/mcd0-ioctl-x86_64": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 8512,
+        "sha256": "dac5c47b17cec8b063329dff21c7318506e1d7a3e05a1f905be53c6483f6fed9",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "bin/mcexec": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 0,
+        "size": 453352,
+        "sha256": "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "bin/mount": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 48864,
+        "sha256": "3ab3ac4707f4d02f4d46c916e537c38cdaee3b9daa64f91f850decf47bc889d9",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "bin/native-application-core": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 39488,
+        "sha256": "558d1607e4648321c9537215084e759496937d9591c319a21443f443193fda9a",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "bin/native-application-hello": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 1264,
+        "sha256": "fd08a46261fa79fdd16ddb2dce6e7f99c77178b290815c06445277db454851e7",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "bin/native-boot": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 31208,
+        "sha256": "6b9f753e34d12da474c701ca64ce62825788295646b60f67482ef9ec8690c417",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "bin/native-lifecycle-probe": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 872616,
+        "sha256": "d8132525b6126ee93fc5de4f59ac06eb83ffeb90f85225da585d89060dfb1248",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "bin/native-os-buildid-i386": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 29716,
+        "sha256": "04b7ad7993ce87fce24108491959374303bd74ea38e85e591dcdce096396e2ce",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "bin/native-os-buildid-x86_64": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 30376,
+        "sha256": "65f51b8d3324641b6fcd72d79448e15b1cc0fe054f3116d6ceb8ea1b5c56d18b",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "bin/native-string-i386": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 38740,
+        "sha256": "b2884ecbe15f3dbb763d1192332bfeb0bd78d864984d7b31a6f96a4ca99ea111",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "bin/native-string-x86_64": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 39352,
+        "sha256": "ba40b85c8620454276f631096b6f807cc4384c5354880e1af43de6e45532495c",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "bin/stat": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 51,
+        "sha256": "9f6ffbf89d8463633790130b1d79999e1f5ef72fa63ac128eefc19101116b4d3",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "bin/uname": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 52,
+        "sha256": "050964cc46affadcf00d817106c47a6bde087fc483fa0643e168a816b76de608",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "case": {
+        "mode": 16877,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 2,
+        "mtime": 0,
+        "size": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "case/work": {
+        "mode": 16877,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 2,
+        "mtime": 0,
+        "size": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "dev": {
+        "mode": 16877,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 2,
+        "mtime": 0,
+        "size": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "images": {
+        "mode": 16877,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 2,
+        "mtime": 0,
+        "size": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "images/mckernel.img": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 7933968,
+        "sha256": "1e7a1f689f565e3ba35def32d4f8c9ae729f0e5945c4fbeadee4eb523738a4a2",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "init": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 0,
+        "size": 1021992,
+        "sha256": "268b967064e44a61340e43a23940ef2bba16ad22e3615a6f5d0e7108428890b6",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "lib": {
+        "mode": 16877,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 2,
+        "mtime": 0,
+        "size": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "lib64": {
+        "mode": 16877,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 2,
+        "mtime": 0,
+        "size": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "lib64/ld-linux-x86-64.so.2": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 930600,
+        "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "lib64/libacl.so.1": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 40896,
+        "sha256": "342a0213a17809ee41816a95c939f11ba25ff92da53ae849bc88cf3da81649aa",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "lib64/libattr.so.1": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 28296,
+        "sha256": "1369a9dd4a7bcd8d4bf71293b369f6d222a1ea12132d988ed529d796522076a0",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "lib64/libblkid.so.1": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 242128,
+        "sha256": "6149c97e401f088ee8e4d9681e0498486e41a90b90618b0dafca0b8545230143",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "lib64/libc.so.6": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 2339896,
+        "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "lib64/libcap.so.2": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 53168,
+        "sha256": "70e8dbe271e2ea63127fbc20270ce60541d1244f0b170888d258b86b2573bcbf",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "lib64/libcrypto.so.3": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 5631152,
+        "sha256": "3da8e54521ce53e2a09d9ca0d1d5c3368b8abba252492cee21affd6146f72d82",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "lib64/libgcc_s.so.1": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 186528,
+        "sha256": "cc9c9d070f290bd0b39a7208f8850f6f6cb85491cf6aee80ef4502c3f040c2cb",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "lib64/liblzma.so.5": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 215496,
+        "sha256": "a1ccc4236761114ffa9efa797501b9f34398a20de75ca0ca22df9410cbe41bde",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "lib64/libmount.so.1": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 333512,
+        "sha256": "5199b49c7ad1565700fd649e9b13024919192128908536203fe95fff4adadb2c",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "lib64/libnuma.so.1": {
+        "mode": 33188,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 62328,
+        "sha256": "be20c2b16781eea6c69d47816bf15869f90f2a009628c310049da1d2f3c31e4e",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "lib64/libpcre2-8.so.0": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 665664,
+        "sha256": "ac0dcbb0620261d144a5255ce79c30c583593e7a29822df7a529c06922852e94",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "lib64/libpthread.so.0": {
+        "mode": 33188,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 15496,
+        "sha256": "f2791d4558ccad3fd23808f206e1b8e861b448b04d1e5cc75ae405e3e028fa1a",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "lib64/librt.so.1": {
+        "mode": 33188,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 15632,
+        "sha256": "3edee3d7a74e29d28e4831c37e9ef8330c1702f391302a30d241f6aa579b9afa",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "lib64/libselinux.so.1": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 200664,
+        "sha256": "79e73dd27d4a90f25969c43c298ad32aa21c718c8508ef86c5a8e6ee083723a9",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "lib64/libtinfo.so.6": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 187296,
+        "sha256": "3a4bdb43bc49568cec111b5486e6daa6fbca08dc205357b3d737044eb0ab315a",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "lib64/libz.so.1": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 140824,
+        "sha256": "2fd5dcd6bc0953f3db71958b10c0cdf55ce49e1ceb4ab9d1f869398e39e994eb",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "lib64/libzstd.so.1": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 729608,
+        "sha256": "250dc1e1302e3eedd9f483c7cb3d52ab15882bf9d12072539cc4f06660b384e1",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "modules": {
+        "mode": 16877,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 2,
+        "mtime": 0,
+        "size": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "modules/ihk-smp-x86_64.ko": {
+        "mode": 33188,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 11630064,
+        "sha256": "82c9021f7491fa8bc6d178fe99e7d4b7b6f90838474a9c91b62ddb8edb3d13f8",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "modules/ihk.ko": {
+        "mode": 33188,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 1440392,
+        "sha256": "51b48a9e42eaa2411cab2a28edf9bb5db8b2d648675d083473e926f91dd0e038",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "modules/mcctrl.ko": {
+        "mode": 33188,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 1913904,
+        "sha256": "6571ac7eca13559d8bab65125d54facbbc65e84f815d4ff3fc77ec6aa1104972",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "poweroff": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 4456,
+        "sha256": "384607e6e1544a549c793f34a21d8d555879abaa1d532b5e2b9dc5e020dcc569",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "proc": {
+        "mode": 16877,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 2,
+        "mtime": 0,
+        "size": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "sbin": {
+        "mode": 16877,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 2,
+        "mtime": 0,
+        "size": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "sbin/insmod": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 182088,
+        "sha256": "7e91f52ed2cd5e2c4f82de4bb07bbaa7179cd5c053b7afcf2fd231056681ed55",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "sbin/rmmod": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 182088,
+        "sha256": "7e91f52ed2cd5e2c4f82de4bb07bbaa7179cd5c053b7afcf2fd231056681ed55",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "sys": {
+        "mode": 16877,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 2,
+        "mtime": 0,
+        "size": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "tmp": {
+        "mode": 17407,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 2,
+        "mtime": 0,
+        "size": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "usr": {
+        "mode": 16877,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 4,
+        "mtime": 0,
+        "size": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "usr/bin": {
+        "mode": 16877,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 2,
+        "mtime": 0,
+        "size": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "usr/bin/coreutils": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 1347728,
+        "sha256": "8e7928bf899599dbe98a4baaf2b5cba78a0b003213ab83104182e31475c068ff",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "usr/sbin": {
+        "mode": 16877,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 2,
+        "mtime": 0,
+        "size": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      }
+    },
+    "final_map": {
+      "apps": {
+        "mode": 16877,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 2,
+        "mtime": 0,
+        "size": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "apps/app": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 0,
+        "size": 1522832,
+        "sha256": "5b116839f8cfbb796793d88f7792d21e5e29bd0510d527e8782284ae18239177",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "bin": {
+        "mode": 16877,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 2,
+        "mtime": 0,
+        "size": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "bin/bash": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 1410688,
+        "sha256": "a59fc4da19d169c175b247bfaf4a21c2ee7c16c3ed2820daa807ab12affe98fc",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "bin/dmesg": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 72088,
+        "sha256": "8d98381f576d147789c950da4377464d2dfbb590bd4d7ef8ff9dbc81d74cdbd1",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "bin/mcd0-ioctl-i386": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 8416,
+        "sha256": "9cae94a48462fe1fd409d572acd2c0dff04decb0c7eacae703aa5876389c24f2",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "bin/mcd0-ioctl-x86_64": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 8512,
+        "sha256": "dac5c47b17cec8b063329dff21c7318506e1d7a3e05a1f905be53c6483f6fed9",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "bin/mcexec": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 0,
+        "size": 453352,
+        "sha256": "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "bin/mount": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 48864,
+        "sha256": "3ab3ac4707f4d02f4d46c916e537c38cdaee3b9daa64f91f850decf47bc889d9",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "bin/native-application-core": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 39488,
+        "sha256": "558d1607e4648321c9537215084e759496937d9591c319a21443f443193fda9a",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "bin/native-application-hello": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 1264,
+        "sha256": "fd08a46261fa79fdd16ddb2dce6e7f99c77178b290815c06445277db454851e7",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "bin/native-boot": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 31072,
+        "sha256": "f25a803019a024e4d0e4e056ad2ba9f6b6bf411e81c5252bc59e1a81c1e9d2c8",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "bin/native-lifecycle-probe": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 872616,
+        "sha256": "d8132525b6126ee93fc5de4f59ac06eb83ffeb90f85225da585d89060dfb1248",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "bin/native-os-buildid-i386": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 29716,
+        "sha256": "04b7ad7993ce87fce24108491959374303bd74ea38e85e591dcdce096396e2ce",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "bin/native-os-buildid-x86_64": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 30376,
+        "sha256": "65f51b8d3324641b6fcd72d79448e15b1cc0fe054f3116d6ceb8ea1b5c56d18b",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "bin/native-string-i386": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 38740,
+        "sha256": "b2884ecbe15f3dbb763d1192332bfeb0bd78d864984d7b31a6f96a4ca99ea111",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "bin/native-string-x86_64": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 39352,
+        "sha256": "ba40b85c8620454276f631096b6f807cc4384c5354880e1af43de6e45532495c",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "bin/stat": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 51,
+        "sha256": "9f6ffbf89d8463633790130b1d79999e1f5ef72fa63ac128eefc19101116b4d3",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "bin/uname": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 52,
+        "sha256": "050964cc46affadcf00d817106c47a6bde087fc483fa0643e168a816b76de608",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "case": {
+        "mode": 16877,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 2,
+        "mtime": 0,
+        "size": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "case/work": {
+        "mode": 16877,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 2,
+        "mtime": 0,
+        "size": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "dev": {
+        "mode": 16877,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 2,
+        "mtime": 0,
+        "size": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "images": {
+        "mode": 16877,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 2,
+        "mtime": 0,
+        "size": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "images/mckernel.img": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 7933968,
+        "sha256": "1e7a1f689f565e3ba35def32d4f8c9ae729f0e5945c4fbeadee4eb523738a4a2",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "init": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 0,
+        "size": 1021568,
+        "sha256": "6fc0fe9c5264597eeb6cb9ab20173ec42e9749f315d36ece91523d0567075889",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "lib": {
+        "mode": 16877,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 2,
+        "mtime": 0,
+        "size": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "lib64": {
+        "mode": 16877,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 2,
+        "mtime": 0,
+        "size": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "lib64/ld-linux-x86-64.so.2": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 930600,
+        "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "lib64/libacl.so.1": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 40896,
+        "sha256": "342a0213a17809ee41816a95c939f11ba25ff92da53ae849bc88cf3da81649aa",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "lib64/libattr.so.1": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 28296,
+        "sha256": "1369a9dd4a7bcd8d4bf71293b369f6d222a1ea12132d988ed529d796522076a0",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "lib64/libblkid.so.1": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 242128,
+        "sha256": "6149c97e401f088ee8e4d9681e0498486e41a90b90618b0dafca0b8545230143",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "lib64/libc.so.6": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 2339896,
+        "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "lib64/libcap.so.2": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 53168,
+        "sha256": "70e8dbe271e2ea63127fbc20270ce60541d1244f0b170888d258b86b2573bcbf",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "lib64/libcrypto.so.3": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 5631152,
+        "sha256": "3da8e54521ce53e2a09d9ca0d1d5c3368b8abba252492cee21affd6146f72d82",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "lib64/libgcc_s.so.1": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 186528,
+        "sha256": "cc9c9d070f290bd0b39a7208f8850f6f6cb85491cf6aee80ef4502c3f040c2cb",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "lib64/liblzma.so.5": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 215496,
+        "sha256": "a1ccc4236761114ffa9efa797501b9f34398a20de75ca0ca22df9410cbe41bde",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "lib64/libmount.so.1": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 333512,
+        "sha256": "5199b49c7ad1565700fd649e9b13024919192128908536203fe95fff4adadb2c",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "lib64/libnuma.so.1": {
+        "mode": 33188,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 62328,
+        "sha256": "be20c2b16781eea6c69d47816bf15869f90f2a009628c310049da1d2f3c31e4e",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "lib64/libpcre2-8.so.0": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 665664,
+        "sha256": "ac0dcbb0620261d144a5255ce79c30c583593e7a29822df7a529c06922852e94",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "lib64/libpthread.so.0": {
+        "mode": 33188,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 15496,
+        "sha256": "f2791d4558ccad3fd23808f206e1b8e861b448b04d1e5cc75ae405e3e028fa1a",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "lib64/librt.so.1": {
+        "mode": 33188,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 15632,
+        "sha256": "3edee3d7a74e29d28e4831c37e9ef8330c1702f391302a30d241f6aa579b9afa",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "lib64/libselinux.so.1": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 200664,
+        "sha256": "79e73dd27d4a90f25969c43c298ad32aa21c718c8508ef86c5a8e6ee083723a9",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "lib64/libtinfo.so.6": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 187296,
+        "sha256": "3a4bdb43bc49568cec111b5486e6daa6fbca08dc205357b3d737044eb0ab315a",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "lib64/libz.so.1": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 140824,
+        "sha256": "2fd5dcd6bc0953f3db71958b10c0cdf55ce49e1ceb4ab9d1f869398e39e994eb",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "lib64/libzstd.so.1": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 729608,
+        "sha256": "250dc1e1302e3eedd9f483c7cb3d52ab15882bf9d12072539cc4f06660b384e1",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "modules": {
+        "mode": 16877,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 2,
+        "mtime": 0,
+        "size": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "modules/ihk-smp-x86_64.ko": {
+        "mode": 33188,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 11630064,
+        "sha256": "82c9021f7491fa8bc6d178fe99e7d4b7b6f90838474a9c91b62ddb8edb3d13f8",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "modules/ihk.ko": {
+        "mode": 33188,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 1475952,
+        "sha256": "c396958bfdb0f22036b469ea2a64e0a6b188b9619ee4105c7879483bb3b9790d",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "modules/mcctrl.ko": {
+        "mode": 33188,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 1913904,
+        "sha256": "6571ac7eca13559d8bab65125d54facbbc65e84f815d4ff3fc77ec6aa1104972",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "poweroff": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 4456,
+        "sha256": "384607e6e1544a549c793f34a21d8d555879abaa1d532b5e2b9dc5e020dcc569",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "proc": {
+        "mode": 16877,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 2,
+        "mtime": 0,
+        "size": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "sbin": {
+        "mode": 16877,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 2,
+        "mtime": 0,
+        "size": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "sbin/insmod": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 182088,
+        "sha256": "7e91f52ed2cd5e2c4f82de4bb07bbaa7179cd5c053b7afcf2fd231056681ed55",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "sbin/rmmod": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 182088,
+        "sha256": "7e91f52ed2cd5e2c4f82de4bb07bbaa7179cd5c053b7afcf2fd231056681ed55",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "sys": {
+        "mode": 16877,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 2,
+        "mtime": 0,
+        "size": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "tmp": {
+        "mode": 17407,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 2,
+        "mtime": 0,
+        "size": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "usr": {
+        "mode": 16877,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 4,
+        "mtime": 0,
+        "size": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "usr/bin": {
+        "mode": 16877,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 2,
+        "mtime": 0,
+        "size": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "usr/bin/coreutils": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 1792257846,
+        "size": 1347728,
+        "sha256": "8e7928bf899599dbe98a4baaf2b5cba78a0b003213ab83104182e31475c068ff",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "usr/sbin": {
+        "mode": 16877,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 2,
+        "mtime": 0,
+        "size": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      }
+    }
+  },
+  "source_identities": {
+    "base": {
+      "path": "/home/holden/mckernel-work/scratch/fplg-up-261019-1/base.cpio.gz",
+      "identity": {
+        "st_dev": 1828,
+        "st_ino": 115451,
+        "st_mode": 33152,
+        "st_nlink": 1,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_size": 12748582,
+        "st_mtime_ns": 1792442875560845435,
+        "st_ctime_ns": 1792442875560845435
+      },
+      "sha256": "c5454ffe0cb3ccfd6cbfd52dd8074fd4c01b9f6d748d7a643563cbf264f9828e"
+    },
+    "overlay": {
+      "path": "/home/holden/mckernel-work/scratch/fplg-up-261019-1/lifecycle.cpio.gz",
+      "identity": {
+        "st_dev": 1828,
+        "st_ino": 115452,
+        "st_mode": 33152,
+        "st_nlink": 1,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_size": 13920744,
+        "st_mtime_ns": 1792442875592846400,
+        "st_ctime_ns": 1792442875592846400
+      },
+      "sha256": "f314e0e0c8df5c3506a4c79da55c0e4c237c962e74b6f37b4180f3b910641570"
+    },
+    "overlay_manifest": {
+      "path": "/home/holden/mckernel-work/scratch/fplg-up-261019-1/overlay-manifest.json",
+      "identity": {
+        "st_dev": 1828,
+        "st_ino": 115456,
+        "st_mode": 33152,
+        "st_nlink": 1,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_size": 19378,
+        "st_mtime_ns": 1792442875712850017,
+        "st_ctime_ns": 1792442875712850017
+      },
+      "sha256": "b0b04351be52d2ff77dc7bdd8f17ebcdd84b29e9e730f750ac454665e0b026f2"
+    },
+    "native_manifest": {
+      "path": "/home/holden/mckernel-work/scratch/fplg-up-261019-1/native-manifest.json",
+      "identity": {
+        "st_dev": 1828,
+        "st_ino": 115457,
+        "st_mode": 33152,
+        "st_nlink": 1,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_size": 5362,
+        "st_mtime_ns": 1792442875748851102,
+        "st_ctime_ns": 1792442875748851102
+      },
+      "sha256": "892c5c4b0a02aaf7fb5a2b0235d3f295ecdd1e576421f371b48ca985c3adc674"
+    },
+    "module": {
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-895d6e84dc4c47b3a75b6b12f7bcdb0f/modules/ihk.ko",
+      "identity": {
+        "st_dev": 1828,
+        "st_ino": 758314,
+        "st_mode": 33188,
+        "st_nlink": 1,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_size": 1475952,
+        "st_mtime_ns": 1792440917098276225,
+        "st_ctime_ns": 1792440917098276225
+      },
+      "sha256": "c396958bfdb0f22036b469ea2a64e0a6b188b9619ee4105c7879483bb3b9790d"
+    },
+    "boot": {
+      "path": "/home/holden/mckernel-work/host-preparation/native-fp-logging-helper-preparation-20261018-1/ordinary-output/native-boot",
+      "identity": {
+        "st_dev": 66306,
+        "st_ino": 47986971,
+        "st_mode": 33216,
+        "st_nlink": 1,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_size": 31072,
+        "st_mtime_ns": 1792364279597324477,
+        "st_ctime_ns": 1792364279597324477
+      },
+      "sha256": "f25a803019a024e4d0e4e056ad2ba9f6b6bf411e81c5252bc59e1a81c1e9d2c8"
+    },
+    "collector": {
+      "path": "/home/holden/mckernel-work/scratch/fplg-control-input-261019-1/init",
+      "identity": {
+        "st_dev": 1828,
+        "st_ino": 115519,
+        "st_mode": 33261,
+        "st_nlink": 1,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_size": 1021568,
+        "st_mtime_ns": 1792446589210173762,
+        "st_ctime_ns": 1792446589210173762
+      },
+      "sha256": "6fc0fe9c5264597eeb6cb9ab20173ec42e9749f315d36ece91523d0567075889"
+    },
+    "artifact_review": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-ihk-module-result-review-20261019-1/IHK-ACTUAL-ARTIFACT-REVIEW.json",
+      "identity": {
+        "st_dev": 66306,
+        "st_ino": 48116694,
+        "st_mode": 33152,
+        "st_nlink": 1,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_size": 3338,
+        "st_mtime_ns": 1792441285934295201,
+        "st_ctime_ns": 1792441285934295201
+      },
+      "sha256": "c0ad09a61c82d585d74fa3160028e0f810c4ca4b530a6fce0e488f319eaf3ab4"
+    },
+    "source_review": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-ihk-module-result-review-20261019-1/IHK-ACTUAL-SOURCE-CLOSURE-REVIEW.json",
+      "identity": {
+        "st_dev": 66306,
+        "st_ino": 48116692,
+        "st_mode": 33152,
+        "st_nlink": 1,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_size": 6271,
+        "st_mtime_ns": 1792441285934295201,
+        "st_ctime_ns": 1792441285934295201
+      },
+      "sha256": "095e8b10a619d4eafbd6a5418e6e2c65f3b1d439262c4c9543e118141d1a0377"
+    },
+    "build_receipt": {
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-895d6e84dc4c47b3a75b6b12f7bcdb0f/evidence/receipt.json",
+      "identity": {
+        "st_dev": 1828,
+        "st_ino": 758300,
+        "st_mode": 33188,
+        "st_nlink": 1,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_size": 10838,
+        "st_mtime_ns": 1792440917142277666,
+        "st_ctime_ns": 1792440917142277666
+      },
+      "sha256": "769f841ad24fcebedbacda1024c6518bec7a1defd605e90cffef3aa62e2fbd5b"
+    },
+    "source_closure": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/actual-complete14-source-map.json",
+      "identity": {
+        "st_dev": 66306,
+        "st_ino": 48116696,
+        "st_mode": 33152,
+        "st_nlink": 1,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_size": 1175,
+        "st_mtime_ns": 1792441482012654075,
+        "st_ctime_ns": 1792441482012654075
+      },
+      "sha256": "565d3283f60ab2d516aa4d7c0157e88d9314df81b552dab3a0123ef0817fc743"
+    },
+    "authority_review": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-ihk-module-result-review-20261019-1/FULL-ORIGINAL-AUTHORITY-EXACT-MANIFEST-JOIN-REVIEW.json",
+      "identity": {
+        "st_dev": 66306,
+        "st_ino": 48116905,
+        "st_mode": 33152,
+        "st_nlink": 1,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_size": 6579,
+        "st_mtime_ns": 1792442960011402462,
+        "st_ctime_ns": 1792442960011402462
+      },
+      "sha256": "1b7e6821d98f2dc32cff3dbd14546c240c81a72780aa7306e046e52696ab3797"
+    },
+    "authority:conditional_reuse_review": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-ihk-module-result-review-20261019-1/FULL-ORIGINAL-AUTHORITY-AND-CONDITIONAL-MODULE-REUSE-REVIEW.json",
+      "identity": {
+        "st_dev": 66306,
+        "st_ino": 48116904,
+        "st_mode": 33152,
+        "st_nlink": 1,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_size": 1799159,
+        "st_mtime_ns": 1792442960003402219,
+        "st_ctime_ns": 1792442960003402219
+      },
+      "sha256": "87f857b18d0ae0636ba7b16ab498a24dd46e938db842e409cf1a1f03fd02138c"
+    },
+    "authority:original_compute": {
+      "path": "/home/holden/mckernel-work/host-preparation/native-kmsg-logging-stage-join-20261019-1/actual-source-projection-1/original-compute-catalog.json",
+      "identity": {
+        "st_dev": 66306,
+        "st_ino": 47989920,
+        "st_mode": 33152,
+        "st_nlink": 1,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_size": 1698235,
+        "st_mtime_ns": 1792371718863968502,
+        "st_ctime_ns": 1792371718863968502
+      },
+      "sha256": "5f84a175e08e7b790fbe4e05ecca1754cd2b3b69d71999e1e150d4f576a52af3"
+    },
+    "authority:original_compute:original_report": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/thin-inputs.json",
+      "identity": {
+        "st_dev": 66306,
+        "st_ino": 47882926,
+        "st_mode": 33152,
+        "st_nlink": 1,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_size": 6697823,
+        "st_mtime_ns": 1792358387082390893,
+        "st_ctime_ns": 1792358387082390893
+      },
+      "sha256": "a00c8a708aa6de4f89263af66fd8958e116facbc9f30bf04b413f33c9596a178"
+    },
+    "authority:unchanged_smp": {
+      "path": "/home/holden/mckernel-work/host-preparation/native-kmsg-logging-stage-join-20261019-1/actual-source-projection-1/unchanged_smp-catalog.json",
+      "identity": {
+        "st_dev": 66306,
+        "st_ino": 47989921,
+        "st_mode": 33152,
+        "st_nlink": 1,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_size": 9673,
+        "st_mtime_ns": 1792371718867968534,
+        "st_ctime_ns": 1792371718867968534
+      },
+      "sha256": "b5e5c5eb55c7f70a4323d15548e6280c63da3dad143f78d096812f25da3a079a"
+    },
+    "authority:unchanged_smp:original_report": {
+      "path": "/home/holden/mckernel-work/scratch/nsd-i-a7d84db0d8b54b9b94347fd0aff57594/preparation.json",
+      "identity": {
+        "st_dev": 1828,
+        "st_ino": 111964,
+        "st_mode": 33152,
+        "st_nlink": 1,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_size": 55963,
+        "st_mtime_ns": 1792261159778023834,
+        "st_ctime_ns": 1792261159778023834
+      },
+      "sha256": "e83acd385d2d895741d2ce7bdf4b3ee31780ba60696d7506d47ac121e0d8d685"
+    },
+    "authority:unchanged_mcctrl": {
+      "path": "/home/holden/mckernel-work/host-preparation/native-kmsg-logging-stage-join-20261019-1/actual-source-projection-1/unchanged_mcctrl-catalog.json",
+      "identity": {
+        "st_dev": 66306,
+        "st_ino": 47989922,
+        "st_mode": 33152,
+        "st_nlink": 1,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_size": 9676,
+        "st_mtime_ns": 1792371718867968534,
+        "st_ctime_ns": 1792371718867968534
+      },
+      "sha256": "383d3018d7d4963284c06b9e7cd47505d1d4ee8c6fef38df7990bfc049c48bb9"
+    },
+    "authority:unchanged_mcctrl:original_report": {
+      "path": "/home/holden/mckernel-work/scratch/nsd-i-a7d84db0d8b54b9b94347fd0aff57594/preparation.json",
+      "identity": {
+        "st_dev": 1828,
+        "st_ino": 111964,
+        "st_mode": 33152,
+        "st_nlink": 1,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_size": 55963,
+        "st_mtime_ns": 1792261159778023834,
+        "st_ctime_ns": 1792261159778023834
+      },
+      "sha256": "e83acd385d2d895741d2ce7bdf4b3ee31780ba60696d7506d47ac121e0d8d685"
+    },
+    "old_collector": {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/init",
+      "identity": {
+        "st_dev": 1828,
+        "st_ino": 320995,
+        "st_mode": 33216,
+        "st_nlink": 1,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_size": 1021992,
+        "st_mtime_ns": 1792249191984955130,
+        "st_ctime_ns": 1792249191984955130
+      },
+      "sha256": "268b967064e44a61340e43a23940ef2bba16ad22e3615a6f5d0e7108428890b6"
+    },
+    "old_boot": {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/native-proposal/stage-correction-1/stage/root/bin/native-boot",
+      "identity": {
+        "st_dev": 66306,
+        "st_ino": 47847351,
+        "st_mode": 33261,
+        "st_nlink": 1,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_size": 31208,
+        "st_mtime_ns": 1792265005476471541,
+        "st_ctime_ns": 1792265005476471541
+      },
+      "sha256": "6b9f753e34d12da474c701ca64ce62825788295646b60f67482ef9ec8690c417"
+    },
+    "payload": {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/reference",
+      "identity": {
+        "st_dev": 66306,
+        "st_ino": 47847165,
+        "st_mode": 33216,
+        "st_nlink": 1,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_size": 1522832,
+        "st_mtime_ns": 1792262973334620476,
+        "st_ctime_ns": 1792262973334620476
+      },
+      "sha256": "5b116839f8cfbb796793d88f7792d21e5e29bd0510d527e8782284ae18239177"
+    },
+    "mcexec": {
+      "path": "/home/holden/mckernel-work/scratch/mcexec-preload-fastpath-build-20260928-1/rust/executer/user/mcexec",
+      "identity": {
+        "st_dev": 1828,
+        "st_ino": 147952,
+        "st_mode": 33261,
+        "st_nlink": 1,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_size": 453352,
+        "st_mtime_ns": 1790608592677842234,
+        "st_ctime_ns": 1790608592677842234
+      },
+      "sha256": "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b"
+    }
+  },
+  "original_archives_preserved": true,
+  "archive_suffix_regenerated": false,
+  "base_init_untouched": true
+}

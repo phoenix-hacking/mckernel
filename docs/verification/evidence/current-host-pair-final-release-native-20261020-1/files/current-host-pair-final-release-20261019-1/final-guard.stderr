@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-independent-review-20261019-1/review_final_ihk_logging_release.py", line 107, in <module>
+    if __name__=='__main__':raise SystemExit(main())
+  File "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-independent-review-20261019-1/review_final_ihk_logging_release.py", line 34, in main
+    for value in [a.config_sha256,a.machine_sha256,a.snapshot_sha256]:need(len(value)==64 and all(c in '0123456789abcdef' for c in value),'exact SHA256 argument')
+  File "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-independent-review-20261019-1/review_final_ihk_logging_release.py", line 12, in need
+    if not ok:raise ValueError(label)
+ValueError: exact SHA256 argument

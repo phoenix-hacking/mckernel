@@ -1,0 +1,126 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "EXACT_ROOT41_FILL_AND_EXISTING_ENTRY_SEQUENCE_NOT_EXECUTED",
+  "runtime_authority": null,
+  "sealed_profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/root-selective-adoption-materialization-proposal-source-1/PROFILE.SOURCE-ONLY.json",
+    "bytes": 118748,
+    "sha256": "721547c8246677f55290d98ae9bc161ac0356bcb4ed493bdd28cade1f99552f7"
+  },
+  "source_authority": "Already actual67fc six-source adoption/860533mechanical/941bsource; this document creates no new authority.",
+  "planned_admission": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1",
+  "source_binding_fill": {
+    "template": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/root41-admission-source-1/ROOT-BINDINGS.TEMPLATE.NOT-AUTHORITY.json",
+    "write_new_actual_file": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/root41-admission-source-1/ROOT-ACTUAL-BINDINGS-1.json",
+    "set_by_Root_only": {
+      "author": "/root",
+      "decision": "MATERIALIZE_REVIEWED_CURRENT114_GLOBAL32_PERF3_STATIC_INPUTS_AND_HOLDER_ONLY",
+      "root_attests_exact_UID1000_readonly_exports": true,
+      "nonce": "NEW unused32hex from actualRoot41ledger; never copy oldconsumednonce",
+      "preparation_manifest": "Exact path/bytes/SHA of sealed PREPARATION-MANIFEST.json"
+    },
+    "preserve_known_refs": [
+      "Root41ledger0a841",
+      "currentfreed9e0",
+      "sourceadoption67fc",
+      "mechanical860533",
+      "source941b",
+      "origin2c419/header/env bindings"
+    ]
+  },
+  "phases": [
+    {
+      "phase": "Root exact static metadata staging after independent source PASS; no holder/compiler yet",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/root41-admission-source-1/materialize_admission.py",
+        "--root-bindings",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/root41-admission-source-1/ROOT-ACTUAL-BINDINGS-1.json"
+      ]
+    },
+    {
+      "phase": "Root publish/fetchverify exact newly staged request/profile/helpers, using existing engineering checkpoint/sourcepublisher method",
+      "actual_publication_reference": null
+    },
+    {
+      "phase": "Fresh actual physical capture BEFORE holder; reviewed account/window guard",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/root41-admission-source-1/capture_resources.py",
+        "--physical-output",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/ROOT-PREHOLDER-PHYSICAL-1.json"
+      ]
+    },
+    {
+      "phase": "Exact holder-only entry; waits for one reviewed READY; oneheavy27:4",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/hold_and_run_build_only.py",
+        "--bootstrap-grant",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/ROOT-HOLDER-BOOTSTRAP-GRANT.json"
+      ]
+    },
+    {
+      "phase": "Root fills NEW actual resource input from actual current request/publication/preholder/holder/live other reservations",
+      "template": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/root41-admission-source-1/ROOT-RESOURCE-INPUT.TEMPLATE.NOT-AUTHORITY.json",
+      "actual_file": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/ROOT-ACTUAL-RESOURCE-INPUT-1.json",
+      "fields_from_actual_only": [
+        "author=/root",
+        "decision=BIND_CURRENT110_ACTUAL_HELD_BUILD_RESOURCES",
+        "root_attests_only_intervening_holder_preparation=true",
+        "sameunusednonce/requestsha/profile/requestrefs",
+        "sourcepublicationref",
+        "preholderphysicalref",
+        "runner/worker/exportrefs",
+        "other_reserved_memory_bytes/other_reserved_pids/aggregate_pid_budget"
+      ]
+    },
+    {
+      "phase": "Held fresh resources -> pending input; still no compiler release",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/root41-admission-source-1/capture_resources.py",
+        "--admission",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1",
+        "--root-input",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/ROOT-ACTUAL-RESOURCE-INPUT-1.json"
+      ]
+    },
+    {
+      "phase": "Independent exact execution review on actual held resource/pending input; resourceclock120s notrenewed",
+      "actual_independent_review": null,
+      "actual_approved_pending_input_SHA256": null
+    },
+    {
+      "phase": "Existing publisher after exact independent execution PASS",
+      "argv_prefix": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/publish_approved_ready.py",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1"
+      ],
+      "final_argument": "Actual approved pending-input SHA256 from exact executionreview; never placeholder"
+    },
+    {
+      "phase": "Existing live holder consumes oneREADY and invokes fourbuildcommands; no second launch",
+      "READY": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/HOLDER/ROOT-BUILD-GRANT.READY.json",
+      "commands": [
+        "fullRust",
+        "kernel/syscallC",
+        "processC",
+        "exact11inputrawlink"
+      ]
+    }
+  ],
+  "floors_and_limits": "Existing4CPU2-5/12GiB/512pids/noswap/nonetwork; aggregate7jobs/21.6619GiB; physical7eligibleCPU preserved; HOST16GiB/scratch>=14091616256B(>12GiB); permanent27:4/scratch21; fixed05:36:09Z+earlierclamps/account7fguards.",
+  "actual_guard_query_holder_resource_compiler_or_Git_operations": 0
+}

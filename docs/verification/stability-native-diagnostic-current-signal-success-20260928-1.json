@@ -1,0 +1,87 @@
+{
+  "schema": "mckernel.diagnostic-attempt.v1",
+  "recorded_at": "2026-09-28T10:00:40-07:00",
+  "decision": "PASS_DIAGNOSTIC_PROTOCOL_EVIDENCE",
+  "source_commit": "846ebe49c15bf885cb8982890759bb46746e9591",
+  "checkpoint_commit_before_execution": "e085f0e8c6046f81e890bde1eabd4038f0d503ec",
+  "packet": {
+    "path": "docs/verification/stability-native-diagnostic-current-signal-execution-packet-20260928-6.md",
+    "sha256": "6cc79499689a8d5d0c15e5f48a13e8e95eaca96f28d7289235647dcfcbf99de3",
+    "release": "docs/verification/stability-native-diagnostic-current-signal-execution-release-20260928-6.json",
+    "release_sha256": "284ec4d1e5f124ff61db2b4782935889db9e56ac6a2592e1d762a9bf6a6884b7",
+    "attempts_consumed": 1,
+    "reusable": false
+  },
+  "command": "/usr/bin/sudo -A /home/holden/anaconda3/bin/python3 -B /home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py --attempt-parent /home/holden/mckernel-work/scratch/ndcs-20260928-6 --nonce 0f54526bcbdfd2433bbc5ac7d783a9e2 --owner-sha256 038fe29246bb7977565a53f2346fa981072975eb3c55fdb3571ff6e1da6173f1",
+  "raw_evidence": {
+    "inner": "/home/holden/mckernel-work/scratch/ndcs-20260928-6/attempt-0f54526bcbdfd2433bbc5ac7d783a9e2",
+    "outer": "/home/holden/mckernel-work/scratch/ndcs-20260928-6.owner-0f54526bcbdfd2433bbc5ac7d783a9e2",
+    "outer_readable_copy": "/home/holden/mckernel-work/scratch/native-diagnostic-packet6-outer-review-copy-20260928-1",
+    "inner_regular_file_count": 6,
+    "inner_hashset_sha256": "88ac9809480a5f699fee22b5b0a00d513d90967d438b3f6e6031707f66fd94bd",
+    "outer_regular_file_count": 100,
+    "outer_hashset_sha256": "4434cf94eea26d4b187e7b13f0ab6036cd26da1e429fc6c53e61d14977d64486",
+    "outer_copy_hashset_sha256": "4434cf94eea26d4b187e7b13f0ab6036cd26da1e429fc6c53e61d14977d64486",
+    "hashset_algorithm": "SHA256 of sorted filename NUL decimal-size NUL file-SHA256 newline tuples",
+    "inner_result_sha256": "c8846bf7acaf7e16317bc0e8956ff51e38bc7dd2d2702591c9db2a116ca953ff",
+    "serial_sha256": "27aefbea6ff1dc7f9f15f80960b4e7c549363af1654e9887746dd3158fd6690a",
+    "debugcon_sha256": "bd87db779e6878802fa64fdee99f2eb08dee1529bbea800a65356f051e186685",
+    "qmp_sha256": "f838ef9c8311a73eaa1f785f23d090a7c7d8608fafcf5f047f7f2d259624c94d",
+    "outer_result_sha256": "92b527d394284b315ec1c0770908e341101180e81d8bd9369c70cbad4ea75ef0",
+    "outer_owner_sha256": "0a9985a625eec54935367cdcf8a481515205aab1d750ccc00e79927c456cbf3e",
+    "outer_state_sha256": "fa2510fa0ba7f67d265eec04d521b2d6437ef6f8bf535ecd285125c1d7a1141c",
+    "capture_bindings_sha256": "39a34b3c75acb4a71d1428aade02f6fbb4f41251d74aca01c5be596a9dfa0002"
+  },
+  "observed_behavior": {
+    "real_diagnostic_guest_apps": 1,
+    "case_id": "startup.argv-empty",
+    "stdout_bytes": 91,
+    "stdout_hex": "7b2263617365223a22737461727475702e617267762d656d707479222c2261726763223a342c2261726776223a5b22617070222c2241222c22222c2242225d2c227465726d696e61746f725f69735f6e756c6c223a747275657d0a",
+    "stderr_bytes": 0,
+    "raw_wait_status": 0,
+    "procfs_empty": true,
+    "stream_eof": true,
+    "stream_truncated": false,
+    "qmp_terminal": "shutdown",
+    "qmp_records": 1348,
+    "qmp_matched_successful_pairs": 672,
+    "qemu_identity": {
+      "pid": 11,
+      "pgid": 11,
+      "sid": 11,
+      "starttime_ticks": 82440018,
+      "returncode": -9
+    },
+    "inner_status": "PROTOCOL_PASS",
+    "outer_status": "PROTOCOL_PASS",
+    "inner_cleanup": {
+      "reaped": true,
+      "errors": []
+    },
+    "outer_owner": {
+      "pid": 3296395,
+      "pgid": 3296390,
+      "sid": 3296390,
+      "proc_starttime": 82439910
+    },
+    "docker_client_records": 30,
+    "container_id": "a377dd0bbd5e66a7de58e35882ea9203d5336ad3144b234473faf241c43acc2c",
+    "container_exit_code": 0,
+    "container_oom_killed": false,
+    "absence_verified": true,
+    "lease_retained": false,
+    "matching_live_process_or_container_after": false,
+    "development_lock_available_after": true
+  },
+  "independent_review": {
+    "decision": "PASS_DIAGNOSTIC_PROTOCOL_EVIDENCE",
+    "verified": "source/artifact closure, independent archive/oracle replay, application bytes/status, QMP ordering, QEMU identity/reap, all Docker client identities, container profile/state, capture bindings, removal and final absence",
+    "copy_limitation": "Original-root-to-readable-copy equality uses the coordinator's matching tuple hashsets; the reviewer independently verified the complete readable copy."
+  },
+  "limitations": [
+    "Packet 6, its parent and nonce are consumed and nonreusable.",
+    "This accepts one real diagnostic guest protocol run only.",
+    "It grants no formal catalog/application, M04, production-gate, repeatability, failure-path or whole-OS acceptance."
+  ],
+  "next": "Reuse the validated ownership/collector boundary with a freshly bound memory diagnostic, then files, threads and shutdown under separate exact releases."
+}

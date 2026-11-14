@@ -1,0 +1,54 @@
+--- a/cumulative_accounting.py
++++ b/cumulative_accounting.py
+@@ -60,6 +60,36 @@
+     require(len(rows)*2==receipt['verified_launches'],'actual launch accounting')
+     return total
+ 
++def _short_status(short,proof):
++    require(short['kind']=='completed-short-segment','new segment kind')
++    original=short['original_terminal_status']
++    if original=='SEGMENT_PASS':return 'SEGMENT_PASS',None
++    require(original=='FAIL' and short.get('original_failure_reason')=='trace exact bytes/cap',
++            'unsupported original short failure')
++    adjudication=short.get('offline_adjudication')
++    require(type(adjudication) is dict and adjudication.get('schema')=='p12.uart-onlcr-offline-adjudication.v1',
++            'explicit UART offline adjudication required')
++    require(adjudication.get('original_terminal_status')=='FAIL' and
++            adjudication.get('original_failure_reason')==short['original_failure_reason'] and
++            adjudication.get('adjudicated_terminal_status')=='SEGMENT_PASS' and
++            adjudication.get('transport_decoding')=='uniform_CRLF_to_LF' and
++            adjudication.get('replay_status')=='PROTOCOL_PASS', 'UART adjudication status/reason/decoder')
++    require(adjudication.get('raw_capture_sha256')==short['evidence_sha256'] and
++            adjudication.get('original_result_sha256')==short.get('original_result_sha256'),
++            'UART adjudication capture/result binding')
++    hashes=('raw_capture_sha256','original_result_sha256','manifest_sha256',
++            'original_consumer_sha256','successor_consumer_sha256','unchanged_pair_checker_sha256',
++            'raw_trace_sha256','decoded_trace_sha256','replay_evidence_sha256')
++    require(all(type(adjudication.get(k)) is str and len(adjudication[k])==64 and
++                all(c in '0123456789abcdef' for c in adjudication[k]) for k in hashes),
++            'UART adjudication exact evidence hashes')
++    # The independent qualifier validates these exact raw/result/manifest/source,
++    # inverse-transport and unchanged strict-replay evidence bindings. Receipt
++    # assertions or an unbound PROTOCOL_PASS cannot replace that qualification.
++    require(type(proof) is dict and proof.get('status')=='QUALIFIED' and
++            proof.get('offline_adjudication')==adjudication, 'independently qualified UART adjudication')
++    return 'SEGMENT_PASS',adjudication
++
+ def combine(prefix,short,qualify):
+     """qualify returns a bound QUALIFIED proof including genuine entered/absolute
+     evidence or explicit source-bound producer-entered checks. Root owns actual
+@@ -69,7 +99,7 @@
+     require(callable(qualify),'independent evidence qualifier required')
+     prefix_proof=qualify(prefix);short_proof=qualify(short)
+     require(prefix['kind']=='failed-session-completed-prefix' and prefix['original_terminal_status']=='FAIL','original failure preserved')
+-    require(short['kind']=='completed-short-segment' and short['original_terminal_status']=='SEGMENT_PASS','new segment must complete')
++    short_status,short_adjudication=_short_status(short,short_proof)
+     require(prefix['segment_id']!=short['segment_id'] and prefix['nonce']!=short['nonce'],'duplicate segment/nonce')
+     require(prefix['artifact_bindings']==short['artifact_bindings'],'kernel/module/app/launcher binding mismatch')
+     require(prefix['evidence_sha256']!=short['evidence_sha256'],'duplicate evidence')
+@@ -78,4 +108,4 @@
+     require(len(prefix['completed_rounds'])*2>=100 and len(short['completed_rounds'])>=1,'cumulative launch policy')
+     require(new>=SHORT_NS,'new 90s segment work target')
+     require(old+new>=TARGET_NS,'cumulative mixed work below60min')
+-    return dict(goal_version=GOAL,status='CUMULATIVE_PASS',original_single_session_status='FAIL',uninterrupted_pass=False,qualification_modes=[prefix_proof.get('qualification_mode'),short_proof.get('qualification_mode')],segments=[prefix['segment_id'],short['segment_id']],actual_mixed_work_ns=old+new,successful_launches=prefix['verified_launches']+short['verified_launches'])
++    return dict(goal_version=GOAL,status='CUMULATIVE_PASS',original_single_session_status='FAIL',uninterrupted_pass=False,short_original_terminal_status=short['original_terminal_status'],short_adjudicated_terminal_status=short_status,short_offline_adjudication=short_adjudication,qualification_modes=[prefix_proof.get('qualification_mode'),short_proof.get('qualification_mode')],segments=[prefix['segment_id'],short['segment_id']],actual_mixed_work_ns=old+new,successful_launches=prefix['verified_launches']+short['verified_launches'])

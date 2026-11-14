@@ -1,0 +1,168 @@
+{
+  "acceptance_credit": false,
+  "actual_combined_cpu_seconds": 3.1534720000000003,
+  "actual_result": {
+    "bytes": 3217,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-4/default-image-successor-1/MATERIALIZATION-AND-REQUEST-RESULT.json",
+    "sha256": "209b9ee08943bbf36b51bd3208fe2ca8c061bdec186ac6b50bad6e299b05e61c"
+  },
+  "actual_wall_seconds": 9.712926571955904,
+  "copied_bytes": 120862993,
+  "current_geometry_rule": "Inherited110GiB profile; reconcile coherent successor if142 growth occurs before execution, never reuse stale physical identity.",
+  "eventual_outer_argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-4/default-image-successor-1/native_rust_exact_mckernel_image_container_owner.py",
+    "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-4/default-image-successor-1/image-request.FINAL.json"
+  ],
+  "execution_released": false,
+  "fetched_publication": null,
+  "final_request": null,
+  "fresh_physical_identity_capacity_admission": null,
+  "gitlink_supplement": {
+    "bytes": 96783,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-4/default-image-successor-1/gitlink-inputs.json",
+    "sha256": "bb2b86721185c380e4907007f9a00b2fc546004e27f96998edd9c037e953d91a"
+  },
+  "image": null,
+  "independent_execution_release": null,
+  "materialization_sha256": "0cf60ebe1ba213781da316a709c50e70a4b28448316487fe5ba4ccb95199ac23",
+  "native": null,
+  "pinned_inner_commands": {
+    "configure": [
+      "/usr/bin/cmake",
+      "-S",
+      "/src",
+      "-B",
+      "/work/output/build",
+      "-G",
+      "Unix Makefiles",
+      "-DCMAKE_BUILD_TYPE=Debug",
+      "-DBUILD_TARGET=smp-x86",
+      "-DKERNEL_DIR=/out/build",
+      "-DENABLE_PERF=ON",
+      "-DENABLE_RUSAGE=ON",
+      "-DENABLE_LINUX_WORK_IRQ_FOR_IKC=ON",
+      "-DRUSTC=/nightly/bin/rustc",
+      "-DCMAKE_C_COMPILER=/usr/bin/cc",
+      "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+      "-DENABLE_RUST_KERNEL=ON",
+      "-DENABLE_RUST_IHK_MODULE_HELPERS=ON",
+      "-DENABLE_RUST_USER_TOOLS=ON",
+      "-DMCKERNEL_HOST_IRQ_ABI=linux-6.12",
+      "-DENABLE_NATIVE_FORK_OWNED_TRANSACTION=ON",
+      "-DKBUILD_MAKE_FLAGS=CC=/usr/bin/clang;LD=/usr/bin/ld.lld",
+      "-DCMAKE_MAKE_PROGRAM=/usr/bin/make",
+      "-DCMAKE_LINKER=/usr/bin/ld",
+      "-DCMAKE_AR=/usr/bin/ar",
+      "-DCMAKE_RANLIB=/usr/bin/ranlib",
+      "-DCMAKE_NM=/usr/bin/nm",
+      "-DCMAKE_OBJCOPY=/usr/bin/objcopy",
+      "-DCMAKE_READELF=/usr/bin/readelf",
+      "-DGIT_EXECUTABLE=/usr/bin/git"
+    ],
+    "driver": [
+      "/driver.py",
+      "--source-root",
+      "/src",
+      "--candidate-sha",
+      "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+      "--ihk-sha",
+      "3114d9e7101ad52030eb3effa849a5c108972a1f",
+      "--manifest",
+      "/inputs.json",
+      "--toolchain",
+      "/toolchain.json",
+      "--output",
+      "/work/output",
+      "--evidence",
+      "/work/evidence",
+      "--jobs",
+      "4",
+      "--timeout",
+      "19800",
+      "--gitlink-manifest",
+      "/libdwarf-inputs.json",
+      "--native-fork-owned-transaction"
+    ],
+    "image": [
+      "/usr/bin/cmake",
+      "--build",
+      "/work/output/build",
+      "--target",
+      "mckernel.img",
+      "-j4"
+    ],
+    "production_Rust_object": [
+      "/usr/bin/cmake",
+      "--build",
+      "/work/output/build",
+      "--target",
+      "mckernel_rust_obj",
+      "-j4"
+    ]
+  },
+  "prepared_operation": {
+    "bytes": 6895,
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/default-image-successor-1/OPERATION.PROPOSED.json",
+    "sha256": "3f083d1d3239de07ff9bc0f0a83918668d423627ea354ab783c326cf5b3e13a5"
+  },
+  "production_sources": {
+    "native_rust_exact_build_offline.py": {
+      "bytes": 41116,
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-4/default-image-successor-1/native_rust_exact_build_offline.py",
+      "sha256": "4ca7811da5e9c7b1352ed7d9c986a3307080e2fa7fd1d01d404dd850ed579257"
+    },
+    "native_rust_exact_mckernel_image_container_owner.py": {
+      "bytes": 89722,
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-4/default-image-successor-1/native_rust_exact_mckernel_image_container_owner.py",
+      "sha256": "297488c421a652f1544d1672737f45833b2b5a2e2a96d57a2724690f532f6c61"
+    },
+    "native_rust_exact_mckernel_image_offline.py": {
+      "bytes": 145310,
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-4/default-image-successor-1/native_rust_exact_mckernel_image_offline.py",
+      "sha256": "18017e51cf39e4f2554e70f144669400916a6bcadffb423d248b22b95304887d"
+    }
+  },
+  "profile": {
+    "cpus": "2-5",
+    "heavy_operations": 1,
+    "host_floor_bytes": 17179869184,
+    "jobs_max": 4,
+    "memory_bytes": 12884901888,
+    "memory_swap_bytes": 12884901888,
+    "mutex": "27:4 never unlink",
+    "network": "none",
+    "pids_max": 512,
+    "scratch_UUID": "2a5768c8-718d-4914-bdc0-6b32c5a92a52",
+    "scratch_floor_bytes": 12884901888
+  },
+  "remaining_blocker": "Focused source/profile review of actual candidate; root binds genuine source acceptance/publication, fresh positive predecessor/identity/capacity and independent one-shot heavy release before final request execution.",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_acceptance": null,
+  "source_derivative_sha256": "2a1e94e1d9fd3675e978c7b2fdc3d0cd5b0a4c8f39fc15fe67e6b5e463647d8d",
+  "source_entries": 6959,
+  "source_manifest": {
+    "bytes": 10195266,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-4/default-image-successor-1/source-materialization-attempt-1/source-inputs.json",
+    "sha256": "802f963e8f3ec1c47f98c5f3440b8a132f5b0fa617dd2e014976c63d78870073"
+  },
+  "source_root": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-4/default-image-successor-1/source-materialization-attempt-1/materialized-source",
+  "static_request": {
+    "bytes": 26525037,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-4/default-image-successor-1/image-request.STATIC-DATA.json",
+    "sha256": "65f8f8f0f95f4c75fdd53081c11f9076aeb16ced94303bc0c7ac64b9df0e6921"
+  },
+  "status": "PASS_ACTUAL_COHERENT_SOURCE_AND_STATIC_REQUEST_READY_FOR_FOCUSED_REVIEW",
+  "whole_join": {
+    "closed_streams": true,
+    "direct_child_joined": true,
+    "error": null,
+    "group_absent": true,
+    "pid": 3624138,
+    "retirement_error": null,
+    "returncode": 0,
+    "start": 54652172
+  }
+}

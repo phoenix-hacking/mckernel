@@ -1,0 +1,2221 @@
+{
+  "schema_version": 1,
+  "id": "M15",
+  "scope_id": "project-owned-runtime-rust-cutover-v1-20261024",
+  "title": "Complete Rust/assembly custom host modules and integration runtime",
+  "as_of": "2026-11-10T09:13:49.438016+00:00",
+  "status": "open",
+  "assignment_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "authority": "Explicit user2026-10-24: custom code outside the Rocky/Linux baseline must be Rust, including loadable IHK/project modules; previous reviewed-assembly allowance retained.",
+  "counted_in_practical_35": false,
+  "practical_worklist": "practical-milestones.json",
+  "compute_kernel_worklist": "rust-cutover-m14.json",
+  "guide": "RUST-CUTOVER-M15.md",
+  "inventory_file": "rust-cutover-m15-inventory-20261024.json",
+  "definition_of_done": "All project-owned runtime implementation in the supported delivered system outside M14 is Rust/reviewed assembly, including custom Linux modules, executors, libraries and installed tools. Account for actual selected/linked/deployed code and retain the functional baseline. Linux/third-party/generated boundaries require provenance, not relocation of project C.",
+  "boundary": {
+    "in_scope": [
+      "custom IHK/SMP/mcctrl Linux-loadable modules and transitive project callbacks",
+      "mcexec and project libraries/CLI/diagnostic/monitoring tools",
+      "project-owned installed runtime shell/expect programs",
+      "project-specific runtime helpers even if staged inside Rocky source/build trees"
+    ],
+    "separately_classified": [
+      "Rocky/Linux baseline APIs and legitimate generic platform support",
+      "unmodified third-party libc/BFD/libdwarf/toolchain code",
+      "generated Linux module metadata with no authored project runtime body",
+      "Python campaign/build/test orchestration and test fixtures",
+      "inactive retained C reference/fallback sources"
+    ],
+    "optional_products": "Crash extension, QLMPI/UTI and unsupported configurations need explicit delivery/scope dispositions; disabled is not converted. Final manifest cannot silently omit a delivered optional component.",
+    "working_C_policy": "Keep working C until an equivalent qualified Rust successor exists. Earlier host compatibility exceptions preserve behavior during migration and do not complete M15.",
+    "Linux_control_plane_C": "Explicitly reconfirmed by the user: Rocky/Linux-owned control-plane code may remain C. Project-owned custom runtime is the M14/M15 Rust target."
+  },
+  "existing_rust_modules": [
+    {
+      "target": "ihk.ko",
+      "source": "host-kernel/native-rust/ihk.rs",
+      "status": "existing_Rust_implementation_and_scoped_build_native_evidence",
+      "evidence": "docs/verification/evidence/current-host-pair-205-native-20261019-1/usable-profile-1/USABLE-TESTED-PROFILE-RECIPE.json",
+      "qualification": "Reuse matching evidence only; old module artifact/native proof does not establish current Kbuild C-free ownership or all functionality."
+    },
+    {
+      "target": "ihk-smp-x86_64.ko",
+      "source": "host-kernel/native-rust/ihk_smp_x86_64.rs",
+      "status": "existing_Rust_implementation_and_scoped_build_native_evidence",
+      "evidence": "docs/verification/evidence/current-host-pair-205-native-20261019-1/usable-profile-1/USABLE-TESTED-PROFILE-RECIPE.json",
+      "qualification": "Reuse matching evidence only; old module artifact/native proof does not establish current Kbuild C-free ownership or all functionality."
+    },
+    {
+      "target": "mcctrl.ko",
+      "source": "host-kernel/native-rust/mcctrl.rs",
+      "status": "existing_Rust_implementation_and_scoped_build_native_evidence",
+      "evidence": "docs/verification/evidence/current-host-pair-205-native-20261019-1/usable-profile-1/USABLE-TESTED-PROFILE-RECIPE.json",
+      "qualification": "Reuse matching evidence only; old module artifact/native proof does not establish current Kbuild C-free ownership or all functionality."
+    }
+  ],
+  "existing_user_rust_or_assembly": [
+    {
+      "target": "sched_yield",
+      "kind": "installed shared library",
+      "selected_c": [],
+      "selected_rust": [
+        "executer/user/rust/libsched_yield.rs"
+      ],
+      "selector": "executer/user/CMakeLists.txt:216",
+      "remaining": "Rust source replaces libsched_yield.c in this configuration.",
+      "proof_gap": [
+        "current exact artifact/default symbol and applicable native proof not independently checked here"
+      ]
+    },
+    {
+      "target": "ldump2mcdump",
+      "kind": "installed shared library",
+      "selected_c": [],
+      "selected_rust": [
+        "executer/user/rust/ldump2mcdump_helpers.rs"
+      ],
+      "selector": "executer/user/CMakeLists.txt:494",
+      "remaining": "Rust source replaces ldump2mcdump.c in this configuration.",
+      "proof_gap": [
+        "current exact artifact/default symbol and applicable native dump conversion proof not independently checked here"
+      ]
+    },
+    {
+      "target": "mcstat",
+      "kind": "installed executable",
+      "selected_c": [],
+      "selected_rust": [
+        "tools/mcstat/rust/mcstat.rs"
+      ],
+      "selector": "tools/mcstat/CMakeLists.txt:36",
+      "remaining": "Rust main replaces mcstat.c, but links ihklib, whose selected implementation remains C.",
+      "proof_gap": [
+        "current exact Rust object/link/native monitoring proof not independently checked here",
+        "transitive ihklib C retirement"
+      ]
+    },
+    {
+      "target": "libmcexec",
+      "kind": "static assembly support library",
+      "selected_c": [],
+      "selected_rust": [],
+      "selected_assembly": [
+        "executer/user/arch/x86_64/archdep.S"
+      ],
+      "selector": "executer/user/CMakeLists.txt:27",
+      "remaining": "Assembly support for launcher; review status not reassessed.",
+      "proof_gap": [
+        "existing reviewed-assembly status and exact linked ABI evidence not independently checked here"
+      ]
+    }
+  ],
+  "files": [
+    {
+      "id": "M15-F01",
+      "path": "host-kernel/native-rust/mcctrl_vm_write_compat.c",
+      "target": "mcctrl.ko",
+      "status": "complete",
+      "source_selection": "host-kernel/kbuild/Kbuild.in:10",
+      "existing_rust": [
+        "host-kernel/native-rust/mcctrl.rs",
+        "host-kernel/native-rust/mcctrl_vm.rs"
+      ],
+      "functional_subgoals": [
+        {
+          "id": "M15-F01-01",
+          "title": "Rust mmap write-lock semantics",
+          "status": "complete",
+          "owner": "/root",
+          "next_action": "Retain exact supported source/module/native proof; broader fork revoke/final-ACK lifecycle remains separately open.",
+          "proof": {
+            "implementation": {
+              "status": "pass",
+              "evidence": [
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-rustmm-strict235-native-scope-decision-1/INDEPENDENT-M15-F01-SCOPE-DECISION.json",
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/M15-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json"
+              ]
+            },
+            "focused_checks": {
+              "status": "pass",
+              "evidence": [
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-rustmm-strict235-native-scope-decision-1/INDEPENDENT-M15-F01-SCOPE-DECISION.json",
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/M15-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json"
+              ]
+            },
+            "production_link": {
+              "status": "pass",
+              "evidence": [
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-rustmm-strict235-native-scope-decision-1/INDEPENDENT-M15-F01-SCOPE-DECISION.json",
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/M15-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json"
+              ]
+            },
+            "native_validation": {
+              "status": "pass",
+              "evidence": [
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-rustmm-strict235-native-scope-decision-1/INDEPENDENT-M15-F01-SCOPE-DECISION.json",
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/M15-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json"
+              ]
+            }
+          },
+          "remaining_functions": [
+            "mckernel_inherited_mmap_write_lock"
+          ]
+        },
+        {
+          "id": "M15-F01-02",
+          "title": "Rust mmap write-unlock semantics",
+          "status": "complete",
+          "owner": "/root",
+          "next_action": "Retain exact supported source/module/native proof; broader fork revoke/final-ACK lifecycle remains separately open.",
+          "proof": {
+            "implementation": {
+              "status": "pass",
+              "evidence": [
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-rustmm-strict235-native-scope-decision-1/INDEPENDENT-M15-F01-SCOPE-DECISION.json",
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/M15-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json"
+              ]
+            },
+            "focused_checks": {
+              "status": "pass",
+              "evidence": [
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-rustmm-strict235-native-scope-decision-1/INDEPENDENT-M15-F01-SCOPE-DECISION.json",
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/M15-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json"
+              ]
+            },
+            "production_link": {
+              "status": "pass",
+              "evidence": [
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-rustmm-strict235-native-scope-decision-1/INDEPENDENT-M15-F01-SCOPE-DECISION.json",
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/M15-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json"
+              ]
+            },
+            "native_validation": {
+              "status": "pass",
+              "evidence": [
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-rustmm-strict235-native-scope-decision-1/INDEPENDENT-M15-F01-SCOPE-DECISION.json",
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/M15-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json"
+              ]
+            }
+          },
+          "remaining_functions": [
+            "mckernel_inherited_mmap_write_unlock"
+          ]
+        },
+        {
+          "id": "M15-F01-03",
+          "title": "Rust VMA start-write semantics",
+          "status": "complete",
+          "owner": "/root",
+          "next_action": "Retain exact supported source/module/native proof; broader fork revoke/final-ACK lifecycle remains separately open.",
+          "proof": {
+            "implementation": {
+              "status": "pass",
+              "evidence": [
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-rustmm-strict235-native-scope-decision-1/INDEPENDENT-M15-F01-SCOPE-DECISION.json",
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/M15-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json"
+              ]
+            },
+            "focused_checks": {
+              "status": "pass",
+              "evidence": [
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-rustmm-strict235-native-scope-decision-1/INDEPENDENT-M15-F01-SCOPE-DECISION.json",
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/M15-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json"
+              ]
+            },
+            "production_link": {
+              "status": "pass",
+              "evidence": [
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-rustmm-strict235-native-scope-decision-1/INDEPENDENT-M15-F01-SCOPE-DECISION.json",
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/M15-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json"
+              ]
+            },
+            "native_validation": {
+              "status": "pass",
+              "evidence": [
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-rustmm-strict235-native-scope-decision-1/INDEPENDENT-M15-F01-SCOPE-DECISION.json",
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/M15-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json"
+              ]
+            }
+          },
+          "remaining_functions": [
+            "mckernel_inherited_vma_start_write"
+          ]
+        }
+      ],
+      "blocker": null,
+      "file_closure": {
+        "status": "complete",
+        "requirement": "Remove this project C object from actual selected Kbuild/staging only after equivalent Rust successors and matched module proof.",
+        "evidence": [
+          "docs/verification/evidence/os-recovery-adoption-20261025-0254/M15-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json",
+          "docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-rustmm-strict235-native-scope-decision-1/INDEPENDENT-M15-F01-SCOPE-DECISION.json",
+          "docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-RUSTMM-STRICT235-NATIVE-ADMISSION-1/INDEPENDENT-CASE-AND-POSTJOIN-REVIEW.json"
+        ],
+        "supported_profile": "Exact pinned Linux/current RustMM57546/SMP887dc +F02image2ed7/launcher dca025 supported profile, matching codegen and mandatory native adopted-VMA protocol path. Not every configuration or caller.",
+        "broader_lifecycle_open": "OPEN; parent ACK256/token3 errno0 abandoned1 is preserved waiter-abandonment; no inference of waited destructor ACK"
+      },
+      "owner": "/root/m15_mm",
+      "source_preparation": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-7/ihk-rust-module-closure/mm-rust-candidate/BLOCKED-PROPOSAL.md",
+        "status": "source_and_fixture_preparation_only",
+        "Rust_successor_implemented": false,
+        "unresolved": [
+          "Rust/reviewed-assembly static-key and jump-table gate equivalence",
+          "Rust/LKMM raw access, WRITE_ONCE and sequence barrier equivalence",
+          "actual Rust-equivalence fixture, pinned SDK layout/codegen and module link",
+          "matching changed-path native acceptance"
+        ],
+        "compiler_or_native_execution": false
+      },
+      "latest_dispatcher_checkpoint": {
+        "implemented": "All three project C MM wrapper providers replaced by selected Rust/reviewed assembly at exact pinned supported profile.",
+        "actual": "Independent strict235 exact tuple passed plus mandatory successful adopted-VMA callchain proves all three providers including RAII unlock; original file contract met.",
+        "limits": "OPEN; parent ACK256/token3 errno0 abandoned1 is preserved waiter-abandonment; no inference of waited destructor ACK Full M15 remains open."
+      },
+      "current_increment": {
+        "at": "2026-10-25T04:53:34.467560+00:00",
+        "actual_progress": "Canonical RustMM/Kbuild Rust+2ASM and coherent55source/21ABI tuple reused; genuine retainedMM leaf/processedwarning readback acceptance bound; capsule/stage wrapper source ready, actualstage/nativeUNRUN.",
+        "engineering_percentage": null
+      },
+      "source_reconciliation_20261025": {
+        "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+        "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-mm-source-1/SOURCE-REUSE.json",
+        "finding": "All three MM wrapper successors already exist in canonical mcctrl_mm_write.rs; current Kbuild selects Rust plus reviewed assembly. Twelve source/control bindings match retained prior relation; preceding selected-C/source-unimplemented fields are historical and superseded at source scope only.",
+        "source_successor_implemented": true,
+        "current_selected_project_C_wrapper": false,
+        "native_file_retirement": "OPEN; coherent current retained-module functional MM consumer proof required",
+        "new_tests": 0,
+        "new_native": 0
+      },
+      "historical_blocker_before_20261027_native_tuple_review": "Pinned6.12 lacks ready Rust MM/static-key abstractions. Raw down_write/up_write alone is not equivalent; tracing/static-key registration and LKMM access/barrier semantics remain to prove. No kernel change or unsupported substitution is authorized.",
+      "current_native_gap_review": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m15-mm-nearest-file-closure-1/INDEPENDENT-SCOPE-DECISION.json",
+        "bytes": 12219,
+        "sha256": "f5271b63de77683aa1dbbc64cf86ee474aea004c3525f1bdf8374738b523869a"
+      },
+      "previous_source_preparation_is_historical": true,
+      "current_proof": {
+        "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-rustmm-strict235-native-scope-decision-1/INDEPENDENT-M15-F01-SCOPE-DECISION.json",
+        "bytes": 13254,
+        "sha256": "7c925ec9e387ad997e2c806412c4dcf1754bbdec2a576f9b9f7db930837192c1"
+      }
+    },
+    {
+      "id": "M15-F02",
+      "path": "executer/user/mcexec.c",
+      "target": "mcexec",
+      "status": "open",
+      "source_selection": "executer/user/CMakeLists.txt:33",
+      "existing_rust": [
+        "executer/user/rust/mcexec_helpers.rs"
+      ],
+      "current_increment": {
+        "at": "2026-10-25T04:53:34.467560+00:00",
+        "actual_progress": "ExistingHOST349callbacks/entry51DATA retained; SDK11lifetime33AST adapter+explicitruntimeRustc prepared; actualfinite7014/121MBsourcecopyPASS. Finalmetadataretained-onlyAST3.8compatcontinuationunderreview; 9SDKcommandsUNRUN.",
+        "engineering_percentage": null
+      },
+      "proof_gap": [
+        "inventory of selected C callback bodies and ABI equivalents",
+        "C-free default object/link map",
+        "matching native process/exec/wait and resource/lifecycle proof"
+      ],
+      "remaining_selected_body_count": null,
+      "functional_subgoals": [
+        {
+          "id": "M15-F02-01",
+          "title": "Remaining selected C bodies",
+          "status": "open",
+          "owner": null,
+          "next_action": "Enumerate current live bodies/callbacks incrementally from the selected consumer; reuse existing Rust and implement the next substantive body.",
+          "proof": {
+            "implementation": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "focused_checks": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "production_link": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "native_validation": {
+              "status": "unassessed",
+              "evidence": []
+            }
+          }
+        },
+        {
+          "id": "M15-F02-02",
+          "title": "Default Rust consumer and ABI",
+          "status": "open",
+          "owner": null,
+          "next_action": "Select actual Rust implementation while preserving public CLI/library/process interfaces and exact platform ABI.",
+          "proof": {
+            "implementation": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "focused_checks": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "production_link": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "native_validation": {
+              "status": "unassessed",
+              "evidence": []
+            }
+          }
+        },
+        {
+          "id": "M15-F02-03",
+          "title": "Actual artifact and functional behavior",
+          "status": "open",
+          "owner": null,
+          "next_action": "Prove actual linked ownership plus matching application/lifecycle behavior; source-only selection is insufficient.",
+          "proof": {
+            "implementation": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "focused_checks": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "production_link": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "native_validation": {
+              "status": "unassessed",
+              "evidence": []
+            }
+          }
+        }
+      ],
+      "file_closure": {
+        "status": "open",
+        "requirement": "No project-owned C body or callback from this selected target remains in the delivered runtime; preserve third-party ABI and matching native behavior."
+      },
+      "owner": "/root/m15_tools",
+      "latest_dispatcher_checkpoint": {
+        "at": "2026-10-28T00:59:10.694336+00:00",
+        "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+        "actual_progress": {
+          "selected_Rust_executor": "e5d18169 unchanged actualselected7908/loader8417",
+          "original_startup_native": "FULLPASS22a1/independent7965/trace905b/Rootbdf1",
+          "application": "actual app,A,empty,B/91Bstdout/emptyerr/raw0, completeEOF/no truncation",
+          "retirement": "PID256terminal231/ACK3errno0abandoned1/query513-11/DELETE/distinctquery515zero withinoriginal5s",
+          "actual_current_free": "0ae5/30clients33actors/Root45610578",
+          "actual_native_functional_case_delta": 1,
+          "whole_file_delta": 0,
+          "all349_all51_allocation_claim": false
+        },
+        "native_timing": {
+          "wall_seconds": 38.691237926483154,
+          "controller_cpu_seconds": 0.963369,
+          "controller_peak_RSS_KiB": 52896,
+          "resource_to_entry_seconds": 42.78076124191284
+        },
+        "original_next": "Strict235 exec/wait clause bd5a/0e3a remains OPEN, along with original broader ABI/allocation/cancel/recovery/resource obligations; useexisting537cbpayload/e5d/loader, caseboundRustcollector source underprocess235owner, no executor rewrite/rebuild."
+      },
+      "latest_checkpoint": {
+        "actual": "PrivateF4Ddefaultintegration9a94 SourcePASS independentcustodyreview; no configure/link/install/newlauncher/native operation.",
+        "implemented": "Reuses14acceptedRustpatches/349-provider source; separateusercompiler/defaultCrefgate/dedicatedmcexec_runtime installproposal.",
+        "limits": "CanonicaldefaultstillretainsC;349parity/51data/allocation/deliveredELF/default/install/native remainOPEN."
+      },
+      "checkpoint": {
+        "implemented": "F4D Rust349bridges+main/utilthread/3inline selected,19sourceRootadoption andactualfinite7015filecopy; no duplicateport.",
+        "actual": "Actual6phase7908selectedtarget/stagedinstall and3loadercommands8417 accepted; installede5d. Initialnativebe6eFAILwrongc020compiledargv, noexecutorbug. CorrectRustcollectord0bfHOST5steps+16controls939ec, actualcorrectstage23e2/eb045/dd94 acceptedSOURCEARTIFACT, matchingoriginalstartupnativeOPEN.",
+        "limits": "No all349/all51/allocation/fullfile/native completion extrapolatedfromsourcefunctiondeselection or HOST/link. Original91Bargvempty andcurrentoriginalnativecontrols retained."
+      }
+    },
+    {
+      "id": "M15-F03",
+      "path": "executer/user/mcinspect_bfd_shim.c",
+      "target": "mcinspect",
+      "status": "open",
+      "source_selection": "executer/user/CMakeLists.txt:100",
+      "existing_rust": [
+        "executer/user/rust/mcinspect_helpers.rs"
+      ],
+      "current_increment": {
+        "at": "2026-10-28T20:10:37.386817+00:00",
+        "actual_progress": "Independent f92028de accepts actual current-default Rust mcinspect/eclair links and BFD ABI/provider/object ownership from exact3command producerfaac. Configure/build/readback0; wall8.201202s/CPU8.009559s/peakRSS108764KiB. AcceptedSDK21 source/ABI evidence reused, no producer replay. Matching valid diagnostics/native, installation and whole-file acceptance remainOPEN.",
+        "engineering_percentage": null,
+        "evidence": [
+          "docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-resume-20261028-1/BFD-ROOT-SOURCE-ADOPTION.json",
+          "docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-restart-independent-review-20261028-1/ACTUAL-PRODUCER-REVIEW-1/REVIEW.json"
+        ],
+        "proof_stage": "CURRENT_DEFAULT_ARTIFACT_ACCEPTED",
+        "producer_commands": 3,
+        "default_artifact_acceptance": "docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-restart-independent-review-20261028-1/ACTUAL-PRODUCER-REVIEW-1/REVIEW.json",
+        "matching_native_acceptance": false,
+        "installation_acceptance": false,
+        "whole_file_acceptance": false
+      },
+      "proof_gap": [
+        "replace BFD macro wrappers using checked Rust binding or reviewed ASM ABI",
+        "C-free project object/link closure",
+        "matched native diagnostic behavior"
+      ],
+      "remaining_selected_body_count": null,
+      "functional_subgoals": [
+        {
+          "id": "M15-F03-01",
+          "title": "Rust BFD get_symtab_upper_bound adapter",
+          "status": "open",
+          "owner": null,
+          "next_action": "Use the pinned BFD ABI and existing Rust tool body; retain error/ownership behavior and prove real link closure.",
+          "proof": {
+            "implementation": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "focused_checks": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "production_link": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "native_validation": {
+              "status": "unassessed",
+              "evidence": []
+            }
+          },
+          "remaining_functions": [
+            "mcinspect_bfd_get_symtab_upper_bound_bridge"
+          ]
+        },
+        {
+          "id": "M15-F03-02",
+          "title": "Rust BFD canonicalize_symtab adapter",
+          "status": "open",
+          "owner": null,
+          "next_action": "Use the pinned BFD ABI and existing Rust tool body; retain error/ownership behavior and prove real link closure.",
+          "proof": {
+            "implementation": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "focused_checks": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "production_link": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "native_validation": {
+              "status": "unassessed",
+              "evidence": []
+            }
+          },
+          "remaining_functions": [
+            "mcinspect_bfd_canonicalize_symtab_bridge"
+          ]
+        }
+      ],
+      "file_closure": {
+        "status": "open",
+        "requirement": "No project-owned C body or callback from this selected target remains in the delivered runtime; preserve third-party ABI and matching native behavior."
+      },
+      "owner": "/root/bfddefault",
+      "latest_dispatcher_checkpoint": {
+        "at": "2026-10-28T20:10:37.386817+00:00",
+        "actual_progress": "Current default artifact accepted f92028de; matched valid diagnostic/native/installation/file obligations OPEN; container2460 normalretirement/current-free pending.",
+        "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-restart-independent-review-20261028-1/ACTUAL-PRODUCER-REVIEW-1/REVIEW.json"
+      }
+    },
+    {
+      "id": "M15-F04",
+      "path": "executer/user/eclair_bfd_shim.c",
+      "target": "eclair",
+      "status": "open",
+      "source_selection": "executer/user/CMakeLists.txt:172",
+      "existing_rust": [
+        "executer/user/rust/eclair_helpers.rs",
+        "executer/user/rust/arch_eclair_x86_64.rs"
+      ],
+      "current_increment": {
+        "at": "2026-10-28T20:10:37.386817+00:00",
+        "actual_progress": "Independent f92028de accepts actual current-default Rust mcinspect/eclair links and BFD ABI/provider/object ownership from exact3command producerfaac. Configure/build/readback0; wall8.201202s/CPU8.009559s/peakRSS108764KiB. AcceptedSDK21 source/ABI evidence reused, no producer replay. Matching valid diagnostics/native, installation and whole-file acceptance remainOPEN.",
+        "engineering_percentage": null,
+        "evidence": [
+          "docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-resume-20261028-1/BFD-ROOT-SOURCE-ADOPTION.json",
+          "docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-restart-independent-review-20261028-1/ACTUAL-PRODUCER-REVIEW-1/REVIEW.json"
+        ],
+        "proof_stage": "CURRENT_DEFAULT_ARTIFACT_ACCEPTED",
+        "producer_commands": 3,
+        "default_artifact_acceptance": "docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-restart-independent-review-20261028-1/ACTUAL-PRODUCER-REVIEW-1/REVIEW.json",
+        "matching_native_acceptance": false,
+        "installation_acceptance": false,
+        "whole_file_acceptance": false
+      },
+      "proof_gap": [
+        "replace BFD macro wrappers using checked Rust binding or reviewed ASM ABI",
+        "C-free project object/link closure",
+        "matched native diagnostic behavior"
+      ],
+      "remaining_selected_body_count": null,
+      "functional_subgoals": [
+        {
+          "id": "M15-F04-01",
+          "title": "Rust BFD get_symtab_upper_bound adapter",
+          "status": "open",
+          "owner": null,
+          "next_action": "Use the pinned BFD ABI and existing Rust tool body; retain error/ownership behavior and prove real link closure.",
+          "proof": {
+            "implementation": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "focused_checks": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "production_link": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "native_validation": {
+              "status": "unassessed",
+              "evidence": []
+            }
+          },
+          "remaining_functions": [
+            "eclair_bfd_get_symtab_upper_bound_bridge"
+          ]
+        },
+        {
+          "id": "M15-F04-02",
+          "title": "Rust BFD canonicalize_symtab adapter",
+          "status": "open",
+          "owner": null,
+          "next_action": "Use the pinned BFD ABI and existing Rust tool body; retain error/ownership behavior and prove real link closure.",
+          "proof": {
+            "implementation": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "focused_checks": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "production_link": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "native_validation": {
+              "status": "unassessed",
+              "evidence": []
+            }
+          },
+          "remaining_functions": [
+            "eclair_bfd_canonicalize_symtab_bridge"
+          ]
+        }
+      ],
+      "file_closure": {
+        "status": "open",
+        "requirement": "No project-owned C body or callback from this selected target remains in the delivered runtime; preserve third-party ABI and matching native behavior."
+      },
+      "owner": "/root/bfddefault",
+      "latest_dispatcher_checkpoint": {
+        "at": "2026-10-28T20:10:37.386817+00:00",
+        "actual_progress": "Current default artifact accepted f92028de; matched valid diagnostic/native/installation/file obligations OPEN; container2460 normalretirement/current-free pending.",
+        "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-restart-independent-review-20261028-1/ACTUAL-PRODUCER-REVIEW-1/REVIEW.json"
+      }
+    },
+    {
+      "id": "M15-F05",
+      "path": "ihk/linux/user/ihklib.c",
+      "target": "ihklib",
+      "status": "open",
+      "source_selection": "ihk/linux/user/CMakeLists.txt:21",
+      "existing_rust": [
+        "ihk/linux/user/rust/whole70/libihklib_whole70.rs"
+      ],
+      "current_increment": {
+        "at": "2026-10-25T04:53:34.467560+00:00",
+        "actual_progress": "Source-producedRustlibihk70functions+6data andexactABI/link reused; prior4artifactinstall+3loaderchecks andphysical accepted. NewCLI/native lifecycle/defaultretirementOPEN.",
+        "engineering_percentage": null
+      },
+      "proof_gap": [
+        "SelectedSDK canonical source/header/ABI/link PASS applies only to frozen supported whole70 route; qualify remaining configurations and delivered/default selection",
+        "Matched native library lifecycle/error/resource restoration behavior",
+        "Whole-file C/callback retirement acceptance remains OPEN"
+      ],
+      "remaining_selected_body_count": null,
+      "functional_subgoals": [
+        {
+          "id": "M15-F05-01",
+          "title": "Remaining selected C bodies",
+          "status": "open",
+          "owner": null,
+          "next_action": "Enumerate current live bodies/callbacks incrementally from the selected consumer; reuse existing Rust and implement the next substantive body.",
+          "proof": {
+            "implementation": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "focused_checks": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "production_link": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "native_validation": {
+              "status": "unassessed",
+              "evidence": []
+            }
+          }
+        },
+        {
+          "id": "M15-F05-02",
+          "title": "Default Rust consumer and ABI",
+          "status": "open",
+          "owner": null,
+          "next_action": "Reuse accepted selectedSDK canonical Rust/header ABI/link proof; qualify installed/delivered default and native behavior.",
+          "proof": {
+            "implementation": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "focused_checks": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "production_link": {
+              "status": "partial",
+              "evidence": [
+                {
+                  "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-libihk-next/canonical-source-producer-SDK-target-operation-1/bounded-top-level-cache-dependency-correction-1/selected-source-1/workspace/native-running-modules-candidate-1315033c6e40480ea1b61cf8159c0c19/evidence/receipt.json",
+                  "sha256": "969a603a696f8b2cfde0464ac07654a602a224aaff4fd49bad236fcf69cdf8d3",
+                  "bytes": 35176,
+                  "scope": "Actual selected canonical-source SDK11 header/ABI/link PASS;70T+6data, callerimports4/13/0; no CLI/default/native/file closure acceptance"
+                }
+              ]
+            },
+            "native_validation": {
+              "status": "unassessed",
+              "evidence": []
+            }
+          }
+        },
+        {
+          "id": "M15-F05-03",
+          "title": "Actual artifact and functional behavior",
+          "status": "open",
+          "owner": null,
+          "next_action": "Reuse actual linked artifact ownership proof; perform matching native application/lifecycle/error/resource restoration checks when separately released.",
+          "proof": {
+            "implementation": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "focused_checks": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "production_link": {
+              "status": "partial",
+              "evidence": [
+                {
+                  "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-libihk-next/canonical-source-producer-SDK-target-operation-1/bounded-top-level-cache-dependency-correction-1/selected-source-1/workspace/native-running-modules-candidate-1315033c6e40480ea1b61cf8159c0c19/evidence/receipt.json",
+                  "sha256": "969a603a696f8b2cfde0464ac07654a602a224aaff4fd49bad236fcf69cdf8d3",
+                  "bytes": 35176,
+                  "scope": "Actual selected canonical-source SDK11 header/ABI/link PASS;70T+6data, callerimports4/13/0; no CLI/default/native/file closure acceptance"
+                }
+              ]
+            },
+            "native_validation": {
+              "status": "unassessed",
+              "evidence": []
+            }
+          }
+        }
+      ],
+      "file_closure": {
+        "status": "open",
+        "requirement": "No project-owned C body or callback from this selected target remains in the delivered runtime; preserve third-party ABI and matching native behavior."
+      },
+      "owner": "/root/m15_tools",
+      "latest_dispatcher_checkpoint": {
+        "implemented": "Daemon27 source ready; exact producedprovider13189639 and full11 source map reviewed. SDK7/default/native dependency pending; no duplicate heavy owner.",
+        "actual": "Daemon27 source ready; exact producedprovider13189639 and full11 source map reviewed. SDK7/default/native dependency pending; no duplicate heavy owner.",
+        "limits": "No new default/native/wholefile closure."
+      }
+    },
+    {
+      "id": "M15-F06",
+      "path": "ihk/linux/user/ihkconfig.c",
+      "target": "ihkconfig",
+      "status": "open",
+      "source_selection": "ihk/linux/user/CMakeLists.txt:26",
+      "existing_rust": [
+        "ihk/linux/user/rust/ihkconfig.rs"
+      ],
+      "current_increment": {
+        "at": "2026-10-25T04:53:34.467560+00:00",
+        "actual_progress": "Rustihkconfig SDKABI/link4imports +priorprivateinstall/loader accepted; realCLI/native/defaultretirementOPEN.",
+        "engineering_percentage": null
+      },
+      "proof_gap": [
+        "Rust CLI/action/exit-code/diagnostic parity",
+        "SelectedSDK Rust source selector/link PASS; installed/delivered default selection remains OPEN",
+        "matched native management operations"
+      ],
+      "remaining_selected_body_count": null,
+      "functional_subgoals": [
+        {
+          "id": "M15-F06-01",
+          "title": "Remaining selected C bodies",
+          "status": "partial",
+          "owner": null,
+          "next_action": "Independent Rust CLI/contract review and actual production library/default selector/link; hoststub is not native proof.",
+          "proof": {
+            "implementation": {
+              "status": "partial",
+              "evidence": [
+                {
+                  "path": "docs/verification/evidence/velocity-intervention-20261023-7/m15-ihkconfig/root-owned-first-fixture-1/ACTUAL-WHOLE-JOIN.json",
+                  "sha256": "f0e58de58675e5e2fa51c1474ebd98147bc9e06014ef9736b8674671ae45a886",
+                  "size": 3374,
+                  "scope": "Actual defaultstub188 C/Rust parity+3 separatelyidentifieddefinedbehaviorcases PASS; KRM/default installedlink/native unproven."
+                }
+              ]
+            },
+            "focused_checks": {
+              "status": "partial",
+              "evidence": [
+                {
+                  "path": "docs/verification/evidence/velocity-intervention-20261023-7/m15-ihkconfig/root-owned-first-fixture-1/ACTUAL-WHOLE-JOIN.json",
+                  "sha256": "f0e58de58675e5e2fa51c1474ebd98147bc9e06014ef9736b8674671ae45a886",
+                  "size": 3374,
+                  "scope": "Actual defaultstub188 C/Rust parity+3 separatelyidentifieddefinedbehaviorcases PASS; KRM/default installedlink/native unproven."
+                }
+              ]
+            },
+            "production_link": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "native_validation": {
+              "status": "unassessed",
+              "evidence": []
+            }
+          }
+        },
+        {
+          "id": "M15-F06-02",
+          "title": "Default Rust consumer and ABI",
+          "status": "open",
+          "owner": null,
+          "next_action": "Reuse accepted selectedSDK canonical Rust/header ABI/link proof; qualify installed/delivered default and native behavior.",
+          "proof": {
+            "implementation": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "focused_checks": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "production_link": {
+              "status": "partial",
+              "evidence": [
+                {
+                  "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-libihk-next/canonical-source-producer-SDK-target-operation-1/bounded-top-level-cache-dependency-correction-1/selected-source-1/workspace/native-running-modules-candidate-1315033c6e40480ea1b61cf8159c0c19/evidence/receipt.json",
+                  "sha256": "969a603a696f8b2cfde0464ac07654a602a224aaff4fd49bad236fcf69cdf8d3",
+                  "bytes": 35176,
+                  "scope": "Actual selected canonical-source SDK11 header/ABI/link PASS;70T+6data, callerimports4/13/0; no CLI/default/native/file closure acceptance"
+                }
+              ]
+            },
+            "native_validation": {
+              "status": "unassessed",
+              "evidence": []
+            }
+          }
+        },
+        {
+          "id": "M15-F06-03",
+          "title": "Actual artifact and functional behavior",
+          "status": "open",
+          "owner": null,
+          "next_action": "Reuse actual linked artifact ownership proof; perform matching native application/lifecycle/error/resource restoration checks when separately released.",
+          "proof": {
+            "implementation": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "focused_checks": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "production_link": {
+              "status": "partial",
+              "evidence": [
+                {
+                  "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-libihk-next/canonical-source-producer-SDK-target-operation-1/bounded-top-level-cache-dependency-correction-1/selected-source-1/workspace/native-running-modules-candidate-1315033c6e40480ea1b61cf8159c0c19/evidence/receipt.json",
+                  "sha256": "969a603a696f8b2cfde0464ac07654a602a224aaff4fd49bad236fcf69cdf8d3",
+                  "bytes": 35176,
+                  "scope": "Actual selected canonical-source SDK11 header/ABI/link PASS;70T+6data, callerimports4/13/0; no CLI/default/native/file closure acceptance"
+                }
+              ]
+            },
+            "native_validation": {
+              "status": "unassessed",
+              "evidence": []
+            }
+          }
+        }
+      ],
+      "file_closure": {
+        "status": "open",
+        "requirement": "No project-owned C body or callback from this selected target remains in the delivered runtime; preserve third-party ABI and matching native behavior."
+      },
+      "owner": "/root/m15_tools",
+      "private_candidate_root": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-7/m15-ihkconfig",
+      "current_source_work": "Canonical Rust CLI source selected in qualifiedSDK source build; compiler/link proof actual. Retained C references and native/installed-default/file closure remain unaccepted.",
+      "latest_dispatcher_checkpoint": {
+        "implemented": "Daemon27 source ready; exact producedprovider13189639 and full11 source map reviewed. SDK7/default/native dependency pending; no duplicate heavy owner.",
+        "actual": "Daemon27 source ready; exact producedprovider13189639 and full11 source map reviewed. SDK7/default/native dependency pending; no duplicate heavy owner.",
+        "limits": "No new default/native/wholefile closure."
+      }
+    },
+    {
+      "id": "M15-F07",
+      "path": "ihk/linux/user/ihkosctl.c",
+      "target": "ihkosctl",
+      "status": "open",
+      "source_selection": "ihk/linux/user/CMakeLists.txt:31",
+      "existing_rust": [
+        "ihk/linux/user/rust/ihkosctl.rs"
+      ],
+      "current_increment": {
+        "at": "2026-10-25T04:53:34.467560+00:00",
+        "actual_progress": "Rustihkosctl SDKABI/link13imports +priorprivateinstall/loader accepted; realCLI/native/defaultretirementOPEN.",
+        "engineering_percentage": null
+      },
+      "proof_gap": [
+        "Rust CLI/action/exit-code/diagnostic parity",
+        "SelectedSDK Rust source selector/link PASS; installed/delivered default selection remains OPEN",
+        "matched native OS lifecycle operations"
+      ],
+      "remaining_selected_body_count": null,
+      "functional_subgoals": [
+        {
+          "id": "M15-F07-01",
+          "title": "Remaining selected C bodies",
+          "status": "open",
+          "owner": null,
+          "next_action": "Enumerate current live bodies/callbacks incrementally from the selected consumer; reuse existing Rust and implement the next substantive body.",
+          "proof": {
+            "implementation": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "focused_checks": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "production_link": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "native_validation": {
+              "status": "unassessed",
+              "evidence": []
+            }
+          }
+        },
+        {
+          "id": "M15-F07-02",
+          "title": "Default Rust consumer and ABI",
+          "status": "open",
+          "owner": null,
+          "next_action": "Reuse accepted selectedSDK canonical Rust/header ABI/link proof; qualify installed/delivered default and native behavior.",
+          "proof": {
+            "implementation": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "focused_checks": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "production_link": {
+              "status": "partial",
+              "evidence": [
+                {
+                  "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-libihk-next/canonical-source-producer-SDK-target-operation-1/bounded-top-level-cache-dependency-correction-1/selected-source-1/workspace/native-running-modules-candidate-1315033c6e40480ea1b61cf8159c0c19/evidence/receipt.json",
+                  "sha256": "969a603a696f8b2cfde0464ac07654a602a224aaff4fd49bad236fcf69cdf8d3",
+                  "bytes": 35176,
+                  "scope": "Actual selected canonical-source SDK11 header/ABI/link PASS;70T+6data, callerimports4/13/0; no CLI/default/native/file closure acceptance"
+                }
+              ]
+            },
+            "native_validation": {
+              "status": "unassessed",
+              "evidence": []
+            }
+          }
+        },
+        {
+          "id": "M15-F07-03",
+          "title": "Actual artifact and functional behavior",
+          "status": "open",
+          "owner": null,
+          "next_action": "Reuse actual linked artifact ownership proof; perform matching native application/lifecycle/error/resource restoration checks when separately released.",
+          "proof": {
+            "implementation": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "focused_checks": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "production_link": {
+              "status": "partial",
+              "evidence": [
+                {
+                  "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-libihk-next/canonical-source-producer-SDK-target-operation-1/bounded-top-level-cache-dependency-correction-1/selected-source-1/workspace/native-running-modules-candidate-1315033c6e40480ea1b61cf8159c0c19/evidence/receipt.json",
+                  "sha256": "969a603a696f8b2cfde0464ac07654a602a224aaff4fd49bad236fcf69cdf8d3",
+                  "bytes": 35176,
+                  "scope": "Actual selected canonical-source SDK11 header/ABI/link PASS;70T+6data, callerimports4/13/0; no CLI/default/native/file closure acceptance"
+                }
+              ]
+            },
+            "native_validation": {
+              "status": "unassessed",
+              "evidence": []
+            }
+          }
+        }
+      ],
+      "file_closure": {
+        "status": "open",
+        "requirement": "No project-owned C body or callback from this selected target remains in the delivered runtime; preserve third-party ABI and matching native behavior."
+      },
+      "owner": "/root/m15_tools",
+      "latest_dispatcher_checkpoint": {
+        "implemented": "Daemon27 source ready; exact producedprovider13189639 and full11 source map reviewed. SDK7/default/native dependency pending; no duplicate heavy owner.",
+        "actual": "Daemon27 source ready; exact producedprovider13189639 and full11 source map reviewed. SDK7/default/native dependency pending; no duplicate heavy owner.",
+        "limits": "No new default/native/wholefile closure."
+      }
+    },
+    {
+      "id": "M15-F08",
+      "path": "ihk/linux/user/ihkmond.c",
+      "target": "ihkmond",
+      "status": "open",
+      "source_selection": "ihk/linux/user/CMakeLists.txt:36",
+      "existing_rust": [
+        "Retained read-errors-successor-1/ihkmond.rs SHA0c0b4b6d; latest new-window-daemon-sdk-source-1 source contract, no SDK/native claim."
+      ],
+      "current_increment": {
+        "at": "2026-10-25T04:53:34.467560+00:00",
+        "actual_progress": "Reuse latestfullRustihkmond readerrorssuccessor0c0b4b6d; original3compilerstepsrc0/overallFAIL emptyrmetaoracle preserved. Genuine7commandSDK+libudevABI/productionselector sourcecandidate387815e3 ready, pure8cases/SDK/nativeUNRUN.",
+        "engineering_percentage": null
+      },
+      "proof_gap": [
+        "reuse search at identified historical revision or Rust implementation",
+        "daemon callback/thread/event and cleanup ABI parity",
+        "default link plus matched native creation/destruction/recovery behavior"
+      ],
+      "remaining_selected_body_count": null,
+      "functional_subgoals": [
+        {
+          "id": "M15-F08-01",
+          "title": "Remaining selected C bodies",
+          "status": "open",
+          "owner": null,
+          "next_action": "Enumerate current live bodies/callbacks incrementally from the selected consumer; reuse existing Rust and implement the next substantive body.",
+          "proof": {
+            "implementation": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "focused_checks": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "production_link": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "native_validation": {
+              "status": "unassessed",
+              "evidence": []
+            }
+          }
+        },
+        {
+          "id": "M15-F08-02",
+          "title": "Default Rust consumer and ABI",
+          "status": "open",
+          "owner": null,
+          "next_action": "Select actual Rust implementation while preserving public CLI/library/process interfaces and exact platform ABI.",
+          "proof": {
+            "implementation": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "focused_checks": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "production_link": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "native_validation": {
+              "status": "unassessed",
+              "evidence": []
+            }
+          }
+        },
+        {
+          "id": "M15-F08-03",
+          "title": "Actual artifact and functional behavior",
+          "status": "open",
+          "owner": null,
+          "next_action": "Prove actual linked ownership plus matching application/lifecycle behavior; source-only selection is insufficient.",
+          "proof": {
+            "implementation": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "focused_checks": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "production_link": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "native_validation": {
+              "status": "unassessed",
+              "evidence": []
+            }
+          }
+        }
+      ],
+      "file_closure": {
+        "status": "open",
+        "requirement": "No project-owned C body or callback from this selected target remains in the delivered runtime; preserve third-party ABI and matching native behavior."
+      },
+      "owner": "/root/m15_tools",
+      "latest_dispatcher_checkpoint": {
+        "implemented": "Daemon27 source ready; exact producedprovider13189639 and full11 source map reviewed. SDK7/default/native dependency pending; no duplicate heavy owner.",
+        "actual": "Daemon27 source ready; exact producedprovider13189639 and full11 source map reviewed. SDK7/default/native dependency pending; no duplicate heavy owner.",
+        "limits": "No new default/native/wholefile closure."
+      },
+      "checkpoint_before_20261027_SDK7": null,
+      "checkpoint": {
+        "implemented": "Existing Rust daemon/SDK7 supportedtarget retained; sameimage observational reproducer source25 independentlyPASS.",
+        "actual": "Prior kernelpids64 actual26attempt reached singleton assertion2expected1 and stopped, all owners retired/currentfree accepted; no daemon functional acceptance.",
+        "limits": "HistoricalextraTIDunknown; no procfs-race causalclaim. Production-main/fullgraph/install/native remain open; exact8s repro next under new grant."
+      },
+      "latest_checkpoint": {
+        "actual": "Source28 actualsuffixd413 reachedmockPASS thenRustcompilerFAIL EROFS temp nextROsource; zeroobservercases. Actualowner/callers/allclients retired andcurrentfree98887bde independentlyaccepted.",
+        "implemented": "ExactjoinedTID/birth-to-ENOENT observer/sourceprofilePASS; finalsingleton/original8sec retained. Existingowner prepares one bounded compiler output/cwd correction, mock.o+8priorcases preserved.",
+        "limits": "No newdaemoncase/productionmain/fullgraph/install/native/wholefile acceptance; historicalextraTID identityunknown."
+      }
+    }
+  ],
+  "runtime_programs": [
+    {
+      "id": "M15-P01",
+      "path": "scripts/mcreboot-smp.sh.in",
+      "current_interpreter": "#!/bin/bash",
+      "status": "open",
+      "owner": null,
+      "next_action": "Determine exact installed role, preserve command/exit/diagnostic/lifecycle semantics, and replace the shipped custom runtime program with Rust/reviewed assembly under matching tests. The Python campaign harness remains build/test orchestration.",
+      "proof": {
+        "implementation": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "focused_checks": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "production_link": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "native_validation": {
+          "status": "unassessed",
+          "evidence": []
+        }
+      },
+      "latest_source_progress": {
+        "at": "2026-11-10T09:13:49.438016+00:00",
+        "implementation": "ReviewedretainedRustintegratedintocurrentselectionwithdefaultOFF;notwholeprogramacceptance",
+        "focused_evidence": "docs/verification/m15-runtime-program-qualification-20261110/p01-p02/RESULT.json",
+        "remaining": "Fullselected/default/actualbackend/lifecycle/matchingnativeproofremainsopen",
+        "whole_program_acceptance": "OPEN",
+        "original_counted_credit": 0
+      }
+    },
+    {
+      "id": "M15-P02",
+      "path": "scripts/mcstop+release-smp.sh.in",
+      "current_interpreter": "#!/bin/bash",
+      "status": "open",
+      "owner": null,
+      "next_action": "Determine exact installed role, preserve command/exit/diagnostic/lifecycle semantics, and replace the shipped custom runtime program with Rust/reviewed assembly under matching tests. The Python campaign harness remains build/test orchestration.",
+      "proof": {
+        "implementation": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "focused_checks": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "production_link": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "native_validation": {
+          "status": "unassessed",
+          "evidence": []
+        }
+      },
+      "latest_source_progress": {
+        "at": "2026-11-10T09:13:49.438016+00:00",
+        "implementation": "ReviewedretainedRustintegratedintocurrentselectionwithdefaultOFF;notwholeprogramacceptance",
+        "focused_evidence": "docs/verification/m15-runtime-program-qualification-20261110/p01-p02/RESULT.json",
+        "remaining": "Fullselected/default/actualbackend/lifecycle/matchingnativeproofremainsopen",
+        "whole_program_acceptance": "OPEN",
+        "original_counted_credit": 0
+      }
+    },
+    {
+      "id": "M15-P03",
+      "path": "scripts/eclair-dump-backtrace.exp.in",
+      "current_interpreter": "#!/usr/bin/expect",
+      "status": "open",
+      "owner": null,
+      "next_action": "Determine exact installed role, preserve command/exit/diagnostic/lifecycle semantics, and replace the shipped custom runtime program with Rust/reviewed assembly under matching tests. The Python campaign harness remains build/test orchestration.",
+      "proof": {
+        "implementation": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "focused_checks": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "production_link": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "native_validation": {
+          "status": "unassessed",
+          "evidence": []
+        }
+      },
+      "latest_source_progress": {
+        "at": "2026-11-10T08:43:45.513998+00:00",
+        "canonical_source": "scripts/rust/eclair-backtrace",
+        "selector_default": "OFF; explicitON selects RustALLtarget and original installedbasename0755",
+        "implementation": "Exact retainedRustsource integrated; notwholeprogramacceptance",
+        "producer_evidence": "docs/verification/m15-p03-host-producer-20261110/RESULT.json",
+        "focused_checks": "docs/verification/m15-p03-runtime-selection-20261110/behavior/RESULT.json",
+        "selection_and_private_install": "docs/verification/m15-p03-runtime-selection-20261110/selection/RESULT.json",
+        "remaining": [
+          "Fulltop-level/defaultRustsource-selectionqualification",
+          "ActualEclair/kernelbehaviorparity,applicablematchingnative/lifecycleproof"
+        ],
+        "whole_program_acceptance": "OPEN",
+        "original_counted_credit": 0
+      }
+    },
+    {
+      "id": "M15-P04",
+      "path": "executer/user/vmcore2mckdump.in",
+      "current_interpreter": "#!/bin/sh",
+      "status": "open",
+      "owner": null,
+      "next_action": "Determine exact installed role, preserve command/exit/diagnostic/lifecycle semantics, and replace the shipped custom runtime program with Rust/reviewed assembly under matching tests. The Python campaign harness remains build/test orchestration.",
+      "proof": {
+        "implementation": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "focused_checks": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "production_link": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "native_validation": {
+          "status": "unassessed",
+          "evidence": []
+        }
+      },
+      "latest_source_progress": {
+        "at": "2026-11-10T09:13:49.438016+00:00",
+        "implementation": "ReviewedretainedRustintegratedintocurrentselectionwithdefaultOFF;notwholeprogramacceptance",
+        "focused_evidence": "docs/verification/m15-runtime-program-qualification-20261110/p04/RESULT.json",
+        "remaining": "Fullselected/default/actualbackend/lifecycle/matchingnativeproofremainsopen",
+        "whole_program_acceptance": "OPEN",
+        "original_counted_credit": 0
+      }
+    },
+    {
+      "id": "M15-P05",
+      "path": "executer/user/mcps.in",
+      "current_interpreter": "#!/bin/bash",
+      "status": "open",
+      "owner": null,
+      "next_action": "Determine exact installed role, preserve command/exit/diagnostic/lifecycle semantics, and replace the shipped custom runtime program with Rust/reviewed assembly under matching tests. The Python campaign harness remains build/test orchestration.",
+      "proof": {
+        "implementation": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "focused_checks": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "production_link": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "native_validation": {
+          "status": "unassessed",
+          "evidence": []
+        }
+      }
+    }
+  ],
+  "conditional_targets": [
+    {
+      "target": "mckernel.so crash extension",
+      "selected_by": "tools/crash/mckernel.mk.in:65",
+      "c": [
+        "tools/crash/mckernel.c"
+      ],
+      "rust": [
+        "tools/crash/rust/mckernel_crash_helpers.rs"
+      ],
+      "status": "separate make target; CMake only copies inputs, so not default build or proven deployed; make always compiles C even when Rust found"
+    },
+    {
+      "targets": [
+        "qlmpi",
+        "qlfort",
+        "ql_server",
+        "ql_talker",
+        "ql_mpiexec_start",
+        "ql_mpiexec_finalize"
+      ],
+      "status": "ENABLE_QLMPI=OFF; existing Rust for first four, qlmpi additionally retains qlmpi_mpi_abi.c when enabled; final two directly compile ql_mpiexec_start.c and md5.c; not current selected debt"
+    },
+    {
+      "targets": [
+        "mck_syscall_intercept",
+        "libuti",
+        "syscall_intercept_shared"
+      ],
+      "status": "ENABLE_UTI=OFF; Rust intercept/arch wrappers exist, libuti ExternalProject selector requests --enable-rust when configured; vendor capstone/syscall_intercept and optional libuti not inventoried as live debt"
+    },
+    {
+      "target": "mcstat_runtest",
+      "status": "EXCLUDE_FROM_ALL test target, existing Rust runtest.rs; not production debt"
+    },
+    {
+      "sources": [
+        "scripts/tests/**/*.rs",
+        "test",
+        "ihk/test"
+      ],
+      "status": "fixtures/tests outside production scope; not walked"
+    }
+  ],
+  "final_subgoals": [
+    {
+      "id": "M15-I01",
+      "title": "Complete delivered-runtime ownership manifest",
+      "status": "open",
+      "owner": null,
+      "next_action": "Reconcile selected target sources, included headers, installed programs, project-authored platform helpers, actual link maps and optional-product dispositions. Add any newly found owned runtime C; never hide it through a path/classification change.",
+      "proof": {
+        "implementation": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "focused_checks": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "production_link": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "native_validation": {
+          "status": "unassessed",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "M15-I02",
+      "title": "All three Linux-loadable modules in Rust/assembly",
+      "status": "open",
+      "owner": null,
+      "next_action": "Use pinned CONFIG_RUST kernel/Kbuild; prove exact compiler inputs, module ABI/imports/modpost and generated-only C metadata, with no project C implementation object.",
+      "proof": {
+        "implementation": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "focused_checks": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "production_link": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "native_validation": {
+          "status": "unassessed",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "M15-I03",
+      "title": "Rust executors, libraries and installed tools",
+      "status": "open",
+      "owner": null,
+      "next_action": "Prove selected Rust artifacts, CLI/exported-library ABI, dynamic/static project dependency closure and source/toolchain reproducibility.",
+      "proof": {
+        "implementation": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "focused_checks": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "production_link": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "native_validation": {
+          "status": "unassessed",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "M15-I04",
+      "title": "Matching native applications, module and lifecycle proof",
+      "status": "open",
+      "owner": null,
+      "next_action": "Reuse matching M03/M05/M06/M08/M09/M11/M12 evidence; run changed paths with the exact module/image/tool cohort, including MM lock successors, load/unload, useful apps and resource restoration. No new broad exposure quota.",
+      "proof": {
+        "implementation": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "focused_checks": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "production_link": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "native_validation": {
+          "status": "unassessed",
+          "evidence": []
+        }
+      }
+    }
+  ],
+  "evidence_limits": [
+    "not a whole repository source walk or complete application/deployment inventory",
+    "seven is configured user/runtime selector coverage, not final ELF composition or all project runtime C count",
+    "M14 six compute C owners and current native IHK/SMP/mcctrl module graph excluded by assignment; compatibility CMake module paths are not credited as deployed native debt without deployment evidence",
+    "no executable-header/body/preprocessor census or ABI equivalence audit",
+    "no claim that native proof is absent globally: only evidence inspected here is classified",
+    "new explicit user all-project-owned Rust/ASM scope overrides older control-plane-C allowance for planning; canonical policy not edited",
+    "practical 35 denominator unchanged; no whole OS/language completion or native acceptance credit"
+  ],
+  "reporting": {
+    "known_selected_project_C_files_outside_M14": 8,
+    "current_module_C_wrapper_functions": 3,
+    "known_installed_non_Rust_runtime_programs": 5,
+    "engineering_percentage": null,
+    "source_selection_is_not_final_ownership": true,
+    "do_not_infer_percentage_from_row_counts": true,
+    "inventory_complete": false,
+    "percentage_policy": "Unmeasured. Withdrawn conversational guesses are not engineering estimates; C-file count, open-area count and test-vector counts do not measure implementation or remaining effort."
+  },
+  "next_actions": [
+    "Preserve six ready M14 source lanes and qualified P12 work while M15 advances independently.",
+    "Reuse native Rust IHK/SMP/mcctrl instead of implementing the drivers again.",
+    "Prepare exact pinned MM-wrapper replacement/interface proposal; a blocked wrapper must not stall independent user-tool ports.",
+    "Start private ihkconfig Rust CLI successor while retaining libihk as explicitly temporary transitive C debt.",
+    "Complete target/link/deployment ownership with existing artifacts at normal checkpoints; no repetitive broad audit."
+  ],
+  "updates": [
+    {
+      "kind": "initial_bounded_scope",
+      "at": "2026-10-24T00:32:46.264202+00:00",
+      "evidence": [
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-7/ihk-rust-module-closure/SCOPING-REVIEW.md",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-7/project-runtime-rust-scope/report.txt"
+      ],
+      "practical_check_closures": [],
+      "M14_closures": [],
+      "new_native_credit": false
+    },
+    {
+      "at": "2026-10-24T00:35:49.928901+00:00",
+      "kind": "explicit_Linux_C_boundary_and_private_source_assignments",
+      "practical_check_closures": [],
+      "M14_closures": [],
+      "new_native_credit": false
+    },
+    {
+      "date": "2026-10-24T00:48:58.796129+00:00",
+      "kind": "FOUR_IMPLEMENTATION_LANES_AND_EXACT_RESOURCE_QUEUE",
+      "owners": {
+        "M15-F01": "foreground:/root/ihk_rust_scope",
+        "M15-F03": "foreground:/root/m15_bfd_rust_cutover",
+        "M15-F04": "foreground:/root/m15_bfd_rust_cutover",
+        "M15-F05": "/root/case227_stage",
+        "M15-F06": "foreground:/root/project_runtime_rust_scope"
+      },
+      "background_libihk_actual_followup_and_running_census": true,
+      "foreground_actual_turns": "user-confirmed; not root tool census",
+      "support_owner": "/root/m15_bfd_compile_owner private fixed compile-only successor source, no runtime release",
+      "implementation_only_no_closure": true,
+      "practical_check_closures": []
+    },
+    {
+      "date": "2026-10-24T01:27:44.772886+00:00",
+      "kind": "ACTUAL_DEFAULT_IHKCONFIG_HOST_STUB_PASS_AND_LIBIHK_CPU_PASS",
+      "ihkconfig": "velocity-intervention-20261023-7/m15-ihkconfig/root-owned-first-fixture-1/ACTUAL-WHOLE-JOIN.json",
+      "libihk_cpu": "velocity-intervention-20261023-8/m15-libihk/root-cpu-fixture-actual-1/RESULT.json",
+      "counts": "188parity+3separatecontracts;4608CPUAPIvectors",
+      "source_default_native_or_file_closure": false,
+      "practical_check_closures": []
+    },
+    {
+      "utc": "2026-10-24T02:46:59.172098+00:00",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "summary": "User withdrew unsupported conversational M14/M15 percentages; engineering_percentage null. Credit substantial existing Rust and stage-specific actual implementation/default-link/native evidence; no new audit prerequisite."
+    },
+    {
+      "at": "2026-10-24T04:22:02.536749+00:00",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "summary": "Qualified union2 exact11 canonical integration; full78Rust and6Cpartial pass, new controlledbody checks, no default/native/file closure. M15IKC2865 plus realHOSTshared/CLIlink, no default/native closure. Practical34/35 unchanged.",
+      "evidence": [
+        "docs/verification/evidence/velocity-intervention-20261023-6/root-union-preparation-2/CANONICAL-INTEGRATION.json"
+      ],
+      "new_practical_closed_ids": []
+    },
+    {
+      "utc": "2026-10-24T05:33:56.778364+00:00",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "actual_increment": "Coherentmcexec349callbacks+entry+51data HOSTRust/ASMlinkPASS afteroneLP64cast; MMbody22+epoch1+invalid4+mockwarn6PASS, actualCPU1.127633/output7785307. NeitherRockydefault/nativenorfullbehaviorclosure.",
+      "proofs": [
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/m15-mcexec-default-compile-preparation-1/bounded-lp64-threshold-correction-1/root-actual-bounded-LP64-1/FINAL-RESULT.ONCE.json",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/m15-mm-capture-fix/ROOT-ACTUAL-HOST-BODY-ACCEPTANCE.json"
+      ]
+    },
+    {
+      "at": "2026-10-24T06:53:11.612587+00:00",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "note": "Practical M12/35checks now complete independently; M15 still active. Existing driver Rust reused; actual HOST executor link/MM body/library/CLI proof remain scoped. Owner provenance corrected without counting completed foreworkers active.",
+      "engineering_percentage": null
+    },
+    {
+      "at": "2026-10-26T23:33:39.496042+00:00",
+      "actual_progress": "Matching current290 baseline.core.memory independently accepted: stdout24B/exit37/stderr0/procfsempty; PID255 retirement0 before powerdown, original QEMU-9 retained. Actual caller0/38.849s/all30commands reaped/normalcontainer removal/fresh physicalfree accepted. Growth final copiedFD closure accepted; original reserve/account/rootdir observer failures preserved. SDK7 reviewed twohop/currenthead adapter source PASS, actual accepted input materialization next; no SDK commands or whole-file/M14/M15 closures."
+    },
+    {
+      "at": "2026-10-27T19:06:35.717743+00:00",
+      "actual_progress": "CURRENT110 actual5productioncommands PASS; independent selecteddefault60e62/Rust45/C94/process68, sixCfunction replacements+116BRustidledata. No native/wholefile delta. Source32threecallsbehaviorPASS/outerFAILmissingafterpidsOPEN. Executor actualprecommandfailureea96retired, mappingexpert active. OriginalF05nativeHOLD; foregroundv2readyfornewHOSTqualification.",
+      "evidence": "../evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/TWENTY-MINUTE-ENGINEERING-REVIEW-1856.json"
+    },
+    {
+      "at": "2026-10-27T19:46:22.263905+00:00",
+      "actual_progress": "CURRENT111 independentlyselecteddefault0bbe/Rust48/C91/process67,3callbacks+208BRustdata;4commands0/21.678797ssum. Executor6phase selectedtarget/stagedinstall354oldCsource definitionsabsent; native/file/all349/all51/allocationOPEN. F05v2HOST/finalizer/offlinecompositionPASS, nativeentrysource27dfready; no native/filedelta.",
+      "evidence": "../evidence/os-recovery-adoption-20261025-0254/CURRENT111-INDEPENDENT-DEFAULT-ARTIFACT-ACCEPTANCE.json"
+    }
+  ],
+  "engineering_updates": [
+    {
+      "at": "2026-10-24T07:56:08.272591+00:00",
+      "actual_progress": "Eventfd960 scoped parity PASS; separate resource correctness successor assigned. Tool/daemon/dump/SDK candidates remain gated, no new native closure.",
+      "engineering_percentage": null
+    },
+    {
+      "at": "2026-10-24T08:41:48.138798+00:00",
+      "actual_progress": "Actualeventfd900 ownership/error regressions PASS.381125s; toolcohort7HOSTcompile/link/import commands PASS CPU.577132, native/defaultopen with13transitiveC imports. Executor C/Rust linksPASS, metadataobserverFAIL beforebehavior; observer3 grantedCPU0, no outcome inferred.",
+      "engineering_percentage": null
+    },
+    {
+      "at": "2026-10-24T09:27:50.669852+00:00",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "native_qualified_delta": null,
+      "retired_C_boundaries": [],
+      "engineering_percentage": null,
+      "actual_progress": "Tool7HOST artifact and executor18HOSTcontrolledbehavior acceptance retained; coherent libihk21/30/35/37/51 provider source joins remainUNCOMPILED, generatedBFD/targetABI unknown. SDK correctedconsumer sourceapproved; notexecuted because soleheavy retainedvalidation predecessor requires normalretirement. No native/default/librarywholeclosure claimed.",
+      "evidence": "docs/verification/evidence/rust-cutover-engineering-checkpoint-20261024-0852/RETENTION.json"
+    },
+    {
+      "at": "2026-10-24T10:29:30.733843+00:00",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "actual_progress": "Whole70 supported HOST libihk Rust compilation/shared-library/retained CLI link: all17 commands PASS; no C runtime TU selected in this HOST job. Target/default/native remains open.",
+      "native_qualified_delta": 0,
+      "retired_C_boundaries": [],
+      "engineering_percentage": null,
+      "evidence": "docs/verification/evidence/rust-cutover-engineering-checkpoint-20261024-1012/REVIEW.json"
+    },
+    {
+      "at": "2026-10-24T11:00:44.060056+00:00",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "actual_progress": "M15correctedinterpositionobserver STOP after3readonlycommands beforeweakening/behavior; internal unnamedSECTION resolution needs expertcorrection.",
+      "native_qualified_delta": 0,
+      "retired_C_boundaries": [],
+      "engineering_percentage": null,
+      "evidence": "docs/verification/evidence/rust-cutover-engineering-checkpoint-20261024-1052/REVIEW.json"
+    },
+    {
+      "at": "2026-10-24T11:43:50.774989+00:00",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "actual_delta": {
+        "M15-F01": "Actual SDK first inert C layout probe compiled, Rust layout probe FAIL redundant no_std/unusedextern under unchanged -Dwarnings. No module phase; normal and independent physical retirement PASS, current postjoin nonnull. Inert-only4line correction source PASS, not executed.",
+        "M15-F05": "Actual supported whole70 HOST Rust library seventeen commands PASS; no C runtime TU, retained CLI link only. Real target/default/native OPEN. Genuine Linux recorder preflight STOP before children unqualified calloc; exact compiler fold diagnosed, explicit tracked-calloc bounded source successor prepared. Original fake-statusHOLD preserved."
+      },
+      "new_native_qualified": 0,
+      "new_C_retired": 0,
+      "engineering_percentage": null,
+      "evidence": "docs/verification/evidence/rust-cutover-engineering-checkpoint-20261024-1133/REVIEW.json"
+    },
+    {
+      "at": 1792847234.6697447,
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "kind": "actual_host_behavior_and_canonical_candidate_audits",
+      "library": {
+        "status": "PASS_RETAINED_GENUINE_LINUX_RECORDERS_PROOF_MAP_CORRECTION",
+        "new_commands": 10,
+        "wall_seconds": 0.8521693890215829,
+        "CPU_seconds": 0.772027,
+        "archive_recompiled": false,
+        "C_reference_recompiled": false,
+        "native": false,
+        "evidence": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/root-m15-proof-map-remaining-suffix-1/WHOLE-JOIN.json"
+      },
+      "MM": {
+        "canonical_candidate_applied": true,
+        "existing_HOST_audits": 3,
+        "all_passed": true,
+        "wall_seconds": 4.356281963991933,
+        "CPU_seconds": 4.331382,
+        "native_retirement": false
+      },
+      "whole_milestone_acceptance": false
+    },
+    {
+      "at": "2026-10-24T15:00:50Z",
+      "evidence": "docs/verification/evidence/rust-cutover-engineering-checkpoint-20261024-1455/REVIEW.json",
+      "actual_progress": {
+        "MM": "prior SDK3artifact/codegen+HOSTaudits reused; no newmodule/native run",
+        "library": "ActualHOST70scope retained; SDKsourcearchive only, actualSDK15pending"
+      },
+      "whole_file_retirement_delta": 0,
+      "new_native_delta": 0
+    },
+    {
+      "at": "2026-10-24T18:38Z",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "status": "PASS_SDK_WHOLE70_LIBRARY_LINK_ONLY",
+      "evidence": "docs/verification/evidence/m15-sdk-library-whole70-link-qualification-20261024-1/RETENTION.json",
+      "actual": "Ten retained prefix commands plus five fresh selected-SDK commands accepted. Strict real-BFD libihk.so546dbe76/12095032B uniquely defines70text+6data requiredproviders; no selectedproject/Rustpanic unresolved. OriginaldiagnosticFAIL preserved; archive unchanged, not recompiled/rehash.",
+      "physical": "Normal owner retirement and independent currentd28b7a87/current_live_postjoin22aa8d69 accepted.",
+      "metrics": {
+        "fresh_capture_wall_sum_seconds": 0.42118662397842854,
+        "container_wall_seconds": 0.710632039,
+        "actual_CPU_seconds": null,
+        "peak_RSS_bytes": null
+      },
+      "remaining": "Actual target CMake default library/tool selection and matching functional native proof; no CLI/default/native/M15completioncredit."
+    },
+    {
+      "at": "2026-10-24T19:27:31.493241+00:00",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "evidence": "docs/verification/evidence/rust-cutover-engineering-checkpoint-20261024-1930/REVIEW.json",
+      "actual": "37 children passed: 6 builds, 5 link observers, 26 controlled behavior executions. Ring-C not started: capture path collided with executable. Outer4.148043969s, joined/group absent/streams closed. Three-child suffix correction prepared; no retry yet. nightly version command PASS; configure FAIL4.772846676s missing actual libdwarf templates. Original failure retained; normal physical retirement independently accepted before current M14 build. Source-only RO vendor closure plus mountpoint successor under review.",
+      "new_native_delta": 0,
+      "whole_file_retirement_delta": 0
+    },
+    {
+      "at": "2026-10-24T20:21:19.486276+00:00",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "evidence": "docs/verification/evidence/rust-cutover-engineering-checkpoint-20261024-2030/REVIEW.json",
+      "actual": "OPEN. Actual selectedSDK eleven targetCMake/ABI/link commands PASS; whole70+6data DSO and ihkconfig/ihkosctl/mcps artifacts, independentlyaccepted normalretirement. Canonical externalarchive-only default proposal held; acceptedsource producer route under review. Controlled daemon fortifiedring/oversize five PASS, boot/stop8+eclair6 HOSTfake tests PASS.",
+      "new_native_delta": 0,
+      "whole_file_retirement_delta": 0
+    },
+    {
+      "at": "2026-10-25T00:01:54.385548+00:00",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "evidence": "docs/verification/evidence/os-shutdown-checkpoint-20261025-0000/SHUTDOWN.json",
+      "actual_progress": "Actual source-produced SDK11 ABI/link remains accepted only. Four-artifact install/three loader checks remain unexecuted and require future COPY7 positive physical/current authority. No CLI/default/native or whole-file retirement added. Launcher shutdown requested; no new dispatch.",
+      "engineering_percentage": null,
+      "new_native_delta": 0,
+      "whole_file_retirement_delta": 0
+    },
+    {
+      "at": "2026-10-25T02:59:53Z",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/SOURCE-LANE-RESULTS.json",
+      "actual_progress": "Source-only recovery: MM12bindings and SDK11four artifacts reused, daemon source selector cache/linker correction and BFD current-CMake rebase prepared. No new compiler/test/native/file-retirement results. COPY7 normal cleanup passed; physical/current acceptance pending.",
+      "new_native_delta": 0,
+      "whole_file_retirement_delta": 0
+    },
+    {
+      "at": "2026-10-25T03:13:10Z",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/ADOPTION.json",
+      "actual_progress": "Effective eleven-source installed cohort source-approved without replacement; initial reviewer path finding withdrawn. COPY7-aware binder8puretests/53negativecasesPASS, actual metadata bindingPASS. Private install/three loader checks remain unrun after future overlay/fresh admission review. Daemon threecase source-generation scope accepted, no native/default retirement.",
+      "new_native_delta": 0,
+      "whole_file_retirement_delta": 0
+    },
+    {
+      "at": "2026-10-25T03:23:29Z",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0321.json",
+      "actual_progress": "overlay exact15 published/pushed/fetched3de8ac09; readonlyquery/prepare source-execution clearance ready; install unrun",
+      "new_native_delta": 0,
+      "whole_file_retirement_delta": 0
+    },
+    {
+      "at": "2026-10-25T03:37:34Z",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/COMPILED-INSTALL-CHECKPOINT-20261025T0337.json",
+      "actual_progress": "Actual selected SDK four private installs plus three loader checks PASS2.811519s; normal owned retirement and independent physical b7f8c5ea/current1fec1959 accepted. Working SDK artifacts reused, no new build/relink, CLI-main/device/native/default-language retirement. Separate BFD/executor/MM source integration queues advance.",
+      "new_native_delta": 0,
+      "whole_file_retirement_delta": 0
+    },
+    {
+      "at": "2026-10-25T03:42:54Z",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0341.json",
+      "actual_progress": "Thirty-minute cadence adopted; last queued old-monitor review recorded. Qualified canonical205f checkpoint pushed/fetched; actual install/loader/physical and current-object evidence advanced; retained COPY7 freshcopyPASS. NextboundF02validator+targetedABI/object work, no unchanged image/Rust replay.",
+      "new_native_delta": 0,
+      "whole_file_retirement_delta": 0
+    },
+    {
+      "at": "2026-10-25T03:48:50Z",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/INTEGRATED-39-PROVIDERS-AND-F02-PUBLICATION.json",
+      "actual_progress": "",
+      "new_native_delta": 0,
+      "whole_file_retirement_delta": 0
+    },
+    {
+      "at": "2026-10-25T04:17:46Z",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0412.json",
+      "actual_progress": "",
+      "new_native_delta": 0,
+      "whole_file_retirement_delta": 0
+    },
+    {
+      "at": "2026-10-25T04:53:34.467560+00:00",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0442.json",
+      "actual_progress": "Integrated15process providers and mincore entry+10callbacks plusF04storage source; ONE current HOST Rust object/strictpartial independently qualifies55+100providers,15fallbacks,21ABI,66data,U60. Exact retained-owner normal cleanup/physical/currentpostjoin accepted; original stdout/PID capture limitation explicit. Paired defaultCMake source selectors integrated after3fragment cases. Executor7014filecopyPASS; metadatafinalfillAST3.8compat correction3testsPASS, retained-only continuation underreview. No newSDK/productionimage/native/file retirement.",
+      "new_native_delta": 0,
+      "whole_file_retirement_delta": 0
+    },
+    {
+      "as_of": "2026-10-25T05:55:53.501107+00:00",
+      "actual_progress": "Current178 compiler/ABI/strict partial qualified; final metadata-only repair and independent acceptance completed after snapshot; exact5 runtime sources integrated5daaa9a1.17providers over161, one semantic package counted. Executor9 precommandFAIL/CONFIGfix4PASS; freshcurrentpostjoin pending. No production/native/file closure.",
+      "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0542.json",
+      "status": "M14/M15_OPEN",
+      "new_native_delta": 0,
+      "whole_file_retirement_delta": 0
+    },
+    {
+      "at": "2026-10-25T06:18:53.211478+00:00",
+      "actual_progress": "Two HOSTpackages178/221 accepted,60providersover161; ONEnewRustcodegen221thiswindow. SDK/default/native/fileclosures0.",
+      "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0612.json",
+      "new_native_delta": 0,
+      "whole_file_retirement_delta": 0
+    },
+    {
+      "at": "2026-10-25T06:48:07.959550+00:00",
+      "actual": {
+        "SDK_commands_executed": 4,
+        "passed": 3,
+        "first_failure": 3,
+        "accepted_SDK": 0
+      },
+      "implemented": "executor six-command corrected suffix/source17; BFD21/daemon7 ready",
+      "limits": "Default/native/whole-file retirement OPEN; HOST/source-only not production closure",
+      "evidence": [
+        "docs/verification/evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0642.json"
+      ]
+    },
+    {
+      "at": "2026-10-25T07:00:57.936165+00:00",
+      "actual": {
+        "accepted_SDK_packages": 1,
+        "package": "m15.executor.supported-target",
+        "retained_commands": [
+          0,
+          1,
+          2
+        ],
+        "new_commands": [
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "Rust_main_and_ASM_only_link": true,
+        "native": false,
+        "default": false,
+        "whole_files_retired": 0
+      },
+      "implemented": "Selected executor SDK producer passed independent actualABI/artifact/link acceptance; physicalobserver schema correction undergoing pure regression; BFD and daemon nextsourcecohorts advancing.",
+      "limits": "No CLI/all349/all51/allocation/native/default/whole-file retirement acceptance. No nextheavy before actualF4Dphysical/current acceptance.",
+      "evidence": [
+        "docs/verification/evidence/os-recovery-adoption-20261025-0254/ACTUAL-F4D-EXECUTOR-INDEPENDENT-SDK-PRODUCER-ACCEPTANCE.json"
+      ]
+    },
+    {
+      "at": "2026-10-25T07:22:43.720142+00:00",
+      "actual": {
+        "new_selected_SDK_Rust_executor_package": 1,
+        "new_SDK_commands": 6,
+        "retained_SDK_commands_replayed": 0,
+        "new_HOST_futex_kernel_candidate_object": 1,
+        "new_current_fullcrate_objects": 0,
+        "new_canonical_integrated_Rust_bodies": 0,
+        "note": "Focused fixture/metadata compiles are separately reported, not production/current-union qualification."
+      },
+      "implemented": {
+        "next_actual_acceptance": "BFD21 supported-tool SDK qualification",
+        "owner": "root + m14_mem + recovery_review",
+        "next_command": "Publish/fetch actual correctedSOURCE24; independentfull11approval; finalstatictransport bind+publication; oncefreshquery\u2192actualpayloadreview\u2192ordinarysamePIDowner21commands",
+        "blocker": "Genuine new24source/full11approval/failedqueryabsence and correctedstrict-ref transport; SDKworkloadnotstarted",
+        "following": "current230modern77IMAGE_BUILD_ONLY build mckernel.img-j4 and matchingownership/native; prepared daemon7/MMstaging/runtime consumers"
+      },
+      "limits": {
+        "SDK_packages": 1,
+        "production_default": 0,
+        "native": 0,
+        "whole_C_files_retired": 0,
+        "production_C_boundaries_retired": 0,
+        "new_guest_apps": 0,
+        "new_images": 0
+      },
+      "evidence": [
+        "docs/verification/evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0712.json"
+      ]
+    },
+    {
+      "at": "2026-10-25T07:43:22.019431+00:00",
+      "actual": {
+        "accepted_fixed_integration_packages": 0,
+        "canonical_integrated_Rust_bodies": 0,
+        "current_fullcrate_qualified_objects": 0,
+        "BFD_successful_preparatory_commands": 9,
+        "BFD_failed_commands": 1,
+        "BFD_failure": "real_equivalence left[i]==right[i] assertion rc-6; root cause unresolved",
+        "source_retention_files": 6153,
+        "source_retention_gzip_outputs": 45,
+        "production_default_closures": 0,
+        "native_closures": 0,
+        "whole_C_files_retired": 0,
+        "production_C_boundaries_retired": 0,
+        "new_guest_apps": 0,
+        "new_images": 0
+      },
+      "implemented": {
+        "next_actual_acceptance": {
+          "name": "BFD pinned original-C twice diagnostic, then corrected fixedBFD SDK contract",
+          "owner": "root + m14_mem",
+          "next_command": "Link original_C_twice_pinned_BFD_control.c with retained two original-C objects and pinned libbfd; execute retained fixture.o/stripped.o within existing reviewed controller",
+          "blocker": "Finite two-command driver/owner/source binding and actualexecution release; no unchanged21command replay"
+        },
+        "next_default_acceptance": {
+          "owner": "root + f02_contract",
+          "command": "cmake --build /work/output/build --target mckernel.img -j4 after fresh configure",
+          "blocker": "Published/fetched actual source capsule plus exact compact metadata/staticreview, then freshactualquery/payloadreview and soleheavyentry",
+          "source_identity": "dev66306 inode59524933 frozeneb3 compute + explicit qualifiedIHK3114d9e override"
+        }
+      },
+      "limits": {
+        "SDK_packages": 0,
+        "production_default": 0,
+        "native": 0,
+        "whole_C_files_retired": 0,
+        "production_C_boundaries_retired": 0
+      },
+      "evidence": [
+        "docs/verification/evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0742.json"
+      ]
+    },
+    {
+      "at": "2026-10-25T07:57:15.222827+00:00",
+      "actual": {
+        "new_current_object_packages": 1,
+        "current_Rust_providers": 277,
+        "new_Rust_providers_over230": 47,
+        "canonical_runtime_files_integrated": 5,
+        "retained_successful_commands": 10,
+        "new_observers": 3
+      },
+      "implemented": {
+        "next_actual_acceptance": "Pinned BFD original-C/C diagnostic then correctedSDKcontract; private230 defaultimage entry",
+        "owners": [
+          "root",
+          "m14_mem",
+          "f02_contract"
+        ]
+      },
+      "limits": {
+        "production_default": 0,
+        "native": 0,
+        "whole_C_files_retired": 0,
+        "production_C_boundaries_retired": 0
+      },
+      "evidence": [
+        "docs/verification/evidence/os-recovery-adoption-20261025-0254/ACTUAL-CURRENT277-INDEPENDENT-ACCEPTANCE-AND-CANONICAL-INTEGRATION.json"
+      ]
+    },
+    {
+      "at": "2026-10-25T08:23:28.113743+00:00",
+      "actual": {
+        "accepted_current_object_packages": 1,
+        "new_Rust_codegen_objects": 1,
+        "new_strict_partial_link_objects": 1,
+        "new_qualified_Rust_providers": 47,
+        "canonical_runtime_files_integrated": 5,
+        "new_SDK_packages": 0,
+        "production_default_closures": 0,
+        "native_closures": 0,
+        "whole_C_files_retired": 0,
+        "production_C_boundaries_retired": 0,
+        "new_guest_apps": 0,
+        "new_images": 0
+      },
+      "implemented": {
+        "next_actual_acceptance": "CorrectedpinnedBFD C/C2commanddiagnostic orfrozen230firstdefaultimageentry, whicheverstaticrelease-readyfirst",
+        "owner": "root withm14_mem/f02_contract andindependentreviewer",
+        "next_executable_command": "Publish/fetch correctedC/C25 source then existingfreshquery\u2192actualpayloadreview\u2192samePID2commands; image finitecaller after source/heldFD review andtruthfulcurrentHEAD sourceproofrefresh.",
+        "blocker": "Actualsource/caller/currentbinding release;no heavyCPUcapacity shortage",
+        "following": "BFD21/daemon7SDKconsumers and actualF4Dstartupnativepacket; current277/285matchingdefault/native proof"
+      },
+      "limits": {
+        "production_default": 0,
+        "native": 0,
+        "whole_C_files_retired": 0,
+        "production_C_boundaries_retired": 0
+      },
+      "evidence": [
+        "docs/verification/evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0812.json"
+      ]
+    },
+    {
+      "at": "2026-10-25T08:45:34.186058+00:00",
+      "actual_progress": "08:42review: BFD originalC/C diagnosticPASS separately from SDK21; nativeexecutor/default closures still0.",
+      "engineering_percentage": null
+    },
+    {
+      "at": "2026-10-25T09:43:46.838375+00:00",
+      "actual_progress": "09:42review: one qualified data5integrationpackage; three new controlledHOST checks. SDKowner635880 quarantined; sourcefix/ownedrecovery criticalpath. Default/native/file/Cretirement0.",
+      "engineering_percentage": null,
+      "review": "../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0942.json"
+    },
+    {
+      "at": "2026-10-25T10:30:39.485455+00:00",
+      "review": "docs/verification/evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T1012.json",
+      "actual_progress": "10:12 interval zero integration packages/default/native/file/Cboundary closures. VMlock192 and archmemory42 HOST accepted. Post-snapshot current290 Rust+partial pass, metadata12-only correction pending; SDK cleanup and physical/current now accepted, new SDK entry pending."
+    },
+    {
+      "at": "2026-10-25T21:34:32.845279+00:00",
+      "actual_progress": "Manualresume: qualifiedcurrent290 accepted/integrated3files,+5Rustfunctions; freshphysical/current proof41fee accepted. M15SDKfresh17transport published, livequery/SDKentry pending. Default/native/file/Cboundary closures0.",
+      "proof": "docs/verification/evidence/os-recovery-adoption-20261025-0254/ACTUAL-CURRENT290-INDEPENDENT-CURRENT-OBJECT-ACCEPTANCE.json"
+    },
+    {
+      "at": "2026-10-25T21:58:54.763082+00:00",
+      "actual_progress": "Newfixed18hwindow until2026-10-26T15:55:33Z. Current290integrated; BFD SDK21 artifact/behavior independentlyaccepted additive1231c1f6; SDKnewcurrentobserveractualPASS reviewpending; default290sourcecopyactualPASS, image/nativeunrun. Default/native/file/Cretirement0.",
+      "evidence": [
+        "docs/verification/evidence/os-recovery-adoption-20261025-0254/ACTUAL-BFD-SDK21-INDEPENDENT-ARTIFACT-AND-BEHAVIOR-ACCEPTANCE.json"
+      ]
+    },
+    {
+      "at": "2026-10-25T22:20:36.682463+00:00",
+      "actual_progress": "22:17review:0newintegration/default/native/file/Cclosures. Perf3600/ABI56controlledPASS; newcurrentphysical84daaccepted; 69memberdefaultcapsulepublished,nextfetchedbindingandselectedGCC14entry.",
+      "review": "docs/verification/evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T2217.json"
+    },
+    {
+      "at": "2026-10-25T23:12:34.835625+00:00",
+      "actual_progress": "Current290 censusPASS and ownerentered95.0205s; actualownervalidateFAIL provenancebeforecompiler butsharedexclusionretained andparentquarantined. Source17HOST4032/ABI23 andSource18HOST360+288/ABI32 independentlyaccepted. No default/native/file/Cclosure; bounded readonly/recovery next, sourcebindingrepairparallel.",
+      "review": "docs/verification/evidence/os-recovery-adoption-20261025-0254/ACTUAL-CURRENT290-OWNER-PROVENANCE-FAILURE-AND-HELD-OWNERSHIP.json"
+    },
+    {
+      "at": "2026-10-25T23:48:22.359856+00:00",
+      "actual_progress": "23:37review: Source20private411/ABI25HOSTaccepted; newcurrenttypedquiescencea4ea accepted asprocessrecoveryprerequisite only. Parent866814/shared324a retained; process-onlysource7f approvedpendingfetchedconcreterelease withCPUinfinity/noouterkill. Source21privatepositiveCAS/caller/destructor compiled, notselected. Default/native/file/Cclosures0; firstdefaultcompilerunknown.",
+      "review": "docs/verification/evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T2337.json"
+    },
+    {
+      "at": "2026-10-26T00:36:26.090068+00:00",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "actual_progress": "Late23:57/00:17 reviews: Source21 private60/ABI20 HOST acceptance. Process-only retirement ed504 passes, permanent27:4 free; shared324a fence intact. Later shared attempt failed pre-archive/unlink in root-readonly observation; underlying failure UNKNOWN. Zero-unlink diagnostic source/9controls passed, pending fetched/concrete release. Source22/23 Rust compile pass, retained-object C qualification underway. No new default/native/whole-file/C retirement. SDK21/current290 successful prefixes retained.",
+      "evidence": [
+        "docs/verification/evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261026T0017.json"
+      ],
+      "engineering_percentage": null
+    },
+    {
+      "at": "2026-10-26T00:48:45.817251+00:00",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "actual_progress": "Independent004f4df9 accepts actualshared324a archival/soleunlink/currentpostreturnphysical, helper898578joined0/mutexfree. ActualSource24 HOST333/ABI22+Lookup12 andSource25 HOST6480/ABI18 accepted; no canonical/default/native/file/Cclosure. Source26 composition fixture preparing. Exactattempt2 frontend proof binding/ordinary3namespace/staticpub next beforefreshadmission.",
+      "evidence": [
+        "docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT290-SHARED-ARCHIVAL-INDEPENDENT-CURRENT-PHYSICAL-ACCEPTANCE.json"
+      ],
+      "engineering_percentage": null
+    },
+    {
+      "at": "2026-10-26T01:12:46.877068+00:00",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "actual_progress": "Attempt2 actualowner8fb entered93.49s, thenfailedreceiptcandidateidentity beforecompiler. Newsharedbe87/owner904301joined1 andparent903729 FD3quarantined; old004f cannotclearnewrecord. Source337/request4d separateactualreceiptcandidate942 fromsourceeb; fullproductionreceiptfunction pure11 independentlyPASS, no runtimeacceptance. Freshheldreadonlyproof/recovery next; frontend3source-ready failclosed. Source27real77module compilependingrunnercorrectioncontrols/review/ROOTgrant.",
+      "evidence": [
+        "docs/verification/evidence/os-recovery-adoption-20261025-0254/ACTUAL-ATTEMPT2-IMAGE-RECEIPT-FAILURE-AND-HELD-OWNERSHIP.json"
+      ],
+      "engineering_percentage": null
+    },
+    {
+      "at": "2026-10-26T02:07:30.030722+00:00",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "actual_progress": "Actual903processretirement19379 andbe87archive1abf/currentphysical75535 accepted; namespace3initialized6294. Final337/4dfrontendbinding beforefreshadmission next. NewprivateRust6057full77modulecompile accepted; Source28C/partialprefix5PASS thenknowninheritedloggerLOCALcontractFAIL, nofullmetadata/default/native/file/Cclosure. Originalfailures/sources andallprefixes retained.",
+      "evidence": [
+        "docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT290-NEWBE87-INDEPENDENT-CURRENT-PHYSICAL-ACCEPTANCE.json"
+      ],
+      "engineering_percentage": null
+    },
+    {
+      "at": "2026-10-26T22:15:57.336260+00:00",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "actual_progress": "Current290 selected three-command default artifact validated, then exact matching startup.argv-empty native diagnostic case and normalretirement independentlyaccepted. Original native1EAGAIN failure preserved; collector-only repair compiled with22parser/10oracle controls and actualretirement515=0. MMactual Rustunlock hostfixture compile+64epochs PASS; SDK7 typedcurrentbinding ready for actualqualification.",
+      "evidence": [
+        "docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT290-NATIVE2-INDEPENDENT-STARTUP-CASE-ACCEPTANCE.json",
+        "docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT290-NATIVE2-INDEPENDENT-POSTJOIN-ACCEPTANCE.json",
+        "docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mm-unlock-fixture-actual-1/RESULT.json"
+      ],
+      "limits": "One exact native diagnosticcase only; no whole defaultcutover/nativecutover/M14/M15/wholefile/Cboundary retirement acceptance or95percentclaim."
+    },
+    {
+      "at": "2026-10-26T23:49:41.812613+00:00",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "actual_progress": "Matching current290 memory diagnostic accepted stdout24B/exit37/retirement/postjoin; F05 selectedC0/343Rust/7storage proofs qualified, file KEEP_OPEN precisely at frozen M14-05-05. SDK source/custody/currenthead composition PASS, actualRootstatic binding and fresh query next; no SDK command or C/file closure yet.",
+      "evidence": [
+        "docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT290-MEMORY1-INDEPENDENT-CASE-ACCEPTANCE.json",
+        "docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m14-f05-nearest-file-closure-1/F05-CLOSURE-DECISION.json"
+      ],
+      "limits": "Exact diagnostic and selected-link scope only; M14/M15 OPEN/practical35 unchanged; no velocity95percentclaim."
+    },
+    {
+      "at": "2026-10-27T00:21:28.590045+00:00",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "actual_progress": "29 sequential ordinary HOST commands passed: F03 2perf callbacks/2330pairs, F02 3mutableflagdata selected/fallback39checks perprofile, F06 3mmap flags selected/fallback. SDKowner actualpre-admission API refshapeRefusal retained/independentlyretired; exact2keyfix realAPI6tests+independentSourcePASS. No new default/native/file closure; newfreshSDK3 epoch next.",
+      "limits": "HOSTprivate/source scopes only. Currentdefault/kernel source unchanged; wholefile/M14/M15/nativecutover remainOPEN.",
+      "evidence": [
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-DAEMON7-POSTGROWTH-SDK-ADMISSION-2/ACTUAL-INDEPENDENT-REFUSAL-ACCEPTANCE.json",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sdk7-postgrowth-final-static-1/sdk-reference-shape-correction-1/RESULT.SOURCE-ONLY.json"
+      ]
+    },
+    {
+      "at": "2026-10-27T00:42:15.136349+00:00",
+      "actual_progress": "Daemon SDK7 fixed supported-target ABI/selected-rule/link/loader package independently accepted, all7commands0 and normalphysical retirement. No native/wholefile/M15closure.",
+      "engineering_percentage": null
+    },
+    {
+      "at": "2026-10-27T05:45:27.592657+00:00",
+      "actual_progress": "Source28mockcompilePASS/RustEROFSFAIL,0observercases; normalownedretirement/currentfree accepted98887bde; F4Ddefaultproposal SourcePASS only.",
+      "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/DAEMON-SOURCE28-FAILED-INDEPENDENT-POSTJOIN-CURRENT-ACCEPTANCE.json",
+      "engineering_percentage": null
+    },
+    {
+      "at": "2026-10-27T18:04:15.074538+00:00",
+      "actual_progress": "HOST19source6callbacks+116Bdata; mcexec19sourceadoption+actualcopy/preflight; F05static8/89+offlinecomposition; Source31CringFAILretired, Source32stackcorrectionready. Default/native/file deltas0.",
+      "evidence": "../evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/TWENTY-MINUTE-ENGINEERING-REVIEW-1.json"
+    },
+    {
+      "at": "2026-10-27T23:19:56.035733+00:00",
+      "actual_progress": "Rustexecutoractualsixphaseconfigure/link/import/install/ELFacceptance7908 andactualinstalledloader3accepted8417 remainreused,354oldsourcefunctiondefinitionsabsent atselectedscope only. Originalstartupbe6eFAILcausedcompiledc020wrongargv, noexecutorbug. SeparatecorrectRustcollectord0bfsource/HOST5steps+16controlsaccepted939ec/Root4052; correctstartupactualoverlay23e2/manifesteb045/fullmapdd94 qualified, entrysource8c253 ready, nativeOPEN. F05causalRustsupervisor908f/36actualcontrols qualified8108, preguest31770failuremissingHOSTcompilerROproofpath; owner66da sourcefix880a/Root9429 closure29files, newoutercdc sourcefinalized5bdd, noOS/nativecredit.",
+      "evidence": "../evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/TWENTY-MINUTE-ENGINEERING-REVIEW-2316.json"
+    },
+    {
+      "at": "2026-10-27T23:58:03.696853+00:00",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "actual_progress": {
+        "installed_Rust_executor": "e5d18169/7908selectedstagedinstall/8417loaderPASS",
+        "correct_startup_collector": "d0bf61dc/939ec/405266",
+        "actual_startup_nonce": "6d2e6c210f8bf62b1a4f1abc127fb09a consumed once",
+        "actual_application_values": "PASS exact91B stdout/raw0/emptyerr/argv app,A,empty,B; EOF/no truncation",
+        "full_native_case": "FAIL BEGIN retirement result; only token513 errno-11, no final0 in serial",
+        "failure_receipt": "docs/verification/evidence/os-recovery-adoption-20261025-0254/M15-RUST-STARTUP-ACTUAL-RETIREMENT-FAILURE-6D2E.json",
+        "native_credit_delta": 0,
+        "whole_file_credit_delta": 0
+      },
+      "next_action": "Independent actual current-free then corrected114 build. Private bounded Rust collector successor waits genuine retirement within original deadline; no unchanged guest replay."
+    },
+    {
+      "at": "2026-10-28T00:20:50.693301+00:00",
+      "actual_progress": {
+        "installed_Rust_executor": "unchanged e5d18169/7908selectedstagedinstall/8417loader",
+        "original_startup_values": "6d2e actual argv app,A,empty,B and91B/raw0/emptyerr PASS; fullcaseFAIL BEGINretirement-11 retained2443/b9ea",
+        "retirement_collector_correction": "sourceeb59/reviewf758, all5HOSTcommands0/all22controlsPASS, actualstatic33c11/5675672B independently5b30/facts5b51/Rootea24",
+        "corrected_startup_stage": "8073archive/c560receipt/manifest06e933/fullmapb388/c17b; onlyinit changedvs23e2",
+        "compose_failure_preserved": "firstmissingplannedoutputparent0.174s/noartifact, ONEfreshboundedcorrection11.111665sPASS; no compiler/guest replay",
+        "native_credit_delta": 0,
+        "whole_file_credit_delta": 0,
+        "original_5s_retirement_and_10s_application_deadlines_preserved": true
+      },
+      "next_action": "Complete Root43 actualsource/capability/onceentry static publication beforefresh resource; run exactfrozen60e/e5d/ff227+33c11 originalstartupafterindependentrelease. Independent114artifactreview not prerequisite."
+    },
+    {
+      "at": "2026-10-28T00:59:10.694336+00:00",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "actual_progress": {
+        "selected_Rust_executor": "e5d18169 unchanged actualselected7908/loader8417",
+        "original_startup_native": "FULLPASS22a1/independent7965/trace905b/Rootbdf1",
+        "application": "actual app,A,empty,B/91Bstdout/emptyerr/raw0, completeEOF/no truncation",
+        "retirement": "PID256terminal231/ACK3errno0abandoned1/query513-11/DELETE/distinctquery515zero withinoriginal5s",
+        "actual_current_free": "0ae5/30clients33actors/Root45610578",
+        "actual_native_functional_case_delta": 1,
+        "whole_file_delta": 0,
+        "all349_all51_allocation_claim": false
+      },
+      "native_timing": {
+        "wall_seconds": 38.691237926483154,
+        "controller_cpu_seconds": 0.963369,
+        "controller_peak_RSS_KiB": 52896,
+        "resource_to_entry_seconds": 42.78076124191284
+      },
+      "original_next": "Strict235 exec/wait clause bd5a/0e3a remains OPEN, along with original broader ABI/allocation/cancel/recovery/resource obligations; useexisting537cbpayload/e5d/loader, caseboundRustcollector source underprocess235owner, no executor rewrite/rebuild."
+    },
+    {
+      "at": "2026-10-28T02:09:09.340307+00:00",
+      "actual_progress": "Reconciled stale BFD F03/F04 status against alreadyacceptedSDK21, no prefix replay/new closure. Activated private selective current default-selector lane; native diagnostics require genuine valid context."
+    },
+    {
+      "at": "2026-10-28T02:10:18.999870+00:00",
+      "actual_progress": "Independentoriginal235Rustexecutorcase732da/Rootnativeadoption:exact235/0/0 andfullstrictchild/exec/wait/parentACKDELETEdistinct147zero; currentfree563d. +1nativecase only, M15files1/8 unchanged; originalfilecontractreconciliationpending.",
+      "evidence": [
+        {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/M15-RUST-EXECUTOR-ORIGINAL235-INDEPENDENT-NATIVE-ACCEPTANCE.json",
+          "bytes": 3265,
+          "sha256": "534971e61c488f584621893e765123ea647797d7dc1a399459b13bc35e1a39ec"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-28T19:53:51.965287+00:00",
+      "actual_progress": "ActualBFDcurrentdefault3configure/build/ownershipreadback commandsPASS0, noncefaac consumedONCE; currentRustmcinspect/eclair produced. ActualELF/ABIreview and validdiagnostic/native/fileproof pending; stoppedCID2460 retained awaiting normalretirement.",
+      "evidence": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-default-next-integration-source-20261028-1/new-window-producer-cohort-source-1/latest-root61-consumer-successor-source-1/OUTPUT/work/evidence/worker-result.json",
+      "producer_commands": 3,
+      "command_wall_seconds": 8.201201915740967,
+      "CPU_seconds": 8.009559,
+      "maximum_child_RSS_KiB": 108764,
+      "supported_file_counts": [
+        1,
+        8
+      ],
+      "native_delta": 0,
+      "wholefile_delta": 0
+    },
+    {
+      "at": "2026-10-29T03:17:51.877456+00:00",
+      "actual_progress": "Private current119 runtimeCMake integration rebased and missing explicitruntimecompiler dependency repaired;8actualgenerationcases plusindependentreview. Actualfullconverter callback27candidate+13original cases and47joinedchildren validate narrowACK/layout;20ownershipFAILcases retained. ExactRockyBFDsource/header/linkerscript evidence supports privateRustownershiprepair; actualSDKlibbfd.a hash remainsunbound.",
+      "source_integration_evidence": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/current119-cmake-integration-source-1/independent-source-review-1/REVIEW.json",
+      "callback_fixture_evidence": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/QUALIFICATION.ACTUAL.json",
+      "ownership_failure_evidence": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/OWNERSHIP-FAILURES.ACTUAL.json",
+      "supported_file_counts": [
+        1,
+        8
+      ],
+      "new_default_native_file_credit": 0
+    },
+    {
+      "at": "2026-10-29T03:31:00.052145+00:00",
+      "actual_progress": "Privateconverter Rustowner guards pass56HOSTcallbackcases/59joinedcommands andindependentb2f6/599checks; original20ownershipfailures preserved. Separate genuinepinnedheader ABIblocker c779 inheritedoldsectionlayout/3argsetters/booldecls requires newsource correction; priorfixturemirrorsoldABI and isnotSDKproof.",
+      "evidence": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/independent-ownership-review-1/REVIEW.json",
+      "supported_file_counts": [
+        1,
+        8
+      ],
+      "new_default_native_file_credit": 0
+    },
+    {
+      "at": "2026-10-29T03:56:00.202763+00:00",
+      "actual_progress": "Private5aab selectedBFDABI successor corrects11imports/opaquesectionaccess fromgenuineheader;56HOSTcases/63joinedcommands andindependente1f9 PASS. Completejoint19 defaultproducerlayoutENV/dependencies and5graphs/independentfe54PASS. AllactualSDKarchive/compiler/link/default/native/validdump gatesOPEN.",
+      "evidence": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/selected-bfd-abi-repair-source-1/independent-selected-abi-review-1/REVIEW.json",
+      "joint_integration": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/current119-cmake-integration-source-1/selected-bfd-abi-coupled-successor-source-1/independent-source-review-1/REVIEW.json",
+      "supported_file_counts": [
+        1,
+        8
+      ],
+      "new_default_native_file_credit": 0
+    }
+  ],
+  "latest_dispatcher_checkpoint": {
+    "at": "2026-10-29T05:26:17.693391+00:00",
+    "M15_supported_files": "1/8",
+    "BFD_current_default_artifact_acceptance": "docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-restart-independent-review-20261028-1/ACTUAL-PRODUCER-REVIEW-1/REVIEW.json",
+    "BFD_producer_commands": 3,
+    "BFD_native_diagnostic": "UNRUN; help/error-only outputs do not qualify",
+    "BFD_installation_and_file_acceptance": "OPEN",
+    "current_physical_clearance_pending": true,
+    "next_action": "PreserveM15checkpoint; noimplementation/preparation/HOST/build/native untiloriginalM14acceptance, thenautomaticwithinexistingwindow",
+    "current_free": "PENDING currentM14postjoin; historicalRoot62 doesnotclearcurrentfrontier",
+    "current_ledger": "CurrentM14Root64 POST-ROOT4 pending72/aefd; M15engineeringpaused",
+    "historical_before_M14_exclusive_override": {
+      "at": "2026-10-28T21:58:38.748911+00:00",
+      "current_free": "Root62/e13be6df actual4606 capture/f97f parent; no newworkloadgrant",
+      "current_ledger": "Root63/6b2e9d8c/count71; typedcurrentbindingbe0e9a90",
+      "next_action": "Rootactualtyped118materializer/sourceexport/admission/defaultbuild usingacceptedcurrent; SDK21/retainedobjects reusedwhereexact; no faac/cleanup/capture replay."
+    }
+  },
+  "campaign_scheduling_override": {
+    "state": "paused_until_original_M14_acceptance",
+    "request_id": "20261029T040237372323Z-phone-79600609001652c3f404d9e22664a23f4db1d54da809dd0be92a66032261b1b2",
+    "at": "2026-10-29T04:11:39.252803+00:00",
+    "acceptance_status_unchanged": true,
+    "resume_automatically_after": "OriginalM14supported-scopeclosureacceptedandrecorded; same06:00Z/creditlimits"
+  }
+}

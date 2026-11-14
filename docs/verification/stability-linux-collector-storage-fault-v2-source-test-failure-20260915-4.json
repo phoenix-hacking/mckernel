@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_test_failure",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "attempt": 20,
+  "status": "FAIL_SOURCE_TEST",
+  "recorded_utc": "2026-09-16T01:51:49Z",
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-failure-20260915-20.tar.gz",
+    "sha256": "be62bbc2d83dbf0a5229ce8ba3693563a82621081670811d389d3b0f40d1d0f8",
+    "size": 90943,
+    "members": 20
+  },
+  "failing_source_sha256": {
+    "supervise.py": "8f7789b100067b41d0aff710feaaf2bcbea10bf83a869faa9bfd300593cedf5c",
+    "oracle.py": "d15be5d03135f73f25e074fa0e959d3c72b5b7de9e1893bd447a41bdd90ace6b",
+    "test_collector_storage_fault_packet.py": "c208fa47d67ec35147053376506cfd8b126db2cfb6d0bdb636eb3bfc75a1ccb9"
+  },
+  "failure": "Both full interpreter suites reached 88 passing tests, then rejected the existing packet-15 negative only because the new diagnostic text no longer matched its retained exact contract.",
+  "correction": "The diagnostic was changed without altering the predicate so both the retained packet-15 control and the new no-sentinel timeout controls match the same specific error.",
+  "corrected_source_sha256": {
+    "oracle.py": "d8d43ca5c7a5768e66e1851e66563bb6cbb346efdf99594303779061c7f45252",
+    "test_collector_storage_fault_packet.py": "c208fa47d67ec35147053376506cfd8b126db2cfb6d0bdb636eb3bfc75a1ccb9"
+  },
+  "corrected_checks": {
+    "python3.9.12": "89/89 PASS",
+    "python3.8.10": "89/89 PASS",
+    "pycompile": "PASS on both interpreters"
+  },
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

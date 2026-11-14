@@ -1,0 +1,105 @@
+{
+  "accepted_selected_source_facts": [
+    "228/509 are actual Rust line!() arguments in retained x86_cpu_helpers.rs save/copy allocation calls. CPU_FILE deliberately emits arch/x86_64/kernel/cpu.c; they are not physical line numbers in cpu.c text.",
+    "Rust release_fp_regs returns early on null fp_regs; the pages-only release marker is emitted only in its non-null branch, before _ihk_mc_free_pages and before the pointer slot is cleared. Marker contains no pointer/TID.",
+    "Allocator ADD logs the allocation result pointer; REMOVE logs addr_entry.addr. Entry keys are shared file/line allocation groups, not unique tracking-entry addresses. Final DELETE follows removal when alloc_count reaches zero.",
+    "kprintf locks individual writes; allocator entry/add and remove/delete span lock releases. One CPU does not imply whole allocator-operation atomicity. Current neighbor/final-delete filters are useful conservative candidate constraints, not a new thread or atomicity proof.",
+    "Unchanged pinned native_diagnostic._validate_manifest/evaluate remain called and require exact AVX payload/oracle, stream completion, procfs-empty, trace/retirement/release, QMP shutdown and teardown. Evaluator keeps native_acceptance=false."
+  ],
+  "completed_fixture_scope": {
+    "claim": "Synthetic source-format and negative-field coverage only; no actual native MM/FP lifecycle accepted",
+    "direct_returncode": 0,
+    "duration_seconds": 0.11433863401180133,
+    "negatives": 17,
+    "positives": 2,
+    "reviewer_replays": 0,
+    "target_or_guest_runs": 0
+  },
+  "decision": "NO_COMPLETE_NATIVE_ALLOCATION_TO_RELEASE_PROOF_FROM_CURRENT_EVALUATOR",
+  "evidence": {
+    "actual_reader_reference": {
+      "bytes": 87659,
+      "path": "/home/holden/mckernel-work/host-preparation/native-kmsg-read-abi-20261018-1/fixture-source/os_runtime.rs",
+      "sha256": "dd8a566b659395a2cb93e396ea6569510f57a3058ccecf52428cbd6d36b50394"
+    },
+    "collector_source": {
+      "bytes": 26243,
+      "path": "/home/holden/mckernel-work/host-preparation/native-fp-logging-helper-preparation-20261018-1/source/collector-fp-logging.c",
+      "sha256": "fc52d0e1b899a6032bd920aa2788323cc5632d3b27e4c78c271fa5d1d3119116"
+    },
+    "ring_writer": {
+      "bytes": 7840,
+      "path": "/home/holden/mckernel/kernel/debug.c",
+      "sha256": "5896fabfd22da1c023a9b4b9970fe7cfe1524de7bf353383b2dd04ad2b6c1f92"
+    }
+  },
+  "findings": [
+    {
+      "id": "ring-prefix-overwrite",
+      "not_covered_by_existing_tests": "truncated_tail deletes the final newline; it does not cover an overwritten prefix or full occupancy.",
+      "predicate": "Current consumer accepts raw length CAP-1=4190207. Ring writer uses exactly len-1 retained occupancy after overwriting the head. A newline-terminated overwritten prefix can therefore pass size/newline and contain a complete apparently fresh allocation/release sequence while hiding prior pointer history. The seen-pointer reuse test covers only retained text.",
+      "required_correction": "Before claiming a complete no-reuse allocation lifetime, require genuine no-overwrite/full-history evidence. A stricter <CAP-1 threshold is a candidate minimum only after binding actual reader fixed length/nonshifting behavior and accounting for its wrapped-bottom strnlen behavior. Do not label an unknown-history ring complete.",
+      "severity": "BLOCKS_COMPLETE_LIFETIME_ACCEPTANCE",
+      "source": "evaluate_fp_ring.py::transport len(raw)<CAP; retained kernel/debug.c overflow head=(tail+1)%len"
+    },
+    {
+      "id": "same-owned-boot",
+      "predicate": "evaluate accepts raw/status/control separately from native observation and verifies image hash/oracle but no shared attempt identity. CLI alone cannot prove these bytes were collected during that same exclusive boot.",
+      "required_join": "Actual independent runtime review must bind control writes, raw ring/status hashes, collector identity/source, unchanged native observation and exact image within one owned guest/attempt/archive receipt. This is a real input lineage obligation, not an invented success report or new generic framework.",
+      "severity": "MANDATORY_ACTUAL_RESULT_JOIN_OUTSIDE_EVALUATOR"
+    }
+  ],
+  "functional_scope": "Working OS/apps plus actual Rust/reviewed assembly cutover; source/evidence review only",
+  "implementation_author": "evening_two_app_batch",
+  "implementation_ownership": false,
+  "native_acceptance": false,
+  "nonnull_release_native_credit": false,
+  "permitted_scope": "Source-format candidate detection and future diagnostic evidence collection. A release marker plus source pins supports only a non-null-branch candidate until actual same-boot native observation and full-history/pointer-lifetime ambiguity obligations are closed. No thread identity or direct release-marker-pointer field exists.",
+  "reviewed_at": "2026-10-19T20:53:48.322621+00:00",
+  "reviewed_inputs": {
+    "completed_fixture_result": {
+      "bytes": 661,
+      "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/ring-fixture-result.json",
+      "sha256": "8f35dff6695d8a6e45d6a419ad4f150ac38267f3ca06090b79e65974489fe27d"
+    },
+    "completed_fixture_status": {
+      "bytes": 889,
+      "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/ring-fixture.status.json",
+      "sha256": "0083ffa76e59048120c6f8f9de42eb55cb26e7cc3939e60ef46e246ac16a7cd8"
+    },
+    "evaluator": {
+      "bytes": 7027,
+      "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/evaluate_fp_ring.py",
+      "sha256": "e3dfb403804705d25e6b399dd53dd92f80a88eb365cf1f8734425106023b5779"
+    },
+    "fixture_source": {
+      "bytes": 3657,
+      "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/test_fp_ring.py",
+      "sha256": "b2b4e7580725ab12bff9b4c63b98af017c21ffaf2598292c1afb792ca006c37c"
+    },
+    "fixture_stderr": {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/ring-fixture.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "fixture_stdout": {
+      "bytes": 166,
+      "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/ring-fixture.stdout",
+      "sha256": "8db65c6bd94a275dc5ef939b855b07ac8ec605a87fb595c36bfc079066a4a37d"
+    },
+    "source_contract": {
+      "bytes": 1798,
+      "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/evaluator-source-contract.json",
+      "sha256": "5618f683a52b69b4a0a679b498c2515b6dd4c5d0b1110495d8c999b91dd5f081"
+    }
+  },
+  "reviewer": "/root/next_replace_tid_review",
+  "reviewer_tests_or_target_commands": 0,
+  "root_or_guest_authority": false,
+  "schema": "mckernel.independent-fp1e7-ring-evaluator-source-review.v1",
+  "smallest_next_action": "Author preserves current evaluator/2+17 fixture result, corrects only history-completeness predicate using pinned reader/writer facts, and exercises one affected boundary negative under the existing ordinary profile. No helper/kernel ABI expansion, old fixture replay, root or guest action is authorized here.",
+  "source_execution_authority": false,
+  "status": "NEEDS_ONE_BOUNDED_HISTORY_COMPLETENESS_CORRECTION",
+  "unrelated_catalogs_reaudited": false,
+  "whole_C_retirement": false
+}

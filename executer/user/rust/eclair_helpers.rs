@@ -203,7 +203,7 @@ unsafe extern "C" {
     fn bfd_openr(filename: *const u8, target: *const u8) -> *mut c_void;
     fn bfd_fopen(filename: *const u8, target: *const u8, mode: *const u8, fd: c_int)
         -> *mut c_void;
-    fn bfd_check_format(abfd: *mut c_void, format: c_int) -> c_int;
+    fn bfd_check_format(abfd: *mut c_void, format: c_int) -> bool;
     fn eclair_bfd_get_symtab_upper_bound_bridge(abfd: *mut c_void) -> isize;
     fn eclair_bfd_canonicalize_symtab_bridge(
         abfd: *mut c_void,
@@ -216,7 +216,7 @@ unsafe extern "C" {
         location: *mut c_void,
         offset: isize,
         count: usize,
-    ) -> c_int;
+    ) -> bool;
     fn bfd_perror(message: *const u8);
     fn printf(fmt: *const u8, ...) -> i32;
     fn fprintf(stream: *mut c_void, fmt: *const u8, ...) -> i32;
@@ -245,12 +245,9 @@ unsafe extern "C" {
 
 #[repr(C)]
 pub struct BfdSection {
-    name: *const u8,
-    id: u32,
-    index: u32,
-    next: *mut BfdSection,
-    prev: *mut BfdSection,
-    flags: u32,
+    // Opaque selected BFD 2.41 prefix, including its packed section flags.
+    // The production typed witness binds the consumed VMA field at byte 48.
+    before_vma: [u8; 48],
     vma: usize,
 }
 
@@ -262,6 +259,21 @@ pub struct BfdSymbol {
     flags: u32,
     section: *mut BfdSection,
 }
+
+// Only these symbol/section fields are read. Bind each repr(C) offset and
+// alignment to the same pinned layout checked by bfd_layout_witness.c.
+const _: [(); 8] = [(); core::mem::align_of::<BfdSymbol>()];
+const _: [(); 8] = [(); core::mem::offset_of!(BfdSymbol, name)];
+const _: [(); 16] = [(); core::mem::offset_of!(BfdSymbol, value)];
+const _: [(); 32] = [(); core::mem::offset_of!(BfdSymbol, section)];
+const _: [(); 8] = [(); core::mem::align_of::<BfdSection>()];
+const _: [(); 48] = [(); core::mem::offset_of!(BfdSection, vma)];
+const _: [(); 8] = [(); core::mem::size_of::<usize>()];
+const _: [(); 8] = [(); core::mem::size_of::<*const u8>()];
+const _: [(); 8] = [(); core::mem::size_of::<*mut BfdSection>()];
+const _: [(); 8] = [(); core::mem::align_of::<usize>()];
+const _: [(); 8] = [(); core::mem::align_of::<*const u8>()];
+const _: [(); 8] = [(); core::mem::align_of::<*mut BfdSection>()];
 
 fn is_space(byte: u8) -> bool {
     matches!(byte, b' ' | b'\t' | b'\n' | b'\r' | 0x0b | 0x0c)
@@ -535,7 +547,7 @@ unsafe fn read_physmem(pa: usize, buf: *mut c_void, size: usize) -> c_int {
     }
 
     let ok = unsafe { bfd_get_section_contents(dump, section, buf, offset, size) };
-    if ok == 0 {
+    if !ok {
         unsafe {
             bfd_perror(b"read_physmem:bfd_get_section_contents\0".as_ptr());
         }
@@ -711,7 +723,7 @@ pub unsafe extern "C" fn setup_symbols(fname: *mut u8) -> c_int {
         return 1;
     }
 
-    if unsafe { bfd_check_format(abfd, BFD_OBJECT) } == 0 {
+    if !unsafe { bfd_check_format(abfd, BFD_OBJECT) } {
         unsafe {
             bfd_perror(b"bfd_check_format\0".as_ptr());
         }
@@ -846,7 +858,7 @@ pub unsafe extern "C" fn setup_dump(_fname: *mut u8) -> c_int {
         return 1;
     }
 
-    if unsafe { bfd_check_format(dump, BFD_OBJECT) } == 0 {
+    if !unsafe { bfd_check_format(dump, BFD_OBJECT) } {
         unsafe {
             bfd_perror(b"bfd_check_format\0".as_ptr());
         }
@@ -866,7 +878,7 @@ pub unsafe extern "C" fn setup_dump(_fname: *mut u8) -> c_int {
         kernel_base: 0,
         phys_start: 0,
     };
-    if unsafe {
+    if !unsafe {
         bfd_get_section_contents(
             dump,
             physchunks,
@@ -874,7 +886,7 @@ pub unsafe extern "C" fn setup_dump(_fname: *mut u8) -> c_int {
             0,
             core::mem::size_of::<DumpMemChunksHeader>(),
         )
-    } == 0
+    }
     {
         unsafe {
             bfd_perror(b"read_physmem:bfd_get_section_contents(mem_size)\0".as_ptr());
@@ -892,8 +904,7 @@ pub unsafe extern "C" fn setup_dump(_fname: *mut u8) -> c_int {
         return 1;
     }
 
-    if unsafe { bfd_get_section_contents(dump, physchunks, chunks.cast::<c_void>(), 0, mem_size) }
-        == 0
+    if !unsafe { bfd_get_section_contents(dump, physchunks, chunks.cast::<c_void>(), 0, mem_size) }
     {
         unsafe {
             bfd_perror(b"read_physmem:bfd_get_section_contents(mem_chunks)\0".as_ptr());

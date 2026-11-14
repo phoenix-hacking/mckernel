@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_correction_validation_failure",
+  "task_id": "M02-B-storage-fault-v2-source-correction",
+  "correction_attempt": 58,
+  "recorded_utc": "2026-09-16T12:08:29Z",
+  "status": "FAIL_REGRESSION_ERROR_PRECEDENCE",
+  "authority": {
+    "review_input_sha256": "dbe24f5b7cdd94f9ba2f9846073b6b2cd6e5f00ffca55f4ce99d4343261b5100",
+    "review_failure_sha256": "0abed1c3f09eab131c2e3cfc717f782be1ff806f84763eb95c9e7238f0f8b529"
+  },
+  "candidate": {
+    "oracle_sha256": "189a079ee9c89801d85136dce79cf3fe1744117a21dbf38d6a0d21970e8de5e9",
+    "witness_owner_sha256": "43eaea9a18aa50d91ad7cc83efba680db8c45e0649d1d4f718a48bd6e88c90c3",
+    "test_sha256": "4c82c1de0d174ed890b3bede0a0a3ca0b624c500d193bb563994ba71184c7b6c",
+    "focused_descriptor_matrix": "PASS",
+    "full_python3_9": "135 tests, 3 failures",
+    "full_python3_8": "135 tests, 3 failures"
+  },
+  "evidence": {
+    "archive_path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-correction-validation-failure-20260916-58.tar.gz",
+    "archive_sha256": "4be555440fa79fc90e6850699918af739d56341aed2a21e7027718b3e6297e95",
+    "archive_size": 99201,
+    "archive_members": 12,
+    "archive_regular_files": 11
+  },
+  "blocking_finding": "The new semantic checks reject the intended contradictions, but three retained tests observe earlier generic high-fd or bind-acquisition diagnostics instead of their established boolean/type or descriptor-specific diagnostics. Both full Python versions fail the same three expectations.",
+  "next": "Preserve semantic rejection while restoring deterministic validation precedence: let existing type/range checks handle booleans and negative values, and use a descriptor-specific high_fd transition error. Then rerun the focused matrix and both complete suites before a new review archive.",
+  "source_accepted": false,
+  "compiler_packet_released": false,
+  "compiler_execution": false,
+  "runtime_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}

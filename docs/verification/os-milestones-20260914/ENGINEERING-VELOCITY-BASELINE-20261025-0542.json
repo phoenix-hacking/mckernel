@@ -1,0 +1,52 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "metric": "Net accepted substantive integration packages per wall-clock hour: current_object/default/SDK/native only.",
+  "baseline": {
+    "event": "baseline",
+    "id": "artifact-qualified-integrations-20261025-041242-051242",
+    "start": 1792901562.0,
+    "end": 1792905162.0,
+    "accepted": [
+      {
+        "package": "m14.process-mincore-cpu.union55",
+        "stage": "current_object",
+        "proof": "docs/verification/evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0442.json",
+        "handoff_sha256": "5f05e07c8b4f9ecb409f8f74b11c29cf3ef04f6d07f0f3dc93766e9165ae418a",
+        "observed_reported_at": "2026-10-25T04:47:51.348215+00:00",
+        "contract": "Actual current Rust object, selected/fallback C, ABI, unique providers and strict partial link accepted for155-provider cohort; one combined qualification, no per-function counts."
+      },
+      {
+        "package": "m14.process.create-thread-adapters",
+        "stage": "current_object",
+        "proof": "docs/verification/evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0512.json",
+        "handoff_sha256": "14bd82e6c70532891c03e44837b0382597509250a4681bbe363e35f5e6fc1177",
+        "observed_reported_at": "2026-10-25T05:12:41.768221+00:00",
+        "contract": "Actual current source8 full Rust/selected consumer/ABI/strictpartial accepted and integrated,160-provider cohort. One scope/stage across retries."
+      }
+    ],
+    "measurement": "Observed accepted current-object/default/SDK/native integration packages, excluding behavior-only/source-only/metadata work from this primary metric.",
+    "limit": "Retrospective scoped record baseline; report times distinguish observations from unknown compiler completion timestamps; not whole-project labor productivity."
+  },
+  "baseline_packages_per_hour": 2,
+  "target_ratio": 1.95,
+  "target_packages_per_hour": 3.9,
+  "practical_target": "At least2comparable packages in each30-minute window, sustained across2windows, with quality and default/native closure checks.",
+  "intervention_started_at": 1792907022.9841754,
+  "intervention_started_at_utc": "2026-10-25T05:43:42.984175+00:00",
+  "ledger_path": "docs/verification/os-milestones-20260914/engineering-velocity-events.jsonl",
+  "reporter_path": "scripts/os_velocity/report_velocity.py",
+  "primary_stages": [
+    "current_object",
+    "default",
+    "SDK",
+    "native"
+  ],
+  "original_helper_template_is_not_live_baseline": true,
+  "denominator_note": "Use a full one-hour baseline. Monitor snapshot spans and delayed review write times overlap; two selected steps divided by one30-minute snapshot would not establish complete baseline throughput.",
+  "zero_baseline_categories": "Default/native/file closure baseline0: report absolute new closures, no percentage uplift from zero.",
+  "quality_gate": "Do not split packages, count retries twice, treat metadata/source-only checks as qualified artifacts, or delay a longer useful native/default job to improve the counter. Stage mix and complexity must remain comparable for a95% claim.",
+  "actual_improvement_ratio": null,
+  "sustained_195_claim": false,
+  "resource_controls_changed": false,
+  "milestone_acceptance_changed": false
+}

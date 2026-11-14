@@ -1,0 +1,80 @@
+--- actual-control-delivery.rs
++++ actual-control-delivery-corrected.rs
+@@ -1739,6 +1739,12 @@
+     }
+ }
+ 
++
++#[cfg(test)] impl<M:ResponseMemory> Mailbox<M>{
++pub(crate) fn fixture_response_identity_held(&self,physical:u64)->bool{
++        self.calls.iter().flatten().any(|call|call.delivery.request().response()==physical)
++    }
++}
+ }
+ use application_rpc::{Exchange, Token};
+ use application_syscall::Request;
+@@ -3089,6 +3095,64 @@
+ // Pending cancellation can destroy the guest root on a negative first RET.
+ // Keep the original response claim unpublished while MM adoption is active;
+ // after seal, abort/quarantine stays frozen until the real host revoke barrier.
++const FORK_CARRIER_MARKER: u64 = 0x313030434b46434d;
++fn fork_ack_publication_frozen(slots: &mut [Option<Entry>], parent: Token, cpu: i32) -> bool {
++    let Some(pi) = slots.iter().position(|slot| slot.as_ref().is_some_and(|entry| entry.key() == parent)) else { return false; };
++    let parent_pid = slots[pi].as_ref().unwrap().cleanup.pid();
++    for ci in 0..slots.len() {
++        let Some(fork) = slots[ci].as_ref().and_then(|entry| entry.fork.as_ref()) else { continue; };
++        if fork.reservation.identity.parent != parent.wire() { continue; }
++        let Some((physical, 1)) = fork.link.as_ref().and_then(|link| link.revoked_carrier()) else { continue; };
++        let key = fork.reservation.identity;
++        let Some(ack) = fork.ack.as_ref() else { continue; };
++        let delivery = ack.delivery.clone();
++        let ready = ack.verified && ack.accepted && !ack.published;
++        let published = ack.published;
++        if slots[pi].as_ref().unwrap().syscalls.has_private_fork_response(cpu, 3, |request| {
++            let args = request.arguments();
++            request.pid() == parent_pid && args[1] == 2 && args[2] == key.length
++                && args[3] == key.root && args[4] == physical && args[5] == FORK_CARRIER_MARKER
++                && (published || delivery.as_ref().is_none_or(|d| request != &d.request))
++        }) { return true; }
++        let Some(delivery) = delivery else { continue; };
++        if delivery.cpu != cpu || published { continue; }
++        if !ready || slots[pi].as_mut().unwrap().syscalls.check_fork_abort(
++            delivery.worker, delivery.serial, &delivery.request, Some(0),
++        ).is_err() { return true; }
++    }
++    false
++}
++fn publish_fork_ack_in_slots(slots: &mut [Option<Entry>], parent: Token, cpu: i32,
++    send: impl FnOnce(&[u8; 128]) -> Result) -> Result<bool> {
++    let pi = slots.iter().position(|slot| slot.as_ref().is_some_and(|entry| entry.key() == parent)).ok_or(ENOENT)?;
++    let ci = slots.iter().position(|slot| slot.as_ref().and_then(|entry| entry.fork.as_ref()).is_some_and(|fork| {
++        fork.reservation.identity.parent == parent.wire() && fork.ack.as_ref().is_some_and(|ack|
++            ack.verified && ack.accepted && !ack.published && ack.delivery.as_ref().is_some_and(|d| d.cpu == cpu))
++    }));
++    let Some(ci) = ci else {
++        return slots[pi].as_mut().unwrap().syscalls.publish(cpu, |packet| send(packet).map_err(|e| e.to_errno())).map_err(errno);
++    };
++    if pi == ci { return Err(EIO); }
++    let (parent_entry, child_entry) = if pi < ci {
++        let (left, right) = slots.split_at_mut(ci);
++        (left[pi].as_mut().unwrap(), right[0].as_mut().unwrap())
++    } else {
++        let (left, right) = slots.split_at_mut(pi);
++        (right[0].as_mut().unwrap(), left[ci].as_mut().unwrap())
++    };
++    let ack = child_entry.fork.as_mut().unwrap().ack.as_mut().unwrap();
++    parent_entry.syscalls.publish_observed(cpu, |packet| send(packet).map_err(|e| e.to_errno()),
++        |request, worker, serial| {
++            if ack.delivery.as_ref().is_some_and(|delivery|
++                request == &delivery.request && worker == Some(delivery.worker) && serial == delivery.serial)
++            {
++                // Infallible durable publication marker, BEFORE any later
++                // Mailbox bookkeeping can fail. The response's last access and
++                // memory release have actually ended at this precise point.
++                ack.published = true;
++            }
++        }).map_err(errno)
++}
+ fn fork_publication_frozen(slots: &[Option<Entry>], parent: Token, cpu: i32) -> bool {
+     if fork_ingress::publication_frozen(slots, parent, cpu)
+         || fork_link::control_publication_frozen(slots, parent, cpu) { return true; }

@@ -1,0 +1,28 @@
+{
+  "decision": "PASS_SOURCE_ONLY_NO_EXECUTION_AUTHORITY",
+  "reviewer": "/root/custody_release_review",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "custody_adapter": "exact-root-sudo-reparent1311-outer-typed-absent-v1",
+  "runtime_sha256": "0a67af9b28ac480960dbcaa2553b9b262cf90f1f96618beb818392018715648c",
+  "sources": {
+    "runtime_pipeline.py": {
+      "bytes": 33739,
+      "sha256": "0a67af9b28ac480960dbcaa2553b9b262cf90f1f96618beb818392018715648c"
+    },
+    "capture_entry.py": {
+      "bytes": 11236,
+      "sha256": "58c80704920fec383a2ec19bf1594a6b24a57688be681232d140dbaa55d26497"
+    },
+    "capture_outer.py": {
+      "bytes": 9167,
+      "sha256": "3d3e46527400d7142a9c98dfa63f665d9973057526dce66b39417ac2e71800c4"
+    }
+  },
+  "review_basis": "Independent review plus15 runtime and18 capture private tests; rawcustody beforeadapters; exactsameOFD; no borrowedLOCK_UN; unknown historical outerJOIN preserved; typedcurrentabsence and clockguards; uncertainfault custodyretained.",
+  "execution_release": false,
+  "limitations": [
+    "No exact launch packet/grant yet",
+    "Private fixtures not actual transfer/retirement/physical acceptance",
+    "New capture direct wait covers new child only"
+  ]
+}

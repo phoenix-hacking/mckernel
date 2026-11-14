@@ -1,0 +1,72 @@
+--- /home/holden/mckernel-work/host-preparation/m07-current-final-used-state-join-20261023-1/private-state-app-successor-1/native-execution-preparation-1/typed-state-consumer-1/native_diagnostic.py
++++ /home/holden/mckernel-work/host-preparation/m07-current-final-used-state-join-20261023-1/private-state-app-successor-1/native-execution-preparation-1/typed-state-consumer-1/state-case-binding-1/native_diagnostic.py
+@@ -337,6 +337,45 @@
+             "source_attestation_only": "Frozen app markers follow actual seed/compare/restore checks; no independent register-byte read by consumer."}
+ 
+ 
++STATE_CASE_ID = "m07.private-used-state-3-4-9"
++STATE_ENV = {"PATH": "/usr/bin:/bin", "COKERNEL_PATH": "/apps", "PAIR_CPU": "0"}
++
++def _validate_state_case_binding(obj, payload, profile):
++    validate_state_oracle(payload["oracle"]["stdout_typed"])
++    _need(obj["case_id"] == STATE_CASE_ID and payload["env"] == STATE_ENV, "fixed state-case identity/environment")
++    _need(payload["argv"] == ["/bin/mcexec", "-t", "1", "0", "/apps/app"], "fixed state app argv")
++    _need((profile["memory_mib"], profile["vcpus"], profile["numa_nodes"]) == (8192, 4, 2), "state two-LWK-CPU guest profile")
++
++def _check_state_thread_trace(serial, prefix):
++    # App waits for exactly one bounded waiter and joins it before returning.
++    # Keep original parent delivery/RET/route checker; add exact procfs ledger.
++    owner = re.fullmatch(r"os=(\d+) generation=(\d+) pid=(\d+)", prefix)
++    _need(owner is not None, "state parent identity")
++    parent = int(owner[3]); events = {"published": {}, "deleted": {}}
++    for position, line in enumerate(serial.splitlines()):
++        if "application procfs " not in line:
++            continue
++        match = re.search(r"application procfs (published|deleted) " + re.escape(prefix) + r" tid=(\d+)\s*$", line)
++        _need(match is not None, "state foreign/malformed thread procfs row")
++        operation, tid = match[1], int(match[2])
++        _need(tid > 0 and tid not in events[operation], "state duplicate/invalid thread procfs row")
++        events[operation][tid] = position
++    published, deleted = events["published"], events["deleted"]
++    _need(set(published) == set(deleted) and len(published) == 2 and parent in published,
++          "state exact parent/waiter publication and deletion")
++    waiter = next(tid for tid in published if tid != parent)
++    _need(published[parent] < published[waiter] < deleted[waiter] < deleted[parent],
++          "state waiter/parent procfs order")
++    exits = [i for i,line in enumerate(serial.splitlines()) if re.search(
++        r"application_syscall=delivered " + re.escape(prefix) + r" worker=\d+ delivery=\d+ cpu=0 number=231\s*$", line)]
++    _need(len(exits) == 1 and deleted[waiter] < exits[0] < deleted[parent],
++          "state joined waiter before parent exit")
++    waits = [i for i,line in enumerate(serial.splitlines()) if re.search(
++        r"application_syscall=delivered " + re.escape(prefix) + r" worker=\d+ delivery=\d+ cpu=0 number=202\s*$", line)]
++    _need(any(published[waiter] < i < deleted[waiter] for i in waits), "state actual sampled blocking futex")
++    return {"parent_tid": parent, "waiter_tid": waiter, "PAIR_CPU": 0,
++            "registered_tid_count": 2, "all_registered_tids_deleted": True}
++
+ def _validate_manifest(obj):
+     _keys(obj, ("schema_version", "kind", "case_id", "artifacts", "modules", "profile", "payload", "staging"))
+     _need(type(obj["schema_version"]) is int and obj["schema_version"] == 1 and obj["kind"] == "native-diagnostic-manifest", "manifest identity")
+@@ -362,7 +401,10 @@
+     payload = obj["payload"]
+     _need(payload["cwd"] == "/case/work", "payload cwd")
+     _validate_payload_argv(payload["argv"])
+-    _need(payload["env"] == {"PATH": "/usr/bin:/bin", "COKERNEL_PATH": "/apps"}, "frozen environment")
++    if "stdout_typed" in payload["oracle"]:
++        _validate_state_case_binding(obj, payload, profile)
++    else:
++        _need(payload["env"] == {"PATH": "/usr/bin:/bin", "COKERNEL_PATH": "/apps"}, "frozen environment")
+     oracle = payload["oracle"]
+     _need(set(oracle) in ({"stdout_hex", "stderr_hex", "exit_code"},
+                           {"stdout_hex", "stderr_hex", "exit_code", "stderr_typed"},
+@@ -730,9 +772,10 @@
+                       for op in ("published", "deleted")]):
+         _need(len(re.findall(pattern, serial)) == 1, "retirement/release evidence")
+     _check_syscall_trace(serial, prefix, _begin_cleanup_enabled(manifest), _begin_process_case(manifest))
++    state_threads = _check_state_thread_trace(serial, prefix) if state_typed is not None and state_outcome["selected_mask"] else None
+     return {"schema_version": 1, "kind": "native-diagnostic-result", "case_id": manifest["case_id"],
+             "status": "PROTOCOL_PARTIAL" if state_outcome is not None and not state_outcome["preservation_pass"] else "PROTOCOL_PASS",
+-            **({"state_app_outcome": state_outcome} if state_outcome is not None else {}),
++            **({"state_app_outcome": state_outcome, "state_thread_observation": state_threads} if state_outcome is not None else {}),
+             "application_acceptance": False, "mckernel_application_executed": False,
+             "guest_report": report, "observation": observation, "runtime_blocker": DIAGNOSTIC_LIMITATION}
+ 

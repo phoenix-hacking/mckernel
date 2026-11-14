@@ -1,0 +1,209 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_500_PAIR_MOCKED_HOST_ABI_AND_BEHAVIOR",
+  "grant": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/ROOT-ORDINARY-HOST-GRANT-OUTPUT-SUCCESSOR.json",
+    "bytes": 2388,
+    "sha256": "2ec39a4bc7bca77703fbb2a16ad80cf7ff97d606e0e1b57a20b7dcb115cfee41"
+  },
+  "command_plan": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/FUTURE-HOST-COMMANDS.NOT-GRANTED.json",
+    "bytes": 2952,
+    "sha256": "0dcfb7948631089af3e2f4312ba35e8f608cf2fa32f0f3223f46286b9590964a"
+  },
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/SOURCE-READY.json",
+    "bytes": 4983,
+    "sha256": "fd4cccbf60e67f0300f66848eeb7791ed61cd83e6234bfd7dc3226847e48d061"
+  },
+  "source_bindings": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/f06_vdso_info.rs",
+      "bytes": 5913,
+      "sha256": "4bc4a23b9444a6eab6f5a6f6e2737db41530809b3f8d987973ab0e1dbd8ebd8b"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/original-vdso-info.c.inc",
+      "bytes": 787,
+      "sha256": "fcb21ddb8e3d30a75d3394a3e9603000d9e323beade8579e9afb8e98cc4e7f2d"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/original-vdso-layout.c.inc",
+      "bytes": 312,
+      "sha256": "092ac2e97236ae0706bfbf4dee3e6841c46cd4672447af7ab2205bc722ae38df"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/oracle.c",
+      "bytes": 3454,
+      "sha256": "eb4c214d2c3fbcbb68260c389462522b6501cf94641ddcb4a13ff38f5466e775"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/fixture.rs",
+      "bytes": 3189,
+      "sha256": "4df1a1d668f1486f159bfac827cba323c47a05276b7388c5b0747b7f0b03a063"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/arch-syscall-selection.patch",
+      "bytes": 453,
+      "sha256": "4613472b80c34f2d9a6effd0b4e1824ec3b80c10aadcc9d1cf424957f9268eee"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/syscall-policy-integration.patch",
+      "bytes": 890,
+      "sha256": "6d9bea37caa537a2aa6e4794e9e7cc4f89435029354d2486ff0541399dd457db"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/cmake-selection.PROPOSAL.patch",
+      "bytes": 771,
+      "sha256": "8d9ddb272be733f3eeab8275c73e8846c9bb13085e1dc4ce6c85d4328df58719"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/FUTURE-HOST-COMMANDS.NOT-GRANTED.json",
+      "bytes": 2952,
+      "sha256": "0dcfb7948631089af3e2f4312ba35e8f608cf2fa32f0f3223f46286b9590964a"
+    }
+  ],
+  "commands": [
+    {
+      "index": 0,
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Compile untouched original C body pure oracle.",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-I",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1",
+        "-c",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/oracle.c",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/future-host-output-1/oracle.o"
+      ],
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1",
+      "cpu_affinity": [
+        7
+      ],
+      "AS_bytes": 2147483648,
+      "CPU_limit_seconds": 60,
+      "wall_limit_seconds": 90,
+      "pid": 1892425,
+      "birth": 96475465,
+      "started_epoch": 1793167309.9632163,
+      "returncode": 0,
+      "wall_seconds": 0.06222754996269941,
+      "CPU_seconds": 0.048069999999999995,
+      "maximum_RSS_KiB": 26224,
+      "positive_direct_wait4_join": true,
+      "streams_closed": true,
+      "timed_out": false,
+      "finished_epoch": 1793167310.0254517,
+      "remaining_process_group_members": [],
+      "process_group_absent": true,
+      "group_observation_errors": [],
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/future-host-output-1/command0.stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/future-host-output-1/command0.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 1,
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Compile Rust body and ABI/equivalence driver.",
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--test",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "link-arg=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/future-host-output-1/oracle.o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/fixture.rs",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/future-host-output-1/fixture"
+      ],
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1",
+      "cpu_affinity": [
+        7
+      ],
+      "AS_bytes": 2147483648,
+      "CPU_limit_seconds": 60,
+      "wall_limit_seconds": 90,
+      "pid": 1892428,
+      "birth": 96475473,
+      "started_epoch": 1793167310.0355144,
+      "returncode": 0,
+      "wall_seconds": 0.14242655702400953,
+      "CPU_seconds": 0.14155399999999999,
+      "maximum_RSS_KiB": 123168,
+      "positive_direct_wait4_join": true,
+      "streams_closed": true,
+      "timed_out": false,
+      "finished_epoch": 1793167310.1779447,
+      "remaining_process_group_members": [],
+      "process_group_absent": true,
+      "group_observation_errors": [],
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/future-host-output-1/command1.stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/future-host-output-1/command1.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 2,
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Run 500 deterministic original C/Rust behavior pairs.",
+      "argv": [
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/future-host-output-1/fixture",
+        "--test-threads=1",
+        "--nocapture"
+      ],
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1",
+      "cpu_affinity": [
+        7
+      ],
+      "AS_bytes": 2147483648,
+      "CPU_limit_seconds": 60,
+      "wall_limit_seconds": 90,
+      "pid": 1892441,
+      "birth": 96475488,
+      "started_epoch": 1793167310.187559,
+      "returncode": 0,
+      "wall_seconds": 0.021889880998060107,
+      "CPU_seconds": 0.0019299999999999999,
+      "maximum_RSS_KiB": 8364,
+      "positive_direct_wait4_join": true,
+      "streams_closed": true,
+      "timed_out": false,
+      "finished_epoch": 1793167310.2094524,
+      "remaining_process_group_members": [],
+      "process_group_absent": true,
+      "group_observation_errors": [],
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/future-host-output-1/command2.stdout",
+        "bytes": 266,
+        "sha256": "38f16f4d00c85189a3eb626adf2d5a52905ea7db540515c6c78225c9b8b96d71"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/future-host-output-1/command2.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "commands_executed": 3,
+  "runtime_acceptance": false,
+  "default_acceptance": false,
+  "native_acceptance": false,
+  "wholefile_acceptance": false
+}

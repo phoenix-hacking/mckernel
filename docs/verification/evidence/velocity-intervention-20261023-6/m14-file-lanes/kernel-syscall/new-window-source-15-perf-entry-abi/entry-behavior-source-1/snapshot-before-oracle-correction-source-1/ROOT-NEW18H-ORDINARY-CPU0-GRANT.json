@@ -1,0 +1,33 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "ROOT_GRANTED_ONCE_ORDINARY_CORRECTED_PERF_ENTRY",
+  "at": 1792965933.4501503,
+  "execution_count": 1,
+  "CPU": 0,
+  "ordinary_jobs": 1,
+  "uid": 1000,
+  "AS_bytes": 2147483648,
+  "CPU_seconds": 60,
+  "wall_seconds": 90,
+  "retirement_seconds": 6,
+  "F_bytes": 33554432,
+  "FD": 256,
+  "stack_bytes": 2097152,
+  "core": 0,
+  "MemAvailable_minimum_bytes": 25501368320,
+  "HOST_floor_bytes": 17246978048,
+  "scratch_floor_bytes": 12884901888,
+  "ready_sha256": "20ed0201cc6d71e5a21f119bf0c03be16d4ed8e695c6d07cba5941356a28bd4f",
+  "runner_sha256": "17ffd2a7abd74d301304ec2c2b21538d8fa06c5dd72bb9f1784d357c53ddf6b6",
+  "launch_argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "-c",
+    "import os,sys,hashlib; p=sys.argv[1]; fd=os.open(p,os.O_RDONLY|os.O_CLOEXEC); raw=os.read(fd,1048576); st=os.fstat(fd); assert len(raw)==st.st_size and hashlib.sha256(raw).hexdigest()==sys.argv[2], 'source FD binding mismatch'; ns={'__name__':'__main__','__file__':p}; exec(compile(raw,p,'exec'),ns)",
+    "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-15-perf-entry-abi/entry-behavior-source-1/snapshot-before-oracle-correction-source-1/run_snapshot_correction_once.NOT-GRANTED.py",
+    "17ffd2a7abd74d301304ec2c2b21538d8fa06c5dd72bb9f1784d357c53ddf6b6"
+  ],
+  "source_review_sha256": "ce3b350015f323081941b50da58a31bbfa1f78bb71cba3062e6ce6332a9ee1c9",
+  "Rust_recompile": false,
+  "old_grant_replay": false,
+  "heavy_native_granted": false
+}

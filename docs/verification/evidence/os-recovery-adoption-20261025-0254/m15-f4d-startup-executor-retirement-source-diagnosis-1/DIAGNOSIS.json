@@ -1,0 +1,366 @@
+{
+  "complete_original_ND_PAYLOAD": {
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "app",
+      "A",
+      "",
+      "B"
+    ],
+    "cwd": "/case/work",
+    "env": {
+      "COKERNEL_PATH": "/apps",
+      "PATH": "/usr/bin:/bin"
+    },
+    "finished_ns": 34649745401,
+    "procfs_empty": true,
+    "raw_wait_status": 0,
+    "reaped_ns": 34176476033,
+    "started_ns": 31909714196,
+    "streams": {
+      "stderr": {
+        "discarded": 0,
+        "eof": true,
+        "eof_ns": 34074411944,
+        "hex": "",
+        "limit": 1024,
+        "observed": 0,
+        "retained": 0,
+        "truncated": false
+      },
+      "stdout": {
+        "discarded": 0,
+        "eof": true,
+        "eof_ns": 34074440160,
+        "hex": "7b2263617365223a22737461727475702e617267762d656d707479222c2261726763223a342c2261726776223a5b22617070222c2241222c22222c2242225d2c227465726d696e61746f725f69735f6e756c6c223a747275657d0a",
+        "limit": 1024,
+        "observed": 91,
+        "retained": 91,
+        "truncated": false
+      }
+    }
+  },
+  "conclusions": [
+    "Selected Rust terminal231 path follows retained C order: no do_syscall_return; libc exit closes launcherfile and driver initiates cleanup. Adding terminal RET or a userspace wait before fileclose would contradict the retained C lifecycle contract.",
+    "Actual sequence proves fileclose, BEGIN intent0, real cleanupACK0/abandoned1, one retryablequery513=-11 and DELETE; it does not prove finalretirement0. ACK0 and procfs-empty are distinct from provider release_ready.",
+    "Backend source explicitly owns later retries and continues past departing RET waiter. Its retry target uses integer ktime_get_seconds()+1, not a new launcher obligation. Wall timing is consistent with an early snapshot, but the actual numeric retry deadline was not logged; no exact minimum1s latency is asserted.",
+    "Collector ends on first namespaceempty, snapshots once and powersoff. Reportfinished ~0.491s after the only-11; no laterquery is in retainedraw beforepoweroff. This demonstrably omits required completion observation; persistent executor/provider leakage remains unproved.",
+    "Wholefile/main/utilthread/all349/all51 semantics remain open beyond this exact successful argv/output and source-order join."
+  ],
+  "constraints": {
+    "BOOT": 963213.6960030915,
+    "MONO": 947874.5689514667,
+    "UTC": "2026-10-28T05:36:09Z",
+    "allholds_oneheavy_parentexclusive": true,
+    "ceiling": 57774.852125,
+    "credit_run": "7f4af94a83b14cc08f97401f5891d965"
+  },
+  "decision": "NO_EXECUTOR_LIFECYCLE_REGRESSION_ESTABLISHED_COLLECTOR_COMPLETION_PROOF_MISSING",
+  "observed_timeline": [
+    {
+      "raw": "<6>[   34.138882] mcctrl: application_syscall=delivered os=0 generation=1 pid=258 worker=6 delivery=512 cpu=0 number=231",
+      "serial_line": 1434
+    },
+    {
+      "raw": "<6>[   34.147793] mcctrl: application_file=close os=0 generation=1",
+      "serial_line": 1435
+    },
+    {
+      "raw": "<6>[   34.149288] mcctrl: application_process=cleanup_requested os=0 generation=1 pid=258 intent_errno=0",
+      "serial_line": 1436
+    },
+    {
+      "raw": "<6>[   34.153910] ihk_smp_x86_64: IHK-SMP: application cleanup ACK os=0 generation=1 pid=258 token=3 errno=0 abandoned=1",
+      "serial_line": 1437
+    },
+    {
+      "raw": "<6>[   34.158954] ihk_smp_x86_64: IHK-SMP: application retirement os=0 generation=1 pid=258 token=513 errno=-11",
+      "serial_line": 1438
+    },
+    {
+      "raw": "<6>[   34.170858] ihk_smp_x86_64: IHK-SMP: application procfs deleted os=0 generation=1 pid=258 tid=258",
+      "serial_line": 1440
+    },
+    {
+      "raw": "[   34.740403] reboot: Power down",
+      "serial_line": 1444
+    }
+  ],
+  "operations": {
+    "canonical_Git": 0,
+    "compiler": 0,
+    "implementation": 0,
+    "query_or_guard_or_cleanup": 0,
+    "subagents": 0,
+    "workload": 0
+  },
+  "references": {
+    "accepted_F4D_producer_context": {
+      "bytes": 7237,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/RETAINED-F4D-EXACT-PRODUCER-CONTEXT.json",
+      "sha256": "d5f8f26e9046c8d72524c9908a2d271c1f6243e0281a2406717b902286bc2244"
+    },
+    "actual_failure": {
+      "bytes": 2950,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/M15-RUST-STARTUP-ACTUAL-RETIREMENT-FAILURE-6D2E.json",
+      "sha256": "581472ec3e733cd557df34e9bd4e86a5cd9c55360b8c9b8b6dc854597fbb7d90"
+    },
+    "actual_serial": {
+      "bytes": 136008,
+      "path": "/home/holden/mckernel-work/scratch/m15st2/attempt-6d2e6c210f8bf62b1a4f1abc127fb09a/serial.log",
+      "sha256": "525a20c9f14f639ef3661be6a5974bbe185115f2f10c76ddb715c49494b5dd39"
+    },
+    "actual_six_phase_independent_acceptance": {
+      "bytes": 14457,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/container-input-closure-expert-1/INDEPENDENT-SIX-PHASE-ACCEPTANCE-CURRENT-FREE.json",
+      "sha256": "7908e5c0475ecd3e9f51ff7b1000617907f992ce9065b523ad513172af69cd2e"
+    },
+    "actual_six_phase_receipt": {
+      "bytes": 11562,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/workspace/native-running-modules-candidate-7d21874e10a4f79465c03c4a499373b3/evidence/receipt.json",
+      "sha256": "7304b696bd0b4fe0132749f530640a449e1dbd6f90610ac7c62e03b048173a2d"
+    },
+    "mcexec_helpers.rs": {
+      "bytes": 255596,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/materialization-preparation-1/actual-source-materialization-1/materialized-source/executer/user/rust/mcexec_helpers.rs",
+      "sha256": "d786abc498f5951c65b28246071fcbbe8023392f2cf7a372902fa76b259ed73d"
+    },
+    "mcexec_signal_wait_exit.rs": {
+      "bytes": 5234,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/materialization-preparation-1/actual-source-materialization-1/materialized-source/executer/user/rust/mcexec_signal_wait_exit.rs",
+      "sha256": "d04d3de7606ac893335782f46a3fb0ff5496271e03690b101ee1f3f0f92d7a25"
+    },
+    "mcexec_worker_lifecycle.rs": {
+      "bytes": 5071,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/materialization-preparation-1/actual-source-materialization-1/materialized-source/executer/user/rust/mcexec_worker_lifecycle.rs",
+      "sha256": "8029628c9093f48d6e8e847a7dbd3e5d53a42cf85d3efb4b5333d2a012b15125"
+    },
+    "retained_C_reference": {
+      "bytes": 221546,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/materialization-preparation-1/actual-source-materialization-1/materialized-source/executer/user/mcexec.c",
+      "sha256": "310301305e41bab4eda63026849ee6f166bb6e5d4d6f2c789aa8003e94745056"
+    },
+    "selected_CMake_cache": {
+      "bytes": 25737,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/workspace/native-running-modules-candidate-7d21874e10a4f79465c03c4a499373b3/output/m15-executor-sdk-default-1/build/CMakeCache.txt",
+      "sha256": "513aa839f40f4cecd8257f74122f36d83f28d18cc998fb4da69f538fb1953823"
+    },
+    "selected_Rust_object": {
+      "bytes": 760376,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/workspace/native-running-modules-candidate-7d21874e10a4f79465c03c4a499373b3/output/m15-executor-sdk-default-1/build/executer/user/rust/mcexec_helpers.o",
+      "sha256": "6bfeaed7849315e70895effe519ad159f704121b0a40360808c0c79333485c6f"
+    },
+    "selected_installed_executor": {
+      "bytes": 396200,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/workspace/native-running-modules-candidate-7d21874e10a4f79465c03c4a499373b3/output/mcexec-default-install-1/usr/local/bin/mcexec",
+      "sha256": "e5d18169ee50581274b374bba17fcefebe39e828885f367bfee182beaa3df756"
+    },
+    "selected_link_rule": {
+      "bytes": 201,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/workspace/native-running-modules-candidate-7d21874e10a4f79465c03c4a499373b3/output/m15-executor-sdk-default-1/build/executer/user/CMakeFiles/mcexec.dir/link.txt",
+      "sha256": "ff9aca24f030d1458637b31324ec9e44ebc9a8a94a6e90db75df68940da49531"
+    },
+    "selected_mcctrl_file": {
+      "bytes": 9095,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/resource-parallelism/sdk-operation/inert-rust-boilerplate-correction-1/workspace/native-running-modules-candidate-15817c3475cb4d3da5b21edd26b5ffb2/modules/mcctrl.rs",
+      "sha256": "de4793814c7ab3834d0d284c7e28ab2fbfdbfb63f50aac286c5082909d392dee"
+    },
+    "selected_mcctrl_process": {
+      "bytes": 54854,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/resource-parallelism/sdk-operation/inert-rust-boilerplate-correction-1/workspace/native-running-modules-candidate-15817c3475cb4d3da5b21edd26b5ffb2/modules/mcctrl_process.rs",
+      "sha256": "8bf30cd8ae79cc778bd91816f30aaf7a37ccc2aab59822ca2a03587426a212b8"
+    },
+    "selected_module_build_receipt": {
+      "bytes": 28840,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/resource-parallelism/sdk-operation/inert-rust-boilerplate-correction-1/workspace/native-running-modules-candidate-15817c3475cb4d3da5b21edd26b5ffb2/evidence/receipt.json",
+      "sha256": "1c320375b8bebf122ec7f7f397022e559275b88a4f410f28b2536ca5abbefef3"
+    },
+    "selected_smp_application": {
+      "bytes": 74960,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/resource-parallelism/sdk-operation/inert-rust-boilerplate-correction-1/workspace/native-running-modules-candidate-15817c3475cb4d3da5b21edd26b5ffb2/modules/smp_application.rs",
+      "sha256": "6adb4d11e7285caadd699bf22359bf21922f7dbfa4828b12b7a96fb7a1b07be0"
+    },
+    "selected_startup_collector_main": {
+      "bytes": 13552,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-supervisor-source-1/main.rs",
+      "sha256": "3366dc3aedf3a9499f866bd372046b3792ac6528f81b9ce81f637fde80a58ba5"
+    },
+    "unchanged_full_evaluator": {
+      "bytes": 100261,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/bound-native-runtime-1/native_diagnostic.py",
+      "sha256": "529830adcd6fafa13979bf6036b2812c88630c5e0112ce4d80f9fc28cc30d4da"
+    }
+  },
+  "remaining_unknowns": [
+    "No later retirementquery was observed before guestpoweroff; cannot conclude whether backend would reach0 within original5s without honest completion observation.",
+    "If bounded collector correction waits full original5s and still lacks genuine final0, preserve that failure and investigate exact backend release/task/procfs lifetime; do not modify executor without that evidence."
+  ],
+  "report_after_first_retryable_minus11_seconds": 0.49079140099999563,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "smallest_justified_correction_proposal": {
+    "change": "Within original absolute postreap5s, observe authentic same os/gen/pid BEGIN/ACK/retry-query chain and DELETE; require finalactualretirementquery0 plus original namespaceempty before the unchanged single rawfinalsnapshot/poweroff. Retain actual -11 retry records; no deduplication/invented logs/synthetic0/fixedsleep.",
+    "next_check": "Source-only completionpredicate regression: ACK0+DELETE+last-11 remains notready; laterrealquery0 before same5s end permits readiness; wrongowner/generation/token/timeout still fail. Then independently review Root-granted collector-only compile/test/stage and genuinely fresh native release after actual retirement.",
+    "owner": "/root/f05_rust_causal_supervisor separate source lane; no overlapping implementation here",
+    "target": "Rust startup collector retirement/snapshot readiness only",
+    "unchanged": "Original5298 strict lifecycle evaluator, original91B/argv/twoenv/emptyargument/oracle/10s1024, exacte5d executor/kernel/modules; no newquota or349 port/recompile implied"
+  },
+  "source_facts": [
+    {
+      "excerpt": {
+        "first_line": 2399,
+        "last_line": 2441,
+        "text": "pub unsafe extern \"C\" fn mcexec_finish_main_image_body(desc: *mut c_void) -> c_int {\n    if unsafe { ioctl(MCEXEC_FD, MCEXEC_UP_PREPARE_IMAGE, desc as c_ulong) } != 0 {\n        unsafe { mcexec_main_prepare_image_failed_bridge() };\n        return 1;\n    }\n\n    unsafe { print_desc(desc as *const c_void) };\n    if unsafe { transfer_image(MCEXEC_FD, desc) } < 0 {\n        unsafe { mcexec_execve2_transfer_image_failed_bridge() };\n        return -1;\n    }\n\n    let close_ret = unsafe { ioctl(MCEXEC_FD, MCEXEC_UP_CLOSE_EXEC, 0 as c_ulong) };\n    if close_ret != 0 {\n        unsafe { mcexec_execve2_close_exec_failed_bridge(close_ret) };\n        return 1;\n    }\n\n    unsafe { mcexec_main_flush_bridge() };\n    let cmd_rc = unsafe { mcexec_main_cmd_servers_init_bridge() };\n    if cmd_rc != 0 {\n        return cmd_rc;\n    }\n\n    unsafe { init_sigaction() };\n    let worker_rc = unsafe { init_worker_threads(MCEXEC_FD) };\n    if worker_rc != 0 {\n        unsafe { mcexec_main_worker_threads_failed_bridge(worker_rc) };\n        return 1;\n    }\n\n    if unsafe { ioctl(MCEXEC_FD, MCEXEC_UP_START_IMAGE, desc as c_ulong) } != 0 {\n        unsafe { mcexec_main_start_image_failed_bridge() };\n        return 1;\n    }\n\n    unsafe { mcexec_join_all_threads_body() };\n    0\n}\n\n#[no_mangle]\npub unsafe extern \"C\" fn act_execve(\n    w: *const McexecSyscallWaitDesc,"
+      },
+      "name": "Rust main launches and joins workers",
+      "source": "mcexec_helpers.rs"
+    },
+    {
+      "excerpt": {
+        "first_line": 2156,
+        "last_line": 2191,
+        "text": "pub unsafe extern \"C\" fn act_exit(w: *const McexecSyscallWaitDesc, cpu: c_int, is_child: c_int) {\n    let status = unsafe { (*w).sr.args[0] };\n    let number = unsafe { (*w).sr.number as c_long };\n    let mut sig = 0;\n    let mut term = 0;\n    let mut report_sig = 0;\n    let mut report_status = 0;\n\n    unsafe {\n        mcexec_exit_debug_bridge(status, cpu);\n        mcexec_exit_status_plan_result(\n            number,\n            status,\n            SYS_EXIT_GROUP,\n            is_child,\n            mcexec_exit_isatty_bridge(2),\n            &mut sig,\n            &mut term,\n            &mut report_sig,\n            &mut report_status,\n        );\n        if report_sig != 0 {\n            mcexec_exit_report_signal_bridge(sig);\n        } else if report_status != 0 {\n            mcexec_exit_report_status_bridge(term);\n        }\n        mcexec_exit_cmd_servers_bridge();\n        if sig != 0 {\n            mcexec_exit_replay_signal_bridge(sig);\n        }\n        mcexec_exit_process_bridge(term);\n    }\n}\n\n#[no_mangle]\npub unsafe extern \"C\" fn act_execve_phase1("
+      },
+      "name": "Terminal231 deliberately exits without returning terminal syscall",
+      "source": "mcexec_helpers.rs"
+    },
+    {
+      "excerpt": {
+        "first_line": 2834,
+        "last_line": 2849,
+        "text": "    let number = unsafe { (*w).sr.number as c_long };\n\n    match number {\n        SYS_OPENAT => unsafe { act_openat(w, fd, cpu, pathbuf, tmpbuf) },\n        SYS_FUTEX => unsafe { act_futex_clock(w, fd, cpu) },\n        SYS_KILL => unsafe { act_kill(w, fd, cpu, my_thread) },\n        SYS_EXIT | SYS_EXIT_GROUP => {\n            unsafe { act_exit(w, cpu, is_child) };\n            if !main_loop_ret.is_null() {\n                unsafe {\n                    *main_loop_ret = (*w).sr.args[0] as c_long;\n                }\n            }\n            return 1;\n        }\n        SYS_MMAP | SYS_MUNMAP | SYS_MPROTECT => unsafe { act_reserved_memory_syscall(w, fd, cpu) },"
+      },
+      "name": "Dispatcher231 routes to act_exit",
+      "source": "mcexec_helpers.rs"
+    },
+    {
+      "excerpt": {
+        "first_line": 86,
+        "last_line": 100,
+        "text": " if debug!=0 {printf(b\"mcexec_exit_debug_bridge: __NR_exit/__NR_exit_group: %ld (cpu_id: %d)\\n\\0\".as_ptr(),status,cpu);fflush(stdout);}\n}\n#[no_mangle]\npub unsafe extern \"C\" fn mcexec_exit_isatty_bridge(fd:c_int)->c_int { isatty(fd) }\n#[no_mangle]\npub unsafe extern \"C\" fn mcexec_exit_report_signal_bridge(sig:c_int) {fprintf(stderr,b\"Terminate by signal %d\\n\\0\".as_ptr(),sig);}\n#[no_mangle]\npub unsafe extern \"C\" fn mcexec_exit_report_status_bridge(term:c_int) {\n if debug!=0 {printf(b\"mcexec_exit_report_status_bridge: Exit status: %d\\n\\0\".as_ptr(),term);fflush(stdout);}\n}\n#[no_mangle]\npub unsafe extern \"C\" fn mcexec_exit_replay_signal_bridge(sig:c_int) {signal(sig,0);kill(super::getpid(),sig);pause();}\n#[no_mangle]\npub unsafe extern \"C\" fn mcexec_exit_process_bridge(term:c_int) {exit(term);}\n#[cfg(mcexec_signal_fixture)]"
+      },
+      "name": "Process-exit provider delegates libc exit",
+      "source": "mcexec_signal_wait_exit.rs"
+    },
+    {
+      "excerpt": {
+        "first_line": 62,
+        "last_line": 83,
+        "text": "#[no_mangle]\npub unsafe extern \"C\" fn mcexec_init_worker_threads_wait_bridge() { pthread_barrier_wait(addr_of_mut!(init_ready)); }\n#[no_mangle]\npub unsafe extern \"C\" fn mcexec_init_worker_threads_error_bridge(ret:c_int) {\n    printf(b\"ERROR: creating worker threads (%d), check ulimit?\\n\\0\".as_ptr(),ret);\n}\n#[no_mangle]\npub unsafe extern \"C\" fn mcexec_join_all_threads_head_bridge()->*mut McexecThreadData { super::MCEXEC_THREAD_DATA }\n#[no_mangle]\npub unsafe extern \"C\" fn mcexec_join_all_threads_join_bridge(tp:*mut McexecThreadData) { pthread_join((*tp).thread_id,null_mut()); }\n#[no_mangle]\npub unsafe extern \"C\" fn mcexec_kill_thread_head_bridge()->*mut McexecThreadData { super::MCEXEC_THREAD_DATA }\n#[no_mangle]\npub unsafe extern \"C\" fn mcexec_kill_thread_pthread_kill_bridge(tp:*mut McexecThreadData,sig:c_int)->c_int { pthread_kill((*tp).thread_id,sig) }\n#[no_mangle]\npub unsafe extern \"C\" fn mcexec_util_thread_barrier_init_bridge() { pthread_barrier_init(addr_of_mut!(uti_init_ready),core::ptr::null(),2); }\n#[no_mangle]\npub unsafe extern \"C\" fn mcexec_util_thread_create_worker_bridge(out:*mut *mut McexecThreadData)->c_int { super::mcexec_create_worker_thread_body(out,addr_of_mut!(uti_init_ready)) }\n#[no_mangle]\npub unsafe extern \"C\" fn mcexec_util_thread_worker_error_bridge(rc:c_int) { printf(b\"util_thread: Error: create_worker_thread failed (%d)\\n\\0\".as_ptr(),rc); }\n#[no_mangle]\npub unsafe extern \"C\" fn mcexec_util_thread_barrier_wait_bridge() { pthread_barrier_wait(addr_of_mut!(uti_init_ready)); }"
+      },
+      "name": "Worker join bridge preserves pthread_join",
+      "source": "mcexec_worker_lifecycle.rs"
+    },
+    {
+      "excerpt": {
+        "first_line": 1539,
+        "last_line": 1598,
+        "text": "pub unsafe extern \"C\" fn mcexec_util_thread_body(\n    _my_thread: *mut McexecThreadData,\n    rp_rctx: c_ulong,\n    remote_tid: c_int,\n    pattr: c_ulong,\n    uti_info: c_ulong,\n    uti_desc_arg: c_ulong,\n) -> c_long {\n    let uti_desc = uti_desc_arg as *mut McexecUtiDesc;\n    if uti_desc.is_null() {\n        unsafe { mcexec_util_thread_missing_desc_bridge() };\n        return -(EINVAL as c_long);\n    }\n    unsafe { mcexec_util_thread_desc_log_bridge(uti_desc as *mut c_void) };\n\n    unsafe { mcexec_util_thread_barrier_init_bridge() };\n    let mut tp: *mut McexecThreadData = core::ptr::null_mut();\n    let mut rc = unsafe { mcexec_util_thread_create_worker_bridge(&mut tp) };\n    if rc != 0 {\n        unsafe { mcexec_util_thread_worker_error_bridge(rc) };\n        return -(EINVAL as c_long);\n    }\n    unsafe { mcexec_util_thread_barrier_wait_bridge() };\n\n    let worker_tid = if tp.is_null() {\n        0\n    } else {\n        unsafe { (*tp).tid }\n    };\n    unsafe { mcexec_util_thread_worker_tid_log_bridge(worker_tid) };\n\n    unsafe {\n        (*uti_desc).fd = MCEXEC_FD;\n    }\n\n    rc = unsafe { syscall(888) as c_int };\n    if rc != -1 {\n        unsafe { mcexec_util_thread_intercept_warning_bridge(rc) };\n    }\n\n    let mut get_ctx_desc = McexecUtiGetCtxDesc {\n        rp_rctx,\n        rctx: unsafe { (*uti_desc).rctx.as_mut_ptr() as *mut c_void },\n        lctx: unsafe { (*uti_desc).lctx.as_mut_ptr() as *mut c_void },\n        uti_refill_tid: worker_tid,\n        key: 0,\n    };\n\n    rc = unsafe {\n        ioctl(\n            MCEXEC_FD,\n            MCEXEC_UP_UTI_GET_CTX,\n            &mut get_ctx_desc as *mut McexecUtiGetCtxDesc as c_ulong,\n        )\n    };\n    if rc != 0 {\n        let errno_value = unsafe { *__errno_location() };\n        unsafe { mcexec_util_thread_get_ctx_error_bridge(errno_value) };\n        return -(errno_value as c_long);\n    }"
+      },
+      "name": "UTI helper publishesFD/context; optional migration, not BEGIN/ACK waiter",
+      "source": "mcexec_helpers.rs"
+    },
+    {
+      "excerpt": {
+        "first_line": 7953,
+        "last_line": 8023,
+        "text": "\t\tcase __NR_exit:\n\t\tcase __NR_exit_group:\n#ifdef MCEXEC_RUST_HELPERS\n\t\t\tact_exit(&w, cpu, ischild);\n#else\n\t\t\tsig = 0;\n\t\t\tterm = 0;\n\t\t\t\n\t\t\t/* Enforce the order in which mcexec is destroyed and then \n\t\t\t   McKernel process is destroyed to prevent\n\t\t\t   migrated-to-Linux thread from accessing stale memory values.\n\t\t\t   It is done by not calling do_syscall_return(fd, cpu, 0, 0, 0, 0, 0);\n\t\t\t   here and making McKernel side wait until release_handler() is called. */\n\n\t\t\t__dprintf(\"__NR_exit/__NR_exit_group: %ld (cpu_id: %d)\\n\",\n\t\t\t\t\tw.sr.args[0], cpu);\n#ifdef MCEXEC_RUST_HELPERS\n\t\t\tmcexec_exit_status_plan_result(w.sr.number, w.sr.args[0],\n\t\t\t\t\t__NR_exit_group, ischild, isatty(2),\n\t\t\t\t\t&sig, &term, &report_sig,\n\t\t\t\t\t&report_status);\n\t\t\tif (report_sig) {\n\t\t\t\tfprintf(stderr, \"Terminate by signal %d\\n\", sig);\n\t\t\t}\n\t\t\telse if (report_status) {\n\t\t\t\t__dprintf(\"Exit status: %d\\n\", term);\n\t\t\t}\n#else\n\t\t\tif(w.sr.number == __NR_exit_group){\n\t\t\t\tsig = w.sr.args[0] & 0x7f;\n\t\t\t\tterm = (w.sr.args[0] & 0xff00) >> 8;\n\t\t\t\tif(isatty(2)){\n\t\t\t\t\tif(sig){\n\t\t\t\t\t\tif(!ischild) {\n\t\t\t\t\t\t\tfprintf(stderr, \"Terminate by signal %d\\n\", sig);\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\telse if(term) {\n\t\t\t\t\t\t__dprintf(\"Exit status: %d\\n\", term);\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t\t\n\t\t\t}\n#endif\n\n#ifdef USE_SYSCALL_MOD_CALL\n#ifdef CMD_DCFA\n\t\t\tibmic_cmd_server_exit();\n#endif\n\n#ifdef CMD_DCFAMPI\n\t\t\tdcfampi_cmd_server_exit();\n#endif\n\t\t\tmc_cmd_server_exit();\n\t\t\t__dprintf(\"mccmd server exited\\n\");\n#endif\n\t\t\tif(sig){\n\t\t\t\tsignal(sig, SIG_DFL);\n\t\t\t\tkill(getpid(), sig);\n\t\t\t\tpause();\n\t\t\t}\n\n\t\t\texit(term); /* Call release_handler() and proceed terminate() */\n#endif\n\n\t\t\t//pthread_mutex_unlock(lock);\n\t\t\treturn w.sr.args[0];\n\n\t\tcase __NR_mmap:\n\t\tcase __NR_munmap:\n\t\tcase __NR_mprotect:"
+      },
+      "name": "Original C explicit destruction-before-guest-retirement rule",
+      "source": "retained_C_reference"
+    },
+    {
+      "excerpt": {
+        "first_line": 132,
+        "last_line": 145,
+        "text": "\n// SAFETY: IHK transfers back the unique Box after every ioctl has finished,\n// retaining both the OS generation and our module until this returns.\nunsafe extern \"C\" fn close(context: *mut c_void) {\n    // SAFETY: This is exactly the allocation returned by successful open.\n    let context = unsafe { Box::from_raw(context.cast::<FileContext>()) };\n    pr_info!(\n        \"application_file=close os={} generation={}\\n\",\n        context.slot,\n        context.generation\n    );\n    drop(context);\n}\n"
+      },
+      "name": "Actual driver file-close drops context",
+      "source": "selected_mcctrl_file"
+    },
+    {
+      "excerpt": {
+        "first_line": 648,
+        "last_line": 687,
+        "text": "    /// Paired fork routes can retain this connection after its last binding\n    /// closes. BEGIN_CLEANUP records intent only; the continuing provider owns\n    /// cancellation/publication and retirement. Every error retains armed state,\n    /// routes, mappings and credits; no same-attempt retry is inferred.\n    fn request_cleanup(&self) {\n        if self.armed.load(Ordering::Acquire)\n            && !self.cleanup_requested.swap(true, Ordering::AcqRel)\n        {\n            // SAFETY: This retained connection authenticates its own token.\n            // The provider records cleanup intent without waiting for Linux\n            // task exit or guest retirement, which final file close must allow.\n            let status = unsafe {\n                ihk_os_application_invoke_v1(\n                    self.context.as_ptr(),\n                    super::application_abi::BEGIN_CLEANUP,\n                    ptr::null_mut(),\n                    0,\n                )\n            };\n            pr_info!(\n                \"application_process=cleanup_requested os={} generation={} pid={} intent_errno={}\\n\",\n                self.slot,\n                self.generation,\n                self.pid,\n                status\n            );\n        }\n    }\n}\n\nimpl Drop for Registration {\n    fn drop(&mut self) {\n        self.request_cleanup();\n        // SAFETY: Return exactly the successful connection after invocation.\n        // A failed/racing publication remains unarmed and cancels only its own\n        // reserved descriptor; it cannot clean up the winning registration.\n        unsafe { ihk_os_application_close_v1(self.context.as_ptr()) };\n    }\n}\n"
+      },
+      "name": "Actual process owner sends BEGIN_CLEANUP then provider close",
+      "source": "selected_mcctrl_process"
+    },
+    {
+      "excerpt": {
+        "first_line": 91,
+        "last_line": 109,
+        "text": "    fn release_ready(&self) -> bool {\n        !self.quarantined\n            && self.parent_slot_pins == 0\n            && self.cleanup.release_ready()\n            && self.syscalls.drained()\n            && self.procfs.as_ref().is_none_or(|procfs| procfs.drained())\n            && (!self.scheduled\n                || self.cleanup.result() == Some(0)\n                    && self\n                        .retirement\n                        .as_ref()\n                        .is_some_and(|query| query.result() == Some(0))\n                    && self\n                        .procfs\n                        .as_ref()\n                        .is_some_and(|procfs| procfs.threads_retired()))\n    }\n\n    fn request_cleanup(&mut self) -> Result {"
+      },
+      "name": "Backend final release requires actual query0 and threadsretired",
+      "source": "selected_smp_application"
+    },
+    {
+      "excerpt": {
+        "first_line": 142,
+        "last_line": 166,
+        "text": "        }\n        if self.cleanup.reserved() {\n            self.cleanup.begin().map_err(errno)?;\n        }\n        if self.scheduled && self.cleanup.result().is_some() {\n            kernel::error::to_result(self.cleanup.result().unwrap())?;\n            let retry = self\n                .retirement\n                .as_ref()\n                .is_none_or(|query| query.result() == Some(-11));\n            // SAFETY: ktime_get_seconds is a permanent Linux monotonic-clock\n            // export, callable while this mutex is held and independent of any\n            // retiring application. Its scalar result neither borrows nor\n            // changes the retained exchange state.\n            let now = unsafe { bindings::ktime_get_seconds() } as u64;\n            if retry && now >= self.retirement_after {\n                let mut query =\n                    Exchange::retirement(self.owner_slot, self.cleanup.cpu(), self.cleanup.pid())\n                        .map_err(errno)?;\n                query.begin().map_err(errno)?;\n                self.retirement = Some(query);\n            }\n        }\n        Ok(())\n    }"
+      },
+      "name": "Backend retryable query and absolute retry scheduling",
+      "source": "selected_smp_application"
+    },
+    {
+      "excerpt": {
+        "first_line": 503,
+        "last_line": 535,
+        "text": "    pub(crate) fn advance(&self) -> Result {\n        let mut slots = self.slots.lock();\n        self.transport_health()?;\n        // This task continues even if the original RET waiter is dying. No\n        // intentionally blocking user syscall is timed: only accepted results\n        // whose response/wake has not reached real publication are bounded.\n        // SAFETY: ktime_get_seconds is the same permanent, non-sleeping Linux\n        // clock export used for retirement retries. Reading it while slots is\n        // locked cannot alias application-owned memory or publish a response.\n        let now = unsafe { bindings::ktime_get_seconds() } as u64;\n        if let Err(error) = self.expire_publications(&mut slots, now) {\n            drop(slots);\n            self.changed.notify_all();\n            return Err(error);\n        }\n        for slot in &mut *slots {\n            if let Some(entry) = slot {\n                if entry.needs_cleanup && !entry.quarantined {\n                    if let Err(error) = entry.request_cleanup() {\n                        entry.quarantined = true;\n                        pr_err!(\n                            \"IHK-SMP: application cleanup retained pid={} errno={}\\n\",\n                            entry.cleanup.pid(),\n                            error.to_errno()\n                        );\n                    }\n                }\n                if entry.closed && entry.cleanup.retired() && entry.release_ready() {\n                    *slot = None;\n                }\n            }\n        }\n        Ok(())"
+      },
+      "name": "Backend continues independently of exiting RET waiter",
+      "source": "selected_smp_application"
+    },
+    {
+      "excerpt": {
+        "first_line": 685,
+        "last_line": 707,
+        "text": "            if let Some(query) = &mut entry.retirement {\n                match query.accept(packet) {\n                    Ok(()) => {\n                        let result = query.result().unwrap();\n                        pr_info!(\"IHK-SMP: application retirement os={} generation={} pid={} token={} errno={}\\n\",\n                            self.owner.slot(), self.owner.generation(), query.pid(), query.token().wire(), result);\n                        if result == -11 {\n                            // SAFETY: This reads only Linux's permanent\n                            // monotonic clock while the entry remains covered\n                            // by slots; the value is copied into a local retry\n                            // deadline and has no application-memory lifetime.\n                            entry.retirement_after =\n                                unsafe { bindings::ktime_get_seconds() } as u64 + 1;\n                        } else if result != 0 {\n                            entry.quarantined = true;\n                        }\n                        if entry.closed && entry.cleanup.retired() && entry.release_ready() {\n                            *slot = None;\n                        }\n                        return Ok(());\n                    }\n                    Err(-2 | -16) => continue,\n                    Err(error) => return Err(errno(error)),"
+      },
+      "name": "Actual query -11 schedules retry, other errors quarantine",
+      "source": "selected_smp_application"
+    },
+    {
+      "excerpt": {
+        "first_line": 728,
+        "last_line": 761,
+        "text": "        let mut slots = self.slots.lock();\n        if let Some(slot) = slots\n            .iter_mut()\n            .find(|slot| slot.as_ref().is_some_and(|entry| entry.key() == token))\n        {\n            let entry = slot.as_mut().unwrap();\n            if entry.quarantined {\n                entry.closed = true;\n                if let Some(procfs) = &entry.procfs {\n                    procfs.close();\n                }\n                // An untrustworthy success cannot prove prepared-task retirement.\n                // Retain its bounded slot until actual OS shutdown is implemented.\n                return;\n            }\n            if entry.parent_slot_pins == 0\n                && entry.syscalls.drained()\n                && entry.procfs.as_ref().is_none_or(|procfs| procfs.drained())\n                && (entry.prepare.is_none() && entry.cleanup.reserved() || entry.release_ready())\n            {\n                *slot = None;\n            } else {\n                entry.closed = true;\n                entry.cleanup.abandon();\n                if let Some(prepare) = &mut entry.prepare {\n                    prepare.exchange.abandon();\n                }\n                let _ = entry.request_cleanup();\n            }\n        }\n    }\n\n    pub(crate) fn close(&self, token: Token) {\n        self.close_inner(token);"
+      },
+      "name": "Close keeps pending application owned",
+      "source": "selected_smp_application"
+    },
+    {
+      "excerpt": {
+        "first_line": 320,
+        "last_line": 364,
+        "text": "        let end = bounded_deadline(begin_retirement + 5000 * MS, outer, 0);\n        if begin_retirement == 0 {\n            return Err(\"retirement clock unavailable\".into());\n        }\n        loop {\n            let current = now_ns();\n            if current == 0 || current >= end {\n                return Err(\"original post-reap retirement deadline\".into());\n            }\n            // Preserve original Cstartup namespace retirement; F05's causal\n            // gate, child link and actual lifecycle ACK proof are not selected.\n            if startup_retirement_ready(current, end, procfs_empty())? {\n                empty = true;\n                break;\n            }\n            sleep_ms(10);\n        }\n        Ok(())\n    })();\n    let mut good = operation.is_ok();\n    if let Err(error) = operation {\n        let _ = save(\"/case/evidence/collector.failure\", error.as_bytes(), outer);\n    }\n    let teardown = format!(\n        \"modules_loaded={loaded} processes_reaped={} procfs_empty={} nested_os_retained=1\\n\",\n        safe as i32, empty as i32\n    );\n    if save(\"/case/evidence/teardown\", teardown.as_bytes(), outer).is_err() {\n        good = false;\n    }\n    // Original startup publishes exactly one unchanged raw klogctl(3) snapshot.\n    // There is no F05 incremental observer, gate or reconstructed serial stream.\n    let mut kernel_log = vec![0u8; RAW_LIMIT];\n    let count = unsafe { klogctl(3, kernel_log.as_mut_ptr().cast(), kernel_log.len() as i32) };\n    if count < 0 || count == kernel_log.len() as i32 {\n        good = false;\n    } else {\n        kernel_log.truncate(count as usize);\n        if save(\"/case/evidence/kernel.log\", &kernel_log, outer).is_err() {\n            good = false;\n        }\n        if let Some(console) = &console {\n            if write_all_bounded(console.as_raw_fd(), &kernel_log, outer).is_err()\n                || write_all_bounded(console.as_raw_fd(), b\"\\n\", outer).is_err()\n            {"
+      },
+      "name": "Collector terminates namespace wait before actual final0 predicate",
+      "source": "selected_startup_collector_main"
+    },
+    {
+      "excerpt": {
+        "first_line": 1309,
+        "last_line": 1339,
+        "text": "def _check_begin_cleanup(serial, prefix, terminal):\n    \"\"\"Intent is not ACK. Match owner identity, not cross-namespace tokens.\n\n    ACK may precede intent logging; close may set abandoned=1. Retirement\n    queries are issued only after successful cleanup ACK. The target terminal\n    must precede its own actual retirement, independently of any child.\n    \"\"\"\n    owner = re.fullmatch(r\"os=(\\d+) generation=(\\d+) pid=(\\d+)\", prefix)\n    _need(owner is not None, \"BEGIN owner identity\")\n    pid = owner.group(3)\n    intents=[]; acknowledgements=[]; attempts=[]\n    patterns = (\n        (\"application_process=cleanup_requested \", r\"intent_errno=(-?\\d+)\", intents),\n        (\"application cleanup ACK \", r\"token=(\\d+) errno=(-?\\d+) abandoned=([01])\", acknowledgements),\n        (\"application retirement \", r\"token=(\\d+) errno=(-?\\d+)\", attempts),\n    )\n    for position,line in enumerate(serial.splitlines()):\n        for marker,suffix,rows in patterns:\n            if marker not in line or not re.search(r\"pid=\"+pid+r\"\\b\", line):\n                continue\n            match=re.search(re.escape(marker)+prefix+\" \"+suffix+r\"\\s*$\",line)\n            _need(match is not None, \"malformed/wrong-generation BEGIN lifecycle\")\n            rows.append((position, *map(int,match.groups())))\n    _need(len(intents)==1 and intents[0][1]==0, \"missing/failed BEGIN intent\")\n    _need(len(acknowledgements)==1, \"missing/duplicate real cleanup ACK\")\n    ack=acknowledgements[0]\n    _need(0<ack[1]<2**64 and ack[2]==0, \"real cleanup ACK failure/token\")\n    _need(1<=len(attempts)<=12 and len({a[1] for a in attempts})==len(attempts), \"BEGIN retirement attempts\")\n    _need(all(0<a[1]<2**64 and a[0]>terminal and a[0]>ack[0] for a in attempts), \"BEGIN premature retirement/token\")\n    _need(all(a[2]==-11 for a in attempts[:-1]) and attempts[-1][2]==0, \"BEGIN retirement result\")\n    return {\"entry_token\":ack[1],\"query_tokens\":[a[1] for a in attempts]}"
+      },
+      "name": "Original evaluator accepts retry prefix only with final0",
+      "source": "unchanged_full_evaluator"
+    }
+  ],
+  "source_object_artifact_join": {
+    "Rust_object_sha256": "6bfeaed7849315e70895effe519ad159f704121b0a40360808c0c79333485c6f",
+    "exit_provider_sha256": "d04d3de7606ac893335782f46a3fb0ff5496271e03690b101ee1f3f0f92d7a25",
+    "installed_sha256": "e5d18169ee50581274b374bba17fcefebe39e828885f367bfee182beaa3df756",
+    "main_source_sha256": "d786abc498f5951c65b28246071fcbbe8023392f2cf7a372902fa76b259ed73d",
+    "retained_C": "Reference semantics only, not selected C object",
+    "selected_SMP": "6adb4d11 actualmodule source; f5c56d83 cleanup-profile reference is historical schema and is not asserted as whole selected source",
+    "selected_UTI": "OFF"
+  },
+  "strict_original_failure_reproduced": "BEGIN retirement result"
+}

@@ -1,0 +1,83 @@
+#define _GNU_SOURCE
+#include <assert.h>
+#include <errno.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <ihk/ihklib_private.h>
+/* Same extraction/provider interface as the creation allocation observer.
+ * Every libc allocation succeeds: no old null-duplicate path can execute.
+ * These callbacks observe flow only; no IHK/backend/device operation is run. */
+static void *owned[16], *last_pair;
+static int live, allocated, released, dups, rollback_started;
+static int events[8], used, checks, pair_freed, check_restore, restore_seen;
+static int baseline;
+static void event(int value){assert(used<8);events[used++]=value;}
+static void *record(void *pointer){assert(pointer);for(int i=0;i<16;i++)if(!owned[i]){owned[i]=pointer;++live;++allocated;return pointer;}abort();}
+void *observation_calloc(size_t n,size_t size){return record(calloc(n,size));}
+char *observation_strndup(const char *text,size_t size){last_pair=record(strndup(text,size));errno=EAGAIN;return last_pair;}
+char *observation_strdup(const char *text){++dups;return record(strdup(text));}
+void observation_free(void *pointer){
+ if(check_restore){assert(errno==EAGAIN);check_restore=0;++restore_seen;}
+ if(pointer){
+  int found=0;for(int i=0;i<16;i++)if(owned[i]==pointer){owned[i]=NULL;--live;++released;found=1;break;}assert(found);
+  if(pointer==last_pair){last_pair=NULL;++pair_freed;if(dups==0||pair_freed==2)check_restore=1;}
+ }
+ free(pointer);errno=EIO;
+}
+int observation_cpu_count(int device){assert(device==0);event(rollback_started?9:1);if(rollback_started)assert(live==baseline);return 0;}
+int observation_mem_count(int device){assert(device==0&&!rollback_started);event(2);return 0;}
+int observation_os_count(int device){assert(device==0&&live==baseline);rollback_started=1;event(8);return 0;}
+int observation_release_mem(int device,struct ihk_mem_chunk *chunks,int count){assert(device==0&&rollback_started&&count==1&&chunks->size==~0UL&&chunks->numa_node_number==0&&live==baseline);event(10);return 0;}
+#define UNUSED_INT(name, signature, discard) int name signature { discard; abort(); }
+UNUSED_INT(observation_query_cpu,(int device,int *cpus,int count),(void)device;(void)cpus;(void)count)
+UNUSED_INT(observation_query_mem,(int device,struct ihk_mem_chunk *chunks,int count),(void)device;(void)chunks;(void)count)
+UNUSED_INT(observation_create,(int device),(void)device)
+UNUSED_INT(observation_assign_cpu,(int os,int *cpus,int count),(void)os;(void)cpus;(void)count)
+UNUSED_INT(observation_assign_mem,(int os,struct ihk_mem_chunk *chunks,int count),(void)os;(void)chunks;(void)count)
+UNUSED_INT(observation_load,(int os,char *image),(void)os;(void)image)
+UNUSED_INT(observation_kargs,(int os,char *args),(void)os;(void)args)
+UNUSED_INT(observation_release_cpu,(int device,int *cpus,int count),(void)device;(void)cpus;(void)count)
+UNUSED_INT(observation_list,(int device,int *list,int count),(void)device;(void)list;(void)count)
+UNUSED_INT(observation_destroy,(int device,int os),(void)device;(void)os)
+UNUSED_INT(observation_assigned_cpu_count,(int os),(void)os)
+UNUSED_INT(observation_query_assigned_cpu,(int os,int *cpus,int count),(void)os;(void)cpus;(void)count)
+UNUSED_INT(observation_release_assigned_cpu,(int os,int *cpus,int count),(void)os;(void)cpus;(void)count)
+UNUSED_INT(observation_release_assigned_mem,(int os,struct ihk_mem_chunk *chunks,int count),(void)os;(void)chunks;(void)count)
+UNUSED_INT(observation_reserve_conf,(int device,int key,void *value),(void)device;(void)key;(void)value)
+UNUSED_INT(observation_raw,(int index,char *text,char *error),(void)index;(void)text;(void)error)
+#undef UNUSED_INT
+
+typedef int (*Create)(int,int *,const char *,int,const char *,const char *,char *);
+static void check(Create create,int entry){
+ assert(live==0);for(int i=0;i<16;i++)assert(!owned[i]);
+ allocated=released=dups=used=rollback_started=pair_freed=check_restore=restore_seen=0;last_pair=NULL;
+ char env[32]={0};if(entry==2)strcpy(env,"UNUSED=kept");
+ char original[32];memcpy(original,env,sizeof(env));
+ char error[1024];memset(error,0x5a,sizeof(error));char before[1024];memcpy(before,error,sizeof(error));int index=12345;
+ errno=EAGAIN;
+ int returned=create(0,&index,env,entry,"image","default",error);
+ assert(returned==-EINVAL&&index==12345&&!memcmp(error,before,sizeof(error))&&!memcmp(env,original,sizeof(env)));
+ int expected[]={1,2,8,9,10};assert(used==5&&!memcmp(events,expected,sizeof(expected)));
+ assert(dups==2*(entry-1)&&allocated==3+3*(entry-1)&&live==baseline);
+ assert(released==allocated-baseline&&pair_freed==entry-baseline);
+ assert(restore_seen==!baseline&&!check_restore);
+ if(baseline){
+  /* Retained pair is a recorded successful libc allocation, never borrowed text.
+   * Reclaim it directly after observing the old return; no dereference needed. */
+  assert(last_pair);void *retained=last_pair;last_pair=NULL;
+  observation_free(retained);assert(live==0&&allocated==released);
+ }
+ printf("CASE empty-entry=%d baseline=%d result=%d index=%d allocated=%d freed=%d retained-before-reclaim=%d local-errno-restored=%d\n",entry,baseline,returned,index,allocated,released,baseline,restore_seen);++checks;
+}
+int observation_run(Create create){
+ assert(getuid()==1000&&geteuid()==1000);
+#ifdef EMPTY_BASELINE
+ baseline=1;
+#else
+ baseline=0;
+#endif
+ check(create,1);check(create,2);assert(checks==2&&live==0);
+ puts("creation empty-entry cases=2 all-libc-allocations-successful final-live=0");return 0;
+}

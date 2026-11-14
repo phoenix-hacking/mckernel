@@ -1,0 +1,45 @@
+{
+  "schema": "mckernel.terminal-precedence.single-bounded-source-correction.v1",
+  "status": "FROZEN_CORRECTION_SOURCE_ONLY_PENDING_E_REVIEW_AND_ROOT_FOCUSED_TEST_ADMISSION",
+  "incoming_commit": "8fa22bdc77da30d19f7c802fe520d3aa887c81f9",
+  "baseline": {
+    "path": "/home/holden/mckernel-work/resume-20261110T025232Z-785c93f5/terminal-precedence-source-1/baseline/scripts/run_os_goal.py",
+    "sha256": "33b5158563b05ed2773bf0040a4ed5b5f1892a27e24640cfc1679a483c6d50f8"
+  },
+  "original_unexecuted_preserved": {
+    "candidate_path": "/home/holden/mckernel-work/resume-20261110T025232Z-785c93f5/terminal-precedence-source-1/candidate/scripts/run_os_goal.py",
+    "candidate_sha256": "a65a6e325859d5e182e4257c151e998061118e671d72cb8b1a8f9502d0e03c1b",
+    "patch_path": "/home/holden/mckernel-work/resume-20261110T025232Z-785c93f5/terminal-precedence-source-1/TERMINAL-PRECEDENCE.PRIVATE.patch",
+    "patch_sha256": "ee145183e7f8772d45fb0695d517af103916bf6ef66ae1a172272d1f97bbad7a",
+    "proof_path": "/home/holden/mckernel-work/resume-20261110T025232Z-785c93f5/terminal-precedence-source-1/SOURCE-PROOF.json",
+    "proof_sha256": "13dc176ab57ceb910c8735bb86d20a1a3d240ab125106b447e1cc948ab2cbae1"
+  },
+  "candidate": {
+    "path": "/home/holden/mckernel-work/resume-20261110T025232Z-785c93f5/terminal-precedence-source-1/correction-1/candidate/scripts/run_os_goal.py",
+    "sha256": "454c01ec08767858787a2da8a060fc90d059d4030fa2675ab479a2a0c32b079f",
+    "bytes": 130613
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/resume-20261110T025232Z-785c93f5/terminal-precedence-source-1/correction-1/TERMINAL-PRECEDENCE.PRIVATE.patch",
+    "sha256": "9871a77d9f2c03f1dad080dcc40d2ee1d72fb751f23847d7288a2add2188f249",
+    "changed_canonical_paths": [
+      "scripts/run_os_goal.py"
+    ]
+  },
+  "exact_v1_to_correction_delta": "Remove only OR override of terminal handling during already-requested milestonecheckpoint; restore exactoriginalnotcheckpoint_requested/notblocked_wait/notstop_reason terminalcondition, now beforeACTIVEledger. Allothercandidatebytesincludingpauseboolean/deferredreasonunchanged.",
+  "removed_out_of_scope_behavior": "Do not exitterminalwithstale requested_milestones_complete reason/journal while acceptedmilestonecheckpointdrains. Existing checkpointterminal/hardstop/signal/time precedence unchanged.",
+  "retained_required_fix": [
+    "Existinghardstopblockandoriginalterminalconditionrunbeforeledger;onlyACTIVEiseligibleformilestonecheckpoint.",
+    "Existingpausegoal/getcanobserveaterminalafterACTIVEledgerdecision. Itsactualactive\u2192pausedbooleanmustbetruebeforemilestonereason/checkpointflag/steer;otherwisecontinueactualterminal/hardstophandling.",
+    "NoadditionalRPC,goalidentity/statusactivation/creation/budget/holdmutation orbegin/stop/event/recovery/flagschange.",
+    "Existingnongmilestonecheckpointandactualhardstopbehaviorretained."
+  ],
+  "source_only_checks": {
+    "new_to_v1_is_one_exact_condition_replacement": true,
+    "original_terminal_condition_byteexact_in_baseline_and_correction": true,
+    "original_packet_preserved": true,
+    "no_tests_import_parser_goal_model_Popen_controller_or_runtime": true,
+    "no_canonical_index_state_or_other_owner_edits": true
+  },
+  "remaining_test_contract": "B7focusedselectors/11newscenarios+existingactivecontrol, no additionalfixture/testexpansion selected."
+}

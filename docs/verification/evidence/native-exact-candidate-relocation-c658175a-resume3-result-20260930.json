@@ -1,0 +1,69 @@
+{
+  "schema": "mckernel.native-exact-candidate-relocation-result.v1",
+  "status": "PASS",
+  "scope": "retention-only; no build, boot, guest, application, or acceptance credit",
+  "observed_at_utc": "2026-09-30T11:02:43.898143Z",
+  "release_commit": "8fcc4d47aaea0956e5574016f827e49058e11848",
+  "candidate_commit": "c658175ae1831e2caef6ecf59730a272f1324645",
+  "ihk_commit": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+  "packet": {
+    "path": "docs/verification/evidence/native-exact-candidate-relocation-c658175a-resume3-20260930.sh",
+    "sha256": "e2908f93a61043a34e44acb39798b622ed0dfa35dce826c281491323c7616d7e"
+  },
+  "test": {
+    "path": "scripts/tests/test_native_exact_candidate_relocation_c658175a_resume3_20260930.py",
+    "sha256": "6cd4e81f0a733e8a69a6838c9a8c478b5eaa7a142e6366b1969b4f5eb6c0f345",
+    "result": "11 passed"
+  },
+  "source": {
+    "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-c658175a-scratch-7",
+    "identity_before": "1831:6684719",
+    "present_after": false
+  },
+  "temporary": {
+    "path": "/home/holden/mckernel-work/retained-exact-candidates/.mckernel-exact-candidate-c658175a-scratch-7.tmp-relocation-15-retry1",
+    "identity_before": "66306:47753167",
+    "present_after": false
+  },
+  "destination": {
+    "path": "/home/holden/mckernel-work/retained-exact-candidates/mckernel-exact-candidate-c658175a-scratch-7",
+    "identity_after": "66306:47753167",
+    "entry_count": 10746
+  },
+  "verification": {
+    "full_regular_file_sha256_inventory": "PASS",
+    "metadata_and_hardlink_inventory": "PASS",
+    "rsync_checksum_dry_run": "PASS",
+    "source_recheck_before_delete": "PASS",
+    "open_reference_and_active_lease_census": "PASS",
+    "atomic_no_replace_promotion": "PASS",
+    "source_deletion": "PASS"
+  },
+  "portable_failure_archive": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-build-failure-c658175a-scratch-7-retry1-20260930-1.tar",
+    "identity": "1831:57617",
+    "size": 1402880,
+    "sha256": "ee326adc5d98ba5949cc7d16705e58e25546d2493197692feda62ae218ab6cef"
+  },
+  "outputs": {
+    "log": {"identity": "1831:57626", "sha256": "36a8c132321bbb5af464b2bf315bb86ea4f9272aa2ac9b5586c4673c35e051d6"},
+    "intent": {"identity": "1831:57628", "sha256": "3c24d900e9f7f84ddb058b51e1c4fe80d72d2488d842a4c48ed4272d87693f14"},
+    "deletion_intent": {"identity": "1831:57629", "sha256": "5dacd7b1f0e2f06e4e1d27fe0e19418a98dc8ddbe0539d3d473595269e26a7f9"},
+    "terminal": {"identity": "1831:57630", "sha256": "36a8c132321bbb5af464b2bf315bb86ea4f9272aa2ac9b5586c4673c35e051d6"},
+    "exclusion": {"identity": "1831:57627", "sha256": "8e7aca350d465676cc9128320ff7abe10d2d2da6a8d49f8962ba1f8538a0f1ff"},
+    "lock": {"identity": "1831:57625", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
+  },
+  "trim": {
+    "path": "/home/holden/mckernel-work/scratch",
+    "bytes": 13027381248,
+    "host_available_bytes_after": 34776424448,
+    "scratch_available_bytes_after": 29093855232
+  },
+  "preserved_failures": [
+    "runtime-checker-self-digest",
+    "archive-path-binding",
+    "failure-record-provenance-routing",
+    "embedded-record-routing-nameerror"
+  ],
+  "next": "prepare a fresh source-bound selfdigest-13 candidate from the corrected pushed head, then run one reviewed exact build"
+}

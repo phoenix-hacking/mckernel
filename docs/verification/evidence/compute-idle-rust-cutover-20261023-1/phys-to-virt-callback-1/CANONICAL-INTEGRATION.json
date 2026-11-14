@@ -1,0 +1,30 @@
+{
+  "actual_evidence_sha256": "8d54b99673573d5eecd388a1b2d1ceeadb85bcfd1f7e7bffe4a339c0235271fc",
+  "body_displaced": "Selected C x86_clear_phys_to_virt_bridge forwarding callback; existing Rust phys_to_virt reused",
+  "decision": "PASS_M14_CALLBACK_SOURCE_AND_SELECTED_ABI_LINK",
+  "frozen10972_unchanged": true,
+  "implementation_ownership": false,
+  "postimages": {
+    "arch/x86_64/kernel/memory.c": {
+      "bytes": 83989,
+      "sha256": "95bb6a4a916a802e98eb9f7eac98eef990d6f75a3e42b06f29ac0a73ef2a452b"
+    },
+    "kernel/rust/x86_memory_helpers.rs": {
+      "bytes": 190037,
+      "sha256": "689b9741821609a7c2e3aadb8cd46b0dbc57948090b38758f0b3eb120a5297fb"
+    }
+  },
+  "practical_closure": false,
+  "preimages": {
+    "arch/x86_64/kernel/memory.c": "4818be5c7277621ce41dae1d261dec97e7e0c65b6054a6e8511a4d64d555c68f",
+    "kernel/rust/x86_memory_helpers.rs": "9cba23c3b1e9ba94205c5b8234c5be0408d8c41722b5a0e094ca5a0d1211d067"
+  },
+  "production_fullcrate_default_image_and_native": "OPEN",
+  "recorded_by": "/root",
+  "recorded_unix": 1792736291.679997,
+  "reviewer": "/root/p12_successor_review",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "selected_host_consumer_provider_partial_link": "PASS GCC9 selectedcomplete C TU/4relocations, complete Rustmodule uniqueprovider, partiallinkT1/noU",
+  "status": "CANONICAL_REVIEWED_CALLBACK_SOURCE_INTEGRATED",
+  "whole_file_or_area_closed": false
+}

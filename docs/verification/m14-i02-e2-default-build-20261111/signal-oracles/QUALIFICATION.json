@@ -1,0 +1,1571 @@
+{
+  "actual_app_main_HOST_signal_FP_native_execution": false,
+  "actual_execution": {
+    "bytes": 9339,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/execution-1/RESULT.json",
+    "sha256": "a21ae60306aa7655f7a7feb3c9d7fb7e72f2f1cd77a76a527cbfba2c16fcc443"
+  },
+  "actual_instruction_scope": "MXCSR uses actual VEX vldmxcsr/vstmxcsr; mask initialization also uses ymm/vzeroupper. Static bytes only. Later matched native CPU/configuredxstate must support emittedISA; no HOST/guest execution or preAVX compatibility inferred.",
+  "actual_syscall_ABI": {
+    "call_shape": "libc variadic SysV syscall ABI: numberEDI, PIDRSI/TIDRDX/signalECX; actual0xba/0xea and signals10/12 present.",
+    "gettid": 186,
+    "header": {
+      "bytes": 5815,
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/syscall_list.h",
+      "sha256": "a9680be6ce9d26c6f1d3df2110e1ed4407a51f577381875c66801b07a54d5ead"
+    },
+    "tgkill": 234
+  },
+  "all27_saved_output_identities": [
+    {
+      "bytes": 1924,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/output-1/vector.mxcsr-nested-signal.nm.stdout",
+      "sha256": "22ff6d4cc6d4ddbe42bc2879c02942d238c60665d746e4aee837ff66a2beb8d6"
+    },
+    {
+      "bytes": 5759,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/output-1/signal.altstack-small.ELF.stdout",
+      "sha256": "4e49734f046d2ff4f8b6a8d34a4554de66fc9510d77fae0f0fc2fae7db17b177"
+    },
+    {
+      "bytes": 5966,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/output-1/signal.mask-restore.ELF.stdout",
+      "sha256": "ca8848fd418c53c4697877c22f8062b578b6faa0aeb233b173024231202adb97"
+    },
+    {
+      "bytes": 10067,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/output-1/vector.mxcsr-nested-signal.d",
+      "sha256": "92e6b2367bfff7a5640c909b921a6e285154338b98753e04c8c0cbcb38de0a6e"
+    },
+    {
+      "bytes": 807,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/output-1/vector.mxcsr-nested-signal.link.stdout",
+      "sha256": "f6519fcdce873e64e32fec75afbe709a3d9f686bd0762e3e74f1fbf4e32a2cda"
+    },
+    {
+      "bytes": 22232,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/output-1/vector.mxcsr-nested-signal.map",
+      "sha256": "75acafb56c5ab143c922cc33dc07c7631b700db1a6a0508ccd90b537bd664858"
+    },
+    {
+      "bytes": 21237,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/output-1/signal.altstack-small.map",
+      "sha256": "508e8cc852d228e0f6b831b07e7a09d37971eae263d9e5d2440fe9b5cdb7d93e"
+    },
+    {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/output-1/vector.mxcsr-nested-signal.compile.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 18248,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/output-1/signal.altstack-small",
+      "sha256": "9554beb200a168f648ea919dbe2e75b0a63add208d0bee32bebba3b175e425e1"
+    },
+    {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/output-1/signal.altstack-small.ELF.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 5644,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/output-1/vector.mxcsr-nested-signal.ELF.stdout",
+      "sha256": "af53d9447681f333e8b13ffebe57a475629b1a393d26cbd515c83a2158b0fa7b"
+    },
+    {
+      "bytes": 3060,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/output-1/signal.mask-restore.d",
+      "sha256": "5bd48491eb8195d9185d1e91dc0df1d2368d2251c5b6fa6eff82180e22542525"
+    },
+    {
+      "bytes": 3325,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/output-1/signal.altstack-small.d",
+      "sha256": "e555923e40c8f7b57b0fc1208c28eca835944f67ef23108a8fb6b9f158039e75"
+    },
+    {
+      "bytes": 12850,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/output-1/signal.mask-restore.disassembly.stdout",
+      "sha256": "f734eeac4b896fd415ecc81577c56369914834001d74c9ee7703f5af83d377b9"
+    },
+    {
+      "bytes": 22460,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/output-1/signal.mask-restore.map",
+      "sha256": "c608944806b06c9e9d5713c170b9b12754016bc1f5124d54ca74524ddbaf9426"
+    },
+    {
+      "bytes": 807,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/output-1/signal.mask-restore.link.stdout",
+      "sha256": "3a54d0116ea32ccedf2a985059f68809c3ffcd3b3120e11c6bb32771dcd980e5"
+    },
+    {
+      "bytes": 1469,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/output-1/signal.altstack-small.nm.stdout",
+      "sha256": "54012e13e6586976f7166dffa1ade4d958467c1907eb0acb68d3f6ab2eb239bc"
+    },
+    {
+      "bytes": 15274,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/output-1/vector.mxcsr-nested-signal.disassembly.stdout",
+      "sha256": "92a0e59108c893f8c6d291e65f17e5ce0f963b61d25389979cd0938243cc592d"
+    },
+    {
+      "bytes": 9723,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/output-1/signal.altstack-small.disassembly.stdout",
+      "sha256": "8200c26f123944df379384c86f3f90657e8ff376919b73cd7998f807c78486ce"
+    },
+    {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/output-1/signal.mask-restore.ELF.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 18656,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/output-1/signal.mask-restore",
+      "sha256": "49c21ce0098cddf0778797bca50d4bfa7be4e4513fe7dd34474b614dab871827"
+    },
+    {
+      "bytes": 807,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/output-1/signal.altstack-small.link.stdout",
+      "sha256": "4aab5f5813a8fc66773cdf724ad90a51feaccd4e53d05ea6c4396c368fc37917"
+    },
+    {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/output-1/vector.mxcsr-nested-signal.ELF.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/output-1/signal.mask-restore.compile.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 19352,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/output-1/vector.mxcsr-nested-signal",
+      "sha256": "db18e3d6e9497f86d10605e0e7b52e15f2952cb49076c954931d5e338ca81706"
+    },
+    {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/output-1/signal.altstack-small.compile.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 1691,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/output-1/signal.mask-restore.nm.stdout",
+      "sha256": "ad71025191da213ba8ea37812bc2a16c10eda42f45a7c8adf363454c70152c29"
+    }
+  ],
+  "artifacts": [
+    {
+      "ELF": {
+        "DT_NEEDED": [
+          "libc.so.6"
+        ],
+        "RPATH_RUNPATH": [],
+        "class": "ELF64",
+        "comment": [
+          "GCC: (GNU) 14.3.1 20251022 (Red Hat 14.3.1-4)"
+        ],
+        "endian": "little",
+        "entry": "0x401230",
+        "interpreter": "/lib64/ld-linux-x86-64.so.2",
+        "machine": "EM_X86_64",
+        "main_address": "0x0000000000401070",
+        "main_bytes": 442,
+        "raw_header_dynamic_dynsym_versym_match_saved_metadata": true,
+        "type": "ET_EXEC"
+      },
+      "actual_compiler_temporary_object": "/output/tmp/ccmmxBL2.o",
+      "app": {
+        "bytes": 19352,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/output-1/vector.mxcsr-nested-signal",
+        "sha256": "db18e3d6e9497f86d10605e0e7b52e15f2952cb49076c954931d5e338ca81706"
+      },
+      "compiler_and_reader_stderr_empty": true,
+      "mode": "0755",
+      "name": "vector.mxcsr-nested-signal",
+      "object_scope": "One application source object owns main/handlers in actual map/trace; temporary pathname is not a retained object hash or compute C-retirement evidence.",
+      "optional_weak_imports": [
+        {
+          "binding": "WEAK",
+          "bytes": 0,
+          "index": 2,
+          "name": "_ITM_deregisterTMCloneTable",
+          "section": "UND",
+          "type": "NOTYPE",
+          "value_hex": "0000000000000000",
+          "visibility": "DEFAULT"
+        },
+        {
+          "binding": "WEAK",
+          "bytes": 0,
+          "index": 7,
+          "name": "__gmon_start__",
+          "section": "UND",
+          "type": "NOTYPE",
+          "value_hex": "0000000000000000",
+          "visibility": "DEFAULT"
+        },
+        {
+          "binding": "WEAK",
+          "bytes": 0,
+          "index": 8,
+          "name": "_ITM_registerTMCloneTable",
+          "section": "UND",
+          "type": "NOTYPE",
+          "value_hex": "0000000000000000",
+          "visibility": "DEFAULT"
+        }
+      ],
+      "required_import_count": 5,
+      "required_import_version_file_joins": [
+        {
+          "consumer": {
+            "binding": "GLOBAL",
+            "bytes": 0,
+            "index": 1,
+            "name": "__libc_start_main@GLIBC_2.34 (2)",
+            "section": "UND",
+            "type": "FUNC",
+            "value_hex": "0000000000000000",
+            "visibility": "DEFAULT"
+          },
+          "consumer_verneed_file": "libc.so.6",
+          "consumer_versym": {
+            "hidden": false,
+            "index": 2,
+            "name": "GLIBC_2.34"
+          },
+          "provider": {
+            "binding": "GLOBAL",
+            "bytes": 332,
+            "index": 1824,
+            "name": "__libc_start_main@@GLIBC_2.34",
+            "section": "16",
+            "type": "FUNC",
+            "value_hex": "000000000002a5c0",
+            "visibility": "DEFAULT"
+          },
+          "provider_file": {
+            "bytes": 2339896,
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/output-1/runtime/lib64/libc.so.6",
+            "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4"
+          },
+          "provider_verdef_name": "GLIBC_2.34",
+          "provider_versym": {
+            "hidden": false,
+            "index": 35,
+            "name": "GLIBC_2.34"
+          }
+        },
+        {
+          "consumer": {
+            "binding": "GLOBAL",
+            "bytes": 0,
+            "index": 3,
+            "name": "getpid@GLIBC_2.2.5 (3)",
+            "section": "UND",
+            "type": "FUNC",
+            "value_hex": "0000000000000000",
+            "visibility": "DEFAULT"
+          },
+          "consumer_verneed_file": "libc.so.6",
+          "consumer_versym": {
+            "hidden": false,
+            "index": 3,
+            "name": "GLIBC_2.2.5"
+          },
+          "provider": {
+            "binding": "WEAK",
+            "bytes": 12,
+            "index": 1498,
+            "name": "getpid@@GLIBC_2.2.5",
+            "section": "16",
+            "type": "FUNC",
+            "value_hex": "00000000000d8840",
+            "visibility": "DEFAULT"
+          },
+          "provider_file": {
+            "bytes": 2339896,
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/output-1/runtime/lib64/libc.so.6",
+            "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4"
+          },
+          "provider_verdef_name": "GLIBC_2.2.5",
+          "provider_versym": {
+            "hidden": false,
+            "index": 2,
+            "name": "GLIBC_2.2.5"
+          }
+        },
+        {
+          "consumer": {
+            "binding": "GLOBAL",
+            "bytes": 0,
+            "index": 4,
+            "name": "printf@GLIBC_2.2.5 (3)",
+            "section": "UND",
+            "type": "FUNC",
+            "value_hex": "0000000000000000",
+            "visibility": "DEFAULT"
+          },
+          "consumer_verneed_file": "libc.so.6",
+          "consumer_versym": {
+            "hidden": false,
+            "index": 3,
+            "name": "GLIBC_2.2.5"
+          },
+          "provider": {
+            "binding": "GLOBAL",
+            "bytes": 212,
+            "index": 2614,
+            "name": "printf@@GLIBC_2.2.5",
+            "section": "16",
+            "type": "FUNC",
+            "value_hex": "000000000005b5e0",
+            "visibility": "DEFAULT"
+          },
+          "provider_file": {
+            "bytes": 2339896,
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/output-1/runtime/lib64/libc.so.6",
+            "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4"
+          },
+          "provider_verdef_name": "GLIBC_2.2.5",
+          "provider_versym": {
+            "hidden": false,
+            "index": 2,
+            "name": "GLIBC_2.2.5"
+          }
+        },
+        {
+          "consumer": {
+            "binding": "GLOBAL",
+            "bytes": 0,
+            "index": 5,
+            "name": "signal@GLIBC_2.2.5 (3)",
+            "section": "UND",
+            "type": "FUNC",
+            "value_hex": "0000000000000000",
+            "visibility": "DEFAULT"
+          },
+          "consumer_verneed_file": "libc.so.6",
+          "consumer_versym": {
+            "hidden": false,
+            "index": 3,
+            "name": "GLIBC_2.2.5"
+          },
+          "provider": {
+            "binding": "WEAK",
+            "bytes": 181,
+            "index": 2656,
+            "name": "signal@@GLIBC_2.2.5",
+            "section": "16",
+            "type": "FUNC",
+            "value_hex": "0000000000041040",
+            "visibility": "DEFAULT"
+          },
+          "provider_file": {
+            "bytes": 2339896,
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/output-1/runtime/lib64/libc.so.6",
+            "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4"
+          },
+          "provider_verdef_name": "GLIBC_2.2.5",
+          "provider_versym": {
+            "hidden": false,
+            "index": 2,
+            "name": "GLIBC_2.2.5"
+          }
+        },
+        {
+          "consumer": {
+            "binding": "GLOBAL",
+            "bytes": 0,
+            "index": 6,
+            "name": "syscall@GLIBC_2.2.5 (3)",
+            "section": "UND",
+            "type": "FUNC",
+            "value_hex": "0000000000000000",
+            "visibility": "DEFAULT"
+          },
+          "consumer_verneed_file": "libc.so.6",
+          "consumer_versym": {
+            "hidden": false,
+            "index": 3,
+            "name": "GLIBC_2.2.5"
+          },
+          "provider": {
+            "binding": "GLOBAL",
+            "bytes": 55,
+            "index": 2962,
+            "name": "syscall@@GLIBC_2.2.5",
+            "section": "16",
+            "type": "FUNC",
+            "value_hex": "0000000000104140",
+            "visibility": "DEFAULT"
+          },
+          "provider_file": {
+            "bytes": 2339896,
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/output-1/runtime/lib64/libc.so.6",
+            "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4"
+          },
+          "provider_verdef_name": "GLIBC_2.2.5",
+          "provider_versym": {
+            "hidden": false,
+            "index": 2,
+            "name": "GLIBC_2.2.5"
+          }
+        }
+      ],
+      "source": {
+        "bytes": 2425,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/input/vector.mxcsr-nested-signal.c",
+        "sha256": "885ae44209a18b3621c38bf54f1196f575f125697555d2316110daadf1cd6c3f"
+      }
+    },
+    {
+      "ELF": {
+        "DT_NEEDED": [
+          "libc.so.6"
+        ],
+        "RPATH_RUNPATH": [],
+        "class": "ELF64",
+        "comment": [
+          "GCC: (GNU) 14.3.1 20251022 (Red Hat 14.3.1-4)"
+        ],
+        "endian": "little",
+        "entry": "0x401220",
+        "interpreter": "/lib64/ld-linux-x86-64.so.2",
+        "machine": "EM_X86_64",
+        "main_address": "0x00000000004010a0",
+        "main_bytes": 378,
+        "raw_header_dynamic_dynsym_versym_match_saved_metadata": true,
+        "type": "ET_EXEC"
+      },
+      "actual_compiler_temporary_object": "/output/tmp/ccrFMENQ.o",
+      "app": {
+        "bytes": 18656,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/output-1/signal.mask-restore",
+        "sha256": "49c21ce0098cddf0778797bca50d4bfa7be4e4513fe7dd34474b614dab871827"
+      },
+      "compiler_and_reader_stderr_empty": true,
+      "mode": "0755",
+      "name": "signal.mask-restore",
+      "object_scope": "One application source object owns main/handlers in actual map/trace; temporary pathname is not a retained object hash or compute C-retirement evidence.",
+      "optional_weak_imports": [
+        {
+          "binding": "WEAK",
+          "bytes": 0,
+          "index": 4,
+          "name": "_ITM_deregisterTMCloneTable",
+          "section": "UND",
+          "type": "NOTYPE",
+          "value_hex": "0000000000000000",
+          "visibility": "DEFAULT"
+        },
+        {
+          "binding": "WEAK",
+          "bytes": 0,
+          "index": 8,
+          "name": "__gmon_start__",
+          "section": "UND",
+          "type": "NOTYPE",
+          "value_hex": "0000000000000000",
+          "visibility": "DEFAULT"
+        },
+        {
+          "binding": "WEAK",
+          "bytes": 0,
+          "index": 10,
+          "name": "_ITM_registerTMCloneTable",
+          "section": "UND",
+          "type": "NOTYPE",
+          "value_hex": "0000000000000000",
+          "visibility": "DEFAULT"
+        }
+      ],
+      "required_import_count": 8,
+      "required_import_version_file_joins": [
+        {
+          "consumer": {
+            "binding": "GLOBAL",
+            "bytes": 0,
+            "index": 1,
+            "name": "sigprocmask@GLIBC_2.2.5 (2)",
+            "section": "UND",
+            "type": "FUNC",
+            "value_hex": "0000000000000000",
+            "visibility": "DEFAULT"
+          },
+          "consumer_verneed_file": "libc.so.6",
+          "consumer_versym": {
+            "hidden": false,
+            "index": 2,
+            "name": "GLIBC_2.2.5"
+          },
+          "provider": {
+            "binding": "WEAK",
+            "bytes": 49,
+            "index": 1918,
+            "name": "sigprocmask@@GLIBC_2.2.5",
+            "section": "16",
+            "type": "FUNC",
+            "value_hex": "0000000000041350",
+            "visibility": "DEFAULT"
+          },
+          "provider_file": {
+            "bytes": 2339896,
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/output-1/runtime/lib64/libc.so.6",
+            "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4"
+          },
+          "provider_verdef_name": "GLIBC_2.2.5",
+          "provider_versym": {
+            "hidden": false,
+            "index": 2,
+            "name": "GLIBC_2.2.5"
+          }
+        },
+        {
+          "consumer": {
+            "binding": "GLOBAL",
+            "bytes": 0,
+            "index": 2,
+            "name": "raise@GLIBC_2.2.5 (2)",
+            "section": "UND",
+            "type": "FUNC",
+            "value_hex": "0000000000000000",
+            "visibility": "DEFAULT"
+          },
+          "consumer_verneed_file": "libc.so.6",
+          "consumer_versym": {
+            "hidden": false,
+            "index": 2,
+            "name": "GLIBC_2.2.5"
+          },
+          "provider": {
+            "binding": "GLOBAL",
+            "bytes": 49,
+            "index": 2237,
+            "name": "raise@@GLIBC_2.2.5",
+            "section": "16",
+            "type": "FUNC",
+            "value_hex": "0000000000041100",
+            "visibility": "DEFAULT"
+          },
+          "provider_file": {
+            "bytes": 2339896,
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/output-1/runtime/lib64/libc.so.6",
+            "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4"
+          },
+          "provider_verdef_name": "GLIBC_2.2.5",
+          "provider_versym": {
+            "hidden": false,
+            "index": 2,
+            "name": "GLIBC_2.2.5"
+          }
+        },
+        {
+          "consumer": {
+            "binding": "GLOBAL",
+            "bytes": 0,
+            "index": 3,
+            "name": "__libc_start_main@GLIBC_2.34 (3)",
+            "section": "UND",
+            "type": "FUNC",
+            "value_hex": "0000000000000000",
+            "visibility": "DEFAULT"
+          },
+          "consumer_verneed_file": "libc.so.6",
+          "consumer_versym": {
+            "hidden": false,
+            "index": 3,
+            "name": "GLIBC_2.34"
+          },
+          "provider": {
+            "binding": "GLOBAL",
+            "bytes": 332,
+            "index": 1824,
+            "name": "__libc_start_main@@GLIBC_2.34",
+            "section": "16",
+            "type": "FUNC",
+            "value_hex": "000000000002a5c0",
+            "visibility": "DEFAULT"
+          },
+          "provider_file": {
+            "bytes": 2339896,
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/output-1/runtime/lib64/libc.so.6",
+            "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4"
+          },
+          "provider_verdef_name": "GLIBC_2.34",
+          "provider_versym": {
+            "hidden": false,
+            "index": 35,
+            "name": "GLIBC_2.34"
+          }
+        },
+        {
+          "consumer": {
+            "binding": "GLOBAL",
+            "bytes": 0,
+            "index": 5,
+            "name": "sigaction@GLIBC_2.2.5 (2)",
+            "section": "UND",
+            "type": "FUNC",
+            "value_hex": "0000000000000000",
+            "visibility": "DEFAULT"
+          },
+          "consumer_verneed_file": "libc.so.6",
+          "consumer_versym": {
+            "hidden": false,
+            "index": 2,
+            "name": "GLIBC_2.2.5"
+          },
+          "provider": {
+            "binding": "WEAK",
+            "bytes": 52,
+            "index": 781,
+            "name": "sigaction@@GLIBC_2.2.5",
+            "section": "16",
+            "type": "FUNC",
+            "value_hex": "0000000000041170",
+            "visibility": "DEFAULT"
+          },
+          "provider_file": {
+            "bytes": 2339896,
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/output-1/runtime/lib64/libc.so.6",
+            "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4"
+          },
+          "provider_verdef_name": "GLIBC_2.2.5",
+          "provider_versym": {
+            "hidden": false,
+            "index": 2,
+            "name": "GLIBC_2.2.5"
+          }
+        },
+        {
+          "consumer": {
+            "binding": "GLOBAL",
+            "bytes": 0,
+            "index": 6,
+            "name": "printf@GLIBC_2.2.5 (2)",
+            "section": "UND",
+            "type": "FUNC",
+            "value_hex": "0000000000000000",
+            "visibility": "DEFAULT"
+          },
+          "consumer_verneed_file": "libc.so.6",
+          "consumer_versym": {
+            "hidden": false,
+            "index": 2,
+            "name": "GLIBC_2.2.5"
+          },
+          "provider": {
+            "binding": "GLOBAL",
+            "bytes": 212,
+            "index": 2614,
+            "name": "printf@@GLIBC_2.2.5",
+            "section": "16",
+            "type": "FUNC",
+            "value_hex": "000000000005b5e0",
+            "visibility": "DEFAULT"
+          },
+          "provider_file": {
+            "bytes": 2339896,
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/output-1/runtime/lib64/libc.so.6",
+            "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4"
+          },
+          "provider_verdef_name": "GLIBC_2.2.5",
+          "provider_versym": {
+            "hidden": false,
+            "index": 2,
+            "name": "GLIBC_2.2.5"
+          }
+        },
+        {
+          "consumer": {
+            "binding": "GLOBAL",
+            "bytes": 0,
+            "index": 7,
+            "name": "sigemptyset@GLIBC_2.2.5 (2)",
+            "section": "UND",
+            "type": "FUNC",
+            "value_hex": "0000000000000000",
+            "visibility": "DEFAULT"
+          },
+          "consumer_verneed_file": "libc.so.6",
+          "consumer_versym": {
+            "hidden": false,
+            "index": 2,
+            "name": "GLIBC_2.2.5"
+          },
+          "provider": {
+            "binding": "GLOBAL",
+            "bytes": 39,
+            "index": 2772,
+            "name": "sigemptyset@@GLIBC_2.2.5",
+            "section": "16",
+            "type": "FUNC",
+            "value_hex": "0000000000041ab0",
+            "visibility": "DEFAULT"
+          },
+          "provider_file": {
+            "bytes": 2339896,
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/output-1/runtime/lib64/libc.so.6",
+            "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4"
+          },
+          "provider_verdef_name": "GLIBC_2.2.5",
+          "provider_versym": {
+            "hidden": false,
+            "index": 2,
+            "name": "GLIBC_2.2.5"
+          }
+        },
+        {
+          "consumer": {
+            "binding": "GLOBAL",
+            "bytes": 0,
+            "index": 9,
+            "name": "sigismember@GLIBC_2.2.5 (2)",
+            "section": "UND",
+            "type": "FUNC",
+            "value_hex": "0000000000000000",
+            "visibility": "DEFAULT"
+          },
+          "consumer_verneed_file": "libc.so.6",
+          "consumer_versym": {
+            "hidden": false,
+            "index": 2,
+            "name": "GLIBC_2.2.5"
+          },
+          "provider": {
+            "binding": "GLOBAL",
+            "bytes": 60,
+            "index": 771,
+            "name": "sigismember@@GLIBC_2.2.5",
+            "section": "16",
+            "type": "FUNC",
+            "value_hex": "0000000000041bb0",
+            "visibility": "DEFAULT"
+          },
+          "provider_file": {
+            "bytes": 2339896,
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/output-1/runtime/lib64/libc.so.6",
+            "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4"
+          },
+          "provider_verdef_name": "GLIBC_2.2.5",
+          "provider_versym": {
+            "hidden": false,
+            "index": 2,
+            "name": "GLIBC_2.2.5"
+          }
+        },
+        {
+          "consumer": {
+            "binding": "GLOBAL",
+            "bytes": 0,
+            "index": 11,
+            "name": "sigaddset@GLIBC_2.2.5 (2)",
+            "section": "UND",
+            "type": "FUNC",
+            "value_hex": "0000000000000000",
+            "visibility": "DEFAULT"
+          },
+          "consumer_verneed_file": "libc.so.6",
+          "consumer_versym": {
+            "hidden": false,
+            "index": 2,
+            "name": "GLIBC_2.2.5"
+          },
+          "provider": {
+            "binding": "GLOBAL",
+            "bytes": 68,
+            "index": 637,
+            "name": "sigaddset@@GLIBC_2.2.5",
+            "section": "16",
+            "type": "FUNC",
+            "value_hex": "0000000000041b10",
+            "visibility": "DEFAULT"
+          },
+          "provider_file": {
+            "bytes": 2339896,
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/output-1/runtime/lib64/libc.so.6",
+            "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4"
+          },
+          "provider_verdef_name": "GLIBC_2.2.5",
+          "provider_versym": {
+            "hidden": false,
+            "index": 2,
+            "name": "GLIBC_2.2.5"
+          }
+        }
+      ],
+      "source": {
+        "bytes": 1243,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/input/signal.mask-restore.c",
+        "sha256": "4b90aac56c88ee2d62671655f279b6d4d311a7c340c8b2178ac72e74e8334025"
+      }
+    },
+    {
+      "ELF": {
+        "DT_NEEDED": [
+          "libc.so.6"
+        ],
+        "RPATH_RUNPATH": [],
+        "class": "ELF64",
+        "comment": [
+          "GCC: (GNU) 14.3.1 20251022 (Red Hat 14.3.1-4)"
+        ],
+        "endian": "little",
+        "entry": "0x401170",
+        "interpreter": "/lib64/ld-linux-x86-64.so.2",
+        "machine": "EM_X86_64",
+        "main_address": "0x0000000000401080",
+        "main_bytes": 233,
+        "raw_header_dynamic_dynsym_versym_match_saved_metadata": true,
+        "type": "ET_EXEC"
+      },
+      "actual_compiler_temporary_object": "/output/tmp/ccrfcRUs.o",
+      "app": {
+        "bytes": 18248,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/output-1/signal.altstack-small",
+        "sha256": "9554beb200a168f648ea919dbe2e75b0a63add208d0bee32bebba3b175e425e1"
+      },
+      "compiler_and_reader_stderr_empty": true,
+      "mode": "0755",
+      "name": "signal.altstack-small",
+      "object_scope": "One application source object owns main/handlers in actual map/trace; temporary pathname is not a retained object hash or compute C-retirement evidence.",
+      "optional_weak_imports": [
+        {
+          "binding": "WEAK",
+          "bytes": 0,
+          "index": 4,
+          "name": "_ITM_deregisterTMCloneTable",
+          "section": "UND",
+          "type": "NOTYPE",
+          "value_hex": "0000000000000000",
+          "visibility": "DEFAULT"
+        },
+        {
+          "binding": "WEAK",
+          "bytes": 0,
+          "index": 6,
+          "name": "__gmon_start__",
+          "section": "UND",
+          "type": "NOTYPE",
+          "value_hex": "0000000000000000",
+          "visibility": "DEFAULT"
+        },
+        {
+          "binding": "WEAK",
+          "bytes": 0,
+          "index": 8,
+          "name": "_ITM_registerTMCloneTable",
+          "section": "UND",
+          "type": "NOTYPE",
+          "value_hex": "0000000000000000",
+          "visibility": "DEFAULT"
+        }
+      ],
+      "required_import_count": 6,
+      "required_import_version_file_joins": [
+        {
+          "consumer": {
+            "binding": "GLOBAL",
+            "bytes": 0,
+            "index": 1,
+            "name": "free@GLIBC_2.2.5 (2)",
+            "section": "UND",
+            "type": "FUNC",
+            "value_hex": "0000000000000000",
+            "visibility": "DEFAULT"
+          },
+          "consumer_verneed_file": "libc.so.6",
+          "consumer_versym": {
+            "hidden": false,
+            "index": 2,
+            "name": "GLIBC_2.2.5"
+          },
+          "provider": {
+            "binding": "GLOBAL",
+            "bytes": 257,
+            "index": 519,
+            "name": "free@@GLIBC_2.2.5",
+            "section": "16",
+            "type": "FUNC",
+            "value_hex": "00000000000a6300",
+            "visibility": "DEFAULT"
+          },
+          "provider_file": {
+            "bytes": 2339896,
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/output-1/runtime/lib64/libc.so.6",
+            "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4"
+          },
+          "provider_verdef_name": "GLIBC_2.2.5",
+          "provider_versym": {
+            "hidden": false,
+            "index": 2,
+            "name": "GLIBC_2.2.5"
+          }
+        },
+        {
+          "consumer": {
+            "binding": "GLOBAL",
+            "bytes": 0,
+            "index": 2,
+            "name": "__libc_start_main@GLIBC_2.34 (3)",
+            "section": "UND",
+            "type": "FUNC",
+            "value_hex": "0000000000000000",
+            "visibility": "DEFAULT"
+          },
+          "consumer_verneed_file": "libc.so.6",
+          "consumer_versym": {
+            "hidden": false,
+            "index": 3,
+            "name": "GLIBC_2.34"
+          },
+          "provider": {
+            "binding": "GLOBAL",
+            "bytes": 332,
+            "index": 1824,
+            "name": "__libc_start_main@@GLIBC_2.34",
+            "section": "16",
+            "type": "FUNC",
+            "value_hex": "000000000002a5c0",
+            "visibility": "DEFAULT"
+          },
+          "provider_file": {
+            "bytes": 2339896,
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/output-1/runtime/lib64/libc.so.6",
+            "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4"
+          },
+          "provider_verdef_name": "GLIBC_2.34",
+          "provider_versym": {
+            "hidden": false,
+            "index": 35,
+            "name": "GLIBC_2.34"
+          }
+        },
+        {
+          "consumer": {
+            "binding": "GLOBAL",
+            "bytes": 0,
+            "index": 3,
+            "name": "__errno_location@GLIBC_2.2.5 (2)",
+            "section": "UND",
+            "type": "FUNC",
+            "value_hex": "0000000000000000",
+            "visibility": "DEFAULT"
+          },
+          "consumer_verneed_file": "libc.so.6",
+          "consumer_versym": {
+            "hidden": false,
+            "index": 2,
+            "name": "GLIBC_2.2.5"
+          },
+          "provider": {
+            "binding": "GLOBAL",
+            "bytes": 21,
+            "index": 2929,
+            "name": "__errno_location@@GLIBC_2.2.5",
+            "section": "16",
+            "type": "FUNC",
+            "value_hex": "000000000002a990",
+            "visibility": "DEFAULT"
+          },
+          "provider_file": {
+            "bytes": 2339896,
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/output-1/runtime/lib64/libc.so.6",
+            "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4"
+          },
+          "provider_verdef_name": "GLIBC_2.2.5",
+          "provider_versym": {
+            "hidden": false,
+            "index": 2,
+            "name": "GLIBC_2.2.5"
+          }
+        },
+        {
+          "consumer": {
+            "binding": "GLOBAL",
+            "bytes": 0,
+            "index": 5,
+            "name": "printf@GLIBC_2.2.5 (2)",
+            "section": "UND",
+            "type": "FUNC",
+            "value_hex": "0000000000000000",
+            "visibility": "DEFAULT"
+          },
+          "consumer_verneed_file": "libc.so.6",
+          "consumer_versym": {
+            "hidden": false,
+            "index": 2,
+            "name": "GLIBC_2.2.5"
+          },
+          "provider": {
+            "binding": "GLOBAL",
+            "bytes": 212,
+            "index": 2614,
+            "name": "printf@@GLIBC_2.2.5",
+            "section": "16",
+            "type": "FUNC",
+            "value_hex": "000000000005b5e0",
+            "visibility": "DEFAULT"
+          },
+          "provider_file": {
+            "bytes": 2339896,
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/output-1/runtime/lib64/libc.so.6",
+            "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4"
+          },
+          "provider_verdef_name": "GLIBC_2.2.5",
+          "provider_versym": {
+            "hidden": false,
+            "index": 2,
+            "name": "GLIBC_2.2.5"
+          }
+        },
+        {
+          "consumer": {
+            "binding": "GLOBAL",
+            "bytes": 0,
+            "index": 7,
+            "name": "malloc@GLIBC_2.2.5 (2)",
+            "section": "UND",
+            "type": "FUNC",
+            "value_hex": "0000000000000000",
+            "visibility": "DEFAULT"
+          },
+          "consumer_verneed_file": "libc.so.6",
+          "consumer_versym": {
+            "hidden": false,
+            "index": 2,
+            "name": "GLIBC_2.2.5"
+          },
+          "provider": {
+            "binding": "GLOBAL",
+            "bytes": 813,
+            "index": 1809,
+            "name": "malloc@@GLIBC_2.2.5",
+            "section": "16",
+            "type": "FUNC",
+            "value_hex": "00000000000a5c10",
+            "visibility": "DEFAULT"
+          },
+          "provider_file": {
+            "bytes": 2339896,
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/output-1/runtime/lib64/libc.so.6",
+            "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4"
+          },
+          "provider_verdef_name": "GLIBC_2.2.5",
+          "provider_versym": {
+            "hidden": false,
+            "index": 2,
+            "name": "GLIBC_2.2.5"
+          }
+        },
+        {
+          "consumer": {
+            "binding": "GLOBAL",
+            "bytes": 0,
+            "index": 9,
+            "name": "sigaltstack@GLIBC_2.2.5 (2)",
+            "section": "UND",
+            "type": "FUNC",
+            "value_hex": "0000000000000000",
+            "visibility": "DEFAULT"
+          },
+          "consumer_verneed_file": "libc.so.6",
+          "consumer_versym": {
+            "hidden": false,
+            "index": 2,
+            "name": "GLIBC_2.2.5"
+          },
+          "provider": {
+            "binding": "WEAK",
+            "bytes": 37,
+            "index": 2525,
+            "name": "sigaltstack@@GLIBC_2.2.5",
+            "section": "16",
+            "type": "FUNC",
+            "value_hex": "00000000000419b0",
+            "visibility": "DEFAULT"
+          },
+          "provider_file": {
+            "bytes": 2339896,
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/output-1/runtime/lib64/libc.so.6",
+            "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4"
+          },
+          "provider_verdef_name": "GLIBC_2.2.5",
+          "provider_versym": {
+            "hidden": false,
+            "index": 2,
+            "name": "GLIBC_2.2.5"
+          }
+        }
+      ],
+      "source": {
+        "bytes": 1072,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/input/signal.altstack-small.c",
+        "sha256": "167521ac7646d96e79761e425cd0614b07858fb6a86e08ba5131c880be409259"
+      }
+    }
+  ],
+  "at": "2026-11-10T23:58:37.184190+00:00",
+  "bounded_saved_data_corrections": [
+    {
+      "bytes": 1236,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-existing-signal-oracles-review-p04tests-max-1/actual-result-1/QUALIFIER-DATA-BINDING.FAILURE.json",
+      "sha256": "07688c4cbac80510fabbee9bffa9a6c8055dd2b0b771ceeb218ed73fe8fff97e"
+    },
+    {
+      "bytes": 1602,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-existing-signal-oracles-review-p04tests-max-1/actual-result-1/QUALIFIER-LIBC-METADATA.FAILURE.json",
+      "sha256": "4c96a19ad83ebd257c160e88084410b2a1ec27cd3f655a883a3c07eb6b918916"
+    },
+    {
+      "bytes": 3917,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-existing-signal-oracles-review-p04tests-max-1/actual-result-1/QUALIFIER-LIBC-METADATA.DIAGNOSTIC-TOOL.json",
+      "sha256": "df4ce805043a5733d3013acda454c63a5bbbaf59ed884cc02f38e71499c57ef7"
+    }
+  ],
+  "compiler": {
+    "actual_corroboration": "All3 ELF comments GCC14.3.1-4; actual GCC14 trace/systemheaders/deps and unchanged strict C11/GNU/O2/g1/Wall/Wextra/Werror/noPIE5333script. Compiler identity is qualified reuse under immutable image/exact unmasking mounts, not a new per-run binary hash claim.",
+    "reused_compiler": {
+      "existing_profile": "Actual same46dGCC14 used currentmatchingimage/controlplane app builds. No compiler/version/availability re-probe.",
+      "path": "/usr/bin/cc",
+      "resolved_bytes_sha256": "2092e32fa9abee9ccbf777a5f893b9cc608582b660c93e742a17c3eb7da109c2"
+    },
+    "same_immutable46d_GCC14_binding": {
+      "bytes": 16456,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/REQUEST.json",
+      "sha256": "fca432a3378375422703fc24cf80a7001ff5a460474ff25c96090f58a72daa5b"
+    }
+  },
+  "future_literal_cases_NOT_ADMITTED": [
+    {
+      "argv": [
+        "/apps/vector.mxcsr-nested-signal"
+      ],
+      "exit": 0,
+      "stderr_hex": "",
+      "stdout": {
+        "bytes": 141,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/mxcsr-oracle-correction-1/source/expected.stdout",
+        "sha256": "2ad8848ffacb1c561e88bdc46649394a51cb289630855e984bdb44b48e5c8093"
+      }
+    },
+    {
+      "argv": [
+        "/apps/signal.mask-restore"
+      ],
+      "exit": 0,
+      "stderr_hex": "",
+      "stdout": {
+        "bytes": 40,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/existing-signal-oracles-1/source/signal.mask-restore.expected.stdout",
+        "sha256": "dcaa9f1bb23dd9194743e50b308030dbb3bae80ade2729e0605663edd28d1033"
+      }
+    },
+    {
+      "argv": [
+        "/apps/signal.altstack-small"
+      ],
+      "exit": 0,
+      "stderr_hex": "",
+      "stdout": {
+        "bytes": 36,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/existing-signal-oracles-1/source/signal.altstack-small.expected.stdout",
+        "sha256": "8cff46eccdbec3bec7c8d86ee0fe556e54db13904634ed72544e6114de4a8a7b"
+      }
+    }
+  ],
+  "hash_receipt_scope": "Root originally lists27 names/sizes; these metadata SHA identities are frozen at qualification, not falsely attributed to Root. Actual3ELF hashes/modes also match actual producerstdout.",
+  "lifecycle": {
+    "Root_RESOURCE_RELEASE": {
+      "bytes": 266,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/execution-1/RESOURCE-RELEASE.json",
+      "sha256": "6038f30c057c46992900b5bf610bcee0ab96bf845b3159ec4a7b6cce36829287"
+    },
+    "Root_session": 32360,
+    "Root_session_exit": 0,
+    "Root_tool_completion": {
+      "bytes": 283,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/execution-1/ROOT-EXEC-COMPLETION.json",
+      "sha256": "e20d5f510bd2b30fd2ac9316c692155edec91073427b0994eeb372969183553b"
+    },
+    "actual_clients": [
+      {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "--host=unix:///var/run/docker.sock",
+          "ps",
+          "--no-trunc",
+          "--format",
+          "{{.ID}} {{.Names}}"
+        ],
+        "birth": "44008968",
+        "direct_wait_joined": true,
+        "exit": 0,
+        "label": "running-preflight",
+        "pid": 1149086,
+        "streams_closed": true
+      },
+      {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "--host=unix:///var/run/docker.sock",
+          "ps",
+          "-a",
+          "--format",
+          "{{.Names}}"
+        ],
+        "birth": "44008984",
+        "direct_wait_joined": true,
+        "exit": 0,
+        "label": "names-preflight",
+        "pid": 1149101,
+        "streams_closed": true
+      },
+      {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "--host=unix:///var/run/docker.sock",
+          "create",
+          "--name",
+          "mck-m14-f06-corrected-existing-inputs-20261110-cpu7-1",
+          "--label",
+          "mckernel.preparation-owner=m14-f06-corrected-existing-inputs-1",
+          "--init",
+          "--pull=never",
+          "--network=none",
+          "--ipc=private",
+          "--cpus=1",
+          "--cpuset-cpus=7",
+          "--memory=256m",
+          "--memory-swap=256m",
+          "--pids-limit=64",
+          "--ulimit",
+          "core=0:0",
+          "--ulimit",
+          "fsize=67108864:67108864",
+          "--ulimit",
+          "cpu=60:60",
+          "--user",
+          "1000:1000",
+          "--read-only",
+          "--cap-drop=ALL",
+          "--security-opt=no-new-privileges",
+          "--tmpfs",
+          "/tmp:rw,nodev,nosuid,noexec,size=16m,mode=1777",
+          "--workdir",
+          "/output",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/input,dst=/source,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/compile_and_read.sh,dst=/producer/compile_and_read.sh,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/output-1,dst=/output",
+          "--entrypoint",
+          "/usr/bin/env",
+          "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+          "-i",
+          "BASH_ENV=",
+          "ENV=",
+          "LANG=C",
+          "LC_ALL=C",
+          "PATH=/usr/bin:/bin",
+          "TZ=UTC",
+          "LD_PRELOAD=",
+          "LD_LIBRARY_PATH=",
+          "TMPDIR=/tmp",
+          "TMP=/tmp",
+          "TEMP=/tmp",
+          "/usr/bin/bash",
+          "--noprofile",
+          "--norc",
+          "-e",
+          "-c",
+          "ulimit -v 262144; umask 022; exec \"$@\"",
+          "corrected-existing-signal-inputs-as-limit",
+          "/usr/bin/bash",
+          "--noprofile",
+          "--norc",
+          "/producer/compile_and_read.sh"
+        ],
+        "birth": "44009006",
+        "direct_wait_joined": true,
+        "exit": 0,
+        "label": "payload-create",
+        "pid": 1149117,
+        "streams_closed": true
+      },
+      {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "--host=unix:///var/run/docker.sock",
+          "inspect",
+          "ce4c2f099e2b9074c9d8ffdba0e02ffbce59236ead67869a6798e5ce3132a152"
+        ],
+        "birth": "44009028",
+        "direct_wait_joined": true,
+        "exit": 0,
+        "label": "payload-profile",
+        "pid": 1149132,
+        "streams_closed": true
+      },
+      {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "--host=unix:///var/run/docker.sock",
+          "inspect",
+          "ce4c2f099e2b9074c9d8ffdba0e02ffbce59236ead67869a6798e5ce3132a152"
+        ],
+        "birth": "44009051",
+        "direct_wait_joined": true,
+        "exit": 0,
+        "label": "payload-running-inspect",
+        "pid": 1149149,
+        "streams_closed": true
+      },
+      {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "--host=unix:///var/run/docker.sock",
+          "start",
+          "-a",
+          "ce4c2f099e2b9074c9d8ffdba0e02ffbce59236ead67869a6798e5ce3132a152"
+        ],
+        "birth": "44009050",
+        "direct_wait_joined": true,
+        "exit": 0,
+        "label": "payload-payload",
+        "pid": 1149147,
+        "primary_error": null,
+        "secondary_errors": [],
+        "streams_closed": true
+      },
+      {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "--host=unix:///var/run/docker.sock",
+          "inspect",
+          "ce4c2f099e2b9074c9d8ffdba0e02ffbce59236ead67869a6798e5ce3132a152"
+        ],
+        "birth": "44009200",
+        "direct_wait_joined": true,
+        "exit": 0,
+        "label": "payload-terminal",
+        "pid": 1149375,
+        "streams_closed": true
+      },
+      {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "--host=unix:///var/run/docker.sock",
+          "wait",
+          "ce4c2f099e2b9074c9d8ffdba0e02ffbce59236ead67869a6798e5ce3132a152"
+        ],
+        "birth": "44009212",
+        "direct_wait_joined": true,
+        "exit": 0,
+        "label": "payload-container-wait",
+        "pid": 1149383,
+        "streams_closed": true
+      },
+      {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "--host=unix:///var/run/docker.sock",
+          "rm",
+          "ce4c2f099e2b9074c9d8ffdba0e02ffbce59236ead67869a6798e5ce3132a152"
+        ],
+        "birth": "44009224",
+        "direct_wait_joined": true,
+        "exit": 0,
+        "label": "payload-owned-remove",
+        "pid": 1149391,
+        "streams_closed": true
+      }
+    ],
+    "all9_positive_client_births_direct_waits_streams": true,
+    "initial_Root_tool": {
+      "bytes": 131,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/execution-1/ROOT-EXEC-TOOL.json",
+      "sha256": "70b2af8f238b7a9417ae3e676359eb8168d2c75f78bccaf754f906610eda713a"
+    },
+    "memory": {
+      "bytes": 695,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/execution-1/payload-MEMORY.json",
+      "sha256": "2ab1a033f3e227b0d8c1e3ee110efb6316e94f011f59f0c4e5a00138401651f0"
+    },
+    "original_admission": {
+      "bytes": 577,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/execution-1/ADMISSION.json",
+      "sha256": "bc6d0b89eac75af0bd6639e7eae55cc0980e0a12bed10bd31a4dc501bebdfd6e"
+    },
+    "owned_CID": "ce4c2f099e2b9074c9d8ffdba0e02ffbce59236ead67869a6798e5ce3132a152",
+    "producer_stderr": {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/execution-1/payload-payload.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "producer_stdout": {
+      "bytes": 750,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/execution-1/payload-payload.stdout",
+      "sha256": "3dfe3119f10c870cffe9f602e1522d672fb9f18e6279da60f628e52e5721e1f6"
+    },
+    "profile": {
+      "bytes": 9849,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/execution-1/payload-PROFILE.json",
+      "sha256": "c4961f41e70cf5a76dc0efe1e03457e0e489e8974006a87d07866ca74bdddf34"
+    },
+    "release_scope": "Root retires only this256MiB/onejob after full exact completion; no other/historical release by qualifier.",
+    "remaining_owned_children": [],
+    "sampled_failcnt_OOM": 0,
+    "sampled_highwater_bytes": 89780224,
+    "sampled_highwater_is_not_exact_terminal_peak": true,
+    "terminal": {
+      "Dead": false,
+      "Error": "",
+      "ExitCode": 0,
+      "FinishedAt": "2026-11-10T23:37:05.455842485Z",
+      "OOMKilled": false,
+      "Paused": false,
+      "Pid": 0,
+      "Restarting": false,
+      "Running": false,
+      "StartedAt": "2026-11-10T23:37:04.855794235Z",
+      "Status": "exited"
+    },
+    "terminal_receipt": {
+      "bytes": 10509,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/execution-1/payload-TERMINAL.json",
+      "sha256": "3b3aba423f554a6410ee848011a54650761b1fd0d8992de52fd059ecd9dc2a20"
+    }
+  },
+  "material_source_GO": {
+    "bytes": 17773,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-existing-signal-oracles-review-p04tests-max-1/REVIEW.json",
+    "sha256": "229197c75c2ef7dfd6ed3120c2f46d2a9b365cb7a7e3d6c0514f0ecd22de1e22"
+  },
+  "operations": "Saved source/text/JSON/ELFbyte/hash/stat comparisons and private data qualification only. No compiler/newmetadata tool/provider/app/FP/signal/Docker/network/native/process-control execution or canonical/candidate/source/controller/accounting changes.",
+  "optimized_oracle_byte_proofs": [
+    {
+      "all_saved_instruction_bytes_equal_actual_ELF": true,
+      "blocks": {
+        "inner": "0000000000401320 <inner>:\n  401320:\t48 83 ec 18          \tsub    $0x18,%rsp\n  401324:\tc7 44 24 0c 80 5f 00 00 \tmovl   $0x5f80,0xc(%rsp)\n  40132c:\tc5 f8 ae 54 24 0c    \tvldmxcsr 0xc(%rsp)\n  401332:\t31 c0                \txor    %eax,%eax\n  401334:\tbf ba 00 00 00       \tmov    $0xba,%edi\n  401339:\te8 22 fd ff ff       \tcall   401060 <syscall@plt>\n  40133e:\tc5 f8 ae 5c 24 0c    \tvstmxcsr 0xc(%rsp)\n  401344:\t8b 54 24 0c          \tmov    0xc(%rsp),%edx\n  401348:\t89 15 ea 2c 00 00    \tmov    %edx,0x2cea(%rip)        # 404038 <inner_csr>\n  40134e:\t48 63 15 e7 2c 00 00 \tmovslq 0x2ce7(%rip),%rdx        # 40403c <expected_tid>\n  401355:\t48 39 c2             \tcmp    %rax,%rdx\n  401358:\t0f 94 c0             \tsete   %al\n  40135b:\t0f b6 c0             \tmovzbl %al,%eax\n  40135e:\t89 05 c4 2c 00 00    \tmov    %eax,0x2cc4(%rip)        # 404028 <__TMC_END__>\n  401364:\t8b 05 be 2c 00 00    \tmov    0x2cbe(%rip),%eax        # 404028 <__TMC_END__>\n  40136a:\t85 c0                \ttest   %eax,%eax\n  40136c:\t75 0a                \tjne    401378 <inner+0x58>\n  40136e:\tc7 05 cc 2c 00 00 01 00 00 00 \tmovl   $0x1,0x2ccc(%rip)        # 404044 <failed>\n  401378:\tc7 05 c6 2c 00 00 02 00 00 00 \tmovl   $0x2,0x2cc6(%rip)        # 404048 <depth>\n  401382:\t48 83 c4 18          \tadd    $0x18,%rsp\n  401386:\tc3                   \tret\n  401387:\t66 0f 1f 84 00 00 00 00 00 \tnopw   0x0(%rax,%rax,1)\n\n",
+        "main": "0000000000401070 <main>:\n  401070:\t41 54                \tpush   %r12\n  401072:\t55                   \tpush   %rbp\n  401073:\t53                   \tpush   %rbx\n  401074:\t48 83 ec 10          \tsub    $0x10,%rsp\n  401078:\te8 b3 ff ff ff       \tcall   401030 <getpid@plt>\n  40107d:\tbf ba 00 00 00       \tmov    $0xba,%edi\n  401082:\t4c 63 e0             \tmovslq %eax,%r12\n  401085:\t31 c0                \txor    %eax,%eax\n  401087:\te8 d4 ff ff ff       \tcall   401060 <syscall@plt>\n  40108c:\t48 89 c3             \tmov    %rax,%rbx\n  40108f:\t48 83 e8 01          \tsub    $0x1,%rax\n  401093:\t48 3d fe ff ff 7f    \tcmp    $0x7ffffffe,%rax\n  401099:\t77 05                \tja     4010a0 <main+0x30>\n  40109b:\t4d 85 e4             \ttest   %r12,%r12\n  40109e:\t7f 0e                \tjg     4010ae <main+0x3e>\n  4010a0:\tb8 01 00 00 00       \tmov    $0x1,%eax\n  4010a5:\t48 83 c4 10          \tadd    $0x10,%rsp\n  4010a9:\t5b                   \tpop    %rbx\n  4010aa:\t5d                   \tpop    %rbp\n  4010ab:\t41 5c                \tpop    %r12\n  4010ad:\tc3                   \tret\n  4010ae:\tbe 90 13 40 00       \tmov    $0x401390,%esi\n  4010b3:\tbf 0a 00 00 00       \tmov    $0xa,%edi\n  4010b8:\t44 89 25 81 2f 00 00 \tmov    %r12d,0x2f81(%rip)        # 404040 <expected_pid>\n  4010bf:\t89 1d 77 2f 00 00    \tmov    %ebx,0x2f77(%rip)        # 40403c <expected_tid>\n  4010c5:\te8 86 ff ff ff       \tcall   401050 <signal@plt>\n  4010ca:\t48 83 c0 01          \tadd    $0x1,%rax\n  4010ce:\t74 d0                \tje     4010a0 <main+0x30>\n  4010d0:\tbe 20 13 40 00       \tmov    $0x401320,%esi\n  4010d5:\tbf 0c 00 00 00       \tmov    $0xc,%edi\n  4010da:\te8 71 ff ff ff       \tcall   401050 <signal@plt>\n  4010df:\t48 83 c0 01          \tadd    $0x1,%rax\n  4010e3:\t74 bb                \tje     4010a0 <main+0x30>\n  4010e5:\tc5 f8 ae 5c 24 0c    \tvstmxcsr 0xc(%rsp)\n  4010eb:\t8b 6c 24 0c          \tmov    0xc(%rsp),%ebp\n  4010ef:\tc7 44 24 0c 80 1f 00 00 \tmovl   $0x1f80,0xc(%rsp)\n  4010f7:\tc5 f8 ae 54 24 0c    \tvldmxcsr 0xc(%rsp)\n  4010fd:\t31 c0                \txor    %eax,%eax\n  4010ff:\tb9 0a 00 00 00       \tmov    $0xa,%ecx\n  401104:\t48 89 da             \tmov    %rbx,%rdx\n  401107:\t4c 89 e6             \tmov    %r12,%rsi\n  40110a:\tbf ea 00 00 00       \tmov    $0xea,%edi\n  40110f:\te8 4c ff ff ff       \tcall   401060 <syscall@plt>\n  401114:\t48 85 c0             \ttest   %rax,%rax\n  401117:\t74 0a                \tje     401123 <main+0xb3>\n  401119:\tc7 05 21 2f 00 00 01 00 00 00 \tmovl   $0x1,0x2f21(%rip)        # 404044 <failed>\n  401123:\tc5 f8 ae 5c 24 0c    \tvstmxcsr 0xc(%rsp)\n  401129:\t8b 44 24 0c          \tmov    0xc(%rsp),%eax\n  40112d:\t89 6c 24 0c          \tmov    %ebp,0xc(%rsp)\n  401131:\t89 05 f5 2e 00 00    \tmov    %eax,0x2ef5(%rip)        # 40402c <main_after>\n  401137:\tc5 f8 ae 54 24 0c    \tvldmxcsr 0xc(%rsp)\n  40113d:\t45 31 c9             \txor    %r9d,%r9d\n  401140:\t8b 05 ee 2e 00 00    \tmov    0x2eee(%rip),%eax        # 404034 <outer_before>\n  401146:\t3d 80 3f 00 00       \tcmp    $0x3f80,%eax\n  40114b:\t75 12                \tjne    40115f <main+0xef>\n  40114d:\t8b 05 dd 2e 00 00    \tmov    0x2edd(%rip),%eax        # 404030 <outer_after>\n  401153:\t45 31 c9             \txor    %r9d,%r9d\n  401156:\t3d 80 3f 00 00       \tcmp    $0x3f80,%eax\n  40115b:\t41 0f 94 c1          \tsete   %r9b\n  40115f:\t8b 05 c7 2e 00 00    \tmov    0x2ec7(%rip),%eax        # 40402c <main_after>\n  401165:\t3d 80 1f 00 00       \tcmp    $0x1f80,%eax\n  40116a:\t8b 05 c8 2e 00 00    \tmov    0x2ec8(%rip),%eax        # 404038 <inner_csr>\n  401170:\t40 0f 94 c7          \tsete   %dil\n  401174:\t0f 94 c1             \tsete   %cl\n  401177:\t31 d2                \txor    %edx,%edx\n  401179:\tf7 d0                \tnot    %eax\n  40117b:\t40 0f b6 ff          \tmovzbl %dil,%edi\n  40117f:\ta9 80 1f 00 00       \ttest   $0x1f80,%eax\n  401184:\t74 4e                \tje     4011d4 <main+0x164>\n  401186:\t8b 05 bc 2e 00 00    \tmov    0x2ebc(%rip),%eax        # 404048 <depth>\n  40118c:\t31 db                \txor    %ebx,%ebx\n  40118e:\t83 f8 02             \tcmp    $0x2,%eax\n  401191:\t74 64                \tje     4011f7 <main+0x187>\n  401193:\t44 8b 15 8e 2e 00 00 \tmov    0x2e8e(%rip),%r10d        # 404028 <__TMC_END__>\n  40119a:\t44 8b 05 8b 2e 00 00 \tmov    0x2e8b(%rip),%r8d        # 40402c <main_after>\n  4011a1:\t53                   \tpush   %rbx\n  4011a2:\t8b 0d 88 2e 00 00    \tmov    0x2e88(%rip),%ecx        # 404030 <outer_after>\n  4011a8:\t8b 05 8a 2e 00 00    \tmov    0x2e8a(%rip),%eax        # 404038 <inner_csr>\n  4011ae:\t41 52                \tpush   %r10\n  4011b0:\t8b 35 92 2e 00 00    \tmov    0x2e92(%rip),%esi        # 404048 <depth>\n  4011b6:\t52                   \tpush   %rdx\n  4011b7:\t89 c2                \tmov    %eax,%edx\n  4011b9:\t31 c0                \txor    %eax,%eax\n  4011bb:\t57                   \tpush   %rdi\n  4011bc:\tbf 10 20 40 00       \tmov    $0x402010,%edi\n  4011c1:\te8 7a fe ff ff       \tcall   401040 <printf@plt>\n  4011c6:\t89 d8                \tmov    %ebx,%eax\n  4011c8:\t48 83 c4 20          \tadd    $0x20,%rsp\n  4011cc:\t83 f0 01             \txor    $0x1,%eax\n  4011cf:\te9 d1 fe ff ff       \tjmp    4010a5 <main+0x35>\n  4011d4:\t8b 05 56 2e 00 00    \tmov    0x2e56(%rip),%eax        # 404030 <outer_after>\n  4011da:\tf7 d0                \tnot    %eax\n  4011dc:\ta9 80 1f 00 00       \ttest   $0x1f80,%eax\n  4011e1:\t75 a3                \tjne    401186 <main+0x116>\n  4011e3:\t8b 05 43 2e 00 00    \tmov    0x2e43(%rip),%eax        # 40402c <main_after>\n  4011e9:\t31 d2                \txor    %edx,%edx\n  4011eb:\tf7 d0                \tnot    %eax\n  4011ed:\ta9 80 1f 00 00       \ttest   $0x1f80,%eax\n  4011f2:\t0f 94 c2             \tsete   %dl\n  4011f5:\teb 8f                \tjmp    401186 <main+0x116>\n  4011f7:\t8b 05 47 2e 00 00    \tmov    0x2e47(%rip),%eax        # 404044 <failed>\n  4011fd:\t85 c0                \ttest   %eax,%eax\n  4011ff:\t75 92                \tjne    401193 <main+0x123>\n  401201:\t8b 1d 21 2e 00 00    \tmov    0x2e21(%rip),%ebx        # 404028 <__TMC_END__>\n  401207:\t85 db                \ttest   %ebx,%ebx\n  401209:\t74 88                \tje     401193 <main+0x123>\n  40120b:\t8b 05 27 2e 00 00    \tmov    0x2e27(%rip),%eax        # 404038 <inner_csr>\n  401211:\t31 db                \txor    %ebx,%ebx\n  401213:\t3d 80 5f 00 00       \tcmp    $0x5f80,%eax\n  401218:\t0f 85 75 ff ff ff    \tjne    401193 <main+0x123>\n  40121e:\t44 21 c9             \tand    %r9d,%ecx\n  401221:\t89 cb                \tmov    %ecx,%ebx\n  401223:\t21 d3                \tand    %edx,%ebx\n  401225:\te9 69 ff ff ff       \tjmp    401193 <main+0x123>\n  40122a:\t66 0f 1f 44 00 00    \tnopw   0x0(%rax,%rax,1)\n\n",
+        "outer": "0000000000401390 <outer>:\n  401390:\t48 83 ec 18          \tsub    $0x18,%rsp\n  401394:\tc7 44 24 0c 80 3f 00 00 \tmovl   $0x3f80,0xc(%rsp)\n  40139c:\tc5 f8 ae 54 24 0c    \tvldmxcsr 0xc(%rsp)\n  4013a2:\tc5 f8 ae 5c 24 0c    \tvstmxcsr 0xc(%rsp)\n  4013a8:\t8b 44 24 0c          \tmov    0xc(%rsp),%eax\n  4013ac:\tb9 0c 00 00 00       \tmov    $0xc,%ecx\n  4013b1:\tbf ea 00 00 00       \tmov    $0xea,%edi\n  4013b6:\t89 05 78 2c 00 00    \tmov    %eax,0x2c78(%rip)        # 404034 <outer_before>\n  4013bc:\t31 c0                \txor    %eax,%eax\n  4013be:\tc7 05 80 2c 00 00 01 00 00 00 \tmovl   $0x1,0x2c80(%rip)        # 404048 <depth>\n  4013c8:\t48 63 15 6d 2c 00 00 \tmovslq 0x2c6d(%rip),%rdx        # 40403c <expected_tid>\n  4013cf:\t48 63 35 6a 2c 00 00 \tmovslq 0x2c6a(%rip),%rsi        # 404040 <expected_pid>\n  4013d6:\te8 85 fc ff ff       \tcall   401060 <syscall@plt>\n  4013db:\t48 85 c0             \ttest   %rax,%rax\n  4013de:\t74 0a                \tje     4013ea <outer+0x5a>\n  4013e0:\tc7 05 5a 2c 00 00 01 00 00 00 \tmovl   $0x1,0x2c5a(%rip)        # 404044 <failed>\n  4013ea:\tc5 f8 ae 5c 24 0c    \tvstmxcsr 0xc(%rsp)\n  4013f0:\t8b 44 24 0c          \tmov    0xc(%rsp),%eax\n  4013f4:\t89 05 36 2c 00 00    \tmov    %eax,0x2c36(%rip)        # 404030 <outer_after>\n  4013fa:\t8b 05 48 2c 00 00    \tmov    0x2c48(%rip),%eax        # 404048 <depth>\n  401400:\t83 f8 02             \tcmp    $0x2,%eax\n  401403:\t74 0a                \tje     40140f <outer+0x7f>\n  401405:\tc7 05 35 2c 00 00 01 00 00 00 \tmovl   $0x1,0x2c35(%rip)        # 404044 <failed>\n  40140f:\t48 83 c4 18          \tadd    $0x18,%rsp\n  401413:\tc3                   \tret\n\nDisassembly of section .fini:\n\n"
+      },
+      "disassembly": {
+        "bytes": 15274,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/output-1/vector.mxcsr-nested-signal.disassembly.stdout",
+        "sha256": "92a0e59108c893f8c6d291e65f17e5ce0f963b61d25389979cd0938243cc592d"
+      },
+      "instruction_records": 250,
+      "meaning": "Inner loads0x5f80, calls libc syscall186, then observes CSR and compares TID. Outer observes0x3f80 before/after syscall234(PID,TID,SIGUSR2=12). Main saves oldCSR/loads0x1f80, calls syscall234(PID,TID,SIGUSR1=10), observes returnCSR then restores oldCSR beforeprintf. Real mode/mask/depth/TID/failure checks drive valid/exit; no uncontrolled inline syscall.",
+      "program": "vector.mxcsr-nested-signal"
+    },
+    {
+      "all_saved_instruction_bytes_equal_actual_ELF": true,
+      "blocks": {
+        "handler": "0000000000401310 <handler>:\n  401310:\t53                   \tpush   %rbx\n  401311:\t31 f6                \txor    %esi,%esi\n  401313:\tbf 02 00 00 00       \tmov    $0x2,%edi\n  401318:\t48 83 c4 80          \tadd    $0xffffffffffffff80,%rsp\n  40131c:\t48 89 e2             \tmov    %rsp,%rdx\n  40131f:\te8 0c fd ff ff       \tcall   401030 <sigprocmask@plt>\n  401324:\t85 c0                \ttest   %eax,%eax\n  401326:\t74 18                \tje     401340 <handler+0x30>\n  401328:\t8b 05 16 2d 00 00    \tmov    0x2d16(%rip),%eax        # 404044 <handled>\n  40132e:\t83 c0 01             \tadd    $0x1,%eax\n  401331:\t89 05 0d 2d 00 00    \tmov    %eax,0x2d0d(%rip)        # 404044 <handled>\n  401337:\t48 83 ec 80          \tsub    $0xffffffffffffff80,%rsp\n  40133b:\t5b                   \tpop    %rbx\n  40133c:\tc3                   \tret\n  40133d:\t0f 1f 00             \tnopl   (%rax)\n  401340:\tbe 0c 00 00 00       \tmov    $0xc,%esi\n  401345:\t48 89 e7             \tmov    %rsp,%rdi\n  401348:\te8 33 fd ff ff       \tcall   401080 <sigismember@plt>\n  40134d:\t83 f8 01             \tcmp    $0x1,%eax\n  401350:\t75 d6                \tjne    401328 <handler+0x18>\n  401352:\tc7 05 e4 2c 00 00 01 00 00 00 \tmovl   $0x1,0x2ce4(%rip)        # 404040 <__TMC_END__>\n  40135c:\teb ca                \tjmp    401328 <handler+0x18>\n\nDisassembly of section .fini:\n\n",
+        "main": "00000000004010a0 <main>:\n  4010a0:\t55                   \tpush   %rbp\n  4010a1:\tc5 f9 ef c0          \tvpxor  %xmm0,%xmm0,%xmm0\n  4010a5:\t48 89 e5             \tmov    %rsp,%rbp\n  4010a8:\t41 57                \tpush   %r15\n  4010aa:\t41 56                \tpush   %r14\n  4010ac:\t41 55                \tpush   %r13\n  4010ae:\t41 54                \tpush   %r12\n  4010b0:\t53                   \tpush   %rbx\n  4010b1:\t48 81 ec 28 02 00 00 \tsub    $0x228,%rsp\n  4010b8:\t48 8d 9c 24 88 01 00 00 \tlea    0x188(%rsp),%rbx\n  4010c0:\tc5 fe 7f 84 24 e0 01 00 00 \tvmovdqu %ymm0,0x1e0(%rsp)\n  4010c9:\t4c 8d ac 24 80 00 00 00 \tlea    0x80(%rsp),%r13\n  4010d1:\tc5 fe 7f 84 24 80 01 00 00 \tvmovdqu %ymm0,0x180(%rsp)\n  4010da:\t48 89 df             \tmov    %rbx,%rdi\n  4010dd:\tc5 fe 7f 84 24 a0 01 00 00 \tvmovdqu %ymm0,0x1a0(%rsp)\n  4010e6:\tc5 fe 7f 84 24 c0 01 00 00 \tvmovdqu %ymm0,0x1c0(%rsp)\n  4010ef:\tc5 fe 7f 84 24 f8 01 00 00 \tvmovdqu %ymm0,0x1f8(%rsp)\n  4010f8:\tc5 f8 77             \tvzeroupper\n  4010fb:\te8 70 ff ff ff       \tcall   401070 <sigemptyset@plt>\n  401100:\tbe 0c 00 00 00       \tmov    $0xc,%esi\n  401105:\t48 89 df             \tmov    %rbx,%rdi\n  401108:\te8 83 ff ff ff       \tcall   401090 <sigaddset@plt>\n  40110d:\t31 f6                \txor    %esi,%esi\n  40110f:\t4c 89 ea             \tmov    %r13,%rdx\n  401112:\tbf 02 00 00 00       \tmov    $0x2,%edi\n  401117:\t48 c7 84 24 80 01 00 00 10 13 40 00 \tmovq   $0x401310,0x180(%rsp)\n  401123:\te8 08 ff ff ff       \tcall   401030 <sigprocmask@plt>\n  401128:\t85 c0                \ttest   %eax,%eax\n  40112a:\t74 17                \tje     401143 <main+0xa3>\n  40112c:\tb8 01 00 00 00       \tmov    $0x1,%eax\n  401131:\t48 81 c4 28 02 00 00 \tadd    $0x228,%rsp\n  401138:\t5b                   \tpop    %rbx\n  401139:\t41 5c                \tpop    %r12\n  40113b:\t41 5d                \tpop    %r13\n  40113d:\t41 5e                \tpop    %r14\n  40113f:\t41 5f                \tpop    %r15\n  401141:\t5d                   \tpop    %rbp\n  401142:\tc3                   \tret\n  401143:\t31 d2                \txor    %edx,%edx\n  401145:\t48 8d b4 24 80 01 00 00 \tlea    0x180(%rsp),%rsi\n  40114d:\tbf 0a 00 00 00       \tmov    $0xa,%edi\n  401152:\te8 f9 fe ff ff       \tcall   401050 <sigaction@plt>\n  401157:\t85 c0                \ttest   %eax,%eax\n  401159:\t75 d1                \tjne    40112c <main+0x8c>\n  40115b:\tbf 0a 00 00 00       \tmov    $0xa,%edi\n  401160:\te8 db fe ff ff       \tcall   401040 <raise@plt>\n  401165:\t85 c0                \ttest   %eax,%eax\n  401167:\t75 c3                \tjne    40112c <main+0x8c>\n  401169:\t4c 8d b4 24 00 01 00 00 \tlea    0x100(%rsp),%r14\n  401171:\t31 f6                \txor    %esi,%esi\n  401173:\tbf 02 00 00 00       \tmov    $0x2,%edi\n  401178:\t4c 89 f2             \tmov    %r14,%rdx\n  40117b:\te8 b0 fe ff ff       \tcall   401030 <sigprocmask@plt>\n  401180:\t85 c0                \ttest   %eax,%eax\n  401182:\t75 a8                \tjne    40112c <main+0x8c>\n  401184:\t48 89 e7             \tmov    %rsp,%rdi\n  401187:\tbb 01 00 00 00       \tmov    $0x1,%ebx\n  40118c:\t41 bc 01 00 00 00    \tmov    $0x1,%r12d\n  401192:\te8 d9 fe ff ff       \tcall   401070 <sigemptyset@plt>\n  401197:\t66 0f 1f 84 00 00 00 00 00 \tnopw   0x0(%rax,%rax,1)\n  4011a0:\t89 de                \tmov    %ebx,%esi\n  4011a2:\t4c 89 ef             \tmov    %r13,%rdi\n  4011a5:\te8 d6 fe ff ff       \tcall   401080 <sigismember@plt>\n  4011aa:\t89 de                \tmov    %ebx,%esi\n  4011ac:\t4c 89 f7             \tmov    %r14,%rdi\n  4011af:\t41 89 c7             \tmov    %eax,%r15d\n  4011b2:\te8 c9 fe ff ff       \tcall   401080 <sigismember@plt>\n  4011b7:\t44 89 fa             \tmov    %r15d,%edx\n  4011ba:\t09 c2                \tor     %eax,%edx\n  4011bc:\tc1 ea 1f             \tshr    $0x1f,%edx\n  4011bf:\t41 39 c7             \tcmp    %eax,%r15d\n  4011c2:\t0f 95 c0             \tsetne  %al\n  4011c5:\t83 c3 01             \tadd    $0x1,%ebx\n  4011c8:\t09 d0                \tor     %edx,%eax\n  4011ca:\t83 f0 01             \txor    $0x1,%eax\n  4011cd:\t41 21 c4             \tand    %eax,%r12d\n  4011d0:\t83 fb 41             \tcmp    $0x41,%ebx\n  4011d3:\t75 cb                \tjne    4011a0 <main+0x100>\n  4011d5:\t8b 15 65 2e 00 00    \tmov    0x2e65(%rip),%edx        # 404040 <__TMC_END__>\n  4011db:\t31 c0                \txor    %eax,%eax\n  4011dd:\t44 89 e1             \tmov    %r12d,%ecx\n  4011e0:\tbf 10 20 40 00       \tmov    $0x402010,%edi\n  4011e5:\t8b 35 59 2e 00 00    \tmov    0x2e59(%rip),%esi        # 404044 <handled>\n  4011eb:\te8 70 fe ff ff       \tcall   401060 <printf@plt>\n  4011f0:\t8b 05 4e 2e 00 00    \tmov    0x2e4e(%rip),%eax        # 404044 <handled>\n  4011f6:\t83 e8 01             \tsub    $0x1,%eax\n  4011f9:\t0f 85 2d ff ff ff    \tjne    40112c <main+0x8c>\n  4011ff:\t8b 05 3b 2e 00 00    \tmov    0x2e3b(%rip),%eax        # 404040 <__TMC_END__>\n  401205:\t83 e8 01             \tsub    $0x1,%eax\n  401208:\t0f 95 c0             \tsetne  %al\n  40120b:\t41 83 f4 01          \txor    $0x1,%r12d\n  40120f:\t44 09 e0             \tor     %r12d,%eax\n  401212:\t0f b6 c0             \tmovzbl %al,%eax\n  401215:\te9 17 ff ff ff       \tjmp    401131 <main+0x91>\n  40121a:\t66 0f 1f 44 00 00    \tnopw   0x0(%rax,%rax,1)\n\n"
+      },
+      "disassembly": {
+        "bytes": 12850,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/output-1/signal.mask-restore.disassembly.stdout",
+        "sha256": "f734eeac4b896fd415ecc81577c56369914834001d74c9ee7703f5af83d377b9"
+      },
+      "instruction_records": 214,
+      "meaning": "Two real sigismember calls per iteration compare baseline/after bits1..64, reject negative results and inequality, AND results into restored. Handler queries mask and observes USR2. Actual handled/observed/restored values drive return.",
+      "program": "signal.mask-restore"
+    },
+    {
+      "all_saved_instruction_bytes_equal_actual_ELF": true,
+      "blocks": {
+        "main": "0000000000401080 <main>:\n  401080:\t41 55                \tpush   %r13\n  401082:\t31 ff                \txor    %edi,%edi\n  401084:\t41 54                \tpush   %r12\n  401086:\t55                   \tpush   %rbp\n  401087:\t53                   \tpush   %rbx\n  401088:\t48 83 ec 68          \tsub    $0x68,%rsp\n  40108c:\t48 89 e6             \tmov    %rsp,%rsi\n  40108f:\te8 dc ff ff ff       \tcall   401070 <sigaltstack@plt>\n  401094:\t85 c0                \ttest   %eax,%eax\n  401096:\t74 10                \tje     4010a8 <main+0x28>\n  401098:\tb8 01 00 00 00       \tmov    $0x1,%eax\n  40109d:\t48 83 c4 68          \tadd    $0x68,%rsp\n  4010a1:\t5b                   \tpop    %rbx\n  4010a2:\t5d                   \tpop    %rbp\n  4010a3:\t41 5c                \tpop    %r12\n  4010a5:\t41 5d                \tpop    %r13\n  4010a7:\tc3                   \tret\n  4010a8:\tbf ff 07 00 00       \tmov    $0x7ff,%edi\n  4010ad:\te8 ae ff ff ff       \tcall   401060 <malloc@plt>\n  4010b2:\t48 89 c5             \tmov    %rax,%rbp\n  4010b5:\t48 85 c0             \ttest   %rax,%rax\n  4010b8:\t74 de                \tje     401098 <main+0x18>\n  4010ba:\t48 89 44 24 40       \tmov    %rax,0x40(%rsp)\n  4010bf:\t31 c0                \txor    %eax,%eax\n  4010c1:\t89 44 24 48          \tmov    %eax,0x48(%rsp)\n  4010c5:\t48 c7 44 24 50 ff 07 00 00 \tmovq   $0x7ff,0x50(%rsp)\n  4010ce:\te8 6d ff ff ff       \tcall   401040 <__errno_location@plt>\n  4010d3:\t31 d2                \txor    %edx,%edx\n  4010d5:\t48 8d 7c 24 40       \tlea    0x40(%rsp),%rdi\n  4010da:\t31 f6                \txor    %esi,%esi\n  4010dc:\t89 10                \tmov    %edx,(%rax)\n  4010de:\t48 89 c3             \tmov    %rax,%rbx\n  4010e1:\te8 8a ff ff ff       \tcall   401070 <sigaltstack@plt>\n  4010e6:\t48 8d 74 24 20       \tlea    0x20(%rsp),%rsi\n  4010eb:\t31 ff                \txor    %edi,%edi\n  4010ed:\t44 8b 2b             \tmov    (%rbx),%r13d\n  4010f0:\t41 89 c4             \tmov    %eax,%r12d\n  4010f3:\te8 78 ff ff ff       \tcall   401070 <sigaltstack@plt>\n  4010f8:\t89 c3                \tmov    %eax,%ebx\n  4010fa:\t85 c0                \ttest   %eax,%eax\n  4010fc:\t75 9a                \tjne    401098 <main+0x18>\n  4010fe:\t48 8b 44 24 20       \tmov    0x20(%rsp),%rax\n  401103:\t48 39 04 24          \tcmp    %rax,(%rsp)\n  401107:\t74 45                \tje     40114e <main+0xce>\n  401109:\t31 c9                \txor    %ecx,%ecx\n  40110b:\t41 83 fd 0c          \tcmp    $0xc,%r13d\n  40110f:\t44 89 ea             \tmov    %r13d,%edx\n  401112:\t44 89 e6             \tmov    %r12d,%esi\n  401115:\t0f 94 c1             \tsete   %cl\n  401118:\t41 89 d8             \tmov    %ebx,%r8d\n  40111b:\tbf 10 20 40 00       \tmov    $0x402010,%edi\n  401120:\t31 c0                \txor    %eax,%eax\n  401122:\te8 29 ff ff ff       \tcall   401050 <printf@plt>\n  401127:\t48 89 ef             \tmov    %rbp,%rdi\n  40112a:\te8 01 ff ff ff       \tcall   401030 <free@plt>\n  40112f:\t41 83 c4 01          \tadd    $0x1,%r12d\n  401133:\t0f 95 c2             \tsetne  %dl\n  401136:\t41 83 fd 0c          \tcmp    $0xc,%r13d\n  40113a:\t0f 95 c0             \tsetne  %al\n  40113d:\t09 c2                \tor     %eax,%edx\n  40113f:\t89 d8                \tmov    %ebx,%eax\n  401141:\t83 f0 01             \txor    $0x1,%eax\n  401144:\t09 d0                \tor     %edx,%eax\n  401146:\t83 e0 01             \tand    $0x1,%eax\n  401149:\te9 4f ff ff ff       \tjmp    40109d <main+0x1d>\n  40114e:\t48 8b 44 24 30       \tmov    0x30(%rsp),%rax\n  401153:\t48 39 44 24 10       \tcmp    %rax,0x10(%rsp)\n  401158:\t75 af                \tjne    401109 <main+0x89>\n  40115a:\t31 db                \txor    %ebx,%ebx\n  40115c:\t8b 44 24 28          \tmov    0x28(%rsp),%eax\n  401160:\t39 44 24 08          \tcmp    %eax,0x8(%rsp)\n  401164:\t0f 94 c3             \tsete   %bl\n  401167:\teb a0                \tjmp    401109 <main+0x89>\n  401169:\t0f 1f 80 00 00 00 00 \tnopl   0x0(%rax)\n\n"
+      },
+      "disassembly": {
+        "bytes": 9723,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/output-1/signal.altstack-small.disassembly.stdout",
+        "sha256": "8200c26f123944df379384c86f3f90657e8ff376919b73cd7998f807c78486ce"
+      },
+      "instruction_records": 164,
+      "meaning": "Real malloc2047 and stack_t.size2047/flags0, before/request/after sigaltstack calls. Captured errno compared12, rc compared-1, all three previous stack pointer/size/flags compared; storage freed and actual outcomes drive exit.",
+      "program": "signal.altstack-small"
+    }
+  ],
+  "original_acceptance": false,
+  "owner": "/root/p04_tests_max direct same-Root Sol/MAX, private qualifier only",
+  "producer": {
+    "bytes": 1026,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/compile_and_read.sh",
+    "sha256": "5333a2e0602aa203f9a63a6d4cd936fd12499fbe994d2090e8e1090f97627d1f"
+  },
+  "profile_GO": {
+    "bytes": 6547,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-existing-signal-oracles-review-p04tests-max-1/cpu7-affinity-1/current-disposition-1/REVIEW.json",
+    "sha256": "30ffc1b87954960a68e5c1e717fb8b3168c301ac03600f61b881c7e31e8217af"
+  },
+  "provider": {
+    "all_required_unique_callable_type_version_versym_verdef_file_joins": true,
+    "libc": {
+      "bytes": 2339896,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/output-1/runtime/lib64/libc.so.6",
+      "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4"
+    },
+    "loader": {
+      "bytes": 930600,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/output-1/runtime/lib64/ld-linux-x86-64.so.2",
+      "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b"
+    },
+    "no_new_NEEDED_RPATH_or_provider_probe": true,
+    "optional_scope": "Exactly3 standard unversioned ITM/gmon NOTYPE weak slots perapp, not required providers.",
+    "optional_weak_slots": 9,
+    "required_rows": 19,
+    "retained_full_libc_metadata": {
+      "bytes": 337646,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/provider-closure-1/execution-1/payload.stdout",
+      "sha256": "248be21979833c4f20b70132acd63036e525fc2a4d79c47caca60c42e1359324"
+    },
+    "reused_same46d_runtime_input_qualification": {
+      "bytes": 19010,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/qualification-1/RESULT.json",
+      "sha256": "ae2965d9575488919e44ff338d1d4ca7b6268d1c1a93ed02f747c619e09b5055"
+    },
+    "unique_required_symbol_version_pairs": 15
+  },
+  "qualifier_admission": {
+    "bytes": 1144,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-existing-signal-oracles-review-p04tests-max-1/actual-result-1/QUALIFIER-ADMISSION.json",
+    "sha256": "94d47d0179e2740098fe617c8ae5790cbb0cce5a389479fa522c6e80b31c4fdf"
+  },
+  "remaining_original_conditions": [
+    "Actual matched McKernel named-case stdout/stderr/exit and positive resource-restoring lifecycle.",
+    "Complete original normal/error/frame/register/configuredxstate/ptrace/alternate-stack behavior remains unproved outside retained exact passing scopes.",
+    "Fresh genuine native/source/currentfree/oneowner/cohort/guestnamespace/loader/provider/frontdoor/restoration binding; source default and original M14 acceptance remain separate."
+  ],
+  "request": {
+    "bytes": 14515,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/functional-cases-1/compile-corrected-existing-1/cpu7-affinity-1/REQUEST.json",
+    "sha256": "524126181a0ae6783fd5aed1fad22d5aa83c2f82957d0608b34dd158c27a50a3"
+  },
+  "schema": "m14-f06-three-corrected-oracles-saved-ELF-physical-preparation-qualification-v1",
+  "status": "PASS_PHYSICAL_PREPARATION_ONLY",
+  "whole_M14_06_02_FUNCTIONAL": false
+}

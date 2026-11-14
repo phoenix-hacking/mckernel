@@ -1,0 +1,109 @@
+{
+  "schema": "mckernel.rs011-source-authority-independent-review.v1",
+  "recorded_at_utc": "2026-10-17T02:54:30Z",
+  "reviewer": "/root/cheap_profile_review",
+  "model": "gpt-6.1-sol",
+  "implementation_ownership": false,
+  "decision": "PASS_SOURCE_AUTHORITY",
+  "scope": "Exact RS-011 current-source inventory, new SAFETY bindings and dependent source-authority repair only. This is not a complete review of every unsafe site, compiler evidence, preparation release, build release or runtime acceptance.",
+  "base_commit": "2fd71645bfae65d9e82feb1f0c7347c7961f0edd",
+  "author_record": {
+    "path": "docs/verification/evidence/rs011-authority-20261017.json",
+    "sha256": "77c98238bb181b0bab2ee0915f386c9294441fb8d07692995b61a789e6172516",
+    "status": "PASS_SOURCE_CHECKS_ONLY"
+  },
+  "files_sha256": {
+    "host-kernel/contracts/ihk-os-runtime-v1.json": "0c808a75ed83820ce8180e2dc985e91541723a687bbd5e31d16f2876ad91dbf0",
+    "host-kernel/kbuild/stage-manifest.json": "f5c7efabb35366142600b4c58df8aa77718ad982f282e00cdcf55c99cb965d46",
+    "host-kernel/native-rust/ihk-lifecycle-contract-v1.json": "de6a8f4121ed992abba680026c5c23c4324ef5c7cdd5ddb92ed1d31889826fd5",
+    "host-kernel/native-rust/ihk-smp-lifecycle-contract-v1.json": "a5b9818be9ccfb36516bb62d1f0114196651a83c41befee4f0fffd39770b4185",
+    "host-kernel/native-rust/ihk-mapping-foundation-contract-v1.json": "9843b938d283e792c678032d697de46a966f071a634195d86163a8caddd50abc",
+    "host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json": "12e67cb24105d53021da12aa3ad563dcd99baee6444d0ff21842cd36776971fa",
+    "host-kernel/native-rust/os_runtime.rs": "9519b7f35f5d28c88cdf366fe5c67a244ea005db713690a3686afe8c2a60fcab",
+    "host-kernel/native-rust/smp_memory.rs": "db0c5f94b5ea41610c501002ff359b7f23a38841715a0307e8b8f7872ac65522",
+    "scripts/rocky_rust_staging.py": "adf9d798856859ce7391f0cd7b8ba5a8c425cda71e73365db2923f0ab1abe981",
+    "scripts/ihk_smp_native_lifecycle_check.py": "9133a587e9a11fec6c2dbab48268ed6dd245fe69d3b4f37c66119a890e74d084",
+    "scripts/native_rust_host_audit.py": "37946ab30ff6c74cc94bda8e0ca28df52b61474454b9561ea2f6631d851fe3cb",
+    "scripts/tests/test_native_rust_unsafe_ffi_ledger.py": "cc7fec55765f7a2f1587333b7450cecd0a490b1847c0680a970698e21cdcdffe"
+  },
+  "independent_checks": [
+    {
+      "command": "/home/holden/anaconda3/bin/python3 -B scripts/native_rust_unsafe_ffi_ledger.py check",
+      "exit_code": 0,
+      "stdout": "RS-011 source ledger verified: 55 inputs, 654 unsafe/FFI sites; gate_status=NOT_READY\n",
+      "checker_sha256": "bf9a8ea3fc5402aa3946860f416570d81420e387619f20513d8f97bc21bcdfee"
+    },
+    {
+      "kind": "stdlib JSON, HEAD comparison and AST comparison; no repository imports or compiler",
+      "exit_code": 0,
+      "stdout": "PASS 637 durable IDs conserved; 17 additive; source scope, pending compiler/review and NOT_READY gate unchanged\nPASS 175 existing dependent path/digest/size bindings\nPASS comment-only diff host-kernel/native-rust/os_runtime.rs 13 lines\nPASS comment-only diff host-kernel/native-rust/smp_memory.rs 5 lines\nPASS exact digest-literal-only AST update scripts/rocky_rust_staging.py\nPASS exact digest-literal-only AST update scripts/ihk_smp_native_lifecycle_check.py\nPASS exact two SAFETY-prefix-string-only AST update scripts/native_rust_host_audit.py\nPASS frozen independent source-authority static checks\n"
+    },
+    {
+      "kind": "Final author-record SHA256, files/files_sha256/hash/size joins and reported command/test status checks",
+      "exit_code": 0,
+      "stdout": "PASS frozen author record digest, 12 exact file hashes/sizes and all reported source/test statuses\n"
+    }
+  ],
+  "author_test_evidence_reviewed": {
+    "ordered_source_checks": [
+      "native_rust_build_surface_audit.py",
+      "rocky_rust_staging.py --check",
+      "ihk_native_lifecycle_check.py",
+      "native_rust_unsafe_ffi_ledger.py check"
+    ],
+    "all_source_checks_exit_zero": true,
+    "focused_unittests_passed": 143,
+    "additional_host_audit_unittests_passed": 23,
+    "total_unittests_passed": 166,
+    "additional_source_checks": ["SMP lifecycle source contract", "mapping source contract without compiler"],
+    "staging_readiness_blockers_remaining": 4,
+    "reviewer_reran_full_unittest_suites": false
+  },
+  "invariant_review": {
+    "callback_generation_and_module": "create_os acquires ProviderModule before publication and OsObject retains it. os_request's file OsLease retains the exact generation and object; shutdown uses that handle's minor/generation and the resident v6 callback.",
+    "operation_and_admission": "os_request holds object.operations, closes admission and obtains begin_shutdown before invoking v6. Resident application/service admission owners exclude close. Post-effect tagging routes through finish_shutdown to committed closed admission and irreversible Shutdown; pre-effect failure preserves rollback semantics.",
+    "constructor_obligations": "The unsafe v6 constructor requires trusted live provider code, resident non-unwinding ABI-correct callbacks and exact-generation serialized effect reporting. Option/callback-ABI admission and create_os's provider pin match those obligations.",
+    "irq_work_sync": "PreparedBoot validates exact generation/descriptor/retained slot geometry, begins route close, closes and drains senders, waits BUSY clear and synchronizes each retained node before finish_close. The module, node allocation and master remain retained. boot_irq_callback checks route phase and uses BootMaster::interrupt, which only stores an atomic notification; it does not require the caller-held memory-controller mutex. Sleepable context and no callback-lock dependency are valid source obligations; exact native ABI/runtime evidence remains due.",
+    "executable_semantics": "The complete source diffs relative to the base commit are exclusively 13 added comment lines in os_runtime.rs and 5 added comment lines in smp_memory.rs. No Rust executable token is changed by this repair.",
+    "durable_inventory": "All 637 historical IDs preserve path, kind, owner and pending compiler/review records. Seventeen new IDs are additive. Eight changed expression bindings and four SAFETY-text bindings refer to the preserved semantic sites described individually in the author evidence; no IDs are dropped or renumbered.",
+    "checker_integrity": "The RS-011 discovery/checker source is unchanged. AST comparisons prove only authorized digest literals change in staging/SMP lifecycle checkers and only the two exact reviewed v6 SAFETY-prefix strings change in host audit. The ledger-test diff refreshes exact site counts, kind/crate counts and site-ID digest to independently discovered values; mutation and rejection assertions remain present.",
+    "dependent_digests": "All 175 existing path/digest/size joins in the selected authority JSON files match the live frozen bytes. The final author evidence independently joins all 12 selected file hashes and sizes."
+  },
+  "failure_history": {
+    "family": "RS-011/native source authority",
+    "phase": "Expert correction after the retained original failure and one bounded correction; history is not reset.",
+    "retained_prior_record": "docs/verification/evidence/os-preparation-20261016/source-authority-review.json",
+    "retained_current_failures": "The exact inventory, hard-locked staging input and v6 host-audit-prefix failures are retained in author_record.failure_family.additional_observations.",
+    "pre_freeze_review_observation": "An independent static probe while the author was still updating the unfrozen ledger observed 652 unique IDs and stale source_inputs for ihk_smp_x86_64.rs, os_runtime.rs, smp_cpu.rs, smp_memory.rs and smp_resource.rs plus a stale lifecycle support_sources[6] contract digest; it exited with AssertionError before admission. The author confirmed this was an intermediate write state. The frozen 654-site probe above passes every link. No intermediate snapshot was released or counted as a new candidate acceptance."
+  },
+  "resource_profile": {
+    "cpu_affinity": [0],
+    "cpu_shares": 1,
+    "inherited_address_space_limit_bytes": 2147483648,
+    "inherited_cpu_seconds_limit": 150,
+    "wall_seconds_per_check": 180,
+    "termination_cleanup_seconds_maximum": 5,
+    "root": false,
+    "compiler": false,
+    "build": false,
+    "guest": false,
+    "network": false
+  },
+  "blocking_findings": [],
+  "remaining_obligations": [
+    "RS-011 remains NOT_READY: exact Rocky compiler commands, dep-info/object/source/config/toolchain closure, compiler-expanded unsafe-operation capture and complete independent unsafe/owner review remain pending.",
+    "All four original staging readiness blockers remain; no source check supplies native build or runtime evidence.",
+    "Accepted scratch21-specific cleanup and separately reviewed fresh scratch22 preparation/build/runtime releases remain required."
+  ],
+  "next_executable_observation": "After accepted scratch21 cleanup, dispatcher commits/pushes/fetches the exact reviewed source authority, then obtains the separate fresh scratch22 preparation release; no scratch21 replay.",
+  "acceptance": {
+    "source_authority_repair_reviewed": true,
+    "rs011_gate_status": "NOT_READY",
+    "compiler_capture_status": "missing",
+    "whole_ledger_independent_review_status": "pending",
+    "runtime_released": false,
+    "runtime_acceptance": false,
+    "formal_application_acceptance": false,
+    "os_complete": false
+  }
+}

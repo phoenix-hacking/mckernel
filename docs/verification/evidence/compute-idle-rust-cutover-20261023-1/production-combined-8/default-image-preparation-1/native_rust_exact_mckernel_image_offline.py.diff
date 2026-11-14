@@ -1,0 +1,65 @@
+--- frozen7/native_rust_exact_mckernel_image_offline.py
++++ future8/native_rust_exact_mckernel_image_offline.py
+@@ -27,7 +27,7 @@
+ import native_rust_exact_build_offline as provenance
+ 
+ # Authenticate the neighboring provenance selected by this exact driver capsule.
+-EXPECTED_PROVENANCE_SHA256 = 'dbe2a604df56b4e90eaa11716ba290c5d23d3eaaf7da017be52620f29687bb7a'
++EXPECTED_PROVENANCE_SHA256 = 'e2d5176d457217bb8f16f32bd6fea5cabd48ca16deb20b649b62f57151ef070b'
+ _EXPECTED_PROVENANCE_PATH = Path(__file__).with_name("native_rust_exact_build_offline.py").resolve()
+ if (Path(provenance.__file__).resolve() != _EXPECTED_PROVENANCE_PATH or
+         hashlib.sha256(_EXPECTED_PROVENANCE_PATH.read_bytes()).hexdigest() != EXPECTED_PROVENANCE_SHA256):
+@@ -1451,21 +1451,21 @@
+ # Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+ # Inserted into the existing pinned image driver; uses its owned command/capture path.
+ M14_SOURCE_PINS = {
+-    'kernel/rust/tests/run_equivalence.sh': '2e1aa8e4299480ce31282f85e303a463034a475abbf20fb21fae95990230ed23',
++    'kernel/rust/tests/run_equivalence.sh': 'fce1f3b9a5606eedb245996d4b88b5e93022ae56145729592c9d675ecb267386',
+     'kernel/mem.c': 'bac5d4fb766b5cb80e036457465e215743a1cb31622ff11c5b5b605749f3d7fe',
+     'kernel/rust/page_helpers.rs': 'cfc64f72bf9b94c65417bc8f4e29d65b81f98239fe52ab2a7dd0352ebdfc3f70',
+     'kernel/process.c': '7203019d2ba8143f9240a03d11bc8c5cfcd495d89183aa7ab643c6159a6bd02d',
+     'kernel/rust/sched_helpers.rs': '449df570965855f992a0fe024fca7cd6527b20622b4b8e3b33af04900b02e923',
+     'kernel/include/sched_helpers.h': '9712a3df59eb0251f517ce01254e4576119868924b35f7da6fbee294bff966ae',
+-    'arch/x86_64/kernel/memory.c': '935dce935e814974a85729fafde9b3912e9fbff816d9074f6044fa63102370cb',
+-    'kernel/rust/x86_memory_helpers.rs': '19919d35402c84540336b1983e7ac031397bc5f2d7855a7ae901a35dcedbf3f9',
++    'arch/x86_64/kernel/memory.c': '3dccbb04986c7fb4c1c47bad1a382372c19cd270861501cf064ce95f36d46c32',
++    'kernel/rust/x86_memory_helpers.rs': 'f88ca6d45b1395b74c0c86565b5a391d01124fa3fb30486a7e4eb31c85d9eff8',
+ }
+ M14_IDLE_IMPORTS = ('sched_idle_loop_body_result', 'sched_idle_current_cpu_bridge')
+ M14_MEMORY_IMPORTS = ('x86_clear_old_action_bridge', 'x86_clear_phys_to_virt_bridge',
+                       'x86_clear_page_unmap_bridge', 'x86_clear_free_pages_user_bridge')
+ M14_C_RETIRED_MEMORY_BODIES = ('clear_range_old_action', 'x86_init_normal_set_large_bridge',
+-                               'x86_init_text_map_kernel_start_bridge')
+-M14_RUST_EXPORTS = M14_IDLE_IMPORTS + M14_MEMORY_IMPORTS + ('page_unmap', 'x86_init_normal_set_large_bridge', 'x86_init_text_map_kernel_start_bridge') + (
++                               'x86_init_text_map_kernel_start_bridge', 'x86_init_text_end_bridge')
++M14_RUST_EXPORTS = M14_IDLE_IMPORTS + M14_MEMORY_IMPORTS + ('page_unmap', 'x86_init_normal_set_large_bridge', 'x86_init_text_map_kernel_start_bridge', 'x86_init_text_end_bridge') + (
+     'sched_idle_begin_body_result', 'sched_idle_iteration_body_result',
+     'sched_idle_runqueue_has_running_result', 'process_sched_cpu_local_bridge',
+     'get_cpu_local_var', 'ihk_mc_get_processor_id')
+@@ -1545,6 +1545,18 @@
+     found = rows(rust_symbols, geometry)
+     _fail(len(found) == 1 and found[0][-2] == 'U', 'M14 textmap Rust geometry consumer')
+     _fail(not any(row[-2] == 'U' for row in rows(rust_symbols, getter)), 'M14 textmap unresolved Rust getter')
++    end_getter = 'x86_init_text_end_bridge'
++    _fail(not any(row[-2] in ('T', 't') for row in rows(memory_symbols, end_getter)),
++          'M14 text-end original C getter selected')
++    for text in (rust_symbols, image_symbols):
++        found = rows(text, end_getter)
++        _fail(len(found) == 1 and found[0][-2] == 'T', 'M14 text-end unique Rust getter')
++    found = rows(rust_symbols, '_end')
++    _fail(len(found) == 1 and found[0][-2] == 'U', 'M14 text-end Rust linker-address consumer')
++    found = rows(image_symbols, '_end')
++    _fail(len(found) == 1 and found[0][-2].upper() != 'U',
++          'M14 final linker _end must be defined; no type/width assumption')
++
+ 
+ 
+ def _validate_m14_textmap_contract(build, tools, env, timeout, command_rows, objects):
+@@ -1558,6 +1570,7 @@
+     _m14_check_textmap_symbols(*texts)
+     return dict(getter='x86_init_text_map_kernel_start_bridge', C_getter_excluded=True,
+                 geometry='x86_map_kernel_start_geometry', immutable_geometry_bytes=8,
++                text_end_getter='x86_init_text_end_bridge', Rust_end_import=True, final_end_defined=True,
+                 native=False)
+ 
+ 

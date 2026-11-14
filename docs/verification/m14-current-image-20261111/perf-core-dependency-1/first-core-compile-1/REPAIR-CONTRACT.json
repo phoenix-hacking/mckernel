@@ -1,0 +1,111 @@
+{
+  "actual_failure_classes": [
+    "core::panicking::panic",
+    "core::panicking::panic_fmt",
+    "core::panicking::panic_bounds_check",
+    "core::option::expect_failed",
+    "core::option::unwrap_failed",
+    "core::result::unwrap_failed",
+    "i32 core::fmt::Display::fmt",
+    "i32 core::fmt::LowerHex::fmt",
+    "i32 core::fmt::UpperHex::fmt"
+  ],
+  "all_assert_expect_unwrap_bounds_conditions_and_existing_panic_handler_bytes_unchanged": true,
+  "at_utc": "2026-11-11T16:15:08.187668+00:00",
+  "cause": "Existing kernel custom command emits only consumer object and direct ld omits out-of-line core dependency. Existing panic_handler is already terminal; its definition cannot supply core provider implementations.",
+  "core_specific_source_supported_arguments": {
+    "cfg": "no_fp_fmt_parse (actual Linux6.12 rust/Makefile53)",
+    "crate_name": "core",
+    "crate_type": "rlib",
+    "edition": "2024 (actual core Cargo manifest and qualified Linux rust/Makefile version>=1.87)",
+    "metadata": "mckernel_kernel_195 (isolated source-built crate identity, never assumed equal old HOST core) ",
+    "sysroot": "/dev/null (actual Linux rust/Makefile library rule)"
+  },
+  "existing_failure": {
+    "actual_link_failure": {
+      "bytes": 13711,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-image-operation-sdk-max-1/fcntl-constant-correction-1/execution-1/RESULT.json",
+      "sha256": "a4dd96a2a4693c18110c9d92a464d8dfa5a90811fd2640baa767bf270c2e5e70"
+    },
+    "actual_link_stderr": {
+      "bytes": 142006,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-image-operation-sdk-max-1/fcntl-constant-correction-1/execution-1/build-payload.stderr",
+      "sha256": "f4ed9a501d1fe45722c545604f0ac44dbbc1c0029588eaa1aded1274af6e404a"
+    },
+    "actual_missing_provider_map": {
+      "bytes": 638,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-image-operation-sdk-max-1/fcntl-constant-correction-1/execution-1/LINK-MISSING-PROVIDERS.json",
+      "sha256": "a7b207dce1107a0864caf417efe0bfab64c3e8229c7adb7b31392bec95c8ccff"
+    },
+    "current_process_retirement": {
+      "bytes": 881,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-image-operation-sdk-max-1/fcntl-constant-correction-1/CURRENT-PROCESS-MEMORY-RETIREMENT.json",
+      "sha256": "6c100868d650c4f7bc9bd06577107fdaaf2532697eaa80a113664d6fd393d597"
+    },
+    "diagnosis": {
+      "bytes": 18818,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-rust-core-link-diagnosis-p04source-max-1/DIAGNOSIS.json",
+      "sha256": "e267771294ce8888874d0203f193c9108fe8e78a76cf47b5e66e2e9a3b33e902"
+    },
+    "independent_failure_qualification": {
+      "bytes": 17087,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-image-operation-review-sourceacq-max-1/fcntl-constant-correction-1/actual-result-1/QUALIFICATION.json",
+      "sha256": "35891f6d7fdfa57a7fbc455c570657adfc0326b27fd3878fe18e5012c70a51a7"
+    },
+    "prior_compatible_profile_GO": {
+      "bytes": 17440,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-image-operation-review-sourceacq-max-1/fcntl-constant-correction-1/REVIEW.json",
+      "sha256": "6a55f301b2620ae32d2c7e5823de1161e5d5131d7a0f4bb1cb8ea4a4eb663102"
+    },
+    "prior_image_request": {
+      "bytes": 33762,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-image-operation-sdk-max-1/fcntl-constant-correction-1/REQUEST.json",
+      "sha256": "4f89f1c296de252668e2924c1d882aad16b1c2f3f2dc19b7ea9a6d58ea38f1d0"
+    },
+    "prior_protected_parent": {
+      "bytes": 11689,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-image-operation-sdk-max-1/fcntl-constant-correction-1/run_root_once.py",
+      "sha256": "8bc233af298d5b6f315334449cd6ef29b0c2aa55375ea62fe9172dd198635440"
+    }
+  },
+  "existing_panic_handler": "Actual lib.rs142 calls x86_setup::early_panic then infinite spin_loop. Genuine core panic_fmt constructs actual PanicInfo and calls Rust compiler lang panic_impl; no guessed symbol ABI or hand-authored panic helper.",
+  "native_DEFAULT_original_acceptance": false,
+  "no_new_panic_strategy_abort_shortcut_no_check_disabling_no_host_archive": true,
+  "remaining_before_new_kernel_image": [
+    "Actual core compiler PASS and all exported/new import/ABI/instruction/depfile source qualification",
+    "Genuine same-profile compiler-builtins0.1.160 source build from separately owned P04Source unit, samecore metadata; no Linux panicking builtin placeholders",
+    "Unchanged wholeRust consumer recompile with explicit newcore+newbuiltins metadata and dependency search, not oldsysroot metadata",
+    "Small reviewed CMake dependency/link/source binding, normal named image + affected provider/ownership/ABI readback",
+    "Meaningful fatal/Option/Result/bounds provider-path tests by independent existing test owner; preserve no-unwind/terminal/fail-closed behavior; no unrelated green suite replay"
+  ],
+  "repair_route": "Rebuild actual1.95 core source as obj+metadata with kernel codegen flags and genuine Linux6.12 no_fp_fmt_parse/edition2024 dependency shape. Subsequent actual compiler-builtins and unchanged wholeRust consumer must consume this SAME core metadata; direct image link must consume matching actual core/builtins objects. This first packet compiles ONLY core, not consumer/kernel/image.",
+  "same_kernel_codegen_flags": [
+    "-C",
+    "panic=abort",
+    "-C",
+    "opt-level=2",
+    "-C",
+    "debuginfo=2",
+    "-C",
+    "code-model=large",
+    "-C",
+    "relocation-model=static",
+    "-C",
+    "no-redzone=yes",
+    "-C",
+    "force-frame-pointers=yes",
+    "-C",
+    "overflow-checks=off",
+    "-C",
+    "force-unwind-tables=no",
+    "-C",
+    "no-vectorize-loops",
+    "-C",
+    "no-vectorize-slp",
+    "-C",
+    "target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma"
+  ],
+  "schema": 1,
+  "source_and_ownership_algorithms_changed": false,
+  "status": "GENUINE_KERNEL_PROFILE_CORE_RECONSTRUCTION_FIRST_COMPILER_INPUT_TYPE_LINK_AND_KERNEL_COMPATIBILITY_UNPROVED"
+}

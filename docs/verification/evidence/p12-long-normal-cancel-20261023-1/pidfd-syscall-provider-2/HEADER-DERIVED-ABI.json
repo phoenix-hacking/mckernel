@@ -1,0 +1,43 @@
+{
+  "macro_sha256": "d167cc6c5911f84e4a536b10e2f64456d6875f8f16ef2404e41a136816e6a26b",
+  "macros": {
+    "SYS_pidfd_open": "__NR_pidfd_open",
+    "SYS_pidfd_send_signal": "__NR_pidfd_send_signal",
+    "__LP64__": "1",
+    "__NR_pidfd_open": "434",
+    "__NR_pidfd_send_signal": "424",
+    "__SIZEOF_LONG__": "8",
+    "__SIZEOF_POINTER__": "8",
+    "__x86_64__": "1"
+  },
+  "predecessor_source_sha256": "d81c00d846a2b7998c67da1f8e3cc829f7044ed05de9d0959ef19ce8fb2c6557",
+  "provider": "explicit libc.syscall; no fallback",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "selected_headers": [
+    {
+      "bytes": 1256,
+      "path": "/usr/include/x86_64-linux-gnu/sys/syscall.h",
+      "sha256": "c78d0796b9c383b3a2a66f2e8ceeae027fb0cf61ea4ff5d3c3209d5b97fe5dbc"
+    },
+    {
+      "bytes": 44103,
+      "path": "/usr/include/x86_64-linux-gnu/bits/syscall.h",
+      "sha256": "fe2ab541bc6f97f1b84c0b5cc63f8ea45d3db43f74b324b98df6df6d6d1d5acd"
+    },
+    {
+      "bytes": 623,
+      "path": "/usr/include/x86_64-linux-gnu/asm/unistd.h",
+      "sha256": "a83776c3b064c9d1f04ea0a8228e20eef166508c6c13cd75afbabd3237acc445"
+    },
+    {
+      "bytes": 9286,
+      "path": "/usr/include/x86_64-linux-gnu/asm/unistd_64.h",
+      "sha256": "698d4666c969b0b4d0bed328b4a4f3cab765ec1a9948e0f14751f0ce56d91535"
+    }
+  ],
+  "status": "ACTUAL_GCC9_SYSTEM_HEADER_CONSTANT_EXTRACTION",
+  "values": {
+    "SYS_pidfd_open": 434,
+    "SYS_pidfd_send_signal": 424
+  }
+}

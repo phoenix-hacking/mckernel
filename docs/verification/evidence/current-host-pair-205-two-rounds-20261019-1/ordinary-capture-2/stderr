@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/check_two_rounds_corrected.py", line 35, in <module>
+    run('compile-actual-body',flags+[str(N/'fixtures/actual_two_round_body.c'),'-o',str(WORK/'actual-body')])
+  File "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/check_two_rounds_corrected.py", line 28, in run
+    need(row['returncode']==0 and row['direct_child_joined'] and row['group_absent'] and row['closed_streams'] and not row['error'] and not row['retirement_error'],'clean direct capture '+name)
+  File "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/check_two_rounds_corrected.py", line 7, in need
+    if not value:raise AssertionError(message)
+AssertionError: clean direct capture compile-actual-body

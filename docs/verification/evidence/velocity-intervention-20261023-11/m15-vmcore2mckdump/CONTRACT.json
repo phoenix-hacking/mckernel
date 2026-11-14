@@ -1,0 +1,118 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "milestone": "M15 shipped vmcore2mckdump program",
+  "owner": "lane2 project_runtime_rust_scope",
+  "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-11/m15-vmcore2mckdump/vmcore2mckdump.rs",
+  "reuse": {
+    "original": "executer/user/vmcore2mckdump.in",
+    "producer": "executer/user/rust/ldump2mcdump_helpers.rs",
+    "build_selector": "executer/user/CMakeLists.txt:467-498, --cfg ldump2_full_body",
+    "decision": "retain existing Rust dump producer and format; port only shell/Expect PTY orchestration; no BFD/ELF parser introduced"
+  },
+  "reference_semantics": [
+    "uname -r runs before CLI validation and its status is ignored; stdout trailing LFs stripped",
+    "exactly the first three positional arguments affect validation; an empty third permits later extra arguments",
+    "missing/empty input/output or nonempty third -> usage on stderr and1",
+    "nonregular/missing input -> input path plus : not found on stderr and1",
+    "empty configured ARCH -> ARCH_NAME is empty. on stdout and1",
+    "x86_64 maps module suffix to x86; other configured ARCH retained",
+    "export VMLINUX, INSTALLDIR, INFILE, OUTFILE to crash session",
+    "five prompt-driven commands: mod, extend, ldump2mcdump0-o, extend-u,quit",
+    "original checks only output file existence and ignores crash/Expect status, allowing stale/partial false success"
+  ],
+  "valid_profile": "Linux, configured literal installation paths and ordinary literal input/output paths; actual crash/extension artifacts matched; 300-second production prompt deadline; current x86_64 supported path mapped to x86",
+  "wrapper_implementation": "215-line Rust std wrapper using baseline libc openpty/setsid/ioctl/poll/kill and existing crash executable. No custom shell or Tcl runtime body. Streams forwarded over PTY; no dump format interpreted or modified.",
+  "intended_behavior_change": {
+    "requires_root_choice": true,
+    "predicate": [
+      "complete prompt conversation",
+      "clean crash exit status",
+      "exact path-bound success marker from matching reviewed converter delta",
+      "fresh staging file has same owned identity, is regular and nonempty",
+      "atomic output publication succeeds"
+    ],
+    "publication": "staging file in same parent; pre-existing output untouched until commit; previous regular permission bits copied on success; failed owned staging file retained separately for evidence",
+    "failure": "return1, existing final failure line, additional cause/staging diagnostics; pre-existing bytes preserved",
+    "format_validity": "delegate to the matched existing converter success contract; wrapper freshness/nonempty test is not an independent format validator or native conversion proof",
+    "reference_comparison": "preserve original observed false success separately; never count deliberately corrected status/file-disposition behavior as parity"
+  },
+  "converter_delta": {
+    "patch": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-11/m15-vmcore2mckdump/converter-ack.patch",
+    "full_private_candidate": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-11/m15-vmcore2mckdump/ldump2mcdump_helpers.ack-candidate.rs",
+    "contract": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-11/m15-vmcore2mckdump/converter-ack-contract.json",
+    "status": "private source proposal only; no canonical changes/compiler/fixture/native acceptance",
+    "marker": "MCKERNEL_LDUMP2MCDUMP_SUCCESS <exact producer PATH> newline",
+    "conditions": "all required metadata/payload reads checked, existing BFD write failures return before marker, missing physchunks suppresses marker, bfd_close succeeds before marker",
+    "original_observations": "retain existing physical readmem error and continued later reads/writes; suppress marker on any such failure",
+    "prerequisite": "unmodified producer has no marker, so strict wrapper cannot be shipped against it as working default"
+  },
+  "fixture": {
+    "driver": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-11/m15-vmcore2mckdump/fixture/run_fixture.py",
+    "matrix": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-11/m15-vmcore2mckdump/fixture/cases.json",
+    "cases": 22,
+    "first_command": "/usr/bin/python3 -I /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-11/m15-vmcore2mckdump/fixture/run_fixture.py --execute --rustc /home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
+    "profile": {
+      "cpu_count": 1,
+      "memory_mib": 1024,
+      "tasks_max": 64,
+      "wall_seconds": 160,
+      "driver_work_seconds": 150,
+      "bounded_cleanup_seconds": 6,
+      "storage_mib": 64,
+      "jobs": 1,
+      "root": "none",
+      "Docker": "none",
+      "guest": "none",
+      "custom_devices": "none",
+      "PTY": "ordinary /dev/ptmx required; actual admission untested",
+      "process_ownership": "unprivileged helper child-subreaper, per-command groups, and /proc self-children joins cover PTY peers creating separate sessions"
+    },
+    "classes": [
+      "seven actual original CLI-before-Expect comparisons",
+      "Rust PTY synthetic-peer protocol contract, success/freshness/status/preservation/error cases",
+      "separate observed stale-output success when real Expect is absent",
+      "optional real Expect original-driver observations with only crash path and timeout fixture literal bindings"
+    ],
+    "synthetic_payload": "not a real dump file; no format validity/native acceptance from stub bytes or fake ack",
+    "reference_prerequisites": {
+      "expect_present_at_source_check": false,
+      "crash_present_at_source_check": false,
+      "meaning": "real prerequisites absent; no replacement Tcl parser is written; --with-reference-protocol requires actual platform Expect and a separately granted attempt"
+    },
+    "retention": "existing fixture-output refused; stdout/stderr, command lists/envs, process/PTY traces, old/new bytes and partial staging files retained; no automatic retries"
+  },
+  "substantive_remaining_gaps": [
+    "root must review/adopt the deliberate false-success correction and atomic output contract",
+    "wrapper Rust compile/link and PTY/prompt/status fixture are unrun; framing/log_user bytes and terminal settings are unproven against platform Expect",
+    "separate converter delta needs whole-command fault/ABI fixture, production object and matched extension proof; existing pure helper smoke alone is insufficient",
+    "actual crash, matching vmlinux/module/extension and real vmcore needed for native conversion/unchanged-format acceptance",
+    "nonliteral shell/Tcl path behavior, symlink/output ownership metadata and stream/locale edge behavior remain explicit scope review, not silently equivalent"
+  ],
+  "checks_run": [
+    "Python AST parsing for four fixture source files",
+    "JSON parse and22 data-case checks",
+    "two bounded original source snapshots/pins match current canonical bytes",
+    "private diff generation from retained converter source"
+  ],
+  "checks_not_run": [
+    "compiler",
+    "driver invocation including preparation-only mode",
+    "subprocess fixture",
+    "PTY open/spawn",
+    "converter fault fixture",
+    "Docker/root/guest/native operations"
+  ],
+  "accounting": {
+    "source_ready": true,
+    "compiler_pass": false,
+    "host_fixture_pass": false,
+    "converter_ack_accepted": false,
+    "default_canonical_selected": false,
+    "native_acceptance": false,
+    "language_retirement": false,
+    "functional35_changed": false,
+    "M14_changed": false,
+    "earlier_ihkconfig_mcps_packages_changed": false
+  },
+  "controller": "Root owns grants, publication and canonical integration; this package is private source readiness only."
+}

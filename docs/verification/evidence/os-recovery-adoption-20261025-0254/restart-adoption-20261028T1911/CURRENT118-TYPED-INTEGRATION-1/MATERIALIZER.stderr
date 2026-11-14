@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/materialize_admission.py", line 103, in <module>
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root-bindings',required=True);a=p.parse_args();materialize(Path(a.root_bindings))
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/materialize_admission.py", line 93, in materialize
+    rp=root/'STATIC-REQUEST-PAYLOAD.SOURCE-ONLY.json';write(rp,request);profile['request_sha256']=ref(rp)['sha256'];r.commands_for_plan(profile);write(root/'PROFILE.SOURCE-ONLY.json',profile)
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/run_build_only.py", line 144, in commands_for_plan
+    require(set(s.removeprefix('/src/') for s in sources)<={r['relative'] for r in profile['inputs']['postimages']}|{r['relative'] for r in source_directory_postimages(profile)},'all three changed compiler source paths must be bound readonly postimages')
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/run_build_only.py", line 144, in <genexpr>
+    require(set(s.removeprefix('/src/') for s in sources)<={r['relative'] for r in profile['inputs']['postimages']}|{r['relative'] for r in source_directory_postimages(profile)},'all three changed compiler source paths must be bound readonly postimages')
+AttributeError: 'str' object has no attribute 'removeprefix'

@@ -1,0 +1,10 @@
+--- /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/root-union-preparation-2/source/F06-real-header-ABI-and-callers.path-correction1.c
++++ /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/root-union-preparation-2/source/F06-real-header-ABI-and-callers.expert-attribute1.c
+@@ -15,5 +15,5 @@
+ _Static_assert(sizeof(struct ptrace_report_signal_offsets)==14*sizeof(unsigned long),"real14offset ABI");
+ _Static_assert(__builtin_types_compatible_p(__typeof__(&vdso_map_global_pages),int (*)(void)),"VDSO public ABI");
+ _Static_assert(__builtin_types_compatible_p(__typeof__(&ptrace_report_signal),void (*)(struct thread *,int)),"ptrace signal public ABI");
+-__attribute__((noinline,used)) int f06_actual_vdso_C_caller(void) {return vdso_map_global_pages();}
+-__attribute__((noinline,used)) void f06_actual_signal_C_caller(struct thread *t,int sig) {ptrace_report_signal(t,sig);}
++__attribute__((__noinline__,__used__)) int f06_actual_vdso_C_caller(void) {return vdso_map_global_pages();}
++__attribute__((__noinline__,__used__)) void f06_actual_signal_C_caller(struct thread *t,int sig) {ptrace_report_signal(t,sig);}

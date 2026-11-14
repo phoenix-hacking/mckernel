@@ -1,0 +1,90 @@
+--- a/kernel/mem.c
++++ b/kernel/mem.c
+@@ -5946,26 +5946,14 @@
+ extern void mem_vmap_free_bridge(void *desc, unsigned long address,
+ 		int npages);
+ 
+-int mem_pt_set_page_bridge(page_table_t pt, void *virt,
+-		unsigned long phys, enum ihk_mc_pt_attribute attr)
+-{
+-	return ihk_mc_pt_set_page(pt, virt, phys, attr);
+-}
+-
+-int mem_pt_clear_page_bridge(page_table_t pt, void *virt)
+-{
+-	return ihk_mc_pt_clear_page(pt, virt);
+-}
+-
+-void mem_flush_tlb_single_bridge(unsigned long addr)
+-{
+-	flush_tlb_single(addr);
+-}
+-
+-void mem_barrier_bridge(void)
+-{
+-	barrier();
+-}
++extern int mem_pt_set_page_bridge(page_table_t pt, void *virt,
++		unsigned long phys, enum ihk_mc_pt_attribute attr);
++
++extern int mem_pt_clear_page_bridge(page_table_t pt, void *virt);
++
++extern void mem_flush_tlb_single_bridge(unsigned long addr);
++
++extern void mem_barrier_bridge(void);
+ #endif
+ 
+ #ifdef MCKERNEL_RUST_MEM_HELPERS
+--- a/kernel/rust/mem_helpers.rs
++++ b/kernel/rust/mem_helpers.rs
+@@ -175,15 +175,6 @@
+     fn mem_begin_free_pages_pending_panic_bridge();
+     fn mem_pending_free_bridge(phys: CULong, npages: CInt, is_user: CInt);
+     fn mem_finish_free_pages_pending_panic_bridge();
+-    fn mem_pt_set_page_bridge(
+-        pt: *mut c_void,
+-        virt: *mut c_void,
+-        phys: CULong,
+-        attr: IhkMcPtAttribute,
+-    ) -> CInt;
+-    fn mem_pt_clear_page_bridge(pt: *mut c_void, virt: *mut c_void) -> CInt;
+-    fn mem_flush_tlb_single_bridge(addr: CULong);
+-    fn mem_barrier_bridge();
+ 
+     static mut sysctl_overcommit_memory: CInt;
+     #[link_name = "memdebug"]
+@@ -7041,3 +7032,34 @@
+         );
+     }
+ }
++
++/// Same public Rust page-table setter; attributes and error result unchanged.
++#[no_mangle]
++pub unsafe extern "C" fn mem_pt_set_page_bridge(
++    pt: *mut c_void,
++    virt: *mut c_void,
++    phys: CULong,
++    attr: IhkMcPtAttribute,
++) -> CInt {
++    unsafe { crate::x86_memory_helpers::ihk_mc_pt_set_page(pt, virt, phys, attr) }
++}
++
++/// Same public clearer, including existing default-root and walk/error behavior.
++#[no_mangle]
++pub unsafe extern "C" fn mem_pt_clear_page_bridge(pt: *mut c_void, virt: *mut c_void) -> CInt {
++    unsafe { crate::x86_memory_helpers::ihk_mc_pt_clear_page(pt, virt) }
++}
++
++/// Reuse the already production-tested Rust TLB callback to the same assembly
++/// endpoint. No address normalization, CPU selection or asynchronous completion.
++#[no_mangle]
++pub unsafe extern "C" fn mem_flush_tlb_single_bridge(addr: CULong) {
++    unsafe { mem_tlb_flush_single_bridge(addr) }
++}
++
++/// Reuse the existing empty-asm compiler memory barrier, matching C barrier().
++/// This does not add a hardware memory fence or change mapping publication.
++#[no_mangle]
++pub unsafe extern "C" fn mem_barrier_bridge() {
++    unsafe { crate::x86_cpu_helpers::arch_barrier() }
++}

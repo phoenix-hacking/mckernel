@@ -1,0 +1,106 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "TEST_ONLY_HOLD_ASSERTION_CORRECTION_PENDING_ROOT_RERUN",
+  "at": "2026-10-24T04:04:03.392244+00:00",
+  "source": {
+    "bridge.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-controller-1/bridge.py",
+      "bytes": 21129,
+      "sha256": "bd417d8e1cfe25e028c4b7653183bcf5b169d3f83ab0e88f5872592d94decd9a"
+    },
+    "finite_launcher.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-controller-1/finite_launcher.py",
+      "bytes": 2147,
+      "sha256": "a74411302daab86d7845c771d34c4cdbb13e4ed4292656ecf26a6e9fba7f3b56"
+    },
+    "test_bridge.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-controller-1/test_bridge.py",
+      "bytes": 21509,
+      "sha256": "a01e87a9baae0e44ac7c38687ca7efd24377ea27a1cd0f370b43db1e43c00421"
+    },
+    "CONFIG.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-controller-1/CONFIG.json",
+      "bytes": 469,
+      "sha256": "5fc7872e5dc22144b039dddc927fe4e17b9fd3469e897c1b580bce194824f683"
+    },
+    "CURRENT-INVOCATION.txt": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-controller-1/CURRENT-INVOCATION.txt",
+      "bytes": 2433,
+      "sha256": "9f2c46d5bcebae0d987a294d28cf0918614781c835f30d40fcff9b37d6061c3e"
+    }
+  },
+  "existing_sources": {
+    "run_os_goal.py": "009d00f1aa2c07d0d4c50fd1eace64c1a04afe8d33a0b691968b877d4310b3f5",
+    "watch_os_goal.py": "182ffe05bbef52a01b7f7519052fa10cfd06cd642c4acbaea2be3fcbfd749947",
+    "os_goal_credits.py": "adf5187240ed8199746eef3b59b79d4d38c4ae8ac5821c8d8324833926b21ec3"
+  },
+  "test_command": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=6s",
+    "90s",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=60:60",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-controller-1/test_bridge.py"
+  ],
+  "test_semantics": "Offline mocks only. Root prior final24 job actually23PASS/1FAIL solely prose substring; its original artifacts and failed source/packet preserved. This one-line test-only correction has NOT RUN; product bridge/entry unchanged.",
+  "current_resident_action": "NOACTION; healthy originalLONG/watch/worker/server unchanged",
+  "production_arm_command": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-controller-1/bridge.py",
+    "--run",
+    "--packet-sha256",
+    "13049e3fdc6f34dd59100e4548a562ea42786e3a7b8dccc479bde008a4b48876"
+  ],
+  "production_note": "Detach root-reviewed command with inheritedoriginal launcher hardlimits; do NOT impose bridge-only hardAS/CPU/filelimits that its later launcher would inherit. Childtaskset restoresonlyapprovedCPU pool0,2-7. Bridge loop metadata small; no runtime arm performed.",
+  "cancel_command": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-controller-1/bridge.py",
+    "--cancel"
+  ],
+  "managed_handoff": "Root requests normalworker-only checkpoint only at safe naturalbetween-workloads boundary. Bridgepassivelywaits paused/stopped states; root supplies handoff.json afteractualoldtripletretirement, approving exactFINALstoppedstate SHA and explicitcurrentresume. Missingpermit NEVERresumes signal/userstop. Automaticfallback onlylocal included_usage_guard+10080minused100+positive modelretirement/freeleases; remotequota/auth/billing/credit_balance_decreased notautomatic.",
+  "deadline": "Persisted BOOTTIME cutoff=min(saved,boot_now+max(0,deadlineUTC-wall_now)) every observation; fixed launched watcher MONOTONIC cutoff stored separately. Forward-before-expiry/backward/rearm cannot extend authorization. Holds/source drift preserve owned legacy guardian; foreign watcher publication never rebinds trusted original. Exact worker-only one normal drain, no competing finite-watcher normal-expiry TERM.",
+  "runtime": false,
+  "correction": "Final bounded three-counterexample completion: latch earlier FUTURE BOOTTIME cutoff through rollback/rearm; load retained journal/owned lineage before consumed-source drift can hold new inference; preserve trusted watcher identity on foreign publication. Earlier frozen child-reap/source-pin/known-class/guardian/duplicate-signal corrections retained.",
+  "mock_test_count": 24,
+  "frozen_packet": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-controller-1/FROZEN-PACKET.json",
+    "sha256": "13049e3fdc6f34dd59100e4548a562ea42786e3a7b8dccc479bde008a4b48876",
+    "bytes": 948
+  },
+  "arm_prerequisites": [
+    "Independent final narrow source acceptance and actual root-granted offline mock PASS, no actual fixtures executed by foreground.",
+    "Root tiny real-host Python3.9 receipt: os.pidfd_open(os.getpid(),0), signal.pidfd_send_signal(fd,0,None,0), close fd, and CLOCK_BOOTTIME succeeds. This is own-process signal0 only; no campaign/guest signal. Not executed here.",
+    "Fresh healthy exact resident thread/heartbeat and watcher/worker/server ancestry/birth bound at first arm; preserve native ownership/exclusions."
+  ],
+  "test_only_correction": {
+    "from": "self.assertIn('another watcher',retained['transition_hold'])",
+    "to": "self.assertTrue(retained.get('transition_hold'))",
+    "meaningful_invariants": "Nonempty transition_hold; retained original exact triplet equality includes watcher PID/birth; no stop_worker/no Popen; STOP_DEADLINE result. Human prose is not an oracle.",
+    "failed_job": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-controller-1/root-offline-fixture-final24-1/RESULT.json",
+    "archive": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-controller-1/before-test-only-hold-wording-correction",
+    "product_unchanged": {
+      "bridge.py": "bd417d8e1cfe25e028c4b7653183bcf5b169d3f83ab0e88f5872592d94decd9a",
+      "finite_launcher.py": "a74411302daab86d7845c771d34c4cdbb13e4ed4292656ecf26a6e9fba7f3b56"
+    }
+  },
+  "arm_authority": "Foreground parent owns any actual arm after fresh user authorization/review/PASS/self-capability. Background root remains subject to its included-only instructions and may perform offline fixtures without any instruction override."
+}

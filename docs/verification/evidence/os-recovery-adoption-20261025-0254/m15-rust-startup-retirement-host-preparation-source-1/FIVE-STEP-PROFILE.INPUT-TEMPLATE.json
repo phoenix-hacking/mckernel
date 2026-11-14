@@ -1,0 +1,130 @@
+{
+  "HOST_floor_bytes": 17179869184,
+  "all_realholds_oneheavy_exclusions": true,
+  "allcommandssequential": true,
+  "credit_ceiling": 57774.852125,
+  "credit_run": "7f4af94a83b14cc08f97401f5891d965",
+  "fixed_cutoffs": [
+    1793165769.0,
+    947874.5689514667,
+    963213.6960030915
+  ],
+  "fixed_deadline_UTC": "2026-10-28T05:36:09Z",
+  "goal": "01a17e6f-112f-7660-8771-85d15e07a26c",
+  "host_growth_reserve_bytes": 8589934592,
+  "overlap_rule": "Only genuineRootCPU6 exclusion/job/memory/storage headroom grant permits overlap with current114heavy; sourcepacket grants no overlap or resources.",
+  "resources": {
+    "AS_bytes": 2147483648,
+    "CORE_bytes": 0,
+    "CPU_seconds_each": 60,
+    "FSIZE_bytes": 67108864,
+    "aggregate_GiB": "21.6619",
+    "aggregate_jobs": 7,
+    "cpu": 6,
+    "jobs": 1,
+    "wall_seconds_each": 90
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "scratch_floor_bytes": 12884901888,
+  "status": "SAME_ORDINARY_CPU6_PROFILE_INPUT_TEMPLATE_NOT_AUTHORITY",
+  "steps": [
+    {
+      "argv_template": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "-D",
+        "warnings",
+        "-C",
+        "codegen-units=1",
+        "-C",
+        "opt-level=1",
+        "-C",
+        "panic=abort",
+        "-C",
+        "target-feature=+crt-static",
+        "-C",
+        "relocation-model=static",
+        "-C",
+        "link-arg=-no-pie",
+        "-C",
+        "link-arg=-Wl,-z,noexecstack",
+        "{source_root}/fakeexec.rs",
+        "-o",
+        "{output_root}/startup-fakeexec"
+      ],
+      "index": 0,
+      "label": "Functional OS only; no security testing. Compile small HOST-only rawargv fakeexec"
+    },
+    {
+      "argv_template": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "-D",
+        "warnings",
+        "-C",
+        "codegen-units=1",
+        "--test",
+        "{source_root}/main.rs",
+        "-o",
+        "{output_root}/startup-tests"
+      ],
+      "env_overlay_template": {
+        "STARTUP_FAKEEXEC_PATH": "{output_root}/startup-fakeexec"
+      },
+      "index": 1,
+      "label": "Functional OS only; no security testing. Compile exact source-bound retained16 plus actualproducer observer controls",
+      "note": "Compiletime helperpath for testharness only; actualsupervised payload ENV remains original2entries."
+    },
+    {
+      "argv_template": [
+        "{output_root}/startup-tests",
+        "--test-threads=1"
+      ],
+      "deadline_seconds": 30,
+      "index": 2,
+      "label": "Functional OS only; no security testing. Run finite source-bound startup and retirement controls",
+      "require": "Every exact boundtestname PASS; nofailed/ignored/filtered/measured; elapsedtext is retained, not anoracle"
+    },
+    {
+      "argv_template": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "-D",
+        "warnings",
+        "-C",
+        "codegen-units=1",
+        "-C",
+        "opt-level=1",
+        "-C",
+        "panic=abort",
+        "-C",
+        "target-feature=+crt-static",
+        "-C",
+        "relocation-model=static",
+        "-C",
+        "link-arg=-no-pie",
+        "-C",
+        "link-arg=-Wl,-z,noexecstack",
+        "{source_root}/main.rs",
+        "-o",
+        "{output_root}/startup-supervisor"
+      ],
+      "index": 3,
+      "label": "Functional OS only; no security testing. Compile fixedstartup productioncollector"
+    },
+    {
+      "argv_template": [
+        "/usr/bin/readelf",
+        "-W",
+        "-h",
+        "-l",
+        "-d",
+        "{output_root}/startup-supervisor"
+      ],
+      "index": 4,
+      "label": "Functional OS only; no security testing. Qualify actualcollectorELF",
+      "require": "ELF64 x86-64, ET_EXEC, noINTERP/NEEDED, sourcebound Rootartifact receipt"
+    }
+  ],
+  "test_time_rule": "Original test proposal30s was already executed under retained90s wholecapture envelope. No newdeadline added; Rootusesexact reviewedordinary90s/60CPU/2GiB envelope for allfivecommands."
+}

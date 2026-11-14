@@ -1,0 +1,262 @@
+{
+  "application_acceptance": false,
+  "document": {
+    "path": "docs/verification/stability-runnable-thread-payload-review-20260913.md",
+    "sha256": "5c0f0a58afbb934efcb11150e959480782fcb23ff62d8257b4bbd95622ea5fbf",
+    "size": 6774
+  },
+  "independent_reviews": [
+    {
+      "path": "/tmp/stability-runnable-payload-independent-review-20260913-p0p_zua0/review.json",
+      "sha256": "6ffd67482c17ecb3d9fcfb1a627f2d2e0feb859a9366792928d38e248d35e5c9",
+      "size": 2672
+    },
+    {
+      "path": "/tmp/stability-spinner-owner-source-review-20260913-1/review.json",
+      "sha256": "426029bb42e28b7fb14e9787c6f5a98d845604b36c3915238ef028330f500891",
+      "size": 7098
+    }
+  ],
+  "kind": "additive-runnable-thread-fault-payload-review",
+  "numeric_hard_contract": {
+    "path": "scripts/application-tests/contracts/stability-prepublish-hard-20260913-v1.json",
+    "sha256": "025ffc1bb8722c321912169825ef7c4ff0dc452c9f14dd8f82667778a29cc665",
+    "size": 1098
+  },
+  "original_inputs": [
+    {
+      "path": "scripts/tests/fixtures/stability-transport-fault/payload.c",
+      "sha256": "1cb799c6b994250dad9d367bd33b629a095b78d220df5a683f1da607bbfb971b",
+      "size": 870
+    },
+    {
+      "path": "scripts/tests/fixtures/stability-transport-fault/owner-phase-v1/controller.c",
+      "sha256": "92307db9af4cdaa76e85f9c985575f4aec413789751a1e1f012f1d9962fbb06f",
+      "size": 45151
+    },
+    {
+      "path": "scripts/tests/fixtures/native-application-core.c",
+      "sha256": "525bb7416c579da09c5f780b3ff6962287f07143488b6669bbee5ae744412743",
+      "size": 5758
+    },
+    {
+      "path": "kernel/rust/syscall_policy.rs",
+      "sha256": "5e770e3375c7eb2f6f5aae23863a961123b5f200c77662780cb04a90dc13bf53",
+      "size": 694954
+    },
+    {
+      "path": "kernel/rust/sched_helpers.rs",
+      "sha256": "5f6841a4f17330e4d37510f4467e8747ca183ecf1b2055ebfa8718974f017475",
+      "size": 160439
+    },
+    {
+      "path": "docs/verification/native-application-threads-checkpoint-20260909.json",
+      "sha256": "ac7f4f59abcc05f847813e64e807a74cd33caa4074698e57a3ade0612d93e0f3",
+      "size": 44267
+    },
+    {
+      "path": "docs/verification/native-application-ultra-handoff-20260909.md",
+      "sha256": "6448ba2ea9e23add3f40bb171f1e5e90056c641021119437d51cc6c352305dbe",
+      "size": 7049
+    },
+    {
+      "path": "scripts/application-tests/contracts/stability-prepublish-hard-20260913-v1.json",
+      "sha256": "025ffc1bb8722c321912169825ef7c4ff0dc452c9f14dd8f82667778a29cc665",
+      "size": 1098
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-ultra-baseline-memory-guest-20260909-stability-service-failure-20260913-1/record.json",
+      "sha256": "ba7d27f6104800289c94d45d5ff03888056b5c142243ed1b3d89c6a899fc4dd0",
+      "size": 62289
+    }
+  ],
+  "parent_build": {
+    "actual_elf_body": {
+      "bytes": 32,
+      "contains_call_or_syscall": false,
+      "hex": "c7050e2c000001000000660f1f4400008b05fe2b000085c074f6b850404000c3",
+      "independently_read_from_PT_LOAD": true,
+      "virtual_address": 4199488
+    },
+    "compiled_outputs": [
+      {
+        "path": "/work/stability-runnable-thread-payload-build-20260913-1/payload.o",
+        "sha256": "4cf752709061a579c5646d51520faeb7d6915020568a7f2eb3d0357dcd64672a",
+        "size": 21696
+      },
+      {
+        "path": "/work/stability-runnable-thread-payload-build-20260913-1/payload.elf",
+        "sha256": "d415cd01fe3187f273415deb120609a158a1bdfb0329cc221eb3bbf444a4cfe4",
+        "size": 25360
+      },
+      {
+        "path": "/work/stability-runnable-thread-payload-build-20260913-1/payload.d",
+        "sha256": "64787a960def45e959cb3ab830440421155c5ac71613fb776787379f83605abf",
+        "size": 3113
+      },
+      {
+        "path": "/work/stability-runnable-thread-payload-build-20260913-1/payload.map",
+        "sha256": "2b4c0c8c65a5aaab3f9661812aa9d75827bf0fab79b86267fc584a78e8caa85d",
+        "size": 24217
+      }
+    ],
+    "compiler_dependency_count": 88,
+    "external_compiler_dependency_scope": "Parent compiler helper records/rechecks all dependencies and new pinned preparer rechecks them. Reviewer independently rehashed retained payload.c and outputs; did not rehash container-only system headers from the workstation.",
+    "guest_execution": false,
+    "helper": {
+      "path": "/home/holden/mckernel-work/scratch/stability-runnable-thread-payload-build-20260913-1/helper.py",
+      "sha256": "4b4305cf30221cf090661764320d2cbd64b9958008832d7f307c1936cf0d75b0",
+      "size": 4871
+    },
+    "payload_execution": false,
+    "record": {
+      "path": "/home/holden/mckernel-work/scratch/stability-runnable-thread-payload-build-20260913-1/record.json",
+      "sha256": "39c0aab8820da8555e883c7de7febef7b9c950a9f184a1c97742d017883a2b1a",
+      "size": 40897
+    },
+    "retained_outputs_source_and_collection_streams_independently_rehashed": true,
+    "reviewed_commands": [
+      {
+        "argv": [
+          "/usr/bin/gcc",
+          "--version"
+        ],
+        "label": "compiler-version",
+        "raw_wait_status": 0,
+        "status": "COMPLETED"
+      },
+      {
+        "argv": [
+          "/usr/bin/gcc",
+          "-std=c11",
+          "-D_GNU_SOURCE",
+          "-O2",
+          "-g",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-fno-pie",
+          "-pthread",
+          "-MD",
+          "-MF",
+          "/work/stability-runnable-thread-payload-build-20260913-1/payload.d",
+          "-I",
+          "/workspace/executer/include",
+          "-c",
+          "/work/stability-runnable-thread-payload-build-20260913-1/payload.c",
+          "-o",
+          "/work/stability-runnable-thread-payload-build-20260913-1/payload.o"
+        ],
+        "label": "payload-compile",
+        "raw_wait_status": 0,
+        "status": "COMPLETED"
+      },
+      {
+        "argv": [
+          "/usr/bin/gcc",
+          "-no-pie",
+          "-pthread",
+          "/work/stability-runnable-thread-payload-build-20260913-1/payload.o",
+          "-Wl,-Map=/work/stability-runnable-thread-payload-build-20260913-1/payload.map",
+          "-o",
+          "/work/stability-runnable-thread-payload-build-20260913-1/payload.elf"
+        ],
+        "label": "payload-link",
+        "raw_wait_status": 0,
+        "status": "COMPLETED"
+      },
+      {
+        "argv": [
+          "/usr/bin/readelf",
+          "-h",
+          "-l",
+          "-d",
+          "/work/stability-runnable-thread-payload-build-20260913-1/payload.elf"
+        ],
+        "label": "payload-elf",
+        "raw_wait_status": 0,
+        "status": "COMPLETED"
+      },
+      {
+        "argv": [
+          "/usr/bin/ldd",
+          "/work/stability-runnable-thread-payload-build-20260913-1/payload.elf"
+        ],
+        "label": "payload-loader-trace",
+        "raw_wait_status": 0,
+        "status": "COMPLETED"
+      },
+      {
+        "argv": [
+          "/usr/bin/objdump",
+          "-d",
+          "--disassemble=spin_until_done",
+          "/work/stability-runnable-thread-payload-build-20260913-1/payload.elf"
+        ],
+        "label": "spinner-disassembly",
+        "raw_wait_status": 0,
+        "status": "COMPLETED"
+      }
+    ],
+    "spinner_disassembly": {
+      "path": "/work/stability-runnable-thread-payload-build-20260913-1/spinner-disassembly-collection/stdout.bin",
+      "sha256": "2a0c0a7a84ca550a34366ead50c87c45e1cd41f3998786d97016a7264a930bb9",
+      "size": 724
+    },
+    "status": "PASS_BUILD_ONLY"
+  },
+  "payload_profile": "runnable-thread-v1",
+  "payload_source": {
+    "path": "scripts/tests/fixtures/stability-transport-fault/payload-runnable-thread-v1.c",
+    "sha256": "dbc68dc4e981c0ed3433491747b4dcd7a031548fbd84bddbd8e98361d4681491",
+    "size": 4008
+  },
+  "pending": [
+    "Actual same-new-ELF Linux reference and McKernel payload runs.",
+    "Actual runnable peer and scheduled selected read with physical wake2 before input ACK.",
+    "Actual RET errno/elapsed time, selected counter contract and complete terminal/+5 inventories.",
+    "Actual raw launcher wait and bounded owned cleanup, complete original evidence export.",
+    "All remaining transport modes and independent release gates."
+  ],
+  "preparer_delta": {
+    "prior": {
+      "path": "/tmp/stability-case-work-preparer-review-20260913-f7gq8o9n/preparer.py",
+      "sha256": "ae6c760cd815b0304e41ef80b5db4c969a07980377cdaa8b4067dd7e9307473f",
+      "size": 15281
+    },
+    "result": "PASS_SOURCE_REVIEW_ONLY",
+    "scope": "Explicit profile selection; reviewed source hash, PASS_BUILD_ONLY and exact profile required for runnable variant; compiler dependencies/outputs rechecked; actual payload loader dependencies included in root binding.",
+    "source": {
+      "path": "scripts/tests/prepare_stability_fault_guest.py",
+      "sha256": "922f0b4d60edae9bdec36c960cacb50ef6c11cd31b216c0e89b5279ff36af0c8",
+      "size": 16163
+    }
+  },
+  "production_gate_credit": false,
+  "reviewer_compiler_execution": false,
+  "reviewer_guest_execution": false,
+  "reviewer_test_execution": false,
+  "schema_version": 1,
+  "scope": "New workload source, unchanged selected counter derivation, independent C/owner reviews, narrow preparer delta and read-only inspection of actual parent compiler/ELF captures. No guest acceptance.",
+  "source_capture": "/tmp/stability-runnable-thread-payload-source-20260913-n8qknrbi",
+  "status": "PASS_SOURCE_AND_RETAINED_BUILD_REVIEW_ONLY",
+  "transport_acceptance": false,
+  "workload_binding": {
+    "application_threads": 2,
+    "created_pthreads": 1,
+    "mckernel_cpus": 1,
+    "pthread_stack_bytes": 262144,
+    "raw_launcher_wait": "Observe actual terminal status and owned cleanup. Old single-thread termination trace does not constitute this workload runtime evidence.",
+    "request_field_writes": false,
+    "required_pre_input_wake": 2,
+    "selected_read": {
+      "buffer_bytes": 32,
+      "fd": 0,
+      "guard_byte": 90,
+      "input_byte": 165,
+      "length": 16,
+      "offset": 8
+    },
+    "spinner_has_no_calls_until_done": true
+  }
+}

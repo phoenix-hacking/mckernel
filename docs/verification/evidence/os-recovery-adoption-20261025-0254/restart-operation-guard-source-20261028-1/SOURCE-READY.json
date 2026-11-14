@@ -1,0 +1,80 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_READY_FOR_INDEPENDENT_REVIEW_NOT_RUNTIME_RELEASED",
+  "owner": "/root/restart_guard",
+  "thread": "01a183ec-72e5-7400-8f48-b4efb8725520",
+  "clocks_order": [
+    "epoch",
+    "MONOTONIC",
+    "BOOTTIME"
+  ],
+  "operation_cutoffs": [
+    1793253600,
+    1035704.5689393478,
+    1051042.6959879305
+  ],
+  "credit_run_id": "7f4af94a83b14cc08f97401f5891d965",
+  "credit_ceiling": "57774.852125",
+  "minimum_cumulative_spent": "22812.3311",
+  "sources": {
+    "bfd_guard_adapter.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/bfd_guard_adapter.py",
+      "bytes": 3022,
+      "sha256": "e148b1c9bf038a76a40b3dbd5282ab80dfc2a78d80aae02aa27c27b925fb1934"
+    },
+    "current116_guard_adapter.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/current116_guard_adapter.py",
+      "bytes": 3003,
+      "sha256": "af2f25cb88bc3853789df9eef85ae2b9e209e637fa2a7e553055894a9ed8b32c"
+    },
+    "guardian_guard.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/guardian_guard.py",
+      "bytes": 13388,
+      "sha256": "48893862bb3262a2c81d282215e4b9771b8f659e635a21856096c41233774f18"
+    },
+    "operation_guard_adapter.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/operation_guard_adapter.py",
+      "bytes": 2995,
+      "sha256": "38c2742016f10c089d4203e14cf9971e8dad9aa274412008ebeeb3ed1a62065a"
+    },
+    "operation_window_guard.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/operation_window_guard.py",
+      "bytes": 8622,
+      "sha256": "0947dc484d8071dfab53d2ddadd652f7a9746c394bce79faf31b7cbe85eac058"
+    },
+    "original227_guard_adapter.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/original227_guard_adapter.py",
+      "bytes": 3004,
+      "sha256": "307993c2dfdc44982386e5c3f8c411b3546e16ba0ecc87447ef12551101cba9f"
+    },
+    "test_guardian_guard.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/test_guardian_guard.py",
+      "bytes": 5200,
+      "sha256": "c8e72665904ce2d983007c80b1c3327e69f30f73e55b03718a0b68064646f28e"
+    },
+    "test_operation_window_guard.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/test_operation_window_guard.py",
+      "bytes": 8907,
+      "sha256": "d370a9f724cf3818d2a70f47b0bc8203b0743104614cc29150f49fdb208017a5"
+    },
+    "test_restart_bindings.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/test_restart_bindings.py",
+      "bytes": 6232,
+      "sha256": "6bd94a833c4ba3cdeb299322e4aee2fa60a4584cf9d9836c8d71504f96027fc7"
+    }
+  },
+  "actual_receipt": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/new-run-until-20261028-2300-pacific-1/restart-20261028-1200-pacific-1/ACTUAL-CONTROLS-ARMED.json",
+    "bytes": 3171,
+    "sha256": "fe3c2193600ce06c98f769d4659faaf52d3035437a98c5fa8d33ab43a7ed8202"
+  },
+  "regression": {
+    "command": "python3 -B -m unittest discover -s /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1 -p test*.py -v",
+    "tests": 22,
+    "exit_code": 0,
+    "reported_unittest_seconds": 0.074,
+    "live_guard_calls": 0
+  },
+  "native_release": false,
+  "controller_mutations": 0
+}

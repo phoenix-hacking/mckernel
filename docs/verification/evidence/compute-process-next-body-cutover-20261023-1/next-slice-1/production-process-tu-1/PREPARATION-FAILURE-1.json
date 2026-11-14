@@ -1,0 +1,14 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRESERVED_SOURCE_PREPARATION_FAILURE_NO_COMPILER",
+  "source_sha256": "ceb735b562c68f5382b74872ea38eacb1a55e2dd94d883233c2acf8c52a3caef",
+  "error": "AssertionError at line35: assumed each existing source hash appeared once in driver.",
+  "actual_occurrences": {
+    "kernel/process.c": 2,
+    "kernel/rust/sched_helpers.rs": 3,
+    "kernel/rust/tests/run_equivalence.sh": 1
+  },
+  "explanation": "Same exact source is bound by multiple existing M14/release-TID/fork/affinity guards. All six actual bindings must coherently advance to the accepted canonical postimages; no guard removal.",
+  "compiler_Docker_root_runs": 0,
+  "bounded_correction": "Update only all six known exact source-pin literals; compare remaining function AST after pin-only normalization."
+}

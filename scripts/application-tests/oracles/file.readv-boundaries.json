@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "file.readv-boundaries",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/file.readv-boundaries"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["read=24 bad_index=24 guards=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["readv count equals 24 and concatenated iovecs equal source bytes", "All six guard bytes remain 0xcc", "No byte is written outside an iovec payload"],
+  "unresolved_expectations": ["Freeze canonical output and reviewed input/oracle SHA256 before execution."],
+  "max_question_for_reviewer": "Confirm iovec lengths 1, 7, and 16 and guard preservation around each payload."
+}

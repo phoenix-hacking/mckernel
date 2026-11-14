@@ -1,0 +1,41 @@
+{
+  "argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=536870912",
+    "--cpu=30",
+    "--core=0",
+    "--nofile=256",
+    "--fsize=33554432",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/owned-request-fullcrate-2/prepare_final_source.py",
+    "--checkpoint",
+    "ac009b7687a8f868732aaf417f6181f0814bb856"
+  ],
+  "pid": 1819711,
+  "start": 26628825,
+  "returncode": 0,
+  "direct_child_joined": true,
+  "process_group_absent": true,
+  "elapsed_seconds": 0.2766246795654297,
+  "streams": {
+    "stdout": {
+      "bytes": 332,
+      "sha256": "708f9cfb0e3716e23641bf6918666247754927435a0470f491c850d84fbf8b78"
+    },
+    "stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "compiler_started": false
+}

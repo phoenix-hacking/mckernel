@@ -1,0 +1,221 @@
+{
+  "status": "SOURCE_CONTRACT_GO_FINITE_LOCK_STORAGE_AND_NATIVE_IRQ_PREPARATION_ONLY",
+  "owner": "/root/create_empty_entry_parity_high",
+  "created_utc": "2026-11-09T17:56:17.175273+00:00",
+  "source_bindings": {
+    "/home/holden/mckernel/kernel/rust/debug.rs": "fed7537d21f5d5fe0fc3ffdb1fe44783f5f9ac13937b3bdbbcc452cc2fa5eb16",
+    "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs": "7b6c1e87f521eaf4674128afd7bff71785bead4ff7c9eb3c9a668d6a0cb0cbe7",
+    "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde",
+    "/home/holden/mckernel/kernel/rust/x86_setup.rs": "1bf9b326873b22034dfba47165c95bdcc599d41533a112c64de72950e99589fe",
+    "/home/holden/mckernel/kernel/rust/cls.rs": "c0260e7634d53fcc0873746af8bd16b6691ee0a4b7f394ca18896aef070f6bba",
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "/home/holden/mckernel/kernel/rust/lib.rs": "e6e8f0203ea587789977c7dd23a1e7bbd8f89a9f6c84b8aeaa874b2f0880fe0b",
+    "/home/holden/mckernel/kernel/CMakeLists.txt": "1254c624f883166d3eaefb5e795571afcaf962ff10b0991524b317be71bec057",
+    "/home/holden/mckernel/kernel/include/kmsg.h": "47434be82c72e66bdc82ded4da08159eb6c63f7b1060142539e081a2f1f2d5b5",
+    "/home/holden/mckernel/arch/x86_64/kernel/include/arch-lock.h": "ca8baa66ed77634cd6319a918211b3eb8fe80fc7dcb2ac0110ab6bfbd0c1b81b",
+    "/home/holden/mckernel/lib/include/ihk/lock.h": "fd34fe3adae00d309fc48e4a8f8c4170edfdfc6bfffd5b37db13f5391ed84f6f",
+    "/home/holden/mckernel/ihk/linux/include/ihk/ihk_debug.h": "63160ae79466f721b35bae1f2a8dad1378bcd4b8525045930abfaf4ec47383d7",
+    "/home/holden/mckernel/ihk/cokernel/smp/x86_64/bootparam.h": "6e72eae27f27625efa66bdf0a76d661cb4a8050ceb117fb75c56ff63678e5da1"
+  },
+  "prior_kprintf_contract": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-contract-1/CONTRACT.json",
+    "sha256": "b7da89fb9acf39afd4c25df70e6c86da7f57b72f8ea873f22057af9a5a102e82"
+  },
+  "current_nonexecuted_partial": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/output/kprintf_storage_partial.o",
+    "sha256": "ca06d0e48d88beb010df1d6a548c9978e4dd4445322b2e235e3896714b44b438",
+    "actual_strong": 42,
+    "actual_genuine_U": 23,
+    "qualified_raw_nm": {
+      "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/joined-symbols.stdout",
+      "sha256": "ed7602f900301b23dba8bbd95cc17e06a421fa2074147c52605b94cef517680a"
+    },
+    "source_cut_global_intersection": []
+  },
+  "smallest_cut": {
+    "functions": [
+      "kprintf_lock",
+      "kprintf_unlock",
+      "kmsg_init"
+    ],
+    "data": [
+      {
+        "source": "kernel/rust/debug.rs:44",
+        "definition": "#[no_mangle]\npub static mut kmsg_buf: *mut IhkKmsgBuf = null_mut();",
+        "kind": "Original8byteglobalpointer; NULL initializer genuine, not initializedmessagebuffer."
+      },
+      {
+        "source": "kernel/rust/debug.rs:47",
+        "definition": "static mut KMSG_LOCK: IhkSpinlock = IhkSpinlock { head_tail: 0 };",
+        "kind": "ExactlyONE originalprivate4byte/align4 singleton,initialhead_tail0. Retain originalprivatesourcevisibility. Actualemittedsymbol/localglobaldata classification must be observed; do not inventanexport or omitcompiler-mangleddata."
+      }
+    ],
+    "types": "Use actualabi::IhkSpinlock reprC{head_tail:u32} for originaldebugdata/functions and actualIhkKmsgBuf reprC fromdebug.rs (4MiB/str4096 originalasserts). No wholedebug/Ddebug/sysfs/formatter definitions and no secondKMSG_LOCK.",
+    "genuine_remaining_U": [
+      "__ihk_mc_spinlock_lock",
+      "__ihk_mc_spinlock_unlock",
+      "ihk_mc_spinlock_init"
+    ],
+    "ABI": "OriginalNoMangleC lock()->CULong,u64; unlock(CULong)->void; init()->void; exactgenuineIhkSpinlock*4/align4 pointee tospinlockproviders. Actualkernelheadersagree."
+  },
+  "finite_optional_direct_callable_closure": {
+    "spinlock_functions": [
+      "ihk_mc_spinlock_init",
+      "__ihk_mc_spinlock_lock_noirq",
+      "__ihk_mc_spinlock_lock",
+      "__ihk_mc_spinlock_unlock_noirq",
+      "__ihk_mc_spinlock_unlock"
+    ],
+    "private_helpers": [
+      "ticket_head",
+      "ticket_tail",
+      "head_atomic"
+    ],
+    "constants": [
+      "TICKET_INC:u16=2",
+      "TAIL_INC:u32=(TICKET_INC asu32)<<16"
+    ],
+    "types": "Retain originalspinlock_helpers::IhkSpinlock reprC{head_tail:AtomicU32}; originalsize4/align4/offset0 asserts. Debugabi::IhkSpinlock reprC{head_tail:u32} is separateoriginaltype with sameCpointerstorageABI; do notrewriteorconflateRustnominaltypes. AtomicU16head addresseslow16bits on selectedlittleendianx86_64.",
+    "semantics": "Init SeqCst0; lock disablesIRQs then noirqpreempt_disable/fetch_addticket131072/Acquirewait+genuinecpu_pause; unlock noirqhead fetch_add2 thenpreempt_enable, outerrestoregenuineflags. Originalticket/wrap/order bytes retained; no Hostmutex/Condvar callback.",
+    "genuine_remaining_U": [
+      "preempt_disable",
+      "preempt_enable",
+      "cpu_disable_interrupt_save",
+      "cpu_restore_interrupt",
+      "cpu_pause"
+    ],
+    "native_CPU4": [
+      "cpu_restore_interrupt",
+      "cpu_pause",
+      "cpu_disable_interrupt_save",
+      "cpu_interrupt_disabled"
+    ],
+    "native_CPU_eligibility": "Four exact current NoMangleC definitions eachcfg(not(mckernel_equivalence)). Finiteasm bodies have no projectimports/data/constants/SDKcallbacks. Onlynonexecutedcodegen/sourcepreparation eligible; preserve realpushfq/popfq/cli/pause and actualflag semantics. No mckernel_equivalence/no-op/HostIRQsubstitution. No function,privilegedinstruction or nativeexecution admitted.",
+    "count_if_Root_selects_this_closure": "3debug+8spinlock(including3private)+4nativeCPU=15functions,12originalCexports plus2originaldatadefs. No unrelatedspinlocktrylock/lockmodule/preemptbodyroot.",
+    "preempt_boundary": "Realcls.rs178preempt_enable/186disable testoriginalcpu_local_var_initialized thenthis_cpu_local_var andAtomicI32 no_preempt fetch_sub/addSeqCst. CurrentlowerCPU/getter ownership is reused; initializedflag/processCPU/runtime/GS/boot lifetime is not fabricated. Keep both genuineprovidersU unless separatelysourcequalified."
+  },
+  "delay_clock_boundary": {
+    "optional_wrapper": "Exactihk_mc_delay_us(CInt)->void x86_cpu_helpers.rs965 calls arch_delay(CInt); canbeaseparateonefunctionsourcecut onlyifRootselects,arch_delayU.",
+    "actual_arch_delay": "x86_setup.rs750 cfg_attr(not(mckernel_equivalence),no_mangle) computesrdtsc().wrapping_add(333u64.wrapping_mul(us asCULong)),loopswhile actualrdtsc()<end withcpu_pause. Actualrdtsc x86_cpu_helpers.rs184 combinesEDX/EAX intoCULong withrealrdtsc asm. No timingbehavior/correctcalibration/bootclockcontract accepted from source or codegen.",
+    "remaining": "Clockavailability/calibration/monotonicityandgenuinetiming/runtimequalificationremainOPEN; do notreplacewithHostsleep/constantclock oraddarch_delay/rdtsc implicitly."
+  },
+  "actual_buffer_boot_lifetime": {
+    "writer": "x86_setup.rs468 ihk_get_kmsg_buf(&mutmsg_buffer,&mutmsg_buffer_size),thenkmsg_buf=map_fixed_area(phys,size,0),thenkmsg_init(),thenkputs. Thisisthedirectselectednativebootpath,not a fabricatedbufferprovider.",
+    "IHK_pair_owner": "Actualihk_get_kmsg_buf x86_setup.rs567 returnsboot_param.msg_buffer/msg_buffer_size. ActualIHKbootparam.h104declaresmsg_buffer physicaladdressand105size. Bufferisoutsidekernelimage peractualIHKsetup.c145 comment. No special-address APIcall occurs in thisdirectkmsgboot/lock/initcut; ifaseparateIHKspecial-address routeisrequested,itsidentityremainsOPENratherthaninvented.",
+    "ownership": "kmsg_buf isonlyborrowedmappedpointer. OriginalsharedIhkKmsgBuf.lock/tail/len/head +stringstorageownership/initialization stayswithactualIHKbootprovider. kmsg_init initializesONLYprivateouterKMSG_LOCK, notbuffercontents/map/header/length. No HOST4MiBownedbuffer/nullsuccess/initiallenfake.",
+    "lifetime_and_order": "Bootparam/sourcecustody,physicalrange/alignment/mapping,liveness/headerpublicationandconcurrency mustbeprovenactualsupportedbootbeforecallablelogging. Oneinitmustprecedeusingouterlock; repeatedinitwhilelockinuse isnot authorized. Datazero/null sourceinitializeralone establishesnoneofthese runtimefacts."
+  },
+  "notification_boundary": {
+    "actual_entry": "kernel/rust/syscall_policy.rs25885 #[no_mangle] externC eventfd(CInt)->void, exactnamedendpointonlyreviewed. Readsrealget_cpu_local_var(0).ikc2linux;calls syscall_eventfd_send_result(channel,0x46,type,Some(f03_eventfd_send)); ignoredresultmatchesC.",
+    "actual_send": "Privatef03_eventfd_send25870 forwardsactualcrate::ikc_manycore::ihk_ikc_send. syscall_eventfd_send_result3037 preparesactualIkcScdPacket usinggenuinepackethelper beforeactualsend. No callbackinvented/externalized or heldgeneric/do_syscall/execbody inspected/proposed.",
+    "unresolved": "ActualCPU0channel/IKCqueue/send/interrupt/hostnotificationownership,destinationandshutdownlifetime stayOPEN; keepkernel eventfdU. Never substituteHOSTlibc eventfdABI/callback orclaimdeliveryfromvoidignoredresult."
+  },
+  "ABI_and_selection": {
+    "defaultowners": "Currentlib.rsdebug+spinlock_helpers+x86_cpu_helpers+cls+x86_setup selected, CMakeRustSPINLOCKhelperdefineactive. ActualdefaultCdebug.c removed; no referenceCstate introduced. AcceptedF04source remainsclosedunchanged; its scopefacts do not imply anewindependentobject/link/runtime.",
+    "Cspinlock": "arch/x86_64/kernel/include/arch-lock.h21ihk_spinlock_t unionu32head_tail/{u16head,tail};original0unlockmacro; CABIprototypes38-44 agree. Sharedlock4align4, notdebugringinnerCIntlock.",
+    "no_current_duplicate": "Actual42globalowners havenoneofnew3debugfunctions,5spinlockexports,4nativeCPUexports,kmsg_buf. Existing35formatterownsneitherKMSG_LOCK norbufferinitializer. Exactlyonefutureprivateinstance andglobalptrprovideronly; actualemittedmetadata/uniqueintersection mustbecheckedbeforejoin."
+  },
+  "eligibility_decision": "GO sourcepreparation for smallest3function+2datacut; finite15function2dataclosure isalso genuinecurrenteligible nonexecutedsource ifRootexplicitlyselects it. No blocker in theseexactsource/typebodies, no impliedcodegenorlinkgrant. Retainrealpreemption/boot/timing/notify/sourcecustody/nativeholds; actualsupportedlifecycle/default/providerclosure isNOTaccepted.",
+  "smallest_next_proof": "Rootselectexactcut; Aproduceonlythoseactualblocks/types/attrs/constants withsourceproof andprecisefreshcompile+metadatarequest. Independentconcreteunit/profile/oneprivateSingleton/actualsymbolsABIreviewbeforefreshRootadmission. Reusecurrent42object andclosedmatchingchecks; no oldcohort/wholemodule/SDKremap/codegen greenreplay.",
+  "compiler_link_runtime_native_function_operations": false,
+  "canonical_index_implementation_writes": false,
+  "new_gate_score_C_retirement_or_acceptance": false,
+  "exact_candidate_function_definitions": {
+    "kprintf_lock": {
+      "source": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "line": 175,
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn kprintf_lock() -> CULong {\n    __ihk_mc_spinlock_lock(&raw mut KMSG_LOCK)\n}",
+      "sha256": "251277be14cec6018285902b2945e8d9d46b25616715951cabd283df1fdf2c86"
+    },
+    "kprintf_unlock": {
+      "source": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "line": 180,
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn kprintf_unlock(irqflags: CULong) {\n    __ihk_mc_spinlock_unlock(&raw mut KMSG_LOCK, irqflags);\n}",
+      "sha256": "ed27862904bdefd6cf3b324ecde96f901ecc03233d4a9a15a34ea806719095aa"
+    },
+    "kmsg_init": {
+      "source": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "line": 257,
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn kmsg_init() {\n    ihk_mc_spinlock_init(&raw mut KMSG_LOCK);\n}",
+      "sha256": "26617f826d8e0bbcb158e37b908c8d7477c6c812368fd496bf7ddbef566686e5"
+    },
+    "ticket_head": {
+      "source": "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs",
+      "line": 30,
+      "exact_definition": "#[inline(always)]\nfn ticket_head(value: u32) -> u16 {\n    value as u16\n}",
+      "sha256": "555b3e8a624d41c0c38e777296d22a5cd2fa8c06bc4236b36f540f371c65d496"
+    },
+    "ticket_tail": {
+      "source": "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs",
+      "line": 35,
+      "exact_definition": "#[inline(always)]\nfn ticket_tail(value: u32) -> u16 {\n    (value >> 16) as u16\n}",
+      "sha256": "38f27c003dc72c06305de48b2f64ff485d23467f78f82242e99b560b73e87941"
+    },
+    "head_atomic": {
+      "source": "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs",
+      "line": 45,
+      "exact_definition": "#[inline(always)]\nunsafe fn head_atomic(lock: *mut IhkSpinlock) -> *mut AtomicU16 {\n    lock as *mut AtomicU16\n}",
+      "sha256": "ded17d91e12277eb0aa75083b164ad1bf5a40cbb31729ebd082c1893df464508"
+    },
+    "ihk_mc_spinlock_init": {
+      "source": "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs",
+      "line": 50,
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn ihk_mc_spinlock_init(lock: *mut IhkSpinlock) {\n    (*lock).head_tail.store(0, Ordering::SeqCst);\n}",
+      "sha256": "ee9fc3876725fe97ed5690e824d51544354882bb765b5b1b124e6b87ce8fcfd7"
+    },
+    "__ihk_mc_spinlock_lock_noirq": {
+      "source": "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs",
+      "line": 90,
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn __ihk_mc_spinlock_lock_noirq(lock: *mut IhkSpinlock) {\n    preempt_disable();\n    let ticket = (*lock).head_tail.fetch_add(TAIL_INC, Ordering::SeqCst);\n    let wait_for = ticket_tail(ticket);\n\n    if ticket_head(ticket) == wait_for {\n        return;\n    }\n\n    loop {\n        if ticket_head((*lock).head_tail.load(Ordering::Acquire)) == wait_for {\n            return;\n        }\n        cpu_pause();\n    }\n}",
+      "sha256": "8a5911c80f88896bb851d9042bcc8b36bff50359fdb72f985ea26e8d15f49d57"
+    },
+    "__ihk_mc_spinlock_lock": {
+      "source": "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs",
+      "line": 108,
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn __ihk_mc_spinlock_lock(lock: *mut IhkSpinlock) -> CULong {\n    let flags = cpu_disable_interrupt_save();\n\n    __ihk_mc_spinlock_lock_noirq(lock);\n    flags\n}",
+      "sha256": "f9e802f6a46d6416513e7fc256f3bb205d52f1d75e7a4e81329b22d7d7b88fab"
+    },
+    "__ihk_mc_spinlock_unlock_noirq": {
+      "source": "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs",
+      "line": 116,
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn __ihk_mc_spinlock_unlock_noirq(lock: *mut IhkSpinlock) {\n    let _ = (*head_atomic(lock)).fetch_add(TICKET_INC, Ordering::SeqCst);\n    preempt_enable();\n}",
+      "sha256": "8987080d711bceec966997275e40d9e5d4a8d666dbb2577d521e2abbe0aa6538"
+    },
+    "__ihk_mc_spinlock_unlock": {
+      "source": "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs",
+      "line": 122,
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn __ihk_mc_spinlock_unlock(lock: *mut IhkSpinlock, flags: CULong) {\n    __ihk_mc_spinlock_unlock_noirq(lock);\n    cpu_restore_interrupt(flags);\n}",
+      "sha256": "1027c182eafde486c0a6a62bcb9dbb0459e39d429ae7f7df5be7cbd34cd939a9"
+    },
+    "cpu_restore_interrupt": {
+      "source": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "line": 841,
+      "exact_definition": "#[cfg(not(mckernel_equivalence))]\n#[no_mangle]\npub unsafe extern \"C\" fn cpu_restore_interrupt(flags: CULong) {\n    core::arch::asm!(\"push {flags}\", \"popfq\", flags = in(reg) flags);\n}",
+      "sha256": "712ff18fba8e8a75667daeec5270d63f162407ac798d812fdd800ec71e4878a4"
+    },
+    "cpu_pause": {
+      "source": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "line": 847,
+      "exact_definition": "#[cfg(not(mckernel_equivalence))]\n#[no_mangle]\npub unsafe extern \"C\" fn cpu_pause() {\n    core::arch::asm!(\"pause\", options(nomem, nostack, preserves_flags));\n}",
+      "sha256": "290bb7a4cb16c96feae989279527e75e5760902a679a2966cb423e8764615679"
+    },
+    "cpu_disable_interrupt_save": {
+      "source": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "line": 853,
+      "exact_definition": "#[cfg(not(mckernel_equivalence))]\n#[no_mangle]\npub unsafe extern \"C\" fn cpu_disable_interrupt_save() -> CULong {\n    let flags: CULong;\n\n    core::arch::asm!(\"pushfq\", \"pop {flags}\", \"cli\", flags = lateout(reg) flags);\n\n    flags\n}",
+      "sha256": "75ff3871917ecbb30bafe01f963af0cba4f2b8aebe7d452f83d0dddecd729ea2"
+    },
+    "cpu_interrupt_disabled": {
+      "source": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "line": 873,
+      "exact_definition": "#[cfg(not(mckernel_equivalence))]\n#[no_mangle]\npub unsafe extern \"C\" fn cpu_interrupt_disabled() -> CInt {\n    let flags: CULong;\n\n    core::arch::asm!(\n        \"pushfq\",\n        \"pop {flags}\",\n        flags = lateout(reg) flags,\n        options(preserves_flags),\n    );\n\n    if flags & 0x200 == 0 {\n        1\n    } else {\n        0\n    }\n}",
+      "sha256": "c797b7d0936d33ab6142a44299b3900b2250cca7954937dc806c2f75e00cd7b3"
+    },
+    "ihk_mc_delay_us": {
+      "source": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "line": 965,
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn ihk_mc_delay_us(us: CInt) {\n    unsafe {\n        arch_delay(us);\n    }\n}",
+      "sha256": "c5f50310e8fc8de23ba3963dcebf51f62283e83a654081aad8b21fef31f7770a"
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "record_kind": "pending_free_batch_candidate_failure",
+  "task_id": "M03-A/M03-B",
+  "attempt": 5,
+  "status": "FAIL_EVIDENCE_REVIEW",
+  "base_commit": "88db2d4efcbf0c0a99156eea38cda693a5eb3c43",
+  "candidate_files": [
+    {"path": "kernel/rust/mem_helpers.rs", "sha256": "3bdb98c725f56795d8aa05273db9bd68a15aae3efb5b205836c6c995f73b02ca"},
+    {"path": "kernel/rust/tests/run_equivalence.sh", "sha256": "344e636a44df9594ea26c8bafa5ed08441518233dfee17920cda83e5653788e8"},
+    {"path": "kernel/rust/tests/pending_free_batch_actual_harness.py", "sha256": "c316035433b35c5d5386498046e0998c4666799f087ec0e45e4b609d167e018a"},
+    {"path": "kernel/rust/tests/pending_free_batch_vectors.rs", "sha256": "6f0555989406254ed695597872593eed9d89c6cd80cc7f26dca04c1f5261061f"},
+    {"path": "kernel/rust/tests/pending_free_batch_vectors.c", "sha256": "d118ccd6050ae09bc5b3139b93fb572201f431d7dbb72b2feb3e1b76c61c9d96"}
+  ],
+  "archive": {
+    "path": "docs/verification/evidence/stability-pending-free-batch-candidate-failure-20260915-5.tar.gz",
+    "size": 723734,
+    "sha256": "b3a393bf3b4e92afc6348bcb0d73ce4ab7f5b4430bf9401567b87ddec08be30d",
+    "members": 5
+  },
+  "independent_review": {
+    "role": "Astra/high ownership and unsafe-code reviewer",
+    "status": "FAIL",
+    "findings": [
+      {"severity": "P1", "finding": "The later-invalid drain vector has no valid prefix, so it cannot detect partial release."},
+      {"severity": "P1", "finding": "The C fixture prints successful empty/reset and preservation results without asserting them; no computed Rust/C comparison exists."},
+      {"severity": "P2", "finding": "Production dependencies now match but remain manually duplicated and unbound to source."},
+      {"severity": "P2", "finding": "Mixed destination, wrong source and two-head isolation are still absent from executed coverage; transaction generation remains a design limitation."}
+    ]
+  },
+  "accepted_observations": [
+    "The focused harness exits zero with the source-extracted private definitions and exact-type negative trait checks.",
+    "Production finish and wrappers remain byte-identical and no new production implementation defect was found."
+  ],
+  "compiled_with_production_dependencies": false,
+  "runtime_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}

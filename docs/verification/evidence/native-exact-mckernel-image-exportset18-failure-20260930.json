@@ -1,0 +1,94 @@
+{
+  "schema": "mckernel.native-exact-mckernel-image-failure-evidence.v1",
+  "recorded_at": "2026-09-30T12:58:41-07:00",
+  "candidate_sha": "4e99a82c9b87a7cf3d6002b75ec380fef37af7a1",
+  "checkpoint_base": "637ad4417035a7808e5efb3503fbe21e2ae9d013",
+  "attempt": "exportset-18",
+  "classification": "FAIL_CONFIGURE_TOOLCHAIN_AND_DEPENDENCY_CONTRACT",
+  "diagnostic_only": true,
+  "acceptance_effect": "none",
+  "owner": {
+    "pid": 1634914,
+    "starttime_ticks": 100793649,
+    "owner_nonce": "db5dfd5bfc7c461ba6ed28e9b4ea42ed",
+    "container_id": "a6e3772f3470c79a55807d38a12e0b02e84f4e0b12771d17742b99f55f2cb0ae",
+    "container_name": "mckernel-image-ce76ec9b4973421f8981f6cb63fa5af1",
+    "terminal_status": "exited",
+    "terminal_exit_code": 1,
+    "terminal_pid": 0,
+    "oom_killed": false,
+    "retired": true,
+    "lease_present_after_retirement": false,
+    "container_retained": true
+  },
+  "driver_result": {
+    "status": "FAIL",
+    "phase": "configure",
+    "error": "configure failed",
+    "command_count": 1,
+    "image_produced": false,
+    "observed_failures": [
+      "kernel module probe used gcc 14.3.1 against a kernel built by clang 21.1.8",
+      "gcc rejected -mretpoline-external-thunk",
+      "CMake reported error: couldn't find libnuma"
+    ]
+  },
+  "inputs": {
+    "request": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-request-4e99a82c-exportset-18.json",
+      "sha256": "ee41103c4b9b49cfaaca31aff3b6af39404b18935a89feed0bf35bbd6b63643a",
+      "size": 43891119,
+      "device": 1831,
+      "inode": 1712450
+    },
+    "toolchain": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-toolchain-4e99a82c-exportset-18.json",
+      "sha256": "471ed7e365a1a676713292691bdf5501efa10036cab7b41b0fd89d7aaece9d72",
+      "size": 80765577,
+      "device": 1831,
+      "inode": 1712448
+    }
+  },
+  "original_evidence": {
+    "driver_receipt": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-work-4e99a82c-exportset-18/evidence/receipt.json",
+      "sha256": "dd5c53b91eb7274af42da2eb992ddd2c3e81909ec738fc8952f7f9bf3a588272"
+    },
+    "owner_receipt": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-owner-evidence-4e99a82c-exportset-18/owner-receipt.json",
+      "sha256": "7929772081c18f6218c4e8c782005c33a6e209caca87d4797f73fd7edfa9558c"
+    },
+    "stdout_log": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-work-4e99a82c-exportset-18/evidence/build.stdout.log",
+      "sha256": "e295e9870e8dc8c496dfa8182dbac8ac6f4e0a5d385951a3fc8586a5921b3ec3"
+    },
+    "stderr_log": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-work-4e99a82c-exportset-18/evidence/build.stderr.log",
+      "sha256": "8c0b66c7d7cae23e524fa9b160e60cd4c94910e2e98ae3e9baa2430bb42c6a0b"
+    },
+    "tool_versions": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-work-4e99a82c-exportset-18/evidence/tool-versions.txt",
+      "sha256": "da0de40de5f10eaf4d3417a368a94cdb8ef57692b69d9daa288714d07479193b"
+    },
+    "operational_exclusion": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-18.json",
+      "sha256": "d8c94e1b7e65827ad41cf5b317f63b4a72c817bc7978b87ac76caa71b39f3216",
+      "size": 269,
+      "device": 1831,
+      "inode": 90635
+    }
+  },
+  "convergence": {
+    "family": "current-image-build-contract",
+    "prior_failure": "exportset-17 identity failure: cc version differs",
+    "bounded_correction": "preserved authenticated /usr/bin/cc lookup spelling",
+    "correction_result": "identity passed; configure exposed the next toolchain/dependency failure",
+    "next_action": "expert review the Clang-built host-kernel compiler contract and sealed libnuma availability; do not repeat an unchanged image attempt"
+  },
+  "shutdown_process_identities": {
+    "launcher_wrapper_pid": 1442141,
+    "launcher_pid": 1442142,
+    "worker_pid": 1442145,
+    "server_pid": 1442149
+  }
+}

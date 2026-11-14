@@ -1,0 +1,35 @@
+--- a/kernel/rust/process_helpers.rs
++++ b/kernel/rust/process_helpers.rs
+@@ -248,12 +248,9 @@
+         end: CULong,
+         error: CInt,
+     );
+-    fn process_pte_get_phys_bridge(ptep: *mut c_void) -> CULong;
+     fn process_phys_to_page_bridge(phys: CULong) -> *mut c_void;
+     fn process_page_offset_bridge(page: *mut c_void) -> OffT;
+     fn process_flush_tlb_single_bridge(addr: CULong);
+-    fn process_pgsize_to_tbllv_bridge(pgsize: SizeT) -> CInt;
+-    fn process_tbllv_to_contpgsize_bridge(level: CInt) -> SizeT;
+     fn process_page_unmap_bridge(page: *mut c_void) -> CInt;
+     fn process_panic_bridge(message: *const i8);
+     fn process_memory_range_free_log_bridge(vm: *mut c_void, range: *mut c_void, error: CInt);
+@@ -12130,3 +12127,19 @@
+ ) -> CInt {
+     crate::pte_helpers::pte_is_fileoff(ptep.cast::<CULong>(), pgsize)
+ }
++
++// Preserve the invalidate owner physical/contiguous-size callback boundaries.
++#[no_mangle]
++pub unsafe extern "C" fn process_pte_get_phys_bridge(ptep: *mut c_void) -> CULong {
++    crate::pte_helpers::pte_get_phys(ptep.cast::<CULong>())
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn process_pgsize_to_tbllv_bridge(pgsize: SizeT) -> CInt {
++    crate::pte_helpers::pgsize_to_tbllv(pgsize)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn process_tbllv_to_contpgsize_bridge(level: CInt) -> SizeT {
++    crate::pte_helpers::tbllv_to_contpgsize(level)
++}

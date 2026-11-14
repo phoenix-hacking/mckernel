@@ -1,0 +1,54 @@
+"""Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Bounded ABI/ELF qualification only; no dynamic or native behavior claim.
+"""
+from pathlib import Path
+import hashlib,importlib.util,json,sys,struct
+D=Path(__file__).resolve().parent
+helper=D.parent/'f02-source38-next-current-integration-source-1/check_thirteen_storage.py'
+spec=importlib.util.spec_from_file_location('retained_elf',helper);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+Elf=module.Elf
+
+def ref(p):
+ b=Path(p).read_bytes();return dict(path=str(p),bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def word_array(elf,name):
+ rows=elf.definitions(name);assert len(rows)==1,(elf.path,name,rows)
+ s=rows[0];sec=elf.sections[s['ndx']]
+ assert s['kind']==1 and s['bind']==1 and s['size']==72
+ assert sec['flags']&2 and not sec['flags']&5 and sec['align']>=8 and s['value']%8==0
+ start=sec['off']+s['value']-sec['addr'];return struct.unpack('<9Q',elf.data[start:start+72])
+def function(elf,name,global_required):
+ rows=elf.definitions(name);assert len(rows)==1,(elf.path,name,rows)
+ s=rows[0];assert s['kind']==2 and s['size']>0 and elf.sections[s['ndx']]['flags']&4
+ if global_required:assert s['bind']==1
+ return dict(name=name,size=s['size'],section=elf.sections[s['ndx']]['name'],binding=s['bind'])
+def main():
+ out=Path(sys.argv[1]);assert out.resolve()==(D/'HOST-output-proposed-1').resolve()
+ names=['f03_ptrace_setsiginfo_v1','ptrace_syscall_event','f03_exec_report_signal_v1']
+ rust,c,fallback,joint,oldjoint=[Elf(out/x) for x in ['rust-selected.o','selected.o','fallback.o','selected-joint.o','fallback-joint.o']]
+ abi=word_array(rust,'f03_ptrace_HOST_ABI');assert abi==word_array(c,'f03_ptrace_C_ABI')==word_array(fallback,'f03_ptrace_C_ABI')==word_array(joint,'f03_ptrace_HOST_ABI')
+ assert abi[0]==128 and abi[2]==160 and abi[4]==24 and abi[6:8]==(4,8)
+ exports=[function(rust,n,True) for n in names];[function(joint,n,True) for n in names]
+ for n in names:assert not c.definitions(n),(n,'selected C must reference Rust')
+ refs={n:c.allocated_references(n) for n in ['f03_ptrace_setsiginfo_v1','f03_exec_report_signal_v1']}
+ assert all(refs.values()),('actual selected TU consumers required',refs)
+ for n in ['ptrace_setsiginfo','ptrace_report_signal_bridge']:assert not c.definitions(n)
+ oldnames=['ptrace_setsiginfo','ptrace_syscall_event','ptrace_report_signal_bridge']
+ oldexports=[function(fallback,n,n=='ptrace_syscall_event') for n in oldnames]
+ [function(oldjoint,n,n=='ptrace_syscall_event') for n in oldnames]
+ # Public event name is retained for actual architecture/Rust consumers.
+ proof=json.loads((D/'REUSED-SEMANTIC-PROVIDER-SOURCE-PROOF.json').read_text())
+ retained=Elf(proof['retained_actual_Rust']['path']);assert ref(retained.path)==proof['retained_actual_Rust']
+ publicrefs=retained.allocated_references('ptrace_syscall_event');assert publicrefs
+ source=json.loads((D/'HOST-WITNESS-BINDING.json').read_text());host=Path(source['HOST_policy']['path']).read_text();assert host.endswith(source['witness_only'])
+ assert host[:-len(source['witness_only'])]==Path(source['production_policy']['path']).read_text()
+ for n in names:assert not [s for s in joint.symbols if s['name']==n and s['ndx']==0]
+ # Partial-linker must preserve every existing Rust retained section.
+ retained_sections=[s for s in rust.sections if s['flags']&0x200000 and s['flags']&2]
+ assert retained_sections
+ for s in retained_sections:
+  matches=[z for z in joint.sections if z['name']==s['name']]
+  assert len(matches)==1 and matches[0]['flags']&0x200000,(s['name'],'GNU_RETAIN lost')
+ report=dict(status='PASS_CHANGED_THREE_WRAPPER_ABI_ELF_ONLY',scope=__doc__.splitlines()[0],ABI_words=list(abi),Rust_exports=exports,selected_TU_real_consumer_relocations=refs,retained_public_event_consumers=publicrefs,fallback_C_functions=oldexports,retained_Rust_sections=len(retained_sections),artifacts=[ref(out/x) for x in ['rust-selected.o','selected.o','fallback.o','selected-joint.o','fallback-joint.o']],new_dynamic_behavior_tests_run=0,native_credit=0,production_acceptance=False)
+ (out/'CHANGED-BOUNDARY-QUALIFICATION.json').write_text(json.dumps(report,indent=2)+'\n')
+ print('PTRACE3 PASS genuineABI/fullRust/selectedCcallback/publicsymbol/fallback; behavior-nativeOPEN')
+if __name__=='__main__':main()

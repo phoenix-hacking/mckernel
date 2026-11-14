@@ -1,0 +1,56 @@
+{
+  "decision": "GO_SOLE_BOUNDED_ACTUAL_WITNESS_BINDING_CORRECTION_PENDING_FRESH_ROOT_RUNTIME_ADMISSION",
+  "request": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kernel-string-provider-unit-1/witness-1/correction-2/REQUEST.json",
+    "sha256": "e8b91fef45b214170a6cb6d3e3a4152daee3029e0ff24cf49f8f514b0f6232a9"
+  },
+  "source": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kernel-string-provider-unit-1/witness-1/correction-2/c_abi_witness.c",
+    "sha256": "bb35cb634acae6e7b7eee846fd5c7cf8a3115ff8d0dda4c9c85009c576e92f6e"
+  },
+  "source_correction": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kernel-string-provider-unit-1/witness-1/correction-2/SOURCE-CORRECTION.json",
+    "sha256": "7a6402e1be22a7bff50544e69f2aa012cdb88f7ddce4c9a68041c9f9ed2b92fb"
+  },
+  "predicate": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kernel-string-provider-unit-1/witness-1/correction-2/witness_checks.py",
+    "sha256": "6f7e67cecd87fc6806b8e1adc76cadcebb053497729b00f4cb35cdee6a1e632e"
+  },
+  "controller": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kernel-string-provider-unit-1/witness-1/correction-2/run_packet.py",
+    "sha256": "de2e7fe297cb933cbac15880a2a26289fb9792b9ce40e7adbf7c8e8f133fa943"
+  },
+  "actual_failure_disposition": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kernel-string-provider-contract-1/concrete-3/FIRST-FAILURE-REVIEW-1.json",
+    "sha256": "9486813b5db36af895ed99c9d719c534d91c590d354b212581ca59c296443329"
+  },
+  "source_ABI_review": {
+    "changes": "Exactlystaticfileprivate void*(*volatile kernel_memset_entry)(void*,int,size_t)=&memset; fill_casecallsreadpointervalue. Addcompiletime actual __printf_chk declarationcompatibilityassert. No functiondefinition/callback/provider/symbolalias/asmrewrite/endpointoverride. All35frozeninputs matched.",
+    "preserved": "Same actual HOST headers/FORTIFY/fno-builtin family/compiler flags, qualified965leafobject/sourceABI/coreproof, fixed6payloadprofile and all11validobservations/expectedstdout. Onlyaddedallowlistentryexactgenuine__printf_chk; actualheaderstdio2.hprototype int(int,constchar*,...)bound andasserted. Sourcecaller/privatepointeraddresssame KernelmemsetCABI.",
+    "data_domain": "Eight empty/abcNUL/0,2,3,8limit observations remainreadable underactualread-firstsemantics. Threeownedmalloc16cases retainn0/5/5, offsets4/3/2, c0x123/0x123/-1, returnedoriginalpointer/lowbyte/allunmodifiedownedbytes assertions andoncefree. NoinvalidNULL/nonNUL/OOB/guardpage/native/kernelstate."
+  },
+  "caller_gate_review": {
+    "exact_initializer": "ActualcallerELF mustrequiregenuineUmemset/strnlenandno endpointdefinition; onlymainstrong andreviewedHOSTimports. ExactlynamedLOCALOBJECT kernel_memset_entry,8B D; exactlyoneinitializerRELAR_X86_64_64toUmemset+0 atslotstart. No otherrelocationwithinslot.",
+    "actual_pointer_dataflow": "Decodedinstructions tiedtoactual executable-sectionrelocationtargetingthatlocalslot. Either actualmemory-indirectcallthroughslot or64-bit movregister-loadthenindirectcallthroughsameregister in same sourcefunction. No intermediatecontroltransfer/call/registerdestinationclobber accepted. Exactsourcecontainsnoslotwritesafterinitializer. No address-taking-only or arbitraryindirectcallcredit.",
+    "direct_strnlen": "Actual PC32/PLT32 strnlenU relocation in executablecallersectionwithprecedingE8directcallopcode required.",
+    "control": "Controller calls caller(), persistsCALLER-CHECK andonlythensetscaller_passed afternewcallerdisassembly; witness-linkPopen assertscaller_passed."
+  },
+  "final_ELF_gate_review": {
+    "roots": "ActualnonPIEELF64LE/x86_64EXEC, uniqueGLOBALDEFAULTFUNCmemset/strnlenwithfull965functionsize/codebyteidentity.",
+    "slot": "ActualfinalfileprivateLOCALOBJECT8BslotmustcontainexactqualifiedmemsetFUNCaddress; no actualELFRELA mayreplacepointeratloadtime.",
+    "caller_provenance": "Caller()rechecksretainednewobjectprovenance. Containingfinalsourcefunctionname/bind/sizeandallnonrelocatedopcode/register-flowbytesmustmatchcallerobject; eachactualrelocatedpointerloadtargetmustresolveexactslotaddress. Originalindirectcallinstructionbytesremainunchanged. ActualfinalstrnlenE8displacementmustresolvedirectlytoqualifiedstrnlenFUNCaddress.",
+    "control": "Controller calls executable(), persistsEXECUTABLE-CHECK andonlythensetself_passed afterreadelf; witness-runPopen assertsbothgates. Finalcodebindingisactualcheckedprior toruntime, not inferredfromsourceornamesalone."
+  },
+  "execution_profile": "SixnewserialCPU7commandsforchangedCcalleronly: compile/nm/disassembly/link/readelf/onewitnessrun. Provider965core/partialjoin unchanged/reusednorebuild. AS1GiB,payloadCPU45s/wall60s,outerwall380s,FSIZE64MiB/core0. Fixedenvironment/explicitlinkonlyCcaller+965/genuineHOSTCRT; noancestorprivilegedcohort. RootfreshordinaryHOSTruntimeadmission required within3jobs/4GiBTOTAL overhead, CPUs0/6/7 and>=26GiBavailable.",
+  "capture_failure": "AllstartedchildrenactualPID/birthpersistedbeforedirectwait; exclusivestdio/rawmetrics/resultcaptured, expectedzeroexit/emptystderr/exact11observationstdoutafterrun. Oldb6e33failure/bcc41caller/3PASSmetadata preservedandunexecutedobservationsretain0credit; changedcallerrequiresnewqualification. Thisissoleboundedcorrectionforactualwitnessfailurefamily. AnyfurtherunexpectedfailureSTOP/focusedescalation,no secondcorrection/autoretry/profileweakening.",
+  "limits": "GOisrevieweligibilityonly; no newcallerobject/executableexistedat review. No actualfunctionalPASS/nativeABI/kernelstate/boot/kprintf/image/Cretirement/F04/scoreclaim. HOSTlibcservesnormalCRT/allocator/outputonly, not eitherKernelendpoint. Currentacceptedscopesandholdsremainunchanged.",
+  "reviewer_operations": {
+    "compiler": false,
+    "linker": false,
+    "new_nm_readelf_objdump": false,
+    "predicate_execution": false,
+    "runtime": false,
+    "canonical_index_writes": false,
+    "recursive_agents": false
+  }
+}

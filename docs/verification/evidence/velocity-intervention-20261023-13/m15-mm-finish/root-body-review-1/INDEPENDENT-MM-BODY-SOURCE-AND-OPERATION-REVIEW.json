@@ -1,0 +1,90 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_NARROW_WARNING_BODY_SOURCE_HOLD_EXACT_EXECUTION_BINDING",
+  "reviewer": "m14_build_release_review",
+  "ready": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-13/m15-mm-finish/batch-1/READY-FOR-ROOT.json",
+    "bytes": 2062,
+    "sha256": "2d3a9663ad5a1d14f57b9f20150306454dc4c986a9a158f0b16906e29bf2992f"
+  },
+  "input_manifest": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-13/m15-mm-finish/batch-1/CANDIDATE-INPUTS.json",
+    "bytes": 6232,
+    "sha256": "2aef54815205c0e46ee6d7787016e8941a335155e6459152f590896ec9fd7f82"
+  },
+  "body_profile": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-13/m15-mm-finish/batch-1/BODY-FIXTURE-PROFILE.json",
+    "bytes": 2881,
+    "sha256": "a31a26572428f060af2f68f20eb77fd404ed511d417e22561d885ef64404d06d"
+  },
+  "source": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-13/m15-mm-finish/batch-1/mcctrl_mm_write_candidate.rs",
+    "bytes": 8335,
+    "sha256": "6e1d6d65fcad10aa673bd546646b96f28fd7280250ad05a6ca560a0dc2877107"
+  },
+  "warning_assembly": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-13/m15-mm-finish/batch-1/m15_mm_write_warning.S",
+    "bytes": 1872,
+    "sha256": "24bd1ebcd59ac1de5761282cac404540a2324fd819576f5d39dd51c1c7f18550"
+  },
+  "runner": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-13/m15-mm-finish/batch-1/run_candidate_fixture.py",
+    "bytes": 15150,
+    "sha256": "81c2b363c0340e082759e823f0c708e22ece8769e2d1f69d2d3ecffc4a419fc0"
+  },
+  "authenticated_source_scope": {
+    "private_source_pins": 36,
+    "exact_current_original_extracted_functions": 15,
+    "unchanged_current_project_C_wrapper_and_header": true,
+    "fixture_vectors": 22,
+    "additional_epoch_cases": 1,
+    "invalid_schedules_rejected_before_FFI": 4,
+    "isolated_warning_vectors": 6,
+    "actual_output_absent_at_review": true,
+    "candidate_import_compile_test": false
+  },
+  "narrow_source_decision": {
+    "rwsem_read": "One aligned64-bit raw asm load, no Rust reference to shared count; low-bit1 condition matches atomic_long_read(count)&RWSEM_WRITER_LOCKED on actual non-RT/non-lockdep pin.",
+    "repeat_warning": "Every missing-writer-bit observation warns; no ONCE/DONE state, suppression or substituted early return. Negative/high-bit test values preserve low-bit predicate and full64-bit observation.",
+    "order": [
+      "Unlock: release trace, active mmap write assertion, compiler smp_wmb, sequence increment, up_write.",
+      "VMA: active mmap write assertion before sequence/idempotence comparison; idempotent return performs no VMA lock/store.",
+      "Non-idempotent VMA: down_write, one aligned32-bit publication, up_write; no retained pointer/ownership transfer.",
+      "Lock: start trace, down_write, sequence increment then compiler smp_wmb, acquired trace."
+    ],
+    "memory_model_scope": "Exact pinned x86/KCSAN-off compiler barrier and raw shared-word boundary only; concurrent Linux/LKMM and generated-code qualification remain OPEN.",
+    "warning_assembly_source": "Relative bug_addr/file displacements, line16/flags16,12-byte record; flags0x901=WARNING|TAINT_WARN<<8 without ONCE. Reachable annotation on two-byte UD2, special-data annotation, SYM_FUNC_START and RET use retained Linux macros.",
+    "warning_assembly_limit": "Body fixture mocks warning emission and never builds/executes the actual UD2 leaf. Its ABI/relocations/ENDBR/return/objtool/module/native acceptance is not supplied by this review.",
+    "fixture_scope": "Exact Rust candidate/raw shared-word asm plus extracted original C; lower MM primitives, outer/inner trace gates and warnings controlled by recorded callbacks. Invalid operation sequences rejected before C/Rust FFI."
+  },
+  "concrete_execution_binding_issues": [
+    {
+      "path_symbol": "BODY-FIXTURE-PROFILE.json resources; run_candidate_fixture.py main/run",
+      "scenario": "Exact profile argv contains no CPU/taskset/prlimit/owned-capture binding; runner enforces no whole-job timer/affinity/rlimits itself. Declared1GiB/120s cannot silently become an admitted held90+6 ordinary operation.",
+      "needed_correction": "Root prepares an additive exact operation using existing accepted990 outer ownership on one free CPU0 or CPU6 slot. Preserve1GiB AS cap (reserve full2GiB ordinary pool), CPU60/wall90+6/F32MiB/FD256/core0/OSstack2MiB, exact pinned Python3.8 and body argv. A different profile requires explicit successor qualification."
+    },
+    {
+      "path_symbol": "run_candidate_fixture.py run: subprocess.run(timeout=30)",
+      "scenario": "Inner timeout kills/joins only direct compiler driver; cc1/as/linker descendants can remain in its inherited process group. Inner RETIRED alone proves no descendant census.",
+      "needed_correction": "Root accepted outer capture must own runner and all inherited descendants, preserve first failure and retain reservation until direct join/group absence/closed streams/retirement complete. No automatic replay; no new custom executor required."
+    },
+    {
+      "path_symbol": "run_candidate_fixture.py environment dictionary",
+      "scenario": "Explicit replacement environment omits RUST_MIN_STACK, so setting it only on the outer wrapper is not inherited by Rust compiler children.",
+      "needed_correction": "Preserve frozen batch and prepare additive runner/profile/manifest successor with RUST_MIN_STACK=2097152 in child environment, or explicitly qualify a different per-job stack profile before execution."
+    }
+  ],
+  "output_and_admission_qualification": {
+    "declared_maximum_private_output_bytes": 67108864,
+    "hard_aggregate_output_cap_implemented_in_runner": false,
+    "meaning": "64MiB is a planning claim, not an enforced directory cap; FSIZE is per file. Root admission must account for the actual bounded artifact/capture/temp budget under unchanged floors/full sparse-gap/reservations.",
+    "two_lane_aggregate": "Ordinary CPU0/6 only; CPU7 control, CPU1 excluded; full19.75GiB reservations plus4GiB HOST RAM reserve, freshMemAvailable>=25501368320 and exact slot grant. No current admission was queried by reviewer."
+  },
+  "compatible_SDK_followup": "Separate retained compatible SDK/Kbuild/objtool lane; incompatible host GLIBC2.38 objtool is not invoked in --phase body and must not be replaced as part of this body grant.",
+  "current_C_default": "Preserve until separate SDK leaf/layout/codegen, production module/import/CRC and matching native acceptance. No C-retirement or module closure credit.",
+  "actual_body_fixture_pass": false,
+  "execution_release": null,
+  "canonical_or_immutable_batch_edits": 0,
+  "reviewer_compiler_test_root_guest_calls": 0,
+  "next": "Root may prepare exact bounded body-only operation and minimal additive environment/profile successor from this source decision. First actual invocation remains held until these concrete bindings and fresh admission are recorded."
+}

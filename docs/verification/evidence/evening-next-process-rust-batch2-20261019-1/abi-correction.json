@@ -1,0 +1,17 @@
+{
+  "status": "SOURCE_DERIVED_ABI_CORRECTION",
+  "ordinary_resource_set": 7912,
+  "tofu_resource_set": 24368,
+  "calculation": "TOFU ikc2linux24360 + pointer8 = resource_set24368; next status24376",
+  "source": "kernel/rust/abi.rs",
+  "anchor_lines": "    #[cfg(enable_tofu)]\n    assert_eq_usize(offset_of!(CpuLocalVar, runq_len), 24344);\n    #[cfg(not(enable_tofu))]\n    assert_eq_usize(offset_of!(CpuLocalVar, ikc2linux), 7904);\n    #[cfg(enable_tofu)]\n    assert_eq_usize(offset_of!(CpuLocalVar, ikc2linux), 24360);\n    #[cfg(not(enable_tofu))]\n    assert_eq_usize(offset_of!(CpuLocalVar, status), 7920);\n    #[cfg(enable_tofu)]\n    assert_eq_usize(offset_of!(CpuLocalVar, status), 24376);\n    #[cfg(not(enable_tofu))]\n",
+  "field_sequence": [
+    "ikc2linux:*mut c_void",
+    "resource_set:*mut ResourceSet",
+    "status:CInt"
+  ],
+  "runtime_functions_changed": false,
+  "ordinary_checks_replayed": false,
+  "C_fixture_status": "Rust-derived sparse padding assumption, not actual C layout proof",
+  "production_C_assertions": "production-process-assertions.inc UNRUN; 10 selected assertions required before C ABI credit"
+}

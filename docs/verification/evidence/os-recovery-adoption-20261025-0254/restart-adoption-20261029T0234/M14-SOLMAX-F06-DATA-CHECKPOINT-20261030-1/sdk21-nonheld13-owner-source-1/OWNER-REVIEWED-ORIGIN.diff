@@ -1,0 +1,74 @@
+--- reviewed/compile_image_owner.py
++++ candidate/sdk13_compile_image_owner.py
+@@ -1878,12 +1878,71 @@
+         return receipt
+ 
+ 
++# SDK13 successor admission source.  The candidate14 lifecycle remains above
++# byte-for-byte for review and reuse; no SDK13 launch is enabled until its
++# profile/driver/mount and output validation are wired and independently reviewed.
++SDK13_PROFILE_SHA = "3e6d2491c509790cea3f2de035e2171858d5efbcb9cc0dca8cc3aaea15007926"
++SDK13_RETIREMENT_SHA = "bc2df78168d34ef7c6b720766a03391668775d8e0847bb1130ff404e7958248d"
++SDK13_RETIREMENT_ACCEPTANCE_SHA = "69216fdba1acbe6a1cde3aa996534ed863deb57a5fd0bf64a05242d68bc9b894"
++SDK13_V3_REVIEW_SHA = "d37004eb0835315d3458fcbd4b5f8a677fad0fef2d71905556bb48b24f2d2bbd"
++SDK13_REQUIRED_FACTS = ("native_known_and_unknown_custody", "native_reserved_resources",
++    "v2_unknown_reserved_resources", "pure_outstanding_reserved_resources",
++    "daemon_socket_identity_and_continuity", "daemon_native_rw_separation",
++    "cpu6_positive_retirement_and_exclusive_grant", "root_controller_service_weekly_clocks",
++    "sdk_image_and_toolchain_identity", "sdk_source_config_header_object_closure",
++    "readonly_mounts_and_rw_output_nonintersection", "fresh_output_and_owner_ancestry",
++    "aggregate_cpu_memory_disk_headroom", "nonce_uniqueness",
++    "independent_successor_source_execution_review")
++
++def _validate_sdk13_facts(facts, now_boot_ns, boot_id):
++    _fail(isinstance(facts, dict), "SDK13 root admission missing")
++    _fail(facts.get("status") == "SDK13_COMPILE_ONLY_ADMISSION" and
++          facts.get("profile_sha256") == SDK13_PROFILE_SHA, "SDK13 admission identity mismatch")
++    _fail(facts.get("retirement_result_sha256") == SDK13_RETIREMENT_SHA and
++          facts.get("retirement_acceptance_sha256") == SDK13_RETIREMENT_ACCEPTANCE_SHA and
++          facts.get("v3_observation_review_sha256") == SDK13_V3_REVIEW_SHA, "SDK13 retirement evidence mismatch")
++    _fail(facts.get("boot_id") == boot_id and type(facts.get("observed_boottime_ns")) is int and
++          0 <= now_boot_ns - facts["observed_boottime_ns"] <= 120000000000, "SDK13 facts expired or wrong boot")
++    _fail(facts.get("unknown_custody_retained") is True and
++          facts.get("historical_no_unlisted") is None and facts.get("current_free") is None,
++          "SDK13 unknowns cannot be erased or asserted")
++    for name in SDK13_REQUIRED_FACTS:
++        fact = facts.get("facts", {}).get(name) if isinstance(facts.get("facts"), dict) else None
++        _fail(isinstance(fact, dict) and fact.get("verdict") == "PASS" and
++              isinstance(fact.get("evidence_sha256"), str) and
++              re.fullmatch(r"[0-9a-f]{64}", fact["evidence_sha256"]) is not None,
++              "SDK13 required reviewed fact missing: " + name)
++    limits = facts.get("reservations")
++    _fail(isinstance(limits, dict) and limits.get("native_memory_bytes") == 12 * 2**30 and
++          limits.get("native_cpus") == "2-5" and limits.get("v2_unknown_memory_bytes") == 2 * 2**30 and
++          limits.get("v2_unknown_cpu") == "7" and limits.get("pure_memory_bytes") == 2**29 and
++          limits.get("compile_memory_bytes") == 4 * 2**30 and limits.get("compile_cpu") == "6" and
++          limits.get("mutex") == "27:4" and limits.get("scratch") == "21",
++          "SDK13 fixed reservations differ")
++    _fail(type(facts.get("aggregate_memory_bytes")) is int and
++          (12 + 2 + 4) * 2**30 + 2**29 <= facts["aggregate_memory_bytes"] <= int(Decimal("22.3811") * 2**30) and
++          type(facts.get("aggregate_cpu_shares")) is int and 6 <= facts["aggregate_cpu_shares"] <= 7 and
++          type(facts.get("MemAvailable")) is int and facts["MemAvailable"] >= 24 * 2**30 and
++          type(facts.get("host_free_bytes")) is int and facts["host_free_bytes"] >= 16 * 2**30 and
++          type(facts.get("scratch_free_bytes")) is int and facts["scratch_free_bytes"] >= 12 * 2**30,
++          "SDK13 aggregate capacity insufficient or unknown")
++    return facts
++
++def _sdk13_prelease_gate(request):
++    _fail(isinstance(request, dict) and request.get("compile_only_release") is not None,
++          "SDK13 sealed root release missing")
++    # The SDK13 release reader and executable request-core binding have not yet
++    # been connected to the retained candidate14 owner. Refuse before lease.
++    raise OwnerError("SDK13_OWNER_BINDING_PENDING: exact sealed release/driver/mount/lease integration requires independent reviewed successor")
++
++
+ def main(argv=None):
+     parser = argparse.ArgumentParser(description="Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Fixed candidate14 compile owner.")
+     parser.add_argument("action", choices=("run", "release-accepted-lease"))
+     parser.add_argument("request", type=Path)
+     args = parser.parse_args(argv)
+     request = json.loads(args.request.read_text())
++    _sdk13_prelease_gate(request)
+     if args.action == "release-accepted-lease":
+         result = release_accepted_compile_lease(request)
+         print(json.dumps(result, sort_keys=True))

@@ -1,0 +1,29 @@
+{
+  "finding": "actual initializer zeros cpu_id; base clone copies CPU mask/in_kernel only; selected x86 arch_clone_thread is empty; actual default Rust runqueue body writes cpu_id at publication. Caller owns separate earlier reservation.",
+  "rows": [
+    {
+      "bytes": 919,
+      "item": "process_thread_alloc_init_body_result",
+      "sha256": "26dcb5902bb4082b8cb62568848ef7cc283bf7a531f51e14f647521090456d00",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs"
+    },
+    {
+      "bytes": 751,
+      "item": "process_clone_thread_base_state_body_result",
+      "sha256": "2a8a9e2acd42087b21f94ce152b4a683b74dc5d67ad9ed6e19b252194fc9a019",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs"
+    },
+    {
+      "bytes": 130,
+      "item": "arch_clone_thread",
+      "sha256": "0e654788fcc0a99ad8f5520816dbadd228ecb769dd83030d6b6641029a2add47",
+      "source": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs"
+    },
+    {
+      "bytes": 1433,
+      "item": "sched_runq_add_thread_locked_result",
+      "sha256": "f7c763d041f56f688dd4b21fbe2d54a8fe74cf04abb43ee311e99739eb1601ca",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs"
+    }
+  ]
+}

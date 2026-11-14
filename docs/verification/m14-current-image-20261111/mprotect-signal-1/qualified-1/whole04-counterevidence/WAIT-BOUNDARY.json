@@ -1,0 +1,198 @@
+{
+  "actions": "Only exact bounded current source and saved text/image bytes were read; no compiler/ELF tool/producer/reader/case/native execution or canonical changes.",
+  "actual_image": {
+    "bytes": 10663560,
+    "independent_inode": true,
+    "mode": "0o755",
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/stable-baselinef199-1/build/kernel/mckernel.img",
+    "producer_captured_identity_matches": true,
+    "same_as_prior7231": false,
+    "saved_device": 66306,
+    "saved_inode": 2243290,
+    "sha256": "1aee02d2fb387e08ab6a771aa2e7d9d01a6673ad364a06685e3bc3e926bdb690",
+    "source_device": 66306,
+    "source_inode": 2237771,
+    "source_path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/mckernel.img",
+    "source_stable_during_copy": true
+  },
+  "actual_preserved_cohort": {
+    "bytes": 28388,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/stable-baselinef199-1/BASELINE.json",
+    "sha256": "0ddffc56414ab8c5fa8148e103703ea99c39c30c25308e7ef27ad2acc4956199"
+  },
+  "actual_required_caller_chain": [
+    "selected sys_wait4 or sys_waitid",
+    "wait4_body_result or waitid_body_result",
+    "selected Rust wait4_do_wait_bridge",
+    "f03_wait_process_scan reads real F03_WAIT_C_DEPENDENCIES.host_wait4",
+    "wait_process_scan_body_result passes typed callback to wait_process_zombie_body_result",
+    "non-skip original host-wait branch calls host_wait4_fn(child_pid,options)",
+    "real dependency slot0 -> current LOCAL C wait_host_wait4_bridge70B -> genuine do_syscall"
+  ],
+  "at": "2026-11-11T07:00:13.396505+00:00",
+  "bounded_source_basis": {
+    "C_actual_provider": {
+      "end_line": 4985,
+      "start_line": 4971,
+      "text": "#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_FORWARD_ADAPTERS)\nextern int wait_host_wait4_bridge(int pid, int options);\n#else\nstatic int\nwait_host_wait4_bridge(int pid, int options)\n{\n\tstruct syscall_request request IHK_DMA_ALIGN;\n\n\trequest.number = __NR_wait4;\n\trequest.args[0] = pid;\n\trequest.args[1] = 0;\n\trequest.args[2] = options;\n\treturn do_syscall(&request, ihk_mc_get_processor_id());\n}\n#endif"
+    },
+    "C_real_dependency_initializer": {
+      "end_line": 5277,
+      "start_line": 5261,
+      "text": "struct f03_wait_c_dependencies {\n    int (*host_wait4)(int, int);\n    int (*stopped)(void *, void *, void *, int *, int);\n    int (*continued)(void *, void *, void *, int *, int);\n    void (*ptrace_detach)(void *);\n    void (*zombie_log)(int, int, int, int);\n    void (*wait_log)(int, int, int);\n};\nconst struct f03_wait_c_dependencies f03_wait_c_dependencies = {\n    .host_wait4 = wait_host_wait4_bridge,\n    .stopped = wait_stopped_bridge,\n    .continued = wait_continued_bridge,\n    .ptrace_detach = wait_thread_ptrace_detach_bridge,\n    .zombie_log = wait_zombie_log_bridge,\n    .wait_log = do_wait_log_bridge,\n};\n#endif"
+    },
+    "Rust_required_non_skip_callback_branch": {
+      "end_line": 18380,
+      "start_line": 18369,
+      "text": "        write_volatile(status, group_exit_status);\n    }\n\n    let ret = if wait_zombie_skip_host_result(ppid_parent_pid, current_pid, nowait) != 0 {\n        child_pid\n    } else {\n        host_wait4_fn(child_pid, options)\n    };\n    if ret != child_pid {\n        log_fn(WAIT_ZOMBIE_LOG_WARNING, child_pid, 0, ret);\n    }\n    log_fn("
+    },
+    "Rust_selected_wait_entries": {
+      "end_line": 11605,
+      "start_line": 11574,
+      "text": "#[no_mangle]\npub unsafe extern \"C\" fn sys_wait4(_n: CInt, ctx: *mut X86UserContext) -> CLong {\n    if ctx.is_null() {\n        return -(EFAULT as CLong);\n    }\n\n    wait4_body_result(\n        (*ctx).gpr.rdi as CInt,\n        (*ctx).gpr.rsi,\n        (*ctx).gpr.rdx as CInt,\n        (*ctx).gpr.r10,\n        wait4_do_wait_bridge,\n        syscall_copy_to_user_bridge,\n    )\n}\n\n#[no_mangle]\npub unsafe extern \"C\" fn sys_waitid(_n: CInt, ctx: *mut X86UserContext) -> CLong {\n    if ctx.is_null() {\n        return -(EFAULT as CLong);\n    }\n\n    waitid_body_result(\n        (*ctx).gpr.rdi as CInt,\n        (*ctx).gpr.rsi as CInt,\n        (*ctx).gpr.rdx,\n        (*ctx).gpr.r10 as CInt,\n        wait4_do_wait_bridge,\n        syscall_copy_to_user_bridge,\n    )\n}\n"
+    },
+    "Rust_typed_dependency_consumption": {
+      "end_line": 24945,
+      "start_line": 24925,
+      "text": "    let mut child_threads = MaybeUninit::<McsRwlockNode>::uninit();\n    let mut parent_update = MaybeUninit::<McsRwlockNode>::uninit();\n    let mut child_update = MaybeUninit::<McsRwlockNode>::uninit();\n    let mut pid1_children = MaybeUninit::<McsRwlockNode>::uninit();\n    // SAFETY: The actual immutable C initializer supplies six typed function\n    // pointers. Its layout is witnessed; no arbitrary pointer is manufactured.\n    let c = unsafe { addr_of!(F03_WAIT_C_DEPENDENCIES).read() };\n    // SAFETY: Reuse the complete existing process scan and its original ownership\n    // transitions. Actual noirq lock providers ignore node contents on this profile.\n    unsafe {\n        wait_process_scan_body_result(\n            pid, status, options, usage, empty, thread.cast(), proc.cast(), pid1.cast(),\n            addr_of!(F03_WAIT_SCAN_OFFSETS), addr_of!(F03_WAIT_ZOMBIE_OFFSETS),\n            Some(f03_wait_writer_lock), Some(f03_wait_writer_unlock), c.host_wait4,\n            Some(f03_wait_list_detach), Some(f03_wait_list_add_tail), c.ptrace_detach,\n            Some(f03_wait_release_process), c.zombie_log, c.stopped, c.continued,\n            Some(crate::process_helpers::process_thread_signal_flags_reap_result),\n            parent_children.as_mut_ptr().cast(), child_threads.as_mut_ptr().cast(),\n            parent_update.as_mut_ptr().cast(), child_update.as_mut_ptr().cast(),\n            pid1_children.as_mut_ptr().cast(),\n        )"
+    },
+    "Rust_wait_entry_and_existing_partial_request_HOLD": {
+      "end_line": 25000,
+      "start_line": 24969,
+      "text": "}\n\n/// Enter the complete existing wait scan/sleep transaction from wait4/waitid.\n///\n/// # Safety\n/// Status/usage follow the existing caller's writable storage contract. Current\n/// Thread/Process/waitq remain live across sleep. Existing scan helpers and typed\n/// C dependencies own their exact reap, ptrace, host request and release contracts.\n/// The host-wait4 partial-request HOLD is retained; no ACK or fields are invented.\n#[no_mangle]\npub unsafe extern \"C\" fn wait4_do_wait_bridge(\n    pid: CInt, status: *mut CInt, options: CInt, usage: *mut RUsage,\n) -> CInt {\n    let cpu = unsafe { get_this_cpu_local_var() };\n    let thread = unsafe { addr_of!((*cpu).current).read() };\n    let mut entry = MaybeUninit::<WaitqEntry>::uninit();\n    let c = unsafe { addr_of!(F03_WAIT_C_DEPENDENCIES).read() };\n    // SAFETY: Actual init always initializes the wait entry before prepare/use.\n    // The full existing helper finishes it before each return/sleep iteration.\n    unsafe {\n        do_wait_body_result(\n            pid, status, options, usage.cast(), thread.cast(), entry.as_mut_ptr().cast(),\n            offset_of!(Thread, proc) as CULong, offset_of!(Process, pid) as CULong,\n            offset_of!(Process, waitpid_q) as CULong, PS_INTERRUPTIBLE,\n            Some(f03_wait_process_scan), Some(f03_wait_thread_scan), Some(f03_wait_init),\n            Some(f03_wait_prepare), Some(f03_wait_finish), Some(f03_wait_has_signal),\n            Some(schedule), c.wait_log,\n        )\n    }\n}\n\n// Functional McKernel OS/apps and Rust/assembly migration only; no security testing."
+    }
+  },
+  "component_scope_preserved": "This does not reject the new genuine signal/context provider source/body/wire/component proof, prior other regions or artifact/lifecycle closure; their actual qualification remains independently assessable.",
+  "current_C_function": {
+    "ELF_type": "FUNC",
+    "actual_symbol_row": "     3: fffffffffe801000    70 FUNC    LOCAL  DEFAULT    1 wait_host_wait4_bridge",
+    "binding": "LOCAL",
+    "bytes": 70,
+    "final_70bytes_sha256": "dc871224aa2ce4e1a793ea162a53f376fbd88b1c4ac1d1e3ba285f165d77c922",
+    "final_address": "0xfffffffffe801000",
+    "final_code_file_offset": 4096,
+    "input_object": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+    "input_sha256": "35975861fbd7d878ff91940f202300d7dfa6c747bc293f2e7b44cd7c4c787588",
+    "name": "wait_host_wait4_bridge"
+  },
+  "current_source_identity_note": "Later documentation/user named-case changes do not change either consumed kernel source byte identity below. No oldHEAD requirement or producer replay.",
+  "evidence": [
+    {
+      "bytes": 47026,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-signal-reader-p03-max-1/metadata-1/image-elf.stdout",
+      "sha256": "a0578d3fe3ac7ddf392e5095e0a97bceb8fcc1033d42a45262a15faa5d1922fa"
+    },
+    {
+      "bytes": 438310,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-signal-reader-p03-max-1/metadata-1/image-symbols-relocations.stdout",
+      "sha256": "845d63864a413ea21466f326388b8e9e563ca10aa1c696dc03a0a627e24d62c5"
+    },
+    {
+      "bytes": 240497,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-signal-reader-p03-max-1/metadata-1/image-nm.stdout",
+      "sha256": "0d33bdf4f17d2257d63c15278954b8a6160804ba45b86a86ed6059303ad66ba6"
+    },
+    {
+      "bytes": 38583414,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-signal-reader-p03-max-1/metadata-1/affected-constituent-symbols-relocations.stdout",
+      "sha256": "98465a10aa3bc3bfb155e8468b3274ce09fb77cebde08028be594c74dcfea7b8"
+    }
+  ],
+  "exact_next_engineering_input": "Root-owned disposition of the existing host-wait4 partial-request source/domain HOLD and source-faithful typed Rust provider/paired ordinary selector + actual new image callback ownership. Existing C initializes request.number,args0..2 only; do not invent zero/ACK/remaining-field semantics or enable a held broad adapter. No native scenario quota or whole-image-zeroC condition is added.",
+  "failed_literal_clause": "no required behavior is supplied by ... live project C",
+  "literal_original_task": {
+    "counted_in_requirement_rollup": true,
+    "definition_status": "completion_condition_defined; runnable packet waits for named original contract/admission inputs",
+    "dependencies": [
+      "HOLD-GENERIC",
+      "PROVIDER-CLOSURE",
+      "SOURCE-SDK-NATIVE"
+    ],
+    "done_when": "Every required original region in this scope has a complete implementation/selection mapping to Rust or allowed assembly, compatible actual ABI/providers, and a unique supported-default definition in the coherent image; no required behavior is supplied by a held object, guessed provider, live project C or compiler-elided placeholder.",
+    "evidence": [
+      "CAMPAIGN.md"
+    ],
+    "execution_profile": "ordinary_HOST",
+    "id": "M14-03-04-DEFAULT",
+    "owner": "Root integration/compositor; applicable original hold and native/source authorities retain release ownership",
+    "parent": "M14-03-04",
+    "percent_complete": 0,
+    "progress_metric": "binary verified completion at stated scope",
+    "required_inputs": {
+      "missing_before_execution": [
+        "Complete and bind all required signal/futex/robust/time/wait/wake/restart behavior/providers on final supported cohort.",
+        "Qualify real mask/action forwarding, restart and cleanup/lifetime behavior on matching admitted native image."
+      ],
+      "original_requirement": "M14-03-04",
+      "source_profile": "Original supported x86_64/Rocky profile; exact source/config/toolchain/artifact identities must match the proof scope.",
+      "target": "kernel/syscall.c"
+    },
+    "scope_limit": "Requires admissible final source/artifact cohort; source compilation or opt-in linking is insufficient.",
+    "status": "open_or_unverified",
+    "title": "Verify complete supported-default Rust/allowed-assembly selection, real ABI/provider and no duplicate live C ownership",
+    "verification_method": "Join source/config/toolchain/provider identities to the admitted final cohort; inspect actual selected/emitted/link ownership and execute only the original applicable defined functional scenarios after Root admission. Record exact command, result, cleanup and matching artifact identity; skipped/UNKNOWN results do not satisfy this step."
+  },
+  "material_disposition": "NO_GO_WHOLE_DEFAULT_REQUIRED_WAIT_HOST_BEHAVIOR_REMAINS_PROJECT_C",
+  "minimal_future_verification": "After eligible reviewed source changes, actual normal production image and focused changed dependency-slot/provider/type ownership; existing other bodies/wire tests reused, operation review/admission separate. No payload is proposed by this review.",
+  "original_condition": "M14-03-04-DEFAULT",
+  "real_48B_dependency_table": {
+    "actual_Rust_wait4_do_wait_bridge_R64_to_slot0": [
+      "0000000000000356  00001d2300000001 R_X86_64_64            0000000000000000 f03_wait_c_dependencies + 0"
+    ],
+    "actual_pointer_bytes_hex": "001080feffffffff",
+    "actual_pointer_hex": "0xfffffffffe801000",
+    "actual_symbol_row": "  3699: fffffffffe909400    48 OBJECT  GLOBAL DEFAULT   40 f03_wait_c_dependencies",
+    "equals_actual_local_C_function": true,
+    "field_offset": 0,
+    "final_address": "0xfffffffffe909400",
+    "input_R64_relocations": [
+      {
+        "row": "0000000000000b40  0000000200000001 R_X86_64_64            0000000000000000 .text + 0",
+        "section": "Relocation section '.rela.rodata' at offset 0x1fa88 contains 103 entries:"
+      }
+    ],
+    "pointer_file_offset": 1086464,
+    "rodata_file_offset": 1080096,
+    "rodata_section_address": "0xfffffffffe907b20",
+    "source_field": "host_wait4"
+  },
+  "review_owner": "sdk_binding_source_max",
+  "schema": 1,
+  "selected_profile": {
+    "C_provider_guard": "Rust external provider requires MCKERNEL_RUST_SYSCALL_POLICY_HELPERS AND MCKERNEL_RUST_F03_FORWARD_ADAPTERS; current ordinary profile selects the real C fallback. Broad/experimental enablement is not a fix.",
+    "actual_broad_adapters_cache_OFF": true,
+    "actual_broad_forward_macro_absent": true,
+    "evidence": [
+      {
+        "bytes": 7231,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-signal-reader-p03-max-1/metadata-1/regenerated-flags.make",
+        "sha256": "b3d7aa1962c2385648654868c8dbc92a6687f19a7da7cc9690d4dd970f11b574"
+      },
+      {
+        "bytes": 30235,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-signal-reader-p03-max-1/metadata-1/regenerated-CMakeCache.txt",
+        "sha256": "4370c59a693599c441178bf55018a0146096fbee28a4978e2feed3787b0c1533"
+      }
+    ]
+  },
+  "separate_scopes": [
+    "M14-03-04-FUNCTIONAL/native/restoration remain separate",
+    "HOLD-GENERIC/exec/native/source/UNKNOWN holds unchanged",
+    "No zero-C-whole-image requirement and no broad waiver"
+  ],
+  "source_commit_consumed": "f1992ec2c5f18bb3a7f139647edde6818c34991b",
+  "source_identity": {
+    "C": {
+      "bytes": 964476,
+      "path": "/home/holden/mckernel/kernel/syscall.c",
+      "sha256": "e2bb3e910dcaecf23a8e131b347b401d7baf372f3d749a073e03458c429f1947"
+    },
+    "Rust": {
+      "bytes": 1240794,
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "sha256": "76ce6016d6ddd1cfa6c41070c0cf35e87b94ddc31e67c805adbe3b94b3f17469"
+    }
+  },
+  "supplying_owner": "Root/source authority for exact retained host-wait4 partial-request contract; implementation may be dispatched to existing eligible ordinary source owner only after that exact scope/input is established.",
+  "why_in_original_scope": "Wait is explicitly in the original M14-03-04 scope/title and required action. This exact actual table/caller chain is a supported wait4/waitid reap path, not unrelated whole-image C. A source comment/higher Rust entry/zeroUND does not remove the typed live C callback."
+}

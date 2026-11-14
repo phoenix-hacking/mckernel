@@ -1,0 +1,70 @@
+--- a/kernel/mem.c
++++ b/kernel/mem.c
+@@ -4320,15 +4320,23 @@
+ 	return ihk_mc_get_processor_id();
+ }
+ 
++#ifdef MCKERNEL_RUST_MEM_HELPERS
++extern void mem_tlb_noirq_lock_bridge(unsigned long lock_addr);
++#else
+ MEM_TLB_PUBLIC_BRIDGE void mem_tlb_noirq_lock_bridge(unsigned long lock_addr)
+ {
+ 	ihk_mc_spinlock_lock_noirq((ihk_spinlock_t *)lock_addr);
+ }
+-
++#endif
++
++#ifdef MCKERNEL_RUST_MEM_HELPERS
++extern void mem_tlb_noirq_unlock_bridge(unsigned long lock_addr);
++#else
+ MEM_TLB_PUBLIC_BRIDGE void mem_tlb_noirq_unlock_bridge(unsigned long lock_addr)
+ {
+ 	ihk_mc_spinlock_unlock_noirq((ihk_spinlock_t *)lock_addr);
+ }
++#endif
+ 
+ MEM_TLB_PUBLIC_BRIDGE void mem_tlb_atomic_set_bridge(unsigned long atomic_addr, int value)
+ {
+--- a/kernel/rust/mem_helpers.rs
++++ b/kernel/rust/mem_helpers.rs
+@@ -25,8 +25,6 @@
+     fn mem_tlb_current_cpu_bridge() -> CInt;
+     fn mem_tlb_get_vector_bridge(type_: CInt) -> CInt;
+     fn mem_tlb_interrupt_cpu_bridge(cpu: CInt, vector: CInt);
+-    fn mem_tlb_noirq_lock_bridge(lock_addr: CULong);
+-    fn mem_tlb_noirq_unlock_bridge(lock_addr: CULong);
+     fn mem_tlb_atomic_set_bridge(atomic_addr: CULong, value: CInt);
+     fn mem_tlb_atomic_inc_bridge(atomic_addr: CULong);
+     fn mem_tlb_atomic_read_bridge(atomic_addr: CULong) -> CInt;
+@@ -5509,6 +5507,31 @@
+     phys_to_nid_cb(*ptep & PT_PHYSMASK)
+ }
+ 
++/// Exact no-IRQ ticket-lock callback; the original live lock remains caller-owned.
++///
++/// # Safety
++/// lock_addr is the original aligned, initialized ihk_spinlock_t, retained for the
++/// entire synchronous TLB protocol. The same provider owns preemption and ticket
++/// ordering; this adapter neither changes IRQ state nor retains the pointer.
++#[no_mangle]
++pub unsafe extern "C" fn mem_tlb_noirq_lock_bridge(lock_addr: CULong) {
++    unsafe {
++        crate::spinlock_helpers::__ihk_mc_spinlock_lock_noirq(
++            lock_addr as *mut crate::spinlock_helpers::IhkSpinlock,
++        )
++    }
++}
++
++/// Exact no-IRQ release callback; release precedes the provider's preempt-enable.
++#[no_mangle]
++pub unsafe extern "C" fn mem_tlb_noirq_unlock_bridge(lock_addr: CULong) {
++    unsafe {
++        crate::spinlock_helpers::__ihk_mc_spinlock_unlock_noirq(
++            lock_addr as *mut crate::spinlock_helpers::IhkSpinlock,
++        )
++    }
++}
++
+ /// Preserve the original single-address stack-local handoff to the array entry.
+ ///
+ /// # Safety

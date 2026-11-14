@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-012",
+  "packet_version": 1,
+  "context_sha256": "c9d20c3792b1fc4fbc318cf74af9e27a0c2107271271922af93ee685ea3be4d1",
+  "started_utc": "2026-09-09T10:30:00Z",
+  "finished_utc": "2026-09-09T10:30:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "memory.anonymous-zero",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/memory/memory.anonymous-zero.c",
+      "oracle": "scripts/application-tests/oracles/memory.anonymous-zero.json",
+      "changed_files": ["scripts/application-tests/cases/memory/memory.anonymous-zero.c", "scripts/application-tests/oracles/memory.anonymous-zero.json"],
+      "parameter_vectors": {"bytes": [1, 4095, 4096, 4097, 65553, 1048576]},
+      "unresolved_oracle_notes": ["Canonical output and reviewed input/oracle bindings require confirmation before execution."],
+      "max_reviewer_question": "Confirm zero-fill, complete readback, and munmap requirements for all six sizes."
+    },
+    {
+      "case_id": "memory.anonymous-reuse",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/memory/memory.anonymous-reuse.c",
+      "oracle": "scripts/application-tests/oracles/memory.anonymous-reuse.json",
+      "changed_files": ["scripts/application-tests/cases/memory/memory.anonymous-reuse.c", "scripts/application-tests/oracles/memory.anonymous-reuse.json"],
+      "parameter_vectors": {"bytes": [1, 4095, 4096, 4097, 65553, 1048576], "rounds": [16]},
+      "unresolved_oracle_notes": ["Canonical output and reviewed input/oracle bindings require confirmation before execution."],
+      "max_reviewer_question": "Confirm 16 fresh anonymous mappings per size and no stale pattern observation."
+    },
+    {
+      "case_id": "memory.map-unmap-hole",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/memory/memory.map-unmap-hole.c",
+      "oracle": "scripts/application-tests/oracles/memory.map-unmap-hole.json",
+      "changed_files": ["scripts/application-tests/cases/memory/memory.map-unmap-hole.c", "scripts/application-tests/oracles/memory.map-unmap-hole.json"],
+      "parameter_vectors": {},
+      "unresolved_oracle_notes": ["Pinned guest SEGV_MAPERR numeric binding and canonical output require confirmation before execution."],
+      "max_reviewer_question": "Confirm exact middle-page fault address and SEGV_MAPERR requirement."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/memory/memory.anonymous-zero.c", "sha256": "ca69fa1fe2fba5203b6b4a574be85c879ff2cef4d8e1483a2c11464092ee107e"},
+    {"path": "scripts/application-tests/oracles/memory.anonymous-zero.json", "sha256": "cafb141f5801232d1e903082e11b1c77e7a6ab48c5b7ba555c9081c38fd81cce"},
+    {"path": "scripts/application-tests/cases/memory/memory.anonymous-reuse.c", "sha256": "4b47d0eaf5a29e98232ed0533135fbd9455d2b47123f1a19915304242e81d813"},
+    {"path": "scripts/application-tests/oracles/memory.anonymous-reuse.json", "sha256": "fc609a583c1aabb2ada4104786a96d92b60ce4c6aa89dea5c2ac11bbb8082e"},
+    {"path": "scripts/application-tests/cases/memory/memory.map-unmap-hole.c", "sha256": "bbc58b83330c13ca58753fb8c0be115822987098c08a5dc7cf34fc2bd12aaac8"},
+    {"path": "scripts/application-tests/oracles/memory.map-unmap-hole.json", "sha256": "748daef78f9b331c817b38e6bf3be4ecb43a79eea534a954d717e7d4e5e7ea18"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-012.json --emit-context /tmp/application-packet-012-context.json", "outcome": "PASS; metadata only"},
+    {"command": "python3 -m json.tool report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Three memory mapping cases require final canonical schema, guest signal binding, and input review."],
+  "blocked_execution_capabilities": ["current-inputs", "runtime-transport-fault-injection", "runner-contract"],
+  "first_failure_event": null,
+  "max_escalation": ["Review zero-fill/reuse semantics and exact SEGV_MAPERR delivery before execution."],
+  "next_packet_id": "packet-013"
+}

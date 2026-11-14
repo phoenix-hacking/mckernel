@@ -1,0 +1,33 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_EXACT_ONE_LONG_SESSION_EXECUTION",
+  "reviewer": "/root/m14_callback_review",
+  "candidate_sha256": "1f411f5e548c47b108d7b29d866feb9164a01f272a5e0fbdc63c49f25de322b4",
+  "corrected_facts_sha256": "db297568c49ed7999ec39c284f6ec7c27bff96aa16da12d06b6f75892f9f786f",
+  "canonical_payload_sha256": "57f26f9b1f05a908dce78e8051095a9be4fde84f0cc2a2911a4e898c012e95e4",
+  "release_sha256": "293fc5c64fb2fbc1891ce8fdab1fd0c41bd627a23bc0c63ab22a9abc8c710030",
+  "request_sha256": "ceef230a09899b22f89a2c706e61bf0fea473cbe90af087a76187f29062cd96b",
+  "root_argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=536870912:536870912",
+    "--cpu=unlimited:unlimited",
+    "--fsize=402653184:402653184",
+    "--core=0:0",
+    "--nofile=4096:4096",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/capture_root_LONG.NOT-RELEASED.py",
+    "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/CAPTURE-REQUEST.json",
+    "ceef230a09899b22f89a2c706e61bf0fea473cbe90af087a76187f29062cd96b"
+  ],
+  "expires_unix": 1792767833.1427934,
+  "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+  "recorded_utc": "2026-10-23T14:56:57.974742+00:00"
+}

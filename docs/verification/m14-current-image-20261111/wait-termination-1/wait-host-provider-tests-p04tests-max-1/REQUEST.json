@@ -1,0 +1,288 @@
+{
+  "acceptance_delta": 0,
+  "at": "2026-11-11T07:43:07.670258+00:00",
+  "capture_root": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/execution-1",
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648",
+        "--cpu=60",
+        "--fsize=16777216",
+        "--nofile=64",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TZ=UTC",
+        "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/output-1/tmp",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+        "--crate-name",
+        "wait_host_changed_provider",
+        "--edition=2021",
+        "-Dwarnings",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "debuginfo=1",
+        "-C",
+        "force-unwind-tables=no",
+        "--cfg",
+        "native_linux_irq_work_v6_12",
+        "--cfg",
+        "enable_profile",
+        "--cfg",
+        "enable_perf",
+        "--cfg",
+        "enable_rusage",
+        "--cfg",
+        "f03_do_syscall_outer_candidate",
+        "--cfg",
+        "f03_wait_host_provider_candidate",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/wait_host_regression.rs",
+        "-o",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/output-1/wait-host-regression"
+      ],
+      "expected_exit": 0,
+      "id": "compile-entire-genuine-wait-module-and-real-ABI-controlled-boundary",
+      "required_output": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/output-1/wait-host-regression",
+      "required_stderr": "empty",
+      "required_stdout": "empty",
+      "wall_seconds": 60
+    },
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648",
+        "--cpu=60",
+        "--fsize=16777216",
+        "--nofile=64",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TZ=UTC",
+        "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/output-1/tmp",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/output-1/wait-host-regression"
+      ],
+      "expected_exit": 0,
+      "id": "six-new-wait-request-CPU-return-lifetime-vectors",
+      "required_stderr": "empty",
+      "required_stdout_json": {
+        "actual_CPU_or_do_syscall_or_waitid_executed": false,
+        "case_count": 6,
+        "cases": [
+          {
+            "configured_cpu": 0,
+            "cpu_lookups": 1,
+            "events": [
+              "cpu",
+              "send",
+              "send-return"
+            ],
+            "id": "pid-one-success",
+            "natural_alignment": true,
+            "options": 0,
+            "pid": 1,
+            "reply": 1,
+            "request_hex": "000000000000000000000000000000003d00000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            "return": 1,
+            "sent_cpu": 0,
+            "snapshot_within_call_only": true,
+            "syscall_calls": 1,
+            "writable_during_callback": true
+          },
+          {
+            "configured_cpu": 6,
+            "cpu_lookups": 1,
+            "events": [
+              "cpu",
+              "send",
+              "send-return"
+            ],
+            "id": "max-pid-option-bit-error",
+            "natural_alignment": true,
+            "options": 16777216,
+            "pid": 2147483647,
+            "reply": -10,
+            "request_hex": "000000000000000000000000000000003d00000000000000ffffff7f0000000000000000000000000000000100000000000000000000000000000000000000000000000000000000",
+            "return": -10,
+            "sent_cpu": 6,
+            "snapshot_within_call_only": true,
+            "syscall_calls": 1,
+            "writable_during_callback": true
+          },
+          {
+            "configured_cpu": 7,
+            "cpu_lookups": 1,
+            "events": [
+              "cpu",
+              "send",
+              "send-return"
+            ],
+            "id": "min-pid-sign-options-interrupted",
+            "natural_alignment": true,
+            "options": -2147483648,
+            "pid": -2147483648,
+            "reply": -4,
+            "request_hex": "000000000000000000000000000000003d0000000000000000000080ffffffff000000000000000000000080ffffffff000000000000000000000000000000000000000000000000",
+            "return": -4,
+            "sent_cpu": 7,
+            "snapshot_within_call_only": true,
+            "syscall_calls": 1,
+            "writable_during_callback": true
+          },
+          {
+            "configured_cpu": 6,
+            "cpu_lookups": 1,
+            "events": [
+              "cpu",
+              "send",
+              "send-return"
+            ],
+            "id": "negative-pid-all-option-bits",
+            "natural_alignment": true,
+            "options": -1,
+            "pid": -1,
+            "reply": 0,
+            "request_hex": "000000000000000000000000000000003d00000000000000ffffffffffffffff0000000000000000ffffffffffffffff000000000000000000000000000000000000000000000000",
+            "return": 0,
+            "sent_cpu": 6,
+            "snapshot_within_call_only": true,
+            "syscall_calls": 1,
+            "writable_during_callback": true
+          },
+          {
+            "configured_cpu": 0,
+            "cpu_lookups": 1,
+            "events": [
+              "cpu",
+              "send",
+              "send-return"
+            ],
+            "id": "wide-positive-return-narrows",
+            "natural_alignment": true,
+            "options": 16777218,
+            "pid": 123,
+            "reply": 4294967297,
+            "request_hex": "000000000000000000000000000000003d000000000000007b0000000000000000000000000000000200000100000000000000000000000000000000000000000000000000000000",
+            "return": 1,
+            "sent_cpu": 0,
+            "snapshot_within_call_only": true,
+            "syscall_calls": 1,
+            "writable_during_callback": true
+          },
+          {
+            "configured_cpu": 7,
+            "cpu_lookups": 1,
+            "events": [
+              "cpu",
+              "send",
+              "send-return"
+            ],
+            "id": "wide-negative-return-narrows",
+            "natural_alignment": true,
+            "options": 2,
+            "pid": 456,
+            "reply": -4294967297,
+            "request_hex": "000000000000000000000000000000003d00000000000000c80100000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000",
+            "return": -1,
+            "sent_cpu": 7,
+            "snapshot_within_call_only": true,
+            "syscall_calls": 1,
+            "writable_during_callback": true
+          }
+        ],
+        "native_execution": false,
+        "original_acceptance": false,
+        "scope": "new-whole-wait-host-provider-with-explicit-controlled-lower-effects",
+        "status": "PASS"
+      },
+      "wall_seconds": 5
+    }
+  ],
+  "consumer_contract": {
+    "bytes": 27521,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-1/CONSUMER-CONTRACT.json",
+    "sha256": "a9f7d2f7981246f6cf7bf078f41adcaa3eb717ead4bf4ff229d838edb180c32f"
+  },
+  "cwd": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1",
+  "fresh_output_root": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/output-1",
+  "independent_oracle": "External EXPECTED.json uses explicit6recipe inputvectors and LP64 little-endian72B manualwire/sign/truncation derivation, not candidate execution or source output. Actualcapturedraw bytes/returnedCInt/counts emitted; Rootdeepcompares allfields. Zero routing/valid is pre-call carrier only, not an ACK/publish/reply claim.",
+  "inputs": {
+    "bytes": 4097,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/INPUTS.json",
+    "sha256": "5d210f43dbcc5bf388a7770d9055a2c74735f65c3f5479837ce84ac466eed0af"
+  },
+  "meaningful_changed_scope": "Entire new400ad module, genuine72BfullABI/types, six independently derived external wire/return goldens; getteronce\u2192sameCPU\u2192syscallonce, naturalalignment/fullinitializedcarrier/mutablelive synchronousrequest and no pointerescape by controlledcallee. No actualLinuxwait/service/offload/ACK or baselinepartial/uninitializedC execution. No broadmalformed/old349/51/9/12/wire/layout suite.",
+  "no_canonical_changes": true,
+  "no_execution_by_author": true,
+  "not_proved": [
+    "actualCPU/GS/offload/hostwaitid/ACK/driver/native/functionallifecycle",
+    "actualdefaultCexclusion/waittable48slot0 Rustowner untilnormalnewproductionimage withrealtypedguards",
+    "unchangedterminationtransaction/bodycases do not needmirrorfixture; exportedvoidABI/selector/Cexclusion validated by realnewproductionC/Rustguard+normalimage/read under independent source review"
+  ],
+  "owner": "/root/p04_tests_max testfixture/privatepacket only; SDKsourceauthor/SourceAcqmaterialreview/P03operationreview/Rootsoleexecutor",
+  "ownership": {
+    "helper": {
+      "bytes": 4668,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/owned_process.py",
+      "sha256": "afe7403ead1bf8b2c527dfa34a0c0c19010cde5f27a646ccf1545fb8f3b9bc1d"
+    },
+    "labels": [
+      "phase-1",
+      "phase-2"
+    ],
+    "required": "Immediately after EACH returned actualrecord: positiveleader/birth, exact0/status, directparent/wholefamily/streamsjoined, notimeout/groupsignal/adoptedreap/adoptedkill/residual/error; exact2 finalrecords/noRootdirectchildren. Rootfulltool/directwaitcompletion before currentresource release. UNKNOWNcharge retained; no numeric/globalfallback."
+  },
+  "preconditions": [
+    "Root separately verifies exactP03operationGO, current source400ad/ff48/header/compiler/Owner pins and all priorHOSTpayload positive closure. No compiler/test/helper wasrunbypreparer.",
+    "Fresh exactcapture/output/tmp roots absent beforeRootstart; Rootcreates0700 outputandtmp and performs fresh sameRunaccount/stop/holdguard, MemAvailable>=26GiB, alloverhead+new2GiB<=4GiB/max3, host16/scratch12GiB plus32MiB output. No source/service/native/currentfree/UNKNOWN waiver.",
+    "Serialize actualpayload against otherRootHOSTjobs unless a separately measured allcurrent aggregate stillfits; this exactdriverrecords otherpayloads0, whichRoot mustmake truthful withpositive retiredowners.",
+    "Only compilethenoneHOSTexecutable, stoponfirstunexpectedfailure, preserve argv/phase/case/primarydiag/partialreceipt. Rootcaptures initialtool andfullcompletion/directwait before any current2GiB release."
+  ],
+  "private_tmp": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-tests-p04tests-max-1/output-1/tmp",
+  "profile": {
+    "batch_wall_seconds": 90,
+    "cpu": 6,
+    "current_accounting": "Only540/a41 oldcurrentHOST releases at exact scope. All actual otherpayload/currentowners/Native12/Scratch/retained18GiB/UNKNOWN/account remain asRootfreshguard measures; thispacket releasesnone.",
+    "fresh_MemAvailable_floor_GiB": 26,
+    "host_disk_floor_GiB": 16,
+    "jobs": 1,
+    "kind": "Same qualified HOST195 compiler/sysroot/standardlink profile, existing2GiB inheritedAS familyplanned reservation (notcgroup/exactpeak), CPU6/lightserial inside actualshared4GiB withallcontroller/worker overhead. No newlane or nativeCPU borrowing.",
+    "max_address_space_bytes": 2147483648,
+    "max_aggregate_HOST_bytes": 4294967296,
+    "max_aggregate_jobs": 3,
+    "output_disk_reservation_bytes": 33554432,
+    "output_max_file_bytes": 16777216,
+    "runtime_processes": 1,
+    "runtime_threads": 1,
+    "scratch_disk_floor_GiB": 12
+  },
+  "schema": "wait-host-provider-six-vector-root-operation-v1",
+  "source_GO": {
+    "bytes": 20015,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-review-sourceacq-max-1/candidate-1/REVIEW.json",
+    "sha256": "4a6cfc793f878a6836bd4952b0090ac5796937258e5a81bae7fc4fc8f645204e"
+  },
+  "source_candidate": {
+    "bytes": 2788,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-host-provider-1/candidate/kernel/rust/f03_wait_host_provider.rs",
+    "sha256": "400ad42def827a0516dbe3a5a918802b929fae1c8861a6589f48f80bff4b0753"
+  },
+  "status": "FROZEN_NOT_EXECUTED_REQUIRES_INDEPENDENT_OPERATION_GO_AND_FRESH_ROOT_ADMISSION"
+}

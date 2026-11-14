@@ -1,0 +1,32 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=60:60",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--stack=2097152:2097152",
+    "--core=0:0",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=6",
+    "90",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/attempt2-coherent-entry-preparation-source-1/genuine-postshared-binding-successor-source-1/owner904301-parent903729-recovery-source-1/process-only903729-retirement-source-1/test_process903_FOCUSED_PURE.py"
+  ],
+  "pid": 913569,
+  "start": "77574701",
+  "returncode": 0,
+  "direct_child_joined": true,
+  "group_absent": true,
+  "closed_streams": true,
+  "wall_seconds": 0.19679883599746972,
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_sha256": "2e3a323dc27bf21fcccbaf7833b8b3fb849f5a399e756db3ca2fe23f9af34c4a"
+}

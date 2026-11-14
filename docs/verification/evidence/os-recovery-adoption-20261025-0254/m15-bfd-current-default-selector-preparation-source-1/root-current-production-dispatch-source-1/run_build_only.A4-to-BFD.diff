@@ -1,0 +1,182 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/run_build_only.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-current-default-selector-preparation-source-1/root-current-production-dispatch-source-1/run_build_only.py
+@@ -53,26 +53,14 @@
+     require(resources['native_custody_unchanged'] is True,'native/global custody must remain untouched')
+ 
+ def mounts(profile,export,output):
+-    require(export['source6153']==profile['inputs']['source6153'],'exact immutable source origin')
+-    require(export['retained_seed']==profile['inputs']['retained_seed'],'exact retained seed origin')
+-    base=[dict(host=export['readable_source_export'],target='/src',readonly=True),dict(host=export['readable_seed_export'],target='/seed-build',readonly=True)]
+-    base += [dict(host=r['host_path'],target=r['container_path'],readonly=True) for r in profile['inputs']['toolchain_mounts']]
+-    source_directory_postimages(profile)
+-    base += [dict(host=r['host_path'],target=r['container_destination'],readonly=True) for r in profile['inputs'].get('source_directory_exports',[])]
+-    base += [dict(host=r['postimage']['path'],target=r['container_destination'],readonly=True) for r in profile['inputs']['postimages']]
+-    # Exports cover generated includes/SDK aliases/gitlinks needed by this exact command.
+-    # The entire literal set is bound to independent review; never infer permission.
+-    for row in export['additional_readonly_exports']:
+-        require(set(row)=={'host','target','readonly'} and row['readonly'] is True,'only exact readonly additional exports')
+-        require(row['target'] in ('/src/ihk','/work/output/build/kernel/include') or row['target'].startswith(('/src/ihk/','/out/','/work/output/build/kernel/include/')),'bounded immutable generated/SDK/gitlink aliases')
+-        base.append(row)
+-    for row in profile['inputs']['configuration']:
+-        base.append(dict(host=row['source']['path'],target='/work/output/build/'+row['build_relative'],readonly=True))
+-    for row in profile['inputs']['objects']:
+-        if not row['replace']:base.append(dict(host=row['source']['path'],target='/work/output/build/'+row['build_relative'],readonly=True))
+-    base.append(dict(host=profile['reuse_descriptor'],target='/reuse-inputs.json',readonly=True))
+-    base += [dict(host=str(D/'build_only_worker.py'),target='/build-only-worker.py',readonly=True),dict(host=str(output/'plan.json'),target='/build-only-plan.json',readonly=True)]
+-    return base
++    require(export['source_export_plan']==profile['inputs']['source_export_plan'],'exact source-export plan')
++    require(export['readable_source_export']==profile['inputs']['source_export_root'],'exact private closed export path')
++    verify_bfd_source_export(profile)
++    rows=[dict(host=export['readable_source_export'],target='/src',readonly=True),dict(host=profile['inputs']['assets_root'],target='/candidate',readonly=True)]
++    rows += [dict(host=r['host_path'],target=r['container_path'],readonly=True) for r in profile['inputs']['toolchain_mounts']]
++    rows += [dict(host=str(D/'build_only_worker.py'),target='/build-only-worker.py',readonly=True),dict(host=str(output/'plan.json'),target='/build-only-plan.json',readonly=True)]
++    return rows
++
+ 
+ def docker_prefix(profile,grant=None,review=None):
+     require(profile['docker_client_prefix']==SUDO_DOCKER_PREFIX,'exact existing sudo Docker-client prefix only')
+@@ -81,7 +69,7 @@
+     return list(SUDO_DOCKER_PREFIX)
+ 
+ def docker_argv(profile,name,mount_rows,output):
+-    argv=docker_prefix(profile)+['run','--name',name,'--cidfile',str(output/'container.cid'),'--user','1000:1000','--read-only','--network','none','--cap-drop','ALL','--security-opt','no-new-privileges','--cpuset-cpus','2-5','--memory',str(MEMORY),'--memory-swap',str(MEMORY),'--pids-limit','512','--tmpfs','/tmp:rw,nosuid,nodev,size=1073741824,mode=1777','--workdir','/work/output/build/kernel']
++    argv=docker_prefix(profile)+['run','--name',name,'--cidfile',str(output/'container.cid'),'--user','1000:1000','--read-only','--network','none','--cap-drop','ALL','--security-opt','no-new-privileges','--cpuset-cpus','2-5','--memory',str(MEMORY),'--memory-swap',str(MEMORY),'--pids-limit','512','--tmpfs','/tmp:rw,nosuid,nodev,size=1073741824,mode=1777','--workdir','/work']
+     argv+=['--mount','type=bind,source='+str(output/'work')+',target=/work']
+     for row in mount_rows:
+         require(row['readonly'] is True,'all input mounts readonly')
+@@ -90,50 +78,35 @@
+     argv += ['--entrypoint','/usr/bin/python3',profile['inputs']['image'],'-I','-B','/build-only-worker.py','/build-only-plan.json']
+     return argv
+ 
+-def source_directory_postimages(profile):
+-    exports=profile['inputs'].get('source_directory_exports',[])
+-    require(isinstance(exports,list) and len(exports)<=1,'only one exact Rust subtree directory export')
+-    rows=[]
+-    for export in exports:
+-        require(set(export)=={'host_path','container_destination','readonly','manifest'} and export['readonly'] is True and export['container_destination']=='/src/kernel/rust','exact readonly Rust subtree source export')
+-        root=strict_parent(export['host_path']);require(root.is_dir() and not root.is_symlink(),'ordinary closed source directory')
+-        manifest=read(auth(export['manifest']))
+-        require(manifest['schema']=='mckernel.exact-kernel-rust-subtree-readonly.v1' and manifest['runtime_authority'] is None and manifest['export_root']==str(root) and manifest['container_destination']=='/src/kernel/rust' and manifest['base_source_root']==profile['inputs']['source6153']+'/kernel/rust','exact source-directory manifest binding')
+-        expected=set()
+-        for row in manifest['files']:
+-            relative=Path(row['relative']);require(not relative.is_absolute() and '..' not in relative.parts and str(relative)==row['relative'],'exact normalized source-relative file')
+-            require(row['relative'] not in expected and row['snapshot']['path']==str(root/relative),'unique literal source snapshot file map')
+-            expected.add(row['relative']);rows.append(dict(relative='kernel/rust/'+row['relative'],postimage=row['snapshot']))
+-        actual=set()
+-        for path in root.rglob('*'):
+-            require(not path.is_symlink(),'no source-subtree symlinks')
+-            if path.is_dir():continue
+-            require(path.is_file(),'ordinary closed source snapshot file');actual.add(str(path.relative_to(root)))
+-        require(actual==expected,'closed exact source-directory file set')
+-    return rows
++def verify_bfd_source_export(profile):
++    plan=read(auth(profile['inputs']['source_export_plan']));root=strict_parent(profile['inputs']['source_export_root'])
++    require(root.is_dir() and str(root)==plan['export_root'],'actual source export exists at exact bound path')
++    for row in plan['records']:
++        relative=Path(row['relative']);require(not relative.is_absolute() and '..' not in relative.parts,'normalized exact selected source path')
++        p=root/relative
++        if row['type']=='directory':require(p.is_dir() and not p.is_symlink(),'ordinary selected source directory')
++        elif row['type']=='symlink':require(p.is_symlink() and os.readlink(p)==row['link_target'],'exact selected source symlink')
++        else:
++            require(p.is_file() and not p.is_symlink(),'ordinary selected source file')
++            actual=reference(p);require(actual['bytes']==row['source']['bytes'] and actual['sha256']==row['source']['sha256'],'exact selected current source bytes')
++    # Materializer created only this finite map; a closed exported snapshot is mandatory.
++    expected={r['relative'] for r in plan['records']}
++    actual={str(p.relative_to(root)) for p in root.rglob('*')}
++    require(actual==expected,'exact closed selected source export, no extras')
++    asset=read(auth(profile['inputs']['asset_map']));assets=Path(profile['inputs']['assets_root'])
++    require({str(p.relative_to(assets)) for p in assets.rglob('*') if p.is_file()}=={r['relative'] for r in asset['files']},'exact three readonly assets')
++    for row in asset['files']:auth(row['reference'])
++    return plan
+ 
+ def commands_for_plan(profile):
+-    """Fixed successor cohort only; data is incomplete until Root binds exact sources/flags."""
+-    require(isinstance(profile['request_sha256'],str) and len(profile['request_sha256'])==64 and all(c in '0123456789abcdef' for c in profile['request_sha256']),'Root must bind new exact request SHA256')
+-    require(isinstance(profile['inputs']['postimages'],list) and profile['inputs']['postimages'],'Root must supply exact new readonly postimages')
+-    require(profile['cohort_source_bindings']==[dict(relative=r['relative'],postimage=r['postimage']) for r in profile['inputs']['postimages']]+source_directory_postimages(profile),'exact new cohort source map')
+-    require(isinstance(profile['reuse_descriptor'],str) and profile['reuse_descriptor'],'Root must supply matching eight-object/three-replacement reuse descriptor')
+-    require(isinstance(profile['producer_contract']['process_delta'],str) and profile['producer_contract']['process_delta'],'Root must state exact new process delta')
+-    if 'unchanged_completed_process_prefix' in profile:require(profile['unchanged_completed_process_prefix']['Root_decision'] is not None,'Root must disposition already completed unchanged F02 process prefix before grant')
+-    commands=profile['exact_commands']
+-    outputs=['rust/mckernel_rust.o','CMakeFiles/mckernel.img.dir/process.c.o','CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o','mckernel.img']
+-    sources=['/src/kernel/rust/lib.rs','/src/kernel/process.c','/src/arch/x86_64/kernel/syscall.c']
+-    require(len(commands)==4,'exact four selected successor commands')
+-    require(set(s.removeprefix('/src/') for s in sources)<={r['relative'] for r in profile['inputs']['postimages']}|{r['relative'] for r in source_directory_postimages(profile)},'all three changed compiler source paths must be bound readonly postimages')
+-    require(sum(not r['replace'] for r in profile['inputs']['objects'])==8 and sum(r['replace'] for r in profile['inputs']['objects'])==3,'eight accepted retained and three new objects')
+-    require({r['link_token'] for r in profile['inputs']['objects'] if r['replace']}==set(outputs[:3]),'exact three selected replacement object paths')
+-    for i,(command,output) in enumerate(zip(commands,outputs)):
+-        argv=command['argv']
+-        require(isinstance(argv,list) and argv and all(isinstance(a,str) and a for a in argv),'Root must supply exact nonempty literal argv')
+-        require(command['cwd']=='/work/output/build/kernel' and command['new_output']=='/work/output/build/kernel/'+output,'exact fixed output/cwd map')
+-        if i==0:require(argv[:3]==['/usr/bin/cmake','-E','env'] and '--emit=obj='+command['new_output'] in argv and argv[-1]==sources[i],'whole Rust object command binding')
+-        elif i<3:require(argv[0]=='/usr/bin/cc' and argv[-2:]==['-c',sources[i]] and argv[argv.index('-o')+1]==output,'exact selected C object/source command binding')
+-        else:require(argv==['/usr/bin/ld', '-e', 'arch_start', '-T', '/work/output/build/kernel/config/smp-x86.lds', '--build-id', '-Map=/work/output/build/kernel/mckernel.img.map', '--dependency-file=CMakeFiles/mckernel.img.dir/link.d', 'CMakeFiles/mckernel.img.dir/mem.c.o', 'CMakeFiles/mckernel.img.dir/syscall.c.o', 'CMakeFiles/mckernel.img.dir/process.c.o', 'CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o', 'CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/context.S.o', 'CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o', 'CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/interrupt.S.o', 'CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o', 'CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o', 'CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/trampoline.S.o', 'rust/mckernel_rust.o', '-o', 'mckernel.img'],'unchanged exact eleven-input raw linker argv')
++    require(profile['request_sha256']==reference(D/'REQUEST.SOURCE-ONLY.json')['sha256'],'exact finite BFD request')
++    request=read(D/'REQUEST.SOURCE-ONLY.json');require(request['runtime_authority'] is None,'request supplies no runtime authority')
++    require(profile['exact_commands']==request['commands'],'exact three current BFD commands')
++    commands=profile['exact_commands'];require(len(commands)==3,'exact configure/build/readback commands only')
++    require([c['new_output'] for c in commands]==['/work/current-bfd-build/CMakeCache.txt','/work/current-bfd-build/executer/user/mcinspect','/work/BFD-CURRENT-PROJECT-OBJECTS.json'],'exact fresh current BFD products')
++    require(all(c['cwd']=='/work' for c in commands),'literal three-command CWD')
++    require(commands[1]['argv']==['/usr/bin/cmake','--build','/work/current-bfd-build','--target','mcinspect','eclair','--parallel','1'],'only two genuine targets/jobs1')
++    require(profile['inputs']['image']=='sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5','same accepted SDK image')
+     return commands
+ 
+ 
+@@ -165,15 +138,16 @@
+     require(ready['holder']==resources['reservation_holder'] and ready['nonce']==grant['nonce'] and ready['status']=='ACTUAL_ONE_HEAVY_27_4_HELD_NOT_BUILD_ADMISSION','actual wrapper holder receipt required')
+     require(export['author']=='/root' and export['decision']=='PASS_EXACT_UID1000_READONLY_BUILD_EXPORTS' and export['request_sha256']==profile['request_sha256'],'real read-permission/export binding required')
+     require(export['runtime_authority'] is None,'input export descriptor supplies no execution authority')
++    require(export['container_tool_files']==profile['inputs']['container_tool_files'] and export['container_sha256_pins']==profile['inputs']['container_sha256_pins'],'exact accepted tool/library/header pins')
+     require(len(export['container_tool_files'])>=4 and {'/usr/bin/cmake','/usr/bin/cc','/usr/bin/ld','/nightly/bin/rustc'}<=set(x['path'] for x in export['container_tool_files']),'qualified exact Rust/GCC/linker/tool files required')
+     require(export['Rust_release']=='1.95.0-nightly' and export['GCC_major']==14,'same pinned compiler versions; no HOST ABI substitution')
+-    require(read(profile['reuse_descriptor']).get('runtime_authority') is None,'readonly descriptor supplies no runtime authority')
+-    require(export['SDK21_recompiled'] is False and export['source6153_entries']==6153,'preserve exact source and SDK reuse scope')
++    require(export['SDK21_recompiled'] is False,'no SDK21/eight-pair replay')
++    require(export['source_adoption']==profile['actual_source_adoption'],'same actual Root selective adoption')
++    adoption=read(auth(profile['actual_source_adoption']));require(adoption['author']=='/root' and adoption['adopted'] is True and adoption['source_export_plan']==profile['inputs']['source_export_plan'],'genuine Root exact four-path adoption')
+     output=strict_parent(grant['fresh_output_root'])
+     require(review['fresh_output_root']==str(output) and resources['fresh_output_root']==str(output),'same fresh disjoint output')
+     require(PROTECTED_SUFFIX not in str(output) and not os.path.lexists(output),'fresh output distinct from attempt5')
+-    originals=[profile['inputs']['source6153'],profile['inputs']['retained_seed']]+[x['host_path'] for x in profile['inputs']['toolchain_mounts']]+[export['readable_source_export'],export['readable_seed_export']]
+-    originals += [r['host_path'] for r in profile['inputs'].get('source_directory_exports',[])]
++    originals=[profile['inputs']['source_export_root'],profile['inputs']['assets_root']]+[x['host_path'] for x in profile['inputs']['toolchain_mounts']]
+     for original in originals:
+         p=Path(original).resolve();require(p!=output and p not in output.parents and output not in p.parents,'outputs disjoint from protected inputs')
+     holder=resources['reservation_holder'];reservation=strict_parent(holder['path']);st=reservation.lstat()
+@@ -186,29 +160,16 @@
+     require(os.statvfs(output.parent).f_bavail*os.statvfs(output.parent).f_frsize>=max(16<<30,resources['host_required_free_bytes']),'fresh host/scratch export capacity guard')
+     scratch=Path('/home/holden/mckernel-work/scratch');sv=os.statvfs(scratch)
+     require(sv.f_bavail*sv.f_frsize>=max(12<<30,resources['scratch_required_free_bytes']),'fresh actual scratch reserve guard')
+-    # Check only qualified file identities, not broad source inventories.
+-    expected=[r['source'] for r in profile['inputs']['configuration']]+[r['source'] for r in profile['inputs']['objects'] if not r['replace']]+[r['postimage'] for r in profile['inputs']['postimages']]+[r['postimage'] for r in source_directory_postimages(profile)]
+-    require(export['qualified_readonly_files']==expected,'exact retained configuration/nine objects/new cohort postimage export closure')
+-    for row in expected:auth(row)
+-    require(all(os.access(x,os.R_OK|os.X_OK) for x in (export['readable_source_export'],export['readable_seed_export'])),'actual UID1000 readable/traversable root exports')
+-    output.mkdir(mode=0o700);(output/'work').mkdir(mode=0o700)
+-    (output/'work/evidence').mkdir(mode=0o700);(output/'work/output').mkdir(mode=0o700)
+-    build=output/'work/output/build';(build/'kernel/rust').mkdir(mode=0o700,parents=True)
+-    # Exact new header bind target lies under fresh writable /work, never /src.
+-    origin_target=build/'kernel/rust/f06-origin/f06_rt_sigreturn_origin.h'
+-    origin_target.parent.mkdir(mode=0o700)
+-    require(not os.path.lexists(origin_target),'fresh exact origin header bind target')
+-    origin_target.touch(mode=0o400,exist_ok=False)
+-    metadata_target=origin_target.parent/'f06_clone_cpuid_metadata.rs'
+-    require(not os.path.lexists(metadata_target),'fresh exact cpuid metadata bind target')
+-    metadata_target.touch(mode=0o400,exist_ok=False)
+-    for row in profile['inputs']['configuration']+[r for r in profile['inputs']['objects'] if not r['replace']]:
+-        target=build/row['build_relative'];target.parent.mkdir(mode=0o700,parents=True,exist_ok=True);target.touch(mode=0o400,exist_ok=False)
+-    (output/'plan.json').write_text(json.dumps(dict(runtime_authority=None,deadline_epoch=DEADLINE,commands=commands,tool_files=export['container_tool_files'],producer_contract=profile['producer_contract'],source_profile=reference(D/'PROFILE.SOURCE-ONLY.json')),indent=2)+'\n')
++    verify_bfd_source_export(profile)
++    require(export['qualified_readonly_files']==profile['inputs']['qualified_readonly_files'],'exact source/toolchain/helper closure')
++    for row in profile['inputs']['qualified_readonly_files']:auth(row)
++    require(os.access(export['readable_source_export'],os.R_OK|os.X_OK),'UID1000 readable/traversable closed source')
++    output.mkdir(mode=0o700);(output/'work').mkdir(mode=0o700);(output/'work/evidence').mkdir(mode=0o700)
++    (output/'plan.json').write_text(json.dumps(dict(runtime_authority=None,deadline_epoch=DEADLINE,commands=commands,tool_files=export['container_tool_files'],tool_sha256_pins=export['container_sha256_pins'],producer_contract=profile['producer_contract'],source_profile=reference(D/'PROFILE.SOURCE-ONLY.json')),indent=2)+'\n')
+     rows=mounts(profile,export,output)
+     require(len({r['target'] for r in rows})==len(rows),'no duplicate RO mount targets')
+     for row in rows:require(os.access(row['host'],os.R_OK),'actual UID1000 input bind read access')
+-    name='current115-build-only-'+grant['nonce'];require(name.replace('-','').isalnum() and len(name)<=120,'bounded container identity')
++    name='bfd-current-two-target-'+grant['nonce'];require(name.replace('-','').isalnum() and len(name)<=120,'bounded container identity')
+     current_operation_guard()
+     argv=docker_argv(profile,name,rows,output)
+     (output/'claim.json').write_text(json.dumps(dict(grant=reference(grant_path),argv=argv,pid=os.getpid(),scope=profile['scope'],native_authority=False),indent=2)+'\n')

@@ -1,0 +1,424 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "BOUNDED_CORRECTION1_PASS_REAL_LONG_STRICT_PAIR_INTEGRATION_PENDING_FOCUSED_REREVIEW",
+  "source_cohort": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/merged-source-1/correction1/COHERENT-CORRECTION1-SOURCE-COHORT.NOT-RELEASED.json",
+    "sha256": "86773a3d7f21fd01f45fd29be973f02b3ae9d5ea20603e223d2f8b1261205dbd",
+    "bytes": 4362
+  },
+  "LONG_source": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/merged-source-1/correction1/source/p12_long_session.py",
+    "sha256": "bff717d885afdda0d82cd0ab05a0930a3e66b242c6200b1295f2173bb4cdc5d3",
+    "bytes": 10930
+  },
+  "owner": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/merged-source-1/correction1/source/native_diagnostic_container_owner.py",
+    "sha256": "64e0c499f1122b080bae6d015b66ecf5f5aacbc7a5b16e8581408e1a670a5b9f",
+    "bytes": 99824
+  },
+  "native_preserved": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/merged-source-1/correction1/source/native_diagnostic.py",
+    "sha256": "f417a029b43b1d7916e733742946a709584b0a606849f1ca2fc46647bd40dbef",
+    "bytes": 88327
+  },
+  "real_LONG_integration": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/merged-source-1/correction1/LONG-INTEGRATION-RESULT.json",
+    "sha256": "d677d413eacbe48c46b564f0b57a7278fece45121c3afd81fb3af6189ac86144",
+    "bytes": 1225
+  },
+  "original8consumer_fixtures": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/merged-source-1/correction1/MERGED-FIXTURE-RESULT.json",
+    "sha256": "a7336e9d1a6e95d8afd5092c71499c4b51dedc8e56942061a75eca714afd4300",
+    "bytes": 1390
+  },
+  "actual_wait_consumer": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/merged-source-1/correction1/DIRECT-CONSUMER-RESULT.json",
+    "sha256": "ed7512591b9b20e07f24206e4b31f7231453897832e13c8b4b39df076ddecf9d",
+    "bytes": 2846
+  },
+  "whole_capture": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/merged-source-1/correction1/fixture-capture-1/WHOLE-JOIN.json",
+    "sha256": "fbf2d4a79ddcb7a19feaec20e5db620af38af4ce9a57d7a4e8adca4d0afe8f41",
+    "bytes": 1291
+  },
+  "expected_original_projection_failure": "missing/failed BEGIN intent",
+  "real_strict_pair_checker_stubbed": false,
+  "synthetic_fixture_rounds": 400,
+  "synthetic_fixture_launches": 800,
+  "synthetic_fixture_work_ns": 3600000000000,
+  "negative_controls": [
+    {
+      "case": "missing_ACK",
+      "error": "missing/duplicate real cleanup ACK"
+    },
+    {
+      "case": "foreign_generation_ACK",
+      "error": "foreign/malformed application trace"
+    },
+    {
+      "case": "duplicate_ACK",
+      "error": "missing/duplicate real cleanup ACK"
+    }
+  ],
+  "actual_runtime_rounds": 0,
+  "actual_runtime_launches": 0,
+  "bounded_corrections": 1,
+  "correction1_fixture_failures": 0,
+  "geometry": {
+    "observed_context_GiB": 110,
+    "required_LONG_source_capacity_GiB": 142,
+    "capacity_guard_unchanged": true,
+    "actual_growth_acceptance": null,
+    "actual142_capacity": null,
+    "current_geometry_live_identity": null,
+    "EXTERNAL_CAPTURE_BINDING": null
+  },
+  "geometry_guard_modified": false,
+  "EXTERNAL_CAPTURE_BINDING": null,
+  "HOST4GiB_arithmetic_not_live_bound": true,
+  "preserved_original_handoff_sha": "6e1a582da1424755e4d79462425770420ed00f56f10779ee0bb63d9eb5c1ef75",
+  "selected": [
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/merged-source-1/correction1/OWNER-PATH-HASH-ONLY.patch",
+        "sha256": "6dd712ee4dec10254d6732bdc3be6c88fc38b216d35380954138d532a33d5fa0",
+        "bytes": 71993
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/merged-source-1/correction1/OWNER-PATH-HASH-ONLY.patch",
+        "sha256": "6dd712ee4dec10254d6732bdc3be6c88fc38b216d35380954138d532a33d5fa0",
+        "bytes": 71993
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/merged-source-1/correction1/run_fixtures.py",
+        "sha256": "c874fa7477056d61ffa39c8513acc9e46a2e8bde069dd2049c0ff2b01d5fad31",
+        "bytes": 1685
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/merged-source-1/correction1/run_fixtures.py",
+        "sha256": "c874fa7477056d61ffa39c8513acc9e46a2e8bde069dd2049c0ff2b01d5fad31",
+        "bytes": 1685
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/merged-source-1/correction1/check_direct_consumer.py",
+        "sha256": "6fe2326f11acda191ebea9ee8f4c17e5dd92a4a2326629dedd2b30c0513324f6",
+        "bytes": 3621
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/merged-source-1/correction1/check_direct_consumer.py",
+        "sha256": "6fe2326f11acda191ebea9ee8f4c17e5dd92a4a2326629dedd2b30c0513324f6",
+        "bytes": 3621
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/merged-source-1/correction1/LONG-BEGIN-PROJECTION.patch",
+        "sha256": "2d2c4687a0b56e723711458e5fe304545d598fff889fde0980ac5c535165a0cd",
+        "bytes": 1481
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/merged-source-1/correction1/LONG-BEGIN-PROJECTION.patch",
+        "sha256": "2d2c4687a0b56e723711458e5fe304545d598fff889fde0980ac5c535165a0cd",
+        "bytes": 1481
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/merged-source-1/correction1/CORRECTION1-PRELAUNCH.json",
+        "sha256": "9fe5162c3efbad092c04608ffef5c25db56e64cdc2111e20a05997030639b3fa",
+        "bytes": 4270
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/merged-source-1/correction1/CORRECTION1-PRELAUNCH.json",
+        "sha256": "9fe5162c3efbad092c04608ffef5c25db56e64cdc2111e20a05997030639b3fa",
+        "bytes": 4270
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/merged-source-1/correction1/MERGED-FIXTURE-RESULT.json",
+        "sha256": "a7336e9d1a6e95d8afd5092c71499c4b51dedc8e56942061a75eca714afd4300",
+        "bytes": 1390
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/merged-source-1/correction1/MERGED-FIXTURE-RESULT.json",
+        "sha256": "a7336e9d1a6e95d8afd5092c71499c4b51dedc8e56942061a75eca714afd4300",
+        "bytes": 1390
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/merged-source-1/correction1/test_long_integration.py",
+        "sha256": "1efe1dfdcad1d9bea9fe5a36a3cfd74754db6253de845cacfaceb699ca699c2e",
+        "bytes": 6554
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/merged-source-1/correction1/test_long_integration.py",
+        "sha256": "1efe1dfdcad1d9bea9fe5a36a3cfd74754db6253de845cacfaceb699ca699c2e",
+        "bytes": 6554
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/merged-source-1/correction1/test_merged_hooks.py",
+        "sha256": "230ff367e2dc1d664e35b9a8b5005e5e0108ae0cf2ff7747c2a8afd63fe8e981",
+        "bytes": 5342
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/merged-source-1/correction1/test_merged_hooks.py",
+        "sha256": "230ff367e2dc1d664e35b9a8b5005e5e0108ae0cf2ff7747c2a8afd63fe8e981",
+        "bytes": 5342
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/merged-source-1/correction1/LONG-INTEGRATION-RESULT.json",
+        "sha256": "d677d413eacbe48c46b564f0b57a7278fece45121c3afd81fb3af6189ac86144",
+        "bytes": 1225
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/merged-source-1/correction1/LONG-INTEGRATION-RESULT.json",
+        "sha256": "d677d413eacbe48c46b564f0b57a7278fece45121c3afd81fb3af6189ac86144",
+        "bytes": 1225
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/merged-source-1/correction1/COHERENT-CORRECTION1-SOURCE-COHORT.NOT-RELEASED.json",
+        "sha256": "86773a3d7f21fd01f45fd29be973f02b3ae9d5ea20603e223d2f8b1261205dbd",
+        "bytes": 4362
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/merged-source-1/correction1/COHERENT-CORRECTION1-SOURCE-COHORT.NOT-RELEASED.json",
+        "sha256": "86773a3d7f21fd01f45fd29be973f02b3ae9d5ea20603e223d2f8b1261205dbd",
+        "bytes": 4362
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/merged-source-1/correction1/test_suite.py",
+        "sha256": "583c8ab7a59ad70b5235f246ff357bc06aeed44333154a5178a15a004b5e996a",
+        "bytes": 326
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/merged-source-1/correction1/test_suite.py",
+        "sha256": "583c8ab7a59ad70b5235f246ff357bc06aeed44333154a5178a15a004b5e996a",
+        "bytes": 326
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/merged-source-1/correction1/DIRECT-CONSUMER-RESULT.json",
+        "sha256": "ed7512591b9b20e07f24206e4b31f7231453897832e13c8b4b39df076ddecf9d",
+        "bytes": 2846
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/merged-source-1/correction1/DIRECT-CONSUMER-RESULT.json",
+        "sha256": "ed7512591b9b20e07f24206e4b31f7231453897832e13c8b4b39df076ddecf9d",
+        "bytes": 2846
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/merged-source-1/correction1/source/composite_module_binding.py",
+        "sha256": "3d123cf9fffeee89d179a9a3d50cbdee45374bffc519b8707c98f470ebd24cfa",
+        "bytes": 4899
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/merged-source-1/correction1/source/composite_module_binding.py",
+        "sha256": "3d123cf9fffeee89d179a9a3d50cbdee45374bffc519b8707c98f470ebd24cfa",
+        "bytes": 4899
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/merged-source-1/correction1/source/long_transport.py",
+        "sha256": "896fdf225cf73e8d95df01907308ebe7621ee58376d215f90c74397a2c780cdf",
+        "bytes": 15548
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/merged-source-1/correction1/source/long_transport.py",
+        "sha256": "896fdf225cf73e8d95df01907308ebe7621ee58376d215f90c74397a2c780cdf",
+        "bytes": 15548
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/merged-source-1/correction1/source/p12_long_session.py",
+        "sha256": "bff717d885afdda0d82cd0ab05a0930a3e66b242c6200b1295f2173bb4cdc5d3",
+        "bytes": 10930
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/merged-source-1/correction1/source/p12_long_session.py",
+        "sha256": "bff717d885afdda0d82cd0ab05a0930a3e66b242c6200b1295f2173bb4cdc5d3",
+        "bytes": 10930
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/merged-source-1/correction1/source/native_diagnostic_container_owner.py",
+        "sha256": "64e0c499f1122b080bae6d015b66ecf5f5aacbc7a5b16e8581408e1a670a5b9f",
+        "bytes": 99824
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/merged-source-1/correction1/source/native_diagnostic_container_owner.py",
+        "sha256": "64e0c499f1122b080bae6d015b66ecf5f5aacbc7a5b16e8581408e1a670a5b9f",
+        "bytes": 99824
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/merged-source-1/correction1/source/repaired_image_authority.py",
+        "sha256": "e375bd0eadf5ea8fa8ef6621603a8617b45bbce965a74f10e08b3cd7256b6f2e",
+        "bytes": 24863
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/merged-source-1/correction1/source/repaired_image_authority.py",
+        "sha256": "e375bd0eadf5ea8fa8ef6621603a8617b45bbce965a74f10e08b3cd7256b6f2e",
+        "bytes": 24863
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/merged-source-1/correction1/source/qmp_capture.py",
+        "sha256": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741",
+        "bytes": 9913
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/merged-source-1/correction1/source/qmp_capture.py",
+        "sha256": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741",
+        "bytes": 9913
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/merged-source-1/correction1/source/native_diagnostic_runner.py",
+        "sha256": "d3cbf307b619e347c994503e2765da9d1962d0affe42baf54482529a4f372094",
+        "bytes": 7500
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/merged-source-1/correction1/source/native_diagnostic_runner.py",
+        "sha256": "d3cbf307b619e347c994503e2765da9d1962d0affe42baf54482529a4f372094",
+        "bytes": 7500
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/merged-source-1/correction1/source/native_diagnostic_backend.py",
+        "sha256": "3f01a73dbd7664a12a514163561790fc56edf46114018f13781ab62387cccd52",
+        "bytes": 26316
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/merged-source-1/correction1/source/native_diagnostic_backend.py",
+        "sha256": "3f01a73dbd7664a12a514163561790fc56edf46114018f13781ab62387cccd52",
+        "bytes": 26316
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/merged-source-1/correction1/source/native_diagnostic.py",
+        "sha256": "f417a029b43b1d7916e733742946a709584b0a606849f1ca2fc46647bd40dbef",
+        "bytes": 88327
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/merged-source-1/correction1/source/native_diagnostic.py",
+        "sha256": "f417a029b43b1d7916e733742946a709584b0a606849f1ca2fc46647bd40dbef",
+        "bytes": 88327
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/merged-source-1/correction1/fixture-capture-1/direct-wait.json",
+        "sha256": "1b6a4c5c03f48b4c93d3010ebd038f526fbb4d4baa08f311c7257743338f4b50",
+        "bytes": 82
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/merged-source-1/correction1/fixture-capture-1/direct-wait.json",
+        "sha256": "1b6a4c5c03f48b4c93d3010ebd038f526fbb4d4baa08f311c7257743338f4b50",
+        "bytes": 82
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/merged-source-1/correction1/fixture-capture-1/command.json",
+        "sha256": "07d2d79454ed165895d3c9510b44f547f48036875b0002907fde09cf9568af89",
+        "bytes": 433
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/merged-source-1/correction1/fixture-capture-1/command.json",
+        "sha256": "07d2d79454ed165895d3c9510b44f547f48036875b0002907fde09cf9568af89",
+        "bytes": 433
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/merged-source-1/correction1/fixture-capture-1/direct-join.json",
+        "sha256": "1b452f308a4e7be7b93ad05dea716cfbdb3ca242b53211d04602acdc6c3de2b1",
+        "bytes": 258
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/merged-source-1/correction1/fixture-capture-1/direct-join.json",
+        "sha256": "1b452f308a4e7be7b93ad05dea716cfbdb3ca242b53211d04602acdc6c3de2b1",
+        "bytes": 258
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/merged-source-1/correction1/fixture-capture-1/stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/merged-source-1/correction1/fixture-capture-1/stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/merged-source-1/correction1/fixture-capture-1/stdout",
+        "sha256": "f3de2017d43a26d6f0aa5e75914d02a16f15bd07f169c6b1136bae79d1694a09",
+        "bytes": 4453
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/merged-source-1/correction1/fixture-capture-1/stdout",
+        "sha256": "f3de2017d43a26d6f0aa5e75914d02a16f15bd07f169c6b1136bae79d1694a09",
+        "bytes": 4453
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/merged-source-1/correction1/fixture-capture-1/WHOLE-JOIN.json",
+        "sha256": "fbf2d4a79ddcb7a19feaec20e5db620af38af4ce9a57d7a4e8adca4d0afe8f41",
+        "bytes": 1291
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/merged-source-1/correction1/fixture-capture-1/WHOLE-JOIN.json",
+        "sha256": "fbf2d4a79ddcb7a19feaec20e5db620af38af4ce9a57d7a4e8adca4d0afe8f41",
+        "bytes": 1291
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/merged-source-1/correction1/fixture-capture-1/started.json",
+        "sha256": "f954ce11372474a43d4347efddc1d9110f5b6a91acc9fd98fcace13f6c2fcccd",
+        "bytes": 36
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/merged-source-1/correction1/fixture-capture-1/started.json",
+        "sha256": "f954ce11372474a43d4347efddc1d9110f5b6a91acc9fd98fcace13f6c2fcccd",
+        "bytes": 36
+      }
+    }
+  ],
+  "independent_source_review": null,
+  "execution_release": null,
+  "root_operations": 0,
+  "Docker_operations": 0,
+  "compiler_operations": 0,
+  "guest_runs": 0
+}

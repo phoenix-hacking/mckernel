@@ -1,0 +1,56 @@
+{
+  "architecture": "x86_64",
+  "definition": {
+    "denominator": "all bytes in final ELF SHT_PROGBITS sections with SHF_ALLOC and SHF_EXECINSTR, including linker fill and padding",
+    "excluded_from_rust_numerator": "C, assembly, unknown-origin bytes, discarded input sections, and linker fill/padding",
+    "numerator": "GNU ld input-section contribution bytes attributed to the exact mckernel_rust.o path"
+  },
+  "executable_sections": [
+    {
+      "address": "0xfffffffffe801000",
+      "name": ".text",
+      "non_rust_or_padding_bytes": 169450,
+      "rust_input_bytes": 679745,
+      "rust_input_contributions": 2816,
+      "size_bytes": 849195
+    },
+    {
+      "address": "0xfffffffffe8d052b",
+      "name": ".fixup",
+      "non_rust_or_padding_bytes": 60,
+      "rust_input_bytes": 0,
+      "rust_input_contributions": 0,
+      "size_bytes": 60
+    },
+    {
+      "address": "0xfffffffffe91f000",
+      "name": ".vsyscall",
+      "non_rust_or_padding_bytes": 3864,
+      "rust_input_bytes": 232,
+      "rust_input_contributions": 4,
+      "size_bytes": 4096
+    }
+  ],
+  "inputs": {
+    "image": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/mckernel.img",
+      "sha256": "10972f87277e8429e2badd238d3ac53e451b8a2351a8ebf013941e1dfb95e1e2"
+    },
+    "link_map": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/mckernel.img.map",
+      "sha256": "cb5255c931aff1020a440251fe659a2faee07e77f809f1f7ecc87539befa816c"
+    },
+    "rust_object": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/rust/mckernel_rust.o",
+      "sha256": "c282ce61bf89adedf844e74ba47b9c40ef1c7d1e70fcadc903b5b81f1609266a"
+    }
+  },
+  "metric_scope": "final mckernel.img allocated executable PROGBITS bytes",
+  "non_rust_or_padding_executable_text_bytes": 173374,
+  "rust_executable_text_bytes": 679977,
+  "rust_executable_text_percent": "79.683155",
+  "rust_input_contribution_count": 2820,
+  "schema": "mckernel-link-map-executable-text-ownership-v1",
+  "source_commit": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+  "total_executable_text_bytes": 853351
+}

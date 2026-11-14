@@ -1,0 +1,54 @@
+#!/bin/sh
+# vmcore2mckdump.in COPYRIGHT FUJITSU LIMITED 2017-2018
+export VMLINUX=/usr/lib/debug/lib/modules/`uname -r`/vmlinux
+export INSTALLDIR=@prefix@
+export INFILE=$1
+export OUTFILE=$2
+
+if [ "X$INFILE" = X -o "X$OUTFILE" = X -o "X$3" != X ]; then
+	echo "usage: vmcore2mckdump <vmcore> <mckdump>" >&2
+	exit 1
+fi
+
+if [ ! -f "$INFILE" ]; then
+	echo "$INFILE: not found" >&2
+	exit 1
+fi
+
+ARCH_NAME=@ARCH@
+if [ "X$ARCH_NAME" = "X" ]; then
+	echo "ARCH_NAME is empty."
+	exit 1
+fi
+
+if [ "$ARCH_NAME" = "x86_64" ]; then
+	ARCH_NAME=x86
+fi
+
+/usr/bin/expect -c "
+set timeout 300
+spawn /usr/bin/crash $VMLINUX $INFILE
+
+expect \"crash>\"
+send \"mod -s ihk_smp_${ARCH_NAME} $INSTALLDIR/kmod/ihk-smp-${ARCH_NAME}.ko\n\"
+
+expect \"crash>\"
+send \"extend $INSTALLDIR/lib/ldump2mcdump.so\n\"
+
+expect \"crash>\"
+send \"ldump2mcdump 0 -o $OUTFILE\n\"
+
+expect \"crash>\"
+send \"extend -u $INSTALLDIR/lib/ldump2mcdump.so\n\"
+
+expect \"crash>\"
+send \"quit\n\"
+"
+if [ -f ${OUTFILE} ]; then
+	echo "mcdump: ${OUTFILE} is extracted."
+	exit 0
+else
+	echo "Error: failed to extract mcdump."
+	exit 1
+fi
+

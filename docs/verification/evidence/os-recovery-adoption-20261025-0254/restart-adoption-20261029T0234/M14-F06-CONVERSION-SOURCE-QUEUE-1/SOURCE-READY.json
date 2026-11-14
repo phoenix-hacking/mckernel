@@ -1,0 +1,57 @@
+{
+  "task_id": "M14-F06-CONVERSION-SOURCE-QUEUE-1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "READY_FOR_INDEPENDENT_SOURCE_REVIEW_NOT_APPLIED",
+  "items": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-F06-CONVERSION-SOURCE-QUEUE-1/regset-defined-1",
+      "symbols": [
+        "arch_ptrace_regset_log_bridge"
+      ],
+      "C_macro": "MCKERNEL_RUST_F06_REGSET_DEFINED_DIAGNOSTIC",
+      "Rust_cfg": "f06_regset_defined_diagnostic_candidate",
+      "contract": "Intentional full CULong lowercase %lx change, not original undefined parity."
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-F06-CONVERSION-SOURCE-QUEUE-1/signal-leaves-reuse-1",
+      "symbols": [
+        "arch_rt_sigreturn_xrstor_bridge",
+        "arch_native_signal_bad_frame_bridge"
+      ],
+      "C_macros": [
+        "MCKERNEL_RUST_F06_XRSTOR_LEAF",
+        "MCKERNEL_RUST_F06_BAD_FRAME_LEAF"
+      ],
+      "Rust_cfg": "f06_signal_leaf_adapters_candidate",
+      "reuse_source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-signal-runtime-adapters-source-1/candidate/syscall_policy.signal_runtime_adapters.FRAGMENT.rs"
+    }
+  ],
+  "compositor": "Both patches use same unchanged actual119 preimages; merge disjoint function replacements, module declarations and CMake dependency additions centrally, do not overwrite one postimage with the other. Pair both C leaf macros with single signal Rust cfg; bad-frame export additionally requires native_linux_irq_work_v6_12. Modules are cfg-OFF until Root selection recipe. Existing parent extern declarations bind these same-name Rust exports.",
+  "open_prerequisites": [
+    "Independent source review, actual public ABI/header/layout checks and matched full crate/C TU/codegen/unique link ownership before selection.",
+    "XRSTOR: original valid aligned standard XSAVE state, actual stable boot mask, CPU exclusion and raw fault behavior; no recovery substitution. Existing asm memory effects and no-FP/SIMD compiler assumptions require actual codegen/native proof. Visibility-only shared helper change centrally owned.",
+    "Bad-frame: actual long/void/SIGSEGV/EFAULT headers and genuine termination lifetime effects; source real-ABI fragment has static assertions but was not compiled here.",
+    "Exact current81 partial-proof receipt not supplied; asked Root for binding. No current81 proof claimed.",
+    "Any real service/account restriction remains; UNKNOWN receipt provenance not cleared.",
+    "Matched original389 registry multiset and final native functional acceptance OPEN."
+  ],
+  "source_bindings": [
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+      "sha256": "b5e9a382491d0f6dc4b71a55f54f76f3d4ca610fa9f81adc60e70ec97a194669"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "sha256": "07cb4bff5a0a9a0d582ebc18e344e5cf06ccd6fc37005292c757ef0501ea50eb"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "sha256": "0fe73cfa95c24b2aa6f91062a802bffc222b0c0f1cc094740dbff7e2634d8516"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "8db479fbea9493ee498bf5d78aef71589b49d9f065e13a8617b5765cd681c194"
+    }
+  ],
+  "history": "All missing path errors retained in source checks; bounded read corrections only. No actual guard/compiler/native operations."
+}

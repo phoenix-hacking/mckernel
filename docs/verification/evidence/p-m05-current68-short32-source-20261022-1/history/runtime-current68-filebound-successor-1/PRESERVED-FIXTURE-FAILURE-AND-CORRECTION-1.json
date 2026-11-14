@@ -1,0 +1,9 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "failure": "Reused generic no-effect fixture overrides actual backend.process_factory with forbidden; new filecap test then invokes fixture stub.",
+  "originals": "check_actual_short32_runtime.py, ACTUAL-SHORT32-CHECK-1.json and actual-short32-check-capture-1 unchanged.",
+  "bounded_correction": "Remove only old process_factory stub assignment. Global Popen/socket/exec remain forbidden; actual production factory validates realprivate cwd and returns unexecuted spawnclosure.",
+  "production_sources_changed": false,
+  "failed_candidates": 1,
+  "correction_candidates": 1
+}

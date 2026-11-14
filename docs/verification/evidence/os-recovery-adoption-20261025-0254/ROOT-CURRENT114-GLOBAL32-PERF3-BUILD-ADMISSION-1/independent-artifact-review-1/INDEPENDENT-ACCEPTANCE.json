@@ -1,0 +1,316 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_ACTUAL_CURRENT114_SELECTED_DEFAULT_ARTIFACT_AND_CURRENT_CONSUMERS",
+  "independent": true,
+  "reviewer": "/root/current110_execution_review",
+  "recorded_at": "2026-10-28T00:21:57.124461+00:00",
+  "profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/PROFILE.SOURCE-ONLY.json",
+    "bytes": 119861,
+    "sha256": "971120d12e67d0b26d031ccec384ccd98f1c65e4ed669a2078e5af15ab31fff8"
+  },
+  "source_adoption": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/root-selective-adoption-materialization-proposal-source-1/ROOT-ACTUAL-SELECTIVE-SOURCE-ADOPTION-1/ROOT-SOURCE-ADOPTION.json",
+    "bytes": 7298,
+    "sha256": "67fc6e6e6fda8e690710657978fb746960deee1efe42afae40a04de27620062c"
+  },
+  "source_publication": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/ROOT-ACTUAL-STATIC-SOURCE-PUBLICATION.json",
+    "bytes": 69972,
+    "sha256": "1fb9d3dcd1a5b2fc98b2787300129e2f38cb1214d89ea34d740ee0b6feceb6ca"
+  },
+  "frozen_profile_publication_null_preserved": true,
+  "actual_execution_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/INDEPENDENT-ACTUAL-HELD-RESOURCE-EXECUTION-REVIEW.json",
+    "bytes": 7813,
+    "sha256": "9daabd1d40b3963f3b7f0f082a7d859e5b3b762ff8bb10dce011cd1c0e758a2a"
+  },
+  "source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/outer-perf-line-restore-source-1/independent-source-review-1/INDEPENDENT-SOURCE-REVIEW.json",
+    "bytes": 8472,
+    "sha256": "941b98394b1600300165d97527059822f78860da5dba03eded90abf89940a801"
+  },
+  "mechanical_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/root-selective-adoption-materialization-proposal-source-1/independent-source-review/INDEPENDENT-SOURCE-REVIEW.json",
+    "bytes": 7197,
+    "sha256": "860533ab009f35dc4ac35ce8a12617d086a3e7e5294336466389fa860d5fd552"
+  },
+  "previous_acceptance": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT113-ABI-PRIVATE-CORRECTION-BUILD-ADMISSION-1/independent-artifact-review-1/INDEPENDENT-ACCEPTANCE.json",
+    "bytes": 5905,
+    "sha256": "02c1001e037ea4d57d3d2dc5fdffa3655ce6d94c36a77ff6ea84b409f1f18cbd"
+  },
+  "tuple": {
+    "Rust": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o",
+      "bytes": 18312048,
+      "sha256": "bc882d2b168140bfc99e56fbe94308c0cdc89234af9f59b4b1f9430b9ded7cb3"
+    },
+    "kernel_C": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+      "bytes": 359600,
+      "sha256": "0109b8edb2d6dbb75cb0416146b8545ee25989ebe53e9a13499f5fcda3df737a"
+    },
+    "process_C": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+      "bytes": 54712,
+      "sha256": "62621cfed19359018448f58ca8146d736bae6b563af4fd53f6e7f14d9e4ab108"
+    },
+    "retained_arch": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT113-ABI-PRIVATE-CORRECTION-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+      "bytes": 106008,
+      "sha256": "da1e0f3a5c170e6ca8c6e2c55d4b5329987e7fc4f47f26f7aef74f5bca7454c0"
+    },
+    "image": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/mckernel.img",
+      "bytes": 10265048,
+      "sha256": "c48faaa46bf244212a99a82222e869f9de001df47e49d99115a23437f7e7b95e"
+    }
+  },
+  "counts": {
+    "Rust_selected_providers": 59,
+    "C_kernel_functions": 61,
+    "C_arch_functions": 19,
+    "C_total": 80,
+    "C_process_OBJECTs": 31
+  },
+  "proofs": {
+    "CORE-ARTIFACT-READBACK.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/independent-artifact-review-1/CORE-ARTIFACT-READBACK.json",
+      "bytes": 1314665,
+      "sha256": "e741e81d8992eb43ad1b09db24a56e6cf813801f897a90b43dcb9b522aa240fb"
+    },
+    "METADATA-EDGE-ABI-WARNING-COMPLEMENT.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/independent-artifact-review-1/METADATA-EDGE-ABI-WARNING-COMPLEMENT.json",
+      "bytes": 228974,
+      "sha256": "97a23eb4b0784f215fccc4b8e66395ec5600840eafa797ecee1bfc14cf7bcb06"
+    },
+    "SELECTED-DATA-CONSUMERS.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/independent-artifact-review-1/SELECTED-DATA-CONSUMERS.json",
+      "bytes": 452666,
+      "sha256": "a52da8c44d68ce0789c43dd8b072b31c8aa369ad56778c3a7726fd9f983c5c2c"
+    },
+    "ALL59-EXACT-ENTRY-ALIASES-AND-CONSUMERS.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/independent-artifact-review-1/ALL59-EXACT-ENTRY-ALIASES-AND-CONSUMERS.json",
+      "bytes": 72736,
+      "sha256": "5f01785be1796576286074d784e8db6b690c107ed8447f37afd3a3db9e53f44a"
+    },
+    "ANONYMOUS-EXACT-SELECTED-ENTRY-EDGES.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/independent-artifact-review-1/ANONYMOUS-EXACT-SELECTED-ENTRY-EDGES.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    "FINITE-ANONYMOUS-OWNER-INVENTORY.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/independent-artifact-review-1/FINITE-ANONYMOUS-OWNER-INVENTORY.json",
+      "bytes": 32733,
+      "sha256": "3438daa4a66783fa3082c0c3fe850dd4bc8f1ef48be9306c3e3de2d9f349878e"
+    }
+  },
+  "actual_join": {
+    "runner": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/HOLDER/RUNNER.JOINED.json",
+      "bytes": 83,
+      "sha256": "13ab04cbefa4c520761a0cb10fe54cf1828472bdd567d3dee492246cca5a75bb"
+    },
+    "holder_terminal": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/HOLDER/BUILD-LOCAL-TERMINAL.json",
+      "bytes": 246,
+      "sha256": "a33bc8ab72fc2bdc34c385b9d1aac19e12af00ccce4afec9140bb4f1fa04e996"
+    },
+    "container_terminal": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/OUTPUT/terminal.json",
+      "bytes": 459,
+      "sha256": "462c3da37341d57730e88cc24fe94f7f538210c2abd9ce0da41dd36059eec009"
+    }
+  },
+  "metrics": {
+    "actual_commands": [
+      {
+        "index": 0,
+        "started_at_epoch": 1793146038.7788014,
+        "finished_at_epoch": 1793146059.5702548,
+        "wall_seconds": 20.79145336151123,
+        "CPU_seconds": 20.835207999999998,
+        "maximum_child_RSS_KiB_worker_cumulative": 592140,
+        "returncode": 0,
+        "output": {
+          "path": "/work/output/build/kernel/rust/mckernel_rust.o",
+          "bytes": 18312048,
+          "sha256": "bc882d2b168140bfc99e56fbe94308c0cdc89234af9f59b4b1f9430b9ded7cb3"
+        }
+      },
+      {
+        "index": 1,
+        "started_at_epoch": 1793146059.5868392,
+        "finished_at_epoch": 1793146060.3455799,
+        "wall_seconds": 0.7587406635284424,
+        "CPU_seconds": 0.732679000000001,
+        "maximum_child_RSS_KiB_worker_cumulative": 592140,
+        "returncode": 0,
+        "output": {
+          "path": "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+          "bytes": 359600,
+          "sha256": "0109b8edb2d6dbb75cb0416146b8545ee25989ebe53e9a13499f5fcda3df737a"
+        }
+      },
+      {
+        "index": 2,
+        "started_at_epoch": 1793146060.3462536,
+        "finished_at_epoch": 1793146060.3824768,
+        "wall_seconds": 0.03622317314147949,
+        "CPU_seconds": 0.03601199999999949,
+        "maximum_child_RSS_KiB_worker_cumulative": 592140,
+        "returncode": 0,
+        "output": {
+          "path": "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+          "bytes": 54712,
+          "sha256": "62621cfed19359018448f58ca8146d736bae6b563af4fd53f6e7f14d9e4ab108"
+        }
+      },
+      {
+        "index": 3,
+        "started_at_epoch": 1793146060.382759,
+        "finished_at_epoch": 1793146060.4882982,
+        "wall_seconds": 0.10553908348083496,
+        "CPU_seconds": 0.10530200000000178,
+        "maximum_child_RSS_KiB_worker_cumulative": 592140,
+        "returncode": 0,
+        "output": {
+          "path": "/work/output/build/kernel/mckernel.img",
+          "bytes": 10265048,
+          "sha256": "c48faaa46bf244212a99a82222e869f9de001df47e49d99115a23437f7e7b95e"
+        }
+      }
+    ],
+    "span_seconds": 21.70949673652649,
+    "sum_command_wall_seconds": 21.691956281661987,
+    "CPU_seconds": 21.709201,
+    "maximum_child_RSS_KiB_worker_cumulative": 592140,
+    "resource_epoch": 1793145973.2151532,
+    "resource_to_first_compiler_seconds": 65.56364822387695
+  },
+  "production_artifact_findings": [
+    "All4 exact production commands joined0;3 fresh objects and8 exact retained objects feed genuine11-input raw link.119-source Rust cohort and genuine CURRENT113 origin are reused at accepted source scope.",
+    "All59 selected Rust exports have unique input/final ownership and complete final-byte reconstruction. Inherited56 and existing atomic alias retain exact113 nonrelocated bodies and positive relocation provenance. Two new wrappers bind genuine existing x86 implementations; u32 hardware-code narrowing and CInt return retain source/actual ABI/HOST qualification.",
+    "Actual C kernel functions61 plus retained arch functions19 total80; process C OBJECTs31. Exactly3 old C callback definitions disappear: extra_set, init_raw and event_atomic64_read. Accounting is2 new Rust wrappers plus1 already existing Rust atomic bridge newly selected by C alias.",
+    "GLOBAL32 Ddebug objects own64 slots/2048B, each32B/aligned8, exact original file/function/line, flags0, null format and zero pad;128 R64 string fields bind exact readonly final bytes. GNU_RETAIN is present. All14 LOCAL C records/14slots448B and C configuration objects remain owned by C.",
+    "All76 functions actually referencing the moved data reconstruct complete final bytes with113 nonrelocated parity. Finite anonymous LOCAL function/data owners and5 self-function jump tables resolve exact current input/final symbols or bytes; no unknown address is skipped.",
+    "The actual389-record registry has identical record multiset and32B start..stop coverage. Exact final show/store bodies equal113 and retain complete traversal. Moving GLOBAL descriptors into the Rust link-set changes sysfs listing row order; file/function/line matching and update semantics retain every record. Byte-identical listing order is not claimed.",
+    "All213 remaining C metadata objects retain raw initializers/types/bindings;189 retain identical raw relocations.24 records/38 changed fields have exact original/current named-owner or readonly-string provenance and complete current final bytes.",
+    "Three new callback table fields resolve actual Rust providers. Both full provider tables and5 actual Rust table consumers reconstruct positive final bytes, including field8/16 extra_set/init_raw and atomic_read field16.",
+    "39 of59 selected entrypoints have positive direct or exact same-entry alias R64 consumer edges in the11 inputs. Other20 are inherited emitted provider bodies without such a direct raw edge in this tuple. Their body/source acceptance is retained; no new consumer execution or native retirement is inferred from symbol presence.",
+    "Inherited13 folded arguments, timer120B, idle116B, runqueue208B/17 fields, scalar4 constants/8 consumers, four LOCAL logger records and337B logger/jump table revalidate against actual image. Required ELF entry and symbols pass."
+  ],
+  "warnings": {
+    "Rust143_entire_stream_equal113": {
+      "current": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/OUTPUT/work/evidence/00.stderr",
+        "bytes": 56443,
+        "sha256": "50c0fd6786d447ef4c46e5869002ab6f17f4436908a02f9ab74182ba4fb1d519"
+      },
+      "old113": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT113-ABI-PRIVATE-CORRECTION-BUILD-ADMISSION-1/OUTPUT/work/evidence/00.stderr",
+        "bytes": 56443,
+        "sha256": "50c0fd6786d447ef4c46e5869002ab6f17f4436908a02f9ab74182ba4fb1d519"
+      },
+      "entire_stream_equal": true
+    },
+    "kernel_C_seven_original_messages": {
+      "actual": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/OUTPUT/work/evidence/01.stderr",
+        "bytes": 1745,
+        "sha256": "97e63907fbe38a669bafce0937c4c90523aab60dfbe40469663d504d6bbf2da4"
+      },
+      "prior": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT112-EVENT2-ALLOC2-BUILD-ADMISSION-1/OUTPUT/work/evidence/01.stderr",
+        "bytes": 1626,
+        "sha256": "e017141995a7d329d40c7e5e3717e957efa70587be5fd2f4aa9731d7d8f965f8"
+      },
+      "seven_warning_messages_identical": true,
+      "presentation_changed": true
+    },
+    "process_C_stderr_empty": true,
+    "link_stderr_equal113": true,
+    "six_unused_C_initializers_unchanged": true,
+    "inherited_syscall17B_ABI_bridge": [
+      {
+        "offset": 6,
+        "type": 1,
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe8ca320",
+        "kind": "NAMED",
+        "target": "syscall",
+        "final_symbol": {
+          "name": "syscall",
+          "bind": 1,
+          "type": 2,
+          "other": 0,
+          "shndx": 1,
+          "value": 18446744073685213984,
+          "size": 2796
+        }
+      }
+    ]
+  },
+  "preserved_open": [
+    "Original seven older C section-relative metadata provenance limitations remain OPEN at accepted inherited scope.",
+    "Native execution, application coverage, supported whole-file C retirement and full M14/M15 completion remain OPEN; this receipt grants no runtime authority.",
+    "Original failed113 E0616 batch, old GNU linker retain failure, withdrawn dead witness, outer PERF FILELINE blocked candidate and offline reader failures remain preserved."
+  ],
+  "reader_failures_preserved": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/independent-artifact-review-1/reader-first-failure.py",
+      "bytes": 16663,
+      "sha256": "323262f14f97572ce4f036e14e388bcfbc86b1fad244fcfc3148385e8401e035"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/independent-artifact-review-1/reader-fourth-registry-literal-failure.py",
+      "bytes": 15305,
+      "sha256": "ed511adc2a8a94b303564763533142ebb581d4567b4e177b2891b179e4ca78c7"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/independent-artifact-review-1/reader-second-type-failure.py",
+      "bytes": 16646,
+      "sha256": "bdfb54c8cce0e9bbc601fd9967e0593bcc545f91dbd9c00e1cfd18f958e7285f"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/independent-artifact-review-1/reader-third-anonymous-failure.py",
+      "bytes": 16652,
+      "sha256": "acdaec7342066295abb1edbe938f566796378f7bccb19e77aca7f8c889bad5a2"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/independent-artifact-review-1/READER-FIRST-FAILURE.json",
+      "bytes": 408,
+      "sha256": "31cb02590eb5ff20e5e0622ed36aec5853deb6fd04261dc2114bed8f285134d8"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/independent-artifact-review-1/READER-SECOND-TYPE-FAILURE.json",
+      "bytes": 351,
+      "sha256": "d086c07f0cf2d49ff569d20ae7ef1cdd0b938b955ca1a5f6b13ffbe01efd1dbe"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/independent-artifact-review-1/READER-THIRD-FAILURE.json",
+      "bytes": 282,
+      "sha256": "dcd6d98bedcb115c92151c26ab87ba6cfdf39510b28109d92cfc1f22227640ea"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/independent-artifact-review-1/reader-fifth-kernel-warning-assumption.py",
+      "bytes": 15655,
+      "sha256": "ad07c34f3e18f332343ada254b9e9e614ea362a7c56d8878f1252fbdbf6c8320"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/independent-artifact-review-1/RECEIPT-ASSEMBLY-PUBLICATION-NULL-FAILURE.json",
+      "bytes": 285,
+      "sha256": "5a227b6198a201095d31633cc2cac766d078dc798929ceee01e847098e5df7a8"
+    }
+  ],
+  "blocking_findings": [],
+  "actual_compiler_replays": 0,
+  "native_actions": 0,
+  "guard_or_resource_queries": 0,
+  "canonical_mutations": 0,
+  "native_acceptance": false,
+  "wholefile_retirement": false,
+  "runtime_authority": null,
+  "current_free_authority": false
+}

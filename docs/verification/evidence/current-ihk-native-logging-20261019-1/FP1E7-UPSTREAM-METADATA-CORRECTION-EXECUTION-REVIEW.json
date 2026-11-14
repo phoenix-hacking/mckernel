@@ -1,0 +1,118 @@
+{
+  "accepted_upstream_boundary": {
+    "bytes": 4825,
+    "path": "/home/holden/mckernel-work/host-preparation/current-ihk-module-result-review-20261019-1/FP1E7-UPSTREAM-ORDINARY-EXECUTION-REVIEW.json",
+    "sha256": "fbefed3d4da1df5ab0a061a11766cb91ec8412287bbabedb5694dc58d84f246c"
+  },
+  "allowed_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--fsize=33554432",
+    "--nofile=256",
+    "--core=0",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/derive_fp1e7_avx_metadata.py",
+    "--binding",
+    "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/upstream-stage-binding-metadata.json",
+    "--binding-sha256",
+    "49ecb5fad9fb615dcd82aa8c9069d9a312c66218200190391eb089a64109e92c"
+  ],
+  "application_acceptance": false,
+  "binding": {
+    "bytes": 2837,
+    "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/upstream-stage-binding-metadata.json",
+    "sha256": "49ecb5fad9fb615dcd82aa8c9069d9a312c66218200190391eb089a64109e92c"
+  },
+  "binding_delta_only": [
+    "derivation_source"
+  ],
+  "conditional_downstream_source_acceptance": {
+    "actual_stage_execution_authorized": false,
+    "remaining": "Genuine upstream manifests/receipt and fixed fullauthority/reuse binding plus exactloggingpayload still required.",
+    "source": {
+      "bytes": 21794,
+      "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/stage_logging_metadata.py",
+      "sha256": "991933fd686f2fb4baca96c251fa97bc074927cd0d31ba0e6aee308fd3a46bac"
+    },
+    "source_profile_accepted": true
+  },
+  "counts": {
+    "negative": 14,
+    "positive": 4,
+    "saved_actual_archive_inputs": 2
+  },
+  "decision": "PASS_EXECUTION",
+  "first_failure_and_one_bounded_correction": true,
+  "fixture_result": {
+    "bytes": 273,
+    "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/metadata-fixture-result.json",
+    "sha256": "de3ad0afa1c36bd5222dd8b30f86e2b2d0ae42c91baebee9d4d0f925b6c12b2d"
+  },
+  "fixture_source": {
+    "bytes": 3171,
+    "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/test_archive_metadata.py",
+    "sha256": "e9f42e20ad71d29d125cc5ceb6b8db93e0fbacf4cfd7a864f56b4b266ff1c288"
+  },
+  "fixture_status": {
+    "bytes": 897,
+    "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/metadata-fixture.status.json",
+    "sha256": "ad398bc53cb4144229eb19c15be577491c6c65641e1ac1644cb12af042ae40e8"
+  },
+  "fresh_ordinary_admission_required": true,
+  "implementation_ownership": false,
+  "module_load_acceptance": false,
+  "native_acceptance": false,
+  "preserved_failure_classification": {
+    "bytes": 3535,
+    "path": "/home/holden/mckernel-work/host-preparation/current-ihk-module-result-review-20261019-1/FP1E7-UPSTREAM-FAILED-PREFIX-AND-METADATA-SEMANTICS-REVIEW.json",
+    "sha256": "cae51d88c1630c2ede18abee47e9a91102f9051f2740ad1425054dc41a9d1773"
+  },
+  "profile": {
+    "as_bytes": 1073741824,
+    "capture_per_stream_bytes": 33554432,
+    "cpu": 7,
+    "cpu_seconds": 30,
+    "host_floor_bytes": 17179869184,
+    "host_growth_bytes": 4194304,
+    "jobs": 1,
+    "kill_grace_seconds": 2,
+    "per_file_fsize_bytes": 33554432,
+    "reserve_bytes": 671088640,
+    "scratch_floor_bytes": 12884901888,
+    "scratch_growth_bytes": 67108864,
+    "total_output_growth_cap_bytes": 67108864,
+    "wall_seconds": 35
+  },
+  "proposal": {
+    "bytes": 10332,
+    "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/ORDINARY-METADATA-CORRECTION-PROPOSAL.json",
+    "sha256": "cd73e682cf9925663d63cc46b1a844c74844b81508d6977b170aad42e01e3b2a"
+  },
+  "reviewed_payload": {
+    "bytes": 4988,
+    "path": "/home/holden/mckernel-work/host-preparation/current-ihk-module-result-review-20261019-1/FP1E7-UPSTREAM-METADATA-CORRECTION-EXACT-PAYLOAD.json",
+    "sha256": "d3543054db89f0b170dfc7e7d396aadc49d7608cef50f7202d688fd591de8782"
+  },
+  "reviewed_release_payload_sha256": "d3543054db89f0b170dfc7e7d396aadc49d7608cef50f7202d688fd591de8782",
+  "reviewer": "/root/resume_git_owner_review",
+  "schema": "mckernel.independent-exact-ordinary-fp1e7-upstream-metadata-correction-review.v1",
+  "source": {
+    "bytes": 12702,
+    "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/derive_fp1e7_avx_metadata.py",
+    "sha256": "8f71ccd003950c9b9884e11e960da9196b9c7fbd819ad217deffa99226281f26"
+  },
+  "source_delta": "Exactly2 stage expressions in upstream and2 matching stage expressions in separate downstreamvariant: compressed archive bound through output_sha256; prefix and rawsuffix bound through overlay_sha256; emitted suffix hash reflects no[len(nb):]. Other function bodies/globals unchanged.",
+  "stage_count": 1,
+  "status": "PASS_EXECUTION",
+  "time_unix": 1792442731.5936205
+}

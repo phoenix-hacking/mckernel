@@ -1,0 +1,49 @@
+{
+  "status": "BOUNDED_CORRECTION_SOURCE_READY_UNRUN",
+  "scope": "Functional OS/apps plus actual Rust/reviewed assembly compute-C retirement",
+  "production_source_changes": 0,
+  "native_acceptance": false,
+  "files": [
+    {
+      "path": "focused-test-1/actual.rs",
+      "sha256": "05e47d350c92ab858da0cc06075f5cf8ae64dad42e5456c8ee730c92e71a3513",
+      "bytes": 14313
+    },
+    {
+      "path": "focused-test-1/application.rs",
+      "sha256": "80183a0d743aa266fa8931f6cd1915de1e7de7ea9cfb26c3215db4505b711ec5",
+      "bytes": 5785
+    },
+    {
+      "path": "focused-test-1/application_rpc.rs",
+      "sha256": "9f811c86c4e996294a6cd3be6b83315dabd20a3fb375419e091f4b9dedcfad39",
+      "bytes": 10080
+    },
+    {
+      "path": "focused-test-1/application_syscall.rs",
+      "sha256": "b56600c4e02337f5e16c659723320f0779de54c97b5331c85d1f29d0b3f6d1fa",
+      "bytes": 20555
+    },
+    {
+      "path": "focused-test-1/current_fork_control.rs",
+      "sha256": "df606a373c7a10d920b3c8ae2c28b5bf9478a39ad911a9a7dfc4715ebd98b842",
+      "bytes": 10664
+    },
+    {
+      "path": "focused-test-1/smp_application_syscall.rs",
+      "sha256": "07d94c5e579e142ccd9c859b415714b8f8613dd7fe69762f4010fb06f9d22412",
+      "bytes": 33609
+    },
+    {
+      "path": "source/host-kernel/native-rust/current_fork_control.rs",
+      "sha256": "89e3c6a26826ef48c2d5420759e462cebe12e2ffe437b9cb5a83627d37699304",
+      "bytes": 10580
+    },
+    {
+      "path": "source/host-kernel/native-rust/current_fork_host.rs",
+      "sha256": "5a68633144eb60f941a73ceff9f2d5b0d30c7b9c1c1d0c25d5e8135dfde959b4",
+      "bytes": 10844
+    }
+  ],
+  "failure_history": "First candidate compiled0, test101 because shared ResponseMemory/capsule release counter incorrectly expected zero after successful actual Response publication. Preserve ../capture-1. This bounded correction separates capsule-release witness and requires actual response release1/capsule release0. Any further failed candidate requires escalation."
+}

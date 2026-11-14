@@ -1,0 +1,141 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/observe_current64_current118_postjoin.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/common-routing-data-correction-source-1/observe_current64_current118_postjoin.py
+@@ -100,7 +100,7 @@
+  rows.extend(dict(pid=r['pid'],start=r['birth'],role='CURRENT118_actual_recovery_recorded_command',group=r['pid'],fd=None)for r in clients)
+  need(value['additional_measured_actors']==rows,'exact actual recovery operator/parent/twelve clients; no invented or omitted births')
+  need(type(value['recorded_epoch'])in(int,float) and math.isfinite(value['recorded_epoch']) and all(type(parent[k])in(int,float) and math.isfinite(parent[k])for k in ['start_epoch','finish_epoch']) and checked(PINS['failed_recovery_join'])['finish_epoch']<=parent['start_epoch']<=parent['finish_epoch']<=value['recorded_epoch']<PINS['limits'][0],'post-failure current supplement within original caps')
+- retained['actors'].extend(rows);retained['actors'].extend(root3_failed_actors(checked(PINS['post_root3_pending'])));retained['actors'].extend(root4_outer_parent_actors());retained['custody_supplement']=row
++ retained['actors'].extend(rows);retained['actors'].extend(root3_failed_actors(checked(PINS['post_root3_pending'])));retained['actors'].extend(root4_outer_parent_actors());retained['actors'].extend(failed_weekly_capture1_actors());retained['custody_supplement']=row
+  return value
+ 
+ 
+@@ -164,6 +164,24 @@
+  need(auth(joined['stderr']).read_bytes()==b'' and json.loads(auth(joined['stdout']).read_bytes())==dict(status='RETIREMENT_COMPLETE_PENDING_PARENT_JOIN_AND_FRESH_CURRENT',result=closed['result']),'Root4 raw streams bind exact result')
+  return [dict(pid=parent['pid'],start=parent['birth'],role='CURRENT118_Root4_closed_cleanup_outer_parent',group=None,fd=None)]
+ 
++def failed_weekly_capture1_actors():
++ """Exact actual joined failed observation; no new current-free/effect inference."""
++ pending=checked(PINS['post_weekly_capture1_pending']);note=json.loads(pending['note']);prior=json.loads(checked(PINS['post_root4_pending'])['note'])
++ need(note['prior_metadata_boundary']==PINS['post_root4_pending'] and note['closed_failed_weekly_capture1']==PINS['failed_weekly_capture1'],'exact Root-authored post-failure pending frontier')
++ for key in ['closed_current118_root4_retirement','closed_failed_current118_cleanup']:need(note[key]==prior[key],'unchanged prior closed custody '+key)
++ failed=checked(PINS['failed_weekly_capture1'])
++ need(failed['author']=='/root' and failed['status']=='FAILED_PRE_EXTERNAL_QUERY_ROOT_EXACT_CONFIGURED_RUNTIME_DEPENDENCIES' and failed['current_free']is False and failed['new_external_command_clients']==0 and failed['no_cleanup_or_resource_release']is True and failed['signals_sent']==0 and failed['original_readonly_client2232653_exit']=='UNKNOWN','truthful exact failed capture scope and original UNKNOWN')
++ for key in ['parent_join','tool_join','release','capture_result']:auth(failed[key])
++ joined=checked(failed['parent_join']);tool=checked(failed['tool_join']);result=checked(failed['capture_result']);parent=joined['parent'];child=joined['child']
++ need((parent['pid'],parent['birth'],child['pid'],child['birth'],child['ppid'])==(2332459,105231105,2332460,105231110,2332459),'exact measured failed capture parent/observer identities')
++ need(joined['author']=='/root' and joined['release']==failed['release'] and joined['returncode']==1 and joined['wait4_status']==256 and joined['wait4_pid']==child['pid'] and joined['positive_direct_parent_wait']is True and joined['positive_direct_wait_join']is True and joined['positive_wait4_join']is True and joined['parent_streams_closed']is True and joined['streams_closed']is True and joined['process_group_absent']is True and joined['remaining_group_members']==[] and joined['group_observation_errors']==[] and joined['signals_sent']==0 and joined['current_free']is False,'actual failed capture child positivewait/group/stream closure')
++ need(tool['author']=='/root' and tool['decision']=='ROOT_ATTESTS_OBSERVED_ACTUAL_TOOL_SESSION_JOIN' and tool['session_id']==91482 and tool['actual_tool_response']==dict(chunk_id='a08490',exit_code=1) and tool['joined']is True and tool['returncode']==1 and tool['parent_receipt']==failed['parent_join'] and tool['parent']==dict(pid=parent['pid'],birth=parent['birth']) and tool['child']==dict(pid=child['pid'],birth=child['birth']) and tool['new_external_command_clients']==0 and tool['signals_sent']==0 and tool['current_free']is False,'actual Roottool91482 positive terminal parent join')
++ need(auth(joined['stdout']).read_bytes()==b'' and b"ValueError: Root exact configured runtime dependencies"in auth(joined['stderr']).read_bytes(),'exact original raw failed capture diagnostics')
++ need(result==dict(status='READONLY_ROOT64_CAPTURE_FAILED_NO_RETRY',error="ValueError('Root exact configured runtime dependencies')",runtime_authority=None),'exact retained failed capture result')
++ rows=failed['closed_failed_actors']
++ need([(r['pid'],r['birth'],r['group'])for r in rows]==[(2332459,105231105,2332459),(2332460,105231110,2332460)] and parent['pgrp']==parent['sid']==parent['pid'] and child['pgrp']==child['sid']==child['pid'],'only exact measured failed capture dedicated groups')
++ return [actor(r)for r in rows]
++
+ def validate_retirement(retained,result_ref,parent_ref):
+  executor=retained['executor'];b=retained['b'];value=checked(result_ref)
+  receipts=executor.validate_result(value,b)
+@@ -188,7 +206,7 @@
+  inherited=load(PINS['base_source'],'CURRENT118_source_closure').source_subjects()
+  result.update({'inherited:'+key:value for key,value in inherited.items()})
+  for key,row in checked(PINS['compatibility_runtime_files']).items():auth(row);result['compat:'+key]=row
+- for key in ['failed_normal','failed_recovery_join','failed_recovery_started','failed_recovery_release','recovery_parent_validator','recovery_bindings','recovery_source_ready','source1_ready','source1_observer','post_root3_pending','post_root4_pending','root4_parent_normalized','root4_parent_raw']:result[key]=PINS[key];auth(PINS[key])
++ for key in ['failed_normal','failed_recovery_join','failed_recovery_started','failed_recovery_release','recovery_parent_validator','recovery_bindings','recovery_source_ready','source1_ready','source1_observer','post_root3_pending','post_root4_pending','root4_parent_normalized','root4_parent_raw','failed_weekly_capture1','post_weekly_capture1_pending']:result[key]=PINS[key];auth(PINS[key])
+  return result
+ 
+ def runtime_dependencies(bindings):
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/INPUTS.json
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/common-routing-data-correction-source-1/INPUTS.json
+@@ -165,8 +165,18 @@
+     "sha256": "2c4041377247ffedb960c8e38ddf5a7abf31777b2706330fd483a651c34bf805"
+   },
+   "runtime_base_source": {
+-    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recursive-current62/observe_current62_bfd_postjoin.py",
++    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/common-routing-data-correction-source-1/recursive-current62/observe_current62_bfd_postjoin.py",
+     "bytes": 37857,
+     "sha256": "48b80a8f8d8715fba6a83bd67993e3a974f60b3ea29f27701a9fdc37d764e577"
++  },
++  "failed_weekly_capture1": {
++    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/FAILED-WEEKLY-CAPTURE1.ACTUAL.json",
++    "bytes": 2315,
++    "sha256": "2c25a5b98eb05dc69be7efc02814d2fb1ab24058c09934a42544efe46f83b68d"
++  },
++  "post_weekly_capture1_pending": {
++    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CURRENT-NONCE-LEDGER64.POST-WEEKLY-CAPTURE1-FAILURE.PENDING.json",
++    "bytes": 44093,
++    "sha256": "a5d6a1669151dc0fe024e659b0c467c14247d404251f7ba4d4f4f611024fc01e"
+   }
+ }
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recursive-current62/INPUTS.json
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/common-routing-data-correction-source-1/recursive-current62/INPUTS.json
+@@ -101,9 +101,9 @@
+     "sha256": "3b4d2c9816d69084a26433383333082885a2b4bfe88a17e39cd6675702d843ab"
+   },
+   "history_runtime_source": {
+-    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recursive-current62/history/observe_bfd_current61.py",
+-    "bytes": 10926,
+-    "sha256": "30409461a026793c1b70feb19af1c7b9a6094d519fc1bae9ed1aa4ee223751b9"
++    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/common-routing-data-correction-source-1/recursive-current62/history/observe_bfd_current61.py",
++    "bytes": 10966,
++    "sha256": "3e8820572c3ea1dd56e9ca1629ce6a0012310720b2bcd5c62f42672f6a926921"
+   },
+   "retirement_executor": {
+     "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/image-metadata-profile-correction-source-1/retire_exact_bfd_stopped_container.py",
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recursive-current62/history/observe_bfd_current61.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/common-routing-data-correction-source-1/recursive-current62/history/observe_bfd_current61.py
+@@ -8,7 +8,7 @@
+ import os
+ 
+ HERE=Path(__file__).resolve().parent
+-PINS={'ledger60': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER60.json', 'bytes': 24066, 'sha256': 'bd4b75db9c1c7cdb2993aa957c0c9a690eed39210d751ba89319c29ef4fc28d4'}, 'current60_source': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recursive-current62/history/observe_bfd_current60_history.py', 'bytes': 13303, 'sha256': '4bc439b4ad5b648c3d669974540cedb3171a306554cc2e8cb0e4f5cab736f220'}, 'capture2': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/ACTUAL-POSTJOIN-OBSERVATION-2-CPU0.json', 'bytes': 5944082, 'sha256': 'ebbd745f00e17f52fb2e4f589633ca74c9e64e44a643f875c6d9697dc7c9a270'}, 'capture2_join': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/profile-caller-correction-source-1/ACTUAL-CPU0-POSTJOIN-2.RESULT.json', 'bytes': 1142, 'sha256': '01189006547b80fe7de923c073f7a43951da3297805c9c08a1c4e6e3ae983263'}, 'compose_result': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/actual-host-bound-source-1/root-ordinary-compose-dispatch-source-1/future-capture-1/ACTUAL-COMPOSE-RESULT.json', 'bytes': 3596, 'sha256': '2afd5f7fb1ffb3501bda6071b135e055262a681a6fa2f09f7c07eff737ba3728'}, 'CID': '57a5fb1f62bc707ee90412fe9585718cdaa39e4110854f91bf4cb6df4380fda3'}
++PINS={'ledger60': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER60.json', 'bytes': 24066, 'sha256': 'bd4b75db9c1c7cdb2993aa957c0c9a690eed39210d751ba89319c29ef4fc28d4'}, 'current60_source': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/common-routing-data-correction-source-1/recursive-current62/history/observe_bfd_current60_history.py', 'bytes': 13303, 'sha256': '4bc439b4ad5b648c3d669974540cedb3171a306554cc2e8cb0e4f5cab736f220'}, 'capture2': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/ACTUAL-POSTJOIN-OBSERVATION-2-CPU0.json', 'bytes': 5944082, 'sha256': 'ebbd745f00e17f52fb2e4f589633ca74c9e64e44a643f875c6d9697dc7c9a270'}, 'capture2_join': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/profile-caller-correction-source-1/ACTUAL-CPU0-POSTJOIN-2.RESULT.json', 'bytes': 1142, 'sha256': '01189006547b80fe7de923c073f7a43951da3297805c9c08a1c4e6e3ae983263'}, 'compose_result': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/actual-host-bound-source-1/root-ordinary-compose-dispatch-source-1/future-capture-1/ACTUAL-COMPOSE-RESULT.json', 'bytes': 3596, 'sha256': '2afd5f7fb1ffb3501bda6071b135e055262a681a6fa2f09f7c07eff737ba3728'}, 'CID': '57a5fb1f62bc707ee90412fe9585718cdaa39e4110854f91bf4cb6df4380fda3'}
+ CURRENT={'ledger': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER61.json', 'bytes': 24665, 'sha256': '20e2470a6f7f81b188350af1374611801f68eacbf80ee8916814bd48962f4fa2'}, 'latest_free': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/CURRENT116-POSTJOIN-REVIEW-1/CURRENT-FREE.json', 'bytes': 12188, 'sha256': '6c83eee41b7e90d0f055034b9bbd30cfc9e32efac9e8285a90fc8948f7b82e7d'}, 'root_inputs': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER61.json', 'bytes': 24665, 'sha256': '20e2470a6f7f81b188350af1374611801f68eacbf80ee8916814bd48962f4fa2'}, 'ledger_key': 'Root61', 'compose_result': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/actual-host-bound-source-1/root-ordinary-compose-dispatch-source-1/future-capture-1/ACTUAL-COMPOSE-RESULT.json', 'bytes': 3596, 'sha256': '2afd5f7fb1ffb3501bda6071b135e055262a681a6fa2f09f7c07eff737ba3728'}}
+ STATUS='PASS_Root61_CURRENT_BOUNDARY_OBSERVATION_PENDING_ROOT_ACCEPTANCE'
+ 
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recursive-current62/history/ACTUAL-PINS.TEMPLATE.NOT-AUTHORITY.json
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/common-routing-data-correction-source-1/recursive-current62/history/ACTUAL-PINS.TEMPLATE.NOT-AUTHORITY.json
+@@ -10,7 +10,7 @@
+     "sha256": "8917629dcf0dd686c77e2531e26818c003ec43d6543786c4b4fa6e5a8cb25b53"
+   },
+   "common": {
+-    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current62-after-bfd-default-build-source-20261028-1/review-correction-source-1/attempt2-binding-successor-1/retirement-parent-abi-correction-source-1/history/observe_bfd_root59_history.py",
++    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/common-routing-data-correction-source-1/recursive-current62/history/observe_bfd_root59_history.py",
+     "bytes": 23317,
+     "sha256": "5877ec1acbc121c99dd564e3c5f0801995417ae08e66887e34afd3b4c8a30515"
+   },
+@@ -89,10 +89,5 @@
+     "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT116-F03SEVEN-SHM-BUILD-ADMISSION-1/HOLDER/BUILD-LOCAL-TERMINAL.json",
+     "bytes": 246,
+     "sha256": "df525f2df8625a9965c3a3f5b484853fc41059a5546bb9abcf6b883f02dcf809"
+-  },
+-  "common_source": {
+-    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recursive-current62/history/observe_bfd_root59_history.py",
+-    "bytes": 23317,
+-    "sha256": "5877ec1acbc121c99dd564e3c5f0801995417ae08e66887e34afd3b4c8a30515"
+   }
+ }
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recursive-current62/history/ROOT-ACTUAL-RUNTIME-DEPENDENCIES.TEMPLATE.NOT-AUTHORITY.json
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/common-routing-data-correction-source-1/recursive-current62/history/ROOT-ACTUAL-RUNTIME-DEPENDENCIES.TEMPLATE.NOT-AUTHORITY.json
+@@ -2,7 +2,7 @@
+   "schema": "mckernel.configured-root59-observer-dependencies.v1",
+   "author": null,
+   "observer": {
+-    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recursive-current62/history/observe_bfd_root59_history.py",
++    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/common-routing-data-correction-source-1/recursive-current62/history/observe_bfd_root59_history.py",
+     "bytes": 23317,
+     "sha256": "5877ec1acbc121c99dd564e3c5f0801995417ae08e66887e34afd3b4c8a30515"
+   },
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recursive-current62/history/ROOT61-RUNTIME-DEPENDENCIES.TEMPLATE.NOT-AUTHORITY.json
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/common-routing-data-correction-source-1/recursive-current62/history/ROOT61-RUNTIME-DEPENDENCIES.TEMPLATE.NOT-AUTHORITY.json
+@@ -1,9 +1,9 @@
+ {
+   "author": null,
+   "observer": {
+-    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recursive-current62/history/observe_bfd_current61.py",
+-    "bytes": 10926,
+-    "sha256": "30409461a026793c1b70feb19af1c7b9a6094d519fc1bae9ed1aa4ee223751b9"
++    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/common-routing-data-correction-source-1/recursive-current62/history/observe_bfd_current61.py",
++    "bytes": 10966,
++    "sha256": "3e8820572c3ea1dd56e9ca1629ce6a0012310720b2bcd5c62f42672f6a926921"
+   },
+   "ledger": {
+     "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER61.json",

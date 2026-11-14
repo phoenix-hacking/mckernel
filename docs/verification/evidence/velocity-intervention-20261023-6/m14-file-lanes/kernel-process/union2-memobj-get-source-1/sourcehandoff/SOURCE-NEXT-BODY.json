@@ -1,0 +1,88 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "MEMOBJ_ACQUISITION_SOURCE_ONLY_WITH_EXPLICIT_ZEROOBJ_OWNERSHIP_HOLD",
+  "predecessor_ready": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-passed-prepare-production-1/ROOT-READY.CURRENT-UNION2-PREPARE-AND-F01-CONSUMER.json",
+    "sha256": "01fc0c57c07d29ca2092b423ec40bd8fd2db18469ea3fae9c4264d673127263e",
+    "bytes": 2643
+  },
+  "postimages": {
+    "kernel/process.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-memobj-get-source-1/candidate/kernel/process.c",
+      "sha256": "54c1f0473f64d9fbdaea229ddbabf6b496130ee9ca794642e5d3ff6daac49986",
+      "bytes": 165883
+    },
+    "kernel/rust/process_helpers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-memobj-get-source-1/candidate/kernel/rust/process_helpers.rs",
+      "sha256": "f4ea58d13a5915953bcbf7ee80c31815b95c230c0d99e1dfc66b9cb9b0178d5f",
+      "bytes": 366345
+    }
+  },
+  "original_C_branch": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-memobj-get-source-1/fixture/original_memobj_branch.ACTUAL-C.inc",
+    "sha256": "5a75a404107d7cd3f56e5be9c9fa57a9acba983cf64ac01fce111e317b611661",
+    "bytes": 624
+  },
+  "new_Rust": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-memobj-get-source-1/fixture/memobj_get.ACTUAL-RUST.inc",
+    "sha256": "f9c6c9dfaed5ce7f06ffaef8b2a73ba10cd21b84084663ce110ecd41ed8c5eed",
+    "bytes": 1119
+  },
+  "exact_original_C_fallback": true,
+  "retained_error_branch": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-memobj-get-source-1/fixture/retained_zeroobj_error.ACTUAL-C.inc",
+    "sha256": "fcf931c444b019580ab48056304ace212bd992e7a890a4b0788c7a185b24dc4b",
+    "bytes": 174
+  },
+  "no_added_lock_refcount_Page_or_cleanup": "Caller retains its existing VM lock and original memobj/Page ownership. New helper only publishes NOPHYS/physical result, provider flags and signed provider error. No extra Page lookup/ref/unmap/free or owning zeroobj pointer is introduced.",
+  "original_order": "NOPHYS first; absent memobj leaves flags/error unchanged. Null/nonfileoff PTE uses exact unsigned-wrapped range offset, fileoff uses actual Rust PTE offset provider. Call actual typed memobj_get_page once, preserve all output mutations and signed result, return only nonzero-error predicate to original C branch.",
+  "explicit_ownership_hold": "Existing zeroobj_create calls memobj_ref on success. Original C temporary comparison branch has no paired unref. Intent/lifetime is not established here; it remains byte-preserved C, and no owning zeroobj ref crosses this new Rust boundary. Root/owner must disposition that retained reference before porting the error branch; no invented ACK/unref.",
+  "provider_sources": {
+    "kernel/rust/object_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/object_helpers.rs",
+      "sha256": "7444ec38a30cdb2b0505b939f02eacb5018d3732a97fcd12b3eba189133f0f06",
+      "bytes": 235965
+    },
+    "kernel/rust/pte_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/pte_helpers.rs",
+      "sha256": "d6117286cc222c27ae6f76773796efd77d9f87b969644555e0a6286721653e62",
+      "bytes": 7855
+    },
+    "kernel/rust/zeroobj.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/zeroobj.rs",
+      "sha256": "eed90e36aceaaa44936a7c9513c0768278cfdd61882eb9327941f0751c9e9b5b",
+      "bytes": 6442
+    },
+    "kernel/include/memobj.h": {
+      "path": "/home/holden/mckernel/kernel/include/memobj.h",
+      "sha256": "7d587411f1b6957c6fcc6f61d8f03b052d875cfd774f602aefe05ff99f536bb9",
+      "bytes": 3957
+    }
+  },
+  "fixture_fragments": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-memobj-get-source-1/fixture/original_lookup_reference.SOURCE-ONLY.c.inc",
+      "sha256": "cae30dbf7e42389ca98b0c933ddafb15f4a16eb128041d3311ec3e7ca2820cdb",
+      "bytes": 1571
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-memobj-get-source-1/fixture/actual_provider.SOURCE-ONLY.rs",
+      "sha256": "e2eac40a882d88c53ccc1f707dc0f058dcf00868ae9ca2ecddc2775aa74a5fa7",
+      "bytes": 475
+    }
+  ],
+  "next_check": "Actual C reference/Rust phases with absent/present/missing operation, signed offset/high-bit wrap/fileoff offsets, provider0/positive/negative extremes, physical+flag output changes even on error, and pointer/operation mutation. Assert no zeroobj call/ref/unmap/free in this boundary; exact C provider signature and real layouts. Source fragments only; no new executable queue.",
+  "anonymous_allocation_port_included": false,
+  "production_ready_unchanged": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-passed-prepare-production-1/ROOT-READY.CURRENT-UNION2-PREPARE-AND-F01-CONSUMER.json",
+    "sha256": "01fc0c57c07d29ca2092b423ec40bd8fd2db18469ea3fae9c4264d673127263e",
+    "bytes": 2643
+  },
+  "remaining": "Owning zeroobj comparison branch held; anonymous allocation/clear/map and COW/copy/accounting/install/cleanup still separate source/private C debt. Default/native acceptance open.",
+  "compiler_jobs": 0,
+  "tests_executed": 0,
+  "CPU_reservations": 0,
+  "new_executable_queues": 0,
+  "canonical_mutations": 0,
+  "default_native_credit": false
+}

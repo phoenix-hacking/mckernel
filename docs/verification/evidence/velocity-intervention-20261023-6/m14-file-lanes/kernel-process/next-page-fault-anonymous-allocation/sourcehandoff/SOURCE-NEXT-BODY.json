@@ -1,0 +1,80 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SUBSTANTIVE_ACTUAL_ANONYMOUS_ALLOCATION_RETRY_SOURCE_ONLY_NO_SECOND_QUEUE",
+  "predecessor": {
+    "kernel/process.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/candidate/kernel/process.c",
+      "sha256": "60065b0b2a9d542d74cd980d98951f36ec9917bd4160700056059c4eaaf710ac",
+      "bytes": 166125
+    },
+    "kernel/rust/process_helpers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/candidate/kernel/rust/process_helpers.rs",
+      "sha256": "035a629fd72d0ac95f4c9f518e583401a69fb790259c4b357b8bb15977062ead",
+      "bytes": 366476
+    }
+  },
+  "postimages": {
+    "kernel/process.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-anonymous-allocation/candidate/kernel/process.c",
+      "sha256": "0586cd81d72195157d9e415e921edfc4ea0d8856b97115619aa1f89dbe9a490f",
+      "bytes": 166943
+    },
+    "kernel/rust/process_helpers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-anonymous-allocation/candidate/kernel/rust/process_helpers.rs",
+      "sha256": "d1d614a1f161268b66dbf2e80b68c42597ddf34e6d3bdab6c6d259c4fb8fc7c0",
+      "bytes": 369038
+    }
+  },
+  "original_C_block": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-anonymous-allocation/fixture/original_anon_allocate.ACTUAL-C-BLOCK.inc",
+    "sha256": "f397c3b773b77ec5148d772e3f1d967477417475115ccc7e81e9375e8c054bbd",
+    "bytes": 924
+  },
+  "actual_Rust": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-anonymous-allocation/fixture/anon_allocate.ACTUAL-RUST.inc",
+    "sha256": "4071bfa03b5bfd5dfeaf0f45b78b7b4d3c7a2f1bb73b488a49203cdc08421dbd",
+    "bytes": 2358
+  },
+  "existing_allocator": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-anonymous-allocation/fixture/allocator.EXISTING-RUST-REFERENCE.inc",
+    "sha256": "963dbc7533bd822000a7b611f7ae62e7ec114ded2d953c3f922a7d7a86e04e38",
+    "bytes": 972
+  },
+  "original_C_fallback_exact": true,
+  "tracking_source_line": 2982,
+  "precise_ownership": "Entry is inside phys==NOPHYS with existing page_table_lock already held and no newly acquired Page. Each failed allocation returns NULL and owns no page. Successful pointer returnsCONTINUE0 to the original C clearing/profile/memset/virt_to_phys/page_map tail, transferring no additional reference and performing no helper-side free. Final NULL/shrink error returnsGOTO_OUT1 with no allocation and existing lock still held for original out: unlock. Memobj/page accounting and later COW/map/stray cleanup are unchanged.",
+  "precise_order": "Compute page count with original size_t division/CInt narrowing, reload range flags before each allocation, reload range.pgshift after failure. On successful smaller-page result clear ptep and align pgaddr before retry; on smaller-page error preserve old ptep and old pgaddr while retaining provider-updated size/alignment and exact error log. Exhausted4K/fixedshift failure logs-ENOMEM. Ignore logger return, retain static file/line pointer lifetime.",
+  "original_provider_ABI": "Existing _ihk_mc_alloc_aligned_pages_node(CInt,CInt,CULong,CInt,CInt,CULong,*mut i8,CInt)->*mut c_void; existing tracked allocator/body/backends reused, not duplicated.",
+  "fixture_fragments": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-anonymous-allocation/fixture/original_reference.SOURCE-ONLY.c.inc",
+      "sha256": "891bc48d4b4d70796f0f3682a625d65b16e29b14749dcde4162ad72f55d3ff91",
+      "bytes": 2422
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-anonymous-allocation/fixture/hosted_decision.SOURCE-ONLY.rs",
+      "sha256": "74bc9fc70320d206e3ef873b0b7edff616cff9ba4ded510c619af9a10c60d27c",
+      "bytes": 1306
+    }
+  ],
+  "next_meaningful_check": "Actual original block/Rust controlled allocator-return tape with first-attempt success,2M/1G retry-to-success, fixedshift/basepage failure, smaller-page failure retaining ptep, range.pgshift/flags mutation after allocator, signed pagecount narrowing and original static file/line identity. Check no frees/refcount changes and lock retained on both outcomes; allocator model is not production backend acceptance.",
+  "queued_prepare96_continuation": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/bounded-reference-context-correction-1/sourcehandoff/EXECUTABLE-READY.PAGE-FAULT-PREPARE96-CONTINUATION.NOT-GRANTED.json",
+    "sha256": "9ca715e2895d2a773fe890266340ebf6cfde682097071d9011b60dd73671a30f",
+    "bytes": 9007
+  },
+  "remaining_C_debt": [
+    "Memobj get-page/zeroobj selection before anonymous allocation",
+    "Anonymous clearing/profile/translation/page_map after allocation",
+    "COW allocation/copy/accounting, PTE install and final unlock/stray-page cleanup",
+    "Existing allocator backend/tracking/lock callbacks and default/native proof"
+  ],
+  "difficulty": "This retry slice has explicit NULL/error/success ownership handoff. The remaining COW/copy/accounting cleanup is more difficult because Page references and old/new physical mappings coexist. No estimate or complete-file claim.",
+  "failure_history": "de43 first prepare96 runtime/reference-context failure and sole bounded9ca continuation preserved; original product035 unchanged by its fixture fix. Earlier245/eb65 and795/404 evidence retained.",
+  "compiler_jobs": 0,
+  "tests_executed": 0,
+  "CPU_reservations": 0,
+  "new_executable_queues": 0,
+  "canonical_mutations": 0,
+  "default_native_credit": false
+}

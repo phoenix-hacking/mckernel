@@ -1,0 +1,87 @@
+--- observe_current_pass_image_retirement.py
++++ observe_current_launcher_retirement.UNBOUND.py
+@@ -16,23 +16,23 @@
+ 
+ 
+ 
+-FAILURE_CASE = Path('/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/bound-terminal-source-1/PASS-CASE-STATIC.json')
+-FAILURE_CASE_SHA = '6422685923bf3c6bac434c47a5771ecdaec491656d0c2e402866170da6e906ca'
++FAILURE_CASE = Path('/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-terminal-data-preparation-1/LAUNCHER-CASE-STATIC.json')
++FAILURE_CASE_SHA = None
+ REPO = Path('/home/holden/mckernel')
+ ROOT = Path('/home/holden/mckernel-work/scratch')
+-PREP = Path('/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/bound-terminal-source-1')
+-CASE = Path('/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1')
+-CAPTURE = Path('/home/holden/mckernel-work/scratch/native-rust-phase5-current-optin-image-guard-d37f2175c1c049869e4a5872de864858')
+-SOURCE = Path('/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/bound-terminal-source-1/cleanup_pass_image.py')
++PREP = Path('/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-terminal-data-preparation-1')
++CASE = Path('/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-successor-preparation-1/launcher-attempt-1')
++CAPTURE = None
++SOURCE = Path('/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-terminal-data-preparation-1/cleanup_launcher.py')
+ TEST = Path('/home/holden/mckernel/scripts/tests/test_native_rust_cutover_image_terminal_cleanup.py')
+-SOURCE_SHA = '25e8657a301c6d486833de7bf8f6cdd7ebc360d9930a997809b3089b16551633'
++SOURCE_SHA = None
+ TEST_SHA = '2fba315ad96f271124cf78f7441faa306f58ea03ae35cdbe78bba5be6488d630'
+-RETIREMENT = Path('/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/independent-runtime-binding-review-1/ROOT-RECORDED-INDEPENDENT-CURRENT-IMAGE-RETAINED-PHYSICAL-ACCEPTANCE.json')
+-RETIREMENT_SHA = '3351eefc3df372220d7a32c20932fa20f8143d466786f0d21bcb1d6e400e1b3f'
+-NONCE = 'numa-allowed-mask-pass-image-observation-1'
++RETIREMENT = None
++RETIREMENT_SHA = None
++NONCE = 'numa-launcher-sentinel-observation-1'
+ OUTPUT = PREP / ('root-observation-' + NONCE)
+-BOOT = '7bfc5687-6c04-4d15-84eb-b92ab9a55dcb'
+-PIDS = (2553251, 2556251, 2553176, 2556259, 2557124, 2553184, 2553192, 2553168)
++BOOT = None
++PIDS = None
+ 
+ 
+ def need(ok, reason):
+@@ -165,18 +165,19 @@
+ 
+ 
+ 
+-PENDING_BINDINGS = ()
++PENDING_BINDINGS = ('actual launcher target/client/receipt/artifact/namespace/source bindings',)
+ 
+ def current_pass_prerequisites(retirement,case,root_join,artifact):
+     """Decode genuine retained physical and separate producer-artifact authority."""
+-    need(retirement['schema']=='mckernel.numa-current-image.retained-terminal-postjoin-review.v1' and
+-         retirement['status']=='PASS_ACTUAL_IMAGE_TERMINAL_RETAINED_POSTJOIN_SCOPE_ONLY' and
++    need(retirement['schema']=='mckernel.numa-current-launcher.retained-terminal-postjoin-review.v1' and
++         retirement['status']=='PASS_ACTUAL_LAUNCHER_TERMINAL_RETAINED_POSTJOIN_SCOPE_ONLY' and
+          retirement['build_status']=='PASS' and retirement['retired'] is True and
+          retirement['terminal_container_retained'] is True and retirement['cleanup_separately_required'] is True and
+          retirement['physical_release'] is False and retirement['record_release_complete'] is False and
+          retirement['request_lease_absent'] is True and retirement['outer_direct_joined'] is True and
+          retirement['outer_group_absent'] is True and retirement['root_mutex_reacquired_after_guard_join'] is True and
+-         retirement['exact_terminal_exit0_nonOOM_PID0'] is True and retirement['closed_saved_host_client_count']==8,
++         retirement['exact_terminal_exit0_nonOOM_PID0'] is True and type(retirement['closed_saved_host_client_count']) is int and retirement['closed_saved_host_client_count']>0 and
++         retirement['closed_saved_host_client_count']==case['closed_saved_host_client_count'],
+          'exact current retained PASS physical authority required')
+     need(case['execution_authorized'] is False and case['successful_artifacts_required'] is True and
+          case['target']['exit_code']==0,'current PASS case only')
+@@ -188,9 +189,12 @@
+         need(retirement[key]==case['finite_roles'][role],'retained receipt/source mismatch:'+key)
+     need(case['artifact_acceptance']==case['finite_roles']['artifact_acceptance'],
+          'exact bound artifact reference differs')
+-    need(artifact['schema']=='mckernel.current-numa-scheduler.production-image-artifact-review.v1' and
+-         artifact['status']=='PASS_CURRENT_IMAGE_BUILD_LINK_AND_NAMED_BOUNDARIES_NO_NATIVE_ACCEPTANCE' and
+-         artifact['decision']=='PASS_ACTUAL_CURRENT_NUMA_SCHEDULER_IMAGE_AND_REAL_MCEEXEC_LINK_ARTIFACTS_ONLY' and
++    need(artifact['schema']=='mckernel.launcher-only-production-artifact-review.v1' and
++         artifact['status']=='PASS_ACTUAL_LAUNCHER_ONLY_PRODUCTION_TARGET_ARTIFACT' and
++         artifact['decision']=='PASS_ACTUAL_LAUNCHER_ONLY_TARGET_AND_REAL_MCEXEC_LINK_ARTIFACTS_ONLY' and
++         artifact['target']=='mcexec' and artifact['kernel_rebuilt'] is False and
++         artifact['source_change']=='PLD_MPOL_MAX4→5 only' and
++         artifact['launcher_source_sha256']=='da71f31656ccfc58a79c4dcca01f9c6742135c292b213b7d86113ebddc4cae0a' and
+          artifact['implementation_ownership'] is False and isinstance(artifact['reviewer'],str) and
+          bool(artifact['reviewer']) and artifact['physical_clearance'] is False,
+          'separate genuine current NUMA/scheduler artifact authority required')
+@@ -219,7 +223,7 @@
+     need(case['source_identity']==CURRENT_EXPECTED_SOURCE,'exact frozen current source required')
+ 
+ 
+-CURRENT_EXPECTED_SOURCE = {'candidate_identity_scope': 'base_git_commit_only', 'candidate_sha': '942c927b1ec93cc31284ff498455909d9bb2d0fc', 'materialization_sha256': '317752dc9138cde2aac932da3b9e1b3e7f3434379361778a6aff035b2d46c44c', 'source_derivative_sha256': '050b953f46ff55f5ec819923819096fde8688400d860f7e666db9bbddb5b3f44', 'source_identity': {'dev': 66306, 'file_type': 16384, 'gid': 1000, 'inode': 48501031, 'mode': 448, 'path': '/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/source-materialization-1/materialized-source', 'uid': 1000}, 'source_root': '/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/source-materialization-1/materialized-source'}
++CURRENT_EXPECTED_SOURCE = None
+ 
+ def main(argv=None):
+     need(not PENDING_BINDINGS, 'pending actual source bindings: ' + repr(PENDING_BINDINGS))

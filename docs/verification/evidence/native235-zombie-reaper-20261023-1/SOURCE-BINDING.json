@@ -1,0 +1,13 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source": "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/source-postimages/mcctrl_process.rs",
+  "preimage_sha256": "b2e635f6590d401e2d37646486c2d3a5a52fece210d569533001f354d0537d23",
+  "candidate_sha256": "fcddb2679847c70e8d663cdf990f54be3a7645560c0dac2910018cda82ae5d2f",
+  "status": "candidate; no SDK integration/native acceptance",
+  "invariants": [
+    "only existing CLEANUP authority",
+    "no synthetic completion, ACK, route removal, armed clearing or credit release",
+    "thread task reference held through exit_state read",
+    "group leader terminal state does not declare whole TGID dead"
+  ]
+}

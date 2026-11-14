@@ -1,0 +1,497 @@
+{
+  "schema": "mckernel.new-current-process-pair-genuine-provider-codegen-partial-link.v1",
+  "status": "FROZEN_NEW_OPERATION_PENDING_P03_MATERIAL_SOURCE_SCOPE_PROFILE_REVIEW_AND_ROOT_FRESH_ADMISSION",
+  "owner": "public_abi_join_max actual existing Sol/MAX; Root sole canonical/executor; P03 independent reviewer",
+  "cwd": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1",
+  "source_manifest": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/SOURCE-MANIFEST.json",
+  "output_directory": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/output",
+  "provider_object": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/output/process_pair.o",
+  "provider_nm": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/provider-nm.stdout",
+  "provider_elf": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/provider-elf.stdout",
+  "joined_object": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/output/process_pair_e1a_partial.o",
+  "joined_nm": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/joined-nm.stdout",
+  "joined_elf": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/joined-elf.stdout",
+  "commands": [
+    {
+      "label": "provider-compile",
+      "argv": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=16777216:16777216",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/provider-compile.metrics",
+        "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+        "-o",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/output/process_pair.o",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/process_pair_unit.rs"
+      ],
+      "stdout_path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/provider-compile.stdout",
+      "stderr_path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/provider-compile.stderr"
+    },
+    {
+      "label": "provider-nm",
+      "argv": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "20s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=10:10",
+        "--fsize=16777216:16777216",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/provider-nm.metrics",
+        "/usr/bin/nm",
+        "-S",
+        "--format=posix",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/output/process_pair.o"
+      ],
+      "stdout_path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/provider-nm.stdout",
+      "stderr_path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/provider-nm.stderr"
+    },
+    {
+      "label": "provider-elf",
+      "argv": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "20s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=10:10",
+        "--fsize=16777216:16777216",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/provider-elf.metrics",
+        "/usr/bin/readelf",
+        "-h",
+        "-SW",
+        "-Ws",
+        "-Wr",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/output/process_pair.o"
+      ],
+      "stdout_path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/provider-elf.stdout",
+      "stderr_path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/provider-elf.stderr"
+    },
+    {
+      "label": "partial-link",
+      "argv": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "30s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=15:15",
+        "--fsize=16777216:16777216",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/partial-link.metrics",
+        "/usr/bin/ld",
+        "-r",
+        "-o",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/output/process_pair_e1a_partial.o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-complete-provider-join-1/output/scheduler_callback_complete_partial.o",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/output/process_pair.o"
+      ],
+      "stdout_path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/partial-link.stdout",
+      "stderr_path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/partial-link.stderr"
+    },
+    {
+      "label": "joined-nm",
+      "argv": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "20s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=10:10",
+        "--fsize=16777216:16777216",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/joined-nm.metrics",
+        "/usr/bin/nm",
+        "-S",
+        "--format=posix",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/output/process_pair_e1a_partial.o"
+      ],
+      "stdout_path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/joined-nm.stdout",
+      "stderr_path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/joined-nm.stderr"
+    },
+    {
+      "label": "joined-elf",
+      "argv": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "20s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=10:10",
+        "--fsize=16777216:16777216",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/joined-elf.metrics",
+        "/usr/bin/readelf",
+        "-h",
+        "-SW",
+        "-Ws",
+        "-Wr",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/output/process_pair_e1a_partial.o"
+      ],
+      "stdout_path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/joined-elf.stdout",
+      "stderr_path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/joined-elf.stderr"
+    }
+  ],
+  "environment_replace": {
+    "PATH": "/usr/bin:/bin",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "inputs": {
+    "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/manifest-rustc-x86_64-unknown-linux-gnu": "91a1a7f70e2ff4dd332d528d75fa35adfaca6c82182e56d3cde7afbbbd9dd8d3",
+    "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/manifest-rust-std-x86_64-unknown-linux-gnu": "a6fd34e854f1a161ecf61fa52faf5e49f0f379b1b4a764464ee92bb46ecbc0c0",
+    "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc": "70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09",
+    "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/libLLVM.so.22.1-rust-1.95.0-nightly": "a7fe29550a088de8770838e923ca8600077f4b6912c80e4a3daeadd0fb05d227",
+    "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/librustc_driver-63b8deb6c23747dd.so": "9f00b9316db6d42fee821fa4e86601a6ec853c004569d644fd9c30b892f9c7d0",
+    "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libcompiler_builtins-bbfdd99d24659dd7.rlib": "664ab9539ec3e1a7d5a54f3b4677ac2dd56152c3a01784709563459a7e68c62d",
+    "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libcompiler_builtins-bbfdd99d24659dd7.rmeta": "52cdadd46947d6b0ed1af185a0b2c4458cd8a325b18cefd9a11de947ee66372e",
+    "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libcore-5202d9b43b836218.rlib": "39987bd26679bef50d9fdf6b3ad752baacc1a0a7e9524476c6e158315c666202",
+    "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libcore-5202d9b43b836218.rmeta": "84ee56efc5484640a744ab9bf83ff1bdb4de1836d8000408cf49bbeeb9521cca",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/SOURCE-MANIFEST.json": "be0a3b9804286f39b7c85a5ec899996b6c3172b02ce692003bf093b5216ed46c",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/checks.py": "58dc47595ef6f5eba51cafa0a56d760b6c6aa21dbc2bea990394ce28a7df9c2e",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/run.py": "ca02311c930f41091bbe0e43a7630b421e43a36e200d84b65a1f1d78b715b040",
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "/home/holden/mckernel/arch/x86_64/kernel/include/arch-lock.h": "ca8baa66ed77634cd6319a918211b3eb8fe80fc7dcb2ac0110ab6bfbd0c1b81b",
+    "/home/holden/mckernel/kernel/include/process.h": "8848d536f2fa847a59af72d573ec9c55838c27cea664d46438ab4e038bf83649",
+    "/home/holden/mckernel/kernel/include/cls.h": "19719fe663c33bc3aec62875baa7f1b8d4a0e0042b5a8aae94fe7b6c9799a4c1",
+    "/home/holden/mckernel/kernel/rust/abi_checks.c": "f8deda08de0eccda152a6416a01bec00e6984c1cf4c998e9ca877b1bbe31c23a",
+    "/home/holden/mckernel/docs/verification/m14-f03-adapters-unit-20261105-2/receipt.json": "4c7f8d0870e24088e92b5c1685c2dcd2b030ff55cf1ee8dac0365b40cd283d2f",
+    "/home/holden/mckernel/docs/verification/m14-f03-adapters-unit-20261105-2/stderr.txt": "52aa1b68329c0e77b9847f4d1c1d5a4f88f802ffe2e6a69f2dace0fadf9add99",
+    "/home/holden/mckernel/docs/verification/m14-callback-provider-chain-20261110/scheduler-callback-complete-provider-join-1/JOIN-RESULT.json": "0eff8398cadaf559123440363a0eb8532ad33c02017cf1730d65aca1e6ccd0bd",
+    "/home/holden/mckernel/docs/verification/m14-callback-provider-chain-20261110/scheduler-callback-complete-provider-join-1/POSTJOIN-CHECK.json": "09950c8c68e18fc3457cbf6e9ab75224fbb3a94d1a022fa974768be98c2209d3",
+    "/home/holden/mckernel/docs/verification/m14-callback-provider-chain-20261110/scheduler-callback-complete-provider-join-1/ACTUAL-JOINED-METADATA.json": "ddb12a1e5d32740ddf497cc394bae44d3ab58d89280f5213354f0d0a58cdf3fa",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-complete-provider-join-1/joined-symbols.stdout": "5abd1a77c879b779b4accc1f4417f90c81c2a5ed61079a1b8a36e36d94e66b14",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-complete-provider-join-1/output/scheduler_callback_complete_partial.o": "e1a2469706723545483f74be15ad0bcc8ef01c9171159991b7a367adf87d2fd9",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/CONTRACT.json": "374f58941d4d2003d2997059782945a09c4022ae7e9a653de58dbfe524df9f7f",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/USER-PROCESS-CONTRACT.json": "0e11126ac65180eebafed764ee3ce35445406c50006d4214dfef25f95708beb4",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/USER-SCOPE-CLARIFICATION.json": "a83ecc44225fc7533fcc9f278aa236556ad4110b784c5e921d9ec53a8a470966",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-review-1/REVIEW.json": "ca82df9af654dc4189afb240c658bb018179d568ab652f943398287737b5fec5",
+    "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs": "7b6c1e87f521eaf4674128afd7bff71785bead4ff7c9eb3c9a668d6a0cb0cbe7",
+    "/home/holden/mckernel/kernel/rust/lock_helpers.rs": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3",
+    "/home/holden/mckernel/kernel/rust/process_helpers.rs": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+    "/home/holden/mckernel/kernel/rust/syscall_policy.rs": "11df0a7dbaeedcb009f5275e422f17eed444f4b513e7322e14f19e88566a2f1e",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/spinlock_helpers.rs": "b3741003b93df8698c41be8d16c2261a81131f29726f56bec12aa3dbae815941",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/lock_helpers.rs": "3730fad7b80ca75ac0a7fe73281605e46592294ed4cb26751375eb099c5c9e96",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/process_helpers.rs": "3030f1692805bbc1887185a62c9002451baef626b7d52f03a9dd04d14079314d",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/syscall_policy.rs": "d675bbc109a454e68d92589ab97c033fa637452692d7e16457e970bb51413012",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/process_pair_unit.rs": "6eb83d4e0e4435d14664cf858ebc529c42bf415a05c15e1ae82fe0fb2cb446af",
+    "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihklib-matching-provider-build-1/compiler195-binding-1/COMPILER-BINDING.json": "978a22dab7d017d6daf201f6fffcc2eee2bc7a0d63b83c0af89a5361ca4e9b96",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/storage_predicate.py": "a4df81bb2b86d97f4199ae816dab7965213ceba05dca17945f9eae861dc31892",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/RESULT.json": "0e3047ea8d08d3f9ba7837f135142fcd29c14cdb1116e62743f1bd01214136fb",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/join_checks.py": "8e713e3311f55d5316e3dc5a7bff4b72e39f650e48e5f9e6616fdf77e5933a0c",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/RESULT.json": "86b94cb33ea32c4fea505438f478b0f02ed8409b40bde2a3865189335b40c827",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-provider-unit-1/expanded-1/join-1/join_checks.py": "93a8f429f77664a4df90fafc227801575751138ac32e7c2d3ed46d16a5f462c8",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-provider-unit-1/expanded-1/join-1/RESULT.json": "e52cb6c3d067f2f7f0657ea78c89d9d39db20bd483d185cedc8b3f3770c8dc40",
+    "/usr/bin/taskset": "28f2dd426247d7d1d794c0fb8a723efc6a1ae3c56393a238b180fe9a0dc32f1c",
+    "/usr/bin/timeout": "91db1e64064f0bf5ee99abda3a054cc6f05748dad2af5a145f890c9172d28d73",
+    "/usr/bin/prlimit": "06a57e4767f1bdfcc8c5a39b4b58decb9366447b007a8bdd9d6b12d1e6698d8c",
+    "/usr/bin/time": "f3c4104d963b00e1b3a3dcf80722fea57f15f67b57a512cc30adc434b60e6e03",
+    "/usr/bin/python3": "298a9e830ed52f36c299427565485d717d1ce0179c0597cc16560513eb780b06",
+    "/usr/bin/ld": "476b24d5cc1fef54f80412d06e7430b2dcf4e2b6f1525ee17e6eaaf16b28a00f",
+    "/usr/bin/nm": "5fb0dd8acc18e3f348ed0acbcada0580dbdddd1eb5de3c8323613af13580032b",
+    "/usr/bin/readelf": "41a813335a74480f145fba9400aa7fb5c0ec7ffcaa7af7f33e832dc75eb90ffb",
+    "/home/holden/mckernel/docs/verification/m14-callback-provider-chain-20261110/scheduler-callback-target-provider-unit-1/REQUEST.json": "7d7230dee529bdea3585404461b06acab62dcfc5ffa3796186c8519972948131"
+  },
+  "expected_compile_stderr": {
+    "path": "/home/holden/mckernel/docs/verification/m14-f03-adapters-unit-20261105-2/stderr.txt",
+    "sha256": "52aa1b68329c0e77b9847f4d1c1d5a4f88f802ffe2e6a69f2dace0fadf9add99"
+  },
+  "compiler_profile": {
+    "source_receipt": "/home/holden/mckernel/docs/verification/m14-f03-adapters-unit-20261105-2/receipt.json",
+    "compiler": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+    "compiler_sha256": "70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09",
+    "compiler_version_from_receipt": "rustc 1.95.0-nightly (c04308580 2026-02-18)",
+    "no_std": true,
+    "warning_policy": "Require exact unchanged retained single target-feature sse2 ABI warning bytes; no extra warnings suppressed. This is inherited HOST partial-codegen scope, not final/native ABI acceptance.",
+    "expected_compile_stderr_path": "/home/holden/mckernel/docs/verification/m14-f03-adapters-unit-20261105-2/stderr.txt",
+    "expected_compile_stderr_sha256": "52aa1b68329c0e77b9847f4d1c1d5a4f88f802ffe2e6a69f2dace0fadf9add99",
+    "required_source_feature": "Genuine current no_std/core pointer/offset_of/raw-reference functions only; no new nightly feature/cfg/target/lint suppression. Full ABIff48 source assertions and exact selected node/lock source assertions compile in the new finite unit.",
+    "retained_compiler_codegen_options_unchanged": true,
+    "source_selection_delta": "New finite current process-pair source members and private outputs; compiler path/options/native cfg and retained diagnostic bytes unchanged. No original target/RDMSR body selected or replayed."
+  },
+  "exact_rust_flags": [],
+  "actual_cfg_flags": [],
+  "compiler_directory_binding_reused": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihklib-matching-provider-build-1/compiler195-binding-1/COMPILER-BINDING.json",
+    "sha256": "978a22dab7d017d6daf201f6fffcc2eee2bc7a0d63b83c0af89a5361ca4e9b96"
+  },
+  "retained_object": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-complete-provider-join-1/output/scheduler_callback_complete_partial.o",
+    "sha256": "e1a2469706723545483f74be15ad0bcc8ef01c9171159991b7a367adf87d2fd9",
+    "actual_nm": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-complete-provider-join-1/joined-symbols.stdout",
+    "capture": "/home/holden/mckernel/docs/verification/m14-callback-provider-chain-20261110/scheduler-callback-complete-provider-join-1/ACTUAL-JOINED-METADATA.json",
+    "actual_qualification": {
+      "path": "/home/holden/mckernel/docs/verification/m14-callback-provider-chain-20261110/scheduler-callback-complete-provider-join-1/POSTJOIN-CHECK.json",
+      "sha256": "09950c8c68e18fc3457cbf6e9ab75224fbb3a94d1a022fa974768be98c2209d3"
+    },
+    "actual_execution": {
+      "path": "/home/holden/mckernel/docs/verification/m14-callback-provider-chain-20261110/scheduler-callback-complete-provider-join-1/JOIN-RESULT.json",
+      "sha256": "0eff8398cadaf559123440363a0eb8532ad33c02017cf1730d65aca1e6ccd0bd"
+    }
+  },
+  "retained_lower_owners": {
+    "get_this_cpu_local_var": {
+      "kind": "T",
+      "bytes": 99
+    },
+    "get_cpu_local_var": {
+      "kind": "T",
+      "bytes": 24
+    },
+    "ihk_mc_get_processor_id": {
+      "kind": "T",
+      "bytes": 77
+    },
+    "preempt_disable": {
+      "kind": "T",
+      "bytes": 54
+    },
+    "preempt_enable": {
+      "kind": "T",
+      "bytes": 54
+    },
+    "clv": {
+      "kind": "B",
+      "bytes": 8
+    },
+    "locals": {
+      "kind": "B",
+      "bytes": 8
+    },
+    "num_processors": {
+      "kind": "D",
+      "bytes": 4
+    },
+    "cpu_local_var_initialized": {
+      "kind": "B",
+      "bytes": 4
+    },
+    "cpu_pause": {
+      "kind": "T",
+      "bytes": 3
+    },
+    "cpu_disable_interrupt_save": {
+      "kind": "T",
+      "bytes": 6
+    },
+    "cpu_restore_interrupt": {
+      "kind": "T",
+      "bytes": 5
+    },
+    "__ihk_mc_spinlock_lock": {
+      "kind": "T",
+      "bytes": 108
+    },
+    "__ihk_mc_spinlock_unlock": {
+      "kind": "T",
+      "bytes": 61
+    }
+  },
+  "retained_genuine_U": [
+    "do_kill",
+    "do_syscall",
+    "eventfd",
+    "f03_terminate_host_refcount_set_v1",
+    "f03_wait_release_process",
+    "f03_wait_release_thread",
+    "syscall_do_kill_thread_bridge",
+    "syscall_do_syscall_request_bridge",
+    "syscall_find_process_bridge",
+    "syscall_generic_forwarding_body_result",
+    "syscall_process_unlock_bridge",
+    "terminate_host_body_result"
+  ],
+  "expected_new_global_T": [
+    "syscall_find_process_bridge",
+    "syscall_process_unlock_bridge",
+    "find_process",
+    "process_unlock",
+    "process_hash",
+    "process_find_process_body_result",
+    "process_unlock_found_process_result",
+    "process_mcs_reader_lock_bridge",
+    "process_mcs_reader_unlock_bridge",
+    "__mcs_rwlock_reader_lock",
+    "__mcs_rwlock_reader_unlock"
+  ],
+  "expected_new_genuine_U": [
+    "__ihk_mc_spinlock_lock",
+    "__ihk_mc_spinlock_unlock",
+    "get_this_cpu_local_var"
+  ],
+  "expected_remaining_genuine_U": [
+    "do_kill",
+    "do_syscall",
+    "eventfd",
+    "f03_terminate_host_refcount_set_v1",
+    "f03_wait_release_process",
+    "f03_wait_release_thread",
+    "syscall_do_kill_thread_bridge",
+    "syscall_do_syscall_request_bridge",
+    "syscall_generic_forwarding_body_result",
+    "terminate_host_body_result"
+  ],
+  "expected_new_data": [],
+  "qualified_ELF_reader": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/storage_predicate.py",
+    "sha256": "a4df81bb2b86d97f4199ae816dab7965213ceba05dca17945f9eae861dc31892",
+    "qualification_receipt": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/RESULT.json",
+    "scope": "Reuse existing exact Image/parse_nm for ELF64-LE/x86_64 REL metadata/bytes only, not storage predicate re-review or new parser/loader."
+  },
+  "qualified_owner_helpers": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/join_checks.py",
+    "sha256": "8e713e3311f55d5316e3dc5a7bff4b72e39f650e48e5f9e6616fdf77e5933a0c",
+    "actual_qualification_receipt": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/RESULT.json",
+    "reuse": "Image/check_nm/local/compare_owner/reference helpers only; no repeatedkprintfpredicate/codegen/oldmetadata execution."
+  },
+  "qualified_relocation_helpers": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-provider-unit-1/expanded-1/join-1/join_checks.py",
+    "sha256": "93a8f429f77664a4df90fafc227801575751138ac32e7c2d3ed46d16a5f462c8",
+    "qualification_receipt": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-provider-unit-1/expanded-1/join-1/RESULT.json",
+    "reuse": "ActualqualifiedprivateNOBITSownerrelocnormalization+ownerhelpers only; no oldpredicate/metadata/codegenreplay."
+  },
+  "profile": {
+    "CPU": [
+      7
+    ],
+    "local_serial_jobs": 1,
+    "allocation_bytes_including_controller_and_child_overhead": 1073741824,
+    "AS_limit_each_process_bytes": 1073741824,
+    "phase_wall_seconds": [
+      60,
+      20,
+      20,
+      30,
+      20,
+      20
+    ],
+    "phase_CPU_seconds": [
+      45,
+      10,
+      10,
+      15,
+      10,
+      10
+    ],
+    "controller_wall_seconds": 240,
+    "controller_CPU_seconds": 120,
+    "FSIZE_bytes_each_file": 16777216,
+    "core_bytes": 0,
+    "disk_headroom_minimum_bytes": 536870912,
+    "finite_disk_bound": "6 serial commands x3 capture files x16MiB +2 ELF outputs x16MiB +<=7 JSON/result files x16MiB +<=16MiB outer stdout =448MiB;512MiB includes source/manifests/overhead. Per-file16MiB enforced. No package/source acquisition.",
+    "aggregate_HOST_CPUs": [
+      0,
+      6,
+      7
+    ],
+    "aggregate_jobs_max": 3,
+    "aggregate_HOST_total_bytes_all_overhead": 4294967296,
+    "fresh_MemAvailable_minimum_bytes": 27917287424,
+    "prior_reservations_bytes": 19327352832,
+    "host_RAM_floor_bytes": 4294967296,
+    "host_disk_floor_bytes": 17179869184,
+    "scratch_disk_floor_bytes": 12884901888,
+    "old_UNJOINED_CPU0_bytes": 268435456,
+    "old_UNJOINED_jobs": 1,
+    "parallelism": "No automatic overlap grant; Root measures actual all-controller/worker sums and existing exact live owners, no competing heavy/native job. OldCPU0 source-reader UNKNOWN remains held and counted."
+  },
+  "driver_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "240s",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=120:120",
+    "--fsize=16777216:16777216",
+    "--core=0:0",
+    "--",
+    "/usr/bin/python3",
+    "-B",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/run.py",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/REQUEST.json"
+  ],
+  "source_operation_scope": {
+    "new_authority": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/USER-SCOPE-CLARIFICATION.json",
+      "sha256": "a83ecc44225fc7533fcc9f278aa236556ad4110b784c5e921d9ec53a8a470966"
+    },
+    "assessment": "This newly requested finite current-source pair has an explicit current Root b274 scope and actual new PROCESS-CONTRACT/type/lifetime input. UNKNOWN encrypted historical plaintext is not treated as blanket source-wide prohibition or missing external inventory. Original cyber_policy completion/error and current actual held exclusions remain intact; rejected fixture/task is neither read/copied/reconstructed/replayed nor replaced by an equivalent task. No full generic/process/syscall Rust module is compiled.",
+    "selected_genuine_bodies": [
+      "syscall_find_process_bridge",
+      "syscall_process_unlock_bridge",
+      "find_process",
+      "process_unlock",
+      "process_hash",
+      "process_find_process_body_result",
+      "process_unlock_found_process_result",
+      "process_mcs_reader_lock_bridge",
+      "process_mcs_reader_unlock_bridge",
+      "__mcs_rwlock_reader_lock",
+      "__mcs_rwlock_reader_unlock",
+      "private process_list_container"
+    ],
+    "exclusions": [
+      "all TID/writer bodies",
+      "reader_noirq exports",
+      "notification/eventfd",
+      "wait/refcount/final-release bodies",
+      "kill/syscall backend",
+      "generic/exec",
+      "old fixtures and old combined/mixed cohorts",
+      "native/GS/MSR/IRQ execution"
+    ],
+    "no_stub_or_synthetic_state": "Spinlock module contains actual source ticket type and two extern declarations to existing e1a strong owners. No callback implementation, fake CPU state, refcount change, zero-init requirement, layout substitution or source body edit.",
+    "type_ABI": "Actual complete ABIff48 module and current exact genuine node/lock/ticket declarations/assertions compile with no extra cfg; unchanged C header/CABI source/profile and retained e1a lower proof reused. New full-image C configure/header witness belongs to P04 and is not a prerequisite invented for unchanged pair fields. This packet does not claim newly executed C ABI/layout or native qualification.",
+    "borrow_lifetime": "Success retains same bucket reader lock and borrowed Process without procRef; miss releases internally. Matching same Process/PID/resource-set and caller-exclusive64-aligned node must remain live/stable through exactly-one unlock/IRQ restoration. No process lifetime after unlock or across unrelated release granted."
+  },
+  "expected_result_scope": "Actual new11 strong function owners, zero new data, exact3 imports bound to real old lower owners; 140 strong total/115T25data if actual artifacts confirm; exact remaining10 genuine U. Preserve every prior global/private source owner, function/data bytes, aliases, readonly contents, normalized relocations and NOBITS declarations. Actual result must be independently qualified; no source-only, names-only image/default/native/C-retirement credit.",
+  "failure_rule": "Persist command row before Popen, actual pid/birth/wait/streams and primary exception; stop at first changed diagnostic/failure/unknown. No automatic retry. Root alone actual cleanup/admission/retirement; no release inferred for oldUNKNOWN.",
+  "review_and_execution_gate": "Old374f/ca82 only readonly source facts. This exact new packet requires separate P03 material GO and Root fresh operation-specific resource/source/account/ownership admission. No compiler/link/payload has run.",
+  "retained_compiler_flag_reference": {
+    "path": "/home/holden/mckernel/docs/verification/m14-callback-provider-chain-20261110/scheduler-callback-target-provider-unit-1/REQUEST.json",
+    "sha256": "7d7230dee529bdea3585404461b06acab62dcfc5ffa3796186c8519972948131",
+    "reuse": "Exact compiler identity/native no_std HOST partial-codegen flags and unchanged SSE warning only; no target/RDMSR source/provider/gate replay."
+  }
+}

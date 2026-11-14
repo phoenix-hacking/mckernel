@@ -1,0 +1,166 @@
+{
+  "at": "2026-11-10T15:31:09.524623+00:00",
+  "contract": {
+    "bytes": 3828,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01p02-production-cutover-1/CONTRACT.json",
+    "sha256": "22c3a393b28d8af96afa0a3cd014724123c1db7baa8f59425a2c6e0b850a41a6"
+  },
+  "decision": "NO_GO_EXACT_REQUEST_74a493_OWNED_TEMP_ENVIRONMENT_DEFECT",
+  "defect": {
+    "actual_execution": "No compiler, CMake payload, test, Native, tool probe or process/container control was run by reviewer. This is a preexecution source/request defect, not a service/permission/source-authority rejection.",
+    "evidence": "Root_preconditions[1] confines all writes to new output-1. Every commands[*].argv invokes env -i and lacks TMPDIR. rustc/linker temporary artifacts therefore use default shared /tmp; an outer TMPDIR does not survive env-i.",
+    "id": "P01P02-PRODUCTION-TMPDIR-01",
+    "minimal_correction": "Preserve exact74a493 request and failure review; add literal TMPDIR=<packet>/output-1/tmp inside all seven clean command environments, and require Root to create that exact private empty temporary directory as part of fresh output-1 after admission. Explicit PYTHONDONTWRITEBYTECODE=1 or -B for the final Python invocation keeps bytecode cache writes out of scope. No source/case/fixture/selector/flags/resource-limit or new-test change is required.",
+    "scope": "request argv and owned temporary setup only; production source/case/compiler flags are unaffected"
+  },
+  "executed": {
+    "Docker_or_network_or_native": 0,
+    "canonical_edits": 0,
+    "compiler_or_tests": 0,
+    "operation": "source and immutable evidence reads/hash comparisons only; wrote this private REVIEW.json",
+    "payloads": 0,
+    "source_edits": 0
+  },
+  "inputs": {
+    "bytes": 8150,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01p02-production-cutover-1/INPUTS.json",
+    "sha256": "46d4afe36ac0e8e1ddf9095369e6d99c32b1b968f12f22e908c9434629d56c63"
+  },
+  "new_case": {
+    "bytes": 4222,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01p02-production-cutover-1/qualification/production_work_irq.rs",
+    "sha256": "2156b201b8bc52f5950c8ac1818aed93cc72356e09f9a7ea22f9eb6df3db0dcc"
+  },
+  "next": "SDK source owner prepares correction-1 argv/tmp/cache successor only; this reviewer reuses all unchanged source/test/profile findings and reviews that bounded delta. Root alone executes after exact successor GO and fresh admission.",
+  "producer": {
+    "bytes": 1646,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01p02-production-cutover-1/producer/CMakeLists.txt",
+    "sha256": "2bdc7301a7c2929ff980be4a9396f812d5dc388b2c2a4223af211329f8fa814e"
+  },
+  "remaining_original_scope": "No default flip, shell C retirement, full root build, complete I01 manifest, deployed/matched cohort or native/boot/stop/release/restoration acceptance. M14-before-M15 and all generic/source/native/UNKNOWN holds unchanged.",
+  "request": {
+    "bytes": 12853,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01p02-production-cutover-1/REQUEST.json",
+    "sha256": "74a4935d99d046c6a21930698ad5951d154c53774bee1aeecf4293de7b39fc5c"
+  },
+  "reviewer": "/root/p04_tests_max actual inherited gpt-6.1-sol/MAX; no recursion",
+  "schema": 1,
+  "unchanged_install_and_capture_review_GO": {
+    "capture_requirements": "Root records exact argv/cwd/env and complete stdout/stderr/status for every phase; require all7 expected0 and exact1testpass. Readelf raw ELF/dynamic/symbol output must join Rust main/provider ownership and current HOST system dependencies at unchanged ABI scope. Do not execute new production programs. Preserve partial failures and do not start dependent phases after failure.",
+    "output": "output-1 absent at review. New build/stage/result only; fresh private output owner is Root. Verifier compares full config text and all five generated Rust copies, ON/path cache values, exact two regular ELF64-little-endian staged names, mode0755, size<64MiB and byte hashes.",
+    "ownership_requirements": "Root exact birth-bound ordinary HOST owner, wall<=180 total and perphase stated limits, all direct waits/streams closed, no adopted kills/reaps/residual/UNKNOWN success. Any uncertainty preserves owner/reservation and primary failure. No numeric/broad process retirement.",
+    "seven_phase_sequence": [
+      "configure narrow producer",
+      "build exact two named Rust targets -j1",
+      "compile one new case from generated config/module copies",
+      "run exactly one named FakeHost case",
+      "readelf both new ELF metadata only",
+      "private DESTDIR install only",
+      "verify exact generated config/source copies/file set/0755/byte-identical built-installedELFs"
+    ]
+  },
+  "unchanged_resource_profile_review_GO_conditional": {
+    "AS_bytes": 2147483648,
+    "budget_arithmetic": "4GiB -2GiB new complete compiler family allocation -256MiB old UNKNOWN =1792MiB for every other controller/daemon/worker/container/payload. UNKNOWNjob1+newjob1 count2 ofmax3. RLIMIT_AS is per process, not aggregatecgroup enforcement; Root measures complete new family/linker/controller RSS and all other accounted slices, retaining total4GiB.",
+    "cpu": [
+      6
+    ],
+    "cpu_seconds_per_command": 60,
+    "file_bytes": 67108864,
+    "fresh_conditions": [
+      "Fresh sharedMemAvailable>=26GiB, host/scratch16/12GiB floors.",
+      "Other named container/compiler owner must positively retire before start; do not infer UNKNOWN release. Serialize network/otherpayload work when needed for the exact fit.",
+      "Root reports fresh overhead1.545GB, leaving room for2GiB+retained256MiB inside4GiB; Root fresh raw admission must establish actual bytes and no additional overlap before the corrected run. If fit fails, wait for positively owned disjoint work retirement; no grant increase or unknown release."
+    ],
+    "jobs": 1,
+    "prior_observation_reused": "Actual matching08:58 profile AS2GiB/CPU60/FSIZE64, two unchanged bodies plus larger original8case fixture compiled and passed, reported peak childrenRSS186080KiB. No probe or new budget invented.",
+    "remaining_for_all_other_HOST_overhead_bytes": 1879048192,
+    "retained_UNKNOWN": {
+      "CPU": 0,
+      "bytes": 268435456,
+      "jobs": 1,
+      "release": false
+    },
+    "shared_total_bytes": 4294967296,
+    "whole_wall_seconds": 180
+  },
+  "unchanged_source_review_GO": {
+    "all_seven": [
+      {
+        "current_canonical_bytes_exact": true,
+        "declared_hash_exact": true,
+        "git_blob_exact": true,
+        "qualified_old_bytes_exact": true,
+        "relative": "scripts/rust/boot-tools/SelectRustBootTools.cmake",
+        "sha256": "4530acbb7e2e1dc6b506db9ae8ae25cd61cdbb7328aa6bf22739bc7b9c98123b"
+      },
+      {
+        "current_canonical_bytes_exact": true,
+        "declared_hash_exact": true,
+        "git_blob_exact": true,
+        "qualified_old_bytes_exact": true,
+        "relative": "scripts/rust/boot-tools/config.rs.in",
+        "sha256": "7d17d41df6984c5ab58f59b8c55a396699e0c987ee521d29f2b36c785c691bb3"
+      },
+      {
+        "current_canonical_bytes_exact": true,
+        "declared_hash_exact": true,
+        "git_blob_exact": true,
+        "qualified_old_bytes_exact": true,
+        "relative": "scripts/rust/boot-tools/platform.rs",
+        "sha256": "7e837af3533f3496f35fea94561d39b4cedf55334ebc8864ac34308dd1aef10c"
+      },
+      {
+        "current_canonical_bytes_exact": true,
+        "declared_hash_exact": true,
+        "git_blob_exact": true,
+        "qualified_old_bytes_exact": true,
+        "relative": "scripts/rust/boot-tools/reboot.rs",
+        "sha256": "36d32e918c2f69694bd8c3e54ff3041f57cac5ad511a524de11c313aec4986da"
+      },
+      {
+        "current_canonical_bytes_exact": true,
+        "declared_hash_exact": true,
+        "git_blob_exact": true,
+        "qualified_old_bytes_exact": true,
+        "relative": "scripts/rust/boot-tools/stop.rs",
+        "sha256": "71d2ba856347d9f830bf0ca2bfab0c877adb139d5661dfae10e0a34da499f00b"
+      },
+      {
+        "current_canonical_bytes_exact": true,
+        "declared_hash_exact": true,
+        "git_blob_exact": true,
+        "qualified_old_bytes_exact": true,
+        "relative": "scripts/rust/boot-tools/mcreboot_main.rs",
+        "sha256": "9bed3da348b7d663d9599888a4d6b8f49af65679bc81d2e0613b67106ed69473"
+      },
+      {
+        "current_canonical_bytes_exact": true,
+        "declared_hash_exact": true,
+        "git_blob_exact": true,
+        "qualified_old_bytes_exact": true,
+        "relative": "scripts/rust/boot-tools/mcstop_main.rs",
+        "sha256": "0f19631e426f228b5bb61813a2fb3a06720e38b5e3c3ff728fe6451732263d47"
+      }
+    ],
+    "compiler_selection": "Exact previously qualified direct HOST rustc1.95 path/hash70ebcbba and std/linker/CMake/make/readelf bindinge27a reused. Clean PATH=/usr/bin:/bin selects recorded cc/gcc9 and GNUld.bfd. Selector commands retain edition2021,panic=abort,opt2, exact two mains, compiler and module dependencies, named outputs and PROGRAMS install. New test compile retains earlier --test/edition2021/opt2. No Rust1.92/native compiler substitution.",
+    "production_values": "Root x86_64/smp-x86 and GNUInstallDirs prefix/usr/local,sbin,lib64 agree with producer and generated config oracle. ETCDIR=/usr/local/etc,KMODDIR=/usr/local/kmod,MCKERNELDIR=/usr/local/smp-x86/kernel; BUILDID8d288b8 matches accepted IHK8d metadata. Root WORK_IRQ defaultON at148 and real legacy shell281-299 skip autoIRQ scan forON and omit ihk_start_irq when -q empty.",
+    "root_single_selector_include": "Current CMakeLists306 includes unchanged selector; no duplicate direct mcreboot/mcstop configure/install remains in root. Selector defaultOFF/fallback unchanged. Private producer has LANGUAGES NONE and includes only exact selected production selector; no full root/Kbuild/held graph."
+  },
+  "unchanged_test_review_GO": {
+    "meaningful_new_assertions": "Actual ON comes from selector-generated config; exact SMP insmod has only module and ihk_ikc_irq_core=0, and no call contains ihk_start_irq=. CPU/mem release and reverse mcctrl/smp/ihk unload remain exact. The deliberate FakeHost boot failure stays in-memory; no Native::new, OS command, module, device or lifecycle is executed.",
+    "new_test_count": 1,
+    "old8_and_fixture_ELF_scope": "Actual08:58 receipt9af5... old8/config/2ELFs retained; it qualifies unchanged source and fake scenario only. New production paths/buildid/ON outputs are genuinely unmatched and will be separately produced, not relabeled old binaries.",
+    "old8_not_rerun": true,
+    "old_fake_prefix_bytes": 2419,
+    "old_fake_prefix_sha256": "c33456dfa430befe96859cc3b8fc8c1cde65b725fedec5b879c7e1e9ffce8a5a",
+    "prefix_exact": true,
+    "runtime_stdout_gate": "Root must verify exact one named test executed and passed; a zero-test filter exit0 is not accepted.",
+    "scenario": "Exact old boot_new_resources_reverse_rollback owned FakeHost scenario; only generated actual production linux_work_irq=true is transferred into fixture config. Generated scalar paths/arch/buildid/stop sbin asserted separately."
+  },
+  "verify": {
+    "bytes": 2519,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01p02-production-cutover-1/verify-installed.py",
+    "sha256": "4c7d77d517cd8d0c2efc34d29d4342b515e0a062eb052eb67c043994789a0f73"
+  }
+}

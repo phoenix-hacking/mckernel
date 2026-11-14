@@ -1,0 +1,26 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "NINE_CALLBACK_SOURCE_MERGE_ONLY_NOT_TESTED_NOT_EXECUTABLE_READY",
+  "postimages": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/nine-callback-source-only-1/candidate/kernel/mem.c",
+      "sha256": "110cadf51edec2593ce7b24cba583f1d17f436f48c10ab9eb79a17eb9a3d3e74",
+      "bytes": 227781
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/nine-callback-source-only-1/candidate/kernel/rust/mem_helpers.rs",
+      "sha256": "8507658440bf3b22c1397e0d40c603ac4d34fc1968821371834d9c5cab67dc24",
+      "bytes": 205936
+    }
+  ],
+  "patch_sha256": "25bfa8be2cf6d999df6c4fab7ca66932f42ee2080a03846d043198376960d886",
+  "actual_atomic": null,
+  "actual_noirq": null,
+  "actual_three_target_callbacks": null,
+  "production_plan": "After expert fixture resolution and independent acceptance, reuse current exact78 production nightly1.95/4cfg/CGU1 with only accepted coherent mem_helpers override; selected GCC9 complete mem.c real67header ABI/default exclusion/data relocs/fullRustpartial proof. Current canonical78 preimages and symbol set must be bound at grant time; no old scalar union assumed.",
+  "new_U_expected_not_observed": "Three existing publicCPU/vector/interrupt plus atomic/spinlock providers already present production Rust; direct crate calls reuse existing definitions, no new C providers. Exact NM sets derived from actual accepted baseline when coherent78 prepared.",
+  "remaining_C_debt": "4 callbacks: rdtsc, flush_single, flush_all, pause. All C file/default linked/native closure remain OPEN.",
+  "next_executable_observation": "Expert disposition on retained59d29c compile failure missing fixture import; no retry authorized here.",
+  "execution_grant": null,
+  "CPU_reserved": null
+}

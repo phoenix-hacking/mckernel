@@ -1,0 +1,406 @@
+{
+  "at": "2026-11-10T21:50:49.195351+00:00",
+  "candidates": [
+    {
+      "bytes": 619886,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/classification-correction-1/candidate/kernel/rust/process_helpers.rs",
+      "sha256": "d3be0ac4bfc9a103db7709fb8ba1d40b3e3e4eb144cc5c96fe3d54cbfefbcafe"
+    },
+    {
+      "bytes": 325789,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/classification-correction-1/candidate/kernel/rust/x86_memory_helpers.rs",
+      "sha256": "19aa46052d53f7e725a787b5ad516ba3dec0c6680645d5dd00aad81b935d8156"
+    }
+  ],
+  "contract": {
+    "bytes": 7209,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/PROVIDER-CONTRACT.json",
+    "sha256": "b93edd280038916c9dfa08c46f359e2e01403f3085b7591f40c9db1bf20e0cfb"
+  },
+  "decision": "GO",
+  "focused_test_review": {
+    "baseline": "Exact unchanged real add orchestrator plus old two bridge bodies use explicitly test-only owning-removal/backend fault effects. Retirement doubles defer actual Box deallocation until dispose and free each tracked allocation once, so expected descriptor2/backing2 and exit42 expose the source-proved ownership path without an actual UAF/double-free. This is not a real old full-remover/native fault-injection result.",
+    "candidate_cases": [
+      "Page-backed ENOMEM after one actual4K mapping then failed next-L1 table allocation: original errno, outputnull, tree/cache detached, partial PTE cleared and flush observed before descriptor1; caller backing1/internal0, no RSS, no TLB allocation, lock/unlock exactlyonce.",
+      "Object-backed same failure: original real memobj refcount helper confirms retained ref1 then caller consumes to0; rollback consumes none.",
+      "Two4K ordinary success spanning a2M boundary: actual real algorithms, exactlytwo4K commit visits/8192 charged bytes, no retirement/flush.",
+      "Supported remote outside-LWK physical target: same real traversal visits both leaves, explicit RSS lower-effect model applies exact first genuine range flag exclusion, zero charges/appropriate skip count/no physical RAM check/no panic.",
+      "Full2M directory with pgshift12:512 actual4K entries/charges/byte count, genuine allocation count.",
+      "Actual2M size-bit leaf with pgshift21:one2M visit/charge and no L1 allocation, distinct from directory control."
+    ],
+    "compile": "Exact HOST1.95 qualified70eb compiler, edition2021/Dwarnings/panicabort/O2/debug1/no unwind tables and actual profile/perf/rusage cfg. Compile one frozen adapter; no regeneration or production provider substitute. Require0/empty stdout+stderr and capture new executable identity before any runtime.",
+    "model_truth": "Real orchestrator/bridges/new transaction/43 PTE algorithms/ABI/RB/refcount source is included. Allocation/phys translation/PT lock/TLB ack/RSS final effect/destructor/diagnostic effects are explicitly HOST doubles and never enter production candidate. rusage_memory_stat_add is a declared controlled effect applying only relevant first exclusion; full physical/accounting/destructor/hardware behavior is not claimed tested. Synthetic addresses remain inert data, no native tables or signals/API/device access.",
+    "oracles": "All internal assertions must pass before exact baseline FAIL_EXPECTED JSON/42 or six-case candidate PASS JSON/0 is printed. Root compares complete expected JSON and empty stderr. Compiler failure or baseline mismatch stops before candidate. No tolerant prefix/count-only/global ownership waiver."
+  },
+  "independent_static_binding_verification": {
+    "all_input_files": 21,
+    "all_input_pins_and_compiler_match": true,
+    "all_verified_inputs": [
+      {
+        "bytes": 14377,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/tests/rollback_regression.rs",
+        "sha256": "241c0760d90c74ad8a183dd9dd877ca9fe3972e224f1faa0f231d368d9e97d3c"
+      },
+      {
+        "bytes": 11495,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/tests/process-production.rs",
+        "sha256": "1ab4b82f0bf98f6ff60a048b8eda57ecd1fee0f29a0692ff3dc712483483c3c7"
+      },
+      {
+        "bytes": 548,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/tests/baseline-bridges.rs",
+        "sha256": "4152de3a4525bde0670f9c7f6cb8706974176700f9a862ce3f318b6bb91304a9"
+      },
+      {
+        "bytes": 2160,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/tests/candidate-bridges.rs",
+        "sha256": "3c297bc3c7ec1246ab38f6d4e230e62972b5af860f1fcc48f317370606c8a3a8"
+      },
+      {
+        "bytes": 45665,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/tests/x86-production.rs",
+        "sha256": "5ebbeed07b1571fa46aa63cf0335af01198b4714d94df018179fcf1c00517261"
+      },
+      {
+        "bytes": 4362,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/tests/x86-test-effects.rs",
+        "sha256": "9f9e166b78b222340f4b9fec2cce541b91e8d487891f36b3702e22628713c516"
+      },
+      {
+        "bytes": 6891,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/tests/prepare_sources.py",
+        "sha256": "55639d8231a25de7648c77e13f212e57c1aca05629c97e459f63df5b66e666f7"
+      },
+      {
+        "bytes": 76151,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/input/abi.rs",
+        "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+      },
+      {
+        "bytes": 22536,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/input/rbtree.rs",
+        "sha256": "114e8dbd0b48abc156879bfd2f019071c30174019e97904c028ccee911840256"
+      },
+      {
+        "bytes": 3105,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/input/refcount_helpers.rs",
+        "sha256": "07430d9fe1529bb81a4b76c7a998546b8e54219f1d7c2d91f398ea7c28b618ba"
+      },
+      {
+        "bytes": 149495,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/TEST-SOURCE-BINDINGS.json",
+        "sha256": "63d95349993d1882c0b8cd25e4c2b2f148212263734e7c8e0506b82dd3a2633d"
+      },
+      {
+        "bytes": 7209,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/PROVIDER-CONTRACT.json",
+        "sha256": "b93edd280038916c9dfa08c46f359e2e01403f3085b7591f40c9db1bf20e0cfb"
+      },
+      {
+        "bytes": 22554,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/CALLER-OWNERSHIP-SLICES.json",
+        "sha256": "3f4d9e8707b89afaf1f266f22e596f7f61f7817bab5a182f9ff982dacc2b72db"
+      },
+      {
+        "bytes": 14413,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/classification-correction-1/ADD-RANGE-TRANSACTION.rs",
+        "sha256": "284adee85c9b273dc6421ebf492d8368b59814a94ff0705f305d4e0db8096b78"
+      },
+      {
+        "bytes": 5006,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/classification-correction-1/SOURCE-READY.SOURCE-ONLY.json",
+        "sha256": "509be00c2eb76857eda96717ae68f54fa1ef30374e17c07ccef6d616131625f2"
+      },
+      {
+        "bytes": 18914,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/classification-correction-1/SHARED-ADD-RANGE-ROLLBACK.CLASSIFICATION.patch",
+        "sha256": "611dffe864537af5ac5817d1b34aaceb3430de50d80e2cf9f1c87f7c486ea2ca"
+      },
+      {
+        "bytes": 4429,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/classification-correction-1/RSS-CLASSIFICATION.DELTA.patch",
+        "sha256": "55a9eec8fb950b494b0c932baf07ae6f75d6590906f01e9f6c98775136934825"
+      },
+      {
+        "bytes": 619886,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/classification-correction-1/candidate/kernel/rust/process_helpers.rs",
+        "sha256": "d3be0ac4bfc9a103db7709fb8ba1d40b3e3e4eb144cc5c96fe3d54cbfefbcafe"
+      },
+      {
+        "bytes": 325789,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/classification-correction-1/candidate/kernel/rust/x86_memory_helpers.rs",
+        "sha256": "19aa46052d53f7e725a787b5ad516ba3dec0c6680645d5dd00aad81b935d8156"
+      },
+      {
+        "bytes": 43555,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-source-1/HOST-TOOLCHAIN-BINDING.json",
+        "sha256": "e27a98348bd44a341a37db8528008303111f7753af6a8fb441cd14199ec243ac"
+      },
+      {
+        "bytes": 4668,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/owned_process.py",
+        "sha256": "afe7403ead1bf8b2c527dfa34a0c0c19010cde5f27a646ccf1545fb8f3b9bc1d"
+      }
+    ],
+    "compiler": {
+      "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+      "reuse": "Actual qualified HOST nightly1.95 binding; no probe or alternate toolchain",
+      "sha256": "70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09"
+    },
+    "generated_adapter_files": 4,
+    "lower_effects": {
+      "bytes": 4362,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/tests/x86-test-effects.rs",
+      "sha256": "9f9e166b78b222340f4b9fec2cce541b91e8d487891f36b3702e22628713c516"
+    },
+    "method": "Read manifest/data only, independently locate each exact source slice from declared source line and SHA; remove only literal no_mangle attribute; reconstruct each complete process-production/baseline-bridges/candidate-bridges/x86-production output and require byte equality. Did not import or execute preparer/helper/source generator/compiler/test.",
+    "production_source_slices": 186,
+    "test_driver": {
+      "bytes": 14377,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/tests/rollback_regression.rs",
+      "sha256": "241c0760d90c74ad8a183dd9dd877ca9fe3972e224f1faa0f231d368d9e97d3c"
+    },
+    "x86_genuine_functions": 43
+  },
+  "input_manifest": {
+    "bytes": 6596,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/HOST-INPUTS.json",
+    "sha256": "0c8918c5c6c4989c873a5e80ac908e41c27db5cca786900d97434a1d2b725884"
+  },
+  "material_source_findings": [
+    {
+      "disposition": "Resolved in corrected paired shared bridges, reusing a69 sound findings. Failed map owns nonowning partial-PTE cleanup; range remover only validates exact inserted interval then RB/cache detaches under caller writer. Unchanged original orchestrator free callback is sole descriptor retirement. Caller retains p/memobj/private_data on ordinary error. Update retains PF_POPULATE-derived attrs, IRQ-save PT lock and original errno/log sequence; ABI unchanged.",
+      "issue": "Original c33 duplicate descriptor/backing retirement"
+    },
+    {
+      "disposition": "Resolved by exact55a9 delta. New commit_l1/level/root callbacks retain genuine x86_visit_pte_leaf/level/root/action/range_dispatch classification but use ordinary actual walk_pte_l1..l4. Thus valid remote/I/O/COW leaf physicals are not RAM-chunk filtered. Only table directory physicals are translated/dereferenced, from protected existing address-space metadata; terminal data physicals go to real RSS provider. No new exclusion or guessed remote accounting is introduced.",
+      "issue": "a69 supported non-LWK RSS commit panic"
+    },
+    {
+      "disposition": "commit_level passes skip_null1/retry_skip_null1/pgshift0/direct_requires_size1/can_allocate0. L2/L3 use their actual size bit and real direct-enable policy. A full512x4K directory descends; only genuine2M/1G leaves are charged at large size. L4 cannot allocate. Generic full-cover alone cannot select large. Original real classifier errors remain errors; no broad error waiver.",
+      "issue": "Large-page vs full directory classification"
+    },
+    {
+      "disposition": "Exact old fragment differs only by53-line new traversal insertion and5-to1-line commit call replacement; independently reproduced55a9 unified diff. Mapping journal, noallocation clear, one-address synchronous TLB acknowledgement, child-table preservation, mandatory full-cover check/real set_range_rss_add and original provider exclusions are unchanged. Failed transaction charges nothing; success must run real accounting traversal before returning. Impossible invariant panic remains fail-stop, not a supported-path waiver.",
+      "issue": "Mandatory success accounting and failure atomicity"
+    },
+    {
+      "disposition": "c33 unaffected complete outer do_mmap/C mapping/56 provider and21bbb writer-to-one-reader Release-store protocol findings are reused. Source changes here do not alter outer5961, lock type/counter/state/preemption, range borrow lifetime, scalar capture, caller selectors/fallback, or existing public set/free/clear functions. Full new x86 candidate is byte-identical preimage plus exact284adee8 module; process candidate is identicald3be to previous review.",
+      "issue": "Unchanged complete port/atomic contracts"
+    }
+  ],
+  "operation": {
+    "admission": "Root must freshly measure old CPU0/256MiB/job1 UNKNOWN plus controllers/workers/thisCPU6 AS2GiB job1 insideHOST4GiB/max3; fresh26GiB, host16/scratch12GiB floors plus32MiB output. Native2-5/12GiB and all old reservations remain held. Serialize any2GiB image owner unless actual total fits; no automatic parallel grant.",
+    "capture": "Root creates new owned output/tmp and durable disjoint capture, exact env-i/privateTMPDIR and taskset6/prlimit AS2GiB/CPU60/fsize16MiB/nofile64. Existing Owner records exact argv/session/positive birth/expected status/family waits/streams immediately before advancing; reject adopted_reaps/adopted_kills/residual/UNKNOWN. Exact final3 records, batch120s/compile60s/runs5s. Preserve primary errors and best-effort partial receipt; authenticated exact-birth cleanup only, no numeric PID/global fallback.",
+    "exact_commands": [
+      {
+        "argv": [
+          "/usr/bin/taskset",
+          "-c",
+          "6",
+          "/usr/bin/prlimit",
+          "--as=2147483648",
+          "--cpu=60",
+          "--fsize=16777216",
+          "--nofile=64",
+          "--",
+          "/usr/bin/env",
+          "-i",
+          "PATH=/usr/bin:/bin",
+          "LANG=C",
+          "LC_ALL=C",
+          "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/host-output-1/tmp",
+          "PYTHONDONTWRITEBYTECODE=1",
+          "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+          "--crate-name",
+          "add_range_rollback_regression",
+          "--edition=2021",
+          "-Dwarnings",
+          "-C",
+          "panic=abort",
+          "-C",
+          "opt-level=2",
+          "-C",
+          "debuginfo=1",
+          "-C",
+          "force-unwind-tables=no",
+          "--cfg",
+          "enable_profile",
+          "--cfg",
+          "enable_perf",
+          "--cfg",
+          "enable_rusage",
+          "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/tests/rollback_regression.rs",
+          "-o",
+          "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/host-output-1/add-range-rollback"
+        ],
+        "expected_exit": 0,
+        "id": "compile-exact-old-new-add-range-production-path-adapter",
+        "required_output": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/host-output-1/add-range-rollback",
+        "required_stderr": "empty",
+        "required_stdout": "empty",
+        "scope": "Complete exact original orchestrator and old/new bridges, byte-identical new transaction,43 genuine existing PTE algorithm functions, real ABI/RB-tree/refcount; explicit lower HOST effects only. No production image/provider binding.",
+        "wall_seconds": 60
+      },
+      {
+        "argv": [
+          "/usr/bin/taskset",
+          "-c",
+          "6",
+          "/usr/bin/prlimit",
+          "--as=2147483648",
+          "--cpu=60",
+          "--fsize=16777216",
+          "--nofile=64",
+          "--",
+          "/usr/bin/env",
+          "-i",
+          "PATH=/usr/bin:/bin",
+          "LANG=C",
+          "LC_ALL=C",
+          "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/host-output-1/tmp",
+          "PYTHONDONTWRITEBYTECODE=1",
+          "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/host-output-1/add-range-rollback",
+          "baseline"
+        ],
+        "expected_exit": 42,
+        "id": "safe-observe-original-error-double-retirement",
+        "required_stderr": "empty",
+        "required_stdout_json": {
+          "backing_releases": 2,
+          "descriptor_retirements": 2,
+          "kernel_runtime": false,
+          "real_UAF_executed": false,
+          "scope": "actual-old-add-range-ownership-path-with-explicit-test-doubles",
+          "status": "FAIL_EXPECTED"
+        },
+        "scope": "A test-only lower backend/removal model lets exact original orchestrator+bridges exhibit source-proved descriptor2/backing2 counters. Deferred host deallocation avoids real UAF/double-free; no unsafe original native baseline is executed.",
+        "wall_seconds": 5
+      },
+      {
+        "argv": [
+          "/usr/bin/taskset",
+          "-c",
+          "6",
+          "/usr/bin/prlimit",
+          "--as=2147483648",
+          "--cpu=60",
+          "--fsize=16777216",
+          "--nofile=64",
+          "--",
+          "/usr/bin/env",
+          "-i",
+          "PATH=/usr/bin:/bin",
+          "LANG=C",
+          "LC_ALL=C",
+          "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/host-output-1/tmp",
+          "PYTHONDONTWRITEBYTECODE=1",
+          "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/host-output-1/add-range-rollback",
+          "candidate"
+        ],
+        "expected_exit": 0,
+        "id": "new-rollback-and-RSS-leaf-classification",
+        "required_stderr": "empty",
+        "required_stdout_json": {
+          "caller_backing_preserved": true,
+          "candidate_cases": 6,
+          "descriptor_once": true,
+          "directory_4K_and_real_large_classification": true,
+          "failed_RSS_zero": true,
+          "kernel_runtime": false,
+          "outside_LWK_remote_success": true,
+          "partial_PTEs_cleared_and_flushed": true,
+          "scope": "actual-new-add-range-rollback-and-RSS-commit-with-explicit-test-doubles",
+          "status": "PASS",
+          "successful_RSS_commit": true
+        },
+        "scope": "Six genuine changed-path controlled cases in one local process: ENOMEM page/object ownership, ordinary successful mandatory RSScommit, outside-LWK remote supported success, directory512x4K and real2M leaf distinction. No native page tables or hardware.",
+        "wall_seconds": 5
+      }
+    ],
+    "fresh_output_observed_absent": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/host-output-1",
+    "implementation_of_existing_Root_capture_is_not_a_new_controller_grant": true,
+    "no_payload_execution_by_reviewer": true,
+    "profile": {
+      "all_overhead_and_UNKNOWN": "Root measures every worker/controller and retained CPU0/256MiB/job1 UNKNOWN inside current shared4GiB/max3. Native reservations and floor not borrowed.",
+      "batch_wall_seconds": 120,
+      "compilation_children": "Existing actual compiler/linker family subject to positive birth/stream/wait/cleanup postconditions; no unbounded subprocess/grandchild acceptance.",
+      "cpu": 6,
+      "fresh_MemAvailable_floor_GiB": 26,
+      "host_disk_floor_GiB": 16,
+      "jobs": 1,
+      "kind": "Existing changed-source HOST1.95 ordinary lane, no quota increase",
+      "max_address_space_bytes": 2147483648,
+      "max_aggregate_HOST_bytes": 4294967296,
+      "native_Docker_network": false,
+      "output_disk_reservation_bytes": 33554432,
+      "output_max_file_bytes": 16777216,
+      "runtime_processes": 1,
+      "runtime_threads_per_case": 1,
+      "scratch_disk_floor_GiB": 12
+    }
+  },
+  "ready": {
+    "bytes": 2469,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/SOURCE-TEST-READY.NOT-EXECUTED.json",
+    "sha256": "e487e8ccaa5e4080cce680aafc794e4b08e9a103769f37e3b363b79ccc4ebe1b"
+  },
+  "remaining_original_conditions": [
+    "Actual Root admitted compile/baseline/candidate results and independent qualification still required; source-only decision earns no original acceptance.",
+    "Root later composes only reviewed hunks into current actual source, preserving live terminate/exit_group/F06/clone and all other dirty edits; then normal complete Rust/C ABI/image/provider/C-exclusion readback. No archived full-file overwrite or partial object injection.",
+    "Real allocator/memobj/PTE/TLB/concurrent/host-mirror/native mapping behavior remains unrun; original supported functional/default/native/resource-restoring conditions and held XPMEM/exec/Direct-TID/TERMRESET/generic replay scopes remain separate.",
+    "Current c664/1e64 native cohort and true native/currentfree/source/resource/service/account/credit/UNKNOWN holds are unchanged."
+  ],
+  "request": {
+    "bytes": 10361,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/HOST-REQUEST.PROPOSED.json",
+    "sha256": "b3ac92fc323dd59eb2e082b72e5d345045d18a9a77d889be5d51582eab94eb2b"
+  },
+  "reuse": [
+    {
+      "bytes": 26550,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-review-source-acquisition-max-1/REVIEW.json",
+      "sha256": "c33bd554a3b415d3443175209025a736980566f74fa3683cbb86b0f26c1f0302"
+    },
+    {
+      "bytes": 9431,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-review-source-acquisition-max-1/provider-correction-1/REVIEW.source.json",
+      "sha256": "a69bd7d3a65a627e89d9a9e7091ef7e1649d21aa7aa3ab84fea83c54a187f3e3"
+    }
+  ],
+  "review_operations": {
+    "SUT_import_helper_regeneration_compiler_tests_Docker_network_native": false,
+    "candidate_canonical_or_state_edits": false,
+    "private_review_write_only": true,
+    "recursive_agents": false,
+    "source_and_machine_data_reads": true
+  },
+  "reviewer": "/root/source_acquisition_review_max, independent of P04Tests author; Root sole compositor/executor",
+  "schema": "m14-do-mmap-shared-provider-classification-source-test-profile-independent-review-v1",
+  "scope": "Exact corrected shared-provider source and three serial controlled HOST commands only, conditional on Root fresh admission and complete existing Owner postconditions. No production image/default/native or original acceptance granted.",
+  "source_delta": {
+    "bytes": 4429,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/classification-correction-1/RSS-CLASSIFICATION.DELTA.patch",
+    "sha256": "55a9eec8fb950b494b0c932baf07ae6f75d6590906f01e9f6c98775136934825"
+  },
+  "source_fragment": {
+    "bytes": 14413,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/classification-correction-1/ADD-RANGE-TRANSACTION.rs",
+    "sha256": "284adee85c9b273dc6421ebf492d8368b59814a94ff0705f305d4e0db8096b78"
+  },
+  "source_patch": {
+    "bytes": 18914,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/classification-correction-1/SHARED-ADD-RANGE-ROLLBACK.CLASSIFICATION.patch",
+    "sha256": "611dffe864537af5ac5817d1b34aaceb3430de50d80e2cf9f1c87f7c486ea2ca"
+  },
+  "source_ready": {
+    "bytes": 5006,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/classification-correction-1/SOURCE-READY.SOURCE-ONLY.json",
+    "sha256": "509be00c2eb76857eda96717ae68f54fa1ef30374e17c07ccef6d616131625f2"
+  },
+  "test_source_manifest": {
+    "bytes": 149495,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/TEST-SOURCE-BINDINGS.json",
+    "sha256": "63d95349993d1882c0b8cd25e4c2b2f148212263734e7c8e0506b82dd3a2633d"
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-033",
+  "packet_version": 1,
+  "context_sha256": "249bfa2eaf3a27bacfd8dd223f392fcdb688e279f7a32b3194288b48b1f2ef79",
+  "started_utc": "2026-09-09T10:38:00Z",
+  "finished_utc": "2026-09-09T10:38:46Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "futex.timeout-fault",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/futex/futex.timeout-fault.c",
+      "oracle": "scripts/application-tests/oracles/futex.timeout-fault.json",
+      "changed_files": ["scripts/application-tests/cases/futex/futex.timeout-fault.c", "scripts/application-tests/oracles/futex.timeout-fault.json"],
+      "parameter_vectors": {},
+      "implemented_operations": ["matching FUTEX_WAIT word", "PROT_NONE timeout pointer", "post-call mapping retirement"],
+      "unresolved_oracle_notes": ["Native timeout-pointer validation ordering and canonical errno/output binding require Max review."],
+      "max_reviewer_question": "Confirm EFAULT is returned before waiter publication when the timeout pointer is inaccessible."
+    },
+    {
+      "case_id": "futex.bitset-zero",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/futex/futex.bitset-zero.c",
+      "oracle": "scripts/application-tests/oracles/futex.bitset-zero.json",
+      "changed_files": ["scripts/application-tests/cases/futex/futex.bitset-zero.c", "scripts/application-tests/oracles/futex.bitset-zero.json"],
+      "parameter_vectors": {},
+      "implemented_operations": ["FUTEX_WAIT_BITSET with zero bitset", "post-call FUTEX_WAKE queue-retirement check"],
+      "unresolved_oracle_notes": ["Private/shared operation variant and canonical errno/output binding require Max review."],
+      "max_reviewer_question": "Confirm bitset zero is rejected synchronously with EINVAL and cannot leave a waiter queued."
+    },
+    {
+      "case_id": "futex.bitset-monotonic-timeout",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/futex/futex.bitset-monotonic-timeout.c",
+      "oracle": "scripts/application-tests/oracles/futex.bitset-monotonic-timeout.json",
+      "changed_files": ["scripts/application-tests/cases/futex/futex.bitset-monotonic-timeout.c", "scripts/application-tests/oracles/futex.bitset-monotonic-timeout.json"],
+      "parameter_vectors": {"clock": ["CLOCK_MONOTONIC"], "bitset": ["FUTEX_BITSET_MATCH_ANY"], "deadline_offset_ns": [20000000]},
+      "implemented_operations": ["absolute monotonic deadline", "WAIT_BITSET timeout", "elapsed monotonic interval capture"],
+      "unresolved_oracle_notes": ["Private nr202 path capture, timing relation, and canonical errno/output binding require Max review."],
+      "max_reviewer_question": "Confirm monotonic absolute-deadline semantics and required capture of the actual private futex syscall path."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/futex/futex.timeout-fault.c", "sha256": "59fe50889bfc1b3c04ccea8285aa7caeb6d2f2bb93303f0f7578035650fdcfbc"},
+    {"path": "scripts/application-tests/oracles/futex.timeout-fault.json", "sha256": "564d3d788c1a1b0dacd00d5ea7947d3036c308e6b6edb4012d2833c5a3f01966"},
+    {"path": "scripts/application-tests/cases/futex/futex.bitset-zero.c", "sha256": "d7113e516cd062e41c70676e7ad9606a789ac308a78c9aa9af51844ee6883e44"},
+    {"path": "scripts/application-tests/oracles/futex.bitset-zero.json", "sha256": "c93e5ea3524b9a5aed1e887851e655c5d16f4eb2732aaa04a8040e7cc02aefce"},
+    {"path": "scripts/application-tests/cases/futex/futex.bitset-monotonic-timeout.c", "sha256": "dd0f8f9d5178db1b03d9330facd45622cbe0a7a3f7a1a5835955e172710b95bf"},
+    {"path": "scripts/application-tests/oracles/futex.bitset-monotonic-timeout.json", "sha256": "e4347b0a11b089683b7f5e175106f11cc173b78ff264662d1efbf15d63322ea9"},
+    {"path": "docs/verification/evidence/application-drafts-20260909/ultra-handoff-1/packet-033/context.json", "sha256": "249bfa2eaf3a27bacfd8dd223f392fcdb688e279f7a32b3194288b48b1f2ef79"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-033.json --emit-context /tmp/application-packet-033-context-20260909-1.json", "outcome": "PASS; planning metadata only; runtime_authorized=false"},
+    {"command": "python3 -m json.tool packet-033/report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"},
+    {"command": "native container wrapper invocation", "outcome": "NOT_RUN; wrapper requires unavailable sudo terminal askpass; no payload or compiler executed"}
+  ],
+  "unresolved_oracles": ["All three futex fault/bitset cases need final native ABI, validation-ordering, timing, and canonical record review."],
+  "blocked_execution_capabilities": ["current-inputs", "runtime-transport-fault-injection", "runner-contract"],
+  "first_failure_event": null,
+  "max_escalation": ["Review timeout EFAULT ordering and waiter publication", "Confirm zero-bitset EINVAL and queue-retirement behavior", "Confirm monotonic absolute timeout and private nr202 evidence"],
+  "next_packet_id": "packet-034"
+}

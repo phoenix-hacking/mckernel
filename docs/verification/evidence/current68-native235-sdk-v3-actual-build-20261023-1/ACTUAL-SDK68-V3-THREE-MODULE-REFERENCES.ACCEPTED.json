@@ -1,0 +1,460 @@
+{
+  "actual_MM_provider": {
+    "artifacts": {
+      "command_bindings": {
+        "C_cmd_sha256": "b1969fb33d9065595f84fec475d6525a4027f1ce0cafb26da2e1b699f3b4a43c",
+        "composite_cmd_sha256": "48b2b0090374effdc46b4ca404992be7e313f2654221fc07d0966d4845d911b8",
+        "members": [
+          "/candidate/modules/mcctrl_rust.o",
+          "/candidate/modules/mcctrl_vm_write_compat.o"
+        ]
+      },
+      "mcctrl.ko": {
+        "bytes": 2655616,
+        "sha256": "c47cb00090077e980706d2b0b6bed438bc45d0280927e700f948a20555b6584a",
+        "symbols": {
+          "mckernel_inherited_mmap_write_lock": {
+            "definitions": 1,
+            "emitted_reference": false,
+            "undefined": 0
+          },
+          "mckernel_inherited_mmap_write_unlock": {
+            "definitions": 1,
+            "emitted_reference": false,
+            "undefined": 0
+          },
+          "mckernel_inherited_vma_start_write": {
+            "definitions": 1,
+            "emitted_reference": false,
+            "undefined": 0
+          }
+        }
+      },
+      "mcctrl.o": {
+        "bytes": 2554184,
+        "sha256": "4d00e40e081393c656c539bedb7b96f25c917a8b5daf116227613db7aab702da",
+        "symbols": {
+          "mckernel_inherited_mmap_write_lock": {
+            "definitions": 1,
+            "emitted_reference": false,
+            "undefined": 0
+          },
+          "mckernel_inherited_mmap_write_unlock": {
+            "definitions": 1,
+            "emitted_reference": false,
+            "undefined": 0
+          },
+          "mckernel_inherited_vma_start_write": {
+            "definitions": 1,
+            "emitted_reference": false,
+            "undefined": 0
+          }
+        }
+      },
+      "mcctrl_rust.o": {
+        "bytes": 2365616,
+        "sha256": "2ebf79a911a71a6b58f3bb296ca4ff8c2ade5fd91459a1cac897ae57f379e9c9",
+        "symbols": {
+          "mckernel_inherited_mmap_write_lock": {
+            "definitions": 0,
+            "emitted_reference": true,
+            "undefined": 1
+          },
+          "mckernel_inherited_mmap_write_unlock": {
+            "definitions": 0,
+            "emitted_reference": true,
+            "undefined": 1
+          },
+          "mckernel_inherited_vma_start_write": {
+            "definitions": 0,
+            "emitted_reference": true,
+            "undefined": 1
+          }
+        }
+      },
+      "mcctrl_vm_write_compat.o": {
+        "bytes": 134400,
+        "sha256": "ed1caaa49604b422af6bca7f89b748a73eac7209df3f3f6abebf9525d9f352dd",
+        "symbols": {
+          "mckernel_inherited_mmap_write_lock": {
+            "definitions": 1,
+            "emitted_reference": false,
+            "undefined": 0
+          },
+          "mckernel_inherited_mmap_write_unlock": {
+            "definitions": 1,
+            "emitted_reference": false,
+            "undefined": 0
+          },
+          "mckernel_inherited_vma_start_write": {
+            "definitions": 1,
+            "emitted_reference": false,
+            "undefined": 0
+          }
+        }
+      }
+    },
+    "module_load": false,
+    "status": "PASS_ACTUAL_COMPOSITE_MM_PROVIDER_SYMBOLS"
+  },
+  "actual_driver_receipt": {
+    "bytes": 40851,
+    "path": "/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-bc3cf0ecfe164d6bbcad77dd3bae8e16/evidence/receipt.json",
+    "sha256": "b571063a934307e487277c87ab3914fc95f5f2d4a209c33ae2822f7cb40003fc"
+  },
+  "actual_owner_capture": {
+    "bytes": 2138,
+    "path": "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/actual-sdk-v3-build-attempt-1/owner-capture-1/status.json",
+    "sha256": "a50330cf527e4fd6b56f438ad2e50ec0534df01e25f35a4a603fd40261e78d9a"
+  },
+  "current_export_contract": {
+    "profile": "current-v6-adopt-v4-control-v1",
+    "required_exports": [
+      "ihk_os_create_unbooted_v6",
+      "ihk_os_application_adopt_current_v4",
+      "ihk_os_application_fork_control_current_v1"
+    ]
+  },
+  "genuine_independent_artifact_and_physical_acceptance": {
+    "path": "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/INDEPENDENT-ACTUAL-SDK68-V3-ARTIFACT-AND-PHYSICAL-ACCEPTANCE-1.json",
+    "sha256": "6a6a47b9899e8de45ab650023419b5a1af0596fb34865241cae263e0b19cac2f"
+  },
+  "guest_or_native_acceptance": false,
+  "modules": [
+    {
+      "compiler_binding": {
+        "command_sha256": "fe3319e019ceb141a534092e29014bf4bf817b34072d5848813e5ebe810c8b44",
+        "saved_command": "RUST_MODFILE=/candidate/modules/ihk rustc --edition=2021 -Zbinary_dep_depinfo=y -Astable_features -Dunsafe_op_in_unsafe_fn -Dnon_ascii_idents -Wrust_2018_idioms -Wunreachable_pub -Wmissing_docs -Wrustdoc::missing_crate_level_docs -Wclippy::all -Wclippy::mut_mut -Wclippy::needless_bitwise_bool -Wclippy::needless_continue -Wclippy::no_mangle_with_rust_abi -Wclippy::dbg_macro -Cpanic=abort -Cembed-bitcode=n -Clto=n -Cforce-unwind-tables=n -Ccodegen-units=1 -Csymbol-mangling-version=v0 -Crelocation-model=static -Zfunction-sections=n -Wclippy::float_arithmetic --target=./scripts/target.json -Ctarget-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2 -Zcf-protection=branch -Zno-jump-tables -Ztune-cpu=generic -Cno-redzone=y -Ccode-model=kernel -Zfunction-return=thunk-extern -Zpatchable-function-entry=16,16 -Copt-level=2 -Cdebug-assertions=n -Coverflow-checks=n -Dwarnings -Cdebuginfo=2  --cfg MODULE  @./include/generated/rustc_cfg -Zallow-features=arbitrary_self_types,new_uninit,used_with_arg -Zcrate-attr=no_std -Zcrate-attr='feature(arbitrary_self_types,new_uninit,used_with_arg)' -Zunstable-options --extern force:alloc --extern kernel --crate-type rlib -L ./rust/ --crate-name ihk --sysroot=/dev/null --out-dir /candidate/modules/ --emit=dep-info=/candidate/modules/.ihk.o.d --emit=obj=/candidate/modules/ihk.o /candidate/modules/ihk.rs  ; ./tools/objtool/objtool --hacks=jump_label --hacks=noinstr --hacks=skylake --ibt --mcount --mnop --orc --retpoline --rethunk --sls --static-call --uaccess --prefix=16  --link  --module /candidate/modules/ihk.o",
+        "sources": [
+          "abi/application.rs",
+          "abi/os_service.rs",
+          "abi/x86_64.rs",
+          "device_registry.rs",
+          "ihk.rs",
+          "ihk_ioctl.rs",
+          "ikc_master.rs",
+          "ikc_queue.rs",
+          "os_registry.rs",
+          "os_runtime.rs",
+          "os_service.rs",
+          "page_allocator.rs",
+          "page_owner_registry.rs"
+        ]
+      },
+      "hash_authority": "Genuine completed driverreceipt; no worker binary rehash",
+      "mode": 33188,
+      "modinfo": {
+        "author": "McKernel Rust port",
+        "depends": "",
+        "description": "Native Rust IHK host core",
+        "license": "GPL v2",
+        "name": "ihk",
+        "retpoline": "Y",
+        "rhelversion": "10.2",
+        "srcversion": "56185ED204C089769025BCB",
+        "vermagic": "6.12.0-211.44.1.el10_2.mckernel1.x86_64 SMP preempt mod_unload ",
+        "version": "1.7.0rc4"
+      },
+      "name": "ihk.ko",
+      "path": "/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-bc3cf0ecfe164d6bbcad77dd3bae8e16/modules/ihk.ko",
+      "sha256": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c",
+      "size": 1527808,
+      "stat_identity": {
+        "st_ctime_ns": 1792715520822016625,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48671609,
+        "st_mode": 33188,
+        "st_mtime_ns": 1792715520822016625,
+        "st_nlink": 1,
+        "st_size": 1527808,
+        "st_uid": 1000
+      }
+    },
+    {
+      "compiler_binding": {
+        "command_sha256": "d1949eb35c6dd3dfca38f9b967bc55f8613f8452c2ede8568f72333ff743ec1c",
+        "saved_command": "RUST_MODFILE=/candidate/modules/ihk-smp-x86_64 rustc --edition=2021 -Zbinary_dep_depinfo=y -Astable_features -Dunsafe_op_in_unsafe_fn -Dnon_ascii_idents -Wrust_2018_idioms -Wunreachable_pub -Wmissing_docs -Wrustdoc::missing_crate_level_docs -Wclippy::all -Wclippy::mut_mut -Wclippy::needless_bitwise_bool -Wclippy::needless_continue -Wclippy::no_mangle_with_rust_abi -Wclippy::dbg_macro -Cpanic=abort -Cembed-bitcode=n -Clto=n -Cforce-unwind-tables=n -Ccodegen-units=1 -Csymbol-mangling-version=v0 -Crelocation-model=static -Zfunction-sections=n -Wclippy::float_arithmetic --target=./scripts/target.json -Ctarget-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2 -Zcf-protection=branch -Zno-jump-tables -Ztune-cpu=generic -Cno-redzone=y -Ccode-model=kernel -Zfunction-return=thunk-extern -Zpatchable-function-entry=16,16 -Copt-level=2 -Cdebug-assertions=n -Coverflow-checks=n -Dwarnings -Cdebuginfo=2  --cfg MODULE  @./include/generated/rustc_cfg -Zallow-features=arbitrary_self_types,new_uninit,used_with_arg -Zcrate-attr=no_std -Zcrate-attr='feature(arbitrary_self_types,new_uninit,used_with_arg)' -Zunstable-options --extern force:alloc --extern kernel --crate-type rlib -L ./rust/ --crate-name ihk_smp_x86_64 --sysroot=/dev/null --out-dir /candidate/modules/ --emit=dep-info=/candidate/modules/.ihk_smp_x86_64.o.d --emit=obj=/candidate/modules/ihk_smp_x86_64.o /candidate/modules/ihk_smp_x86_64.rs",
+        "sources": [
+          "abi/application.rs",
+          "abi/sysfs.rs",
+          "abi/sysfs_request.rs",
+          "abi/vdso.rs",
+          "abi/x86_64.rs",
+          "application_image.rs",
+          "application_pager.rs",
+          "application_rpc.rs",
+          "application_syscall.rs",
+          "current_fork_control.rs",
+          "current_fork_task_mm.rs",
+          "exec_delivery.rs",
+          "exec_transfer_checked.rs",
+          "ihk-compat-build-id.bin",
+          "ihk_mapping.rs",
+          "ihk_smp_x86_64.rs",
+          "ikc_master.rs",
+          "ikc_queue.rs",
+          "procfs_objects.rs",
+          "smp_application.rs",
+          "smp_application_image.rs",
+          "smp_application_syscall.rs",
+          "smp_boot_code.rs",
+          "smp_cpu.rs",
+          "smp_file_pager.rs",
+          "smp_ikc.rs",
+          "smp_image.rs",
+          "smp_loader.rs",
+          "smp_memory.rs",
+          "smp_procfs.rs",
+          "smp_resource.rs",
+          "smp_service.rs",
+          "smp_startup.rs",
+          "smp_startup_entry.S",
+          "smp_topology.rs",
+          "smp_trampoline.S",
+          "smp_trampoline.rs",
+          "smp_vdso.rs",
+          "sysfs_memory.rs",
+          "sysfs_objects.rs",
+          "sysfs_os.rs",
+          "sysfs_remote.rs",
+          "sysfs_rpc.rs",
+          "sysfs_setup.rs",
+          "sysfs_snoop.rs",
+          "sysfs_tree.rs",
+          "sysfs_zeroing.rs",
+          "user_string.rs",
+          "zero_pages.rs"
+        ]
+      },
+      "hash_authority": "Genuine completed driverreceipt; no worker binary rehash",
+      "mode": 33188,
+      "modinfo": {
+        "depends": "ihk",
+        "import_ns": "MCKERNEL_IHK_V1",
+        "license": "Dual BSD/GPL",
+        "name": "ihk_smp_x86_64",
+        "parm": "ihk_ikc_irq_core:Target CPU of IHK IKC IRQ",
+        "parmtype": "ihk_ikc_irq_core:uint",
+        "retpoline": "Y",
+        "rhelversion": "10.2",
+        "srcversion": "88B1EE3E3684689BC294910",
+        "vermagic": "6.12.0-211.44.1.el10_2.mckernel1.x86_64 SMP preempt mod_unload "
+      },
+      "name": "ihk-smp-x86_64.ko",
+      "path": "/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-bc3cf0ecfe164d6bbcad77dd3bae8e16/modules/ihk-smp-x86_64.ko",
+      "sha256": "8234e5ef8b6a76ec478a717d59c413325aa42408c1175ec187ac99887a3ba2e7",
+      "size": 12917072,
+      "stat_identity": {
+        "st_ctime_ns": 1792715521066024136,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48671611,
+        "st_mode": 33188,
+        "st_mtime_ns": 1792715521058023889,
+        "st_nlink": 1,
+        "st_size": 12917072,
+        "st_uid": 1000
+      }
+    },
+    {
+      "compiler_binding": {
+        "command_sha256": "9cda1e193cbed3ddfab5e7409695ffac4867314e2322e62efd23057dbac361fe",
+        "saved_command": "RUST_MODFILE=/candidate/modules/mcctrl rustc --edition=2021 -Zbinary_dep_depinfo=y -Astable_features -Dunsafe_op_in_unsafe_fn -Dnon_ascii_idents -Wrust_2018_idioms -Wunreachable_pub -Wmissing_docs -Wrustdoc::missing_crate_level_docs -Wclippy::all -Wclippy::mut_mut -Wclippy::needless_bitwise_bool -Wclippy::needless_continue -Wclippy::no_mangle_with_rust_abi -Wclippy::dbg_macro -Cpanic=abort -Cembed-bitcode=n -Clto=n -Cforce-unwind-tables=n -Ccodegen-units=1 -Csymbol-mangling-version=v0 -Crelocation-model=static -Zfunction-sections=n -Wclippy::float_arithmetic --target=./scripts/target.json -Ctarget-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2 -Zcf-protection=branch -Zno-jump-tables -Ztune-cpu=generic -Cno-redzone=y -Ccode-model=kernel -Zfunction-return=thunk-extern -Zpatchable-function-entry=16,16 -Copt-level=2 -Cdebug-assertions=n -Coverflow-checks=n -Dwarnings -Cdebuginfo=2 --check-cfg 'cfg(MODULE)' --check-cfg 'cfg(mckernel_current_fork_adoption_opt_in)' --cfg mckernel_current_fork_adoption_opt_in  --cfg MODULE  @./include/generated/rustc_cfg -Zallow-features=arbitrary_self_types,new_uninit,used_with_arg -Zcrate-attr=no_std -Zcrate-attr='feature(arbitrary_self_types,new_uninit,used_with_arg)' -Zunstable-options --extern force:alloc --extern kernel --crate-type rlib -L ./rust/ --crate-name mcctrl_rust --sysroot=/dev/null --out-dir /candidate/modules/ --emit=dep-info=/candidate/modules/.mcctrl_rust.o.d --emit=obj=/candidate/modules/mcctrl_rust.o /candidate/modules/mcctrl_rust.rs",
+        "sources": [
+          "abi/application.rs",
+          "abi/os_service.rs",
+          "abi/x86_64.rs",
+          "application_image.rs",
+          "current_fork_host.rs",
+          "mcctrl_exec.rs",
+          "mcctrl_process.rs",
+          "mcctrl_rust.rs",
+          "mcctrl_vm.rs",
+          "user_string.rs"
+        ]
+      },
+      "hash_authority": "Genuine completed driverreceipt; no worker binary rehash",
+      "mode": 33188,
+      "modinfo": {
+        "depends": "ihk",
+        "import_ns": "MCKERNEL_IHK_V1",
+        "license": "GPL v2",
+        "name": "mcctrl",
+        "retpoline": "Y",
+        "rhelversion": "10.2",
+        "srcversion": "01D615A4E35FCEA89E06282",
+        "vermagic": "6.12.0-211.44.1.el10_2.mckernel1.x86_64 SMP preempt mod_unload "
+      },
+      "name": "mcctrl.ko",
+      "path": "/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-bc3cf0ecfe164d6bbcad77dd3bae8e16/modules/mcctrl.ko",
+      "sha256": "c47cb00090077e980706d2b0b6bed438bc45d0280927e700f948a20555b6584a",
+      "size": 2655616,
+      "stat_identity": {
+        "st_ctime_ns": 1792715520866017979,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48671610,
+        "st_mode": 33188,
+        "st_mtime_ns": 1792715520862017856,
+        "st_nlink": 1,
+        "st_size": 2655616,
+        "st_uid": 1000
+      }
+    }
+  ],
+  "old20352_receipt_relabelled": false,
+  "preparation_sha256": "c10aa8e755d4900cc607b77951ac2ff2657224a6ee7a183c86bf099716097a44",
+  "production_build_observation": true,
+  "production_module_artifacts_accepted": true,
+  "schema": "mckernel.actual-sdk68-v3.artifact-reference.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_bytes": 1353815,
+  "source_files": 68,
+  "source_identity": "b3f80c34011dca51674b0566ea08a2aff0e23f3e65e5f82b5a96b7dad47c924c",
+  "source_provenance": {
+    "baseline_source_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+    "closure_hash_encoding": "SHA256 of UTF-8 JSON relative-path-to-SHA256 map, sorted keys, separators comma/colon",
+    "closure_sha256": "c3a6a093181a6f3b57fc9469a031b8e714a287e18868558669703660ed9b2578",
+    "compatibility_build_id": {
+      "meaning": "Retained baseline ABI compatibility blob; not proof of unchanged compiled source",
+      "path": "ihk-compat-build-id.bin",
+      "sha256": "6836dd3f0fd3d273816c58b067eeea1b53a2a7ab760c68e3d918eb14e80c38f0"
+    },
+    "excluded_working_tree": "Every unreviewed working-tree file excluded; exact68file source preparation; module/native acceptance remains unproven",
+    "reviewed_deltas": [
+      {
+        "baseline_sha256": "f33c826539ed0807617337ba64a1cb646daf510cc06a44b47243d14e366d67a3",
+        "path": "Kbuild",
+        "source_candidate_sha256": "ca334dd0417ca3497b896faa1397dee3799b8ce418444c24559e44745e300e1f"
+      },
+      {
+        "baseline_sha256": "d2b3770a111777d4f28a7a81814a03414d318a90d3ec7082d5c89149b1704a0f",
+        "path": "abi/application.rs",
+        "source_candidate_sha256": "cc91eb844cbffdb8818f4c2d728bf3dcbd0b39883655cdd0a5e0d98815925eb4"
+      },
+      {
+        "baseline_sha256": "03007f44c020c5d0cf797b18568ef8b329fd5cb4e81abe80bb5c542b58020c25",
+        "path": "application_syscall.rs",
+        "source_candidate_sha256": "daaa3b0fabb002b40cafdc4d7c74ed6cdfd606e18dc82d3bb32bc3055e1a96e0"
+      },
+      {
+        "baseline_sha256": null,
+        "path": "current_fork_control.rs",
+        "source_candidate_sha256": "89e3c6a26826ef48c2d5420759e462cebe12e2ffe437b9cb5a83627d37699304"
+      },
+      {
+        "baseline_sha256": null,
+        "path": "current_fork_host.rs",
+        "source_candidate_sha256": "5a68633144eb60f941a73ceff9f2d5b0d30c7b9c1c1d0c25d5e8135dfde959b4"
+      },
+      {
+        "baseline_sha256": null,
+        "path": "current_fork_task_mm.rs",
+        "source_candidate_sha256": "e2e124e84030aa6be957af6ff9c2a03116ac1b20118e28c974d24e05048b6dfe"
+      },
+      {
+        "baseline_sha256": null,
+        "path": "exec_delivery.rs",
+        "source_candidate_sha256": "65ab86c4aff79e04e46a0f6b9b2eb2397e4e94d16bc5163579e55663eac83b7d"
+      },
+      {
+        "baseline_sha256": null,
+        "path": "exec_transfer_checked.rs",
+        "source_candidate_sha256": "a7dae8a829da028cab0ad2d9de233304a587fd7d09059f4bf87c4fee16b67907"
+      },
+      {
+        "baseline_sha256": "a353b2915a4038e7739d01cc440376daf091367f976cf6de297bceb1dd59fce8",
+        "path": "ihk_smp_x86_64.rs",
+        "source_candidate_sha256": "7457d19bfbc8af95825481a924cdb8dee6ce5c74604907cf49ac34a54b93b5ac"
+      },
+      {
+        "baseline_sha256": "b3898d1a4d08ba5512ee9b12e66224409f6aed4db3adc293b47631aa16fa8030",
+        "path": "mcctrl.rs",
+        "source_candidate_sha256": "1871d5fc2bd352228dc167a7460a6f687e1a5b8228410cbf394be90c010c325e"
+      },
+      {
+        "baseline_sha256": "148134730b5fed7f14770eb070529b5227bb6ab790b7199f8800968219dffc70",
+        "path": "mcctrl_process.rs",
+        "source_candidate_sha256": "b2e635f6590d401e2d37646486c2d3a5a52fece210d569533001f354d0537d23"
+      },
+      {
+        "baseline_sha256": null,
+        "path": "mcctrl_rust.rs",
+        "source_candidate_sha256": "1871d5fc2bd352228dc167a7460a6f687e1a5b8228410cbf394be90c010c325e"
+      },
+      {
+        "baseline_sha256": "83630dbe469466c7f69f51feb3a85438e2ae20049346b5e940d89d355f590ab3",
+        "path": "mcctrl_vm.rs",
+        "source_candidate_sha256": "50e0a20a032cf137ab93f2b19f392577fd1a3f48990b4e368ac415134002bf92"
+      },
+      {
+        "baseline_sha256": null,
+        "path": "mcctrl_vm_write_compat.c",
+        "source_candidate_sha256": "dcbe065ede329b51b41abcaf0563015532920fe6a34391c7bf77ed1c2f0abdf0"
+      },
+      {
+        "baseline_sha256": null,
+        "path": "mcctrl_vm_write_compat.h",
+        "source_candidate_sha256": "ff25bb43907149fc9303b0dd0a7db1c84b9fc2c6f49f1922f18ca9c32b57c527"
+      },
+      {
+        "baseline_sha256": "9519b7f35f5d28c88cdf366fe5c67a244ea005db713690a3686afe8c2a60fcab",
+        "path": "os_runtime.rs",
+        "source_candidate_sha256": "4acedfe7e50e51183f0e58d3ab9fd9225eccf4bd5bfdb4101a49e4a201fd55f5"
+      },
+      {
+        "baseline_sha256": "6b37a71ba79bf5746fd72123b82ebe5afc71c809310a2a942cea08a3d66cf5e8",
+        "path": "smp_application.rs",
+        "source_candidate_sha256": "426f7c32d262f42da37454bb7008163aa2ab9da202476c606169be0c1b647871"
+      },
+      {
+        "baseline_sha256": "7fb8c862a1793ea4db6f90200adb9f78ee9b9b2abd9899b9ffd4671d647d7985",
+        "path": "smp_application_image.rs",
+        "source_candidate_sha256": "cf3eb651aac4a5510f8ddcf9cc5376479e3379528582a33e1fc55c084f1317b5"
+      },
+      {
+        "baseline_sha256": "4118de1401f33b2df17393660e6acbce2f337dca8a9cdfcf10965b1d3dc84c55",
+        "path": "smp_application_syscall.rs",
+        "source_candidate_sha256": "b99874d9c1a80720f154086d40f4427f83732824dad85d8d391cc3a8a4de4360"
+      },
+      {
+        "baseline_sha256": "ed5520878d89e9a79d7ffeb128ccbb54fbab5472b4b0f57abd00a0399fc8e9cb",
+        "path": "smp_cpu.rs",
+        "source_candidate_sha256": "f65f3aea00dfdd0a7905d3dd396e67684fd428c71cf34dd6e15a56896c73f912"
+      },
+      {
+        "baseline_sha256": "9876f1b374ecfb44fba09395aa9fca1ed840619488f9b4f8cde38a6693004cd9",
+        "path": "smp_file_pager.rs",
+        "source_candidate_sha256": "655c029bcddf937b6445ee01d076978ff9606832d60fd038e07076bee939e96c"
+      },
+      {
+        "baseline_sha256": "db0c5f94b5ea41610c501002ff359b7f23a38841715a0307e8b8f7872ac65522",
+        "path": "smp_memory.rs",
+        "source_candidate_sha256": "60758aeafac150bd8aac62455844e3f4e4200a082f82f80ce66c3c871d4909be"
+      },
+      {
+        "baseline_sha256": "7aba4319fdc6fa76761ca01128c7a7d920c4be85244737167122c914fc1268d5",
+        "path": "smp_procfs.rs",
+        "source_candidate_sha256": "4ae39992d0354b2f0b32de4a3e26ce8a621ede6dff69dd92ce303d4ab90232ea"
+      },
+      {
+        "baseline_sha256": "bd0a109fe6c402e21b702b0fa96d99c2d9edbd5179877aa61f9f27bd595fe0e4",
+        "path": "smp_service.rs",
+        "source_candidate_sha256": "fd2c19bc7e09911c9332ec32432060b04e2ce3d4c2918cf94a996eeef82deeac"
+      },
+      {
+        "baseline_sha256": "c4bb558432a85c565977a7820d42eaf06530398d7fe9b916bf58f6741ca78d81",
+        "path": "sysfs_memory.rs",
+        "source_candidate_sha256": "a06bef19cc2f0c847a4e394703f3cb0e9450c8a8453252c46745e324fe83d600"
+      },
+      {
+        "baseline_sha256": "8a33f152307d66f7c205fe7557da1a4e02e5d230335dd9b36f16797e11db53ee",
+        "path": "sysfs_remote.rs",
+        "source_candidate_sha256": "fe4ec42333148770a36843a82f0c4cdf675a27065dbed1f13449a2b61472dfa9"
+      }
+    ],
+    "source_candidate_sha": "b3f80c34011dca51674b0566ea08a2aff0e23f3e65e5f82b5a96b7dad47c924c"
+  },
+  "status": "INDEPENDENTLY_ACCEPTED_ACTUAL_SDK68_V3_THREE_MODULE_ARTIFACT_REFERENCES"
+}

@@ -1,0 +1,21 @@
+...........................................................E.
+======================================================================
+ERROR: tearDownClass (scripts.tests.test_os_goal_launcher.CampaignTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/scripts/tests/test_os_goal_launcher.py", line 993, in tearDownClass
+    schemas = {method: json.loads((Path(directory) / name).read_text()) for method, name in files.items()}
+  File "/home/holden/mckernel/scripts/tests/test_os_goal_launcher.py", line 993, in <dictcomp>
+    schemas = {method: json.loads((Path(directory) / name).read_text()) for method, name in files.items()}
+  File "/home/holden/anaconda3/lib/python3.9/pathlib.py", line 1266, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+  File "/home/holden/anaconda3/lib/python3.9/pathlib.py", line 1252, in open
+    return io.open(self, mode, buffering, encoding, errors, newline,
+  File "/home/holden/anaconda3/lib/python3.9/pathlib.py", line 1120, in _opener
+    return self._accessor.open(self, flags, mode)
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/mckernel-model-protocol-qa6xofk0/v2/GetAccountRateLimitsParams.json'
+
+----------------------------------------------------------------------
+Ran 60 tests in 2.912s
+
+FAILED (errors=1)

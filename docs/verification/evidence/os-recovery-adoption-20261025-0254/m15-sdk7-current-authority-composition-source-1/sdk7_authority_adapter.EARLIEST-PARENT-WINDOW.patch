@@ -1,0 +1,21 @@
+--- a/sdk7_authority_adapter.py
++++ b/sdk7_authority_adapter.py
+@@ -13,7 +13,8 @@
+ import re
+ import time
+ 
+-from prepare_current_window_bindings import ORIGIN, ORIGIN_SHA, WINDOW, validate_window
++from prepare_current_window_bindings import ORIGIN, ORIGIN_SHA
++from sdk7_current_window import load_window, validate_window
+ from retained_sdk21_authority import validate_current
+ 
+ PROFILE = dict(cpus='2-5', jobs=1, memory_bytes=12 * 2**30,
+@@ -353,7 +354,7 @@
+     need(os.geteuid() == 0, 'root-authenticated metadata writer required')
+     raw = ORIGIN.read_bytes()
+     need(hashlib.sha256(raw).hexdigest() == ORIGIN_SHA, 'fixed retained consumer changed')
+-    window = json.loads(WINDOW.read_bytes())
++    window = load_window()
+     now = actual_clock()
+     bundle_raw = args.bundle.read_bytes()
+     bundle = json.loads(bundle_raw)

@@ -1,0 +1,40 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "NOT_RELEASED",
+  "candidate_release": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/ROOT-NORMAL-RETIREMENT-PREPARATION-1/RELEASE.CANDIDATE.NOT-RELEASED.json",
+    "bytes": 241229,
+    "sha256": "a7149d27a2e88acf0d805f52fa66e8c58ab1ef48641a48779a4aa5855712a2e1"
+  },
+  "actual_readonly_acceptance": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-post-recovery-retirement-review-1/ACTUAL-CORRECTED-READONLY-INDEPENDENT-ACCEPTANCE.json",
+  "argv_template": [
+    "/usr/bin/sudo",
+    "-A",
+    "--",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/bounded-observer-correction-source-1/native_rust_cutover_image_terminal_cleanup.CURRENT290.EXACT-DEAD-CALLER.py",
+    "--release",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/ROOT-NORMAL-RETIREMENT-PREPARATION-1/RELEASE.PASS_EXECUTION_RELEASE.json",
+    "--release-sha256",
+    null,
+    "--execute",
+    "--exact-dead-caller-new-ofd"
+  ],
+  "finalization_only": [
+    "status becomes PASS_EXECUTION_RELEASE",
+    "execution_review becomes PASS with this independent execution reviewer and exact approving evidence hash",
+    "argv release digest becomes SHA256 exact finalized release"
+  ],
+  "all_other_release_bytes_values_unchanged": true,
+  "capture": "Root ordinary one-shot fullregularstdoutstderr/PIDbirth/PGID/directJOIN/rusage; no timeout/groupkill or replay of cleanup"
+}

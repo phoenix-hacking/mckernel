@@ -1,0 +1,249 @@
+--- a/kernel/rust/fork_control_registry.rs
++++ b/kernel/rust/fork_control_registry.rs
+@@ -177,10 +177,10 @@
+         match (&mut *REGISTRY.state.get()).matching(handle) {
+             None => Err(ENOENT),
+             Some(slot) if slot.busy || slot.phase != Phase::Private => Err(EBUSY),
+-            Some(slot) => {
+-                slot.phase = Phase::Escaped;
+-                Ok(slot.carrier.unwrap())
+-            }
++            Some(slot) => match slot.carrier {
++                Some(carrier) => { slot.phase = Phase::Escaped; Ok(carrier) }
++                None => Err(EIO),
++            },
+         }
+     };
+     REGISTRY.unlock();
+@@ -200,7 +200,7 @@
+                 slot.phase = Phase::Retained;
+                 Err(EBUSY)
+             }
+-            Some(slot) => Ok(slot.carrier.take().unwrap()),
++            Some(slot) => slot.carrier.take().ok_or(EIO),
+         }
+     };
+     REGISTRY.unlock();
+@@ -231,7 +231,7 @@
+     if !handle.valid(){return Err(EINVAL);}
+     REGISTRY.lock();
+     let result=match (&mut *REGISTRY.state.get()).matching(handle){
+-        Some(slot) if !slot.busy&&slot.phase!=Phase::Private&&slot.carrier==Some(expected)=>Ok(slot.carrier.take().unwrap()),
++        Some(slot) if !slot.busy&&slot.phase!=Phase::Private&&slot.carrier==Some(expected)=>slot.carrier.take().ok_or(EIO),
+         Some(_)=>Err(EBUSY),None=>Err(ENOENT),
+     };
+     REGISTRY.unlock();result
+@@ -252,7 +252,10 @@
+         match (&mut *REGISTRY.state.get()).matching(handle) {
+             None => Err(ENOENT),
+             Some(slot) if slot.busy => Err(EBUSY),
+-            Some(slot) => { slot.busy = true; Ok(slot.carrier.unwrap()) }
++            Some(slot) => match slot.carrier {
++                Some(carrier) => { slot.busy = true; Ok(carrier) }
++                None => Err(EIO),
++            },
+         }
+     };
+     REGISTRY.unlock();
+@@ -279,9 +282,11 @@
+     REGISTRY.lock();
+     let mut count = 0;
+     unsafe {
++        let mut destinations = out.iter_mut();
+         for (index, slot) in (&*REGISTRY.state.get()).slots.iter().enumerate() {
+             if slot.carrier.is_some() && slot.phase != Phase::Private {
+-                out[count] = Handle { slot: index as u32, reserved: 0, epoch: slot.epoch };
++                let Some(destination) = destinations.next() else { break; };
++                *destination = Handle { slot: index as u32, reserved: 0, epoch: slot.epoch };
+                 count += 1;
+             }
+         }
+--- a/kernel/rust/fork_child_credits.rs
++++ b/kernel/rust/fork_child_credits.rs
+@@ -9,7 +9,7 @@
+ use core::ptr::{addr_of_mut, NonNull};
+ use core::sync::atomic::{AtomicI32, Ordering};
+ use crate::abi::{Process, ProcessVm, SyscallRequest, Thread};
+-use super::{registry, Carrier, Handle, EACCES, EBUSY, EINVAL, NR_CLONE};
++use super::{registry, Carrier, Handle, EACCES, EBUSY, EINVAL, EIO, NR_CLONE};
+ 
+ const EOVERFLOW: i32 = -75;
+ #[path="fork_constructed_credits.rs"]
+@@ -73,14 +73,14 @@
+         if !self.retirement_complete(true){return Err(self);}
+         // runq_add already consumed the reservation. There is no CPU release
+         // here and no second release of any original constructor edge.
+-        let graph=self.constructor.unwrap();
++        let Some(graph)=self.constructor else{return Err(self);};
+         crate::process_helpers::release_thread(self.parent.as_ptr());
+         crate::mem_helpers::kfree(graph.as_ptr().cast());Ok(())
+     }
+     pub(super) unsafe fn release_after_ack(self)->Result<(),Self> {
+         if !self.destruction_complete(){return Err(self);}
+         // No child/VM/Process pointer is used after checked final destruction.
+-        let graph=self.constructor.unwrap();
++        let Some(graph)=self.constructor else{return Err(self);};
+         constructed::release_cpuid(self.reserved_cpu);
+         crate::process_helpers::release_thread(self.parent.as_ptr());
+         crate::mem_helpers::kfree(graph.as_ptr().cast());Ok(())
+@@ -282,9 +282,18 @@
+             0
+         });
+         if rc != 0 { return Err(PrivateFailure { error: rc, owner: self }); }
++        let credits = match self.credits.take() {
++            Some(credits) => credits,
++            None => {
++                self.retained = true;
++                let _ = registry::retain(self.handle);
++                return Err(PrivateFailure { error: EIO, owner: self });
++            }
++        };
+         let pointer = match registry::cancel(self.handle) {
+             Ok(pointer) => pointer,
+             Err(error) => {
++                self.credits = Some(credits);
+                 self.retained = true;
+                 let _ = registry::retain(self.handle);
+                 return Err(PrivateFailure { error, owner: self });
+@@ -292,7 +301,6 @@
+         };
+         // Cancel returned this allocation only after releasing registry lock.
+         crate::mem_helpers::kfree(pointer.as_ptr().cast());
+-        let credits = self.credits.take().unwrap();
+         // The validation above proves this current-parent release cannot be a
+         // last-reference destructor; no child/process/VM/CPU credit is changed.
+         match credits.cancel_unpublished() {
+@@ -501,6 +509,7 @@
+     let slot = match ForkRequestSlot::allocate(host_flags, vm.region.user_start, length, root) {
+         Ok(slot) => slot, Err(error) => { (*out).error = error; return 0; },
+     };
++    let request = slot.request;
+     let mut pointer = match super::create_private_carrier_current(slot.request.as_ptr(), parent, child) {
+         Ok(pointer) => pointer,
+         Err(error) => { slot.free_private(); (*out).error = error; return 0; },
+@@ -515,8 +524,9 @@
+             // entries cannot be discovered by observers. No credit transferred.
+             match registry::cancel(handle) {
+                 Ok(mut pointer) => {
+-                    let slot = pointer.as_mut().owned_request.take().unwrap();
+-                    crate::mem_helpers::kfree(pointer.as_ptr().cast()); slot.free_private();
++                    let slot = pointer.as_mut().owned_request.take();
++                    crate::mem_helpers::kfree(pointer.as_ptr().cast());
++                    if let Some(slot) = slot { slot.free_private(); }
+                 },
+                 Err(_) => {
+                     // Request ownership is already durable. On unexpected
+@@ -532,7 +542,6 @@
+     // initialization directly, just like the actual carrier constructor does.
+     pointer.as_mut().owned_credits = Some(credits);
+     (*out).disposition = RUST_RETAINS_CREDITS; (*out).handle = handle;
+-    let request = pointer.as_ref().owned_request.as_ref().unwrap().request;
+     if let Err(error) = registry::begin(handle) {
+         let _ = registry::retain(handle); (*out).error = error; return 0;
+     }
+--- a/kernel/rust/fork_runnable_child.rs
++++ b/kernel/rust/fork_runnable_child.rs
+@@ -44,6 +44,10 @@
+     let physical=crate::x86_memory_helpers::virt_to_phys(context.response.cast::<c_void>())as u64;
+     let end=physical.checked_add(size_of::<SyscallResponse>()as u64);
+     let carrier_end=c.physical.checked_add(128);
++    let disjoint=match (end,carrier_end){
++        (Some(end),Some(carrier_end))=>!(physical<carrier_end&&c.physical<end),
++        _=>false,
++    };
+     let frame=snapshot(c);
+     let valid=c.phase==FIRST_POSITIVE&&c.error==0&&c.parent==context.thread as usize
+         &&request.number==NR_CLONE&&request.args==c.host_start.args&&request.args[0]==1
+@@ -52,8 +56,7 @@
+         &&request.ttid==0&&request.valid==0&&context.cpu==c.host_start.cpu&&context.cpu>=0
+         &&physical!=0&&physical%8==0&&response.stid>0
+         &&crate::x86_cpu_helpers::smp_load_acquire_ulong(addr_of!(response.status))==1
+-        &&end.is_some()&&carrier_end.is_some()
+-        &&!(physical<carrier_end.unwrap()&&c.physical<end.unwrap())
++        &&disjoint
+         &&crate::x86_memory_helpers::virt_to_phys(addr_of_mut!(c.bytes).cast::<c_void>())as u64==c.physical
+         &&frame[..8]==*b"MCFKW001"&&word(&frame,24)==1
+         &&word(&frame,32)==c.identity.child_pid as u64&&key(&frame)==c.identity
+@@ -75,8 +78,8 @@
+ unsafe fn submit_start(handle:Handle)->i32 {
+     let local=crate::cls::get_this_cpu_local_var();if local.is_null(){return EACCES;}
+     let parent=(*local).current;if parent.is_null(){return EACCES;}let cpu=(*parent).cpu_id;
+-    let mut slot=match ControlRequestSlot::allocate(){Ok(slot)=>Some(slot),Err(error)=>return error};
+-    let request=slot.as_ref().unwrap().request;
++    let slot=match ControlRequestSlot::allocate(){Ok(slot)=>slot,Err(error)=>return error};
++    let request=slot.request;let mut slot=Some(slot);
+     let prepared=registry::visit(handle,|pointer|{let c=&mut*pointer.as_ptr();
+         if c.handle!=handle||c.phase!=FIRST_POSITIVE||c.error!=0||c.parent!=parent as usize
+             ||c.host_start.state!=IDLE||!carrier_geometry(c,&c.identity){return EACCES;}
+@@ -120,7 +123,11 @@
+     });
+     if prepared!=0{return prepared;}
+     // No registry/publication/MM lock is held across lifecycle callbacks.
+-    let published=permit.unwrap().publish(pid,options.parent_cpu,options.flags,options.child_tid);
++    let Some(permit)=permit else{
++        let _=registry::visit(handle,|pointer|{let c=&mut*pointer.as_ptr();c.phase=RETAINED;c.error=EIO;0});
++        let _=registry::retain(handle);return EIO;
++    };
++    let published=permit.publish(pid,options.parent_cpu,options.flags,options.child_tid);
+     let _=registry::visit(handle,|pointer|{let c=&mut*pointer.as_ptr();
+         if published==0{c.runtime_publish_completed=true;if c.phase==RUNTIME_PUBLISHING{c.phase=RUNTIME_PUBLISHED;}}
+         else{c.phase=RETAINED;c.error=published;}0});
+--- a/kernel/rust/fork_final_ack.rs
++++ b/kernel/rust/fork_final_ack.rs
+@@ -4,8 +4,8 @@
+ 
+ pub(super) unsafe fn destroy_and_ack_current(handle:Handle)->i32 {
+     // This request allocation precedes every destructive guest effect.
+-    let mut slot=match ControlRequestSlot::allocate(){Ok(slot)=>Some(slot),Err(error)=>return error};
+-    let request=slot.as_ref().unwrap().request;let mut permit=None;let mut runtime_permit=None;
++    let slot=match ControlRequestSlot::allocate(){Ok(slot)=>slot,Err(error)=>return error};
++    let request=slot.request;let mut slot=Some(slot);let mut permit=None;let mut runtime_permit=None;
+     let mut runtime=false;let mut cpu=-1;let mut parent=0;
+     let prepared=registry::visit(handle,|pointer|{
+         let c=&mut*pointer.as_ptr();
+@@ -29,12 +29,22 @@
+     });
+     if prepared!=0 {if let Some(slot)=slot{slot.free_private();}return prepared;}
+     // No registry lock or Carrier reference survives a destructive callback.
+-    let destroyed=if runtime{runtime_permit.take().unwrap().destroy()}else{permit.take().unwrap().destroy()};
++    let destroyed=if runtime{
++        match runtime_permit.take(){Some(permit)=>Some(permit.destroy()),None=>None}
++    }else{
++        match permit.take(){Some(permit)=>Some(permit.destroy()),None=>None}
++    };
++    let Some(destroyed)=destroyed else{
++        if let Some(slot)=slot{slot.free_private();}
++        let _=registry::visit(handle,|pointer|{let c=&mut*pointer.as_ptr();c.phase=RETAINED;c.error=EIO;0});
++        let _=registry::retain(handle);return EIO;
++    };
+     let rebound=registry::visit(handle,|pointer|{
+         let c=&mut*pointer.as_ptr();
+-        if c.phase!=DESTRUCTING||c.owned_credits.is_none(){return EACCES;}
++        if c.phase!=DESTRUCTING{return EACCES;}
++        let Some(credits)=c.owned_credits.as_ref()else{return EACCES;};
+         if destroyed.is_err(){c.phase=RETAINED;c.error=EBUSY;return EBUSY;}
+-        if !c.owned_credits.as_ref().unwrap().retirement_complete(runtime){c.phase=RETAINED;return EBUSY;}
++        if !credits.retirement_complete(runtime){c.phase=RETAINED;return EBUSY;}
+         if runtime&&!runnable::runtime_retirement_ready(c){c.phase=RETAINED;c.error=EACCES;return EACCES;}
+         // The saved real revoke receipt binds nonce, original request/root,
+         // opaque epoch and delivery. Only the checked graph can reach here.
+@@ -64,12 +74,17 @@
+         expected=Some(pointer);0
+     });
+     if observed!=0{return observed;}
+-    let mut pointer=match registry::detach_terminal(handle,expected.unwrap()){
++    let Some(expected)=expected else{let _=registry::retain(handle);return EIO;};
++    let mut pointer=match registry::detach_terminal(handle,expected){
+         Ok(pointer)=>pointer,Err(error)=>return error,
+     };
+     // No new observer can obtain a Carrier borrow; all three real calls have
+     // acquired their actual completed Responses. Destruction is outside locks.
+-    let c=pointer.as_mut();let credits=c.owned_credits.take().unwrap();
++    let c=pointer.as_mut();let Some(credits)=c.owned_credits.take()else{
++        // Detach already removed discovery. Keep this allocation and every
++        // request; missing credits grant no destructor/free/positive return.
++        c.phase=RETAINED;c.error=EIO;guard.armed=false;return EIO;
++    };
+     let released=if runtime{credits.release_runtime_after_ack()}else{credits.release_after_ack()};
+     if let Err(credits)=released{c.owned_credits=Some(credits);guard.armed=false;return EBUSY;}
+     if runtime{c.host_start.free_after_ack();}

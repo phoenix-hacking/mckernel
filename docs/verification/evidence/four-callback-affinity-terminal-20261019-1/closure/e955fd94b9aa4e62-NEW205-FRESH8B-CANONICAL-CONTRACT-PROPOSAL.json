@@ -1,0 +1,655 @@
+{
+  "acceptance_bits": {
+    "compute_C_retirement": false,
+    "implementation_ownership": false,
+    "native_acceptance": false,
+    "production_artifact_acceptance": true,
+    "runtime_acceptance": false
+  },
+  "actual_artifact_acceptance": false,
+  "actual_artifacts": {
+    "each_descriptor": "engine_full_FD_type; rolecpu actualselectedlinkedcpu.c.o,process actualselectedlinkedprocess.c.o,rust actualdefaultRust object,image actualsupportedlinkedimage",
+    "exact_roles": [
+      "cpu",
+      "process",
+      "rust",
+      "image"
+    ],
+    "primary_copier_source_adapter": "actualcopier.source has path/dev/inode/uid/gid/mode:int/bytes/mtime_ns/ctime_ns/sha256. Compare exact engine source by device\u2192dev,size\u2192bytes,octmode\u2192int,removingONLYnlink; no missinguid/gid/mode/timestamps.",
+    "selected_image": "exactlyone image role,all4 originalpaths distinct"
+  },
+  "actual_report_exists": false,
+  "actual_report_path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-ACTUAL-PRODUCTION-ARTIFACT-REVIEW.json",
+  "actual_report_ref": null,
+  "actual_report_refusal_rules": [
+    "Consumerhardcodes schema/status/decision/phasebits and thiscontracthash/path,not binding-selected expectedPASS orwhole-object tautology.",
+    "Actualreportrequiredrefs/FDs/proofs may not be null/PENDING/template placeholders; request64MiB/source8MiB bounds must fit genuine35,945,443Brequest.",
+    "Source-onlytemplate maycarry nullfuturevalues ONLY withacceptancefalse/effectrefusal. Actualreport absentbeforecompletednew205compiler/image/observations/retention.",
+    "No actual37retention or nativeCPU proof inferred fromlabelledsynthetic1positive16refusals.",
+    "No globalHEAD/liverepositorysource equalitygate; usefullactualfrozen6948authority+205publication/acceptedsource closure."
+  ],
+  "actual_report_writer": "/root/next_replace_tid_review",
+  "affinity_default_witnesses": {
+    "existing_phaseproof_policy": "Use complete validactualnew205 producerNM/layout/source/fullcrate proofs when sufficient. If exactcaller/target association is absent, only boundedtargeted symbol/callsite observation is allowed afterseparateordinaryapproval; no deferredDWARF replay or fullcompiler replay.",
+    "export_matrix": "Everyrequiredexport uniqueT1/U0 inbothfreshnative+legacyRust andactualdefaultimage. Cselectedsyscall snapshot/inherit D0/U1; fallbacksyscall D0/U0. Baseinitializer selectedANDfallbackprocess D0/U1. Selected Csetaffinitywrapper omitted underSYSCALL_POLICY,so no invented C U1oracle; actualRustwrapper/defaultbody required.",
+    "fixed_origin_matrix": {
+      "process_clone_thread_base_state": {
+        "bothfullRust": "T1/U0",
+        "default_image": "T1/U0; actualclone_thread linkedcall",
+        "selected_and_fallback_process": "D0/U1"
+      },
+      "setaffinity": {
+        "bothfullRust": "T1/U0",
+        "default_image": "T1/U0; actualRustsys_sched_setaffinity linkedcall",
+        "selected_C_syscallwrapper": "omitted underMCKERNEL_RUST_SYSCALL_POLICY_HELPERS; noC U1oracle"
+      },
+      "snapshot_inherit": {
+        "bothfullRust": "T1/U0",
+        "default_image": "T1/U0;actualdo_fork linkedcalls",
+        "fallback_syscall": "D0/U0",
+        "selected_syscall": "D0/U1"
+      }
+    },
+    "initialCPU_runtime_separate": "StrictN3 actualchildinitialCPU1 atworker9/delivery70/syscall157 beforeworkerbind,allreturn/deliveryCPUs unchanged; no startup exemption or inventedPID. This report grants no nativeclaim.",
+    "machine_obligation": "No namedcallee-string requirement when compilerinlined. No proof from unusedexportpresence orsourceSomealone. Sizes/relocationcounts/addresses/bodybytes/layoutoffsets are NEWactual205 data, not literal996/21/oldNdxbounds.",
+    "machine_proof_allowed_fixed_forms": [
+      "actualresolvedcall/tailcall/function-address relocation with uniqueactualprovider andexactactualfunctionbounds",
+      "completeactualobject\u2192linkedfunction byteprojection with allactualrelocations uniquelyresolved plus typedsource/defaultownership and concreteinlinedphase/control-dataflow witnesses"
+    ],
+    "required_caller_roles": {
+      "C_clone_thread_to_Rust_initializer": "Actualselected kernel/process.c clone_thread\u2192Rustprocess_clone_thread_base_state_body_result; fallback referenceorigin preserved.",
+      "Rust_initializer_to_mask_inherit": "Actuale6b8 Rustinitializer\u21923510 inherit routine; initializedcopy serialized withrunq_reservation_lock,actualinlined/callroute proof.",
+      "Rust_sys_sched_setaffinity_to_body": "Actualselected Rustsys_sched_setaffinity\u21923510 sched_setaffinity_body_result; Cwrapperomitted. Actualmaskwrite/check existingreservationlock ordering andunlock beforemigrationprovider remain.",
+      "do_fork_snapshot_reserve_inherit": "Actualselected kernel/syscall.c do_fork from90732: snapshot\u2192existingobtain_clone_cpuid(snapshot,0)\u2192samecapturedmask privatechildinherit BEFOREpublication; actuallinkedprovider orwholeoptimizedbody/source/dataflow proof."
+    },
+    "required_exports": [
+      "sched_clone_affinity_snapshot_result",
+      "sched_clone_affinity_inherit_result",
+      "sched_setaffinity_body_result",
+      "process_clone_thread_base_state_body_result"
+    ],
+    "required_fields": [
+      "source_files",
+      "export_matrix",
+      "callers",
+      "layout_authority",
+      "optimizer_source_association",
+      "observation_refs"
+    ],
+    "source_files": {
+      "kernel/rust/process_helpers.rs": "e6b80f8a93298ddf5a1570fb00b528a515c6676b01af6de92f985a9ad5cca786",
+      "kernel/rust/sched_helpers.rs": "3510ce13fc4653311fa98f68ba472c8eb64e330ddf41b8ae691b81dc6563e70e",
+      "kernel/syscall.c": "90732f8aac62d1221f56d9c56d059e597f82dbd7ac22f8f1ef531f074e90161c"
+    }
+  },
+  "base_frozen_contract": {
+    "bytes": 30353,
+    "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-CANONICAL-REPORT-FIXED-CONTRACT.json",
+    "sha256": "2585003998fbbeed875158abc7dad9177302c336549dfb13bad54c735ea0d788"
+  },
+  "clarification_scope": "Exact value types only, same schema/status/decision/report path/witness/ownership/source/37actions; no new build gate or source change. Base258+authorfrozeninterface0f51 already met beforebuildcondition.",
+  "compiler_proofs": {
+    "C110": "Actualcompletefresh selected+fallback process TU GCC14 assertions110,allnamedphasecommands exit0/directjoined; originalC110 and source assertion pins retained.",
+    "all_reference_fields": "reference_type; every normalizedproof also binds exactrawreceipt/command/output refs and actualsource/provider fullFD authority.",
+    "fullcpu_selected_fallback": "Reuse genuine THIS-new205 phaseproof only; do not recompile successfulnamedgates forreport.",
+    "fullcrate_legacy": "Freshcomplete legacyRust proofcrate gate once,sameactualrequiredorigins; no old03a.",
+    "fullcrate_native": "Freshcomplete nativeRust proofcrate gate once,actualrequiredsymbols/providerorigins,not old03a; rawcommand/object/symbol proofs bound.",
+    "image_build": "Exactlyactualsupportednew205 CMake imageMAKE/-j4 command/result/artifact/provenance andnormaldefaultRust generation; separatecompiler-gate counts from normalimagebuild steps.",
+    "layout27": {
+      "cell_count": 27,
+      "each_vector_bytes": 216,
+      "encoding": "27native-targetu64 cells/216bytes; selectedC=fallbackC=actualRust bytes, no localoffsetoracle",
+      "ordered_C_Rust_expressions": [
+        {
+          "C": "sizeof(cpu_set_t)",
+          "Rust": "core::mem::size_of::<abi::CpuSet>()",
+          "zero_based_index": 0
+        },
+        {
+          "C": "_Alignof(cpu_set_t)",
+          "Rust": "core::mem::align_of::<abi::CpuSet>()",
+          "zero_based_index": 1
+        },
+        {
+          "C": "sizeof(struct thread)",
+          "Rust": "core::mem::size_of::<abi::Thread>()",
+          "zero_based_index": 2
+        },
+        {
+          "C": "_Alignof(struct thread)",
+          "Rust": "core::mem::align_of::<abi::Thread>()",
+          "zero_based_index": 3
+        },
+        {
+          "C": "sizeof(struct process)",
+          "Rust": "core::mem::size_of::<abi::Process>()",
+          "zero_based_index": 4
+        },
+        {
+          "C": "_Alignof(struct process)",
+          "Rust": "core::mem::align_of::<abi::Process>()",
+          "zero_based_index": 5
+        },
+        {
+          "C": "__builtin_offsetof(struct thread,proc)",
+          "Rust": "core::mem::offset_of!(abi::Thread,proc)",
+          "zero_based_index": 6
+        },
+        {
+          "C": "__builtin_offsetof(struct thread,sched_param)",
+          "Rust": "core::mem::offset_of!(abi::Thread,sched_param)",
+          "zero_based_index": 7
+        },
+        {
+          "C": "__builtin_offsetof(struct thread,sched_policy)",
+          "Rust": "core::mem::offset_of!(abi::Thread,sched_policy)",
+          "zero_based_index": 8
+        },
+        {
+          "C": "__builtin_offsetof(struct thread,cpu_id)",
+          "Rust": "core::mem::offset_of!(abi::Thread,cpu_id)",
+          "zero_based_index": 9
+        },
+        {
+          "C": "__builtin_offsetof(struct thread,cpu_set)",
+          "Rust": "core::mem::offset_of!(abi::Thread,cpu_set)",
+          "zero_based_index": 10
+        },
+        {
+          "C": "__builtin_offsetof(struct thread,in_kernel)",
+          "Rust": "core::mem::offset_of!(abi::Thread,in_kernel)",
+          "zero_based_index": 11
+        },
+        {
+          "C": "__builtin_offsetof(struct process,pid)",
+          "Rust": "core::mem::offset_of!(abi::Process,pid)",
+          "zero_based_index": 12
+        },
+        {
+          "C": "__builtin_offsetof(struct process,ruid)",
+          "Rust": "core::mem::offset_of!(abi::Process,ruid)",
+          "zero_based_index": 13
+        },
+        {
+          "C": "__builtin_offsetof(struct process,euid)",
+          "Rust": "core::mem::offset_of!(abi::Process,euid)",
+          "zero_based_index": 14
+        },
+        {
+          "C": "__builtin_offsetof(struct process,cpu_set)",
+          "Rust": "core::mem::offset_of!(abi::Process,cpu_set)",
+          "zero_based_index": 15
+        },
+        {
+          "C": "sizeof(struct sched_syscall_offsets)",
+          "Rust": "core::mem::size_of::<SchedSyscallOffsets>()",
+          "zero_based_index": 16
+        },
+        {
+          "C": "_Alignof(struct sched_syscall_offsets)",
+          "Rust": "core::mem::align_of::<SchedSyscallOffsets>()",
+          "zero_based_index": 17
+        },
+        {
+          "C": "__builtin_offsetof(struct sched_syscall_offsets,thread_proc_offset)",
+          "Rust": "core::mem::offset_of!(SchedSyscallOffsets,thread_proc_offset)",
+          "zero_based_index": 18
+        },
+        {
+          "C": "__builtin_offsetof(struct sched_syscall_offsets,thread_sched_param_offset)",
+          "Rust": "core::mem::offset_of!(SchedSyscallOffsets,thread_sched_param_offset)",
+          "zero_based_index": 19
+        },
+        {
+          "C": "__builtin_offsetof(struct sched_syscall_offsets,thread_sched_policy_offset)",
+          "Rust": "core::mem::offset_of!(SchedSyscallOffsets,thread_sched_policy_offset)",
+          "zero_based_index": 20
+        },
+        {
+          "C": "__builtin_offsetof(struct sched_syscall_offsets,thread_cpu_id_offset)",
+          "Rust": "core::mem::offset_of!(SchedSyscallOffsets,thread_cpu_id_offset)",
+          "zero_based_index": 21
+        },
+        {
+          "C": "__builtin_offsetof(struct sched_syscall_offsets,thread_cpu_set_offset)",
+          "Rust": "core::mem::offset_of!(SchedSyscallOffsets,thread_cpu_set_offset)",
+          "zero_based_index": 22
+        },
+        {
+          "C": "__builtin_offsetof(struct sched_syscall_offsets,proc_pid_offset)",
+          "Rust": "core::mem::offset_of!(SchedSyscallOffsets,proc_pid_offset)",
+          "zero_based_index": 23
+        },
+        {
+          "C": "__builtin_offsetof(struct sched_syscall_offsets,proc_ruid_offset)",
+          "Rust": "core::mem::offset_of!(SchedSyscallOffsets,proc_ruid_offset)",
+          "zero_based_index": 24
+        },
+        {
+          "C": "__builtin_offsetof(struct sched_syscall_offsets,proc_euid_offset)",
+          "Rust": "core::mem::offset_of!(SchedSyscallOffsets,proc_euid_offset)",
+          "zero_based_index": 25
+        },
+        {
+          "C": "__builtin_offsetof(struct sched_syscall_offsets,proc_cpu_set_offset)",
+          "Rust": "core::mem::offset_of!(SchedSyscallOffsets,proc_cpu_set_offset)",
+          "zero_based_index": 26
+        }
+      ],
+      "required_vector_roles": [
+        "selected_C",
+        "fallback_C",
+        "actual_Rust"
+      ],
+      "vector_proof": "All3 genuineheldFD bytevectors equal eachother and actualcompilerreceipt layout_bytes_sha256; exact27u64LE cells in frozenproducerorder, no handtypedlayout numbers."
+    },
+    "no_old_compiled_artifacts_adopted": true,
+    "required_fields": [
+      "build_acceptance",
+      "driver_receipt",
+      "ordinary_acceptance",
+      "no_old_compiled_artifacts_adopted",
+      "C110",
+      "syscall_selected_C10",
+      "syscall_fallback_C8",
+      "layout27",
+      "fullcrate_native",
+      "fullcrate_legacy",
+      "fullcpu_selected_fallback",
+      "image_build"
+    ],
+    "syscall_fallback_C8": "Actualcompletefresh fallback syscall TU GCC14 assertions8,unchanged C/reference selection.",
+    "syscall_selected_C10": "Actualcompletefresh selected syscall TU GCC14 assertions10,correctmacro selections; not an injectedunusedprototype-only translationunit."
+  },
+  "contract_execution_authority": false,
+  "created_at": "2026-10-19T11:58:51.588398+00:00",
+  "draft_clarifications_before_authoritative_freeze": [
+    "Actualsourcepins are90732 Csyscall/3510 sched_helpers/e6b8 process_helpers; syscall_policy wrapper source comesfrom fullmanifest,notmisidentifiedas3510.",
+    "Action-specific37engineinput/reuse-retained_authority andrawpair schema followexistingacceptedengine; no separate74manifest.",
+    "Source_request_bindings aliases requiredexactsource refs; reportsource11 block separately carriesconsumed11controlclosure."
+  ],
+  "engine_full_FD_type": {
+    "ctime_ns": "integer",
+    "device": "integer",
+    "exact_fields": [
+      "path",
+      "device",
+      "inode",
+      "uid",
+      "gid",
+      "mode",
+      "size",
+      "nlink",
+      "mtime_ns",
+      "ctime_ns",
+      "sha256"
+    ],
+    "gid": "integer",
+    "inode": "integer",
+    "mode": "permission octal string e.g.0o644",
+    "mtime_ns": "integer",
+    "nlink": "integer1 for boundretainedobjects",
+    "observation": "O_NOFOLLOW heldFD regular/singlelink,fullmetadata stable before/after/hash; represented pathname identity matches. No inode/path identity borrowed acrosscopies.",
+    "path": "absolute string",
+    "sha256": "64 lowercase hex",
+    "size": "integer",
+    "uid": "integer"
+  },
+  "existing_primary_pairs": {
+    "copier_receipt": "reference_type; actualstatus PASS_EXACT_FOUR_ARTIFACT_RETENTION_ONLY.artifacts exactlycpu/process/rust/image",
+    "count": 4,
+    "exact_fields": [
+      "count",
+      "copier_receipt",
+      "pairs"
+    ],
+    "pairs": "list4 exactfields role/original/retained; original+retained bothengine_full_FD_type; original exactlyactual_artifacts[role]",
+    "required_joins": [
+      "Unique4roles/sourcepaths/destinations; sourceandretained inode identities distinct.",
+      "Copierretained path/device/inode/size/hash exact currentretainedFD; preserve original/retained size/hash/uid/gid/mode for4primarycopies.",
+      "Exactlyone selectedimage pair joins reportactualimage and full37reuse authority; no oldimagepair or callback-only artifact substitution."
+    ]
+  },
+  "four_callback_witnesses": {
+    "old_four_leaf_scope": "Currentactual__release_tid/__find_and_replace_tid/timeaccount/hashdetach/defaultCbridges/unique/noFP anddebugdescriptors remainrequired,usingnew205 captures; originalfailures remainhistorical.",
+    "required_exports": [
+      "process_current_resource_set_bridge",
+      "process_release_hash_detach_bridge",
+      "process_release_sibling_detach_bridge",
+      "process_release_final_cleanup_bridge"
+    ],
+    "required_proof": "Actualnew205 selected/fallback/native/legacy/defaultimage origin matrix andactualdefaultRustbody association+typedinlinedlock/list/finalcleanup phases; reuse380e algorithm only. No old03abyte/size/address/reloc witnesscredit.",
+    "source_consumer": "Actualdefault release_process with exactSome callbacks/body-result source argumentindices8/9/10/17; profilearg11 excluded."
+  },
+  "guard_retirement": {
+    "client_joins": "actualfiniteDockerclientswait/reap/directguardwholejoin+ownerPASS/exit0/stoppedCID state/mountconfig androotmutexpostjoin; no PIDabsence-only proof",
+    "physical_cleanup_state": "REQUIRES_SEPARATE_ACCEPTED_CLEANUP orACTUAL_PHYSICAL_RELEASE_SEPARATELY_ACCEPTED withgenuineref; never nativeauthorityfromretirement",
+    "required_fields": [
+      "build_acceptance",
+      "owner_receipt",
+      "guard_result",
+      "guard_status",
+      "postjoin_readback",
+      "container_id",
+      "owner_nonce",
+      "retired",
+      "client_joins",
+      "physical_cleanup_state"
+    ],
+    "retired": true
+  },
+  "implementation_ownership": false,
+  "limitations_required": [
+    "Actualnative/runtime/computeCretirement not accepted byartifactreport.",
+    "Onlygenuinelycompiledconfiguration accepted; no actualTOFUlayout/nativeclaimfromcfgsource alone.",
+    "OriginalfullsyscallDWARFgap andeveryfailedattempt/source/consumer correction retained.",
+    "No old03a objectadoption,bodyaddresses/CID/Ndx/lineflags/FD/oracle pass substitutedfornew205."
+  ],
+  "phase_status_literals": {
+    "guard_retirement": "PASS_POSITIVE_CLIENT_OWNER_GUARD_RETIREMENT",
+    "postbuild_facts": "PASS_ACTUAL_NEW205_OPTIMIZED_DEFAULT_CONSUMERS_AND_DESCRIPTORS",
+    "production_compilers": "PASS_FULL_FRESH_C110_SYSCALL_C10_C8_LAYOUT27_TWO_CRATES",
+    "production_image": "PASS_ACTUAL_NEW205_SUPPORTED_IMAGE_BUILD",
+    "retention": "PASS_ACTUAL_ACTION_SPECIFIC_37_ROLES_33COPY_4REUSE",
+    "runtime": "NOT_GRANTED",
+    "source": "BOUND_ACTUAL_NEW205_REQUEST_AND_MATERIALIZATION"
+  },
+  "postbuild_facts": {
+    "capture_contract": {
+      "bytes": 23883,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/postbuild-preparation-1/capture-contract-draft.json",
+      "sha256": "4ed32e604c9711d1cb5713461f1e0ce7104d4db4b6102befeb0cd856eec47b4a"
+    },
+    "completion": "Everydeclaredoperation actualargv/source/exit/directjoin/bothstreamFD/hash/size/completion contract,including first12 +late3derivedactualdescriptorobservations. No all-original14PASS relabel.",
+    "descriptors": "TwoactualRust32B descriptors associated bydistinctactualNdx even ifbothsectionnames __verbose; exactindexedread/coverage. ET_REL zero-pointer placeholders joinactualABS64 RELAtargets; linked2x32B/64Brange hasnonzerofile/func,fmtNULL,exactsource line/defaultflags. Derive allnewNdx/addresses/lineflags.",
+    "facts_phase_literal": "complete_mechanical_postbuild",
+    "facts_producer_contract": {
+      "bytes": 3189,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/postbuild-preparation-1/FIFTEEN-FACTS-PRODUCER-CONTRACT.json",
+      "sha256": "8d3ce514d545330558c83f8774ec5723435d91c37184cddec8dcd3d143432a61"
+    },
+    "facts_schema_literal": "mckernel.new205.actual-fifteen-mechanical-facts.v1",
+    "facts_status_literal": "PASS_NEW205_FIFTEEN_COMPLETION_AND_MECHANICAL_FACTS_ONLY",
+    "full_DWARF_gap": "OPEN_NO_REPLAY_NO_WAIVER",
+    "linked_string_windows": "All4actualfile/funcCStringwindows boundedactualELFsection+address\u2192fileoffset+rawbytes,stableFD/hash andexactfrozen-source values. Can use separatelydeclaredboundedlocalELF evidence; never fabricate capturecommands.",
+    "operation_count": 15,
+    "optimizer_fixes_reference_only": {
+      "actual_historical_acceptance": {
+        "bytes": 7375,
+        "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-review-20261019-1/REMAINING-ACTUAL-SAVED-FACTS-ACCEPTANCE.json",
+        "sha256": "e94326ac8d2e5a80404570ac6a90430a798422d740def02f178d345241ec8953"
+      },
+      "algorithm": {
+        "bytes": 18439,
+        "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/facts-correction-1/postbuild_future_facts_corrected.py",
+        "sha256": "380e4d8c7ac1360a2694a34cb037c748bdaa31948da7948686add983f5b825fe"
+      }
+    },
+    "required_fields": [
+      "capture_contract",
+      "resolved_plan",
+      "release",
+      "completion",
+      "facts_source",
+      "facts_output",
+      "independent_facts_acceptance",
+      "operation_count",
+      "default_machine_proofs",
+      "descriptors",
+      "linked_string_windows",
+      "original_failures"
+    ]
+  },
+  "reference_type": {
+    "bytes": "nonnegative integer, bool forbidden",
+    "exact_fields": [
+      "path",
+      "sha256",
+      "bytes"
+    ],
+    "hash_and_decode": "same verified byte snapshot; bounded refs request64MiB/fullmanifest8MiB/ordinaryreports4MiB",
+    "path": "absolute string",
+    "sha256": "64 lowercase hex string of actualbytes"
+  },
+  "report_decision_literal": "PASS_ACTUAL_NEW205_PRODUCTION_IMAGE_ARTIFACT_AND_GUARD_RETIREMENT",
+  "report_schema_literal": "mckernel.independent-four-callback-affinity-image-actual-review.v1",
+  "report_status_literal": "PASS",
+  "report_value_types": {
+    "affinity_callers": "dict keyedexact4 required_caller_roles; eachreviewedobject carries sourcefile/function/provider names,actualconsumerartifact/sourcepin and actualmachineproofref(s)/witnesses; fixedtwoallowedmachineproofforms, no caller-selected PASS. Consumer checks exactrequiredrole/type/sourcepins and canonicaldecision ratherthan inventing another machineacceptance status.",
+    "affinity_export_matrix": "dict keyedexact4requiredexports; eachvalue normalizedobservations keyed actualartifactrole with integerdefinition_count/undefined_count,listdefinition_types and rawproof ref3/fullFD. Actualcanonicalreview enforces fixedoriginmatrix.",
+    "affinity_source_files": "relative-name\u2192SHA dict matching fixedsource_authority.actual_file_pins. Rawmechanicalfacts actual_source_pins may be relative-name\u2192ref3; compare hashes and frozen94643boundary, never require documentary liveREPO file to remain.",
+    "compiler_proofs_layout27": {
+      "affinity_receipt": "ref3",
+      "cell_count": "integer27",
+      "cells": "list27 nonnegative uint64 actualdecodedvalues, ordered by fixedC/Rustexpressionlist",
+      "common_sha256": "hex64 equal all3vectors and actualaffinityreceipt layout_bytes_sha256",
+      "encoding": "27_u64_le",
+      "exact_fields": [
+        "cell_count",
+        "encoding",
+        "cells",
+        "vectors",
+        "common_sha256",
+        "affinity_receipt"
+      ],
+      "vectors": "exactdict selected_C/fallback_C/actual_Rust, each full11engineFD size216"
+    },
+    "compiler_proofs_no_old_compiled_artifacts_adopted": "bool true",
+    "compiler_proofs_ref3_roles": [
+      "build_acceptance",
+      "driver_receipt",
+      "ordinary_acceptance",
+      "C110",
+      "syscall_selected_C10",
+      "syscall_fallback_C8",
+      "fullcrate_native",
+      "fullcrate_legacy",
+      "fullcpu_selected_fallback",
+      "image_build"
+    ],
+    "postbuild_ref3_roles": [
+      "capture_contract",
+      "resolved_plan",
+      "release",
+      "completion",
+      "facts_source",
+      "facts_output",
+      "independent_facts_acceptance"
+    ]
+  },
+  "required_top_level_fields": [
+    "schema",
+    "status",
+    "decision",
+    "reviewer",
+    "implementation_ownership",
+    "created_at",
+    "scope",
+    "production_artifact_acceptance",
+    "runtime_acceptance",
+    "native_acceptance",
+    "compute_C_retirement",
+    "phase_status",
+    "source_request_bindings",
+    "source_authority",
+    "actual_artifacts",
+    "existing_primary_pairs",
+    "compiler_proofs",
+    "affinity_default_witnesses",
+    "four_callback_witnesses",
+    "postbuild_facts",
+    "retained_authority",
+    "source11",
+    "guard_retirement",
+    "evidence",
+    "limitations"
+  ],
+  "retained_authority": {
+    "action_rules": {
+      "copy": "Exactly33newretainedpaths; actualengineexclusivewrite/copiedhash/size/fullFD/provenance andseparatelyacceptedretentionreceipt required; no forcingretainedmode=original when acceptedenginewrites0600. Bothmodes/owners remainexplicit.",
+      "reuse": "Exactly4primaryroles; currentretainedFD matchesprioractual4copyreceipt+originalproperties uid/gid/mode,size/hash andunchangedexistingpair; never newcopyclaim."
+    },
+    "copy_count": 33,
+    "engine_result": "reference_type toactual37retentionengine terminalresult",
+    "exact_fields": [
+      "role_count",
+      "copy_count",
+      "reuse_count",
+      "metadata_rows",
+      "original_authorities",
+      "pairs",
+      "engine_result",
+      "objects_manifest",
+      "independent_review"
+    ],
+    "finite_bytes_limit": 117440512,
+    "fixed_role_names": [
+      "CMakeCache.txt",
+      "build.make",
+      "build.stderr.log",
+      "build.stdout.log",
+      "compile_commands.json",
+      "cpu.c.o",
+      "link.txt",
+      "mckernel.img",
+      "mckernel.img.map",
+      "mckernel_rust.o",
+      "process.c.o",
+      "production-abi-checks.json",
+      "production-abi-cpu.c",
+      "production-abi-process.c",
+      "receipt.json",
+      "release-fallback-cpu.o",
+      "release-fallback-process.o",
+      "release-legacy-mckernel_rust.o",
+      "release-native-mckernel_rust.o",
+      "release-selected-cpu.o",
+      "release-selected-process.o",
+      "clone-affinity-production-checks.json",
+      "release-tid-production-checks.json",
+      "affinity-production-syscall.c",
+      "actual-affinity-layout.rs",
+      "affinity-selected-syscall.o",
+      "affinity-selected-syscall.bin",
+      "affinity-fallback-syscall.o",
+      "affinity-fallback-syscall.bin",
+      "affinity-actual-rust-layout.o",
+      "affinity-actual-rust-layout.bin",
+      "affinity-selected-syscall.nm",
+      "affinity-fallback-syscall.nm",
+      "affinity-selected-process.nm",
+      "affinity-fallback-process.nm",
+      "affinity-native-rust.nm",
+      "affinity-legacy-rust.nm"
+    ],
+    "independent_review": "reference_type toseparateactualaction-specific37retentionacceptance, notthis sourcecontract/syntheticfixture",
+    "metadata_rows": "2*len(pairs)=74; exact37uniqueoriginals/37uniqueretainedpaths,not old29/58 or21",
+    "objects_manifest": "reference_type toactualrawLIST37,each exactfields original/retained/outside_generic_receipt_inventory,withoutside_generic_receipt_inventory:true andbothfull11engineFD descriptors. No invented74rowmanifest.",
+    "original_authorities": "list37 engineinput rows exactkind/action/original/retained; original fullengine11; retained absolute destinationstring; EXACT4reuse rows additionally contain retained_authority fullengine11 matching priorprimarycopier/currentretainedFD. Exactkind/actions/paths matchfixed37manifest/executedrelease.",
+    "pairs": "list37 normalized canonical rows exactkind/action/original/retained, both descriptors fullengine11. Actualrawengine objects_manifest LIST37 has original/retained/outside_generic_receipt_inventory:true; enrich kind/action ONLY by exactoriginalpath+destination joins to original_authorities,with explicitprojectionprovenance.",
+    "reuse_count": 4,
+    "reuse_primary_join": "All4reuse rows match existing_primary_pairs.pairs and their perrow retained_authority across ALL11representedfields; no separate74rowmanifest required,metadata_rows counts2*37.",
+    "role_count": 37,
+    "role_manifest": {
+      "bytes": 20157,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/postbuild-preparation-1/retention-role-paths.json",
+      "sha256": "a0e64f5afe0e1583135113252b2a7076c89e12280a2a8e6e0722b4f92c7fe363"
+    }
+  },
+  "reviewer": "/root/next_replace_tid_review",
+  "schema": "mckernel.fixed-new205-actual-artifact-report-contract.v1",
+  "scope": "Functional OS/apps plus actual Rust/reviewedassembly migration; one fresh205 image with four release callbacks and changed CLONE_THREAD creator-affinity/defaultscheduler boundary. No borrowed03a object or machine witness credit.",
+  "source11": {
+    "authority": {
+      "bytes": 8885,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/heavy-proposal-1/source-sha256.json",
+      "sha256": "70227f83c4eccb4022b2d52eff0300930d0e602e2aac31fa049c3a68176ff6bd"
+    },
+    "count": 11,
+    "declared_host_owner": "reference_type actual902requestdeclared96d175 lowerhostowner,memberclosure; distinguishfromimageowner wrapper",
+    "executed_image_owner": "reference_type toactualnew205 imageowner adapter,memberclosure",
+    "guard": "reference_type toactualcorrected6901 source",
+    "publication": {
+      "bytes": 3955,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/heavy-proposal-1/dispatcher-publication-proof.json",
+      "sha256": "702347fec131eef6166a9bcc2ca685fc0fdf7e26ee1c3b697d7ee92d27cf25ba"
+    },
+    "request_lineage": "exactrequest/owner_receipt/driver_receipt/guard_result/postjoin_readback refs; current902/sourceidentityandactualCID/nonce/source/manifests/boot/mount match,not genericPASS oroldsource.",
+    "required_fields": [
+      "count",
+      "authority",
+      "source_sha256",
+      "publication",
+      "guard",
+      "executed_image_owner",
+      "declared_host_owner",
+      "request_lineage"
+    ],
+    "source_sha256": "exactcurrent11-entry consumedguardclosure; guard11+dispatcher12publication,notoldremaining12/13"
+  },
+  "source_authority": {
+    "actual_file_pins": {
+      "kernel/rust/process_helpers.rs": "e6b80f8a93298ddf5a1570fb00b528a515c6676b01af6de92f985a9ad5cca786",
+      "kernel/rust/sched_helpers.rs": "3510ce13fc4653311fa98f68ba472c8eb64e330ddf41b8ae691b81dc6563e70e",
+      "kernel/syscall.c": "90732f8aac62d1221f56d9c56d059e597f82dbd7ac22f8f1ef531f074e90161c"
+    },
+    "candidate_identity_scope": "base_git_commit_only",
+    "candidate_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+    "code_checkpoint": "205410e43e19456ec98777dd6392940707061324",
+    "file_pin_scope": "relative filenames resolved through exact full6948manifest/materializedroot. Documentary liveREPO paths in producer94643 are not a new livepath/globalHEAD gate.",
+    "ihk_sha": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+    "manifest": {
+      "bytes": 6717521,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/thin-inputs.json",
+      "sha256": "d3495242284b653ef10de9f4f70706fc0ea118696189aa957305ce8bf5df8098"
+    },
+    "materialization_receipt": {
+      "bytes": 483,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/materialization-receipt.json",
+      "sha256": "e2f4361997676db57505dacf2125e513f47b1013844e616070da56fff721a425"
+    },
+    "materialization_sha256": "a6c5602304214426c70a73823607ed58f6cc5d475457051b477271bd4d48ffcc",
+    "producer_boundary": {
+      "bytes": 6018,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/postbuild-preparation-1/AFFINITY-PRODUCTION-BOUNDARY-EXACT.json",
+      "sha256": "94643e33a179df71a081b8cc56b8ed01457948d98a1f19626c85676cfdee0826"
+    },
+    "request": {
+      "bytes": 35945925,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/image-request.json",
+      "sha256": "8b7b34ede927594675ad8cd303c24c233f4dcdaaa414c5a4c1171adc1139cbe1"
+    },
+    "required_fields": [
+      "request",
+      "manifest",
+      "materialization_receipt",
+      "source_identity",
+      "candidate_sha",
+      "candidate_identity_scope",
+      "ihk_sha",
+      "source_derivative_sha256",
+      "materialization_sha256",
+      "code_checkpoint",
+      "actual_file_pins"
+    ],
+    "source_derivative_sha256": "46ef55bc149a7c17cafc7b082e4774561980452e9d89f1d34e2096e7b9a2107e",
+    "source_identity": {
+      "dev": 66306,
+      "file_type": 16384,
+      "gid": 1000,
+      "inode": 48016248,
+      "mode": 448,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/materialized-source",
+      "uid": 1000
+    }
+  },
+  "source_request_bindings": {
+    "exact_fields": [
+      "request",
+      "manifest",
+      "materialization_receipt"
+    ],
+    "value_type": "reference_type; exact same genuine refs as source_authority (fresh8b7b/d349/e2f4 pins), not caller-selected authority."
+  },
+  "status": "FIXED_SOURCE_CONTRACT_ACTUAL205_REPORT_AND_WITNESSES_NOT_YET_PRODUCED"
+}

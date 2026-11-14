@@ -1,0 +1,65 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root",
+  "decision": "PROPOSE_DEFINED_REQUEST_ARGUMENT_CONSTRUCTORS_FOR_DECLARED_ARITY",
+  "recorded_utc": "2026-10-29T23:00:04.960280+00:00",
+  "intent": "Define previously indeterminate unused argument slots for the named2/3argument helper interfaces; intentional ordinaryfunctional correction, no undefined-C parity claim.",
+  "constructors": [
+    {
+      "symbols": [
+        "syscall_do_syscall2_bridge",
+        "syscall_policy_do_syscall2_bridge"
+      ],
+      "number": "caller syscall_nr with original CInt\u2192CULong conversion",
+      "args": [
+        "arg0",
+        "arg1",
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "symbols": [
+        "syscall_do_syscall3_bridge",
+        "syscall_policy_do_syscall3_bridge"
+      ],
+      "number": "caller syscall_nr with original CInt\u2192CULong conversion",
+      "args": [
+        "arg0",
+        "arg1",
+        "arg2",
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "symbols": [
+        "wait_host_wait4_bridge"
+      ],
+      "number": "unchanged __NR_wait4",
+      "args": [
+        "original pid conversion",
+        0,
+        "original options conversion",
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "invariants": [
+    "Set number and all6args individually beforedo_syscall; no general zero-fill of request, packet, response, uti_info or other objects.",
+    "rtid/ttid/valid remain initialized by existing helpers in original order; no response/ACK/lifetime or service behavior change.",
+    "Preserve original IHK_DMA_ALIGN stack-object alignment separately from struct layout; actual request72B/align8 and packet128B remain pending genuineABI29witness, not acceptance.",
+    "Old C fallback retained; newRust-ownedselectedpath only after reviewed actualprofile/ABI/ownership/compiler/link gates.",
+    "Review caller arity and exact host consumption; any receiver using an allegedly unused slot blocks this contract until explicit resolution.",
+    "Execveat phase1/phase2 require separate request/argv/env/descriptor lifetime decision and are NOT authorized by this proposal.",
+    "No service/account restriction cleared, no runtime/service call, no rejected-work retry."
+  ],
+  "requires_independent_review": true,
+  "source_implementation_authorized": false,
+  "compiled_or_native_acceptance": false
+}

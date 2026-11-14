@@ -1,0 +1,458 @@
+--- reviewed/compile_image_owner.py
++++ candidate/sdk13_compile_image_owner.py
+@@ -32,7 +32,7 @@
+ OWNER_RECEIPT_NAME = "owner-receipt.json"
+ EXPECTED_DRIVER_SHA256 = '7d30085edda4d1272f923b19e8632e9ab8b259874623974c2da53dbe4c3c5be0'
+ EXPECTED_PROVENANCE_SHA256 = '453dd998e4ef1e2ed21b0818771d97197d77f98c90ca8c6c67cc8ab019063044'
+-EXPECTED_HOST_OWNER_SHA256 = '8ffc9a09e2f2e9e9c9cc09af559d707bf6c4b989fc4f9d3ad51fe88a8e5b6083'
++EXPECTED_HOST_OWNER_SHA256 = '49751a3d9e0cda96e27ffa1fc2511b75cdf0f139a30b7e0f1cb58d6feb04b3a0'
+ EXPECTED_HEAVY_ENTRY_CONTRACT_SHA256 = "c252ee341eb61752704f8b818503c0a5dc97400845494707ca3110f5f23df6d1"
+ # The image owner advances with the image-candidate namespace.  Keep consumed
+ # exclusions explicit: accepting one of these would allow a request to race a
+@@ -182,7 +182,7 @@
+         sys.modules.pop(package_name, None)
+ 
+ 
+-_HOST_OWNER_PATH = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/compile_host_helper.py')
++_HOST_OWNER_PATH = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-nonheld13-owner-source-1/sdk13_compile_host_helper.py')
+ _HOST_OWNER = _load_reviewed_host_owner(
+     _HOST_OWNER_PATH, EXPECTED_HOST_OWNER_SHA256,
+     Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-14/default-image-preparation-1/native_rust_exact_build_offline.py'),
+@@ -1878,22 +1878,429 @@
+         return receipt
+ 
+ 
++# SDK13 successor admission source.  The candidate14 lifecycle remains above
++# byte-for-byte for review and reuse; no SDK13 launch is enabled until its
++# profile/driver/mount and output validation are wired and independently reviewed.
++SDK13_PROFILE_SHA = "3e6d2491c509790cea3f2de035e2171858d5efbcb9cc0dca8cc3aaea15007926"
++SDK13_RETIREMENT_SHA = "bc2df78168d34ef7c6b720766a03391668775d8e0847bb1130ff404e7958248d"
++SDK13_RETIREMENT_ACCEPTANCE_SHA = "69216fdba1acbe6a1cde3aa996534ed863deb57a5fd0bf64a05242d68bc9b894"
++SDK13_V3_REVIEW_SHA = "d37004eb0835315d3458fcbd4b5f8a677fad0fef2d71905556bb48b24f2d2bbd"
++SDK13_REQUIRED_FACTS = ("native_known_and_unknown_custody", "native_reserved_resources",
++    "v2_unknown_reserved_resources", "pure_outstanding_reserved_resources",
++    "daemon_socket_identity_and_continuity", "daemon_native_rw_separation",
++    "cpu6_positive_retirement_and_exclusive_grant", "root_controller_service_weekly_clocks",
++    "sdk_image_and_toolchain_identity", "sdk_source_config_header_object_closure",
++    "readonly_mounts_and_rw_output_nonintersection", "fresh_output_and_owner_ancestry",
++    "aggregate_cpu_memory_disk_headroom", "nonce_uniqueness",
++    "independent_successor_source_execution_review")
++
++def _validate_sdk13_facts(facts, now_boot_ns, boot_id):
++    _fail(isinstance(facts, dict), "SDK13 root admission missing")
++    _fail(facts.get("status") == "SDK13_COMPILE_ONLY_ADMISSION" and
++          facts.get("profile_sha256") == SDK13_PROFILE_SHA, "SDK13 admission identity mismatch")
++    _fail(facts.get("retirement_result_sha256") == SDK13_RETIREMENT_SHA and
++          facts.get("retirement_acceptance_sha256") == SDK13_RETIREMENT_ACCEPTANCE_SHA and
++          facts.get("v3_observation_review_sha256") == SDK13_V3_REVIEW_SHA, "SDK13 retirement evidence mismatch")
++    _fail(facts.get("boot_id") == boot_id and type(facts.get("observed_boottime_ns")) is int and
++          0 <= now_boot_ns - facts["observed_boottime_ns"] <= 120000000000, "SDK13 facts expired or wrong boot")
++    _fail(facts.get("unknown_custody_retained") is True and
++          facts.get("historical_no_unlisted") is None and facts.get("current_free") is None,
++          "SDK13 unknowns cannot be erased or asserted")
++    for name in SDK13_REQUIRED_FACTS:
++        fact = facts.get("facts", {}).get(name) if isinstance(facts.get("facts"), dict) else None
++        _fail(isinstance(fact, dict) and fact.get("verdict") == "PASS" and
++              isinstance(fact.get("evidence_sha256"), str) and
++              re.fullmatch(r"[0-9a-f]{64}", fact["evidence_sha256"]) is not None,
++              "SDK13 required reviewed fact missing: " + name)
++    limits = facts.get("reservations")
++    _fail(isinstance(limits, dict) and limits.get("native_memory_bytes") == 12 * 2**30 and
++          limits.get("native_cpus") == "2-5" and limits.get("native_memory_swap_bytes") == 12 * 2**30 and
++          limits.get("native_pids") == 512 and limits.get("v2_unknown_memory_bytes") == 2 * 2**30 and
++          limits.get("v2_unknown_cpu") == "7" and limits.get("pure_memory_bytes") == 2**29 and limits.get("pure_cpu") == "0" and
++          limits.get("compile_memory_bytes") == 4 * 2**30 and limits.get("compile_memory_swap_bytes") == 4 * 2**30 and
++          limits.get("compile_pids") == 128 and limits.get("compile_cpu") == "6" and
++          limits.get("mutex") == "27:4" and limits.get("scratch") == "21",
++          "SDK13 fixed reservations differ")
++    _fail(type(facts.get("aggregate_memory_bytes")) is int and
++          (12 + 2 + 4) * 2**30 + 2**29 <= facts["aggregate_memory_bytes"] <= int(Decimal("22.3811") * 2**30) and
++          type(facts.get("aggregate_cpu_shares")) is int and facts["aggregate_cpu_shares"] == 7 and
++          type(facts.get("MemAvailable")) is int and facts["MemAvailable"] >= 24 * 2**30 and
++          type(facts.get("host_free_bytes")) is int and facts["host_free_bytes"] >= 16 * 2**30 and
++          type(facts.get("scratch_free_bytes")) is int and facts["scratch_free_bytes"] >= 12 * 2**30,
++          "SDK13 aggregate capacity insufficient or unknown")
++    return facts
++
++# SDK13 owner branch: the reviewed candidate14 owner and lifecycle functions are
++# retained above. Root must bind exact current facts and review these adaptations.
++SDK13_DIR = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-nonheld13-owner-source-1')
++SDK13_PROFILE_PATH = SDK13_DIR.parent / 'sdk21-nonheld13-compile-preparation-1/SDK21-COMPILE.SOURCE-ONLY.json'
++SDK13_REQUEST_PATH = SDK13_DIR.parent / 'sdk21-nonheld13-admission-successor-1/ADMISSION-SUCCESSOR.SOURCE-ONLY.json'
++SDK13_DRIVER = SDK13_DIR / 'sdk13_four_command_driver.py'
++SDK13_DRIVER_SHA = '3d84e87b78f9a8737a5abcb36510fba202d97c4e019614ef6fdfd8522dc19671'
++SDK13_VALIDATOR = SDK13_DIR.parent / 'sdk21-nonheld13-input-validation-source-1/sdk13_input_validation.py'
++SDK13_VALIDATOR_SHA = 'c7dfd75f22a1f0bfedf01bc8a95612806e3e8b08f9cdd049d2fec420967edeca'
++SDK13_IMAGE = 'sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5'
++SDK13_OPERATION = 'M14_SDK13_RETIRED_ROOT70_COMPILE_ONLY_V1'
++SDK13_RELEASE = SDK13_DIR / 'ROOT-SDK13-RELEASE.ACTUAL.json'
++SDK13_ACCEPTANCE = SDK13_DIR / 'ROOT-SDK13-PHYSICAL-ACCEPTANCE.ACTUAL.json'
++SDK13_WORK = Path('/home/holden/mckernel-work/scratch/sdk21-nonheld13-compile-only-20261030-1')
++SDK13_CONTROL = SDK13_DIR.parent / 'ACTUAL-CONTROLS-ARMED.json'
++SDK13_CAPACITY = SDK13_DIR.parent / 'ACTUAL-CAPACITY-FALLBACK-ARMED.json'
++SDK13_UTC = 1793774133
++SDK13_BOOT = 1571569.6959267766
++SDK13_MONO = 1556231.5688797957
++SDK13_BOOT_ID = '7bfc5687-6c04-4d15-84eb-b92ab9a55dcb'
++
++
++def _sdk13_read(path, maximum, expected_sha=None, root=False):
++    _no_symlink_parents(path,'SDK13 bound input')
++    fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_CLOEXEC)
++    try:
++        st = os.fstat(fd)
++        _fail(stat.S_ISREG(st.st_mode) and st.st_nlink == 1 and st.st_size <= maximum,
++              'SDK13 bounded single-link regular file required: ' + str(path))
++        if root:
++            _fail(st.st_uid == 0 and not stat.S_IMODE(st.st_mode) & 0o077,
++                  'SDK13 sealed file must be root-owned and private')
++        chunks=[]; total=0
++        while True:
++            block=os.read(fd,65536)
++            if not block: break
++            total+=len(block); _fail(total<=maximum, 'SDK13 file grew')
++            chunks.append(block)
++        end=os.fstat(fd); named=os.lstat(path)
++        keys=('st_dev','st_ino','st_uid','st_gid','st_mode','st_nlink','st_size','st_mtime_ns','st_ctime_ns')
++        _fail(total==st.st_size and all(getattr(st,k)==getattr(end,k)==getattr(named,k) for k in keys),
++              'SDK13 file identity changed: ' + str(path))
++        data=b''.join(chunks); digest=hashlib.sha256(data).hexdigest()
++        if expected_sha is not None: _fail(digest==expected_sha, 'SDK13 hash mismatch: ' + str(path))
++        return data, (st.st_dev,st.st_ino,st.st_mode,st.st_uid,st.st_size,st.st_mtime_ns,st.st_ctime_ns,digest)
++    finally: os.close(fd)
++
++
++def _sdk13_module():
++    raw,_=_sdk13_read(SDK13_VALIDATOR,2**20,SDK13_VALIDATOR_SHA)
++    module=types.ModuleType('_sdk13_authenticated_input_validator')
++    module.__file__=str(SDK13_VALIDATOR)
++    exec(compile(raw,str(SDK13_VALIDATOR),'exec'),module.__dict__)
++    _fail(callable(getattr(module,'validate',None)) and callable(getattr(module,'revalidate',None)),
++          'SDK13 validator API missing')
++    return module
++
++
++def _sdk13_root(ref, path):
++    _fail(isinstance(ref,dict) and set(ref)=={'path','sha256'} and ref['path']==str(path) and
++          isinstance(ref['sha256'],str) and re.fullmatch(r'[0-9a-f]{64}',ref['sha256']),
++          'SDK13 sealed reference missing')
++    _no_symlink_parents(path,'SDK13 sealed document')
++    raw,ident=_sdk13_read(path,2**20,ref['sha256'],root=True)
++    value=json.loads(raw); _fail(isinstance(value,dict),'SDK13 sealed object expected')
++    return value,ident
++
++
++def _sdk13_ref(ref):
++    _fail(isinstance(ref,dict) and set(ref)=={'path','sha256'} and
++          isinstance(ref['path'],str) and Path(ref['path']).is_absolute(), 'SDK13 evidence reference invalid')
++    return _sdk13_root(ref,Path(ref['path']))
++
++
++def _sdk13_daemon_identity(expected):
++    _fail(isinstance(expected,dict) and type(expected.get('pid')) is int and expected['pid']>0 and
++          type(expected.get('starttime')) is int, 'SDK13 daemon identity unavailable')
++    pid=expected['pid']; birth=int(_proc_starttime(pid)); exe=os.stat('/proc/%d/exe'%pid)
++    sock=os.stat('/var/run/docker.sock')
++    actual={'pid':pid,'starttime':birth,'exe_device':exe.st_dev,'exe_inode':exe.st_ino,
++            'socket_device':sock.st_dev,'socket_inode':sock.st_ino}
++    _fail(stat.S_ISSOCK(sock.st_mode) and actual==expected, 'SDK13 daemon/socket identity changed')
++    return actual
++
++
++def _sdk13_authorize(request):
++    release,identity=_sdk13_root(request.get('compile_only_release'),SDK13_RELEASE)
++    _fail(release.get('status')=='RELEASED_ONE_SDK13_COMPILE_ONLY' and
++          release.get('operation')==SDK13_OPERATION and release.get('profile_sha256')==SDK13_PROFILE_SHA and
++          release.get('driver_sha256')==SDK13_DRIVER_SHA and release.get('validator_sha256')==SDK13_VALIDATOR_SHA and
++          release.get('owner_sha256')==_sha256(Path(__file__)) and
++          release.get('request_core_sha256')==_request_core_hash(request), 'SDK13 release bindings differ')
++    facts=release.get('admission'); boot=Path('/proc/sys/kernel/random/boot_id').read_text().strip()
++    _validate_sdk13_facts(facts,_boottime_ns(),boot)
++    _fail(boot==SDK13_BOOT_ID and facts.get('service_status')=='NO_NEW_REJECTION' and
++          facts.get('paid_fallback') is False and type(facts.get('weekly_used_percent')) in (int,float) and
++          0<=facts['weekly_used_percent']<100, 'SDK13 service or weekly allowance not established')
++    now=time.time(); bt=time.clock_gettime(time.CLOCK_BOOTTIME); mono=time.monotonic()
++    _fail(type(facts.get('weekly_observed_utc')) in (int,float) and
++          0<=now-facts['weekly_observed_utc']<=30 and type(facts.get('expiry_utc')) in (int,float) and
++          now<facts['expiry_utc']<=SDK13_UTC and now<SDK13_UTC and bt<SDK13_BOOT and mono<SDK13_MONO,
++          'SDK13 usage observation expired or time ceiling reached')
++    controls=[]
++    for path,key in ((SDK13_CONTROL,'controls_sha256'),(SDK13_CAPACITY,'capacity_sha256')):
++        data,record=_sdk13_read(path,2**20,facts.get(key));
++        _fail(isinstance(facts.get(key),str),'SDK13 control hash missing')
++        doc=json.loads(data)
++        _fail(doc.get('caps')=={'boot_deadline':SDK13_BOOT,'boot_id':SDK13_BOOT_ID,'deadline':SDK13_UTC,
++                                'monotonic_deadline':SDK13_MONO},'SDK13 actual control caps mismatch')
++        controls.append(record)
++    evidence=[]; refs=release.get('evidence_refs')
++    _fail(isinstance(refs,dict) and set(refs)==set(SDK13_REQUIRED_FACTS), 'SDK13 fact evidence incomplete')
++    for name in SDK13_REQUIRED_FACTS:
++        ref=refs[name]; _fail(ref.get('sha256')==facts['facts'][name]['evidence_sha256'], 'SDK13 fact hash differs')
++        _,record=_sdk13_ref(ref); evidence.append((name,record))
++    daemon=_sdk13_daemon_identity(facts.get('daemon'))
++    _fail(_mem_available()>=24*2**30,'SDK13 actual memory below floor')
++    for path,key,floor in ((Path('/home/holden/mckernel'),'host_required_bytes',16*2**30),
++                           (Path('/home/holden/mckernel-work/scratch'),'scratch_required_bytes',12*2**30)):
++        st=os.statvfs(path); free=st.f_bavail*st.f_frsize; need=facts.get(key)
++        _fail(type(need) is int and need>=floor and free>=need,'SDK13 actual disk below admitted bound')
++    return {'release':identity,'controls':controls,'evidence':evidence,'daemon':daemon}
++
++
++def _sdk13_set_profile(request,bound):
++    global COMPILE_PROFILE, COMPILE_PROFILE_SHA256
++    _fail(request.get('compile_operation')==SDK13_OPERATION and request.get('jobs')==1 and
++          type(request.get('timeout')) is int and
++          1<=request['timeout']<=2500, 'SDK13 operation or timeout invalid')
++    nonce=request.get('owner_nonce')
++    _fail(isinstance(nonce,str) and re.fullmatch(r'[0-9a-f]{32}',nonce) and nonce not in
++          ('4709c9fae2c743a7acd662e93a663358','5732bbe86da94491884b8b18a020f2ea',
++           '95f3c1f79ec040ddbb7065ff9f5ca536'),'SDK13 fresh nonce required')
++    _fail(Path(bound['work'])==SDK13_WORK and Path(bound['lease'])==SDK13_DIR/'sdk13-owner-evidence-1/compile-lease.json' and
++          Path(bound['owner_evidence'])==SDK13_DIR/'sdk13-owner-evidence-1' and
++          Path(bound['attempt'])==SDK13_DIR/'sdk13-owner-evidence-1/attempt' and
++          request.get('lease_path')==str(bound['lease']), 'SDK13 private domain differs')
++    COMPILE_PROFILE_SHA256=SDK13_PROFILE_SHA
++    COMPILE_PROFILE={'operation':SDK13_OPERATION,'container_name':'mckernel-sdk13-'+nonce,
++                     'owner_nonce':nonce,'image_id':SDK13_IMAGE,'lease_path':str(bound['lease']),'limits':LIMITS}
++
++
++def _sdk13_mounts(bound):
++    mounts=[(str(SDK13_WORK),'/work',False)]
++    mounts.extend((str(a),str(b),bool(c)) for a,b,c in bound['readonly_mounts'])
++    mounts.extend([(str(SDK13_PROFILE_PATH),'/work/sdk13-profile.json',True),
++                   (str(SDK13_DRIVER),'/work/sdk13-driver.py',True)])
++    _fail(all(ro for _,_,ro in mounts[1:]) and len({p[1] for p in mounts})==len(mounts),
++          'SDK13 mount set not exclusive or duplicate targets')
++    return mounts
++
++
++def _sdk13_create_args(bound):
++    mounts=_sdk13_mounts(bound); command=['/work/sdk13-driver.py']
++    args=['create','--name',COMPILE_PROFILE['container_name'],
++          '--label','mckernel.owner='+COMPILE_PROFILE['owner_nonce'],
++          '--label','mckernel.operation='+SDK13_OPERATION,'--init','--network=none','--ipc=private',
++          *RESOURCE_ARGS,'--user','1000:1000','--cap-drop=ALL','--security-opt=no-new-privileges',
++          '--read-only','--tmpfs','/tmp:rw,nodev,nosuid,size=256m']
++    for source,target,readonly in mounts:
++        args+=['--mount','type=bind,src='+source+',dst='+target+(',readonly' if readonly else '')]
++    args+=['--entrypoint','/usr/bin/python3',SDK13_IMAGE,*command]
++    return args,mounts,command
++
++
++
++def _sdk13_prepare_work(bound,request,validator):
++    work=Path(bound['work']);os.mkdir(work,0o700)
++    st=os.lstat(work)
++    created=tuple(getattr(st,k) for k in ('st_dev','st_ino','st_mode','st_uid','st_gid','st_nlink','st_size','st_mtime_ns','st_ctime_ns'))
++    validator.bind_work(bound,request,created)
++    data,_=_sdk13_read(SDK13_PROFILE_PATH,2**20,SDK13_PROFILE_SHA); profile=json.loads(data)
++    def host_path(raw):
++        path=Path(raw); _fail(path.is_absolute() and '..' not in path.parts and path!=Path('/work'), 'SDK13 mount target invalid')
++        return work/path.relative_to('/work')
++    for name in profile['private_work']['precreation_requirements']['required_output_directories']:
++        host_path(name).mkdir(parents=True,exist_ok=True)
++    for _,target,readonly in _sdk13_mounts(bound)[1:]:
++        if target.startswith('/work/'):
++            _fail(readonly,'SDK13 unexpected writable nested mount')
++            placeholder=host_path(target);placeholder.parent.mkdir(parents=True,exist_ok=True)
++            fd=os.open(placeholder,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW|os.O_CLOEXEC,0o600)
++            os.close(fd)
++    return created
++
++def _sdk13_driver_result(bound):
++    evidence=Path(bound['work'])/'sdk13-driver-evidence'
++    result=_load_json(_safe_regular(evidence/'result.json','SDK13 driver result'),'SDK13 driver result')
++    _fail(result.get('status')=='COMMANDS_EXITED_ZERO' and result.get('artifact_validation')=='NOT_PERFORMED',
++          'SDK13 driver did not report four zero exits')
++    for i in range(1,5):
++        intent=_load_json(_safe_regular(evidence/('stage-%d-intent.json'%i),'SDK13 intent'),'SDK13 intent')
++        row=_load_json(_safe_regular(evidence/('stage-%d-result.json'%i),'SDK13 stage'),'SDK13 stage')
++        _fail(intent.get('argv')==bound['commands'][i-1]['argv'] and
++              intent.get('cwd')==bound['commands'][i-1]['cwd'] and
++              row.get('stage')==bound['commands'][i-1]['stage'] and
++              row.get('returncode')==0 and row.get('direct_wait_completed') is True and
++              row.get('timed_out') is False and not row.get('error'),'SDK13 stage or command differs')
++        for suffix in ('stdout','stderr'):
++            _safe_regular(evidence/('stage-%d.%s'%(i,suffix)),'SDK13 stage capture')
++    outputs=[]
++    depfiles=['/work/output/build/kernel/rust/mckernel_rust.d',
++              '/work/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o.d',
++              '/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o.d',
++              '/work/output/build/kernel/CMakeFiles/mckernel.img.dir/link.d',
++              '/work/output/build/kernel/mckernel.img.map']
++    for raw in bound['outputs']+depfiles:
++        host=Path(bound['work']) / Path(raw).relative_to('/work')
++        path=_safe_regular(host,'SDK13 actual output')
++        _fail(path.stat().st_size>0,'SDK13 output empty')
++        outputs.append({'path':str(path),'bytes':path.stat().st_size,'sha256':_sha256(path)})
++    return outputs
++
++
++class SDK13ImageOwner:
++    def __init__(self,request,validator,signals):
++        self.request=request;self.validator=validator;self.signals=signals
++    def run(self):
++        r=self.request
++        _fail('physical_acceptance' not in r,'SDK13 launch request must not contain future physical acceptance')
++        _fail(os.getuid()==os.geteuid()==os.getgid()==os.getegid()==1000,'SDK13 ordinary owner required')
++        authority=_sdk13_authorize(r)
++        bound=self.validator.validate(r,profile_path=SDK13_PROFILE_PATH,request_path=SDK13_REQUEST_PATH,
++                                      source_map_path=Path(r['source_map_path']))
++        _sdk13_set_profile(r,bound)
++        _sdk13_read(SDK13_DRIVER,2**20,SDK13_DRIVER_SHA)
++        self.validator.revalidate(bound,r)
++        _fail(_sdk13_authorize(r)==authority,'SDK13 authority identity drift before lease')
++        os.mkdir(Path(bound['owner_evidence']),0o700)
++        _fsync_dir(Path(bound['owner_evidence']).parent)
++        lease=CompileLease(r)
++        try: lease.acquire()
++        except BaseException as exc:
++            _exclusive_json(Path(bound['owner_evidence'])/'prelease-error.json',
++                            {'status':'UNKNOWN_PRECREATE_LEASE_ACQUISITION',
++                             'error':type(exc).__name__+': '+str(exc),'native_guest_or_heavy_release':False})
++            raise
++        receipt={'scope':'Functional McKernel OS/apps and Rust/assembly migration only; no security testing.',
++                 'operation':SDK13_OPERATION,'profile_sha256':SDK13_PROFILE_SHA,
++                 'owner_sha256':_sha256(Path(__file__)),'driver_sha256':SDK13_DRIVER_SHA,
++                 'validator_sha256':SDK13_VALIDATOR_SHA,'container_name':COMPILE_PROFILE['container_name'],
++                 'owner_nonce':COMPILE_PROFILE['owner_nonce'],'status':'FAIL','container_id':None,'retired':False,
++                 'container_absence_confirmed':False,'all_docker_clients_joined':False,
++                 'lease_retained_for_root_acceptance':True,'native_guest_or_heavy_release':False,
++                 'compile_lease':lease.record,'request_core_sha256':_request_core_hash(r)}
++        attempted=False;client=None
++        try:
++            receipt['work_created_identity']=_sdk13_prepare_work(bound,r,self.validator)
++            Path(bound['attempt']).mkdir(mode=0o700); _fsync_dir(Path(bound['owner_evidence']))
++            client=_HOST_OWNER.Docker(Path(bound['attempt'])/'docker.log',self.signals,sudo=True)
++            image=json.loads(client.call(['image','inspect',SDK13_IMAGE],timeout=30).stdout)
++            _fail(isinstance(image,list) and len(image)==1 and image[0].get('Id')==SDK13_IMAGE and
++                  image[0].get('Architecture')=='amd64','SDK13 image identity differs')
++            self.validator.revalidate(bound,r)
++            _fail(_sdk13_authorize(r)==authority,'SDK13 authority changed before create')
++            args,mounts,command=_sdk13_create_args(bound)
++            _fail(not client.client_retirement_unproven,'SDK13 precreate client retirement unknown')
++            attempted=True;created=client.call(args);cid=created.stdout.strip()
++            _fail(re.fullmatch(r'[0-9a-f]{64}',cid or ''),'SDK13 create CID missing')
++            receipt['container_id']=cid;info=_own_inspect(client,cid)
++            _check_profile(info,SDK13_IMAGE,COMPILE_PROFILE['owner_nonce'],mounts=mounts,
++                           command=command,user='1000:1000',host_owner=_HOST_OWNER)
++            self.validator.revalidate(bound,r)
++            _fail(_sdk13_authorize(r)==authority,'SDK13 authority changed before start')
++            _fail(not client.client_retirement_unproven,'SDK13 prestart client retirement unknown')
++            client.call(['start',cid]);waited=client.call(['wait',cid],timeout=r['timeout'])
++            receipt['exit_code']=int(waited.stdout.strip());_fail(receipt['exit_code']==0,'SDK13 driver failed')
++            receipt['outputs']=_sdk13_driver_result(bound)
++            self.validator.revalidate(bound,r);receipt['status']='PASS'
++        except BaseException as exc:
++            receipt['error']=type(exc).__name__+': '+str(exc)
++        finally:
++            if self.signals:self.signals.cleaning=True
++            if attempted and client is not None:
++                try:receipt.update(_cleanup_owned_compile(client,Path(bound['attempt']),receipt.get('container_id')))
++                except BaseException as exc:receipt.update(status='FAIL',cleanup_error=type(exc).__name__+': '+str(exc))
++            else:receipt['no_container_create_attempted']=True
++            try:self.validator.revalidate(bound,r)
++            except BaseException as exc:receipt.update(status='FAIL',input_revalidation_error=type(exc).__name__+': '+str(exc))
++            if self.signals and self.signals.requested is not None:receipt.update(status='FAIL',interrupted_signal=self.signals.requested)
++            receipt['finished_at']=time.time()
++            _exclusive_json(Path(bound['owner_evidence'])/OWNER_RECEIPT_NAME,receipt)
++        return receipt
++
++
++
++def _sdk13_retirement_controls(acceptance):
++    # A separate, fresh root operation release is required for HOST lease retirement.
++    _fail(acceptance.get('release_action_authorized') is True and
++          acceptance.get('service_status')=='NO_NEW_REJECTION' and acceptance.get('paid_fallback') is False and
++          type(acceptance.get('weekly_used_percent')) in (int,float) and
++          0<=acceptance['weekly_used_percent']<100, 'SDK13 retirement service or billing unknown')
++    now=time.time(); bt=time.clock_gettime(time.CLOCK_BOOTTIME); mono=time.monotonic()
++    _fail(type(acceptance.get('weekly_observed_utc')) in (int,float) and
++          0<=now-acceptance['weekly_observed_utc']<=30 and
++          type(acceptance.get('expiry_utc')) in (int,float) and now<acceptance['expiry_utc']<=SDK13_UTC and
++          now<SDK13_UTC and bt<SDK13_BOOT and mono<SDK13_MONO and
++          Path('/proc/sys/kernel/random/boot_id').read_text().strip()==SDK13_BOOT_ID,
++          'SDK13 retirement usage or time expired')
++    rows=[]
++    for path,key in ((SDK13_CONTROL,'controls_sha256'),(SDK13_CAPACITY,'capacity_sha256')):
++        digest=acceptance.get(key);_fail(isinstance(digest,str),'SDK13 retirement controls missing')
++        raw,identity=_sdk13_read(path,2**20,digest);doc=json.loads(raw)
++        _fail(doc.get('caps')=={'boot_deadline':SDK13_BOOT,'boot_id':SDK13_BOOT_ID,'deadline':SDK13_UTC,
++                                'monotonic_deadline':SDK13_MONO},'SDK13 retirement control caps mismatch')
++        rows.append(identity)
++    return rows,_sdk13_daemon_identity(acceptance.get('daemon'))
++
++def _sdk13_release_accepted_lease(request,validator):
++    _fail(os.getuid()==os.geteuid()==os.getgid()==os.getegid()==1000,'SDK13 ordinary release owner required')
++    core_request={k:v for k,v in request.items() if k!='physical_acceptance'}
++    # The initial validator correctly requires a fresh, absent work/evidence
++    # namespace; it cannot be reused after the operation has produced evidence.
++    # Physical acceptance binds the exact already-existing receipt and lease.
++    bound={'work':SDK13_WORK,'owner_evidence':SDK13_DIR/'sdk13-owner-evidence-1',
++           'attempt':SDK13_DIR/'sdk13-owner-evidence-1/attempt',
++           'lease':SDK13_DIR/'sdk13-owner-evidence-1/compile-lease.json'}
++    _fail(core_request.get('work_root')==str(bound['work']) and
++          core_request.get('owner_evidence_root')==str(bound['owner_evidence']) and
++          core_request.get('attempt_root')==str(bound['attempt']),
++          'SDK13 existing release paths differ')
++    _sdk13_set_profile(core_request,bound)
++    acceptance,_=_sdk13_root(request.get('physical_acceptance'),SDK13_ACCEPTANCE)
++    _fail(acceptance.get('status')=='ACCEPTED_COMPILE_ONLY_PHYSICAL_RETIREMENT' and
++          acceptance.get('operation')==SDK13_OPERATION and acceptance.get('profile_sha256')==SDK13_PROFILE_SHA and
++          acceptance.get('owner_sha256')==_sha256(Path(__file__)) and
++          acceptance.get('request_core_sha256')==_request_core_hash(core_request) and
++          acceptance.get('owner_and_controller_joined') is True and
++          acceptance.get('all_owned_client_identities_retired') is True,
++          'SDK13 physical acceptance missing or differs')
++    receipt_path=_safe_regular(Path(bound['owner_evidence'])/OWNER_RECEIPT_NAME,'SDK13 owner receipt')
++    _fail(acceptance.get('owner_receipt_sha256')==_sha256(receipt_path),'SDK13 receipt changed')
++    receipt=_load_json(receipt_path,'SDK13 owner receipt')
++    _fail(receipt.get('retired') is True and receipt.get('container_absence_confirmed') is True and
++          receipt.get('all_docker_clients_joined') is True and receipt.get('operation')==SDK13_OPERATION and
++          receipt.get('request_core_sha256')==_request_core_hash(core_request),'SDK13 physical retirement missing')
++    retirement_authority=_sdk13_retirement_controls(acceptance)
++    cid=receipt.get('container_id');client=_HOST_OWNER.Docker(Path(bound['attempt'])/'lease-release-docker.log',sudo=True)
++    absence=_own_absence(client,cid)
++    _fail(not client.client_retirement_unproven,'SDK13 lease release client retirement unknown')
++    _fail(_sdk13_retirement_controls(acceptance)==retirement_authority,
++          'SDK13 retirement authority or daemon changed')
++    lease=CompileLease(core_request);stored=_load_json(lease.path,'SDK13 compile lease')
++    for key in ('schema','operation','request_core_sha256','profile_sha256','container_name','owner_nonce'):
++        _fail(stored.get(key)==lease.record[key],'SDK13 accepted lease binding differs')
++    lease.record=stored; lease.load_owned()
++    _exclusive_json(Path(bound['attempt'])/'accepted-lease-release-intent.json',
++                    {'operation':SDK13_OPERATION,'acceptance':acceptance,'fresh_own_absence':absence,
++                     'lease_sha256':hashlib.sha256(lease.load_owned()).hexdigest()})
++    lease.release_accepted(acceptance)
++    result={'status':'PASS_SDK13_COMPILE_ONLY_LEASE_RELEASED','container_id':cid,
++            'fresh_own_absence':absence,'native_guest_or_heavy_release':False}
++    _exclusive_json(Path(bound['attempt'])/'accepted-lease-release-result.json',result)
++    return result
++
++
+ def main(argv=None):
+-    parser = argparse.ArgumentParser(description="Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Fixed candidate14 compile owner.")
++    parser = argparse.ArgumentParser(description="Functional McKernel OS/apps and Rust/assembly migration only; no security testing. SDK13 compile owner.")
+     parser.add_argument("action", choices=("run", "release-accepted-lease"))
+     parser.add_argument("request", type=Path)
+     args = parser.parse_args(argv)
+     request = json.loads(args.request.read_text())
++    validator = _sdk13_module()
+     if args.action == "release-accepted-lease":
+-        result = release_accepted_compile_lease(request)
+-        print(json.dumps(result, sort_keys=True))
++        result = _sdk13_release_accepted_lease(request,validator)
++        print(json.dumps(result,sort_keys=True))
+         return 0
+     with Signals() as signals:
+-        result = ImageOwner(request, signals=signals).run()
+-    print(json.dumps(result, sort_keys=True))
+-    return 0 if result.get("status") == "PASS" and result.get("retired") is True else 1
+-
+-
++        result=SDK13ImageOwner(request,validator,signals).run()
++    print(json.dumps(result,sort_keys=True))
++    return 0 if result.get('status')=='PASS' and result.get('retired') is True else 1
+ 
+ 
+ if __name__ == "__main__":

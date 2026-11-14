@@ -1,0 +1,79 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": "2026-10-26T01:05:27.056690+00:00",
+  "status": "FAIL_IMAGE_RECEIPT_CANDIDATE_IDENTITY_BEFORE_COMPILER_OWNERSHIP_RETAINED",
+  "caller": {
+    "pid": 903729,
+    "starttime": "77387104",
+    "fd": 3,
+    "tool_session": 68064,
+    "still_live_quarantine": true
+  },
+  "owner": {
+    "pid": 904301,
+    "starttime": "77396514",
+    "returncode": 1,
+    "direct_joined_group_absent_closed": true
+  },
+  "query_to_owner_entry_seconds": 93.4937641620636,
+  "first_compiler_at": null,
+  "failure": "_validate_v2_image_tools635: image receipt identity differs; genuine immutable receipt candidate942c927b vs current sourcecandidateeb3ce544 conflated. Provenance correction passed; new later family.",
+  "effects": "Shared acquired before validate. Failure before common/lease/attempt/Docker/output/evidence/ownerreceipt creation.",
+  "shared": {
+    "path": "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock",
+    "device": 1828,
+    "inode": 116858,
+    "mode": 384,
+    "uid": 1000,
+    "gid": 1000,
+    "nlink": 1,
+    "bytes": 268,
+    "sha256": "be87556927c1bd55bdf4db6dac6cbb8a035800c0d58727e48187414b2e119fc8",
+    "record": {
+      "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+      "device": 1828,
+      "inode": 116858,
+      "kind": "image",
+      "pid": 904301,
+      "request_sha256": "5a20b25385d0df0dd233539e5f745222990526da14447d7c9053ea646dac74a7",
+      "schema": "mckernel.heavy-operation.v1",
+      "starttime": "77396514"
+    },
+    "inode_reused_from_previous_record": true,
+    "old004f_cannot_clear_new_record": true
+  },
+  "evidence": {
+    "ACTUAL-OWNER-ENTRY.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/attempt2-coherent-entry-preparation-source-1/genuine-postshared-binding-successor-source-1/actual-entry-1/ACTUAL-OWNER-ENTRY.json",
+      "sha256": "5a05037474f88377699ec8d0580d8acf88e60a6c910c1b06f8ffcb39a2fdda9f",
+      "bytes": 2813
+    },
+    "owner.PROCESS.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/attempt2-coherent-entry-preparation-source-1/genuine-postshared-binding-successor-source-1/actual-entry-1/owner.PROCESS.json",
+      "sha256": "5362c0ec07667a49c28bb57d0a64a1ebac47cd21593f93ff5e3a334721e0f020",
+      "bytes": 1276
+    },
+    "owner.JOIN.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/attempt2-coherent-entry-preparation-source-1/genuine-postshared-binding-successor-source-1/actual-entry-1/owner.JOIN.json",
+      "sha256": "5ed8fdac0f5cba4894e63289820aa1b68e09e5db897d102dde2de9740f0139cd",
+      "bytes": 3587
+    },
+    "owner.stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/attempt2-coherent-entry-preparation-source-1/genuine-postshared-binding-successor-source-1/actual-entry-1/owner.stderr",
+      "sha256": "499e1e3f91bd058aa7d6f75f8cb683ebdf03e081f0c137ac74e1bc93c0a6c5a5",
+      "bytes": 3671
+    },
+    "OWNERSHIP-QUARANTINE.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/attempt2-coherent-entry-preparation-source-1/genuine-postshared-binding-successor-source-1/actual-entry-1/OWNERSHIP-QUARANTINE.json",
+      "sha256": "e766e31df4fc2f4ac6bd5810af8cd4e0f8dd1292ba55224fee2814b240f195aa",
+      "bytes": 354
+    },
+    "INDEPENDENT-EXECUTION-REVIEW-READY.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/attempt2-coherent-entry-preparation-source-1/genuine-postshared-binding-successor-source-1/actual-entry-1/INDEPENDENT-EXECUTION-REVIEW-READY.json",
+      "sha256": "775077bb145ee76d82e93e1e86ac89a7d61d113c0b042a147e76a6e44a9f1bb5",
+      "bytes": 3231
+    }
+  },
+  "next": "Fresh exactcurrent readonly proof, independent process-only retirement release, then distinct shared archival; sourceowner fixes receipt-origin binding with real validator puretest. No automatic replay.",
+  "native_or_default_acceptance": false
+}

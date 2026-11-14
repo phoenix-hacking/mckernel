@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "process.exec-success",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/process.exec-success"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 23},
+  "stdout": {"kind": "exact-line-lines", "lines": ["argc=4 argv0=/apps/process.exec-success argv1=argA argv2_len=0 argv3=argB env_ok=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["execve replaces the image while retaining the same guest process identity", "The new image receives exact argv including an empty argument, exact C locale environment, and exits 23"],
+  "unresolved_expectations": ["/proc/self/exe binding and same-identity evidence require runner review."],
+  "max_question_for_reviewer": "Confirm re-exec through the bound ET_EXEC preserves PID/TID identity and exact argv/env bytes."
+}

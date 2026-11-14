@@ -1,0 +1,156 @@
+{
+  "schema": "m14-ptrace-seven-new-callback-host-contract-v1",
+  "status": "FROZEN_SOURCE_ONLY_NOT_COMPILED_NOT_EXECUTED",
+  "original_check": "M14-06-03-DEFAULT changed callback/provider lifecycle prerequisite; original functional/native/full acceptance separate.",
+  "source_ready": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-ownership-publicabi-max-1/SOURCE-READY.json",
+    "bytes": 3069,
+    "sha256": "478cdf21a3948b37d5b84d370689de25872ca2a7fb8f546c1ad8d9e3cb2589e5"
+  },
+  "source_GO": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-review-p03-max-1/REVIEW.json",
+    "bytes": 19857,
+    "sha256": "297d61c5f27dd267f58e380408ca3f14055036a77233aadfd488ad1d6afd3b64"
+  },
+  "source_slices": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-tests-publicabi-max-1/PRODUCTION-SLICES.json",
+    "bytes": 21556,
+    "sha256": "fcff9505041cc761a1fea8113be1156f80f626b3791d50c94bec1bb801cb35c2"
+  },
+  "full_SUT_rule": "Verbatim7740-byte entire new2a00 module prefix plus only explicit HOST-cfg private Ddebug/ops-offset access footer; all five production bodies and guards unchanged. Entire unchanged091c two-adapter module, actual ff48 ABI and complete existing resume body/helpers/offset/state/typed-kill closure are compiled. No production source edit, implementation stand-in, historical fixture or synthetic Thread/Process layout.",
+  "private_footer": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-tests-publicabi-max-1/source/HOST-ONLY-DESCRIPTOR-FOOTER.txt",
+    "bytes": 372,
+    "sha256": "b00029b9234e274ffae6629467a4d60165140be18402e83983e47ef9128a01f2"
+  },
+  "external_oracle": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-tests-publicabi-max-1/EXPECTED.json",
+    "bytes": 13532,
+    "sha256": "22f21bf1c94ce61b30fb40fb6fa47b25fb6168483b7c1b77ca82fe2b4c696a2e"
+  },
+  "oracle_derivation": "Twelve finite vectors in seven families, fixed from the original complete C branch/error/order and callback contracts in source/ORIGINAL-C-ORACLE-SOURCE.txt, not inferred by running SUT or generated from its output. Binary emits actual events, arguments, counters,128-byte records and field state; Root must compare complete observed JSON to external EXPECTED.",
+  "seven_cases": [
+    {
+      "id": "direct-provider-ABI-debug-origin",
+      "C_golden": "Six non-entry exports: event4 and any nonzero Ddebug flags (0 suppresses,0x80 enables, event3 suppresses), actual filename/function/fmtNULL/24429, signedPID32/hex32. Same64-aligned node initialized by writer before read, same lock/node/savedIRQ restored. Trackedfree4657 once; opaque kill returns full signed-long MIN+3; void wake discards-44. Callback caller retains its borrowed lifetime, intentionally not claimed released."
+    },
+    {
+      "id": "lookup-and-data-errors",
+      "C_golden": "One current lookup then log then find(pid,pid). Miss-ESRCH/no unlock. Data-1 or65 returns-EINVAL after one borrowed unlock, no saved-context clear/writer/free/signal/wake."
+    },
+    {
+      "id": "KILL-success-error",
+      "C_golden": "Clear saved before delivery;128 zero bytes except SIGKILL9. pid42/tid-1/ptracecont0. Success wake0x60 then unlock; error-77 only unlock, no writer/pending free."
+    },
+    {
+      "id": "CONT-no-signal-SIGSTOP",
+      "C_golden": "Data0 and19 clear saved then trace-syscall bit under writer pair, restore IRQ before wake0x60 and unlock. No pending consumption or signal."
+    },
+    {
+      "id": "SINGLESTEP-user-signal",
+      "C_golden": "Saved clear before single-step, then writer clears syscall bit. NonCONT ignores retained pending pointers; SI_USER/signo10/tracerPID500/uid0 in128 bytes, cont1 delivery then wake/unlock."
+    },
+    {
+      "id": "SYSCALL-user-error",
+      "C_golden": "Writer sets syscall bit/no single-step, ignores retained pending slots; SI_USER/signo12/PID500 info; delivery-91 after IRQ restore, unlock/no wake."
+    },
+    {
+      "id": "CONT-pending-copy128-free-error",
+      "C_golden": "CONT chooses sendsig before recvsig, clears chosen pointer, copies128 before trackedfree; unchosen recv remains. Recv-only fallback frees chosen once then-5 delivery unlocks/no wake. Test free poisons128 and deallocates before delivery; exact independent full-byte record catches late/pointer-based info use."
+    }
+  ],
+  "actual_C19slot_contract": {
+    "source_slots": [
+      [
+        "traceme_fn",
+        "ptrace_traceme"
+      ],
+      [
+        "wakeup_fn",
+        "ptrace_wakeup_sig"
+      ],
+      [
+        "getregs_fn",
+        "ptrace_getregs"
+      ],
+      [
+        "setregs_fn",
+        "ptrace_setregs"
+      ],
+      [
+        "getfpregs_fn",
+        "ptrace_getfpregs"
+      ],
+      [
+        "setfpregs_fn",
+        "ptrace_setfpregs"
+      ],
+      [
+        "peekuser_fn",
+        "ptrace_peekuser"
+      ],
+      [
+        "pokeuser_fn",
+        "ptrace_pokeuser"
+      ],
+      [
+        "peektext_fn",
+        "ptrace_peektext"
+      ],
+      [
+        "poketext_fn",
+        "ptrace_poketext"
+      ],
+      [
+        "setoptions_fn",
+        "ptrace_setoptions"
+      ],
+      [
+        "attach_fn",
+        "ptrace_attach"
+      ],
+      [
+        "detach_fn",
+        "ptrace_detach"
+      ],
+      [
+        "getsiginfo_fn",
+        "ptrace_getsiginfo"
+      ],
+      [
+        "setsiginfo_fn",
+        "ptrace_setsiginfo"
+      ],
+      [
+        "getregset_fn",
+        "ptrace_getregset"
+      ],
+      [
+        "setregset_fn",
+        "ptrace_setregset"
+      ],
+      [
+        "geteventmsg_fn",
+        "ptrace_geteventmsg"
+      ],
+      [
+        "arch_fn",
+        "arch_ptrace"
+      ]
+    ],
+    "type_rule": "Exact actual Rust19-slot struct and complete function-pointer alias closure, original compile-time guards plus measured HOST152/19/wakeup8,node64align64,info128,pending.info24.",
+    "not_a_dummy_table": "No synthetic19-slot table is executed or counted as real binding; genuine production table relocations/addresses/provider ownership remain normal-image proof."
+  },
+  "explicit_test_only_lower_effects": [
+    "CPU/current lookup uses initialized actual-layout allocated HOST storage, never GS",
+    "logical borrowed find/unlock and exact pointer identity, never real process refs/hash locks",
+    "writer savedIRQ sentinel/exclusion controls using actual extracted types, never actual spinlock or IRQ instructions",
+    "single-step routing only, never hardware/context behavior",
+    "tracked allocator free validates originalfile/4657/cleared slots/once-only ownership then poisons and releases test allocation",
+    "typed signal/scheduler controls record full data and return configured values; no signal/kill/scheduler/native/API call",
+    "actual variadic HOSTC formatter signature records arguments only; not kernel formatter acceptance"
+  ],
+  "memory_safety": "Zeroed actual-layout typed allocations remain live for complete synchronous calls; no whole Thread/Process reference, process refcount or lock authority created. Direct Info uses actual aligned SigInfo allocation. Writer never reads uninitialized node bytes before initializing irqsave. Pending allocation freed only after pointer cleared; all still-owned nodes released by test teardown. No escaped reference crosses callbacks; all cases serial, one HOST process/thread.",
+  "unchanged_passes": "Reuse sourceGO297d, current15 lower owner/ff48/104 and accepted time12/profile facts; no old source/body-only/F02/fork/held fixture suite replay. New input is actual seven-callback composition.",
+  "not_proved": "No genuine production lower providers/C19-table binding, kernel IRQ/locks/GS/current-thread/refcount/PTE/signal/scheduler/transport/native/restoration, C retirement or M14 DEFAULT/FUNCTIONAL/ACCEPT. Held590e/generic/exec/privateTID/TERMRESET/equivalent replay remains excluded. Root solely integrates, admits and executes."
+}

@@ -1,0 +1,109 @@
+{
+  "actual_loading_boundary_unchanged": "A fresh stop CLI imports new protocol but only queues request_stop. The old live guardian imported signal_exact earlier and still needs genuine reviewed owner retirement/reload; no hotpatch assumed.",
+  "all_other_original_function_bodies_byte_equal": [
+    "read_json",
+    "atomic_json",
+    "process_start",
+    "lease_free",
+    "goal_digest",
+    "recovery_blocker",
+    "checkpoint_request",
+    "validate_recovery_proof"
+  ],
+  "baseline": {
+    "bytes": 9802,
+    "path": "/home/holden/mckernel/scripts/os_goal_guard_protocol.py",
+    "sha256": "597d61bbedf7e1ff8b5d7c8d5b167b1e635ee2a9cee577074c4a4b0f4b861d3f"
+  },
+  "candidate": {
+    "bytes": 9688,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/pidfd-compatibility-repair-1/canonical-wrapper-reuse-1/candidate/scripts/os_goal_guard_protocol.py",
+    "sha256": "9bc35f56234b30e892828b6f75b4f909896b4125f4d4397e3a02fa810f602d09"
+  },
+  "effect_and_ownership_preserved": [
+    "Returned pidfd registered in local fd before try; post-open digit-string/exact current birth guard unchanged.",
+    "Only genuine canonical pidfd_send_signal gets the pinned fd after guard; no numeric PID/group/kill fallback.",
+    "Single finally os.close(fd), original mismatch/send/open/close errors and guardian hold/uncertain delivery semantics retained.",
+    "Builtin/fallback APIs and Linux x86_64 ABI/errno behavior are those already source-reviewed canonical helpers, not duplicated algorithms."
+  ],
+  "exact_new_function": "def signal_exact(pid, birth, signum):\n    from watch_os_goal import pidfd_open, pidfd_send_signal\n    fd = pidfd_open(pid)\n    try:\n        if not isinstance(birth, str) or not birth.isdigit() or process_start(pid) != birth:\n            raise ValueError(\"Process birth differs; no signal sent\")\n        pidfd_send_signal(fd, signum)\n    finally:\n        os.close(fd)\n",
+  "focused_tests_successor": "P04Tests should bind this complete candidate and actual canonical watcher helper unit with controlled lower syscall effects; same compatibility/negative identity/errno/close tests, no old suite replay or real process signal.",
+  "import_safety_source_facts": [
+    "Lazy import is reached only after the protocol and guardian modules have completed initialization; the protocol has no import-time signal_exact call.",
+    "watch_os_goal top level defines helpers/constants and imports only stdlib plus the pinned normal os_goal_transport/os_goal_handoff/os_goal_stop_log modules. Their top-level statements have no service/main/process/account/control operation.",
+    "The existing normal script directory resolves the canonical watcher module; no sys.path edit, private package, interpreter change, dynamically chosen source path or override is introduced.",
+    "Even an existing watcher module cached by this same normal source still has the same unchanged9a105 helper bodies. Root must retain matching actual source hashes; no loader behavior grants resource authority."
+  ],
+  "no_new_helpers_or_imports_outside_that_function": true,
+  "only_changed_function": "signal_exact",
+  "ordinary_same_Root_import_dependency_closure": [
+    {
+      "bytes": 39730,
+      "path": "/home/holden/mckernel/scripts/watch_os_goal.py",
+      "sha256": "9a105b4f37f61bed7ffbffd848ed0f02d2e792e4797a38609761e98480e7a1bb"
+    },
+    {
+      "bytes": 4021,
+      "path": "/home/holden/mckernel/scripts/os_goal_transport.py",
+      "sha256": "ad2eb154f2b278194878483ea3d3114e2d25642aaf0a74ea8f42f5a3a5ba8a5c"
+    },
+    {
+      "bytes": 8069,
+      "path": "/home/holden/mckernel/scripts/os_goal_handoff.py",
+      "sha256": "00572ac9faf386d0d74c081e1a270daca5579d03d292e34e7ad563aad05298c2"
+    },
+    {
+      "bytes": 13341,
+      "path": "/home/holden/mckernel/scripts/os_goal_stop_log.py",
+      "sha256": "46cded4b59ed1a0d625400c5868a2a168799e38107bbb3f047c153fb2d497ef0"
+    }
+  ],
+  "original_actual_capability_failure": {
+    "bytes": 2268,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/pidfd-compatibility-repair-1/ACTUAL-CAPABILITY-NO-GO.json",
+    "sha256": "225077efec4b0f79e7d85dd1858b8a0ae1266c0cffdd58ea1b538a9f40c05757"
+  },
+  "patch": {
+    "bytes": 723,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/pidfd-compatibility-repair-1/canonical-wrapper-reuse-1/LAZY-CANONICAL-PIDFD-WRAPPER-ONLY.patch",
+    "sha256": "3acc41574f3112007624702738f1c37386dca22c72fe7f9a2f165de321132ab3"
+  },
+  "prior_copied_helpers_preserved": {
+    "bytes": 2383,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/pidfd-compatibility-repair-1/SOURCE-READY.NOT-EXECUTED.json",
+    "sha256": "83b48252cc10aacfeb24043f9c17991a78ac92e12fa8eb3445581820e545e0c6"
+  },
+  "real_unchanged_canonical_helpers": [
+    {
+      "name": "_linux_pidfd_syscall",
+      "source": {
+        "bytes": 39730,
+        "path": "/home/holden/mckernel/scripts/watch_os_goal.py",
+        "sha256": "9a105b4f37f61bed7ffbffd848ed0f02d2e792e4797a38609761e98480e7a1bb"
+      },
+      "source_span_sha256": "e048f0209a404264b03944bda3b00a1b0a0b2467e1033525dc645a0b9d6f939a"
+    },
+    {
+      "name": "pidfd_open",
+      "source": {
+        "bytes": 39730,
+        "path": "/home/holden/mckernel/scripts/watch_os_goal.py",
+        "sha256": "9a105b4f37f61bed7ffbffd848ed0f02d2e792e4797a38609761e98480e7a1bb"
+      },
+      "source_span_sha256": "e13190c8c59ee67f131fd300d5c34164243bfa4f504275f21f649ff1553bbf8e"
+    },
+    {
+      "name": "pidfd_send_signal",
+      "source": {
+        "bytes": 39730,
+        "path": "/home/holden/mckernel/scripts/watch_os_goal.py",
+        "sha256": "9a105b4f37f61bed7ffbffd848ed0f02d2e792e4797a38609761e98480e7a1bb"
+      },
+      "source_span_sha256": "5b4c2f0ed5fdc6722f8b207182c61c57ca80a8ccfb6001463a65abc60f3d6f75"
+    }
+  ],
+  "requested_by": "Root delivered explicit user6807087233 canonical wrapper preference",
+  "schema": "mckernel.guardian-canonical-pidfd-lazy-reuse.v1",
+  "status": "SOURCE_ONLY_CANONICAL_REUSE_SUCCESSOR_UNEXECUTED",
+  "whole_original_acceptance_or_live_activation": false
+}

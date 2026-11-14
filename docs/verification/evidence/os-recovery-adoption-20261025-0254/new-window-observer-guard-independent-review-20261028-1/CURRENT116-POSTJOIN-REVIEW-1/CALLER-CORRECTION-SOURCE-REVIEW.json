@@ -1,0 +1,56 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_ONE_BOUNDED_CPU0_CALLER_OWNERSHIP_CORRECTION_SOURCE",
+  "independent": true,
+  "implementation_ownership": false,
+  "reviewer": "/root/observerreview",
+  "source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/profile-caller-correction-source-1/owned_capture.py",
+    "bytes": 4901,
+    "sha256": "8bdb6ed7f0a3d001116608fcfb1f20451a9d25fb987312e5708e9e3936b0341e"
+  },
+  "test": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/profile-caller-correction-source-1/test_owned_capture.py",
+    "bytes": 2091,
+    "sha256": "e3d8804f2c680aca885cf775e3386fe8206ce4c80d8925dc60dd59c7be616b2a"
+  },
+  "review_request": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/profile-caller-correction-source-1/REVIEW-REQUEST.json",
+    "bytes": 3395,
+    "sha256": "d4ecab512546ab952a6d2b5eb5071aef715fe179b8417925e00ecd30f51bbc81"
+  },
+  "independent_controls": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/CURRENT116-POSTJOIN-REVIEW-1/CALLER-CORRECTION-INDEPENDENT-CONTROLS.json",
+    "bytes": 1497,
+    "sha256": "b83d19ec4dbb8659ad5efae3847808e8e9809cc0f8c8976cd4a5c79569753d02"
+  },
+  "frozen_observer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/observe_current60_postjoin.py",
+    "bytes": 13268,
+    "sha256": "de9f6a1b76faded7a31227d13fe30cab33867ba769eb0a0b7234ea564946f048"
+  },
+  "original_profile_hold": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/profile-caller-correction-source-1/ORIGINAL-CAPTURE-PROFILE-HOLD.json",
+    "bytes": 1888,
+    "sha256": "ca9f6b6a85c38ce77a44170d2bd422a2d8a98f437340acad2d097a0c712b7c61"
+  },
+  "independent_first_capture_refusal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/CURRENT116-POSTJOIN-REVIEW-1/FIRST-CAPTURE-PROFILE-REFUSAL.json",
+    "bytes": 1175,
+    "sha256": "34ed7e72c882cbccfae3f00af8e6184c6876f17e45d6660cb2ec618d8cf4385a"
+  },
+  "runtime_authority": null,
+  "findings": [
+    "Caller correction is standalone and leaves observerde9/pinsf57f/Root60bd4b/historical/native/physical predicates unchanged. Capture1 remains profile-unqualified and supplies no current-free acceptance.",
+    "Popen preexec enforces affinityCPU0 and hardAS2GiB/CPU60 before exact helper exec; exec failures cannot silently fall back. Parent reads actual childPID/birth/affinity before wait4 and requires observed affinity[0]. New session defines owned process group.",
+    "Exclusive once-claim precedes spawn; stdout/stderr/STARTED/RESULT records are exclusive and fsynced where applicable. wait4 provides direct positive join and CPU/RSS; streams close before complete group census and result. rc7/error output are preserved.",
+    "120s wall timeout writes exact ownership-retained identity and raises without signal/cleanup/retry or false join. Root remains responsible for unresolved readonly child ownership if timeout occurs.",
+    "Two real fixture children independently proveCPU0stdout/actualPIDbirth match/positivejoin/groupgone/streams plus failedchildrc7stderr retention and repeatclaim refusal. These are ordinary offline caller tests, not observer/guard/Docker/native execution.",
+    "Main authenticates exact command manifest/helper/release hashes and literal helperCLI, Rootmax1/outputabsence/CPU0/timeout120 before invoking capture; proposed release2 differs from released1 only by freshoutput."
+  ],
+  "failure_family": {
+    "failed_profile_capture_count": 1,
+    "allowed_bounded_correction_count": 1,
+    "further_failure_requires_escalation": true
+  }
+}

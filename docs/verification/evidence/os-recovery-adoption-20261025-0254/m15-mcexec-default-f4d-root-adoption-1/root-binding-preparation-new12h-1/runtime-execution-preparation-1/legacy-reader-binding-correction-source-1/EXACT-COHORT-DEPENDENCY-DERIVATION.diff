@@ -1,0 +1,159 @@
+--- retained/mcexec_owner.py
++++ corrected/mcexec_owner.py
+@@ -19,7 +19,7 @@
+ import subprocess
+ import sys
+ import time
+-sys.path.insert(0, '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1')
++sys.path.insert(0, '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort')
+ import mcexec_contract as mc
+ 
+ sys.path.insert(0, '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/resource-parallelism/sdk-operation/inert-rust-boilerplate-correction-1/runtime')
+@@ -31,7 +31,7 @@
+ REPO = Path('/home/holden/mckernel')
+ ROOT = Path('/home/holden/mckernel-work/scratch')
+ # New profile only: created separately after review; inputs/leases stay scratch.
+-OUTPUT_PARENT = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/workspace')
++OUTPUT_PARENT = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/workspace')
+ BACKING = ROOT.parent / 'scratch.ext4'
+ NIGHTLY_ROOT = Path('/home/holden/mckernel-work/scratch/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu')
+ NIGHTLY_IDENTITY = {'path': '/home/holden/mckernel-work/scratch/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu', 'device': 1828, 'inode': 6453911, 'mode': 509, 'uid': 1000, 'gid': 1000}
+@@ -50,9 +50,9 @@
+ OUTPUT_ALLOCATION_BYTES = 6 * OUTPUT_BLOCKS * 4096 + 5 * OUTPUT_FILES * 4096 + 16 * 2**20
+ 
+ BASIS = ROOT / 'mckernel-exact-candidate-scratch-22-authority3-output'
+-PREPARATION = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/PREPARATION.json')
++PREPARATION = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/PREPARATION.json')
+ PREPARATION_SHA = hashlib.sha256(PREPARATION.read_bytes()).hexdigest()
+-DRIVER = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/mcexec_driver.py')
++DRIVER = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/mcexec_driver.py')
+ HISTORICAL_OBSERVER = REPO / 'scripts/native_exact_historical_lease_observer.py'
+ HISTORICAL_OBSERVER_SHA = '463ae558e141c2a6fe5a016fb19baddb26ed883c3bf6d39c114b27711ee78a51'
+ HISTORICAL_PREFIX = ('/usr/bin/sudo', '-A', '/home/holden/anaconda3/bin/python3', '-I', '-B')
+@@ -95,8 +95,8 @@
+ RUNTIME_SOURCE_PATHS['scripts/native_running_external_modules_owner.py'] = '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sdk7-142g-consumer-successor-source-1/daemon_sdk_owner.142G-SOURCE-ONLY.py'
+ RUNTIME_SOURCE_PATHS['scripts/native_running_external_modules_offline.py'] = str(DRIVER)
+ SOURCES = SOURCES + ('mcexec/contract.py', 'mcexec/validator.py', 'mcexec/observer.py', 'mcexec/elf_install_contract.py', 'mcexec/preparation.json', 'mcexec/retained_context.json', 'mcexec/qualified_ELF.json', 'mcexec/legacy_stable_readers.py')
+-RUNTIME_SOURCE_PATHS.update({'mcexec/contract.py': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/mcexec_contract.py', 'mcexec/validator.py': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/validate_mcexec_default_batch.py', 'mcexec/observer.py': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/observe_mcexec_context.py', 'mcexec/elf_install_contract.py': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/elf_install_contract.py', 'mcexec/preparation.json': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/PREPARATION.json', 'mcexec/retained_context.json': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/RETAINED-F4D-EXACT-PRODUCER-CONTEXT.json', 'mcexec/qualified_ELF.json': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/QUALIFIED-F4D-ELF-TUPLE.json', 'mcexec/legacy_stable_readers.py': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/executor-integration-source-2/executor-sdk-user-rustc-source-4/target_tools_sdk_driver.RETAINED-PREFIX-SUFFIX.SOURCE-ONLY.py'})
+-RUNTIME_SOURCE_PATHS['scripts/native_running_external_modules_owner.py'] = '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/mcexec_owner.py'
++RUNTIME_SOURCE_PATHS.update({'mcexec/contract.py': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/mcexec_contract.py', 'mcexec/validator.py': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/validate_mcexec_default_batch.py', 'mcexec/observer.py': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/observe_mcexec_context.py', 'mcexec/elf_install_contract.py': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/elf_install_contract.py', 'mcexec/preparation.json': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/PREPARATION.json', 'mcexec/retained_context.json': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/RETAINED-F4D-EXACT-PRODUCER-CONTEXT.json', 'mcexec/qualified_ELF.json': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/QUALIFIED-F4D-ELF-TUPLE.json', 'mcexec/legacy_stable_readers.py': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/executor-integration-source-2/executor-sdk-user-rustc-source-4/target_tools_sdk_driver.RETAINED-PREFIX-SUFFIX.SOURCE-ONLY.py'})
++RUNTIME_SOURCE_PATHS['scripts/native_running_external_modules_owner.py'] = '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/mcexec_owner.py'
+ 
+ 
+ 
+--- retained/mcexec_driver.py
++++ corrected/mcexec_driver.py
+@@ -4,11 +4,11 @@
+ """
+ from pathlib import Path
+ import ast,hashlib,json,os,re,resource,signal,stat,sys,time
+-sys.path.insert(0, '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1')
++sys.path.insert(0, '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort')
+ import mcexec_contract as mc
+ import validate_mcexec_default_batch as batch
+ entered=time.monotonic()
+-CONFIG = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/PREPARATION.json')
++CONFIG = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/PREPARATION.json')
+ CONFIG_SHA = None
+ TOOL_RULES = {'/nightly/bin/rustc': ('readonly-mounted-nightly', '70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09'), '/usr/bin/cc': ('readonly-image', '2092e32fa9abee9ccbf777a5f893b9cc608582b660c93e742a17c3eb7da109c2'), '/usr/include/bfd.h': ('readonly-image', 'de900a9fe4ac94543ee1382cebc3063c3d7e20d16bc934fc816133dd55fe2432'), '/usr/lib64/libbfd.so': ('readonly-image', '6cfd31804974c248c9512879e7b77a94862f92150c2171d901140464ea936ab3'), '/usr/bin/cmake': ('readonly-image', 'a2ec9c59d15b48b6abba45cfaa873df186e01a2e3ca99302ada1e51637f4cfd1'), '/usr/bin/nm': ('readonly-image', 'df99ae7b36cf9aa2da1e447026082ae5faddb7d7f12ebce911503c3022ed4bf1'), '/usr/bin/readelf': ('readonly-image', 'c5e0de5f419ed907fdc0b7b0a6087ff5c54a8c68db4da01097bdf84a296349b7'), '/usr/bin/ar': ('readonly-image', '5da84ec1ebfbb2c6e9e0bc8ad12ba09bcbef053d2ed7841aa9bf2bed4bb92f54')}
+ D = Path('/work/mcexec-default-captures')
+--- retained/mcexec_contract.py
++++ corrected/mcexec_contract.py
+@@ -8,7 +8,7 @@
+ HERE=Path(__file__).resolve().parent
+ PREPARATION=HERE/'PREPARATION.json'
+ PROFILE=dict(uid=1000,gid=1000,cpus='2-5',jobs=1,memory_bytes=12*2**30,memory_swap_bytes=12*2**30,pids=512,network='none')
+-COMMANDS_SHA256='e19ce35d21a08293896cf34ff365647b42c3918eb98afc2d3754322c981a2176'
++COMMANDS_SHA256='996ee4642083d297d7e581b2c10193e772e35f248219e9247c015aa473cda480'
+ LABELS=['current-configure','producer-context','current-link','current-ELF-imports','current-install','installed-ELF']
+ 
+ def need(ok,why):
+--- retained/observe_mcexec_context.py
++++ corrected/observe_mcexec_context.py
+@@ -8,7 +8,7 @@
+ import validate_mcexec_default_batch as v
+ 
+ LEGACY=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/executor-integration-source-2/executor-sdk-user-rustc-source-4/target_tools_sdk_driver.RETAINED-PREFIX-SUFFIX.SOURCE-ONLY.py')
+-LEGACY_SHA='30a86c386f09741a18e7873f0869526edb4bc3e63524bdfc47431ac8695de3a4'
++LEGACY_SHA='bb8be09522d6b4729dd7ca599b199a5b3060265636c8239af2a810059b6721a8'
+ 
+ def readers():
+     raw=LEGACY.read_bytes();v.need(hashlib.sha256(raw).hexdigest()==LEGACY_SHA,'accepted stable-reader source changed')
+--- retained/PREPARATION.json
++++ corrected/PREPARATION.json
+@@ -36,32 +36,32 @@
+   "closure": [
+     {
+       "bytes": 9451,
+-      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/mcexec_contract.py",
+-      "sha256": "974f35afa62f2ff7cc56fd6523bd02ab28afa0a10904d6769a20fadf78c3d73a"
++      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/mcexec_contract.py",
++      "sha256": "73de41dc39d310e7efca587039281bc47f8603a24935e285d033a0acff527065"
+     },
+     {
+       "bytes": 9383,
+-      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/validate_mcexec_default_batch.py",
++      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/validate_mcexec_default_batch.py",
+       "sha256": "6e516307f9011bd20744e1f79f09b8a488131d70cdcbe7d72ccd91d12f86588a"
+     },
+     {
+       "bytes": 7954,
+-      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/observe_mcexec_context.py",
+-      "sha256": "6141a819839a0583f5a5c839250ba3235b5523ef94b0f18f7189930972c5b11b"
++      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/observe_mcexec_context.py",
++      "sha256": "adf1a81c39efd76bd244244fa05a0fee6532946327c47e07f6a3b83a22bc2804"
+     },
+     {
+       "bytes": 7147,
+-      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/elf_install_contract.py",
++      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/elf_install_contract.py",
+       "sha256": "9054aceb4486629a8338bc64f603e5ab5e38b8f4f70a6e88f0c5fadf4e45895e"
+     },
+     {
+       "bytes": 7237,
+-      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/RETAINED-F4D-EXACT-PRODUCER-CONTEXT.json",
++      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/RETAINED-F4D-EXACT-PRODUCER-CONTEXT.json",
+       "sha256": "d5f8f26e9046c8d72524c9908a2d271c1f6243e0281a2406717b902286bc2244"
+     },
+     {
+       "bytes": 12823,
+-      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/QUALIFIED-F4D-ELF-TUPLE.json",
++      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/QUALIFIED-F4D-ELF-TUPLE.json",
+       "sha256": "5161dcbb05aa951d55472b7c0d40df7596a3d946c205d13f299e360b32616923"
+     },
+     {
+@@ -200,11 +200,11 @@
+       "argv": [
+         "/usr/bin/python3",
+         "-B",
+-        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/observe_mcexec_context.py",
++        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/observe_mcexec_context.py",
+         "--preparation",
+-        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/PREPARATION.json",
++        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/PREPARATION.json",
+         "--retained-context",
+-        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/RETAINED-F4D-EXACT-PRODUCER-CONTEXT.json",
++        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/RETAINED-F4D-EXACT-PRODUCER-CONTEXT.json",
+         "--request",
+         "/request.json",
+         "--compute-before",
+@@ -2562,8 +2562,8 @@
+   "materialized_source": null,
+   "observer": {
+     "bytes": 7954,
+-    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-qualification-inputs-source-1/observe_mcexec_context.py",
+-    "sha256": "6141a819839a0583f5a5c839250ba3235b5523ef94b0f18f7189930972c5b11b"
++    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/observe_mcexec_context.py",
++    "sha256": "adf1a81c39efd76bd244244fa05a0fee6532946327c47e07f6a3b83a22bc2804"
+   },
+   "output_budget_bytes": 536870912,
+   "profile": {
+@@ -2745,7 +2745,7 @@
+   "tool_image": "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5",
+   "validator": {
+     "bytes": 9383,
+-    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-qualification-inputs-source-1/validate_mcexec_default_batch.py",
++    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/validate_mcexec_default_batch.py",
+     "sha256": "6e516307f9011bd20744e1f79f09b8a488131d70cdcbe7d72ccd91d12f86588a"
+   }
+ }

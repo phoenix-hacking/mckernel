@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-047",
+  "packet_version": 1,
+  "context_sha256": "de2f8754b6fe31eeb526c26972d70ba2a6f0b34591b9b5bb197c2b6726ea358d",
+  "started_utc": "2026-09-09T11:34:00Z",
+  "finished_utc": "2026-09-09T11:35:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "signal.handler-flags",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/signal/signal.handler-flags.c",
+      "oracle": "scripts/application-tests/oracles/signal.handler-flags.json",
+      "changed_files": ["scripts/application-tests/cases/signal/signal.handler-flags.c", "scripts/application-tests/oracles/signal.handler-flags.json"],
+      "parameter_vectors": {"signal": ["SIGUSR1"], "flag": ["SA_RESETHAND"], "invocations": [1]},
+      "implemented_operations": ["reset-hand handler installation", "single raise and handler entry", "post-handler action query"],
+      "unresolved_oracle_notes": ["Post-reset sa_flags normalization and canonical output require Max review."],
+      "max_reviewer_question": "Confirm SIG_DFL is observable after one invocation and record platform-specific normalized flags."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/signal/signal.handler-flags.c", "sha256": "5afa64ac6eb7cc08916d22ad154aaab0954e829ddb7f43aa62231cec6a6e15d8"},
+    {"path": "scripts/application-tests/oracles/signal.handler-flags.json", "sha256": "2dd9c4dddbf74b37ca973df4fbc43e3264943df97cc9c4bd150c73c3a1b3c13f"},
+    {"path": "docs/verification/evidence/application-drafts-20260909/ultra-handoff-1/packet-047/context.json", "sha256": "de2f8754b6fe31eeb526c26972d70ba2a6f0b34591b9b5bb197c2b6726ea358d"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-047.json --emit-context /tmp/application-packet-047-context-20260909-1.json", "outcome": "PASS; planning metadata only; runtime_authorized=false"},
+    {"command": "python3 -m json.tool packet-047/report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["SA_RESETHAND reset action and normalized flags need final native ABI, signal-order, and canonical record review."],
+  "blocked_execution_capabilities": ["current-inputs", "runtime-transport-fault-injection", "runner-contract"],
+  "first_failure_event": null,
+  "max_escalation": ["Review reset-to-default action", "Record normalized sa_flags"],
+  "next_packet_id": "packet-048"
+}

@@ -1,0 +1,131 @@
+{
+  "kind": "SIX_ACCEPTED_F02_SCHEDULER_BRIDGES_FINITE_SOURCE_LOOKAHEAD",
+  "decision": "GO_SOURCE_CONTRACT_READY_FOR_ROOT_PREPARATION_REVIEW_AND_SEPARATE_ADMISSION",
+  "owner": "Existing Sol/HIGH m15_readonly_config_input source-only lookahead; Root sole compositor; engine/wrapper owners separate",
+  "active_instruction": "Root reports same-Root ACTIVE invocation20261109T211917Z-488788ba under explicit user resume. CAMPAIGN on disk still updated20:45Z; this review follows newer explicit scope without editing canonical plan.",
+  "eligibility": {
+    "affirmative_source": "Accepted M14-F02 process/scheduling implementation; current kernel/rust/lib.rs45 selects process_helpers and CMake169 lists actual source,668/670 select MCKERNEL_RUST_PROCESS_HELPERS for process/process_helpers C references.",
+    "finite_boundary": "Only the six already existing exported bridge definitions listed here and their actual ABI types/extern declarations. All are direct CPU-address/lock/status forwarding with no generic/exec/notification implementation dependency.",
+    "holds": "Original generic/exec/notification payloads and held bodies remain excluded; accepted process wrapper preparation does not release them. No full process_helpers, scheduler engine, syscall, lock engine or other module body import is included. No perf/mmap/balanced/failed-open/monitor/native/SDK/currentfree/UNKNOWN disposition is changed."
+  },
+  "source": {
+    "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+    "sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+    "definitions": [
+      {
+        "name": "process_spin_lock_bridge",
+        "range": "5975-5978",
+        "signature": "unsafe extern C fn(CULong)->CULong",
+        "body": "__ihk_mc_spinlock_lock(lock_addr as *mut IhkSpinlock)",
+        "genuine_import": "__ihk_mc_spinlock_lock"
+      },
+      {
+        "name": "process_spin_unlock_bridge",
+        "range": "5980-5983",
+        "signature": "unsafe extern C fn(CULong,CULong)",
+        "body": "__ihk_mc_spinlock_unlock(lock_addr as *mut IhkSpinlock,irqstate);",
+        "genuine_import": "__ihk_mc_spinlock_unlock"
+      },
+      {
+        "name": "process_sched_rwlock_bridge",
+        "range": "5995-5998",
+        "signature": "unsafe extern C fn(CULong,CULong)",
+        "body": "__mcs_rwlock_writer_lock_noirq(lock_addr as *mut McsRwlockLock,node_addr as *mut c_void);",
+        "genuine_import": "__mcs_rwlock_writer_lock_noirq"
+      },
+      {
+        "name": "process_sched_rwunlock_bridge",
+        "range": "6000-6003",
+        "signature": "unsafe extern C fn(CULong,CULong)",
+        "body": "__mcs_rwlock_writer_unlock_noirq(lock_addr as *mut McsRwlockLock,node_addr as *mut c_void);",
+        "genuine_import": "__mcs_rwlock_writer_unlock_noirq"
+      },
+      {
+        "name": "process_sched_cpu_local_bridge",
+        "range": "6020-6023",
+        "signature": "unsafe extern C fn(CInt)->CULong",
+        "body": "get_cpu_local_var(cpu_id) as CULong",
+        "genuine_import": "get_cpu_local_var"
+      },
+      {
+        "name": "process_sched_status_set_bridge",
+        "range": "6049-6052",
+        "signature": "unsafe extern C fn(CULong,CInt)",
+        "body": "xchg4(status_addr as *mut CInt,status);",
+        "genuine_import": "xchg4"
+      }
+    ]
+  },
+  "exact_closure": {
+    "exported_definition_count": 6,
+    "private_function_bodies": [],
+    "data_definitions": [],
+    "constants_or_literals_requiring_additional_owner": [],
+    "genuine_extern_imports": [
+      {
+        "name": "__ihk_mc_spinlock_lock",
+        "actual_declaration_line": 22,
+        "signature": "fn(*mut IhkSpinlock)->CULong"
+      },
+      {
+        "name": "__ihk_mc_spinlock_unlock",
+        "actual_declaration_line": 23,
+        "signature": "fn(*mut IhkSpinlock,CULong)"
+      },
+      {
+        "name": "__mcs_rwlock_writer_lock_noirq",
+        "actual_declaration_line": 34,
+        "signature": "fn(*mut McsRwlockLock,*mut c_void)"
+      },
+      {
+        "name": "__mcs_rwlock_writer_unlock_noirq",
+        "actual_declaration_line": 35,
+        "signature": "fn(*mut McsRwlockLock,*mut c_void)"
+      },
+      {
+        "name": "get_cpu_local_var",
+        "actual_declaration_line": 58,
+        "signature": "fn(CInt)->*mut CpuLocalVar"
+      },
+      {
+        "name": "xchg4",
+        "actual_declaration_line": 63,
+        "signature": "fn(*mut CInt,CInt)->CInt"
+      }
+    ],
+    "no_body_substitution": "Keep actual six imports genuine unresolved at provider-only boundary. No callbacks, replacement atomics, C shims, symbol aliases, guessed layouts, fallback providers or downstream implementation needed to define this unit.",
+    "ownership_and_semantics": "No allocation, reference acquisition, wait-list ownership or static initialization belongs to these wrappers. Lock/IRQ semantics stay delegated to actual imported engines. Preserve all casts/return types and status setter discard of xchg4 old-value result; do not transform it into a plain store."
+  },
+  "real_type_profile": {
+    "abi_path": "/home/holden/mckernel/kernel/rust/abi.rs",
+    "abi_sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "profile_binding": "Same unchanged ff48bc2e ABI source as retained delay/aaaf partial and reviewed scheduler wrapper type profile.",
+    "types": [
+      "CInt=i32",
+      "CULong=u64",
+      "CpuLocalVar actual repr(C,align64) atabi1785",
+      "IhkSpinlock actual repr(C) u32 head_tail atabi643-647",
+      "McsRwlockLock actual repr(C,align64) containing actual IhkSpinlock atabi673-676",
+      "core::ffi::c_void"
+    ],
+    "no_type_module_body_dependency": "Genuine abi.rs and core types are sufficient; omitted top-level process_helpers imports for unrelated functions must not pull in their implementation modules.",
+    "engine_import_compatibility": "Engine source declares pointer-address bridges using usize; real source exports CULong. In selected x86_64 LP64 both are64bit C-compatible integer address ABI. Preserve actual source CULong export signatures and existing actual declaration/call arguments rather than rewriting either source.",
+    "compile_profile_if_separately_admitted": "Reuse exact qualified no_std Rustnightly1.95/edition2021/large-static/no-redzone/no-vector/no-SSE partial-codegen contract and no optional cfgs, including inherited exact SSE2 ABI warning scope. This is not a new final/native ABI profile."
+  },
+  "smallest_next_reviewable_preparation": {
+    "unit": "Exact six source definitions with original attributes, required genuine ABI imports and six original extern declarations only. Source bytes/provenance and current imported types must be independently checked before Root executes any operation.",
+    "provider_metadata_condition": "If later admitted, reconcile actual six C export owners, genuine extern relocation/import set, no unexpected private/data owner and inherited diagnostics before any partial join. Do not claim object properties before compilation.",
+    "partial_join_condition": "Only a fresh reviewed compatible scheduler engine/current partial plus this future provider object may join; preserve all prior owners/bytes/relocations and every unresolved true downstream body. Actual current artifact/import state determines which imports resolve; no finalUcount is invented here.",
+    "limits": "No wholecrate, held body import, scheduler/lock/IRQ/CPU function execution, tests, device/native/boot action, accepted-F02 reopening or new acceptance quota. Root owns exact artifact composition/review/resource admission."
+  },
+  "actions_this_review": {
+    "CPU0_reads_only": true,
+    "source_only_contract_file_written": "/home/holden/mckernel-work/m14-m15-scheduler-resume-20261109T211802Z/scheduler-lock-cpu-provider-lookahead.json",
+    "unit_or_fixture_generation": false,
+    "engine_worker_files_touched": false,
+    "canonical_source_or_index_changes": false,
+    "compilation_test_link_runtime_or_goal_control": false,
+    "nested_agents": false
+  },
+  "acceptance_or_scoring_change": false
+}

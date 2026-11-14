@@ -1,0 +1,42 @@
+{
+  "schema": "mckernel.overnight.prespawn-log-source-correction.v1",
+  "status": "FROZEN_PRIVATE_SOURCE_ONLY_PENDING_E_REVIEW_AND_FRESH_FOCUSED_MOCK_TEST_ADMISSION",
+  "incoming_commit": "d84ee20ae834626ac62eaaae9233f4a12500a3d7",
+  "incoming_parent_prefix": "bca",
+  "baseline": {
+    "path": "/home/holden/mckernel-work/resume-20261110T032750Z-14c19ec7/prespawn-log-source-1/baseline/scripts/start_os_overnight.py",
+    "sha256": "bcca5560b364e8608f93f4f2410b4f2b2452616680304d6cb636bc7d5b8908cc",
+    "bytes": 13730,
+    "origin": "Exactgitshowincoming:scripts/start_os_overnight.py"
+  },
+  "candidate": {
+    "path": "/home/holden/mckernel-work/resume-20261110T032750Z-14c19ec7/prespawn-log-source-1/candidate/scripts/start_os_overnight.py",
+    "sha256": "5937e05070f9c539dee33ed0ae0fc1f79a96e803e8f716151af808beb564a390",
+    "bytes": 14165
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/resume-20261110T032750Z-14c19ec7/prespawn-log-source-1/PRESPAWN-LOG.PRIVATE.patch",
+    "sha256": "75981b0dfc60f7b3d15b0c66df0ed1c29444a33e32c853a3397937f9161954b3",
+    "changed_canonical_paths": [
+      "scripts/start_os_overnight.py"
+    ]
+  },
+  "changed_function_only": "start, afterdurableSTARTINGrecordandbeforeouterlockclose",
+  "invariants": [
+    "Logopen/fdopen/build-commandfailuresnowreachsameexistingfailurehandlerbeforeanyPopenentry;persistFAILEDwhenexistingJSONwriteswork.",
+    "Explicitspawn_attemptedbecomesTrueimmediatelybeforeenteringsoleexistingPopen. AraisedPopenwithchildNonepersistsUNKNOWN,neverproofnoproc;oldSTARTING/unresolved/liveidentityandduplicate-ownerrefusalsstayconservative.",
+    "Receiptpersistenceprecedesoptionalerrorlogwrite;log.writeandownedlogclosearebesteffortandcannotmaskdurableJSONfailurestate.",
+    "OwnedrawFDstaysowneduntildfdopenreturnsitsfileobject;iffdopenraises,finallyclosesrawFD. SuccessfultransferclearsrawFDslotandonlylog.closeownsit.",
+    "ExistingchildPID/start/sessionverification,exitedversuslivepollclassification,leaserefusals/UNKNOWNchecks,pidfdstopandouterstartlocklifetimeunchanged.",
+    "No recipe/flags/profile/liveauthoritychange;optionalhelperstaysinertandnotauthorizedforstart. Existinghardcodedrecipeisnotlivecontrol."
+  ],
+  "source_only_checks": {
+    "onlystartinteriorchanged": true,
+    "before_STARTING_and_after_outer_lock_close_byteidentical": true,
+    "one_existing_Popen_callsite_noadditional_spawn": true,
+    "no_newreceipt_schema_orcompatibility_API": true,
+    "loggingdiagnosticjournalbesteffort_contract_retained": true
+  },
+  "boundaries": "No launcherstate/goal/runtimecontroller/livehelper/inhibitor/start/stop/realprocess/test/model/IHK/canonical/index/monitorchanges. Newlivecontrols6HIGH/4GiBtotal/0,6,7/max3/watchdog180/stall1200/restarts3/hours0unchangedandnotexecuted.",
+  "operations": "Exactgitshowsourceread,privatebyte/diff/proofwritesonly. No moduleimport/AST/gate/tests/controller/model/runtime or recursiveagent. B ownsindependentmocktests/Ereviews."
+}

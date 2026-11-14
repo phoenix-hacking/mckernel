@@ -1,0 +1,18 @@
+--- /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/attempt3-coherent-entry-preparation-source-1/genuine-newbe87-physical-binding-preparation-source-1/actual7553-namespace6294-final-source-1/memory-floor-correction1-source-1/capture_readonly_admission.CURRENT290-IMAGE-ONLY.NOT-EXECUTED.py
++++ /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/attempt3-coherent-entry-preparation-source-1/genuine-newbe87-physical-binding-preparation-source-1/actual7553-namespace6294-final-source-1/memory-floor-correction1-source-1/query-packet-pin-correction1-source-1/capture_readonly_admission.CURRENT290-IMAGE-ONLY.NOT-EXECUTED.py
+@@ -13,13 +13,13 @@
+  if isinstance(n,(ast.Import,ast.ImportFrom)) or isinstance(n,ast.FunctionDef) and n.name in functions or isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id in assignments for t in n.targets):body.append(n)
+ ns={'__file__':str(SOURCE)};exec(compile(ast.Module(body=body,type_ignores=[]),str(SOURCE),'exec'),ns)
+ for signum in (signal.SIGTERM,signal.SIGINT,signal.SIGALRM):signal.signal(signum,ns['stop'])
+-packet=D/'READONLY-ADMISSION-ARGV.CURRENT290-IMAGE-ONLY.NOT-EXECUTED.json';raw=packet.read_bytes();assert hashlib.sha256(raw).hexdigest()=='f79955d377f75bfe6173cf2d0ebd268c77237b99d83d642bcbdcf936e894d3c9'
++packet=D/'READONLY-ADMISSION-ARGV.CURRENT290-IMAGE-ONLY.NOT-EXECUTED.json';raw=packet.read_bytes();assert hashlib.sha256(raw).hexdigest()=='bc5317a5bd605f2339a41af3e6735fbb9ae5f2e91623eeaa87b0375ae4e429d3'
+ commands=json.loads(raw);commands=commands['read_only_admission_commands']+[commands['namespace_observation']]
+ assert len(commands)==5 and commands[3]['argv']==['/usr/bin/sudo','-A','/usr/sbin/losetup','--list','--json','--associated','/home/holden/mckernel-work/scratch.ext4']
+ assert all('sudo' not in ' '.join(c['argv']) for i,c in enumerate(commands) if i!=3)
+ assert os.getuid()==os.geteuid()==1000 and os.sched_getaffinity(0)=={7}
+ cap=D/'actual-readonly-admission-capture-1';cap.mkdir(mode=0o700)
+-ns['write'](cap/'SOURCE-ARGV-BINDING.json',{'scope':'Functional McKernel OS/apps and Rust/assembly migration only; no security testing.','helper_sha256':'990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8','packet_sha256':'f79955d377f75bfe6173cf2d0ebd268c77237b99d83d642bcbdcf936e894d3c9','runner_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),'commands':commands})
++ns['write'](cap/'SOURCE-ARGV-BINDING.json',{'scope':'Functional McKernel OS/apps and Rust/assembly migration only; no security testing.','helper_sha256':'990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8','packet_sha256':'bc5317a5bd605f2339a41af3e6735fbb9ae5f2e91623eeaa87b0375ae4e429d3','runner_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),'commands':commands})
+ started_epoch=time.time();begin=time.monotonic();initial_cpu=ns['cpu_used']();results=[]
+ for i,command in enumerate(commands,1):
+  remaining_wall=60-(time.monotonic()-begin);remaining_cpu=30-(ns['cpu_used']()-initial_cpu)

@@ -1,0 +1,20 @@
+--- a/arch/x86_64/kernel/syscall.c
++++ b/arch/x86_64/kernel/syscall.c
+@@ -3146,6 +3146,9 @@
+ 	}
+ }
+ 
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_VDSO_SETUP_LOG)
++extern void arch_vdso_setup_log_bridge(int event, int error);
++#else
+ void
+ arch_vdso_setup_log_bridge(int event, int error)
+ {
+@@ -3166,6 +3169,7 @@
+ 		break;
+ 	}
+ }
++#endif
+ 
+ #ifndef MCKERNEL_RUST_F06_VDSO_ADD_RANGE
+ int

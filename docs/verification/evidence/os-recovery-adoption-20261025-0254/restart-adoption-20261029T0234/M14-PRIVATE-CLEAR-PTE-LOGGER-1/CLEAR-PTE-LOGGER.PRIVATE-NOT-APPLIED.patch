@@ -1,0 +1,60 @@
+--- /dev/null
++++ b/kernel/rust/syscall_clear_host_pte_logger.rs
+@@ -0,0 +1,16 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Private same-name successor for the clear_host_pte diagnostic callback.
++
++use super::{kprintf, CLong};
++
++/// Existing `void (*)(long)` callback; body-level nonzero gating stays upstream.
++#[no_mangle]
++pub(super) extern "C" fn clear_host_pte_log_bridge(error: CLong) {
++    // SAFETY: the immutable NUL-terminated format contains one %ld. CLong is
++    // the existing signed i64 C long ABI on the selected 64-bit compute target;
++    // error is passed unchanged as that exact variadic type. No pointer payload,
++    // allocation, retained reference or mutable logger state crosses this call.
++    unsafe {
++        kprintf(c"clear_host_pte failed. %ld\n".as_ptr().cast(), error);
++    }
++}
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -5775,11 +5775,15 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++extern void clear_host_pte_log_bridge(long error);
++#else
+ static void
+ clear_host_pte_log_bridge(long error)
+ {
+ 	kprintf("clear_host_pte failed. %ld\n", error);
+ }
++#endif
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ /* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -17,6 +17,10 @@
+ use crate::mem_helpers::{rusage_check_overmap, rusage_get_free_memory, rusage_get_total_memory};
+ use crate::sched_helpers::SchedSyscallOffsets;
+ use crate::waitq::{Waitq as RuntimeWaitq, WaitqEntry};
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[path = "syscall_clear_host_pte_logger.rs"]
++mod syscall_clear_host_pte_logger;
+ 
+ const EINVAL: CInt = 22;
+ const ENOMEM: CInt = 12;
+--- a/kernel/CMakeLists.txt
++++ b/kernel/CMakeLists.txt
+@@ -152,6 +152,7 @@
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_local.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_memory_helpers.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_memory_logger_bridges.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_clear_host_pte_logger.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_memory_loggers.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_perfctr.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_setup.rs"

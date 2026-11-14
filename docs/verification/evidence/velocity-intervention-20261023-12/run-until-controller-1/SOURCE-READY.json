@@ -1,0 +1,126 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PIDFD_COMPATIBILITY_DELTA_FROZEN_PENDING_ROOT_OFFLINE_AND_FOREGROUND_SELF_RECEIPT",
+  "at": "2026-10-24T04:08:54.233987+00:00",
+  "source": {
+    "bridge.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-controller-1/bridge.py",
+      "bytes": 22400,
+      "sha256": "a7a0749fdc84debc73fff69022d409b420de228450e625555524c4b4863ee81f"
+    },
+    "finite_launcher.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-controller-1/finite_launcher.py",
+      "bytes": 2147,
+      "sha256": "a74411302daab86d7845c771d34c4cdbb13e4ed4292656ecf26a6e9fba7f3b56"
+    },
+    "test_bridge.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-controller-1/test_bridge.py",
+      "bytes": 26490,
+      "sha256": "2962a311135125164e8baad2184f15ad081617c46c408764a61a638b66e93329"
+    },
+    "CONFIG.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-controller-1/CONFIG.json",
+      "bytes": 469,
+      "sha256": "5fc7872e5dc22144b039dddc927fe4e17b9fd3469e897c1b580bce194824f683"
+    },
+    "CURRENT-INVOCATION.txt": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-controller-1/CURRENT-INVOCATION.txt",
+      "bytes": 2433,
+      "sha256": "9f2c46d5bcebae0d987a294d28cf0918614781c835f30d40fcff9b37d6061c3e"
+    }
+  },
+  "existing_sources": {
+    "run_os_goal.py": "009d00f1aa2c07d0d4c50fd1eace64c1a04afe8d33a0b691968b877d4310b3f5",
+    "watch_os_goal.py": "182ffe05bbef52a01b7f7519052fa10cfd06cd642c4acbaea2be3fcbfd749947",
+    "os_goal_credits.py": "adf5187240ed8199746eef3b59b79d4d38c4ae8ac5821c8d8324833926b21ec3"
+  },
+  "test_command": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=6s",
+    "90s",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=60:60",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-controller-1/test_bridge.py"
+  ],
+  "test_semantics": "30 offline mocks prepared, NOT RUN by foreground. Six added cases cover callable builtins, typed Linuxx86_64 syscall args, errno open/send, unsupported architecture, FDclose on success/identity/sendfail, and no close/signal after openfail. Prior root23PASS/1FAIL prose-only result retained; one-line wording correction retained.",
+  "current_resident_action": "NOACTION; healthy originalLONG/watch/worker/server unchanged",
+  "production_arm_command": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-controller-1/bridge.py",
+    "--run",
+    "--packet-sha256",
+    "fd28d66e4d93e3154bbd3d89e09b909c6997a7a0925b0d88f094a46f7343ea54"
+  ],
+  "production_note": "Detach root-reviewed command with inheritedoriginal launcher hardlimits; do NOT impose bridge-only hardAS/CPU/filelimits that its later launcher would inherit. Childtaskset restoresonlyapprovedCPU pool0,2-7. Bridge loop metadata small; no runtime arm performed.",
+  "cancel_command": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-controller-1/bridge.py",
+    "--cancel"
+  ],
+  "managed_handoff": "Root requests normalworker-only checkpoint only at safe naturalbetween-workloads boundary. Bridgepassivelywaits paused/stopped states; root supplies handoff.json afteractualoldtripletretirement, approving exactFINALstoppedstate SHA and explicitcurrentresume. Missingpermit NEVERresumes signal/userstop. Automaticfallback onlylocal included_usage_guard+10080minused100+positive modelretirement/freeleases; remotequota/auth/billing/credit_balance_decreased notautomatic.",
+  "deadline": "Persisted BOOTTIME cutoff=min(saved,boot_now+max(0,deadlineUTC-wall_now)) every observation; fixed launched watcher MONOTONIC cutoff stored separately. Forward-before-expiry/backward/rearm cannot extend authorization. Holds/source drift preserve owned legacy guardian; foreign watcher publication never rebinds trusted original. Exact worker-only one normal drain, no competing finite-watcher normal-expiry TERM.",
+  "runtime": false,
+  "correction": "Final bounded three-counterexample completion: latch earlier FUTURE BOOTTIME cutoff through rollback/rearm; load retained journal/owned lineage before consumed-source drift can hold new inference; preserve trusted watcher identity on foreign publication. Earlier frozen child-reap/source-pin/known-class/guardian/duplicate-signal corrections retained.",
+  "mock_test_count": 30,
+  "frozen_packet": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-controller-1/FROZEN-PACKET.json",
+    "sha256": "fd28d66e4d93e3154bbd3d89e09b909c6997a7a0925b0d88f094a46f7343ea54",
+    "bytes": 948
+  },
+  "arm_prerequisites": [
+    "Independent final narrow source acceptance and actual root-granted offline mock PASS, no actual fixtures executed by foreground.",
+    "Foreground parent must run foreground_self_capability_command through actual new reviewed wrapper; own-process signal0 and CLOCK_BOOTTIME only. Prior raw-syscall receipt proves kernel but not new wrapper. No capability command executed here.",
+    "Fresh healthy exact resident thread/heartbeat and watcher/worker/server ancestry/birth bound at first arm; preserve native ownership/exclusions."
+  ],
+  "test_only_correction": {
+    "from": "self.assertIn('another watcher',retained['transition_hold'])",
+    "to": "self.assertTrue(retained.get('transition_hold'))",
+    "meaningful_invariants": "Nonempty transition_hold; retained original exact triplet equality includes watcher PID/birth; no stop_worker/no Popen; STOP_DEADLINE result. Human prose is not an oracle.",
+    "failed_job": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-controller-1/root-offline-fixture-final24-1/RESULT.json",
+    "archive": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-controller-1/before-test-only-hold-wording-correction",
+    "product_unchanged": {
+      "bridge.py": "bd417d8e1cfe25e028c4b7653183bcf5b169d3f83ab0e88f5872592d94decd9a",
+      "finite_launcher.py": "a74411302daab86d7845c771d34c4cdbb13e4ed4292656ecf26a6e9fba7f3b56"
+    }
+  },
+  "arm_authority": "Foreground parent owns any actual arm after fresh user authorization/review/PASS/self-capability. Background root remains subject to its included-only instructions and may perform offline fixtures without any instruction override.",
+  "pidfd_compatibility": {
+    "builtin": "Prefer callable Python pidfd builtins.",
+    "fallback": "Linux x86_64 64-bit pointer only; libc syscall restype c_long; explicit c_long syscall number/c_int pidfd,PID,signal/c_uint flags/c_void_p NULL; open434/send424; use_errno preserved as OSError; no numericPID kill.",
+    "stop_worker": "Original fresh exact birth/PPID check and finally FDclose unchanged; wrapper substitution only.",
+    "actual_prior_self_proof": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-review-1/FOREGROUND-SELF-SYSCALL-CAPABILITY.json",
+    "archive": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-controller-1/before-pidfd-compat",
+    "runtime_observed_by_foreground": false,
+    "production_SIGTERM_coverage": "Typed fallback fixture includes signal.Signals SIGTERM IntEnum and own-probe signal0; no strict type(int) validation."
+  },
+  "foreground_self_capability_command": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "-c",
+    "import importlib.util,json,os,signal,sys,time\nfrom pathlib import Path\npath=Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-controller-1/bridge.py')\nspec=importlib.util.spec_from_file_location('reviewed_bridge_self_capability',path)\nb=importlib.util.module_from_spec(spec);spec.loader.exec_module(b)\nb.verify_packet(sys.argv[1])\nfd=b.pidfd_open(os.getpid())\ntry:\n    b.pidfd_send_signal(fd,0)\n    boot=time.clock_gettime(time.CLOCK_BOOTTIME)\nfinally:\n    os.close(fd)\nprint(json.dumps(dict(status='PASS_REVIEWED_WRAPPER_OWN_PIDFD_SIGNAL0_AND_BOOTTIME',scope='Functional McKernel OS/apps and Rust/assembly migration only; no security testing.',python=sys.version,architecture=os.uname().machine,pid=os.getpid(),packet_sha256=sys.argv[1],clock_boottime=boot,pidfd_closed=True,signal_zero_to_own_process_only=True,campaign_signals=0,guest_actions=0)))\n",
+    "fd28d66e4d93e3154bbd3d89e09b909c6997a7a0925b0d88f094a46f7343ea54"
+  ]
+}

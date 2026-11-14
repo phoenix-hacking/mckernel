@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_review_envelope",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "review_input_attempt": 12,
+  "status": "FAIL_REVIEW_ENVELOPE",
+  "recorded_utc": "2026-09-16T00:48:43Z",
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260915-12.tar.gz",
+    "sha256": "f64fc79d2a2b67821de9d40ddbe3bb7d2bd9e192743dd9744734bb645c9fa007",
+    "size": 85890,
+    "members": 30
+  },
+  "finding": "The archive retained PASS review records and packet hashes but omitted the underlying packet 11, 13 and 15 contract texts, so exact-contract review could not be established.",
+  "source_disposition": "UNCHANGED_NOT_REVIEWED",
+  "source_accepted": false,
+  "execution_released": false
+}

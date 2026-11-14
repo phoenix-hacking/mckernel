@@ -1,0 +1,147 @@
+{
+  "task_id": "native_boot_epoch_allocate_error",
+  "status": "READY_FOR_INDEPENDENT_REVIEW",
+  "changed_paths": [
+    "host-kernel/native-rust/smp_memory.rs",
+    "scripts/tests/test_native_boot_epoch_allocate_error_20261017.py",
+    "scripts/tests/fixtures/native_boot_epoch_allocate_error_20261017.rs"
+  ],
+  "source_before": {
+    "source_sha256": "8b2f2074417c8f681fa8972a40bbab3aa25a48f72bc7f145f7d553d64d3217ba",
+    "allocate_sha256": "bbb3815cf9a0829a7dc1b192927526cf350418bf1964a15a7d1ba599378c3e79",
+    "original_build_failure": {
+      "receipt": "5.882957s FAIL E0308 line1162",
+      "stderr": "/scratch/nsd-c-23e0839d85fe47c4ab296fbe3f5a384c/evidence/make.stderr",
+      "authority": "dispatcher-supplied; original frozen candidate/build outputs unchanged"
+    }
+  },
+  "sources": [
+    {
+      "path": "host-kernel/native-rust/smp_memory.rs",
+      "sha256": "8785b1be4dffe2ef24bc54dc8f861c290418ce13773d46177692c709d69fb525",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-boot-epoch-allocate-error-source-20261017-1/smp_memory.rs"
+    },
+    {
+      "path": "scripts/tests/test_native_boot_epoch_allocate_error_20261017.py",
+      "sha256": "31dcbf4d819fb0d14ed9c2ad0ec4b7c3a95f391f3c636d4ed2baf69259347d45",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-boot-epoch-allocate-error-source-20261017-1/test_native_boot_epoch_allocate_error_20261017.py"
+    },
+    {
+      "path": "scripts/tests/fixtures/native_boot_epoch_allocate_error_20261017.rs",
+      "sha256": "988dd64fcd6a171084dcf161c8ba1d9cce6ea27e60c4fd5fc015df6f27a02017",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-boot-epoch-allocate-error-source-20261017-1/native_boot_epoch_allocate_error_20261017.rs"
+    }
+  ],
+  "allocate_after_sha256": "c5a09e80d7b872debe6b067c05e3a0149446eaa6237c894cfd39072c422d59aa",
+  "change": "Only BootEpoch::allocate tail changes from Arc::new(..., GFP_KERNEL) to Ok(Arc::new(..., GFP_KERNEL)?); ? converts distinct AllocError via From into kernel Error. No flags, signature, ownership, epoch or other function changes.",
+  "checks": {
+    "attempt": 1,
+    "result": "PASS",
+    "command_record": "/home/holden/mckernel-work/scratch/native-boot-epoch-allocate-error-source-20261017-1/command.json",
+    "compiler": "rustc1.92 --edition=2021 --test -W rust_2018_idioms -Dwarnings",
+    "actual_body": "Complete extracted production BootEpoch::allocate with mock Arc returning Result<Arc, AllocError>, distinct Error and From<AllocError> -> ENOMEM",
+    "runtime_tests": "3 passed; 0 failed: success state/id; allocator error conversion ENOMEM and consumed id not reused; exhaustion EIO without allocation",
+    "negative_control": "Exact original tail fails compilation with E0308, expected Result<_, Error>, found Result<_, AllocError>; retained full diagnostics",
+    "scope": "Focused unprivileged actual-body/type check, not kernel module build or runtime acceptance"
+  },
+  "evidence": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-boot-epoch-allocate-error-source-20261017-1/allocate.after.rs",
+      "sha256": "b7b8b5eafa2bc322fd0b3a1c903c207e33fe75329e73bf3fc5c6b80118ff56c6"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-boot-epoch-allocate-error-source-20261017-1/allocate.before.rs",
+      "sha256": "1eb1ea74c99965d7e93f4b40925d1a96f704a9965ce591d6319b66b4a97bc15e"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-boot-epoch-allocate-error-source-20261017-1/attempt1/actual",
+      "sha256": "29ad7447857a1d46bd26f1e2b41dda9b3c09a3ffb0d77b2afad2f15ab449952c"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-boot-epoch-allocate-error-source-20261017-1/attempt1/actual.compile.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-boot-epoch-allocate-error-source-20261017-1/attempt1/actual.compile.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-boot-epoch-allocate-error-source-20261017-1/attempt1/actual.compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-boot-epoch-allocate-error-source-20261017-1/attempt1/actual.rs",
+      "sha256": "599eb40f95b6621e2acf71529483fe1836f237b9c116c67b5b1b2e80c9f383f7"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-boot-epoch-allocate-error-source-20261017-1/attempt1/actual.run.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-boot-epoch-allocate-error-source-20261017-1/attempt1/actual.run.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-boot-epoch-allocate-error-source-20261017-1/attempt1/actual.run.stdout",
+      "sha256": "79389995a3ddeba571dc4ca0f2c0b53f35b8b28526ec4b009aa38aea2b7b60a2"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-boot-epoch-allocate-error-source-20261017-1/attempt1/original.compile.status",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-boot-epoch-allocate-error-source-20261017-1/attempt1/original.compile.stderr",
+      "sha256": "b8ac5857d05704a27875d86d8a610856ccb1c8ab3905b8ab9a72adf212a1ab77"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-boot-epoch-allocate-error-source-20261017-1/attempt1/original.compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-boot-epoch-allocate-error-source-20261017-1/attempt1/original.rs",
+      "sha256": "ce8e7066bca189ed97da7af8319c0c35857a8481afaee5b476579a97e95817b1"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-boot-epoch-allocate-error-source-20261017-1/before.json",
+      "sha256": "dfa9af3d7a77321e5b7c4f28fcf4001275432e816fd3d9f6a8eda1390fcb527b"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-boot-epoch-allocate-error-source-20261017-1/change.diff",
+      "sha256": "28a240c0254b14378eddc92ced8236c76c486c1c3f0125e1f52659a787bfe8d2"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-boot-epoch-allocate-error-source-20261017-1/command.json",
+      "sha256": "f373c16a6241ca4618dcc241c972685219d2dd11578b080e829f14aa30946dcd"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-boot-epoch-allocate-error-source-20261017-1/native_boot_epoch_allocate_error_20261017.rs",
+      "sha256": "988dd64fcd6a171084dcf161c8ba1d9cce6ea27e60c4fd5fc015df6f27a02017"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-boot-epoch-allocate-error-source-20261017-1/smp_memory.before.rs",
+      "sha256": "8b2f2074417c8f681fa8972a40bbab3aa25a48f72bc7f145f7d553d64d3217ba"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-boot-epoch-allocate-error-source-20261017-1/smp_memory.rs",
+      "sha256": "8785b1be4dffe2ef24bc54dc8f861c290418ce13773d46177692c709d69fb525"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-boot-epoch-allocate-error-source-20261017-1/status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-boot-epoch-allocate-error-source-20261017-1/stderr",
+      "sha256": "1a56fd6fec25e9974c21d0742629f4522909af943f748ef9e90e9d1bd3ad43b4"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-boot-epoch-allocate-error-source-20261017-1/stdout",
+      "sha256": "58e141df94b3803d868faef2d3e46790b4c2619cf651a63a5873156252f3c8e3"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-boot-epoch-allocate-error-source-20261017-1/test_native_boot_epoch_allocate_error_20261017.py",
+      "sha256": "31dcbf4d819fb0d14ed9c2ad0ec4b7c3a95f391f3c636d4ed2baf69259347d45"
+    }
+  ],
+  "blocker": null,
+  "next_task": "Independent source review then dispatcher releases fresh matched-source module build. Original frozen candidate and failing 5.882957s build receipt unchanged. Actual owner retirement remains independent/pending."
+}

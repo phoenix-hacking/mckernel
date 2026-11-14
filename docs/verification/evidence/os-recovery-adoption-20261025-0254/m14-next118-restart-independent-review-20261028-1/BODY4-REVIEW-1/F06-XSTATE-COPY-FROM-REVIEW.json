@@ -1,0 +1,115 @@
+{
+  "actual_HOST": {
+    "bytes": 12085,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body4-restart-20261028-1/rebased118-source-1/ACTUAL-HOST-QUALIFICATION.json",
+    "sha256": "3bb70cfe46d097472b48035d438c157952445d62b7f353d8d43d1376484c9ec0"
+  },
+  "actual_caps": [
+    1793253600,
+    1035704.5689393478,
+    1051042.6959879305
+  ],
+  "actual_commands_reviewed": 4,
+  "actual_direct_joins": [
+    {
+      "birth": "101567833",
+      "parent_streams_closed": true,
+      "pid": 2132848,
+      "positive_wait4_join": true,
+      "returncode": 0
+    },
+    {
+      "birth": "101567839",
+      "parent_streams_closed": true,
+      "pid": 2132851,
+      "positive_wait4_join": true,
+      "returncode": 0
+    },
+    {
+      "birth": "101567846",
+      "parent_streams_closed": true,
+      "pid": 2132854,
+      "positive_wait4_join": true,
+      "returncode": 0
+    },
+    {
+      "birth": "101567871",
+      "parent_streams_closed": true,
+      "pid": 2132870,
+      "positive_wait4_join": true,
+      "returncode": 0
+    }
+  ],
+  "actual_pairs_reviewed": 1944,
+  "actual_results": {
+    "bytes": 13231,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body4-restart-20261028-1/rebased118-source-1/future-host-output-1/RESULTS.json",
+    "sha256": "5d54bffa6edd9fca0fb89af0ecaf9d7c2a7c80eaaaf540834717872c3dfe8f0a"
+  },
+  "actual_source_baseline": "adopted118/c161d7b6; all9postimages exact; accepted defaultartifact remains116",
+  "composition": "Use rebased118 patches only, merge both copy-direction cfg/source/extern/fallback boundaries coherently with body3, retain restoreFP/vDSO modules and rebind genuine combined F06 origin/profile/dependency closure. Fullcrate/selected+fallbackTU/defaultlink/matching-native obligations remain.",
+  "credit_ceiling": "57774.852125",
+  "credit_run_id": "7f4af94a83b14cc08f97401f5891d965",
+  "decision": "PASS_REBASED118_PRIVATE_SOURCE_ABI_BORROWED_WRITE_AND_ACTUAL_HOST1944_ONLY",
+  "evidence_checks": {
+    "bytes": 34377,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/BODY4-REVIEW-1/CHECKS.json",
+    "sha256": "be87e64ef4785d8dbcfff912a0be6d5b2ba251d2507a114cbbf037df5f009374"
+  },
+  "explanation": {
+    "bytes": 6773,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/BODY4-REVIEW-1/README.md",
+    "sha256": "844edc256e057e02eda1e01905561d9db19c9340b42afa22fc640da50182d5c5"
+  },
+  "fixture": {
+    "bytes": 6494,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body4-restart-20261028-1/rebased118-source-1/fixture.rs",
+    "sha256": "d5a131f1fb79844569aee4320977dc0021ad70563b207a81e929a63da26c991f"
+  },
+  "functional_findings": [
+    "Null borrowed FP returns-ENOMEM with zero copy; otherwise exact destination/user/count forwarded to existing Rust copy_from_user.",
+    "Signed-int32 provider result widens to signed-long64; partial writes are preserved without rollback/normalization.",
+    "Entire Rust candidate and verbatim real-header original C compare against independent trace/result/full canaries; Thread and source remain borrowed and unchanged.",
+    "Actual LP64/provider/Thread.fp_regs/xsave layout assertions passed; huge counts/null/high user addresses are mocked forwarding, not actual usercopy acceptance."
+  ],
+  "genuine_header_witness": {
+    "bytes": 1565,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body4-restart-20261028-1/rebased118-source-1/abi_probe.c",
+    "sha256": "be5e2107d73ae41f1c94d8afc9ba33e74044b215a757310a3aa92aeb893ba133"
+  },
+  "grant": {
+    "bytes": 9057,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body4-restart-20261028-1/rebased118-source-1/ROOT-ORDINARY-HOST-GRANT.json",
+    "sha256": "09bff2d18d82370c44f8f80aae896e84482607148250950ba8203143e147dabb"
+  },
+  "immutable_original_inputs_preserved": 7,
+  "implementation_ownership": false,
+  "independent": true,
+  "new_C_retirements": 0,
+  "new_default_artifacts": 0,
+  "new_file_closures": 0,
+  "new_native_cases": 0,
+  "original_C": {
+    "bytes": 289,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body4-restart-20261028-1/rebased118-source-1/original-xstate-copy-from.c.inc",
+    "sha256": "92814434e2c18bda2b792392fa754e637c5e12d7d0488dececb886ce478d9f5c"
+  },
+  "reviewer": "/root/consumer_review",
+  "reviewer_compiler_fixture_guard_replays": 0,
+  "runtime_authority": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source": {
+    "bytes": 1720,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body4-restart-20261028-1/rebased118-source-1/f06_ptrace_xstate_copy_from.rs",
+    "sha256": "6a6e89f1e956ca599cee4dd9c851125acada5565aa2c3835d3e5184fbfb6dde5"
+  },
+  "source_blockers": [],
+  "source_ready": {
+    "bytes": 11399,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body4-restart-20261028-1/rebased118-source-1/SOURCE-READY.json",
+    "sha256": "322410ee7345cfefda4718fbff8c40b400a14a265f14a8ce985f47228520cd50"
+  },
+  "spent_floor": "22812.3311",
+  "stale_original116_patch_authority": false,
+  "target": "arch_ptrace_xstate_copy_from_bridge"
+}

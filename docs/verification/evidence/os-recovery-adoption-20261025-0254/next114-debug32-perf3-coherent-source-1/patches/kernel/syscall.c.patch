@@ -1,0 +1,56 @@
+--- GLOBAL32/kernel/syscall.c
++++ GLOBAL32-perf3/kernel/syscall.c
+@@ -20613,17 +20613,31 @@
+ #endif
+ 
+ #ifdef ENABLE_PERF
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PERF_PROVIDER_NEXT3_BRIDGES)
++extern int perf_counter_extra_set_bridge(void *event);
++#else
++#line 20498
+ static int
+ perf_counter_extra_set_bridge(void *event)
+ {
+ 	return ihk_mc_perfctr_set_extra((struct mc_perf_event *)event);
+ }
+-
++#endif
++#line 20503
++
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PERF_PROVIDER_NEXT3_BRIDGES)
++extern int perf_counter_init_raw_bridge(int counter_id, unsigned long hw_config, int mode);
++_Static_assert(sizeof(unsigned long)==8 && sizeof(unsigned int)==4, "supported Rust perf init code narrowing ABI");
++_Static_assert(__builtin_types_compatible_p(__typeof__(&ihk_mc_perfctr_init_raw), int (*)(int,unsigned int,int)), "selected x86 Rust provider requires original u32 code ABI");
++#else
++#line 20504
+ static int
+ perf_counter_init_raw_bridge(int counter_id, unsigned long hw_config, int mode)
+ {
+ 	return ihk_mc_perfctr_init_raw(counter_id, hw_config, mode);
+ }
++#endif
++#line 20509
+ 
+ #if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PERF_ATTR_CALLBACKS)
+ extern int f03_perf_counter_attr_flags_v1(const void *, int *, int *);
+@@ -20685,11 +20699,20 @@
+ #endif
+ #line 20563
+ 
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PERF_PROVIDER_NEXT3_BRIDGES)
++extern long syscall_atomic64_read_bridge(void *value);
++#define perf_event_atomic64_read_bridge syscall_atomic64_read_bridge
++_Static_assert(sizeof(ihk_atomic64_t)==8 && __alignof__(ihk_atomic64_t)==8 && __builtin_offsetof(ihk_atomic64_t,counter64)==0, "existing atomic64 provider layout ABI");
++_Static_assert(__builtin_types_compatible_p(__typeof__(&ihk_atomic64_read), long (*)(const ihk_atomic64_t *)), "existing atomic64 read provider C ABI");
++#else
++#line 20564
+ static long
+ perf_event_atomic64_read_bridge(void *value)
+ {
+ 	return ihk_atomic64_read((ihk_atomic64_t *)value);
+ }
++#endif
++#line 20569
+ 
+ #if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PERF_ATTR_CALLBACKS)
+ extern int f03_perf_read_attr_flags_v1(const void *, int *, int *, int *);

@@ -1,0 +1,114 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_SOURCE_COMPOSITION_ONLY",
+  "checks": [
+    "three exact original C bodies restored by reversing selection edits",
+    "four modeled C branch/dispatch combinations per body with original next-line origins",
+    "six terminate debug/allocation origins in both fallback dispatch modes",
+    "three Rust-owned writable debug records and source-profile pair present",
+    "existing policy Rust prefix and interrupt source preserved",
+    "three default-disabled selectors and C/Rust paired type declarations",
+    "exact host fragment reused and current provider source signatures checked",
+    "CMake carries only Rust source dependencies"
+  ],
+  "line_model": {
+    "terminate_mcexec:dispatch=False:selected=False": {
+      "fallback_start": 5190,
+      "next_line": 5203
+    },
+    "terminate_mcexec:dispatch=False:selected=True": {
+      "selected_decl": 5194,
+      "next_line": 5203
+    },
+    "terminate_mcexec:dispatch=True:selected=False": {
+      "fallback_start": 5183,
+      "next_line": 5196
+    },
+    "terminate_mcexec:dispatch=True:selected=True": {
+      "selected_decl": 5187,
+      "next_line": 5196
+    },
+    "terminate:dispatch=False:selected=False": {
+      "fallback_start": 5249,
+      "debug0": 5278,
+      "debug1": 5299,
+      "alloc": 5353,
+      "idfree": 5370,
+      "savedfree": 5410,
+      "debug2": 5518,
+      "next_line": 5538
+    },
+    "terminate:dispatch=False:selected=True": {
+      "selected_decl": 5253,
+      "next_line": 5538
+    },
+    "terminate:dispatch=True:selected=False": {
+      "fallback_start": 5242,
+      "debug0": 5271,
+      "debug1": 5292,
+      "alloc": 5346,
+      "idfree": 5363,
+      "savedfree": 5403,
+      "debug2": 5511,
+      "next_line": 5531
+    },
+    "terminate:dispatch=True:selected=True": {
+      "selected_decl": 5246,
+      "next_line": 5531
+    },
+    "terminate_host:dispatch=False:selected=False": {
+      "fallback_start": 5627,
+      "next_line": 5641
+    },
+    "terminate_host:dispatch=False:selected=True": {
+      "selected_decl": 5631,
+      "next_line": 5641
+    },
+    "terminate_host:dispatch=True:selected=False": {
+      "fallback_start": 5620,
+      "next_line": 5634
+    },
+    "terminate_host:dispatch=True:selected=True": {
+      "selected_decl": 5624,
+      "next_line": 5634
+    }
+  },
+  "files": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-TERMINATION-FAMILY-COMPOSITION-1/TERMINATION-FAMILY.PRIVATE-NOT-APPLIED.patch",
+      "bytes": 34219,
+      "sha256": "878cebb343e9beac287a8e2781064a47a4259c81c12f670515f38fb183b70399"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-TERMINATION-FAMILY-COMPOSITION-1/postimage/kernel/syscall.c",
+      "bytes": 931086,
+      "sha256": "08435b7961a6535b3bc1539c801c7ebcefbf89276149ee1f1bae9c3580fbe1de"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-TERMINATION-FAMILY-COMPOSITION-1/postimage/kernel/CMakeLists.txt",
+      "bytes": 44392,
+      "sha256": "308d50062f59a091a3303372a18c787da091827b8e766ab97d7bf0873cfd9091"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-TERMINATION-FAMILY-COMPOSITION-1/postimage/kernel/rust/syscall_policy.rs",
+      "bytes": 1304095,
+      "sha256": "b10eb0b6f650c250d3327f5bd26504fadd881b56ce7669824163116bb40abd73"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-TERMINATION-FAMILY-COMPOSITION-1/postimage/kernel/rust/syscall_terminate_whole.rs",
+      "bytes": 23676,
+      "sha256": "a7988c894719fa0046a0037dc9189e8bd0c229dba87ca8ef42eb6be347201746"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-TERMINATION-FAMILY-COMPOSITION-1/postimage/kernel/rust/syscall_terminate_mcexec_whole.rs",
+      "bytes": 1905,
+      "sha256": "59b4319e7f5d68a693fec1688b615ff4359fc172795977cc8d70163d40dfe1cc"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-TERMINATION-FAMILY-COMPOSITION-1/postimage/kernel/rust/syscall_terminate_host_whole.rs",
+      "bytes": 2897,
+      "sha256": "e473c77e4aad3d50c7136ec73e81921fd0a25a01cdc3b7cb7a1c3e42fd35ce29"
+    }
+  ],
+  "limitations": "Source model only; no actual preprocessing, compiler, link, ABI, 389 metadata, native, or ownership/retirement acceptance. Integration requires matching C/Rust flags and source path, all lifecycle/provider holds and independent review."
+}

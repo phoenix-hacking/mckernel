@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "app.sha256sum",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"path": "/case/input", "hex": "4d634b65726e656c2073686132353620666978747572650a", "sha256": "21f87b81702c28e740565cbe54127948ec0cb50cf3e0d171c3c30d97df786aeb"},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["21f87b81702c28e740565cbe54127948ec0cb50cf3e0d171c3c30d97df786aeb  /case/input"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Digest equals independent SHA-256 of the pinned bytes", "Filename, two-space separator, and trailing newline are exact"],
+  "unresolved_expectations": ["Pinned coreutils binary identity, option inventory, and DSO closure require Max review."],
+  "max_question_for_reviewer": "Confirm sha256sum output formatting and the independent digest for the pinned input bytes."
+}

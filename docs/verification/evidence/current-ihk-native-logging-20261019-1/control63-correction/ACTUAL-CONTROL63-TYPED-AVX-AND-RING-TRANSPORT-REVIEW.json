@@ -1,0 +1,196 @@
+{
+  "accepted_diagnostic_behavior": true,
+  "actual_guest_runs": 1,
+  "actual_payload_processes": 1,
+  "actual_stage_review": {
+    "bytes": 14576,
+    "path": "/home/holden/mckernel-work/host-preparation/current-ihk-logging-native-independent-review-20261019-1/ACTUAL-CONTROL63-STAGE-AND-TYPED-NATIVE-METADATA-REVIEW.json",
+    "sha256": "c71b70420d03a565893cdd610329b311ab8891d38f3304373644e0d26736c526"
+  },
+  "application_acceptance": false,
+  "attempt_archive": {
+    "bytes": 614400,
+    "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/control-receipt-correction-1/readback-3.stdout",
+    "sha256": "c172fe9a62973e799028122caa1189aad91fd13158ceecc5653b3502a42a59f9"
+  },
+  "attempt_result": {
+    "bytes": 188530,
+    "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/control-receipt-correction-1/readback-2.stdout",
+    "sha256": "ca186ed26e0d548eb0492b80c6f5c06f50fb25da86082f2cb2adaab8a51a912d"
+  },
+  "case": {
+    "EOF_complete": true,
+    "McKernel_CPU": 0,
+    "McKernel_PID": 255,
+    "case_id": "vector.enabled-avx-preservation",
+    "discarded_bytes": 0,
+    "observed_xcr0": 543,
+    "procfs_empty": true,
+    "raw_wait_status": 0,
+    "required_xcr0": 7,
+    "scope": "Original exact10line typed grammar, exposure gates and unchanged x87/SSE/YMM syscall/futex/signal boundary assertions. No wholeISA/IFUNC closure.",
+    "selected_stdout": {
+      "bytes": 380,
+      "path": "/home/holden/mckernel-work/host-preparation/current-ihk-logging-native-independent-review-20261019-1/control63-native-selected-evidence-1/payload.stdout",
+      "sha256": "9a82eb916caf96e85af3d35adb6cea0eb6757533b865c97381fd931c710660f7"
+    },
+    "stderr_bytes": 0,
+    "stdout_bytes": 380,
+    "stdout_sha256": "9a82eb916caf96e85af3d35adb6cea0eb6757533b865c97381fd931c710660f7",
+    "supported_xcr0": 543,
+    "typed_exposure": {
+      "ENABLED_AUXV": {
+        "hwcap": 2,
+        "hwcap2": 0
+      },
+      "ENABLED_CPUID1": {
+        "ecx": 4277678603,
+        "edx": 533462013
+      },
+      "ENABLED_CPUID7": {
+        "ebx": 563889065,
+        "ecx": 2151678476,
+        "edx": 16
+      },
+      "ENABLED_CPUIDD0": {
+        "eax": 543,
+        "ebx": 2696,
+        "ecx": 2696,
+        "edx": 0
+      },
+      "ENABLED_XCR0": {
+        "hi": 0,
+        "lo": 543
+      }
+    },
+    "typed_prefix_records": 5,
+    "unchanged_fixed_suffix_bytes": 120
+  },
+  "complete_ring_history_proven": false,
+  "decision": "ACCEPT_EXACT_CURRENT_IHK_FP1E7_TYPED_AVX_DIAGNOSTIC_AND_LINUX_CONTROL_TRANSPORT_ONLY",
+  "decoder_result": {
+    "bytes": 1174,
+    "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/control-receipt-correction-1/decode-ring.stdout",
+    "sha256": "b143a0de8be7ea8ef12ba5cfe07fdf7dc24f5f148409b2fa2637b249141da133"
+  },
+  "decoder_status": {
+    "bytes": 1764,
+    "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/control-receipt-correction-1/decode-ring.status.json",
+    "sha256": "4ce642ce3081fa18316bad5faa9384669485b1bfbba56c9d1b7ac3baca2b58eb"
+  },
+  "diagnostic_transfer": {
+    "control": {
+      "bytes": 63,
+      "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/control-receipt-correction-1/decoded-mckernel-evidence/fp-debug-control-writes",
+      "sha256": "a991d7c93cac93891df29be55b3489ab01ba530987d592c67601e3945d6ff257"
+    },
+    "endpoint": "/sys/class/mcos/mcos0/sys/kernel/debug/dynamic_debug/control",
+    "former_133_vs_128_defect_fixed_in_real_path": true,
+    "framing": {
+      "CRLF_accepted": true,
+      "chunks": {
+        "control": 1,
+        "raw": 98,
+        "status": 1
+      },
+      "limits": {
+        "control": 128,
+        "raw": 262144,
+        "serial": 4194304,
+        "status": 512
+      },
+      "order": [
+        "raw",
+        "status",
+        "control"
+      ],
+      "raw_bytes_identical": true,
+      "terminal_fault_absent": true
+    },
+    "interface": "pointer-only ioctl0x00112a20, full4190208B buffer",
+    "raw": {
+      "bytes": 49670,
+      "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/control-receipt-correction-1/decoded-mckernel-evidence/mckernel-kmsg.raw",
+      "sha256": "4cde66032f571ed6a41c1d9430a88b102dc4bcbf106df521fc4e40dc118f5cb4"
+    },
+    "read_status": {
+      "bytes": 219,
+      "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/control-receipt-correction-1/decoded-mckernel-evidence/mckernel-kmsg.status",
+      "sha256": "0345ed3ee22a7120d45c3b9f42a2c4110218fe5faddb19db15aa8956d6fcbb49"
+    },
+    "status": {
+      "added_terminator": "0",
+      "cap": "4190208",
+      "close_errno": "0",
+      "device": "/dev/mcos0",
+      "ioctl_errno": "0",
+      "ioctl_return": "49670",
+      "nonshifting": "1",
+      "open_errno": "0",
+      "raw_bytes": "49670",
+      "raw_errno": "0",
+      "raw_saved": "1",
+      "request": "0x00112a20",
+      "semantic_acceptance": "0",
+      "transport": "PASS"
+    }
+  },
+  "final_machine_review": {
+    "bytes": 7273,
+    "path": "/home/holden/mckernel-work/host-preparation/current-ihk-logging-native-independent-review-20261019-1/control63-final-review-1/FINAL-IHK-LOGGING-NATIVE-MACHINE-REVIEW.json",
+    "sha256": "41f51d8ae92c6ba4e0d734776ff95b6f6633ccce91fd216988052c818d319035"
+  },
+  "frozen_result_acceptance_fields_preserved": {
+    "application_acceptance": false,
+    "mckernel_application_executed": false,
+    "meaning": "Historical protocol result fields stay false; real boot/PID/output observations are separately demonstrated here, without formal application acceptance."
+  },
+  "lifecycle": {
+    "QEMU_returncode": -9,
+    "QMP_terminal_shutdown": true,
+    "capture_errors": [],
+    "cleanup_errors": [],
+    "deadline_met": true,
+    "host_QEMU_direct_reaped": true,
+    "kernel_failure_marker_absent": true
+  },
+  "limitations": [
+    "Pointer-only read and complete export establish only this49670B returned snapshot. RingCAP-1/wrappedstrnlen/embeddedNUL history limitations from2c11 remain.",
+    "release_fp_regs pages=1 text is observed but does not establish complete non-nullFP ownership/history/nooverwrite.",
+    "Original83a invocation remains FAIL and allits sources/captures preserved.",
+    "No fresh guest, kernel/source edit, or replay authorized by this review."
+  ],
+  "machine_release": {
+    "bytes": 2726,
+    "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/control-receipt-correction-1/execution-release.json",
+    "sha256": "f2022eee4b9726c7e4a3bc6d4471b1c419b6ae1839b20af56de560b46bedb8ac"
+  },
+  "native_acceptance": false,
+  "native_status": {
+    "bytes": 1515,
+    "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/control-receipt-correction-1/native-owner.status.json",
+    "sha256": "8c1a3f5bbb6b858e2da05eaa841c273b213b8b38bfb17cb8127076c417d5960d"
+  },
+  "new_logical_cases": 0,
+  "nonnull_FP_acceptance": false,
+  "operation_status": "PROTOCOL_PASS",
+  "owner_archive": {
+    "bytes": 757760,
+    "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/control-receipt-correction-1/readback-1.stdout",
+    "sha256": "9ed42f8554677c305f5926b088b019681544ea60a8c68f4f2804ca38a3a31982"
+  },
+  "physical_release": {
+    "bytes": 6902,
+    "path": "/home/holden/mckernel-work/host-preparation/current-ihk-logging-native-independent-review-20261019-1/ACTUAL-CONTROL63-NATIVE-PHYSICAL-RETIREMENT-REVIEW.json",
+    "sha256": "080d5bfca371d079ae9de84fe1535e36e156a1ef7c3cecb6c50bd9395f61db76"
+  },
+  "reviewer": "two_cpu_end_to_end_review",
+  "runtime_authority": false,
+  "schema": "mckernel.independent-current-ihk-control63-native-diagnostic-result-review.v1",
+  "selected_raw_witnesses": {
+    "bytes": 581,
+    "path": "/home/holden/mckernel-work/host-preparation/current-ihk-logging-native-independent-review-20261019-1/control63-native-selected-evidence-1/raw-selected-witnesses.json",
+    "sha256": "1356bbe54bee40fe99fcc3ad9f0831440db901362446cea341f4d18d29d817e2"
+  },
+  "status": "PASS_ACTUAL_TYPED_AVX_AND_COMPLETE_BOUNDED_RING_RAW_STATUS_CONTROL_DIAGNOSTICS"
+}

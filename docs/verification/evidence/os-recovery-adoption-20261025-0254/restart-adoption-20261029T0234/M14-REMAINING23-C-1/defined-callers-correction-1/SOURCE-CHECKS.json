@@ -1,0 +1,90 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "APPROVED_CONTRACT_SOURCE_COMPOSITION_ONLY",
+  "checks": [
+    "approved exact contract hash",
+    "logger selected/OFF model and original line restoration",
+    "original C logger restored by reversal",
+    "u32 negative and edge format examples against approved definition",
+    "six raw field writes, pid/tid/sig conversion and order; no aggregate initialization",
+    "existing x86 accessor mapping",
+    "same source-bound C and Rust selector condition",
+    "parent Rust prefix and retained six module identities"
+  ],
+  "logger_model": {
+    "off": {
+      "fallback_start": 24425,
+      "fallback_debug": 24429,
+      "next_line": 24433
+    },
+    "on": {
+      "selected_decl": 24426,
+      "next_line": 24433
+    }
+  },
+  "defined_format_vectors": [
+    {
+      "event": 4,
+      "value": -3,
+      "result": -2147483648,
+      "expected": "ptrace_wakeup_sig,pid=-3,data=80000000\n"
+    },
+    {
+      "event": 4,
+      "value": -3,
+      "result": -1,
+      "expected": "ptrace_wakeup_sig,pid=-3,data=ffffffff\n"
+    },
+    {
+      "event": 4,
+      "value": -3,
+      "result": 0,
+      "expected": "ptrace_wakeup_sig,pid=-3,data=00000000\n"
+    },
+    {
+      "event": 4,
+      "value": -3,
+      "result": 1,
+      "expected": "ptrace_wakeup_sig,pid=-3,data=00000001\n"
+    },
+    {
+      "event": 4,
+      "value": -3,
+      "result": 2147483647,
+      "expected": "ptrace_wakeup_sig,pid=-3,data=7fffffff\n"
+    }
+  ],
+  "patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-C-1/defined-callers-correction-1/DEFINED-CALLERS.PRIVATE-NOT-APPLIED.patch",
+    "bytes": 5672,
+    "sha256": "55b447728ce685b2c3c41917339dffed1c105256f672f1b4e2b9ba91ef987442"
+  },
+  "contract": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-DEFINED-CALLER-CONTRACT-1/ROOT-CONTRACTS.APPROVED.json",
+    "bytes": 4007,
+    "sha256": "534c4df211bcf940f19191607d8d3d26d426e2f82d3bfaa7f392c41fe06df19e"
+  },
+  "outputs": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-C-1/defined-callers-correction-1/postimage/kernel/syscall.c",
+      "bytes": 933177,
+      "sha256": "d763a9b0534f991a16bd85d4e792a92a100c538ee1cd3830383dd90417e0b03a"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-C-1/defined-callers-correction-1/postimage/kernel/rust/syscall_policy.rs",
+      "bytes": 1305130,
+      "sha256": "118912f30954b7a42da0f9e6a0f2399dc24fe993bff90876693802a8f3759def"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-C-1/defined-callers-correction-1/postimage/kernel/CMakeLists.txt",
+      "bytes": 45588,
+      "sha256": "992541ee6c26cb247f624854a6f9bc74e8a4e2d1c4fabd3791c143006cccd0a6"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-C-1/defined-callers-correction-1/postimage/kernel/rust/syscall_ptrace_wakeup_log.rs",
+      "bytes": 1522,
+      "sha256": "5ada11fb235313d03d00ea99d583867485175b851b1dccb86ecb8455ffbf8b8f"
+    }
+  ],
+  "limitations": "Pure source/model checks; no preprocessor, actual varargs, compiler/link/native/389 ABI/metadata acceptance or hold clearance."
+}

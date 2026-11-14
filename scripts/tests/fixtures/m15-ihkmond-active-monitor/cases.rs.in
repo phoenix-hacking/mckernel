@@ -1,0 +1,58 @@
+// Separate new active-monitor profile; genuine stat pathname adapter only.
+use std::collections::BTreeSet;
+use std::os::fd::{IntoRawFd,AsRawFd};
+use std::sync::OnceLock;
+extern "C"{fn getuid()->u32;}
+const STAT_PATH:&str=env!("MONITOR_STAT_PATH");
+#[derive(Debug)]struct Tick{fd:i32,at:Instant,closed_before_next:bool,live_fds:BTreeSet<i32>}
+#[derive(Default)]struct MonitorObservation{error:bool,stats:usize,stat_errno:Vec<i32>,opens:usize,ticks:Vec<Tick>}
+static MONITOR:OnceLock<(Mutex<MonitorObservation>,Condvar)>=OnceLock::new();
+fn control()->&'static (Mutex<MonitorObservation>,Condvar){MONITOR.get_or_init(||(Mutex::new(MonitorObservation::default()),Condvar::new()))}
+fn observation()->std::sync::MutexGuard<'static,MonitorObservation>{control().0.lock().unwrap()}
+fn changed(){control().1.notify_all();}
+fn fd_set()->BTreeSet<i32>{
+ let scanner=std::path::PathBuf::from(format!("/proc/{}/fd",std::process::id()));
+ fs::read_dir("/proc/self/fd").unwrap().map(|e|e.unwrap()).filter(|e|fs::read_link(e.path()).ok().as_ref()!=Some(&scanner)).map(|e|e.file_name().to_string_lossy().parse().unwrap()).collect()
+}
+fn task_set()->BTreeSet<u32>{fs::read_dir("/proc/self/task").unwrap().map(|e|e.unwrap().file_name().to_string_lossy().parse().unwrap()).collect()}
+fn snapshot(label:&str)->(BTreeSet<i32>,BTreeSet<u32>){let fds=fd_set();let tasks=task_set();println!("SNAPSHOT {label} fds={fds:?} tasks={tasks:?}");(fds,tasks)}
+fn until(label:&str,mut condition:impl FnMut()->bool){let deadline=Instant::now()+Duration::from_secs(5);loop{if condition(){return}assert!(Instant::now()<deadline,"bounded actual-state handshake: {label}");let guard=observation();drop(control().1.wait_timeout(guard,Duration::from_millis(2)).unwrap());}}
+fn device_path()->std::path::PathBuf{Path::new(TMP).parent().unwrap().join("local-monitor-device")}
+#[export_name="ihklib_device_open"]pub extern "C" fn monitor_device_open(index:i32)->i32{
+ assert_eq!(index,0);let mut obs=observation();assert_eq!(obs.opens,obs.ticks.len());
+ if let Some(previous)=obs.ticks.last_mut(){
+  // Observe while no new source FD has been acquired. FD-number reuse by the
+  // next actual open cannot turn this into a false closure observation.
+  let actual=fd_set();assert!(!actual.contains(&previous.fd));previous.closed_before_next=true;
+  println!("CLOSED_BARRIER prior-fd={} before-next-open fds={actual:?}",previous.fd);
+ }
+ let file=OpenOptions::new().read(true).write(true).create(true).truncate(false).open(device_path()).unwrap();
+ assert!(file.metadata().unwrap().file_type().is_file());let fd=file.into_raw_fd();obs.opens+=1;drop(obs);changed();fd
+}
+#[export_name="ihklib_os_open"]pub extern "C" fn monitor_os_open(_index:i32)->i32{panic!("monitor must not select event-provider OS-open")}
+#[no_mangle]pub extern "C" fn monitor_stat_observed(result:i32,error:i32){
+ assert_eq!(result,0);let mut obs=observation();obs.stats+=1;assert_eq!(obs.stats,1);obs.stat_errno.push(error);drop(obs);changed();
+}
+#[no_mangle]pub unsafe extern "C" fn monitor_detect(fd:i32,device:c_ulong)->i32{
+ assert_eq!(device,0);assert_eq!(fs::read_link(format!("/proc/self/fd/{fd}")).unwrap(),device_path());
+ let actual=fd_set();assert!(actual.contains(&fd));let mut obs=observation();assert_eq!(obs.opens,obs.ticks.len()+1);assert_eq!(obs.stats,1);
+ let tick=obs.ticks.len()+1;let at=Instant::now();if let Some(previous)=obs.ticks.last(){assert!(previous.closed_before_next);assert!(at.duration_since(previous.at)>=Duration::from_secs(1));}
+ let eps:Vec<_>=fs::read_dir("/proc/self/fd").unwrap().map(|e|e.unwrap()).filter(|e|fs::read_link(e.path()).ok().is_some_and(|p|p.as_os_str().as_bytes()==b"anon_inode:[eventpoll]")).collect();assert_eq!(eps.len(),1);
+ let ep=eps[0].file_name().to_string_lossy().parse::<i32>().unwrap();let info=fs::read_to_string(format!("/proc/self/fdinfo/{ep}")).unwrap();assert_eq!(info.lines().filter(|line|line.starts_with("tfd:")).count(),1);
+ let error=obs.error;println!("TICK {tick} error={error} source-fd={fd} live-fds={actual:?} ep={ep}\n{info}");
+ obs.ticks.push(Tick{fd,at,closed_before_next:false,live_fds:actual});drop(obs);changed();
+ if error{unsafe{*__errno_location()=5;}return -1}0
+}
+fn run_case(error:bool){
+ *observation()=MonitorObservation{error,..MonitorObservation::default()};let label=if error{"ioctl-eio"}else{"normal"};let baseline=snapshot(&format!("{label}-before"));
+ let stat_owner=OpenOptions::new().read(true).write(true).create_new(true).open(STAT_PATH).unwrap();assert!(stat_owner.metadata().unwrap().file_type().is_file());println!("OWNED_STAT_FILE case={label} fd={} path={STAT_PATH}",stat_owner.as_raw_fd());
+ let mut workers=Workers::new().unwrap();workers.spawn(true,176,Arc::new(CString::new("monitor-host").unwrap()),1).unwrap();workers.add();
+ until("two genuine interval ticks without worker failure",||{assert_eq!(workers.failure(),None);observation().ticks.len()>=2});
+ assert!(!workers.items[0].life.finished.load(Ordering::Acquire));assert_eq!(workers.failure(),None);assert_eq!(workers.finish(),0);
+ assert!(workers.items[0].life.finished.load(Ordering::Acquire));assert_eq!(workers.items[0].life.status.load(Ordering::Acquire),0);
+ {let mut obs=observation();assert!(obs.ticks.len()>=2);assert_eq!(obs.opens,obs.ticks.len());let actual=fd_set();let last=obs.ticks.last_mut().unwrap();assert!(!actual.contains(&last.fd));last.closed_before_next=true;
+  assert!(obs.ticks.iter().all(|tick|tick.closed_before_next&&tick.live_fds.contains(&tick.fd)));println!("MONITOR_ORDER case={label} ticks={} opens={} stat-calls={} stat-errno={:?} interval-ns={:?} all-tick-fds-closed=1",obs.ticks.len(),obs.opens,obs.stats,obs.stat_errno,obs.ticks.windows(2).map(|pair|pair[1].at.duration_since(pair[0].at).as_nanos()).collect::<Vec<_>>());}
+ drop(workers);drop(stat_owner);fs::remove_file(STAT_PATH).unwrap();fs::remove_file(device_path()).unwrap();until("exact joined fd/task retirement",||fd_set()==baseline.0&&task_set()==baseline.1);assert_eq!(snapshot(&format!("{label}-after")),baseline);
+ println!("CASE active-monitor-{label} ticks-at-least=2 nonfatal-continuation=1 worker-status=0 all-owned-fds-tasks-restored=1");
+}
+fn main(){assert_eq!(unsafe{getuid()},1000);assert_eq!(unsafe{geteuid()},1000);let _=control();assert!(!Path::new(STAT_PATH).exists());run_case(false);run_case(true);println!("active-monitor cases=2 genuine-stat-threads-timing-eventfd-epoll=1 nonfatal-ioctl-contract=1 no-device-native-claim=1");}

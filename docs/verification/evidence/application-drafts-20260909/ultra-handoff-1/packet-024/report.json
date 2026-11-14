@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-024",
+  "packet_version": 1,
+  "context_sha256": "528ec9d27ed19ad51445afdb1ef7b06cd4413236294418839960816dca980d64",
+  "started_utc": "2026-09-09T12:30:00Z",
+  "finished_utc": "2026-09-09T12:30:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {"case_id": "file.rename", "status": "DRAFTED_WITH_UNRESOLVED", "fixture": "scripts/application-tests/cases/file/file.rename.c", "oracle": "scripts/application-tests/oracles/file.rename.json", "changed_files": ["scripts/application-tests/cases/file/file.rename.c", "scripts/application-tests/oracles/file.rename.json"], "parameter_vectors": {}, "unresolved_oracle_notes": ["Canonical output and reviewed input binding require confirmation."], "max_reviewer_question": "Confirm old-path absence and exact 32-byte content at new path."},
+    {"case_id": "file.rename-overwrite", "status": "DRAFTED_WITH_UNRESOLVED", "fixture": "scripts/application-tests/cases/file/file.rename-overwrite.c", "oracle": "scripts/application-tests/oracles/file.rename-overwrite.json", "changed_files": ["scripts/application-tests/cases/file/file.rename-overwrite.c", "scripts/application-tests/oracles/file.rename-overwrite.json"], "parameter_vectors": {}, "unresolved_oracle_notes": ["Canonical output and reviewed input binding require confirmation."], "max_reviewer_question": "Confirm pathname replacement while open old-target fd retains TARGET bytes."},
+    {"case_id": "file.mkdir-rmdir", "status": "DRAFTED_WITH_UNRESOLVED", "fixture": "scripts/application-tests/cases/file/file.mkdir-rmdir.c", "oracle": "scripts/application-tests/oracles/file.mkdir-rmdir.json", "changed_files": ["scripts/application-tests/cases/file/file.mkdir-rmdir.c", "scripts/application-tests/oracles/file.mkdir-rmdir.json"], "parameter_vectors": {}, "unresolved_oracle_notes": ["Canonical output and reviewed input binding require confirmation."], "max_reviewer_question": "Confirm empty directory creation/removal and final absence."}
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/file/file.rename.c", "sha256": "eec8c279f63ff85e84e8bc0ce2ee4700930c0cccfce0a40f72db9243d7d52bea"},
+    {"path": "scripts/application-tests/oracles/file.rename.json", "sha256": "c12c34e97445be726fcdc8ef12c076f9645d54923f69f630eca566f2fe623c56"},
+    {"path": "scripts/application-tests/cases/file/file.rename-overwrite.c", "sha256": "3bb59cf3f782f9eb788fe6743752d5ab57f2991c1c8fa7449dafeb0fbde3cd6a"},
+    {"path": "scripts/application-tests/oracles/file.rename-overwrite.json", "sha256": "60595b9fa44d44437d2ca455a68d457179e47f12cbe6fcb5e6c81da9725ae364"},
+    {"path": "scripts/application-tests/cases/file/file.mkdir-rmdir.c", "sha256": "0354e45ab40e32de7b6fe809bb3e9f6bf075c33f35ef7f43b02343782853d599"},
+    {"path": "scripts/application-tests/oracles/file.mkdir-rmdir.json", "sha256": "bdeecc64db89ae8f92cacdf6a7dda1c03019de69389ce98875d5c90afb3b928c"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-024.json --emit-context /tmp/application-packet-024-context.json", "outcome": "PASS; metadata only"},
+    {"command": "python3 -m json.tool report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Three path/namespace cases need final canonical record and input review."],
+  "blocked_execution_capabilities": ["current-inputs", "runtime-transport-fault-injection", "runner-contract"],
+  "first_failure_event": null,
+  "max_escalation": ["Review rename atomicity/overwrite lifetime and directory namespace restoration."],
+  "next_packet_id": "packet-025"
+}

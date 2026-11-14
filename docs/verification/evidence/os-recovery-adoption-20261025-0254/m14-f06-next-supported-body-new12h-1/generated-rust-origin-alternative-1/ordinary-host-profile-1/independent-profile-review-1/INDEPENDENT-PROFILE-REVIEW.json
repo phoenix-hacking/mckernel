@@ -1,0 +1,84 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/custody_release_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "recorded_at": "2026-10-27T19:13:08.104190+00:00",
+  "decision": "PASS_EXACT_F06_ORDINARY_SIX_COMMAND_PROFILE_SOURCE_ONLY",
+  "profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-supported-body-new12h-1/generated-rust-origin-alternative-1/ordinary-host-profile-1/PROFILE.NOT-GRANTED.json",
+    "bytes": 70136,
+    "sha256": "dfb949b96141219caa411ff0f743b84cbfec4dfb0a2e19c2175b3b7bd8f3b8f4"
+  },
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-supported-body-new12h-1/generated-rust-origin-alternative-1/ordinary-host-profile-1/SOURCE-READY.json",
+    "bytes": 2918,
+    "sha256": "8cfa9928b037ef81adaef5f0d4bcae22c437253c126e6bd4c1f4805e5182319f"
+  },
+  "plan": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-supported-body-new12h-1/generated-rust-origin-alternative-1/ordinary-host-profile-1/PLAN.SOURCE-ONLY.json",
+    "bytes": 11531,
+    "sha256": "0963b5d17f0af2f44709095787d872e89a282d9300869cef977e8126a14cce4b"
+  },
+  "retained_source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-supported-body-new12h-1/generated-rust-origin-alternative-1/independent-source-review-1/INDEPENDENT-SOURCE-REVIEW.json",
+    "bytes": 7488,
+    "sha256": "691b1fabf6f34133bd57270b6b4755ad698389f4d0914f257d7d106f9400566f"
+  },
+  "existing_runner": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ordinary-host-new12h-runner-source-1/run_new12h_host.py",
+    "bytes": 7521,
+    "sha256": "6e98a1fbcbce2e822a815a05516287e7122cbd8e06d43277134b27b70cf3ad34"
+  },
+  "negative_fixture_helper": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-supported-body-new12h-1/generated-rust-origin-alternative-1/ordinary-host-profile-1/expect_negative_guard.py",
+    "bytes": 2226,
+    "sha256": "cd67fe89073083cff685cd2dd00a5b1d59888301d5e9f907b0093305bdd72fe0"
+  },
+  "pure_source_result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-supported-body-new12h-1/generated-rust-origin-alternative-1/ordinary-host-profile-1/SOURCE-CHECK-RESULT.json",
+    "bytes": 741,
+    "sha256": "cdb9b5581dd7ae2abea96b695c5e2559bf4e550a13817348858f76b48ee438f1"
+  },
+  "input_pins_verified": 267,
+  "exact_command_count": 6,
+  "findings": [
+    "All267 unique source/tool/SDK/header/Rustsysroot/admission/v2guard/capture/helper pins match actual bytes. Profiledfb949/ready8cfa authenticate; retained source691b1fab applies unchanged.",
+    "Pure existing6e98 validator accepts exact deadline, stricter UTC/MONO/BOOT cutoffs, CPU6/onejob/2GiBAS/60CPU/90wall/64MiBfile/zerocore, aggregate7jobs21.6619GiB and768MiBfullgrowthreserve. No runner/admission/helpermain executes in this review.",
+    "First five argv equal source-approved recipe after only fresh output-root substitution. Sixth is exact fixed negativefixture helper whose sole GCC9 argv equals source-approved negativecompile after same output substitution. Rustoriginenv, generatedinclude and all absolute source/tool/cwd tokens remain exact.",
+    "Sourceproducer/Ruststaticlib/Cfixturelink/832alloc+8free/positiveguard/expectednegativeguard are six sequential ordinary commands under existing outer lifetime/capture. No real allocation/free/native/kernel operation or extra compiler job is implied.",
+    "Negativehelper uses inherited bounded processgroup, direct subprocess.run join and closes pipes, captures raw stdout/stderr/exit/argv, requires positive nonzero compiler exit, exact original-origin diagnostic substring and absent object. Signal exits/zeroexit/objectcreation fail; enclosing h990 verifies group retirement/closedstreams.",
+    "Capture and output roots are distinct, fresh and absolute. Guard-positive/negative slots are directories separate from generated executable/object paths, avoiding capture/executable collisions. Existing runner rechecks exact input pins and account/window before each command and preserves completed prefix/first failure.",
+    "Transitive sourceclosure includes reviewed admission7df1->v2guard1f152 and prioraccountguard/guardian, capture9908 and its owner helper, genuineproduction headers/config, compiler/linker runtime and Rustsysroot. These are static bindings; actual fresh CPU6 exclusion/account/headroom/nonce/grant remain Root obligations."
+  ],
+  "resources": {
+    "cpu": 6,
+    "jobs": 1,
+    "AS_bytes": 2147483648,
+    "CPU_seconds_each": 60,
+    "FSIZE_bytes": 67108864,
+    "CORE_bytes": 0,
+    "wall_seconds_each": 90,
+    "aggregate_jobs": 7,
+    "aggregate_GiB": "21.6619"
+  },
+  "fixed_cutoffs": [
+    1793165769.0,
+    947874.5689514667,
+    963213.6960030915
+  ],
+  "fresh_output_root": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-supported-body-new12h-1/generated-rust-origin-alternative-1/ordinary-host-profile-1/future-host-output-1",
+  "fresh_capture_root": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-supported-body-new12h-1/generated-rust-origin-alternative-1/ordinary-host-profile-1/actual-capture-1",
+  "runtime_requirements": [
+    "Root fresh ordinary CPU6 exclusion/resource/account/window/nonce grant; honor F05v2 priority and existing heavy/native controls.",
+    "Recheck output/capture absence and allpins at entry. Preserve exact expected compiler rejection/rawdiagnostic/noobject as test evidence.",
+    "Actual six commands and independent result acceptance remain pending; no source-only evidence is production/native/retirement proof."
+  ],
+  "no_source_or_profile_correction_required": true,
+  "execution_release": false,
+  "actual_compiler_or_fixture_commands": 0,
+  "workload_or_Docker_or_root_or_native_actions": 0,
+  "helper_main_calls": 0,
+  "canonical_changes": false,
+  "only_assigned_review_directory_written": true
+}

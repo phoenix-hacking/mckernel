@@ -1,0 +1,42 @@
+{
+  "schema": "mckernel.native-diagnostic-execution-review-failure.v1",
+  "recorded_at": "2026-09-28T08:38:00-07:00",
+  "decision": "FAIL_EXACT_ONE_SHOT_EXECUTION_RELEASE",
+  "source_commit": "e188e73d32a454fa16f623163a274b80b3a206c3",
+  "packet": "docs/verification/stability-native-diagnostic-current-signal-execution-packet-20260928-3.md",
+  "packet_sha256": "01be20700088ed85cb346ef2143b87e7b6e0bd7bfa0f00683a2622bb7f7ecec9",
+  "attempt_parent": "/home/holden/mckernel-work/scratch/ndcs-20260928-3",
+  "nonce": "3262fdc2a1436b42438b368b38db429f",
+  "execution_performed": false,
+  "findings": [
+    {
+      "id": "docker-client-identities-not-retained",
+      "detail": "CommandChild kept PID only in memory; numbered outer command records retained argv/result but no acquisition PID/PGID/SID/starttime or exact reap identity. Packet wording cannot supply evidence the implementation does not serialize."
+    },
+    {
+      "id": "qemu-argv-identity-status-not-retained-on-all-paths",
+      "detail": "QEMU process identity reached result.json only after successful evaluation. Lifecycle/QMP/evaluation failure discarded the already captured tuple, and actual argv/observed subprocess return code were not serialized on success or failure."
+    }
+  ],
+  "verified_prerequisites": {
+    "source_and_remote": "Runtime sources match e188e73d; fetched commit and nine blobs match in active dispatcher log event e2ef1ab8.",
+    "manifest": "ab2905811ae10eda6ba6d4ca7d023b0cc50fdaa7520968e45c2b41c733a1ecc6",
+    "derived_initramfs": "19c3447625ff80c1bd9922a7e68cb0f54f7875b37546e0e0ec483cfd617fef3f",
+    "mcexec": "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b",
+    "paths_absent_at_review": true,
+    "qmp_path_bytes": 100,
+    "oracle": "unchanged 91-byte stdout, empty stderr and exit zero"
+  },
+  "bounded_correction": [
+    "Retain primitive acquisition/reap identities in every outer Docker command record without releasing unresolved children.",
+    "Retain exact QEMU argv, PID/PGID/SID/starttime and observed return code after exact reap on success and all post-spawn failure paths.",
+    "Run cheap local fault-path tests and independent ownership review before drafting a fresh packet with a new parent and nonce."
+  ],
+  "prohibited": [
+    "Do not execute packet 3 or reuse its parent/nonce.",
+    "Do not obtain release by weakening the packet's evidence contract.",
+    "Do not infer QEMU status from runner/container status or reconstruct actual argv after the fact."
+  ],
+  "runtime_acceptance": false,
+  "whole_os_complete": false
+}

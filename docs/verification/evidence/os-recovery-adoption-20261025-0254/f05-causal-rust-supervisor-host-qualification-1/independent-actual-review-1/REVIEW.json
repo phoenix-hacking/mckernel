@@ -1,0 +1,767 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "independent": true,
+  "reviewer": "/root/custody_release_review",
+  "decision": "PASS_ACTUAL_F05_RUST_CAUSAL_SUPERVISOR_HOST_SOURCE_ARTIFACT_QUALIFICATION",
+  "at": "2026-10-27T22:13:26.747848+00:00",
+  "runtime_authority": null,
+  "actual_result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-host-qualification-1/attempt-2/ROOT-ACTUAL-RESULT.json",
+    "bytes": 9719,
+    "sha256": "0ea0bd4c573553a2192af498a20708ff4c53e91b428c2bbe73e0af9a8073fc9f"
+  },
+  "actual_grant": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-host-qualification-1/attempt-2/ROOT-GRANT.json",
+    "bytes": 6588,
+    "sha256": "5525890d2fe0fdfcb4818c62a7871c6c5e44b2b8f57f7a684a777af92c775101"
+  },
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/compiler-warning-correction-1/READY.json",
+    "bytes": 6755,
+    "sha256": "81bb4eb14fa872f130fe3c92a7964713eb58115f10505d7845193e5053ec14f6"
+  },
+  "actual_source_qualification": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/compiler-warning-correction-1/independent-source-review-1/REVIEW.json",
+    "bytes": 3516,
+    "sha256": "448573d3ab12a0c6491c5a0254ec308e69a0e5c9ceef6afb257cbe67e51d38e1"
+  },
+  "retained_full_source_ABI_ownership_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/independent-source-review-1/REVIEW.json",
+    "bytes": 13450,
+    "sha256": "c1d30c88c78eba362408804ce476423907dd852cd9552caf6f7c71e7cc205b56"
+  },
+  "selected_seven_Rust_source_closure": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/compiler-warning-correction-1/host_tests.rs",
+      "bytes": 3949,
+      "sha256": "63b1652dd589b7f7967cc694b2d51c45ab827bbc64ff202f755474cb5dd13b57"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/compiler-warning-correction-1/lifecycle.rs",
+      "bytes": 22000,
+      "sha256": "0f72b2b34eb03f1269537f7669da5217e9fa45c2b2df40819bf456e724d323b0"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/compiler-warning-correction-1/main.rs",
+      "bytes": 14484,
+      "sha256": "a513796141c8a46e29fe180e5125b19083c5c8760a13bebd0d2921153d163294"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/compiler-warning-correction-1/observer_tests.rs",
+      "bytes": 9643,
+      "sha256": "a892b7965586a3987fad535f602eea79dc99b69db8881a7b225fbae0259cbd25"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/compiler-warning-correction-1/report.rs",
+      "bytes": 2087,
+      "sha256": "9c55957c00355fef045efed65fecb2d80f93ab88d2f81afdac0c731489fb56fd"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/compiler-warning-correction-1/supervisor.rs",
+      "bytes": 28731,
+      "sha256": "61bdd82d4c3b4ed0a9b10ae250c1d20eaf81ca627604abe035e595f83cf430d5"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/compiler-warning-correction-1/tests.rs",
+      "bytes": 14032,
+      "sha256": "e81e1833ed5831ede43d955e4ab9a7eebdd2be7f59d5a8ce780984ce66e6f3f0"
+    }
+  ],
+  "compiler": {
+    "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+    "bytes": 654904,
+    "sha256": "028fd60b0e0add5505c661cd3ccde91393d615c8729bd95d94ab1e91409b36a1"
+  },
+  "actual_commands": [
+    {
+      "index": 0,
+      "label": "Functional OS only; no security testing. compile36controls",
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "-D",
+        "warnings",
+        "--test",
+        "-C",
+        "codegen-units=1",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/compiler-warning-correction-1/main.rs",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-host-qualification-1/attempt-2/supervisor-tests"
+      ],
+      "joined": {
+        "pid": 1715390,
+        "start": 93600030,
+        "returncode": 0,
+        "direct_child_joined": true,
+        "group_absent": true,
+        "remaining_group_members": [],
+        "unexpected_group_members": [],
+        "timed_out": false,
+        "error": null,
+        "retirement_error": null,
+        "seconds": 0.6631487689446658,
+        "closed_streams": true,
+        "captures": {
+          "stdout": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-host-qualification-1/attempt-2/step0/stdout",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 59796798,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1793138555602601500,
+            "ctime_ns": 1793138555602601500
+          },
+          "stderr": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-host-qualification-1/attempt-2/step0/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 59796799,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1793138555602601500,
+            "ctime_ns": 1793138555602601500
+          }
+        }
+      },
+      "started_at": 1793138555.6064692,
+      "finished_at": 1793138556.270793
+    },
+    {
+      "index": 1,
+      "label": "Functional OS only; no security testing. run36ordinarycontrols",
+      "argv": [
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-host-qualification-1/attempt-2/supervisor-tests",
+        "--test-threads=1"
+      ],
+      "joined": {
+        "pid": 1715401,
+        "start": 93600096,
+        "returncode": 0,
+        "direct_child_joined": true,
+        "group_absent": true,
+        "remaining_group_members": [],
+        "unexpected_group_members": [],
+        "timed_out": false,
+        "error": null,
+        "retirement_error": null,
+        "seconds": 0.86903792002704,
+        "closed_streams": true,
+        "captures": {
+          "stdout": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-host-qualification-1/attempt-2/step1/stdout",
+            "sha256": "2375ad7fb913304c457ca8b8a5223eaf5afcaafd96d27ac95a4f6877a9323e37",
+            "device": 66306,
+            "inode": 59796806,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 3248,
+            "mtime_ns": 1793138557118652506,
+            "ctime_ns": 1793138557118652506
+          },
+          "stderr": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-host-qualification-1/attempt-2/step1/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 59796807,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1793138556270623976,
+            "ctime_ns": 1793138556270623976
+          }
+        }
+      },
+      "started_at": 1793138556.271967,
+      "finished_at": 1793138557.1421738
+    },
+    {
+      "index": 2,
+      "label": "Functional OS only; no security testing. compileselectedsupervisor",
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "-D",
+        "warnings",
+        "-C",
+        "opt-level=1",
+        "-C",
+        "codegen-units=1",
+        "-C",
+        "panic=abort",
+        "-C",
+        "target-feature=+crt-static",
+        "-C",
+        "relocation-model=static",
+        "-C",
+        "link-arg=-no-pie",
+        "-C",
+        "link-arg=-Wl,-z,noexecstack",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/compiler-warning-correction-1/main.rs",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-host-qualification-1/attempt-2/f05-causal-supervisor"
+      ],
+      "joined": {
+        "pid": 1715445,
+        "start": 93600183,
+        "returncode": 0,
+        "direct_child_joined": true,
+        "group_absent": true,
+        "remaining_group_members": [],
+        "unexpected_group_members": [],
+        "timed_out": false,
+        "error": null,
+        "retirement_error": null,
+        "seconds": 1.603904850082472,
+        "closed_streams": true,
+        "captures": {
+          "stdout": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-host-qualification-1/attempt-2/step2/stdout",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 59796812,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1793138557142653313,
+            "ctime_ns": 1793138557142653313
+          },
+          "stderr": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-host-qualification-1/attempt-2/step2/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 59796813,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1793138557142653313,
+            "ctime_ns": 1793138557142653313
+          }
+        }
+      },
+      "started_at": 1793138557.1434164,
+      "finished_at": 1793138558.7486708
+    },
+    {
+      "index": 3,
+      "label": "Functional OS only; no security testing. qualifyactualELF",
+      "argv": [
+        "/usr/bin/readelf",
+        "-W",
+        "-h",
+        "-l",
+        "-d",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-host-qualification-1/attempt-2/f05-causal-supervisor"
+      ],
+      "joined": {
+        "pid": 1715457,
+        "start": 93600344,
+        "returncode": 0,
+        "direct_child_joined": true,
+        "group_absent": true,
+        "remaining_group_members": [],
+        "unexpected_group_members": [],
+        "timed_out": false,
+        "error": null,
+        "retirement_error": null,
+        "seconds": 0.02364518295507878,
+        "closed_streams": true,
+        "captures": {
+          "stdout": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-host-qualification-1/attempt-2/step3/stdout",
+            "sha256": "2b1fd1ff64428e511169f493406d6fc13f62bd3488bee29017ea91673d21ec8c",
+            "device": 66306,
+            "inode": 59796819,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 2620,
+            "mtime_ns": 1793138558750707405,
+            "ctime_ns": 1793138558750707405
+          },
+          "stderr": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-host-qualification-1/attempt-2/step3/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 59796820,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1793138558746707271,
+            "ctime_ns": 1793138558746707271
+          }
+        }
+      },
+      "started_at": 1793138558.7503211,
+      "finished_at": 1793138558.7755039
+    }
+  ],
+  "actual_controls": {
+    "total": 36,
+    "passed": 36,
+    "failed": 0,
+    "ignored": 0,
+    "filtered": 0,
+    "names": [
+      "host_tests::host_missing_namespace_is_an_error",
+      "host_tests::host_real_binary_streams_and_raw_wait_status",
+      "host_tests::host_real_exec_and_cwd_failures_keep_exact_setup_stage",
+      "host_tests::host_real_orphan_descendant_is_reaped_before_clean_result",
+      "host_tests::host_real_stream_overflow_counts_without_exceeding_retention",
+      "host_tests::host_real_timeout_signals_pinned_group_and_reaps_ignored_term",
+      "supervisor::leader_ownership_tests::descendant_reap_keeps_leader_pin_but_echild_removes_all_signal_authority",
+      "supervisor::leader_ownership_tests::positive_leader_reap_forbids_signals_on_every_later_clock_or_error_branch",
+      "supervisor::observer_tests::mocked_actual_gate_write_failure_is_not_recorded_as_release",
+      "supervisor::observer_tests::mocked_backlog_defers_gate_until_all_queued_rows_are_validated",
+      "supervisor::observer_tests::mocked_early_child_rows_replay_without_reordering_retained_raw_bytes",
+      "supervisor::observer_tests::mocked_foreign_early_child_fails_on_real_clone_binding_and_retains_all_raw_rows",
+      "supervisor::observer_tests::mocked_foreign_owner_never_releases",
+      "supervisor::observer_tests::mocked_gap_poison_preserves_offending_record_and_never_releases",
+      "supervisor::observer_tests::mocked_missing_or_replaced_gate_refuses_actual_write",
+      "supervisor::observer_tests::mocked_observer_writes_one_real_g_and_retains_exact_raw_records",
+      "supervisor::observer_tests::mocked_post_reap_service_cannot_release_gate",
+      "supervisor::observer_tests::mocked_snapshot_short_message_cannot_match_containing_record_or_wrong_multiplicity",
+      "tests::child_publication_before_authoritative_clone_delivery_is_not_repaired_by_later_ret",
+      "tests::duplicate_malformed_unknown_rows_and_bad_results_are_refused",
+      "tests::early_child_publication_write_and_ret_replay_only_after_real_parent_clone_ret",
+      "tests::exact_final_kernel_record_body_and_multiplicity_refuse_substrings_and_bad_envelopes",
+      "tests::foreign_generation_pid_and_unlinked_publication_are_refused",
+      "tests::genuine_child_then_parent_sequence_finishes_only_after_real_parent_zero",
+      "tests::namespace_absence_or_ack_or_reap_cannot_release",
+      "tests::original_deadlines_clamp_without_renewal",
+      "tests::original_twelve_attempt_limit_is_preserved",
+      "tests::oversize_frame_uses_original_failure_fallback",
+      "tests::pending_duplicate_unknown_and_foreign_rows_fail_strict_binding_replay",
+      "tests::pending_unbound_rows_are_bounded_and_wrong_generation_fails_immediately",
+      "tests::retirement_zero_alone_does_not_imply_delete",
+      "tests::selected_report_preserves_exact_argv_cwd_two_env_and_status",
+      "tests::sequence_keeps_native_metadata_and_refuses_gaps_duplicates_overflow",
+      "tests::stream_capture_retains_1024_and_counts_all_bytes",
+      "tests::unchanged_failed_v2_order_is_refused",
+      "tests::unreadable_procfs_and_deadline_never_become_retirement"
+    ],
+    "source_test_name_set_equal": true,
+    "pure_and_leader": 20,
+    "mocked_observer_IO": 10,
+    "real_owned_child_supervision": 6
+  },
+  "actual_collector_artifact": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-host-qualification-1/attempt-2/f05-causal-supervisor",
+    "bytes": 5725328,
+    "sha256": "908f147ef0a61959becc20820d6e889aaf5eb4418adda0c99f13b3c3e6cf72a1"
+  },
+  "artifact_mode": "0o100700",
+  "static_ELF": {
+    "class": 64,
+    "little_endian": true,
+    "type": "ET_EXEC",
+    "machine": "EM_X86_64",
+    "entry": "0x240fe0",
+    "entry_in_executable_LOAD": true,
+    "INTERP": false,
+    "PT_DYNAMIC": false,
+    "SHT_DYNAMIC": false,
+    "NEEDED": false,
+    "allocated_relocations": "30 R_X86_64_IRELATIVE, symbol index0 only",
+    "statically_defined_selected_FFI": [
+      {
+        "name": "fork",
+        "bind": 2,
+        "type": 2,
+        "shndx": 8,
+        "value": 3281552,
+        "size": 429
+      },
+      {
+        "name": "waitid",
+        "bind": 2,
+        "type": 2,
+        "shndx": 8,
+        "value": 3281248,
+        "size": 181
+      },
+      {
+        "name": "waitpid",
+        "bind": 2,
+        "type": 2,
+        "shndx": 8,
+        "value": 3281056,
+        "size": 11
+      },
+      {
+        "name": "kill",
+        "bind": 2,
+        "type": 2,
+        "shndx": 8,
+        "value": 2806672,
+        "size": 37
+      },
+      {
+        "name": "execve",
+        "bind": 2,
+        "type": 2,
+        "shndx": 8,
+        "value": 3282080,
+        "size": 37
+      },
+      {
+        "name": "klogctl",
+        "bind": 1,
+        "type": 2,
+        "shndx": 8,
+        "value": 3300000,
+        "size": 37
+      },
+      {
+        "name": "mount",
+        "bind": 2,
+        "type": 2,
+        "shndx": 8,
+        "value": 3300048,
+        "size": 40
+      },
+      {
+        "name": "sigaction",
+        "bind": 2,
+        "type": 2,
+        "shndx": 8,
+        "value": 2699776,
+        "size": 52
+      },
+      {
+        "name": "sigemptyset",
+        "bind": 0,
+        "type": 2,
+        "shndx": 8,
+        "value": 2806768,
+        "size": 70
+      },
+      {
+        "name": "alarm",
+        "bind": 1,
+        "type": 2,
+        "shndx": 8,
+        "value": 3281440,
+        "size": 37
+      },
+      {
+        "name": "pause",
+        "bind": 2,
+        "type": 2,
+        "shndx": 8,
+        "value": 2698800,
+        "size": 117
+      },
+      {
+        "name": "clock_gettime",
+        "bind": 2,
+        "type": 2,
+        "shndx": 8,
+        "value": 3278560,
+        "size": 111
+      },
+      {
+        "name": "opendir",
+        "bind": 2,
+        "type": 2,
+        "shndx": 8,
+        "value": 3279808,
+        "size": 380
+      },
+      {
+        "name": "readdir",
+        "bind": 2,
+        "type": 2,
+        "shndx": 8,
+        "value": 3280512,
+        "size": 285
+      },
+      {
+        "name": "closedir",
+        "bind": 2,
+        "type": 2,
+        "shndx": 8,
+        "value": 3280464,
+        "size": 45
+      },
+      {
+        "name": "syncfs",
+        "bind": 1,
+        "type": 2,
+        "shndx": 8,
+        "value": 3289328,
+        "size": 37
+      }
+    ],
+    "toolchain_comments": [
+      "Linker: LLD 21.1.3 (/checkout/src/llvm-project/llvm 4f74b76fb69688474e073fb26b316d9ea571388f)",
+      "",
+      "rustc version 1.92.0 (ded5c06cf 2025-12-08)",
+      "GCC: (Ubuntu 9.4.0-1ubuntu1~20.04.2) 9.4.0",
+      ""
+    ],
+    "readelf_capture": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-host-qualification-1/attempt-2/step3/stdout",
+      "bytes": 2620,
+      "sha256": "2b1fd1ff64428e511169f493406d6fc13f62bd3488bee29017ea91673d21ec8c"
+    },
+    "undefined_symtab_entries": [
+      {
+        "name": "__call_tls_dtors",
+        "bind": 0,
+        "type": 0,
+        "shndx": 0,
+        "value": 0,
+        "size": 0
+      },
+      {
+        "name": "__rpc_thread_destroy",
+        "bind": 0,
+        "type": 0,
+        "shndx": 0,
+        "value": 0,
+        "size": 0
+      },
+      {
+        "name": "__strerror_thread_freeres",
+        "bind": 0,
+        "type": 0,
+        "shndx": 0,
+        "value": 0,
+        "size": 0
+      },
+      {
+        "name": "__gmon_start__",
+        "bind": 2,
+        "type": 0,
+        "shndx": 0,
+        "value": 0,
+        "size": 0
+      },
+      {
+        "name": "_ITM_deregisterTMCloneTable",
+        "bind": 2,
+        "type": 0,
+        "shndx": 0,
+        "value": 0,
+        "size": 0
+      },
+      {
+        "name": "_ITM_registerTMCloneTable",
+        "bind": 2,
+        "type": 0,
+        "shndx": 0,
+        "value": 0,
+        "size": 0
+      },
+      {
+        "name": "__tls_get_addr",
+        "bind": 1,
+        "type": 0,
+        "shndx": 0,
+        "value": 0,
+        "size": 0
+      },
+      {
+        "name": "__cxa_thread_atexit_impl",
+        "bind": 2,
+        "type": 0,
+        "shndx": 0,
+        "value": 0,
+        "size": 0
+      },
+      {
+        "name": "statx",
+        "bind": 2,
+        "type": 0,
+        "shndx": 0,
+        "value": 0,
+        "size": 0
+      },
+      {
+        "name": "gettid",
+        "bind": 2,
+        "type": 0,
+        "shndx": 0,
+        "value": 0,
+        "size": 0
+      },
+      {
+        "name": "__pthread_rwlock_init",
+        "bind": 2,
+        "type": 0,
+        "shndx": 0,
+        "value": 0,
+        "size": 0
+      },
+      {
+        "name": "__pthread_rwlock_destroy",
+        "bind": 2,
+        "type": 0,
+        "shndx": 0,
+        "value": 0,
+        "size": 0
+      },
+      {
+        "name": "__pthread_rwlock_rdlock",
+        "bind": 2,
+        "type": 0,
+        "shndx": 0,
+        "value": 0,
+        "size": 0
+      },
+      {
+        "name": "__pthread_rwlock_wrlock",
+        "bind": 2,
+        "type": 0,
+        "shndx": 0,
+        "value": 0,
+        "size": 0
+      },
+      {
+        "name": "__pthread_rwlock_unlock",
+        "bind": 2,
+        "type": 0,
+        "shndx": 0,
+        "value": 0,
+        "size": 0
+      },
+      {
+        "name": "__pthread_setcancelstate",
+        "bind": 2,
+        "type": 0,
+        "shndx": 0,
+        "value": 0,
+        "size": 0
+      },
+      {
+        "name": "_pthread_cleanup_push_defer",
+        "bind": 2,
+        "type": 0,
+        "shndx": 0,
+        "value": 0,
+        "size": 0
+      },
+      {
+        "name": "_pthread_cleanup_pop_restore",
+        "bind": 2,
+        "type": 0,
+        "shndx": 0,
+        "value": 0,
+        "size": 0
+      },
+      {
+        "name": "__pthread_cleanup_upto",
+        "bind": 2,
+        "type": 0,
+        "shndx": 0,
+        "value": 0,
+        "size": 0
+      },
+      {
+        "name": "_dl_starting_up",
+        "bind": 2,
+        "type": 0,
+        "shndx": 0,
+        "value": 0,
+        "size": 0
+      },
+      {
+        "name": "_dl_rtld_map",
+        "bind": 2,
+        "type": 0,
+        "shndx": 0,
+        "value": 0,
+        "size": 0
+      }
+    ],
+    "limit": "Optional/unused glibc/Rust symtab names including NOTYPE __tls_get_addr remain. No dynamic dependency or symbol-bearing allocated relocation. No claim every symtab name is defined."
+  },
+  "protocol": {
+    "interface": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/compiler-warning-correction-1/SUPERVISOR-INTERFACE.json",
+      "bytes": 4144,
+      "sha256": "f38fca58c41b81154a593f468e34dd3ae6f43b5c3df73ecc36cef2fdb71c7304"
+    },
+    "case_id": "M14-05-05-owned-processvm-v3-causal-204B",
+    "nonce": "31770ebb739fea402ded939617921dda",
+    "gate_absolute": "/case/work/.f05-gate-31770ebb739fea402ded939617921dda",
+    "gate_relative": ".f05-gate-31770ebb739fea402ded939617921dda",
+    "release_bytes_hex": "47",
+    "release_count": 1,
+    "payload_argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "/apps/app"
+    ],
+    "payload_cwd": "/case/work",
+    "payload_env": {
+      "PATH": "/usr/bin:/bin",
+      "COKERNEL_PATH": "/apps"
+    },
+    "limits": {
+      "payload_timeout_ms": 10000,
+      "stdout_limit_bytes": 1024,
+      "stderr_limit_bytes": 1024,
+      "collector_timeout_seconds": 120,
+      "post_reap_retirement_ms": 5000,
+      "outer_native_timeout_seconds": 300,
+      "frame_limit_bytes": 4096,
+      "final_klog_bytes": 262144,
+      "real_retirement_attempts_max": 12
+    },
+    "report_schema_unchanged": true
+  },
+  "qualified_behavior": [
+    "All36 exact prepared source test names execute once with no failures/ignored/filtered. Actual own-child byte streams/raw37 status, exec/cwd error stages, ignoredTERM KILL/reap, orphan descendant reap and1024 retention/full1100 counts pass.",
+    "Corrected signal custody, authoritative bounded early-child replay, unknown/foreign/duplicate failure, actual mocked G/raw retention, backlog/sequence/gap/overflow, whole-body coverage, original deadlines and report fallback pass exact HOST controls.",
+    "Both actual Rust1.92 LP64 compilations use-Dwarnings and return0/empty stderr. Static layout assertions compile. Production binary is compiled and inspected, never executed as HOST PID1."
+  ],
+  "preserved_first_failure": {
+    "actual_result": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-host-qualification-1/attempt-1/ROOT-ACTUAL-RESULT.json",
+      "bytes": 2531,
+      "sha256": "fdd085e6321eabaea2c1d86298ead8bd4e1ddd761055a1439cb347954c133ece"
+    },
+    "stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-host-qualification-1/attempt-1/step0/stderr",
+      "bytes": 791,
+      "sha256": "59cfd953a63cf8f1bdbec69b74c4ed61d707d1da848f38c2b1fa446058ddf146"
+    },
+    "returncode": 1,
+    "reason": "Exactly two unused duplicate constants; additive source correction4485; no original test/production suffix."
+  },
+  "toolchain_scope": "Actual compiler executable pin, selected source closure, literal test/static production argv and embedded Rust1.92/LLD21.1.3/GCC9.4 provenance bound. No runtime ELF interpreter or DT_NEEDED library. Full archive-by-archive compiler/linker input reproduction is not claimed.",
+  "remaining": [
+    "Root additive SupervisorBinding must use actual908f artifact and this actual qualification. Oldc020 remains old-v2-only; immutable interface qualification fields remain null until actual additive binding.",
+    "Root separately binds actual foreground app/source/oracle and working mixed C+Rust-helper launcherdca025 source/object/config. No circular prior-native acceptance gate.",
+    "Actual native kmsg/final snapshot compatibility,64-sample trace visibility, original full235/227 and v3 strict evaluator, fresh account/source/ownership/resource/ledger and independent native release remain OPEN."
+  ],
+  "review_actions": {
+    "retained_hash_source_capture_direct_ELF_parse_only": true,
+    "compiler_test_native_guard_query_workload_canonical_cleanup": 0,
+    "subagents": 0
+  },
+  "native_acceptance": false,
+  "application_acceptance": false,
+  "whole_file_retirement": false
+}

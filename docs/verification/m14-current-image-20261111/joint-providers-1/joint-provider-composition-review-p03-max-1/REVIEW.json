@@ -1,0 +1,302 @@
+{
+  "schema": "mckernel-focused-joint-material-source-composition-review-v1",
+  "at": "2026-11-11T04:04:43.341369+00:00",
+  "reviewer": "/root/p03_cutover_source_max; existing same-Root Sol/MAX independent review route; no child agents",
+  "verdict": "GO",
+  "decision": "GO_EXACT_SEVEN_PATH_JOINT_MEMORY_PTRACE_CONTEXT_SOURCE_COMPOSITION_ONLY",
+  "scope": "Composition2 of the exact already independently reviewed memory/ptrace/context source deltas onto actual canonical2cc813c2. Review covers shared selector nesting, module/dependency wiring, C exclusions, unchanged callback/ABI tables and current fork/clock preservation. No old body/test suite audit or operation execution.",
+  "composition": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-composition-2/COMPOSITION.proposed.json",
+    "bytes": 4147,
+    "sha256": "88528460711a8fab2333a8405c35ede38da6887b6a5e66af5022b74467620bb8"
+  },
+  "joint_patch": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-composition-2/JOINT-OWNERSHIP.patch",
+    "bytes": 34676,
+    "sha256": "099ddd4d44fc5f7c7b1ce71eb58d5cf9f82819b49b810d6ce9a833045c8507e7"
+  },
+  "actual_parent": "2cc813c2df6544c05394639094f6e9e93149f972",
+  "original_packet_pins": [
+    {
+      "name": "memory",
+      "base": "f83960460f4fa883cfc6550f0ed8809a561bbb64",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-closure-p04source-max-1/correction-1/MEMORY-HOST-OFFLOAD-OWNERSHIP.CORRECTED.patch",
+      "sha256": "aead1ad5a472ac6f048d072f45de5c4da183b8afb7c2a99767c8f52f9ecd3324"
+    },
+    {
+      "name": "ptrace",
+      "base": "14d3cc82da7db56d1783ab6ef3f661e1838abf2a",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-ownership-publicabi-max-1/PTRACE-RESUME-CALLBACKS.patch",
+      "sha256": "27117efde5ceff043cc9c1de6c786bb73adf7ccefc2fe0620d3cbfd934217881"
+    },
+    {
+      "name": "context",
+      "base": "14d3cc82da7db56d1783ab6ef3f661e1838abf2a",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f03-context-settimeofday-ownership-p04source-max-1/POLICY-CONTEXT-BRIDGE-OWNERSHIP.patch",
+      "sha256": "4579fb9b84d3358c68497de91bf9d2f097bed0ce011b3d8f3c357f3b0f903172"
+    }
+  ],
+  "candidate_rows": [
+    {
+      "path": "kernel/CMakeLists.txt",
+      "sha256": "59fb96abd8bf18ca48f788376503495e8baba0ca39e9e02f7ee72b7121c5e685",
+      "bytes": 61222,
+      "absolute_path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-composition-2/candidate/kernel/CMakeLists.txt"
+    },
+    {
+      "path": "kernel/rust/f03_memory_host_offload.rs",
+      "sha256": "f181d7308fcc3ecc81343f38788c9a9f1a1f7b024b3a24586a057f3ff2c17d33",
+      "bytes": 5930,
+      "absolute_path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-composition-2/candidate/kernel/rust/f03_memory_host_offload.rs"
+    },
+    {
+      "path": "kernel/rust/f03_policy_forward_context_bridge.rs",
+      "sha256": "10208bd7fb8539e1313a13c861bdaf84a54df7ce39ab4a714e1726e6729b5377",
+      "bytes": 1495,
+      "absolute_path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-composition-2/candidate/kernel/rust/f03_policy_forward_context_bridge.rs"
+    },
+    {
+      "path": "kernel/rust/f06_ptrace_resume_callbacks.rs",
+      "sha256": "2a00e7d12f25b6e738df786fe2511c4ef4d425335e9e2f663434982e1fb02ae0",
+      "bytes": 7740,
+      "absolute_path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-composition-2/candidate/kernel/rust/f06_ptrace_resume_callbacks.rs"
+    },
+    {
+      "path": "kernel/rust/lib.rs",
+      "sha256": "2b2cef5a65dd303ddf923bda67c7ebfe3ccc5360dfefac8910fe67c8e95477be",
+      "bytes": 4655,
+      "absolute_path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-composition-2/candidate/kernel/rust/lib.rs"
+    },
+    {
+      "path": "kernel/rust/syscall_policy.rs",
+      "sha256": "76ce6016d6ddd1cfa6c41070c0cf35e87b94ddc31e67c805adbe3b94b3f17469",
+      "bytes": 1240794,
+      "absolute_path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-composition-2/candidate/kernel/rust/syscall_policy.rs"
+    },
+    {
+      "path": "kernel/syscall.c",
+      "sha256": "9681968de471da4c6051b4b0faa1b402201f6e78ad1a659052042b60be8fed9a",
+      "bytes": 962259,
+      "absolute_path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-composition-2/candidate/kernel/syscall.c"
+    }
+  ],
+  "parent_source_identities": {
+    "kernel/CMakeLists.txt": "54933e844f67eb8afe94f0ac23b82403557361fdbe5f7e83b821b5f8451e8d9d",
+    "kernel/rust/f03_memory_host_offload.rs": null,
+    "kernel/rust/f03_policy_forward_context_bridge.rs": null,
+    "kernel/rust/f06_ptrace_resume_callbacks.rs": null,
+    "kernel/rust/lib.rs": "a891d48079db2c7cd749ce4f5d71075f8e3b053bc055f7b2e53d2e873061c9c8",
+    "kernel/rust/syscall_policy.rs": "3c91a22fdae204240201969957036a175fa207cb1d076ff5723650ce5a9adb8f",
+    "kernel/syscall.c": "f51bb8cd054632c5bc4004a374345da8045c873bc8236fe27cbd40e034c1481a"
+  },
+  "reused_independent_material_source_reviews": [
+    {
+      "bytes": 9524,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-review-publicabi-max-1/correction-1/REVIEW.json",
+      "sha256": "440dd803abbd8d1f1145deebb2cc5760b307df17dbc85ff97037b8ef803ba90e"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-review-p03-max-1/REVIEW.json",
+      "bytes": 19857,
+      "sha256": "297d61c5f27dd267f58e380408ca3f14055036a77233aadfd488ad1d6afd3b64"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f03-context-forward-review-p03-max-1/REVIEW.json",
+      "bytes": 20500,
+      "sha256": "905fbcb92db0212a70f1a6c9c44d55a1baa5bc1817f274c7ca9ef6ddae188487"
+    }
+  ],
+  "reused_actual_focused_host_results": [
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-review-source-acquisition-max-1/actual-result-1/REVIEW.json",
+      "bytes": 19911,
+      "sha256": "4b33ea054e9bea414d0a7014ceb821bdd117beae3e630774c1a1afcf2aee79c1"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/escalation-pointer-1/qualification-1/QUALIFICATION.json",
+      "bytes": 35073,
+      "sha256": "0a6d374402468de20f07a64685336013301a95937d2bbdffd74f7a1a59c0c4c4"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-tests-p04tests-max-1/qualification-1/REVIEW.json",
+      "bytes": 9245,
+      "sha256": "ed583329774778209ac557a394b0feb3729dff5124d61a0489a7751fb34822aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-tests-publicabi-max-1/qualification-1/QUALIFICATION.json",
+      "bytes": 18738,
+      "sha256": "0176a8ffc4a68d4b331d48743a205e0e0067a532ba16ad641b47a5e275444f85"
+    }
+  ],
+  "actual_result_reuse_limits": [
+    "Nine corrected memory-host composition cases with exact f181 production module retain their original test-only provider/controlled synchronous scope; no new actual native/offload behavior is inferred.",
+    "Seven ptrace callback families/twelve finite vectors reuse the ed583/0176 actual source/lifetime/type/log/IRQ/free/return results without rerunning or auditing unchanged bodies.",
+    "The context905 source review covers the branchless same-number/raw-pointer/signed-return pass-through and all19 unchanged callers; no mirrored fixture is required or newly executed.",
+    "Root current14d/a70 physical image, source ABI104 and original04 DEFAULT proof remain at their exact prior scopes until the new joint source produces a genuinely qualified image."
+  ],
+  "material_findings": [
+    {
+      "result": "PASS",
+      "check": "The two supplied manifest/patch size and full SHA match88528460711a8fab2333a8405c35ede38da6887b6a5e66af5022b74467620bb8 and099ddd4d44fc5f7c7b1ce71eb58d5cf9f82819b49b810d6ce9a833045c8507e7. Exactly seven patch/candidate paths equal manifest paths; all seven candidate byte sizes/SHA match."
+    },
+    {
+      "result": "PASS",
+      "check": "All four existing manifest preimages match actual2cc813c2 committed blobs and the read-only observed canonical source. A standalone text-only hunk reconstruction of all24 hunks produces every exact candidate. The other three paths are genuinely new. No git apply/merge-file/compiler/helper or canonical/index mutation was performed by reviewer."
+    },
+    {
+      "result": "PASS",
+      "check": "For every one of the seven paths, the exact net added/removed source-line multiset equals the union of the three original hash-pinned patches. Shared-region inspection confirms correct ordering and nesting. There is no unreviewed source addition, dropped reviewed change, duplicate body, blanket conflict acceptance or unrelated edit."
+    },
+    {
+      "result": "PASS",
+      "check": "All four listed CMake conflicts are additions-only with zero base lines, exactly as manifest records. Existing current additions and incoming additions each occur once in coherent blocks. No conflict markers remain anywhere in the seven candidates. Original failed composition1 is not overwritten or reclassified; accepting documented merge-file conflict-count exits0..127 did not waive marker/content checks."
+    },
+    {
+      "result": "PASS",
+      "check": "Three new modules match exact prequalified5930B f181d730 memory,7740B2a00e7d1 ptrace and1495B10208bd7 context bytes. Rejected original d7ae memory initialization is not selected. No new body/ABI/lifetime/protocol modification is introduced by composition."
+    },
+    {
+      "result": "PASS",
+      "check": "Each selected flag is initialized OFF, has one intended guarded ON/cfg/source-dependency assignment and controls its own C exclusion macro appended after source properties that could replace definitions. CMake new blocks are balanced siblings/children as reviewed; no existing default, option, compiler flag, ABI cfg or broad/experimental/owned selection is enabled."
+    },
+    {
+      "result": "PASS",
+      "check": "Ptrace selection remains within the existing x86/native6.12/!UBSAN/PROFILE and !TOFU/!Fugaku outer branches, additionally requiring wholeF06, perf/rusage/workIRQ, !DCFA, !broad, !experimental and !owned. Only exact existing f03_ptrace_adapters two-export module is enabled via cfg-any alongside five new resume callbacks; f03_forward_adapters itself retains its original broad-only cfg."
+    },
+    {
+      "result": "PASS",
+      "check": "Memory/context use the original qualified12-term MCKERNEL_RUST_F06_WHOLE_DEFAULT profile predicate plus owned-transaction OFF. Their cfg/module/C guard pairs remain separate from broad forwarding. Unsupported profiles keep their existing C fallbacks. Whole-F06 option/default and native/source authority are unchanged."
+    },
+    {
+      "result": "PASS",
+      "check": "The complete1240596B syscall_policy.rs existing prefix is byte-identical; only the previously reviewed198-byte child-module declaration is appended. All19 context callback uses, required old policy bodies/providers, ptrace resume body, current offsets and clock forwarding behavior remain unchanged."
+    },
+    {
+      "result": "PASS",
+      "check": "lib.rs retains current fork/mmap/outer/policy2/signal/credential/exit wiring and adds only two new cfg modules plus the exact narrow ptrace-adapter cfg alternative. Root supplies unchanged f03_ptrace_adapters.rs through its full source tree; its absence from candidate/ is correct because it is not an eighth changed path."
+    },
+    {
+      "result": "PASS",
+      "check": "C memory prototypes/external-vs-static selection, five endpoint exclusions, new ptrace seven exclusions/prototypes/#line/type assertions and one context guard are exactly the independently reviewed deltas. Current policy2 declaration and guard remain intact. No callback-table entry, provider argument, normal/error order, diagnostic flag/origin or full C fallback behavior is changed beyond those reviewed guards."
+    },
+    {
+      "result": "PASS",
+      "check": "The actual clear-host3-slot initializer, munmap6-slot initializer, ptrace19-slot initializer and complete104-word C fork metadata initializer are byte-identical to2cc parent. The unchanged Rust fork32328B7de21260, policy2 module2724B872a9987, ptrace adapters1635B091c497b and fullABI76151Bff48bc2e remain exact current inputs."
+    },
+    {
+      "result": "PASS",
+      "check": "Existing default predicate/whole option, current fork selected macro block and policy2 selected macro block are textually preserved. Their previously qualified ABI/cfg/C exclusions are not replaced by old private source postimages. Source-path dependencies of new Rust modules include genuine selected headers; actual production regeneration and provider ownership remain future operations."
+    }
+  ],
+  "selector_map": [
+    {
+      "flag": "MCKERNEL_MEMORY_HOST_OFFLOAD_SELECTED",
+      "predicate": "MCKERNEL_RUST_F06_WHOLE_DEFAULT AND NOT ENABLE_NATIVE_FORK_OWNED_TRANSACTION",
+      "cfg": "f03_memory_host_offload_candidate",
+      "module": "crate::f03_memory_host_offload",
+      "C_macro": "MCKERNEL_RUST_F03_MEMORY_HOST_OFFLOAD",
+      "new_typed_exports": [
+        "syscall_do_syscall3_bridge",
+        "syscall_policy_do_syscall3_bridge",
+        "clear_host_pte_log_bridge",
+        "do_munmap_clear_host_bridge",
+        "do_munmap_set_host_bridge"
+      ]
+    },
+    {
+      "flag": "MCKERNEL_PTRACE_RESUME_CALLBACKS_SELECTED",
+      "predicate": "Existing ordinary x86/native6.12/!UBSAN/PROFILE/!TOFU/!Fugaku parent AND wholeF06/perf/rusage/workIRQ/!DCFA/!broad/!experimental/!owned",
+      "cfg": "f06_ptrace_resume_callbacks_candidate",
+      "module": "crate::syscall_policy::f06_ptrace_resume_callbacks",
+      "C_macro": "MCKERNEL_RUST_F06_PTRACE_RESUME_CALLBACKS",
+      "new_typed_exports": [
+        "ptrace_wakeup_log_bridge",
+        "ptrace_wakeup_update_lock_bridge",
+        "ptrace_wakeup_update_unlock_bridge",
+        "ptrace_detach_kfree_bridge",
+        "ptrace_wakeup_sig"
+      ],
+      "unchanged_narrow_reused_exports": [
+        "ptrace_detach_do_kill_bridge",
+        "ptrace_detach_wakeup_bridge"
+      ]
+    },
+    {
+      "flag": "MCKERNEL_POLICY_FORWARD_CONTEXT_SELECTED",
+      "predicate": "MCKERNEL_RUST_F06_WHOLE_DEFAULT AND NOT ENABLE_NATIVE_FORK_OWNED_TRANSACTION",
+      "cfg": "f03_policy_forward_context_bridge_candidate",
+      "module": "crate::f03_policy_forward_context_bridge",
+      "C_macro": "MCKERNEL_RUST_F03_POLICY_FORWARD_CONTEXT_BRIDGE",
+      "new_typed_exports": [
+        "syscall_policy_forward_context_bridge"
+      ]
+    }
+  ],
+  "unchanged_source_initializer_identity_records": [
+    {
+      "name": "f03_clear_host_pte_binding_v1",
+      "source_bytes": 178,
+      "source_sha256": "3d3f9fc47f1f018a5ea1d568fd873a43a85dd2c339b72ac558a590db2b7cc35e"
+    },
+    {
+      "name": "f03_do_munmap_binding_v1",
+      "source_bytes": 298,
+      "source_sha256": "03429a5bc16337784c124026deb02559e5363f695eb6bf4b5acc27ad4fe28948"
+    },
+    {
+      "name": "f03_ptrace_entry_ops_v1",
+      "source_bytes": 881,
+      "source_sha256": "5b8d2ac86c38b4b819197136a4f4f7f701e95bc75599c99cac3dd9976a29260c"
+    },
+    {
+      "name": "f03_do_fork_c_abi_words",
+      "source_bytes": 7580,
+      "source_sha256": "2bec587abce3489fcf41ecac593e2cc672aa573fe1d8f4ab8d82bdf616439ed1"
+    }
+  ],
+  "unchanged_nonpatch_inputs": [
+    {
+      "path": "/home/holden/mckernel/kernel/rust/f03_do_fork.rs",
+      "bytes": 32328,
+      "sha256": "7de2126064794969f03b0d780679816e095e27733742b7684f29abe01979489b"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/f03_do_syscall2_bridge.rs",
+      "bytes": 2724,
+      "sha256": "872a99877d33a1f25814fe801bbc51104225cbc1dc8904cfe38acd3c0f524685"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/f03_ptrace_adapters.rs",
+      "bytes": 1635,
+      "sha256": "091c497b7b92a59839c61849d7a0d66430966186f835329c12f6e319defa2a7f"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    }
+  ],
+  "root_reported_patchcheck_and_print_diagnostic": {
+    "git_apply_check": "Root reported PASS for exact joint patch; reused, not rerun.",
+    "later_print_failure": "Root diagnostic printing requested candidate/kernel/rust/f03_ptrace_adapters.rs, which is intentionally absent from the seven-path patch snapshot because unchanged. The real current Root source input exists and matches091c497b. This post-manifest print error did not change the already validated candidate/patch or canonical source; no compiler/SUT failure is claimed."
+  },
+  "remaining_blocker_at_source_composition_scope": null,
+  "next_actual_boundary": [
+    "Root alone applies exact seven focused postimages/patch to its verified source parent, preserves unrelated edits, freezes actual integration source/config/cache/compiler/header/provider inputs and publishes coherent source/evidence as appropriate.",
+    "Prepare independently reviewed normal current mckernel.img named-target operation with legitimate CMake regeneration only, reusing matching accepted SDK/Linux/toolchain/ABI/body/test proof. No partial old object injection, forced green suite, held request replay or native operation is authorized here.",
+    "The actual produced image must show all13 intended Rust source owners (eleven new module exports plus two exact reused ptrace adapter exports), corresponding C definitions excluded, genuine current callback-table slot/relocation providers, precise typed ABI and source/log origins, no required undefined/unexplained provider, current104/72/node64/ops152/debug32 contracts and all retained accepted entries/data.",
+    "Independently qualify exact resulting current C ledger and every original01/03 DEFAULT required transitive provider, including actual table pointers and scoped callees. Source or controlled HOST cases do not alone close either whole DEFAULT condition.",
+    "Root freshly admits the one actual heavy producer and serialized passive reader under shared HOST4GiB/max3/CPUs0,6,7/all controllers+workers/fresh26GiB/disk floors and operation-specific source/current-owner controls. Require positive exact-birth/direct/full-family/streams/container retirement and actual scoped resource release before next heavy/cache owner."
+  ],
+  "credit_and_hold_limits": {
+    "canonical_or_index_written_by_reviewer": false,
+    "compiler_test_CMake_Docker_or_metadata_tool_run_by_reviewer": false,
+    "child_agents": false,
+    "new_lease_or_resource_release": false,
+    "new_image_or_C_retirement": false,
+    "whole_original_01_or_03_DEFAULT_accepted": false,
+    "whole_F03_F06_M14_M15_or_parent_accepted": false,
+    "preserved": "Actual original criteria, whole01 d11e/a234 pending real provider proof, original04f0f scope, native holder/currentfree/restoration/source/account/resource/UNKNOWN controls and genuine generic/exec/owned590e/TID/XPMEM/TERMRESET rejected/replay exclusions remain unchanged. Installed controls/refusals are not bypassed."
+  },
+  "root_next_action": "Exact seven-path source composition is GO. Root may integrate it and freeze the genuinely necessary current normal image operation for separate independent operation review and fresh admission; no additional source fixture or old green rerun is required by this review."
+}

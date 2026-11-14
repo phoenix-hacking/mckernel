@@ -1,0 +1,27 @@
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-signal-batch-preparation-1/fixture/signal_batch_actual.c:35:34: error: conflicting types for ‘monitor’
+   35 | static struct ihk_os_cpu_monitor monitor;
+      |                                  ^~~~~~~
+In file included from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-signal-batch-preparation-1/fixture/signal_batch_actual.c:9:
+/home/holden/mckernel/lib/include/ihk/monitor.h:6:31: note: previous declaration of ‘monitor’ was here
+    6 | extern struct ihk_os_monitor *monitor;
+      |                               ^~~~~~~
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-signal-batch-preparation-1/fixture/signal_batch_actual.c:85: warning: "ihk_mc_spinlock_lock_noirq" redefined
+   85 | #define ihk_mc_spinlock_lock_noirq fixture_runq_lock
+      | 
+In file included from /home/holden/mckernel/lib/include/ihk/lock.h:16,
+                 from /home/holden/mckernel/lib/include/ihk/mm.h:20,
+                 from /home/holden/mckernel/kernel/include/process.h:19,
+                 from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-signal-batch-preparation-1/fixture/signal_batch_actual.c:7:
+/home/holden/mckernel/arch/x86_64/kernel/include/arch-lock.h:47: note: this is the location of the previous definition
+   47 | #define ihk_mc_spinlock_lock_noirq __ihk_mc_spinlock_lock_noirq
+      | 
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-signal-batch-preparation-1/fixture/signal_batch_actual.c:86: warning: "ihk_mc_spinlock_unlock_noirq" redefined
+   86 | #define ihk_mc_spinlock_unlock_noirq fixture_runq_unlock
+      | 
+In file included from /home/holden/mckernel/lib/include/ihk/lock.h:16,
+                 from /home/holden/mckernel/lib/include/ihk/mm.h:20,
+                 from /home/holden/mckernel/kernel/include/process.h:19,
+                 from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-signal-batch-preparation-1/fixture/signal_batch_actual.c:7:
+/home/holden/mckernel/arch/x86_64/kernel/include/arch-lock.h:49: note: this is the location of the previous definition
+   49 | #define ihk_mc_spinlock_unlock_noirq __ihk_mc_spinlock_unlock_noirq
+      | 

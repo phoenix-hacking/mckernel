@@ -1,0 +1,791 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_FOUR_EXACT_CURRENT119_RELOCATION_SUPPLEMENTS_PENDING_INDEPENDENT_DISPOSITION",
+  "actual_Rust": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CONVERSION-FIRST-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o",
+    "bytes": 18483968,
+    "sha256": "52f739f3aeaba14db37bff8d466ab377fddaaccce40a4006f0219917a10a4ef9"
+  },
+  "actual_image": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CONVERSION-FIRST-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/mckernel.img",
+    "bytes": 10303496,
+    "sha256": "1cd7e4e66bdbd7d34bcca2e7cb698da814df470ffd726270a612a2d92faf8c38"
+  },
+  "preserved_first_reader_failures": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-ACTUAL-ARTIFACT-QUALIFICATION-1/ACTUAL119-ARTIFACT-FACTS.json",
+    "bytes": 103837,
+    "sha256": "c6fb7ede5eb7232029118ab75a8de56c135a431339453805fd1a4e2c286cfbc5"
+  },
+  "frozen_original_readers_unchanged": true,
+  "original389_unchanged": true,
+  "proofs": [
+    {
+      "name": "arch_vdso_map_log_bridge",
+      "input": {
+        "index": 4677,
+        "name": "arch_vdso_map_log_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 914,
+        "value": 0,
+        "size": 210
+      },
+      "final": {
+        "name": "arch_vdso_map_log_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684634976,
+        "size": 210
+      },
+      "unique_actual_Rust_owner": true,
+      "all_nonrelocated_instruction_bytes_equal": true,
+      "all_relocation_targets_proven": true,
+      "full_actual_final_function_bytes": true,
+      "relocations": [
+        {
+          "offset": 9,
+          "relocation_type": 1,
+          "kind": "EXACT_SELF_RELATIVE_JUMP_TABLE",
+          "section": ".lrodata.arch_vdso_map_log_bridge",
+          "bytes": 40,
+          "function_relative_targets": [
+            20,
+            186,
+            72,
+            174,
+            60
+          ],
+          "actual_final_table": "74cd83feffffffff1ace83feffffffffa8cd83feffffffff0ece83feffffffff9ccd83feffffffff",
+          "actual_final_address": "0xfffffffffe9056f8"
+        },
+        {
+          "offset": 22,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "mckernel_f06_vdso_map_debug",
+          "addend": 27,
+          "unbounded_S_plus_A": "0xfffffffffe8ff1bb",
+          "actual_u64": "0xfffffffffe8ff1bb",
+          "wrap64": false
+        },
+        {
+          "offset": 37,
+          "relocation_type": 1,
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "617263685f6d61705f7664736f28293a206e6f7420617661696c61626c650a00"
+        },
+        {
+          "offset": 47,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "kprintf",
+          "addend": 0,
+          "unbounded_S_plus_A": "0xfffffffffe874350",
+          "actual_u64": "0xfffffffffe874350",
+          "wrap64": false
+        },
+        {
+          "offset": 62,
+          "relocation_type": 1,
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "4552524f523a20616464696e67206d656d6f72792072616e676520666f7220767661722e2025640a00"
+        },
+        {
+          "offset": 116,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "mckernel_f06_vdso_offset",
+          "addend": 0,
+          "unbounded_S_plus_A": "0xfffffffffe95f930",
+          "actual_u64": "0xfffffffffe95f930",
+          "wrap64": false
+        },
+        {
+          "offset": 129,
+          "relocation_type": 1,
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "6d63657865635f7631303a207664736f5f6d6170207069643d256420636f6e7461696e65723d3078256c78207664736f3d3078256c78207664736f5f656e643d3078256c78206f66667365743d3078256c782073697a653d3078256c782070616765733d25640a00"
+        },
+        {
+          "offset": 139,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "kprintf",
+          "addend": 0,
+          "unbounded_S_plus_A": "0xfffffffffe874350",
+          "actual_u64": "0xfffffffffe874350",
+          "wrap64": false
+        },
+        {
+          "offset": 176,
+          "relocation_type": 1,
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "69686b5f6d635f70745f7365745f72616e6765206661696c65642e2025640a00"
+        },
+        {
+          "offset": 188,
+          "relocation_type": 1,
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "4552524f523a20616464696e67206d656d6f72792072616e676520666f72207664736f2e2025640a00"
+        },
+        {
+          "offset": 198,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "kprintf",
+          "addend": 0,
+          "unbounded_S_plus_A": "0xfffffffffe874350",
+          "actual_u64": "0xfffffffffe874350",
+          "wrap64": false
+        }
+      ]
+    },
+    {
+      "name": "arch_vdso_setup_log_bridge",
+      "input": {
+        "index": 4680,
+        "name": "arch_vdso_setup_log_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 924,
+        "value": 0,
+        "size": 100
+      },
+      "final": {
+        "name": "arch_vdso_setup_log_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684635504,
+        "size": 100
+      },
+      "unique_actual_Rust_owner": true,
+      "all_nonrelocated_instruction_bytes_equal": true,
+      "all_relocation_targets_proven": true,
+      "full_actual_final_function_bytes": true,
+      "relocations": [
+        {
+          "offset": 13,
+          "relocation_type": 1,
+          "kind": "EXACT_SELF_RELATIVE_JUMP_TABLE",
+          "section": ".lrodata.arch_vdso_setup_log_bridge",
+          "bytes": 32,
+          "function_relative_targets": [
+            24,
+            73,
+            36,
+            48
+          ],
+          "actual_final_table": "88cf83feffffffffb9cf83feffffffff94cf83feffffffffa0cf83feffffffff",
+          "actual_final_address": "0xfffffffffe905740"
+        },
+        {
+          "offset": 26,
+          "relocation_type": 1,
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "617263685f73657475705f7664736f3a207664736f5f6765745f7664736f5f696e666f206661696c65642e2025640a00"
+        },
+        {
+          "offset": 38,
+          "relocation_type": 1,
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "7664736f2064697361626c65643a20686f7374207667746f64206461746120756e617661696c61626c650a00"
+        },
+        {
+          "offset": 50,
+          "relocation_type": 1,
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "617263685f73657475705f7664736f3a207664736f5f6d61705f676c6f62616c5f7061676573206661696c65642e2025640a00"
+        },
+        {
+          "offset": 60,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "kprintf",
+          "addend": 0,
+          "unbounded_S_plus_A": "0xfffffffffe874350",
+          "actual_u64": "0xfffffffffe874350",
+          "wrap64": false
+        },
+        {
+          "offset": 75,
+          "relocation_type": 1,
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "783836206c6f63616c2067657474696d652064697361626c65643a20686f7374207667746f64206461746120756e617661696c61626c650a00"
+        },
+        {
+          "offset": 85,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "kprintf",
+          "addend": 0,
+          "unbounded_S_plus_A": "0xfffffffffe874350",
+          "actual_u64": "0xfffffffffe874350",
+          "wrap64": false
+        }
+      ]
+    },
+    {
+      "name": "f03_wait_log_v1",
+      "input": {
+        "index": 5037,
+        "name": "f03_wait_log_v1",
+        "bind": 1,
+        "type": 2,
+        "shndx": 1373,
+        "value": 0,
+        "size": 215
+      },
+      "final": {
+        "name": "f03_wait_log_v1",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684727040,
+        "size": 215
+      },
+      "unique_actual_Rust_owner": true,
+      "all_nonrelocated_instruction_bytes_equal": true,
+      "all_relocation_targets_proven": true,
+      "full_actual_final_function_bytes": true,
+      "relocations": [
+        {
+          "offset": 17,
+          "relocation_type": 1,
+          "kind": "EXACT_SELF_RELATIVE_JUMP_TABLE",
+          "section": ".lrodata.f03_wait_log_v1",
+          "bytes": 40,
+          "function_relative_targets": [
+            28,
+            169,
+            107,
+            138,
+            76
+          ],
+          "actual_final_table": "1c3585feffffffffa93585feffffffff6b3585feffffffff8a3585feffffffff4c3585feffffffff",
+          "actual_final_address": "0xfffffffffe905918"
+        },
+        {
+          "offset": 30,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "f03_wait_log_debug_v1",
+          "addend": 24,
+          "unbounded_S_plus_A": "0xfffffffffe8fe998",
+          "actual_u64": "0xfffffffffe8fe998",
+          "wrap64": false
+        },
+        {
+          "offset": 53,
+          "relocation_type": 1,
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "776169743428293a2063757272656e742d3e70726f632d3e7069643a2025642c207069643a2025640a00"
+        },
+        {
+          "offset": 63,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "kprintf",
+          "addend": 0,
+          "unbounded_S_plus_A": "0xfffffffffe874350",
+          "actual_u64": "0xfffffffffe874350",
+          "wrap64": false
+        },
+        {
+          "offset": 78,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "f03_wait_log_debug_v1",
+          "addend": 152,
+          "unbounded_S_plus_A": "0xfffffffffe8fea18",
+          "actual_u64": "0xfffffffffe8fea18",
+          "wrap64": false
+        },
+        {
+          "offset": 97,
+          "relocation_type": 1,
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "77616974342c6f75745f6e6f74666f756e640a00"
+        },
+        {
+          "offset": 109,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "f03_wait_log_debug_v1",
+          "addend": 88,
+          "unbounded_S_plus_A": "0xfffffffffe8fe9d8",
+          "actual_u64": "0xfffffffffe8fe9d8",
+          "wrap64": false
+        },
+        {
+          "offset": 128,
+          "relocation_type": 1,
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "776169743428293a20776f6b656e2075700a00"
+        },
+        {
+          "offset": 140,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "f03_wait_log_debug_v1",
+          "addend": 120,
+          "unbounded_S_plus_A": "0xfffffffffe8fe9f8",
+          "actual_u64": "0xfffffffffe8fe9f8",
+          "wrap64": false
+        },
+        {
+          "offset": 159,
+          "relocation_type": 1,
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "77616974342c6f75745f666f756e640a00"
+        },
+        {
+          "offset": 171,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "f03_wait_log_debug_v1",
+          "addend": 56,
+          "unbounded_S_plus_A": "0xfffffffffe8fe9b8",
+          "actual_u64": "0xfffffffffe8fe9b8",
+          "wrap64": false
+        },
+        {
+          "offset": 192,
+          "relocation_type": 1,
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "77616974342c736c656570696e670a00"
+        },
+        {
+          "offset": 202,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "kprintf",
+          "addend": 0,
+          "unbounded_S_plus_A": "0xfffffffffe874350",
+          "actual_u64": "0xfffffffffe874350",
+          "wrap64": false
+        }
+      ]
+    },
+    {
+      "name": "vdso_get_vdso_info",
+      "input": {
+        "index": 7320,
+        "name": "vdso_get_vdso_info",
+        "bind": 1,
+        "type": 2,
+        "shndx": 4704,
+        "value": 0,
+        "size": 946
+      },
+      "final": {
+        "name": "vdso_get_vdso_info",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073685268816,
+        "size": 946
+      },
+      "unique_actual_Rust_owner": true,
+      "all_nonrelocated_instruction_bytes_equal": true,
+      "all_relocation_targets_proven": true,
+      "full_actual_final_function_bytes": true,
+      "relocations": [
+        {
+          "offset": 18,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "locals",
+          "addend": 0,
+          "unbounded_S_plus_A": "0xfffffffffe95f920",
+          "actual_u64": "0xfffffffffe95f920",
+          "wrap64": false
+        },
+        {
+          "offset": 43,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "num_processors",
+          "addend": 0,
+          "unbounded_S_plus_A": "0xfffffffffe9009d0",
+          "actual_u64": "0xfffffffffe9009d0",
+          "wrap64": false
+        },
+        {
+          "offset": 98,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "clv",
+          "addend": 0,
+          "unbounded_S_plus_A": "0xfffffffffe95a0f8",
+          "actual_u64": "0xfffffffffe95a0f8",
+          "wrap64": false
+        },
+        {
+          "offset": 126,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "_RNvNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy13f06_vdso_info14production_log5ENTER",
+          "addend": 24,
+          "unbounded_S_plus_A": "0xfffffffffe8ff018",
+          "actual_u64": "0xfffffffffe8ff018",
+          "wrap64": false
+        },
+        {
+          "offset": 145,
+          "relocation_type": 1,
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "7664736f5f6765745f7664736f5f696e666f28290a00"
+        },
+        {
+          "offset": 157,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "kprintf",
+          "addend": 0,
+          "unbounded_S_plus_A": "0xfffffffffe874350",
+          "actual_u64": "0xfffffffffe874350",
+          "wrap64": false
+        },
+        {
+          "offset": 169,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "mckernel_f06_vdso_state",
+          "addend": 84,
+          "unbounded_S_plus_A": "0xfffffffffe95f98c",
+          "actual_u64": "0xfffffffffe95f98c",
+          "wrap64": false
+        },
+        {
+          "offset": 185,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "mckernel_f06_vdso_state",
+          "addend": 76,
+          "unbounded_S_plus_A": "0xfffffffffe95f984",
+          "actual_u64": "0xfffffffffe95f984",
+          "wrap64": false
+        },
+        {
+          "offset": 202,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "mckernel_f06_vdso_state",
+          "addend": 68,
+          "unbounded_S_plus_A": "0xfffffffffe95f97c",
+          "actual_u64": "0xfffffffffe95f97c",
+          "wrap64": false
+        },
+        {
+          "offset": 219,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "mckernel_f06_vdso_state",
+          "addend": 60,
+          "unbounded_S_plus_A": "0xfffffffffe95f974",
+          "actual_u64": "0xfffffffffe95f974",
+          "wrap64": false
+        },
+        {
+          "offset": 236,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "mckernel_f06_vdso_state",
+          "addend": 52,
+          "unbounded_S_plus_A": "0xfffffffffe95f96c",
+          "actual_u64": "0xfffffffffe95f96c",
+          "wrap64": false
+        },
+        {
+          "offset": 253,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "mckernel_f06_vdso_state",
+          "addend": 44,
+          "unbounded_S_plus_A": "0xfffffffffe95f964",
+          "actual_u64": "0xfffffffffe95f964",
+          "wrap64": false
+        },
+        {
+          "offset": 270,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "mckernel_f06_vdso_state",
+          "addend": 36,
+          "unbounded_S_plus_A": "0xfffffffffe95f95c",
+          "actual_u64": "0xfffffffffe95f95c",
+          "wrap64": false
+        },
+        {
+          "offset": 287,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "mckernel_f06_vdso_state",
+          "addend": 28,
+          "unbounded_S_plus_A": "0xfffffffffe95f954",
+          "actual_u64": "0xfffffffffe95f954",
+          "wrap64": false
+        },
+        {
+          "offset": 304,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "mckernel_f06_vdso_state",
+          "addend": 20,
+          "unbounded_S_plus_A": "0xfffffffffe95f94c",
+          "actual_u64": "0xfffffffffe95f94c",
+          "wrap64": false
+        },
+        {
+          "offset": 321,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "mckernel_f06_vdso_state",
+          "addend": 12,
+          "unbounded_S_plus_A": "0xfffffffffe95f944",
+          "actual_u64": "0xfffffffffe95f944",
+          "wrap64": false
+        },
+        {
+          "offset": 338,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "mckernel_f06_vdso_state",
+          "addend": 0,
+          "unbounded_S_plus_A": "0xfffffffffe95f938",
+          "actual_u64": "0xfffffffffe95f938",
+          "wrap64": false
+        },
+        {
+          "offset": 355,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "mckernel_f06_vdso_state",
+          "addend": 8,
+          "unbounded_S_plus_A": "0xfffffffffe95f940",
+          "actual_u64": "0xfffffffffe95f940",
+          "wrap64": false
+        },
+        {
+          "offset": 381,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "linux_page_offset_base",
+          "addend": 0,
+          "unbounded_S_plus_A": "0xfffffffffe95f918",
+          "actual_u64": "0xfffffffffe95f918",
+          "wrap64": false
+        },
+        {
+          "offset": 421,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "x86_addr_log_straight_debug",
+          "addend": 24,
+          "unbounded_S_plus_A": "0xfffffffffe8fffd8",
+          "actual_u64": "0xfffffffffe8fffd8",
+          "wrap64": false
+        },
+        {
+          "offset": 457,
+          "relocation_type": 1,
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a204d41505f53545f5354415254203c3d203078256c78203c3d204d41505f46495845445f53544152540a00"
+        },
+        {
+          "offset": 467,
+          "relocation_type": 1,
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "766972745f746f5f7068797300"
+        },
+        {
+          "offset": 479,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "kprintf",
+          "addend": 0,
+          "unbounded_S_plus_A": "0xfffffffffe874350",
+          "actual_u64": "0xfffffffffe874350",
+          "wrap64": false
+        },
+        {
+          "offset": 493,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "x86_kernel_phys_base",
+          "addend": 0,
+          "unbounded_S_plus_A": "0xfffffffffe990430",
+          "actual_u64": "0xfffffffffe990430",
+          "wrap64": false
+        },
+        {
+          "offset": 506,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "x86_addr_log_kernel_debug",
+          "addend": 24,
+          "unbounded_S_plus_A": "0xfffffffffe8fffb8",
+          "actual_u64": "0xfffffffffe8fffb8",
+          "wrap64": false
+        },
+        {
+          "offset": 525,
+          "relocation_type": 1,
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a204d41505f4b45524e454c5f5354415254203c3d203078256c78203c3d206c696e75785f706167655f6f66667365745f626173650a00"
+        },
+        {
+          "offset": 535,
+          "relocation_type": 1,
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "766972745f746f5f7068797300"
+        },
+        {
+          "offset": 547,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "kprintf",
+          "addend": 0,
+          "unbounded_S_plus_A": "0xfffffffffe874350",
+          "actual_u64": "0xfffffffffe874350",
+          "wrap64": false
+        },
+        {
+          "offset": 559,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "mckernel_f06_vdso_state",
+          "addend": 25165824,
+          "unbounded_S_plus_A": "0x1000000000015f938",
+          "actual_u64": "0x15f938",
+          "wrap64": true
+        },
+        {
+          "offset": 653,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "ihk_ikc_write_queue",
+          "addend": 0,
+          "unbounded_S_plus_A": "0xfffffffffe867ef0",
+          "actual_u64": "0xfffffffffe867ef0",
+          "wrap64": false
+        },
+        {
+          "offset": 670,
+          "relocation_type": 1,
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a20636f756c646e277420617070656e64207061636b6574202d3e207265747279696e670a00"
+        },
+        {
+          "offset": 680,
+          "relocation_type": 1,
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "69686b5f696b635f73656e6400"
+        },
+        {
+          "offset": 716,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "kprintf",
+          "addend": 0,
+          "unbounded_S_plus_A": "0xfffffffffe874350",
+          "actual_u64": "0xfffffffffe874350",
+          "wrap64": false
+        },
+        {
+          "offset": 742,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "mckernel_f06_vdso_state",
+          "addend": 8,
+          "unbounded_S_plus_A": "0xfffffffffe95f940",
+          "actual_u64": "0xfffffffffe95f940",
+          "wrap64": false
+        },
+        {
+          "offset": 777,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "mckernel_f06_vdso_state",
+          "addend": 8,
+          "unbounded_S_plus_A": "0xfffffffffe95f940",
+          "actual_u64": "0xfffffffffe95f940",
+          "wrap64": false
+        },
+        {
+          "offset": 799,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "ihk_mc_interrupt_host",
+          "addend": 0,
+          "unbounded_S_plus_A": "0xfffffffffe869e40",
+          "actual_u64": "0xfffffffffe869e40",
+          "wrap64": false
+        },
+        {
+          "offset": 817,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "mckernel_f06_vdso_state",
+          "addend": 0,
+          "unbounded_S_plus_A": "0xfffffffffe95f938",
+          "actual_u64": "0xfffffffffe95f938",
+          "wrap64": false
+        },
+        {
+          "offset": 847,
+          "relocation_type": 1,
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "7664736f5f6765745f7664736f5f696e666f3a2069686b5f696b635f73656e64206661696c65642e2025640a00"
+        },
+        {
+          "offset": 862,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "kprintf",
+          "addend": 0,
+          "unbounded_S_plus_A": "0xfffffffffe874350",
+          "actual_u64": "0xfffffffffe874350",
+          "wrap64": false
+        },
+        {
+          "offset": 881,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "_RNvNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy13f06_vdso_info14production_log4EXIT",
+          "addend": 24,
+          "unbounded_S_plus_A": "0xfffffffffe8feff8",
+          "actual_u64": "0xfffffffffe8feff8",
+          "wrap64": false
+        },
+        {
+          "offset": 900,
+          "relocation_type": 1,
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "7664736f5f6765745f7664736f5f696e666f28293a2025640a00"
+        },
+        {
+          "offset": 915,
+          "relocation_type": 1,
+          "kind": "NAMED_R_X86_64_64",
+          "target": "kprintf",
+          "addend": 0,
+          "unbounded_S_plus_A": "0xfffffffffe874350",
+          "actual_u64": "0xfffffffffe874350",
+          "wrap64": false
+        }
+      ]
+    }
+  ],
+  "interpretation": "Three newly emitted selfjump tables were outside fixed old-reader function whitelist. One R_X86_64_64 result wraps modulo2^64; old Python reader compared an unbounded integer. No input/output/expected389 bytes altered.",
+  "artifact_acceptance": false,
+  "native_acceptance": false,
+  "wholefile_acceptance": false,
+  "runtime_authority": null
+}

@@ -1,0 +1,64 @@
+{
+  "schema": "mckernel.memory-futex-static-preparation.v1",
+  "status": "PASS_STATIC_PREPARATION_LINUX_REFERENCE_ONLY",
+  "authority": "Dispatcher explicitly admitted these two fixed sources and ordinary-user reference execution under the existing static GCC command/profile; no new execution review framework.",
+  "reused_profile": "docs/verification/evidence/signal-mask-restore-compile-profile-review-20261017.json",
+  "reused_toolchain_evidence": "docs/verification/evidence/signal-mask-restore-static-reference-20261017.json",
+  "artifact_root": "/home/holden/mckernel-work/scratch/memory-futex-static-preparation-20261017-9l2wCV",
+  "complete_observation": {
+    "relative_path": "observation.json",
+    "sha256": "1eeee93b1f45cd9eaf381059f581a36e73c38db085dee48fbf82d30fa30f4a2f",
+    "observer_relative_path": "observe.py",
+    "observer_sha256": "403c9b5ade781525e88e61988bf1e701a7b490b074d67c6338cda166abe18462",
+    "contains": "Exact compile/readelf/payload argv, cwd, clean environment, timestamps, UID/EUID, empty initial mask, limits, storage floors, input/tool/static-link/header dependency hashes, binary/depfile hashes, output/status hashes, ELF checks and exact pre-frozen/observed stdout bytes. Raw stdout/stderr/status files remain beside this observation; all failed attempts would be preserved."
+  },
+  "fixed_inputs_sha256": {
+    "scripts/application-tests/cases/memory/memory.anonymous-zero.c": "ca69fa1fe2fba5203b6b4a574be85c879ff2cef4d8e1483a2c11464092ee107e",
+    "scripts/application-tests/oracles/memory.anonymous-zero.json": "cafb141f5801232d1e903082e11b1c77e7a6ab48c5b7ba555c9081c38fd81cce",
+    "scripts/application-tests/cases/futex/futex.wait-mismatch.c": "fd7850ca265e5eb82370f0ee309cc546cc2e645d9118a38eca83dc3eaefdfb9d",
+    "scripts/application-tests/oracles/futex.wait-mismatch.json": "b751126490cf9ff206408137173e1ca64634f2f484bb35058ba206f174bb8791"
+  },
+  "execution": {
+    "uid_policy": "Ordinary user only; observer refused UID0 or EUID0",
+    "resource_wrapper": "/usr/bin/timeout --signal=TERM --kill-after=5s 120s /usr/bin/taskset -c 6 /usr/bin/prlimit --as=2147483648 --cpu=100 --nofile=256 --fsize=67108864 --core=0 -- /usr/bin/env -i PATH=/usr/bin:/bin LC_ALL=C LANG=C TZ=UTC PYTHONDONTWRITEBYTECODE=1 HOME=<artifact_root>/home TMPDIR=<artifact_root>/tmp /home/holden/anaconda3/bin/python3 -B <artifact_root>/observe.py",
+    "environment": {"PATH": "/usr/bin:/bin", "LANG": "C", "LC_ALL": "C", "TZ": "UTC", "PYTHONDONTWRITEBYTECODE": "1", "HOME": "<artifact_root>/home", "TMPDIR": "<artifact_root>/tmp"},
+    "compiler_argv_pattern": ["/usr/bin/gcc", "-std=gnu11", "-O2", "-Wall", "-Wextra", "-Werror", "-static", "-fno-pie", "-no-pie", "-Wl,-z,noexecstack", "-MD", "-MF", "<artifact_root>/<case>/app.d", "<fixed_absolute_source>", "-o", "<artifact_root>/<case>/app"],
+    "compiler_cwd_pattern": "<artifact_root>/<case>",
+    "compiler_timeout_seconds": 60,
+    "readelf_argv_pattern": ["/usr/bin/readelf", "-W", "-h", "-l", "<artifact_root>/<case>/app"],
+    "payload_argv_pattern": ["<artifact_root>/<case>/app"],
+    "payload_cwd_pattern": "<artifact_root>/<case>/work",
+    "payload_timeout_seconds": 10,
+    "initial_signal_mask": [],
+    "pre_payload_signal_masks_empty": true,
+    "serial": true,
+    "all_command_exit_statuses": 0,
+    "compiler_stdout_stderr": "Empty for both compiles",
+    "payload_stderr": "Empty for both references"
+  },
+  "cases": {
+    "memory.anonymous-zero": {
+      "binary_relative_path": "memory.anonymous-zero/app",
+      "binary_sha256": "45e7f5cb35864992606c50219175c8a93abf1410bf7bbd2ac1235365ad904ece",
+      "binary_size": 871848,
+      "reference_runs": 1,
+      "expected_and_observed_stdout_utf8": "bytes=1 zero_bad=1 fill_bad=1 munmap=0\nbytes=4095 zero_bad=4095 fill_bad=4095 munmap=0\nbytes=4096 zero_bad=4096 fill_bad=4096 munmap=0\nbytes=4097 zero_bad=4097 fill_bad=4097 munmap=0\nbytes=65553 zero_bad=65553 fill_bad=65553 munmap=0\nbytes=1048576 zero_bad=1048576 fill_bad=1048576 munmap=0\n",
+      "oracle_authority": "Existing immutable oracle remains draft with relational assertions and unresolved canonical freeze. This additive record freezes the exact six predicted lines before compilation/execution and compares them byte-for-byte without editing or promoting that oracle.",
+      "elf": {"static_no_interp_no_dynamic": true, "no_wx_load": true, "nonexecuting_stack": true}
+    },
+    "futex.wait-mismatch": {
+      "binary_relative_path": "futex.wait-mismatch/app",
+      "binary_sha256": "8875749bebe5b153791cd088ac9d2beeef807ac90defc73e7bad629b2b4fabf5",
+      "binary_size": 871920,
+      "reference_runs": 1,
+      "expected_and_observed_stdout_utf8": "futex-wait-mismatch rc=-1 errno=11\nword=0\nbuffer-end=42\n",
+      "oracle_authority": "Exact frozen draft lines with LF terminators, exit0 and empty stderr; no queue-introspection claim beyond the unchanged source and observed nonblocking mismatch return.",
+      "elf": {"static_no_interp_no_dynamic": true, "no_wx_load": true, "nonexecuting_stack": true}
+    }
+  },
+  "failures": [],
+  "bounded_corrections_used": 0,
+  "scope": "Static artifact preparation and actual Linux reference execution only. No fixed source/oracle, collector or production file changed; no collector compilation/execution, root, container, network, guest or Git operation.",
+  "next_dependency": "First new guest remains signal.mask-restore after the current fresh image and reviewed release. These two artifacts are prepared only for later source-bound diagnostic overlays using the existing default collector pattern; no guest release is inferred.",
+  "acceptance_delta": {"mckernel_runtime": 0, "current_candidate_builds": 0, "real_guest_apps": 0, "formal_application_cases": 0, "production_gates": 0}
+}

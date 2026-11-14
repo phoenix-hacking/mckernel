@@ -1,0 +1,14 @@
+--- /home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/merged-source-1/correction1/source/long_transport.py
++++ /home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/source/long_transport.py
+@@ -226,9 +226,9 @@
+     fd = os.open(backing, os.O_RDONLY | os.O_NOFOLLOW | os.O_CLOEXEC)
+     try:
+         info = os.fstat(fd)
+-        need(stat.S_ISREG(info.st_mode) and info.st_size == 142 * 2**30 and
++        need(stat.S_ISREG(info.st_mode) and info.st_size == 110 * 2**30 and
+              info.st_dev == Path(parent).stat().st_dev and info.st_dev != device,
+-             'exact142GiB host sparse backing and distinct output filesystem')
++             'exact110GiB host sparse backing and distinct output filesystem')
+         gap = max(0, info.st_size - info.st_blocks * 512)
+     finally:
+         os.close(fd)

@@ -1,0 +1,118 @@
+{
+  "schema": "scratch22-source-adapter-work-evidence-v1",
+  "status": "PASS_DISPOSABLE_TESTS_ONLY",
+  "base_commit": "2fd71645",
+  "implementation": {
+    "path": "scripts/prepare_native_exact_scratch22.py",
+    "sha256": "3c3dd179301ee9d16ecf8c9e918fee304ee76cb6a89bc2a987235c1f52ec6663"
+  },
+  "tests": {
+    "path": "scripts/tests/test_prepare_native_exact_scratch22.py",
+    "sha256": "71d1c0658fb67b65df761ce5b13f145ccb54a5f0ded64e0e06edf5fbcde1a97f",
+    "command": "python3 -B -m unittest -v scripts.tests.test_prepare_native_exact_scratch22",
+    "returncode": 0,
+    "cases": 22,
+    "elapsed_seconds": 0.095,
+    "profile": "one CPU / two GiB planning ceiling; disposable Python/Git hash-object only; no Docker, sudo, network, compiler or guest"
+  },
+  "ancestor": {
+    "path": "docs/verification/evidence/native-exact-candidate-delta-preparation-scratch18-20261001.py",
+    "sha256": "23d2dcc45db9e9268456a202e46c0e25e982b13d91413271cf00452d0564a731",
+    "modified": false
+  },
+  "failed_attempts": [
+    {
+      "command": "python3 -B -m unittest -v scripts.tests.test_prepare_native_exact_scratch22",
+      "returncode": 1,
+      "cases": 14,
+      "errors": 3,
+      "error_subcases": "test_dynamic_census_accepts_different_complete_topologies count=2,6,7",
+      "exception": "_scratch22_private_ancestor.Refusal: unauthenticated alias bytes/mode: evidence",
+      "cause": "Fixture file inherited launcher umask 0077 and was mode 0600 while frozen Git oracle required 100644; production validation correctly rejected it.",
+      "bounded_correction": "Explicit chmod 0644 in disposable fixture. No production oracle changed.",
+      "corrected_run": "14 tests passed in 0.022 seconds; subsequently expanded to 16 tests, all pass."
+    }
+  ],
+  "regressions": [
+    "scratch19 frozen Python target/old defaults reproduced and all inherited default parameters explicitly supplied",
+    "scratch20 candidate owner exclusion mismatch refuses before inherited preparation",
+    "all 486 shared inputs required; scratch15/16/17/18/20/21 aliases included",
+    "link counts derive from complete authenticated alias census; disposable two/six/seven-link topologies pass",
+    "unlisted hardlinks, replaced aliases, changed bytes, duplicate roots and nested symlinks refuse",
+    "release hash drift, missing authority, DRAFT cleanup and mismatching source authority review refuse",
+    "exact fetched origin ref target/tree/parent and exact delta are bound externally",
+    "fresh scratch22 namespace and scratch18 owner exclusion ABI slot retained",
+    "canonical candidate BuildOwner.validate invoked at prepared-request boundary; executable request rejected",
+    "real --materialize adapter branch calls inherited preparation with every argument explicit and execute=true only after fresh reviewed preparation release",
+    "actual cleanup result, original execution release, canonical plan and complete nine-row journal chain, capture and archive identities are checked",
+    "terminal cleanup result without independently accepted exact postflight record refuses",
+    "same-author preparation review and helper hash drift refuse before materialization"
+  ],
+  "authority": {
+    "materialization_performed": false,
+    "runtime_performed": false,
+    "scratch21_replayed": false,
+    "execution_released": false,
+    "target_guessed_from_HEAD": false,
+    "source_release_created": false,
+    "source_only_release_schema": "scratch22-source-admission-v1",
+    "required_common_release_fields": ["schema", "status", "attempt=scratch22", "execution_released=false", "target", "target_tree", "baseline", "source_base", "fetched_ref", "exact_delta", "cleanup.path", "cleanup.sha256", "cleanup_release.path", "cleanup_release.sha256", "cleanup_postflight.path", "cleanup_postflight.sha256", "source_checks.path", "source_checks.sha256", "source_review.path", "source_review.sha256"],
+    "cleanup_receipt_contract": "Actual schema scratch21.cleanup-result.v1, status PASS_EXECUTED or PASS_TERMINAL_REPLAY, terminal/container_absent true, original container and filesystem UUID, exact release/plan hashes and live plan/journal/capture/archive identities. Original schema scratch21.cleanup-release.v1 with PASS_EXECUTION_RELEASE and independent source/execution reviews must match canonical release_sha256. Complete nine-row plan-bound journal required. Existing independently accepted postflight schema scratch21.cleanup-postflight-review.v1, decision PASS_CLEANUP joins exact raw result_sha256 and canonical executed release_sha256. No normalized cleanup receipt is produced or required.",
+    "source_review_contract": "Actual source author evidence status PASS_SOURCE_CHECKS_ONLY with five successful ordered checks and exact target-bound file hashes, plus actual independent review decision PASS_SOURCE_AUTHORITY joining author_record path/hash and files_sha256. No change to NOT_READY, pending compiler or runtime acceptance statuses.",
+    "materialization_release_contract": "Schema scratch22.preparation-release.v1, status PASS_PREPARATION_EXECUTION_RELEASE and the common fields above; additionally author, controller, script_sha256, tests_sha256, ancestor_sha256, preparation_review path/hash and live_binding. Exact controller Git blobs must equal current helper/test/ancestor hashes. Independent preparation review decision PASS_PREPARATION_EXECUTION requires a reviewer different from author, implementation_ownership=false, matching target/tree, and reviewed_inputs_sha256 containing exact script/tests/ancestor and cleanup/cleanup_release/cleanup_postflight/source_checks/source_review hashes.",
+    "live_binding_contract": "scratch_device, scratch_uuid and boot_id freshly bound in the reviewed preparation release. --materialize rechecks canonical real scratch root, current device/boot, ext4 UUID and rw/nodev/nosuid profile, and host/scratch capacity floors before inherited preparation. Inherited materialization rechecks all fresh destinations and computes full storage requirements."
+  },
+  "remaining_prerequisites": [
+    "Accepted scratch21-specific cleanup transaction and fresh independently reviewed release",
+    "RS-011 and all ordered source checks pass independently reviewed current sources",
+    "Commit, push, fetch and verify exact target/tree/parent/delta; produce externally digest-bound source-only admission release",
+    "Independent review of this adapter and its authority receipt contracts before running even source admission",
+    "Fresh live UUID/device/boot/lock/capacity checks bound to any later materialization execution release",
+    "Accepted new exact independent preparation execution release for the implemented --materialize path; this worker has not invoked it",
+    "Canonical BuildOwner validation and non-executable request check run after inherited materialization; independent prepared-artifact review and new one-shot heavy release remain required"
+  ],
+  "next_command_template": "python3 -B scripts/prepare_native_exact_scratch22.py --release ACCEPTED_RELEASE_PATH --release-sha256 EXTERNALLY_VERIFIED_RELEASE_SHA256",
+  "next_command_scope": "Read-only admission only, blocked pending prerequisites; no real path or authority digest is supplied or invented.",
+  "critical_path_usability_proposal": {
+    "status": "HISTORICAL_PROPOSAL_SUPERSEDED_BY_DISPATCHER_AUTHORIZED_BOUNDED_CORRECTION_BELOW",
+    "inspection": "Current adapter is a read-only admission component. It cannot create the fresh candidate, manifest or request, so by itself it does not unblock the next image build. Its invented cleanup status=PASS/scope=scratch21-cleanup input is also incompatible with the actual cleanup executor output. Do not manufacture another acceptance gate or relabel original cleanup evidence to fit that draft contract.",
+    "actual_cleanup_contract_inspected": {
+      "source": "scripts/native_exact_scratch21_terminal_cleanup.py",
+      "configure_authority": "schema=scratch21.cleanup-release.v1, status=PASS_EXECUTION_RELEASE; exact script/tests/Git bindings, fresh observation and independent source/execution review receipts",
+      "execution_result": "status=PASS_EXECUTED, terminal=true, plan_sha256, publisher_contract",
+      "terminal_reconciliation_result": "status=PASS_TERMINAL_REPLAY, terminal=true, publisher_contract",
+      "durable_plan": "schema=scratch21.terminal-cleanup.v1 with release_sha256 binding the canonical accepted cleanup release",
+      "durable_journal": "The final complete event is plan_sha256-bound; Transaction.state validates chain and filesystem transitions.",
+      "mapping": "Consume exact dispatcher-retained cleanup release/result/plan/journal paths and hashes directly. Require the original executed terminal result and accepted transaction evidence, or accepted terminal replay reconciliation referencing that original result. An execution release alone or PASS_VALIDATE_ONLY is insufficient. This maps the existing cleanup acceptance requirement; it does not add a new cleanup gate."
+    },
+    "minimum_wiring": [
+      "Extract common read-only source/cleanup/alias admission from prepare into one internal function returning the released target and explicit inherited argument dictionary. Keep prepare and its CLI validate-only.",
+      "Replace invented receipt scope/status requirements with parsing of the exact actual accepted cleanup and source-review records selected by dispatcher. Preserve byte hashes, original schemas, terminal checks and exact target/tree bindings; do not create normalized acceptance receipts solely for this adapter.",
+      "Add a separately callable materialize_preparation entrypoint or a fresh scratch22 preparation wrapper modeled on the inspected scratch21 preparation wrapper. It must require the existing independently reviewed preparation release binding exact adapter/test/ancestor/controller source hashes, fresh scratch22 destinations and retained predecessor identities. No authority transfers from scratch21.",
+      "After that existing preparation release is accepted, rerun common admission and fresh capacity/UUID/device/lease checks immediately before the call. Derive alias count from the authenticated six-root census rather than pinning six, and require all inherited destinations including the owner scratch18 exclusion slot to remain absent.",
+      "Copy the fully explicit inherited_arguments mapping and change only execute to true at this separately released preparation entrypoint; call _IMPL.prepare(source, scratch15, scratch, **args). This creates fresh scratch22 metadata, blobs, canonical manifest and non-executable request. It performs no Docker build or guest launch.",
+      "The inherited implementation already runs canonical candidate driver.verify_inputs and BuildOwner.validate before returning PASS_PREPARE_ONLY. Also call validate_prepared_request on its exact returned request to enforce preparation_only=true, executable=false, execution_released=false and the scratch18 owner exclusion slot. Preserve inherited journal/terminal evidence on all exceptions.",
+      "Independently review the prepared artifact and issue the already required fresh one-shot heavy release. Preparation materialization must not grant build or guest authority."
+    ],
+    "minimum_disposable_checks_before_release": [
+      "Actual cleanup executor PASS_EXECUTED plus bound complete plan/journal admits; NOT_RELEASED, PASS_VALIDATE_ONLY, missing complete event, wrong release/plan hashes and quarantine refuse before inherited execute.",
+      "Materialization entrypoint rejects absent or drifting exact preparation release/helper/tests/controller bindings; validate-only entrypoint always supplies execute=false.",
+      "With all external boundaries mocked, materialization calls inherited prepare exactly once with every parameter explicit and execute=true, then validates its exact returned request through the real candidate-module boundary adapter.",
+      "Canonical owner validation failure preserves the inherited terminal/journal and grants no further execution. No disposable test touches real scratch or constructs Docker."
+    ],
+    "source_review_mapping_pending": "Resolved by direct author/reviewer coordination: rs011-authority-20261017.json status PASS_SOURCE_CHECKS_ONLY; rs011-authority-independent-review-20261017.json decision PASS_SOURCE_AUTHORITY with exact author_record and files_sha256. Records are not yet accepted/frozen at this worker's last observation; adapter does not fabricate them.",
+    "execution_now": false,
+    "code_expanded": false,
+    "nearest_next_action": "Dispatcher independent review of current adapter plus this proposal, then authorize the bounded wiring correction against actual cleanup/source evidence contracts."
+  },
+  "dispatcher_authorized_bounded_correction": {
+    "implemented": true,
+    "authorization": "Dispatcher explicitly authorized real --materialize path gated by fresh exact independent preparation execution release, while preserving read-only default and consuming actual cleanup/source evidence contracts.",
+    "result": "Read-only prepare remains default. --materialize validates the separate preparation release and all existing prerequisite records, rechecks live scratch identity/capacity, and calls the reviewed inherited prepare with execute=true and every default explicit. It then validates the exact returned non-executable request with canonical BuildOwner.validate. No Docker build, root action or guest is enabled.",
+    "test_runs": ["21 disposable tests pass in 0.117 seconds", "22 disposable tests pass in 0.095 seconds after adding agreed exact independent cleanup postflight join"],
+    "code_executed_live": false,
+    "next_command_template_after_existing_prerequisites": "python3 -B scripts/prepare_native_exact_scratch22.py --release ACCEPTED_PREPARATION_RELEASE_PATH --release-sha256 EXTERNALLY_VERIFIED_RELEASE_SHA256 --materialize",
+    "ready_next_step": "Independent corrected adapter source review; accepted cleanup/source evidence and actual fresh preparation release follow."
+  },
+  "acceptance_delta": {"current_candidate_builds": 0, "real_guest_apps": 0, "formal_applications": 0, "production_gates": 0}
+}

@@ -1,0 +1,102 @@
+
+docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT109-NEXT-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/mckernel.img:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+fffffffffe851780 <f03_ptrace_poketext_v1>:
+fffffffffe851780:	55                   	push   %rbp
+fffffffffe851781:	48 89 e5             	mov    %rsp,%rbp
+fffffffffe851784:	41 57                	push   %r15
+fffffffffe851786:	41 56                	push   %r14
+fffffffffe851788:	53                   	push   %rbx
+fffffffffe851789:	50                   	push   %rax
+fffffffffe85178a:	49 89 d6             	mov    %rdx,%r14
+fffffffffe85178d:	49 89 f7             	mov    %rsi,%r15
+fffffffffe851790:	89 fe                	mov    %edi,%esi
+fffffffffe851792:	48 b8 70 72 85 fe ff 	movabs $0xfffffffffe857270,%rax
+fffffffffe851799:	ff ff ff 
+fffffffffe85179c:	31 ff                	xor    %edi,%edi
+fffffffffe85179e:	ff d0                	call   *%rax
+fffffffffe8517a0:	48 85 c0             	test   %rax,%rax
+fffffffffe8517a3:	74 44                	je     fffffffffe8517e9 <f03_ptrace_poketext_v1+0x69>
+fffffffffe8517a5:	48 89 c3             	mov    %rax,%rbx
+fffffffffe8517a8:	f7 80 58 10 00 00 60 	testl  $0x60,0x1058(%rax)
+fffffffffe8517af:	00 00 00 
+fffffffffe8517b2:	48 8b b8 68 10 00 00 	mov    0x1068(%rax),%rdi
+fffffffffe8517b9:	74 3a                	je     fffffffffe8517f5 <f03_ptrace_poketext_v1+0x75>
+fffffffffe8517bb:	48 85 ff             	test   %rdi,%rdi
+fffffffffe8517be:	74 4a                	je     fffffffffe85180a <f03_ptrace_poketext_v1+0x8a>
+fffffffffe8517c0:	4c 89 75 e0          	mov    %r14,-0x20(%rbp)
+fffffffffe8517c4:	48 b8 f0 a5 88 fe ff 	movabs $0xfffffffffe88a5f0,%rax
+fffffffffe8517cb:	ff ff ff 
+fffffffffe8517ce:	48 8d 55 e0          	lea    -0x20(%rbp),%rdx
+fffffffffe8517d2:	b9 08 00 00 00       	mov    $0x8,%ecx
+fffffffffe8517d7:	4c 89 fe             	mov    %r15,%rsi
+fffffffffe8517da:	ff d0                	call   *%rax
+fffffffffe8517dc:	85 c0                	test   %eax,%eax
+fffffffffe8517de:	0f 84 e3 00 00 00    	je     fffffffffe8518c7 <f03_ptrace_poketext_v1+0x147>
+fffffffffe8517e4:	4c 63 f0             	movslq %eax,%r14
+fffffffffe8517e7:	eb 28                	jmp    fffffffffe851811 <f03_ptrace_poketext_v1+0x91>
+fffffffffe8517e9:	49 c7 c6 fd ff ff ff 	mov    $0xfffffffffffffffd,%r14
+fffffffffe8517f0:	e9 c4 00 00 00       	jmp    fffffffffe8518b9 <f03_ptrace_poketext_v1+0x139>
+fffffffffe8517f5:	49 c7 c6 fb ff ff ff 	mov    $0xfffffffffffffffb,%r14
+fffffffffe8517fc:	f0 ff 8b 14 12 00 00 	lock decl 0x1214(%rbx)
+fffffffffe851803:	74 43                	je     fffffffffe851848 <f03_ptrace_poketext_v1+0xc8>
+fffffffffe851805:	e9 af 00 00 00       	jmp    fffffffffe8518b9 <f03_ptrace_poketext_v1+0x139>
+fffffffffe85180a:	49 c7 c6 f2 ff ff ff 	mov    $0xfffffffffffffff2,%r14
+fffffffffe851811:	48 b8 98 cd 8f fe ff 	movabs $0xfffffffffe8fcd98,%rax
+fffffffffe851818:	ff ff ff 
+fffffffffe85181b:	8b 00                	mov    (%rax),%eax
+fffffffffe85181d:	3d 00 00 00 01       	cmp    $0x1000000,%eax
+fffffffffe851822:	72 1b                	jb     fffffffffe85183f <f03_ptrace_poketext_v1+0xbf>
+fffffffffe851824:	48 bf f1 90 90 fe ff 	movabs $0xfffffffffe9090f1,%rdi
+fffffffffe85182b:	ff ff ff 
+fffffffffe85182e:	48 b9 c0 45 87 fe ff 	movabs $0xfffffffffe8745c0,%rcx
+fffffffffe851835:	ff ff ff 
+fffffffffe851838:	4c 89 fe             	mov    %r15,%rsi
+fffffffffe85183b:	31 c0                	xor    %eax,%eax
+fffffffffe85183d:	ff d1                	call   *%rcx
+fffffffffe85183f:	f0 ff 8b 14 12 00 00 	lock decl 0x1214(%rbx)
+fffffffffe851846:	75 71                	jne    fffffffffe8518b9 <f03_ptrace_poketext_v1+0x139>
+fffffffffe851848:	4c 8b bb 68 10 00 00 	mov    0x1068(%rbx),%r15
+fffffffffe85184f:	48 8b b3 d0 10 00 00 	mov    0x10d0(%rbx),%rsi
+fffffffffe851856:	48 b8 00 56 8a fe ff 	movabs $0xfffffffffe8a5600,%rax
+fffffffffe85185d:	ff ff ff 
+fffffffffe851860:	48 89 df             	mov    %rbx,%rdi
+fffffffffe851863:	ff d0                	call   *%rax
+fffffffffe851865:	48 8b bb c0 12 00 00 	mov    0x12c0(%rbx),%rdi
+fffffffffe85186c:	48 be 80 fc 90 fe ff 	movabs $0xfffffffffe90fc80,%rsi
+fffffffffe851873:	ff ff ff 
+fffffffffe851876:	48 b8 e0 43 83 fe ff 	movabs $0xfffffffffe8343e0,%rax
+fffffffffe85187d:	ff ff ff 
+fffffffffe851880:	ba f2 01 00 00       	mov    $0x1f2,%edx
+fffffffffe851885:	ff d0                	call   *%rax
+fffffffffe851887:	48 b8 e0 09 82 fe ff 	movabs $0xfffffffffe8209e0,%rax
+fffffffffe85188e:	ff ff ff 
+fffffffffe851891:	48 89 df             	mov    %rbx,%rdi
+fffffffffe851894:	be 45 00 00 00       	mov    $0x45,%esi
+fffffffffe851899:	ff d0                	call   *%rax
+fffffffffe85189b:	48 b8 70 64 84 fe ff 	movabs $0xfffffffffe846470,%rax
+fffffffffe8518a2:	ff ff ff 
+fffffffffe8518a5:	48 89 df             	mov    %rbx,%rdi
+fffffffffe8518a8:	ff d0                	call   *%rax
+fffffffffe8518aa:	48 b8 60 bf 8a fe ff 	movabs $0xfffffffffe8abf60,%rax
+fffffffffe8518b1:	ff ff ff 
+fffffffffe8518b4:	4c 89 ff             	mov    %r15,%rdi
+fffffffffe8518b7:	ff d0                	call   *%rax
+fffffffffe8518b9:	4c 89 f0             	mov    %r14,%rax
+fffffffffe8518bc:	48 83 c4 08          	add    $0x8,%rsp
+fffffffffe8518c0:	5b                   	pop    %rbx
+fffffffffe8518c1:	41 5e                	pop    %r14
+fffffffffe8518c3:	41 5f                	pop    %r15
+fffffffffe8518c5:	5d                   	pop    %rbp
+fffffffffe8518c6:	c3                   	ret    
+fffffffffe8518c7:	45 31 f6             	xor    %r14d,%r14d
+fffffffffe8518ca:	f0 ff 8b 14 12 00 00 	lock decl 0x1214(%rbx)
+fffffffffe8518d1:	0f 84 71 ff ff ff    	je     fffffffffe851848 <f03_ptrace_poketext_v1+0xc8>
+fffffffffe8518d7:	eb e0                	jmp    fffffffffe8518b9 <f03_ptrace_poketext_v1+0x139>
+
+Disassembly of section .fixup:
+
+Disassembly of section .vsyscall:

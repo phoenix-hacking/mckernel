@@ -1,0 +1,54 @@
+{
+  "schema": "mckernel.native-exact-build-diagnostic-failure.v1",
+  "status": "FAIL_PHASE0_SOURCE_BINDING",
+  "acceptance_credit": false,
+  "candidate_sha": "8b5056f836ecd3e6916625696750c4dfadbaaf9f",
+  "request": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-build-request-8b5056f8-scratch-6.json",
+    "sha256": "f234ca2cb443f0014f626bbbf1e72991dd1c6a51598c5b675f895354847300d4"
+  },
+  "execution": {
+    "exit_code": 1,
+    "phase": "Verify source-only contracts without claiming readiness",
+    "started_at": "2026-09-30T09:04:21.502220317Z",
+    "finished_at": "2026-09-30T09:05:06.777409614Z",
+    "container_id": "92b2f3fed0376933f6d703ecfe5245da5a3f19be63aa9712d4713792b5c245e9",
+    "container_name": "mckernel-exact-d8096033e9cd4b1d9f2006a6f652f816",
+    "terminal_pid": 0,
+    "oom_killed": false,
+    "compiled_artifact_count": 0,
+    "profile": {
+      "cpus": "2-5",
+      "memory_bytes": 12884901888,
+      "memory_swap_bytes": 12884901888,
+      "network_mode": "none",
+      "pids_limit": 512,
+      "actual_jobs": 2
+    }
+  },
+  "failure": {
+    "family": "runtime-build-workflow-git-blob-identity",
+    "diagnostic": "native-rust-runtime-evidence: FAIL: runtime repository workflow identities differ",
+    "actual_workflow": {
+      "size": 95328,
+      "sha256": "030822f476e5aaa290b06255d3e874dbf584760e06a221b2dd15ed9332ed8629",
+      "git_blob_sha1": "7d922ef0efc6629837b9fdb090d596bd63d90d69"
+    },
+    "stale_contract_git_blob_sha1": "4f8da595da68e0d7d5c22debc25778922f0f2446",
+    "interpretation": "The patch-0025 checkpoint updated workflow size/SHA-256 and the runtime checker constant but missed the same workflow's Git-blob field in the JSON contract. The runtime checker correctly failed before compilation.",
+    "bounded_correction": "Update only the stale JSON Git-blob field and exact downstream consumer hashes. Do not change the workflow, Rust code, runtime oracle, or checker semantics."
+  },
+  "retained_evidence": {
+    "owner_receipt_sha256": "fba8703bf4c8bc79e53b6fe7b7b4d20ea4b47e2406de0bd05deedeb7984a4107",
+    "build_receipt_sha256": "ffa7765a9cc0d0820cde690efa0896c15411d134e2ff48374b38ee085de80889",
+    "driver_log_sha256": "6023ceed80de89933221fd9b2725addea3f7a3e040b54d72c020fe7259bacdf5",
+    "output_identity": "1831:6553623",
+    "evidence_identity": "1831:6553638",
+    "operational_exclusion_identity": "1831:57597",
+    "operational_exclusion_sha256": "4f3f3ec96b1366cdbac384ff70d54f0576f99308a33ad7986dc804ca5f8511ee",
+    "lease_absent_after_exit": true,
+    "container_retained": true,
+    "cleanup_separately_required": true
+  },
+  "validation_note": "A broad host unittest invocation was not credited: the live repository has preexisting hardlinked files that intentionally trip single-link evidence checks, and one unrelated synthetic GitHub unadvertised-object fetch also failed. The exact container failure and retained bytes above are the authoritative result."
+}

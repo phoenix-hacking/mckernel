@@ -1,0 +1,14 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_PREPARATION_PREFIX_ASSERTION_BEFORE_COMPILER",
+  "source_script": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-cpu-log-next/production-consumer-preparation-1/prepare_sources_only.py",
+    "sha256": "3f25c379b0abd029a8c2de9a7f5aec8b19a2bcf136145e8ade0d05b1878fc691"
+  },
+  "error": "ValueError: generated mckernel-work header include is not relative to canonical mckernel root",
+  "cause": "String prefix matching ROOT without slash also matched sibling mckernel-work; pathlib correctly refused.",
+  "correction": "Require include prefix -I+ROOT+/ only; leave generated header paths untouched. Preserve existing source/recipe files and verify identical JSON if reused.",
+  "compiler_jobs": 0,
+  "test_jobs": 0,
+  "CPU_slots_held": 0
+}

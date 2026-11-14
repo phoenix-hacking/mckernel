@@ -1,0 +1,267 @@
+{
+  "status": "PASS_ACTUAL_SYMBOL_DATA_RELOCATION_AND_GENUINE_MEMSET_SOURCE_ABI_RECONCILIATION",
+  "reviewer": "/root/create_empty_entry_parity_high",
+  "created_utc": "2026-11-09T17:33:35.429011+00:00",
+  "result": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/RESULT.json",
+    "sha256": "6b25ba98986242be7b242c9cf0c215b7c6c7794501366e321c70495302edca30"
+  },
+  "artifact": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/output/kprintf_provider.o",
+    "sha256": "550bf6d7d108e766a593a18d96edc2f46e5688bd07cae48ddc61e4868b5afbdf",
+    "bytes": 19064
+  },
+  "prior_source_GO": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-review-1/REVIEW.json",
+    "sha256": "db4bffee02e482a51daeb6a3cb73ae6e4fa62da2914615a659e3b88e3b26a320"
+  },
+  "actual_metadata": {
+    "ACTUAL-NM-METADATA.json": {
+      "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/ACTUAL-NM-METADATA.json",
+      "sha256": "bab0e69f0f16559ad6b373a6c2481af0637de482f481a679e4d5bf5ecd73d64f"
+    },
+    "ACTUAL-ELF-METADATA.json": {
+      "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/ACTUAL-ELF-METADATA.json",
+      "sha256": "724bcdf7840cc8afb2bf6c4943299ea5695b14c77909a8821f45c3d890b5a30e"
+    },
+    "provider-symbols.stdout": {
+      "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/provider-symbols.stdout",
+      "sha256": "32b79118c00809386f3f562d317d35f5e156f7a6b9f60b22fb60bdd6a6aa9526"
+    },
+    "provider-elf.stdout": {
+      "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/provider-elf.stdout",
+      "sha256": "d964a7e714fe0209e7cc772b5f10a362eb5137ecf8bbed855c88eb56031bb2d8"
+    }
+  },
+  "actual_producer_scope": {
+    "commands": 3,
+    "direct_waits_all0": true,
+    "births_saved_all3": true,
+    "joined_and_CPU6_released": true,
+    "exact_retained_single_SSE_warning": true,
+    "reviewer_replayed_no_workload": true
+  },
+  "global_C_exports": [
+    {
+      "name": "format_decode_result",
+      "nm_type": "T",
+      "value_hex": "0",
+      "bytes": 876,
+      "raw": "format_decode_result T 0 36c"
+    },
+    {
+      "name": "kprintf",
+      "nm_type": "T",
+      "value_hex": "0",
+      "bytes": 706,
+      "raw": "kprintf T 0 2c2"
+    },
+    {
+      "name": "printf_copy_literal_result",
+      "nm_type": "T",
+      "value_hex": "0",
+      "bytes": 174,
+      "raw": "printf_copy_literal_result T 0 ae"
+    },
+    {
+      "name": "printf_emit_char_result",
+      "nm_type": "T",
+      "value_hex": "0",
+      "bytes": 14,
+      "raw": "printf_emit_char_result T 0 e"
+    },
+    {
+      "name": "printf_terminate_result",
+      "nm_type": "T",
+      "value_hex": "0",
+      "bytes": 19,
+      "raw": "printf_terminate_result T 0 13"
+    },
+    {
+      "name": "printf_write_nchars_result",
+      "nm_type": "T",
+      "value_hex": "0",
+      "bytes": 25,
+      "raw": "printf_write_nchars_result T 0 19"
+    },
+    {
+      "name": "put_dec_full_result",
+      "nm_type": "T",
+      "value_hex": "0",
+      "bytes": 174,
+      "raw": "put_dec_full_result T 0 ae"
+    },
+    {
+      "name": "put_dec_result",
+      "nm_type": "T",
+      "value_hex": "0",
+      "bytes": 291,
+      "raw": "put_dec_result T 0 123"
+    },
+    {
+      "name": "put_dec_trunc_result",
+      "nm_type": "T",
+      "value_hex": "0",
+      "bytes": 214,
+      "raw": "put_dec_trunc_result T 0 d6"
+    },
+    {
+      "name": "skip_atoi_result",
+      "nm_type": "T",
+      "value_hex": "0",
+      "bytes": 66,
+      "raw": "skip_atoi_result T 0 42"
+    },
+    {
+      "name": "snprintf",
+      "nm_type": "T",
+      "value_hex": "0",
+      "bytes": 76,
+      "raw": "snprintf T 0 4c"
+    }
+  ],
+  "actual_private_function_owners": [
+    {
+      "symbol": "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse17number_ref_result",
+      "binding": "LOCAL",
+      "kind": "FUNC",
+      "bytes": 1190,
+      "source_definition": "numparse::number_ref_result",
+      "source_definition_sha256": "21ea118537680865f53b84fa9a0d41063c032343ae0738faf34c9467c78bd9c0",
+      "ownership": "Current finite unit own local helper. No private ABI import or export; other reviewed localhelpers inlined."
+    },
+    {
+      "symbol": "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result",
+      "binding": "LOCAL",
+      "kind": "FUNC",
+      "bytes": 3395,
+      "source_definition": "numparse::vsnprintf_va_list_result",
+      "source_definition_sha256": "f254b64f63dceeb0504aa2a9729dd4a66b56850116c33ec0cc1c927c378532f5",
+      "ownership": "Current finite unit own local helper. No private ABI import or export; other reviewed localhelpers inlined."
+    }
+  ],
+  "literal_and_section_ownership": [
+    {
+      "section": ".lrodata.str1.1",
+      "bytes": 22,
+      "exact_bytes_hex": "5b2533645d3a20003c4e554c4c3e00286e756c6c2900",
+      "owners": "debug::vkprintf_locked CPU prefix; numparse::string_ref_result NULL_STRING; numparse::pointer_ref_result NULL_POINTER. Actual anonymous source literals, not new sharedstorage."
+    },
+    {
+      "section": ".lrodata.cst16",
+      "bytes": 16,
+      "exact_bytes": "0123456789ABCDEF",
+      "owner": "numparse::number_ref_result::DIGITS"
+    },
+    {
+      "section": ".lrodata privatevsnprintf",
+      "bytes": 240,
+      "relocations": 30,
+      "owner": "Compiler jump tables for actual localvsnprintf; every 8byteentry R_X86_64_64 targets actual own .ltext within3395bytebounds."
+    },
+    {
+      "section": ".lrodata.format_decode_result",
+      "bytes": 1216,
+      "relocations": 152,
+      "owner": "Compiler jump tables for actualformat_decode; every 8byteentry R_X86_64_64 targets own .ltext within876bytebounds."
+    },
+    {
+      "section": ".eh_frame/.rela.eh_frame",
+      "owner": "Compiler unwindmetadata for13actualfunctions;13relocs only into actualsource-owned code sections, no runtime import"
+    },
+    {
+      "section": ".comment/.note.GNU-stack/.strtab/.symtab/relocationsections",
+      "owner": "Compiler/link metadata; all44symbols/33sections/9relocsections captured. No new runtime/data provider or init entry."
+    }
+  ],
+  "data_check": "No namedglobaldata definitions and no allocated writable section; no privateKMSG_LOCK,kmsg_buf initializer,Ddebug,descriptors or new state.",
+  "actual_relocation_source_mapping": {
+    "kprintf": "Actual14relocations:12external/import or sourcehelperedges plus localprefix/privatevsnprintf; includes genuinekmsg/CPU/lock/IRQ/kernel-eventfd/delay and compiler memset. No fakeprovider.",
+    "snprintf": "Relocates to actual source-owned localvsnprintf helper.",
+    "formatter": "Privatevsnprintf relocates to format_decode_result, actualprivate numberhelper, strnlen and source-owned readonly data; numberhelper to put_dec_result/DIGITS; put_dec_result to put_dec_trunc_result. All jump-table and eh_frame offsets within sourceowned functions."
+  },
+  "actual_U": [
+    "cpu_disable_interrupt_save",
+    "cpu_interrupt_disabled",
+    "cpu_pause",
+    "cpu_restore_interrupt",
+    "eventfd",
+    "ihk_mc_delay_us",
+    "ihk_mc_get_processor_id",
+    "kmsg_buf",
+    "kprintf_lock",
+    "kprintf_unlock",
+    "memset",
+    "strnlen"
+  ],
+  "new_compiler_U": [
+    "memset"
+  ],
+  "panic_or_private_mangled_U": [],
+  "memset_contract": {
+    "source": "/home/holden/mckernel/kernel/rust/string.rs",
+    "source_sha256": "579d8c06bb766a270548399a8820733516a167bb8af5d1fea46d8a51f7e8fbf3",
+    "line": 272,
+    "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn memset(s: *mut c_void, c: CInt, mut n: SizeT) -> *mut c_void {\n    let mut ptr = s.cast::<u8>();\n    let byte = c as u8;\n\n    while n > 0 {\n        write_volatile(ptr, byte);\n        ptr = ptr.add(1);\n        n -= 1;\n    }\n\n    s\n}",
+    "definition_sha256": "ccf94e5cb529aea4c5c5f0febf39fb10a7b9cff0a0ca3460a1d057c4601a8203",
+    "C_declaration_path": "/home/holden/mckernel/lib/include/string.h",
+    "C_declaration_sha256": "f612dad80dd16ff0d4d6232f155cc879522de6203ce015afa3ef0c36c3dd5636",
+    "C_declaration_line": 32,
+    "ABI": "Existing NoMangle unsafe externC fn memset(void*,CInt,SizeT)->void*. CInt=i32/SizeT=usize64 matches genuinekernel string.h void*memset(void*,int,size_t).",
+    "semantics": "Actual byte=c asu8, repeatedvolatilebytewrite countn, returnoriginals. No callbacks/allocator/globals needed by function.",
+    "selection": "Current default lib.rs selects modstring and CMake removes lib/string.c for Rust image. Rust string.rs is genuine selected provider owner; Creference endpoint is not substituted.",
+    "compiler_origin": "Only newU absent explicitunit extern declarations; actualkprintf R_X86_64_64 relocation at0x70 corresponds to unchanged local[0i8;1024] initialization in inlinedvkprintf_locked.",
+    "artifact_or_runtime_qualification": "OPEN; no independent current memset object asserted or supplied. Keep U in permitted nonexecutedpartialproof. No libc/stub/newcodegen needed for this join."
+  },
+  "unique_partial_join_source_eligibility": {
+    "status": "GO_SOURCE_CONTRACT_FOR_FUTURE_EXACT_TWO_INPUT_NONEXECUTED_JOIN",
+    "input_objects": [
+      {
+        "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-1/output/storage_lower_partial.o",
+        "sha256": "1faf0e7f6157983d86cf767f6fb4743dd65da148e63bf1dc2dc125e253285845"
+      },
+      {
+        "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/output/kprintf_provider.o",
+        "sha256": "550bf6d7d108e766a593a18d96edc2f46e5688bd07cae48ddc61e4868b5afbdf",
+        "bytes": 19064
+      }
+    ],
+    "old31owners_preserved": true,
+    "11newglobalexports_intersection": [],
+    "prospective_strong_global_count": 42,
+    "prospective_global_T": 33,
+    "prospective_global_data": 9,
+    "two_private_local_helpers_remain_local": true,
+    "prospective_unresolved_count": 23,
+    "prospective_unresolved": [
+      "cpu_disable_interrupt_save",
+      "cpu_interrupt_disabled",
+      "cpu_pause",
+      "cpu_restore_interrupt",
+      "do_kill",
+      "do_syscall",
+      "eventfd",
+      "f03_terminate_host_refcount_set_v1",
+      "f03_wait_release_process",
+      "f03_wait_release_thread",
+      "ihk_mc_delay_us",
+      "kmsg_buf",
+      "kprintf_lock",
+      "kprintf_unlock",
+      "memset",
+      "sched_wakeup_thread",
+      "strnlen",
+      "syscall_do_kill_thread_bridge",
+      "syscall_do_syscall_request_bridge",
+      "syscall_find_process_bridge",
+      "syscall_generic_forwarding_body_result",
+      "syscall_process_unlock_bridge",
+      "terminate_host_body_result"
+    ],
+    "actual_cross_input_edges": "Existing x86_addr_log_bridge kprintfU resolves to newkprintf; new nativeCPU U resolves to currentold ihk_mc_get_processor_id. Other genuineproviders includingmemset/strnlen remainU.",
+    "scope": "Exact concrete join request/profile/predicate review and Root freshadmission stillrequired. No finalruntime/providerclosure/native/defaultABI or gateacceptance from this reconciliation."
+  },
+  "new_compiler_link_runtime_or_function_execution_by_reviewer": false,
+  "canonical_index_source_writes": false,
+  "fresh_execution_admission": false
+}

@@ -1,0 +1,152 @@
+{
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-B",
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/ndlife-1",
+    "--nonce",
+    "ccee33a9cb4e45039b2b3da2b134388a",
+    "--owner-sha256",
+    "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+    "--manifest",
+    "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/manifest.json",
+    "--manifest-sha256",
+    "0540cfd9488579e59cb2bbd78883633015a14d622bc6fb8c1e26255df5f3b5bb"
+  ],
+  "author": "/root",
+  "candidate_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+  "execution_count": 1,
+  "manifest": {
+    "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/manifest.json",
+    "sha256": "0540cfd9488579e59cb2bbd78883633015a14d622bc6fb8c1e26255df5f3b5bb",
+    "size": 5641
+  },
+  "nonce": "ccee33a9cb4e45039b2b3da2b134388a",
+  "oracle": {
+    "exit_code": 0,
+    "stderr_hex": "",
+    "stdout_hex": "68616e646c65643d31206f627365727665645f626c6f636b65643d3120726573746f7265643d310a"
+  },
+  "owner": {
+    "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+    "sha256": "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+    "size": 58828
+  },
+  "parent": {
+    "path": "/home/holden/mckernel-work/scratch/ndlife-1",
+    "device": 1828,
+    "inode": 108537,
+    "mode": "0o700",
+    "uid": 1000,
+    "gid": 1000
+  },
+  "prerequisites": {
+    "image_archival_cleanup": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/scratch22-authority3-image-cleanup-result-review-20261017-1.json",
+      "sha256": "47cc7673788cb9b8c15443eec7f24c07d749b1bfe05875673d2c2b9af72bc15d",
+      "size": 1892
+    },
+    "image_retirement_proof": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/scratch22-image-fresh-retirement-observation-20261017-1.json",
+      "sha256": "1cdf3af9fa657d160a801bf909f9e5c0e77dd132d3c38b3f1a38482bd1691da8",
+      "size": 1439
+    },
+    "live_preflight": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-lifecycle-current942-live-preflight-20261017-1.json",
+      "sha256": "9b0b1416a3318638da2746c9bb4bf2b905e3152c7762725f368325e629a9cbb7",
+      "size": 3926
+    }
+  },
+  "profile": {
+    "cleanup_timeout_seconds": 15,
+    "cpus": 4,
+    "cpuset": "2-5",
+    "guest_memory_mib": 8192,
+    "guest_numa_nodes": 2,
+    "guest_timeout_seconds": 300,
+    "guest_vcpus": 4,
+    "heavy_operations": 1,
+    "mckernel_cpus": 1,
+    "mckernel_memory_mib": 128,
+    "memory": 12884901888,
+    "memory_swap": 12884901888,
+    "network": "none",
+    "payload_timeout_seconds": 10,
+    "pids": 512
+  },
+  "schema": "mckernel.native-lifecycle-execution-proposal.v1",
+  "scope": "One native lifecycle diagnostic after exact signalpayload and confirmedemptyprocfs: pinnedprobe queries Running5, attempts shutdownONCE, queriesNotBooted0, closes. No rmmod/destroy/resource-restoration claim. DisposableLinuxguest retainedprofile. Existingnative_diagnostic.evaluate AND correctedofflineparser mandatory plus independentactualretirementreview. Newcollector/probe60memberoverlay; no kernel/module/image rebuild.",
+  "staging_evidence": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-lifecycle-current942-preparation-20261017-2.json",
+    "sha256": "0aa0a108c88057f9fe789b8665ac0ddcdf2eef8c2a417869783344f548261e18",
+    "size": 51306
+  },
+  "status": "PENDING_INDEPENDENT_EXECUTION_REVIEW",
+  "source_review": {
+    "reviewer": "/root/image_retirement_review",
+    "decision": "PASS_SOURCE_INTEGRATED_QMP_ADMISSION",
+    "diagnostic_sha256": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e",
+    "owner_sha256": "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+    "test_sha256": "6d7fdebda5a064dfbf8f1ddac8e4a771f9db237c575e2475bf643190560a8818",
+    "actual_test_exit": 0,
+    "tests_passed": 76
+  },
+  "unix_monitor_endpoints": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/ndlife-1/attempt-ccee33a9cb4e45039b2b3da2b134388a/qmp.sock",
+      "encoded_bytes": 93,
+      "max_bytes": 107
+    }
+  ],
+  "lifecycle_parser": {
+    "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_lifecycle_capture.py",
+    "sha256": "0585f78b80e603c010316418ce307794d59e1d92581b845ec6b2e74e22c8954b",
+    "size": 7025
+  },
+  "lifecycle_oracle": {
+    "argv": [
+      "/bin/native-lifecycle-probe",
+      "0"
+    ],
+    "status_before": 5,
+    "shutdown_return": 0,
+    "status_after": 0,
+    "transition_observed": true,
+    "resource_restoration_verified": false,
+    "os_destroyed": false,
+    "require_independent_payload_evaluation": true
+  },
+  "lifecycle_probe": {
+    "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-static-20261017-1/native-lifecycle-probe",
+    "sha256": "d8132525b6126ee93fc5de4f59ac06eb83ffeb90f85225da585d89060dfb1248",
+    "size": 872616
+  },
+  "lifecycle_collector": {
+    "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-static-20261017-1/native-lifecycle-collector",
+    "sha256": "8330e259adcd34136379f0deef2f77ecd5a8a8aba9161c5ba6329e8a0e70f89b",
+    "size": 1021992
+  },
+  "crossbody_evidence": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-lifecycle-capture-crossbody-20261017-2.json",
+    "sha256": "12501910d607e7a48ad9fa32c3b4761cd7acd97fc33a52a18d20ff64260d9ebe",
+    "size": 13131
+  },
+  "prior_tls_retirement": {
+    "decision": "PASS_RETIREMENT_FAIL_HARNESS_CONTRACT",
+    "reviewer": "/root/image_retirement_review",
+    "owner_result": {
+      "path": "/home/holden/mckernel-work/scratch/thread-tls-isolation-current942-dispatch-20261017-1/owner-result.json",
+      "sha256": "d2dcc8272507f537fc3f3d851b57a6c005ac2d912487b2c834154d87d5887127",
+      "size": 256
+    },
+    "attempt_tar": {
+      "path": "/home/holden/mckernel-work/scratch/thread-tls-isolation-current942-dispatch-20261017-1/attempt-evidence.tar",
+      "sha256": "d4cf8d68210f25db3ca4e6731aca6eca9806360b9c7969ca1d1f795b2a597683",
+      "size": 307200
+    },
+    "scope": "25clients+owner/exactcontainerremoved/name-label-IDempty/root27:4free; Dockerstartreturn1 innerstreamlimit mismatch, no kernel/passcredit."
+  }
+}

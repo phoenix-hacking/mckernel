@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "kind": "window-end-wip",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "recorded_at_utc": "2026-09-16T00:20:13Z",
+  "status": "FAIL_SOURCE_WIP",
+  "acceptance": {
+    "source": false,
+    "compiler": false,
+    "root": false,
+    "native": false,
+    "guest": false,
+    "application": false,
+    "production": false
+  },
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-window-end-20260915-12.tar.gz",
+    "sha256": "94c2c22c4f2dd4060e5935f444fee5926e5b16d98089895700db2521407b1c0c"
+  },
+  "source_sha256": {
+    "prepare.py": "1d09a2f4f143af79de7eb98e7cc6d5c6a01efa89e15fa925d2c7869c78ab2df4",
+    "witness_owner.py": "4554efcda371a395681ff7f7353e05d98adf6ab4aae656b40d524f128fdf4670",
+    "supervise.py": "08ce8557a5ca9c436f0b89f1258689190b549662df628fbb04d51dc942c331d3",
+    "oracle.py": "669a89b10770ac2199817ad2672fbace0a4acdb2b4c914816e9004decdb3e6a0",
+    "test_collector_storage_fault_packet.py": "dc596d9078f9f99e3e9f9ac8f095d741962f1e630f76a353dab47c5fdd80b49b"
+  },
+  "checks": {
+    "python3.9.12_py_compile": "PASS",
+    "python3.8.10_py_compile": "PASS",
+    "python3.9.12_tests": "60/63 PASS; three exact error-order assertions fail",
+    "python3.8.10_tests": "60/63 PASS; the same three exact error-order assertions fail"
+  },
+  "failures": [
+    {
+      "expected": "supervisor owner identity",
+      "observed": "supervisor owner observations"
+    },
+    {
+      "expected": "supervisor cleanup incomplete",
+      "observed": "supervisor complete cleanup"
+    },
+    {
+      "expected": "supervisor direct wait",
+      "observed": "supervisor owner wait"
+    }
+  ],
+  "bounded_correction": "The oracle snapshot includes a local exact raw-wait decoder required by the new result/wait join. No further source correction was attempted after the window-end failures.",
+  "live_processes": [
+    {
+      "pid": 1676703,
+      "role": "launcher",
+      "started_local": "2026-09-15 15:51:14 PDT"
+    },
+    {
+      "pid": 1676707,
+      "role": "launcher-worker",
+      "started_local": "2026-09-15 15:51:14 PDT"
+    },
+    {
+      "pid": 1676709,
+      "role": "codex-app-server",
+      "started_local": "2026-09-15 15:51:14 PDT"
+    }
+  ],
+  "next_tasks": [
+    "Correct only the three retained oracle validation-order failures without weakening any join.",
+    "Add the still-missing matched-unreaped OWNER_ERROR, owner exit/signal, sentinel signal/error, nullable/positive birth, descriptor-negative and raw-wait-join controls.",
+    "Rerun the exact 63-test suite under Python 3.9.12 and 3.8.10, then request a fresh independent exact-byte full source review.",
+    "Do not compile, use root, launch a guest or claim any acceptance gate before PASS_SOURCE."
+  ],
+  "goal_complete": false
+}

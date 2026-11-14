@@ -1,0 +1,2257 @@
+{
+  "archive": {
+    "bytes": 1645461,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/evidence-export-1/evidence.tar.gz",
+    "sha256": "1cee6cafffec2afd1005b902ce2cd053d663ed162faf842d5b2df7e724ba500b"
+  },
+  "descriptor_only_artifacts": {
+    "artifacts": {
+      "bzImage": {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/bzImage",
+        "sha256": "032653ee0661b059c325e2a0911a9d492805f1a889c4df515473d69a8be105bc",
+        "size": 16130048
+      },
+      "initramfs": {
+        "mode": 33152,
+        "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/stage-launches-1/base.cpio.gz",
+        "sha256": "11635aef3572fe11994727e13d772d0dded3b2eb15e2ac521086a70c738d7841",
+        "size": 12983921
+      },
+      "libc": {
+        "mode": 33261,
+        "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/native-proposal/stage-correction-1/stage/root/lib64/libc.so.6",
+        "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+        "size": 2339896
+      },
+      "loader": {
+        "mode": 33261,
+        "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/native-proposal/stage-correction-1/stage/root/lib64/ld-linux-x86-64.so.2",
+        "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b",
+        "size": 930600
+      },
+      "mcexec": {
+        "mode": 33261,
+        "path": "/home/holden/mckernel-work/scratch/mcexec-preload-fastpath-build-20260928-1/rust/executer/user/mcexec",
+        "sha256": "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b",
+        "size": 453352
+      },
+      "mckernel_image": {
+        "mode": 33261,
+        "path": "/home/holden/mckernel-work/host-preparation/repaired-affinity-n3-variant-20261019-1/repaired-image-fresh8b-runtime-0755",
+        "sha256": "ff4fca457e9ffe50dc4eca930c5f91faf317eeee15bf0c2907067cffa77b23bb",
+        "size": 7988768
+      },
+      "native_boot": {
+        "mode": 33261,
+        "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/two-cpu-running-query-correction-1/native-boot-two-0755",
+        "sha256": "4312f9a8f53d8db7b2b6be4c7d5e409f5c0f82cf8215728209be0f6ff4a5d5c5",
+        "size": 35784
+      },
+      "payload": {
+        "mode": 33216,
+        "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/app0",
+        "sha256": "024fa5620735622c684283df1a8270c2d7c78f62dd82d294c544f5eb3b197ac4",
+        "size": 5685552
+      },
+      "root_base": {
+        "mode": 33152,
+        "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/stage-launches-1/base.cpio.gz",
+        "sha256": "11635aef3572fe11994727e13d772d0dded3b2eb15e2ac521086a70c738d7841",
+        "size": 12983921
+      }
+    },
+    "modules": [
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/ihk.ko",
+        "sha256": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c",
+        "size": 1527808
+      },
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/ihk-smp-x86_64.ko",
+        "sha256": "c6a9db8eaa2ec5f7898b021b6835d20e4359a5f4a1209b5b28fd9559cd03387f",
+        "size": 12210104
+      },
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/mcctrl.ko",
+        "sha256": "4e2f1e5b11cad8a9fbfaca4ae6671a2f3fa16ef3c8c651357506d93c7edf4fa9",
+        "size": 2368472
+      }
+    ],
+    "pair": {
+      "apps": [
+        {
+          "argv": [
+            "/bin/mcexec",
+            "-t",
+            "1",
+            "-c",
+            "0",
+            "0",
+            "/apps/app0"
+          ],
+          "cpu": 0,
+          "cwd": "/case/two-app/work0",
+          "env": {
+            "COKERNEL_PATH": "/apps",
+            "PAIR_CPU": "0",
+            "PATH": "/usr/bin:/bin"
+          },
+          "id": 0,
+          "oracle": {
+            "exit_code": 0,
+            "stderr_hex": "",
+            "stdout_hex": "626174636820626567696e2063617365733d32206d697865645f726f756e64733d330a727573742d66696c652d726f756e647472697020696e697469616c3d3136206f76657277726974653d3420736872696e6b3d31302067726f773d3134207a65726f733d34207461696c3d61616262636320696e76616c69645f7365656b3d323220637572736f723d313420636865636b65645f636c6f73653d312072656d6f7665643d310a6d6978656420726f756e64733d332062797465735f656163683d3831393320636865636b73756d5f746f74616c3d333037323237300a66696c65733d3320636865636b65645f636c6f7365733d362072656f70656e65643d3320656f663d332072656d6f7665643d330a6a6f696e65645f746872656164733d36207475726e735f656163683d31323820636f756e7465725f746f74616c3d3736380a626174636820706173732063617365733d3220636865636b65645f636c6f7365733d372072656d6f7665643d34206a6f696e65645f746872656164733d360a"
+          },
+          "payload": {
+            "mode": 33216,
+            "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/app0",
+            "sha256": "024fa5620735622c684283df1a8270c2d7c78f62dd82d294c544f5eb3b197ac4",
+            "size": 5685552
+          },
+          "stderr_limit_bytes": 1024,
+          "stdout_limit_bytes": 1024,
+          "timeout_ms": 10000
+        },
+        {
+          "argv": [
+            "/bin/mcexec",
+            "-t",
+            "1",
+            "-c",
+            "1",
+            "0",
+            "/apps/app1"
+          ],
+          "cpu": 1,
+          "cwd": "/case/two-app/work1",
+          "env": {
+            "COKERNEL_PATH": "/apps",
+            "PAIR_CPU": "1",
+            "PATH": "/usr/bin:/bin"
+          },
+          "id": 1,
+          "oracle": {
+            "exit_code": 0,
+            "stderr_hex": "",
+            "stdout_hex": "465054485245414420763120746872656164733d322073616d655f7065726d69747465645f6370753d312064697374696e63745f7469643d310a7468726561643020726f756e64733d363420796d6d5f6c616e65733d363420706565725f70726f67726573733d3634207969656c645f6d696e3d363420636f6e74726f6c733d303737662f3366383020726573746f7265643d310a7468726561643120726f756e64733d363420796d6d5f6c616e65733d363420706565725f70726f67726573733d3634207969656c645f6d696e3d363420636f6e74726f6c733d306237662f3566383020726573746f7265643d310a465054485245414420504153530a"
+          },
+          "payload": {
+            "mode": 33216,
+            "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/app1",
+            "sha256": "1f51f0e3c8288bc05aabbc0309d1bf84abab1cbc6d8593c4ec7b1460b38163b7",
+            "size": 5666048
+          },
+          "stderr_limit_bytes": 1024,
+          "stdout_limit_bytes": 1024,
+          "timeout_ms": 10000
+        }
+      ],
+      "cpus": [
+        0,
+        1
+      ],
+      "default_ikc_linux": 0,
+      "generation": 1,
+      "host_cpus": [
+        1,
+        2
+      ],
+      "inherited_overlay_manifest": {
+        "mode": 33152,
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/n3-variant/stage-matched-FP-modules-1/overlay-manifest.json",
+        "sha256": "ef0fdf9595ec9598dd3656ff608fde4fbc4ee412a7bbff31f894d288982a1dc9",
+        "size": 19433
+      },
+      "os": 0,
+      "source_authority": {
+        "mode": 33152,
+        "path": "/home/holden/mckernel-work/host-preparation/repaired-affinity-n3-variant-20261019-1/authority-inputs-fresh8b.json",
+        "sha256": "6a7e06affcf998f9c2c4f767cd2489a657b1547cbcc0a3b5087f21df851c7f66",
+        "size": 2535
+      },
+      "version": 1
+    },
+    "staging": {
+      "base_initramfs": {
+        "mode": 33152,
+        "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/stage-launches-1/base.cpio.gz",
+        "sha256": "11635aef3572fe11994727e13d772d0dded3b2eb15e2ac521086a70c738d7841",
+        "size": 12983921
+      },
+      "collector": {
+        "mode": 33261,
+        "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/stage-launches-1/pair-init-0755",
+        "sha256": "9c5b82a6fcd1baace70cea8daf29433684a3f7bc4d2307d4d31899653abf0e02",
+        "size": 1043696
+      },
+      "derived_initramfs": {
+        "mode": 33152,
+        "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/stage-launches-1/lifecycle.cpio.gz",
+        "sha256": "a029ca501033221a7638ed8a31dc25e2be2e3e6694a809ac6d6d08023bd5df86",
+        "size": 18980347
+      },
+      "overlay_manifest": {
+        "mode": 33152,
+        "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/stage-launches-1/overlay-manifest.json",
+        "sha256": "667ada147b650919962e74a2df5f88ca48d2bb9e0fb4126ea2796d69ba480664",
+        "size": 20062
+      },
+      "overlay_source": {
+        "mode": 33152,
+        "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/stage_launch_init.py",
+        "sha256": "7a0f8c8ed20e1769005d38805f894897023a4289f3da96edd1d05f865bc9980e",
+        "size": 6300
+      }
+    }
+  },
+  "elapsed_seconds": 0.2319731519673951,
+  "exporter": {
+    "bytes": 4572,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/evidence-export-1/export.py",
+    "sha256": "411fa75c8c99045ba8cb49619df330f71c5314692fd7d382810f29965f3a2844"
+  },
+  "files": [
+    {
+      "bytes": 19919,
+      "member": "native-preparation/bind_native_packet.py",
+      "mode": "0o600",
+      "sha256": "80fdd706e26bfef37dd6eac4230eee10eac661bb9b5df7b45610ede0b1f459f1",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/bind_native_packet.py"
+    },
+    {
+      "bytes": 1108,
+      "member": "native-preparation/native-metadata-outer-1.stdout",
+      "mode": "0o600",
+      "sha256": "852a9e809984d303b2f94e570dea2a7102c709a29a5037924b60fdf5cdc25ae4",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/native-metadata-outer-1.stdout"
+    },
+    {
+      "bytes": 8162,
+      "member": "native-preparation/finalize_stage_proposal.py",
+      "mode": "0o600",
+      "sha256": "f2b449b34ec2a1fb76a5d8dddc027f37938f5a69d0a56ad39bfb3b05b1c1ed1a",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/finalize_stage_proposal.py"
+    },
+    {
+      "bytes": 2207,
+      "member": "native-preparation/run_native_metadata_expert1.py",
+      "mode": "0o600",
+      "sha256": "790c7de61b03b94a4f6b18b9b77b6b56ab131aeee8af5264e22007186f53ca30",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/run_native_metadata_expert1.py"
+    },
+    {
+      "bytes": 2200,
+      "member": "native-preparation/run_native_metadata_correction1.py",
+      "mode": "0o600",
+      "sha256": "8309b23d7c3f3c9848c6113c55be287dd4553de21474b98e379da0b6a646d042",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/run_native_metadata_correction1.py"
+    },
+    {
+      "bytes": 0,
+      "member": "native-preparation/native-metadata-outer-2.stderr",
+      "mode": "0o600",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/native-metadata-outer-2.stderr"
+    },
+    {
+      "bytes": 8613,
+      "member": "native-preparation/sdk_physical_projection.py",
+      "mode": "0o600",
+      "sha256": "f78ebae768b62395844aa6714b871075d32d8742c1f838df746a11bd76b832df",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/sdk_physical_projection.py"
+    },
+    {
+      "bytes": 0,
+      "member": "native-preparation/native-metadata-outer-1.stderr",
+      "mode": "0o600",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/native-metadata-outer-1.stderr"
+    },
+    {
+      "bytes": 1122,
+      "member": "native-preparation/native-metadata-expert-outer-1.stdout",
+      "mode": "0o600",
+      "sha256": "e4f185bcc339440bda94d15ce08d83723f9600516f8bdf75baaa4eb0c50349ad",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/native-metadata-expert-outer-1.stdout"
+    },
+    {
+      "bytes": 0,
+      "member": "native-preparation/native-final-metadata-outer-1.stderr",
+      "mode": "0o600",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/native-final-metadata-outer-1.stderr"
+    },
+    {
+      "bytes": 1120,
+      "member": "native-preparation/native-final-metadata-outer-1.stdout",
+      "mode": "0o600",
+      "sha256": "5af9c8448ad019c6c7a2561082e5c6e0dc7d0d277e0c2b23066650a2daf80dd7",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/native-final-metadata-outer-1.stdout"
+    },
+    {
+      "bytes": 0,
+      "member": "native-preparation/native-metadata-expert-outer-1.stderr",
+      "mode": "0o600",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/native-metadata-expert-outer-1.stderr"
+    },
+    {
+      "bytes": 10839,
+      "member": "native-preparation/root_manual_snapshot_twenty_launches_sdk.py",
+      "mode": "0o600",
+      "sha256": "2363d6ef638d4a4661d5c603645f919ea7dee16da033110f939a8b4ff08ea21e",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/root_manual_snapshot_twenty_launches_sdk.py"
+    },
+    {
+      "bytes": 1107,
+      "member": "native-preparation/native-metadata-outer-2.stdout",
+      "mode": "0o600",
+      "sha256": "0fd93cf8c1a62e69d2c65e3be51f67afb1a6a27c1100d19cd7390244ec2050fe",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/native-metadata-outer-2.stdout"
+    },
+    {
+      "bytes": 2200,
+      "member": "native-preparation/run_native_metadata_once.py",
+      "mode": "0o600",
+      "sha256": "15cc5a47d3a974dc40ea599208ee65004028ae2f858fb912b975d53fd0d677cc",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/run_native_metadata_once.py"
+    },
+    {
+      "bytes": 82,
+      "member": "native-metadata-check-1/direct-wait.json",
+      "mode": "0o600",
+      "sha256": "b591942430c5576f289fad3d16a97fa9d5c25640baaaf029e5142cca6eac33a1",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/native-metadata-check-1/direct-wait.json"
+    },
+    {
+      "bytes": 6273,
+      "member": "native-metadata-check-1/sdk_physical_projection.failed-source.py",
+      "mode": "0o600",
+      "sha256": "912707d4dd45e7ed296ae04784dfbea834b7c73e271ed5f40a9ca5f201181410",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/native-metadata-check-1/sdk_physical_projection.failed-source.py"
+    },
+    {
+      "bytes": 260,
+      "member": "native-metadata-check-1/direct-join.json",
+      "mode": "0o600",
+      "sha256": "75b6611bce72c0d5b01db8120c1673256aa9eeaeebdf88e7ef115df502cdcd9e",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/native-metadata-check-1/direct-join.json"
+    },
+    {
+      "bytes": 1266,
+      "member": "native-metadata-check-1/whole.json",
+      "mode": "0o600",
+      "sha256": "705eb0ff72ca4811794ee017ee54a5cbb0ce025acd1d1d16929800b4e33069fa",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/native-metadata-check-1/whole.json"
+    },
+    {
+      "bytes": 966,
+      "member": "native-metadata-check-1/stderr",
+      "mode": "0o600",
+      "sha256": "ac64c79fb956685d5d849fbaa176b95be33fb5a6934a0aa5512aa1bd6e615645",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/native-metadata-check-1/stderr"
+    },
+    {
+      "bytes": 19919,
+      "member": "native-metadata-check-1/bind_native_packet.failed-source.py",
+      "mode": "0o600",
+      "sha256": "80fdd706e26bfef37dd6eac4230eee10eac661bb9b5df7b45610ede0b1f459f1",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/native-metadata-check-1/bind_native_packet.failed-source.py"
+    },
+    {
+      "bytes": 0,
+      "member": "native-metadata-check-1/stdout",
+      "mode": "0o600",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/native-metadata-check-1/stdout"
+    },
+    {
+      "bytes": 36,
+      "member": "native-metadata-check-1/started.json",
+      "mode": "0o600",
+      "sha256": "4aa49ef04b1cdff75733dc23fafb261a22f9f431c8042b51c95ebb0929ee60b9",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/native-metadata-check-1/started.json"
+    },
+    {
+      "bytes": 82,
+      "member": "native-metadata-check-2/direct-wait.json",
+      "mode": "0o600",
+      "sha256": "db49d26adb50af68ef2ca34f91616b71f86a04c9ef6734d3d4d818df6bf75a0e",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/native-metadata-check-2/direct-wait.json"
+    },
+    {
+      "bytes": 7011,
+      "member": "native-metadata-check-2/sdk_physical_projection.failed-source.py",
+      "mode": "0o600",
+      "sha256": "9342ec2988ff94961e258a57253b0fd6ad75998727cf4e5eff8dcca4965808d9",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/native-metadata-check-2/sdk_physical_projection.failed-source.py"
+    },
+    {
+      "bytes": 259,
+      "member": "native-metadata-check-2/direct-join.json",
+      "mode": "0o600",
+      "sha256": "5167d99263ab71199dfe71367776cff54868eb1c5b2a585d1763cc7bedac27c9",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/native-metadata-check-2/direct-join.json"
+    },
+    {
+      "bytes": 2200,
+      "member": "native-metadata-check-2/run_native_metadata_correction1.failed-source.py",
+      "mode": "0o600",
+      "sha256": "8309b23d7c3f3c9848c6113c55be287dd4553de21474b98e379da0b6a646d042",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/native-metadata-check-2/run_native_metadata_correction1.failed-source.py"
+    },
+    {
+      "bytes": 1265,
+      "member": "native-metadata-check-2/whole.json",
+      "mode": "0o600",
+      "sha256": "59dcde83c51d901811303a34e588e2c29b8b9930fc2c8d03a14250717d3173f6",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/native-metadata-check-2/whole.json"
+    },
+    {
+      "bytes": 662,
+      "member": "native-metadata-check-2/stderr",
+      "mode": "0o600",
+      "sha256": "80a907086c7f0652c7015d059f9a32f2e420099d49194a7f59a1278843e1a19f",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/native-metadata-check-2/stderr"
+    },
+    {
+      "bytes": 19919,
+      "member": "native-metadata-check-2/bind_native_packet.failed-source.py",
+      "mode": "0o600",
+      "sha256": "80fdd706e26bfef37dd6eac4230eee10eac661bb9b5df7b45610ede0b1f459f1",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/native-metadata-check-2/bind_native_packet.failed-source.py"
+    },
+    {
+      "bytes": 0,
+      "member": "native-metadata-check-2/stdout",
+      "mode": "0o600",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/native-metadata-check-2/stdout"
+    },
+    {
+      "bytes": 36,
+      "member": "native-metadata-check-2/started.json",
+      "mode": "0o600",
+      "sha256": "e1b3585f5f8f76f840dab878dc75738b3535e806714d60af3d4ed8902d39bee8",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/native-metadata-check-2/started.json"
+    },
+    {
+      "bytes": 82,
+      "member": "native-metadata-expert-check-1/direct-wait.json",
+      "mode": "0o600",
+      "sha256": "2c068147999d51a7a9dd2fbd706e29a8b60c0b05ea6f6a7a4454e33d6550db03",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/native-metadata-expert-check-1/direct-wait.json"
+    },
+    {
+      "bytes": 260,
+      "member": "native-metadata-expert-check-1/direct-join.json",
+      "mode": "0o600",
+      "sha256": "5f11246609d6f08ad8c011dedcfbd7da34913133673bd164141db37d2289013b",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/native-metadata-expert-check-1/direct-join.json"
+    },
+    {
+      "bytes": 1280,
+      "member": "native-metadata-expert-check-1/whole.json",
+      "mode": "0o600",
+      "sha256": "6ca4bd1663cf9550a39b93b25d31eb6e47dd9d860708404902d8bac329e2c3b1",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/native-metadata-expert-check-1/whole.json"
+    },
+    {
+      "bytes": 0,
+      "member": "native-metadata-expert-check-1/stderr",
+      "mode": "0o600",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/native-metadata-expert-check-1/stderr"
+    },
+    {
+      "bytes": 395,
+      "member": "native-metadata-expert-check-1/stdout",
+      "mode": "0o600",
+      "sha256": "21bf3b5d846477b848337b99dbf19f6eaee52861c3c4a5358aab30c7e2992464",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/native-metadata-expert-check-1/stdout"
+    },
+    {
+      "bytes": 36,
+      "member": "native-metadata-expert-check-1/started.json",
+      "mode": "0o600",
+      "sha256": "5561be67f000502e2b67be117dc9d97a795c5841717b61d872002b7a28a9e347",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/native-metadata-expert-check-1/started.json"
+    },
+    {
+      "bytes": 82,
+      "member": "native-final-metadata-check-1/direct-wait.json",
+      "mode": "0o600",
+      "sha256": "12a06ed8064bc2b5b87f967e7513f950bd4a6763d696cb0d0b85e050af5bfd90",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/native-final-metadata-check-1/direct-wait.json"
+    },
+    {
+      "bytes": 260,
+      "member": "native-final-metadata-check-1/direct-join.json",
+      "mode": "0o600",
+      "sha256": "7166fbef7a03562948c2061eef4c0e2a76a86162107805bce009a9a13aa71f60",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/native-final-metadata-check-1/direct-join.json"
+    },
+    {
+      "bytes": 1258,
+      "member": "native-final-metadata-check-1/whole.json",
+      "mode": "0o600",
+      "sha256": "914eeb303043633cd71c0fb27cf50871305fb0231e0df59c767c5e1e1be1e8ea",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/native-final-metadata-check-1/whole.json"
+    },
+    {
+      "bytes": 0,
+      "member": "native-final-metadata-check-1/stderr",
+      "mode": "0o600",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/native-final-metadata-check-1/stderr"
+    },
+    {
+      "bytes": 396,
+      "member": "native-final-metadata-check-1/stdout",
+      "mode": "0o600",
+      "sha256": "7eb270c2f5474e996ad197a682c655c77bfcc35289f8a494c5fdfc62f00cc952",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/native-final-metadata-check-1/stdout"
+    },
+    {
+      "bytes": 36,
+      "member": "native-final-metadata-check-1/started.json",
+      "mode": "0o600",
+      "sha256": "cc81c0d3fd18f91aa196de87045d948bc48dc722982b881feb36ea06c449a291",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/native-final-metadata-check-1/started.json"
+    },
+    {
+      "bytes": 3787,
+      "member": "stage-consumer/ACTUAL-ORDINARY-WHOLE-HANDOFF.json",
+      "mode": "0o600",
+      "sha256": "7758b405be62aea6211e0ebbd635115b4c415d20accb85151b4760f6814e82ec",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/ACTUAL-ORDINARY-WHOLE-HANDOFF.json"
+    },
+    {
+      "bytes": 561,
+      "member": "stage-consumer/variant-settings.json",
+      "mode": "0o600",
+      "sha256": "958e6039bdc370b9481b16ec2a6f8fbe197fb1aaa7f56e94d22de608abbe1e3d",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/variant-settings.json"
+    },
+    {
+      "bytes": 4000,
+      "member": "stage-consumer/composite_module_binding.py",
+      "mode": "0o600",
+      "sha256": "21ba151be3e0f819bca0514a53dfb33d7ea49f6d2cbd1f7ace658ee6a864ba30",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/composite_module_binding.py"
+    },
+    {
+      "bytes": 3851,
+      "member": "stage-consumer/actual-fresh8b-consumer-parent-result.json",
+      "mode": "0o600",
+      "sha256": "3d911f6788cf21ca80c24f37ba32a595310598010aa7fa810ca79e9934220659",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/actual-fresh8b-consumer-parent-result.json"
+    },
+    {
+      "bytes": 97825,
+      "member": "stage-consumer/native_diagnostic_container_owner.py",
+      "mode": "0o600",
+      "sha256": "457323799b266c7f91cae415f08966c08b292f3564ee980401e1b491989a9d9b",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native_diagnostic_container_owner.py"
+    },
+    {
+      "bytes": 455,
+      "member": "stage-consumer/root-ordinary-admission-1.json",
+      "mode": "0o600",
+      "sha256": "6b249db98fb3046d7d15ab2951a883c73fc6ddd9e1b9881888e876bc06a60eca",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/root-ordinary-admission-1.json"
+    },
+    {
+      "bytes": 2854,
+      "member": "stage-consumer/COMMAND-SET-v2.json",
+      "mode": "0o600",
+      "sha256": "3eb2c52cc9148c68f5c09b483e79dfdfe28e81a37641c1605d3f53f6614cadc2",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/COMMAND-SET-v2.json"
+    },
+    {
+      "bytes": 19655,
+      "member": "stage-consumer/source-pins-v2.json",
+      "mode": "0o600",
+      "sha256": "f56c44183367e5c867545f5aa7b4d5b669792b12205e12da4dbfa5562d12f0c6",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/source-pins-v2.json"
+    },
+    {
+      "bytes": 24863,
+      "member": "stage-consumer/repaired_image_authority.py",
+      "mode": "0o600",
+      "sha256": "e375bd0eadf5ea8fa8ef6621603a8617b45bbce965a74f10e08b3cd7256b6f2e",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/repaired_image_authority.py"
+    },
+    {
+      "bytes": 4168,
+      "member": "stage-consumer/STAGE-INPUTS.json",
+      "mode": "0o600",
+      "sha256": "ae10b02e5d418bb012f070ce528a5d09d1393c6aa3d84d8f8151e6097902a271",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/STAGE-INPUTS.json"
+    },
+    {
+      "bytes": 8678,
+      "member": "stage-consumer/COMPOSITE-MODULE-BINDING.json",
+      "mode": "0o600",
+      "sha256": "b2819124b01afceab304998b65f3c5a4f9beb21d81b260e356f75c6ac65fbd8e",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/COMPOSITE-MODULE-BINDING.json"
+    },
+    {
+      "bytes": 84014,
+      "member": "stage-consumer/fresh-snapshot-bindings.json",
+      "mode": "0o600",
+      "sha256": "d3d78e09d9c4eca80650a20214913cf42b9638f34c774fc400df10dd905b800c",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/fresh-snapshot-bindings.json"
+    },
+    {
+      "bytes": 0,
+      "member": "stage-consumer/fresh8b-owner-fixture.stderr",
+      "mode": "0o600",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/fresh8b-owner-fixture.stderr"
+    },
+    {
+      "bytes": 2948,
+      "member": "stage-consumer/root-live-preflight-1.json",
+      "mode": "0o644",
+      "sha256": "a305e8dbd9c4a7f9fdb92505ad032feb0a5ad693a21a5aa633c298b578907b85",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/root-live-preflight-1.json"
+    },
+    {
+      "bytes": 43957,
+      "member": "stage-consumer/pinned-source-authorities-v2.json",
+      "mode": "0o600",
+      "sha256": "c2d6dc30c17ec3f755669fd40ab031861297270dc581937dd9f5e0ee1c6ee240",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/pinned-source-authorities-v2.json"
+    },
+    {
+      "bytes": 9913,
+      "member": "stage-consumer/qmp_capture.py",
+      "mode": "0o600",
+      "sha256": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/qmp_capture.py"
+    },
+    {
+      "bytes": 6300,
+      "member": "stage-consumer/stage_launch_init.py",
+      "mode": "0o600",
+      "sha256": "7a0f8c8ed20e1769005d38805f894897023a4289f3da96edd1d05f865bc9980e",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/stage_launch_init.py"
+    },
+    {
+      "bytes": 125,
+      "member": "stage-consumer/ordinary-outer-1.stdout",
+      "mode": "0o600",
+      "sha256": "ef28d74a39cc956ca2d3dc8eebf9fd258088b26f828cdb738cce2a45ac39af75",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/ordinary-outer-1.stdout"
+    },
+    {
+      "bytes": 14753,
+      "member": "stage-consumer/run_two_commands_source_bound.py",
+      "mode": "0o600",
+      "sha256": "28a5eaaa7741044ed25d6fdc1dcd1d523a30b8669c37c5f1cabc6689a9237582",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/run_two_commands_source_bound.py"
+    },
+    {
+      "bytes": 6005,
+      "member": "stage-consumer/native_diagnostic_runner.py",
+      "mode": "0o600",
+      "sha256": "25ea29f9b07232094e9df1db6094ad0a85ec678281749a1d6998abb7c700d499",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native_diagnostic_runner.py"
+    },
+    {
+      "bytes": 0,
+      "member": "stage-consumer/fresh8b-runner-fixture.stderr",
+      "mode": "0o600",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/fresh8b-runner-fixture.stderr"
+    },
+    {
+      "bytes": 5514,
+      "member": "stage-consumer/prepare_native_parent.py",
+      "mode": "0o600",
+      "sha256": "4f65a414b5d2072653b6b8e9344234607f1d00eed47f8c5a637936247062cb56",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/prepare_native_parent.py"
+    },
+    {
+      "bytes": 25398,
+      "member": "stage-consumer/native_diagnostic_backend.py",
+      "mode": "0o600",
+      "sha256": "cd0759c926876483665065cb320b9daf7d7c6b32f56e561805b4b0343f60d614",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native_diagnostic_backend.py"
+    },
+    {
+      "bytes": 0,
+      "member": "stage-consumer/ordinary-outer-1.stderr",
+      "mode": "0o600",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/ordinary-outer-1.stderr"
+    },
+    {
+      "bytes": 7610,
+      "member": "stage-consumer/REVIEW-PACKET.json",
+      "mode": "0o600",
+      "sha256": "7f30a5dda290562f9388d410fd4cb910e7f402dd7fe0655f604fb6d3a4f0646f",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/REVIEW-PACKET.json"
+    },
+    {
+      "bytes": 3197,
+      "member": "stage-consumer/EXECUTION-PROFILE-SOURCE-BOUND-v2.json",
+      "mode": "0o600",
+      "sha256": "cef9898d69dae1c2ba83d856201c48440baeeddfbf25461a618b5ac2d62d981b",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/EXECUTION-PROFILE-SOURCE-BOUND-v2.json"
+    },
+    {
+      "bytes": 1840,
+      "member": "stage-consumer/prospective-full-argv-NOT-PREFLIGHT.json",
+      "mode": "0o600",
+      "sha256": "d217a8bd45a2e8137d4524aba0607a5337a09d3a88caf425922e920a6f25286c",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/prospective-full-argv-NOT-PREFLIGHT.json"
+    },
+    {
+      "bytes": 10839,
+      "member": "stage-consumer/root_manual_snapshot_twenty_launches_sdk.py",
+      "mode": "0o600",
+      "sha256": "2363d6ef638d4a4661d5c603645f919ea7dee16da033110f939a8b4ff08ea21e",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/root_manual_snapshot_twenty_launches_sdk.py"
+    },
+    {
+      "bytes": 76466,
+      "member": "stage-consumer/native_diagnostic.py",
+      "mode": "0o600",
+      "sha256": "69d7bdb600309a4aea02f38746ba17438bf6e4758def35d6c2f90264c3ee75e3",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native_diagnostic.py"
+    },
+    {
+      "bytes": 0,
+      "member": "stage-consumer/fresh8b-owner-fixture.stdout",
+      "mode": "0o600",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/fresh8b-owner-fixture.stdout"
+    },
+    {
+      "bytes": 1570,
+      "member": "stage-consumer/fresh8b-fixture-inputs.json",
+      "mode": "0o600",
+      "sha256": "2d4f4294a7c7578ca960ebc487c1a2519e1fb45823489dc34053bc3870fdfc99",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/fresh8b-fixture-inputs.json"
+    },
+    {
+      "bytes": 46752,
+      "member": "stage-consumer/actual-native-preflight-fresh8b.json",
+      "mode": "0o600",
+      "sha256": "d2c962258b5c4a5c14d496709af1d9e9a17000b1a939a93fadb8c45b32d1c890",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/actual-native-preflight-fresh8b.json"
+    },
+    {
+      "bytes": 111,
+      "member": "stage-consumer/fresh8b-runner-fixture.stdout",
+      "mode": "0o600",
+      "sha256": "d6d858244559daff2dc481eccc005e0e2e36c2936f709a977903bd13c04c4095",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/fresh8b-runner-fixture.stdout"
+    },
+    {
+      "bytes": 7276,
+      "member": "stage-consumer/prepare_current_pair_consumer.py",
+      "mode": "0o600",
+      "sha256": "c2fffe4dc33e77f624835b2f9596bab660961e7ca8c55d6f4a98c52b40fe9ce4",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/prepare_current_pair_consumer.py"
+    },
+    {
+      "bytes": 20062,
+      "member": "stage-descriptors/overlay-manifest.json",
+      "mode": "0o600",
+      "sha256": "667ada147b650919962e74a2df5f88ca48d2bb9e0fb4126ea2796d69ba480664",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/stage-launches-1/overlay-manifest.json"
+    },
+    {
+      "bytes": 4470,
+      "member": "stage-descriptors/stage-result.json",
+      "mode": "0o600",
+      "sha256": "1a51c010834416755820d6c896b82222674a54871cfa0fb2a257ff1d51e68aa1",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/stage-launches-1/stage-result.json"
+    },
+    {
+      "bytes": 10485,
+      "member": "stage-descriptors/manifest.json",
+      "mode": "0o600",
+      "sha256": "69e8bc3a08c304a9c98f4243adb2a2889fb30237f6ec532b5c132ad343b29416",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/stage-launches-1/manifest.json"
+    },
+    {
+      "bytes": 310,
+      "member": "ordinary-chain/admission.json",
+      "mode": "0o600",
+      "sha256": "7d05bab202ed0355c5e34ac01c4fd8dc1ddd020b31a7a5b377046baa70387f5d",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/ordinary-chain-capture-1/admission.json"
+    },
+    {
+      "bytes": 3315,
+      "member": "ordinary-chain/whole-result.json",
+      "mode": "0o600",
+      "sha256": "76b292461a32997893335ea3cd9e4510b3c27ee1dba9785879d805d54c756858",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/ordinary-chain-capture-1/whole-result.json"
+    },
+    {
+      "bytes": 82,
+      "member": "ordinary-chain/01-actual-owner-runner-full-parent/direct-wait.json",
+      "mode": "0o600",
+      "sha256": "a70480beb27dd67973f39d63448537efc2644c0fa8a000f3319129fecbb898a3",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/ordinary-chain-capture-1/01-actual-owner-runner-full-parent/direct-wait.json"
+    },
+    {
+      "bytes": 303,
+      "member": "ordinary-chain/01-actual-owner-runner-full-parent/command.json",
+      "mode": "0o600",
+      "sha256": "dab2a69501f2eea356662d5fae70ef7e1d15543458e7d1bd212afaf5a8b0ae55",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/ordinary-chain-capture-1/01-actual-owner-runner-full-parent/command.json"
+    },
+    {
+      "bytes": 258,
+      "member": "ordinary-chain/01-actual-owner-runner-full-parent/direct-join.json",
+      "mode": "0o600",
+      "sha256": "575724cfd4d33a3df8b32b038502d5c21c466823363e8d1c9de80781a879609f",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/ordinary-chain-capture-1/01-actual-owner-runner-full-parent/direct-join.json"
+    },
+    {
+      "bytes": 0,
+      "member": "ordinary-chain/01-actual-owner-runner-full-parent/stderr",
+      "mode": "0o600",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/ordinary-chain-capture-1/01-actual-owner-runner-full-parent/stderr"
+    },
+    {
+      "bytes": 306,
+      "member": "ordinary-chain/01-actual-owner-runner-full-parent/stdout",
+      "mode": "0o600",
+      "sha256": "f128e3d2bba6c0a100565bcc353b3210883c0876144a5a54db2b4dea8e4d82c4",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/ordinary-chain-capture-1/01-actual-owner-runner-full-parent/stdout"
+    },
+    {
+      "bytes": 1481,
+      "member": "ordinary-chain/01-actual-owner-runner-full-parent/status.json",
+      "mode": "0o600",
+      "sha256": "2370964ba3d7e270a2424939eda7fbe581d741c4fa47494ee7e3592928589890",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/ordinary-chain-capture-1/01-actual-owner-runner-full-parent/status.json"
+    },
+    {
+      "bytes": 36,
+      "member": "ordinary-chain/01-actual-owner-runner-full-parent/started.json",
+      "mode": "0o600",
+      "sha256": "59cc7b1c0f802395493460fe2197a36f42db02b92ab84d34115ee30bbe475f02",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/ordinary-chain-capture-1/01-actual-owner-runner-full-parent/started.json"
+    },
+    {
+      "bytes": 82,
+      "member": "ordinary-chain/00-metadata-preserving-HOST66-three-modules-and-collector-stage/direct-wait.json",
+      "mode": "0o600",
+      "sha256": "e67cdbce7d7ea2fbf8821aae6c942b8b8df30e1472b1b2baf6be416b4c2c0c47",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/ordinary-chain-capture-1/00-metadata-preserving-HOST66-three-modules-and-collector-stage/direct-wait.json"
+    },
+    {
+      "bytes": 320,
+      "member": "ordinary-chain/00-metadata-preserving-HOST66-three-modules-and-collector-stage/command.json",
+      "mode": "0o600",
+      "sha256": "35bc2eb676904e104c38f44257afa4e72e9f2558e43857e01ba22eb4946cc6cb",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/ordinary-chain-capture-1/00-metadata-preserving-HOST66-three-modules-and-collector-stage/command.json"
+    },
+    {
+      "bytes": 259,
+      "member": "ordinary-chain/00-metadata-preserving-HOST66-three-modules-and-collector-stage/direct-join.json",
+      "mode": "0o600",
+      "sha256": "1148d23140fdf0491fc199ddc6d76ab43f4ef7db0a87d7c464254a3bcc59bd78",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/ordinary-chain-capture-1/00-metadata-preserving-HOST66-three-modules-and-collector-stage/direct-join.json"
+    },
+    {
+      "bytes": 0,
+      "member": "ordinary-chain/00-metadata-preserving-HOST66-three-modules-and-collector-stage/stderr",
+      "mode": "0o600",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/ordinary-chain-capture-1/00-metadata-preserving-HOST66-three-modules-and-collector-stage/stderr"
+    },
+    {
+      "bytes": 146,
+      "member": "ordinary-chain/00-metadata-preserving-HOST66-three-modules-and-collector-stage/stdout",
+      "mode": "0o600",
+      "sha256": "6234557b335549910c42219d8e6f69dd9bdfa933867ca524158e9ecf60743e72",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/ordinary-chain-capture-1/00-metadata-preserving-HOST66-three-modules-and-collector-stage/stdout"
+    },
+    {
+      "bytes": 1557,
+      "member": "ordinary-chain/00-metadata-preserving-HOST66-three-modules-and-collector-stage/status.json",
+      "mode": "0o600",
+      "sha256": "2adc6c2e6a325aef4d68a3f24c08ff7937bec2eaeb4162c9645a0bcbaf9d6bc8",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/ordinary-chain-capture-1/00-metadata-preserving-HOST66-three-modules-and-collector-stage/status.json"
+    },
+    {
+      "bytes": 36,
+      "member": "ordinary-chain/00-metadata-preserving-HOST66-three-modules-and-collector-stage/started.json",
+      "mode": "0o600",
+      "sha256": "855bcd2bd024e7ed8df77ebcd06734e9d6c9b5ef1de41d6e545cfcdf499b266e",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/ordinary-chain-capture-1/00-metadata-preserving-HOST66-three-modules-and-collector-stage/started.json"
+    },
+    {
+      "bytes": 0,
+      "member": "native-case/root-seven1-readback-2.stderr",
+      "mode": "0o600",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/root-seven1-readback-2.stderr"
+    },
+    {
+      "bytes": 412,
+      "member": "native-case/root-seven1-readback-2.stdout",
+      "mode": "0o600",
+      "sha256": "2bdbb5600e5a13ee53371955032e01db387314d2beab90af9bb605e07122eb8d",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/root-seven1-readback-2.stdout"
+    },
+    {
+      "bytes": 0,
+      "member": "native-case/root-seven1-final-guard.stderr",
+      "mode": "0o600",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/root-seven1-final-guard.stderr"
+    },
+    {
+      "bytes": 0,
+      "member": "native-case/root-seven1-readback-1.stderr",
+      "mode": "0o600",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/root-seven1-readback-1.stderr"
+    },
+    {
+      "bytes": 927,
+      "member": "native-case/root-seven1-final-guard.status.json",
+      "mode": "0o600",
+      "sha256": "940075a5b8d74cc80d7c72b026b043d3eb2eb9c5dbadda4217aaf13cc4bbc9fd",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/root-seven1-final-guard.status.json"
+    },
+    {
+      "bytes": 925,
+      "member": "native-case/root-seven1-readback-1.status.json",
+      "mode": "0o600",
+      "sha256": "f30fc22de55c27d925d6b1b94511e247d8ef9b4de0f0a0e13317b4232f8804bc",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/root-seven1-readback-1.status.json"
+    },
+    {
+      "bytes": 1159,
+      "member": "native-case/snapshot.status.json.command.json",
+      "mode": "0o600",
+      "sha256": "d98f09601f059ae25e2aa8fbc545e01ae864d3fe2ff7b85067b2b99c8623fe6b",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/snapshot.status.json.command.json"
+    },
+    {
+      "bytes": 414,
+      "member": "native-case/root-seven1-native-owner.stdout",
+      "mode": "0o600",
+      "sha256": "364bd1971e778d1e69489675f01d5290beba8de937210781cd6d11ead565ac5b",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/root-seven1-native-owner.stdout"
+    },
+    {
+      "bytes": 6290,
+      "member": "native-case/SNAPSHOT-STATIC-EQUALITY-AND-CAPPED-ARGV.json",
+      "mode": "0o600",
+      "sha256": "f2d016e1f9cb615a3bf697f925357a8ee4e184af5961c4b6b647a6d3ab0d4444",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/SNAPSHOT-STATIC-EQUALITY-AND-CAPPED-ARGV.json"
+    },
+    {
+      "bytes": 412,
+      "member": "native-case/root-seven1-readback-3.stdout",
+      "mode": "0o600",
+      "sha256": "ca7b7e785d1d0701a46f6c56fa984e3f349595099060e33590ee1c38106ec74b",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/root-seven1-readback-3.stdout"
+    },
+    {
+      "bytes": 667,
+      "member": "native-case/root-seven1-readback-3.child.json",
+      "mode": "0o600",
+      "sha256": "154bfd362b200c5fd8691c5d6d8bceec98819dfd4cdc65049104299aa3b593f6",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/root-seven1-readback-3.child.json"
+    },
+    {
+      "bytes": 8200,
+      "member": "native-case/review_final_205_release.py",
+      "mode": "0o600",
+      "sha256": "b0c414549510d765bd45e55bb1fa9a306d438845d121e203798277e763df11b2",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/review_final_205_release.py"
+    },
+    {
+      "bytes": 49352,
+      "member": "native-case/FINAL-SEVEN-ROOT-CALL-DATA.json.PENDING-STATIC-CORRECTED",
+      "mode": "0o600",
+      "sha256": "93dd23369f4e5a9c0979bb17b0792ef9e4c5599f62515e8270891f044f7299d3",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/FINAL-SEVEN-ROOT-CALL-DATA.json.PENDING-STATIC-CORRECTED"
+    },
+    {
+      "bytes": 17047,
+      "member": "native-case/FINAL-IHK-LOGGING-CHECK-CONFIG.json",
+      "mode": "0o600",
+      "sha256": "89d4952d90a6e8199b2138f963f61bc99078d395f5042392fc0ec6178cfdc8df",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/FINAL-IHK-LOGGING-CHECK-CONFIG.json"
+    },
+    {
+      "bytes": 613,
+      "member": "native-case/root-seven1-native-owner.child.json",
+      "mode": "0o600",
+      "sha256": "20d039eb22746049f95955573a1f87df05f7f2dc093c0163a40d7c64159aafbf",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/root-seven1-native-owner.child.json"
+    },
+    {
+      "bytes": 7578,
+      "member": "native-case/NATIVE-COHERENT-REVIEW-PACKET.json.PENDING-STATIC-CORRECTED",
+      "mode": "0o600",
+      "sha256": "fa4a8233f5712a9e1b74764d623a1f58fe6e2ddb5c7ceb9eed464d2e13c29afc",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/NATIVE-COHERENT-REVIEW-PACKET.json.PENDING-STATIC-CORRECTED"
+    },
+    {
+      "bytes": 6091,
+      "member": "native-case/SNAPSHOT-STATIC-EQUALITY-AND-CAPPED-ARGV.json.PENDING-STATIC-CORRECTED",
+      "mode": "0o600",
+      "sha256": "c81a5589c05d39088fb3c1f04068db97fc2baee9dacbfbd7929ecf6057718eca",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/SNAPSHOT-STATIC-EQUALITY-AND-CAPPED-ARGV.json.PENDING-STATIC-CORRECTED"
+    },
+    {
+      "bytes": 669,
+      "member": "native-case/root-seven1-final-guard.child.json",
+      "mode": "0o600",
+      "sha256": "bacb96fd61f88052103e6c431e4ab6bc6a2dd81852b3fb87ee5e2c26243b338e",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/root-seven1-final-guard.child.json"
+    },
+    {
+      "bytes": 353,
+      "member": "native-case/root-seven-admission-1.json",
+      "mode": "0o600",
+      "sha256": "8440fe6a34925e6aec85b51292af83f3027fb01d2e8aae704dc984c84bb84d1d",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/root-seven-admission-1.json"
+    },
+    {
+      "bytes": 3124,
+      "member": "native-case/conditional-metadata.json.PENDING-STATIC-CORRECTED",
+      "mode": "0o600",
+      "sha256": "67d91ba847f07f487e3aa27cae63c3a45f500485c7f0bfb8b07748c0076f8373",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/conditional-metadata.json.PENDING-STATIC-CORRECTED"
+    },
+    {
+      "bytes": 3400,
+      "member": "native-case/FINAL-NONTEMPORAL-DATA-INDEX.json.PENDING-STATIC-CORRECTED",
+      "mode": "0o600",
+      "sha256": "ef2c2d2aa2a7ac204cae6e1262825f1a962f4068488d60bd24975c65a1282055",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/FINAL-NONTEMPORAL-DATA-INDEX.json.PENDING-STATIC-CORRECTED"
+    },
+    {
+      "bytes": 0,
+      "member": "native-case/root-seven1-machine-assembly.stderr",
+      "mode": "0o600",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/root-seven1-machine-assembly.stderr"
+    },
+    {
+      "bytes": 6091,
+      "member": "native-case/root-execute-seven-1.py.PENDING-STATIC-CORRECTED",
+      "mode": "0o600",
+      "sha256": "3f6abce2e21cb3d5411db5f7e13209b7a5aafee6902ce0de25e72ded5380c445",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/root-execute-seven-1.py.PENDING-STATIC-CORRECTED"
+    },
+    {
+      "bytes": 88286,
+      "member": "native-case/non-temporal-freeze.json.PENDING-STATIC-CORRECTED",
+      "mode": "0o600",
+      "sha256": "87577ce68ef42f581ec9a8a6091842343248b0bb291d3c2e9ddc6e3f1a72243e",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/non-temporal-freeze.json.PENDING-STATIC-CORRECTED"
+    },
+    {
+      "bytes": 400,
+      "member": "native-case/root-seven1-LAST-snapshot.stdout",
+      "mode": "0o600",
+      "sha256": "c34ea6aa4b8a9ee2d3c22c75492fab5aae1310abb86bc96d64a3f412c842119a",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/root-seven1-LAST-snapshot.stdout"
+    },
+    {
+      "bytes": 928,
+      "member": "native-case/root-seven1-LAST-snapshot.status.json",
+      "mode": "0o600",
+      "sha256": "6e8079d52191e557b211d076d13de269a39c75a1aa3960af245cbe0dd189beda",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/root-seven1-LAST-snapshot.status.json"
+    },
+    {
+      "bytes": 301,
+      "member": "native-case/snapshot.stdout",
+      "mode": "0o600",
+      "sha256": "31f544a950ee557dde73a1d5ed35dc86660827ec517effc38a1515cc86d6fd11",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/snapshot.stdout"
+    },
+    {
+      "bytes": 673,
+      "member": "native-case/root-seven1-machine-assembly.child.json",
+      "mode": "0o600",
+      "sha256": "7424976f4870b52c262078fd90de28d4e6904b034c783a7f50c378769bcb3b6e",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/root-seven1-machine-assembly.child.json"
+    },
+    {
+      "bytes": 667,
+      "member": "native-case/root-seven1-readback-1.child.json",
+      "mode": "0o600",
+      "sha256": "efa401726ba0ecb172cc86aa09afe69ea2f3f71a72ec14dfeb5db225fd996f65",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/root-seven1-readback-1.child.json"
+    },
+    {
+      "bytes": 6280,
+      "member": "native-case/FINAL-205-MATCHED-SDK-NATIVE-MACHINE-REVIEW.json",
+      "mode": "0o600",
+      "sha256": "ee109da1a8591021add1f3d6d3a41d0cfa74993eb0bf09377af1e8cab8f65595",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/FINAL-205-MATCHED-SDK-NATIVE-MACHINE-REVIEW.json"
+    },
+    {
+      "bytes": 931,
+      "member": "native-case/root-seven1-machine-assembly.status.json",
+      "mode": "0o600",
+      "sha256": "453e5e24cbd6b0f7fd374baf9145612d9b40376a1422e57ce75590e7e3fd61db",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/root-seven1-machine-assembly.status.json"
+    },
+    {
+      "bytes": 853,
+      "member": "native-case/root-seven1-native-owner.status.json",
+      "mode": "0o600",
+      "sha256": "7bdd48e4f7347471d9547feea8d79f44cd9ba3ddc47ee52fed0d9f56e896840c",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/root-seven1-native-owner.status.json"
+    },
+    {
+      "bytes": 1961,
+      "member": "native-case/machine-base.json",
+      "mode": "0o600",
+      "sha256": "1ce1b513e3d9196b5ded42b56093452cd734dbd1112b29c8a73400ef20a9d935",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/machine-base.json"
+    },
+    {
+      "bytes": 412,
+      "member": "native-case/root-seven1-readback-1.stdout",
+      "mode": "0o600",
+      "sha256": "419c0f186d521093939d28b68013ce62557f0adde216f03631a2940385304168",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/root-seven1-readback-1.stdout"
+    },
+    {
+      "bytes": 893,
+      "member": "native-case/snapshot.status.json.direct-join.json",
+      "mode": "0o600",
+      "sha256": "6ebc4c01025d43aa4ce986d31c09560ed8841ee42a07f0b349acf1da7849dcd1",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/snapshot.status.json.direct-join.json"
+    },
+    {
+      "bytes": 2341,
+      "member": "native-case/root-seven-whole-1.json",
+      "mode": "0o600",
+      "sha256": "78cb2e0cd935f80beafddc7ddc9cbd9c6666b427f79a07ec019ac052e5cc04b2",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/root-seven-whole-1.json"
+    },
+    {
+      "bytes": 16776,
+      "member": "native-case/FINAL-IHK-LOGGING-CHECK-CONFIG.json.PENDING-STATIC-CORRECTED",
+      "mode": "0o600",
+      "sha256": "8c05868cb456edde71db743c19300307565a80afcfbfc09d8ef66a6c4e308a70",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/FINAL-IHK-LOGGING-CHECK-CONFIG.json.PENDING-STATIC-CORRECTED"
+    },
+    {
+      "bytes": 671,
+      "member": "native-case/root-seven1-LAST-snapshot.child.json",
+      "mode": "0o600",
+      "sha256": "785e4acbb35c43f26154e1477d01c44ff0faf1e0e48dfa3d4403c179399ada50",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/root-seven1-LAST-snapshot.child.json"
+    },
+    {
+      "bytes": 5323,
+      "member": "native-case/proposal.json",
+      "mode": "0o600",
+      "sha256": "211be2988298b549bf6614956d20791dc4ff1627907967e9cc00e6dfdd1631b1",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/proposal.json"
+    },
+    {
+      "bytes": 1780,
+      "member": "native-case/snapshot.status.json",
+      "mode": "0o600",
+      "sha256": "53e343eb9c3b251689eece8c0a7fd01a28decb191d963dec251042ef29e371dc",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/snapshot.status.json"
+    },
+    {
+      "bytes": 49352,
+      "member": "native-case/FINAL-SEVEN-ROOT-CALL-DATA.json",
+      "mode": "0o600",
+      "sha256": "c2e25450197070261bbf35fed56d7928288bc5b4b5e5f5147b06d343a0bb42fe",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/FINAL-SEVEN-ROOT-CALL-DATA.json"
+    },
+    {
+      "bytes": 0,
+      "member": "native-case/root-seven1-native-owner.stderr",
+      "mode": "0o600",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/root-seven1-native-owner.stderr"
+    },
+    {
+      "bytes": 0,
+      "member": "native-case/root-seven1-LAST-snapshot.stderr",
+      "mode": "0o600",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/root-seven1-LAST-snapshot.stderr"
+    },
+    {
+      "bytes": 424,
+      "member": "native-case/root-seven1-machine-assembly.stdout",
+      "mode": "0o600",
+      "sha256": "c131d6d44c771a7c4f3347a72c683036f9351b7948b80d8fb3daefb6810e2496",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/root-seven1-machine-assembly.stdout"
+    },
+    {
+      "bytes": 278,
+      "member": "native-case/ROOT-SEVEN-REVIEW-REF-1.json",
+      "mode": "0o600",
+      "sha256": "89d93361d7be23b8a5a252185077114aebcbe495e331d4801a70faf93b2aa409",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/ROOT-SEVEN-REVIEW-REF-1.json"
+    },
+    {
+      "bytes": 7632,
+      "member": "native-case/NATIVE-COHERENT-REVIEW-PACKET.json",
+      "mode": "0o600",
+      "sha256": "d7bcca25285f7a42830a0a867605a84a6d89aa8d36704cb81fc2543ce6beaf57",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/NATIVE-COHERENT-REVIEW-PACKET.json"
+    },
+    {
+      "bytes": 3466,
+      "member": "native-case/FINAL-NONTEMPORAL-DATA-INDEX.json",
+      "mode": "0o600",
+      "sha256": "2fb2cfefccdfe563dd7a4094dd01297eac6cb4e81f851bccc6bcd21816392dad",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/FINAL-NONTEMPORAL-DATA-INDEX.json"
+    },
+    {
+      "bytes": 0,
+      "member": "native-case/snapshot.stderr",
+      "mode": "0o600",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/snapshot.stderr"
+    },
+    {
+      "bytes": 0,
+      "member": "native-case/root-seven1-readback-3.stderr",
+      "mode": "0o600",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/root-seven1-readback-3.stderr"
+    },
+    {
+      "bytes": 807,
+      "member": "native-case/snapshot.status.json.child.json",
+      "mode": "0o600",
+      "sha256": "67429eff373d2c5f7bef95e4c04be9cd68b7f3ce0741033b1e586bef5ba306ef",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/snapshot.status.json.child.json"
+    },
+    {
+      "bytes": 414,
+      "member": "native-case/root-seven1-final-guard.stdout",
+      "mode": "0o600",
+      "sha256": "2330c0dfa19f94c890fb6bfd5289637005601d5f49615f7df30b4b642214da62",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/root-seven1-final-guard.stdout"
+    },
+    {
+      "bytes": 925,
+      "member": "native-case/root-seven1-readback-2.status.json",
+      "mode": "0o600",
+      "sha256": "d29de35fe896c2ddb14be840003fd32474a27f3d3055247891a18e39e247aa38",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/root-seven1-readback-2.status.json"
+    },
+    {
+      "bytes": 667,
+      "member": "native-case/root-seven1-readback-2.child.json",
+      "mode": "0o600",
+      "sha256": "dca3da626c59a847674f01fdde868932ae5c3f89176c34f7e02d075c65ef3dea",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/root-seven1-readback-2.child.json"
+    },
+    {
+      "bytes": 5471,
+      "member": "native-case/root-run-exact-readonly-stage.py",
+      "mode": "0o600",
+      "sha256": "71ae1eaa7732d20d54afe940d2692d5c1896cfbde1718e6748ad05b28899da64",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/root-run-exact-readonly-stage.py"
+    },
+    {
+      "bytes": 1898,
+      "member": "native-case/machine-base.json.PENDING-STATIC-CORRECTED",
+      "mode": "0o600",
+      "sha256": "3a829e73acede7e62a39da4b2908f95c6b4af7601e3518a21d7e4a1f7ef63f53",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/machine-base.json.PENDING-STATIC-CORRECTED"
+    },
+    {
+      "bytes": 6091,
+      "member": "native-case/root-execute-seven-1.py",
+      "mode": "0o600",
+      "sha256": "3e2998447cb773ff0c328f18ca8c8ddc0fe68b8b038594046051196af1bb46ae",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/root-execute-seven-1.py"
+    },
+    {
+      "bytes": 5323,
+      "member": "native-case/proposal.json.PENDING-STATIC-CORRECTED",
+      "mode": "0o600",
+      "sha256": "211be2988298b549bf6614956d20791dc4ff1627907967e9cc00e6dfdd1631b1",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/proposal.json.PENDING-STATIC-CORRECTED"
+    },
+    {
+      "bytes": 215,
+      "member": "native-case/ROOT-SEVEN-REVIEW-REF-1.json.PENDING-STATIC-CORRECTED",
+      "mode": "0o600",
+      "sha256": "91b701f37fd165d0d22c8352e0180e1bb42c246e89b25a0fe096c876a84250bc",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/ROOT-SEVEN-REVIEW-REF-1.json.PENDING-STATIC-CORRECTED"
+    },
+    {
+      "bytes": 925,
+      "member": "native-case/root-seven1-readback-3.status.json",
+      "mode": "0o600",
+      "sha256": "a32017066a0598d2218db59bce008a98772030a405cba8476874692352597176",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/root-seven1-readback-3.status.json"
+    },
+    {
+      "bytes": 2228,
+      "member": "native-case/execution-release.json",
+      "mode": "0o600",
+      "sha256": "044ed175cc7a5128408bcaa14fd065838bf2d3d8b6bfd10af36efc8ca1b6f1b4",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/execution-release.json"
+    },
+    {
+      "bytes": 88361,
+      "member": "native-case/non-temporal-freeze.json",
+      "mode": "0o600",
+      "sha256": "dbf8cf0730c986cd37d974b5f3b2353aed934be99f3de3f2caa50bd485086f56",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/non-temporal-freeze.json"
+    },
+    {
+      "bytes": 3175,
+      "member": "native-case/conditional-metadata.json",
+      "mode": "0o600",
+      "sha256": "66618b897869c04791f0d9dbbdf0134d73b6a136be89d6778e36e05056027a5b",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/conditional-metadata.json"
+    },
+    {
+      "bytes": 722,
+      "member": "native-case/captures/02-final-guard/status.json.child.json",
+      "mode": "0o600",
+      "sha256": "e34611bff0cd7a85516afbe9b061fc4e0fa91ec324db686d2c51a8e1b615e99c",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/captures/02-final-guard/status.json.child.json"
+    },
+    {
+      "bytes": 1070,
+      "member": "native-case/captures/02-final-guard/status.json.command.json",
+      "mode": "0o600",
+      "sha256": "04fd817353439c61a10a7ace04ca233118057116a748c1657ad5e39f438c27b8",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/captures/02-final-guard/status.json.command.json"
+    },
+    {
+      "bytes": 809,
+      "member": "native-case/captures/02-final-guard/status.json.direct-join.json",
+      "mode": "0o600",
+      "sha256": "352002e817a69f832b7e07673273f4ac70cc95baf36789cdb0fa127cde554c9c",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/captures/02-final-guard/status.json.direct-join.json"
+    },
+    {
+      "bytes": 0,
+      "member": "native-case/captures/02-final-guard/stderr",
+      "mode": "0o600",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/captures/02-final-guard/stderr"
+    },
+    {
+      "bytes": 1035,
+      "member": "native-case/captures/02-final-guard/stdout",
+      "mode": "0o600",
+      "sha256": "0c8f12555873bd0b65f402816094d4fc10ab11d80d2ac7f311a42efc82f86ad0",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/captures/02-final-guard/stdout"
+    },
+    {
+      "bytes": 1725,
+      "member": "native-case/captures/02-final-guard/status.json",
+      "mode": "0o600",
+      "sha256": "6233a4d1b548658ffb7e0b2bde687ce02da869dc8a79bddd14722dd265be9648",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/captures/02-final-guard/status.json"
+    },
+    {
+      "bytes": 1919,
+      "member": "native-case/captures/01-machine-assembly/status.json.child.json",
+      "mode": "0o600",
+      "sha256": "ecee0bc23485dbd5c941d47b37a42c93207022f459e7b89635219d850d12dcf0",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/captures/01-machine-assembly/status.json.child.json"
+    },
+    {
+      "bytes": 2277,
+      "member": "native-case/captures/01-machine-assembly/status.json.command.json",
+      "mode": "0o600",
+      "sha256": "06d37c710ec23775cce98f39a9d3948455d48a148a17bfa394053e3356863284",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/captures/01-machine-assembly/status.json.command.json"
+    },
+    {
+      "bytes": 2006,
+      "member": "native-case/captures/01-machine-assembly/status.json.direct-join.json",
+      "mode": "0o600",
+      "sha256": "8191708aed462bca8f282ee1e1c95efaf33957bacb8e3e7775e9b560e454025d",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/captures/01-machine-assembly/status.json.direct-join.json"
+    },
+    {
+      "bytes": 0,
+      "member": "native-case/captures/01-machine-assembly/stderr",
+      "mode": "0o600",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/captures/01-machine-assembly/stderr"
+    },
+    {
+      "bytes": 268,
+      "member": "native-case/captures/01-machine-assembly/stdout",
+      "mode": "0o600",
+      "sha256": "5b965691398f8b693bfc5295553d94ca07c5bb8e49e08cda5645caedfecfa0a1",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/captures/01-machine-assembly/stdout"
+    },
+    {
+      "bytes": 2936,
+      "member": "native-case/captures/01-machine-assembly/status.json",
+      "mode": "0o600",
+      "sha256": "6b3b957fb2c1d11129a254aaaeefeabd905c6f40a60064b0c751141aefaa7d07",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/captures/01-machine-assembly/status.json"
+    },
+    {
+      "bytes": 390,
+      "member": "native-case/captures/05-readback-2/status.json.child.json",
+      "mode": "0o600",
+      "sha256": "62eff71235ffaea5b9d4070ac4ac2ba9a385892b983300a363ef0c0a60f2c9a2",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/captures/05-readback-2/status.json.child.json"
+    },
+    {
+      "bytes": 736,
+      "member": "native-case/captures/05-readback-2/status.json.command.json",
+      "mode": "0o600",
+      "sha256": "5ba90bb94c345a3081a9b4f2b0a7f152bbe3558550911cdc8082ab1e7adad0e9",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/captures/05-readback-2/status.json.command.json"
+    },
+    {
+      "bytes": 477,
+      "member": "native-case/captures/05-readback-2/status.json.direct-join.json",
+      "mode": "0o600",
+      "sha256": "28e5dd7c7a10cf748db6393fd5389d77014496986083c9707770f3c351626c20",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/captures/05-readback-2/status.json.direct-join.json"
+    },
+    {
+      "bytes": 0,
+      "member": "native-case/captures/05-readback-2/stderr",
+      "mode": "0o600",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/captures/05-readback-2/stderr"
+    },
+    {
+      "bytes": 1535346,
+      "member": "native-case/captures/05-readback-2/stdout",
+      "mode": "0o600",
+      "sha256": "44114fee269ecd82eb9d9ce486d2499a379a57396344702f5d9a156d8b21cc22",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/captures/05-readback-2/stdout"
+    },
+    {
+      "bytes": 1393,
+      "member": "native-case/captures/05-readback-2/status.json",
+      "mode": "0o600",
+      "sha256": "265117c303179555d22886b20572e18b1271a0212fe0b19efd701647ed340185",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/captures/05-readback-2/status.json"
+    },
+    {
+      "bytes": 414,
+      "member": "native-case/captures/04-readback-1/status.json.child.json",
+      "mode": "0o600",
+      "sha256": "69dba73368915f6aa4f6b4a2ad84144f381b801aec37ffc00d0a817f5509c2b0",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/captures/04-readback-1/status.json.child.json"
+    },
+    {
+      "bytes": 760,
+      "member": "native-case/captures/04-readback-1/status.json.command.json",
+      "mode": "0o600",
+      "sha256": "50a8f2bc7361c156a8a196647e9ac8d305e88f6fc01e0023b9db04f29b2630d2",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/captures/04-readback-1/status.json.command.json"
+    },
+    {
+      "bytes": 501,
+      "member": "native-case/captures/04-readback-1/status.json.direct-join.json",
+      "mode": "0o600",
+      "sha256": "76803cbc0660cd18defd8b58275675ee8b2860642a1b0dae10872280a8502384",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/captures/04-readback-1/status.json.direct-join.json"
+    },
+    {
+      "bytes": 0,
+      "member": "native-case/captures/04-readback-1/stderr",
+      "mode": "0o600",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/captures/04-readback-1/stderr"
+    },
+    {
+      "bytes": 3727360,
+      "member": "native-case/captures/04-readback-1/stdout",
+      "mode": "0o600",
+      "sha256": "47b93e85541c3e6f0da5b965992caf7a2b52f3a651af981b862999bbb7269ec6",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/captures/04-readback-1/stdout"
+    },
+    {
+      "bytes": 1417,
+      "member": "native-case/captures/04-readback-1/status.json",
+      "mode": "0o600",
+      "sha256": "4029ef9b84ea776a307d7bdef161fc0971d0a4f48a8e3b1484e4c8a5272b1ea3",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/captures/04-readback-1/status.json"
+    },
+    {
+      "bytes": 653,
+      "member": "native-case/captures/03-native-owner/status.json.child.json",
+      "mode": "0o600",
+      "sha256": "702fb0c699bf3cacfd6b6c8ad9396e80314769bd39cdbed62a89512b96b1f2eb",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/captures/03-native-owner/status.json.child.json"
+    },
+    {
+      "bytes": 1008,
+      "member": "native-case/captures/03-native-owner/status.json.command.json",
+      "mode": "0o600",
+      "sha256": "3ec3769d92e1ce4ce98365ea33bda55a03e89ed85b0753afa28bd038f77610b9",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/captures/03-native-owner/status.json.command.json"
+    },
+    {
+      "bytes": 738,
+      "member": "native-case/captures/03-native-owner/status.json.direct-join.json",
+      "mode": "0o600",
+      "sha256": "bc81d86f3e8be5087a4b37506d752e2abec9494efc297e98d1e58841fc06912c",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/captures/03-native-owner/status.json.direct-join.json"
+    },
+    {
+      "bytes": 0,
+      "member": "native-case/captures/03-native-owner/stderr",
+      "mode": "0o600",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/captures/03-native-owner/stderr"
+    },
+    {
+      "bytes": 0,
+      "member": "native-case/captures/03-native-owner/stdout",
+      "mode": "0o600",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/captures/03-native-owner/stdout"
+    },
+    {
+      "bytes": 1654,
+      "member": "native-case/captures/03-native-owner/status.json",
+      "mode": "0o600",
+      "sha256": "45e7d630ea56894b7a5369ba09ec4124e81d8a7c4be3fb7bdc7c771302050ac0",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/captures/03-native-owner/status.json"
+    },
+    {
+      "bytes": 439,
+      "member": "native-case/captures/06-readback-3/status.json.child.json",
+      "mode": "0o600",
+      "sha256": "3e0d31c622bacf87477b961823478e9f27c63f838e80d36eed63e07a21456905",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/captures/06-readback-3/status.json.child.json"
+    },
+    {
+      "bytes": 785,
+      "member": "native-case/captures/06-readback-3/status.json.command.json",
+      "mode": "0o600",
+      "sha256": "cab0f8f8a3055cd8b9698e924c6542eead14adf792a6f7df49d9b254dd2c80c6",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/captures/06-readback-3/status.json.command.json"
+    },
+    {
+      "bytes": 526,
+      "member": "native-case/captures/06-readback-3/status.json.direct-join.json",
+      "mode": "0o600",
+      "sha256": "b4ad86e691a30b53f1952a341df50b1dd9416c35ff75663eca5736709a0d06a0",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/captures/06-readback-3/status.json.direct-join.json"
+    },
+    {
+      "bytes": 0,
+      "member": "native-case/captures/06-readback-3/stderr",
+      "mode": "0o600",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/captures/06-readback-3/stderr"
+    },
+    {
+      "bytes": 3430400,
+      "member": "native-case/captures/06-readback-3/stdout",
+      "mode": "0o600",
+      "sha256": "006d4c11e0abd36d3ab4f0322dea21519795ac5637eaf4e07d34b9e31d666a59",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/captures/06-readback-3/stdout"
+    },
+    {
+      "bytes": 1442,
+      "member": "native-case/captures/06-readback-3/status.json",
+      "mode": "0o600",
+      "sha256": "05167defd971da63157148f353155bb81df9da31223be50b7296fd0cfb98544e",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/captures/06-readback-3/status.json"
+    },
+    {
+      "bytes": 2405,
+      "member": "native-case/capture-templates/05-readback-2.json",
+      "mode": "0o600",
+      "sha256": "80f26a6f93c80c4042662a1e03576ea4d5b74c32681e38d5252be13b03bcbeed",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/capture-templates/05-readback-2.json"
+    },
+    {
+      "bytes": 2595,
+      "member": "native-case/capture-templates/03-native-owner.json.PENDING-STATIC-CORRECTED",
+      "mode": "0o600",
+      "sha256": "d3158c45e1ac5a13de9cd8f4eda695a69ccd07d5457e0f5496b1c1c52e9ac9c8",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/capture-templates/03-native-owner.json.PENDING-STATIC-CORRECTED"
+    },
+    {
+      "bytes": 3927,
+      "member": "native-case/capture-templates/01-machine-assembly.json",
+      "mode": "0o600",
+      "sha256": "6a20f22f59e097c96b2de77f94eba9bd7009f3d17aea3a656a258de50728081c",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/capture-templates/01-machine-assembly.json"
+    },
+    {
+      "bytes": 3864,
+      "member": "native-case/capture-templates/01-machine-assembly.json.PENDING-STATIC-CORRECTED",
+      "mode": "0o600",
+      "sha256": "053b8c17cc14bfd55bd85fe6e066c7a9fea5bae6665258fc685cfc0d1e09cec4",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/capture-templates/01-machine-assembly.json.PENDING-STATIC-CORRECTED"
+    },
+    {
+      "bytes": 2393,
+      "member": "native-case/capture-templates/04-readback-1.json.PENDING-STATIC-CORRECTED",
+      "mode": "0o600",
+      "sha256": "0c68f70c95a8411bf95e38593d38e8240c930b4e8eb96768c2255769df379bf6",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/capture-templates/04-readback-1.json.PENDING-STATIC-CORRECTED"
+    },
+    {
+      "bytes": 2675,
+      "member": "native-case/capture-templates/02-final-guard.json",
+      "mode": "0o600",
+      "sha256": "f915b3c0015f60094b57c279b9e3e377a987dfd919852ceb04f904635cb447a9",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/capture-templates/02-final-guard.json"
+    },
+    {
+      "bytes": 2427,
+      "member": "native-case/capture-templates/06-readback-3.json.PENDING-STATIC-CORRECTED",
+      "mode": "0o600",
+      "sha256": "f089c505468fea2d20d7b1f036570d4eb9cab76fbacdb706e8ba2ddfb8c198ac",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/capture-templates/06-readback-3.json.PENDING-STATIC-CORRECTED"
+    },
+    {
+      "bytes": 2490,
+      "member": "native-case/capture-templates/06-readback-3.json",
+      "mode": "0o600",
+      "sha256": "15741b342fea0dafeb37febc392c3e0e2ef0409edcfa2304b1e05f4bd8579140",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/capture-templates/06-readback-3.json"
+    },
+    {
+      "bytes": 2805,
+      "member": "native-case/capture-templates/00-LAST-snapshot.json.PENDING-STATIC-CORRECTED",
+      "mode": "0o600",
+      "sha256": "39a591b022a1ae0def0e2682c6531e712557dd91428875e44b2ea4335efa267f",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/capture-templates/00-LAST-snapshot.json.PENDING-STATIC-CORRECTED"
+    },
+    {
+      "bytes": 2342,
+      "member": "native-case/capture-templates/05-readback-2.json.PENDING-STATIC-CORRECTED",
+      "mode": "0o600",
+      "sha256": "b9ff024f2c477e531a78fdb632140b4dedd2cc99e7f82dc263175e5ab052d746",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/capture-templates/05-readback-2.json.PENDING-STATIC-CORRECTED"
+    },
+    {
+      "bytes": 2456,
+      "member": "native-case/capture-templates/04-readback-1.json",
+      "mode": "0o600",
+      "sha256": "45fe5a5df491bcdf4772a96d995dee6ae218e854316e0edbffd8858a819b6ea9",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/capture-templates/04-readback-1.json"
+    },
+    {
+      "bytes": 2612,
+      "member": "native-case/capture-templates/02-final-guard.json.PENDING-STATIC-CORRECTED",
+      "mode": "0o600",
+      "sha256": "3c28877f22d0f8278eed89d724b3e3ab62c4bf65a2f204fc6d293ca240a9aa95",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/capture-templates/02-final-guard.json.PENDING-STATIC-CORRECTED"
+    },
+    {
+      "bytes": 2868,
+      "member": "native-case/capture-templates/00-LAST-snapshot.json",
+      "mode": "0o600",
+      "sha256": "1fca78fe73bf23e547a15348d09104314f12214241f4b69ca77b3da343a573aa",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/capture-templates/00-LAST-snapshot.json"
+    },
+    {
+      "bytes": 2658,
+      "member": "native-case/capture-templates/03-native-owner.json",
+      "mode": "0o600",
+      "sha256": "fa4648e4f02512b2f9d4d6c69ecb6197f2d2ff7570b578ee50bc381311970a80",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/capture-templates/03-native-owner.json"
+    },
+    {
+      "bytes": 2405,
+      "member": "native-case/actual-command-data/05-readback-2.json",
+      "mode": "0o600",
+      "sha256": "80f26a6f93c80c4042662a1e03576ea4d5b74c32681e38d5252be13b03bcbeed",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/actual-command-data/05-readback-2.json"
+    },
+    {
+      "bytes": 3989,
+      "member": "native-case/actual-command-data/01-machine-assembly.json",
+      "mode": "0o600",
+      "sha256": "4cd1b67abdaad13e89d723f6107057834fb99ad76ff1989be73c7c3a02cb895d",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/actual-command-data/01-machine-assembly.json"
+    },
+    {
+      "bytes": 2799,
+      "member": "native-case/actual-command-data/02-final-guard.json",
+      "mode": "0o600",
+      "sha256": "26bf8afe01183ba8745ab9ebe13c11609a4118f416fbd065351299f9f8fb1b26",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/actual-command-data/02-final-guard.json"
+    },
+    {
+      "bytes": 2490,
+      "member": "native-case/actual-command-data/06-readback-3.json",
+      "mode": "0o600",
+      "sha256": "15741b342fea0dafeb37febc392c3e0e2ef0409edcfa2304b1e05f4bd8579140",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/actual-command-data/06-readback-3.json"
+    },
+    {
+      "bytes": 2456,
+      "member": "native-case/actual-command-data/04-readback-1.json",
+      "mode": "0o600",
+      "sha256": "45fe5a5df491bcdf4772a96d995dee6ae218e854316e0edbffd8858a819b6ea9",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/actual-command-data/04-readback-1.json"
+    },
+    {
+      "bytes": 2868,
+      "member": "native-case/actual-command-data/00-LAST-snapshot.json",
+      "mode": "0o600",
+      "sha256": "1fca78fe73bf23e547a15348d09104314f12214241f4b69ca77b3da343a573aa",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/actual-command-data/00-LAST-snapshot.json"
+    },
+    {
+      "bytes": 2658,
+      "member": "native-case/actual-command-data/03-native-owner.json",
+      "mode": "0o600",
+      "sha256": "fa4648e4f02512b2f9d4d6c69ecb6197f2d2ff7570b578ee50bc381311970a80",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1/native-packet-1/actual-command-data/03-native-owner.json"
+    },
+    {
+      "bytes": 5686,
+      "member": "collector-source/pair_runtime.inc",
+      "mode": "0o600",
+      "sha256": "6fb3c422bd11ecfa2cfdd29eb3665f9d81eb29039cf379ebd415f07087634899",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/candidate/pair_runtime.inc"
+    },
+    {
+      "bytes": 10605,
+      "member": "collector-source/pair_launch_expansion_support.inc",
+      "mode": "0o600",
+      "sha256": "9efecc0f600634dc45c5710b13fb3fde968fef4d1a4a3392ce20fb929df12933",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/candidate/pair_launch_expansion_support.inc"
+    },
+    {
+      "bytes": 3010,
+      "member": "collector-source/pair_assignment.h",
+      "mode": "0o600",
+      "sha256": "29963c5088598368fe7565a6fba88f5712cece4105314e4d1f2205c6a936b643",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/candidate/pair_assignment.h"
+    },
+    {
+      "bytes": 3751,
+      "member": "collector-source/pair_launch_expansion_run.inc",
+      "mode": "0o600",
+      "sha256": "88c3f4e449c2cef04cc0864ea7deeb11a8d0381638278c67e351159fa8d6bde1",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/candidate/pair_launch_expansion_run.inc"
+    },
+    {
+      "bytes": 24863,
+      "member": "collector-source/repaired_image_authority.py",
+      "mode": "0o600",
+      "sha256": "e375bd0eadf5ea8fa8ef6621603a8617b45bbce965a74f10e08b3cd7256b6f2e",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/candidate/repaired_image_authority.py"
+    },
+    {
+      "bytes": 12059,
+      "member": "collector-source/pair_trace_retention.inc",
+      "mode": "0o600",
+      "sha256": "acb8163419236147da3c330f26e8dabb67c0e4802d9bdcd2c247d1cded40a468",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/candidate/pair_trace_retention.inc"
+    },
+    {
+      "bytes": 2469,
+      "member": "collector-source/pair_round_oracles.h",
+      "mode": "0o600",
+      "sha256": "4f7fbd55ffa528e59bdb2445bb74ee681fab4e2cd4ca4e5a016d7c0d525d7bbc",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/candidate/pair_round_oracles.h"
+    },
+    {
+      "bytes": 24161,
+      "member": "collector-source/pair_collector.c",
+      "mode": "0o600",
+      "sha256": "b4c019d216ab12d41559fcdb9ea3c9f9380201e8f9d4434847ec254118731431",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/candidate/pair_collector.c"
+    },
+    {
+      "bytes": 76145,
+      "member": "collector-source/native_diagnostic.py",
+      "mode": "0o600",
+      "sha256": "3bfc5b99a84a71a30fdf1f5a6e7a09af5fff011d2ecee58d38f3a17274cac01d",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/candidate/native_diagnostic.py"
+    },
+    {
+      "bytes": 4616,
+      "member": "collector-source/pair_collector.inc",
+      "mode": "0o600",
+      "sha256": "dcfbb3a9c7199c4d06e014a7b9df9933da7c6f26ed552bc2bdca9e272a082020",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/candidate/pair_collector.inc"
+    },
+    {
+      "bytes": 2626,
+      "member": "collector-repair/run_checks_once.py",
+      "mode": "0o600",
+      "sha256": "76f3710df39af65dd9426f9533bd2febdc51f1eed745178fa2c32f661c08955f",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/run_checks_once.py"
+    },
+    {
+      "bytes": 8085,
+      "member": "collector-repair/test_collector_drain.c",
+      "mode": "0o600",
+      "sha256": "16322fc43c3abfd6c1c4ed850abfafa9fa61db6b7f24ebe3cfe22481e6076f69",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/test_collector_drain.c"
+    },
+    {
+      "bytes": 10173,
+      "member": "collector-repair/collector-drain.patch",
+      "mode": "0o600",
+      "sha256": "225f779b53bb78c7fa5c5ab7ef3c47a46096fa692f3643111240229503b23d58",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/collector-drain.patch"
+    },
+    {
+      "bytes": 6023,
+      "member": "collector-repair/REVIEW-PACKET.json",
+      "mode": "0o600",
+      "sha256": "c0a36a29907e9c2cd43347ddacfa975d10b46b39bcd27466aeeaca9bfb481d5c",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/REVIEW-PACKET.json"
+    },
+    {
+      "bytes": 8065,
+      "member": "collector-check-1/test_collector_drain.c.FAILURE-1",
+      "mode": "0o600",
+      "sha256": "009776f035559a46c40e5e52b547853e6ba4cfc56bb70238ac56902a87b0f346",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/check-1/test_collector_drain.c.FAILURE-1"
+    },
+    {
+      "bytes": 1289,
+      "member": "collector-check-1/whole.json",
+      "mode": "0o600",
+      "sha256": "582bcb0641f0038eab49f16d417aa6bfe4207d8900615afc1e1b08e17efb8ffd",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/check-1/whole.json"
+    },
+    {
+      "bytes": 2626,
+      "member": "collector-check-1/run_checks_once.py.FAILURE-1",
+      "mode": "0o600",
+      "sha256": "4fbf5cca75c77e805abd35185e4d00a8b55653f171cfb0d192069b0fab8bfbfb",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/check-1/run_checks_once.py.FAILURE-1"
+    },
+    {
+      "bytes": 82,
+      "member": "collector-check-1/compile-actual-body-fixture/direct-wait.json",
+      "mode": "0o600",
+      "sha256": "4847a16426e3670ec89c4b9d33573afc018dd8c528df75e1f18ea7dabcc73ab5",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/check-1/compile-actual-body-fixture/direct-wait.json"
+    },
+    {
+      "bytes": 432,
+      "member": "collector-check-1/compile-actual-body-fixture/command.json",
+      "mode": "0o600",
+      "sha256": "4b58eccd9af74badda026485c952a877f80391f3e22d562f7bbf4a492c5a4368",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/check-1/compile-actual-body-fixture/command.json"
+    },
+    {
+      "bytes": 260,
+      "member": "collector-check-1/compile-actual-body-fixture/direct-join.json",
+      "mode": "0o600",
+      "sha256": "51f77e1cfd28435f45572d605c77c48bb576638f9529dc4e5d105c01be088722",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/check-1/compile-actual-body-fixture/direct-join.json"
+    },
+    {
+      "bytes": 771,
+      "member": "collector-check-1/compile-actual-body-fixture/stderr",
+      "mode": "0o600",
+      "sha256": "17e320e9172176aa16af4ae1edac76937b646e4d99fe42c88472e6e50cbf73d9",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/check-1/compile-actual-body-fixture/stderr"
+    },
+    {
+      "bytes": 0,
+      "member": "collector-check-1/compile-actual-body-fixture/stdout",
+      "mode": "0o600",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/check-1/compile-actual-body-fixture/stdout"
+    },
+    {
+      "bytes": 36,
+      "member": "collector-check-1/compile-actual-body-fixture/started.json",
+      "mode": "0o600",
+      "sha256": "2a26ca7c1f4e61ae58864a8f57594e6e9ea52836ba676c3c564ea612b8e86918",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/check-1/compile-actual-body-fixture/started.json"
+    },
+    {
+      "bytes": 3607,
+      "member": "collector-check-2/whole.json",
+      "mode": "0o600",
+      "sha256": "98bcad998d8dd98dadf92161d95d3f3cc84d3ac8a6f5cbb2ffa56efeca248ca7",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/check-2/whole.json"
+    },
+    {
+      "bytes": 82,
+      "member": "collector-check-2/actual-body-fixture/direct-wait.json",
+      "mode": "0o600",
+      "sha256": "d9bf7cb7a9f7acb63256382f3fdfd1e5e44d550abee160394636baf99d210330",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/check-2/actual-body-fixture/direct-wait.json"
+    },
+    {
+      "bytes": 285,
+      "member": "collector-check-2/actual-body-fixture/command.json",
+      "mode": "0o600",
+      "sha256": "9005a55d4da9044f36355634e584aa9a7e681f5a1ba223468e5d35216a9b8b79",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/check-2/actual-body-fixture/command.json"
+    },
+    {
+      "bytes": 260,
+      "member": "collector-check-2/actual-body-fixture/direct-join.json",
+      "mode": "0o600",
+      "sha256": "6d925fe53066d535b28524c4bf4564b9cc04da574c9dfdcadeb72a984fcc1533",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/check-2/actual-body-fixture/direct-join.json"
+    },
+    {
+      "bytes": 0,
+      "member": "collector-check-2/actual-body-fixture/stderr",
+      "mode": "0o600",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/check-2/actual-body-fixture/stderr"
+    },
+    {
+      "bytes": 469,
+      "member": "collector-check-2/actual-body-fixture/stdout",
+      "mode": "0o600",
+      "sha256": "ac06f5534f6ec1fd2b836b41db12954c4ac7bc7fe1fc1bf9eae188c6124944ff",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/check-2/actual-body-fixture/stdout"
+    },
+    {
+      "bytes": 36,
+      "member": "collector-check-2/actual-body-fixture/started.json",
+      "mode": "0o600",
+      "sha256": "c7babbb551c08abcee30182d070daf8bea752acd34992d35db647e66a80bb9b1",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/check-2/actual-body-fixture/started.json"
+    },
+    {
+      "bytes": 2565,
+      "member": "collector-check-2/vectors/pending_deadline/diagnostic.stdout",
+      "mode": "0o600",
+      "sha256": "eab294e9585aff3b2341a6c49994b6a34c1792358d64beb7fb36578f11bbf640",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/check-2/vectors/pending_deadline/diagnostic.stdout"
+    },
+    {
+      "bytes": 20,
+      "member": "collector-check-2/vectors/pending_deadline/evidence/kernel.log",
+      "mode": "0o600",
+      "sha256": "c4bffd79f03ec0b85c32f2052351c86662508e4df26c62e3ddc835b4642be4f1",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/check-2/vectors/pending_deadline/evidence/kernel.log"
+    },
+    {
+      "bytes": 1068,
+      "member": "collector-check-2/vectors/pending_deadline/evidence/gate.raw",
+      "mode": "0o600",
+      "sha256": "097dc1cbb97f2fbaa0694790ed2a6acaba95a3456dda36d8c27f2131ab065888",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/check-2/vectors/pending_deadline/evidence/gate.raw"
+    },
+    {
+      "bytes": 1346,
+      "member": "collector-check-2/vectors/pending_then_real_completion/evidence/round0/current-trace.log",
+      "mode": "0o600",
+      "sha256": "651eb437b4e49f95180bb0265e4220a546eccbdcfb576bcaf7246550f478ffb1",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/check-2/vectors/pending_then_real_completion/evidence/round0/current-trace.log"
+    },
+    {
+      "bytes": 76,
+      "member": "collector-check-2/vectors/pending_then_real_completion/evidence/round0/current-trace.identity.json",
+      "mode": "0o600",
+      "sha256": "085755b99da3a1ecd7c12ecb1be19c137c61e0df95f37721bdf2adaaa63b83c7",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/check-2/vectors/pending_then_real_completion/evidence/round0/current-trace.identity.json"
+    },
+    {
+      "bytes": 82,
+      "member": "collector-check-2/compile-actual-body-fixture/direct-wait.json",
+      "mode": "0o600",
+      "sha256": "5c707db8c01e6cc93d34e09b7c7993ddb93b3681bf8e652df1d8c0b5e7ae9510",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/check-2/compile-actual-body-fixture/direct-wait.json"
+    },
+    {
+      "bytes": 432,
+      "member": "collector-check-2/compile-actual-body-fixture/command.json",
+      "mode": "0o600",
+      "sha256": "82548b2cd71d40e83129c9559e2a3d7dc935c717fd627a15fd22ca8050f6873d",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/check-2/compile-actual-body-fixture/command.json"
+    },
+    {
+      "bytes": 259,
+      "member": "collector-check-2/compile-actual-body-fixture/direct-join.json",
+      "mode": "0o600",
+      "sha256": "f04e6e3f3c377c5d9c0983f2468ce6c2e173fb3e0a07a2d91a4cb97c03c4682c",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/check-2/compile-actual-body-fixture/direct-join.json"
+    },
+    {
+      "bytes": 0,
+      "member": "collector-check-2/compile-actual-body-fixture/stderr",
+      "mode": "0o600",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/check-2/compile-actual-body-fixture/stderr"
+    },
+    {
+      "bytes": 0,
+      "member": "collector-check-2/compile-actual-body-fixture/stdout",
+      "mode": "0o600",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/check-2/compile-actual-body-fixture/stdout"
+    },
+    {
+      "bytes": 36,
+      "member": "collector-check-2/compile-actual-body-fixture/started.json",
+      "mode": "0o600",
+      "sha256": "b81c76b195a10a163b9ff02443c1af1f568b82a35e1d77f1e9bb7f91cc8916d0",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/check-2/compile-actual-body-fixture/started.json"
+    },
+    {
+      "bytes": 82,
+      "member": "collector-check-2/compile-current-collector/direct-wait.json",
+      "mode": "0o600",
+      "sha256": "4f36e0cbc3c820534fc468e03aee914c3bc893434f1ecd97350c6f3b1bcaa919",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/check-2/compile-current-collector/direct-wait.json"
+    },
+    {
+      "bytes": 479,
+      "member": "collector-check-2/compile-current-collector/command.json",
+      "mode": "0o600",
+      "sha256": "167bc2ae5c336696756243c2c8915a80117b56687e7351bbbe5a1a49e5911e35",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/check-2/compile-current-collector/command.json"
+    },
+    {
+      "bytes": 259,
+      "member": "collector-check-2/compile-current-collector/direct-join.json",
+      "mode": "0o600",
+      "sha256": "2425cf6ff47ffb48b1f3455229e69041daa8f8c14d26b6feb99b96087e11a28c",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/check-2/compile-current-collector/direct-join.json"
+    },
+    {
+      "bytes": 0,
+      "member": "collector-check-2/compile-current-collector/stderr",
+      "mode": "0o600",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/check-2/compile-current-collector/stderr"
+    },
+    {
+      "bytes": 0,
+      "member": "collector-check-2/compile-current-collector/stdout",
+      "mode": "0o600",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/check-2/compile-current-collector/stdout"
+    },
+    {
+      "bytes": 36,
+      "member": "collector-check-2/compile-current-collector/started.json",
+      "mode": "0o600",
+      "sha256": "39ca978697d750cb4151af1a3795d9cb76efeb0afdfcd4d2f1d948b8da8574ad",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/check-2/compile-current-collector/started.json"
+    },
+    {
+      "bytes": 1704,
+      "member": "expert-interface/PREPARATION.md",
+      "mode": "0o600",
+      "sha256": "4fe7692de9eec48f7d108498b1894ccc088debbbcaf465f32991de52a1bf4e0c",
+      "source": "/home/holden/mckernel-work/host-preparation/host66-native-physical-projection-expert-20261020-1/PREPARATION.md"
+    },
+    {
+      "bytes": 4161,
+      "member": "expert-interface/test_actual_host66_projection.py",
+      "mode": "0o600",
+      "sha256": "4f6f941b2cd8cc1910ce28aafda7df46d42103dca8a412e50e61add5208cfb7c",
+      "source": "/home/holden/mckernel-work/host-preparation/host66-native-physical-projection-expert-20261020-1/test_actual_host66_projection.py"
+    },
+    {
+      "bytes": 8613,
+      "member": "expert-interface/sdk_physical_projection.py",
+      "mode": "0o600",
+      "sha256": "f78ebae768b62395844aa6714b871075d32d8742c1f838df746a11bd76b832df",
+      "source": "/home/holden/mckernel-work/host-preparation/host66-native-physical-projection-expert-20261020-1/sdk_physical_projection.py"
+    },
+    {
+      "bytes": 8682,
+      "member": "expert-interface/sdk_physical_projection.diff",
+      "mode": "0o600",
+      "sha256": "2bdffa91998ced09d4f82f57174e65004938ef8e7e71130e8e0af70360e4c6f3",
+      "source": "/home/holden/mckernel-work/host-preparation/host66-native-physical-projection-expert-20261020-1/sdk_physical_projection.diff"
+    },
+    {
+      "bytes": 113,
+      "member": "expert-interface/execution-1/direct-wait.json",
+      "mode": "0o600",
+      "sha256": "5145e36c9bcfa6d5a8a5be182701af7bdb423fa34c420c5066b688787dd1986b",
+      "source": "/home/holden/mckernel-work/host-preparation/host66-native-physical-projection-expert-20261020-1/execution-1/direct-wait.json"
+    },
+    {
+      "bytes": 40,
+      "member": "expert-interface/execution-1/direct-child.json",
+      "mode": "0o600",
+      "sha256": "a4bc53a60c0ae7bac1944e747523d3c051f48e6de81844c1db96e6f720c6631f",
+      "source": "/home/holden/mckernel-work/host-preparation/host66-native-physical-projection-expert-20261020-1/execution-1/direct-child.json"
+    },
+    {
+      "bytes": 219,
+      "member": "expert-interface/execution-1/whole.json",
+      "mode": "0o600",
+      "sha256": "eebf39844db08cbf9f2eff91b59b4fb9ee1c66363716ce6f0ea7d97ef4ebfa18",
+      "source": "/home/holden/mckernel-work/host-preparation/host66-native-physical-projection-expert-20261020-1/execution-1/whole.json"
+    },
+    {
+      "bytes": 0,
+      "member": "expert-interface/execution-1/stderr",
+      "mode": "0o600",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "/home/holden/mckernel-work/host-preparation/host66-native-physical-projection-expert-20261020-1/execution-1/stderr"
+    },
+    {
+      "bytes": 274,
+      "member": "expert-interface/execution-1/stdout",
+      "mode": "0o600",
+      "sha256": "a4137fea677266ddc3ac6b27ed3a7380cdd97e7458286123da3da6fcf8e592fb",
+      "source": "/home/holden/mckernel-work/host-preparation/host66-native-physical-projection-expert-20261020-1/execution-1/stdout"
+    },
+    {
+      "bytes": 555,
+      "member": "expert-interface/execution-1/status.json",
+      "mode": "0o600",
+      "sha256": "97ce94dbb285c038d24afd7f138ea9a2910e0bd0e308dd903c803aea6806f7d8",
+      "source": "/home/holden/mckernel-work/host-preparation/host66-native-physical-projection-expert-20261020-1/execution-1/status.json"
+    },
+    {
+      "bytes": 83528,
+      "member": "expert-interface/actual-check-1/unretired-owner.json",
+      "mode": "0o600",
+      "sha256": "bf35f1e511b987418b2c7b4b71be47dec4219d2312873d6f9aa93c066a9b68ef",
+      "source": "/home/holden/mckernel-work/host-preparation/host66-native-physical-projection-expert-20261020-1/actual-check-1/unretired-owner.json"
+    },
+    {
+      "bytes": 2025,
+      "member": "expert-interface/actual-check-1/changed-authorization.json",
+      "mode": "0o600",
+      "sha256": "55bbad43f592809409ba555274088ce1257088f6150d83e99c02ca947bd385ef",
+      "source": "/home/holden/mckernel-work/host-preparation/host66-native-physical-projection-expert-20261020-1/actual-check-1/changed-authorization.json"
+    },
+    {
+      "bytes": 1404,
+      "member": "expert-interface/actual-check-1/result.json",
+      "mode": "0o600",
+      "sha256": "3cafafd4eb423d36bbfb03fa3029f06a60aa405e9c4b18fa953fce593f7d3649",
+      "source": "/home/holden/mckernel-work/host-preparation/host66-native-physical-projection-expert-20261020-1/actual-check-1/result.json"
+    },
+    {
+      "bytes": 26985,
+      "member": "expert-interface/actual-check-1/owner-not-retired.json",
+      "mode": "0o600",
+      "sha256": "9e80f150269e3b63bd2eb1f9b1384517ff97aad50718e6e4689ebf1ff306736a",
+      "source": "/home/holden/mckernel-work/host-preparation/host66-native-physical-projection-expert-20261020-1/actual-check-1/owner-not-retired.json"
+    },
+    {
+      "bytes": 26693,
+      "member": "expert-interface/actual-check-1/missing-positive-release-completion.json",
+      "mode": "0o600",
+      "sha256": "c199cb37357e6990d6f9fea4172bb07d5ec0e81bea60610f53a1c28b45a0e981",
+      "source": "/home/holden/mckernel-work/host-preparation/host66-native-physical-projection-expert-20261020-1/actual-check-1/missing-positive-release-completion.json"
+    },
+    {
+      "bytes": 26946,
+      "member": "expert-interface/actual-check-1/changed-raw-copy-inode.json",
+      "mode": "0o600",
+      "sha256": "f08251d6fd02858df8858cd295710b35203fc485ca86e22e9f3c54a1c7c39793",
+      "source": "/home/holden/mckernel-work/host-preparation/host66-native-physical-projection-expert-20261020-1/actual-check-1/changed-raw-copy-inode.json"
+    },
+    {
+      "bytes": 26979,
+      "member": "expert-interface/actual-check-1/changed-authorized-original-inode.json",
+      "mode": "0o600",
+      "sha256": "66a58bc58f153dda38e982dc1b3dcc2e088a121ef65f2fc72013eb8358822589",
+      "source": "/home/holden/mckernel-work/host-preparation/host66-native-physical-projection-expert-20261020-1/actual-check-1/changed-authorized-original-inode.json"
+    },
+    {
+      "bytes": 12404,
+      "member": "independent/COLLECTOR-DRAIN-CORRECTION1-SOURCE-AND-ACTUAL-ELEVEN-CASES-REVIEW.json",
+      "mode": "0o600",
+      "sha256": "5d6179cb58df4928dcf5061ec7a21712085c3798e16b73bbf33a109a18f0d042",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-independent-review-20261020-1/COLLECTOR-DRAIN-CORRECTION1-SOURCE-AND-ACTUAL-ELEVEN-CASES-REVIEW.json"
+    },
+    {
+      "bytes": 16763,
+      "member": "independent/HOST66-THREE-MODULE-DRAIN-COLLECTOR-STAGE-AND-CONSUMER-ORDINARY-RELEASE.json",
+      "mode": "0o600",
+      "sha256": "6afde605288d10ce595358d3ad84c1a0bef9f54c90bd0ea3384f467dc5d1ac35",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-independent-review-20261020-1/HOST66-THREE-MODULE-DRAIN-COLLECTOR-STAGE-AND-CONSUMER-ORDINARY-RELEASE.json"
+    },
+    {
+      "bytes": 12370,
+      "member": "independent/ACTUAL-HOST66-THREE-MODULE-DRAIN-COLLECTOR-STAGE-AND-CONSUMER-ACCEPTANCE.json",
+      "mode": "0o600",
+      "sha256": "43d17911f3a5bc167bda2c0507a57ad09d835a92c4e8f0d4128128827053c38e",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-independent-review-20261020-1/ACTUAL-HOST66-THREE-MODULE-DRAIN-COLLECTOR-STAGE-AND-CONSUMER-ACCEPTANCE.json"
+    },
+    {
+      "bytes": 9913,
+      "member": "independent/HOST66-EXPERT-PHYSICAL-PROJECTION-SOURCE-AND-ACTUAL-CONTROLS-REVIEW.json",
+      "mode": "0o600",
+      "sha256": "3e9bf9b88711466d1272d6ae3153f5600f265e2b63b19c5afa0d008be5bbf608",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-independent-review-20261020-1/HOST66-EXPERT-PHYSICAL-PROJECTION-SOURCE-AND-ACTUAL-CONTROLS-REVIEW.json"
+    },
+    {
+      "bytes": 23848,
+      "member": "independent/HOST66-DRAIN-NATIVE-SOURCE-AND-NONTEMPORAL-RELEASE.json",
+      "mode": "0o600",
+      "sha256": "8adfbd584be9c3027ca82b4bda123ba55672c5c4c9ea062bd7a67c8f10765e77",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-independent-review-20261020-1/HOST66-DRAIN-NATIVE-SOURCE-AND-NONTEMPORAL-RELEASE.json"
+    },
+    {
+      "bytes": 12419,
+      "member": "independent/HOST66-DRAIN-NATIVE-FINAL-NINETEEN-OUTPUT-MECHANICAL-CLOSURE.json",
+      "mode": "0o600",
+      "sha256": "05279349dec4164953507c784e1233c0e2bf2f3a13dfdc50972b122cbe3cd60d",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-independent-review-20261020-1/HOST66-DRAIN-NATIVE-FINAL-NINETEEN-OUTPUT-MECHANICAL-CLOSURE.json"
+    },
+    {
+      "bytes": 13288,
+      "member": "independent/ACTUAL-HOST66-NATIVE-POSITIVE-PHYSICAL-RETIREMENT-REVIEW.json",
+      "mode": "0o600",
+      "sha256": "9abe4a4003b7e6e259988c27ee070eeb6385daf3466dcf55a20d3bb71da647f6",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-independent-review-20261020-1/ACTUAL-HOST66-NATIVE-POSITIVE-PHYSICAL-RETIREMENT-REVIEW.json"
+    },
+    {
+      "bytes": 15665,
+      "member": "independent/ACTUAL-HOST66-NATIVE-STRICT-TWENTY-MODULE-ABI-AND-DRAIN-SEMANTIC-REVIEW.json",
+      "mode": "0o600",
+      "sha256": "041ee767c6e1198d117e53e35287a9c37983ba666f7e6cc1cf353438b00e6e25",
+      "source": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-independent-review-20261020-1/ACTUAL-HOST66-NATIVE-STRICT-TWENTY-MODULE-ABI-AND-DRAIN-SEMANTIC-REVIEW.json"
+    }
+  ],
+  "full_toolchain_catalog_replayed_or_rehashed": false,
+  "guest_runs_by_exporter": 0,
+  "original_failed64_evidence_ref": {
+    "bytes": 14610,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-independent-review-20261020-1/ACTUAL-COMPOSITE64-NATIVE-FAILURE-FINAL-PHYSICAL-RETIREMENT-REVIEW.json",
+    "sha256": "4b36bfdf1617b628fb88641b2407096bc8d3887d458e1bac6e4a0526c8267021"
+  },
+  "original_metadata_failures_retained_and_selected": true,
+  "schema": "mckernel.closed-host66-native-evidence-export.v1",
+  "scope": "Functional OS/apps plus Rust cutover; closed HOST66 native captures preserved; semantic report remains separately authoritative; no positive CREATE_PPD/parentclose/ACK or library-default credit",
+  "semantic_status": "PASS_STRICT20_NORMAL_MODULE_ABI_AND_BOUNDED_DRAIN_ONLY",
+  "source_physical_acceptance": {
+    "bytes": 13288,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-independent-review-20261020-1/ACTUAL-HOST66-NATIVE-POSITIVE-PHYSICAL-RETIREMENT-REVIEW.json",
+    "sha256": "9abe4a4003b7e6e259988c27ee070eeb6385daf3466dcf55a20d3bb71da647f6"
+  },
+  "source_semantic_acceptance": {
+    "bytes": 15665,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-independent-review-20261020-1/ACTUAL-HOST66-NATIVE-STRICT-TWENTY-MODULE-ABI-AND-DRAIN-SEMANTIC-REVIEW.json",
+    "sha256": "041ee767c6e1198d117e53e35287a9c37983ba666f7e6cc1cf353438b00e6e25"
+  },
+  "stage_kernel_module_binaries_copied": false
+}

@@ -1,0 +1,75 @@
+--- /dev/null
++++ b/kernel/rust/syscall_exit_group_current_pid.rs
+@@ -0,0 +1,27 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Existing raw current-process PID callback; private source-only successor.
++
++use super::{current_thread_ptr, CInt};
++use crate::abi::{Process, Thread};
++use core::mem::{offset_of, size_of};
++
++// Reuse the exact existing abi.rs/process_helpers.rs assertions, not a new layout.
++const _: () = {
++    assert!(size_of::<CInt>() == 4);
++    assert!(offset_of!(Thread, proc) == 4304);
++    assert!(offset_of!(Process, pid) == 456);
++};
++
++/// Same no-argument C int callback as the original raw C getter.
++///
++/// # Safety
++/// Existing syscall-entry invariant: the local current thread and its proc are
++/// live, non-null, correctly aligned and readable for this callback. Reuse the
++/// existing accessor and scheduler/preemption/lifetime context. This getter does
++/// not schedule, acquire ownership, add null handling, or extend either lifetime.
++#[no_mangle]
++pub(super) unsafe extern "C" fn exit_group_current_pid_bridge() -> CInt {
++    // SAFETY: the unchanged caller's raw current/proc invariant above is exactly
++    // the original C getter's precondition. No Rust reference is constructed.
++    unsafe { (*(*current_thread_ptr()).proc).pid }
++}
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -5754,13 +5754,13 @@
+ 	terminate(status, group);
+ }
+ 
+-int
+-exit_group_current_pid_bridge(void)
+-{
+-	struct thread *thread = get_this_cpu_local_var()->current;
+-
+-	return thread->proc->pid;
+-}
++#if defined(MCKERNEL_RUST_F03_LEAF_CALLBACKS) && defined(__x86_64__)
++extern int exit_group_current_pid_bridge(void);
++#else
++int exit_group_current_pid_bridge(void) { struct thread *thread = get_this_cpu_local_var()->current; return thread->proc->pid; }
++
++
++#endif
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ long sys_exit_group(int n, ihk_mc_user_context_t *ctx);
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -1,4 +1,9 @@
+ use core::ffi::c_void;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(all(f03_leaf_callbacks_candidate, target_arch = "x86_64"))]
++#[path = "syscall_exit_group_current_pid.rs"]
++mod syscall_exit_group_current_pid;
+ use core::mem::{align_of, offset_of, size_of, ManuallyDrop, MaybeUninit};
+ use core::ptr::{
+     addr_of, addr_of_mut, copy_nonoverlapping, null_mut, read_volatile, write, write_volatile,
+--- a/kernel/CMakeLists.txt
++++ b/kernel/CMakeLists.txt
+@@ -142,6 +142,7 @@
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/smp_ikc.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/sysfs.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_policy.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_exit_group_current_pid.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/timer.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/tofu_uapi.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/ubsan.rs"

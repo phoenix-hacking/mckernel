@@ -1,0 +1,76 @@
+{
+  "L1_actual": null,
+  "actual_L2_receipt": {
+    "bytes": 7902,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/sourcehandoff/ACTUAL-CLEAR-RANGE-L2-FIXTURE-RECEIPT.json",
+    "sha256": "ceea9d6a88bd0b727e3572306f7503b37c17941da3dc973efef847be30d1a312"
+  },
+  "canonical_shared_ABI_P12_frozen15_Git_mutations": false,
+  "chosen_actual_C_body": "x86_clear_range_walk_l3_bridge; direct original walk_pte_l3(...,&clear_range_l3,args) complete dispatcher",
+  "combined_five_slice_patch": {
+    "bytes": 7453,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-walk-l3-source-only-1/patch/combined-l2-l1-walk-l1-l2-l3.patch",
+    "sha256": "df0521ef855079103dd55f721580182d533f60a0b63d5e643dfb447085f292b1"
+  },
+  "compiler_test_root_Docker_jobs": 0,
+  "consumer_invariants": {
+    "ABI": "Five-input void*,unsigned long,unsigned long,unsigned long,void* -> int; existing typed immutable x86_clear_range_l3_callback retains same data ABI/target spelling.",
+    "PUBLIC_selection": "Default C dispatcher body excluded, only external prototype present; unique global Rust T x86_clear_range_walk_l3_bridge with no Rust U/selfreference; complete original fallback C body remains selected without PUBLIC.",
+    "actual_consumers": "Rust x86_clear_range_l4_body -> existing borrowed x86_clear_range_l3_callback -> Rust walkL3 -> Rust clear_range_l3. Lower Rust L2/L1 chain from private predecessor retained unchanged.",
+    "alias_lifetime": "pt/base/start/end/args forwarded unchanged to existing Rust walk_pte_l3; no nullpolicy, reference, state ownership, new allocation/free or retained callback added.",
+    "range_error_semantics": "Existing Rust walker retains geometry, range clipping, first-error and -ENOENT aggregation; dispatcher simply returns its exact result.",
+    "section_ownership": "x86_clear_range_l3_callback global eight-byte typed data remains C data; exact owning SHT_RELA.sh_info+symboloffset relocation now targets global Rust walkL3 provider, not a guessed static-C section offset."
+  },
+  "fallback_bodies_byte_identical": {
+    "static int clear_range_l1(": true,
+    "static int clear_range_l2(": true,
+    "static int x86_clear_range_walk_l1_bridge(": true,
+    "static int x86_clear_range_walk_l2_bridge(": true,
+    "static int x86_clear_range_walk_l3_bridge(": true
+  },
+  "new_standalone_patch": {
+    "bytes": 1775,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-walk-l3-source-only-1/patch/walk-l3-only.patch",
+    "sha256": "40a531f4573e1683af28cd80d9602e426746c4967045b53b54abbe720dec92ba"
+  },
+  "new_walkers_actual": null,
+  "postimages": [
+    {
+      "bytes": 89024,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-walk-l3-source-only-1/candidate/arch/x86_64/kernel/memory.c",
+      "sha256": "40c904d08e2c835b9bb09656fd0b6a105ab7c1729dbefd17426bc204fd6da88a"
+    },
+    {
+      "bytes": 203048,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-walk-l3-source-only-1/candidate/kernel/rust/x86_memory_helpers.rs",
+      "sha256": "c6af248abbee2547848c4d8935fdd07335cf27c64b47e905fc47730e8ff43ca5"
+    }
+  ],
+  "preimages": [
+    {
+      "bytes": 88836,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-walk-l2-source-only-1/candidate/arch/x86_64/kernel/memory.c",
+      "sha256": "b6399244b4bc45115d3906e1d7e16235ee9f36347bd7f9289aa95686fa84e3b2"
+    },
+    {
+      "bytes": 202634,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-walk-l2-source-only-1/candidate/kernel/rust/x86_memory_helpers.rs",
+      "sha256": "d80d5b1db943482220967692d127ec37ea5accbac15dbc92f37598403637ebe2"
+    }
+  ],
+  "production_partial_default_link_native": null,
+  "remaining_C_debt": [
+    "memobj flush/RSS/memobjRSS/range/effect log/PTfree callback bodies",
+    "other memory.c runtime functions outside these five selected bodies",
+    "existing C immutable callback objects and geometry data remain C data; whole-file retirement remains OPEN"
+  ],
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "second_fixture_or_CPU_reservation": null,
+  "single_queued_fixture": {
+    "bytes": 15095,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-l1-source-1/sourcehandoff/EXECUTABLE-READY.NOT-RELEASED.json",
+    "sha256": "702f4e675ad9f073ea6f996987ad7d37d57ba6f1ecd5c19fa441574195fd8e3f"
+  },
+  "status": "FIVE_SLICE_PRIVATE_COHERENT_SOURCE_ONLY_L1_REMAINS_ONLY_EXECUTABLE_QUEUE",
+  "typed_L4_child_identity_byte_identical": true
+}

@@ -1,0 +1,34 @@
+--- previous-installed-proposal
++++ new-installed-proposal
+@@ -648,6 +648,20 @@
+     return receipt
+ 
+ 
++def validate_runtime_source_bindings(source_sha256):
++    """Bind the executing installed owner and every release source to one cohort."""
++    need(set(source_sha256) == set(SOURCES), 'complete runtime source closure required')
++    installed_owner = safe_path(str(REPO / 'scripts/native_running_external_modules_owner.py'), False)
++    executing_owner = safe_path(str(Path(__file__).absolute()), False)
++    need(executing_owner == installed_owner, 'executing owner differs from installed runtime source')
++    observed = {}
++    for name in SOURCES:
++        path = safe_path(str(REPO / name), False)
++        observed[name] = sha(path.read_bytes())
++        need(observed[name] == source_sha256[name], 'reviewed source drift')
++    return observed
++
++
+ def authenticate(request_path, request_sha, release_path, release_sha):
+     request = bound(dict(path=str(request_path), sha256=request_sha))
+     release = bound(dict(path=str(release_path), sha256=release_sha))
+@@ -659,9 +673,7 @@
+          release.get('historical_observer') == dict(path=str(HISTORICAL_OBSERVER), sha256=HISTORICAL_OBSERVER_SHA,
+               prefix=list(HISTORICAL_PREFIX), timeout_seconds=30),
+          'independent one-shot external-module execution release required')
+-    need(set(release.get('source_sha256', {})) == set(SOURCES), 'complete runtime source closure required')
+-    for name in SOURCES:
+-        need(host.digest(safe_path(str(REPO / name), False)) == release['source_sha256'][name], 'reviewed source drift')
++    validate_runtime_source_bindings(release.get('source_sha256', {}))
+     need(request['driver']['sha256'] == release['source_sha256']['scripts/native_running_external_modules_offline.py'], 'driver source release differs')
+     for key, decision in (('source_review', 'PASS_SOURCE'), ('execution_review', 'PASS_EXECUTION')):
+         review = bound(release[key])

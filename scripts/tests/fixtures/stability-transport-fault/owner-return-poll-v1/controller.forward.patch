@@ -1,0 +1,41 @@
+--- controller.original.c
++++ controller.c
+@@ -231,0 +232,10 @@
++/* Shared with the retained-raw-sample regression harness. The actual procfs
++ * reader still supplies a bounded, complete, NUL-terminated record. */
++static void parse_syscall_sample(struct sample *s)
++{
++    char extra;
++    s->parsed = sscanf(s->raw, "%ld %lx %lx %lx %lx %lx %lx %lx %lx %c",
++                       &s->nr, &s->arg[0], &s->arg[1], &s->arg[2], &s->arg[3],
++                       &s->arg[4], &s->arg[5], &s->arg[6], &s->arg[7], &extra);
++}
++
+@@ -241,4 +251 @@
+-        char extra;
+-        s.parsed = sscanf(s.raw, "%ld %lx %lx %lx %lx %lx %lx %lx %lx %c",
+-                          &s.nr, &s.arg[0], &s.arg[1], &s.arg[2], &s.arg[3],
+-                          &s.arg[4], &s.arg[5], &s.arg[6], &s.arg[7], &extra);
++        parse_syscall_sample(&s);
+@@ -262,0 +270,12 @@
++}
++
++enum return_sample_kind { RETURN_SAMPLE_UNKNOWN, RETURN_SAMPLE_RET, RETURN_SAMPLE_OTHER };
++
++/* A running task may still be executing the selected RET. Only a complete
++ * different syscall record proves a sampled transition; errors, negative
++ * syscall numbers and partial/unavailable records remain unknown. Native RET
++ * events are separately required for the accepted return value and deadline. */
++static enum return_sample_kind classify_return_sample(const struct sample *s)
++{
++    if (s->error || s->parsed != 9 || s->nr < 0) return RETURN_SAMPLE_UNKNOWN;
++    return is_ioctl(s, MCEXEC_UP_RET_SYSCALL) ? RETURN_SAMPLE_RET : RETURN_SAMPLE_OTHER;
+@@ -651 +670,2 @@
+-        if (is_ioctl(&s, MCEXEC_UP_RET_SYSCALL)) {
++        enum return_sample_kind sample_kind = classify_return_sample(&s);
++        if (sample_kind == RETURN_SAMPLE_RET) {
+@@ -653,2 +673,2 @@
+-        } else if (ret_entry_seen) {
+-            /* A successful different sample or disappearance proves it left the sampled RET.
++        } else if (ret_entry_seen && sample_kind == RETURN_SAMPLE_OTHER) {
++            /* A complete different syscall proves it left the sampled RET.

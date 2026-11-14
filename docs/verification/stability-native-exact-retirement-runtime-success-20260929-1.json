@@ -1,0 +1,77 @@
+{
+  "schema": "mckernel.retirement-runtime-success.v1",
+  "status": "PASS_RETIREMENT_ONLY",
+  "timestamp_utc": "2026-09-29T13:44:00Z",
+  "fetched_commit": "431df62c57b6d8f8c0eb5eb61b20dff49ea2f35c",
+  "template_commit": "377556e8c520fae7fda03e89327b23d624ec9bbc",
+  "packet_sha256": "ac4c4d3e8b49ff59e1388b738a48746b29f6e411a05faea9bf854d83274b1d35",
+  "release_raw_sha256": "b21a64049dfb1b4a71efb45444640a1f8c886b948fe1c0157c4e59a94907a292",
+  "release_canonical_json_sha256": "7a4124aa14f8e2297e718237cda43b1e50194f6328b596107a66b4f95adf864d",
+  "full_unprivileged_admission": {
+    "status": "PASS",
+    "objects": 9011,
+    "bytes": 9050119070,
+    "elapsed_seconds": 35.15,
+    "max_rss_kib": 259508,
+    "swaps": 0
+  },
+  "preflight": {
+    "root_members": {"candidate": 10509, "metadata_backup": 86},
+    "docker_containers": 13,
+    "docker_ids_sha256": "9f2c6d44b6187d8a3ecf133648ffb3da9d0a5d3f2d69eedb8d652a4adf0ef6e0",
+    "docker_canonical_inspect_sha256": "df5eb59c138afe9b0882870787f9319f880c1221a351d1129706b2c7558bac72",
+    "immutable_probe_device": 1831,
+    "immutable_probe": "PASS_SET_OBSERVE_CLEAR_REMOVE",
+    "immutable_probe_observer_failure": "The first shell assertion incorrectly matched the letter i in the filename after lsattr showed the flag cleared; cleanup removed the file. The bounded correction parsed only the attribute token and passed."
+  },
+  "invocation": {
+    "command": "/usr/bin/sudo -A /usr/bin/python3 -E -s -B /home/holden/mckernel/docs/verification/evidence/native-exact-candidate-retirement-67589154-1.py --release /home/holden/mckernel/docs/verification/evidence/stability-native-exact-candidate-retirement-67589154-1.release.json",
+    "attempts": 1,
+    "exit_status": 0,
+    "wrapper_pid": 3871615,
+    "wrapper_starttime": 89921496,
+    "packet_pid": 3871619,
+    "packet_starttime": 89921507,
+    "stdout": "",
+    "stderr": ""
+  },
+  "evidence": {
+    "live_directory": "/dev/shm/.mckernel-retirement-evidence-67589154-1",
+    "archive": "docs/verification/evidence/stability-native-exact-retirement-runtime-67589154-20260929-1.tar.gz",
+    "archive_sha256": "840c1e959e6eacb33769a410484f6e16450a791d4a8ca583f58d12eefdc25c0d",
+    "packet_status_sha256": "aaab70bd48f7c3ec9d66e61ad40bffe51dc91f25c5172b77aaeb6e7554a2ae97",
+    "claim_sha256": "25357a94959e95ff291d42930e17a4c0b4460269e91ca0635cf24a6302b044be",
+    "evidence_sha256": "3004ef5687d4b49799bcb3f277f043e789d37ee95bbb8b01e20c55bae1b69e24",
+    "journal_sha256": "0f87b33a9cae69a664c879b388fdae50e95268776e387f5eb4d9f7f5068b4c1a",
+    "journal_records": 21202,
+    "observer_stdout_sha256": "1b337faf5951ee0793a6973f94ed2dc3fd9e4fda5bec165dfe3e365b085701ac",
+    "docker_inspect_sha256": "c67f46850fbbca31c7377abed0994d33e6458346be9d5f987b9fae8a4049b977"
+  },
+  "postconditions": {
+    "candidate_absent": true,
+    "metadata_backup_absent": true,
+    "candidate_quarantine_absent": true,
+    "metadata_backup_quarantine_absent": true,
+    "failure_or_pending_records_absent": true,
+    "related_processes_absent": true,
+    "docker_containers_preserved": true,
+    "tmpfs_available_bytes": 16587915264
+  },
+  "immutable_tombstone": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-build-lease-67589154-1.json",
+    "device": 1831,
+    "inode": 31470,
+    "mode": 600,
+    "uid": 0,
+    "gid": 0,
+    "sha256": "ac3d18953da2871ae6e9702143ba05a98abbb3412d512cc65eaa480517772f34",
+    "immutable": true,
+    "disposition": "Preserve permanently for consumed attempt 67589154-1; it is not an active build owner and does not conflict with the distinct 704f6654-1 lease."
+  },
+  "independent_review": {
+    "review": 143,
+    "status": "PASS",
+    "scope": "retirement of candidate 67589154-1 and metadata backup only"
+  },
+  "acceptance_limits": "No build, guest, application, production-gate, language-gate or whole-OS acceptance follows. Preparation 704f6654-1 still requires separate execution review and live preflight."
+}

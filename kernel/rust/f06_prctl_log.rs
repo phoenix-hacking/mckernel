@@ -1,0 +1,29 @@
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Preserve the original C diagnostic descriptor and existing Rust print provider.
+use core::ptr::{addr_of,read_volatile};
+use crate::abi::{CInt,CULong};
+use crate::debug::{Ddebug,kprintf};
+
+const ARCH_SET_FS:CInt=0x1002;
+unsafe extern "C" {
+    #[link_name="mckernel_f06_arch_prctl_debug"]
+    static mut ARCH_PRCTL_DEBUG:Ddebug;
+}
+
+/// Preserve event selection, the original eight-bit debug gate and exact print ABI.
+/// Descriptor storage is the same image-lifetime C record. Its defining x86 ABI
+/// places flags at byte27; read only that byte and form no Rust reference across
+/// printing. This adds no synchronization or atomicity guarantee; original flag
+/// update/exclusion and kprintf ownership remain with their existing providers.
+#[no_mangle]
+pub extern "C" fn arch_prctl_log_bridge(event:CInt,cpu:CInt,value:CULong) {
+    if event!=ARCH_SET_FS {return;}
+    // SAFETY: the paired selector supplies the qualified32B/align8 C descriptor;
+    // formats are immutable NUL-terminated and %d/%lX consume exact int/ulong args.
+    unsafe {
+        let flags=read_volatile(addr_of!(ARCH_PRCTL_DEBUG).cast::<u8>().add(27));
+        if flags!=0 {
+            kprintf(b"[%d] arch_prctl: ARCH_SET_FS: 0x%lX\n\0".as_ptr().cast(),cpu,value);
+        }
+    }
+}

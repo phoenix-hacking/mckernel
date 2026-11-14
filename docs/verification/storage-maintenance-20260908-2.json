@@ -1,0 +1,76 @@
+{
+  "artifacts": [
+    {
+      "path": "docs/verification/evidence/cleanup-archived-captures-20260908-2.py.gz",
+      "sha256": "445f1b87e3ed8c8fec1dcd0ac58d7d9b5ba85b684f1f91e666f22d88c3e7d77a",
+      "size": 3773,
+      "source": "/home/holden/mckernel-work/scratch/cleanup-archived-captures-20260908-2.py"
+    },
+    {
+      "path": "docs/verification/evidence/trim-scratch-storage-20260908-2.py.gz",
+      "sha256": "65cd78bee1050e4c637584bd660a08092d95d5cd20174c46cc047b0bc7e9dd35",
+      "size": 706,
+      "source": "/home/holden/mckernel-work/scratch/trim-scratch-storage-20260908-2.py"
+    },
+    {
+      "path": "docs/verification/evidence/storage-cleanup-20260908-2-plan.json.gz",
+      "sha256": "b8fb31dad3ebbba1155c2435ab65aa7f31ad6c605b3870a700d0eab30c5c6bb0",
+      "size": 15202,
+      "source": "/home/holden/mckernel-work/scratch/storage-cleanup-20260908-2-plan.json"
+    },
+    {
+      "path": "docs/verification/evidence/storage-cleanup-20260908-2-report.json.gz",
+      "sha256": "bf73b8eb478f1fef0a7a63cd18e88866af4e0c76707c6311cd6707624d636d2a",
+      "size": 2761,
+      "source": "/home/holden/mckernel-work/scratch/storage-cleanup-20260908-2-report.json"
+    },
+    {
+      "path": "docs/verification/evidence/storage-preserved-inputs-20260908-2.json.gz",
+      "sha256": "5457fd862f07aeacb1ec1857364b2bfd65f5963163df73b9e8993211839a040b",
+      "size": 47128,
+      "source": "/home/holden/mckernel-work/scratch/storage-preserved-inputs-20260908-2.json"
+    },
+    {
+      "path": "docs/verification/evidence/storage-preserved-inputs-after-20260908-2.json.gz",
+      "sha256": "ff438879c27f5671bd81428cc6dbf984f6c4aa521715bd73d0a58fa4309c00a6",
+      "size": 377,
+      "source": "/home/holden/mckernel-work/scratch/storage-preserved-inputs-after-20260908-2.json"
+    },
+    {
+      "path": "docs/verification/evidence/storage-scratch-trim-20260908-2.json.gz",
+      "sha256": "9a1b1778d2c34d0c68402b422363f89d3a2097b737bbab2b9f6152fa5befa16c",
+      "size": 374,
+      "source": "/home/holden/mckernel-work/scratch/storage-scratch-trim-20260908-2.json"
+    }
+  ],
+  "checks": [
+    "Verified retained archives against exact Git objects at the pushed HEAD and manifest SHA-256 values before deletion.",
+    "Compared every removed expanded capture entry against its committed archive, including contents, modes and symbolic links; preserved every failed run.",
+    "Checked targets for open descriptors and process working directories; applied a fixed allowlist with unchanged source snapshots.",
+    "All 1,281 checked current files remain byte-identical and all 21 protected dependency directories remain present, including native-sysfs-service-module-20260908-2.",
+    "Targeted scratch fstrim succeeded; the mounted sparse image retains its original 60-GiB logical size."
+  ],
+  "current_root_available_bytes": 152339726336,
+  "current_scratch_available_bytes": 33198419968,
+  "evidence_checked_at_pushed_head": "5c247af32fcd854428737f19c4f23dbf6359759b",
+  "finished_utc": "2026-09-08T08:20:26.205223+00:00",
+  "kind": "Requested ongoing storage maintenance; preserved current verification inputs and archived all removed evidence",
+  "limitations": [
+    "This pass removed only fully archived completed verification captures and duplicate compressed copies. Current sources, builds, boot images, environments, personal files and other applications were outside the deletion allowlist.",
+    "Reclaimed host allocation is measured from the scratch backing file before and after trim; concurrent activity can change overall host free space.",
+    "This maintenance result adds no kernel or application acceptance credit. The separate full-ready checkpoint preserves the newest actual boot/service evidence and its remaining scope."
+  ],
+  "preserved_current_files": 1281,
+  "protected_directories": 21,
+  "reclaimed_host_allocated_bytes": 507654144,
+  "reclaimed_scratch_backing_allocated_bytes": 507654144,
+  "removed_capture_directories": 7,
+  "removed_duplicate_archives": 24,
+  "removed_scratch_allocated_bytes": 485216256,
+  "restoration": [
+    "The compressed cleanup report maps every removed capture and duplicate archive to its retained committed path and SHA-256. Verify that archive before restoring it into scratch for historical replay; use fresh attempt names for new verification."
+  ],
+  "status": "PASS",
+  "total_reclaimed_across_five_cleanups_bytes": 61119729664,
+  "verified_retained_files": 25
+}

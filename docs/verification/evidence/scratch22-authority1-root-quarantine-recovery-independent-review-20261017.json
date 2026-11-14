@@ -1,0 +1,112 @@
+{
+  "schema": "scratch22-authority1.root-quarantine-recovery-independent-review.v1",
+  "decision": "PASS_PROPOSED_PROCESS_RETIREMENT_PROFILE",
+  "reviewer": "/root/scratch21_source_review",
+  "implementation_ownership": false,
+  "execution_performed": false,
+  "failure_family": "S22-OBSERVER-CAPTURE-BOUND-1",
+  "finding": "The canonical build failed and retired, but the outer observer refuses its80143046-byte stdout under MAX_CAPTURE16777216. The unchanged guard correctly enters fail-closed quarantine before releasing its root flock. This is not a surviving build/container and not a successful compilation.",
+  "bound_guard": {
+    "pid": 80259,
+    "starttime": "718109",
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "parent_pid": 80258,
+    "uid": 1000,
+    "gid": 1000,
+    "threads": 1,
+    "exe": "/usr/bin/python3.8",
+    "exe_device": 66306,
+    "exe_inode": 1048651,
+    "exe_size": 5490456,
+    "exe_sha256": "298a9e830ed52f36c299427565485d717d1ce0179c0597cc16560513eb780b06",
+    "source": "/home/holden/mckernel/scripts/native_exact_scratch22_authority1_build_wrapper.py",
+    "source_sha256": "a0439f79cb895dd6696e4005f1b8f7d6d42018ff3481541b43b12ab2ab582fad",
+    "argv": [
+      "/usr/bin/python3", "-B", "/home/holden/mckernel/scripts/native_exact_scratch22_authority1_build_wrapper.py",
+      "--release", "/home/holden/mckernel/docs/verification/evidence/scratch22-authority1-heavy-build-execution-release-20261017.json",
+      "--release-sha256", "08954d0a71fbc5c535eb29dea188ac36ecb243c6e61fc44a78161f12b211881c",
+      "--release-commit", "41561399b950b635bce943240b9e4d580fa2ebfa", "--execute"
+    ],
+    "root_lock": {"path": "/run/lock/mckernel-development.lock", "device": 27, "inode": 4},
+    "observed_lock_row": "FLOCK ADVISORY WRITE80259 00:1b:4 0 EOF",
+    "direct_children": [],
+    "quarantine": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-scratch-22-authority1-heavy-build.root-lock-quarantine.json",
+      "device": 1828,
+      "inode": 57730,
+      "size": 298,
+      "sha256": "d3cbda53da7a302f44817161ed3cad35301e290cafd3ea897bfea5c92dc61a38",
+      "reason": "build-started-without-positive-terminal-retirement"
+    }
+  },
+  "retirement_proof": {
+    "canonical_stdout": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-scratch-22-authority1-heavy-build.stdout",
+      "device": 1828,
+      "inode": 57726,
+      "size": 80143046,
+      "sha256": "8909cceae61b87b8168642860871d569c2a12ce7ba01f05e308fa050891ed681"
+    },
+    "owner_receipt": {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority1-evidence/receipt.json",
+      "device": 1828,
+      "inode": 5341836,
+      "size": 89341228,
+      "sha256": "9fa6a298a053190a52f7672242a08fd94716ac58e071339ce7ebdcdee1db6a8c"
+    },
+    "json_objects_identical": true,
+    "canonical_predicates": {"retired": true, "client_retirement_unproven": false, "cleanup_separately_required": true, "terminal_container_retained": true, "terminal_container_info_current": true},
+    "build_status": "FAIL",
+    "build_exit": 1,
+    "build_error": "offline driver failed; retained compiler failure is separate from this observer recovery",
+    "owner": {"pid": 80867, "starttime": "722300", "nonce": "d4ad604bc9cf47a1a1a2b5e4655ebc41", "container_name": "mckernel-exact-154a592e9c9841618a114901cdfd3e17"},
+    "docker_client_pids": [80988, 81001, 81013, 81026, 81085, 207427, 207440],
+    "client_statuses": "All seven command status files are exited/exit_code0 with no forced-client/unproven-retirement/survivor/reap-error flags. Docker wait's client exit0 is distinct from the container exit1.",
+    "container": {
+      "id": "18ce9ef597cfc38f4c661a7a36d80d872d3dfc96f6e93551651bc8f0b31b5aa6",
+      "status": "exited", "pid": 0, "exit_code": 1, "oom_killed": false,
+      "fresh_inspect_exactly_matches_retained_terminal": true,
+      "terminal_path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority1-evidence/inspect-terminal.json",
+      "terminal_size": 9755,
+      "terminal_sha256": "96ecbeaa6dbf4ad7ea460b270669772e32a0e15104160dc13c3cd7cc6840cbff"
+    },
+    "fresh_full_root_process_check": "The exact accepted scratch21 PROC_CODE from source6606af40...abed executed read-only through sudo-A isolated Python. Both complete challenge/caller/current-boot-bound snapshots had owner80867 and all seven client PIDs absent; their only publisher was80259/start718109/python3.8. All corresponding assertions passed before an unrelated local pidfd API probe raised AttributeError. No process report success is inferred from failed root commands.",
+    "request": {"path": "/home/holden/mckernel-work/scratch/native-exact-build-request-scratch-22-authority1.execution.json", "device": 1828, "inode": 57725, "size": 3095, "sha256": "520fbc79a87a800e9c2875bdcdd24eb3d4c449a7ba15ec1fd85aa664520cecbe", "normalized_sha256": "6ba51875cfa116f8debdcf332ad8f8b73fdb3cc08baa5bd039c16b4279b533a0"},
+    "request_equals_receipt_request": true,
+    "request_lease_absent": true,
+    "persistent_exclusions": [
+      {"path": "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock", "device": 1828, "inode": 57728, "size": 264, "sha256": "a3c2eedff58cdbc79754039d3490aef171164851a192ac23155943e8abc462d3"},
+      {"path": "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch18.json", "device": 1828, "inode": 57729, "size": 264, "sha256": "893ebf5f3890953508542eee9e13d1a68af1fbdbfe7e1c2931b19a6c138e54a3"}
+    ],
+    "exclusion_join": "Both originals remain0600/uid1000/gid1000, bind owner80867/start722300/current boot and normalized request6ba51875. No exclusion or container was removed."
+  },
+  "reviewer_checks": {
+    "profile": "CPU0/2GiB/180seconds; bounded JSON parse and streaming SHA256 of existing80/89MiB receipts, small identity/client/exclusion files, accepted read-only full-proc helper and exact sudo-A Docker inspect only. No source edits, build, compiler, kill, signal, root unlock or cleanup.",
+    "preserved_harness_failures": [
+      "Initial stable-file check compared atime-inclusive stat tuples after an ordinary read and refused before root observation. Bounded correction used O_NOATIME, matching accepted evidence-reader behavior.",
+      "All retirement/root/container/identity assertions then passed, but the final local probe found os.pidfd_open unavailable in installed Python; therefore the diagnostic did not emit its final JSON summary. No signal was sent and no automatic recovery occurred."
+    ],
+    "bounded_pidfd_design_check": "A separate read-only ctypes syscall434(pid80259,flags0) succeeds on x86_64, its fdinfo reports Pid80259, current starttime remains718109 and direct children are empty. Descriptor closed without signaling. Local primary header /usr/include/x86_64-linux-gnu/asm/unistd_64.h confirms pidfd_open434 and pidfd_send_signal424."
+  },
+  "proposed_dispatcher_recovery_profile": {
+    "authorization": "One future dispatcher process-retirement step is conditionally approved for only the exact quarantined guard above, after all immediate predicates below are revalidated and captured. This report performs no action and grants no container/exclusion cleanup or workload authority.",
+    "why_sigkill": "The accepted guard deliberately defers HUP/INT/TERM/QUIT and retries exceptional quarantine waits forever. It has no safe normal-exit interface. Once actual owner/client/container retirement is independently proven, PIDFD-bound SIGKILL of this idle observer is an appropriate finite recovery; numeric-PID or group kill is not approved.",
+    "resources": "One ordinary holden process on CPU0 with2GiB planning RAM. Existing approved sudo-A full-proc helper and exact stopped-container inspect are the only root read-only operations. No compiler/guest/build/cleanup, host proc-permission change or credential exposure.",
+    "pre_signal": [
+      "Before any signal, preserve this review and complete fresh proof/capture digests durably in a new recovery receipt. Revalidate exact guard PID/starttime/boot/UID/GID/argv/executable node/hash/source hash/quarantine record and sole root-lock27:4 holder. Original receipts, derived request, stopped container and both exclusion identities/hashes must still match.",
+      "Repeat and retain the accepted bounded root full-process report and exact Docker inspect immediately for this action: owner80867 and seven clients absent, no descendants of guard, no other heavy publisher, full exact container profile stopped/exit1/Pid0/non-OOM, request lease absent. Any mismatch/unknown state refuses and preserves the guard.",
+      "On exact x86_64 only, open a pidfd with syscall434(80259,0); keep it open. Require fdinfo Pid80259 and recheck current process starttime718109, boot and exact argv/exe/source after opening it. Any API/kernel failure refuses; do not fall back to an unchecked numeric kill."
+    ],
+    "sole_signal": "Exactly once syscall424(pidfd,SIGKILL,NULL,0) on that still-open authenticated descriptor. No os.kill numeric fallback, kill shell command, process-group/descendant signal, or signal to watcher/worker/server23902/23943/23945 is allowed.",
+    "post_signal": [
+      "Observe pidfd exit readiness with a bounded wait; capture result and original launcher session42395 completion/status when available. Confirm exact guard no longer owns root lock; do not claim a healthy build was interrupted or that compilation passed.",
+      "Open the unchanged existing development lock inode27:4 and acquire it nonblocking for recovery reconciliation only. If another holder appears, do not signal it or start work; reconcile independently. Keep the replacement lock through durable recovery receipt publication and final checks.",
+      "Verify stopped container, absent owner/clients/request lease and unchanged original request/receipts/quarantine/exclusions remain. Retain stdout80143046bytes, owner receipt89341228bytes and all failures; never delete, truncate, rewrite or normalize them to manufacture a normal terminal result.",
+      "Durably write a distinct recovery receipt binding this review hash, exact pidfd-target identity, signal result/exit proof, before/after root-lock observations, all retained evidence/exclusion hashes and current container/process proof. Release the recovery lock only after positive reconciliation and durable receipt. If uncertain, retain a live replacement root-lock guard and both persistent exclusions; no new workload."
+    ],
+    "after_recovery": "Proper separately reviewed actual-terminal cleanup must still remove the retained container and archive/release the two exclusion records. Future observer capture-size repair must use another source-bound candidate; do not edit active a043 source or replay consumed authority1."
+  },
+  "blocking_findings": [],
+  "acceptance_credit": false,
+  "scope": "Independent retirement reconciliation and proposed exact process recovery only. The OS campaign remains active/incomplete; no build success, cleanup completion, image, guest or formal acceptance is claimed."
+}

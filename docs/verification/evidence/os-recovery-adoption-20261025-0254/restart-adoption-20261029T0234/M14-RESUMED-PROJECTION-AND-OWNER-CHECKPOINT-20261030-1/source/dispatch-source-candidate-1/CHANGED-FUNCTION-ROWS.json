@@ -1,0 +1,81 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "rows": [
+    {
+      "original_c_function": "do_syscall",
+      "path": "kernel/syscall.c",
+      "replacement_language": "Rust",
+      "source_status": "REUSED_PRIVATE_COMBINED_UNTESTED",
+      "new_retirement_credit": 0,
+      "default_selected": false,
+      "native_accepted": false
+    },
+    {
+      "original_c_function": "util_thread",
+      "path": "kernel/syscall.c",
+      "replacement_language": "Rust",
+      "source_status": "REUSED_PRIVATE_COMBINED_UNTESTED",
+      "new_retirement_credit": 0,
+      "default_selected": false,
+      "native_accepted": false
+    },
+    {
+      "original_c_function": "syscall_do_syscall2_bridge",
+      "path": "kernel/syscall.c",
+      "replacement_language": "Rust",
+      "source_status": "REUSED_PRIVATE_COMBINED_UNTESTED",
+      "new_retirement_credit": 0,
+      "default_selected": false,
+      "native_accepted": false
+    },
+    {
+      "original_c_function": "syscall_policy_do_syscall2_bridge",
+      "path": "kernel/syscall.c",
+      "replacement_language": "Rust",
+      "source_status": "REUSED_PRIVATE_COMBINED_UNTESTED",
+      "new_retirement_credit": 0,
+      "default_selected": false,
+      "native_accepted": false
+    },
+    {
+      "original_c_function": "syscall_do_syscall3_bridge",
+      "path": "kernel/syscall.c",
+      "replacement_language": "Rust",
+      "source_status": "REUSED_PRIVATE_COMBINED_UNTESTED",
+      "new_retirement_credit": 0,
+      "default_selected": false,
+      "native_accepted": false
+    },
+    {
+      "original_c_function": "syscall_policy_do_syscall3_bridge",
+      "path": "kernel/syscall.c",
+      "replacement_language": "Rust",
+      "source_status": "REUSED_PRIVATE_COMBINED_UNTESTED",
+      "new_retirement_credit": 0,
+      "default_selected": false,
+      "native_accepted": false
+    },
+    {
+      "original_c_function": "wait_host_wait4_bridge",
+      "path": "kernel/syscall.c",
+      "replacement_language": "Rust",
+      "source_status": "REUSED_PRIVATE_COMBINED_UNTESTED",
+      "new_retirement_credit": 0,
+      "default_selected": false,
+      "native_accepted": false
+    },
+    {
+      "function": "mcexec_util_thread_body",
+      "path": "executer/user/rust/mcexec_helpers.rs",
+      "change": "defer borrowed uti_info publication until size/attribute preactivation checks succeed",
+      "source_status": "NEW_PRIVATE_CORRECTION_UNTESTED",
+      "original_c_replacement_count": 0,
+      "default_selected": false,
+      "native_accepted": false
+    }
+  ],
+  "new_current_candidate_builds": 0,
+  "new_real_guest_apps": 0,
+  "tests_executed": 0,
+  "remaining_lifetime_and_allcaller_gates_open": true
+}

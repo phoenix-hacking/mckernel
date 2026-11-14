@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "record_kind": "native_collector_lifecycle_raw_expanded_node_source_checkpoint",
+  "task_id": "M02-C-lifecycle-raw-expanded-node-source",
+  "attempt": 1,
+  "status": "PASS_RAW_EXPANDED_NODE_SOURCE_CHECKPOINT_ONLY",
+  "recorded_utc": "2026-09-15T18:16:00Z",
+  "base_commit": "e72acda7cb9847e1e2ac50c59fb867ad37942d6e",
+  "reviews": {
+    "packet_attempt_1": "FAIL_PACKET_WORDING_PLACEHOLDER_AND_STREAM_BOUND",
+    "packet_attempt_2": "PASS_RAW_EXPANDED_NODE_PACKET_ONLY",
+    "source": "PASS_RAW_EXPANDED_NODE_SOURCE_ONLY",
+    "evidence": "PASS_RAW_EXPANDED_NODE_EVIDENCE_ONLY"
+  },
+  "source": {
+    "harness_sha256": "d2e1507baf611c97bfc6fb18287a3a67a99c0774b8e29148abd893068c9c4c11",
+    "vectors_sha256": "3e845d032938fef1854638529a3d21bb0c992780d65fb76b555dd62721e9da2f",
+    "expected_sha256": "86473f7b4027b9a06e064788d7ed41115b28705a62edc199879990310323a7f7",
+    "test_sha256": "b98a6d49f238b0df595dc4187a220bc6fd8502e156033b4e16ac40d39526cf57",
+    "accepted_prefix_records": 132,
+    "accepted_prefix_text_sha256": "37d212189d28e761b8ea978c8fdce4ff60e4c06e26ca4f6f316e1be8ab9a3930"
+  },
+  "archive": {
+    "path": "docs/verification/evidence/stability-native-collector-lifecycle-raw-expanded-node-source-checkpoint-20260915-1.tar.gz",
+    "sha256": "4d4b13c9e508b022fda02b8aa6340acafb75587bd690c14d53098b23a36fc638",
+    "members": 10
+  },
+  "checks": {
+    "python_3_9_12": {"tests_passed": 13, "tests_failed": 0},
+    "python_3_8_10": {"tests_passed": 13, "tests_failed": 0},
+    "new_raw_cases": 1,
+    "cumulative_raw_cases": 133,
+    "positive_nodes": 262144,
+    "negative_nodes_attempted": 262145,
+    "positive_input_bytes": 14523,
+    "negative_input_bytes": 14525
+  },
+  "raw_full_matrix_frozen": false,
+  "corpus_complete": false,
+  "compiler_execution": false,
+  "model_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

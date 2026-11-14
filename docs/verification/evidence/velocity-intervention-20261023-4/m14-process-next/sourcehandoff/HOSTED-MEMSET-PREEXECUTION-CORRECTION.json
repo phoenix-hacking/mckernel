@@ -1,0 +1,19 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_CORRECTION_ONLY_NO_EXECUTION_GRANTED",
+  "reason": "Independent preexecution source review found kernel string.h memset macro selects __inline_memset without hosted provider. Preserve real headers/types and undefine only fixture macro so libc supplies memset.",
+  "original_ready_sha256": "6c75e1fcf380007b0be10a84aa56db368afc8821042f17e65531b7515e63ddd7",
+  "original_fixture_sha256": "54b2f4b326d2fe83e1af6d2236a3b792847f987039429c0db126408fa4efde9a",
+  "corrected_fixture_sha256": "3c9e4e7f0da2abb88308edefbc80b18ac45f3b97288d32ec8de2cb03e8f5ecfb",
+  "product_sources_unchanged": true,
+  "assertions_unchanged": true,
+  "compiler_or_test_executed": false,
+  "failure_family_history": [
+    {
+      "family": "hosted-kernel-string-memset-provider",
+      "observation": "Reviewer caught preexecution; no failed candidate executed in this packet. Prior remote port failure already known.",
+      "correction": "fixture-only #undef memset after real header includes",
+      "remaining_unchanged_replay_allowed": false
+    }
+  ]
+}

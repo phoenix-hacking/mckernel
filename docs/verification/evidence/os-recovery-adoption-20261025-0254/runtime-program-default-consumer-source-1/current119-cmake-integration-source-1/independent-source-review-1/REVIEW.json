@@ -1,0 +1,333 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_SOURCE",
+  "reviewer": "/root/recovery_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "files": {
+    "source_ready": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/current119-cmake-integration-source-1/SOURCE_READY.json",
+      "bytes": 2640,
+      "sha256": "de10a9322708fed7ff01fb7b36f8803bd761500bf64ad8b51e3b8835b96f09ec"
+    },
+    "filemap": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/current119-cmake-integration-source-1/FILEMAP.SOURCE-ONLY.json",
+      "bytes": 14924,
+      "sha256": "2535addfa43322b29e1b790df6ac2a1cee087a9fbb3613348fc7402346b16306"
+    },
+    "patch": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/current119-cmake-integration-source-1/CURRENT119-RUNTIME-CONSUMERS.PRIVATE.patch",
+      "bytes": 50017,
+      "sha256": "37c048f9c877458d5cc5baf142f6faab8cfdbfef5f0a1c5b89c59d20082676bd"
+    },
+    "generation_script": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/current119-cmake-integration-source-1/check_cmake_generation.py",
+      "bytes": 5298,
+      "sha256": "4b29e9a894b85fc81b1910b903b296e40608fc7c7107dc544e542c5b64d20683"
+    },
+    "next_named_target_compile": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/current119-cmake-integration-source-1/NEXT-NAMED-TARGET-COMPILE.NOT-GRANTED.json",
+      "bytes": 5984,
+      "sha256": "0e2e30d4fdbd45ffe3a7deb1335081848a650dd35f7f6b9781a8ed2a7f95b3dd"
+    }
+  },
+  "changed_sources": [
+    {
+      "proposed_path": "CMakeLists.txt",
+      "preimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/current119-cmake-integration-source-1/preimage/CMakeLists.txt",
+        "bytes": 14511,
+        "sha256": "e60b304fd38bd2dcddd4f7f8c6217bf887bacfc997741e7aed321dd9222899da"
+      },
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/current119-cmake-integration-source-1/postimage/CMakeLists.txt",
+        "bytes": 14388,
+        "sha256": "fd8410b20f5cb7972d05ca101c13c759af3f66282f76cd11025d97e65f2472ef"
+      },
+      "canonical": {
+        "path": "/home/holden/mckernel/CMakeLists.txt",
+        "bytes": 14511,
+        "sha256": "e60b304fd38bd2dcddd4f7f8c6217bf887bacfc997741e7aed321dd9222899da"
+      }
+    },
+    {
+      "proposed_path": "executer/user/CMakeLists.txt",
+      "preimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/current119-cmake-integration-source-1/preimage/executer/user/CMakeLists.txt",
+        "bytes": 28027,
+        "sha256": "a77da8f2ccaf54997c043cf30c22c8e67fedd3b7b318b54709df2820f29f5e4b"
+      },
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/current119-cmake-integration-source-1/postimage/executer/user/CMakeLists.txt",
+        "bytes": 28048,
+        "sha256": "2e2fb13ff9bbbd9e740ee49fb8973ffc906bc21a58517ecf61ee70248e9a6d05"
+      },
+      "canonical": {
+        "path": "/home/holden/mckernel/executer/user/CMakeLists.txt",
+        "bytes": 28027,
+        "sha256": "a77da8f2ccaf54997c043cf30c22c8e67fedd3b7b318b54709df2820f29f5e4b"
+      }
+    },
+    {
+      "proposed_path": "executer/user/cmake/SelectRustVmcore2mckdump.cmake",
+      "prior": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/postimage/executer/user/cmake/SelectRustVmcore2mckdump.cmake",
+        "bytes": 2264,
+        "sha256": "f97ad4c9ea3511c4c00b2a3c7c3bc38ce914d6c02c2c3c656c416208457ab6b7"
+      },
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/current119-cmake-integration-source-1/postimage/executer/user/cmake/SelectRustVmcore2mckdump.cmake",
+        "bytes": 2297,
+        "sha256": "0772eb990997c817e9ae7ee5852f2496a148bbc6e7f349ee0fbb7068f83bf32a"
+      },
+      "change": "Bind explicit runtime compiler as build dependency"
+    },
+    {
+      "proposed_path": "scripts/rust/boot-tools/SelectRustBootTools.cmake",
+      "prior": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/postimage/scripts/rust/boot-tools/SelectRustBootTools.cmake",
+        "bytes": 2469,
+        "sha256": "3ea36b43636866b5b536cb0184cf6047e7b4f71ddcba64a3b67375554748c245"
+      },
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/current119-cmake-integration-source-1/postimage/scripts/rust/boot-tools/SelectRustBootTools.cmake",
+        "bytes": 2502,
+        "sha256": "798cc5b6f6919450859109a2e392baf7941a9b5d47c444c442982c1a2dc12cd1"
+      },
+      "change": "Bind explicit runtime compiler as build dependency"
+    },
+    {
+      "proposed_path": "scripts/rust/eclair-backtrace/SelectRustEclairBacktrace.cmake",
+      "prior": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/postimage/scripts/rust/eclair-backtrace/SelectRustEclairBacktrace.cmake",
+        "bytes": 2240,
+        "sha256": "d0702e58aa09ada88cf85e4643c3e022dc982e425b0a74820d15b677db456db8"
+      },
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/current119-cmake-integration-source-1/postimage/scripts/rust/eclair-backtrace/SelectRustEclairBacktrace.cmake",
+        "bytes": 2273,
+        "sha256": "15a0adbda3d6d9491de881ceef65a31a2854372056896d0456787976b1390817"
+      },
+      "change": "Bind explicit runtime compiler as build dependency"
+    }
+  ],
+  "unchanged_runtime_config_sources": [
+    {
+      "postimage": {
+        "bytes": 570,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/postimage/scripts/rust/boot-tools/config.rs.in",
+        "sha256": "1babd031ec00d02a7589f5ce4a649db7981aaa160a910a993eca2b467ee0f0ad"
+      },
+      "proposed_path": "scripts/rust/boot-tools/config.rs.in",
+      "runtime_bytes_unchanged": true,
+      "source": {
+        "bytes": 570,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-13/m15-boot-tools/batch1/config.rs.in",
+        "sha256": "1babd031ec00d02a7589f5ce4a649db7981aaa160a910a993eca2b467ee0f0ad"
+      }
+    },
+    {
+      "postimage": {
+        "bytes": 4395,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/postimage/scripts/rust/boot-tools/platform.rs",
+        "sha256": "7e837af3533f3496f35fea94561d39b4cedf55334ebc8864ac34308dd1aef10c"
+      },
+      "proposed_path": "scripts/rust/boot-tools/platform.rs",
+      "runtime_bytes_unchanged": true,
+      "source": {
+        "bytes": 4395,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-13/m15-boot-tools/batch1/platform.rs",
+        "sha256": "7e837af3533f3496f35fea94561d39b4cedf55334ebc8864ac34308dd1aef10c"
+      }
+    },
+    {
+      "postimage": {
+        "bytes": 12648,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/postimage/scripts/rust/boot-tools/reboot.rs",
+        "sha256": "36d32e918c2f69694bd8c3e54ff3041f57cac5ad511a524de11c313aec4986da"
+      },
+      "proposed_path": "scripts/rust/boot-tools/reboot.rs",
+      "runtime_bytes_unchanged": true,
+      "source": {
+        "bytes": 12648,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-13/m15-boot-tools/batch1/reboot.rs",
+        "sha256": "36d32e918c2f69694bd8c3e54ff3041f57cac5ad511a524de11c313aec4986da"
+      }
+    },
+    {
+      "postimage": {
+        "bytes": 2526,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/postimage/scripts/rust/boot-tools/stop.rs",
+        "sha256": "71d2ba856347d9f830bf0ca2bfab0c877adb139d5661dfae10e0a34da499f00b"
+      },
+      "proposed_path": "scripts/rust/boot-tools/stop.rs",
+      "runtime_bytes_unchanged": true,
+      "source": {
+        "bytes": 2526,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-13/m15-boot-tools/batch1/stop.rs",
+        "sha256": "71d2ba856347d9f830bf0ca2bfab0c877adb139d5661dfae10e0a34da499f00b"
+      }
+    },
+    {
+      "postimage": {
+        "bytes": 287,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/postimage/scripts/rust/boot-tools/mcreboot_main.rs",
+        "sha256": "9bed3da348b7d663d9599888a4d6b8f49af65679bc81d2e0613b67106ed69473"
+      },
+      "proposed_path": "scripts/rust/boot-tools/mcreboot_main.rs",
+      "runtime_bytes_unchanged": true,
+      "source": {
+        "bytes": 287,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-13/m15-boot-tools/batch1/mcreboot_main.rs",
+        "sha256": "9bed3da348b7d663d9599888a4d6b8f49af65679bc81d2e0613b67106ed69473"
+      }
+    },
+    {
+      "postimage": {
+        "bytes": 281,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/postimage/scripts/rust/boot-tools/mcstop_main.rs",
+        "sha256": "c1c46356e9b89de7208208022916135529cd0f3b0cd5f611549363205199cc69"
+      },
+      "proposed_path": "scripts/rust/boot-tools/mcstop_main.rs",
+      "runtime_bytes_unchanged": true,
+      "source": {
+        "bytes": 281,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-13/m15-boot-tools/batch1/mcstop_main.rs",
+        "sha256": "c1c46356e9b89de7208208022916135529cd0f3b0cd5f611549363205199cc69"
+      }
+    },
+    {
+      "postimage": {
+        "bytes": 110,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/postimage/scripts/rust/eclair-backtrace/config.rs.in",
+        "sha256": "27acdd3d59e11969ac95bbc58f8debcefdc2a369e4ff1148e308b35cde6d1806"
+      },
+      "proposed_path": "scripts/rust/eclair-backtrace/config.rs.in",
+      "runtime_bytes_unchanged": true,
+      "source": {
+        "bytes": 110,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-13/m15-boot-tools/batch2/config.rs.in",
+        "sha256": "27acdd3d59e11969ac95bbc58f8debcefdc2a369e4ff1148e308b35cde6d1806"
+      }
+    },
+    {
+      "postimage": {
+        "bytes": 3713,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/postimage/scripts/rust/eclair-backtrace/eclair_backtrace.rs",
+        "sha256": "1d69aa1a5840b31787c813698131b96af567ccd35f51ec2665e61d07d5aab865"
+      },
+      "proposed_path": "scripts/rust/eclair-backtrace/eclair_backtrace.rs",
+      "runtime_bytes_unchanged": true,
+      "source": {
+        "bytes": 3713,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-13/m15-boot-tools/batch2/eclair_backtrace.rs",
+        "sha256": "1d69aa1a5840b31787c813698131b96af567ccd35f51ec2665e61d07d5aab865"
+      }
+    },
+    {
+      "postimage": {
+        "bytes": 2304,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/postimage/scripts/rust/eclair-backtrace/eclair_native.rs",
+        "sha256": "b6e82247f81e32ceb857069baa788a808d3052f8aae48c3586c85c8a7b127e2a"
+      },
+      "proposed_path": "scripts/rust/eclair-backtrace/eclair_native.rs",
+      "runtime_bytes_unchanged": true,
+      "source": {
+        "bytes": 2304,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-13/m15-boot-tools/batch2/eclair_native.rs",
+        "sha256": "b6e82247f81e32ceb857069baa788a808d3052f8aae48c3586c85c8a7b127e2a"
+      }
+    },
+    {
+      "postimage": {
+        "bytes": 352,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/postimage/scripts/rust/eclair-backtrace/eclair_main.rs",
+        "sha256": "295c495f3400d35bd0b965910b7e19b3d9114b121a81bb8ab99a6b674bd5f8be"
+      },
+      "proposed_path": "scripts/rust/eclair-backtrace/eclair_main.rs",
+      "runtime_bytes_unchanged": true,
+      "source": {
+        "bytes": 352,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-13/m15-boot-tools/batch2/eclair_main.rs",
+        "sha256": "295c495f3400d35bd0b965910b7e19b3d9114b121a81bb8ab99a6b674bd5f8be"
+      }
+    },
+    {
+      "postimage": {
+        "bytes": 12392,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/postimage/executer/user/rust/vmcore2mckdump.rs",
+        "sha256": "44329596ff8fcb1f197878664bf4999407648f056f81280008d885802f6e5427"
+      },
+      "proposed_path": "executer/user/rust/vmcore2mckdump.rs",
+      "runtime_bytes_unchanged": true,
+      "source": {
+        "bytes": 12392,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-11/m15-vmcore2mckdump/vmcore2mckdump.rs",
+        "sha256": "44329596ff8fcb1f197878664bf4999407648f056f81280008d885802f6e5427"
+      }
+    }
+  ],
+  "independent_generation": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/current119-cmake-integration-source-1/independent-source-review-1/generation-checks-1/RESULT.json",
+    "bytes": 9117,
+    "sha256": "014b7ce04f67e46d71608c51ada9c245fc68e7a94d1892c36a21028dfa35ebcf"
+  },
+  "private_patch_check": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/current119-cmake-integration-source-1/independent-source-review-1/PATCH-CHECK.ACTUAL.json",
+    "bytes": 4773,
+    "sha256": "fbfa6146d16ed1ae0c352769183b551e2b331dc163cd4127c666fe9d565afa2d"
+  },
+  "individual_target_dependency_check": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/current119-cmake-integration-source-1/independent-source-review-1/PER-TARGET-GRAPH-CHECK.ACTUAL.json",
+    "bytes": 1730,
+    "sha256": "42c6c9dd5900bb8611a621a81f32c72d7a307092f3677e1b3f33ae717c679b87"
+  },
+  "reviewer_observer_error_preserved": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/runtime-program-default-consumer-source-1/current119-cmake-integration-source-1/independent-source-review-1/FIRST-PER-TARGET-CHECK-FAILURE.json",
+    "bytes": 440,
+    "sha256": "e14c5b2979a4862675d8de353ff862652ef5feca1350e1755e2dc157c6b872a1"
+  },
+  "runtime_authority": null,
+  "canonical_writes": 0,
+  "compiler_build_install_native_Docker_root_calls": 0,
+  "installed_or_native_acceptance": false,
+  "M15_full_file_credit": false,
+  "findings": [
+    {
+      "boundary": "Concrete compiler dependency defect and correction",
+      "result": "PASS_SOURCE",
+      "details": "All three existing selectors add exactly MCKERNEL_RUNTIME_TOOL_RUSTC to custom-command DEPENDS. Independent actualCMake3.25 generation reproduces old boot/stop/backtrace graphs without that prerequisite and verifies repaired graphs individually for mcreboot.sh, mcstop+release.sh and eclair-dump-backtrace.exp; vmcore2mckdump ACK graph also names it. Each inert TEST_ONLY compiler leaf is nonexecutable and no compiler command was called. Thus a changed selected compiler can participate in ordinary build dependency freshness instead of leaving old executable outputs undetected."
+    },
+    {
+      "boundary": "Rebased complete source integration",
+      "result": "PASS_SOURCE",
+      "details": "Patch37c048f9 passes git apply --check against current canonical topCMakee60b/userCMakea77d. Independent application within exclusive review directory reproduces all16 exact declared postimages:2 complete CMake files,3 selectors,11 reused Rust/config files. Top-level delta changes only boot/stop/backtrace configure/install wiring into selectors. UserCMake delta replaces only vmcore configure_file with selector include. Every current mcexec MCEXEC_USER_RUSTC/provider/build-id/install component, BFD object routing, libelf/ldump2mcdump and mcps region remains byte-identical outside that one hunk."
+    },
+    {
+      "boundary": "Existing Rust bodies and installed interfaces",
+      "result": "PASS_SOURCE",
+      "details": "All11 reused Rust/config source bodies authenticate byte-identically to FILEMAP source refs; no new port or runtime-body qualification is claimed. Selectors use explicit independent MCKERNEL_RUNTIME_TOOL_RUSTC without assigning compute RUSTC. Existing installed output names mcreboot.sh/mcstop+release.sh/eclair-dump-backtrace.exp remain under same SBINDIR/BINDIR install(PROGRAMS) semantics; vmcore remains userCMake install(PROGRAMS) at same path. Default OFF configures working reference files and does not create Rust program targets."
+    },
+    {
+      "boundary": "VMcore exact producer requirement",
+      "result": "PASS_SOURCE",
+      "details": "ENABLE_RUST_VMCORE2MCKDUMP remains OFF. ON requires Linux/x86_64, ENABLE_RUST_USER_TOOLS and existing ldump2mcdump_rust_helpers target, SHA2565205663e of actual rust/ldump2mcdump_helpers.rs, absolute existing runtime compiler, and build dependency on ldump2mcdump. Independent cases refuse missing producer and current real source without ACK. The ACK success fixture has exact retained candidate bytes plus TEST_ONLY target leaves solely for generation; it is not a compiled producer, matched ACK qualification or native proof. Actual matching producer is explicitly outside main patch and must qualify jointly."
+    },
+    {
+      "boundary": "Independent focused generation",
+      "result": "PASS_GENERATOR_ONLY",
+      "details": "Unchanged generator copied into owned directory ran eight actualCMake LANGUAGES NONE configurations on CPU0 under AS2GiB/FS32MiB/NOFILE256/CORE0 and one-job environment. Cases preserve defaultOFF, reject absent compiler boot/backtrace, reproduce prior graph defect, pass fixed graphs, reject missing producer/noACK, and pass retainedACK graph-only. No build, install, target execution, SDK, Docker, privileged or native action occurred. Reviewer initial extra vmcore edge inspection searched an unprefixed target; its failure is retained and corrected to actual executer/user/vmcore2mckdump target without source or oracle change."
+    },
+    {
+      "boundary": "Explicit production compile dependency",
+      "result": "SOURCE_ONLY_PENDING",
+      "details": "NEXT-NAMED-TARGET-COMPILE proposal names actual /src production graph, selected SDK cachea75f, explicit compute/runtime/IHK compiler paths, qualified source/readset requirement and fresh source/output. It enables boot/backtrace, keeps vmcoreOFF and names only three actual targets with-j1. Existing predecessor recipec1f878 and cache bytes authenticate. Its nested historical runtime_delta/runtime_patch refs remain original proposals; Root must bind current FILEMAP2535/patch37c0 over exact current preimages plus matching actual qualified SDK source/readset and /out/build support. This recipe grants no heavy slot or replay of accepted SDK/executor/BFD work."
+    }
+  ],
+  "source_blockers": [],
+  "remaining_acceptance": [
+    "Fresh admitted named-target SDK compile/link using full current graph and exact unchanged accepted SDK/export inputs at their scope.",
+    "Boot8/eclair6 actual behavior on matching produced artifacts and installed/default/native qualification; source count is not M15 acceptance.",
+    "Vmcore remainsOFF until behavior-contract choice, actual matching ACK producer,22case PTY/subreaper fixture plus ACK fault matrix and valid-dump SDK/native publication pass."
+  ]
+}

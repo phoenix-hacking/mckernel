@@ -1,0 +1,423 @@
+{
+  "schema": "mckernel.ipi-concrete.actual-emission-source-contract.v1",
+  "retained_capture": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-concrete-provider-metadata-1/ACTUAL-CAPTURE-BEFORE-GATE.json",
+    "sha256": "d7c5046d4393d21a0ef8080fdcca7d1d318749117191342b47d61508e898adc3",
+    "status": "ACTUAL_EMITTED_METADATA_CAPTURE_ONLY_NOT_OWNERSHIP_GATE_PASS"
+  },
+  "object": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-concrete-provider-unit-1/output/scheduler_ipi_concrete_provider.o",
+    "sha256": "1f4a6b978f6b81737c4bf2bf62c94fbdd71a4003c59161db7abec761209be2e0",
+    "bytes": 4256
+  },
+  "functions": {
+    "apic_icr_write": {
+      "symbol": {
+        "name": "apic_icr_write",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "section": 3,
+        "value": 0,
+        "size": 45
+      },
+      "section": {
+        "name": ".ltext.apic_icr_write",
+        "type": 1,
+        "flags": 268435462,
+        "align": 16,
+        "size": 45,
+        "entry_size": 0
+      },
+      "actual_bytes_sha256": "b7a0ba65c92096c758101930afe08a603c0a6bc5069672ff6340a89d68bbce05",
+      "source_global_relocations": [
+        {
+          "offset": 10,
+          "type": 1,
+          "target": "x86_lapic_write_bridge",
+          "target_bind": 1,
+          "target_section": 0,
+          "addend": 0
+        }
+      ]
+    },
+    "apic_wait_icr_idle": {
+      "symbol": {
+        "name": "apic_wait_icr_idle",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "section": 5,
+        "value": 0,
+        "size": 73
+      },
+      "section": {
+        "name": ".ltext.apic_wait_icr_idle",
+        "type": 1,
+        "flags": 268435462,
+        "align": 16,
+        "size": 73,
+        "entry_size": 0
+      },
+      "actual_bytes_sha256": "cab85dcb24b48b88769b25aa0743db39fbb1068b920729a406d71125492c2251",
+      "source_global_relocations": [
+        {
+          "offset": 6,
+          "type": 1,
+          "target": "lapic_read",
+          "target_bind": 1,
+          "target_section": 0,
+          "addend": 0
+        },
+        {
+          "offset": 30,
+          "type": 1,
+          "target": "x86_cpu_pause_bridge",
+          "target_bind": 1,
+          "target_section": 0,
+          "addend": 0
+        }
+      ]
+    },
+    "apic_x86_issue_ipi": {
+      "symbol": {
+        "name": "apic_x86_issue_ipi",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "section": 7,
+        "value": 0,
+        "size": 138
+      },
+      "section": {
+        "name": ".ltext.apic_x86_issue_ipi",
+        "type": 1,
+        "flags": 268435462,
+        "align": 16,
+        "size": 138,
+        "entry_size": 0
+      },
+      "actual_bytes_sha256": "5bbb9cb392a9b212cef3211d85543872e9f89e63f83f72678cf1066212c328d2",
+      "source_global_relocations": [
+        {
+          "offset": 14,
+          "type": 1,
+          "target": "cpu_disable_interrupt_save",
+          "target_bind": 1,
+          "target_section": 0,
+          "addend": 0
+        },
+        {
+          "offset": 29,
+          "type": 1,
+          "target": "lapic_read",
+          "target_bind": 1,
+          "target_section": 0,
+          "addend": 0
+        },
+        {
+          "offset": 54,
+          "type": 1,
+          "target": "x86_cpu_pause_bridge",
+          "target_bind": 1,
+          "target_section": 0,
+          "addend": 0
+        },
+        {
+          "offset": 87,
+          "type": 1,
+          "target": "x86_lapic_write_bridge",
+          "target_bind": 1,
+          "target_section": 0,
+          "addend": 0
+        },
+        {
+          "offset": 117,
+          "type": 1,
+          "target": "cpu_restore_interrupt",
+          "target_bind": 1,
+          "target_section": 0,
+          "addend": 0
+        }
+      ]
+    },
+    "x2apic_icr_write": {
+      "symbol": {
+        "name": "x2apic_icr_write",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "section": 9,
+        "value": 0,
+        "size": 26
+      },
+      "section": {
+        "name": ".ltext.x2apic_icr_write",
+        "type": 1,
+        "flags": 268435462,
+        "align": 16,
+        "size": 26,
+        "entry_size": 0
+      },
+      "actual_bytes_sha256": "cd0a62b198285e55ee0dcff803c1679db712af79f5b19590fbe07ce73b4f223d",
+      "source_global_relocations": [
+        {
+          "offset": 11,
+          "type": 1,
+          "target": "x86_write_msr_bridge",
+          "target_bind": 1,
+          "target_section": 0,
+          "addend": 0
+        }
+      ]
+    },
+    "x2apic_x86_issue_ipi": {
+      "symbol": {
+        "name": "x2apic_x86_issue_ipi",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "section": 11,
+        "value": 0,
+        "size": 83
+      },
+      "section": {
+        "name": ".ltext.x2apic_x86_issue_ipi",
+        "type": 1,
+        "flags": 268435462,
+        "align": 16,
+        "size": 83,
+        "entry_size": 0
+      },
+      "actual_bytes_sha256": "b080e479536ef13bb82412a534ed81dbe3093af71163daf77043f5838433c01f",
+      "source_global_relocations": [
+        {
+          "offset": 12,
+          "type": 1,
+          "target": "ihk_mc_mb",
+          "target_bind": 1,
+          "target_section": 0,
+          "addend": 0
+        },
+        {
+          "offset": 24,
+          "type": 1,
+          "target": "cpu_disable_interrupt_save",
+          "target_bind": 1,
+          "target_section": 0,
+          "addend": 0
+        },
+        {
+          "offset": 48,
+          "type": 1,
+          "target": "x86_write_msr_bridge",
+          "target_bind": 1,
+          "target_section": 0,
+          "addend": 0
+        },
+        {
+          "offset": 65,
+          "type": 1,
+          "target": "cpu_restore_interrupt",
+          "target_bind": 1,
+          "target_section": 0,
+          "addend": 0
+        }
+      ]
+    },
+    "x86_apic_issue_ipi_body_result": {
+      "symbol": {
+        "name": "x86_apic_issue_ipi_body_result",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "section": 13,
+        "value": 0,
+        "size": 120
+      },
+      "section": {
+        "name": ".ltext.x86_apic_issue_ipi_body_result",
+        "type": 1,
+        "flags": 268435462,
+        "align": 16,
+        "size": 120,
+        "entry_size": 0
+      },
+      "actual_bytes_sha256": "27d4aa994f33c8bf5afc86f44323b0dc9c39a170df5fc3c41f24981fb43774d2",
+      "source_global_relocations": []
+    },
+    "x86_x2apic_issue_ipi_body_result": {
+      "symbol": {
+        "name": "x86_x2apic_issue_ipi_body_result",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "section": 14,
+        "value": 0,
+        "size": 94
+      },
+      "section": {
+        "name": ".ltext.x86_x2apic_issue_ipi_body_result",
+        "type": 1,
+        "flags": 268435462,
+        "align": 16,
+        "size": 94,
+        "entry_size": 0
+      },
+      "actual_bytes_sha256": "a948fb887b02a1802c6b9f83952b06ce6296f748c39097aceab10c6e592fb452",
+      "source_global_relocations": []
+    }
+  },
+  "data": {
+    "x86_icr_geometry": {
+      "symbol": {
+        "name": "x86_icr_geometry",
+        "bind": 1,
+        "type": 1,
+        "other": 0,
+        "section": 15,
+        "value": 0,
+        "size": 32
+      },
+      "section": {
+        "name": ".lrodata.x86_icr_geometry",
+        "type": 1,
+        "flags": 268435458,
+        "align": 8,
+        "size": 32,
+        "entry_size": 0
+      },
+      "actual_bytes_hex": "3008000000000000100300000000000000030000000000000010000000000000"
+    },
+    "x86_ipi_icr_id_shift": {
+      "symbol": {
+        "name": "x86_ipi_icr_id_shift",
+        "bind": 1,
+        "type": 1,
+        "other": 0,
+        "section": 16,
+        "value": 0,
+        "size": 4
+      },
+      "section": {
+        "name": ".lrodata.x86_ipi_icr_id_shift",
+        "type": 1,
+        "flags": 268435458,
+        "align": 4,
+        "size": 4,
+        "entry_size": 0
+      },
+      "actual_bytes_hex": "18000000"
+    }
+  },
+  "source_data_values": {
+    "x86_ipi_icr_id_shift": {
+      "signed_i32": 24,
+      "bytes_hex": "18000000"
+    },
+    "x86_icr_geometry": {
+      "u64_array": [
+        2096,
+        784,
+        768,
+        4096
+      ],
+      "bytes_hex": "3008000000000000100300000000000000030000000000000010000000000000"
+    }
+  },
+  "actual_genuine_U": [
+    "cpu_disable_interrupt_save",
+    "cpu_restore_interrupt",
+    "ihk_mc_mb",
+    "lapic_read",
+    "x86_cpu_pause_bridge",
+    "x86_lapic_write_bridge",
+    "x86_write_msr_bridge"
+  ],
+  "actual_private_FUNC_OBJECT": [],
+  "actual_writable_alloc_sections": [],
+  "actual_unwind": {
+    "section": {
+      "name": ".eh_frame",
+      "type": 1879048193,
+      "flags": 2,
+      "align": 8,
+      "size": 440,
+      "entry_size": 0
+    },
+    "actual_bytes_sha256": "0cb8a49a61ae7a1e1a5fae28b85ecab0db240f524f7a7062c41a03aeb2d3d309",
+    "relocations": [
+      {
+        "offset": 32,
+        "type": 24,
+        "target_section_name": ".ltext.apic_icr_write",
+        "target_bind": 0,
+        "target_symbol_type": 3,
+        "target_value": 0,
+        "addend": 0
+      },
+      {
+        "offset": 80,
+        "type": 24,
+        "target_section_name": ".ltext.apic_wait_icr_idle",
+        "target_bind": 0,
+        "target_symbol_type": 3,
+        "target_value": 0,
+        "addend": 0
+      },
+      {
+        "offset": 128,
+        "type": 24,
+        "target_section_name": ".ltext.apic_x86_issue_ipi",
+        "target_bind": 0,
+        "target_symbol_type": 3,
+        "target_value": 0,
+        "addend": 0
+      },
+      {
+        "offset": 200,
+        "type": 24,
+        "target_section_name": ".ltext.x2apic_icr_write",
+        "target_bind": 0,
+        "target_symbol_type": 3,
+        "target_value": 0,
+        "addend": 0
+      },
+      {
+        "offset": 232,
+        "type": 24,
+        "target_section_name": ".ltext.x2apic_x86_issue_ipi",
+        "target_bind": 0,
+        "target_symbol_type": 3,
+        "target_value": 0,
+        "addend": 0
+      },
+      {
+        "offset": 288,
+        "type": 24,
+        "target_section_name": ".ltext.x86_apic_issue_ipi_body_result",
+        "target_bind": 0,
+        "target_symbol_type": 3,
+        "target_value": 0,
+        "addend": 0
+      },
+      {
+        "offset": 376,
+        "type": 24,
+        "target_section_name": ".ltext.x86_x2apic_issue_ipi_body_result",
+        "target_bind": 0,
+        "target_symbol_type": 3,
+        "target_value": 0,
+        "addend": 0
+      }
+    ]
+  },
+  "actual_relocations": {
+    "function_global_count": 13,
+    "unwind_count": 7,
+    "total": 20
+  },
+  "source_and_optimization_binding": "Both originalentryfunctions legitimatelyinline originaltransactioncores/ICRcallbacks; scalarfixeddata isconstant-folded into code, while two exportedrealROdata ownersremain. Compareexactobservedfunction/sourceglobal-relocation/content facts above; no requirement for uninlinedinternalcalls or datareferences. No missing sourcehelper/alias invented.",
+  "external_boundary": "SevenactualgenuineU, includingx86_cpu_pause_bridge ratherthancpu_pause,lapic_read asoriginalselected_read declarationonly. ExistingIRQsave/restore are externalgenuineowners, notcopied. No backend init/state/publication/slotowner orhardwareexecution.",
+  "actual_capture_is_not_GO": true
+}

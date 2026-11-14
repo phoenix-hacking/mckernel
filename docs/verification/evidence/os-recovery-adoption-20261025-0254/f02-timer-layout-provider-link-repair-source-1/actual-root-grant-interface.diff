@@ -1,0 +1,30 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-provider-link-repair-source-1/run_fresh_granted_remaining_once.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-provider-link-repair-source-1/run_actual_expert_grant_once.py
+@@ -28,17 +28,19 @@
+     for kind, limit in [(resource.RLIMIT_AS, 2 * 2**30), (resource.RLIMIT_CPU, 60),
+                         (resource.RLIMIT_FSIZE, 64 * 2**20), (resource.RLIMIT_CORE, 0)]:
+         resource.setrlimit(kind, (limit, limit))
+-    assert len(sys.argv) == 3, 'Supply the fresh Root grant path and its exact SHA256'
+-    grant_path = Path(sys.argv[1]).resolve()
+-    assert grant_path == S / 'ROOT-ORDINARY-CPU6-GRANT.json'
+-    assert len(sys.argv[2]) == 64 and ref(grant_path)['sha256'] == sys.argv[2]
++    assert len(sys.argv) == 1
++    grant_path = S / 'ROOT-ORDINARY-EXPERT-CPU6-GRANT.json'
++    assert ref(grant_path)['sha256'] == '0336b8953ddedf4d5070fd2e02774aa5dd111be5feb6ce30b9b3b69ebbbdd641'
+     grant = json.loads(grant_path.read_text())
+-    assert grant['decision'] == 'GRANT_ONE_ORDINARY_CPU6_F02_TIMER_PROVIDER_EXPERT_SUFFIX'
++    assert grant['decision'] == 'GRANT_ONE_EXPERT_F02_EXISTING_PROVIDER_HOST_CLOSURE'
++    assert grant['owner'] == '/root/timer_provider_link_expert'
+     plan_path = S / 'EXACT-FIVE-REMAINING-COMMANDS.NOT-ADMITTED.json'
+-    assert ref(plan_path) == grant['plan']
++    assert ref(plan_path) == grant['exact_plan']
+     plan = json.loads(plan_path.read_text())
+-    assert ref(Path(__file__).resolve()) == plan['runner']
+-    assert len(plan['commands']) == grant['maximum_compiler_test_commands'] == 5
++    assert ref(S / 'run_fresh_granted_remaining_once.py') == plan['runner']
++    assert len(plan['commands']) == grant['maximum_new_commands'] == 5
++    assert grant['prior_actual_commands_retained'] == 6
++    assert grant['maximum_total_timer_family_commands'] == 11
+     for row in plan['inputs'] + plan['tools']:
+         assert ref(row['path']) == row, row['path']
+     guard_dir = P.parent / ('m14-f06-selected-residual-implementation-20261026-1/'

@@ -1,0 +1,77 @@
+{
+  "schema": "mckernel.stability-artifact-review.v1",
+  "recorded_at": "2026-09-28T11:30:03-07:00",
+  "base_commit": "a2df0eb7106b7194e899a6f87cd4c517ed0edd74",
+  "scope": "source-fixed collector, host oracle, derived initramfs and strict manifest for native-application-core threads diagnostic",
+  "decision": "PASS_ARTIFACT_MANIFEST_READY_FOR_PACKET",
+  "collector": {
+    "source": "scripts/application-tests/native_diagnostic_guest_collector.c",
+    "source_sha256": "e78760ae333ca5967da30f6b338f2ee57344ed2f9e9495d80b00e35b6f72ad4a",
+    "command": "/usr/bin/gcc -std=gnu11 -O2 -Wall -Wextra -Werror -static -fno-pie -no-pie -Wl,-z,noexecstack -DND_CORE_THREADS=1 /home/holden/mckernel/scripts/application-tests/native_diagnostic_guest_collector.c -o /home/holden/mckernel-work/scratch/native-diagnostic-threads-collector-build-20260928-1/init",
+    "selected_path": "/home/holden/mckernel-work/scratch/native-diagnostic-threads-collector-build-20260928-1/init",
+    "corrected_rebuild_path": "/home/holden/mckernel-work/scratch/native-diagnostic-threads-collector-build-20260928-1/init-corrected",
+    "artifact_sha256": "9dd9388b34283779c8bb6c8d8c7779ef0e44e9480775a4a3244f50b3240e9b10",
+    "artifact_size": 1021296,
+    "artifact_mode": "0700",
+    "corrected_rebuild_byte_identical": true,
+    "compiler_sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f",
+    "corrected_compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "corrected_compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "corrected_timing_sha256": "ce0a338cc141ea88a5078fe756489fd3895dc9ce9f76dcec800af63e3977b3d8",
+    "result": "static x86_64 ET_EXEC; no PT_INTERP or dynamic section; GNU_STACK is non-executable; only source-fixed threads selector is present",
+    "independent_review": "PASS_ARTIFACT_READY_FOR_OVERLAY"
+  },
+  "oracle": {
+    "root": "/home/holden/mckernel-work/scratch/native-diagnostic-threads-oracle-20260928-1",
+    "initial_failure": "A wrong hard-coded expected SHA rejected the actual output before result recording; preserved without weakening the oracle.",
+    "correction_sha256": "3074ff98febea078f4bd037354d3e16352685cf3381070646529b2f92071e463",
+    "correction": "Fail-closed recheck proves exit 37, exact stdout, empty stderr and empty pre/post residual inventories.",
+    "stdout_sha256": "cfe15383daf9fc40bcdaf5433bf9bc9b8f3f7001f84ada6131306eb07bcff700",
+    "stdout_size": 25,
+    "stdout_hex": "4e41544956455f434f5245205041535320746872656164730a",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_size": 0,
+    "exit_code": 37
+  },
+  "overlay": {
+    "root": "/home/holden/mckernel-work/scratch/native-diagnostic-threads-overlay-20260928-1",
+    "base_gzip_sha256": "c7957431335818d1cf448bb0ae24efb5193bbfa226885787ff5311bea45b4265",
+    "base_cpio_sha256": "fefbfbe32e2cfb05a200b0e8280f6ffa9be4698171194042fd69af85eea0de57",
+    "base_cpio_size": 38191104,
+    "payload_sha256": "558d1607e4648321c9537215084e759496937d9591c319a21443f443193fda9a",
+    "collector_sha256": "9dd9388b34283779c8bb6c8d8c7779ef0e44e9480775a4a3244f50b3240e9b10",
+    "mcexec_sha256": "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b",
+    "overlay_sha256": "5991339efa5fcd010fdf428413f1420a65c1bd99e8f27e7eea51c1dbd8058a17",
+    "derived_initramfs_sha256": "e16c593d37345e612fc8b5d1b8fcd92185077c347110e92f6cef266c385eeeec",
+    "derived_initramfs_size": 12405183,
+    "manifest_sha256": "d97f1201b6eb71e93245aeaa5bafa95427fa753fab4becc1ea73f331280d66e7",
+    "manifest_size": 14882,
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "timing_sha256": "e1afa0449c572b239a891eec8f0dcf3cfa99f0ba3a422ab1d2ab3fcf2001d2c1",
+    "replay": "Exact 38,191,104-byte base CPIO prefix and canonical overlay reproduce all 61 final members."
+  },
+  "strict_manifest": {
+    "path": "/home/holden/mckernel-work/scratch/native-diagnostic-threads-manifest-20260928-1/manifest.json",
+    "sha256": "0a473e550fc7a399b4c969c51cba2894eb3c93f54df9fa0701f03badee835ca9",
+    "size": 4686,
+    "mode": "0600",
+    "case_id": "baseline.core.threads",
+    "argv": ["/bin/mcexec", "-t", "1", "0", "app", "threads"],
+    "stdout_hex": "4e41544956455f434f5245205041535320746872656164730a",
+    "stderr_hex": "",
+    "exit_code": 37,
+    "owner_bound_manifest": "PASS",
+    "qmp_path_bytes_for_proposed_packet": 100
+  },
+  "independent_review": {
+    "decision": "PASS_ARTIFACT_MANIFEST_READY_FOR_PACKET",
+    "verified": "strict path/hash/mode/schema joins, exact base prefix, canonical 61-member replay, all 37 userspace ELFs with 52 dependency, 11 interpreter and 270 version-provider joins, and complete module/image/runtime closure",
+    "corrected_observer_note": "Initial audit counted 41 ELF members before excluding three modules and the McKernel image; corrected userspace count is 37 with no artifact defect."
+  },
+  "limitations": [
+    "No root, Docker, QEMU, guest or McKernel threads application execution occurred.",
+    "The initial oracle hash mistake and corrected observer record remain preserved.",
+    "A separately reviewed exact one-shot execution packet is still required.",
+    "No application, M04, production-gate or whole-OS acceptance follows."
+  ]
+}

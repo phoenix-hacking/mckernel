@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "record_kind": "collector_build_owner_success",
+  "task_id": "M02-B-rebuild-owner",
+  "attempt": 2,
+  "status": "PASS_REBUILT_COLLECTOR_INPUT",
+  "recorded_utc": "2026-09-15T05:47:44Z",
+  "source_commit": "e634d38c731003ab682a0948659b660cf0b654d4",
+  "owner_sha256": "e78c8855177d873182d284a87159f36d26c2e0d03fe4f37350bfcdb29d754115",
+  "result": {
+    "status": "PASS_LINUX_COLLECTOR_BUILD_OWNER_INFRASTRUCTURE_ONLY",
+    "sha256": "3281b84a2646cbef39daeba1751e6a0e9f55a832736bf3a5dcc44ceed5f89157",
+    "first_failure_present": false
+  },
+  "build": {
+    "path": "/home/holden/mckernel-work/scratch/stability-linux-collector-build-mount-20260915-2/stability-linux-collector-build-20260915-2",
+    "record_sha256": "fa12fe8df3092f64fbe757bbd3ccad62bd8a672cbda39fb4153ffd54c6d917ed",
+    "status": "PASS_LINUX_COLLECTOR_REBUILD_SHA9_BUILDER_NEGATIVE_ONLY",
+    "inputs": 14,
+    "compiler_dependencies": 179,
+    "compiled_outputs": 16,
+    "commands": 20,
+    "loader_dependencies": 2,
+    "sha_cases": 9,
+    "builder_negative_cases": 1,
+    "rebuilt_collector_sha256": "e0e8e30e89b003ba51092f571d622e007ca2d9067561bfc06a2854cb8d29cc9d"
+  },
+  "bindings_sha256": "518ff78174addbdc7814102a14e9405703d18d91fa1a8b53019e2d1014666b05",
+  "cleanup": {
+    "container_absence_verified": true,
+    "evidence_complete": true,
+    "cleanup_first_failure": null,
+    "watchdog_status": "DISARMED_AFTER_VERIFIED_ABSENCE",
+    "watchdog_result_sha256": "3d4b322f3321c37e35657f6271162502966208c75dadf8eb67085513442d84be",
+    "watchdog_raw_wait_status": 0,
+    "development_lock_free_after_run": true,
+    "recorded_owner_and_watchdog_pids_absent": true
+  },
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-build-owner-success-20260915-2.tar.gz",
+    "size": 746318,
+    "sha256": "1aa076149e2ffc83019f43d11b79c9f679ec5ca24345c13525e45528292319a6",
+    "members": 612,
+    "inventoried_file_hashes_verified": 527,
+    "build_bindings_verified": 266,
+    "build_mount_files_verified": 333
+  },
+  "independent_reviews": [
+    {"role": "Luna evidence auditor", "status": "PASS_BUILD_EVIDENCE"},
+    {"role": "Astra/high ownership and runtime-acceptance reviewer", "status": "PASS_REBUILT_COLLECTOR_INPUT"}
+  ],
+  "application_acceptance": false,
+  "transport_acceptance": false,
+  "root_positive_execution": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false,
+  "next": "Independently review and checkpoint the root-positive orchestrator rebind before any root collector attempt."
+}

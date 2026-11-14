@@ -1,0 +1,70 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_CONTEXT_TEMPLATE_COMPARATOR_NOT_EXECUTION",
+  "reviewer": "/root/daemon_execution_review",
+  "implementation_ownership": true,
+  "original_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-1/independent-execution-waiter-source-1/review_exact_matching235.typed_bytes.py",
+    "bytes": 13227,
+    "sha256": "2172aedc24d23dc30d0457b6df54af4861c4d96babe8cbbc92a96bdb81bbb0e0"
+  },
+  "template_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-2/independent-execution-waiter-source-1/review_exact_matching235.CONTEXT-TEMPLATE.NOT-BOUND.py",
+    "bytes": 13011,
+    "sha256": "d6f33b318372386ab58b6f4fb1c7c062a693ae7195e0d5ad452c740b072d32c2"
+  },
+  "changed_top_level_assignments": [
+    "F",
+    "STATIC_SHA",
+    "AUTH_SHA",
+    "BRIDGE_SHA",
+    "NONCE"
+  ],
+  "all_function_asts_identical": true,
+  "unchanged_functions": [
+    "need",
+    "ref",
+    "read",
+    "checked",
+    "load",
+    "durable",
+    "cold",
+    "hot",
+    "main"
+  ],
+  "typed_cold_shape_unchanged": true,
+  "hot_guard_postfsync_atomic_publication_unchanged": true,
+  "binder_sha256": "8ba9856c6793e15cfc850c0b1542fb9ff244be8d79816f0cb786ccc417d9de59",
+  "fixed_root_ledger": "0140dcb85e685cce3c23d7f76b50b05c092f0db4fa8b5f3e651c8467bfdf2f55",
+  "consumed_nonce_count": 68,
+  "selected_observer_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-2/BOUND-CURRENT-OBSERVER.SOURCE-ONLY.py",
+    "bytes": 13334,
+    "sha256": "2456ed7ae90645cd0f910eca3b68c76bb978996c735074fbd8c98142cad9cf93"
+  },
+  "selected_observer_schema": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-2/BOUND-OBSERVER-SCHEMA.SOURCE-ONLY.json",
+    "bytes": 640,
+    "sha256": "27ee0525d9ee77c8c7ae79fd1fa47b16ac89afdf3fe1c9bd222b124b3825022a"
+  },
+  "actual_binding_slots": {
+    "STATIC_SHA": null,
+    "AUTH_SHA": null,
+    "BRIDGE_SHA": null,
+    "NONCE": null
+  },
+  "actual_source_ready": null,
+  "actual_cold_check": null,
+  "actual_publication": null,
+  "actual_waiter_pid": null,
+  "resource_calls": 0,
+  "guard_calls": 0,
+  "approval_writes": 0,
+  "workloads": 0,
+  "retained_old_refusal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-1/independent-execution-waiter-source-1/WAITER-TERMINAL-NO-APPROVAL.json",
+    "bytes": 3070,
+    "sha256": "fa0ef5e6b20567c53fe309b1c991c574e5b7963b27d705698a442f33887455d3"
+  },
+  "next": "Root seals exact static/auth/bridge/nonce; create separate bound source by four literal assignment fills only; independent focused review and actual pure cold check before launch; actual PID/birth PREWARM precedes capture."
+}

@@ -1,0 +1,49 @@
+{
+  "HOST_required_formula": "17179869184 + max(0,fresh_backing_size - 512*fresh_backing_blocks) +16106090496 +377487360 +679477248",
+  "HOST_without_full_sparse_gap_bytes": 34342924288,
+  "accepted_actual_profile_authority": {
+    "bytes": 2360,
+    "path": "/home/holden/mckernel/docs/verification/evidence/p-m06-actual-matched-image-build-20261022-1/image-final-live-admission.json",
+    "sha256": "819ea908b848e7f2af858101824d9ac9b54ef26f1209344041bcc8c8f8eefbf4"
+  },
+  "assertion": "Fixed numbers proposed for adoption, not an optional alternative budget. Once root adopts unchanged envelope, bind it as current admission budget rather than reference-only. Fresh measured capacity and all reservations must still satisfy complete formula.",
+  "authority": {
+    "bytes": 3229,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/guest-runtime-admission-preparation-2/CAPACITY-AND-FULL-SPARSE-GROWTH.DATA.json",
+    "sha256": "b6ce028faac9779edff3f34f88b1c998d463ad76a65a02861a350d95d6199eb8"
+  },
+  "capacity_acceptance": null,
+  "current_concurrent_reservations": null,
+  "declared_per_filesystem": {
+    "host": {
+      "compiler_and_control_growth_bytes": 16106090496,
+      "emergency_reserve_bytes": 679477248,
+      "floor_bytes": 17179869184,
+      "postbuild_growth_bytes": 377487360
+    },
+    "scratch": {
+      "compiler_and_control_growth_bytes": 67108864,
+      "emergency_reserve_bytes": 679477248,
+      "floor_bytes": 12884901888,
+      "postbuild_growth_bytes": 0
+    }
+  },
+  "explicit_roles": {
+    "host_compiler_output_control_growth_bytes": 16106090496,
+    "host_emergency_reserve_bytes": 679477248,
+    "host_postbuild_capture_and_finite_retention_growth_bytes": 377487360,
+    "new_source_growth_bytes": 0,
+    "scratch_emergency_reserve_bytes": 679477248,
+    "scratch_postbuild_growth_bytes": 0,
+    "scratch_small_control_and_capture_growth_bytes": 67108864
+  },
+  "fresh_UUID_loop_backing_full_gap": null,
+  "fresh_aggregate_resource_grant": null,
+  "fresh_host_scratch_available": null,
+  "role_rule": "HOST compiler/output/control is one combined16106090496B envelope. Postbuild377487360B is the entire original stream/metadata/finite-retention capture allowance, not an extra duplicate capture reserve. Scratch67,108,864B covers existing small control/guard capture only; all large compiler/output/postbuild evidence remain HOST. Retained/out/nightly/backup scratch dependencies stay read-only. No SDK artifact copy/cleanup allowance.",
+  "root_adoption_of_unchanged_declared_envelope": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\nReuse the accepted finite materializer and controller/static-request derivation.\n",
+  "scratch_required_bytes": 13631488000,
+  "source_already_allocated": true,
+  "status": "DECLARED_FIXED_UNCHANGED_HOST_OUTPUT_ENVELOPE_PENDING_ROOT_ADOPTION_AND_FRESH_ADMISSION"
+}

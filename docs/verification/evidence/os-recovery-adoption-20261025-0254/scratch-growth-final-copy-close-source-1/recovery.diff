@@ -1,0 +1,129 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/scratch-growth-postcheck-custody-recovery-source-1/recover_growth_custody.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/scratch-growth-final-copy-close-source-1/recover_growth_custody.py
+@@ -1,6 +1,6 @@
+ #!/usr/bin/env python3
+ """Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+-One separately released copy/retire/close operation for growth1281419 FD4.
++One separately released copy/retire/close operation for copied growth holder1289073 FD4; immutable origin1281419.
+ No filesystem mutation, lock reopening, unlock, child spawning or automatic signal.
+ """
+ import argparse
+@@ -22,11 +22,14 @@
+ sys.path.insert(0,str(HERE))
+ import ofd_primitives as ofd
+ E=HERE.parent
+-PID,BIRTH,PARENT,PGID,REMOTE_FD,ORIGIN=1281419,85204892,1281416,1281414,4,1281419
++PID,BIRTH,PARENT,PGID,REMOTE_FD,ORIGIN=1289073,85353159,1289070,1289064,4,1281419
++CALLER_BIRTH=85353151
++TOOL_CELL_ID='44584'
++ORIGINAL_TARGET=dict(pid=1281419,birth=85204892,parent=1281416,pgid=1281414,fd=4,origin=1281419)
+ BOOT='7bfc5687-6c04-4d15-84eb-b92ab9a55dcb'
+ CUTOFFS=[1793100290.0,882395.5689528405,897734.6960034363]
+ LOCK=Path('/run/lock/mckernel-development.lock')
+-OUTPUT=E/'ROOT-SCRATCH-GROWTH-CUSTODY-RECOVERY-1'
++OUTPUT=E/'ROOT-SCRATCH-GROWTH-FINAL-COPY-CLOSE-1'
+ SCOPE='Functional McKernel OS/apps and Rust/assembly migration only; no security testing.'
+ TARGET=dict(pid=PID,birth=BIRTH,parent=PARENT,pgid=PGID,fd=REMOTE_FD,origin=ORIGIN)
+ 
+@@ -41,19 +44,60 @@
+     raw=p.read_bytes();need(len(raw)==r['bytes'] and hashlib.sha256(raw).hexdigest()==r['sha256'],'changed evidence')
+     return json.loads(raw) if document else raw
+ 
++CANONICAL_CREDITS_SHA256='adf5187240ed8199746eef3b59b79d4d38c4ae8ac5821c8d8324833926b21ec3'
++need(reference(HERE/'canonical_os_goal_credits.py')['sha256']==CANONICAL_CREDITS_SHA256,'pinned canonical available_balance source')
++from canonical_os_goal_credits import available_balance,amount
++
++def check_account_state(s,wall):
++    """Pure pinned canonical balance check. Never observes or writes the ledger."""
++    age=wall-datetime.datetime.fromisoformat(s['heartbeat_at']).timestamp()
++    need(s['phase']=='running' and s.get('stop_reason') is None
++         and s.get('stop_now',False) is False
++         and s['thread_id']=='01a170fb-57c3-7ab3-862d-8005bef92a63'
++         and s['credit_budget']['id']=='7f4af94a83b14cc08f97401f5891d965'
++         and amount(s['credit_budget']['budget'])==Decimal('57774.852125')
++         and amount(s['credit_budget']['remaining'])>0 and s['credit_budget_error'] is None
++         and 0<=age<180,'same account guard')
++    # NULL is normal only when the exact canonical available_balance accepts
++    # the full known finite-positive credit snapshot. All real stops still veto.
++    return available_balance(s['last_rate_limits'])
++
+ def guard():
+     need(os.getuid()==os.geteuid()==os.getgid()==os.getegid()==0 and os.uname().machine=='x86_64','root x86_64 only')
+     need(Path('/proc/sys/kernel/random/boot_id').read_text().strip()==BOOT,'same boot')
+     clocks=[time.time(),time.monotonic(),time.clock_gettime(time.CLOCK_BOOTTIME)]
+     need(all(a<b for a,b in zip(clocks,CUTOFFS)),'fixed cutoff')
+     s=json.loads(Path('/home/holden/mckernel/.git/os-autopilot/state.json').read_bytes())
+-    age=clocks[0]-datetime.datetime.fromisoformat(s['heartbeat_at']).timestamp()
+-    need(s['phase']=='running' and s['thread_id']=='01a170fb-57c3-7ab3-862d-8005bef92a63'
+-         and s['credit_budget']['id']=='7f4af94a83b14cc08f97401f5891d965'
+-         and Decimal(s['credit_budget']['budget'])==Decimal('57774.852125')
+-         and Decimal(s['credit_budget']['remaining'])>0 and s['credit_budget_error'] is None
+-         and 0<=age<180 and s['last_rate_limits']['spendControlReached'] is False,'same account guard')
++    check_account_state(s,clocks[0])
+     return clocks
++
++def predecessor_chain(pins,ready,quarantine,retired,joins,packet,qualified):
++    """Pure proof binding: current copied holder differs from retired origin."""
++    own=ready['data']['successor']
++    need({k:own[k] for k in ('pid','birth','parent','pgid','fd')}=={k:TARGET[k] for k in ('pid','birth','parent','pgid','fd')}
++         and own['command_hex']==pins['target']['command_hex']
++         and ready['data']['old_target']==ORIGINAL_TARGET
++         and ready['data']['lock_origin_pid']==ORIGIN
++         and ready['data']['qualified_postconditions']==qualified,'exact copied-holder/original-origin chain')
++    need(ready['source_packet']==pins['pins']['prior_source_packet']
++         and packet['target']==ORIGINAL_TARGET
++         and packet['sources']['recover_growth_custody.py']==pins['pins']['prior_recovery_source']
++         and packet['sources']['ofd_primitives.py']==pins['pins']['prior_ofd_source'],'original actual recovery source binding')
++    need(quarantine['source_packet']==ready['source_packet']
++         and quarantine['event']=='QUARANTINE'
++         and quarantine['data']['phase']=='RETIRED' and quarantine['data']['fd']==REMOTE_FD
++         and quarantine['data']['copy_possible'] is True and quarantine['data']['closed'] is False
++         and quarantine['data']['error']=="ValueError('same account guard')",'exact prior account-refusal custody')
++    need(retired['source_packet']==ready['source_packet']
++         and retired['data']['old_target']==ORIGINAL_TARGET
++         and retired['data']['ready']==pins['pins']['prior_actual_copy']
++         and retired['data']['positive_pidfd_exit'] is True
++         and retired['data']['nonchild_waitpid_claim'] is False,'original target already positively retired')
++    need(joins['decision']=='PASS_ACTUAL_OLD_GROWTH_CALLER_TOOL_JOIN'
++         and joins['old_target']==ORIGINAL_TARGET
++         and joins['pidfd_exit']==pins['pins']['prior_pidfd_exit']
++         and all(joins[k] is True for k in ('caller_positive_wait','tool_positive_join','group_absent','closed_streams')),'original target genuine joins preserved')
++    return True
+ 
+ def independent(review,decision,payload):
+     need(review['decision']==decision and review['implementation_ownership'] is False
+@@ -102,7 +146,7 @@
+         self.fd=None;self.closed=True;self.phase='CLOSED'
+         # A publication fault now is explicitly postclose; it cannot restore custody.
+         self.b.publish('NORMAL-CLOSE',dict(ready=self.ready,pidfd_exit=self.retired,
+-            successor_fd_closed=True,original_helper_normal_close_claim=False,normal_return_expected=True,consumed_close=close_consumed))
++            successor_fd_closed=True,original_helper_normal_close_claim=False,predecessor_helper_normal_close_claim=False,normal_return_expected=True,consumed_close=close_consumed))
+         return 0
+ 
+ class Backend:
+@@ -119,10 +163,14 @@
+         need(p['target']==TARGET and p['output']==str(OUTPUT) and p['boot_id']==BOOT
+              and p['fixed_cutoffs']==CUTOFFS and p['phase']=='COPY_ONLY','one exact copy packet')
+         need(self.target_pins['target']==dict(TARGET,command_hex=self.target_pins['target']['command_hex']),'exact pinned target')
+-        for name,r in self.target_pins['pins'].items():bound(r,False,root=name!='source822')
++        for name,r in self.target_pins['pins'].items():bound(r,False,root=name not in ('source822','prior_recovery_source','prior_ofd_source','canonical_policy_source'))
++        pins=self.target_pins['pins']
++        need(pins['canonical_policy_source']['sha256']==CANONICAL_CREDITS_SHA256,'actual canonical account policy binding')
++        predecessor_chain(self.target_pins,*(bound(pins[name]) for name in ('prior_actual_copy','prior_quarantine','prior_pidfd_exit','prior_old_actual_joins','prior_source_packet')),p['qualified_postconditions'])
++        need(not (Path(pins['prior_actual_copy']['path']).parent/'CONSUMED-CLOSE.json').exists(),'prior CLOSE was not consumed')
+         need(self.target_pins['pins']['source822']['sha256']=='8229919524d803c3694aea42e85bb43d705228d7f78a8ce768704b613ce7608f','original source822')
+         need(Path('/proc/self/cmdline').read_bytes()==bytes.fromhex(p['command_hex']),'exact reviewed recovery argv')
+-        expected={n:reference(HERE/n) for n in ('recover_growth_custody.py','ofd_primitives.py','ACTUAL-TARGET-PINS.json')}
++        expected={n:reference(HERE/n) for n in ('recover_growth_custody.py','ofd_primitives.py','ACTUAL-TARGET-PINS.json','canonical_os_goal_credits.py')}
+         need(p['sources']==expected and p['actual_target_pins']==expected['ACTUAL-TARGET-PINS.json'],'exact recovery sources')
+         qualification=bound(p['qualified_postconditions'])
+         need(qualification['decision']=='PASS_QUALIFIED_ONLINE_GROWTH_POSTCONDITIONS'
+@@ -193,7 +241,7 @@
+             need(action=='CLOSE' and payload['pidfd_exit']==retired,'close binds actual pidfd exit')
+             joins=bound(payload['old_actual_joins']);fs=bound(payload['current_fs_acceptance'])
+             need(joins['decision']=='PASS_ACTUAL_OLD_GROWTH_CALLER_TOOL_JOIN' and joins['old_target']==TARGET
+-                 and joins['caller']==dict(pid=1281416,birth=85204885) and joins['tool_cell_id']=='40285'
++                 and joins['caller']==dict(pid=PARENT,birth=CALLER_BIRTH) and joins['tool_cell_id']==TOOL_CELL_ID
+                  and all(joins[k] is True for k in ('caller_positive_wait','tool_positive_join','group_absent','closed_streams'))
+                  and joins['pidfd_exit']==retired,'genuine old caller/tool joins required')
+             for r in joins['actual_evidence']:bound(r,False)

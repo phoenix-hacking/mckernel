@@ -1,0 +1,98 @@
+{
+  "actor_retirement": false,
+  "blockers": [
+    "No actual root held-custody transfer performed",
+    "No independently released keeper/capture or root syscall operation",
+    "No phase-aware full old-release configure implementation",
+    "No released shared-only continuation or final physical acceptance"
+  ],
+  "checks": [
+    {
+      "command_argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--core=0:0",
+        "--",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/test_partial_quarantine_adoption.py"
+      ],
+      "evidence": "PURE-FIXTURES-FINAL.stderr",
+      "exit_code": 0,
+      "reported_wall_seconds": 0.304,
+      "scope": "real private file phase/custody fixtures and mocked fixed-root source protocol; no production execution",
+      "tests": 14
+    },
+    {
+      "command_argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--core=0:0",
+        "--",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/fixture_crossprocess_pidfd_getfd.py"
+      ],
+      "evidence": "CROSSPROCESS-PIDFD-GETFD-FIXTURE.json",
+      "exit_code": 0,
+      "reported_wall_seconds": 0.002267078962177038,
+      "result": "PASS_REAL_PRIVATE_CROSSPROCESS_CUSTODY",
+      "scope": "one ordinary owned private child/file; actual kernel pidfd_open/getfd, normal exit, positive pidfd readiness and wait; no production/root access"
+    }
+  ],
+  "first_failure": {
+    "correction": "Direct x86_64 pidfd_open434 and POSIX WIFEXITED/WEXITSTATUS replace missing Python3.8 APIs; no retry/fallback on getfd denial.",
+    "evidence": "CROSSPROCESS-FIRST-FAILURE.json"
+  },
+  "new_candidate_builds": 0,
+  "new_guest_apps": 0,
+  "next": "Independent high review of fixed duplicate-only standby + actual keeper/capture/release; retain current root actor until genuine verified same-OFD held custody and later explicit retirement release.",
+  "owner": "/root/partial_quarantine_reconcile",
+  "preserved": [
+    "original e49 source and frozen9c7589 release",
+    "actual old root actor and permanent27:4 FD3",
+    "original four-event journal and b5df plan",
+    "original common archive and absent common active path",
+    "original shared record and empty archive sentinel",
+    "original quarantine and all prior evidence"
+  ],
+  "production_mutations": false,
+  "recorded_at": "2026-10-26T10:11:34.631303+00:00",
+  "root_fd_transfer": false,
+  "root_queries": false,
+  "runtime_authority": false,
+  "schema": "mckernel.current290.partial-quarantine.source-stage.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "signals": false,
+  "source": [
+    {
+      "bytes": 13459,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/partial_quarantine_adoption.py",
+      "sha256": "57722eab94b8494c2423cf9a161ff43ed2948018fa0ddc8ad59f91cd9d9968aa"
+    },
+    {
+      "bytes": 6986,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/fixed_root_custody_standby.SOURCE-ONLY.py",
+      "sha256": "b775c8b58439f5b86d73851c897b9f08b234654c4d488194d8e6637922926402"
+    },
+    {
+      "bytes": 7266,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/fixture_crossprocess_pidfd_getfd.py",
+      "sha256": "9a4436c1b657899daaaa4ef264cce4555e90ce21db0d9ea5b02061ce4ae3a2ce"
+    },
+    {
+      "bytes": 14059,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/test_partial_quarantine_adoption.py",
+      "sha256": "e78926f30590d87a74054f6f82071e607ddeb7799896f0e58a63e39deb9b0939"
+    }
+  ],
+  "status": "SOURCE_STAGE_READY_FOR_INDEPENDENT_REVIEW"
+}

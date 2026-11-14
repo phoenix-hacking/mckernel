@@ -1,0 +1,70 @@
+{
+  "returncode": 0,
+  "direct_child_joined": true,
+  "process_group_absent": true,
+  "seconds": 14.243233749002684,
+  "argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--fsize=33554432",
+    "--core=0",
+    "--",
+    "/usr/bin/python3",
+    "-B",
+    "-m",
+    "unittest",
+    "scripts.tests.test_native_rust_kconfig_policy",
+    "scripts.tests.test_rocky_rust_staging.RockyRustStagingTests.test_repository_checkpoint_has_bound_crate_roots_but_is_not_gate_ready",
+    "scripts.tests.test_rocky_rust_staging.RockyRustStagingTests.test_exact_linux_mm_composite_alias_stages_real_bytes",
+    "scripts.tests.test_rocky_rust_staging.RockyRustStagingTests.test_linux_mm_compat_missing_changed_or_extra_input_is_rejected",
+    "scripts.tests.test_rocky_rust_staging.RockyRustStagingTests.test_every_recursive_source_is_staged_at_its_exact_path_and_no_extra_is_accepted",
+    "scripts.tests.test_native_rust_host_audit.NativeRustHostAuditTests.test_integrated_repository_closure_passes",
+    "scripts.tests.test_native_rust_host_audit.NativeRustHostAuditTests.test_only_exact_linux_mm_compat_source_and_alias_are_admitted",
+    "scripts.tests.test_native_rust_host_audit.NativeRustHostAuditTests.test_resealed_current_task_mm_binding_cannot_gain_escape_surface",
+    "scripts.tests.test_native_rust_build_surface_audit.NativeRustBuildSurfaceAuditTests.test_repository_has_one_authoritative_surface",
+    "scripts.tests.test_native_rust_build_surface_audit.NativeRustBuildSurfaceAuditTests.test_current_recursive_closure_is_exact_and_generated_bytes_are_excluded",
+    "scripts.tests.test_native_rust_build_surface_audit.NativeRustBuildSurfaceAuditTests.test_only_two_exact_linux_mm_compat_inputs_are_admitted"
+  ],
+  "streams": {
+    "stdout": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-sdk-preparation-20261020-1/production-build-wiring-1/actual-check-3/stdout",
+      "bytes": 92,
+      "sha256": "4442d933d5d5f59f88ed35b3348bf5eb774f1c90fe4230e22e7cdd5f68158a76",
+      "stable_fd": {
+        "st_dev": 66306,
+        "st_ino": 48136431,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_mode": 33152,
+        "st_nlink": 1,
+        "st_size": 92,
+        "st_mtime_ns": 1792475788058257766,
+        "st_ctime_ns": 1792475788058257766
+      }
+    },
+    "stderr": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-sdk-preparation-20261020-1/production-build-wiring-1/actual-check-3/stderr",
+      "bytes": 128,
+      "sha256": "a2316d0dc970043aebf8c3288e518862d1742d3058f537247fc5210b2dc88e3c",
+      "stable_fd": {
+        "st_dev": 66306,
+        "st_ino": 48136432,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_mode": 33152,
+        "st_nlink": 1,
+        "st_size": 128,
+        "st_mtime_ns": 1792475788058257766,
+        "st_ctime_ns": 1792475788058257766
+      }
+    }
+  }
+}

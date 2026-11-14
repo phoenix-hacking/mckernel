@@ -1,0 +1,241 @@
+{
+  "LONG_profile": {
+    "min_launches": 2,
+    "round_cap": 2048,
+    "trace_cap": 268435456,
+    "version": 2,
+    "wall_ns": 600000000000,
+    "work_ns": 90000000000
+  },
+  "SDK5_replacements": {
+    "bin/mcexec": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/launcher-runtime-snapshot-1/mcexec",
+      "sha256": "dca0250159ce04a272a72dd1217213a4b6e0f21ec8c21da211eede250c451954",
+      "size": 394648
+    },
+    "images/mckernel.img": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/mckernel.img",
+      "sha256": "10972f87277e8429e2badd238d3ac53e451b8a2351a8ebf013941e1dfb95e1e2",
+      "size": 8439816
+    },
+    "modules/ihk-smp-x86_64.ko": {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-30717e2c0ee840ffa441d577bed3a427/modules/ihk-smp-x86_64.ko",
+      "sha256": "887dc3567e6035c921588e61b45b41a8ef32a972d142fe2ba82ec48442353b12",
+      "size": 13098896
+    },
+    "modules/ihk.ko": {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-30717e2c0ee840ffa441d577bed3a427/modules/ihk.ko",
+      "sha256": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c",
+      "size": 1527808
+    },
+    "modules/mcctrl.ko": {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-30717e2c0ee840ffa441d577bed3a427/modules/mcctrl.ko",
+      "sha256": "06e8b9b571f21b41821aa03a32ebf4ae20ae19cf4b110c3af2c81b491b92ef86",
+      "size": 2662320
+    }
+  },
+  "actual_changed_members_required": [
+    "init"
+  ],
+  "actual_stage_result": null,
+  "application_replacements": {},
+  "application_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-long-mixed-apps-20261023-1/INDEPENDENT-LONG-APP-SOURCE-AND-LINUX-REVIEW.ROOT-RECORD.json",
+    "sha256": "831c0c9eb44a979cc4dddab359cecf27be2f42f35e9bf895447423dc83b4342b",
+    "size": 958
+  },
+  "baseline_capsule": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-snapshot-equality-successor-1/capsule-preparation-1/actual-stage-1/lifecycle-long.cpio.gz",
+    "sha256": "30db047425e07c25ede4cdf572fed4b1dbe02d3531abe166fd7c9698e16ca42b",
+    "size": 19448431
+  },
+  "baseline_manifest": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-snapshot-equality-successor-1/capsule-preparation-1/actual-stage-1/manifest.json",
+    "sha256": "9dfead8648d68c90e798973b384a1c41bc5493fe5390e237b4868ecfa4b33abe",
+    "size": 13073
+  },
+  "baseline_overlay_manifest": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-snapshot-equality-successor-1/capsule-preparation-1/actual-stage-1/overlay-manifest.json",
+    "sha256": "8b129f8ddd867528cc9f25b4f005d665870188de617dd68669667cf2773e0f0d",
+    "size": 20201
+  },
+  "case_id": "practical.rust.SEGMENT90.SDK8.current110",
+  "cleanup_profile": {
+    "child_trace_cases": [
+      "P-M06-01-process-exec-wait-235B",
+      "P-M01-02-child-SIGTERM-and-exec-recovery-227B"
+    ],
+    "consumer": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/wait-error-observation-1/mcctrl_process.rs",
+      "sha256": "8bf30cd8ae79cc778bd91816f30aaf7a37ccc2aab59822ca2a03587426a212b8",
+      "size": 54854
+    },
+    "id": "begin-cleanup-real-ack-parent-clone-v2",
+    "modules": [
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-30717e2c0ee840ffa441d577bed3a427/modules/ihk.ko",
+        "sha256": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c",
+        "size": 1527808
+      },
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-30717e2c0ee840ffa441d577bed3a427/modules/ihk-smp-x86_64.ko",
+        "sha256": "887dc3567e6035c921588e61b45b41a8ef32a972d142fe2ba82ec48442353b12",
+        "size": 13098896
+      },
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-30717e2c0ee840ffa441d577bed3a427/modules/mcctrl.ko",
+        "sha256": "06e8b9b571f21b41821aa03a32ebf4ae20ae19cf4b110c3af2c81b491b92ef86",
+        "size": 2662320
+      }
+    ],
+    "provider": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/source/smp_application.rs",
+      "sha256": "6adb4d11e7285caadd699bf22359bf21922f7dbfa4828b12b7a96fb7a1b07be0",
+      "size": 74960
+    },
+    "schema_version": 1
+  },
+  "collector_current_stat_verified_no_rehash": true,
+  "diagnostic_source": null,
+  "host_floor_bytes": 17179869184,
+  "host_stage_growth_bytes": 134217728,
+  "max_inflated_bytes": 67108864,
+  "max_patched_bytes": 104857600,
+  "member_transformer": {
+    "bytes": 16074,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/stage_m05_two_generation.py",
+    "sha256": "65c01a4f1e4bc7b70350c9705a56fca1c08fb0ed96161a761ad5802f76597193"
+  },
+  "new_actual17_source_closure": [
+    {
+      "bytes": 10814,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/collector-source720/long_bridge.inc",
+      "sha256": "028bf94c785404e3c4769eb43bc4860a797df910a2b4fbe44650fab9c42c5c19"
+    },
+    {
+      "bytes": 448,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/collector-source720/long_empty.inc",
+      "sha256": "829151c8080deeeaf56de7b71c5c7493ecbc73cb83e8c010bac38bcafb23a588"
+    },
+    {
+      "bytes": 224,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/collector-source720/long_provider_decl.inc",
+      "sha256": "92d4da589e28f1177c0edcedb71206220bc0185a1fa5282a8021bdba181bf836"
+    },
+    {
+      "bytes": 10893,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/collector-source720/long_support.inc",
+      "sha256": "1eb80bf416ec15d108c48ab3be1e4c5e3f8f159e01eb3e85ee0864e646d0db44"
+    },
+    {
+      "bytes": 6711,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/collector-source720/long_trace_retention.inc",
+      "sha256": "adc08b445de3d3cadff671ecf5b6ca8ac49c6480dd91830c7e5976b6a2a9af56"
+    },
+    {
+      "bytes": 3010,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/collector-source720/pair_assignment.h",
+      "sha256": "29963c5088598368fe7565a6fba88f5712cece4105314e4d1f2205c6a936b643"
+    },
+    {
+      "bytes": 25410,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/collector-source720/pair_collector.c",
+      "sha256": "43cb72a34b8b5d6f0ded293ea9ffdc2fcd0f8218a972045ad20cc7af1a0d63f2"
+    },
+    {
+      "bytes": 4616,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/collector-source720/pair_collector.inc",
+      "sha256": "dcfbb3a9c7199c4d06e014a7b9df9933da7c6f26ed552bc2bdca9e272a082020"
+    },
+    {
+      "bytes": 3340,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/collector-source720/pair_launch_expansion_run.inc",
+      "sha256": "6a948ebc2a68b9f3e18cb5fded0eb8309a1bc31a94ecf4e1dccdf1bc620dacbd"
+    },
+    {
+      "bytes": 8799,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/collector-source720/pair_launch_expansion_support.inc",
+      "sha256": "9348bce5f046b3285547e1348966c18b0f09cbfaa9592d04fcc3c7d2c4a64379"
+    },
+    {
+      "bytes": 1432,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/collector-source720/pair_long_producer.h",
+      "sha256": "c929df9548b9660857c55fb6c01886df5a7363e7f992f7032941c81a054ef599"
+    },
+    {
+      "bytes": 13305,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/collector-source720/pair_long_producer.rs",
+      "sha256": "19f9710202b152ea1a91bc991bef08283f96497a3ab6d6a7deaf6d82bc8e3834"
+    },
+    {
+      "bytes": 13496,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/collector-source720/pair_long_static.rs",
+      "sha256": "7afb7ebaea9939da9d549eb4b62e28d1d162815df6c65e5c0388db366c8fb7ff"
+    },
+    {
+      "bytes": 2469,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/collector-source720/pair_round_oracles.h",
+      "sha256": "4f7fbd55ffa528e59bdb2445bb74ee681fab4e2cd4ca4e5a016d7c0d525d7bbc"
+    },
+    {
+      "bytes": 5686,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/collector-source720/pair_runtime.inc",
+      "sha256": "6fb3c422bd11ecfa2cfdd29eb3665f9d81eb29039cf379ebd415f07087634899"
+    },
+    {
+      "bytes": 11255,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/collector-source720/pair_trace_retention.inc",
+      "sha256": "5b59e01a608740b8e830c5cf2fb94a1610163b961324bce31a0f3d7295856a8d"
+    },
+    {
+      "bytes": 3478,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/collector-source720/retirement_settlement.inc",
+      "sha256": "175091f1a0be6e332ded88fbcd2b0c7a5d0b54d528c7b6fa28c97d5493b81883"
+    }
+  ],
+  "new_actual_collector_handoff": {
+    "bytes": 6553,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/cumulative-continuation-90s/ACTUAL-COLLECTOR90-C720-AND-ACCOUNTING6.HANDOFF.json",
+    "sha256": "2518d70ab0ea728d042ecba3d8c846665bf09eef312fbaef41eacb6a2fabe3dd"
+  },
+  "old_actual_capsule_handoff": {
+    "bytes": 45887,
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-snapshot-equality-successor-1/capsule-preparation-1/ACTUAL-SNAPSHOT-EQUALITY-COLLECTOR-CAPSULE-HANDOFF.json",
+    "sha256": "ff70fbc4d5cae1ad1d2631bdcb08d5c99a22af1d6414c12158c9c9b53076791e"
+  },
+  "old_builder_binding": {
+    "bytes": 34067,
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-snapshot-equality-successor-1/capsule-preparation-1/CAPSULE-BINDING.READY.json",
+    "sha256": "c00864972520e8eb0ab5e4737e8910aa69cc3bf19e7dd227daac151931fac209"
+  },
+  "overlay_source": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/native_diagnostic_overlay.py",
+    "sha256": "46d41bc0727fa77e4126e739f25352c53eadf2e1fa8e23ef06a6e46c9b3ba27d",
+    "size": 26579
+  },
+  "producer_artifact": {
+    "mode": 448,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/cumulative-continuation-90s/collector-cumulative-segment-720",
+    "sha256": "d788349c321ce05b0c4da0deef1dacc51804526550b7c8746a20654c4f3c6ed8",
+    "size": 1633128
+  },
+  "producer_review": null,
+  "reviewed_stage_profile": null,
+  "runtime_release": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "scratch_floor_bytes": 12884901888,
+  "status": "PREPARED_NOT_EXECUTABLE_PENDING_COMPATIBLE_STRICT_LOADER_AND_REVIEW",
+  "unchanged_final_members_required": 61
+}

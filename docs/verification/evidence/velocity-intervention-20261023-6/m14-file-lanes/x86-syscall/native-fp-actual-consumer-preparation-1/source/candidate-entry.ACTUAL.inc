@@ -1,0 +1,69 @@
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// F06: complete native signal private-copy/validate/checked-XRSTOR lifetime.
+// Existing checked hardware instruction/fault recovery and CPU reset owners stay
+// at their accepted providers. No new XRSTOR or raw user-memory access is added.
+#[cfg(native_linux_irq_work_v6_12)]
+unsafe extern "C" {
+    #[link_name = "arch_native_signal_reset_fp_bridge"]
+    fn f06_native_fp_reset() -> CLong;
+    #[link_name = "arch_native_signal_mxcsr_mask_bridge"]
+    fn f06_native_fp_mxcsr_mask() -> u32;
+    #[link_name = "native_xrstor_checked"]
+    fn f06_native_fp_xrstor(buffer: *const u8, mask: CULong) -> CLong;
+}
+
+/// The copied allocation remains exclusively live through validation and the
+/// synchronous checked XRSTOR provider, then its ORIGINAL base is freed once.
+/// CPU pinning/FP exclusion and provider fault recovery are the caller's existing
+/// sigreturn contract. This entry creates no owner reference or user-memory slice.
+#[cfg(native_linux_irq_work_v6_12)]
+#[no_mangle]
+pub unsafe extern "C" fn arch_native_signal_restore_fp_bridge(
+    user_address: CULong, size: CInt,
+) -> CLong {
+    unsafe {
+        // Preserve the original getter-before-NULL-reset order.
+        let configured = crate::x86_cpu_helpers::get_xsave_size();
+        if user_address == 0 {
+            return f06_native_fp_reset();
+        }
+        let bytes = crate::native_xstate::native_xstate_buffer_size_result(size, configured);
+        if bytes < 0 {
+            return bytes;
+        }
+        // Existing Rust policy bounds bytes to 576..=65536; +63 fits the
+        // unchanged tracked allocator's int size ABI and supplies all padding.
+        let allocation = crate::mem_helpers::kmalloc_tracked(
+            (bytes as SizeT).wrapping_add(63) as CInt,
+            IHK_MC_AP_NOWAIT,
+            concat!(file!(), "\0").as_ptr().cast::<i8>() as *mut i8,
+            line!() as CInt,
+        );
+        if allocation.is_null() {
+            return -(ENOMEM as CLong);
+        }
+        // Same unsigned address rounding as C; map_addr preserves the base
+        // allocation's provenance while selecting its in-bounds aligned window.
+        let aligned = allocation.cast::<u8>()
+            .map_addr(|address| address.wrapping_add(63) & !63usize);
+        let copied = crate::x86_memory_helpers::copy_from_user(
+            aligned.cast(), user_address as *const c_void, bytes as SizeT,
+        );
+        let result = if copied != 0 {
+            -(EFAULT as CLong)
+        } else {
+            let mask = crate::x86_cpu_helpers::get_xsave_mask();
+            let checked = crate::native_xstate::native_xstate_validate_result(
+                aligned, bytes as SizeT, configured, mask, f06_native_fp_mxcsr_mask(),
+            );
+            if checked == 0 { f06_native_fp_xrstor(aligned, mask) } else { checked }
+        };
+        // Never free aligned: that may be inside the allocation, not its owner.
+        crate::mem_helpers::kfree_tracked(
+            allocation,
+            concat!(file!(), "\0").as_ptr().cast::<i8>() as *mut i8,
+            line!() as CInt,
+        );
+        result
+    }
+}

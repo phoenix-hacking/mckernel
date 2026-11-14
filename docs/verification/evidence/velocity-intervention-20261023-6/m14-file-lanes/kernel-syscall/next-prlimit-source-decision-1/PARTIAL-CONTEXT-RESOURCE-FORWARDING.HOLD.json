@@ -1,0 +1,54 @@
+{
+  "actual_consumer": {
+    "bytes": 1568,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-prlimit-source-decision-1/syscall_generic_forwarding.UNCHANGED-RUST.inc",
+    "sha256": "b104cb96128b6bb26fe8e07d58c945cfd280c96cacd18a30ac23bdc7d7c86948"
+  },
+  "actual_jobs": 0,
+  "additional_actual_reads": [
+    4,
+    5
+  ],
+  "branches": [
+    "prlimit_linux_update_needed(resource) before Linux update",
+    "mcresource<0 generic forwarding fallback"
+  ],
+  "canonical_C": {
+    "bytes": 843257,
+    "path": "/home/holden/mckernel/kernel/syscall.c",
+    "sha256": "34ec8a08c5790aa7533e5a8e3905d1dd1d4989bf0f431b8517ae6d50bbaa54f4"
+  },
+  "canonical_policy": {
+    "bytes": 713471,
+    "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+    "sha256": "3ef8288617db7bcc26c56039491295d3f48c53d4f76d111b68dfcc3186546f7d"
+  },
+  "existing_Rust_coverage": [
+    "resource and newlimit validators",
+    "Linux-update-needed/resource mapping",
+    "set/get/prlimit frontends"
+  ],
+  "initialized_context_arguments": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "local_ownership": "resource_set/phash sampled before validation, copied newlimit before Linux forward, IRQsave/hash-reader protects process existence, update-writer or-reader until copy/update, then updateunlock/hashunlock/IRQrestore. No port emitted across unresolved forwarding contract.",
+  "native_cause_proven": false,
+  "original_C": {
+    "bytes": 2979,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-prlimit-source-decision-1/do_prlimit64.ORIGINAL-C.UNCHANGED.inc",
+    "sha256": "c3c82d2689faab96733e1553f075989d8e56918f4df01bb42bbcf1effb070bc4"
+  },
+  "original_C_unchanged": true,
+  "prior_related_hold": {
+    "bytes": 1948,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-forward-sigaction-source-decision-1/PARTIAL-CONTEXT-FORWARDING.HOLD.json",
+    "sha256": "048dce0dae63bec8792f4a399ee9eac2c502a5acf9966b3442bc50b8fe11fa97"
+  },
+  "proposed_Rust": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "HOLD_INITIALIZED4_ACTUAL_READ6_NO_NEW_PRLIMIT_RUST",
+  "zero_fill_or_upperargs_invention": false
+}

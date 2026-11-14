@@ -1,0 +1,240 @@
+{
+  "application_acceptance": false,
+  "changed_sources": [
+    "scripts/native_running_external_modules_offline.py",
+    "scripts/native_running_external_modules_owner.py"
+  ],
+  "closure_files_bytes": 1463836,
+  "consumer_schema": {
+    "execution_review": {
+      "decision": "PASS_EXECUTION",
+      "reviewed_release_payload_sha256": "canonical release excluding execution_review"
+    },
+    "release_schema": "mckernel.native-running-external-modules-release.v1",
+    "request_schema": "mckernel.native-running-external-modules-request.v1",
+    "source_review": {
+      "decision": "PASS_SOURCE",
+      "implementation_ownership": false,
+      "reviewer": "independent and different from release.author",
+      "source_sha256": "Exact complete SOURCES 11-entry map matching materialized source bytes"
+    }
+  },
+  "decision": "PASS_SOURCE",
+  "driver": {
+    "bytes": 35143,
+    "path": "/home/holden/mckernel-work/scratch/native-fork-c-command-correction-20261018-1/owner-capsule/scripts/native_running_external_modules_offline.py",
+    "sha256": "331538eb13236a866b8ec29b9b7b03fd9c31622a3a56738af8437f20281afc71"
+  },
+  "execution_release": false,
+  "full_module_build": "NOT_RUN",
+  "functional_scope": "PRACTICAL-GOAL functional supported kernel and application infrastructure; unrelated hardening/qualification deferred",
+  "implementation_ownership": false,
+  "next_step": "Publish/fetch-verify exact capsule and source review, use fresh nonce materialization/request and independent execution review before one new C-first compile. Only successful actual strict C audit permits full three-module phase.",
+  "owner": {
+    "bytes": 45281,
+    "path": "/home/holden/mckernel-work/scratch/native-fork-c-command-correction-20261018-1/owner-capsule/scripts/native_running_external_modules_owner.py",
+    "sha256": "34478c84477515bb678620952ea197764eddd4902c8c1cb064374be09d843e04"
+  },
+  "owner_input_directory_exact_schema": {
+    "Makefile.build": {
+      "bytes": 17493,
+      "sha256": "9a4d2a34fb5db30c43db86f14474a9b3135bd877ad2850aedb437d0c7606f9df"
+    },
+    "Makefile.modpost": {
+      "bytes": 4854,
+      "sha256": "c4863ea111f798f9adf5a0ea17db63a398a9ba819ebf4475bbd59209a9d7229a"
+    },
+    "baseline-C-mmap_lock.o.cmd": {
+      "bytes": 89035,
+      "sha256": "d2c1cac7c0a8d1b09351ec0c1eadf08ad8f98668e9e1576e7d078b9e0733d5fa"
+    },
+    "baseline-LD-ihk-smp-x86_64.o.cmd": {
+      "bytes": 489,
+      "sha256": "569329bc0644b43570f3e47eb8373374cbe9fa849f7d57c73fbc5e88ee801a6a"
+    },
+    "baseline-build.commands": {
+      "bytes": 2081,
+      "sha256": "025ae0a10dab15fa6acbec3d209e5125e467038c89bbf6aa9e80e991646f416e"
+    },
+    "baseline-build.environment": {
+      "bytes": 170,
+      "sha256": "ad5591d91bbca9a7d795926ff1890a0faadd4de38dc108673c00cc83d402a35f"
+    },
+    "baseline-ihk.o.cmd": {
+      "bytes": 3259,
+      "sha256": "db2a929e3a8c3e7eaaa5d6cce9dd721b6ac6da05347d54f482a6253fb86b54ef"
+    },
+    "baseline-ihk_smp_x86_64.o.cmd": {
+      "bytes": 6153,
+      "sha256": "bc808d213c5f4a3881bc3fec5c49c0f46933395c6d071f81def8274c13a5ec62"
+    },
+    "baseline-kernel.release": {
+      "bytes": 40,
+      "sha256": "42bb1d3c01816ca5d716e59ce1b50f1b96be1e5643d866486b0f6db098d2725a"
+    },
+    "baseline-mcctrl.o.cmd": {
+      "bytes": 2932,
+      "sha256": "285ff17f816e40f26e8af94377fa26cc324d7c00ffb81d900af841cea34732f4"
+    },
+    "baseline-stage-lock.json": {
+      "bytes": 8241,
+      "sha256": "a902a71e67aa8ca1fd0d317df2dbeffdc5998c5e29010fad44060c36aab2a4d3"
+    },
+    "baseline.config": {
+      "bytes": 260490,
+      "sha256": "106055ad26cfc19373b1bc52e1dcc24b3eaa7c48125c451be029898b8f696474"
+    },
+    "container-owner.py": {
+      "bytes": 51773,
+      "sha256": "2c5241ba08ed2862e510549eedbfa73ba71795971e2c179056a190d77e50ee50"
+    },
+    "exact-build-workflow.yml": {
+      "bytes": 95328,
+      "sha256": "030822f476e5aaa290b06255d3e874dbf584760e06a221b2dd15ed9332ed8629"
+    },
+    "kernel-Makefile": {
+      "bytes": 70466,
+      "sha256": "96d61309de7b5a043f53f8203c05ea30c27808fc7db06b3503d98105f4fde6f6"
+    },
+    "preparation.json": {
+      "bytes": 46260,
+      "sha256": "05cacc2e65d165d4f74a2c480dc4d3f4bbb44d8564dcb7ff919da79c9de46b74"
+    }
+  },
+  "preparation": {
+    "bytes": 46260,
+    "path": "/home/holden/mckernel-work/scratch/native-fork-c-command-correction-20261018-1/owner-capsule/docs/verification/evidence/native-fork-consolidated-conditional-external-modules-preparation-20261018-1.json",
+    "sha256": "05cacc2e65d165d4f74a2c480dc4d3f4bbb44d8564dcb7ff919da79c9de46b74"
+  },
+  "preservation": "Prior failed actual build and commands retained; default fork CREATE_PPD closed, service-held later transport/ACK excluded.",
+  "preserved_checks": [
+    "Compiler identity and all remaining C flags/token order/source/output/target bindings",
+    "Exact-cardinality normalization of only original in-tree Werror and two in-tree include tokens",
+    "Private/Linux MM header and SDK/config dependency audits",
+    "All three thunk definitions, exported C imports, Rust imports and exact composite ordered LD inputs",
+    "Unchanged all-three-module/Rust source binding and modpost/vermagic/v6-v9 factory exports checks",
+    "C-first fail-closed flow and unchanged C object hash between phases",
+    "Existing owner isolation, leases, historical observer, client retirement, exact records and root lock release"
+  ],
+  "production_acceptance": false,
+  "profile": {
+    "C_make_timeout_seconds": 30,
+    "cpu_limit": 4,
+    "cpu_set": "2-5",
+    "full_make_timeout_seconds": 1800,
+    "memory_bytes": 12884901888,
+    "memory_swap_bytes": 12884901888,
+    "network": "none",
+    "outer_wait_seconds": 1860,
+    "pids_limit": 512,
+    "profile_expansion": false,
+    "read_only_container": true,
+    "user": "1000:1000"
+  },
+  "reviewed_private_capsule": "/home/holden/mckernel-work/scratch/native-fork-c-command-correction-20261018-1/owner-capsule",
+  "reviewed_runtime_source_files": [
+    {
+      "bytes": 10901,
+      "path": "/home/holden/mckernel-work/scratch/native-fork-c-command-correction-20261018-1/owner-capsule/scripts/native_exact_historical_lease_observer.py",
+      "sha256": "463ae558e141c2a6fe5a016fb19baddb26ed883c3bf6d39c114b27711ee78a51"
+    },
+    {
+      "bytes": 35143,
+      "path": "/home/holden/mckernel-work/scratch/native-fork-c-command-correction-20261018-1/owner-capsule/scripts/native_running_external_modules_offline.py",
+      "sha256": "331538eb13236a866b8ec29b9b7b03fd9c31622a3a56738af8437f20281afc71"
+    },
+    {
+      "bytes": 45281,
+      "path": "/home/holden/mckernel-work/scratch/native-fork-c-command-correction-20261018-1/owner-capsule/scripts/native_running_external_modules_owner.py",
+      "sha256": "34478c84477515bb678620952ea197764eddd4902c8c1cb064374be09d843e04"
+    },
+    {
+      "bytes": 51773,
+      "path": "/home/holden/mckernel-work/scratch/native-fork-c-command-correction-20261018-1/owner-capsule/scripts/native_rust_exact_build_container_owner.py",
+      "sha256": "2c5241ba08ed2862e510549eedbfa73ba71795971e2c179056a190d77e50ee50"
+    },
+    {
+      "bytes": 22959,
+      "path": "/home/holden/mckernel-work/scratch/native-fork-c-command-correction-20261018-1/owner-capsule/scripts/native_rust_exact_build_image_prepare.py",
+      "sha256": "45cb12e0fd58d164468badfb99a3ed922e65e06046bf38b4a50e27e18595a27b"
+    },
+    {
+      "bytes": 11193,
+      "path": "/home/holden/mckernel-work/scratch/native-fork-c-command-correction-20261018-1/owner-capsule/scripts/native_rust_exact_build_image_rebind.py",
+      "sha256": "f10ab116e55a24e8db7a8157d71efdd01198ba3453a8141bc8bbf596eda6b61e"
+    },
+    {
+      "bytes": 24966,
+      "path": "/home/holden/mckernel-work/scratch/native-fork-c-command-correction-20261018-1/owner-capsule/scripts/native_rust_exact_build_image_rebind_probe.py",
+      "sha256": "412d46de7e078746a7ec979a13ccb25753d6fa34708610932e35be8f02a89635"
+    },
+    {
+      "bytes": 27338,
+      "path": "/home/holden/mckernel-work/scratch/native-fork-c-command-correction-20261018-1/owner-capsule/scripts/native_rust_exact_build_offline.py",
+      "sha256": "cc243126ab8cc0754c62175c77e46d6ba0d98294f8168cc77893a2c12249cd1a"
+    },
+    {
+      "bytes": 57015,
+      "path": "/home/holden/mckernel-work/scratch/native-fork-c-command-correction-20261018-1/owner-capsule/scripts/native_rust_exact_disk_build_wrapper.py",
+      "sha256": "c252ee341eb61752704f8b818503c0a5dc97400845494707ca3110f5f23df6d1"
+    },
+    {
+      "bytes": 81525,
+      "path": "/home/holden/mckernel-work/scratch/native-fork-c-command-correction-20261018-1/owner-capsule/scripts/native_rust_exact_mckernel_image_container_owner.py",
+      "sha256": "052f916d0692b8f4dcc7b9f18a1e39d9e26472fb01e3fcd174eb538342b87600"
+    },
+    {
+      "bytes": 38906,
+      "path": "/home/holden/mckernel-work/scratch/native-fork-c-command-correction-20261018-1/owner-capsule/scripts/tests/test_native_running_external_modules_owner.py",
+      "sha256": "1f78700e75700a6bd5aa8f751b2353728205db781f75a541e28f869e43ef0168"
+    }
+  ],
+  "reviewer": "/root/strict_c_command_source_review",
+  "runtime_release": false,
+  "schema": "mckernel.native-fork-strict-c-command-source-review.v1",
+  "source_candidate_sha256": "f656e2bd73549af2359520b9af94d5ece8774ceac9e3e26c6d0b5de67ed3abc1",
+  "source_closure_unchanged": true,
+  "source_files": 66,
+  "source_profile_decision": "Approve exact strict command/source derivative and one-line owner preparation pin only; publication/materialization/request/execution releases must bind these actual bytes.",
+  "source_sha256": {
+    "scripts/native_exact_historical_lease_observer.py": "463ae558e141c2a6fe5a016fb19baddb26ed883c3bf6d39c114b27711ee78a51",
+    "scripts/native_running_external_modules_offline.py": "331538eb13236a866b8ec29b9b7b03fd9c31622a3a56738af8437f20281afc71",
+    "scripts/native_running_external_modules_owner.py": "34478c84477515bb678620952ea197764eddd4902c8c1cb064374be09d843e04",
+    "scripts/native_rust_exact_build_container_owner.py": "2c5241ba08ed2862e510549eedbfa73ba71795971e2c179056a190d77e50ee50",
+    "scripts/native_rust_exact_build_image_prepare.py": "45cb12e0fd58d164468badfb99a3ed922e65e06046bf38b4a50e27e18595a27b",
+    "scripts/native_rust_exact_build_image_rebind.py": "f10ab116e55a24e8db7a8157d71efdd01198ba3453a8141bc8bbf596eda6b61e",
+    "scripts/native_rust_exact_build_image_rebind_probe.py": "412d46de7e078746a7ec979a13ccb25753d6fa34708610932e35be8f02a89635",
+    "scripts/native_rust_exact_build_offline.py": "cc243126ab8cc0754c62175c77e46d6ba0d98294f8168cc77893a2c12249cd1a",
+    "scripts/native_rust_exact_disk_build_wrapper.py": "c252ee341eb61752704f8b818503c0a5dc97400845494707ca3110f5f23df6d1",
+    "scripts/native_rust_exact_mckernel_image_container_owner.py": "052f916d0692b8f4dcc7b9f18a1e39d9e26472fb01e3fcd174eb538342b87600",
+    "scripts/tests/test_native_running_external_modules_owner.py": "1f78700e75700a6bd5aa8f751b2353728205db781f75a541e28f869e43ef0168"
+  },
+  "strict_compile": "NOT_RUN",
+  "unchanged_runtime_source_files": 9,
+  "verification": {
+    "author_authenticate_fixture": {
+      "bytes": 1941,
+      "path": "/home/holden/mckernel-work/scratch/native-fork-c-command-correction-20261018-1/owner-authenticate-report.json",
+      "sha256": "49c158d213f77fa6627ab765addf5ddc80cc1c49dd1742cbd24b31c9aaacf8de"
+    },
+    "author_fixture_checks": 4,
+    "author_fixture_limit": "Real authenticate body and actual11 file hash reads; authority JSON transport is an in-memory fixture, no real execution release. Independently read, not replayed.",
+    "final_actual_binding_join": "PASS exact11 real file hashes, exact12 capsule files including prep, exact2 changed/9 unchanged, owner exact single-line replacement, PREPARATION_SHA and SOURCES AST contracts",
+    "independent_preceding_checks": 21,
+    "preceding_report": {
+      "bytes": 11259,
+      "path": "/home/holden/mckernel-work/scratch/native-fork-strict-c-command-review-20261018-1/review.json",
+      "sha256": "55cf4fdd81de0d625ef4bf783a8516e60f288b4f680dd2523391d34cd4eb5de3"
+    },
+    "unchanged_checks_reused": "Accepted conditional66 7+32 unaffected checks; no replay"
+  },
+  "warning_policy": {
+    "C_phase_jobs": 1,
+    "Rust_warnings_policy": "Unchanged CONFIG_WERROR=y / SDK KBUILD_RUSTFLAGS-$(CONFIG_WERROR) += -Dwarnings; next actual full Rust commands must retain this flag",
+    "actual_prior_command": "117 tokens lacking generic -Werror; remains rejected by strict derivative",
+    "common_make_assignment": "KCFLAGS=-Werror",
+    "expected_new_command": "118 tokens = all actual retained tokens in unchanged order plus -Werror immediately before -DMODULE",
+    "full_module_phase_jobs": 2,
+    "strict_compile_observed": false
+  }
+}

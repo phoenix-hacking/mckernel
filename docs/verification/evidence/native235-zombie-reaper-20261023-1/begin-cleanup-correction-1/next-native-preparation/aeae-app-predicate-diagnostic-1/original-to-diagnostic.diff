@@ -1,0 +1,83 @@
+--- /home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/process_exec_wait.rs
++++ /home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/begin-cleanup-native-successor-2/app-predicate-diagnostic-1/process_exec_wait_diagnostic.rs
+@@ -89,7 +89,7 @@
+         if result == self.pid { self.reaped = true; self.owned = false; }
+         else if result < 0 && errno() != EINTR {
+             if errno() == ECHILD { self.owned = false; }
+-            return Err("waitpid");
++            return Err(if errno() == ECHILD { "waitpid ECHILD" } else { "waitpid other error" });
+         }
+         Ok(())
+     }
+@@ -154,7 +154,11 @@
+         if (!child.reaped || !eof) && !pause(child.reader, POLLIN | POLLHUP) { return Err("poll child"); }
+     }
+     let expected = if missing { 42 } else { 37 };
+-    if child.status & 0x7f != 0 || (child.status >> 8) & 0xff != expected || &bytes[..kept] != marker { return Err("child result"); }
++    // Diagnostic-only: same failing predicate, branch-specific raw parent exit.
++    if child.status == -1 { return Err("child status untouched"); }
++    if child.status & 0x7f != 0 { return Err("child status abnormal"); }
++    if (child.status >> 8) & 0xff != expected { return Err(if missing { "missing child exit code" } else { "success child exit code" }); }
++    if &bytes[..kept] != marker { return Err(if missing { "missing child bytes" } else { "success child bytes" }); }
+     if !child.close_reader() { return Err("parent close reader"); }
+     loop {
+         if !before(deadline) { return Err("second wait deadline"); }
+@@ -162,7 +166,8 @@
+         let result = unsafe { waitpid(pid, &mut status, WNOHANG) };
+         let saved = errno();
+         if result == -1 && saved == EINTR { continue; }
+-        if result != -1 || saved != ECHILD { return Err("second wait ECHILD"); }
++        if result != -1 { return Err(if result == 0 { "second wait zero" } else { "second wait nonzero" }); }
++        if saved != ECHILD { return Err("second wait errno"); }
+         break;
+     }
+     if !raw_write(1, marker, deadline) { return Err("forward child marker"); }
+@@ -208,8 +213,46 @@
+     Ok(())
+ }
+ 
++// Functional diagnostic only; failure exits bypass stdio after parent cleanup.
++fn diagnostic_exit_code(stage: &str) -> i32 {
++    match stage {
++        "waitpid ECHILD" => 110,
++        "waitpid other error" => 111,
++        "child status untouched" => 112,
++        "child status abnormal" => 113,
++        "success child exit code" => 114,
++        "missing child exit code" => 115,
++        "success child bytes" => 116,
++        "missing child bytes" => 117,
++        "parent close reader" => 118,
++        "second wait zero" => 119,
++        "second wait nonzero" => 120,
++        "second wait errno" => 121,
++        "second wait deadline" => 122,
++        "pipe2" => 123,
++        "fork" => 124,
++        "parent close writer" => 125,
++        "capture deadline" => 126,
++        "child output overflow" => 127,
++        "read child" => 128,
++        "poll child" => 129,
++        "forward child marker" => 130,
++        "parent arguments" => 131,
++        "absolute executable path" => 132,
++        "executable NUL" => 133,
++        "SIGCHLD policy" => 134,
++        "clock" => 135,
++        "parent start" => 136,
++        "success output" => 137,
++        "error output" => 138,
++        "create observations" => 139,
++        "write observations" => 140,
++        _ => 141,
++    }
++}
++
+ fn main() {
+     let args: Vec<OsString> = std::env::args_os().collect();
+     if args.get(1).is_some_and(|arg| arg == "--child") { std::process::exit(child_mode(&args)); }
+-    if let Err(stage) = parent(&args) { eprintln!("process-exec-wait failure stage={stage} errno={}", errno()); std::process::exit(1); }
+-}
++    if let Err(stage) = parent(&args) { unsafe { _exit(diagnostic_exit_code(stage)); } }
++}

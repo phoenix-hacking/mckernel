@@ -1,0 +1,64 @@
+{
+  "actual_fixture_TU_partial_default_native": null,
+  "callback_state": "Exactly one existing x86_addr_init_pt_loaded_bridge state sample; same MAP_ST_START/LINUX_PAGE_OFFSET_BASE and wrapping unsigned64 addition. No new null policy: wrapped zero remains zero.",
+  "canonical_relation": {
+    "bytes": 3686,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-pt-phys-to-virt-source-only-1/FROZEN-937-BATCH-CURRENT-CANONICAL-QUALIFICATION.json",
+    "sha256": "04163dc82356c87ecdbfa7da49211503d8e874862a4b544bf0b88f33c33a0db7"
+  },
+  "chosen_complete_body": "x86_pt_phys_to_virt_bridge",
+  "complete_Rust_body": "Uses existing actual phys_to_virt -> x86_phys_to_virt_body_result; no arithmetic model or new callback.",
+  "fallback_C_body_byte_identical": true,
+  "future_fragment": {
+    "bytes": 916,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-pt-phys-to-virt-source-only-1/FUTURE-FIXTURE-FRAGMENT.NOT-QUEUED.c",
+    "sha256": "26f71d4a9b3f24a50d218d41d8c00b4354082d8f6d868f7f9fd0731a96571b1b"
+  },
+  "new_driver_queue_or_reservation": null,
+  "page_lock_lifetime": "Only raw address translation. No dereference, allocation/free, page reference, lock, retained borrow, callback retention, or state publication; existing page-table callers and callback ordering unchanged.",
+  "patch": [
+    {
+      "bytes": 351,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-pt-phys-to-virt-source-only-1/patch/memory.c.diff",
+      "sha256": "af4c0d82cba71a49803635fcdd8b77e9374703c3e3e1974f3402404271dd191b"
+    },
+    {
+      "bytes": 980,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-pt-phys-to-virt-source-only-1/patch/x86_memory_helpers.rs.diff",
+      "sha256": "3c644127b4bb9bc2f3ea0278928131fb336405cfb48cbf048c67ca5cc5a77992"
+    }
+  ],
+  "postimages": [
+    {
+      "bytes": 89491,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-pt-phys-to-virt-source-only-1/candidate/arch/x86_64/kernel/memory.c",
+      "sha256": "a9143108871b616167f855282ac20b8f740bd126008e3e15ac4f49163da4c46a"
+    },
+    {
+      "bytes": 204582,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-pt-phys-to-virt-source-only-1/candidate/kernel/rust/x86_memory_helpers.rs",
+      "sha256": "3fc5561925a84b18870d2d141314c56d958f3f9c1e602a5eda3b32b39978617a"
+    }
+  ],
+  "preimages": [
+    {
+      "bytes": 89444,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-memobj-flush-source-only-1/candidate/arch/x86_64/kernel/memory.c",
+      "sha256": "ceed123214cd293f5afefd21dd071e39aa824cf3424cc6355a841c1ae5467f39"
+    },
+    {
+      "bytes": 204359,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-memobj-flush-source-only-1/candidate/kernel/rust/x86_memory_helpers.rs",
+      "sha256": "087240006b3f1b99c844c77c1c645118710bf34f53546637eb12d54215822092"
+    }
+  ],
+  "provider_ownership": "PUBLIC C definition excluded; existing forward C declaration unchanged; global Rust provider replaces its foreign import. Actual unique T/no self-U and real selected C partial provider resolution remain future.",
+  "remaining_C_debt": [
+    "x86_pt_free_pages_bridge and allocator backing callbacks",
+    "range/effect logging providers",
+    "physical initialization-state provider",
+    "other live memory bodies and backing object operations"
+  ],
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\nSource-only qualification and one backing-provider port; no fixture execution.\n",
+  "tracing_and_error_semantics": "No tracing, return-code or panic added; PTfree source-file/line tracking is untouched and remains C debt."
+}

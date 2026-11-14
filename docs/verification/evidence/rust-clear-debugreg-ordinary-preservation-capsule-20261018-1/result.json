@@ -1,0 +1,45 @@
+{
+  "blocked_fields": [
+    "independent ordinary execution profile decision",
+    "fresh live owner/mount/storage/memory/usage admission"
+  ],
+  "builds": 0,
+  "counts": {
+    "materialized_repository_files": 6927,
+    "materialized_symlinks": 49,
+    "omitted_repository_files": 2833,
+    "repository_files": 9760,
+    "retained_ihk_git_metadata": 21
+  },
+  "guests": 0,
+  "manifest_sha256": "734a549787c909b4b265e5faf4a7c5b74e1a87923b29b26b91fed2a5aa91e9b7",
+  "materialization_sha256": "b61fae14a2d72a7be880a4c5d164980e6f25d18b42282537d33976d54bb9687b",
+  "next_command": [
+    "/usr/bin/env",
+    "-i",
+    "PATH=/usr/bin:/bin",
+    "LC_ALL=C",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-preparation-20261018-1/materialize_thin.py"
+  ],
+  "publication_commit": "cf035407404dc17a89c8347c4d5a01f48627d385",
+  "publication_proof": {
+    "bytes": 17757,
+    "path": "/home/holden/mckernel-work/host-preparation/checkpoint-cf035407-fetched-proof-20261018-1.json",
+    "sha256": "cb7fbc04312fd3c7d523254ae0b79991cefeef6c5249b431d89d320d280092b3"
+  },
+  "source_derivative_sha256": "c4aa2d6025ee407f08ab6a31da01685fa908b02cc614606bd9dfb52ea36eca59",
+  "status": "READY_SOURCE_BOUND_ORDINARY_PROPOSAL_ONLY"
+}

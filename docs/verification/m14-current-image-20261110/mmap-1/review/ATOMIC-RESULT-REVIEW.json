@@ -1,0 +1,164 @@
+{
+  "schema": "m14-do-mmap-typed-source-independent-saved-atomic-result-supplement-v1",
+  "at": "2026-11-10T22:53:37.211718+00:00",
+  "reviewer": "/root/public_abi_join_max, actual gpt-6.1-sol/MAX; independent saved-byte/result review only",
+  "decision": "GO_SAVED_856B_ATOMIC_TWO_COMMAND_RESULT_REUSED_FOR_UNCHANGED_SLICE_IN_CORRECTED75A1_PORT",
+  "material_defects": [],
+  "typed_source_and_composition_GO_preserved": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-final-review-publicabi-max-1/direct-call-type-correction-1/REVIEW.json",
+    "bytes": 14816,
+    "sha256": "9183636f6d0a31926db6e5580bd00ac1e415b009dfcc6881472505045ba8f6b3"
+  },
+  "corrected_port": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/candidate/kernel/rust/f03_do_mmap.rs",
+    "bytes": 30921,
+    "sha256": "75a1f11b33af4e663f857d54190ec0b14c4193fb944d20ed0d7a7b54c5e1298e"
+  },
+  "correction_patch": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/TYPE-CORRECTION.patch",
+    "bytes": 2973,
+    "sha256": "f3381128ab1cf70701ce648c0b1afeafcb80e289a65148fa28fce77d207bc67a"
+  },
+  "prior_source_test_profile_GO": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-final-review-publicabi-max-1/REVIEW.json",
+    "bytes": 24944,
+    "sha256": "b3db9552313f9f218bd449f24364776ccb183c34e7854cfbfebf75b16572e5bc"
+  },
+  "request": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/ATOMIC-TEST-REQUEST.PROPOSED.json",
+    "bytes": 7886,
+    "sha256": "856b3c196bcafc6920a06d539c1e8afec7de3d61135cc20dca04ec285beded77"
+  },
+  "actual_result": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/atomic-execution-1/RESULT.json",
+    "bytes": 1898,
+    "sha256": "3f9e856a9dee18039122339f048b3b4634ded5b662be96f4a59739d0ef5b8364"
+  },
+  "actual_ownership": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/atomic-execution-1/ownership.json",
+    "bytes": 745,
+    "sha256": "ccc46aeb73eeb33028a9ced8fc5f999b46dfc1bb2f8dc841a9b4bc768b1e94ce"
+  },
+  "actual_admission": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/atomic-execution-1/ADMISSION.json",
+    "bytes": 501,
+    "sha256": "623ce58d86b0d9c3987619486e47a800a290fd72e70b1de02155e85778c48f6c"
+  },
+  "actual_executable": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/atomic-output-1/lock-downgrade",
+    "bytes": 4740432,
+    "sha256": "de0a8d357399afc73ff7d49d45bf3eead25de3451dbe9271132f862ab6a414ac"
+  },
+  "actual_raw_outputs": [
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/atomic-execution-1/phase-1.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/atomic-execution-1/phase-1.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/atomic-execution-1/phase-2.stdout",
+      "bytes": 179,
+      "sha256": "39ddbfc9867bf193a9407adaa08b8f0d3f52119bca8ca43141b7d80b198e4330"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/atomic-execution-1/phase-2.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "actual_two_command_qualification": {
+    "started_at": "2026-11-10T22:49:36.542578+00:00",
+    "finished_at": "2026-11-10T22:49:37.358192+00:00",
+    "compiler": "Actual qualified1.95 exact856b command exit0, stdout/stderr both empty; no full do_mmap entry/width assertions or kernel code compiled by this test.",
+    "runtime": "Exact expected JSON and exit0; no_unlocked_handoff=true, writer_excluded_until_readers_release=true, joined_workers=2, kernel_runtime=false. Test source executes both thread joins before print; source/test protocol review is reused, not re-audited or rerun.",
+    "observed_protocol_scope": "Owned genuine ABI four-byte AtomicI32 word: writer sentinel blocks acquisition, exact Release transition publishes reader1, second reader CAS1-to2, writer denied at2 and1 and acquires only after0. Source exact single-store proof supplies absence of an intermediate0; this controlled HOST observation does not prove native scheduler/preemption/VM/XPMEM behavior.",
+    "positive_owners": [
+      {
+        "label": "phase-1",
+        "leader": 1132912,
+        "leader_birth": "43724262",
+        "status": 0,
+        "leader_parent_joined": true,
+        "timed_out": false,
+        "leader_group_signalled": false,
+        "adopted_reaps": [],
+        "adopted_kills": [],
+        "whole_descendants_joined": true,
+        "remaining_direct_children": [],
+        "streams_closed": true,
+        "error": null
+      },
+      {
+        "label": "phase-2",
+        "leader": 1132938,
+        "leader_birth": "43724342",
+        "status": 0,
+        "leader_parent_joined": true,
+        "timed_out": false,
+        "leader_group_signalled": false,
+        "adopted_reaps": [],
+        "adopted_kills": [],
+        "whole_descendants_joined": true,
+        "remaining_direct_children": [],
+        "streams_closed": true,
+        "error": null
+      }
+    ],
+    "all_positive_closed": true,
+    "no_adopted_reap_kill_timeout_signal_residual_or_stream_error": true
+  },
+  "meaningful_source_join": {
+    "actual_test": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/tests/lock_downgrade.rs",
+      "bytes": 3969,
+      "sha256": "714ba1c8923a5e7caecc6a445c203caa61440b3afa59ac5b0c2bf88f68719152"
+    },
+    "real_ABI": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/input/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    "original5961_and_corrected75a1_exact_function_slice_sha256": "8e837db66a13bc19595f478b7fb8fc71cd495e887bb34af54bad6898078641af",
+    "equality": "The function text in the compiled test, original5961 and corrected75a1 is identical. The two corrected SizeT/CULong callsites and C/Rust width guards are outside this slice. Actual finite result therefore carries to the selected corrected source without any test replay.",
+    "source_COMPOSITION_and_TYPE_decision": "9183636f source/composition GO remains unchanged and is supplemented by this newly delivered actual receipt. No duplicate body/provider audit or new codegen proof is claimed."
+  },
+  "preexecution_resource_failure_and_first_actual_attempt": {
+    "preserved_failure": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/atomic-execution-1/INITIAL-ADMISSION-FAILURE.json",
+      "bytes": 549,
+      "sha256": "708aaf5ca70a3ddde71f46809a9e05d991f934873b6566dfd9e7b16583396435"
+    },
+    "failure_scope": "22:47:38 shared-headroom assertion failed before compiler/runtime Popen; saved phases empty. Root reconciliation records output root never created. No SUT command ran, and this was not a service/policy/source rejection.",
+    "new_read_only_fact": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/atomic-execution-1/RESOURCE-DIAGNOSTIC.json",
+      "bytes": 355,
+      "sha256": "47af301dc1515c0b24a02d32d1ea1bffd14b780761ede0709f5b698e31cfc30d"
+    },
+    "reconciliation": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/atomic-execution-1/ADMISSION-RECONCILIATION.json",
+      "bytes": 736,
+      "sha256": "0ed0dc9f6c5564ad581373bedaff2d55dbac548208382dcb7be90b6953053b24"
+    },
+    "fact_total_bytes": 4239294464,
+    "fresh_final_admission_total_bytes": 4193566720,
+    "arithmetic": "ADMISSION uses1,509,212,160B actual overhead +2,147,483,648B new reservation +2x268,435,456B UNKNOWN =4,193,566,720B. Earlier qualifying read-only fact measured1,554,939,904B overhead and4,239,294,464B total. Both are below unchanged4,294,967,296B; use each actual timestamp rather than conflating the two observations.",
+    "fresh_MemAvailable_bytes": 29316853760,
+    "jobs": "Two retained UNKNOWN jobs plus one new CPU6 job equals3; both256MiB holds retained. Disk floors passed. No new allowance/grant, source/profile change or UNKNOWN release.",
+    "memory_scope": "HOST prlimitAS2GiB applies as reviewed; no cgroup aggregate enforcement or exact terminal family peak is invented. Exact peak remains UNKNOWN.",
+    "attempt_scope": "Only the two previouslyunstarted exact commands ran once after the new qualifying input and fresh admission. Original admission failure remains intact; no unchanged SUT retry."
+  },
+  "remaining_actual_image_and_original_conditions": {
+    "image": "Corrected whole port75a1, selected C/Rust guards and production provider/default ownership still require Root coherent-source integration and separately reviewed normal image operation, real artifact/ELF/map/C-exclusion/ABI/debug/provider result and independent qualification. This HOST result supplies no fake production provider or whole-entry compile result.",
+    "scheduling": "Root reported separate f498 CPU7/1GiB producer live. Changed image waits its positive owner release and a new exact current aggregate HOST4/max3/fresh26/floor/source/profile admission. This result does not admit another job or borrow native CPUs2-5.",
+    "original_acceptance": false,
+    "C_debt": "Current greenf8 genericC33 and all other original DEFAULT/FUNCTIONAL/I02/native/lifecycle obligations stay unchanged until matching actual evidence; C33-to32 is still a future named-owner result, not count-only credit.",
+    "preserved": "Old failures/source candidates, accepted file scopes, held private fixtures/generic-exec equivalents, source/account/service/native/currentfree and both UNKNOWN reservations remain. No code, criterion or score change."
+  },
+  "reviewer_actions": "Saved JSON/text/artifact/hash/slice comparisons only and this private review write. No compiler/test/checker/helper/ELFtool/Docker/network/API/native execution, source/canonical/index/control mutation or child.",
+  "next_action": "Root may bind9183636f plus this actual atomic supplement into the corrected-source operation and proceed after exact source/operation review and positive f498 release/fresh admission. Reuse the passing six rollback/RSS cases and this atomic result; no further unchanged test replay is needed."
+}

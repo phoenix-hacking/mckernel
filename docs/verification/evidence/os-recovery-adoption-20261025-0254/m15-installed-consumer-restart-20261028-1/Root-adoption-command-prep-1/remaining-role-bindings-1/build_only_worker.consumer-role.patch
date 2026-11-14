@@ -1,0 +1,35 @@
+--- accepted-bfd-cohort/build_only_worker.py
++++ remaining-role-bindings-1/build_only_worker.py
+@@ -11,7 +11,7 @@
+     with p.open('rb') as stream:
+         for block in iter(lambda:stream.read(1<<20),b''):h.update(block)
+     return dict(path=str(p),bytes=p.stat().st_size,sha256=h.hexdigest())
+-CUTOFFS=[1793253600.0, 1035705.5689454618, 1051043.6959931096]
++CUTOFFS=[1793253600.0, 1035704.5689393478, 1051042.6959879305]
+ BOOT='7bfc5687-6c04-4d15-84eb-b92ab9a55dcb'
+ def window_remaining():
+     clocks=[time.time(),time.monotonic(),time.clock_gettime(time.CLOCK_BOOTTIME)]
+@@ -25,7 +25,7 @@
+     require(os.getuid()==os.geteuid()==1000,'UID1000 required')
+     require(os.sched_getaffinity(0)=={2,3,4,5},'exact reserved CPU2-5')
+     require(plan['runtime_authority'] is None,'input plan must not act as runtime authority')
+-    require(len(plan['commands'])==3,'exact three current BFD producer commands')
++    require(len(plan['commands'])==1,'one exact current consumer serial leaf')
+     require(plan['deadline_epoch']==1793253600,'fixed actual campaign deadline')
+     seconds=min(19800,int(window_remaining()))
+     require(seconds>0,'before fixed deadline');signal.signal(signal.SIGALRM,alarm_handler);signal.alarm(seconds)
+@@ -47,12 +47,10 @@
+             after=resource.getrusage(resource.RUSAGE_CHILDREN)
+             row=dict(index=index,argv=command['argv'],cwd=command['cwd'],started_at_epoch=started,finished_at_epoch=time.time(),returncode=returncode,CPU_seconds=(after.ru_utime+after.ru_stime)-(usage.ru_utime+usage.ru_stime),maximum_child_RSS_KiB=after.ru_maxrss)
+             records.append(row)
+-            require(returncode==0,'first failed configure/build/readback stops suffix')
++            require(returncode==0,'failed consumer leaf stops without replay')
+             require(target.is_file() and not target.is_symlink() and target.stat().st_size>0,'new ordinary output required')
+             row['output']=reference(target)
+-            if index==1:
+-                other=Path('/work/current-bfd-build/executer/user/eclair');require(other.is_file() and not other.is_symlink() and other.stat().st_size>0,'both selected tools produced');row['second_output']=reference(other)
+-        (out/'producer-contract.json').write_text(json.dumps(dict(status='ACTUAL_CURRENT_BFD_THREE_COMMAND_PRODUCER',source_profile=plan['source_profile'],contract=plan['producer_contract'],commands=records,fresh_genuine_two_target_configure=True,default_native_retirement_acceptance=False),indent=2)+'\n')
++        (out/'producer-contract.json').write_text(json.dumps(dict(status='ACTUAL_CURRENT_CONSUMER_ONE_SERIAL_LEAF',source_profile=plan['source_profile'],contract=plan['producer_contract'],commands=records,serial_consumer_leaf=True,default_native_retirement_acceptance=False),indent=2)+'\n')
+         status='PASS_BUILD_ONLY_PENDING_CURRENT_DEFAULT_AND_NATIVE_VALIDATORS'
+     except BaseException as error:
+         status='FAIL_PRESERVE_CAPTURE_NO_AUTOMATIC_RETRY'

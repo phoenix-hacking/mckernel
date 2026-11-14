@@ -1,0 +1,15 @@
+{
+  "schema": "mckernel.native-fork-final-destructor-record-preservation.v1",
+  "precompile_input": {
+    "path": "docs/verification/evidence/native-fork-final-destructor-implementation-20261017.json",
+    "sha256": "4f84d8efbd00f5ea26e95626cc1be2dec8932b3929d7da2e15e977f265086700",
+    "state": "Exact profile-bound precompile bytes restored and frozen."
+  },
+  "actual_pass": {
+    "path": "docs/verification/evidence/native-fork-final-destructor-central-pass-20261017.json",
+    "sha256": "a2e1c7a5d3e57fa9f3af5b20bb5b4eb425bf1346d643e217fed85db5b344a03d",
+    "state": "Exact complete PASS update retained separately, including compiler artifacts and original failures."
+  },
+  "method": "Reversed only the precisely recorded central-execution insertion and five status updates; verified the required original SHA256 before restoration. Applied file changes only through apply_patch.",
+  "scope": "Evidence preservation only. No code, tests, compilers, Git state or acceptance changed."
+}

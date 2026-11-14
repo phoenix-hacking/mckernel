@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "time.monotonic-libc",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/time.monotonic-libc"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "canonical-record-with-relations", "fields": ["count", "bad_index", "order_bad", "last_sec", "last_nsec"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Exactly 1024 libc reads complete", "Every nanosecond is in [0,1e9)", "The sequence is nondecreasing", "bad_index=1024 and order_bad=0"],
+  "unresolved_expectations": ["Freeze canonical record and bind input/oracle hashes before execution."],
+  "max_question_for_reviewer": "Confirm nondecreasing CLOCK_MONOTONIC relation is the required guest contract."
+}

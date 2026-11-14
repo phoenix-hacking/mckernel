@@ -1,0 +1,45 @@
+{
+  "schema": "mckernel.candidate12-cleanup-source-review.v1",
+  "status": "PASS_SOURCE_INTEGRATION",
+  "recorded_at": "2026-09-30T16:26:00-07:00",
+  "base_commit": "9a6eb5b4e26b1ade6c9b32d4789ffe23f9d37684",
+  "tool": {
+    "path": "docs/verification/evidence/native-exact-candidate12-planbound-cleanup-20260930.py",
+    "sha256": "43afae3704644fe73bea48a2e02cee73e6869378618dc763c8a46da887c0fff9"
+  },
+  "tests": {
+    "path": "scripts/tests/test_native_exact_candidate12_planbound_cleanup_20260930.py",
+    "sha256": "3a683af7a8a699b8f86e9d0f8f52db97ac95163326aaec760a94509fb750c36a",
+    "result": "59 tests, PASS"
+  },
+  "validation_only": {
+    "command": [
+      "/usr/bin/python3",
+      "docs/verification/evidence/native-exact-candidate12-planbound-cleanup-20260930.py",
+      "--validate-only",
+      "--plan",
+      "/home/holden/mckernel-work/scratch/native-exact-candidate12-source-audit-reviewed-20260930-1.json"
+    ],
+    "result": "VALIDATION_PASS; no mutation or runtime acceptance"
+  },
+  "reviewed_families": [
+    "exact subtree enumeration including unlisted entries",
+    "fresh post-staging census, leases and protected inputs",
+    "exact authentication of both retained terminal containers",
+    "forward and rollback rename interruption reconciliation",
+    "truthful transaction state through descriptor unwinding and return"
+  ],
+  "plan": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-candidate12-source-audit-reviewed-20260930-1.json",
+    "sha256": "eaba225bfeb8e58fa1a6a7d5cfe1ae622e5bb1f9355e359af16464968ac0f957",
+    "unique_files": 2507,
+    "allocated_bytes": 9102798848
+  },
+  "execution_release": false,
+  "executed": false,
+  "removed_files": 0,
+  "diagnostic_acceptance": false,
+  "production_acceptance": false,
+  "os_complete": false,
+  "next": "Commit and fetch-verify this source, author a separately committed exact one-shot release, independently review that release, then remeasure and execute once."
+}

@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "record_kind": "pending_free_inventory_production_authority_audit",
+  "task_id": "M03-pending-free-inventory-source-contract",
+  "audit_attempt": 2,
+  "recorded_utc": "2026-09-16T05:05:00Z",
+  "status": "PASS_SOURCE_MAP_ONLY_AUTHORITIES_MISSING",
+  "contract": {
+    "path": "docs/verification/stability-pending-free-inventory-source-contract-20260915-1.md",
+    "sha256": "00141eb8f17d21ad3ad9b20829a333e6558e8859f70347d72bd3e9b893ae8be8"
+  },
+  "source_sha256": {
+    "kernel/mem.c": "167ad2b976bcdec048a625dedf68a9b7c1ef6db7c57f3ceddf3582d54887101a",
+    "kernel/include/page.h": "c8f3f5e7804c71430c814395ea14a1ee93267180713caeb39880b662cc9cd0dc",
+    "kernel/rust/mem_helpers.rs": "647825d8c51a9f584d1229a2389fbb81105e4bbf94bfcf95a12d172c5dde112b",
+    "kernel/rust/abi_checks.c": "f8deda08de0eccda152a6416a01bec00e6984c1cf4c998e9ca877b1bbe31c23a",
+    "kernel/cls.c": "071008b51aaa9f173b855a65791c2e24286d4b7f843d786227d68377e3c9a31f",
+    "kernel/rust/tests/pending_free_inventory_harness_v1.py": "bedb35acfe55000e865309db395142bc73b15aa10af89eac065ff41bce13f142",
+    "kernel/rust/tests/pending_free_inventory_reference_v1.c": "db6df3c3b214ec75d6fbe8d1aee84e7ca5b83508592d60829623436a458cf66e",
+    "kernel/rust/tests/pending_free_inventory_v1.rs": "1b2b2ab6c5732b0d92040d93bc1219646b4633ebbf3bfae46d058b9c06cfe44b",
+    "kernel/rust/tests/pending_free_inventory_vectors_v1.rs": "798a2f9c0c9bc7aee2384049bfdfedf4e67376e1426f6e35386a3e8268715928"
+  },
+  "authority_map": [
+    {
+      "authority": "current per-CPU pending list and enqueue/free flow",
+      "classification": "EXISTING_WITHOUT_DURABLE_IDENTITY",
+      "evidence": [
+        "kernel/mem.c:3827-3889",
+        "kernel/rust/mem_helpers.rs:4056-4089",
+        "kernel/rust/abi_checks.c:1230-1231,1265-1266",
+        "kernel/cls.c:78-90"
+      ],
+      "limit": "CPU selection and a raw list head exist, but there is no restart/VM incarnation, generation, pinned lifetime or exclusive lease."
+    },
+    {
+      "authority": "descriptor arena identity, generation, count and range",
+      "classification": "MISSING",
+      "evidence": [
+        "kernel/include/page.h:18-39",
+        "kernel/mem.c:5258-5270"
+      ],
+      "limit": "The descriptor has links/mode/physical/count/mapped/offset/pgshift only; phys_to_page is a lookup, not ownership authority."
+    },
+    {
+      "authority": "validate-before-dereference and pinned arena lifetime",
+      "classification": "MISSING",
+      "evidence": [
+        "kernel/rust/mem_helpers.rs:300-434"
+      ],
+      "limit": "The rejected candidate dereferences raw links before any trusted bounds and its safety comments do not establish a production lifetime or lease."
+    },
+    {
+      "authority": "pending-list lock, IRQ/reentry exclusion and recovery lease",
+      "classification": "UNKNOWN_MISSING_AT_PRODUCER",
+      "evidence": [
+        "kernel/mem.c:2534-2541",
+        "kernel/mem.c:3827-3830",
+        "kernel/mem.c:4248-4255"
+      ],
+      "limit": "Generic no-IRQ wrappers exist but are not bound to pending-free ownership."
+    },
+    {
+      "authority": "typed clear/TLB completion joined to a pending snapshot",
+      "classification": "PARTIAL_MACHINERY_AUTHORITY_MISSING",
+      "evidence": [
+        "kernel/mem.c:4310-4345"
+      ],
+      "limit": "Remote flush and IRQ counters exist, but expose no typed snapshot acknowledgement or durable clear epoch."
+    },
+    {
+      "authority": "zeroing ownership and durable quarantine metadata",
+      "classification": "MISSING",
+      "evidence": [
+        "kernel/mem.c:4773-4777",
+        "kernel/mem.c:4897-4901"
+      ],
+      "limit": "Zeroing lists initialize independently; no pending-inventory authority or quarantine lifetime/recovery owner exists."
+    }
+  ],
+  "smallest_aligned_boundary": "Add a private production inventory beside enqueue/begin/detach/drain with an explicit VM/restart epoch, descriptor-arena identity and generation, trusted count/range, pinned lifetime, pending-list lock/IRQ lease, typed clear/TLB acknowledgement and durable quarantine ownership. Do not use a raw pointer lookup, test mirror or new public C ABI as authority.",
+  "hazards": [
+    "use-after-free or recycled descriptors",
+    "CPU-local concurrent mutation or callback reentry",
+    "partial-drain mutation before authority is proved",
+    "stale physical aliases",
+    "clear/TLB timeout",
+    "owner teardown without quarantine recovery"
+  ],
+  "required_next_review_inputs": [
+    "authoritative VM/restart epoch owner",
+    "descriptor arena generation and pinned-lifetime owner",
+    "pending-list lock plus IRQ/reentry semantics",
+    "exact clear/TLB completion acknowledgement contract",
+    "quarantine lifetime and recovery owner"
+  ],
+  "candidate_disposition": "The current dirty candidate remains rejected and untracked; this audit releases no source integration.",
+  "source_integration_released": false,
+  "compiler_execution": false,
+  "runtime_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

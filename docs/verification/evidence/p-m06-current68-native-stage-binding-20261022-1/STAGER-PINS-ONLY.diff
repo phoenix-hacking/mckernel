@@ -1,0 +1,30 @@
+--- /home/holden/mckernel-work/host-preparation/phase5-child-exec-wait-native-preparation-20261020-1/source/scripts/application-tests/native_diagnostic_stager.py
++++ /home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native_diagnostic_stager.current68.py
+@@ -17,8 +17,8 @@
+ import subprocess
+ import tempfile
+ 
+-MCEEXEC_SHA256 = "689dcad27b2ce3a30f49df1bfe9452f2169a14e9c350c24c9677c88b1f152876"
+-MCEEXEC_SIZE = 394656
++MCEEXEC_SHA256 = "0d774a14c08bdd4abcd0368060ca8eafba18bf44244dafba5459f895c5d78a7a"
++MCEEXEC_SIZE = 394640
+ BASE_ROOT = Path("/home/holden/mckernel-work/scratch/native-ultra-futex-guest-20260909-2026091302/root")
+ PAYLOAD = Path("/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/process_exec_wait")
+ EXPECTED = {
+@@ -30,6 +30,7 @@
+     "bin/native-boot": "4558995",  # full identity is checked by retained-prefix binding below
+ }
+ PAYLOAD_SHA256 = "537cb22b2af1f7fca1202afaf45b017364823c185c2ec47474093e51647ba5b8"
++SELECTED_APP_PAYLOADS = {'/home/holden/mckernel-work/host-preparation/native-exec-reset-self-exec-case-preparation-20261021-1/ordinary-reference-1/result/app': 'e225ab42ec8836a7887135297218645f868568e131d5676b5bb59c12c8dd7b52', '/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/process_exec_wait': '537cb22b2af1f7fca1202afaf45b017364823c185c2ec47474093e51647ba5b8', '/home/holden/mckernel-work/host-preparation/p-m06-recovery-batch-prerequisite-20261022-1/process_cancel_recovery': '6abb5e9046444c64d72139f85fcae9e4796eff7ceb5cc2dd1e5b1a47ef3695a5'}
+ LOADER = "lib64/ld-linux-x86-64.so.2"
+ LIBC = "lib64/libc.so.6"
+ REPLACEMENT_PATHS = frozenset(("images/mckernel.img", "modules/ihk.ko",
+@@ -88,7 +89,7 @@
+     for p, label in ((payload, "payload"), (collector, "collector")):
+         st = os.lstat(p)
+         _fail(stat.S_ISREG(st.st_mode) and not stat.S_ISLNK(st.st_mode), label + " must be regular")
+-    _fail(_hash(payload) == PAYLOAD_SHA256, "payload hash mismatch")
++    _fail(str(payload) in SELECTED_APP_PAYLOADS and _hash(payload) == SELECTED_APP_PAYLOADS[str(payload)], "selected app payload path/hash mismatch")
+     return inv
+ 
+ def _open_source(path):

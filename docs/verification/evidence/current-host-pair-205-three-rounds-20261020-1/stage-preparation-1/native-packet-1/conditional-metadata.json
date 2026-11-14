@@ -1,0 +1,68 @@
+{
+  "accepted_stage_manifest": {
+    "bytes": 10529,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/stage-preparation-1/stage-three-rounds-1/manifest.json",
+    "sha256": "52e701ac05a9eda132417e63c91f2577d2024170670ed2e71f9fec11e4412d41"
+  },
+  "actual_metadata_review": {
+    "bytes": 11751,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-independent-review-20261020-1/ACTUAL-INIT-STAGE-AND-THREE-ROUND-CONSUMER-ACCEPTANCE.json",
+    "sha256": "6d893a0163b637a37a92a8bc586c3a9ed6755da64bb7172f8d9070759934d3fc"
+  },
+  "execution_route": "DIRECT_OWNER_THEN_THREE_SUCCESS_ONLY_READERS_NO_DECODER",
+  "normalized_manifest": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/scratch/r2053m-261020-1/manifest.json",
+    "sha256": "52e701ac05a9eda132417e63c91f2577d2024170670ed2e71f9fec11e4412d41",
+    "size": 10529
+  },
+  "parent_identity": {
+    "device": 1828,
+    "gid": 1000,
+    "inode": 759502,
+    "mode": "0o700",
+    "uid": 1000
+  },
+  "postjoin_readback": {
+    "approved": "CONDITIONAL_ON_EXACT_INDEPENDENT_EXECUTION_RELEASE",
+    "argv": [
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/r2053-261020-1/p.owner-b9d2e9af8064437b9d7f08c66c98ac20",
+        "."
+      ],
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/cat",
+        "/home/holden/mckernel-work/scratch/r2053-261020-1/p/attempt-b9d2e9af8064437b9d7f08c66c98ac20/result.json"
+      ],
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/r2053-261020-1/p/attempt-b9d2e9af8064437b9d7f08c66c98ac20",
+        "--exclude=./qmp.sock",
+        "."
+      ]
+    ],
+    "capture_limit_bytes_per_command": 33554432,
+    "requested": true,
+    "timeout_seconds_per_command": 30
+  },
+  "proposal": {
+    "bytes": 4607,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/stage-preparation-1/native-packet-1/proposal.json",
+    "sha256": "f5876eb5b45ffd65b925f82f62e29b9984550d89a249040589551bd98a527383"
+  },
+  "runtime_release": false,
+  "runtime_wrapper": null,
+  "schema": "mckernel.native-two-cpu.conditional-metadata.v1",
+  "status": "PENDING_EXACT_FINAL_NATIVE_RELEASE"
+}

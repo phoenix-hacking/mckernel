@@ -1,0 +1,254 @@
+{
+  "schema": "mckernel.whole-M03-HOST66-affected-boundary-additive-join.v1",
+  "reviewed_at": "2026-10-20T22:19:37.432505+00:00",
+  "reviewer": "/root/m03_failed_invalidation_literal_delta",
+  "functional_scope": "Functional supported-profile OS/apps PLUS active compute-C retirement into Rust/reviewed assembly. Exact existing used-mapping/failure-retention boundary only; no new compute-C functionality.",
+  "additive_to": [
+    {
+      "file": "decision.json",
+      "sha256": "16b5ad6a21d29e45a087693c6bdd05c81cc3377f4ac57385bde1e93d2d7f9461",
+      "preserved": true
+    },
+    {
+      "file": "whole-m03-exit-decision.json",
+      "sha256": "5c175919d480f3796fa7c1c29e21fee084521dfecbefb8ec7094812f04047700",
+      "preserved": true,
+      "previous_gap": "The selected inputs then available did not bind b9 failure-ownership source to HOST66. Existing compact accepted HOST66 inputs supplied by root now close that exact evidence gap."
+    }
+  ],
+  "milestone": "M03",
+  "exit_condition": "Used mappings preserve data/access and prevent unsafe release or reuse.",
+  "recommendation": "COMPLETE_LITERAL_M03_EXIT_FOR_ACCEPTED_TESTED205_HOST66_SUPPORTED_USED_MAPPING_PROFILE",
+  "reason": "Accepted HOST66 source-plan/materialization rows and compiler dependency closure bind the exact retained Rust failure-ownership boundary into the same modules used by accepted tested205 map/protect/unmap data/access witnesses. This closes the previous cross-tuple source join. Completion follows the concrete exit behavior and ownership invariants below, rather than a count of three completed checks.",
+  "used_mapping_data_access": {
+    "accepted_reviews": [
+      "ebec559801d70a62a7ecab1f2c8c4c1e281457c8c3ab47a81b542890bdbc65b8",
+      "b7aa10fca87703fd94ae60d9f26e728514c8f15d8341e515a87a2ce1a2ef5058"
+    ],
+    "proof": "Successful writable mmap, guarded data write/read, real read-only write SIGSEGV+SEGV_ACCERR at exact target preserving old byte, restored RW/write/readback and checked munmap. Matching invalid-input slice rejects unaligned mprotect EINVAL while preserving all8192bytes and write access. Strict61B/73B stdout, emptyerr, exit0, actual native launch/retirement and matching physical acceptance.",
+    "image_sha256": "ff4fca457e9ffe50dc4eca930c5f91faf317eeee15bf0c2907067cffa77b23bb",
+    "modules": {
+      "ihk": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c",
+      "ihk-smp-x86_64": "c6a9db8eaa2ec5f7898b021b6835d20e4359a5f4a1209b5b28fd9559cd03387f",
+      "mcctrl": "4e2f1e5b11cad8a9fbfaca4ae6671a2f3fa16ef3c8c651357506d93c7edf4fa9"
+    }
+  },
+  "exact_HOST66_binding": {
+    "accepted_source_identity": "722e3028b1e6fef1c3b56821d5147a8c6228ac2b46db104f8c92d0af7af91fa5",
+    "mailbox_source_sha256": "e9374097d50f30c4bc7a8cb586ce6b175fd683276e3d189309c853e3c89563eb",
+    "mailbox_source_bytes": 29754,
+    "mailbox_authority": "SOURCE-PLAN row38 and materialization row38. Exact materialization source path is used, not current shared source/HEAD.",
+    "compiler_bindings": "Accepted artifact review actual strict dependency lists include smp_application_syscall/smp_application/smp_service/ihk_smp_x86_64 and abi/application in actual SMP compile, and mcctrl_process/mcctrl_vm in actual mcctrl compile. Accepted review joins all66 frozen sources/81 materialized inputs to actual make0 and the exact three output hashes above.",
+    "host_build_physical_review": "a6614e9c584912790423266097f898badfe4014a6c82a13a0ea0004b5c366672",
+    "native_activation_scope": "Existing ebec/b7 accepted actual tested205/HOST66 mapping witnesses activate these exact module bytes. Source dispatch binding below establishes only the already-existing mapping clear route; no native negative-MM hit is inferred."
+  },
+  "affected_boundary_source_findings": [
+    {
+      "invariant": "Authenticated negative MM result cannot prepare completion/end reservation/release response",
+      "finding": "HOST66 finish_invalidation is exact-body equal to reviewed33e7 function. Its valid negative branch retains exact worker/kernel reservation/response and returns original errno before mutation. Same worker/serial/request checks; later exactzero takes unchanged finish_kernel path."
+    },
+    {
+      "invariant": "Failed clear prevents worker reuse, publication, drain and process cleanup",
+      "finding": "HOST66 close_worker, publish, next_completion and drained are exact-body equal to accepted repair source. Entry.clear_syscall and request_cleanup are exact-body equal to reviewed original caller contracts. close_inner and release_ready retain drained/quarantine/cleanup gates and add parent_slot_pins==0, which only strengthens release refusal."
+    },
+    {
+      "invariant": "Cancellation cannot bypass retained in-kernel call",
+      "finding": "HOST66 cancel_call retains existing call.kernel guard, adds fork_parked as another retention guard, and uses prepare_retained to put the response back on failed cancellation preparation. Initial ordinary call fork_parked=false; begin_kernel/return_value/TID transfer add refusal for parkedfork calls. No new completion/reuse escape for an invalidation is introduced."
+    },
+    {
+      "invariant": "Worker and Mirror lifetime survive failed real-MM clear",
+      "finding": "mcctrl wait_syscall original nr11 branch is unchanged; new preceding branch selects only fork nr56/control magic. The existing local HostWorker Arc and Registration.workers retain exact Mirror identity. reap_workers is unchanged and keeps EBUSY worker in vector. Reaper addition drains deferred VMA owners outside locks; it does not remove a failed worker."
+    },
+    {
+      "invariant": "MM preflight errors cannot establish successful invalidation or release retained owner",
+      "finding": "HOST66 Mirror.clear differs only at mapping-owner lookup: checked vma_owner(VM_OPERATIONS equality/non-null VmaOwner ArcBorrow) replaces the old MappingFile lookup, then checks ptr::eq exact Mirror. MM/range validation, transientMM reference, mmap write lock, complete preflight/zap and errno sequence remain unchanged. This adds early EACCES refusal without response mutation/release."
+    },
+    {
+      "invariant": "Existing production mapping CLEAR_DONE routes to repaired Rust consumer",
+      "finding": "Frozen ABI/application CLEAR_DONE=13; ihk_smp_x86_64 dispatcher CLEAR_DONE -> application.clear_syscall(bytes,true); smp_service Application::clear_syscall -> started.runtime.application.clear_syscall(token,bytes,finish); Entry.clear_syscall -> exact repaired Mailbox::finish_invalidation under existing slots mutex. Frozen manifest rows and actual compiler dependencies bind this route to HOST66; the unchanged source route is not a dormant newfork constructor."
+    }
+  ],
+  "ownership_failure_evidence_reused": "Existing independent06ded67a source review and repository actual-source six-case PASS plus preserved baseline/candidate/fixture failure history from16b5 decision. Exact retained finish/close/publication/drain bodies and reviewed retention-preserving caller changes justify using this evidence for the HOST66 mapping boundary. No passing test was rerun.",
+  "no_remaining_literal_exit_gap_identified": true,
+  "new_code_defect_established": false,
+  "limits": [
+    "No actual native failed-MM-error branch hit, automatic re-clear/retry, recovery-liveness or native forced-retirement fault injection is credited.",
+    "Persistent failed invalidation deliberately retains bounded ownership and blocks reuse until separately proven resolution/teardown; no synthetic ACK or forced abandonment is introduced.",
+    "HOST66 artifact report generic default_consumer_acceptance=false/production_acceptance=false/newfork activation holds remain preserved. This additive decision only binds and accepts the existing exercised mapping clear path, not Invoke18/non-nullCREATE_PPD/taskMM/revoke/finalACK/nativefork activation.",
+    "No whole latestcurrent38e file build, whole-OS delivery, final regression quota, broad topology/alias/NUMA qualification or whole-kernel Rust retirement is inferred.",
+    "No build/test/root/guest/source edit/shared edit or CPU lease. Only exact retained source rows and affected function bodies/caller contracts were inspected; no bulk source/archive hash audit."
+  ],
+  "shortest_next_observation": "None required for this literal whole-M03 exit on the exact accepted tested205/HOST66 used-mapping profile. Preserve native failed-MM-error/nonautomatic-recovery limitations separately and continue dependency-ready implementation.",
+  "source_rows": [
+    {
+      "row_index": 2,
+      "origin": "EXACT_CORRECTED_PHASE4_REVOKE_FINAL_ACK_HOST_SOURCE",
+      "relative": "abi/application.rs",
+      "source": {
+        "bytes": 5785,
+        "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-20261020-1/phase4-revoke-ack-correction-1/source/host-kernel/native-rust/abi/application.rs",
+        "sha256": "80183a0d743aa266fa8931f6cd1915de1e7de7ea9cfb26c3215db4505b711ec5"
+      }
+    },
+    {
+      "row_index": 20,
+      "origin": "EXACT_CORRECTED_PHASE4_REVOKE_FINAL_ACK_HOST_SOURCE",
+      "relative": "ihk_smp_x86_64.rs",
+      "source": {
+        "bytes": 36511,
+        "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-20261020-1/phase4-revoke-ack-correction-1/source/host-kernel/native-rust/ihk_smp_x86_64.rs",
+        "sha256": "3dac121b4a019d53f50f73d0c7c88b9692a309cdfcf72b090f1e2c6454cc6816"
+      }
+    },
+    {
+      "row_index": 25,
+      "origin": "EXACT_CORRECTED_PHASE4_REVOKE_FINAL_ACK_HOST_SOURCE",
+      "relative": "mcctrl_process.rs",
+      "source": {
+        "bytes": 48054,
+        "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-20261020-1/phase4-revoke-ack-correction-1/source/host-kernel/native-rust/mcctrl_process.rs",
+        "sha256": "e93c487a9fbe978275991954a50039aabd82f71da7bcc91df0300cfa97a08a35"
+      }
+    },
+    {
+      "row_index": 27,
+      "origin": "EXACT_CORRECTED_PHASE4_REVOKE_FINAL_ACK_HOST_SOURCE",
+      "relative": "mcctrl_vm.rs",
+      "source": {
+        "bytes": 30315,
+        "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-20261020-1/phase4-revoke-ack-correction-1/source/host-kernel/native-rust/mcctrl_vm.rs",
+        "sha256": "50e0a20a032cf137ab93f2b19f392577fd1a3f48990b4e368ac415134002bf92"
+      }
+    },
+    {
+      "row_index": 36,
+      "origin": "EXACT_CORRECTED_PHASE4_REVOKE_FINAL_ACK_HOST_SOURCE",
+      "relative": "smp_application.rs",
+      "source": {
+        "bytes": 65940,
+        "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-20261020-1/phase4-revoke-ack-correction-1/source/host-kernel/native-rust/smp_application.rs",
+        "sha256": "babfb6d60f1393637fd08f9549e9a77c06f3c308f1b40d4b74a9a995f70f745a"
+      }
+    },
+    {
+      "row_index": 38,
+      "origin": "EXACT_CORRECTED_PHASE4_REVOKE_FINAL_ACK_HOST_SOURCE",
+      "relative": "smp_application_syscall.rs",
+      "source": {
+        "bytes": 29754,
+        "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-20261020-1/phase4-revoke-ack-correction-1/source/host-kernel/native-rust/smp_application_syscall.rs",
+        "sha256": "e9374097d50f30c4bc7a8cb586ce6b175fd683276e3d189309c853e3c89563eb"
+      }
+    },
+    {
+      "row_index": 48,
+      "origin": "EXACT_CORRECTED_PHASE4_REVOKE_FINAL_ACK_HOST_SOURCE",
+      "relative": "smp_service.rs",
+      "source": {
+        "bytes": 47241,
+        "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-20261020-1/phase4-revoke-ack-correction-1/source/host-kernel/native-rust/smp_service.rs",
+        "sha256": "7c153e7d2b7ebe81a9a234690c1ac4cf3219720590e86264ddcb0e4fb25c647e"
+      }
+    }
+  ],
+  "materialization_rows": [
+    {
+      "row_index": 2,
+      "destination": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/abi/application.rs",
+      "source": {
+        "bytes": 5785,
+        "path": "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-preparation-20261020-1/source-modules/abi/application.rs",
+        "sha256": "80183a0d743aa266fa8931f6cd1915de1e7de7ea9cfb26c3215db4505b711ec5"
+      }
+    },
+    {
+      "row_index": 20,
+      "destination": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/ihk_smp_x86_64.rs",
+      "source": {
+        "bytes": 36511,
+        "path": "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-preparation-20261020-1/source-modules/ihk_smp_x86_64.rs",
+        "sha256": "3dac121b4a019d53f50f73d0c7c88b9692a309cdfcf72b090f1e2c6454cc6816"
+      }
+    },
+    {
+      "row_index": 25,
+      "destination": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/mcctrl_process.rs",
+      "source": {
+        "bytes": 48054,
+        "path": "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-preparation-20261020-1/source-modules/mcctrl_process.rs",
+        "sha256": "e93c487a9fbe978275991954a50039aabd82f71da7bcc91df0300cfa97a08a35"
+      }
+    },
+    {
+      "row_index": 27,
+      "destination": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/mcctrl_vm.rs",
+      "source": {
+        "bytes": 30315,
+        "path": "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-preparation-20261020-1/source-modules/mcctrl_vm.rs",
+        "sha256": "50e0a20a032cf137ab93f2b19f392577fd1a3f48990b4e368ac415134002bf92"
+      }
+    },
+    {
+      "row_index": 36,
+      "destination": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/smp_application.rs",
+      "source": {
+        "bytes": 65940,
+        "path": "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-preparation-20261020-1/source-modules/smp_application.rs",
+        "sha256": "babfb6d60f1393637fd08f9549e9a77c06f3c308f1b40d4b74a9a995f70f745a"
+      }
+    },
+    {
+      "row_index": 38,
+      "destination": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/smp_application_syscall.rs",
+      "source": {
+        "bytes": 29754,
+        "path": "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-preparation-20261020-1/source-modules/smp_application_syscall.rs",
+        "sha256": "e9374097d50f30c4bc7a8cb586ce6b175fd683276e3d189309c853e3c89563eb"
+      }
+    },
+    {
+      "row_index": 48,
+      "destination": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/smp_service.rs",
+      "source": {
+        "bytes": 47241,
+        "path": "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-preparation-20261020-1/source-modules/smp_service.rs",
+        "sha256": "7c153e7d2b7ebe81a9a234690c1ac4cf3219720590e86264ddcb0e4fb25c647e"
+      }
+    }
+  ],
+  "references": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/ACTUAL-ARTIFACT-REVIEW.json",
+      "sha256": "b11c68ea444b1afcd36e7cfd46db433029e815ba42b3bc0aca5c16ca8d97c974",
+      "bytes": 25023
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/ARTIFACT-ADDITIVE-MANIFEST.json",
+      "sha256": "52d4851a7eaecd81b74e1129a573b1b48fc4b39cf891e90578c36c216da24766",
+      "bytes": 591
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/MANIFEST.json",
+      "sha256": "451087657cabf105a193a1f31efec6149cc8abfe4237b96d36694662558e4782",
+      "bytes": 65637
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/independent/HOST66-ACTUAL-PHYSICAL-RETIREMENT-REVIEW.json",
+      "sha256": "a6614e9c584912790423266097f898badfe4014a6c82a13a0ea0004b5c366672",
+      "bytes": 26946
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-preparation-20261020-1/SOURCE-PLAN.json",
+      "sha256": "d7a0cc8edc428c31ca934c570ce6faf3f852b20237748152109c7fd3ffabb827",
+      "bytes": 32045
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-preparation-20261020-1/materialization-files.json",
+      "sha256": "ccb7fd33eeab825dc3b7dd5d1b8e426867befe2264139f2c39ccb35e7a65fa73",
+      "bytes": 31458
+    }
+  ],
+  "runtime_authority": false,
+  "shared_edits": false,
+  "compute_C_expansion": false
+}

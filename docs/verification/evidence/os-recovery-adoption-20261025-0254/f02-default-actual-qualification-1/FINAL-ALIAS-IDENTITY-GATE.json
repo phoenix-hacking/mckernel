@@ -1,0 +1,46 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_ONLY_TWO_REVIEWED_ALIAS_PAIRS_WITH_FULL_OBJECT_FINAL_IDENTITY",
+  "decision": {
+    "status": "PASS_ONLY_TWO_REVIEWED_ALIAS_PAIRS_WITH_FULL_OBJECT_FINAL_IDENTITY",
+    "aliases": [
+      {
+        "offset": 8,
+        "original": "process_spin_lock_bridge",
+        "actual": "mem_kmalloc_remote_lock_bridge"
+      },
+      {
+        "offset": 16,
+        "original": "process_spin_unlock_bridge",
+        "actual": "mem_kmalloc_remote_unlock_bridge"
+      }
+    ],
+    "all_ten_original_named_final_function_addresses": true
+  },
+  "independent_disposition": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/F02-DEFAULT-INDEPENDENT-ALIAS-AND-ABI-WARNING-DISPOSITION.json",
+    "bytes": 1988,
+    "sha256": "1ce6de982e7b7beed038e31cde6a60a5b3168bb079276d57e8a9929bf5178b19"
+  },
+  "actual_rows": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-default-actual-qualification-1/NARROW-ALIAS-ACTUAL-ROWS.json",
+    "bytes": 57400,
+    "sha256": "71aeb3d07ee8b48d175731706f750a440c6f423f9b047bcd5424b75ee910aebf"
+  },
+  "predicate": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-default-actual-qualification-1/narrow_f02_alias_identity.py",
+    "bytes": 2649,
+    "sha256": "0422b8a096631b41cc6e5e28f739f690767e70bce26c997012c2d65f09b6ff49"
+  },
+  "negative_control_tests": {
+    "methods": 11,
+    "returncode": 0,
+    "scope": "Reject changed pair/slot/R64/addend/object-or-final bind/type/section/value/size/visibility/code/pointer and missing slots"
+  },
+  "strict_original_name_failure_retained": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-default-actual-qualification-1/FOUR-F02-OWNERS-RESULT.json",
+    "bytes": 5444,
+    "sha256": "d7b62abf191af3998a23021f02fa10162a3ee54561849ca51edb9d4dcee916b1"
+  },
+  "native_acceptance": false
+}

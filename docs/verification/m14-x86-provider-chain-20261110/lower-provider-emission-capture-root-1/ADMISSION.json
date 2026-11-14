@@ -1,0 +1,50 @@
+{
+  "at": "2026-11-09T23:41:24.828227+00:00",
+  "scope": "Read-only actual new ELF/asm emission inspection before strict gate preparation, using unchanged qualified Image and already qualified objdump profile; no kernel function execution or gatePASS",
+  "object_sha256": "8e7ca2ffcfa218acd6342019bc8bcc85dade472e1923c356335d0f2027874032",
+  "source_profile_GO": "c350c5f4",
+  "MemAvailable": 29765730304,
+  "usage": {
+    "at": "2026-11-09T23:36:57.488500+00:00",
+    "used_percent": 40,
+    "remaining_percent": 60,
+    "normal_guard_passed": true,
+    "rateLimitReachedType": null,
+    "spendControlReached": false,
+    "included_only": true
+  },
+  "CPU": 6,
+  "HOST": "shared0/6/7max3LIGHTjobs4GiBTOTALalloverhead",
+  "command": {
+    "label": "provider-disassembly",
+    "argv": [
+      "/usr/bin/taskset",
+      "-c",
+      "6",
+      "/usr/bin/timeout",
+      "--signal=TERM",
+      "--kill-after=5s",
+      "60s",
+      "/usr/bin/prlimit",
+      "--as=1073741824:1073741824",
+      "--cpu=45:45",
+      "--fsize=67108864:67108864",
+      "--core=0:0",
+      "--",
+      "/usr/bin/time",
+      "-v",
+      "-o",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-metadata-1/provider-disassembly.metrics",
+      "/usr/bin/objdump",
+      "-dr",
+      "--no-show-raw-insn",
+      "-M",
+      "intel",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-unit-1/output/scheduler_ipi_lower_provider.o"
+    ],
+    "stdout_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-metadata-1/provider-disassembly.stdout",
+    "stderr_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-metadata-1/provider-disassembly.stderr",
+    "expected_returncode": 0
+  },
+  "no_compiler_link_runtime_or_hold_release": true
+}

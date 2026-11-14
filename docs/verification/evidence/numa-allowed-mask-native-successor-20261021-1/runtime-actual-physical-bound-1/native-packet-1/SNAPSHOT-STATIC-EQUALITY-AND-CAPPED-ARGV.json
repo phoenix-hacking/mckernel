@@ -1,0 +1,134 @@
+{
+  "OUTPUT": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/runtime-body-preparation-1/physical-bound-1/root-live-preflight-1.json",
+  "actual_snapshot_ref": null,
+  "actual_snapshot_sha256": null,
+  "actual_static_review": {
+    "bytes": 12064,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/runtime-release-review-2/ACTUAL-WHOLE-CALLER-STATIC-ACCEPTANCE-1.json",
+    "sha256": "da45fc503ff6755744e23defdbe710225b626e20c75d8ff76a2a815f564dfb67"
+  },
+  "actual_timestamp": null,
+  "application_acceptance": false,
+  "bindings": {
+    "bytes": 14296,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/runtime-body-preparation-1/physical-bound-1/fresh-snapshot-bindings.json",
+    "sha256": "c1204d9ddf69b41dfdedf944ea56f6d7b2acbef3bf02fc3d1a5c6a8a13940992"
+  },
+  "current100percent_included_only": true,
+  "latest_physical": {
+    "bytes": 27306,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/census-corrected-cleanup-data-preparation-1/ROOT-RECORDED-CANONICAL-CURRENT-IMAGE-PHYSICAL-RELEASE-1.json",
+    "sha256": "96108bb1cbde766986dbfb79aae15e1a6647029a8f42add93d9a04a6eab538a2"
+  },
+  "non_temporal_freeze": {
+    "bytes": 11685,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/runtime-body-preparation-1/physical-bound-1/native-packet-1/non-temporal-freeze.json",
+    "sha256": "85ebaed26fa9525124a471de57acf0deb718f14394714cd2d8df50fc807774bf"
+  },
+  "producer": {
+    "bytes": 11664,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/runtime-body-preparation-1/physical-bound-1/root_manual_snapshot_threads.py",
+    "sha256": "09a831e7d19db7ddca8753fc9c921a32c5ff470d01f9ec295485bb8e4d0651fe"
+  },
+  "profile": {
+    "AS": 1073741824,
+    "CPU": 6,
+    "CPU_seconds": 30,
+    "kill_after_seconds": 2,
+    "stream_bytes": 33554432,
+    "wall_seconds": 35
+  },
+  "root_snapshot_argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--core=0",
+    "--nofile=256",
+    "--fsize=33554432",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/runtime-body-preparation-1/physical-bound-1/root_manual_snapshot_threads.py",
+    "--bindings-sha256",
+    "c1204d9ddf69b41dfdedf944ea56f6d7b2acbef3bf02fc3d1a5c6a8a13940992",
+    "--terminal",
+    "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/census-corrected-cleanup-data-preparation-1/ROOT-RECORDED-CANONICAL-CURRENT-IMAGE-PHYSICAL-RELEASE-1.json",
+    "--terminal-sha256",
+    "96108bb1cbde766986dbfb79aae15e1a6647029a8f42add93d9a04a6eab538a2"
+  ],
+  "schema": "mckernel.selected205.m03-current100-static-snapshot-projection.v1",
+  "snapshot_equal": {
+    "accepted_actual_stage_fixture_parent_review": {
+      "bytes": 12064,
+      "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/runtime-release-review-2/ACTUAL-WHOLE-CALLER-STATIC-ACCEPTANCE-1.json",
+      "sha256": "da45fc503ff6755744e23defdbe710225b626e20c75d8ff76a2a815f564dfb67"
+    },
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "cgroup": {
+      "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_period_us": "100000",
+      "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_quota_us": "400000",
+      "/sys/fs/cgroup/memory/mckernel-dev/memory.limit_in_bytes": "12884901888",
+      "/sys/fs/cgroup/memory/mckernel-dev/memory.use_hierarchy": "1",
+      "/sys/fs/cgroup/pids/mckernel-dev/pids.max": "512"
+    },
+    "current_predecessor_container_absent": true,
+    "exclusive_heavy_accepted": true,
+    "guest_profile": {
+      "memory_mib": 8192,
+      "numa_nodes": 2,
+      "vcpus": 4
+    },
+    "heavy_profile": {
+      "cpus": 4,
+      "cpuset": "2-5",
+      "memory": 12884901888,
+      "memory_swap": 12884901888,
+      "network": "none",
+      "pids": 512
+    },
+    "image_id": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+    "independent_static_execution_decision": {
+      "bytes": 12064,
+      "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/runtime-release-review-2/ACTUAL-WHOLE-CALLER-STATIC-ACCEPTANCE-1.json",
+      "sha256": "da45fc503ff6755744e23defdbe710225b626e20c75d8ff76a2a815f564dfb67"
+    },
+    "non_temporal_join_result": {
+      "bytes": 11685,
+      "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/runtime-body-preparation-1/physical-bound-1/native-packet-1/non-temporal-freeze.json",
+      "sha256": "85ebaed26fa9525124a471de57acf0deb718f14394714cd2d8df50fc807774bf"
+    },
+    "parent_identity": {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 882772,
+      "mode": "0o700",
+      "uid": 1000
+    },
+    "released_paths_absent": [
+      "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1/common-exclusion.json",
+      "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock"
+    ],
+    "root_mutex_snapshot_free": true,
+    "status": "PASS_LIVE_PREEXECUTION_SNAPSHOT",
+    "terminal_acceptance": {
+      "bytes": 27306,
+      "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/census-corrected-cleanup-data-preparation-1/ROOT-RECORDED-CANONICAL-CURRENT-IMAGE-PHYSICAL-RELEASE-1.json",
+      "sha256": "96108bb1cbde766986dbfb79aae15e1a6647029a8f42add93d9a04a6eab538a2"
+    }
+  },
+  "snapshot_equal_fields": 15,
+  "status": "PASS_SOURCE_DERIVED_STATIC_DATA_ONLY_NO_SNAPSHOT",
+  "status_path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/runtime-body-preparation-1/physical-bound-1/native-packet-1/snapshot.status.json",
+  "stderr_path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/runtime-body-preparation-1/physical-bound-1/native-packet-1/snapshot.stderr",
+  "stdout_path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/runtime-body-preparation-1/physical-bound-1/native-packet-1/snapshot.stdout"
+}

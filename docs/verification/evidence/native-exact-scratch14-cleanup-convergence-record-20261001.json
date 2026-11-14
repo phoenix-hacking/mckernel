@@ -1,0 +1,33 @@
+{
+  "schema": "mckernel.cleanup-convergence-record.v1",
+  "time_utc": "2026-10-01T09:26:51Z",
+  "status": "BLOCKED_SUPERSEDED",
+  "candidate_root": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-c81aeaca-scratch-14",
+  "candidate_commit": "c81aeaca5cedd893981a058444fa11a03a49a744",
+  "failed_source": {
+    "path": "docs/verification/evidence/native-exact-scratch14-planbound-evidence-cleanup-20261001.py",
+    "sha256": "d9ce8143e14021cdb5283bab0a07572a8d9199f5ca03bfa3fb3fb1fa6741e1fe"
+  },
+  "failed_test": {
+    "path": "scripts/tests/test_native_exact_scratch14_planbound_evidence_cleanup_20261001.py",
+    "sha256": "70ae2303dfb2ca1d25d8719344162f69325c4945b49d2276f4d5b91147581a8d",
+    "result": "15 passed but insufficient"
+  },
+  "independent_blockers": [
+    "final chain authentication accepted tampered receipt and status artifacts",
+    "audit publication still bypassed the complete live plan validator",
+    "the required temporary-file plus renameat2 no-replace final publication protocol was absent"
+  ],
+  "execution": "NEVER_RUN",
+  "mutation": "NONE",
+  "replacement_strategy": {
+    "review": "PASS_RETIREMENT_DESIGN",
+    "description": "Retain and verify the complete dirty prepared state, then retire the two exact candidate and metadata-backup roots through the mature ordinary-retirement path.",
+    "required_roots": [
+      "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-c81aeaca-scratch-14",
+      "/home/holden/mckernel-work/scratch/native-exact-metadata-backup-c81aeaca-scratch-14"
+    ],
+    "next": "Prepare a fresh retention manifest and deterministic capsule; push/fetch them before any retirement release."
+  },
+  "warning": "The failed per-file helper is retained only as original failure evidence and MUST NOT be executed."
+}

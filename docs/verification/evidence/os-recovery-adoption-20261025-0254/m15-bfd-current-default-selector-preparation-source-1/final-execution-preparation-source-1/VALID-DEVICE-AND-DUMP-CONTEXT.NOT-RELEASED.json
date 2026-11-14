@@ -1,0 +1,155 @@
+{
+  "Root_actual_context": null,
+  "Root_valid_diagnostic_release": null,
+  "cases": [
+    {
+      "argv": [
+        "/case/tools/mcinspect",
+        "--kernel=/case/input/mckernel.img",
+        "--ps"
+      ],
+      "context": "Disposable OS belonging to same reviewed native owner, freshly booted with existing ordinary profile and one assigned McKernel CPU; no user payload running. Root records actual OS/gen/CPU assignment, idle state, empty user process namespace and matching loaded kernel identity before probe.",
+      "cwd": "/case/work",
+      "device": "/dev/mcos0",
+      "id": "M15-BFD-CURRENT-MCINSPECT-OWNED-IDLE-PS",
+      "oracle": [
+        "exit0 and empty stderr; complete PS header and valid rows for all actual assigned CPUs",
+        "independently recorded assigned CPU set equals PS CPU set; exactly one active current thread per CPU and idle thread coverage; no unexpected user-process rows",
+        "no BFD/DWARF/device/read error, malformed/unknown row, missing CPU or truncated capture; compare semantic fields with independently grounded owner/procfs/kernel boot state, never merely accept a header/exit0",
+        "postprobe owner/OS/device state remains valid; actual owned child joined, group absent, streams closed; complete raw stdout/stderr retained"
+      ],
+      "requires": [
+        "new exact selected mcinspect ELF from producer",
+        "matching genuine unstripped selected kernel with expected symbols and DWARF, plus matching libdwarf/libbfd/loader dependencies in case root",
+        "fresh Root current ordinary-native admission/release/owner and read-only device mapping; preserve existing OS lifecycle/deadlines/teardown"
+      ],
+      "stdin_hex": ""
+    },
+    {
+      "argv": [
+        "/case/tools/eclair",
+        "-k",
+        "/case/input/mckernel.img",
+        "-i",
+        "-o",
+        "0",
+        "-l"
+      ],
+      "cwd": "/case/work",
+      "id": "M15-BFD-CURRENT-ECLAIR-OWNED-IDLE-LIVE-THREADS",
+      "input_protocol": [
+        "wait for actual (eclair) GDB prompt within inherited finite owner deadline",
+        "send set confirm off\ninfo threads\nquit\n, then close stdin; retain full interaction and child exits"
+      ],
+      "oracle": [
+        "real BFD symbols, kernel constants and memory-area setup complete, actual GDB connection and thread list agree with independently bound idle CPU/thread facts",
+        "no unknown-thread/memory/setup errors; no fake helper callbacks or synthetic dump/threads",
+        "GDB quit and eclair EOF/exit complete, direct/descendant children reaped, groups absent and streams closed under existing owner policy",
+        "record actual OS paused/running state; Root applies reviewed ordinary owned teardown or source-proven resume before cleanup. Child exit alone never proves OS restoration"
+      ],
+      "requires": [
+        "new exact selected eclair ELF and matching genuine unstripped kernel",
+        "pinned actual gdb and runtime closure; local loopback communication supported within reviewed no-external-network isolation",
+        "explicit Root disposable-owner NMI/paused-state/lifecycle operation review; passive read-only mcinspect authority does not authorize this path",
+        "bounded prompt interaction and gdb descendant ownership using retained standard owner/capture primitives; old expect script timeout -1 is not reusable unchanged"
+      ],
+      "source_effects": [
+        "setup_dump_interactive issues IHK_OS_DUMP DUMP_SET_LEVEL, DUMP_NMI, QUERY_NUM_MEM_AREAS, QUERY_MEM_AREAS; pauses live target and sets remote_running=0",
+        "start_gdb forks/execs gdb and uses local TCP listener; no external network is required or permitted",
+        "idle threads are included via -l; unsupported memory/thread context must fail rather than accept empty output"
+      ]
+    }
+  ],
+  "exact_dump_or_kernel_data_paths_in_selected_bank": {
+    "candidate": [],
+    "source": []
+  },
+  "new_valid_diagnostic_receipts": null,
+  "offline_alternative": {
+    "actual_dump_ref": null,
+    "argv": [
+      "/case/tools/eclair",
+      "-k",
+      "/case/input/mckernel.img",
+      "-d",
+      "/case/input/mcdump",
+      "-l"
+    ],
+    "requires": [
+      "genuine same-instance dump, exact matching kernel/modules/source identity, independently grounded expected CPU/thread facts",
+      "physchunks and every declared physmemN section present and attributable to actual dump capture",
+      "Root existing ordinary dump-capture contract and actual gdb lifecycle proof; no manufactured ELF section/data or reuse of missing/stripped fixture as valid dump"
+    ]
+  },
+  "quota": "No new per-helper/native quota. These are original functional diagnostic testcase obligations under existing one-heavy/profile/window/resource controls; no run or extra OS owner is authorized.",
+  "reused_native_basis": {
+    "kernel": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT110-HOST19-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/mckernel.img",
+      "sha256": "60e62f97ef48ecaf14174af1c5b75d7181969f439c1b45c618d6c16d4bc40d57",
+      "size": 10255112
+    },
+    "manifest": {
+      "bytes": 9106,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-stage-preparation-source-1/root-actual-qualified-input-plan-source-1/process235.NEW-COLLECTOR.HOST-BOUND.json",
+      "sha256": "cf49bed61322fa0f1ccb6536bdd14753903c3ec3ac2b105e22ec64c809f0a86a"
+    },
+    "modules": [
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/module-runtime-snapshots-1/ihk.ko",
+        "sha256": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c",
+        "size": 1527808
+      },
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-final-native-preparation-new12h-1/offline-materialization-1/runtime-inputs/ihk-smp-x86_64.ko",
+        "sha256": "887dc3567e6035c921588e61b45b41a8ef32a972d142fe2ba82ec48442353b12",
+        "size": 13098896
+      },
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-final-native-preparation-new12h-1/offline-materialization-1/runtime-inputs/mcctrl.ko",
+        "sha256": "57546af5110c0674b307e5ac5a328228abbe784f890f69521db5f594f21f6ae8",
+        "size": 2578512
+      }
+    ],
+    "profile": {
+      "memory_mib": 8192,
+      "name": "native-diagnostic-4vcpu-8192mib",
+      "numa_nodes": 2,
+      "vcpus": 4
+    },
+    "scope": "Existing matched working OS/kernel/module profile provenance only. No consumed case235 operation/nonce/lease is reused; actual current identity and new diagnostic scope require Root binding."
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "selected_bank_assessment": "No genuine dump payload, matching unstripped kernel or live owner context is supplied by this selected SDK source/candidate bank. This is bounded extraction from its literal inventory; no global filesystem search or claim about all retained evidence.",
+  "selected_bank_manifest": {
+    "bytes": 708714,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/equivalence-oracle-correction-source-7/selected-bootstrap-correction-source-8/coherent-cxx-bound-retained11-suffix10-source-2/BFD-INPUTS.json",
+    "sha256": "ac17abec03e87d4e5817fa91879db685c4ac0bb6395d0895893f52acf0dc2a5e"
+  },
+  "status": "SOURCE_ONLY_MINIMAL_SUPPORTED_NATIVE_CASES_CONTEXT_AND_AUTHORITY_OPEN",
+  "tool_source_refs": [
+    {
+      "bytes": 98836,
+      "path": "/home/holden/mckernel/executer/user/rust/mcinspect_helpers.rs",
+      "sha256": "7449e7856d6699ee9fa245a75f3e63488fb42603b0e19c574bf148c9d84a9590"
+    },
+    {
+      "bytes": 90194,
+      "path": "/home/holden/mckernel/executer/user/rust/eclair_helpers.rs",
+      "sha256": "9f1f3b1bd2e496f9e4485535af4f3dd73bfcf975887ba9cdfed6a33d64940d0e"
+    },
+    {
+      "bytes": 7574,
+      "path": "/home/holden/mckernel/executer/user/rust/arch_eclair_x86_64.rs",
+      "sha256": "48e1af9fa7ec6c026a7a3c7657e147e04c905573ee5c08a7bcca4f5a57c634dd"
+    },
+    {
+      "bytes": 1524,
+      "path": "/home/holden/mckernel/scripts/eclair-dump-backtrace.exp.in",
+      "sha256": "f32ada2d0c61351286f1318f9caa1ea764a64ceb9ccc658cd62ee487595a4ee3"
+    }
+  ]
+}

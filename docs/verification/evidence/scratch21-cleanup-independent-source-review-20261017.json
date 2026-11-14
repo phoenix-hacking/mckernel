@@ -1,0 +1,90 @@
+{
+  "schema": "scratch21.cleanup-independent-source-review.v1",
+  "status": "PASS_SOURCE",
+  "reviewer": "/root/scratch21_source_review",
+  "author": "/root/scratch21_transaction",
+  "independent": true,
+  "execution_released": false,
+  "acceptance_credit": false,
+  "base_head": "2fd71645bfae65d9e82feb1f0c7347c7961f0edd",
+  "reviewed_initial_files": {
+    "scripts/native_exact_scratch21_terminal_cleanup.py": "0ef02b9a63aa9269101fd45a548dd05cc1350ab4d6f7731957fda3b6d20ccff0",
+    "scripts/tests/test_native_exact_scratch21_terminal_cleanup.py": "306d886e3ab3840c67f73a7aa7e7c7b281c1b88553f8478c6f565e3aef4edd3f"
+  },
+  "reviewed_files": {
+    "scripts/native_exact_scratch21_terminal_cleanup.py": "6606af40114eb5b6019438c4127948081d80bbe65144d841e906a7cba84aabed",
+    "scripts/tests/test_native_exact_scratch21_terminal_cleanup.py": "e1467625cfcc848c7834e23c6bff26a535b40115a0d85bb512f488bf8fcb7d90"
+  },
+  "author_record": {
+    "path": "docs/verification/evidence/scratch21-cleanup-20261017-source.json",
+    "sha256": "e4941ac3eb0061787ca5ed6e65507d6c70cc465e363a73b576b5e3e2bad4f893"
+  },
+  "preserved_initial_artifacts": {
+    "docs/verification/evidence/scratch21-cleanup-precorrection-source-20261017.txt": "0ef02b9a63aa9269101fd45a548dd05cc1350ab4d6f7731957fda3b6d20ccff0",
+    "docs/verification/evidence/scratch21-cleanup-precorrection-tests-20261017.txt": "306d886e3ab3840c67f73a7aa7e7c7b281c1b88553f8478c6f565e3aef4edd3f",
+    "docs/verification/evidence/scratch21-cleanup-initial-block-review-20261017.json": "688e0d2a23f06fce8b88ce6c58005d939ed65d8bfd46866eba09337598159e53"
+  },
+  "inputs": {
+    "docs/verification/evidence/os-preparation-20261016/scratch21-live.json": "2f37c4f52d92ea873288cba818845fb725fb21edb71ca9439c6524c89add0723",
+    "docs/verification/evidence/os-preparation-20261016/scratch21-cleanup-review.json": "0e31926689a401275589178f149a5ed5b5057b1071d18d5255a49dcb3a5e9686",
+    "docs/verification/evidence/native-exact-scratch21-build-failure-checkpoint-20261001.json": "905bf242c7e7fa83a0e46c3d1c2de49f8bf118b9b7c17717f67387f1424226d2",
+    "docs/verification/evidence/os-resume-reconciliation-20261017.json": "c473ba5fe6c2a0512811d1a6c0821e4964e33095bb006417f397ec0879ec095b"
+  },
+  "initial_validation": {
+    "command": "timeout 180s taskset -c 0 /bin/bash -c 'ulimit -v 2097152; ulimit -u 128; exec python3 -I -B -m unittest discover -s scripts/tests -p test_native_exact_scratch21_terminal_cleanup.py -v'",
+    "returncode": 0,
+    "observed": "Ran 28 tests in 1.390s; OK",
+    "profile": "One CPU, 2 GiB virtual-memory ceiling, 128-process limit, 180-second timeout; disposable temporary files, no live Docker/root/network/build/cleanup."
+  },
+  "corrected_validation": {
+    "command": "timeout 180s taskset -c 0 /bin/bash -c 'ulimit -v 2097152; exec python3 -I -B -m unittest discover -s scripts/tests -p test_native_exact_scratch21_terminal_cleanup.py -v'",
+    "returncode": 0,
+    "observed": "Ran 32 tests in 1.455s; OK",
+    "hashes_unchanged_after_execution": true,
+    "profile": "One affinity CPU, 2 GiB virtual-memory ceiling, 180-second timeout; inherited process limit, seven exact disposable children sequentially forked and reaped; no live Docker/root/network/build/cleanup.",
+    "actual_child_observations": [
+      "Broken stdout pipe and quarantine writer failure both occur while the real production quarantine_wait body holds the child alive and the root flock cannot be reacquired.",
+      "SIGHUP, SIGINT and SIGTERM separately arrive before the first mutex mutation and during attempted quarantine evidence writing; blocked and pending signal bits are observed, the child stays alive and root flock remains held.",
+      "Each child is subsequently killed using its exact fork-returned PID and reaped; flock becomes available, while the active sentinel, unchanged shared original, archived attempt original and two durable journal rows remain.",
+      "Success and preflight-refusal paths restore the original signal mask after lock closure."
+    ],
+    "preserved_profile_failure": {
+      "command_delta": "The first corrected-suite reviewer run additionally imposed ulimit -u 128.",
+      "returncode": 1,
+      "observed": "Ran 32 tests in 1.373s; FAILED (errors=7). All seven real-child fork attempts raised BlockingIOError: [Errno 11] Resource temporarily unavailable at os.fork(), before child creation; the other tests passed.",
+      "classification": "Reviewer-added per-UID RLIMIT_NPROC conflicted with existing shared-user processes/threads; no cleanup-source failure or live mutation.",
+      "bounded_environment_correction": "Omitted the reviewer-added ulimit -u setting, retaining the inherited limit, one CPU, 2 GiB memory ceiling, 180-second timeout and explicit exact-child teardown. No host or inherited system limit was raised."
+    }
+  },
+  "preserved_findings": [
+    {
+      "id": "S21-LOCK-1",
+      "invariant": "Uncertain cleanup must retain the preserved root development flock even if quarantine evidence or status output fails; ordinary termination handling must not bypass that hold.",
+      "initial_decision": "BLOCK_SOURCE",
+      "source_argument": "recover() catches errors writing QUARANTINE, then calls print(..., flush=True) outside a protective handler and before quarantine_wait(). A print exception reaches finally: tx.close(). Ordinary termination signals are blocked only inside quarantine_wait().",
+      "disposable_reproducer": "Load CleanupTests fixture; inject Refusal('uncertain-exchange') immediately after Transaction.append durably records after_exchange; patch module print to raise BrokenPipeError('closed stdout'); call recover(True), catching BrokenPipeError. An independently opened root-lock fd acquires LOCK_EX|LOCK_NB, quarantine_wait.call_count is zero, ATTEMPT remains a sentinel directory and SHARED remains the original regular file.",
+      "reproducer_returncode": 0,
+      "reproducer_observed": "REPRODUCED: uncertain exchange plus BrokenPipeError bypassed quarantine_wait and released root lock",
+      "required_correction": "A single coherent correction must establish ordinary termination handling before mutation, make quarantine/status side effects best effort, and enter unconditional root-lock retention after uncertain mutation. Add actual disposable child-process regressions for closed stdout and signals during the uncertainty path.",
+      "resolution": "RESOLVED_IN_EXPERT_CORRECTION",
+      "resolution_argument": "recover(True) blocks HUP/INT/TERM/QUIT before Transaction acquisition. Quarantine construction, serialization, file writing and status output are best effort under BaseException handlers. The real quarantine_wait body loops nonreturningly even on exceptional waits. On successful or preflight-refusal paths, tx.close() precedes restoring the previous signal mask. Actual child regressions independently execute the formerly failing closed-stdout boundary and six signal frontiers."
+    }
+  ],
+  "other_reviewed_boundaries": [
+    "Fresh UUID/device/boot, preserved root lock, direct request consumers and complete protected failure/evidence identities are bound by a separate release.",
+    "Exact exit-1 container profile, command, labels and mounts are compared against immutable preparation evidence; non-force removal follows matching log capture and fresh census.",
+    "Positive complete Docker inventory establishes absence; census and identity checks precede both sentinel releases.",
+    "Atomic exchanges keep active exclusion names occupied, archive original file identities durably and never unlink original ownership records.",
+    "Journal prefixes, plan and sentinel identities authenticate crash frontiers; torn/unbound state refuses and is retained rather than speculatively repaired.",
+    "scratch21.cleanup-result.v1 binds exact release/plan, UUID/boot/container, plan/journal/capture and original archives; independent postflight remains required.",
+    "prepare_release emits NOT_RELEASED; exact fetched source/test Git blobs plus independent source and execution reviews remain mandatory. No host-wide proc changes exist."
+  ],
+  "execution_prerequisites": [
+    "Commit/push/fetch and verify exact script/test source identities; refresh live observation before a separately reviewed execution release.",
+    "Maintain sole campaign coordinator, no concurrent project build/cleanup, and project publishers creating regular files with O_CREAT|O_EXCL. Arbitrary same-UID directory substitution after final sentinel validation is explicitly outside this publisher contract.",
+    "Independently review actual cleanup evidence and immutable terminal replay before scratch22; source review grants no root execution or next workload authority."
+  ],
+  "blockers": [],
+  "scope_released": "Source admission of the exact corrected script/tests under the declared publisher contract and disposable Python test profile only. No privileged execution, retirement acceptance or workload authority.",
+  "unexecuted": ["Live cleanup", "Root/Docker execution", "Scratch21 replay", "Scratch22 materialization", "Build", "Guest", "Formal acceptance"]
+}

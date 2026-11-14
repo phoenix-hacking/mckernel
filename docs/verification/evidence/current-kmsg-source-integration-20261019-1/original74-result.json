@@ -1,0 +1,56 @@
+{
+  "status": "PRIVATE_PATCH_AND_FULL_ADAPTER_FIXTURE_PASS_ONLY",
+  "base_commit": "d99edf2f58ee44b1a7e9aa726cbb49eee7850248",
+  "ihk_gitlink_commit": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+  "changed_files": [
+    "host-kernel/native-rust/os_runtime.rs"
+  ],
+  "added_lines": 116,
+  "removed_lines": 2,
+  "patch_sha256": "e419bfbc42c670ea6c10b63f2c757ee6cb20ef3b8181cc9d44c1ee2e248a71ee",
+  "candidate_sha256": "6b736f94751c21a6b745f0476484d516c0de536c1cc2f4e1717eb899bf8be5e7",
+  "source_map": "/home/holden/mckernel-work/host-preparation/native-kmsg-read-abi-20261018-1/actual-body-source-map.json",
+  "fixture_summary": {
+    "status": "PASS_PRIVATE_ACTUAL_COMPLETE_ADAPTER_MOCK_LINUX_ONLY",
+    "tests": "ok. 74 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.94s",
+    "source_bytes_total": 8417378,
+    "native": false,
+    "production_build": false,
+    "cpu": 7,
+    "ram_bytes": 1073741824,
+    "runner_source": "/home/holden/mckernel-work/host-preparation/rust-fp-release-cutover-20261018-1/check-v2.py",
+    "runner_sha256": "921fbbe94518ef41f8f8d78e779eb5c0475cb19490d1975026e7d32b8ce7f02f",
+    "rustc_sha256": "028fd60b0e0add5505c661cd3ccde91393d615c8729bd95d94ab1e91409b36a1"
+  },
+  "native_credit": 0,
+  "module_builds": 0,
+  "new_compute_c": 0,
+  "new_asm": 0,
+  "profile_change": "none; existing reviewed unprivileged Rust fixture profile only",
+  "legacy_behavior_preserved": [
+    "0x112a20 per-OS ioctl",
+    "exact4190208-byte public maximum",
+    "nonshifting snapshot",
+    "wrapped-bottom boundedstrnlen then rawtop",
+    "raw bytecount success",
+    "EINVAL for copy_to_user failure"
+  ],
+  "intentional_bounded_error_extensions": [
+    "EBUSY after65536 unsuccessful sharedlock acquisition attempts",
+    "EINVAL before any data access for invalid length/head/tail or invalid ownedbase/outputgeometry"
+  ],
+  "ownership": "Existing OsFile.lease pins exactslot+generation/OsObject/KmsgPages/provider; existing object.operations mutex excludes boot/shutdown/release; no physical address/user address supplies buffer authority. Guest uses identical CAS0->1 sharedlock; usercopy runs after sharedlock drops. No host IRQ path touches this ring.",
+  "limitations": [
+    "Linux allocator/usercopy/device model are mocks",
+    "No real-target Kbuild compile/link evidence",
+    "No guest or module load/native observation",
+    "No production acceptance or Rust retirement claim",
+    "Lock attempt bound is finite but not a hardware absolute walltime guarantee under host scheduling"
+  ],
+  "failures_preserved": [
+    "prepare_patch.failed-needle.py: generator overbroad needle assertion before candidate creation",
+    "prepare_patch.failed-needle-scope.py: generator overbroad suffix assertion before candidate creation"
+  ],
+  "runtime_failure_family": "none; first compiler and full74test execution PASS",
+  "next_observation": "Independent source/ABI/ownership review of actual private patch and fixture; then dispatcher-owned exact accepted-source target ihk.ko compile with only this os_runtime.rs overlay under separately reviewed 4CPU/12GiB/no-swap/512-task/no-network container profile. No mckernel image rebuild required. Module/native release remains separate."
+}

@@ -1,0 +1,65 @@
+{
+  "schema": "mckernel.native-exact-build-failure-evidence.v1",
+  "status": "DIAGNOSTIC_BUILD_FAIL",
+  "scope": "source/build evidence only; no runtime, diagnostic application, or acceptance credit",
+  "candidate_sha": "5aff8eef75f1d1788eb5c9d37135b789609dd57e",
+  "command": "/usr/bin/python3 -E -s -B /home/holden/mckernel/scripts/native_rust_exact_disk_build_wrapper.py /home/holden/mckernel-work/scratch/native-exact-build-request-5aff8eef-scratch-1.json --launcher-aggregate-gib 16.2158",
+  "request": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-build-request-5aff8eef-scratch-1.json",
+    "sha256": "be455b54ed5609517e02714b8200f4603c477c94ae312162b23e034bb0a9fe6e"
+  },
+  "source_preparation": {
+    "preparation_log_sha256": "5b9ff6816fc7a2eb4cedb344cd4366be4fc9edb9c15ed28a99d72d25d841d639",
+    "preparation_terminal_sha256": "da988a39e0dc220c565d8759373ddc8a8a27aee8eb061f23ab7041ec0bdb31c9",
+    "input_manifest_sha256": "29144b4df4d54bbafbf49c3c4ae7fda89f5133aa3d128d38efc1fb826b1a9998",
+    "candidate_root": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-5aff8eef-scratch-1"
+  },
+  "operational_exclusion": {
+    "path": "native-exact-candidate-operational-exclusion-97fb67a7-3.json",
+    "sha256": "20d1dfab04b1a9616b3bfd8b7842929405dca5fcc1c86b9d42e8a775e21ad8db",
+    "device": 1831,
+    "inode": 31523,
+    "pid": 70730,
+    "starttime": "94521477"
+  },
+  "terminal": {
+    "container_id": "b5a32f491e35d06aec1e0dca3f2ad29f4d4a96e46d4ce60c9e59478adce08f51",
+    "container_name": "mckernel-exact-5eb6988440f3492299214641b485eeb6",
+    "status": "exited",
+    "exit_code": 1,
+    "owner_nonce": "7550ac9037a04edda56859767dc73fd6",
+    "owner_pid": 70730,
+    "owner_starttime": "94521477",
+    "image": "sha256:0f8ad280e47d76b23554de4aec411752e1f779f9b2fc7fece6b0b3375dc9775d"
+  },
+  "receipts": {
+    "owner_receipt_sha256": "9d1c05c7e78a3fb9bd2688fc2fcb72b8d504f4a63c98fea0118fa5e42b76f66b",
+    "driver_receipt_sha256": "ae207b88d06fff5479122cbcb4c99fcd9645cd006354eb325fd237de352c7f08",
+    "driver_log_sha256": "4a015d009d6e528c914aeb33e7fee80f7217729117968d2314fc09dea1ee851d"
+  },
+  "failure": {
+    "phase": "Verify source-only contracts without claiming readiness",
+    "categories": {
+      "failures": 4,
+      "errors": 1
+    },
+    "tests": [
+      "test_dependency_lists_match_the_actual_rust_crate_edges [ihk]",
+      "test_dependency_lists_match_the_actual_rust_crate_edges [ihk-smp-x86_64]",
+      "test_dependency_lists_match_the_actual_rust_crate_edges [mcctrl]",
+      "test_extracted_production_dispatch_against_mock_usercopy",
+      "test_real_stager_and_captured_os_runtime_dependency_record [ERROR]"
+    ],
+    "artifacts": "none; output root remained empty"
+  },
+  "archive": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-build-failure-5aff8eef-scratch-1-20260930-1.tar",
+    "sha256": "daf0bfb4a4ec373b17c1bcd5ae76eb418c0dc14a2e25a539907fbaf3c1858eff",
+    "size": 1576960,
+    "members": 47
+  },
+  "next_bounded_corrections": [
+    "Repair the recorded source-only dependency/stager contract failures without weakening tests.",
+    "Prepare a fresh candidate and rerun the exact build only after independent review; preserve this failure archive."
+  ]
+}

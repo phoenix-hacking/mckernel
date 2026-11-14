@@ -1,0 +1,35 @@
+test_actual_new_owner_authenticate_api_refs_and_full_source_map (__main__.Pure) ... ok
+test_current_admission_wrong64_profile_stale_consumed_nonce_refused (__main__.Pure) ... ok
+test_driver_kernel_proof_before_compilers_and_frozen_case_body (__main__.Pure) ... ok
+test_effective64_profile_rejects512_and_other_drift (__main__.Pure) ... ok
+test_exact_summary_negative_status_and_real_resource_limits_preserved (__main__.Pure) ... ok
+test_frozen_lifecycle_functions_and_capture_classes_unchanged (__main__.Pure) ... ok
+test_kernel_v1_v2_hybrid_controller_and_raw64 (__main__.Pure) ... ok
+test_only_exact_owned_invocation_symlink_allowed (__main__.Pure) ... ok
+test_output_wrong_inode_extra_or_nonempty_refused (__main__.Pure) ... ERROR
+test_same13_mirror_precreated_targets_and_output_identity (__main__.Pure) ... ERROR
+
+======================================================================
+ERROR: test_output_wrong_inode_extra_or_nonempty_refused (__main__.Pure)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/test_mock64_successor.py", line 48, in test_output_wrong_inode_extra_or_nonempty_refused
+    root,request=self.mirror();bad=copy.deepcopy(request);bad['fixture_output_identity']['inode']+=1
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/test_mock64_successor.py", line 31, in mirror
+    root=self.tmp();mirror=root/'mirror';mirror.mkdir(mode=0o700);self.enterContext(patch.object(mc,'MIRROR',mirror));workspace=root/'workspace';workspace.mkdir(mode=0o700);self.enterContext(patch.object(mc,'OUTPUT_PARENT',workspace))
+AttributeError: 'Pure' object has no attribute 'enterContext'
+
+======================================================================
+ERROR: test_same13_mirror_precreated_targets_and_output_identity (__main__.Pure)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/test_mock64_successor.py", line 44, in test_same13_mirror_precreated_targets_and_output_identity
+    root,request=self.mirror();self.assertEqual(len(mc.verify_mirror(mc.MIRROR)),13);mc.verify_request_inputs(request);owner.validate_preparation(mc.PREP,request)
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/test_mock64_successor.py", line 31, in mirror
+    root=self.tmp();mirror=root/'mirror';mirror.mkdir(mode=0o700);self.enterContext(patch.object(mc,'MIRROR',mirror));workspace=root/'workspace';workspace.mkdir(mode=0o700);self.enterContext(patch.object(mc,'OUTPUT_PARENT',workspace))
+AttributeError: 'Pure' object has no attribute 'enterContext'
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.074s
+
+FAILED (errors=2)

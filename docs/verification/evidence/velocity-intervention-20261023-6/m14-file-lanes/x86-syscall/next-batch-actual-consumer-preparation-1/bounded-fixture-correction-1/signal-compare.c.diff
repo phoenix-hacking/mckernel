@@ -1,0 +1,12 @@
+--- /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-batch-actual-consumer-preparation-1/ptrace-signal/signal_actual.c
++++ /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-batch-actual-consumer-preparation-1/bounded-fixture-correction-1/source/signal-compare.c
+@@ -156,7 +156,8 @@
+  const int signals[]={0,SIGCHLD,SIGSTOP,SIGTSTP,SIGTTIN,SIGTTOU,-1,2147483647};
+  for(int traced=0;traced<2;traced++)for(int syscall=0;syscall<2;syscall++)for(int main=0;main<2;main++)for(int sig=0;sig<8;sig++)for(int invalid=0;invalid<6;invalid++)for(int debug=0;debug<3;debug++)for(int rc=0;rc<3;rc++) {
+   cfg=(struct config){traced,syscall,main,signals[sig],invalid,debug==0?0:debug==1?1:128,rc==0?0:rc==1?~0UL:0x8000000000000000UL};
+-  if(compare())return 1;vector_number++;
++  if(compare())return 1;
++  vector_number++;
+  }
+  printf("PASS ptrace_report_signal selected_C_public_Rust=%lu fallback_baseline_valid_only=1 actual_ABI_fields22=1 controls_lock_MSR_wait_kill_schedule=1\n",vector_number);
+  return 0;

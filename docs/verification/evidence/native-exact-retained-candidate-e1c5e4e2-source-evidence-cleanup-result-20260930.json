@@ -1,0 +1,42 @@
+{
+  "status": "APPLY_PASS",
+  "acceptance": "Storage maintenance only; no build, boot, guest, or application acceptance is claimed.",
+  "candidate": {
+    "commit": "e1c5e4e2ba6429f0aaf5f3c15708014a269b74df",
+    "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-e1c5e4e2-scratch-4",
+    "identity": "1831:4587522",
+    "allocated_bytes_after": 134430720
+  },
+  "sealed_plan": {
+    "path": "/home/holden/mckernel-work/retained-exact-candidates/native-exact-retained-candidate-e1c5e4e2-source-evidence-cleanup-plan-20260930.json",
+    "identity": "66306:47496683",
+    "size": 1542552,
+    "sha256": "e965f077fa471a2ea8cbfe1f11d8f360f1fed2d3d64b13ea8d13221ef226f06d",
+    "targets": 2426,
+    "preserved_differences": 0,
+    "target_allocated_bytes": 9100566528
+  },
+  "apply": {
+    "log_path": "/home/holden/mckernel-work/retained-exact-candidates/native-exact-retained-candidate-e1c5e4e2-source-evidence-cleanup-apply-20260930.log",
+    "log_identity": "66306:47496698",
+    "log_size": 1357669,
+    "log_sha256": "d785de05d2bbc73c7b6f49abf45f5163149b46da2350be4eab7066759505dbf2",
+    "targets_absent": 2426,
+    "targets_total": 2426
+  },
+  "preserved": {
+    "build_output_and_evidence": true,
+    "metadata_and_preparation_records": true,
+    "operational_exclusion_offlinecwd_6": true,
+    "two_failure_archives": true,
+    "nested_ihk_delta": true,
+    "container_id": "f93945ad8b4e8439c607a17ac37541de9eaa36fa9ab2f416ed7972edfac972dd",
+    "container_terminal": "exited; exit 1; OOMKilled false; PID 0"
+  },
+  "trim": {
+    "reported_bytes": 9600372736,
+    "host_free_bytes_after": 38233141248,
+    "scratch_free_bytes_after": 26956496896
+  },
+  "next": "Repeat independent heavy-build review for the unchanged scratch-11 request and run exactly one build if live capacity and ownership still pass."
+}

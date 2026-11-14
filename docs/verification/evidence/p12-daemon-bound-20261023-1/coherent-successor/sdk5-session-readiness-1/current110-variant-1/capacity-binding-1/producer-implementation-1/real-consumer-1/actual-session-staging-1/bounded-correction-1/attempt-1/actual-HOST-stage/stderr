@@ -1,0 +1,22 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/actual-session-staging-1/bounded-correction-1/stage_long_session.py", line 115, in <module>
+    print(json.dumps(stage(json.loads(Path(args.binding).read_text())),sort_keys=True))
+  File "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/actual-session-staging-1/bounded-correction-1/stage_long_session.py", line 109, in stage
+    exact(b['diagnostic_source']);nd=load('strict_current110_LONG',b['diagnostic_source']['path']);nd.load_manifest(str(manifest))
+  File "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/source/native_diagnostic.py", line 207, in load_manifest
+    return _validate_manifest(obj)
+  File "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/source/native_diagnostic.py", line 1445, in _validate_manifest
+    value=_short_transport_validate_manifest({k:v for k,v in obj.items() if k!='pair_long_session'})
+  File "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/source/native_diagnostic.py", line 1356, in _validate_manifest
+    validated=_legacy_cleanup_validate_manifest(base)
+  File "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/source/native_diagnostic.py", line 1040, in _validate_manifest
+    module_binding.validate_module_binding(base)
+  File "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/source/composite_module_binding.py", line 12, in validate_module_binding
+    b=json.loads((D/'COMPOSITE-MODULE-BINDING.json').read_bytes())
+  File "/home/holden/anaconda3/lib/python3.9/pathlib.py", line 1259, in read_bytes
+    with self.open(mode='rb') as f:
+  File "/home/holden/anaconda3/lib/python3.9/pathlib.py", line 1252, in open
+    return io.open(self, mode, buffering, encoding, errors, newline,
+  File "/home/holden/anaconda3/lib/python3.9/pathlib.py", line 1120, in _opener
+    return self._accessor.open(self, flags, mode)
+FileNotFoundError: [Errno 2] No such file or directory: '/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/source/COMPOSITE-MODULE-BINDING.json'

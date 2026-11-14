@@ -1,0 +1,90 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_SOURCE_FULL_MPROTECT_REACHABLE_PREFIX_AND_UNSAFE_ABI_CONTRACT",
+  "reviewer": "/root/recovery_receipts",
+  "independent": true,
+  "implementation_ownership": false,
+  "recorded_epoch": 1793311228.312474,
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-MPROTECT-HOST-VMA-BRIDGE-1/SOURCE-READY.json",
+    "bytes": 3362,
+    "sha256": "a2613fa0531d1d0baac487d8bba219dc7f1dd8d4045eef39fe75c573a512fb20"
+  },
+  "patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-MPROTECT-HOST-VMA-BRIDGE-1/MPROTECT-HOST-VMA.PRIVATE-NOT-APPLIED.patch",
+    "bytes": 4462,
+    "sha256": "9713669dc82eec5251547a6f9fb1cb04a01b60fa6da582e022e8caab8f79b441"
+  },
+  "leaf": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-MPROTECT-HOST-VMA-BRIDGE-1/postimage/kernel/rust/syscall_mprotect_host_vma.rs",
+    "bytes": 2745,
+    "sha256": "11a6131f8f8e826912602bf89fdd32bad7675d184f4e43c16b6375f54d17b881"
+  },
+  "checks": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-MPROTECT-HOST-VMA-BRIDGE-1/independent-source-review-1/CHECKS.json",
+    "bytes": 4985,
+    "sha256": "93a99bc9ebb153b15097c821e7b40c88b819b99a702d12040c5c7fab3662ef35"
+  },
+  "checker": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-MPROTECT-HOST-VMA-BRIDGE-1/independent-source-review-1/check_prefix_independent.py",
+    "bytes": 7694,
+    "sha256": "2e3f12ad1adf81a5ee1fb450cf9bdce3aa22a6956f6cb8ca1f1c3882fe6f6b84"
+  },
+  "bounded_header_source_refs": {
+    "kernel/rust/abi.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    "kernel/rust/x86_cpu_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "bytes": 255992,
+      "sha256": "8db479fbea9493ee498bf5d78aef71589b49d9f065e13a8617b5765cd681c194"
+    },
+    "arch/x86_64/kernel/include/ihk/context.h": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/ihk/context.h",
+      "bytes": 2286,
+      "sha256": "13a67bcf26c512ac27ece4ab801e5e96976b88ec505d9f549e53755b431171f8"
+    },
+    "arch/x86_64/kernel/include/registers.h": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/registers.h",
+      "bytes": 5778,
+      "sha256": "43fd6d2e278953684574224927fe65bc514a88c5529d97f688e1e21b1864a6fc"
+    }
+  },
+  "findings": [
+    "The selectedoriginalcallback forwards to Cset_host_vma. Its reachableprefix reads CPU.current then calls arg0/arg1/arg2 setters before its firstqualifiedRustbodyreturn; subsequentCoffload/log/flag tail is unreachable here. Candidate implements precisely that reachableprefix plus existing set_host_vma_body_result; it does not skip setters or dependon Cset_host_vma. All originalChelper bytes and othercallers remain unchanged.",
+    "Actualx86helper source routes setters0/1/2 to write_volatile of gpr.rdi/rsi/rdx respectively, withunsignedlong/CULong value ABI. Newleaf calls allthree once inoriginalorder, then passes originalfourargs to samebody and returnsCInt unchanged. No memory-range-lock acquisition, hostrequest retry, endpoint/lifetime policy, validation, errno or hiddenVMsideeffect is added.",
+    "MaybeUninit<X86UserContext>::zeroed gives naturallyaligned typed224B localstorage. ActualreprCnestedfieldgraph is21CULongBasicRegs,6CULongSregs,8u8flags andnestedrecords, with no bool/enum/reference/pointer validity restriction; zero is valid and satisfiesexisting224B/gpr56assertions. This makes references formed by existingvolatile setters refer to initializedvalidfields. Scratchhas onlythreeas_mut_ptr uses, isnotreadback/published/retained and isnotpassed tobody; its lifetime spans allsetters. Addedprivateinitialization doesnotclaim identical stack/instructions or observableexecutionproof.",
+    "TheCPU pointer retains originalvalid/readablecurrent-slot precondition. The unusedcurrentthread value is arawpointerandmaybenull; no newnonnullthread/proc requirement or borrowedreference is introduced byprefix. Existingbody retains its exactcurrent/thread/VM/borrowedlock and synchronousrequest contracts.",
+    "C int prot conversion to64bitunsignedlong is defined modulo2^64. DirectRust CInt/i32\u2192CULong/u64 matchesnegativecases -1\u21920xffffffffffffffff and INT_MIN\u21920xffffffff80000000. The candidate doesnotnarrow throughu32. SizeT\u2192CULong is widthpreserving on asserted64bitx86, andoriginalprot/holding_lock remainCInt when forwarded tobody. Exactsetter/body/newcallbackfunction-pointer assertiontypes andheaderprototypes agree atsource scope; no freshcompiledABIwitness claimed.",
+    "OnlytheoneCcallbackregion changes: selectedextern underexistingpairedleafcallback+x86 predicate, token-identicalOFFfallback andline-neutralpadding. FullRustpolicy remainsverbatimprefix withoneEOFmodule andoneCMake dependency; all53line! and53file! origins remainexact. No descriptor/389oracle/lineconstant/ELFchange, hiddensharedfilewrite or alteration of existinghelpers/users occurs.",
+    "Three memory-only negative source mutations (missing setter, reordering/duplicate setter, u32narrowing) are refused. These validate applicability ofdeclaredsourcecontract only; no actualC/Rustcallback, compiler, ELF or native behavior wasexecuted."
+  ],
+  "source_blockers": [],
+  "holds": "Existing functionalVM/request/endpoint/lifetime and all otherhelddomains remain scopedandunchanged. SOURCEacceptance grants no execution or holdclearance.",
+  "test_result": {
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/usr/bin/python3",
+      "-B",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-MPROTECT-HOST-VMA-BRIDGE-1/independent-source-review-1/check_prefix_independent.py"
+    ],
+    "returncode": 0,
+    "result": "PASS_SOURCE_FULL_REACHABLE_MPROTECT_PREFIX_UNSAFE_AND_ABI_CONTRACT",
+    "negative_source_mutations": 3
+  },
+  "next_Root_step": "Root may composewithacceptedbatch underdisjointownership, then requireactualselectedRust/CABI/codegen/linkedprovider/original389/fullartifact andaffectedfunctional/nativeproof underfreshapplicable release. Verify3volatilewrites/currentread inemittedscope as required; no sourceasbehavior/Cretirementcredit.",
+  "canonical_applied": false,
+  "actual_compiler_ELF_HOST_native_guard_proc_stage_cleanup_controller_billing_actions": 0,
+  "C_set_host_vma_or_other_user_retirement_claim": false,
+  "new_C_retirement_credit": 0,
+  "artifact_acceptance": false,
+  "native_acceptance": false,
+  "wholefile_acceptance": false,
+  "runtime_authority": null,
+  "execution_authority": null,
+  "owned_live_resources": []
+}

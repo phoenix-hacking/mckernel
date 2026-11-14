@@ -1,0 +1,65 @@
+{
+  "actual_nonce": "33f4428ac1c74917bcd6715cdbaee963",
+  "actual_release": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/execution-preparation-1/release.json",
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--fsize=33554432",
+    "--as=2147483648:2147483648",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "-c",
+    "import sys,runpy; sys.path.insert(0,'/home/holden/mckernel/scripts'); runpy.run_path('/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/prepared-sdk/derived-runtime/native_running_external_modules_owner.py',run_name='__main__')",
+    "--request",
+    "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/prepared-sdk/request.json",
+    "--request-sha256",
+    "38d7188e58dcba2cf5b697567b1916a76c40524f7892578aced361952da6f664",
+    "--release",
+    "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/execution-preparation-1/release.json",
+    "--release-sha256",
+    null
+  ],
+  "capture_directory": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/execution-preparation-1/owner-capture-1",
+  "cpu": 7,
+  "execution_review": null,
+  "profile": {
+    "container_CPU_affinity": "2-5",
+    "container_CPU_count": 4,
+    "container_memory_bytes": 12884901888,
+    "container_network": "none",
+    "container_swap_bytes": 0,
+    "container_tasks": 512,
+    "cpu": 7,
+    "external_make_jobs": 2,
+    "jobs": 1,
+    "outer_grace_kill": null,
+    "outer_wall_kill": null,
+    "owner_CPU_limits": [
+      -1,
+      -1
+    ],
+    "owner_as_bytes": [
+      2147483648,
+      2147483648
+    ],
+    "owner_external_build_timeout_seconds": 1800,
+    "owner_uid_gid": [
+      1000,
+      1000
+    ],
+    "required_inherited_cpu_limits": [
+      -1,
+      -1
+    ],
+    "stream_fsize": 33554432
+  },
+  "role": "current-sdk-owner",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "EXACT_SDK6_TEMPLATE_NOT_EXECUTION_RELEASE",
+  "stream_cap_bytes": 33554432
+}

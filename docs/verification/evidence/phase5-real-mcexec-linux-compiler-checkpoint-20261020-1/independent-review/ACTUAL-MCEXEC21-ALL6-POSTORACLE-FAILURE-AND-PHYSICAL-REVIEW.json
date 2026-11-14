@@ -1,0 +1,297 @@
+{
+  "actual_dependencies": [
+    {
+      "actual_depfile": {
+        "bytes": 8338,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/compiler-attempt-1/work/output/build/executer/user/CMakeFiles/mcexec.dir/mcexec.c.o.d",
+        "sha256": "33f5ab321474adeb0e62a398621b0e51a32ccb6982849b51a3d35c28efb1d137"
+      },
+      "canonical_unique": 250,
+      "capture": {
+        "bytes": 62160,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/compiler-attempt-1/work/output/build/real-mcexec-1/actual-C-dependencies.json",
+        "sha256": "dabdd88f584aee51a2d2a674f5fedb0f9bb1e624ce15fc6869c21462b39e7e2d"
+      },
+      "spellings": 250,
+      "target": [
+        "executer/user/CMakeFiles/mcexec.dir/mcexec.c.o"
+      ],
+      "version_leaf": [
+        {
+          "authority": "exact frozen known-input source",
+          "bytes": 375,
+          "path": "/src/.kernel-sdk/include/generated/uapi/linux/version.h",
+          "sha256": "3cc5d7cfe76eb7db13aac6d42be01cd2c5f8da0caaae154798a8d0115bb95571"
+        }
+      ]
+    },
+    {
+      "actual_depfile": {
+        "bytes": 2688,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/compiler-attempt-1/work/output/build/executer/user/CMakeFiles/mcexec.dir/link.d",
+        "sha256": "ab0b63156b87558f055709476c86ffe7d52868d5aa44fdc420e7c08bf20562a8"
+      },
+      "canonical_unique": 18,
+      "capture": {
+        "bytes": 5533,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/compiler-attempt-1/work/output/build/real-mcexec-1/actual-link-dependencies.json",
+        "sha256": "0c5d842600b8ab5f4a8f10084c10b7bb104d0e9f28143eaf0d178f6309f59c01"
+      },
+      "spellings": 30,
+      "target": [
+        "mcexec"
+      ],
+      "version_leaf": []
+    }
+  ],
+  "concrete_source_diagnosis": [
+    "MCEXEC_RUST_HELPERS excludes wholeoldCmain_loop at7858; Cact_clone_start reference8107 isexcluded, soCact_clone_startABSENT iscorrect.",
+    "ActualC2436 callbackmacro targetsRustmcexec_main_loop_thread_func_body; Rust3001entrycallsact_main_loop_body/iteration/syscall thenact_clone_start thenCforkbridge. CorrectoraclemustrequireCentryU1/RustentryD1, CcloneABSENT/RustcloneD1, CbridgeD1/RustbridgeU1, finaltargetD1.",
+    "BothactualC.d andlink.d captured:250canonicalCdependenciesincludingexact375Bversionleaf3cc5;link30spellings\u219218canonicaldeps. No thirdheaderattempt. OrdinarysavedartifactvalidatorcanfixpostcompileoraclewithoutrebuildingorrewritingoriginalFAIL."
+  ],
+  "driver": {
+    "bytes": 13536,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/compile_real_mcexec_driver.py",
+    "sha256": "2cb4327bcb9b454c34a4d61f84e3d9d6d35106e9d34437cdbd14d9c316e0b481"
+  },
+  "epoch": 1792486348.0690067,
+  "first_failed_contract": {
+    "compiler_error": false,
+    "header_family_resolved": true,
+    "kind": "POSTCOMPILE_ORACLE_WRONG_C_IMPORT",
+    "message": "AssertionError: ('mcexec.c.o', 'act_clone_start', 0, 0)",
+    "result_json_absent_original_owner_status_FAIL": true
+  },
+  "five_actual_outputs": [
+    {
+      "bytes": 236424,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/compiler-attempt-1/work/output/build/executer/user/CMakeFiles/mcexec.dir/mcexec.c.o",
+      "sha256": "cf1a50ec342fd17cbe21f6c65da8911ece77cc296f39c1582348d1c516109659"
+    },
+    {
+      "bytes": 437008,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/compiler-attempt-1/work/output/build/executer/user/rust/mcexec_helpers.o",
+      "sha256": "63f7f2916feb6b051325133b9e04008618c178a11ff6310c55d56183ac7398d3"
+    },
+    {
+      "bytes": 2776,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/compiler-attempt-1/work/output/build/executer/user/CMakeFiles/libmcexec.dir/arch/x86_64/archdep.S.o",
+      "sha256": "a3bd896e8ce04475a83075094bedbca92914d8ec72d0e9b071bac631669fdf64"
+    },
+    {
+      "bytes": 2970,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/compiler-attempt-1/work/output/build/executer/user/libmcexec.a",
+      "sha256": "03ebcef8bf6da449b24b053e5f5cc856cc9cfd1189d9ca07bd740d3ab92cb422"
+    },
+    {
+      "bytes": 394656,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/compiler-attempt-1/work/output/build/executer/user/mcexec",
+      "sha256": "689dcad27b2ce3a30f49df1bfe9452f2169a14e9c350c24c9677c88b1f152876"
+    }
+  ],
+  "functional_scope": "FunctionalOS/apps+Rust/reviewedassemblycutover; realLinuxmcexeccompile/link/dependencyfeedback only, no program/guest execution.",
+  "outer_seconds": 4.817310333251953,
+  "outer_status": {
+    "bytes": 2222,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/compiler-attempt-1/actual-root-owner-1/status.json",
+    "sha256": "023f50772746190054b09b340a44e8860dbcb7ea229fa8cef85675a5f2e3eea7"
+  },
+  "owner": {
+    "bytes": 23878,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/current_mcexec_owner.py",
+    "sha256": "6e6ec3088e66fe852b7941e22a9f52d2bc3a726532ea670bf368156453b3cb1d"
+  },
+  "owner_receipt": {
+    "bytes": 30807,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/compiler-attempt-1/owner-evidence/owner-receipt.json",
+    "sha256": "2f1bba447d96cc6b08687c4db4cc6647ce25d8669c07dde4ebc0baf118a03c9a"
+  },
+  "ownership_archive": {
+    "bytes": 14813,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/compiler-attempt-1/owner-evidence/ownership-archive.json",
+    "sha256": "b1acd9beae14b6d252f5a282dab50deff939713a1bb3dbc1669c8f832d88398e"
+  },
+  "passed_raw_producers": 6,
+  "physical_decision": {
+    "all11owner_and2info_groups_closed": true,
+    "all13Dockerclients_positive": true,
+    "cleanup_separately_required": false,
+    "container_id": "fd7c641f205c5423934237f6aa1dbecd0c7cb3f232198605392756353bfa9668",
+    "container_name": "mckernel-mcexec-version-26698125a667",
+    "exact_CID_exited_PID0_noOOM_exit1": true,
+    "exact_CID_rm0_then3empty_name_label_ID_censuses": true,
+    "old_owner_PID_start_tuple_absent": true,
+    "outer_direct_joined": true,
+    "outer_group_absent": true,
+    "retired": true,
+    "status": "PASS_EXACT_REAL_MCEXEC21_COMPILER_PHYSICAL_RETIREMENT_ONLY",
+    "three_current_records_absent": true,
+    "three_rawrecord_archive_authrelease_hashJSON_verified": true
+  },
+  "positive_client_statuses": [
+    {
+      "bytes": 249,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/compiler-attempt-1/owner-evidence/command-ae383f02ef974014906e172e34f4b056/status.json",
+      "sha256": "f9b8be5828802ad50067303b249bd7700036e84c5912c5d8e4a7047f368d866f"
+    },
+    {
+      "bytes": 322,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/compiler-attempt-1/owner-evidence/command-8b2adcdae62a4ee2ac8ec4e0c07f25f0/status.json",
+      "sha256": "474cf099abb93ffc862a1d0cf522ad0b1b6f573e0a2303a5dc3d2f34b31509bf"
+    },
+    {
+      "bytes": 297,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/compiler-attempt-1/owner-evidence/command-930201e1096645b4a5a81d5a2e85dedc/status.json",
+      "sha256": "6be13dfa0a0ee636a89984c36e2211c2f7016d183bf5648b1b1783d8bc265e7e"
+    },
+    {
+      "bytes": 271,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/compiler-attempt-1/owner-evidence/command-a68779d44a4f4e1c8ffa4c628e5ced52/status.json",
+      "sha256": "1591d7381c26d29849f7317027aac33cf6778766cb61ac8dbdfb95d0f4b2bc12"
+    },
+    {
+      "bytes": 246,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/compiler-attempt-1/owner-evidence/command-6d8f93b0ee994fb19dc55bce82ce8303/status.json",
+      "sha256": "fe0160dc6671d89bb5de5879b883415c47d79442d5449505c06c28f235d1fb50"
+    },
+    {
+      "bytes": 313,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/compiler-attempt-1/owner-evidence/command-3bab8102e323485892832111c363a24c/status.json",
+      "sha256": "6fa14a9c03d16ec9390e35a3d8c0d7fc5b633e2f677d0d4edccc883bb4c41581"
+    },
+    {
+      "bytes": 2636,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/compiler-attempt-1/owner-evidence/command-7f31b12a77334712b776037c9188d3c6/status.json",
+      "sha256": "9cd11d94751a321a9dd4fb42862796bbbe3ac02ae17d96847d20d34e6c787b34"
+    },
+    {
+      "bytes": 247,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/compiler-attempt-1/owner-evidence/command-8bf7f3ba8d1e4e5ebde4cc03872291d4/status.json",
+      "sha256": "0384aedda8d60d4155bf5cdfba9eb9c809eec58acd7317158434f3a6768e2a64"
+    },
+    {
+      "bytes": 247,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/compiler-attempt-1/owner-evidence/command-076f5f8a9cdc4625873b389efa01a3bd/status.json",
+      "sha256": "c5313d7a8f5ba23398b34bfd91b32b4f5f1c5fb0cee18706f4b5f11a16591e4f"
+    },
+    {
+      "bytes": 249,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/compiler-attempt-1/owner-evidence/command-038f794dede74a03a24f1c846e85756f/status.json",
+      "sha256": "d2febfa0b036d4dfb1dd47722daa3ef82db9d6d0fab200d5c6ee64dd10b9dfb1"
+    },
+    {
+      "bytes": 336,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/compiler-attempt-1/owner-evidence/command-7ec19c20b58d4f78b11e31c48838d1b7/status.json",
+      "sha256": "540cf93b16247591ea3ffbe55ebbdee5f5b915e326851f15bf86781afabf18bc"
+    },
+    {
+      "bytes": 248,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/compiler-attempt-1/capacity-admission/outer/command-1d0b5d136aa94156bf5e9f906c020d30/status.json",
+      "sha256": "abb3891fd8f4439ddab1bfd1cf72bfd3247af1c37e4aed755e361c81dbab7d8c"
+    },
+    {
+      "bytes": 248,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/compiler-attempt-1/capacity-admission/inner/command-e9a9f8c2f16440c0aa1ce898f316f589/status.json",
+      "sha256": "9659a59f1e4b9513cc28cebb6ea82b3aa6b3feaded97575799a4477938217af9"
+    }
+  ],
+  "postflight": {
+    "bytes": 11699,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/compiler-attempt-1/owner-evidence/postflight-proof.json",
+    "sha256": "fbcfb335d17e069ba903e656df7e28182a0216e33ef115a7d58d0cacef070c56"
+  },
+  "record_release_authorized": {
+    "bytes": 2007,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/compiler-attempt-1/owner-evidence/record-release-authorized.json",
+    "sha256": "0677363b804c4e457a5d6e58e7b6e1f2f6ea26f6d9bdd4dab3bf356ec519cf83"
+  },
+  "record_release_complete": {
+    "bytes": 176,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/compiler-attempt-1/owner-evidence/record-release-complete.json",
+    "sha256": "03d9345103d1126f12028664c6fc887f48e0f3e2ad852409e53526c5d5b9fa84"
+  },
+  "remaining": "Saved5artifact/provider/archive/PIEandactualdependencyHOSThashvalidationmustfinishwithcorrectedrealconsumeroracle; raw6rc0doesnotrewritefailedownerreceipt. NoLinuxexecution/kernel-link/image/default/native/taskMM/revoke/finalACKcredit.",
+  "request": {
+    "bytes": 17130,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/request.json",
+    "sha256": "0290fe3de72191f32400437d64074c1d9f060e0aafcb74f763edb0a057a28498"
+  },
+  "reviewer_actions": "Readonlyall6exactargv/closedstable9/outputdescriptors/actualdepfilepins/sourcepredicate/strictpositivephysicalchecks. No tests/compiler/nm/Docker/root/retry/Git/sharedwrites. Newprivate reportonly.",
+  "reviewer_correction": "Firstlargereviewscript hadSyntaxError missingwhitespaceinconditional expression beforeeffects. Correctedreadablescriptverifiedall6/physicalandwrotethisrecord; failure retainedinconversation.",
+  "schema": "mckernel.actual-mcexec21-all6-postoracle-failure-physical-review.v1",
+  "stages": [
+    {
+      "exactargv_and_closedstable9": true,
+      "rc": 0,
+      "seconds": 0.2882158160209656,
+      "selection": "real-mcexec-C-and-dependencies",
+      "status": {
+        "bytes": 4127,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/compiler-attempt-1/work/output/build/real-mcexec-1/real-mcexec-C-and-dependencies/status.json",
+        "sha256": "a9f4389b4d09de71d983cbd7862ff850b2019d05b27b97b65e40cd835d356f92"
+      },
+      "stderr_bytes": 0
+    },
+    {
+      "exactargv_and_closedstable9": true,
+      "rc": 0,
+      "seconds": 1.38822172395885,
+      "selection": "real-mcexec-Rust",
+      "status": {
+        "bytes": 3374,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/compiler-attempt-1/work/output/build/real-mcexec-1/real-mcexec-Rust/status.json",
+        "sha256": "b2c3896127f181d7aafbafc993b32d491d031a043135451aed0874565e400171"
+      },
+      "stderr_bytes": 0
+    },
+    {
+      "exactargv_and_closedstable9": true,
+      "rc": 0,
+      "seconds": 0.017070511996280402,
+      "selection": "real-mcexec-ASM",
+      "status": {
+        "bytes": 3818,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/compiler-attempt-1/work/output/build/real-mcexec-1/real-mcexec-ASM/status.json",
+        "sha256": "28dc8693c0e65d60c4065b37096d7bbacce0b312ef0787cd37ebf91fd68f0730"
+      },
+      "stderr_bytes": 0
+    },
+    {
+      "exactargv_and_closedstable9": true,
+      "rc": 0,
+      "seconds": 0.04936985595850274,
+      "selection": "real-mcexec-archive-0",
+      "status": {
+        "bytes": 2871,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/compiler-attempt-1/work/output/build/real-mcexec-1/real-mcexec-archive-0/status.json",
+        "sha256": "bdb5f25485496b9c871977ab3784347363f8ce2d1a6eb22359599a82cca7188f"
+      },
+      "stderr_bytes": 0
+    },
+    {
+      "exactargv_and_closedstable9": true,
+      "rc": 0,
+      "seconds": 0.01735290401848033,
+      "selection": "real-mcexec-archive-1",
+      "status": {
+        "bytes": 2763,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/compiler-attempt-1/work/output/build/real-mcexec-1/real-mcexec-archive-1/status.json",
+        "sha256": "a7ed341904de2ab9e28c44b4da1bfa092c8f3048e26e85a80b58815e894c4160"
+      },
+      "stderr_bytes": 0
+    },
+    {
+      "exactargv_and_closedstable9": true,
+      "rc": 0,
+      "seconds": 0.039348704973235726,
+      "selection": "real-mcexec-link",
+      "status": {
+        "bytes": 3226,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/compiler-attempt-1/work/output/build/real-mcexec-1/real-mcexec-link/status.json",
+        "sha256": "718a851aa589eab83d717b4ad1c07e90f93528dd0562f3a437cc504f98e0e0c5"
+      },
+      "stderr_bytes": 0
+    }
+  ],
+  "status": "ALL6_ACTUAL_PRODUCERS_RC0_POSTCOMPILE_ORACLE_FAIL_POSITIVE_PHYSICAL_RETIREMENT_PASS"
+}

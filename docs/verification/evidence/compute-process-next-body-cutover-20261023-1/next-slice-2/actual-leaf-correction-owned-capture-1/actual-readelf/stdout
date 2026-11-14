@@ -1,0 +1,49 @@
+
+Relocation section '.rela.text._ZN6actual30sched_process_spin_lock_bridge17hf4c88a8ae1799c46E' at offset 0x9a0 contains 1 entry:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000001  0000000d00000004 R_X86_64_PLT32         0000000000000000 process_spin_lock_bridge - 4
+
+Relocation section '.rela.text._ZN6actual31sched_process_noirq_lock_bridge17h3ee13e7d6c90d84fE' at offset 0x9b8 contains 1 entry:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000001  0000000e00000004 R_X86_64_PLT32         0000000000000000 process_sched_noirq_lock_bridge - 4
+
+Relocation section '.rela.text._ZN6actual32sched_process_spin_unlock_bridge17hc794c20d7478f146E' at offset 0x9d0 contains 1 entry:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000001  0000000f00000004 R_X86_64_PLT32         0000000000000000 process_spin_unlock_bridge - 4
+
+Relocation section '.rela.text._ZN6actual33sched_process_noirq_unlock_bridge17h0e4c7d226e38e134E' at offset 0x9e8 contains 1 entry:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000001  0000001000000004 R_X86_64_PLT32         0000000000000000 process_sched_noirq_unlock_bridge - 4
+
+Relocation section '.rela.text.sched_request_migrate' at offset 0xa00 contains 16 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000013  0000001300000004 R_X86_64_PLT32         0000000000000000 process_sched_cpu_local_bridge - 4
+000000000000001b  0000001400000004 R_X86_64_PLT32         0000000000000000 get_this_cpu_local_var - 4
+0000000000000038  000000150000000b R_X86_64_32S           0000000000000000 locked_wake_function + 0
+0000000000000049  0000001600000004 R_X86_64_PLT32         0000000000000000 ihk_mc_get_processor_id - 4
+00000000000000c7  000000170000000b R_X86_64_32S           0000000000000000 process_sched_migrate_log_bridge + 0
+00000000000000cc  000000180000000b R_X86_64_32S           0000000000000000 process_sched_schedule_bridge + 0
+00000000000000d1  000000190000000b R_X86_64_32S           0000000000000000 process_sched_interrupt_bridge + 0
+00000000000000d6  0000001a0000000b R_X86_64_32S           0000000000000000 process_sched_vector_bridge + 0
+00000000000000db  0000001b0000000b R_X86_64_32S           0000000000000000 process_sched_waitq_finish_bridge + 0
+00000000000000e0  0000001c0000000b R_X86_64_32S           0000000000000000 process_sched_waitq_prepare_bridge + 0
+00000000000000e5  0000001d0000000b R_X86_64_32S           0000000000000000 process_sched_waitq_init_bridge + 0
+00000000000000ea  000000080000000b R_X86_64_32S           0000000000000000 .text._ZN6actual33sched_process_noirq_unlock_bridge17h0e4c7d226e38e134E + 0
+00000000000000ef  000000040000000b R_X86_64_32S           0000000000000000 .text._ZN6actual31sched_process_noirq_lock_bridge17h3ee13e7d6c90d84fE + 0
+00000000000000f4  000000060000000b R_X86_64_32S           0000000000000000 .text._ZN6actual32sched_process_spin_unlock_bridge17hc794c20d7478f146E + 0
+00000000000000f9  000000020000000b R_X86_64_32S           0000000000000000 .text._ZN6actual30sched_process_spin_lock_bridge17hf4c88a8ae1799c46E + 0
+000000000000010a  0000001e00000004 R_X86_64_PLT32         0000000000000000 sched_request_migrate_body_result - 4
+
+Relocation section '.rela.text.waitq_init_locked_entry' at offset 0xb80 contains 1 entry:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+000000000000000f  000000150000000b R_X86_64_32S           0000000000000000 locked_wake_function + 0
+
+Relocation section '.rela.eh_frame' at offset 0xb98 contains 7 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000020  0000000200000002 R_X86_64_PC32          0000000000000000 .text._ZN6actual30sched_process_spin_lock_bridge17hf4c88a8ae1799c46E + 0
+0000000000000034  0000000400000002 R_X86_64_PC32          0000000000000000 .text._ZN6actual31sched_process_noirq_lock_bridge17h3ee13e7d6c90d84fE + 0
+0000000000000048  0000000600000002 R_X86_64_PC32          0000000000000000 .text._ZN6actual32sched_process_spin_unlock_bridge17hc794c20d7478f146E + 0
+000000000000005c  0000000800000002 R_X86_64_PC32          0000000000000000 .text._ZN6actual33sched_process_noirq_unlock_bridge17h0e4c7d226e38e134E + 0
+0000000000000070  0000000a00000002 R_X86_64_PC32          0000000000000000 .text.leaf_sched_request_migrate_body_result + 0
+00000000000000bc  0000000b00000002 R_X86_64_PC32          0000000000000000 .text.sched_request_migrate + 0
+0000000000000140  0000000c00000002 R_X86_64_PC32          0000000000000000 .text.waitq_init_locked_entry + 0

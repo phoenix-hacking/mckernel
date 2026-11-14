@@ -1,0 +1,115 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_ACTUAL_HOST13_EXACT_FINAL_CONSUMER_ARGUMENTS",
+  "reviewer": "/root/custody_release_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "actual_review_received_epoch": 1793079377.0096452,
+  "tuple": {
+    "process_sha256": "055c157831118f4b434a92e03725a05bd9ff8c3071235b8c79ab6019c94a9c40",
+    "Rust_sha256": "e9cc19209572b008257385f1251e4f8f7fa30c15540bc28255cdbe13f017b90e",
+    "image_sha256": "26eb201ab8160b98e9a95ac3bae116a6392f343faf60641bb62faa7116a793eb"
+  },
+  "rows": [
+    {
+      "consumer": "mckfd",
+      "signed_CInt_value": 171,
+      "argument": "EDX",
+      "instruction_address": "0xfffffffffe899beb"
+    },
+    {
+      "consumer": "policy",
+      "signed_CInt_value": 253,
+      "argument": "EDX",
+      "instruction_address": "0xfffffffffe89cb5b"
+    },
+    {
+      "consumer": "optional",
+      "signed_CInt_value": 258,
+      "argument": "EDX",
+      "instruction_address": "0xfffffffffe89b1ab"
+    },
+    {
+      "consumer": "alloc",
+      "signed_CInt_value": 340,
+      "argument": "ECX",
+      "instruction_address": "0xfffffffffe8909a1"
+    },
+    {
+      "consumer": "free_vm",
+      "signed_CInt_value": 561,
+      "argument": "EDX",
+      "instruction_address": "0xfffffffffe8976db"
+    },
+    {
+      "consumer": "create_thread",
+      "signed_CInt_value": 788,
+      "argument": "stack eighth",
+      "instruction_address": "0xfffffffffe893d1c"
+    },
+    {
+      "consumer": "split_range",
+      "signed_CInt_value": 1628,
+      "argument": "ECX",
+      "instruction_address": "0xfffffffffe8a0a41"
+    },
+    {
+      "consumer": "range_kfree",
+      "signed_CInt_value": 1817,
+      "argument": "EDX",
+      "instruction_address": "0xfffffffffe89dafb"
+    },
+    {
+      "consumer": "free_range_pages",
+      "signed_CInt_value": 1873,
+      "argument": "R8D",
+      "instruction_address": "0xfffffffffe89a402"
+    },
+    {
+      "consumer": "add_range_alloc",
+      "signed_CInt_value": 2256,
+      "argument": "ECX",
+      "instruction_address": "0xfffffffffe890166"
+    },
+    {
+      "consumer": "add_range_free",
+      "signed_CInt_value": 2261,
+      "argument": "EDX",
+      "instruction_address": "0xfffffffffe89025b"
+    },
+    {
+      "consumer": "page_fault_anon",
+      "signed_CInt_value": 3058,
+      "argument": "stack eighth",
+      "instruction_address": "0xfffffffffe89b249"
+    },
+    {
+      "consumer": "free_thread_pages",
+      "signed_CInt_value": 3501,
+      "argument": "R8D",
+      "instruction_address": "0xfffffffffe897635"
+    }
+  ],
+  "genuine_call_targets": {
+    "_kfree": "0xfffffffffe834470",
+    "_kmalloc": "0xfffffffffe834920",
+    "allocator": "0xfffffffffe833b40",
+    "pagealloc_track_free_result": "0xfffffffffe889a10"
+  },
+  "additional_OOM_EDX_instructions": {
+    "alloc": "0xfffffffffe890a3e",
+    "split_range": "0xfffffffffe8a0ade",
+    "add_range_alloc": "0xfffffffffe890203"
+  },
+  "tracked_file_pointers": {
+    "process_tracked_allocator_source_file": "0xfffffffffe903128",
+    "anonymous": "0xfffffffffe902fd0"
+  },
+  "positive_proofs": [
+    "All13 unique global readonly4B/alignment>=4 Rust and final values equal actualHOST13/C originals; no C definitions",
+    "All13 namedconsumerRust bodies byteidentical to final except genuine relocation fields",
+    "All13 storage RELAs folded; exact x86-64 ABI arguments unchanged between constants and genuinecalls/tailcalls",
+    "free_range_pages argument proven in exact permitted containing process_memory_range_free_bridge"
+  ],
+  "limits": "Exact tuple/storage/linkedconsumerarguments only. Retain scripted OPEN and original failures. No runtime path execution, Source38 GNU_RETAIN, wholefile/native or overallaggregate acceptance."
+}

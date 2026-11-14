@@ -1,0 +1,77 @@
+{
+  "schema": "mckernel.native-exact-retirement-failure.v1",
+  "date": "2026-09-29",
+  "status": "FAIL_OBSERVER_TARGET_BINDING_BEFORE_DELETION",
+  "source_checkpoint": "cd4d7e63f0c736f2135834a4372a05fa1c3b29c4",
+  "packet_sha256": "27753f96ddc358218cad6a8ade00680894b378190f7ddb981df5b945bfc7c582",
+  "release_sha256": "19093ec1c3db71f16d5fd93264f474a200c823161b6da522400bbd4b238cc281",
+  "invocation": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/python3",
+    "-E",
+    "-s",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/native-exact-candidate-retirement-704f6654-2.py",
+    "--release",
+    "/home/holden/mckernel/docs/verification/evidence/stability-native-exact-candidate-retirement-704f6654-2.release.json"
+  ],
+  "packet_process": {
+    "pid": 3912447,
+    "starttime": 90493097,
+    "terminal": true
+  },
+  "failure": {
+    "packet_error": "observer callback failed",
+    "observer_error": "only the exact ordered original or quarantine target pair is accepted",
+    "observer_status": 1,
+    "cause": "the sealed observer accepted only historical 67589154-1 paths while the packet supplied the exact 704f6654-2 quarantine pair"
+  },
+  "retained_state": {
+    "original_paths_absent": true,
+    "candidate_quarantine": {
+      "path": "/dev/shm/.mckernel-retirement-candidate-704f6654-2",
+      "device": 26,
+      "inode": 36767,
+      "uid": 0,
+      "gid": 0,
+      "mode": 448
+    },
+    "metadata_quarantine": {
+      "path": "/dev/shm/.mckernel-retirement-metadata-backup-704f6654-2",
+      "device": 26,
+      "inode": 47413,
+      "uid": 0,
+      "gid": 0,
+      "mode": 448
+    },
+    "deletion_started": false,
+    "journal_terminal_failure": true,
+    "historical_claim_retained": true,
+    "historical_evidence_retained": true,
+    "immutable_tombstone_retained": true,
+    "tombstone_path": "/home/holden/mckernel-work/scratch/native-exact-build-lease-704f6654-1.json",
+    "tombstone_sha256": "482bdf30e7320693c338832695932fdf1be261ed081de225e4cbdaf7e4c2c123",
+    "tombstone_device": 1831,
+    "tombstone_inode": 31474,
+    "tombstone_immutable": true
+  },
+  "retained_evidence": {
+    "raw_archive": "docs/verification/evidence/stability-native-exact-retirement-704f6654-failure-20260929-1.tar.gz",
+    "raw_archive_sha256": "ba74523dc6917e113134bb8978b64c76a1332efbf096fa85c5400ce38af78806",
+    "raw_archive_contains_quarantine_contents": false,
+    "historical_journal_sha256": "40fe38c85890a7ad52fdb9de50e46bfd08e86f5c4fcab6ecf6db3e6e9e05f3fe",
+    "historical_claim_sha256": "c5a060b787146a6d78e36e9b6606e0bc1d0f9cbdb8825ab7f76051cbf3f541a1",
+    "observer_stdout_sha256": "b0b0b67301baf84418fac7fc99b7553408bccf080e2089fbf41e77f067d0bab0",
+    "packet_failure_sha256": "c47d7d2263fc10973a6a1b444c903035b58ce07e51d3acbc2d2f90e7ef74d2dc"
+  },
+  "preservation_note": "An initial archival command accidentally included the retained quarantine trees; it was terminated before completion and its unlinked partial output was removed. The final small archive contains only the exact historical evidence directory and immutable tombstone. Neither quarantine was changed.",
+  "acceptance": {
+    "retirement": false,
+    "kernel_build": false,
+    "guest": false,
+    "application": false,
+    "formal_counters_changed": false
+  },
+  "next": "create and independently review a fresh one-shot quarantine continuation that adopts the existing immutable tombstone and exact released quarantines; never retry or roll back the consumed v2 packet"
+}

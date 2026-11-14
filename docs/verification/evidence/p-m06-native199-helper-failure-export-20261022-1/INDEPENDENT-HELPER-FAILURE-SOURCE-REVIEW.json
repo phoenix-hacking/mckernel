@@ -1,0 +1,67 @@
+{
+  "actual_collector_artifact_acceptance": null,
+  "actual_stage": null,
+  "base": {
+    "bytes": 23353,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-exec-wait-native-preparation-20261020-1/source/scripts/application-tests/native_diagnostic_guest_collector.c",
+    "sha256": "c61fcee6576ae2a1320d4a51a6910d4097da9280bbabc0f545b209508eb0d821"
+  },
+  "candidate": {
+    "bytes": 25205,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-helper-failure-export-1/errno-correction-1/native_diagnostic_guest_collector.helper-diagnostic.c",
+    "sha256": "b3fc4fe0d46ae95a0b428a3c2ff46a8836affc0d929da9a2809cbe3e15b5e2d6"
+  },
+  "canonical_source_edits": 0,
+  "compiler_runs": 0,
+  "created_utc": "2026-10-22T22:31:48.425164+00:00",
+  "decision": "PASS_SOURCE_FOR_SELECTED_ND_PROCESS_EXEC_WAIT",
+  "errno_correction_patch": {
+    "bytes": 1437,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-helper-failure-export-1/errno-correction-1/errno-diagnostic-only.patch",
+    "sha256": "f9d24838f578a596062d55ebf62ae6b4053236829719586032b98e4c0671d07e"
+  },
+  "execution_release": null,
+  "findings": [],
+  "fixture_source_scope": {
+    "actual_helper_functions": {
+      "bytes": 3667,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-helper-failure-export-1/errno-correction-1/actual-helper-functions.inc",
+      "sha256": "f8064bcb3b1318a0be7e229a7a802c62837717ce2835f3bcab70612d1e47841f"
+    },
+    "assessment": "Proposed actual helper/serializer body fixtures with explicit supervisor/file/write adapters exercise silent success,nonzeroexit,truncated retainedstream,uncleanchild,evidence failure without errno and failedconsolewrite. Compiler/model verification remains separately granted and pending; no native proof.",
+    "fixture": {
+      "bytes": 2756,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-helper-failure-export-1/errno-correction-1/actual-helper-fixture.c",
+      "sha256": "e43e9c8653cede81c855a84a0a8aeea1937434c9c2cc4e285e020b5b80f18302"
+    }
+  },
+  "guest_runs": 0,
+  "historical_proposal_limit": "Original db9d1339...3710B proposal was augmented in place by author before preservation request; it cannot be claimed retained. Current e4eb610e...5629B parent proposal is retained. Parent must use a fresh executable proposal and exact current pins for any ordinary grant; source receipt grants no execution.",
+  "milestone_credit": null,
+  "native_acceptance": null,
+  "original_diagnostic_candidate": {
+    "bytes": 25146,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-helper-failure-export-1/native_diagnostic_guest_collector.helper-diagnostic.c",
+    "sha256": "0f6fdeca8e5e0b62dbeca6b7b34b2f05e58527f7d19d9ed4c1fff403ff87cfab"
+  },
+  "original_diagnostic_patch": {
+    "bytes": 5178,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-helper-failure-export-1/helper-failure-export.patch",
+    "sha256": "c449e2ca551890a1c8fd65b102a31fa58469c985ee2881d960a8411d1d9c0b25"
+  },
+  "resolved_finding": "Original diagnostic candidate could sample stale ambient errno after save_file failure without a fresh syscall errno. Fresh correction clears errno before each save;0 explicitly means unspecified failure. Evidence-failure bitmap and raw helper status remain independent.",
+  "reviewer": "/root/remaining_request_check",
+  "root_operations": 0,
+  "schema": "mckernel.native199.independent-helper-failure-source-review.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Narrow failure-only helper diagnostics on selected single-app collector.",
+  "tests_run": 0,
+  "verified": [
+    "Exact selectedbase c61fcee6576ae2a1320d4a51a6910d4097da9280bbabc0f545b209508eb0d82123353B and correctedsource b3fc4fe0d46ae95a0b428a3c2ff46a8836affc0d929da9a2809cbe3e15b5e2d625205B pins match.",
+    "Entire source prefix before helper region is byte-identical; entire tail byte-identical after normalizing only added console arguments. Supervise/drain/signal/reap,timeout/deadline,payloadargv/env,stream/exit/timestamp oracles and final strictFAIL path unchanged.",
+    "Selected1024B retained stream produces2048hexbytes; each separate stream record including worst-case scalar metadata fits4096B FRAME_LIMIT/PIPE_BUF. Status record is small. Static helper tags are fixed ASCII constants. No claim for other profile4096B retained streams.",
+    "Existing serializer includes exact retainedhex,observed/retained/discarded/truncated/eof/eof_ns accounting. Metadata includes rawwaitstatus,fault/timeout/clean,setupstage/errno,evidence-failurebits andtimestamps.",
+    "Console opened NONBLOCK; each existing write_all call has2s deadline capped by shared120s collector deadline. At most three new frame writes per failed helper. These diagnostic records are not claimed to be an indivisible combined transaction.",
+    "helper_export_failure only called when existing helper outcome or evidence save is alreadybad. Export failure cannot turn failure into success; helper stillreturns-1. Safe0 retained for unclean child. Caller stops before payload; final good0 becomes payload.fault. No retry or alternate success path.",
+    "Successfulhelper emits no new diagnostic frame; successfulapp output/oracles unchanged."
+  ]
+}

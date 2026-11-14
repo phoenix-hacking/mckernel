@@ -1,0 +1,398 @@
+{
+  "status": "READY_EXACT_KPRINTF_JOIN_ONLY_PENDING_F_CONCRETE_GO_AND_ROOT_ADMISSION",
+  "owner": "/root/m15_public_abi_high",
+  "cwd": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1",
+  "private_output": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/output",
+  "commands": [
+    {
+      "label": "partial-join",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/partial-join.metrics",
+        "/usr/bin/ld",
+        "-r",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/output/kprintf_storage_partial.o",
+        "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/output/kprintf_provider.o",
+        "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-1/output/storage_lower_partial.o"
+      ],
+      "environment_overrides": {},
+      "stdout_path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/partial-join.stdout",
+      "stderr_path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/partial-join.stderr",
+      "expected_returncode": 0,
+      "expected_stderr": ""
+    },
+    {
+      "label": "joined-symbols",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/joined-symbols.metrics",
+        "/usr/bin/nm",
+        "-S",
+        "--format=posix",
+        "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/output/kprintf_storage_partial.o"
+      ],
+      "environment_overrides": {},
+      "stdout_path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/joined-symbols.stdout",
+      "stderr_path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/joined-symbols.stderr",
+      "expected_returncode": 0,
+      "expected_stderr": ""
+    },
+    {
+      "label": "joined-elf",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/joined-elf.metrics",
+        "/usr/bin/readelf",
+        "-h",
+        "-SW",
+        "-Ws",
+        "-Wr",
+        "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/output/kprintf_storage_partial.o"
+      ],
+      "environment_overrides": {},
+      "stdout_path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/joined-elf.stdout",
+      "stderr_path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/joined-elf.stderr",
+      "expected_returncode": 0,
+      "expected_stderr": ""
+    }
+  ],
+  "inputs": {
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/join_checks.py": "8e713e3311f55d5316e3dc5a7bff4b72e39f650e48e5f9e6616fdf77e5933a0c",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/INPUT-OWNERS.json": "c108b5f9ffdc335c0dff0a041c11f491f1fc7c8eb964879cafa47cc410f5d9fe",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/storage_predicate.py": "a4df81bb2b86d97f4199ae816dab7965213ceba05dca17945f9eae861dc31892",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-review-1/ACTUAL-METADATA-REVIEW.json": "d130a1034ed835da35636dc253e529534e57210bedd76229a79366489824170c",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/RESULT.json": "6b25ba98986242be7b242c9cf0c215b7c6c7794501366e321c70495302edca30",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/SOURCE-PROOF.json": "7876582758513dc37d1ec6136a768c7368f1be7ee1808eda7e000dda690d4665",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/ACTUAL-NM-METADATA.json": "bab0e69f0f16559ad6b373a6c2481af0637de482f481a679e4d5bf5ecd73d64f",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/ACTUAL-ELF-METADATA.json": "724bcdf7840cc8afb2bf6c4943299ea5695b14c77909a8821f45c3d890b5a30e",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/provider-symbols.stdout": "32b79118c00809386f3f562d317d35f5e156f7a6b9f60b22fb60bdd6a6aa9526",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/provider-elf.stdout": "d964a7e714fe0209e7cc772b5f10a362eb5137ecf8bbed855c88eb56031bb2d8",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-1/output/storage_lower_partial.o": "1faf0e7f6157983d86cf767f6fb4743dd65da148e63bf1dc2dc125e253285845",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-1/joined-symbols.stdout": "5aee58d85ce98100525de85b6d959e8c32a8821a6be0e2f5a5bede5a3d9c984e",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/RESULT.json": "0e3047ea8d08d3f9ba7837f135142fcd29c14cdb1116e62743f1bd01214136fb",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/output/kprintf_provider.o": "550bf6d7d108e766a593a18d96edc2f46e5688bd07cae48ddc61e4868b5afbdf",
+    "/usr/bin/ld": "476b24d5cc1fef54f80412d06e7430b2dcf4e2b6f1525ee17e6eaaf16b28a00f",
+    "/usr/bin/nm": "5fb0dd8acc18e3f348ed0acbcada0580dbdddd1eb5de3c8323613af13580032b",
+    "/usr/bin/readelf": "41a813335a74480f145fba9400aa7fb5c0ec7ffcaa7af7f33e832dc75eb90ffb"
+  },
+  "object_inputs": [
+    {
+      "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/output/kprintf_provider.o",
+      "sha256": "550bf6d7d108e766a593a18d96edc2f46e5688bd07cae48ddc61e4868b5afbdf",
+      "bytes": 19064
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-1/output/storage_lower_partial.o",
+      "sha256": "1faf0e7f6157983d86cf767f6fb4743dd65da148e63bf1dc2dc125e253285845",
+      "bytes": 13400
+    }
+  ],
+  "actual_new_nm": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/provider-symbols.stdout",
+  "actual_prior_nm": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-1/joined-symbols.stdout",
+  "joined_object": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/output/kprintf_storage_partial.o",
+  "joined_nm": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/joined-symbols.stdout",
+  "qualified_ELF_reader": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/storage_predicate.py",
+    "sha256": "a4df81bb2b86d97f4199ae816dab7965213ceba05dca17945f9eae861dc31892",
+    "qualification_receipt": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/RESULT.json",
+    "scope": "Reuse existing exact Image/parse_nm for ELF64-LE/x86_64 REL metadata/bytes only, not storage predicate re-review or new parser/loader."
+  },
+  "predicate": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/join_checks.py",
+    "sha256": "8e713e3311f55d5316e3dc5a7bff4b72e39f650e48e5f9e6616fdf77e5933a0c",
+    "prejoin_callable": "prejoin(request)",
+    "postjoin_callable": "postjoin(request)",
+    "must_be_called_before_ld_r": true,
+    "must_be_called_after_actual_joined_nm_and_ELF_readback": true,
+    "prepared_AST_only_not_executed": true
+  },
+  "expected": {
+    "new11_global_T": {
+      "format_decode_result": 876,
+      "kprintf": 706,
+      "printf_copy_literal_result": 174,
+      "printf_emit_char_result": 14,
+      "printf_terminate_result": 19,
+      "printf_write_nchars_result": 25,
+      "put_dec_full_result": 174,
+      "put_dec_result": 291,
+      "put_dec_trunc_result": 214,
+      "skip_atoi_result": 66,
+      "snprintf": 76
+    },
+    "prior31_global_owners": {
+      "_RNvNtNtCs5mudLkas02F_21provider_storage_unit18x86_memory_helpers17owned_memory_data10TRACE_FILE": {
+        "kind": "R",
+        "bytes": 319
+      },
+      "clv": {
+        "kind": "B",
+        "bytes": 8
+      },
+      "do_setresgid": {
+        "kind": "T",
+        "bytes": 173
+      },
+      "do_setresuid": {
+        "kind": "T",
+        "bytes": 173
+      },
+      "get_cpu_local_var": {
+        "kind": "T",
+        "bytes": 24
+      },
+      "get_this_cpu_local_var": {
+        "kind": "T",
+        "bytes": 99
+      },
+      "getcred": {
+        "kind": "T",
+        "bytes": 259
+      },
+      "getcred_body_result": {
+        "kind": "T",
+        "bytes": 272
+      },
+      "ihk_mc_get_processor_id": {
+        "kind": "T",
+        "bytes": 77
+      },
+      "linux_page_offset_base": {
+        "kind": "B",
+        "bytes": 8
+      },
+      "locals": {
+        "kind": "B",
+        "bytes": 8
+      },
+      "num_processors": {
+        "kind": "D",
+        "bytes": 4
+      },
+      "ptrace_detach_do_kill_bridge": {
+        "kind": "T",
+        "bytes": 12
+      },
+      "ptrace_detach_wakeup_bridge": {
+        "kind": "T",
+        "bytes": 12
+      },
+      "syscall_do_syscall2_bridge": {
+        "kind": "T",
+        "bytes": 167
+      },
+      "syscall_do_syscall3_bridge": {
+        "kind": "T",
+        "bytes": 171
+      },
+      "syscall_get_processor_id_bridge": {
+        "kind": "T",
+        "bytes": 77
+      },
+      "syscall_policy_do_syscall2_bridge": {
+        "kind": "T",
+        "bytes": 167
+      },
+      "syscall_policy_do_syscall3_bridge": {
+        "kind": "T",
+        "bytes": 171
+      },
+      "syscall_refresh_cred_fields_body_result": {
+        "kind": "T",
+        "bytes": 163
+      },
+      "syscall_virt_to_phys_bridge": {
+        "kind": "T",
+        "bytes": 165
+      },
+      "terminate_host": {
+        "kind": "T",
+        "bytes": 183
+      },
+      "virt_to_phys": {
+        "kind": "T",
+        "bytes": 165
+      },
+      "wait_host_wait4_bridge": {
+        "kind": "T",
+        "bytes": 166
+      },
+      "x86_addr_log_bridge": {
+        "kind": "T",
+        "bytes": 98
+      },
+      "x86_addr_log_kernel_debug": {
+        "kind": "D",
+        "bytes": 32
+      },
+      "x86_addr_log_straight_debug": {
+        "kind": "D",
+        "bytes": 32
+      },
+      "x86_kernel_phys_base": {
+        "kind": "B",
+        "bytes": 8
+      },
+      "x86_map_kernel_start_geometry": {
+        "kind": "R",
+        "bytes": 8
+      },
+      "x86_user_map_kernel_start_bridge": {
+        "kind": "T",
+        "bytes": 14
+      },
+      "x86_virt_to_phys_body_result": {
+        "kind": "T",
+        "bytes": 105
+      }
+    },
+    "actual_new12_U": [
+      "cpu_disable_interrupt_save",
+      "cpu_interrupt_disabled",
+      "cpu_pause",
+      "cpu_restore_interrupt",
+      "eventfd",
+      "ihk_mc_delay_us",
+      "ihk_mc_get_processor_id",
+      "kmsg_buf",
+      "kprintf_lock",
+      "kprintf_unlock",
+      "memset",
+      "strnlen"
+    ],
+    "actual_prior13_U": [
+      "do_kill",
+      "do_syscall",
+      "f03_terminate_host_refcount_set_v1",
+      "f03_wait_release_process",
+      "f03_wait_release_thread",
+      "kprintf",
+      "sched_wakeup_thread",
+      "syscall_do_kill_thread_bridge",
+      "syscall_do_syscall_request_bridge",
+      "syscall_find_process_bridge",
+      "syscall_generic_forwarding_body_result",
+      "syscall_process_unlock_bridge",
+      "terminate_host_body_result"
+    ],
+    "two_source_private_local_helpers": {
+      "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse17number_ref_result": 1190,
+      "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result": 3395
+    },
+    "partial23_U": [
+      "cpu_disable_interrupt_save",
+      "cpu_interrupt_disabled",
+      "cpu_pause",
+      "cpu_restore_interrupt",
+      "do_kill",
+      "do_syscall",
+      "eventfd",
+      "f03_terminate_host_refcount_set_v1",
+      "f03_wait_release_process",
+      "f03_wait_release_thread",
+      "ihk_mc_delay_us",
+      "kmsg_buf",
+      "kprintf_lock",
+      "kprintf_unlock",
+      "memset",
+      "sched_wakeup_thread",
+      "strnlen",
+      "syscall_do_kill_thread_bridge",
+      "syscall_do_syscall_request_bridge",
+      "syscall_find_process_bridge",
+      "syscall_generic_forwarding_body_result",
+      "syscall_process_unlock_bridge",
+      "terminate_host_body_result"
+    ],
+    "partial_global_strong": 42,
+    "partial_global_T": 33,
+    "partial_global_data": 9,
+    "source_owned_jump_table_sections": [
+      ".lrodata._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result",
+      ".lrodata.format_decode_result"
+    ],
+    "prior31_sizes_bytes_data": "Exact file-backed symbol bytes/types/size/visibility preserved; NOBITS preserves declarations/layout only (no fabricated initializedHOST bytes). Actual all owner relocation signatures preserved, including originaldata literal pointers.",
+    "new_function_and_private_helper_bytes": "All11Cfunction bytes/sizes plus two source-ownedLOCAL helpers1190/3395 bytes/visibility preserved; localVaList ABI never externalized.",
+    "readonly_literal_and_table_relocations": "Source strings normalize by actualNUL bytes across legitimate merge; DIGITS16 and unique240/1216byte tables preserve bytes and owned relocs.",
+    "cross_input_edges": "Old actualx86_addr_log_bridge kprintfU resolves newkprintf; new nativeCPU reference resolves oldcurrentihk_mc_get_processor_id. Genuineother23U includingkernelmemset remain unresolved.",
+    "no_new_global_storage_or_private_KMSG_LOCK": true
+  },
+  "source_ownership_reconciliation": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-review-1/ACTUAL-METADATA-REVIEW.json",
+    "sha256": "d130a1034ed835da35636dc253e529534e57210bedd76229a79366489824170c",
+    "memset": "Actualselectedkernel/rust/string.rs C ABI source known/qualified atsourceonly; remains genuineU. No libc/fake implementation or extra compile."
+  },
+  "profile": {
+    "CPU": [
+      6
+    ],
+    "local_serial_jobs": 1,
+    "AS_bytes": 1073741824,
+    "CPU_seconds": 45,
+    "wall_seconds": 60,
+    "kill_after_seconds": 5,
+    "FSIZE_bytes": 67108864,
+    "core_bytes": 0,
+    "aggregate_HOST_CPUs": [
+      0,
+      6,
+      7
+    ],
+    "aggregate_jobs_max": 3,
+    "aggregate_HOST_total_bytes_all_overhead": 4294967296,
+    "retained_prior_bytes": 19327352832,
+    "host_floor_bytes": 4294967296,
+    "fresh_MemAvailable_minimum_bytes": 27917287424
+  },
+  "no_compiler_or_previous_metadata_or_behavior_replay": true,
+  "no_native_function_boot_lock_IRQ_runtime": true,
+  "scope": "One nonexecuted relocatable join of exactly qualified550bf+1faf, then2metadata reads. No oldcore/wholecrate/archive/libc/override/callback/data/profile substitutions. Original/default/final/native/providerclosure remains open.",
+  "not_runnable_until": "FinalFconcrete exact join/predicate GO and RootfreshCPU6onejob admission. Exact prejoin predicate must PASS before any ld-r Popen; firstunexpectedresult stops/no autonomousretry or compiler rerun.",
+  "canonical_or_index_writes": false
+}

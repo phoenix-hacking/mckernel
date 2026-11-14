@@ -1,0 +1,54 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_CONSUMER_AND_CONTROLLED_EFFECT_FRAGMENT_NO_SECOND_QUEUE",
+  "actual_live_caller": "interrupt.S::debug_exception callsdebug_handler236 afterPUSH_ALL_REGS; sourceunchanged.",
+  "actual_existing_Rust_reader": "x86_cpu_helpers.rs2957..2981 DebugRegisterReader/HardwareDebugRegisterReader::read::<6>(); alreadyusedbydefaultsave_debugreg. No newhardwareASM/Cgetter.",
+  "exact_selection": "ExistingPUBLICMCKERNEL_RUST_X86_CPU_HELPERS selectsRustentry; literalwholeoriginalCbodyretained#else; readonlyCdebugconfigR4explicitdebt0undefined/1definedincluding0.",
+  "consumer_expectations": [
+    "FuturefullRustTdebug_handler unique; CPU Cdefinitionabsent, actualassemblyU/relocresolver isRustentry, no inventedCPU Cimport.",
+    "RustUreadonlyconfig resolvesactualselectedCPU C R4; actualenum/signal/frameABIwitness required.",
+    "AllcurrentbaseexistingRustdebugreader/savedebugreg andcontext/ulongexports preserved; GPE/int3/three-bodybatchseparate unlessrootcoherentlymerges."
+  ],
+  "actual_algorithm": "Classify/timing,optionalexactlog/context,existingDR6readREG6once,BSpriorityclearonlysavedTF+TRAP_TRACE elseB0..3TRAP_HWBKPT else0,fullzeroedSigInfo,set_signal(SIGTRAP),interrupt_exit,reclassify/timing.",
+  "future_fixture_fragment": "OriginalCsingleasmstatement replacedonlybycontrolledread(6); actualRustgenericbodyusesexistingtraitmock. HardwareexportandDR6instructions compiledonly/notexecuted. Replaybothdebuggateswithmatchingreadonlydatum and Cifdef, strictproviderorder/oneDR6read/full128initializedbytes/postexitRSPmutation. No real signal/IRQ/scheduler/native effect claim.",
+  "raw_ISR_and_platform_results": null,
+  "controlled_effect_result": null,
+  "compiler_jobs": 0,
+  "test_jobs": 0,
+  "CPU_slots_held": 0,
+  "ABI_stop": "Actualunsignedenum/layout/debugconfig mismatch orunknownprovider:STOP, no Cgetter/cast/guardrelaxation.",
+  "NMI_scope": "Reviewerclassifiedinheritedselectedfreeze_thaw(NULL)consumerdefect; sourceofthatlaneunchanged. No voidcalleeNULLguard/no fake successfulrewrite.",
+  "sole_production_queue": "next-body-batch-source-1/production-consumer-preparation-1/88de5ff6; no second executable queue created.",
+  "source_pins": {
+    "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "98914e1ff4d50c2f42ccbdeb1f4f338024b7a9a2143fbad2f59ebd6f6b50dd0b",
+      "bytes": 93305
+    },
+    "/home/holden/mckernel/kernel/rust/abi.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "bytes": 76151
+    },
+    "/home/holden/mckernel/kernel/include/syscall.h": {
+      "path": "/home/holden/mckernel/kernel/include/syscall.h",
+      "sha256": "459e6d0faec3f1b8366a0d329571ef5ea813042706be11f9423b0399bbba6ffa",
+      "bytes": 20836
+    },
+    "/home/holden/mckernel/arch/x86_64/kernel/include/registers.h": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/registers.h",
+      "sha256": "43fd6d2e278953684574224927fe65bc514a88c5529d97f688e1e21b1864a6fc",
+      "bytes": 5778
+    },
+    "/home/holden/mckernel/arch/x86_64/kernel/include/signal.h": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/signal.h",
+      "sha256": "3cea81b9b2f723fbff2cafa634761d50316a397d06df2c12f94fe5f0dae03752",
+      "bytes": 7474
+    },
+    "/home/holden/mckernel/arch/x86_64/kernel/interrupt.S": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/interrupt.S",
+      "sha256": "9cffbeb01046a7215cbbca2bb1cf580611269d27d4fa317151cdb19441a15f61",
+      "bytes": 5678
+    }
+  }
+}

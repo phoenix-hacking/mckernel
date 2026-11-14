@@ -1,0 +1,65 @@
+        if status != 0 { return Err(errno(if (-4095..0).contains(&status) { status } else { -71 })); }
+        // Restore only this exact BUSY epoch; all attempted errors instead
+        // quarantine and retain its contexts, including any SEALED link gate.
+        claim.restore()
+    })();
+    result.map_or_else(|e| e.to_errno(), |()| 0)
+}
+
+unsafe extern "C" fn resolve_fork_ack_scope(
+    context: *mut c_void, descriptor: *const super::application_abi::ForkGuestAckV1,
+    verify: Option<super::application_abi::ForkAckVerifyV1>,
+    finish: Option<super::application_abi::ForkAckFinishV1>, ticket: *mut c_void,
+) -> i32 {
+    let result = (|| -> Result {
+        use super::application_abi::{ForkGuestAckV1, VERSION};
+        if context.is_null() || descriptor.is_null() || ticket.is_null() { return Err(EINVAL); }
+        let verify = verify.ok_or(EINVAL)?;
+        let finish = finish.ok_or(EINVAL)?;
+        let scope = unsafe { &*context.cast::<ForkLinkResolverScope>() };
+        let d = unsafe { &*descriptor };
+        let key = d.identity;
+        if d.version != VERSION || d.bytes as usize != core::mem::size_of::<ForkGuestAckV1>()
+            || d.reserved != 0 || key.reserved0 != 0 || key.reserved1 != 0
+            || key.slot != scope.slot || key.generation != scope.generation
+            || d.epoch == 0 || d.worker == 0 || d.delivery == 0 || d.cpu < 0
+            || d.physical == 0 || d.sequence != 2 || key.nonce == 0
+        { return Err(EACCES); }
+        let epoch = d.epoch;
+        let object = unsafe { &*scope.object };
+        let child_context = {
+            let table = object.forks.lock();
+            let entry = table.entries.iter().flatten().find(|entry|
+                entry.identity == Some(key) && entry.epoch == epoch).ok_or(ENOENT)?;
+            if !entry.host_revoked || entry.payload.is_none() { return Err(EBUSY); }
+            entry.child_context
+        };
+        let mut claim = match ForkProviderClaim::acquire(object, key, child_context, 0)? {
+            ForkClaimLookup::Pending(claim) => claim,
+            ForkClaimLookup::Completed => return Err(EIO),
+        };
+        if claim.epoch != epoch || claim.receipt_index.is_none() { return Err(EACCES); }
+        if !claim.guest_released {
+            let payload = claim.payload.as_ref().ok_or(ENODEV)?;
+            let payload_context = payload.context.load(Ordering::Acquire);
+            if payload_context.is_null() { return Err(EIO); }
+            // Actual registered SMP ticket authenticates the owned selector3
+            // and private original guest checked-result2 carrier. All table,
+            // Remote and MM guards have ended; the raw borrow never escapes.
+            let status = unsafe { verify(ticket, payload_context) };
+            if status != 0 { return Err(errno(if (-4095..0).contains(&status) { status } else { -71 })); }
+            claim.mark_guest_released()?;
+        }
+        // Durable ACK_RECEIVED precedes permission for final RETURN value0.
+        // A retry never reruns the guest destructor or its verifier.
+        let status = unsafe { finish(ticket) };
+        if status != 0 { return Err(errno(if (-4095..0).contains(&status) { status } else { -71 })); }
+        claim.restore()
+    })();
+    result.map_or_else(|e| e.to_errno(), |()| 0)
+}
+
+/// # Safety
+/// This is the actual live parent file's pre-RETURN hook. Only registered
+/// backend code derives a guest ACK key from its owned original delivery.
+#[export_name = "ihk_os_application_prepare_fork_ack_v1"]

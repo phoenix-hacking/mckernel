@@ -1,0 +1,39 @@
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -28269,6 +28269,12 @@
+  * swapoout(const char *filename, void *workarea, size_t size)
+  */
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++#ifdef MCKERNEL_RUST_F03_IO_DIAGNOSTICS
++struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_swapout_callback_debug_v1 = {
++ .file=__FILE__, .func="syscall_swapout_log_bridge", .line=28275, .flags=DDEBUG_DEFAULT
++};
++extern void syscall_swapout_log_bridge(const void *fname, void *buf, size_t size, int flag);
++#else
+ void
+ syscall_swapout_log_bridge(const void *fname, void *buf, size_t size, int flag)
+ {
+@@ -28276,6 +28282,7 @@
+ 			ihk_mc_get_processor_id(), (unsigned long)fname,
+ 			(unsigned long)buf, (unsigned long)size, (long)flag);
+ }
++#endif /* MCKERNEL_RUST_F03_IO_DIAGNOSTICS */
+ 
+ long sys_swapout(int n, ihk_mc_user_context_t *ctx);
+ #else
+@@ -28310,11 +28317,15 @@
+ #endif
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++#ifdef MCKERNEL_RUST_F03_IO_DIAGNOSTICS
++extern void syscall_linux_mlock_log_bridge(unsigned long addr, unsigned long len);
++#else
+ void
+ syscall_linux_mlock_log_bridge(unsigned long addr, unsigned long len)
+ {
+ 	kprintf("linux_mlock: %p %ld\n", (void *)addr, len);
+ }
++#endif /* MCKERNEL_RUST_F03_IO_DIAGNOSTICS */
+ #endif
+ 
+ #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS

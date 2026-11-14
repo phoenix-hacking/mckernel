@@ -1,0 +1,131 @@
+{
+  "status": "FROZEN_REAL_ARCHIVE_ORDINARY_PROPOSAL_UNRUN",
+  "functional_scope": "Functional supported-profile McKernel OS/apps plus actual Rust/reviewed-assembly compute retirement; M03 offline realarchive binding only",
+  "accepted_M03_observer_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/M03-TYPED-OBSERVER-EVALUATOR-STAGER-SOURCE-AND-ACTUAL-SEVEN-GROUPS-REVIEW.json",
+    "sha256": "03fe26ac0fe2e997024465f99cc2955d2e9b8f059b73ed89f03549e21d8ca305"
+  },
+  "accepted_owner_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/M03-OWNER-SOURCE-ROUTING-AND-ACTUAL-FOUR-PATH-BINDING-GROUPS-REVIEW.json",
+    "sha256": "e03fca138bb1b8e41dff096b3404266f9dededed993197692602f176981c68a3"
+  },
+  "input_pins": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/REAL-STAGE-INPUT-PINS.json",
+    "sha256": "bd8b569fe483c231d7a246f842e5f170b310a51ad7eb2f909b104333a3d1bd4c",
+    "size": 5971,
+    "mode": 33152
+  },
+  "commands": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/REAL-STAGE-COMMANDS.json",
+    "sha256": "2350be29545010c5a5aab27ae55c1acd019be0f1bed825c1b1e2b2311e2b96ed",
+    "size": 546,
+    "mode": 33152
+  },
+  "runner": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/run-real-stage-1.py",
+    "sha256": "9e50fa56d8ca7f1cef22af5a8d7e4cd523aae71480f1d47eef50504ded1f9971",
+    "size": 3582,
+    "mode": 33152
+  },
+  "stage_source": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/stage_m03.py",
+    "sha256": "192382b11461d5e2641b62ad00e14801331059c27f43d132a35aefcd45f0140b",
+    "size": 6339,
+    "mode": 33152
+  },
+  "outer_argv": [
+    "taskset",
+    "-c",
+    "6",
+    "prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--fsize=33554432",
+    "--core=0",
+    "--nofile=256",
+    "--",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/run-real-stage-1.py"
+  ],
+  "inner_argv": [
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/stage_m03.py",
+    "--collector-ref",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/COMPILED-M03-COLLECTOR.json",
+    "--output",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-stage-1"
+  ],
+  "expected_exits": [
+    0
+  ],
+  "resources": {
+    "profile": "ordinary unprivileged CPU6 only /1job/1GiBAS/30CPU/35+2wall/32MiBperfile/core0/nofile256",
+    "CPU6_exclusive_within_ordinary_share": true,
+    "root_Docker_VM_module_or_app_execution": false,
+    "host_floor_bytes": 17179869184,
+    "scratch_floor_bytes": 12884901888,
+    "guard_extra_bytes_each": 536870912,
+    "mem_available_guard_bytes": 2147483648,
+    "one_job_AS_cap_bytes": 1073741824,
+    "one_job_RAM_reservation_bytes": 1073741824,
+    "concurrent_heavy_RAM_bytes": 12884901888,
+    "host_control_reserve_RAM_bytes": 4294967296,
+    "required_aggregate_RAM_reservation_bytes": 18253611008,
+    "host_artifact_growth_cap_bytes": 67174400,
+    "host_two_capture_files_cap_bytes": 67108864,
+    "host_control_status_budget_bytes": 2097152,
+    "host_emergency_bytes": 268435456,
+    "host_total_growth_reserved_bytes": 536870912,
+    "scratch_new_output_growth_bytes": 0,
+    "scratch_extra_emergency_guard_reserved_bytes": 536870912,
+    "temporary_disk_archives": 0,
+    "temporary_archive_location": "RAM only; originalBASE immutable, gzip output only in fresh host-preparation/native-stage-1",
+    "heavy_remaining_disk_growth_must_be_added_by_root": true,
+    "measured_RAM_peak_claim": false,
+    "memory_rationale": "Existing nonstreaming producer holds decompressedBASE/record payloads/recompression+reread buffers; AS1GiB enforced, no concurrent compiler/VM in this ordinary job. Root aggregate admission reserves full1GiB plus sole12GiBheavy and4GiBcontrol.",
+    "per_file_32MiB_safety_cap_note": "Compressed output must fit existing32MiB RLIMIT_FSIZE; no larger limit. Any excess/failure retains partial output and fails; raw archive size is not an output-file cap.",
+    "gzip_input_compressed_bytes": 18980347,
+    "gzip_input_ISIZE_bytes": 60505816,
+    "gzip_ISIZE_authority": "One-gzip-member accepted producer _gzip(finalraw), last8B CRC/ISIZE metadata read only; actual stage decompress and originalprefix reread verify it.",
+    "new_canonical_tail_unpadded_bytes": 7089156,
+    "new_canonical_tail_512padded_upper_bytes": 7089664,
+    "planned_derived_raw_upper_bytes": 67595480
+  },
+  "outputs_must_be_absent": [
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-stage-1",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/real-stage-ordinary-result-1.json",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/real-M03-archive-stage-1.stdout",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/real-M03-archive-stage-1.stderr",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/real-M03-archive-stage-1.wait-status.json"
+  ],
+  "new_directory_outputs": [
+    "native-stage-1/m03.cpio.gz",
+    "native-stage-1/overlay-manifest.json",
+    "native-stage-1/manifest.json",
+    "native-stage-1/stage-result.json"
+  ],
+  "genuine_preservation": [
+    "Complete accepted69e8-derived archive retains byte-identical uncompressedBASE prefix",
+    "Existing canonical six-member overlay appends directories+init+apps/app+identical ee1f mcexec",
+    "Full final-map set and metadata/bytes identical except init/apps/app size+hash",
+    "Matched tested205ff4+HOST66 three-module tuple retained; no newforkimage/enabledSDK consumed",
+    "Actual stagedmanifest strict typed evaluator fullinput/archive joins, compressed reread/prefix/mapchecks"
+  ],
+  "exclusions": [
+    "No root,Docker,module,VM,guest,app,Linuxoracle or compiler launch",
+    "No replay of accepted7/4 groups/staticcompile",
+    "No scratch writes, sharedsource changes, deletion, ownershiprecord/mutex changes or activeimage inputs",
+    "All prior app235B/20owner/failures untouched; no oldnonce/attempt reuse"
+  ],
+  "failure_policy": "Stop/preserve first unexpected stage failure; one bounded same-family correction only under fresh root grant, then expert escalation",
+  "future_attempt_parent": null,
+  "future_nonce": null,
+  "future_latest_exclusive_predecessor": null,
+  "future_physical_result": null,
+  "future_runtime_release": null,
+  "native_acceptance": false
+}

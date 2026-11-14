@@ -1,0 +1,259 @@
+{
+  "actual_actor_attached_by_reviewer": false,
+  "actual_cause_observed": false,
+  "approved_operation": "One guarded functional diagnostic of exact root-owned quarantined Python1060806/start80309560 only: kernel debugger attach brief stop, typed bounded read of sole exact e49 recover-frame error.args[0], explicit detach/resume to same quarantine. The temporary attach stop/detach resume is authorized only as this reviewed debugger protocol; no extra target/group/model/native signals or execution-control commands.",
+  "binaries": {
+    "gdb": {
+      "bytes": 8824736,
+      "path": "/usr/bin/gdb",
+      "sha256": "ee638c585936025f85a5f0f967e3929c9b36cb286d37ef662b23705682e31e2a"
+    },
+    "python": {
+      "bytes": 15880080,
+      "path": "/home/holden/anaconda3/bin/python3.9",
+      "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb"
+    }
+  },
+  "cleanup_or_custody_transfer_authority": false,
+  "completion_or_free_acceptance": false,
+  "decision": "PASS_EXACT_OWNED_QUARANTINE_EXCEPTION_ATTACH_READ_DETACH_ONCE",
+  "exact_owned_debugger_argv": [
+    "/usr/bin/gdb",
+    "-nx",
+    "-nh",
+    "-batch",
+    "-q",
+    "-iex",
+    "set auto-load off",
+    "-ex",
+    "set pagination off",
+    "-ex",
+    "set confirm off",
+    "-ex",
+    "set may-call-functions off",
+    "-ex",
+    "set may-write-registers off",
+    "-ex",
+    "set may-write-memory off",
+    "-ex",
+    "set may-insert-breakpoints off",
+    "-ex",
+    "set may-insert-fast-tracepoints off",
+    "-ex",
+    "file /home/holden/anaconda3/bin/python3.9",
+    "-ex",
+    "attach 1060806",
+    "-ex",
+    "source /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/read_exact_recover_error.gdb.py",
+    "-ex",
+    "read-exact-recover-error /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/bounded-observer-correction-source-1/native_rust_cutover_image_terminal_cleanup.CURRENT290.EXACT-DEAD-CALLER.py Refusal",
+    "-ex",
+    "detach"
+  ],
+  "exact_root_argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "--",
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/custody-guard-correction-source-1/exact_root_guard_runner.py",
+    "--execute-exact-root-read"
+  ],
+  "fixture_result": {
+    "bytes": 5679,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/custody-guard-correction-source-1/FIXTURE-LOCK-CUSTODY-RESULT.json",
+    "sha256": "7fa77f0f1cf6c5c933dc394af383a06181c8d0ddaa67c3fab14bdb2b19d30767"
+  },
+  "fixture_source": {
+    "bytes": 927,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/custody-guard-correction-source-1/owned_lock_fixture.py",
+    "sha256": "7aa57c355cb5d49cfcb761656e92a50f337ea126ae6d0e654d79e4727edb12ef"
+  },
+  "fixture_status": {
+    "bytes": 1379,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/custody-guard-correction-source-1/fixture-tests.status.json",
+    "sha256": "c7a7604df7f2f5900127e70ade4ac68254150ff0dc695c40b00f5ce37f1ca4d2"
+  },
+  "fixture_test": {
+    "bytes": 4185,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/custody-guard-correction-source-1/test_fixture_lock_custody.py",
+    "sha256": "67179f9a978a2f1ee791d8d54392fa150632abb0340f93f554a4382740853cd0"
+  },
+  "frozen_runtime_files": {
+    "quarantine": {
+      "bytes": 208,
+      "identity": {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 116869,
+        "mode": 384,
+        "nlink": 1,
+        "size": 208,
+        "uid": 1000
+      },
+      "path": "/home/holden/mckernel-work/scratch/m14-current290-owner213-rolejoin-pathfix-retirement-20261026-1.quarantine.json",
+      "sha256": "1df4c03a3bc191e82b1b6dd4afb816311e827be25d401bfa3261b284535b1dbc"
+    },
+    "release": {
+      "bytes": 241402,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/ROOT-NORMAL-RETIREMENT-PREPARATION-1/RELEASE.PASS_EXECUTION_RELEASE.json",
+      "sha256": "9c7589afa411c1b40fe02777facf69007b885d228632b12c3f34e5a091b517e9"
+    },
+    "source": {
+      "bytes": 128910,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/bounded-observer-correction-source-1/native_rust_cutover_image_terminal_cleanup.CURRENT290.EXACT-DEAD-CALLER.py",
+      "sha256": "e49eaf2a7bacc6a64523f9f6c91516b9a3abefc875cdc1d8941c4e6b55473de3"
+    },
+    "transaction_journal": {
+      "bytes": 1245,
+      "identity": {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 116867,
+        "mode": 384,
+        "nlink": 1,
+        "size": 1245,
+        "uid": 1000
+      },
+      "path": "/home/holden/mckernel-work/scratch/m14-current290-owner213-rolejoin-pathfix-retirement-20261026-1.journal.jsonl",
+      "sha256": "f51d694648934ea837a035daf8adcf99da36d4e47a24cfe1ae397b20861a7577"
+    },
+    "transaction_plan": {
+      "bytes": 15316,
+      "identity": {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 116868,
+        "mode": 384,
+        "nlink": 1,
+        "size": 15316,
+        "uid": 1000
+      },
+      "path": "/home/holden/mckernel-work/scratch/m14-current290-owner213-rolejoin-pathfix-retirement-20261026-1.plan.json",
+      "sha256": "b5df1a15e071ce09cc4ba44d316baee32b9217917f307dde388efb69196ca88c"
+    }
+  },
+  "guard_status": {
+    "bytes": 1359,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/custody-guard-correction-source-1/guard-tests.status.json",
+    "sha256": "a4220456e16fcd20187ae9f2a4222682d363083d3a4373cc866386b0ff71f466"
+  },
+  "guard_tests": {
+    "bytes": 5939,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/custody-guard-correction-source-1/test_guard_runner.py",
+    "sha256": "148aab97009348c4bf5dedc46f58ead4c32cf259170c42f69a18df9f260d77b9"
+  },
+  "helper": {
+    "bytes": 4178,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/read_exact_recover_error.gdb.py",
+    "sha256": "8c445cb73209ec8b08bcd5c63bf73cd67ffc6a4b748ac85da8d0a9157c41f795"
+  },
+  "implementation_ownership": false,
+  "independent_guard_regression": {
+    "command": "taskset -c 0 prlimit --as=2147483648:2147483648 --core=0:0 -- /home/holden/anaconda3/bin/python3.9 -I -B docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/custody-guard-correction-source-1/test_guard_runner.py",
+    "exit_code": 0,
+    "reported_seconds": 0.036,
+    "scope": "Unprivileged mocked guards plus exact binary/helper/source hash reads; no actualrootguard/attach/fixture replay by reviewer.",
+    "tests": 11
+  },
+  "new_workload_authority": false,
+  "prior_helper_source_review": {
+    "bytes": 4815,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-post-recovery-retirement-review-1/EXCEPTION-READER-8C445C-INDEPENDENT-SOURCE-REVIEW.json",
+    "sha256": "0b87a056fcfecaaf9aa58c6564e5ea34a28ac57b63c5d2743e4ad2a0a30e2f71"
+  },
+  "profile": {
+    "bytes": 6578,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/custody-guard-correction-source-1/EXACT-ACTOR-ROOT-READ-PROFILE.NOT-RELEASED.json",
+    "sha256": "5accbdaa97e4a9e9e8b970c477b89baac0e3313ece2f3ecac54e3969a31bddc1"
+  },
+  "proposal": {
+    "bytes": 5920,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/custody-guard-correction-source-1/EXACT-ROOT-READ-EXECUTION-PREPARATION.NOT-RELEASED.json",
+    "sha256": "82ae3ec1dd2bb764f5ba2e61d7b4a7f3b45e4f551b8a9a779c0b34ce064f67ce"
+  },
+  "recorded_at": "2026-10-26T09:36:41.019876+00:00",
+  "reviewed_controls": [
+    "Fixed profile hash and exact actor/sudo parent births, full argv/executables/direct parent+group/boot/credentials and live nonstopped state validated before and after. PID reuse/unknown state refuses.",
+    "Permanent27:4 exact name metadata, exactly one held targetFD with matching link/stat/fdinfo and sole globalFLOCKWRITEowner1060806 discovered using read-only metadata only; no targetFD open/duplicate/acquire/close or unlock. Exact before/after return objects must match.",
+    "Pinned gdb ee638c585936025f85a5f0f967e3929c9b36cb286d37ef662b23705682e31e2a and CondaPython3.9 8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb, helper/e49source/release and current exact transaction/quarantine file hashes/identities authenticated.",
+    "-nx/-nh and auto-load off; inferior calls, memory/register writes and breakpoint/fast-tracepoint insertion disabled. Helper reads typed metadata and named error only, bounded4096ASCII; no arbitrary heap/locals/memory/backtrace scan.",
+    "Only newly owned GDB child gets10s subprocess.run timeout kill/reap. Postguards always attempted after normal/error/timeout; no target/group signal or guessed resume if postguard fails.",
+    "Require debuggerexit0, exactly one correct PASS_EXACT_RECOVER_ERROR_READ record and equal pre/post custody. Exit0 alone or missing/duplicate/wrong result refuses. Full available debuggerstdout/stderr length/SHA/rawhex bundle retained in runner result.",
+    "InstalledGDB lacks debuginfod command; DEBUGINFOD_URLS empty and unreviewed autoload/init disabled. No unsupported debugger command was introduced."
+  ],
+  "reviewer": "/root/current_owner_retirement",
+  "root_final_grant_requirements": [
+    "Publish/fetch verify exact runner/profile/helper/tests/results/packet; bind this review and exactargv/binaries/resources/target in existing authenticated Root one-shot grant.",
+    "Fresh ordinary resource admission: CPU0/one job/2GiBAS/32MiBfile/zero core as exactargv; current quarantine owner/custody is preserved, no second cleanup/native/build lease.",
+    "Capture outer exact runner process/PIDbirth/group/fullstreams/directJOIN; retain all error/timeout/uncertain evidence and do not replay unchanged.",
+    "Any failed preguard prevents attach. Any failed postguard leaves uncertainty retained without target signalling, unlock, custody transfer or cleanup.",
+    "This diagnostic authorizes no reconciliation, source patch to live actor, cleanup replay/continuation, holder retirement, free claim or new workload. Existing nonptrace container/transaction facts remain needed before later reconciliation."
+  ],
+  "runner": {
+    "bytes": 8774,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/custody-guard-correction-source-1/exact_root_guard_runner.py",
+    "sha256": "7754e68bcdb2796a61a7b7444453442eec46e4e5057305cb9f98e28445856b7f"
+  },
+  "schema": "mckernel.current290.quarantine.exact-guarded-exception-read.independent-execution-review.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "target": {
+    "actor": {
+      "cmdline_hex": "2f686f6d652f686f6c64656e2f616e61636f6e6461332f62696e2f707974686f6e33002d49002d42002f686f6d652f686f6c64656e2f6d636b65726e656c2f646f63732f766572696669636174696f6e2f65766964656e63652f6f732d7265636f766572792d61646f7074696f6e2d32303236313032352d303235342f63757272656e743239302d646561642d63616c6c65722d6e6f726d616c2d636c65616e75702d736f757263652d312f626f756e6465642d6f627365727665722d636f7272656374696f6e2d736f757263652d312f6e61746976655f727573745f6375746f7665725f696d6167655f7465726d696e616c5f636c65616e75702e43555252454e543239302e45584143542d444541442d43414c4c45522e7079002d2d72656c65617365002f686f6d652f686f6c64656e2f6d636b65726e656c2f646f63732f766572696669636174696f6e2f65766964656e63652f6f732d7265636f766572792d61646f7074696f6e2d32303236313032352d303235342f63757272656e743239302d646561642d63616c6c65722d6e6f726d616c2d636c65616e75702d736f757263652d312f524f4f542d4e4f524d414c2d5245544952454d454e542d5052455041524154494f4e2d312f52454c454153452e504153535f455845435554494f4e5f52454c454153452e6a736f6e002d2d72656c656173652d7368613235360039633735383961666134313163316234306665303237373766616366363930303762383835643232383633326231326333663334653561303931623531376539002d2d65786563757465002d2d65786163742d646561642d63616c6c65722d6e65772d6f666400",
+      "exe": "/home/holden/anaconda3/bin/python3.9",
+      "is_sudo_parent": false,
+      "pgid": 1060803,
+      "pid": 1060806,
+      "ppid": 1060803,
+      "starttime": "80309560"
+    },
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "mutex": {
+      "identity": {
+        "device": 27,
+        "gid": 0,
+        "inode": 4,
+        "mode": 420,
+        "nlink": 1,
+        "size": 0,
+        "uid": 0
+      },
+      "path": "/run/lock/mckernel-development.lock"
+    },
+    "parent": {
+      "cmdline_hex": "2f7573722f62696e2f7375646f002d41002d2d002f7573722f62696e2f7461736b736574002d630037002f7573722f62696e2f70726c696d6974002d2d61733d323134373438333634383a32313437343833363438002d2d6673697a653d33333535343433323a3333353534343332002d2d636f72653d303a30002d2d002f686f6d652f686f6c64656e2f616e61636f6e6461332f62696e2f707974686f6e33002d49002d42002f686f6d652f686f6c64656e2f6d636b65726e656c2f646f63732f766572696669636174696f6e2f65766964656e63652f6f732d7265636f766572792d61646f7074696f6e2d32303236313032352d303235342f63757272656e743239302d646561642d63616c6c65722d6e6f726d616c2d636c65616e75702d736f757263652d312f626f756e6465642d6f627365727665722d636f7272656374696f6e2d736f757263652d312f6e61746976655f727573745f6375746f7665725f696d6167655f7465726d696e616c5f636c65616e75702e43555252454e543239302e45584143542d444541442d43414c4c45522e7079002d2d72656c65617365002f686f6d652f686f6c64656e2f6d636b65726e656c2f646f63732f766572696669636174696f6e2f65766964656e63652f6f732d7265636f766572792d61646f7074696f6e2d32303236313032352d303235342f63757272656e743239302d646561642d63616c6c65722d6e6f726d616c2d636c65616e75702d736f757263652d312f524f4f542d4e4f524d414c2d5245544952454d454e542d5052455041524154494f4e2d312f52454c454153452e504153535f455845435554494f4e5f52454c454153452e6a736f6e002d2d72656c656173652d7368613235360039633735383961666134313163316234306665303237373766616366363930303762383835643232383633326231326333663334653561303931623531376539002d2d65786563757465002d2d65786163742d646561642d63616c6c65722d6e65772d6f666400",
+      "exe": "/usr/bin/sudo",
+      "is_sudo_parent": true,
+      "pgid": 1060803,
+      "pid": 1060803,
+      "ppid": 1060802,
+      "starttime": "80309553"
+    }
+  },
+  "verified_fixture_scope": {
+    "actual_actor_attached": false,
+    "actual_permanent27_4_used": false,
+    "all_alive_resumed_same_birth": true,
+    "all_before_after_fdinfo_identity_global_flock_objects_equal": true,
+    "cases": 3,
+    "modes": [
+      "success",
+      "helper_error",
+      "debugger_timeout"
+    ],
+    "normal_release_exits": [
+      0,
+      0,
+      0
+    ]
+  }
+}

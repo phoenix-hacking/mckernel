@@ -1,0 +1,52 @@
+{
+  "status": "PASS_CURRENT_CANONICAL_SDK_IMAGE_SHARED_HEAVY_RECORDS_ABSENT",
+  "at": "2026-10-22T23:25:10.460709+00:00",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "rows": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-running-external-modules.lease.json",
+      "observation": "ENOENT",
+      "absent": true
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-running-external-modules-operational-exclusion.json",
+      "observation": "ENOENT",
+      "absent": true
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch18-image-1.json",
+      "observation": "ENOENT",
+      "absent": true
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock",
+      "observation": "ENOENT",
+      "absent": true
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/common-exclusion.json",
+      "observation": "ENOENT",
+      "absent": true
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/lease.json",
+      "observation": "ENOENT",
+      "absent": true
+    }
+  ],
+  "observed_under_permanent_mutex": {
+    "device": 27,
+    "inode": 4,
+    "exclusive_nonblocking": true
+  },
+  "no_concurrent_heavy_dispatch": true,
+  "observed_by": "root dispatcher; lstat ENOENT only; EACCES or other errors refuse",
+  "source_path_authority": [
+    "scripts/native_running_external_modules_owner.py:58",
+    "scripts/native_rust_exact_mckernel_image_container_owner.py:41",
+    "scripts/native_rust_exact_disk_build_wrapper.py:66",
+    "G actual matched-image static data selected common+lease paths"
+  ],
+  "mutation": false,
+  "native_release": false
+}

@@ -1,0 +1,36 @@
+{
+  "schema": "mckernel.stability.source-evidence.v1",
+  "date": "2026-09-28",
+  "status": "WIP_SOURCE_ONLY",
+  "base_commit": "5af634ce1e71248d7bbe144a49d689443993f449",
+  "scope": "authenticated exact-build supplement for the ordered 0006 through 0010-v2 native host patch closure",
+  "artifacts": {
+    "host-kernel/kbuild/secondary-reset-build-supplement-v1.json": "95ffec726a344f746a674c4568baf20481e7469c7e13ee18ab5e52f7ef0fa3ab",
+    "scripts/secondary_reset_build_supplement.py": "8a3121e04d4707a2a54b9442df75b85583382daec0ba79c1274958fc9fd04cdd",
+    "scripts/tests/test_secondary_reset_build_supplement.py": "60d1d1616b926738d33da2567010d23f0e16f77698d567f2341219c0f52831c6",
+    ".github/workflows/native-rust-host-modules-exact-build.yml": "a0308127b6b63e6a1ed63f90e31a45023d177bbc8d59a52df6c3868c4faad05d",
+    "scripts/tests/test_native_rust_exact_build_workflow.py": "bd5bfe04de1f56d35927a49f80cbfd1b475317d41e29d772b018bc220723a6f7"
+  },
+  "preserved_failure": {
+    "command": "python3 -B -m unittest -v scripts.tests.test_secondary_reset_build_supplement",
+    "result": "first run FAIL: positive verify-lock incorrectly checked every intermediate writer of a multiply-modified path rather than its final authenticated writer; negative cases passed"
+  },
+  "bounded_correction": "verify_lock now compares each path with the last authenticated writer in the ordered closure; manifest license expressions and checker hash were also corrected without changing immutable predecessor authority files",
+  "tests": [
+    {
+      "command": "python3 -B -m unittest -v scripts.tests.test_secondary_reset_build_supplement",
+      "result": "PASS: 2 tests in 308.604 seconds"
+    },
+    {
+      "command": "git diff --check",
+      "result": "PASS at checkpoint"
+    }
+  ],
+  "remaining": [
+    "run py_compile after resume",
+    "run the affected exact-workflow assertion with a compatible Python interpreter; available Python 3.9 cannot import an existing dependency that uses newer union annotation syntax",
+    "independent authority/workflow review",
+    "actual configured exact build"
+  ],
+  "acceptance": "No kernel build, module link/load, CPU reset, guest execution, lifecycle gate or whole-OS acceptance is claimed."
+}

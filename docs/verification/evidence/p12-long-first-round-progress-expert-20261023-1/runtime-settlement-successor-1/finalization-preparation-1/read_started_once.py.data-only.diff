@@ -1,0 +1,17 @@
+--- acceptedRT6/read_started_once.py
++++ settlementDATA/read_started_once.py
+@@ -1,12 +1,12 @@
+ # Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+ from pathlib import Path
+ import importlib.util,subprocess,os,time,resource,json
+-D=Path(__file__).resolve().parent
++D=Path('/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1')
+ H=Path('/home/holden/mckernel/docs/verification/evidence/phase5-m03-handshake-runtime-checkpoint-20261020-1/sdk-physical-source/run_two_commands_source_bound_corrected.py')
+ s=importlib.util.spec_from_file_location('accepted_capture',H);h=importlib.util.module_from_spec(s);s.loader.exec_module(h)
+ assert h.hashed(H,65536)['sha256']=='990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8'
+ a=['/usr/bin/sudo','-A','/usr/bin/cat',str(D/'actual-capture-1/started.json')]
+-out=Path('/home/holden/mckernel/docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk6-successor-1/authenticated-started-read-1');out.mkdir(mode=0o700)
++out=Path('/home/holden/mckernel/docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/authenticated-started-read-1');out.mkdir(mode=0o700)
+ h.write(out/'command.json',a)
+ def limits():
+  os.sched_setaffinity(0,{7})

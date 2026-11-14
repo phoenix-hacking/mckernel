@@ -1,0 +1,23 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_PREPARATION_KEY_SPELLING_ASSERT_STOP_NO_CHILD",
+  "error": "AssertionError kernel/rust/syscall_policy.rs; expected-name allowlist erroneously wrote syscall_policy_helpers.rs",
+  "actual_current_deltas": [
+    {
+      "key": "kernel/rust/process_helpers.rs",
+      "before": "526baf9363a0845ad50aade7e9b2296d27c8840527f3510d95a1105fc626d8d3",
+      "actual": "3f2c3dc03445147addee47d77e3ad2b31207fb3bfaa591ad99b6d0d9c897932e"
+    },
+    {
+      "key": "kernel/rust/syscall_policy.rs",
+      "before": "4edf51b9c391ddca12fd4505ac1c6b51f6a73e3919f3f1cd49b3ebcb87a38a69",
+      "actual": "f1f7866c0f2ccc8e1b0024dfb632ec7359dd2a0a4bcd8e22deb957d48ef6d770"
+    }
+  ],
+  "compiler_runs": 0,
+  "test_runs": 0,
+  "CPU6_reserved": false,
+  "partial_source_tree_preserved": true,
+  "exact_stdin_preparation_source_not_separately_saved": true,
+  "old_ready_and_recipes_unchanged": true
+}

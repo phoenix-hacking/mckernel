@@ -1,0 +1,62 @@
+{
+  "status": "ADDITIVE_REVISION_MAP_NO_V2_OR_V3_OVERWRITES",
+  "v2_original_frozen_proposal": {
+    "path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/ACTUALBODY-COMPILE-PROPOSAL.json",
+    "sha256": "8189702e60b04ed1c7fa803f78eb62b4900138806184694d7afc8204ed6e6562"
+  },
+  "v3_frozen_proposal": {
+    "path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/ACTUALBODY-COMPILE-PROPOSAL-V3.json",
+    "sha256": "baa90c9620c0c195c70946c13754830f6be78f639e10bb5ef5c7575e41e19e11"
+  },
+  "v3_fixture_failure": {
+    "fixture": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-v3-start.rs",
+    "fixture_sha256": "1ed6a73e5013012b44298369a067b89418745e2c24e69f0ec8eb0fed1461e6a6",
+    "compiler_report": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-3-compile-v3-start/report.json",
+    "stderr_sha256": "488f8de33be35d7ceece875f5802308a1f2aef21c30589c518f7fbe497ad7836",
+    "cause": "Standalone fixture aliases Error to i32 and omitted the kernel::Error to_errno analogue; E0599 in two exact publisher send closures. Production source unchanged."
+  },
+  "bounded_fixture_correction": {
+    "fixture": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-v3-correction-start.rs",
+    "fixture_sha256": "052346fdf2ab76a5136ad03f943e6e9e4eb90601a0012cafaba4003c357dfa3e",
+    "change": "Only nested fixture i32.to_errno trait analogue; exact executable production bodies unchanged",
+    "proposal": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/ACTUALBODY-COMPILE-PROPOSAL-V3-CORRECTION.json",
+    "proposal_sha256": "d4801d0096302ca86715ca832bcee357015ebf45b799395987869fd0f63280bb"
+  },
+  "production_source_mapping": [
+    {
+      "v2_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/candidate/mcctrl.rs",
+      "v2_sha256": "1871d5fc2bd352228dc167a7460a6f687e1a5b8228410cbf394be90c010c325e",
+      "v3_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/candidate-v3/mcctrl.rs",
+      "v3_sha256": "1871d5fc2bd352228dc167a7460a6f687e1a5b8228410cbf394be90c010c325e",
+      "changed": false
+    },
+    {
+      "v2_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/candidate/mcctrl_process.rs",
+      "v2_sha256": "b2e635f6590d401e2d37646486c2d3a5a52fece210d569533001f354d0537d23",
+      "v3_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/candidate-v3/mcctrl_process.rs",
+      "v3_sha256": "b2e635f6590d401e2d37646486c2d3a5a52fece210d569533001f354d0537d23",
+      "changed": false
+    },
+    {
+      "v2_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/candidate/mcexec_helpers.rs",
+      "v2_sha256": "8f9fbe474220433118e6662c9f2517f73a547730575b83ffb73255d06e9b40d7",
+      "v3_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/candidate-v3/mcexec_helpers.rs",
+      "v3_sha256": "8f9fbe474220433118e6662c9f2517f73a547730575b83ffb73255d06e9b40d7",
+      "changed": false
+    },
+    {
+      "v2_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/candidate/smp_application.rs",
+      "v2_sha256": "105e06fbdd15e70d44a95e4deb1bb3e7e27157f65905365121e538ea2edc38a1",
+      "v3_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/candidate-v3/smp_application.rs",
+      "v3_sha256": "426f7c32d262f42da37454bb7008163aa2ab9da202476c606169be0c1b647871",
+      "changed": true
+    },
+    {
+      "v2_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/candidate/smp_application_syscall.rs",
+      "v2_sha256": "b99874d9c1a80720f154086d40f4427f83732824dad85d8d391cc3a8a4de4360",
+      "v3_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/candidate-v3/smp_application_syscall.rs",
+      "v3_sha256": "b99874d9c1a80720f154086d40f4427f83732824dad85d8d391cc3a8a4de4360",
+      "changed": false
+    }
+  ]
+}

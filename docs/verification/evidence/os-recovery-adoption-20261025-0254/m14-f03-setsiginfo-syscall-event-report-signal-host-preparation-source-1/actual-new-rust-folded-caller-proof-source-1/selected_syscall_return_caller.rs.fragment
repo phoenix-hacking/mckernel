@@ -1,0 +1,11 @@
+                    if ctx.is_null() { 0 } else { cpu::ihk_mc_syscall_sp(ctx) },
+                );
+            }
+            super::save_syscall_return_value(num, result as CULong);
+            if (*(*super::get_this_cpu_local_var()).current).ptrace != 0 {
+                result = super::arch_ptrace_syscall_event(
+                    (*super::get_this_cpu_local_var()).current, ctx, result,
+                );
+            }
+            let ts = cpu::rdtsc();
+            if super::syscall_profile_event_needed_result(num, (*config).profile_max) != 0 {

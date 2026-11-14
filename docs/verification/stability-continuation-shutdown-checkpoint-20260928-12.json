@@ -1,0 +1,108 @@
+{
+  "schema": "mckernel.stability-continuation-shutdown-checkpoint.v1",
+  "recorded_at": "2026-09-28T04:25:46-07:00",
+  "base_commit": "c5d95e1cda88d6300ebf9d05bdcde69baf681887",
+  "launcher": {
+    "run_directory": ".git/os-autopilot/runs/20260928T104742Z-d8634f08",
+    "launcher_pid": 3125264,
+    "worker_pid": 3125267,
+    "app_server_pid": 3125269,
+    "started": "2026-09-28T03:47:42-07:00",
+    "future_continuations_paused": true
+  },
+  "resources_at_shutdown": {
+    "host_free_gib": 43,
+    "scratch_free_gib": 21,
+    "memory_available_gib": 28,
+    "heavy_lease": "free",
+    "project_compiler_or_guest_active": false
+  },
+  "accepted_result": {
+    "name": "scoped Rust pending-free complete-ring preflight",
+    "review": "PASS_SCOPED_VALID_PREFIX_REPAIR",
+    "source_sha256": {
+      "kernel/rust/mem_helpers.rs": "8a1e50d93811edba17530ca7f5365b502585fc42ff588edc58c23b25ea8a17d4",
+      "kernel/rust/tests/pending_free_batch_vectors.rs": "aaa221ab56e843bc93189ecdf94caccc3706f511d08446e5872fe0cec29f4594",
+      "kernel/rust/tests/pending_free_batch_actual_harness.py": "305fb90adbfbcf4d74619d6db7e01aeb9c9b5a952d2b9e14bb76ddbe35b38e1b"
+    },
+    "evidence": "docs/verification/stability-pending-free-production-preflight-success-20260928-10.json",
+    "observed": "37 Rust/C snapshots and 15 trait negatives pass in the pinned container; later-invalid input causes no unlink or callback, and the preflight-removal mutant reproduces valid-prefix release",
+    "limits": "No VM/token/extent ownership, IRQ/reentry/migration exclusion, C fallback repair, guest runtime or full M03 acceptance"
+  },
+  "preserved_wip": [
+    {
+      "lane": "SC-VM-01 actual-body harness",
+      "status": "FAIL_AFTER_BOUNDED_CORRECTION",
+      "sha256": {
+        "kernel/rust/tests/do_munmap_host_clear_actual_harness.py": "4fdcf8eb0058a52942f5198e6e5482891df7d85bad2cffbac60065de95830465",
+        "scripts/tests/test_do_munmap_host_clear_actual_harness.py": "cfccca384c055e2a3ebd35473e1443019ebe0fad31d1314dcc843d70de18f5d7"
+      },
+      "blocker": "Missing EINVAL fixture binding, wrong callback-count oracle, nonexecuted mutants, packet-input mismatch and incomplete durable command/dependency evidence"
+    },
+    {
+      "lane": "M01 trusted retention driver",
+      "status": "FAIL_SOURCE",
+      "sha256": {
+        "scripts/tests/run_stability_selected_retention_phase_i.py": "b06454197ddae6f8af623f5e2f3f8ec6589385667eb3749307b998c0a03c2289",
+        "scripts/tests/test_run_stability_selected_retention_phase_i.py": "c153a018f8238ee00ca3aa30ffe3b959aad19f7c7044e55a8566ac8c3dd88df7"
+      },
+      "blocker": "Close failures mask the primary error in four cleanup sites and Journal construction leaks its descriptor after initial fstat failure"
+    },
+    {
+      "lane": "M02 descriptor remapping",
+      "status": "TESTED_PENDING_INDEPENDENT_REVIEW",
+      "sha256": {
+        "supervise.py": "0da621baad7b9a32dfac6e22260be39d906dce02844d4c1ae70e714031906e53",
+        "witness_owner.py": "4fd01abff28e732778008a221ee26ce2dc3d20e124b705eb53c4f9152f915ade",
+        "test_collector_storage_fault_packet.py": "86b7b11b51cdea3fcae04daa72f26f834601860159c8b5fe7abc979c0e778128"
+      },
+      "observed": "Five real fork/dup/exec and identity tests pass; no child processes remain"
+    },
+    {
+      "lane": "root13 cgroup collector",
+      "status": "INTERRUPTED_UNREVIEWED_PARTIAL",
+      "sha256": {
+        "scripts/tests/layer_b_systemd_cgroup_collector.py": "156e199495253a0e99bfd85d873fb81e67415711d80d32c9b751a461a01e18d3",
+        "scripts/tests/test_layer_b_systemd_cgroup_collector.py": "933b2f70394d67d525ecd7b6eb8de4ca02ffcefd70d8fd302c47d1e219331a88",
+        "packet28": "10efe1aa5d3c0a682ffa30ae427d92916d03976c88c109c80d5037ff26bfc4e7"
+      },
+      "blocker": "Expert correction was interrupted for shutdown; no execution release and no root/systemd action"
+    },
+    {
+      "lane": "Linux diagnostic owner",
+      "status": "INTERRUPTED_UNREVIEWED_PARTIAL",
+      "sha256": {
+        "packet": "cdd75643e96623eb45c555976b893fc9a3f3bf73198085267794e49b29e3a6e1",
+        "oracle": "dbd74f37ffac63d7b7d6381d7179ae633046dce96957f476f929956cea9f2b02",
+        "test": "efc0af7478bc7bfea9d7d7149fa04917a2affad9b3128cf9e630a0f432388b0e"
+      },
+      "blocker": "Expert correction was interrupted after the prior review rejected closure proof, ownership, cleanup, watchdog, admission and evidence validation"
+    },
+    {
+      "lane": "native diagnostic lifecycle",
+      "status": "FAIL_SOURCE",
+      "sha256": {
+        "scripts/application-tests/native_diagnostic.py": "fc48de3043f7ec2a461174366800ec31eecdf6ee6aafcddfdba9f64a1f14490f",
+        "scripts/tests/test_application_native_diagnostic.py": "f17856e9a0fc6facd82aef95a3d96f23b249cc35f311418ef2a153c974487c6e"
+      },
+      "blocker": "Final snapshot precedes teardown, route/CPU correspondence is incomplete, QMP method lookup can bypass process cleanup, and failure journaling can indefinitely delay retirement"
+    }
+  ],
+  "next_tasks": [
+    "Independently review the exact M02 descriptor candidate before any privileged collector action",
+    "Complete and independently review the interrupted root13 collector correction before a fresh root13 attempt",
+    "Complete and independently review the Linux diagnostic owner correction before any Docker payload",
+    "Repair M01 cleanup boundaries so primary errors win and all post-open Journal initialization is covered; add combined-fault tests and review",
+    "Replace the failed SC-VM-01 focused harness coherently, then independently review it before compiler/container execution",
+    "Repair the native diagnostic teardown/final-capture and route-completeness failures; retain the real backend prerequisites",
+    "Implement and execute the matching C pending-free preflight, then continue VM/token/extent ownership design"
+  ],
+  "counters": {
+    "real_guest_applications": "0/273",
+    "narrow_fault_modes": "2/4",
+    "production_gates": "6/130",
+    "points": "350/10000",
+    "language_gates": "0/7"
+  },
+  "whole_os_complete": false
+}

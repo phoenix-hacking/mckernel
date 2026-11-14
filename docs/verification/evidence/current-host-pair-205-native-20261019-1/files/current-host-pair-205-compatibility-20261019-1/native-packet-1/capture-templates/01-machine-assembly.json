@@ -1,0 +1,70 @@
+{
+  "operations": [
+    {
+      "argv_template": [],
+      "profile": "metadata",
+      "role": "UNUSED_INDEX_ZERO_DO_NOT_EXECUTE"
+    },
+    {
+      "argv_template": [
+        "/usr/bin/taskset",
+        "--cpu-list",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--core=0",
+        "--nofile=256",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "-c",
+        "import pathlib,json,hashlib,time,sys\nV=pathlib.Path('/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/n3-variant');B=pathlib.Path('/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1')\nbasebytes=(B/'machine-base.json').read_bytes();assert hashlib.sha256(basebytes).hexdigest()==sys.argv[1];base=json.loads(basebytes)\nsnapshotbytes=(V/'root-live-preflight-1.json').read_bytes();assert hashlib.sha256(snapshotbytes).hexdigest()==sys.argv[2];snapshot=json.loads(snapshotbytes)\nassert snapshot['status']=='PASS_LIVE_PREEXECUTION_SNAPSHOT' and 0<=time.time()-snapshot['time_epoch']<=60 and snapshot['parent_identity']==base['parent_identity']\nassert base['execution_count']==1 and base['runtime_release'] is False and base['fresh_live_preflight'] is None\nassert base['terminal_cleanup_and_common_shared_release']['status']=='PASS' and snapshot['terminal_acceptance']=={k:base['exclusive_queue_predecessor'][k] for k in ['path','sha256']}\nbase.update(status='PASS_EXECUTION_RELEASE',runtime_release=True,fresh_live_preflight={'path':str(V/'root-live-preflight-1.json'),'sha256':sys.argv[2],'bytes':len(snapshotbytes)})\nraw=(json.dumps(base,indent=2)+'\\n').encode()\nwith (B/'execution-release.json').open('xb') as f:f.write(raw)\nprint(json.dumps({'path':str(B/'execution-release.json'),'sha256':hashlib.sha256(raw).hexdigest(),'bytes':len(raw)}),flush=True)\n",
+        "03578183e2cdf32b97eb20f528cc3ca23daeec877567b6914c3856b2bf33d68f",
+        null
+      ],
+      "profile": "metadata",
+      "role": "machine-assembly",
+      "status_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/root-captures-1/01-machine-assembly/status.json",
+      "stderr_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/root-captures-1/01-machine-assembly/stderr",
+      "stdout_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/root-captures-1/01-machine-assembly/stdout"
+    }
+  ],
+  "profiles": {
+    "metadata": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 40,
+      "stream_fsize": 33554432
+    },
+    "native": {
+      "cpu": 7,
+      "parent_kill_grace_seconds": null,
+      "parent_wall_seconds": null,
+      "stream_fsize": 33554432
+    },
+    "reader": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 35,
+      "stream_fsize": 33554432
+    },
+    "snapshot": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 40,
+      "stream_fsize": 33554432
+    }
+  },
+  "release": {
+    "bytes": 5433,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-independent-review-20261019-1/FINAL-N3-SDK-SNAPSHOT-SOURCE-AND-NONTEMPORAL-REVIEW.json",
+    "sha256": "d9c02604d05b67259552dd976fcef430c3bf5b16d74323ee36dd3c0f78201df3"
+  },
+  "root_installed_release_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-independent-review-20261019-1/FINAL-N3-SDK-SNAPSHOT-SOURCE-AND-NONTEMPORAL-REVIEW.json"
+}

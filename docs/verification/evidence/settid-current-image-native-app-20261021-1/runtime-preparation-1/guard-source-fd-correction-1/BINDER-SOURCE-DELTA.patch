@@ -1,0 +1,12 @@
+--- /home/holden/mckernel-work/host-preparation/settid-current-image-native-app-preparation-20261021-1/runtime-preparation-1/whole-caller-path-correction-1/bind_threads_native_packet.py
++++ /home/holden/mckernel-work/host-preparation/settid-current-image-native-app-preparation-20261021-1/runtime-preparation-1/guard-source-fd-correction-1/bind_threads_native_packet.py
+@@ -150,6 +150,9 @@
+ cfg['container_image_id']=c['container_image_id'];cfg['module_authority']=prop['component_ABI']
+ cfg['component_artifact']=prop['component_artifact']
+ cfg['runtime_source_refs']=b['source_pins']+[ref(D/'root_manual_snapshot_threads.py'),bref];cfg['diagnostic_extra_capture_growth_bytes']=8388608;cfg['capacity_reserve_bytes']=679477248
++cfg['runtime_source_fd_identity_map']=ref(D/'RUNTIME-SOURCE-FD-IDENTITIES.json')
++source_fd_map=load(cfg['runtime_source_fd_identity_map']['path'])
++need(source_fd_map['schema']=='mckernel.current-native.selected-runtime-source-full-fd-identities.v1' and set(source_fd_map['identities'])=={row['path'] for row in cfg['runtime_source_refs'] if not row['path'].endswith('.json')},'mandatory exact selected runtime source FD map set')
+ cfg['status']='PASS_NON_TEMPORAL_CURRENT_IHK_LOGGING_NATIVE_CHECK_CONFIG' if final else 'PENDING_INDEPENDENT_STATIC_DATA_REVIEW'
+ cfgref=add(Q/'FINAL-IHK-LOGGING-CHECK-CONFIG.json',cfg)
+ oldx=load(OQ/'FINAL-SEVEN-ROOT-CALL-DATA.json');x=transform(oldx);x['historical_template_ancestry']=oldx['historical_template_ancestry'];x.update(machine_base=baseref,non_temporal_index=iref,snapshot_projection=projectionref,final_config=cfgref,native_allowed_argv=pre['owner_argv'],snapshot_output=str(D/'root-live-preflight-1.json'),required_caller=ref(Q/'root-run-exact-readonly-stage.py'))

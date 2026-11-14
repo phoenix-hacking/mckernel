@@ -1,0 +1,96 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/recovery_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "decision": "PASS_SOURCE",
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CURRENT118-COMPATIBILITY-CLEANUP-PREPARATION/GUARDIAN-REBINDER-SOURCE-READY.json",
+    "bytes": 2039,
+    "sha256": "6136c1d7672181da519b0ff00d397a46892723c16df86b96b72259c0117ecded"
+  },
+  "files": {
+    "rebind_guardian_source.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CURRENT118-COMPATIBILITY-CLEANUP-PREPARATION/rebind_guardian_source.py",
+      "bytes": 8793,
+      "sha256": "2b85201627aad2e50fd915108cba286a4575328f2462a34b2374b4c155e72ce3"
+    },
+    "test_rebind_guardian_source.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CURRENT118-COMPATIBILITY-CLEANUP-PREPARATION/test_rebind_guardian_source.py",
+      "bytes": 5519,
+      "sha256": "cde705cad4116285280fbf062b712c66e567aacb6f69ee425037bf97394cdf44"
+    },
+    "prepare_current_guardian_successor.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CURRENT118-COMPATIBILITY-CLEANUP-PREPARATION/prepare_current_guardian_successor.py",
+      "bytes": 3599,
+      "sha256": "0ab1ef3c0ceea63c0e7d5ac89df592abb70f2a1c8459487b3750e0a62bbe52d5"
+    }
+  },
+  "original_guardian": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/guardian_guard.py",
+    "bytes": 13388,
+    "sha256": "48893862bb3262a2c81d282215e4b9771b8f659e635a21856096c41233774f18"
+  },
+  "focused_tests": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/INDEPENDENT-CURRENT-GUARDIAN-SUCCESSOR-REVIEW/FOCUSED-TESTS.ACTUAL.json",
+    "bytes": 1969,
+    "sha256": "2955450a82d5f267fd01ca403fb51af337d5c3346385b8ea61a7bf02e5e3e660"
+  },
+  "runtime_authority": null,
+  "current_free": false,
+  "controls_arming_authorized": false,
+  "execution_authorized": false,
+  "native_acceptance": false,
+  "findings": [
+    {
+      "boundary": "Exact old source and generated delta",
+      "result": "PASS_SOURCE",
+      "details": "The original guardian is pinned to48893862. render() replaces exactly one declared occurrence per anchor and adds only constants. CONTROL selects NEWSC; ARM_RECEIPT_REF, CONFIG_SHA, PACKET_SHA, THREAD, INITIAL, BOOT_CAP and MONO_CAP bind exact current inputs. Guardian launch/recorded PPID, all six expected actor identities and auxiliary recorded PPIDs become explicit constants. Every original function AST compares equal after normalizing only those four declared identity names. No new process, signal, lock, controller import, RPC or state write enters generated guardian."
+    },
+    {
+      "boundary": "Immutable window and cumulative allowance",
+      "result": "PASS_SOURCE",
+      "details": "DEADLINE1793253600, original WINDOW_SHA, boot ID, RUN7f4af94a83b14cc08f97401f5891d965, CEILING57774.852125, SPENT_FLOOR22812.3311 and window/journal predicates remain. Source constructor allows BOOT_CAP only at or below1051042.6959879305 and MONO_CAP only at or below1035704.5689393478. Earlier immutable window and journal caps remain separate existing predicates; actual runtime deadline uses minimum journal/new caps. Extended caps, changed credit id/budget/spent floor and wrong current thread are rejected by focused tests."
+    },
+    {
+      "boundary": "Actual input references and retained ownership",
+      "result": "PASS_SOURCE",
+      "details": "Late-bound armed/config/packet/bridge references must use four exact NEWSC paths and authenticate bytes before materialization. Armed status, current thread, packet/window hashes, six distinct actors, retired actor exclusions, PPID chain, retained phone1894242/b96505809 and auxiliary leases are checked. Existing supervisor1311/b596/systemd, fresh observed actor PID/birth/allowed reparent, active state/heartbeat, service/auth/billing/instruction holds, stop files, account balance and all packet bytes remain in original validator functions."
+    },
+    {
+      "boundary": "Fixtures and absence",
+      "result": "PASS_SOURCE",
+      "details": "Pure tests use TEST_ONLY=True fixtures. main() explicitly refuses TEST_ONLY before authentication/render or namespace creation, and authenticate fails on missing actual receipt. Tests reject retired receipt path. Actual NEWSC armed receipt and both generated namespaces were absent at independent observation; no actual source generation or controller arming was performed by reviewer."
+    },
+    {
+      "boundary": "Compatibility executor constructor",
+      "result": "PASS_SOURCE",
+      "details": "prepare_current_guardian_successor.py is only a constructor: requires actual armed receipt existence, exact supplied guardian bytes and guard() API, pins old binding49c0 and executor44fd, changes only guardian/output_root_parent plus corresponding BINDINGS_SHA, reauthenticates runtime file references, and emits SOURCE_ONLY pending review/publication. Its guard() shape check is not independent validation of supplied guardian semantics; actual generated bytes must be separately reviewed before any runtime release."
+    }
+  ],
+  "validation_functions": [
+    "need",
+    "finite",
+    "raw",
+    "read",
+    "birth",
+    "validate",
+    "validate_control_config",
+    "validate_arm_reference",
+    "validate_armed",
+    "guard"
+  ],
+  "required_before_actual_generation": [
+    "Parent must finalize genuine NEWSC ACTUAL-CONTROLS-ARMED.json, CONFIG.json, FROZEN-PACKET.json and bridge-start.json under same immutable window/account/thread; no fabricated fixture input.",
+    "Capture exact input bundle refs and authenticate private/canonical packet closure; preserve missing/failed outputs and source evidence."
+  ],
+  "required_before_runtime": [
+    "Independently inspect actual generated guardian constants/minimal diff against real armed receipt/config/packet/bridge, confirm all original function ASTs after declared identity normalization, and no looser finite caps or account changes.",
+    "Independently inspect actual compatibility successor BINDINGS/sole BINDINGS_SHA delta/runtime references, rerun applicable existing Python3.8 compatibility tests at exact scope, then publish/fetch exact generated source dependencies.",
+    "Root must obtain fresh coherent current operation/account/identity/admission, independent exact execution approval and one-shot container retirement/current-free evidence. This source review grants no runtime, control-arming, cleanup, native or OS acceptance."
+  ],
+  "source_blockers": [],
+  "remaining_runtime_blockers": [
+    "Actual NEWSC armed control receipt is absent; actual successor not generated/reviewed/published."
+  ]
+}

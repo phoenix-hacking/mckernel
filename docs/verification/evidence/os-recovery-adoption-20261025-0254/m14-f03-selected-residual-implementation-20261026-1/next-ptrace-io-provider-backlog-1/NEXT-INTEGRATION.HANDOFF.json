@@ -1,0 +1,111 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "NEXT_SUBSTANTIVE_F03_WORK_IS_SIX_QUALIFIED_SELECTOR_INTEGRATION_NOT_MISSING_BODY",
+  "actual_last_batch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-ptrace-io-provider-backlog-1/ACTUAL-SCOPED-RESULT-HANDOFF.json",
+    "bytes": 15758,
+    "sha256": "084eb710f4abfd468ecb1274fe143dd9793de74ddf2514fa80d3a2c285d5e6d4"
+  },
+  "prior_termination_batch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/ACTUAL-SCOPED-RESULT-HANDOFF.json",
+    "bytes": 15427,
+    "sha256": "7006443c7e783e82a99bec8149812631db6d752433147f41a640aad22f91e5ba"
+  },
+  "adopted_prior_twelve_file_source_plan": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-cohort-next-static-source-1/COHERENT-NEXT-SOURCE-PLAN.NOT-GRANTED.json",
+    "bytes": 29507,
+    "sha256": "2edb294b0a171d83939751121dc86d7eb99992509532887c284682fdbdeec86b"
+  },
+  "Root_actual_current_default_profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F03-F06-QUALIFIED-DEFAULT-BUILD-ADMISSION-1/PROFILE.SOURCE-ONLY.json",
+    "bytes": 90783,
+    "sha256": "bda130dc62879e00e1728d21300ebb0bc62cd84dc5e31b0744546ed16a316cec"
+  },
+  "merge_owner_report": "qualified_batch_default_profile confirms prior four-slice+do_exit+fivebridge adopted at3e2d9c4ea; now owns artifact validator only, no next-six integration assignment. No Git command executed by this child.",
+  "observed_current_source_refs": {
+    "kernel/syscall.c": {
+      "path": "/home/holden/mckernel/kernel/syscall.c",
+      "bytes": 913009,
+      "sha256": "2e1c3d5537551bb6a330ea37371ceed20718692d82e0522e004769bf1dcb7f89"
+    },
+    "kernel/rust/syscall_policy.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "bytes": 1249379,
+      "sha256": "f4ed7080659863662e1de75c432b89fd94aadf312efb5e924b1d0e60ef93dbd6"
+    },
+    "kernel/CMakeLists.txt": {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "bytes": 29064,
+      "sha256": "a2636a16d089ee4f93158d8bea30e6a43e40bed967a35a8d859d63f4a19afa32"
+    }
+  },
+  "six_current_gap_observations": [
+    {
+      "symbol": "wait_process_release_bridge",
+      "exact_original_C_region_occurrences_in_current_source": 1,
+      "C_flag_present_in_current_source": false,
+      "C_flag_to_add": "MCKERNEL_RUST_F03_WAIT_PROCESS_RELEASE",
+      "Rust_cfg_to_add": "f03_wait_process_release_selected_candidate"
+    },
+    {
+      "symbol": "terminate_host_refcount_set_bridge",
+      "exact_original_C_region_occurrences_in_current_source": 1,
+      "C_flag_present_in_current_source": false,
+      "C_flag_to_add": "MCKERNEL_RUST_F03_TERMINATE_REFCOUNT",
+      "Rust_cfg_to_add": "f03_terminate_refcount_selected_candidate"
+    },
+    {
+      "symbol": "terminate_mcexec_cmpxchg_bridge",
+      "exact_original_C_region_occurrences_in_current_source": 1,
+      "C_flag_present_in_current_source": false,
+      "C_flag_to_add": "MCKERNEL_RUST_F03_TERMINATE_CMPXCHG",
+      "Rust_cfg_to_add": null
+    },
+    {
+      "symbol": "ptrace_find_thread_bridge",
+      "exact_original_C_region_occurrences_in_current_source": 1,
+      "C_flag_present_in_current_source": false,
+      "C_flag_to_add": "MCKERNEL_RUST_F03_PTRACE_IO_FIND",
+      "Rust_cfg_to_add": "f03_ptrace_io_find_selected_candidate"
+    },
+    {
+      "symbol": "ptrace_thread_unlock_bridge",
+      "exact_original_C_region_occurrences_in_current_source": 1,
+      "C_flag_present_in_current_source": false,
+      "C_flag_to_add": "MCKERNEL_RUST_F03_PTRACE_IO_UNLOCK",
+      "Rust_cfg_to_add": "f03_ptrace_io_unlock_selected_candidate"
+    },
+    {
+      "symbol": "ptrace_copy_from_user_bridge",
+      "exact_original_C_region_occurrences_in_current_source": 1,
+      "C_flag_present_in_current_source": false,
+      "C_flag_to_add": "MCKERNEL_RUST_F03_PTRACE_IO_COPY_FROM",
+      "Rust_cfg_to_add": null
+    }
+  ],
+  "bounded_next_output": {
+    "scope": "Private whole-file successor composition against the adopted canonical cohort; Root alone writes canonical sources after its current epoch is complete.",
+    "files": [
+      "kernel/syscall.c",
+      "kernel/rust/syscall_policy.rs",
+      "kernel/CMakeLists.txt"
+    ],
+    "C_delta": "Apply only six frozen original\u2192paired-selector regions from already HOST-qualified termination3 and ptrace3. No new C runtime function.",
+    "Rust_delta": "Promote existing wait-process/find-thread/unlock callbacks with three cfg_attr(no_mangle)/visibility edits, and append one narrow refcount adapter. Direct CAS/copy aliases need no new Rust body.",
+    "CMake_delta": "Under existing MCKERNEL_HOST_IRQ_ABI=linux-6.12, ARCH=x86_64 and NOT ENABLE_UBSAN cohort gate, pair six C definitions and four Rust cfg values listed above; no wider profile expansion.",
+    "reuse": "Do not reimplement or replay prior four-slice/do_exit/fivebridge/termination3/ptrace3 bodies or HOST compiler prefixes.",
+    "next_check": "Focused exact-region/type/export-uniqueness/coherent C/Rust CMake mapping check on private successor; then Root independently releases the next production compile/default/native epoch without changing/replaying its current frozen profile."
+  },
+  "why_not_another_body_port": "These six actually selected C bridges remain unchanged in current canonical source and already have actual HOST evidence; their production selection/link integration is now the ready dependency. Full mmap/fork already exist privately with unresolved descriptor/range/constructor/provider ownership holds.",
+  "shared_ABI_atomic_helpers_or_F06_body_edit": false,
+  "new_algorithm_body_required": false,
+  "compiler_or_canonical_authority_from_this_cursor": false,
+  "held_scope": [
+    "Original final-reference/current-stack/DCFA/tracee/usercopy/setsiginfo ownership stays open",
+    "Current adopted12-file cohort source-only status is not default/native acceptance",
+    "No whole-file retirement credit"
+  ],
+  "ordinary_CPU6_slot_FREE_at_last_result": true,
+  "fixed_deadline": "2026-10-27T11:24:50Z",
+  "child_next_action": "Stop at this precise integration handoff; no filler inventories or new compiler/source integration dispatch."
+}

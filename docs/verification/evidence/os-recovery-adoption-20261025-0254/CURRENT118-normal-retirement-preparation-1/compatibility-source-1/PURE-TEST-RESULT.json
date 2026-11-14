@@ -1,0 +1,33 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_PURE_TESTS",
+  "actual_interpreter": "/usr/bin/python3",
+  "version": "3.8.10 (default, Mar 18 2025, 20:04:55) \n[GCC 9.4.0]",
+  "waitstatus_to_exitcode_present": false,
+  "observed_actual_tool_response_chunk": "a710aa",
+  "observed_actual_tool_exit_code": 0,
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/compatibility-source-1",
+    "-p",
+    "test_*.py",
+    "-v"
+  ],
+  "test_count": 38,
+  "reported_test_seconds": 0.718,
+  "raw_log_kind": "Exact test response retained in actual tool transcript; this JSON is a worker report, not invented native stdout/wait4.",
+  "signals_sent": 0,
+  "actual_Docker_queries": 0,
+  "actual_guard_calls": 0,
+  "actual_lock_acquisitions": 0,
+  "actual_retirements": 0
+}

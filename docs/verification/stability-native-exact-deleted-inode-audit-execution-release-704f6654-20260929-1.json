@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "record_kind": "native_exact_deleted_inode_audit_execution_release",
+  "status": "PENDING_INDEPENDENT_EXECUTION_REVIEW",
+  "one_shot": true,
+  "maximum_invocations": 1,
+  "retry": false,
+  "rollback": false,
+  "source_checkpoint": "5a8b9b9a3782fe6341df92033ffecf759e8f6c43",
+  "basis": {
+    "path": "docs/verification/evidence/native-exact-candidate-deleted-inode-audit-release-basis-704f6654-1.json",
+    "sha256": "8ec1591e2544264080f7cd958435d3175043bc0b30f5cd1700babf3371bfabd2"
+  },
+  "source_bindings": {
+    "helper_sha256": "997c8b808885c4eb89704bba46f69121d7def304d0aaa4480f09eb96ed352406",
+    "test_sha256": "cbe06f646c620694a71be1d12462f6e485a5b3bf5e8f1b4a7ba496dcdc108ab8",
+    "source_review_record": "docs/verification/stability-native-exact-deleted-inode-audit-source-success-704f6654-20260929-1.json",
+    "source_review_status": "PASS_SOURCE_ONLY"
+  },
+  "exact_command_argv": [
+    "/usr/bin/sudo", "-A", "/usr/bin/python3.8", "-I", "-B",
+    "/home/holden/mckernel/scripts/native_exact_candidate_deleted_inode_audit.py",
+    "--archive", "/home/holden/mckernel/docs/verification/evidence/stability-native-exact-quarantine-continuation-success-704f6654-20260929-1.tar.gz",
+    "--inventory", "/home/holden/mckernel/docs/verification/evidence/stability-native-exact-candidate-retention-704f6654-20260929-1.inventory.json",
+    "--output", "/home/holden/mckernel-work/scratch/native-exact-candidate-deleted-inode-audit-704f6654-1.json",
+    "--rounds", "3", "--delay", "0.1",
+    "--anchor", "3399308:83682487",
+    "--anchor", "3399313:83682494",
+    "--anchor", "3399317:83682500"
+  ],
+  "scope": {
+    "allowed": "read procfs and the exact pinned archive/inventory/helper/interpreter; create exactly one exclusive mode-0600 audit JSON",
+    "forbidden": ["Docker mutation", "build", "module load", "guest", "deletion", "rename", "rollback", "consumed packet reuse", "network"]
+  },
+  "required_before_execution": [
+    "this proposal, its exact basis and all source bindings are committed, pushed and fetched byte-identically",
+    "an independent Astra execution reviewer returns PASS_EXECUTION_RELEASE for the fetched proposal and exact argv",
+    "boot ID, output-parent identity and all three PID/starttime anchors still match the basis",
+    "the exact output path is absent including as a dangling symlink",
+    "the original and quarantine target names remain absent and retained evidence/tombstone identities remain exact",
+    "the coordinator performs no concurrent dispatch or process launch during the three-round census"
+  ],
+  "required_after_execution": [
+    "preserve outer exit status, stdout and stderr without credential material",
+    "preserve and hash the exclusive root-owned mode-0600 result",
+    "independently review every round, failure/reference list, target binding and postflight identity",
+    "archive runtime evidence before any fresh candidate preparation"
+  ],
+  "expected": {
+    "outer_exit_status": 0,
+    "schema": "mckernel.native-exact-deleted-inode-audit.v1",
+    "status": "PASS",
+    "rounds": 3,
+    "references_each_round": 0,
+    "failures_each_round": 0,
+    "target_identity_count": 10611,
+    "target_identity_sha256": "3ee0942c4e5f1934220c8dafed3c4664ae47d05cb30ed4679ec0fe6cadd0a1e8"
+  },
+  "acceptance": {
+    "runtime_acceptance": false,
+    "production_gate_credit": false,
+    "application_acceptance": false,
+    "retrospective_retirement_acceptance": false,
+    "fresh_candidate_preparation_unlocked_only_after_independent_runtime_pass": true,
+    "os_complete": false
+  }
+}

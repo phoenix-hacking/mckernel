@@ -1,0 +1,24 @@
+--- /home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/begin-cleanup-native-successor-2/restoration-batch-readiness-1/derive_fixed_batch.TEMPLATE.py
++++ /home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/derive_fixed_batch.PENDING.py
+@@ -6,9 +6,9 @@
+ import argparse,ast,hashlib,json
+ HERE=Path(__file__).resolve().parent
+ OLD=Path('/home/holden/mckernel-work/host-preparation/p-m05-fixed-profile-batch-adaptation-20261023-1')
+-PROFILE_ID='current68-begin-db7f-image10972-launcherdca0-p05-short32'
+-SDK=None
+-SDK_SHA=None
++PROFILE_ID='current68-sdk5-image10972-launcherdca025-p05-short32'
++SDK=Path('/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-sdk-preparation-5/INDEPENDENT-ACTUAL-SDK-ARTIFACT-AND-PHYSICAL-ACCEPTANCE.json')
++SDK_SHA='8614e3e2bbf9e07c01f396079fc83fedbbb4119a3c37b5e311bdcc6cb6099623'
+ def need(v,m):
+  if not v:raise ValueError(m)
+ def digest(b):return hashlib.sha256(b).hexdigest()
+@@ -17,7 +17,7 @@
+ def main(argv=None):
+  p=argparse.ArgumentParser();p.add_argument('--profile',required=True);args=p.parse_args(argv)
+  raw=Path(args.profile).read_bytes();profile=json.loads(raw)
+- need(profile['profile_id']==PROFILE_ID and profile['prior_cycle_credit']==0 and profile['future_v3_artifacts'] is None,'fixed current zombie tuple and zero prior credit')
++ need(profile['profile_id']==PROFILE_ID and profile['prior_cycle_credit']==0 and profile['future_v3_artifacts'] is None,'fixed SDK5 tuple and zero prior credit')
+  manifest=bound(profile['manifest']);need(SDK is not None and digest(SDK.read_bytes())==SDK_SHA,'exact accepted BEGIN SDK authority');sdk=json.loads(SDK.read_text())
+  need({Path(r['path']).name:{'bytes':r['size'],'sha256':r['sha256']}for r in manifest['modules']}=={k:{n:v[n]for n in ('bytes','sha256')}for k,v in sdk['artifacts'].items()},'exact three accepted current SDK modules')
+  need(manifest['artifacts']['mckernel_image']['sha256']=='10972f87277e8429e2badd238d3ac53e451b8a2351a8ebf013941e1dfb95e1e2' and manifest['artifacts']['mcexec']['sha256']=='dca0250159ce04a272a72dd1217213a4b6e0f21ec8c21da211eede250c451954','unchanged accepted image and launcher')

@@ -1,0 +1,156 @@
+--- cleanup_pass_image5f67.py
++++ cleanup_launcher.UNBOUND.py
+@@ -31,27 +31,27 @@
+ import signal
+ import time
+ 
+-SOURCE_REFS = {'artifacts:CMakeCache.txt': {'bytes': 26414, 'path': '/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1/owner-work/output/build/CMakeCache.txt', 'sha256': '50e1523f485648386b9037630ce7306d8315c4dc08f8b9ca56f3a401f0ed0110'}, 'artifacts:build.make': {'bytes': 8381, 'path': '/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel_rust_obj.dir/build.make', 'sha256': '4b95928d2d27f8b1295c993a5e52ef2ad537bdeb2e03b1f9c5213534add4f481'}, 'artifacts:compile_commands.json': {'bytes': 74392, 'path': '/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1/owner-work/output/build/compile_commands.json', 'sha256': 'cbf12ca93c9946c7020b428e5dbc9f08df22659651d94c40704e7c8fa41f006b'}, 'artifacts:mcexec': {'bytes': 394656, 'path': '/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1/owner-work/output/build/executer/user/mcexec', 'sha256': '689dcad27b2ce3a30f49df1bfe9452f2169a14e9c350c24c9677c88b1f152876'}, 'artifacts:mcexec-rust-build.make': {'bytes': 3618, 'path': '/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1/owner-work/output/build/executer/user/CMakeFiles/mcexec_rust_helpers.dir/build.make', 'sha256': '974f1814427e41cbb9b0cb25a31fcd66804474fab8d1fecc191d36387c72828c'}, 'artifacts:mcexec_helpers.o': {'bytes': 437008, 'path': '/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1/owner-work/output/build/executer/user/rust/mcexec_helpers.o', 'sha256': '63f7f2916feb6b051325133b9e04008618c178a11ff6310c55d56183ac7398d3'}, 'artifacts:mckernel.img': {'bytes': 8427720, 'path': '/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1/owner-work/output/build/kernel/mckernel.img', 'sha256': '1d8c4e78f7219792c0d2008952e11602a19451eb6697593ec10f0c77a8f1c101'}, 'artifacts:mckernel.img.map': {'bytes': 757032, 'path': '/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1/owner-work/output/build/kernel/mckernel.img.map', 'sha256': 'b246d72982065b0bd60ea718f1362f7ec53ba19e3a5ffa36768befb219e48c48'}, 'artifacts:mckernel_rust.o': {'bytes': 13576160, 'path': '/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1/owner-work/output/build/kernel/rust/mckernel_rust.o', 'sha256': 'e3a2a623c39b05776af21805553a3523568b6d6a9b85ff447f6ab786ed90f36b'}, 'driver_path': {'bytes': 135622, 'path': '/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/native_rust_exact_mckernel_image_offline.py', 'sha256': 'bc2ff0e00864d08489425cf979d35c6717d040c6c8a18b85bb0d0e573904dc6a'}, 'driver_receipt': {'bytes': 41900, 'path': '/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1/owner-work/evidence/receipt.json', 'sha256': '21e543405e6611313d704340cfccc522da82ca991429b7f16e784cfab5318150'}, 'evidence_artifacts:CMakeCache.txt': {'bytes': 26414, 'path': '/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1/owner-work/evidence/artifacts/CMakeCache.txt', 'sha256': '50e1523f485648386b9037630ce7306d8315c4dc08f8b9ca56f3a401f0ed0110'}, 'evidence_artifacts:build.make': {'bytes': 8381, 'path': '/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1/owner-work/evidence/artifacts/build.make', 'sha256': '4b95928d2d27f8b1295c993a5e52ef2ad537bdeb2e03b1f9c5213534add4f481'}, 'evidence_artifacts:compile_commands.json': {'bytes': 74392, 'path': '/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1/owner-work/evidence/artifacts/compile_commands.json', 'sha256': 'cbf12ca93c9946c7020b428e5dbc9f08df22659651d94c40704e7c8fa41f006b'}, 'evidence_artifacts:mcexec': {'bytes': 394656, 'path': '/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1/owner-work/evidence/artifacts/mcexec', 'sha256': '689dcad27b2ce3a30f49df1bfe9452f2169a14e9c350c24c9677c88b1f152876'}, 'evidence_artifacts:mcexec-rust-build.make': {'bytes': 3618, 'path': '/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1/owner-work/evidence/artifacts/mcexec-rust-build.make', 'sha256': '974f1814427e41cbb9b0cb25a31fcd66804474fab8d1fecc191d36387c72828c'}, 'evidence_artifacts:mcexec_helpers.o': {'bytes': 437008, 'path': '/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1/owner-work/evidence/artifacts/mcexec_helpers.o', 'sha256': '63f7f2916feb6b051325133b9e04008618c178a11ff6310c55d56183ac7398d3'}, 'evidence_artifacts:mckernel.img': {'bytes': 8427720, 'path': '/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1/owner-work/evidence/artifacts/mckernel.img', 'sha256': '1d8c4e78f7219792c0d2008952e11602a19451eb6697593ec10f0c77a8f1c101'}, 'evidence_artifacts:mckernel.img.map': {'bytes': 757032, 'path': '/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1/owner-work/evidence/artifacts/mckernel.img.map', 'sha256': 'b246d72982065b0bd60ea718f1362f7ec53ba19e3a5ffa36768befb219e48c48'}, 'evidence_artifacts:mckernel_rust.o': {'bytes': 13576160, 'path': '/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1/owner-work/evidence/artifacts/mckernel_rust.o', 'sha256': 'e3a2a623c39b05776af21805553a3523568b6d6a9b85ff447f6ab786ed90f36b'}, 'gitlink_manifest': {'bytes': 72854, 'path': '/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/gitlink-inputs.json', 'sha256': '3d58d0bf69f6253d322d81599b6ca7b952731a08ab66871b97264cc5af922541'}, 'host_owner_path': {'bytes': 51420, 'path': '/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/adapters/native_rust_exact_build_container_owner.py', 'sha256': '96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1'}, 'image_owner': {'bytes': 88727, 'path': '/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/native_rust_exact_mckernel_image_container_owner.py', 'sha256': '84844a50f98267b6acff57ed6b0854a97c8999a81a520493b6762e4cabaa93a2'}, 'materialization': {'bytes': 513, 'path': '/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/source-materialization-1/materialization-receipt.json', 'sha256': 'f22260393624603dfd17ea15d2b9104d5275b2cec025653d6395df029a96f360'}, 'provenance_path': {'bytes': 41115, 'path': '/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/native_rust_exact_build_offline.py', 'sha256': 'd508ba6ae81dbdad81199515d55d5406e4c0a41944c1d301240d75d81f8e6ec1'}, 'source_manifest': {'bytes': 6382081, 'path': '/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/thin-inputs.json', 'sha256': '40944a65b9714777d0af0e4626e65888bf627d648395d5cc3a2e646ff19c1520'}, 'toolchain_manifest': {'bytes': 72685013, 'path': '/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/image-toolchain.json', 'sha256': 'a68e02b3b66b8bfbae96bf742dc8702b6e81dd97b92189b87437c3d08fccdf72'}}
+-CURRENT_TYPED_REQUEST = {'candidate_identity_scope': 'base_git_commit_only', 'candidate_sha': '942c927b1ec93cc31284ff498455909d9bb2d0fc', 'materialization_sha256': '317752dc9138cde2aac932da3b9e1b3e7f3434379361778a6aff035b2d46c44c', 'source_derivative_sha256': '050b953f46ff55f5ec819923819096fde8688400d860f7e666db9bbddb5b3f44', 'source_identity': {'dev': 66306, 'file_type': 16384, 'gid': 1000, 'inode': 48501031, 'mode': 448, 'path': '/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/source-materialization-1/materialized-source', 'uid': 1000}, 'source_root': '/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/source-materialization-1/materialized-source'}
++SOURCE_REFS = None
++CURRENT_TYPED_REQUEST = None
+ REPO = Path('/home/holden/mckernel')
+-PUBLISHED_SCRIPT = 'docs/verification/evidence/numa-allowed-mask-native-successor-preparation-20261021-1/bound-terminal-source-1/cleanup_pass_image.py'
++PUBLISHED_SCRIPT = 'docs/verification/evidence/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-terminal-data-preparation-1/cleanup_launcher.py'
+ PUBLISHED_TESTS = 'scripts/tests/test_native_rust_cutover_image_terminal_cleanup.py'
+ SELFTEST = REPO / PUBLISHED_TESTS
+-NAMESPACE = Path('/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1')
+-NAMESPACE_ANCESTRY = [{'device': 66306, 'gid': 0, 'inode': 2, 'mode': 16877, 'path': '/', 'uid': 0}, {'device': 66306, 'gid': 0, 'inode': 45481985, 'mode': 16877, 'path': '/home', 'uid': 0}, {'device': 66306, 'gid': 1000, 'inode': 45481986, 'mode': 16877, 'path': '/home/holden', 'uid': 1000}, {'device': 66306, 'gid': 1000, 'inode': 47459822, 'mode': 16893, 'path': '/home/holden/mckernel-work', 'uid': 1000}, {'device': 66306, 'gid': 1000, 'inode': 47848559, 'mode': 16832, 'path': '/home/holden/mckernel-work/host-preparation', 'uid': 1000}, {'device': 66306, 'gid': 1000, 'inode': 48500973, 'mode': 16832, 'path': '/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1', 'uid': 1000}, {'device': 66306, 'gid': 1000, 'inode': 48508835, 'mode': 16832, 'path': '/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1', 'uid': 1000}]
+-NAMESPACE_BINDING = {'device': 66306, 'gid': 1000, 'inode': 48508835, 'mode': 16832, 'uid': 1000}
++NAMESPACE = Path('/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-successor-preparation-1/launcher-attempt-1')
++NAMESPACE_ANCESTRY = None
++NAMESPACE_BINDING = None
+ ROOT = Path('/home/holden/mckernel-work/scratch')
+ UUID = '2a5768c8-718d-4914-bdc0-6b32c5a92a52'
+ DEVICE = None  # A future, independently reviewed release binds the live device.
+ UID = GID = 1000
+-PREFIX = 'numa-allowed-mask-image-terminal-20261021-1'
++PREFIX = 'numa-launcher-sentinel-terminal-20261021-1'
+ CANDIDATE = None  # Derived only from the exact consumed image request at release validation.
+-ATTEMPT = Path('/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1/common-exclusion.json')
++ATTEMPT = NAMESPACE / 'common-exclusion.json'
+ SHARED = ROOT / 'mckernel-heavy-operation.lock'
+-REQUEST = Path('/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/execution-preparation-1/image-request.json')
+-LEASE = Path('/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1/lease.json')
+-OUTPUT = Path('/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1/owner-work')
+-EVIDENCE = Path('/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1/owner-evidence')
++REQUEST = Path('/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-successor-preparation-1/launcher-request.json')
++LEASE = NAMESPACE / 'lease.json'
++OUTPUT = NAMESPACE / 'owner-work'
++EVIDENCE = NAMESPACE / 'owner-evidence'
+ MUTEX = ROOT / (PREFIX + '.mutex')
+ PLAN = ROOT / (PREFIX + '.plan.json')
+ JOURNAL = ROOT / (PREFIX + '.journal.jsonl')
+@@ -61,8 +61,8 @@
+ ROOT_LOCK = Path('/run/lock/mckernel-development.lock')
+ BASELINE_SOURCE_SHA = '6606af40114eb5b6019438c4127948081d80bbe65144d841e906a7cba84aabed'
+ NATIVE_BASELINE_SOURCE_SHA = '8449b4b87b2286d4dc3d08e0c5921d2d79e44f17920d0aaee3eae646993fc995'
+-KNOWN_TARGET = {'container_id': '4639405e15ed82ddaf337a96141ccc080061831ab857ef12d0d4e9a3dc1f85cd', 'container_name': 'mckernel-image-1c6453956ff74845ba0fdaec6d51c200', 'exit_code': 0, 'owner_nonce': '0570af28c85f4112b2d904edd552ebd0', 'owner_pid': 2551723, 'owner_starttime': '37358952'}
+-REQUEST_SHA = '1430be233825272d40f5692a62f11b9fd612e49158551ed1c8a321fa26bd31e2'
++KNOWN_TARGET = None
++REQUEST_SHA = None
+ IMAGE_CANDIDATE = '942c927b1ec93cc31284ff498455909d9bb2d0fc'
+ ROOT_TERMINAL = None  # Exact future nonce-bound guard-result.json proof.
+ CONTAINER = CONTAINER_NAME = OWNER_NONCE = OWNER_PID = OWNER_START = None
+@@ -143,7 +143,7 @@
+         if observe_identity(Path(row['path'])) != row:
+             raise Refusal('selected-artifact-or-receipt-drift:' + row['path'])
+ 
+-PASS_LOG_CHANNELS = {'status.json': {'bytes': 257, 'path': '/home/holden/mckernel-work/scratch/native-rust-phase5-current-optin-image-guard-d37f2175c1c049869e4a5872de864858/command-84191d8d9d854fac94958d706d4065f9/status.json', 'sha256': '53fbcd99bfab3f9d7b1ce4c4aa59963a66692c4e85f0616fc28af773c4e41508'}, 'stderr': {'bytes': 0, 'path': '/home/holden/mckernel-work/scratch/native-rust-phase5-current-optin-image-guard-d37f2175c1c049869e4a5872de864858/command-84191d8d9d854fac94958d706d4065f9/stderr', 'sha256': 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'}, 'stdout': {'bytes': 33564, 'path': '/home/holden/mckernel-work/scratch/native-rust-phase5-current-optin-image-guard-d37f2175c1c049869e4a5872de864858/command-84191d8d9d854fac94958d706d4065f9/stdout', 'sha256': '900e92224927bdf0f229acbe891e5db33e84ecea77b81f6571207d1ad8d6a652'}}
++PASS_LOG_CHANNELS = None
+ 
+ def capture_logs(present, execute=False, transaction=None):
+     for role, row in PASS_LOG_CHANNELS.items():
+@@ -347,22 +347,33 @@
+     ref = SOURCE_REFS['image_owner']
+     source = read_bounded(Path(ref['path']), maximum=PROTECTED_LIMIT)
+     if digest(source) != ref['sha256']: raise Refusal('current-image-owner-source')
++    plan_ref = request.get('launcher_plan')
++    if plan_ref != CURRENT_LAUNCHER_PLAN or plan_ref != SOURCE_REFS['launcher_plan']:
++        raise Refusal('exact-launcher-plan-reference')
++    raw_plan = read_bounded(Path(plan_ref['path']), maximum=PROTECTED_LIMIT)
++    if len(raw_plan) != plan_ref['bytes'] or digest(raw_plan) != plan_ref['sha256']:
++        raise Refusal('exact-launcher-plan-bytes')
++    plan = parse(raw_plan)
++    if plan.get('schema') != 'mckernel.exact-launcher-only-plan.v1':
++        raise Refusal('exact-launcher-plan-schema')
+     nodes = list(ast.walk(ast.parse(source.decode())))
+     command = next(n for n in nodes if isinstance(n,ast.Assign) and isinstance(n.targets[0],ast.Name) and n.targets[0].id=='command' and isinstance(n.value,ast.List) and n.value.elts and isinstance(n.value.elts[0],ast.Constant) and n.value.elts[0].value=='/driver.py')
+     mounts = next(n for n in nodes if isinstance(n,ast.Assign) and isinstance(n.targets[0],ast.Name) and n.targets[0].id=='mounts' and isinstance(n.value,ast.List) and command.lineno-40<n.lineno<command.lineno)
+     gm = next(n for n in nodes if isinstance(n,ast.If) and n.lineno==mounts.end_lineno+1)
++    extra = next(n for n in nodes if isinstance(n,ast.AugAssign) and isinstance(n.target,ast.Name) and n.target.id=='mounts' and isinstance(n.op,ast.Add) and isinstance(n.value,ast.List) and gm.end_lineno<n.lineno<command.lineno)
++    if len(extra.value.elts) != 5: raise Refusal('exact-launcher-five-extra-mounts')
+     gc = next(n for n in nodes if isinstance(n,ast.If) and n.lineno==command.end_lineno+1)
+-    # Include the current opt-in conditional immediately following gitlink args.
+     opt = next(n for n in nodes if isinstance(n,ast.If) and n.lineno==gc.end_lineno+1)
+     bound={k:Path(request[v]) for k,v in [('source','source_root'),('manifest','source_manifest'),('toolchain','toolchain_manifest'),('driver','driver_path'),('provenance','provenance_path'),('output','output_root')]}
+-    bound.update(work=Path(request['work_root']),gitlink_manifest=Path(request['gitlink_manifest']),gitlink_root=Path(request['gitlink_root']))
++    bound.update(work=Path(request['work_root']),gitlink_manifest=Path(request['gitlink_manifest']),gitlink_root=Path(request['gitlink_root']),launcher_plan=Path(plan_ref['path']),launcher_base_driver=Path(plan['base_driver']['path']),launcher_retained_build=Path(plan['retained_build']['path']),launcher_original=Path(plan['original_source']['path']),launcher_override=Path(plan['source_override']['path']))
+     scope=dict(r=request,bound=bound,evidence=Path(request['evidence_root']))
+-    tree=ast.fix_missing_locations(ast.Module(body=[mounts,gm,command,gc,opt],type_ignores=[]))
+-    exec(compile(tree,'<pinned current producer literal layout>','exec'),scope)
++    tree=ast.fix_missing_locations(ast.Module(body=[mounts,gm,extra,command,gc,opt],type_ignores=[]))
++    exec(compile(tree,'<pinned launcher producer literal layout>','exec'),scope)
+     pairs=[(dst,str(src),'bind',not readonly) for src,dst,readonly in scope['mounts']]
+     pairs.extend((row['container_path'],row['host_path'],'bind',False) for row in request['toolchain_roots'])
+     if scope['command'].count('--native-fork-owned-transaction') != 1: raise Refusal('current-image-opt-in-layout')
+     return scope['command'],sorted(pairs)
++
+ 
+ 
+ def image_owner_receipt_binding(receipt, item, receipt_sha):
+@@ -372,7 +383,8 @@
+     spec = importlib.util.spec_from_file_location('image_receipt_mount_core', path)
+     core = importlib.util.module_from_spec(spec)
+     spec.loader.exec_module(core)
+-    if (receipt.get('schema') != 'mckernel.native-exact-mckernel-image-container-receipt.v1' or
++    if (receipt.get('schema') != 'mckernel.native-exact-launcher-container-receipt.v1' or
++            receipt.get('operation_scope') != 'launcher-only' or receipt.get('launcher_only') is not True or
+             receipt.get('status') != 'PASS' or receipt.get('retired') is not True or
+             receipt.get('terminal_container_retained') is not True or
+             receipt.get('cleanup_separately_required') is not True or
+@@ -410,6 +422,8 @@
+ 
+ def typed_source_binding(request,obs,selected_map):
+     expected = CURRENT_TYPED_REQUEST
++    if request.get('launcher_plan') != CURRENT_LAUNCHER_PLAN or SOURCE_REFS.get('launcher_plan') != CURRENT_LAUNCHER_PLAN:
++        raise Refusal('exact-launcher-typed-plan')
+     if any(request.get(k)!=v for k,v in expected.items()): raise Refusal('current-typed-source-request')
+     for name,ref in SOURCE_REFS.items():
+         row=selected_map.get(ref['path'])
+@@ -419,6 +433,9 @@
+     if obs['candidate_root']['inode']!=request['source_identity']['inode']: raise Refusal('current-source-root-identity')
+ 
+ 
++
++CURRENT_GUARD_CAPTURE = None  # Future exact actual guard capture Path.
++CURRENT_LAUNCHER_PLAN = {'path': '/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-successor-preparation-1/launcher-plan.json', 'bytes': 3577, 'sha256': '58d346ad4f227cd9da07d36c6956216c85101ef34893bbf0ec5092f7383bff9d'}
+ 
+ def configure(value, execute=False):
+     """Future release only. No runtime identity is inherited from scratch21."""
+@@ -479,7 +496,7 @@
+     client_rows = obs['client_ledger']
+     if not isinstance(client_rows, list) or not client_rows or any(set(r) != {'pid', 'status_path', 'status_sha256'} or type(r['pid']) is not int or r['pid'] <= 0 for r in client_rows):
+         raise Refusal('positive-client-ledger-required')
+-    guard_capture = ROOT / 'native-rust-phase5-current-optin-image-guard-d37f2175c1c049869e4a5872de864858'
++    guard_capture = CURRENT_GUARD_CAPTURE
+     if {r['status_path'] for r in client_rows} != {str(p) for p in guard_capture.glob('command-*/status.json')} or any(Path(r['status_path']).parent.parent != guard_capture for r in client_rows):
+         raise Refusal('complete-current-guard-client-ledger-required')
+     for row in client_rows:
+@@ -556,7 +573,7 @@
+         raise Refusal('duplicate-selected-file')
+     ROOT_TERMINAL = Path(obs[proof_key]['path'])
+     if proof_key == 'guard_proof' and (ROOT_TERMINAL.name != 'guard-result.json' or ROOT_TERMINAL.parent.parent != ROOT or
+-            ROOT_TERMINAL.parent.name != 'native-rust-phase5-current-optin-image-guard-d37f2175c1c049869e4a5872de864858'):
++            ROOT_TERMINAL.parent != CURRENT_GUARD_CAPTURE):
+         raise Refusal('image-guard-proof-path')
+     joins = {'driver_path': 'driver_sha256', 'provenance_path': 'provenance_sha256',
+              'host_owner_path': 'host_owner_sha256', 'source_manifest': 'source_manifest_sha256',
+@@ -567,7 +584,7 @@
+               str(OUTPUT / 'evidence/receipt.json')}
+     if target['exit_code'] == 0:
+         needed.update(str(OUTPUT / relative) for relative in
+-                      ('output/build/kernel/mckernel.img', 'evidence/artifacts/mckernel.img'))
++                      ('output/build/executer/user/mcexec', 'evidence/artifacts/mcexec'))
+     needed.update(request[key] for key in joins)
+     needed.update(row['status_path'] for row in client_rows)
+     if not needed <= set(selected_map):

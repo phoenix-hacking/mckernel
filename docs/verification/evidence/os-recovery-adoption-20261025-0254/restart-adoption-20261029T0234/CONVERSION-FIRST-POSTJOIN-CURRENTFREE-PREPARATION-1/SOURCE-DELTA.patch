@@ -1,0 +1,52 @@
+--- accepted_root69_observer
++++ new_postretirement_observer
+@@ -20,7 +20,7 @@
+ ABANDONMENT={'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CURRENT119-MATCHING-NATIVE-PREPARATION-1/ROOT-ABANDONED-NATIVE-NONCE.ACTUAL.json', 'bytes': 1019, 'sha256': '12bec5b7722555ce8639a9f5b93368ac029a97b6ab40afa2c8009015442d23ba'}
+ FAILURE_REVIEW={'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CURRENT119-MATCHING-NATIVE-PREPARATION-1/root-adopted-current119-process235-entry-3/actual-entry-refusal-review-1/ENTRY-REFUSAL-DISPOSITION.ACTUAL.json', 'bytes': 7632, 'sha256': '033c6b8c8bf9bbe148531b07d059b4d0a6510266cfbc850e097d1bdc01515f6f'}
+ PHYSICAL={'path':'/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-physical-history-successor-source-20261028-1/physical_history_successor.py','bytes':9521,'sha256':'af7cfd5a37a56672205ef0bc133d0c679aa5a7103450cf73ff1ba4f50479ca87'}
+-GUARD={'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-CURRENT-FRONTIER-PREPARATION-1/parent-ownership-correction-1/readonly_operation_guard.py', 'bytes': 9868, 'sha256': '29bc19df20118485418a96a2dd0fd9099ff550a5732a8dfcd402aa332b28d066'}
++GUARD={'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CONVERSION-FIRST-POSTJOIN-CURRENTFREE-PREPARATION-1/readonly_operation_guard.py', 'bytes': 8449, 'sha256': 'efbb2f477b306054fcbf988bf9576c80b713ec3b7b755fb5987af52dcbb9d757'}
+ LIMITS=(1793774133,1556235.568922472,1571573.6959699572)
+ def need(v,why):
+  if not v:raise ValueError(why)
+@@ -103,17 +103,13 @@
+ def observe():
+  binding=read(ref(BINDING));guard=load(GUARD,'exact_current119_native_guard_resource');first=guard.guard();_,_,context,_=guard.binding_metadata(guard.read(guard.ref(guard.BINDING)))
+  review=read(binding['independent_review']);validate_route(binding,context,review)
+- need(binding['current_free']==ACCEPTED_FREE,'exact independently accepted current119 capture, no prior free alias')
+- checker=load(CHECKER,'exact_current119_postjoin_source');capture=read(CAPTURE);parent=read(PARENT);free=read(binding['current_free']);actors=frontier(checker,free,capture,parent)
+- validate_adoption(read(binding['current_ledger']),read(binding['current_boundary']),binding['current_ledger'],binding['current_free'],free,actors)
+- supplement_ref=binding['post_root68_custody_supplement'];supplement=read(supplement_ref)
+- acceptance=read(STAGE_ACCEPTANCE);actors=append_post68_stage(actors,supplement,supplement_ref,read(context['source_authority']),context,acceptance,read(supplement['stage_result']),read(supplement['stage_parent_join']),read(supplement['stage_grant']))
+- resource1_ref=binding['post_root68_resource1_custody_supplement'];resource1_supplement=read(resource1_ref);actors=append_resource1(actors,resource1_supplement,resource1_ref,read(context['source_authority']),context,checker,read(RESOURCE1),read(RESOURCE_JOIN),read(RESOURCE_PARENT),read(RESOURCE_RELEASE),read(RESOURCE_REFUSAL),read(RESOURCE_REVIEW),read(ABANDONMENT),read(FAILURE_REVIEW))
++ history=load(context['readonly_source_closure']['history'],'pure_actual_postretirement_frontier');actors,retire_receipts,pins=history.validate(read(context['source_authority']));previous_free=read(pins['previous_free'])
++ checker=load(CHECKER,'retained_pure_postjoin_readers')
+  history_binding=read(binding['physical_history_binding'])
+  need(history_binding['guard_adapter']==ref(HERE/'readonly_history_guard.py') and history_binding['guard_config']==guard.ref(guard.BINDING),'exact retained physical history with native Q adapter')
+  physical=load(PHYSICAL,'accepted_original_physical_history');physical.configure(binding['physical_history_binding']);historical=physical.observe()
+  # Reuse the unchanged normal-retirement transport and full-process predicate.
+- executor,b,_,retirement=checker.validate_metadata();out=Path(binding['query_output_directory'])
++ executor=history.load(pins['retirement_executor'],'actual_conversion_retirement_readers');b=executor.bindings();retirement=retire_receipts;out=Path(binding['query_output_directory'])
+  need(out.is_absolute() and out.is_dir() and not any(out.iterdir()),'fresh dedicated output directory')
+  cls,_=executor.transport(b);commands=cls(out,executor.Stop())
+  def before_popen(argv):
+@@ -139,7 +135,7 @@
+  need(historical['no_existing_heavy'] is True and historical['active_shared_records_absent'] is True and historical['pids_current']==0 and len(historical['closed_exclusive_probes'])==2,'unchanged full original physical resource checks')
+  need(historical['capacity']['/home/holden/mckernel']>=16*2**30 and historical['capacity']['/home/holden/mckernel-work/scratch']>=12*2**30,'original host and scratch floors')
+  last=guard.guard();limits=guard.current_cutoffs();need(all(0<=a<=z<c<=m for a,z,c,m in zip(first,last,limits,LIMITS)) and last[1]-first[1]<=120,'same current Q clocks and freshness')
+- result=dict(historical);result.pop('actual_latest_operation_postjoin_acceptance',None);result.pop('current_boundary',None);result.update(historical_root68_ledger=binding['current_ledger'],historical_root68_boundary=binding['current_boundary'],historical_current119_free=binding['current_free'],current_free_candidate=True,independent_acceptance=False,current_physical_clearance_pending=True,complete_actual_actor_frontier=True,all_recorded_actors_absent=actors,old_readonly_client_status='UNKNOWN',historical_current119_capture=CAPTURE,post_root68_custody_supplement=supplement_ref,post_root68_resource1_custody_supplement=resource1_ref,unmeasured_resource1=resource1_supplement['unmeasured'],unmeasured_resource1_limitations=resource1_supplement['unmeasured_limitations'],stage_acceptance=STAGE_ACCEPTANCE,unmeasured_post_root68_outer_tool_actor=supplement['unmeasured_outer_tool_actor'],current119_query_command_receipts=commands.receipts,current119_complete_process_report=report,query_clients=[dict(pid=r['pid'],birth=r['birth'])for r in records],observer_self=dict(pid=caller[0],birth=int(caller[1]),group=os.getpgrp()),observed_clocks=first,last_observed_clocks=last,fixed_cutoffs=list(limits),native_acceptance=False,runtime_authority=None)
++ result=dict(historical);result.pop('actual_latest_operation_postjoin_acceptance',None);result.pop('current_boundary',None);result.update(historical_root69_free=pins['previous_free'],historical_root69_boundary=pins['root69_boundary'],actual_root70_pending_ledger=pins['root70_pending_ledger'],actual_conversion_retirement=pins['retirement_result'],actual_retirement_caller_closure=pins['retirement_tool_closure'],current_free_candidate=True,independent_acceptance=False,current_physical_clearance_pending=True,complete_actual_actor_frontier=True,all_recorded_actors_absent=actors,old_readonly_client_status='UNKNOWN',unmeasured_source_tool_identities='UNKNOWN',unmeasured_resource1=previous_free['unmeasured_resource1'],unmeasured_resource1_limitations=previous_free['unmeasured_resource1_limitations'],unmeasured_post_root68_outer_tool_actor=previous_free['unmeasured_post_root68_outer_tool_actor'],unmeasured_retirement_outer_birth='UNKNOWN',unmeasured_build_Docker_client_births='UNKNOWN',current119_query_command_receipts=commands.receipts,current119_complete_process_report=report,query_clients=[dict(pid=r['pid'],birth=r['birth'])for r in records],observer_self=dict(pid=caller[0],birth=int(caller[1]),group=os.getpgrp()),observed_clocks=first,last_observed_clocks=last,fixed_cutoffs=list(limits),native_acceptance=False,runtime_authority=None)
+  return result
+ 
+ 
+@@ -150,8 +146,8 @@
+  parser.add_argument('--release-sha256',required=True);args=parser.parse_args()
+  release_ref=ref(args.release);need(release_ref['sha256']==args.release_sha256,'exact one-shot readonly release')
+  release=read(release_ref);binding_ref=ref(args.bindings)
+- need(args.bindings==BINDING and release['author']=='/root' and release['decision']=='AUTHORIZE_ONE_CONVERSION_FRONTIER_READONLY_CAPTURE' and release['maximum_invocations']==1 and release['source']==ref(__file__) and release['bindings']==binding_ref and release['output']==str(args.output) and release['native_authority'] is None and release['runtime_authority'] is None,'exact Root readonly source/binding/output, no producer or native grant')
+- review=read(release['independent_execution_review']);need(review['decision']=='PASS_EXACT_CONVERSION_FRONTIER_READONLY_CAPTURE' and review['independent'] is True and review['implementation_ownership'] is False and review['release_payload']=={k:v for k,v in release.items()if k!='independent_execution_review'},'independent exact readonly release')
++ need(args.bindings==BINDING and release['author']=='/root' and release['decision']=='AUTHORIZE_ONE_CONVERSION_POSTJOIN_READONLY_CAPTURE' and release['maximum_invocations']==1 and release['source']==ref(__file__) and release['bindings']==binding_ref and release['output']==str(args.output) and release['native_authority'] is None and release['runtime_authority'] is None,'exact Root readonly source/binding/output, no producer or native grant')
++ review=read(release['independent_execution_review']);need(review['decision']=='PASS_EXACT_CONVERSION_POSTJOIN_READONLY_CAPTURE' and review['independent'] is True and review['implementation_ownership'] is False and review['release_payload']=={k:v for k,v in release.items()if k!='independent_execution_review'},'independent exact readonly release')
+  need(os.getuid()==os.geteuid()==1000 and os.sched_getaffinity(0)=={0} and 0<resource.getrlimit(resource.RLIMIT_AS)[0]<=2<<30 and 0<resource.getrlimit(resource.RLIMIT_CPU)[0]<=60,'same previously reviewed readonly profile')
+  need(args.output==HERE/'actual-frontier-1/OBSERVATION.json' and args.output.parent.is_dir() and not args.output.exists(),'fresh confined result path')
+  binding=read(binding_ref);need(binding['query_output_directory']==str(HERE/'actual-frontier-1/commands'),'fresh exact query output path')

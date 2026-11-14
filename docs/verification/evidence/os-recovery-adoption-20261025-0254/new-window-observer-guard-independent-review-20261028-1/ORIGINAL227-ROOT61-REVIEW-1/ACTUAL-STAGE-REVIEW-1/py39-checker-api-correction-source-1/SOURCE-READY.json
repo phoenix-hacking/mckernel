@@ -1,0 +1,78 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "ONE_ADDITIVE_PYTHON39_CHECKER_API_CORRECTION_READY_FOR_INDEPENDENT_REVIEW_NOT_EXECUTION",
+  "original_checker": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/ORIGINAL227-ROOT61-REVIEW-1/ACTUAL-STAGE-REVIEW-1/check_retained_stage.py",
+    "bytes": 8882,
+    "sha256": "606f7dd794e21ceb2b6154dd500f65fcd4ad07f073bcbf26c8d9dd37acfe43d0"
+  },
+  "original_driver": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/ORIGINAL227-ROOT61-REVIEW-1/ACTUAL-STAGE-REVIEW-1/run_profiled_readback.py",
+    "bytes": 935,
+    "sha256": "3cbbbdffd46f2ff655a1d0a663fbff0af92317676755e905f3463df238c68426"
+  },
+  "original_failure": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/ORIGINAL227-ROOT61-REVIEW-1/ACTUAL-STAGE-REVIEW-1/FAILURE.json",
+    "bytes": 174,
+    "sha256": "f3d7dfaae076a9d1a8451855d1033851bed1949f752152dd5c576e7d39d110d1"
+  },
+  "original_refusal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/ORIGINAL227-ROOT61-REVIEW-1/ACTUAL-STAGE-REVIEW-1/INDEPENDENT-INCOMPLETE-READBACK-REFUSAL.json",
+    "bytes": 4589,
+    "sha256": "af375a509e7cc2cf9127a55a6d6946367d97bba321b6ef3c01c71133aab36f5f"
+  },
+  "corrected_checker": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/ORIGINAL227-ROOT61-REVIEW-1/ACTUAL-STAGE-REVIEW-1/py39-checker-api-correction-source-1/check_retained_stage_py39.py",
+    "bytes": 8862,
+    "sha256": "f968367559efb4ead1d56a6d06664e278dffee6c2f9109c5d09e068fb81cd696"
+  },
+  "corrected_driver": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/ORIGINAL227-ROOT61-REVIEW-1/ACTUAL-STAGE-REVIEW-1/py39-checker-api-correction-source-1/run_profiled_readback_py39.py",
+    "bytes": 940,
+    "sha256": "ffc2cb7071fd62f369c7612205c80dfbfa3ff65656688c466260e0be19101082"
+  },
+  "delta": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/ORIGINAL227-ROOT61-REVIEW-1/ACTUAL-STAGE-REVIEW-1/py39-checker-api-correction-source-1/EXACT-DELTA.patch",
+    "bytes": 1530,
+    "sha256": "12301f8a9ee800b0a38645dacc891bc710116af9e5eaa99070c5c582763b74b4"
+  },
+  "tests": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/ORIGINAL227-ROOT61-REVIEW-1/ACTUAL-STAGE-REVIEW-1/py39-checker-api-correction-source-1/test_py39_metadata.py",
+    "bytes": 2171,
+    "sha256": "68f0034555abf16a8673611565c08a5a28dcd6f052fde47e8c824e4b97ba10ae"
+  },
+  "local_regression": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/ORIGINAL227-ROOT61-REVIEW-1/ACTUAL-STAGE-REVIEW-1/py39-checker-api-correction-source-1/LOCAL-REGRESSION.json",
+    "bytes": 982,
+    "sha256": "8f07580e94fa8ff1d4f19012b9186f8414201646d193af444bf4f0c85d5a8c84"
+  },
+  "only_checker_expression_change": "Path(row['path']).stat(follow_symlinks=False) \u2192 Path(row['path']).lstat()",
+  "driver_delta": "Only selected helper basename changes; new __file__ parent naturally provides a fresh exclusive evidence namespace.",
+  "required_profile": {
+    "CPU": [
+      0
+    ],
+    "AS_bytes": 2147483648,
+    "CPU_seconds": 60,
+    "wall_seconds": 120,
+    "jobs": 1
+  },
+  "proposed_one_actual_completion_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/ORIGINAL227-ROOT61-REVIEW-1/ACTUAL-STAGE-REVIEW-1/py39-checker-api-correction-source-1/run_profiled_readback_py39.py"
+  ],
+  "corrected_actual_readback_runs": 0,
+  "archive_repack_compose_build_native_nonce_guard_controller_actions": 0,
+  "acceptance": null,
+  "conditions": [
+    "Independent source/test/execution decision BEFORE any corrected actualarchive readback.",
+    "Root separate explicit ONE completion run grant still required after independent review.",
+    "Keep original checker606f/failure/refusalaf375 and namespace unchanged; if correctedfamilyfails stop+escalate, no third renamedattempt."
+  ],
+  "runtime_authority": null
+}

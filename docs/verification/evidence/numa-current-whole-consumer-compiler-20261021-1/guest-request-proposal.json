@@ -1,0 +1,558 @@
+{
+  "FAM_oracle": {
+    "actual_objects": [
+      "native-mckernel_rust.o",
+      "legacy-mckernel_rust.o",
+      "selected-owned-syscall.o",
+      "fallback-owned-syscall.o",
+      "settid-c-fallback-syscall.o"
+    ],
+    "assertion_objects_evidence_only": true,
+    "section": ".mckernel_fam_layout",
+    "unique_symbol_bytes": 40,
+    "words": [
+      164,
+      168,
+      4,
+      4,
+      8
+    ]
+  },
+  "RAM_min_available_bytes": 19327352832,
+  "boundary_linkage": {
+    "C_provider_absent": [
+      "release_cpuid"
+    ],
+    "C_provider_definitions": [
+      "clone_thread"
+    ],
+    "Rust_definitions": [
+      "process_fork_cancel_constructed_current_v1",
+      "process_fork_construct_current_v1",
+      "process_fork_owned_caller_current_v2",
+      "process_fork_owned_caller_runnable_current_v2",
+      "release_cpuid",
+      "release_process_checked",
+      "release_process_vm_checked",
+      "release_thread_checked",
+      "process_fork_runtime_drain_current_v1",
+      "process_release_vm_checked_body_result",
+      "sched_schedule_exit_cleanup",
+      "syscall_settid_body_result",
+      "setscheduler_body_result",
+      "sched_setscheduler_body_result",
+      "syscall_vm_range_policy_search_body_result"
+    ],
+    "Rust_undefined": [
+      "clone_thread"
+    ],
+    "actual_link_performed": false,
+    "candidate_inputs": {
+      "fallback": [
+        "native-mckernel_rust.o",
+        "fallback-owned-syscall.o",
+        "constructor-process.o"
+      ],
+      "legacy": [
+        "legacy-mckernel_rust.o",
+        "constructor-process.o"
+      ],
+      "selected": [
+        "native-mckernel_rust.o",
+        "selected-owned-syscall.o",
+        "constructor-process.o"
+      ]
+    },
+    "no_legacy_C_or_link_claim": true,
+    "no_unresolved_or_duplicate_target_claim_beyond_per_object_counts": true,
+    "numa_per_object_rules": {
+      "constructor-process.o": {
+        "forbidden_global_or_weak_symbols": [
+          "release_cpuid"
+        ],
+        "unique_global_or_weak_STT_FUNC_definitions": [
+          "clone_thread"
+        ],
+        "unique_undefined_global_or_weak_symbols": []
+      },
+      "fallback-owned-syscall.o": {
+        "forbidden_global_or_weak_symbols": [
+          "process_fork_cancel_constructed_current_v1",
+          "process_fork_construct_current_v1",
+          "process_fork_owned_caller_runnable_current_v2",
+          "process_fork_runtime_drain_current_v1"
+        ],
+        "unique_global_or_weak_STT_FUNC_definitions": [
+          "do_fork"
+        ],
+        "unique_undefined_global_or_weak_symbols": [
+          "setscheduler_body_result",
+          "syscall_settid_body_result",
+          "syscall_vm_range_policy_search_body_result"
+        ]
+      },
+      "legacy-mckernel_rust.o": {
+        "forbidden_global_or_weak_symbols": [],
+        "unique_global_or_weak_STT_FUNC_definitions": [
+          "process_fork_cancel_constructed_current_v1",
+          "process_fork_construct_current_v1",
+          "process_fork_guest_carrier_begin_current_v1",
+          "process_fork_guest_carrier_cancel_current_v1",
+          "process_fork_guest_carrier_create_current_v1",
+          "process_fork_guest_carrier_retain_current_v1",
+          "process_fork_guest_control_submit_current_v1",
+          "process_fork_owned_caller_current_v1",
+          "process_fork_owned_caller_current_v2",
+          "process_fork_owned_caller_runnable_current_v2",
+          "process_fork_runtime_drain_current_v1",
+          "process_release_vm_checked_body_result",
+          "release_cpuid",
+          "release_process_checked",
+          "release_process_vm_checked",
+          "release_thread_checked",
+          "sched_schedule_exit_cleanup",
+          "sched_setscheduler_body_result",
+          "setscheduler_body_result",
+          "syscall_settid_body_result",
+          "syscall_vm_range_policy_search_body_result"
+        ],
+        "unique_undefined_global_or_weak_symbols": [
+          "clone_thread"
+        ]
+      },
+      "native-mckernel_rust.o": {
+        "forbidden_global_or_weak_symbols": [],
+        "unique_global_or_weak_STT_FUNC_definitions": [
+          "process_fork_cancel_constructed_current_v1",
+          "process_fork_construct_current_v1",
+          "process_fork_guest_carrier_begin_current_v1",
+          "process_fork_guest_carrier_cancel_current_v1",
+          "process_fork_guest_carrier_create_current_v1",
+          "process_fork_guest_carrier_retain_current_v1",
+          "process_fork_guest_control_submit_current_v1",
+          "process_fork_owned_caller_current_v1",
+          "process_fork_owned_caller_current_v2",
+          "process_fork_owned_caller_runnable_current_v2",
+          "process_fork_runtime_drain_current_v1",
+          "process_release_vm_checked_body_result",
+          "release_cpuid",
+          "release_process_checked",
+          "release_process_vm_checked",
+          "release_thread_checked",
+          "sched_schedule_exit_cleanup",
+          "sched_setscheduler_body_result",
+          "setscheduler_body_result",
+          "syscall_settid_body_result",
+          "syscall_vm_range_policy_search_body_result"
+        ],
+        "unique_undefined_global_or_weak_symbols": [
+          "clone_thread"
+        ]
+      },
+      "selected-owned-syscall.o": {
+        "forbidden_global_or_weak_symbols": [],
+        "unique_global_or_weak_STT_FUNC_definitions": [
+          "do_fork"
+        ],
+        "unique_undefined_global_or_weak_symbols": [
+          "process_fork_cancel_constructed_current_v1",
+          "process_fork_construct_current_v1",
+          "process_fork_owned_caller_runnable_current_v2",
+          "process_fork_runtime_drain_current_v1",
+          "setscheduler_body_result",
+          "syscall_settid_body_result",
+          "syscall_vm_range_policy_search_body_result"
+        ]
+      },
+      "settid-c-fallback-syscall.o": {
+        "forbidden_global_or_weak_symbols": [
+          "setscheduler_body_result",
+          "syscall_settid_body_result",
+          "syscall_vm_range_policy_search_body_result"
+        ],
+        "unique_global_or_weak_STT_FUNC_definitions": [
+          "do_fork"
+        ],
+        "unique_undefined_global_or_weak_symbols": [
+          "process_fork_cancel_constructed_current_v1",
+          "process_fork_construct_current_v1",
+          "process_fork_owned_caller_runnable_current_v2",
+          "process_fork_runtime_drain_current_v1"
+        ]
+      }
+    },
+    "scheduler_fallback_scope": "sixth C profile undefines both syscall and scheduler policy helpers; retained C bodies compile only, with inherited external C caller lifetime qualification still open",
+    "scheduler_per_object_rules": {
+      "fallback-owned-syscall.o": {
+        "unique_undefined_global_or_weak_symbols": [
+          "setscheduler_body_result",
+          "syscall_settid_body_result"
+        ]
+      },
+      "legacy-mckernel_rust.o": {
+        "unique_global_or_weak_STT_FUNC_definitions": [
+          "process_fork_cancel_constructed_current_v1",
+          "process_fork_construct_current_v1",
+          "process_fork_guest_carrier_begin_current_v1",
+          "process_fork_guest_carrier_cancel_current_v1",
+          "process_fork_guest_carrier_create_current_v1",
+          "process_fork_guest_carrier_retain_current_v1",
+          "process_fork_guest_control_submit_current_v1",
+          "process_fork_owned_caller_current_v1",
+          "process_fork_owned_caller_current_v2",
+          "process_fork_owned_caller_runnable_current_v2",
+          "process_fork_runtime_drain_current_v1",
+          "process_release_vm_checked_body_result",
+          "release_cpuid",
+          "release_process_checked",
+          "release_process_vm_checked",
+          "release_thread_checked",
+          "sched_schedule_exit_cleanup",
+          "sched_setscheduler_body_result",
+          "setscheduler_body_result",
+          "syscall_settid_body_result"
+        ]
+      },
+      "native-mckernel_rust.o": {
+        "unique_global_or_weak_STT_FUNC_definitions": [
+          "process_fork_cancel_constructed_current_v1",
+          "process_fork_construct_current_v1",
+          "process_fork_guest_carrier_begin_current_v1",
+          "process_fork_guest_carrier_cancel_current_v1",
+          "process_fork_guest_carrier_create_current_v1",
+          "process_fork_guest_carrier_retain_current_v1",
+          "process_fork_guest_control_submit_current_v1",
+          "process_fork_owned_caller_current_v1",
+          "process_fork_owned_caller_current_v2",
+          "process_fork_owned_caller_runnable_current_v2",
+          "process_fork_runtime_drain_current_v1",
+          "process_release_vm_checked_body_result",
+          "release_cpuid",
+          "release_process_checked",
+          "release_process_vm_checked",
+          "release_thread_checked",
+          "sched_schedule_exit_cleanup",
+          "sched_setscheduler_body_result",
+          "setscheduler_body_result",
+          "syscall_settid_body_result"
+        ]
+      },
+      "selected-owned-syscall.o": {
+        "unique_undefined_global_or_weak_symbols": [
+          "process_fork_cancel_constructed_current_v1",
+          "process_fork_construct_current_v1",
+          "process_fork_owned_caller_runnable_current_v2",
+          "process_fork_runtime_drain_current_v1",
+          "setscheduler_body_result",
+          "syscall_settid_body_result"
+        ]
+      },
+      "settid-c-fallback-syscall.o": {
+        "forbidden_global_or_weak_symbols": [
+          "setscheduler_body_result",
+          "syscall_settid_body_result"
+        ]
+      }
+    },
+    "selected_current_consumer": "process_fork_owned_caller_runnable_current_v2",
+    "selected_current_consumers": [
+      "process_fork_owned_caller_runnable_current_v2",
+      "process_fork_runtime_drain_current_v1"
+    ],
+    "settid_per_object_rules": {
+      "fallback-owned-syscall.o": "exactly one undefined, no defined",
+      "legacy-mckernel_rust.o": "exactly one defined STT_FUNC, no undefined",
+      "native-mckernel_rust.o": "exactly one defined STT_FUNC, no undefined",
+      "selected-owned-syscall.o": "exactly one undefined, no defined",
+      "settid-c-fallback-syscall.o": "no symbol of any kind"
+    }
+  },
+  "capacity_admission_root": "/home/holden/mckernel-work/host-preparation/numa-current-whole-consumer-compile-preparation-20261021-1/compiler-attempt-1/capacity-admission",
+  "capacity_contract": {
+    "emergency_reserve_preserved_bytes": 671088640,
+    "floors_unchanged": true,
+    "host_growth_bytes": 1610612736,
+    "scratch_growth_bytes": 771751936,
+    "scratch_record_FSIZE": 33554432,
+    "scratch_record_count": 3
+  },
+  "capacity_monitor": "single-threaded synchronous wait_terminal composition calls original accepted ancestor in<=20ms slices; readonly whole /work census; original cleanup wait preserved once stopping",
+  "capture_ancestor": {
+    "bytes": 1645,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/current-fullcrate-owner-1/OWNED-CAPTURE-ANCESTOR-PROOF.json",
+    "sha256": "8d58fa3b988ca42ea12e6e7b3f038b28a3de4d35b5d2cf48f6192db0a690b69f"
+  },
+  "capture_budget_bytes": 402653184,
+  "capture_helpers": {
+    "bytes": 8355,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/current-fullcrate-owner-1/owned_capture_helpers.py",
+    "sha256": "7834a85da04a3667b86365ec6340a55580b560248dd23fec84e673acc31bea90"
+  },
+  "command": [
+    "/driver.py",
+    "--execute"
+  ],
+  "commands": {
+    "bytes": 12104,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-current-whole-consumer-compile-preparation-20261021-1/guest-compiler-commands.json",
+    "sha256": "6b93fb8b9404698363198c011ccb2f1875ad90107e8d4ff08388160749823a6d"
+  },
+  "common_exclusion_path": "/home/holden/mckernel-work/scratch/native-held-host-control-fullmodule-external-modules-operational-exclusion.json",
+  "compiler_basis_request": {
+    "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/image-request.json",
+    "sha256": "902f482227f3510c86a2624fa9f255abb3d0c82996191f4e3ca4c227877765f8"
+  },
+  "compiler_cwd": "unchanged accepted /work/output/build/kernel; created fresh, used by actual Popen and persisted",
+  "compiler_started": false,
+  "container_name": "mckernel-numa-compiler-3af338a1e61e",
+  "create_argv": [
+    "create",
+    "--name",
+    "mckernel-numa-compiler-3af338a1e61e",
+    "--label",
+    "mckernel.owner=30d537ca28184998be8db99d70977afc",
+    "--network=none",
+    "--ipc=private",
+    "--cpus=4",
+    "--cpuset-cpus=2-5",
+    "--memory=12g",
+    "--memory-swap=12g",
+    "--pids-limit=512",
+    "--user",
+    "1000:1000",
+    "--read-only",
+    "--cap-drop=ALL",
+    "--security-opt=no-new-privileges",
+    "--init",
+    "--tmpfs",
+    "/tmp:rw,nodev,nosuid,size=256m",
+    "--entrypoint",
+    "/usr/bin/python3",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/host-preparation/numa-current-whole-consumer-compile-preparation-20261021-1/materialized-source,dst=/src,readonly",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/scratch/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu,dst=/nightly,readonly",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/host-preparation/numa-current-whole-consumer-compile-preparation-20261021-1/compile_retirement_current_driver.py,dst=/driver.py,readonly",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/host-preparation/numa-current-whole-consumer-compile-preparation-20261021-1/source-manifest.json,dst=/inputs.json,readonly",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/host-preparation/numa-current-whole-consumer-compile-preparation-20261021-1/guest-compiler-commands.json,dst=/commands.json,readonly",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/host-preparation/numa-current-whole-consumer-compile-preparation-20261021-1/compiler-attempt-1/work,dst=/work",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/current-fullcrate-owner-1/owned_capture_helpers.py,dst=/owned-capture.py,readonly",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/adapters/native_rust_exact_build_container_owner.py,dst=/accepted-host-owner.py,readonly",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/host-preparation/numa-current-whole-consumer-compile-preparation-20261021-1/actual_retirement_consumer_and_FAM_assertions.h,dst=/prototype-assertions.h,readonly",
+    "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5",
+    "/driver.py",
+    "--execute"
+  ],
+  "disk_budget_bytes": 536870912,
+  "driver": {
+    "bytes": 11902,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-current-whole-consumer-compile-preparation-20261021-1/compile_retirement_current_driver.py",
+    "sha256": "635bd8735f91f69d397879b1557586d051a1543296e2f1a3b686eb86e7181bb0"
+  },
+  "driver_limits": {
+    "capture": "accepted WNOWAIT/direct join helper unchanged; status FIRST; stable9 excludes atime;32MiB each stream",
+    "compiler_stages": 6,
+    "core": 0,
+    "file_size_bytes": 33554432,
+    "jobs": 1,
+    "nofile": 256,
+    "stream_bytes_each": 33554432,
+    "streams": 12,
+    "whole_compiler_work_seconds": 1750,
+    "whole_work_bytes": 671088640
+  },
+  "emergency_reserve_bytes": 671088640,
+  "existing_transport": {
+    "fullimage_artifact_validator_reused": false,
+    "helpers": [
+      "Lease",
+      "CliSignals",
+      "Docker",
+      "inspect",
+      "check_profile",
+      "retire",
+      "_check_profile"
+    ],
+    "host_owner": {
+      "bytes": 51420,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/adapters/native_rust_exact_build_container_owner.py",
+      "sha256": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1"
+    },
+    "image_owner": {
+      "bytes": 84202,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/adapters/native_rust_exact_mckernel_image_container_owner.py",
+      "sha256": "34963a3efdd93ca7c88a88335c1b597a7084fd83f96fdd473daa4e55df474317"
+    }
+  },
+  "expected_artifacts": [
+    "output/build/current-guest-control-fullcrate-1/native-mckernel_rust.o",
+    "output/build/current-guest-control-fullcrate-1/legacy-mckernel_rust.o",
+    "output/build/current-guest-control-fullcrate-1/selected-owned-syscall.o",
+    "output/build/current-guest-control-fullcrate-1/fallback-owned-syscall.o",
+    "output/build/current-guest-control-fullcrate-1/constructor-process.o",
+    "output/build/current-guest-control-fullcrate-1/settid-c-fallback-syscall.o"
+  ],
+  "image_id": "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5",
+  "latest_exclusive_physical": null,
+  "latest_exclusive_physical_at_preparation": null,
+  "latest_exclusive_physical_requires_root_revalidation": true,
+  "lease_path": "/home/holden/mckernel-work/scratch/mckernel-numa-compiler-3af338a1e61e.lease.json",
+  "mounts": [
+    {
+      "readonly": true,
+      "source": "/home/holden/mckernel-work/host-preparation/numa-current-whole-consumer-compile-preparation-20261021-1/materialized-source",
+      "target": "/src"
+    },
+    {
+      "readonly": true,
+      "source": "/home/holden/mckernel-work/scratch/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu",
+      "target": "/nightly"
+    },
+    {
+      "readonly": true,
+      "source": "/home/holden/mckernel-work/host-preparation/numa-current-whole-consumer-compile-preparation-20261021-1/compile_retirement_current_driver.py",
+      "target": "/driver.py"
+    },
+    {
+      "readonly": true,
+      "source": "/home/holden/mckernel-work/host-preparation/numa-current-whole-consumer-compile-preparation-20261021-1/source-manifest.json",
+      "target": "/inputs.json"
+    },
+    {
+      "readonly": true,
+      "source": "/home/holden/mckernel-work/host-preparation/numa-current-whole-consumer-compile-preparation-20261021-1/guest-compiler-commands.json",
+      "target": "/commands.json"
+    },
+    {
+      "readonly": false,
+      "source": "/home/holden/mckernel-work/host-preparation/numa-current-whole-consumer-compile-preparation-20261021-1/compiler-attempt-1/work",
+      "target": "/work"
+    },
+    {
+      "readonly": true,
+      "source": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/current-fullcrate-owner-1/owned_capture_helpers.py",
+      "target": "/owned-capture.py"
+    },
+    {
+      "readonly": true,
+      "source": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/adapters/native_rust_exact_build_container_owner.py",
+      "target": "/accepted-host-owner.py"
+    },
+    {
+      "readonly": true,
+      "source": "/home/holden/mckernel-work/host-preparation/numa-current-whole-consumer-compile-preparation-20261021-1/actual_retirement_consumer_and_FAM_assertions.h",
+      "target": "/prototype-assertions.h"
+    }
+  ],
+  "nonce": "30d537ca28184998be8db99d70977afc",
+  "object_contract": "Same six real ELF64 ET_REL objects and inherited rules; NUMA helper unique provider/import, absent in policy-off C. No final link/default/native/retirement authority.",
+  "outer_capture_root": "/home/holden/mckernel-work/host-preparation/numa-current-whole-consumer-compile-preparation-20261021-1/compiler-attempt-1/actual-root-owner-1",
+  "owner": {
+    "bytes": 22034,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-current-whole-consumer-compile-preparation-20261021-1/current_fullcrate_owner.py",
+    "sha256": "ff9f79d5c9a11b3643e9868c80f008c25c6ce86165b658052e3fc636adc3fddb"
+  },
+  "owner_delta": [
+    "owner byte-identical to accepted current six-stage owner; no lifecycle, resource or namespace policy algorithm change"
+  ],
+  "owner_evidence_root": "/home/holden/mckernel-work/host-preparation/numa-current-whole-consumer-compile-preparation-20261021-1/compiler-attempt-1/owner-evidence",
+  "physical_release_prerequisite": "UNBOUND: current image37e must reach accepted terminal physical release, then thread-native priority first; fresh root admission required",
+  "positive_retirement_required": [
+    "all Docker clients directwait and ownedPGID absent",
+    "terminal exactCID inspect:Runningfalse/PID0/notOOM",
+    "retain ownership records until separate accepted physical release; no rawremove",
+    "same nonce/image/profile/mounts revalidation",
+    "both actualrustc children directwait+ownedgroupESRCH before nextstage"
+  ],
+  "prerequisites_unbound": [
+    "independent exact new packet review",
+    "fresh source-only materialization CPU6 admission and positive closure",
+    "actual new source inode/capture binding",
+    "currentimage37e terminal physical release, thread-native priority, and latest genuine exclusive review",
+    "fresh aggregate headroom, identities, tool, lease, service and included-usage admission",
+    "new packet Git/fetched publication proof",
+    "actual outer owner and independent/root execution release"
+  ],
+  "prototype_assertions": {
+    "bytes": 3277,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-current-whole-consumer-compile-preparation-20261021-1/actual_retirement_consumer_and_FAM_assertions.h",
+    "sha256": "dfcceac5ea50734419ae79423e5fc20fd0cac36fc8a53e4989c813bd5bb216b9"
+  },
+  "provider": {
+    "bytes": 1934,
+    "path": "/home/holden/mckernel-work/host-preparation/phase4-guest-compiler-packet-assembly-20261020-1/compiler-provider.json",
+    "sha256": "b1f169aff076a1f069a3fdb843a541cd35b740613bea43364d09c03dc33f1249"
+  },
+  "retirement_import_closure": [
+    {
+      "bytes": 41822,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/current-fullcrate-owner-1/retirement-transport/scripts/native_running_external_modules_owner.py",
+      "sha256": "3509e0ff79109a8170b766a725da10bc15a0d4359d90728a73abd023a88eb97a"
+    },
+    {
+      "bytes": 81525,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/current-fullcrate-owner-1/retirement-transport/scripts/native_rust_exact_mckernel_image_container_owner.py",
+      "sha256": "e9861cf73b0328c9fe2eacb987ea179933146cbeddbc3951405d4e60e89560f4"
+    },
+    {
+      "bytes": 51420,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/current-fullcrate-owner-1/retirement-transport/scripts/native_rust_exact_build_container_owner.py",
+      "sha256": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1"
+    },
+    {
+      "bytes": 27338,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/current-fullcrate-owner-1/retirement-transport/scripts/native_rust_exact_build_offline.py",
+      "sha256": "cc243126ab8cc0754c62175c77e46d6ba0d98294f8168cc77893a2c12249cd1a"
+    },
+    {
+      "bytes": 57015,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/current-fullcrate-owner-1/retirement-transport/scripts/native_rust_exact_disk_build_wrapper.py",
+      "sha256": "c252ee341eb61752704f8b818503c0a5dc97400845494707ca3110f5f23df6d1"
+    },
+    {
+      "bytes": 24966,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/current-fullcrate-owner-1/retirement-transport/scripts/native_rust_exact_build_image_rebind_probe.py",
+      "sha256": "412d46de7e078746a7ec979a13ccb25753d6fa34708610932e35be8f02a89635"
+    },
+    {
+      "bytes": 22959,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/current-fullcrate-owner-1/retirement-transport/scripts/native_rust_exact_build_image_prepare.py",
+      "sha256": "45cb12e0fd58d164468badfb99a3ed922e65e06046bf38b4a50e27e18595a27b"
+    },
+    {
+      "bytes": 11193,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/current-fullcrate-owner-1/retirement-transport/scripts/native_rust_exact_build_image_rebind.py",
+      "sha256": "f10ab116e55a24e8db7a8157d71efdd01198ba3453a8141bc8bbf596eda6b61e"
+    }
+  ],
+  "retirement_import_provenance": {
+    "bytes": 6022,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/current-fullcrate-owner-1/RETIREMENT-IMPORT-CLOSURE.json",
+    "sha256": "4a51d52ecc4aeea35e09903d8395d575aee6fd3fcaff8748ac100d185494e3f1"
+  },
+  "retirement_transport": {
+    "bytes": 41822,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/current-fullcrate-owner-1/retirement-transport/scripts/native_running_external_modules_owner.py",
+    "sha256": "3509e0ff79109a8170b766a725da10bc15a0d4359d90728a73abd023a88eb97a"
+  },
+  "root_execution_release_required": true,
+  "schema": "mckernel.phase4-guest-real-boundary-compiler-request.v1",
+  "source": {
+    "bytes": 38987,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-current-whole-consumer-compile-preparation-20261021-1/source-manifest.json",
+    "sha256": "f57553dff6e55c9ac9f5d79164e0ff9ce17d93a3fabccf9cadf197f2697c308f"
+  },
+  "source_count": 160,
+  "status": "NUMA_CURRENT_SIX_STAGE_PROPOSAL_NOT_RELEASED",
+  "terminal_policy": "same-owner SDK stoppedCID removal+absence+positiveclients+three-record archive/readback/authorizedrelease under pinned developmentflock; compiler PASSorFAIL independent; preserve wholehostcase",
+  "timeout_seconds": 1800,
+  "whole_work_cap_bytes": 671088640,
+  "work_root": "/home/holden/mckernel-work/host-preparation/numa-current-whole-consumer-compile-preparation-20261021-1/compiler-attempt-1/work"
+}

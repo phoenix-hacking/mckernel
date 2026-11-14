@@ -1,0 +1,112 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_SCOPED_ACTUAL_COMMAND_FIXTURE_AND_ORACLE",
+  "reviewer": "/root/recovery_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "qualification": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/QUALIFICATION.ACTUAL.json",
+    "bytes": 4238,
+    "sha256": "9942eafb6451f07ecdd530371c030dda6613f43f35e841442f72e0b2b00c2f4d"
+  },
+  "ownership_failure": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/OWNERSHIP-FAILURES.ACTUAL.json",
+    "bytes": 8599,
+    "sha256": "fa697a5719c7ceed6bb2a96b9d7a5f5b8f63c7d149a65be70c30c81484b5223b"
+  },
+  "candidate": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-11/m15-vmcore2mckdump/ldump2mcdump_helpers.ack-candidate.rs",
+    "bytes": 29466,
+    "sha256": "5205663e825abfb26d8eb0e01c225c1eb7cecd95051832b7234890dba5f3de78"
+  },
+  "baseline": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-11/m15-vmcore2mckdump/reference/ldump2mcdump_helpers.rs",
+    "bytes": 28439,
+    "sha256": "4e036420cd4f3e62694c33d235747d23dabc4ac54236fe46b9cdf0290c93a9f0"
+  },
+  "fixture": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/fixture.c",
+    "bytes": 12177,
+    "sha256": "618ec740c124adafe311be086afacfb74518a2f316de44e4fd76946ee540576b"
+  },
+  "driver": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/run_fixture.py",
+    "bytes": 8013,
+    "sha256": "1be23e295f937b92136f4b49b0b38db8ea081ad064e8777bf48bcd5ba4cd326f"
+  },
+  "dump_layout": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/dump-layout.h",
+    "bytes": 563,
+    "sha256": "788e43a79da00da5d2e5d6fc9821e3e24cade3868ccc98883ff3ab18ebfc0334"
+  },
+  "actual_result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/RESULT.json",
+    "bytes": 19982,
+    "sha256": "c960989857e411d8b03ed12e76df436ac715d269a239bf31bad7016613b874ae"
+  },
+  "independent_evidence_checks": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/independent-source-review-1/EVIDENCE-CHECK.ACTUAL.json",
+    "bytes": 39298,
+    "sha256": "137f83dc54ea3d24d6c4797a938d45d8cead915b464ddf60f17aaaef9609b066"
+  },
+  "exact_undefined_symbols": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/independent-source-review-1/UNDEFINED-SYMBOLS.ACTUAL.json",
+    "bytes": 2750,
+    "sha256": "db09eafdf6b9fbfa2fc33dd40e5cfc97c1fa3bc232a5a77020dc965123011556"
+  },
+  "repair_constraints": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/independent-source-review-1/RUST-OWNERSHIP-REPAIR-CONSTRAINTS.json",
+    "bytes": 3985,
+    "sha256": "806086a654ca43bba2ecf42021013fc9df1bea9fa42c55f000dbd8f89ffc6a11"
+  },
+  "selected_BFD_provenance": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-bfd-source-1/actual-queue-source-2/current-cohort-owner-source-4/soleheavy-sdk-source-successor-1/fixture-runtime-rustc-successor-1/candidate/PINNED-ABI.json",
+    "bytes": 2216,
+    "sha256": "d8c9f701f1c4bda3f8ed70c1c7639bab2bc388eddce13e80bf2a34269fcb5102"
+  },
+  "runtime_authority": null,
+  "ownership_status": "FAIL_20_CANDIDATE_CASES",
+  "native_or_SDK_acceptance": false,
+  "whole_file_acceptance": false,
+  "selected_BFD_lifetime_semantics_verified": false,
+  "reviewer_compiler_rebuilds": 0,
+  "reviewer_new_body_invocations": 0,
+  "findings": [
+    {
+      "boundary": "Actual entire unchanged command",
+      "result": "PASS_SCOPED_FIXTURE",
+      "details": "Both exact Rust source hashes bind successful original rustc full-body compilations with --cfgldump2_full_body, not copied state logic. Corrected C links reuse those exact original objects. Existing Rust .init_array initializes actual CommandTableEntry callback; C register_extension checks name/function/sentinel, and main asserts registered pointer equals real cmd_ldump2mcdump then invokes it. Driver27candidate+13matched original case outputs all came from actual full command. No SDK/native/crash/BFD library ran."
+    },
+    {
+      "boundary": "ABI and data oracle",
+      "result": "PASS_SCOPED_FIXTURE",
+      "details": "dump-layout.h byte-exactly copies retained canonical C declarations. C static asserts verify page16B/page-set24B/chunks-header24B/chunk16B and candidate repr(C) section prefix VMAoffset40/size64. C callbacks match existing Rust command/Machdep/Passwd prefix views; opaque FILE/BFD/Tm are leaves. Rust-generated count3 and three chunks at0x800000/0x802000/0x804000 with4096bytes, kernel_base0x1200000, phys_start0, section bytes/flags/vma/lma/bitfield and each physical byte pattern are checked. This matches fixture/candidate ABI, not a fresh selected SDK header acceptance."
+    },
+    {
+      "boundary": "Closed allocation/output interception",
+      "result": "PASS_SCOPED_FIXTURE",
+      "details": "Exact nm-u of both original objects independently retained. Allocation imports are malloc/calloc/free only; all three intercepted in both corrected links, with no realloc/aligned allocation aliases. Output imports fprintf/fwrite and candidate fflush are intercepted; deterministic environment/crash/BFD leaves supplied, memset/strcpy/strlen remain ordinary libc operations. First LLVM calloc alias omission caused genuine fixture assertion-6 and is preserved. Sole correction adds calloc/fwrite leaves and reuses successful Rust objects; no candidate source repair or oracle relaxation occurred."
+    },
+    {
+      "boundary": "Actual effects and baseline attribution",
+      "result": "PASS_SCOPED_FIXTURE",
+      "details": "291 selected byte/join/effect assertions pass. All47 historical direct children have positive wait4 and closed streams; first failed invocation-6 remains only nonzero, all42 corrected commands exit0. Twentyseven candidate cases preserve exact success ACK path with space and flush,7 metadata FALSE immediate exits/bitmap cleanup,3 physical read fault diagnostics with later observations,7 BFDwrite faults,close fault,physchunksNULL and7allocation faults. Thirteen actual original cases match every output field except intentionally new ACK/flush event fields. This proves measured success/physical/write/close/physchunks effects and ownership preexist ACK change; original metadata FALSE/allocation fault execution was not performed or claimed."
+    },
+    {
+      "boundary": "Ownership failure retained, no lifecycle promotion",
+      "result": "FAIL_PRODUCER_OWNERSHIP",
+      "details": "Independent matrix extraction reproduces exactly20 failing candidate ownership cases: success/physical paths retain3names96B; write/close failures retain payload1MiB+outer72B+names96B=1048744B/5allocations; second-pass metadataFALSE leaves72B outer buffer though both failed bitmap reads free their maps; allocation-failure routes retain earlier buffers. Harness reports live allocations before final test-process reclamation. Early write errors also perform zero BFDclose, but fixture static token does not measure actual BFD heap. Thus callback ACK/layout pass is not lifecycle, whole-file, installed/native or SDK acceptance."
+    },
+    {
+      "boundary": "BFD lifetime gap and repair readiness",
+      "result": "OPEN_SEPARATE_SOURCE_EVIDENCE",
+      "details": "Retained selected provenance pins image41778, binutils-devel2.41-63.el10.x86_64,bfd.hde900a9f and libbfd.so6cfd3180, with its own stated layout/equivalence limits. No authoritative selected implementation close/name semantics were available in this fixture packet. Separate bounded selected source extraction is in progress. Repair constraints require caller names remain through final BFD use and exact consumed-handle behavior before cleanup choice; no safe early-free/doubleclose/close-error success assumption is approved."
+    }
+  ],
+  "fixture_oracle_blockers": [],
+  "remaining_qualification": [
+    "Actual private Rust ownership successor plus unweakened matrix and expanded exact BFD/name lifetime oracle.",
+    "Selected BFD source/lifetime binding, matching SDK compiler/link/ABI and actual valid-dump/native/install qualification.",
+    "Whole-file/M15 and full repeated lifecycle acceptance remain OPEN."
+  ]
+}

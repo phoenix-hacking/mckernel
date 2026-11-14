@@ -1,0 +1,62 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_SOURCE_CANDIDATE_ONLY_NOT_COMPILED_NOT_TESTED_NOT_ADMITTED",
+  "source": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/production-collector-preparation-1/production-source/long_trace_retention.inc",
+    "bytes": 6588,
+    "sha256": "66ad73a4b7da9ccb775247c2d32a803f445e93a1e5b8762cabc5a4968adf099f"
+  },
+  "actual_collector_sha256": "bff842db67d61cd2587a65df706dfc60aed465a72acf77f133ffc7c881d737cb",
+  "actual_collector_binding": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-snapshot-equality-successor-1/capsule-preparation-1/ACTUAL-SNAPSHOT-EQUALITY-COLLECTOR-CAPSULE-HANDOFF.json",
+  "source_identity_chain": "handoff.source_closure.long_trace_retention.inc accepted_preimage/selected/materialized all66ad73a4...; selected manifest staging.collector matches actual collector",
+  "failure": {
+    "reported_result": -3,
+    "meaning": "pair_long_producer.rs Failure::Deadline; Trace=-9; Pair=-5",
+    "pair_stage_is_stale": true,
+    "proof": "long_pair callback-report follows successful pair_round_gate, which finishes with successful pair_trace_save",
+    "first_eligible_deadline_branch": "pair_long_producer.rs line157 ended>=absolute after successful run_pair",
+    "other_possible_same_result_checks": "line176 elapsed since first_work, line192 after post-pair empty; existing serial lacks ended/postempty time so exact one cannot be distinguished",
+    "work_ns": 3519690949712,
+    "work_credit": 0,
+    "launch_credit": 0,
+    "round0_start_ns": 37377645994,
+    "round629_start_ns": 7227680364652,
+    "elapsed_start_to_start_ns": 7190302718658,
+    "wall_limit_ns": 7200000000000,
+    "trace_cap_bytes": 268435456,
+    "trace_bytes": 150512132
+  },
+  "candidate": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/trace-retention-fix/long_trace_retention.inc",
+    "sha256": "2df20077af1d815b76f6bd70b094153a40507afb00c0c359e4df314762566edf",
+    "change": "Resume exact line scanning at max(record.offset,cursor); all old file identity checks retain same call order.",
+    "semantic_argument": "Every successful member lookup sets cursor to an exact newline end in immutable concatenated authenticated records. Bytes before cursor cannot satisfy original off>=cursor predicate. Cursor at/after record end skips only impossible matches; absent/changed files are still checked before scanning. No bytes are removed or modified.",
+    "expected_effect": "Less repeated memchr scanning; same memory allocation, same metadata syscall count/order, same file count, same retained full bytes and profile/caps. Actual improvement remains unmeasured.",
+    "unaffected_reuse": [
+      "kernel10972f87277e8429e2badd238d3ac53e451b8a2351a8ebf013941e1dfb95e1e2",
+      "same SDK8 modules",
+      "same launcher/apps"
+    ],
+    "needs_rebuild": [
+      "collector only",
+      "derived capsule/manifests and runtime source/profile bindings"
+    ],
+    "does_not_change": [
+      "60 continuous work criterion",
+      "2h wall bound",
+      "trace cap/full retention",
+      "strict trace oracle",
+      "PID/token/ownership rules"
+    ]
+  },
+  "execution": {
+    "compiler": false,
+    "test": false,
+    "guest": false,
+    "root": false,
+    "canonical_edit": false,
+    "signals": false,
+    "live_mutation": false
+  },
+  "preserve_failed_evidence": true
+}

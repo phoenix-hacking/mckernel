@@ -1,0 +1,48 @@
+{
+  "schema": "mckernel.native-exact-scratch21-heavy-build-execution-proposal.v1",
+  "status": "PROPOSED",
+  "candidate_sha": "28a905bfc177627e338a3fd91f69329ac2e74046",
+  "candidate_tree": "1d7bfce8a37ab5dd1bdd8197c4531a157ffdfd0f",
+  "preparation_evidence": "docs/verification/evidence/native-exact-scratch19-21-preparation-checkpoint-20261001.json",
+  "request": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-delta-request-scratch-21.json",
+    "sha256": "04a7b363d94af5da8276397f6c2e0baec058eabdcc10471b8e2c8d0f9b554f2c",
+    "size": 2974,
+    "device_inode": "1831:57682"
+  },
+  "owner": {
+    "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21/scripts/native_rust_exact_build_container_owner.py",
+    "sha256": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1",
+    "size": 51420,
+    "device_inode": "1831:3940277"
+  },
+  "command": [
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21/scripts/native_rust_exact_build_container_owner.py",
+    "/home/holden/mckernel-work/scratch/native-exact-delta-request-scratch-21.json"
+  ],
+  "execution_count": 1,
+  "profile": {
+    "cpus": "2-5",
+    "jobs_max": 4,
+    "memory_bytes": 12884901888,
+    "memory_swap_bytes": 12884901888,
+    "pids_limit": 512,
+    "network": "none",
+    "read_only_root": true,
+    "container_tmpfs_bytes": 268435456
+  },
+  "live_requirements": [
+    "exact request, owner, candidate, manifest and controller identities unchanged",
+    "output and evidence roots empty",
+    "lease and exact active exclusion path absent",
+    "development and shared heavy locks unheld",
+    "no QEMU, mcexec or other heavy owner",
+    "host and scratch capacity remain above request floors plus measured packet need"
+  ],
+  "terminal_policy": "retain the exact terminal container and lease until separately reviewed cleanup; never force-release uncertain ownership",
+  "authorization": "requires independent PASS_EXECUTION over this exact published proposal and live state",
+  "not_acceptance": "a successful compile is a candidate build only, not guest, application, production or OS acceptance"
+}

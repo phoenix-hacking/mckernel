@@ -1,0 +1,12 @@
+            cpu::cpu_enable_interrupt();
+            if let Some(drain) = (*config).fork_drain {
+                let _ = drain();
+            }
+            if (*(*super::get_this_cpu_local_var()).current).ptrace != 0 {
+                super::arch_ptrace_syscall_event(
+                    (*super::get_this_cpu_local_var()).current, ctx, -38,
+                );
+                num = cpu::ihk_mc_syscall_number(ctx) as CInt;
+            }
+            if debug_enabled(0) {
+                super::kprintf(

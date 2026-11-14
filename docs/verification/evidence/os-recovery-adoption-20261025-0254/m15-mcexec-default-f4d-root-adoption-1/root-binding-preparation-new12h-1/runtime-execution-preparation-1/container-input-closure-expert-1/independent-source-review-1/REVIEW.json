@@ -1,0 +1,116 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/daemon_execution_review",
+  "implementation_ownership": false,
+  "independent": true,
+  "at": "2026-10-27T19:16:01.170481+00:00",
+  "decision": "PASS_SOURCE",
+  "execution_release": false,
+  "execution_authority": false,
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/container-input-closure-expert-1/READY.SOURCE-ONLY.json",
+    "bytes": 8465,
+    "sha256": "04a0763e16e757e938312915b737e77e8946cbc2736a65e05db2662606f898e9"
+  },
+  "source_sha256": {
+    "mcexec/contract.py": "73de41dc39d310e7efca587039281bc47f8603a24935e285d033a0acff527065",
+    "mcexec/elf_install_contract.py": "9054aceb4486629a8338bc64f603e5ab5e38b8f4f70a6e88f0c5fadf4e45895e",
+    "mcexec/legacy_stable_readers.py": "bb8be09522d6b4729dd7ca599b199a5b3060265636c8239af2a810059b6721a8",
+    "mcexec/observer.py": "adf1a81c39efd76bd244244fa05a0fee6532946327c47e07f6a3b83a22bc2804",
+    "mcexec/preparation.json": "252f056d171351c595f2441a76af0d7fe21980c887e66fcf4c148ec665d60b8f",
+    "mcexec/qualified_ELF.json": "5161dcbb05aa951d55472b7c0d40df7596a3d946c205d13f299e360b32616923",
+    "mcexec/retained_context.json": "d5f8f26e9046c8d72524c9908a2d271c1f6243e0281a2406717b902286bc2244",
+    "mcexec/validator.py": "6e516307f9011bd20744e1f79f09b8a488131d70cdcbe7d72ccd91d12f86588a",
+    "scripts/native_exact_historical_lease_observer.py": "463ae558e141c2a6fe5a016fb19baddb26ed883c3bf6d39c114b27711ee78a51",
+    "scripts/native_running_external_modules_offline.py": "0e3285f2e7366b7a90e8ff6003283f85e73a2526d8b8ae4c43658241b16b7c48",
+    "scripts/native_running_external_modules_owner.py": "c86382f1358310421928aeecc0b1740afb389a130dc8d61d932da8b3e86df43a",
+    "scripts/native_rust_exact_build_container_owner.py": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1",
+    "scripts/native_rust_exact_build_image_prepare.py": "45cb12e0fd58d164468badfb99a3ed922e65e06046bf38b4a50e27e18595a27b",
+    "scripts/native_rust_exact_build_image_rebind.py": "f10ab116e55a24e8db7a8157d71efdd01198ba3453a8141bc8bbf596eda6b61e",
+    "scripts/native_rust_exact_build_image_rebind_probe.py": "412d46de7e078746a7ec979a13ccb25753d6fa34708610932e35be8f02a89635",
+    "scripts/native_rust_exact_build_offline.py": "cc243126ab8cc0754c62175c77e46d6ba0d98294f8168cc77893a2c12249cd1a",
+    "scripts/native_rust_exact_disk_build_wrapper.py": "c252ee341eb61752704f8b818503c0a5dc97400845494707ca3110f5f23df6d1",
+    "scripts/native_rust_exact_mckernel_image_container_owner.py": "e9861cf73b0328c9fe2eacb987ea179933146cbeddbc3951405d4e60e89560f4",
+    "scripts/tests/test_native_running_external_modules_owner.py": "c816f7dfd6fa167670876d8e64e8474bec119e1f19280fcc1cb902dff1a2c340"
+  },
+  "outer_source_sha256": {
+    "EXECUTION-PINS.json": "e36dddd0ca7f6ecf7c6cf9e6fa44019b83397f6d54c0590190307b4c7d7156e2",
+    "capture_resource.py": "6b591acbc9cad83b63b279f7d820aa90e8d74a32339238a30e59c3a373102fee",
+    "execution_contract.py": "dd60dc2024b289591ddfabaefefcaf533c466e5ec33aff0852316f1ecb36eb84",
+    "prepare_execution.py": "54dec8259af36a79d62316d6a95345077f771e7a28879ef5aec825f96577c31f",
+    "run_mcexec_current.py": "6182b6d70ca7907615e1d1e8bfac9487f6c4a08e63a4f9f991d394703d72e210"
+  },
+  "prior_corrected_source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/INDEPENDENT-CORRECTED-SOURCE-REVIEW.json",
+    "bytes": 9866,
+    "sha256": "ff308f27212da597ab459c7a5cd7a9c1dc04ddfd80d1936c9388a74a2416ca1c"
+  },
+  "resolved_finding": "Exact PREP libdwarf_vendor.authority file was absent from prior38mount view;wrapper6182 adds only its same-path readonly bind. Prioractualea96 unmapped-input failure remainsFAIL and immutable.",
+  "verified_correction": [
+    "READY04a0763e and all12 artifact references independently match exactsize/SHA256. Outer5map matches actualfiles;EXECUTION-PINS/execution_contract/prepare_execution/capture_resource bytes are exactruntime-execution-after-shape2. Only wrapperchanges;runtime19 map1bc3/PREP252f/sourceRoot/materialization/flags/F4DBuildID expectation unchanged.",
+    "Authority_mount reads only PREPalready-pinned libdwarf_vendor.authority,uses retained owner.safe_path(file),and requires exactpath/72854B/hash5e14419d reference. It returns samehost/container path with readonlyTrue. No hostdirectory or invented authoritypath is exposed.",
+    "extend_mounts preserves original38rows/order;adds exactly1readonlyfile row;deduplicates identicalexistingrow;rejects writable,alias-rewrite and conflictingtarget variants. Correctedmount count39. Retainedowner mounts validation/creation use explicit temporarywrapper mounts global for same reviewedinvocation.",
+    "Wrapper still authenticates retained19 plus exactouter5 source context before execution and again under retainedcustody. It captures originalauthenticate/PollSignals/mounts,installs disclosedcontext and restores allthree in finally. Guardpoll/cleaning-mode behavior is byte-preserved;cleanup/clientretirement/ownedrecordrelease remain originalretained logic.",
+    "Independent12purecontrols passed0.134732s: oldmissingauthority reproduced,newexactmount/dedup/negativecontrols,unchanged vendorauthority commit/412file validator,retainedemptyvendor mountpoint,all10prefixinputs/all27supportinputs readonly,longestnestedvendor alias resolution and unchangeddriver stable-FD validators.",
+    "Independently reran finite staticaudit of7475 declared requirements with reportwrites mocked:allinputs resolve exactexpectedhost readonly;onlyoldomission is vendorauthority. Groups7015finite source/412vendor/27literalclosure/7Pythonconfiguration/10retainedF4D/2qualification/1driver/1authority. No guard/resource/container/workload main called.",
+    "Audit explicitly binds transitiveh990 extractedcensus source96d17547 and observer legacy stable-readersbb8be095;driver/config modules/retainedcontext/qualifiedELF/PREPimports all present. SDKbuild/source symlink resolves readonly within /out. Unusedoperationalmains and their state/profile inputs stay excluded rather than being imported or newlymounted.",
+    "No C/Rust body changes,no349body recompilation,no fallbackretirement,no relaxedvalidator/oracle. AcceptedF4D object/assemblyarchive/source-tool-SDK-ABI-flags-BuildID reuse contract remains. Source-only closure result gives no build/install/native/production/M15filecredit."
+  ],
+  "closure_evidence": {
+    "CLOSURE-SUMMARY.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/container-input-closure-expert-1/CLOSURE-SUMMARY.json",
+      "bytes": 1918,
+      "sha256": "0065deb41a54b2b8a42155a13fd6846de99cfe938a007071a0ca9e949da2ccad"
+    },
+    "CONTAINER-INPUT-CLOSURE.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/container-input-closure-expert-1/CONTAINER-INPUT-CLOSURE.json",
+      "bytes": 4402437,
+      "sha256": "0f247a260deb6189a3f3184e3054cd4529e0e04767da088b5e711dfe5a07cee3"
+    },
+    "EXACT-OUTER-MOUNT-CORRECTION.diff": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/container-input-closure-expert-1/EXACT-OUTER-MOUNT-CORRECTION.diff",
+      "bytes": 2899,
+      "sha256": "3b1a6b4074ffcaca4deec16d83b4525e3d2a377a511155d99b186cb0b53a2b78"
+    },
+    "PURE-TEST-RESULT.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/container-input-closure-expert-1/PURE-TEST-RESULT.json",
+      "bytes": 3210,
+      "sha256": "2820820a1d52f92dc73cf916a76ea445c3b2d3c1285ecc2e1539c92c69c2dbab"
+    },
+    "OUTER-PREFLIGHT.RESULT.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/container-input-closure-expert-1/OUTER-PREFLIGHT.RESULT.json",
+      "bytes": 2703,
+      "sha256": "71619565b2b5ad8afb3fbff747b22dd2e6ee86a2ad7acda3b04dca403125fa27"
+    }
+  },
+  "exact_added_mount": [
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-union2-default-image-preparation-1/normal-heavy-build-preparation-1/provenance-authority-correction-1/gitlink-inputs.json",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-union2-default-image-preparation-1/normal-heavy-build-preparation-1/provenance-authority-correction-1/gitlink-inputs.json",
+    true
+  ],
+  "runtime_release_conditions": [
+    "Root publishes/fetches exact runtime19/outer5 with thisreview;newfresh namespace/nonce under actual currentRoot30 successor ledger and lastacceptedfree boundary292acc02. Minimum27lineage in retainedpins is not authority to omit newerconsumednonces.",
+    "Bind actual corrected39mount view in exactouterwrapper release;retainedoldwrapper/release/ea96 cannot authorize newentry.",
+    "Fresh actual account/window/guardian/nativeownership/resources/admission plus exactindependent one-use executionrelease remain required. Samefixed05:36Z/account7fcreditceiling/realholds/floors/permanent27:4/scratch21/oneheavy4CPU12GiB512tasks apply.",
+    "Actual real six-phase configure/link/install/import/loader/native predicates require their own results;thisstaticreview runs none."
+  ],
+  "review_actions": {
+    "declared_artifact_refs_verified": 12,
+    "retained_runtime_sources": 19,
+    "outer_sources": 5,
+    "static_input_requirements_resolved": 7475,
+    "mounts_before": 38,
+    "mounts_after": 39,
+    "pure_controls": 12,
+    "pure_controls_seconds": 0.13473198504652828,
+    "test_report_writes_suppressed": true,
+    "new_guard_calls": 0,
+    "resource_queries": 0,
+    "compiler_calls": 0,
+    "Docker_commands": 0,
+    "workload_calls": 0,
+    "root_commands": 0,
+    "cleanup_operations": 0
+  },
+  "blocking_findings": []
+}

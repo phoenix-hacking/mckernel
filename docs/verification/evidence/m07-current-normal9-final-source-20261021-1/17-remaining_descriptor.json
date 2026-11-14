@@ -1,0 +1,21 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "schema": "m07-remaining-functional-output-v1",
+  "line_count": 5,
+  "component_order": [3, 4, 9],
+  "component_bits": {"3": 8, "4": 16, "9": 512},
+  "union_mask": 536,
+  "mpx_rows_equal": true,
+  "header": "REMAINING_XCR0 hi=<8 lowercase hex> lo=<8 lowercase hex>",
+  "allowed_rows": [
+    "REMAINING component=<id> INAPPLICABLE reason=not-enabled",
+    "REMAINING component=<id> INAPPLICABLE reason=instruction-fault signal=4 trap=6 code=2",
+    "REMAINING component=<id> INAPPLICABLE reason=instruction-fault signal=11 trap=13 code=128",
+    "REMAINING component=<id> ACCESS_ROUNDTRIP_SYSCALL_QUEUED_FUTEX_SIGNAL_RESTORE_PASS",
+    "REMAINING component=9 STOP reason=no-safe-noninitial-seed"
+  ],
+  "summary": "REMAINING_COMPLETED applicable=<3 lowercase hex> inapplicable=<3 lowercase hex> stopped=<3 lowercase hex>",
+  "summary_rule": "Masks derived from rows must be disjoint and partition 0x218; no unexplained bytes or duplicate rows; final LF and EOF required.",
+  "exit_rule": "2 exactly when stopped mask is nonzero, otherwise 0; stderr empty.",
+  "credit_rule": "Only actual full-boundary PASS rows receive component preservation credit. INAPPLICABLE and STOP never do. All-inapplicable is completed observation only. Any STOP remains an unmet prerequisite, never acceptance."
+}

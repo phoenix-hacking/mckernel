@@ -1,0 +1,213 @@
+{
+  "status": "READY_EXACT_LOWER_CALLABLE_PARTITION_FOR_INDEPENDENT_CONCRETE_REVIEW",
+  "unit_path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/lower-provider-unit-1/lower_provider_unit.rs",
+  "unit_sha256": "59ceb915804f071291e4197c7bf8bf3ea9efd4bf4a143c40b531a107b744a449",
+  "source_bindings": {
+    "/home/holden/mckernel/kernel/rust/cls.rs": "c0260e7634d53fcc0873746af8bd16b6691ee0a4b7f394ca18896aef070f6bba",
+    "/home/holden/mckernel/kernel/rust/x86_local.rs": "9f102654a22895615da854b08ea8e043a6c17b9157e4b77e5b58783e70abeb3f",
+    "/home/holden/mckernel/kernel/rust/x86_memory_helpers.rs": "5c60055053656751ea490be95c09d7343b0391797c21d5e6c97de97cb8d34c68",
+    "/home/holden/mckernel/kernel/rust/syscall_policy.rs": "11df0a7dbaeedcb009f5275e422f17eed444f4b513e7322e14f19e88566a2f1e",
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+  },
+  "actual_function_source_blocks": {
+    "cls::get_cpu_local_var": {
+      "source": "/home/holden/mckernel/kernel/rust/cls.rs",
+      "start_byte": 4712,
+      "end_byte": 4826,
+      "start_line": 167,
+      "sha256": "87f9be43f2af61bc60ad38d90a6ed8667d12b2ea1387828b00a945ffa7b03a24",
+      "exact_source": "#[no_mangle]\npub unsafe extern \"C\" fn get_cpu_local_var(id: CInt) -> *mut CpuLocalVar {\n    clv.add(id as usize)\n}\n"
+    },
+    "cls::this_cpu_local_var": {
+      "source": "/home/holden/mckernel/kernel/rust/cls.rs",
+      "start_byte": 3311,
+      "end_byte": 3432,
+      "start_line": 119,
+      "sha256": "98ea27f24370b62832a2aa7ba344314fedc72a48b805bb97cf9dc3dd33cb85b6",
+      "exact_source": "#[inline(always)]\nunsafe fn this_cpu_local_var() -> *mut CpuLocalVar {\n    get_cpu_local_var(ihk_mc_get_processor_id())\n}\n"
+    },
+    "cls::get_this_cpu_local_var": {
+      "source": "/home/holden/mckernel/kernel/rust/cls.rs",
+      "start_byte": 4828,
+      "end_byte": 4939,
+      "start_line": 172,
+      "sha256": "69f7fad9c8d3b07057434be9b4bc6608e4013eb4573125c10d1f4fae540172c9",
+      "exact_source": "#[no_mangle]\npub unsafe extern \"C\" fn get_this_cpu_local_var() -> *mut CpuLocalVar {\n    this_cpu_local_var()\n}\n"
+    },
+    "x86_local::rdmsr": {
+      "source": "/home/holden/mckernel/kernel/rust/x86_local.rs",
+      "start_byte": 1050,
+      "end_byte": 1339,
+      "start_line": 40,
+      "sha256": "d20f26c1b8dad08205ca55304e5c6a764e2e5e07d77808dc24e5bb3e825690d0",
+      "exact_source": "#[inline(always)]\nunsafe fn rdmsr(index: u32) -> CULong {\n    let low: u32;\n    let high: u32;\n    asm!(\n        \"rdmsr\",\n        in(\"ecx\") index,\n        out(\"eax\") low,\n        out(\"edx\") high,\n        options(nomem, preserves_flags)\n    );\n    ((high as CULong) << 32) | low as CULong\n}\n"
+    },
+    "x86_local::ihk_mc_get_processor_id": {
+      "source": "/home/holden/mckernel/kernel/rust/x86_local.rs",
+      "start_byte": 3872,
+      "end_byte": 4322,
+      "start_line": 145,
+      "sha256": "5d32980dcc56b5c7d960a599f89de58457657cad9f2295d0ab2440d09e1c3cff",
+      "exact_source": "#[cfg(not(mckernel_equivalence))]\n#[no_mangle]\npub unsafe extern \"C\" fn ihk_mc_get_processor_id() -> CInt {\n    let gs = rdmsr(MSR_GS_BASE) as *mut u8;\n    let local_base = locals as *mut u8;\n    let local_end = local_base.add(LOCALS_SPAN.wrapping_mul(num_processors as usize));\n\n    if gs < local_base || gs > local_end {\n        return -1;\n    }\n\n    let id: CInt;\n    asm!(\"mov {0:e}, gs:0\", out(reg) id, options(nomem, preserves_flags));\n    id\n}\n"
+    },
+    "x86_memory_helpers::x86_virt_to_phys_body_result": {
+      "source": "/home/holden/mckernel/kernel/rust/x86_memory_helpers.rs",
+      "start_byte": 151263,
+      "end_byte": 152149,
+      "start_line": 5422,
+      "sha256": "21bed1bc85e43e916e15f2853b39413d87507d8996c9b6a3111da994b0266d9f",
+      "exact_source": "#[no_mangle]\npub unsafe extern \"C\" fn x86_virt_to_phys_body_result(\n    va: CULong,\n    map_kernel_start: CULong,\n    kernel_phys_base: CULong,\n    linux_page_offset_base: CULong,\n    map_fixed_start: CULong,\n    map_st_start: CULong,\n    log_fn: Option<X86AddrLogFn>,\n) -> CULong {\n    if va >= map_kernel_start {\n        if let Some(log) = log_fn {\n            unsafe {\n                log(X86_ADDR_LOG_KERNEL, va);\n            }\n        }\n        return va\n            .wrapping_sub(map_kernel_start)\n            .wrapping_add(kernel_phys_base);\n    }\n    if va >= linux_page_offset_base {\n        return va.wrapping_sub(linux_page_offset_base);\n    }\n    if va >= map_fixed_start {\n        return va.wrapping_sub(map_fixed_start);\n    }\n\n    if let Some(log) = log_fn {\n        unsafe {\n            log(X86_ADDR_LOG_STRAIGHT, va);\n        }\n    }\n    va.wrapping_sub(map_st_start)\n}\n"
+    },
+    "x86_memory_helpers::x86_user_map_kernel_start_bridge": {
+      "source": "/home/holden/mckernel/kernel/rust/x86_memory_helpers.rs",
+      "start_byte": 267039,
+      "end_byte": 267328,
+      "start_line": 8948,
+      "sha256": "71e41e8ec3e1a548892a35290b3747cedfa5930b6a4600680989caa91485d50d",
+      "exact_source": "#[no_mangle]\npub unsafe extern \"C\" fn x86_user_map_kernel_start_bridge() -> CULong {\n    // SAFETY: Typed readonly C address cells bind the real existing storage.\n    // Reads match original plain C loads; there is no borrowed Rust reference.\n    unsafe { X86_MAP_KERNEL_START_GEOMETRY }\n}\n"
+    },
+    "x86_memory_helpers::virt_to_phys": {
+      "source": "/home/holden/mckernel/kernel/rust/x86_memory_helpers.rs",
+      "start_byte": 152507,
+      "end_byte": 152836,
+      "start_line": 5471,
+      "sha256": "8295bd03a2ba4a653a5eca6c22df025e5cc4800700f6aae767b333ba47b8ebb4",
+      "exact_source": "#[no_mangle]\npub unsafe extern \"C\" fn virt_to_phys(v: *mut c_void) -> CULong {\n    x86_virt_to_phys_body_result(\n        v as CULong,\n        x86_user_map_kernel_start_bridge(),\n        X86_KERNEL_PHYS_BASE,\n        LINUX_PAGE_OFFSET_BASE,\n        MAP_FIXED_START,\n        MAP_ST_START,\n        Some(x86_addr_log_bridge),\n    )\n}\n"
+    },
+    "syscall_policy::syscall_get_processor_id_bridge": {
+      "source": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "start_byte": 991390,
+      "end_byte": 991699,
+      "start_line": 30109,
+      "sha256": "05f46856cc02b50ee91e01929ad007638b64bd7d1da3a86449094fa66953a5aa",
+      "exact_source": "#[no_mangle]\npub unsafe extern \"C\" fn syscall_get_processor_id_bridge() -> CInt {\n    // SAFETY: The original architecture entry is called under the same CPU context;\n    // no MSR access, local-data read or fallback behavior is reimplemented here.\n    unsafe { crate::x86_local::ihk_mc_get_processor_id() }\n}\n"
+    },
+    "syscall_policy::syscall_virt_to_phys_bridge": {
+      "source": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "start_byte": 990689,
+      "end_byte": 991026,
+      "start_line": 30095,
+      "sha256": "cad4806de621a0c1ad0548ed9be65157962b2210b1a12f2d79cf9543888ca9e8",
+      "exact_source": "#[no_mangle]\npub unsafe extern \"C\" fn syscall_virt_to_phys_bridge(addr: *mut c_void) -> CULong {\n    // SAFETY: The original raw address and mapping-state preconditions pass unchanged.\n    // The actual Rust provider retains all range branches, wrapping arithmetic and logs.\n    unsafe { crate::x86_memory_helpers::virt_to_phys(addr) }\n}\n"
+    }
+  },
+  "actual_constants_cpu": [
+    "const PAGE_SIZE: usize = 4096;",
+    "const LOCALS_SPAN: usize = 4 * PAGE_SIZE;",
+    "const MSR_GS_BASE: u32 = 0xc000_0101;"
+  ],
+  "actual_constants_mapping": [
+    "const MAP_FIXED_START: CULong = 0xffff860000000000;",
+    "const MAP_ST_START: CULong = 0xffff800000000000;",
+    "const X86_ADDR_LOG_KERNEL: CInt = 1;",
+    "const X86_ADDR_LOG_STRAIGHT: CInt = 2;"
+  ],
+  "actual_mapping_callback_alias": "type X86AddrLogFn = unsafe extern \"C\" fn(CInt, CULong);",
+  "source_data_and_logger_type_origins": {
+    "cls_clv_definition": "pub static mut clv: *mut CpuLocalVar = null_mut();",
+    "cpu_locals_definition": "pub static mut locals: *mut X86CpuLocalVariables = core::ptr::null_mut();",
+    "cpu_num_processors_declaration": "    static mut num_processors: CInt;",
+    "phys_logger_declaration": "    fn x86_addr_log_bridge(event: CInt, value: CULong);"
+  },
+  "unchanged_existing_canonical_geometry_aliases": [
+    "    #[link_name = \"x86_map_kernel_start_geometry\"]\n    static X86_MAP_KERNEL_START_GEOMETRY: CULong;",
+    "    #[link_name = \"linux_page_offset_base\"]\n    static mut LINUX_PAGE_OFFSET_BASE: CULong;",
+    "    #[link_name = \"x86_kernel_phys_base\"]\n    static mut X86_KERNEL_PHYS_BASE: CULong;"
+  ],
+  "actual_exported_functions": [
+    "get_this_cpu_local_var",
+    "get_cpu_local_var",
+    "ihk_mc_get_processor_id",
+    "virt_to_phys",
+    "x86_virt_to_phys_body_result",
+    "x86_user_map_kernel_start_bridge",
+    "syscall_get_processor_id_bridge",
+    "syscall_virt_to_phys_bridge"
+  ],
+  "actual_private_helpers": [
+    "cls::this_cpu_local_var",
+    "x86_local::rdmsr"
+  ],
+  "expected_genuine_unresolved": [
+    "clv",
+    "locals",
+    "num_processors",
+    "x86_map_kernel_start_geometry",
+    "linux_page_offset_base",
+    "x86_kernel_phys_base",
+    "x86_addr_log_bridge"
+  ],
+  "data_initialization_ownership": "Only extern declarations for actual existing clv/locals/num_processors and geometry storage; no fake/null/init data definition. Real boot/init owner finalcohort remains open.",
+  "native_CPU_selection": "Exact cfg(not(mckernel_equivalence)) body/current bounds plus exact rdmsr/GS:0. No equivalence substitution or correction, no hardware execution.",
+  "logging": "Exact existing x86_addr_log_bridge extern ABI remains genuine unresolved provider, current implementation x86_memory_logger_bridges.rs not included. No fake callback/debug profile.",
+  "prior_partial_result": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/credential-provider-unit-1/RESULT.json",
+    "sha256": "b606a740de6e391c079db5c1b6ddfecf2d8a60677d0a0c9aeb9a5457150d3440",
+    "object": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/credential-provider-unit-1/output/credential_partial.o",
+    "object_sha256": "912e47f9b47cf01614852a2d9590941285b3eca58608b43ebf3b51f2d6a27a2c",
+    "unique_existing_definitions": {
+      "do_setresgid": 173,
+      "do_setresuid": 173,
+      "getcred": 259,
+      "getcred_body_result": 272,
+      "ptrace_detach_do_kill_bridge": 12,
+      "ptrace_detach_wakeup_bridge": 12,
+      "syscall_do_syscall2_bridge": 167,
+      "syscall_do_syscall3_bridge": 171,
+      "syscall_policy_do_syscall2_bridge": 167,
+      "syscall_policy_do_syscall3_bridge": 171,
+      "syscall_refresh_cred_fields_body_result": 163,
+      "terminate_host": 183,
+      "wait_host_wait4_bridge": 166
+    },
+    "actual_imports": [
+      "do_kill",
+      "do_syscall",
+      "f03_terminate_host_refcount_set_v1",
+      "f03_wait_release_process",
+      "f03_wait_release_thread",
+      "get_this_cpu_local_var",
+      "ihk_mc_get_processor_id",
+      "sched_wakeup_thread",
+      "syscall_do_kill_thread_bridge",
+      "syscall_do_syscall_request_bridge",
+      "syscall_find_process_bridge",
+      "syscall_generic_forwarding_body_result",
+      "syscall_get_processor_id_bridge",
+      "syscall_process_unlock_bridge",
+      "syscall_virt_to_phys_bridge",
+      "terminate_host_body_result"
+    ]
+  },
+  "prospective_partial_definitions": 21,
+  "prospective_partial_genuine_imports": [
+    "clv",
+    "do_kill",
+    "do_syscall",
+    "f03_terminate_host_refcount_set_v1",
+    "f03_wait_release_process",
+    "f03_wait_release_thread",
+    "linux_page_offset_base",
+    "locals",
+    "num_processors",
+    "sched_wakeup_thread",
+    "syscall_do_kill_thread_bridge",
+    "syscall_do_syscall_request_bridge",
+    "syscall_find_process_bridge",
+    "syscall_generic_forwarding_body_result",
+    "syscall_process_unlock_bridge",
+    "terminate_host_body_result",
+    "x86_addr_log_bridge",
+    "x86_kernel_phys_base",
+    "x86_map_kernel_start_geometry"
+  ],
+  "new_symbol_renames_or_overrides": false,
+  "canonical_aliases_only": "Existing source #[link_name] for geometry data copied exactly, no new symbol rewriting.",
+  "excluded": "No whole modules/kernelcrate/generic/exec/ACK/TID/XPMEM/offload/logger/data initialization/c205/eight/cohort. Only actual named callable closure and pure ABI types.",
+  "compiler_link_runtime_or_canonical_index_writes": false,
+  "independent_qualified_object_reuse_decision": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/lower-provider-reuse-1/REUSE-DECISION.json",
+    "sha256": "81f075c6dea7b08ab37cdf3aaef8b90db95c05d449d68df0110abd1aa8a7c324",
+    "scope": "No independently qualified matching current provider object established by exact named16U/F03/F06/fc5 inputs only; not universal absence. Excluded old combined cohorts not selected."
+  }
+}

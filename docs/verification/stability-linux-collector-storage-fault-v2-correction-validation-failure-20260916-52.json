@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_correction_validation_failure",
+  "task_id": "M02-B-storage-fault-v2-source-correction",
+  "correction_attempt": 52,
+  "recorded_utc": "2026-09-16T11:29:39Z",
+  "status": "FAIL_SYNTAX",
+  "authority": {
+    "review_failure_path": "docs/verification/stability-linux-collector-storage-fault-v2-source-review-failure-20260916-51.json",
+    "review_failure_sha256": "23cf40bec561751b27d5f70645da9cafc1cbbdb35fff179cfc8fb6f3812c0046",
+    "review_input_path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-review-input-20260916-51.tar.gz",
+    "review_input_sha256": "f5de5ac40efdbafe780500aeb81aa0e5b2dbd6b63e850ee0bf835b8d5074d456"
+  },
+  "candidate": {
+    "oracle_sha256": "67a6ed5bd04a65e91a72a6cfb8621221363542302da3d810729fcfb6195d258a",
+    "witness_owner_sha256": "d7084b98d7639279c5095a599529de22421eb6c2e213ffb0bf48cc26287e9760",
+    "test_sha256": "83488c6b0f3c29432f949b1ae5cbbe923936ff15f4162dd7bc5fd42ae60358c0",
+    "git_diff_check": "PASS",
+    "focused_python3_9": "FAIL_SYNTAX",
+    "full_python3_9": "NOT_RUN_AFTER_FOCUSED_FAILURE",
+    "python3_8": "NOT_RUN_AFTER_FOCUSED_FAILURE"
+  },
+  "failure": {
+    "command": "python3.9 -B -m unittest scripts.tests.test_collector_storage_fault_packet.StorageFaultV2SourceTests.test_eof_rejects_directory_and_live_file_capability_aliases",
+    "location": "scripts/tests/test_collector_storage_fault_packet.py:4352",
+    "diagnostic": "mismatched closing bracket ']' and parenthesis ')' in the new witness-journal lambda",
+    "log_created": false,
+    "source_preserved_in_place": true
+  },
+  "blocking_finding": "The intended EOF live-capability collision checks are present in both validators, but the focused regression cannot import because its new lambda has a bracket/parenthesis syntax error. No broader validation was run.",
+  "next": "On a future continuation, correct only the test syntax, rerun the focused case followed by complete Python 3.9 and 3.8 suites, both pycompile lanes and the diff check, then freeze a fresh review archive and obtain a new independent source review.",
+  "source_accepted": false,
+  "compiler_packet_released": false,
+  "compiler_execution": false,
+  "runtime_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "whole_os_acceptance": false
+}

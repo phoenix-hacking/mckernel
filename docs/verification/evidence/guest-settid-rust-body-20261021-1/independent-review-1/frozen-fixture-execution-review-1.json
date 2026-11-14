@@ -1,0 +1,43 @@
+{
+  "schema": "mckernel.settid-frozen-fixture.execution-source-review.v1",
+  "reviewer": "/root/sdk66_source_review",
+  "functional_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "CORRECTION_REQUIRED_NO_EXECUTION_RELEASE",
+  "proposal_sha256": "ba53bbbca777d67d463bb18c154745f0b30af4336745c0f6ba7cdf8bcc5d1061",
+  "frozen_manifest_sha256": "060b3f12eabe610eed5c2ca06fa666ce208ffba0b71637da1d8883b026a5482b",
+  "fixture_inputs_sha256": "207b081bbde82d53711e6ea9011aac43ead47c075eb072ba76f3bbe252a26f1d",
+  "runner_sha256": "b05bcc6bd6bf8cc6739fa5263b442cc17c55c03798fcf125575ef25c2f06fa50",
+  "accepted_source_equivalence_reused_sha256": "3b18d5fb5c87be68c2da66aea0a062220d26818e5be0d4c73e794a0c5ca49c90",
+  "findings": [
+    {
+      "blocking": true,
+      "path": "run_fixture_once.py",
+      "defect": "Popen(...,start_new_session=True) occurs before the try/finally owning its child. The installed asynchronous stop handler can raise after child creation and before cleanup ownership, leaving a separate inner session outside the outer capture group.",
+      "correction": "Use the already reviewed pinned owned_capture lifecycle, which masks stop signals during fork-to-ownership assignment, restores the mask in the child and always performs positive retirement/direct join before reading streams. Preserve five sequential commands and the finite whole-driver deadline. Do not invent another capture design for this fixture."
+    },
+    {
+      "blocking": true,
+      "path": "run_fixture_once.py",
+      "defect": "p.wait reaps the inner session leader before process-group checks. A live descendant after leader exit is merely recorded as process_group_absent:false and causes an assertion, without retiring that separate group. The outer group cannot own descendants that deliberately started a new session. Reaping before subsequent process-group signaling also loses the retained-leader ownership anchor.",
+      "correction": "Retain the child identity/leader until group observation and required termination are complete, then positively join and record retirement. Reuse the existing capture helper whose accepted lifecycle already enforces this invariant. No success or runtime grant may rely on a false group-absence record."
+    },
+    {
+      "blocking_for_whole_body_provenance_claim": true,
+      "path": "fixture-1/candidate.c",
+      "defect": "The two existing transport bridge definitions were compacted and one parameter renamed instead of being copied as exact complete production definitions. Their current behavior is trivially equivalent, but this is an avoidable exception to the declared whole-body extraction rule.",
+      "correction": "Copy the exact production syscall_virt_to_phys_bridge and syscall_do_syscall_request_bridge declarations/definitions into the fixture; retain fixture macro callback substitution. No production code edit is needed."
+    }
+  ],
+  "accepted_fixture_design": [
+    "The actual original settid function and candidate selected adapter/log body retain the settid name, and the complete production Rust function is present with existing scalar/request declarations and layout checks.",
+    "The fixture-only GNU ld wrapper records and poisons the C request carrier, forwards its arguments unchanged to the actual Rust symbol and verifies the same invocation pointer at the offload callback. It does not demand stack-address equality across independent C/Rust calls.",
+    "All 12 vectors preserve independent expected narrowed ints/log counts, full72-byte request assertions at fixed authoritative offsets, V/C/D/(L) order, translation even for NULL/zero count, CPU0/7 propagation, exact warning text, callback counts and unchanged TID buffers. Parity compares observation fields rather than C struct padding.",
+    "The exact five commands use the pinned nightly-2026-02-18 compiler and GCC9, one Rust codegen unit/thread, -Dwarnings, panic abort, opt2; C gnu11 opt2 strict warnings, no LTO and the real selected empty IHK_DMA_ALIGN header. The linker wraps only the helper symbol. No full crate, shared source integration, root, module or guest command is present.",
+    "CPU6/one job, 1GiB AS,30CPU seconds,28-second driver/35-second outer wall,32MiB per-file,256 nofile/core0, finite fresh outputs and admitted host/scratch floors are a bounded ordinary proposal once the process-ownership defects are corrected and dispatcher admission binds exact inputs/argv."
+  ],
+  "next_executable_observation": "Author retains the frozen version, makes one source correction using the accepted capture helper and exact bridge extraction, freezes changed runner/fixture inputs, and returns that small delta for release. Dispatcher then grants one fresh unprivileged run with positive inner and outer closure; no current release is supplied here.",
+  "failure_family": {"name": "settid-port", "executed_candidates": 0, "execution_failures": 0, "bounded_execution_corrections_used": 0, "source_review_correction_requested": true},
+  "reviewer_executed_tests_compilers_or_candidate_commands": 0,
+  "source_edits": 0,
+  "native_or_retirement_acceptance": false
+}

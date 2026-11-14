@@ -1,0 +1,357 @@
+{
+  "schema": "mckernel.tested205.delivered-tested-identities.v1",
+  "profile_id": "tested205-ff4f-current-host-c396-af234-6571-two-cpu-20261019",
+  "status": "DELIVERED_EXISTING_ACCEPTED_TESTED_CONFIGURATION_NO_NEW_RUN",
+  "profile": {
+    "cleanup_timeout_seconds": 15,
+    "cpus": 4,
+    "cpuset": "2-5",
+    "guest_memory_mib": 8192,
+    "guest_numa_nodes": 2,
+    "guest_timeout_seconds": 300,
+    "guest_vcpus": 4,
+    "heavy_operations": 1,
+    "mckernel_cpus": 2,
+    "mckernel_memory_mib": 128,
+    "memory": 12884901888,
+    "memory_swap": 12884901888,
+    "network": "none",
+    "payload_timeout_seconds": 10,
+    "pids": 512
+  },
+  "artifacts": {
+    "bzImage": {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/bzImage",
+      "sha256": "032653ee0661b059c325e2a0911a9d492805f1a889c4df515473d69a8be105bc",
+      "size": 16130048
+    },
+    "initramfs": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/n3-variant/stage205-current-pair-1/base.cpio.gz",
+      "sha256": "605d5c27c38d3c5e68dba2483bd782939aba7fcea13feb47cab7c3e0a2bb7abd",
+      "size": 12770049
+    },
+    "libc": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/native-proposal/stage-correction-1/stage/root/lib64/libc.so.6",
+      "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+      "size": 2339896
+    },
+    "loader": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/native-proposal/stage-correction-1/stage/root/lib64/ld-linux-x86-64.so.2",
+      "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b",
+      "size": 930600
+    },
+    "mcexec": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/scratch/mcexec-preload-fastpath-build-20260928-1/rust/executer/user/mcexec",
+      "sha256": "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b",
+      "size": 453352
+    },
+    "mckernel_image": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/host-preparation/repaired-affinity-n3-variant-20261019-1/repaired-image-fresh8b-runtime-0755",
+      "sha256": "ff4fca457e9ffe50dc4eca930c5f91faf317eeee15bf0c2907067cffa77b23bb",
+      "size": 7988768
+    },
+    "native_boot": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/two-cpu-running-query-correction-1/native-boot-two-0755",
+      "sha256": "4312f9a8f53d8db7b2b6be4c7d5e409f5c0f82cf8215728209be0f6ff4a5d5c5",
+      "size": 35784
+    },
+    "payload": {
+      "mode": 33216,
+      "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/app0",
+      "sha256": "024fa5620735622c684283df1a8270c2d7c78f62dd82d294c544f5eb3b197ac4",
+      "size": 5685552
+    },
+    "root_base": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/n3-variant/stage205-current-pair-1/base.cpio.gz",
+      "sha256": "605d5c27c38d3c5e68dba2483bd782939aba7fcea13feb47cab7c3e0a2bb7abd",
+      "size": 12770049
+    }
+  },
+  "modules": [
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/n3-variant/stage-matched-FP-modules-1/ihk.ko",
+      "sha256": "c396958bfdb0f22036b469ea2a64e0a6b188b9619ee4105c7879483bb3b9790d",
+      "size": 1475952
+    },
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/n3-variant/stage-matched-FP-modules-1/ihk-smp-x86_64.ko",
+      "sha256": "af234fbcd09327a80e12396eebbfbcd30838f88a552fa13ba00a2728a761eeaa",
+      "size": 11632136
+    },
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/n3-variant/stage-matched-FP-modules-1/mcctrl.ko",
+      "sha256": "6571ac7eca13559d8bab65125d54facbbc65e84f815d4ff3fc77ec6aa1104972",
+      "size": 1913904
+    }
+  ],
+  "apps": [
+    {
+      "argv": [
+        "/bin/mcexec",
+        "-t",
+        "1",
+        "-c",
+        "0",
+        "0",
+        "/apps/app0"
+      ],
+      "cpu": 0,
+      "cwd": "/case/two-app/work0",
+      "env": {
+        "COKERNEL_PATH": "/apps",
+        "PAIR_CPU": "0",
+        "PATH": "/usr/bin:/bin"
+      },
+      "id": 0,
+      "oracle": {
+        "exit_code": 0,
+        "stderr_hex": "",
+        "stdout_hex": "626174636820626567696e2063617365733d32206d697865645f726f756e64733d330a727573742d66696c652d726f756e647472697020696e697469616c3d3136206f76657277726974653d3420736872696e6b3d31302067726f773d3134207a65726f733d34207461696c3d61616262636320696e76616c69645f7365656b3d323220637572736f723d313420636865636b65645f636c6f73653d312072656d6f7665643d310a6d6978656420726f756e64733d332062797465735f656163683d3831393320636865636b73756d5f746f74616c3d333037323237300a66696c65733d3320636865636b65645f636c6f7365733d362072656f70656e65643d3320656f663d332072656d6f7665643d330a6a6f696e65645f746872656164733d36207475726e735f656163683d31323820636f756e7465725f746f74616c3d3736380a626174636820706173732063617365733d3220636865636b65645f636c6f7365733d372072656d6f7665643d34206a6f696e65645f746872656164733d360a"
+      },
+      "payload": {
+        "mode": 33216,
+        "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/app0",
+        "sha256": "024fa5620735622c684283df1a8270c2d7c78f62dd82d294c544f5eb3b197ac4",
+        "size": 5685552
+      },
+      "stderr_limit_bytes": 1024,
+      "stdout_limit_bytes": 1024,
+      "timeout_ms": 10000
+    },
+    {
+      "argv": [
+        "/bin/mcexec",
+        "-t",
+        "1",
+        "-c",
+        "1",
+        "0",
+        "/apps/app1"
+      ],
+      "cpu": 1,
+      "cwd": "/case/two-app/work1",
+      "env": {
+        "COKERNEL_PATH": "/apps",
+        "PAIR_CPU": "1",
+        "PATH": "/usr/bin:/bin"
+      },
+      "id": 1,
+      "oracle": {
+        "exit_code": 0,
+        "stderr_hex": "",
+        "stdout_hex": "465054485245414420763120746872656164733d322073616d655f7065726d69747465645f6370753d312064697374696e63745f7469643d310a7468726561643020726f756e64733d363420796d6d5f6c616e65733d363420706565725f70726f67726573733d3634207969656c645f6d696e3d363420636f6e74726f6c733d303737662f3366383020726573746f7265643d310a7468726561643120726f756e64733d363420796d6d5f6c616e65733d363420706565725f70726f67726573733d3634207969656c645f6d696e3d363420636f6e74726f6c733d306237662f3566383020726573746f7265643d310a465054485245414420504153530a"
+      },
+      "payload": {
+        "mode": 33216,
+        "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/app1",
+        "sha256": "1f51f0e3c8288bc05aabbc0309d1bf84abab1cbc6d8593c4ec7b1460b38163b7",
+        "size": 5666048
+      },
+      "stderr_limit_bytes": 1024,
+      "stdout_limit_bytes": 1024,
+      "timeout_ms": 10000
+    }
+  ],
+  "source_authority": {
+    "actual_file_pins": {
+      "kernel/rust/process_helpers.rs": "e6b80f8a93298ddf5a1570fb00b528a515c6676b01af6de92f985a9ad5cca786",
+      "kernel/rust/sched_helpers.rs": "3510ce13fc4653311fa98f68ba472c8eb64e330ddf41b8ae691b81dc6563e70e",
+      "kernel/syscall.c": "90732f8aac62d1221f56d9c56d059e597f82dbd7ac22f8f1ef531f074e90161c"
+    },
+    "candidate_identity_scope": "base_git_commit_only",
+    "candidate_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+    "code_checkpoint": "205410e43e19456ec98777dd6392940707061324",
+    "ihk_sha": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+    "manifest": {
+      "bytes": 6717521,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/thin-inputs.json",
+      "sha256": "d3495242284b653ef10de9f4f70706fc0ea118696189aa957305ce8bf5df8098"
+    },
+    "materialization_receipt": {
+      "bytes": 483,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/materialization-receipt.json",
+      "sha256": "e2f4361997676db57505dacf2125e513f47b1013844e616070da56fff721a425"
+    },
+    "materialization_sha256": "a6c5602304214426c70a73823607ed58f6cc5d475457051b477271bd4d48ffcc",
+    "request": {
+      "bytes": 35945925,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/image-request.json",
+      "sha256": "8b7b34ede927594675ad8cd303c24c233f4dcdaaa414c5a4c1171adc1139cbe1"
+    },
+    "source_derivative_sha256": "46ef55bc149a7c17cafc7b082e4774561980452e9d89f1d34e2096e7b9a2107e",
+    "source_identity": {
+      "dev": 66306,
+      "file_type": 16384,
+      "gid": 1000,
+      "inode": 48016248,
+      "mode": 448,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/materialized-source",
+      "uid": 1000
+    }
+  },
+  "module_source_provenance": {
+    "baseline_source_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+    "closure_hash_encoding": "SHA256 of UTF-8 JSON relative-path-to-SHA256 map, sorted keys, separators comma/colon",
+    "closure_sha256": "f7183ef9cd8aa032dede3822357219c811664ba2d365e0c0f9486b90a90c3970",
+    "compatibility_build_id": {
+      "meaning": "Retained baseline ABI compatibility blob; not proof of unchanged compiled source",
+      "path": "ihk-compat-build-id.bin",
+      "sha256": "6836dd3f0fd3d273816c58b067eeea1b53a2a7ab760c68e3d918eb14e80c38f0"
+    },
+    "excluded_working_tree": "Every unreviewed working-tree file excluded; retained accepted60 closure plus reviewed kmsg reader and mailbox failed-invalidation ownership pair included",
+    "reviewed_deltas": [
+      {
+        "baseline_sha256": "a353b2915a4038e7739d01cc440376daf091367f976cf6de297bceb1dd59fce8",
+        "path": "ihk_smp_x86_64.rs",
+        "source_candidate_sha256": "5b12bf77664095c966245ac8a1312a41c2fc16dd4a8233abd9e6c602305ecd6d"
+      },
+      {
+        "baseline_sha256": "9519b7f35f5d28c88cdf366fe5c67a244ea005db713690a3686afe8c2a60fcab",
+        "path": "os_runtime.rs",
+        "source_candidate_sha256": "6b736f94751c21a6b745f0476484d516c0de536c1cc2f4e1717eb899bf8be5e7"
+      },
+      {
+        "baseline_sha256": "6b37a71ba79bf5746fd72123b82ebe5afc71c809310a2a942cea08a3d66cf5e8",
+        "path": "smp_application.rs",
+        "source_candidate_sha256": "127829f3dd35b3d44c2b098279b7439dccb31a53508055e3cdd1fd9e450682e2"
+      },
+      {
+        "baseline_sha256": "4118de1401f33b2df17393660e6acbce2f337dca8a9cdfcf10965b1d3dc84c55",
+        "path": "smp_application_syscall.rs",
+        "source_candidate_sha256": "33e7b92712ca90fdc2b88cff234ad2a981f3538fbd38fc705dfc2cde937a7378"
+      },
+      {
+        "baseline_sha256": "ed5520878d89e9a79d7ffeb128ccbb54fbab5472b4b0f57abd00a0399fc8e9cb",
+        "path": "smp_cpu.rs",
+        "source_candidate_sha256": "356853344bffaa5b3d625c97eb3928b8908d45abbc94d16902e19bdef45ea90c"
+      },
+      {
+        "baseline_sha256": "9876f1b374ecfb44fba09395aa9fca1ed840619488f9b4f8cde38a6693004cd9",
+        "path": "smp_file_pager.rs",
+        "source_candidate_sha256": "655c029bcddf937b6445ee01d076978ff9606832d60fd038e07076bee939e96c"
+      },
+      {
+        "baseline_sha256": "db0c5f94b5ea41610c501002ff359b7f23a38841715a0307e8b8f7872ac65522",
+        "path": "smp_memory.rs",
+        "source_candidate_sha256": "8785b1be4dffe2ef24bc54dc8f861c290418ce13773d46177692c709d69fb525"
+      },
+      {
+        "baseline_sha256": "7aba4319fdc6fa76761ca01128c7a7d920c4be85244737167122c914fc1268d5",
+        "path": "smp_procfs.rs",
+        "source_candidate_sha256": "4ae39992d0354b2f0b32de4a3e26ce8a621ede6dff69dd92ce303d4ab90232ea"
+      },
+      {
+        "baseline_sha256": "bd0a109fe6c402e21b702b0fa96d99c2d9edbd5179877aa61f9f27bd595fe0e4",
+        "path": "smp_service.rs",
+        "source_candidate_sha256": "cd97c1528602323c43aaf70f528342fc3874fe9da1660cf1a767d27284cb5b5a"
+      },
+      {
+        "baseline_sha256": "c4bb558432a85c565977a7820d42eaf06530398d7fe9b916bf58f6741ca78d81",
+        "path": "sysfs_memory.rs",
+        "source_candidate_sha256": "d64efe15ff3545e6f21733cdc6dcbf026df370049484a7221a653d502612bfc1"
+      },
+      {
+        "baseline_sha256": "8a33f152307d66f7c205fe7557da1a4e02e5d230335dd9b36f16797e11db53ee",
+        "path": "sysfs_remote.rs",
+        "source_candidate_sha256": "fe4ec42333148770a36843a82f0c4cdf675a27065dbed1f13449a2b61472dfa9"
+      }
+    ],
+    "source_candidate_sha": "257ba169b58eebd066281020999ec760bfc2f4e0"
+  },
+  "module_build_image_id": "sha256:0f8ad280e47d76b23554de4aec411752e1f779f9b2fc7fece6b0b3375dc9775d",
+  "module_driver": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-20261019-1/capsule/scripts/native_running_external_modules_offline.py",
+    "sha256": "ad6c09af765ca347c5a18edac943afd2178f9baf0099e94096dbfba69c8f453f"
+  },
+  "compute_build_image_id": "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5",
+  "compute_toolchain": {
+    "manifest": {
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/image-toolchain.json",
+      "sha256": "a68e02b3b66b8bfbae96bf742dc8702b6e81dd97b92189b87437c3d08fccdf72"
+    },
+    "lock_sha256": "fd3d7a13e1b8b5d103f7e59d22f17c9e4b99cc937637decaa66749acfae6c802",
+    "rustc": {
+      "path": "/nightly/bin/rustc",
+      "version": "rustc 1.95.0-nightly (c04308580 2026-02-18)",
+      "sha256": "70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09"
+    },
+    "cc": "GCC14.3.1",
+    "clang_lld": "21.1.8",
+    "binutils": "2.41-63.el10",
+    "cmake": "3.31.8",
+    "make": "4.4.1"
+  },
+  "runtime_sources": [
+    {
+      "bytes": 66233,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/n3-variant/native_diagnostic_container_owner.py",
+      "sha256": "5ab04f3bb41b21d52f3f567169c519a0837419fa12f9ec2897f1b1b116f8860a"
+    },
+    {
+      "bytes": 6005,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/n3-variant/native_diagnostic_runner.py",
+      "sha256": "25ea29f9b07232094e9df1db6094ad0a85ec678281749a1d6998abb7c700d499"
+    },
+    {
+      "bytes": 70246,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/n3-variant/native_diagnostic.py",
+      "sha256": "8d29c650b74285d9d22435391059dfca7ae7605d0c1158a2a9cb850bd3aa0e20"
+    },
+    {
+      "bytes": 25398,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/n3-variant/native_diagnostic_backend.py",
+      "sha256": "cd0759c926876483665065cb320b9daf7d7c6b32f56e561805b4b0343f60d614"
+    },
+    {
+      "bytes": 9913,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/n3-variant/qmp_capture.py",
+      "sha256": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741"
+    },
+    {
+      "bytes": 24863,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/n3-variant/repaired_image_authority.py",
+      "sha256": "e375bd0eadf5ea8fa8ef6621603a8617b45bbce965a74f10e08b3cd7256b6f2e"
+    }
+  ],
+  "accepted_observations": {
+    "CPUs": [
+      0,
+      1
+    ],
+    "exit_codes": [
+      0,
+      0
+    ],
+    "guest_boots": 1,
+    "host_assignments": [
+      1,
+      2
+    ],
+    "native_lifecycle_cycles": 0,
+    "overlap_seconds": 1.620779456,
+    "procfs_empty_after_retirement": true,
+    "real_application_launches": 2,
+    "stdout_bytes": [
+      387,
+      254
+    ],
+    "strict_startup_CPU": true
+  },
+  "capability_statement": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/p-m13-02-capability-statement-20261022-1/CAPABILITY-STATEMENT.md",
+    "sha256": "e877026cf804bf6c657c3fffd4aa8d7ea0b9cc36007d30eac31d953e61e86afe",
+    "bytes": 14771
+  },
+  "identity_verification_scope": "Exact frozen recipe/manifest descriptor hashes checked; artifact byte descriptors reused from accepted freeze/build/native decisions. No binary corpus rehash, rebuild or fresh native validation."
+}

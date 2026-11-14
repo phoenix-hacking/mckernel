@@ -1,0 +1,374 @@
+{
+  "byte_identical_test_copy": {
+    "bytes": 5930,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/production_memory_provider.rs",
+    "sha256": "f181d7308fcc3ecc81343f38788c9a9f1a1f7b024b3a24586a057f3ff2c17d33"
+  },
+  "full_ABI": {
+    "bytes": 76151,
+    "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+    "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+  },
+  "full_corrected_module": {
+    "bytes": 5930,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-closure-p04source-max-1/correction-1/candidate/kernel/rust/f03_memory_host_offload.rs",
+    "sha256": "f181d7308fcc3ecc81343f38788c9a9f1a1f7b024b3a24586a057f3ff2c17d33"
+  },
+  "namespace_import_prefix": "// Exact unchanged production definitions below; imports only adapt namespace.\nuse core::{ffi::c_void, mem::offset_of, ptr::{addr_of_mut, write}};\nuse crate::abi::{CInt, CLong, CULong, SizeT, SyscallRequest, Thread, ProcessVm};\nuse crate::cls::get_this_cpu_local_var;\nuse crate::x86_local::ihk_mc_get_processor_id;\nuse crate::production_memory_provider::syscall_policy_do_syscall3_bridge;\n\n",
+  "production_definitions_modified": false,
+  "pure_setter_import_prefix": "// Exact unchanged production pure GPR setters; no IRQ/GS/hardware functions.\nuse crate::abi::{CInt, CULong, X86UserContext};\nuse core::ptr::write_volatile;\n\n",
+  "schema": "memory-five-exact-production-slices-v1",
+  "source_items": [
+    {
+      "bytes": 24,
+      "end_line_1based": 21,
+      "exact_text": "const EINVAL: CInt = 22;",
+      "kind": "constant-or-typealias",
+      "sha256": "0836b68bcc155c8cca768abaaaedb07a161e2f51aac938f86dae615d523423dd",
+      "source": {
+        "bytes": 1240596,
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "sha256": "3c91a22fdae204240201969957036a175fa207cb1d076ff5723650ce5a9adb8f"
+      },
+      "start_line_1based": 21,
+      "symbol": "EINVAL"
+    },
+    {
+      "bytes": 29,
+      "end_line_1based": 114,
+      "exact_text": "const PROT_READ: CInt = 0x01;",
+      "kind": "constant-or-typealias",
+      "sha256": "4cf7cf743497038f5320b7f3c52f5565c9798f8ab450952c286ff29ee0c10dbb",
+      "source": {
+        "bytes": 1240596,
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "sha256": "3c91a22fdae204240201969957036a175fa207cb1d076ff5723650ce5a9adb8f"
+      },
+      "start_line_1based": 114,
+      "symbol": "PROT_READ"
+    },
+    {
+      "bytes": 30,
+      "end_line_1based": 115,
+      "exact_text": "const PROT_WRITE: CInt = 0x02;",
+      "kind": "constant-or-typealias",
+      "sha256": "5ee500a82650e28932572fb8ad02408ebd425a20110931a8d743020321422975",
+      "source": {
+        "bytes": 1240596,
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "sha256": "3c91a22fdae204240201969957036a175fa207cb1d076ff5723650ce5a9adb8f"
+      },
+      "start_line_1based": 115,
+      "symbol": "PROT_WRITE"
+    },
+    {
+      "bytes": 29,
+      "end_line_1based": 116,
+      "exact_text": "const PROT_EXEC: CInt = 0x04;",
+      "kind": "constant-or-typealias",
+      "sha256": "981e9dc03caef4debf7aedd5a3559446b236ac560f73dea2a3335dfde708c3a5",
+      "source": {
+        "bytes": 1240596,
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "sha256": "3c91a22fdae204240201969957036a175fa207cb1d076ff5723650ce5a9adb8f"
+      },
+      "start_line_1based": 116,
+      "symbol": "PROT_EXEC"
+    },
+    {
+      "bytes": 85,
+      "end_line_1based": 573,
+      "exact_text": "type SyscallRequestCallFn = unsafe extern \"C\" fn(*mut SyscallRequest, CInt) -> CLong;",
+      "kind": "constant-or-typealias",
+      "sha256": "fcadbe76e33682c6e44e6f6b453da1d2f6f3f45e7dfb598e5aa1743d9c90bd26",
+      "source": {
+        "bytes": 1240596,
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "sha256": "3c91a22fdae204240201969957036a175fa207cb1d076ff5723650ce5a9adb8f"
+      },
+      "start_line_1based": 573,
+      "symbol": "SyscallRequestCallFn"
+    },
+    {
+      "bytes": 87,
+      "end_line_1based": 572,
+      "exact_text": "type SyscallDoSyscall3Fn = unsafe extern \"C\" fn(CInt, CULong, CULong, CULong) -> CLong;",
+      "kind": "constant-or-typealias",
+      "sha256": "40e4631fa537b7feaf112801df36b7392dd9f6e99e5fcbae9b58777a71e233fa",
+      "source": {
+        "bytes": 1240596,
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "sha256": "3c91a22fdae204240201969957036a175fa207cb1d076ff5723650ce5a9adb8f"
+      },
+      "start_line_1based": 572,
+      "symbol": "SyscallDoSyscall3Fn"
+    },
+    {
+      "bytes": 45,
+      "end_line_1based": 689,
+      "exact_text": "type DoMunmapVoidFn = unsafe extern \"C\" fn();",
+      "kind": "constant-or-typealias",
+      "sha256": "54c272b0ef0715d04526f101887fec2e9c9cb5168f248b7ae75f72e39ba5149b",
+      "source": {
+        "bytes": 1240596,
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "sha256": "3c91a22fdae204240201969957036a175fa207cb1d076ff5723650ce5a9adb8f"
+      },
+      "start_line_1based": 689,
+      "symbol": "DoMunmapVoidFn"
+    },
+    {
+      "bytes": 98,
+      "end_line_1based": 690,
+      "exact_text": "type DoMunmapRemoveRangeFn = unsafe extern \"C\" fn(*mut c_void, CULong, CULong, *mut CInt) -> CInt;",
+      "kind": "constant-or-typealias",
+      "sha256": "770ddfea2f0714d658ec178f23c331b75776fc004e18465977a731cc1e7e66c0",
+      "source": {
+        "bytes": 1240596,
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "sha256": "3c91a22fdae204240201969957036a175fa207cb1d076ff5723650ce5a9adb8f"
+      },
+      "start_line_1based": 690,
+      "symbol": "DoMunmapRemoveRangeFn"
+    },
+    {
+      "bytes": 78,
+      "end_line_1based": 691,
+      "exact_text": "type DoMunmapClearHostFn = unsafe extern \"C\" fn(CULong, SizeT, CInt) -> CLong;",
+      "kind": "constant-or-typealias",
+      "sha256": "b0613f7663d351b59ac002083d813835e85a75305bc090322f7e5a2ae732d282",
+      "source": {
+        "bytes": 1240596,
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "sha256": "3c91a22fdae204240201969957036a175fa207cb1d076ff5723650ce5a9adb8f"
+      },
+      "start_line_1based": 691,
+      "symbol": "DoMunmapClearHostFn"
+    },
+    {
+      "bytes": 63,
+      "end_line_1based": 692,
+      "exact_text": "type DoMunmapLogFn = unsafe extern \"C\" fn(CULong, SizeT, CInt);",
+      "kind": "constant-or-typealias",
+      "sha256": "6ac5e4dec17be71b32640cacf7a550e2d378eca6a563bb05b03d20b3f7645514",
+      "source": {
+        "bytes": 1240596,
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "sha256": "3c91a22fdae204240201969957036a175fa207cb1d076ff5723650ce5a9adb8f"
+      },
+      "start_line_1based": 692,
+      "symbol": "DoMunmapLogFn"
+    },
+    {
+      "bytes": 53,
+      "end_line_1based": 694,
+      "exact_text": "type ClearHostPteLogFn = unsafe extern \"C\" fn(CLong);",
+      "kind": "constant-or-typealias",
+      "sha256": "b4af1593637f8b07109b1aff88eae71df8d7a0546fcce476e5d43927943a8184",
+      "source": {
+        "bytes": 1240596,
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "sha256": "3c91a22fdae204240201969957036a175fa207cb1d076ff5723650ce5a9adb8f"
+      },
+      "start_line_1based": 694,
+      "symbol": "ClearHostPteLogFn"
+    },
+    {
+      "bytes": 84,
+      "end_line_1based": 779,
+      "exact_text": "type MprotectSetHostVmaFn = unsafe extern \"C\" fn(CULong, SizeT, CInt, CInt) -> CInt;",
+      "kind": "constant-or-typealias",
+      "sha256": "8d8b0d559295c4989e13877d778540aeaca0e1e06dab68900c81388d11c9f4ec",
+      "source": {
+        "bytes": 1240596,
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "sha256": "3c91a22fdae204240201969957036a175fa207cb1d076ff5723650ce5a9adb8f"
+      },
+      "start_line_1based": 779,
+      "symbol": "MprotectSetHostVmaFn"
+    },
+    {
+      "bytes": 117,
+      "end_line_1based": 1989,
+      "exact_text": "#[inline(always)]\nunsafe fn field_ptr<T>(base: *mut u8, offset: SizeT) -> *mut T {\n    base.add(offset).cast::<T>()\n}",
+      "kind": "fn",
+      "sha256": "d1f6b644776e056413b208768556474e0e1bc08d2c30c81e174482f03222ebd1",
+      "source": {
+        "bytes": 1240596,
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "sha256": "3c91a22fdae204240201969957036a175fa207cb1d076ff5723650ce5a9adb8f"
+      },
+      "start_line_1based": 1986,
+      "symbol": "field_ptr"
+    },
+    {
+      "bytes": 173,
+      "end_line_1based": 11206,
+      "exact_text": "unsafe fn current_thread_ptr() -> *mut Thread {\n    let cpu = get_this_cpu_local_var();\n    if cpu.is_null() {\n        null_mut()\n    } else {\n        (*cpu).current\n    }\n}",
+      "kind": "fn",
+      "sha256": "990ea00596100a713af17e0c7dc8a87a92892fe968553e6cfe37392738203e63",
+      "source": {
+        "bytes": 1240596,
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "sha256": "3c91a22fdae204240201969957036a175fa207cb1d076ff5723650ce5a9adb8f"
+      },
+      "start_line_1based": 11199,
+      "symbol": "current_thread_ptr"
+    },
+    {
+      "bytes": 869,
+      "end_line_1based": 2974,
+      "exact_text": "#[no_mangle]\npub unsafe extern \"C\" fn syscall_generic_forwarding_body_result(\n    request: *mut SyscallRequest,\n    n: CInt,\n    arg0: CULong,\n    arg1: CULong,\n    arg2: CULong,\n    arg3: CULong,\n    arg4: CULong,\n    arg5: CULong,\n    cpu: CInt,\n    do_syscall_fn: Option<SyscallRequestCallFn>,\n) -> CLong {\n    let Some(do_syscall_fn) = do_syscall_fn else {\n        return -(EINVAL as CLong);\n    };\n    if request.is_null() {\n        return -(EINVAL as CLong);\n    }\n\n    write(addr_of_mut!((*request).number), n as CULong);\n    write(addr_of_mut!((*request).args[0]), arg0);\n    write(addr_of_mut!((*request).args[1]), arg1);\n    write(addr_of_mut!((*request).args[2]), arg2);\n    write(addr_of_mut!((*request).args[3]), arg3);\n    write(addr_of_mut!((*request).args[4]), arg4);\n    write(addr_of_mut!((*request).args[5]), arg5);\n\n    do_syscall_fn(request, cpu)\n}",
+      "kind": "fn",
+      "sha256": "7581e48499b90f9077283bc867f956849e89fca558309792276880fa97992bfc",
+      "source": {
+        "bytes": 1240596,
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "sha256": "3c91a22fdae204240201969957036a175fa207cb1d076ff5723650ce5a9adb8f"
+      },
+      "start_line_1based": 2945,
+      "symbol": "syscall_generic_forwarding_body_result"
+    },
+    {
+      "bytes": 1937,
+      "end_line_1based": 4323,
+      "exact_text": "#[no_mangle]\npub unsafe extern \"C\" fn do_munmap_body_result(\n    vm: *mut c_void,\n    proc: *mut c_void,\n    addr: CULong,\n    len: SizeT,\n    holding_memory_range_lock: CInt,\n    proc_straight_va_offset: SizeT,\n    proc_straight_len_offset: SizeT,\n    begin_fn: Option<DoMunmapVoidFn>,\n    remove_range_fn: Option<DoMunmapRemoveRangeFn>,\n    clear_host_pte_fn: Option<DoMunmapClearHostFn>,\n    set_host_vma_fn: Option<MprotectSetHostVmaFn>,\n    finish_fn: Option<DoMunmapVoidFn>,\n    log_fn: Option<DoMunmapLogFn>,\n) -> CInt {\n    if let Some(begin) = begin_fn {\n        begin();\n    }\n\n    let mut ro_freed = 0;\n    let mut error = if let Some(remove_range) = remove_range_fn {\n        remove_range(vm, addr, addr.wrapping_add(len as CULong), &mut ro_freed)\n    } else {\n        -EINVAL\n    };\n\n    let straight_va = *field_ptr::<CULong>(proc.cast::<u8>(), proc_straight_va_offset);\n    let straight_len = *field_ptr::<SizeT>(proc.cast::<u8>(), proc_straight_len_offset);\n    if straight_va == 0\n        || addr < straight_va\n        || addr.wrapping_add(len as CULong) > straight_va.wrapping_add(straight_len as CULong)\n    {\n        if error != 0 || ro_freed == 0 {\n            if let Some(clear_host_pte) = clear_host_pte_fn {\n                let clear_error = clear_host_pte(addr, len, holding_memory_range_lock);\n                if error == 0 {\n                    error = clear_error as CInt;\n                }\n            }\n        } else {\n            error = if let Some(set_host_vma) = set_host_vma_fn {\n                set_host_vma(\n                    addr,\n                    len,\n                    PROT_READ | PROT_WRITE | PROT_EXEC,\n                    holding_memory_range_lock,\n                )\n            } else {\n                -EINVAL\n            };\n        }\n    }\n\n    if let Some(finish) = finish_fn {\n        finish();\n    }\n    if let Some(log) = log_fn {\n        log(addr, len, error);\n    }\n    error\n}",
+      "kind": "fn",
+      "sha256": "f2f64227bd29d5f565f62c9b02e8d5b0ba4cb53128cd0be3cc6d2daf4b00ff13",
+      "source": {
+        "bytes": 1240596,
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "sha256": "3c91a22fdae204240201969957036a175fa207cb1d076ff5723650ce5a9adb8f"
+      },
+      "start_line_1based": 4262,
+      "symbol": "do_munmap_body_result"
+    },
+    {
+      "bytes": 826,
+      "end_line_1based": 4356,
+      "exact_text": "#[no_mangle]\npub unsafe extern \"C\" fn clear_host_pte_body_result(\n    vm: *mut c_void,\n    addr: CULong,\n    len: SizeT,\n    holding_memory_range_lock: CInt,\n    vm_lock_taken_offset: SizeT,\n    cpu: CInt,\n    syscall_nr: CInt,\n    forward_fn: Option<SyscallDoSyscall3Fn>,\n    log_fn: Option<ClearHostPteLogFn>,\n) -> CLong {\n    if holding_memory_range_lock != 0 {\n        *field_ptr::<CInt>(vm.cast::<u8>(), vm_lock_taken_offset) = cpu;\n    }\n\n    let lerror = if let Some(forward) = forward_fn {\n        forward(syscall_nr, addr, len as CULong, 0)\n    } else {\n        (-EINVAL) as CLong\n    };\n\n    if holding_memory_range_lock != 0 {\n        *field_ptr::<CInt>(vm.cast::<u8>(), vm_lock_taken_offset) = -1;\n    }\n    if lerror != 0 {\n        if let Some(log) = log_fn {\n            log(lerror);\n        }\n    }\n    lerror\n}",
+      "kind": "fn",
+      "sha256": "5026c73c622c4b120fdfef6a6602ae41658b718b207fdad7a2e896eb7d251b4f",
+      "source": {
+        "bytes": 1240596,
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "sha256": "3c91a22fdae204240201969957036a175fa207cb1d076ff5723650ce5a9adb8f"
+      },
+      "start_line_1based": 4325,
+      "symbol": "clear_host_pte_body_result"
+    },
+    {
+      "bytes": 1110,
+      "end_line_1based": 5582,
+      "exact_text": "#[no_mangle]\npub extern \"C\" fn set_host_vma_body_result(\n    _addr: CULong,\n    _len: SizeT,\n    _prot: CInt,\n    _holding_memory_range_lock: CInt,\n) -> CInt {\n    #[cfg(native_linux_irq_work_v6_12)]\n    unsafe {\n        let thread = current_thread_ptr();\n        if thread.is_null() || (*thread).vm.is_null() {\n            return -EINVAL;\n        }\n        // Keep the mirror VMA's original protection and invalidate cached PFNs.\n        // Subsequent host faults must consult the new guest PTE permissions.\n        // The existing bridge publishes the held-range-lock flag while the\n        // offload runs, then restores it before the caller unlocks that range.\n        return clear_host_pte_body_result(\n            (*thread).vm.cast::<c_void>(),\n            _addr,\n            _len,\n            _holding_memory_range_lock,\n            offset_of!(ProcessVm, is_memory_range_lock_taken),\n            ihk_mc_get_processor_id(),\n            11,\n            Some(syscall_policy_do_syscall3_bridge),\n            None,\n        ) as CInt;\n    }\n    #[cfg(not(native_linux_irq_work_v6_12))]\n    {\n        0\n    }\n}",
+      "kind": "fn",
+      "sha256": "2c2f4a7433abf52a91cf66ac98fdee2ad024a280815cbe15b1e1588f2087c205",
+      "source": {
+        "bytes": 1240596,
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "sha256": "3c91a22fdae204240201969957036a175fa207cb1d076ff5723650ce5a9adb8f"
+      },
+      "start_line_1based": 5549,
+      "symbol": "set_host_vma_body_result"
+    },
+    {
+      "bytes": 309,
+      "end_line_1based": 30114,
+      "exact_text": "#[no_mangle]\npub unsafe extern \"C\" fn syscall_get_processor_id_bridge() -> CInt {\n    // SAFETY: The original architecture entry is called under the same CPU context;\n    // no MSR access, local-data read or fallback behavior is reimplemented here.\n    unsafe { crate::x86_local::ihk_mc_get_processor_id() }\n}",
+      "kind": "fn",
+      "sha256": "d0f1767d78d57ff182c5aba7b16d69bbc38f72cebd70dd479931407065f5dd4e",
+      "source": {
+        "bytes": 1240596,
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "sha256": "3c91a22fdae204240201969957036a175fa207cb1d076ff5723650ce5a9adb8f"
+      },
+      "start_line_1based": 30109,
+      "symbol": "syscall_get_processor_id_bridge"
+    },
+    {
+      "bytes": 2054,
+      "end_line_1based": 34975,
+      "exact_text": "mod f03_clear_host_pte_entry_v1 {\n    use core::mem::offset_of;\n    use crate::abi::{CInt, CLong, CULong, ProcessVm, SizeT};\n    use super::{clear_host_pte_body_result, syscall_get_processor_id_bridge,\n                ClearHostPteLogFn, SyscallDoSyscall3Fn};\n\n    #[repr(C)]\n    struct ClearHostBinding {\n        munmap_nr: CInt,\n        forward: Option<SyscallDoSyscall3Fn>,\n        log: Option<ClearHostPteLogFn>,\n    }\n    unsafe extern \"C\" {\n        static f03_clear_host_pte_binding_v1: ClearHostBinding;\n    }\n\n    /// Preserve the existing host-PTE request and borrowed VM lock-state protocol.\n    ///\n    /// # Safety\n    /// The current CPU/thread/VM remain live throughout the original synchronous\n    /// forwarding operation. The caller retains the original range-lock ownership\n    /// when `holding_lock` is nonzero. No range is acquired, released or remapped\n    /// by this wrapper; the genuine existing forwarding provider retains its own\n    /// complete context/request and endpoint contracts, including existing holds.\n    #[no_mangle]\n    pub unsafe extern \"C\" fn clear_host_pte(\n        addr: CULong, len: SizeT, holding_lock: CInt,\n    ) -> CLong {\n        // SAFETY: Same original CPU-local/thread lookup and borrowed VM.\n        let cpu = unsafe { crate::cls::get_this_cpu_local_var() };\n        let thread = unsafe { (*cpu).current };\n        let vm = unsafe { (*thread).vm };\n        let processor = unsafe { syscall_get_processor_id_bridge() };\n        // SAFETY: Immutable header-derived syscall number and genuine existing\n        // providers. The exact complete Rust body publishes CPU before forward,\n        // restores -1 before logging, and returns the original signed result.\n        unsafe {\n            let binding = &f03_clear_host_pte_binding_v1;\n            clear_host_pte_body_result(\n                vm.cast(), addr, len, holding_lock,\n                offset_of!(ProcessVm, is_memory_range_lock_taken),\n                processor, binding.munmap_nr, binding.forward, binding.log,\n            )\n        }\n    }\n}",
+      "kind": "mod",
+      "sha256": "f2f6b4bd4305c0fe316ed735794a862f3ad3ea3711457e6cfbccf2869e614c96",
+      "source": {
+        "bytes": 1240596,
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "sha256": "3c91a22fdae204240201969957036a175fa207cb1d076ff5723650ce5a9adb8f"
+      },
+      "start_line_1based": 34930,
+      "symbol": "f03_clear_host_pte_entry_v1"
+    },
+    {
+      "bytes": 2183,
+      "end_line_1based": 35080,
+      "exact_text": "mod f03_do_munmap_entry_v1 {\n    use core::{ffi::c_void, mem::offset_of};\n    use crate::abi::{CInt, CULong, Process, SizeT};\n    use super::{do_munmap_body_result, DoMunmapVoidFn, DoMunmapRemoveRangeFn,\n                DoMunmapClearHostFn, MprotectSetHostVmaFn, DoMunmapLogFn};\n\n    #[repr(C)]\n    struct DoMunmapBinding {\n        begin: Option<DoMunmapVoidFn>,\n        remove_range: Option<DoMunmapRemoveRangeFn>,\n        clear_host: Option<DoMunmapClearHostFn>,\n        set_host: Option<MprotectSetHostVmaFn>,\n        finish: Option<DoMunmapVoidFn>,\n        log: Option<DoMunmapLogFn>,\n    }\n    unsafe extern \"C\" {\n        static f03_do_munmap_binding_v1: DoMunmapBinding;\n    }\n\n    /// Enter the existing unmap body with the original borrowed process and VM.\n    ///\n    /// # Safety\n    /// The current CPU/thread/process/VM and immutable provider binding remain\n    /// live throughout this synchronous operation. Callers retain the original\n    /// range-lock contract indicated by `holding_lock`; this entry acquires no\n    /// additional lock and preserves the existing begin/remove/host/finish/log\n    /// lifetime and error precedence in `do_munmap_body_result`.\n    #[no_mangle]\n    pub unsafe extern \"C\" fn do_munmap(\n        addr: *mut c_void, len: SizeT, holding_lock: CInt,\n    ) -> CInt {\n        // SAFETY: Identical original CPU-local lookup and live borrowed fields.\n        let cpu = unsafe { crate::cls::get_this_cpu_local_var() };\n        let thread = unsafe { (*cpu).current };\n        let vm = unsafe { (*thread).vm };\n        let proc = unsafe { (*thread).proc };\n        // SAFETY: The repr(C) fields match the genuine C provider typedefs.\n        // Real Rust Process offsets replace the corresponding C offsetof values.\n        unsafe {\n            let binding = &f03_do_munmap_binding_v1;\n            do_munmap_body_result(\n                vm.cast(), proc.cast(), addr as CULong, len, holding_lock,\n                offset_of!(Process, straight_va), offset_of!(Process, straight_len),\n                binding.begin, binding.remove_range, binding.clear_host,\n                binding.set_host, binding.finish, binding.log,\n            )\n        }\n    }\n}",
+      "kind": "mod",
+      "sha256": "54366d0d22c8898a023bea0e2c9556699aa7c0fb8360d17e0f6b3ce91db9e6c0",
+      "source": {
+        "bytes": 1240596,
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "sha256": "3c91a22fdae204240201969957036a175fa207cb1d076ff5723650ce5a9adb8f"
+      },
+      "start_line_1based": 35032,
+      "symbol": "f03_do_munmap_entry_v1"
+    },
+    {
+      "bytes": 660,
+      "end_line_1based": 1021,
+      "exact_text": "#[inline(always)]\nunsafe fn x86_syscall_write(uctx: *mut X86UserContext, selector: CInt, value: CULong) {\n    if uctx.is_null() {\n        return;\n    }\n\n    unsafe {\n        match selector {\n            0 => write_volatile(&mut (*uctx).gpr.rdi, value),\n            1 => write_volatile(&mut (*uctx).gpr.rsi, value),\n            2 => write_volatile(&mut (*uctx).gpr.rdx, value),\n            3 => write_volatile(&mut (*uctx).gpr.r10, value),\n            4 => write_volatile(&mut (*uctx).gpr.r8, value),\n            5 => write_volatile(&mut (*uctx).gpr.r9, value),\n            6 => write_volatile(&mut (*uctx).gpr.rax, value),\n            _ => {}\n        }\n    }\n}",
+      "kind": "fn",
+      "sha256": "926c79507087e6b93210086a4b345e65479203cf32626cadc340e9e10b04c667",
+      "source": {
+        "bytes": 256003,
+        "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+        "sha256": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde"
+      },
+      "start_line_1based": 1003,
+      "symbol": "x86_syscall_write"
+    },
+    {
+      "bytes": 156,
+      "end_line_1based": 1056,
+      "exact_text": "#[no_mangle]\npub unsafe extern \"C\" fn ihk_mc_syscall_set_arg0(uctx: *mut X86UserContext, value: CULong) {\n    unsafe { x86_syscall_write(uctx, 0, value) }\n}",
+      "kind": "fn",
+      "sha256": "978c89e6cf672bec78f6c3960e62969e0d2df46feb799826770956e483d8e4c3",
+      "source": {
+        "bytes": 256003,
+        "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+        "sha256": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde"
+      },
+      "start_line_1based": 1053,
+      "symbol": "ihk_mc_syscall_set_arg0"
+    },
+    {
+      "bytes": 156,
+      "end_line_1based": 1061,
+      "exact_text": "#[no_mangle]\npub unsafe extern \"C\" fn ihk_mc_syscall_set_arg1(uctx: *mut X86UserContext, value: CULong) {\n    unsafe { x86_syscall_write(uctx, 1, value) }\n}",
+      "kind": "fn",
+      "sha256": "ebf6fe3c89276adc70ea38ad57743114e255cf22dfe7440b58e55cfed2aa038a",
+      "source": {
+        "bytes": 256003,
+        "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+        "sha256": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde"
+      },
+      "start_line_1based": 1058,
+      "symbol": "ihk_mc_syscall_set_arg1"
+    },
+    {
+      "bytes": 156,
+      "end_line_1based": 1066,
+      "exact_text": "#[no_mangle]\npub unsafe extern \"C\" fn ihk_mc_syscall_set_arg2(uctx: *mut X86UserContext, value: CULong) {\n    unsafe { x86_syscall_write(uctx, 2, value) }\n}",
+      "kind": "fn",
+      "sha256": "6c98ca8ee2232dcde1190e732c00d55cf024f40738f06b7a1a509fa3cc2780f2",
+      "source": {
+        "bytes": 256003,
+        "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+        "sha256": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde"
+      },
+      "start_line_1based": 1063,
+      "symbol": "ihk_mc_syscall_set_arg2"
+    }
+  ],
+  "test_binding_tables": "Two explicit test-only repr(C) tables feed actual new production callbacks into exact existing entry modules. They are not the actual C metadata binding or image provider proof. All begin/remove/finish/final-log/CPU/CLS/transport/diagnostic effects are clearly HOST-only."
+}

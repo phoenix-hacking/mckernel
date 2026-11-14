@@ -1,0 +1,43 @@
+{
+  "scope": "Functional OS/Rust only; no security testing. Two actual VM-entry fixture sources only, not executable-ready.",
+  "status": "NEXT_TWO_VM_CONSUMER_SOURCE_ONLY_NOT_EXECUTABLE_READY",
+  "candidate": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/next-fault-pte-source-1/candidate",
+  "source_bindings": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/two-VM-consumer-source-only-1/EXACT-FUNCTION-EXTRACTIONS.json",
+      "sha256": "93bf4470f39218ef7431482dbe9464250198bc3e9cc7e26d6640b40c356fb48e",
+      "bytes": 1140
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/two-VM-consumer-source-only-1/actual_VM_closure.rs",
+      "sha256": "7477ba400c846f1af21d131863a9ecd65f60a3b37cd60d12e95be41636db55d8",
+      "bytes": 4897
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/two-VM-consumer-source-only-1/actual_abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "bytes": 76151
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/two-VM-consumer-source-only-1/actual_kernel_declarations.h",
+      "sha256": "a9d0b00a8cfc76383c65d95d5c0d309e9153113ff1c24967f92f35932c60043e",
+      "bytes": 2090
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/two-VM-consumer-source-only-1/fixture.c",
+      "sha256": "3f0cac28300c4cfae01645164554e21f64f3658f254f5b3a0c201f2df868c986",
+      "bytes": 4342
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/two-VM-consumer-source-only-1/original-C-default-wrappers-and-log.inc",
+      "sha256": "8a75b69597f904517c361a6dc2d23c50222971f6acc2a7e7d608926a8428cf81",
+      "bytes": 2183
+    }
+  ],
+  "actual": null,
+  "planned_fault_cases": 1944,
+  "planned_node_cases": 324,
+  "qualification": "Exact full Rust helpers+publicentries+real diagnosticcallback; publicfault/PTE/NUMA/kprintf endpoints controlled. Native synchronization/ISA not exercised. C default wrappers preserve actual existinghelper null/error behavior; no Cfallback invalidpointer execution planned. HeaderABI/defaultfallback consumers and buildrecipe still future, so no second queued executablecohort.",
+  "execution_grant": null,
+  "source_preparation_clarification": "Before any executable-ready profile: exact C helper callback prototypes use page_table_t/struct process_vm*, matching canonical C declarations. Source-only Cartesian count corrected4*3*3*3*3*3*2=1944. No compilation/test."
+}

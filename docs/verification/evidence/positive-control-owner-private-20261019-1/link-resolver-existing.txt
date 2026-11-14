@@ -1,0 +1,65 @@
+struct ForkLinkResolverScope {
+    object: *const OsObject,
+    slot: u32,
+    generation: u64,
+}
+
+unsafe extern "C" fn resolve_fork_link_scope(
+    context: *mut c_void, descriptor: *mut super::application_abi::ForkLinkSealV1,
+    finish: Option<super::application_abi::ForkLinkFinishV1>, ticket: *mut c_void,
+) -> i32 {
+    let result = (|| -> Result {
+        use super::application_abi::{ForkLinkSealV1, VERSION};
+        if context.is_null() || descriptor.is_null() || ticket.is_null() { return Err(EINVAL); }
+        let finish = finish.ok_or(EINVAL)?;
+        let scope = unsafe { &*context.cast::<ForkLinkResolverScope>() };
+        let d = unsafe { &*descriptor };
+        let key = d.identity;
+        if d.version != VERSION || d.bytes as usize != core::mem::size_of::<ForkLinkSealV1>()
+            || d.reserved != 0 || key.reserved0 != 0 || key.reserved1 != 0
+            || key.slot != scope.slot || key.generation != scope.generation
+            || key.parent == 0 || key.child == 0 || key.parent == key.child
+            || key.worker == 0 || key.delivery == 0 || key.nonce == 0 || key.child_pid <= 0 || key.child_mm == 0
+            || d.second_worker == 0 || d.second_delivery == 0 || d.second_cpu < 0
+            || d.carrier_physical == 0 || d.carrier_sequence == 0 || d.gate.is_null()
+        { return Err(EACCES); }
+        let before = (d.version, d.bytes, d.identity, d.second_worker, d.second_delivery,
+            d.second_cpu, d.reserved, d.carrier_physical, d.carrier_sequence, d.gate);
+        let object = unsafe { &*scope.object };
+        // Copy only a scalar under exclusion. No context is dereferenced until
+        // acquire rechecks the full key and clones its actual owner/capsules.
+        let child_context = {
+            let table = object.forks.lock();
+            table.entries.iter().flatten().find(|entry| entry.identity == Some(key))
+                .map(|entry| entry.child_context).ok_or(ENOENT)?
+        };
+        let mut claim = match ForkProviderClaim::acquire(object, key, child_context, 0)? {
+            ForkClaimLookup::Pending(claim) => claim,
+            ForkClaimLookup::Completed => return Err(EIO),
+        };
+        claim.begin_link_attempt()?;
+        let capsule = claim.capsule.as_ref().ok_or(ENODEV)?;
+        let verify = capsule._link.ok_or(ENODEV)?;
+        let consumer_context = capsule.context.load(Ordering::Acquire);
+        let payload = claim.payload.as_ref().ok_or(ENODEV)?;
+        let payload_context = payload.context.load(Ordering::Acquire);
+        if consumer_context.is_null() || payload_context.is_null() { return Err(EIO); }
+        // Every exact epoch/capsule/module/OS pin remains owned by claim. No
+        // table/Remote/MM guard spans either callback. Cache the provider's
+        // continuation and ticket before consumer code can edit its descriptor.
+        let status = unsafe { verify(consumer_context, descriptor) };
+        let d = unsafe { &*descriptor };
+        let after = (d.version, d.bytes, d.identity, d.second_worker, d.second_delivery,
+            d.second_cpu, d.reserved, d.carrier_physical, d.carrier_sequence, d.gate);
+        if after != before { return Err(errno(-71)); }
+        if status != 0 { return Err(errno(if (-4095..0).contains(&status) { status } else { -71 })); }
+        if unsafe { &*before.9 }.load(Ordering::Acquire) != 2 { return Err(errno(-71)); }
+        let status = unsafe { finish(ticket, payload_context) };
+        if status != 0 { return Err(errno(if (-4095..0).contains(&status) { status } else { -71 })); }
+        // Restore only this exact BUSY epoch; all attempted errors instead
+        // quarantine and retain its contexts, including any SEALED link gate.
+        claim.restore()
+    })();
+    result.map_or_else(|e| e.to_errno(), |()| 0)
+}
+

@@ -1,0 +1,39 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/actual-host-bound-source-1/root-ordinary-compose-dispatch-source-1/cwd-enforcement-correction-source-1/run_one_compose.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/ordinary-compose-profile-accepted115-source-1/run_one_compose.py
+@@ -4,8 +4,8 @@
+ """
+ from pathlib import Path
+ import argparse,hashlib,importlib.util,json,os,resource,signal,time
+-D=Path(__file__).resolve().parent.parent
+-E=D.parents[2]
++D=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1')
++E=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254')
+ ORD=E/'ordinary-host-new12h-runner-source-1/run_new12h_host.py'
+ ORD_SHA='6e98a1fbcbce2e822a815a05516287e7122cbd8e06d43277134b27b70cf3ad34'
+ def need(v,m):
+@@ -38,7 +38,7 @@
+  initial=guard() # Included-first account/window/floor guard BEFORE output creation.
+  out=Path(p['leaves'][0]['output']);cap=Path(p['capture_root']);need(not os.path.lexists(out) and not os.path.lexists(cap),'fresh disjoint output/capture parents')
+  need(out.parent.is_dir() and cap.parent==D,'exact existing reviewed parents')
+- out.mkdir(mode=0o700);cap.mkdir(mode=0o700)
++ cap.mkdir(mode=0o700) # Exact composition helper creates its fresh output parent before generic calls.
+  write(cap/'CONSUMED-GRANT.json',dict(nonce=g['nonce'],profile=ref(z.profile),grant=ref(z.grant),admission=initial,source=ref(__file__)))
+  for sig in capture.STOP_SIGNALS:signal.signal(sig,capture.stop)
+  os.environ.clear();os.environ.update(PATH='/usr/bin:/bin',LC_ALL='C',PYTHONDONTWRITEBYTECODE='1')
+@@ -50,11 +50,11 @@
+  joined=capture.owned_capture(command,step,90,limits);write(step/'whole-join.json',joined)
+  write(cap/'RESULTS.json',dict(status='JOINED_COMPOSE_PENDING_RECEIPT_BINDING',results=[dict(index=0,leaf=command['leaf'],join=joined)],native_acceptance=False))
+  need(joined['returncode']==0 and joined['direct_child_joined'] and joined['group_absent'] and joined['closed_streams'] and not joined['error'] and not joined['retirement_error'],'first compose failure; preserve no retry')
+- raw=(step/'stdout').read_bytes();receipt=json.loads(raw);need(isinstance(receipt,dict) and isinstance(receipt['final_map'],dict),'complete original46d JSON/fullmap, not constant stdout oracle')
++ raw=(step/'stdout').read_bytes();result=json.loads(raw);need(isinstance(result,dict) and result['status']=='OFFLINE_IMAGE_ONLY_MATCHING235_NOT_NATIVE_RELEASE','complete finite image-only compose result')
++ rr=result['overlay_receipt'];receipt_path=Path(rr['path']);need(ref(receipt_path)['sha256']==rr['sha256'] and ref(receipt_path)['bytes']==rr['size'] and receipt_path.stat().st_mode==rr['mode'],'exact actual original46d artifact reference');receipt=read(receipt_path);need(isinstance(receipt['final_map'],dict),'complete original46d JSON/fullmap')
+  need(not (step/'stderr').read_bytes(),'unchanged producer empty stderr')
+- target=Path(p['actual_receipt_path']);need(target.parent==out and not target.exists(),'exact fresh binder receipt')
+- with target.open('xb') as f:f.write(raw) # Preserve every actual stdout byte andLF.
+- need(target.read_bytes()==raw and receipt['output_sha256']==ref(p['actual_overlay_path'])['sha256'],'actual complete receipt and overlay digest')
++ target=Path(p['actual_receipt_path']);need(target.parent==out and target==receipt_path,'exact composition-produced original46d binder receipt')
++ need(read(out/'COMPOSITION-RESULT.json')==result and receipt['output_sha256']==ref(p['actual_overlay_path'])['sha256'],'actual complete result and original46d receipt/overlay digest')
+  write(cap/'ACTUAL-COMPOSE-RESULT.json',dict(scope=p['scope'],status='ACTUAL_ONE_46D_COMPOSE_ZERO_JOINED_FULL_RECEIPT_NOT_NATIVE',nonce=g['nonce'],profile=ref(z.profile),grant=ref(z.grant),join=ref(step/'whole-join.json'),receipt=ref(target),overlay=ref(p['actual_overlay_path']),complete_stdout=ref(step/'stdout'),stderr=ref(step/'stderr'),current_nonce_ledger=g['current_nonce_ledger'],current_native_free=g['current_native_free'],binder_has_not_run=True,native_acceptance=False))
+- print(json.dumps(dict(status='ACTUAL_227_COMPOSE_ZERO_FULLMAP_PENDING_QUALIFIED_BINDER',result=ref(cap/'ACTUAL-COMPOSE-RESULT.json'))))
++ print(json.dumps(dict(status='ACTUAL_MATCHING115_235_COMPOSE_ZERO_FULLMAP_PENDING_QUALIFIED_BINDER',result=ref(cap/'ACTUAL-COMPOSE-RESULT.json'))))
+ if __name__=='__main__':main()

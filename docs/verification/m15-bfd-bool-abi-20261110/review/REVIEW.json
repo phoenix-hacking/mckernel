@@ -1,0 +1,319 @@
+{
+  "cases": {
+    "bytes": 12261,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/diagnostic-bfd-bool-correction-1/tests-1/CASES.json",
+    "sha256": "45c6dce4eb1aab97add3acb2dd128fccdc4f248323ac98ac832edcc0d016b205"
+  },
+  "decision": "NO_GO_FROZEN_C_HEADER_NAMESPACE_NOT_BOUND_TO_QUALIFIED_SELECTED_INPUT",
+  "focused_test_review_otherwise_GO": {
+    "C_checksum_input": {
+      "bytes": 163,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/diagnostic-bfd-bool-correction-1/tests-1/native-inputs.sha256",
+      "sha256": "fe0df75165896744525a756b832fd3f121202496bc9d2550eb6cb904396fa04e"
+    },
+    "C_oracle": "C11 _Generic exact real two functionpointer prototypes returnbool; sizeof/AlignofCbool both1. -Wall/-Wextra/-Werror/-fsyntax-only; no main, functionbody, provider/link/library call or outputobject. Exact selectedheader/GCC14 hashes must pass before compiler.",
+    "C_script": {
+      "bytes": 608,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/diagnostic-bfd-bool-correction-1/tests-1/compile-header-witness.sh",
+      "sha256": "451a8f1e1b6f6086889f87c2b7e6fc622a71ce79fb886fd74a4ce8359446a6a1"
+    },
+    "C_witness": {
+      "bytes": 730,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/diagnostic-bfd-bool-correction-1/tests-1/header-bool-witness.c",
+      "sha256": "60be640fbd755011a61a9b3b267907cf75736f76d56cee82171377d23e882ada"
+    },
+    "HOST_binding_reused": {
+      "bytes": 43555,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-source-1/HOST-TOOLCHAIN-BINDING.json",
+      "sha256": "e27a98348bd44a341a37db8528008303111f7753af6a8fb441cd14199ec243ac"
+    },
+    "HOST_nightly": {
+      "bytes": 645792,
+      "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+      "sha256": "70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09"
+    },
+    "Rust_oracle": "Same append-only fnptr bool and bool size/align constants appended to each complete real crate. Baseline eclair requires exactly2 E0308 naming both functions/bool-vs-i32; baseline mcinspect requires exactly1. Any other diagnostic error/frontendfeature/tool/file/sysroot failure rejects. No baselineobject. Candidates require exit0/newregular nonempty ELF64REL and compile every fullbody caller.",
+    "Rust_source_fidelity": [
+      {
+        "append_only_assertions": {
+          "bytes": 532,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/diagnostic-bfd-bool-correction-1/tests-1/eclair-signature-tail.rs",
+          "sha256": "2df2bcd23846cf8086b3616f94b5c0715397a3d74f44b2f2d372c4ecce151507"
+        },
+        "compile_input": {
+          "bytes": 91690,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/diagnostic-bfd-bool-correction-1/tests-1/eclair-baseline.signature.rs",
+          "sha256": "41b3b9bdf89be941bddd517199b971e01956a7cb6ed401b9d49225ed4c14973a"
+        },
+        "complete_source": {
+          "bytes": 91158,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/bfd-bool-correction-1/preimage/executer/user/rust/eclair_helpers.rs",
+          "sha256": "e5857d236e9e62ea27b8963956ffbcf5ac04d51512191548749d4b2524d0a77b"
+        },
+        "exact_full_prefix_plus_tail": true,
+        "family": "eclair",
+        "variant": "baseline"
+      },
+      {
+        "append_only_assertions": {
+          "bytes": 532,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/diagnostic-bfd-bool-correction-1/tests-1/eclair-signature-tail.rs",
+          "sha256": "2df2bcd23846cf8086b3616f94b5c0715397a3d74f44b2f2d372c4ecce151507"
+        },
+        "compile_input": {
+          "bytes": 91660,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/diagnostic-bfd-bool-correction-1/tests-1/eclair-candidate.signature.rs",
+          "sha256": "0ad69980ad28eca355f39834edc85e4e2f1882ae5521fe515f12f6eb157bdf74"
+        },
+        "complete_source": {
+          "bytes": 91128,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/bfd-bool-correction-1/candidate/executer/user/rust/eclair_helpers.rs",
+          "sha256": "2988d0402d1637b8b0e375590e45949da7add2c8d429447c145c08f0245179fb"
+        },
+        "exact_full_prefix_plus_tail": true,
+        "family": "eclair",
+        "variant": "candidate"
+      },
+      {
+        "append_only_assertions": {
+          "bytes": 369,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/diagnostic-bfd-bool-correction-1/tests-1/mcinspect-signature-tail.rs",
+          "sha256": "f62c62a0e2a292f736aeb01a5b5900916219ec85ae9c5a3f278773ad6a7417f6"
+        },
+        "compile_input": {
+          "bytes": 101309,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/diagnostic-bfd-bool-correction-1/tests-1/mcinspect-baseline.signature.rs",
+          "sha256": "8867afa35bf26c483dd211661870b5481bc39c0ec8bc196250732dc91f474f87"
+        },
+        "complete_source": {
+          "bytes": 100940,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/diagnostic-bfd-bool-correction-1/mcinspect/preimage/executer/user/rust/mcinspect_helpers.rs",
+          "sha256": "e9a9a648035e71c430742ac3f505cc5f9cbaeadb344b4727792721682da5db88"
+        },
+        "exact_full_prefix_plus_tail": true,
+        "family": "mcinspect",
+        "variant": "baseline"
+      },
+      {
+        "append_only_assertions": {
+          "bytes": 369,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/diagnostic-bfd-bool-correction-1/tests-1/mcinspect-signature-tail.rs",
+          "sha256": "f62c62a0e2a292f736aeb01a5b5900916219ec85ae9c5a3f278773ad6a7417f6"
+        },
+        "compile_input": {
+          "bytes": 101304,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/diagnostic-bfd-bool-correction-1/tests-1/mcinspect-candidate.signature.rs",
+          "sha256": "0696e45cd90119d9041e6c9d0e39847e0b20842323aaaa0fe86ff124a2bd28cf"
+        },
+        "complete_source": {
+          "bytes": 100935,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/diagnostic-bfd-bool-correction-1/mcinspect/candidate/executer/user/rust/mcinspect_helpers.rs",
+          "sha256": "88b6c5254ff9b4377d67f7da8f44d17a4c330a82c609c65ec9c557d9ec7dc50f"
+        },
+        "exact_full_prefix_plus_tail": true,
+        "family": "mcinspect",
+        "variant": "candidate"
+      }
+    ],
+    "no_fake_provider_or_waiver": "No function/provider/body/trampoline/type cast/redeclaration/shadow is added; actual imported C function item is assigned to expected bool fnptr. No warning waiver flags, RUSTC_BOOTSTRAP, loader/API/runtime or old72/41/producer replay.",
+    "profile_limit": "Genuine HOSTRust1.95nightly is required for eclair c_variadic. This checks source/type/callers only. Native46d Rust1.92 mcinspect actual corrected object/ELF/provider and final eclair namedbuild remain separate mandatory operations; old63502 is historical e9a9 source scope."
+  },
+  "inputs": {
+    "bytes": 10068,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/diagnostic-bfd-bool-correction-1/tests-1/INPUTS.json",
+    "sha256": "fe3648b7d0c2696109fda41ded2a25e5cf158f176a745999ec8b3b450622aab3"
+  },
+  "next_action": "P04Tests freezes the smallest four-file namespace-only successor. SDK reviews only changed input/mount/request identities against this retained otherwise-GO review. Root alone freshly admits and executes exact corrected compiler batch.",
+  "operation_profile_review_otherwise_GO": {
+    "C_phase": "One exact fresh named immutable46d user1000/capsdrop/no-newprivs/networknone/privateIPC/read-onlyroot container, CPU6/512MiB=swap/pids64/CPU60/core0/FSIZE64MiB/tmpfs32MiB. Only inputRO/captureRW; namespace missing above must be repaired before admission.",
+    "HOST_phases": "Four CPU6 serial compiler-only families, AS2GiB/CPU60/FSIZE64MiB/core0 and exactnightly; clean env-i/privateTMPDIR/bytecodeoff/MAKEFLAGSj1/OMP1. No linker/runtime/provider calls. Cphase andownedcontainer must positively retire before HOST.",
+    "failure_policy": "No commands executed. Preserve original failed/unexecuted candidate and raw firstdiagnostic; run only after meaningful namespace correction, independentdeltaGO and fresh actualRoot4GiB/max3/fresh26/disk admission.",
+    "lifecycle": "Root validates exactdaemon/name/image/ID/Cmd/profile/mounts beforestart; captures actual argv/env/birth/returncode/stdio and all direct waits/whole descendants/closedstreams, then normal exact-owned containerremove. All expectedbaseline1 statuses are compared to case-specificoracle, not blanketzero. Any unknown outcome remains owned/reserved; old CPU0/256MiB/job1 andnative2-5/12GiB held.",
+    "root_setup": {
+      "C_capture_initially_empty": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/diagnostic-bfd-bool-correction-1/tests-1/output-1/c-header",
+      "C_script_creates_only_capture_tmp": "/capture/tmp",
+      "Root_creates_after_GO_admission": [
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/diagnostic-bfd-bool-correction-1/tests-1/output-1",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/diagnostic-bfd-bool-correction-1/tests-1/output-1/tmp",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/diagnostic-bfd-bool-correction-1/tests-1/output-1/c-header"
+      ],
+      "all_Rust_object_stream_paths_must_be_absent_before_first_compile": true,
+      "fresh_output_absent": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/diagnostic-bfd-bool-correction-1/tests-1/output-1",
+      "no_preparer_created_output_or_tmp": true
+    },
+    "shared_budget": {
+      "CPU": [
+        6
+      ],
+      "CPU_seconds_per_command": 60,
+      "C_memory_bytes_including_tmpfs": 536870912,
+      "C_memory_swap_total_bytes": 536870912,
+      "C_phase_max_wall_seconds": 60,
+      "FSIZE_bytes": 67108864,
+      "HOST_AS_per_compile_bytes": 2147483648,
+      "HOST_total_all_overhead_bytes": 4294967296,
+      "additional_output_capture_planning_bytes": 134217728,
+      "aggregate_jobs_max": 3,
+      "each_Rust_phase_wall_seconds": 30,
+      "fit_condition": "Root fresh allcontrollers/daemons/workers/otherpayloads + max2GiB completecompilefamily + retained256MiB must fit4GiB; oldjob1+newjob1 count2. Wait othercompiler/container/network retirement if actual remaining1792MiB overhead budget cannotfit. AS is perprocess; count completefamily, no multiplied grant. Native2-5/12GiB and all18GiB/priorUNKNOWN/source reservations held.",
+      "fresh_MemAvailable_min_bytes": 27917287424,
+      "host_disk_floor_bytes": 17179869184,
+      "jobs": 1,
+      "old_UNJOINED_CPU0_bytes": 268435456,
+      "old_UNJOINED_CPU0_jobs": 1,
+      "old_UNJOINED_released": false,
+      "phase_order": "Cwitness one unprivileged512MiB container, positive retire; then4HOSTcompile phases strictly serial; never overlap these grants.",
+      "scratch_disk_floor_bytes": 12884901888,
+      "total_batch_wall_seconds": 180
+    }
+  },
+  "request": {
+    "bytes": 21534,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/diagnostic-bfd-bool-correction-1/tests-1/REQUEST.json",
+    "sha256": "5ef7cb967b42473ddbafa4a9c11e902404ab0c3d5cf34fef13e99857043f31db"
+  },
+  "reviewed_at": "2026-11-10T16:21:28.152956+00:00",
+  "reviewer": "/root/sdk_binding_source_max; existing direct actualSol/MAX; no recursion",
+  "reviewer_operations": "Only exact source patches/contracts/header prototypes/quotedheader identities and testprefix/tail/input/argv/resource metadata read/compared; this privateREVIEW written. No compiler/GCC/Rust/test/headerwitness/helper/Docker/network/library/loader/API/main/native execution, source/packet/canonical edits or child agent.",
+  "root_only_acceptance": {
+    "Cretirement_or_scope_hold_release": false,
+    "actual_tests_or_compilers_run": false,
+    "complete_ABI_runtime_native_I01_I03_or_milestone_acceptance": false,
+    "new_corrected_artifacts_qualified": false,
+    "source_patches_canonical_applied": false
+  },
+  "schema": "mckernel.diagnostic-bfd-bool.changed-source-test-review.v1",
+  "sole_material_blocker": {
+    "actual_script_obligation": "native-inputs.sha256 pins de900 at /usr/include/bfd.h then compile-header-witness.sh runs literal /usr/bin/cc -std=c11 -Wall -Wextra -Werror -fsyntax-only /input/header-bool-witness.c. Frozencreate argv mounts no actual qualified BFDheader or its three quotedheader inputs.",
+    "family": "Selected BFD header namespace materialization",
+    "minimum_correction": "Preserve original5ef7 packet unexecuted. A bounded correction adds only the four exact retained readonly header file mounts to /usr/include/bfd.h, ansidecl.h, symcat.h, diagnostics.h, and freezes corresponding source/header/input/request/result bindings. Do not mask /usr/include or copy/synthesize headers. Cwitness/script/native-input-checksum/candidates/fourRustcases/literalccflags/resources remain unchanged.",
+    "observed_frozen_mounts": [
+      {
+        "destination": "/input/header-bool-witness.c",
+        "read_only": true,
+        "source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/diagnostic-bfd-bool-correction-1/tests-1/header-bool-witness.c"
+      },
+      {
+        "destination": "/input/native-inputs.sha256",
+        "read_only": true,
+        "source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/diagnostic-bfd-bool-correction-1/tests-1/native-inputs.sha256"
+      },
+      {
+        "destination": "/input/compile-header-witness.sh",
+        "read_only": true,
+        "source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/diagnostic-bfd-bool-correction-1/tests-1/compile-header-witness.sh"
+      },
+      {
+        "destination": "/capture",
+        "read_only": false,
+        "source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/diagnostic-bfd-bool-correction-1/tests-1/output-1/c-header"
+      }
+    ],
+    "owner": "/root/p04_tests_max owns tests1 private successor; Root sole integration/execution; SDK reviews only the actual namespace delta.",
+    "retained_provenance": {
+      "actual_prior_profile": {
+        "bytes": 73165,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/consumer-native46d-1/named-build-1/REQUEST.json",
+        "sha256": "48c260e19e688e9005b0326124394050ba52115872d9368b319c3845a7760e83"
+      },
+      "distinction": "Prior matching mcinspect profile supplied these qualified passive-extraction files by explicit read-only overlay. That is not evidence that the immutable image unmounted /usr/include/bfd.h equals de900. The frozen current packet supplies no such actual image-fixed receipt. No absence or different image contents are asserted.",
+      "selected_header_readonly_bindings": [
+        {
+          "identity": {
+            "bytes": 252810,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/include/bfd.h",
+            "sha256": "de900a9fe4ac94543ee1382cebc3063c3d7e20d16bc934fc816133dd55fe2432"
+          },
+          "kind": "actualBFDheaderquotedincludeclosure",
+          "target": "/usr/include/bfd.h"
+        },
+        {
+          "identity": {
+            "bytes": 11773,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/include/ansidecl.h",
+            "sha256": "fe1b2660b8393691c6e89f0099cfe0b0287a4eccaccd84ea9cdcfb9afc050aa6"
+          },
+          "kind": "actualBFDheaderquotedincludeclosure",
+          "target": "/usr/include/ansidecl.h"
+        },
+        {
+          "identity": {
+            "bytes": 2191,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/include/symcat.h",
+            "sha256": "51dc65606b842617374d454a538abdded150c87bc05a7f59dcd71207529af4c2"
+          },
+          "kind": "actualBFDheaderquotedincludeclosure",
+          "target": "/usr/include/symcat.h"
+        },
+        {
+          "identity": {
+            "bytes": 5323,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/include/diagnostics.h",
+            "sha256": "4b0272a4540cc2acccbc40eafd668f5e10b6f8f62dbabe9b2e0f1e31e0aa2460"
+          },
+          "kind": "actualBFDheaderquotedincludeclosure",
+          "target": "/usr/include/diagnostics.h"
+        }
+      ]
+    }
+  },
+  "source_material_review_otherwise_GO": {
+    "actual_C_prototypes": [
+      "bfd.h1065-1067: bool bfd_get_section_contents(bfd*,asection*,void*,file_ptr,bfd_size_type)",
+      "bfd.h2854: bool bfd_check_format(bfd*,bfd_format)"
+    ],
+    "actual_header": {
+      "bytes": 252810,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/include/bfd.h",
+      "sha256": "de900a9fe4ac94543ee1382cebc3063c3d7e20d16bc934fc816133dd55fe2432"
+    },
+    "eclair": {
+      "baseline": {
+        "bytes": 91158,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/bfd-bool-correction-1/preimage/executer/user/rust/eclair_helpers.rs",
+        "sha256": "e5857d236e9e62ea27b8963956ffbcf5ac04d51512191548749d4b2524d0a77b"
+      },
+      "candidate": {
+        "bytes": 91128,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/bfd-bool-correction-1/candidate/executer/user/rust/eclair_helpers.rs",
+        "sha256": "2988d0402d1637b8b0e375590e45949da7add2c8d429447c145c08f0245179fb"
+      },
+      "exact_changed_contract": "Only two extern return declarations c_int->bool and five false-result branches ==0->!bool: read_physmem section read, setup_symbols format, setup_dump format and two chunk reads. Existing args/layout/pointer ownership, diagnostic text, failure return and all other source bytes preserved.",
+      "patch": {
+        "bytes": 2426,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/bfd-bool-correction-1/ECLAIR-BFD-BOOL.patch",
+        "sha256": "f6a174775b03a394cea4ec05fe26849ae813a43e0cac6336ba71da6e5d27fec2"
+      },
+      "source_contract": {
+        "bytes": 4768,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/bfd-bool-correction-1/SOURCE-CONTRACT.json",
+        "sha256": "86e7c76ddc9c43fd9c112ae59f6033ec1b12475170aefadaf77d715b21f49983"
+      },
+      "unsafe_ABI_reason": "C bool return must be declared Rustbool under C ABI; oldc_int could read a different return width. Rustbool matches actualC_Bool, and negation preserves false/error branches without casting or accepting unknown values. No provider implementation or shared layout changes."
+    },
+    "mcinspect": {
+      "baseline": {
+        "bytes": 100940,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/diagnostic-bfd-bool-correction-1/mcinspect/preimage/executer/user/rust/mcinspect_helpers.rs",
+        "sha256": "e9a9a648035e71c430742ac3f505cc5f9cbaeadb344b4727792721682da5db88"
+      },
+      "candidate": {
+        "bytes": 100935,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/diagnostic-bfd-bool-correction-1/mcinspect/candidate/executer/user/rust/mcinspect_helpers.rs",
+        "sha256": "88b6c5254ff9b4377d67f7da8f44d17a4c330a82c609c65ec9c557d9ec7dc50f"
+      },
+      "exact_changed_contract": "Only bfd_check_format c_int->bool and its init_bfd_symbols failure condition ==0->!bool. bfd_perror and -1 failure return unchanged; all other source bytes preserved.",
+      "patch": {
+        "bytes": 837,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/diagnostic-bfd-bool-correction-1/mcinspect/MCINSPECT-BFD-BOOL.patch",
+        "sha256": "e1425da9417af068e25726b433ff5c36d70c2de77874202f14af47cdfc4b647d"
+      },
+      "source_contract": {
+        "bytes": 6115,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/diagnostic-bfd-bool-correction-1/mcinspect/SOURCE-BINDINGS.json",
+        "sha256": "b950a0a51450e942e171bfdbc32a1067e0698d8aabb85645879bcfc8cf8b76fb"
+      }
+    },
+    "unchanged_argument_contracts": "Existing opaque bfd/asection/void pointers, bfd_format/c_int and selected x86_64 file_ptr/isize,bfd_size_type/usize are unchanged. This review does not reopen retained layout/accessor proofs or add a blanket BFD/provider waiver."
+  }
+}

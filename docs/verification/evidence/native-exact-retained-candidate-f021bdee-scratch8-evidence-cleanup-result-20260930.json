@@ -1,0 +1,61 @@
+{
+  "schema": "mckernel.exact-evidence-cleanup-result.v1",
+  "status": "APPLY_PASS",
+  "scope": "stopped failed-candidate Git-evidence deduplication only; compiled output and failure evidence preserved",
+  "release_commit": "78e2cdc660431de40450c9f119223eb1713ab6fd",
+  "candidate_commit": "f021bdee206944fc9c68a3f1f2e0f6683a849435",
+  "candidate_root": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-f021bdee-scratch-8",
+  "candidate_identity": "1831:5242921",
+  "candidate_allocated_bytes_before": 9237291008,
+  "candidate_allocated_bytes_after": 134750208,
+  "packet": {
+    "path": "docs/verification/evidence/native-exact-retained-candidate-f021bdee-scratch8-evidence-cleanup-20260930.py",
+    "sha256": "c2182ce828e0b6282e95bfb71861e5263d7137385cef2fc81ccdb24a29411c0d"
+  },
+  "test": {
+    "path": "scripts/tests/test_native_exact_retained_candidate_f021bdee_scratch8_evidence_cleanup_20260930.py",
+    "sha256": "de951d4cd334443c5557138006f82b77329a3fbe1247588533e6e5e210ea3a3d",
+    "result": "8 passed"
+  },
+  "plan": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-retained-candidate-f021bdee-scratch8-evidence-cleanup-plan-20260930.json",
+    "identity": "1831:72270",
+    "size": 1566164,
+    "sha256": "cb35c05da923552e09a952e008e24e71f3fbafd885e23ef0add9abd60a1c52cb",
+    "target_count": 2479,
+    "preserved_count": 0,
+    "removed_allocated_bytes": 9102540800
+  },
+  "verification": {
+    "all_planned_targets_absent_after": true,
+    "candidate_identity_unchanged": true,
+    "candidate_head_unchanged": true,
+    "build_output_evidence_request_manifest_metadata_exclusion_preserved": true,
+    "stopped_container_preserved": "b34323f6c4352e8bae669d006e11076a64a5734ed165a6ce866bd4e7aa04c001",
+    "restoration": "restore each plan restore_git_path from its exact blob at candidate_commit"
+  },
+  "preserved_harness_failures": [
+    {
+      "family": "delegated-host-mount-binding",
+      "message": "FAIL_CLOSED: unexpected nested mount/device",
+      "plan_present_after": false,
+      "deletion_started": false,
+      "correction": "require exact scratch mount /dev/loop39 ext4 7:39"
+    },
+    {
+      "family": "delegated-audit-signature",
+      "message": "TypeError: audit() takes 0 positional arguments but 3 were given",
+      "plan_identity": "1831:72270",
+      "all_target_count_still_present_after": 2479,
+      "deletion_started": false,
+      "correction": "exact pinned three-argument audit adapter plus apply integration fixture"
+    }
+  ],
+  "trim": {
+    "path": "/home/holden/mckernel-work/scratch",
+    "bytes": 13968592896,
+    "host_available_bytes_after": 37035544576,
+    "scratch_available_bytes_after": 23300349952
+  },
+  "next": "archive and retire only the stopped f021 expanded build-evidence root to recover the remaining scratch admission margin, then prepare a fresh corrected candidate"
+}

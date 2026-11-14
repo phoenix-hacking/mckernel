@@ -1,0 +1,43 @@
+{
+  "schema": "mckernel.native-exact-candidate-preparation-failure.v1",
+  "status": "FAIL_CLOSED",
+  "failure_family": "post-clone-capacity-accounting",
+  "candidate_commit": "c658175ae1831e2caef6ecf59730a272f1324645",
+  "candidate_path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-c658175a-scratch-7",
+  "candidate_identity": "1831:6684719",
+  "candidate_allocated_bytes": 9229795328,
+  "packet_sha256": "32330d3e59eca5d6d3ddb0e334de8c2309f5d2a3093188e45e9f2c963e501245",
+  "test_sha256": "7334417526404976f909cdb82aeaa170c9ca2f5a320a1608686ec9cc487088e7",
+  "release_commit": "f5cdbb82e2431db6e87c8954a4c457343ff38c14",
+  "terminal": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-candidate-preparation-c658175a-scratch-7-terminal.json",
+    "identity": "1831:57611",
+    "sha256": "a9bf9967a1dd78cd64d3cf0ba168af5eb4359533e08f75dd3e518a0b854f87b1",
+    "returncode": 1
+  },
+  "log": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-candidate-preparation-c658175a-scratch-7.log",
+    "identity": "1831:57610",
+    "sha256": "47344ca5a5652821e7e77f3ca041c06c5424ef5496ac946e16d105d0d525982f"
+  },
+  "observed_error": "pre-conversion scratch reserve plus checkout floor failed",
+  "observed_scratch_free_bytes": 19873701888,
+  "incorrect_required_scratch_bytes": 23731113984,
+  "root_cause": "The post-clone gate re-added the full checkout allocation even though the checkout was already present, effectively budgeting a second checkout.",
+  "postflight": {
+    "candidate_preserved": true,
+    "candidate_head_verified": true,
+    "metadata_conversion_started": false,
+    "metadata_backup_absent": true,
+    "output_absent": true,
+    "evidence_absent": true,
+    "request_absent": true,
+    "manifest_absent": true,
+    "lease_absent": true,
+    "runtimeblob_12_exclusion_absent": true,
+    "host_available_bytes": 26433531904,
+    "scratch_available_bytes": 19873697792
+  },
+  "bounded_correction": "Resume the exact existing checkout under fresh identities and require only the 12-GiB reserve plus 512-MiB metadata overhead and 1-GiB emergency margin before conversion.",
+  "acceptance": "Preparation failure only; no compilation, image, boot, diagnostic application or production acceptance."
+}

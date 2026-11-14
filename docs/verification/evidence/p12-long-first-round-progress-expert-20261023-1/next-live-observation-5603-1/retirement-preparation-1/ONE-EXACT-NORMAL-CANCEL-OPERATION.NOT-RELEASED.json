@@ -1,0 +1,68 @@
+{
+  "actual_cancel": null,
+  "actual_owner_cleanup": null,
+  "actual_physical_clearance": null,
+  "current_context": {
+    "normal_terminal_result": null,
+    "outer_birth": 57872086,
+    "outer_root_controller_PID": 3857691,
+    "producer_reported_failure": "round0 app0_trace_oracle result-5 ownership_complete1 rounds0 launches0; failuretrace97303B saved1; ABORT emitted; no successful launch credit",
+    "tool_session": 27997
+  },
+  "independent_release": null,
+  "operation_count": 1,
+  "pre_signal_invariants": "Exact Linuxx86_64LP64; rootUID; pidfdOPEN beforefreshchecks; fdinfoPID exact; repeatedboot/source/UID/GID/birth/PGID/SID/entirecmdline; holdfd throughONEsend, closefinally. ESRCH/alreadyterminal yields observation/noaction, no retry.",
+  "preserve_invariants": [
+    "No numericPIDsignal/killpg/forcekill/QMP/Docker action bythiscommand",
+    "No ACK/releases/leaseunlink/ownerflags/cleanup mutation",
+    "Preserve failedattempt/trace/source/evidence; no unchangedruntime replay",
+    "Rootcontroller27997 continues actualnormalretirement andoriginalattemptFAIL; sendreceipt is NOT cleanup/physicalclearance",
+    "If PIDgone/changed/source/bootguardfails, nofallback/no otherPID"
+  ],
+  "profile": {
+    "bytes": 1690,
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/retirement-preparation-1/ROOT-CANCEL-PROFILE.NOT-RELEASED.json",
+    "sha256": "3ca247379799d73221c4c3750283cddb13c32aa8078d04ea490b6d4a1e8c5631"
+  },
+  "root_argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=30:30",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--nofile=256:256",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/retirement-preparation-1/cancel_exact_owner_once.py",
+    "03526e78f04ce4246439c6e3703d7a4ff99901cf6de05f52c82ad6a22102e673"
+  ],
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source": {
+    "bytes": 8205,
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/retirement-preparation-1/cancel_exact_owner_once.py",
+    "sha256": "03526e78f04ce4246439c6e3703d7a4ff99901cf6de05f52c82ad6a22102e673"
+  },
+  "source_proof": {
+    "bytes": 4345,
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/retirement-preparation-1/EXPECTED-LITERAL-PROOF.json",
+    "sha256": "69e0885c7ecbdf22aa1587f885a5e37539ba6c6990540b0e9150bd1fc3994ae0"
+  },
+  "status": "ONE_EXISTING_PIDFD_OWNER_SIGTERM_OPERATION_READY_FOR_INDEPENDENT_REVIEW",
+  "target": {
+    "GID": 0,
+    "PGID": 3857698,
+    "SID": 3857698,
+    "UID": 0,
+    "nonce": "5603c55a294240fdb86c3613ec42e293",
+    "pid": 3857698,
+    "source_sha256": "fbedb881439d6db6b0aa13ecea2d7dfa31737607cc1fc1f150a2e65ac4d89ce3",
+    "start": 57872098
+  }
+}

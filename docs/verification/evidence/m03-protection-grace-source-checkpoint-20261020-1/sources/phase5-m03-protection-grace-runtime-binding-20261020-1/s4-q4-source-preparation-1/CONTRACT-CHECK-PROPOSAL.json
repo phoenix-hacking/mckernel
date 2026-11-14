@@ -1,0 +1,96 @@
+{
+  "actual_caller": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/s4-q4-source-preparation-1/non-temporal-source-4/root_manual_snapshot_m03.py",
+    "sha256": "6c79b623a46e811add3d92d5ce08b6e8cce0364efdb5416841027412d6c07db9",
+    "size": 12684
+  },
+  "capture_source": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/s4-q4-source-preparation-1/run_contract_checks_once.py",
+    "sha256": "215ab14ca4e00d51169ed3548b1e1d94d63cb8a241a39a013c6648094be4168d",
+    "size": 2897
+  },
+  "check_source": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/s4-q4-source-preparation-1/check_contract_actual_caller.py",
+    "sha256": "6aaea3193753e17b018100505be97e7891127f45fc914612b986a5d9bbfe0a33",
+    "size": 2217
+  },
+  "commands": [
+    [
+      "/home/holden/anaconda3/bin/python3.9",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/s4-q4-source-preparation-1/check_contract_actual_caller.py",
+      "positive"
+    ],
+    [
+      "/home/holden/anaconda3/bin/python3.9",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/s4-q4-source-preparation-1/check_contract_actual_caller.py",
+      "changed_report_mode"
+    ]
+  ],
+  "expected": [
+    "Full genuine ebd6 typed descriptors/c6e action/rawactualfacts accepted through actualcaller->sharedhelper method body.",
+    "Changed genuine report mode refused through same actualcaller method; actual immutable report remains byte-identical."
+  ],
+  "guest_runs": 0,
+  "inputs": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/s4-q4-source-preparation-1/CONTRACT-CHECK-INPUTS.json",
+    "sha256": "0bf2c450e48890a2c724dbb54f608849868bb14e9fcf3fd4b233a2fdb4d20e35",
+    "size": 1344
+  },
+  "known_kind_helper": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/s4-q4-source-preparation-1/non-temporal-source-4/m03_protection_normalization_contract.py",
+    "sha256": "2a90a35fff7480997996547cd16ddef61ccab1928a806aa7c68f7557d0fb1953",
+    "size": 4327
+  },
+  "no_effect_boundary": "Actual root_manual_snapshot_m03 module imported under -I-B with non-main name; call only source-pinned m03_contract().validate. Popen/socket/exec forbidden before actualcaller import. No root/static_joins/main/snapshot/owner/guard/binder invocation. Only capture records written by granted capture wrapper.",
+  "outer_argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2",
+    "35",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=30:30",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--nofile=256:256",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/s4-q4-source-preparation-1/run_contract_checks_once.py"
+  ],
+  "profile": {
+    "MemAvailable_minimum_bytes": 5368709120,
+    "address_space_bytes": 1073741824,
+    "affinity_cpu": 6,
+    "child_CPU_seconds": 10,
+    "child_wall_seconds": 10,
+    "core_bytes": 0,
+    "file_size_bytes": 33554432,
+    "host_minimum_bytes": 18887655424,
+    "nofile": 256,
+    "one_serial_job": true,
+    "outer_kill_after_seconds": 2,
+    "outer_wall_seconds": 35,
+    "parent_CPU_seconds": 30,
+    "scratch_minimum_bytes": 14026801152
+  },
+  "root_grant": null,
+  "root_operations": 0,
+  "schema": "mckernel.m03-S4-actual-decorated-caller-contract-two-command-ordinary-proposal.v1",
+  "scope": "Functional OS/apps plus compute-C retirement into Rust/reviewed assembly; exact known M03 grace report contract only",
+  "source_review": null,
+  "status": "SOURCE_ONLY_UNRUN_NO_GRANT",
+  "tests": 0
+}

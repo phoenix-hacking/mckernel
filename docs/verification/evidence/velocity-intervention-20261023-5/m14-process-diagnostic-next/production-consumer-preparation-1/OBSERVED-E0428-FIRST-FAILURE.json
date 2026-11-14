@@ -1,0 +1,18 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "STOP_E0428_DUPLICATE_EXISTING_KPRINTF_NO_RETRY",
+  "family": "log-callback-fullcrate-duplicate-kprintf-declaration",
+  "first_failed_candidates": 1,
+  "bounded_corrections": 0,
+  "error_sha256": "e9a1a83c79078bfecf6bfd2e63cca2705fa1dbfbe16ad7afff3e830d093e0425",
+  "failure_receipt_sha256": "2fb3a2294e4347bc7eced2aee91ef259778c079779bcbfa5e8f61eda3fb17698",
+  "cause": "New extern kprintf at candidate line20 duplicates same unconditional existing module extern at candidate11627/canonical11593.",
+  "proposed_root_owned_correction": "Remove only added top extern kprintf declaration; reuse same existing later declaration. No callback/fixture/Cbody/variadic/selector/ABI/oracle change.",
+  "current14commands_executed": 1,
+  "compiler_returncode": 1,
+  "complete_current78_proven": false,
+  "complete_C_TU_proven": false,
+  "default_image_native_proven": false,
+  "CPU6_released": true,
+  "no_retry_or_source_correction_performed": true
+}

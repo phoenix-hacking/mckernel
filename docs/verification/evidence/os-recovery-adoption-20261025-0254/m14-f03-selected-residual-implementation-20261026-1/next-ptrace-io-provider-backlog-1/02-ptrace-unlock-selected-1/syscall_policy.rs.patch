@@ -1,0 +1,12 @@
+--- kernel/rust/syscall_policy.rs
++++ kernel/rust/syscall_policy.rs
+@@ -25266,7 +25266,8 @@
+ unsafe extern "C" fn f03_ptrace_io_find(tgid: CInt, tid: CInt) -> CULong {
+     unsafe { crate::process_helpers::find_thread(tgid, tid) as CULong }
+ }
+-unsafe extern "C" fn f03_ptrace_io_unlock(thread: CULong) {
++#[cfg_attr(f03_ptrace_io_unlock_selected_candidate,no_mangle)]
++pub unsafe extern "C" fn f03_ptrace_io_unlock(thread: CULong) {
+     unsafe { crate::process_helpers::thread_unlock(thread as *mut Thread) };
+ }
+ unsafe extern "C" fn f03_ptrace_io_read(

@@ -1,0 +1,116 @@
+{
+  "at": "2026-11-10T17:38:20.840030+00:00",
+  "blockers": [
+    {
+      "actual": "exact_rust_flags=[] and rustc argv has only -o output/process_pair.o plus source. The no_std source has no crate_type/emit attributes. Edition/lib/object/native-kernel flags and the source-bound retained SSE warning are therefore not selected; this is a real preexecution command-construction defect, not a compiler failure.",
+      "id": "compiler-flags-empty",
+      "location": "REQUEST.json exact_rust_flags and commands[provider-compile].argv; run.py main executes literal argv",
+      "minimal_correction": "Bind exact19 retained actual flags from the qualified target REQUEST using rustc index through -o boundary; populate exact_rust_flags and append identical ordered tokens in compiler argv. Preserve source/compiler/nativecfg/profile; do not execute the bad command.",
+      "qualified_reference": {
+        "path": "/home/holden/mckernel/docs/verification/m14-callback-provider-chain-20261110/scheduler-callback-target-provider-unit-1/REQUEST.json",
+        "reuse": "Exact compiler identity/native no_std HOST partial-codegen flags and unchanged SSE warning only; no target/RDMSR source/provider/gate replay.",
+        "sha256": "7d7230dee529bdea3585404461b06acab62dcfc5ffa3796186c8519972948131"
+      },
+      "required_flags": [
+        "--edition=2021",
+        "--crate-type=lib",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "code-model=large",
+        "-C",
+        "relocation-model=static",
+        "-C",
+        "no-redzone=yes",
+        "-C",
+        "no-vectorize-loops",
+        "-C",
+        "no-vectorize-slp",
+        "-C",
+        "target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma",
+        "--emit=obj"
+      ]
+    },
+    {
+      "actual": "Exact pinned /usr/bin/python3 SHA298a9e83 resolves to /usr/bin/python3.8. New dictionary | expression is unsupported on3.8 and would fail only after six successful commands. The set unions at81 are valid.",
+      "id": "python38-capture-dict-union",
+      "location": "checks.py151 capture relocations dictionary construction",
+      "minimal_correction": "Replace only capture-row dict union by Python3.8-compatible dict(base,symbol_name=...), preserving every key/value and all set operations/check predicates; no Python/tool/runtime upgrade or test replay.",
+      "pinned_interpreter": {
+        "path": "/usr/bin/python3",
+        "resolved_path": "/usr/bin/python3.8",
+        "sha256": "298a9e830ed52f36c299427565485d717d1ce0179c0597cc16560513eb780b06"
+      }
+    }
+  ],
+  "decision": "NO_GO_EXACT_7F39_COMPILER_FLAGS_OMITTED_AND_PINNED_PYTHON38_DICT_UNION_BEFORE_ANY_EXECUTION",
+  "execution_GO": false,
+  "next_action": "PublicABI one bounded successor correcting exactly the19 actual compiler flags and one Python3.8 dictionary construction, with disjoint outputs/updated exact hashes; independent review only material successor delta, then Root actual fresh admission. Original request/source/failure-free state retained.",
+  "old_UNKNOWN_released": false,
+  "original_acceptance": false,
+  "other_material_predicates_completed": {
+    "actual_genuine_source_files": {
+      "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/lock_helpers.rs": {
+        "bytes": 1055,
+        "sha256": "3730fad7b80ca75ac0a7fe73281605e46592294ed4cb26751375eb099c5c9e96"
+      },
+      "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/process_helpers.rs": {
+        "bytes": 6062,
+        "sha256": "3030f1692805bbc1887185a62c9002451baef626b7d52f03a9dd04d14079314d"
+      },
+      "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/process_pair_unit.rs": {
+        "bytes": 1216,
+        "sha256": "6eb83d4e0e4435d14664cf858ebc529c42bf415a05c15e1ae82fe0fb2cb446af"
+      },
+      "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/spinlock_helpers.rs": {
+        "bytes": 485,
+        "sha256": "b3741003b93df8698c41be8d16c2261a81131f29726f56bec12aa3dbae815941"
+      },
+      "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/syscall_policy.rs": {
+        "bytes": 810,
+        "sha256": "d675bbc109a454e68d92589ab97c033fa637452692d7e16457e970bb51413012"
+      }
+    },
+    "all_manifest_current_source_slices_byte_hashes_and_unique_selected_containment_verified": true,
+    "capture_and_resources": "Six literal serial HOST commands, inheritedCPU7,1GiB planned allocation including new controller/child and AS1GiB each; per-phase/outer timeout+CPU/file/core bounds, controlled env/absolute tools, exclusive new output/captures, prePopen persisted rows and final direct wait in finally. Root must use its qualified full-result/exact-birth/whole-family/closed-stream capture and actual retirement for any timeout/unknown. FreshHOST4/max3/all overhead/fresh26/disk16/12+512MiB/oldCPU0-256MiB-job1 and allnative reservations stay required; no automatic overlap or broader capacity.",
+    "exact11_actual_no_mangle_exports": [
+      "__mcs_rwlock_reader_lock",
+      "__mcs_rwlock_reader_unlock",
+      "process_hash",
+      "find_process",
+      "process_unlock",
+      "process_find_process_body_result",
+      "process_unlock_found_process_result",
+      "process_mcs_reader_lock_bridge",
+      "process_mcs_reader_unlock_bridge",
+      "syscall_find_process_bridge",
+      "syscall_process_unlock_bridge"
+    ],
+    "new_check_predicates": "Source/retained binding before output; prejoin invoked before ld-r; exact new roots/types/imports/no duplicate global owners; all old/new global/private function/data/NOBITS owners and normalized relocations; readonly content preservation; exact remaining U and postjoin metadata. Uses only three already qualified helper modules; static AST shows definitions/imports and no top-level old predicate/tool/main execution. Helpers/checker were not imported or run by reviewer.",
+    "new_user_scope": "Current USER-SCOPE-CLARIFICATION a83ecc permits assessment of ordinary current process source/type/provider work; encrypted historical plaintext is not a blanket source-wide ban. This finite exact pair source is not reconstructed from the rejected fixture/turn and no known prohibited operation is selected. Genuine local generic/exec/replay/equivalent/permission/service/source/native/UNKNOWN controls remain; old374f/ca82 itself is not this execution authority.",
+    "source_selection": "Two wrappers + genuine find/unlock/hash/search/unlockbody/reader-adapter/MCS IRQsave-reader functions and private list-container; exact fullABIff48 plus actual node/lock/ticket types/assertions; only real lower spinlock/CPU externs. No TID/writer/noirq/notification/wait/kill/exec body, fake callback/state/zero-init/refcount or whole kernel/process/syscall module compiled. Selected function boundaries/source bytes and simple balanced delimiters inspected statically; actual Rust compile remains new oracle after correction.",
+    "source_slice_count": 29,
+    "three_import_and_owner_arithmetic": "Expected new3 U bind to existing e1a lower owners; expected11 actual source roots, old129+11=140,115T/25data and remaining10 are derived constraints to check actual new output, not achieved quotas. Original body semantics preserve no-refcount successful lock borrow, miss release, same-node/PID/resource-set matching IRQ restoration under source-bound64/64/UBSAN-OFF profile.",
+    "zero_new_data_and_no_extra_cfg": true
+  },
+  "preserved_candidate": {
+    "checks_58dc": true,
+    "compiler_or_test_failure_manufactured": false,
+    "request_7f39": true,
+    "source_body_changes_required": false
+  },
+  "request": {
+    "bytes": 30382,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/REQUEST.json",
+    "sha256": "7f39eece457bbe7c8bf30c337196c161d24e7c06e7ffc894b459f6d8d0c49ab2"
+  },
+  "reviewer": "/root/p03_cutover_source_max actual existing Sol/MAX; independent of PublicABI source/preparer; Root sole canonical/executor; no recursion",
+  "reviewer_operations": "Read exact current user/input/source/manifest/request/run/check and qualified flag/helper source as text; static AST and byte/range/hash/declaration/delimiter comparisons plus exact Python path/readlink metadata. Write this one private REVIEW. No compiler/ELFreader/helper/typecheck/test/ld/nm/readelf/Docker/network/OS function/IRQ/GS/MSR/native execution, source/packet/canonical edits, or recursive agent.",
+  "schema": "mckernel.m14-process-pair-producer-independent-material-review.v1",
+  "source_manifest": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/SOURCE-MANIFEST.json",
+    "sha256": "be0a3b9804286f39b7c85a5ec899996b6c3172b02ce692003bf093b5216ed46c"
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "status": "DIAGNOSTIC_PASS",
+  "application_acceptance": false,
+  "production_acceptance": false,
+  "formal_case_credit": false,
+  "attempt_root": "/home/holden/mckernel-work/scratch/dual-guest-_nm6yypf",
+  "summary_sha256": "ac2bf475772e250e07e1b6b80ab5b2b316f935501648c21bf8b175f916f83134",
+  "pair_wall_seconds": 37.421,
+  "observed_overlap_seconds": 33.465,
+  "resource_snapshot": {
+    "host_cpu_sets": ["2,3", "4,5"],
+    "mem_available_bytes": 30746468352,
+    "host_free_bytes": 38736052224,
+    "scratch_free_bytes": 34178084864
+  },
+  "new_behavior": {
+    "case_id": "signal.block-pending",
+    "manifest": "/home/holden/mckernel-work/scratch/dual-profile-y9fy3i_8/manifest.json",
+    "manifest_sha256": "dbf9d7a23bd76610dc91f9534c4b4c520104d23e9b3308664fdfe27362ed92d3",
+    "result": "/home/holden/mckernel-work/scratch/dual-guest-_nm6yypf/guest-0/attempt/result.json",
+    "result_sha256": "ccc8b4dfb829cc5efecf38a284d1a39b8a11697f758885a8091a7b21df669866",
+    "serial_sha256": "18e698c3f720f4f83e4e3d019f52d6648f9a71eabae8038db4cd576a0ce1a7ce",
+    "qmp_sha256": "4c032922f59472d13863023150be9acd115ea43321a833b9181864815f5ad3fb",
+    "raw_wait_status": 0,
+    "stdout_hex": "70656e64696e675f6265666f72653d312070656e64696e675f61667465723d302068616e646c65643d310a",
+    "stderr_hex": "",
+    "procfs_empty": true,
+    "protocol_status": "PROTOCOL_PASS"
+  },
+  "control": {
+    "case_id": "startup.argv-empty",
+    "manifest": "/home/holden/mckernel-work/scratch/dual-profile-k9cvv__p/manifest.json",
+    "manifest_sha256": "b429e4eaf112f7fe07b2dae8de11f434564a1857580b312b73d3628b12b82b37",
+    "result_sha256": "12c885f4bb2619b5f0afa035623dc22e80fcb7681d67bdac10e461370b3d7a7c",
+    "protocol_status": "PROTOCOL_PASS",
+    "new_diagnostic_credit": false
+  },
+  "cleanup": {
+    "owned_containers_absent": true,
+    "qemu_absent": true,
+    "mcexec_absent": true,
+    "development_lock_unheld": true
+  },
+  "fork_repair_review": {
+    "status": "BLOCK",
+    "rejected_patch_process_sha256": "4582efc49fcea7f7a16ee8fdcc31ac903faf3d271ea65458562d31272129fcff",
+    "rejected_patch_vm_sha256": "2398178f558de8dcf6878d01800ab06c69e0152b832fec01178e2824ed72736d",
+    "reason": "A child Mirror alone leaves inherited VMA fault ownership on the parent and the child backend has no adopted prepare/page-table state. The unsafe working patch was removed from production sources before any build.",
+    "next_fix": "Design one transaction that validates retained parent fork provenance, adopts the child backend page table and worker lifecycle, rebinds per-VMA child fault ownership, and rolls back before publication on every failure."
+  }
+}

@@ -1,0 +1,5 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+Smallest existing accepted BFD qualifier is the unchanged one-slot pinned-SDK job: 21 logged commands plus eight paired CLI comparisons. Exact argv retains /work/qualification-1, matching its strict outer result validator. Profile: image41778, CPU6, one CPU/job, 2GiB memory/no extra swap, 128tasks, networknone, readonly source/candidate/toolchain/rootfs, sole fresh writable /work. Ordinary HOST compilation cannot prove this pinned BFD ABI.
+
+The blocker is a cohort binding, not missing Rust implementation. The historical owner hardcodes the old candidate identity/input manifest/namespace and cannot consume the rebase unchanged. Root must bind the current candidate through its existing accepted controls, retain full current source and /out,/nightly inventory validation, independently review the successor and obtain fresh physical/capacity/slot release. Old lease/request/admission/publisher HOLD remain untouched. No new compiler, test, root, Docker or guest work occurred.

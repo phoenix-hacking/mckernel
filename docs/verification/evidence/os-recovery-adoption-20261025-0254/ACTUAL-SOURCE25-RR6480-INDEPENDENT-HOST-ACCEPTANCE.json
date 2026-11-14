@@ -1,0 +1,31 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "ACCEPT_HOST_RR_INTERVAL6480_ABI18_CONTROLLED_ONLY",
+  "reviewer": "/root/perf_review18h",
+  "implementation_ownership": false,
+  "recorded_by": "/root",
+  "at": "2026-10-26T00:44:43.437725+00:00",
+  "actual_result_sha256": "95cd313ddd11f8f56bf775d8662353cab8734b5b217d6779adc2ab68a3d95eb6",
+  "verified_pins": 89,
+  "commands": 3,
+  "returncodes": [
+    0,
+    0,
+    0
+  ],
+  "stderr_empty": true,
+  "RR_queries": 6480,
+  "ABI_words": 18,
+  "Rust_object_sha256": "dfdc8f2ac38a7717c9a3e51033751d3314bc62d5c8c9b927e007ed059133577b",
+  "Rust_object_bytes": 1944,
+  "Source23_compile_or_fixture_replayed": false,
+  "children_joined_group_absent_streams_closed": true,
+  "wall_seconds": 0.458671,
+  "CPU_seconds": 0.515915,
+  "peak_RSS_KiB": 95780,
+  "oracles": "Zero-address forwarding/error precedence, captured interval bytes, exit during copy, full-width and partial-copy faults, matching unlocks and allocation balance.",
+  "default_selected": false,
+  "canonical_integrated": false,
+  "native_qualified": false,
+  "limits": "Controlled HOST lifetime/ABI only. Concurrent scheduler-field synchronization, production positive-reference acquisition/composition, current build/link/default/native and C retirement remain open; selectors OFF."
+}

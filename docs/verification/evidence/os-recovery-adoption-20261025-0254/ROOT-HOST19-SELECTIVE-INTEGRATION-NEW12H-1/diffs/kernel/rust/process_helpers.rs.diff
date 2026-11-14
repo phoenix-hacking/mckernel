@@ -1,0 +1,63 @@
+--- a/kernel/rust/process_helpers.rs
++++ b/kernel/rust/process_helpers.rs
+@@ -17377,8 +17377,8 @@
+     pub static mut runq_reservation_lock: IhkSpinlock = IhkSpinlock { head_tail: 0 };
+ }
+ 
+-// Own one runtime-consumed callback table using the existing qualified selector.
+-// The original C-produced offsets/values and genuine C ABI witnesses stay live.
++// Own the qualified idle data with the existing paired storage selector.
++// The accepted callback initializer and genuine ABI contracts remain unchanged.
+ #[cfg(process_global_storage_candidate)]
+ mod process_idle_callback_storage {
+     use core::mem::{align_of, offset_of, size_of};
+@@ -17416,6 +17416,49 @@
+     const _: [(); 56] = [(); offset_of!(SchedIdleCallbacks, consolidate)];
+     const _: [(); 64] = [(); offset_of!(SchedIdleCallbacks, zero_free)];
+     const _: [(); 72] = [(); offset_of!(SchedIdleCallbacks, safe_halt)];
++
++    // Immutable companions to the already qualified idle callback owner.
++    // Original CPU, thread and monitor constants are checked by the selected C ABI.
++    mod layout_values_storage {
++        use core::mem::{align_of, offset_of, size_of};
++
++        use crate::abi::{CpuLocalVar, IhkOsCpuMonitor, Thread};
++        use crate::sched_helpers::{SchedIdleOffsets, SchedIdleValues};
++
++        const _: () = {
++            assert!(size_of::<SchedIdleOffsets>() == 80);
++            assert!(align_of::<SchedIdleOffsets>() == 8);
++            assert!(size_of::<SchedIdleValues>() == 36);
++            assert!(align_of::<SchedIdleValues>() == 4);
++        };
++
++        #[no_mangle]
++        pub static process_idle_offsets: SchedIdleOffsets = SchedIdleOffsets {
++            cpu_runq_lock_offset: offset_of!(CpuLocalVar, runq_lock),
++            cpu_runq_irqstate_offset: offset_of!(CpuLocalVar, runq_irqstate),
++            cpu_current_offset: offset_of!(CpuLocalVar, current),
++            cpu_flags_offset: offset_of!(CpuLocalVar, flags),
++            cpu_status_offset: offset_of!(CpuLocalVar, status),
++            cpu_runq_offset: offset_of!(CpuLocalVar, runq),
++            thread_sched_list_offset: offset_of!(Thread, sched_list),
++            thread_status_offset: offset_of!(Thread, status),
++            monitor_status_offset: offset_of!(IhkOsCpuMonitor, status),
++            monitor_counter_offset: offset_of!(IhkOsCpuMonitor, counter),
++        };
++
++        #[no_mangle]
++        pub static process_idle_values: SchedIdleValues = SchedIdleValues {
++            cpu_running: 2,
++            cpu_idle: 1,
++            cpu_reserved: 3,
++            thread_running: 1,
++            thread_stopped: 0x20,
++            thread_interruptible: 2,
++            need_migrate: 2,
++            monitor_idle: 1,
++            monitor_kernel: 3,
++        };
++    }
+ 
+     // Keep this immutable callback array in the original readonly-data class.
+     // Object flags/RELA and final physical mapping require independent proof.

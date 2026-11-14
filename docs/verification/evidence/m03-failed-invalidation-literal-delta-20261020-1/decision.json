@@ -1,0 +1,145 @@
+{
+  "schema": "mckernel.m03-failed-invalidation-practical-literal-delta.v1",
+  "reviewed_at": "2026-10-20T22:15:56.178420+00:00",
+  "reviewer": "/root/m03_failed_invalidation_literal_delta",
+  "functional_scope": "Supported-profile functional OS/apps PLUS live compute-C retirement into Rust/reviewed assembly; this decision concerns only existing Rust failed-invalidation ownership.",
+  "decision": "SATISFIED_LITERAL_P_M03_02_AND_P_M03_03_FOR_EXACT_ACCEPTED_MATCHED_SDK_TUPLE",
+  "clauses": [
+    {
+      "id": "P-M03-02",
+      "description": "Fix known failed-invalidation ownership gaps or safely disable optional affected operations.",
+      "assessment": "SATISFIED_BY_REPAIR",
+      "reason": "The known negative-MM-result bug called finish_kernel, prepared an ordinary completion and released the response despite no successful invalidation. Exact reviewed Rust source33e7b927 instead authenticates serial/request/worker/kernel reservation/no completion and returns the original valid negative errno before mutation. The repaired path is compiled into the accepted default SMP consumer and its exact module is loaded in the accepted native tuple."
+    },
+    {
+      "id": "P-M03-03",
+      "description": "Retain release ownership on failure.",
+      "assessment": "SATISFIED_FOR_SELECTED_FAILED_INVALIDATION_BOUNDARY",
+      "reason": "Six actual-body cases establish response claimed/status0/releases0/drainedfalse, worker close/reuse EBUSY, no ordinary/cancellation publication after a failed clear, retention under repeated errors and wrong identities, and exactly one release only after later exact success plus successful publication. Independent caller review confirms retained HostWorker/Arc<Mirror>/registration and cleanup gates. This is bounded failure ownership, not a native fault-injection or automatic-recovery claim."
+    }
+  ],
+  "literal_scope_rationale": "Neither selected clause requires a new native fault-injection quota or automatic retry. The practical M03 requirement is used map/protect/unmap data/access checks and safe failure ownership. Existing actual-body negative/cancellation tests plus independent ownership review, accepted full SDK/default-consumer binding and matching native module activation satisfy these literal repair/retention clauses. P-M03-01 is already independently complete and was not reopened. This decision does not certify the final aggregate delivery tuple or whole OS.",
+  "exact_join": {
+    "source_commit": "36a475ef",
+    "accepted_mailbox_source_sha256": "33e7b92712ca90fdc2b88cff234ad2a981f3538fbd38fc705dfc2cde937a7378",
+    "sdk_source_candidate_commit": "257ba169b58eebd066281020999ec760bfc2f4e0",
+    "sdk_authority_row": "ACTUAL-SOURCE-AUTHORITY-INPUTS.json/full60/rows/32: repaired source equals parent_source_sha256 and actual consumed sha256; baseline4118de",
+    "artifact_review_sha256": "b9ea18d03dde21fc3b6f958647358081d9a5f249779b10628e9361f4926e5005",
+    "default_consumer_route": "application_abi::CLEAR_DONE -> service Application::clear_syscall(finish=true) -> Entry.syscalls.finish_invalidation; emitted actual default clear_syscall is present, full SDK strict dependencies accepted",
+    "abi_review_sha256": "5d31c1f057127cf4c9fc076f3dc6c675ea4dc11ce4cef69889aab787135bd88c",
+    "module_manifest_sha256": "e3d8c75acf0e691386415590a6982868bc868b898ae6f1a781e3d1f6081b0e56",
+    "modules": {
+      "ihk": "c396958bfdb0f22036b469ea2a64e0a6b188b9619ee4105c7879483bb3b9790d",
+      "ihk-smp-x86_64": "af234fbcd09327a80e12396eebbfbcd30838f88a552fa13ba00a2728a761eeaa",
+      "mcctrl": "6571ac7eca13559d8bab65125d54facbbc65e84f815d4ff3fc77ec6aa1104972"
+    },
+    "native_semantic_review_sha256": "88121b1525ab00f09ae63172544fe78d22369fa41e05b9e81ce4ef0fa8717e61",
+    "native_physical_review_sha256": "a03e987a278d06246f33be78672281d3599e7b5e262ef82a7a391df75d575f60",
+    "activation_observation": "All three matched modules loaded; one actual typed AVX PID255/CPU0 application exact380B/empty stderr/exit0; complete physical retirement independently accepted. No failed-MM branch hit is inferred."
+  },
+  "actual_tests": {
+    "repository_fixture": "scripts/tests/fixtures/native-application-invalidation-ownership.rs",
+    "fixture_sha256": "354b3f7755bfba6ef32181a9bbdf8a5772d606dd258d79288c05b2f51434da15",
+    "passed": 6,
+    "actual_source_not_reimplementation": true,
+    "substitutions": "allocation-only kernel Vec and ResponseMemory shim; no Linux Mirror PTE zap execution",
+    "original_failure_retained": "baseline witness Ok(-14),publishtrue,status1,releases1,claimedfalse; original candidate six-case fixture expectation failure retained; one bounded expected-result correction Ok(None)->Err(-16) passed; production candidate unchanged"
+  },
+  "current_source_caveat": {
+    "observed_current_file_sha256": "38e9816b37f72bc85a7631ef1c78cd240efc8cd3f00148c3b0eba36059fa669e",
+    "observed_bytes": 31165,
+    "exact_finish_invalidation_body_matches_reviewed33e7": true,
+    "body_sha256": "bdd534155aa8c8547419ef5c0c4208ac3a5bd0fa8325f6627b9af1ffe68d9b77",
+    "line": 511,
+    "meaning": "Concurrent integration enlarged the shared file. Only this unchanged function was compared; this decision does not claim the entire latest31KB file or HOST66 was compiled/native accepted by b9ea. Its frozen accepted tuple is explicit above."
+  },
+  "missing_literal_ownership_transition": null,
+  "new_code_defect_established": false,
+  "limits_preserved": [
+    "Native failed-MM-error ownership execution remains unproven; all accepted artifact/native reviews say so.",
+    "Current mcctrl WAIT does not automatically re-clear/retry; persistent failure deliberately retains the bounded owner until separately proven resolution or existing teardown.",
+    "No inline machine-branch semantic decode, whole-OS acceptance, extra native behavior, new compute-C functionality or language-retirement credit.",
+    "No new build, runtime release, guest, root action, tests or service request were executed by this reviewer."
+  ],
+  "shortest_existing_executable_regression": {
+    "needed_for_literal_decision": false,
+    "compile_argv": [
+      "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2021",
+      "-D",
+      "warnings",
+      "--test",
+      "-C",
+      "debuginfo=0",
+      "/home/holden/mckernel/scripts/tests/fixtures/native-application-invalidation-ownership.rs",
+      "-o",
+      "FRESH_PRIVATE_OUTPUT/invalidation-ownership-tests"
+    ],
+    "test_argv": [
+      "FRESH_PRIVATE_OUTPUT/invalidation-ownership-tests",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    "note": "Existing six-case actual-source regression, unchanged passing case need not be replayed. If dispatcher later needs native error-path credit specifically, use a separately reviewed genuine Mirror.clear negative-error probe; normal mprotect/AVX success cannot supply that observation. No existing approved native negative probe was established in this narrow packet."
+  },
+  "references": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/failed-invalidation-ownership-repair-20261019-1/FAILED-INVALIDATION-OWNERSHIP-INDEPENDENT-REVIEW.json",
+      "sha256": "06ded67a652113b0699076bcfddcc550bfb1f2a4f87e25fca888e38a743cfe28",
+      "bytes": 15398
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/failed-invalidation-ownership-repair-20261019-1/REVIEW-PACKET.json",
+      "sha256": "21cdeca5edd5681fa02e89db033bd9ca1d686549841d1ae802f6a30f958befa3",
+      "bytes": 9579
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/failed-invalidation-ownership-repair-20261019-1/OWNERSHIP-ORACLE.json",
+      "sha256": "1ab4f0d28a3a130a7c4a6d92cad430b9138d2037ecc15db35e11f9518a3357ac",
+      "bytes": 2468
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/failed-invalidation-ownership-repair-20261019-1/INTEGRATION.json",
+      "sha256": "032a5fe898b3fcc4695f6f059ad587015177ed9b010148c00cf232b08e5bc8b1",
+      "bytes": 885
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/failed-invalidation-ownership-repair-20261019-1/repository-fixture-result.json",
+      "sha256": "5f3dc02fc28203f40d617905c439ccf446651c199cb7bebb20b257e5a965b14a",
+      "bytes": 3942
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-20261019-1/ACTUAL-SOURCE-AUTHORITY-INPUTS.json",
+      "sha256": "932fffc77ba044b3e3071f04bef0d6ae5664a53417bd3cf48489d3c1100167a5",
+      "bytes": 41117
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-independent-review-20261019-1/CURRENT-HOST-PAIR-ACTUAL-THREE-MODULE-ARTIFACT-REVIEW.json",
+      "sha256": "b9ea18d03dde21fc3b6f958647358081d9a5f249779b10628e9361f4926e5005",
+      "bytes": 40051
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-independent-review-20261019-1/CURRENT-HOST-PAIR-ACTUAL-THREE-MODULE-ABI-JOIN.json",
+      "sha256": "5d31c1f057127cf4c9fc076f3dc6c675ea4dc11ce4cef69889aab787135bd88c",
+      "bytes": 31299
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/current-host-rust-pair-native-20261019-1/MATCHED-MODULE-MANIFEST.json",
+      "sha256": "e3d8c75acf0e691386415590a6982868bc868b898ae6f1a781e3d1f6081b0e56",
+      "bytes": 5461
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/current-host-rust-pair-native-20261019-1/ACTUAL-MATCHED-THREE-MODULE-TYPED-AVX-AND-RING-TRANSPORT-REVIEW.json",
+      "sha256": "88121b1525ab00f09ae63172544fe78d22369fa41e05b9e81ce4ef0fa8717e61",
+      "bytes": 12725
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/current-host-rust-pair-native-20261019-1/CURRENT-HOST-PAIR-ACTUAL-NATIVE-PHYSICAL-RETIREMENT-REVIEW.json",
+      "sha256": "a03e987a278d06246f33be78672281d3599e7b5e262ef82a7a391df75d575f60",
+      "bytes": 6606
+    }
+  ],
+  "shared_edits": false,
+  "runtime_authority": false,
+  "compute_C_expansion": false
+}

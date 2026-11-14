@@ -1,0 +1,256 @@
+os_runtime.rs:3425
+pub(crate) unsafe extern "C" fn fork_progress_application(
+    child: *mut c_void,
+    identity: *const super::application_abi::ForkIdentityV1,
+    stage: u32,
+    verify: Option<super::application_abi::ForkVerifyV1>,
+    context: *mut c_void,
+) -> i32 {
+    use super::application_abi::{FORK_HOST_REVOKED_V1, FORK_GUEST_DESTROYED_V1};
+    let result = (|| -> Result {
+        if identity.is_null() || !matches!(stage, FORK_HOST_REVOKED_V1 | FORK_GUEST_DESTROYED_V1)
+        { return Err(EINVAL); }
+        let key = unsafe { *identity };
+        let (child, object, registered) = unsafe { fork_application_binding(child, key) }?;
+        let progress = registered.fork_progress.ok_or(ENODEV)?;
+        let mut claim = match ForkProviderClaim::acquire(object, key, child.backend.context.as_ptr() as usize, stage)? {
+            ForkClaimLookup::Completed => return Ok(()),
+            ForkClaimLookup::Pending(claim) => claim,
+        };
+        let (host_verify, capsule_context, accept) = {
+            let capsule = claim.capsule.as_ref().ok_or(ENODEV)?;
+            let context = capsule.context.load(Ordering::Acquire);
+            if context.is_null() { return Err(EIO); }
+            (capsule.verify, context, capsule.accept)
+        };
+        if stage == FORK_HOST_REVOKED_V1 {
+            // Independent capsule Arc/module/Registration and OS/provider
+            // ownership survive last fd closure or any attempted error.
+            let status = if let Some(payload) = claim.payload.as_ref() {
+                let callback = registered.fork_progress_payload.ok_or(ENODEV)?;
+                let payload_context = payload.context.load(Ordering::Acquire);
+                if payload_context.is_null() { return Err(EIO); }
+                unsafe { callback(child.backend.context.as_ptr(), &key, stage,
+                    Some(host_verify), capsule_context, payload_context) }
+            } else {
+                unsafe { progress(child.backend.context.as_ptr(), &key, stage, Some(host_verify), capsule_context) }
+            };
+            if status != 0 { return Err(errno(if (-4095..0).contains(&status) { status } else { -71 })); }
+            return claim.finish(stage);
+        }
+        // Carrier transactions accept guest destruction only through the
+        // actual owned selector3 ticket and later final-publication endpoint.
+        if claim.payload.is_some() { return Err(EBUSY); }
+        if !claim.guest_released {
+            let verify = verify.ok_or(EINVAL)?;
+            let status = unsafe { progress(child.backend.context.as_ptr(), &key, stage, Some(verify), context) };
+            if status != 0 { return Err(errno(if (-4095..0).contains(&status) { status } else { -71 })); }
+            claim.mark_guest_released()?;
+        }
+        // ACK_RECEIVED is durable and receipt capacity was reserved before
+        // Remote's irreversible transition. Retry executes ONLY Accept here.
+        let status = unsafe { accept(capsule_context, &key) };
+        if status != 0 { return Err(errno(if (-4095..0).contains(&status) { status } else { -71 })); }
+        claim.finish(stage)
+    })();
+    result.map_or_else(|error| error.to_errno(), |()| 0)
+}
+// END PRIVATE FORK IHK PROVIDER BRIDGE
+
+// SAFETY: Immutable relocation with the same module lifetime and namespace.
+#[export_name = "__export_symbol_ihk_os_application_adopt_fork_v1"]
+#[link_section = ".export_symbol"]
+#[used(compiler)]
+pub(crate) static APPLICATION_ADOPT_FORK_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord {
+    license: *b"GPL\0",
+    namespace: *b"MCKERNEL_IHK_V1\0",
+    padding: [0; 4],
+    symbol: adopt_fork_application as *const () as *const u8,
+};
+
+// SAFETY: Additive private initializing-capsule callback relocation.
+#[export_name = "__export_symbol_ihk_os_application_adopt_fork_v2"]
+#[link_section = ".export_symbol"]
+#[used(compiler)]
+pub(crate) static APPLICATION_ADOPT_FORK_V2_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord {
+    license: *b"GPL\0",
+    namespace: *b"MCKERNEL_IHK_V1\0",
+    padding: [0; 4],
+    symbol: adopt_fork_application_v2 as *const () as *const u8,
+};
+
+// SAFETY: Immutable relocation with the same module lifetime and namespace.
+
+smp_service.rs:1025
+            || !matches!(stage, FORK_HOST_REVOKED_V1 | FORK_GUEST_DESTROYED_V1)
+        { return Err(EINVAL); }
+        let key = super::super::smp_application_image::ForkIdentity {
+            slot: identity.slot, generation: identity.generation, parent: identity.parent,
+            worker: identity.worker, delivery: identity.delivery, child: identity.child,
+            child_pid: identity.child_pid, child_mm: identity.child_mm as usize,
+            root: identity.root, start: identity.start, length: identity.length, nonce: identity.nonce,
+        };
+        let remote = &self.started.runtime.application;
+        remote.begin_fork_progress(self.token, key, stage)?;
+        // Provider/OS/table/slots guards all ended BEFORE real MM revocation or
+        // final guest-proof validation. Stage1 has closed real admissions and
+        // proved original response ownership; it remains frozen until finish.
+        let status = unsafe { verify(context, &identity) };
+        if status != 0 { return Err(errno(if (-4095..0).contains(&status) { status } else { -71 })); }
+        // SAFETY: The actual typed verifier established this exact proof. The
+        // backend rechecks the full key, actual service drain and response.
+        unsafe { remote.finish_fork_progress(self.token, key, stage) }
+    }
+    /// # Safety
+    /// IHK selects this raw context from its exact claimed capsule, with every
+    /// provider/OS/module owner retained through callback return. No external
+    /// caller or decoded bytes can supply an owned payload or guest proof.
+    pub(in super::super) unsafe fn fork_progress_payload(
+        &self, identity: super::super::application_abi::ForkIdentityV1, stage: u32,
+        verify: super::super::application_abi::ForkVerifyV1, context: *mut core::ffi::c_void,
+        payload: *mut core::ffi::c_void,
+    ) -> Result {
+        if stage != super::super::application_abi::FORK_HOST_REVOKED_V1
+            || identity.reserved0 != 0 || identity.reserved1 != 0 { return Err(EINVAL); }
+        let payload = core::ptr::NonNull::new(payload.cast::<memory::ForkPayload>()).ok_or(EINVAL)?;
+        let key = super::super::smp_application_image::ForkIdentity {
+            slot: identity.slot, generation: identity.generation, parent: identity.parent,
+            worker: identity.worker, delivery: identity.delivery, child: identity.child,
+            child_pid: identity.child_pid, child_mm: identity.child_mm as usize,
+            root: identity.root, start: identity.start, length: identity.length, nonce: identity.nonce,
+        };
+        let remote = &self.started.runtime.application;
+        remote.begin_fork_progress(self.token, key, stage)?;
+        let status = unsafe { verify(context, &identity) };
+        if status != 0 { return Err(errno(if (-4095..0).contains(&status) { status } else { -71 })); }
+        unsafe { remote.finish_fork_progress_payload(self.token, key, stage, payload) }
+    }
+
+    /// # Safety
+    /// The live parent Registration and actual registered IHK resolver pin all
+    /// code/context until this owned ACK ticket and its callbacks have ended.
+    pub(in super::super) unsafe fn prepare_fork_ack(
+
+smp_application.rs:2070
+    /// No verifier/callback/borrowed pointer escapes into Remote state.
+    pub(crate) unsafe fn finish_fork_progress(&self, child: Token, identity: ForkIdentity, stage: u32) -> Result {
+        unsafe { self.finish_fork_progress_inner(child, identity, stage, None) }
+    }
+
+    /// # Safety
+    /// The IHK exact BUSY claim owns the initialized payload capsule. Only
+    /// this slots-held block may materialize its exclusive borrowed context.
+    pub(crate) unsafe fn finish_fork_progress_payload(&self, child: Token, identity: ForkIdentity,
+        stage: u32, payload: NonNull<super::smp_memory::ForkPayload>) -> Result {
+        if stage != super::application_abi::FORK_HOST_REVOKED_V1 { return Err(EBUSY); }
+        unsafe { self.finish_fork_progress_inner(child, identity, stage, Some(payload)) }
+    }
+
+    unsafe fn finish_fork_progress_inner(&self, child: Token, identity: ForkIdentity, stage: u32,
+        payload: Option<NonNull<super::smp_memory::ForkPayload>>) -> Result {
+        use super::application_abi::{FORK_HOST_REVOKED_V1, FORK_ABORT_RETURN_V1};
+        let mut slots = self.slots.lock();
+        let (parent_index, child_index) = fork_progress_in_slots(self.owner, &mut slots, child, identity, stage)?;
+        if stage == FORK_HOST_REVOKED_V1 {
+            let parent_index = parent_index.ok_or(EIO)?;
+            let record = &slots[child_index].as_ref().unwrap().fork.as_ref().unwrap().reservation;
+            let first = record.first.clone();
+            let value = record.return_value;
+            if let Some(mut payload) = payload {
+                // The temporary reference and its helper-call protector both
+                // end while slots is held, before any negative RET can publish.
+                let payload = unsafe { payload.as_mut() };
+                fork_link::commit_revoked_fork_carrier_in_slots(
+                    self.owner, &mut slots, child, identity, payload,
+                )?;
+            }
+            slots[parent_index].as_mut().unwrap().syscalls.reconcile_fork_abort(
+                identity.worker, identity.delivery, &first, value,
+            ).map_err(errno)?;
+            let record = &mut slots[child_index].as_mut().unwrap().fork.as_mut().unwrap().reservation;
+            // One publication lock atomically commits the terminal negative
+            // metadata and its permission. No stale positive can pass between.
+            record.return_value = Some(FORK_ABORT_RETURN_V1);
+            if record.state.phase() == ForkPhase::Quarantined {
+                unsafe { record.state.reconciled_quarantined_host_revoke(identity) }?;
+            } else {
+                unsafe { record.state.host_revoked(identity, 0) }?;
+            }
+            drop(slots);
+            return Ok(());
+        }
+        let record = &mut slots[child_index].as_mut().unwrap().fork.as_mut().unwrap().reservation;
+        unsafe { record.state.guest_destroyed(identity) }?;
+        record.state.acknowledge_destroyed(identity)?;
+        // Exact final proof retires this never-scheduled reservation itself;
+        // ordinary CLEANUP must not send another destructor for the same child.
+        let retired = slots[child_index].take();
+        drop(slots);
+        // Structural PID/MM and retained Remote cycles drop outside all locks.
+        drop(retired);
+        Ok(())
+    }
+}
+// END PRIVATE FORK BACKEND PROGRESS
+
+smp_fork_link.rs:320
+        // The durable ChildFork record owns SEALED/sequence even on failure.
+        // Neither callback error nor this stack destructor cancels/revokes it.
+    }
+}
+fn receipt_bytes(record: &ForkLinkRecord, sequence: u64, kind: u32, result: i64) -> [u8; 128] {
+    let k = record.identity;
+    let mut b = [0; 128];
+    b[..8].copy_from_slice(b"MCFKW001");
+    b[8..10].copy_from_slice(&1u16.to_le_bytes());b[10..12].copy_from_slice(&40u16.to_le_bytes());
+    b[12..16].copy_from_slice(&128u32.to_le_bytes());b[16..20].copy_from_slice(&kind.to_le_bytes());
+    b[24..32].copy_from_slice(&sequence.to_le_bytes());b[32..40].copy_from_slice(&result.to_le_bytes());
+    b[40..44].copy_from_slice(&k.slot.to_le_bytes());b[44..48].copy_from_slice(&k.child_pid.to_le_bytes());
+    for (offset, value) in [(48,k.generation),(56,k.parent),(64,k.worker),(72,k.delivery),
+        (80,k.child),(88,k.child_mm as u64),(96,k.root),(104,k.start),(112,k.length),(120,k.nonce)] {
+        b[offset..offset+8].copy_from_slice(&value.to_le_bytes());
+    }
+    b
+}
+
+/// Parent RET validation hook, before any response is committed.
+pub(super) fn authorize_return(slots: &[Option<Entry>], parent: Token,
+    worker: u64, serial: u64, cpu: i64, value: i64) -> Result {
+    for record in slots.iter().flatten().filter_map(|e| e.fork.as_ref().and_then(|f| f.link.as_ref())) {
+        if record.identity.parent == parent.wire() && record.second.as_ref().is_some_and(|d| d.worker == worker && d.serial == serial) {
+            let d = record.second.as_ref().unwrap();
+            if value != 0 || d.cpu as i64 != cpu || !record.sealed() || !record.receipt_written { return Err(EBUSY); }
+        }
+    }
+    Ok(())
+}
+pub(super) fn record_return(slots: &mut [Option<Entry>], parent: Token, worker: u64, serial: u64, value: i64) {
+    for record in slots.iter_mut().flatten().filter_map(|e| e.fork.as_mut().and_then(|f| f.link.as_mut())) {
+        if record.identity.parent == parent.wire() && record.second.as_ref().is_some_and(|d| d.worker == worker && d.serial == serial)
+            && value == 0 && record.sealed() && record.receipt_written { record.return_accepted = true; }
+    }
+}
+
+abi/application.rs:230
+    pub(crate) epoch: u64,
+    pub(crate) context: *mut c_void,
+    pub(crate) attach: Option<ForkPayloadAttachV1>,
+}
+pub(crate) type ForkAdoptScopedV1 = unsafe extern "C" fn(
+    *mut c_void, *mut c_void, *const ForkGeometryV1, *mut ForkPayloadScopeV1,
+    Option<ForkAdoptConsumerV1>, *mut c_void,
+) -> i32;
+// END PRIVATE FORK PAYLOAD CAPSULE ABI V1
+
+// BEGIN PRIVATE FORK FINALIZATION ABI V1
+// The IHK claim, never the caller, selects its exact owned payload context.
+// The provider materializes a short exclusive borrow only under its slots
+// lock. Stage1 writes kind3/-125 before permitting the original negative RET.
+pub(crate) type ForkProgressPayloadV1 = unsafe extern "C" fn(
+    *mut c_void, *const ForkIdentityV1, u32, Option<ForkVerifyV1>, *mut c_void,
+    *mut c_void,
+) -> i32;
+
+// Borrowed metadata from the actual owned selector3 delivery. Header bytes
+// alone are not a guest destruction proof; its trusted provider ticket must
+// validate the retained carrier and original in-band checked result2 producer.

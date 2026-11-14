@@ -1,0 +1,170 @@
+{
+  "status": "PASS_CALLED_ACTUAL_THREE_PRIMITIVES_ATOMIC_AND_DELEGATE_METADATA",
+  "object_sha256": "a22738e2afd4286b09781ca4ae1b53cd08ee54b2b9c0470c33dd93d24fd8d25d",
+  "actual3T": {
+    "__mcs_rwlock_writer_lock_noirq": 12,
+    "__mcs_rwlock_writer_unlock_noirq": 12,
+    "xchg4": 5
+  },
+  "genuine2U": [
+    "__ihk_mc_spinlock_lock_noirq",
+    "__ihk_mc_spinlock_unlock_noirq"
+  ],
+  "actual_wrapper_delegation": {
+    "__mcs_rwlock_writer_lock_noirq": {
+      "actual_instruction_rows": [
+        {
+          "address": 0,
+          "mnemonic": "movabs",
+          "operand": "rax,0x0",
+          "raw_line": "   0:\tmovabs rax,0x0"
+        },
+        {
+          "address": 10,
+          "mnemonic": "jmp",
+          "operand": "rax",
+          "raw_line": "   a:\tjmp    rax"
+        }
+      ],
+      "exact_genuine_import": "__ihk_mc_spinlock_lock_noirq",
+      "actual_relocation": {
+        "section": 3,
+        "offset": 2,
+        "type": 1,
+        "symbol": {
+          "name": "__ihk_mc_spinlock_lock_noirq",
+          "bind": 1,
+          "type": 0,
+          "other": 0,
+          "section": 0,
+          "value": 0,
+          "size": 0
+        },
+        "addend": 0
+      },
+      "original_RDI_pointer_unchanged_slock_offset0": true,
+      "original_node_argument_ignored": true
+    },
+    "__mcs_rwlock_writer_unlock_noirq": {
+      "actual_instruction_rows": [
+        {
+          "address": 0,
+          "mnemonic": "movabs",
+          "operand": "rax,0x0",
+          "raw_line": "   0:\tmovabs rax,0x0"
+        },
+        {
+          "address": 10,
+          "mnemonic": "jmp",
+          "operand": "rax",
+          "raw_line": "   a:\tjmp    rax"
+        }
+      ],
+      "exact_genuine_import": "__ihk_mc_spinlock_unlock_noirq",
+      "actual_relocation": {
+        "section": 5,
+        "offset": 2,
+        "type": 1,
+        "symbol": {
+          "name": "__ihk_mc_spinlock_unlock_noirq",
+          "bind": 1,
+          "type": 0,
+          "other": 0,
+          "section": 0,
+          "value": 0,
+          "size": 0
+        },
+        "addend": 0
+      },
+      "original_RDI_pointer_unchanged_slock_offset0": true,
+      "original_node_argument_ignored": true
+    }
+  },
+  "actual_xchg4_instruction_rows": [
+    {
+      "address": 0,
+      "mnemonic": "mov",
+      "operand": "eax,esi",
+      "raw_line": "   0:\tmov    eax,esi"
+    },
+    {
+      "address": 2,
+      "mnemonic": "xchg",
+      "operand": "DWORD PTR [rdi],eax",
+      "raw_line": "   2:\txchg   DWORD PTR [rdi],eax"
+    },
+    {
+      "address": 4,
+      "mnemonic": "ret",
+      "operand": "",
+      "raw_line": "   4:\tret    "
+    }
+  ],
+  "xchg4_atomic_lowering": {
+    "accepted_dataflow": "new_ESI_to_EAX_then_memory_exchange_returns_old_EAX",
+    "memory_operand_bits": 32,
+    "new_value_CInt_input": "esi",
+    "old_value_CInt_return": "eax",
+    "memory_pointer": "rdi",
+    "explicit_lock_prefix": false,
+    "memory_XCHG_is_implicitly_atomic_without_explicit_lock": true,
+    "source_Ordering": "SeqCst"
+  },
+  "data_or_private_helper_owners": [],
+  "source_owned_unwind": [
+    {
+      "section": ".eh_frame",
+      "bytes": 120,
+      "source_function_references": [
+        {
+          "section": 10,
+          "offset": 32,
+          "type": 24,
+          "symbol": {
+            "name": "",
+            "bind": 0,
+            "type": 3,
+            "other": 0,
+            "section": 3,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 0
+        },
+        {
+          "section": 10,
+          "offset": 64,
+          "type": 24,
+          "symbol": {
+            "name": "",
+            "bind": 0,
+            "type": 3,
+            "other": 0,
+            "section": 5,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 0
+        },
+        {
+          "section": 10,
+          "offset": 96,
+          "type": 24,
+          "symbol": {
+            "name": "",
+            "bind": 0,
+            "type": 3,
+            "other": 0,
+            "section": 7,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 0
+        }
+      ]
+    }
+  ],
+  "actual_metadata_capture": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-metadata-1/ACTUAL-ELF-METADATA.json",
+  "future_partial_join_unbound": true,
+  "no_atomic_lock_scheduler_IRQ_native_function_execution": true
+}

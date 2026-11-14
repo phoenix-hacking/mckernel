@@ -1,0 +1,30 @@
+{
+  "argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--fsize=33554432",
+    "--core=0",
+    "--nofile=256",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase4-guest-compiler-packet-assembly-20261020-1/test_materializer_normalization.py"
+  ],
+  "pid": 1893443,
+  "start": 27622318,
+  "returncode": 0,
+  "direct_child_joined": true,
+  "process_group_absent": true,
+  "elapsed_seconds": 0.03333357800147496,
+  "compilers": 0,
+  "source_copies": 0
+}

@@ -1,0 +1,1711 @@
+{
+  "actual_default_machine_projection": {
+    "all_bytes_matched": true,
+    "image_start": 18446744073684981344,
+    "linked_bytes_sha256": "bb0dd228cc5f7c223b88d7781b6c5502f31ec6fe4e686188f04c88a73aa811b9",
+    "object_start": 0,
+    "relocation_count": 21,
+    "relocations": [
+      {
+        "addend": 0,
+        "address": 18446744073685795280,
+        "kind": "X86_64_64",
+        "offset": 67,
+        "provider": "locals"
+      },
+      {
+        "addend": 0,
+        "address": 18446744073685244388,
+        "kind": "X86_64_64",
+        "offset": 80,
+        "provider": "num_processors"
+      },
+      {
+        "addend": 0,
+        "address": 18446744073685786736,
+        "kind": "X86_64_64",
+        "offset": 127,
+        "provider": "clv"
+      },
+      {
+        "addend": 0,
+        "address": 18446744073684476288,
+        "kind": "X86_64_64",
+        "offset": 158,
+        "provider": "process_mcs_writer_lock_bridge"
+      },
+      {
+        "addend": 0,
+        "address": 18446744073684476304,
+        "kind": "X86_64_64",
+        "offset": 168,
+        "provider": "process_mcs_writer_unlock_bridge"
+      },
+      {
+        "addend": 0,
+        "address": 18446744073684471776,
+        "kind": "X86_64_64",
+        "offset": 425,
+        "provider": "process_optional_free_bridge"
+      },
+      {
+        "addend": 0,
+        "address": 18446744073684490288,
+        "kind": "X86_64_64",
+        "offset": 442,
+        "provider": "process_release_profile_bridge"
+      },
+      {
+        "addend": 0,
+        "address": 18446744073684474560,
+        "kind": "X86_64_64",
+        "offset": 469,
+        "provider": "process_free_thread_pages_bridge"
+      },
+      {
+        "addend": 0,
+        "address": 18446744073685786744,
+        "kind": "X86_64_64",
+        "offset": 489,
+        "provider": "cpu_local_var_initialized"
+      },
+      {
+        "addend": 0,
+        "address": 18446744073685795280,
+        "kind": "X86_64_64",
+        "offset": 520,
+        "provider": "locals"
+      },
+      {
+        "addend": 0,
+        "address": 18446744073685244388,
+        "kind": "X86_64_64",
+        "offset": 545,
+        "provider": "num_processors"
+      },
+      {
+        "addend": 0,
+        "address": 18446744073685786736,
+        "kind": "X86_64_64",
+        "offset": 580,
+        "provider": "clv"
+      },
+      {
+        "addend": 0,
+        "address": 18446744073684471744,
+        "kind": "X86_64_64",
+        "offset": 659,
+        "provider": "process_mckfd_free_bridge"
+      },
+      {
+        "addend": 0,
+        "address": 18446744073685786744,
+        "kind": "X86_64_64",
+        "offset": 708,
+        "provider": "cpu_local_var_initialized"
+      },
+      {
+        "addend": 0,
+        "address": 18446744073684471776,
+        "kind": "X86_64_64",
+        "offset": 721,
+        "provider": "process_optional_free_bridge"
+      },
+      {
+        "addend": 0,
+        "address": 18446744073685795280,
+        "kind": "X86_64_64",
+        "offset": 749,
+        "provider": "locals"
+      },
+      {
+        "addend": 0,
+        "address": 18446744073685244388,
+        "kind": "X86_64_64",
+        "offset": 774,
+        "provider": "num_processors"
+      },
+      {
+        "addend": 0,
+        "address": 18446744073685786736,
+        "kind": "X86_64_64",
+        "offset": 809,
+        "provider": "clv"
+      },
+      {
+        "addend": 0,
+        "address": 18446744073684476320,
+        "kind": "X86_64_64",
+        "offset": 863,
+        "provider": "process_mcs_reader_lock_bridge"
+      },
+      {
+        "addend": 0,
+        "address": 18446744073684776672,
+        "kind": "X86_64_64",
+        "offset": 904,
+        "provider": "hugefileobj_cleanup"
+      },
+      {
+        "addend": 0,
+        "address": 18446744073684476336,
+        "kind": "X86_64_64",
+        "offset": 931,
+        "provider": "process_mcs_reader_unlock_bridge"
+      }
+    ],
+    "size": 996,
+    "symbol": "release_process"
+  },
+  "actual_inline_phase_witnesses": {
+    "analysis": {
+      "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-review-20261019-1/REMAINING-SAVED-MACHINE-ENTRY-ANALYSIS.json",
+      "sha256": "4883f3635ded142a3ae0d116cfcc557338c15e9d734975598f29b38d36b40299"
+    },
+    "configuration": "ACTUAL_NON_TOFU_ONLY",
+    "instruction_witnesses": {
+      "0x102": "callq *%r13",
+      "0x139": "callq *%r12",
+      "0x151": "callq *%r13",
+      "0x19d": "callq *%r12",
+      "0x25e": "mov %rbx,%r12",
+      "0x34d": "callq *%r8",
+      "0x36c": "callq *%rax",
+      "0x37d": "cmp %rax,0x120(%rdi)",
+      "0x390": "callq *%rax",
+      "0x3b0": "callq *%rax",
+      "0x91": "mov 0x1ee8(%rcx,%rax,1),%rbx"
+    },
+    "order": [
+      "current_resource_set",
+      "hash_detach",
+      "sibling_detach",
+      "final_cleanup"
+    ],
+    "typed_phase_fields": {
+      "current_resource_set": {
+        "cpu_local_stride": 8128,
+        "range": "0x31..0x99",
+        "resource_set_load": "0x91:mov 0x1ee8(%rcx,%rax,1),%rbx"
+      },
+      "final_cleanup": {
+        "TOFU_configuration": "off only",
+        "children_list_offset": 288,
+        "children_lock_offset": 320,
+        "exact_empty_cmp": "0x37d:cmp %rax,0x120(%rdi)",
+        "hugefile_cleanup_call": "0x390",
+        "nonempty_skips_cleanup": "0x384:jne0x39a",
+        "pid1_offset": 320,
+        "process_free_before_final": "0x34d:call *%r8",
+        "range": "0x350..0x3b2",
+        "reader_lock_call": "0x36c",
+        "reader_unlock_call": "0x3b0",
+        "resource_set_saved": "0x25e:%rbx\u2192%r12"
+      },
+      "hash_detach": {
+        "bucket_lock_stride": 64,
+        "buckets": 73,
+        "hash_lock_offset": 1216,
+        "lock_call": "0x102:*%r13",
+        "neighbor_stores": [
+          "0x11b",
+          "0x11f"
+        ],
+        "pid_offset": 456,
+        "poison_stores": [
+          "0x122:0x100129",
+          "0x129:0x200229"
+        ],
+        "process_hash_offset": 24,
+        "range": "0x99..0x13c",
+        "unlock_call": "0x139:*%r12"
+      },
+      "sibling_detach": {
+        "list_offsets": [
+          384,
+          392
+        ],
+        "lock_call": "0x151:*%r13",
+        "neighbor_stores": [
+          "0x178",
+          "0x17c"
+        ],
+        "parent_children_lock_offset": 320,
+        "parent_offset": 272,
+        "poison_stores": [
+          "0x17f:0x100129",
+          "0x18a:0x200229"
+        ],
+        "range": "0x13c..0x1a0",
+        "unlock_call": "0x19d:*%r12"
+      }
+    }
+  },
+  "actual_test_receipts": {
+    "completion": {
+      "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/completed-command-receipt.json",
+      "sha256": "f4deb6b1ec14823a0b29baafa23d07be2f73372789e1f89f13e87effacfb5b0f"
+    },
+    "known": {
+      "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/remaining-known-inputs.json",
+      "sha256": "843f838aebde74fe0a8c144c4c9781984ab2ce2ee509198a360604d76eb68c0a"
+    },
+    "plan": {
+      "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/resolved15-command-plan.json",
+      "sha256": "4e69d9a0c665767f623ead4dc84684cafe59fc78a951d2c41b19c57b75443604"
+    },
+    "release": {
+      "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/resolved15-release.json",
+      "sha256": "8e34103103ea8ccc42579b63d8c51796dd389e77c4dfd7ec138656b78aca0ba4"
+    }
+  },
+  "callbacks": [
+    {
+      "argument_index_from_frozen_Rust_source": 8,
+      "consumer": "release_process",
+      "index_convention": "zero-based-body-result-argument",
+      "machine_argument_slot_independently_decoded": false,
+      "machine_default_body_form": "INLINED_PHASES_PROVEN_BY_COMPLETE_RELOCATION_PROJECTION",
+      "symbol": "process_current_resource_set_bridge"
+    },
+    {
+      "argument_index_from_frozen_Rust_source": 9,
+      "consumer": "release_process",
+      "index_convention": "zero-based-body-result-argument",
+      "machine_argument_slot_independently_decoded": false,
+      "machine_default_body_form": "INLINED_PHASES_PROVEN_BY_COMPLETE_RELOCATION_PROJECTION",
+      "symbol": "process_release_hash_detach_bridge"
+    },
+    {
+      "argument_index_from_frozen_Rust_source": 10,
+      "consumer": "release_process",
+      "index_convention": "zero-based-body-result-argument",
+      "machine_argument_slot_independently_decoded": false,
+      "machine_default_body_form": "INLINED_PHASES_PROVEN_BY_COMPLETE_RELOCATION_PROJECTION",
+      "symbol": "process_release_sibling_detach_bridge"
+    },
+    {
+      "argument_index_from_frozen_Rust_source": 17,
+      "consumer": "release_process",
+      "index_convention": "zero-based-body-result-argument",
+      "machine_argument_slot_independently_decoded": false,
+      "machine_default_body_form": "INLINED_PHASES_PROVEN_BY_COMPLETE_RELOCATION_PROJECTION",
+      "symbol": "process_release_final_cleanup_bridge"
+    }
+  ],
+  "completion": {
+    "completion": {
+      "ctime_ns": 1792406134636390736,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 48016063,
+      "mode": "0o600",
+      "mtime_ns": 1792406134636390736,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/completed-command-receipt.json",
+      "sha256": "f4deb6b1ec14823a0b29baafa23d07be2f73372789e1f89f13e87effacfb5b0f",
+      "size": 20601,
+      "uid": 1000
+    },
+    "not_all_original14_pass": true,
+    "operations": [
+      {
+        "child": {
+          "ctime_ns": 1792406129132227379,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48015988,
+          "mode": "0o600",
+          "mtime_ns": 1792406129132227379,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/process-nm.txt.status.json.child.json",
+          "sha256": "2e949a46c4311a0233368c277524d72e236b75eb382680639b953cf0f7c800bf",
+          "size": 85,
+          "uid": 1000
+        },
+        "command": {
+          "ctime_ns": 1792406129132227379,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48015985,
+          "mode": "0o600",
+          "mtime_ns": 1792406129132227379,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/process-nm.txt.status.json.command.json",
+          "sha256": "9997b61b93b68a6d3a7b4eec4790f96cb2ddcfd730574fb1b2bf336ef0259b6a",
+          "size": 757,
+          "uid": 1000
+        },
+        "direct_child_joined": true,
+        "expected": {
+          "classification": "MECHANICAL_INPUT",
+          "receipt_execution_release_sha256": "77c91c929cc82b121b881538ba55460014c9b1e5f4031b7ce9bc84fb260ffd0e",
+          "receipt_stage": "command-1",
+          "returncode": 0,
+          "stderr_policy": "empty"
+        },
+        "index": 1,
+        "returncode": 0,
+        "status": {
+          "ctime_ns": 1792406129148227854,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48015989,
+          "mode": "0o600",
+          "mtime_ns": 1792406129148227854,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/process-nm.txt.status.json",
+          "sha256": "5fe7443b35be56ba2fe00d755cb39503c57389570e9c95bf812289546c5c17c4",
+          "size": 976,
+          "uid": 1000
+        },
+        "streams": {
+          "stderr": {
+            "ctime_ns": 1792406129132227379,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48015987,
+            "mode": "0o600",
+            "mtime_ns": 1792406129132227379,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/process-nm.txt.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0,
+            "uid": 1000
+          },
+          "stdout": {
+            "ctime_ns": 1792406129144227735,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48015986,
+            "mode": "0o600",
+            "mtime_ns": 1792406129144227735,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/process-nm.txt",
+            "sha256": "478d7f03d551a722cd7ef46e1924ae9e678695e60c0ee06c4536b4bb5f32a3eb",
+            "size": 20454,
+            "uid": 1000
+          }
+        }
+      },
+      {
+        "child": {
+          "ctime_ns": 1792406129148227854,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48015993,
+          "mode": "0o600",
+          "mtime_ns": 1792406129148227854,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/process-objdump.txt.status.json.child.json",
+          "sha256": "586c6126706a168a931ab8f0fd94af00187d3b873cd2e9828b33b4733778d63a",
+          "size": 83,
+          "uid": 1000
+        },
+        "command": {
+          "ctime_ns": 1792406129148227854,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48015990,
+          "mode": "0o600",
+          "mtime_ns": 1792406129148227854,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/process-objdump.txt.status.json.command.json",
+          "sha256": "e8cbc8a2b72a2d6c9408abe3af713c3cfd17285be5cb0dd3169c896d80683b27",
+          "size": 764,
+          "uid": 1000
+        },
+        "direct_child_joined": true,
+        "expected": {
+          "classification": "MECHANICAL_INPUT",
+          "receipt_execution_release_sha256": "77c91c929cc82b121b881538ba55460014c9b1e5f4031b7ce9bc84fb260ffd0e",
+          "receipt_stage": "command-2",
+          "returncode": 0,
+          "stderr_policy": "empty"
+        },
+        "index": 2,
+        "returncode": 0,
+        "status": {
+          "ctime_ns": 1792406129160228210,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48015994,
+          "mode": "0o600",
+          "mtime_ns": 1792406129160228210,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/process-objdump.txt.status.json",
+          "sha256": "4e8e9773b3b9672cc837bbc8f043d9dc2893540f589188df7393af8ec6cd727e",
+          "size": 983,
+          "uid": 1000
+        },
+        "streams": {
+          "stderr": {
+            "ctime_ns": 1792406129148227854,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48015992,
+            "mode": "0o600",
+            "mtime_ns": 1792406129148227854,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/process-objdump.txt.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0,
+            "uid": 1000
+          },
+          "stdout": {
+            "ctime_ns": 1792406129156228092,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48015991,
+            "mode": "0o600",
+            "mtime_ns": 1792406129156228092,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/process-objdump.txt",
+            "sha256": "333144a9e3c145b3435ce17effcdbc34b9dab869fed6144aa0079ae2cc96597d",
+            "size": 308967,
+            "uid": 1000
+          }
+        }
+      },
+      {
+        "child": {
+          "ctime_ns": 1792406129160228210,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48015998,
+          "mode": "0o600",
+          "mtime_ns": 1792406129160228210,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/process-readelf.txt.status.json.child.json",
+          "sha256": "986adbdd622cfb2b31eb1396adeac1148127525143e83657f0f5317485b312eb",
+          "size": 85,
+          "uid": 1000
+        },
+        "command": {
+          "ctime_ns": 1792406129160228210,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48015995,
+          "mode": "0o600",
+          "mtime_ns": 1792406129160228210,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/process-readelf.txt.status.json.command.json",
+          "sha256": "c50bfd850a788f2ba02ee6b558c736be8b6f3e5f71d26c85f5350eb4450ff2c5",
+          "size": 763,
+          "uid": 1000
+        },
+        "direct_child_joined": true,
+        "expected": {
+          "classification": "MECHANICAL_INPUT",
+          "receipt_execution_release_sha256": "77c91c929cc82b121b881538ba55460014c9b1e5f4031b7ce9bc84fb260ffd0e",
+          "receipt_stage": "command-3",
+          "returncode": 0,
+          "stderr_policy": "empty"
+        },
+        "index": 3,
+        "returncode": 0,
+        "status": {
+          "ctime_ns": 1792406129164228329,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48015999,
+          "mode": "0o600",
+          "mtime_ns": 1792406129164228329,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/process-readelf.txt.status.json",
+          "sha256": "e46c8c0c4b5fcdddf6f9d42443a732a11bad00654168d392d1ee082b09ed740e",
+          "size": 983,
+          "uid": 1000
+        },
+        "streams": {
+          "stderr": {
+            "ctime_ns": 1792406129160228210,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48015997,
+            "mode": "0o600",
+            "mtime_ns": 1792406129160228210,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/process-readelf.txt.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0,
+            "uid": 1000
+          },
+          "stdout": {
+            "ctime_ns": 1792406129160228210,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48015996,
+            "mode": "0o600",
+            "mtime_ns": 1792406129160228210,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/process-readelf.txt",
+            "sha256": "ec2a5357a496d6aa2f926c0176fe1af238db63dac5845388e301b8846041ac4b",
+            "size": 40555,
+            "uid": 1000
+          }
+        }
+      },
+      {
+        "child": {
+          "ctime_ns": 1792406129164228329,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48016003,
+          "mode": "0o600",
+          "mtime_ns": 1792406129164228329,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/fallback-nm.txt.status.json.child.json",
+          "sha256": "8dd275190825db2e2b20951ab3c36dbe385bb7da418b4200fe4c4fcb864d09fa",
+          "size": 85,
+          "uid": 1000
+        },
+        "command": {
+          "ctime_ns": 1792406129164228329,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48016000,
+          "mode": "0o600",
+          "mtime_ns": 1792406129164228329,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/fallback-nm.txt.status.json.command.json",
+          "sha256": "d41e5d07d6c9165770feaf0af80d955a78b3c846ff6db5a2afc3d50bbb2cf678",
+          "size": 752,
+          "uid": 1000
+        },
+        "direct_child_joined": true,
+        "expected": {
+          "classification": "MECHANICAL_INPUT",
+          "receipt_execution_release_sha256": "77c91c929cc82b121b881538ba55460014c9b1e5f4031b7ce9bc84fb260ffd0e",
+          "receipt_stage": "command-4",
+          "returncode": 0,
+          "stderr_policy": "empty"
+        },
+        "index": 4,
+        "returncode": 0,
+        "status": {
+          "ctime_ns": 1792406129180228804,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48016004,
+          "mode": "0o600",
+          "mtime_ns": 1792406129180228804,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/fallback-nm.txt.status.json",
+          "sha256": "fbeaa52108616c43d7845cbb0b0e6ab87821f23c147b6d2bc76d228e5e1b496c",
+          "size": 970,
+          "uid": 1000
+        },
+        "streams": {
+          "stderr": {
+            "ctime_ns": 1792406129164228329,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48016002,
+            "mode": "0o600",
+            "mtime_ns": 1792406129164228329,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/fallback-nm.txt.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0,
+            "uid": 1000
+          },
+          "stdout": {
+            "ctime_ns": 1792406129176228685,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48016001,
+            "mode": "0o600",
+            "mtime_ns": 1792406129176228685,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/fallback-nm.txt",
+            "sha256": "74dcfb83cacc7d680720adceca9e0b10be07d1dd8efa10095c19795edb8b50b1",
+            "size": 28717,
+            "uid": 1000
+          }
+        }
+      },
+      {
+        "child": {
+          "ctime_ns": 1792406129180228804,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48016008,
+          "mode": "0o600",
+          "mtime_ns": 1792406129180228804,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/fallback-objdump.txt.status.json.child.json",
+          "sha256": "b5bf9e283ed2846928029ff2a4001298c270c1533dfa9de7fd792b64c50e3904",
+          "size": 84,
+          "uid": 1000
+        },
+        "command": {
+          "ctime_ns": 1792406129180228804,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48016005,
+          "mode": "0o600",
+          "mtime_ns": 1792406129180228804,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/fallback-objdump.txt.status.json.command.json",
+          "sha256": "0b265a9dbf0128b4a20d75318617b6794a728bbc2c107dfd504a70969d12fff9",
+          "size": 759,
+          "uid": 1000
+        },
+        "direct_child_joined": true,
+        "expected": {
+          "classification": "MECHANICAL_INPUT",
+          "receipt_execution_release_sha256": "77c91c929cc82b121b881538ba55460014c9b1e5f4031b7ce9bc84fb260ffd0e",
+          "receipt_stage": "command-5",
+          "returncode": 0,
+          "stderr_policy": "empty"
+        },
+        "index": 5,
+        "returncode": 0,
+        "status": {
+          "ctime_ns": 1792406129196229279,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48016009,
+          "mode": "0o600",
+          "mtime_ns": 1792406129196229279,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/fallback-objdump.txt.status.json",
+          "sha256": "96aab392bbe3b5e4d9514476c6fa6b79f145804b56aff331cf3a70e16952fcfa",
+          "size": 978,
+          "uid": 1000
+        },
+        "streams": {
+          "stderr": {
+            "ctime_ns": 1792406129180228804,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48016007,
+            "mode": "0o600",
+            "mtime_ns": 1792406129180228804,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/fallback-objdump.txt.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0,
+            "uid": 1000
+          },
+          "stdout": {
+            "ctime_ns": 1792406129196229279,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48016006,
+            "mode": "0o600",
+            "mtime_ns": 1792406129196229279,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/fallback-objdump.txt",
+            "sha256": "e14e423cafad3178d8478a03fa03b6dab867c2be5c2d7625f74d585855ef8297",
+            "size": 522204,
+            "uid": 1000
+          }
+        }
+      },
+      {
+        "child": {
+          "ctime_ns": 1792406129196229279,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48016013,
+          "mode": "0o600",
+          "mtime_ns": 1792406129196229279,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/fallback-readelf.txt.status.json.child.json",
+          "sha256": "e19d63863e0015ca0c6c737811140d75b80fc893ef8410b4041d144d03b800f1",
+          "size": 85,
+          "uid": 1000
+        },
+        "command": {
+          "ctime_ns": 1792406129196229279,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48016010,
+          "mode": "0o600",
+          "mtime_ns": 1792406129196229279,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/fallback-readelf.txt.status.json.command.json",
+          "sha256": "e564d5e77e4a2f9fc7d178a44396fa46e7c2aa6de6680d6d4f2c0823c82d7b8f",
+          "size": 758,
+          "uid": 1000
+        },
+        "direct_child_joined": true,
+        "expected": {
+          "classification": "MECHANICAL_INPUT",
+          "receipt_execution_release_sha256": "77c91c929cc82b121b881538ba55460014c9b1e5f4031b7ce9bc84fb260ffd0e",
+          "receipt_stage": "command-6",
+          "returncode": 0,
+          "stderr_policy": "empty"
+        },
+        "index": 6,
+        "returncode": 0,
+        "status": {
+          "ctime_ns": 1792406129200229397,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48016014,
+          "mode": "0o600",
+          "mtime_ns": 1792406129200229397,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/fallback-readelf.txt.status.json",
+          "sha256": "242b394f4a6cd988e7840ef67c1a8dfd8db72474a627507f81f6aba72562fb1a",
+          "size": 977,
+          "uid": 1000
+        },
+        "streams": {
+          "stderr": {
+            "ctime_ns": 1792406129196229279,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48016012,
+            "mode": "0o600",
+            "mtime_ns": 1792406129196229279,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/fallback-readelf.txt.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0,
+            "uid": 1000
+          },
+          "stdout": {
+            "ctime_ns": 1792406129200229397,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48016011,
+            "mode": "0o600",
+            "mtime_ns": 1792406129200229397,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/fallback-readelf.txt",
+            "sha256": "4050f6dc1afce9c91aa5f08c21451335c2533b0081fe9376f60f1a66ef9e5ff6",
+            "size": 56618,
+            "uid": 1000
+          }
+        }
+      },
+      {
+        "child": {
+          "ctime_ns": 1792406129200229397,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48016018,
+          "mode": "0o600",
+          "mtime_ns": 1792406129200229397,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/rust-nm.txt.status.json.child.json",
+          "sha256": "bdd2e9f3ae3c7f6d1f8fedd9a279d829aa1eaa42fd43361b00153b799716e10b",
+          "size": 85,
+          "uid": 1000
+        },
+        "command": {
+          "ctime_ns": 1792406129200229397,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48016015,
+          "mode": "0o600",
+          "mtime_ns": 1792406129200229397,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/rust-nm.txt.status.json.command.json",
+          "sha256": "4f44b9757c59e464fda6d81e7351bbfed8feb78ea3c49d671ad2d3b25f12deeb",
+          "size": 738,
+          "uid": 1000
+        },
+        "direct_child_joined": true,
+        "expected": {
+          "classification": "MECHANICAL_INPUT",
+          "receipt_execution_release_sha256": "77c91c929cc82b121b881538ba55460014c9b1e5f4031b7ce9bc84fb260ffd0e",
+          "receipt_stage": "command-7",
+          "returncode": 0,
+          "stderr_policy": "empty"
+        },
+        "index": 7,
+        "returncode": 0,
+        "status": {
+          "ctime_ns": 1792406129224230109,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48016019,
+          "mode": "0o600",
+          "mtime_ns": 1792406129224230109,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/rust-nm.txt.status.json",
+          "sha256": "40def87371069279a4f2e392d8fab7728b63a73d2f5c7a8371a22eda8acff864",
+          "size": 958,
+          "uid": 1000
+        },
+        "streams": {
+          "stderr": {
+            "ctime_ns": 1792406129200229397,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48016017,
+            "mode": "0o600",
+            "mtime_ns": 1792406129200229397,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/rust-nm.txt.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0,
+            "uid": 1000
+          },
+          "stdout": {
+            "ctime_ns": 1792406129224230109,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48016016,
+            "mode": "0o600",
+            "mtime_ns": 1792406129224230109,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/rust-nm.txt",
+            "sha256": "af3bafa688b4f90970ec2490f42757ed56b099ca7ade23bad6628a03b99127fa",
+            "size": 340368,
+            "uid": 1000
+          }
+        }
+      },
+      {
+        "child": {
+          "ctime_ns": 1792406129228230228,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48016023,
+          "mode": "0o600",
+          "mtime_ns": 1792406129228230228,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/rust-objdump.txt.status.json.child.json",
+          "sha256": "0e6c45f9425e9275ae6f0b568fc55c937d8397e8acc67ab99484504b519e260c",
+          "size": 85,
+          "uid": 1000
+        },
+        "command": {
+          "ctime_ns": 1792406129224230109,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48016020,
+          "mode": "0o600",
+          "mtime_ns": 1792406129224230109,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/rust-objdump.txt.status.json.command.json",
+          "sha256": "75806d624a83857ffd9754e3d44ef3e549064df1d20c7a5d66955d1780487e7c",
+          "size": 745,
+          "uid": 1000
+        },
+        "direct_child_joined": true,
+        "expected": {
+          "classification": "MECHANICAL_INPUT",
+          "receipt_execution_release_sha256": "77c91c929cc82b121b881538ba55460014c9b1e5f4031b7ce9bc84fb260ffd0e",
+          "receipt_stage": "command-8",
+          "returncode": 0,
+          "stderr_policy": "empty"
+        },
+        "index": 8,
+        "returncode": 0,
+        "status": {
+          "ctime_ns": 1792406134292380525,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48016024,
+          "mode": "0o600",
+          "mtime_ns": 1792406134292380525,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/rust-objdump.txt.status.json",
+          "sha256": "59eacca8a0c4c2ca5c0cf05bb09288f5c9ed1c25226b2a1e7f10a8044327f69a",
+          "size": 963,
+          "uid": 1000
+        },
+        "streams": {
+          "stderr": {
+            "ctime_ns": 1792406129224230109,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48016022,
+            "mode": "0o600",
+            "mtime_ns": 1792406129224230109,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/rust-objdump.txt.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0,
+            "uid": 1000
+          },
+          "stdout": {
+            "ctime_ns": 1792406134284380288,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48016021,
+            "mode": "0o600",
+            "mtime_ns": 1792406134284380288,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/rust-objdump.txt",
+            "sha256": "158b6bd29115e4efdff427816f50bd10aca9651fbe10ff2fe0cdf5278e196d8b",
+            "size": 9301756,
+            "uid": 1000
+          }
+        }
+      },
+      {
+        "child": {
+          "ctime_ns": 1792406134296380644,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48016028,
+          "mode": "0o600",
+          "mtime_ns": 1792406134296380644,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/rust-readelf.txt.status.json.child.json",
+          "sha256": "82fbe38130fabb66eda97a8d2e58c09017e61a3e2128755ed53c4e510bd9967b",
+          "size": 84,
+          "uid": 1000
+        },
+        "command": {
+          "ctime_ns": 1792406134292380525,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48016025,
+          "mode": "0o600",
+          "mtime_ns": 1792406134292380525,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/rust-readelf.txt.status.json.command.json",
+          "sha256": "e1fae8778fab1978f83f2f4b0d61f0405b050d88a4e390e19509e0146d8e0ad2",
+          "size": 744,
+          "uid": 1000
+        },
+        "direct_child_joined": true,
+        "expected": {
+          "classification": "MECHANICAL_INPUT",
+          "receipt_execution_release_sha256": "77c91c929cc82b121b881538ba55460014c9b1e5f4031b7ce9bc84fb260ffd0e",
+          "receipt_stage": "command-9",
+          "returncode": 0,
+          "stderr_policy": "empty"
+        },
+        "index": 9,
+        "returncode": 0,
+        "status": {
+          "ctime_ns": 1792406134304380881,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48016029,
+          "mode": "0o600",
+          "mtime_ns": 1792406134304380881,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/rust-readelf.txt.status.json",
+          "sha256": "f86cba71019fbc4ee3d6f1ccd12a04b0c071feaa2290f318ef96e56738d39563",
+          "size": 964,
+          "uid": 1000
+        },
+        "streams": {
+          "stderr": {
+            "ctime_ns": 1792406134292380525,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48016027,
+            "mode": "0o600",
+            "mtime_ns": 1792406134292380525,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/rust-readelf.txt.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0,
+            "uid": 1000
+          },
+          "stdout": {
+            "ctime_ns": 1792406134300380763,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48016026,
+            "mode": "0o600",
+            "mtime_ns": 1792406134300380763,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/rust-readelf.txt",
+            "sha256": "43e4e1b0e81ceb00181d03a46e5dfb46f2e0d420ca4c095f2f39687e5e28b110",
+            "size": 508151,
+            "uid": 1000
+          }
+        }
+      },
+      {
+        "child": {
+          "ctime_ns": 1792406134304380881,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48016033,
+          "mode": "0o600",
+          "mtime_ns": 1792406134304380881,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/image-nm.txt.status.json.child.json",
+          "sha256": "cfefcef6b2875414f18c9a910f1c4048ec07bd36450b18f8f73ee1a6b02315ef",
+          "size": 85,
+          "uid": 1000
+        },
+        "command": {
+          "ctime_ns": 1792406134304380881,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48016030,
+          "mode": "0o600",
+          "mtime_ns": 1792406134304380881,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/image-nm.txt.status.json.command.json",
+          "sha256": "63669fea86e1397c341499c46b76f6b67ae9477d80232e11264ce653f93233e7",
+          "size": 731,
+          "uid": 1000
+        },
+        "direct_child_joined": true,
+        "expected": {
+          "classification": "MECHANICAL_INPUT",
+          "receipt_execution_release_sha256": "77c91c929cc82b121b881538ba55460014c9b1e5f4031b7ce9bc84fb260ffd0e",
+          "receipt_stage": "command-10",
+          "returncode": 0,
+          "stderr_policy": "empty"
+        },
+        "index": 10,
+        "returncode": 0,
+        "status": {
+          "ctime_ns": 1792406134324381475,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48016034,
+          "mode": "0o600",
+          "mtime_ns": 1792406134324381475,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/image-nm.txt.status.json",
+          "sha256": "ef819015c93ee5991169d54af02bf1813275d2e6ca4f7fa53456c3bd723414d5",
+          "size": 951,
+          "uid": 1000
+        },
+        "streams": {
+          "stderr": {
+            "ctime_ns": 1792406134304380881,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48016032,
+            "mode": "0o600",
+            "mtime_ns": 1792406134304380881,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/image-nm.txt.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0,
+            "uid": 1000
+          },
+          "stdout": {
+            "ctime_ns": 1792406134320381357,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48016031,
+            "mode": "0o600",
+            "mtime_ns": 1792406134320381357,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/image-nm.txt",
+            "sha256": "b00f1160c49bfec1b3c30cba50bbc2bf68d2f8d7cabf697e2282d565826da9b6",
+            "size": 224887,
+            "uid": 1000
+          }
+        }
+      },
+      {
+        "child": {
+          "ctime_ns": 1792406134324381475,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48016038,
+          "mode": "0o600",
+          "mtime_ns": 1792406134324381475,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/image-objdump.txt.status.json.child.json",
+          "sha256": "011d31b93935f0f8fe21db19691adac1c651d21db291290102bf521be2f49141",
+          "size": 84,
+          "uid": 1000
+        },
+        "command": {
+          "ctime_ns": 1792406134324381475,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48016035,
+          "mode": "0o600",
+          "mtime_ns": 1792406134324381475,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/image-objdump.txt.status.json.command.json",
+          "sha256": "054550970cb3fd3911d2a8ff1afb0604cb4569a21e627a3028f87ad8c6139f15",
+          "size": 738,
+          "uid": 1000
+        },
+        "direct_child_joined": true,
+        "expected": {
+          "classification": "MECHANICAL_INPUT",
+          "receipt_execution_release_sha256": "77c91c929cc82b121b881538ba55460014c9b1e5f4031b7ce9bc84fb260ffd0e",
+          "receipt_stage": "command-11",
+          "returncode": 0,
+          "stderr_policy": "empty"
+        },
+        "index": 11,
+        "returncode": 0,
+        "status": {
+          "ctime_ns": 1792406134588389311,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48016039,
+          "mode": "0o600",
+          "mtime_ns": 1792406134588389311,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/image-objdump.txt.status.json",
+          "sha256": "7b807a015f0d75894f83909499cac513d93f10e301802ec14322e37fdef1c07a",
+          "size": 958,
+          "uid": 1000
+        },
+        "streams": {
+          "stderr": {
+            "ctime_ns": 1792406134324381475,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48016037,
+            "mode": "0o600",
+            "mtime_ns": 1792406134324381475,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/image-objdump.txt.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0,
+            "uid": 1000
+          },
+          "stdout": {
+            "ctime_ns": 1792406134572388836,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48016036,
+            "mode": "0o600",
+            "mtime_ns": 1792406134572388836,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/image-objdump.txt",
+            "sha256": "c9a07fa397ab5c262537a2054009a3228239c43eed79e828d43bd0f7cdfd3f4f",
+            "size": 14042351,
+            "uid": 1000
+          }
+        }
+      },
+      {
+        "child": {
+          "ctime_ns": 1792406134588389311,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48016043,
+          "mode": "0o600",
+          "mtime_ns": 1792406134588389311,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/image-readelf.txt.status.json.child.json",
+          "sha256": "74aa6a0cb174cfc69ec704bafa3808068177ae9e0048e985754d5259cd662d0f",
+          "size": 85,
+          "uid": 1000
+        },
+        "command": {
+          "ctime_ns": 1792406134588389311,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48016040,
+          "mode": "0o600",
+          "mtime_ns": 1792406134588389311,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/image-readelf.txt.status.json.command.json",
+          "sha256": "f416fbdf214ab7ff428cbcc8eabb64791776a4f9de830f454d98d1bd3faf4b64",
+          "size": 737,
+          "uid": 1000
+        },
+        "direct_child_joined": true,
+        "expected": {
+          "classification": "MECHANICAL_INPUT",
+          "receipt_execution_release_sha256": "77c91c929cc82b121b881538ba55460014c9b1e5f4031b7ce9bc84fb260ffd0e",
+          "receipt_stage": "command-12",
+          "returncode": 0,
+          "stderr_policy": "empty"
+        },
+        "index": 12,
+        "returncode": 0,
+        "status": {
+          "ctime_ns": 1792406134596389549,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48016044,
+          "mode": "0o600",
+          "mtime_ns": 1792406134596389549,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/image-readelf.txt.status.json",
+          "sha256": "f52db1abac189ba2c7260227ec5e6ff9fc51ad1228138a7160ace43048c8c8ad",
+          "size": 957,
+          "uid": 1000
+        },
+        "streams": {
+          "stderr": {
+            "ctime_ns": 1792406134588389311,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48016042,
+            "mode": "0o600",
+            "mtime_ns": 1792406134588389311,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/image-readelf.txt.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0,
+            "uid": 1000
+          },
+          "stdout": {
+            "ctime_ns": 1792406134592389430,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48016041,
+            "mode": "0o600",
+            "mtime_ns": 1792406134592389430,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/image-readelf.txt",
+            "sha256": "98461d8429e20a1c512d0b0c729a2c044d25cb8397dde2a3d0bdb1831028848e",
+            "size": 425954,
+            "uid": 1000
+          }
+        }
+      },
+      {
+        "child": {
+          "ctime_ns": 1792406134624390380,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48016051,
+          "mode": "0o600",
+          "mtime_ns": 1792406134624390380,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/rust-release-tid-descriptor.status.json.child.json",
+          "sha256": "39bf31416276fff54469ad259f5d79a09c112f1e489fe286e1b7243d747f2e5e",
+          "size": 85,
+          "uid": 1000
+        },
+        "command": {
+          "ctime_ns": 1792406134620390261,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48016048,
+          "mode": "0o600",
+          "mtime_ns": 1792406134620390261,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/rust-release-tid-descriptor.status.json.command.json",
+          "sha256": "a5a66caa5c5c71c4552599a6a2b4793d5de6e3c76f268acdf5bd506dbd3b7f04",
+          "size": 755,
+          "uid": 1000
+        },
+        "direct_child_joined": true,
+        "expected": {
+          "classification": "MECHANICAL_INPUT",
+          "receipt_execution_release_sha256": "77c91c929cc82b121b881538ba55460014c9b1e5f4031b7ce9bc84fb260ffd0e",
+          "receipt_stage": "command-13",
+          "returncode": 0,
+          "stderr_policy": "empty"
+        },
+        "index": 13,
+        "returncode": 0,
+        "status": {
+          "ctime_ns": 1792406134628390498,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48016052,
+          "mode": "0o600",
+          "mtime_ns": 1792406134628390498,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/rust-release-tid-descriptor.status.json",
+          "sha256": "497d73872655d9b6b73b0c4734d3c5dbdb54248402e41e3bb05ad8cb320742ab",
+          "size": 970,
+          "uid": 1000
+        },
+        "streams": {
+          "stderr": {
+            "ctime_ns": 1792406134620390261,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48016050,
+            "mode": "0o600",
+            "mtime_ns": 1792406134620390261,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/rust-release-tid-descriptor.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0,
+            "uid": 1000
+          },
+          "stdout": {
+            "ctime_ns": 1792406134624390380,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48016049,
+            "mode": "0o600",
+            "mtime_ns": 1792406134624390380,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/rust-release-tid-descriptor",
+            "sha256": "278493c068ee329c3252653d4d994752c59ee843a41dd274103159ff174a7247",
+            "size": 261,
+            "uid": 1000
+          }
+        }
+      },
+      {
+        "child": {
+          "ctime_ns": 1792406134628390498,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48016056,
+          "mode": "0o600",
+          "mtime_ns": 1792406134628390498,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/rust-replace-tid-descriptor.status.json.child.json",
+          "sha256": "62b19db73e0f0d1d9f9028680ba39156851fb1a351330ef0a7e5cf808ec88259",
+          "size": 85,
+          "uid": 1000
+        },
+        "command": {
+          "ctime_ns": 1792406134628390498,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48016053,
+          "mode": "0o600",
+          "mtime_ns": 1792406134628390498,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/rust-replace-tid-descriptor.status.json.command.json",
+          "sha256": "f0e1d05c90cc06e39c202a3a0e3a9712dcd7d15b4defe20419172c78685ef0e0",
+          "size": 755,
+          "uid": 1000
+        },
+        "direct_child_joined": true,
+        "expected": {
+          "classification": "MECHANICAL_INPUT",
+          "receipt_execution_release_sha256": "77c91c929cc82b121b881538ba55460014c9b1e5f4031b7ce9bc84fb260ffd0e",
+          "receipt_stage": "command-14",
+          "returncode": 0,
+          "stderr_policy": "empty"
+        },
+        "index": 14,
+        "returncode": 0,
+        "status": {
+          "ctime_ns": 1792406134628390498,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48016057,
+          "mode": "0o600",
+          "mtime_ns": 1792406134628390498,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/rust-replace-tid-descriptor.status.json",
+          "sha256": "24255cbe69b6785cb03824b3d68728214940cf3d3d91c3f4177ea54b2f033f4d",
+          "size": 973,
+          "uid": 1000
+        },
+        "streams": {
+          "stderr": {
+            "ctime_ns": 1792406134628390498,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48016055,
+            "mode": "0o600",
+            "mtime_ns": 1792406134628390498,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/rust-replace-tid-descriptor.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0,
+            "uid": 1000
+          },
+          "stdout": {
+            "ctime_ns": 1792406134628390498,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48016054,
+            "mode": "0o600",
+            "mtime_ns": 1792406134628390498,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/rust-replace-tid-descriptor",
+            "sha256": "a694538acf8c0907498a153b32252c6becc8e8a99865ef49a9cb00826a900e6e",
+            "size": 261,
+            "uid": 1000
+          }
+        }
+      },
+      {
+        "child": {
+          "ctime_ns": 1792406134632390617,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48016061,
+          "mode": "0o600",
+          "mtime_ns": 1792406134632390617,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/image-descriptor-range.status.json.child.json",
+          "sha256": "c65799f22eb354d5765874b900d7af207cba8994f0a69f79f0871ea87d775525",
+          "size": 85,
+          "uid": 1000
+        },
+        "command": {
+          "ctime_ns": 1792406134632390617,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48016058,
+          "mode": "0o600",
+          "mtime_ns": 1792406134632390617,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/image-descriptor-range.status.json.command.json",
+          "sha256": "6ac7f6ad878b2f025cf56365786bdf2509b88aea1a3611534bb3eda57f02560c",
+          "size": 818,
+          "uid": 1000
+        },
+        "direct_child_joined": true,
+        "expected": {
+          "classification": "MECHANICAL_INPUT",
+          "receipt_execution_release_sha256": "77c91c929cc82b121b881538ba55460014c9b1e5f4031b7ce9bc84fb260ffd0e",
+          "receipt_stage": "command-15",
+          "returncode": 0,
+          "stderr_policy": "empty"
+        },
+        "index": 15,
+        "returncode": 0,
+        "status": {
+          "ctime_ns": 1792406134632390617,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48016062,
+          "mode": "0o600",
+          "mtime_ns": 1792406134632390617,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/image-descriptor-range.status.json",
+          "sha256": "e8c473990022a1ea19ebf1d73cdf1ff21d13d4455dcc0df815f739fd03ae1864",
+          "size": 1035,
+          "uid": 1000
+        },
+        "streams": {
+          "stderr": {
+            "ctime_ns": 1792406134632390617,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48016060,
+            "mode": "0o600",
+            "mtime_ns": 1792406134632390617,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/image-descriptor-range.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0,
+            "uid": 1000
+          },
+          "stdout": {
+            "ctime_ns": 1792406134632390617,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48016059,
+            "mode": "0o600",
+            "mtime_ns": 1792406134632390617,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/captures/image-descriptor-range",
+            "sha256": "232faab3614c169bff3fd7b1c8e61bf38a39a80ec18071bc00ae5edb6952e325",
+            "size": 587,
+            "uid": 1000
+          }
+        }
+      }
+    ],
+    "original_failure_contract": "FAIL_OPEN_RETAINED; process14 and actualC ABI checks do not make literalall14PASS; no syscalldecoder replay in thispacket",
+    "original_full_DWARF_acceptance": false,
+    "plan": {
+      "ctime_ns": 1792406134620390261,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 48016045,
+      "mode": "0o600",
+      "mtime_ns": 1792406134620390261,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/resolved15-command-plan.json",
+      "sha256": "4e69d9a0c665767f623ead4dc84684cafe59fc78a951d2c41b19c57b75443604",
+      "size": 46511,
+      "uid": 1000
+    },
+    "release": {
+      "ctime_ns": 1792406134620390261,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 48016047,
+      "mode": "0o600",
+      "mtime_ns": 1792406134620390261,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/resolved15-release.json",
+      "sha256": "8e34103103ea8ccc42579b63d8c51796dd389e77c4dfd7ec138656b78aca0ba4",
+      "size": 11476,
+      "uid": 1000
+    },
+    "review": {
+      "ctime_ns": 1792406134620390261,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 48016046,
+      "mode": "0o600",
+      "mtime_ns": 1792406134620390261,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild-readonly-1/resolved15-execution-review.json",
+      "sha256": "f81d0f7cc25a93ea51c5ebcad72d5fd240a142bb9bce24b93ce81c3367d3091f",
+      "size": 1112,
+      "uid": 1000
+    },
+    "sources": [
+      {
+        "ctime_ns": 1792405834947550664,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 48015925,
+        "mode": "0o600",
+        "mtime_ns": 1792405834947550664,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/observe_remaining_postbuild.py",
+        "sha256": "c5c5928ecca78baf5defaf771260ba3d878d71b219d55cc4ec2dacab680b2572",
+        "size": 11490,
+        "uid": 1000
+      },
+      {
+        "ctime_ns": 1792405031597086279,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 48015327,
+        "mode": "0o600",
+        "mtime_ns": 1792405031597086279,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild_future_facts.py",
+        "sha256": "4988980b17c4257751ed50295edc54efc835d686b6470b5d56304d65a343d494",
+        "size": 9954,
+        "uid": 1000
+      }
+    ],
+    "status": "PASS_ALL14_DECLARED_COMPLETION_CONTRACTS_FD_AND_HASH_JOINS_ONLY"
+  },
+  "default_Rust_consumer": {
+    "actual_machine_named_callback_calls": false,
+    "argument_indices": {
+      "process_current_resource_set_bridge": 8,
+      "process_release_final_cleanup_bridge": 17,
+      "process_release_hash_detach_bridge": 9,
+      "process_release_sibling_detach_bridge": 10
+    },
+    "default_Rust_source": true,
+    "function": "release_process",
+    "machine_argument_slots_independently_decoded": false,
+    "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/materialized-source/kernel/rust/process_helpers.rs",
+    "retained_fullcrate_C109_provenance": {
+      "bytes": 7256,
+      "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-review-20261019-1/RETAINED-PREBUILD-ARTIFACT-ACCEPTANCE.json",
+      "sha256": "339d896be804e48fb9f373bbac5df8eaec1dfde381167a439a33f9c0101a04f7"
+    },
+    "sha256": "5da4ddd8bb92b99eed111600871b18457ed8b6c524786644966250a610decdfb"
+  },
+  "derived_pointer_windows": [
+    {
+      "address": 18446744073685366259,
+      "artifact": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/selected-release-process-linkage-correction-1/remaining-image-make-preparation/remaining-attempt-1/owner-work/output/build/kernel/mckernel.img",
+      "extent": 256,
+      "field": "file",
+      "tag": "image_RELEASE_TID_DEBUG"
+    },
+    {
+      "address": 18446744073685366295,
+      "artifact": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/selected-release-process-linkage-correction-1/remaining-image-make-preparation/remaining-attempt-1/owner-work/output/build/kernel/mckernel.img",
+      "extent": 64,
+      "field": "func",
+      "tag": "image_RELEASE_TID_DEBUG"
+    },
+    {
+      "address": 18446744073685366259,
+      "artifact": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/selected-release-process-linkage-correction-1/remaining-image-make-preparation/remaining-attempt-1/owner-work/output/build/kernel/mckernel.img",
+      "extent": 256,
+      "field": "file",
+      "tag": "image_REPLACE_TID_DEBUG"
+    },
+    {
+      "address": 18446744073685366326,
+      "artifact": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/selected-release-process-linkage-correction-1/remaining-image-make-preparation/remaining-attempt-1/owner-work/output/build/kernel/mckernel.img",
+      "extent": 64,
+      "field": "func",
+      "tag": "image_REPLACE_TID_DEBUG"
+    }
+  ],
+  "descriptors": {
+    "image_RELEASE_TID_DEBUG": {
+      "address": 18446744073685243904,
+      "bytes_hex": "f3f58efeffffffff17f68efeffffffff00000000000000006f2c000000000000",
+      "flags": 0,
+      "fmt_null": true,
+      "line": 11375,
+      "ndx": 3,
+      "pointer_encoding": "ACTUAL_LINKED_NONZERO_POINTERS",
+      "size": 32,
+      "symbol": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust15process_helpers17RELEASE_TID_DEBUG"
+    },
+    "image_REPLACE_TID_DEBUG": {
+      "address": 18446744073685243936,
+      "bytes_hex": "f3f58efeffffffff36f68efeffffffff0000000000000000fc2c000000000000",
+      "flags": 0,
+      "fmt_null": true,
+      "line": 11516,
+      "ndx": 3,
+      "pointer_encoding": "ACTUAL_LINKED_NONZERO_POINTERS",
+      "size": 32,
+      "symbol": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust15process_helpers17REPLACE_TID_DEBUG"
+    },
+    "rust_RELEASE_TID_DEBUG": {
+      "address": 0,
+      "bytes_hex": "0000000000000000000000000000000000000000000000006f2c000000000000",
+      "flags": 0,
+      "fmt_null": true,
+      "line": 11375,
+      "ndx": 3895,
+      "pointer_encoding": "UNAPPLIED_ET_REL_ZERO_RELOCATION_PLACEHOLDERS",
+      "size": 32,
+      "symbol": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust15process_helpers17RELEASE_TID_DEBUG"
+    },
+    "rust_REPLACE_TID_DEBUG": {
+      "address": 0,
+      "bytes_hex": "000000000000000000000000000000000000000000000000fc2c000000000000",
+      "flags": 0,
+      "fmt_null": true,
+      "line": 11516,
+      "ndx": 3897,
+      "pointer_encoding": "UNAPPLIED_ET_REL_ZERO_RELOCATION_PLACEHOLDERS",
+      "size": 32,
+      "symbol": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust15process_helpers17REPLACE_TID_DEBUG"
+    }
+  },
+  "independent_accepted_data_projection": {
+    "actual_corrected_source": {
+      "bytes": 18439,
+      "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/facts-correction-1/postbuild_future_facts_corrected.py",
+      "sha256": "380e4d8c7ac1360a2694a34cb037c748bdaa31948da7948686add983f5b825fe"
+    },
+    "backdated_authority": false,
+    "independent_acceptance": {
+      "bytes": 7375,
+      "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-review-20261019-1/REMAINING-ACTUAL-SAVED-FACTS-ACCEPTANCE.json",
+      "sha256": "e94326ac8d2e5a80404570ac6a90430a798422d740def02f178d345241ec8953"
+    },
+    "kind": "REVIEW_ACCEPTED_EXECUTED_VALUES_NO_PRODUCER_OR_OBSERVATION_REPLAY",
+    "original_candidate": {
+      "bytes": 71717,
+      "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/facts-correction-1/actual-saved-capture-fixture-1/candidate-facts.json",
+      "sha256": "3b950abd7201a56cc947b247face0ea28e6ffbdfac8400897f94c095b199dfc9"
+    },
+    "original_candidate_status": "CANDIDATE_UNREVIEWED_ADDITIVE_MECHANICAL_FACTS",
+    "original_observation_producer_identity_preserved": true,
+    "review_timestamp": "2026-10-19T10:54:46.021581+00:00"
+  },
+  "linked_descriptor_string_evidence": {
+    "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-review-20261019-1/REMAINING-LINKED-DESCRIPTOR-STRING-WINDOWS.json",
+    "sha256": "bf706ce70f2ca924432e440259f5649467ba04b3e6d55892e7326df43134c2ff"
+  },
+  "object_descriptor_relocation_evidence": {
+    "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-review-20261019-1/REMAINING-RUST-DESCRIPTOR-RELOCATION-ANALYSIS.json",
+    "sha256": "5dabcf15ede97bbd022a321911542c9b8afb87323b6e3c6a735b2d5eec3231a6"
+  },
+  "old_four_leaf_facts": {
+    "native_acceptance": false,
+    "status": "PASS_OLD_FOUR_LEAF_MECHANICAL_FACTS_FROM_THIS_FIFTEEN_CAPTURE_SET"
+  },
+  "original_full_syscall_DWARF_gap": "OPEN_NO_REPLAY_NO_WAIVER",
+  "original_receipt_producer": {
+    "bytes": 9954,
+    "path": "/home/holden/mckernel-work/host-preparation/future-four-callback-compiler-preparation-20261019-1/terminal-preparation-1/remaining-only-late-binding-1/postbuild_future_facts.py",
+    "sha256": "4988980b17c4257751ed50295edc54efc835d686b6470b5d56304d65a343d494"
+  },
+  "pending": [
+    "four actual image file/func pointer windows",
+    "independent canonical/physical/native acceptance"
+  ],
+  "production_or_native_acceptance": false,
+  "schema": "mckernel.future-four-callback.postbuild-additive-facts.v1",
+  "status": "PASS_ADDITIVE_MECHANICAL_FACTS_ONLY"
+}

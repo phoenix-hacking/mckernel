@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "case_id": "signal.alternate-repeat",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "wait_status": {
+    "kind": "exited",
+    "code": 0
+  },
+  "stdout": {
+    "kind": "exact-line-prefixes",
+    "lines": [
+      "handler=1",
+      "delivery=16 alt_hits=16"
+    ]
+  },
+  "stderr": {
+    "kind": "exact-bytes",
+    "hex": ""
+  },
+  "input_fixture": {
+    "repeat_count": 16,
+    "stack_bytes": 65536,
+    "environment": {
+      "LANG": "C",
+      "LC_ALL": "C",
+      "TZ": "UTC"
+    }
+  },
+  "relational_assertions": [
+    "Exactly 16 SIGUSR1 deliveries must occur",
+    "Each delivery handler must run on alternate stack",
+    "No handler miss or fallback to default stack allowed"
+  ],
+  "unresolved_expectations": [
+    "Output line order may vary while still satisfying handler count and alternate-stack coverage"
+  ],
+  "max_question_for_reviewer": "Should alternate-stack verification be based on exact address-range checks or higher-level API state assertions only?"
+}

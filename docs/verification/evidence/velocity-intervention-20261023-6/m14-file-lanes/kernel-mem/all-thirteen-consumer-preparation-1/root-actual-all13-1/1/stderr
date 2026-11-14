@@ -1,0 +1,7 @@
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/all-thirteen-consumer-preparation-1/fixture/fixture.c: In function ‘deliver’:
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/all-thirteen-consumer-preparation-1/fixture/fixture.c:57:2: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+   57 |  if(ret||before<=0||ihk_atomic_read(&tlb_flush_vector[slot].pending)!=before-1)abort();++decrements;
+      |  ^~
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/all-thirteen-consumer-preparation-1/fixture/fixture.c:57:88: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+   57 |  if(ret||before<=0||ihk_atomic_read(&tlb_flush_vector[slot].pending)!=before-1)abort();++decrements;
+      |                                                                                        ^~

@@ -1,0 +1,27 @@
+name: Native Rust host modules exact Rocky runtime PR capture
+
+on:
+  pull_request:
+    branches: [development]
+    paths:
+      - .gitmodules
+      - .github/workflows/native-rust-host-modules-exact-*.yml
+      - host-kernel/contracts/*.json
+      - host-kernel/kbuild/**
+      - host-kernel/native-rust/**
+      - host-kernel/reference/**
+      - host-kernel/rocky/**
+      - ihk
+      - scripts/**
+
+permissions:
+  contents: read
+
+jobs:
+  exact-runtime:
+    name: Capture exact lifecycle in QEMU (credit forbidden)
+    if: >-
+      ${{ github.event.pull_request.head.repo.full_name == github.repository }}
+    uses: ./.github/workflows/native-rust-host-modules-exact-runtime.yml
+    with:
+      validation_sha: ${{ github.event.pull_request.head.sha }}

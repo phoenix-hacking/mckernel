@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "queue_run_id": "ultra-handoff-1",
+  "queue_sha256": "ba6c560a4b144250c3bba7194422653b1b87e18c2444d5faeaf96cf76e449b96",
+  "packet_id": "packet-041",
+  "packet_version": 1,
+  "context_sha256": "63328c4eeac0306d00a734ff15a0b4649e4d917a2e5dfc399d531368eef9027b",
+  "started_utc": "2026-09-09T11:04:00Z",
+  "finished_utc": "2026-09-09T11:05:00Z",
+  "draft_status": "DRAFTED_WITH_UNRESOLVED",
+  "cases": [
+    {
+      "case_id": "thread.semaphore",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/thread/thread.semaphore.c",
+      "oracle": "scripts/application-tests/oracles/thread.semaphore.json",
+      "changed_files": ["scripts/application-tests/cases/thread/thread.semaphore.c", "scripts/application-tests/oracles/thread.semaphore.json"],
+      "parameter_vectors": {"posted_tokens": [16], "consumer_waits": [16], "final_probe": ["sem_trywait"]},
+      "implemented_operations": ["producer sem_post loop", "consumer sem_wait loop", "final EAGAIN probe and count readback"],
+      "unresolved_oracle_notes": ["Semaphore sharing mode and numeric EAGAIN binding require Max review."],
+      "max_reviewer_question": "Confirm process-private semaphore count and final no-token EAGAIN state."
+    },
+    {
+      "case_id": "thread.detach",
+      "status": "DRAFTED_WITH_UNRESOLVED",
+      "fixture": "scripts/application-tests/cases/thread/thread.detach.c",
+      "oracle": "scripts/application-tests/oracles/thread.detach.json",
+      "changed_files": ["scripts/application-tests/cases/thread/thread.detach.c", "scripts/application-tests/oracles/thread.detach.json"],
+      "parameter_vectors": {"detach_state": ["PTHREAD_CREATE_DETACHED"], "worker_runs": [1], "retirement_deadline_seconds": [15]},
+      "implemented_operations": ["detached pthread creation", "worker TID capture", "completion handshake without join"],
+      "unresolved_oracle_notes": ["TID/procfs retirement must be supplied by runner evidence; fixture does not join the detached worker."],
+      "max_reviewer_question": "Confirm detached TID and procfs retirement evidence is required after payload completion."
+    }
+  ],
+  "changed_files_with_sha256": [
+    {"path": "scripts/application-tests/cases/thread/thread.semaphore.c", "sha256": "201cec686a467c62acc1874017196134bb3074c88ce0268863e4a782ddbf7581"},
+    {"path": "scripts/application-tests/oracles/thread.semaphore.json", "sha256": "7336687360813102154127cadb91cb4f4632edb514e5298b42e05b46e27f4f60"},
+    {"path": "scripts/application-tests/cases/thread/thread.detach.c", "sha256": "325da32b0f0628a68f76f2566b0e0a1cfaef6d05f5e2ad58cb2e5109f7c41958"},
+    {"path": "scripts/application-tests/oracles/thread.detach.json", "sha256": "58e106157b56f5c39583597e3b0c5cb353f3ee4ddd050414673961ec8165f898"},
+    {"path": "docs/verification/evidence/application-drafts-20260909/ultra-handoff-1/packet-041/context.json", "sha256": "63328c4eeac0306d00a734ff15a0b4649e4d917a2e5dfc399d531368eef9027b"}
+  ],
+  "commands_and_outcomes": [
+    {"command": "python3 -B scripts/application-tests/validate.py --packet scripts/application-tests/packets/packet-041.json --emit-context /tmp/application-packet-041-context-20260909-1.json", "outcome": "PASS; planning metadata only; runtime_authorized=false"},
+    {"command": "python3 -m json.tool packet-041/report.json", "outcome": "PASS"},
+    {"command": "git diff --check", "outcome": "PASS"}
+  ],
+  "unresolved_oracles": ["Semaphore count and detached-thread retirement cases need final native ABI, runner-trace, lifetime, and canonical record review."],
+  "blocked_execution_capabilities": ["current-inputs", "runtime-transport-fault-injection", "runner-contract"],
+  "first_failure_event": null,
+  "max_escalation": ["Review semaphore token accounting and EAGAIN", "Require detached TID/procfs retirement traces"],
+  "next_packet_id": "packet-042"
+}

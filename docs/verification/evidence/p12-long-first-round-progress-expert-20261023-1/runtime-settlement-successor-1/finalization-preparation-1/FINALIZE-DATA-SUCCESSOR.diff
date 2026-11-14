@@ -1,0 +1,37 @@
+--- acceptedRT6C41recipe
++++ settlement-data-successor-null-query-notexecuted
+@@ -1,9 +1,9 @@
+ from pathlib import Path
+ import importlib.util,json,os,sys,time
+-D=Path('/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk6-successor-1')
++D=Path('/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1')
+ assert sys.version_info[:3]==(3,9,12) and os.getuid()==os.geteuid()==1000
+ s=importlib.util.spec_from_file_location('actual_selected_production_transport',D/'source/long_transport.py');g=importlib.util.module_from_spec(s);s.loader.exec_module(g)
+-assert g.digest(g.stable(D/'source/long_transport.py'))=='93aa1d942e14b7fab5c77138b4bf40a8b9b99e9848119cd4f96214a5fc3f8636'
++assert g.digest(g.stable(D/'source/long_transport.py'))=='394e91d91d96d4edebf7f85e320a64dbe4afd81664bd7e8775e3606fa99c3cd1'
+ # Authenticated readback exists ONLY in repository; no private-copy prerequisite.
+ assert len(sys.argv)==6
+ query=Path(sys.argv[4]);querysha=sys.argv[5];qraw=g.stable(query);assert len(querysha)==64 and g.digest(qraw)==querysha;q=json.loads(qraw);assert q['status']=='PASS_FRESH_READ_ONLY_P12_LONG_ADMISSION'
+@@ -16,18 +16,18 @@
+ payloadraw=g.stable(payloadpath);assert g.digest(payloadraw)==payloadsha;value=json.loads(payloadraw);assert 'independent_review' not in value and g.canonical(value)==payloadraw and payloadraw.endswith(b'\n')
+ review=json.loads(g.stable(reviewpath));assert set(review)=={'status','reviewer','implementation_ownership','payload_sha256'} and review['status']=='PASS' and review['implementation_ownership'] is False and review['reviewer']!=value['author'] and review['payload_sha256']==g.digest(payloadraw)
+ assert value['profile']==g.TRANSPORT and value['storage_admission']==q['observations']['admission'] and value['boot_id']==Path('/proc/sys/kernel/random/boot_id').read_text().strip()
+-assert value['nonce']=='5603c55a294240fdb86c3613ec42e293' and value['attempt_parent']=='/home/holden/mckernel-work/native-runs/l12d1/p' and value['manifest']=={'path':'/home/holden/mckernel-work/scratch/p12s6l1/m.json','sha256':'2f4c5c6dab2dcc5993df805da4d4c57c1e8d39c7ac2b4118b59ad578cd9c5c57'}
++assert value['nonce']=='221b6d10cca3426096dce479aba205b0' and value['attempt_parent']=='/home/holden/mckernel-work/native-runs/l12e1/p' and value['manifest']=={'path':'/home/holden/mckernel-work/scratch/p12s6l2/m.json','sha256':'33eb6e9a08be55651d60e4fb786ac2ccd5dfc476ef611b7fe0be804477403390'}
+ now=time.time();assert now<=value['expires_unix']<=now+600 and value['execution_count']==1
+-value['independent_review']=review;raw=g.canonical(value);release=Path('/home/holden/mckernel-work/scratch/p12s6l1/r.json');exclusive(release,raw);release_sha=g.digest(raw)
++value['independent_review']=review;raw=g.canonical(value);release=Path('/home/holden/mckernel-work/scratch/p12s6l2/r.json');exclusive(release,raw);release_sha=g.digest(raw)
+ # No clock or boot override: full unmodified production validation on published bytes.
+ validated=g.validate_release(str(release),release_sha,value['manifest']['path'],value['nonce'],value['attempt_parent'])
+ req=json.loads(g.stable(D/'CAPTURE-REQUEST.PROTOTYPE.NOT-EXECUTABLE.json'));req['long_profile_release']={'path':str(release),'sha256':release_sha};req['argv'][req['argv'].index('--long-profile-release-sha256')+1]=release_sha;req['status']='EXACT_IMMUTABLE_REQUEST_CONDITIONED_ON_APPROVED_PAYLOAD_AND_REALCLOCK_CONSUMER';request_raw=g.canonical(req);exclusive(D/'CAPTURE-REQUEST.json',request_raw);request_sha=g.digest(request_raw)
+ # Mandatory actual published-request consumer BEFORE any controller invocation.
+-consumer=D/'controller_pre_effect_consumer.py';assert g.digest(g.stable(consumer))=='04b60587d7cf1f72627d0d2f76da202d7144ab1cd421e071d8ccf1194f3e10ad'
++consumer=D/'controller_pre_effect_consumer.py';assert g.digest(g.stable(consumer))=='a7554d12bc00458f3cc644e0e1213cc182482a9a972d01b70156460b8d90ac6b'
+ s=importlib.util.spec_from_file_location('reviewed_actual_published_request_pre_effect_consumer',consumer);p=importlib.util.module_from_spec(s);s.loader.exec_module(p)
+ prior_argv=sys.argv;sys.argv=[str(consumer),str(D/'CAPTURE-REQUEST.json'),request_sha]
+ try:p.main()
+ finally:sys.argv=prior_argv
+ argv=json.loads(g.stable(D/'finalization-preparation-1/ROOT-ARGV.PROTOTYPE.NOT-EXECUTABLE.json'));argv[-1]=request_sha;exclusive(D/'ROOT-ARGV.FINAL.NOT-EXECUTED.json',g.canonical(argv))
+-result={'scope':'Functional OS/apps and Rust/assembly migration only; no security testing.','status':'PASS_PUBLISHED_FINAL_SERIALIZATION_AND_FULL_REALCLOCK_RELEASE_CONSUMER','payload_sha256':g.digest(payloadraw),'release_path':str(release),'release_sha256':release_sha,'request_path':str(D/'CAPTURE-REQUEST.json'),'request_sha256':request_sha,'root_argv_path':str(D/'ROOT-ARGV.FINAL.NOT-EXECUTED.json'),'expires_unix':validated['expires_unix'],'independent_review_source':str(reviewpath),'native_invoked':False,'actual_published_request_pre_effect_consumer_sha256':'04b60587d7cf1f72627d0d2f76da202d7144ab1cd421e071d8ccf1194f3e10ad','actual_published_request_pre_effect_consumer':'PASS_ACTUAL_FINAL_SERIALIZED_REQUEST_PRE_EFFECT_GUARDS'}
++result={'scope':'Functional OS/apps and Rust/assembly migration only; no security testing.','status':'PASS_PUBLISHED_FINAL_SERIALIZATION_AND_FULL_REALCLOCK_RELEASE_CONSUMER','payload_sha256':g.digest(payloadraw),'release_path':str(release),'release_sha256':release_sha,'request_path':str(D/'CAPTURE-REQUEST.json'),'request_sha256':request_sha,'root_argv_path':str(D/'ROOT-ARGV.FINAL.NOT-EXECUTED.json'),'expires_unix':validated['expires_unix'],'independent_review_source':str(reviewpath),'native_invoked':False,'actual_published_request_pre_effect_consumer_sha256':'a7554d12bc00458f3cc644e0e1213cc182482a9a972d01b70156460b8d90ac6b','actual_published_request_pre_effect_consumer':'PASS_ACTUAL_FINAL_SERIALIZED_REQUEST_PRE_EFFECT_GUARDS'}
+ exclusive(D/'ACTUAL-FINAL-SERIALIZATION-AND-REALCLOCK-CONSUMER.json',g.canonical(result));print(json.dumps(result))

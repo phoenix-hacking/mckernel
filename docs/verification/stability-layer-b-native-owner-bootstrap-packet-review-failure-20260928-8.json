@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "record_kind": "layer_b_native_owner_bootstrap_packet_review",
+  "recorded_utc": "2026-09-28T08:53:00Z",
+  "status": "FAIL_BOOTSTRAP_PACKET",
+  "packet_path": "docs/verification/stability-layer-b-native-owner-bootstrap-packet-20260928-8.md",
+  "packet_sha256": "3f8f363fe5e7086b027e7814ce98c7b715f3978981ff1e71b2234f0108bf0ec9",
+  "findings": [
+    "Command-line -D_GNU_SOURCE conflicts with the reviewed source definition under Werror.",
+    "The transient service does not install the declared sanitized environment or working directory.",
+    "Successful units can unload before InvocationID/status/ControlGroup capture without RemainAfterExit.",
+    "Kill syntax is malformed and start/show/stop/kill client operations lack complete bounds.",
+    "LD_TRACE_LOADED_OBJECTS is applied to the ldd shell interpreter rather than providing static artifact inspection.",
+    "Consumed libc/Linux headers, architecture headers, startup/support objects and pthread/link inputs are not completely bound."
+  ],
+  "compilation_released": false,
+  "owner_execution_released": false,
+  "acceptance_credit": false,
+  "next": "Apply one consolidated additive correction and obtain independent review before any compiler or systemd command."
+}

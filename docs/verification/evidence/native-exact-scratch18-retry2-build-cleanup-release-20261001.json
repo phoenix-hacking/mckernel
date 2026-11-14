@@ -1,0 +1,62 @@
+{
+  "schema": "mckernel.native-exact-scratch18-retry2-build-cleanup-release.v1",
+  "recorded_at": "2026-10-01T11:31:26-07:00",
+  "status": "PASS_EXECUTION_RELEASE_PENDING_INDEPENDENT_REVIEW",
+  "scope": "One resumable retirement of the exact successful scratch18 retry2 terminal container and durable archival/release of its two exact ownership records.",
+  "source_commit": "f1d7721cd35d4b5bb69862c8a90db51b031d2ecc",
+  "fetched_ref": "refs/remotes/origin/codex/local-native-staging-repair",
+  "source": {
+    "path": "docs/verification/evidence/native-exact-scratch18-retry2-build-cleanup-20261001.py",
+    "sha256": "01e24b5b5b5a1c69d3c512d196862418f3f4e28d2295a06132aad81795ce3b8a",
+    "tests_path": "scripts/tests/test_native_exact_scratch18_retry2_build_cleanup_20261001.py",
+    "tests_sha256": "337819de6af63b34859c4842daf0c38aae0c4542d702af59f3817c198d5f8381",
+    "tests": "PASS 40/40 Python 3.8",
+    "independent_source_review": "PASS_PUBLICATION_AND_LATER_SEPARATELY_RELEASED_EXECUTION"
+  },
+  "validate_only": {
+    "command": ["taskset", "-c", "6,7", "prlimit", "--as=3221225472", "--", "/usr/bin/python3.8", "-B", "/home/holden/mckernel/docs/verification/evidence/native-exact-scratch18-retry2-build-cleanup-20261001.py"],
+    "result": "PASS_VALIDATE_ONLY",
+    "container_present": true,
+    "events": 0,
+    "terminal": false,
+    "fresh_transaction_paths_absent_after_validation": true
+  },
+  "target": {
+    "candidate_sha": "89ab5c555aac9177a789efc67ddc775dacb25d6d",
+    "container_id": "3af1e30c1e2db5b868e5b9f0d235426e128ccafe6b6193c1de54f44fafdee0a9",
+    "container_name": "mckernel-exact-4192f858907f4fd2add8871fee8cf750",
+    "owner_nonce": "51fc08b654d644478765e9f28d1807eb",
+    "owner_pid": 3459677,
+    "owner_starttime": "108526336",
+    "owner_pid_absent": true,
+    "state": "exited",
+    "exit_code": 0,
+    "oom_killed": false
+  },
+  "ownership_records": {
+    "operational_exclusion": {"path": "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch18.json", "device_inode": "1831:57646", "size": 269, "sha256": "207f2d4f77542dae9db5dc8210a921cc574db51e6720d454231a49591011cf48"},
+    "shared_heavy_lock": {"path": "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock", "device_inode": "1831:57645", "size": 269, "sha256": "2ccb8ad7b12b55e555cf053d1051c5b33d5893e1ae28e10f70f3d9a3f7b44ab4"},
+    "lease_absent": true
+  },
+  "resources": {
+    "host_free_bytes": 39935922176,
+    "scratch_free_bytes": 34921132032,
+    "memory_available_bytes": 23232983040,
+    "host_floor_bytes": 17179869184,
+    "scratch_floor_bytes": 12884901888
+  },
+  "execution": {
+    "invocations": 1,
+    "command": ["taskset", "-c", "6,7", "prlimit", "--as=3221225472", "--", "/usr/bin/python3.8", "-B", "/home/holden/mckernel/docs/verification/evidence/native-exact-scratch18-retry2-build-cleanup-20261001.py", "--execute"],
+    "preconditions": [
+      "release commit and exact source/tests hashes remain fetched",
+      "real validate-only immediately re-passes with events zero and target present",
+      "container and both ownership record identities remain exact",
+      "mutex, plan, journal and capture paths remain absent before the sole invocation",
+      "no concurrent project build, image, guest or cleanup publisher exists"
+    ],
+    "required_result": "PASS_EXECUTED terminal=true followed by PASS_TERMINAL_REPLAY",
+    "no_volume_or_prune_removal": true
+  },
+  "acceptance": "Cleanup execution release only. It grants no image, guest, application, production, or OS acceptance."
+}

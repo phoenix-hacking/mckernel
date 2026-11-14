@@ -1,0 +1,58 @@
+{
+  "status": "PASS_LIVE_PREFLIGHT",
+  "observed_at_epoch": 1792259859.3079495,
+  "head": "413462da2894cf928dcbd383964a34fa2e76f85d",
+  "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+  "mount": {
+    "target": "/home/holden/mckernel-work/scratch",
+    "source": "/dev/loop36",
+    "fstype": "ext4",
+    "options": "rw,nosuid,nodev,relatime",
+    "uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52",
+    "maj:min": "7:36"
+  },
+  "parent": {
+    "device": 1828,
+    "gid": 1000,
+    "inode": 114719,
+    "mode": "0o700",
+    "path": "/home/holden/mckernel-work/scratch/ndrc-b06ef44d",
+    "uid": 1000
+  },
+  "nonce": "b06ef44d54a14d588b43502d2478d1c8",
+  "parent_empty": true,
+  "evidence_sibling_absent": true,
+  "root_lock": [
+    27,
+    4
+  ],
+  "root_lock_free": true,
+  "host_available_bytes": 18117259264,
+  "scratch_available_bytes": 17121681408,
+  "cgroups": {
+    "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_period_us": "100000",
+    "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_quota_us": "400000",
+    "/sys/fs/cgroup/memory/mckernel-dev/memory.limit_in_bytes": "12884901888",
+    "/sys/fs/cgroup/memory/mckernel-dev/memory.use_hierarchy": "1",
+    "/sys/fs/cgroup/pids/mckernel-dev/pids.max": "512"
+  },
+  "sources": {
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_runner.py": "25ea29f9b07232094e9df1db6094ad0a85ec678281749a1d6998abb7c700d499",
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic.py": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e",
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_backend.py": "cd0759c926876483665065cb320b9daf7d7c6b32f56e561805b4b0343f60d614",
+    "/home/holden/mckernel/scripts/application-tests/qmp_capture.py": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741"
+  },
+  "shared_common_leases_absent": true,
+  "checked_absent_leases": [
+    "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock",
+    "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch18.json",
+    "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch18-image-1.json"
+  ],
+  "unix_monitor_endpoints": [
+    {
+      "encoded_bytes": 98,
+      "max_bytes": 107,
+      "path": "/home/holden/mckernel-work/scratch/ndrc-b06ef44d/attempt-b06ef44d54a14d588b43502d2478d1c8/qmp.sock"
+    }
+  ]
+}

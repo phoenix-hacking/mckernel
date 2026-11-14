@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "loader.static-startup",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/loader.static-startup"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["argc=1 argv0_present=1 lang=C marker=STATIC valid=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["The selected static ELF has no dynamic interpreter and starts with the exact argv/environment contract", "Static read-only data remains intact"],
+  "unresolved_expectations": ["Static toolchain availability and ELF interpreter absence require Max review."],
+  "max_question_for_reviewer": "Confirm the pinned static toolchain output is interpreter-free and its startup record is exact."
+}

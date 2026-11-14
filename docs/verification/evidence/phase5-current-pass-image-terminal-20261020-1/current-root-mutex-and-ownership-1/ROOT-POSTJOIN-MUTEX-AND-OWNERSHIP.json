@@ -1,0 +1,94 @@
+{
+  "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+  "build_status": "PASS",
+  "effects": "read-only stableFD records; same mutex temporarily held; no unlink/delete/signal",
+  "holder_pid": 2058491,
+  "mutex_acquired": true,
+  "mutex_identity": [
+    27,
+    4
+  ],
+  "mutex_released": true,
+  "observed_at": 1792502019.596634,
+  "original_guard_absent": true,
+  "record_release_complete": false,
+  "records": [
+    {
+      "full_descriptor": {
+        "bytes": 269,
+        "ctime_ns": 1792501157166033847,
+        "device": 1828,
+        "gid": 1000,
+        "inode": 116148,
+        "mode": "0o600",
+        "mtime_ns": 1792501157166033847,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock",
+        "sha256": "644e94db3461aab7d449a9c5f9b306a8a7a6f27ea04ffb3d0fddb3a38b25eca3",
+        "uid": 1000
+      },
+      "identity": [
+        1828,
+        116148,
+        1000,
+        1000,
+        33152,
+        269,
+        1,
+        1792501157166033847,
+        1792501157166033847
+      ],
+      "path": "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock",
+      "record": {
+        "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+        "device": 1828,
+        "inode": 116148,
+        "kind": "image",
+        "pid": 2049400,
+        "request_sha256": "d490ba0d062ba5faadaa24152f50c4484640096cfa247425b9b39670780478ed",
+        "schema": "mckernel.heavy-operation.v1",
+        "starttime": "29860024"
+      },
+      "role": "shared",
+      "sha256": "644e94db3461aab7d449a9c5f9b306a8a7a6f27ea04ffb3d0fddb3a38b25eca3"
+    },
+    {
+      "full_descriptor": {
+        "bytes": 272,
+        "ctime_ns": 1792501224856189692,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 48383187,
+        "mode": "0o600",
+        "mtime_ns": 1792501224856189692,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/panic-free-full-image-correction-1/full-image-attempt-2/common-exclusion.json",
+        "sha256": "0b3f33b87f87142d31dc82fecf367fd8c58fca4f6d71c354f5e44df076f02b89",
+        "uid": 1000
+      },
+      "identity": [
+        66306,
+        48383187,
+        1000,
+        1000,
+        33152,
+        272,
+        1,
+        1792501224856189692,
+        1792501224856189692
+      ],
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/panic-free-full-image-correction-1/full-image-attempt-2/common-exclusion.json",
+      "record": {
+        "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+        "dev": 66306,
+        "inode": 48383187,
+        "pid": 2049400,
+        "request_sha256": "4e11a0b1c5e6936f1fd1a11a2246c4d991af200658e92b7309a1523c55984687",
+        "schema": "mckernel.native-exact-operational-exclusion.v1",
+        "starttime": "29860024"
+      },
+      "role": "common",
+      "sha256": "0b3f33b87f87142d31dc82fecf367fd8c58fca4f6d71c354f5e44df076f02b89"
+    }
+  ]
+}

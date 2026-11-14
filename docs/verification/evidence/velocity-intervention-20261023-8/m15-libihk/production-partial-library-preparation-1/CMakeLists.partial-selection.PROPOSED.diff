@@ -1,0 +1,33 @@
+--- canonical/ihk/linux/user/CMakeLists.txt
++++ PROPOSED-only-qualified-partial-Rust-selection
+@@ -18,10 +18,28 @@
+ endif()
+ message("PAGE_SIZE: ${PAGE_SIZE}")
+ 
+-add_library(ihklib SHARED ihklib.c)
++# Private partial Rust selection only: remaining C APIs stay explicit debt.
++if(WITH_KRM OR ENABLE_FUGAKU_HACKS OR NOT "${ARCH}" STREQUAL "x86_64" OR NOT "${PAGE_SIZE}" STREQUAL "4096")
++    message(FATAL_ERROR "Qualify libihk Rust CPU/memory profile before selecting this configuration")
++endif()
++find_program(IHKLIB_RUSTC rustc REQUIRED)
++set(IHKLIB_RUST_ARCHIVE "${CMAKE_CURRENT_BINARY_DIR}/rust/libihklib_cpu_memory.a")
++add_custom_command(OUTPUT "${IHKLIB_RUST_ARCHIVE}"
++    COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/rust"
++    COMMAND ${IHKLIB_RUSTC} --edition=2021 --crate-name ihklib_cpu_memory --crate-type staticlib
++        -C panic=abort -C codegen-units=1 -C relocation-model=pic -C opt-level=2
++        -o "${IHKLIB_RUST_ARCHIVE}" "${CMAKE_CURRENT_SOURCE_DIR}/rust/libihk_memory_chain.rs"
++    DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/rust/libihk_memory_chain.rs"
++        "${CMAKE_CURRENT_SOURCE_DIR}/rust/ihklib_memory_os_dependencies.rs"
++    VERBATIM)
++add_custom_target(ihklib_rust_cpu_memory DEPENDS "${IHKLIB_RUST_ARCHIVE}")
++add_library(ihklib SHARED ihklib.remaining.c)
++add_dependencies(ihklib ihklib_rust_cpu_memory)
++
+ target_compile_definitions(ihklib PRIVATE -DPAGE_SIZE=${PAGE_SIZE})
+ SET_TARGET_PROPERTIES(ihklib PROPERTIES OUTPUT_NAME ihk)
+-target_link_libraries(ihklib ${LIBBFD})
++target_link_libraries(ihklib "${IHKLIB_RUST_ARCHIVE}" ${LIBBFD})
++set_property(TARGET ihklib APPEND_STRING PROPERTY LINK_FLAGS " -Wl,--gc-sections -Wl,-z,defs")
+ 
+ add_executable(ihkconfig ihkconfig.c)
+ set_property(TARGET ihkconfig PROPERTY POSITION_INDEPENDENT_CODE ON)

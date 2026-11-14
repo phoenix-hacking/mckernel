@@ -1,0 +1,301 @@
+2990
+            fork.reservation.state.request_abort(identity)?;
+        }
+        entry.syscalls.close().map_err(errno)?;
+    } else if stage != FORK_GUEST_DESTROYED_V1 { return Err(EINVAL); }
+    if !entry.needs_cleanup || entry.scheduled || entry.prepare.is_some()
+        || entry.procfs.is_some() || !entry.syscalls.drained()
+    { return Err(EBUSY); }
+    fork.reservation.state.revoke_drained(identity)?;
+    let first = fork.reservation.first.clone();
+    let value = fork.reservation.return_value;
+    let published = fork.reservation.return_published;
+    if stage == FORK_GUEST_DESTROYED_V1 {
+        fork.reservation.state.permit_guest_destroy(identity)?;
+        if !published || value != Some(super::application_abi::FORK_ABORT_RETURN_V1) { return Err(EBUSY); }
+        // Publication retained the authenticated full child key and terminal
+        // value. The parent's normally retired mailbox is no longer needed.
+        return Ok((None, child_index));
+    } else if published { return Err(EBUSY); }
+    let parent_index = slots.iter().position(|slot| slot.as_ref().is_some_and(|entry| entry.key().wire() == identity.parent)).ok_or(ENOENT)?;
+    if stage == FORK_HOST_REVOKED_V1 {
+        // Establish exact response ownership/unpublished state BEFORE any MM
+        // callback. AbortRequested/Quarantined freezes all its publication.
+        slots[parent_index].as_mut().unwrap().syscalls.check_fork_abort(
+            identity.worker, identity.delivery, &first, value,
+        ).map_err(errno)?;
+    }
+    Ok((Some(parent_index), child_index))
+}
+
+#[allow(dead_code)]
+impl Remote {
+    pub(crate) fn begin_fork_progress(&self, child: Token, identity: ForkIdentity, stage: u32) -> Result {
+        let mut slots = self.slots.lock();
+        fork_progress_in_slots(self.owner, &mut slots, child, identity, stage)?;
+        Ok(())
+    }
+
+    /// # Safety
+    /// A module-pinned, typed verifier just established the requested actual
+    /// alias/TLB or authenticated final in-band destructor proof for this key.
+    /// No verifier/callback/borrowed pointer escapes into Remote state.
+    pub(crate) unsafe fn finish_fork_progress(&self, child: Token, identity: ForkIdentity, stage: u32) -> Result {
+        use super::application_abi::{FORK_HOST_REVOKED_V1, FORK_ABORT_RETURN_V1};
+        let mut slots = self.slots.lock();
+        let (parent_index, child_index) = fork_progress_in_slots(self.owner, &mut slots, child, identity, stage)?;
+        if stage == FORK_HOST_REVOKED_V1 {
+            let parent_index = parent_index.ok_or(EIO)?;
+            let record = &slots[child_index].as_ref().unwrap().fork.as_ref().unwrap().reservation;
+            let first = record.first.clone();
+            let value = record.return_value;
+            slots[parent_index].as_mut().unwrap().syscalls.reconcile_fork_abort(
+                identity.worker, identity.delivery, &first, value,
+            ).map_err(errno)?;
+            let record = &mut slots[child_index].as_mut().unwrap().fork.as_mut().unwrap().reservation;
+            // One publication lock atomically commits the terminal negative
+            // metadata and its permission. No stale positive can pass between.
+            record.return_value = Some(FORK_ABORT_RETURN_V1);
+            if record.state.phase() == ForkPhase::Quarantined {
+                unsafe { record.state.reconciled_quarantined_host_revoke(identity) }?;
+            } else {
+                unsafe { record.state.host_revoked(identity, 0) }?;
+            }
+            drop(slots);
+            return Ok(());
+        }
+        let record = &mut slots[child_index].as_mut().unwrap().fork.as_mut().unwrap().reservation;
+        unsafe { record.state.guest_destroyed(identity) }?;
+        record.state.acknowledge_destroyed(identity)?;
+        // Exact final proof retires this never-scheduled reservation itself;
+        // ordinary CLEANUP must not send another destructor for the same child.
+        let retired = slots[child_index].take();
+        drop(slots);
+        // Structural PID/MM and retained Remote cycles drop outside all locks.
+        drop(retired);
+        Ok(())
+    }
+}
+}
+#[path="/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/sources/smp_fork_link.rs"] mod fork_link; pub(crate) use fork_link::PreparedLinkTicket;
+#[path="/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/fixture-ingress.rs"] mod fork_ingress;
+
+// Sole-thread setup of real mailboxes and real Memory response ownership.
+fn entry(pid:i32,scheduled:bool)->Entry{Entry{cleanup:Exchange::new(0,0,pid).unwrap(),owner_slot:0,owner_generation:2,scheduled,closed:false,needs_cleanup:false,quarantined:false,prepare:scheduled.then_some(()),fork:None,fork_ingress:None,syscalls:Mailbox::new().unwrap(),fork_prepared_parent_refs:0,procfs:None,retirement:None}}
+pub(crate) fn fixture(memory:&Arc<crate::smp_memory::storage::Memory>,request:Request)->(Arc<Remote>,Token,Token,u64,u64){
+ let mut p=entry(101,true);let c=entry(102,false);let w=p.syscalls.open_worker(200).unwrap();p.syscalls.admit(request,|r|memory.syscall(r)).unwrap();let(s,_)=p.syscalls.reserve(w).unwrap().unwrap();p.syscalls.copied(w,s,true).unwrap();let pt=p.key();let ct=c.key();
+ let remote=Arc::new(Remote{owner:memory.owner,slots:Mutex::new(vec![Some(p),Some(c)]),transport_failed:AtomicBool::new(false),release_token:Token::allocate().unwrap(),releases:Mutex::new(Mailbox::new().unwrap())},0).unwrap();(remote,pt,ct,w,s)
+
+5100
+    #[allow(non_upper_case_globals)] pub static mut init_pid_ns:()=();
+    pub unsafe fn get_task_pid(_: *mut(),_:u32)->*mut pid{2usize as*mut pid}
+    pub unsafe fn pid_nr_ns(_: *mut pid,_:*mut())->i32{102}
+    pub unsafe fn put_pid(_: *mut pid){}
+    #[allow(non_upper_case_globals)] pub const pid_type_PIDTYPE_TGID:u32=1;
+    pub unsafe fn get_pid_task(referenced_pid:*mut self::pid,_:u32)->*mut(){if referenced_pid.is_null(){ptr::null_mut()}else{1usize as*mut()}}
+    pub unsafe fn put_task_struct(_: *mut()){}
+
+    #[repr(C)] pub struct atomic_t { pub counter:i32 }
+    #[repr(C)] pub struct mm_fields { pub mm_count:atomic_t }
+    #[repr(C)] pub struct mm_union { pub __bindgen_anon_1:mm_fields,pub mm_users:atomic_t }
+    #[repr(C)] pub struct mm_struct { pub __bindgen_anon_1:mm_union, pub users:Cell<i32>, pub drops:Cell<usize> }
+    #[repr(C)] pub struct file { pub private_data:*mut c_void }
+    pub const VM_PFNMAP:u64=1024; pub const VM_DONTEXPAND:u64=2048; pub const VM_DONTDUMP:u64=4096;
+    #[repr(C)] pub struct geometry { pub vm_start:u64, pub vm_end:u64 }
+    #[repr(C)] pub struct fields { pub __bindgen_anon_1:geometry }
+    #[repr(C)] pub struct flags { pub __vm_flags:u64 }
+    #[repr(C)] pub struct vm_area_struct {
+        pub vm_mm:*mut mm_struct, pub vm_file:*mut file, pub vm_private_data:*mut c_void,
+        pub vm_ops:*const (), pub vm_pgoff:u64, pub __bindgen_anon_1:fields, pub __bindgen_anon_2:flags,
+        pub old_owner:*mut c_void, pub writing:bool, pub cleared:bool,
+    }
+    pub struct fault_fields { pub vma:*mut vm_area_struct, pub address:u64 }
+    pub struct vm_fault { pub __bindgen_anon_1:fault_fields, pub flags:u64 }
+    pub unsafe fn get_current()->*mut () { ptr::null_mut() }
+    pub unsafe fn get_task_mm(_: *mut ())->*mut mm_struct { MODEL.with(|m| { let mm=m.borrow().mm; unsafe { (*mm).__bindgen_anon_1.mm_users.counter+=1;(*mm).users.set((*mm).__bindgen_anon_1.mm_users.counter) }; mm }) }
+    pub unsafe fn mmput(mm:*mut mm_struct) { unsafe { (*mm).__bindgen_anon_1.mm_users.counter-=1;(*mm).users.set((*mm).__bindgen_anon_1.mm_users.counter) }; }
+    pub unsafe fn __mmdrop(mm:*mut mm_struct) { unsafe { (*mm).drops.set((*mm).drops.get()+1) }; }
+    pub unsafe fn find_vma(mm:*mut mm_struct, address:u64)->*mut vm_area_struct {
+        MODEL.with(|m| { let m=m.borrow(); assert!(m.locked); assert_eq!(mm,m.mm);
+            m.vmas.iter().copied().find(|v| unsafe { (**v).__bindgen_anon_1.__bindgen_anon_1.vm_end>address }).unwrap_or(ptr::null_mut()) })
+    }
+    pub unsafe fn zap_vma_ptes(vma:*mut vm_area_struct, first:u64, length:u64) {
+        MODEL.with(|m| { let mut m=m.borrow_mut(); assert!(m.locked);
+            for pointer in &m.vmas { unsafe { assert!((**pointer).writing); assert_eq!((**pointer).vm_private_data,(**pointer).old_owner); } }
+            unsafe { assert_eq!(first,(*vma).__bindgen_anon_1.__bindgen_anon_1.vm_start); assert_eq!(first+length,(*vma).__bindgen_anon_1.__bindgen_anon_1.vm_end); (*vma).cleared=true; }
+            m.events.push("zap"); })
+    }
+}
+struct Model { mm:*mut bindings::mm_struct, vmas:std::vec::Vec<*mut bindings::vm_area_struct>, locked:bool, valid:bool, events:std::vec::Vec<&'static str> }
+thread_local! { static MODEL: RefCell<Model> = RefCell::new(Model { mm:ptr::null_mut(),vmas:vec![],locked:false,valid:true,events:vec![] }); }
+#[no_mangle] unsafe extern "C" fn mckernel_inherited_mmap_write_lock(mm:*mut bindings::mm_struct) {
+    MODEL.with(|m| { let mut m=m.borrow_mut();crate::MM_ACTIVE.with(|a|assert!(!a.replace(true))); m.valid=m.valid&&m.mm==mm&&!m.locked; m.locked=true; m.events.push("lock"); });
+}
+#[no_mangle] unsafe extern "C" fn mckernel_inherited_mmap_write_unlock(mm:*mut bindings::mm_struct) {
+    MODEL.with(|m| { let mut m=m.borrow_mut(); m.valid=m.valid&&m.mm==mm&&m.locked; for v in &m.vmas { unsafe { (**v).writing=false; } } m.events.push("unlock"); m.locked=false;crate::MM_ACTIVE.with(|a|assert!(a.replace(false))); });
+crate::run_mm_unlock_hook();
+}
+#[no_mangle] unsafe extern "C" fn mckernel_inherited_vma_start_write(vma:*mut bindings::vm_area_struct) {
+    MODEL.with(|m| { let mut m=m.borrow_mut(); m.valid=m.valid&&m.locked&&unsafe{(*vma).vm_mm==m.mm}; unsafe { (*vma).writing=true; } m.events.push("write"); });
+}
+mod application_abi { pub(super) use crate::application_abi::*; }
+mod mcctrl_process {pub(super) use super::actual::ForkClaim;pub(super) use super::actual::completion::{ForkLinkBinding,BorrowedLinkSeal,ReferencedChildMm};}
+mod mcctrl_vm {pub(super) use super::actual::{ForkRevocation,ForkLinkReceipt};}
+mod wire {
+    pub fn put_word(b:&mut[u8],o:usize,v:u64)->Result<(),i32> { b[o..o+8].copy_from_slice(&v.to_le_bytes()); Ok(()) }
+    pub fn word(b:&[u8],o:usize)->Result<u64,i32> { Ok(u64::from_le_bytes(b[o..o+8].try_into().unwrap())) }
+}
+thread_local!{static CURRENT_PID:Cell<(i32,usize)>=const{Cell::new((102,2))};static USER_SPAN:Cell<(usize,usize)>=const{Cell::new((0,0))};}
+struct ProcessId{number:i32,identity:usize}
+impl ProcessId{fn current()->Result<Self>{CURRENT_PID.with(|p|{let(n,id)=p.get();Ok(Self{number:n,identity:id})})}fn same(&self,other:&Self)->bool{self.identity==other.identity}fn number(&self)->Result<i32>{if self.number>0{Ok(self.number)}else{Err(ESRCH)}}}
+struct UserSlice{address:usize,bytes:usize}
+impl UserSlice{fn new(address:usize,bytes:usize)->Self{Self{address,bytes}}fn reader(self)->Self{self}fn read_slice(self,output:&mut[u8])->Result{USER_SPAN.with(|s|{let(address,bytes)=s.get();if self.address!=address||self.bytes>bytes||output.len()!=self.bytes{return Err(EFAULT);}output.copy_from_slice(unsafe{std::slice::from_raw_parts(address as *const u8,self.bytes)});Ok(())})}}
+struct FixtureContext(i32);
+impl FixtureContext{fn as_ptr(&self)->*mut c_void{crate::provider_runtime::connection_context(self.0)}}
+struct Registration { fork_accepted:AtomicBool,context:FixtureContext,fork:Mutex<Option<actual::ForkClaim>>,slot:u32, generation:u64, pid:i32,physical:u64,calls:Cell<usize>,_pid:ProcessId,mapping:Mutex<Option<Arc<actual::Mirror>>>,armed:AtomicBool }
+fn registration(slot:u32,generation:u64,physical:u64)->Registration{let parent=physical==0x9000;Registration{fork_accepted:AtomicBool::new(false),context:FixtureContext(if parent{101}else{102}),fork:Mutex(RefCell::new(None)),slot,generation,pid:if parent{101}else{102},physical,calls:Cell::new(0),_pid:ProcessId{number:if parent{101}else{102},identity:if parent{1}else{2}},mapping:Mutex(RefCell::new(None)),armed:AtomicBool::new(false)}}
+impl Registration {
+    pub(super) fn same_generation(&self, other: &Self) -> bool {
+        self.slot == other.slot && self.generation != 0 && self.generation == other.generation
+    }
+
+6030
+        if context.accepted { return Ok(()); }
+        if !context.receipt.as_ref().is_some_and(|receipt| receipt.matches(identity)) {
+            return Err(EBUSY);
+        }
+        if context.registration.fork.lock().as_ref().map(ForkClaim::identity) != Some(identity) {
+            return Err(EACCES);
+        }
+        // No fallible work follows. Keep the full key for exact retry/cache
+        // reconciliation, and prevent ordinary CLEANUP from destroying twice.
+        context.registration.armed.store(false, Ordering::Release);
+        context.registration.fork_accepted.store(true, Ordering::Release);
+        context.accepted = true;
+        Ok(())
+    })();
+    result.map_or_else(|error| error.to_errno(), |()| 0)
+}
+
+
+}
+struct Scenario {
+    owner:Arc<VmaOwner>, parent:Arc<Mirror>, parent_registration:Arc<Registration>, child_registration:Arc<Registration>,
+    parent_vma:Box<bindings::vm_area_struct>, children:std::vec::Vec<Box<bindings::vm_area_struct>>,
+    file:Box<bindings::file>, parent_mm:Box<bindings::mm_struct>, child_mm:Box<bindings::mm_struct>,
+}
+fn mm()->Box<bindings::mm_struct> { Box::new(bindings::mm_struct { __bindgen_anon_1:bindings::mm_union {
+    __bindgen_anon_1:bindings::mm_fields { mm_count:bindings::atomic_t { counter:1 } },mm_users:bindings::atomic_t{counter:1} },users:Cell::new(1),drops:Cell::new(0) }) }
+fn count(mm:&bindings::mm_struct)->i32 { unsafe { AtomicI32::from_ptr(ptr::addr_of!(mm.__bindgen_anon_1.__bindgen_anon_1.mm_count.counter).cast_mut()) }.load(Ordering::SeqCst) }
+fn vma(mm:*mut bindings::mm_struct,file:*mut bindings::file,first:u64,last:u64,owner:Arc<VmaOwner>)->Box<bindings::vm_area_struct> {
+    let raw=Arc::into_raw(owner).cast_mut().cast();
+    Box::new(bindings::vm_area_struct {vm_mm:mm,vm_file:file,vm_private_data:raw,old_owner:raw,vm_ops:&VM_OPERATIONS.0,vm_pgoff:first/4096,
+        __bindgen_anon_1:bindings::fields {__bindgen_anon_1:bindings::geometry {vm_start:first,vm_end:last}},
+        __bindgen_anon_2:bindings::flags {__vm_flags:1024|2048|4096},writing:false,cleared:false})
+}
+impl Scenario {
+    fn new()->Self {
+        ALLOCATION.with(|a|a.set((0,0)));
+        let mut parent_mm=mm(); let mut child_mm=mm();
+        MODEL.with(|m|m.borrow_mut().mm=&mut *parent_mm);
+        let current=CurrentMm::get().unwrap();
+        let parent=Arc::new(Mirror {mm:MmIdentity::from_current(&current).unwrap(),start:0,end:0x8000,admission:AtomicBool::new(true),foreign_alias_seen:AtomicBool::new(false)},0).unwrap(); drop(current);
+        let parent_registration=Arc::new(registration(0,2,0x9000),0).unwrap();
+        let child_registration=Arc::new(registration(0,2,0x19000),0).unwrap();
+        *parent_registration.mapping.lock()=Some(parent.clone());
+        let owner=Arc::new(VmaOwner {registration:parent_registration.clone(),mirror:parent.clone()},0).unwrap();
+        let mut file=Box::new(bindings::file {private_data:ptr::null_mut()});
+        let parent_vma=vma(&mut *parent_mm,&mut *file,0,0x8000,owner.clone());
+        let children=vec![vma(&mut *child_mm,&mut *file,0,0x4000,owner.clone()),vma(&mut *child_mm,&mut *file,0x4000,0x8000,owner.clone())];
+        let mut scenario=Self {owner,parent,parent_registration,child_registration,parent_vma,children,file,parent_mm,child_mm};
+        scenario.install(); scenario
+    }
+    fn install(&mut self) { MODEL.with(|m|*m.borrow_mut()=Model {mm:&mut *self.child_mm,vmas:self.children.iter_mut().map(|v|&mut **v as *mut _).collect(),locked:false,valid:true,events:vec![]}); ALLOCATION.with(|a|a.set((0,0))); }
+    fn unchanged(&self, refs:usize) {
+        assert_eq!(Arc::strong_count(&self.owner),refs);
+        assert_eq!(count(&self.child_mm),1); assert_eq!(self.child_mm.users.get(),1);
+        for v in &self.children { assert_eq!(v.vm_private_data,v.old_owner); assert!(!v.cleared); }
+        MODEL.with(|m| { let m=m.borrow(); assert!(m.valid); assert!(!m.locked); assert!(!m.events.contains(&"write")); assert!(!m.events.contains(&"zap")); });
+    }
+    fn run(&self)->Result<Arc<Mirror>> { unsafe { Mirror::inherit_vmas(&self.parent,&self.parent_registration,self.child_registration.clone(),0,0x8000,|_| panic!("seal must not run on validation failure")) } }
+}
+impl Drop for Scenario { fn drop(&mut self) { unsafe { vma_close(&mut *self.parent_vma); for v in &mut self.children { vma_close(&mut **v); } } } }
+
+// The actual consumer callbacks validate all inherited VMAs and derive proofs;
+// callers can choose failures but never directly mint a seal or receipt.
+unsafe extern "C" fn ihk_os_application_abort_fork_payload_v1(scope:*mut crate::application_abi::ForkPayloadScopeV1)->i32{unsafe{crate::provider_runtime::abort_fork_payload_application(scope)}}
+unsafe extern "C" fn ihk_os_application_ready_fork_payload_v1(scope:*mut crate::application_abi::ForkPayloadScopeV1)->i32{unsafe{crate::provider_runtime::ready_fork_payload_application(scope)}}
+fn original_request(second:bool)->crate::Request{
+ let mut args=[0u64;6];unsafe{let request=guest_request();args.copy_from_slice(core::slice::from_raw_parts(request.add(24).cast::<u64>(),6))};if second{args[0]=1;args[1]=102;}
+ let response=if second{0x1c00000u64}else{0x1b00000};
+ let mut bytes=[0u8;128];bytes[8..12].copy_from_slice(&4i32.to_le_bytes());bytes[24..28].copy_from_slice(&0i32.to_le_bytes());bytes[32..36].copy_from_slice(&101i32.to_le_bytes());bytes[48..52].copy_from_slice(&101i32.to_le_bytes());bytes[52..56].copy_from_slice(&(if second{201i32}else{200}).to_le_bytes());bytes[56..64].copy_from_slice(&1u64.to_le_bytes());bytes[64..72].copy_from_slice(&56u64.to_le_bytes());for(n,a)in args.iter().enumerate(){bytes[72+n*8..80+n*8].copy_from_slice(&a.to_le_bytes());}bytes[120..128].copy_from_slice(&response.to_le_bytes());crate::Request::decode(&bytes,1).unwrap()
+}
+unsafe extern "C"{#[link_name="fork_carrier_guest_initialize"]fn guest_initialize()->i32;#[link_name="fork_carrier_guest_arena"]fn guest_arena()->*mut u8;#[link_name="fork_carrier_guest_arena_bytes"]fn guest_arena_bytes()->usize;#[link_name="fork_carrier_guest_request"]fn guest_request()->*const u8;#[link_name="fork_carrier_guest_accept"]fn guest_accept(stage:i32,result:i64)->i32;#[link_name="fork_carrier_guest_second_request"]fn guest_second_request()->i32;}
+struct Joined {mm:Scenario,process:Arc<Process>,connections:Option<crate::provider_runtime::Connections>,remote:crate::Arc<crate::Remote>,memory:crate::Arc<crate::smp_memory::storage::Memory>,parent:crate::Token,child:crate::Token,worker:u64,serial:u64}
+impl Joined {
+ fn new()->Self{
+  assert_eq!(unsafe{guest_initialize()},0);let mm=Scenario::new();CURRENT_PID.with(|p|p.set((102,2)));
+  let process=Arc::new(Process{pid:ProcessId{number:102,identity:2},registration:Mutex(RefCell::new(None))},0).unwrap();
+  let memory=crate::smp_memory::storage::new_fixture(unsafe{guest_arena()},unsafe{guest_arena_bytes()});let(remote,parent,child,worker,serial)=crate::smp_application::fixture(&memory,original_request(false));let mut connections=crate::provider_runtime::connections(remote.clone(),parent,child);let(p,c)=connections.raw();crate::provider_runtime::set_connection_contexts(p,c);
+  Self{mm,process,connections:Some(connections),remote,memory,parent,child,worker,serial}
+ }
+ fn adopt(&mut self)->i32{
+  let mut attempt=ForkAttempt{process:&self.process,parent:&self.mm.parent_registration,child:&self.mm.child_registration,parent_mirror:&self.mm.parent,descriptor:ForkDescriptor{root:0x19000,start:0,length:0x8000},called:false,published:false};
+  let(p,c)=self.connections.as_mut().unwrap().raw();let geometry=crate::application_abi::ForkGeometryV1{root:0x19000,start:0,length:0x8000};
+  let rc=unsafe{crate::provider_runtime::adopt_fork_application_v2(p,c,&geometry,crate::provider_runtime::consumer_module(),Some(completion::fork_proof_initial_construct),ptr::from_mut(&mut attempt).cast(),Some(completion::fork_proof_destroy),Some(completion::fork_verify_host),Some(completion::fork_proof_accept),Some(completion::fork_verify_link),Some(fork_adopt_consumer),ptr::from_mut(&mut attempt).cast())};
+  if rc==0{assert!(attempt.called&&attempt.published);}rc
+ }
+ fn first_return(&mut self){assert_eq!(crate::smp_application::return_actual(&self.remote,self.parent,self.worker,self.serial,0,102),Ok(()));assert_eq!(self.remote.publish_syscall(self.parent,0,|_|Ok(()),||Ok(())),Ok(true));assert_eq!(unsafe{guest_accept(1,102)},0);assert_eq!(crate::smp_memory::storage::claims(&self.memory),(0,1));}
+ fn link(&mut self)->(i32,u64,u64){assert_eq!(unsafe{guest_second_request()},0);let(w,s)=crate::smp_application::delivered(&self.remote,self.parent,&self.memory,original_request(true));let(p,_)=self.connections.as_mut().unwrap().raw();let result=unsafe{crate::provider_runtime::prepare_fork_link_application(p,w,s,0,0)};(result,w,s)}
+ fn retain(mut self){let connections=self.connections.take().unwrap();crate::provider_runtime::retain_connections(connections);std::mem::forget(self);}
+}
+#[test]fn actual_durable_parent_pin_survives_positive_first_ret_failed_link_and_parent_close(){
+ let mut j=Joined::new();assert_eq!(j.adopt(),0);
+
+4290
+        drop(table);
+        Ok(())
+    })();
+    result.map_or_else(|error| error.to_errno(), |()| 0)
+}
+
+struct ForkProviderClaim {
+    object: *const OsObject,
+    index: usize,
+    epoch: u64,
+    identity: super::application_abi::ForkIdentityV1,
+    previous_phase: u32,
+    guest_released: bool,
+    attempted: bool,
+    receipt_index: Option<usize>,
+    // Capsule destruction/module_put precede the last provider owner release.
+    capsule: Option<Arc<ForkConsumerCapsule>>,
+    payload: Option<Arc<ForkPayloadCapsule>>,
+    owner: Arc<ForkProviderOwner>,
+    active: bool,
+}
+enum ForkClaimLookup { Pending(ForkProviderClaim), Completed }
+impl ForkProviderClaim {
+    // stage0 is private attachment/cancellation lookup, never a wire opcode.
+    fn acquire(object: &OsObject, identity: super::application_abi::ForkIdentityV1,
+        child_context: usize, stage: u32) -> Result<ForkClaimLookup>
+    {
+        let mut table = object.forks.lock();
+        if stage == super::application_abi::FORK_GUEST_DESTROYED_V1
+            && table.completed.iter().flatten().any(|receipt|
+                receipt.identity == identity && receipt.child_context == child_context
+                    && receipt.phase == ForkReceiptPhase::Finished)
+        { return Ok(ForkClaimLookup::Completed); }
+        let index = table.entries.iter().position(|entry| entry.as_ref().is_some_and(|entry|
+            entry.identity == Some(identity) && entry.child_context == child_context)).ok_or(ENOENT)?;
+        let entry = table.entries[index].as_ref().unwrap();
+        if stage == super::application_abi::FORK_HOST_REVOKED_V1 && entry.host_revoked {
+            return Ok(ForkClaimLookup::Completed);
+        }
+        if entry.phase == 0 || entry.phase == FORK_PROVIDER_BUSY
+            || stage == super::application_abi::FORK_GUEST_DESTROYED_V1 && !entry.host_revoked
+        { return Err(EBUSY); }
+        if stage != 0 && entry.capsule.is_none() { return Err(ENODEV); }
+        // Completion receipts have an independent lifetime from pending slots.
+        // Reserve before the first revoke effect; Finished cells are never
+        // evicted by pending-slot reuse. Until authenticated receipt retirement

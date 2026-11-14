@@ -1,0 +1,11 @@
+--- union3/driver
++++ union3b/driver
+@@ -5,7 +5,7 @@
+ from pathlib import Path
+ import ast,collections,hashlib,json,os,resource,signal,sys,time
+ D=Path(__file__).resolve().parent
+-PINNED_METADATA={'EXACT-COMBINED-PRODUCTION-COMMANDS.NOT-EXECUTED.json': '1baaa22e4526e1773d8d0a4d11d790b750b1ea77c9d9acd886a8b9a087776b7d', 'EXACT12-SOURCE-MANIFEST.json': '8ac0b5ba4371035a61eb99e325e51ae7894056afe2e5955118d233a4f6648810', 'FULL78-SOURCE-MANIFEST.json': '9c8fcc6eef468b357202ea650e8945edade5cdecb4e2da559a00c420361e2102'}
++PINNED_METADATA={'EXACT-COMBINED-PRODUCTION-COMMANDS.NOT-EXECUTED.json': 'a740c072536b7f7a45e787302b8354f8fa6cfd789cbd16f9f34e8432f7ee8ec8', 'EXACT12-SOURCE-MANIFEST.json': '3e41a3c0bf998456d443eca83eddeddfe2d689e663307cd1f296dba5e3fa2f27', 'FULL78-SOURCE-MANIFEST.json': '059e50cb07deae5aa7c48e1daae8062a7d7ae0ed6294287744fdd9f48bc51fde'}
+ H=Path('/home/holden/mckernel/docs/verification/evidence/phase5-m03-handshake-runtime-checkpoint-20261020-1/sdk-physical-source/run_two_commands_source_bound_corrected.py')
+ HELPER_SHA='990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8'
+ assert hashlib.sha256(H.read_bytes()).hexdigest()==HELPER_SHA

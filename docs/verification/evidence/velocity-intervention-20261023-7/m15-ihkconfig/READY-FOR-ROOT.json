@@ -1,0 +1,38 @@
+{
+  "schema": "m15-private-source-ready-v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "milestone": "M15-F06",
+  "lane": 2,
+  "prepared_at": "2026-10-24T00:39:51.449160+00:00",
+  "status": "SOURCE_READY_FOR_FIRST_COMPILER_GRANT",
+  "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-7/m15-ihkconfig/ihkconfig.rs",
+  "contract": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-7/m15-ihkconfig/CONTRACT.json",
+  "handoff": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-7/m15-ihkconfig/HANDOFF.txt",
+  "source_candidate_frozen_after_publication": true,
+  "queue_receipt_is_transport_only": true,
+  "compiler_executed": false,
+  "cli_or_fixture_executed": false,
+  "native_executed": false,
+  "canonical_changed": false,
+  "pending": "fresh ordinary host compiler/fixture grant and review of explicit defined-behavior proposals",
+  "first_command": "/usr/bin/python3 -I /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-7/m15-ihkconfig/fixture/run_equivalence.py --execute --profile default --cc /usr/bin/cc --rustc /home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
+  "requested_bounds": {
+    "cpu_count": 1,
+    "memory_mib": 1024,
+    "tasks_max": 64,
+    "wall_seconds": 180,
+    "storage_mib": 64,
+    "device_access": "none",
+    "root": "none",
+    "Docker": "none",
+    "guest": "none",
+    "jobs": 1
+  },
+  "public_libihk_imports": [
+    "ihk_reserve_cpu",
+    "ihk_reserve_mem",
+    "ihk_get_num_os_instances",
+    "ihk_get_os_instances"
+  ],
+  "acceptance_credit": 0
+}

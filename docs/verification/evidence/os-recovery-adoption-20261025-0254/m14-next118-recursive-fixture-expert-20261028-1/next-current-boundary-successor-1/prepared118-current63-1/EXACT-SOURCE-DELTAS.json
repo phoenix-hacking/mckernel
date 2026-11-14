@@ -1,0 +1,399 @@
+{
+  "changes": [
+    {
+      "diff": "",
+      "previous": {
+        "bytes": 23317,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/original227-runtime-bindings-restart-20261028-1/recursive-successor-1/prepared-cohort-2/common/observe_root59_configured.py",
+        "sha256": "5877ec1acbc121c99dd564e3c5f0801995417ae08e66887e34afd3b4c8a30515"
+      },
+      "replacements": [],
+      "successor": {
+        "bytes": 23317,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/common/observe_root59_configured.py",
+        "sha256": "5877ec1acbc121c99dd564e3c5f0801995417ae08e66887e34afd3b4c8a30515"
+      }
+    },
+    {
+      "diff": "",
+      "previous": {
+        "bytes": 13268,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/original227-runtime-bindings-restart-20261028-1/recursive-successor-1/prepared-cohort-2/current60/observe_current60_postjoin.py",
+        "sha256": "de9f6a1b76faded7a31227d13fe30cab33867ba769eb0a0b7234ea564946f048"
+      },
+      "replacements": [],
+      "successor": {
+        "bytes": 13268,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/current60/observe_current60_postjoin.py",
+        "sha256": "de9f6a1b76faded7a31227d13fe30cab33867ba769eb0a0b7234ea564946f048"
+      }
+    },
+    {
+      "diff": "--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/observe_current61_current118.py\n+++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/observe_current61_current118.py\n@@ -8,7 +8,7 @@\n import os\n \n HERE=Path(__file__).resolve().parent\n-PINS={'ledger60': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER60.json', 'bytes': 24066, 'sha256': 'bd4b75db9c1c7cdb2993aa957c0c9a690eed39210d751ba89319c29ef4fc28d4'}, 'current60_source': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/observe_current60_postjoin.py', 'bytes': 13268, 'sha256': 'de9f6a1b76faded7a31227d13fe30cab33867ba769eb0a0b7234ea564946f048'}, 'capture2': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/ACTUAL-POSTJOIN-OBSERVATION-2-CPU0.json', 'bytes': 5944082, 'sha256': 'ebbd745f00e17f52fb2e4f589633ca74c9e64e44a643f875c6d9697dc7c9a270'}, 'capture2_join': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/profile-caller-correction-source-1/ACTUAL-CPU0-POSTJOIN-2.RESULT.json', 'bytes': 1142, 'sha256': '01189006547b80fe7de923c073f7a43951da3297805c9c08a1c4e6e3ae983263'}, 'compose_result': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/actual-host-bound-source-1/root-ordinary-compose-dispatch-source-1/future-capture-1/ACTUAL-COMPOSE-RESULT.json', 'bytes': 3596, 'sha256': '2afd5f7fb1ffb3501bda6071b135e055262a681a6fa2f09f7c07eff737ba3728'}, 'CID': '57a5fb1f62bc707ee90412fe9585718cdaa39e4110854f91bf4cb6df4380fda3'}\n+PINS={'ledger60': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER60.json', 'bytes': 24066, 'sha256': 'bd4b75db9c1c7cdb2993aa957c0c9a690eed39210d751ba89319c29ef4fc28d4'}, 'current60_source': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/current60/observe_current60_postjoin.py', 'bytes': 13268, 'sha256': 'de9f6a1b76faded7a31227d13fe30cab33867ba769eb0a0b7234ea564946f048'}, 'capture2': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/ACTUAL-POSTJOIN-OBSERVATION-2-CPU0.json', 'bytes': 5944082, 'sha256': 'ebbd745f00e17f52fb2e4f589633ca74c9e64e44a643f875c6d9697dc7c9a270'}, 'capture2_join': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/profile-caller-correction-source-1/ACTUAL-CPU0-POSTJOIN-2.RESULT.json', 'bytes': 1142, 'sha256': '01189006547b80fe7de923c073f7a43951da3297805c9c08a1c4e6e3ae983263'}, 'compose_result': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/actual-host-bound-source-1/root-ordinary-compose-dispatch-source-1/future-capture-1/ACTUAL-COMPOSE-RESULT.json', 'bytes': 3596, 'sha256': '2afd5f7fb1ffb3501bda6071b135e055262a681a6fa2f09f7c07eff737ba3728'}, 'CID': '57a5fb1f62bc707ee90412fe9585718cdaa39e4110854f91bf4cb6df4380fda3'}\n CURRENT={'ledger': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER61.json', 'bytes': 24665, 'sha256': '20e2470a6f7f81b188350af1374611801f68eacbf80ee8916814bd48962f4fa2'}, 'latest_free': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/CURRENT116-POSTJOIN-REVIEW-1/CURRENT-FREE.json', 'bytes': 12188, 'sha256': '6c83eee41b7e90d0f055034b9bbd30cfc9e32efac9e8285a90fc8948f7b82e7d'}, 'root_inputs': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER61.json', 'bytes': 24665, 'sha256': '20e2470a6f7f81b188350af1374611801f68eacbf80ee8916814bd48962f4fa2'}, 'ledger_key': 'Root61', 'compose_result': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/actual-host-bound-source-1/root-ordinary-compose-dispatch-source-1/future-capture-1/ACTUAL-COMPOSE-RESULT.json', 'bytes': 3596, 'sha256': '2afd5f7fb1ffb3501bda6071b135e055262a681a6fa2f09f7c07eff737ba3728'}}\n BOUNDARY=HERE/'cohort/ROOT-ACTUAL-CURRENT-BOUNDARY.json'\n STATUS='PASS_Root61_CURRENT_BOUNDARY_OBSERVATION_PENDING_ROOT_ACCEPTANCE'\n",
+      "previous": {
+        "bytes": 12126,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/observe_current61_current118.py",
+        "sha256": "bad31cb9e8a642c273c77e8cbe33104fb55148819ad3dc54aba8bafdf74cfb88"
+      },
+      "replacements": [
+        [
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/observe_current60_postjoin.py",
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/current60/observe_current60_postjoin.py"
+        ]
+      ],
+      "successor": {
+        "bytes": 12187,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/observe_current61_current118.py",
+        "sha256": "55bbebd5736c776611dacfd16922807665b9c971b542db9160f1ad332d6700d2"
+      }
+    },
+    {
+      "diff": "--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/materialize_source_export.py\n+++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/materialize_source_export.py\n@@ -9,7 +9,7 @@\n import os\n \n D = Path(__file__).resolve().parent\n-S = D.parent\n+S = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1')\n CHECKOUT_ROOT = Path('/home/holden/mckernel')\n \n \n",
+      "previous": {
+        "bytes": 6174,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/materialize_source_export.py",
+        "sha256": "308db791a74e73a4711529952fe08e6c41fb312a160d4a2465c84542cbbf9806"
+      },
+      "replacements": [
+        [
+          "S = D.parent",
+          "S = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1')"
+        ]
+      ],
+      "successor": {
+        "bytes": 6300,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/materialize_source_export.py",
+        "sha256": "799028d73ec2ca51242c6d877402e5378de093ba259220880f323b064c8c216f"
+      }
+    },
+    {
+      "diff": "",
+      "previous": {
+        "bytes": 3009,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/current118_guard_adapter.py",
+        "sha256": "3a90d200d4bcb81d68f9aed22c37f8a3ebc5389896c29b6f2a7973e9ae66da91"
+      },
+      "replacements": [],
+      "successor": {
+        "bytes": 3009,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/current118_guard_adapter.py",
+        "sha256": "3a90d200d4bcb81d68f9aed22c37f8a3ebc5389896c29b6f2a7973e9ae66da91"
+      }
+    },
+    {
+      "diff": "",
+      "previous": {
+        "bytes": 1635,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/cohort/ROOT-PREWRITTEN-RESOURCE-INPUT-FILL.py",
+        "sha256": "0a79a14649bee90d1acb669aa064b281f862141815890a0a3f9f50ab1d0e7db7"
+      },
+      "replacements": [],
+      "successor": {
+        "bytes": 1635,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/ROOT-PREWRITTEN-RESOURCE-INPUT-FILL.py",
+        "sha256": "0a79a14649bee90d1acb669aa064b281f862141815890a0a3f9f50ab1d0e7db7"
+      }
+    },
+    {
+      "diff": "",
+      "previous": {
+        "bytes": 2742,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/cohort/boundary_join.py",
+        "sha256": "5d6e57f561d108c81311ba63422f693e0091a60b37077687703090051c0b425b"
+      },
+      "replacements": [],
+      "successor": {
+        "bytes": 2742,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/boundary_join.py",
+        "sha256": "5d6e57f561d108c81311ba63422f693e0091a60b37077687703090051c0b425b"
+      }
+    },
+    {
+      "diff": "",
+      "previous": {
+        "bytes": 4115,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/cohort/build_only_worker.py",
+        "sha256": "04e67f1f1f3e299bb948c518ad64b2ad92c93e9ca08f3919fdbbd67631c56d59"
+      },
+      "replacements": [],
+      "successor": {
+        "bytes": 4115,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/build_only_worker.py",
+        "sha256": "04e67f1f1f3e299bb948c518ad64b2ad92c93e9ca08f3919fdbbd67631c56d59"
+      }
+    },
+    {
+      "diff": "--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/cohort/capture_resources.py\n+++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/capture_resources.py\n@@ -5,8 +5,8 @@\n from pathlib import Path\n import argparse,hashlib,importlib.util,json,os,subprocess,time\n D=Path(__file__).resolve().parent;E=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254')\n-GUARD=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/cohort/runtime_guard.py')\n-GUARD_SHA='0a88b83a544b33b0974ebb0f273f86946d056bfb70e415e133ef9c03a6e2bd74'\n+GUARD=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/runtime_guard.py')\n+GUARD_SHA='62c4657bd9619e62d1b72d5eb41ec0168b0c9559982c0e7435fa7cba2f661147'\n BOUNDARY=D/'ROOT-ACTUAL-CURRENT-BOUNDARY.json'\n AGGREGATE=23259332608\n SCOPE='Functional McKernel OS/apps and Rust/assembly migration only; no security testing.'\n@@ -23,6 +23,11 @@\n  spec=importlib.util.spec_from_file_location(name,path)\n  module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)\n  return module\n+def typed_boundary():\n+ row={'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/typed_current_boundary.py', 'bytes': 12354, 'sha256': '00483f2b97dbd03d76ee397ab9c80c050821ba1f705168d3606822b796e87514'}\n+ assert ref(row['path'])==row\n+ spec=importlib.util.spec_from_file_location('exact118_typed_boundary_core',row['path']);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module);return module\n+\n def valid_resource_facts(memory,capacity,other_memory,other_pids,aggregate_pids,threads,thread_limit):\n  assert type(other_memory) is int and other_memory>=0 and other_memory+(12<<30)<=AGGREGATE\n  assert memory['MemAvailable']>=max(22<<30,other_memory+(16<<30))\n@@ -88,8 +93,7 @@\n  runner=load(root/'run_build_only.py',inputs['runner']['sha256'],'current110_held_source_map_reader')\n  assert inputs['runner']==ref(root/'run_build_only.py') and inputs['worker']==ref(root/'build_only_worker.py')\n  runner.commands_for_plan(profile)\n- source_rows=[r['source'] for r in profile['inputs']['configuration']]+[r['source'] for r in profile['inputs']['objects'] if not r['replace']]+[r['postimage'] for r in profile['inputs']['postimages']]+[r['postimage'] for r in runner.source_directory_postimages(profile)]\n- assert len(runner.source_directory_postimages(profile))==121\n+ source_rows=typed_boundary().source_rows_for_capture(profile,runner,{'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/RUST-CLOSED-SOURCE-OVERLAY.NOT-MATERIALIZED.json', 'bytes': 53997, 'sha256': 'a1da9bdee23f5e2ebbd6ff0cd12c015c72793c9315adf998aa5e497b075d0cb9'})\n  for row in source_rows:auth(row)\n  export=read(auth(inputs['input_export_authority']));assert export['qualified_readonly_files']==source_rows and export['request_sha256']==profile['request_sha256']\n  assert not (root/'OUTPUT').exists()\n",
+      "previous": {
+        "bytes": 10995,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/cohort/capture_resources.py",
+        "sha256": "e61ce35deb0a3779d664e2873d2d024a205195032491cd2b2dc95b4880418b97"
+      },
+      "replacements": [
+        [
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1",
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1"
+        ]
+      ],
+      "successor": {
+        "bytes": 11618,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/capture_resources.py",
+        "sha256": "1d8ca4458535517fa9508c01b7b2500694cd88ecf49a16729b933875adece6ae"
+      }
+    },
+    {
+      "diff": "",
+      "previous": {
+        "bytes": 2426,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/cohort/fill_boundary_and_facts.py",
+        "sha256": "457e4977b0b73591d6ce461727f306c45ccd6668c8a5d2db12e705ddf795d463"
+      },
+      "replacements": [],
+      "successor": {
+        "bytes": 2426,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/fill_boundary_and_facts.py",
+        "sha256": "457e4977b0b73591d6ce461727f306c45ccd6668c8a5d2db12e705ddf795d463"
+      }
+    },
+    {
+      "diff": "",
+      "previous": {
+        "bytes": 5192,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/cohort/fill_build_metadata.py",
+        "sha256": "c284c63af93493ac72bf34c314764ac42c36004956db058f73a84be37a7db465"
+      },
+      "replacements": [],
+      "successor": {
+        "bytes": 5192,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/fill_build_metadata.py",
+        "sha256": "c284c63af93493ac72bf34c314764ac42c36004956db058f73a84be37a7db465"
+      }
+    },
+    {
+      "diff": "",
+      "previous": {
+        "bytes": 17471,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/cohort/finite_review.py",
+        "sha256": "eacd859b938a70e6a07ed562ff07cd6377fc8314b3b14683ee441322d4de443e"
+      },
+      "replacements": [],
+      "successor": {
+        "bytes": 17471,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/finite_review.py",
+        "sha256": "eacd859b938a70e6a07ed562ff07cd6377fc8314b3b14683ee441322d4de443e"
+      }
+    },
+    {
+      "diff": "",
+      "previous": {
+        "bytes": 3559,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/cohort/handoff_common.py",
+        "sha256": "1afec85a8ba2a174a8167ebfc18cfcd9c0266fac131ec02b6890443f5befd156"
+      },
+      "replacements": [],
+      "successor": {
+        "bytes": 3559,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/handoff_common.py",
+        "sha256": "1afec85a8ba2a174a8167ebfc18cfcd9c0266fac131ec02b6890443f5befd156"
+      }
+    },
+    {
+      "diff": "",
+      "previous": {
+        "bytes": 7010,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/cohort/hold_and_run_build_only.py",
+        "sha256": "d17bd70e3e3e6ef7febe48b6f0f892ab6f1a94c74e89d43808bbea8b5dc21551"
+      },
+      "replacements": [],
+      "successor": {
+        "bytes": 7010,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/hold_and_run_build_only.py",
+        "sha256": "d17bd70e3e3e6ef7febe48b6f0f892ab6f1a94c74e89d43808bbea8b5dc21551"
+      }
+    },
+    {
+      "diff": "",
+      "previous": {
+        "bytes": 10652,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/cohort/hot_predicates.py",
+        "sha256": "74d3e18dfde95a837eb2f54d76697e1e47468e97ad1492b01fd1e26628e172be"
+      },
+      "replacements": [],
+      "successor": {
+        "bytes": 10652,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/hot_predicates.py",
+        "sha256": "74d3e18dfde95a837eb2f54d76697e1e47468e97ad1492b01fd1e26628e172be"
+      }
+    },
+    {
+      "diff": "--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/cohort/materialize_admission.py\n+++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/materialize_admission.py\n@@ -6,10 +6,10 @@\n import argparse,hashlib,importlib.util,json,os,re\n D=Path(__file__).resolve().parent\n P=D.parent\n-E=P.parents[1]\n+E=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254')\n ADMISSION_PARENT=E\n CHECKOUT_ROOT=Path('/home/holden/mckernel')\n-S=P.parent\n+S=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1')\n def read(p):return json.loads(Path(p).read_bytes())\n def ref(p):\n  p=Path(p);b=p.read_bytes();return dict(path=str(p),bytes=len(b),sha256=hashlib.sha256(b).hexdigest())\n@@ -20,6 +20,11 @@\n  with Path(p).open('xb') as f:f.write(v if isinstance(v,bytes) else (json.dumps(v,indent=2)+'\\n').encode())\n def load_runner():\n  spec=importlib.util.spec_from_file_location('current118_source_runner',D/'run_build_only.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);return m\n+\n+def typed_boundary():\n+ row={'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/typed_current_boundary.py', 'bytes': 12354, 'sha256': '00483f2b97dbd03d76ee397ab9c80c050821ba1f705168d3606822b796e87514'}\n+ assert ref(row['path'])==row\n+ spec=importlib.util.spec_from_file_location('exact118_typed_boundary_core',row['path']);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module);return module\n \n def validate118(b):\n  \"\"\"Pure bindings/profile validation; no guard or writes. Used by TEST_ONLY too.\"\"\"\n@@ -35,7 +40,7 @@\n  ledger=read(auth(b['nonce_ledger']));assert ledger['complete_within_declared_current_boundary'] is True and ledger['root_attests_no_unlisted_post_boundary_execution_or_custody_operation'] is True and b['nonce'] not in ledger['consumed_nonces']\n  baseline=read(E/'CURRENT116-ACCEPTED-ARTIFACT-AND-CURRENTFREE.json')\n  assert baseline['actual_new_default_artifact']['image']['sha256']=='42473e03dae2310cb444008f4a46e84b3da87b00e4b2e2ab008f2637abbdc2c4'\n- assert b['nonce_ledger']==baseline['current_ledger'] and b['native_custody_clearance']==baseline['current_free']\n+ typed_boundary().validate_root_context(b,{'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/UPSTREAM-SELECTION.SOURCE-ONLY.json', 'bytes': 2114, 'sha256': '596600fab7c3e8551c564187cce52e8207ecf088fe4ac618cf74028eeaee5312'},{'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/observe_current63_current118.py', 'bytes': 1614, 'sha256': 'e6b734f0683b72c329f7fee69532e6e6fe9556b294a3b8e3bfbc646f6a044876'},{'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/typed_current_boundary.py', 'bytes': 12354, 'sha256': '00483f2b97dbd03d76ee397ab9c80c050821ba1f705168d3606822b796e87514'})\n  for key in ['independent_source_profile_review','mechanical_source_profile_review']:auth(b[key])\n  review=read(b['independent_source_profile_review']['path'])\n  assert review['independent'] is True and review['implementation_ownership'] is False and review['runtime_authority'] is None and review['decision'].startswith('PASS_')\n",
+      "previous": {
+        "bytes": 11019,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/cohort/materialize_admission.py",
+        "sha256": "0c3b4f9293685f06cf93b745e0c87d1cf0df0ae9fe5e94c1142ea65011c257fd"
+      },
+      "replacements": [
+        [
+          "E=P.parents[1]",
+          "E=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254')"
+        ],
+        [
+          "S=P.parent",
+          "S=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1')"
+        ]
+      ],
+      "successor": {
+        "bytes": 12693,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/materialize_admission.py",
+        "sha256": "2c0c14479207f56a50c65bed528a61ac2d2233cd77b489c6e92f53ceb7d34757"
+      }
+    },
+    {
+      "diff": "--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/cohort/prepare_publication_rows.py\n+++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/prepare_publication_rows.py\n@@ -28,6 +28,27 @@\n add(ref(D/'ROOT-OPERATION-BINDINGS.json'))\n for key in ['successor','independent_review']:add(operation[key])\n for row in operation['expected_subjects'].values():add(row)\n+\n+# Include every nested runtime DATA dependency, including implicit sibling reads.\n+core_ref={'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/typed_current_boundary.py', 'bytes': 12354, 'sha256': '00483f2b97dbd03d76ee397ab9c80c050821ba1f705168d3606822b796e87514'}\n+assert ref(core_ref['path'])==core_ref\n+import importlib.util\n+_spec=importlib.util.spec_from_file_location('exact118_runtime_data_closure',core_ref['path'])\n+_typed=importlib.util.module_from_spec(_spec);_spec.loader.exec_module(_typed)\n+typed_ref=actual_binding['typed_current_boundary_binding']\n+selection_ref={'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/UPSTREAM-SELECTION.SOURCE-ONLY.json', 'bytes': 2114, 'sha256': '596600fab7c3e8551c564187cce52e8207ecf088fe4ac618cf74028eeaee5312'}\n+aliases_ref=actual_binding['runtime_data_fetched_aliases'];assert ref(aliases_ref['path'])==aliases_ref\n+aliases=read(aliases_ref['path']);assert aliases['author']=='/root' and aliases['runtime_authority'] is None\n+add(aliases_ref)\n+for closure_row in _typed.runtime_data_rows(typed_ref,selection_ref,ref(D/'ROOT-OPERATION-BINDINGS.json')):\n+ source=closure_row['actual']\n+ if source['path'] in seen:continue\n+ if closure_row['requires_explicit_fetched_alias']:\n+  alias=aliases['aliases'][source['path']]\n+  actual=ref(repo/alias);assert (actual['bytes'],actual['sha256'])==(source['bytes'],source['sha256'])\n+  rows.append(dict(actual=source,fetched_equivalent_path=alias));seen.add(source['path'])\n+ else:add(source)\n+\n v=dict(scope=z['scope'],status='ROOT118_CACHED_PUBLICATION_ROWS_PREPARED_NOT_FETCH_PROOF',runtime_authority=None,rows=rows,actual_fetched_commit=None,source_export_traversal_replayed=False)\n f=A/'PUBLICATION-ROWS.PREPARED.json'\n with f.open('x') as o:json.dump(v,o,indent=2);o.write('\\n')\n",
+      "previous": {
+        "bytes": 2492,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/cohort/prepare_publication_rows.py",
+        "sha256": "6da5292f24633b6b7d4a0a9955a1a544397115023ef0171de9ce0c268ac73daf"
+      },
+      "replacements": [],
+      "successor": {
+        "bytes": 4256,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/prepare_publication_rows.py",
+        "sha256": "17d10ee3903d4666f02d129edd2899bd68715af820e404af90923b4efd11082a"
+      }
+    },
+    {
+      "diff": "",
+      "previous": {
+        "bytes": 2656,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/cohort/publish_after_independent_pass_once.py",
+        "sha256": "b18f4a331ebc4cf719882b1ca6841ddbe739e0ced162fc0c4d8d1b2964b73b0d"
+      },
+      "replacements": [],
+      "successor": {
+        "bytes": 2656,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/publish_after_independent_pass_once.py",
+        "sha256": "b18f4a331ebc4cf719882b1ca6841ddbe739e0ced162fc0c4d8d1b2964b73b0d"
+      }
+    },
+    {
+      "diff": "",
+      "previous": {
+        "bytes": 3489,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/cohort/publish_approved_ready.py",
+        "sha256": "7b729613a28b03630f32bf1115a3d063b0ca40d27a8f800e4747b7c4f9f7251e"
+      },
+      "replacements": [],
+      "successor": {
+        "bytes": 3489,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/publish_approved_ready.py",
+        "sha256": "7b729613a28b03630f32bf1115a3d063b0ca40d27a8f800e4747b7c4f9f7251e"
+      }
+    },
+    {
+      "diff": "",
+      "previous": {
+        "bytes": 3424,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/cohort/root_capture_once.py",
+        "sha256": "e04f0511809bd46ecfeff2d01128f6d431e1c11418420b3a765e996b230af00e"
+      },
+      "replacements": [],
+      "successor": {
+        "bytes": 3424,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/root_capture_once.py",
+        "sha256": "e04f0511809bd46ecfeff2d01128f6d431e1c11418420b3a765e996b230af00e"
+      }
+    },
+    {
+      "diff": "--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/cohort/run_build_only.py\n+++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/run_build_only.py\n@@ -6,7 +6,7 @@\n from pathlib import Path\n D=Path(__file__).resolve().parent\n DEADLINE=1793253600\n-RUNTIME_GUARD_REF={'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/cohort/runtime_guard.py', 'bytes': 4041, 'sha256': '0a88b83a544b33b0974ebb0f273f86946d056bfb70e415e133ef9c03a6e2bd74'}\n+RUNTIME_GUARD_REF={'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/runtime_guard.py', 'bytes': 7241, 'sha256': '62c4657bd9619e62d1b72d5eb41ec0168b0c9559982c0e7435fa7cba2f661147'}\n MEMORY=12884901888\n COMMAND_RECIPE_REF={'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/MINIMAL-FOUR-COMMAND-CONTINUATION.NOT-GRANTED.json', 'bytes': 30006, 'sha256': '89ade2c2bdf88300b9d5adc24300531edb65d14d6ee106df885a9c785dc16808'}\n BUDGET=23259332608  # current aggregate21.661941528320312GiB ceiling\n@@ -156,7 +156,7 @@\n \n def current_operation_guard():\n     import importlib.util\n-    path = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/cohort/runtime_guard.py')\n+    path = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/runtime_guard.py')\n     require(reference(path) == RUNTIME_GUARD_REF, 'exact new-window operation consumer')\n     spec = importlib.util.spec_from_file_location('current118-build_explicit_operation_binding', path)\n     module = importlib.util.module_from_spec(spec); spec.loader.exec_module(module)\n",
+      "previous": {
+        "bytes": 26500,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/cohort/run_build_only.py",
+        "sha256": "fe751f69a6a999416191404c201f0b5d07df02a148e4dd6bf4f04ab73945dcdf"
+      },
+      "replacements": [
+        [
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1",
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1"
+        ]
+      ],
+      "successor": {
+        "bytes": 26588,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/run_build_only.py",
+        "sha256": "c6cb17664d62bc0aaab8f20d3e464bbdfdfaca75107da739c15b2f55ba4d9348"
+      }
+    },
+    {
+      "diff": "--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/cohort/runtime_guard.py\n+++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/runtime_guard.py\n@@ -2,15 +2,15 @@\n from pathlib import Path\n import hashlib, importlib.util, json\n GUARD = {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/current118-operation-source-1/operation_window_guard118.py', 'bytes': 8511, 'sha256': 'd02781a862ff41f8116b84eab955f66969b0db8137b9b255ba6b656958eac275'}\n-RETAINED_SUBJECTS = {'accepted116': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT116-ACCEPTED-ARTIFACT-AND-CURRENTFREE.json', 'bytes': 6506, 'sha256': 'ce4822f9d90fc5b8b1cc3340e081582e85c7a3370e36b3f77e0343f8608ce16e'}, 'source_map118': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/SOURCE-MAP-FROM116.json', 'bytes': 14172, 'sha256': '3fd41c1b961a44814a0ba96c0c0ac0be68b9b1a3c159fff6a7c7a376c5b3706c'}, 'recipe118': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/MINIMAL-FOUR-COMMAND-CONTINUATION.NOT-GRANTED.json', 'bytes': 30006, 'sha256': '89ade2c2bdf88300b9d5adc24300531edb65d14d6ee106df885a9c785dc16808'}, 'external3': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/EXTERNAL-THREE-MODULE-INPUTS.json', 'bytes': 2282, 'sha256': 'ad5164e78d8c940815d05d21e1e8ec923700419c322c061b60bc316ce9c803db'}, 'exporter': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/materialize_source_export.py', 'bytes': 6174, 'sha256': '308db791a74e73a4711529952fe08e6c41fb312a160d4a2465c84542cbbf9806'}, 'observer': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/observe_current61_current118.py', 'bytes': 12126, 'sha256': 'bad31cb9e8a642c273c77e8cbe33104fb55148819ad3dc54aba8bafdf74cfb88'}, 'adapter': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/current118_guard_adapter.py', 'bytes': 3009, 'sha256': '3a90d200d4bcb81d68f9aed22c37f8a3ebc5389896c29b6f2a7973e9ae66da91'}, 'shared_guard': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/current118-operation-source-1/operation_window_guard118.py', 'bytes': 8511, 'sha256': 'd02781a862ff41f8116b84eab955f66969b0db8137b9b255ba6b656958eac275'}}\n-COHORT = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/cohort')\n+RETAINED_SUBJECTS = {'accepted116': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT116-ACCEPTED-ARTIFACT-AND-CURRENTFREE.json', 'bytes': 6506, 'sha256': 'ce4822f9d90fc5b8b1cc3340e081582e85c7a3370e36b3f77e0343f8608ce16e'}, 'source_map118': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/SOURCE-MAP-FROM116.json', 'bytes': 14172, 'sha256': '3fd41c1b961a44814a0ba96c0c0ac0be68b9b1a3c159fff6a7c7a376c5b3706c'}, 'recipe118': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/MINIMAL-FOUR-COMMAND-CONTINUATION.NOT-GRANTED.json', 'bytes': 30006, 'sha256': '89ade2c2bdf88300b9d5adc24300531edb65d14d6ee106df885a9c785dc16808'}, 'external3': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/EXTERNAL-THREE-MODULE-INPUTS.json', 'bytes': 2282, 'sha256': 'ad5164e78d8c940815d05d21e1e8ec923700419c322c061b60bc316ce9c803db'}, 'exporter': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/materialize_source_export.py', 'bytes': 6300, 'sha256': '799028d73ec2ca51242c6d877402e5378de093ba259220880f323b064c8c216f'}, 'observer': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/observe_current63_current118.py', 'bytes': 1614, 'sha256': 'e6b734f0683b72c329f7fee69532e6e6fe9556b294a3b8e3bfbc646f6a044876'}, 'adapter': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/current118-operation-source-1/current118_guard_adapter.py', 'bytes': 3009, 'sha256': '3a90d200d4bcb81d68f9aed22c37f8a3ebc5389896c29b6f2a7973e9ae66da91'}, 'shared_guard': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/current118-operation-source-1/operation_window_guard118.py', 'bytes': 8511, 'sha256': 'd02781a862ff41f8116b84eab955f66969b0db8137b9b255ba6b656958eac275'}, 'recursive_current60': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current62-after-bfd-default-build-source-20261028-1/review-correction-source-1/attempt2-binding-successor-1/retirement-parent-abi-correction-source-1/history/observe_bfd_current60_history.py', 'bytes': 13303, 'sha256': '4bc439b4ad5b648c3d669974540cedb3171a306554cc2e8cb0e4f5cab736f220'}, 'recursive_common': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current62-after-bfd-default-build-source-20261028-1/review-correction-source-1/attempt2-binding-successor-1/retirement-parent-abi-correction-source-1/history/observe_bfd_root59_history.py', 'bytes': 23317, 'sha256': '5877ec1acbc121c99dd564e3c5f0801995417ae08e66887e34afd3b4c8a30515'}, 'recursive_physical': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-physical-history-successor-source-20261028-1/physical_history_successor.py', 'bytes': 9521, 'sha256': 'af7cfd5a37a56672205ef0bc133d0c679aa5a7103450cf73ff1ba4f50479ca87'}, 'typed_boundary_core': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/typed_current_boundary.py', 'bytes': 12354, 'sha256': '00483f2b97dbd03d76ee397ab9c80c050821ba1f705168d3606822b796e87514'}, 'upstream_selection': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/UPSTREAM-SELECTION.SOURCE-ONLY.json', 'bytes': 2114, 'sha256': '596600fab7c3e8551c564187cce52e8207ecf088fe4ac618cf74028eeaee5312'}, 'upstream_post_BFD_observer': {'bytes': 37436, 'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current62-after-bfd-default-build-source-20261028-1/review-correction-source-1/attempt2-binding-successor-1/retirement-parent-abi-correction-source-1/observe_current62_bfd_postjoin.py', 'sha256': 'da5a628ca0248c30f78fe6617f50a33b7c469a1095ed4dd28a7d2f1257bd6935'}, 'upstream_subject_map': {'bytes': 10364, 'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current62-after-bfd-default-build-source-20261028-1/review-correction-source-1/attempt2-binding-successor-1/retirement-parent-abi-correction-source-1/STATIC-SOURCE-SUBJECTS.json', 'sha256': '90eb689ea94061454e71f4913704e0e9ca87a55f069a14abf2cfd804b3cc6a03'}, 'upstream_inputs': {'bytes': 9966, 'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current62-after-bfd-default-build-source-20261028-1/review-correction-source-1/attempt2-binding-successor-1/retirement-parent-abi-correction-source-1/INPUTS.json', 'sha256': '613a8bea48341d6c11ef884f59a61abe48be8dd62a319160de27532aaddab91a'}}\n+COHORT = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort')\n def subjects():\n     result = dict(RETAINED_SUBJECTS)\n     for path in sorted(COHORT.glob('*.py')):\n         raw = path.read_bytes()\n         result['consumer:' + path.name] = dict(path=str(path), bytes=len(raw), sha256=hashlib.sha256(raw).hexdigest())\n     return result\n-BINDING = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/cohort/ROOT-OPERATION-BINDINGS.json')\n+BINDING = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/ROOT-OPERATION-BINDINGS.json')\n def guard():\n     path = Path(GUARD['path']); raw = path.read_bytes()\n     assert len(raw) == GUARD['bytes'] and hashlib.sha256(raw).hexdigest() == GUARD['sha256']\n",
+      "previous": {
+        "bytes": 4041,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/cohort/runtime_guard.py",
+        "sha256": "0a88b83a544b33b0974ebb0f273f86946d056bfb70e415e133ef9c03a6e2bd74"
+      },
+      "replacements": [
+        [
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1",
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1"
+        ]
+      ],
+      "successor": {
+        "bytes": 7241,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/runtime_guard.py",
+        "sha256": "62c4657bd9619e62d1b72d5eb41ec0168b0c9559982c0e7435fa7cba2f661147"
+      }
+    },
+    {
+      "diff": "",
+      "previous": {
+        "bytes": 1970,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/cohort/verify_exact_fetched_rows.py",
+        "sha256": "bc6c87e37f38efaa4588921bdf43baae2bb394b94e4f87354a4adccfbb8e9957"
+      },
+      "replacements": [],
+      "successor": {
+        "bytes": 1970,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/verify_exact_fetched_rows.py",
+        "sha256": "bc6c87e37f38efaa4588921bdf43baae2bb394b94e4f87354a4adccfbb8e9957"
+      }
+    }
+  ],
+  "guard_adapter": {
+    "bytes": 3009,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/current118-operation-source-1/current118_guard_adapter.py",
+    "sha256": "3a90d200d4bcb81d68f9aed22c37f8a3ebc5389896c29b6f2a7973e9ae66da91"
+  },
+  "limits": [
+    1793253600.0,
+    1035704.5689393478,
+    1051042.6959879305
+  ],
+  "new_typed_sources": [
+    {
+      "bytes": 12354,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/typed_current_boundary.py",
+      "sha256": "00483f2b97dbd03d76ee397ab9c80c050821ba1f705168d3606822b796e87514"
+    },
+    {
+      "bytes": 2114,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/UPSTREAM-SELECTION.SOURCE-ONLY.json",
+      "sha256": "596600fab7c3e8551c564187cce52e8207ecf088fe4ac618cf74028eeaee5312"
+    },
+    {
+      "bytes": 1614,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/observe_current63_current118.py",
+      "sha256": "e6b734f0683b72c329f7fee69532e6e6fe9556b294a3b8e3bfbc646f6a044876"
+    }
+  ],
+  "physical_history": {
+    "bytes": 9521,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-physical-history-successor-source-20261028-1/physical_history_successor.py",
+    "sha256": "af7cfd5a37a56672205ef0bc133d0c679aa5a7103450cf73ff1ba4f50479ca87"
+  },
+  "runtime_authority": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "shared_guard": {
+    "bytes": 8511,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/current118-operation-source-1/operation_window_guard118.py",
+    "sha256": "d02781a862ff41f8116b84eab955f66969b0db8137b9b255ba6b656958eac275"
+  }
+}

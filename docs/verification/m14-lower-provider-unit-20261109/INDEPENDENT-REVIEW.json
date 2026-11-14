@@ -1,0 +1,163 @@
+{
+  "decision": "GO_EXACT_CURRENT_NATIVE_LOWER_PARTITION_SOURCE_ABI_OWNERSHIP_PROFILE_FOR_ROOT_ADMISSION",
+  "owner": "/root/create_empty_entry_parity_high",
+  "compiler_link_runtime_or_native_executed": false,
+  "execution_admission_granted": false,
+  "canonical_or_index_writes": false,
+  "bindings": {
+    "request": {
+      "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/lower-provider-unit-1/REQUEST.json",
+      "sha256": "cc6a8ccc01b83b991c4776a986e3b9daff858aa11ed781b74fcacc232dfa5a78"
+    },
+    "unit": {
+      "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/lower-provider-unit-1/lower_provider_unit.rs",
+      "sha256": "59ceb915804f071291e4197c7bf8bf3ea9efd4bf4a143c40b531a107b744a449"
+    },
+    "source_proof": {
+      "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/lower-provider-unit-1/SOURCE-PROOF.json",
+      "sha256": "585e8e371ecd549b9fb46d911ebedd9b5bb54a927a0cba54621add7d9fd81234"
+    },
+    "independent_reuse_decision": {
+      "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/lower-provider-reuse-1/REUSE-DECISION.json",
+      "sha256": "81f075c6dea7b08ab37cdf3aaef8b90db95c05d449d68df0110abd1aa8a7c324"
+    },
+    "existing_current_credential_partial": {
+      "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/credential-provider-unit-1/output/credential_partial.o",
+      "sha256": "912e47f9b47cf01614852a2d9590941285b3eca58608b43ebf3b51f2d6a27a2c",
+      "receipt": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/credential-provider-unit-1/RESULT.json",
+      "receipt_sha256": "b606a740de6e391c079db5c1b6ddfecf2d8a60677d0a0c9aeb9a5457150d3440"
+    }
+  },
+  "source_eligibility": {
+    "authority": "Root explicit Nov9 lower-provider task: only named current CPU/local/virt-to-phys endpoints and genuinely needed unheld callees. This does not release original whole-crate/generic/exec/ACK/TID/XPMEM/offload/source/native holds.",
+    "independent_exact_comparison": "Eight exported definitions and two private helpers compared byte-for-byte with current actual selected source, including original attributes. Sole path include is actual ABI type/layout file; no whole implementation modules imported.",
+    "function_hashes": {
+      "cls::get_cpu_local_var": "87f9be43f2af61bc60ad38d90a6ed8667d12b2ea1387828b00a945ffa7b03a24",
+      "cls::this_cpu_local_var": "98ea27f24370b62832a2aa7ba344314fedc72a48b805bb97cf9dc3dd33cb85b6",
+      "cls::get_this_cpu_local_var": "69f7fad9c8d3b07057434be9b4bc6608e4013eb4573125c10d1f4fae540172c9",
+      "x86_local::rdmsr": "d20f26c1b8dad08205ca55304e5c6a764e2e5e07d77808dc24e5bb3e825690d0",
+      "x86_local::ihk_mc_get_processor_id": "5d32980dcc56b5c7d960a599f89de58457657cad9f2295d0ab2440d09e1c3cff",
+      "x86_memory_helpers::x86_virt_to_phys_body_result": "21bed1bc85e43e916e15f2853b39413d87507d8996c9b6a3111da994b0266d9f",
+      "x86_memory_helpers::x86_user_map_kernel_start_bridge": "71e41e8ec3e1a548892a35290b3747cedfa5930b6a4600680989caa91485d50d",
+      "x86_memory_helpers::virt_to_phys": "8295bd03a2ba4a653a5eca6c22df025e5cc4800700f6aae767b333ba47b8ebb4",
+      "syscall_policy::syscall_get_processor_id_bridge": "05f46856cc02b50ee91e01929ad007638b64bd7d1da3a86449094fa66953a5aa",
+      "syscall_policy::syscall_virt_to_phys_bridge": "cad4806de621a0c1ad0548ed9be65157962b2210b1a12f2d79cf9543888ca9e8"
+    },
+    "exports": [
+      "get_this_cpu_local_var",
+      "get_cpu_local_var",
+      "ihk_mc_get_processor_id",
+      "virt_to_phys",
+      "x86_virt_to_phys_body_result",
+      "x86_user_map_kernel_start_bridge",
+      "syscall_get_processor_id_bridge",
+      "syscall_virt_to_phys_bridge"
+    ],
+    "private_helpers": [
+      "cls::this_cpu_local_var",
+      "x86_local::rdmsr"
+    ],
+    "no_reimplemented_callbacks_or_fake_data": true,
+    "canonical_geometry_attributes": "Three existing actual #[link_name] data declarations copied unchanged. They bind genuine original global names; no new symbol rewrite, override, section carve or ownership substitution."
+  },
+  "actual_ABI_and_contracts": {
+    "target": "Same existing ELF64 little-endian x86_64 freestanding partial profile as fc5/current13 object, no additional cfg.",
+    "CInt": "i32",
+    "CULong": "u64",
+    "pointer_and_SizeT_bits": 64,
+    "actual_abi_sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "get_this_cpu_local_var": "unsafe extern C fn()->*mut CpuLocalVar; exact private this_cpu_local_var calls get_cpu_local_var(actual ihk_mc_get_processor_id), which uses real clv.add(id as usize). Valid boot/current-CPU array lifetime remains required. No null/default/ID fallback or new owner.",
+    "CpuLocalVar_nonTOFU_layout": {
+      "bytes": 8128,
+      "alignment": 64,
+      "current_offset": 7848
+    },
+    "native_CPU": "unsafe extern C fn()->CInt, cfg(not(mckernel_equivalence)). Exact rdmsr(MSR_GS_BASE=0xc0000101), locals and num_processors range test (gs<base || gs>end) and gs:0 load preserved. Existing 4096-byte PAGE_SIZE and LOCALS_SPAN4*PAGE_SIZE=16384 retained; no bound repair/equivalence substitute or hardware execution.",
+    "X86CpuLocalVariables": {
+      "bytes": 456,
+      "alignment": 1,
+      "role": "Actual packed pointer type; hardware locals span remains source16384, not struct-size substitution."
+    },
+    "syscall_get_processor_id_bridge": "unsafe extern C fn()->CInt; unchanged direct actual x86_local endpoint.",
+    "virt_to_phys": "unsafe extern C fn(*mut c_void)->CULong; raw address interpreted numerically, not dereferenced. Actual complete helper/geometry getter selected.",
+    "mapping_branches": "Original order: >=real kernel map start -> wrapping subtract/add kernel physical base with kernel diagnostic; else >=real Linux page offset -> subtraction; else >=actualfixed-start -> subtraction; else straight-map wrapping subtraction with straight diagnostic. Actual fixed/straight constants and X86AddrLogFn preserved. Some(real x86_addr_log_bridge), never null/fake logger.",
+    "mapping_bridge": "syscall_virt_to_phys_bridge retains exact pointer and unsigned-long ABI to current actual virt_to_phys.",
+    "geometry_and_logger": "Actual CULong data identities x86_map_kernel_start_geometry(readonly), linux_page_offset_base(mut), x86_kernel_phys_base(mut); logger CInt/CULong->void from current x86_memory_logger_bridges.rs. All genuine unresolved, uninitialized by this unit. No guessed geometry, metadata or debug state."
+  },
+  "unique_ownership": {
+    "existing13_definitions": [
+      "do_setresgid",
+      "do_setresuid",
+      "getcred",
+      "getcred_body_result",
+      "ptrace_detach_do_kill_bridge",
+      "ptrace_detach_wakeup_bridge",
+      "syscall_do_syscall2_bridge",
+      "syscall_do_syscall3_bridge",
+      "syscall_policy_do_syscall2_bridge",
+      "syscall_policy_do_syscall3_bridge",
+      "syscall_refresh_cred_fields_body_result",
+      "terminate_host",
+      "wait_host_wait4_bridge"
+    ],
+    "new_export_intersection": [],
+    "prospective_unique_T": 21,
+    "new_global_data_definitions": [],
+    "provider_expected_U": [
+      "clv",
+      "locals",
+      "num_processors",
+      "x86_map_kernel_start_geometry",
+      "linux_page_offset_base",
+      "x86_kernel_phys_base",
+      "x86_addr_log_bridge"
+    ],
+    "resolved_previous_four_U": [
+      "get_this_cpu_local_var",
+      "ihk_mc_get_processor_id",
+      "syscall_get_processor_id_bridge",
+      "syscall_virt_to_phys_bridge"
+    ],
+    "partial_expected_19_U": [
+      "clv",
+      "do_kill",
+      "do_syscall",
+      "f03_terminate_host_refcount_set_v1",
+      "f03_wait_release_process",
+      "f03_wait_release_thread",
+      "linux_page_offset_base",
+      "locals",
+      "num_processors",
+      "sched_wakeup_thread",
+      "syscall_do_kill_thread_bridge",
+      "syscall_do_syscall_request_bridge",
+      "syscall_find_process_bridge",
+      "syscall_generic_forwarding_body_result",
+      "syscall_process_unlock_bridge",
+      "terminate_host_body_result",
+      "x86_addr_log_bridge",
+      "x86_kernel_phys_base",
+      "x86_map_kernel_start_geometry"
+    ],
+    "only_link_inputs": [
+      "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/lower-provider-unit-1/output/lower_provider.o",
+      "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/credential-provider-unit-1/output/credential_partial.o"
+    ],
+    "old_input_policy": "Use current credential_partial912e once plus new lower object only. Do not also append fc5/original3provider, c205, old8 or any old combined cohort."
+  },
+  "concrete_profile_review": {
+    "commands": 5,
+    "compiler_payload": "Independently compared executable-through-last-argument to original fc5 receipt; only source/output paths differ. Same pinned70ebcbba compiler, edition2021/lib, panicabort,opt2,large/static,no-redzone,no-loop/SLP-vectorization and disabledSSE/AVX feature list. No mckernel_equivalence, enable_tofu, wholecrate, warning suppression or extra backend option.",
+    "warning_policy": "Preserve exactly the retained single sse2 ABI warning SHA52aa1b68. This is an inherited HOST partial-codegen profile, not final/native ABI acceptance; new warnings or support imports require focused reconciliation.",
+    "link_payload": "Plain ld-r with precisely newlower.o and currentcredential_partial.o; no response/archive/wholecrate/allowduplicates/wrap/redefine options.",
+    "resource_profile": "CPU6, one serial job,1GiBAS,45sCPU,60+5wall,64MiBFSIZE,core0; aggregateHOST0/6/7,max3jobs,4GiBTOTALoverheadincluded with18GiBprior+4GiBfloor/fresh26GiB. Root must freshly admit actual capacity/ownership.",
+    "pre_link_gate": "CALL actual provider symbol predicate before ld-r, require exactly8currentT, exactly7genuineU and no globaldata/extra support provider. Any mismatch stops; never fabricate a missing definition.",
+    "post_link_checks": "Require21uniqueT, preserve prior13names/sizes/credential173B entries, resolve the4namedpreviousimports uniquely, list19genuineU. Require ELF64x86_64ET_REL and actual relocation targets for current CPU/local/mapping binding; held offload/do_syscall/generic symbols remain U."
+  },
+  "reuse_and_limits": {
+    "independent_object_search": "E bounded named-input decision81f075c6 establishes no already-qualified matching independent provider from that chain, not universal absence. I did not repeat that object search or select old combined artifacts.",
+    "existing_credential_batch": "All5codegen/link/metadata commands PASS already consumed; not rerun. Existing5producerbehavior cases reused unchanged at extracted HOST scope, not runtime proof for these lower native providers.",
+    "runtime": "No rdmsr/GS/native mapping/function/test execution by review or proposed batch. Only source codegen, nonexecuted relocatable join and metadata observations.",
+    "final_gates": "Final boot/data/logger initialization, genuine do_syscall/offload, full provider ownership/cohort/SDK/source/current-free/default/native and matching host artifacts remain open. No original M14/M15 file acceptance, C retirement, final CREDENTIAL-COHORT or held-owner/reservation release."
+  }
+}

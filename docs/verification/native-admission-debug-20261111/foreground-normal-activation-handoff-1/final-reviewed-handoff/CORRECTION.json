@@ -1,0 +1,70 @@
+{
+  "actual_diagnostic": "Installed taskset executes the misplaced -- token as a command (exit127); foreground separately demonstrated taskset -c 0 COMMAND succeeds with affinity[0]. Exact raw responses are retained in the bound private probe.",
+  "actual_foreground_probe": {
+    "bytes": 931,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/foreground-taskset-prefix-probe-20261111T2222Z.json",
+    "sha256": "ca8f9576a92607644478f2a424f6f6e051d60d7f10587c1c2bd699e65e2b66bf"
+  },
+  "corrected_private_argv": {
+    "bytes": 12770,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/foreground-custodian-handoff-1/affinity-correction-1/taskset-syntax-correction-1/LITERAL-NORMAL-ARGV.PRIVATE.json",
+    "sha256": "bc1caa6b1c38b31a5a0cb1722923751d627725b66c5d416be68d2d7ea8e5c36a"
+  },
+  "corrected_private_contract": {
+    "bytes": 16855,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/foreground-custodian-handoff-1/affinity-correction-1/taskset-syntax-correction-1/FOREGROUND-NORMAL-TRANSITION.PRIVATE.json",
+    "sha256": "dc064d8ef2b62dbf5416c72b90d6d7b5423658f5ef3ba4cea1601691799dfd51"
+  },
+  "exact_delta": {
+    "contract_only_changes": {
+      "argv_reference_count": 3
+    },
+    "final_prefix": [
+      "/usr/bin/taskset",
+      "-c",
+      "0"
+    ],
+    "literal_command_count": 11,
+    "reinserting_token_restores_predecessor_argv_json_bytes": true,
+    "removed_token": "--",
+    "removed_zero_based_index": 3,
+    "removing_final_three_token_prefix_restores_original_649449_argv_json_bytes": true
+  },
+  "execution_status": "NO_STOP_START_OR_CONTROL_COMMAND_ISSUED_BY_AUTHOR",
+  "failed_predecessor_argv": {
+    "bytes": 12924,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/foreground-custodian-handoff-1/affinity-correction-1/LITERAL-NORMAL-ARGV.PRIVATE.json",
+    "sha256": "cf079d7637bb89d15505378468b1d150cc162353c66d4653b469b9d580472731"
+  },
+  "failed_predecessor_contract": {
+    "bytes": 16771,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/foreground-custodian-handoff-1/affinity-correction-1/FOREGROUND-NORMAL-TRANSITION.PRIVATE.json",
+    "sha256": "faad61e805bd5591091f2421f3fff0cfa066ff08e97432de0e315765ea34730d"
+  },
+  "failed_predecessor_ready": {
+    "bytes": 4577,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/foreground-custodian-handoff-1/affinity-correction-1/READY.NOT-EXECUTED.json",
+    "sha256": "c3a007833bbd0fe5c9f99871a4b122292b8d21598f8e3d5aa277ee3612e13c3d"
+  },
+  "original_full_affinity_NO_GO": {
+    "bytes": 9766,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-review-sourceacq-max-1/current-468d-generation-1/foreground-custodian-handoff-1/REVIEW.json",
+    "sha256": "d821d2e0a437d62c0efb2c32fcde5d6e9386a9ff94bb8d23f1ef3b43b489f105"
+  },
+  "prior_affinity_correction": {
+    "bytes": 4325,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/foreground-custodian-handoff-1/affinity-correction-1/CORRECTION.json",
+    "sha256": "23978d1eee880308e35137c2f520a1d1b8e5d17db6b10af9e778dd6eb42e3e46"
+  },
+  "privacy": "All actual full command/cap/account/state/ledger material remains private0600; public relay only references/hashes and normal command names.",
+  "required_before_action": "Focused independent correction review and actual foreground fresh admission/current source/owner/delivery/account controls remain mandatory.",
+  "schema": "mckernel.foreground-taskset-syntax-only-correction.v1",
+  "unchanged_guards": {
+    "all_normal_cli_flags_and_tails": true,
+    "no_source_algorithm_new_runner_controller_or_framework": true,
+    "persistent_foreground_actor_affinity_unmodified": true,
+    "phase4_actual_read_method_request_new_owner_and_durable_receipt_no_newer_veto": true,
+    "private_capture_contract": true,
+    "same_Root_goal_thread_original_credit_run_budget_cumulative_accounting_all_owners_and_holds": true
+  }
+}

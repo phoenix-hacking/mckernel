@@ -1,0 +1,56 @@
+{
+  "architecture": "x86_64",
+  "definition": {
+    "denominator": "all bytes in final ELF SHT_PROGBITS sections with SHF_ALLOC and SHF_EXECINSTR, including linker fill and padding",
+    "excluded_from_rust_numerator": "C, assembly, unknown-origin bytes, discarded input sections, and linker fill/padding",
+    "numerator": "GNU ld input-section contribution bytes attributed to the exact mckernel_rust.o path"
+  },
+  "executable_sections": [
+    {
+      "address": "0xfffffffffe801000",
+      "name": ".text",
+      "non_rust_or_padding_bytes": 165740,
+      "rust_input_bytes": 613951,
+      "rust_input_contributions": 2708,
+      "size_bytes": 779691
+    },
+    {
+      "address": "0xfffffffffe8bf5ab",
+      "name": ".fixup",
+      "non_rust_or_padding_bytes": 60,
+      "rust_input_bytes": 0,
+      "rust_input_contributions": 0,
+      "size_bytes": 60
+    },
+    {
+      "address": "0xfffffffffe90d000",
+      "name": ".vsyscall",
+      "non_rust_or_padding_bytes": 3864,
+      "rust_input_bytes": 232,
+      "rust_input_contributions": 4,
+      "size_bytes": 4096
+    }
+  ],
+  "inputs": {
+    "image": {
+      "path": "/tmp/mckernel-rocky-rust/kernel/mckernel.img",
+      "sha256": "68d7f6e7dbac77451e0fb97bcce1c0514b754e0a7d40f77ba6340f101baa230e"
+    },
+    "link_map": {
+      "path": "/tmp/mckernel-rocky-rust/kernel/mckernel.img.map",
+      "sha256": "d1871418813d7c54ce04ec1f9a15cc586698b8196a53bd7f1b9dab78470345d6"
+    },
+    "rust_object": {
+      "path": "/tmp/mckernel-rocky-rust/kernel/rust/mckernel_rust.o",
+      "sha256": "ea685c6af411f084dd3071e740f3ce8fff6aaf9aeb58c6924d3dcca0216d6140"
+    }
+  },
+  "metric_scope": "final mckernel.img allocated executable PROGBITS bytes",
+  "non_rust_or_padding_executable_text_bytes": 169664,
+  "rust_executable_text_bytes": 614183,
+  "rust_executable_text_percent": "78.354960",
+  "rust_input_contribution_count": 2712,
+  "schema": "mckernel-link-map-executable-text-ownership-v1",
+  "source_commit": "24a151fef5b9fcf303fdbb8cf9762340cd4100fd",
+  "total_executable_text_bytes": 783847
+}

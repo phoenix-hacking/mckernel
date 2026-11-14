@@ -1,0 +1,144 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "FIRST_PREFLIGHT_FAILURE_RETAINED_NO_RETRY_NO_POPEN",
+  "original_wholejoin": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/actual-first-candidate-1/ACTUAL-WHOLE-JOIN.json",
+    "sha256": "e35bf6de4371391cd95c4a1f0a35d2a29d421283ae36a0fe40bc6a839f34def6",
+    "bytes": 977
+  },
+  "executed_driver": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/actual-first-candidate-1/run_actual_once.py",
+    "sha256": "d317b5b8ca5e4f395060874e149bb24fc24fe85ec1deeff0a2b118b1a899c863",
+    "bytes": 9875
+  },
+  "outer_actual_command_exit": 1,
+  "fixture_commands_started": 0,
+  "compiler_commands_started": 0,
+  "CPU6_released": true,
+  "declared_output_directory_created": false,
+  "bounded_detector_entries": [
+    {
+      "pid": 49,
+      "comm": "cpuhp/6",
+      "state": "S",
+      "start": 14,
+      "flags": 69238848,
+      "PF_KTHREAD_set": true,
+      "status_fields": [
+        "Name:\tcpuhp/6",
+        "State:\tS (sleeping)",
+        "PPid:\t2",
+        "Cpus_allowed_list:\t6"
+      ],
+      "cmdline_empty": true
+    },
+    {
+      "pid": 50,
+      "comm": "idle_inject/6",
+      "state": "S",
+      "start": 14,
+      "flags": 69238848,
+      "PF_KTHREAD_set": true,
+      "status_fields": [
+        "Name:\tidle_inject/6",
+        "State:\tS (sleeping)",
+        "PPid:\t2",
+        "Cpus_allowed_list:\t6"
+      ],
+      "cmdline_empty": true
+    },
+    {
+      "pid": 51,
+      "comm": "migration/6",
+      "state": "S",
+      "start": 14,
+      "flags": 69238848,
+      "PF_KTHREAD_set": true,
+      "status_fields": [
+        "Name:\tmigration/6",
+        "State:\tS (sleeping)",
+        "PPid:\t2",
+        "Cpus_allowed_list:\t6"
+      ],
+      "cmdline_empty": true
+    },
+    {
+      "pid": 52,
+      "comm": "ksoftirqd/6",
+      "state": "S",
+      "start": 14,
+      "flags": 69238848,
+      "PF_KTHREAD_set": true,
+      "status_fields": [
+        "Name:\tksoftirqd/6",
+        "State:\tS (sleeping)",
+        "PPid:\t2",
+        "Cpus_allowed_list:\t6"
+      ],
+      "cmdline_empty": true
+    },
+    {
+      "pid": 54,
+      "comm": "kworker/6:0H-events_highpri",
+      "state": "I",
+      "start": 14,
+      "flags": 69238880,
+      "PF_KTHREAD_set": true,
+      "status_fields": [
+        "Name:\tkworker/6:0H-events_highpri",
+        "State:\tI (idle)",
+        "PPid:\t2",
+        "Cpus_allowed_list:\t6"
+      ],
+      "cmdline_empty": true
+    },
+    {
+      "pid": 229,
+      "comm": "kworker/6:1H-kblockd",
+      "state": "I",
+      "start": 66,
+      "flags": 69238880,
+      "PF_KTHREAD_set": true,
+      "status_fields": [
+        "Name:\tkworker/6:1H-kblockd",
+        "State:\tI (idle)",
+        "PPid:\t2",
+        "Cpus_allowed_list:\t6"
+      ],
+      "cmdline_empty": true
+    },
+    {
+      "pid": 3738614,
+      "comm": "kworker/6:1-events",
+      "state": "I",
+      "start": 56131608,
+      "flags": 69238880,
+      "PF_KTHREAD_set": true,
+      "status_fields": [
+        "Name:\tkworker/6:1-events",
+        "State:\tI (idle)",
+        "PPid:\t2",
+        "Cpus_allowed_list:\t6"
+      ],
+      "cmdline_empty": true
+    },
+    {
+      "pid": 4022589,
+      "comm": "kworker/6:2",
+      "state": "I",
+      "start": 60152915,
+      "flags": 69238880,
+      "PF_KTHREAD_set": true,
+      "status_fields": [
+        "Name:\tkworker/6:2",
+        "State:\tI (idle)",
+        "PPid:\t2",
+        "Cpus_allowed_list:\t6"
+      ],
+      "cmdline_empty": true
+    }
+  ],
+  "disposition": "Finite facts only, not a correction or release. Detector included emptycmdline CPU6 entries without excluding kernelthreads; root/expertowns any next correction/admission. No selfretry.",
+  "expected_8000_counts": "NOTEXECUTED",
+  "original_recipe_precheck_products_mutated": false
+}

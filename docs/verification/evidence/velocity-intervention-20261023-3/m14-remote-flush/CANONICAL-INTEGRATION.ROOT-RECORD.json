@@ -1,0 +1,48 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "CANONICAL_TWO_FILE_SOURCE_INTEGRATED_AFTER_SOURCE_AND_ACTUAL_CONSUMER_ACCEPTANCE",
+  "copies": [
+    {
+      "path": "/home/holden/mckernel/kernel/mem.c",
+      "preimage_sha256": "bac5d4fb766b5cb80e036457465e215743a1cb31622ff11c5b5b605749f3d7fe",
+      "postimage_sha256": "7498e7c930a55bdcde5ecd12f4498c47c5573d690355c8f09a7b9f957ffe00a2",
+      "bytes": 226712,
+      "new_inode": 47475811,
+      "nlink": 1
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+      "preimage_sha256": "5b1716af8c1f0381001199ed2332efb58562cb983143b0e58c2658abaabfcb3c",
+      "postimage_sha256": "c0e7f8bd0b117c9b4e0a4e3690ef5ed5cb01bdc6b16f7225de973eba039d72d5",
+      "bytes": 202708,
+      "new_inode": 47484784,
+      "nlink": 1
+    }
+  ],
+  "active_direct_pin_check": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-remote-flush/ACTIVE-SDK8-DIRECT-PIN-CHECK.json",
+    "sha256": "dfdd56b72a2553fce28e229dd70a70ef65a3bbbeed25bee9fb0cc10ecbf3d42b",
+    "bytes": 2348
+  },
+  "preserves_frozen_hardlinks": true,
+  "independent_production_acceptance": {
+    "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+    "reviewer": "/root/m14_callback_review",
+    "actual_Rust_verdict": "PASS_ACTUAL78_PRODUCTION_RUST_CONSUMER_ONLY",
+    "actual_Rust_receipt_sha256": "d3bfcd21e64b89715866a3b2a7ebdcbc6c7f66f4be967b39dd273e08f3787ff5",
+    "actual_C_verdict": "PASS_ACTUAL_SELECTED_GCC9_WHOLE_TU_AND_PARTIAL_LINK_ONLY",
+    "actual_C_receipt_sha256": "72211a29e13036fd6cc0eb96250d42458d80213483fcdc44aa55ea33a010614b",
+    "Rust_object_sha256": "6e91528d6fecf3e58454a91c9b9006a809413301ee227253dd6a04780af5b648",
+    "preserved_T_and_exact_U_delta_560_to_573": true,
+    "all_commands_joined_group_absent_streams_closed": true,
+    "callback_debt": 13,
+    "default_GCC14_kernel_link": false,
+    "native": false
+  },
+  "remaining_C_callbacks": 13,
+  "whole_file_retired": false,
+  "default_image_link": false,
+  "native_acceptance": false,
+  "practical_check_closure": false,
+  "next": "Coherent next default image build and relevant targeted native proof; final LONG only after fullM14 readiness."
+}

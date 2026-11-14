@@ -1,0 +1,34 @@
+{
+  "schema": "mckernel.native-exact-c81-signals-diagnostic-checkpoint.v1",
+  "recorded_at": "2026-10-01T08:00:00Z",
+  "status": "PASS_DIAGNOSTIC_C81_SIGNALS_AND_PASS_GUEST_POSTFLIGHT_SIGNALS",
+  "candidate": {"source_commit": "c81aeaca5cedd893981a058444fa11a03a49a744", "mckernel_image_sha256": "fa6685543160fcaa5000b535ec8bd6fc70230465109564c3fb2beecb95bf39ed", "compiled_candidate_count": 1},
+  "execution": {
+    "nonce": "12b580e25217daeb184cc3b6af080b0e",
+    "packet_path": "docs/verification/stability-native-diagnostic-signals-c81-execution-packet-20261001-1.md",
+    "packet_sha256": "3724d7082feb5f55d7e85a8d2bb3c0f26409f15e56ac87274cbf7a056fea28c5",
+    "packet_fetched_commit": "61b0b027a878c2b709164e8cffdf34ddb82c452f",
+    "manifest_sha256": "7638d9829c8e2fbc45829b7e3aae1e602e1c8bd42ee611796ee0e5037001c298",
+    "attempt_root": "/home/holden/mckernel-work/scratch/ndsigc81-20261001-1/attempt-12b580e25217daeb184cc3b6af080b0e",
+    "result_sha256": "49c012dc2a0c45c42df703c2c8b3bd7129bf1827533203407cc9a953e08e2d7e",
+    "serial_sha256": "48af33642078998e5458e5848785432c0996b6cb53418989f6df0949dd44639f",
+    "qmp_sha256": "e7b163555938852293194be07514a0b972ea36e4c7c382a35bc482f14801857e",
+    "owner_result_sha256": "ec88044211d9523c8c3799bb09bbbff61b74c975fb3b0a053394e9a49df0a823",
+    "owner_state_sha256": "9fde2bc92310eb3d121fcd9d72a6a9fff1ba0156ee5dfadcff3c04c814c320e8",
+    "owner_identity_sha256": "ef57dcd62c62f796b228f755ccce04919ebbfa3fd0c8720670543f3b7c273847"
+  },
+  "observed": {
+    "stdout_hex": "4e41544956455f434f52452050415353207369676e616c730a", "stderr_hex": "", "exit_code": 37, "raw_wait_status": 9472,
+    "streams_eof": true, "discarded_bytes": 0, "truncated": false, "procfs_empty": true,
+    "verified_behavior": ["blocked SIGUSR1 remained pending", "unblocking delivered SIGUSR1 on the alternate stack", "a second delivery also used the alternate stack", "signal action, mask and alternate stack were restored", "PID/TID 256 was deleted", "four pager references drained to zero", "retirement advanced from retryable -11 to zero"]
+  },
+  "cleanup": {
+    "container_id": "eb33a982e9004c2834e59cedcd9d8edfad3660e4ab8a02692acd349ea70cbcb0", "container_exit_code": 0, "container_oom_killed": false, "container_absent": true,
+    "docker_clients_reaped": 30, "owner_pid": 2933484, "owner_pid_absent": true, "development_lock_released": true, "lease_retained": false,
+    "qmp_guest_shutdown_observed": true, "qmp_quit_acknowledged": true, "qemu_returncode": -9
+  },
+  "decisions": ["PASS_EXECUTION_C81_SIGNALS", "PASS_DIAGNOSTIC_C81_SIGNALS", "PASS_GUEST_POSTFLIGHT_SIGNALS"],
+  "accounting": {"accepted_current_candidate_diagnostic_applications": 5, "formal_application_acceptance": 0, "os_goal_complete": false},
+  "limitations": ["bounded diagnostic, not general signal correctness or formal application acceptance", "forced QEMU reap after acknowledged QMP shutdown and quit is not graceful QEMU exit", "application exit and QMP poweroff do not establish native OS shutdown"],
+  "next_tasks": ["repair direct-futex lane with a bounded typed stderr oracle and executable collector tests before artifact or guest release", "extend native shutdown into generation-bound sender closure and callback drain, then STOP, CPU reclamation and resource restoration"]
+}

@@ -1,0 +1,229 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Two pure perf-attribute callbacks only, no PMU/counter/systemcall/kernel/native effects.",
+  "status": "PRIVATE_TWO_NEW_RUST_CALLBACKS_SOURCE_IMPLEMENTED_UNCOMPILED_NO_GRANT",
+  "commands": [
+    {
+      "label": "00-two-actual-Rust-callbacks-object",
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--crate-name",
+        "f03_perf_attr_callbacks",
+        "--crate-type",
+        "lib",
+        "--edition=2021",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "--emit=obj=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-perf-attribute-callbacks-1/output-PENDING-ROOT/callbacks.o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-perf-attribute-callbacks-1/lib.fixture.rs"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Two pure perf-attribute callbacks only, no PMU/counter/systemcall/kernel/native effects.",
+      "cwd": "/home/holden/mckernel"
+    },
+    {
+      "label": "01-genuine-header-original-C-driver-and-Rust-link",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-Werror=incompatible-pointer-types",
+        "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+        "-DIHK_OS_MANYCORE",
+        "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+        "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+        "-DMCKERNEL_NATIVE_CLONE3",
+        "-DMCKERNEL_NATIVE_CLONE_TID",
+        "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+        "-DMCKERNEL_NATIVE_FUTEX",
+        "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+        "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+        "-DMCKERNEL_RUST_BITOPS",
+        "-DMCKERNEL_RUST_LIST_HELPERS",
+        "-DMCKERNEL_RUST_LOCK_HELPERS",
+        "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_PTE_HELPERS",
+        "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+        "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+        "-DPROFILE_ENABLE",
+        "-D__KERNEL__",
+        "-DMCKERNEL_NATIVE_FORK_OWNED_TRANSACTION",
+        "-DMCKERNEL_RUST_RLIMIT_HELPERS",
+        "-DMCKERNEL_RUST_SCHED_POLICY_HELPERS",
+        "-DMCKERNEL_RUST_SCHED_PRIO_HELPERS",
+        "-DMCKERNEL_RUST_SHMID_HELPERS",
+        "-DMCKERNEL_RUST_SHM_PERM_HELPERS",
+        "-DMCKERNEL_RUST_SIGNAL_HELPERS",
+        "-DMCKERNEL_RUST_SYSCALL_OFFLOAD",
+        "-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/current-composition10-compiler-preparation-1/bounded-storage-nominal-correction-current80-1/expert-conditional-projection-correction-1/generated-build/kernel/include",
+        "-I/home/holden/mckernel/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/current-composition10-compiler-preparation-1/bounded-storage-nominal-correction-current80-1/expert-conditional-projection-correction-1/generated-build/kernel",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/current-composition10-compiler-preparation-1/bounded-storage-nominal-correction-current80-1/expert-conditional-projection-correction-1/generated-build",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64/include",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64",
+        "-I/home/holden/mckernel/ihk/ikc/include",
+        "-I/home/holden/mckernel/ihk/linux/include",
+        "-I/home/holden/mckernel/lib/include",
+        "-I/home/holden/mckernel/arch/x86_64/kernel/include",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Wno-unused-parameter",
+        "-Wno-sign-compare",
+        "-Wno-unused-function",
+        "-Wno-implicit-fallthrough",
+        "-Wno-stringop-truncation",
+        "-ffreestanding",
+        "-O2",
+        "-nostdinc",
+        "-isystem",
+        "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+        "-fno-omit-frame-pointer",
+        "-mcmodel=large",
+        "-mno-red-zone",
+        "-mno-sse",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-perf-attribute-callbacks-1/driver.c",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-perf-attribute-callbacks-1/output-PENDING-ROOT/callbacks.o",
+        "-no-pie",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-perf-attribute-callbacks-1/output-PENDING-ROOT/parity"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Two pure perf-attribute callbacks only, no PMU/counter/systemcall/kernel/native effects.",
+      "cwd": "/home/holden/mckernel"
+    },
+    {
+      "label": "02-original-C-Rust2330-pairs",
+      "argv": [
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-perf-attribute-callbacks-1/output-PENDING-ROOT/parity"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Two pure perf-attribute callbacks only, no PMU/counter/systemcall/kernel/native effects.",
+      "cwd": "/home/holden/mckernel"
+    }
+  ],
+  "expected_pairs": 2330,
+  "expected_vector_scope": "512 flags combinations +64 single-bit images +allones; four ordered/nonalias/alias C/Rust pairs each, plus7counter+15read NULL/no-write pairs",
+  "new_production_sources": [
+    "kernel/rust/f03_perf_attr_callbacks.rs",
+    "kernel/rust/f03_perf_event_attr_abi.rs"
+  ],
+  "central_canonical_write_proposal": [
+    "kernel/syscall.c",
+    "kernel/CMakeLists.txt",
+    "kernel/rust/lib.rs",
+    "kernel/rust/f03_perf_attr_callbacks.rs",
+    "kernel/rust/f03_perf_event_attr_abi.rs"
+  ],
+  "shared_abi_rs_write": false,
+  "syscall_policy_write": false,
+  "parent_cputime_candidate": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/SOURCE-HANDOFF.json",
+    "bytes": 6356,
+    "sha256": "849fcff8c75b3ac7e36a9b56b8a3f2abf121d2fa12e212ebfb2032dacaba1c4a"
+  },
+  "input_refs": {
+    "candidate/kernel/syscall.c": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-perf-attribute-callbacks-1/candidate/kernel/syscall.c",
+      "bytes": 910097,
+      "sha256": "23293565af78250da0dc6da7ea74f83f3246e4ba99700e9035d8db7f519edf12"
+    },
+    "candidate/kernel/rust/lib.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-perf-attribute-callbacks-1/candidate/kernel/rust/lib.rs",
+      "bytes": 2169,
+      "sha256": "9795c733d4bc973f8b9934e8b8863069e48301ef80c979d4593108b9dafcb6b7"
+    },
+    "candidate/kernel/CMakeLists.txt": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-perf-attribute-callbacks-1/candidate/kernel/CMakeLists.txt",
+      "bytes": 26753,
+      "sha256": "46890fd958e877e340116e46e6e6880d478ddb487d5147f3e16c02276db74854"
+    },
+    "candidate/kernel/rust/f03_perf_attr_callbacks.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-perf-attribute-callbacks-1/candidate/kernel/rust/f03_perf_attr_callbacks.rs",
+      "bytes": 1638,
+      "sha256": "116a1b3561009f530817c96341a8d1b58e1ab1ea275856f7582168c126ca2017"
+    },
+    "candidate/kernel/rust/f03_perf_event_attr_abi.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-perf-attribute-callbacks-1/candidate/kernel/rust/f03_perf_event_attr_abi.rs",
+      "bytes": 1722,
+      "sha256": "8eec931271fd3829c6fffbadf3f2ae1da13796cc1929f3685145d0cd65c8d285"
+    },
+    "lib.fixture.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-perf-attribute-callbacks-1/lib.fixture.rs",
+      "bytes": 245,
+      "sha256": "0d3336520bf1a20290a709624ee0644b6b170e59200070f32f63b952a3dd506d"
+    },
+    "driver.c": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-perf-attribute-callbacks-1/driver.c",
+      "bytes": 4168,
+      "sha256": "06b0e8eb7abd478199b443af6e0d3b4909ab34d06581555272cacb576c570348"
+    },
+    "perf_counter_attr_flags_bridge.ORIGINAL-C.inc": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-perf-attribute-callbacks-1/perf_counter_attr_flags_bridge.ORIGINAL-C.inc",
+      "bytes": 340,
+      "sha256": "3477064c7a59b43975f5600e4cd55e34cbb87274473ab42c52423d837ffef077"
+    },
+    "perf_read_attr_flags_bridge.ORIGINAL-C.inc": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-perf-attribute-callbacks-1/perf_read_attr_flags_bridge.ORIGINAL-C.inc",
+      "bytes": 392,
+      "sha256": "8a546661055da615aa79f18e68c65ec9c65e0ca9b3d15f6d8fc33a5324068f53"
+    }
+  },
+  "tool_refs": {
+    "C": {
+      "path": "/usr/bin/gcc-9",
+      "bytes": 1158288,
+      "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f"
+    },
+    "stable_Rust": {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "bytes": 654904,
+      "sha256": "028fd60b0e0add5505c661cd3ccde91393d615c8729bd95d94ab1e91409b36a1"
+    },
+    "Python": {
+      "path": "/home/holden/anaconda3/bin/python3",
+      "bytes": 15880080,
+      "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb"
+    }
+  },
+  "inherited_genuine_header_C_flags": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-15-perf-entry-abi/execution-freeze-1/EXACT-PERF-ABI-COMMANDS.NOT-GRANTED.json",
+    "bytes": 24827,
+    "sha256": "e8e545f6dfa5fc9067f591a0b4f2248654e94cc90a335439349dca14d3f1a08f"
+  },
+  "required_actual_resource_admission": true,
+  "profile": {
+    "jobs": 1,
+    "memory_planning_ceiling_bytes": 2147483648,
+    "CPU": "Root ordinary slot only; no grant claimed",
+    "root": false,
+    "container": false,
+    "native": false
+  },
+  "retained_qualified_attribute_type": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-15-perf-entry-abi/perf_event_attr.ABI.rs.inc",
+    "bytes": 1722,
+    "sha256": "8eec931271fd3829c6fffbadf3f2ae1da13796cc1929f3685145d0cd65c8d285"
+  },
+  "retained_ABI_acceptance": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-15-perf-entry-abi/execution-freeze-1/ACTUAL-SOURCE15-ABI-HANDOFF.json",
+    "bytes": 13846,
+    "sha256": "6763a9706372c8449527f225562dfc51b554383344e08eef70b50c15c71c677b"
+  },
+  "current_header": {
+    "path": "/home/holden/mckernel/lib/include/mc_perf_event.h",
+    "bytes": 8775,
+    "sha256": "8a9978dcab179a63b3aff3b66641a4814bacaf86cf4631ecdf39e32df45ea5dd"
+  },
+  "actual_selected_callbacks": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-perf-attribute-callbacks-1/ACTUAL-RETAINED-PERF-CALLBACK-BINDING.json",
+    "bytes": 1027,
+    "sha256": "837a7a988fb94451b867e13e91a2a7ccce023becfffe0c45ab1e2d5cbfb80c25"
+  },
+  "callback_new_body_functions": [
+    "f03_perf_counter_attr_flags_v1",
+    "f03_perf_read_attr_flags_v1"
+  ],
+  "selected_C_debt_before": 2,
+  "actual_new_object_delta": null,
+  "actual_default_or_native": false,
+  "held_perf_entry_allocator_group_corrections_enabled": false
+}

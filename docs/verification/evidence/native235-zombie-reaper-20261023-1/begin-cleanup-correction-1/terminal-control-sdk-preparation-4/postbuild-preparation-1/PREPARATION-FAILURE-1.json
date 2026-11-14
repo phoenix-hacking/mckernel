@@ -1,0 +1,17 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "STOPPED_FIRST_UNEXPECTED_METADATA_ASSERTION",
+  "actual_tool_chunk": "04f39f",
+  "returncode": 1,
+  "stderr": "Traceback (most recent call last):\n  File \"<stdin>\", line 12, in <module>\nAssertionError\n",
+  "failing_line_12": "for operation in artifact['operations']:assert nonce in operation['argv'][-1]or operation['name']in('module_sha256',)",
+  "cause": "Outer status/stderr paths correctly use the SDK-private release-assembly/owner-capture-1 directory, which does not contain the nonce. Request-bound artifact and owner evidence paths already provide exact identity.",
+  "profile": {"cpu": 0, "jobs": 1, "AS": 2147483648, "CPU_seconds": 30, "FSIZE": 134217728, "nofile": 256, "core": 0},
+  "cwd": "/home/holden/mckernel",
+  "python": "/home/holden/anaconda3/bin/python3 -I -B -",
+  "retained_partial_files": "ACTUAL-READS.SCHEMA.PENDING.json in new repository postbuild-preparation-1 and private H4/postbuild-preparation; no artifact or physical packet written.",
+  "actual_output_reads": 0,
+  "root_Docker_compiler_queries": 0,
+  "automatic_retry": false,
+  "next": "Dispatcher authorizes one bounded metadata correction using exact request/capture path checks."
+}

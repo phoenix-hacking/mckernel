@@ -1,0 +1,9 @@
+{
+  "at": "2026-09-15T02:33:30.344503+00:00",
+  "command": "OS_GOAL_PROTOCOL_SCHEMA=/tmp/os-goal-protocol-ci05fpv2 python3 -B scripts/tests/test_os_goal_launcher.py -v",
+  "exit_code": 1,
+  "result": "15 offline lifecycle/transport tests passed; optional generated-schema validation failed during schema loading.",
+  "original_error": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/os-goal-protocol-ci05fpv2/InitializeParams.json'",
+  "correction": "Use the generated v1/InitializeParams.json path.",
+  "scope": "Launcher test harness only; no Codex inference or OS payload execution."
+}

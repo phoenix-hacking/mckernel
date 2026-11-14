@@ -1,0 +1,58 @@
+{
+  "schema": "mckernel.native-fork-inherited-vma-independent-review.v1",
+  "decision": "PASS_DORMANT_SOURCE_BOUNDARY",
+  "reviewer": "/root/fork_adoption_boundary_review",
+  "implementation_author": "/root/fork_ownership",
+  "implementation_ownership": false,
+  "model": "gpt-6.1-sol",
+  "source_root": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1",
+  "code_sha256": {
+    "host-kernel/native-rust/mcctrl_vm.rs": "6ef9694808e4950f1dd2fe6e609413b96f45281ef4010fe9cdebe42b78272e3c",
+    "host-kernel/native-rust/mcctrl_process.rs": "132f5fbc769a562e7e01fad44ce1f78b7928b14494a0b9d9d3e709e68f2e9d04",
+    "host-kernel/kbuild/patches/0011-mm-export-inherited-vma-write-primitives.patch": "c7e59c982b4ec85ff93fb232f88265e46d8f789abb5eafecd7a89f7350640d9d",
+    "scripts/tests/test_native_fork_inherited_vma_transaction_20261017.py": "3ea37f065803007b205f9ef6740e61201322c9c7b04408fb7c591c04899de0f3",
+    "scripts/tests/fixtures/native_fork_inherited_vma_transaction_20261017.rs": "b653891d220622b3791fe82aca0bb212512d985d2c6a5cc67c656d734e753b65"
+  },
+  "findings": [
+    "The new primitive is unsafe and dormant: the only production inherit_vmas occurrence is its definition; CREATE_PPD's nonzero-argument EOPNOTSUPP gate remains. No admission or runtime caller is added.",
+    "Exact parent geometry, distinct registration, nonzero same slot/generation and different current MM are checked before mutation. Under the current MM's real write lock, the full contiguous VMA set must have matching MM, operations, nonnull common file, exact offset, required PFN flags, identical flags and exact parent Registration/Mirror ownership. Gaps, overlap and foreign ownership fail closed.",
+    "CurrentMm owns a transient mm_users reference through unlock; each Mirror owns structural mm_count only. VMA owners retain Registration and Mirror, but Mirror does not retain Registration or mm_users, so this addition introduces no VMA/MM users reference cycle. MM identity/allocation errors balance before any VMA mutation.",
+    "All fallible allocations and journal population complete before per-VMA write exclusion, zaps or owner replacement. Real vma_start_write is applied to every validated VMA before all inherited PFNs are zapped; all zaps precede all owner swaps. Each old raw Arc is balanced once and each new VMA receives one raw Arc. Parent Registration/Mirror arguments remain retained across old-owner drops, preventing their final external destructor under the MM lock. On a pre-mutation error the guard unlocks before the last local child owner/Registration can drop.",
+    "After mutation starts, no Result-returning operation remains. seal runs after every child owner is installed but before real mmap_write_unlock releases the VMA write epoch. Its infallibility is an unsafe caller obligation, not something FnOnce's type proves; there is deliberately no rollback after first zap.",
+    "The three C thunks have matching void/pointer-only Rust declarations and call real pinned mmap_write_lock, mmap_write_unlock and vma_start_write. In the retained Linux source, write lock begins the MM sequence, vma_start_write excludes per-VMA readers, and write unlock calls vma_end_write_all before up_write. No raw semaphore substitute or handwritten sequence protocol is introduced."
+  ],
+  "pinned_linux_source": {
+    "root": "/home/holden/mckernel-work/scratch/native-source/linux-6.12.0-211.44.1.el10_2",
+    "files_sha256": {
+      "include/linux/mmap_lock.h": "b361781abe8cb1b625c0eaa5c707815177a28b4c55d89b8f098fc4f6f0324732",
+      "include/linux/mm.h": "aac2bb23f3a07d0b6ab0e085c2a3fe4b00bc2f53bf5db237e1671ea39f346732",
+      "mm/mmap.c": "eb389f96f6871408a425c886c8f334f71a98d9c8a4664678ad11d5faee7c3bee"
+    },
+    "patch_application": "Dispatcher reports read-only apply-check PASS after two preserved hunk-format failures. Reviewer read the exact patch and pinned API bodies; did not reapply, compile or modify Linux."
+  },
+  "actual_body_evidence_reused": {
+    "root": "/tmp/native-fork-inherited-vma-20261017-z79gmrqg",
+    "generated_source_sha256": "51e181dea6e75e925317d1c306487fae52d2ee2b1e8b10f122379f2faa77e580",
+    "generated_source_equals_current_driver_extraction": true,
+    "compile_status": 0,
+    "run_status": 0,
+    "rust_tests_passed": 4,
+    "run_stdout_sha256": "952e3ba9e01e4e5a0885b30eac5e23d36ef215f0c1fc93a81f548b8bd5afcd75",
+    "compile_stderr_sha256": "bcfb762addc157316a4e3b9239e2507c410670ae044e6c343bfacfb37e1be4d3",
+    "coverage": "Actual MM/reference, owner, same-generation, transaction and lookup bodies; geometry/generation/current-MM rejection, nine invalid VMA vectors, three allocation failure points, write/zap/swap/seal/unlock order and parent/child fault routing with balanced references.",
+    "limits": "Linux/MM/VMA tree/lock/allocation/LOOKUP adapters are synthetic. The disclosed improper_ctypes warning is from the fixture vm_area_struct lacking repr(C); this is neither native Linux ABI evidence nor a production warning conclusion. Tests do not execute the real C thunks or prove concurrency, backend transaction sealing, revoke or final ACK.",
+    "compiler_or_tests_rerun_by_reviewer": false
+  },
+  "required_activation_gates": [
+    "Keep the primitive dormant and CREATE_PPD closed until exact pinned native build/link proves the patched C exports and Rust ABI/configuration surface. Applying a patch and synthetic fixture success are insufficient.",
+    "A future unsafe caller must bind the retained immutable parent delivery/nonce/OS generation and exact child Registration/PID/current MM/backend reservation. same_generation proves only nonzero slot/generation equality, not child PID identity, transaction provenance, publication state or guest root ownership.",
+    "Review the concrete caller's lock order: neither acquiring MM/VMA write exclusion nor seal may wait on a backend lock held by a fault waiting on that exclusion. seal must not panic, allocate, perform fallible/user/external operations, reenter the MM lock or expose a partly adopted transaction; it must commit the already-reserved exact child owner infallibly before unlock.",
+    "Retain guest root ownership structurally across host revoke and native abort; separately prove final VM destruction and exact final ACK before retiring the reservation. This helper supplies none of those proofs and authorizes no fork wiring or runtime admission."
+  ],
+  "blocking_findings_for_dormant_source": [],
+  "review_profile": "Focused read-only source/capture check, CPU2 one-job/2GiB planning share; no Git, root, Docker, network, child agent, compiler or mutation beyond this new review file. Current native image build and its inputs/leases untouched; no shared-evidence corpus scans or baseline replay.",
+  "failure_history": "Prior fork ownership/adoption/final-destructor/backend findings and the two reported patch-format failures remain preserved. This scoped source PASS does not reset them or grant native/compiler/runtime/formal acceptance.",
+  "native_abi_proven": false,
+  "runtime_caller_released": false,
+  "acceptance_credit": false
+}

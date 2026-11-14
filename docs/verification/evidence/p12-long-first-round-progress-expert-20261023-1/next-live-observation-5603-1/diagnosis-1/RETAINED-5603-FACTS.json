@@ -1,0 +1,290 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "FINITE_RETAINED_PREFIX_FACTS_ONLY",
+  "capture": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/actual-read-1/stdout",
+    "sha256": "ce67af79d6944fa02701af32c0373daa6b51cfc958f6c364583bfc2080345e5a",
+    "bytes": 173545
+  },
+  "retained_prefix": {
+    "bytes": 128772,
+    "sha256": "b5e4e55377cd405c747bfefa92e65d1df59bd6a9a96a8df209629920d95d25e7",
+    "complete_lines": 1408,
+    "partial_tail_bytes": 0
+  },
+  "diagnostic_interpreter": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-aa5-1/interpret_retained_diagnostics.py",
+    "sha256": "0f71d1fc9b8fcef7b0540ee8a98c055e3bdd36ed504dc3b261cd3fb46758cfca",
+    "unchanged": true
+  },
+  "phases_failure": {
+    "last_phase": {
+      "line": 434,
+      "round": 0,
+      "stage": "failure-trace-save"
+    },
+    "phase_records": [
+      {
+        "line": 422,
+        "round": 0,
+        "stage": "setup-spool"
+      },
+      {
+        "line": 425,
+        "round": 0,
+        "stage": "round-evidence"
+      },
+      {
+        "line": 426,
+        "round": 0,
+        "stage": "callback-discover"
+      },
+      {
+        "line": 427,
+        "round": 0,
+        "stage": "callback-launch"
+      },
+      {
+        "line": 428,
+        "round": 0,
+        "stage": "callback-load"
+      },
+      {
+        "line": 429,
+        "round": 0,
+        "stage": "callback-postflight"
+      },
+      {
+        "line": 430,
+        "round": 0,
+        "stage": "callback-gate"
+      },
+      {
+        "line": 433,
+        "round": 0,
+        "stage": "failure-trace-snapshot"
+      },
+      {
+        "line": 434,
+        "round": 0,
+        "stage": "failure-trace-save"
+      }
+    ],
+    "failure_records": [
+      {
+        "line": 431,
+        "round": 0,
+        "stage": "callback-gate",
+        "pair_stage": "app0_trace_oracle",
+        "result": -5,
+        "ownership_complete_reported": 1,
+        "rounds_reported": 0,
+        "launches_reported": 0,
+        "trace_bytes_reported": 0
+      }
+    ],
+    "abort_records": 2,
+    "trace_headers": [
+      {
+        "line": 435,
+        "kind": "BEGIN",
+        "bytes_declared": 97303,
+        "saved_reported": 1
+      },
+      {
+        "line": 1406,
+        "kind": "END",
+        "bytes_declared": 97303,
+        "saved_reported": null
+      }
+    ],
+    "trace_errors": [],
+    "diagnostic_parse_errors": [],
+    "partial_tail_excluded_bytes": 0,
+    "launch_credit": 0,
+    "work_hour_credit": 0,
+    "ownership_clearance": false,
+    "application_acceptance": false,
+    "native_acceptance": false,
+    "qualification": "Last phase identifies an entered boundary only; absence of a next line does not prove blocking, liveness, app start, safe ownership or cause. Failure fields and trace headers are reported serial values. Raw retained prefix preserves trace bytes; no trace/retirement proof is inferred. Existing strict terminal consumer remains authoritative."
+  },
+  "anchor_before": {
+    "expected_start": 57872098,
+    "observed_start": 57872098,
+    "pid": 3857698,
+    "same_identity": true,
+    "state": "S"
+  },
+  "anchor_after": {
+    "expected_start": 57872098,
+    "observed_start": 57872098,
+    "pid": 3857698,
+    "same_identity": true,
+    "state": "S"
+  },
+  "reported_completed_launches": null,
+  "reported_mixed_work_ns": null,
+  "typed_notifications": {
+    "recorded_rows": [
+      {
+        "serial_line": 1314,
+        "text": "<6>[   34.292832] ihk_smp_x86_64: IHK-SMP: guest notification os=0 generation=1 eventfd_type=101 count=1 subscribers=0"
+      },
+      {
+        "serial_line": 1315,
+        "text": "<6>[   34.292979] ihk_smp_x86_64: IHK-SMP: guest notification os=0 generation=1 eventfd_type=101 count=2 subscribers=0"
+      },
+      {
+        "serial_line": 1316,
+        "text": "<6>[   34.293025] ihk_smp_x86_64: IHK-SMP: guest notification os=0 generation=1 eventfd_type=101 count=3 subscribers=0"
+      },
+      {
+        "serial_line": 1317,
+        "text": "<6>[   34.293058] ihk_smp_x86_64: IHK-SMP: guest notification os=0 generation=1 eventfd_type=101 count=4 subscribers=0"
+      },
+      {
+        "serial_line": 1318,
+        "text": "<6>[   34.294808] ihk_smp_x86_64: IHK-SMP: guest notification os=0 generation=1 eventfd_type=101 count=5 subscribers=0"
+      },
+      {
+        "serial_line": 1319,
+        "text": "<6>[   34.294883] ihk_smp_x86_64: IHK-SMP: guest notification os=0 generation=1 eventfd_type=101 count=6 subscribers=0"
+      },
+      {
+        "serial_line": 1320,
+        "text": "<6>[   34.294913] ihk_smp_x86_64: IHK-SMP: guest notification os=0 generation=1 eventfd_type=101 count=7 subscribers=0"
+      },
+      {
+        "serial_line": 1321,
+        "text": "<6>[   34.294950] ihk_smp_x86_64: IHK-SMP: guest notification os=0 generation=1 eventfd_type=101 count=8 subscribers=0"
+      },
+      {
+        "serial_line": 1322,
+        "text": "<6>[   34.294977] ihk_smp_x86_64: IHK-SMP: guest notification os=0 generation=1 eventfd_type=101 count=9 subscribers=0"
+      },
+      {
+        "serial_line": 1323,
+        "text": "<6>[   34.295003] ihk_smp_x86_64: IHK-SMP: guest notification os=0 generation=1 eventfd_type=101 count=10 subscribers=0"
+      },
+      {
+        "serial_line": 1324,
+        "text": "<6>[   34.295029] ihk_smp_x86_64: IHK-SMP: guest notification os=0 generation=1 eventfd_type=101 count=11 subscribers=0"
+      },
+      {
+        "serial_line": 1325,
+        "text": "<6>[   34.295071] ihk_smp_x86_64: IHK-SMP: guest notification os=0 generation=1 eventfd_type=101 count=12 subscribers=0"
+      },
+      {
+        "serial_line": 1326,
+        "text": "<6>[   34.295778] ihk_smp_x86_64: IHK-SMP: guest notification os=0 generation=1 eventfd_type=101 count=13 subscribers=0"
+      },
+      {
+        "serial_line": 1327,
+        "text": "<6>[   34.296597] ihk_smp_x86_64: IHK-SMP: guest notification os=0 generation=1 eventfd_type=101 count=14 subscribers=0"
+      },
+      {
+        "serial_line": 1328,
+        "text": "<6>[   34.296663] ihk_smp_x86_64: IHK-SMP: guest notification os=0 generation=1 eventfd_type=101 count=15 subscribers=0"
+      },
+      {
+        "serial_line": 1329,
+        "text": "<6>[   34.296693] ihk_smp_x86_64: IHK-SMP: guest notification os=0 generation=1 eventfd_type=101 count=16 subscribers=0"
+      }
+    ],
+    "types_observed": [
+      101
+    ],
+    "qualification": "Logged counts1..16 do not by themselves bound total notifications."
+  },
+  "service_or_wait_failures": [],
+  "lifecycle_rows": [
+    {
+      "serial_line": 935,
+      "text": "<6>[   33.066394] ihk_smp_x86_64: IHK-SMP: application SCHEDULE os=0 generation=1 pid=258 cpu=1"
+    },
+    {
+      "serial_line": 936,
+      "text": "<6>[   33.070906] ihk_smp_x86_64: IHK-SMP: application SCHEDULE os=0 generation=1 pid=257 cpu=0"
+    },
+    {
+      "serial_line": 937,
+      "text": "<6>[   33.082390] ihk_smp_x86_64: IHK-SMP: application procfs published os=0 generation=1 pid=258 tid=258"
+    },
+    {
+      "serial_line": 938,
+      "text": "<6>[   33.084171] ihk_smp_x86_64: IHK-SMP: application procfs published os=0 generation=1 pid=257 tid=257"
+    },
+    {
+      "serial_line": 1361,
+      "text": "<6>[   36.683652] mcctrl: application_process=cleanup_requested os=0 generation=1 pid=258 intent_errno=0"
+    },
+    {
+      "serial_line": 1362,
+      "text": "<6>[   36.694150] ihk_smp_x86_64: IHK-SMP: application cleanup ACK os=0 generation=1 pid=258 token=3 errno=0 abandoned=1"
+    },
+    {
+      "serial_line": 1363,
+      "text": "<6>[   36.699258] ihk_smp_x86_64: IHK-SMP: application retirement os=0 generation=1 pid=258 token=933 errno=-11"
+    },
+    {
+      "serial_line": 1364,
+      "text": "<6>[   36.705721] ihk_smp_x86_64: IHK-SMP: application procfs deleted os=0 generation=1 pid=258 tid=258"
+    },
+    {
+      "serial_line": 1392,
+      "text": "<6>[   37.081727] ihk_smp_x86_64: IHK-SMP: application retirement os=0 generation=1 pid=258 token=1006 errno=0"
+    },
+    {
+      "serial_line": 1402,
+      "text": "<6>[   37.126749] mcctrl: application_process=cleanup_requested os=0 generation=1 pid=257 intent_errno=0"
+    },
+    {
+      "serial_line": 1403,
+      "text": "<6>[   37.132642] ihk_smp_x86_64: IHK-SMP: application cleanup ACK os=0 generation=1 pid=257 token=4 errno=0 abandoned=0"
+    },
+    {
+      "serial_line": 1404,
+      "text": "<6>[   37.137613] ihk_smp_x86_64: IHK-SMP: application retirement os=0 generation=1 pid=257 token=1015 errno=-11"
+    },
+    {
+      "serial_line": 1405,
+      "text": "<6>[   37.139682] ihk_smp_x86_64: IHK-SMP: application procfs deleted os=0 generation=1 pid=257 tid=257"
+    },
+    {
+      "serial_line": 1408,
+      "text": "[   38.082705] ihk_smp_x86_64: IHK-SMP: application retirement os=0 generation=1 pid=257 token=1016 errno=0"
+    }
+  ],
+  "export_boundary": {
+    "BEGIN_serial_line": 435,
+    "END_serial_line": 1406,
+    "declared_bytes": 97303,
+    "saved_reported": 1,
+    "errors": []
+  },
+  "app0_final_retirement_after_export": [
+    {
+      "serial_line": 1408,
+      "text": "[   38.082705] ihk_smp_x86_64: IHK-SMP: application retirement os=0 generation=1 pid=257 token=1016 errno=0"
+    }
+  ],
+  "app_raw_output": {
+    "ND_PAIR_records": [],
+    "ND_PAYLOAD_records": [],
+    "raw_stdout_stderr_exported": false,
+    "qualification": "No raw app stream bytes/report are present in this captured prefix. Source path reaches app0_trace_oracle only after stream_identity_oracle succeeds; that is a source implication, not a raw-byte export or acceptance."
+  },
+  "source_ref": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/long_support.inc",
+    "sha256": "306d889b49249caecc2852454308ed4692d5bb8699fc70314cd07e844fa2cc03",
+    "gate_lines": "158-176; pair_round_trace final conditions lines147-155"
+  },
+  "cause_qualification": "Collector reports strict app0 trace-oracle failure after launch/load/postflight with ownership1. Exported later snapshot still shows app0 pending retirement-11, and final0 is recorded after export. Original strict gate snapshot itself is not retained here, so exact failed predicate/localization belongs to p12_first_round_predictor; no gate change or timing waiver is proposed.",
+  "ownership_handoff": "Parent assigned precise gate diagnosis to p12_first_round_predictor. This lane stops after factual evidence handoff.",
+  "live_reads_PROC_root_QMP_probes_signals": 0,
+  "compiler_tests": 0,
+  "source_oracle_controller_changes": 0,
+  "native_acceptance": false,
+  "application_acceptance": false,
+  "physical_clearance": false
+}

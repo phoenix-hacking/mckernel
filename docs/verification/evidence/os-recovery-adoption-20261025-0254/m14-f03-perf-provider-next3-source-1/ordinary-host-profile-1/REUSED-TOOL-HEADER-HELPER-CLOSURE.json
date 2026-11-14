@@ -1,0 +1,74 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "retained_closure": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-event-provider-bridges-next-source-1/ordinary-host-profile-1/TOOL-HEADER-HELPER-CLOSURE.json",
+    "bytes": 41808,
+    "sha256": "ad70dbc721161b8a554e5a105c710c21cf9212cfda77fc4a1cd29364c514db6d"
+  },
+  "retained_input_count": 134,
+  "additional_tools": [
+    {
+      "path": "/usr/bin/readelf",
+      "bytes": 658360,
+      "sha256": "41a813335a74480f145fba9400aa7fb5c0ec7ffcaa7af7f33e832dc75eb90ffb"
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libctf-nobfd.so.0",
+      "bytes": 117736,
+      "sha256": "75b96d12809374f96cae1fa25e4afbfe51912dc050033e3aa49d00545650c47f"
+    },
+    {
+      "path": "/usr/bin/nm",
+      "bytes": 52664,
+      "sha256": "5fb0dd8acc18e3f348ed0acbcada0580dbdddd1eb5de3c8323613af13580032b"
+    },
+    {
+      "path": "/usr/bin/env",
+      "bytes": 43352,
+      "sha256": "5f7c7882898e9e280e93579b459e22b339c4f38cfd54a05b46b81dfb60c557cc"
+    }
+  ],
+  "additional_ELF_edges": [
+    {
+      "consumer": "/usr/bin/readelf",
+      "needed": "libctf-nobfd.so.0",
+      "resolved": "/lib/x86_64-linux-gnu/libctf-nobfd.so.0"
+    },
+    {
+      "consumer": "/usr/bin/readelf",
+      "needed": "libz.so.1",
+      "resolved": "/lib/x86_64-linux-gnu/libz.so.1"
+    },
+    {
+      "consumer": "/usr/bin/readelf",
+      "needed": "libc.so.6",
+      "resolved": "/lib/x86_64-linux-gnu/libc.so.6"
+    },
+    {
+      "consumer": "/lib/x86_64-linux-gnu/libctf-nobfd.so.0",
+      "needed": "libz.so.1",
+      "resolved": "/lib/x86_64-linux-gnu/libz.so.1"
+    },
+    {
+      "consumer": "/lib/x86_64-linux-gnu/libctf-nobfd.so.0",
+      "needed": "libc.so.6",
+      "resolved": "/lib/x86_64-linux-gnu/libc.so.6"
+    },
+    {
+      "consumer": "/usr/bin/nm",
+      "needed": "libbfd-2.34-system.so",
+      "resolved": "/lib/x86_64-linux-gnu/libbfd-2.34-system.so"
+    },
+    {
+      "consumer": "/usr/bin/nm",
+      "needed": "libc.so.6",
+      "resolved": "/lib/x86_64-linux-gnu/libc.so.6"
+    },
+    {
+      "consumer": "/usr/bin/env",
+      "needed": "libc.so.6",
+      "resolved": "/lib/x86_64-linux-gnu/libc.so.6"
+    }
+  ],
+  "method": "Filesystem reads/ELF parsing only, no tool execution. Existing80 system headers/Rust1.92/GCC9/helper closure unchanged. Real kernel ABI is retained literal declaration slices."
+}

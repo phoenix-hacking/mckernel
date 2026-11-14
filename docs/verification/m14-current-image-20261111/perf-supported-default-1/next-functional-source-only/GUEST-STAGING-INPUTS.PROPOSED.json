@@ -1,0 +1,850 @@
+{
+  "schema_version": 1,
+  "kind": "named-native-diagnostic-staging-inputs",
+  "case_id": "signal-alternate-repeat-c964-a2f00a61",
+  "cohort": {
+    "compute_source_commit": "c964be3917c8f4c5031108aa927c84894584b667",
+    "compute_image_sha256": "a2f00a6105f20642db8ef95fe12ade0873120594531f325ef363a4bb59f0ff8a",
+    "compute_baseline": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/preserved-c964-a2f00a61-1/PRESERVED-COHORT.json",
+      "bytes": 17139,
+      "sha256": "6024f36ad02385f07f3988566c45d712e48e5f4d69395652f7e9c89d14e42b45"
+    },
+    "compute_qualification": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/qualification-1/dispatch-owner-correction-1/QUALIFICATION.json",
+      "bytes": 139468,
+      "sha256": "6f67cd0637b3127c8724e78ad259d3b86c536c66868a92dafa0a106f33f68623"
+    },
+    "matching_module_binding": {
+      "bytes": 30444,
+      "path": "/home/holden/mckernel/docs/verification/m14-m15-matching-kbuild-20261110/bindings-qualified/BINDINGS.json",
+      "sha256": "0781087478376977da68666ee6ae257846d53dc5501cfa6b9b3ca170597f26be"
+    },
+    "IHK_commit": "8d288b8bd81b50cc3a3f814d949b89bf416a6ec7",
+    "module_source_stage": "099/Linux6.12/config106055",
+    "collector_source_sha256": "c48cbdcbc3648f4e1d8838e451d6d578c5a0b2876fc6e2401aff26ee4372a5b8",
+    "collector_actual_producer_profile": "ActualHOSTgcc9 -static -no-pie C11/O2/g1/Wall/Wextra/Werror/ND_SIGNAL_ALTERNATE_REPEAT=1; .d/map/trace captured, privateTMPDIR used. Collectoritselfneverexecuted.",
+    "collector_actual_qualification": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/qualification-1/RESULT.json",
+      "bytes": 19395,
+      "sha256": "4d6d9e7b599892681a818f19d72b68601fd738d2c1f9e173d37a7cc9979fa98d"
+    },
+    "source30": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/SOURCE-BINDINGS.json",
+      "bytes": 20069,
+      "sha256": "2e1c5b8dc4ae06da90bd4b38c0a76d5556c23717c21bb6c2746b291021e066ce"
+    },
+    "old_native_1e64_c664_not_substituted": true,
+    "source_and_image_transition": "Deliberately proposed new c964/a2f cohort using same qualified099/IHK8d/Linuxconfig106055 modules; native source/currentowner/custody admission must separately select this cohort. Earlier c664 native config/install is not a grant for a2f.",
+    "whole_DEFAULT_independent": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-whole03-05-review-p04tests-max-1/REVIEW.json",
+      "bytes": 66921,
+      "sha256": "c7f765f0db52a687b5cc81c4bf5fe9a4d5f7906704045dcdb3b72ab91f923377"
+    }
+  },
+  "files": [
+    {
+      "target": "bin/native-boot",
+      "source": {
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01p02-production-cutover-1/output-1/stage/usr/local/sbin/mcreboot.sh",
+        "size": 4493400,
+        "sha256": "cd50d3da3f8707a3bb1735da4873f9ac09e8ac6990abfbb423a7a518f4cd7818",
+        "mode": 493
+      },
+      "role": "Real source-bound boot/control/DSO/image input",
+      "proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/SOURCE-CONTRACT.json",
+        "bytes": 13862,
+        "sha256": "14fbb95a6c7e1c985572565d3aebc145d9159fa1d2c1aa028c46010bd1e2e524"
+      }
+    },
+    {
+      "target": "images/mckernel.img",
+      "source": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/preserved-c964-a2f00a61-1/build/kernel/mckernel.img",
+        "size": 13349576,
+        "sha256": "a2f00a6105f20642db8ef95fe12ade0873120594531f325ef363a4bb59f0ff8a",
+        "mode": 292
+      },
+      "role": "Same exact new c964/a2f qualified image at both genuinely consumed diagnostic/native-boot paths; immutable independent preserved source is0444 and image is read as data.",
+      "proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/qualification-1/dispatch-owner-correction-1/QUALIFICATION.json",
+        "bytes": 139468,
+        "sha256": "6f67cd0637b3127c8724e78ad259d3b86c536c66868a92dafa0a106f33f68623"
+      }
+    },
+    {
+      "target": "lib64/ld-linux-x86-64.so.2",
+      "source": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/output-1/runtime/lib64/ld-linux-x86-64.so.2",
+        "size": 930600,
+        "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b",
+        "mode": 493
+      },
+      "role": "Actual matching Linux helper/runtime ld-linux-x86-64.so.2",
+      "proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      }
+    },
+    {
+      "target": "lib64/libacl.so.1",
+      "source": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/output-1/files/libacl.so.1",
+        "size": 40896,
+        "sha256": "342a0213a17809ee41816a95c939f11ba25ff92da53ae849bc88cf3da81649aa",
+        "mode": 493
+      },
+      "role": "Actual matching Linux helper/runtime libacl.so.1",
+      "proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      }
+    },
+    {
+      "target": "lib64/libattr.so.1",
+      "source": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/output-1/files/libattr.so.1",
+        "size": 28296,
+        "sha256": "1369a9dd4a7bcd8d4bf71293b369f6d222a1ea12132d988ed529d796522076a0",
+        "mode": 493
+      },
+      "role": "Actual matching Linux helper/runtime libattr.so.1",
+      "proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      }
+    },
+    {
+      "target": "lib64/libaudit.so.1",
+      "source": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/output-1/files/libaudit.so.1",
+        "size": 192352,
+        "sha256": "ab76f679c3cc8aadde6cc961d6aede927b4891f761615233389d396a06c6f3cc",
+        "mode": 493
+      },
+      "role": "Actual matching Linux helper/runtime libaudit.so.1",
+      "proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      }
+    },
+    {
+      "target": "lib64/libblkid.so.1",
+      "source": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/output-1/files/libblkid.so.1",
+        "size": 242128,
+        "sha256": "6149c97e401f088ee8e4d9681e0498486e41a90b90618b0dafca0b8545230143",
+        "mode": 493
+      },
+      "role": "Actual matching Linux helper/runtime libblkid.so.1",
+      "proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      }
+    },
+    {
+      "target": "lib64/libc.so.6",
+      "source": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/output-1/runtime/lib64/libc.so.6",
+        "size": 2339896,
+        "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+        "mode": 493
+      },
+      "role": "Actual matching Linux helper/runtime libc.so.6",
+      "proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      }
+    },
+    {
+      "target": "lib64/libcap-ng.so.0",
+      "source": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/output-1/files/libcap-ng.so.0",
+        "size": 32336,
+        "sha256": "0ee946e3dbce118176795986e931d2c16c95734220c3d5d47d9de1ada9517832",
+        "mode": 493
+      },
+      "role": "Actual matching Linux helper/runtime libcap-ng.so.0",
+      "proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      }
+    },
+    {
+      "target": "lib64/libcap.so.2",
+      "source": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/output-1/files/libcap.so.2",
+        "size": 53168,
+        "sha256": "70e8dbe271e2ea63127fbc20270ce60541d1244f0b170888d258b86b2573bcbf",
+        "mode": 493
+      },
+      "role": "Actual matching Linux helper/runtime libcap.so.2",
+      "proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      }
+    },
+    {
+      "target": "lib64/libcrypt.so.2",
+      "source": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/output-1/files/libcrypt.so.2",
+        "size": 197000,
+        "sha256": "3cb0985cf4ae9bf1f2eabee655527d1e7baf295a9c00c202781cc0e1ad8bd8f7",
+        "mode": 493
+      },
+      "role": "Actual matching Linux helper/runtime libcrypt.so.2",
+      "proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      }
+    },
+    {
+      "target": "lib64/libcrypto.so.3",
+      "source": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/output-1/files/libcrypto.so.3",
+        "size": 5631152,
+        "sha256": "3da8e54521ce53e2a09d9ca0d1d5c3368b8abba252492cee21affd6146f72d82",
+        "mode": 493
+      },
+      "role": "Actual matching Linux helper/runtime libcrypto.so.3",
+      "proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      }
+    },
+    {
+      "target": "lib64/libeconf.so.0",
+      "source": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/output-1/files/libeconf.so.0",
+        "size": 49336,
+        "sha256": "4465c7bedc9db8bca0092b82ab414b651c2d437ac48e8b7f6b511bf8edb241ed",
+        "mode": 493
+      },
+      "role": "Actual matching Linux helper/runtime libeconf.so.0",
+      "proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      }
+    },
+    {
+      "target": "lib64/libgcc_s.so.1",
+      "source": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/cpu0-affinity-1/output-1/files/libgcc_s.so.1",
+        "size": 186528,
+        "sha256": "cc9c9d070f290bd0b39a7208f8850f6f6cb85491cf6aee80ef4502c3f040c2cb",
+        "mode": 493
+      },
+      "role": "Actual matching Linux helper/runtime libgcc_s.so.1",
+      "proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      }
+    },
+    {
+      "target": "lib64/liblzma.so.5",
+      "source": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/output-1/files/liblzma.so.5",
+        "size": 215496,
+        "sha256": "a1ccc4236761114ffa9efa797501b9f34398a20de75ca0ca22df9410cbe41bde",
+        "mode": 493
+      },
+      "role": "Actual matching Linux helper/runtime liblzma.so.5",
+      "proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      }
+    },
+    {
+      "target": "lib64/libm.so.6",
+      "source": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/cpu0-affinity-1/output-1/files/libm.so.6",
+        "size": 720624,
+        "sha256": "e5963b5e3cbd54ad0c9eb1dbd24f175e5728c09378831196c9bb53733ed8c2a6",
+        "mode": 493
+      },
+      "role": "Actual matching Linux helper/runtime libm.so.6",
+      "proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      }
+    },
+    {
+      "target": "lib64/libmount.so.1",
+      "source": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/output-1/files/libmount.so.1",
+        "size": 333512,
+        "sha256": "5199b49c7ad1565700fd649e9b13024919192128908536203fe95fff4adadb2c",
+        "mode": 493
+      },
+      "role": "Actual matching Linux helper/runtime libmount.so.1",
+      "proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      }
+    },
+    {
+      "target": "lib64/libnuma.so.1",
+      "source": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/runtime-numa-copy-1/output-1/libnuma.so.1",
+        "size": 62328,
+        "sha256": "be20c2b16781eea6c69d47816bf15869f90f2a009628c310049da1d2f3c31e4e",
+        "mode": 493
+      },
+      "role": "Actual qualified NUMA provider; historical capture/disposition kept separate",
+      "proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-runtime-numa-copy-review-source-acquisition-max-1/REVIEW.json",
+        "sha256": "db6434473a56befccc2772e7a06e275f9c52f2d7b7d669ef1991bf1a87239ac5"
+      }
+    },
+    {
+      "target": "lib64/libpam.so.0",
+      "source": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/output-1/files/libpam.so.0",
+        "size": 73808,
+        "sha256": "3b27cfc9a13a898e7184ea90ecca48bce9e8721b820dff13b5b4a60bb06fc925",
+        "mode": 493
+      },
+      "role": "Actual matching Linux helper/runtime libpam.so.0",
+      "proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      }
+    },
+    {
+      "target": "lib64/libpcre2-8.so.0",
+      "source": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/output-1/files/libpcre2-8.so.0",
+        "size": 665664,
+        "sha256": "ac0dcbb0620261d144a5255ce79c30c583593e7a29822df7a529c06922852e94",
+        "mode": 493
+      },
+      "role": "Actual matching Linux helper/runtime libpcre2-8.so.0",
+      "proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      }
+    },
+    {
+      "target": "lib64/libproc2.so.0",
+      "source": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/output-1/files/libproc2.so.0",
+        "size": 173848,
+        "sha256": "f5df8f1abb757eb85293854bd4cc4e6fcd0fa2f9e5399e56e28957cec66f8de2",
+        "mode": 493
+      },
+      "role": "Actual matching Linux helper/runtime libproc2.so.0",
+      "proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      }
+    },
+    {
+      "target": "lib64/libpthread.so.0",
+      "source": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/cpu0-affinity-1/output-1/files/libpthread.so.0",
+        "size": 15496,
+        "sha256": "f2791d4558ccad3fd23808f206e1b8e861b448b04d1e5cc75ae405e3e028fa1a",
+        "mode": 493
+      },
+      "role": "Actual matching Linux helper/runtime libpthread.so.0",
+      "proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      }
+    },
+    {
+      "target": "lib64/libseccomp.so.2",
+      "source": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/output-1/files/libseccomp.so.2",
+        "size": 135488,
+        "sha256": "fd624d73c660ffc8dc6dccb714223112285f2460dec7a6b1e31efdb65373a015",
+        "mode": 493
+      },
+      "role": "Actual matching Linux helper/runtime libseccomp.so.2",
+      "proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      }
+    },
+    {
+      "target": "lib64/libselinux.so.1",
+      "source": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/output-1/files/libselinux.so.1",
+        "size": 200664,
+        "sha256": "79e73dd27d4a90f25969c43c298ad32aa21c718c8508ef86c5a8e6ee083723a9",
+        "mode": 493
+      },
+      "role": "Actual matching Linux helper/runtime libselinux.so.1",
+      "proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      }
+    },
+    {
+      "target": "lib64/libsystemd.so.0",
+      "source": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/output-1/files/libsystemd.so.0",
+        "size": 1225176,
+        "sha256": "88ce44c4762330ddb10c33ea0c6fa264af74ce7d204166221a6f4156304c172c",
+        "mode": 493
+      },
+      "role": "Actual matching Linux helper/runtime libsystemd.so.0",
+      "proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      }
+    },
+    {
+      "target": "lib64/libz.so.1",
+      "source": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/cpu0-affinity-1/output-1/files/libz.so.1",
+        "size": 140824,
+        "sha256": "2fd5dcd6bc0953f3db71958b10c0cdf55ce49e1ceb4ab9d1f869398e39e994eb",
+        "mode": 493
+      },
+      "role": "Actual matching Linux helper/runtime libz.so.1",
+      "proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      }
+    },
+    {
+      "target": "lib64/libzstd.so.1",
+      "source": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/output-1/files/libzstd.so.1",
+        "size": 729608,
+        "sha256": "250dc1e1302e3eedd9f483c7cb3d52ab15882bf9d12072539cc4f06660b384e1",
+        "mode": 493
+      },
+      "role": "Actual matching Linux helper/runtime libzstd.so.1",
+      "proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      }
+    },
+    {
+      "target": "modules/ihk-smp-x86_64.ko",
+      "source": {
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/modules/ihk-smp-x86_64.ko",
+        "size": 13092960,
+        "sha256": "ae67f463920ae6267710624139c56ef5dcfa8d1c60f4fc1a42f0e52604066696",
+        "mode": 420
+      },
+      "role": "Actual matching099/IHK8d/Linux6.12/config106055 module",
+      "proof": {
+        "bytes": 30444,
+        "path": "/home/holden/mckernel/docs/verification/m14-m15-matching-kbuild-20261110/bindings-qualified/BINDINGS.json",
+        "sha256": "0781087478376977da68666ee6ae257846d53dc5501cfa6b9b3ca170597f26be"
+      }
+    },
+    {
+      "target": "modules/ihk.ko",
+      "source": {
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/modules/ihk.ko",
+        "size": 1521480,
+        "sha256": "04f5d3e0dbf0c70b7ff5aeb281fabda310751bc45c4916cb582575cf3f81155e",
+        "mode": 420
+      },
+      "role": "Actual matching099/IHK8d/Linux6.12/config106055 module",
+      "proof": {
+        "bytes": 30444,
+        "path": "/home/holden/mckernel/docs/verification/m14-m15-matching-kbuild-20261110/bindings-qualified/BINDINGS.json",
+        "sha256": "0781087478376977da68666ee6ae257846d53dc5501cfa6b9b3ca170597f26be"
+      }
+    },
+    {
+      "target": "modules/mcctrl.ko",
+      "source": {
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/modules/mcctrl.ko",
+        "size": 2374656,
+        "sha256": "dc46a4f552776d6f9200cbdc8127882ea3f5d69d119f3e5b00672dce234eabcc",
+        "mode": 420
+      },
+      "role": "Actual matching099/IHK8d/Linux6.12/config106055 module",
+      "proof": {
+        "bytes": 30444,
+        "path": "/home/holden/mckernel/docs/verification/m14-m15-matching-kbuild-20261110/bindings-qualified/BINDINGS.json",
+        "sha256": "0781087478376977da68666ee6ae257846d53dc5501cfa6b9b3ca170597f26be"
+      }
+    },
+    {
+      "target": "sbin/insmod",
+      "source": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/cpu0-affinity-1/output-1/files/insmod",
+        "size": 182088,
+        "sha256": "7e91f52ed2cd5e2c4f82de4bb07bbaa7179cd5c053b7afcf2fd231056681ed55",
+        "mode": 493
+      },
+      "role": "Actual matching Linux helper/runtime insmod",
+      "proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      }
+    },
+    {
+      "target": "usr/bin/chown",
+      "source": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/cpu0-affinity-1/output-1/files/chown",
+        "size": 52,
+        "sha256": "497a658c90080afd7bba33da8297fdb1be37cf36a3465a344164a8cb14390b53",
+        "mode": 365
+      },
+      "role": "Genuine coreutils shebang wrapper; literal interpreter /usr/bin/coreutils",
+      "proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      }
+    },
+    {
+      "target": "usr/bin/coreutils",
+      "source": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/coreutils-wrapper-correction-1/output-1/files/coreutils",
+        "size": 1347728,
+        "sha256": "8e7928bf899599dbe98a4baaf2b5cba78a0b003213ab83104182e31475c068ff",
+        "mode": 493
+      },
+      "role": "Actual matching Linux helper/runtime coreutils",
+      "proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      }
+    },
+    {
+      "target": "usr/bin/pidof",
+      "source": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/cpu0-affinity-1/output-1/files/pidof",
+        "size": 24064,
+        "sha256": "66a8f1ea5012d82ac6979165feb6bcc818532e57c9367c5b4bd095624d138312",
+        "mode": 493
+      },
+      "role": "Actual matching Linux helper/runtime pidof",
+      "proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      }
+    },
+    {
+      "target": "usr/bin/sync",
+      "source": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/cpu0-affinity-1/output-1/files/sync",
+        "size": 51,
+        "sha256": "5f3ecf316cc8d0461cdc69e55f97c575a2c37f250e77461ac6241d049d65b177",
+        "mode": 365
+      },
+      "role": "Genuine coreutils shebang wrapper; literal interpreter /usr/bin/coreutils",
+      "proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      }
+    },
+    {
+      "target": "usr/bin/systemctl",
+      "source": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/cpu0-affinity-1/output-1/files/systemctl",
+        "size": 326688,
+        "sha256": "c1ab70e9b250c2fdfa49373d9748842846a84eaa971eac40430d0eeb607a2bec",
+        "mode": 493
+      },
+      "role": "Actual matching Linux helper/runtime systemctl",
+      "proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      }
+    },
+    {
+      "target": "usr/bin/tee",
+      "source": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/cpu0-affinity-1/output-1/files/tee",
+        "size": 50,
+        "sha256": "97a3eca66552d324751b1e8e5af6ca4295328b98fa57bc43f1f81cc0a53e197e",
+        "mode": 365
+      },
+      "role": "Genuine coreutils shebang wrapper; literal interpreter /usr/bin/coreutils",
+      "proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      }
+    },
+    {
+      "target": "usr/lib64/systemd/libsystemd-shared-257-23.el10_2.1.rocky.0.1.so",
+      "source": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/output-1/files/libsystemd-shared-257-23.el10_2.1.rocky.0.1.so",
+        "size": 4930680,
+        "sha256": "eadc13fc65d2c132427d03fcac5c4543a29b33d8dccf18ca3d1a1a630d42ba96",
+        "mode": 493
+      },
+      "role": "Actual matching Linux helper/runtime libsystemd-shared-257-23.el10_2.1.rocky.0.1.so",
+      "proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      }
+    },
+    {
+      "target": "usr/local/lib64/libihk.so",
+      "source": {
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihklib-matching-provider-build-1/build-output-195/stage/lib64/libihk.so",
+        "size": 12095128,
+        "sha256": "b7bcafd0923de851cd04b3934207e7217065e28434e95e505d4ed5fd4bfc96c2",
+        "mode": 493
+      },
+      "role": "Real source-bound boot/control/DSO/image input",
+      "proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/SOURCE-CONTRACT.json",
+        "bytes": 13862,
+        "sha256": "14fbb95a6c7e1c985572565d3aebc145d9159fa1d2c1aa028c46010bd1e2e524"
+      }
+    },
+    {
+      "target": "usr/local/sbin/ihkconfig",
+      "source": {
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/cli-matching-provider-build-1/build-output/stage/sbin/ihkconfig",
+        "size": 40960,
+        "sha256": "95b661ae705775b0806e1f132758b155fba27ba062a16c82a3b32e623751a87b",
+        "mode": 493
+      },
+      "role": "Real source-bound boot/control/DSO/image input",
+      "proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/SOURCE-CONTRACT.json",
+        "bytes": 13862,
+        "sha256": "14fbb95a6c7e1c985572565d3aebc145d9159fa1d2c1aa028c46010bd1e2e524"
+      }
+    },
+    {
+      "target": "usr/local/sbin/ihkosctl",
+      "source": {
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/cli-matching-provider-build-1/build-output/stage/sbin/ihkosctl",
+        "size": 37776,
+        "sha256": "85bb95dad74941c680e6f43078648569b2de1b0aa7b449a1a81b59ed0844c672",
+        "mode": 493
+      },
+      "role": "Real source-bound boot/control/DSO/image input",
+      "proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/SOURCE-CONTRACT.json",
+        "bytes": 13862,
+        "sha256": "14fbb95a6c7e1c985572565d3aebc145d9159fa1d2c1aa028c46010bd1e2e524"
+      }
+    },
+    {
+      "target": "usr/local/smp-x86/kernel/mckernel.img",
+      "source": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/preserved-c964-a2f00a61-1/build/kernel/mckernel.img",
+        "size": 13349576,
+        "sha256": "a2f00a6105f20642db8ef95fe12ade0873120594531f325ef363a4bb59f0ff8a",
+        "mode": 292
+      },
+      "role": "Same exact new c964/a2f qualified image at both genuinely consumed diagnostic/native-boot paths; immutable independent preserved source is0444 and image is read as data.",
+      "proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/qualification-1/dispatch-owner-correction-1/QUALIFICATION.json",
+        "bytes": 139468,
+        "sha256": "6f67cd0637b3127c8724e78ad259d3b86c536c66868a92dafa0a106f33f68623"
+      }
+    },
+    {
+      "target": "usr/sbin/getenforce",
+      "source": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/getenforce-provider-1/passive-extraction-1/extracted/libselinux-utils/usr/sbin/getenforce",
+        "size": 15792,
+        "sha256": "f0ee5942bf7c31e995da955022d676e73734ac71367efe22b262356bc93dc788",
+        "mode": 493
+      },
+      "role": "Actual matching Linux helper/runtime getenforce",
+      "proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      }
+    }
+  ],
+  "directories": {
+    "bin": 493,
+    "dev": 493,
+    "etc": 493,
+    "images": 493,
+    "lib64": 493,
+    "modules": 493,
+    "proc": 493,
+    "run": 493,
+    "sbin": 493,
+    "sys": 493,
+    "tmp": 1023,
+    "usr": 493,
+    "usr/bin": 493,
+    "usr/lib64": 493,
+    "usr/lib64/systemd": 493,
+    "usr/local": 493,
+    "usr/local/lib64": 493,
+    "usr/local/sbin": 493,
+    "usr/local/smp-x86": 493,
+    "usr/local/smp-x86/kernel": 493,
+    "usr/sbin": 493
+  },
+  "artifact_sources": {
+    "bzImage": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/bzImage",
+      "size": 16134144,
+      "sha256": "415b951d9d83f62ec9253eee43ffbd0c6daf3fa02b25618d995d89dc3de928c4",
+      "mode": 420
+    },
+    "mckernel_image": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/preserved-c964-a2f00a61-1/build/kernel/mckernel.img",
+      "size": 13349576,
+      "sha256": "a2f00a6105f20642db8ef95fe12ade0873120594531f325ef363a4bb59f0ff8a",
+      "mode": 292
+    },
+    "mcexec": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/production-packet-1/output-1/stage/usr/local/bin/mcexec",
+      "size": 398096,
+      "sha256": "df65517e79c5f0923cd7c1547469f645dd2857648a596349781d5e62c79682b4",
+      "mode": 493
+    },
+    "payload": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/output-1/signal.alternate-repeat",
+      "size": 18736,
+      "sha256": "77e8dfe6f8089f18b22524ad474e057cb061d67501f9e9fdb4f391dd4790f45d",
+      "mode": 493
+    },
+    "native_boot": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01p02-production-cutover-1/output-1/stage/usr/local/sbin/mcreboot.sh",
+      "size": 4493400,
+      "sha256": "cd50d3da3f8707a3bb1735da4873f9ac09e8ac6990abfbb423a7a518f4cd7818",
+      "mode": 493
+    },
+    "libc": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/output-1/runtime/lib64/libc.so.6",
+      "size": 2339896,
+      "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+      "mode": 493
+    },
+    "loader": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/output-1/runtime/lib64/ld-linux-x86-64.so.2",
+      "size": 930600,
+      "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b",
+      "mode": 493
+    },
+    "collector": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/output-1/collector",
+      "size": 1029880,
+      "sha256": "9a553f4a33d4ed99b106bc4795bb34e75071dbbf08469115a0765f4f7f364914",
+      "mode": 493
+    }
+  },
+  "artifact_locations": {
+    "bzImage": "assets/bzImage",
+    "mckernel_image": "root/images/mckernel.img",
+    "mcexec": "assets/mcexec",
+    "payload": "assets/signal.alternate-repeat",
+    "native_boot": "root/bin/native-boot",
+    "libc": "root/lib64/libc.so.6",
+    "loader": "root/lib64/ld-linux-x86-64.so.2",
+    "collector": "assets/collector"
+  },
+  "overlay_source": {
+    "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_overlay.py",
+    "size": 27356,
+    "sha256": "0891bc13a8750d09f7758d31031828f8270bc480fe5dc0c25d545528ab454640",
+    "mode": 384
+  },
+  "diagnostic_source": {
+    "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic.py",
+    "size": 54447,
+    "sha256": "7e4256eee51f7d50ef758c55579801d691d4ee2cee9155a60680701dba5c540b",
+    "mode": 384
+  },
+  "profile": {
+    "name": "native-diagnostic-4vcpu-8192mib",
+    "memory_mib": 8192,
+    "vcpus": 4,
+    "numa_nodes": 2,
+    "append": "console=ttyS0,115200n8 rdinit=/init nokaslr panic=-1 memmap=4K%0x80000-1"
+  },
+  "payload": {
+    "cwd": "/case/work",
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "/apps/signal.alternate-repeat"
+    ],
+    "env": {
+      "PATH": "/usr/bin:/bin",
+      "COKERNEL_PATH": "/apps",
+      "LANG": "C",
+      "LC_ALL": "C",
+      "TZ": "UTC"
+    },
+    "oracle": {
+      "stdout_hex": "68616e646c65723d3120696e5f616c743d696e736964650a68616e646c65723d3220696e5f616c743d696e736964650a68616e646c65723d3320696e5f616c743d696e736964650a68616e646c65723d3420696e5f616c743d696e736964650a68616e646c65723d3520696e5f616c743d696e736964650a68616e646c65723d3620696e5f616c743d696e736964650a68616e646c65723d3720696e5f616c743d696e736964650a68616e646c65723d3820696e5f616c743d696e736964650a68616e646c65723d3920696e5f616c743d696e736964650a68616e646c65723d313020696e5f616c743d696e736964650a68616e646c65723d313120696e5f616c743d696e736964650a68616e646c65723d313220696e5f616c743d696e736964650a68616e646c65723d313320696e5f616c743d696e736964650a68616e646c65723d313420696e5f616c743d696e736964650a68616e646c65723d313520696e5f616c743d696e736964650a68616e646c65723d313620696e5f616c743d696e736964650a64656c69766572793d313620616c745f686974733d31360a",
+      "stderr_hex": "",
+      "exit_code": 0
+    },
+    "stdout_limit_bytes": 1024,
+    "stderr_limit_bytes": 1024
+  },
+  "proofs": {
+    "whole30_static_helper_closure": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+      "bytes": 146175,
+      "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+    },
+    "whole30_independent_GO": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-capng-one-provider-review-source-acquisition-max-1/actual-result-1/REVIEW.json",
+      "sha256": "1293bd7e990c9db290a484844993310abc364c33cd1b6b1c34c5d3e3c69598ce"
+    },
+    "named_actual_HOST_cases": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/host-validation-1/qualification-1/RESULT.json",
+      "bytes": 19838,
+      "sha256": "0f0dcbb5767ac47017d405e705d5b0218074a298031fd7665a6e4a340045c6b7"
+    },
+    "boot_actual_HOST_case": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/qualification-1/RESULT.json",
+      "bytes": 19395,
+      "sha256": "4d6d9e7b599892681a818f19d72b68601fd738d2c1f9e173d37a7cc9979fa98d"
+    },
+    "source_only_no_native_grant": true,
+    "actual_new_image_producer": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/source-set-gate-correction-1/execution-1/RESULT.json",
+      "bytes": 28898,
+      "sha256": "bc331c7173f1db51bd08d4feaa9ea7b87c2301f59bbe7a66885253a04a243458"
+    },
+    "actual_new_image_reader": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/reader-1/qualified-producer-binding-1/execution-1/RESULT.json",
+      "bytes": 17717,
+      "sha256": "20295eacb8d60dba2d1cb18fd6a0cb6a2c724f7d37d99f89e1ba009fdf63cfeb"
+    },
+    "deliberate_new_cohort_source_only_native_not_admitted": true
+  }
+}

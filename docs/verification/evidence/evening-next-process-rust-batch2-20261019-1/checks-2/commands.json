@@ -1,0 +1,553 @@
+[
+  {
+    "label": "tofu-leaf-object",
+    "argv": [
+      "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2021",
+      "--crate-type=lib",
+      "-Awarnings",
+      "--cfg",
+      "enable_tofu",
+      "-C",
+      "panic=abort",
+      "-C",
+      "opt-level=2",
+      "-C",
+      "debuginfo=2",
+      "-C",
+      "code-model=large",
+      "-C",
+      "relocation-model=static",
+      "-C",
+      "no-redzone=yes",
+      "-C",
+      "force-frame-pointers=yes",
+      "-C",
+      "overflow-checks=off",
+      "-C",
+      "force-unwind-tables=no",
+      "-C",
+      "no-vectorize-loops",
+      "-C",
+      "no-vectorize-slp",
+      "-C",
+      "target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma",
+      "--emit=obj",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-2/extracted.rs",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-2/tofu/leaf.o"
+    ],
+    "pid": 1418242,
+    "returncode": 0,
+    "direct_child_joined": true,
+    "seconds": 0.1150467139959801,
+    "timed_out": false,
+    "cleanup": [],
+    "capture_method": "direct regular-file child writes",
+    "cap_bytes_per_stream": 33554432,
+    "captures": {
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      }
+    }
+  },
+  {
+    "label": "tofu-leaf-nm",
+    "argv": [
+      "/usr/bin/nm",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-2/tofu/leaf.o"
+    ],
+    "pid": 1418254,
+    "returncode": 0,
+    "direct_child_joined": true,
+    "seconds": 0.016690390999428928,
+    "timed_out": false,
+    "cleanup": [],
+    "capture_method": "direct regular-file child writes",
+    "cap_bytes_per_stream": 33554432,
+    "captures": {
+      "stdout": {
+        "bytes": 332,
+        "sha256": "d82af194938fbfabe76740438f86b64cf996a91056c8992edad72ed1c81ec918",
+        "within_cap": true,
+        "cap_reached": false
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      }
+    }
+  },
+  {
+    "label": "tofu-leaf-disassembly-0",
+    "argv": [
+      "/usr/bin/objdump",
+      "-dr",
+      "--disassemble=process_current_resource_set_bridge",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-2/tofu/leaf.o"
+    ],
+    "pid": 1418256,
+    "returncode": 0,
+    "direct_child_joined": true,
+    "seconds": 0.004354678996605799,
+    "timed_out": false,
+    "cleanup": [],
+    "capture_method": "direct regular-file child writes",
+    "cap_bytes_per_stream": 33554432,
+    "captures": {
+      "stdout": {
+        "bytes": 692,
+        "sha256": "8f05fbc8c4e0d37a246845b7a3ef9bcfd43b74320f7c9e06025bf95c54f6c1b0",
+        "within_cap": true,
+        "cap_reached": false
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      }
+    }
+  },
+  {
+    "label": "tofu-leaf-disassembly-1",
+    "argv": [
+      "/usr/bin/objdump",
+      "-dr",
+      "--disassemble=process_release_final_cleanup_bridge",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-2/tofu/leaf.o"
+    ],
+    "pid": 1418257,
+    "returncode": 0,
+    "direct_child_joined": true,
+    "seconds": 0.004391978989588097,
+    "timed_out": false,
+    "cleanup": [],
+    "capture_method": "direct regular-file child writes",
+    "cap_bytes_per_stream": 33554432,
+    "captures": {
+      "stdout": {
+        "bytes": 1892,
+        "sha256": "effc40afd2268fa4f2c1b23f0694b25062ce0a3ef45ac69acd153598603e36dc",
+        "within_cap": true,
+        "cap_reached": false
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      }
+    }
+  },
+  {
+    "label": "tofu-c-reference",
+    "argv": [
+      "/usr/bin/gcc",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-Werror=implicit-function-declaration",
+      "-fno-pie",
+      "-c",
+      "-DENABLE_TOFU",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/reference.c",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-2/tofu/reference.o"
+    ],
+    "pid": 1418258,
+    "returncode": 0,
+    "direct_child_joined": true,
+    "seconds": 0.03278587700333446,
+    "timed_out": false,
+    "cleanup": [],
+    "capture_method": "direct regular-file child writes",
+    "cap_bytes_per_stream": 33554432,
+    "captures": {
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      }
+    }
+  },
+  {
+    "label": "tofu-c-selected",
+    "argv": [
+      "/usr/bin/gcc",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-Werror=implicit-function-declaration",
+      "-fno-pie",
+      "-c",
+      "-DENABLE_TOFU",
+      "-DMCKERNEL_RUST_PROCESS_HELPERS",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/consumer.c",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-2/tofu/selected.o"
+    ],
+    "pid": 1418277,
+    "returncode": 0,
+    "direct_child_joined": true,
+    "seconds": 0.016833153000334278,
+    "timed_out": false,
+    "cleanup": [],
+    "capture_method": "direct regular-file child writes",
+    "cap_bytes_per_stream": 33554432,
+    "captures": {
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      }
+    }
+  },
+  {
+    "label": "tofu-c-nm-selected",
+    "argv": [
+      "/usr/bin/nm",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-2/tofu/selected.o"
+    ],
+    "pid": 1418292,
+    "returncode": 0,
+    "direct_child_joined": true,
+    "seconds": 0.01664799399441108,
+    "timed_out": false,
+    "cleanup": [],
+    "capture_method": "direct regular-file child writes",
+    "cap_bytes_per_stream": 33554432,
+    "captures": {
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      }
+    }
+  },
+  {
+    "label": "tofu-c-fallback",
+    "argv": [
+      "/usr/bin/gcc",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-Werror=implicit-function-declaration",
+      "-fno-pie",
+      "-c",
+      "-DENABLE_TOFU",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/consumer.c",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-2/tofu/fallback.o"
+    ],
+    "pid": 1418302,
+    "returncode": 0,
+    "direct_child_joined": true,
+    "seconds": 0.0328927630034741,
+    "timed_out": false,
+    "cleanup": [],
+    "capture_method": "direct regular-file child writes",
+    "cap_bytes_per_stream": 33554432,
+    "captures": {
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      }
+    }
+  },
+  {
+    "label": "tofu-c-nm-fallback",
+    "argv": [
+      "/usr/bin/nm",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-2/tofu/fallback.o"
+    ],
+    "pid": 1418305,
+    "returncode": 0,
+    "direct_child_joined": true,
+    "seconds": 0.016693932004272938,
+    "timed_out": false,
+    "cleanup": [],
+    "capture_method": "direct regular-file child writes",
+    "cap_bytes_per_stream": 33554432,
+    "captures": {
+      "stdout": {
+        "bytes": 854,
+        "sha256": "7c95abcb2e1b51f707eae98de7aab3e7366d9d51e5dbbf16df3e91d53b839218",
+        "within_cap": true,
+        "cap_reached": false
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      }
+    }
+  },
+  {
+    "label": "tofu-rust-default-consumer",
+    "argv": [
+      "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2021",
+      "--crate-type=lib",
+      "-Awarnings",
+      "--cfg",
+      "enable_tofu",
+      "-C",
+      "panic=abort",
+      "-C",
+      "opt-level=2",
+      "-C",
+      "debuginfo=2",
+      "-C",
+      "code-model=large",
+      "-C",
+      "relocation-model=static",
+      "-C",
+      "no-redzone=yes",
+      "-C",
+      "force-frame-pointers=yes",
+      "-C",
+      "overflow-checks=off",
+      "-C",
+      "force-unwind-tables=no",
+      "-C",
+      "no-vectorize-loops",
+      "-C",
+      "no-vectorize-slp",
+      "-C",
+      "target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma",
+      "--emit=obj",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-2/consumer.rs",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-2/tofu/consumer.o"
+    ],
+    "pid": 1418306,
+    "returncode": 0,
+    "direct_child_joined": true,
+    "seconds": 0.06499823098420165,
+    "timed_out": false,
+    "cleanup": [],
+    "capture_method": "direct regular-file child writes",
+    "cap_bytes_per_stream": 33554432,
+    "captures": {
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      }
+    }
+  },
+  {
+    "label": "tofu-consumer-disassembly",
+    "argv": [
+      "/usr/bin/objdump",
+      "-dr",
+      "--disassemble=release_process",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-2/tofu/consumer.o"
+    ],
+    "pid": 1418313,
+    "returncode": 0,
+    "direct_child_joined": true,
+    "seconds": 0.004481303010834381,
+    "timed_out": false,
+    "cleanup": [],
+    "capture_method": "direct regular-file child writes",
+    "cap_bytes_per_stream": 33554432,
+    "captures": {
+      "stdout": {
+        "bytes": 3002,
+        "sha256": "a877c13f8a7ce9e5e0a5a9bf49b7c3a2a448b37b4b4699ed7f3a0293fa47fbdb",
+        "within_cap": true,
+        "cap_reached": false
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      }
+    }
+  },
+  {
+    "label": "tofu-unique-link",
+    "argv": [
+      "/usr/bin/ld",
+      "-r",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-2/tofu/selected.o",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-2/tofu/consumer.o",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-2/tofu/joined.o"
+    ],
+    "pid": 1418314,
+    "returncode": 0,
+    "direct_child_joined": true,
+    "seconds": 0.004227230994729325,
+    "timed_out": false,
+    "cleanup": [],
+    "capture_method": "direct regular-file child writes",
+    "cap_bytes_per_stream": 33554432,
+    "captures": {
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      }
+    }
+  },
+  {
+    "label": "tofu-joined-nm",
+    "argv": [
+      "/usr/bin/nm",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-2/tofu/joined.o"
+    ],
+    "pid": 1418315,
+    "returncode": 0,
+    "direct_child_joined": true,
+    "seconds": 0.016529452987015247,
+    "timed_out": false,
+    "cleanup": [],
+    "capture_method": "direct regular-file child writes",
+    "cap_bytes_per_stream": 33554432,
+    "captures": {
+      "stdout": {
+        "bytes": 818,
+        "sha256": "593e705f0517644bcc3e49d88d16eb5230f239558478d2ee7feb70c81c0c79a8",
+        "within_cap": true,
+        "cap_reached": false
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      }
+    }
+  },
+  {
+    "label": "tofu-parity-compile",
+    "argv": [
+      "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2021",
+      "-Awarnings",
+      "-C",
+      "opt-level=2",
+      "--cfg",
+      "enable_tofu",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-2/tofu/parity.rs",
+      "-C",
+      "link-arg=/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-2/tofu/reference.o",
+      "-C",
+      "link-arg=-no-pie",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-2/tofu/parity"
+    ],
+    "pid": 1418316,
+    "returncode": 0,
+    "direct_child_joined": true,
+    "seconds": 0.2658781420032028,
+    "timed_out": false,
+    "cleanup": [],
+    "capture_method": "direct regular-file child writes",
+    "cap_bytes_per_stream": 33554432,
+    "captures": {
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      }
+    }
+  },
+  {
+    "label": "tofu-parity-run",
+    "argv": [
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-2/tofu/parity"
+    ],
+    "pid": 1418331,
+    "returncode": 0,
+    "direct_child_joined": true,
+    "seconds": 0.0023721809848211706,
+    "timed_out": false,
+    "cleanup": [],
+    "capture_method": "direct regular-file child writes",
+    "cap_bytes_per_stream": 33554432,
+    "captures": {
+      "stdout": {
+        "bytes": 122,
+        "sha256": "838bd431e20b245a8613ca74da8e1555451392d9bfe1fa44d900b6a69d6a5ecc",
+        "within_cap": true,
+        "cap_reached": false
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      }
+    }
+  }
+]

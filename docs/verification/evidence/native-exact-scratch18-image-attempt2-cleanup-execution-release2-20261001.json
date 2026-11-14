@@ -1,0 +1,63 @@
+{
+  "schema": "mckernel.native-exact-scratch18-image-attempt2-cleanup-execution-release.v1",
+  "status": "PROPOSED",
+  "scope": "one exact standalone attempt-2 failed-image cleanup invocation only",
+  "candidate_sha": "89ab5c555aac9177a789efc67ddc775dacb25d6d",
+  "prior_release": {
+    "sha256": "aef3c61b1c5e25787b183b4f226884484accb1789ce676895a0bafb731187fd7",
+    "invocation_result": "REFUSED before mutation: concurrent-build-or-cleanup-publisher",
+    "cause": "coordinator incorrectly wrapped execute and replay commands in one shell, so the privileged census saw the second cleanup command in the live parent command line",
+    "container_unchanged": true,
+    "ownership_records_unchanged": true,
+    "transaction_events": 0,
+    "only_effect": "persistent cleanup mutex created as designed"
+  },
+  "implementation": {
+    "path": "docs/verification/evidence/native-exact-scratch18-image-attempt2-cleanup-20261001.py",
+    "sha256": "489ea04b8fe5d5c95f56e2599d90e8cae945caa31c96676ca8cb76e3df6336ff",
+    "tests_path": "scripts/tests/test_native_exact_scratch18_image_attempt2_cleanup_20261001.py",
+    "tests_sha256": "012240a1eeb7cc2db7477b9a7021c7fd860cb0813ee0fb4cd54254b43cf8d8c9",
+    "tests": "50 passed",
+    "source_review": "PASS"
+  },
+  "command": [
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/native-exact-scratch18-image-attempt2-cleanup-20261001.py",
+    "--execute"
+  ],
+  "standalone_requirement": "do not chain a replay or any second command in the same parent shell",
+  "fresh_validate_only": {
+    "status": "PASS_VALIDATE_ONLY",
+    "events": 0,
+    "container_present": true,
+    "mutex_present": true,
+    "plan_absent": true,
+    "journal_absent": true,
+    "capture_absent": true
+  },
+  "target": {
+    "container_id": "199591e8a9d9fca3ee1026fe43457b6f775888e22431dc89caafc5e865ebb562",
+    "container_name": "mckernel-image-a54e9e91af62474c8de5042bef79741d",
+    "owner_nonce": "3db31b9648044af19daf952651a1cb05",
+    "required_state": "exited",
+    "required_exit_code": 1,
+    "required_pid": 0,
+    "required_oom_killed": false,
+    "lease_absent": true,
+    "work_root_empty": true
+  },
+  "authorized_effects": [
+    "capture exact Docker logs",
+    "remove only the exact terminal container without force",
+    "archive and release only the exact candidate/shared ownership records"
+  ],
+  "not_authorized": [
+    "source correction",
+    "image retry",
+    "guest execution",
+    "application or OS acceptance"
+  ],
+  "execution_requires": "a fresh independent PASS_EXECUTION over this exact published release"
+}

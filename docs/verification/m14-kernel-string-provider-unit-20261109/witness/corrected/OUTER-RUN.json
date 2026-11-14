@@ -1,0 +1,36 @@
+{
+  "driver_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "380s",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=45:45",
+    "--fsize=67108864:67108864",
+    "--core=0:0",
+    "--",
+    "/usr/bin/python3",
+    "-B",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kernel-string-provider-unit-1/witness-1/correction-2/run_packet.py",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kernel-string-provider-unit-1/witness-1/correction-2/REQUEST.json"
+  ],
+  "environment_replace": {
+    "PATH": "/usr/bin:/bin",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "request_sha256": "e8b91fef45b214170a6cb6d3e3a4152daee3029e0ff24cf49f8f514b0f6232a9",
+  "admission_sha256": "bcf84bab0a77455df44ba801cb89344134bafce6ac0fc2023fe280a618fe36da",
+  "current_route_path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/CURRENT-SHARED-ROUTES-1829.json",
+  "current_route_sha256": "45c7a53b944367ea437f0cabecf88b8b3f5754ee00cdd4d9a5ad7417bb6619ea",
+  "driver_pid": 566469,
+  "proc_start_ticks": "33528973",
+  "direct_wait_joined": true,
+  "returncode": 0,
+  "wall_seconds": 0.12326460699841846
+}

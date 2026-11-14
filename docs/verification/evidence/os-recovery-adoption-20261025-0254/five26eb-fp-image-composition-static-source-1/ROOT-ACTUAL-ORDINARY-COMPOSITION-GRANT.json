@@ -1,0 +1,97 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root",
+  "decision": "GRANT_ONE_ORDINARY_REVIEWED_26EB_FP_OFFLINE_COMPOSITION",
+  "maximum_invocations": 1,
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=60:60",
+    "--fsize=67108864:67108864",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/five26eb-fp-image-composition-static-source-1/stage_bound_26eb_fp.py",
+    "--inputs",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/five26eb-fp-image-composition-static-source-1/26EB-FP-STAGING-INPUTS.FINAL-BOUND.json",
+    "--inputs-sha256",
+    "1c6ea1292457503a1eabff6b9daede5dbc15ed307e1167891f8331406d1eff6b"
+  ],
+  "review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/five26eb-fp-image-composition-static-source-1/ROOT-RECORDED-INDEPENDENT-OFFLINE-REVIEW.json",
+    "bytes": 2492,
+    "sha256": "8d088391f0774d91d1a718f384165bdca0221c0d94644d657d20afb601d467c9"
+  },
+  "source_publication": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/five26eb-fp-image-composition-static-source-1/ROOT-SOURCE-PUBLICATION-VERIFIED.json",
+    "bytes": 3305,
+    "sha256": "f011f87b35954388ac971c28b5a8a5aed99960242f2a7f927dc0b8fefc41ac47"
+  },
+  "admission": {
+    "wall": 1793080208.4555547,
+    "monotonic": 862315.024511349,
+    "boottime": 877653.151561462,
+    "fixed_cutoff_ref": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW18H-20261026-FIXED-CUTOFF-BINDING.json",
+      "bytes": 952,
+      "sha256": "2e1d3fa8338e51973cf0af5677e7e256259aff539adb164be0fb53240d834b35"
+    },
+    "memory_available_bytes": 27215740928,
+    "aggregate_reserved_bytes": 21474836480,
+    "budget": {
+      "schema_version": 2,
+      "id": "7f4af94a83b14cc08f97401f5891d965",
+      "budget": "57774.852125",
+      "initial_balance": "57774.8521250000",
+      "minimum_balance": "52079.8011050000",
+      "last_balance": "52079.8011050000",
+      "spent": "22812.3311000000",
+      "remaining": "34962.5210250000",
+      "scope": "Cumulative account-wide observed balance decreases; increases never restore allowance; stale snapshots may count conservatively; in-flight charges can settle later"
+    },
+    "heartbeat_at": "2026-10-27T05:49:57.000526+00:00",
+    "phase": "running",
+    "account_wall": 1793080208.4559462,
+    "heartbeat_age_seconds": 11.45542025566101,
+    "available_prepaid_balance": "52079.8011050000",
+    "spendControlReached": false,
+    "loadavg": [
+      0.99,
+      1.14,
+      1.11
+    ],
+    "CPU_affinity": [
+      0,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ]
+  },
+  "host_free_bytes": 150386253824,
+  "scratch_free_bytes": 47871365120,
+  "Root_attests_other_CPU6_jobs": 0,
+  "ordinary_slot": {
+    "CPU": 6,
+    "jobs": 1,
+    "AS_bytes": 2147483648,
+    "CPU_seconds": 60,
+    "FSIZE_bytes": 67108864,
+    "core": 0,
+    "wall_seconds": 90
+  },
+  "native_authority": false,
+  "compiler_Docker_guest_actions": 0,
+  "latest_heavy_current_free": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/DAEMON-SOURCE28-FAILED-INDEPENDENT-POSTJOIN-CURRENT-ACCEPTANCE.json",
+    "bytes": 2234,
+    "sha256": "98887bdeb7fdf0fd0600ecfbe6f33a39e7f8b3a05610615ca4c01e9e7bce398c"
+  }
+}

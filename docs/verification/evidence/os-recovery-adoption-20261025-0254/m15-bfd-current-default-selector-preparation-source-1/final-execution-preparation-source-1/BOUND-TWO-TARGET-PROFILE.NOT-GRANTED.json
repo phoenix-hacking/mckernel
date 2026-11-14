@@ -1,0 +1,277 @@
+{
+  "Root_actual_boundary": null,
+  "Root_current_adoption": null,
+  "Root_current_closed_source": null,
+  "Root_grant": null,
+  "capture_budget_bytes": 67108864,
+  "capture_root": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-current-default-selector-preparation-source-1/final-execution-preparation-source-1/future-capture-1",
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/cmake",
+        "-S",
+        "/candidate/tool-project",
+        "-B",
+        "/work/current-bfd-build",
+        "-DCMAKE_C_COMPILER=/usr/bin/cc",
+        "-DSTAGED_USER_SOURCE=/src/executer/user",
+        "-DORIGINAL_SOURCE=/src",
+        "-DCMAKE_VERBOSE_MAKEFILE=ON",
+        "-DIHK_USER_RUSTC:FILEPATH=/nightly/bin/rustc"
+      ],
+      "argv_compact_json_LF_sha256": "4722eba1838cdd8bf2f70b83be4901c8f447fe44b744497b1b705f4a562e2591",
+      "cwd": "/work",
+      "id": "0-current-selected-tools-configure",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Configure genuine current executer/user targets using accepted native SDK layout witness; no full SDK/image rebuild"
+    },
+    {
+      "argv": [
+        "/usr/bin/cmake",
+        "--build",
+        "/work/current-bfd-build",
+        "--target",
+        "mcinspect",
+        "eclair",
+        "--parallel",
+        "1"
+      ],
+      "argv_compact_json_LF_sha256": "3bca7895d79c545b9ae88ee1eab77413fcdbcca2c7b12d7e5819014e4dbb4230",
+      "cwd": "/work",
+      "id": "1-build-only-mcinspect-eclair",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Build only selected tools and genuine required vendor/object dependencies"
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "/candidate/inspect_project_objects.py",
+        "/work/current-bfd-build",
+        "/work/BFD-CURRENT-PROJECT-OBJECTS.json"
+      ],
+      "argv_compact_json_LF_sha256": "38333655f91e619e98a2efefa80cc04db26753d38a6fa4ba592b0ff6abc1afef",
+      "cwd": "/work",
+      "id": "2-actual-project-object-selection",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Verify genuine new linkfiles/project objects and Rust providers; no replay of SDK21 equivalence/error vectors"
+    }
+  ],
+  "environment": {
+    "application_environment": "No application workload in producer phase",
+    "container_toolchain": "/usr/bin/cc; /usr/bin/clang --driver-mode=g++; /nightly/bin/rustc",
+    "extra_environment_assignments": []
+  },
+  "expected_layout": {
+    "bytes": 259,
+    "sha256": "e21b4d9975984b7c14e13760c232dda4e755c5955f1649df77ebdc38e065530b"
+  },
+  "expected_project_objects": {
+    "eclair": [
+      "bfd_accessors.o",
+      "eclair_helpers.o",
+      "arch_eclair_x86_64.o"
+    ],
+    "mcinspect": [
+      "bfd_accessors.o",
+      "mcinspect_helpers.o"
+    ]
+  },
+  "fixed_cutoffs": [
+    1793165769.0,
+    947874.5689514667,
+    963213.6960030915
+  ],
+  "fixed_deadline_UTC": "2026-10-28T05:36:09Z",
+  "full_growth_including_staging_temporary_bytes": 4294967296,
+  "goal": "01a17e6f-112f-7660-8771-85d15e07a26c",
+  "inputs": [
+    {
+      "bytes": 5781,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-current-default-selector-preparation-source-1/SOURCE-READY.json",
+      "sha256": "67b99680016b85c606757e8fd58c176638c5208fe473f91707217b193dec731e"
+    },
+    {
+      "bytes": 8423,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-current-default-selector-preparation-source-1/SELECTIVE-REBASE-AND-PRESERVATION.json",
+      "sha256": "0364551dc7869281400cd64e7ddd35b9352089dcda62b6c011586cfe3b677194"
+    },
+    {
+      "bytes": 3815,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-current-default-selector-preparation-source-1/ROOT-SELECTIVE-WRITE-SET.NOT-AUTHORITY.json",
+      "sha256": "e6b10c0777f362ea51766f34ee82a60d8affa1a0be4d9733eb8f7b7485db2116"
+    },
+    {
+      "bytes": 2646,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-current-default-selector-preparation-source-1/EXACT-NEXT-CONFIGURE-BUILD-OBJECT-COMMANDS.NOT-GRANTED.json",
+      "sha256": "484713289b4689447a66c1169726895765868e446913d559fc9b49e55e80fc9d"
+    },
+    {
+      "bytes": 2161,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-current-default-selector-preparation-source-1/VALID-DIAGNOSTIC.DEPENDENCIES-NOT-RELEASED.json",
+      "sha256": "31e46f9a0d5786dbe84534d0f41063dbb817bad513e040dc91d7f3363d04d60c"
+    },
+    {
+      "bytes": 2866,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-current-default-selector-preparation-source-1/inspect_project_objects.py",
+      "sha256": "fbdad51334329d36197e301a9f0e02b64e704892c5474e6d0bd7ac4ba7e44a49"
+    },
+    {
+      "bytes": 6103,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-current-default-selector-preparation-source-1/retained_elf.py",
+      "sha256": "ba2b4764ce71f01cf2a4d80e6892acfa7862bb47455a945122b2c69646cb50cf"
+    },
+    {
+      "bytes": 1565,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-current-default-selector-preparation-source-1/tool-project/CMakeLists.txt",
+      "sha256": "af282395510242ca69aeffaf7950b429ca4027b9d09e52b5feed5028bb4450d0"
+    },
+    {
+      "bytes": 28027,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-current-default-selector-preparation-source-1/candidate/executer/user/CMakeLists.txt",
+      "sha256": "a77da8f2ccaf54997c043cf30c22c8e67fedd3b7b318b54709df2820f29f5e4b"
+    },
+    {
+      "bytes": 2626,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-current-default-selector-preparation-source-1/candidate/executer/user/cmake/BfdRustAccessors.cmake",
+      "sha256": "325d811a58fa96cc6543825d88963ee0167be2d93ff5ddd8cd35f8c2089d5f4d"
+    },
+    {
+      "bytes": 2115,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-current-default-selector-preparation-source-1/candidate/executer/user/cmake/bfd_layout_witness.c",
+      "sha256": "4fd1248188a4ccf23fa576a9bb849fa5f9bbaa1fee69ad949a9c94b9f95989b9"
+    },
+    {
+      "bytes": 2400,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-current-default-selector-preparation-source-1/candidate/executer/user/rust/bfd_accessors.rs",
+      "sha256": "f75c6ed4d793eaa1a906a0752dce079efef9aab2897888ffd9ccfc45f03a561b"
+    },
+    {
+      "bytes": 306,
+      "path": "/home/holden/mckernel/executer/user/mcinspect_bfd_shim.c",
+      "sha256": "4bc272746c75f53d563b5f557fc20bdede364cb7ca532cc8b407e62cf256835d"
+    },
+    {
+      "bytes": 297,
+      "path": "/home/holden/mckernel/executer/user/eclair_bfd_shim.c",
+      "sha256": "e2317b32f6fde2d2998e7ccbc69a2a903cdf881b08d19b08eb5d5c9ac86a5e1e"
+    },
+    {
+      "bytes": 98836,
+      "path": "/home/holden/mckernel/executer/user/rust/mcinspect_helpers.rs",
+      "sha256": "7449e7856d6699ee9fa245a75f3e63488fb42603b0e19c574bf148c9d84a9590"
+    },
+    {
+      "bytes": 90194,
+      "path": "/home/holden/mckernel/executer/user/rust/eclair_helpers.rs",
+      "sha256": "9f1f3b1bd2e496f9e4485535af4f3dd73bfcf975887ba9cdfed6a33d64940d0e"
+    },
+    {
+      "bytes": 7574,
+      "path": "/home/holden/mckernel/executer/user/rust/arch_eclair_x86_64.rs",
+      "sha256": "48e1af9fa7ec6c026a7a3c7657e147e04c905573ee5c08a7bcca4f5a57c634dd"
+    },
+    {
+      "bytes": 2083,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ACTUAL-BFD-SDK21-INDEPENDENT-ARTIFACT-AND-BEHAVIOR-ACCEPTANCE.json",
+      "sha256": "1231c1f6aae61548964d19c8feab74bef96e94cc21c4c853a1841df3b6e04c8e"
+    },
+    {
+      "bytes": 708714,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/equivalence-oracle-correction-source-7/selected-bootstrap-correction-source-8/coherent-cxx-bound-retained11-suffix10-source-2/BFD-INPUTS.json",
+      "sha256": "ac17abec03e87d4e5817fa91879db685c4ac0bb6395d0895893f52acf0dc2a5e"
+    },
+    {
+      "bytes": 16660,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/equivalence-oracle-correction-source-7/selected-bootstrap-correction-source-8/coherent-cxx-bound-retained11-suffix10-source-2/BFD-PREPARATION.json",
+      "sha256": "d68fdaf5153477a9f6cfedc86e17ad10f503a077635cb3ad6d0dc73000a78cfc"
+    },
+    {
+      "bytes": 94697,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/equivalence-oracle-correction-source-7/selected-bootstrap-correction-source-8/coherent-cxx-bound-retained11-suffix10-source-2/bfd_cxx_bound_retained11_suffix10_owner.py",
+      "sha256": "542a78c4e5fca1ef0bfed6d41ea70d689c1a7284390ee4f858c705efaf4f0491"
+    },
+    {
+      "bytes": 4602,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/equivalence-oracle-correction-source-7/selected-bootstrap-correction-source-8/coherent-cxx-bound-retained11-suffix10-source-2/bfd_cxx_bound_retained11_suffix10_driver.py",
+      "sha256": "c1a66a3458f8519529e454fcc739c944c619789cf0d48bdeef62083589b6e5e2"
+    },
+    {
+      "bytes": 5490,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/equivalence-oracle-correction-source-7/selected-bootstrap-correction-source-8/coherent-cxx-bound-retained11-suffix10-source-2/REQUEST.PENDING-NO-AUTHORITY.json",
+      "sha256": "8613ce19963839c180868761b29b692d2e0aa4ade82cc4a78ea841b5ea4bf9c6"
+    }
+  ],
+  "mounts": [
+    {
+      "container": "/candidate",
+      "host": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-current-default-selector-preparation-source-1",
+      "readonly": true
+    },
+    {
+      "container": "/out",
+      "host": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output",
+      "readonly": true
+    },
+    {
+      "container": "/nightly",
+      "host": "/home/holden/mckernel-work/scratch/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu",
+      "readonly": true
+    },
+    {
+      "container": "/src",
+      "host_binding": "Root_current_closed_source.path",
+      "readonly": true
+    },
+    {
+      "container": "/work",
+      "host": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-current-default-selector-preparation-source-1/final-execution-preparation-source-1/future-work-1",
+      "readonly": false
+    }
+  ],
+  "native_authority": "NOT_GRANTED_BY_PRODUCER_PROFILE",
+  "new_actual_receipts": null,
+  "output_budget_bytes": 536870912,
+  "outputs": [
+    "/work/current-bfd-build/executer/user/mcinspect",
+    "/work/current-bfd-build/executer/user/eclair",
+    "/work/BFD-CURRENT-PROJECT-OBJECTS.json"
+  ],
+  "required_receipts": [
+    "exact command argv/CWD/hash, exit status, complete raw stdout/stderr, whole child/group/stream retirement for all three commands",
+    "new generated259B layout and native witness configure trace; Rust compiler/source/object producer and link commands",
+    "actual two link.txt files, exact project object sets, ELF64 PIE binaries and executable global main plus four Rust BFD bridge definitions from existing inspect_project_objects.py",
+    "all relevant vendor/generated libdwarf/libbfd and supporting third-party link inputs retained and classified; target set does not permit additional project C runtime/shim objects",
+    "new tool artifact hashes and independent current source/object/ABI/link review; this alone does not prove installation default or valid native diagnostic"
+  ],
+  "resources": {
+    "aggregate_GiB": "21.6619",
+    "aggregate_jobs": 7,
+    "cpus": "2-5",
+    "jobs": 1,
+    "memory_bytes": 12884901888,
+    "memory_swap_bytes": 12884901888,
+    "network": "none",
+    "one_heavy": true,
+    "pids": 512
+  },
+  "retained_no_replay": {
+    "SDK_acceptance": {
+      "bytes": 2083,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ACTUAL-BFD-SDK21-INDEPENDENT-ARTIFACT-AND-BEHAVIOR-ACCEPTANCE.json",
+      "sha256": "1231c1f6aae61548964d19c8feab74bef96e94cc21c4c853a1841df3b6e04c8e"
+    },
+    "SDK_help_error_pairs": 8,
+    "SDK_logical_commands": 21,
+    "new_replay_commands": 0
+  },
+  "retained_timeout_seconds": 19800,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_preconditions": [
+    "Root checks exact current1208 preimage, applies only five-site CMake a77da and three unchanged BFD companion files; preserves current mcexec/default/script/tool selectors outside five sites.",
+    "Root creates hash-bound current closed source materialization and maps it readonly to /src; do not reuse SDK historic source/ac17 as current, compile directly from mutable checkout, or transplant old full CMake.",
+    "Root rebinds /out, readonly nightly rustc70eb, exact image and SDK ABI tool hashes using retained BFD inputs/owner preparation at their applicable scope; no consumed request/nonce/lease is authority.",
+    "Current source/materialization, execution boundary and current ownership/account/boot/time/resources/free floors must pass actual independent operation admission. Output and capture roots must be fresh."
+  ],
+  "status": "SOURCE_ONLY_EXACT_THREE_STEP_PROFILE_ROOT_MATERIALIZATION_AND_EXECUTION_UNBOUND",
+  "task_id": "M15-BFD-CURRENT-DEFAULT-TWO-TARGET-1",
+  "timeout_rule": "Retained upper bound only; every operation clamps to original fixed UTC/MONO/BOOT deadline and actual fresh Root grant. No renewed duration.",
+  "tool_image": "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5"
+}

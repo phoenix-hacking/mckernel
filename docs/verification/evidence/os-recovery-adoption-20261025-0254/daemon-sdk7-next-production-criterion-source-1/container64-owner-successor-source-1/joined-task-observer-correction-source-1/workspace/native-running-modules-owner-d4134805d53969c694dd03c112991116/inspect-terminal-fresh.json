@@ -1,0 +1,367 @@
+{
+  "AppArmorProfile": "docker-default",
+  "Args": [
+    "-I",
+    "-B",
+    "/driver.py",
+    "--execute"
+  ],
+  "Config": {
+    "AttachStderr": true,
+    "AttachStdin": false,
+    "AttachStdout": true,
+    "Cmd": [
+      "-I",
+      "-B",
+      "/driver.py",
+      "--execute"
+    ],
+    "Domainname": "",
+    "Entrypoint": [
+      "/usr/bin/python3"
+    ],
+    "Env": [
+      "container=oci"
+    ],
+    "Hostname": "864ccac9da84",
+    "Image": "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5",
+    "Labels": {
+      "io.buildah.version": "1.43.1",
+      "license": "BSD-3-Clause",
+      "mckernel.owner": "d4134805d53969c694dd03c112991116",
+      "name": "rockylinux",
+      "org.opencontainers.image.authors": "Lukas Magauer, Neil Hanlon, Louis Abel",
+      "org.opencontainers.image.licenses": "BSD-3-Clause",
+      "org.opencontainers.image.source": "https://git.resf.org/sig_core/rocky-kiwi-descriptions/src/branch/r10",
+      "org.opencontainers.image.title": "rockylinux",
+      "org.opencontainers.image.vendor": "Rocky Enterprise Software Foundation",
+      "org.opencontainers.image.version": "10",
+      "summary": "Rocky Linux Base image",
+      "vendor": "Rocky Enterprise Software Foundation",
+      "version": "10"
+    },
+    "OnBuild": null,
+    "OpenStdin": false,
+    "StdinOnce": false,
+    "Tty": false,
+    "User": "1000:1000",
+    "Volumes": null,
+    "WorkingDir": "/"
+  },
+  "Created": "2026-10-27T05:42:00.757159169Z",
+  "Driver": "overlay2",
+  "ExecIDs": null,
+  "GraphDriver": {
+    "Data": {
+      "LowerDir": "/var/lib/docker/overlay2/002c273a2e2bfc80c43dc9b6eb173fa2179e681a84241132658519d1cdc12d99-init/diff:/var/lib/docker/overlay2/7dfdeca53dbb9dd0b2a42681dfe546347648e0f11b7b03876404223be540f39f/diff:/var/lib/docker/overlay2/2a23ddce6067a5847fc046c77f050a037a224c752e9e6ff2d7d56ac9162e8982/diff",
+      "MergedDir": "/var/lib/docker/overlay2/002c273a2e2bfc80c43dc9b6eb173fa2179e681a84241132658519d1cdc12d99/merged",
+      "UpperDir": "/var/lib/docker/overlay2/002c273a2e2bfc80c43dc9b6eb173fa2179e681a84241132658519d1cdc12d99/diff",
+      "WorkDir": "/var/lib/docker/overlay2/002c273a2e2bfc80c43dc9b6eb173fa2179e681a84241132658519d1cdc12d99/work"
+    },
+    "Name": "overlay2"
+  },
+  "HostConfig": {
+    "AutoRemove": false,
+    "Binds": null,
+    "BlkioDeviceReadBps": [],
+    "BlkioDeviceReadIOps": [],
+    "BlkioDeviceWriteBps": [],
+    "BlkioDeviceWriteIOps": [],
+    "BlkioWeight": 0,
+    "BlkioWeightDevice": [],
+    "CapAdd": null,
+    "CapDrop": [
+      "ALL"
+    ],
+    "Cgroup": "",
+    "CgroupParent": "",
+    "CgroupnsMode": "host",
+    "ConsoleSize": [
+      0,
+      0
+    ],
+    "ContainerIDFile": "",
+    "CpuCount": 0,
+    "CpuPercent": 0,
+    "CpuPeriod": 0,
+    "CpuQuota": 0,
+    "CpuRealtimePeriod": 0,
+    "CpuRealtimeRuntime": 0,
+    "CpuShares": 0,
+    "CpusetCpus": "2-5",
+    "CpusetMems": "",
+    "DeviceCgroupRules": null,
+    "DeviceRequests": null,
+    "Devices": [],
+    "Dns": [],
+    "DnsOptions": [],
+    "DnsSearch": [],
+    "ExtraHosts": null,
+    "GroupAdd": null,
+    "IOMaximumBandwidth": 0,
+    "IOMaximumIOps": 0,
+    "Init": true,
+    "IpcMode": "private",
+    "Isolation": "",
+    "Links": null,
+    "LogConfig": {
+      "Config": {},
+      "Type": "json-file"
+    },
+    "MaskedPaths": [
+      "/proc/asound",
+      "/proc/acpi",
+      "/proc/kcore",
+      "/proc/keys",
+      "/proc/latency_stats",
+      "/proc/timer_list",
+      "/proc/timer_stats",
+      "/proc/sched_debug",
+      "/proc/scsi",
+      "/sys/firmware",
+      "/sys/devices/virtual/powercap"
+    ],
+    "Memory": 12884901888,
+    "MemoryReservation": 0,
+    "MemorySwap": 12884901888,
+    "MemorySwappiness": null,
+    "Mounts": [
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/joined-task-observer-correction-source-1/input-mirror",
+        "Target": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-daemon-validation",
+        "Type": "bind"
+      },
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel-work/scratch/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu",
+        "Target": "/nightly",
+        "Type": "bind"
+      },
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel",
+        "Target": "/home/holden/mckernel",
+        "Type": "bind"
+      },
+      {
+        "Source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/joined-task-observer-correction-source-1/workspace/native-running-modules-candidate-d4134805d53969c694dd03c112991116",
+        "Target": "/work",
+        "Type": "bind"
+      },
+      {
+        "Source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/joined-task-observer-correction-source-1/workspace/native-running-modules-candidate-d4134805d53969c694dd03c112991116/fixture-output",
+        "Target": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-daemon-validation/read-errors-successor-1/fixture-output",
+        "Type": "bind"
+      },
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/joined-task-observer-correction-source-1/workspace/preparation-d4134805d53969c694dd03c112991116",
+        "Target": "/preparation",
+        "Type": "bind"
+      },
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/joined-task-observer-correction-source-1/suffix_driver.py",
+        "Target": "/driver.py",
+        "Type": "bind"
+      },
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/joined-task-observer-correction-source-1/SUFFIX-REQUEST.json",
+        "Target": "/request.json",
+        "Type": "bind"
+      },
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-20261019-1/capsule/scripts/native_rust_exact_build_container_owner.py",
+        "Target": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-20261019-1/capsule/scripts/native_rust_exact_build_container_owner.py",
+        "Type": "bind"
+      },
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/workspace/native-running-modules-candidate-1fff493f114662040e1147fdcbf5fa32/fixture-output",
+        "Target": "/retained-prefix",
+        "Type": "bind"
+      }
+    ],
+    "NanoCpus": 4000000000,
+    "NetworkMode": "none",
+    "OomKillDisable": false,
+    "OomScoreAdj": 0,
+    "PidMode": "",
+    "PidsLimit": 64,
+    "PortBindings": {},
+    "Privileged": false,
+    "PublishAllPorts": false,
+    "ReadonlyPaths": [
+      "/proc/bus",
+      "/proc/fs",
+      "/proc/irq",
+      "/proc/sys",
+      "/proc/sysrq-trigger"
+    ],
+    "ReadonlyRootfs": true,
+    "RestartPolicy": {
+      "MaximumRetryCount": 0,
+      "Name": "no"
+    },
+    "Runtime": "runc",
+    "SecurityOpt": [
+      "no-new-privileges"
+    ],
+    "ShmSize": 67108864,
+    "Tmpfs": {
+      "/tmp": "rw,nodev,nosuid,size=256m"
+    },
+    "UTSMode": "",
+    "Ulimits": [],
+    "UsernsMode": "",
+    "VolumeDriver": "",
+    "VolumesFrom": null
+  },
+  "HostnamePath": "/var/lib/docker/containers/864ccac9da84ef2890b2a2a38b92fa61db1af16a89e9bd115f152b791430b950/hostname",
+  "HostsPath": "/var/lib/docker/containers/864ccac9da84ef2890b2a2a38b92fa61db1af16a89e9bd115f152b791430b950/hosts",
+  "Id": "864ccac9da84ef2890b2a2a38b92fa61db1af16a89e9bd115f152b791430b950",
+  "Image": "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5",
+  "LogPath": "/var/lib/docker/containers/864ccac9da84ef2890b2a2a38b92fa61db1af16a89e9bd115f152b791430b950/864ccac9da84ef2890b2a2a38b92fa61db1af16a89e9bd115f152b791430b950-json.log",
+  "MountLabel": "",
+  "Mounts": [
+    {
+      "Destination": "/home/holden/mckernel",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-daemon-validation/read-errors-successor-1/fixture-output",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": true,
+      "Source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/joined-task-observer-correction-source-1/workspace/native-running-modules-candidate-d4134805d53969c694dd03c112991116/fixture-output",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/driver.py",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/joined-task-observer-correction-source-1/suffix_driver.py",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/retained-prefix",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/workspace/native-running-modules-candidate-1fff493f114662040e1147fdcbf5fa32/fixture-output",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-daemon-validation",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/joined-task-observer-correction-source-1/input-mirror",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/nightly",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel-work/scratch/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/work",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": true,
+      "Source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/joined-task-observer-correction-source-1/workspace/native-running-modules-candidate-d4134805d53969c694dd03c112991116",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/preparation",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/joined-task-observer-correction-source-1/workspace/preparation-d4134805d53969c694dd03c112991116",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/request.json",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/joined-task-observer-correction-source-1/SUFFIX-REQUEST.json",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-20261019-1/capsule/scripts/native_rust_exact_build_container_owner.py",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-20261019-1/capsule/scripts/native_rust_exact_build_container_owner.py",
+      "Type": "bind"
+    }
+  ],
+  "Name": "/mckernel-external-d4134805d53969c694dd03c112991116",
+  "NetworkSettings": {
+    "Bridge": "",
+    "EndpointID": "",
+    "Gateway": "",
+    "GlobalIPv6Address": "",
+    "GlobalIPv6PrefixLen": 0,
+    "HairpinMode": false,
+    "IPAddress": "",
+    "IPPrefixLen": 0,
+    "IPv6Gateway": "",
+    "LinkLocalIPv6Address": "",
+    "LinkLocalIPv6PrefixLen": 0,
+    "MacAddress": "",
+    "Networks": {
+      "none": {
+        "Aliases": null,
+        "DNSNames": null,
+        "DriverOpts": null,
+        "EndpointID": "",
+        "Gateway": "",
+        "GlobalIPv6Address": "",
+        "GlobalIPv6PrefixLen": 0,
+        "IPAMConfig": null,
+        "IPAddress": "",
+        "IPPrefixLen": 0,
+        "IPv6Gateway": "",
+        "Links": null,
+        "MacAddress": "",
+        "NetworkID": "8c4a9a65ad813cb3f458da3761bdeba25d43fc777fb9fb0b91756f4e1553fa11"
+      }
+    },
+    "Ports": {},
+    "SandboxID": "30f43fabeba8693f0cfea8ef57ae315cbc0f3d9087356457ad3b2e2a855aa29a",
+    "SandboxKey": "/var/run/docker/netns/30f43fabeba8",
+    "SecondaryIPAddresses": null,
+    "SecondaryIPv6Addresses": null
+  },
+  "Path": "/usr/bin/python3",
+  "Platform": "linux",
+  "ProcessLabel": "",
+  "ResolvConfPath": "/var/lib/docker/containers/864ccac9da84ef2890b2a2a38b92fa61db1af16a89e9bd115f152b791430b950/resolv.conf",
+  "RestartCount": 0,
+  "State": {
+    "Dead": false,
+    "Error": "",
+    "ExitCode": 1,
+    "FinishedAt": "2026-10-27T05:42:01.885666179Z",
+    "OOMKilled": false,
+    "Paused": false,
+    "Pid": 0,
+    "Restarting": false,
+    "Running": false,
+    "StartedAt": "2026-10-27T05:42:01.131608901Z",
+    "Status": "exited"
+  }
+}

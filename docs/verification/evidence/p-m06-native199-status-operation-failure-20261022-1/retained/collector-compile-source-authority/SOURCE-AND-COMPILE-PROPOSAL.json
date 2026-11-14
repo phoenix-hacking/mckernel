@@ -1,0 +1,132 @@
+{
+  "status": "SOURCE_ONLY_NOT_GRANTED_NOT_RELEASED",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "base": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-exec-wait-native-preparation-20261020-1/source/scripts/application-tests/native_diagnostic_guest_collector.c",
+    "bytes": 23353,
+    "sha256": "c61fcee6576ae2a1320d4a51a6910d4097da9280bbabc0f545b209508eb0d821"
+  },
+  "candidate": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-helper-failure-export-1/errno-correction-1/native_diagnostic_guest_collector.helper-diagnostic.c",
+    "bytes": 25205,
+    "sha256": "b3fc4fe0d46ae95a0b428a3c2ff46a8836affc0d929da9a2809cbe3e15b5e2d6"
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-helper-failure-export-1/errno-correction-1/errno-diagnostic-only.patch",
+    "bytes": 1437,
+    "sha256": "f9d24838f578a596062d55ebf62ae6b4053236829719586032b98e4c0671d07e"
+  },
+  "actual_selected_collector": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-exec-wait-native-preparation-20261020-1/process-exec-wait-collector",
+    "sha256": "d1c72d0fe0a2e6872b8aa210354984aa946d5475865ce9e9fe6c79de79cfa0be"
+  },
+  "selected_base_native_boot": {
+    "source": "/home/holden/mckernel-work/scratch/native-ultra-futex-guest-20260909-2026091302/boot-probe-source/native-boot.c",
+    "staged_sha256": "4558995ea1ae70c8d5a115542e333ad695a54b4b8f450ea717df37fd1e631af3",
+    "source_assertions_before_first_pause_lines": [
+      207,
+      215,
+      219,
+      220,
+      221,
+      222,
+      223
+    ],
+    "compiler_source_provenance_limit": "Sourceadjacentboot-probe-source+selectedbinarystringshidosallow/SERVICE/PREREADYconfirmed;exactcompilerflagreceiptnotlocated,noexactfailedassertionclaimed."
+  },
+  "bounded_diagnosis": "Boothelperfailedorhelper-evidencepersistfailedbeforefirst10scapturepause;exactstatus/stdout/stderrnotexportedbyactualcollector,soexactcauseunobservable. Started0isunlaunchedpayload,notaprovedpayloadclockfailure.",
+  "compile_argv": [
+    "/usr/bin/x86_64-linux-gnu-gcc-9",
+    "-std=gnu11",
+    "-static",
+    "-O2",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-DND_PROCESS_EXEC_WAIT",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-helper-failure-export-1/errno-correction-1/native_diagnostic_guest_collector.helper-diagnostic.c",
+    "-o",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-helper-failure-export-1/errno-correction-1/collector-helper-diagnostic"
+  ],
+  "proposed_ordinary_limits": {
+    "cpu": 6,
+    "jobs": 1,
+    "as_bytes": 536870912,
+    "cpu_seconds": 30,
+    "wall_seconds": 30,
+    "filesize_bytes": 8388608,
+    "compiler_and_model_only": true
+  },
+  "needed_targeted_tests": [
+    "actualhelperbody success emitsnothing",
+    "helpernonzeroexit exportsrawstatus+exactbothcapturedstreams andstillreturnsfailure",
+    "stdoutover1KiB exportsretained/truncatedaccounting andstillfailure",
+    "uncleanchildexportsunclean andpreservessafe0",
+    "save_fileIOrefusalexports evidence_failed;errno0explicitlymeansunspecified,notstaleambienterrno",
+    "diagnosticwritefailure remainshelperfailure,noappstart/retry"
+  ],
+  "unchanged": [
+    "supervise/drain/signal/reapcode",
+    "alltimeouts/resourcecaps",
+    "payloadargv/env/strictstdout/stderr/exit/timestamps",
+    "fullready/ownership/retirementcriteria"
+  ],
+  "tests_run": 0,
+  "compiler_runs": 0,
+  "root_or_guest_runs": 0,
+  "native_acceptance": false,
+  "actual_new_collector_artifact": null,
+  "actual_stage": null,
+  "actual_release": null,
+  "fixture_compile_argv": [
+    "/usr/bin/x86_64-linux-gnu-gcc-9",
+    "-std=gnu11",
+    "-O2",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-helper-failure-export-1/errno-correction-1/actual-helper-fixture.c",
+    "-o",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-helper-failure-export-1/errno-correction-1/actual-helper-fixture"
+  ],
+  "fixture_run_argv": [
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-helper-failure-export-1/errno-correction-1/actual-helper-fixture"
+  ],
+  "fixture_bodies": "Exact candidateappend/stream_json/helper_export_failure/helper function text, no reimplementation; struct layouts copied from same selected source; explicit adapters at supervise/save_file/write_all only.",
+  "fixture_scenarios": {
+    "0": "successsilent",
+    "1": "nonzeroexit+exactassertionlinehex",
+    "2": "stdout1025observed/1024retained/truncated",
+    "3": "uncleanpreservessafe0",
+    "4": "save_filefailurewithoutnewerrnoreports0unspecified,notambientESTALE",
+    "5": "consolewritefailurestillbad/noretry"
+  },
+  "new_fixture_inputs": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-helper-failure-export-1/errno-correction-1/actual-helper-functions.inc",
+      "bytes": 3667,
+      "sha256": "f8064bcb3b1318a0be7e229a7a802c62837717ce2835f3bcab70612d1e47841f"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-helper-failure-export-1/errno-correction-1/actual-helper-fixture.c",
+      "bytes": 2756,
+      "sha256": "e43e9c8653cede81c855a84a0a8aeea1937434c9c2cc4e285e020b5b80f18302"
+    }
+  ],
+  "compiler": {
+    "path": "/usr/bin/x86_64-linux-gnu-gcc-9",
+    "bytes": 1158288,
+    "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f"
+  },
+  "preimage_proposal": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-helper-failure-export-1/SOURCE-AND-COMPILE-PROPOSAL.json",
+    "bytes": 5629,
+    "sha256": "e4eb610e9a992b08f83b603da6767149dab4b645ca74c312cba0165bfd6683d3"
+  },
+  "preimage_candidate": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-helper-failure-export-1/native_diagnostic_guest_collector.helper-diagnostic.c",
+    "bytes": 25146,
+    "sha256": "0f6fdeca8e5e0b62dbeca6b7b34b2f05e58527f7d19d9ed4c1fff403ff87cfab"
+  },
+  "ordinary_output": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-helper-failure-export-1/errno-correction-1/ordinary-check-1"
+}

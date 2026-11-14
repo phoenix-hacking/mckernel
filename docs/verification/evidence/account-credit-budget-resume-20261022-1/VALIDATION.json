@@ -1,0 +1,42 @@
+{
+  "recorded_at": "2026-10-22T15:11:13.866208+00:00",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "authorization": "Explicit user request to continue using some existing account credits; conservative starter budget 100 unless user chooses another amount.",
+  "credit_budget": "100",
+  "mode": "prepaid_credits",
+  "in_flight_charges_may_settle_after_stop": true,
+  "account_wide_balance_guard": true,
+  "automatic_purchase": false,
+  "api_key_billing": false,
+  "offline_tests": {
+    "test_os_goal_credits.py": 7,
+    "test_os_goal_launcher.py": 93,
+    "test_run_os_parallel.py": 39,
+    "test_os_goal_recovery.py": 21,
+    "total": 160,
+    "status": "PASS"
+  },
+  "independent_source_review": {
+    "agent": "/root/review_credit_budget",
+    "status": "PASS after fixing balance polling; no remaining findings",
+    "runtime_independently_retested": false
+  },
+  "real_read_only_preflight": {
+    "status": "PASS",
+    "exit_code": 0,
+    "inference_started": false,
+    "model": "gpt-6.1-sol",
+    "available_prepaid_credits": "58235.9614400000",
+    "active_affinity": [
+      0,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ]
+  },
+  "startup": "pending",
+  "preservation": "Retain existing dirty worktree, evidence, owners, Scratch21 and permanent mutex. Separate reserve change remains unapproved."
+}

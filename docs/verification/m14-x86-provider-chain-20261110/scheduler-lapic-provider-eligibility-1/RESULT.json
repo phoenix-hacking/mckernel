@@ -1,0 +1,198 @@
+{
+  "schema": "mckernel.scheduler-lapic-provider.eligibility.v1",
+  "invocation": "20261109T211917Z-488788ba",
+  "owner": "SavedRoot01a18bc3-e072-7810-9426-75101b0856c0 solecompositor; /root/scheduler_debug_data_review_high readonlycontractwriter",
+  "decision": "GO_EXACT_TWO_ORIGINAL_F04_WRAPPER_DEFINITIONS_WITH_THREE_GENUINE_CALLEE_IMPORTS_ONLY",
+  "scope": "Exact lapic_timer_enable and lapic_timer_disable source-only wrapperproviders; no body_result engine or LAPIC-write bridge/backend implementation included. No unit or command selected by thiscontract.",
+  "actual_dependency_basis": "Root supplied actual genuine lapic_timer_enable(u32)/lapic_timer_disable() dependencies introduced by the genuine fourtimercallbacks in current shared scheduler/credential provider queue. This is concrete source/provider engineering, not missingcoverage/globalinventory or native readiness inference.",
+  "affirmative_original_membership": {
+    "active_plan": "CAMPAIGN.md M14-F04 /04-01..05 names arch/x86_64/kernel/cpu.c accepted for primitives/startup/interrupts/context/TLS/FPU/xstate/diagnostics; accepted scope remains closed.",
+    "exact_C_membership": "cpu.c1273\u20131279 selectedRust branch declares exacttwoLAPICtimerAPIs; reference alternative1281\u20131296 is original general localAPICtimercontrol, not packet/syscallnotification/generic/exec/ACK/TID/XPMEM endpoint. Only exact requested functions mapped; neighboring routines not included.",
+    "actual_Rust_selection": "lib.rs94 unconditionallyselectsx86_cpu_helpers; CMake187 addsactualRustsource; CMake729\u2013730 pairs sameCPU C file withMCKERNEL_RUST_X86_CPU_HELPERS underactualRustselection. Exactfunctions have#[no_mangle] and no localcfg/equivalence/featurebody substitution.",
+    "boundary_reason": "Positive F04owner+exactC/Rustfunction/selector mapping establishes these two forwardingbodies. Hardware-related names alone neitherholdnorpermit downstream implementations. These wrappers contain no APIC/MSR/register/memory/boot operations or data publication."
+  },
+  "exact_functions": [
+    {
+      "name": "lapic_timer_enable",
+      "ABI": "unsafe extern C fn(CUInt=u32)->()",
+      "source": {
+        "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+        "first_line": 1873,
+        "last_line": 1876,
+        "sha256": "1c6fc9889a1dabe38d529a91fac65fb3f3263e90ec83a0c450afae068a173368"
+      },
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn lapic_timer_enable(clocks: CUInt) {\n    let _ = x86_lapic_timer_enable_body_result(clocks, Some(x86_lapic_write_bridge));\n}\n",
+      "semantics": "Pass clocks unchanged and originalSome(genuinex86_lapic_write_bridge) into actual x86_lapic_timer_enable_body_result; ignore returnedCInt exactlyas let_. No inventedvalidation/callback/returnpolicy."
+    },
+    {
+      "name": "lapic_timer_disable",
+      "ABI": "unsafe extern C fn()->()",
+      "source": {
+        "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+        "first_line": 1890,
+        "last_line": 1893,
+        "sha256": "6f89e356c6f80a5c81227feb0c6007f6921aaabdd305843e21316c06a03e8fdd"
+      },
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn lapic_timer_disable() {\n    let _ = x86_lapic_timer_disable_body_result(Some(x86_lapic_write_bridge));\n}\n",
+      "semantics": "Pass originalSome(genuinex86_lapic_write_bridge) into actual x86_lapic_timer_disable_body_result; ignore returnedCInt exactlyas let_. No callback executioninthisinvestigation."
+    }
+  ],
+  "strict_finite_closure": {
+    "types": [
+      {
+        "name": "CInt",
+        "source": "kernel/rust/abi.rs5",
+        "definition": "pub type CInt=i32; actualABI reused"
+      },
+      {
+        "name": "CUInt",
+        "source": "kernel/rust/x86_cpu_helpers.rs9",
+        "definition": "type CUInt = u32;"
+      },
+      {
+        "name": "X86LapicWriteFn",
+        "source": "kernel/rust/x86_cpu_helpers.rs69",
+        "definition": "type X86LapicWriteFn = unsafe extern C fn(CInt, CUInt);"
+      },
+      {
+        "name": "Option<X86LapicWriteFn>/Some",
+        "source": "Originalwrapperargument expressions",
+        "definition": "Actual nullableCcallbackargument; Some wraps genuineexistingfunctionaddress, not fakecallback, slotowner, setter or publication."
+      }
+    ],
+    "required_source_constants": [],
+    "private_runtime_helpers": [],
+    "data_owners": [],
+    "genuine_imports": [
+      {
+        "symbol": "x86_lapic_timer_enable_body_result",
+        "kind": "function U",
+        "actual_public_signature_source": "kernel/rust/x86_cpu_helpers.rs1859\u20131862",
+        "ABI": "unsafe extern C fn(clocks:CUInt,write_fn:Option<X86LapicWriteFn>)->CInt",
+        "scope": "Signature/actualcall identity only. Publicengine is NOT a privatehelper hiddeninside this2definitionpermission; body/constants/importclosure remain separatelyunqualified for newpartition."
+      },
+      {
+        "symbol": "x86_lapic_timer_disable_body_result",
+        "kind": "function U",
+        "actual_public_signature_source": "kernel/rust/x86_cpu_helpers.rs1879\u20131881",
+        "ABI": "unsafe extern C fn(write_fn:Option<X86LapicWriteFn>)->CInt",
+        "scope": "Signature/actualcall identity only; publicenginebodynotimported/preparedbythiscontract."
+      },
+      {
+        "symbol": "x86_lapic_write_bridge",
+        "kind": "genuinefunction U usedas originalcallbackaddress",
+        "actual_declaration_source": "kernel/rust/x86_cpu_helpers.rs117",
+        "ABI": "unsafe extern C fn(reg:CInt,value:CUInt)->()",
+        "scope": "Originaldeclaredfunctionaddress only. Actualbridgebody/callback-slotread/selectedtarget/registerbackend/bootmodepublication are NOT inspected/prepared/authorizedbythiscontract."
+      }
+    ],
+    "expected_finite_object": "Two genuine globalT names, no globaldata/privatehelpers, threegenuineUcallee symbols and sourcefunction-addressrelocations; actualcompileremission/private/intrinsic/unwindvariation requireslatercalledobjectreview. Equal/newUcount is not closure.",
+    "why_no_register_constants": "Exact two wrappers perform no registerwrite/divisor/vector arithmetic. OriginalCregisterconstants belongto separate downstreamengine contract; do not transcribe/guess/include them merelyto removeU."
+  },
+  "downstream_lane_boundary": {
+    "engine_bodies": "NO_PERMISSION_FROM_THIS_WRAPPER_GO. If Root wants coherentwrapper+enginebatch, obtain distinct finiteaffirmativeenginecontract with actual source/constants/callback/importselection beforecodegen. Their publicdefinitions are genuineimports here, not absentRustports.",
+    "write_bridge_backend": "UNKNOWN_NOT_INSPECTED_OR_PREPARED. Need separate original accepted-scope/ABI/slot/target/publication contract beforeincluding anybody; thisdocument gives no hardware/backendselection/initialization permission.",
+    "not_global_impasse": "Only downstreamexpansion above remainsoutsideexactwrapperlane. This affirmativewrappercontract neitherdeclareswholequeueexhausted norreleasesheldgeneric/native/source controls."
+  },
+  "source_evidence": [
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 1873,
+      "last_line": 1876,
+      "segment_sha256": "1c6fc9889a1dabe38d529a91fac65fb3f3263e90ec83a0c450afae068a173368",
+      "role": "Exact enabledefinition"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 1890,
+      "last_line": 1893,
+      "segment_sha256": "6f89e356c6f80a5c81227feb0c6007f6921aaabdd305843e21316c06a03e8fdd",
+      "role": "Exact disabledefinition"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 1859,
+      "last_line": 1862,
+      "segment_sha256": "45d1e9168e16b098f292591bd834d4fb30cc0b31f23b55bdd397653e5a086f41",
+      "role": "Actual enableengine publicsignature only"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 1879,
+      "last_line": 1881,
+      "segment_sha256": "d4b3fad3ddbddf359610b36cae8d9268418c64934e52da29501086edeb3bfcdc",
+      "role": "Actual disableengine publicsignature only"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 9,
+      "last_line": 9,
+      "segment_sha256": "c805374cb64cd23693fd085ad2b8826126eb2efd01b8e083c7686ec006e7f358",
+      "role": "ActualCUIntalias"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 69,
+      "last_line": 69,
+      "segment_sha256": "a3644f3493daf9d3fe90a693caa33431ada9dbb7f11af2046b7802f24e7a625b",
+      "role": "Actualcallbackalias"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 117,
+      "last_line": 117,
+      "segment_sha256": "99f2d3e244ffa7f2172006b145d613a4acffbda230398c876bbbf679ef16718f",
+      "role": "GenuineLAPICwritebridge declaration only"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "first_line": 5,
+      "last_line": 5,
+      "segment_sha256": "b09cd972ccaa959019e419236b46df2f11a8eebbae2cbcf8380be1a3c45e7ad6",
+      "role": "ActualCInt"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/lib.rs",
+      "first_line": 94,
+      "last_line": 94,
+      "segment_sha256": "4fefcc69e0dc6f48051ca4ae83e2a725ccefc386861463a2e76508354c5bdbbc",
+      "role": "ActualRustmodule selected"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "first_line": 187,
+      "last_line": 187,
+      "segment_sha256": "cce0758db812ec01f3ec037f576e8e612ca1ebc38bbd17bcf64ebc10284766cd",
+      "role": "ActualRustsource buildinput"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "first_line": 729,
+      "last_line": 730,
+      "segment_sha256": "4256c5202df3cad22f53ced67131586dced0f7179e081c1740b6d95039cf352e",
+      "role": "PairedRustCPU Cselector"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+      "first_line": 1273,
+      "last_line": 1279,
+      "segment_sha256": "2be2c3f5de15cd7a33977363825d77a76b6b7b4197ee8bdbfc0babee057cc778",
+      "role": "ExactselectedRustAPI declarations/selection"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+      "first_line": 1281,
+      "last_line": 1296,
+      "segment_sha256": "2ef987f784bd9d0a412c3b72b523a245085f4c442ff0971708d033be39b2b9ae",
+      "role": "ActualtwooriginalgeneralLAPIC C referencebodies only"
+    }
+  ],
+  "profile_and_next_steps": {
+    "source_preparation": "A futureprivate2wrapperunit may preserve exactsource definitions anddeclare3actualCallees with signatures above; actualabi.rs plusactualCUInt/callbackalias only. No wholemodule/helperbody/importtarget/stub required.",
+    "profile": "Reuse exact current qualifiednightly1.95no_std nativepartial profile/noequivalencecfg. This contract does not supply actualcompiler/resource/SDK/nativeadmission or newcompilecommand.",
+    "actual_current_partial": "UNBOUND. Root must bindlatestpassingmatchingconsumer/objectmetadata anduniqueowner/collisionpredicate before anyjoin, notassume b18/oldaaaf or anyobsoletecohort.",
+    "actual_qualification": "Separateindependentsource/profile/ABIreview and freshHOSTadmission precedeonefinitecompile/actualcalledobjectgate; actualprejoinmustCALLbeforeld-r/postjoinafterreadbacks. No function/timer/register/IRQ/native/defaultacceptance fromsource."
+  },
+  "preserved_controls": "Originalgeneric/exec/notification/perf/mmap/source/SDK/service/native/currentfree/UNKNOWNowners/scratch21/mutex27:4 and acceptedfileclosures unchanged. No scores/Cretirement/bootreadiness/runtimecredit.",
+  "operations": "Read soleactiveCAMPAIGNacceptedF04 mapping, exactsymbol locations/namedRustwrapperdefinitions, actualcallee/type signatures, pairedCMake/lib selection and requestedCtimerreferencefunctions. Readlimitedadjacentcontext only; no downstreambridge/backend/boot/initbody imported/prepared, no wholemodule/globalinventory. Wrote onlythisRESULT.json. No unitgeneration/compiler/preprocessor/GNUmetadata/ELFparser/predicate/link/test/function/register/hardware/runtime/native/account/goal/state/canonical/index operations orrecursivedelegation."
+}

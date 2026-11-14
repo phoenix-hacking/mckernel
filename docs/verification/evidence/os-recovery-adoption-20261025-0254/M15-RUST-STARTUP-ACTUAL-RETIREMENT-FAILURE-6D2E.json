@@ -1,0 +1,72 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "FAIL_ORIGINAL_STARTUP_NATIVE_RETIREMENT_WITH_EXACT_APPLICATION_VALUES_PASS",
+  "recorded_utc": "2026-10-27T23:56:19.019747+00:00",
+  "nonce": "6d2e6c210f8bf62b1a4f1abc127fb09a",
+  "nonce_consumed_once": true,
+  "actual_caller": {
+    "joined": true,
+    "returncode": 1,
+    "caller_pid": 1757368,
+    "caller_starttime": "94271766",
+    "started_at": 1793145273.010894,
+    "finished_at": 1793145311.940107,
+    "cpu_seconds": 0.8833260000000001,
+    "peak_rss_kib": 53072
+  },
+  "wall_seconds": 38.92921304702759,
+  "application_values": {
+    "stdout_bytes": 91,
+    "stderr_bytes": 0,
+    "raw_wait_status": 0,
+    "argv": [
+      "app",
+      "A",
+      "",
+      "B"
+    ],
+    "collector_procfs_empty": true,
+    "acceptance": false
+  },
+  "failure": {
+    "type": "DiagnosticError",
+    "phase": "evaluation",
+    "error": "BEGIN retirement result",
+    "actual_retirement_errno": -11,
+    "os": 0,
+    "generation": 1,
+    "pid": 258,
+    "token": 513
+  },
+  "native_acceptance_delta": 0,
+  "file_acceptance_delta": 0,
+  "independent_current_free_pending": true,
+  "evidence": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-startup-native-entry-source-1/correct-rust-collector-native-entry-source-1/root40-current-binding-delta-1/root-adopted-correct-entry-1/CAPTURE/JOINED.json",
+      "sha256": "21868dfbcd83eaebb88942cda2e0cd29f09822d1a24b4b3b72ae62dbaed54c81",
+      "bytes": 232
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-startup-native-entry-source-1/correct-rust-collector-native-entry-source-1/root40-current-binding-delta-1/root-adopted-correct-entry-1/CAPTURE/stderr",
+      "sha256": "747bb23334499f21383637f0d38c41dc1b7714accec4fa68df662e6b0b4461d6",
+      "bytes": 2226
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/m15st2/attempt-6d2e6c210f8bf62b1a4f1abc127fb09a/result.json",
+      "sha256": "717c9cbce03b2c8e7b6af68cab64aefea2e591477b5c7e69c0d4757700ae566e",
+      "bytes": 2994
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/m15st2/attempt-6d2e6c210f8bf62b1a4f1abc127fb09a/serial.log",
+      "sha256": "525a20c9f14f639ef3661be6a5974bbe185115f2f10c76ddb715c49494b5dd39",
+      "bytes": 136008
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-startup-native-entry-source-1/correct-rust-collector-native-entry-source-1/root40-current-binding-delta-1/root-adopted-correct-entry-1/ROOT-ONCE-ENTRY.JOINED.json",
+      "sha256": "7c74932842b1257a9372500b4bb311c1f6111a060419fda9b31ccf0c1310eb1a",
+      "bytes": 1754
+    }
+  ],
+  "next": "Independent positive current-free; bounded source-bound retirement diagnosis, no unchanged rerun."
+}

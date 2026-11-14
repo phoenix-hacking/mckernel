@@ -1,0 +1,9 @@
+/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body-source-20261028-1/driver.c:23:6: error: conflicting types for 'do_mmap'
+   23 | long do_mmap(unsigned long addr,size_t len,int prot,int flags,int fd,long off,
+      |      ^~~~~~~
+In file included from /home/holden/mckernel/kernel/include/process.h:26,
+                 from /home/holden/mckernel/kernel/include/cls.h:16,
+                 from /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body-source-20261028-1/driver.c:8:
+/home/holden/mckernel/kernel/include/syscall.h:626:10: note: previous declaration of 'do_mmap' was here
+  626 | intptr_t do_mmap(uintptr_t addr0, size_t len0, int prot, int flags, int fd,
+      |          ^~~~~~~

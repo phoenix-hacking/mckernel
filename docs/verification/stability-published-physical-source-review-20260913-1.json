@@ -1,0 +1,108 @@
+{
+  "all_member_types_modes_bytes_verified": true,
+  "application_acceptance": false,
+  "archive": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/stability-published-physical-source-20260913-1.tar.gz",
+    "sha256": "f97592d250378c65c40a2351dd15adbdace97c15e43d104a6a1c0ff18dd867e6",
+    "size_bytes": 65036
+  },
+  "author_review": {
+    "path": "/tmp/stability-published-physical-source-20260913-nempio08/author-review.json",
+    "sha256": "12727d7b111416eebf1aafcfc1b9bf28b9550105c8ece75b81b5ffbbd04542fb",
+    "size_bytes": 5750
+  },
+  "base_comparator_unchanged": true,
+  "compiler_executions": 0,
+  "documentation": {
+    "path": "/home/holden/mckernel/docs/verification/stability-published-physical-comparison-20260913.md",
+    "sha256": "fff5428c5b4fcf83191b8584cb620b8f4edc10b20bcd9fac5e2ba8aa7d7b587e",
+    "size_bytes": 7023
+  },
+  "guest_executions": 0,
+  "kind": "published-physical-source-review",
+  "member_count": 48,
+  "members_manifest": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/stability-published-physical-source-20260913-1.members.json",
+    "sha256": "414cd0935fa7c278a9ac05c5d65dd0431470582fa1ea0589aebb5090d47cde87",
+    "size_bytes": 15891
+  },
+  "original_capture_root": "/tmp/stability-published-physical-source-20260913-nempio08",
+  "peer_review": {
+    "path": "/tmp/stability-published-physical-independent-review-20260913-b86g2o2g/review.json",
+    "sha256": "a51cc691921f02320911f947551ba01fea3575d11604ce89c7e2eefd30062d15",
+    "size_bytes": 4728
+  },
+  "physical_reads": 0,
+  "production_gate_credit": false,
+  "remaining_gates": [
+    "parent pinned18 literal tests with raw wait/streams/cleanup/evidence",
+    "actual source/image/module/request/OS-generation/queue identity joins",
+    "typed AcceptedReturn ownership and no selected-response read after possible release",
+    "actual stopped QMP captures plus verified resume and full phase timing",
+    "native RET/owner/physical/controller mode-specific review"
+  ],
+  "schema_version": 1,
+  "source_inputs": [
+    {
+      "path": "/home/holden/mckernel/scripts/application-tests/published_physical_observations.py",
+      "sha256": "948e1b9fa887e3aa6b8bbf8b84d54643f46d2ee51cfd985e5e351de53919e25e",
+      "size_bytes": 4831
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/tests/test_published_physical_observations.py",
+      "sha256": "c3d1bcd9347646356a7c3345267e57ee3a9973601c66f98dada74c1add1b5dd9",
+      "size_bytes": 17386
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/stability-published-physical-comparison-20260913.md",
+      "sha256": "fff5428c5b4fcf83191b8584cb620b8f4edc10b20bcd9fac5e2ba8aa7d7b587e",
+      "size_bytes": 7023
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/application-tests/physical_observations.py",
+      "sha256": "bf343ff9b3e59e2b92cf6481b6b181e45e9204afed5dfaf8ded4e7b063a0460a",
+      "size_bytes": 6677
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/tests/test_physical_observations.py",
+      "sha256": "0ec5a0564a78ca12fc6bb4a80fd4b11818ee1b17a8f2d21e1d4ed21cf23882b4",
+      "size_bytes": 17521
+    },
+    {
+      "path": "/home/holden/mckernel/host-kernel/native-rust/application_syscall.rs",
+      "sha256": "a1f5e98413a83f7c11c069d23d883379aa64578b55e011dff49c528a236321fd",
+      "size_bytes": 15406
+    },
+    {
+      "path": "/home/holden/mckernel/host-kernel/native-rust/abi/x86_64.rs",
+      "sha256": "89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3",
+      "size_bytes": 19740
+    },
+    {
+      "path": "/home/holden/mckernel/host-kernel/native-rust/smp_ikc.rs",
+      "sha256": "87af7bfa59df5ee3164e5afca5fe5ff5a8256ff27c7635b2a72f8f769e3963b2",
+      "size_bytes": 12665
+    },
+    {
+      "path": "/home/holden/mckernel/host-kernel/native-rust/sysfs_memory.rs",
+      "sha256": "11eadff3fde6d46edfefcd988e941cb9bbab443e059a03d082245c3db6f1ec73",
+      "size_bytes": 24656
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/tests/fixtures/stability-owner-observer/application_syscall.append.rs",
+      "sha256": "65c63429dbf58f803fda72965a51a2b2b98a1c4f5a952d59ff61ef4f4c9b39e7",
+      "size_bytes": 1768
+    }
+  ],
+  "source_review_findings": [],
+  "status": "PASS_SOURCE_REVIEW_ONLY_NOT_RUN",
+  "subject_imports": 0,
+  "successful_helper_status": "PHYSICAL_BYTES_MATCH_ONLY",
+  "supported_comparisons": [
+    "BlockedRead_to_AcceptedReturn_prepared40_prefix",
+    "one_selected_wake_in_complete501_publication_interval"
+  ],
+  "test_executions": 0,
+  "test_method_count": 18,
+  "transport_acceptance": false
+}

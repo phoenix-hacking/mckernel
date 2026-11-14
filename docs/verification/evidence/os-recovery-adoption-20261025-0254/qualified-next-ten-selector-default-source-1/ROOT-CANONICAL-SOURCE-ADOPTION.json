@@ -1,0 +1,91 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "ROOT_EXACT_EIGHT_SOURCE_POSTIMAGES_ADOPTED_NOT_COMPILED",
+  "at": 1793072857.3679185,
+  "preimages": {
+    "kernel/syscall.c": {
+      "path": "/home/holden/mckernel/kernel/syscall.c",
+      "bytes": 913009,
+      "sha256": "2e1c3d5537551bb6a330ea37371ceed20718692d82e0522e004769bf1dcb7f89"
+    },
+    "kernel/rust/syscall_policy.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "bytes": 1249379,
+      "sha256": "f4ed7080659863662e1de75c432b89fd94aadf312efb5e924b1d0e60ef93dbd6"
+    },
+    "kernel/CMakeLists.txt": {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "bytes": 29064,
+      "sha256": "a2636a16d089ee4f93158d8bea30e6a43e40bed967a35a8d859d63f4a19afa32"
+    },
+    "arch/x86_64/kernel/syscall.c": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+      "bytes": 114150,
+      "sha256": "affa9b6d2fdc2514c6d7414f4f7854410ae18ebea02db738665065a5179db893"
+    }
+  },
+  "postimages": {
+    "kernel/syscall.c": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-next-ten-selector-default-source-1/candidate/kernel/syscall.c",
+      "bytes": 914490,
+      "sha256": "8b8037ce23d364847fbdfdce2bc67bfea66668bd8574e752d8c0848ea6d0da8c"
+    },
+    "kernel/rust/syscall_policy.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-next-ten-selector-default-source-1/candidate/kernel/rust/syscall_policy.rs",
+      "bytes": 1251016,
+      "sha256": "5bc789e1a842a93d64047a7b97e888cdff3ee429de394006d8d522ab3951833c"
+    },
+    "kernel/CMakeLists.txt": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-next-ten-selector-default-source-1/candidate/kernel/CMakeLists.txt",
+      "bytes": 30396,
+      "sha256": "edbd78df1f50bc3e9d1bcdf5e06712be3902d3ec2b5d754f4ef584835cedd51e"
+    },
+    "arch/x86_64/kernel/syscall.c": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-next-ten-selector-default-source-1/candidate/arch/x86_64/kernel/syscall.c",
+      "bytes": 114344,
+      "sha256": "d3cd4d9a9bb1a604dfa5da28b02aef033fb78510a4aed24905b3dedec10ed96c"
+    },
+    "kernel/rust/f06_ptrace_context.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-next-ten-selector-default-source-1/candidate/kernel/rust/f06_ptrace_context.rs",
+      "bytes": 828,
+      "sha256": "5c24cfbe6519b8e2a449c1240fb9015baf401fd40814a02cca9237a5adae4dc8"
+    },
+    "kernel/rust/f06_ptrace_alloc.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-next-ten-selector-default-source-1/candidate/kernel/rust/f06_ptrace_alloc.rs",
+      "bytes": 773,
+      "sha256": "bcb605d9ae7d117b7ce87b51d1bb3468e4dd62a46606cc9d0bde6972ca57b9b0"
+    },
+    "kernel/rust/f06_vdso_add_range.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-next-ten-selector-default-source-1/candidate/kernel/rust/f06_vdso_add_range.rs",
+      "bytes": 1074,
+      "sha256": "89462d17ffe853d5dd4980c960bce9e62c64be799474a9e56cb085bd3c7c6805"
+    },
+    "kernel/rust/f06_vdso_set_range.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-next-ten-selector-default-source-1/candidate/kernel/rust/f06_vdso_set_range.rs",
+      "bytes": 1408,
+      "sha256": "78ac29d3e81b388994cfab31eb732716a5c1980a8dd9944dffc6a873af44eeea"
+    }
+  },
+  "pre_adoption_static_check": {
+    "argv": [
+      "taskset",
+      "-c",
+      "6",
+      "prlimit",
+      "--as=2147483648",
+      "--cpu=60",
+      "--core=0",
+      "--",
+      "timeout",
+      "90s",
+      "python3",
+      "-B",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-next-ten-selector-default-source-1/check_static_cohort.py"
+    ],
+    "returncode": 0,
+    "stdout": "{\"scope\": \"Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\", \"status\": \"PASS_FROZEN_SOURCE_REAL_FOUR_COMMAND_API_105FILE_CLOSURE_AND_PREPUBLISHED_ACCEPTANCE_INPUTS\", \"runtime_authority\": null, \"commands\": 4, \"retained_C_inputs\": 8, \"new_unique_Rust_exports_expected\": 8, \"new_C_wrappers_expected\": 10, \"Rust_files\": 105, \"compiler_guest_Root_grant_actions\": 0}\n"
+  },
+  "runtime_authority": null,
+  "artifact_acceptance": false,
+  "native_acceptance": false
+}

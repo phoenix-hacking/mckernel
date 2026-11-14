@@ -1,0 +1,308 @@
+{
+  "schema": "mckernel.p04.coherent-source-and-configure-invalidation.delta-review.v1",
+  "decision": "GO_COHERENT_SIX_PATH_SOURCE_AND_EXACT_GUARD_ONLY_OBSERVATION_PENDING_ROOT_FRESH_ADMISSION",
+  "reviewer": "/root/p04_tests_max independent direct same-Root Sol/MAX; no recursion",
+  "permissions": "Session danger-full-access/approval never; read-only source/proof inspection and this sole private REVIEW.json write; no Unix-root authority used.",
+  "prior_review": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-production-source-review-max-1/REVIEW.json",
+    "bytes": 14477,
+    "sha256": "52b19986d63f5c27d640d7d7c1e68f8486316b8b434e87b9dc8cdf1557cb3875"
+  },
+  "coherent_patch": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-converter-current-source-max-1/P04-CONVERTER-CURRENT-COHERENT.PRIVATE.patch",
+    "bytes": 38804,
+    "sha256": "e1503866cc00ed36c6e0ff6874c296e2f70944f35aa7f23cd1a787c57f8acd96"
+  },
+  "source_ready": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-converter-current-source-max-1/SOURCE-READY.NOT-EXECUTED.json",
+    "bytes": 11605,
+    "sha256": "5d75293d05476d11758fa57858b6761ac4f21b538c9fb7d4117246200995c551"
+  },
+  "selector_only_patch": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-converter-current-source-max-1/SELECTOR-CONFIGURE-INVALIDATION.BOUNDED.patch",
+    "bytes": 838,
+    "sha256": "64ef62ef1e103cfe258b3ebef2b23097437a1adbe38d00b6b4673127d6809ac4"
+  },
+  "observation": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-converter-current-source-max-1/CONFIGURE-INVALIDATION-OBSERVATION.PROPOSED.json",
+    "bytes": 8133,
+    "sha256": "20c73431f8e88e627519edfb562047828f39ffc7abfb518dcf0646e2c150b8cc"
+  },
+  "exact_runtime_and_layout_inputs": {
+    "executer/user/CMakeLists.txt": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-converter-current-source-max-1/source/executer/user/CMakeLists.txt",
+      "bytes": 29328,
+      "sha256": "046b1635bca3af73c9fc9ed37cc4fd0dc2026632c81bae9b2f4c2e078eb46959"
+    },
+    "executer/user/rust/ldump2mcdump_helpers.rs": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-converter-current-source-max-1/source/executer/user/rust/ldump2mcdump_helpers.rs",
+      "bytes": 32826,
+      "sha256": "5aab8a4270858287d4eb61a1109d96126bae9bf06913da31adf79c3e8c1b7c2a"
+    },
+    "executer/user/cmake/ldump2-selected-bfd/Ldump2SelectedBfdLayout.cmake": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-converter-current-source-max-1/source/executer/user/cmake/ldump2-selected-bfd/Ldump2SelectedBfdLayout.cmake",
+      "bytes": 2568,
+      "sha256": "78bc5d6faecd013d3bfb263c097831ce880b76f0a567b99b5787baa6805ad0c4"
+    },
+    "executer/user/cmake/ldump2-selected-bfd/section_layout_witness.c": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-converter-current-source-max-1/source/executer/user/cmake/ldump2-selected-bfd/section_layout_witness.c",
+      "bytes": 3223,
+      "sha256": "3375c309059ad65b0f18d0431b7c413d10d9ed8196beec82409bdf715c3dc427"
+    },
+    "executer/user/rust/vmcore2mckdump.rs": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-converter-current-source-max-1/source/executer/user/rust/vmcore2mckdump.rs",
+      "bytes": 12392,
+      "sha256": "44329596ff8fcb1f197878664bf4999407648f056f81280008d885802f6e5427"
+    },
+    "executer/user/cmake/SelectRustVmcore2mckdump.cmake": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-converter-current-source-max-1/source/executer/user/cmake/SelectRustVmcore2mckdump.cmake",
+      "bytes": 2426,
+      "sha256": "b082d79c183cc3a19d872bc3252303b71871081036a89f9235d7ab049ed48c81"
+    }
+  },
+  "source_delta_findings": [
+    {
+      "boundary": "Exact current source/preimage",
+      "result": "PASS_SOURCE",
+      "details": "Current canonical userCMake still matches d4ff preimage and converter still matches4e03. Six-file patche150 is exactly the declared current-source cut. New source paths do not overwrite an existing canonical implementation. Root composes hunks and revalidates preimages immediately before applying; no whole legacy19-file replay or topCMake/P03 changes."
+    },
+    {
+      "boundary": "Qualified unchanged bodies",
+      "result": "PASS_REUSED_SOURCE_IDENTITIES",
+      "details": "Converter5aab, layout78bc, nonshipped witness3375 and wrapper443 are exact previously reviewed bytes. Existing56 selected-header/body/ownership and22 controlled wrapper/30join evidence is reused; no runtime source modification or new cases occur."
+    },
+    {
+      "boundary": "Current CMake producer data/compiler wiring",
+      "result": "PASS_SOURCE",
+      "details": "UserCMake046b is exactly current d4ff with four intended changes: selected-layout include inside existing Rust converter branch; LDUMP2_BFD_LAYOUT_ENV added to its cmake -E env; LDUMP2_BFD_LAYOUT_DEPENDS appended after the existing source and MCKERNEL_RUNTIME_TOOL_RUSTC file dependencies; original vmcore configure_file replaced by selector include. Explicit runtime compiler, crate/type/edition/full_body/panic-abort/opt2/debug1/PIC/no-unwind flags, external-object C replacement, diagnostics/library/mcps/runtime defaults and installs remain unchanged. No retired find_program(RUSTC) is restored."
+    },
+    {
+      "boundary": "P04-SELECTOR-CONFIGURE-DEPENDENCY-01",
+      "result": "CLOSED_IN_SOURCE_PENDING_AFFECTED_OBSERVATION",
+      "details": "Selectorb082 equals retainedeedb plus only DIRECTORY APPEND CMAKE_CONFIGURE_DEPENDS for the actual converter path immediately before file(SHA256). This is exactly the missing configuration input. Existing Linux/x86_64/actual Rust target/exact5aab/absolute compiler guards, target/cache/source dependencies and defaultOFF are byte-identical."
+    },
+    {
+      "boundary": "Production/default/provider limits",
+      "result": "PRESERVED_OPEN",
+      "details": "Wrapper default remainsOFF; no silentON fallback, duplicate install or extra projectC provider is added. New full-body default Rust converter consumes selected generated layout DATA; actual SDK GCC14/header/archive/provider and final runtime behavior remain unproved at this source-only stage. The nonshipped typed C witness never becomes a production callback."
+    }
+  ],
+  "guard_only_observation_review": {
+    "qualification_project": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-converter-current-source-max-1/qualification/gate-project/CMakeLists.txt",
+      "bytes": 827,
+      "sha256": "56846c0ede412599138beb43de86c8bf9de415ee7f7153a35b4751b4420830a3"
+    },
+    "always_failing_negative_boundary": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-converter-current-source-max-1/qualification/gate-project/converter-build-guard.cmake",
+      "bytes": 256,
+      "sha256": "8edaa41f3ac24c20210d5a1f8f9deb3e3bb65880d67749e937da7b8b6e8204a3"
+    },
+    "compiler_placeholder": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-converter-current-source-max-1/qualification/gate-project/compiler.MUST-NOT-EXECUTE",
+      "bytes": 64,
+      "sha256": "b497b37e1b84bdc05e1af815d74023890a6dbe59b045a7c96ad41aab9b7db2c5"
+    },
+    "compiler_placeholder_mode": "0600, no execute bits; plain TEST_ONLY data, never a compiler",
+    "semantics": "LANGUAGES NONE creates no language compiler probe and includes only the exact actual selector. It never includes the BFD layout fragment or SDK provider. Named TEST_ONLY target leaves are negative build-boundary instrumentation: ldump2mcdump always writes a marker and immediately FATAL_ERROR; it never emits a converter/provider/object. The wrapper target depends on that guard, and its compiler leaf is nonexecutable. No fake layout or passing provider/artifact is produced.",
+    "source_mutation": "Configure each clone initially with exact5aab, then append the same declared inert comment only to that clone. Frozen packet bodies and selectors remain unchanged. This meaningful source edit changes the actual hash while preserving source syntax; no runtime compilation is attempted.",
+    "retained_oracle": "Initial configure must exit0. Build must fail nonzero with TEST_ONLY_CONVERTER_BUILD_WOULD_START_NO_CODEGEN and marker present; no exact-source rejection diagnostic. This proves the missing configure input lets the build boundary be entered, while the deliberate guard stops before codegen.",
+    "candidate_oracle": "Initial configure must exit0. After the identical clone edit, actual build-system CMake regeneration must fail nonzero with the exact jointly-reviewed-ACK-producer hash rejection; marker absent and TEST_ONLY guard diagnostic absent. No compiler command may run. Exit status alone is never the oracle.",
+    "exact_command_scope": "Two copy/configure/build sequences only, retained first then candidate. No 56/22 case, SDK witness, converter body, real compiler, provider link, full production graph, installed/default/native/container/device operation is approved.",
+    "command_binding_addition": "Use explicit Unix Makefiles and /usr/bin/make plus exact clean parent environment below. The proposal omitted generator/environment binding; these invocation-only settings make dependency ordering and failure diagnostics deterministic without source changes or a new case.",
+    "commands": [
+      {
+        "case": "retained",
+        "phase": "copy",
+        "argv": [
+          "/usr/bin/taskset",
+          "-c",
+          "0",
+          "/usr/bin/prlimit",
+          "--as=1073741824:1073741824",
+          "--core=0:0",
+          "--fsize=67108864:67108864",
+          "--",
+          "/usr/bin/cp",
+          "-a",
+          "--",
+          "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-converter-current-source-max-1/qualification/gate-project",
+          "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-converter-current-source-max-1/output/configure-invalidation/retained/source"
+        ],
+        "expected_exit": 0
+      },
+      {
+        "case": "retained",
+        "phase": "configure",
+        "argv": [
+          "/usr/bin/taskset",
+          "-c",
+          "0",
+          "/usr/bin/prlimit",
+          "--as=1073741824:1073741824",
+          "--core=0:0",
+          "--fsize=67108864:67108864",
+          "--",
+          "/usr/bin/cmake",
+          "-S",
+          "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-converter-current-source-max-1/output/configure-invalidation/retained/source",
+          "-B",
+          "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-converter-current-source-max-1/output/configure-invalidation/retained/build",
+          "-DP04_SELECTOR_FILE=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-converter-current-source-max-1/retained/SelectRustVmcore2mckdump.cmake",
+          "-G",
+          "Unix Makefiles",
+          "-DCMAKE_MAKE_PROGRAM:FILEPATH=/usr/bin/make"
+        ],
+        "expected_exit": 0
+      },
+      {
+        "case": "retained",
+        "phase": "build",
+        "argv": [
+          "/usr/bin/taskset",
+          "-c",
+          "0",
+          "/usr/bin/prlimit",
+          "--as=1073741824:1073741824",
+          "--core=0:0",
+          "--fsize=67108864:67108864",
+          "--",
+          "/usr/bin/cmake",
+          "--build",
+          "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-converter-current-source-max-1/output/configure-invalidation/retained/build",
+          "--target",
+          "vmcore2mckdump_rust",
+          "--parallel",
+          "1"
+        ],
+        "expected_exit": "nonzero with exact declared diagnostic/marker oracle"
+      },
+      {
+        "case": "candidate",
+        "phase": "copy",
+        "argv": [
+          "/usr/bin/taskset",
+          "-c",
+          "0",
+          "/usr/bin/prlimit",
+          "--as=1073741824:1073741824",
+          "--core=0:0",
+          "--fsize=67108864:67108864",
+          "--",
+          "/usr/bin/cp",
+          "-a",
+          "--",
+          "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-converter-current-source-max-1/qualification/gate-project",
+          "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-converter-current-source-max-1/output/configure-invalidation/candidate/source"
+        ],
+        "expected_exit": 0
+      },
+      {
+        "case": "candidate",
+        "phase": "configure",
+        "argv": [
+          "/usr/bin/taskset",
+          "-c",
+          "0",
+          "/usr/bin/prlimit",
+          "--as=1073741824:1073741824",
+          "--core=0:0",
+          "--fsize=67108864:67108864",
+          "--",
+          "/usr/bin/cmake",
+          "-S",
+          "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-converter-current-source-max-1/output/configure-invalidation/candidate/source",
+          "-B",
+          "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-converter-current-source-max-1/output/configure-invalidation/candidate/build",
+          "-DP04_SELECTOR_FILE=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-converter-current-source-max-1/source/executer/user/cmake/SelectRustVmcore2mckdump.cmake",
+          "-G",
+          "Unix Makefiles",
+          "-DCMAKE_MAKE_PROGRAM:FILEPATH=/usr/bin/make"
+        ],
+        "expected_exit": 0
+      },
+      {
+        "case": "candidate",
+        "phase": "build",
+        "argv": [
+          "/usr/bin/taskset",
+          "-c",
+          "0",
+          "/usr/bin/prlimit",
+          "--as=1073741824:1073741824",
+          "--core=0:0",
+          "--fsize=67108864:67108864",
+          "--",
+          "/usr/bin/cmake",
+          "--build",
+          "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-converter-current-source-max-1/output/configure-invalidation/candidate/build",
+          "--target",
+          "vmcore2mckdump_rust",
+          "--parallel",
+          "1"
+        ],
+        "expected_exit": "nonzero with exact declared diagnostic/marker oracle"
+      }
+    ],
+    "ordered_Root_file_preparation_and_mutations": [
+      {
+        "case": "retained",
+        "after": "the matching configure exits0 and before its matching build",
+        "fresh_parent": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-converter-current-source-max-1/output/configure-invalidation/retained",
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-converter-current-source-max-1/output/configure-invalidation/retained/source/rust/ldump2mcdump_helpers.rs",
+        "required_before_sha256": "5aab8a4270858287d4eb61a1109d96126bae9bf06913da31adf79c3e8c1b7c2a",
+        "append_exact_utf8": "\n// TEST_ONLY benign source change for configure eligibility invalidation; never compiled.\n",
+        "required_after_sha256": "67ea67fe6a7d46a184f9f3f965a90c259348ccc39043daa4b2564f7e6f4a7641",
+        "guard": "Clone source bytes and mtime must actually change; preserve all frozen source/selector/peer/runtime files. Do not mutate retained or candidate selector after initial configure. No retry/second mutation."
+      },
+      {
+        "case": "candidate",
+        "after": "the matching configure exits0 and before its matching build",
+        "fresh_parent": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-converter-current-source-max-1/output/configure-invalidation/candidate",
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-converter-current-source-max-1/output/configure-invalidation/candidate/source/rust/ldump2mcdump_helpers.rs",
+        "required_before_sha256": "5aab8a4270858287d4eb61a1109d96126bae9bf06913da31adf79c3e8c1b7c2a",
+        "append_exact_utf8": "\n// TEST_ONLY benign source change for configure eligibility invalidation; never compiled.\n",
+        "required_after_sha256": "67ea67fe6a7d46a184f9f3f965a90c259348ccc39043daa4b2564f7e6f4a7641",
+        "guard": "Clone source bytes and mtime must actually change; preserve all frozen source/selector/peer/runtime files. Do not mutate retained or candidate selector after initial configure. No retry/second mutation."
+      }
+    ],
+    "cwd": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-converter-current-source-max-1",
+    "exact_clean_parent_environment": {
+      "PATH": "/usr/bin:/bin",
+      "LC_ALL": "C",
+      "LANG": "C",
+      "CMAKE_BUILD_PARALLEL_LEVEL": "1",
+      "MAKEFLAGS": "-j1",
+      "OMP_NUM_THREADS": "1"
+    },
+    "fresh_outputs": "Root creates only missing private output/configure-invalidation and separate retained/candidate parents as empty real directories; source/build/marker paths must not exist before their case. Preserve captures, expected failures and both clones. Do not delete/reuse an old outcome.",
+    "required_evidence": "Record exact original/proposed input hashes and actual clone before/after hash, all six child argv/PID/birth/return/wait/stdout/stderr, complete owner joins/closed streams/no residuals, both initial successful configurations, actual regenerate/hash/marker failure boundaries, compiler not executed and no object/shared/runtime artifact emitted. Any unexplained source/child/diagnostic boundary failure stops without unchanged replay."
+  },
+  "Root_fresh_admission": {
+    "CPU": [
+      0
+    ],
+    "jobs": 1,
+    "per_process_AS_bytes": 1073741824,
+    "FSIZE_bytes": 67108864,
+    "CORE_bytes": 0,
+    "complete_serial_operation_wall_seconds_max": 60,
+    "retirement_within_outer_bound": "Use existing exact-birth owned capture and preserve a six-second retirement envelope inside the whole60s bound; no blocking unchanged wait or numeric reaped-PID signal. Positive waits and closed streams for every started copy/CMake/make child; any uncertain outcome remainsUNKNOWN.",
+    "shared_grant": "Existing HOSTCPU0,6,7/max3 light jobs/4GiB TOTAL including all controllers/workers/payloads; freshMemAvailable>=26GiB, host>=16GiB/scratch>=12GiB plus private output/capture needs. This one light operation creates no per-owner additional RAM or native grant.",
+    "other_authority": "Root reconciles actual concurrent jobs/leases/current source, actual account/service/credit/stop guard and fresh outputs before execution. NativeCPU2-5/12GiB, prior18GiB/UNKNOWN reservations, scratch21 and all held generic/exec/source/native scopes remain unchanged."
+  },
+  "unchanged_real_SDK_next_action": {
+    "recipe": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-converter-current-source-max-1/SELECTED-SDK-PROVIDER-OPERATION.PROPOSED.json",
+      "bytes": 8848,
+      "sha256": "b61ebdcf9844ba9f3c901b86f7bbc4cfb4826bfcef978c066973dca966b4da8a"
+    },
+    "approval": "NOT_ADMITTED_BY_THIS_REVIEW",
+    "minimum_binding": "Actual selectedGCC14 SHA2092/bfd.h de900 typed witness must generate DATA consumed by exact5aab; actual archive2324 and companion script/libsframe/iberty/z/dl/glibc/compiler runtime inputs plus crash/BFD import ownership must be bound in an operation-specific actual profile. Existing56 and prior HOST layout are not selected SDK/provider evidence. Root engineering supplies this available pinned package/source/profile reconstruction, not an externally authored inventory."
+  },
+  "acceptance_limits": "Source and affected guard-only results close only this implementation/dependency gap. Real BFD heap/descriptor lifecycle, ACK sink errors, finalPTY/session descendants, complete supported wrapper semantics, valid dump and production/default/installed/native proof remain open. No C retirement, image acceptance, original M14/M15 score/gate or held-owner release. M14 acceptance remains beforeM15.",
+  "operations": "Only frozen/current source and existing proof reads, bounded byte/hash/string-delta comparisons and this one private REVIEW write. No driver/helper imports, parser/test/build/configure/compiler/tool main, process control, Docker/container/network/sudo/device/native or canonical/index edits.",
+  "executed": false,
+  "C_retirements": 0,
+  "acceptance_delta": 0
+}

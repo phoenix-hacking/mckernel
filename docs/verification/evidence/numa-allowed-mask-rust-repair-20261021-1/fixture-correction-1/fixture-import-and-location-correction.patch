@@ -1,0 +1,20 @@
+--- original/propose_actual_body_comparison.py
++++ fixture-correction-1/propose_actual_body_comparison.py
+@@ -5,7 +5,7 @@
+ """
+ from pathlib import Path
+ import argparse,hashlib,json,os,re,subprocess
+-R=Path(__file__).resolve().parent
++R=Path(__file__).resolve().parent.parent
+ BASE='75b89149aa031076ae547248e0aab64eda5a7b75162952a954489e86067f0b2d'
+ CAND='da1e612baa6af6cd3e5ddad39f26d0c8aa582faee1920a5b7a86ce507d7b99af'
+ REPO=Path('/home/holden/mckernel')
+@@ -80,7 +80,7 @@
+   bodies=[function(text,n) for n in names]
+   constants='\n'.join(line for line in text.splitlines() if re.match(r'^const (?:EINVAL|EFAULT|PROCESS_NUMA_MASK_BITS|MPOL_DEFAULT|MPOL_PREFERRED|MPOL_BIND|MPOL_INTERLEAVE|MPOL_F_NODE|MPOL_F_ADDR|MPOL_F_MEMS_ALLOWED|GET_MEMPOLICY_LOG_CLAMPED|GET_MEMPOLICY_LOG_INVALID_RANGE):',line))
+   types='\n'.join(line for line in text.splitlines() if re.match(r'^type Syscall(?:CopyToUser|GetMempolicyLog|Rwlock|LookupNode|LookupRange|PolicySearch)Fn\b',line))
+-  source='#![allow(dead_code,static_mut_refs)]\nmod abi;\nuse core::ffi::c_void;\nuse core::mem::size_of;\nuse core::ptr::{write,copy_nonoverlapping};\nuse abi::{CInt,CLong,CULong,SizeT,ProcessVm,VmRange,VmRangeNumaPolicy,PROCESS_NUMA_MASK_WORDS};\n'+constants+'\n'+types+'\n'+'\n'.join(bodies)+'\n'+MAIN
++  source='#![allow(dead_code,static_mut_refs)]\nmod abi;\nuse core::ffi::c_void;\nuse core::mem::size_of;\nuse core::ptr::{write,read_volatile,write_volatile,copy_nonoverlapping};\nuse abi::{CInt,CLong,CULong,SizeT,ProcessVm,VmRange,VmRangeNumaPolicy,PROCESS_NUMA_MASK_WORDS};\n'+constants+'\n'+types+'\n'+'\n'.join(bodies)+'\n'+MAIN
+   out=a.out/(name+'.rs');out.write_text(source);binary=a.out/name
+   argv=[a.rustc,'--edition=2021','-C','opt-level=0',str(out),'-o',str(binary)]+(['--cfg','allowed_candidate'] if cfg else [])
+   env={k:os.environ[k] for k in ['PATH','HOME','USER'] if k in os.environ};env.update(LANG='C',LC_ALL='C')

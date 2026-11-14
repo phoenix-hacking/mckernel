@@ -1,0 +1,27 @@
+test_admission_expiry_is_rejected (__main__.SnapshotFixtures) ... ok
+test_adoption_checks_prior_hash_and_current_metadata (__main__.SnapshotFixtures) ... FAIL
+test_lease_admission_and_request_change_fail (__main__.SnapshotFixtures) ... ok
+test_new_directory_mask_and_symlink_retarget_fail (__main__.SnapshotFixtures) ... ok
+test_revalidation_never_rehashes_tree (__main__.SnapshotFixtures) ... ok
+test_root_and_profile_identity_drift_fail (__main__.SnapshotFixtures) ... test_same_size_file_change_with_restored_mtime_fails (__main__.SnapshotFixtures) ... ok
+
+======================================================================
+FAIL: test_adoption_checks_prior_hash_and_current_metadata (__main__.SnapshotFixtures)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-nonheld13-input-validation-source-1/test_sdk13_data32_input_snapshot.py", line 104, in test_adoption_checks_prior_hash_and_current_metadata
+    with self.assertRaisesRegex(ValueError,'file identity changed'): s._adopt_tree(root,rows,pre)
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_root_and_profile_identity_drift_fail (__main__.SnapshotFixtures) (mutation='profile')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-nonheld13-input-validation-source-1/test_sdk13_data32_input_snapshot.py", line 69, in test_root_and_profile_identity_drift_fail
+    with self.assertRaisesRegex(ValueError,'changed|drift'): self.run_check(b,r,l,g)
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.025s
+
+FAILED (failures=2)

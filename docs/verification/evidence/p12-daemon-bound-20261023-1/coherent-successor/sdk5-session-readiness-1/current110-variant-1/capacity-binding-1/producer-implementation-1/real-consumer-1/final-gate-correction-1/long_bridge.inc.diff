@@ -1,0 +1,50 @@
+--- preimage/long_bridge.inc
++++ final-gate/long_bridge.inc
+@@ -20,8 +20,10 @@
+     struct long_context *ctx=p;(void)round;ctx->deadline=deadline;
+     uint64_t before=now_ns();
+     if(!before || before>=deadline)return 0;
+-    int state=long_provider.empty();uint64_t after=now_ns();
+-    return state==1 && after>=before && after<deadline;
++    int state=long_provider.empty();
++    if(state!=1 || (pair_workspace_initialized && pair_round_workspace_verify(deadline)))return 0;
++    uint64_t after=now_ns();
++    return after>=before && after<deadline;
+ }
+ static int32_t long_pair(void *p,uint32_t round,uint64_t deadline,struct pair_long_pair *out)
+ {
+@@ -86,16 +88,32 @@
+     return after>=before && after<ctx->deadline?(ptrdiff_t)size:-1;
+ }
+ static const struct pair_long_operations long_operations={long_now,long_empty,long_pair,long_retain,long_read,long_write};
++static struct long_context long_final_context;
++static struct pair_long_summary long_final_summary;
++static uint64_t long_final_not_before;
++static int long_final_pending;
++static int long_complete(void)
++{
++    if(!long_final_pending)return -1;
++    long_final_pending=0; /* No same-run terminal retry is permitted. */
++    return pair_complete_long_session(&long_final_context,&long_operations,
++        &long_final_summary,long_final_not_before,long_final_context.deadline);
++}
+ static int long_dispatch(int console,int *safe,int *empty)
+ {
+     (void)pair_run; /* unchanged short consumer retained, excluded from LONG dispatch */
+     struct long_context ctx={.console=console,.spool=-1,.deadline=now_ns()+7200000000000ull};
+-    struct pair_long_summary summary={0};*safe=1;*empty=0;
++    struct pair_long_summary summary={0};*safe=1;*empty=0;long_final_pending=0;
+     pair_seen_pid_count=0;pair_seen_token_count=0;pair_trace_total=0;pair_rounds_initialized=1;
+     ctx.spool=open(PAIR_ROOT "/evidence/long-trace.spool",O_CREAT|O_EXCL|O_RDWR|O_NOFOLLOW|O_CLOEXEC,0600);
+     if(ctx.spool<0)return -1;
+     int code=pair_run_long_session(&ctx,&long_operations,&summary);
+-    *safe=summary.ownership_complete;*empty=code==0 && summary.completed==1 && *safe;
++    *safe=summary.ownership_complete;*empty=code==0 && *safe;
+     if(close(ctx.spool))return -1;
++    if(code==0) {
++        long_final_not_before=now_ns();
++        if(!long_final_not_before || long_final_not_before>=ctx.deadline)return -1;
++        long_final_context=ctx;long_final_summary=summary;long_final_pending=1;
++    }
+     return code;
+ }

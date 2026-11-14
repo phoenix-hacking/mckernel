@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "record_kind": "os_continuation_shutdown_checkpoint",
+  "recorded_utc": "2026-09-28T09:27:28Z",
+  "status": "PAUSED_BY_LAUNCHER_SHUTDOWN_REQUEST",
+  "launcher": {
+    "pid": 3052017,
+    "worker_pid": 3052019,
+    "app_server_pid": 3052021,
+    "run_directory": ".git/os-autopilot/runs/20260928T080459Z-d717ac31"
+  },
+  "active_children": 0,
+  "active_processes": {
+    "compiler": false,
+    "systemd_compile_unit": false,
+    "guest_or_qemu": false,
+    "mcexec_or_ihk": false
+  },
+  "capacity_gib": {
+    "host_free": 44,
+    "scratch_free": 21
+  },
+  "layer_b": {
+    "packet_status": "PASS_DIRECT_OBJECT_PACKET",
+    "packet_path": "docs/verification/stability-layer-b-native-owner-direct-object-packet-20260928-15.md",
+    "packet_sha256": "73ed242336988f5f66bb65db7fc81f85e742ff197552047f74b7ec9b3ac4f100",
+    "scratch_root": "/home/holden/mckernel-work/scratch/stability-layer-b-native-owner-bootstrap-20260928-10",
+    "attempt_state": "PREFLIGHT_ONLY_NOT_SUBMITTED",
+    "unit_identity": null,
+    "cgroup_identity": null,
+    "archive_path": "docs/verification/evidence/stability-layer-b-native-owner-bootstrap-preflight-20260928-10.tar.gz",
+    "archive_sha256": "719fee24d51a10fbe665ba855d610985ca08ac2c88a6d3033bb2e3cf5f3b1b64",
+    "archive_size": 1654349,
+    "archive_members": 9,
+    "preflight_log_hashes": {
+      "include-baseline.jsonl": "fe40457f80af8fb2d816c00e574f659462500472aef8575ebb7db75f67144fa5",
+      "pre-submit-git-status.txt": "6cbe1104786bdbe028250cada7542bc3a31e731cc89d0ff02c006c8fc4c0ad44",
+      "pre-submit-space.txt": "1478161dfbb56b65554b91f7eb90eba8fd95fc6be6821cbc396e65cbbf58afde",
+      "pre-submit-tree.txt": "074c6ecd2c43b198e2c8946e2dcfa33972ef0c01d69938ee287f2910a0ed509a",
+      "preflight.json": "69a0cc1ca2e370ab95d4d8a4258c40bab9e0fbdd5c5c138c416a093e5b0b618d"
+    }
+  },
+  "m01": {
+    "status": "PASS_RECOVERY_PACKET",
+    "review_path": "docs/verification/stability-selected-retention-generic-row03-row12-false-failure-recovery-review-20260928-58.json",
+    "next_action": "Reauthenticate inputs and execute the one released source-only root56 attempt with an ownership specialist, then independently review the complete handoff."
+  },
+  "m02": {
+    "status": "DEPENDENCY_MANIFEST_RECONSTRUCTED_STATIC_ONLY",
+    "manifest_path": "docs/verification/stability-linux-collector-storage-full-dependency-manifest-20260928-1.json",
+    "manifest_sha256": "6e4ec66cd0a4e8ad74bd067338342f6bce7a1a6cc9bf02946f8819f2b2bdc03b",
+    "next_action": "After Layer-B owner behavior is released, prepare an independently reviewed additive full-suite execution packet."
+  },
+  "m03": {
+    "status": "FAIL_VALIDATED_INVENTORY_SOURCE",
+    "review_path": "docs/verification/stability-pending-free-validated-inventory-source-review-failure-20260928-5.json",
+    "next_action": "Repair only the two identified evidence-fixture gaps and obtain fresh independent source review; production callers remain unwired."
+  },
+  "acceptance_counters": {
+    "application_cases": "0/273",
+    "narrow_fault_modes": "2/4",
+    "production_gates": "6/130",
+    "points": "350/10000",
+    "language_gates": "0/7"
+  },
+  "goal_complete": false,
+  "goal_resumed_during_shutdown": false
+}

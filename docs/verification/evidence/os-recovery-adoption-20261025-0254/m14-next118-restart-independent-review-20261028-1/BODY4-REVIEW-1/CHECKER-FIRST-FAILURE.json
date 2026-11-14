@@ -1,0 +1,11 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PURE_REVIEW_CHECKER_WHITESPACE_ASSERTION_FAILURE",
+  "original_checker_sha256": "111be618c86809e1ab008adfbfe6f7909042f7862a2243b10449cfbcd7f7cdee",
+  "exit": 1,
+  "line": 180,
+  "cause": "Fixture-only ABI append has one extra blank line before module closing brace; candidate function bytes themselves match.",
+  "correction": "Ignore only trailing separator newlines before fixture ABI append; compare all production function/body bytes exactly.",
+  "compiler_fixture_guard_calls": 0,
+  "implementation_changes": 0
+}

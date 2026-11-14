@@ -1,0 +1,50 @@
+{
+  "acceptance_credit": false,
+  "artifact_count": 0,
+  "attempt": "native-exact-build-76ae20b5-disk-build-2",
+  "candidate_commit": "76ae20b523f57dee8e0fb1fb834caf5443f9f671",
+  "command": "/usr/bin/python3 -E -s -B /home/holden/mckernel/scripts/native_rust_exact_disk_build_wrapper.py /home/holden/mckernel-work/scratch/native-exact-build-request-76ae20b5-disk-build-2.json --launcher-aggregate-gib 16.2158",
+  "container": {
+    "exit_code": 1,
+    "id": "cc79cd696f027a18045a4a9f86628137f06e36aaca99120f29da0116e191cbd7",
+    "name": "mckernel-exact-7d4e3858320e4797ab6d22ed89195e9c",
+    "owner_nonce": "b3fcbace4c1f4c3b8d05dd69f62519a1",
+    "pid": 0,
+    "retained_for_reviewed_cleanup": true
+  },
+  "diagnosis": {
+    "failure_family": "exact-build-workflow-source-binding",
+    "observed_error": "native-rust-runtime-evidence: FAIL: exact build workflow prebuild scope differs",
+    "unchanged_retry_forbidden": true,
+    "workflow_actual": {
+      "git_blob_sha1": "4f8da595da68e0d7d5c22debc25778922f0f2446",
+      "sha256": "e9cfb14d45c57c4832816c3ec038722bdab4ce51f47b615585c5369127091831",
+      "size": 95063
+    },
+    "workflow_expected_sha256": "16fb30108ea877dcdb7bfb8e36e100d756160c8c8284ee4ca41c483efeaa81e9"
+  },
+  "evidence": {
+    "archive": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-build-failure-76ae20b5-disk-build-2-20260930-1.tar",
+      "sha256": "845bff31305c2b71a017077976c3988b4363a1f8b84351316a8e842b734ce3a7",
+      "size": 204800
+    },
+    "driver_log_sha256": "694ea916d501a5eee6910d8342e38a61adede26b394103094c52b48a56508833",
+    "driver_receipt_sha256": "de23fa1a67011e24d34cfe3589cec03a4ebd73a93084f4ab563a6360cfcbd17c",
+    "owner_receipt": {
+      "device_inode": "1831:5373993",
+      "path": "/home/holden/mckernel-work/scratch/native-exact-build-evidence-76ae20b5-disk-build-2/receipt.json",
+      "sha256": "302961af907eaa74456256c4d863b53753bfb8959db68ab1858eb7a49b6bf8c6",
+      "size": 21920
+    }
+  },
+  "next": [
+    "complete and independently review the source-derived workflow identity repair",
+    "execute only a separately released cleanup of the exact terminal container and common exclusion",
+    "prepare a fresh scratch candidate from the fetched repaired commit",
+    "run one serialized exact host build under the reviewed four-CPU profile"
+  ],
+  "request_sha256": "23b0d9116878dc906fab748695fc23ec8a0ca08c2f0747e25de72eeccc38caad",
+  "result": "FAIL_PREBUILD_NO_ARTIFACTS",
+  "source_checkpoint": "1fefd09a2ef1afa88fb49e4b122b226a96e28210"
+}

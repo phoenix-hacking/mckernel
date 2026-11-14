@@ -1,0 +1,383 @@
+{
+  "status": "PASS_CALLED_ACTUAL_IPI_LOGGER_TWO_T_AND_GENUINE32_DESCRIPTOR",
+  "object_sha256": "830ddbb5029b8d2dbd88b9d0b78a5e8cea9b2c7448d5867f1870573c856056c6",
+  "actual_T": [
+    "x86_interrupt_log_bridge",
+    "x86_issue_ipi_bridge"
+  ],
+  "genuine_U": [
+    "ihk_mc_get_processor_id",
+    "kprintf",
+    "x86_issue_ipi"
+  ],
+  "actual_data": {
+    "name": "x86_interrupt_log_debug",
+    "bytes": 32,
+    "alignment": 8,
+    "section": "__verbose",
+    "exact_flags": "0x200003",
+    "line_flags": 3140,
+    "fmt_NULL": true,
+    "field_relocations": {
+      "file": {
+        "target_section": 7,
+        "target_offset": 76,
+        "exact_NUL_contents_hex": "2f686f6d652f686f6c64656e2f6d636b65726e656c2f617263682f7838365f36342f6b65726e656c2f6370752e6300",
+        "relocation": {
+          "section": 8,
+          "offset": 0,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "bind": 0,
+            "type": 3,
+            "other": 0,
+            "section": 7,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 76
+        }
+      },
+      "func": {
+        "target_section": 7,
+        "target_offset": 123,
+        "exact_NUL_contents_hex": "7838365f696e746572727570745f6c6f675f62726964676500",
+        "relocation": {
+          "section": 8,
+          "offset": 8,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "bind": 0,
+            "type": 3,
+            "other": 0,
+            "section": 7,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 123
+        }
+      }
+    },
+    "actual_padding_hex": "00000000"
+  },
+  "actual_function_evidence": {
+    "x86_issue_ipi_bridge": {
+      "symbol": {
+        "name": "x86_issue_ipi_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "section": 5,
+        "value": 0,
+        "size": 15
+      },
+      "section": {
+        "name_offset": 113,
+        "type": 1,
+        "flags": 268435462,
+        "address": 0,
+        "offset": 176,
+        "size": 15,
+        "link": 0,
+        "info": 0,
+        "align": 16,
+        "entry_size": 0,
+        "index": 5,
+        "name": ".ltext.x86_issue_ipi_bridge"
+      },
+      "actual_bytes_hex": "48b80000000000000000488b00ffe0",
+      "actual_bytes_sha256": "e2db7c9acb558fcde7188caf1d58973c0a42c629c21a0c6700e2dbb442ae2ea7",
+      "actual_relocations": [
+        {
+          "section": 5,
+          "offset": 2,
+          "type": 1,
+          "symbol": {
+            "name": "x86_issue_ipi",
+            "bind": 1,
+            "type": 0,
+            "other": 0,
+            "section": 0,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 0
+        }
+      ]
+    },
+    "x86_interrupt_log_bridge": {
+      "symbol": {
+        "name": "x86_interrupt_log_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "section": 3,
+        "value": 0,
+        "size": 112
+      },
+      "section": {
+        "name_offset": 146,
+        "type": 1,
+        "flags": 268435462,
+        "address": 0,
+        "offset": 64,
+        "size": 112,
+        "link": 0,
+        "info": 0,
+        "align": 16,
+        "entry_size": 0,
+        "index": 3,
+        "name": ".ltext.x86_interrupt_log_bridge"
+      },
+      "actual_bytes_hex": "5389f383ff01741a83ff02751348b800000000000000008b003d0000000173275bc348bf000000000000000048be000000000000000048b9000000000000000089da31c05bffe148b80000000000000000ffd048bf000000000000000048b9000000000000000089c689da31c05bffe1",
+      "actual_bytes_sha256": "e42319dd6bc4a7e661ea09bb579b3f3d3bfdd2bd3928149c99f32dfc56fe2ea2",
+      "actual_relocations": [
+        {
+          "section": 3,
+          "offset": 15,
+          "type": 1,
+          "symbol": {
+            "name": "x86_interrupt_log_debug",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "section": 8,
+            "value": 0,
+            "size": 32
+          },
+          "addend": 24
+        },
+        {
+          "section": 3,
+          "offset": 36,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "bind": 0,
+            "type": 3,
+            "other": 0,
+            "section": 7,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 0
+        },
+        {
+          "section": 3,
+          "offset": 46,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "bind": 0,
+            "type": 3,
+            "other": 0,
+            "section": 7,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 24
+        },
+        {
+          "section": 3,
+          "offset": 56,
+          "type": 1,
+          "symbol": {
+            "name": "kprintf",
+            "bind": 1,
+            "type": 0,
+            "other": 0,
+            "section": 0,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 0
+        },
+        {
+          "section": 3,
+          "offset": 73,
+          "type": 1,
+          "symbol": {
+            "name": "ihk_mc_get_processor_id",
+            "bind": 1,
+            "type": 0,
+            "other": 0,
+            "section": 0,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 0
+        },
+        {
+          "section": 3,
+          "offset": 85,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "bind": 0,
+            "type": 3,
+            "other": 0,
+            "section": 7,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 45
+        },
+        {
+          "section": 3,
+          "offset": 95,
+          "type": 1,
+          "symbol": {
+            "name": "kprintf",
+            "bind": 1,
+            "type": 0,
+            "other": 0,
+            "section": 0,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 0
+        }
+      ]
+    }
+  },
+  "actual_code_source_references": {
+    "x86_issue_ipi_bridge": {
+      "actual_source_globals": [
+        "x86_issue_ipi"
+      ],
+      "actual_literal_targets": []
+    },
+    "x86_interrupt_log_bridge": {
+      "actual_source_globals": [
+        "ihk_mc_get_processor_id",
+        "kprintf",
+        "x86_interrupt_log_debug"
+      ],
+      "actual_literal_targets": [
+        {
+          "offset": 36,
+          "exact_NUL_contents_hex": "25733a20696e76616c6964204350552069643a2025640a00"
+        },
+        {
+          "offset": 46,
+          "exact_NUL_contents_hex": "69686b5f6d635f696e746572727570745f63707500"
+        },
+        {
+          "offset": 85,
+          "exact_NUL_contents_hex": "5b25645d2069686b5f6d635f696e746572727570745f6370753a2025640a00"
+        }
+      ]
+    }
+  },
+  "actual_source_readonly": {
+    "section": {
+      "name_offset": 218,
+      "type": 1,
+      "flags": 268435506,
+      "address": 0,
+      "offset": 191,
+      "size": 148,
+      "link": 0,
+      "info": 0,
+      "align": 1,
+      "entry_size": 1,
+      "index": 7,
+      "name": ".lrodata.str1.1"
+    },
+    "actual_bytes_hex": "25733a20696e76616c6964204350552069643a2025640a0069686b5f6d635f696e746572727570745f637075005b25645d2069686b5f6d635f696e746572727570745f6370753a2025640a002f686f6d652f686f6c64656e2f6d636b65726e656c2f617263682f7838365f36342f6b65726e656c2f6370752e63007838365f696e746572727570745f6c6f675f62726964676500",
+    "actual_strings": [
+      {
+        "offset": 0,
+        "bytes_hex": "25733a20696e76616c6964204350552069643a2025640a00",
+        "source_literal_or_suffix_hex": [
+          "25733a20696e76616c6964204350552069643a2025640a00"
+        ]
+      },
+      {
+        "offset": 24,
+        "bytes_hex": "69686b5f6d635f696e746572727570745f63707500",
+        "source_literal_or_suffix_hex": [
+          "69686b5f6d635f696e746572727570745f63707500"
+        ]
+      },
+      {
+        "offset": 45,
+        "bytes_hex": "5b25645d2069686b5f6d635f696e746572727570745f6370753a2025640a00",
+        "source_literal_or_suffix_hex": [
+          "5b25645d2069686b5f6d635f696e746572727570745f6370753a2025640a00"
+        ]
+      },
+      {
+        "offset": 76,
+        "bytes_hex": "2f686f6d652f686f6c64656e2f6d636b65726e656c2f617263682f7838365f36342f6b65726e656c2f6370752e6300",
+        "source_literal_or_suffix_hex": [
+          "2f686f6d652f686f6c64656e2f6d636b65726e656c2f617263682f7838365f36342f6b65726e656c2f6370752e6300"
+        ]
+      },
+      {
+        "offset": 123,
+        "bytes_hex": "7838365f696e746572727570745f6c6f675f62726964676500",
+        "source_literal_or_suffix_hex": [
+          "7838365f696e746572727570745f6c6f675f62726964676500"
+        ]
+      }
+    ],
+    "no_unique_physical_pool_count_assumption": true
+  },
+  "actual_unwind": {
+    "section": {
+      "name_offset": 98,
+      "type": 1879048193,
+      "flags": 2,
+      "address": 0,
+      "offset": 432,
+      "size": 104,
+      "link": 0,
+      "info": 0,
+      "align": 8,
+      "entry_size": 0,
+      "index": 12,
+      "name": ".eh_frame"
+    },
+    "actual_bytes_sha256": "a6a291d7947c3d939ba4771b20f25c1b74b674c0bf61db39d9c621454b1df408",
+    "actual_relocations": [
+      {
+        "section": 12,
+        "offset": 32,
+        "type": 24,
+        "symbol": {
+          "name": "",
+          "bind": 0,
+          "type": 3,
+          "other": 0,
+          "section": 3,
+          "value": 0,
+          "size": 0
+        },
+        "addend": 0
+      },
+      {
+        "section": 12,
+        "offset": 80,
+        "type": 24,
+        "symbol": {
+          "name": "",
+          "bind": 0,
+          "type": 3,
+          "other": 0,
+          "section": 5,
+          "value": 0,
+          "size": 0
+        },
+        "addend": 0
+      }
+    ]
+  },
+  "capture": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-local-metadata-1/correction-1/combined/IPI-ACTUAL-ELF-METADATA.json",
+  "source_volatile_guard_late_getter_casts_unchanged": true,
+  "no_callback_slot_owner_init_target_call_or_logger_runtime": true,
+  "actual_private_FUNC_OBJECT": [],
+  "source_config_scope_only": true
+}

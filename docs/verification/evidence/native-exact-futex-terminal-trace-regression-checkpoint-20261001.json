@@ -1,0 +1,36 @@
+{
+  "schema": "mckernel.native-exact-futex-terminal-trace-regression-checkpoint.v1",
+  "recorded_at_utc": "2026-10-01T12:18:41Z",
+  "status": "PASS_SOURCE_REGRESSION",
+  "observed_failure": {
+    "family": "terminal exit_group trace sample omitted after 64 ordinary syscall samples",
+    "application_behavior_passed": true,
+    "diagnostic_credit": false,
+    "failed_observation": "sampled_exit_group_231=0"
+  },
+  "production_target": {
+    "commit": "50b084322610a9326b1b7b528edd4cd73b635632",
+    "producer_sha256": "148134730b5fed7f14770eb070529b5227bb6ab790b7199f8800968219dffc70",
+    "observer_sha256": "2aa9b0257395624ced3ecb4d9e4d3e9373310a9266653b1d1f3cec9d2c8f9356",
+    "terminal_bypass_present": "number == 231 || self.trace()"
+  },
+  "regression": {
+    "path": "scripts/tests/test_application_native_diagnostic.py",
+    "sha256": "ec0ceb7d0961b2674afcc84777eb509714014b04d0fe55be6f9549d4937566e1",
+    "tests": "PASS 66",
+    "terminal_removed_mutation": "REJECTED",
+    "producer_bypass_removed_mutation": "REJECTED"
+  },
+  "review_decision": "PASS_SOURCE_REGRESSION",
+  "limitations": [
+    "producer mutation is a textual source-binding test rather than compiled Rust mutation evidence",
+    "observer input is synthetic",
+    "fresh host module, image and guest execution remain required"
+  ],
+  "acceptance": {
+    "new_runtime_result": false,
+    "futex_diagnostic_accepted": false,
+    "formal_application_acceptance": false,
+    "os_complete": false
+  }
+}

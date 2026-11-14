@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "record_kind": "linux_collector_storage_fault_v2_source_test_failure",
+  "task_id": "M02-B-storage-fault-v2-source",
+  "attempt": 28,
+  "status": "FAIL_SOURCE_TEST",
+  "recorded_utc": "2026-09-16T03:42:13Z",
+  "archive": {
+    "path": "docs/verification/evidence/stability-linux-collector-storage-fault-v2-source-failure-20260915-28.tar.gz",
+    "sha256": "3f25c2b0bad9b2adb786f8e8898fa9dfab1b988d076f7bb3c7dfb81ee673d65d",
+    "size": 8979053,
+    "members": 31
+  },
+  "failing_source_sha256": {
+    "oracle.py": "99b4b72c2bf7ae3d0703ec6fd309d9914137ce3f0091452bc4f053f73729b2c4",
+    "test_collector_storage_fault_packet.py": "571c2231d776f9b8ec845e2ca5053eab89829e9e0ce13ffb712b5d302cbc112c"
+  },
+  "focused_failure": {
+    "status": 1,
+    "tests_run": 2,
+    "failures": 2,
+    "tests": [
+      "test_review22_sentinel_retirement_rejects_direct_timeout",
+      "test_review22_adopted_signal_error_equal_time_reap_rejected"
+    ]
+  },
+  "failures": [
+    "The exact canonical full sentinel record SHA256 1d63a6ccf565392a6f7af5bee7680c7d43beab7a0f51b7fd3a52ce5905223671 was accepted after its PID had been reaped.",
+    "The exact canonical full adopted-error record SHA256 d68126e2674521cf4a11ed795486d7e7d20884a293d3d7aba1c7de69db008064 was accepted with an equal-time adopted reap."
+  ],
+  "intermediate_failure": {
+    "oracle_sha256": "73dec0ef8af09b79a2d4b5be8039906f6b40ebdb40551ba103a90ee0336f6320",
+    "test_sha256": "96c4f12284a7e53480fdf194efcea32420fe1c2d08f477d18aab5a819e4d74a8",
+    "summary": "The first correction conflated ECHILD with an actual reap and rejected three previously valid unreaped timeout paths; its exact bytes are retained."
+  },
+  "corrected_source_sha256": {
+    "prepare.py": "1d09a2f4f143af79de7eb98e7cc6d5c6a01efa89e15fa925d2c7869c78ab2df4",
+    "witness_owner.py": "4554efcda371a395681ff7f7353e05d98adf6ab4aae656b40d524f128fdf4670",
+    "supervise.py": "306a4982bd4d04721bc0478a5cfec553ac751dd0b5e9379cb9ba519bf4c92ce1",
+    "oracle.py": "3fa828b3eebffc4ffe6f77ab6b94ebb75f2c558b62c36f875a015b043cddc966",
+    "test_collector_storage_fault_packet.py": "571c2231d776f9b8ec845e2ca5053eab89829e9e0ce13ffb712b5d302cbc112c"
+  },
+  "corrected_checks": {
+    "python3.9.12": "107/107 PASS",
+    "python3.8.10": "107/107 PASS",
+    "pycompile": "PASS on both interpreters for all four fixture Python sources"
+  },
+  "source_accepted": false,
+  "compiler_execution": false,
+  "root_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

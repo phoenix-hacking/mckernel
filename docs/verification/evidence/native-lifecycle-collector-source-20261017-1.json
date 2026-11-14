@@ -1,0 +1,1682 @@
+{
+  "schema": "mckernel.native-lifecycle-collector-source.v1",
+  "task_id": "M05-native-lifecycle-collector-source-20261017-1",
+  "status": "PASS_INJECTED_ACTUAL_BODIES_READY_FOR_INDEPENDENT_REVIEW",
+  "changed_paths": [
+    "scripts/application-tests/native_diagnostic_lifecycle_collector.c",
+    "scripts/tests/test_native_diagnostic_lifecycle_collector.py",
+    "docs/verification/evidence/native-lifecycle-collector-source-20261017-1.json"
+  ],
+  "source": [
+    {
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_lifecycle_collector.c",
+      "sha256": "36fa0d55a30f5e943de0b28c6f54e033cf84ff8cc83cdc54c59688e993c44383",
+      "size": 26673
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/tests/test_native_diagnostic_lifecycle_collector.py",
+      "sha256": "bde489037cb8dc26f909f4a21b7a8dedffc370c30e0ebf98cd781f4c0fdcdc46",
+      "size": 13863
+    }
+  ],
+  "existing_inputs": [
+    {
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_guest_collector.c",
+      "sha256": "82825cf128689ba8f8a74d9528c1acffb724a9356a2c6192c67c8abe4a74965e",
+      "size": 22952
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_lifecycle_probe.c",
+      "sha256": "18444a0917ed850690cca41be1b9a6090a3ab533c94a0f1ad66892df0625ca44",
+      "size": 4282
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/application-tests/native_shutdown_observer.py",
+      "sha256": "d109736f2497a15dc4908792c5aee7447bfdf04b0aa0f90443b3a50029b94218",
+      "size": 20880
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_closure_preflight.py",
+      "sha256": "ad20e6f6423802b5ea73cfe71cc85baba1641e29e9bcc3b2cba76946c2b2916a",
+      "size": 24236
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-lifecycle-probe-actual-main-pass-20261017-1.json",
+      "sha256": "252c3d23488b0193fe3ec5b254798d33f1c2711ff6d6aaf4f00b0b0bef167cd4",
+      "size": 71554
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-lifecycle-probe-static-20261017-1.json",
+      "sha256": "b96e38db85ed93fe9b40ec0ffe43b728671fa42122555eb36b94b80a6f624103",
+      "size": 35931
+    }
+  ],
+  "implementation": {
+    "variant": "Separate new source copied from current diagnostic collector, with lifecycle helper gate and transport. Existing collector/probe/runner/manifest untouched.",
+    "profiles": "Default simple argv payload only. ND_FUTEX and ND_CORE_* compilation explicitly rejected.",
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "app",
+      "A",
+      "",
+      "B"
+    ],
+    "lifecycle_argv": [
+      "/bin/native-lifecycle-probe",
+      "0"
+    ],
+    "native_device": "Frozen probe constructs /dev/mcos0 from decimal0; collector never directly accesses IHK device.",
+    "before_shutdown": "After supervised payload output evidence and bounded /proc/mcos0 empty check, require good/safe, empty==1, clean payload raw waitstatus0, no fault/timeout, both EOF and complete untruncated streams.",
+    "helper": "Existing helper validation/evidence-write body retained with optional returned result copy, invoked through lifecycle gate. Probe uses ordinary10000ms helper timeout, shared outer120s and TERM/KILL/reap reserve unchanged.",
+    "on_failure": "Gate failure sets good0 without calling helper. Helper failure sets good0; unresolved children clear safe, suppressing console publication. Existing finish logic sets payload.fault, causing procfs_empty=false in ND_PAYLOAD. Safe helper errors still export failure capture.",
+    "after_shutdown": "Retained OS object and loaded modules remain until guest poweroff; no destroy/rmmod/resource-restoration claim.",
+    "timeouts": "Supervisor, bounded-deadline arithmetic, shared outer alarm and poweroff-failure behavior preserved verbatim."
+  },
+  "transport_contract": {
+    "order": [
+      "ND_LIFECYCLE",
+      "ND_LIFECYCLE_STREAM stdout",
+      "ND_LIFECYCLE_STREAM stderr",
+      "ND_PAYLOAD"
+    ],
+    "status_fields": [
+      "argv",
+      "helper_result",
+      "raw_wait_status",
+      "fault",
+      "timeout",
+      "clean",
+      "child_stage",
+      "child_errno",
+      "started_ns",
+      "reaped_ns",
+      "finished_ns"
+    ],
+    "stream_fields": "name plus existing stream_json capture: hex/eof/truncated/observed/retained/discarded/limit/eof_ns",
+    "limits": "Two independent <=1024-byte stream captures. Each lifecycle record<=PIPE_BUF, emitted by existing bounded write_all. Separate records avoid exceeding4096bytes with two full hex streams.",
+    "guest_files": [
+      "/case/evidence/lifecycle.stdout",
+      "/case/evidence/lifecycle.stderr",
+      "/case/evidence/lifecycle.status"
+    ],
+    "publication_failure": "Any lifecycle publication failure marks payload.fault before ND_PAYLOAD publication. Partial/missing lifecycle records are invalid input for future host oracle.",
+    "existing_schema": "ND_PAYLOAD and its original byte/exit oracle remain unchanged.",
+    "host_review_boundary": [
+      "No host lifecycle parser/manifest/runner change is included or activated. New marker contract requires independent review before use.",
+      "Host must require exactly one complete lifecycle status record, exactly one stdout stream and one stderr stream, correct ordering, complete untruncated EOF streams, no helper fault/timeout/setup error, clean reap and raw waitstatus0.",
+      "Host must decode probe stdout and independently validate exact before/status, shutdown return/errno, after NotBooted0, close, and final PASS record; require empty helper stderr as appropriate to frozen probe.",
+      "Host must independently apply unchanged payload oracle and ordinary diagnostic error scanning, transport limits and QEMU retirement requirements.",
+      "Local gate checks successful complete payload transport/status, not payload stdout bytes or application correctness.",
+      "The broader native_shutdown_observer snapshot protocol remains separate and is not fulfilled by these limited records."
+    ]
+  },
+  "tests": {
+    "result": {
+      "returncode": 0,
+      "elapsed_seconds": 0.3255269290020806,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "4e2f07e2c12350abb800346341e848d43da026c87a4a094683976b5b31ac4efd"
+    },
+    "python_tests": 2,
+    "compiler_invocations": 1,
+    "scenario_processes": 30,
+    "scenario_groups": {
+      "successful_helper_and_max_streams": 2,
+      "payload_good_safe_procfs_and_result_gates": 13,
+      "helper_exit_signal_timeout_fault_unclean_eof_truncation_and_evidence_failures": 12,
+      "metadata_stdout_stderr_publication_failures": 3
+    },
+    "actual_bodies_executed": [
+      "lifecycle_after_payload",
+      "helper_capture",
+      "helper_timeout_ms",
+      "publish_lifecycle",
+      "publish_lifecycle_stream",
+      "stream_json",
+      "append"
+    ],
+    "injected_boundaries": [
+      "supervise",
+      "save_file",
+      "write_all"
+    ],
+    "source_transformation": "Three function definition names only are changed in a retained generated copy to real_supervise/real_save_file/real_write_all. Their call sites resolve to deterministic wrappers. Main is renamed and never called. Original and transformed complete sources retained.",
+    "source_checks": "Supervisor, payload serializer/frame and poweroff bodies equal existing source byte-for-byte; main source ordering proves lifecycle phase follows retirement and precedes finish, lifecycle records precede ND_PAYLOAD, then poweroff; helper failure poisons good.",
+    "oracle_scope": "Mock helper output deliberately contains arbitrary binary bytes to verify lossless transport. It is not native probe output or shutdown evidence.",
+    "not_executed": [
+      "PID1 main",
+      "actual supervise in this harness",
+      "mount",
+      "insmod",
+      "native-boot",
+      "mcexec",
+      "native lifecycle probe",
+      "real IHK open/ioctl",
+      "poweroff"
+    ],
+    "steps": [
+      {
+        "argv": [
+          "/usr/bin/cc",
+          "-std=c11",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/harness.c",
+          "-o",
+          "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/harness"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/tmp"
+        },
+        "returncode": 0,
+        "observed_summary": null,
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/001.command.json",
+            "sha256": "b7f17e58e65a186cbe08e2e5fbeb0f509edcf708046c01ab080c6b634a42d7ae",
+            "size": 621
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/001.json",
+            "sha256": "2189bb1741ae93696cf8a8bc3306076c648cbacf6d1cba58e81aac0315fc0648",
+            "size": 525
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/001.stdout",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/001.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/harness",
+          "success"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/tmp"
+        },
+        "returncode": 0,
+        "observed_summary": {
+          "helper_rc": 0,
+          "safe": 1,
+          "attempted": 1,
+          "supervised": 1,
+          "saved": 3,
+          "written": 3,
+          "publication": 0
+        },
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/002.command.json",
+            "sha256": "d1d0d4cd520a7dafbc4b544816c7e9dc5ff67c100bfbef351c1f13540f9050d0",
+            "size": 429
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/002.json",
+            "sha256": "8625f7bdc147b6c852f5b61a4236073bf4bc2bd6002b324886d5390024b3d2b1",
+            "size": 333
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/002.stdout",
+            "sha256": "084f31d512994011cbc9fb8ac2e5312f3f72536fc7668f52360a3d326b158895",
+            "size": 627
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/002.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/harness",
+          "max_streams"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/tmp"
+        },
+        "returncode": 0,
+        "observed_summary": {
+          "helper_rc": 0,
+          "safe": 1,
+          "attempted": 1,
+          "supervised": 1,
+          "saved": 3,
+          "written": 3,
+          "publication": 0
+        },
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/003.command.json",
+            "sha256": "80cf3bbc3dd8ede82e7b7302d9360436943b54ad6fa2b1debdd01ef92b8094f2",
+            "size": 433
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/003.json",
+            "sha256": "404f120f4ec55d81f79589afe710ffdf07e92f2b8b74c05adb4a2fd638932f21",
+            "size": 337
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/003.stdout",
+            "sha256": "cca0ce5c7bff840322e11c5905ff0b0f04db12652a20ae9a6ee49c1b762a1349",
+            "size": 4721
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/003.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/harness",
+          "helper_exit"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/tmp"
+        },
+        "returncode": 0,
+        "observed_summary": {
+          "helper_rc": -1,
+          "safe": 1,
+          "attempted": 1,
+          "supervised": 1,
+          "saved": 3,
+          "written": 3,
+          "publication": 0
+        },
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/004.command.json",
+            "sha256": "19a4624dfcb699dc36b5a64a761cfeb14d525a761f1c84f171349bc175b506c3",
+            "size": 433
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/004.json",
+            "sha256": "f9453ee63706fe1f9d6a0651cfd1ae18a0def20499bf990563580d95d50ff774",
+            "size": 337
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/004.stdout",
+            "sha256": "319d7ebaebac7292755daf51206feca6b462bf64cc7a4670919ff6aaf7205a92",
+            "size": 631
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/004.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/harness",
+          "helper_signal"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/tmp"
+        },
+        "returncode": 0,
+        "observed_summary": {
+          "helper_rc": -1,
+          "safe": 1,
+          "attempted": 1,
+          "supervised": 1,
+          "saved": 3,
+          "written": 3,
+          "publication": 0
+        },
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/005.command.json",
+            "sha256": "75620164620ea3cf109aa9f5546dc778d2ef84d0b0700397209725e6268b5965",
+            "size": 435
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/005.json",
+            "sha256": "9c238f8f33adf93399543f8789bab7257e888237e768c3c51cb60e7db7c08846",
+            "size": 339
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/005.stdout",
+            "sha256": "6c3f9b5cb3b73813b61f672747d14953e02e42fd71e3a102a8d12ec125a51683",
+            "size": 629
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/005.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/harness",
+          "helper_timeout"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/tmp"
+        },
+        "returncode": 0,
+        "observed_summary": {
+          "helper_rc": -1,
+          "safe": 1,
+          "attempted": 1,
+          "supervised": 1,
+          "saved": 3,
+          "written": 3,
+          "publication": 0
+        },
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/006.command.json",
+            "sha256": "08cff241ae78bab5dbf169e5a241222c65d0b8919da3dabe7f26cf0756e31299",
+            "size": 436
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/006.json",
+            "sha256": "c93e982bfe8dc3ba40f197e50528a6f25adf28c9af2854154942c8c38230adad",
+            "size": 340
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/006.stdout",
+            "sha256": "ddad06a679ea279b296a69c838a27b5b67ddefeccefc5f6853b8a211e3e030bf",
+            "size": 629
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/006.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/harness",
+          "helper_fault"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/tmp"
+        },
+        "returncode": 0,
+        "observed_summary": {
+          "helper_rc": -1,
+          "safe": 1,
+          "attempted": 1,
+          "supervised": 1,
+          "saved": 3,
+          "written": 3,
+          "publication": 0
+        },
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/007.command.json",
+            "sha256": "4503a0dbed84cc747cc75730379336180522a7baa08223e051a856703833b2d1",
+            "size": 434
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/007.json",
+            "sha256": "7c697ab8724290b2ceb555d81cf0ddfd66e6a23297f88831668f09c8336c0558",
+            "size": 338
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/007.stdout",
+            "sha256": "069e796f44b8cc1315e1beebf91d81621f058d69c3ec496935088db862eae523",
+            "size": 629
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/007.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/harness",
+          "helper_unclean"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/tmp"
+        },
+        "returncode": 0,
+        "observed_summary": {
+          "helper_rc": -1,
+          "safe": 0,
+          "attempted": 1,
+          "supervised": 1,
+          "saved": 3,
+          "written": 0,
+          "publication": 99
+        },
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/008.command.json",
+            "sha256": "520348c4c8a16c125aa62583397543c72d0a017a3879403ee8aa267275577609",
+            "size": 436
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/008.json",
+            "sha256": "7b4eb5ae3125b2d07bce792db1529dd6465d302a98f621321e1fc92223300ed6",
+            "size": 340
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/008.stdout",
+            "sha256": "9e1cf035115029b9a0f8f0eeac523f48c35573aa74eac512587af6a88f9bee06",
+            "size": 101
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/008.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/harness",
+          "helper_out_eof"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/tmp"
+        },
+        "returncode": 0,
+        "observed_summary": {
+          "helper_rc": -1,
+          "safe": 1,
+          "attempted": 1,
+          "supervised": 1,
+          "saved": 3,
+          "written": 3,
+          "publication": 0
+        },
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/009.command.json",
+            "sha256": "d7bd397dd54de8601ca10dc212005c01b2ddb69c0d0775e1c044886371ec3bed",
+            "size": 436
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/009.json",
+            "sha256": "05f9c4ed034b8051198922acf91b17b24410092fa4c424d204d0398effcbfacd",
+            "size": 340
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/009.stdout",
+            "sha256": "c2ca106c88951c01ab7fa6f1e651f301ada6b4643d62fb9ed42ace7bfa619a9c",
+            "size": 630
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/009.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/harness",
+          "helper_err_eof"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/tmp"
+        },
+        "returncode": 0,
+        "observed_summary": {
+          "helper_rc": -1,
+          "safe": 1,
+          "attempted": 1,
+          "supervised": 1,
+          "saved": 3,
+          "written": 3,
+          "publication": 0
+        },
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/010.command.json",
+            "sha256": "d3439debdd8be609aeb11ba09955eae8842fda20374bd1c494d2bad98fe41a42",
+            "size": 436
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/010.json",
+            "sha256": "6b01c404e6ac9c25e14c1fb9c7c1fa4aac6d0f9c4f89f6fb6b393308e0aa06db",
+            "size": 340
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/010.stdout",
+            "sha256": "1c71fc142404cca5c4ce4d7b032aa3d8e43111913ec9eb6c8932ec85601bfa34",
+            "size": 630
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/010.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/harness",
+          "helper_out_truncated"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/tmp"
+        },
+        "returncode": 0,
+        "observed_summary": {
+          "helper_rc": -1,
+          "safe": 1,
+          "attempted": 1,
+          "supervised": 1,
+          "saved": 3,
+          "written": 3,
+          "publication": 0
+        },
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/011.command.json",
+            "sha256": "4ff956b589f8715fe6b1cbabcc5e67ee050204eb3a3cda4ec4e8dab0487ee604",
+            "size": 442
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/011.json",
+            "sha256": "1a53306eb96f6c310f3b3405c094d0555cb309e14860c5736ba7d60bf8587fcc",
+            "size": 346
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/011.stdout",
+            "sha256": "4b6d65b9199d86b02bf66971b6a526f0c04ac2c00891ea7b997dbc3a41f3930a",
+            "size": 628
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/011.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/harness",
+          "helper_err_truncated"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/tmp"
+        },
+        "returncode": 0,
+        "observed_summary": {
+          "helper_rc": -1,
+          "safe": 1,
+          "attempted": 1,
+          "supervised": 1,
+          "saved": 3,
+          "written": 3,
+          "publication": 0
+        },
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/012.command.json",
+            "sha256": "88e06be1f300de5b4156764da9f1aec3f9fb1ef17377f371f5fc02dc4161dff8",
+            "size": 442
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/012.json",
+            "sha256": "dc3884a13a8b6e211771b6731e26463b9d80214fd80a929b8443951298d10830",
+            "size": 346
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/012.stdout",
+            "sha256": "8019199c7da6101ab8a381f88807f6881155fd116e6c48fb92cf4a35e5ca5997",
+            "size": 628
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/012.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/harness",
+          "save_out"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/tmp"
+        },
+        "returncode": 0,
+        "observed_summary": {
+          "helper_rc": -1,
+          "safe": 1,
+          "attempted": 1,
+          "supervised": 1,
+          "saved": 3,
+          "written": 3,
+          "publication": 0
+        },
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/013.command.json",
+            "sha256": "6ff41a688b5118a1246a91a659b135b7359d9feb99c5d663bdefa4393248f53d",
+            "size": 430
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/013.json",
+            "sha256": "3a8cb40c06572526e25aca7619f29367ccafe85f6140d2210571a326c0ef2ba2",
+            "size": 334
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/013.stdout",
+            "sha256": "59ee9dbafd53a1c3fa11b8c3b3f6dd50138843862220654d8667f83df7838f68",
+            "size": 629
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/013.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/harness",
+          "save_err"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/tmp"
+        },
+        "returncode": 0,
+        "observed_summary": {
+          "helper_rc": -1,
+          "safe": 1,
+          "attempted": 1,
+          "supervised": 1,
+          "saved": 3,
+          "written": 3,
+          "publication": 0
+        },
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/014.command.json",
+            "sha256": "b52055da133dd05c6d6c5338d4aaa56051476d30d49508be8b877658bb4bc36f",
+            "size": 430
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/014.json",
+            "sha256": "9ad8510bad23fee9f806134bf32a687e583816e3c037eaa89f747e9c412e929c",
+            "size": 334
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/014.stdout",
+            "sha256": "59ee9dbafd53a1c3fa11b8c3b3f6dd50138843862220654d8667f83df7838f68",
+            "size": 629
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/014.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/harness",
+          "save_status"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/tmp"
+        },
+        "returncode": 0,
+        "observed_summary": {
+          "helper_rc": -1,
+          "safe": 1,
+          "attempted": 1,
+          "supervised": 1,
+          "saved": 3,
+          "written": 3,
+          "publication": 0
+        },
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/015.command.json",
+            "sha256": "fa908589db939edf58afa0be9a12ce679fd945ccc585712dd5493218e8538e65",
+            "size": 433
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/015.json",
+            "sha256": "e7b1d66e3c6887b62aeaeb90b4032399a17ac4b3db0b0350512461043c0a9bff",
+            "size": 337
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/015.stdout",
+            "sha256": "59ee9dbafd53a1c3fa11b8c3b3f6dd50138843862220654d8667f83df7838f68",
+            "size": 629
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/015.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/harness",
+          "publish_metadata"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/tmp"
+        },
+        "returncode": 0,
+        "observed_summary": {
+          "helper_rc": 0,
+          "safe": 1,
+          "attempted": 1,
+          "supervised": 1,
+          "saved": 3,
+          "written": 1,
+          "publication": -1
+        },
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/016.command.json",
+            "sha256": "581e1704829e70f2a8a3f50a61eba69a85acf21f3bb07cf7183c92e8dbaae49b",
+            "size": 438
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/016.json",
+            "sha256": "72e456cca65a9a961b9a44483d65a915b83c9db2f341919dd3cd518c3c206e10",
+            "size": 342
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/016.stdout",
+            "sha256": "4c9133b2b3e1667e32606155aa257e16a65a5d7aac1fe1766e90458b583fa701",
+            "size": 100
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/016.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/harness",
+          "publish_out"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/tmp"
+        },
+        "returncode": 0,
+        "observed_summary": {
+          "helper_rc": 0,
+          "safe": 1,
+          "attempted": 1,
+          "supervised": 1,
+          "saved": 3,
+          "written": 2,
+          "publication": -1
+        },
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/017.command.json",
+            "sha256": "7f6666df55e351ed3b728fa32a6f63509ee7d7e34965ccd3f65d35b95443e004",
+            "size": 433
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/017.json",
+            "sha256": "a6ebd9136acbee4965021c9cb447d3170576a63878a52a2d5adf98d0fb5e4d2f",
+            "size": 337
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/017.stdout",
+            "sha256": "98a06c1a505c4f432475da38a0893af47a735fcb262ac7677053e084754e7603",
+            "size": 308
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/017.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/harness",
+          "publish_err"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/tmp"
+        },
+        "returncode": 0,
+        "observed_summary": {
+          "helper_rc": 0,
+          "safe": 1,
+          "attempted": 1,
+          "supervised": 1,
+          "saved": 3,
+          "written": 3,
+          "publication": -1
+        },
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/018.command.json",
+            "sha256": "7433253be12464484f4ca07c4e12bfd5289cf8b247ccd347dab93c709c899cd5",
+            "size": 433
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/018.json",
+            "sha256": "318cdab10b675f721d6772cfd74ea4040b0307809b7905c2a38a2579797a75d1",
+            "size": 337
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/018.stdout",
+            "sha256": "9c69024e8a27189a791321d5fcea040d61e5cef7c04e70d76a09ca49f424f179",
+            "size": 469
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/018.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/harness",
+          "gate_good"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/tmp"
+        },
+        "returncode": 0,
+        "observed_summary": {
+          "helper_rc": -1,
+          "safe": 1,
+          "attempted": 0,
+          "supervised": 0,
+          "saved": 0,
+          "written": 0,
+          "publication": 99
+        },
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/019.command.json",
+            "sha256": "c065d2296d6910083c0bfae4cc26447a6bb545747155ab36c50328ac7b99215e",
+            "size": 431
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/019.json",
+            "sha256": "2012cd8874be5c88dc191426f278c05f1b9bfb72e5e6dad330cd6d933c031ffb",
+            "size": 335
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/019.stdout",
+            "sha256": "f078c6ba4fc76945d196f3d6248bf2be15672a105fab90770955d4a70a0c5ec4",
+            "size": 101
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/019.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/harness",
+          "gate_safe"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/tmp"
+        },
+        "returncode": 0,
+        "observed_summary": {
+          "helper_rc": -1,
+          "safe": 0,
+          "attempted": 0,
+          "supervised": 0,
+          "saved": 0,
+          "written": 0,
+          "publication": 99
+        },
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/020.command.json",
+            "sha256": "afe6c741b29aa2460a65d34819ded7dbc428d73655824a2f40f761588f049341",
+            "size": 431
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/020.json",
+            "sha256": "5f4ce9414f661428f5a3e8ee739e85a405cb07078199cec27573ff08030ae5b2",
+            "size": 335
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/020.stdout",
+            "sha256": "19ae304f8e3a9293bb611693b93284e8535bad5cf5905e853dbafc9cf3c6583e",
+            "size": 101
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/020.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/harness",
+          "gate_empty"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/tmp"
+        },
+        "returncode": 0,
+        "observed_summary": {
+          "helper_rc": -1,
+          "safe": 1,
+          "attempted": 0,
+          "supervised": 0,
+          "saved": 0,
+          "written": 0,
+          "publication": 99
+        },
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/021.command.json",
+            "sha256": "e54aabc76cb21a04d865431bc55cb7b0020b4aa444703be01b3684fce35c3ea9",
+            "size": 432
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/021.json",
+            "sha256": "1f6cf2558915e119309e53cd1e2e30c0e09c48920df3480f3c892e2e189ab23f",
+            "size": 336
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/021.stdout",
+            "sha256": "f078c6ba4fc76945d196f3d6248bf2be15672a105fab90770955d4a70a0c5ec4",
+            "size": 101
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/021.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/harness",
+          "gate_unreadable"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/tmp"
+        },
+        "returncode": 0,
+        "observed_summary": {
+          "helper_rc": -1,
+          "safe": 1,
+          "attempted": 0,
+          "supervised": 0,
+          "saved": 0,
+          "written": 0,
+          "publication": 99
+        },
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/022.command.json",
+            "sha256": "be592c13b1b2766080615e939d4f22d7a75ca9a97deccb145b1b7968b900656c",
+            "size": 437
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/022.json",
+            "sha256": "6aa037b389fa6bd2825ce71ce96203ed22f8b5fe421392e768f0be4b5e8bb242",
+            "size": 341
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/022.stdout",
+            "sha256": "f078c6ba4fc76945d196f3d6248bf2be15672a105fab90770955d4a70a0c5ec4",
+            "size": 101
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/022.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/harness",
+          "gate_clean"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/tmp"
+        },
+        "returncode": 0,
+        "observed_summary": {
+          "helper_rc": -1,
+          "safe": 1,
+          "attempted": 0,
+          "supervised": 0,
+          "saved": 0,
+          "written": 0,
+          "publication": 99
+        },
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/023.command.json",
+            "sha256": "e345ae6722a419f06095b3b722c27c40dcfef18c5ad6520c3129c1aff95b86b9",
+            "size": 432
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/023.json",
+            "sha256": "bca9eb06c0822f8bc716b02f886f54576be49e285027ca154ba6809b75fb58f4",
+            "size": 336
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/023.stdout",
+            "sha256": "f078c6ba4fc76945d196f3d6248bf2be15672a105fab90770955d4a70a0c5ec4",
+            "size": 101
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/023.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/harness",
+          "gate_fault"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/tmp"
+        },
+        "returncode": 0,
+        "observed_summary": {
+          "helper_rc": -1,
+          "safe": 1,
+          "attempted": 0,
+          "supervised": 0,
+          "saved": 0,
+          "written": 0,
+          "publication": 99
+        },
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/024.command.json",
+            "sha256": "889bfd8d0b7d9f82d7d8628839577a17b5b2336c63246fab1fdbda9a2512a4ff",
+            "size": 432
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/024.json",
+            "sha256": "5ae66c372d496a8b2ef0194e8b633d879b78713a29e70e06c6904fb97183b69d",
+            "size": 336
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/024.stdout",
+            "sha256": "f078c6ba4fc76945d196f3d6248bf2be15672a105fab90770955d4a70a0c5ec4",
+            "size": 101
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/024.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/harness",
+          "gate_timeout"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/tmp"
+        },
+        "returncode": 0,
+        "observed_summary": {
+          "helper_rc": -1,
+          "safe": 1,
+          "attempted": 0,
+          "supervised": 0,
+          "saved": 0,
+          "written": 0,
+          "publication": 99
+        },
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/025.command.json",
+            "sha256": "72e86740513e40eb8b108084c52dc7b8c09eca2313cf928e3fc78089b3f2beee",
+            "size": 434
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/025.json",
+            "sha256": "3cfd74808ead429dbc38632ee0a58559daddb476f578eade724482e08ff36e62",
+            "size": 338
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/025.stdout",
+            "sha256": "f078c6ba4fc76945d196f3d6248bf2be15672a105fab90770955d4a70a0c5ec4",
+            "size": 101
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/025.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/harness",
+          "gate_exit"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/tmp"
+        },
+        "returncode": 0,
+        "observed_summary": {
+          "helper_rc": -1,
+          "safe": 1,
+          "attempted": 0,
+          "supervised": 0,
+          "saved": 0,
+          "written": 0,
+          "publication": 99
+        },
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/026.command.json",
+            "sha256": "ec79e430d98390d8e4d574b37046a8158744fe71e76716b82a39ae6f2b532599",
+            "size": 431
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/026.json",
+            "sha256": "bb75fff7d38bcea192653729cf51a5f5c28d30b448458d555e77e763b4202151",
+            "size": 335
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/026.stdout",
+            "sha256": "f078c6ba4fc76945d196f3d6248bf2be15672a105fab90770955d4a70a0c5ec4",
+            "size": 101
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/026.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/harness",
+          "gate_signal"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/tmp"
+        },
+        "returncode": 0,
+        "observed_summary": {
+          "helper_rc": -1,
+          "safe": 1,
+          "attempted": 0,
+          "supervised": 0,
+          "saved": 0,
+          "written": 0,
+          "publication": 99
+        },
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/027.command.json",
+            "sha256": "9b2f76e871aa9c7680414ef70a9a316b199bbc00f12b47278b0191919eb90ed7",
+            "size": 433
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/027.json",
+            "sha256": "400dcb3f0fe7750da5a88a1d6e8d50f0392ad1010f37678b38843d98f4d251f5",
+            "size": 337
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/027.stdout",
+            "sha256": "f078c6ba4fc76945d196f3d6248bf2be15672a105fab90770955d4a70a0c5ec4",
+            "size": 101
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/027.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/harness",
+          "gate_out_eof"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/tmp"
+        },
+        "returncode": 0,
+        "observed_summary": {
+          "helper_rc": -1,
+          "safe": 1,
+          "attempted": 0,
+          "supervised": 0,
+          "saved": 0,
+          "written": 0,
+          "publication": 99
+        },
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/028.command.json",
+            "sha256": "a52c3653d7574804f4d942864f020baa5c646f4047e41911e80ec4d46ae2557b",
+            "size": 434
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/028.json",
+            "sha256": "add967440c508c932e91cc87513a03fb75b9d1c76905d297b90f134cf17d3743",
+            "size": 338
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/028.stdout",
+            "sha256": "f078c6ba4fc76945d196f3d6248bf2be15672a105fab90770955d4a70a0c5ec4",
+            "size": 101
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/028.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/harness",
+          "gate_err_eof"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/tmp"
+        },
+        "returncode": 0,
+        "observed_summary": {
+          "helper_rc": -1,
+          "safe": 1,
+          "attempted": 0,
+          "supervised": 0,
+          "saved": 0,
+          "written": 0,
+          "publication": 99
+        },
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/029.command.json",
+            "sha256": "43613dbc64d509902e7668c47575c0ac486cf2c15162677fc12b13475dee8d35",
+            "size": 434
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/029.json",
+            "sha256": "b648dcb083597197e087c40a0e69e13c86db9ee05cc97d37306d43830435d6f3",
+            "size": 338
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/029.stdout",
+            "sha256": "f078c6ba4fc76945d196f3d6248bf2be15672a105fab90770955d4a70a0c5ec4",
+            "size": 101
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/029.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/harness",
+          "gate_out_truncated"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/tmp"
+        },
+        "returncode": 0,
+        "observed_summary": {
+          "helper_rc": -1,
+          "safe": 1,
+          "attempted": 0,
+          "supervised": 0,
+          "saved": 0,
+          "written": 0,
+          "publication": 99
+        },
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/030.command.json",
+            "sha256": "c7b386dd544ac59876d7809583f3b03e2a610aae1221cc49cb7e6b62b85ca798",
+            "size": 440
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/030.json",
+            "sha256": "69d23936855d0850a5ba4259cb0e6fe5eecd09106efe17f8749654c0b7949c12",
+            "size": 344
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/030.stdout",
+            "sha256": "f078c6ba4fc76945d196f3d6248bf2be15672a105fab90770955d4a70a0c5ec4",
+            "size": 101
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/030.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/harness",
+          "gate_err_truncated"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/tmp"
+        },
+        "returncode": 0,
+        "observed_summary": {
+          "helper_rc": -1,
+          "safe": 1,
+          "attempted": 0,
+          "supervised": 0,
+          "saved": 0,
+          "written": 0,
+          "publication": 99
+        },
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/031.command.json",
+            "sha256": "4c1a7c52b0b776893c3a9df5535d9d2baba200c0088d4668ae6c4064d266497d",
+            "size": 440
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/031.json",
+            "sha256": "bf8be6572b005d9eed755b87d22c1cff0165bc1f3f273380763d149778c9a7cc",
+            "size": 344
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/031.stdout",
+            "sha256": "f078c6ba4fc76945d196f3d6248bf2be15672a105fab90770955d4a70a0c5ec4",
+            "size": 101
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/031.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      }
+    ]
+  },
+  "execution": {
+    "outer_command": {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=90",
+        "--nofile=256",
+        "--fsize=67108864",
+        "--core=0",
+        "/usr/bin/timeout",
+        "-k",
+        "5s",
+        "120s",
+        "/home/holden/anaconda3/bin/python3",
+        "-B",
+        "-m",
+        "unittest",
+        "-f",
+        "scripts.tests.test_native_diagnostic_lifecycle_collector"
+      ],
+      "environment": {
+        "PATH": "/usr/bin:/bin",
+        "LANG": "C",
+        "LC_ALL": "C",
+        "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/home",
+        "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/tmp",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "NATIVE_LIFECYCLE_COLLECTOR_EVIDENCE": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1"
+      },
+      "cwd": "/home/holden/mckernel",
+      "input_sha256": {
+        "scripts/application-tests/native_diagnostic_lifecycle_collector.c": "36fa0d55a30f5e943de0b28c6f54e033cf84ff8cc83cdc54c59688e993c44383",
+        "scripts/tests/test_native_diagnostic_lifecycle_collector.py": "bde489037cb8dc26f909f4a21b7a8dedffc370c30e0ebf98cd781f4c0fdcdc46",
+        "scripts/application-tests/native_diagnostic_guest_collector.c": "82825cf128689ba8f8a74d9528c1acffb724a9356a2c6192c67c8abe4a74965e"
+      },
+      "scope": "Dispatcher-admitted one cheap C compile and30injected-boundary scenarios; no PID1/device/helper/guest execution"
+    },
+    "resources": {
+      "cpu_affinity": [
+        6
+      ],
+      "address_space_bytes": 1073741824,
+      "cpu_seconds": 90,
+      "wall_seconds": 120,
+      "kill_after_seconds": 5,
+      "nofile": 256,
+      "file_size_bytes": 67108864,
+      "core_bytes": 0,
+      "per_child_timeout_seconds": 20,
+      "parallel_jobs": 1
+    },
+    "captures": [
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/command.json",
+        "sha256": "ffeef444e462b4905859a822756d4851e8ba4edcd91f63715c2381772772325d",
+        "size": 1452
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/result.json",
+        "sha256": "54f596cbbf7d687a09c12a870383646508f5e1d98a14d08787cc2f796b1309ad",
+        "size": 237
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/stderr",
+        "sha256": "4e2f07e2c12350abb800346341e848d43da026c87a4a094683976b5b31ac4efd",
+        "size": 100
+      }
+    ],
+    "generated": [
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/collector.c",
+        "sha256": "36fa0d55a30f5e943de0b28c6f54e033cf84ff8cc83cdc54c59688e993c44383",
+        "size": 26673
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/collector-injected.c",
+        "sha256": "e3e3a5f7e3183403dabccb6a7a8d7df2d1158a0235dfb654de7d22c655c40bfb",
+        "size": 26688
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/harness.c",
+        "sha256": "493b3499bdfef06d1360027c877329d97db4247e21a9ffd6862d81404bb90646",
+        "size": 5936
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-source-20261017-1/compiled-1/harness",
+        "sha256": "1da63eb1d159895d81e53ca802f9792a7da9b0eb3b005fd59a78041052b6a09a",
+        "size": 31632
+      }
+    ],
+    "tools": [
+      {
+        "path": "/home/holden/anaconda3/bin/python3.9",
+        "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb",
+        "size": 15880080
+      },
+      {
+        "path": "/usr/bin/x86_64-linux-gnu-gcc-9",
+        "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f",
+        "size": 1158288
+      }
+    ]
+  },
+  "failures": [],
+  "acceptance": {
+    "production_standalone_collector_built": false,
+    "pid1_main_executed": false,
+    "native_device_access": false,
+    "guest_executed": false,
+    "native_shutdown_observed": false,
+    "resource_restoration_verified": false,
+    "runtime_release": false,
+    "application_acceptance": false,
+    "production_acceptance": false
+  },
+  "blocker": null,
+  "next_task": "Independent source/helper/marker-transport review, then separately admitted standalone static collector build and dispatcher-only lifecycle overlay/host parser/execution packet preparation."
+}

@@ -1,0 +1,93 @@
+{
+  "actual_cleanup_release": {
+    "bytes": 348429,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-image-postbuild-terminal-preparation-20261020-1/failure-case-1/successor-cleanup-preparation-1/entry-guard-correction-1/successor-cleanup-execution-release.json",
+    "sha256": "0905b3ae2613ef72eea1b40016d8fb4aec00189a06b8e2a7b4175536e276c929"
+  },
+  "actual_cleanup_result": {
+    "bytes": 2473,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-image-postbuild-terminal-preparation-20261020-1/failure-case-1/successor-cleanup-preparation-1/entry-guard-correction-1/actual-cleanup-result.json",
+    "sha256": "fd9915e3c584d7303576eee77b97dfb55e77f2a0206a7166631efe6fcd634203"
+  },
+  "actual_corrected_postjoin": null,
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=1073741824:2147483648",
+    "--fsize=134217728:134217728",
+    "--cpu=unlimited:unlimited",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase5-image-postbuild-terminal-preparation-20261020-1/failure-case-1/successor-cleanup-preparation-1/entry-guard-correction-1/postjoin-diagnosis-correction-1/postjoin_readback_with_child_diagnostics.py",
+    "/home/holden/mckernel-work/host-preparation/phase5-image-postbuild-terminal-preparation-20261020-1/failure-case-1/successor-cleanup-preparation-1/entry-guard-correction-1/successor-cleanup-execution-release.json",
+    "0905b3ae2613ef72eea1b40016d8fb4aec00189a06b8e2a7b4175536e276c929",
+    "/home/holden/mckernel-work/host-preparation/phase5-image-postbuild-terminal-preparation-20261020-1/failure-case-1/successor-cleanup-preparation-1/entry-guard-correction-1/actual-cleanup-result.json"
+  ],
+  "capture_directory": "/home/holden/mckernel-work/host-preparation/phase5-image-postbuild-terminal-preparation-20261020-1/failure-case-1/successor-cleanup-preparation-1/entry-guard-correction-1/postjoin-diagnosis-correction-1/actual-corrected-postjoin-capture-1",
+  "cleanup_replay_authorized": false,
+  "conditions": [
+    "Root alone may invoke this exact new read-only postjoin ONCE after fresh CPU7 sole-publisher/resources/identity admission. No additional census-only probe or cleanup replay is authorized.",
+    "Use existing eff9 critical capture direct-wait-first/full stable-FD closure; CPU7 ASsoft1GiB/hard2GiB with original temporary census2GiB, FS128MiB, inherited CPU(-1,-1), no outer timeout/kill. Preserve closed previous failure and all original inputs/results.",
+    "Require actual postjoin0/groupabsence/closed captures and successful full original postjoin predicates before independent physical acceptance. A fresh refusal remains failure and requires escalation, never weakening/unchanged replay."
+  ],
+  "decision": "PASS_EXACT_DIAGNOSTIC_ONLY_POSTJOIN_CORRECTION_WITH_UNCHANGED_ACCEPTANCE_PREDICATES",
+  "handoff": {
+    "bytes": 2852,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-image-postbuild-terminal-preparation-20261020-1/failure-case-1/successor-cleanup-preparation-1/entry-guard-correction-1/postjoin-diagnosis-correction-1/CORRECTED-POSTJOIN-SOURCE-HANDOFF.json",
+    "sha256": "a1f163fd68f3746535b5c4000dba639566f9e11186ba600b04f1bdcc2b1db795"
+  },
+  "implementation_ownership": false,
+  "native_acceptance": false,
+  "next_heavy_authorized": false,
+  "operation": {
+    "bytes": 1457,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-image-postbuild-terminal-preparation-20261020-1/failure-case-1/successor-cleanup-preparation-1/entry-guard-correction-1/postjoin-diagnosis-correction-1/CORRECTED-POSTJOIN-OPERATION.json",
+    "sha256": "cd1c86b38b84b558281ea64f6b89b2b440208bd4b2f2edb2b452d02dbc6ec96b"
+  },
+  "original_failure_cause_recovered": false,
+  "physical_release": false,
+  "preceding_actual_census_diagnostic": {
+    "decision": "Closed0 with original predicate true and container absent; historical postjoin failure cause remains unresolved.",
+    "status": {
+      "bytes": 1278,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-image-postbuild-terminal-preparation-20261020-1/failure-case-1/successor-cleanup-preparation-1/entry-guard-correction-1/postjoin-diagnosis-correction-1/actual-root-census-diagnostic-1/status.json",
+      "sha256": "45efeb0b00759f1e114d569a3477b6f5bb1d91d06c5fb4d044deed4d5e3409af"
+    },
+    "stdout": {
+      "bytes": 403,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-image-postbuild-terminal-preparation-20261020-1/failure-case-1/successor-cleanup-preparation-1/entry-guard-correction-1/postjoin-diagnosis-correction-1/actual-root-census-diagnostic-1/stdout",
+      "sha256": "21947eff8df06e61c98b81ff37056ad693e6286d414e9703fc806b12b0b692ae"
+    }
+  },
+  "profile": {
+    "as_soft_hard": [
+      1073741824,
+      2147483648
+    ],
+    "cpu": 7,
+    "jobs": 1,
+    "outer_grace_kill": null,
+    "outer_wall_kill": null,
+    "required_inherited_cpu_limits": [
+      -1,
+      -1
+    ],
+    "stream_fsize": 134217728
+  },
+  "reviewer": "/root/owned_offload_review",
+  "schema": "mckernel.independent-current-image.corrected-read-only-postjoin-execution-review.v1",
+  "source": {
+    "bytes": 9468,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-image-postbuild-terminal-preparation-20261020-1/failure-case-1/successor-cleanup-preparation-1/entry-guard-correction-1/postjoin-diagnosis-correction-1/postjoin_readback_with_child_diagnostics.py",
+    "sha256": "a55134cd28b03db90bb882b52d819cc2cb4bda90aa7647d59483fd9ea5dc55a1"
+  },
+  "status": "PASS_EXECUTION",
+  "verified_change": "Removing base64 import/64KiB diagnostic cap/the two diagnostic functions and single install call produces byte-for-byte original a60 source. Full original main/census/twoPROC snapshots/tar/preservation/rootlock/result joins remain unchanged. Wrapper invokes exact original engine163 root_command, catches only existing Refusal, best-effort emits bounded discardedCP evidence then rethrows same exception. Diagnostic failures cannot suppress original Refusal."
+}

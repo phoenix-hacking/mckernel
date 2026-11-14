@@ -1,0 +1,38 @@
+--- a/kernel/rust/process_helpers.rs
++++ b/kernel/rust/process_helpers.rs
+@@ -248,8 +248,6 @@
+         end: CULong,
+         error: CInt,
+     );
+-    fn process_pte_is_null_bridge(ptep: *mut c_void) -> CInt;
+-    fn process_pte_is_fileoff_bridge(ptep: *mut c_void, pgsize: SizeT) -> CInt;
+     fn process_pte_get_phys_bridge(ptep: *mut c_void) -> CULong;
+     fn process_phys_to_page_bridge(phys: CULong) -> *mut c_void;
+     fn process_page_offset_bridge(page: *mut c_void) -> OffT;
+@@ -4339,7 +4337,7 @@
+             }
+             // Reload args->memobj after free/log callbacks, and retain C's
+             // narrowing conversion from size_t to the provider's int pgsize.
+-            crate::mem_helpers::rusage_memory_stat_sub((*args).memobj, pgsize, pgsize as CInt);
++            crate::mem_helpers::rusage_memory_stat_sub((*args).memobj, pgsize as CULong, pgsize as CInt);
+         }
+     }
+     if core::ptr::read_volatile(core::ptr::addr_of!(
+@@ -12118,3 +12116,17 @@
+ ) {
+     crate::pte_helpers::pte_xchg(ptep.cast::<CULong>(), valp.cast::<CULong>());
+ }
++
++// Existing read-only PTE predicates for the unchanged invalidate owner.
++#[no_mangle]
++pub unsafe extern "C" fn process_pte_is_null_bridge(ptep: *mut c_void) -> CInt {
++    crate::pte_helpers::pte_is_null(ptep.cast::<CULong>())
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn process_pte_is_fileoff_bridge(
++    ptep: *mut c_void,
++    pgsize: SizeT,
++) -> CInt {
++    crate::pte_helpers::pte_is_fileoff(ptep.cast::<CULong>(), pgsize)
++}

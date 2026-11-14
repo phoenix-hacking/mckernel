@@ -1,0 +1,250 @@
+--- accepted-two-rounds/native_diagnostic.py
++++ three-rounds/native_diagnostic.py
+@@ -1014,7 +1014,7 @@
+     if "pair" not in obj:
+         return _one_validate_manifest(obj)
+     round_case="pair_rounds" in obj
+-    if round_case:_need(type(obj["pair_rounds"]) is int and obj["pair_rounds"]==2,"fixed two-round manifest")
++    if round_case:_need(type(obj["pair_rounds"]) is int and obj["pair_rounds"]==3,"fixed three-round manifest")
+     _need(set(obj)=={"schema_version","kind","case_id","artifacts","modules","profile","payload","staging","pair"}|({"pair_rounds"} if round_case else set()),"pair manifest keys")
+     base=_one_validate_manifest({k:v for k,v in obj.items() if k not in ("pair","pair_rounds")})
+     _need(base["profile"]["name"]==PROFILE_RETAINED,"pair retains4vCPU8192MiB envelope")
+@@ -1052,7 +1052,7 @@
+         _need(hashlib.sha256(bytes.fromhex(a["oracle"]["stdout_hex"])).hexdigest()==expected_shas[i],"frozen pair output oracle")
+         _need(type(a["timeout_ms"]) is int and a["timeout_ms"]==10000 and type(a["stdout_limit_bytes"]) is int and a["stdout_limit_bytes"]==1024 and type(a["stderr_limit_bytes"]) is int and a["stderr_limit_bytes"]==1024,"pair finite bounds")
+     _need(p["apps"][0]["payload"]==base["artifacts"]["payload"],"primary app alias")
+-    return {**base,"pair":p,**({"pair_rounds":2} if round_case else {})}
++    return {**base,"pair":p,**({"pair_rounds":3} if round_case else {})}
+ 
+ def build_command(manifest,attempt):
+     plan=_one_build_command(manifest,attempt)
+@@ -1210,49 +1210,49 @@
+           not BAD_MARKERS.search(serial + "\n" + observation["debugcon"]), "kernel failure marker")
+     _need(observation["qmp"] == {"status": "shutdown"}, "QMP terminal status")
+     _need(observation["teardown"] is True, "teardown uncertain")
+-    return _pair_rounds_body(manifest,observation) if manifest.get("pair_rounds")==2 else _pair_body(manifest,observation)
+-
+-def _pair_rounds_body(manifest,observation):
+-    """Fixed two rounds; retain the original one-pair checker for each view."""
+-    _need(type(manifest.get('pair_rounds')) is int and manifest['pair_rounds']==2,'fixed two-round case')
++    return _pair_three_rounds_body(manifest,observation) if manifest.get("pair_rounds")==3 else _pair_body(manifest,observation)
++
++def _pair_three_rounds_body(manifest,observation):
++    """Fixed three rounds; retain the original one-pair checker for each view."""
++    _need(type(manifest.get('pair_rounds')) is int and manifest['pair_rounds']==3,'fixed three-round case')
+     serial=observation['serial'];lines=serial.splitlines()
+-    _need(not any(line.startswith(('ND_PAIR_ROUND_','ND_PAIR_ROUNDS_')) and not line.startswith(('ND_PAIR_ROUND_START ','ND_PAIR_ROUND_END ','ND_PAIR_ROUND_FAIL ','ND_PAIR_ROUNDS_COMPLETE ')) for line in lines),'unknown two-round wire marker')
++    _need(not any(line.startswith(('ND_PAIR_ROUND_','ND_PAIR_ROUNDS_')) and not line.startswith(('ND_PAIR_ROUND_START ','ND_PAIR_ROUND_END ','ND_PAIR_ROUND_FAIL ','ND_PAIR_ROUNDS_COMPLETE ')) for line in lines),'unknown three-round wire marker')
+     _need(not any(line.startswith('ND_PAYLOAD ') for line in lines),'foreign one-app report')
+     def records(prefix):
+         return [(i,json.loads(line[len(prefix):],object_pairs_hook=_pairs)) for i,line in enumerate(lines) if line.startswith(prefix)]
+     starts=records('ND_PAIR_ROUND_START ');ends=records('ND_PAIR_ROUND_END ');pairs=records('ND_PAIR ');complete=records('ND_PAIR_ROUNDS_COMPLETE ')
+-    _need(len(starts)==len(ends)==len(pairs)==2 and len(complete)==1,'exact two-round evidence')
++    _need(len(starts)==len(ends)==len(pairs)==3 and len(complete)==1,'exact three-round evidence')
+     _need(not any(line.startswith('ND_PAIR_ROUND_FAIL') for line in lines),'failed pair round')
+     _keys(complete[0][1],('rounds','os','generation','procfs_empty'))
+-    _need(complete[0][1]=={'rounds':2,'os':0,'generation':1,'procfs_empty':True} and all(type(complete[0][1][k]) is int for k in ('rounds','os','generation')),'two-round completion identity')
++    _need(complete[0][1]=={'rounds':3,'os':0,'generation':1,'procfs_empty':True} and all(type(complete[0][1][k]) is int for k in ('rounds','os','generation')),'three-round completion identity')
+     pids=[]
+     for _,report in pairs:
+-        _need(type(report.get('apps')) is list and len(report['apps'])==2,'two-round apps')
++        _need(type(report.get('apps')) is list and len(report['apps'])==2,'three-round apps')
+         for app in report['apps']:
+-            pid=app.get('pid');_need(type(pid) is int and pid>0 and pid not in pids,'two-round unique PID');pids.append(pid)
++            pid=app.get('pid');_need(type(pid) is int and pid>0 and pid not in pids,'three-round unique PID');pids.append(pid)
+     schedules=re.findall(r'application SCHEDULE os=(\d+) generation=(\d+) pid=(\d+) cpu=(\d+)\b',serial)
+     expected={('0','1',str(pid),str(i%2)) for i,pid in enumerate(pids)}
+-    _need(len(schedules)==4 and set(schedules)==expected,'two-round global schedules')
++    _need(len(schedules)==6 and set(schedules)==expected,'three-round global schedules')
+     for line in lines:
+         for name in ('delivered','returned','return_route'):
+             marker='application_syscall='+name+' '
+             if marker in line:
+                 match=re.search(re.escape(marker)+r'os=(\d+) generation=(\d+) pid=(\d+) ',line)
+-                _need(match is not None and match.groups()[:2]==('0','1') and int(match.group(3)) in pids,'two-round foreign syscall')
++                _need(match is not None and match.groups()[:2]==('0','1') and int(match.group(3)) in pids,'three-round foreign syscall')
+     tokenrows=re.findall(r'application retirement os=0 generation=1 pid=(\d+) token=(\d+) errno=-?\d+\s*$',serial,re.MULTILINE)
+-    _need(tokenrows and all(int(pid) in pids and 0<int(token)<2**64 for pid,token in tokenrows),'two-round token domain')
+-    _need(len(tokenrows)==len({int(token) for _,token in tokenrows}),'two-round fresh retirement tokens')
++    _need(tokenrows and all(int(pid) in pids and 0<int(token)<2**64 for pid,token in tokenrows),'three-round token domain')
++    _need(len(tokenrows)==len({int(token) for _,token in tokenrows}),'three-round fresh retirement tokens')
+     boot='NATIVE_PAIR_CPU os=0 generation=1 assigned_host=1,2 logical=0,1 default_ikc_linux=0'
+     _need(sum(boot in line for line in lines)==1,'one actual OS boot assignment')
+     validated=[];previous_end=None
+-    for round_index in range(2):
++    for round_index in range(3):
+         start_at,start=starts[round_index];end_at,end=ends[round_index];report_at,report=pairs[round_index]
+         for boundary in (start,end):
+             _keys(boundary,('round','time_ns','procfs_empty'))
+-            _need(type(boundary['round']) is int and boundary['round']==round_index and type(boundary['time_ns']) is int and boundary['time_ns']>0 and boundary['procfs_empty'] is True,'two-round boundary identity')
+-        _need(start_at<report_at<end_at<complete[0][0] and start['time_ns']<end['time_ns'],'two-round serial/timestamp order')
++            _need(type(boundary['round']) is int and boundary['round']==round_index and type(boundary['time_ns']) is int and boundary['time_ns']>0 and boundary['procfs_empty'] is True,'three-round boundary identity')
++        _need(start_at<report_at<end_at<complete[0][0] and start['time_ns']<end['time_ns'],'three-round serial/timestamp order')
+         if round_index:
+-            _need(ends[0][0]<start_at and previous_end<=start['time_ns'],'sequential round handoff')
++            _need(ends[round_index-1][0]<start_at and previous_end<=start['time_ns'],'sequential round handoff')
+         current=pids[round_index*2:round_index*2+2];other=set(pids)-set(current);view=[]
+         for line in lines:
+             if line.startswith(('ND_PAIR ','ND_PAIR_ROUND_','ND_PAIR_ROUNDS_')):continue
+@@ -1268,5 +1268,5 @@
+         validated.append({'round':round_index,'start':start,'end':end,'guest_report':checked['guest_report'],'pair_metrics':checked['pair_metrics'],'trace_projection_excludes_only_known_other_round_PIDs':sorted(other)})
+         previous_end=end['time_ns']
+     elapsed=max(app['finished_ns'] for _,r in pairs for app in r['apps'])-min(app['started_ns'] for _,r in pairs for app in r['apps'])
+-    return {'schema_version':1,'kind':'native-diagnostic-result','case_id':manifest['case_id'],'status':'PROTOCOL_PASS','application_acceptance':False,'mckernel_application_executed':False,'guest_report':{'os':0,'generation':1,'rounds':validated,'procfs_empty':True},'observation':observation,'runtime_blocker':DIAGNOSTIC_LIMITATION,'pair_metrics':{'completed_rounds':2,'completed_apps':4,'wall_ns':elapsed,'apps_per_wall_minute':240_000_000_000/elapsed}}
+-
++    return {'schema_version':1,'kind':'native-diagnostic-result','case_id':manifest['case_id'],'status':'PROTOCOL_PASS','application_acceptance':False,'mckernel_application_executed':False,'guest_report':{'os':0,'generation':1,'rounds':validated,'procfs_empty':True},'observation':observation,'runtime_blocker':DIAGNOSTIC_LIMITATION,'pair_metrics':{'completed_rounds':3,'completed_apps':6,'wall_ns':elapsed,'apps_per_wall_minute':360_000_000_000/elapsed}}
++
+--- accepted-two-rounds/pair_collector.c
++++ three-rounds/pair_collector.c
+@@ -457,17 +457,17 @@
+ #ifndef PAIR_ROOT
+ #define PAIR_ROOT "/case"
+ #endif
+-#if defined(ND_PAIR_TWO_ROUNDS)
++#if defined(ND_PAIR_THREE_ROUNDS)
+ static unsigned pair_active_round;
+ static char pair_evidence_dir[128];
+ #endif
+ #include "pair_runtime.inc"
+-#if defined(ND_PAIR_TWO_ROUNDS)
+-#include "pair_two_round_support.inc"
++#if defined(ND_PAIR_THREE_ROUNDS)
++#include "pair_three_round_support.inc"
+ #endif
+ #include "pair_collector.inc"
+-#if defined(ND_PAIR_TWO_ROUNDS)
+-#include "pair_two_round_run.inc"
++#if defined(ND_PAIR_THREE_ROUNDS)
++#include "pair_three_round_run.inc"
+ #endif
+ 
+ int main(void)
+@@ -512,8 +512,8 @@
+ #else
+     if (helper("boot", "/bin/native-boot", (char *const[]){"/bin/native-boot",NULL}, &safe)) { good = 0; goto finish; }
+ #endif
+-#if defined(ND_PAIR_TWO_ROUNDS)
+-    if(pair_run_two_rounds(console,&safe,&empty))good=0;
++#if defined(ND_PAIR_THREE_ROUNDS)
++    if(pair_run_three_rounds(console,&safe,&empty))good=0;
+     if(!safe)remain_pid1();
+ #else
+     if(pair_run(&safe))good=0;
+@@ -555,8 +555,8 @@
+     if (!good || !safe) payload.fault = 1;
+     payload.finished = now_ns();
+     if (console >= 0 && safe) {
+-#if defined(ND_PAIR_TWO_ROUNDS)
+-        static const char complete[]="ND_PAIR_ROUNDS_COMPLETE {\"rounds\":2,\"os\":0,\"generation\":1,\"procfs_empty\":true}\n";
++#if defined(ND_PAIR_THREE_ROUNDS)
++        static const char complete[]="ND_PAIR_ROUNDS_COMPLETE {\"rounds\":3,\"os\":0,\"generation\":1,\"procfs_empty\":true}\n";
+         int publication = good && empty ? write_all(console,complete,sizeof complete-1) : -1;
+ #else
+         int publication = publish_pair(console, empty && good);
+--- accepted-two-rounds/pair_collector.inc
++++ three-rounds/pair_collector.inc
+@@ -25,13 +25,13 @@
+     int good=!r.fault && !r.timeout && r.clean && r.status==0 &&
+         r.out.eof && r.err.eof && r.out.observed==r.out.kept &&
+         r.err.observed==r.err.kept;
+-#if defined(ND_PAIR_TWO_ROUNDS)
++#if defined(ND_PAIR_THREE_ROUNDS)
+     snprintf(name,sizeof name,"%s/app%d.stdout",pair_evidence_dir,i);
+ #else
+     snprintf(name,sizeof name,PAIR_ROOT "/evidence/app%d.stdout",i);
+ #endif
+     if(save_file(name,r.out.data,r.out.kept))good=0;
+-#if defined(ND_PAIR_TWO_ROUNDS)
++#if defined(ND_PAIR_THREE_ROUNDS)
+     snprintf(name,sizeof name,"%s/app%d.stderr",pair_evidence_dir,i);
+ #else
+     snprintf(name,sizeof name,PAIR_ROOT "/evidence/app%d.stderr",i);
+@@ -41,13 +41,13 @@
+         "{\"app\":%d,\"cpu\":%d,\"raw_wait_status\":%d,\"clean\":%d,\"fault\":%d,\"timeout\":%d,\"started_ns\":%llu,\"finished_ns\":%llu}\n",
+         i,cpu,r.status,r.clean,r.fault,r.timeout,
+         (unsigned long long)r.started,(unsigned long long)r.finished);
+-#if defined(ND_PAIR_TWO_ROUNDS)
++#if defined(ND_PAIR_THREE_ROUNDS)
+     snprintf(name,sizeof name,"%s/app%d.status.json",pair_evidence_dir,i);
+ #else
+     snprintf(name,sizeof name,PAIR_ROOT "/evidence/app%d.status.json",i);
+ #endif
+     if(n<0 || (size_t)n>=sizeof status || save_file(name,status,(size_t)n))good=0;
+-#if defined(ND_PAIR_TWO_ROUNDS)
++#if defined(ND_PAIR_THREE_ROUNDS)
+     snprintf(name,sizeof name,"%s/app%d.result",pair_evidence_dir,i);
+ #else
+     snprintf(name,sizeof name,"/case/evidence/app%d.result",i);
+@@ -63,7 +63,7 @@
+     pid_t owners[2]={-1,-1};
+     *safe=1; /* no children exist on capability refusal */
+     if(cpus[0]<0 || cpus[1]<0 || cpus[0]>=1024 || cpus[1]>=1024 || cpus[0]==cpus[1])return 77;
+-#if defined(ND_PAIR_TWO_ROUNDS)
++#if defined(ND_PAIR_THREE_ROUNDS)
+     if(pair_round_workdirs())return 1;
+ #else
+     if(mkdir(PAIR_ROOT "/two-app",0700) || mkdir(PAIR_ROOT "/two-app/work0",0700) ||
+--- accepted-two-rounds/pair_runtime.inc
++++ three-rounds/pair_runtime.inc
+@@ -53,7 +53,7 @@
+ static int pair_load_results(void)
+ {
+     for(int i=0;i<2;i++) {
+-#if defined(ND_PAIR_TWO_ROUNDS)
++#if defined(ND_PAIR_THREE_ROUNDS)
+         char p[PATH_MAX];snprintf(p,sizeof p,"%s/app%d.result",pair_evidence_dir,i);
+ #else
+         char p[128];snprintf(p,sizeof p,"/case/evidence/app%d.result",i);
+--- accepted-two-rounds/pair_two_round_run.inc
++++ three-rounds/pair_three_round_run.inc
+@@ -1,4 +1,4 @@
+-/* Exactly two rounds, one already-booted OS. No repeat/duration interface. */
++/* Exactly three rounds, one already-booted OS. No repeat/duration interface. */
+ static int pair_round_empty(void)
+ {
+     uint64_t begin=now_ns(),end=bounded_deadline(begin+5000*MS,0);
+@@ -14,10 +14,10 @@
+     char b[256];int n=snprintf(b,sizeof b,"ND_PAIR_ROUND_%s {\"round\":%u,\"time_ns\":%llu,\"procfs_empty\":%s}\n",kind,round,(unsigned long long)stamp,empty?"true":"false");
+     return n<0 || (size_t)n>=sizeof b || write_all(fd,b,(size_t)n)?-1:0;
+ }
+-static int pair_run_two_rounds(int console,int *safe,int *empty)
++static int pair_run_three_rounds(int console,int *safe,int *empty)
+ {
+     pair_seen_pid_count=0;pair_seen_token_count=0;*empty=0;
+-    for(pair_active_round=0;pair_active_round<2;pair_active_round++) {
++    for(pair_active_round=0;pair_active_round<3;pair_active_round++) {
+         *safe=1;
+         if(!pair_round_empty())return -1;
+         int n=snprintf(pair_evidence_dir,sizeof pair_evidence_dir,PAIR_ROOT "/evidence/round%u",pair_active_round);
+--- accepted-two-rounds/pair_two_round_support.inc
++++ three-rounds/pair_three_round_support.inc
+@@ -1,8 +1,8 @@
+-/* Fixed two-round Linux collector support. No kernel/worker ownership policy. */
++/* Fixed three-round Linux collector support. No kernel/worker ownership policy. */
+ #include "pair_round_oracles.h"
+ static struct stat pair_workspace[3];
+-static int pair_seen_pids[4], pair_seen_pid_count;
+-static unsigned long long pair_seen_tokens[48];
++static int pair_seen_pids[6], pair_seen_pid_count;
++static unsigned long long pair_seen_tokens[72];
+ static unsigned pair_seen_token_count;
+ static int pair_round_workdirs(void)
+ {
+@@ -42,7 +42,7 @@
+            r->out.eof_ns<r->started || r->out.eof_ns>r->finished ||
+            r->err.eof_ns<r->started || r->err.eof_ns>r->finished)return -1;
+         for(int j=0;j<pair_seen_pid_count;j++)if(pair_seen_pids[j]==r->pid)return -1;
+-        if(pair_seen_pid_count>=4)return -1;
++        if(pair_seen_pid_count>=6)return -1;
+         pair_seen_pids[pair_seen_pid_count++]=r->pid;
+     }
+     return pair_results[0].started<pair_results[1].reaped &&
+@@ -89,7 +89,7 @@
+             unsigned long long token=0;int error=0;
+             if(sscanf(mark,"application retirement os=%u generation=%lu pid=%d token=%llu errno=%d%n",&osid,&generation,&found,&token,&error,&used)!=5)return -1;
+             if(found!=pid)continue;
+-            if(osid || generation!=1 || mark[used] || !terminal || !token || last_errno==0 || (error!=-11 && error!=0) || ++attempts>12 || pair_seen_token_count==48)return -1;
++            if(osid || generation!=1 || mark[used] || !terminal || !token || last_errno==0 || (error!=-11 && error!=0) || ++attempts>12 || pair_seen_token_count==72)return -1;
+             for(unsigned j=0;j<pair_seen_token_count;j++)if(pair_seen_tokens[j]==token)return -1;
+             pair_seen_tokens[pair_seen_token_count++]=token;last_errno=error;
+         } else if((mark=strstr(line,"application_process=release "))) {

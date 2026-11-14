@@ -1,0 +1,37 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_PERF_ATTRIBUTE_AND_BINDING_ABI_WITNESSES_SOURCE_ONLY",
+  "parent_patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-D-1/PERF-ENTRY.ON-FIRST20.PRIVATE-NOT-APPLIED.patch",
+    "bytes": 13786,
+    "sha256": "617305190d63b325a737e5cdaa9fcd371741cb8f7f942f5a8a85b1d3a2559d2b"
+  },
+  "delta_patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-D-1/defined-callers-correction-1/perf-abi-correction-1/PERF-ABI-CORRECTION.patch",
+    "bytes": 2851,
+    "sha256": "eec5b60d38cc996796d97a8aea5e443cb20d941901964ba042edc4a7b1264153"
+  },
+  "complete_patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-D-1/defined-callers-correction-1/perf-abi-correction-1/PERF-ENTRY-ABI.ON-FIRST20.patch",
+    "bytes": 14945,
+    "sha256": "dde53ee3e6725943baf699ba02ceab16effccee20835580c865f7ed6abb1629e"
+  },
+  "perf_header": {
+    "path": "/home/holden/mckernel/lib/include/mc_perf_event.h",
+    "bytes": 8775,
+    "sha256": "8a9978dcab179a63b3aff3b66641a4814bacaf86cf4631ecdf39e32df45ea5dd"
+  },
+  "rust_attribute": {
+    "path": "/home/holden/mckernel/kernel/rust/f03_perf_event_attr_abi.rs",
+    "bytes": 1722,
+    "sha256": "8eec931271fd3829c6fffbadf3f2ae1da13796cc1929f3685145d0cd65c8d285"
+  },
+  "checks": [
+    "matching C and Rust compile-time size104/alignment8 and used field offsets",
+    "matching C and Rust request72/align8 and provider-table352/align8 witnesses",
+    "no provider, argument, runtime fallback, C metadata or original source line changed"
+  ],
+  "actual_compiler_link_native": false,
+  "default_selection_authorized": false,
+  "runtime_authority": null
+}

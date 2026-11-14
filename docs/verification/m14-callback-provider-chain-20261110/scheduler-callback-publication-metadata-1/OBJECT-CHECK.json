@@ -1,0 +1,137 @@
+{
+  "status": "PASS_CALLED_ACTUAL_PUBLISHER_TWO_T_THREE_B_TWELVE_REAL_U_SIX_STORE_ADDRESS_GATE",
+  "object_sha256": "a51435b0b116a390b13b8936426680a5a5fab10223698eeeca286e6794cc40be",
+  "T_sizes": {
+    "x86_lapic_bsp_select_bridge": 205,
+    "x2apic_wait_icr_idle": 1
+  },
+  "B_sizes": {
+    "x86_cpu_x2apic_mode": 4,
+    "lapic_icr_write": 8,
+    "lapic_wait_icr_idle": 8
+  },
+  "genuine_U": [
+    "apic_icr_write",
+    "apic_read",
+    "apic_wait_icr_idle",
+    "apic_write",
+    "apic_x86_issue_ipi",
+    "lapic_read",
+    "lapic_write",
+    "x2apic_icr_write",
+    "x2apic_read",
+    "x2apic_write",
+    "x2apic_x86_issue_ipi",
+    "x86_issue_ipi"
+  ],
+  "actual_original_zero_nonzero_targets_and_six_ordered_stores": [
+    {
+      "slot": "x86_cpu_x2apic_mode",
+      "address_reloc_offset": 129,
+      "store_offset": 137,
+      "store_hex": "8901",
+      "bytes": 4,
+      "value": "eax zero/nonzero\u21920/1"
+    },
+    {
+      "slot": "lapic_write",
+      "address_reloc_offset": 141,
+      "store_offset": 149,
+      "store_hex": "488910",
+      "bytes": 8,
+      "value": "selected rdx"
+    },
+    {
+      "slot": "lapic_read",
+      "address_reloc_offset": 154,
+      "store_offset": 162,
+      "store_hex": "488930",
+      "bytes": 8,
+      "value": "selected rsi"
+    },
+    {
+      "slot": "lapic_icr_write",
+      "address_reloc_offset": 167,
+      "store_offset": 175,
+      "store_hex": "488938",
+      "bytes": 8,
+      "value": "selected rdi"
+    },
+    {
+      "slot": "lapic_wait_icr_idle",
+      "address_reloc_offset": 180,
+      "store_offset": 188,
+      "store_hex": "4c8900",
+      "bytes": 8,
+      "value": "selected r8"
+    },
+    {
+      "slot": "x86_issue_ipi",
+      "address_reloc_offset": 193,
+      "store_offset": 201,
+      "store_hex": "4c8908",
+      "bytes": 8,
+      "value": "selected r9"
+    }
+  ],
+  "target_relocations_and_choices": [
+    {
+      "slot": "lapic_write",
+      "x2_target": "x2apic_write",
+      "apic_target": "apic_write",
+      "x2_reloc_offset": 9,
+      "apic_reloc_offset": 19,
+      "select_offset": 27,
+      "select_hex": "480f45d1",
+      "selected_register": "rdx"
+    },
+    {
+      "slot": "lapic_read",
+      "x2_target": "x2apic_read",
+      "apic_target": "apic_read",
+      "x2_reloc_offset": 33,
+      "apic_reloc_offset": 43,
+      "select_offset": 51,
+      "select_hex": "480f45f1",
+      "selected_register": "rsi"
+    },
+    {
+      "slot": "lapic_icr_write",
+      "x2_target": "x2apic_icr_write",
+      "apic_target": "apic_icr_write",
+      "x2_reloc_offset": 57,
+      "apic_reloc_offset": 67,
+      "select_offset": 75,
+      "select_hex": "480f45f9",
+      "selected_register": "rdi"
+    },
+    {
+      "slot": "lapic_wait_icr_idle",
+      "x2_target": "x2apic_wait_icr_idle",
+      "apic_target": "apic_wait_icr_idle",
+      "x2_reloc_offset": 81,
+      "apic_reloc_offset": 91,
+      "select_offset": 99,
+      "select_hex": "4c0f45c1",
+      "selected_register": "r8"
+    },
+    {
+      "slot": "x86_issue_ipi",
+      "x2_target": "x2apic_x86_issue_ipi",
+      "apic_target": "apic_x86_issue_ipi",
+      "x2_reloc_offset": 105,
+      "apic_reloc_offset": 115,
+      "select_offset": 123,
+      "select_hex": "4c0f45c9",
+      "selected_register": "r9"
+    }
+  ],
+  "physical_unwind_references": 2,
+  "private_owners": [],
+  "aliases": [],
+  "exact_two_warning_source_specific_reconciliation_only": true,
+  "actual_metadata_capture": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-metadata-1/ACTUAL-ELF-METADATA.json",
+  "preboot0_None_storage_not_live_state": true,
+  "future_current_cohort_collision_join_UNBOUND": true,
+  "no_store_observation_target_controller_boot_IRQ_function_or_native_execution": true
+}

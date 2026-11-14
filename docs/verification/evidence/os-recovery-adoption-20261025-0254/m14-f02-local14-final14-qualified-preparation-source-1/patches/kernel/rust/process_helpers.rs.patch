@@ -1,0 +1,201 @@
+--- actual114/kernel/rust/process_helpers.rs
++++ privateLOCAL14final14/kernel/rust/process_helpers.rs
+@@ -17182,6 +17182,16 @@
+     const _: [(); core::mem::size_of::<Option<ArchMemclear>>()] =
+         [(); core::mem::size_of::<*mut c_void>()];
+ 
++    // Reuse this module's exact existing callback alias. Selected C rejects the
++    // ARCH_MEMCLEAR variant; disabled selection retains its original C owner.
++    #[cfg(process_verbose_local_companions)]
++    mod final_metadata_owner {
++        use super::ArchMemclear;
++
++        #[no_mangle]
++        pub(super) static process_add_range_arch_memclear_callback: Option<ArchMemclear> = None;
++    }
++
+     unsafe extern "C" {
+         static process_add_range_arch_memclear_callback: Option<ArchMemclear>;
+     }
+@@ -17592,3 +17602,181 @@
+     pub static process_dump_tree_enabled: CInt = 0;
+ 
+ }
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Joint selection only: foreground owns all fourteen internal Ddebug definitions.
++// These private configuration types contain immutable image-lifetime addresses.
++// Sync shares the raw values only: no dereference, callback invocation, flag
++// mutation or lifetime/allocator/VM ownership transfer is performed here.
++#[cfg(process_verbose_local_companions)]
++unsafe impl Sync for ProcessCloneConfig {}
++#[cfg(process_verbose_local_companions)]
++unsafe impl Sync for ProcessCopyEntryConfig {}
++#[cfg(process_verbose_local_companions)]
++unsafe impl Sync for ProcessExtendRegionEntryConfig {}
++
++#[cfg(all(process_verbose_local_companions, not(process_verbose_data)))]
++compile_error!("local debug companions require process_verbose_data");
++
++#[cfg(process_verbose_local_companions)]
++mod process_local14_config_storage {
++    use super::{ProcessCloneConfig, ProcessCopyEntryConfig, ProcessExtendRegionEntryConfig};
++    use crate::process_verbose_data::local;
++    use core::ptr::addr_of_mut;
++
++    // Same mandatory actual-C-argv binding and C __FILE__ assertion as foreground.
++    // No Rust file!(), independent literal path, C pointer escape or new C owner.
++    const SOURCE_FILE: &[u8] = concat!(env!("MCKERNEL_PROCESS_C_FILE"), "\0").as_bytes();
++    const _: () = assert!(SOURCE_FILE.len() > 1);
++
++    #[no_mangle]
++    pub(super) static process_clone_config: ProcessCloneConfig = ProcessCloneConfig {
++        stack_pages: 32,
++        page_size: 4096,
++        page_align: 0,
++        nowait: 2,
++        kernel: 0,
++        ss_disable: 2,
++        sp_reg: 1,
++        pc_reg: 2,
++        file: SOURCE_FILE.as_ptr().cast(),
++        lines: [1002, 1063, 1083, 1144, 1153],
++        debug: [
++            addr_of_mut!(local::process_clone_vm_debug),
++            addr_of_mut!(local::process_clone_ranges_debug),
++            addr_of_mut!(local::process_clone_ranges_ok_debug),
++            addr_of_mut!(local::process_clone_sigcommon_debug),
++            addr_of_mut!(local::process_clone_sigshared_debug),
++        ],
++        modify_context: super::process_user_context_modify_bridge,
++        copy_ranges: super::copy_user_ranges,
++    };
++
++    #[no_mangle]
++    pub(super) static process_copy_entry_config: ProcessCopyEntryConfig = ProcessCopyEntryConfig {
++        page_size: 4096,
++        page_shift: 12,
++        nowait: 2,
++        user_category: 1,
++        kernel_category: 0,
++        wipe_on_fork: 2147483648,
++        file: SOURCE_FILE.as_ptr().cast(),
++        alloc_line: 1464,
++        free_line: 1520,
++        visit_flags: 1,
++        found_debug: addr_of_mut!(local::process_copy_pte_found_debug),
++        size_debug: addr_of_mut!(local::process_copy_pte_size_debug),
++        allocated_debug: addr_of_mut!(local::process_copy_pte_allocated_debug),
++        zeroed_debug: addr_of_mut!(local::process_copy_pte_zeroed_debug),
++        copied_debug: addr_of_mut!(local::process_copy_pte_copied_debug),
++        installed_debug: addr_of_mut!(local::process_copy_pte_installed_debug),
++    };
++
++    #[no_mangle]
++    pub(super) static process_extend_region_entry_config: ProcessExtendRegionEntryConfig = ProcessExtendRegionEntryConfig {
++        page_size: 4096,
++        page_shift: 12,
++        page_mask: 18446744073709547520,
++        large_page_size: 2097152,
++        large_page_mask: 18446744073707454464,
++        large_page_p2align: 9,
++        page_p2align: 0,
++        large_page_shift: 21,
++        mpol_no_heap: 1,
++        ap_nowait: 2,
++        ap_user: 4096,
++        pg_user: 1,
++        file: SOURCE_FILE.as_ptr().cast(),
++        alloc_line: 3408,
++        free_line: 3423,
++        exists_debug: addr_of_mut!(local::process_extend_region_exists_debug),
++        alloc_debug: addr_of_mut!(local::process_extend_region_alloc_debug),
++        success_debug: addr_of_mut!(local::process_extend_region_success_debug),
++    };
++
++}
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// A future layer on the existing paired local-companion selection. C rejects
++// unqualified feature variants; disabled selection retains every original cell.
++#[cfg(process_verbose_local_companions)]
++mod process_final_metadata_storage {
++    use super::{CInt, ProcessInitStackEntryConfig};
++    use crate::sched_helpers::SchedExitDebug;
++
++    // The wrapper owns only immutable pointer-cell bits. It creates no reference
++    // or safe dereference API and makes no claim about pointee mutability, lifetime
++    // or synchronization. Existing consumers keep their raw-pointer contracts.
++    #[repr(transparent)]
++    pub(super) struct ReadonlyPointerCell<T>(*const T);
++    // SAFETY: sharing this private cell only shares its immutable raw value.
++    // All pointee access and mutation remain with the existing unsafe consumers.
++    unsafe impl<T> Sync for ReadonlyPointerCell<T> {}
++
++    const SOURCE_FILE: &[u8] = concat!(env!("MCKERNEL_PROCESS_C_FILE"), "\0").as_bytes();
++    const _: () = assert!(
++        SOURCE_FILE.len() > 1,
++        "process C filename must not be empty"
++    );
++
++    #[no_mangle]
++    pub(super) static process_tracked_allocator_source_file: ReadonlyPointerCell<i8> =
++        ReadonlyPointerCell(SOURCE_FILE.as_ptr().cast());
++    #[no_mangle]
++    pub(super) static process_remap_free_file: ReadonlyPointerCell<i8> =
++        ReadonlyPointerCell(SOURCE_FILE.as_ptr().cast());
++    #[no_mangle]
++    pub(super) static process_remap_free_line: CInt = 2469;
++    #[no_mangle]
++    pub(super) static process_page_fault_cow_alloc_file: ReadonlyPointerCell<i8> =
++        ReadonlyPointerCell(SOURCE_FILE.as_ptr().cast());
++    #[no_mangle]
++    pub(super) static process_page_fault_cow_alloc_line: CInt = 3145;
++    #[no_mangle]
++    pub(super) static process_page_fault_anon_alloc_file: ReadonlyPointerCell<i8> =
++        ReadonlyPointerCell(SOURCE_FILE.as_ptr().cast());
++    #[no_mangle]
++    pub(super) static process_init_stack_alloc_file: ReadonlyPointerCell<i8> =
++        ReadonlyPointerCell(SOURCE_FILE.as_ptr().cast());
++    #[no_mangle]
++    pub(super) static process_init_stack_alloc_line: CInt = 3359;
++    #[no_mangle]
++    pub(super) static process_init_stack_free_file: ReadonlyPointerCell<i8> =
++        ReadonlyPointerCell(SOURCE_FILE.as_ptr().cast());
++    #[no_mangle]
++    pub(super) static process_init_stack_free_line: CInt = 3364;
++
++    // Existing repr(C) config and all nine actual Rust callback types are reused.
++    #[no_mangle]
++    pub(super) static process_init_stack_entry_config: ProcessInitStackEntryConfig =
++        ProcessInitStackEntryConfig {
++            page_size: super::PAGE_SIZE,
++            page_shift: super::PAGE_SHIFT as CInt,
++            user_stack_page_mask: 0xffff_ffff_ffe0_0000,
++            user_stack_page_shift: 21,
++            user_stack_prepage_size: 2_097_152,
++            stack_alloc_size_override: 0,
++            user_stack_page_p2align: 9,
++            alloc_nowait: super::IHK_MC_AP_NOWAIT,
++            alloc_user: 4096,
++            mpol_no_stack: 2,
++            user_context_sp_reg: super::IHK_UCR_STACK_POINTER,
++            pf_populate: super::PF_POPULATE,
++            alloc_aligned: super::process_init_stack_alloc_aligned_bridge,
++            free_pages: super::process_init_stack_free_pages_bridge,
++            add_range: super::process_init_stack_add_range_bridge,
++            virt_to_phys: super::process_init_stack_virt_to_phys_bridge,
++            attr: super::process_init_stack_attr_bridge,
++            pt_set_range: super::process_init_stack_pt_set_range_bridge,
++            hwcap: super::process_init_stack_hwcap_bridge,
++            modify_context: super::process_init_stack_modify_context_bridge,
++            log: super::process_init_stack_log_bridge,
++        };
++
++    // Selected C explicitly rejects TIMER_CPU_ID and RUSAGE_DEBUG variants.
++    #[no_mangle]
++    pub(super) static process_sched_timer_configuration: [CInt; 2] = [0, 0];
++    #[no_mangle]
++    pub(super) static process_schedule_exit_debug_input: ReadonlyPointerCell<SchedExitDebug> =
++        ReadonlyPointerCell(core::ptr::null());
++}

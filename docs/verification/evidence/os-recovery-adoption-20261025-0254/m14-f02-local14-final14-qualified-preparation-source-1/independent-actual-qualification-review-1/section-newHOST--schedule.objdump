@@ -1,0 +1,828 @@
+
+/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/relative-module-context-correction-source-1/HOST-output-proposed-1/rust-selected.o:     file format elf64-x86-64
+
+
+Disassembly of section .ltext.schedule:
+
+0000000000000000 <schedule>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	41 57                	push   %r15
+   6:	41 56                	push   %r14
+   8:	41 55                	push   %r13
+   a:	41 54                	push   %r12
+   c:	53                   	push   %rbx
+   d:	48 81 ec 98 00 00 00 	sub    $0x98,%rsp
+  14:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	16: R_X86_64_64	sched_schedule_fp_admit
+  1e:	bf 10 00 00 00       	mov    $0x10,%edi
+  23:	ff d0                	call   *%rax
+  25:	48 89 85 60 ff ff ff 	mov    %rax,-0xa0(%rbp)
+  2c:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+  31:	0f 32                	rdmsr  
+  33:	48 c1 e2 20          	shl    $0x20,%rdx
+  37:	89 c0                	mov    %eax,%eax
+  39:	48 09 d0             	or     %rdx,%rax
+  3c:	49 bc 00 00 00 00 00 00 00 00 	movabs $0x0,%r12	3e: R_X86_64_64	locals
+  46:	4d 8b 04 24          	mov    (%r12),%r8
+  4a:	49 be 00 00 00 00 00 00 00 00 	movabs $0x0,%r14	4c: R_X86_64_64	num_processors
+  54:	4d 63 0e             	movslq (%r14),%r9
+  57:	49 c1 e1 0e          	shl    $0xe,%r9
+  5b:	4d 01 c1             	add    %r8,%r9
+  5e:	49 39 c0             	cmp    %rax,%r8
+  61:	0f 97 c1             	seta   %cl
+  64:	49 39 c1             	cmp    %rax,%r9
+  67:	0f 92 c0             	setb   %al
+  6a:	08 c8                	or     %cl,%al
+  6c:	48 c7 c7 ff ff ff ff 	mov    $0xffffffffffffffff,%rdi
+  73:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+  7a:	75 0a                	jne    86 <schedule+0x86>
+  7c:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+  84:	48 98                	cltq   
+  86:	48 bb 00 00 00 00 00 00 00 00 	movabs $0x0,%rbx	88: R_X86_64_64	clv
+  90:	48 8b 33             	mov    (%rbx),%rsi
+  93:	4c 69 f8 c0 1f 00 00 	imul   $0x1fc0,%rax,%r15
+  9a:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+  9f:	0f 32                	rdmsr  
+  a1:	48 c1 e2 20          	shl    $0x20,%rdx
+  a5:	89 c0                	mov    %eax,%eax
+  a7:	48 09 d0             	or     %rdx,%rax
+  aa:	49 39 c0             	cmp    %rax,%r8
+  ad:	0f 97 c1             	seta   %cl
+  b0:	49 39 c1             	cmp    %rax,%r9
+  b3:	0f 92 c0             	setb   %al
+  b6:	08 c8                	or     %cl,%al
+  b8:	75 0b                	jne    c5 <schedule+0xc5>
+  ba:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+  c2:	48 63 f8             	movslq %eax,%rdi
+  c5:	49 01 f7             	add    %rsi,%r15
+  c8:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+  cd:	0f 32                	rdmsr  
+  cf:	48 c1 e2 20          	shl    $0x20,%rdx
+  d3:	89 c0                	mov    %eax,%eax
+  d5:	48 09 d0             	or     %rdx,%rax
+  d8:	49 39 c0             	cmp    %rax,%r8
+  db:	0f 97 c1             	seta   %cl
+  de:	49 39 c1             	cmp    %rax,%r9
+  e1:	0f 92 c0             	setb   %al
+  e4:	08 c8                	or     %cl,%al
+  e6:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+  ed:	75 0a                	jne    f9 <schedule+0xf9>
+  ef:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+  f7:	48 98                	cltq   
+  f9:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+ 100:	8b 94 06 28 1f 00 00 	mov    0x1f28(%rsi,%rax,1),%edx
+ 107:	4c 89 7d 90          	mov    %r15,-0x70(%rbp)
+ 10b:	48 c7 45 98 00 00 00 00 	movq   $0x0,-0x68(%rbp)
+ 113:	48 c7 45 a0 00 00 00 00 	movq   $0x0,-0x60(%rbp)
+ 11b:	c7 45 c8 00 00 00 00 	movl   $0x0,-0x38(%rbp)
+ 122:	c7 45 c4 00 00 00 00 	movl   $0x0,-0x3c(%rbp)
+ 129:	c7 45 d0 00 00 00 00 	movl   $0x0,-0x30(%rbp)
+ 130:	48 8b 45 90          	mov    -0x70(%rbp),%rax
+ 134:	48 89 85 48 ff ff ff 	mov    %rax,-0xb8(%rbp)
+ 13b:	48 8b 45 98          	mov    -0x68(%rbp),%rax
+ 13f:	48 89 85 50 ff ff ff 	mov    %rax,-0xb0(%rbp)
+ 146:	48 8b 45 a0          	mov    -0x60(%rbp),%rax
+ 14a:	48 89 85 58 ff ff ff 	mov    %rax,-0xa8(%rbp)
+ 151:	8b 45 c8             	mov    -0x38(%rbp),%eax
+ 154:	89 45 a8             	mov    %eax,-0x58(%rbp)
+ 157:	8b 45 c4             	mov    -0x3c(%rbp),%eax
+ 15a:	89 45 88             	mov    %eax,-0x78(%rbp)
+ 15d:	8b 45 d0             	mov    -0x30(%rbp),%eax
+ 160:	89 45 b0             	mov    %eax,-0x50(%rbp)
+ 163:	8b 45 84             	mov    -0x7c(%rbp),%eax
+ 166:	89 45 8c             	mov    %eax,-0x74(%rbp)
+ 169:	49 bd 00 00 00 00 00 00 00 00 	movabs $0x0,%r13	16b: R_X86_64_64	cpu_local_var_initialized
+ 173:	85 d2                	test   %edx,%edx
+ 175:	0f 84 79 01 00 00    	je     2f4 <schedule+0x2f4>
+ 17b:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	17d: R_X86_64_64	.lrodata.str1.1+0x7c0b
+ 185:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	187: R_X86_64_64	.lrodata.str1.1+0x7c46
+ 18f:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	191: R_X86_64_64	kprintf
+ 199:	31 c0                	xor    %eax,%eax
+ 19b:	ff d1                	call   *%rcx
+ 19d:	9c                   	pushf  
+ 19e:	5e                   	pop    %rsi
+ 19f:	fa                   	cli    
+ 1a0:	41 83 7d 00 00       	cmpl   $0x0,0x0(%r13)
+ 1a5:	74 4b                	je     1f2 <schedule+0x1f2>
+ 1a7:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+ 1ac:	0f 32                	rdmsr  
+ 1ae:	48 c1 e2 20          	shl    $0x20,%rdx
+ 1b2:	89 c1                	mov    %eax,%ecx
+ 1b4:	48 09 d1             	or     %rdx,%rcx
+ 1b7:	49 8b 14 24          	mov    (%r12),%rdx
+ 1bb:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+ 1c2:	48 39 ca             	cmp    %rcx,%rdx
+ 1c5:	77 19                	ja     1e0 <schedule+0x1e0>
+ 1c7:	49 63 3e             	movslq (%r14),%rdi
+ 1ca:	48 c1 e7 0e          	shl    $0xe,%rdi
+ 1ce:	48 01 fa             	add    %rdi,%rdx
+ 1d1:	48 39 ca             	cmp    %rcx,%rdx
+ 1d4:	72 0a                	jb     1e0 <schedule+0x1e0>
+ 1d6:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+ 1de:	48 98                	cltq   
+ 1e0:	48 8b 0b             	mov    (%rbx),%rcx
+ 1e3:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+ 1ea:	f0 ff 84 01 28 1f 00 00 	lock incl 0x1f28(%rcx,%rax,1)
+ 1f2:	b9 00 00 02 00       	mov    $0x20000,%ecx
+ 1f7:	f0 41 0f c1 8f 98 1e 00 00 	lock xadd %ecx,0x1e98(%r15)
+ 200:	89 c8                	mov    %ecx,%eax
+ 202:	c1 e8 10             	shr    $0x10,%eax
+ 205:	66 39 c1             	cmp    %ax,%cx
+ 208:	0f 85 d2 00 00 00    	jne    2e0 <schedule+0x2e0>
+ 20e:	41 83 8f 08 1f 00 00 01 	orl    $0x1,0x1f08(%r15)
+ 216:	66 f0 41 83 87 98 1e 00 00 02 	lock addw $0x2,0x1e98(%r15)
+ 220:	41 83 7d 00 00       	cmpl   $0x0,0x0(%r13)
+ 225:	74 4b                	je     272 <schedule+0x272>
+ 227:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+ 22c:	0f 32                	rdmsr  
+ 22e:	48 c1 e2 20          	shl    $0x20,%rdx
+ 232:	89 c1                	mov    %eax,%ecx
+ 234:	48 09 d1             	or     %rdx,%rcx
+ 237:	49 8b 14 24          	mov    (%r12),%rdx
+ 23b:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+ 242:	48 39 ca             	cmp    %rcx,%rdx
+ 245:	77 19                	ja     260 <schedule+0x260>
+ 247:	49 63 3e             	movslq (%r14),%rdi
+ 24a:	48 c1 e7 0e          	shl    $0xe,%rdi
+ 24e:	48 01 fa             	add    %rdi,%rdx
+ 251:	48 39 ca             	cmp    %rcx,%rdx
+ 254:	72 0a                	jb     260 <schedule+0x260>
+ 256:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+ 25e:	48 98                	cltq   
+ 260:	48 8b 0b             	mov    (%rbx),%rcx
+ 263:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+ 26a:	f0 ff 8c 01 28 1f 00 00 	lock decl 0x1f28(%rcx,%rax,1)
+ 272:	56                   	push   %rsi
+ 273:	9d                   	popf   
+ 274:	4c 89 7d 90          	mov    %r15,-0x70(%rbp)
+ 278:	48 c7 45 98 00 00 00 00 	movq   $0x0,-0x68(%rbp)
+ 280:	48 c7 45 a0 00 00 00 00 	movq   $0x0,-0x60(%rbp)
+ 288:	c7 45 c8 00 00 00 00 	movl   $0x0,-0x38(%rbp)
+ 28f:	c7 45 c4 00 00 00 00 	movl   $0x0,-0x3c(%rbp)
+ 296:	c7 45 d0 01 00 00 00 	movl   $0x1,-0x30(%rbp)
+ 29d:	48 8b 45 90          	mov    -0x70(%rbp),%rax
+ 2a1:	48 89 85 48 ff ff ff 	mov    %rax,-0xb8(%rbp)
+ 2a8:	48 8b 45 98          	mov    -0x68(%rbp),%rax
+ 2ac:	48 89 85 50 ff ff ff 	mov    %rax,-0xb0(%rbp)
+ 2b3:	48 8b 45 a0          	mov    -0x60(%rbp),%rax
+ 2b7:	48 89 85 58 ff ff ff 	mov    %rax,-0xa8(%rbp)
+ 2be:	8b 45 c8             	mov    -0x38(%rbp),%eax
+ 2c1:	89 45 a8             	mov    %eax,-0x58(%rbp)
+ 2c4:	8b 45 c4             	mov    -0x3c(%rbp),%eax
+ 2c7:	89 45 88             	mov    %eax,-0x78(%rbp)
+ 2ca:	8b 45 d0             	mov    -0x30(%rbp),%eax
+ 2cd:	89 45 b0             	mov    %eax,-0x50(%rbp)
+ 2d0:	8b 45 84             	mov    -0x7c(%rbp),%eax
+ 2d3:	89 45 8c             	mov    %eax,-0x74(%rbp)
+ 2d6:	e9 e8 06 00 00       	jmp    9c3 <schedule+0x9c3>
+ 2db:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+ 2e0:	41 8b 8f 98 1e 00 00 	mov    0x1e98(%r15),%ecx
+ 2e7:	66 39 c1             	cmp    %ax,%cx
+ 2ea:	0f 84 1e ff ff ff    	je     20e <schedule+0x20e>
+ 2f0:	f3 90                	pause  
+ 2f2:	eb ec                	jmp    2e0 <schedule+0x2e0>
+ 2f4:	9c                   	pushf  
+ 2f5:	58                   	pop    %rax
+ 2f6:	fa                   	cli    
+ 2f7:	48 89 85 68 ff ff ff 	mov    %rax,-0x98(%rbp)
+ 2fe:	41 83 7d 00 00       	cmpl   $0x0,0x0(%r13)
+ 303:	74 4b                	je     350 <schedule+0x350>
+ 305:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+ 30a:	0f 32                	rdmsr  
+ 30c:	48 c1 e2 20          	shl    $0x20,%rdx
+ 310:	89 c1                	mov    %eax,%ecx
+ 312:	48 09 d1             	or     %rdx,%rcx
+ 315:	49 8b 14 24          	mov    (%r12),%rdx
+ 319:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+ 320:	48 39 ca             	cmp    %rcx,%rdx
+ 323:	77 19                	ja     33e <schedule+0x33e>
+ 325:	4d 63 06             	movslq (%r14),%r8
+ 328:	49 c1 e0 0e          	shl    $0xe,%r8
+ 32c:	4c 01 c2             	add    %r8,%rdx
+ 32f:	48 39 ca             	cmp    %rcx,%rdx
+ 332:	72 0a                	jb     33e <schedule+0x33e>
+ 334:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+ 33c:	48 98                	cltq   
+ 33e:	48 8b 0b             	mov    (%rbx),%rcx
+ 341:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+ 348:	f0 ff 84 01 28 1f 00 00 	lock incl 0x1f28(%rcx,%rax,1)
+ 350:	ba 00 00 02 00       	mov    $0x20000,%edx
+ 355:	f0 41 0f c1 97 98 1e 00 00 	lock xadd %edx,0x1e98(%r15)
+ 35e:	48 69 c7 c0 1f 00 00 	imul   $0x1fc0,%rdi,%rax
+ 365:	89 d1                	mov    %edx,%ecx
+ 367:	c1 e9 10             	shr    $0x10,%ecx
+ 36a:	66 39 ca             	cmp    %cx,%dx
+ 36d:	0f 85 fd 00 00 00    	jne    470 <schedule+0x470>
+ 373:	4c 8d 24 06          	lea    (%rsi,%rax,1),%r12
+ 377:	49 83 c4 40          	add    $0x40,%r12
+ 37b:	48 8b 85 68 ff ff ff 	mov    -0x98(%rbp),%rax
+ 382:	49 89 87 a0 1e 00 00 	mov    %rax,0x1ea0(%r15)
+ 389:	49 8b bf a8 1e 00 00 	mov    0x1ea8(%r15),%rdi
+ 390:	45 8b b7 b8 1e 00 00 	mov    0x1eb8(%r15),%r14d
+ 397:	49 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%r8	399: R_X86_64_64	set_timer
+ 3a1:	48 85 ff             	test   %rdi,%rdi
+ 3a4:	48 89 7d b8          	mov    %rdi,-0x48(%rbp)
+ 3a8:	0f 84 d6 00 00 00    	je     484 <schedule+0x484>
+ 3ae:	4c 39 e7             	cmp    %r12,%rdi
+ 3b1:	0f 84 cd 00 00 00    	je     484 <schedule+0x484>
+ 3b7:	4c 89 f9             	mov    %r15,%rcx
+ 3ba:	48 81 c1 d0 1e 00 00 	add    $0x1ed0,%rcx
+ 3c1:	74 49                	je     40c <schedule+0x40c>
+ 3c3:	48 89 fe             	mov    %rdi,%rsi
+ 3c6:	48 81 c6 e8 10 00 00 	add    $0x10e8,%rsi
+ 3cd:	74 3d                	je     40c <schedule+0x40c>
+ 3cf:	48 8b 87 e8 10 00 00 	mov    0x10e8(%rdi),%rax
+ 3d6:	48 8b 97 f0 10 00 00 	mov    0x10f0(%rdi),%rdx
+ 3dd:	48 39 f0             	cmp    %rsi,%rax
+ 3e0:	74 2a                	je     40c <schedule+0x40c>
+ 3e2:	48 85 c0             	test   %rax,%rax
+ 3e5:	74 25                	je     40c <schedule+0x40c>
+ 3e7:	48 85 d2             	test   %rdx,%rdx
+ 3ea:	74 20                	je     40c <schedule+0x40c>
+ 3ec:	48 89 50 08          	mov    %rdx,0x8(%rax)
+ 3f0:	48 89 02             	mov    %rax,(%rdx)
+ 3f3:	48 c7 87 e8 10 00 00 29 01 10 00 	movq   $0x100129,0x10e8(%rdi)
+ 3fe:	48 c7 87 f0 10 00 00 29 02 20 00 	movq   $0x200229,0x10f0(%rdi)
+ 409:	48 ff 09             	decq   (%rcx)
+ 40c:	48 8d 87 58 10 00 00 	lea    0x1058(%rdi),%rax
+ 413:	8b 97 58 10 00 00    	mov    0x1058(%rdi),%edx
+ 419:	83 fa 10             	cmp    $0x10,%edx
+ 41c:	74 43                	je     461 <schedule+0x461>
+ 41e:	48 85 c9             	test   %rcx,%rcx
+ 421:	74 3e                	je     461 <schedule+0x461>
+ 423:	4c 89 f9             	mov    %r15,%rcx
+ 426:	48 81 c1 c0 1e 00 00 	add    $0x1ec0,%rcx
+ 42d:	74 32                	je     461 <schedule+0x461>
+ 42f:	48 89 fa             	mov    %rdi,%rdx
+ 432:	48 81 c2 e8 10 00 00 	add    $0x10e8,%rdx
+ 439:	74 26                	je     461 <schedule+0x461>
+ 43b:	49 8b b7 c8 1e 00 00 	mov    0x1ec8(%r15),%rsi
+ 442:	48 89 8f e8 10 00 00 	mov    %rcx,0x10e8(%rdi)
+ 449:	48 89 b7 f0 10 00 00 	mov    %rsi,0x10f0(%rdi)
+ 450:	48 89 16             	mov    %rdx,(%rsi)
+ 453:	49 89 97 c8 1e 00 00 	mov    %rdx,0x1ec8(%r15)
+ 45a:	49 ff 87 d0 1e 00 00 	incq   0x1ed0(%r15)
+ 461:	41 8b 8f 08 1f 00 00 	mov    0x1f08(%r15),%ecx
+ 468:	eb 31                	jmp    49b <schedule+0x49b>
+ 46a:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+ 470:	41 8b 97 98 1e 00 00 	mov    0x1e98(%r15),%edx
+ 477:	66 39 ca             	cmp    %cx,%dx
+ 47a:	0f 84 f3 fe ff ff    	je     373 <schedule+0x373>
+ 480:	f3 90                	pause  
+ 482:	eb ec                	jmp    470 <schedule+0x470>
+ 484:	41 8b 8f 08 1f 00 00 	mov    0x1f08(%r15),%ecx
+ 48b:	48 85 ff             	test   %rdi,%rdi
+ 48e:	0f 84 3c 01 00 00    	je     5d0 <schedule+0x5d0>
+ 494:	48 8d 87 58 10 00 00 	lea    0x1058(%rdi),%rax
+ 49b:	8b 00                	mov    (%rax),%eax
+ 49d:	f6 c1 02             	test   $0x2,%cl
+ 4a0:	0f 85 65 01 00 00    	jne    60b <schedule+0x60b>
+ 4a6:	4c 89 a5 78 ff ff ff 	mov    %r12,-0x88(%rbp)
+ 4ad:	83 f8 10             	cmp    $0x10,%eax
+ 4b0:	0f 84 55 01 00 00    	je     60b <schedule+0x60b>
+ 4b6:	4d 8d 8f c0 1e 00 00 	lea    0x1ec0(%r15),%r9
+ 4bd:	4d 8b af c0 1e 00 00 	mov    0x1ec0(%r15),%r13
+ 4c4:	4d 39 cd             	cmp    %r9,%r13
+ 4c7:	0f 84 ef 01 00 00    	je     6bc <schedule+0x6bc>
+ 4cd:	44 89 b5 74 ff ff ff 	mov    %r14d,-0x8c(%rbp)
+ 4d4:	45 31 e4             	xor    %r12d,%r12d
+ 4d7:	eb 14                	jmp    4ed <schedule+0x4ed>
+ 4d9:	4d 89 f4             	mov    %r14,%r12
+ 4dc:	0f 1f 40 00          	nopl   0x0(%rax)
+ 4e0:	4d 8b 6d 00          	mov    0x0(%r13),%r13
+ 4e4:	4d 39 cd             	cmp    %r9,%r13
+ 4e7:	0f 84 0e 01 00 00    	je     5fb <schedule+0x5fb>
+ 4ed:	4d 8d b5 18 ef ff ff 	lea    -0x10e8(%r13),%r14
+ 4f4:	41 8b 85 70 ff ff ff 	mov    -0x90(%r13),%eax
+ 4fb:	41 8b 8d 74 03 00 00 	mov    0x374(%r13),%ecx
+ 502:	83 f8 01             	cmp    $0x1,%eax
+ 505:	74 39                	je     540 <schedule+0x540>
+ 507:	83 f8 02             	cmp    $0x2,%eax
+ 50a:	75 d4                	jne    4e0 <schedule+0x4e0>
+ 50c:	49 8d 8d 18 02 00 00 	lea    0x218(%r13),%rcx
+ 513:	49 8b 95 18 02 00 00 	mov    0x218(%r13),%rdx
+ 51a:	49 8b 85 f0 01 00 00 	mov    0x1f0(%r13),%rax
+ 521:	48 85 c0             	test   %rax,%rax
+ 524:	74 2d                	je     553 <schedule+0x553>
+ 526:	48 8b b0 48 08 00 00 	mov    0x848(%rax),%rsi
+ 52d:	48 39 ca             	cmp    %rcx,%rdx
+ 530:	75 26                	jne    558 <schedule+0x558>
+ 532:	48 05 48 08 00 00    	add    $0x848,%rax
+ 538:	48 39 c6             	cmp    %rax,%rsi
+ 53b:	74 a3                	je     4e0 <schedule+0x4e0>
+ 53d:	eb 19                	jmp    558 <schedule+0x558>
+ 53f:	90                   	nop
+ 540:	81 f9 e9 03 00 00    	cmp    $0x3e9,%ecx
+ 546:	0f 84 ac 00 00 00    	je     5f8 <schedule+0x5f8>
+ 54c:	4d 85 e4             	test   %r12,%r12
+ 54f:	75 8f                	jne    4e0 <schedule+0x4e0>
+ 551:	eb 86                	jmp    4d9 <schedule+0x4d9>
+ 553:	48 39 ca             	cmp    %rcx,%rdx
+ 556:	74 88                	je     4e0 <schedule+0x4e0>
+ 558:	49 8d 86 00 13 00 00 	lea    0x1300(%r14),%rax
+ 55f:	49 8b 8e 00 13 00 00 	mov    0x1300(%r14),%rcx
+ 566:	48 39 c1             	cmp    %rax,%rcx
+ 569:	75 1d                	jne    588 <schedule+0x588>
+ 56b:	49 8b 86 d8 12 00 00 	mov    0x12d8(%r14),%rax
+ 572:	48 8b 88 48 08 00 00 	mov    0x848(%rax),%rcx
+ 579:	48 05 48 08 00 00    	add    $0x848,%rax
+ 57f:	48 39 c1             	cmp    %rax,%rcx
+ 582:	0f 84 58 ff ff ff    	je     4e0 <schedule+0x4e0>
+ 588:	4c 89 f7             	mov    %r14,%rdi
+ 58b:	31 f6                	xor    %esi,%esi
+ 58d:	4c 89 c3             	mov    %r8,%rbx
+ 590:	4c 89 a5 40 ff ff ff 	mov    %r12,-0xc0(%rbp)
+ 597:	4d 89 cc             	mov    %r9,%r12
+ 59a:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	59c: R_X86_64_64	getsigpending
+ 5a4:	ff d0                	call   *%rax
+ 5a6:	4d 89 e1             	mov    %r12,%r9
+ 5a9:	4c 8b a5 40 ff ff ff 	mov    -0xc0(%rbp),%r12
+ 5b0:	49 89 d8             	mov    %rbx,%r8
+ 5b3:	48 8b 7d b8          	mov    -0x48(%rbp),%rdi
+ 5b7:	48 85 c0             	test   %rax,%rax
+ 5ba:	0f 95 c0             	setne  %al
+ 5bd:	4d 85 e4             	test   %r12,%r12
+ 5c0:	0f 94 c1             	sete   %cl
+ 5c3:	84 c8                	test   %cl,%al
+ 5c5:	0f 85 0e ff ff ff    	jne    4d9 <schedule+0x4d9>
+ 5cb:	e9 10 ff ff ff       	jmp    4e0 <schedule+0x4e0>
+ 5d0:	4c 89 a5 78 ff ff ff 	mov    %r12,-0x88(%rbp)
+ 5d7:	f6 c1 02             	test   $0x2,%cl
+ 5da:	0f 84 d6 fe ff ff    	je     4b6 <schedule+0x4b6>
+ 5e0:	31 c0                	xor    %eax,%eax
+ 5e2:	4c 8b a5 78 ff ff ff 	mov    -0x88(%rbp),%r12
+ 5e9:	49 bd 00 00 00 00 00 00 00 00 	movabs $0x0,%r13	5eb: R_X86_64_64	clv
+ 5f3:	e9 12 01 00 00       	jmp    70a <schedule+0x70a>
+ 5f8:	4d 89 f4             	mov    %r14,%r12
+ 5fb:	4d 85 e4             	test   %r12,%r12
+ 5fe:	44 8b b5 74 ff ff ff 	mov    -0x8c(%rbp),%r14d
+ 605:	0f 84 b1 00 00 00    	je     6bc <schedule+0x6bc>
+ 60b:	4c 39 e7             	cmp    %r12,%rdi
+ 60e:	0f 85 d3 00 00 00    	jne    6e7 <schedule+0x6e7>
+ 614:	bf 01 00 00 00       	mov    $0x1,%edi
+ 619:	41 ff d0             	call   *%r8
+ 61c:	48 8b 7d b8          	mov    -0x48(%rbp),%rdi
+ 620:	66 f0 41 83 87 98 1e 00 00 02 	lock addw $0x2,0x1e98(%r15)
+ 62a:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	62c: R_X86_64_64	cpu_local_var_initialized
+ 634:	83 38 00             	cmpl   $0x0,(%rax)
+ 637:	49 bd 00 00 00 00 00 00 00 00 	movabs $0x0,%r13	639: R_X86_64_64	clv
+ 641:	74 5f                	je     6a2 <schedule+0x6a2>
+ 643:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+ 648:	0f 32                	rdmsr  
+ 64a:	48 c1 e2 20          	shl    $0x20,%rdx
+ 64e:	89 c1                	mov    %eax,%ecx
+ 650:	48 09 d1             	or     %rdx,%rcx
+ 653:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	655: R_X86_64_64	locals
+ 65d:	48 8b 10             	mov    (%rax),%rdx
+ 660:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+ 667:	48 39 ca             	cmp    %rcx,%rdx
+ 66a:	77 23                	ja     68f <schedule+0x68f>
+ 66c:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	66e: R_X86_64_64	num_processors
+ 676:	48 63 36             	movslq (%rsi),%rsi
+ 679:	48 c1 e6 0e          	shl    $0xe,%rsi
+ 67d:	48 01 f2             	add    %rsi,%rdx
+ 680:	48 39 ca             	cmp    %rcx,%rdx
+ 683:	72 0a                	jb     68f <schedule+0x68f>
+ 685:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+ 68d:	48 98                	cltq   
+ 68f:	49 8b 4d 00          	mov    0x0(%r13),%rcx
+ 693:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+ 69a:	f0 ff 8c 01 28 1f 00 00 	lock decl 0x1f28(%rcx,%rax,1)
+ 6a2:	48 8b 85 68 ff ff ff 	mov    -0x98(%rbp),%rax
+ 6a9:	50                   	push   %rax
+ 6aa:	9d                   	popf   
+ 6ab:	31 c0                	xor    %eax,%eax
+ 6ad:	b9 02 00 00 00       	mov    $0x2,%ecx
+ 6b2:	49 89 fc             	mov    %rdi,%r12
+ 6b5:	31 db                	xor    %ebx,%ebx
+ 6b7:	e9 ef 00 00 00       	jmp    7ab <schedule+0x7ab>
+ 6bc:	31 c0                	xor    %eax,%eax
+ 6be:	49 83 bf d0 1e 00 00 00 	cmpq   $0x0,0x1ed0(%r15)
+ 6c6:	0f 95 c0             	setne  %al
+ 6c9:	8d 04 45 01 00 00 00 	lea    0x1(,%rax,2),%eax
+ 6d0:	41 89 87 f0 1e 00 00 	mov    %eax,0x1ef0(%r15)
+ 6d7:	4c 8b a5 78 ff ff ff 	mov    -0x88(%rbp),%r12
+ 6de:	4c 39 e7             	cmp    %r12,%rdi
+ 6e1:	0f 84 2d ff ff ff    	je     614 <schedule+0x614>
+ 6e7:	31 c0                	xor    %eax,%eax
+ 6e9:	48 85 ff             	test   %rdi,%rdi
+ 6ec:	49 bd 00 00 00 00 00 00 00 00 	movabs $0x0,%r13	6ee: R_X86_64_64	clv
+ 6f6:	74 12                	je     70a <schedule+0x70a>
+ 6f8:	48 8b 8f d0 10 00 00 	mov    0x10d0(%rdi),%rcx
+ 6ff:	48 85 c9             	test   %rcx,%rcx
+ 702:	74 06                	je     70a <schedule+0x70a>
+ 704:	8b 81 c8 01 00 00    	mov    0x1c8(%rcx),%eax
+ 70a:	41 89 87 b8 1e 00 00 	mov    %eax,0x1eb8(%r15)
+ 711:	4d 89 a7 a8 1e 00 00 	mov    %r12,0x1ea8(%r15)
+ 718:	49 8b 75 00          	mov    0x0(%r13),%rsi
+ 71c:	48 85 f6             	test   %rsi,%rsi
+ 71f:	74 6b                	je     78c <schedule+0x78c>
+ 721:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+ 726:	0f 32                	rdmsr  
+ 728:	48 c1 e2 20          	shl    $0x20,%rdx
+ 72c:	89 c1                	mov    %eax,%ecx
+ 72e:	48 09 d1             	or     %rdx,%rcx
+ 731:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	733: R_X86_64_64	locals
+ 73b:	48 8b 10             	mov    (%rax),%rdx
+ 73e:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+ 745:	48 39 ca             	cmp    %rcx,%rdx
+ 748:	77 23                	ja     76d <schedule+0x76d>
+ 74a:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	74c: R_X86_64_64	num_processors
+ 754:	48 63 3f             	movslq (%rdi),%rdi
+ 757:	48 c1 e7 0e          	shl    $0xe,%rdi
+ 75b:	48 01 fa             	add    %rdi,%rdx
+ 75e:	48 39 ca             	cmp    %rcx,%rdx
+ 761:	72 0a                	jb     76d <schedule+0x76d>
+ 763:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+ 76b:	48 98                	cltq   
+ 76d:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+ 774:	48 8b 84 06 a8 1e 00 00 	mov    0x1ea8(%rsi,%rax,1),%rax
+ 77c:	48 85 c0             	test   %rax,%rax
+ 77f:	74 0b                	je     78c <schedule+0x78c>
+ 781:	48 c7 80 c0 13 00 00 00 00 00 00 	movq   $0x0,0x13c0(%rax)
+ 78c:	49 ff 87 30 1f 00 00 	incq   0x1f30(%r15)
+ 793:	bb 01 00 00 00       	mov    $0x1,%ebx
+ 798:	bf 01 00 00 00       	mov    $0x1,%edi
+ 79d:	41 ff d0             	call   *%r8
+ 7a0:	b9 03 00 00 00       	mov    $0x3,%ecx
+ 7a5:	b0 01                	mov    $0x1,%al
+ 7a7:	48 8b 7d b8          	mov    -0x48(%rbp),%rdi
+ 7ab:	4c 89 7d 90          	mov    %r15,-0x70(%rbp)
+ 7af:	48 89 7d 98          	mov    %rdi,-0x68(%rbp)
+ 7b3:	4c 89 65 a0          	mov    %r12,-0x60(%rbp)
+ 7b7:	44 89 75 c8          	mov    %r14d,-0x38(%rbp)
+ 7bb:	89 5d c4             	mov    %ebx,-0x3c(%rbp)
+ 7be:	89 4d d0             	mov    %ecx,-0x30(%rbp)
+ 7c1:	48 8b 55 90          	mov    -0x70(%rbp),%rdx
+ 7c5:	48 89 95 48 ff ff ff 	mov    %rdx,-0xb8(%rbp)
+ 7cc:	4c 8b 7d 98          	mov    -0x68(%rbp),%r15
+ 7d0:	4c 89 bd 50 ff ff ff 	mov    %r15,-0xb0(%rbp)
+ 7d7:	4c 8b 65 a0          	mov    -0x60(%rbp),%r12
+ 7db:	4c 89 a5 58 ff ff ff 	mov    %r12,-0xa8(%rbp)
+ 7e2:	44 8b 75 c8          	mov    -0x38(%rbp),%r14d
+ 7e6:	44 89 75 a8          	mov    %r14d,-0x58(%rbp)
+ 7ea:	8b 4d c4             	mov    -0x3c(%rbp),%ecx
+ 7ed:	89 4d 88             	mov    %ecx,-0x78(%rbp)
+ 7f0:	8b 4d d0             	mov    -0x30(%rbp),%ecx
+ 7f3:	89 4d b0             	mov    %ecx,-0x50(%rbp)
+ 7f6:	8b 4d 84             	mov    -0x7c(%rbp),%ecx
+ 7f9:	89 4d 8c             	mov    %ecx,-0x74(%rbp)
+ 7fc:	84 c0                	test   %al,%al
+ 7fe:	0f 84 bf 01 00 00    	je     9c3 <schedule+0x9c3>
+ 804:	48 8b 85 60 ff ff ff 	mov    -0xa0(%rbp),%rax
+ 80b:	48 89 55 b8          	mov    %rdx,-0x48(%rbp)
+ 80f:	48 89 82 a0 1e 00 00 	mov    %rax,0x1ea0(%rdx)
+ 816:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	818: R_X86_64_64	process_schedule_switch_debug+0x18
+ 820:	8b 00                	mov    (%rax),%eax
+ 822:	3d 00 00 00 01       	cmp    $0x1000000,%eax
+ 827:	0f 82 a4 00 00 00    	jb     8d1 <schedule+0x8d1>
+ 82d:	45 31 d2             	xor    %r10d,%r10d
+ 830:	41 b9 00 00 00 00    	mov    $0x0,%r9d
+ 836:	4d 85 ff             	test   %r15,%r15
+ 839:	74 04                	je     83f <schedule+0x83f>
+ 83b:	45 8b 4f 14          	mov    0x14(%r15),%r9d
+ 83f:	4d 85 e4             	test   %r12,%r12
+ 842:	74 05                	je     849 <schedule+0x849>
+ 844:	45 8b 54 24 14       	mov    0x14(%r12),%r10d
+ 849:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+ 84e:	0f 32                	rdmsr  
+ 850:	48 c1 e2 20          	shl    $0x20,%rdx
+ 854:	89 c1                	mov    %eax,%ecx
+ 856:	48 09 d1             	or     %rdx,%rcx
+ 859:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	85b: R_X86_64_64	locals
+ 863:	48 8b 10             	mov    (%rax),%rdx
+ 866:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+ 86d:	48 39 ca             	cmp    %rcx,%rdx
+ 870:	77 23                	ja     895 <schedule+0x895>
+ 872:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	874: R_X86_64_64	num_processors
+ 87c:	48 63 36             	movslq (%rsi),%rsi
+ 87f:	48 c1 e6 0e          	shl    $0xe,%rsi
+ 883:	48 01 f2             	add    %rsi,%rdx
+ 886:	48 39 ca             	cmp    %rcx,%rdx
+ 889:	72 0a                	jb     895 <schedule+0x895>
+ 88b:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+ 893:	48 98                	cltq   
+ 895:	49 8b 4d 00          	mov    0x0(%r13),%rcx
+ 899:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+ 8a0:	4c 8b 84 01 30 1f 00 00 	mov    0x1f30(%rcx,%rax,1),%r8
+ 8a8:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	8aa: R_X86_64_64	.lrodata.str1.1+0x8615
+ 8b2:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	8b4: R_X86_64_64	.lrodata.str1.1+0x7c46
+ 8bc:	49 bb 00 00 00 00 00 00 00 00 	movabs $0x0,%r11	8be: R_X86_64_64	kprintf
+ 8c6:	44 89 ca             	mov    %r9d,%edx
+ 8c9:	44 89 d1             	mov    %r10d,%ecx
+ 8cc:	31 c0                	xor    %eax,%eax
+ 8ce:	41 ff d3             	call   *%r11
+ 8d1:	4d 85 e4             	test   %r12,%r12
+ 8d4:	0f 84 69 01 00 00    	je     a43 <schedule+0xa43>
+ 8da:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+ 8df:	0f 32                	rdmsr  
+ 8e1:	48 c1 e2 20          	shl    $0x20,%rdx
+ 8e5:	89 c0                	mov    %eax,%eax
+ 8e7:	48 09 d0             	or     %rdx,%rax
+ 8ea:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	8ec: R_X86_64_64	locals
+ 8f4:	48 8b 39             	mov    (%rcx),%rdi
+ 8f7:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	8f9: R_X86_64_64	num_processors
+ 901:	48 63 31             	movslq (%rcx),%rsi
+ 904:	48 c1 e6 0e          	shl    $0xe,%rsi
+ 908:	48 01 fe             	add    %rdi,%rsi
+ 90b:	48 39 c7             	cmp    %rax,%rdi
+ 90e:	0f 97 c1             	seta   %cl
+ 911:	48 39 c6             	cmp    %rax,%rsi
+ 914:	0f 92 c0             	setb   %al
+ 917:	08 c8                	or     %cl,%al
+ 919:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+ 920:	75 0a                	jne    92c <schedule+0x92c>
+ 922:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+ 92a:	48 98                	cltq   
+ 92c:	49 8b 4d 00          	mov    0x0(%r13),%rcx
+ 930:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+ 937:	48 01 c8             	add    %rcx,%rax
+ 93a:	48 83 c0 40          	add    $0x40,%rax
+ 93e:	4c 39 e0             	cmp    %r12,%rax
+ 941:	0f 84 fc 00 00 00    	je     a43 <schedule+0xa43>
+ 947:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	949: R_X86_64_64	.lbss._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust15process_helpers32remaining_process_schedule_entry25MCEXEC_V10_SCHEDULER_LOGS
+ 951:	8b 01                	mov    (%rcx),%eax
+ 953:	66 66 66 66 2e 0f 1f 84 00 00 00 00 00 	data16 data16 data16 cs nopw 0x0(%rax,%rax,1)
+ 960:	83 f8 1f             	cmp    $0x1f,%eax
+ 963:	0f 87 da 00 00 00    	ja     a43 <schedule+0xa43>
+ 969:	8d 50 01             	lea    0x1(%rax),%edx
+ 96c:	f0 0f b1 11          	lock cmpxchg %edx,(%rcx)
+ 970:	75 ee                	jne    960 <schedule+0x960>
+ 972:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+ 977:	0f 32                	rdmsr  
+ 979:	48 c1 e2 20          	shl    $0x20,%rdx
+ 97d:	89 c0                	mov    %eax,%eax
+ 97f:	48 09 d0             	or     %rdx,%rax
+ 982:	48 39 c7             	cmp    %rax,%rdi
+ 985:	0f 97 c1             	seta   %cl
+ 988:	48 39 c6             	cmp    %rax,%rsi
+ 98b:	0f 92 c0             	setb   %al
+ 98e:	08 c8                	or     %cl,%al
+ 990:	ba ff ff ff ff       	mov    $0xffffffff,%edx
+ 995:	be ff ff ff ff       	mov    $0xffffffff,%esi
+ 99a:	75 08                	jne    9a4 <schedule+0x9a4>
+ 99c:	65 8b 34 25 00 00 00 00 	mov    %gs:0x0,%esi
+ 9a4:	4d 85 ff             	test   %r15,%r15
+ 9a7:	74 04                	je     9ad <schedule+0x9ad>
+ 9a9:	41 8b 57 14          	mov    0x14(%r15),%edx
+ 9ad:	49 8b 84 24 d0 10 00 00 	mov    0x10d0(%r12),%rax
+ 9b5:	48 85 c0             	test   %rax,%rax
+ 9b8:	74 24                	je     9de <schedule+0x9de>
+ 9ba:	44 8b 80 c8 01 00 00 	mov    0x1c8(%rax),%r8d
+ 9c1:	eb 21                	jmp    9e4 <schedule+0x9e4>
+ 9c3:	48 8b 85 60 ff ff ff 	mov    -0xa0(%rbp),%rax
+ 9ca:	50                   	push   %rax
+ 9cb:	9d                   	popf   
+ 9cc:	48 81 c4 98 00 00 00 	add    $0x98,%rsp
+ 9d3:	5b                   	pop    %rbx
+ 9d4:	41 5c                	pop    %r12
+ 9d6:	41 5d                	pop    %r13
+ 9d8:	41 5e                	pop    %r14
+ 9da:	41 5f                	pop    %r15
+ 9dc:	5d                   	pop    %rbp
+ 9dd:	c3                   	ret    
+ 9de:	41 b8 ff ff ff ff    	mov    $0xffffffff,%r8d
+ 9e4:	41 8b 4c 24 14       	mov    0x14(%r12),%ecx
+ 9e9:	49 8b 84 24 c8 10 00 00 	mov    0x10c8(%r12),%rax
+ 9f1:	48 85 c0             	test   %rax,%rax
+ 9f4:	74 10                	je     a06 <schedule+0xa06>
+ 9f6:	4c 8b 88 b8 00 00 00 	mov    0xb8(%rax),%r9
+ 9fd:	4c 8b 90 d0 00 00 00 	mov    0xd0(%rax),%r10
+ a04:	eb 06                	jmp    a0c <schedule+0xa0c>
+ a06:	45 31 c9             	xor    %r9d,%r9d
+ a09:	45 31 d2             	xor    %r10d,%r10d
+ a0c:	45 8b 9c 24 58 10 00 00 	mov    0x1058(%r12),%r11d
+ a14:	48 83 ec 08          	sub    $0x8,%rsp
+ a18:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	a1a: R_X86_64_64	.lrodata.str1.1+0x8632
+ a22:	31 c0                	xor    %eax,%eax
+ a24:	48 8b 5d b8          	mov    -0x48(%rbp),%rbx
+ a28:	ff b3 d0 1e 00 00    	push   0x1ed0(%rbx)
+ a2e:	41 53                	push   %r11
+ a30:	41 52                	push   %r10
+ a32:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	a34: R_X86_64_64	kprintf
+ a3c:	41 ff d2             	call   *%r10
+ a3f:	48 83 c4 20          	add    $0x20,%rsp
+ a43:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	a45: R_X86_64_64	sched_schedule_debug_handoff
+ a4d:	4c 89 ff             	mov    %r15,%rdi
+ a50:	4c 89 e6             	mov    %r12,%rsi
+ a53:	ff d0                	call   *%rax
+ a55:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+ a5a:	0f 32                	rdmsr  
+ a5c:	48 c1 e2 20          	shl    $0x20,%rdx
+ a60:	89 c1                	mov    %eax,%ecx
+ a62:	48 09 d1             	or     %rdx,%rcx
+ a65:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	a67: R_X86_64_64	locals
+ a6f:	48 8b 10             	mov    (%rax),%rdx
+ a72:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+ a79:	48 39 ca             	cmp    %rcx,%rdx
+ a7c:	77 23                	ja     aa1 <schedule+0xaa1>
+ a7e:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	a80: R_X86_64_64	num_processors
+ a88:	48 63 36             	movslq (%rsi),%rsi
+ a8b:	48 c1 e6 0e          	shl    $0xe,%rsi
+ a8f:	48 01 f2             	add    %rsi,%rdx
+ a92:	48 39 ca             	cmp    %rcx,%rdx
+ a95:	72 0a                	jb     aa1 <schedule+0xaa1>
+ a97:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+ a9f:	48 98                	cltq   
+ aa1:	49 8b 4d 00          	mov    0x0(%r13),%rcx
+ aa5:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+ aac:	48 01 c8             	add    %rcx,%rax
+ aaf:	48 83 c0 40          	add    $0x40,%rax
+ ab3:	4c 39 e0             	cmp    %r12,%rax
+ ab6:	74 44                	je     afc <schedule+0xafc>
+ ab8:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	aba: R_X86_64_64	x86_cpu_xsave_available
+ ac2:	8b 30                	mov    (%rax),%esi
+ ac4:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	ac6: R_X86_64_64	x86_cpu_initial_fp_regs_available
+ ace:	8b 10                	mov    (%rax),%edx
+ ad0:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	ad2: R_X86_64_64	x86_cpu_xsave_mask
+ ada:	4c 8b 00             	mov    (%rax),%r8
+ add:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	adf: R_X86_64_64	x86_cpu_initial_fp_regs
+ ae7:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	ae9: R_X86_64_64	rust_x86_restore_fp_regs
+ af1:	4c 89 e7             	mov    %r12,%rdi
+ af4:	41 b9 01 00 00 00    	mov    $0x1,%r9d
+ afa:	ff d0                	call   *%rax
+ afc:	4d 85 ff             	test   %r15,%r15
+ aff:	0f 84 d0 01 00 00    	je     cd5 <schedule+0xcd5>
+ b05:	49 8b 87 68 10 00 00 	mov    0x1068(%r15),%rax
+ b0c:	48 8b 00             	mov    (%rax),%rax
+ b0f:	49 8b 8c 24 68 10 00 00 	mov    0x1068(%r12),%rcx
+ b17:	48 8b 09             	mov    (%rcx),%rcx
+ b1a:	48 8b 19             	mov    (%rcx),%rbx
+ b1d:	48 39 18             	cmp    %rbx,(%rax)
+ b20:	0f 84 00 01 00 00    	je     c26 <schedule+0xc26>
+ b26:	48 85 db             	test   %rbx,%rbx
+ b29:	75 0d                	jne    b38 <schedule+0xb38>
+ b2b:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	b2d: R_X86_64_64	_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data13OWNED_INIT_PT
+ b35:	48 8b 18             	mov    (%rax),%rbx
+ b38:	48 85 db             	test   %rbx,%rbx
+ b3b:	0f 84 d9 02 00 00    	je     e1a <schedule+0xe1a>
+ b41:	48 81 fb ff ff 7f fe 	cmp    $0xfffffffffe7fffff,%rbx
+ b48:	77 6c                	ja     bb6 <schedule+0xbb6>
+ b4a:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	b4c: R_X86_64_64	linux_page_offset_base
+ b54:	48 8b 00             	mov    (%rax),%rax
+ b57:	48 39 d8             	cmp    %rbx,%rax
+ b5a:	0f 86 b1 00 00 00    	jbe    c11 <schedule+0xc11>
+ b60:	48 89 d8             	mov    %rbx,%rax
+ b63:	48 c1 e8 29          	shr    $0x29,%rax
+ b67:	3d c3 ff 7f 00       	cmp    $0x7fffc3,%eax
+ b6c:	0f 83 a4 00 00 00    	jae    c16 <schedule+0xc16>
+ b72:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	b74: R_X86_64_64	x86_addr_log_straight_debug+0x18
+ b7c:	8b 00                	mov    (%rax),%eax
+ b7e:	3d 00 00 00 01       	cmp    $0x1000000,%eax
+ b83:	72 25                	jb     baa <schedule+0xbaa>
+ b85:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	b87: R_X86_64_64	.lrodata.str1.1+0x9389
+ b8f:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	b91: R_X86_64_64	.lrodata.str1.1+0x937c
+ b99:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	b9b: R_X86_64_64	kprintf
+ ba3:	48 89 da             	mov    %rbx,%rdx
+ ba6:	31 c0                	xor    %eax,%eax
+ ba8:	ff d1                	call   *%rcx
+ baa:	48 b8 00 00 00 00 00 80 00 00 	movabs $0x800000000000,%rax
+ bb4:	eb 6a                	jmp    c20 <schedule+0xc20>
+ bb6:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	bb8: R_X86_64_64	x86_kernel_phys_base
+ bc0:	4c 8b 28             	mov    (%rax),%r13
+ bc3:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	bc5: R_X86_64_64	x86_addr_log_kernel_debug+0x18
+ bcd:	8b 00                	mov    (%rax),%eax
+ bcf:	3d 00 00 00 01       	cmp    $0x1000000,%eax
+ bd4:	72 25                	jb     bfb <schedule+0xbfb>
+ bd6:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	bd8: R_X86_64_64	.lrodata.str1.1+0x9343
+ be0:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	be2: R_X86_64_64	.lrodata.str1.1+0x937c
+ bea:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	bec: R_X86_64_64	kprintf
+ bf4:	48 89 da             	mov    %rbx,%rdx
+ bf7:	31 c0                	xor    %eax,%eax
+ bf9:	ff d1                	call   *%rcx
+ bfb:	4c 01 eb             	add    %r13,%rbx
+ bfe:	48 81 c3 00 00 80 01 	add    $0x1800000,%rbx
+ c05:	49 bd 00 00 00 00 00 00 00 00 	movabs $0x0,%r13	c07: R_X86_64_64	clv
+ c0f:	eb 12                	jmp    c23 <schedule+0xc23>
+ c11:	48 29 c3             	sub    %rax,%rbx
+ c14:	eb 0d                	jmp    c23 <schedule+0xc23>
+ c16:	48 b8 00 00 00 00 00 7a 00 00 	movabs $0x7a0000000000,%rax
+ c20:	48 01 c3             	add    %rax,%rbx
+ c23:	0f 22 db             	mov    %rbx,%cr3
+ c26:	49 8b b4 24 d0 10 00 00 	mov    0x10d0(%r12),%rsi
+ c2e:	49 39 b7 d0 10 00 00 	cmp    %rsi,0x10d0(%r15)
+ c35:	0f 84 9a 00 00 00    	je     cd5 <schedule+0xcd5>
+ c3b:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+ c40:	0f 32                	rdmsr  
+ c42:	48 c1 e2 20          	shl    $0x20,%rdx
+ c46:	89 c0                	mov    %eax,%eax
+ c48:	48 09 d0             	or     %rdx,%rax
+ c4b:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	c4d: R_X86_64_64	locals
+ c55:	4c 8b 01             	mov    (%rcx),%r8
+ c58:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	c5a: R_X86_64_64	num_processors
+ c62:	48 63 39             	movslq (%rcx),%rdi
+ c65:	48 c1 e7 0e          	shl    $0xe,%rdi
+ c69:	4c 01 c7             	add    %r8,%rdi
+ c6c:	49 39 c0             	cmp    %rax,%r8
+ c6f:	0f 97 c1             	seta   %cl
+ c72:	48 39 c7             	cmp    %rax,%rdi
+ c75:	0f 92 c0             	setb   %al
+ c78:	08 c8                	or     %cl,%al
+ c7a:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+ c81:	75 0a                	jne    c8d <schedule+0xc8d>
+ c83:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+ c8b:	48 98                	cltq   
+ c8d:	49 8b 4d 00          	mov    0x0(%r13),%rcx
+ c91:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+ c98:	48 01 c8             	add    %rcx,%rax
+ c9b:	48 83 c0 40          	add    $0x40,%rax
+ c9f:	4c 39 e0             	cmp    %r12,%rax
+ ca2:	74 31                	je     cd5 <schedule+0xcd5>
+ ca4:	44 3b b6 c8 01 00 00 	cmp    0x1c8(%rsi),%r14d
+ cab:	75 28                	jne    cd5 <schedule+0xcd5>
+ cad:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+ cb2:	0f 32                	rdmsr  
+ cb4:	48 c1 e2 20          	shl    $0x20,%rdx
+ cb8:	89 c0                	mov    %eax,%eax
+ cba:	48 09 d0             	or     %rdx,%rax
+ cbd:	49 39 c0             	cmp    %rax,%r8
+ cc0:	0f 97 c1             	seta   %cl
+ cc3:	48 39 c7             	cmp    %rax,%rdi
+ cc6:	0f 92 c0             	setb   %al
+ cc9:	08 c8                	or     %cl,%al
+ ccb:	75 08                	jne    cd5 <schedule+0xcd5>
+ ccd:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+ cd5:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	cd7: R_X86_64_64	arch_switch_context
+ cdf:	4c 89 ff             	mov    %r15,%rdi
+ ce2:	4c 89 e6             	mov    %r12,%rsi
+ ce5:	ff d0                	call   *%rax
+ ce7:	48 89 c6             	mov    %rax,%rsi
+ cea:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+ cef:	0f 32                	rdmsr  
+ cf1:	48 c1 e2 20          	shl    $0x20,%rdx
+ cf5:	89 c1                	mov    %eax,%ecx
+ cf7:	48 09 d1             	or     %rdx,%rcx
+ cfa:	49 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%r9	cfc: R_X86_64_64	locals
+ d04:	49 8b 11             	mov    (%r9),%rdx
+ d07:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+ d0e:	49 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%r8	d10: R_X86_64_64	num_processors
+ d18:	48 39 ca             	cmp    %rcx,%rdx
+ d1b:	77 19                	ja     d36 <schedule+0xd36>
+ d1d:	49 63 38             	movslq (%r8),%rdi
+ d20:	48 c1 e7 0e          	shl    $0xe,%rdi
+ d24:	48 01 fa             	add    %rdi,%rdx
+ d27:	48 39 ca             	cmp    %rcx,%rdx
+ d2a:	72 0a                	jb     d36 <schedule+0xd36>
+ d2c:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+ d34:	48 98                	cltq   
+ d36:	49 8b 4d 00          	mov    0x0(%r13),%rcx
+ d3a:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+ d41:	66 f0 83 84 01 98 1e 00 00 02 	lock addw $0x2,0x1e98(%rcx,%rax,1)
+ d4b:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	d4d: R_X86_64_64	cpu_local_var_initialized
+ d55:	83 38 00             	cmpl   $0x0,(%rax)
+ d58:	74 4b                	je     da5 <schedule+0xda5>
+ d5a:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+ d5f:	0f 32                	rdmsr  
+ d61:	48 c1 e2 20          	shl    $0x20,%rdx
+ d65:	89 c1                	mov    %eax,%ecx
+ d67:	48 09 d1             	or     %rdx,%rcx
+ d6a:	49 8b 11             	mov    (%r9),%rdx
+ d6d:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+ d74:	48 39 ca             	cmp    %rcx,%rdx
+ d77:	77 19                	ja     d92 <schedule+0xd92>
+ d79:	49 63 38             	movslq (%r8),%rdi
+ d7c:	48 c1 e7 0e          	shl    $0xe,%rdi
+ d80:	48 01 fa             	add    %rdi,%rdx
+ d83:	48 39 ca             	cmp    %rcx,%rdx
+ d86:	72 0a                	jb     d92 <schedule+0xd92>
+ d88:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+ d90:	48 98                	cltq   
+ d92:	49 8b 4d 00          	mov    0x0(%r13),%rcx
+ d96:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+ d9d:	f0 ff 8c 01 28 1f 00 00 	lock decl 0x1f28(%rcx,%rax,1)
+ da5:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+ daa:	0f 32                	rdmsr  
+ dac:	48 c1 e2 20          	shl    $0x20,%rdx
+ db0:	89 c1                	mov    %eax,%ecx
+ db2:	48 09 d1             	or     %rdx,%rcx
+ db5:	49 8b 11             	mov    (%r9),%rdx
+ db8:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+ dbf:	48 39 ca             	cmp    %rcx,%rdx
+ dc2:	77 19                	ja     ddd <schedule+0xddd>
+ dc4:	49 63 38             	movslq (%r8),%rdi
+ dc7:	48 c1 e7 0e          	shl    $0xe,%rdi
+ dcb:	48 01 fa             	add    %rdi,%rdx
+ dce:	48 39 ca             	cmp    %rcx,%rdx
+ dd1:	72 0a                	jb     ddd <schedule+0xddd>
+ dd3:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+ ddb:	48 98                	cltq   
+ ddd:	49 8b 4d 00          	mov    0x0(%r13),%rcx
+ de1:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+ de8:	48 8b 84 01 a0 1e 00 00 	mov    0x1ea0(%rcx,%rax,1),%rax
+ df0:	50                   	push   %rax
+ df1:	9d                   	popf   
+ df2:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	df4: R_X86_64_64	sched_schedule_exit_cleanup
+ dfc:	48 8b 7d b8          	mov    -0x48(%rbp),%rdi
+ e00:	ba 10 00 00 00       	mov    $0x10,%edx
+ e05:	31 c9                	xor    %ecx,%ecx
+ e07:	48 81 c4 98 00 00 00 	add    $0x98,%rsp
+ e0e:	5b                   	pop    %rbx
+ e0f:	41 5c                	pop    %r12
+ e11:	41 5d                	pop    %r13
+ e13:	41 5e                	pop    %r14
+ e15:	41 5f                	pop    %r15
+ e17:	5d                   	pop    %rbp
+ e18:	ff e0                	jmp    *%rax
+ e1a:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	e1c: R_X86_64_64	.lrodata.str1.1+0x9ceb
+ e24:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	e26: R_X86_64_64	panic
+ e2e:	ff d0                	call   *%rax

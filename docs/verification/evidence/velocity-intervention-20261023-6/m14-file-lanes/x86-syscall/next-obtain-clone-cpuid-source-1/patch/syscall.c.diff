@@ -1,0 +1,20 @@
+--- a/arch/x86_64/kernel/syscall.c
++++ b/arch/x86_64/kernel/syscall.c
+@@ -907,6 +907,9 @@
+ 
+ extern int num_processors;
+ 
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++extern int obtain_clone_cpuid(cpu_set_t *cpu_set, int use_last);
++#else
+ int obtain_clone_cpuid(cpu_set_t *cpu_set, int use_last) {
+ 	int min_queue_len = -1;
+ 	int cpu, min_cpu = -1, uti_cpu = -1;
+@@ -949,6 +952,7 @@
+ 
+     return min_cpu;
+ }
++#endif
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ extern long sys_prctl(int n, ihk_mc_user_context_t *ctx);

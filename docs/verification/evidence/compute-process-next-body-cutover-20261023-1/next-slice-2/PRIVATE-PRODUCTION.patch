@@ -1,0 +1,136 @@
+--- a/kernel/process.c
++++ b/kernel/process.c
+@@ -414,9 +414,9 @@
+ 			  (waitq_entry_t *)entry_addr);
+ }
+ #endif
+ 
+-static void process_sched_migrate_log_bridge(unsigned long thread_addr,
++PROCESS_SCHED_PUBLIC_BRIDGE void process_sched_migrate_log_bridge(unsigned long thread_addr,
+ 					     int tid, int cpu_id)
+ {
+ 	(void)thread_addr;
+ 	dkprintf("%s: tid: %d -> cpu: %d\n",
+@@ -4086,8 +4086,9 @@
+ 		process_sched_init_panic_bridge();
+ }
+ #endif
+ 
++#ifndef MCKERNEL_RUST_PROCESS_HELPERS
+ struct migrate_request {
+ 	struct list_head list;
+ 	struct thread *thread;
+ 	struct waitq wq;
+@@ -4106,8 +4107,9 @@
+ 		__builtin_offsetof(struct cpu_local_var, runq_lock),
+ 	.cpu_flags_offset = __builtin_offsetof(struct cpu_local_var, flags),
+ 	.cpu_status_offset = __builtin_offsetof(struct cpu_local_var, status),
+ };
++#endif
+ 
+ #ifndef MCKERNEL_RUST_PROCESS_HELPERS
+ static const struct sched_do_migrate_offsets process_sched_do_migrate_offsets = {
+ 	.req_list_offset = __builtin_offsetof(struct migrate_request, list),
+@@ -4914,8 +4916,9 @@
+  * 2. call schedule() via check_resched()
+  * 3. Do migration
+  * 4. Wake up this thread
+  */
++#ifndef MCKERNEL_RUST_PROCESS_HELPERS
+ void sched_request_migrate(int cpu_id, struct thread *thread)
+ {
+ 	struct cpu_local_var *v = get_cpu_local_var(cpu_id);
+ 	struct migrate_request req;
+@@ -4946,8 +4949,9 @@
+ 			process_sched_vector_bridge, process_sched_interrupt_bridge,
+ 			process_sched_schedule_bridge,
+ 			process_sched_migrate_log_bridge);
+ }
++#endif
+ 
+ /* Runq lock must be held here */
+ #ifdef MCKERNEL_RUST_PROCESS_HELPERS
+ void __runq_add_thread(struct thread *thread, int cpu_id);
+--- a/kernel/rust/sched_helpers.rs
++++ b/kernel/rust/sched_helpers.rs
+@@ -7,8 +7,12 @@
+     SigCommon, SizeT, Thread, TimeSpec, Waitq, CPU_SET_MAX_CPUS,
+ };
+ 
+ unsafe extern "C" {
++    fn process_sched_waitq_init_bridge(waitq_addr: usize);
++    fn process_sched_waitq_prepare_bridge(waitq_addr: usize, entry_addr: usize, status: CInt);
++    fn process_sched_waitq_finish_bridge(waitq_addr: usize, entry_addr: usize);
++    fn process_sched_migrate_log_bridge(thread_addr: usize, tid: CInt, cpu_id: CInt);
+     static mut idle_halt: CInt;
+     fn process_sched_irq_restore_bridge(irqstate: CULong);
+     fn process_sched_zero_free_bridge();
+     fn process_sched_pause_bridge();
+@@ -209,8 +213,9 @@
+ const ERESTARTSYS: i64 = 512;
+ const ENOSYS: CInt = 38;
+ const EFAULT: CInt = 14;
+ const PS_RUNNING: CInt = 0x1;
++const PS_UNINTERRUPTIBLE: CInt = 0x4;
+ const PS_EXITED: CInt = 0x10;
+ const CPU_FLAG_NEED_RESCHED: u32 = 0x1;
+ const CPU_FLAG_NEED_MIGRATE: u32 = 0x2;
+ const CPU_STATUS_IDLE: CInt = 1;
+@@ -2175,8 +2180,57 @@
+         }
+         entry = unsafe { list_next(entry) };
+     }
+     0
++}
++
++/// Publish a stack-local migration request using the existing scheduler body.
++///
++/// # Safety
++/// The caller preserves the existing scheduler/current-CPU contract and supplies
++/// a live thread and CPU. As in the C wrapper, schedule completes the request
++/// before returning; waitq_finish then detaches the entry before either stack
++/// object expires. The body acquires migq_lock before runq_lock and retains it
++/// through target notification. Callbacks must not retain the offset table.
++#[no_mangle]
++pub unsafe extern "C" fn sched_request_migrate(cpu_id: CInt, thread: *mut Thread) {
++    let cpu = unsafe { process_sched_cpu_local_bridge(cpu_id) };
++    let mut request = MaybeUninit::<SchedMigrateRequest>::uninit();
++    let mut entry = MaybeUninit::<crate::waitq::WaitqEntry>::uninit();
++    unsafe {
++        crate::waitq::waitq_init_locked_entry(
++            entry.as_mut_ptr(), (*get_this_cpu_local_var()).current.cast(),
++        );
++    }
++    let current_cpu_id = unsafe { ihk_mc_get_processor_id() };
++    let offsets = SchedMigrateOffsets {
++        req_list_offset: offset_of!(SchedMigrateRequest, list),
++        req_thread_offset: offset_of!(SchedMigrateRequest, thread),
++        req_wq_offset: offset_of!(SchedMigrateRequest, wq),
++        thread_cpu_id_offset: offset_of!(Thread, cpu_id),
++        thread_tid_offset: offset_of!(Thread, tid),
++        cpu_migq_lock_offset: offset_of!(CpuLocalVar, migq_lock),
++        cpu_migq_offset: offset_of!(CpuLocalVar, migq),
++        cpu_runq_lock_offset: offset_of!(CpuLocalVar, runq_lock),
++        cpu_flags_offset: offset_of!(CpuLocalVar, flags),
++        cpu_status_offset: offset_of!(CpuLocalVar, status),
++    };
++    let _ = unsafe {
++        sched_request_migrate_body_result(
++            cpu_id, cpu, request.as_mut_ptr() as usize, entry.as_mut_ptr() as usize,
++            thread as usize, current_cpu_id, PS_UNINTERRUPTIBLE, CPU_FLAG_NEED_RESCHED,
++            CPU_FLAG_NEED_MIGRATE, CPU_STATUS_RUNNING, IHK_GV_IKC, &offsets,
++            Some(sched_process_spin_lock_bridge),
++            Some(sched_process_spin_unlock_bridge),
++            Some(sched_process_noirq_lock_bridge),
++            Some(sched_process_noirq_unlock_bridge),
++            Some(process_sched_waitq_init_bridge),
++            Some(process_sched_waitq_prepare_bridge),
++            Some(process_sched_waitq_finish_bridge),
++            Some(process_sched_vector_bridge), Some(process_sched_interrupt_bridge),
++            Some(process_sched_schedule_bridge), Some(process_sched_migrate_log_bridge),
++        )
++    };
+ }
+ 
+ #[no_mangle]
+ pub unsafe extern "C" fn sched_request_migrate_body_result(

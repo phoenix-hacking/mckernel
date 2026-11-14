@@ -1,0 +1,115 @@
+{
+  "schema": "mckernel.m15-mm-host-body-h990-capture.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_REQUIRES_FRESH_ROOT_REVIEW_AND_EXACT_ORDINARY_GRANT",
+  "root_execution_grant": null,
+  "resources": {
+    "uid": 1000,
+    "cpu_choices": [
+      0,
+      6
+    ],
+    "cpu_count": 1,
+    "AS_bytes": 2147483648,
+    "CPU_seconds": 60,
+    "work_wall_seconds": 90,
+    "bounded_retirement_seconds": 6,
+    "FSIZE_per_file_bytes": 33554432,
+    "NOFILE": 256,
+    "CORE_bytes": 0,
+    "STACK_bytes": 2097152,
+    "RUST_MIN_STACK": "2097152",
+    "aggregate_output_acceptance_cap_bytes": 67108864,
+    "aggregate_output_reservation_bytes": 67108864,
+    "reserve_bytes": 671088640,
+    "compiler_slots": 1,
+    "root": false,
+    "Docker": false,
+    "network": "none"
+  },
+  "output_cap_semantics": "64MiB applies to all body artifacts/captures/control plus outer captures/control, including final receipt. Monitor checks each10ms and after join; any excess fails. It is not an OS aggregate quota and can transiently overshoot before retirement. FSIZE32MiB applies separately to each file.",
+  "CPU_semantics": "RLIMIT_CPU60 inherited per process; total self+waited descendant CPU measured after positive join must be<=60. No claim that per-process rlimit is an aggregate kernel quota.",
+  "fresh_capture_root": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/m15-mm-capture-fix/actual-capture-attempt-1",
+  "fresh_body_output": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/m15-mm-capture-fix/actual-body-attempt-1",
+  "required_free_bytes": 738197504,
+  "source_inputs": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-13/m15-mm-finish/batch-1/CANDIDATE-INPUTS.json",
+      "bytes": 6232,
+      "sha256": "2aef54815205c0e46ee6d7787016e8941a335155e6459152f590896ec9fd7f82"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-13/m15-mm-finish/batch-1/run_candidate_fixture.py",
+      "bytes": 15150,
+      "sha256": "81c2b363c0340e082759e823f0c708e22ece8769e2d1f69d2d3ecffc4a419fc0"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/m15-mm-capture-fix/run_body_fixture.py",
+      "bytes": 15323,
+      "sha256": "a60f041abe588f6b303ddc9e3d304bada69db08e0b2af08935bb7f633a60c790"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-20261019-1/capsule/scripts/native_rust_exact_build_container_owner.py",
+      "bytes": 51420,
+      "sha256": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1"
+    }
+  ],
+  "owned_capture_helper": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/phase5-m03-handshake-runtime-checkpoint-20261020-1/sdk-physical-source/run_two_commands_source_bound_corrected.py",
+    "bytes": 14753,
+    "sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8"
+  },
+  "python_interpreter": {
+    "invocation": "/usr/bin/python3",
+    "resolved": "/usr/bin/python3.8",
+    "sha256": "298a9e830ed52f36c299427565485d717d1ce0179c0597cc16560513eb780b06",
+    "bytes": 5490456,
+    "invoked_by_lane": false
+  },
+  "body_argv": [
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/m15-mm-capture-fix/run_body_fixture.py",
+    "--execute-after-campaign-grant",
+    "--phase",
+    "body",
+    "--output",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/m15-mm-capture-fix/actual-body-attempt-1",
+    "--cc",
+    "/usr/bin/cc",
+    "--rustc",
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc"
+  ],
+  "capture_transport_tools": [
+    {
+      "path": "/usr/bin/env",
+      "bytes": 43352,
+      "sha256": "5f7c7882898e9e280e93579b459e22b339c4f38cfd54a05b46b81dfb60c557cc"
+    },
+    {
+      "path": "/usr/bin/taskset",
+      "bytes": 35048,
+      "sha256": "28f2dd426247d7d1d794c0fb8a723efc6a1ae3c56393a238b180fe9a0dc32f1c"
+    },
+    {
+      "path": "/usr/bin/prlimit",
+      "bytes": 39672,
+      "sha256": "06a57e4767f1bdfcc8c5a39b4b58decb9366447b007a8bdd9d6b12d1e6698d8c"
+    }
+  ],
+  "compiler_environment": {
+    "PATH": "/usr/bin:/bin",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "TZ": "UTC",
+    "HOME": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/m15-mm-capture-fix/actual-body-attempt-1",
+    "TMPDIR": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/m15-mm-capture-fix/actual-body-attempt-1",
+    "RUST_BACKTRACE": "0",
+    "RUST_MIN_STACK": "2097152"
+  },
+  "external_root_admission_required": true,
+  "inheritance": "All inner subprocesses inherit the h990-owned outer session/group; no inner setsid. h990 keeps the outer creator unreaped while signalling and fails if unexpected descendants exist. No retry after first failure.",
+  "helper_reuse": "Unchanged source-bound h990 owned_capture and exact procfs census. Its wait_terminal dependency is wrapped only to monitor aggregate output during work; original wait_terminal is used during retirement.",
+  "production_limits": "HOST body uses mocked MM primitives/gates/warning callbacks. Pinned production objtool requires SDK GLIBC2.38; no gate objtool, SDK, module, native, or C-retirement proof."
+}

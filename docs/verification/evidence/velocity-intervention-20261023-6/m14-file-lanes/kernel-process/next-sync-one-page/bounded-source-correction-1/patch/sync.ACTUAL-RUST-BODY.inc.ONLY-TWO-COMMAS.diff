@@ -1,0 +1,20 @@
+--- preserved-failed/fixture/sync.ACTUAL-RUST-BODY.inc
++++ bounded-correction/fixture/sync.ACTUAL-RUST-BODY.inc
+@@ -14,7 +14,7 @@
+     let pte = ptep.cast::<CULong>();
+     let mut error = 0;
+     if core::ptr::read_volatile(core::ptr::addr_of!(
+-        process_sync_one_page_entry_debug.line_flags,
++        process_sync_one_page_entry_debug.line_flags
+     )) >> 24 != 0 {
+         let _ = kprintf(
+             b"sync_one_page(%p,%p,%p %#lx,%p,%d)\n\0".as_ptr().cast(),
+@@ -43,7 +43,7 @@
+         }
+     }
+     if core::ptr::read_volatile(core::ptr::addr_of!(
+-        process_sync_one_page_exit_debug.line_flags,
++        process_sync_one_page_exit_debug.line_flags
+     )) >> 24 != 0 {
+         let _ = kprintf(
+             b"sync_one_page(%p,%p,%p %#lx,%p,%d):%d\n\0".as_ptr().cast(),

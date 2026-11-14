@@ -9,6 +9,21 @@ use core::mem::{size_of, MaybeUninit};
 #[cfg(ldump2_full_body)]
 use core::ptr::{addr_of, addr_of_mut, null, null_mut};
 
+#[cfg(ldump2_full_body)]
+mod selected_bfd_layout { include!(env!("MCKERNEL_LDUMP2_BFD_LAYOUT_RS")); }
+#[cfg(ldump2_full_body)]
+use selected_bfd_layout::*;
+#[cfg(all(ldump2_full_body, not(all(target_arch="x86_64", target_os="linux", target_pointer_width="64"))))]
+compile_error!("selected BFD section ABI covers x86_64 Linux LP64 only");
+#[cfg(ldump2_full_body)]
+type BfdVma = u64;
+#[cfg(ldump2_full_body)]
+type BfdSize = u64;
+#[cfg(ldump2_full_body)]
+type BfdFilePtr = i64;
+#[cfg(ldump2_full_body)]
+type BfdFlag = u32;
+
 const BITS_PER_LONG: usize = core::mem::size_of::<usize>() * 8;
 #[cfg(ldump2_full_body)]
 const PATH_MAX: usize = 4096;
@@ -27,11 +42,11 @@ const FAULT_ON_ERROR: c_ulong = 0x1;
 #[cfg(ldump2_full_body)]
 const RETURN_ON_ERROR: c_ulong = 0x2;
 #[cfg(ldump2_full_body)]
-const BFD_OBJECT: c_int = 1;
+const BFD_OBJECT: c_int = BFD_SELECTED_OBJECT;
 #[cfg(ldump2_full_body)]
-const SEC_ALLOC: c_uint = 0x1;
+const SEC_ALLOC: BfdFlag = BFD_SELECTED_SEC_ALLOC;
 #[cfg(ldump2_full_body)]
-const SEC_HAS_CONTENTS: c_uint = 0x100;
+const SEC_HAS_CONTENTS: BfdFlag = BFD_SELECTED_SEC_HAS_CONTENTS;
 #[cfg(ldump2_full_body)]
 const PAGE_SHIFT: c_int = 12;
 #[cfg(ldump2_full_body)]
@@ -166,18 +181,7 @@ struct Bfd {
 
 #[repr(C)]
 #[cfg(ldump2_full_body)]
-struct ASection {
-    name: *const c_char,
-    id: c_uint,
-    index: c_uint,
-    next: *mut ASection,
-    prev: *mut ASection,
-    flags: c_uint,
-    bitfields: c_uint,
-    vma: c_ulong,
-    lma: c_ulong,
-    size: c_ulong,
-}
+struct ASection { _private: [u8; 0] }
 
 #[repr(C)]
 #[cfg(ldump2_full_body)]
@@ -214,14 +218,21 @@ unsafe extern "C" {
     static mut machdep: *mut MachdepTable;
 
     fn register_extension(table: *mut CommandTableEntry);
-    fn symbol_value(name: *mut c_char) -> c_ulong;
-    fn readmem(
+    // The real C command boundary owns crash's opaque setjmp environments.
+    // Providers still receive their original arguments and error flags.
+    fn cmd_ldump2mcdump();
+    fn mck_crash_guarded_symbol_value(
+        restart: *mut c_void, name: *mut c_char, value: *mut c_ulong,
+    ) -> c_int;
+    fn mck_crash_guarded_readmem(
+        restart: *mut c_void,
         addr: c_ulonglong,
         type_: c_int,
         buf: *mut c_void,
         size: c_long,
         msg: *mut c_char,
         flags: c_ulong,
+        result: *mut c_int,
     ) -> c_int;
     fn getopt(argc: c_int, argv: *mut *mut c_char, optstring: *const c_char) -> c_int;
     fn strcpy(dst: *mut c_char, src: *const c_char) -> *mut c_char;
@@ -231,6 +242,7 @@ unsafe extern "C" {
     fn free(ptr: *mut c_void);
     fn perror(s: *const c_char);
     fn fprintf(stream: *mut File, format: *const c_char, ...) -> c_int;
+    fn fflush(stream: *mut File) -> c_int;
     fn gethostname(name: *mut c_char, len: usize) -> c_int;
     fn getuid() -> c_uint;
     fn getpwuid(uid: c_uint) -> *mut Passwd;
@@ -238,7 +250,7 @@ unsafe extern "C" {
     fn localtime(timep: *const c_long) -> *mut Tm;
     fn asctime(tm: *const Tm) -> *mut c_char;
 
-    fn bfd_init();
+    fn bfd_init() -> c_uint;
     fn bfd_fopen(
         filename: *const c_char,
         target: *const c_char,
@@ -246,19 +258,21 @@ unsafe extern "C" {
         fd: c_int,
     ) -> *mut Bfd;
     fn bfd_perror(message: *const c_char);
-    fn bfd_set_format(abfd: *mut Bfd, format: c_int) -> c_int;
+    fn bfd_set_format(abfd: *mut Bfd, format: c_int) -> bool;
     fn bfd_make_section_anyway(abfd: *mut Bfd, name: *const c_char) -> *mut ASection;
-    fn bfd_set_section_size(abfd: *mut Bfd, section: *mut ASection, size: c_ulong) -> c_int;
-    fn bfd_set_section_flags(abfd: *mut Bfd, section: *mut ASection, flags: c_uint) -> c_int;
+    fn bfd_set_section_size(section: *mut ASection, size: BfdSize) -> bool;
+    fn bfd_set_section_flags(section: *mut ASection, flags: BfdFlag) -> bool;
     fn bfd_get_section_by_name(abfd: *mut Bfd, name: *const c_char) -> *mut ASection;
     fn bfd_set_section_contents(
         abfd: *mut Bfd,
         section: *mut ASection,
         data: *const c_void,
-        offset: c_long,
-        count: c_ulong,
-    ) -> c_int;
-    fn bfd_close(abfd: *mut Bfd) -> c_int;
+        offset: BfdFilePtr,
+        count: BfdSize,
+    ) -> bool;
+    fn bfd_close(abfd: *mut Bfd) -> bool;
+    // Exact selected binutils2.41-63 bfd.h: bool bfd_close_all_done(bfd *).
+    fn bfd_close_all_done(abfd: *mut Bfd) -> bool;
 }
 
 #[no_mangle]
@@ -336,11 +350,15 @@ unsafe fn dump_chunk(mem_chunks: *mut DumpMemChunks, index: usize) -> *mut DumpM
 
 #[inline(always)]
 #[cfg(ldump2_full_body)]
-unsafe fn set_section_vma(section: *mut ASection, vma: c_ulong) {
+unsafe fn set_section_vma(section: *mut ASection, vma: BfdVma) {
     if !section.is_null() {
-        (*section).vma = vma;
-        (*section).lma = vma;
-        (*section).bitfields |= 1;
+        // Same writes as selected header's inline bfd_set_section_vma. Offsets
+        // and the packed bit are generated by its nonshipped typed C witness.
+        let base = section.cast::<u8>();
+        base.add(BFD_SECTION_VMA_OFFSET).cast::<BfdVma>().write(vma);
+        base.add(BFD_SECTION_LMA_OFFSET).cast::<BfdVma>().write(vma);
+        let packed = base.add(BFD_SECTION_USER_VMA_BYTE);
+        packed.write(packed.read() | BFD_SECTION_USER_VMA_MASK);
     }
 }
 
@@ -348,8 +366,8 @@ unsafe fn set_section_vma(section: *mut ASection, vma: c_ulong) {
 unsafe fn make_section(
     abfd: *mut Bfd,
     name: *const c_char,
-    size: c_ulong,
-    flags: c_uint,
+    size: BfdSize,
+    flags: BfdFlag,
     make_err: &'static [u8],
 ) -> *mut ASection {
     let scn = bfd_make_section_anyway(abfd, name);
@@ -357,11 +375,11 @@ unsafe fn make_section(
         bfd_perror(cstr(make_err));
         return null_mut();
     }
-    if bfd_set_section_size(abfd, scn, size) == 0 {
+    if !bfd_set_section_size(scn, size) {
         bfd_perror(cstr(BFD_SET_SECTION_SIZE));
         return null_mut();
     }
-    if bfd_set_section_flags(abfd, scn, flags) == 0 {
+    if !bfd_set_section_flags(scn, flags) {
         bfd_perror(cstr(BFD_SET_SECTION_FLAGS));
         return null_mut();
     }
@@ -599,20 +617,107 @@ pub unsafe extern "C" fn ldump2mcdump_init() {
 #[cfg(ldump2_full_body)]
 pub unsafe extern "C" fn ldump2mcdump_fini() {}
 
+// Project-owned temporary allocations are scoped to their live users.
 #[cfg(ldump2_full_body)]
-unsafe fn read_or_return(addr: c_ulong, buf: *mut c_void, size: usize, flags: c_ulong) -> c_int {
-    readmem(
+struct OwnedAllocation(*mut c_void);
+
+#[cfg(ldump2_full_body)]
+impl OwnedAllocation {
+    unsafe fn allocate(size: usize) -> Self { Self(malloc(size)) }
+    fn as_ptr(&self) -> *mut c_void { self.0 }
+}
+
+#[cfg(ldump2_full_body)]
+impl Drop for OwnedAllocation {
+    fn drop(&mut self) {
+        if !self.0.is_null() {
+            unsafe { free(core::mem::replace(&mut self.0, null_mut())); }
+        }
+    }
+}
+
+// BFD borrows names until terminal teardown. Private prefixes own these blocks;
+// no public dump layout or allocator boundary changes.
+#[repr(C)]
+#[cfg(ldump2_full_body)]
+struct OwnedSectionName { next: *mut OwnedSectionName, bytes: [c_char; PHYSMEM_NAME_SIZE] }
+
+#[cfg(ldump2_full_body)]
+struct OwnedSectionNames { head: *mut OwnedSectionName }
+
+#[cfg(ldump2_full_body)]
+impl OwnedSectionNames {
+    fn new() -> Self { Self { head: null_mut() } }
+    unsafe fn allocate(&mut self) -> *mut c_char {
+        let item = malloc(size_of::<OwnedSectionName>()).cast::<OwnedSectionName>();
+        if item.is_null() { return null_mut(); }
+        (*item).next = self.head;
+        self.head = item;
+        addr_of_mut!((*item).bytes).cast::<c_char>()
+    }
+}
+
+#[cfg(ldump2_full_body)]
+impl Drop for OwnedSectionNames {
+    fn drop(&mut self) {
+        unsafe {
+            while !self.head.is_null() {
+                let item = self.head;
+                self.head = (*item).next;
+                free(item.cast::<c_void>());
+            }
+        }
+    }
+}
+
+#[cfg(ldump2_full_body)]
+struct OwnedBfd { handle: *mut Bfd }
+
+#[cfg(ldump2_full_body)]
+impl OwnedBfd {
+    unsafe fn finish(&mut self) -> bool {
+        // Selected bfd_close consumes the handle even on FALSE. Disarm first.
+        bfd_close(core::mem::replace(&mut self.handle, null_mut()))
+    }
+}
+
+#[cfg(ldump2_full_body)]
+impl Drop for OwnedBfd {
+    fn drop(&mut self) {
+        if !self.handle.is_null() {
+            // Earlier errors do not finalize pending output. Selected
+            // close_all_done unconditionally deletes BFD, including FALSE.
+            unsafe { let _ = bfd_close_all_done(core::mem::replace(&mut self.handle, null_mut())); }
+        }
+    }
+}
+
+#[cfg(ldump2_full_body)]
+unsafe fn read_or_return(
+    restart: *mut c_void, addr: c_ulong, buf: *mut c_void, size: usize, flags: c_ulong,
+) -> Option<c_int> {
+    let mut result = 0;
+    if mck_crash_guarded_readmem(
+        restart,
         addr as c_ulonglong,
         KVADDR,
         buf,
         size as c_long,
         cstr_mut(EMPTY),
         flags,
-    )
+        &raw mut result,
+    ) == 0 {
+        // A genuine crash longjmp was caught entirely in C. Return normally
+        // through every Rust owner before the C command entry resumes it.
+        None
+    } else {
+        Some(result)
+    }
 }
 
 #[cfg(ldump2_full_body)]
 unsafe fn read_dump_pages(
+    restart: *mut c_void,
     dump_page_set: *const IhkDumpPageSet,
     mem_chunks: *mut DumpMemChunks,
     count_only: bool,
@@ -625,27 +730,34 @@ unsafe fn read_dump_pages(
 
     while i < (*dump_page_set).count {
         let mut ihk_dump_page = MaybeUninit::<IhkDumpPage>::uninit();
-        read_or_return(
+        if read_or_return(
+            restart,
             ihk_dump_page_addr,
             ihk_dump_page.as_mut_ptr().cast::<c_void>(),
             size_of::<IhkDumpPage>(),
             FAULT_ON_ERROR,
-        );
+        ) != Some(TRUE) {
+            return -1;
+        }
         let ihk_dump_page = ihk_dump_page.assume_init();
         let map_size = size_of::<c_ulong>().wrapping_mul(ihk_dump_page.map_count as usize);
-        let map_buf = malloc(map_size).cast::<c_ulong>();
+        let map_owner = OwnedAllocation::allocate(map_size);
+        let map_buf = map_owner.as_ptr().cast::<c_ulong>();
         if map_buf.is_null() {
             perror(cstr(ALLOC_MEM_BUFFER));
             return -1;
         }
 
         memset(map_buf.cast::<c_void>(), 0, map_size);
-        read_or_return(
+        if read_or_return(
+            restart,
             ihk_dump_page_addr.wrapping_add(size_of::<IhkDumpPage>() as c_ulong),
             map_buf.cast::<c_void>(),
             map_size,
             FAULT_ON_ERROR,
-        );
+        ) != Some(TRUE) {
+            return -1;
+        }
 
         let chunk_count = if count_only {
             ldump2_count_chunks_result(map_buf.cast::<usize>(), ihk_dump_page.map_count as usize)
@@ -660,7 +772,7 @@ unsafe fn read_dump_pages(
             )
         };
 
-        free(map_buf.cast::<c_void>());
+        drop(map_owner);
 
         if count_only {
             if chunk_count < 0 || chunk_count > c_int::MAX - total {
@@ -693,7 +805,10 @@ unsafe fn read_dump_pages(
 
 #[no_mangle]
 #[cfg(ldump2_full_body)]
-pub unsafe extern "C" fn cmd_ldump2mcdump() {
+pub unsafe extern "C" fn mck_ldump2mcdump_rust_body(restart: *mut c_void) {
+    // Private acknowledgment proposal: retain existing failure observations and
+    // data-writing behavior, but never acknowledge a partial conversion.
+    let mut conversion_complete = true;
     static mut PATH: [c_char; PATH_MAX] = [0; PATH_MAX];
     static mut HNAME: [c_char; HOST_NAME_MAX + 1] = [0; HOST_NAME_MAX + 1];
 
@@ -732,50 +847,70 @@ pub unsafe extern "C" fn cmd_ldump2mcdump() {
         }
     }
 
-    let symbol_dump_page_set = symbol_value(cstr_mut(DUMP_MEM_SYMBOL));
+    let mut symbol_dump_page_set = 0;
+    if mck_crash_guarded_symbol_value(
+        restart, cstr_mut(DUMP_MEM_SYMBOL), &raw mut symbol_dump_page_set,
+    ) == 0 {
+        return;
+    }
     let mut dump_page_set_addr: c_ulong = 0;
-    read_or_return(
+    if read_or_return(
+        restart,
         symbol_dump_page_set,
         addr_of_mut!(dump_page_set_addr).cast::<c_void>(),
         size_of::<c_ulong>(),
         FAULT_ON_ERROR,
-    );
+    ) != Some(TRUE) {
+        return;
+    }
 
     let mut dump_page_set = MaybeUninit::<IhkDumpPageSet>::uninit();
-    read_or_return(
+    if read_or_return(
+        restart,
         dump_page_set_addr,
         dump_page_set.as_mut_ptr().cast::<c_void>(),
         size_of::<IhkDumpPageSet>(),
         FAULT_ON_ERROR,
-    );
+    ) != Some(TRUE) {
+        return;
+    }
     let dump_page_set = dump_page_set.assume_init();
 
     let mut mem_num: c_int = 0;
-    if read_dump_pages(&dump_page_set, null_mut(), true, &raw mut mem_num) != 0 {
+    if read_dump_pages(restart, &dump_page_set, null_mut(), true, &raw mut mem_num) != 0 {
         return;
     }
 
     let mem_size = size_of::<DumpMemChunks>()
         .wrapping_add(size_of::<DumpMemChunk>().wrapping_mul(mem_num as usize));
-    mem_chunks = malloc(mem_size).cast::<DumpMemChunks>();
+    let chunks_owner = OwnedAllocation::allocate(mem_size);
+    mem_chunks = chunks_owner.as_ptr().cast::<DumpMemChunks>();
     if mem_chunks.is_null() {
         perror(cstr(ALLOC_MEM_BUFFER));
         return;
     }
     memset(mem_chunks.cast::<c_void>(), 0, mem_size);
 
-    if read_dump_pages(&dump_page_set, mem_chunks, false, &raw mut mem_num) != 0 {
+    if read_dump_pages(restart, &dump_page_set, mem_chunks, false, &raw mut mem_num) != 0 {
         return;
     }
 
-    let symbol_bootstrap_mem = symbol_value(cstr_mut(BOOTSTRAP_MEM_SYMBOL));
+    let mut symbol_bootstrap_mem = 0;
+    if mck_crash_guarded_symbol_value(
+        restart, cstr_mut(BOOTSTRAP_MEM_SYMBOL), &raw mut symbol_bootstrap_mem,
+    ) == 0 {
+        return;
+    }
     let mut bootstrap_mem: c_ulong = 0;
-    read_or_return(
+    if read_or_return(
+        restart,
         symbol_bootstrap_mem,
         addr_of_mut!(bootstrap_mem).cast::<c_void>(),
         size_of::<c_ulong>(),
         FAULT_ON_ERROR,
-    );
+    ) != Some(TRUE) {
+        return;
+    }
     (*mem_chunks).kernel_base = bootstrap_mem
         .wrapping_add(LARGE_PAGE_SIZE * 2)
         .wrapping_sub(1)
@@ -790,24 +925,28 @@ pub unsafe extern "C" fn cmd_ldump2mcdump() {
     let _ = phys_size;
 
     let bsize: usize = 0x100000;
-    buf = malloc(bsize);
+    let payload_owner = OwnedAllocation::allocate(bsize);
+    buf = payload_owner.as_ptr();
     if buf.is_null() {
         perror(cstr(ALLOC_MALLOC));
         return;
     }
 
     bfd_init();
+    // Declaration order keeps borrowed names alive through BFD teardown.
+    let mut section_names = OwnedSectionNames::new();
     abfd = bfd_fopen(
         addr_of_mut!(PATH).cast::<c_char>(),
         null(),
         cstr(b"w\0"),
         -1,
     );
+    let mut bfd_owner = OwnedBfd { handle: abfd };
     if abfd.is_null() {
         bfd_perror(cstr(BFD_FOPEN));
         return;
     }
-    if bfd_set_format(abfd, BFD_OBJECT) == 0 {
+    if !bfd_set_format(abfd, BFD_OBJECT) {
         bfd_perror(cstr(BFD_SET_FORMAT));
         return;
     }
@@ -886,7 +1025,7 @@ pub unsafe extern "C" fn cmd_ldump2mcdump() {
 
     i = 0;
     while i < (*mem_chunks).nr_chunks as usize {
-        let physmem_name_buf = malloc(PHYSMEM_NAME_SIZE).cast::<c_char>();
+        let physmem_name_buf = section_names.allocate();
         if physmem_name_buf.is_null() {
             perror(cstr(ALLOC_MALLOC));
             return;
@@ -915,7 +1054,7 @@ pub unsafe extern "C" fn cmd_ldump2mcdump() {
 
     let mut scn = bfd_get_section_by_name(abfd, cstr(SECTION_DATE));
     if !scn.is_null()
-        && bfd_set_section_contents(abfd, scn, date.cast::<c_void>(), 0, date_len) == 0
+        && !bfd_set_section_contents(abfd, scn, date.cast::<c_void>(), 0, date_len)
     {
         bfd_perror(cstr(BFD_SET_CONTENTS_DATE));
         return;
@@ -923,13 +1062,13 @@ pub unsafe extern "C" fn cmd_ldump2mcdump() {
 
     scn = bfd_get_section_by_name(abfd, cstr(SECTION_HOSTNAME));
     if !scn.is_null()
-        && bfd_set_section_contents(
+        && !bfd_set_section_contents(
             abfd,
             scn,
             addr_of_mut!(HNAME).cast::<c_void>(),
             0,
             hostname_len,
-        ) == 0
+        )
     {
         bfd_perror(cstr(BFD_SET_CONTENTS_HOSTNAME));
         return;
@@ -938,21 +1077,24 @@ pub unsafe extern "C" fn cmd_ldump2mcdump() {
     scn = bfd_get_section_by_name(abfd, cstr(SECTION_USER));
     if !scn.is_null()
         && !pw.is_null()
-        && bfd_set_section_contents(abfd, scn, (*pw).pw_name.cast::<c_void>(), 0, user_len) == 0
+        && !bfd_set_section_contents(abfd, scn, (*pw).pw_name.cast::<c_void>(), 0, user_len)
     {
         bfd_perror(cstr(BFD_SET_CONTENTS_USER));
         return;
     }
 
     scn = bfd_get_section_by_name(abfd, cstr(SECTION_PHYSCHUNKS));
+    if scn.is_null() {
+        conversion_complete = false;
+    }
     if !scn.is_null()
-        && bfd_set_section_contents(
+        && !bfd_set_section_contents(
             abfd,
             scn,
             mem_chunks.cast::<c_void>(),
             0,
             mem_size as c_ulong,
-        ) == 0
+        )
     {
         bfd_perror(cstr(BFD_SET_CONTENTS_PHYSCHUNKS));
         return;
@@ -991,22 +1133,28 @@ pub unsafe extern "C" fn cmd_ldump2mcdump() {
                 cpsize = bsize;
             }
             memset(buf, 0, cpsize);
-            let read_mem_ret =
-                read_or_return(ptov(addr), buf, cpsize, FAULT_ON_ERROR | RETURN_ON_ERROR);
+            let Some(read_mem_ret) = read_or_return(
+                restart, ptov(addr), buf, cpsize, FAULT_ON_ERROR | RETURN_ON_ERROR,
+            ) else {
+                return;
+            };
             if read_mem_ret == TRUE {
-                if bfd_set_section_contents(
+                if !bfd_set_section_contents(
                     abfd,
                     scn,
                     buf,
                     phys_offset as c_long,
                     cpsize as c_ulong,
-                ) == 0
+                )
                 {
                     bfd_perror(cstr(BFD_SET_CONTENTS_PHYSMEM));
                     return;
                 }
                 phys_offset = phys_offset.wrapping_add(cpsize as c_ulong);
             } else {
+                // Preserve the original diagnostic and continued observation of
+                // later chunks, while suppressing a successful-conversion ack.
+                conversion_complete = false;
                 fprintf(fp, cstr(READMEM_ERROR), read_mem_ret);
             }
             addr = addr.wrapping_add(cpsize as c_ulong);
@@ -1014,13 +1162,24 @@ pub unsafe extern "C" fn cmd_ldump2mcdump() {
         i += 1;
     }
 
-    if bfd_close(abfd) == 0 {
+    if !bfd_owner.finish() {
         bfd_perror(cstr(BFD_CLOSE));
         return;
     }
 
-    free(buf);
-    free(mem_chunks.cast::<c_void>());
+    drop(bfd_owner);
+    drop(section_names);
+    drop(payload_owner);
+    drop(chunks_owner);
+    if conversion_complete {
+        if fprintf(
+            fp,
+            cstr(b"MCKERNEL_LDUMP2MCDUMP_SUCCESS %s\n\0"),
+            addr_of_mut!(PATH).cast::<c_char>(),
+        ) >= 0 {
+            let _ = fflush(fp);
+        }
+    }
 }
 
 #[panic_handler]

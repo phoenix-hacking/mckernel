@@ -1,0 +1,72 @@
+In file included from /home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/candidate/pair_collector.c:464:
+/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/candidate/pair_collector.c: In function ‘main’:
+/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/candidate/pair_runtime.inc:57:49: error: ‘/app’ directive output may be truncated writing 4 bytes into a region of size between 1 and 4096 [-Werror=format-truncation=]
+   57 |         char p[PATH_MAX];snprintf(p,sizeof p,"%s/app%d.result",pair_evidence_dir,i);
+      |                                                 ^~~~
+/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/candidate/pair_runtime.inc:57:46: note: directive argument in the range [0, 1]
+   57 |         char p[PATH_MAX];snprintf(p,sizeof p,"%s/app%d.result",pair_evidence_dir,i);
+      |                                              ^~~~~~~~~~~~~~~~~
+In file included from /usr/include/stdio.h:867,
+                 from /home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/candidate/pair_collector.c:14:
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:67:10: note: ‘__builtin___snprintf_chk’ output between 13 and 4108 bytes into a destination of size 4096
+   67 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   68 |        __bos (__s), __fmt, __va_arg_pack ());
+      |        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/candidate/pair_collector.c:468:
+/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/candidate/pair_collector.inc:29:34: error: ‘/app’ directive output may be truncated writing 4 bytes into a region of size between 1 and 4096 [-Werror=format-truncation=]
+   29 |     snprintf(name,sizeof name,"%s/app%d.stdout",pair_evidence_dir,i);
+      |                                  ^~~~
+/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/candidate/pair_collector.inc:29:31: note: directive argument in the range [0, 1]
+   29 |     snprintf(name,sizeof name,"%s/app%d.stdout",pair_evidence_dir,i);
+      |                               ^~~~~~~~~~~~~~~~~
+In file included from /usr/include/stdio.h:867,
+                 from /home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/candidate/pair_collector.c:14:
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:67:10: note: ‘__builtin___snprintf_chk’ output between 13 and 4108 bytes into a destination of size 4096
+   67 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   68 |        __bos (__s), __fmt, __va_arg_pack ());
+      |        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/candidate/pair_collector.c:468:
+/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/candidate/pair_collector.inc:35:34: error: ‘/app’ directive output may be truncated writing 4 bytes into a region of size between 1 and 4096 [-Werror=format-truncation=]
+   35 |     snprintf(name,sizeof name,"%s/app%d.stderr",pair_evidence_dir,i);
+      |                                  ^~~~
+/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/candidate/pair_collector.inc:35:31: note: directive argument in the range [0, 1]
+   35 |     snprintf(name,sizeof name,"%s/app%d.stderr",pair_evidence_dir,i);
+      |                               ^~~~~~~~~~~~~~~~~
+In file included from /usr/include/stdio.h:867,
+                 from /home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/candidate/pair_collector.c:14:
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:67:10: note: ‘__builtin___snprintf_chk’ output between 13 and 4108 bytes into a destination of size 4096
+   67 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   68 |        __bos (__s), __fmt, __va_arg_pack ());
+      |        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/candidate/pair_collector.c:468:
+/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/candidate/pair_collector.inc:45:34: error: ‘/app’ directive output may be truncated writing 4 bytes into a region of size between 1 and 4096 [-Werror=format-truncation=]
+   45 |     snprintf(name,sizeof name,"%s/app%d.status.json",pair_evidence_dir,i);
+      |                                  ^~~~
+/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/candidate/pair_collector.inc:45:31: note: directive argument in the range [0, 1]
+   45 |     snprintf(name,sizeof name,"%s/app%d.status.json",pair_evidence_dir,i);
+      |                               ^~~~~~~~~~~~~~~~~~~~~~
+In file included from /usr/include/stdio.h:867,
+                 from /home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/candidate/pair_collector.c:14:
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:67:10: note: ‘__builtin___snprintf_chk’ output between 18 and 4113 bytes into a destination of size 4096
+   67 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   68 |        __bos (__s), __fmt, __va_arg_pack ());
+      |        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/candidate/pair_collector.c:468:
+/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/candidate/pair_collector.inc:51:34: error: ‘/app’ directive output may be truncated writing 4 bytes into a region of size between 1 and 4096 [-Werror=format-truncation=]
+   51 |     snprintf(name,sizeof name,"%s/app%d.result",pair_evidence_dir,i);
+      |                                  ^~~~
+/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/candidate/pair_collector.inc:51:31: note: directive argument in the range [0, 1]
+   51 |     snprintf(name,sizeof name,"%s/app%d.result",pair_evidence_dir,i);
+      |                               ^~~~~~~~~~~~~~~~~
+In file included from /usr/include/stdio.h:867,
+                 from /home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/candidate/pair_collector.c:14:
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:67:10: note: ‘__builtin___snprintf_chk’ output between 13 and 4108 bytes into a destination of size 4096
+   67 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   68 |        __bos (__s), __fmt, __va_arg_pack ());
+      |        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors

@@ -1,0 +1,40 @@
+--- /home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/m05-readiness-runtime-failure-2/coherent-successor-preparation-1/next-native-preparation-1/read_only_m05_HOST_admission.py
++++ /home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/execution-preparation-1/read_only_sdk6_admission.py
+@@ -29,17 +29,31 @@
+ locks=[l for l in Path('/proc/locks').read_text().splitlines() if key in l.split()];need(not locks,'permanent mutex currently held')
+ mutex_fd=os.open('/run/lock/mckernel-development.lock',os.O_RDONLY|os.O_CLOEXEC|os.O_NOFOLLOW);need((os.fstat(mutex_fd).st_dev,os.fstat(mutex_fd).st_ino)==(27,4),'stable27:4FD');fcntl.flock(mutex_fd,fcntl.LOCK_EX|fcntl.LOCK_NB)
+ paths=['/home/holden/mckernel-work/scratch/native-running-external-modules.lease.json', '/home/holden/mckernel-work/scratch/native-running-external-modules-operational-exclusion.json', '/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch18-image-1.json', '/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock', '/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/common-exclusion.json', '/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/lease.json', '/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/driver-hash-correction-1/pinned-launcher-attempt-1/common-exclusion.json', '/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/driver-hash-correction-1/pinned-launcher-attempt-1/image-lease.json'];need(all(not os.path.lexists(p) for p in paths),'fresh exact current SDK/image/launcher ownership paths absent')
+-cid='9ddbc559d8a6182f89102df466f93878390abe77b47ec65fd08e1557afcd828d'
++cid='765ec4a010997dcec3209b55c639f3c80bbb9f62b1c127a9b97da5b8780e1034'
+ need(run(['/usr/bin/docker','ps','-aq','--no-trunc','--filter','id='+cid])=='','latest retired container absent')
+-need(run(['/usr/bin/docker','ps','-aq','--no-trunc','--filter','name=^/mckernel-native-diagnostic-efb4312b2dc644519320ccc24fa1219c$'])=='','fresh exactnonce name absent')
+-need(run(['/usr/bin/docker','ps','-aq','--no-trunc','--filter','label=mckernel.native-diagnostic.owner=efb4312b2dc644519320ccc24fa1219c'])=='','fresh exactnonce label absent')
+-need(not os.path.lexists('/home/holden/mckernel-work/native-runs/m05h2/p/attempt-efb4312b2dc644519320ccc24fa1219c'),'fresh exact M05 attempt absent')
++need(run(['/usr/bin/docker','ps','-aq','--no-trunc','--filter','name=^/mckernel-external-33f4428ac1c74917bcd6715cdbaee963$'])=='','fresh exactnonce name absent')
++need(run(['/usr/bin/docker','ps','-aq','--no-trunc','--filter','label=mckernel.owner=33f4428ac1c74917bcd6715cdbaee963'])=='','fresh exactnonce label absent')
++need(not os.path.lexists('/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-owner-33f4428ac1c74917bcd6715cdbaee963'),'fresh exact M05 attempt absent')
+ running=run(['/usr/bin/docker','ps','-q','--no-trunc']);need(not running,'competing running container')
+ freehost=host.f_bavail*host.f_frsize;freescratch=scratch.f_bavail*scratch.f_frsize;growth=bs.st_size-bs.st_blocks*512;minimum=16*2**30+growth+536870912+679477248
+ need(freehost>=minimum and freescratch>=14101250048,'full capacity growth/reserves')
+ mem=int(next(l for l in Path('/proc/meminfo').read_text().splitlines() if l.startswith('MemAvailable:')).split()[1])*1024
+-need(mem>=int(16.2158*2**30),'aggregate available memory')
++need(mem>=19*2**30,'aggregate available memory')
+ state=json.loads(Path('/home/holden/mckernel/.git/os-autopilot/state.json').read_text());need(state['phase']=='running' and state['stop_reason'] is None,'launcher active')
+ expected_cgroup={'/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_period_us': '100000', '/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_quota_us': '400000', '/sys/fs/cgroup/memory/mckernel-dev/memory.limit_in_bytes': '12884901888', '/sys/fs/cgroup/memory/mckernel-dev/memory.use_hierarchy': '1', '/sys/fs/cgroup/pids/mckernel-dev/pids.max': '512'}
+ cgroup={p:Path(p).read_text().strip() for p in expected_cgroup};need(cgroup==expected_cgroup,'unchanged reviewed cgroup profile')
+-print(json.dumps(dict(status='PASS_FRESH_READ_ONLY_NATIVE235_CURRENT_LIVE_ADMISSION',sdk_predecessor={'bytes': 2584, 'path': '/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-sdk-preparation-5/INDEPENDENT-ACTUAL-SDK-ARTIFACT-AND-PHYSICAL-ACCEPTANCE.json', 'sha256': '8614e3e2bbf9e07c01f396079fc83fedbbb4119a3c37b5e311bdcc6cb6099623'},host_device=os.stat('/home/holden/mckernel').st_dev,scratch_device=root.stat().st_dev,proc=proc,mount=mount,backing=dict(dev=bs.st_dev,inode=bs.st_ino,size=bs.st_size,allocated=bs.st_blocks*512),host_available=freehost,scratch_available=freescratch,minimum_host=minimum,memory_available=mem,affinity=sorted(os.sched_getaffinity(0)),root_lock=[lock.st_dev,lock.st_ino],ownership_paths_absent=paths,running_containers=[],cgroup=cgroup,mutation=False,at_unix=time.time()),sort_keys=True))
++
++# Reuse actual unchanged SDK6 owner guards for staged request identity, mount,
++# full sparse growth and output-allocation bounds. No lifecycle starts here.
++import importlib.util
++sys.path.insert(0,'/home/holden/mckernel/scripts')
++REQUEST=Path('/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/prepared-sdk/request.json');OWNER=Path('/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/prepared-sdk/derived-runtime/native_running_external_modules_owner.py')
++need(hashlib.sha256(REQUEST.read_bytes()).hexdigest()=='38d7188e58dcba2cf5b697567b1916a76c40524f7892578aced361952da6f664','exact staged SDK6 request')
++need(hashlib.sha256(OWNER.read_bytes()).hexdigest()=='a5b919adfed8ee5e7e3f154e0385ae3063e86ea1314bfc60d50115f4bf0b0ef3','exact coherent SDK6 owner')
++spec=importlib.util.spec_from_file_location('sdk6_admission_owner',OWNER)
++module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
++sdk6_request=json.loads(REQUEST.read_text())
++sdk6_mount=module.live_admission(sdk6_request)
++sdk6_resources=module.measure(sdk6_request)
++
++print(json.dumps(dict(sdk6_request_sha256='38d7188e58dcba2cf5b697567b1916a76c40524f7892578aced361952da6f664',sdk6_mount=sdk6_mount,sdk6_resources=sdk6_resources,status='PASS_FRESH_READ_ONLY_NATIVE235_CURRENT_LIVE_ADMISSION',sdk_predecessor={'bytes': 2584, 'path': '/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-sdk-preparation-5/INDEPENDENT-ACTUAL-SDK-ARTIFACT-AND-PHYSICAL-ACCEPTANCE.json', 'sha256': '8614e3e2bbf9e07c01f396079fc83fedbbb4119a3c37b5e311bdcc6cb6099623'},host_device=os.stat('/home/holden/mckernel').st_dev,scratch_device=root.stat().st_dev,proc=proc,mount=mount,backing=dict(dev=bs.st_dev,inode=bs.st_ino,size=bs.st_size,allocated=bs.st_blocks*512),host_available=freehost,scratch_available=freescratch,minimum_host=minimum,memory_available=mem,affinity=sorted(os.sched_getaffinity(0)),root_lock=[lock.st_dev,lock.st_ino],ownership_paths_absent=paths,running_containers=[],cgroup=cgroup,mutation=False,at_unix=time.time()),sort_keys=True))

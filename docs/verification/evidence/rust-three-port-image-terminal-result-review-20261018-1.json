@@ -1,0 +1,274 @@
+{
+  "actual_cleanup_result": {
+    "path": "/home/holden/mckernel-work/scratch/rust-three-port-terminal-preparation-20261018-1/cleanup-proposal-1/execution-capture/cleanup.stdout",
+    "sha256": "db7526fd26c2126389d3ec92e5a67d74031bbc28f0f38f41b19e37ccd3415825"
+  },
+  "application_acceptance": false,
+  "archived_original_exclusions": [
+    {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 114414,
+      "mode": "0o600",
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/scratch/native-rust-three-port-image-terminal-cleanup-20261018-1.attempt.archive",
+      "sha256": "9d5420ce1b86ed3f814d73782b52034839ff45b75fa6c808aef2d4a78f4bbc2b",
+      "size": 268,
+      "uid": 1000
+    },
+    {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 114413,
+      "mode": "0o600",
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/scratch/native-rust-three-port-image-terminal-cleanup-20261018-1.shared.archive",
+      "sha256": "01581a593da9a2621a34f9a2d7d484536c6f299fd4744a19ca05acb368f4647c",
+      "size": 268,
+      "uid": 1000
+    }
+  ],
+  "blocking_findings": [],
+  "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+  "checks": {
+    "passed": 111,
+    "path": "/home/holden/mckernel-work/scratch/rust-three-port-terminal-actual-review-20261018-1/checks.json"
+  },
+  "common_exclusion_released": true,
+  "container_absent": true,
+  "container_id": "1305fc5a226aed2b4d495723282ce4ed009ad84d4ee7ffc439db7a12a3e7bf4a",
+  "created_utc": "2026-10-18T08:00:04.873285+00:00",
+  "decision": "PASS_EXACT_TERMINAL_CLEANUP_AND_COMMON_SHARED_EXCLUSION_RELEASE",
+  "evidence_map": "/home/holden/mckernel-work/scratch/rust-three-port-terminal-actual-review-20261018-1/evidence-map.json",
+  "image_production_abi_default_link_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/rust-three-port-image-actual-review-20261018-1.json",
+    "sha256": "87e37ba180382acc488fe76ad7565ca9f2951a90c9f818bd552efc6790e9656f"
+  },
+  "image_sha256": "da0f1bf760d5472693ed1d24f0bee717d8bf4c0880d4eb92d98203cd737e814f",
+  "implementation_ownership": false,
+  "journal": {
+    "events": 9,
+    "expected_sequence": [
+      [
+        "before_exchange",
+        0
+      ],
+      [
+        "after_exchange",
+        0
+      ],
+      [
+        "release",
+        0
+      ],
+      [
+        "after_release",
+        0
+      ],
+      [
+        "before_exchange",
+        1
+      ],
+      [
+        "after_exchange",
+        1
+      ],
+      [
+        "release",
+        1
+      ],
+      [
+        "after_release",
+        1
+      ],
+      [
+        "complete",
+        2
+      ]
+    ],
+    "hash_chain_verified": true,
+    "path": "/home/holden/mckernel-work/scratch/rust-three-port-terminal-actual-review-20261018-1/private-five-members/native-rust-three-port-image-terminal-cleanup-20261018-1.journal.jsonl",
+    "sha256": "4fd5ff5296b17799984e57209f06a4a8b9c4fafbb468f8b66c8b28bc6ad2e08b"
+  },
+  "language_retirement_credit": 0,
+  "limits": [
+    "Release records the exact completed cleanup/readback point; future runtime admission must retain existing fresh identity, service, resource and execution-release checks.",
+    "Production default-link/ABI accepted separately; exact-image native runtime proof remains required for path retirement.",
+    "No kernel-wide, whole-OS, formal, native, application or deferred original qualification acceptance from cleanup."
+  ],
+  "native_acceptance": false,
+  "new_practical_behaviors": 0,
+  "next_executable_observation": "Dispatcher may bind this terminal/common/shared release and image da0f1bf760d5472693ed1d24f0bee717d8bf4c0880d4eb92d98203cd737e814f into its separately reviewed next native execution gate.",
+  "old_owner": {
+    "container_id": "1305fc5a226aed2b4d495723282ce4ed009ad84d4ee7ffc439db7a12a3e7bf4a",
+    "container_name": "mckernel-image-de70ec145bcb4491998c09ff9b44858c",
+    "exit_code": 0,
+    "image_id": "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5",
+    "owner_nonce": "a358cbe63ec54a80975cce93b7040f9a",
+    "owner_pid": 893281,
+    "owner_starttime": "10459071"
+  },
+  "original_owner_guard_client_retirement": {
+    "absence_alone_not_used": true,
+    "accepted_guard_direct_join_and_root27_4_reacquisition": {
+      "data": {
+        "application_acceptance": false,
+        "cleanup_authorized": false,
+        "common_shared_and_container_retained_for_separate_cleanup": true,
+        "container_id": "1305fc5a226aed2b4d495723282ce4ed009ad84d4ee7ffc439db7a12a3e7bf4a",
+        "guard_direct_joined": true,
+        "guard_result_sha256": "ac4679728f5b3a094422dc2aceb1e80f2eb1e924cdcd8f7788493789ac2ac958",
+        "owner_receipt_sha256": "2b961080406eabc92c546a2d1a92f366012b497a24432b5c053da6542ce0ad11",
+        "root27_4_reacquired_after_join": true,
+        "status": "PASS_ORDINARY_GUARD_POSTJOIN_READBACK_ONLY"
+      },
+      "path": "/home/holden/mckernel-work/scratch/rust-next-three-port-image-preparation-20261018-1/execution-proposal/image-guard-postjoin-readback.json",
+      "sha256": "0b5f1db60376fcb15b7774d355033a2d898c04bb7148edd34eed9105f02d5b77"
+    },
+    "client_count": 8,
+    "clients": [
+      {
+        "pid": 897095,
+        "status_path": "/home/holden/mckernel-work/scratch/native-rust-next-three-port-image-guard-20261018-5b15453e29954a8d8b2d9ce1754dcaa2/command-3eee7b2428c04d0b9512b0e8470bb898/status.json",
+        "status_sha256": "008692f3b84157acb0396824b2de6c7908c943417ba0c3c0bab613d0ee4c8f14"
+      },
+      {
+        "pid": 894366,
+        "status_path": "/home/holden/mckernel-work/scratch/native-rust-next-three-port-image-guard-20261018-5b15453e29954a8d8b2d9ce1754dcaa2/command-98df6c717974434dae1fbf46451d5c67/status.json",
+        "status_sha256": "8147dd1f00cd889cf86e92152154c41eec2fa6652e54814a914e919715b7ab41"
+      },
+      {
+        "pid": 894379,
+        "status_path": "/home/holden/mckernel-work/scratch/native-rust-next-three-port-image-guard-20261018-5b15453e29954a8d8b2d9ce1754dcaa2/command-a8871584b11642d9a8572ae0612662ce/status.json",
+        "status_sha256": "5da0b91e370ef5d6945415fa76254ca3d32124d0c255ac6c28d22901dfe910d3"
+      },
+      {
+        "pid": 894354,
+        "status_path": "/home/holden/mckernel-work/scratch/native-rust-next-three-port-image-guard-20261018-5b15453e29954a8d8b2d9ce1754dcaa2/command-bcfd7196ee4644f7a1d51e144abb6169/status.json",
+        "status_sha256": "f3b787d311d5929b9fb07d9c7c6baf391da9f6036d7a6720655940e4285da675"
+      },
+      {
+        "pid": 894455,
+        "status_path": "/home/holden/mckernel-work/scratch/native-rust-next-three-port-image-guard-20261018-5b15453e29954a8d8b2d9ce1754dcaa2/command-cd9b68293d1c4c0a9cea9a9d51d8a3ea/status.json",
+        "status_sha256": "58e58ab7f2c987d984a021e09e8af9be8bc55594dfce34546f2cd8cdeab21423"
+      },
+      {
+        "pid": 894342,
+        "status_path": "/home/holden/mckernel-work/scratch/native-rust-next-three-port-image-guard-20261018-5b15453e29954a8d8b2d9ce1754dcaa2/command-d14b8080b8d446c2ac2e47b1dc7be480/status.json",
+        "status_sha256": "0447f377b5f298a0f9456e033da5c93a609d2b3321eff894ea805eaaeafd1b8c"
+      },
+      {
+        "pid": 897947,
+        "status_path": "/home/holden/mckernel-work/scratch/native-rust-next-three-port-image-guard-20261018-5b15453e29954a8d8b2d9ce1754dcaa2/command-e6d7ee92d909493485e03b1d37fa3047/status.json",
+        "status_sha256": "e54ee5201518757b3953dc9a8dada81af3bc67ba8b8fd7f111e5aea66a13e8cb"
+      },
+      {
+        "pid": 897107,
+        "status_path": "/home/holden/mckernel-work/scratch/native-rust-next-three-port-image-guard-20261018-5b15453e29954a8d8b2d9ce1754dcaa2/command-f998c0c612034e3490ca7ae95cf0fcad/status.json",
+        "status_sha256": "6eb522cc191daf6b2499fd05ecbdd0c3831b595d3d1ab6619175244540f4ea72"
+      }
+    ],
+    "guard_proof": {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 114430,
+      "mode": "0o600",
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/scratch/native-rust-next-three-port-image-guard-20261018-5b15453e29954a8d8b2d9ce1754dcaa2/guard-result.json",
+      "sha256": "ac4679728f5b3a094422dc2aceb1e80f2eb1e924cdcd8f7788493789ac2ac958",
+      "size": 299,
+      "uid": 1000
+    },
+    "positive_owner_receipt": "/home/holden/mckernel-work/scratch/rust-next-three-port-image-preparation-20261018-1/owner-evidence/owner-receipt.json"
+  },
+  "outer_dispatcher": {
+    "direct_child_joined": true,
+    "elapsed_seconds": 6.3404106620000675,
+    "returncode": 0
+  },
+  "qualification_acceptance": false,
+  "readback": {
+    "actual_object_rows": 20,
+    "all_rows_unchanged": true,
+    "default_nondereferencing_source_verified": true,
+    "image_sha256": "da0f1bf760d5472693ed1d24f0bee717d8bf4c0880d4eb92d98203cd737e814f",
+    "inventory": "/home/holden/mckernel-work/scratch/rust-three-port-terminal-actual-review-20261018-1/tar-inventory.json",
+    "member_count": 5,
+    "retained_pairs": 10,
+    "root_source_rechecked_absent_cid_active_common_shared_request_lease_and_quarantine": true,
+    "strict_full_inventory_before_private_extraction": true,
+    "tar_path": "/home/holden/mckernel-work/scratch/rust-three-port-terminal-preparation-20261018-1/cleanup-proposal-1/execution-capture/readback.stdout",
+    "tar_sha256": "7f5f4fe7683b786790c88e50c2d36347fc77071580890f065b4dd7a966e26bf3"
+  },
+  "release": {
+    "engine_canonical_sha256": "43534b0cda5672ba14a2419f2ba4d85343ae0a626a08568b6763ad4d60c34e38",
+    "file_sha256": "fa5e8f8d4d4f2914feae1ef67bd55be71d555602d078106bf30fe39295d3ad41",
+    "path": "/home/holden/mckernel-work/scratch/rust-three-port-terminal-preparation-20261018-1/cleanup-proposal-1/cleanup-execution-release.json"
+  },
+  "reviewer": "/root/three_port_cleanup_actual_review_0756",
+  "reviewer_executed_root_docker_cleanup_readback_or_tests": false,
+  "reviewer_failure_history": {
+    "path": "/home/holden/mckernel-work/scratch/rust-three-port-terminal-actual-review-20261018-1/review-failure-1.json",
+    "status": "PRESERVED_AND_CORRECTED_OBSERVER_ENCODING_ONLY"
+  },
+  "root_mutex": {
+    "device": 27,
+    "inode": 4,
+    "reacquired_by_postjoin_reader": true,
+    "reader_joined": true
+  },
+  "root_process_joins": {
+    "cleanup": {
+      "actual_root_script_processes": [
+        {
+          "pgrp": 912859,
+          "pid": 912862,
+          "ppid": 912859,
+          "start": "10758596",
+          "uid": 0
+        }
+      ],
+      "direct_pid": 912859,
+      "direct_wait_joined": true,
+      "known_process_count": 25,
+      "postwait_known_identity_and_group_matches": 0,
+      "retirement_proven": true,
+      "status_path": "/home/holden/mckernel-work/scratch/rust-three-port-terminal-preparation-20261018-1/cleanup-proposal-1/execution-capture/cleanup.status.json"
+    },
+    "readback": {
+      "actual_root_script_processes": [
+        {
+          "pgrp": 912979,
+          "pid": 912982,
+          "ppid": 912979,
+          "start": "10759137",
+          "uid": 0
+        }
+      ],
+      "direct_pid": 912979,
+      "direct_wait_joined": true,
+      "known_process_count": 8,
+      "postwait_known_identity_and_group_matches": 0,
+      "retirement_proven": true,
+      "status_path": "/home/holden/mckernel-work/scratch/rust-three-port-terminal-preparation-20261018-1/cleanup-proposal-1/execution-capture/readback.status.json"
+    }
+  },
+  "schema": "mckernel.rust-image.terminal-result-review.v1",
+  "scope": "Functional PRACTICAL-GOAL kernel/apps AND actual compute C retirement to Rust/reviewed assembly; preserve memory ownership, accepted live cpu.c/process.c fixes and host/resource controls. Original qualification remains deferred.",
+  "scratch_uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52",
+  "shared_exclusion_released": true,
+  "source_binding": {
+    "dispatcher_sha256": "bf080c23ba891074811461e8db1a5abe8e7cc0f4947d8837556d5b8f926c2dc6",
+    "engine_sha256": "b3017b081d0b263f452fc46d96e708441244840337e8bf357b2fbdc580d6aeef",
+    "fetched_verification": {
+      "path": "/home/holden/mckernel-work/scratch/checkpoint-three-port-terminal-source-20261018-1/verification.json",
+      "sha256": "a3a35325cea7635a0558d0b62511dcedf7cf229ff4b4b0f5275e19396d7633ba"
+    },
+    "readback_sha256": "6531ea516d69fda88550acca28c9d98fe7f229a1e24c5d9d629c79730c7348c0",
+    "tests_sha256": "605c9372f75bac6770ac6e804b7d222c0324a6d9cb62884a9b78beb7c8ffa73a"
+  },
+  "source_commit": "83b2169a027b9a182fe7316e64e8f502fbbe85d9",
+  "source_tree": "7515e3d617cdc70ff51241e4c8e75189e7c76897",
+  "status": "PASS",
+  "terminal": true
+}

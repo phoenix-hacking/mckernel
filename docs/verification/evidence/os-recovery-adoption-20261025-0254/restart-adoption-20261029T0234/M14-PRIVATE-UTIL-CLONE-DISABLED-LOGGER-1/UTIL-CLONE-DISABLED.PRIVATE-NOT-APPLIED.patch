@@ -1,0 +1,64 @@
+--- /dev/null
++++ b/kernel/rust/syscall_util_clone_disabled_logger.rs
+@@ -0,0 +1,19 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Private source-only successor for the existing constant disabled-UTI logger.
++
++use super::kprintf;
++
++/// Existing no-argument void callback; one unchanged diagnostic per invocation.
++#[no_mangle]
++pub(super) extern "C" fn syscall_util_indicate_clone_disabled_bridge() {
++    // SAFETY: both pointers refer to immutable static NUL-terminated C strings.
++    // The format consumes exactly one %s; its sole variadic argument is the
++    // matching const-char pointer. Neither storage can expire during kprintf.
++    // The existing synchronous logger retains its CPU-prefix/output behavior.
++    unsafe {
++        kprintf(
++            c"%s: error: --enable-uti mcexec option not specified\n".as_ptr().cast(),
++            c"sys_util_indicate_clone".as_ptr().cast::<i8>(),
++        );
++    }
++}
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -29015,12 +29015,12 @@
+ #endif
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+-void
+-syscall_util_indicate_clone_disabled_bridge(void)
+-{
+-	kprintf("%s: error: --enable-uti mcexec option not specified\n",
+-			"sys_util_indicate_clone");
+-}
++extern void syscall_util_indicate_clone_disabled_bridge(void);
++
++
++
++
++
+ 
+ long sys_util_indicate_clone(int n, ihk_mc_user_context_t *ctx);
+ #else
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -1,4 +1,8 @@
+ use core::ffi::c_void;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[path = "syscall_util_clone_disabled_logger.rs"]
++mod syscall_util_clone_disabled_logger;
+ use core::mem::{align_of, offset_of, size_of, ManuallyDrop, MaybeUninit};
+ use core::ptr::{
+     addr_of, addr_of_mut, copy_nonoverlapping, null_mut, read_volatile, write, write_volatile,
+--- a/kernel/CMakeLists.txt
++++ b/kernel/CMakeLists.txt
+@@ -142,6 +142,7 @@
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/smp_ikc.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/sysfs.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_policy.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_util_clone_disabled_logger.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/timer.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/tofu_uapi.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/ubsan.rs"

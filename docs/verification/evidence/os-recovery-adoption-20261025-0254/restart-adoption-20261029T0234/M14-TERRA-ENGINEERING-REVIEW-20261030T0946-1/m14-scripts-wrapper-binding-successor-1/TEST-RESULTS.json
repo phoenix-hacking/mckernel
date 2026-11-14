@@ -1,0 +1,79 @@
+[
+  {
+    "case": "valid_source_only",
+    "outcome": "pass",
+    "result": {
+      "status": "SOURCE_BINDING_ONLY_LIVE_ENTRY_BLOCKED",
+      "source_root": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/scripts",
+      "output_candidate": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-scripts-wrapper-binding-successor-1/fixture-output-must-remain-absent",
+      "manifest_sha256": "48b2c25266784641b28100c08c7c7baa4559d0aaffe670223ee71936f3deaffa",
+      "materializer_sha256": "c3115c13a29dde74f6d316b64d26a6266c5a5cfeed877ef19de088844e09ba37",
+      "verifier_sha256": "34bd9802c507b3408b685c6233f0a2f711edbdf7a6f31c5dcd3eaba70128ba8f",
+      "source_identity": null,
+      "output_identity": null,
+      "authority": null,
+      "release": null,
+      "started": false
+    }
+  },
+  {
+    "case": "manifest_tamper",
+    "outcome": "rejected",
+    "error": "bound bytes: manifest"
+  },
+  {
+    "case": "body_tamper",
+    "outcome": "rejected",
+    "error": "bound bytes: materializer"
+  },
+  {
+    "case": "verifier_tamper",
+    "outcome": "rejected",
+    "error": "bound bytes: verifier"
+  },
+  {
+    "case": "wrong_source",
+    "outcome": "rejected",
+    "error": "source root binding"
+  },
+  {
+    "case": "wrong_manifest_path",
+    "outcome": "rejected",
+    "error": "bound path: manifest_path"
+  },
+  {
+    "case": "wrong_body_path",
+    "outcome": "rejected",
+    "error": "bound path: body_path"
+  },
+  {
+    "case": "wrong_verifier_path",
+    "outcome": "rejected",
+    "error": "bound path: verifier_path"
+  },
+  {
+    "case": "relative_output",
+    "outcome": "rejected",
+    "error": "normalized output"
+  },
+  {
+    "case": "nested_output",
+    "outcome": "rejected",
+    "error": "source/output lexical separation"
+  },
+  {
+    "case": "invented_source_identity",
+    "outcome": "rejected",
+    "error": "live state must remain unbound"
+  },
+  {
+    "case": "invented_release",
+    "outcome": "rejected",
+    "error": "live state must remain unbound"
+  },
+  {
+    "case": "extra_schema",
+    "outcome": "rejected",
+    "error": "exact binding schema"
+  }
+]

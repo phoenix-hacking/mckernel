@@ -1,0 +1,191 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/custody_release_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "recorded_at": "2026-10-27T18:26:06.155643+00:00",
+  "decision": "PASS_EXACT_CURRENT110_SYSCALL_POINTER_WARNING_DISPOSITION",
+  "cohort": "CURRENT110_ONLY",
+  "abi_equivalent_for_exact_current_sources": true,
+  "thin_raw_pointer_contract_preserved": true,
+  "repair_required_for_this_warning": false,
+  "warning_header": "warning: `f06_signal_adapter_syscall` redeclares `syscall` with a different signature",
+  "warning_block": "warning: `f06_signal_adapter_syscall` redeclares `syscall` with a different signature\n   --> /src/kernel/rust/arch_rt_sigreturn_syscall_bridge.rs:6:5\n    |\n  6 |     #[link_name = \"syscall\"]\n    |     ^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration\n    |\n   ::: /src/kernel/rust/init.rs:100:5\n    |\n100 |     fn syscall(num: CInt, ctx: *mut c_void) -> CLong;\n    |     ------------------------------------------------- `syscall` previously declared here\n    |\n    = note: expected `unsafe extern \"C\" fn(i32, *mut core::ffi::c_void) -> i64`\n               found `unsafe extern \"C\" fn(i32, *mut X86UserContext) -> i64`\n",
+  "warning_block_sha256": "8009eb41f1502621722d6a6a69dddb05af1bd87ae45535df3a39b5b147d0ebad",
+  "reviewed_refs": {
+    "profile": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT110-HOST19-BUILD-ADMISSION-1/PROFILE.SOURCE-ONLY.json",
+      "bytes": 94404,
+      "sha256": "64242ef204a7696369462487e5ca17e63f24d1a9d4c9957e43778b643a2fa288"
+    },
+    "currentRustobject": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT110-HOST19-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o",
+      "bytes": 18274528,
+      "sha256": "e2c3032791bbd657a85629dd48ca86b3b93f3ef729305568031776d5674ad9d0"
+    },
+    "currentimage": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT110-HOST19-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/mckernel.img",
+      "bytes": 10255112,
+      "sha256": "60e62f97ef48ecaf14174af1c5b75d7181969f439c1b45c618d6c16d4bc40d57"
+    },
+    "stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT110-HOST19-BUILD-ADMISSION-1/OUTPUT/work/evidence/00.stderr",
+      "bytes": 56443,
+      "sha256": "50c0fd6786d447ef4c46e5869002ab6f17f4436908a02f9ab74182ba4fb1d519"
+    },
+    "baseline_stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-SYNC-PROCESSVM-HOST13-FIVE-BUILD-ADMISSION-1/OUTPUT/work/evidence/00.stderr",
+      "bytes": 55794,
+      "sha256": "72ed15d8ce59998bc956cf89220b867e963d4210e91497f0c26a6243518508d9"
+    },
+    "bridge.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/rust-subtree/arch_rt_sigreturn_syscall_bridge.rs",
+      "bytes": 748,
+      "sha256": "c2b972091d99383f52baabf74a17ce15a55d7e51b3e74a88d41e6d7330f5597d"
+    },
+    "init.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/rust-subtree/init.rs",
+      "bytes": 17659,
+      "sha256": "42ca08af0f1087b3914a58e9c445fff6ae27e3b76da2ee2ee3255181bb4b8886"
+    },
+    "abi.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/rust-subtree/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    "syscall_policy.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/rust-subtree/syscall_policy.rs",
+      "bytes": 1263273,
+      "sha256": "2ddde21dfcf32402d281d7ba70e62d765cb60e60bf225d7303b17221959a5477"
+    },
+    "selected_kernel_C": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/candidate/kernel/syscall.c",
+      "bytes": 916284,
+      "sha256": "d9187c6eeb63f134602218db3b3b50683e1ca45b416199fcaa8ca4976c352713"
+    },
+    "selected_arch_C": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/candidate/arch/x86_64/kernel/syscall.c",
+      "bytes": 116023,
+      "sha256": "c7b0c46302a133b017dbd9176dfe523e3f05fb0e3d268acd32b63679e6493605"
+    },
+    "real_context_header": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/arch/x86_64/kernel/include/ihk/context.h",
+      "bytes": 2286,
+      "sha256": "13a67bcf26c512ac27ece4ab801e5e96976b88ec505d9f549e53755b431171f8"
+    },
+    "original_failure": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/resource-and-qualifier-preparation-1/actual-qualification-1/FINAL-ARTIFACT-QUALIFICATION.json",
+      "bytes": 2388,
+      "sha256": "e8ee544e69dfa0927495b6570ea24114105d2ade1a00b93df8e7434b41bbd4da"
+    },
+    "HOST140_result": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-ready-host-batch-20261027-1/ACTUAL-HOST-RESULT.json",
+      "bytes": 10327,
+      "sha256": "da28810eca38096263ffba9b0955f92a6f5f845ace02095089cf4a1762d5f1d3"
+    },
+    "HOST140_fixture": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-rt-sigreturn-three-source-1/syscall/fixture.c",
+      "bytes": 2999,
+      "sha256": "675b8593fb6d52325cd54c951aa5608133ea73aabe654b94fb348ec04089b328"
+    },
+    "HOST140_original_C": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-rt-sigreturn-three-source-1/syscall/original-bridge.inc",
+      "bytes": 117,
+      "sha256": "9567d9a5740d334310b8c25e1a12dcb193061ad6d6d75a55f0f843c8d940516a"
+    },
+    "HOST140_wholejoin": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-ready-host-batch-20261027-1/step5/whole-join.json",
+      "bytes": 1095,
+      "sha256": "2a598b9e2b2c6825a2a6a0e4e6d86ac7f0c466041da5232ed7b2c17c3e482f64"
+    }
+  },
+  "warning_count_context": {
+    "baseline": 142,
+    "actual": 143,
+    "added_exact_headers": {
+      "warning: `f06_signal_adapter_syscall` redeclares `syscall` with a different signature": 1,
+      "warning: 143 warnings emitted": 1
+    },
+    "removed_exact_headers": {
+      "warning: 142 warnings emitted": 1
+    },
+    "only_one_new_diagnostic_and_its_count_summary": true
+  },
+  "abi_findings": [
+    "Genuine ihk/context.h defines ihk_mc_user_context_t as struct x86_user_context. Rust X86UserContext is a sized repr(C) struct224B/gpr56. CInt=i32 and CLong=i64 match HOST static assertions int4/long8/pointer8. Both declarations use unsafe extern C, same int argument/long result; only second raw-pointer pointee spelling differs.",
+    "Both raw pointers are thin64bit pointers on these exact ELF64 x86_64 artifacts. A rawpointer cast preserves address/provenance without creating a reference, dereference, ownership, lifetime or alignment promise. Context pointee alignment8 concerns valid eventual access, not this cast. Original syscall live-context and dispatch obligations remain unchanged.",
+    "Actual selected provider is syscall_policy::f03_syscall_entry_candidate::syscall_entry exported as syscall with C(i32,*mutX86UserContext)->i64. Selected C retains genuine long syscall(int,ihk_mc_user_context_t*) declaration under Rust-entry selection. init.rs uses voidpointer form for existing callback registration. No variadic libc syscall or calling-convention change.",
+    "All11 rawlink inputs inspected: only actual wholeRust object defines syscall and arch_rt_sigreturn_syscall_bridge; each unique in final image. Bridge17B only pushesrbp,movesrsp,loads target,popsrbp,jumpsrax. R_X86_64_64 at6 names syscall; final targetfffffffffe8ca330 equals unique final syscall. edi/rsi argument bits and returnedrax are untouched; no context dereference.",
+    "HOST140 fixture uses genuine headers/static ABI assertions, exact same bridge source, original C bridge and typed wrapped provider.4int extrema x5pointer patterns x7signed64results PASS, including null/unaligned1/highbits. This proves controlled forwarding only; actual syscall side effects/native signal behavior remain separate."
+  ],
+  "symbol_ownership_rows": [
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT110-HOST19-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o:0000000000000000 T arch_rt_sigreturn_syscall_bridge",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT110-HOST19-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o:0000000000000000 T syscall",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT110-HOST19-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/mckernel.img:fffffffffe83b4a0 T arch_rt_sigreturn_syscall_bridge",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT110-HOST19-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/mckernel.img:fffffffffe8ca330 T syscall"
+  ],
+  "object_bridge_disassembly": "\n/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT110-HOST19-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o:     file format elf64-x86-64\n\n\nDisassembly of section .ltext.arch_rt_sigreturn_syscall_bridge:\n\n0000000000000000 <arch_rt_sigreturn_syscall_bridge>:\n   0:\t55                   \tpush   %rbp\n   1:\t48 89 e5             \tmov    %rsp,%rbp\n   4:\t48 b8 00 00 00 00 00 \tmovabs $0x0,%rax\n   b:\t00 00 00 \n\t\t\t6: R_X86_64_64\tsyscall\n   e:\t5d                   \tpop    %rbp\n   f:\tff e0                \tjmp    *%rax\n",
+  "final_bridge_disassembly": "\n/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT110-HOST19-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/mckernel.img:     file format elf64-x86-64\n\n\nDisassembly of section .text:\n\nfffffffffe83b4a0 <arch_rt_sigreturn_syscall_bridge>:\nfffffffffe83b4a0:\t55                   \tpush   %rbp\nfffffffffe83b4a1:\t48 89 e5             \tmov    %rsp,%rbp\nfffffffffe83b4a4:\t48 b8 30 a3 8c fe ff \tmovabs $0xfffffffffe8ca330,%rax\nfffffffffe83b4ab:\tff ff ff \nfffffffffe83b4ae:\t5d                   \tpop    %rbp\nfffffffffe83b4af:\tff e0                \tjmp    *%rax\n\nDisassembly of section .fixup:\n\nDisassembly of section .vsyscall:\n",
+  "allowed_successor_change": {
+    "exact_warning_only_data_disposition": true,
+    "preserve_original_failed_qualifier": true,
+    "no_generic_redeclares_allowance": true,
+    "no_warning_suppression": true,
+    "no_source_or_object_change": true,
+    "no_compiler_or_fivecommand_replay": true,
+    "require_exact_stderr_fullblock_source_object_image_hashes": true,
+    "retain_all_other_gates": true
+  },
+  "physical_termination_review": {
+    "decision": "PASS_POSITIVE_CURRENT110_BUILD_TERMINATION_AND_FREE_PERMANENT_MUTEX_OBSERVATION",
+    "observation": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT110-HOST19-BUILD-ADMISSION-1/ROOT-POSTBUILD-CURRENT-OBSERVATION.json",
+      "bytes": 128850,
+      "sha256": "60de91ab29e7668c8932feeaef58ce59103452b2102e72318b48e9f1955ec656"
+    },
+    "tool_result": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT110-HOST19-BUILD-ADMISSION-1/ROOT-ACTUAL-HOLDER-TOOL-RESULT.json",
+      "bytes": 377,
+      "sha256": "19e02d6a33f09f237a873e2c048781539b75669797013b40de7e9287a0ca5453"
+    },
+    "local_terminal": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT110-HOST19-BUILD-ADMISSION-1/HOLDER/BUILD-LOCAL-TERMINAL.json",
+      "bytes": 246,
+      "sha256": "626a352f348924d1e60fe3ee2c60da41a62b2326371ebcf04d417dd40931904e"
+    },
+    "runner_join": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT110-HOST19-BUILD-ADMISSION-1/HOLDER/RUNNER.JOINED.json",
+      "bytes": 83,
+      "sha256": "c9c0014980872c903b665439b9eeb70fe98d2255738f6612a540701769135a7e"
+    },
+    "container_terminal": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT110-HOST19-BUILD-ADMISSION-1/OUTPUT/terminal.json",
+      "bytes": 459,
+      "sha256": "624c1fe8648356054c2526c46aa7895ff1e4071fdeea7a16d3e04d4f14e0d3cc"
+    },
+    "holder_pid": 1635037,
+    "holder_birth": 92251956,
+    "runner_pid": 1635602,
+    "runner_birth": 92262222,
+    "container": "ce098a5ea7f3a8db0070dd6f034259eedfa9d50ec5cdbcacadbab98a2d3f229d",
+    "observed_clocks": [
+      1793125315.257798,
+      907421.826754031,
+      922759.953804105
+    ],
+    "facts": [
+      "Holder tool77455/exact runner positively joined0; exact container exited0/Pid0/noOOM and5completed commands agree.",
+      "Current proc snapshot has no holder/runner PID or matching groups, no observation errors; observer positively acquired permanent27:4 fullEOF flock and closed it twice. Historical strict235 rows are supplemental and do not replace these current110 proofs.",
+      "Exited container retained; no deletion required for active-capacity retirement. Root needs fresh next-operation account/source/resource/nonce/execution admission."
+    ],
+    "new_heavy_release_granted": false
+  },
+  "artifact_acceptance": false,
+  "native_acceptance": false,
+  "whole_file_retirement": false,
+  "actions": {
+    "read_hash_and_offline_object_inspection_only": true,
+    "workload_or_compiler_or_Docker_or_root_or_cleanup": false,
+    "only_this_receipt_written": true
+  }
+}

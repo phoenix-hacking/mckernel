@@ -1,0 +1,70 @@
+{
+  "task_id": "signal-alternate-repeat-exact-byte-diagnostic-bridge-20261017-1",
+  "status": "FROZEN_BEFORE_REFERENCE",
+  "scope": "Additive exact-byte diagnostic bridge only; released source/oracle/catalog unchanged and formal acceptance remains unresolved.",
+  "authorization": "Dispatcher explicitly authorized additive source-bound exact-byte bridge before compile/reference; no adaptation to observed output allowed.",
+  "case_id": "signal.alternate-repeat",
+  "original_inputs": [
+    {
+      "source": "/home/holden/mckernel/scripts/application-tests/cases/signal/signal.alternate-repeat.c",
+      "retained": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/payload-original.c",
+      "sha256": "aa6644c7a72f90e49c5eff3115bdd2c2c5aa1fa68dfa138a86335acbe16a08eb",
+      "size": 1368
+    },
+    {
+      "source": "/home/holden/mckernel/scripts/application-tests/oracles/signal.alternate-repeat.json",
+      "retained": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/oracle-original.json",
+      "sha256": "462077668cf49ff07565ff3fe42e4c2b1dbc6cb3bfaeda9608820cd229065f53",
+      "size": 1015
+    },
+    {
+      "source": "/home/holden/mckernel/scripts/application-tests/packets/packet-005.json",
+      "retained": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/released-draft-packet-005.json",
+      "sha256": "981014e863cb11e1f0c0afa69428dc13ec11f20289c597d1c063c61a8325c81c",
+      "size": 5901
+    },
+    {
+      "source": "/home/holden/mckernel/docs/verification/evidence/signal-mask-restore-compile-profile-review-20261017.json",
+      "retained": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/reusable-compile-profile.json",
+      "sha256": "320d19452c638e0853d21798628d59387d551ff2b212806e1061d9d0b644ff31",
+      "size": 11266
+    },
+    {
+      "source": "/home/holden/mckernel/scripts/application-tests/cases.json#signal.alternate-repeat",
+      "catalog_sha256": "e8402f71283634f53923b57a1a920d9bc5e4a0670c6c6aba03eb967f893bf316",
+      "retained": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/selected-case.json",
+      "sha256": "b1c26413db2802db7bed27827ea2a61cdbda1933f9f3bd996fe2b0e0d76bda3f"
+    }
+  ],
+  "expected": {
+    "stdout_ascii": "handler=1 in_alt=inside\nhandler=2 in_alt=inside\nhandler=3 in_alt=inside\nhandler=4 in_alt=inside\nhandler=5 in_alt=inside\nhandler=6 in_alt=inside\nhandler=7 in_alt=inside\nhandler=8 in_alt=inside\nhandler=9 in_alt=inside\nhandler=10 in_alt=inside\nhandler=11 in_alt=inside\nhandler=12 in_alt=inside\nhandler=13 in_alt=inside\nhandler=14 in_alt=inside\nhandler=15 in_alt=inside\nhandler=16 in_alt=inside\ndelivery=16 alt_hits=16\n",
+    "stdout_hex": "68616e646c65723d3120696e5f616c743d696e736964650a68616e646c65723d3220696e5f616c743d696e736964650a68616e646c65723d3320696e5f616c743d696e736964650a68616e646c65723d3420696e5f616c743d696e736964650a68616e646c65723d3520696e5f616c743d696e736964650a68616e646c65723d3620696e5f616c743d696e736964650a68616e646c65723d3720696e5f616c743d696e736964650a68616e646c65723d3820696e5f616c743d696e736964650a68616e646c65723d3920696e5f616c743d696e736964650a68616e646c65723d313020696e5f616c743d696e736964650a68616e646c65723d313120696e5f616c743d696e736964650a68616e646c65723d313220696e5f616c743d696e736964650a68616e646c65723d313320696e5f616c743d696e736964650a68616e646c65723d313420696e5f616c743d696e736964650a68616e646c65723d313520696e5f616c743d696e736964650a68616e646c65723d313620696e5f616c743d696e736964650a64656c69766572793d313620616c745f686974733d31360a",
+    "stdout_sha256": "461b8c2cbeadf7deb6c34b99269d7c9317d8afd7de9f8ee13ee237963077b3db",
+    "stdout_bytes": 415,
+    "stderr_hex": "",
+    "wait_status": {
+      "kind": "exited",
+      "code": 0
+    },
+    "stream_limits": {
+      "stdout": 1024,
+      "stderr": 1024
+    }
+  },
+  "source_argument": [
+    "Single-thread main registers SA_ONSTACK for SIGUSR1, then performs exactly16 kill(getpid(), SIGUSR1) calls sequentially.",
+    "The handler increments hits and prints handler=N and the result of a local marker address comparison against the frozen65536-byte alternate-stack array.",
+    "The self-directed unblocked signal runs the handler before normal sequential continuation; the counter advances1..16 and main prints the final summary after the loop.",
+    "Expected bytes are fixed from the reviewed source and all-inside original relational intent before any reference execution. Observed Linux output may confirm or fail this diagnostic bridge; it cannot change it."
+  ],
+  "preserved_formal_limitations": [
+    "Original oracle exact-line-prefixes, unresolved output-order wording and reviewer address-range/API-state question remain unchanged.",
+    "Catalog normal-execution-stack-restored-each-time property is not directly measured by the frozen fixture and remains unaccepted.",
+    "Handler calls printf; this frozen single-thread synchronous fixture does not establish general async-signal-safe stdio behavior.",
+    "Diagnostic bridge/static host compilation does not satisfy original ordinary-dynamic-etexec catalog or same-binary pinned-Linux-guest/formal execution obligations."
+  ],
+  "reference_policy": "Run original source unchanged under sanitized ordinary-user Linux reference with SIGUSR1/SIGUSR2 not blocked; retain first mismatch and stop.",
+  "formal_case_credit": false,
+  "runtime_release": false,
+  "next_gate": "Independent bridge/fixture review before any guest execution."
+}

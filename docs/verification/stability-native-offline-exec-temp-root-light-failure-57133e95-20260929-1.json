@@ -1,0 +1,75 @@
+{
+  "schema": "mckernel.native-offline-exec-temp-root.light-container.v1",
+  "recorded_at_utc": "2026-09-29T19:38:56Z",
+  "status": "FAIL_PRESERVED",
+  "acceptance": {
+    "source": false,
+    "build": false,
+    "runtime": false,
+    "application": false,
+    "production": false
+  },
+  "source_commit": "57133e95944b3a808c3f38b912d4446ffc298eb1",
+  "container": {
+    "name": "mckernel-offline-temp-57133e95-1",
+    "id": "1e92f6fbe5d053ad5e1078d231cb0fbd2df77cdc47009a235f4f97ba4e0828c4",
+    "state": "exited",
+    "exit_code": 1,
+    "oom_killed": false,
+    "pid": 0,
+    "restart_count": 0,
+    "started_at": "2026-09-29T19:33:45.346350079Z",
+    "finished_at": "2026-09-29T19:34:05.91547375Z",
+    "profile": "cpus 2-3; 2 GiB memory/no swap; 128 pids; no network; read-only root; all capabilities dropped; no-new-privileges; uid/gid 1000; /tmp tmpfs noexec; /evidence writable ext4 bind; candidate source read-only"
+  },
+  "preserved_archive": {
+    "path": "docs/verification/evidence/stability-native-offline-exec-temp-root-light-failure-57133e95-20260929-1.tar.gz",
+    "sha256": "f6c0c49aa3bbbc754ccf26dbd82b6fadbcf5e599ea34764310642c039eb2d0b1",
+    "member_count": 8,
+    "stdout_sha256": "91dcfed2e7145ff089f8d6bb32b8c2f92af88dbdc4ddeed0e5afbd9e191f1d242",
+    "stderr_sha256": "84ddc8e745e603872af08dc2d9400027a7e2d2df16a77443712c41d21b193457",
+    "inspect_sha256": "a9591562e043f7bea880f07f7f51155d43b9e5cf633b94e75d92c089c6f15cc0"
+  },
+  "verified_behavior": [
+    "The corrected offline driver selected /evidence/build for fresh Python tempfile users while /tmp was noexec.",
+    "All 19 offline-driver tests passed with the pinned Rust 1.92 container environment.",
+    "The exact queue fixture and the OS registry, device registry, ioctl and SMP resource checks passed before the terminal failures.",
+    "The container terminated normally without OOM or restart."
+  ],
+  "terminal_failures": [
+    {
+      "test": "scripts.tests.test_ihk_smp_image.NativeSmpImageTests.test_bounded_linux_file_owner",
+      "cause": "The standalone loader fixture did not include the production super::user_string module now required by smp_loader.rs."
+    },
+    {
+      "test": "scripts.tests.test_rust_target_compatibility_patches.RustTargetCompatibilityPatchTests.test_exact_rust_1_92_allocator_symbol_is_warning_clean_when_requested",
+      "cause": "rustc attempted to create /src/rmeta* because the test did not bind its output/cwd to a writable executable temporary root."
+    }
+  ],
+  "candidate_corrections": [
+    {
+      "path": "scripts/tests/fixtures/ihk_smp_loader_compile.rs",
+      "sha256": "1296dc6f861dca67a8844f59624a79647d97f5b9c84f13f4105dcf33a45b81d6"
+    },
+    {
+      "path": "scripts/tests/test_ihk_smp_image.py",
+      "sha256": "3be601ceebf6e4889865c17f114bb677789c2d6f4f4de8a1d506c35d40e687c6"
+    },
+    {
+      "path": "scripts/tests/test_rust_target_compatibility_patches.py",
+      "sha256": "755bbc1d9513ff4a66313d5527946f8571f253625410f82f1a92c10c6a669dc0"
+    }
+  ],
+  "candidate_correction_checks": [
+    "Loader fixture: Rust 1.85.1 compile and 40-test execution passed; focused Python suite passed 3 tests.",
+    "Compatibility test module: 12 passed and 1 Rust-1.92-dependent test skipped on the host.",
+    "git diff --check passed for all three files.",
+    "The host default Rust 1.60 failures are non-authoritative; pinned Rust 1.92 container review and execution remain required."
+  ],
+  "next_actions": [
+    "Independently review the three bounded fixture/test corrections.",
+    "Run a fresh light container with the same reviewed isolation profile, first the two failed tests and then the remaining page allocator, page owner and mapping checks; preserve exact output and identity.",
+    "After a passing light chain, retire the obsolete f5d8d914-1 candidate through the reviewed retention/retirement machinery and prepare a wholly fresh candidate from the fetched corrected commit.",
+    "Create a new heavy-build request and execution release; never execute the consumed or blocked v1/v2 releases."
+  ]
+}

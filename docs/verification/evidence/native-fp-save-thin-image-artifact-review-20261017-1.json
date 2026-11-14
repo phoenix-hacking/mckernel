@@ -1,0 +1,31 @@
+{
+  "schema": "mckernel.independent-build-artifact-review.v1",
+  "decision": "PASS_SCOPED_IMAGE_BUILD_AND_SOURCE_BODY",
+  "reviewer": "/root/native_cpu_reacquire_review",
+  "implementation_ownership": false,
+  "request_sha256": "53734de9fe0b559d07857282f8cef56cc77c79e813d3d8d163f2d6f0d60ab12f",
+  "receipt_sha256": "27244624f1315216703ab12f728a34a26471f44ffd58910141ac22af0c4234fb",
+  "image": {
+    "sha256": "a0f508540d03819d45da6de78a849ae1241fa988feb9e1a90d997b667ea1b7eb",
+    "size": 7908616
+  },
+  "additional_retained_process_object": {
+    "sha256": "166b14198aabad05bebf74a93760385f6f7ff451b8c1d7264a2e029138955207",
+    "size": 319704,
+    "requirement": "Preserve original object in output build tree; not part of seventeen-file receipt inventory."
+  },
+  "verified_receipt_inventory_files": 17,
+  "configure_status": 0,
+  "build_status": 0,
+  "verified_linked_boundary": [
+    "Materialized process15cb/cpu115725/sched5f684 match provenance and exact frozen compiler command.",
+    "Allocator NULL yields -12 at fe81b1df; save_fp_regs retains error and skips XSAVE.",
+    "schedule tests save result at fe81a006 and branches to panic fe81a4f5 before prepare fe81a0c5, restore fe81a162/278 and switch fe81a1e0.",
+    "Accepted panic string, original IRQ saved fe819fbf/r14, runqueue IRQ state fe81a0ee and non-switch restore fe81a405.",
+    "No late save remains in linked schedule."
+  ],
+  "runtime_acceptance": false,
+  "whole_migration_acceptance": false,
+  "owner_retirement_accepted_by_this_review": false,
+  "next": "Independent owner/client retirement and separately released terminal cleanup, then eligible separately reviewed AVX guest."
+}

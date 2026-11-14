@@ -1,0 +1,102 @@
+{
+  "ABI_ownership_findings": [
+    "Target compile guard restricts Linux/x86_64/little-endian/64bit. Existing qualified FFI layouts and direct libc interfaces are retained; sigaction size152/alignment8 assertions and aligned128-byte waitid buffer remain unchanged from qualified source. Actual toolchain/HOST ABI behavior remains to be qualified.",
+    "Parent builds owned CStrings plus separate argv/env pointer vectors before fork, keeps their storage live through owned child wait, and appends exactly oneNULL pointer to each vector. Empty argument becomes a live CString containing onlyNUL, distinct from vector terminator. Child uses inherited prebuilt storage and async-safe libc operations before execve/_exit, with no child Rust allocation/Drop path added.",
+    "One dedicated direct child sets its own process group. LeaderOwnership guards positivePID/group signaling only while leader remains unreaped; positive leader reap orECHILD irreversibly revokes later signaling. Existing100ms TERM\u2192KILL and2s reap reserve/no-new-deadline behavior is retained. HOST tests are dedicated child-subreaper process and serialized.",
+    "Inherited pipe descriptors use bounded retention1024 with observed/discard counts, setup-stage error pipe and EOF gating. Pipes Drop/close paths, waitidWNOWAIT leader pin, finalwaitpid reaps and rawstatus/timestamps remain intact after removing only F05Observer implementation and optional observer=None hooks.",
+    "Production profile fixedeightargv values, including empty seventh element, is consumed both by actualsupervise and report::argv_json; no independent hardcoded wrongargv report or runtime generic case selector remains. Exacttwoenv values andcwd/case/work preserved.",
+    "Main uses only originalstartup /bin/native-boot argv; it omits F05hidos/allow_oversubscribe, causal gate and lifecycle-observer modules. Original5s absolute readable-empty numericprocfs predicate and one genuine finalklogctl snapshot/oneNDframe preserved for this originalstartup case, without changing F05qualification source or originaloracle.",
+    "Frame overflow retains original<4096 fallback that clears retained data, preserves observed/discard accounting and forces procfs_emptyfalse. Actual rawwaitstatus, actualstreambytes and EOF are framed; failure cannot become a fabricated startuporacle PASS."
+  ],
+  "HOST_proposal_findings": [
+    "Five sequential proposed commands compile HOST-only fakeexec, compile sixteen tests with compile-timeSTARTUP_FAKEEXEC_PATH, run exactly sixteen serialized tests, compile productioncollector and inspect actualELF with readelf. All source/argv templates are fixed; Root supplies one fresh disjoint outputroot and real source/artifact receipts.",
+    "Fakeexec receives actual rawargc/argv/envp through C main ABI, checks eightargv values/argv8NULL including empty and exacttwoenv/env2NULL. It emits originalstartuporacle only on exactmatch. Wrongoldc0205argv and droppedempty7argv return41 plus35byte diagnostic; those negative generic invocations are never relabelled through fixed production frame.",
+    "Prepared16 controls cover inherited stream/rawstatus/timeout/group/reap/setup faults and new argv/frame/cwd/5sretirement predicates. Tests do not invoke PID1productionmain, module/guest/kmsg/gate or poweroff. All16 remain prepared/unrun; source review does not claim their PASS.",
+    "Root must use existing ordinaryCPU6 affinity/onecompilerjob/serialized30stest deadline and normal positivejoin/groupabsence/closedstream controls. These five commands add no heavy CPU2\u20135 lease, native authority or aggregate resource expansion."
+  ],
+  "actual_HOST_result": null,
+  "actual_collector_artifact": null,
+  "actual_compiler_result": null,
+  "application_acceptance": false,
+  "blocking_findings": [],
+  "decision": "PASS_SOURCE",
+  "implementation_ownership": false,
+  "independent": true,
+  "language_retirement_acceptance": false,
+  "native_acceptance": false,
+  "ordinary_HOST_proposal": "PASS_PREPARED_FIVE_COMMANDS_FOR_ROOT_ORDINARY_CPU6_ONE_JOB_QUALIFICATION",
+  "original_case_binding": {
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "app",
+      "A",
+      "",
+      "B"
+    ],
+    "boot_argv": [
+      "/bin/native-boot"
+    ],
+    "case": "startup.argv-empty",
+    "cwd": "/case/work",
+    "env": {
+      "COKERNEL_PATH": "/apps",
+      "PATH": "/usr/bin:/bin"
+    },
+    "frame_limit": 4096,
+    "oracle": {
+      "exit_code": 0,
+      "stderr_hex": "",
+      "stdout_hex": "7b2263617365223a22737461727475702e617267762d656d707479222c2261726763223a342c2261726776223a5b22617070222c2241222c22222c2242225d2c227465726d696e61746f725f69735f6e756c6c223a747275657d0a"
+    },
+    "original_payload": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/scratch/stability-packet001-compile-20260913-1/startup.argv-empty/payload",
+      "sha256": "ff227c83b2da598110768e13f5e042b437e049659706b56079cc73f7c818a836",
+      "size": 20528
+    },
+    "payload_timeout_ms": 10000,
+    "retirement_ms": 5000,
+    "stream_limit_each": 1024,
+    "unchanged_full_evaluator": {
+      "bytes": 100261,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/bound-native-runtime-1/native_diagnostic.py",
+      "sha256": "529830adcd6fafa13979bf6036b2812c88630c5e0112ce4d80f9fc28cc30d4da"
+    }
+  },
+  "qualified_predecessor": {
+    "actual_HOST_review_sha256": "9b5433a8f3cf35ea159e33d1d342292daa4237eeb1a2f95a5c623370b5bc0e91",
+    "retained_reference_sha_checks_PASS": 24,
+    "source_ready_sha256": "81bb4eb14fa872f130fe3c92a7964713eb58115f10505d7845193e5053ec14f6",
+    "unchanged_F05_artifact_sha256": "908f147ef0a61959becc20820d6e889aaf5eb4418adda0c99f13b3c3e6cf72a1"
+  },
+  "required_actual_qualification": [
+    "Root may issue the exact ordinaryCPU6 qualification commands after normal current account/window checks, with fresh outputroot and exact source refs. Capture actual compile/test statuses, all16 executed controls and productionELF identity/source closure.",
+    "Bind actual new collector caseprofile to its compiled artifact/HOST qualification. Prior908f F05qualified artifact and oldc020 never stand in for this new startup binary.",
+    "Native staging/overlay/manifest/sourcepublication/currentledger/ownership and independent exact release remain separate. Existing failedbe6e argv/status41 evidence and all unknown rows/wholefile/all349/all51 claims stay preserved."
+  ],
+  "reviewed_HOST_proposal_sha256": "db01d795942f3c908bc39dab3bce00998dc8f1b17c10144d208ca0cd2de5aa60",
+  "reviewed_caseprofile_sha256": "94b008753f112972780401219a6ae36778b858c7c4e6f1f164eb23b487065d6e",
+  "reviewed_ready_sha256": "03647eee5a17e839433ef6290deea7813bf726d9e47ba752d2409578f75b1364",
+  "reviewer": "/root/daemon_execution_review",
+  "runtime_authority": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_sha256": {
+    "fakeexec.rs": "cc3092a4e7a560c8417fd439006e643764b60d47b239adb4856ed8b1308f9d2c",
+    "host_tests.rs": "140a44a7d8600fe08cfd42abbc8379a535a769488798896291c4fb2bf61491d7",
+    "main.rs": "3366dc3aedf3a9499f866bd372046b3792ac6528f81b9ce81f637fde80a58ba5",
+    "profile.rs": "b395546ba05320c50d215770d760bc4ea6f4348a35b8ce03458f21bc6ca7df0a",
+    "report.rs": "da958f3e0ca75817781b2914843f40bddbcbf9735204ff7f1658549ddcdaf4b9",
+    "supervisor.rs": "a6e805b21adb9624e916619ea3f8e36d8ac2dbdb6965d8e44ab49f7800c9ba13",
+    "tests.rs": "1f4b82546db14736a87476a21b71f9cdcb9f4717e6cd0b852bd1d0f39f78cd30"
+  },
+  "static_source_checks": {
+    "HOST_only_Rust_source_count": 3,
+    "all13_ready_references_verified": true,
+    "compiler_or_test_executable_or_guard_or_resource_calls": 0,
+    "prepared_test_functions_count": 16,
+    "production_Rust_module_count": 4
+  }
+}

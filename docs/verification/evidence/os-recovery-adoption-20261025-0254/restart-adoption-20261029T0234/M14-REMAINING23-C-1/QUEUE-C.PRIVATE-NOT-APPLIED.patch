@@ -1,0 +1,225 @@
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -4684,11 +4684,25 @@
+ }
+ #endif
+ 
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_LEAF_CALLBACKS) && defined(__x86_64__) && defined(MCKERNEL_RUST_F03_PTRACE_KFREE_PROFILE_119)
++extern void ptrace_detach_kfree_bridge(void *ptr);
++#else
++#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
++#line 4651
++#else
++#line 4660
++#endif
+ static void
+ ptrace_detach_kfree_bridge(void *ptr)
+ {
+ 	kfree_tracked(ptr, __FILE__, __LINE__);
+ }
++#endif
++#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
++#line 4656
++#else
++#line 4665
++#endif
+ 
+ #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ static void
+@@ -4720,6 +4734,14 @@
+ }
+ #endif
+ 
++#if defined(MCKERNEL_RUST_F03_LEAF_CALLBACKS) && defined(__x86_64__)
++extern long ptrace_detach_do_kill_bridge(void *current_thread, int pid, int tid, int sig, const void *info, int ptracecont);
++#else
++#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
++#line 4687
++#else
++#line 4696
++#endif
+ static long
+ ptrace_detach_do_kill_bridge(void *current_thread, int pid, int tid,
+ 		int sig, const void *info, int ptracecont)
+@@ -4727,6 +4749,12 @@
+ 	return do_kill((struct thread *)current_thread, pid, tid, sig,
+ 			(struct siginfo *)info, ptracecont);
+ }
++#endif
++#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
++#line 4694
++#else
++#line 4703
++#endif
+ 
+ static void
+ ptrace_detach_wakeup_bridge(void *thread, int valid_states)
+@@ -5774,6 +5802,14 @@
+ }
+ #endif
+ 
++#if defined(MCKERNEL_RUST_F03_INTERRUPT_ARITY3_DEFINED) && defined(MCKERNEL_RUST_F03_INTERRUPT_ORIGIN_PROFILE_119) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(__x86_64__)
++extern void interrupt_syscall(struct thread *thread, int sig);
++#else
++#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
++#line 5653
++#else
++#line 5662
++#endif
+ void
+ interrupt_syscall(struct thread *thread, int sig)
+ {
+@@ -5792,6 +5828,12 @@
+ 	}
+ 	return;
+ }
++#endif
++#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
++#line 5671
++#else
++#line 5680
++#endif
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ extern void exit_group_log_bridge(int pid);
+--- a/kernel/CMakeLists.txt
++++ b/kernel/CMakeLists.txt
+@@ -144,6 +144,9 @@
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/sysfs.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_policy.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_mprotect_host_vma.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_ptrace_detach_kfree.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_ptrace_detach_kill.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_interrupt_arity3.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_terminate_whole.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_terminate_mcexec_whole.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_terminate_host_whole.rs"
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -36881,3 +36881,18 @@
+ #[cfg(all(f03_terminate_host_whole_candidate, target_arch = "x86_64"))]
+ #[path = "syscall_terminate_host_whole.rs"]
+ mod syscall_terminate_host_whole;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(all(f03_ptrace_kfree_profile_119, f03_leaf_callbacks_candidate, target_arch = "x86_64"))]
++#[path = "syscall_ptrace_detach_kfree.rs"]
++mod syscall_ptrace_detach_kfree;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(all(f03_leaf_callbacks_candidate, target_arch = "x86_64"))]
++#[path = "syscall_ptrace_detach_kill.rs"]
++mod syscall_ptrace_detach_kill;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(all(f03_interrupt_arity3_defined_candidate, f03_interrupt_origin_profile_119, target_arch = "x86_64"))]
++#[path = "syscall_interrupt_arity3.rs"]
++mod syscall_interrupt_arity3;
+--- /dev/null
++++ b/kernel/rust/syscall_ptrace_detach_kfree.rs
+@@ -0,0 +1,27 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++use core::ffi::{c_int, c_void};
++
++// These constants are valid only under the independently bound PROFILE_119
++// source path and logical-line profile described in the private handoff.
++const SOURCE_FILE: &[u8] = b"/src/kernel/syscall.c\0";
++#[cfg(f03_ptrace_kfree_dispatch_origin)]
++const SOURCE_LINE: c_int = 4657;
++#[cfg(not(f03_ptrace_kfree_dispatch_origin))]
++const SOURCE_LINE: c_int = 4664;
++
++/// Preserve the original tracked-free callback and its selected C origin.
++///
++/// # Safety
++/// `ptr` must be null or an owned live tracked allocation admissible to the
++/// original callback, and ownership must be transferred exactly once.
++#[no_mangle]
++pub unsafe extern "C" fn ptrace_detach_kfree_bridge(ptr: *mut c_void) {
++    // SAFETY: The caller supplies the original pointer domain, and the source
++    // profile binds these Rust-owned C-string bytes and line to the original
++    // translation unit. The allocator handles null and tracking as before.
++    unsafe {
++        crate::mem_helpers::kfree_tracked(
++            ptr, SOURCE_FILE.as_ptr().cast_mut().cast(), SOURCE_LINE,
++        );
++    }
++}
+--- /dev/null
++++ b/kernel/rust/syscall_ptrace_detach_kill.rs
+@@ -0,0 +1,20 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++use crate::abi::{CInt, CLong, SigInfo};
++use core::ffi::c_void;
++
++/// Forward the original callback to the existing do_kill provider.
++///
++/// # Safety
++/// Caller retains the current thread and, when non-null, info for the duration
++/// of the existing provider call, following the original C callback contract.
++#[no_mangle]
++pub unsafe extern "C" fn ptrace_detach_do_kill_bridge(
++    current_thread: *mut c_void, pid: CInt, tid: CInt, sig: CInt,
++    info: *const c_void, ptracecont: CInt,
++) -> CLong {
++    // SAFETY: Existing adapter uses the original unsigned C provider and
++    // bit-preserving long conversion; raw pointers and arguments are unchanged.
++    unsafe { super::f06_ptrace_report_signal_kill(
++        current_thread, pid, tid, sig, info.cast::<SigInfo>(), ptracecont,
++    ) }
++}
+--- /dev/null
++++ b/kernel/rust/syscall_interrupt_arity3.rs
+@@ -0,0 +1,52 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Contract candidate only: kill's unused arguments 3-5 are zero. This proposed
++// defined-input policy does not change UTI decisions or request ID/valid logic.
++use core::mem::MaybeUninit;
++use core::ptr::{addr_of, addr_of_mut, write_volatile};
++use crate::abi::{CInt, CULong, Thread, X86UserContext};
++use crate::debug::Ddebug;
++
++const SOURCE_FILE: &[u8] = b"/src/kernel/syscall.c\0";
++#[cfg(f03_interrupt_origin_dispatch)]
++const DEBUG_LINE: u32 = 5662;
++#[cfg(not(f03_interrupt_origin_dispatch))]
++const DEBUG_LINE: u32 = 5669;
++#[used]
++#[no_mangle]
++#[link_section = "__verbose"]
++static mut f03_interrupt_syscall_debug_v1: [Ddebug; 1] = [Ddebug {
++    file: SOURCE_FILE.as_ptr().cast(), func: b"interrupt_syscall\0".as_ptr().cast(),
++    fmt: core::ptr::null(), line_flags: DEBUG_LINE,
++}];
++
++/// Invoke the original three-argument kill forwarding route on a defined context.
++///
++/// # Safety
++/// `thread` and its process are live for all field reads and forwarding, as in
++/// the original entry. Current execution and forwarding retain their original
++/// locks and lifetime; this does not acquire a reference or alter UTI state.
++#[export_name = "interrupt_syscall"]
++pub unsafe extern "C" fn f03_interrupt_arity3_v1(thread: *mut Thread, sig: CInt) {
++    // Only the six argument fields are initialized; never create a reference
++    // to an incompletely initialized context or initialize unrelated UTI state.
++    let mut ctx = MaybeUninit::<X86UserContext>::uninit();
++    let ctx_ptr = ctx.as_mut_ptr();
++    unsafe {
++        if core::ptr::read_volatile(addr_of!(f03_interrupt_syscall_debug_v1[0].line_flags)) >> 24 != 0 {
++            super::kprintf(c"interrupt_syscall pid=%d tid=%d sig=%d\n".as_ptr(),
++                (*(*thread).proc).pid, (*thread).tid, sig);
++        }
++        // SAFETY: These six distinct integer fields match the x86 syscall
++        // selectors; raw field writes avoid references to uninitialized storage.
++        write_volatile(addr_of_mut!((*ctx_ptr).gpr.rdi), (*(*thread).proc).pid as CULong);
++        write_volatile(addr_of_mut!((*ctx_ptr).gpr.rsi), (*thread).tid as CULong);
++        write_volatile(addr_of_mut!((*ctx_ptr).gpr.rdx), sig as CULong);
++        write_volatile(addr_of_mut!((*ctx_ptr).gpr.r10), 0);
++        write_volatile(addr_of_mut!((*ctx_ptr).gpr.r8), 0);
++        write_volatile(addr_of_mut!((*ctx_ptr).gpr.r9), 0);
++        let error = super::syscall_generic_forwarding(62, ctx_ptr);
++        if error != 0 {
++            super::kprintf(c"interrupt_syscall failed. %ld\n".as_ptr(), error);
++        }
++    }
++}

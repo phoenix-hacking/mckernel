@@ -1,0 +1,2 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Pure source checker attempt 1: AssertionError at check_source.py line 72, `assert orig.count(name+',')==s.count(name+',')==1`. The terminate_mcexec callback is the last argument and appears followed by `);`, not a comma. The source candidate did not fail; the observer's punctuation expectation was wrong. Corrected once to select the original distinct suffix per call site. No compiler or runtime action occurred.

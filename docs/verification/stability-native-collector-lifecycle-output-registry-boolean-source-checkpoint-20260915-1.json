@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "record_kind": "native_collector_lifecycle_output_registry_boolean_source_checkpoint",
+  "task_id": "M02-C-lifecycle-output-registry-boolean-source",
+  "attempt": 2,
+  "status": "PASS_OUTPUT_REGISTRY_BOOLEAN_SOURCE_CHECKPOINT_ONLY",
+  "recorded_utc": "2026-09-15T14:34:00Z",
+  "base_commit": "9e549cb039ae4023ef380c0beb40ad49fbfcf280",
+  "reviews": {
+    "packet": "PASS_OUTPUT_REGISTRY_BOOLEAN_PACKET_ONLY",
+    "source_attempt_1": "PASS_OUTPUT_REGISTRY_BOOLEAN_SOURCE_ONLY",
+    "preliminary_evidence_attempt_1": "FAIL_MISSING_PACKET_REQUIRED_COMPACT_BYTE_MUTATION_ASSERTIONS",
+    "source_attempt_2": "PASS_OUTPUT_REGISTRY_BOOLEAN_SOURCE_ONLY",
+    "preliminary_evidence_attempt_2": "PASS_OUTPUT_REGISTRY_BOOLEAN_SOURCE_PRELIM_ONLY",
+    "evidence_attempt_1": "PASS_OUTPUT_REGISTRY_BOOLEAN_EVIDENCE_ONLY"
+  },
+  "source": {
+    "harness_sha256": "a4a18e905d238f0763a67e533a1c5a278a9fab3735b2b32a26464a603aecdc54",
+    "vectors_sha256": "651e053dd507347d3853f3e27a2b6e501c518d7123347fa161908a301fa962d7",
+    "expected_sha256": "86473f7b4027b9a06e064788d7ed41115b28705a62edc199879990310323a7f7",
+    "test_sha256": "8e3029278f977fc244d865f67e44367796fa4f17586de5b707980ff7f8e9d11f"
+  },
+  "artifact": {
+    "path": "scripts/tests/fixtures/native-lifecycle-model-v1/raw-invalid/oversized-document.json",
+    "sha256": "9a6384d7058b15fa74ef39f6bd6e5745a1fbec565abb06491714704d3d88e07c",
+    "size": 1048577
+  },
+  "archive": {
+    "path": "docs/verification/evidence/stability-native-collector-lifecycle-output-registry-boolean-source-checkpoint-20260915-1.tar.gz",
+    "sha256": "37effa1684a484bd1cf800d94dea9b2f6f385082e16891c8a3598d3158fb714c",
+    "members": 10
+  },
+  "checks": {
+    "python_3_9_12": {"tests_passed": 5, "tests_failed": 0},
+    "python_3_8_10": {"tests_passed": 5, "tests_failed": 0},
+    "negative_cases": 4,
+    "positive_scenarios": 2,
+    "cumulative_raw_cases": 136,
+    "scope": "OUTPUT_REGISTRY_BOOLEAN_POST_CAPTURE_MOCK_ONLY"
+  },
+  "raw_full_matrix_frozen": false,
+  "corpus_complete": false,
+  "compiler_execution": false,
+  "model_execution": false,
+  "native_execution": false,
+  "application_acceptance": false,
+  "production_gate_credit": false
+}

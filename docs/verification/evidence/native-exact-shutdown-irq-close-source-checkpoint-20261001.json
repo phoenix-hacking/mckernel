@@ -1,0 +1,39 @@
+{
+  "schema": "mckernel.native-exact-shutdown-irq-close-source-checkpoint.v1",
+  "recorded_at_utc": "2026-10-01T11:14:00Z",
+  "status": "PASS_SOURCE_INFRASTRUCTURE_LAYER_B",
+  "source_hashes": {
+    "host-kernel/native-rust/smp_cpu.rs": "54ba1a2d353ab73ce007eba7d326b8d6b1f35524d53fc5597b0df7ba703bc84e",
+    "host-kernel/native-rust/smp_memory.rs": "0e73a1bef72cd5ea4d09596966db72582d2922e164cc59b1fccb8da66dc20de8",
+    "scripts/tests/fixtures/shutdown_irq_close.rs": "3a7711e97febdeb4a09ee4572f390e947c3c376c985238f3ae2379bf993261e4",
+    "scripts/tests/test_shutdown_irq_close.py": "0d0b69c3e90c841f825f2472d3b2cb2e01d9a8085fa872903ab9d0ba054610fa",
+    "scripts/tests/test_native_rust_host_audit.py": "6871b6962bc982a80ed8607b6b489b55814c0404fe9d608dd4589095486399ac"
+  },
+  "test": {
+    "command": "MCKERNEL_RUSTC_1_92=<pinned-rustc> taskset -c 6,7 python3 -B -m unittest -v scripts.tests.test_shutdown_irq_close scripts.tests.test_native_rust_host_audit.NativeRustHostAuditTests.test_prepared_boot_memory_map_signatures_keep_const_extent_capacity",
+    "compiler": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+    "result": "PASS 4 Python tests; PASS 19 Rust tests; four compiled mutations rejected",
+    "raw_log": "/home/holden/mckernel-work/scratch/native-shutdown-irq-close-source-review-20261001-1/test.log",
+    "raw_log_sha256": "24e05d9a463f1aa671e3815edcfff293b70109f574602076dd23b481f98b4552",
+    "raw_log_size": 3082
+  },
+  "verified_behavior": [
+    "The fixture compiles and executes the complete production sender-drain helpers, PreparedBoot validation/close methods, IRQ callback and route lifecycle.",
+    "Sender closure and retirement precede node synchronization; BUSY nodes retire before irq_work_sync.",
+    "Successful synchronization precedes master removal and exactly one target-user decrement.",
+    "Sender and first/second BUSY-node timeouts keep admission closed and retain owners, master, generation and target-user count.",
+    "Concurrent callback/close cases keep late callbacks quiet and allow admitted callbacks to drain.",
+    "Negative compiled controls reject missing synchronization, premature sender retirement, the wrong BUSY bit and premature master removal."
+  ],
+  "independent_review": {
+    "decision": "PASS_SOURCE_INFRASTRUCTURE_LAYER_B",
+    "raw_log_verified": true,
+    "prior_blocks_closed": true
+  },
+  "limitations": [
+    "Linux synchronization, allocation and master behavior are mocked; no module linkage or kernel execution is proven.",
+    "PreparedBoot::close_irq_senders has no production caller and booted shutdown remains ENOSYS.",
+    "DRAINED route slots remain unavailable for reuse.",
+    "No shutdown runtime or formal acceptance credit is granted."
+  ]
+}

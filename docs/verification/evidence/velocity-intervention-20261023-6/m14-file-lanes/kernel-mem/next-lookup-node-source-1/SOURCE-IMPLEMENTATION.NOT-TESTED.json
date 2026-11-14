@@ -1,0 +1,47 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "REAL_VM_LOOKUP_PUBLIC_ENTRY_SOURCE_IMPLEMENTED_NOT_EXECUTABLE_READY_NOT_TESTED",
+  "postimages": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/next-lookup-node-source-1/candidate/kernel/mem.c",
+      "sha256": "a28ce7eae668e984ca8ec89cebb8b1b909b4a4105f813cec5a78a9f00f60203d",
+      "bytes": 226686
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/next-lookup-node-source-1/candidate/kernel/rust/mem_helpers.rs",
+      "sha256": "f4ec38f125b1485272843da2bb817a84b4e5f75cf29d23528f6261ffd72a5c60",
+      "bytes": 204668
+    }
+  ],
+  "patch_sha256": "c1e1e7dfd691b9bf883e6caa660c4f7b878a0bfc3a5bc074c83f30bb74a7301c",
+  "header_ABI_pins": [
+    {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "bytes": 76151
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/process.h",
+      "sha256": "8848d536f2fa847a59af72d573ec9c55838c27cea664d46438ab4e038bf83649",
+      "bytes": 26602
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/ihk/mm.h",
+      "sha256": "a1b412608df7512a1b7295c6f19b3ec5a77e6364e8f24b208ab1a29e7556e5b1",
+      "bytes": 9548
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/memory.h",
+      "sha256": "42c0c943511a9eb26133c9f1ca132ade5eb10606ae43c96f6d81d59a69ffeca2",
+      "bytes": 1377
+    }
+  ],
+  "selected_live_body": "lookup_node actual default C wrapper with full mem_lookup_node_body_result already Rust; complete public entry now Rust, existing two C passthrough callbacks no longer consumed by this entry. They remain consumed by ihk_mc_pt_lookup_fault_pte and remain debt.",
+  "semantic_invariant": "Identical full helper and provider callbacks; page_fault called first with PF_POPULATE|PF_USER. Nonzero exact fault errno short-circuits lookup; absent address-space/PT/PTE or inactive PTE yields existing -ENOENT; active PTE mask then phys_to_nid. No reordering, new lock/reference, inventedNULL policy, retry, ACK or ownership transfer.",
+  "ABI_invariant": "ProcessVm/AddressSpace offsetof from actual reprC ABI replaces identical __builtin_offsetof; unsignedlong/CULong64, pte_t/CULong pointer, size_t/usize64, int/CInt32; erased VM/PT pointers retain same C ABI, exact full argument list. Header witness required before acceptance.",
+  "future_actual_fixture_not_prepared": "Original complete default C wrapper versus new Rust public entry using actual full Rust helper and typed public fault/lookup/node endpoints: exact errno returns, active/inactive/missing PTE, offsets, call order and physicalmask, pointer/addr boundaries, one realheader PUBLIC/fallback selected consumer. No new ready fixture while1944queued.",
+  "production_fullcrate_default_TU_link_native": null,
+  "actual_fixture": null,
+  "CPU_grant": null,
+  "remaining_C_debt": "Other VM fault wrapper and its bridge/log, pagefault handling, TLB orchestration and all other unported mem.c bodies; no wholefile or native credit."
+}

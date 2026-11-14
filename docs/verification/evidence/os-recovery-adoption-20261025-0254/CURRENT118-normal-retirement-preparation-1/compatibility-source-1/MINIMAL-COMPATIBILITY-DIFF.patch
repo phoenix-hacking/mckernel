@@ -1,0 +1,43 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/retire_exact_current118_stopped_container.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/compatibility-source-1/retire_exact_current118_stopped_container.py
+@@ -5,7 +5,7 @@
+ from pathlib import Path
+ import argparse,ast,copy,hashlib,importlib.util,json,math,os,re,resource,signal,stat,subprocess,time,types,uuid
+ D=Path(__file__).resolve().parent
+-BINDINGS_SHA='e402b73ca6b21763228fe14e37a0e7a85c86468280ca6e3693a3c227071e4d1c'
++BINDINGS_SHA='49c0deaafbe38894335577b5b1d0512aed6e5e297477d45c0b96295df6b554f8'
+ SELF=D/'retire_exact_current118_stopped_container.py'
+ SCOPE='Functional McKernel OS/apps and Rust/assembly migration only; no security testing.'
+ PREFIX=['/usr/bin/sudo','-A','/usr/bin/docker','--host=unix:///var/run/docker.sock']
+@@ -37,9 +37,12 @@
+ def load(r,name):
+  authenticated(r);s=importlib.util.spec_from_file_location(name,r['path']);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);return m
+ 
++WAIT_STATUS_SOURCE={'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/compatibility-source-1/wait_status_compat.py', 'bytes': 552, 'sha256': 'c895898a0a0162d78e521f4ded5ea7c75b46bd47d7764003f31c09d2d2f31d0a'}
++WAIT_STATUS_COMPAT=load(WAIT_STATUS_SOURCE,'current118_portable_wait_status')
++
+ def bindings():
+  need(reference(D/'BINDINGS.json')['sha256']==BINDINGS_SHA,'frozen CURRENT118 retirement bindings')
+- b=strict((D/'BINDINGS.json').read_bytes());need(b['scope']==SCOPE and b['runtime_authority'] is None,'source binding is not authority');return b
++ b=strict((D/'BINDINGS.json').read_bytes());need(b['scope']==SCOPE and b['runtime_authority'] is None,'source binding is not authority');need(b['wait_status_helper']==WAIT_STATUS_SOURCE,'exact portable wait-status source');return b
+ 
+ def validate_retained(b):
+  p=authenticated(b['packet'],True);protected=authenticated(b['protected'],True)
+@@ -179,7 +182,7 @@
+   if self.returncode is not None:return self.returncode
+   pid,status,usage=self.wait4(self.pid,os.WNOHANG)
+   if pid:
+-   need(pid==self.pid,'exact direct wait4 child');self.returncode=os.waitstatus_to_exitcode(status);self.process.returncode=self.returncode
++   need(pid==self.pid,'exact direct wait4 child');self.returncode=WAIT_STATUS_COMPAT.waitstatus_to_exitcode(status);self.process.returncode=self.returncode
+    self.record.update(positive_wait4=True,wait4_pid=pid,wait4_status=status,returncode=self.returncode,finished_epoch=self.clock.time(),wall_seconds=self.clock.monotonic()-self.started,user_cpu_seconds=usage.ru_utime,system_cpu_seconds=usage.ru_stime,peak_rss_kib=usage.ru_maxrss)
+   return self.returncode
+  def poll(self):return self.reap()
+@@ -427,7 +430,7 @@
+  for kind,wanted in [(resource.RLIMIT_AS,2<<30),(resource.RLIMIT_FSIZE,32<<20),(resource.RLIMIT_NOFILE,256),(resource.RLIMIT_CORE,0)]:need(resource.getrlimit(kind)==(wanted,wanted),'exact reviewed execution rlimit')
+  b=bindings();validate_retained(b);rr=reference(a.release);need(rr['sha256']==a.release_sha256,'exact actual release bytes');r=authenticated(rr,True)
+  files=dict(executor=reference(SELF),bindings=reference(D/'BINDINGS.json'))
+- files.update({k:b[k] for k in ('primitive','normal','backend','guardian','prior_observer','packet','protected','base_reviewed_executor')})
++ files.update({k:b[k] for k in ('primitive','normal','backend','guardian','prior_observer','packet','protected','base_reviewed_executor','wait_status_helper','pre_compatibility_executor')})
+  out=validate_release(r,b,files);r['_reference']=rr;stop=Stop();previous={}
+  for number in (signal.SIGHUP,signal.SIGINT,signal.SIGTERM,signal.SIGQUIT):previous[number]=signal.signal(number,stop.receive)
+  out.mkdir(mode=0o700);ops=None;complete=False

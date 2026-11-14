@@ -1,0 +1,1 @@
+/usr/bin/cc -g -fPIE -pie -Wl,--trace -Wl,-Map=/output/mcexec.map -Wl,--dependency-file=CMakeFiles/mcexec.dir/link.d rust/mcexec_helpers.o -o mcexec  -Wl,-rpath,/qualified-numa: libmcexec.a /usr/lib64/librt.a /qualified-numa/libnuma.so -lpthread

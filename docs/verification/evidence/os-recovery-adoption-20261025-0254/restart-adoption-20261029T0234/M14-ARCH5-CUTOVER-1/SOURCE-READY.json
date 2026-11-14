@@ -1,0 +1,98 @@
+{
+  "task_id": "M14-ARCH5-CUTOVER-1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_READY_COHERENT_FIVE_BODY_BATCH_FOR_REVIEW_NEXT_AFFECTED_COMPILER",
+  "symbols": [
+    "arch_rt_sigreturn_xrstor_bridge",
+    "arch_native_signal_bad_frame_bridge",
+    "arch_rt_sigreturn_context_bridge",
+    "do_signal",
+    "arch_ptrace_regset_log_bridge"
+  ],
+  "apply": "Apply single8target patch to exact preimages in this packet. policy/CMake base is frozenlarge2; arch/provider bases are exact119 preserved sources. Parent line-neutral correction and prior leaf patches are already included: do not apply them again. All other large2 targets remain byte references in parent map; compositor owns final materialization.",
+  "selection": "Private options OFF by default; actual paired selector/provider patch supplied. Root controls option ON and admitted compiler/profile. No automatic application/native acceptance.",
+  "source_check_command": "python3 -B /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-ARCH5-CUTOVER-1/check_source.py",
+  "source_check_result": "PASS_SOURCE_ONLY;8target exact patch applicability;47line/file identities,6 originalC tuple replacements from placement; C logical macros preserved; reused leaf/provider bodies; paired61actual-expression witness slots.",
+  "actual_compiler_or_native": false,
+  "actual_ABI_geometry_result": null,
+  "upstream_bindings": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-LARGE-COMPOSITION-2/FILEMAP.SOURCE-ONLY.json",
+      "bytes": 12054,
+      "sha256": "30a195dcc3a8782821e2ecec720f67b13840532c9c8af048488dadf4c7f45ea9"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-F06-CONVERSION-SOURCE-QUEUE-1/regset-defined-1/PRIVATE-NOT-APPLIED.patch",
+      "bytes": 2376,
+      "sha256": "c9e8de2bd095c06de486231336d135bc003e10e480f8476ff7275ac92310ca12"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-F06-CONVERSION-SOURCE-QUEUE-1/signal-leaves-reuse-1/PRIVATE-NOT-APPLIED.patch",
+      "bytes": 4126,
+      "sha256": "357f683d9ac5c019a7bedbb7179a5a6378d48de44b520cbdc4aea05a6908f9a5"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-F06-CONTEXT-DOSIGNAL-COMPOSITION-1/line-neutral-placement-correction-1/bounded-correction-1/SOURCE-READY.json",
+      "bytes": 5763,
+      "sha256": "76be769e73b279911552b4d75755258253bb58cca65ed0332de0d0bc9e55fc97"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-F06-REGSET-DEFINED-DIAGNOSTIC-1/ROOT-DIAGNOSTIC-CONTRACT.APPROVED.json",
+      "bytes": 1265,
+      "sha256": "df27b12ba91eefa710271b9c2bc9d15bda06855bb9857b925d22325fdb6ea4d4"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-F06-CONTEXT-DOSIGNAL-COMPOSITION-1/ROOT-SIGTRAP-INFO-CONTRACT.APPROVED.json",
+      "bytes": 1212,
+      "sha256": "42846dde85248d75ed093bcac7a04099ccd82b49622b7dd8ffd36d9a6f8fc322"
+    }
+  ],
+  "files": {
+    "ARCH5.PRIVATE-NOT-APPLIED.patch": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-ARCH5-CUTOVER-1/ARCH5.PRIVATE-NOT-APPLIED.patch",
+      "bytes": 31395,
+      "sha256": "1c73c8167eebe4a1fa7a361bb59626f1a7487f308b94bbc45e710d275ecd9490"
+    },
+    "FILEMAP.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-ARCH5-CUTOVER-1/FILEMAP.json",
+      "bytes": 2358,
+      "sha256": "3ebeb7aaec97f8651cdcae39629adc356cb536fb6c42ee66a0775b415d6c2fb0"
+    },
+    "ABI-GEOMETRY-KEYS.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-ARCH5-CUTOVER-1/ABI-GEOMETRY-KEYS.json",
+      "bytes": 7752,
+      "sha256": "8d86757df54bbb1382b13449aca42284257efe053d5add9153f08d720f1072df"
+    },
+    "SOURCE-CHECKS.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-ARCH5-CUTOVER-1/SOURCE-CHECKS.json",
+      "bytes": 930,
+      "sha256": "cf52c61e8aab35a7a83381964dc2e84e71044e3ff8523e68279d2b21d3cab862"
+    },
+    "ROW-CONTRACTS.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-ARCH5-CUTOVER-1/ROW-CONTRACTS.json",
+      "bytes": 5232,
+      "sha256": "1f116001d018c41e5e6598c3a4eb74a23180a007a25a7eae5e073d0bbe6a7be1"
+    },
+    "OWNER-LIST.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-ARCH5-CUTOVER-1/OWNER-LIST.json",
+      "bytes": 738,
+      "sha256": "844f954c0b197904da64adb6f23b8a8bb1600972a47399206f20cd5129bae900"
+    },
+    "ABI-WITNESS-NEXT.md": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-ARCH5-CUTOVER-1/ABI-WITNESS-NEXT.md",
+      "bytes": 2237,
+      "sha256": "b228479cfcf6cbd9789319e9fa6cd4f7ad03d72e22e151269e8812d84773a922"
+    },
+    "check_source.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-ARCH5-CUTOVER-1/check_source.py",
+      "bytes": 6269,
+      "sha256": "07702d2a59c2baa43fdc9ea6e5ce08facbfa5125d64bb715adf1550c508b73ce"
+    },
+    "HISTORY.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-ARCH5-CUTOVER-1/HISTORY.json",
+      "bytes": 602,
+      "sha256": "9bb989e925f5880e7ee9449482712dc8abb44ebffedcbba5c367f300d5da1d8d"
+    }
+  },
+  "next": "Independent review of coherent5source + matching ABI witnesses, Root merges source/provider ownership and admits next affected compile. No remaining actual arch5 source body to implement; next row work is compiler feedback, not duplicate ports or unrelated inventory. All actual holds retained."
+}

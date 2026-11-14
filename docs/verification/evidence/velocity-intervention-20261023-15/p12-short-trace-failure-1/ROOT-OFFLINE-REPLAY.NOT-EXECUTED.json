@@ -1,0 +1,39 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_READY_ROOT_OFFLINE_REVIEW_COMMAND_NOT_EXECUTED",
+  "script": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/p12-short-trace-failure-1/replay_retained.py",
+    "bytes": 1937,
+    "sha256": "8d111e5f9c243d1054eec29e385ff0de0de1cb620cb971de39a833a12dd51894"
+  },
+  "argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/p12-short-trace-failure-1/replay_retained.py"
+  ],
+  "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/p12-short-trace-failure-1",
+  "purpose": "Pure offline frozen actualrawserial replay against1filetransportdecoder successor and unchanged actualstrict_pair_body; reproduceoriginalFAIL first. No guest/compiler/root/live mutations.",
+  "candidate_source": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/p12-short-trace-failure-1/p12_long_session.py",
+    "bytes": 11526,
+    "sha256": "359bea9a9824290e926f9e5250fcd1d4260688349e1c925bc9f8ebd998dc8232"
+  },
+  "private_input_root_confirmation_required": "Actual rootretained capture hydratedserial mustmatch rawhash e0faa4484edef1a3beabcaaab36a9f8814781ba7d698d11055ea7970c675c994 andselectedconsumer da f8... before reevaluation.",
+  "patch_preserves": [
+    "rawcapture bytes/hash/retention",
+    "rawSERIAL_CAP check beforedecoding",
+    "declaredtrace cap/equality after inverseONLCR",
+    "alloriginalstrictpair/syscall/ownership/native/resource checks",
+    "originalFAIL record andsourcebindings"
+  ],
+  "rejection_cases_for_root_offline_fixture": [
+    "bareCR",
+    "mixedLFandCRLF",
+    "doubledCRbeforeLF",
+    "onebytetruncation",
+    "onebyteinsertion",
+    "declaredlengthmismatch",
+    "overtracecap",
+    "duplicatebegin/end/complete"
+  ],
+  "accepted_forms": "ExistingLFcapture unchanged; uniformCRLF decode oneCRperLF only. Rawactualsamebytes passed via actualunchangedchecker afterlocaldecoder."
+}

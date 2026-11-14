@@ -1,0 +1,47 @@
+test_changed_ledger_and_unsupported_command_rejected (__main__.Recursive) ... ok
+test_full_recursive_real_observers_and_negative_actor (__main__.Recursive) ... FAIL
+test_old_guardian_and_wider_caps_rejected (__main__.Recursive) ... ok
+
+======================================================================
+FAIL: test_full_recursive_real_observers_and_negative_actor (__main__.Recursive)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/retained_effect_oracle.py", line 112, in get
+    try:return self.rows[tuple(argv)]
+KeyError: ('/usr/bin/sudo', '-A', '/usr/bin/docker', '--host=unix:///var/run/docker.sock', 'ps', '-aq', '--no-trunc')
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/test_recursive_routing_expert.py", line 172, in test_full_recursive_real_observers_and_negative_actor
+    result=root.observe()
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/TEST_ONLY-full-recursion-pli73hh5/prepared/observe_current61_current118.py", line 79, in observe
+    old=load(PINS['current60_source'],'genuine116_current60_reobservation');history=old.observe()
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/TEST_ONLY-full-recursion-pli73hh5/prepared/current60/observe_current60_postjoin.py", line 89, in observe
+    first=guard.guard();history=common.observe()
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/TEST_ONLY-full-recursion-pli73hh5/prepared/common/observe_root59_configured.py", line 245, in observe
+    history = physical.observe()
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-physical-history-successor-source-20261028-1/physical_history_successor.py", line 196, in observe
+    result = module.observe()
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/finite-review-handoff-correction-source-1/attempt4-root51-boundary-contract-correction-source-1/observe_root51_current115_attempt4.py:EXPLICIT_NEW_WINDOW_SUCCESSOR", line 68, in observe
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/current49-attempt2-observer-source-1/observe_root49_current115_attempt2.py:EXPLICIT_NEW_WINDOW_SUCCESSOR", line 55, in observe
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/current-boundary-observer-source-1/observe_root48_current115.py:EXPLICIT_NEW_WINDOW_SUCCESSOR", line 221, in observe
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-physical-history-successor-source-20261028-1/physical_history_successor.py", line 187, in successor_run
+    return subprocess.run(rewritten, *args, **kwargs)
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/test_recursive_routing_expert.py", line 95, in run
+    historical=Path(argv[argv.index('--historical')+1]);value=self.physical.observe(historical)
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-physical-history-successor-source-20261028-1/physical_history_successor.py", line 196, in observe
+    result = module.observe()
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/resource-observer-window-correction-source-1/check_postnative_current_new12h.py:EXPLICIT_NEW_WINDOW_SUCCESSOR", line 122, in observe
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-physical-history-successor-source-20261028-1/physical_history_successor.py", line 187, in successor_run
+    return subprocess.run(rewritten, *args, **kwargs)
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/test_recursive_routing_expert.py", line 101, in run
+    row=self.retained.get(argv)
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/retained_effect_oracle.py", line 113, in get
+    except KeyError:raise AssertionError('UNSUPPORTED_RETAINED_EFFECT_ARGV '+json.dumps(argv))
+AssertionError: UNSUPPORTED_RETAINED_EFFECT_ARGV ["/usr/bin/sudo", "-A", "/usr/bin/docker", "--host=unix:///var/run/docker.sock", "ps", "-aq", "--no-trunc"]
+
+----------------------------------------------------------------------
+Ran 3 tests in 1.379s
+
+FAILED (failures=1)

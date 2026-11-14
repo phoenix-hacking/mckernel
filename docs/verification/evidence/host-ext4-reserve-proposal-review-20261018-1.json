@@ -1,0 +1,25 @@
+{
+  "decision": "PASS_PROPOSAL_MATH_AND_CAPTURED_IDENTITY_ONLY",
+  "reviewer": "/root/fpu_terminal_cleanup_review",
+  "implementation_ownership": false,
+  "proposal": {
+    "path": "/home/holden/mckernel/docs/verification/os-milestones-20260914/HOST-RESERVE-PROPOSAL-20261018.md",
+    "sha256": "a07500c7afea6781611875188dc7e820d91d89f15cb12185b69dcf15d427a5b5"
+  },
+  "evidence": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/host-ext4-reserve-proposal-20261018-1.json",
+    "sha256": "5510fc92a5b9c0f28ad5cfff50554c7a46baf024df5d45c21187c855d03dad34"
+  },
+  "proposed_reserved_blocks": 2499198,
+  "retained_reserved_bytes": 10236715008,
+  "conditionally_accessible_bytes": 40946847744,
+  "rollback_reserved_blocks": 12495987,
+  "execution_approval": false,
+  "scope_confirmation_required": true,
+  "invariants": [
+    "No allocation reclamation or resize.",
+    "Root reserve/emergency cushion reduced; rollback does not undo writes.",
+    "16/12GiBfloors+allpacketgrowth+97%accountusage unchanged.",
+    "Fresh identity/counts/owner review before separatelyauthorized execution."
+  ]
+}

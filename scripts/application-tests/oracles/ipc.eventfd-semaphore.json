@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "case_id": "ipc.eventfd-semaphore",
+  "case_version": 1,
+  "artifact_version": "20260909.1",
+  "input_fixture": {"argv": ["/apps/ipc.eventfd-semaphore"], "cwd": "/case/work", "environment": {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}},
+  "wait_status": {"kind": "exited", "code": 0},
+  "stdout": {"kind": "exact-line-lines", "lines": ["reads=1,1,1 fourth_read=-1 fourth_errno=11 valid=1"]},
+  "stderr": {"kind": "exact-bytes", "hex": ""},
+  "relational_assertions": ["Semaphore-mode eventfd returns exactly one for each of three reads", "The fourth nonblocking read observes EAGAIN"],
+  "unresolved_expectations": ["Semaphore eventfd ABI and errno preservation require Max review."],
+  "max_question_for_reviewer": "Confirm semaphore mode decrements one count per read and reports EAGAIN only after the three initial tokens."
+}

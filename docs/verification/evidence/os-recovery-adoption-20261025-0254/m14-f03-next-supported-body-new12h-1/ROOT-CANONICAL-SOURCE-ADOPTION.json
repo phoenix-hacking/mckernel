@@ -1,0 +1,35 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ROOT_SELECTIVE_SOURCE_ADOPTION_ONLY_COMPILER_DEFAULT_NATIVE_OPEN",
+  "at": "2026-10-27T19:08:58.338414+00:00",
+  "owner": "/root",
+  "independent_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-supported-body-new12h-1/independent-integration-review-1/REVIEW.json",
+    "sha256": "97ca882de3749f3578781d6c320b22281d2306c18f8be172104704fb96a26741"
+  },
+  "preimages": {
+    "kernel/syscall.c": "d9187c6eeb63f134602218db3b3b50683e1ca45b416199fcaa8ca4976c352713",
+    "kernel/rust/syscall_policy.rs": "2ddde21dfcf32402d281d7ba70e62d765cb60e60bf225d7303b17221959a5477",
+    "kernel/CMakeLists.txt": "96ce9084a3c0973cefefdd21753cbcd2ea7c94d5ca1c0d59363afa3500f737fd"
+  },
+  "postimages": {
+    "kernel/syscall.c": "7d30396958fd57e6e5274d8a4745d832176468c255fccc2b54be872a30aa4cb5",
+    "kernel/rust/syscall_policy.rs": "c81c6735a529003b7efbafa606f6f65ab86f00a55a5f0854ebaa7d575d3e06ae",
+    "kernel/CMakeLists.txt": "1ca3a50f17c4f019f165231f1a04b530806dd9bb6875b302c3869fc70271c310"
+  },
+  "patches": {
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-supported-body-new12h-1/syscall.c.patch": "8be5558bc782f80901c5df00e2bd21919cf5422c8ef26be396b32bc5117ac469",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-supported-body-new12h-1/syscall_policy.rs.patch": "efcee06ceb2b0be17a4bd8bce26a9a37245a3069517b15800cf9d6b357b5dd3c",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-supported-body-new12h-1/CMakeLists.txt.proposal.patch": "6bc0dfa0da6e28ddb39d3259387afe4cf15a83cc8a8ec05a1fbcf8b712c8e21e"
+  },
+  "functions": [
+    "perf_counter_mask_check_bridge",
+    "perf_counter_start_bridge",
+    "perf_counter_stop_bridge"
+  ],
+  "HOST_evidence": "ordinary-host-new12h-runner-source-1/INDEPENDENT-ACTUAL-HOST10-ACCEPTANCE.json",
+  "production_C_delta": 0,
+  "native_delta": 0,
+  "whole_file_delta": 0,
+  "accepted_default_image_unchanged": "60e62f97ef48ecaf14174af1c5b75d7181969f439c1b45c618d6c16d4bc40d57"
+}

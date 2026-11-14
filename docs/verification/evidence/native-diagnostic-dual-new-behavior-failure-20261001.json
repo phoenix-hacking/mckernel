@@ -1,0 +1,53 @@
+{
+  "schema": "mckernel.native-diagnostic-dual-new-behavior-failure.v1",
+  "status": "DIAGNOSTIC_FAIL",
+  "application_acceptance": false,
+  "candidate_source_commit": "89ab5c555aac9177a789efc67ddc775dacb25d6d",
+  "mckernel_image_sha256": "fa6685543160fcaa5000b535ec8bd6fc70230465109564c3fb2beecb95bf39ed",
+  "attempts": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/dual-guest-gnpnx51b",
+      "outcome": "HARNESS_REFUSAL",
+      "reason": "manifest argv omitted collector suffix",
+      "result_sha256": [
+        "6d14ae7259777bdab1c2594678ff13df7332a024cf780950602af0d3dec589c4",
+        "48498244ae0fa7a839942f017f75ca80bbe7bb5d15499b2244d4b61d3180aad6"
+      ],
+      "serial_sha256": [
+        "bf7fa20951685301e63a100af09e7541cc59936a16c03168bb816b80e1c785fa",
+        "38912837457fae795220a1c3f00b7e062ddb21580f39f410c455057d13e70c40"
+      ]
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/dual-guest-taifr8lg",
+      "outcome": "FUNCTIONAL_FAIL_AND_HARNESS_REFUSAL",
+      "process_fork_exit": {
+        "result_sha256": "866cc16238c865c17f1d160c601b85d76b5fcbd27717c38085e56b25a7b1cf6f",
+        "serial_sha256": "a3407121f81163a596cd56a37e099f2d11e6561f1a3ec79e08e7efcfed846ec7",
+        "qmp_sha256": "d58b5fe7ecf781b73fc1d62cb1bbbe9dba00230cc50d2d84883e36e8a75e5fbb",
+        "raw_wait_status": 256,
+        "stdout_hex": "",
+        "stderr_hex": "4552524f523a206372656174696e6720505044202f6465762f6d636f73300a666f726b28293a206572726f722077697468206368696c642070726f6365737320616674657220666f726b0a",
+        "syscall_number": 56,
+        "syscall_return": -95,
+        "procfs_empty": true
+      },
+      "signal_block_pending": {
+        "result_sha256": "b9a9cac104acee6cffa1e3c49110eb498461fae0b5da9d60ba28a271023667fd",
+        "serial_sha256": "1cde16a313def75b36a1ecdf3de59bfb776ddd60c128d9af0b0a67f7ba4c18ab",
+        "qmp_sha256": "3b6accd1602d4f68be8676b37aa2205d1c843244cc741fd48528d38e4933e892",
+        "raw_wait_status": 0,
+        "stdout_hex": "70656e64696e675f6265666f72653d312070656e64696e675f61667465723d302068616e646c65643d310a",
+        "stderr_hex": "",
+        "procfs_empty": true,
+        "harness_refusal": "manifest stdout limit 4096 differed from collector limit 1024"
+      }
+    }
+  ],
+  "postflight": {
+    "owned_containers_absent": true,
+    "qemu_and_mcexec_absent": true,
+    "development_lock_unheld": true
+  },
+  "next": "repair native non-null MCEXEC_UP_CREATE_PPD, rebuild a fresh candidate, and retry corrected manifests"
+}

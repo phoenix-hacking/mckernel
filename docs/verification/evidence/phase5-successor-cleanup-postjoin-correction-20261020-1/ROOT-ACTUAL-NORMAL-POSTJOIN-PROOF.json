@@ -1,0 +1,117 @@
+{
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=268435456:268435456",
+    "--fsize=33554432:33554432",
+    "--cpu=unlimited:unlimited",
+    "--core=0:0",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "-c",
+    "import os,json,sys,fcntl,stat,time\nfrom pathlib import Path\na=json.loads(sys.argv[1]);assert Path('/proc/sys/kernel/random/boot_id').read_text().strip()==a['boot']\nrows=[]\nfor p in a['paths']:\n try:os.lstat(p)\n except FileNotFoundError:rows.append(dict(path=p,errno=2,absent=True))\n else:raise RuntimeError('released name present:'+p)\nprocs=[]\nfor pid in a['pids']:\n assert not os.path.lexists('/proc/'+str(pid)), 'retired process ID reused/present'\n procs.append(dict(pid=pid,absent=True))\np='/run/lock/mckernel-development.lock';fd=os.open(p,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK)\ntry:\n s=os.fstat(fd);assert(s.st_dev,s.st_ino)==(27,4);fcntl.flock(fd,fcntl.LOCK_EX|fcntl.LOCK_NB);named=os.lstat(p);assert(named.st_dev,named.st_ino)==(27,4);fcntl.flock(fd,fcntl.LOCK_UN)\nfinally:os.close(fd)\nprint(json.dumps(dict(status='PASS_ACTUAL_NORMAL_POSTJOIN_PROCESS_MUTEX_AND_RELEASED_NAMES',epoch=time.time(),boot_id=a['boot'],root_lock=dict(path=p,device=27,inode=4,acquired_and_released=True),released_names=rows,processes=procs),sort_keys=True))\n",
+    "{\"paths\":[\"/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/gitlink-nine-copy-observer-correction-1/full-image-attempt-1/image-lease.json\",\"/home/holden/mckernel-work/scratch/phase5-failed-image-terminal-successor-20261020-1.quarantine.json\",\"/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/gitlink-nine-copy-observer-correction-1/full-image-attempt-1/common-exclusion.json\",\"/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock\"],\"pids\":[1998116,1999470,1999478,1999486,1999494,1999551,2002005,2002015,2002502,2034898,2035103,2035355,2037023,2038290],\"boot\":\"7bfc5687-6c04-4d15-84eb-b92ab9a55dcb\"}"
+  ],
+  "direct_child_joined": true,
+  "elapsed_seconds": 0.10132402402814478,
+  "process_group_absent": true,
+  "returncode": 0,
+  "stderr": "",
+  "stdout": {
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "epoch": 1792499614.7823172,
+    "processes": [
+      {
+        "absent": true,
+        "pid": 1998116
+      },
+      {
+        "absent": true,
+        "pid": 1999470
+      },
+      {
+        "absent": true,
+        "pid": 1999478
+      },
+      {
+        "absent": true,
+        "pid": 1999486
+      },
+      {
+        "absent": true,
+        "pid": 1999494
+      },
+      {
+        "absent": true,
+        "pid": 1999551
+      },
+      {
+        "absent": true,
+        "pid": 2002005
+      },
+      {
+        "absent": true,
+        "pid": 2002015
+      },
+      {
+        "absent": true,
+        "pid": 2002502
+      },
+      {
+        "absent": true,
+        "pid": 2034898
+      },
+      {
+        "absent": true,
+        "pid": 2035103
+      },
+      {
+        "absent": true,
+        "pid": 2035355
+      },
+      {
+        "absent": true,
+        "pid": 2037023
+      },
+      {
+        "absent": true,
+        "pid": 2038290
+      }
+    ],
+    "released_names": [
+      {
+        "absent": true,
+        "errno": 2,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/gitlink-nine-copy-observer-correction-1/full-image-attempt-1/image-lease.json"
+      },
+      {
+        "absent": true,
+        "errno": 2,
+        "path": "/home/holden/mckernel-work/scratch/phase5-failed-image-terminal-successor-20261020-1.quarantine.json"
+      },
+      {
+        "absent": true,
+        "errno": 2,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/gitlink-nine-copy-observer-correction-1/full-image-attempt-1/common-exclusion.json"
+      },
+      {
+        "absent": true,
+        "errno": 2,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock"
+      }
+    ],
+    "root_lock": {
+      "acquired_and_released": true,
+      "device": 27,
+      "inode": 4,
+      "path": "/run/lock/mckernel-development.lock"
+    },
+    "status": "PASS_ACTUAL_NORMAL_POSTJOIN_PROCESS_MUTEX_AND_RELEASED_NAMES"
+  }
+}

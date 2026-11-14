@@ -1,0 +1,61 @@
+{
+  "schema": "mckernel.stability.exact-image-preparation.v1",
+  "date": "2026-09-28",
+  "status": "PASS",
+  "scope": "source-free Rocky tool image preparation only",
+  "candidate_commit": "d0947e0c9688106ba853e5846afc63bc94deec03",
+  "ihk_commit": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+  "release_evidence": "docs/verification/stability-native-exact-image-preparation-review-success-20260928-1.json",
+  "command": "sudo -A /usr/bin/python3 -B /home/holden/mckernel-exact-candidate-d0947e0c/scripts/native_rust_exact_build_image_prepare.py --candidate-sha d0947e0c9688106ba853e5846afc63bc94deec03 --output-root /home/holden/mckernel-work/scratch/native-exact-image-output-d0947e0c-1 --evidence-root /home/holden/mckernel-exact-image-evidence-d0947e0c-1 --lease-path /home/holden/mckernel-work/scratch/native-exact-image-d0947e0c-1.lease --toolchain-lock /home/holden/mckernel-exact-candidate-d0947e0c/host-kernel/rocky/toolchain-lock.json",
+  "result": {
+    "exit_code": 0,
+    "image_id": "sha256:0f8ad280e47d76b23554de4aec411752e1f779f9b2fc7fece6b0b3375dc9775d",
+    "image_receipt": "/home/holden/mckernel-exact-image-evidence-d0947e0c-1/image-receipt.json",
+    "image_receipt_sha256": "18225919a44e2c07e87a66711c8d1c9483d10e15da91fa5d7fcb7339ff888172",
+    "source_free": true,
+    "runtime_network": "none",
+    "command_statuses_passed": 18,
+    "receipt_bound_evidence_files": 59,
+    "terminal_container_exit": 143,
+    "terminal_container_running": false,
+    "terminal_oom_killed": false,
+    "container_removed": true,
+    "lease_removed": true
+  },
+  "resources": {
+    "admission_host_free_bytes": 26690740224,
+    "admission_scratch_free_bytes": 21611483136,
+    "admission_memory_available_bytes": 30638354432,
+    "post_host_free_bytes": 25255403520,
+    "post_scratch_free_bytes": 21611483136,
+    "post_memory_available_bytes": 30531493888
+  },
+  "archive": {
+    "path": "docs/verification/evidence/stability-native-exact-image-preparation-d0947e0c-20260928-1.tar.gz",
+    "sha256": "3094e94c211b00e6a4f305162c7987e772eadadfba9cbc6e5759b71ace1359d9",
+    "bytes": 47704,
+    "entries": 79
+  },
+  "owner_regression": {
+    "result": "21 tests PASS in 2.740 seconds",
+    "owner_sha256": "fb9c52cf764b407fe1f09e53fbb2cf5d8c311b58e52f924701f783086a955a79",
+    "test_sha256": "3e3fd66f195aba6fac6ad1db880c2d430f00bfdfc02c5633604f79d8a4f68064",
+    "raw_log_sha256": "7aa9ddbc87dbed566e971482ae8ba5d1fa1e011866228a2528fb0bf6c7b20a29",
+    "compressed_log": "docs/verification/evidence/stability-native-exact-owner-single-start-tests-20260928-1.log.gz",
+    "compressed_log_sha256": "19f6e42868d9193032870e7d60e846973be46cd8df4ffa0b3febfe7c221ad049"
+  },
+  "post_execution_verification": [
+    "Every file named in the image receipt rehashed to its receipt identity and size.",
+    "All 18 Docker command status records report state exited and exit code zero.",
+    "The reviewed stop of the sleep-based preparation container reports terminal exit 143, running false and OOMKilled false.",
+    "The exact preparation container is absent, its ownership lease is absent, and the immutable prepared image is inspectable by its full image ID.",
+    "After breaking three accidentally retained hardlinks and restoring their exact d0947e0c bytes, the complete 8,899-file input manifest passes verify_inputs and the candidate is clean. The source-free preparation had no source mounts, so those concurrent host edits did not enter the image."
+  ],
+  "observer_corrections": [
+    "The first archive inventory helper invoked sha256sum from the wrong working directory; the receipt-bound verifier replaced it and rehashed all 59 named files.",
+    "The first terminal-state assertion incorrectly expected exit zero; the reviewed owner stops the sleep entrypoint, so the retained terminal inspection correctly records exit 143. No privileged command was repeated.",
+    "Two overlapping sed ranges both printed source line 330 and were initially misread as consecutive docker start calls. Direct source inspection proved there is one start followed by one wait; a new focused regression passes 21 tests and freezes that exact lifecycle."
+  ],
+  "next_action": "Checkpoint the single-start owner regression, regenerate the exact source manifest only if the source candidate changes, then obtain a fresh independent execution release for one exact offline build using this image receipt.",
+  "limitations": "This preparation result is not a configured kernel build, module, guest, application, production-package, language-gate or OS acceptance result."
+}

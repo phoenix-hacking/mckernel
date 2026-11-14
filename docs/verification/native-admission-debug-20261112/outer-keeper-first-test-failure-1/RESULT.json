@@ -1,0 +1,52 @@
+{
+  "admitted": true,
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=268435456",
+    "--cpu=10",
+    "--fsize=4194304",
+    "--nofile=64",
+    "--",
+    "/usr/bin/env",
+    "-i",
+    "PATH=/usr/bin:/bin",
+    "LANG=C",
+    "LC_ALL=C",
+    "TZ=UTC",
+    "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/output-1/tmp",
+    "PYTHONDONTWRITEBYTECODE=1",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/outer_keeper_cases.py"
+  ],
+  "automatic_resource_release": false,
+  "error": "AssertionError: ",
+  "finished_at": "2026-11-12T00:47:05.830122+00:00",
+  "original_acceptance": false,
+  "ownership": [
+    {
+      "adopted_kills": [],
+      "adopted_reaps": [],
+      "error": null,
+      "label": "actual-outer-keeper-two-entry-vectors",
+      "leader": 1616362,
+      "leader_birth": "53069185",
+      "leader_group_signalled": false,
+      "leader_parent_joined": true,
+      "remaining_direct_children": [],
+      "status": 0,
+      "streams_closed": true,
+      "timed_out": false,
+      "whole_descendants_joined": true
+    }
+  ],
+  "phase": "actual-outer-keeper-two-entry-vectors",
+  "results": [],
+  "started_at": "2026-11-12T00:47:05.766242+00:00",
+  "status": "FAILED_PRESERVED_NO_UNCHANGED_RETRY",
+  "traceback": "Traceback (most recent call last):\n  File \"/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/run_root_once.py\", line 28, in <module>\n    if \"required_stdout_json\" in c:assert json.loads(r.stdout)==c[\"required_stdout_json\"]\nAssertionError\n"
+}

@@ -1,0 +1,57 @@
+{
+  "C_patch": {
+    "bytes": 484,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-set-signal-entry-source-1/patch/syscall.c.diff",
+    "sha256": "30a3ce0f63dbaadb6511883ebe245735b97242af9c69d7c6770689307dc91e4c"
+  },
+  "C_postimage": {
+    "bytes": 112747,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-set-signal-entry-source-1/candidate/syscall.c",
+    "sha256": "b8ac28bdaee096e69a2d78afd5455a41e9eb04d376e0eaee884af269b2b0b900"
+  },
+  "C_preimage": {
+    "bytes": 112634,
+    "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+    "sha256": "d876e0b24f789372e6747fee7c554a53a3deaa9cee7034d7096374c2dff34ad6"
+  },
+  "Rust_fragment": {
+    "bytes": 2065,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-set-signal-entry-source-1/candidate/syscall_policy.set_signal.FRAGMENT.rs",
+    "sha256": "2db5bd3de97f2a79948c83ce6526ae3a2d41a94d842e1bb1c9f5bcc9874aac8d"
+  },
+  "actual_C_reference": {
+    "bytes": 547,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-set-signal-entry-source-1/fixture-fragments/original-set-signal.ACTUAL.inc",
+    "sha256": "247b4e1451fd5a6c6ace236b11b3e409baf2a93ccec428dbe46455d64a80060d"
+  },
+  "actual_compile": null,
+  "actual_fixture": null,
+  "engineering_percentage": null,
+  "existing_C_providers": [
+    "ihk_mc_debug_show_interrupt_context",
+    "panic(const char*) declaredvoid",
+    "coredump(Thread*,void*,int)->int",
+    "terminate(int,int) declaredvoid",
+    "do_kill target/queue/wakeup orchestration"
+  ],
+  "existing_Rust_reuse": [
+    "cls::get_this_cpu_local_var",
+    "syscall_policy::interrupt_from_user",
+    "syscall_policy::__sigmask",
+    "real ABI Thread/Process/X86UserContext/SigInfo"
+  ],
+  "fixture_proposal": {
+    "bytes": 2417,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-set-signal-entry-source-1/fixture-fragments/SMALLEST-DEFINED-C-RUST-FIXTURE.PROPOSAL.json",
+    "sha256": "94ce9bf9a6bbd10ef26349d968c8bbb52436b45cbf5f9523b38f8297ccf1a30d"
+  },
+  "native": null,
+  "native_blocker": "Actual CPU/current ownership, kernel panic, coredump/termination nonreturn behavior and native signal delivery remain unproved. No HOST panic replacement/job supplied.",
+  "no_second_queue": true,
+  "ownership": "No new ref/lock/IRQ mutation. Borrow currentthread/proc/context/info through synchronous providers. do_kill owns any later pending allocation transfer; Cpanic/terminate fallthrough preserved if declaredvoid endpoint returns; no unsafe unreachable.",
+  "policy_merge": "Append isolated fragment; no sharedimports/ABI or existing FFI removal. Existing process.h set_signal prototype remains real ABI; root composes nonoverlapping Cselection regions.",
+  "production_default_link": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "semantic_scope": "Complete public set_signal entry plus Cdefault/fallback selection only; not complete do_signal or do_kill retirement.",
+  "status": "COMPLETE_SET_SIGNAL_ENTRY_IMPLEMENTED_SOURCE_ONLY_UNCOMPILED"
+}

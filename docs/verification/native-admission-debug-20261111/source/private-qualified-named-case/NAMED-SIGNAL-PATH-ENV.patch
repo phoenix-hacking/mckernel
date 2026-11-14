@@ -1,0 +1,259 @@
+--- a/scripts/application-tests/native_diagnostic.py
++++ b/scripts/application-tests/native_diagnostic.py
+@@ -34,7 +34,7 @@
+ # deliberately bounded rather than frozen so the same manifest validator can
+ # describe startup and the four core-mode payloads.
+ PAYLOAD_ARGV_PREFIX = ("/bin/mcexec", "-t", "1", "0")
+-PAYLOAD_PATHS = ("app", "/apps/app")
++PAYLOAD_PATHS = ("app", "/apps/app", "/apps/signal.alternate-repeat")
+ PAYLOAD_ARGC_MAX = 32
+ PAYLOAD_ARG_BYTES_MAX = 256
+ PAYLOAD_ARGV_BYTES_MAX = 2048
+@@ -115,6 +115,8 @@
+           len(argv) > len(PAYLOAD_ARGV_PREFIX) and
+           argv[len(PAYLOAD_ARGV_PREFIX)] in PAYLOAD_PATHS,
+           "payload argv prefix/path")
++    if argv[len(PAYLOAD_ARGV_PREFIX)] == "/apps/signal.alternate-repeat":
++        _need(len(argv) == len(PAYLOAD_ARGV_PREFIX) + 1, "signal alternate-repeat argv")
+     encoded = 0
+     for item in argv:
+         _need(type(item) is str and "\0" not in item, "payload argv item")
+@@ -133,7 +135,8 @@
+     return {key: getattr(st, key) for key in IDENTITY_FIELDS}
+ 
+ 
+-def _staging(obj, artifacts, modules):
++def _staging(obj, artifacts, modules, *, payload_member="apps/app"):
++    _need(payload_member in ("apps/app", "apps/signal.alternate-repeat"), "unsupported payload member")
+     _keys(obj, ("base_initramfs", "derived_initramfs", "collector", "overlay_source", "overlay_manifest"))
+     refs = {name: _ref(obj[name], name) for name in obj}
+     _need(refs["base_initramfs"] == artifacts["initramfs"], "base initramfs join")
+@@ -176,15 +179,17 @@
+     _need(isinstance(final, dict), "overlay final map")
+     names = {**{name: artifacts[name] for name in ("mcexec", "native_boot", "loader", "libc", "mckernel_image", "payload")},
+              "collector": refs["collector"], **dict(zip(MODULE_NAMES, modules))}
+-    for member, source in FINAL_MEMBERS.items():
++    final_members = {payload_member if member == "apps/app" else member: source
++                     for member, source in FINAL_MEMBERS.items()}
++    for member, source in final_members.items():
+         _need(member in final, "missing final member " + member)
+         row = final[member]
+         _keys(row, MAP_FIELDS)
+         ref = names[source]
+-        expected_mode = stat.S_IFREG | 0o755 if member in ("init", "apps/app") else ref["mode"]
++        expected_mode = stat.S_IFREG | 0o755 if member in ("init", payload_member) else ref["mode"]
+         _need(row["sha256"] == ref["sha256"] and row["size"] == ref["size"] and
+               row["mode"] == expected_mode, "final member join " + member)
+-    for member in OVERLAY_MEMBERS:
++    for member in (payload_member if name == "apps/app" else name for name in OVERLAY_MEMBERS):
+         _need(member in final, "missing overlay member " + member)
+     for member in ("apps", "case", "case/work"):
+         row = final[member]
+@@ -216,7 +221,6 @@
+     _need(isinstance(obj["modules"], list) and len(obj["modules"]) == 3, "exactly three modules")
+     modules = [_ref(ref, "module") for ref in obj["modules"]]
+     _need(tuple(Path(ref["path"]).name for ref in modules) == MODULE_NAMES, "module inventory")
+-    staging = _staging(obj["staging"], bound, modules)
+     _need(isinstance(obj["profile"], dict) and set(obj["profile"]) <= {"name", "memory_mib", "vcpus", "numa_nodes", "append"}
+           and {"memory_mib", "vcpus", "numa_nodes"} <= set(obj["profile"]), "profile keys")
+     profile = obj["profile"]
+@@ -232,7 +236,13 @@
+     payload = obj["payload"]
+     _need(payload["cwd"] == "/case/work", "payload cwd")
+     _validate_payload_argv(payload["argv"])
+-    _need(payload["env"] == {"PATH": "/usr/bin:/bin", "COKERNEL_PATH": "/apps"}, "frozen environment")
++    environment = {"PATH": "/usr/bin:/bin", "COKERNEL_PATH": "/apps"}
++    payload_member = "apps/app"
++    if payload["argv"][len(PAYLOAD_ARGV_PREFIX)] == "/apps/signal.alternate-repeat":
++        environment.update({"LANG": "C", "LC_ALL": "C", "TZ": "UTC"})
++        payload_member = "apps/signal.alternate-repeat"
++    _need(payload["env"] == environment, "frozen environment")
++    staging = _staging(obj["staging"], bound, modules, payload_member=payload_member)
+     oracle = payload["oracle"]
+     _need(set(oracle) in ({"stdout_hex", "stderr_hex", "exit_code"},
+                           {"stdout_hex", "stderr_hex", "exit_code", "stderr_typed"}),
+@@ -444,7 +454,9 @@
+     overlay = {"modules": [m["path"] for m in manifest["modules"]], "mckernel_image": a["mckernel_image"]["path"],
+                "mcexec": a["mcexec"]["path"], "payload": a["payload"]["path"], "load_modules": list(MODULE_NAMES),
+                "boot_contract": "native-boot-v1", "guest_destinations": {"/images/mckernel.img": a["mckernel_image"]["path"],
+-               "/bin/mcexec": a["mcexec"]["path"], "/apps/app": a["payload"]["path"]},
++               "/bin/mcexec": a["mcexec"]["path"],
++               ("/apps/signal.alternate-repeat" if manifest["payload"]["argv"][len(PAYLOAD_ARGV_PREFIX)] ==
++                "/apps/signal.alternate-repeat" else "/apps/app"): a["payload"]["path"]},
+                "init_sequence": ["insmod /modules/ihk.ko", "insmod /modules/ihk-smp-x86_64.ko ihk_trampoline=524288",
+                                  "insmod /modules/mcctrl.ko", "/bin/native-boot", "cd /case/work"],
+                "transport": "guest collector framed serial report; never QEMU stdout"}
+--- a/scripts/application-tests/native_diagnostic_overlay.py
++++ b/scripts/application-tests/native_diagnostic_overlay.py
+@@ -322,12 +322,18 @@
+     return data
+ 
+ 
+-def _replay_records(records):
++def _overlay_names(payload_member):
++    if payload_member not in ("apps/app", "apps/signal.alternate-repeat"):
++        _die("unsupported payload member")
++    return tuple(payload_member if name == "apps/app" else name for name in OVERLAY_NAMES)
++
++
++def _replay_records(records, *, overlay_names=OVERLAY_NAMES):
+     final = {}
+     links = {}
+     for record in records:
+         name = record["name"]
+-        if name in final and name not in OVERLAY_NAMES:
++        if name in final and name not in overlay_names:
+             _die("duplicate newc path outside overlay allowlist")
+         # Lexical paths must match the unpacked namespace: no symlink ancestors.
+         parts = name.split("/")
+@@ -338,7 +344,7 @@
+         if name in final and stat.S_IFMT(final[name]["mode"]) != stat.S_IFMT(record["mode"]):
+             _die("newc duplicate changes member type")
+         if stat.S_ISREG(record["mode"]) and record["nlink"] > 1:
+-            if name in OVERLAY_NAMES:
++            if name in overlay_names:
+                 _die("overlay destination is a hardlink")
+             key = (record["archive"], record["devmajor"], record["devminor"], record["ino"])
+             group = links.setdefault(key, [])
+@@ -368,12 +374,14 @@
+             for name, record in sorted(final.items())}
+ 
+ 
+-def replay(base_raw, overlay_raw, *, base_sha256, base_size, base_cpio_sha256, base_cpio_size):
++def replay(base_raw, overlay_raw, *, base_sha256, base_size, base_cpio_sha256, base_cpio_size,
++           payload_member="apps/app"):
++    overlay_names = _overlay_names(payload_member)
+     base = _authenticate_base(base_raw, base_sha256=base_sha256, base_size=base_size,
+                               base_cpio_sha256=base_cpio_sha256, base_cpio_size=base_cpio_size)
+     base_records, _ = parse_newc(base)
+     overlay_records, _ = parse_newc(overlay_raw)
+-    if tuple(r["name"] for r in overlay_records) != OVERLAY_NAMES:
++    if tuple(r["name"] for r in overlay_records) != overlay_names:
+         _die("overlay membership/order mismatch")
+     if any(r["archive"] != 0 for r in overlay_records):
+         _die("overlay must be one archive")
+@@ -384,9 +392,9 @@
+                 record["nlink"] != (2 if stat.S_ISDIR(mode) else 1) or
+                 record["devmajor"] or record["devminor"] or record["rdevmajor"] or record["rdevminor"]):
+             _die("invalid overlay member metadata")
+-    final = _manifest(_replay_records(base_records + overlay_records))
++    final = _manifest(_replay_records(base_records + overlay_records, overlay_names=overlay_names))
+     combined, _ = parse_newc(base + overlay_raw)
+-    if final != _manifest(_replay_records(combined)):
++    if final != _manifest(_replay_records(combined, overlay_names=overlay_names)):
+         _die("concatenated archive replay mismatch")
+     return final
+ 
+@@ -478,7 +486,8 @@
+ 
+ def build_overlay(base, payload, collector, mcexec, output, *, collector_sha256, mcexec_sha256,
+                   base_sha256, base_size, base_cpio_sha256, base_cpio_size,
+-                  payload_sha256):
++                  payload_sha256, payload_member="apps/app"):
++    overlay_names = _overlay_names(payload_member)
+     base_sha256, base_size, base_cpio_sha256, base_cpio_size = _base_identity(
+         base_sha256, base_size, base_cpio_sha256, base_cpio_size)
+     collector_sha256 = _collector_hash(collector_sha256)
+@@ -511,9 +520,10 @@
+             _check_collector(cr)
+             overlay = _archive((("apps", b"", 0o040755), ("case", b"", 0o040755),
+                                 ("case/work", b"", 0o040755), ("init", cr, 0o100755),
+-                                ("apps/app", pr, 0o100755), ("bin/mcexec", mr, 0o100755)))
++                                (payload_member, pr, 0o100755), ("bin/mcexec", mr, 0o100755)))
+             final_map = replay(br, overlay, base_sha256=base_sha256, base_size=base_size,
+-                               base_cpio_sha256=base_cpio_sha256, base_cpio_size=base_cpio_size)
++                               base_cpio_sha256=base_cpio_sha256, base_cpio_size=base_cpio_size,
++                               payload_member=payload_member)
+             raw = _gzip(original + overlay)
+             for source in sources:
+                 source.verify()
+@@ -537,7 +547,7 @@
+             if unpacked != original + overlay:
+                 _die("output decompressed bytes mismatch")
+             observed_records, _ = parse_newc(unpacked)
+-            if _manifest(_replay_records(observed_records)) != final_map:
++            if _manifest(_replay_records(observed_records, overlay_names=overlay_names)) != final_map:
+                 _die("output final map mismatch")
+             for source in sources:
+                 source.verify()
+@@ -577,6 +587,8 @@
+     parser = argparse.ArgumentParser()
+     for name in ("base", "payload", "collector", "mcexec", "output"):
+         parser.add_argument(name)
++    parser.add_argument("--payload-member", choices=("apps/app", "apps/signal.alternate-repeat"),
++                        default="apps/app")
+     parser.add_argument("--collector-sha256", required=True, type=_collector_hash)
+     parser.add_argument("--mcexec-sha256", required=True, type=_collector_hash)
+     parser.add_argument("--payload-sha256", required=True,
+@@ -592,7 +604,7 @@
+     print(json.dumps(build_overlay(args.base, args.payload, args.collector, args.mcexec, args.output,
+                                    collector_sha256=args.collector_sha256,
+                                    mcexec_sha256=args.mcexec_sha256,
+-                                   payload_sha256=args.payload_sha256,
++                                   payload_sha256=args.payload_sha256, payload_member=args.payload_member,
+                                    base_sha256=args.base_sha256, base_size=args.base_size,
+                                    base_cpio_sha256=args.base_cpio_sha256,
+                                    base_cpio_size=args.base_cpio_size), sort_keys=True))
+--- a/scripts/application-tests/native_diagnostic_guest_collector.c
++++ b/scripts/application-tests/native_diagnostic_guest_collector.c
+@@ -62,6 +62,11 @@
+                           defined(ND_CORE_THREADS) || defined(ND_CORE_SIGNALS))
+ #error "ND_FUTEX is mutually exclusive with ND_CORE_* profiles"
+ #endif
++#if defined(ND_SIGNAL_ALTERNATE_REPEAT) && (defined(ND_FUTEX) || \
++    defined(ND_CORE_MEMORY) || defined(ND_CORE_FILES) || \
++    defined(ND_CORE_THREADS) || defined(ND_CORE_SIGNALS))
++#error "ND_SIGNAL_ALTERNATE_REPEAT is mutually exclusive with other payload profiles"
++#endif
+ #if defined(ND_CORE_MEMORY)
+ static const char nd_core_case[] = "memory";
+ #elif defined(ND_CORE_FILES)
+@@ -80,12 +85,21 @@
+ static char *const payload_argv[] = {
+     "/bin/mcexec", "-t", "1", "0", "/apps/app", NULL
+ };
++#elif defined(ND_SIGNAL_ALTERNATE_REPEAT)
++static char *const payload_argv[] = {
++    "/bin/mcexec", "-t", "1", "0", "/apps/signal.alternate-repeat", NULL
++};
+ #else
+ static char *const payload_argv[] = {
+     "/bin/mcexec", "-t", "1", "0", "app", "A", "", "B", NULL
+ };
+ #endif
++#if defined(ND_SIGNAL_ALTERNATE_REPEAT)
++static char *const payload_env[] = {"PATH=/usr/bin:/bin", "COKERNEL_PATH=/apps",
++                                    "LANG=C", "LC_ALL=C", "TZ=UTC", NULL};
++#else
+ static char *const payload_env[] = {"PATH=/usr/bin:/bin", "COKERNEL_PATH=/apps", NULL};
++#endif
+ static char *const helper_env[] = {"PATH=/bin:/sbin:/usr/bin:/usr/sbin", "LC_ALL=C", NULL};
+ #if defined(ND_FUTEX)
+ static char *const futex_boot_argv[] = {
+@@ -334,6 +348,15 @@
+ #elif defined(ND_FUTEX)
+     if (append(b, &n, "ND_PAYLOAD {\"argv\":[\"/bin/mcexec\",\"-t\",\"1\",\"0\",\"/apps/app\"],\"cwd\":\"/case/work\","
+                "\"env\":{\"PATH\":\"/usr/bin:/bin\",\"COKERNEL_PATH\":\"/apps\"},"
++               "\"raw_wait_status\":%d,\"started_ns\":%llu,\"reaped_ns\":%llu,"
++               "\"finished_ns\":%llu,\"streams\":{\"stdout\":", r->status,
++               (unsigned long long)r->started, (unsigned long long)r->reaped,
++               (unsigned long long)r->finished) ||
++#elif defined(ND_SIGNAL_ALTERNATE_REPEAT)
++    if (append(b, &n, "ND_PAYLOAD {\"argv\":[\"/bin/mcexec\",\"-t\",\"1\",\"0\","
++               "\"/apps/signal.alternate-repeat\"],\"cwd\":\"/case/work\","
++               "\"env\":{\"PATH\":\"/usr/bin:/bin\",\"COKERNEL_PATH\":\"/apps\","
++               "\"LANG\":\"C\",\"LC_ALL\":\"C\",\"TZ\":\"UTC\"},"
+                "\"raw_wait_status\":%d,\"started_ns\":%llu,\"reaped_ns\":%llu,"
+                "\"finished_ns\":%llu,\"streams\":{\"stdout\":", r->status,
+                (unsigned long long)r->started, (unsigned long long)r->reaped,
+--- a/scripts/application-tests/native_diagnostic_container_owner.py
++++ b/scripts/application-tests/native_diagnostic_container_owner.py
+@@ -40,7 +40,7 @@
+ )
+ SOURCE_HASHES = {
+     RUNNER: "25ea29f9b07232094e9df1db6094ad0a85ec678281749a1d6998abb7c700d499",
+-    REPO + "/scripts/application-tests/native_diagnostic.py": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e",
++    REPO + "/scripts/application-tests/native_diagnostic.py": "7e4256eee51f7d50ef758c55579801d691d4ee2cee9155a60680701dba5c540b",
+     REPO + "/scripts/application-tests/native_diagnostic_backend.py": "cd0759c926876483665065cb320b9daf7d7c6b32f56e561805b4b0343f60d614",
+     REPO + "/scripts/application-tests/qmp_capture.py": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741",
+ }

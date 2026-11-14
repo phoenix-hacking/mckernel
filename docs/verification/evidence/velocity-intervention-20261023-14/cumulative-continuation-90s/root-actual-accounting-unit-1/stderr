@@ -1,0 +1,16 @@
+test_exact_remaining_and90s (test_cumulative_accounting.AccountingFixture) ... ok
+test_mismatch_profile_duplicate_failing_wall_and_missing_proof (test_cumulative_accounting.AccountingFixture) ... test_no_prefix_counter_only_credit (test_cumulative_accounting.AccountingFixture) ... ok
+test_short_below_target_rejected (test_cumulative_accounting.AccountingFixture) ... ok
+
+======================================================================
+FAIL: test_mismatch_profile_duplicate_failing_wall_and_missing_proof (test_cumulative_accounting.AccountingFixture) (change=<function AccountingFixture.test_mismatch_profile_duplicate_failing_wall_and_missing_proof.<locals>.<lambda> at 0x7f80eac03310>)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/cumulative-continuation-90s/test_cumulative_accounting.py", line 30, in test_mismatch_profile_duplicate_failing_wall_and_missing_proof
+    with self.assertRaises(c.AccountingError):c.combine(p,s,lambda _:True)
+AssertionError: AccountingError not raised
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.120s
+
+FAILED (failures=1)

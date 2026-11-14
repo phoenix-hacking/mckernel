@@ -1,0 +1,217 @@
+--- root-install-parent-successor-4/root_parent.py
++++ root-install-failure-data-correction-1/root_parent.proposal.py
+@@ -5,6 +5,7 @@
+ in the admitted source closure; a hash supplied as data is not admission.
+ """
+ import hashlib
++import json
+ import fcntl
+ import contextlib
+ import os
+@@ -37,6 +38,70 @@
+     return {'device':st.st_dev,'inode':st.st_ino}
+ 
+ 
++# Exact fixed messages from the source-bound parent/child closure. Arbitrary
++# exception text, filenames, environment and admission bytes are never emitted.
++_FAILURE_FIXED_MESSAGES=frozenset(('60s + 5s stop + 10s join reserve required', 'CPU6 affinity', 'GO cap', 'GO identity', 'GO shape', 'GO short', 'GO verification cap', 'READY exceeded caps', 'READY pipe closed', 'READY pipe error', 'READY size', 'READY trailing data', 'READY/GO closed', 'READY/GO deadline', 'Root parent birth', 'absolute canonical path required', 'absolute source path', 'actor group changed before GO', 'actual Root parent/nonce binding', 'actual Root-reviewed owner intent binding required', 'actual admitted root owner and nonce required', 'actual approved bytes differ', 'actual direct Root parent differs', 'actual held-verified source pins required', 'actual inherited direct-parent channel required', 'actual lease inode', 'actual memory floor', 'actual proc scope required', 'actual release actor binding', 'actual release digest', 'actual retained resource record required', 'actual review or held-verified module pins', 'actual root/code/closure FDs required', 'actual start intent differs', 'actual storage floor', 'actual time bound exceeded', 'admission digest mismatch', 'admission schema', 'admitted release digest required', 'admitted root operation required', 'ancestor shape', 'boot identity', 'bootstrap capture identity absent', 'bounded regular source required', 'bounded reviewed bytes required', 'caller capture identity changed', 'campaign actor in installer group', 'capacity floor', 'capture after disposition', 'capture after full', 'capture before disposition', 'capture before full', 'capture bytes', 'capture cardinality', 'capture identity', 'capture inode', 'capture names', 'capture schema', 'capture writer closure', 'clock caps', 'closure binding', 'closure differs', 'closure digest', 'closure membership', 'code ancestry not traversable', 'code directory mode', 'code parent mode', 'completion exceeded original caps', 'conditional operation-only retirement authority absent', 'configured stop received', 'control caps', 'controller birth', 'controller no longer owns operation', 'controls changed', 'custody channel lost', 'custody handoff cap', 'direct Root parent changed', 'direct controller and keeper identity differ', 'direct installer READY differs', 'direct installer identity', 'direct parent identity', 'direct wait journal', 'directory ancestry is not root controlled', 'directory ancestry is not traversable', 'directory components', 'directory identity mismatch', 'directory immutable absent', 'directory journal identity', 'directory name', 'directory not immutable', 'directory path', 'duplicate READY key', 'duplicate key', 'durable result bytes', 'durable result identity', 'fresh actual included status required', 'fresh included usage/service required', 'future process identity already set', 'host custody freshness/capacity', 'host custody integer', 'host install custody digest', 'host-only custody record', 'immutable flag absent', 'immutable receipt final readback', 'immutable reread differs', 'included usage expired', 'included usage/service', 'incomplete install journal', 'incomplete keeper journal', 'independent installed proof differs', 'inherited tighter caps', 'input bytes drift', 'install claim', 'install journal identity', 'install terminal journal', 'installed file bytes', 'installed file identity', 'installed file verification', 'installed membership', 'installed membership changed', 'installer changed', 'installer did not exit zero', 'installer exceeded absolute caps', 'installer pidfd binding', 'installer pidfd count', 'installer pidfd error', 'installer process identity', 'installer terminal before READY', 'installer/keeper identity', 'intent bytes', 'interpreter binding', 'join reserve', 'keeper birth changed', 'keeper identity', 'keeper missing from census', 'keeper terminal before custody handoff', 'known roles not positively terminal', 'lease acknowledgement', 'lease differs from sealed release', 'lease fd count', 'lease identity', 'lease identity/mode', 'lease location', 'lease record not uniquely owned', 'loader already used or custody UNKNOWN', 'loader custody UNKNOWN', 'malformed process stat', 'new directory owner/mode', 'no deadline remaining', 'no retirement time remains', 'nonce', 'operation caps', 'outer ancestry changed', 'outer birth', 'outer identity', 'outer owner absent', 'output inode differs', 'oversized proc stat', 'owner intent current controls differ', 'owner intent differs', 'owner release hash', 'parent acknowledgement differs', 'parent birth required', 'parent birth unavailable', 'parent channel lost', 'parent deadline and completion reserve', 'parent lost before READY', 'parent lost during install', 'parent owns the shared lease disposition', 'parser directory mode', 'phase-zero lease identity changed', 'pid namespace scope differs', 'pidfd identity', 'pidfd info bound', 'pidfd poll error', 'preexisting alarm or blocked SIGALRM', 'private group not empty', 'proc identity changed', 'process census bound', 'process changed before GO', 'process identity changed during census', 'process not live', 'proof cap', 'proof verification cap', 'receipt binding', 'receipt identity after writer close', 'receipt readback', 'receipt size', 'release identity', 'release readback', 'release sha', 'resource profile', 'result descriptors changed', 'result identity', 'result model differs', 'result scope/roles differ', 'result shape', 'result too large', 'retirement authority type', 'retirement cap expired', 'retirement intent', 'review pin changed', 'reviewed admission nonce', 'reviewed direct creation model differs', 'root-owned immutable file required', 'root-owned traversable code parent required', 'root-private directory required', 'running executable inode differs', 'running interpreter path differs', 'runtime bytes differ', 'runtime owner or identity', 'sealed control copy differs', 'sealed expert review differs from Root-selected bytes', 'sealed review differs', 'selected review mismatch', 'seqpacket required', 'short process stat', 'short receipt write', 'short retirement journal', 'short write', 'single-thread root keeper required', 'single-thread root parent', 'six actors', 'source ancestor identity drift', 'source bytes differ', 'source closure differs', 'source closure digest', 'source closure membership', 'source closure shape', 'source name', 'source path components', 'source relative name', 'source relative path', 'source row', 'source row values', 'source type/size', 'strict lease identity', 'strict root/code identities', 'temporary descriptor not held', 'terminal evidence differs', 'terminal proof', 'tool ancestry', 'tool binding', 'trusted verified-byte bootstrap required', 'unexpected direct keeper child observed', 'unexpected exact frame', 'unexpected wait identity', 'unknown historical ownership must remain unknown', 'unknown retained journal', 'unstable source', 'untrusted root ancestry', 'verified direct source pins absent', 'verified source differs', 'waiting literal binding', 'waiting source', 'writer disposition sequence', 'writer identity sequence', 'writer journal already initialized', 'writer journal short write', 'writer journal unavailable'))
++_FAILURE_STAGES=frozenset(('parent_prepare','keeper_fork','keeper_identity','lease_handoff','installer_handoff','go_handoff','result_handoff','result_verify','terminal_wait','child_setup','child_entry','retire_prepare','full_handoff','retirement_authority','lease_close','lease_close_journal','final_disposition'))
++
++
++def _failure_identity(pid,birth):
++    if type(pid) is not int or pid<=0:pid=None
++    if type(birth) is not str or not birth.isdigit():birth=None
++    return {'pid':pid,'birth':birth}
++
++
++def _failure_message(error):
++    name=type(error).__name__
++    if type(name) is not str or not name.isidentifier() or len(name)>80:name='UnknownException'
++    args=error.args if isinstance(error,BaseException) else ()
++    message=args[0] if len(args)==1 and type(args[0]) is str else None
++    if message in _FAILURE_FIXED_MESSAGES:
++        return name,message,'exact_fixed',None
++    if isinstance(error,OSError) and type(error.errno) is int:
++        try:system_message=os.strerror(error.errno)
++        except (ValueError,OverflowError):system_message=None
++        if type(system_message) is str and error.strerror==system_message:
++            return name,system_message,'system_errno_without_filename',error.errno
++    return name,'message withheld: non-fixed or potentially sensitive','redacted',None
++
++
++def _failure_note(role,stage,error,parent,keeper):
++    """One best-effort write of non-authoritative DATA; never retry."""
++    try:
++        if role not in ('root_parent','keeper') or stage not in _FAILURE_STAGES:return False
++        category,message,policy,error_number=_failure_message(error)
++        obj={'record_type':'ROOT_INSTALL_FAILURE_DATA_V1','scope':'ROOT_CODE_INSTALL_ONLY',
++             'role':role,'stage':stage,'error_class':category,'error_message':message,
++             'message_policy':policy,'errno':error_number,'root_parent':parent,'keeper':keeper,
++             'authority':None,'native_release':False,'native_currentfree':None,'outcome':'UNKNOWN'}
++        raw=(json.dumps(obj,sort_keys=True,separators=(',',':'),allow_nan=False)+'\n').encode()
++        if not 0<len(raw)<=4096:return False
++        st=os.fstat(2);flags=fcntl.fcntl(2,fcntl.F_GETFL)
++        if not stat.S_ISREG(st.st_mode) or st.st_nlink!=1 or (flags&os.O_ACCMODE)==os.O_RDONLY:return False
++        written=os.write(2,raw)
++        if type(written) is not int or written!=len(raw):return False
++        os.fsync(2)
++        return True
++    except BaseException:
++        return False
++
++
++def _keeper_record_identity(record):
++    try:
++        with record.latch.lock:
++            return _failure_identity(record.pid,record.birth)
++    except BaseException:
++        return _failure_identity(None,None)
++
++
++def _self_failure_identity():
++    try:
++        row=process(os.getpid())
++        return _failure_identity(row['pid'],row['birth'])
++    except BaseException:
++        return _failure_identity(os.getpid(),None)
++
++
+ @contextlib.contextmanager
+ def alarm_deferred():
+     old=signal.pthread_sigmask(signal.SIG_BLOCK,(signal.SIGALRM,))
+@@ -178,7 +243,7 @@
+     stop_mono=time.monotonic_ns()+max(0,stop_at-now)
+     stop_utc=time.time_ns()+max(0,stop_at-now)
+     handoff_caps={'boot_ns':stop_at,'mono_ns':min(caps['mono_ns']-15000000000,stop_mono),'utc_ns':min(caps['utc_ns']-15000000000,stop_utc)}
+-    stop={'raised':False}
++    stop={'raised':False};stage='parent_prepare'
+     def on_stop(signum,frame):
+         if not stop['raised']:
+             stop['raised']=True
+@@ -189,23 +254,33 @@
+         if left<=0:raise Unknown('no deadline remaining')
+         signal.setitimer(signal.ITIMER_REAL,left/1000000000)
+         def child():
+-            parent_sock.close()
+-            signal.setitimer(signal.ITIMER_REAL,0)
+-            for signum in (signal.SIGINT,signal.SIGTERM,signal.SIGHUP,signal.SIGQUIT,signal.SIGALRM):signal.signal(signum,signal.SIG_DFL)
+-            signal.pthread_sigmask(signal.SIG_UNBLOCK,(signal.SIGALRM,))
+-            direct_entry.run(child_sock.fileno(),parent['pid'],parent['birth'],admission_raw,admission_sha,review_raw,review_sha)
+-            os._exit(0)
++            child_stage='child_setup'
++            try:
++                parent_sock.close()
++                signal.setitimer(signal.ITIMER_REAL,0)
++                for signum in (signal.SIGINT,signal.SIGTERM,signal.SIGHUP,signal.SIGQUIT,signal.SIGALRM):signal.signal(signum,signal.SIG_DFL)
++                signal.pthread_sigmask(signal.SIG_UNBLOCK,(signal.SIGALRM,))
++                child_stage='child_entry'
++                direct_entry.run(child_sock.fileno(),parent['pid'],parent['birth'],admission_raw,admission_sha,review_raw,review_sha)
++                os._exit(0)
++            except BaseException as error:
++                _failure_note('keeper',child_stage,error,_failure_identity(parent['pid'],parent['birth']),_self_failure_identity())
++                raise
++        stage='keeper_fork'
+         with alarm_deferred():
+             with deferred_fork.DeferredFork() as guard:
+                 keeper_pid,keeper_fd,keeper_birth=guard.fork_and_pin(record,child)
++        stage='keeper_identity'
+         child_sock.close()
+         if process(keeper_pid)!={'pid':keeper_pid,'parent':parent['pid'],'pgrp':os.getpgrp(),'birth':keeper_birth}:raise Unknown('keeper identity')
++        stage='lease_handoff'
+         ready_parent_socket(parent_sock,keeper_fd,handoff_caps)
+         frame,fds=receive_owned(parent_sock,handoff_caps,latch.retained,keeper_pid)
+         if len(fds)!=1:raise Unknown('lease fd count')
+         lease_fd=fds[0];lease=lease_identity(lease_fd)
+         exact(frame,{'type':'LEASE','nonce':nonce,'seq':1,'keeper_pid':keeper_pid,'keeper_birth':keeper_birth,'lease':lease})
+         ipc.send(parent_sock,{'type':'LEASE_ACK','nonce':nonce,'seq':1,'lease':lease},[],handoff_caps)
++        stage='installer_handoff'
+         ready_parent_socket(parent_sock,keeper_fd,handoff_caps)
+         frame,fds=receive_owned(parent_sock,handoff_caps,latch.retained,keeper_pid)
+         if len(fds)!=1:raise Unknown('installer pidfd count')
+@@ -218,6 +293,7 @@
+         if os.getpgrp()==installer_pid or any(os.getpgid(pid)==installer_pid for pid in actor_pids):raise Unknown('campaign actor in installer group')
+         if process(keeper_pid)['birth']!=keeper_birth:raise Unknown('keeper birth changed')
+         ipc.send(parent_sock,dict(expected,type='INSTALLER_ACK'),[],handoff_caps)
++        stage='go_handoff'
+         ready_parent_socket(parent_sock,keeper_fd,handoff_caps)
+         frame,fds=receive_owned(parent_sock,handoff_caps,latch.retained,keeper_pid)
+         if len(fds)!=3 or set(frame)!={'type','nonce','seq','keeper_pid','keeper_birth','installer_pid','installer_birth','release_sha256'}:raise Unknown('GO shape')
+@@ -233,6 +309,7 @@
+         if process(keeper_pid)['birth']!=keeper_birth or process(installer_pid)!={'pid':installer_pid,'parent':keeper_pid,'pgrp':installer_pid,'birth':installer_birth}:raise Unknown('process changed before GO')
+         if os.getpgrp()==installer_pid or any(os.getpgid(pid)==installer_pid for pid in actor_pids):raise Unknown('actor group changed before GO')
+         ipc.send(parent_sock,dict(frame,type='GO_AUTH'),[],handoff_caps)
++        stage='result_handoff'
+         ready_parent_socket(parent_sock,keeper_fd,handoff_caps)
+         frame,fds=receive_owned(parent_sock,handoff_caps,latch.retained,keeper_pid)
+         if len(fds)!=3 or set(frame)!={'type','nonce','seq','keeper_pid','keeper_birth','installer_pid','installer_birth','release_sha256','result'}:raise Unknown('result shape')
+@@ -243,10 +320,12 @@
+             if (a.st_dev,a.st_ino,a.st_mode)!=(b.st_dev,b.st_ino,b.st_mode):raise Unknown('result descriptors changed')
+         result_hash=hashlib.sha256(ipc.canonical(frame)).hexdigest()
+         if ipc.remaining(handoff_caps)<=0:raise Unknown('proof cap')
++        stage='result_verify'
+         independent=direct_completion.verify_parent_result(frame,fds,admission_raw,review_raw,latch.retained)
+         result=frame['result']
+         if ipc.remaining(handoff_caps)<=0:raise Unknown('proof verification cap')
+         ipc.send(parent_sock,{'type':'RESULT_ACK','nonce':nonce,'seq':4,'result_sha256':result_hash},[],handoff_caps)
++        stage='terminal_wait'
+         status=None
+         while ipc.remaining(handoff_caps)>0:
+             status=wait_known(keeper_pid,keeper_fd)
+@@ -274,6 +353,7 @@
+         stop_owned([installer_fd,keeper_fd],signal.SIGKILL)
+         # Keep original lease and pidfds indefinitely on uncertainty. Root must
+         # provide independently reviewed operation custody before termination.
++        _failure_note('root_parent',stage,error,_failure_identity(parent['pid'],parent['birth']),_keeper_record_identity(record))
+         while True:
+             try:
+                 if keeper_pid is not None and keeper_fd is not None:wait_known(keeper_pid,keeper_fd)
+@@ -292,7 +372,7 @@
+     All exceptions retain ownership; no close is retried after ambiguity.
+     """
+     result,latch,lease_fd,root_fd=run(admission_raw,admission_sha,review_raw,review_sha,nonce,caps,actor_pids)
+-    journal_fd=None;close_state='HELD';full_sha=None;disposition_attempted=False
++    journal_fd=None;close_state='HELD';full_sha=None;disposition_attempted=False;stage='retire_prepare'
+     try:
+         if ipc.remaining(caps)<=0:raise Unknown('no retirement time remains')
+         name='PARENT-RETIRE-'+nonce+'.jsonl'
+@@ -312,9 +392,11 @@
+         publish({'state':'COMPLETE_PROOF_BEFORE_LEASE_CLOSE','nonce':nonce,'result':result,'lease':lease_identity(lease_fd)})
+         request=__import__('json').loads(admission_raw)
+         profile_sha=request['profile_sha256']
++        stage='full_handoff'
+         if ensure_capture()!=result['stdout_capture']:raise Unknown('capture before full')
+         full_sha=caller_data_output.publish_full(nonce,profile_sha,result,caps)
+         if ensure_capture()!=result['stdout_capture']:raise Unknown('capture after full')
++        stage='retirement_authority'
+         if not direct_completion.verify_parent_retirement_authority(result['proof'],admission_raw,review_raw):
+             while True:time.sleep(1)
+         if ipc.remaining(caps)<=0:raise Unknown('retirement cap expired')
+@@ -323,6 +405,7 @@
+         records=[r for r in latch.retained if isinstance(r,ipc.ReceivedCustody) and lease_fd in r.fds]
+         if len(records)!=1:raise Unknown('lease record not uniquely owned')
+         owner=records[0];slot=owner.fds.index(lease_fd)
++        stage='lease_close'
+         with alarm_deferred():
+             with deferred_fork.DeferredFork():
+                 close_state='CLOSING';owner.state='CLOSING';owner.historical_fd=lease_fd;owner.fds[slot]=None
+@@ -331,8 +414,10 @@
+                     close_state='CLOSURE_UNKNOWN';owner.state='CLOSURE_UNKNOWN'
+                     raise
+                 close_state='VERIFIED_CLOSED';owner.state='VERIFIED_CLOSED';lease_fd=None
++        stage='lease_close_journal'
+         publish({'state':'LEASE_FD_CLOSED','nonce':nonce,'lease_disposition':close_state})
+         os.fsync(root_fd)
++        stage='final_disposition'
+         if ensure_capture()!=result['stdout_capture']:raise Unknown('capture before disposition')
+         disposition_attempted=True
+         caller_data_output.publish_disposition(nonce,profile_sha,full_sha,'VERIFIED_CLOSED','COMPLETE',caps)
+@@ -350,4 +435,9 @@
+             except BaseException:pass
+         # If the close may have happened the historical number is never reused.
+         # External Root retains the operation resource/uncertainty reservation.
++        root_id=_self_failure_identity()
++        terminal=result.get('terminal_evidence') if type(result) is dict else None
++        keeper=terminal.get('keeper') if type(terminal) is dict else None
++        keeper_id=_failure_identity(keeper.get('pid'),keeper.get('birth')) if type(keeper) is dict else _failure_identity(None,None)
++        _failure_note('root_parent',stage,error,root_id,keeper_id)
+         while True:time.sleep(1)

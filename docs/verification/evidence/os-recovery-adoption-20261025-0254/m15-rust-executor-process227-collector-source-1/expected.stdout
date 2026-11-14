@@ -1,0 +1,5 @@
+recovery parent start
+parent cancel signal=15 ready=1 prereap=0 eof=1 reaped=1 echild=1 owned=0
+child exec success token=fixed-v1
+parent recovery exec exit=37 eof=1 reaped=1 echild=1
+parent recovery complete children=2 owned=0

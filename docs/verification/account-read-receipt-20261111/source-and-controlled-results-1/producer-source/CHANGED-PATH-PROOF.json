@@ -1,0 +1,57 @@
+{
+  "all28_kernel_owners_and_fixed30_native_modules_untouched": true,
+  "candidate": {
+    "bytes": 155857,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-source-sdk-max-1/candidate/scripts/run_os_goal.py",
+    "sha256": "39a03dd8bb33ea943cad02897dee9b6b113187eee30d33ed22a89886b944d870"
+  },
+  "changed_functions": [
+    "RPC.__init__",
+    "RPC.pump",
+    "RPC.call",
+    "Campaign.__init__",
+    "Campaign.record_rate_limits wrapper",
+    "Campaign.refresh_credit_budget receive-context handoff"
+  ],
+  "fallback_tail_exact_source_equal": true,
+  "new_functions": [
+    "_account_value_sha256",
+    "accepted_account_observation"
+  ],
+  "no_actual_account_values_or_capabilities_recorded": true,
+  "original_accounting_full_AST_equal": true,
+  "same_dependencies_credits_and_watch": true,
+  "schema_version": 1,
+  "scope": "source syntax/nonlocation AST and selected exact-byte comparisons only; not runtime tests",
+  "unchanged_methods": [
+    "RPC.send",
+    "RPC.pump_stderr",
+    "RPC.close",
+    "Campaign.poll_native_owner_control",
+    "Campaign.poll_capture_progress",
+    "Campaign.save",
+    "Campaign.record_stop_diagnostic",
+    "Campaign.remember_started_turn",
+    "Campaign.review_blocked_goal",
+    "Campaign.register_instruction_capture_progress",
+    "Campaign.deliver_instruction",
+    "Campaign.on_signal",
+    "Campaign.on_watchdog",
+    "Campaign.remember_goal",
+    "Campaign.remember_child_provenance",
+    "Campaign.record_child_capacity",
+    "Campaign.record_failure",
+    "Campaign._record_rate_limits_accounting",
+    "Campaign.event",
+    "Campaign.instructions",
+    "Campaign.recovery_goal_allowed",
+    "Campaign.prepare_fresh_goal",
+    "Campaign.manual_resume_instruction",
+    "Campaign.begin",
+    "Campaign.transport_error_record",
+    "Campaign.pause",
+    "Campaign.request_checkpoint",
+    "Campaign.stop",
+    "Campaign.run"
+  ]
+}

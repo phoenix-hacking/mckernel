@@ -1,0 +1,954 @@
+There are 35 section headers, starting at offset 0x60308:
+
+Section Headers:
+  [Nr] Name              Type            Address          Off    Size   ES Flg Lk Inf Al
+  [ 0]                   NULL            0000000000000000 000000 000000 00      0   0  0
+  [ 1] .interp           PROGBITS        00000000000002a8 0002a8 00001c 00   A  0   0  1
+  [ 2] .note.gnu.build-id NOTE            00000000000002c4 0002c4 000024 00   A  0   0  4
+  [ 3] .note.ABI-tag     NOTE            00000000000002e8 0002e8 000020 00   A  0   0  4
+  [ 4] .gnu.hash         GNU_HASH        0000000000000308 000308 000030 00   A  5   0  8
+  [ 5] .dynsym           DYNSYM          0000000000000338 000338 000c00 18   A  6   1  8
+  [ 6] .dynstr           STRTAB          0000000000000f38 000f38 000543 00   A  0   0  1
+  [ 7] .gnu.version      VERSYM          000000000000147c 00147c 000100 02   A  5   0  2
+  [ 8] .gnu.version_r    VERNEED         0000000000001580 001580 0000f0 00   A  6   3  8
+  [ 9] .rela.dyn         RELA            0000000000001670 001670 001a10 18   A  5   0  8
+  [10] .rela.plt         RELA            0000000000003080 003080 000048 18  AI  5  22  8
+  [11] .init             PROGBITS        0000000000004000 004000 00001b 00  AX  0   0  4
+  [12] .plt              PROGBITS        0000000000004020 004020 000040 10  AX  0   0 16
+  [13] .plt.got          PROGBITS        0000000000004060 004060 000008 08  AX  0   0  8
+  [14] .text             PROGBITS        0000000000004070 004070 017889 00  AX  0   0 16
+  [15] .fini             PROGBITS        000000000001b8fc 01b8fc 00000d 00  AX  0   0  4
+  [16] .rodata           PROGBITS        000000000001c000 01c000 0033bd 00   A  0   0  4
+  [17] .eh_frame_hdr     PROGBITS        000000000001f3c0 01f3c0 001154 00   A  0   0  4
+  [18] .eh_frame         PROGBITS        0000000000020518 020518 004d08 00   A  0   0  8
+  [19] .init_array       INIT_ARRAY      0000000000026628 025628 000008 08  WA  0   0  8
+  [20] .fini_array       FINI_ARRAY      0000000000026630 025630 000008 08  WA  0   0  8
+  [21] .dynamic          DYNAMIC         0000000000026638 025638 000210 10  WA  6   0  8
+  [22] .got              PROGBITS        0000000000026848 025848 0007b8 08  WA  0   0  8
+  [23] .data             PROGBITS        0000000000027000 026000 0002d0 00  WA  0   0  8
+  [24] .bss              NOBITS          00000000000272d0 0262d0 002258 00  WA  0   0  8
+  [25] .comment          PROGBITS        0000000000000000 0262d0 000057 01  MS  0   0  1
+  [26] .debug_aranges    PROGBITS        0000000000000000 026330 002260 00      0   0 16
+  [27] .debug_info       PROGBITS        0000000000000000 028590 00f2da 00      0   0  1
+  [28] .debug_abbrev     PROGBITS        0000000000000000 03786a 000253 00      0   0  1
+  [29] .debug_line       PROGBITS        0000000000000000 037abd 00f05c 00      0   0  1
+  [30] .debug_str        PROGBITS        0000000000000000 046b19 008c89 01  MS  0   0  1
+  [31] .debug_ranges     PROGBITS        0000000000000000 04f7a2 006da0 00      0   0  1
+  [32] .symtab           SYMTAB          0000000000000000 056548 0048c0 18     33  34  8
+  [33] .strtab           STRTAB          0000000000000000 05ae08 0053b2 00      0   0  1
+  [34] .shstrtab         STRTAB          0000000000000000 0601ba 00014c 00      0   0  1
+Key to Flags:
+  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
+  L (link order), O (extra OS processing required), G (group), T (TLS),
+  C (compressed), x (unknown), o (OS specific), E (exclude),
+  l (large), p (processor specific)
+
+Symbol table '.dynsym' contains 128 entries:
+   Num:    Value          Size Type    Bind   Vis      Ndx Name
+     0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND 
+     1: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND getenv@GLIBC_2.2.5 (2)
+     2: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND sigprocmask@GLIBC_2.2.5 (2)
+     3: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND free@GLIBC_2.2.5 (2)
+     4: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND personality@GLIBC_2.2.5 (2)
+     5: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pthread_create@GLIBC_2.2.5 (3)
+     6: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND numa_bitmask_isbitset@libnuma_1.2 (4)
+     7: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __errno_location@GLIBC_2.2.5 (3)
+     8: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND mlock@GLIBC_2.2.5 (2)
+     9: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND _ITM_deregisterTMCloneTable
+    10: 0000000000000000     0 OBJECT  GLOBAL DEFAULT  UND stdout@GLIBC_2.2.5 (2)
+    11: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND puts@GLIBC_2.2.5 (2)
+    12: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND ferror@GLIBC_2.2.5 (2)
+    13: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND isatty@GLIBC_2.2.5 (2)
+    14: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND sigaction@GLIBC_2.2.5 (3)
+    15: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND fread@GLIBC_2.2.5 (2)
+    16: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND numa_max_possible_node@libnuma_1.2 (4)
+    17: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND faccessat@GLIBC_2.4 (5)
+    18: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND readlink@GLIBC_2.2.5 (2)
+    19: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND fcntl@GLIBC_2.2.5 (2)
+    20: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND clock_gettime@GLIBC_2.17 (6)
+    21: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND setenv@GLIBC_2.2.5 (2)
+    22: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND write@GLIBC_2.2.5 (3)
+    23: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND getpid@GLIBC_2.2.5 (2)
+    24: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pthread_kill@GLIBC_2.2.5 (3)
+    25: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND setresuid@GLIBC_2.2.5 (2)
+    26: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND fclose@GLIBC_2.2.5 (2)
+    27: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND lgetxattr@GLIBC_2.3 (7)
+    28: 0000000000000000     0 OBJECT  GLOBAL DEFAULT  UND optind@GLIBC_2.2.5 (2)
+    29: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND strlen@GLIBC_2.2.5 (2)
+    30: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __lxstat@GLIBC_2.2.5 (2)
+    31: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND openat@GLIBC_2.4 (5)
+    32: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND mmap@GLIBC_2.2.5 (2)
+    33: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND setresgid@GLIBC_2.2.5 (2)
+    34: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND getopt_long@GLIBC_2.2.5 (2)
+    35: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND printf@GLIBC_2.2.5 (2)
+    36: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND rewind@GLIBC_2.2.5 (2)
+    37: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pthread_spin_init@GLIBC_2.2.5 (3)
+    38: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __fxstatat@GLIBC_2.4 (5)
+    39: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pclose@GLIBC_2.2.5 (2)
+    40: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND snprintf@GLIBC_2.2.5 (2)
+    41: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND setfsuid@GLIBC_2.2.5 (2)
+    42: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND lseek@GLIBC_2.2.5 (3)
+    43: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND numa_parse_nodestring_all@libnuma_1.3 (8)
+    44: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND memset@GLIBC_2.2.5 (2)
+    45: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND ioctl@GLIBC_2.2.5 (2)
+    46: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND getcwd@GLIBC_2.2.5 (2)
+    47: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND close@GLIBC_2.2.5 (3)
+    48: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND sched_setaffinity@GLIBC_2.3.4 (9)
+    49: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND sched_yield@GLIBC_2.2.5 (2)
+    50: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __libc_start_main@GLIBC_2.2.5 (2)
+    51: 0000000000000000     0 OBJECT  WEAK   DEFAULT  UND _environ@GLIBC_2.2.5 (2)
+    52: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND calloc@GLIBC_2.2.5 (2)
+    53: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND strcmp@GLIBC_2.2.5 (2)
+    54: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND signal@GLIBC_2.2.5 (2)
+    55: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND readlinkat@GLIBC_2.4 (5)
+    56: 0000000000000000     0 OBJECT  GLOBAL DEFAULT  UND optarg@GLIBC_2.2.5 (2)
+    57: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND fprintf@GLIBC_2.2.5 (2)
+    58: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pthread_spin_unlock@GLIBC_2.2.5 (3)
+    59: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND syscall@GLIBC_2.2.5 (2)
+    60: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND sigemptyset@GLIBC_2.2.5 (2)
+    61: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND feof@GLIBC_2.2.5 (2)
+    62: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND __gmon_start__
+    63: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND strtol@GLIBC_2.2.5 (2)
+    64: 0000000000000000     0 OBJECT  GLOBAL DEFAULT  UND environ@GLIBC_2.2.5 (2)
+    65: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND memcpy@GLIBC_2.14 (10)
+    66: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND prctl@GLIBC_2.2.5 (2)
+    67: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND kill@GLIBC_2.2.5 (2)
+    68: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND fileno@GLIBC_2.2.5 (2)
+    69: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __xstat@GLIBC_2.2.5 (2)
+    70: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pthread_mutex_unlock@GLIBC_2.2.5 (3)
+    71: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pause@GLIBC_2.2.5 (3)
+    72: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND malloc@GLIBC_2.2.5 (2)
+    73: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND fflush@GLIBC_2.2.5 (2)
+    74: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND fseek@GLIBC_2.2.5 (2)
+    75: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND sem_post@GLIBC_2.2.5 (3)
+    76: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND ptrace@GLIBC_2.2.5 (2)
+    77: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND setrlimit@GLIBC_2.2.5 (2)
+    78: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND setreuid@GLIBC_2.2.5 (2)
+    79: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND setregid@GLIBC_2.2.5 (2)
+    80: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND realloc@GLIBC_2.2.5 (2)
+    81: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pthread_barrier_init@GLIBC_2.2.5 (3)
+    82: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND munmap@GLIBC_2.2.5 (2)
+    83: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND numa_run_on_node@libnuma_1.1 (11)
+    84: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND memmove@GLIBC_2.2.5 (2)
+    85: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND setgid@GLIBC_2.2.5 (2)
+    86: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND waitpid@GLIBC_2.2.5 (2)
+    87: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND sem_init@GLIBC_2.2.5 (3)
+    88: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND sem_trywait@GLIBC_2.2.5 (3)
+    89: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND setfsgid@GLIBC_2.2.5 (2)
+    90: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND open@GLIBC_2.2.5 (3)
+    91: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND access@GLIBC_2.2.5 (2)
+    92: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND popen@GLIBC_2.2.5 (2)
+    93: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND fopen@GLIBC_2.2.5 (2)
+    94: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND sigdelset@GLIBC_2.2.5 (2)
+    95: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND perror@GLIBC_2.2.5 (2)
+    96: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND sysconf@GLIBC_2.2.5 (2)
+    97: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pthread_join@GLIBC_2.2.5 (3)
+    98: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND posix_spawn@GLIBC_2.15 (12)
+    99: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND unsetenv@GLIBC_2.2.5 (2)
+   100: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND strtoul@GLIBC_2.2.5 (2)
+   101: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND getline@GLIBC_2.2.5 (2)
+   102: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND getpgid@GLIBC_2.2.5 (2)
+   103: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pread@GLIBC_2.2.5 (3)
+   104: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND getxattr@GLIBC_2.3 (7)
+   105: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pipe2@GLIBC_2.9 (13)
+   106: 0000000000000000     0 OBJECT  GLOBAL DEFAULT  UND __environ@GLIBC_2.2.5 (2)
+   107: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND getppid@GLIBC_2.2.5 (2)
+   108: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND exit@GLIBC_2.2.5 (2)
+   109: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND fwrite@GLIBC_2.2.5 (2)
+   110: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND getrlimit@GLIBC_2.2.5 (2)
+   111: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND _ITM_registerTMCloneTable
+   112: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND setuid@GLIBC_2.2.5 (2)
+   113: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND strdup@GLIBC_2.2.5 (2)
+   114: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND sem_destroy@GLIBC_2.2.5 (3)
+   115: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND strerror@GLIBC_2.2.5 (2)
+   116: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pthread_spin_lock@GLIBC_2.2.5 (3)
+   117: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND waitid@GLIBC_2.2.5 (2)
+   118: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND sleep@GLIBC_2.2.5 (2)
+   119: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pthread_barrier_wait@GLIBC_2.2.5 (3)
+   120: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pthread_mutex_init@GLIBC_2.2.5 (3)
+   121: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND execv@GLIBC_2.2.5 (2)
+   122: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND fork@GLIBC_2.2.5 (2)
+   123: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pthread_mutex_lock@GLIBC_2.2.5 (3)
+   124: 0000000000000000     0 OBJECT  GLOBAL DEFAULT  UND stderr@GLIBC_2.2.5 (2)
+   125: 0000000000009d00    13 FUNC    GLOBAL DEFAULT   14 gettid
+   126: 0000000000000000     0 FUNC    WEAK   DEFAULT  UND __cxa_finalize@GLIBC_2.2.5 (2)
+   127: 000000000001b3c0    19 FUNC    GLOBAL DEFAULT   14 tgkill
+
+Symbol table '.symtab' contains 776 entries:
+   Num:    Value          Size Type    Bind   Vis      Ndx Name
+     0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND 
+     1: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS mcexec_helpers.c8534dd204278441-cgu.0
+     2: 00000000000050e0    71 FUNC    LOCAL  DEFAULT   14 _ZN14mcexec_helpers16is_sys_root_path17h66547855be18af58E
+     3: 0000000000005130   119 FUNC    LOCAL  DEFAULT   14 _ZN14mcexec_helpers17trim_shebang_line17h6b496ba1ec48a9faE
+     4: 00000000000051b0   959 FUNC    LOCAL  DEFAULT   14 _ZN14mcexec_helpers18overlay_checkexist17hc8d0057b5d2d95ebE
+     5: 0000000000005570   327 FUNC    LOCAL  DEFAULT   14 _ZN14mcexec_helpers18path_arg_or_return17h8a064accf54c4463E
+     6: 00000000000056c0   409 FUNC    LOCAL  DEFAULT   14 _ZN14mcexec_helpers19pci_local_cpus_path17hb7af5cd3130429eeE
+     7: 0000000000005860   253 FUNC    LOCAL  DEFAULT   14 _ZN14mcexec_helpers21parse_i32_with_prefix17hd007123c4d37dcbbE
+     8: 0000000000005960    97 FUNC    LOCAL  DEFAULT   14 _ZN14mcexec_helpers22overlay_check_cpu_node17h5d0d7509f31342e3E
+     9: 00000000000059d0   294 FUNC    LOCAL  DEFAULT   14 _ZN14mcexec_helpers22parse_i32_after_prefix17h7a2c6e565712a387E
+    10: 0000000000005b00  1112 FUNC    LOCAL  DEFAULT   14 _ZN14mcexec_helpers25overlay_resolve_sys_links17h1b76cf7758795b00E
+    11: 0000000000005f60   971 FUNC    LOCAL  DEFAULT   14 _ZN14mcexec_helpers27load_desc_publish_exec_path17ha7e69d3f4c35575bE
+    12: 0000000000029328     8 OBJECT  LOCAL  DEFAULT   24 _ZN14mcexec_helpers8SIGFDTOP17hc8b6f3c79df3cc31E.0
+    13: 0000000000029320     4 OBJECT  LOCAL  DEFAULT   24 _ZN14mcexec_helpers23mcexec_worker_lifecycle8NEXT_CPU17he634d2cfd2795b0cE.0
+    14: 00000000000272d1  4097 OBJECT  LOCAL  DEFAULT   24 _ZN14mcexec_helpers16LOAD_INTERP_PATH17hc064ea8c7d2e6562E
+    15: 00000000000292d8     8 OBJECT  LOCAL  DEFAULT   24 _ZN14mcexec_helpers29mcexec_entry_metadata_options12QUERY_RESULT17h1e6ea8db5ec3f4b7E
+    16: 00000000000282d2  4096 OBJECT  LOCAL  DEFAULT   24 _ZN14mcexec_helpers19SEARCH_FILE_MODPATH17hc59fde191115aa00E
+    17: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS crtstuff.c
+    18: 0000000000005010     0 FUNC    LOCAL  DEFAULT   14 deregister_tm_clones
+    19: 0000000000005040     0 FUNC    LOCAL  DEFAULT   14 register_tm_clones
+    20: 0000000000005080     0 FUNC    LOCAL  DEFAULT   14 __do_global_dtors_aux
+    21: 00000000000272d0     1 OBJECT  LOCAL  DEFAULT   24 completed.8061
+    22: 0000000000026630     0 OBJECT  LOCAL  DEFAULT   20 __do_global_dtors_aux_fini_array_entry
+    23: 00000000000050c0     0 FUNC    LOCAL  DEFAULT   14 frame_dummy
+    24: 0000000000026628     0 OBJECT  LOCAL  DEFAULT   19 __frame_dummy_init_array_entry
+    25: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS crtstuff.c
+    26: 000000000002521c     0 OBJECT  LOCAL  DEFAULT   18 __FRAME_END__
+    27: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS 
+    28: 0000000000026630     0 NOTYPE  LOCAL  DEFAULT   19 __init_array_end
+    29: 0000000000026638     0 OBJECT  LOCAL  DEFAULT   21 _DYNAMIC
+    30: 0000000000026628     0 NOTYPE  LOCAL  DEFAULT   19 __init_array_start
+    31: 000000000001f3c0     0 NOTYPE  LOCAL  DEFAULT   17 __GNU_EH_FRAME_HDR
+    32: 0000000000026848     0 OBJECT  LOCAL  DEFAULT   22 _GLOBAL_OFFSET_TABLE_
+    33: 0000000000004000     0 FUNC    LOCAL  DEFAULT   11 _init
+    34: 00000000000042e0    27 FUNC    GLOBAL DEFAULT   14 mcexec_find_libdir_rpath_not_found_bridge
+    35: 000000000000f7e0    15 FUNC    GLOBAL DEFAULT   14 mcexec_init_worker_threads_lock_init_bridge
+    36: 000000000001b890     5 FUNC    GLOBAL DEFAULT   14 __libc_csu_fini
+    37: 0000000000004cf0    43 FUNC    GLOBAL DEFAULT   14 mcexec_reduce_stack_newval_overflow_bridge
+    38: 0000000000016130    95 FUNC    GLOBAL DEFAULT   14 mcexec_path_stat_bridge
+    39: 0000000000010690    68 FUNC    GLOBAL DEFAULT   14 mcexec_load_main_desc_body
+    40: 00000000000130c0   379 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_addfd_publish_bridge
+    41: 00000000000087c0   474 FUNC    GLOBAL DEFAULT   14 act_openat
+    42: 000000000000d8c0    72 FUNC    GLOBAL DEFAULT   14 mcexec_desc_publish_interp_section_bridge
+    43: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND getenv@GLIBC_2.2.5
+    44: 0000000000007e70   184 FUNC    GLOBAL DEFAULT   14 act_main_loop_iteration
+    45: 000000000000ee30    11 FUNC    GLOBAL DEFAULT   14 mcexec_fork_sync_munmap_bridge
+    46: 00000000000040d0    33 FUNC    GLOBAL DEFAULT   14 mcexec_clone_fork_failed_bridge
+    47: 0000000000015fe0    33 FUNC    GLOBAL DEFAULT   14 mcexec_path_openat_bridge
+    48: 000000000000c450   315 FUNC    GLOBAL DEFAULT   14 mcexec_atobytes_result
+    49: 0000000000010030   142 FUNC    GLOBAL DEFAULT   14 mcexec_kill_thread_body
+    50: 0000000000010140     3 FUNC    GLOBAL DEFAULT   14 mcexec_main_cmd_servers_init_bridge
+    51: 0000000000011500     1 FUNC    GLOBAL DEFAULT   14 mcexec_main_publish_args_bridge
+    52: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND sigprocmask@GLIBC_2.2.5
+    53: 000000000001b8a0    20 FUNC    GLOBAL HIDDEN    14 __stat
+    54: 0000000000029500    32 OBJECT  GLOBAL DEFAULT   24 uti_init_ready
+    55: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND free@GLIBC_2.2.5
+    56: 0000000000015ee0    31 FUNC    GLOBAL DEFAULT   14 mcexec_path_len_less_than_result
+    57: 00000000000042c0    27 FUNC    GLOBAL DEFAULT   14 mcexec_find_libdir_readlink_failed_bridge
+    58: 000000000000c990    87 FUNC    GLOBAL DEFAULT   14 mcexec_clone_alloc_fork_sync_bridge
+    59: 000000000000d910    55 FUNC    GLOBAL DEFAULT   14 mcexec_desc_publish_mpol_base_bridge
+    60: 00000000000294d8     4 OBJECT  GLOBAL DEFAULT   24 profile
+    61: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND personality@GLIBC_2.2.5
+    62: 0000000000011160   167 FUNC    GLOBAL DEFAULT   14 mcexec_main_node_cpu_exists_bridge
+    63: 00000000000108b0    50 FUNC    GLOBAL DEFAULT   14 mcexec_lookup_success_bridge
+    64: 0000000000029488     4 OBJECT  GLOBAL DEFAULT   24 mpol_no_bss
+    65: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pthread_create@GLIBC_2.2.5
+    66: 0000000000014350    60 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_replaced_bridge
+    67: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND numa_bitmask_isbitset@libnuma_1.2
+    68: 0000000000016fe0     6 FUNC    GLOBAL DEFAULT   14 mcexec_program_image_section_size_bridge
+    69: 0000000000013df0  1348 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_proc_self_path_result
+    70: 0000000000006a00    95 FUNC    GLOBAL DEFAULT   14 act_execve
+    71: 0000000000011c20   179 FUNC    GLOBAL DEFAULT   14 mcexec_normalize_overlay_path_result
+    72: 0000000000010130    10 FUNC    GLOBAL DEFAULT   14 mcexec_ld_preload_disable_sched_yield_bridge
+    73: 000000000000d2a0   312 FUNC    GLOBAL DEFAULT   14 mcexec_create_local_environ_result
+    74: 0000000000018330   936 FUNC    GLOBAL DEFAULT   14 mcexec_util_thread_body
+    75: 000000000000b520   108 FUNC    GLOBAL DEFAULT   14 mcexec_act_sigaction_install_bridge
+    76: 0000000000015940   292 FUNC    GLOBAL DEFAULT   14 mcexec_partition_get_cpuset_bridge
+    77: 0000000000008f40   132 FUNC    GLOBAL DEFAULT   14 act_setfsuid
+    78: 000000000000e1e0     6 FUNC    GLOBAL DEFAULT   14 mcexec_exit_isatty_bridge
+    79: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __errno_location@GLIBC_2.2.5
+    80: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND mlock@GLIBC_2.2.5
+    81: 00000000000085f0   459 FUNC    GLOBAL DEFAULT   14 act_open
+    82: 0000000000004b90    34 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_getcwd_failed_bridge
+    83: 000000000000e750    19 FUNC    GLOBAL DEFAULT   14 mcexec_reduce_stack_readlink_bridge
+    84: 0000000000009740   294 FUNC    GLOBAL DEFAULT   14 act_wait4
+    85: 0000000000018300    20 FUNC    GLOBAL DEFAULT   14 mcexec_util_thread_barrier_init_bridge
+    86: 0000000000029478     4 OBJECT  GLOBAL DEFAULT   24 mcosid
+    87: 0000000000013750     8 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_getdents_linux_size_bridge
+    88: 000000000000f710    17 FUNC    GLOBAL DEFAULT   14 mcexec_init_worker_threads_barrier_init_bridge
+    89: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND _ITM_deregisterTMCloneTable
+    90: 0000000000000000     0 OBJECT  GLOBAL DEFAULT  UND stdout@GLIBC_2.2.5
+    91: 0000000000011060    10 FUNC    GLOBAL DEFAULT   14 mcexec_main_loop_is_child_bridge
+    92: 0000000000027000     0 NOTYPE  WEAK   DEFAULT   23 data_start
+    93: 0000000000010540    50 FUNC    GLOBAL DEFAULT   14 mcexec_load_desc_shebang_read_failed_bridge
+    94: 0000000000004180    28 FUNC    GLOBAL DEFAULT   14 mcexec_execve1_transfer_failed_bridge
+    95: 0000000000029498     8 OBJECT  GLOBAL DEFAULT   24 mpol_threshold
+    96: 0000000000004f30    32 FUNC    GLOBAL DEFAULT   14 mcexec_util_thread_param_large_bridge
+    97: 0000000000004760    39 FUNC    GLOBAL DEFAULT   14 mcexec_load_realloc_failed_bridge
+    98: 0000000000009d00    13 FUNC    GLOBAL DEFAULT   14 gettid
+    99: 00000000000129c0     8 FUNC    GLOBAL DEFAULT   14 mcexec_opendev_dev_bridge
+   100: 000000000000b5a0   112 FUNC    GLOBAL DEFAULT   14 mcexec_act_sigprocmask_apply_bridge
+   101: 000000000000e190     1 FUNC    GLOBAL DEFAULT   14 mcexec_partition_debug_ikc_binding_bridge
+   102: 0000000000004b60    33 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_find_libdir_failed_bridge
+   103: 0000000000009cb0    20 FUNC    GLOBAL DEFAULT   14 get_syscall_args
+   104: 000000000000df50    31 FUNC    GLOBAL DEFAULT   14 mcexec_env_list_count_result
+   105: 0000000000013320   160 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_delfd_bridge
+   106: 0000000000029360     4 OBJECT  GLOBAL DEFAULT   24 fd
+   107: 0000000000009a70   196 FUNC    GLOBAL DEFAULT   14 copy_dirents
+   108: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND puts@GLIBC_2.2.5
+   109: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND ferror@GLIBC_2.2.5
+   110: 00000000000272a8    16 OBJECT  GLOBAL DEFAULT   23 overlay_fd_list
+   111: 000000000001b370     5 FUNC    GLOBAL DEFAULT   14 set_syscall_number
+   112: 0000000000007460   399 FUNC    GLOBAL DEFAULT   14 act_gettid
+   113: 000000000000dbf0    12 FUNC    GLOBAL DEFAULT   14 mcexec_dirent32_name_result
+   114: 00000000000294b8     8 OBJECT  GLOBAL DEFAULT   24 numa_nodes
+   115: 0000000000027010     4 OBJECT  GLOBAL DEFAULT   23 enable_vdso
+   116: 000000000000f5a0   150 FUNC    GLOBAL DEFAULT   14 mcexec_init_sigaction_install_bridge
+   117: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND isatty@GLIBC_2.2.5
+   118: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND sigaction@GLIBC_2.2.5
+   119: 00000000000293c0    40 OBJECT  GLOBAL DEFAULT   24 lock
+   120: 000000000000b640    18 FUNC    GLOBAL DEFAULT   14 mcexec_add_env_list_invalid_bridge
+   121: 000000000000c940    53 FUNC    GLOBAL DEFAULT   14 mcexec_clock_gettime_log_bridge
+   122: 0000000000004640    33 FUNC    GLOBAL DEFAULT   14 mcexec_load_desc_parse_elf_failed_bridge
+   123: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND fread@GLIBC_2.2.5
+   124: 00000000000129f0    13 FUNC    GLOBAL DEFAULT   14 mcexec_opendev_open_bridge
+   125: 00000000000110c0    76 FUNC    GLOBAL DEFAULT   14 mcexec_main_loop_thread_func_body
+   126: 000000000000dc20    12 FUNC    GLOBAL DEFAULT   14 mcexec_dirent64_name_result
+   127: 0000000000009c70     5 FUNC    GLOBAL DEFAULT   14 get_syscall_arg3
+   128: 00000000000132c0    87 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_cpu_in_node_bridge
+   129: 0000000000004bc0    34 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_getdents_lower_failed_bridge
+   130: 0000000000009160   130 FUNC    GLOBAL DEFAULT   14 act_setresuid
+   131: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND numa_max_possible_node@libnuma_1.2
+   132: 0000000000009c90     5 FUNC    GLOBAL DEFAULT   14 get_syscall_arg5
+   133: 0000000000018020    53 FUNC    GLOBAL DEFAULT   14 mcexec_transfer_seeked_bridge
+   134: 0000000000011fb0    11 FUNC    GLOBAL DEFAULT   14 mcexec_numa_node_set_body
+   135: 000000000001b8a0    20 FUNC    WEAK   HIDDEN    14 stat
+   136: 0000000000009c50     5 FUNC    GLOBAL DEFAULT   14 get_syscall_arg1
+   137: 000000000000eea0    32 FUNC    GLOBAL DEFAULT   14 mcexec_get_thp_disable_body
+   138: 0000000000013aa0   842 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_proc_path_result
+   139: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND faccessat@GLIBC_2.4
+   140: 0000000000010360    21 FUNC    GLOBAL DEFAULT   14 mcexec_ld_preload_setenv_bridge
+   141: 0000000000004330    33 FUNC    GLOBAL DEFAULT   14 mcexec_gettid_alloc_error_bridge
+   142: 00000000000084b0   312 FUNC    GLOBAL DEFAULT   14 act_newfstatat
+   143: 0000000000008a10   282 FUNC    GLOBAL DEFAULT   14 act_readlink
+   144: 000000000000d740   119 FUNC    GLOBAL DEFAULT   14 mcexec_desc_apply_ompi_policy_bridge
+   145: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND readlink@GLIBC_2.2.5
+   146: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND fcntl@GLIBC_2.2.5
+   147: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND clock_gettime@GLIBC_2.17
+   148: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND setenv@GLIBC_2.2.5
+   149: 0000000000015fa0    50 FUNC    GLOBAL DEFAULT   14 mcexec_path_open_log_bridge
+   150: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND write@GLIBC_2.2.5
+   151: 0000000000012190  1089 FUNC    GLOBAL DEFAULT   14 mcexec_ompi_mpol_policy_result
+   152: 000000000000c5c0   856 FUNC    GLOBAL DEFAULT   14 mcexec_build_ld_preload_result
+   153: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND getpid@GLIBC_2.2.5
+   154: 0000000000013810     8 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_getdents_mck_dirents_bridge
+   155: 0000000000029348     8 OBJECT  GLOBAL DEFAULT   24 dma_buf
+   156: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pthread_kill@GLIBC_2.2.5
+   157: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND setresuid@GLIBC_2.2.5
+   158: 00000000000041d0    27 FUNC    GLOBAL DEFAULT   14 mcexec_execve2_close_exec_failed_bridge
+   159: 00000000000294a8     4 OBJECT  GLOBAL DEFAULT   24 nnodes
+   160: 0000000000016010    54 FUNC    GLOBAL DEFAULT   14 mcexec_path_openat_log_bridge
+   161: 000000000000c5a0    27 FUNC    GLOBAL DEFAULT   14 mcexec_atoi_result
+   162: 000000000000c920    31 FUNC    GLOBAL DEFAULT   14 mcexec_clock_gettime_bridge
+   163: 0000000000011270    10 FUNC    GLOBAL DEFAULT   14 mcexec_main_optind_bridge
+   164: 00000000000272d0     0 NOTYPE  GLOBAL DEFAULT   23 _edata
+   165: 0000000000011610   268 FUNC    GLOBAL DEFAULT   14 mcexec_main_state_ptrs_bridge
+   166: 000000000001b310     5 FUNC    GLOBAL DEFAULT   14 set_syscall_arg2
+   167: 000000000001b330     5 FUNC    GLOBAL DEFAULT   14 set_syscall_arg4
+   168: 0000000000017790   500 FUNC    GLOBAL DEFAULT   14 mcexec_shebang_argv_extend_result
+   169: 000000000001b340     5 FUNC    GLOBAL DEFAULT   14 set_syscall_arg6
+   170: 0000000000007390    89 FUNC    GLOBAL DEFAULT   14 act_generic_syscall
+   171: 0000000000004460    33 FUNC    GLOBAL DEFAULT   14 mcexec_linux_spawn_invalid_exec_path_bridge
+   172: 0000000000004730    44 FUNC    GLOBAL DEFAULT   14 mcexec_load_pt_interp_on_interp_bridge
+   173: 0000000000016ff0     6 FUNC    GLOBAL DEFAULT   14 mcexec_program_load_desc_size_bridge
+   174: 0000000000013240    50 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_blacklisted_bridge
+   175: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND fclose@GLIBC_2.2.5
+   176: 00000000000294f0     4 OBJECT  GLOBAL DEFAULT   24 straight_map
+   177: 000000000000e300  1038 FUNC    GLOBAL DEFAULT   14 mcexec_find_libdir_body
+   178: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND lgetxattr@GLIBC_2.3
+   179: 0000000000011550    39 FUNC    GLOBAL DEFAULT   14 mcexec_main_publish_topology_bridge
+   180: 000000000000ce10     6 FUNC    GLOBAL DEFAULT   14 mcexec_clone_sched_yield_bridge
+   181: 000000000000e9f0   864 FUNC    GLOBAL DEFAULT   14 mcexec_flatten_strings_result
+   182: 0000000000000000     0 OBJECT  GLOBAL DEFAULT  UND optind@GLIBC_2.2.5
+   183: 000000000000df10    50 FUNC    GLOBAL DEFAULT   14 mcexec_do_generic_syscall_start_bridge
+   184: 00000000000134a0   202 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_getdents_append_mck_bridge
+   185: 0000000000027020   640 OBJECT  GLOBAL DEFAULT   23 mcexec_options
+   186: 0000000000008cc0   194 FUNC    GLOBAL DEFAULT   14 act_rt_sigaction
+   187: 0000000000017480    57 FUNC    GLOBAL DEFAULT   14 mcexec_sendsig_default_action_bridge
+   188: 0000000000017000   918 FUNC    GLOBAL DEFAULT   14 mcexec_reduce_stack_body
+   189: 0000000000013570    50 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_getdents_blacklisted_bridge
+   190: 0000000000004c50    35 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_truncated_bridge
+   191: 000000000000d530    11 FUNC    GLOBAL DEFAULT   14 mcexec_cred_setfsgid_bridge
+   192: 0000000000016500    57 FUNC    GLOBAL DEFAULT   14 mcexec_print_desc_main_bridge
+   193: 0000000000010730    79 FUNC    GLOBAL DEFAULT   14 mcexec_load_section_log_bridge
+   194: 000000000000d4c0     8 FUNC    GLOBAL DEFAULT   14 mcexec_create_worker_thread_lock_bridge
+   195: 0000000000008b30   301 FUNC    GLOBAL DEFAULT   14 act_readlinkat
+   196: 0000000000015ce0   110 FUNC    GLOBAL DEFAULT   14 mcexec_path_getxattr_bridge
+   197: 00000000000041a0    33 FUNC    GLOBAL DEFAULT   14 mcexec_execve2_alloc_desc_failed_bridge
+   198: 000000000000da10    26 FUNC    GLOBAL DEFAULT   14 mcexec_desc_set_execve1_runtime_bridge
+   199: 000000000001b8fc     0 FUNC    GLOBAL HIDDEN    15 _fini
+   200: 0000000000009c40     6 FUNC    GLOBAL DEFAULT   14 flatten_strings
+   201: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND strlen@GLIBC_2.2.5
+   202: 0000000000004f50    34 FUNC    GLOBAL DEFAULT   14 mcexec_util_thread_switch_failed_bridge
+   203: 0000000000014340     6 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_readlink_bridge
+   204: 0000000000004a00    33 FUNC    GLOBAL DEFAULT   14 mcexec_main_thread_plan_error_bridge
+   205: 000000000000ddd0   191 FUNC    GLOBAL DEFAULT   14 mcexec_do_generic_syscall_body
+   206: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __lxstat@GLIBC_2.2.5
+   207: 0000000000016580    50 FUNC    GLOBAL DEFAULT   14 mcexec_print_flat_count_bridge
+   208: 0000000000029340     4 OBJECT  GLOBAL DEFAULT   24 debug
+   209: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND openat@GLIBC_2.4
+   210: 0000000000011970   640 FUNC    GLOBAL DEFAULT   14 mcexec_mcos_device_path_result
+   211: 00000000000041f0    33 FUNC    GLOBAL DEFAULT   14 mcexec_execve2_transfer_desc_failed_bridge
+   212: 0000000000010fa0    24 FUNC    GLOBAL DEFAULT   14 mcexec_main_get_nodes_bridge
+   213: 0000000000015f70    33 FUNC    GLOBAL DEFAULT   14 mcexec_path_open_bridge
+   214: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND mmap@GLIBC_2.2.5
+   215: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND setresgid@GLIBC_2.2.5
+   216: 00000000000272c0     8 OBJECT  GLOBAL DEFAULT   23 stack_premap
+   217: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND getopt_long@GLIBC_2.2.5
+   218: 0000000000004a30    56 FUNC    GLOBAL DEFAULT   14 mcexec_main_worker_threads_failed_bridge
+   219: 0000000000004ed0    34 FUNC    GLOBAL DEFAULT   14 mcexec_util_thread_get_ctx_error_bridge
+   220: 00000000000040a0    33 FUNC    GLOBAL DEFAULT   14 mcexec_clone_child_after_fork_failed_bridge
+   221: 000000000000e190     1 FUNC    GLOBAL DEFAULT   14 mcexec_partition_debug_numa_binding_bridge
+   222: 00000000000045f0    28 FUNC    GLOBAL DEFAULT   14 mcexec_load_desc_interp_open_failed_bridge
+   223: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND printf@GLIBC_2.2.5
+   224: 000000000000d6c0   113 FUNC    GLOBAL DEFAULT   14 mcexec_desc_apply_bind_nodes_bridge
+   225: 00000000000099e0    21 FUNC    GLOBAL DEFAULT   14 clear_bit
+   226: 000000000000d410   166 FUNC    GLOBAL DEFAULT   14 mcexec_create_worker_thread_body
+   227: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND rewind@GLIBC_2.2.5
+   228: 000000000000c420    37 FUNC    GLOBAL DEFAULT   14 mcexec_apply_stack_max_result
+   229: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pthread_spin_init@GLIBC_2.2.5
+   230: 00000000000048c0    56 FUNC    GLOBAL DEFAULT   14 mcexec_main_load_desc_error_bridge
+   231: 00000000000135f0   119 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_getdents_find_bridge
+   232: 0000000000004390    33 FUNC    GLOBAL DEFAULT   14 mcexec_ld_preload_find_failed_bridge
+   233: 0000000000004220    33 FUNC    GLOBAL DEFAULT   14 mcexec_execve2_transfer_image_failed_bridge
+   234: 000000000000c9f0  1025 FUNC    GLOBAL DEFAULT   14 mcexec_clone_child_bridge
+   235: 0000000000009d10   247 FUNC    GLOBAL DEFAULT   14 init_sigaction
+   236: 00000000000072c0   208 FUNC    GLOBAL DEFAULT   14 act_futex_clock
+   237: 0000000000011720    57 FUNC    GLOBAL DEFAULT   14 mcexec_main_uti_unavailable_bridge
+   238: 000000000000d610    11 FUNC    GLOBAL DEFAULT   14 mcexec_debug_mlock_bridge
+   239: 0000000000017fe0    21 FUNC    GLOBAL DEFAULT   14 mcexec_strtoul_hex_result
+   240: 000000000000f550    77 FUNC    GLOBAL DEFAULT   14 mcexec_init_page_altroot_body
+   241: 0000000000010140     3 FUNC    GLOBAL DEFAULT   14 mcexec_ld_preload_enable_qlmpi_bridge
+   242: 0000000000015bd0    22 FUNC    GLOBAL DEFAULT   14 mcexec_path_copy_return_result
+   243: 000000000001b3e0   731 FUNC    GLOBAL DEFAULT   14 transfer_image
+   244: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __fxstatat@GLIBC_2.4
+   245: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pclose@GLIBC_2.2.5
+   246: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND snprintf@GLIBC_2.2.5
+   247: 00000000000294e0    16 OBJECT  GLOBAL DEFAULT   24 rlim_stack
+   248: 0000000000029494     4 OBJECT  GLOBAL DEFAULT   24 mpol_shm_premap
+   249: 000000000000f7f0    11 FUNC    GLOBAL DEFAULT   14 mcexec_init_worker_threads_reset_cpuid_bridge
+   250: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND setfsuid@GLIBC_2.2.5
+   251: 0000000000013890     8 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_getdents_mck_size_bridge
+   252: 000000000000ee40    72 FUNC    GLOBAL DEFAULT   14 mcexec_fork_sync_remove_node_result
+   253: 000000000000f730   144 FUNC    GLOBAL DEFAULT   14 mcexec_init_worker_threads_create_bridge
+   254: 0000000000004570    33 FUNC    GLOBAL DEFAULT   14 mcexec_load_desc_build_exec_path_failed_bridge
+   255: 0000000000009c70     5 FUNC    GLOBAL DEFAULT   14 mcexec_desc_rprocess_bridge
+   256: 0000000000018920   232 FUNC    GLOBAL DEFAULT   14 overlay_addfd
+   257: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND lseek@GLIBC_2.2.5
+   258: 000000000000ce40    27 FUNC    GLOBAL DEFAULT   14 mcexec_clone_waitpid_nohang_bridge
+   259: 00000000000135b0    50 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_getdents_dupe_bridge
+   260: 000000000000b590     6 FUNC    GLOBAL DEFAULT   14 mcexec_act_signalfd4_write_bridge
+   261: 0000000000004300    45 FUNC    GLOBAL DEFAULT   14 mcexec_flib_affinity_alloc_failed_bridge
+   262: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND numa_parse_nodestring_all@libnuma_1.3
+   263: 000000000000cf30   319 FUNC    GLOBAL DEFAULT   14 mcexec_collect_main_envs_body
+   264: 000000000000dee0    46 FUNC    GLOBAL DEFAULT   14 mcexec_do_generic_syscall_raw_bridge
+   265: 0000000000010780    50 FUNC    GLOBAL DEFAULT   14 mcexec_load_shebang_find_error_bridge
+   266: 0000000000008c60    82 FUNC    GLOBAL DEFAULT   14 act_reserved_memory_syscall
+   267: 00000000000103f0    11 FUNC    GLOBAL DEFAULT   14 mcexec_load_clk_tck_bridge
+   268: 00000000000272b8     8 OBJECT  GLOBAL DEFAULT   23 stack_max
+   269: 000000000000bc50  1552 FUNC    GLOBAL DEFAULT   14 mcexec_apply_option_result
+   270: 0000000000004790    44 FUNC    GLOBAL DEFAULT   14 mcexec_load_too_large_interp_bridge
+   271: 00000000000110b0     6 FUNC    GLOBAL DEFAULT   14 mcexec_main_loop_thread_barrier_wait_bridge
+   272: 000000000000ba70   147 FUNC    GLOBAL DEFAULT   14 mcexec_apply_flib_affinity_body
+   273: 0000000000010400     5 FUNC    GLOBAL DEFAULT   14 mcexec_load_cred_bridge
+   274: 00000000000186e0   155 FUNC    GLOBAL DEFAULT   14 mcexec_util_thread_create_worker_bridge
+   275: 000000000000ad40  1999 FUNC    GLOBAL DEFAULT   14 lookup_exec_path
+   276: 000000000001b8c0    20 FUNC    WEAK   HIDDEN    14 lstat
+   277: 000000000000de90     6 FUNC    GLOBAL DEFAULT   14 mcexec_do_generic_syscall_bridge
+   278: 0000000000013760    58 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_getdents_linux_size_log_bridge
+   279: 0000000000017710   115 FUNC    GLOBAL DEFAULT   14 mcexec_setup_dma_ppd_body
+   280: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND memset@GLIBC_2.2.5
+   281: 0000000000006950   163 FUNC    GLOBAL DEFAULT   14 act_debug_mlock
+   282: 00000000000107c0    50 FUNC    GLOBAL DEFAULT   14 mcexec_load_shebang_load_error_bridge
+   283: 0000000000004ae0    33 FUNC    GLOBAL DEFAULT   14 mcexec_opendev_query_error_bridge
+   284: 000000000000ce30    10 FUNC    GLOBAL DEFAULT   14 mcexec_clone_sem_trywait_bridge
+   285: 000000000000d990    16 FUNC    GLOBAL DEFAULT   14 mcexec_desc_section_filesz_bridge
+   286: 00000000000094e0    89 FUNC    GLOBAL DEFAULT   14 act_signalfd4_syscall
+   287: 000000000000d830    50 FUNC    GLOBAL DEFAULT   14 mcexec_desc_ompi_policy_log_bridge
+   288: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND ioctl@GLIBC_2.2.5
+   289: 000000000000df70    15 FUNC    GLOBAL DEFAULT   14 mcexec_errno_return_result
+   290: 000000000001b390    11 FUNC    GLOBAL DEFAULT   14 syscall_enter
+   291: 000000000000c3f0    42 FUNC    GLOBAL DEFAULT   14 mcexec_apply_saved_stack_limit_result
+   292: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND getcwd@GLIBC_2.2.5
+   293: 0000000000004ca0    24 FUNC    GLOBAL DEFAULT   14 mcexec_print_usage_write_bridge
+   294: 000000000000d9a0    16 FUNC    GLOBAL DEFAULT   14 mcexec_desc_section_fp_bridge
+   295: 0000000000006e50   558 FUNC    GLOBAL DEFAULT   14 act_execve_phase2
+   296: 0000000000009f40  1181 FUNC    GLOBAL DEFAULT   14 load_elf
+   297: 000000000000ee90    13 FUNC    GLOBAL DEFAULT   14 mcexec_fork_sync_unlock_bridge
+   298: 000000000000d550    31 FUNC    GLOBAL DEFAULT   14 mcexec_cred_setgid_bridge
+   299: 000000000000ce20    10 FUNC    GLOBAL DEFAULT   14 mcexec_clone_sem_destroy_bridge
+   300: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND close@GLIBC_2.2.5
+   301: 000000000000d9b0    16 FUNC    GLOBAL DEFAULT   14 mcexec_desc_section_len_bridge
+   302: 00000000000272a0     4 OBJECT  GLOBAL DEFAULT   23 nr_threads
+   303: 0000000000004e10    33 FUNC    GLOBAL DEFAULT   14 mcexec_transfer_access_error_bridge
+   304: 0000000000011f20    65 FUNC    GLOBAL DEFAULT   14 mcexec_numa_node_cpu_isset_bridge
+   305: 0000000000013a20   122 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_lstat_is_symlink_bridge
+   306: 0000000000009b40    89 FUNC    GLOBAL DEFAULT   14 do_strncpy_from_user
+   307: 000000000000a7b0   718 FUNC    GLOBAL DEFAULT   14 load_elf_desc_shebang
+   308: 0000000000014390    99 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_stat_errno_bridge
+   309: 0000000000007910   914 FUNC    GLOBAL DEFAULT   14 act_linux_spawn
+   310: 0000000000016610   672 FUNC    GLOBAL DEFAULT   14 mcexec_proc_self_fd_path_result
+   311: 0000000000014cb0    60 FUNC    GLOBAL DEFAULT   14 mcexec_parse_optional_mcosid_result
+   312: 0000000000016600     6 FUNC    GLOBAL DEFAULT   14 mcexec_print_usage_add_envs_bridge
+   313: 00000000000133d0   199 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_getdents_append_linux_bridge
+   314: 000000000000e110    54 FUNC    GLOBAL DEFAULT   14 mcexec_execve2_image_transferred_bridge
+   315: 0000000000006440   261 FUNC    GLOBAL DEFAULT   14 act_clone_complete
+   316: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND sched_setaffinity@GLIBC_2.3.4
+   317: 00000000000129e0    10 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_mcosid_bridge
+   318: 00000000000195a0  2865 FUNC    GLOBAL DEFAULT   14 overlay_getdents
+   319: 0000000000017990  1603 FUNC    GLOBAL DEFAULT   14 mcexec_shift_flib_affinity_result
+   320: 00000000000294f8     8 OBJECT  GLOBAL DEFAULT   24 thread_data
+   321: 0000000000004ab0    33 FUNC    GLOBAL DEFAULT   14 mcexec_opendev_path_error_bridge
+   322: 0000000000007f30  1407 FUNC    GLOBAL DEFAULT   14 act_main_loop_syscall
+   323: 000000000000e190     1 FUNC    GLOBAL DEFAULT   14 mcexec_exit_cmd_servers_bridge
+   324: 000000000000da40     4 FUNC    GLOBAL DEFAULT   14 mcexec_desc_set_num_sections_bridge
+   325: 000000000000faf0   144 FUNC    GLOBAL DEFAULT   14 mcexec_join_all_threads_body
+   326: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND sched_yield@GLIBC_2.2.5
+   327: 0000000000015c60   125 FUNC    GLOBAL DEFAULT   14 mcexec_path_fstatat_bridge
+   328: 0000000000004db0    39 FUNC    GLOBAL DEFAULT   14 mcexec_sched_setaffinity_invalid_bridge
+   329: 000000000000fba0   425 FUNC    GLOBAL DEFAULT   14 mcexec_join_path_inplace_result
+   330: 00000000000129a0     6 FUNC    GLOBAL DEFAULT   14 mcexec_opendev_buildid_size_bridge
+   331: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __libc_start_main@GLIBC_2.2.5
+   332: 000000000000ce80   115 FUNC    GLOBAL DEFAULT   14 mcexec_collect_active_tids_result
+   333: 00000000000091f0   127 FUNC    GLOBAL DEFAULT   14 act_setreuid
+   334: 000000000000aa80   703 FUNC    GLOBAL DEFAULT   14 load_interp
+   335: 0000000000004810    33 FUNC    GLOBAL DEFAULT   14 mcexec_main_alloc_nodes_error_bridge
+   336: 00000000000174d0     3 FUNC    GLOBAL DEFAULT   14 mcexec_sendsig_si_signo_bridge
+   337: 000000000001b2e0    21 FUNC    GLOBAL DEFAULT   14 set_bit
+   338: 0000000000008ee0    94 FUNC    GLOBAL DEFAULT   14 act_setfsgid
+   339: 00000000000100c0    27 FUNC    GLOBAL DEFAULT   14 mcexec_kill_thread_not_found_bridge
+   340: 0000000000014cf0  1071 FUNC    GLOBAL DEFAULT   14 mcexec_parse_proc_task_ids_result
+   341: 0000000000011ce0    55 FUNC    GLOBAL DEFAULT   14 mcexec_numa_all_body
+   342: 0000000000009e10   301 FUNC    GLOBAL DEFAULT   14 init_worker_threads
+   343: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND calloc@GLIBC_2.2.5
+   344: 000000000000d130   367 FUNC    GLOBAL DEFAULT   14 mcexec_copy_path_result
+   345: 0000000000029330     8 OBJECT  GLOBAL DEFAULT   24 altroot
+   346: 0000000000027000     0 NOTYPE  GLOBAL DEFAULT   23 __data_start
+   347: 000000000001ab70   182 FUNC    GLOBAL DEFAULT   14 print_flat
+   348: 000000000000d520    16 FUNC    GLOBAL DEFAULT   14 mcexec_cred_get_bridge
+   349: 0000000000015b70    95 FUNC    GLOBAL DEFAULT   14 mcexec_path_access_bridge
+   350: 000000000000d620    59 FUNC    GLOBAL DEFAULT   14 mcexec_debug_mlock_log_bridge
+   351: 00000000000139e0    18 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_list_add_body
+   352: 000000000000b660   301 FUNC    GLOBAL DEFAULT   14 mcexec_add_env_list_result
+   353: 00000000000187c0    22 FUNC    GLOBAL DEFAULT   14 mcexec_util_thread_missing_desc_bridge
+   354: 0000000000004c80    30 FUNC    GLOBAL DEFAULT   14 mcexec_partition_get_cpuset_failed_bridge
+   355: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND strcmp@GLIBC_2.2.5
+   356: 0000000000018010    16 FUNC    GLOBAL DEFAULT   14 mcexec_syscall_should_log_result
+   357: 0000000000010620    50 FUNC    GLOBAL DEFAULT   14 mcexec_load_desc_zero_length_bridge
+   358: 0000000000012a40  1654 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_addfd_prepare_result
+   359: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND signal@GLIBC_2.2.5
+   360: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND readlinkat@GLIBC_2.4
+   361: 000000000000f640    10 FUNC    GLOBAL DEFAULT   14 mcexec_init_sigaction_set_master_tid_bridge
+   362: 000000000000d7d0     4 FUNC    GLOBAL DEFAULT   14 mcexec_desc_cpu_bridge
+   363: 0000000000017430    78 FUNC    GLOBAL DEFAULT   14 mcexec_search_env_list_result
+   364: 0000000000000000     0 OBJECT  GLOBAL DEFAULT  UND optarg@GLIBC_2.2.5
+   365: 000000000000d070   180 FUNC    GLOBAL DEFAULT   14 mcexec_copy_dirents_result
+   366: 000000000000dcc0     8 FUNC    GLOBAL DEFAULT   14 mcexec_dirent_is64_body
+   367: 0000000000009cd0     5 FUNC    GLOBAL DEFAULT   14 get_syscall_number
+   368: 000000000000ee20    13 FUNC    GLOBAL DEFAULT   14 mcexec_fork_sync_lock_bridge
+   369: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND fprintf@GLIBC_2.2.5
+   370: 00000000000045d0    28 FUNC    GLOBAL DEFAULT   14 mcexec_load_desc_interp_not_found_bridge
+   371: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pthread_spin_unlock@GLIBC_2.2.5
+   372: 0000000000015e00    21 FUNC    GLOBAL DEFAULT   14 mcexec_path_is_absolute_result
+   373: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND syscall@GLIBC_2.2.5
+   374: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND sigemptyset@GLIBC_2.2.5
+   375: 000000000000da30     8 FUNC    GLOBAL DEFAULT   14 mcexec_desc_set_interp_align_bridge
+   376: 000000000000ed90   129 FUNC    GLOBAL DEFAULT   14 mcexec_fork_sync_complete_result
+   377: 0000000000010f80    24 FUNC    GLOBAL DEFAULT   14 mcexec_main_get_cpu_bridge
+   378: 000000000000fd50   735 FUNC    GLOBAL DEFAULT   14 mcexec_join_path_result
+   379: 00000000000108f0  1601 FUNC    GLOBAL DEFAULT   14 mcexec_main_body
+   380: 000000000000d570    31 FUNC    GLOBAL DEFAULT   14 mcexec_cred_setregid_bridge
+   381: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND feof@GLIBC_2.2.5
+   382: 0000000000008fd0   122 FUNC    GLOBAL DEFAULT   14 act_setgid
+   383: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND __gmon_start__
+   384: 000000000000b7a0   719 FUNC    GLOBAL DEFAULT   14 mcexec_apply_desc_runtime_body
+   385: 000000000000f810   733 FUNC    GLOBAL DEFAULT   14 mcexec_is_proc_task_leaf_path_result
+   386: 000000000000e730     6 FUNC    GLOBAL DEFAULT   14 mcexec_find_libdir_pclose_bridge
+   387: 00000000000100e0    10 FUNC    GLOBAL DEFAULT   14 mcexec_kill_thread_pthread_kill_bridge
+   388: 000000000000eec0    22 FUNC    GLOBAL DEFAULT   14 mcexec_get_thp_disable_prctl_bridge
+   389: 0000000000008e50   135 FUNC    GLOBAL DEFAULT   14 act_sched_setaffinity
+   390: 0000000000010380    22 FUNC    GLOBAL DEFAULT   14 mcexec_ld_preload_setenv_failed_bridge
+   391: 000000000000e0d0    50 FUNC    GLOBAL DEFAULT   14 mcexec_execve1_transfer_ok_bridge
+   392: 0000000000013970    45 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_getdents_upper_small_bridge
+   393: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND strtol@GLIBC_2.2.5
+   394: 0000000000000000     0 OBJECT  GLOBAL DEFAULT  UND environ@GLIBC_2.2.5
+   395: 00000000000046d0    44 FUNC    GLOBAL DEFAULT   14 mcexec_load_elfmag_mismatch_bridge
+   396: 000000000001b80e     0 NOTYPE  GLOBAL DEFAULT   14 compare_and_swap_int
+   397: 0000000000027008     0 OBJECT  GLOBAL HIDDEN    23 __dso_handle
+   398: 00000000000174e0    10 FUNC    GLOBAL DEFAULT   14 mcexec_setfsuid_needs_cred_result
+   399: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND memcpy@GLIBC_2.14
+   400: 0000000000010f40    16 FUNC    GLOBAL DEFAULT   14 mcexec_main_cpu_alloc_size_bridge
+   401: 0000000000012a20    19 FUNC    GLOBAL DEFAULT   14 mcexec_opendev_query_result_bridge
+   402: 000000000000d540    11 FUNC    GLOBAL DEFAULT   14 mcexec_cred_setfsuid_bridge
+   403: 000000000000df80    10 FUNC    GLOBAL DEFAULT   14 mcexec_execve1_enable_vdso_bridge
+   404: 0000000000015a80    49 FUNC    GLOBAL DEFAULT   14 mcexec_partition_numa_run_warning_bridge
+   405: 000000000000ce60    20 FUNC    GLOBAL DEFAULT   14 mcexec_close_plan_result
+   406: 000000000001c000     4 OBJECT  GLOBAL DEFAULT   16 _IO_stdin_used
+   407: 000000000000c590    13 FUNC    GLOBAL DEFAULT   14 mcexec_atobytes_set_errno_bridge
+   408: 00000000000089a0   102 FUNC    GLOBAL DEFAULT   14 act_perf_event_open
+   409: 0000000000007080   248 FUNC    GLOBAL DEFAULT   14 act_exit
+   410: 00000000000272c8     8 OBJECT  GLOBAL DEFAULT   23 straight_map_threshold
+   411: 000000000000db60    63 FUNC    GLOBAL DEFAULT   14 mcexec_destroy_env_list_result
+   412: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND prctl@GLIBC_2.2.5
+   413: 00000000000045a0    33 FUNC    GLOBAL DEFAULT   14 mcexec_load_desc_getcwd_failed_bridge
+   414: 0000000000011140    23 FUNC    GLOBAL DEFAULT   14 mcexec_main_next_option_bridge
+   415: 0000000000004bf0    45 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_getdents_offset_too_large_bridge
+   416: 0000000000004fb0    33 FUNC    GLOBAL DEFAULT   14 mcexec_wait4_error_bridge
+   417: 000000000000d4d0    16 FUNC    GLOBAL DEFAULT   14 mcexec_create_worker_thread_next_cpu_bridge
+   418: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND kill@GLIBC_2.2.5
+   419: 0000000000029480     8 OBJECT  GLOBAL DEFAULT   24 mpol_bind_nodes
+   420: 0000000000010f50    36 FUNC    GLOBAL DEFAULT   14 mcexec_main_flush_bridge
+   421: 0000000000029524     4 OBJECT  GLOBAL DEFAULT   24 uti_use_last_cpu
+   422: 0000000000004cc0    44 FUNC    GLOBAL DEFAULT   14 mcexec_reduce_stack_execv_failed_bridge
+   423: 0000000000009540   113 FUNC    GLOBAL DEFAULT   14 act_sigprocmask
+   424: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND fileno@GLIBC_2.2.5
+   425: 0000000000012a10    16 FUNC    GLOBAL DEFAULT   14 mcexec_opendev_query_buildid_bridge
+   426: 0000000000004360    33 FUNC    GLOBAL DEFAULT   14 mcexec_gettid_transfer_error_bridge
+   427: 0000000000015120   939 FUNC    GLOBAL DEFAULT   14 mcexec_parse_rlimit_stack_env_result
+   428: 000000000000d950    62 FUNC    GLOBAL DEFAULT   14 mcexec_desc_publish_runtime_flags_bridge
+   429: 0000000000018a10  2933 FUNC    GLOBAL DEFAULT   14 overlay_blacklist
+   430: 0000000000007180   320 FUNC    GLOBAL DEFAULT   14 act_faccessat
+   431: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __xstat@GLIBC_2.2.5
+   432: 000000000000d670    65 FUNC    GLOBAL DEFAULT   14 mcexec_default_thread_count_result
+   433: 0000000000004d50    43 FUNC    GLOBAL DEFAULT   14 mcexec_reduce_stack_setenv_failed_bridge
+   434: 000000000000e750    19 FUNC    GLOBAL DEFAULT   14 mcexec_find_libdir_readlink_bridge
+   435: 000000000001b3c0    19 FUNC    GLOBAL DEFAULT   14 tgkill
+   436: 0000000000029398    32 OBJECT  GLOBAL DEFAULT   24 init_ready
+   437: 0000000000011210    45 FUNC    GLOBAL DEFAULT   14 mcexec_main_numa_node_set_cpu_bridge
+   438: 000000000000d820     4 FUNC    GLOBAL DEFAULT   14 mcexec_desc_num_sections_bridge
+   439: 0000000000010800    99 FUNC    GLOBAL DEFAULT   14 mcexec_lookup_lstat_errno_bridge
+   440: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pthread_mutex_unlock@GLIBC_2.2.5
+   441: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pause@GLIBC_2.2.5
+   442: 00000000000293f8   128 OBJECT  GLOBAL DEFAULT   24 mcexec_partition_cpu_set_storage
+   443: 000000000001b820   101 FUNC    GLOBAL DEFAULT   14 __libc_csu_init
+   444: 0000000000011290    11 FUNC    GLOBAL DEFAULT   14 mcexec_main_page_size_bridge
+   445: 000000000000d9e0    16 FUNC    GLOBAL DEFAULT   14 mcexec_desc_section_vaddr_bridge
+   446: 0000000000004d80    44 FUNC    GLOBAL DEFAULT   14 mcexec_reduce_stack_setrlimit_failed_bridge
+   447: 00000000000095c0   272 FUNC    GLOBAL DEFAULT   14 act_stat
+   448: 000000000000f7c0    17 FUNC    GLOBAL DEFAULT   14 mcexec_init_worker_threads_error_bridge
+   449: 0000000000015ae0    51 FUNC    GLOBAL DEFAULT   14 mcexec_partition_rank_log_bridge
+   450: 000000000001b805     0 NOTYPE  GLOBAL DEFAULT   14 compare_and_swap
+   451: 000000000001b8e0    25 FUNC    GLOBAL HIDDEN    14 fstatat
+   452: 0000000000017400    20 FUNC    GLOBAL DEFAULT   14 mcexec_sched_setaffinity_action_result
+   453: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND malloc@GLIBC_2.2.5
+   454: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND fflush@GLIBC_2.2.5
+   455: 000000000000f650   185 FUNC    GLOBAL DEFAULT   14 mcexec_init_stack_limit_body
+   456: 00000000000044e0    44 FUNC    GLOBAL DEFAULT   14 mcexec_load_cannot_read_ehdr_bridge
+   457: 00000000000160c0   111 FUNC    GLOBAL DEFAULT   14 mcexec_path_readlinkat_bridge
+   458: 0000000000004f80    34 FUNC    GLOBAL DEFAULT   14 mcexec_util_thread_switch_returned_bridge
+   459: 00000000000293e8     4 OBJECT  GLOBAL DEFAULT   24 master_tid
+   460: 0000000000004b30    34 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_fd_path_truncated_bridge
+   461: 00000000000068d0   128 FUNC    GLOBAL DEFAULT   14 act_close
+   462: 0000000000011240    24 FUNC    GLOBAL DEFAULT   14 mcexec_main_numa_node_zero_bridge
+   463: 00000000000096d0   100 FUNC    GLOBAL DEFAULT   14 act_swapout_unavailable
+   464: 0000000000004960    30 FUNC    GLOBAL DEFAULT   14 mcexec_main_prepare_image_failed_bridge
+   465: 0000000000010490    50 FUNC    GLOBAL DEFAULT   14 mcexec_load_desc_open_failed_bridge
+   466: 00000000000043e0    27 FUNC    GLOBAL DEFAULT   14 mcexec_linux_spawn_alloc_argv_failed_bridge
+   467: 0000000000009270   122 FUNC    GLOBAL DEFAULT   14 act_setuid
+   468: 0000000000015b40    45 FUNC    GLOBAL DEFAULT   14 mcexec_partition_sched_setaffinity_warning_bridge
+   469: 000000000001b3a0    19 FUNC    GLOBAL DEFAULT   14 test_bit
+   470: 0000000000010410    50 FUNC    GLOBAL DEFAULT   14 mcexec_load_desc_header_failed_bridge
+   471: 00000000000136c0     8 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_getdents_linux_dirents_bridge
+   472: 0000000000010140     3 FUNC    GLOBAL DEFAULT   14 mcexec_main_bind_mount_bridge
+   473: 0000000000015ac0    10 FUNC    GLOBAL DEFAULT   14 mcexec_partition_publish_cpu_rank_bridge
+   474: 000000000000c260   387 FUNC    GLOBAL DEFAULT   14 mcexec_apply_partitioned_cpu_body
+   475: 0000000000010660    46 FUNC    GLOBAL DEFAULT   14 mcexec_load_finalize_desc_bridge
+   476: 0000000000029528     0 NOTYPE  GLOBAL DEFAULT   24 _end
+   477: 000000000000d400    11 FUNC    GLOBAL DEFAULT   14 mcexec_create_worker_thread_alloc_bridge
+   478: 0000000000015ad0     7 FUNC    GLOBAL DEFAULT   14 mcexec_partition_publish_rank_bridge
+   479: 0000000000004840   128 FUNC    GLOBAL DEFAULT   14 mcexec_main_invalid_option_bridge
+   480: 00000000000103a0    13 FUNC    GLOBAL DEFAULT   14 mcexec_ld_preload_unsetenv_bridge
+   481: 000000000000a3e0   970 FUNC    GLOBAL DEFAULT   14 load_elf_desc
+   482: 0000000000010160     6 FUNC    GLOBAL DEFAULT   14 mcexec_ld_preload_getenv_bridge
+   483: 000000000000d9d0    16 FUNC    GLOBAL DEFAULT   14 mcexec_desc_section_remote_pa_bridge
+   484: 0000000000004fe0    47 FUNC    GLOBAL DEFAULT   14 _start
+   485: 0000000000004900    33 FUNC    GLOBAL DEFAULT   14 mcexec_main_no_cpu_bridge
+   486: 0000000000006330   272 FUNC    GLOBAL DEFAULT   14 act_access
+   487: 00000000000050d0     4 FUNC    GLOBAL DEFAULT   14 _RNvCsiGVaDesi5rv_7___rustc17rust_begin_unwind
+   488: 0000000000017420     6 FUNC    GLOBAL DEFAULT   14 mcexec_sched_setaffinity_util_bridge
+   489: 00000000000294b0     4 OBJECT  GLOBAL DEFAULT   24 nr_processes
+   490: 00000000000073f0   106 FUNC    GLOBAL DEFAULT   14 act_getdents
+   491: 00000000000137a0    53 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_getdents_lower_bridge
+   492: 000000000000d660    12 FUNC    GLOBAL DEFAULT   14 mcexec_default_heap_extension_result
+   493: 0000000000027018     8 OBJECT  GLOBAL DEFAULT   23 heap_extension
+   494: 0000000000010870    52 FUNC    GLOBAL DEFAULT   14 mcexec_lookup_stat_error_bridge
+   495: 00000000000294a0     4 OBJECT  GLOBAL DEFAULT   24 n_threads
+   496: 0000000000013920     8 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_getdents_pathlen_bridge
+   497: 0000000000009ca0     5 FUNC    GLOBAL DEFAULT   14 get_syscall_arg6
+   498: 000000000000c980    16 FUNC    GLOBAL DEFAULT   14 mcexec_clone_alloc_container_bridge
+   499: 0000000000004e40    33 FUNC    GLOBAL DEFAULT   14 mcexec_transfer_seek_error_bridge
+   500: 00000000000125e0   939 FUNC    GLOBAL DEFAULT   14 mcexec_opendev_body
+   501: 00000000000294c0     4 OBJECT  GLOBAL DEFAULT   24 overlay_fd_lock
+   502: 0000000000029358     8 OBJECT  GLOBAL DEFAULT   24 exec_path
+   503: 0000000000004de0    42 FUNC    GLOBAL DEFAULT   14 mcexec_search_file_path_too_long_bridge
+   504: 000000000000b610    36 FUNC    GLOBAL DEFAULT   14 mcexec_add_env_list_body
+   505: 0000000000009c60     5 FUNC    GLOBAL DEFAULT   14 get_syscall_arg2
+   506: 000000000000e710     6 FUNC    GLOBAL DEFAULT   14 mcexec_fork_sync_free_bridge
+   507: 0000000000014c40    98 FUNC    GLOBAL DEFAULT   14 mcexec_parse_int_base0_full_result
+   508: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND fseek@GLIBC_2.2.5
+   509: 0000000000009c80     5 FUNC    GLOBAL DEFAULT   14 get_syscall_arg4
+   510: 0000000000011510    10 FUNC    GLOBAL DEFAULT   14 mcexec_main_publish_mcosid_bridge
+   511: 000000000000f800    13 FUNC    GLOBAL DEFAULT   14 mcexec_init_worker_threads_wait_bridge
+   512: 0000000000011f70    51 FUNC    GLOBAL DEFAULT   14 mcexec_numa_node_cpu_log_bridge
+   513: 000000000000dd70    32 FUNC    GLOBAL DEFAULT   14 mcexec_dma_mmap_bridge
+   514: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND sem_post@GLIBC_2.2.5
+   515: 0000000000010150    10 FUNC    GLOBAL DEFAULT   14 mcexec_ld_preload_enable_uti_bridge
+   516: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND ptrace@GLIBC_2.2.5
+   517: 000000000000df90    52 FUNC    GLOBAL DEFAULT   14 mcexec_execve1_load_desc_ok_bridge
+   518: 00000000000129b0     6 FUNC    GLOBAL DEFAULT   14 mcexec_opendev_close_bridge
+   519: 000000000000d8a0    18 FUNC    GLOBAL DEFAULT   14 mcexec_desc_publish_env_bridge
+   520: 00000000000173b0    18 FUNC    GLOBAL DEFAULT   14 mcexec_reduce_stack_setenv_bridge
+   521: 000000000000d880    22 FUNC    GLOBAL DEFAULT   14 mcexec_desc_publish_args_cpu_bridge
+   522: 000000000000d5f0    31 FUNC    GLOBAL DEFAULT   14 mcexec_cred_setuid_bridge
+   523: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND setrlimit@GLIBC_2.2.5
+   524: 0000000000009ba0    72 FUNC    GLOBAL DEFAULT   14 do_syscall_load
+   525: 0000000000004d20    36 FUNC    GLOBAL DEFAULT   14 mcexec_reduce_stack_readlink_failed_bridge
+   526: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND setreuid@GLIBC_2.2.5
+   527: 000000000000dc00    12 FUNC    GLOBAL DEFAULT   14 mcexec_dirent64_off_result
+   528: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND setregid@GLIBC_2.2.5
+   529: 00000000000043c0    32 FUNC    GLOBAL DEFAULT   14 mcexec_ld_preload_line_too_long_bridge
+   530: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND realloc@GLIBC_2.2.5
+   531: 0000000000015b20    20 FUNC    GLOBAL DEFAULT   14 mcexec_partition_sched_setaffinity_bridge
+   532: 0000000000015d50   163 FUNC    GLOBAL DEFAULT   14 mcexec_path_has_libuti_result
+   533: 000000000000da00     5 FUNC    GLOBAL DEFAULT   14 mcexec_desc_set_entry_bridge
+   534: 000000000000e150    54 FUNC    GLOBAL DEFAULT   14 mcexec_execve2_transfer_desc_ok_bridge
+   535: 000000000001b300     5 FUNC    GLOBAL DEFAULT   14 set_syscall_arg1
+   536: 00000000000272d0     0 NOTYPE  GLOBAL DEFAULT   24 __bss_start
+   537: 000000000000e1a0    52 FUNC    GLOBAL DEFAULT   14 mcexec_exit_debug_bridge
+   538: 000000000001b320     5 FUNC    GLOBAL DEFAULT   14 set_syscall_arg3
+   539: 00000000000133c0     6 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_find_libdir_bridge
+   540: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pthread_barrier_init@GLIBC_2.2.5
+   541: 000000000000da00     5 FUNC    GLOBAL DEFAULT   14 set_syscall_arg5
+   542: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND munmap@GLIBC_2.2.5
+   543: 000000000000dcd0    78 FUNC    GLOBAL DEFAULT   14 mcexec_dirent_rewrite_offsets_result
+   544: 0000000000013740     5 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_getdents_linux_path_bridge
+   545: 000000000000e740    13 FUNC    GLOBAL DEFAULT   14 mcexec_find_libdir_popen_bridge
+   546: 0000000000010500    49 FUNC    GLOBAL DEFAULT   14 mcexec_load_desc_sections_bridge
+   547: 000000000000b510     6 FUNC    GLOBAL DEFAULT   14 main
+   548: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND numa_run_on_node@libnuma_1.1
+   549: 0000000000018860   178 FUNC    GLOBAL DEFAULT   14 mcexec_waitid_pid_bridge
+   550: 00000000000103b0    58 FUNC    GLOBAL DEFAULT   14 mcexec_load_alloc_desc_bridge
+   551: 000000000000d9c0    16 FUNC    GLOBAL DEFAULT   14 mcexec_desc_section_offset_bridge
+   552: 0000000000011520    34 FUNC    GLOBAL DEFAULT   14 mcexec_main_publish_page_altroot_bridge
+   553: 00000000000129e0    10 FUNC    GLOBAL DEFAULT   14 mcexec_opendev_mcosid_bridge
+   554: 0000000000029520     4 OBJECT  GLOBAL DEFAULT   24 uti_thread_rank
+   555: 00000000000293f0     8 OBJECT  GLOBAL DEFAULT   24 mcexec_flags
+   556: 000000000000dd20    11 FUNC    GLOBAL DEFAULT   14 mcexec_dma_mlock_bridge
+   557: 0000000000010030   142 FUNC    GLOBAL DEFAULT   14 mcexec_kill_thread_bridge
+   558: 0000000000004980    33 FUNC    GLOBAL DEFAULT   14 mcexec_main_reduce_stack_failed_bridge
+   559: 0000000000008d90   180 FUNC    GLOBAL DEFAULT   14 act_rt_sigprocmask
+   560: 000000000000d500    25 FUNC    GLOBAL DEFAULT   14 mcexec_create_worker_thread_publish_bridge
+   561: 000000000001b380     5 FUNC    GLOBAL DEFAULT   14 set_syscall_return
+   562: 00000000000136d0   103 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_getdents_linux_fd_bridge
+   563: 0000000000007cb0   436 FUNC    GLOBAL DEFAULT   14 act_main_loop_body
+   564: 000000000000d7c0    12 FUNC    GLOBAL DEFAULT   14 mcexec_desc_clear_flags_bridge
+   565: 0000000000004510    44 FUNC    GLOBAL DEFAULT   14 mcexec_load_cannot_read_interp_bridge
+   566: 000000000001b8c0    20 FUNC    GLOBAL HIDDEN    14 __lstat
+   567: 0000000000029490     4 OBJECT  GLOBAL DEFAULT   24 mpol_no_stack
+   568: 00000000000047f0    28 FUNC    GLOBAL DEFAULT   14 mcexec_lookup_not_found_bridge
+   569: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND memmove@GLIBC_2.2.5
+   570: 0000000000004280    27 FUNC    GLOBAL DEFAULT   14 mcexec_exit_report_signal_bridge
+   571: 0000000000004ea0    46 FUNC    GLOBAL DEFAULT   14 mcexec_util_thread_attr_error_bridge
+   572: 00000000000174f0   533 FUNC    GLOBAL DEFAULT   14 mcexec_setup_cpu_topology_body
+   573: 0000000000007710   223 FUNC    GLOBAL DEFAULT   14 act_kill
+   574: 000000000000e230    49 FUNC    GLOBAL DEFAULT   14 mcexec_exit_report_status_bridge
+   575: 00000000000138a0    58 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_getdents_mck_size_log_bridge
+   576: 0000000000011ee0    49 FUNC    GLOBAL DEFAULT   14 mcexec_numa_local_cpu_log_bridge
+   577: 000000000000dff0    11 FUNC    GLOBAL DEFAULT   14 mcexec_execve1_stack_premap_bridge
+   578: 000000000000d5b0    31 FUNC    GLOBAL DEFAULT   14 mcexec_cred_setresuid_bridge
+   579: 0000000000029368    40 OBJECT  GLOBAL DEFAULT   24 fork_sync_mutex
+   580: 0000000000018820    56 FUNC    GLOBAL DEFAULT   14 mcexec_util_thread_worker_tid_log_bridge
+   581: 00000000000294ac     4 OBJECT  GLOBAL DEFAULT   24 no_bind_ikc_map
+   582: 0000000000009cf0     8 FUNC    GLOBAL DEFAULT   14 get_syscall_rip
+   583: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND setgid@GLIBC_2.2.5
+   584: 000000000000fb90    12 FUNC    GLOBAL DEFAULT   14 mcexec_join_all_threads_join_bridge
+   585: 0000000000004a70    31 FUNC    GLOBAL DEFAULT   14 mcexec_opendev_buildid_mismatch_bridge
+   586: 000000000002948c     4 OBJECT  GLOBAL DEFAULT   24 mpol_no_heap
+   587: 0000000000018800    17 FUNC    GLOBAL DEFAULT   14 mcexec_util_thread_worker_error_bridge
+   588: 00000000000292e0    64 OBJECT  GLOBAL DEFAULT   24 dev
+   589: 00000000000090d0   130 FUNC    GLOBAL DEFAULT   14 act_setresgid
+   590: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND waitpid@GLIBC_2.2.5
+   591: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND sem_init@GLIBC_2.2.5
+   592: 0000000000016fa0    49 FUNC    GLOBAL DEFAULT   14 mcexec_process_thread_plan_flib_log_bridge
+   593: 000000000000dea0    56 FUNC    GLOBAL DEFAULT   14 mcexec_do_generic_syscall_done_bridge
+   594: 0000000000004070    33 FUNC    GLOBAL DEFAULT   14 mcexec_act_signalfd4_write_error_bridge
+   595: 000000000000e720     6 FUNC    GLOBAL DEFAULT   14 mcexec_find_libdir_getline_bridge
+   596: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND sem_trywait@GLIBC_2.2.5
+   597: 000000000000d3e0    24 FUNC    GLOBAL DEFAULT   14 mcexec_create_ppd_bridge
+   598: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND setfsgid@GLIBC_2.2.5
+   599: 00000000000162d0   115 FUNC    GLOBAL DEFAULT   14 mcexec_post_option_setup_body
+   600: 0000000000004e70    33 FUNC    GLOBAL DEFAULT   14 mcexec_transfer_short_error_bridge
+   601: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND open@GLIBC_2.2.5
+   602: 0000000000010170   482 FUNC    GLOBAL DEFAULT   14 mcexec_ld_preload_init_body
+   603: 0000000000016050   110 FUNC    GLOBAL DEFAULT   14 mcexec_path_readlink_bridge
+   604: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND access@GLIBC_2.2.5
+   605: 0000000000011070    52 FUNC    GLOBAL DEFAULT   14 mcexec_main_loop_log_syscall_bridge
+   606: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND popen@GLIBC_2.2.5
+   607: 0000000000013670    77 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_getdents_hide_orig_bridge
+   608: 00000000000165c0    50 FUNC    GLOBAL DEFAULT   14 mcexec_print_flat_entry_bridge
+   609: 0000000000029344     4 OBJECT  GLOBAL DEFAULT   24 disable_sched_yield
+   610: 000000000000d4e0    22 FUNC    GLOBAL DEFAULT   14 mcexec_create_worker_thread_pthread_create_bridge
+   611: 000000000000cf00    45 FUNC    GLOBAL DEFAULT   14 mcexec_collect_default_envs_body
+   612: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND fopen@GLIBC_2.2.5
+   613: 0000000000015e90    75 FUNC    GLOBAL DEFAULT   14 mcexec_path_is_single_component_exec_result
+   614: 00000000000187e0    29 FUNC    GLOBAL DEFAULT   14 mcexec_util_thread_switch_ctx_bridge
+   615: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND sigdelset@GLIBC_2.2.5
+   616: 00000000000294a4     4 OBJECT  GLOBAL DEFAULT   24 ncpu
+   617: 0000000000004160    28 FUNC    GLOBAL DEFAULT   14 mcexec_execve1_transfer_alloc_failed_bridge
+   618: 0000000000029338     8 OBJECT  GLOBAL DEFAULT   24 cpu_set_size
+   619: 0000000000004b10    32 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_addfd_path_too_long_bridge
+   620: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND perror@GLIBC_2.2.5
+   621: 0000000000010150    10 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_enable_uti_bridge
+   622: 0000000000015bf0   109 FUNC    GLOBAL DEFAULT   14 mcexec_path_faccessat_bridge
+   623: 000000000000d870     4 FUNC    GLOBAL DEFAULT   14 mcexec_desc_pid_bridge
+   624: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND sysconf@GLIBC_2.2.5
+   625: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pthread_join@GLIBC_2.2.5
+   626: 00000000000046a0    33 FUNC    GLOBAL DEFAULT   14 mcexec_load_desc_strdup_failed_bridge
+   627: 00000000000049b0    34 FUNC    GLOBAL DEFAULT   14 mcexec_main_stack_parse_failed_bridge
+   628: 0000000000004670    33 FUNC    GLOBAL DEFAULT   14 mcexec_load_desc_parse_interp_failed_bridge
+   629: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND posix_spawn@GLIBC_2.15
+   630: 000000000000b790    11 FUNC    GLOBAL DEFAULT   14 mcexec_altroot_bridge
+   631: 0000000000029390     8 OBJECT  GLOBAL DEFAULT   24 fork_sync_top
+   632: 00000000000047c0    33 FUNC    GLOBAL DEFAULT   14 mcexec_lookup_array_too_small_bridge
+   633: 0000000000014920   792 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_uti_path_result
+   634: 0000000000011580    53 FUNC    GLOBAL DEFAULT   14 mcexec_main_stack_debug_bridge
+   635: 000000000001b6bb     0 NOTYPE  GLOBAL DEFAULT   14 switch_ctx
+   636: 0000000000014470  1131 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_sys_path_result
+   637: 0000000000009a00    98 FUNC    GLOBAL DEFAULT   14 close_cloexec_fds
+   638: 000000000000e710     6 FUNC    GLOBAL DEFAULT   14 mcexec_find_libdir_free_bridge
+   639: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND unsetenv@GLIBC_2.2.5
+   640: 0000000000009370   354 FUNC    GLOBAL DEFAULT   14 act_signalfd4
+   641: 000000000000dba0    75 FUNC    GLOBAL DEFAULT   14 mcexec_destroy_local_environ_result
+   642: 000000000000ed50    53 FUNC    GLOBAL DEFAULT   14 mcexec_flib_affinity_log_bridge
+   643: 0000000000016350   160 FUNC    GLOBAL DEFAULT   14 mcexec_post_options_plan_result
+   644: 000000000001b090   582 FUNC    GLOBAL DEFAULT   14 sendsig
+   645: 000000000000ce00     6 FUNC    GLOBAL DEFAULT   14 mcexec_clone_fork_bridge
+   646: 0000000000004a90    28 FUNC    GLOBAL DEFAULT   14 mcexec_opendev_open_error_bridge
+   647: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND strtoul@GLIBC_2.2.5
+   648: 0000000000016190    22 FUNC    GLOBAL DEFAULT   14 mcexec_perf_event_open_bridge
+   649: 0000000000012a00    10 FUNC    GLOBAL DEFAULT   14 mcexec_opendev_publish_fd_bridge
+   650: 000000000000dc10    13 FUNC    GLOBAL DEFAULT   14 mcexec_dirent32_reclen_result
+   651: 0000000000029350     4 OBJECT  GLOBAL DEFAULT   24 enable_uti
+   652: 00000000000106e0    72 FUNC    GLOBAL DEFAULT   14 mcexec_load_publish_main_section_bridge
+   653: 0000000000009c90     5 FUNC    GLOBAL DEFAULT   14 mcexec_desc_entry_bridge
+   654: 000000000001b350    20 FUNC    GLOBAL DEFAULT   14 set_syscall_args
+   655: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND getline@GLIBC_2.2.5
+   656: 000000000001a0e0  2440 FUNC    GLOBAL DEFAULT   14 overlay_path
+   657: 00000000000129d0     6 FUNC    GLOBAL DEFAULT   14 mcexec_opendev_dev_size_bridge
+   658: 00000000000104d0    39 FUNC    GLOBAL DEFAULT   14 mcexec_load_desc_publish_exec_path_bridge
+   659: 000000000000e200    34 FUNC    GLOBAL DEFAULT   14 mcexec_exit_replay_signal_bridge
+   660: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND getpgid@GLIBC_2.2.5
+   661: 000000000000dc00    12 FUNC    GLOBAL DEFAULT   14 mcexec_dirent32_off_result
+   662: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pread@GLIBC_2.2.5
+   663: 0000000000004430    33 FUNC    GLOBAL DEFAULT   14 mcexec_linux_spawn_invalid_arg_bridge
+   664: 00000000000161b0   274 FUNC    GLOBAL DEFAULT   14 mcexec_plan_process_threads_result
+   665: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND getxattr@GLIBC_2.3
+   666: 000000000000dc10    13 FUNC    GLOBAL DEFAULT   14 mcexec_dirent64_reclen_result
+   667: 000000000000d5d0    31 FUNC    GLOBAL DEFAULT   14 mcexec_cred_setreuid_bridge
+   668: 0000000000006a60  1004 FUNC    GLOBAL DEFAULT   14 act_execve_phase1
+   669: 0000000000013280    52 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_considering_bridge
+   670: 00000000000139a0    50 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_glued_bridge
+   671: 0000000000006550   891 FUNC    GLOBAL DEFAULT   14 act_clone_start
+   672: 00000000000100f0    57 FUNC    GLOBAL DEFAULT   14 mcexec_ld_preload_debug_bridge
+   673: 00000000000075f0   286 FUNC    GLOBAL DEFAULT   14 act_getxattr
+   674: 00000000000163f0   197 FUNC    GLOBAL DEFAULT   14 mcexec_prepare_main_desc_body
+   675: 000000000001aa70   255 FUNC    GLOBAL DEFAULT   14 print_desc
+   676: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pipe2@GLIBC_2.9
+   677: 0000000000010fc0   149 FUNC    GLOBAL DEFAULT   14 mcexec_main_load_stack_rlimit_bridge
+   678: 0000000000004100    40 FUNC    GLOBAL DEFAULT   14 mcexec_create_ppd_failed_bridge
+   679: 00000000000138e0    50 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_getdents_offset_bridge
+   680: 0000000000000000     0 OBJECT  GLOBAL DEFAULT  UND __environ@GLIBC_2.2.5
+   681: 000000000000e270   130 FUNC    GLOBAL DEFAULT   14 mcexec_exit_status_plan_result
+   682: 0000000000011bf0    38 FUNC    GLOBAL DEFAULT   14 mcexec_mpol_flags_result
+   683: 0000000000018060   664 FUNC    GLOBAL DEFAULT   14 mcexec_usage_line_result
+   684: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND getppid@GLIBC_2.2.5
+   685: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND exit@GLIBC_2.2.5
+   686: 000000000000fb80    11 FUNC    GLOBAL DEFAULT   14 mcexec_kill_thread_head_bridge
+   687: 0000000000009ce0     5 FUNC    GLOBAL DEFAULT   14 get_syscall_return
+   688: 0000000000010580   157 FUNC    GLOBAL DEFAULT   14 mcexec_load_desc_stat_size_bridge
+   689: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND fwrite@GLIBC_2.2.5
+   690: 00000000000042a0    27 FUNC    GLOBAL DEFAULT   14 mcexec_find_libdir_objdump_failed_bridge
+   691: 00000000000272d0     0 OBJECT  GLOBAL HIDDEN    23 __TMC_END__
+   692: 0000000000014400   103 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_stat_exists_bridge
+   693: 0000000000004130    33 FUNC    GLOBAL DEFAULT   14 mcexec_create_worker_thread_alloc_error_bridge
+   694: 000000000000dd90    53 FUNC    GLOBAL DEFAULT   14 mcexec_dma_mmap_failed_bridge
+   695: 00000000000174c0     4 FUNC    GLOBAL DEFAULT   14 mcexec_sendsig_si_pid_bridge
+   696: 00000000000112a0   598 FUNC    GLOBAL DEFAULT   14 mcexec_main_personality_bridge
+   697: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND getrlimit@GLIBC_2.2.5
+   698: 00000000000173d0    35 FUNC    GLOBAL DEFAULT   14 mcexec_reduce_stack_setrlimit_bridge
+   699: 0000000000004610    33 FUNC    GLOBAL DEFAULT   14 mcexec_load_desc_open_exec_failed_bridge
+   700: 000000000001ac30   383 FUNC    GLOBAL DEFAULT   14 print_usage
+   701: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND _ITM_registerTMCloneTable
+   702: 000000000000d9f0     8 FUNC    GLOBAL DEFAULT   14 mcexec_desc_set_args_len_bridge
+   703: 000000000000dd30    53 FUNC    GLOBAL DEFAULT   14 mcexec_dma_mlock_failed_bridge
+   704: 000000000000d590    31 FUNC    GLOBAL DEFAULT   14 mcexec_cred_setresgid_bridge
+   705: 00000000000293b8     4 OBJECT  GLOBAL DEFAULT   24 ischild
+   706: 0000000000016540    59 FUNC    GLOBAL DEFAULT   14 mcexec_print_desc_section_bridge
+   707: 00000000000077f0   286 FUNC    GLOBAL DEFAULT   14 act_lgetxattr
+   708: 0000000000004250    33 FUNC    GLOBAL DEFAULT   14 mcexec_execve_invalid_phase_bridge
+   709: 000000000000e1f0     7 FUNC    GLOBAL DEFAULT   14 mcexec_exit_process_bridge
+   710: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND setuid@GLIBC_2.2.5
+   711: 0000000000013930    53 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_getdents_upper_bridge
+   712: 0000000000004930    33 FUNC    GLOBAL DEFAULT   14 mcexec_main_no_numa_node_bridge
+   713: 000000000000dfe0    12 FUNC    GLOBAL DEFAULT   14 mcexec_execve1_rlim_max_bridge
+   714: 0000000000004400    33 FUNC    GLOBAL DEFAULT   14 mcexec_linux_spawn_alloc_exec_path_failed_bridge
+   715: 00000000000115c0    68 FUNC    GLOBAL DEFAULT   14 mcexec_main_stack_publish_bridge
+   716: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND strdup@GLIBC_2.2.5
+   717: 0000000000011110    45 FUNC    GLOBAL DEFAULT   14 mcexec_main_loop_timeout_bridge
+   718: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND sem_destroy@GLIBC_2.2.5
+   719: 000000000000d7e0    60 FUNC    GLOBAL DEFAULT   14 mcexec_desc_mpol_log_bridge
+   720: 0000000000009870   363 FUNC    GLOBAL DEFAULT   14 atobytes
+   721: 000000000000ef60  1513 FUNC    GLOBAL DEFAULT   14 mcexec_getpath_execveat_prepare_result
+   722: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND strerror@GLIBC_2.2.5
+   723: 0000000000019590     6 FUNC    GLOBAL DEFAULT   14 overlay_delfd
+   724: 00000000000092f0   127 FUNC    GLOBAL DEFAULT   14 act_sigaction
+   725: 0000000000004540    33 FUNC    GLOBAL DEFAULT   14 mcexec_load_desc_alloc_exec_path_failed_bridge
+   726: 000000000000dfd0    11 FUNC    GLOBAL DEFAULT   14 mcexec_execve1_rlim_cur_bridge
+   727: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pthread_spin_lock@GLIBC_2.2.5
+   728: 0000000000009050   127 FUNC    GLOBAL DEFAULT   14 act_setregid
+   729: 000000000000eee0   113 FUNC    GLOBAL DEFAULT   14 mcexec_getpath_execveat_body
+   730: 000000000000e770   637 FUNC    GLOBAL DEFAULT   14 mcexec_finish_main_image_body
+   731: 0000000000011d20   444 FUNC    GLOBAL DEFAULT   14 mcexec_numa_local_body
+   732: 00000000000294d0     8 OBJECT  GLOBAL DEFAULT   24 page_size
+   733: 0000000000018000    13 FUNC    GLOBAL DEFAULT   14 mcexec_swapout_unavailable_bridge
+   734: 0000000000018780    57 FUNC    GLOBAL DEFAULT   14 mcexec_util_thread_desc_log_bridge
+   735: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND waitid@GLIBC_2.2.5
+   736: 000000000000da50   263 FUNC    GLOBAL DEFAULT   14 mcexec_desc_snapshot_rlimits_bridge
+   737: 0000000000004c20    37 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_readlink_fd_failed_bridge
+   738: 000000000000e000   193 FUNC    GLOBAL DEFAULT   14 mcexec_execve1_transfer_buffer_result
+   739: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND sleep@GLIBC_2.2.5
+   740: 0000000000010450    52 FUNC    GLOBAL DEFAULT   14 mcexec_load_desc_not_executable_bridge
+   741: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pthread_barrier_wait@GLIBC_2.2.5
+   742: 000000000000dc30   140 FUNC    GLOBAL DEFAULT   14 mcexec_dirent_buffer_contains_name_result
+   743: 0000000000015f00   110 FUNC    GLOBAL DEFAULT   14 mcexec_path_lgetxattr_bridge
+   744: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pthread_mutex_init@GLIBC_2.2.5
+   745: 00000000000137e0    45 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_getdents_lower_small_bridge
+   746: 0000000000015a70     6 FUNC    GLOBAL DEFAULT   14 mcexec_partition_numa_run_bridge
+   747: 0000000000000000     0 FUNC    WEAK   DEFAULT  UND __cxa_finalize@GLIBC_2.2.5
+   748: 00000000000154d0  1136 FUNC    GLOBAL DEFAULT   14 mcexec_parse_stack_arg_result
+   749: 00000000000168b0  1768 FUNC    GLOBAL DEFAULT   14 mcexec_proc_task_check_path_result
+   750: 0000000000012990     8 FUNC    GLOBAL DEFAULT   14 mcexec_opendev_buildid_bridge
+   751: 0000000000004700    38 FUNC    GLOBAL DEFAULT   14 mcexec_load_phdr_failed_bridge
+   752: 00000000000294c8     8 OBJECT  GLOBAL DEFAULT   24 page_mask
+   753: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND execv@GLIBC_2.2.5
+   754: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND fork@GLIBC_2.2.5
+   755: 0000000000013820   106 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_getdents_mck_fd_bridge
+   756: 000000000000bb10   316 FUNC    GLOBAL DEFAULT   14 mcexec_apply_main_stack_body
+   757: 0000000000004490    27 FUNC    GLOBAL DEFAULT   14 mcexec_linux_spawn_posix_spawn_failed_bridge
+   758: 000000000001adb0   722 FUNC    GLOBAL DEFAULT   14 search_file
+   759: 0000000000018320    13 FUNC    GLOBAL DEFAULT   14 mcexec_util_thread_barrier_wait_bridge
+   760: 0000000000013a00    30 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_list_del_body
+   761: 0000000000011260    11 FUNC    GLOBAL DEFAULT   14 mcexec_main_optarg_bridge
+   762: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pthread_mutex_lock@GLIBC_2.2.5
+   763: 0000000000015e20   108 FUNC    GLOBAL DEFAULT   14 mcexec_path_is_dev_xpmem_result
+   764: 00000000000173a0     6 FUNC    GLOBAL DEFAULT   14 mcexec_reduce_stack_execv_bridge
+   765: 00000000000044b0    33 FUNC    GLOBAL DEFAULT   14 mcexec_linux_spawn_strncpy_failed_bridge
+   766: 0000000000009bf0    79 FUNC    GLOBAL DEFAULT   14 do_syscall_return
+   767: 0000000000004f00    34 FUNC    GLOBAL DEFAULT   14 mcexec_util_thread_intercept_warning_bridge
+   768: 00000000000148e0    52 FUNC    GLOBAL DEFAULT   14 mcexec_overlay_trying_bridge
+   769: 000000000000fb80    11 FUNC    GLOBAL DEFAULT   14 mcexec_join_all_threads_head_bridge
+   770: 0000000000011760   520 FUNC    GLOBAL DEFAULT   14 mcexec_mapped_proc_task_parent_exists_body
+   771: 00000000000164c0    50 FUNC    GLOBAL DEFAULT   14 mcexec_print_desc_intro_bridge
+   772: 0000000000000000     0 OBJECT  GLOBAL DEFAULT  UND stderr@GLIBC_2.2.5
+   773: 0000000000011fc0   460 FUNC    GLOBAL DEFAULT   14 mcexec_objdump_rpath_cmd_result
+   774: 0000000000011280    15 FUNC    GLOBAL DEFAULT   14 mcexec_main_overlay_lock_init_bridge
+   775: 00000000000049e0    30 FUNC    GLOBAL DEFAULT   14 mcexec_main_start_image_failed_bridge

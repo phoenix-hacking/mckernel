@@ -1,0 +1,70 @@
+{
+  "schema": "mckernel.explicit-flag-preservation.source-only.v1",
+  "status": "FROZEN_MINIMAL_PRIVATE_SOURCE_PATCH_PENDING_F_TESTS_INDEPENDENT_REVIEW_ROOT_COMPOSITION",
+  "source_owner": "/root/scheduler_debug_data_review_high explicitflags_SOURCEonly",
+  "invocation": "20261110T044806Z-3ecbebf5",
+  "saved_root": "01a18bc3-e072-7810-9426-75101b0856c0",
+  "pinned_source": {
+    "commit": "ad526fc4e8484fced90265668486167566d7087d",
+    "path": "scripts/os_goal_service.py",
+    "sha256": "0768d2b28599e20d41734d30126e7cd8ecbb3a015d519c278ad593539eaedef3",
+    "git_blob_sha1": "6105c7aff29dc963f00fa49cc70d8384b20130b0",
+    "bytes": 19846,
+    "authority": "Rootprovidedfetchedparent96886/16pathcheckPASS; exactlocalgitshowblobread, no tree/index/liveidentityrecheck ornetwork."
+  },
+  "exact_parser_dependency": {
+    "commit": "ad526fc4e8484fced90265668486167566d7087d",
+    "path": "scripts/run_os_goal.py",
+    "sha256": "cf9a639f8e5820fb6745fe700486d6326d8c088493e09d59aa6e269feca992bd",
+    "git_blob_sha1": "98998d14bea83147ab1f88183beb36ca0b7257d6",
+    "bytes": 133989,
+    "relevant_flag_source_lines": [
+      {
+        "line": 1955,
+        "exact_source": "    parser.add_argument(\"--repair-agent-failures\", action=\"store_true\","
+      },
+      {
+        "line": 1957,
+        "exact_source": "    parser.add_argument(\"--stop-after-m14-m15\", action=\"store_true\","
+      }
+    ],
+    "behavior_executed": false
+  },
+  "private_artifacts": {
+    "/home/holden/mckernel-work/resume-20261110T044806Z-3ecbebf5/explicit-flags-source-1/PINNED-os_goal_service.py": {
+      "sha256": "0768d2b28599e20d41734d30126e7cd8ecbb3a015d519c278ad593539eaedef3",
+      "bytes": 19846
+    },
+    "/home/holden/mckernel-work/resume-20261110T044806Z-3ecbebf5/explicit-flags-source-1/CANDIDATE-os_goal_service.py": {
+      "sha256": "db1f492d78be56b3c2eb50b8dbf2477c5c7ffba3ea6583966dd3dd9a09b1047e",
+      "bytes": 19658
+    },
+    "/home/holden/mckernel-work/resume-20261110T044806Z-3ecbebf5/explicit-flags-source-1/SOURCE.patch": {
+      "sha256": "6291ab12786313ecaf39b3e1a775710f6c3a3cebd6c1136fe9bd11f5364f37f7",
+      "bytes": 716
+    }
+  },
+  "proposed_canonical_write": {
+    "path": "scripts/os_goal_service.py",
+    "candidate": "/home/holden/mckernel-work/resume-20261110T044806Z-3ecbebf5/explicit-flags-source-1/CANDIDATE-os_goal_service.py",
+    "base_sha256": "0768d2b28599e20d41734d30126e7cd8ecbb3a015d519c278ad593539eaedef3",
+    "candidate_sha256": "db1f492d78be56b3c2eb50b8dbf2477c5c7ffba3ea6583966dd3dd9a09b1047e",
+    "patch": "/home/holden/mckernel-work/resume-20261110T044806Z-3ecbebf5/explicit-flags-source-1/SOURCE.patch",
+    "added_lines": 0,
+    "deleted_lines": 4,
+    "files_changed": 1
+  },
+  "defect": "Explicitlists previouslygain unconditionalrepair-agent-failures andstop-after-m14-m15 opt-ins whenabsent. Twoif-not-presentappendblocks mutatethecopy before realparser, enablingoptionsunrequestedbyexplicitcaller.",
+  "minimal_correction": "DeleteONLYthese4appendblocklines. Existing list(arguments if arguments isnotNone else default_arguments(repo)) nowforwards explicit copiedvalues exactlythrough unchangedvalidation, retaining alreadysuppliedopt-ins andorderwithoutinjection. No newCLI/negativeoption/filter/default/profile/planner/grant/refactor.",
+  "unchanged_source_proofs": {
+    "default_arguments_exact_bytes_sha256": "f1fc2263461c9f44e7065da8a2c961eef63c1ada22514b26de5f16b75a808f5f",
+    "None_defaults_both_optins_retained_byte_identical": true,
+    "existing_input_copy_and_hidden_control_rejection_byte_identical": true,
+    "real_parser_call_read_only_and_instruction_rejections_return_byte_identical": true,
+    "all_other_filebytes_identical_to_pin_outside_single_4line_deletion": true
+  },
+  "verification_scope": "Sourcebyte/string/diffproofonly; Fowns meaningfulvalidator+realparser+mockedlegacyforwardintegration tests underRootadmission. No test/module import orserviceparser/function executedbywriter.",
+  "preserved_controls": "Currentlive96886loadedlegacyhealthy; no service/frontdoor/start/stop/supervisor launch orreload. --supervisor stays futureseparatelyauthorizeddirectpathonly. Existingexplicitflagsdisabled/current6HIGH/4GiBtotal/max3/CPU0,6,7/fresh26GiB/nativeheld/stall1200/maxrestart3 andalloriginalholds unchanged. No166/oldgreen replay.",
+  "non_evidence_lookup_record": "Initialfilesystemlookupprecededadoptionandcouldnotreadnewincomingservicepath; RootresolvedexactpinnedGitblob. LookupwasnotSUTtest/evidence/absenceorblockerclaim. No protectedlegacycontents/credentialread orpermissionescalation; no retryofprotectedpaths.",
+  "operations": "ReadAGENTS/currentCAMPAIGN andexact2localgitshowblobs; generatedonlyprivateoriginal/candidate/unifiedpatch/thisproof. StandardlibraryI/O/hash/diffonly. No SUTimports/tests/main/frontdoor/service/systemd/mailbox/guardian/network/remotehumanmessage/launch/state/canonical/index actions."
+}

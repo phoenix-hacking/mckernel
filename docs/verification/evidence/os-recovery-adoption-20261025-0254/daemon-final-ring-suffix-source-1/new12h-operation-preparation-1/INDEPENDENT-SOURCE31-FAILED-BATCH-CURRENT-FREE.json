@@ -1,0 +1,270 @@
+{
+  "schema": "mckernel.source31.failed-batch.independent-retirement-current-free.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/daemon_execution_review",
+  "implementation_ownership": false,
+  "at": "2026-10-27T17:56:19.405749+00:00",
+  "decision": "PASS_FAILED_BATCH_NORMAL_RETIREMENT_AND_CURRENT_FREE",
+  "workload_result": "FAIL_C_RING_SIGSEGV_PRESERVED",
+  "nonce": "d27509b612927d235adf7f07748f3f82",
+  "nonce_disposition": "CONSUMED_EXACTLY_ONCE",
+  "consumption_evidence": "One actual released owner entry, one create/start/wait/removal command chain and one ring-C leaf; no replay. Prior Root25 attestation remains immutable. Root must append d275 once as operation26 in its successor ledger.",
+  "tool": {
+    "session": 28196,
+    "exit_code": 1,
+    "terminal": true
+  },
+  "outer_owner": {
+    "pid": 1625306,
+    "start": 92109010,
+    "returncode": 1,
+    "seconds": 2.9919939489336684,
+    "positive_direct_join": true,
+    "group_absent": true,
+    "closed_streams": true
+  },
+  "actual_suffix": {
+    "attempted": 1,
+    "completed_contract_passes": 0,
+    "ring-C": {
+      "returncode": -11,
+      "reason": "missing terminal mock resource receipt",
+      "positive_direct_join": true,
+      "group_absent": true,
+      "closed_streams": true
+    },
+    "ring-Rust": "UNRUN",
+    "oversize-Rust": "UNRUN",
+    "compilers": 0,
+    "cases0_to25_replayed": 0
+  },
+  "retirement": {
+    "container_id": "04f8bd6714b4c36bc51e5069798fbb451baa2bf2bb0dab63688f3d09b1f07bcf",
+    "container_terminal_exit_code": 1,
+    "exact_container_removed_and_absent": true,
+    "Docker_clients_normally_joined": 14,
+    "admission_clients_normally_joined": 1,
+    "all_reported_group_checks_empty": true,
+    "owned_records_archived_and_released": 3,
+    "cleanup_status": "PASS_OWNED_REMOVAL_AND_RECORD_RELEASE",
+    "cleanup_separately_required": false,
+    "retired": true
+  },
+  "current": {
+    "Root_observation": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/ROOT-SOURCE31-CURRENT-OBSERVATION.json",
+      "bytes": 127168,
+      "sha256": "ff5f974ab7300f6a1139a9d6ecfc75595a185ced214215342c095b97d6214b1d"
+    },
+    "observed_at": 1793123701.9246702,
+    "independent_checks": [
+      "Observation postdates outer finaljoin. Current bounded process census has no errors and contains no outerowner/client PID or PGID. Independent procfs read confirms those16 host PIDs absent.",
+      "All14 Docker status records plus1 admission status are exited0;exact create/start/wait/rm counts each1;all recorded clientgroup censuses empty.",
+      "Both retained terminal inspections bind exact CID04f8,Runningfalse/ExitCode1. Postflight name/label/idabsence and current full Docker ps-a snapshot exclude exact CID.",
+      "Archive hash matches releaseauthorization/completion;all3 raw record bytehashes/sizes/contents match archive;all3 live record paths are absent.",
+      "Two fresh closed27:4 exclusive probes and expected scratchmount/capacity are present in exact reviewedobserver2b736 currentcapture. Permanentmutex/scratch21 and historical leases remain untouched.",
+      "Outer/fixture/leaf stream bytes match closedcapture hashes;leaf -11 and missingresources/failure traceback preserved. Exactly ring-C joined directory exists;Rust-ring/oversize and compilers absent."
+    ]
+  },
+  "evidence": {
+    "ADOPT-REQUEST.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/ADOPT-REQUEST.json",
+      "bytes": 4209,
+      "sha256": "a443befbf1723b489a82f12b2782bb25d0b2e44ed00da89f11b0a4506e569b80"
+    },
+    "ACTUAL-REVIEWED-RELEASE.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/ACTUAL-REVIEWED-RELEASE.json",
+      "bytes": 5341,
+      "sha256": "0225ca04f64b6e0d9d5cfc2116147030a08457506da97fe6ac7a50f389e57037"
+    },
+    "INDEPENDENT-EXECUTION-REVIEW.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/INDEPENDENT-EXECUTION-REVIEW.json",
+      "bytes": 6510,
+      "sha256": "46b774c536fc66348634fd74109e9ed7640a7a14cd48a6ab433c3fbbcb7e58c4"
+    },
+    "ROOT-ACTUAL-OWNER-TOOL-RESULT.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/ROOT-ACTUAL-OWNER-TOOL-RESULT.json",
+      "bytes": 385,
+      "sha256": "6fdbcc79658561a2c848213a28852c644b74b59d98b00f5158e4816e4a9bf676"
+    },
+    "OWNER-WHOLE-JOIN.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/OWNER-WHOLE-JOIN.json",
+      "bytes": 1269,
+      "sha256": "6322ab7cbe61af74fe7aec40a157946fd9ad00b88a6bb0d93876e8d14bc81222"
+    },
+    "ROOT-SOURCE31-CURRENT-OBSERVATION.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/ROOT-SOURCE31-CURRENT-OBSERVATION.json",
+      "bytes": 127168,
+      "sha256": "ff5f974ab7300f6a1139a9d6ecfc75595a185ced214215342c095b97d6214b1d"
+    }
+  },
+  "retained_failure": {
+    "fixture-output/first-failure.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/workspace/native-running-modules-candidate-d27509b612927d235adf7f07748f3f82/fixture-output/first-failure.json",
+      "bytes": 128,
+      "sha256": "10d3b65ee1455132f0dbd43e83caf40d6159dde8b32b746b46f3c6763a908e98"
+    },
+    "fixture-output/ring-C/whole-join.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/workspace/native-running-modules-candidate-d27509b612927d235adf7f07748f3f82/fixture-output/ring-C/whole-join.json",
+      "bytes": 1136,
+      "sha256": "0976565d5a2a4d74caf85dda69447cca448bcf5be9f4ada979f8ffd513238afc"
+    },
+    "evidence/fixture-join.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/workspace/native-running-modules-candidate-d27509b612927d235adf7f07748f3f82/evidence/fixture-join.json",
+      "bytes": 876,
+      "sha256": "16bc2d16665ecd8c4bd96590891a7c541b96749bdec715f693cbc0b4033561fa"
+    },
+    "evidence/receipt.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/workspace/native-running-modules-candidate-d27509b612927d235adf7f07748f3f82/evidence/receipt.json",
+      "bytes": 2234,
+      "sha256": "1dcbabdf81c8f0720b058f4437bb138d0219aec0ebc5839125a6d03de5496898"
+    },
+    "evidence/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/workspace/native-running-modules-candidate-d27509b612927d235adf7f07748f3f82/evidence/stderr",
+      "bytes": 941,
+      "sha256": "cfe33d1ac69daf4b11659e0309d672c8ae9ab4765315a69faa5078748ce78fbb"
+    }
+  },
+  "retirement_evidence": {
+    "owner-receipt.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/workspace/native-running-modules-owner-d27509b612927d235adf7f07748f3f82/owner-receipt.json",
+      "bytes": 54335,
+      "sha256": "f69e7f4d7469e71b1c52b7aaef3d65c9d2e63490d19f0f2d50bb068ff7450df1"
+    },
+    "postflight-proof.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/workspace/native-running-modules-owner-d27509b612927d235adf7f07748f3f82/postflight-proof.json",
+      "bytes": 18314,
+      "sha256": "d200e3b63725425a2d0dd44cd3a40ed9861defed2875ac6f6907333e2d2c02de"
+    },
+    "ownership-archive.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/workspace/native-running-modules-owner-d27509b612927d235adf7f07748f3f82/ownership-archive.json",
+      "bytes": 24967,
+      "sha256": "b02cd990943d36be4907a289e2762d663a1429b51c837b707ceb3d2fc48088dc"
+    },
+    "record-release-authorized.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/workspace/native-running-modules-owner-d27509b612927d235adf7f07748f3f82/record-release-authorized.json",
+      "bytes": 1995,
+      "sha256": "fed9df60faceea93920588add406d8be98fd4b27779a9dc9b418aaf23a08c771"
+    },
+    "record-release-complete.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/workspace/native-running-modules-owner-d27509b612927d235adf7f07748f3f82/record-release-complete.json",
+      "bytes": 176,
+      "sha256": "d42825b829732fd9b41ae17d5aec0bac1455c6feba6cc5ec0696f679a9716f1f"
+    },
+    "lease.record.raw": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/workspace/native-running-modules-owner-d27509b612927d235adf7f07748f3f82/lease.record.raw",
+      "bytes": 176,
+      "sha256": "9080c937dc1c3b414c490a5ea6b747f2952e03bb887c474962e93e8ecaefda16"
+    },
+    "common.record.raw": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/workspace/native-running-modules-owner-d27509b612927d235adf7f07748f3f82/common.record.raw",
+      "bytes": 269,
+      "sha256": "be829d09ae20c25af9221128af863dec19a74057cf798adc8bfca6d899d4ecdb"
+    },
+    "shared.record.raw": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/workspace/native-running-modules-owner-d27509b612927d235adf7f07748f3f82/shared.record.raw",
+      "bytes": 269,
+      "sha256": "8748c4d2407fcbbe8d29f11f5d7380d5a6336a8e255910b08ded97e7075e2fd5"
+    },
+    "inspect-terminal.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/workspace/native-running-modules-owner-d27509b612927d235adf7f07748f3f82/inspect-terminal.json",
+      "bytes": 15540,
+      "sha256": "8452d919917f28445924ea9f7eb5537a1e71134b5d028ced8fe8b0ba978aace3"
+    },
+    "inspect-terminal-fresh.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/workspace/native-running-modules-owner-d27509b612927d235adf7f07748f3f82/inspect-terminal-fresh.json",
+      "bytes": 15540,
+      "sha256": "3dbcd34373d7db5be6c208b95eaaaa8a923ac4ec3fdf0731a48d2c5cb4f69fba"
+    }
+  },
+  "client_status_references": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/workspace/native-running-modules-owner-d27509b612927d235adf7f07748f3f82/command-105871438b564497bae6cedfcf8c7b65/status.json",
+      "bytes": 263,
+      "sha256": "c94d26d27c47a4c7084d7a926206bc9e62972b40bc69a64f0747ab1e19c2f543"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/workspace/native-running-modules-owner-d27509b612927d235adf7f07748f3f82/command-105f3a18327d42ed96c88c3ad038d8e6/status.json",
+      "bytes": 327,
+      "sha256": "a2c9521f49d9ec34925dcddc204af22fbd2601fb6cebef5f890d0de0a03aafaf"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/workspace/native-running-modules-owner-d27509b612927d235adf7f07748f3f82/command-38fd24e688ed49f0bb40026fd801e0c7/status.json",
+      "bytes": 261,
+      "sha256": "b1a5aa127a9149f2b725798c28cbfabe4485b75e3f6bf26028e9e94bbc905b98"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/workspace/native-running-modules-owner-d27509b612927d235adf7f07748f3f82/command-3f1a3dfb35aa4208a0de9f056ec61c2a/status.json",
+      "bytes": 322,
+      "sha256": "6312a2d80cb49ff30168ba332e68d3d4549f3490c013af35158f1a2b531b86bc"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/workspace/native-running-modules-owner-d27509b612927d235adf7f07748f3f82/command-494ed3daf9f54acc946a693896b8bb94/status.json",
+      "bytes": 297,
+      "sha256": "7ff53682374c1634e1e3573db82adcf23533967ce932913b3fd34feb993462b1"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/workspace/native-running-modules-owner-d27509b612927d235adf7f07748f3f82/command-5e00e7f85fb6489486ce3b402e0f3789/status.json",
+      "bytes": 322,
+      "sha256": "fb5710526b23c7d14bda1d5ce801c60c195238f27031e4d5e0ea334ea7524d3d"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/workspace/native-running-modules-owner-d27509b612927d235adf7f07748f3f82/command-5f3e011f671a4d98b7aad2fff0872dce/status.json",
+      "bytes": 327,
+      "sha256": "6e03ee6f773d489a4f5ea3a3706f72f28b4f1920da87907f26c202b72b0f1225"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/workspace/native-running-modules-owner-d27509b612927d235adf7f07748f3f82/command-7b038ee3d916479db07e8243afe4af4d/status.json",
+      "bytes": 263,
+      "sha256": "27611b4ba3b043859de56ffdc1cf20e04497841c4f5e57fe58840629397b533a"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/workspace/native-running-modules-owner-d27509b612927d235adf7f07748f3f82/command-898e6ff091d342dc983bf07dbed57276/status.json",
+      "bytes": 4359,
+      "sha256": "c3da29bb948302589fd52d2e2861a723ff672e87cf2489338e69c727b931eed0"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/workspace/native-running-modules-owner-d27509b612927d235adf7f07748f3f82/command-a48f0f2e34ba45439fcc0b4bfc1dce80/status.json",
+      "bytes": 271,
+      "sha256": "74106fdb2c54b7649fb2faf1f2b66a1d77bdf0ba6585c1ee6dd93f9110d03026"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/workspace/native-running-modules-owner-d27509b612927d235adf7f07748f3f82/command-ac588efb96134b73ba2f6d3e60716fcc/status.json",
+      "bytes": 273,
+      "sha256": "7ec94c3446e19c018539da604611759c3b56b913d5d9b3009bf65dc5ca7edaf7"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/workspace/native-running-modules-owner-d27509b612927d235adf7f07748f3f82/command-eb4411ae195c4332ba2c0d1987bc6c99/status.json",
+      "bytes": 263,
+      "sha256": "fdb8f6b4786a5e2d364cbb57137d819692137f538515e5e6834406df93d64c37"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/workspace/native-running-modules-owner-d27509b612927d235adf7f07748f3f82/command-fd0ed2ddf6b949e3a7c5c5a4867513f5/status.json",
+      "bytes": 274,
+      "sha256": "806fa30ce381e942a82dbda1ab3250f539cc61b69fb06d29a637fcef6269e2f2"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/workspace/native-running-modules-owner-d27509b612927d235adf7f07748f3f82/command-fe124a511c154bfca8144369efad4c97/status.json",
+      "bytes": 336,
+      "sha256": "c702c729ab61f2dc8ef26493858da0557c064024088a5056cfff8b0016cd888e"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/workspace/native-running-modules-admission-d27509b612927d235adf7f07748f3f82/command-b1596cde66ae4fa2a8a968b8928d0bd6/status.json",
+      "bytes": 11329,
+      "sha256": "2af83fbf5f637a11ce7ed0cf98345b9c53369c368062150d78967b96f9eaf944"
+    }
+  ],
+  "original_failures_preserved": true,
+  "open_predicates": [
+    "Diagnose actual C-ring helper SIGSEGV before any corrected fresh invocation. Preserve original status-11 and missingterminalreceipt.",
+    "Rust-ring/Rust-oversize remain unrun and require matching future source/currentnonce/admission/release.",
+    "No daemon/native/provider Rustlink/M15file closure or currentcandidate build/app credit from this failed mock batch."
+  ],
+  "new_guest_apps": 0,
+  "new_candidate_builds": 0,
+  "native_credit_delta": 0,
+  "native_acceptance": false,
+  "production_acceptance": false,
+  "M15_file_closure": false,
+  "new_execution_authority": null
+}

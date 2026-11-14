@@ -1,0 +1,6 @@
+parent start
+child exec success token=fixed-v1
+parent wait success exit=37 eof=1 reaped=1 echild=1
+child exec error errno=ENOENT state=37 unchanged=1
+parent wait error exit=42 eof=1 reaped=1 echild=1
+parent complete children=2 owned=0

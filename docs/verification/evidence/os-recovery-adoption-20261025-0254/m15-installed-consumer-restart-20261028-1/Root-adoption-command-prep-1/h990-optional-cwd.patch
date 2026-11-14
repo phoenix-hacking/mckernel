@@ -1,0 +1,11 @@
+--- a/h990-owned_capture
++++ b/h990-owned_capture
+@@ -18,7 +18,7 @@
+    try:
+     def child_limits():
+      signal.pthread_sigmask(signal.SIG_SETMASK,previous);limits()
+-    process=subprocess.Popen(command['argv'],stdin=subprocess.DEVNULL,stdout=out,stderr=err,start_new_session=True,preexec_fn=child_limits)
++    process=subprocess.Popen(command['argv'],cwd=command.get('cwd'),stdin=subprocess.DEVNULL,stdout=out,stderr=err,start_new_session=True,preexec_fn=child_limits)
+    finally:signal.pthread_sigmask(signal.SIG_SETMASK,previous)
+    birth=started_reader(process.pid)
+    write(path/'started.json',dict(pid=process.pid,start=birth))

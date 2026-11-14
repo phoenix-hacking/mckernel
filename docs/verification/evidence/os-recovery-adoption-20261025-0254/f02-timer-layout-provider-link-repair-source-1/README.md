@@ -1,0 +1,25 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+Actual HOST update: the fresh Root grant `0336b895` authorized the five frozen commands, and all five passed once. The unchanged oracle completed 25,750 comparisons; the original strict checker passed all 15 table words, readonly storage and exact Rust consumer origins; the separate provider checker passed exact Rust origin and 235 function bytes. All five children joined, their process groups are absent, streams closed and CPU6 is free. First compiler: 2026-10-27T06:28:35.374346Z; aggregate CPU 0.468401 seconds, command wall 0.510315 seconds, maximum RSS 82,068 KiB. See `ACTUAL-HOST-PASS-HANDOFF.json` and `actual-provider-suffix-1/RESULTS.json`. The original six commands and failures remain preserved, making 11 actual family commands total. No default/native/retirement credit is claimed.
+
+The following describes the preserved source-only preparation and its original proposed grant interface. `ACTUAL-GRANT-INTERFACE-BINDING.json` records the separately frozen adapter for Root's actual grant schema; workload argv, limits and canonical admission semantics stayed unchanged.
+
+Source-only expert repair for the F02 timer fixture's unresolved `__inline_memset` dependency. The original fixture failed because its `list` alias rewrote the genuine `timer.list` field. The one bounded alias-order correction then passed C compilation and failed linking the three unchanged zeroing calls: genuine `arch-string.h` enables `ARCH_FAST_MEMSET`, and `lib/include/string.h` maps `memset` to `__inline_memset`. Both attempts and their consumed grants remain unchanged in the original candidate directory.
+
+`inline_memset.CURRENT.rs.inc` is the byte-exact existing `kernel/rust/string.rs` function, including its export annotation. `provider.rs` supplies only `no_std`, the two required core imports and exact existing `CULong=u64`/`SizeT=usize` aliases. It introduces no production body or C replacement. The genuine C prototype is `void *(void *, unsigned long, size_t)`; the pinned x86_64 HOST ABI matches the exact Rust pointer/u64/usize signature. This is a separate focused HOST object, not a full production-crate build or native qualification.
+
+`SOURCE-BINDING.json` retains the exact body, aliases, genuine headers, corrected C fixture, successful objects and failure handoff. `SOURCE-ONLY-CHECKS.json` records source binding and eight pure checker rejection controls: an undefined import, extra implementation, wrong machine ABI, writable code, weak provider, code relocation, incorrect final object origin and changed final bytes. `RECIPE-STATIC-CHECKS.json` records syntax/input checks and verifies that the link argv differs only by adding the provider object and redirecting new outputs. No compiler, linker or test executable has run for this repair.
+
+`EXACT-FIVE-REMAINING-COMMANDS.NOT-ADMITTED.json` freezes this sequence:
+
+1. Compile only the exact existing Rust provider with the same pinned HOST Rust profile used for the retained timer object.
+2. Run the unchanged corrected GCC9 fixture compilation/link with the retained `timer.o`, appending only `provider.o` and using a fresh executable/map namespace.
+3. Require one global strong x86_64 Rust provider, no undefined imports or code relocations, nonwritable executable code, exact final map origin and byte identity. Local unwind references may point to defined local sections; they cannot introduce external dependencies.
+4. Run the unchanged original strict table ownership checker with the retained `timer.o`, `fallback.o` and `selected.o`. The fallback and selected objects remain check inputs; the fallback cannot be linked against the Rust table without duplicating its definition.
+5. Execute the unchanged original 25,750-comparison oracle and require its exact original stdout.
+
+The passed ABI/Rust timer/C fallback/C selection prefix is reused without recompilation. The corrected C source and all original assertions, loop bounds, callback effects and observations remain byte-exact. No unresolved-symbol ignore flag, C stub, libc substitute or oracle weakening is supplied.
+
+Root owns fresh actual admission. The provided runner requires a new Root-written `ROOT-ORDINARY-CPU6-GRANT.json` in this directory, its explicit SHA256 argument, decision `GRANT_ONE_ORDINARY_CPU6_F02_TIMER_PROVIDER_EXPERT_SUFFIX`, the exact plan reference and `maximum_compiler_test_commands: 5`. It verifies its own frozen plan binding, uses the unchanged accepted account/admission helper before every child, creates the output namespace once and preserves the first failure. Its proposed profile is CPU6/job1, AS 2 GiB, CPU 60 seconds, file size 64 MiB, core 0 and wall 90 seconds per child. The original consumed grants authorize nothing here. Root must reconcile the actual CPU/resource grant and fixed deadline before invoking it.
+
+The source-only result leaves all 71 current C records counted. Default integration, matching linked artifact, independent native evidence and whole-file retirement remain open. This repair does not predict or claim that the actual oracle passes.

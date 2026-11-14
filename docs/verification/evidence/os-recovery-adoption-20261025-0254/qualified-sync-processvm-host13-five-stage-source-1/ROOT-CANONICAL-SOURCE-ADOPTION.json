@@ -1,0 +1,83 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root",
+  "decision": "ADOPT_EXACT_SEVEN_COMBINED_HOST_QUALIFIED_POSTIMAGES_NOT_COMPILED",
+  "at": 1793078622.1389124,
+  "preimages": {
+    "kernel/syscall.c": {
+      "path": "/home/holden/mckernel/kernel/syscall.c",
+      "bytes": 914490,
+      "sha256": "8b8037ce23d364847fbdfdce2bc67bfea66668bd8574e752d8c0848ea6d0da8c"
+    },
+    "kernel/rust/syscall_policy.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "bytes": 1251016,
+      "sha256": "5bc789e1a842a93d64047a7b97e888cdff3ee429de394006d8d522ab3951833c"
+    },
+    "kernel/CMakeLists.txt": {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "bytes": 30396,
+      "sha256": "edbd78df1f50bc3e9d1bcdf5e06712be3902d3ec2b5d754f4ef584835cedd51e"
+    },
+    "arch/x86_64/kernel/syscall.c": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+      "bytes": 114344,
+      "sha256": "d3cd4d9a9bb1a604dfa5da28b02aef033fb78510a4aed24905b3dedec10ed96c"
+    },
+    "kernel/process.c": {
+      "path": "/home/holden/mckernel/kernel/process.c",
+      "bytes": 217647,
+      "sha256": "9692036c3aa2d580a2a134c2d4a8fc32ab5ff4215b44128668858d6fac131b12"
+    },
+    "kernel/rust/process_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "bytes": 603471,
+      "sha256": "851acd51fab945456edd87c001a63b867634f51207fbf1900451edaa368b09ea"
+    }
+  },
+  "postimages": {
+    "kernel/syscall.c": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-sync-processvm-host13-five-stage-source-1/candidate/kernel/syscall.c",
+      "bytes": 914839,
+      "sha256": "aeeb1d71cfd5b8d97935981aa3fc29674586289748e7e61514d247a43b473984"
+    },
+    "kernel/rust/syscall_policy.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-sync-processvm-host13-five-stage-source-1/candidate/kernel/rust/syscall_policy.rs",
+      "bytes": 1259403,
+      "sha256": "02ddaecff895693d389b0a6710c0ff4579c91caf2b53ea5f62746f4b8125d812"
+    },
+    "arch/x86_64/kernel/syscall.c": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-sync-processvm-host13-five-stage-source-1/candidate/arch/x86_64/kernel/syscall.c",
+      "bytes": 114757,
+      "sha256": "060ae704f105aff84cfdadb9a4f3846ae1b4a2e8192947a479336b2c05d05ea8"
+    },
+    "kernel/CMakeLists.txt": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-sync-processvm-host13-five-stage-source-1/candidate/kernel/CMakeLists.txt",
+      "bytes": 30707,
+      "sha256": "cd41d90e4b1dae5893c96cc0327aedf644dc7952300e25907543656df6e63586"
+    },
+    "kernel/rust/f06_process_vm_entry.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-sync-processvm-host13-five-stage-source-1/candidate/kernel/rust/f06_process_vm_entry.rs",
+      "bytes": 5428,
+      "sha256": "0e9d9d23db1a376f38757fba98c6b34d0aed4f4b6c45398b0b9372d7624c3d2e"
+    },
+    "kernel/process.c": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-sync-processvm-host13-five-stage-source-1/candidate/kernel/process.c",
+      "bytes": 218419,
+      "sha256": "8d7fc71197eba2e9c29d32de49c6e97aa3f27ee36986bb637eaa73e6f2230038"
+    },
+    "kernel/rust/process_helpers.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-sync-processvm-host13-five-stage-source-1/candidate/kernel/rust/process_helpers.rs",
+      "bytes": 605160,
+      "sha256": "f54652a091b8b426ede0ed1610193c88d3c15cdd7a4e9d6a1e1dfa760be5f3d0"
+    }
+  },
+  "source_profile_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-sync-processvm-host13-five-stage-source-1/INDEPENDENT-SOURCE-PROFILE-REVIEW.json",
+    "bytes": 1089,
+    "sha256": "21064d4cea11d189c6c57e650aa83a0e97c8a0cd9e704311fffd27e177490458"
+  },
+  "runtime_authority": null,
+  "artifact_acceptance": false,
+  "native_acceptance": false
+}

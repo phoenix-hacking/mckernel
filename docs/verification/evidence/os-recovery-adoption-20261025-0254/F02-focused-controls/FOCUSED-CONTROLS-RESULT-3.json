@@ -1,0 +1,416 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_FOCUSED_ARTIFACT_PREDICATE_CONTROLS",
+  "positives": 5,
+  "negatives": 58,
+  "results": [
+    {
+      "name": "exact current 119 owners/whole bytes/RELA/final map",
+      "expected": "PASS",
+      "actual": "PASS"
+    },
+    {
+      "name": "GCC9 COMMON3 plus allocated116 equals GCC14 semantic119",
+      "expected": "PASS",
+      "actual": "PASS"
+    },
+    {
+      "name": "exact ten actual allocated Rust imports retain C-data debt",
+      "expected": "PASS",
+      "actual": "PASS"
+    },
+    {
+      "name": "exact current source SHA through reviewed guard",
+      "expected": "PASS",
+      "actual": "PASS"
+    },
+    {
+      "name": "three retained successful actual ABI source/object identities",
+      "expected": "PASS",
+      "actual": "PASS"
+    },
+    {
+      "name": "historical COMMON owner removed",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "('exact F02 data profile', 'common_names')"
+    },
+    {
+      "name": "current source byte drift through reviewed source guard",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "exact current F02 source; historical canonical path is not source authority"
+    },
+    {
+      "name": "retained ABI memory_real_C_ABI source byte drift",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "('unchanged retained actual ABI source/object', 'memory_real_C_ABI')"
+    },
+    {
+      "name": "retained ABI memory_real_C_ABI object byte drift",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "('unchanged retained actual ABI source/object', 'memory_real_C_ABI')"
+    },
+    {
+      "name": "retained ABI memory_real_C_ABI producer namespace drift",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "('same exact current source ABI witness text', 'memory_real_C_ABI')"
+    },
+    {
+      "name": "retained ABI memory_real_C_ABI assertion/template drift",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "('same exact current source ABI witness text', 'memory_real_C_ABI')"
+    },
+    {
+      "name": "retained ABI memory_real_C_ABI type-assertion source drift",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "('same exact current source ABI witness text', 'memory_real_C_ABI')"
+    },
+    {
+      "name": "retained ABI CPU_real_C_ABI source byte drift",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "('unchanged retained actual ABI source/object', 'CPU_real_C_ABI')"
+    },
+    {
+      "name": "retained ABI CPU_real_C_ABI object byte drift",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "('unchanged retained actual ABI source/object', 'CPU_real_C_ABI')"
+    },
+    {
+      "name": "retained ABI CPU_real_C_ABI producer namespace drift",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "('same exact current source ABI witness text', 'CPU_real_C_ABI')"
+    },
+    {
+      "name": "retained ABI CPU_real_C_ABI assertion/template drift",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "('same exact current source ABI witness text', 'CPU_real_C_ABI')"
+    },
+    {
+      "name": "retained ABI CPU_real_C_ABI type-assertion source drift",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "('same exact current source ABI witness text', 'CPU_real_C_ABI')"
+    },
+    {
+      "name": "retained ABI F01_real_C_ABI source byte drift",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "('unchanged retained actual ABI source/object', 'F01_real_C_ABI')"
+    },
+    {
+      "name": "retained ABI F01_real_C_ABI object byte drift",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "('unchanged retained actual ABI source/object', 'F01_real_C_ABI')"
+    },
+    {
+      "name": "retained ABI F01_real_C_ABI producer namespace drift",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "('same exact current source ABI witness text', 'F01_real_C_ABI')"
+    },
+    {
+      "name": "retained ABI F01_real_C_ABI assertion/template drift",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "('same exact current source ABI witness text', 'F01_real_C_ABI')"
+    },
+    {
+      "name": "retained ABI F01_real_C_ABI type-assertion source drift",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "('same exact current source ABI witness text', 'F01_real_C_ABI')"
+    },
+    {
+      "name": "missing owner",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "('exact F02 data profile', 'allocated_names')"
+    },
+    {
+      "name": "extra owner",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "('unique exact final C data owner', 'unadmitted_C_data_owner')"
+    },
+    {
+      "name": "duplicate owner name",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "duplicate F02 data owner"
+    },
+    {
+      "name": "current allocated C lock hidden as COMMON storage",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "('exact F02 data profile', 'allocated_names')"
+    },
+    {
+      "name": "symbol resource_set_lock size=32",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "('unique exact final C data owner', 'resource_set_lock')"
+    },
+    {
+      "name": "symbol resource_set_list size=8",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "('unique exact final C data owner', 'resource_set_list')"
+    },
+    {
+      "name": "symbol runq_reservation_lock size=8",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "('unique exact final C data owner', 'runq_reservation_lock')"
+    },
+    {
+      "name": "symbol resource_set_list bind=0",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "('unique exact final C data owner', 'resource_set_list')"
+    },
+    {
+      "name": "symbol resource_set_lock type=0",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "('exact F02 data profile', 'allocated_names')"
+    },
+    {
+      "name": "symbol resource_set_list value=136",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": ""
+    },
+    {
+      "name": "hidden C lock visibility",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "('unique exact final C data owner', 'resource_set_lock')"
+    },
+    {
+      "name": "section flags=2",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "('exact F02 data profile', 'owners')"
+    },
+    {
+      "name": "section flags=7",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "('exact F02 data profile', 'owners')"
+    },
+    {
+      "name": "section type=1",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "('final whole data bytes', 'mcexec_v10_scheduler_logs.0')"
+    },
+    {
+      "name": "section align=32",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "('exact F02 data profile', 'owners')"
+    },
+    {
+      "name": "arbitrary compiler-local ID",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "('unique exact final C data owner', 'ddebug.999999')"
+    },
+    {
+      "name": "descriptor line",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "('final whole data bytes', 'ddebug.54')"
+    },
+    {
+      "name": "descriptor flags",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "('final whole data bytes', 'ddebug.54')"
+    },
+    {
+      "name": "descriptor format field",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "('final whole data bytes', 'ddebug.54')"
+    },
+    {
+      "name": "function string byte",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "final string pointee identity"
+    },
+    {
+      "name": "missing pointer RELA",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "('final whole data bytes', 'ddebug.54')"
+    },
+    {
+      "name": "duplicate pointer RELA",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "('exact F02 data profile', 'owners')"
+    },
+    {
+      "name": "wrong RELA width",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "data pointer ABI"
+    },
+    {
+      "name": "wrong RELA addend",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "final string pointee identity"
+    },
+    {
+      "name": "wrong RELA target",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": ""
+    },
+    {
+      "name": "unadmitted source alias with same process.c basename",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "final string pointee identity"
+    },
+    {
+      "name": "final lock bind=0",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "('unique exact final C data owner', 'resource_set_lock')"
+    },
+    {
+      "name": "final lock type=0",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "('unique exact final C data owner', 'resource_set_lock')"
+    },
+    {
+      "name": "final lock size=32",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "('unique exact final C data owner', 'resource_set_lock')"
+    },
+    {
+      "name": "final lock value=18446744073685684424",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "('unique exact final C data owner', 'resource_set_lock')"
+    },
+    {
+      "name": "final lock visibility=2",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "('unique exact final C data owner', 'resource_set_lock')"
+    },
+    {
+      "name": "final BSS nonpointer byte",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "('final whole data bytes', 'resource_set_lock')"
+    },
+    {
+      "name": "final descriptor pointer value",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "final string pointee identity"
+    },
+    {
+      "name": "same-content string at different final stored pointer",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "('exact F02 data profile', 'owners')"
+    },
+    {
+      "name": "wrong exact process map contributor",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "('missing current process input section', {'.bss', '.data', '.rodata', '__verbose'})"
+    },
+    {
+      "name": "exact process map contribution extent drift",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": ""
+    },
+    {
+      "name": "exact process map contribution base drift",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "('unique exact final C data owner', 'time_sharing')"
+    },
+    {
+      "name": "Rust imported C-data relocation offset",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "exact ten allocated Rust-to-C imports"
+    },
+    {
+      "name": "missing actual Rust imports",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "all three genuine C data imports"
+    },
+    {
+      "name": "duplicate allocated Rust C-data import",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "exact ten allocated Rust-to-C imports"
+    },
+    {
+      "name": "C data falsely defined as Rust",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "rejection": "Rust imports genuine C data"
+    }
+  ],
+  "input_sha256": {
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-qualified-source-integration-1/current81-default-image-preparation/next-normal-cfg-only-source-preparation-1/namespace-request-preparation-cfg-only-1/bounded-runtime-import-binding-correction-1/expert-current-process-TID-source-identity-correction-1/retained-normal-prefix-continuation-preparation-1/retained-normal-prefix-attempt-7-retained-witness-validation/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o": "871bc2d67edfe2a622a65c75e176992d99f9c5559fc0ce712cbf85f3d238e682",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-qualified-source-integration-1/current81-default-image-preparation/next-normal-cfg-only-source-preparation-1/namespace-request-preparation-cfg-only-1/bounded-runtime-import-binding-correction-1/expert-current-process-TID-source-identity-correction-1/retained-normal-prefix-continuation-preparation-1/retained-normal-prefix-attempt-7-retained-witness-validation/owner-work/output/build/kernel/rust/mckernel_rust.o": "26141a65a7bacf874355829b78634835ec93f92a88c842f7ae078bd88542779c",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-qualified-source-integration-1/current81-default-image-preparation/next-normal-cfg-only-source-preparation-1/namespace-request-preparation-cfg-only-1/bounded-runtime-import-binding-correction-1/expert-current-process-TID-source-identity-correction-1/retained-normal-prefix-continuation-preparation-1/retained-normal-prefix-attempt-7-retained-witness-validation/owner-work/output/build/kernel/mckernel.img": "8560a749e7a2d90617c19701801daf996306d9e262665046d9566f8dbbf55f8e",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-qualified-source-integration-1/current81-default-image-preparation/next-normal-cfg-only-source-preparation-1/namespace-request-preparation-cfg-only-1/bounded-runtime-import-binding-correction-1/expert-current-process-TID-source-identity-correction-1/retained-normal-prefix-continuation-preparation-1/retained-normal-prefix-attempt-7-retained-witness-validation/owner-work/output/build/kernel/mckernel.img.map": "a7649ce1b4d20c28cdd7b099b12c3641ee317b34b0178f8a11147ce16acd71ba",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-qualified-source-integration-1/current81-six-C-production-preparation-1/output-1/F02.o": "9bb25c409ca27f26337de3af07fbee9c777300e6d7cf088c57aee38e8db5c633",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-qualified-source-integration-1/current81-default-image-preparation/next-normal-cfg-only-source-preparation-1/namespace-request-preparation-cfg-only-1/bounded-runtime-import-binding-correction-1/expert-current-process-TID-source-identity-correction-1/retained-normal-prefix-continuation-preparation-1/final-copy-bound-sdk-marker-continuation-1/bounded-generated-object-directory-correction-1/final-copy2-bound-runtime-and-admission-1/publication-admission-preparation-1/missing-native-fork-executor-dependency-diagnosis-1/current-executor-target-only-retained-suffix-1/final-copy3-bound-executor-runtime-and-admission-1/publication-admission-preparation-1/native-owned-fork-option-selection-source-successor-1/retained-current-syscall-relink-preparation-1/source-materialization-native-owned-selection-attempt-1/materialized-source/kernel/process.c": "56fd550b2611d7dbb5d49f7c39aa6f7d83df76479127ba51f507a60be064f9df",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/data-state-ownership-source-successor-1/production-consumer-preparation-1/bounded-effect-callback-type-correction-1/expert-exact-compiler-note-correction-1/run_retained_suffix_once.SINGLE-GATE.NOT-RELEASED.py": "dac5cb0d3d0bd6a99f190ad4f4c7d1906576ebdd4ead73dd07bca460d7da7bdd",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-2/m14-f02-contract-source-1/f02_data_contract.py": "f747b6fe08b0b0ee47f91199905815fcb11748e7af6015ccfd1ef93fc71a27d0",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-2/m14-f02-contract-source-1/F02-DATA-PROFILE.CONTRACT.json": "e069f867c75e97b6497343d33c60f53f181c94bcae1545b77304904619e93893",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-2/m14-f02-contract-source-1/native_rust_exact_mckernel_image_offline.F02-PROFILE.SOURCE-ONLY.py": "adb7003a47e99ddfb1d1496c07de702a5da59b3481df7ea8860f2afeb0b40830",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-qualified-source-integration-1/current81-default-image-preparation/next-normal-cfg-only-source-preparation-1/namespace-request-preparation-cfg-only-1/bounded-runtime-import-binding-correction-1/expert-current-process-TID-source-identity-correction-1/retained-normal-prefix-continuation-preparation-1/retained-normal-prefix-attempt-7-retained-witness-validation/owner-work/output/build/m14-production/current81-retained-witness-correction-1/memory_real_C_ABI.c": "8c6d9b88e1f9f1a1389a55a2ca03b59cd961d36079d64afb46da3e8fab92c7ac",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-qualified-source-integration-1/current81-default-image-preparation/next-normal-cfg-only-source-preparation-1/namespace-request-preparation-cfg-only-1/bounded-runtime-import-binding-correction-1/expert-current-process-TID-source-identity-correction-1/retained-normal-prefix-continuation-preparation-1/retained-normal-prefix-attempt-7-retained-witness-validation/owner-work/output/build/m14-production/current81-retained-witness-correction-1/memory_real_C_ABI.o": "c376640d6cfca68ea29e7f87b3847d89847d0e5adca767649184d34649ecefcb",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-qualified-source-integration-1/current81-default-image-preparation/next-normal-cfg-only-source-preparation-1/namespace-request-preparation-cfg-only-1/bounded-runtime-import-binding-correction-1/expert-current-process-TID-source-identity-correction-1/retained-normal-prefix-continuation-preparation-1/retained-normal-prefix-attempt-7-retained-witness-validation/owner-work/output/build/m14-production/current81-retained-witness-correction-1/CPU_real_C_ABI.c": "94b65cac322da87df3bbd985c55d71b0e08d52542f770c4d7ce7bb2d43a408b3",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-qualified-source-integration-1/current81-default-image-preparation/next-normal-cfg-only-source-preparation-1/namespace-request-preparation-cfg-only-1/bounded-runtime-import-binding-correction-1/expert-current-process-TID-source-identity-correction-1/retained-normal-prefix-continuation-preparation-1/retained-normal-prefix-attempt-7-retained-witness-validation/owner-work/output/build/m14-production/current81-retained-witness-correction-1/CPU_real_C_ABI.o": "17ffbd7753e45db59c4881705699b668dbdbbc08329b79315981352c608648cf",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-qualified-source-integration-1/current81-default-image-preparation/next-normal-cfg-only-source-preparation-1/namespace-request-preparation-cfg-only-1/bounded-runtime-import-binding-correction-1/expert-current-process-TID-source-identity-correction-1/retained-normal-prefix-continuation-preparation-1/retained-normal-prefix-attempt-7-retained-witness-validation/owner-work/output/build/m14-production/current81-retained-witness-correction-1/F01_real_C_ABI.c": "4b50d2edea90d97d85983ea736272b3d74e30b11277818179c2e8f7d43797a1b",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-qualified-source-integration-1/current81-default-image-preparation/next-normal-cfg-only-source-preparation-1/namespace-request-preparation-cfg-only-1/bounded-runtime-import-binding-correction-1/expert-current-process-TID-source-identity-correction-1/retained-normal-prefix-continuation-preparation-1/retained-normal-prefix-attempt-7-retained-witness-validation/owner-work/output/build/m14-production/current81-retained-witness-correction-1/F01_real_C_ABI.o": "8481b0b41d00d41845e468edfaaabfc9e1fbb773e31ef04bc089f115c9fb9383"
+  },
+  "retained_inputs_unchanged": true,
+  "exact_reviewed_guard_AST_sha256": {
+    "source": "72c19e65a719b1cb9843387e30c7ba43601d2054c7257548882929f4968eab12",
+    "ABI_identity": "61537904116c6e68f610913938a873d47e81a0dfe8a42a646d167616e43fd9d1",
+    "ABI_template": "07bfd31ea575dbd4cf23e9b2af196152f8a8d906a1ce881fd987b0f5c338d201"
+  },
+  "physical_source_root": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-qualified-source-integration-1/current81-default-image-preparation/next-normal-cfg-only-source-preparation-1/namespace-request-preparation-cfg-only-1/bounded-runtime-import-binding-correction-1/expert-current-process-TID-source-identity-correction-1/retained-normal-prefix-continuation-preparation-1/final-copy-bound-sdk-marker-continuation-1/bounded-generated-object-directory-correction-1/final-copy2-bound-runtime-and-admission-1/publication-admission-preparation-1/missing-native-fork-executor-dependency-diagnosis-1/current-executor-target-only-retained-suffix-1/final-copy3-bound-executor-runtime-and-admission-1/publication-admission-preparation-1/native-owned-fork-option-selection-source-successor-1/retained-current-syscall-relink-preparation-1/source-materialization-native-owned-selection-attempt-1/materialized-source",
+  "ABI_template_producer_source_root": "/src",
+  "seconds": 5.463261275901459,
+  "compiler_invocations": 0,
+  "subprocesses": 0,
+  "guest_apps": 0,
+  "image_builds": 0,
+  "C_data_debt": true,
+  "native": false,
+  "full_validator": false,
+  "limits": "Focused contract/source/ABI identity controls only. Assertion/template drift is detected by exact reviewed witness-text checks, not newly compiled ABI evaluation. Future three-global type/alignment ABI witness and full-validator/native proof remain open."
+}

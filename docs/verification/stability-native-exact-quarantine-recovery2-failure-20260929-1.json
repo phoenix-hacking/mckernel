@@ -1,0 +1,74 @@
+{
+  "acceptance_credit": false,
+  "attempt": {
+    "elapsed_seconds": 0.25,
+    "ended_at_utc": "2026-09-29T07:04:35.025730Z",
+    "exit_status": 1,
+    "started_at_utc": "2026-09-29T07:04:34.745722Z"
+  },
+  "execution_checkpoint": "d4c9055ab2be5743ff184ea7ffe219d8023559ab",
+  "failure": {
+    "error": "root helper git rev-parse returned 128 before claim creation",
+    "family": "quarantine recovery execution admission under sanitized root Git identity",
+    "no_retry": true,
+    "phase": "released source validation before claim, journal, Docker, observer or deletion",
+    "reproducer": "/usr/bin/sudo -A /usr/bin/env -i PATH=/usr/bin:/bin HOME=/nonexistent /usr/bin/git -c safe.directory=/home/holden/mckernel -C /home/holden/mckernel rev-parse --verify HEAD",
+    "reproducer_result": "fatal: detected dubious ownership; command-scope safe.directory is ineffective for this -C discovery path",
+    "strategy_decision_required": true
+  },
+  "record_kind": "native_exact_candidate_quarantine_recovery2_failure",
+  "retained_artifacts": {
+    "execution_release_sha256": "7dc1b2b15c45408f4bd899f640d80e456ef6bc93cc9070eceabdecd278badc0d",
+    "preflight_sha256": "468b1d4d765b8d3ff35ff3c638ebcfec16abae153a78ede2097c9a33e1441dec",
+    "process_preflight_result_sha256": "71549c7039cc3d8f54d9f042f682aae3fcf264d27055f6c85485dac49e976909",
+    "process_preflight_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "process_preflight_stdout_sha256": "4866355721a9683893bed3088c4744c2b488046772c392e1743ba5cf37237e7a",
+    "raw_archive": "docs/verification/evidence/stability-native-exact-quarantine-recovery2-failure-raw-20260929-1.tar.gz",
+    "raw_archive_members": 9,
+    "raw_archive_regular_files_verified": 8,
+    "raw_archive_sha256": "93fde8f0143931fb2e3105c2a30b94f5480b933dd8f6d9c9348fc5195edce424",
+    "recovery_rc_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+    "recovery_stderr_sha256": "a1a0b2a389eece4c306dd8a5beacf44d7f8b3344442d398b572519744da937e9",
+    "recovery_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "release_copy_sha256": "4c50f12c5b500d2ecde1750f47b07b820ba43721c613d13176427440294f8b5a"
+  },
+  "retained_state": {
+    "deletion_started": false,
+    "journal_created": false,
+    "new_claim_created": false,
+    "old_lease": {
+      "device_number": 1831,
+      "gid": 0,
+      "inode": 31447,
+      "mode": "0600",
+      "sha256": "69ced2395f7c16019b70d9d1b2de45ff2519014178ee145a453e2ed2a24f47e3",
+      "uid": 0
+    },
+    "original_paths_absent": true,
+    "previous_claim_sha256": "f2d59c24e20b589f5cb9aa9cba1ec4c9c9ba4a84895fe3a468de35d7b5bb41f3",
+    "previous_journal_sha256": "d9a17002fe43df822c367219a4dc58e7a7bb000bce6597a79a5dc6721fe850d4",
+    "quarantines": [
+      {
+        "device_number": 26,
+        "gid": 0,
+        "inode": 14117,
+        "mode": "0700",
+        "path": "/dev/shm/.mckernel-quarantine-mckernel-exact-candidate-68cf089a-1",
+        "uid": 0
+      },
+      {
+        "device_number": 26,
+        "gid": 0,
+        "inode": 24701,
+        "mode": "0700",
+        "path": "/dev/shm/.mckernel-quarantine-mckernel-exact-metadata-backup-68cf089a-1",
+        "uid": 0
+      }
+    ]
+  },
+  "retry": false,
+  "rollback": false,
+  "runtime_acceptance": false,
+  "schema_version": 1,
+  "status": "FAIL_SOURCE_ADMISSION_BEFORE_CLAIM"
+}

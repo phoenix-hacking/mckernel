@@ -1,0 +1,213 @@
+{
+  "accepted_target": {
+    "active_shared_name_absent": true,
+    "archived": {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 115190,
+      "mode": "0o600",
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/scratch/native-host-objtool-prelease-recovery-20261018-1.shared.archive",
+      "sha256": "a41eb454c956af598362cc8eece23afdca70c14234e19ceb0fd2d5c61685a387",
+      "size": 268,
+      "uid": 1000
+    },
+    "local_tool_lease_absent": true,
+    "original": {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 115190,
+      "mode": "0o600",
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock",
+      "sha256": "a41eb454c956af598362cc8eece23afdca70c14234e19ceb0fd2d5c61685a387",
+      "size": 268,
+      "uid": 1000
+    },
+    "original_bytes_preserved": true,
+    "original_inode_preserved": true,
+    "original_owner": {
+      "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+      "device": 1828,
+      "inode": 115190,
+      "kind": "build",
+      "pid": 955897,
+      "request_sha256": "11317acaaa9096ee9da97f8f361d1d4fd9063d1d16fa5f7b752c9f1455bc5075",
+      "schema": "mckernel.heavy-operation.v1",
+      "starttime": "11422134"
+    },
+    "quarantine_absent": true
+  },
+  "actual_operations": {
+    "archival_recovery": {
+      "authority_sha256": "4889dfe9b73eb876a6342f81e99718d204c37897c4ebc2afd6f311757e0a5bd5",
+      "capture_root": "/home/holden/mckernel-work/host-preparation/native-host-objtool-prelease-recovery-20261018-1/recovery-capture-independent-20261018-1",
+      "executions": 1,
+      "release_sha256": "423bee5d6733c3d219f0cbe619340bee318d10c00a7db6021a1fc2446085e178",
+      "review_sha256": "e8672522569779564bf648ae46ecabacc66a1f0607bfac344889a0f9a27004d8"
+    },
+    "read_only_post": {
+      "authority_sha256": "8b854c9bef8990af4e74d0ebafee13f058ac28b30ab2ea0aa6b57617a33ceaa6",
+      "capture_root": "/home/holden/mckernel-work/host-preparation/native-host-objtool-prelease-recovery-20261018-1/snapshot-capture-post-independent-20261018-1",
+      "executions": 1,
+      "review_sha256": "96e1125a38194e9c532f14f832dcc5ac7c64b682b2b1a0836e387d54e119bd23"
+    },
+    "read_only_pre": {
+      "authority_sha256": "9c744be5e21c5387ac3797d8277aaf46a102b6d34c491e43a458d7ad8860d202",
+      "capture_root": "/home/holden/mckernel-work/host-preparation/native-host-objtool-prelease-recovery-20261018-1/snapshot-capture-pre-independent-20261018-1",
+      "executions": 1,
+      "review_sha256": "7408afdea87df599b7e800a8a8256cf32b9c26b2d3f095e581d886172ea623e8"
+    }
+  },
+  "all_three_actual_direct_joins_and_v2_retirement_proofs": "PASS; exit0, no forced/signalled retirement, all original streams retained",
+  "authority_limits": {
+    "container_cleanup": false,
+    "legacy_record_mutation": false,
+    "meaning": "The target shared-record blocker is physically closed. New AVX/native/image/tool execution still requires its own existing exact fresh admission/release; do not call stock_release_exclusion with synthetic aggregate PASS fields.",
+    "new_heavy_operation": false,
+    "new_producer_retry": false
+  },
+  "canonical_journal": {
+    "events": [
+      "before_exchange",
+      "after_exchange",
+      "release",
+      "after_release",
+      "complete"
+    ],
+    "final_event_hash": "a676977077b7089f4dca63606ec58395f726ef952d6bd166531a69c77bbe42a1",
+    "five_event_hash_chain_verified_against_release_and_live_generations": true,
+    "journal": {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 115194,
+      "mode": "0o600",
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/scratch/native-host-objtool-prelease-recovery-20261018-1.journal.jsonl",
+      "sha256": "54d0b101258543408afc577d1c20160c2d62cdfe9d22b7d6a8a34b6372fe040b",
+      "size": 1552,
+      "uid": 1000
+    },
+    "plan": {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 115195,
+      "mode": "0o600",
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/scratch/native-host-objtool-prelease-recovery-20261018-1.plan.json",
+      "sha256": "7a4d8c8f2172004fa94c6ee4547de2dafc59a86034f37cd2f6b3a46857cf4c6e",
+      "size": 1390,
+      "uid": 1000
+    }
+  },
+  "counts": {
+    "formal_acceptance_delta": 0,
+    "functional_acceptance_delta": 0,
+    "new_apps": 0,
+    "new_builds": 0
+  },
+  "independent_reviewer": true,
+  "original_owner_positive_retirement": {
+    "direct_wait": {
+      "exit_code": 1,
+      "joined": true
+    },
+    "forced": false,
+    "postjoin_raw_child_bytes": [
+      0,
+      0
+    ],
+    "postjoin_waitids": [
+      "ECHILD",
+      "ECHILD"
+    ],
+    "pure_frozen_validator_result": "PASS",
+    "raw_v2_proof": {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 755268,
+      "mode": "0o600",
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/scratch/native-host-objtool-retirement-producer-20261018-1/execution-owner-evidence-attempt-1/owner-proof.json",
+      "sha256": "c559fe6ba98e324d6caafd05a7984ffda91bfab44c0f6c4c82b742c36892131d",
+      "size": 611440,
+      "uid": 1000
+    },
+    "uncertainties": []
+  },
+  "physical_final_join": {
+    "attributable_tool_attempts": 0,
+    "backing": {
+      "device": 66306,
+      "gid": 0,
+      "inode": 47468427,
+      "mode": "0o600",
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/scratch.ext4",
+      "size": 118111600640,
+      "uid": 0
+    },
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "failed_raw_files_preserved": 8,
+    "fresh_root_process_counts": [
+      288,
+      288
+    ],
+    "full_docker_inventory_entries": 44,
+    "historical_evidence_bindings": 4,
+    "historical_immutable_leases": 7,
+    "launchers": [
+      {
+        "pid": 871794,
+        "starttime": 10154631
+      },
+      {
+        "pid": 871796,
+        "starttime": 10154636
+      }
+    ],
+    "legacy_records": "UNASSESSED protected; never released or claimed retired",
+    "mount": {
+      "fstype": "ext4",
+      "maj:min": "7:36",
+      "options": "rw,nosuid,nodev,relatime",
+      "source": "/dev/loop36",
+      "target": "/home/holden/mckernel-work/scratch",
+      "uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52"
+    },
+    "preserved_identities": 61,
+    "protected_paths": 39,
+    "publishers": 0,
+    "root_mutex_reacquired": {
+      "device": 27,
+      "gid": 0,
+      "inode": 4,
+      "mode": "0o644",
+      "nlink": 1,
+      "path": "/run/lock/mckernel-development.lock",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "uid": 0
+    },
+    "scratch21_roots_preserved": 4
+  },
+  "prior_withdrawn_authority": {
+    "executed": false,
+    "sha256": "5b5633531f10f48a992cc7de99f1cf3d3d0fe4f25f2062e924b998aea6f4c6e5",
+    "withdrawal_sha256": "25420668af78b99f2780dfbecec489a4d235eadcd12f5e278e95277268a42615"
+  },
+  "reviewer": "/root/host_prelease_recovery_review_1002",
+  "schema": "mckernel.objtool-prelease-physical-release.v1",
+  "scope": "Functional PRACTICAL-GOAL kernel/apps and actual Rust/assembly compute cutover. Target PRE-LEASE shared exclusion only; all legacy protected paths unchanged. No application/build or deferred qualification acceptance.",
+  "source_bindings": {
+    "execution_proposal": "39a6d160d3215e4b8411d1a60a90873e43194c779f692daefb1b7cb16b3ed4fb",
+    "frozen_manifest": "0114d725eef54551c2f2e60836605f8329e970b3d1622c7a266f9d9e5bd296ff",
+    "post_supervisor": "74c1865018338d6d40c20cce707c65dd4d4122dc659402844c1097f6d477f863",
+    "read_config": "888e1350c92606a90ddf71ce6df66f9ff0280ff4b329398a70aecfa4abcdd445",
+    "recovery": "e9084968760af4fa01f34215b98a41ea3b92f0fa87e82375e66ead7abe32a958",
+    "recovery_tests": "5ab12148213c836dfb222a577a96cc57a0ff5c4f87505825ea29666a4d8f6afd",
+    "snapshot": "41d2541f35fc5f8024d7abb3492b05376b659391aaab2be6443ddb4064e6fa24",
+    "supervisor": "e944108c9969ba9546e553ceb23e6047195de63d938f3067a0bb96beaff9c704"
+  },
+  "status": "PASS_ACTUAL_PRELEASE_SHARED_RECORD_ARCHIVED"
+}

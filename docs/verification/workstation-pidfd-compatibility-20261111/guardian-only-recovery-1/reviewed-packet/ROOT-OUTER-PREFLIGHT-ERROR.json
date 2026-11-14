@@ -1,0 +1,21 @@
+{
+  "at": "2026-11-11T21:46:48.463211+00:00",
+  "state": "OUTER_PREFLIGHT_FAILED_BUT_REVIEWED_PARENT_FRESH_ADMISSION_AND_OPERATION_COMPLETED",
+  "actual_failure": "NameError pathlib not defined in Root-only AST overhead reader before external admission record",
+  "orchestration_error": "Root invoked the actual reviewed parent without inspecting the failed separate preflight result. No outer external-admission receipt was created.",
+  "raw_error_tool_chunk": "7d8c45",
+  "actual_reviewed_parent_tool_chunk": "ce816e",
+  "actual_terminal_tool_chunk": "0a81db",
+  "actual_parent_admission_path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/execution-1/ADMISSION.json",
+  "actual_parent_admission_sha256": "6ee1c7494179792d1f72f5c190bcf497dd0a244df774f68abf234d54b929f89c",
+  "actual_parent_fresh_MemAvailable_bytes": 29264420864,
+  "actual_parent_overhead_bytes": 1503617024,
+  "job_bytes": 268435456,
+  "known_other_current_payload_jobs_from_completed_retirement_records": 0,
+  "independent_actual_scope_resource_disposition_required": true,
+  "historical_UNKNOWNs_or_native_releases": false,
+  "no_recovery_replay": true,
+  "future_orchestration_rule": "Root inspects a separate terminal preflight result before invoking any dependent tool; no combined exec may continue after a nonzero or yielded preflight.",
+  "raw_preflight_trace_transcribed_from_actual_tool_result": "Traceback (most recent call last):\n  File \"<stdin>\", line 3, in <module>\n  File \"/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/run_once.py\", line 32, in overhead\n    for p in pathlib.Path('/proc').iterdir():\nNameError: name 'pathlib' is not defined\n",
+  "original_full_preflight_command_was_not_separately_written_before_failure": true
+}

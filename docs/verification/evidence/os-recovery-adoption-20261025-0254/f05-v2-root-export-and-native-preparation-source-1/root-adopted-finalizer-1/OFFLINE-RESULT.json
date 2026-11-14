@@ -1,0 +1,421 @@
+{
+  "status": "PASS_OFFLINE_V2_TRACE_CONTROLS_NOT_HOST_OR_NATIVE",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "synthetic_checks": 77,
+  "checks": [
+    {
+      "label": "trace-stage synthetic baseline including parent zero-clone handshake",
+      "expected": "synthetic pass",
+      "error": null
+    },
+    {
+      "label": "nonpositive linked child",
+      "expected": "reject",
+      "error": "unlinked child syscall PID"
+    },
+    {
+      "label": "negative clone return",
+      "expected": "reject",
+      "error": "unlinked child syscall PID"
+    },
+    {
+      "label": "parent as clone child",
+      "expected": "reject",
+      "error": "duplicate/parent clone child"
+    },
+    {
+      "label": "foreign child PID",
+      "expected": "reject",
+      "error": "unlinked child syscall PID"
+    },
+    {
+      "label": "extra linked child",
+      "expected": "reject",
+      "error": "missing/duplicate child publication"
+    },
+    {
+      "label": "foreign child generation",
+      "expected": "reject",
+      "error": "foreign process syscall identity"
+    },
+    {
+      "label": "child CPU",
+      "expected": "reject",
+      "error": "child CPU/publication order"
+    },
+    {
+      "label": "parent clone CPU",
+      "expected": "reject",
+      "error": "parent clone correspondence"
+    },
+    {
+      "label": "nonpositive child worker",
+      "expected": "reject",
+      "error": "foreign process syscall identity"
+    },
+    {
+      "label": "nonpositive child delivery",
+      "expected": "reject",
+      "error": "foreign process syscall identity"
+    },
+    {
+      "label": "child route CPU",
+      "expected": "reject",
+      "error": "child route identity/order"
+    },
+    {
+      "label": "child route launcher",
+      "expected": "reject",
+      "error": "child route identity/order"
+    },
+    {
+      "label": "child publication generation",
+      "expected": "reject",
+      "error": "child procfs identity"
+    },
+    {
+      "label": "child deletion generation",
+      "expected": "reject",
+      "error": "F05 foreign/duplicate procfs lifecycle"
+    },
+    {
+      "label": "child publication tid",
+      "expected": "reject",
+      "error": "child procfs identity"
+    },
+    {
+      "label": "child raw60 is wrong host trace domain",
+      "expected": "reject",
+      "error": "F05 v2 guest exit60 must forward sole host terminal231"
+    },
+    {
+      "label": "wrong wait return child",
+      "expected": "reject",
+      "error": "F05 exact successful parent wait4/reap after child terminal"
+    },
+    {
+      "label": "failed wait return",
+      "expected": "reject",
+      "error": "F05 exact successful parent wait4/reap after child terminal"
+    },
+    {
+      "label": "unmatched wait delivery",
+      "expected": "reject",
+      "error": "F05 exact successful parent wait4/reap after child terminal"
+    },
+    {
+      "label": "missing clone RET",
+      "expected": "reject",
+      "error": "unlinked child syscall PID"
+    },
+    {
+      "label": "missing child publication",
+      "expected": "reject",
+      "error": "missing/duplicate child publication"
+    },
+    {
+      "label": "missing child RET",
+      "expected": "reject",
+      "error": "child syscall correspondence"
+    },
+    {
+      "label": "missing child terminal",
+      "expected": "reject",
+      "error": "F05 v2 guest exit60 must forward sole host terminal231"
+    },
+    {
+      "label": "missing final wait RET",
+      "expected": "reject",
+      "error": "F05 exact successful parent wait4/reap after child terminal"
+    },
+    {
+      "label": "missing final wait delivery",
+      "expected": "reject",
+      "error": "F05 exact successful parent wait4/reap after child terminal"
+    },
+    {
+      "label": "missing child deletion",
+      "expected": "reject",
+      "error": "F05 complete owned procfs lifecycle"
+    },
+    {
+      "label": "worker route changed",
+      "expected": "reject",
+      "error": "child worker route changed"
+    },
+    {
+      "label": "duplicate child publication",
+      "expected": "reject",
+      "error": "missing/duplicate child publication"
+    },
+    {
+      "label": "duplicate child RET",
+      "expected": "reject",
+      "error": "duplicate process syscall row"
+    },
+    {
+      "label": "duplicate child route",
+      "expected": "reject",
+      "error": "duplicate process syscall row"
+    },
+    {
+      "label": "duplicate child terminal",
+      "expected": "reject",
+      "error": "duplicate process syscall row"
+    },
+    {
+      "label": "extra foreign publication",
+      "expected": "reject",
+      "error": "F05 foreign/duplicate procfs lifecycle"
+    },
+    {
+      "label": "child terminal RET forbidden",
+      "expected": "reject",
+      "error": "child ordinary RET coverage"
+    },
+    {
+      "label": "extra child SCHEDULE forbidden",
+      "expected": "reject",
+      "error": "F05 exactly one positive parent schedule"
+    },
+    {
+      "label": "foreign-generation SCHEDULE forbidden",
+      "expected": "reject",
+      "error": "F05 exactly one positive parent schedule"
+    },
+    {
+      "label": "publication before clone",
+      "expected": "reject",
+      "error": "missing/duplicate child publication"
+    },
+    {
+      "label": "child RET before delivery",
+      "expected": "reject",
+      "error": "child syscall/terminal order"
+    },
+    {
+      "label": "only stop wait before child terminal is insufficient",
+      "expected": "reject",
+      "error": "F05 exact successful parent wait4/reap after child terminal"
+    },
+    {
+      "label": "extra fully linked published child",
+      "expected": "reject",
+      "error": "F05 exactly one linked positive distinct child"
+    },
+    {
+      "label": "child terminal alone lacks ordinary RET proof",
+      "expected": "reject",
+      "error": "F05 v2 actual child write1 RET0 before terminal231"
+    },
+    {
+      "label": "child route before delivery",
+      "expected": "reject",
+      "error": "child route identity/order"
+    },
+    {
+      "label": "write RET must be zero",
+      "expected": "reject",
+      "error": "F05 v2 actual child write1 RET0 before terminal231"
+    },
+    {
+      "label": "unrelated ordinary child syscall cannot substitute for write1",
+      "expected": "reject",
+      "error": "F05 v2 actual child write1 RET0 before terminal231"
+    },
+    {
+      "label": "ordinary nanosleep RET cannot substitute for missing write",
+      "expected": "reject",
+      "error": "F05 v2 actual child write1 RET0 before terminal231"
+    },
+    {
+      "label": "extra actual child write delivery forbidden",
+      "expected": "reject",
+      "error": "F05 v2 actual child write1 RET0 before terminal231"
+    },
+    {
+      "label": "missing ACK",
+      "expected": "reject",
+      "error": "missing/duplicate real cleanup ACK"
+    },
+    {
+      "label": "missing retirement",
+      "expected": "reject",
+      "error": "BEGIN retirement attempts"
+    },
+    {
+      "label": "missing intent",
+      "expected": "reject",
+      "error": "missing/failed BEGIN intent"
+    },
+    {
+      "label": "failed ACK",
+      "expected": "reject",
+      "error": "real cleanup ACK failure/token"
+    },
+    {
+      "label": "zero ACK token",
+      "expected": "reject",
+      "error": "real cleanup ACK failure/token"
+    },
+    {
+      "label": "failed final retirement",
+      "expected": "reject",
+      "error": "BEGIN retirement result"
+    },
+    {
+      "label": "failed intent",
+      "expected": "reject",
+      "error": "missing/failed BEGIN intent"
+    },
+    {
+      "label": "wrong ACK generation",
+      "expected": "reject",
+      "error": "malformed/wrong-generation BEGIN lifecycle"
+    },
+    {
+      "label": "duplicate ACK",
+      "expected": "reject",
+      "error": "missing/duplicate real cleanup ACK"
+    },
+    {
+      "label": "retirement before ACK",
+      "expected": "reject",
+      "error": "BEGIN premature retirement/token"
+    },
+    {
+      "label": "retirement before parent terminal",
+      "expected": "reject",
+      "error": "BEGIN retirement attempts"
+    },
+    {
+      "label": "stdout eof mismatch",
+      "expected": "reject",
+      "error": "incomplete stream"
+    },
+    {
+      "label": "stdout truncated mismatch",
+      "expected": "reject",
+      "error": "incomplete stream"
+    },
+    {
+      "label": "stdout discarded mismatch",
+      "expected": "reject",
+      "error": "stream accounting"
+    },
+    {
+      "label": "stdout observed mismatch",
+      "expected": "reject",
+      "error": "stream accounting"
+    },
+    {
+      "label": "stdout retained mismatch",
+      "expected": "reject",
+      "error": "stream accounting"
+    },
+    {
+      "label": "stdout limit mismatch",
+      "expected": "reject",
+      "error": "stream accounting"
+    },
+    {
+      "label": "stdout hex mismatch",
+      "expected": "reject",
+      "error": "stream accounting"
+    },
+    {
+      "label": "stdout eof_ns mismatch",
+      "expected": "reject",
+      "error": "EOF timestamp"
+    },
+    {
+      "label": "stderr eof mismatch",
+      "expected": "reject",
+      "error": "incomplete stream"
+    },
+    {
+      "label": "stderr truncated mismatch",
+      "expected": "reject",
+      "error": "incomplete stream"
+    },
+    {
+      "label": "stderr discarded mismatch",
+      "expected": "reject",
+      "error": "stream accounting"
+    },
+    {
+      "label": "stderr observed mismatch",
+      "expected": "reject",
+      "error": "stream accounting"
+    },
+    {
+      "label": "stderr retained mismatch",
+      "expected": "reject",
+      "error": "stream accounting"
+    },
+    {
+      "label": "stderr limit mismatch",
+      "expected": "reject",
+      "error": "stream accounting"
+    },
+    {
+      "label": "stderr hex mismatch",
+      "expected": "reject",
+      "error": "stream accounting"
+    },
+    {
+      "label": "stderr eof_ns mismatch",
+      "expected": "reject",
+      "error": "EOF timestamp"
+    },
+    {
+      "label": "host process identity mismatch",
+      "expected": "reject",
+      "error": "process group/session identity mismatch"
+    },
+    {
+      "label": "host nonpositive process identity",
+      "expected": "reject",
+      "error": "invalid process identity types"
+    },
+    {
+      "label": "missing physical teardown",
+      "expected": "reject",
+      "error": "teardown uncertain"
+    },
+    {
+      "label": "nonterminal QMP status",
+      "expected": "reject",
+      "error": "QMP terminal status"
+    }
+  ],
+  "historical235": {
+    "manifest": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-f06-default-rustmm-strict235-preparation-1/offline-preparation-1/manifest.HOST-STATIC.json",
+      "size": 8729,
+      "sha256": "76ce63adc17a76fc90ca972f759f54c46a148799a0112f92f344feed1f87b20a",
+      "mode": 33152
+    },
+    "capture": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F03-F06-RUSTMM-STRICT235-NATIVE-ADMISSION-1/GUEST-RAW/result.json",
+      "size": 110843,
+      "sha256": "5f4f115369d05b20914fc673dbd398c4ce2178eafc5ec74bb550ef758c32353d",
+      "mode": 33152
+    },
+    "complete_old_new_and_recorded_result_literal_equality": true,
+    "recorded_owner_envelope_fields_excluded": [
+      "cleanup",
+      "capture_errors",
+      "qemu_evidence",
+      "admitted_qemu_argv"
+    ],
+    "original_profile_and_case_ids_unchanged": true,
+    "stream4096_vs1024_contradiction_rejected_by_both": true
+  },
+  "no_compiler_reference_container_native_or_cleanup_execution": true,
+  "new_manifest_full_staging_validation": "NOT_RUN_UNBOUND_TEMPLATE_NO_NEW_STAGE_OR_RELEASE",
+  "native_acceptance": false,
+  "v2_production_evaluate_unbound_rejected": true,
+  "test_scope": "trace and retained complete evaluator stages only; no synthetic HOST binding",
+  "actual_v2_HOST_contract_positive_test": "PENDING_ROOT_ACTUAL_HOST"
+}

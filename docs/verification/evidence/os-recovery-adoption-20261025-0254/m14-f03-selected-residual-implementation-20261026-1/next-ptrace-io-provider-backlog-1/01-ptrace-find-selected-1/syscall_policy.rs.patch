@@ -1,0 +1,12 @@
+--- kernel/rust/syscall_policy.rs
++++ kernel/rust/syscall_policy.rs
+@@ -25263,7 +25263,8 @@
+ // SAFETY (adapter callers): complete existing I/O bodies control the retained
+ // find/unlock edge and valid thread/context provider use. No checked-release or
+ // fabricated reference is substituted for the actual public provider contract.
+-unsafe extern "C" fn f03_ptrace_io_find(tgid: CInt, tid: CInt) -> CULong {
++#[cfg_attr(f03_ptrace_io_find_selected_candidate,no_mangle)]
++pub unsafe extern "C" fn f03_ptrace_io_find(tgid: CInt, tid: CInt) -> CULong {
+     unsafe { crate::process_helpers::find_thread(tgid, tid) as CULong }
+ }
+ unsafe extern "C" fn f03_ptrace_io_unlock(thread: CULong) {

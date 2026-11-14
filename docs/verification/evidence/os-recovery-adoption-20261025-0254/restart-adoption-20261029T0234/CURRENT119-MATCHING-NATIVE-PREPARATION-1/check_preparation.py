@@ -1,0 +1,20 @@
+"""Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Pure source/data binding check; never compose, stage, guard, query, compile or run.
+"""
+from pathlib import Path
+import ast,hashlib,json
+D=Path(__file__).resolve().parent;E=D.parent.parent;old=E/'m14-f02-current115-matching235-native-preparation-source-1';plan=json.loads((D/'MATCHING235-CURRENT119-PLAN.NOT-RELEASED.json').read_bytes());before=json.loads((old/'MATCHING235-CURRENT115-PLAN.NOT-RELEASED.json').read_bytes())
+def auth(r):
+ p=Path(r['path']);assert p.is_absolute() and not p.is_symlink() and p.is_file();raw=p.read_bytes();assert len(raw)==r['size'] and hashlib.sha256(raw).hexdigest()==r['sha256'] and p.stat().st_mode==r['mode'];return raw
+for k in ['new_image','old_image','base','accepted235_manifest','accepted235_overlay_receipt','accepted235_overlay','accepted235_fullmap_review','accepted235_binding','overlay_helper','record_deriver','actual119_independent_artifact_acceptance','actual119_root_artifact_adoption']:auth(plan[k])
+for row in plan['modules']:auth(row)
+oldmanifest=json.loads(auth(plan['accepted235_manifest']));current115=json.loads((old/'root-actual-compose-1/manifest.HOST-STATIC.json').read_bytes());assert oldmanifest['artifacts']['mckernel_image']==plan['old_image'] and oldmanifest['payload']==plan['original_payload_contract'];assert current115['payload']==plan['original_payload_contract'] and current115['modules']==plan['modules'] and current115['cleanup_profile']==plan['original_cleanup'] and current115['profile']==plan['original_profile']
+assert plan['post119_current_free'] is None and plan['current_free'] is None and plan['nonce'] is None and plan['native_release'] is None and plan['native_acceptance'] is None and plan['resource'] is None
+assert plan['new_image']['size']==10298648 and plan['new_image']['sha256']=='759fe1cb2dda4a87ab521b79b17e771514c4da042cbfcd3344b6c5d670b17a31'
+artifact=json.loads(auth(plan['actual119_independent_artifact_acceptance']));adopt=json.loads(auth(plan['actual119_root_artifact_adoption']));assert artifact['decision']=='PASS_INDEPENDENT_ACTUAL_CURRENT119_SELECTED_DEFAULT_ARTIFACT_SOURCE_ABI_LINK_AND_CURRENT_CONSUMERS' and artifact['independent'] is True and artifact['native_acceptance'] is False and adopt['host_image']==plan['new_image']['path'] and adopt['image']['sha256']==plan['new_image']['sha256']
+assert len(bytes.fromhex(plan['original_payload_contract']['oracle']['stdout_hex']))==235 and plan['original_payload_contract']['oracle']['stderr_hex']=='' and plan['original_payload_contract']['oracle']['exit_code']==0
+for key in ['old_image','base','base_raw_sha256','base_raw_size','accepted235_manifest','accepted235_overlay_receipt','accepted235_overlay','accepted235_fullmap_review','accepted235_binding','overlay_helper','record_deriver','original_payload_contract','original_profile','original_cleanup','modules']:assert plan[key]==before[key],key
+assert [r['sha256'] for r in plan['modules']]==['daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c','887dc3567e6035c921588e61b45b41a8ef32a972d142fe2ba82ec48442353b12','57546af5110c0674b307e5ac5a328228abbe784f890f69521db5f594f21f6ae8']
+source=(D/'compose_matching235_current119.py').read_text();prior=(old/'compose_matching235_current115.py').read_text();prior=prior.replace('MATCHING235-CURRENT115-PLAN.NOT-RELEASED.json','MATCHING235-CURRENT119-PLAN.NOT-RELEASED.json').replace('current115-process235-base.cpio.gz','current119-process235-base.cpio.gz').replace('current115-process235-overlay.cpio.gz','current119-process235-overlay.cpio.gz');start=source.index(" artifact=json.loads(checked(p['actual119_independent_artifact_acceptance']))");end=source.index("\n assert old['artifacts']",start);assert source[:start]+source[end+1:]==prior;ast.parse(source)
+assert not Path(plan['planned_output_parent']).exists()
+print('PASS actual119 image/independent artifact, retained strict235 manifest/module/payload/profile bytes and original235 oracle, minimal image-only composer delta; no staging/guard/query/compiler/native')
